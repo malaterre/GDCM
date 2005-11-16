@@ -1,0 +1,49 @@
+PROJECT(GDCM)
+
+#-----------------------------------------------------------------------------
+SET(GDCM_MAJOR_VERSION 0)
+SET(GDCM_MINOR_VERSION 0)
+SET(GDCM_BUILD_VERSION 0)
+SET(GDCM_VERSION 
+    "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}.${GDCM_BUILD_VERSION}")
+
+#-----------------------------------------------------------------------------
+# Build shared lib by default
+OPTION(GDCM_BUILD_SHARED_LIBS "Build GDCM with shared libraries." ON)
+SET(BUILD_SHARED_LIBS ${GDCM_BUILD_SHARED_LIBS})
+
+#-----------------------------------------------------------------------------
+SET (EXECUTABLE_OUTPUT_PATH ${GDCM_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
+SET (LIBRARY_OUTPUT_PATH ${GDCM_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
+MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
+
+
+#-----------------------------------------------------------------------------
+INCLUDE (${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)
+CHECK_INCLUDE_FILE("stdint.h"       CMAKE_HAVE_STDINT_H)
+IF(UNIX) #Avoid polluting Win32 cmakecache
+  CHECK_INCLUDE_FILE("inttypes.h"     CMAKE_HAVE_INTTYPES_H)
+ENDIF(UNIX)
+
+#-----------------------------------------------------------------------------
+# Build the main lib...
+SUBDIRS(
+  Dicts
+  Source
+  )
+
+#-----------------------------------------------------------------------------
+# Add the testing directories
+OPTION(BUILD_TESTING "Build testing." ON)
+
+IF(BUILD_TESTING)
+  #CONFIGURE_FILE(${GDCM_SOURCE_DIR}/CMake/CTestCustom.ctest.in
+  #    ${GDCM_BINARY_DIR}/CMake/CTestCustom.ctest @ONLY)
+  ENABLE_TESTING()
+  INCLUDE (${CMAKE_ROOT}/Modules/Dart.cmake)
+  MARK_AS_ADVANCED(DART_ROOT)
+  SUBDIRS(Tests)
+ENDIF(BUILD_TESTING)
+
+
+

@@ -1,0 +1,2030 @@
+
+File Meta Information Version
+Media Storage SOP Class UID
+Media Storage SOP Instance UID
+Transfer Syntax UID
+Implementation Class UID
+Implementation Version Name
+Source Application Entity Title
+Private Information Creator UID
+Private Information
+File-set ID
+File-set Descriptor File ID
+Specific Character Set of File-set Descriptor File
+Offset of the First Directory Record of the Root Directory Entity
+Offset of the Last Directory Record of the Root Directory Entity
+File-set Consistency Flag
+Directory Record Sequence
+Offset of the Next Directory Record
+Record In-use Flag
+Offset of Referenced Lower-Level Directory Entity
+Directory Record Type
+Private Record UID
+Referenced File ID
+MRDR Directory Record Offset
+Referenced SOP Class UID in File
+Referenced SOP Instance UID in File
+Referenced Transfer Syntax UID in File
+Referenced Related General SOP Class UID in File
+Number of References
+Length to End (RET)
+Specific Character Set
+Image Type
+Recognition Code (RET)
+Instance Creation Date
+Instance Creation Time
+Instance Creator UID
+SOP Class UID
+SOP Instance UID
+Related General SOP Class UID
+Original Specialized SOP Class UID
+Study Date
+Series Date
+Acquisition Date
+Content Date
+Overlay Date
+Curve Date
+Acquisition Datetime
+Study Time
+Series Time
+Acquisition Time
+Content Time
+Overlay Time
+Curve Time
+Data Set Type (RET)
+Data Set Subtype (RET)
+Nuclear Medicine Series Type (RET)
+Accession Number
+Query/Retrieve Level
+Retrieve AE Title
+Instance Availability
+Failed SOP Instance UID List
+Modality
+Modalities in Study
+SOP Classes in Study
+Conversion Type
+Presentation Intent Type
+Manufacturer
+Institution Name
+Institution Address
+Institution Code Sequence
+Referring Physician's Name
+Referring Physician's Address
+Referring Physician's Telephone Numbers
+Referring Physician Identification Sequence
+Code Value
+Coding Scheme Designator
+Coding Scheme Version
+Code Meaning
+Mapping Resource
+Context Group Version
+Context Group Local Version
+Context Group Extension Flag
+Coding Scheme UID
+Context Group Extension Creator UID
+Context Identifier
+Coding Scheme Identification Sequence
+Coding Scheme Registry
+Coding Scheme External ID
+Coding Scheme Name
+Responsible Organization
+Timezone Offset From UTC
+Network ID (RET)
+Station Name
+Study Description
+Procedure Code Sequence
+Series Description
+Institutional Department Name
+Physician(s) of Record
+Physician(s) of Record Identification Sequence
+Performing Physician's Name
+Performing Physician Identification Sequence
+Name of Physician(s) Reading Study
+Physician(s) Reading Study Identification Sequence
+Operator's Name
+Operator Identification Sequence
+Admitting Diagnoses Description
+Admitting Diagnoses Code Sequence
+Manufacturer's Model Name
+Referenced Results Sequence
+Referenced Study Sequence
+Referenced Performed Procedure Step Sequence
+Referenced Series Sequence
+Referenced Patient Sequence
+Referenced Visit Sequence
+Referenced Overlay Sequence
+Referenced Waveform Sequence
+Referenced Image Sequence
+Referenced Curve Sequence
+Referenced Instance Sequence
+Referenced SOP Class UID
+Referenced SOP Instance UID
+SOP Classes Supported
+Referenced Frame Number
+Transaction UID
+Failure Reason
+Failed SOP Sequence
+Referenced SOP Sequence
+Studies Containing Other Referenced Instances Sequence
+Related Series Sequence
+Lossy Image Compression (RET)
+Derivation Description
+Source Image Sequence
+Stage Name
+Stage Number
+Number of Stages
+View Name
+View Number
+Number of Event Timers
+Number of Views in Stage
+Event Elapsed Time(s)
+Event Timer Name(s)
+Start Trim
+Stop Trim
+Recommended Display Frame Rate
+Transducer Position (RET)
+Transducer Orientation (RET)
+Anatomic Structure (RET)
+Anatomic Region Sequence
+Anatomic Region Modifier Sequence
+Primary Anatomic Structure Sequence
+Anatomic Structure, Space or Region Sequence
+Primary Anatomic Structure Modifier Sequence
+Transducer Position Sequence
+Transducer Position Modifier Sequence
+Transducer Orientation Sequence
+Transducer Orientation Modifier Sequence
+Alternate Representation Sequence
+Identifying Comments (RET)
+Frame Type
+Referenced Image Evidence Sequence
+Referenced Raw Data Sequence
+Creator-Version UID
+Derivation Image Sequence
+Source Image Evidence Sequence
+Pixel Presentation
+Volumetric Properties
+Volume Based Calculation Technique
+Complex Image Component
+Acquisition Contrast
+Derivation Code Sequence
+Referenced Grayscale Presentation State Sequence
+Patient's Name
+Patient ID
+Issuer of Patient ID
+Patient's Birth Date
+Patient's Birth Time
+Patient's Sex
+Patient's Insurance Plan Code Sequence
+Patient's Primary Language Code Sequence
+Patient's Primary Language Code Modifier Sequence
+Other Patient IDs
+Other Patient Names
+Patient's Birth Name
+Patient's Age
+Patient's Size
+Patient's Weight
+Patient's Address
+Insurance Plan Identification (RET)
+Patient's Mother's Birth Name
+Military Rank
+Branch of Service
+Medical Record Locator
+Medical Alerts
+Contrast Allergies
+Country of Residence
+Region of Residence
+Patient's Telephone Numbers
+Ethnic Group
+Occupation
+Smoking Status
+Additional Patient History
+Pregnancy Status
+Last Menstrual Date
+Patient's Religious Preference
+Patient Comments
+Clinical Trial Sponsor Name
+Clinical Trial Protocol ID
+Clinical Trial Protocol Name
+Clinical Trial Site ID
+Clinical Trial Site Name
+Clinical Trial Subject ID
+Clinical Trial Subject Reading ID
+Clinical Trial Time Point ID
+Clinical Trial Time Point Description
+Clinical Trial Coordinating Center Name
+Contrast/Bolus Agent
+Contrast/Bolus Agent Sequence
+Contrast/Bolus Administration Route Sequence
+Body Part Examined
+Scanning Sequence
+Sequence Variant
+Scan Options
+MR Acquisition Type
+Sequence Name
+Angio Flag
+Intervention Drug Information Sequence
+Intervention Drug Stop Time
+Intervention Drug Dose
+Intervention Drug Sequence
+Additional Drug Sequence
+Radionuclide (RET)
+Radiopharmaceutical
+Energy Window Centerline (RET)
+Energy Window Total Width (RET)
+Intervention Drug Name
+Intervention Drug Start Time
+Intervention Sequence
+Therapy Type (RET)
+Intervention Status
+Therapy Description (RET)
+Intervention Description
+Cine Rate
+Slice Thickness
+KVP
+Counts Accumulated
+Acquisition Termination Condition
+Effective Duration
+Acquisition Start Condition
+Acquisition Start Condition Data
+Acquisition Termination Condition Data
+Repetition Time
+Echo Time
+Inversion Time
+Number of Averages
+Imaging Frequency
+Imaged Nucleus
+Echo Number(s)
+Magnetic Field Strength
+Spacing Between Slices
+Number of Phase Encoding Steps
+Data Collection Diameter
+Echo Train Length
+Percent Sampling
+Percent Phase Field of View
+Pixel Bandwidth
+Device Serial Number
+Plate ID
+Secondary Capture Device ID
+Hardcopy Creation Device ID
+Date of Secondary Capture
+Time of Secondary Capture
+Secondary Capture Device Manufacturer
+Hardcopy Device Manufacturer
+Secondary Capture Device Manufacturer's Model Name
+Secondary Capture Device Software Version(s)
+Hardcopy Device Software Version
+Hardcopy Device Manufacturer's Model Name
+Software Version(s)
+Video Image Format Acquired
+Digital Image Format Acquired
+Protocol Name
+Contrast/Bolus Route
+Contrast/Bolus Volume
+Contrast/Bolus Start Time
+Contrast/Bolus Stop Time
+Contrast/Bolus Total Dose
+Syringe Counts
+Contrast Flow Rate
+Contrast Flow Duration
+Contrast/Bolus Ingredient
+Contrast/Bolus Ingredient Concentration
+Spatial Resolution
+Trigger Time
+Trigger Source or Type
+Nominal Interval
+Frame Time
+Framing Type
+Frame Time Vector
+Frame Delay
+Image Trigger Delay
+Multiplex Group Time Offset
+Trigger Time Offset
+Synchronization Trigger
+Synchronization Channel
+Trigger Sample Position
+Radiopharmaceutical Route
+Radiopharmaceutical Volume
+Radiopharmaceutical Start Time
+Radiopharmaceutical Stop Time
+Radionuclide Total Dose
+Radionuclide Half Life
+Radionuclide Positron Fraction
+Radiopharmaceutical Specific Activity
+Beat Rejection Flag
+Low R-R Value
+High R-R Value
+Intervals Acquired
+Intervals Rejected
+PVC Rejection
+Skip Beats
+Heart Rate
+Cardiac Number of Images
+Trigger Window
+Reconstruction Diameter
+Distance Source to Detector
+Distance Source to Patient
+Estimated Radiographic Magnification Factor
+Gantry/Detector Tilt
+Gantry/Detector Slew
+Table Height
+Table Traverse
+Table Motion
+Table Vertical Increment
+Table Lateral Increment
+Table Longitudinal Increment
+Table Angle
+Table Type
+Rotation Direction
+Angular Position
+Radial Position
+Scan Arc
+Angular Step
+Center of Rotation Offset
+Rotation Offset (RET)
+Field of View Shape
+Field of View Dimension(s)
+Exposure Time
+X-ray Tube Current
+Exposure
+Exposure in uAs
+Average Pulse Width
+Radiation Setting
+Rectification Type
+Radiation Mode
+Image Area Dose Product
+Filter Type
+Type of Filters
+Intensifier Size
+Imager Pixel Spacing
+Grid
+Generator Power
+Collimator/grid Name
+Collimator Type
+Focal Distance
+X Focus Center
+Y Focus Center
+Focal Spot(s)
+Anode Target Material
+Body Part Thickness
+Compression Force
+Date of Last Calibration
+Time of Last Calibration
+Convolution Kernel
+Upper/Lower Pixel Values (RET)
+Actual Frame Duration
+Count Rate
+Preferred Playback Sequencing
+Receive Coil Name
+Transmit Coil Name
+Plate Type
+Phosphor Type
+Scan Velocity
+Whole Body Technique
+Scan Length
+Acquisition Matrix
+In-plane Phase Encoding Direction
+Flip Angle
+Variable Flip Angle Flag
+SAR
+dB/dt
+Acquisition Device Processing Description
+Acquisition Device Processing Code
+Cassette Orientation
+Cassette Size
+Exposures on Plate
+Relative X-ray Exposure
+Column Angulation
+Tomo Layer Height
+Tomo Angle
+Tomo Time
+Tomo Type
+Tomo Class
+Number of Tomosynthesis Source Images
+Positioner Motion
+Positioner Type
+Positioner Primary Angle
+Positioner Secondary Angle
+Positioner Primary Angle Increment
+Positioner Secondary Angle Increment
+Detector Primary Angle
+Detector Secondary Angle
+Shutter Shape
+Shutter Left Vertical Edge
+Shutter Right Vertical Edge
+Shutter Upper Horizontal Edge
+Shutter Lower Horizontal Edge
+Center of Circular Shutter
+Radius of Circular Shutter
+Vertices of the Polygonal Shutter
+Shutter Presentation Value
+Shutter Overlay Group
+Collimator Shape
+Collimator Left Vertical Edge
+Collimator Right Vertical Edge
+Collimator Upper Horizontal Edge
+Collimator Lower Horizontal Edge
+Center of Circular Collimator
+Radius of Circular Collimator
+Vertices of the Polygonal Collimator
+Acquisition Time Synchronized
+Time Source
+Time Distribution Protocol
+NTP Source Address
+Page Number Vector
+Frame Label Vector
+Frame Primary Angle Vector
+Frame Secondary Angle Vector
+Slice Location Vector
+Display Window Label Vector
+Nominal Scanned Pixel Spacing
+Digitizing Device Transport Direction
+Rotation of Scanned Film
+IVUS Acquisition
+IVUS Pullback Rate
+IVUS Gated Rate
+IVUS Pullback Start Frame Number
+IVUS Pullback Stop Frame Number
+Lesion Number
+Acquisition Comments (RET)
+Output Power
+Transducer Data
+Focus Depth
+Processing Function
+Postprocessing Function
+Mechanical Index
+Bone Thermal Index
+Cranial Thermal Index
+Soft Tissue Thermal Index
+Soft Tissue-focus Thermal Index
+Soft Tissue-surface Thermal Index
+Dynamic Range (RET)
+Total Gain (RET)
+Depth of Scan Field
+Patient Position
+View Position
+Projection Eponymous Name Code Sequence
+Image Transformation Matrix (RET)
+Image Translation Vector (RET)
+Sensitivity
+Sequence of Ultrasound Regions
+Region Spatial Format
+Region Data Type
+Region Flags
+Region Location Min X0
+Region Location Min Y0
+Region Location Max X1
+Region Location Max Y1
+Reference Pixel X0
+Reference Pixel Y0
+Physical Units X Direction
+Physical Units Y Direction
+Reference Pixel Physical Value X
+Reference Pixel Physical Value Y
+Physical Delta X
+Physical Delta Y
+Transducer Frequency
+Transducer Type
+Pulse Repetition Frequency
+Doppler Correction Angle
+Steering Angle
+Doppler Sample Volume X Position (RET)
+Doppler Sample Volume X Position
+Doppler Sample Volume Y Position (RET)
+Doppler Sample Volume Y Position
+TM-Line Position X0 (RET)
+TM-Line Position X0
+TM-Line Position Y0 (RET)
+TM-Line Position Y0
+TM-Line Position X1 (RET)
+TM-Line Position X1
+TM-Line Position Y1 (RET)
+TM-Line Position Y1
+Pixel Component Organization
+Pixel Component Mask
+Pixel Component Range Start
+Pixel Component Range Stop
+Pixel Component Physical Units
+Pixel Component Data Type
+Number of Table Break Points
+Table of X Break Points
+Table of Y Break Points
+Number of Table Entries
+Table of Pixel Values
+Table of Parameter Values
+R Wave Time Vector
+Detector Conditions Nominal Flag
+Detector Temperature
+Detector Type
+Detector Configuration
+Detector Description
+Detector Mode
+Detector ID
+Date of Last Detector Calibration
+Time of Last Detector Calibration
+Exposures on Detector Since Last Calibration
+Exposures on Detector Since Manufactured
+Detector Time Since Last Exposure
+Detector Active Time
+Detector Activation Offset From Exposure
+Detector Binning
+Detector Element Physical Size
+Detector Element Spacing
+Detector Active Shape
+Detector Active Dimension(s)
+Detector Active Origin
+Detector Manufacturer Name
+Detector Manufacturer's Model Name
+Field of View Origin
+Field of View Rotation
+Field of View Horizontal Flip
+Grid Absorbing Material
+Grid Spacing Material
+Grid Thickness
+Grid Pitch
+Grid Aspect Ratio
+Grid Period
+Grid Focal Distance
+Filter Material
+Filter Thickness Minimum
+Filter Thickness Maximum
+Exposure Control Mode
+Exposure Control Mode Description
+Exposure Status
+Phototimer Setting
+Exposure Time in µS
+X-Ray Tube Current in µA
+Content Qualification
+Pulse Sequence Name
+MR Imaging Modifier Sequence
+Echo Pulse Sequence
+Inversion Recovery
+Flow Compensation
+Multiple Spin Echo
+Multi-planar Excitation
+Phase Contrast
+Time of Flight Contrast
+Spoiling
+Steady State Pulse Sequence
+Echo Planar Pulse Sequence
+Tag Angle First Axis
+Magnetization Transfer
+T2 Preparation
+Blood Signal Nulling
+Saturation Recovery
+Spectrally Selected Suppression
+Spectrally Selected Excitation
+Spatial Pre-saturation
+Tagging
+Oversampling Phase
+Tag Spacing First Dimension
+Geometry of k-Space Traversal
+Segmented k-Space Traversal
+Rectilinear Phase Encode Reordering
+Tag Thickness
+Partial Fourier Direction
+Cardiac Synchronization Technique
+Receive Coil Manufacturer Name
+MR Receive Coil Sequence
+Receive Coil Type
+Quadrature Receive Coil
+Multi-Coil Definition Sequence
+Multi-Coil Configuration
+Multi-Coil Element Name
+Multi-Coil Element Used
+MR Transmit Coil Sequence
+Transmit Coil Manufacturer Name
+Transmit Coil Type
+Spectral Width
+Chemical Shift Reference
+Volume Localization Technique
+MR Acquisition Frequency Encoding Steps
+De-coupling
+De-coupled Nucleus
+De-coupling Frequency
+De-coupling Method
+De-coupling Chemical Shift Reference
+k-space Filtering
+Time Domain Filtering
+Number of Zero fills
+Baseline Correction
+Parallel Reduction Factor In-plane
+Cardiac R-R Interval Specified
+Acquisition Duration
+Frame Acquisition Datetime
+Diffusion Directionality
+Diffusion Gradient Direction Sequence
+Parallel Acquisition
+Parallel Acquisition Technique
+Inversion Times
+Metabolite Map Description
+Partial Fourier
+Effective Echo Time
+Metabolite Map Code Sequence
+Chemical Shift Sequence
+Cardiac Signal Source
+Diffusion b-value
+Diffusion Gradient Orientation
+Velocity Encoding Direction
+Velocity Encoding Minimum Value
+Number of k-Space Trajectories
+Coverage of k-Space
+Spectroscopy Acquisition Phase Rows
+Transmitter Frequency
+Resonant Nucleus
+Frequency Correction
+MR Spectroscopy FOV/Geometry Sequence
+Slab Thickness
+Slab Orientation
+Mid Slab Position
+MR Spatial Saturation Sequence
+MR Timing and Related Parameters Sequence
+MR Echo Sequence
+MR Modifier Sequence
+MR Diffusion Sequence
+Cardiac Trigger Sequence
+MR Averages Sequence
+MR FOV/Geometry Sequence
+Volume Localization Sequence
+Spectroscopy Acquisition Data Columns
+Diffusion Anisotropy Type
+Frame Reference Datetime
+MR Metabolite Map Sequence
+Parallel Reduction Factor out-of-plane
+Spectroscopy Acquisition Out-of-plane Phase Steps
+Bulk Motion Status
+Parallel Reduction Factor Second In-plane
+Cardiac Beat Rejection Technique
+Respiratory Motion Compensation Technique
+Respiratory Signal Source
+Bulk Motion Compensation Technique
+Bulk Motion Signal Source
+Applicable Safety Standard Agency
+Applicable Safety Standard Description
+Operating Mode Sequence
+Operating Mode Type
+Operating Mode
+Specific Absorption Rate Definition
+Gradient Output Type
+Specific Absorption Rate Value
+Gradient Output
+Flow Compensation Direction
+Tagging Delay
+Chemical Shifts Minimum Integration Limit in Hz (RET)
+Chemical Shifts Maximum Integration Limit in Hz (RET)
+MR Velocity Encoding Sequence
+First Order Phase Correction
+Water Referenced Phase Correction
+MR Spectroscopy Acquisition Type
+Respiratory Cycle Position
+Velocity Encoding Maximum Value
+Tag Spacing Second Dimension
+Tag Angle Second Axis
+Frame Acquisition Duration
+MR Image Frame Type Sequence
+MR Spectroscopy Frame Type Sequence
+MR Acquisition Phase Encoding Steps in-plane
+MR Acquisition Phase Encoding Steps out-of-plane
+Spectroscopy Acquisition Phase Columns
+Cardiac Cycle Position
+Specific Absorption Rate Sequence
+Chemical Shifts Minimum Integration Limit in ppm
+Chemical Shifts Maximum Integration Limit in ppm
+RF Echo Train Length
+Gradient Echo Train Length
+CT Acquisition Type Sequence
+Acquisition Type
+Tube Angle
+CT Acquisition Details Sequence
+Revolution Time
+Single Collimation Width
+Total Collimation Width
+CT Table Dynamics Sequence
+Table Speed
+Table Feed per Rotation
+Spiral Pitch Factor
+CT Geometry Sequence
+Data Collection Center (Patient)
+CT Reconstruction Sequence
+Reconstruction Algorithm
+Convolution Kernel Group
+Reconstruction Field of View
+Reconstruction Target Center (Patient)
+Reconstruction Angle
+Image Filter
+CT Exposure Sequence
+Reconstruction Pixel Spacing
+Exposure Modulation Type
+Estimated Dose Saving
+CT X-ray Details Sequence
+CT Position Sequence
+Table Position
+Exposure Time in ms
+CT Image Frame Type Sequence
+X-Ray Tube Current in mA
+Exposure in mAs
+Constant Volume Flag
+Fluoroscopy Flag
+Distance Source to Data Collection Center
+Contrast/Bolus Agent Number
+Contrast/Bolus Ingredient Code Sequence
+Contrast Administration Profile Sequence
+Contrast/Bolus Usage Sequence
+Contrast/Bolus Agent Administered
+Contrast/Bolus Agent Detected
+Contrast/Bolus Agent Phase
+CTDIvol
+Contributing Equipment Sequence
+Contribution Date Time
+Contribution Description
+Study Instance UID
+Series Instance UID
+Study ID
+Series Number
+Acquisition Number
+Instance Number
+Isotope Number (RET)
+Phase Number (RET)
+Interval Number (RET)
+Time Slot Number (RET)
+Angle Number (RET)
+Item Number
+Patient Orientation
+Overlay Number
+Curve Number
+Lookup Table Number
+Image Position (RET)
+Image Position (Patient)
+Image Orientation (RET)
+Image Orientation (Patient)
+Location (RET)
+Frame of Reference UID
+Laterality
+Image Laterality
+Image Geometry Type (RET)
+Masking Image (RET)
+Temporal Position Identifier
+Number of Temporal Positions
+Temporal Resolution
+Synchronization Frame of Reference UID
+Series in Study
+Acquisitions in Series (RET)
+Images in Acquisition
+Images in Series FIXME (RET)
+Acquisitions in Study
+Images in Study FIXME (RET)
+Reference (RET)
+Position Reference Indicator
+Slice Location
+Other Study Numbers
+Number of Patient Related Studies
+Number of Patient Related Series
+Number of Patient Related Instances
+Number of Study Related Series
+Number of Study Related Instances
+Number of Series Related Instances
+0020 31xx LO 1-n Source Image IDs (RET)
+Modifying Device ID (RET)
+Modified Image ID (RET)
+Modified Image Date (RET)
+Modifying Device Manufacturer (RET)
+Modified Image Time (RET)
+Modified Image Description (RET)
+Image Comments
+Original Image Identification (RET)
+Original Image Identification Nomenclature (RET)
+Stack ID
+In-Stack Position Number
+Frame Anatomy Sequence
+Frame Laterality
+Frame Content Sequence
+Plane Position Sequence
+Plane Orientation Sequence
+Temporal Position Index
+Trigger Delay Time
+Frame Acquisition Number
+Dimension Index Values
+Frame Comments
+Concatenation UID
+In-concatenation Number
+In-concatenation Total Number
+Dimension Organization UID
+Dimension Index Pointer
+Functional Group Pointer
+Dimension Index Private Creator
+Dimension Organization Sequence
+Dimension Index Sequence
+Concatenation Frame Offset Number
+Functional Group Private Creator
+Light Path Filter Pass-Through Wavelength
+Light Path Filter Pass Band
+Image Path Filter Pass-Through Wavelength
+Image Path Filter Pass Band
+Patient Eye Movement Commanded
+Patient Eye Movement Command Code Sequence
+Spherical Lens Power
+Cylinder Lens Power
+Cylinder Axis
+Emmetropic Magnification
+Intra Ocular Pressure
+Horizontal Field of View
+Pupil Dilated
+Degree of Dilation
+Stereo Baseline Angle
+Stereo Baseline Displacement
+Stereo Horizontal Pixel Offset
+Stereo Vertical Pixel Offset
+Stereo Rotation
+Acquisition Device Type Code Sequence
+Illumination Type Code Sequence
+Light Path Filter Type Stack Code Sequence
+Image Path Filter Type Stack Code Sequence
+Lenses Code Sequence
+Channel Description Code Sequence
+Refractive State Sequence
+Mydriatic Agent Code Sequence
+Relative Image Position Code Sequence
+Stereo Pairs Sequence
+Left Image Sequence
+Right Image Sequence
+Samples per Pixel
+Samples per Pixel Used
+Photometric Interpretation
+Image Dimensions (RET)
+Planar Configuration
+Number of Frames
+Frame Increment Pointer
+Frame Dimension Pointer
+Rows
+Columns
+Planes
+Ultrasound Color Data Present
+Pixel Spacing
+Zoom Factor
+Zoom Center
+Pixel Aspect Ratio
+Image Format (RET)
+Manipulated Image (RET)
+Corrected Image
+Compression Code (RET)
+Bits Allocated
+Bits Stored
+High Bit
+Pixel Representation
+Smallest Valid Pixel Value (RET)
+Largest Valid Pixel Value (RET)
+Smallest Image Pixel Value
+Largest Image Pixel Value
+Smallest Pixel Value in Series
+Largest Pixel Value in Series
+Smallest Image Pixel Value in Plane
+Largest Image Pixel Value in Plane
+Pixel Padding Value
+Image Location (RET)
+Quality Control Image
+Burned In Annotation
+Pixel Intensity Relationship
+Pixel Intensity Relationship Sign
+Window Center
+Window Width
+Rescale Intercept
+Rescale Slope
+Rescale Type
+Window Center & Width Explanation
+Gray Scale (RET)
+Recommended Viewing Mode
+Gray Lookup Table Descriptor (RET)
+Red Palette Color Lookup Table Descriptor
+Green Palette Color Lookup Table Descriptor
+Blue Palette Color Lookup Table Descriptor
+Palette Color Lookup Table UID
+Gray Lookup Table Data (RET)
+Red Palette Color Lookup Table Data
+Green Palette Color Lookup Table Data
+Blue Palette Color Lookup Table Data
+Segmented Red Palette Color Lookup Table Data
+Segmented Green Palette Color Lookup Table Data
+Segmented Blue Palette Color Lookup Table Data
+Implant Present
+Partial View
+Partial View Description
+Lossy Image Compression
+Lossy Image Compression Ratio
+Lossy Image Compression Method
+Modality LUT Sequence
+LUT Descriptor
+LUT Explanation
+Modality LUT Type
+LUT Data 
+VOI LUT Sequence
+Softcopy VOI LUT Sequence
+Image Presentation Comments (RET)
+Bi-Plane Acquisition Sequence
+Representative Frame Number
+Frame Numbers of Interest (FOI)
+Frame(s) of Interest Description
+Frame of Interest Type
+Mask Pointer(s) (RET)
+R Wave Pointer
+Mask Subtraction Sequence
+Mask Operation
+Applicable Frame Range
+Mask Frame Numbers
+Contrast Frame Averaging
+Mask Sub-pixel Shift
+TID Offset
+Mask Operation Explanation
+Data Point Rows
+Data Point Columns
+Signal Domain Columns
+Largest Monochrome Pixel Value (RET)
+Data Representation
+Pixel Measures Sequence
+Frame VOI LUT Sequence
+Pixel Value Transformation Sequence
+Signal Domain Rows
+Study Status ID
+Study Priority ID
+Study ID Issuer
+Study Verified Date
+Study Verified Time
+Study Read Date
+Study Read Time
+Scheduled Study Start Date
+Scheduled Study Start Time
+Scheduled Study Stop Date
+Scheduled Study Stop Time
+Scheduled Study Location
+Scheduled Study Location AE Title(s)
+Reason for Study
+Requesting Physician Identification Sequence
+Requesting Physician
+Requesting Service
+Study Arrival Date
+Study Arrival Time
+Study Completion Date
+Study Completion Time
+Study Component Status ID
+Requested Procedure Description
+Requested Procedure Code Sequence
+Requested Contrast Agent
+Study Comments
+Referenced Patient Alias Sequence
+Visit Status ID
+Admission ID
+Issuer of Admission ID
+Route of Admissions
+Scheduled Admission Date
+Scheduled Admission Time
+Scheduled Discharge Date
+Scheduled Discharge Time
+Scheduled Patient Institution Residence
+Admitting Date
+Admitting Time
+Discharge Date
+Discharge Time
+Discharge Diagnosis Description
+Discharge Diagnosis Code Sequence
+Special Needs
+Current Patient Location
+Patient's Institution Residence
+Patient State
+Visit Comments
+Waveform Originality
+Number of Waveform Channels
+Number of Waveform Samples
+Sampling Frequency
+Multiplex Group Label
+Channel Definition Sequence
+Waveform Channel Number
+Channel Label
+Channel Status
+Channel Source Sequence
+Channel Source Modifiers Sequence
+Source Waveform Sequence
+Channel Derivation Description
+Channel Sensitivity
+Channel Sensitivity Units Sequence
+Channel Sensitivity Correction Factor
+Channel Baseline
+Channel Time Skew
+Channel Sample Skew
+Channel Offset
+Waveform Bits Stored
+Filter Low Frequency
+Filter High Frequency
+Notch Filter Frequency
+Notch Filter Bandwidth
+Multiplexed Audio Channels Description Code Sequence
+Channel Identification Code
+Channel Mode
+Scheduled Station AE Title
+Scheduled Procedure Step Start Date
+Scheduled Procedure Step Start Time
+Scheduled Procedure Step End Date
+Scheduled Procedure Step End Time
+Scheduled Performing Physician's Name
+Scheduled Procedure Step Description
+Scheduled Protocol Code Sequence
+Scheduled Procedure Step ID
+Stage Code Sequence
+Scheduled Performing Physician Identification Sequence
+Scheduled Station Name
+Scheduled Procedure Step Location
+Pre-Medication
+Scheduled Procedure Step Status
+Scheduled Procedure Step Sequence
+Referenced Non-Image Composite SOP Instance Sequence
+Performed Station AE Title
+Performed Station Name
+Performed Location
+Performed Procedure Step Start Date
+Performed Procedure Step Start Time
+Performed Procedure Step End Date
+Performed Procedure Step End Time
+Performed Procedure Step Status
+Performed Procedure Step ID
+Performed Procedure Step Description
+Performed Procedure Type Description
+Performed Protocol Code Sequence
+Scheduled Step Attributes Sequence
+Request Attributes Sequence
+Comments on the Performed Procedure Step
+Performed Procedure Step Discontinuation Reason Code Sequence
+Quantity Sequence
+Quantity
+Measuring Units Sequence
+Billing Item Sequence
+Total Time of Fluoroscopy
+Total Number of Exposures
+Entrance Dose
+Exposed Area
+Distance Source to Entrance
+Distance Source to Support (RET)
+Exposure Dose Sequence
+Comments on Radiation Dose
+X-Ray Output
+Half Value Layer
+Organ Dose
+Organ Exposed
+Billing Procedure Step Sequence
+Film Consumption Sequence
+Billing Supplies and Devices Sequence
+Referenced Procedure Step Sequence (RET)
+Performed Series Sequence
+Comments on the Scheduled Procedure Step
+Protocol Context Sequence
+Content Item Modifier Sequence
+Specimen Accession Number
+Specimen Sequence
+Specimen Identifier
+Acquisition Context Sequence
+Acquisition Context Description
+Specimen Type Code Sequence
+Slide Identifier
+Image Center Point Coordinates Sequence
+X offset in Slide Coordinate System
+Y offset in Slide Coordinate System
+Z offset in Slide Coordinate System
+Pixel Spacing Sequence
+Coordinate System Axis Code Sequence
+Measurement Units Code Sequence
+Requested Procedure ID
+Reason for the Requested Procedure
+Requested Procedure Priority
+Patient Transport Arrangements
+Requested Procedure Location
+Placer Order Number / Procedure (RET)
+Filler Order Number / Procedure (RET)
+Confidentiality Code
+Reporting Priority
+Reason for Requested Procedure Code Sequence
+Names of Intended Recipients of Results
+Intended Recipients of Results Identification Sequence
+Person Identification Code Sequence
+Person's Address
+Person's Telephone Numbers
+Requested Procedure Comments
+Reason for the Imaging Service Request (RET)
+Issue Date of Imaging Service Request
+Issue Time of Imaging Service Request
+Placer Order Number / Imaging Service Request (RET)
+Filler Order Number / Imaging Service Request (RET)
+Order Entered By
+Order Enterer's Location
+Order Callback Phone Number
+Placer Order Number / Imaging Service Request
+Filler Order Number / Imaging Service Request
+Imaging Service Request Comments
+Confidentiality Constraint on Patient Data Description
+General Purpose Scheduled Procedure Step Status
+General Purpose Performed Procedure Step Status
+General Purpose Scheduled Procedure Step Priority
+Scheduled Processing Applications Code Sequence
+Scheduled Procedure Step Start Date and Time
+Multiple Copies Flag
+Performed Processing Applications Code Sequence
+Human Performer Code Sequence
+Scheduled Procedure Step Modification Date and Time
+Expected Completion Date and Time
+Resulting General Purpose Performed Procedure Steps Sequence
+Referenced General Purpose Scheduled Procedure Step Sequence
+Scheduled Workitem Code Sequence
+Performed Workitem Code Sequence
+Input Availability Flag
+Input Information Sequence
+Relevant Information Sequence
+Referenced General Purpose Scheduled Procedure Step Transaction UID
+Scheduled Station Name Code Sequence
+Scheduled Station Class Code Sequence
+Scheduled Station Geographic Location Code Sequence
+Performed Station Name Code Sequence
+Performed Station Class Code Sequence
+Performed Station Geographic Location Code Sequence
+Requested Subsequent Workitem Code Sequence
+Non-DICOM Output Code Sequence
+Output Information Sequence
+Scheduled Human Performers Sequence
+Actual Human Performers Sequence
+Human Performer's Organization
+Human Performer's Name
+Entrance Dose in mGy
+Real World Value Mapping Sequence
+LUT Label
+Real World Value Last Value Mapped
+Real World Value LUT Data
+Real World Value First Value Mapped
+Real World Value Intercept
+Real World Value Slope
+Relationship Type
+Verifying Organization
+Verification Date Time
+Observation Date Time
+Value Type
+Concept Name Code Sequence
+Continuity Of Content
+Verifying Observer Sequence
+Verifying Observer Name
+Verifying Observer Identification Code Sequence
+Referenced Waveform Channels
+DateTime
+Date
+Time
+Person Name
+UID
+Temporal Range Type
+Referenced Sample Positions
+Referenced Frame Numbers
+Referenced Time Offsets
+Referenced Datetime
+Text Value
+Concept Code Sequence
+Purpose of Reference Code Sequence
+Annotation Group Number
+Modifier Code Sequence
+Measured Value Sequence
+Numeric Value Qualifier Code Sequence
+Numeric Value
+Predecessor Documents Sequence
+Referenced Request Sequence
+Performed Procedure Code Sequence
+Current Requested Procedure Evidence Sequence
+Pertinent Other Evidence Sequence
+Completion Flag
+Completion Flag Description
+Verification Flag
+Content Template Sequence
+Identical Documents Sequence
+Content Sequence
+Annotation Sequence
+Template Identifier
+Template Version (RET)
+Template Local Version (RET)
+Template Extension Flag (RET)
+Template Extension Organization UID (RET)
+Template Extension Creator UID (RET)
+Referenced Content Item Identifier
+Calibration Image
+Device Sequence
+Device Length
+Device Diameter
+Device Diameter Units
+Device Volume
+Inter-Marker Distance
+Device Description
+Energy Window Vector
+Number of Energy Windows
+Energy Window Information Sequence
+Energy Window Range Sequence
+Energy Window Lower Limit
+Energy Window Upper Limit
+Radiopharmaceutical Information Sequence
+Residual Syringe Counts
+Energy Window Name
+Detector Vector
+Number of Detectors
+Detector Information Sequence
+Phase Vector
+Number of Phases
+Phase Information Sequence
+Number of Frames in Phase
+Phase Delay
+Pause Between Frames
+Phase Description
+Rotation Vector
+Number of Rotations
+Rotation Information Sequence
+Number of Frames in Rotation
+R-R Interval Vector
+Number of R-R Intervals
+Gated Information Sequence
+Data Information Sequence
+Time Slot Vector
+Number of Time Slots
+Time Slot Information Sequence
+Time Slot Time
+Slice Vector
+Number of Slices
+Angular View Vector
+Time Slice Vector
+Number of Time Slices
+Start Angle
+Type of Detector Motion
+Trigger Vector
+Number of Triggers in Phase
+View Code Sequence
+View Modifier Code Sequence
+Radionuclide Code Sequence
+Administration Route Code Sequence
+Radiopharmaceutical Code Sequence
+Calibration Data Sequence
+Energy Window Number
+Image ID
+Patient Orientation Code Sequence
+Patient Orientation Modifier Code Sequence
+Patient Gantry Relationship Code Sequence
+Slice Progression Direction
+Series Type
+Units
+Counts Source
+Reprojection Method
+Randoms Correction Method
+Attenuation Correction Method
+Decay Correction
+Reconstruction Method
+Detector Lines of Response Used
+Scatter Correction Method
+Axial Acceptance
+Axial Mash
+Transverse Mash
+Detector Element Size
+Coincidence Window Width
+Secondary Counts Type
+Frame Reference Time
+Primary (Prompts) Counts Accumulated
+Secondary Counts Accumulated
+Slice Sensitivity Factor
+Decay Factor
+Dose Calibration Factor
+Scatter Fraction Factor
+Dead Time Factor
+Image Index
+Counts Included
+Dead Time Correction Flag
+Histogram Sequence
+Histogram Number of Bins
+Histogram First Bin Value
+Histogram Last Bin Value
+Histogram Bin Width
+Histogram Explanation
+Histogram Data
+Graphic Annotation Sequence
+Graphic Layer
+Bounding Box Annotation Units
+Anchor Point Annotation Units
+Graphic Annotation Units
+Unformatted Text Value
+Text Object Sequence
+Graphic Object Sequence
+Bounding Box Top Left Hand Corner
+Bounding Box Bottom Right Hand Corner
+Bounding Box Text Horizontal Justification
+Anchor Point
+Anchor Point Visibility
+Graphic Dimensions
+Number of Graphic Points
+Graphic Data
+Graphic Type
+Graphic Filled
+Image Horizontal Flip
+Image Rotation
+Displayed Area Top Left Hand Corner
+Displayed Area Bottom Right Hand Corner
+Displayed Area Selection Sequence
+Graphic Layer Sequence
+Graphic Layer Order
+Graphic Layer Recommended Display Grayscale Value
+Graphic Layer Recommended Display RGB Value
+Graphic Layer Description
+Content Label
+Content Description
+Presentation Creation Date
+Presentation Creation Time
+Content Creator's Name
+Presentation Size Mode
+Presentation Pixel Spacing
+Presentation Pixel Aspect Ratio
+Presentation Pixel Magnification Ratio
+Shape Type
+Registration Sequence
+Matrix Registration Sequence
+Matrix Sequence
+Frame of Reference Transformation Matrix Type
+Registration Type Code Sequence
+Fiducial Description
+Fiducial Identifier
+Fiducial Identifier Code Sequence
+Contour Uncertainty Radius
+Used Fiducials Sequence
+Graphic Coordinates Data Sequence
+Fiducial UID
+Fiducial Set Sequence
+Fiducial Sequence
+Storage Media File-set ID
+Storage Media File-set UID
+Icon Image Sequence
+Topic Title
+Topic Subject
+Topic Author
+Topic Keywords
+SOP Instance Status
+SOP Authorization Date and Time
+SOP Authorization Comment
+Authorization Equipment Certification Number
+MAC ID Number
+MAC Calculation Transfer Syntax UID
+MAC Algorithm
+Data Elements Signed
+Digital Signature UID
+Digital Signature DateTime
+Certificate Type
+Certificate of Signer
+Signature
+Certified Timestamp Type
+Certified Timestamp
+Encrypted Attributes Sequence
+Encrypted Content Transfer Syntax UID
+Encrypted Content
+Modified Attributes Sequence
+Number of Copies
+Printer Configuration Sequence
+Print Priority
+Medium Type
+Film Destination
+Film Session Label
+Memory Allocation
+Maximum Memory Allocation
+Color Image Printing Flag
+Collation Flag
+Annotation Flag
+Image Overlay Flag
+Presentation LUT Flag
+Image Box Presentation LUT Flag
+Memory Bit Depth
+Printing Bit Depth
+Media Installed Sequence
+Other Media Available Sequence
+Supported Image Display Formats Sequence
+Referenced Film Box Sequence
+Referenced Stored Print Sequence
+Image Display Format
+Annotation Display Format ID
+Film Orientation
+Film Size ID
+Printer Resolution ID
+Default Printer Resolution ID
+Magnification Type
+Smoothing Type
+Default Magnification Type
+Other Magnification Types Available
+Default Smoothing Type
+Other Smoothing Types Available
+Border Density
+Empty Image Density
+Min Density
+Max Density
+Trim
+Configuration Information
+Configuration Information Description
+Maximum Collated Films
+Illumination
+Reflected Ambient Light
+Printer Pixel Spacing
+Referenced Film Session Sequence
+Referenced Image Box Sequence
+Referenced Basic Annotation Box Sequence
+Image Position
+Polarity
+Requested Image Size
+Requested Decimate/Crop Behavior
+Requested Resolution ID
+Requested Image Size Flag
+Decimate/Crop Result
+Basic Grayscale Image Sequence
+Basic Color Image Sequence
+Referenced Image Overlay Box Sequence (RET)
+Referenced VOI LUT Box Sequence (RET)
+Annotation Position
+Text String
+Referenced Overlay Plane Sequence
+Referenced Overlay Plane Groups
+Overlay Pixel Data Sequence
+Overlay Magnification Type
+Overlay Smoothing Type
+Overlay or Image Magnification
+Magnify to Number of Columns
+Overlay Foreground Density
+Overlay Background Density
+Overlay Mode (RET)
+Threshold Density (RET)
+Referenced Image Box Sequence (RET)
+Presentation LUT Sequence
+Presentation LUT Shape
+Referenced Presentation LUT Sequence
+Print Job ID
+Execution Status
+Execution Status Info
+Creation Date
+Creation Time
+Originator
+Destination AE
+Owner ID
+Number of Films
+Referenced Print Job Sequence
+Printer Status
+Printer Status Info
+Printer Name
+Print Queue ID
+Queue Status
+Print Job Description Sequence
+Referenced Print Job Sequence
+Print Management Capabilities Sequence
+Printer Characteristics Sequence
+Film Box Content Sequence
+Image Box Content Sequence
+Annotation Content Sequence
+Image Overlay Box Content Sequence
+Presentation LUT Content Sequence
+Proposed Study Sequence
+Original Image Sequence
+Label Using Information Extracted From Instances
+Label Text
+Label Style Selection
+Media Disposition
+Barcode Value
+Barcode Symbology
+Allow Media Splitting
+Include Non-DICOM Objects
+Include Display Application
+Preserve Composite Instances After Media Creation
+Total Number of Pieces of Media Created
+Requested Media Application Profile
+Referenced Storage Media Sequence
+Failure Attributes
+Allow Lossy Compression
+Request Priority
+RT Image Label
+RT Image Name
+RT Image Description
+Reported Values Origin
+RT Image Plane
+X-Ray Image Receptor Translation
+X-Ray Image Receptor Angle
+RT Image Orientation
+Image Plane Pixel Spacing
+RT Image Position
+Radiation Machine Name
+Radiation Machine SAD
+Radiation Machine SSD
+RT Image SID
+Source to Reference Object Distance
+Fraction Number
+Exposure Sequence
+Meterset Exposure
+Diaphragm Position
+Fluence Map Sequence
+Fluence Data Source
+Fluence Data Scale
+DVH Type
+Dose Units
+Dose Type
+Dose Comment
+Normalization Point
+Dose Summation Type
+Grid Frame Offset Vector
+Dose Grid Scaling
+RT Dose ROI Sequence
+Dose Value
+Tissue Heterogeneity Correction
+DVH Normalization Point
+DVH Normalization Dose Value
+DVH Sequence
+DVH Dose Scaling
+DVH Volume Units
+DVH Number of Bins
+DVH Data
+DVH Referenced ROI Sequence
+DVH ROI Contribution Type
+DVH Minimum Dose
+DVH Maximum Dose
+DVH Mean Dose
+Structure Set Label
+Structure Set Name
+Structure Set Description
+Structure Set Date
+Structure Set Time
+Referenced Frame of Reference Sequence
+RT Referenced Study Sequence
+RT Referenced Series Sequence
+Contour Image Sequence
+Structure Set ROI Sequence
+ROI Number
+Referenced Frame of Reference UID
+ROI Name
+ROI Description
+ROI Display Color
+ROI Volume
+RT Related ROI Sequence
+RT ROI Relationship
+ROI Generation Algorithm
+ROI Generation Description
+ROI Contour Sequence
+Contour Sequence
+Contour Geometric Type
+Contour Slab Thickness
+Contour Offset Vector
+Number of Contour Points
+Contour Number
+Attached Contours
+Contour Data
+RT ROI Observations Sequence
+Observation Number
+Referenced ROI Number
+ROI Observation Label
+RT ROI Identification Code Sequence
+ROI Observation Description
+Related RT ROI Observations Sequence
+RT ROI Interpreted Type
+ROI Interpreter
+ROI Physical Properties Sequence
+ROI Physical Property
+ROI Physical Property Value
+Frame of Reference Relationship Sequence
+Related Frame of Reference UID
+Frame of Reference Transformation Type
+Frame of Reference Transformation Matrix
+Frame of Reference Transformation Comment
+Measured Dose Reference Sequence
+Measured Dose Description
+Measured Dose Type
+Measured Dose Value
+Treatment Session Beam Sequence
+Current Fraction Number
+Treatment Control Point Date
+Treatment Control Point Time
+Treatment Termination Status
+Treatment Termination Code
+Treatment Verification Status
+Referenced Treatment Record Sequence
+Specified Primary Meterset
+Specified Secondary Meterset
+Delivered Primary Meterset
+Delivered Secondary Meterset
+Specified Treatment Time
+Delivered Treatment Time
+Control Point Delivery Sequence
+Specified Meterset
+Delivered Meterset
+Dose Rate Delivered
+Treatment Summary Calculated Dose Reference Sequence
+Cumulative Dose to Dose Reference
+First Treatment Date
+Most Recent Treatment Date
+Number of Fractions Delivered
+Override Sequence
+Override Parameter Pointer
+Measured Dose Reference Number
+Override Reason
+Calculated Dose Reference Sequence
+Calculated Dose Reference Number
+Calculated Dose Reference Description
+Calculated Dose Reference Dose Value
+Start Meterset
+End Meterset
+Referenced Measured Dose Reference Sequence
+Referenced Measured Dose Reference Number
+Referenced Calculated Dose Reference Sequence
+Referenced Calculated Dose Reference Number
+Beam Limiting Device Leaf Pairs Sequence
+Recorded Wedge Sequence
+Recorded Compensator Sequence
+Recorded Block Sequence
+Treatment Summary Measured Dose Reference Sequence
+Recorded Source Sequence
+Source Serial Number
+Treatment Session Application Setup Sequence
+Application Setup Check
+Recorded Brachy Accessory Device Sequence
+Referenced Brachy Accessory Device Number
+Recorded Channel Sequence
+Specified Channel Total Time
+Delivered Channel Total Time
+Specified Number of Pulses
+Delivered Number of Pulses
+Specified Pulse Repetition Interval
+Delivered Pulse Repetition Interval
+Recorded Source Applicator Sequence
+Referenced Source Applicator Number
+Recorded Channel Shield Sequence
+Referenced Channel Shield Number
+Brachy Control Point Delivered Sequence
+Safe Position Exit Date
+Safe Position Exit Time
+Safe Position Return Date
+Safe Position Return Time
+Current Treatment Status
+Treatment Status Comment
+Fraction Group Summary Sequence
+Referenced Fraction Number
+Fraction Group Type
+Beam Stopper Position
+Fraction Status Summary Sequence
+Treatment Date
+Treatment Time
+RT Plan Label
+RT Plan Name
+RT Plan Description
+RT Plan Date
+RT Plan Time
+Treatment Protocols
+Treatment Intent
+Treatment Sites
+RT Plan Geometry
+Prescription Description
+Dose Reference Sequence
+Dose Reference Number
+Dose Reference UID
+Dose Reference Structure Type
+Nominal Beam Energy Unit
+Dose Reference Description
+Dose Reference Point Coordinates
+Nominal Prior Dose
+Dose Reference Type
+Constraint Weight
+Delivery Warning Dose
+Delivery Maximum Dose
+Target Minimum Dose
+Target Prescription Dose
+Target Maximum Dose
+Target Underdose Volume Fraction
+Organ at Risk Full-volume Dose
+Organ at Risk Limit Dose
+Organ at Risk Maximum Dose
+Organ at Risk Overdose Volume Fraction
+Tolerance Table Sequence
+Tolerance Table Number
+Tolerance Table Label
+Gantry Angle Tolerance
+Beam Limiting Device Angle Tolerance
+Beam Limiting Device Tolerance Sequence
+Beam Limiting Device Position Tolerance
+Patient Support Angle Tolerance
+Table Top Eccentric Angle Tolerance
+Table Top Vertical Position Tolerance
+Table Top Longitudinal Position Tolerance
+Table Top Lateral Position Tolerance
+RT Plan Relationship
+Fraction Group Sequence
+Fraction Group Number
+Fraction Group Description
+Number of Fractions Planned
+Number of Fraction Pattern Digits Per Day
+Repeat Fraction Cycle Length
+Fraction Pattern
+Number of Beams
+Beam Dose Specification Point
+Beam Dose
+Beam Meterset
+Number of Brachy Application Setups
+Brachy Application Setup Dose Specification Point
+Brachy Application Setup Dose
+Beam Sequence
+Treatment Machine Name
+Primary Dosimeter Unit
+Source-Axis Distance
+Beam Limiting Device Sequence
+RT Beam Limiting Device Type
+Source to Beam Limiting Device Distance
+Number of Leaf/Jaw Pairs
+Leaf Position Boundaries
+Beam Number
+Beam Name
+Beam Description
+Beam Type
+Radiation Type
+High-Dose Technique Type
+Reference Image Number
+Planned Verification Image Sequence
+Imaging Device-Specific Acquisition Parameters
+Treatment Delivery Type
+Number of Wedges
+Wedge Sequence
+Wedge Number
+Wedge Type
+Wedge ID
+Wedge Angle
+Wedge Factor
+Wedge Orientation
+Source to Wedge Tray Distance
+Number of Compensators
+Material ID
+Total Compensator Tray Factor
+Compensator Sequence
+Compensator Number
+Compensator ID
+Source to Compensator Tray Distance
+Compensator Rows
+Compensator Columns
+Compensator Pixel Spacing
+Compensator Position
+Compensator Transmission Data
+Compensator Thickness Data
+Number of Boli
+Compensator Type
+Number of Blocks
+Total Block Tray Factor
+Block Sequence
+Block Tray ID
+Source to Block Tray Distance
+Block Type
+Accessory Code
+Block Divergence
+Block Mounting Position
+Block Number
+Block Name
+Block Thickness
+Block Transmission
+Block Number of Points
+Block Data
+Applicator Sequence
+Applicator ID
+Applicator Type
+Applicator Description
+Cumulative Dose Reference Coefficient
+Final Cumulative Meterset Weight
+Number of Control Points
+Control Point Sequence
+Control Point Index
+Nominal Beam Energy
+Dose Rate Set
+Wedge Position Sequence
+Wedge Position
+Beam Limiting Device Position Sequence
+Leaf/Jaw Positions
+Gantry Angle
+Gantry Rotation Direction
+Beam Limiting Device Angle
+Beam Limiting Device Rotation Direction
+Patient Support Angle
+Patient Support Rotation Direction
+Table Top Eccentric Axis Distance
+Table Top Eccentric Angle
+Table Top Eccentric Rotation Direction
+Table Top Vertical Position
+Table Top Longitudinal Position
+Table Top Lateral Position
+Isocenter Position
+Surface Entry Point
+Source to Surface Distance
+Cumulative Meterset Weight
+Patient Setup Sequence
+Patient Setup Number
+Patient Additional Position
+Fixation Device Sequence
+Fixation Device Type
+Fixation Device Label
+Fixation Device Description
+Fixation Device Position
+Shielding Device Sequence
+Shielding Device Type
+Shielding Device Label
+Shielding Device Description
+Shielding Device Position
+Setup Technique
+Setup Technique Description
+Setup Device Sequence
+Setup Device Type
+Setup Device Label
+Setup Device Description
+Setup Device Parameter
+Setup Reference Description
+Table Top Vertical Setup Displacement
+Table Top Longitudinal Setup Displacement
+Table Top Lateral Setup Displacement
+Brachy Treatment Technique
+Brachy Treatment Type
+Treatment Machine Sequence
+Source Sequence
+Source Number
+Source Type
+Source Manufacturer
+Active Source Diameter
+Active Source Length
+Source Encapsulation Nominal Thickness
+Source Encapsulation Nominal Transmission
+Source Isotope Name
+Source Isotope Half Life
+Reference Air Kerma Rate
+Air Kerma Rate Reference Date
+Air Kerma Rate Reference Time
+Application Setup Sequence
+Application Setup Type
+Application Setup Number
+Application Setup Name
+Application Setup Manufacturer
+Template Number
+Template Type
+Template Name
+Total Reference Air Kerma
+Brachy Accessory Device Sequence
+Brachy Accessory Device Number
+Brachy Accessory Device ID
+Brachy Accessory Device Type
+Brachy Accessory Device Name
+Brachy Accessory Device Nominal Thickness
+Brachy Accessory Device Nominal Transmission
+Channel Sequence
+Channel Number
+Channel Length
+Channel Total Time
+Source Movement Type
+Number of Pulses
+Pulse Repetition Interval
+Source Applicator Number
+Source Applicator ID
+Source Applicator Type
+Source Applicator Name
+Source Applicator Length
+Source Applicator Manufacturer
+Source Applicator Wall Nominal Thickness
+Source Applicator Wall Nominal Transmission
+Source Applicator Step Size
+Transfer Tube Number
+Transfer Tube Length
+Channel Shield Sequence
+Channel Shield Number
+Channel Shield ID
+Channel Shield Name
+Channel Shield Nominal Thickness
+Channel Shield Nominal Transmission
+Final Cumulative Time Weight
+Brachy Control Point Sequence
+Control Point Relative Position
+Control Point 3D Position
+Cumulative Time Weight
+Compensator Divergence
+Compensator Mounting Position
+Source to Compensator Distance
+Referenced RT Plan Sequence
+Referenced Beam Sequence
+Referenced Beam Number
+Referenced Reference Image Number
+Start Cumulative Meterset Weight
+End Cumulative Meterset Weight
+Referenced Brachy Application Setup Sequence
+Referenced Brachy Application Setup Number
+Referenced Source Number
+Referenced Fraction Group Sequence
+Referenced Fraction Group Number
+Referenced Verification Image Sequence
+Referenced Reference Image Sequence
+Referenced Dose Reference Sequence
+Referenced Dose Reference Number
+Brachy Referenced Dose Reference Sequence
+Referenced Structure Set Sequence
+Referenced Patient Setup Number
+Referenced Dose Sequence
+Referenced Tolerance Table Number
+Referenced Bolus Sequence
+Referenced Wedge Number
+Referenced Compensator Number
+Referenced Block Number
+Referenced Control Point Index
+Approval Status
+Review Date
+Review Time
+Reviewer Name
+Text Arbitrary (RET)
+Text Comments (RET)
+Results ID
+Results ID Issuer
+Referenced Interpretation Sequence
+Interpretation Recorded Date
+Interpretation Recorded Time
+Interpretation Recorder
+Reference to Recorded Sound
+Interpretation Transcription Date
+Interpretation Transcription Time
+Interpretation Transcriber
+Interpretation Text
+Interpretation Author
+Interpretation Approver Sequence
+Interpretation Approval Date
+Interpretation Approval Time
+Physician Approving Interpretation
+Interpretation Diagnosis Description
+Interpretation Diagnosis Code Sequence
+Results Distribution List Sequence
+Distribution Name
+Distribution Address
+Interpretation ID
+Interpretation ID Issuer
+Interpretation Type ID
+Interpretation Status ID
+Impressions
+Results Comments
+MAC Parameters Sequence
+Curve Dimensions
+Number of Points
+Type of Data
+Curve Description
+Axis Units
+Axis Labels
+Data Value Representation
+Minimum Coordinate Value
+Maximum Coordinate Value
+Curve Range
+Curve Data Descriptor
+Coordinate Start Value
+Coordinate Step Value
+Curve Activation Layer
+Audio Type
+Audio Sample Format
+Number of Channels
+Number of Samples
+Sample Rate
+Total Time
+Audio Sample Data
+Audio Comments
+Curve Label
+Referenced Overlay Sequence
+Referenced Overlay Group
+Curve Data
+Shared Functional Groups Sequence
+Per-frame Functional Groups Sequence
+Waveform Sequence
+Channel Minimum Value
+Channel Maximum Value
+Waveform Bits Allocated
+Waveform Sample Interpretation
+Waveform Padding Value
+Waveform Data
+First Order Phase Correction Angle
+Spectroscopy Data
+Overlay Rows
+Overlay Columns
+Overlay Planes
+Number of Frames in Overlay
+Overlay Description
+Overlay Type
+Overlay Subtype
+Overlay Origin
+Image Frame Origin
+Overlay Plane Origin
+Overlay Compression Code (RET)
+Overlay Bits Allocated
+Overlay Bit Position
+Overlay Format (RET)
+Overlay Location (RET)
+Overlay Activation Layer
+Overlay Descriptor - Gray (RET)
+Overlay Descriptor - Red (RET)
+Overlay Descriptor - Green (RET)
+Overlay Descriptor - Blue (RET)
+Overlays - Gray (RET)
+Overlays - Red (RET)
+Overlays - Green (RET)
+Overlays - Blue (RET)
+ROI Area
+ROI Mean
+ROI Standard Deviation
+Overlay Label
+Overlay Data
+Overlay Comments (RET)
+Pixel Data
+Digital Signatures Sequence
+Data Set Trailing Padding
+Item
+Item Delimitation Item
+Sequence Delimitation Item 
+

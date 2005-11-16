@@ -1,0 +1,2028 @@
+(0008,0001) Length to End RET
+(0008,0005) Specific Character Set CS 1-n
+(0008,0008) Image Type CS 1-n
+(0008,0010) Recognition Code RET
+(0008,0012) Instance Creation Date DA 1
+(0008,0013) Instance Creation Time TM 1
+(0008,0014) Instance Creator UID UI 1
+(0008,0016) SOP Class UID UI 1
+(0008,0018) SOP Instance UID UI 1
+(0008,001a) Related General SOP Class UID UI 1-n
+(0008,001b) Original Specialized SOP Class UID UI 1
+(0008,0020) Study Date DA 1
+(0008,0021) Series Date DA 1
+(0008,0022) Acquisition Date DA 1
+(0008,0023) Content Date DA 1
+(0008,0024) Overlay Date DA 1
+(0008,0025) Curve Date DA 1
+(0008,002a) Acquisition Datetime DT 1
+(0008,0030) Study Time TM 1
+(0008,0031) Series Time TM 1
+(0008,0032) Acquisition Time TM 1
+(0008,0033) Content Time TM 1
+(0008,0034) Overlay Time TM 1
+(0008,0035) Curve Time TM 1
+(0008,0040) Data Set Type RET
+(0008,0041) Data Set Subtype RET
+(0008,0042) Nuclear Medicine Series Type CS 1 RET
+(0008,0050) Accession Number SH 1
+(0008,0052) Query/Retrieve Level CS 1
+(0008,0054) Retrieve AE Title AE 1-n
+(0008,0056) Instance Availability CS 1
+(0008,0058) Failed SOP Instance UID List UI 1-n
+(0008,0060) Modality CS 1
+(0008,0061) Modalities in Study CS 1-n
+(0008,0062) SOP Classes in Study UI 1-n
+(0008,0064) Conversion Type CS 1
+(0008,0068) Presentation Intent Type CS 1
+(0008,0070) Manufacturer LO 1
+(0008,0080) Institution Name LO 1
+(0008,0081) Institution Address ST 1
+(0008,0082) Institution Code Sequence SQ 1
+(0008,0090) Referring Physician's Name PN 1
+(0008,0092) Referring Physician's Address ST 1
+(0008,0094) Referring Physician's Telephone Numbers SH 1-n
+(0008,0096) Referring Physician Identification Sequence SQ 1
+(0008,0100) Code Value SH 1
+(0008,0102) Coding Scheme Designator SH 1
+(0008,0103) Coding Scheme Version SH 1
+(0008,0104) Code Meaning LO 1
+(0008,0105) Mapping Resource CS 1
+(0008,0106) Context Group Version DT 1
+(0008,0107) Context Group Local Version DT 1
+(0008,010b) Context Group Extension Flag CS 1
+(0008,010c) Coding Scheme UID UI 1
+(0008,010d) Context Group Extension Creator UID UI 1
+(0008,010f) Context Identifier CS 1
+(0008,0110) Coding Scheme Identification Sequence SQ 1
+(0008,0112) Coding Scheme Registry LO 1
+(0008,0114) Coding Scheme External ID ST 1
+(0008,0115) Coding Scheme Name ST 1
+(0008,0116) Responsible Organization ST 1
+(0008,0201) Timezone Offset From UTC SH 1
+(0008,1000) Network ID RET
+(0008,1010) Station Name SH 1
+(0008,1030) Study Description LO 1
+(0008,1032) Procedure Code Sequence SQ 1
+(0008,103e) Series Description LO 1
+(0008,1040) Institutional Department Name LO 1
+(0008,1048) Physician(s) of Record PN 1-n
+(0008,1049) Physician(s) of Record Identification Sequence SQ 1
+(0008,1050) Performing Physician's Name PN 1-n
+(0008,1052) Performing Physician Identification Sequence SQ 1
+(0008,1060) Name of Physician(s) Reading Study PN 1-n
+(0008,1062) Physician(s) Reading Study Identification Sequence SQ 1
+(0008,1070) Operators' Name PN 1-n
+(0008,1072) Operator Identification Sequence SQ 1
+(0008,1080) Admitting Diagnoses Description LO 1-n
+(0008,1084) Admitting Diagnoses Code Sequence SQ 1
+(0008,1090) Manufacturer's Model Name LO 1
+(0008,1100) Referenced Results Sequence SQ 1
+(0008,1110) Referenced Study Sequence SQ 1
+(0008,1111) Referenced Performed Procedure Step Sequence SQ 1
+(0008,1115) Referenced Series Sequence SQ 1
+(0008,1120) Referenced Patient Sequence SQ 1
+(0008,1125) Referenced Visit Sequence SQ 1
+(0008,1130) Referenced Overlay Sequence SQ 1
+(0008,113a) Referenced Waveform Sequence SQ 1
+(0008,1140) Referenced Image Sequence SQ 1
+(0008,1145) Referenced Curve Sequence SQ 1
+(0008,114a) Referenced Instance Sequence SQ 1
+(0008,1150) Referenced SOP Class UID UI 1
+(0008,1155) Referenced SOP Instance UID UI 1
+(0008,115a) SOP Classes Supported UI 1-n
+(0008,1160) Referenced Frame Number IS 1-n
+(0008,1195) Transaction UID UI 1
+(0008,1197) Failure Reason US 1
+(0008,1198) Failed SOP Sequence SQ 1
+(0008,1199) Referenced SOP Sequence SQ 1
+(0008,1200) Studies Containing Other Referenced Instances Sequence
+(0008,1250) Related Series Sequence SQ 1
+(0008,2110) Lossy Image Compression CS 1 RET
+(0008,2111) Derivation Description ST 1
+(0008,2112) Source Image Sequence SQ 1
+(0008,2120) Stage Name SH 1
+(0008,2122) Stage Number IS 1
+(0008,2124) Number of Stages IS 1
+(0008,2127) View Name SH 1
+(0008,2128) View Number IS 1
+(0008,2129) Number of Event Timers IS 1
+(0008,212a) Number of Views in Stage IS 1
+(0008,2130) Event Elapsed Time(s) DS 1-n
+(0008,2132) Event Timer Name(s) LO 1-n
+(0008,2142) Start Trim IS 1
+(0008,2143) Stop Trim IS 1
+(0008,2144) Recommended Display Frame Rate IS 1
+(0008,2200) Transducer Position CS 1 RET
+(0008,2204) Transducer Orientation CS 1 RET
+(0008,2208) Anatomic Structure CS 1 RET
+(0008,2218) Anatomic Region Sequence SQ 1
+(0008,2220) Anatomic Region Modifier Sequence SQ 1
+(0008,2228) Primary Anatomic Structure Sequence SQ 1
+(0008,2229) Anatomic Structure, Space or Region Sequence SQ 1
+(0008,2230) Primary Anatomic Structure Modifier Sequence SQ 1
+(0008,2240) Transducer Position Sequence SQ 1
+(0008,2242) Transducer Position Modifier Sequence SQ 1
+(0008,2244) Transducer Orientation Sequence SQ 1
+(0008,2246) Transducer Orientation Modifier Sequence SQ 1
+(0008,3001) Alternate Representation Sequence SQ 1
+(0008,4000) Comments RET
+(0008,9007) Frame Type CS 4
+(0008,9092) Referenced Image Evidence Sequence SQ 1
+(0008,9121) Referenced Raw Data Sequence SQ 1
+(0008,9123) Creator-Version UID UI 1
+(0008,9124) Derivation Image Sequence SQ 1
+(0008,9154) Source Image Evidence Sequence SQ 1
+(0008,9205) Pixel Presentation CS 1
+(0008,9206) Volumetric Properties CS 1
+(0008,9207) Volume Based Calculation Technique CS 1
+(0008,9208) Complex Image Component CS 1
+(0008,9209) Acquisition Contrast CS 1
+(0008,9215) Derivation Code Sequence SQ 1
+(0008,9237) Referenced Grayscale Presentation State Sequence SQ 1
+(0010,0010) Patient's Name PN 1
+(0010,0020) Patient ID LO 1
+(0010,0021) Issuer of Patient ID LO 1
+(0010,0030) Patient's Birth Date DA 1
+(0010,0032) Patient's Birth Time TM 1
+(0010,0040) Patient's Sex CS 1
+(0010,0050) Patient's Insurance Plan Code Sequence SQ 1
+(0010,0101) Patient's Primary Language Code Sequence SQ 1
+(0010,0102) Patient's Primary Language Code Modifier Sequence SQ 1
+(0010,1000) Other Patient IDs LO 1-n
+(0010,1001) Other Patient Names PN 1-n
+(0010,1005) Patient's Birth Name PN 1
+(0010,1010) Patient's Age AS 1
+(0010,1020) Patient's Size DS 1
+(0010,1030) Patient's Weight DS 1
+(0010,1040) Patient's Address LO 1
+(0010,1050) Insurance Plan Identification RET
+(0010,1060) Patient's Mother's Birth Name PN 1
+(0010,1080) Military Rank LO 1
+(0010,1081) Branch of Service LO 1
+(0010,1090) Medical Record Locator LO 1
+(0010,2000) Medical Alerts LO 1-n
+(0010,2110) Contrast Allergies LO 1-n
+(0010,2150) Country of Residence LO 1
+(0010,2152) Region of Residence LO 1
+(0010,2154) Patient's Telephone Numbers SH 1-n
+(0010,2160) Ethnic Group SH 1
+(0010,2180) Occupation SH 1
+(0010,21a0) Smoking Status CS 1
+(0010,21b0) Additional Patient History LT 1
+(0010,21c0) Pregnancy Status US 1
+(0010,21d0) Last Menstrual Date DA 1
+(0010,21f0) Patient's Religious Preference LO 1
+(0010,4000) Patient Comments LT 1
+(0012,0010) Clinical Trial Sponsor Name LO 1
+(0012,0020) Clinical Trial Protocol ID LO 1
+(0012,0021) Clinical Trial Protocol Name LO 1
+(0012,0030) Clinical Trial Site ID LO 1
+(0012,0031) Clinical Trial Site Name LO 1
+(0012,0040) Clinical Trial Subject ID LO 1
+(0012,0042) Clinical Trial Subject Reading ID LO 1
+(0012,0050) Clinical Trial Time Point ID LO 1
+(0012,0051) Clinical Trial Time Point Description ST 1
+(0012,0060) Clinical Trial Coordinating Center Name LO 1
+(0018,0010) Contrast/Bolus Agent LO 1
+(0018,0012) Contrast/Bolus Agent Sequence SQ 1
+(0018,0014) Contrast/Bolus Administration Route Sequence SQ 1
+(0018,0015) Body Part Examined CS 1
+(0018,0020) Scanning Sequence CS 1-n
+(0018,0021) Sequence Variant CS 1-n
+(0018,0022) Scan Options CS 1-n
+(0018,0023) MR Acquisition Type CS 1
+(0018,0024) Sequence Name SH 1
+(0018,0025) Angio Flag CS 1
+(0018,0026) Intervention Drug Information Sequence SQ 1
+(0018,0027) Intervention Drug Stop Time TM 1
+(0018,0028) Intervention Drug Dose DS 1
+(0018,0029) Intervention Drug Sequence SQ 1
+(0018,002a) Additional Drug Sequence SQ 1
+(0018,0030) Radionuclide LO 1-n RET
+(0018,0031) Radiopharmaceutical LO 1
+(0018,0032) Energy Window Centerline DS 1 RET
+(0018,0033) Energy Window Total Width DS 1-n RET
+(0018,0034) Intervention Drug Name LO 1
+(0018,0035) Intervention Drug Start Time TM 1
+(0018,0036) Intervention Sequence SQ 1
+(0018,0037) Therapy Type CS 1 RET
+(0018,0038) Intervention Status CS 1
+(0018,0039) Therapy Description CS 1 RET
+(0018,003a) Intervention Description ST 1
+(0018,0040) Cine Rate IS 1
+(0018,0050) Slice Thickness DS 1
+(0018,0060) KVP DS 1
+(0018,0070) Counts Accumulated IS 1
+(0018,0071) Acquisition Termination Condition CS 1
+(0018,0072) Effective Duration DS 1
+(0018,0073) Acquisition Start Condition CS 1
+(0018,0074) Acquisition Start Condition Data IS 1
+(0018,0075) Acquisition Termination Condition Data IS 1
+(0018,0080) Repetition Time DS 1
+(0018,0081) Echo Time DS 1
+(0018,0082) Inversion Time DS 1
+(0018,0083) Number of Averages DS 1
+(0018,0084) Imaging Frequency DS 1
+(0018,0085) Imaged Nucleus SH 1
+(0018,0086) Echo Number(s) IS 1-n
+(0018,0087) Magnetic Field Strength DS 1
+(0018,0088) Spacing Between Slices DS 1
+(0018,0089) Number of Phase Encoding Steps IS 1
+(0018,0090) Data Collection Diameter DS 1
+(0018,0091) Echo Train Length IS 1
+(0018,0093) Percent Sampling DS 1
+(0018,0094) Percent Phase Field of View DS 1
+(0018,0095) Pixel Bandwidth DS 1
+(0018,1000) Device Serial Number LO 1
+(0018,1004) Plate ID LO 1
+(0018,1010) Secondary Capture Device ID LO 1
+(0018,1011) Hardcopy Creation Device ID LO 1
+(0018,1012) Date of Secondary Capture DA 1
+(0018,1014) Time of Secondary Capture TM 1
+(0018,1016) Secondary Capture Device Manufacturer LO 1
+(0018,1017) Hardcopy Device Manufacturer LO 1
+(0018,1018) Secondary Capture Device Manufacturer's Model Name LO 1
+(0018,1019) Secondary Capture Device Software Version(s) LO 1-n
+(0018,101a) Hardcopy Device Software Version LO 1-n
+(0018,101b) Hardcopy Device Manfuacturer's Model Name LO 1
+(0018,1020) Software Version(s) LO 1-n
+(0018,1022) Video Image Format Acquired SH 1
+(0018,1023) Digital Image Format Acquired LO 1
+(0018,1030) Protocol Name LO 1
+(0018,1040) Contrast/Bolus Route LO 1
+(0018,1041) Contrast/Bolus Volume DS 1
+(0018,1042) Contrast/Bolus Start Time TM 1
+(0018,1043) Contrast/Bolus Stop Time TM 1
+(0018,1044) Contrast/Bolus Total Dose DS 1
+(0018,1045) Syringe Counts IS 1
+(0018,1046) Contrast Flow Rate DS 1-n
+(0018,1047) Contrast Flow Duration DS 1-n
+(0018,1048) Contrast/Bolus Ingredient CS 1
+(0018,1049) Contrast/Bolus Ingredient Concentration DS 1
+(0018,1050) Spatial Resolution DS 1
+(0018,1060) Trigger Time DS 1
+(0018,1061) Trigger Source or Type LO 1
+(0018,1062) Nominal Interval IS 1
+(0018,1063) Frame Time DS 1
+(0018,1064) Framing Type LO 1
+(0018,1065) Frame Time Vector DS 1-n
+(0018,1066) Frame Delay DS 1
+(0018,1067) Image Trigger Delay DS 1
+(0018,1068) Multiplex Group Time Offset DS 1
+(0018,1069) Trigger Time Offset DS 1
+(0018,106a) Synchronization Trigger CS 1
+(0018,106c) Synchronization Channel US 2
+(0018,106e) Trigger Sample Position UL 1
+(0018,1070) Radiopharmaceutical Route LO 1
+(0018,1071) Radiopharmaceutical Volume DS 1
+(0018,1072) Radiopharmaceutical Start Time TM 1
+(0018,1073) Radiopharmaceutical Stop Time TM 1
+(0018,1074) Radionuclide Total Dose DS 1
+(0018,1075) Radionuclide Half Life DS 1
+(0018,1076) Radionuclide Positron Fraction DS 1
+(0018,1077) Radiopharmaceutical Specific Activity DS 1
+(0018,1080) Beat Rejection Flag CS 1
+(0018,1081) Low R-R Value IS 1
+(0018,1082) High R-R Value IS 1
+(0018,1083) Intervals Acquired IS 1
+(0018,1084) Intervals Rejected IS 1
+(0018,1085) PVC Rejection LO 1
+(0018,1086) Skip Beats IS 1
+(0018,1088) Heart Rate IS 1
+(0018,1090) Cardiac Number of Images IS 1
+(0018,1094) Trigger Window IS 1
+(0018,1100) Reconstruction Diameter DS 1
+(0018,1110) Distance Source to Detector DS 1
+(0018,1111) Distance Source to Patient DS 1
+(0018,1114) Estimated Radiographic Magnification Factor DS 1
+(0018,1120) Gantry/Detector Tilt DS 1
+(0018,1121) Gantry/Detector Slew DS 1
+(0018,1130) Table Height DS 1
+(0018,1131) Table Traverse DS 1
+(0018,1134) Table Motion CS 1
+(0018,1135) Table Vertical Increment DS 1-n
+(0018,1136) Table Lateral Increment DS 1-n
+(0018,1137) Table Longitudinal Increment DS 1-n
+(0018,1138) Table Angle DS 1
+(0018,113a) Table Type CS 1
+(0018,1140) Rotation Direction CS 1
+(0018,1141) Angular Position DS 1
+(0018,1142) Radial Position DS 1-n
+(0018,1143) Scan Arc DS 1
+(0018,1144) Angular Step DS 1
+(0018,1145) Center of Rotation Offset DS 1
+(0018,1146) Rotation Offset DS 1-n RET
+(0018,1147) Field of View Shape CS 1
+(0018,1149) Field of View Dimension(s) IS 1-2
+(0018,1150) Exposure Time IS 1
+(0018,1151) X-ray Tube Current IS 1
+(0018,1152) Exposure IS 1
+(0018,1153) Exposure in uAs IS 1
+(0018,1154) Average Pulse Width DS 1
+(0018,1155) Radiation Setting CS 1
+(0018,1156) Rectification Type CS 1
+(0018,115a) Radiation Mode CS 1
+(0018,115e) Image Area Dose Product DS 1
+(0018,1160) Filter Type SH 1
+(0018,1161) Type of Filters LO 1-n
+(0018,1162) Intensifier Size DS 1
+(0018,1164) Imager Pixel Spacing DS 2
+(0018,1166) Grid CS 1-n
+(0018,1170) Generator Power IS 1
+(0018,1180) Collimator/grid Name SH 1
+(0018,1181) Collimator Type CS 1
+(0018,1182) Focal Distance IS 1-2
+(0018,1183) X Focus Center DS 1-2
+(0018,1184) Y Focus Center DS 1-2
+(0018,1190) Focal Spot(s) DS 1-n
+(0018,1191) Anode Target Material CS 1
+(0018,11a0) Body Part Thickness DS 1
+(0018,11a2) Compression Force DS 1
+(0018,1200) Date of Last Calibration DA 1-n
+(0018,1201) Time of Last Calibration TM 1-n
+(0018,1210) Convolution Kernel SH 1-n
+(0018,1240) Upper/Lower Pixel Values RET
+(0018,1242) Actual Frame Duration IS 1
+(0018,1243) Count Rate IS 1
+(0018,1244) Preferred Playback Sequencing US 1
+(0018,1250) Receive Coil Name SH 1
+(0018,1251) Transmit Coil Name SH 1
+(0018,1260) Plate Type SH 1
+(0018,1261) Phosphor Type LO 1
+(0018,1300) Scan Velocity DS 1
+(0018,1301) Whole Body Technique CS 1-n
+(0018,1302) Scan Length IS 1
+(0018,1310) Acquisition Matrix US 4
+(0018,1312) In-plane Phase Encoding Direction CS 1
+(0018,1314) Flip Angle DS 1
+(0018,1315) Variable Flip Angle Flag CS 1
+(0018,1316) SAR DS 1
+(0018,1318) dB/dt DS 1
+(0018,1400) Acquisition Device Processing Description LO 1
+(0018,1401) Acquisition Device Processing Code LO 1
+(0018,1402) Cassette Orientation CS 1
+(0018,1403) Cassette Size CS 1
+(0018,1404) Exposures on Plate US 1
+(0018,1405) Relative X-ray Exposure IS 1
+(0018,1450) Column Angulation DS 1
+(0018,1460) Tomo Layer Height DS 1
+(0018,1470) Tomo Angle DS 1
+(0018,1480) Tomo Time DS 1
+(0018,1490) Tomo Type CS 1
+(0018,1491) Tomo Class CS 1
+(0018,1495) Number of Tomosynthesis Source Images IS 1
+(0018,1500) Positioner Motion CS 1
+(0018,1508) Positioner Type CS 1
+(0018,1510) Positioner Primary Angle DS 1
+(0018,1511) Positioner Secondary Angle DS 1
+(0018,1520) Positioner Primary Angle Increment DS 1-n
+(0018,1521) Positioner Secondary Angle Increment DS 1-n
+(0018,1530) Detector Primary Angle DS 1
+(0018,1531) Detector Secondary Angle DS 1
+(0018,1600) Shutter Shape CS 1-3
+(0018,1602) Shutter Left Vertical Edge IS 1
+(0018,1604) Shutter Right Vertical Edge IS 1
+(0018,1606) Shutter Upper Horizontal Edge IS 1
+(0018,1608) Shutter Lower Horizontal Edge IS 1
+(0018,1610) Center of Circular Shutter IS 2
+(0018,1612) Radius of Circular Shutter IS 1
+(0018,1620) Vertices of the Polygonal Shutter IS 2-2n
+(0018,1622) Shutter Presentation Value US 1
+(0018,1623) Shutter Overlay Group US 1
+(0018,1700) Collimator Shape CS 1-3
+(0018,1702) Collimator Left Vertical Edge IS 1
+(0018,1704) Collimator Right Vertical Edge IS 1
+(0018,1706) Collimator Upper Horizontal Edge IS 1
+(0018,1708) Collimator Lower Horizontal Edge IS 1
+(0018,1710) Center of Circular Collimator IS 2
+(0018,1712) Radius of Circular Collimator IS 1
+(0018,1720) Vertices of the Polygonal Collimator IS 2-2n
+(0018,1800) Acquisition Time Synchronized CS 1
+(0018,1801) Time Source SH 1
+(0018,1802) Time Distribution Protocol CS 1
+(0018,1803) NTP Source Address LO 1
+(0018,2001) Page Number Vector IS 1-n
+(0018,2002) Frame Label Vector SH 1-n
+(0018,2003) Frame Primary Angle Vector DS 1-n
+(0018,2004) Frame Secondary Angle Vector DS 1-n
+(0018,2005) Slice Location Vector DS 1-n
+(0018,2006) Display Window Label Vector SH 1-n
+(0018,2010) Nominal Scanned Pixel Spacing DS 2
+(0018,2020) Digitizing Device Transport Direction CS 1
+(0018,2030) Rotation of Scanned Film DS 1
+(0018,3100) IVUS Acquisition CS 1
+(0018,3101) IVUS Pullback Rate DS 1
+(0018,3102) IVUS Gated Rate DS 1
+(0018,3103) IVUS Pullback Start Frame Number IS 1
+(0018,3104) IVUS Pullback Stop Frame Number IS 1
+(0018,3105) Lesion Number IS 1-n
+(0018,4000) Comments RET
+(0018,5000) Output Power SH 1-n
+(0018,5010) Transducer Data LO 3
+(0018,5012) Focus Depth DS 1
+(0018,5020) Processing Function LO 1
+(0018,5021) Postprocessing Function LO 1
+(0018,5022) Mechanical Index DS 1
+(0018,5024) Bone Thermal Index DS 1
+(0018,5026) Cranial Thermal Index DS 1
+(0018,5027) Soft Tissue Thermal Index DS 1
+(0018,5028) Soft Tissue-focus Thermal Index DS 1
+(0018,5029) Soft Tissue-surface Thermal Index DS 1
+(0018,5030) Dynamic Range RET
+(0018,5040) Total Gain RET
+(0018,5050) Depth of Scan Field IS 1
+(0018,5100) Patient Position CS 1
+(0018,5101) View Position CS 1
+(0018,5104) Projection Eponymous Name Code Sequence SQ 1
+(0018,5210) Image Transformation Matrix DS 6 RET
+(0018,5212) Image Translation Vector DS 3 RET
+(0018,6000) Sensitivity DS 1
+(0018,6011) Sequence of Ultrasound Regions SQ 1
+(0018,6012) Region Spatial Format US 1
+(0018,6014) Region Data Type US 1
+(0018,6016) Region Flags UL 1
+(0018,6018) Region Location Min X0 UL 1
+(0018,601a) Region Location Min Y0 UL 1
+(0018,601c) Region Location Max X1 UL 1
+(0018,601e) Region Location Max Y1 UL 1
+(0018,6020) Reference Pixel X0 SL 1
+(0018,6022) Reference Pixel Y0 SL 1
+(0018,6024) Physical Units X Direction US 1
+(0018,6026) Physical Units Y Direction US 1
+(0018,6028) Reference Pixel Physical Value X FD 1
+(0018,602a) Reference Pixel Physical Value Y FD 1
+(0018,602c) Physical Delta X FD 1
+(0018,602e) Physical Delta Y FD 1
+(0018,6030) Transducer Frequency UL 1
+(0018,6031) Transducer Type CS 1
+(0018,6032) Pulse Repetition Frequency UL 1
+(0018,6034) Doppler Correction Angle FD 1
+(0018,6036) Steering Angle FD 1
+(0018,6038) Doppler Sample Volume X Position UL 1 RET
+(0018,6039) Doppler Sample Volume X Position SL 1
+(0018,603a) Doppler Sample Volume Y Position UL 1 RET
+(0018,603b) Doppler Sample Volume Y Position SL 1
+(0018,603c) TM-Line Position X0 UL 1 RET
+(0018,603d) TM-Line Position X0 SL 1
+(0018,603e) TM-Line Position Y0 UL 1 RET
+(0018,603f) TM-Line Position Y0 SL 1
+(0018,6040) TM-Line Position X1 UL 1 RET
+(0018,6041) TM-Line Position X1 SL 1
+(0018,6042) TM-Line Position Y1 UL 1 RET
+(0018,6043) TM-Line Position Y1 SL 1
+(0018,6044) Pixel Component Organization US 1
+(0018,6046) Pixel Component Mask UL 1
+(0018,6048) Pixel Component Range Start UL 1
+(0018,604a) Pixel Component Range Stop UL 1
+(0018,604c) Pixel Component Physical Units US 1
+(0018,604e) Pixel Component Data Type US 1
+(0018,6050) Number of Table Break Points UL 1
+(0018,6052) Table of X Break Points UL 1-n
+(0018,6054) Table of Y Break Points FD 1-n
+(0018,6056) Number of Table Entries UL 1
+(0018,6058) Table of Pixel Values UL 1-n
+(0018,605a) Table of Parameter Values FL 1-n
+(0018,6060) R Wave Time Vector FL 1-n
+(0018,7000) Detector Conditions Nominal Flag CS 1
+(0018,7001) Detector Temperature DS 1
+(0018,7004) Detector Type CS 1
+(0018,7005) Detector Configuration CS 1
+(0018,7006) Detector Description LT 1
+(0018,7008) Detector Mode LT 1
+(0018,700a) Detector ID SH 1
+(0018,700c) Date of Last Detector Calibration DA 1
+(0018,700e) Time of Last Detector Calibration TM 1
+(0018,7010) Exposures on Detector Since Last Calibration IS 1
+(0018,7011) Exposures on Detector Since Manufactured IS 1
+(0018,7012) Detector Time Since Last Exposure DS 1
+(0018,7014) Detector Active Time DS 1
+(0018,7016) Detector Activation Offset From Exposure DS 1
+(0018,701a) Detector Binning DS 2
+(0018,7020) Detector Element Physical Size DS 2
+(0018,7022) Detector Element Spacing DS 2
+(0018,7024) Detector Active Shape CS 1
+(0018,7026) Detector Active Dimension(s) DS 1-2
+(0018,7028) Detector Active Origin DS 2
+(0018,702a) Detector Manufacturer Name LO 1
+(0018,702b) Detector Manufacturer's Model Name LO 1
+(0018,7030) Field of View Origin DS 2
+(0018,7032) Field of View Rotation DS 1
+(0018,7034) Field of View Horizontal Flip CS 1
+(0018,7040) Grid Absorbing Material LT 1
+(0018,7041) Grid Spacing Material LT 1
+(0018,7042) Grid Thickness DS 1
+(0018,7044) Grid Pitch DS 1
+(0018,7046) Grid Aspect Ratio IS 2
+(0018,7048) Grid Period DS 1
+(0018,704c) Grid Focal Distance DS 1
+(0018,7050) Filter Material CS 1-n
+(0018,7052) Filter Thickness Minimum DS 1-n
+(0018,7054) Filter Thickness Maximum DS 1-n
+(0018,7060) Exposure Control Mode CS 1
+(0018,7062) Exposure Control Mode Description LT 1
+(0018,7064) Exposure Status CS 1
+(0018,7065) Phototimer Setting DS 1
+(0018,8150) Exposure Time in µS DS 1
+(0018,8151) X-Ray Tube Current in µA DS 1
+(0018,9004) Content Qualification CS 1
+(0018,9005) Pulse Sequence Name SH 1
+(0018,9006) MR Imaging Modifier Sequence SQ 1
+(0018,9008) Echo Pulse Sequence CS 1
+(0018,9009) Inversion Recovery CS 1
+(0018,9010) Flow Compensation CS 1
+(0018,9011) Multiple Spin Echo CS 1
+(0018,9012) Multi-planar Excitation CS 1
+(0018,9014) Phase Contrast CS 1
+(0018,9015) Time of Flight Contrast CS 1
+(0018,9016) Spoiling CS 1
+(0018,9017) Steady State Pulse Sequence CS 1
+(0018,9018) Echo Planar Pulse Sequence CS 1
+(0018,9019) Tag Angle First Axis FD 1
+(0018,9020) Magnetization Transfer CS 1
+(0018,9021) T2 Preparation CS 1
+(0018,9022) Blood Signal Nulling CS 1
+(0018,9024) Saturation Recovery CS 1
+(0018,9025) Spectrally Selected Suppression CS 1
+(0018,9026) Spectrally Selected Excitation CS 1
+(0018,9027) Spatial Pre-saturation CS 1
+(0018,9028) Tagging CS 1
+(0018,9029) Oversampling Phase CS 1
+(0018,9022) Blood Signal Nulling CS 1
+(0018,9030) Tag Spacing First Dimension FD 1
+(0018,9032) Geometry of k-Space Traversal CS 1
+(0018,9033) Segmented k-Space Traversal CS 1
+(0018,9034) Rectilinear Phase Encode Reordering CS 1
+(0018,9035) Tag Thickness FD 1
+(0018,9036) Partial Fourier Direction CS 1
+(0018,9037) Cardiac Synchronization Technique CS 1
+(0018,9041) Receive Coil Manufacturer Name LO 1
+(0018,9042) MR Receive Coil Sequence SQ 1
+(0018,9043) Receive Coil Type CS 1
+(0018,9044) Quadrature Receive Coil CS 1
+(0018,9045) Multi-Coil Definition Sequence SQ 1
+(0018,9046) Multi-Coil Configuration LO 1
+(0018,9047) Multi-Coil Element Name SH 1
+(0018,9048) Multi-Coil Element Used CS 1
+(0018,9049) MR Transmit Coil Sequence SQ 1
+(0018,9050) Transmit Coil Manufacturer Name LO 1
+(0018,9051) Transmit Coil Type CS 1
+(0018,9052) Spectral Width FD 1-2
+(0018,9053) Chemical Shift Reference FD 1-2
+(0018,9054) Volume Localization Technique CS 1
+(0018,9058) MR Acquisition Frequency Encoding Steps US 1
+(0018,9059) De-coupling CS 1
+(0018,9060) De-coupled Nucleus CS 1-2
+(0018,9061) De-coupling Frequency FD 1-2
+(0018,9062) De-coupling Method CS 1
+(0018,9063) De-coupling Chemical Shift Reference FD 1-2
+(0018,9064) k-space Filtering CS 1
+(0018,9065) Time Domain Filtering CS 1-2
+(0018,9066) Number of Zero fills US 1-2
+(0018,9067) Baseline Correction CS 1
+(0018,9069) Parallel Reduction Factor In-plane FD 1
+(0018,9070) Cardiac R-R Interval Specified FD 1
+(0018,9073) Acquisition Duration FD 1
+(0018,9074) Frame Acquisition Datetime DT 1
+(0018,9075) Diffusion Directionality CS 1
+(0018,9076) Diffusion Gradient Direction Sequence SQ 1
+(0018,9077) Parallel Acquisition CS 1
+(0018,9078) Parallel Acquisition Technique CS 1
+(0018,9079) Inversion Times FD 1-n
+(0018,9080) Metabolite Map Description ST 1
+(0018,9081) Partial Fourier CS 1
+(0018,9082) Effective Echo Time FD 1
+(0018,9083) Metabolite Map Code Sequence SQ 1
+(0018,9084) Chemical Shift Sequence SQ 1
+(0018,9085) Cardiac Signal Source CS 1
+(0018,9087) Diffusion b-value FD 1
+(0018,9089) Diffusion Gradient Orientation FD 3
+(0018,9090) Velocity Encoding Direction FD 3
+(0018,9091) Velocity Encoding Minimum Value FD 1
+(0018,9093) Number of k-Space Trajectories US 1
+(0018,9094) Coverage of k-Space CS 1
+(0018,9095) Spectroscopy Acquisition Phase Rows UL 1
+(0018,9098) Transmitter Frequency FD 1-2
+(0018,9100) Resonant Nucleus CS 1-2
+(0018,9101) Frequency Correction CS 1
+(0018,9103) MR Spectroscopy FOV/Geometry Sequence SQ 1
+(0018,9104) Slab Thickness FD 1
+(0018,9105) Slab Orientation FD 3
+(0018,9106) Mid Slab Position FD 3
+(0018,9107) MR Spatial Saturation Sequence SQ 1
+(0018,9112) MR Timing and Related Parameters Sequence SQ 1
+(0018,9114) MR Echo Sequence SQ 1
+(0018,9115) MR Modifier Sequence SQ 1
+(0018,9117) MR Diffusion Sequence SQ 1
+(0018,9118) Cardiac Trigger Sequence SQ 1
+(0018,9119) MR Averages Sequence SQ 1
+(0018,9125) MR FOV/Geometry Sequence SQ 1
+(0018,9126) Volume Localization Sequence SQ 1
+(0018,9127) Spectroscopy Acquisition Data Columns UL 1
+(0018,9147) Diffusion Anisotropy Type CS 1
+(0018,9151) Frame Reference Datetime DT 1
+(0018,9152) MR Metabolite Map Sequence SQ 1
+(0018,9155) Parallel Reduction Factor out-of-plane FD 1
+(0018,9159) Spectroscopy Acquisition Out-of-plane Phase Steps UL 1
+(0018,9166) Bulk Motion Status CS 1
+(0018,9168) Parallel Reduction Factor Second In-plane FD 1
+(0018,9169) Cardiac Beat Rejection Technique CS 1
+(0018,9170) Respiratory Motion Compensation Technique CS 1
+(0018,9171) Respiratory Signal Source CS 1
+(0018,9172) Bulk Motion Compensation Technique CS 1
+(0018,9173) Bulk Motion Signal Source CS 1
+(0018,9174) Applicable Safety Standard Agency CS 1
+(0018,9175) Applicable Safety Standard Description LO 1
+(0018,9176) Operating Mode Sequence SQ 1
+(0018,9177) Operating Mode Type CS 1
+(0018,9178) Operating Mode CS 1
+(0018,9179) Specific Absorption Rate Definition CS 1
+(0018,9180) Gradient Output Type CS 1
+(0018,9181) Specific Absorption Rate Value FD 1
+(0018,9182) Gradient Output FD 1
+(0018,9183) Flow Compensation Direction CS 1
+(0018,9184) Tagging Delay FD 1
+(0018,9195) Chemical Shifts Minimum Integration Limit in Hz FD 1 Retired
+(0018,9196) Chemical Shifts Maximum Integration Limit in Hz FD 1 Retired
+(0018,9197) MR Velocity Encoding Sequence SQ 1
+(0018,9198) First Order Phase Correction CS 1
+(0018,9199) Water Referenced Phase Correction CS 1
+(0018,9200) MR Spectroscopy Acquisition Type CS 1
+(0018,9214) Respiratory Cycle Position CS 1
+(0018,9217) Velocity Encoding Maximum Value FD 1
+(0018,9218) Tag Spacing Second Dimension FD 1
+(0018,9219) Tag Angle Second Axis SS 1
+(0018,9220) Frame Acquisition Duration FD 1
+(0018,9226) MR Image Frame Type Sequence SQ 1
+(0018,9227) MR Spectroscopy Frame Type Sequence SQ 1
+(0018,9231) MR Acquisition Phase Encoding Steps in-plane US 1
+(0018,9232) MR Acquisition Phase Encoding Steps out-of-plane US 1
+(0018,9234) Spectroscopy Acquisition Phase Columns UL 1
+(0018,9236) Cardiac Cycle Position CS 1
+(0018,9239) Specific Absorption Rate Sequence SQ 1
+(0018,9295) Chemical Shifts Minimum Integration Limit in ppm FD 1
+(0018,9296) Chemical Shifts Maximum Integration Limit in ppm FD 1
+(0018,9240) RF Echo Train Length US 1
+(0018,9241) Gradient Echo Train Length US 1
+(0018,9301) CT Acquisition Type Sequence SQ 1
+(0018,9302) Acquisition Type CS 1
+(0018,9303) Tube Angle FD 1
+(0018,9304) CT Acquisition Details Sequence SQ 1
+(0018,9305) Revolution Time FD 1
+(0018,9306) Single Collimation Width FD 1
+(0018,9307) Total Collimation Width FD 1
+(0018,9308) CT Table Dynamics Sequence SQ 1
+(0018,9309) Table Speed FD 1
+(0018,9310) Table Feed per Rotation FD 1
+(0018,9311) Spiral Pitch Factor FD 1
+(0018,9312) CT Geometry Sequence SQ 1
+(0018,9313) Data Collection Center (Patient) FD 3
+(0018,9314) CT Reconstruction Sequence SQ 1
+(0018,9315) Reconstruction Algorithm CS 1
+(0018,9316) Convolution Kernel Group CS 1
+(0018,9317) Reconstruction Field of View FD 2
+(0018,9318) Reconstruction Target Center (Patient) FD 3
+(0018,9319) Reconstruction Angle FD 1
+(0018,9320) Image Filter SH 1
+(0018,9321) CT Exposure Sequence SQ 1
+(0018,9322) Reconstruction Pixel Spacing FD 2
+(0018,9323) Exposure Modulation Type CS 1
+(0018,9324) Estimated Dose Saving FD 1
+(0018,9325) CT X-ray Details Sequence SQ 1
+(0018,9326) CT Position Sequence SQ 1
+(0018,9327) Table Position FD 1
+(0018,9328) Exposure Time in ms FD 1
+(0018,9329) CT Image Frame Type Sequence SQ 1
+(0018,9330) X-Ray Tube Current in mA FD 1
+(0018,9332) Exposure in mAs FD 1
+(0018,9333) Constant Volume Flag CS 1
+(0018,9334) Fluoroscopy Flag CS 1
+(0018,9335) Distance Source to Data Collection Center FD 1
+(0018,9337) Contrast/Bolus Agent Number US 1
+(0018,9338) Contrast/Bolus Ingredient Code Sequence SQ 1
+(0018,9340) Contrast Administration Profile Sequence SQ 1
+(0018,9341) Contrast/Bolus Usage Sequence SQ 1
+(0018,9342) Contrast/Bolus Agent Administered CS 1
+(0018,9343) Contrast/Bolus Agent Detected CS 1
+(0018,9344) Contrast/Bolus Agent Phase CS 1
+(0018,9345) CTDIvol FD 1
+(0018,a001) Contributing Equipment Sequence SQ 1
+(0018,a002) Contribution DateTime DT 1
+(0018,a003) Contribution Description ST 1
+(0020,000d) Study Instance UID UI 1
+(0020,000e) Series Instance UID UI 1
+(0020,0010) Study ID SH 1
+(0020,0011) Series Number IS 1
+(0020,0012) Acquisition Number IS 1
+(0020,0013) Instance Number IS 1
+(0020,0014) Isotope Number IS 1 RET
+(0020,0015) Phase Number IS 1 RET
+(0020,0016) Interval Number IS 1 RET
+(0020,0017) Time Slot Number IS 1 RET
+(0020,0018) Angle Number IS 1 RET
+(0020,0019) Item Number IS 1
+(0020,0020) Patient Orientation CS 2
+(0020,0022) Overlay Number IS 1
+(0020,0024) Curve Number IS 1
+(0020,0026) Lookup Table Number IS 1
+(0020,0030) Image Position RET
+(0020,0032) Image Position (Patient) DS 3
+(0020,0035) Image Orientation RET
+(0020,0037) Image Orientation (Patient) DS 6
+(0020,0050) Location RET
+(0020,0052) Frame of Reference UID UI 1
+(0020,0060) Laterality CS 1
+(0020,0062) Image Laterality CS 1
+(0020,0070) Image Geometry Type RET
+(0020,0080) Masking Image RET
+(0020,0100) Temporal Position Identifier IS 1
+(0020,0105) Number of Temporal Positions IS 1
+(0020,0110) Temporal Resolution DS 1
+(0020,0200) Synchronization Frame of Reference UID UI 1
+(0020,1000) Series in Study IS 1
+(0020,1001) Acquisitions in Series RET
+(0020,1002) Images in Acquisition IS 1
+(0020,1004) Acquisitions in Study IS 1
+(0020,1020) Reference RET
+(0020,1040) Position Reference Indicator LO 1
+(0020,1041) Slice Location DS 1
+(0020,1070) Other Study Numbers IS 1-n
+(0020,1200) Number of Patient Related Studies IS 1
+(0020,1202) Number of Patient Related Series IS 1
+(0020,1204) Number of Patient Related Instances IS 1
+(0020,1206) Number of Study Related Series IS 1
+(0020,1208) Number of Study Related Instances IS 1
+(0020,1209) Number of Series Related Instances IS 1
+(0020,31xx) Source Image Ids RET
+(0020,3401) Modifying Device ID RET
+(0020,3402) Modified Image ID RET
+(0020,3403) Modified Image Date RET
+(0020,3404) Modifying Device Manufacturer RET
+(0020,3405) Modified Image Time RET
+(0020,3406) Modified Image Description RET
+(0020,4000) Image Comments LT 1
+(0020,5000) Original Image Identification RET
+(0020,5002) Original Image Identification Nomenclature RET
+(0020,9056) Stack ID SH 1
+(0020,9057) In-Stack Position Number UL 1
+(0020,9071) Frame Anatomy Sequence SQ 1
+(0020,9072) Frame Laterality CS 1
+(0020,9111) Frame Content Sequence SQ 1
+(0020,9113) Plane Position Sequence SQ 1
+(0020,9116) Plane Orientation Sequence SQ 1
+(0020,9128) Temporal Position Index UL 1
+(0020,9153) Trigger Delay Time FD 1
+(0020,9156) Frame Acquisition Number US 1
+(0020,9157) Dimension Index Values UL 1-n
+(0020,9158) Frame Comments LT 1
+(0020,9161) Concatenation UID UI 1
+(0020,9162) In-concatenation Number US 1
+(0020,9163) In-concatenation Total Number US 1
+(0020,9164) Dimension Organization UID UI 1
+(0020,9165) Dimension Index Pointer AT 1
+(0020,9167) Functional Group Pointer AT 1
+(0020,9213) Dimension Index Private Creator LO 1
+(0020,9221) Dimension Organization Sequence SQ 1
+(0020,9222) Dimension Index Sequence SQ 1
+(0020,9228) Concatenation Frame Offset Number UL 1
+(0020,9238) Functional Group Private Creator LO 1
+(0022,0001) Light Path Filter Pass-Through Wavelength US 1
+(0022,0002) Light Path Filter Pass Band US 2
+(0022,0003) Image Path Filter Pass-Through Wavelength US 1
+(0022,0004) Image Path Filter Pass Band US 2
+(0022,0005) Patient Eye Movement Commanded CS 1
+(0022,0006) Patient Eye Movement Command Code Sequence SQ 1
+(0022,0007) Spherical Lens Power FL 1
+(0022,0008) Cylinder Lens Power FL 1
+(0022,0009) Cylinder Axis FL 1
+(0022,000a) Emmetropic Magnification FL 1
+(0022,000b) Intra Ocular Pressure FL 1
+(0022,000c) Horizontal Field of View FL 1
+(0022,000d) Pupil Dilated CS 1
+(0022,000e) Degree of Dilation FL 1
+(0022,0010) Stereo Baseline Angle FL 1
+(0022,0011) Stereo Baseline Displacement FL 1
+(0022,0012) Stereo Horizontal Pixel Offset FL 1
+(0022,0013) Stereo Vertical Pixel Offset FL 1
+(0022,0014) Stereo Rotation FL 1
+(0022,0015) Acquisition Device Type Code Sequence SQ 1
+(0022,0016) Illumination Type Code Sequence SQ 1
+(0022,0017) Light Path Filter Type Stack Code Sequence SQ 1
+(0022,0018) Image Path Filter Type Stack Code Sequence SQ 1
+(0022,0019) Lenses Code Sequence SQ 1
+(0022,001a) Channel Description Code Sequence SQ 1
+(0022,001b) Refractive State Sequence SQ 1
+(0022,001c) Mydriatic Agent Code Sequence SQ 1
+(0022,001d) Relative Image Position Code Sequence SQ 1
+(0022,0020) Stereo Pairs Sequence SQ 1
+(0022,0021) Left Image Sequence SQ 1
+(0022,0022) Right Image Sequence SQ 1
+(0028,0002) Samples per Pixel US 1
+(0028,0003) Samples per Pixel Used US 1
+(0028,0004) Photometric Interpretation CS 1
+(0028,0005) Image Dimensions RET
+(0028,0006) Planar Configuration US 1
+(0028,0008) Number of Frames IS 1
+(0028,0009) Frame Increment Pointer AT 1-n
+(0028,000a) Frame Dimension Pointer AT 1-n
+(0028,0010) Rows US 1
+(0028,0011) Columns US 1
+(0028,0012) Planes US 1
+(0028,0014) Ultrasound Color Data Present US 1
+(0028,0030) Pixel Spacing DS 2
+(0028,0031) Zoom Factor DS 2
+(0028,0032) Zoom Center DS 2
+(0028,0034) Pixel Aspect Ratio IS 2
+(0028,0040) Image Format RET
+(0028,0050) Manipulated Image RET
+(0028,0051) Corrected Image CS 1-n
+(0028,0060) Compression Code RET
+(0028,0100) Bits Allocated US 1
+(0028,0101) Bits Stored US 1
+(0028,0102) High Bit US 1
+(0028,0103) Pixel Representation US 1
+(0028,0104) Smallest Valid Pixel Value RET
+(0028,0105) Largest Valid Pixel Value RET
+(0028,0106) Smallest Image Pixel Value US or SS 1
+(0028,0107) Largest Image Pixel Value US or SS 1
+(0028,0108) Smallest Pixel Value in Series US or SS 1
+(0028,0109) Largest Pixel Value in Series US or SS 1
+(0028,0110) Smallest Image Pixel Value in Plane US or SS 1
+(0028,0111) Largest Image Pixel Value in Plane US or SS 1
+(0028,0120) Pixel Padding Value US or SS 1
+(0028,0200) Image Location RET
+(0028,0300) Quality Control Image CS 1
+(0028,0301) Burned In Annotation CS 1
+(0028,1040) Pixel Intensity Relationship CS 1
+(0028,1041) Pixel Intensity Relationship Sign SS 1
+(0028,1050) Window Center DS 1-n
+(0028,1051) Window Width DS 1-n
+(0028,1052) Rescale Intercept DS 1
+(0028,1053) Rescale Slope DS 1
+(0028,1054) Rescale Type LO 1
+(0028,1055) Window Center & Width Explanation LO 1-n
+(0028,1080) Gray Scale RET
+(0028,1090) Recommended Viewing Mode CS 1
+(0028,1100) Gray Lookup Table Descriptor RET
+(0028,1101) Red Palette Color Lookup Table Descriptor US or SS 3
+(0028,1102) Green Palette Color Lookup Table Descriptor US or SS 3
+(0028,1103) Blue Palette Color Lookup Table Descriptor US or SS 3
+(0028,1199) Palette Color Lookup Table UID UI 1
+(0028,1200) Gray Lookup Table Data RET
+(0028,1201) Red Palette Color Lookup Table Data OW 1
+(0028,1202) Green Palette Color Lookup Table Data OW 1
+(0028,1203) Blue Palette Color Lookup Table Data OW 1
+(0028,1221) Segmented Red Palette Color Lookup Table Data OW 1
+(0028,1222) Segmented Green Palette Color Lookup Table Data OW 1
+(0028,1223) Segmented Blue Palette Color Lookup Table Data OW 1
+(0028,1300) Implant Present CS 1
+(0028,1350) Partial View CS 1
+(0028,1351) Partial View Description ST 1
+(0028,2110) Lossy Image Compression CS 1
+(0028,2112) Lossy Image Compression Ratio DS 1-n
+(0028,2114) Lossy Image Compression Method CS 1-n
+(0028,3000) Modality LUT Sequence SQ 1
+(0028,3002) LUT Descriptor US or SS 3
+(0028,3003) LUT Explanation LO 1
+(0028,3004) Modality LUT Type LO 1
+(0028,3006) LUT Data US or SS or OW 1-n 1
+(0028,3010) VOI LUT Sequence SQ 1
+(0028,3110) Softcopy VOI LUT Sequence SQ 1
+(0028,4000) Comments RET
+(0028,5000) Bi-Plane Acquisition Sequence SQ 1
+(0028,6010) Representative Frame Number US 1
+(0028,6020) Frame Numbers of Interest (FOI) US 1-n
+(0028,6022) Frame(s) of Interest Description LO 1-n
+(0028,6023) Frame of Interest Type CS 1-n
+(0028,6030) Mask Pointer(s) US 1-n RET
+(0028,6040) R Wave Pointer US 1-n
+(0028,6100) Mask Subtraction Sequence SQ 1
+(0028,6101) Mask Operation CS 1
+(0028,6102) Applicable Frame Range US 2-2n
+(0028,6110) Mask Frame Numbers US 1-n
+(0028,6112) Contrast Frame Averaging US 1
+(0028,6114) Mask Sub-pixel Shift FL 2
+(0028,6120) TID Offset SS 1
+(0028,6190) Mask Operation Explanation ST 1
+(0028,9001) Data Point Rows UL 1
+(0028,9002) Data Point Columns UL 1
+(0028,9003) Signal Domain Columns CS 1
+(0028,9099) Largest Monochrome Pixel Value US 1 Retired
+(0028,9108) Data Representation CS 1
+(0028,9110) Pixel Measures Sequence SQ 1
+(0028,9132) Frame VOI LUT Sequence SQ 1
+(0028,9145) Pixel Value Transformation Sequence SQ 1
+(0028,9235) Signal Domain Rows CS 1
+(0032,000a) Study Status ID CS 1
+(0032,000c) Study Priority ID CS 1
+(0032,0012) Study ID Issuer LO 1
+(0032,0032) Study Verified Date DA 1
+(0032,0033) Study Verified Time TM 1
+(0032,0034) Study Read Date DA 1
+(0032,0035) Study Read Time TM 1
+(0032,1000) Scheduled Study Start Date DA 1
+(0032,1001) Scheduled Study Start Time TM 1
+(0032,1010) Scheduled Study Stop Date DA 1
+(0032,1011) Scheduled Study Stop Time TM 1
+(0032,1020) Scheduled Study Location LO 1
+(0032,1021) Scheduled Study Location AE Title(s) AE 1-n
+(0032,1030) Reason for Study LO 1
+(0032,1031) Requesting Physician Identification Sequence SQ 1
+(0032,1032) Requesting Physician PN 1
+(0032,1033) Requesting Service LO 1
+(0032,1040) Study Arrival Date DA 1
+(0032,1041) Study Arrival Time TM 1
+(0032,1050) Study Completion Date DA 1
+(0032,1051) Study Completion Time TM 1
+(0032,1055) Study Component Status ID CS 1
+(0032,1060) Requested Procedure Description LO 1
+(0032,1064) Requested Procedure Code Sequence SQ 1
+(0032,1070) Requested Contrast Agent LO 1
+(0032,4000) Study Comments LT 1
+(0038,0004) Referenced Patient Alias Sequence SQ 1
+(0038,0008) Visit Status ID CS 1
+(0038,0010) Admission ID LO 1
+(0038,0011) Issuer of Admission ID LO 1
+(0038,0016) Route of Admissions LO 1
+(0038,001a) Scheduled Admission Date DA 1
+(0038,001b) Scheduled Admission Time TM 1
+(0038,001c) Scheduled Discharge Date DA 1
+(0038,001d) Scheduled Discharge Time TM 1
+(0038,001e) Scheduled Patient Institution Residence LO 1
+(0038,0020) Admitting Date DA 1
+(0038,0021) Admitting Time TM 1
+(0038,0030) Discharge Date DA 1
+(0038,0032) Discharge Time TM 1
+(0038,0040) Discharge Diagnosis Description LO 1
+(0038,0044) Discharge Diagnosis Code Sequence SQ 1
+(0038,0050) Special Needs LO 1
+(0038,0300) Current Patient Location LO 1
+(0038,0400) Patient's Institution Residence LO 1
+(0038,0500) Patient State LO 1
+(0038,4000) Visit Comments LT 1
+(003a,0004) Waveform Originality CS 1
+(003a,0005) Number of Waveform Channels US 1
+(003a,0010) Number of Waveform Samples UL 1
+(003a,001a) Sampling Frequency DS 1
+(003a,0020) Multiplex Group Label SH 1
+(003a,0200) Channel Definition Sequence SQ 1
+(003a,0202) Waveform Channel Number IS 1
+(003a,0203) Channel Label SH 1
+(003a,0205) Channel Status CS 1-n
+(003a,0208) Channel Source Sequence SQ 1
+(003a,0209) Channel Source Modifiers Sequence SQ 1
+(003a,020a) Source Waveform Sequence SQ 1
+(003a,020c) Channel Derivation Description LO 1
+(003a,0210) Channel Sensitivity DS 1
+(003a,0211) Channel Sensitivity Units Sequence SQ 1
+(003a,0212) Channel Sensitivity Correction Factor DS 1
+(003a,0213) Channel Baseline DS 1
+(003a,0214) Channel Time Skew DS 1
+(003a,0215) Channel Sample Skew DS 1
+(003a,0218) Channel Offset DS 1
+(003a,021a) Waveform Bits Stored US 1
+(003a,0220) Filter Low Frequency DS 1
+(003a,0221) Filter High Frequency DS 1
+(003a,0222) Notch Filter Frequency DS 1
+(003a,0223) Notch Filter Bandwidth DS 1
+(003a,0300) Multiplexed Audio Channels Description Code Sequence SQ 1
+(003a,0301) Channel Identification Code IS 1
+(003a,0302) Channel Mode CS 1
+(0040,0001) Scheduled Station AE Title AE 1-n
+(0040,0002) Scheduled Procedure Step Start Date DA 1
+(0040,0003) Scheduled Procedure Step Start Time TM 1
+(0040,0004) Scheduled Procedure Step End Date DA 1
+(0040,0005) Scheduled Procedure Step End Time TM 1
+(0040,0006) Scheduled Performing Physician's Name PN 1
+(0040,0007) Scheduled Procedure Step Description LO 1
+(0040,0008) Scheduled Protocol Code Sequence SQ 1
+(0040,0009) Scheduled Procedure Step ID SH 1
+(0040,000a) Stage Code Sequence SQ 1
+(0040,000b) Scheduled Performing Physician Identification Sequence SQ 1
+(0040,0010) Scheduled Station Name SH 1-n
+(0040,0011) Scheduled Procedure Step Location SH 1
+(0040,0012) Pre-Medication LO 1
+(0040,0020) Scheduled Procedure Step Status CS 1
+(0040,0100) Scheduled Procedure Step Sequence SQ 1
+(0040,0220) Referenced Non-Image Composite SOP Instance Sequence SQ 1
+(0040,0241) Performed Station AE Title AE 1
+(0040,0242) Performed Station Name SH 1
+(0040,0243) Performed Location SH 1
+(0040,0244) Performed Procedure Step Start Date DA 1
+(0040,0245) Performed Procedure Step Start Time TM 1
+(0040,0250) Performed Procedure Step End Date DA 1
+(0040,0251) Performed Procedure Step End Time TM 1
+(0040,0252) Performed Procedure Step Status CS 1
+(0040,0253) Performed Procedure Step ID SH 1
+(0040,0254) Performed Procedure Step Description LO 1
+(0040,0255) Performed Procedure Type Description LO 1
+(0040,0260) Performed Protocol Code Sequence SQ 1
+(0040,0270) Scheduled Step Attributes Sequence SQ 1
+(0040,0275) Request Attributes Sequence SQ 1
+(0040,0280) Comments on the Performed Procedure Step ST 1
+(0040,0281) Performed Procedure Step Discontinuation Reason Code Sequence SQ 1
+(0040,0293) Quantity Sequence SQ 1
+(0040,0294) Quantity DS 1
+(0040,0295) Measuring Units Sequence SQ 1
+(0040,0296) Billing Item Sequence SQ 1
+(0040,0300) Total Time of Fluoroscopy US 1
+(0040,0301) Total Number of Exposures US 1
+(0040,0302) Entrance Dose US 1
+(0040,0303) Exposed Area US 1-2
+(0040,0306) Distance Source to Entrance DS 1
+(0040,0307) Distance Source to Support DS 1 RET
+(0040,030e) Exposure Dose Sequence SQ 1
+(0040,0310) Comments on Radiation Dose ST 1
+(0040,0312) X-Ray Output DS 1
+(0040,0314) Half Value Layer DS 1
+(0040,0316) Organ Dose DS 1
+(0040,0318) Organ Exposed CS 1
+(0040,0320) Billing Procedure Step Sequence SQ 1
+(0040,0321) Film Consumption Sequence SQ 1
+(0040,0324) Billing Supplies and Devices Sequence SQ 1
+(0040,0330) Referenced Procedure Step Sequence SQ 1 RET
+(0040,0340) Performed Series Sequence SQ 1
+(0040,0400) Comments on the Scheduled Procedure Step LT 1
+(0040,0440) Protocol Context Sequence SQ 1
+(0040,0441) Content Item Modifier Sequence SQ 1
+(0040,050a) Specimen Accession Number LO 1
+(0040,0550) Specimen Sequence SQ 1
+(0040,0551) Specimen Identifier LO 1
+(0040,0555) Acquisition Context Sequence SQ 1
+(0040,0556) Acquisition Context Description ST 1
+(0040,059a) Specimen Type Code Sequence SQ 1
+(0040,06fa) Slide Identifier LO 1
+(0040,071a) Image Center Point Coordinates Sequence SQ 1
+(0040,072a) X offset in Slide Coordinate System DS 1
+(0040,073a) Y offset in Slide Coordinate System DS 1
+(0040,074a) Z offset in Slide Coordinate System DS 1
+(0040,08d8) Pixel Spacing Sequence SQ 1
+(0040,08da) Coordinate System Axis Code Sequence SQ 1
+(0040,08ea) Measurement Units Code Sequence SQ 1
+(0040,1001) Requested Procedure ID SH 1
+(0040,1002) Reason for the Requested Procedure LO 1
+(0040,1003) Requested Procedure Priority SH 1
+(0040,1004) Patient Transport Arrangements LO 1
+(0040,1005) Requested Procedure Location LO 1
+(0040,1006) Placer Order Number / Procedure SH 1 RET
+(0040,1007) Filler Order Number / Procedure SH 1 RET
+(0040,1008) Confidentiality Code LO 1
+(0040,1009) Reporting Priority SH 1
+(0040,100a) Reason for Requested Procedure Code Sequence SQ 1
+(0040,1010) Names of Intended Recipients of Results PN 1-n
+(0040,1011) Intended Recipients of Results Identification Sequence SQ 1
+(0040,1101) Person Identification Code Sequence SQ 1
+(0040,1102) Person's Address ST 1
+(0040,1103) Person's Telephone Numbers LO 1-n
+(0040,1400) Requested Procedure Comments LT 1
+(0040,2001) Reason for the Imaging Service Request LO 1 RET
+(0040,2004) Issue Date of Imaging Service Request DA 1
+(0040,2005) Issue Time of Imaging Service Request TM 1
+(0040,2006) Placer Order Number / Imaging Service Request SH 1 RET
+(0040,2007) Filler Order Number / Imaging Service Request SH 1 RET
+(0040,2008) Order Entered By PN 1
+(0040,2009) Order Enterer's Location SH 1
+(0040,2010) Order Callback Phone Number SH 1
+(0040,2016) Placer Order Number / Imaging Service Request LO 1
+(0040,2017) Filler Order Number / Imaging Service Request LO 1
+(0040,2400) Imaging Service Request Comments LT 1
+(0040,3001) Confidentiality Constraint on Patient Data Description LO 1
+(0040,4001) General Purpose Scheduled Procedure Step Status CS 1
+(0040,4002) General Purpose Performed Procedure Step Status CS 1
+(0040,4003) General Purpose Scheduled Procedure Step Priority CS 1
+(0040,4004) Scheduled Processing Applications Code Sequence SQ 1
+(0040,4005) Scheduled Procedure Step Start Date and Time DT 1
+(0040,4006) Multiple Copies Flag CS 1
+(0040,4007) Performed Processing Applications Code Sequence SQ 1
+(0040,4009) Human Performer Code Sequence SQ 1
+(0040,4010) Scheduled Procedure Step Modification Date and Time DT 1
+(0040,4011) Expected Completion Date and Time DT 1
+(0040,4015) Resulting General Purpose Performed Procedure Steps Sequence SQ 1
+(0040,4016) Referenced General Purpose Scheduled Procedure Step Sequence SQ 1
+(0040,4018) Scheduled Workitem Code Sequence SQ 1
+(0040,4019) Performed Workitem Code Sequence SQ 1
+(0040,4020) Input Availability Flag CS 1
+(0040,4021) Input InformationSequence SQ 1
+(0040,4022) Relevant Information Sequence SQ 1
+(0040,4023) Referenced General Purpose Scheduled Procedure Step Transaction UID UI 1
+(0040,4025) Scheduled Station Name Code Sequence SQ 1
+(0040,4026) Scheduled Station Class Code Sequence SQ 1
+(0040,4027) Scheduled Station Geographic Location Code Sequence SQ 1
+(0040,4028) Performed Station Name Code Sequence SQ 1
+(0040,4029) Performed Station Class Code Sequence SQ 1
+(0040,4030) Performed Station Geographic Location Code Sequence SQ 1
+(0040,4031) Requested Subsequent Workitem Code Sequence SQ 1
+(0040,4032) Non-DICOM Output Code Sequence SQ 1
+(0040,4033) Output Information Sequence SQ 1
+(0040,4034) Scheduled Human Performers Sequence SQ 1
+(0040,4035) Actual Human Performers Sequence SQ 1
+(0040,4036) Human Performer's Organization LO 1
+(0040,4037) Human Performer's Name PN 1
+(0040,8302) Entrance Dose in mGy DS 1
+(0040,9096) Real World Value Mapping Sequence SQ 1
+(0040,9210) LUT Label SH 1
+(0040,9211) Real World Value Last Value Mapped US/SS 1
+(0040,9212) Real World Value LUT Data FD 1-n
+(0040,9216) Real World Value First Value Mapped US/SS 1
+(0040,9224) Real World Value Intercept FD 1
+(0040,9225) Real World Value Slope FD 1
+(0040,a010) Relationship Type CS 1
+(0040,a027) Verifying Organization LO 1
+(0040,a030) Verification DateTime DT 1
+(0040,a032) Observation DateTime DT 1
+(0040,a040) Value Type CS 1
+(0040,a043) Concept Name Code Sequence SQ 1
+(0040,a050) Continuity Of Content CS 1
+(0040,a073) Verifying Observer Sequence SQ 1
+(0040,a075) Verifying Observer Name PN 1
+(0040,a088) Verifying Observer Identification Code Sequence SQ 1
+(0040,a0b0) Referenced Waveform Channels US 2-2n
+(0040,a120) DateTime DT 1
+(0040,a121) Date DA 1
+(0040,a122) Time TM 1
+(0040,a123) Person Name PN 1
+(0040,a124) UID UI 1
+(0040,a130) Temporal Range Type CS 1
+(0040,a132) Referenced Sample Positions UL 1-n
+(0040,a136) Referenced Frame Numbers US 1-n
+(0040,a138) Referenced Time Offsets DS 1-n
+(0040,a13a) Referenced Datetime DT 1-n
+(0040,a160) Text Value UT 1
+(0040,a168) Concept Code Sequence SQ 1
+(0040,a170) Purpose of Reference Code Sequence SQ 1
+(0040,a180) Annotation Group Number US 1
+(0040,a195) Modifier Code Sequence SQ 1
+(0040,a300) Measured Value Sequence SQ 1
+(0040,a301) Numeric Value Qualifier Code Sequence SQ 1
+(0040,a30a) Numeric Value DS 1-n
+(0040,a360) Predecessor Documents Sequence SQ 1
+(0040,a370) Referenced Request Sequence SQ 1
+(0040,a372) Performed Procedure Code Sequence SQ 1
+(0040,a375) Current Requested Procedure Evidence Sequence SQ 1
+(0040,a385) Pertinent Other Evidence Sequence SQ 1
+(0040,a491) Completion Flag CS 1
+(0040,a492) Completion Flag Description LO 1
+(0040,a493) Verification Flag CS 1
+(0040,a504) Content Template Sequence SQ 1
+(0040,a525) Identical Documents Sequence SQ 1
+(0040,a730) Content Sequence SQ 1
+(0040,b020) Annotation Sequence SQ 1
+(0040,db00) Template Identifier CS 1
+(0040,db06) Template Version DT 1 RET
+(0040,db07) Template Local Version DT 1 RET
+(0040,db0b) Template Extension Flag CS 1 RET
+(0040,db0c) Template Extension Organization UID UI 1 RET
+(0040,db0d) Template Extension Creator UID UI 1 RET
+(0040,db73) Referenced Content Item Identifier UL 1-n
+(0050,0004) Calibration Image CS 1
+(0050,0010) Device Sequence SQ 1
+(0050,0014) Device Length DS 1
+(0050,0016) Device Diameter DS 1
+(0050,0017) Device Diameter Units CS 1
+(0050,0018) Device Volume DS 1
+(0050,0019) Inter-marker Distance DS 1
+(0050,0020) Device Description LO 1
+(0054,0010) Energy Window Vector US 1-n
+(0054,0011) Number of Energy Windows US 1
+(0054,0012) Energy Window Information Sequence SQ 1
+(0054,0013) Energy Window Range Sequence SQ 1
+(0054,0014) Energy Window Lower Limit DS 1
+(0054,0015) Energy Window Upper Limit DS 1
+(0054,0016) Radiopharmaceutical Information Sequence SQ 1
+(0054,0017) Residual Syringe Counts IS 1
+(0054,0018) Energy Window Name SH 1
+(0054,0020) Detector Vector US 1-n
+(0054,0021) Number of Detectors US 1
+(0054,0022) Detector Information Sequence SQ 1
+(0054,0030) Phase Vector US 1-n
+(0054,0031) Number of Phases US 1
+(0054,0032) Phase Information Sequence SQ 1
+(0054,0033) Number of Frames in Phase US 1
+(0054,0036) Phase Delay IS 1
+(0054,0038) Pause Between Frames IS 1
+(0054,0039) Phase Description CS 1
+(0054,0050) Rotation Vector US 1-n
+(0054,0051) Number of Rotations US 1
+(0054,0052) Rotation Information Sequence SQ 1
+(0054,0053) Number of Frames in Rotation US 1
+(0054,0060) R-R Interval Vector US 1-n
+(0054,0061) Number of R-R Intervals US 1
+(0054,0062) Gated Information Sequence SQ 1
+(0054,0063) Data Information Sequence SQ 1
+(0054,0070) Time Slot Vector US 1-n
+(0054,0071) Number of Time Slots US 1
+(0054,0072) Time Slot Information Sequence SQ 1
+(0054,0073) Time Slot Time DS 1
+(0054,0080) Slice Vector US 1-n
+(0054,0081) Number of Slices US 1
+(0054,0090) Angular View Vector US 1-n
+(0054,0100) Time Slice Vector US 1-n
+(0054,0101) Number of Time Slices US 1
+(0054,0200) Start Angle DS 1
+(0054,0202) Type of Detector Motion CS 1
+(0054,0210) Trigger Vector IS 1-n
+(0054,0211) Number of Triggers in Phase US 1
+(0054,0220) View Code Sequence SQ 1
+(0054,0222) View Modifier Code Sequence SQ 1
+(0054,0300) Radionuclide Code Sequence SQ 1
+(0054,0302) Administration Route Code Sequence SQ 1
+(0054,0304) Radiopharmaceutical Code Sequence SQ 1
+(0054,0306) Calibration Data Sequence SQ 1
+(0054,0308) Energy Window Number US 1
+(0054,0400) Image ID SH 1
+(0054,0410) Patient Orientation Code Sequence SQ 1
+(0054,0412) Patient Orientation Modifier Code Sequence SQ 1
+(0054,0414) Patient Gantry Relationship Code Sequence SQ 1
+(0054,0500) Slice Progression Direction CS 1
+(0054,1000) Series Type CS 2
+(0054,1001) Units CS 1
+(0054,1002) Counts Source CS 1
+(0054,1004) Reprojection Method CS 1
+(0054,1100) Randoms Correction Method CS 1
+(0054,1101) Attenuation Correction Method LO 1
+(0054,1102) Decay Correction CS 1
+(0054,1103) Reconstruction Method LO 1
+(0054,1104) Detector Lines of Response Used LO 1
+(0054,1105) Scatter Correction Method LO 1
+(0054,1200) Axial Acceptance DS 1
+(0054,1201) Axial Mash IS 2
+(0054,1202) Transverse Mash IS 1
+(0054,1203) Detector Element Size DS 2
+(0054,1210) Coincidence Window Width DS 1
+(0054,1220) Secondary Counts Type CS 1-n
+(0054,1300) Frame Reference Time DS 1
+(0054,1310) Primary (Prompts) Counts Accumulated IS 1
+(0054,1311) Secondary Counts Accumulated IS 1-n
+(0054,1320) Slice Sensitivity Factor DS 1
+(0054,1321) Decay Factor DS 1
+(0054,1322) Dose Calibration Factor DS 1
+(0054,1323) Scatter Fraction Factor DS 1
+(0054,1324) Dead Time Factor DS 1
+(0054,1330) Image Index US 1
+(0054,1400) Counts Included CS 1-n
+(0054,1401) Dead Time Correction Flag CS 1
+(0060,3000) Histogram Sequence SQ 1
+(0060,3002) Histogram Number of Bins US 1
+(0060,3004) Histogram First Bin Value US or SS 1
+(0060,3006) Histogram Last Bin Value US or SS 1
+(0060,3008) Histogram Bin Width US 1
+(0060,3010) Histogram Explanation LO 1
+(0060,3020) Histogram Data UL 1-n
+(0070,0001) Graphic Annotation Sequence SQ 1
+(0070,0002) Graphic Layer CS 1
+(0070,0003) Bounding Box Annotation Units CS 1
+(0070,0004) Anchor Point Annotation Units CS 1
+(0070,0005) Graphic Annotation Units CS 1
+(0070,0006) Unformatted Text Value ST 1
+(0070,0008) Text Object Sequence SQ 1
+(0070,0009) Graphic Object Sequence SQ 1
+(0070,0010) Bounding Box Top Left Hand Corner FL 2
+(0070,0011) Bounding Box Bottom Right Hand Corner FL 2
+(0070,0012) Bounding Box Text Horizontal Justification CS 1
+(0070,0014) Anchor Point FL 2
+(0070,0015) Anchor Point Visibility CS 1
+(0070,0020) Graphic Dimensions US 1
+(0070,0021) Number of Graphic Points US 1
+(0070,0022) Graphic Data FL 2-n
+(0070,0023) Graphic Type CS 1
+(0070,0024) Graphic Filled CS 1
+(0070,0041) Image Horizontal Flip CS 1
+(0070,0042) Image Rotation US 1
+(0070,0052) Displayed Area Top Left Hand Corner SL 2
+(0070,0053) Displayed Area Bottom Right Hand Corner SL 2
+(0070,005a) Displayed Area Selection Sequence SQ 1
+(0070,0060) Graphic Layer Sequence SQ 1
+(0070,0062) Graphic Layer Order IS 1
+(0070,0066) Graphic Layer Recommended Display Grayscale Value US 1
+(0070,0067) Graphic Layer Recommended Display RGB Value US 3
+(0070,0068) Graphic Layer Description LO 1
+(0070,0080) Content Label CS 1
+(0070,0081) Content Description LO 1
+(0070,0082) Presentation Creation Date DA 1
+(0070,0083) Presentation Creation Time TM 1
+(0070,0084) Content Creator's Name PN 1
+(0070,0100) Presentation Size Mode CS 1
+(0070,0101) Presentation Pixel Spacing DS 2
+(0070,0102) Presentation Pixel Aspect Ratio IS 2
+(0070,0103) Presentation Pixel Magnification Ratio FL 1
+(0070,0306) Shape Type CS 1
+(0070,0308) Registration Sequence SQ 1
+(0070,0309) Matrix Registration Sequence SQ 1
+(0070,030a) Matrix Sequence SQ 1
+(0070,030c) Frame of Reference Transformation Matrix Type CS 1
+(0070,030d) Registration Type Code Sequence SQ 1
+(0070,030f) Fiducial Description ST 1
+(0070,0310) Fiducial Identifier SH 1
+(0070,0311) Fiducial Identifier Code Sequence SQ 1
+(0070,0312) Contour Uncertainty Radius FD 1
+(0070,0314) Used Fiducials Sequence SQ 1
+(0070,0318) Graphic Coordinates Data Sequence SQ 1
+(0070,031a) Fiducial UID UI 1
+(0070,031c) Fiducial Set Sequence SQ 1
+(0070,031e) Fiducial Sequence SQ 1
+(0088,0130) Storage Media File-set ID SH 1
+(0088,0140) Storage Media File-set UID UI 1
+(0088,0200) Icon Image Sequence SQ 1
+(0088,0904) Topic Title LO 1
+(0088,0906) Topic Subject ST 1
+(0088,0910) Topic Author LO 1
+(0088,0912) Topic Key Words LO 1-32
+(0100,0410) SOP Instance Status CS 1
+(0100,0420) SOP Authorization Date and Time DT 1
+(0100,0424) SOP Authorization Comment LT 1
+(0100,0426) Authorization Equipment Certification Number LO 1
+(0400,0005) MAC ID Number US 1
+(0400,0010) MAC Calculation Transfer Syntax UID UI 1
+(0400,0015) MAC Algorithm CS 1
+(0400,0020) Data Elements Signed AT 1-n
+(0400,0100) Digital Signature UID UI 1
+(0400,0105) Digital Signature DateTime DT 1
+(0400,0110) Certificate Type CS 1
+(0400,0115) Certificate of Signer OB 1
+(0400,0120) Signature OB 1
+(0400,0305) Certified Timestamp Type CS 1
+(0400,0310) Certified Timestamp OB 1
+(0400,0500) Encrypted Attributes Sequence SQ 1
+(0400,0510) Encrypted Content Transfer Syntax UID UI 1
+(0400,0520) Encrypted Content OB 1
+(0400,0550) Modified Attributes Sequence SQ 1
+(2000,0010) Number of Copies IS 1
+(2000,001e) Printer Configuration Sequence SQ 1
+(2000,0020) Print Priority CS 1
+(2000,0030) Medium Type CS 1
+(2000,0040) Film Destination CS 1
+(2000,0050) Film Session Label LO 1
+(2000,0060) Memory Allocation IS 1
+(2000,0061) Maximum Memory Allocation IS 1
+(2000,0062) Color Image Printing Flag CS 1
+(2000,0063) Collation Flag CS 1
+(2000,0065) Annotation Flag CS 1
+(2000,0067) Image Overlay Flag CS 1
+(2000,0069) Presentation LUT Flag CS 1
+(2000,006a) Image Box Presentation LUT Flag CS 1
+(2000,00a0) Memory Bit Depth US 1
+(2000,00a1) Printing Bit Depth US 1
+(2000,00a2) Media Installed Sequence SQ 1
+(2000,00a4) Other Media Available Sequence SQ 1
+(2000,00a8) Supported Image Display Formats Sequence SQ 1
+(2000,0500) Referenced Film Box Sequence SQ 1
+(2000,0510) Referenced Stored Print Sequence SQ 1
+(2010,0010) Image Display Format ST 1
+(2010,0030) Annotation Display Format ID CS 1
+(2010,0040) Film Orientation CS 1
+(2010,0050) Film Size ID CS 1
+(2010,0052) Printer Resolution ID CS 1
+(2010,0054) Default Printer Resolution ID CS 1
+(2010,0060) Magnification Type CS 1
+(2010,0080) Smoothing Type CS 1
+(2010,00a6) Default Magnification Type CS 1
+(2010,00a7) Other Magnification Types Available CS 1-n
+(2010,00a8) Default Smoothing Type CS 1
+(2010,00a9) Other Smoothing Types Available CS 1-n
+(2010,0100) Border Density CS 1
+(2010,0110) Empty Image Density CS 1
+(2010,0120) Min Density US 1
+(2010,0130) Max Density US 1
+(2010,0140) Trim CS 1
+(2010,0150) Configuration Information ST 1
+(2010,0152) Configuration Information Description LT 1
+(2010,0154) Maximum Collated Films IS 1
+(2010,015e) Illumination US 1
+(2010,0160) Reflected Ambient Light US 1
+(2010,0376) Printer Pixel Spacing DS 2
+(2010,0500) Referenced Film Session Sequence SQ 1
+(2010,0510) Referenced Image Box Sequence SQ 1
+(2010,0520) Referenced Basic Annotation Box Sequence SQ 1
+(2020,0010) Image Position US 1
+(2020,0020) Polarity CS 1
+(2020,0030) Requested Image Size DS 1
+(2020,0040) Requested Decimate/Crop Behavior CS 1
+(2020,0050) Requested Resolution ID CS 1
+(2020,00a0) Requested Image Size Flag CS 1
+(2020,00a2) Decimate/Crop Result CS 1
+(2020,0110) Basic Grayscale Image Sequence SQ 1
+(2020,0111) Basic Color Image Sequence SQ 1
+(2020,0130) Referenced Image Overlay Box Sequence SQ 1 RET
+(2020,0140) Referenced VOI LUT Box Sequence SQ 1 RET
+(2030,0010) Annotation Position US 1
+(2030,0020) Text String LO 1
+(2040,0010) Referenced Overlay Plane Sequence SQ 1
+(2040,0011) Referenced Overlay Plane Groups US 1-99
+(2040,0020) Overlay Pixel Data Sequence SQ 1
+(2040,0060) Overlay Magnification Type CS 1
+(2040,0070) Overlay Smoothing Type CS 1
+(2040,0072) Overlay or Image Magnification CS 1
+(2040,0074) Magnify to Number of Columns US 1
+(2040,0080) Overlay Foreground Density CS 1
+(2040,0082) Overlay Background Density CS 1
+(2040,0090) Overlay Mode CS 1 RET
+(2040,0100) Threshold Density CS 1 RET
+(2040,0500) Referenced Image Box Sequence SQ 1 RET
+(2050,0010) Presentation LUT Sequence SQ 1
+(2050,0020) Presentation LUT Shape CS 1
+(2050,0500) Referenced Presentation LUT Sequence SQ 1
+(2100,0010) Print Job ID SH 1
+(2100,0020) Execution Status CS 1
+(2100,0030) Execution Status Info CS 1
+(2100,0040) Creation Date DA 1
+(2100,0050) Creation Time TM 1
+(2100,0070) Originator AE 1
+(2100,0140) Destination AE AE 1
+(2100,0160) Owner ID SH 1
+(2100,0170) Number of Films IS 1
+(2100,0500) Referenced Print Job Sequence SQ 1
+(2110,0010) Printer Status CS 1
+(2110,0020) Printer Status Info CS 1
+(2110,0030) Printer Name LO 1
+(2110,0099) Print Queue ID SH 1
+(2120,0010) Queue Status CS 1
+(2120,0050) Print Job Description Sequence SQ 1
+(2120,0070) Referenced Print Job Sequence SQ 1
+(2130,0010) Print Management Capabilities Sequence SQ 1
+(2130,0015) Printer Characteristics Sequence SQ 1
+(2130,0030) Film Box Content Sequence SQ 1
+(2130,0040) Image Box Content Sequence SQ 1
+(2130,0050) Annotation Content Sequence SQ 1
+(2130,0060) Image Overlay Box Content Sequence SQ 1
+(2130,0080) Presentation LUT Content Sequence SQ 1
+(2130,00a0) Proposed Study Sequence SQ 1
+(2130,00c0) Original Image Sequence SQ 1
+(2200,0001) Label Using Information Extracted From Instances CS 1
+(2200,0002) Label Text UT 1
+(2200,0003) Label Style Selection CS 1
+(2200,0004) Media Disposition LT 1
+(2200,0005) Barcode Value LT 1
+(2200,0006) Barcode Symbology CS 1
+(2200,0007) Allow Media Splitting CS 1
+(2200,0008) Include Non-DICOM Objects CS 1
+(2200,0009) Include Display Application CS 1
+(2200,000a) Preserve Composite Instances After Media Creation CS 1
+(2200,000b) Total Number of Pieces of Media Created US 1
+(2200,000c) Requested Media Application Profile LO 1
+(2200,000d) Referenced Storage Media Sequence SQ 1
+(2200,000e) Failure Attributes AT 1-n
+(2200,000f) Allow Lossy Compression CS 1
+(2200,0020) Request Priority CS 1
+(3002,0002) RT Image Label SH 1
+(3002,0003) RT Image Name LO 1
+(3002,0004) RT Image Description ST 1
+(3002,000a) Reported Values Origin CS 1
+(3002,000c) RT Image Plane CS 1
+(3002,000d) X-Ray Image Receptor Translation DS 3
+(3002,000e) X-Ray Image Receptor Angle DS 1
+(3002,0010) RT Image Orientation DS 6
+(3002,0011) Image Plane Pixel Spacing DS 2
+(3002,0012) RT Image Position DS 2
+(3002,0020) Radiation Machine Name SH 1
+(3002,0022) Radiation Machine SAD DS 1
+(3002,0024) Radiation Machine SSD DS 1
+(3002,0026) RT Image SID DS 1
+(3002,0028) Source to Reference Object Distance DS 1
+(3002,0029) Fraction Number IS 1
+(3002,0030) Exposure Sequence SQ 1
+(3002,0032) Meterset Exposure DS 1
+(3002,0034) Diaphragm Position DS 4
+(3002,0040) Fluence Map Sequence SQ 1
+(3002,0041) Fluence Data Source CS 1
+(3002,0042) Fluence Data Scale DS 1
+(3004,0001) DVH Type CS 1
+(3004,0002) Dose Units CS 1
+(3004,0004) Dose Type CS 1
+(3004,0006) Dose Comment LO 1
+(3004,0008) Normalization Point DS 3
+(3004,000a) Dose Summation Type CS 1
+(3004,000c) Grid Frame Offset Vector DS 2-n
+(3004,000e) Dose Grid Scaling DS 1
+(3004,0010) RT Dose ROI Sequence SQ 1
+(3004,0012) Dose Value DS 1
+(3004,0014) Tissue Heterogeneity Correction CS 1-3
+(3004,0040) DVH Normalization Point DS 3
+(3004,0042) DVH Normalization Dose Value DS 1
+(3004,0050) DVH Sequence SQ 1
+(3004,0052) DVH Dose Scaling DS 1
+(3004,0054) DVH Volume Units CS 1
+(3004,0056) DVH Number of Bins IS 1
+(3004,0058) DVH Data DS 2-2n
+(3004,0060) DVH Referenced ROI Sequence SQ 1
+(3004,0062) DVH ROI Contribution Type CS 1
+(3004,0070) DVH Minimum Dose DS 1
+(3004,0072) DVH Maximum Dose DS 1
+(3004,0074) DVH Mean Dose DS 1
+(3006,0002) Structure Set Label SH 1
+(3006,0004) Structure Set Name LO 1
+(3006,0006) Structure Set Description ST 1
+(3006,0008) Structure Set Date DA 1
+(3006,0009) Structure Set Time TM 1
+(3006,0010) Referenced Frame of Reference Sequence SQ 1
+(3006,0012) RT Referenced Study Sequence SQ 1
+(3006,0014) RT Referenced Series Sequence SQ 1
+(3006,0016) Contour Image Sequence SQ 1
+(3006,0020) Structure Set ROI Sequence SQ 1
+(3006,0022) ROI Number IS 1
+(3006,0024) Referenced Frame of Reference UID UI 1
+(3006,0026) ROI Name LO 1
+(3006,0028) ROI Description ST 1
+(3006,002a) ROI Display Color IS 3
+(3006,002c) ROI Volume DS 1
+(3006,0030) RT Related ROI Sequence SQ 1
+(3006,0033) RT ROI Relationship CS 1
+(3006,0036) ROI Generation Algorithm CS 1
+(3006,0038) ROI Generation Description LO 1
+(3006,0039) ROI Contour Sequence SQ 1
+(3006,0040) Contour Sequence SQ 1
+(3006,0042) Contour Geometric Type CS 1
+(3006,0044) Contour Slab Thickness DS 1
+(3006,0045) Contour Offset Vector DS 3
+(3006,0046) Number of Contour Points IS 1
+(3006,0048) Contour Number IS 1
+(3006,0049) Attached Contours IS 1-n
+(3006,0050) Contour Data DS 3-3n
+(3006,0080) RT ROI Observations Sequence SQ 1
+(3006,0082) Observation Number IS 1
+(3006,0084) Referenced ROI Number IS 1
+(3006,0085) ROI Observation Label SH 1
+(3006,0086) RT ROI Identification Code Sequence SQ 1
+(3006,0088) ROI Observation Description ST 1
+(3006,00a0) Related RT ROI Observations Sequence SQ 1
+(3006,00a4) RT ROI Interpreted Type CS 1
+(3006,00a6) ROI Interpreter PN 1
+(3006,00b0) ROI Physical Properties Sequence SQ 1
+(3006,00b2) ROI Physical Property CS 1
+(3006,00b4) ROI Physical Property Value DS 1
+(3006,00c0) Frame of Reference Relationship Sequence SQ 1
+(3006,00c2) Related Frame of Reference UID UI 1
+(3006,00c4) Frame of Reference Transformation Type CS 1
+(3006,00c6) Frame of Reference Transformation Matrix DS 16
+(3006,00c8) Frame of Reference Transformation Comment LO 1
+(3008,0010) Measured Dose Reference Sequence SQ 1
+(3008,0012) Measured Dose Description ST 1
+(3008,0014) Measured Dose Type CS 1
+(3008,0016) Measured Dose Value DS 1
+(3008,0020) Treatment Session Beam Sequence SQ 1
+(3008,0022) Current Fraction Number IS 1
+(3008,0024) Treatment Control Point Date DA 1
+(3008,0025) Treatment Control Point Time TM 1
+(3008,002a) Treatment Termination Status CS 1
+(3008,002b) Treatment Termination Code SH 1
+(3008,002c) Treatment Verification Status CS 1
+(3008,0030) Referenced Treatment Record Sequence SQ 1
+(3008,0032) Specified Primary Meterset DS 1
+(3008,0033) Specified Secondary Meterset DS 1
+(3008,0036) Delivered Primary Meterset DS 1
+(3008,0037) Delivered Secondary Meterset DS 1
+(3008,003a) Specified Treatment Time DS 1
+(3008,003b) Delivered Treatment Time DS 1
+(3008,0040) Control Point Delivery Sequence SQ 1
+(3008,0042) Specified Meterset DS 1
+(3008,0044) Delivered Meterset DS 1
+(3008,0048) Dose Rate Delivered DS 1
+(3008,0050) Treatment Summary Calculated Dose Reference Sequence SQ 1
+(3008,0052) Cumulative Dose to Dose Reference DS 1
+(3008,0054) First Treatment Date DA 1
+(3008,0056) Most Recent Treatment Date DA 1
+(3008,005a) Number of Fractions Delivered IS 1
+(3008,0060) Override Sequence SQ 1
+(3008,0062) Override Parameter Pointer AT 1
+(3008,0064) Measured Dose Reference Number IS 1
+(3008,0066) Override Reason ST 1
+(3008,0070) Calculated Dose Reference Sequence SQ 1
+(3008,0072) Calculated Dose Reference Number IS 1
+(3008,0074) Calculated Dose Reference Description ST 1
+(3008,0076) Calculated Dose Reference Dose Value DS 1
+(3008,0078) Start Meterset DS 1
+(3008,007a) End Meterset DS 1
+(3008,0080) Referenced Measured Dose Reference Sequence SQ 1
+(3008,0082) Referenced Measured Dose Reference Number IS 1
+(3008,0090) Referenced Calculated Dose Reference Sequence SQ 1
+(3008,0092) Referenced Calculated Dose Reference Number IS 1
+(3008,00a0) Beam Limiting Device Leaf Pairs Sequence SQ 1
+(3008,00b0) Recorded Wedge Sequence SQ 1
+(3008,00c0) Recorded Compensator Sequence SQ 1
+(3008,00d0) Recorded Block Sequence SQ 1
+(3008,00e0) Treatment Summary Measured Dose Reference Sequence SQ 1
+(3008,0100) Recorded Source Sequence SQ 1
+(3008,0105) Source Serial Number LO 1
+(3008,0110) Treatment Session Application Setup Sequence SQ 1
+(3008,0116) Application Setup Check CS 1
+(3008,0120) Recorded Brachy Accessory Device Sequence SQ 1
+(3008,0122) Referenced Brachy Accessory Device Number IS 1
+(3008,0130) Recorded Channel Sequence SQ 1
+(3008,0132) Specified Channel Total Time DS 1
+(3008,0134) Delivered Channel Total Time DS 1
+(3008,0136) Specified Number of Pulses IS 1
+(3008,0138) Delivered Number of Pulses IS 1
+(3008,013a) Specified Pulse Repetition Interval DS 1
+(3008,013c) Delivered Pulse Repetition Interval DS 1
+(3008,0140) Recorded Source Applicator Sequence SQ 1
+(3008,0142) Referenced Source Applicator Number IS 1
+(3008,0150) Recorded Channel Shield Sequence SQ 1
+(3008,0152) Referenced Channel Shield Number IS 1
+(3008,0160) Brachy Control Point Delivered Sequence SQ 1
+(3008,0162) Safe Position Exit Date DA 1
+(3008,0164) Safe Position Exit Time TM 1
+(3008,0166) Safe Position Return Date DA 1
+(3008,0168) Safe Position Return Time TM 1
+(3008,0200) Current Treatment Status CS 1
+(3008,0202) Treatment Status Comment ST 1
+(3008,0220) Fraction Group Summary Sequence SQ 1
+(3008,0223) Referenced Fraction Number IS 1
+(3008,0224) Fraction Group Type CS 1
+(3008,0230) Beam Stopper Position CS 1
+(3008,0240) Fraction Status Summary Sequence SQ 1
+(3008,0250) Treatment Date DA 1
+(3008,0251) Treatment Time TM 1
+(300a,0002) RT Plan Label SH 1
+(300a,0003) RT Plan Name LO 1
+(300a,0004) RT Plan Description ST 1
+(300a,0006) RT Plan Date DA 1
+(300a,0007) RT Plan Time TM 1
+(300a,0009) Treatment Protocols LO 1-n
+(300a,000a) Treatment Intent CS 1
+(300a,000b) Treatment Sites LO 1-n
+(300a,000c) RT Plan Geometry CS 1
+(300a,000e) Prescription Description ST 1
+(300a,0010) Dose Reference Sequence SQ 1
+(300a,0012) Dose Reference Number IS 1
+(300a,0013) Dose Reference UID UI 1
+(300a,0014) Dose Reference Structure Type CS 1
+(300a,0015) Nominal Beam Energy Unit CS 1
+(300a,0016) Dose Reference Description LO 1
+(300a,0018) Dose Reference Point Coordinates DS 3
+(300a,001a) Nominal Prior Dose DS 1
+(300a,0020) Dose Reference Type CS 1
+(300a,0021) Constraint Weight DS 1
+(300a,0022) Delivery Warning Dose DS 1
+(300a,0023) Delivery Maximum Dose DS 1
+(300a,0025) Target Minimum Dose DS 1
+(300a,0026) Target Prescription Dose DS 1
+(300a,0027) Target Maximum Dose DS 1
+(300a,0028) Target Underdose Volume Fraction DS 1
+(300a,002a) Organ at Risk Full-volume Dose DS 1
+(300a,002b) Organ at Risk Limit Dose DS 1
+(300a,002c) Organ at Risk Maximum Dose DS 1
+(300a,002d) Organ at Risk Overdose Volume Fraction DS 1
+(300a,0040) Tolerance Table Sequence SQ 1
+(300a,0042) Tolerance Table Number IS 1
+(300a,0043) Tolerance Table Label SH 1
+(300a,0044) Gantry Angle Tolerance DS 1
+(300a,0046) Beam Limiting Device Angle Tolerance DS 1
+(300a,0048) Beam Limiting Device Tolerance Sequence SQ 1
+(300a,004a) Beam Limiting Device Position Tolerance DS 1
+(300a,004c) Patient Support Angle Tolerance DS 1
+(300a,004e) Table Top Eccentric Angle Tolerance DS 1
+(300a,0051) Table Top Vertical Position Tolerance DS 1
+(300a,0052) Table Top Longitudinal Position Tolerance DS 1
+(300a,0053) Table Top Lateral Position Tolerance DS 1
+(300a,0055) RT Plan Relationship CS 1
+(300a,0070) Fraction Group Sequence SQ 1
+(300a,0071) Fraction Group Number IS 1
+(300a,0072) Fraction Group Description LO 1
+(300a,0078) Number of Fractions Planned IS 1
+(300a,0079) Number of Fraction Pattern Digits Per Day IS 1
+(300a,007a) Repeat Fraction Cycle Length IS 1
+(300a,007b) Fraction Pattern LT 1
+(300a,0080) Number of Beams IS 1
+(300a,0082) Beam Dose Specification Point DS 3
+(300a,0084) Beam Dose DS 1
+(300a,0086) Beam Meterset DS 1
+(300a,00a0) Number of Brachy Application Setups IS 1
+(300a,00a2) Brachy Application Setup Dose Specification Point DS 3
+(300a,00a4) Brachy Application Setup Dose DS 1
+(300a,00b0) Beam Sequence SQ 1
+(300a,00b2) Treatment Machine Name SH 1
+(300a,00b3) Primary Dosimeter Unit CS 1
+(300a,00b4) Source-Axis Distance DS 1
+(300a,00b6) Beam Limiting Device Sequence SQ 1
+(300a,00b8) RT Beam Limiting Device Type CS 1
+(300a,00ba) Source to Beam Limiting Device Distance DS 1
+(300a,00bc) Number of Leaf/Jaw Pairs IS 1
+(300a,00be) Leaf Position Boundaries DS 3-n
+(300a,00c0) Beam Number IS 1
+(300a,00c2) Beam Name LO 1
+(300a,00c3) Beam Description ST 1
+(300a,00c4) Beam Type CS 1
+(300a,00c6) Radiation Type CS 1
+(300a,00c7) High-Dose Technique Type CS 1
+(300a,00c8) Reference Image Number IS 1
+(300a,00ca) Planned Verification Image Sequence SQ 1
+(300a,00cc) Imaging Device-Specific Acquisition Parameters LO 1-n
+(300a,00ce) Treatment Delivery Type CS 1
+(300a,00d0) Number of Wedges IS 1
+(300a,00d1) Wedge Sequence SQ 1
+(300a,00d2) Wedge Number IS 1
+(300a,00d3) Wedge Type CS 1
+(300a,00d4) Wedge ID SH 1
+(300a,00d5) Wedge Angle IS 1
+(300a,00d6) Wedge Factor DS 1
+(300a,00d8) Wedge Orientation DS 1
+(300a,00da) Source to Wedge Tray Distance DS 1
+(300a,00e0) Number of Compensators IS 1
+(300a,00e1) Material ID SH 1
+(300a,00e2) Total Compensator Tray Factor DS 1
+(300a,00e3) Compensator Sequence SQ 1
+(300a,00e4) Compensator Number IS 1
+(300a,00e5) Compensator ID SH 1
+(300a,00e6) Source to Compensator Tray Distance DS 1
+(300a,00e7) Compensator Rows IS 1
+(300a,00e8) Compensator Columns IS 1
+(300a,00e9) Compensator Pixel Spacing DS 2
+(300a,00ea) Compensator Position DS 2
+(300a,00eb) Compensator Transmission Data DS 1-n
+(300a,00ec) Compensator Thickness Data DS 1-n
+(300a,00ed) Number of Boli IS 1
+(300a,00ee) Compensator Type CS 1
+(300a,00f0) Number of Blocks IS 1
+(300a,00f2) Total Block Tray Factor DS 1
+(300a,00f4) Block Sequence SQ 1
+(300a,00f5) Block Tray ID SH 1
+(300a,00f6) Source to Block Tray Distance DS 1
+(300a,00f8) Block Type CS 1
+(300a,00f9) Accessory Code LO 1
+(300a,00fa) Block Divergence CS 1
+(300a,00fb) Block Mounting Position CS 1
+(300a,00fc) Block Number IS 1
+(300a,00fe) Block Name LO 1
+(300a,0100) Block Thickness DS 1
+(300a,0102) Block Transmission DS 1
+(300a,0104) Block Number of Points IS 1
+(300a,0106) Block Data DS 2-2n
+(300a,0107) Applicator Sequence SQ 1
+(300a,0108) Applicator ID SH 1
+(300a,0109) Applicator Type CS 1
+(300a,010a) Applicator Description LO 1
+(300a,010c) Cumulative Dose Reference Coefficient DS 1
+(300a,010e) Final Cumulative Meterset Weight DS 1
+(300a,0110) Number of Control Points IS 1
+(300a,0111) Control Point Sequence SQ 1
+(300a,0112) Control Point Index IS 1
+(300a,0114) Nominal Beam Energy DS 1
+(300a,0115) Dose Rate Set DS 1
+(300a,0116) Wedge Position Sequence SQ 1
+(300a,0118) Wedge Position CS 1
+(300a,011a) Beam Limiting Device Position Sequence SQ 1
+(300a,011c) Leaf/Jaw Positions DS 2-2n
+(300a,011e) Gantry Angle DS 1
+(300a,011f) Gantry Rotation Direction CS 1
+(300a,0120) Beam Limiting Device Angle DS 1
+(300a,0121) Beam Limiting Device Rotation Direction CS 1
+(300a,0122) Patient Support Angle DS 1
+(300a,0123) Patient Support Rotation Direction CS 1
+(300a,0124) Table Top Eccentric Axis Distance DS 1
+(300a,0125) Table Top Eccentric Angle DS 1
+(300a,0126) Table Top Eccentric Rotation Direction CS 1
+(300a,0128) Table Top Vertical Position DS 1
+(300a,0129) Table Top Longitudinal Position DS 1
+(300a,012a) Table Top Lateral Position DS 1
+(300a,012c) Isocenter Position DS 3
+(300a,012e) Surface Entry Point DS 3
+(300a,0130) Source to Surface Distance DS 1
+(300a,0134) Cumulative Meterset Weight DS 1
+(300a,0180) Patient Setup Sequence SQ 1
+(300a,0182) Patient Setup Number IS 1
+(300a,0184) Patient Additional Position LO 1
+(300a,0190) Fixation Device Sequence SQ 1
+(300a,0192) Fixation Device Type CS 1
+(300a,0194) Fixation Device Label SH 1
+(300a,0196) Fixation Device Description ST 1
+(300a,0198) Fixation Device Position SH 1
+(300a,01a0) Shielding Device Sequence SQ 1
+(300a,01a2) Shielding Device Type CS 1
+(300a,01a4) Shielding Device Label SH 1
+(300a,01a6) Shielding Device Description ST 1
+(300a,01a8) Shielding Device Position SH 1
+(300a,01b0) Setup Technique CS 1
+(300a,01b2) Setup Technique Description ST 1
+(300a,01b4) Setup Device Sequence SQ 1
+(300a,01b6) Setup Device Type CS 1
+(300a,01b8) Setup Device Label SH 1
+(300a,01ba) Setup Device Description ST 1
+(300a,01bc) Setup Device Parameter DS 1
+(300a,01d0) Setup Reference Description ST 1
+(300a,01d2) Table Top Vertical Setup Displacement DS 1
+(300a,01d4) Table Top Longitudinal Setup Displacement DS 1
+(300a,01d6) Table Top Lateral Setup Displacement DS 1
+(300a,0200) Brachy Treatment Technique CS 1
+(300a,0202) Brachy Treatment Type CS 1
+(300a,0206) Treatment Machine Sequence SQ 1
+(300a,0210) Source Sequence SQ 1
+(300a,0212) Source Number IS 1
+(300a,0214) Source Type CS 1
+(300a,0216) Source Manufacturer LO 1
+(300a,0218) Active Source Diameter DS 1
+(300a,021a) Active Source Length DS 1
+(300a,0222) Source Encapsulation Nominal Thickness DS 1
+(300a,0224) Source Encapsulation Nominal Transmission DS 1
+(300a,0226) Source Isotope Name LO 1
+(300a,0228) Source Isotope Half Life DS 1
+(300a,022a) Reference Air Kerma Rate DS 1
+(300a,022c) Air Kerma Rate Reference Date DA 1
+(300a,022e) Air Kerma Rate Reference Time TM 1
+(300a,0230) Application Setup Sequence SQ 1
+(300a,0232) Application Setup Type CS 1
+(300a,0234) Application Setup Number IS 1
+(300a,0236) Application Setup Name LO 1
+(300a,0238) Application Setup Manufacturer LO 1
+(300a,0240) Template Number IS 1
+(300a,0242) Template Type SH 1
+(300a,0244) Template Name LO 1
+(300a,0250) Total Reference Air Kerma DS 1
+(300a,0260) Brachy Accessory Device Sequence SQ 1
+(300a,0262) Brachy Accessory Device Number IS 1
+(300a,0263) Brachy Accessory Device ID SH 1
+(300a,0264) Brachy Accessory Device Type CS 1
+(300a,0266) Brachy Accessory Device Name LO 1
+(300a,026a) Brachy Accessory Device Nominal Thickness DS 1
+(300a,026c) Brachy Accessory Device Nominal Transmission DS 1
+(300a,0280) Channel Sequence SQ 1
+(300a,0282) Channel Number IS 1
+(300a,0284) Channel Length DS 1
+(300a,0286) Channel Total Time DS 1
+(300a,0288) Source Movement Type CS 1
+(300a,028a) Number of Pulses IS 1
+(300a,028c) Pulse Repetition Interval DS 1
+(300a,0290) Source Applicator Number IS 1
+(300a,0291) Source Applicator ID SH 1
+(300a,0292) Source Applicator Type CS 1
+(300a,0294) Source Applicator Name LO 1
+(300a,0296) Source Applicator Length DS 1
+(300a,0298) Source Applicator Manufacturer LO 1
+(300a,029c) Source Applicator Wall Nominal Thickness DS 1
+(300a,029e) Source Applicator Wall Nominal Transmission DS 1
+(300a,02a0) Source Applicator Step Size DS 1
+(300a,02a2) Transfer Tube Number IS 1
+(300a,02a4) Transfer Tube Length DS 1
+(300a,02b0) Channel Shield Sequence SQ 1
+(300a,02b2) Channel Shield Number IS 1
+(300a,02b3) Channel Shield ID SH 1
+(300a,02b4) Channel Shield Name LO 1
+(300a,02b8) Channel Shield Nominal Thickness DS 1
+(300a,02ba) Channel Shield Nominal Transmission DS 1
+(300a,02c8) Final Cumulative Time Weight DS 1
+(300a,02d0) Brachy Control Point Sequence SQ 1
+(300a,02d2) Control Point Relative Position DS 1
+(300a,02d4) Control Point 3D Position DS 3
+(300a,02d6) Cumulative Time Weight DS 1
+(300a,02e0) Compensator Divergence CS 1
+(300a,02e1) Compensator Mounting Position CS 1
+(300a,02e2) Source to Compensator Distance DS 1-n
+(300c,0002) Referenced RT Plan Sequence SQ 1
+(300c,0004) Referenced Beam Sequence SQ 1
+(300c,0006) Referenced Beam Number IS 1
+(300c,0007) Referenced Reference Image Number IS 1
+(300c,0008) Start Cumulative Meterset Weight DS 1
+(300c,0009) End Cumulative Meterset Weight DS 1
+(300c,000a) Referenced Brachy Application Setup Sequence SQ 1
+(300c,000c) Referenced Brachy Application Setup Number IS 1
+(300c,000e) Referenced Source Number IS 1
+(300c,0020) Referenced Fraction Group Sequence SQ 1
+(300c,0022) Referenced Fraction Group Number IS 1
+(300c,0040) Referenced Verification Image Sequence SQ 1
+(300c,0042) Referenced Reference Image Sequence SQ 1
+(300c,0050) Referenced Dose Reference Sequence SQ 1
+(300c,0051) Referenced Dose Reference Number IS 1
+(300c,0055) Brachy Referenced Dose Reference Sequence SQ 1
+(300c,0060) Referenced Structure Set Sequence SQ 1
+(300c,006a) Referenced Patient Setup Number IS 1
+(300c,0080) Referenced Dose Sequence SQ 1
+(300c,00a0) Referenced Tolerance Table Number IS 1
+(300c,00b0) Referenced Bolus Sequence SQ 1
+(300c,00c0) Referenced Wedge Number IS 1
+(300c,00d0) Referenced Compensator Number IS 1
+(300c,00e0) Referenced Block Number IS 1
+(300c,00f0) Referenced Control Point Index IS 1
+(300e,0002) Approval Status CS 1
+(300e,0004) Review Date DA 1
+(300e,0005) Review Time TM 1
+(300e,0008) Reviewer Name PN 1
+(4000,0010) Arbitrary RET
+(4000,4000) Comments RET
+(4008,0040) Results ID SH 1
+(4008,0042) Results ID Issuer LO 1
+(4008,0050) Referenced Interpretation Sequence SQ 1
+(4008,0100) Interpretation Recorded Date DA 1
+(4008,0101) Interpretation Recorded Time TM 1
+(4008,0102) Interpretation Recorder PN 1
+(4008,0103) Reference to Recorded Sound LO 1
+(4008,0108) Interpretation Transcription Date DA 1
+(4008,0109) Interpretation Transcription Time TM 1
+(4008,010a) Interpretation Transcriber PN 1
+(4008,010b) Interpretation Text ST 1
+(4008,010c) Interpretation Author PN 1
+(4008,0111) Interpretation Approver Sequence SQ 1
+(4008,0112) Interpretation Approval Date DA 1
+(4008,0113) Interpretation Approval Time TM 1
+(4008,0114) Physician Approving Interpretation PN 1
+(4008,0115) Interpretation Diagnosis Description LT 1
+(4008,0117) Interpretation Diagnosis Code Sequence SQ 1
+(4008,0118) Results Distribution List Sequence SQ 1
+(4008,0119) Distribution Name PN 1
+(4008,011a) Distribution Address LO 1
+(4008,0200) Interpretation ID SH 1
+(4008,0202) Interpretation ID Issuer LO 1
+(4008,0210) Interpretation Type ID CS 1
+(4008,0212) Interpretation Status ID CS 1
+(4008,0300) Impressions ST 1
+(4008,4000) Results Comments ST 1
+(4ffe,0001) MAC Parameters Sequence SQ 1
+(50xx,0005) Curve Dimensions US 1
+(50xx,0010) Number of Points US 1
+(50xx,0020) Type of Data CS 1
+(50xx,0022) Curve Description LO 1
+(50xx,0030) Axis Units SH 1-n
+(50xx,0040) Axis Labels SH 1-n
+(50xx,0103) Data Value Representation US 1
+(50xx,0104) Minimum Coordinate Value US 1-n
+(50xx,0105) Maximum Coordinate Value US 1-n
+(50xx,0106) Curve Range SH 1-n
+(50xx,0110) Curve Data Descriptor US 1-n
+(50xx,0112) Coordinate Start Value US 1-n
+(50xx,0114) Coordinate Step Value US 1-n
+(50xx,1001) Curve Activation Layer CS 1
+(50xx,2000) Audio Type US 1
+(50xx,2002) Audio Sample Format US 1
+(50xx,2004) Number of Channels US 1
+(50xx,2006) Number of Samples UL 1
+(50xx,2008) Sample Rate UL 1
+(50xx,200a) Total Time UL 1
+(50xx,200c) Audio Sample Data OW or OB 1
+(50xx,200e) Audio Comments LT 1
+(50xx,2500) Curve Label LO 1
+(50xx,2600) Referenced Overlay Sequence SQ 1
+(50xx,2610) Referenced Overlay Group US 1
+(50xx,3000) Curve Data OW or OB 1
+(5200,9229) Shared Functional Groups Sequence SQ 1
+(5200,9230) Per-frame Functional Groups Sequence SQ 1
+(5400,0100) Waveform Sequence SQ 1
+(5400,0110) Channel Minimum Value OB or OW 1
+(5400,0112) Channel Maximum Value OB or OW 1
+(5400,1004) Waveform Bits Allocated US 1
+(5400,1006) Waveform Sample Interpretation CS 1
+(5400,100a) Waveform Padding Value OB or OW 1
+(5400,1010) Waveform Data OB or OW 1
+(5600,0010) First Order Phase Correction Angle OF 1
+(5600,0020) Spectroscopy Data OF 1
+(60xx,0010) Overlay Rows US 1
+(60xx,0011) Overlay Columns US 1
+(60xx,0012) Overlay Planes US 1
+(60xx,0015) Number of Frames in Overlay IS 1
+(60xx,0022) Overlay Description LO 1
+(60xx,0040) Overlay Type CS 1
+(60xx,0045) Overlay Subtype LO 1
+(60xx,0050) Overlay Origin SS 2
+(60xx,0051) Image Frame Origin US 1
+(60xx,0052) Overlay Plane Origin US 1
+(60xx,0060) Compression Code RET
+(60xx,0100) Overlay Bits Allocated US 1
+(60xx,0102) Overlay Bit Position US 1
+(60xx,0110) Overlay Format RET
+(60xx,0200) Overlay Location RET
+(60xx,1001) Overlay Activation Layer CS 1
+(60xx,1100) Overlay Descriptor - Gray US 1 RET
+(60xx,1101) Overlay Descriptor - Red US 1 RET
+(60xx,1102) Overlay Descriptor - Green US 1 RET
+(60xx,1103) Overlay Descriptor - Blue US 1 RET
+(60xx,1200) Overlays - Gray US 1-n RET
+(60xx,1201) Overlays - Red US 1-n RET
+(60xx,1202) Overlays - Green US 1-n RET
+(60xx,1203) Overlays - Blue US 1-n RET
+(60xx,1301) ROI Area IS 1
+(60xx,1302) ROI Mean DS 1
+(60xx,1303) ROI Standard Deviation DS 1
+(60xx,1500) Overlay Label LO 1
+(60xx,3000) Overlay Data OB or OW 1
+(60xx,4000) Comments RET
+(7fe0,0010) Pixel Data OW or OB 1
+(fffa,fffa) Digital Signatures Sequence SQ 1
+(fffc,fffc) Data Set Trailing Padding OB 1
+(fffe,e000) Item see note 1
+(fffe,e00d) Item Delimitation Item see note 1
+(fffe,e0dd) Sequence Delimitation Item see note 1
+(0002,0000) Group Length UL 1
+(0002,0001) File Meta Information Version OB 1
+(0002,0002) Media Storage SOP Class UID UI 1
+(0002,0003) Media Storage SOP Instance UID UI 1
+(0002,0010) Transfer Syntax UID UI 1
+(0002,0012) Implementation Class UID UI 1
+(0002,0013) Implementation Version Name SH 1
+(0002,0016) Source Application Entity Title AE 1
+(0002,0100) Private Information Creator UID UI 1
+(0002,0102) Private Information OB 1
+(0004,0000) Group Length UL 1
+(0004,1130) File-set ID CS 1
+(0004,1141) File-set Descriptor File ID CS 1-8
+(0004,1142) Specific Character Set of File-set Descriptor File CS 1
+(0004,1200) Offset of the First Directory Record of the Root Directory Entity UL 1
+(0004,1202) Offset of the Last Directory Record of the Root Directory Entity UL 1
+(0004,1212) File-set Consistency Flag US 1
+(0004,1220) Directory Record Sequence SQ 1
+(0004,1400) Offset of the Next Directory Record UL 1
+(0004,1410) Record In-use Flag US 1
+(0004,1420) Offset of Referenced Lower-Level Directory Entity UL 1
+(0004,1430) Directory Record Type CS 1
+(0004,1432) Private Record UID UI 1
+(0004,1500) Referenced File ID CS 1-8
+(0004,1504) MRDR Directory Record Offset UL 1
+(0004,1510) Referenced SOP Class UID in File UI 1
+(0004,1511) Referenced SOP Instance UID in File UI 1
+(0004,1512) Referenced Transfer Syntax UID in File UI 1
+(0004,151a) Referenced Related General SOP Class UID in File UI 1-n

@@ -1,0 +1,16 @@
+Manfuacturer
+Mssing SEQ for
+US/SS -> US or SS
+0040 4021 SQ 1 Input InformationSequence
+0040 a030 DT 1 Verification DateTime
+0040 a032 DT 1 Observation DateTime
+2110 0099 SH 1 Print Queue ID -> Printer
+6000 0060 LT 1 Overlay Compression Code (RET)
+0020 31xx LO 1-n Source Image Ids (RET) -> IDs
+60xx 0060 LT 1 Overlay Compression Code (RET)
+
+0018 9022 CS 1 Blood Signal Nulling
+0008 1070 PN 1-n Operator's Name
+0018 a002 DT 1 Contribution Date Time
+0050 0019 DS 1 Inter-Marker Distance
+0088 0912 LO 1-32 Topic Key Words
