@@ -9,11 +9,24 @@ CONFIGURE_FILE(
   IMMEDIATE
   )
 
-# add the include path to find the .h
+# Add the include paths
 INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Source"
   "${GDCM_SOURCE_DIR}/Source"
   )
+
+ADD_CUSTOM_COMMAND(
+  OUTPUT    ${GDCM_BINARY_DIR}/Source/gdcmDefaultDicts.cxx
+  COMMAND   ${EXECUTABLE_OUTPUT_PATH}/PrepDict
+  ARGS      ${GDCM_SOURCE_DIR}/Dicts/DataDict.dic
+            ${GDCM_BINARY_DIR}/Source/gdcmDefaultDicts.cxx
+  DEPENDS   ${GDCM_SOURCE_DIR}/Dicts/DataDict.dic
+  COMMENT   "Generating gdcmDefaultDicts.cxx based on DataDict.dic"
+  )
+
+# Since the file gdcmDefaultDicts.cxx does not exist, mark it as GENERATED:
+#SET_SOURCE_FILES_PROPERTIES(
+#  "${GDCM_BINARY_DIR}/Source/gdcmDefaultDicts.cxx" GENERATED)
 
 
 SET(SRCS
