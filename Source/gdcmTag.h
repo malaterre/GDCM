@@ -9,6 +9,8 @@
  */
 
 #include "gdcmType.h"
+//#include "gdcmDICOMOStream.h"
+//#include "gdcmDICOMIStream.h"
 #include <iostream>
 #include <iomanip>
 
@@ -17,14 +19,16 @@ namespace gdcm
 // Data Element Tag
 class Tag
 {
-  friend class IStream;
-  friend class OStream;
+  friend class DICOMIStream;
+  friend class DICOMOStream;
 public:
   Tag() { ElementTag.tag = 0; }
   Tag(uint32_t tag) { ElementTag.tag = tag; }
   Tag(uint16_t group, uint16_t element) { ElementTag.tags[0] = group; ElementTag.tags[1] = element; }
 
   friend std::ostream& operator<<(std::ostream& _os, const Tag &_val);
+  //friend DICOMIStream& operator>>(DICOMIStream& _os, Tag &_val);
+  //friend DICOMOStream& operator<<(DICOMOStream& _os, Tag &_val);
 
   uint16_t GetGroup() const { return ElementTag.tags[0]; }
   uint16_t GetElement() const { return ElementTag.tags[1]; }
@@ -77,7 +81,7 @@ public:
     ElementTag.tag = _val.ElementTag.tag;
     }
   // Should be always true
-  uint32_t GetLength() { return 8; }
+  uint32_t GetLength() const { return 8; }
 
 private:
   //uint16_t ElementTag[2]; // Group, Element

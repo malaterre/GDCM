@@ -1,63 +1,32 @@
 #include "gdcmIStream.h"
+#include "gdcmByteSwap.txx"
 
 namespace gdcm
 {
 
-IStream &IStream::Read(Tag &t)
+IStream& IStream::Read(char* s, std::streamsize n )
 {
+  if(s) { assert( memset(s,0,n) ); }
   assert( !(!InternalStream) );
-  assert( sizeof(t) == 4 );
-  InternalStream.read((char*)(&t.ElementTag.tag), 4);
-  return *this;
+  assert( !InternalStream.eof() );
+  //std::cout << InternalStream.tellg() << std::endl;
+  if( !InternalStream.read(s,n) )
+    {
+    if( !(InternalStream.eof()))
+      {
+      std::cerr << "Problem reading: " << n << " bytes" << std::endl;
+      assert(0);
+      }
+    }
+  return *this; 
 }
 
-IStream &IStream::Read(VR::VRType &vr)
+IStream& IStream::Read(short* s, std::streamsize n )
 {
-  assert( !(!InternalStream) );
-  char vr_str[3];
-  InternalStream.read(vr_str, 2);
-  vr_str[2] = '\0';
-  vr = VR::GetVRType(vr_str);
+  Read((char*)s, 2*n);
+  ByteSwap<short>::SwapRangeFromSwapCodeIntoSystem(s, SwapCode, n);
   return *this;
 }
-
-IStream &IStream::Read(uint16_t &vl)
-{
-  assert( !(!InternalStream) );
-  char vl_str[2];
-  InternalStream.read(vl_str,2);
-  vl = *((uint16_t*)(vl_str));
-  return *this;
-}
-
-IStream &IStream::Read(uint32_t &vl)
-{
-  assert( !(!InternalStream) );
-  char vl_str[4];
-  InternalStream.read(vl_str,4);
-  vl = *((uint32_t*)(vl_str));
-  return *this;
-}
-
-IStream &IStream::Read(Value &v, uint32_t length)
-{
-  assert( !(!InternalStream) );
-  v.SetLength(length); // perform realloc
-  InternalStream.read(v.Internal, length);
-  return *this;
-}
-
-IStream &IStream::ReadDICM()
-{
-  assert( !(!InternalStream) );
-  char dicm[128+4];
-  InternalStream.read(dicm, 128+4);
-  assert( dicm[124+4] == 'D'
-       && dicm[125+4] == 'I'
-       && dicm[126+4] == 'C'
-       && dicm[127+4] == 'M');
-  return *this;
-}
-
-}
+ 
+} // end namespace gdcm
 

@@ -20,6 +20,8 @@ public:
   ImplicitDataElement() { ValueLengthField = 0; }
 
   friend std::ostream& operator<<(std::ostream& _os, const ImplicitDataElement &_val);
+  friend DICOMIStream& operator>>(DICOMIStream& _os, ImplicitDataElement &_val);
+  friend DICOMOStream& operator<<(DICOMOStream& _os, const ImplicitDataElement &_val);
 
   uint32_t GetValueLength() { return ValueLengthField; }
   void SetValueLength(uint32_t vl) { ValueLengthField = vl; }
@@ -31,7 +33,7 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const ImplicitDataElement &_val)
 {
-  _os << "VL=" << std::dec << _val.ValueLengthField;
+  _os << _val.TagField << " VL=" /* << "VL= " << std::dec << _val.ValueLengthField*/;
   const DataElement &de = _val;
   _os << " " << de;
   return _os;

@@ -4,49 +4,55 @@
 
 /**
  * \brief Wrapper around ifstream
+ * Should only provide wrapper around big endian stuff
+ * Should not have any DICOM notion. See DICOMIStream for a specialization of IStream
  * \note bla
  */
 
 #include "gdcmType.h"
-#include "gdcmTag.h"
-#include "gdcmVR.h"
-#include "gdcmValue.h"
 #include <fstream>
+#include <iostream>
 
 namespace gdcm
 {
 class IStream
 {
 public:
+  IStream () { SwapCode = LittleEndian; }
+
   bool operator ! ( ) const { return !InternalStream; }
   bool eof ( ) const { return InternalStream.eof(); }
+  // Although correct this is not defined by the standart
+  //operator bool() const { return !InternalStream.eof(); }
+  //define the void* operation so that while( IStream ) becomes a valid cast
+  //defined cast/ user cast
+  operator void * ( ) const { return static_cast<void*>(InternalStream); }
 
   void SetFileName(const std::string& filename) { FileName = filename; }
   void Open() { InternalStream.open(FileName.c_str(), std::ios::binary);}
   void Close() { InternalStream.close(); }
+
+  std::streampos Tellg() { return InternalStream.tellg(); }
+
+  IStream& Seekg( std::streamoff off, std::ios_base::seekdir dir ) 
+    { 
+    //std::cerr << "off= " << off << std::endl;
+    InternalStream.seekg(off,dir); return *this; }
+
+protected:
+  // Only subclass should have access to this method... this is too general
+  // for end user
+  IStream& Read(char* s, std::streamsize n);
+  IStream& Read(short* s, std::streamsize n);
   
 
-  // Read a tag from the IStream
-  IStream &Read(Tag &t);
 
-  // Read a VR from the IStream
-  IStream &Read(VR::VRType &t);
-
-  // Read a uin16_t from the Stream
-  IStream &Read(uint16_t &vl);
-
-  // Read a uin32_t from the Stream
-  IStream &Read(uint32_t &vl);
-
-  // Read a Value from the Stream
-  IStream &Read(Value &v, uint32_t length);
-
-  // FIXME Should not be here
-  IStream &ReadDICM();
+  SwapCodeType SwapCode;
 
 private:
   std::string FileName;
   std::ifstream InternalStream;
+
 };
 
 }

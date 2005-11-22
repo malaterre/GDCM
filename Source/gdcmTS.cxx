@@ -48,6 +48,18 @@ static const char *TSStrings[] = {
   0 // Compilers have no obligation to finish by NULL, do it ourself
 };
 
+const TS::TSType TS::GetTSType(const char *str)
+{
+  int i = 0;
+  while(TSStrings[i] != 0)
+    {
+    if( strcmp(str, TSStrings[i]) == 0 )
+      return (TSType)i;
+    ++i;
+    }
+  return TS_END;
+}
+
 const char* TS::GetTSString(const TSType &ts)
 {
   assert( ts < TS_END );
@@ -74,6 +86,18 @@ bool TS::IsJPEG(const TSType &ts)
   if( strncmp(s, jpeg, strlen(jpeg)) == 0)
     return true;
   return false;
+}
+
+bool TS::IsImplicit(const TSType &ts)
+{
+  return ts == ImplicitVRLittleEndian
+    || ts == ImplicitVRBigEndianPrivateGE;
+}
+
+bool TS::IsBigEndian(const TSType &ts)
+{
+  return ts == ExplicitVRBigEndian
+    || ts == ImplicitVRBigEndianPrivateGE;
 }
 
 } // end namespace gdcm

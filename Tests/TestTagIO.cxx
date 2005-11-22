@@ -1,6 +1,6 @@
 #include "gdcmTag.h"
-#include "gdcmIStream.h"
-#include "gdcmOStream.h"
+#include "gdcmDICOMIStream.h"
+#include "gdcmDICOMOStream.h"
 #include <fstream>
 
 // Purpose of this test is to make sure we can read and write a gdcm::Tag
@@ -38,9 +38,9 @@ int TestTagIO(int , char *[])
     }
 
   //----------------------------------------------------------
-  // Same test using the gdcm::IStream class
+  // Same test using the gdcm::DICOMIStream class
   gdcm::Tag o;
-  gdcm::IStream gi;
+  gdcm::DICOMIStream gi;
   gi.SetFileName( "/tmp/bla.bin" );
   gi.Open();
   gi.Read(o);
@@ -54,15 +54,15 @@ int TestTagIO(int , char *[])
     }
 
   //----------------------------------------------------------
-  // Same test using the gdcm::IStream class
-  gdcm::OStream go;
+  // Same test using the gdcm::DICOMIStream class
+  gdcm::DICOMOStream go;
   go.SetFileName( "/tmp/bla2.bin" );
   go.Open();
   go.Write(t);
   go.Close();
 
   gdcm::Tag o2;
-  gdcm::IStream gi2;
+  gdcm::DICOMIStream gi2;
   gi2.SetFileName( "/tmp/bla.bin" );
   gi2.Open();
   gi2.Read(o2);

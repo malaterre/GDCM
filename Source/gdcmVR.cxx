@@ -112,8 +112,20 @@ VR::VRType VR::GetVRType(const char *vr)
 
 bool VR::IsValid(const char *vr1, const VRType& vr2)
 {
+  assert( strlen(vr1) == 3 );
   VR::VRType vr = GetVRType(vr1);
   return vr & vr2;
+}
+
+bool VR::IsSwap(const char *vr)
+{
+  assert( vr[2] == '\0' );
+  char vr_swap[3];
+  vr_swap[0] = vr[1];
+  vr_swap[1] = vr[0];
+  vr_swap[2] = '\0';
+  assert( GetVRType(vr_swap) != SS );
+  return GetVRType(vr_swap) != VR_END;
 }
 
 } // end of namespace gdcm

@@ -35,6 +35,10 @@ public:
 
   friend std::ostream& operator<<(std::ostream& _os, const DictEntry &_val);
 
+  VR::VRType GetVR() { return ValueRepresentation; }
+
+  VM::VMType GetVM() { return ValueMultiplicity; }
+
 private:
   std::string Name;
   VR::VRType ValueRepresentation;

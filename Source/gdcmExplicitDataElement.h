@@ -9,8 +9,8 @@
  */
 
 #include "gdcmDataElement.h"
-#include "gdcmIStream.h"
-#include "gdcmOStream.h"
+#include "gdcmDICOMIStream.h"
+#include "gdcmDICOMOStream.h"
 #include "gdcmVR.h"
 
 namespace gdcm
@@ -22,14 +22,15 @@ public:
   ExplicitDataElement() { ValueLengthField = 0; VRField = VR::INVALID; }
 
   friend std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_val);
-  friend gdcm::IStream& operator>>(gdcm::IStream& _os, ExplicitDataElement &_val);
-  friend gdcm::OStream& operator<<(gdcm::OStream& _os, ExplicitDataElement &_val);
+  friend DICOMIStream& operator>>(DICOMIStream& _os, ExplicitDataElement &_val);
+  friend DICOMOStream& operator<<(DICOMOStream& _os, const ExplicitDataElement &_val);
 
   uint32_t GetValueLength() { return ValueLengthField; }
   void SetValueLength(uint32_t vl) { ValueLengthField = vl; }
 
   uint32_t GetLength() { 
-    assert( ValueLengthField != 0xFFFFFFFF );
+    assert( ValueLengthField != 0xFFFFFFFF 
+      && ValueLengthField != 0xFFFF );
     return ValueLengthField; }
 
   VR::VRType GetVR() { return VRField; }
@@ -44,7 +45,7 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_val)
 {
-  _os << "VR=" << _val.VRField/* << ",VL=" << std::dec << _val.ValueLengthField*/;
+  _os << _val.TagField << " VR=" << _val.VRField/* << ",VL=" << std::dec << _val.ValueLengthField*/;
   const DataElement &de = _val;
   _os << " " << de;
   return _os;

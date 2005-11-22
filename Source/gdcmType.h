@@ -36,15 +36,13 @@ typedef  unsigned int        uint32_t;
 
 namespace gdcm 
 {
-typedef struct {
-  char VR[2];
-  uint16_t length;
-} Explicit;
+  typedef enum {
+    LittleEndian    = 1234,
+    BigEndian       = 4321,
+    BadLittleEndian = 3412,
+    BadBigEndian    = 2143
+  } SwapCodeType;
 
-typedef union { 
-  Explicit ExplicitLength;
-  uint32_t ImplicitLength;
-} VRValueLength;
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
 #endif // __gdcmType_h

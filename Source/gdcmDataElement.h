@@ -12,7 +12,8 @@
 #include "gdcmType.h"
 #include "gdcmTag.h"
 #include "gdcmValue.h"
-#include "gdcmIStream.h"
+#include "gdcmDICOMIStream.h"
+#include "gdcmDICOMOStream.h"
 
 namespace gdcm
 {
@@ -29,24 +30,39 @@ public:
   virtual ~DataElement() {}
 
   friend std::ostream& operator<<(std::ostream& _os, const DataElement &_val);
-  friend gdcm::IStream& operator>>(gdcm::IStream& _os, DataElement &_val);
+  friend DICOMIStream& operator>>(DICOMIStream& _os, DataElement &_val);
+  friend DICOMOStream& operator<<(DICOMOStream& _os, const DataElement &_val);
+
+  const Tag& GetTag() const { return TagField; }
+  void SetTag(const Tag &t) { TagField = t; }
+
+  const Value &GetValue() const { return ValueField; }
 
 protected:
+  Tag TagField;
   Value ValueField;
   // Value could be NULL if we don't read it, therefore we need an offset
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const DataElement &_val)
 {
-  _os << "VF=" << _val.ValueField;
+  _os << /*_val.TagField <<*/ " VF=" << _val.ValueField;
   return _os;
 }
 //-----------------------------------------------------------------------------
-inline gdcm::IStream& operator>>(gdcm::IStream& _os, DataElement &_val)
+inline DICOMIStream& operator>>(DICOMIStream& _os, DataElement &_val)
 {
-  //FIXME... can we do the writting here instead of subclass ?
-  (void)_val;
-  assert( 0 );
+  // Read Tag
+  assert( !_os.eof() );
+  if( !_os.Read(_val.TagField) ) return _os;
+  return _os;
+}
+
+//-----------------------------------------------------------------------------
+inline DICOMOStream& operator<<(DICOMOStream& _os, const DataElement &_val)
+{
+  // Write Tag
+  _os.Write(_val.TagField);
   return _os;
 }
 

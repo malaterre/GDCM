@@ -1,10 +1,13 @@
 #include "gdcmExplicitDataElement.h"
+#include "gdcmSequenceDataElement.txx"
 
 namespace gdcm
 {
 //-----------------------------------------------------------------------------
-gdcm::OStream& operator<<(gdcm::OStream& _os, ExplicitDataElement &_val)
+DICOMOStream& operator<<(DICOMOStream& _os, const ExplicitDataElement &_val)
 {
+  //const DataElement &de = _val;
+  //_os << de;
   _os.Write(_val.VRField);
   // See PS 3.5, Date Element Structure With Explicit VR
   if( _val.VRField == VR::OB
@@ -38,10 +41,12 @@ gdcm::OStream& operator<<(gdcm::OStream& _os, ExplicitDataElement &_val)
 }
 
 //-----------------------------------------------------------------------------
-gdcm::IStream& operator>>(gdcm::IStream& _os, ExplicitDataElement &_val)
+DICOMIStream& operator>>(DICOMIStream& _os, ExplicitDataElement &_val)
 {
+  //DataElement &de = _val;
+  //if( !(_os >> de) ) return _os;
   // Read VR
-  _os.Read(_val.VRField);
+  if( !(_os.Read(_val.VRField)) ) return _os;
   // See PS 3.5, Date Element Structure With Explicit VR
   if( _val.VRField == VR::OB
    || _val.VRField == VR::OW
@@ -66,29 +71,45 @@ gdcm::IStream& operator>>(gdcm::IStream& _os, ExplicitDataElement &_val)
     }
   else
     {
+    // Two steps since ValueLengthField is 32 bits, we need to declate a 16bits int first
     uint16_t vl;
     // Read Value Lenght (16bits)
     _os.Read(vl);
+    if( _val.VRField == VR::UL )
+      {
+      if(vl == 6)
+        {
+        std::cerr << "BUGGY HEADER: vl=6 should be 4" << std::endl;
+        vl = 4;
+        }
+      }
     _val.ValueLengthField = vl;
     }
   // Read the Value
-  if( _val.ValueLengthField != 0xFFFFFFFF )
+  if( _val.VRField == VR::SQ )
     {
-    // We have the length we should be able to read the value
-    _os.Read(_val.ValueField, _val.ValueLengthField);
+    // Check wether or not this is an undefined length sequence
+    SequenceDataElement<ExplicitDataElement> sde( _val.ValueLengthField  );
+    _os >> sde;
+    }
+  else if( _val.ValueLengthField == 0xFFFFFFFF )
+    {
+    // Ok this is Pixel Data fragmented...
+    Tag pixelData(0x7fe0,0x0010);
+    assert( _val.VRField == VR::OB 
+         || _val.VRField == VR::OW );
+    assert( _val.TagField == pixelData );
+    SequenceDataElement<ExplicitDataElement> sde;
+    _os >> sde;
     }
   else
     {
-    Tag t;
-    Tag sdi = Tag(0xfffe,0xe0dd); // Sequence Delimitation Item
-    ExplicitDataElement dummy;
-    while(t != sdi )
-      {
-      _os.Read(t);
-      _os >> dummy;
-      _val.ValueLengthField+=t.GetLength()+dummy.GetLength();
-      }
+    assert (_val.ValueLengthField != 0xFFFF ); // ??
+    // We have the length we should be able to read the value
+    _val.ValueField.SetLength(_val.ValueLengthField); // perform realloc
+    _os.Read(_val.ValueField);
     }
+
   return _os;
 }
 

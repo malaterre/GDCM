@@ -237,7 +237,6 @@ int main(int argc, char *argv[])
    //while (from >> line)
    //while (from.getline(iline, 512))
    std::ostringstream os;
-   std::string s;
    while(std::getline(from, line))
      {
      if( *(line.c_str()) == '\0' )
@@ -254,11 +253,11 @@ int main(int argc, char *argv[])
          uint16_t end   = 0x50ff;
          for(uint16_t i= start; i<=end; i+=2)
            {
-           std::string s = line.c_str()+4;
+           std::string s1 = line.c_str()+4;
            os.str("");
-           os << std::hex << i << s;
-           convert_to_cxx(os.str().c_str(), s);
-           into << s << std::endl;
+           os << std::hex << i << s1;
+           convert_to_cxx(os.str().c_str(), s1);
+           into << s1 << std::endl;
            }
          }
        else if(line[0] == '6')
@@ -267,11 +266,11 @@ int main(int argc, char *argv[])
          uint16_t end   = 0x60ff;
          for(uint16_t i= start; i<=end; i+=2)
            {
-           std::string s = line.c_str()+4;
+           std::string s1 = line.c_str()+4;
            os.str("");
-           os << std::hex << i << s;
-           convert_to_cxx(os.str().c_str(), s);
-           into << s << std::endl;
+           os << std::hex << i << s1;
+           convert_to_cxx(os.str().c_str(), s1);
+           into << s1 << std::endl;
            }
          }
        else
@@ -300,6 +299,7 @@ int main(int argc, char *argv[])
        }
      else
        {
+   std::string s;
        convert_to_cxx(line.c_str(), s);
        into << s << std::endl;
        }

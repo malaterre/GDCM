@@ -18,11 +18,17 @@ INCLUDE_DIRECTORIES(
 
 SET(SRCS
   gdcmIStream.cxx
+  gdcmDICOMIStream.cxx
   gdcmOStream.cxx
+  gdcmDICOMOStream.cxx
   gdcmVR.cxx
   gdcmVM.cxx
   gdcmTS.cxx
+  #gdcmTag.cxx
   gdcmExplicitDataElement.cxx
+  gdcmImplicitDataElement.cxx
+  #gdcmSequenceDataElement.cxx
+  #gdcmSequenceItem.cxx
   "${GDCM_BINARY_DIR}/Source/gdcmDefaultDicts.cxx"
   )
 

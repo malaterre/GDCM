@@ -17,6 +17,14 @@ SET (EXECUTABLE_OUTPUT_PATH ${GDCM_BINARY_DIR}/bin CACHE PATH "Single output dir
 SET (LIBRARY_OUTPUT_PATH ${GDCM_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
 MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
 
+#-----------------------------------------------------------------------------
+# Adding GDCM_DATA_ROOT
+FIND_PATH(GDCM_DATA_ROOT gdcm-ACR-LibIDO.acr
+  ${GDCM_SOURCE_DIR}/../gdcmData
+  $ENV{GDCM_DATA}
+  $ENV{PUB_DICT_PATH}/../../gdcmData
+  )
+
 
 #-----------------------------------------------------------------------------
 INCLUDE (${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)

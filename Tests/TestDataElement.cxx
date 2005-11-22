@@ -1,6 +1,7 @@
 #include "gdcmDataElement.h"
-#include "gdcmIStream.h"
+#include "gdcmDICOMIStream.h"
 #include "gdcmExplicitDataElement.h"
+#include "gdcmTag.h"
 #include <sstream>
 #include <fstream>
 
@@ -8,10 +9,16 @@
 int TestDataElement(int , char *[])
 {
   std::ostringstream os;
+  //const uint16_t group = 0x1234;
+  //char *str = (char*)(&group);
+  //os.write(str, sizeof(group));
+  //const uint16_t element = 0x5678;
+  //str = (char*)(&element);
+  //os.write(str, sizeof(element));
   os << "AE";
   const uint16_t vl = 16;
-  char *vl_str = (char*)(&vl);
-  os.write(vl_str, sizeof(vl));
+  char *str = (char*)(&vl);
+  os.write(str, sizeof(vl));
   const char value[] = "ABCDEFGHIJKLMNOP";
   os << value;
 
@@ -19,7 +26,7 @@ int TestDataElement(int , char *[])
   of.write(os.str().c_str(), os.str().size());
   of.close();
 
-  gdcm::IStream is;
+  gdcm::DICOMIStream is;
   is.SetFileName("/tmp/bla.bin");
   is.Open();
   gdcm::ExplicitDataElement de;
@@ -28,7 +35,7 @@ int TestDataElement(int , char *[])
 
   std::cout << de << std::endl;
 
-  gdcm::OStream Os;
+  gdcm::DICOMOStream Os;
   Os.SetFileName("/tmp/bla2.bin");
   Os.Open();
   Os << de;

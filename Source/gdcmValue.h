@@ -17,8 +17,8 @@ namespace gdcm
 // Data Element Value Field
 class Value
 {
-  friend class IStream;
-  friend class OStream;
+  friend class DICOMIStream;
+  friend class DICOMOStream;
 public:
   Value() { Internal = 0; Length = 0; }
   ~Value() { delete[] Internal; Internal = 0; Length = 0; }
@@ -30,15 +30,18 @@ public:
   void SetLength(uint32_t l) { 
     assert( !(l%2) );
     // FIXME: man realloc
-    if( Length < l )
+    if( l )
       {
-      char *internal = new char[l+1];
-      memcpy(internal, Internal, Length);
-      delete[] Internal;
-      Internal = internal;
+      if( l > Length )
+        {
+        char *internal = new char[l+1];
+        memcpy(internal, Internal, Length);
+        delete[] Internal;
+        Internal = internal;
+        }
+      Internal[l] = '\0';
       }
     Length = l;
-    Internal[l] = '\0';
   }
 
   Value(const Value&_val)
@@ -63,6 +66,8 @@ public:
     return false;
     }
 
+  const char *GetPointer() const { return Internal; }
+
 private:
   char* Internal;
   uint32_t Length;
@@ -71,7 +76,7 @@ private:
 inline std::ostream& operator<<(std::ostream& _os, const Value &_val)
 {
   if( _val.Internal )
-    _os << "Loaded:" << _val.Internal;
+    _os << "Loaded:" << _val.Length;
   else
     _os << "Not Loaded";
   _os << " (Length: " << _val.Length << ")";

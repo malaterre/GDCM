@@ -8,9 +8,6 @@
  */
 
 #include "gdcmType.h"
-#include "gdcmTag.h"
-#include "gdcmVR.h"
-#include "gdcmValue.h"
 #include <fstream>
 
 
@@ -23,20 +20,12 @@ public:
   void Open() { InternalStream.open(FileName.c_str(), std::ios::binary);}
   void Close() { InternalStream.close(); }
 
-  // Write a tag from the IStream
-  OStream &Write(const Tag &t);
-
-  // Write a VR from the IStream
-  OStream &Write(const VR::VRType &t);
-
-  // Write a uin16_t from the Stream
-  OStream &Write(const uint16_t &vl);
-
-  // Write a uin32_t from the Stream
-  OStream &Write(const uint32_t &vl);
-
-  // Write a Value from the Stream
-  OStream &Write(const Value &v);
+protected:
+  // Only subclass should have access to this method... this is too general
+  // for end user
+  OStream& Write(const char* s, std::streamsize n ) { 
+    assert( !(!InternalStream) );
+    InternalStream.write(s,n); return *this; }
 
 private:
   std::string FileName;
