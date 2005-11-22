@@ -1,0 +1,4 @@
+const char * const gdcmDataImages[] = { 
+  @GDCM_DATA_IMAGES@
+0 };
+
