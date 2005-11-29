@@ -1,3 +1,4 @@
+#include "gdcmType.h"
 #include "gdcmDICOMIStream.h"
 #include "gdcmVR.h"
 #include "gdcmByteSwap.txx"
@@ -11,9 +12,10 @@ namespace gdcm
 IStream &DICOMIStream::Read(Tag &t)
 {
   assert( sizeof(t) == 4 );
-  IStream::Read((char*)(&t.ElementTag.tag), 4);
+  if( !IStream::Read((char*)(&t.ElementTag.tag), 4) ) return *this;
   //assert(!(t.GetGroup()%2));
   ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem(t.ElementTag.tags, SwapCode, 2);
+  //assert( t != Tag(0,0) ); // FIXME
   return *this;
 }
 
@@ -31,8 +33,8 @@ IStream &DICOMIStream::Read(uint16_t &vl)
 {
   char vl_str[2];
   IStream::Read(vl_str,2);
-  ByteSwap<char>::SwapRangeFromSwapCodeIntoSystem((char*)(&vl_str), SwapCode, 2);
-  vl = *((uint16_t*)(vl_str));
+  ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)(&vl_str), SwapCode, 1);
+  memcpy(&vl, vl_str, 2);
   return *this;
 }
 
@@ -40,8 +42,8 @@ IStream &DICOMIStream::Read(uint32_t &vl)
 {
   char vl_str[4];
   IStream::Read(vl_str,4);
-  vl = *((uint32_t*)(vl_str));
-  ByteSwap<uint32_t>::SwapFromSwapCodeIntoSystem(vl, SwapCode);
+  ByteSwap<uint32_t>::SwapRangeFromSwapCodeIntoSystem((uint32_t*)(&vl_str), SwapCode, 1);
+  memcpy(&vl, vl_str, 4);
   return *this;
 }
 
@@ -112,39 +114,44 @@ void DICOMIStream::ReadNonStandardDataElements()
   FindNegociatedTS();
   if( NegociatedTS == Explicit )
     {
-  // So far we only found the potential TS
-  ExplicitDataElement de;
-  DataElement &de_tag = de;
-  const gdcm::Tag t(0x0002,0x0010);
-  while( *this >> de_tag )
-    {
-    if( de_tag.GetTag().GetGroup() < 0x0007 )
+    // So far we only found the potential TS
+    ExplicitDataElement de;
+    DataElement &de_tag = de;
+    const gdcm::Tag t(0x0002,0x0010);
+    gdcm::TS::TSType ts = TS::TS_END;
+    while( *this >> de_tag )
       {
-      *this >> de;
-      std::cout << "Debug: " << de << std::endl;
-      if( de_tag.GetTag() == t )
+      std::cerr << "Tag: " << de_tag.GetTag() << std::endl;
+      assert( de_tag.GetTag().GetGroup() <= 0x0010
+        || de_tag.GetTag().GetGroup() == 0x0800 ); // Byte Swap problem
+      if( de_tag.GetTag().GetGroup() <= 0x0002 )
         {
-        gdcm::TS::TSType ts = gdcm::TS::GetTSType( de.GetValue().GetPointer() );
-        //NegociatedTS = Explicit;
-        bool isImplicit = gdcm::TS::IsImplicit( ts );
+        *this >> de;
+        std::cout << "Debug: " << de << std::endl;
+        if( de_tag.GetTag() == t )
+          {
+          std::cerr << "TS=" << de.GetValue().GetPointer() << std::endl;
+          ts = gdcm::TS::GetTSType( de.GetValue().GetPointer() );
+          assert( ts != TS::TS_END );
+          }
+        }
+      else
+        {
+        // Ok seek back...
+        Seekg(-4, std::ios::cur);
+        bool isImplicit = TS::IsImplicit( ts );
         if( isImplicit )
           {
-          NegociatedTS = Implicit;
+          NegociatedTS = DICOMIStream::Implicit;
           }
-        //bool isBigEndian = gdcm::TS::IsBigEndian( ts );
-        //if( isBigEndian )
-        //  {
-        //  SwapCode = BigEndian;
-        //  }
+        bool isBigEndian = TS::IsBigEndian( ts );
+        if( isBigEndian )
+          {
+          SwapCode = SC::BigEndian;
+          }
+        break;
         }
       }
-    else
-      {
-      // Ok seek back...
-      Seekg(-4, std::ios::cur);
-      break;
-      }
-    }
     }
 }
 
@@ -184,20 +191,21 @@ void DICOMIStream::FindNegociatedTS()
       if( t.GetElement() == 0x0000 )
         {
         uint32_t group_length;
+        assert( SwapCode == SC::Unknown );
         Read(group_length);
         switch(group_length)
           {
         case 0x00040000 :
-          SwapCode = BadLittleEndian;
+          SwapCode = SC::BadLittleEndian;
           break;
         case 0x04000000 :
-          SwapCode = BigEndian;
+          SwapCode = SC::BigEndian;
           break;
         case 0x00000400 :
-          SwapCode = BadBigEndian;
+          SwapCode = SC::BadBigEndian;
           break;
         case 0x00000004 :
-          SwapCode = LittleEndian;
+          SwapCode = SC::LittleEndian;
           break;
         default:
           abort();

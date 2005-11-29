@@ -21,12 +21,12 @@ IStream& IStream::Read(char* s, std::streamsize n )
   return *this; 
 }
 
-IStream& IStream::Read(short* s, std::streamsize n )
-{
-  Read((char*)s, 2*n);
-  ByteSwap<short>::SwapRangeFromSwapCodeIntoSystem(s, SwapCode, n);
-  return *this;
-}
+//IStream& IStream::Read(short* s, std::streamsize n )
+//{
+//  Read((char*)s, 2*n);
+//  ByteSwap<short>::SwapRangeFromSwapCodeIntoSystem(s, SwapCode, n);
+//  return *this;
+//}
  
 } // end namespace gdcm
 

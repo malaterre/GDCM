@@ -2,6 +2,9 @@
 #include <assert.h>
 #include <string.h>
 
+#include <string>
+#include <iostream>
+
 namespace gdcm
 {
 
@@ -48,12 +51,22 @@ static const char *TSStrings[] = {
   0 // Compilers have no obligation to finish by NULL, do it ourself
 };
 
-const TS::TSType TS::GetTSType(const char *str)
+const TS::TSType TS::GetTSType(const char *cstr)
 {
+  // trim trailing whitespace
+  std::string str = cstr;
+  std::string::size_type notspace = str.find_last_not_of(" ") + 1;
+  if( notspace != str.size() )
+    {
+    std::cerr << "BUGGY HEADER: TS contains " << 
+      str.size()-notspace << " whitespace character(s)" << std::endl;
+    str.erase(notspace);
+    }
+
   int i = 0;
   while(TSStrings[i] != 0)
     {
-    if( strcmp(str, TSStrings[i]) == 0 )
+    if( str == TSStrings[i] )
       return (TSType)i;
     ++i;
     }

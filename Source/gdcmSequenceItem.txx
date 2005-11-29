@@ -37,7 +37,7 @@ DICOMIStream& operator>>(DICOMIStream& _os, SequenceItem<DEType> &_val)
         }
       // else
       _os  >> exde;
-      std::cout << "Debug \t" << exde << std::endl;
+      std::cout << "Debug SQ Item:\t" << exde << std::endl;
       }
     }
   else

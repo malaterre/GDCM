@@ -14,6 +14,7 @@
 #include <ctype.h>
 
 //#define DICT_DEBUG
+//#define DICT_XML
 
 //static const char DictFilename[] = "DataDict.dic";
 void write_header(std::ofstream &of)
@@ -117,6 +118,33 @@ bool read_uint16(const char *raw, uint16_t &ov)
   return true;
 }
 
+// Takes as input a raw text file, and converts it into a xml line
+// Template is:
+// From
+// 0000 0000 UL 1 Group Length
+// into:
+// <DataElement Tag="0000,0000" VR="UL" VM="1" Name="Group Length">
+bool convert_to_xml(const char *raw, std::string &cxx)
+{
+  uint16_t group;
+  uint16_t element;
+  gdcm::VR::VRType vr;
+  gdcm::VM::VMType vm;
+  read_uint16(raw, group);
+  assert( !(group%2) );
+  read_uint16(raw+5, element);
+  read_vr(raw+10, vr);
+  int len = 11+strlen(gdcm::VR::GetVRString(vr));
+  read_vm(raw+len, vm);
+  len += strlen(gdcm::VM::GetVMString(vm))+1;
+  std::ostringstream os;
+  os << "  <DataElement Tag=\"" << std::hex << std::setw(4) << std::setfill('0') << group << "," 
+    << std::setw(4) << std::setfill('0')
+    << element << "\" VR=\"" << vr << "\" VM=\"" << vm << "\"\tName=\"" << (raw+len) << "\">";
+  cxx = os.str();
+  return true;
+}
+
 // Takes as input a raw text file, and converts it into a c++ line
 // Template is:
 // From
@@ -129,9 +157,6 @@ bool convert_to_cxx(const char *raw, std::string &cxx)
   uint16_t element;
   gdcm::VR::VRType vr;
   gdcm::VM::VMType vm;
-//  char name[256];
-//  int sscanf(raw.c_str(), "%04x %04x %2c %s %s", group, element, vr, vm, name);
-//  std::cout << name << std::endl;
   read_uint16(raw, group);
   assert( !(group%2) );
   read_uint16(raw+5, element);
@@ -170,39 +195,47 @@ void add_group_lenght(std::ifstream &from, std::ofstream &into)
   std::string in = group;
   const char group_str[] = " 0000 UL 1 Group Length";
   std::ostringstream os;
-    std::string out;
+  std::string out;
   if( in[2] == 'x' && in[3] == 'x' )
     {
     std::string line = in;
-       if(line[0] == '5')
-         {
-         uint16_t start = 0x5000;
-         uint16_t end   = 0x50ff;
-         for(uint16_t i= start; i<=end; i+=2)
-           {
-           os.str("");
-           os << std::hex << i << group_str;
-           convert_to_cxx(os.str().c_str(), out);
-           into << out << std::endl;
-           }
-         }
-       else if(line[0] == '6')
-         {
-         uint16_t start = 0x6000;
-         uint16_t end   = 0x60ff;
-         for(uint16_t i= start; i<=end; i+=2)
-           {
-           os.str("");
-           os << std::hex << i << group_str;
-           convert_to_cxx(os.str().c_str(), out);
-           into << out << std::endl;
-           }
-         }
+    if(line[0] == '5')
+      {
+      uint16_t start = 0x5000;
+      uint16_t end   = 0x50ff;
+      for(uint16_t i= start; i<=end; i+=2)
+        {
+        os.str("");
+        os << std::hex << i << group_str;
+#ifndef DICT_XML
+        convert_to_cxx(os.str().c_str(), out);
+        into << out << std::endl;
+#endif
+        }
+      }
+    else if(line[0] == '6')
+      {
+      uint16_t start = 0x6000;
+      uint16_t end   = 0x60ff;
+      for(uint16_t i= start; i<=end; i+=2)
+        {
+        os.str("");
+        os << std::hex << i << group_str;
+#ifndef DICT_XML
+        convert_to_cxx(os.str().c_str(), out);
+        into << out << std::endl;
+#endif
+        }
+      }
     }
   else
     {
     in += group_str;
+#ifdef DICT_XML
+    convert_to_xml(in.c_str(), out);
+#else
     convert_to_cxx(in.c_str(), out);
+#endif
     into << out << std::endl;
     }
   // seek back
@@ -256,7 +289,11 @@ int main(int argc, char *argv[])
            std::string s1 = line.c_str()+4;
            os.str("");
            os << std::hex << i << s1;
+#ifdef DICT_XML
+           convert_to_xml(os.str().c_str(), s1);
+#else
            convert_to_cxx(os.str().c_str(), s1);
+#endif
            into << s1 << std::endl;
            }
          }
@@ -269,7 +306,11 @@ int main(int argc, char *argv[])
            std::string s1 = line.c_str()+4;
            os.str("");
            os << std::hex << i << s1;
+#ifdef DICT_XML
+           convert_to_xml(os.str().c_str(), s1);
+#else
            convert_to_cxx(os.str().c_str(), s1);
+#endif
            into << s1 << std::endl;
            }
          }
@@ -289,7 +330,11 @@ int main(int argc, char *argv[])
            std::string s = line.c_str()+9;
            os.str("");
            os << s1 << std::hex << i << s;
+#ifdef DICT_XML
+           convert_to_xml(os.str().c_str(), s);
+#else
            convert_to_cxx(os.str().c_str(), s);
+#endif
            into << s << std::endl;
            }
          //std::cout << line << std::endl;
@@ -299,8 +344,12 @@ int main(int argc, char *argv[])
        }
      else
        {
-   std::string s;
+       std::string s;
+#ifdef DICT_XML
+       convert_to_xml(line.c_str(), s);
+#else
        convert_to_cxx(line.c_str(), s);
+#endif
        into << s << std::endl;
        }
      }

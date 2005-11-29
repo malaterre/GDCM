@@ -53,7 +53,7 @@ inline std::ostream& operator<<(std::ostream& _os, const DataElement &_val)
 inline DICOMIStream& operator>>(DICOMIStream& _os, DataElement &_val)
 {
   // Read Tag
-  assert( !_os.eof() );
+  //assert( !_os.eof() ); // FIXME
   if( !_os.Read(_val.TagField) ) return _os;
   return _os;
 }

@@ -13,52 +13,15 @@ void PrintDataElements(gdcm::DICOMIStream &is)
   gdcm::DataElement &de_tag = de;
   const gdcm::Tag item(0xfffe, 0xe000);
 
-  while( is >> de_tag )
+  while( !is.eof() && is >> de_tag )
     {
     if( de_tag.GetTag() == item )
       {
       std::cout << is.Tellg() << std::endl;
-      continue;
+      abort();
       }
     is >> de;
-    std::cout << de << std::endl;
-    }
-}
-
-template<class DEType>
-void PrintDataElementsHeader(gdcm::DICOMIStream &is)
-{
-  DEType de;
-  gdcm::DataElement &de_tag = de;
-  const gdcm::Tag t(0x0002,0x0010);
-  bool isImplicit = false;
-  while( is >> de_tag )
-    {
-    if( de_tag.GetTag().GetGroup() > 0x0002 )
-      {
-      std::cerr << "Entering" << std::endl;
-      int l = -4;
-      is.Seekg(l, std::ios::cur );
-      if( isImplicit )
-        {
-        std::cerr << "Implicit" << std::endl;
-        PrintDataElements<gdcm::ImplicitDataElement>(is);
-        }
-      else
-        PrintDataElements<gdcm::ExplicitDataElement>(is);
-      break;
-      }
-    else
-      {
-      is >> de;
-      if( de_tag.GetTag() == t )
-        {
-        gdcm::TS::TSType ts = gdcm::TS::GetTSType( de.GetValue().GetPointer() );
-        isImplicit = gdcm::TS::IsImplicit( ts );
-        std::cout << "IsImplicit:" << isImplicit << std::endl;
-        }
-      std::cout << de << std::endl;
-      }
+    //std::cout << de << std::endl;
     }
 }
 

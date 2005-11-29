@@ -7,7 +7,7 @@ SET(TEST_SRCS
   TestDataElement
   TestVRValueLength
   TestVR
-  #TestSwap
+  TestSwap
   TestGroup
   #TestValueField
   TestVM
@@ -48,11 +48,7 @@ FILE(GLOB GDCM_DATA_IMAGES_GLOB
   "${GDCM_DATA_ROOT}/*.dcm"
   )
 SET(BLACK_LIST
-  "00191113.dcm"
-  "THERALYS-12-MONO2-Uncompressed-Even_Length_Tag.dcm" # This one should technically work...
-  "US-RGB-8-epicard.dcm" # BigEndian not so well handled
-  "MARCONI_MxTWin-12-MONO2-JpegLossless-ZeroLengthSQ.dcm" # odd length for pixel data
-  "gdcm-JPEG-LossLess3a.dcm" # Don't understand why JPEG lenght is skrewed...
+  #"diazpost.dcm" # This one is nasty
   )
 
 SET(GDCM_DATA_IMAGES)

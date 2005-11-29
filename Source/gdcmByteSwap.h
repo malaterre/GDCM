@@ -19,8 +19,8 @@ public:
   static bool SystemIsBigEndian ();
   static bool SystemIsLittleEndian ();
 
-  static void SwapFromSwapCodeIntoSystem(T &p, SwapCodeType sc);
-  static void SwapRangeFromSwapCodeIntoSystem(T *p, SwapCodeType sc, unsigned int num);
+  static void SwapFromSwapCodeIntoSystem(T &p, SC::SwapCodeType sc);
+  static void SwapRangeFromSwapCodeIntoSystem(T *p, SC::SwapCodeType sc, unsigned int num);
   
 protected:
   ByteSwap() {}

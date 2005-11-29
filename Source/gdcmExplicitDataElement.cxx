@@ -82,6 +82,10 @@ DICOMIStream& operator>>(DICOMIStream& _os, ExplicitDataElement &_val)
         std::cerr << "BUGGY HEADER: vl=6 should be 4" << std::endl;
         vl = 4;
         }
+      if( vl == 1024 )
+        {
+        abort();
+        }
       }
     _val.ValueLengthField = vl;
     }
@@ -106,8 +110,13 @@ DICOMIStream& operator>>(DICOMIStream& _os, ExplicitDataElement &_val)
     {
     assert (_val.ValueLengthField != 0xFFFF ); // ??
     // We have the length we should be able to read the value
-    _val.ValueField.SetLength(_val.ValueLengthField); // perform realloc
-    _os.Read(_val.ValueField);
+    if( _val.ValueLengthField < 0xfff )
+      {
+      _val.ValueField.SetLength(_val.ValueLengthField); // perform realloc
+      _os.Read(_val.ValueField);
+      }
+    else
+      _os.Seekg(_val.ValueLengthField, std::ios::cur);
     }
 
   return _os;

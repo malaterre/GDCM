@@ -25,29 +25,52 @@ DICOMIStream& operator>>(DICOMIStream& _os, SequenceDataElement<DEType> &_val)
   SequenceItem<DEType> si;
   assert( si.GetTag() == Tag(0,0) );
   DataElement &de = si;
+  bool isBroken = false;
   if( _val.SequenceLengthField == 0xFFFFFFFF)
     {
     while( _os >> de )
       {
-      if(de.GetTag() == seqDel ) 
+      if(de.GetTag() == seqDel) 
         {
-        //_val.TagField = de.GetTag();
         uint32_t length;
         _os.Read(length);
-        //std::cerr << "End of SQ: l=" << length << std::endl;
-        assert( length == 0 || length == 0xFFFFFFFF ); // FIXME can a sequence
-        // with unknow lenght finish with FFFFFFF ?
+        // 7.5.2 Delimitation of the Sequence of Items
+        // ...
+        // b) Undefined Length: The Data Element Length Field shall contain a Value FFFFFFFFH to
+        // indicate an Undefined Sequence length. It shall be used in conjunction with a Sequence
+        // Delimitation Item. A Sequence Delimitation Item shall be included after the last Item
+        // in the sequence. Its Item Tag shall be (FFFE,E0DD) with an Item Length of 00000000H. 
+        // No Value shall be present.
+        if( length != 0 )
+          {
+          std::cerr << "Wrong length for Sequence Delimitation Item: " << length; 
+          abort();
+          }
+        // Looks like some pixel data have instead: == 0xFFFFFFFF -> SIEMENS-MR-RGB-16Bits.dcm
         break;
         }
       // else
-      assert( de.GetTag() == itemStart );
+      if( de.GetTag() != itemStart )
+        {
+        // gdcm-JPEG-LossLess3a.dcm
+        std::streampos pos = _os.Tellg();
+        _os.Seekg( 0, std::ios::end );
+        std::streampos end = _os.Tellg();
+        std::cerr << "Broken file: " << (long)(end-pos) 
+          << " bytes were skiped at the end of file" << std::endl;
+        isBroken = true;
+        break;
+        }
       _os >> si;
       if( si.GetLength() == 0xFFFFFFFF )
         {
         assert( de.GetTag() == itemEnd );
         }
       }
+    if( !isBroken )
+      {
     assert( si.GetTag() == seqDel );
+      }
     }
   else
     {

@@ -36,12 +36,17 @@ typedef  unsigned int        uint32_t;
 
 namespace gdcm 
 {
-  typedef enum {
-    LittleEndian    = 1234,
-    BigEndian       = 4321,
-    BadLittleEndian = 3412,
-    BadBigEndian    = 2143
-  } SwapCodeType;
+  class SC // SwapCode
+    {
+  public:
+    typedef enum {
+      Unknown         = 0,
+      LittleEndian    = 1234,
+      BigEndian       = 4321,
+      BadLittleEndian = 3412,
+      BadBigEndian    = 2143
+    } SwapCodeType;
+    };
 
 } // end namespace gdcm
 //-----------------------------------------------------------------------------

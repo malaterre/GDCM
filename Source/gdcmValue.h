@@ -28,7 +28,10 @@ public:
   uint32_t GetLength() const { return Length; }
   // Does a reallocation
   void SetLength(uint32_t l) { 
-    assert( !(l%2) );
+    if (l%2)
+      {
+      std::cerr << "BUGGY HEADER: You're dicom contain odd lenght value field." << std::endl;
+      }
     // FIXME: man realloc
     if( l )
       {

@@ -18,7 +18,7 @@ namespace gdcm
 class IStream
 {
 public:
-  IStream () { SwapCode = LittleEndian; }
+  IStream () { SwapCode = SC::Unknown; }
 
   bool operator ! ( ) const { return !InternalStream; }
   bool eof ( ) const { return InternalStream.eof(); }
@@ -43,11 +43,9 @@ protected:
   // Only subclass should have access to this method... this is too general
   // for end user
   IStream& Read(char* s, std::streamsize n);
-  IStream& Read(short* s, std::streamsize n);
-  
+  //IStream& Read(short* s, std::streamsize n);
 
-
-  SwapCodeType SwapCode;
+  SC::SwapCodeType SwapCode;
 
 private:
   std::string FileName;

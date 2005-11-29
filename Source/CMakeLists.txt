@@ -21,8 +21,10 @@ ADD_CUSTOM_COMMAND(
   ARGS      ${GDCM_SOURCE_DIR}/Dicts/DataDict.dic
             ${GDCM_BINARY_DIR}/Source/gdcmDefaultDicts.cxx
   DEPENDS   ${GDCM_SOURCE_DIR}/Dicts/DataDict.dic
+            ${GDCM_SOURCE_DIR}/Dicts/gdcmPrepDict.cxx
   COMMENT   "Generating gdcmDefaultDicts.cxx based on DataDict.dic"
   )
+
 
 # Since the file gdcmDefaultDicts.cxx does not exist, mark it as GENERATED:
 #SET_SOURCE_FILES_PROPERTIES(
