@@ -112,7 +112,7 @@ VR::VRType VR::GetVRType(const char *vr)
 
 bool VR::IsValid(const char *vr1, const VRType& vr2)
 {
-  assert( strlen(vr1) == 3 );
+  assert( strlen(vr1) == 2 );
   VR::VRType vr = GetVRType(vr1);
   return vr & vr2;
 }

@@ -52,9 +52,13 @@ DICOMIStream& operator>>(DICOMIStream& _os, ImplicitDataElement &_val)
   else
     {
     // We have the length we should be able to read the value
-    //_val.ValueField.SetLength(_val.ValueLengthField); // perform realloc
-    //_os.Read(_val.ValueField);
-    _os.Seekg(_val.ValueLengthField, std::ios::cur);
+    if( _val.ValueLengthField < 0xfff )
+      {
+      _val.ValueField.SetLength(_val.ValueLengthField); // perform realloc
+      _os.Read(_val.ValueField);
+      }
+    else
+      _os.Seekg(_val.ValueLengthField, std::ios::cur);
     }
   return _os;
 }
