@@ -48,6 +48,7 @@ FILE(GLOB GDCM_DATA_IMAGES_GLOB
   "${GDCM_DATA_ROOT}/*.dcm"
   )
 SET(BLACK_LIST
+  "dummyfile.dcm"
   #"diazpost.dcm" # This one is nasty
   )
 
