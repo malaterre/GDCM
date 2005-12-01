@@ -73,6 +73,9 @@ bool DICOMIStream::ReadDICM()
        && dicm[127+4] == 'M')
     {
     r = true; // Sometime not everything is set to zero: D_CLUNIE_VL4_RLE.dcm
+  // Nowhere it's written the 128 first bytes *must* be set to Zero
+  // Don't loose time with useless checkings
+/*
     int i;
     for(i=0; i<128; ++i)
       if(dicm[i] != '\0' )
@@ -84,6 +87,7 @@ bool DICOMIStream::ReadDICM()
       {
       std::cerr << "Real clean HEADER" << std::endl;
       }
+*/
     }
 
   return r;
