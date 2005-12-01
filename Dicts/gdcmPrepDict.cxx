@@ -12,6 +12,8 @@
 #include <iostream>
 #include <iomanip>
 #include <ctype.h>
+#include <assert.h>
+#include <stdio.h>
 
 //#define DICT_DEBUG
 //#define DICT_XML
@@ -270,7 +272,7 @@ int main(int argc, char *argv[])
    //while (from >> line)
    //while (from.getline(iline, 512))
    std::ostringstream os;
-   while(std::getline(from, line))
+   while(std::getline(from, line, '\n'))
      {
      if( *(line.c_str()) == '\0' )
        {

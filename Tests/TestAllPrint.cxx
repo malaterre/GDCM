@@ -15,11 +15,6 @@ void PrintDataElements(gdcm::DICOMIStream &is)
 
   while( !is.eof() && is >> de_tag )
     {
-    if( de_tag.GetTag() == item )
-      {
-      std::cout << is.Tellg() << std::endl;
-      abort();
-      }
     is >> de;
     //std::cout << de << std::endl;
     }

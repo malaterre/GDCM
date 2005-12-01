@@ -1,5 +1,6 @@
 #include "gdcmVR.h"
 #include <iostream>
+#include <string>
 
 int TestValue()
 {
