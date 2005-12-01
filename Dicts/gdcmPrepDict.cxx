@@ -63,7 +63,7 @@ void write_footer(std::ofstream &of)
 #ifdef DICT_DEBUG
 "   {0,0,0,0,0}\n"
 #else
-"   {0,0,(VR::VRType)0,(VM::VMType)0,0}\n"
+"   {0,0,VR::VR_END,VM::VM_END,0}\n"
 #endif
 "};\n\n\
 void Dict::FillDefaultDataDict()\n\
@@ -272,8 +272,13 @@ int main(int argc, char *argv[])
    //while (from >> line)
    //while (from.getline(iline, 512))
    std::ostringstream os;
-   while(std::getline(from, line, '\n'))
+   while(std::getline(from, line))
      {
+     if( !line.empty() )
+       {
+       std::string::iterator e(line.end()-1);
+       if( *e == '\r' ) line.erase(e);
+       }
      if( *(line.c_str()) == '\0' )
        {
        // If an empty line is found then a new group starts
