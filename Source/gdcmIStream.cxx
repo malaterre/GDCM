@@ -1,6 +1,8 @@
 #include "gdcmIStream.h"
 #include "gdcmByteSwap.txx"
 
+#include <assert.h>
+
 namespace gdcm
 {
 

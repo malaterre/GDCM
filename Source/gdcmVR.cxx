@@ -1,5 +1,7 @@
 #include "gdcmVR.h"
 #include <string.h>
+#include <assert.h>
+
 
 namespace gdcm
 {

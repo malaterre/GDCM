@@ -13,6 +13,7 @@
 //#include "gdcmDICOMIStream.h"
 #include <iostream>
 #include <iomanip>
+#include <assert.h>
 
 namespace gdcm
 {
