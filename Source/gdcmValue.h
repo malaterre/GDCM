@@ -30,7 +30,7 @@ public:
   void SetLength(uint32_t l) { 
     if (l%2)
       {
-      std::cerr << "BUGGY HEADER: You're dicom contain odd lenght value field." << std::endl;
+      std::cerr << "BUGGY HEADER: Your dicom contain odd lenght value field." << std::endl;
       }
     // FIXME: man realloc
     if( l )
