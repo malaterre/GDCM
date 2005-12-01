@@ -9,7 +9,6 @@
  */
 
 #include "gdcmDataElement.h"
-#include "gdcmVR.h"
 
 namespace gdcm
 {
@@ -23,8 +22,24 @@ public:
   friend DICOMIStream& operator>>(DICOMIStream& _os, ImplicitDataElement &_val);
   friend DICOMOStream& operator<<(DICOMOStream& _os, const ImplicitDataElement &_val);
 
-  uint32_t GetValueLength() { return ValueLengthField; }
+  uint32_t GetValueLength() const { return ValueLengthField; }
   void SetValueLength(uint32_t vl) { ValueLengthField = vl; }
+
+//  ImplicitDataElement(const ImplicitDataElement &_val)
+//    {
+//    }
+
+  ImplicitDataElement &operator=(const ImplicitDataElement &_val)
+    {
+    (void)_val;
+    abort();
+    }
+
+  uint32_t GetLength() const
+    {
+    //assert( ValueLengthField != 0xFFFFFFFF ); //FIXME
+    return DataElement::GetLength() + sizeof(ValueLengthField) + ValueLengthField;
+    }
 
 private:
   // This is the value read from the file, might be different from the lenght of Value Field

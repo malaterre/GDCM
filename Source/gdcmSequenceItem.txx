@@ -12,12 +12,7 @@ DICOMIStream& operator>>(DICOMIStream& _os, SequenceItem<DEType> &_val)
   const Tag item(0xfffe,0xe000);
   const Tag seqDel(0xfffe,0xe0dd); //[Sequence Delimitation Item]
   //if( !(_os.Read(_val.TagField))) return _os;
-  //if( _val.TagField != item ) 
-  //  {
-  //  assert(0);
-  //  return _os;
-  //  }
-  //assert(_val.TagField == item);
+  assert(_val.TagField == item);
   _os.Read(_val.ItemLengthField);
   if( _val.ItemLengthField == 0xFFFFFFFF )
     {
@@ -37,6 +32,8 @@ DICOMIStream& operator>>(DICOMIStream& _os, SequenceItem<DEType> &_val)
         }
       // else
       _os  >> exde;
+      assert(exde.GetTag() == de.GetTag() );
+      _val.AddDataElement(exde);
       std::cout << "Debug SQ Item:\t" << exde << std::endl;
       }
     }

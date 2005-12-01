@@ -49,13 +49,16 @@ public:
 
   Value(const Value&_val)
     {
-    Internal = _val.Internal;
-    Length = _val.Length;
+    if( this != &_val)
+      {
+      *this = _val;
+      }
     }
 
   Value &operator=(const Value &_val)
     {
-    Internal = _val.Internal;
+    Internal = new char[_val.Length];
+    memcpy(Internal,_val.Internal,_val.Length);
     Length = _val.Length;
     return *this;
     }

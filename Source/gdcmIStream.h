@@ -39,6 +39,8 @@ public:
     //std::cerr << "off= " << off << std::endl;
     InternalStream.seekg(off,dir); return *this; }
 
+  SC::SwapCodeType GetSwapCode() { return SwapCode; }
+
 protected:
   // Only subclass should have access to this method... this is too general
   // for end user

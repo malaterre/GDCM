@@ -19,7 +19,7 @@ namespace gdcm
 class ExplicitDataElement : public DataElement
 {
 public:
-  ExplicitDataElement() { ValueLengthField = 0; VRField = VR::INVALID; }
+  ExplicitDataElement() { ValueLengthField = 0; VRField = VR::INVALID; SequenceLength = 0; }
 
   friend std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_val);
   friend DICOMIStream& operator>>(DICOMIStream& _os, ExplicitDataElement &_val);
@@ -36,16 +36,34 @@ public:
   VR::VRType GetVR() { return VRField; }
   void SetVR(VR::VRType vr) { VRField = vr; }
 
+  uint32_t GetLength() const
+    {
+    //assert( ValueLengthField != 0xFFFFFFFF ); //FIXME
+    // Nice trick each time VR::GetLength() is 2 then Value Length is coded in 2
+    //                                         4 then Value Length is coded in 4
+    if( ValueLengthField != 0xFFFFFFFF )
+      return DataElement::GetLength() + 2*VR::GetLength(VRField) + ValueLengthField;
+    else
+      return DataElement::GetLength() + 2*VR::GetLength(VRField) + SequenceLength;
+    }
+
 private:
   // Value Representation
   VR::VRType VRField;
   // This is the value read from the file, might be different from the lenght of Value Field
   uint32_t ValueLengthField; // Can be 0xFFFFFFF
+
+  // This is set if ValueLengthField == 0xFFFFFFF
+  uint32_t SequenceLength;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_val)
 {
-  _os << _val.TagField << " VR=" << _val.VRField/* << ",VL=" << std::dec << _val.ValueLengthField*/;
+  _os << _val.TagField << " VR=" << _val.VRField;
+  if(_val.ValueLengthField == 0xFFFFFFF )
+    _os << ",VL=" << std::dec << _val.ValueLengthField;
+  else
+    _os << ",VL=" << std::dec << _val.SequenceLength;
   const DataElement &de = _val;
   _os << " " << de;
   return _os;

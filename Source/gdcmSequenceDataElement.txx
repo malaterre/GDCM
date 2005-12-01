@@ -2,10 +2,15 @@
 #define __gdcmSequenceDataElement_txx
 
 #include "gdcmSequenceDataElement.h"
-#include "gdcmSequenceItem.txx"
 
 namespace gdcm
 {
+template<class DEType>
+void SequenceDataElement<DEType>::AddSequenceItem(SequenceItem<DEType> const &item)
+{
+  SequenceItems.push_back(item);
+}
+
 //-----------------------------------------------------------------------------
 template<class DEType>
 DICOMOStream& operator<<(DICOMOStream& _os, const SequenceDataElement<DEType> &_val)
@@ -20,9 +25,8 @@ DICOMIStream& operator>>(DICOMIStream& _os, SequenceDataElement<DEType> &_val)
 {
   const Tag itemStart(0xfffe,0xe000); // Item
   const Tag itemEnd(0xfffe,0xe00d);
-  (void)_val;
   const Tag seqDel(0xfffe,0xe0dd); //[Sequence Delimitation Item]
-  SequenceItem<DEType> si;
+  SequenceItem<DEType> si; // = _val.SequenceItemField;
   assert( si.GetTag() == Tag(0,0) );
   DataElement &de = si;
   bool isBroken = false;
@@ -57,19 +61,21 @@ DICOMIStream& operator>>(DICOMIStream& _os, SequenceDataElement<DEType> &_val)
         _os.Seekg( 0, std::ios::end );
         std::streampos end = _os.Tellg();
         std::cerr << "Broken file: " << (long)(end-pos) 
-          << " bytes were skiped at the end of file" << std::endl;
+          << " bytes were skipped at the end of file" << std::endl;
         isBroken = true;
         break;
         }
       _os >> si;
+      _val.SequenceItems.push_back( si );
       if( si.GetLength() == 0xFFFFFFFF )
         {
         assert( de.GetTag() == itemEnd );
         }
+      //_val.Length += si.GetLength();
       }
     if( !isBroken )
       {
-    assert( si.GetTag() == seqDel );
+      assert( si.GetTag() == seqDel );
       }
     }
   else
@@ -87,8 +93,9 @@ DICOMIStream& operator>>(DICOMIStream& _os, SequenceDataElement<DEType> &_val)
         break;
         }
       _os >> si;
+      _val.SequenceItems.push_back( si );
       // Sequence Length = Item Tag Length + Sequence Value Length
-      seq_length += de.GetTag().GetLength();
+      seq_length += de.GetTag().GetLength() + 4;
       seq_length += si.GetLength();
       std::cerr << "Debug: seq_length="  << seq_length << std::endl;
       assert( seq_length <= _val.SequenceLengthField );

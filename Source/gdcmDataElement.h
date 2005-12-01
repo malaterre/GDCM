@@ -38,6 +38,26 @@ public:
 
   const Value &GetValue() const { return ValueField; }
 
+  DataElement(const DataElement&_val)
+    {
+    if( this != &_val)
+      {
+      *this = _val;
+      }
+    }
+
+  DataElement &operator=(const DataElement &_val)
+    {
+    TagField = _val.TagField;
+    ValueField = _val.ValueField;
+    return *this;
+    }
+
+  uint32_t GetLength() const
+    {
+    return TagField.GetLength();
+    }
+
 protected:
   Tag TagField;
   Value ValueField;
@@ -53,7 +73,7 @@ inline std::ostream& operator<<(std::ostream& _os, const DataElement &_val)
 inline DICOMIStream& operator>>(DICOMIStream& _os, DataElement &_val)
 {
   // Read Tag
-  //assert( !_os.eof() ); // FIXME
+  assert( !_os.eof() ); // FIXME
   if( !_os.Read(_val.TagField) ) return _os;
   return _os;
 }

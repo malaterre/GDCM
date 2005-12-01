@@ -82,7 +82,7 @@ public:
     ElementTag.tag = _val.ElementTag.tag;
     }
   // Should be always true
-  uint32_t GetLength() const { return 8; }
+  uint32_t GetLength() const { return 4; }
 
 private:
   //uint16_t ElementTag[2]; // Group, Element

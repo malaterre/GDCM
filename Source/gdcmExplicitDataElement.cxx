@@ -1,5 +1,6 @@
 #include "gdcmExplicitDataElement.h"
 #include "gdcmSequenceDataElement.txx"
+#include "gdcmDict.h"
 
 namespace gdcm
 {
@@ -18,7 +19,7 @@ DICOMOStream& operator<<(DICOMOStream& _os, const ExplicitDataElement &_val)
     {
     uint16_t check = 0x0;
     _os.Write(check);
-    // Write Value Lenght (32bits)
+    // Write Value Length (32bits)
     _os.Write(_val.ValueLengthField);
     }
   else if( _val.VRField == VR::UT )
@@ -43,11 +44,18 @@ DICOMOStream& operator<<(DICOMOStream& _os, const ExplicitDataElement &_val)
 //-----------------------------------------------------------------------------
 DICOMIStream& operator>>(DICOMIStream& _os, ExplicitDataElement &_val)
 {
-  //DataElement &de = _val;
-  //if( !(_os >> de) ) return _os;
+  // See PS 3.5, Date Element Structure With Explicit VR
+  // Read Tag
+  //if( !_os.Read(_val.TagField) ) return _os;
+  //static Dict d;
+  //const DictEntry &de = d.GetDictEntry(_val.TagField);
   // Read VR
   if( !(_os.Read(_val.VRField)) ) return _os;
-  // See PS 3.5, Date Element Structure With Explicit VR
+//  if( !(de.GetVR() & _val.VRField) && de.GetVR() != VR::INVALID )
+//    {
+//    std::cerr << "BUGGY VR for Tag: " << _val.TagField << " : " << VR::GetVRString(_val.VRField)
+//      << " should be: " << VR::GetVRString(de.GetVR()) << std::endl;
+//    }
   if( _val.VRField == VR::OB
    || _val.VRField == VR::OW
    || _val.VRField == VR::OF
@@ -95,16 +103,18 @@ DICOMIStream& operator>>(DICOMIStream& _os, ExplicitDataElement &_val)
     // Check wether or not this is an undefined length sequence
     SequenceDataElement<ExplicitDataElement> sde( _val.ValueLengthField  );
     _os >> sde;
+    //_val.SequenceLength = sde.GetLength(); //FIXME
     }
   else if( _val.ValueLengthField == 0xFFFFFFFF )
     {
     // Ok this is Pixel Data fragmented...
-    Tag pixelData(0x7fe0,0x0010);
+    const Tag pixelData(0x7fe0,0x0010);
     assert( _val.VRField == VR::OB 
          || _val.VRField == VR::OW );
     assert( _val.TagField == pixelData );
     SequenceDataElement<ExplicitDataElement> sde;
     _os >> sde;
+    //_val.SequenceLength = sde.GetLength(); //FIXME
     }
   else
     {

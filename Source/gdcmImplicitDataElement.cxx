@@ -1,5 +1,6 @@
 #include "gdcmImplicitDataElement.h"
 #include "gdcmSequenceDataElement.txx"
+#include "gdcmDict.h"
 
 namespace gdcm
 {
@@ -18,8 +19,10 @@ DICOMOStream& operator<<(DICOMOStream& _os, const ImplicitDataElement &_val)
 DICOMIStream& operator>>(DICOMIStream& _os, ImplicitDataElement &_val)
 {
   // See PS 3.5, 7.1.3 Date Element Structure With Implicit VR
-  //DataElement &de = _val;
-  //if( !(_os >> de) ) return _os;
+  // Read Tag
+  //if( !_os.Read(_val.TagField) ) return _os;
+  //static Dict d;
+  //const DictEntry &de = d.GetDictEntry(_val.TagField);
   // Read Value Length
   if( !(_os.Read(_val.ValueLengthField)) ) return _os;
   // THE WORST BUG EVER:
@@ -36,18 +39,11 @@ DICOMIStream& operator>>(DICOMIStream& _os, ImplicitDataElement &_val)
     }
   if(_val.ValueLengthField == 0xFFFFFFFF)
     {
-    //assert(0 && "Not Implemented");
+    //assert( de.GetVR() == VR::SQ );
     const Tag sdi(0xfffe,0xe0dd); // Sequence Delimitation Item
-    //ImplicitDataElement dummy;
-    SequenceDataElement<ImplicitDataElement> sde( _val.ValueLengthField  );
+    SequenceDataElement<ImplicitDataElement> sde(_val.ValueLengthField);
     _os >> sde;
     std::cout << "Debug:" << sde << std::endl;
-    //while( _os >> dummy )
-    //  {
-    //  //_os.Read(t);
-    //  //std::cout << t << std::endl;
-    //  std::cout << "Debug:" << dummy << std::endl;
-    //  }
     }
   else
     {

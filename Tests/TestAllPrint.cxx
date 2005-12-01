@@ -11,7 +11,6 @@ void PrintDataElements(gdcm::DICOMIStream &is)
 {
   DEType de;
   gdcm::DataElement &de_tag = de;
-  const gdcm::Tag item(0xfffe, 0xe000);
 
   while( !is.eof() && is >> de_tag )
     {

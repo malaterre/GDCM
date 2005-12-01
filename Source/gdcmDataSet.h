@@ -31,10 +31,11 @@ public:
   typedef typename std::map<Tag, DEType> ElementsMap;
   friend std::ostream& operator<< < >(std::ostream& _os, const DataSet<DEType> &_val);
 
-  void AddDataElement(const Tag& t, const DEType& de)
+  void AddDataElement(const DEType& de)
     {
+    // FIXME warn if about to enter duplicate ?
     DataElements.insert(typename
-      ElementsMap::value_type(t, de));
+      ElementsMap::value_type(de.GetTag(), de));
     }
   const DEType& GetDataElement(const Tag& t) const
     {

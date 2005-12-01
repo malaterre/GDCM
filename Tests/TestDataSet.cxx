@@ -1,4 +1,4 @@
-#include "gdcmDataSet.h"
+#include "gdcmDataSet.txx"
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
 
@@ -23,7 +23,8 @@ int TestDataSet(int argc, char *argv[])
   typedef gdcm::ExplicitDataElement Explicit;
   Explicit de;
   gdcm::DataSet<Explicit> ds;
-  ds.AddDataElement(gdcm::Tag(0,0), de);
+  de.SetTag(gdcm::Tag(0,0));
+  ds.AddDataElement(de);
   
   std::cout << ds << std::endl;
 
@@ -31,7 +32,8 @@ int TestDataSet(int argc, char *argv[])
   typedef gdcm::ImplicitDataElement Implicit;
   Implicit ide;
   gdcm::DataSet<Implicit> ds2;
-  ds2.AddDataElement(gdcm::Tag(0,1), ide);
+  ide.SetTag(gdcm::Tag(0,1));
+  ds2.AddDataElement(ide);
   std::cout << ds2 << std::endl;
 
   gdcm::DICOMIStream Is;

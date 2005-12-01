@@ -43,6 +43,16 @@ ADD_CUSTOM_COMMAND(
   COMMENT   "Generating gdcmDefaultDicts.cxx based on DataDict.dic"
   )
 
+ADD_CUSTOM_COMMAND(
+  OUTPUT    ${GDCM_BINARY_DIR}/Source/gdcmDefaultGroupNames.cxx
+  COMMAND   ${PREP_GROUPNAME}
+  ARGS      ${GDCM_SOURCE_DIR}/Dicts/GroupName.dic
+            ${GDCM_BINARY_DIR}/Source/gdcmDefaultGroupNames.cxx
+  DEPENDS   ${GDCM_SOURCE_DIR}/Dicts/GroupName.dic
+            ${GDCM_SOURCE_DIR}/Dicts/gdcmPrepGroupName.cxx
+  COMMENT   "Generating gdcmDefaultGroupNames.cxx based on GroupName.dic"
+  )
+
 
 # Since the file gdcmDefaultDicts.cxx does not exist, mark it as GENERATED:
 #SET_SOURCE_FILES_PROPERTIES(
@@ -58,11 +68,13 @@ SET(SRCS
   gdcmVM.cxx
   gdcmTS.cxx
   #gdcmTag.cxx
+  gdcmGroupDict.cxx
   gdcmExplicitDataElement.cxx
   gdcmImplicitDataElement.cxx
   #gdcmSequenceDataElement.cxx
   #gdcmSequenceItem.cxx
   "${GDCM_BINARY_DIR}/Source/gdcmDefaultDicts.cxx"
+  "${GDCM_BINARY_DIR}/Source/gdcmDefaultGroupNames.cxx"
   )
 
 ADD_LIBRARY(gdcm ${SRCS})

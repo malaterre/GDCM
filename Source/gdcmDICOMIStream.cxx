@@ -15,7 +15,7 @@ IStream &DICOMIStream::Read(Tag &t)
   if( !IStream::Read((char*)(&t.ElementTag.tag), 4) ) return *this;
   //assert(!(t.GetGroup()%2));
   ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem(t.ElementTag.tags, SwapCode, 2);
-  //assert( t != Tag(0,0) ); // FIXME
+  assert( t != Tag(0,0) ); // FIXME
   return *this;
 }
 
@@ -73,9 +73,9 @@ bool DICOMIStream::ReadDICM()
        && dicm[127+4] == 'M')
     {
     r = true; // Sometime not everything is set to zero: D_CLUNIE_VL4_RLE.dcm
-  // Nowhere it's written the 128 first bytes *must* be set to Zero
-  // Don't loose time with useless checkings
-/*
+    // It's not clearly specify that the 128 first bytes *must* be set to Zero
+    // But usually it is report only when compiled in Debug mode
+#ifndef NDEBUG
     int i;
     for(i=0; i<128; ++i)
       if(dicm[i] != '\0' )
@@ -87,7 +87,7 @@ bool DICOMIStream::ReadDICM()
       {
       std::cerr << "Real clean HEADER" << std::endl;
       }
-*/
+#endif
     }
 
   return r;
@@ -141,7 +141,8 @@ void DICOMIStream::ReadNonStandardDataElements()
         }
       else
         {
-        // Ok seek back...
+        // Ok seek back, since we only read de_tag, we need to seek back 4 bytes:
+        assert( de_tag.GetLength() == 4 );
         Seekg(-4, std::ios::cur);
         bool isImplicit = TS::IsImplicit( ts );
         if( isImplicit )

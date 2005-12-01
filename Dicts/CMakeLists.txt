@@ -19,4 +19,7 @@ ADD_EXECUTABLE(PrepDict ${DICT_SRCS}
   "${GDCM_SOURCE_DIR}/Source/gdcmVM.cxx"
   )
 
+ADD_EXECUTABLE(PrepGroupName
+  ${GDCM_SOURCE_DIR}/Dicts/gdcmPrepGroupName.cxx
+  )
 

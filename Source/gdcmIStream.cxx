@@ -2,8 +2,6 @@
 #include "gdcmByteSwap.txx"
 #include <assert.h>
 
-#include <assert.h>
-
 namespace gdcm
 {
 

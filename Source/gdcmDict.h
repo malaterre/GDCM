@@ -37,7 +37,7 @@ public:
       DictInternal.find(tag);
     if (it == DictInternal.end())
       {
-      assert( 0 && "Impossible" );
+      //assert( 0 && "Impossible" );
       return GetDictEntry(Tag(0,0));
       }
     return it->second;
