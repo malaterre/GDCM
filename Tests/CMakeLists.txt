@@ -14,7 +14,7 @@ SET(TEST_SRCS
   TestTS
   TestDictEntry
   TestDict
-  TestDataSet
+  #TestDataSet
   TestSequenceDataElement
   TestAllPrint
   )
