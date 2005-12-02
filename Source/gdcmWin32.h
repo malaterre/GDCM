@@ -1,6 +1,6 @@
 
-#ifndef __GDCMTYPE_H
-#define __GDCMTYPE_H
+#ifndef __gdcmWin32_h
+#define __gdcmWin32_h
 
 //#include "gdcmConfigure.h"
 
@@ -16,6 +16,5 @@
   #define GDCM_EXPORT
 #endif
 
-} //namespace gdcm
 //-----------------------------------------------------------------------------
-#endif
+#endif //__gdcmWin32_h

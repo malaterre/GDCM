@@ -4,6 +4,7 @@
 
 #include "gdcmConfigure.h"
 
+#include "gdcmWin32.h"
 
 //-----------------------------------------------------------------------------
 #ifdef CMAKE_HAVE_STDINT_H
