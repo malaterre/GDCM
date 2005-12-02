@@ -67,7 +67,7 @@ SET(SRCS
   gdcmVR.cxx
   gdcmVM.cxx
   gdcmTS.cxx
-  #gdcmTag.cxx
+  gdcmTag.cxx
   gdcmGroupDict.cxx
   gdcmExplicitDataElement.cxx
   gdcmImplicitDataElement.cxx

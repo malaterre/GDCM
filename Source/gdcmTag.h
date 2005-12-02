@@ -2,10 +2,7 @@
 #ifndef __gdcmTag_h
 #define __gdcmTag_h
 
-
 #include "gdcmType.h"
-//#include "gdcmDICOMOStream.h"
-//#include "gdcmDICOMIStream.h"
 #include <iostream>
 #include <iomanip>
 #include <assert.h>

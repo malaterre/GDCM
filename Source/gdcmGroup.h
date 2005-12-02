@@ -27,7 +27,6 @@ DICOMOStream& operator<<(DICOMOStream& _os, const Group<DEType> &_val);
  
 // Group
 template<class DEType> // DataElementType
-
 class Group
 {
 public:
