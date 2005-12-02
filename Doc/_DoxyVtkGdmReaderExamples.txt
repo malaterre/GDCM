@@ -1,0 +1,9 @@
+/**
+ * \page DoxyVtkGdmReaderExamples VtkGdmReader examples
+ *  Below you will find, by order of complexity, two examples that
+ *  illustate how the vtkGdcmReader vtk class can be used.
+ *  Basically, vtkGdcmReader behaves like any other derived class of
+ *  vtkImageReader...
+ * \include vtkGdcmDemo.cxx
+ * \include vtkgdcmViewer.cxx
+ */

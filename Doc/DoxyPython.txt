@@ -1,0 +1,7 @@
+/**
+ * \page DoxyPythonComplete gdcmPython
+ *  GdcmPython is the blending of gdcm with the
+ *  <A HREF="http://www.python.org">Python</A> scripting language. 
+ *  Here is a simple example of the usage of gdcmPython:
+ * \include PrintFile.py
+ */
