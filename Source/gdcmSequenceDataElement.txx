@@ -21,7 +21,7 @@ DICOMOStream& operator<<(DICOMOStream& _os, const SequenceDataElement<DEType> &_
 }
 //-----------------------------------------------------------------------------
 template<class DEType>
-DICOMIStream& operator>>(DICOMIStream& _os, SequenceDataElement<DEType> &_val)
+DICOMIStream& operator>>(DICOMIStream &_os, SequenceDataElement<DEType> &_val)
 {
   const Tag itemStart(0xfffe,0xe000); // Item
   const Tag itemEnd(0xfffe,0xe00d);

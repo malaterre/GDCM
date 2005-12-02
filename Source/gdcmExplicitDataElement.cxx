@@ -26,14 +26,14 @@ DICOMOStream& operator<<(DICOMOStream& _os, const ExplicitDataElement &_val)
     {
     uint16_t check = 0x0;
     _os.Write(check);
-    // Write Value Lenght (32bits)
+    // Write Value Length (32bits)
     assert( _val.ValueLengthField != 0xFFFFFFFF );
     _os.Write(_val.ValueLengthField);
     }
   else
     {
     uint16_t vl = _val.ValueLengthField;
-    // Write Value Lenght (16bits)
+    // Write Value Length (16bits)
     _os.Write(vl);
     }
   // We have the length we should be able to write the value
@@ -65,7 +65,7 @@ DICOMIStream& operator>>(DICOMIStream& _os, ExplicitDataElement &_val)
     uint16_t check;
     _os.Read(check);
     assert( check == 0x0 );
-    // Read Value Lenght (32bits)
+    // Read Value Length (32bits)
     _os.Read(_val.ValueLengthField);
     }
   else if( _val.VRField == VR::UT )
@@ -73,7 +73,7 @@ DICOMIStream& operator>>(DICOMIStream& _os, ExplicitDataElement &_val)
     uint16_t check;
     _os.Read(check);
     assert( check == 0x0 );
-    // Read Value Lenght (32bits)
+    // Read Value Length (32bits)
     _os.Read(_val.ValueLengthField);
     assert( _val.ValueLengthField != 0xFFFFFFFF );
     }
@@ -81,7 +81,7 @@ DICOMIStream& operator>>(DICOMIStream& _os, ExplicitDataElement &_val)
     {
     // Two steps since ValueLengthField is 32 bits, we need to declate a 16bits int first
     uint16_t vl;
-    // Read Value Lenght (16bits)
+    // Read Value Length (16bits)
     _os.Read(vl);
     if( _val.VRField == VR::UL )
       {
