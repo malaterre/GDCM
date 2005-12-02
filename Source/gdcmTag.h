@@ -69,15 +69,12 @@ public:
   // All other comparison can be constructed from this one and operator ==
   bool operator<(const Tag &_val) const
     {
-    return (ElementTag.tag < _val.ElementTag.tag) ? true : false;
-    /*
     if( ElementTag.tags[0] < _val.ElementTag.tags[0] )
       return true;
     if( ElementTag.tags[0] == _val.ElementTag.tags[0]
      && ElementTag.tags[1] <  _val.ElementTag.tags[1] )
       return true;
     return false;
-    */
     }
 
   Tag(const Tag &_val)
