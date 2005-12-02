@@ -257,7 +257,7 @@ int main(int argc, char *argv[])
   const char *filename = argv[1]; // Full path to the dict
   const char *outfilename = argv[2]; // Full path to output the dict
   //std::cerr << "open: " << filename << std::endl;
-  std::ifstream from(filename);
+  std::ifstream from(filename, std::ios::binary);
   std::ofstream into(outfilename);
   if(!from)
     {
