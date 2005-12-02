@@ -28,7 +28,11 @@ DICOMOStream& operator<<(DICOMOStream& _os, const SequenceItems<DEType> &_val);
 template<class DEType>
 
 /**
- * \brief Class to represent a Sequence Data Element
+ * \brief Class to represent a Sequence Of Items
+ * (value representation : SQ)
+ * a Value Representation for Data Elements that contains a sequence of Data Sets.
+ * Sequence of Item allows for Nested Data Sets
+ *
  * See PS 3.5, 7.4.6 Data Element Type Within a Sequence
  * \note bla
  */
