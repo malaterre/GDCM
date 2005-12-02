@@ -2,11 +2,7 @@
 #ifndef __gdcmGroupDict_h
 #define __gdcmGroupDict_h
 
-/**
- * \brief Class to represent the mapping from group number to its abbreviation and name
- * \note Should I rewrite this class to use a std::map instead of vector from problem of 
- * memory consumption ?
- */
+
 
 #include "gdcmType.h"
 #include <assert.h>
@@ -16,6 +12,11 @@
 
 namespace gdcm
 {
+/**
+ * \brief Class to represent the mapping from group number to its abbreviation and name
+ * \note Should I rewrite this class to use a std::map instead of vector from problem of 
+ * memory consumption ?
+ */
 class GroupDict
 {
 public:

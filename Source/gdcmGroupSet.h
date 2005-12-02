@@ -2,17 +2,17 @@
 #ifndef __gdcmGroupSet_h
 #define __gdcmGroupSet_h
 
-/**
- * \brief Class to represent a Data Set (which contains Data Elements)
- * A Data Set represents an instance of a real world Information Object
- * \note bla
- */
-
 #include "gdcmGroup.h"
 #include <vector>
 
 namespace gdcm
 {
+
+/**
+ * \brief Class to represent a Data Set (which contains Data Elements)
+ * A Data Set represents an instance of a real world Information Object
+ * \note bla
+ */
 
 
 // This is needed in order to declare a friend of template class
