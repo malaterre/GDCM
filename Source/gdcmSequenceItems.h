@@ -1,6 +1,6 @@
 
-#ifndef __gdcmSequenceDataElement_h
-#define __gdcmSequenceDataElement_h
+#ifndef __gdcmSequenceItems_h
+#define __gdcmSequenceItems_h
 
 #include "gdcmType.h"
 #include "gdcmDICOMIStream.h"
@@ -12,15 +12,15 @@ namespace gdcm
 {
 // This is needed in order to declare a friend of template class
 template<class DEType>
-class SequenceDataElement;
+class SequenceItems;
 template<class DEType>
-std::ostream& operator<<(std::ostream& _os, const SequenceDataElement<DEType> &_val);
+std::ostream& operator<<(std::ostream& _os, const SequenceItems<DEType> &_val);
 
 template<class DEType>
-DICOMIStream& operator>>(DICOMIStream& _os, SequenceDataElement<DEType> &_val);
+DICOMIStream& operator>>(DICOMIStream& _os, SequenceItems<DEType> &_val);
 
 template<class DEType>
-DICOMOStream& operator<<(DICOMOStream& _os, const SequenceDataElement<DEType> &_val);
+DICOMOStream& operator<<(DICOMOStream& _os, const SequenceItems<DEType> &_val);
 
 // Sequence Data Element
 // == bunch of SequenceItem
@@ -32,15 +32,15 @@ template<class DEType>
  * See PS 3.5, 7.4.6 Data Element Type Within a Sequence
  * \note bla
  */
-class SequenceDataElement
+class SequenceItems
 {
 public:
-  SequenceDataElement(uint32_t length = 0xFFFFFFFF) { SequenceLengthField = length; }
+  SequenceItems(uint32_t length = 0xFFFFFFFF) { SequenceLengthField = length; }
   typedef std::vector<SequenceItem<DEType> > SequenceItemVector;
 
-  friend std::ostream& operator<< < >(std::ostream& _os, const SequenceDataElement<DEType> &_val);
-  friend DICOMIStream& operator>> < >(DICOMIStream& _os, SequenceDataElement<DEType> &_val);
-  friend DICOMOStream& operator<< < >(DICOMOStream& _os, const SequenceDataElement<DEType> &_val);
+  friend std::ostream& operator<< < >(std::ostream& _os, const SequenceItems<DEType> &_val);
+  friend DICOMIStream& operator>> < >(DICOMIStream& _os, SequenceItems<DEType> &_val);
+  friend DICOMOStream& operator<< < >(DICOMOStream& _os, const SequenceItems<DEType> &_val);
 
   uint32_t GetSequenceLength() { return SequenceLengthField; }
   void SetSequenceLength(uint32_t length) { SequenceLengthField = length; }
@@ -56,16 +56,16 @@ public:
 
 private:
   uint32_t SequenceLengthField;
-  SequenceItemVector SequenceItems;
+  SequenceItemVector SequenceItemsInternal;
 };
 //-----------------------------------------------------------------------------
 template<class DEType>
-inline std::ostream& operator<<(std::ostream& _os, const SequenceDataElement<DEType> &_val)
+inline std::ostream& operator<<(std::ostream& _os, const SequenceItems<DEType> &_val)
 {
   _os << "SQ L= " << _val.SequenceLengthField << std::endl;
-  typename SequenceDataElement<DEType>::SequenceItemVector::const_iterator it = _val.SequenceItems.begin();
+  typename SequenceItems<DEType>::SequenceItemVector::const_iterator it = _val.SequenceItemsInternal.begin();
   int i = 0;
-  for( ; it != _val.SequenceItems.end();
+  for( ; it != _val.SequenceItemsInternal.end();
     ++it)
     {
     _os << "Sequence #" << i++ << std::endl << *it << std::endl;
@@ -76,4 +76,4 @@ inline std::ostream& operator<<(std::ostream& _os, const SequenceDataElement<DET
 
 } // end namespace gdcm
 
-#endif //__gdcmSequenceDataElement_h
+#endif //__gdcmSequenceItems_h

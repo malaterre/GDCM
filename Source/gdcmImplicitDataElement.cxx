@@ -1,5 +1,5 @@
 #include "gdcmImplicitDataElement.h"
-#include "gdcmSequenceDataElement.txx"
+#include "gdcmSequenceItems.txx"
 #include "gdcmDict.h"
 
 namespace gdcm
@@ -41,7 +41,7 @@ DICOMIStream& operator>>(DICOMIStream& _os, ImplicitDataElement &_val)
     {
     //assert( de.GetVR() == VR::SQ );
     const Tag sdi(0xfffe,0xe0dd); // Sequence Delimitation Item
-    SequenceDataElement<ImplicitDataElement> sde(_val.ValueLengthField);
+    SequenceItems<ImplicitDataElement> sde(_val.ValueLengthField);
     _os >> sde;
     std::cout << "Debug:" << sde << std::endl;
     }

@@ -1,19 +1,19 @@
-#ifndef __gdcmSequenceDataElement_txx
-#define __gdcmSequenceDataElement_txx
+#ifndef __gdcmSequenceItems_txx
+#define __gdcmSequenceItems_txx
 
-#include "gdcmSequenceDataElement.h"
+#include "gdcmSequenceItems.h"
 
 namespace gdcm
 {
 template<class DEType>
-void SequenceDataElement<DEType>::AddSequenceItem(SequenceItem<DEType> const &item)
+void SequenceItems<DEType>::AddSequenceItem(SequenceItem<DEType> const &item)
 {
-  SequenceItems.push_back(item);
+  SequenceItemsInternal.push_back(item);
 }
 
 //-----------------------------------------------------------------------------
 template<class DEType>
-DICOMOStream& operator<<(DICOMOStream& _os, const SequenceDataElement<DEType> &_val)
+DICOMOStream& operator<<(DICOMOStream& _os, const SequenceItems<DEType> &_val)
 {
   (void)_val;
   assert( 0 );
@@ -21,7 +21,7 @@ DICOMOStream& operator<<(DICOMOStream& _os, const SequenceDataElement<DEType> &_
 }
 //-----------------------------------------------------------------------------
 template<class DEType>
-DICOMIStream& operator>>(DICOMIStream &_os, SequenceDataElement<DEType> &_val)
+DICOMIStream& operator>>(DICOMIStream &_os, SequenceItems<DEType> &_val)
 {
   const Tag itemStart(0xfffe,0xe000); // Item
   const Tag itemEnd(0xfffe,0xe00d);
@@ -66,7 +66,7 @@ DICOMIStream& operator>>(DICOMIStream &_os, SequenceDataElement<DEType> &_val)
         break;
         }
       _os >> si;
-      _val.SequenceItems.push_back( si );
+      _val.SequenceItemsInternal.push_back( si );
       if( si.GetLength() == 0xFFFFFFFF )
         {
         assert( de.GetTag() == itemEnd );
@@ -93,7 +93,7 @@ DICOMIStream& operator>>(DICOMIStream &_os, SequenceDataElement<DEType> &_val)
         break;
         }
       _os >> si;
-      _val.SequenceItems.push_back( si );
+      _val.SequenceItemsInternal.push_back( si );
       // Sequence Length = Item Tag Length + Sequence Value Length
       seq_length += de.GetTag().GetLength() + 4;
       seq_length += si.GetLength();
@@ -104,5 +104,5 @@ DICOMIStream& operator>>(DICOMIStream &_os, SequenceDataElement<DEType> &_val)
   return _os;
 }
 }
-#endif //__gdcmSequenceDataElement_txx
+#endif //__gdcmSequenceItems_txx
 

@@ -1,15 +1,15 @@
-#include "gdcmSequenceDataElement.txx"
+#include "gdcmSequenceItems.txx"
 #include "gdcmExplicitDataElement.h"
 #include "gdcmSequenceItem.txx"
 
 void TestInstanciation()
 {
   typedef gdcm::ExplicitDataElement DEType;
-  gdcm::SequenceDataElement<DEType> sde;
+  gdcm::SequenceItems<DEType> sde;
   std::cout << sde << std::endl;
 
   typedef gdcm::ImplicitDataElement DEType2;
-  gdcm::SequenceDataElement<DEType2> sde2;
+  gdcm::SequenceItems<DEType2> sde2;
   std::cout << sde2 << std::endl;
 }
 
@@ -18,7 +18,7 @@ int TestSequenceDataElement(int , char *[])
   TestInstanciation();
 
   typedef gdcm::ExplicitDataElement DEType;
-  gdcm::SequenceDataElement<DEType> sde;
+  gdcm::SequenceItems<DEType> sde;
   if( !sde.IsUndefinedLength() )
     return 1;
 
