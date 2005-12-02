@@ -66,6 +66,11 @@ int main(int argc, char *argv[])
   std::string line;
   while(std::getline(from, line))
     {
+     if( !line.empty() )
+       {
+       std::string::iterator e(line.end()-1);
+       if( *e == '\r' ) line.erase(e);
+       }
     unsigned int group; // Group Number
     char abbr[512]; // NHI Abbreviation (when known) - not part of DICOM standard -
     char meaning[512]; // Meaning          (when known) - not part of DICOM standard -

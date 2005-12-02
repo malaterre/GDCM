@@ -51,7 +51,6 @@ public:
     return GroupTags[_id];
     }
 
-  // Should be always true
   uint32_t GetLength() const;
 
   bool operator!=(const Group &_val) const

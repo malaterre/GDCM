@@ -38,7 +38,7 @@ public:
   // This is up to the user to not make any error
   void AppendGroup(const Group<DEType>& group)
     {
-#ifndef _NDEBUG
+#ifndef NDEBUG
     if( !Groups.empty() )
       {
       typename GroupVector::iterator it(Groups.end()-1);
