@@ -33,6 +33,10 @@ public:
   void AddDataElement(const DEType& de)
     {
     // FIXME warn if about to enter duplicate ?
+#ifndef NDEBUG
+    typename ElementsMap::const_iterator it = DataElements.find(de.GetTag());
+    assert (it == DataElements.end());
+#endif
     DataElements.insert(typename
       ElementsMap::value_type(de.GetTag(), de));
     }
@@ -47,6 +51,8 @@ public:
     return it->second;
     }
 
+  bool IsEmpty() { return DataElements.empty(); }
+
 private:
   ElementsMap DataElements;
 };
@@ -59,9 +65,9 @@ inline std::ostream& operator<<(std::ostream &_os, const DataSet<DEType> &_val)
     it != _val.DataElements.end();
     ++it)
     {
-    const Tag &t = it->first;
+    //const Tag &t = it->first;
     const DEType &de = it->second;
-    _os << t << "\t" << de << std::endl;
+    _os << de << std::endl;
     }
   return _os;
 }

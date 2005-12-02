@@ -1,21 +1,26 @@
 #include "gdcmSequenceItems.txx"
-#include "gdcmExplicitDataElement.h"
-#include "gdcmItem.txx"
 
+template<class DEType>
 void TestInstanciation()
 {
-  typedef gdcm::ExplicitDataElement DEType;
-  gdcm::SequenceItems<DEType> sde;
-  std::cout << sde << std::endl;
+  gdcm::SequenceItems<DEType> si;
+  std::cout << si << std::endl;
+}
 
-  typedef gdcm::ImplicitDataElement DEType2;
-  gdcm::SequenceItems<DEType2> sde2;
-  std::cout << sde2 << std::endl;
+template<class DEType>
+void PrintEmptySequenceItems()
+{
+  gdcm::SequenceItems<DEType> si;
+  std::cout << si << std::endl;
 }
 
 int TestSequenceItems(int , char *[])
 {
-  TestInstanciation();
+  TestInstanciation<gdcm::ExplicitDataElement>();
+  TestInstanciation<gdcm::ImplicitDataElement>();
+
+  PrintEmptySequenceItems<gdcm::ExplicitDataElement>();
+  PrintEmptySequenceItems<gdcm::ImplicitDataElement>();
 
   typedef gdcm::ExplicitDataElement DEType;
   gdcm::SequenceItems<DEType> sde;

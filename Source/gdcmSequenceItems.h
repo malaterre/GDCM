@@ -68,11 +68,19 @@ inline std::ostream& operator<<(std::ostream& _os, const SequenceItems<DEType> &
 {
   _os << "SQ L= " << _val.SequenceLengthField << std::endl;
   typename SequenceItems<DEType>::ItemVector::const_iterator it = _val.Items.begin();
+  // Print each Item
   int i = 0;
   for( ; it != _val.Items.end();
     ++it)
     {
     _os << "Sequence #" << i++ << std::endl << *it << std::endl;
+    }
+  // Print delimitation if undefined
+  if( _val.SequenceLengthField == 0xFFFFFFFF )
+    {
+    DataElement endSeq;
+    endSeq.SetTag( Tag(0xfffe,0xe0dd) ); // Sequence Delimitation Item
+    _os << endSeq << std::endl;
     }
   return _os;
 }

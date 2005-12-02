@@ -27,7 +27,7 @@ namespace gdcm
 class GDCM_EXPORT DataElement
 {
 public:
-  DataElement() {}
+  DataElement() { ValueLengthField = 0; }
   virtual ~DataElement() {}
 
   friend std::ostream& operator<<(std::ostream &_os, const DataElement &_val);
@@ -38,6 +38,8 @@ public:
   void SetTag(const Tag &t) { TagField = t; }
 
   const Value &GetValue() const { return ValueField; }
+//  virtual uint32_t GetLength();
+//  virtual uint32_t GetLength();
 
   DataElement(const DataElement&_val)
     {
@@ -63,11 +65,13 @@ protected:
   Tag TagField;
   Value ValueField;
   // Value could be NULL if we don't read it, therefore we need an offset
+  // This is the value read from the file, might be different from the length of Value Field
+  uint32_t ValueLengthField; // Can be 0xFFFFFFFF
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &_os, const DataElement &_val)
 {
-  _os << /*_val.TagField <<*/ " VF=" << _val.ValueField;
+  _os << _val.TagField << " VL=" << _val.ValueLengthField;
   return _os;
 }
 //-----------------------------------------------------------------------------

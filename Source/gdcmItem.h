@@ -41,19 +41,24 @@ template<class DEType> // DataElementType
 class GDCM_EXPORT Item : public DataElement
 {
 public:
-  Item() { ItemLengthField = 0; }
+  Item(uint32_t length = 0xFFFFFFFF) { TagField = Tag(0xfffe,0xe000); ItemLengthField = length; }
 
   friend std::ostream& operator<< < >(std::ostream& _os, const Item<DEType> &_val);
   friend DICOMIStream& operator>> < >(DICOMIStream& _os, Item<DEType> &_val);
   friend DICOMOStream& operator<< < >(DICOMOStream& _os, const Item<DEType> &_val);
 
   uint32_t GetLength() { 
-    assert( ItemLengthField != 0xFFFFFFF );
+    assert( ItemLengthField != 0xFFFFFFFF );
     return ItemLengthField; }
 
   void AddDataElement(const DEType& de)
     {
     NestedDataSet.AddDataElement(de);
+    // Update the length
+    if (ItemLengthField != 0xFFFFFFFF )
+      {
+      ItemLengthField += de.GetLength();
+      }
     }
   const DEType& GetDataElement(const Tag& t) const
     {
@@ -63,7 +68,7 @@ public:
 private:
   // This is the value read from the file, might either be a defined lenght
   // or undefined
-  uint32_t ItemLengthField; // Can be 0xFFFFFFF
+  uint32_t ItemLengthField; // Can be 0xFFFFFFFF
 
   /* NESTED DATA SET  a Data Set contained within a Data Element of an other Data Set.
    * May be nested recursively.
@@ -75,8 +80,16 @@ private:
 template<class DEType>
 inline std::ostream& operator<<(std::ostream& _os, const Item<DEType> &_val)
 {
-  _os << _val.TagField << " Item L=" << _val.ItemLengthField << " V= " << _val.ValueField;
+  _os << _val.TagField << " Item Length=" << _val.ItemLengthField << " Item Value= " << _val.ValueField << std::endl;
   _os << _val.NestedDataSet;
+  // Print delimitation if undefined
+  if( _val.ItemLengthField == 0xFFFFFFFF )
+    {
+    DataElement endItem;
+    endItem.SetTag( Tag(0xfffe,0xe00d) );
+    _os << endItem << std::endl;
+    }
+
   return _os;
 }
 

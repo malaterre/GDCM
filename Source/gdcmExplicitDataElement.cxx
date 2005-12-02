@@ -101,9 +101,9 @@ DICOMIStream& operator>>(DICOMIStream &_os, ExplicitDataElement &_val)
   if( _val.VRField == VR::SQ )
     {
     // Check wether or not this is an undefined length sequence
-    SequenceItems<ExplicitDataElement> sde( _val.ValueLengthField  );
-    _os >> sde;
-    //_val.SequenceLength = sde.GetLength(); //FIXME
+    SequenceItems<ExplicitDataElement> si( _val.ValueLengthField  );
+    _os >> si;
+    //_val.SequenceLength = si.GetLength(); //FIXME
     }
   else if( _val.ValueLengthField == 0xFFFFFFFF )
     {
@@ -112,9 +112,9 @@ DICOMIStream& operator>>(DICOMIStream &_os, ExplicitDataElement &_val)
     assert( _val.VRField == VR::OB 
          || _val.VRField == VR::OW );
     assert( _val.TagField == pixelData );
-    SequenceItems<ExplicitDataElement> sde;
-    _os >> sde;
-    //_val.SequenceLength = sde.GetLength(); //FIXME
+    SequenceItems<ExplicitDataElement> si;
+    _os >> si;
+    //_val.SequenceLength = si.GetLength(); //FIXME
     }
   else
     {

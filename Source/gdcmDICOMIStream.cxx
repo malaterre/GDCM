@@ -58,8 +58,8 @@ void DICOMIStream::Initialize()
 {
   //FindNegociatedTS();
   ReadNonStandardDataElements();
-  std::cerr << "NegociatedTS: " << NegociatedTS << std::endl;
-  std::cerr << "SwapCode: " << SwapCode << std::endl;
+  std::cout << "NegociatedTS: " << NegociatedTS << std::endl;
+  std::cout << "SwapCode: " << SwapCode << std::endl;
 }
 
 bool DICOMIStream::ReadDICM()
@@ -80,12 +80,12 @@ bool DICOMIStream::ReadDICM()
     for(i=0; i<128; ++i)
       if(dicm[i] != '\0' )
         {
-        std::cerr << "Garbage in the DICOM Header" << std::endl;
+        std::cout << "Garbage in the DICOM Header" << std::endl;
         break;
         }
     if( i == 128 )
       {
-      std::cerr << "Real clean HEADER" << std::endl;
+      std::cout << "Real clean HEADER" << std::endl;
       }
 #endif
     }
@@ -102,7 +102,7 @@ void CheckNegociatedTS(gdcm::DICOMIStream &is)
   while( is >> de_tag )
     {
     is >> de;
-    std::cout << de << std::endl;
+    //std::cout << de << std::endl;
    }
 }
 
@@ -125,16 +125,16 @@ void DICOMIStream::ReadNonStandardDataElements()
     gdcm::TS::TSType ts = TS::TS_END;
     while( *this >> de_tag )
       {
-      std::cerr << "Tag: " << de_tag.GetTag() << std::endl;
+      //std::cerr << "Tag: " << de_tag.GetTag() << std::endl;
       assert( de_tag.GetTag().GetGroup() <= 0x0010
         || de_tag.GetTag().GetGroup() == 0x0800 ); // Byte Swap problem
       if( de_tag.GetTag().GetGroup() <= 0x0002 )
         {
         *this >> de;
-        std::cout << "Debug: " << de << std::endl;
+        //std::cout << "Debug: " << de << std::endl;
         if( de_tag.GetTag() == t )
           {
-          std::cerr << "TS=" << de.GetValue().GetPointer() << std::endl;
+          //std::cerr << "TS=" << de.GetValue().GetPointer() << std::endl;
           ts = gdcm::TS::GetTSType( de.GetValue().GetPointer() );
           assert( ts != TS::TS_END );
           }
@@ -165,7 +165,7 @@ void DICOMIStream::FindNegociatedTS()
   // Stream is passed the DICM header
   if( !ReadDICM() )
     {
-    std::cerr << "Not a DICOM V3 file" << std::endl;
+    //std::cerr << "Not a DICOM V3 file" << std::endl;
     IStream::Seekg(0, std::ios::beg);
     }
   
@@ -216,10 +216,10 @@ void DICOMIStream::FindNegociatedTS()
           abort();
           }
         Seekg(0, std::ios::beg);
-        std::cerr << "T=" << Tellg() << std::endl;
+        //std::cerr << "T=" << Tellg() << std::endl;
         if(!ReadDICM())
           IStream::Seekg(0, std::ios::beg);
-        std::cerr << "T=" << Tellg() << std::endl;
+        //std::cerr << "T=" << Tellg() << std::endl;
         Read(t);
         }
       NegociatedTS = Implicit;
@@ -227,7 +227,7 @@ void DICOMIStream::FindNegociatedTS()
     }
   else
     {
-    std::cerr << "Start with private element" << std::endl;
+    //std::cerr << "Start with private element" << std::endl;
     char vr_str[3];
     IStream::Read(vr_str, 2);
     vr_str[2] = '\0';

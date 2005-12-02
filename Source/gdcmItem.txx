@@ -10,9 +10,8 @@ template<class DEType>
 DICOMIStream& operator>>(DICOMIStream &_os, Item<DEType> &_val)
 {
   const Tag item(0xfffe,0xe000);
-  const Tag seqDel(0xfffe,0xe0dd); //[Sequence Delimitation Item]
   //if( !(_os.Read(_val.TagField))) return _os;
-  assert(_val.TagField == item);
+  assert(_val.TagField == item); // KEEPME
   _os.Read(_val.ItemLengthField);
   if( _val.ItemLengthField == 0xFFFFFFFF )
     {
@@ -26,23 +25,22 @@ DICOMIStream& operator>>(DICOMIStream &_os, Item<DEType> &_val)
         _val.TagField = de.GetTag();
         _os.Read(_val.ItemLengthField);
         //std::cerr << "End of SQ item: l=" << _val.ItemLengthField << std::endl;
-        assert( _val.ItemLengthField == 0 
-          || _val.ItemLengthField == 0xFFFFFFFF );
+        assert( _val.ItemLengthField == 0 );
         break;
         }
       // else
-      _os  >> exde;
-      assert(exde.GetTag() == de.GetTag() );
+      _os >> exde;
+      assert(exde.GetTag() == de.GetTag());
       _val.AddDataElement(exde);
-      std::cout << "Debug SQ Item:\t" << exde << std::endl;
+      //std::cout << "Debug SQ Item:\t" << exde << std::endl;
       }
     }
   else
     {
-    std::cerr << "Debug Item: " << _val.ItemLengthField << std::endl;
+    std::cout << "Debug Item: " << _val.ItemLengthField << std::endl;
     _val.ValueField.SetLength(_val.ItemLengthField);
     _os.Read(_val.ValueField);
-    std::cout << "Debug \t" << _val << std::endl;
+    //std::cout << "Debug \t" << _val << std::endl;
     }
   return _os;
 }

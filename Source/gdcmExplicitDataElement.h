@@ -27,17 +27,17 @@ public:
   uint32_t GetValueLength() { return ValueLengthField; }
   void SetValueLength(uint32_t vl) { ValueLengthField = vl; }
 
-  uint32_t GetLength() { 
-    assert( ValueLengthField != 0xFFFFFFFF 
-      && ValueLengthField != 0xFFFF );
-    return ValueLengthField; }
-
   VR::VRType GetVR() { return VRField; }
   void SetVR(VR::VRType vr) { VRField = vr; }
 
-  uint32_t GetLength() const
+  uint32_t GetLength() { return ComputeLength(); }
+
+  uint32_t GetLength() const { return ComputeLength(); }
+
+protected:
+  uint32_t ComputeLength() const
     {
-    //assert( ValueLengthField != 0xFFFFFFFF ); //FIXME
+    assert( ValueLengthField != 0xFFFFFFFF ); //FIXME
     // Nice trick each time VR::GetLength() is 2 then Value Length is coded in 2
     //                                         4 then Value Length is coded in 4
     if( ValueLengthField != 0xFFFFFFFF )
@@ -49,22 +49,18 @@ public:
 private:
   // Value Representation
   VR::VRType VRField;
-  // This is the value read from the file, might be different from the length of Value Field
-  uint32_t ValueLengthField; // Can be 0xFFFFFFF
 
-  // This is set if ValueLengthField == 0xFFFFFFF
+  // This is set if ValueLengthField == 0xFFFFFFFF
   uint32_t SequenceLength;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_val)
 {
   _os << _val.TagField << " VR=" << _val.VRField;
-  if(_val.ValueLengthField == 0xFFFFFFF )
+  if(_val.ValueLengthField == 0xFFFFFFFF )
     _os << ",VL=" << std::dec << _val.ValueLengthField;
   else
     _os << ",VL=" << std::dec << _val.SequenceLength;
-  const DataElement &de = _val;
-  _os << " " << de;
   return _os;
 }
 

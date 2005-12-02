@@ -21,6 +21,7 @@ SET(TEST_SRCS
   TestPrintGroup
   TestGroupSet
   TestAllReadGroup
+  TestItem
   )
 
 # Add the include paths
@@ -52,9 +53,10 @@ FILE(GLOB GDCM_DATA_IMAGES_GLOB
   "${GDCM_DATA_ROOT}/*.dcm"
   )
 SET(BLACK_LIST
+  "dummy.dcm"
   "diazpost.dcm" # This one is nasty
-  "CT-MONO2-12-lomb-an2.acr" # contains wrong group length !!
-  "MR-MONO2-12-angio-an1.acr" # idem
+  #"CT-MONO2-12-lomb-an2.acr" # contains wrong group length !!
+  #"MR-MONO2-12-angio-an1.acr" # idem
   )
 
 SET(GDCM_DATA_IMAGES)

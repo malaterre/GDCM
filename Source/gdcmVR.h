@@ -63,6 +63,7 @@ static bool IsSwap(const char *vr);
 
 // Size read on disk
 static uint32_t GetLength(VRType vr) { 
+  assert( vr != VR::INVALID );
   if( vr == VR::OB
    || vr == VR::OW
    || vr == VR::OF

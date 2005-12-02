@@ -41,15 +41,11 @@ public:
     }
 
 private:
-  // This is the value read from the file, might be different from the length of Value Field
-  uint32_t ValueLengthField; // Can be 0xFFFFFFF
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const ImplicitDataElement &_val)
 {
-  _os << _val.TagField << " VL=" /* << "VL= " << std::dec << _val.ValueLengthField*/;
-  const DataElement &de = _val;
-  _os << " " << de;
+  _os << _val.TagField << " VL=" << std::dec << _val.ValueLengthField;
   return _os;
 }
 

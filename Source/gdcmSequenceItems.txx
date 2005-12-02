@@ -27,9 +27,7 @@ DICOMIStream& operator>>(DICOMIStream &_os, SequenceItems<DEType> &_val)
   const Tag itemStart(0xfffe,0xe000); // Item
   const Tag itemEnd(0xfffe,0xe00d);
   const Tag seqDel(0xfffe,0xe0dd); //[Sequence Delimitation Item]
-  Item<DEType> si; // = _val.SequenceItemField;
-  assert( si.GetTag() == Tag(0,0) );
-  DataElement &de = si;
+  DataElement de; // = si;
   bool isBroken = false;
   if( _val.SequenceLengthField == 0xFFFFFFFF)
     {
@@ -66,17 +64,15 @@ DICOMIStream& operator>>(DICOMIStream &_os, SequenceItems<DEType> &_val)
         isBroken = true;
         break;
         }
+      Item<DEType> si; // = _val.SequenceItemField;
+      assert( si.GetTag() == de.GetTag() ); // Should be an Item Start
+      assert( si.GetTag() == itemStart );
       _os >> si;
       _val.Items.push_back( si );
-      if( si.GetLength() == 0xFFFFFFFF )
-        {
-        assert( de.GetTag() == itemEnd );
-        }
-      //_val.Length += si.GetLength();
       }
     if( !isBroken )
       {
-      assert( si.GetTag() == seqDel );
+      assert( de.GetTag() == seqDel );
       }
     }
   else
@@ -93,6 +89,7 @@ DICOMIStream& operator>>(DICOMIStream &_os, SequenceItems<DEType> &_val)
         _os.Seekg( _val.SequenceLengthField - 4, std::ios::cur );
         break;
         }
+      Item<DEType> si; // = _val.SequenceItemField;
       _os >> si;
       _val.Items.push_back( si );
       // Sequence Length = Item Tag Length + Sequence Value Length
