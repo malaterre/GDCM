@@ -2,11 +2,6 @@
 #ifndef __gdcmDICOMIStream_h
 #define __gdcmDICOMIStream_h
 
-/**
- * \brief Specialization of IFStream to read DICOM struct
- * \note bla
- */
-
 #include "gdcmIStream.h"
 #include "gdcmTag.h"
 #include "gdcmVR.h"
@@ -14,6 +9,12 @@
 
 namespace gdcm
 {
+/**
+ * \brief Specialization of IFStream to read DICOM struct
+ *
+ * Detailled description here
+ * \note bla
+ */
 class DICOMIStream : public IStream
 {
 public:

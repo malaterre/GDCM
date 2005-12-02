@@ -2,17 +2,16 @@
 #ifndef __gdcmImplicitDataElement_h
 #define __gdcmImplicitDataElement_h
 
-/**
- * \brief Class to represent a Data Element
- * Implicit / Explicit
- * \note bla
- */
 
 #include "gdcmDataElement.h"
 
 namespace gdcm
 {
-// Data Element (Implicit)
+/**
+ * \brief Class to represent a Data Element
+ * Implicit / Explicit
+ * \note bla
+ */
 class ImplicitDataElement : public DataElement
 {
 public:
@@ -42,7 +41,7 @@ public:
     }
 
 private:
-  // This is the value read from the file, might be different from the lenght of Value Field
+  // This is the value read from the file, might be different from the length of Value Field
   uint32_t ValueLengthField; // Can be 0xFFFFFFF
 };
 //-----------------------------------------------------------------------------

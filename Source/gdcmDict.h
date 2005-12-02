@@ -1,11 +1,7 @@
-
 #ifndef __gdcmDict_h
 #define __gdcmDict_h
 
-/**
- * \brief Class to represent a map of DictEntry
- * \note bla
- */
+
 
 #include "gdcmTag.h"
 #include "gdcmDictEntry.h"
@@ -16,6 +12,10 @@
 namespace gdcm
 {
 // Data Element Tag
+/**
+ * \brief Class to represent a map of DictEntry
+ * \note bla
+ */
 class Dict
 {
 public:

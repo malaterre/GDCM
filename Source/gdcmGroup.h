@@ -2,17 +2,17 @@
 #ifndef __gdcmGroup_h
 #define __gdcmGroup_h
 
-/**
- * \brief Class to store all DataElement from within the same group
- * basically a vector of Tags
- * \note bla
- */
-
 #include "gdcmDataElement.h"
 #include <vector>
 
 namespace gdcm
 {
+
+/**
+ * \brief Class to store all DataElement from within the same group
+ * basically a vector of Tags
+ * \note bla
+ */
 // This is needed in order to declare a friend of template class
 template<class DEType>
 class Group;
@@ -27,6 +27,7 @@ DICOMOStream& operator<<(DICOMOStream& _os, const Group<DEType> &_val);
  
 // Group
 template<class DEType> // DataElementType
+
 class Group
 {
 public:

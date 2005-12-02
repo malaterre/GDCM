@@ -2,19 +2,17 @@
 #ifndef __gdcmDataElement_h
 #define __gdcmDataElement_h
 
-/**
- * \brief Class to represent a Data Element
- * Implicit / Explicit
- * \note bla
- */
-
 #include "gdcmType.h"
 #include "gdcmTag.h"
 #include "gdcmValueField.h"
 
 namespace gdcm
 {
-// Data Element
+/**
+ * \brief Class to represent a Data Element
+ * Implicit / Explicit
+ * \note bla
+ */
 class DataElement
 {
 public:

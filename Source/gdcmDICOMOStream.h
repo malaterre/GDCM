@@ -2,11 +2,6 @@
 #ifndef __gdcmDICOMOStream_h
 #define __gdcmDICOMOStream_h
 
-/**
- * \brief Wrapper around ofstream
- * \note bla
- */
-
 #include "gdcmOStream.h"
 #include "gdcmTag.h"
 #include "gdcmVR.h"
@@ -15,6 +10,10 @@
 
 namespace gdcm
 {
+/**
+ * \brief Wrapper around ofstream
+ * \note bla
+ */
 class DICOMOStream : public OStream
 {
 public:

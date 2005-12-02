@@ -2,34 +2,33 @@
 #ifndef __gdcmDataSet_h
 #define __gdcmDataSet_h
 
-/**
- * \brief Class to represent a Data Set (which contains Data Elements)
- * A Data Set represents an instance of a real world Information Object
- * \note bla
- */
+
 
 #include "gdcmDataElement.h"
 #include <map>
 
 namespace gdcm
 {
-
-
 // This is needed in order to declare a friend of template class
 template<class DEType>
 class DataSet;
 template<class DEType>
-std::ostream& operator<<(std::ostream& _os, const DataSet<DEType> &_val);
+std::ostream& operator<<(std::ostream &_os, const DataSet<DEType> &_val);
 
 // Data Set
 template<class DEType> // DataElementType
+/**
+ * \brief Class to represent a Data Set (which contains Data Elements)
+ * A Data Set represents an instance of a real world Information Object
+ * \note bla
+ */
 class DataSet
 {
 public:
   DataSet() {}
 
   typedef typename std::map<Tag, DEType> ElementsMap;
-  friend std::ostream& operator<< < >(std::ostream& _os, const DataSet<DEType> &_val);
+  friend std::ostream& operator<< < >(std::ostream &_os, const DataSet<DEType> &_val);
 
   void AddDataElement(const DEType& de)
     {
@@ -37,10 +36,9 @@ public:
     DataElements.insert(typename
       ElementsMap::value_type(de.GetTag(), de));
     }
-  const DEType& GetDataElement(const Tag& t) const
+  const DEType& GetDataElement(const Tag &t) const
     {
-    typename ElementsMap::const_iterator it = 
-      DataElements.find(t);
+    typename ElementsMap::const_iterator it = DataElements.find(t);
     if (it == DataElements.end())
       {
       assert( 0 && "Impossible" );
@@ -54,7 +52,7 @@ private:
 };
 //-----------------------------------------------------------------------------
 template<class DEType>
-inline std::ostream& operator<<(std::ostream& _os, const DataSet<DEType> &_val)
+inline std::ostream& operator<<(std::ostream &_os, const DataSet<DEType> &_val)
 {
   typename DataSet<DEType>::ElementsMap::const_iterator it = _val.DataElements.begin();
   for(;

@@ -2,12 +2,7 @@
 #ifndef __gdcmFileChunk_h
 #define __gdcmFileChunk_h
 
-/**
- * \brief Will retains an offset start and an offset end
- * usefull to store the beinging and end of let say a group
- * usefull to store the beinging and end of let say a Sequence
- * \note bla
- */
+
 
 #include "gdcmType.h"
 #include <fstream>
@@ -15,6 +10,12 @@
 
 namespace gdcm
 {
+/**
+ * \brief Will retains an offset start and an offset end
+ * usefull to store the begining and end of let say a group
+ * usefull to store the begining and end of let say a Sequence
+ * \note bla
+ */
 class FileChunk
 {
 public:

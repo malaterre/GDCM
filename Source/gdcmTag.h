@@ -2,11 +2,6 @@
 #ifndef __gdcmTag_h
 #define __gdcmTag_h
 
-/**
- * \brief Class to represent a Data Element Tag (Group, Element).
- * Basically an uint32_t or expressad as two uint16_t (group and element)
- * \note bla
- */
 
 #include "gdcmType.h"
 //#include "gdcmDICOMOStream.h"
@@ -17,7 +12,12 @@
 
 namespace gdcm
 {
-// Data Element Tag
+
+/**
+ * \brief Class to represent a Data Element Tag (Group, Element).
+ * Basically an uint32_t or expressed as two uint16_t (group and element)
+ * \note bla
+ */
 class Tag
 {
   friend class DICOMIStream;
@@ -27,9 +27,9 @@ public:
   Tag(uint32_t tag) { ElementTag.tag = tag; }
   Tag(uint16_t group, uint16_t element) { ElementTag.tags[0] = group; ElementTag.tags[1] = element; }
 
-  friend std::ostream& operator<<(std::ostream& _os, const Tag &_val);
-  //friend DICOMIStream& operator>>(DICOMIStream& _os, Tag &_val);
-  //friend DICOMOStream& operator<<(DICOMOStream& _os, Tag &_val);
+  friend std::ostream& operator<<(std::ostream &_os, const Tag &_val);
+  //friend DICOMIStream& operator>>(DICOMIStream &_os, Tag &_val);
+  //friend DICOMOStream& operator<<(DICOMOStream &_os, Tag &_val);
 
   uint16_t GetGroup() const { return ElementTag.tags[0]; }
   uint16_t GetElement() const { return ElementTag.tags[1]; }
@@ -69,12 +69,15 @@ public:
   // All other comparison can be constructed from this one and operator ==
   bool operator<(const Tag &_val) const
     {
+    return (ElementTag.tag < _val.ElementTag.tag) ? true : false;
+    /*
     if( ElementTag.tags[0] < _val.ElementTag.tags[0] )
       return true;
     if( ElementTag.tags[0] == _val.ElementTag.tags[0]
      && ElementTag.tags[1] <  _val.ElementTag.tags[1] )
       return true;
     return false;
+    */
     }
 
   Tag(const Tag &_val)
@@ -89,7 +92,7 @@ private:
   union { uint32_t tag; uint16_t tags[2]; } ElementTag;
 };
 //-----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream& _os, const Tag &_val)
+inline std::ostream& operator<<(std::ostream &_os, const Tag &_val)
 {
   _os.setf( std::ios::right);
   _os << std::hex << std::setw( 4 ) << std::setfill( '0' )

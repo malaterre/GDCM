@@ -2,19 +2,17 @@
 #ifndef __gdcmEncapsulated_h
 #define __gdcmEncapsulated_h
 
-/**
- * \brief Class to represent a Encapsulated Pixel Data
- * See PS 3.5, A.4 Transfer Syntaxes for encapsulation of encoded Pixel Data
- * \note bla
- */
-
 #include "gdcmType.h"
 #include "gdcmDICOMIStream.h"
 #include "gdcmDICOMOStream.h"
 
 namespace gdcm
 {
-
+/**
+ * \brief Class to represent a Encapsulated Pixel Data
+ * See PS 3.5, A.4 Transfer Syntaxes for encapsulation of encoded Pixel Data
+ * \note bla
+ */
 class Encapsulated
 {
 public:

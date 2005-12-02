@@ -23,15 +23,16 @@ namespace gdcm
 // -> Optional VR
 // -> ValueLength
 // -> Value
+// -> Store Offset, to further printing  ?
 class DataElement
 {
 public:
   DataElement() {}
   virtual ~DataElement() {}
 
-  friend std::ostream& operator<<(std::ostream& _os, const DataElement &_val);
-  friend DICOMIStream& operator>>(DICOMIStream& _os, DataElement &_val);
-  friend DICOMOStream& operator<<(DICOMOStream& _os, const DataElement &_val);
+  friend std::ostream& operator<<(std::ostream &_os, const DataElement &_val);
+  friend DICOMIStream& operator>>(DICOMIStream &_os, DataElement &_val);
+  friend DICOMOStream& operator<<(DICOMOStream &_os, const DataElement &_val);
 
   const Tag& GetTag() const { return TagField; }
   void SetTag(const Tag &t) { TagField = t; }
@@ -64,13 +65,13 @@ protected:
   // Value could be NULL if we don't read it, therefore we need an offset
 };
 //-----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream& _os, const DataElement &_val)
+inline std::ostream& operator<<(std::ostream &_os, const DataElement &_val)
 {
   _os << /*_val.TagField <<*/ " VF=" << _val.ValueField;
   return _os;
 }
 //-----------------------------------------------------------------------------
-inline DICOMIStream& operator>>(DICOMIStream& _os, DataElement &_val)
+inline DICOMIStream& operator>>(DICOMIStream &_os, DataElement &_val)
 {
   // Read Tag
   assert( !_os.eof() ); // FIXME
@@ -79,7 +80,7 @@ inline DICOMIStream& operator>>(DICOMIStream& _os, DataElement &_val)
 }
 
 //-----------------------------------------------------------------------------
-inline DICOMOStream& operator<<(DICOMOStream& _os, const DataElement &_val)
+inline DICOMOStream& operator<<(DICOMOStream &_os, const DataElement &_val)
 {
   // Write Tag
   _os.Write(_val.TagField);

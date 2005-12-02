@@ -2,12 +2,6 @@
 #ifndef __gdcmDictEntry_h
 #define __gdcmDictEntry_h
 
-/**
- * \brief Class to represent an Entry in the Dict
- * Does not really exist within the DICOM definition, just a way to minize storage
- * and have a mapping from gdcm::Tag to the needed information
- * \note bla
- */
 
 #include "gdcmType.h"
 #include "gdcmVR.h"
@@ -18,6 +12,12 @@
 
 namespace gdcm
 {
+/**
+ * \brief Class to represent an Entry in the Dict
+ * Does not really exist within the DICOM definition, just a way to minimize 
+ * storage and have a mapping from gdcm::Tag to the needed information
+ * \note bla
+ */
 class DictEntry
 {
 public:

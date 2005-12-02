@@ -2,10 +2,7 @@
 #ifndef __gdcmFragment_h
 #define __gdcmFragment_h
 
-/**
- * \brief Class to represent a Fragment of Pixel Data
- * \note bla
- */
+
 
 #include "gdcmType.h"
 #include <iostream>
@@ -14,6 +11,10 @@
 namespace gdcm
 {
 // Pixel Data Fragment
+/**
+ * \brief Class to represent a Fragment of Pixel Data
+ * \note bla
+ */
 class Fragment
 {
 public:

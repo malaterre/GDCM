@@ -2,19 +2,17 @@
 #ifndef __gdcmValue_h
 #define __gdcmValue_h
 
-/**
- * \brief Class to represent a Data Element Tag (Group, Element).
- * Basically an uint32_t or expressad as two uint16_t (group and element)
- * \note bla
- */
-
 #include "gdcmType.h"
 #include <iostream>
 #include <string.h>
 
 namespace gdcm
 {
-// Data Element Value Field
+/**
+ * \brief Class to represent the value of a Data Element.
+ * 
+ * \note bla
+ */
 class Value
 {
   friend class DICOMIStream;
@@ -23,14 +21,15 @@ public:
   Value() { Internal = 0; Length = 0; }
   ~Value() { delete[] Internal; Internal = 0; Length = 0; }
 
-  friend std::ostream& operator<<(std::ostream& _os, const Value &_val);
+  friend std::ostream& operator<<(std::ostream &_os, const Value &_val);
 
   uint32_t GetLength() const { return Length; }
   // Does a reallocation
   void SetLength(uint32_t l) { 
     if (l%2)
       {
-      std::cerr << "BUGGY HEADER: Your dicom contain odd lenght value field." << std::endl;
+      // Unfortunately, there is no way to know on the Tag.
+      std::cerr << "BUGGY HEADER: Your dicom contain odd length value field." << std::endl;
       }
     // FIXME: man realloc
     if( l )
@@ -79,7 +78,7 @@ private:
   uint32_t Length;
 };
 //-----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream& _os, const Value &_val)
+inline std::ostream& operator<<(std::ostream &_os, const Value &_val)
 {
   if( _val.Internal )
     _os << "Loaded:" << _val.Length;

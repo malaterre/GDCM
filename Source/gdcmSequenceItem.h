@@ -2,16 +2,6 @@
 #ifndef __gdcmSequenceItem_h
 #define __gdcmSequenceItem_h
 
-/**
- * \brief Class to represent a Sequence Data Element
- * See PS 3.5 7.5.1 Item Encoding Rules
- * Each Item of a Data Element of VR SQ shall be encoded as a DICOM Standart Data
- * Element with a specific Data Element Tag of Value (FFFE,E000). The Item Tag is
- * followed by a 4 byte Item Length field encoded in one of the following two ways
- * Explicit/ Implicit
- * \note bla
- */
-
 #include "gdcmDataElement.h"
 #include "gdcmDICOMIStream.h"
 #include "gdcmDICOMOStream.h"
@@ -35,6 +25,17 @@ DICOMOStream& operator<<(DICOMOStream& _os, const SequenceItem<DEType> &_val);
 
 // Sequence Item (Items within a SQ)
 template<class DEType> // DataElementType
+
+/**
+ * \brief Class to represent a Sequence Data Element
+ * See PS 3.5 7.5.1 Item Encoding Rules
+ * Each Item of a Data Element of VR SQ shall be encoded as a DICOM Standart Data
+ * Element with a specific Data Element Tag of Value (FFFE,E000). The Item Tag is
+ * followed by a 4 byte Item Length field encoded in one of the following two ways
+ * Explicit/ Implicit
+ * \note bla
+ */
+
 class SequenceItem : public DataElement
 {
 public:

@@ -2,15 +2,15 @@
 #ifndef __gdcmFileGroup_h
 #define __gdcmFileGroup_h
 
-/**
- * \brief This define the start and end of the a particular group in a DICOM file
- * \note bla
- */
 
 #include "gdcmFileChunk.h"
 
 namespace gdcm
 {
+/**
+ * \brief This define the start and end of the a particular group in a DICOM file
+ * \note bla
+ */
 class FileGroup : public FileChunk
 {
 public:

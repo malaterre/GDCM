@@ -2,10 +2,6 @@
 #ifndef __gdcmOStream_h
 #define __gdcmOStream_h
 
-/**
- * \brief Wrapper around ofstream
- * \note bla
- */
 
 #include "gdcmType.h"
 #include <fstream>
@@ -14,6 +10,11 @@
 
 namespace gdcm
 {
+/**
+ * \brief Wrapper around ofstream
+ * \note bla
+ */
+
 class OStream
 {
 public:

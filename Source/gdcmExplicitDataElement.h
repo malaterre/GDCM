@@ -2,12 +2,6 @@
 #ifndef __gdcmExplicitDataElement_h
 #define __gdcmExplicitDataElement_h
 
-/**
- * \brief Class to represent a Data Element
- * Implicit / Explicit
- * \note bla
- */
-
 #include "gdcmDataElement.h"
 #include "gdcmDICOMIStream.h"
 #include "gdcmDICOMOStream.h"
@@ -16,6 +10,11 @@
 namespace gdcm
 {
 // Data Element (Explicit)
+/**
+ * \brief Class to represent a Data Element
+ * Implicit / Explicit
+ * \note bla
+ */
 class ExplicitDataElement : public DataElement
 {
 public:
@@ -50,7 +49,7 @@ public:
 private:
   // Value Representation
   VR::VRType VRField;
-  // This is the value read from the file, might be different from the lenght of Value Field
+  // This is the value read from the file, might be different from the length of Value Field
   uint32_t ValueLengthField; // Can be 0xFFFFFFF
 
   // This is set if ValueLengthField == 0xFFFFFFF

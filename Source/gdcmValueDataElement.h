@@ -2,19 +2,17 @@
 #ifndef __gdcmDataElement_h
 #define __gdcmDataElement_h
 
-/**
- * \brief Class to represent a Data Element
- * Implicit / Explicit
- * \note bla
- */
-
 #include "gdcmType.h"
 #include "gdcmTag.h"
 #include "gdcmValueField.h"
 
 namespace gdcm
 {
-// Data Element
+/**
+ * \brief Class to represent a Data Element
+ * Implicit / Explicit
+ * \note bla
+ */
 class DataElement
 {
 public:
@@ -22,7 +20,7 @@ public:
 
   friend std::ostream& operator<<(std::ostream& _os, const DataElement &_val);
 
-//  VRValueLenght GetVRValueLength() const { return
+//  VRValueLength GetVRValueLength() const { return
 
 //  DataElement &operator=(const DataElement &_val)
 //    {
@@ -46,7 +44,7 @@ public:
 private:
   ValueField Value;
   // Value could be NULL if we don't read it, therefore we need an offset
-  // This is the value read from the file, might be different from the lenght of Value Field
+  // This is the value read from the file, might be different from the length of Value Field
   uint32_t ValueLength; // Can be 0xFFFFFFF
 };
 //-----------------------------------------------------------------------------

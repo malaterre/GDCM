@@ -2,12 +2,6 @@
 #ifndef __gdcmSequenceDataElement_h
 #define __gdcmSequenceDataElement_h
 
-/**
- * \brief Class to represent a Sequence Data Element
- * See PS 3.5, 7.4.6 Data Element Type Within a Sequence
- * \note bla
- */
-
 #include "gdcmType.h"
 #include "gdcmDICOMIStream.h"
 #include "gdcmDICOMOStream.h"
@@ -32,6 +26,12 @@ DICOMOStream& operator<<(DICOMOStream& _os, const SequenceDataElement<DEType> &_
 // == bunch of SequenceItem
 // But does not know anything about a Sequence Item : lik eht delimitation
 template<class DEType>
+
+/**
+ * \brief Class to represent a Sequence Data Element
+ * See PS 3.5, 7.4.6 Data Element Type Within a Sequence
+ * \note bla
+ */
 class SequenceDataElement
 {
 public:

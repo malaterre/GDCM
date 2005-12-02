@@ -2,6 +2,13 @@
 #ifndef __gdcmIStream_h
 #define __gdcmIStream_h
 
+#include "gdcmType.h"
+#include <fstream>
+#include <iostream>
+
+namespace gdcm
+{
+
 /**
  * \brief Wrapper around ifstream
  * Should only provide wrapper around big endian stuff
@@ -9,12 +16,6 @@
  * \note bla
  */
 
-#include "gdcmType.h"
-#include <fstream>
-#include <iostream>
-
-namespace gdcm
-{
 class IStream
 {
 public:
