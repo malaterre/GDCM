@@ -11,7 +11,7 @@ namespace gdcm
  * \brief Read can convert to RGBA from any DICOM image
  * \note bla
  */
-class RGBAReader
+class GDCM_EXPORT RGBAReader
 {
 public:
 private:

@@ -28,7 +28,7 @@
 namespace gdcm
 {
 
-class VM
+class GDCM_EXPORT VM
 {
 public:
   typedef enum {

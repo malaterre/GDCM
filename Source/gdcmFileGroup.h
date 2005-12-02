@@ -11,7 +11,7 @@ namespace gdcm
  * \brief This define the start and end of the a particular group in a DICOM file
  * \note bla
  */
-class FileGroup : public FileChunk
+class GDCM_EXPORT FileGroup : public FileChunk
 {
 public:
   FileGroup() : FileChunk() {}

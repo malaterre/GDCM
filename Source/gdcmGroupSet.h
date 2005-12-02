@@ -23,7 +23,7 @@ std::ostream& operator<<(std::ostream& _os, const GroupSet<DEType> &_val);
 
 // Data Set
 template<class DEType> // DataElementType
-class GroupSet
+class GDCM_EXPORT GroupSet
 {
 public:
   GroupSet() {}

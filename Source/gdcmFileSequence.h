@@ -12,7 +12,7 @@ namespace gdcm
  * can be embedded in another sequence
  * \note bla
  */
-class FileSequence : public FileChunk
+class GDCM_EXPORT FileSequence : public FileChunk
 {
 public:
 

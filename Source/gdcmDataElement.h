@@ -24,7 +24,7 @@ namespace gdcm
 // -> ValueLength
 // -> Value
 // -> Store Offset, to further printing  ?
-class DataElement
+class GDCM_EXPORT DataElement
 {
 public:
   DataElement() {}

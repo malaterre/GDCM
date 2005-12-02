@@ -16,7 +16,7 @@ namespace gdcm
  * \brief Class to represent a map of DictEntry
  * \note bla
  */
-class Dict
+class GDCM_EXPORT Dict
 {
 public:
   typedef std::map<Tag, DictEntry> MapDictEntry;

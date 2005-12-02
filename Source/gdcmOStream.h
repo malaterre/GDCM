@@ -15,7 +15,7 @@ namespace gdcm
  * \note bla
  */
 
-class OStream
+class GDCM_EXPORT OStream
 {
 public:
   void SetFileName(const std::string& filename) { FileName = filename; }

@@ -31,7 +31,7 @@ template<class DEType>
  * See PS 3.5, 7.4.6 Data Element Type Within a Sequence
  * \note bla
  */
-class PixelDataElement
+class GDCM_EXPORT PixelDataElement
 {
 public:
   PixelDataElement() { }

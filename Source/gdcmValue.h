@@ -13,7 +13,7 @@ namespace gdcm
  * 
  * \note bla
  */
-class Value
+class GDCM_EXPORT Value
 {
   friend class DICOMIStream;
   friend class DICOMOStream;

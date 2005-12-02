@@ -22,7 +22,7 @@ template<class DEType> // DataElementType
  * A Data Set represents an instance of a real world Information Object
  * \note bla
  */
-class DataSet
+class GDCM_EXPORT DataSet
 {
 public:
   DataSet() {}

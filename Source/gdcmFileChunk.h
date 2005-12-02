@@ -16,7 +16,7 @@ namespace gdcm
  * usefull to store the begining and end of let say a Sequence
  * \note bla
  */
-class FileChunk
+class GDCM_EXPORT FileChunk
 {
 public:
   FileChunk() { OffsetStart = OffsetEnd = 0; }

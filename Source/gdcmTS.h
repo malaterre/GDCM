@@ -7,7 +7,7 @@
 namespace gdcm
 {
 
-class TS
+class GDCM_EXPORT TS
 {
 public:
   typedef enum {

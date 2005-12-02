@@ -13,7 +13,7 @@
 namespace gdcm
 {
 
-class VR 
+class GDCM_EXPORT VR 
 {
 public:
 typedef enum {

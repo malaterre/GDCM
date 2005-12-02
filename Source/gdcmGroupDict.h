@@ -17,7 +17,7 @@ namespace gdcm
  * \note Should I rewrite this class to use a std::map instead of vector from problem of 
  * memory consumption ?
  */
-class GroupDict
+class GDCM_EXPORT GroupDict
 {
 public:
   typedef std::vector<std::string> GroupStringVector;

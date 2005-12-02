@@ -18,7 +18,7 @@ namespace gdcm
  * storage and have a mapping from gdcm::Tag to the needed information
  * \note bla
  */
-class DictEntry
+class GDCM_EXPORT DictEntry
 {
 public:
   DictEntry(const char *name, VR::VRType const &vr, VM::VMType const &vm /*, bool ret = false*/) {

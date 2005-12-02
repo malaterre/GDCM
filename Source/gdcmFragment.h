@@ -15,7 +15,7 @@ namespace gdcm
  * \brief Class to represent a Fragment of Pixel Data
  * \note bla
  */
-class Fragment
+class GDCM_EXPORT Fragment
 {
 public:
   Fragment() { }

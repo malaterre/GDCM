@@ -12,7 +12,7 @@ namespace gdcm
  * Implicit / Explicit
  * \note bla
  */
-class ImplicitDataElement : public DataElement
+class GDCM_EXPORT ImplicitDataElement : public DataElement
 {
 public:
   ImplicitDataElement() { ValueLengthField = 0; }

@@ -12,7 +12,7 @@ namespace gdcm
  */
 
 template<class T>
-class ByteSwap
+class GDCM_EXPORT ByteSwap
 {
 public:
   /** Query the machine Endian-ness. */

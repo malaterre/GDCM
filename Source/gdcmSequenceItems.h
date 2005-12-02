@@ -36,7 +36,7 @@ template<class DEType>
  * See PS 3.5, 7.4.6 Data Element Type Within a Sequence
  * \note bla
  */
-class SequenceItems
+class GDCM_EXPORT SequenceItems
 {
 public:
   SequenceItems(uint32_t length = 0xFFFFFFFF) { SequenceLengthField = length; }

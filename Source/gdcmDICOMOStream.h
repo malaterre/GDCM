@@ -14,7 +14,7 @@ namespace gdcm
  * \brief Wrapper around ofstream
  * \note bla
  */
-class DICOMOStream : public OStream
+class GDCM_EXPORT DICOMOStream : public OStream
 {
 public:
   // Write a tag from the IStream

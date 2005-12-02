@@ -15,7 +15,7 @@ namespace gdcm
  * Basically an uint32_t or expressed as two uint16_t (group and element)
  * \note bla
  */
-class Tag
+class GDCM_EXPORT Tag
 {
   friend class DICOMIStream;
   friend class DICOMOStream;

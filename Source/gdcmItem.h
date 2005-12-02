@@ -38,7 +38,7 @@ template<class DEType> // DataElementType
  * \note bla
  */
 
-class Item : public DataElement
+class GDCM_EXPORT Item : public DataElement
 {
 public:
   Item() { ItemLengthField = 0; }

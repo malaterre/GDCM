@@ -36,7 +36,7 @@ typedef  unsigned int        uint32_t;
 
 namespace gdcm 
 {
-  class SC // SwapCode
+  class GDCM_EXPORT SC // SwapCode
     {
   public:
     typedef enum {

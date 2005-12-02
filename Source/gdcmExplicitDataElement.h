@@ -15,7 +15,7 @@ namespace gdcm
  * Implicit / Explicit
  * \note bla
  */
-class ExplicitDataElement : public DataElement
+class GDCM_EXPORT ExplicitDataElement : public DataElement
 {
 public:
   ExplicitDataElement() { ValueLengthField = 0; VRField = VR::INVALID; SequenceLength = 0; }

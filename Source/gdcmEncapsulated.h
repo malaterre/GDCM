@@ -13,7 +13,7 @@ namespace gdcm
  * See PS 3.5, A.4 Transfer Syntaxes for encapsulation of encoded Pixel Data
  * \note bla
  */
-class Encapsulated
+class GDCM_EXPORT Encapsulated
 {
 public:
   Encapsulated() { }

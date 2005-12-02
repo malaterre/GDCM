@@ -16,7 +16,7 @@ namespace gdcm
  * \note bla
  */
 
-class IStream
+class GDCM_EXPORT IStream
 {
 public:
   IStream () { SwapCode = SC::Unknown; }

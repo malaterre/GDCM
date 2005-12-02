@@ -15,7 +15,7 @@ namespace gdcm
  * Detailled description here
  * \note bla
  */
-class DICOMIStream : public IStream
+class GDCM_EXPORT DICOMIStream : public IStream
 {
 public:
   DICOMIStream() { NegociatedTS = Unknown; }
