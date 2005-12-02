@@ -1,6 +1,6 @@
 #include "gdcmSequenceItems.txx"
 #include "gdcmExplicitDataElement.h"
-#include "gdcmSequenceItem.txx"
+#include "gdcmItem.txx"
 
 void TestInstanciation()
 {
@@ -22,9 +22,9 @@ int TestSequenceDataElement(int , char *[])
   if( !sde.IsUndefinedLength() )
     return 1;
 
-  gdcm::SequenceItem<DEType> si;
-  sde.AddSequenceItem(si);
-  sde.AddSequenceItem(si);
+  gdcm::Item<DEType> si;
+  sde.AddItem(si);
+  sde.AddItem(si);
 
   DEType de1;
   DEType de2;

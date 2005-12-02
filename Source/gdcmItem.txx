@@ -1,13 +1,13 @@
-#ifndef __gdcmSequenceItem_txx
-#define __gdcmSequenceItem_txx
+#ifndef __gdcmItem_txx
+#define __gdcmItem_txx
 
-#include "gdcmSequenceItem.h"
+#include "gdcmItem.h"
 
 namespace gdcm
 {
 //-----------------------------------------------------------------------------
 template<class DEType>
-DICOMIStream& operator>>(DICOMIStream &_os, SequenceItem<DEType> &_val)
+DICOMIStream& operator>>(DICOMIStream &_os, Item<DEType> &_val)
 {
   const Tag item(0xfffe,0xe000);
   const Tag seqDel(0xfffe,0xe0dd); //[Sequence Delimitation Item]
@@ -49,7 +49,7 @@ DICOMIStream& operator>>(DICOMIStream &_os, SequenceItem<DEType> &_val)
 
 //-----------------------------------------------------------------------------
 template<class DEType>
-DICOMOStream& operator<<(DICOMOStream &_os, const SequenceItem<DEType> &_val)
+DICOMOStream& operator<<(DICOMOStream &_os, const Item<DEType> &_val)
 {
   (void)_val;
   assert( 0 );
@@ -57,5 +57,5 @@ DICOMOStream& operator<<(DICOMOStream &_os, const SequenceItem<DEType> &_val)
 }
 } // end namespace gdcm
 
-#endif //__gdcmSequenceItem_txx
+#endif //__gdcmItem_txx
 

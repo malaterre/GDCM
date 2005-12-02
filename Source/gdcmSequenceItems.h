@@ -5,7 +5,7 @@
 #include "gdcmType.h"
 #include "gdcmDICOMIStream.h"
 #include "gdcmDICOMOStream.h"
-#include "gdcmSequenceItem.txx"
+#include "gdcmItem.h"
 #include <vector>
 
 namespace gdcm
@@ -23,7 +23,7 @@ template<class DEType>
 DICOMOStream& operator<<(DICOMOStream& _os, const SequenceItems<DEType> &_val);
 
 // Sequence Data Element
-// == bunch of SequenceItem
+// == bunch of Item
 // But does not know anything about a Sequence Item : lik eht delimitation
 template<class DEType>
 
@@ -40,7 +40,7 @@ class SequenceItems
 {
 public:
   SequenceItems(uint32_t length = 0xFFFFFFFF) { SequenceLengthField = length; }
-  typedef std::vector<SequenceItem<DEType> > SequenceItemVector;
+  typedef std::vector<Item<DEType> > ItemVector;
 
   friend std::ostream& operator<< < >(std::ostream& _os, const SequenceItems<DEType> &_val);
   friend DICOMIStream& operator>> < >(DICOMIStream& _os, SequenceItems<DEType> &_val);
@@ -56,20 +56,20 @@ public:
   }
   bool IsUndefinedLength() { return SequenceLengthField == 0xFFFFFFFF; }
 
-  void AddSequenceItem(SequenceItem<DEType> const &item);
+  void AddItem(Item<DEType> const &item);
 
 private:
   uint32_t SequenceLengthField;
-  SequenceItemVector SequenceItemsInternal;
+  ItemVector Items;
 };
 //-----------------------------------------------------------------------------
 template<class DEType>
 inline std::ostream& operator<<(std::ostream& _os, const SequenceItems<DEType> &_val)
 {
   _os << "SQ L= " << _val.SequenceLengthField << std::endl;
-  typename SequenceItems<DEType>::SequenceItemVector::const_iterator it = _val.SequenceItemsInternal.begin();
+  typename SequenceItems<DEType>::ItemVector::const_iterator it = _val.Items.begin();
   int i = 0;
-  for( ; it != _val.SequenceItemsInternal.end();
+  for( ; it != _val.Items.end();
     ++it)
     {
     _os << "Sequence #" << i++ << std::endl << *it << std::endl;

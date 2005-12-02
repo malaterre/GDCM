@@ -2,13 +2,14 @@
 #define __gdcmSequenceItems_txx
 
 #include "gdcmSequenceItems.h"
+#include "gdcmItem.txx"
 
 namespace gdcm
 {
 template<class DEType>
-void SequenceItems<DEType>::AddSequenceItem(SequenceItem<DEType> const &item)
+void SequenceItems<DEType>::AddItem(Item<DEType> const &item)
 {
-  SequenceItemsInternal.push_back(item);
+  Items.push_back(item);
 }
 
 //-----------------------------------------------------------------------------
@@ -26,7 +27,7 @@ DICOMIStream& operator>>(DICOMIStream &_os, SequenceItems<DEType> &_val)
   const Tag itemStart(0xfffe,0xe000); // Item
   const Tag itemEnd(0xfffe,0xe00d);
   const Tag seqDel(0xfffe,0xe0dd); //[Sequence Delimitation Item]
-  SequenceItem<DEType> si; // = _val.SequenceItemField;
+  Item<DEType> si; // = _val.SequenceItemField;
   assert( si.GetTag() == Tag(0,0) );
   DataElement &de = si;
   bool isBroken = false;
@@ -66,7 +67,7 @@ DICOMIStream& operator>>(DICOMIStream &_os, SequenceItems<DEType> &_val)
         break;
         }
       _os >> si;
-      _val.SequenceItemsInternal.push_back( si );
+      _val.Items.push_back( si );
       if( si.GetLength() == 0xFFFFFFFF )
         {
         assert( de.GetTag() == itemEnd );
@@ -93,7 +94,7 @@ DICOMIStream& operator>>(DICOMIStream &_os, SequenceItems<DEType> &_val)
         break;
         }
       _os >> si;
-      _val.SequenceItemsInternal.push_back( si );
+      _val.Items.push_back( si );
       // Sequence Length = Item Tag Length + Sequence Value Length
       seq_length += de.GetTag().GetLength() + 4;
       seq_length += si.GetLength();
