@@ -5,7 +5,7 @@
 namespace gdcm
 {
 //-----------------------------------------------------------------------------
-DICOMOStream& operator<<(DICOMOStream& _os, const ExplicitDataElement &_val)
+DICOMOStream& operator<<(DICOMOStream &_os, const ExplicitDataElement &_val)
 {
   //const DataElement &de = _val;
   //_os << de;
@@ -42,7 +42,7 @@ DICOMOStream& operator<<(DICOMOStream& _os, const ExplicitDataElement &_val)
 }
 
 //-----------------------------------------------------------------------------
-DICOMIStream& operator>>(DICOMIStream& _os, ExplicitDataElement &_val)
+DICOMIStream& operator>>(DICOMIStream &_os, ExplicitDataElement &_val)
 {
   // See PS 3.5, Date Element Structure With Explicit VR
   // Read Tag
@@ -79,7 +79,7 @@ DICOMIStream& operator>>(DICOMIStream& _os, ExplicitDataElement &_val)
     }
   else
     {
-    // Two steps since ValueLengthField is 32 bits, we need to declate a 16bits int first
+    // Two steps since ValueLengthField is 32 bits, we need to declare a 16bits int first
     uint16_t vl;
     // Read Value Length (16bits)
     _os.Read(vl);

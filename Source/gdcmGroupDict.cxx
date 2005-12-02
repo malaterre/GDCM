@@ -30,4 +30,9 @@ void GroupDict::InsertGroupEntry(uint16_t num, std::string const &abbreviation,
   GroupName.insert(GroupName.begin()+num, name);
 }
 
+void GroupDict::FillDefaultGroupName()
+{
+   // Left blank UN intentionaly (just allow linking)
+}
+
 } // end namespace gdcm

@@ -28,7 +28,7 @@ public:
   void SetLength(uint32_t l) { 
     if (l%2)
       {
-      // Unfortunately, there is no way to know on the Tag.
+      // Unfortunately, there is no way to know on *which* Tag the trouble is.
       std::cerr << "BUGGY HEADER: Your dicom contain odd length value field." << std::endl;
       }
     // FIXME: man realloc
