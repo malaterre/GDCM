@@ -13,7 +13,7 @@ void TestInstanciation()
   std::cout << sde2 << std::endl;
 }
 
-int TestSequenceDataElement(int , char *[])
+int TestSequenceItems(int , char *[])
 {
   TestInstanciation();
 
