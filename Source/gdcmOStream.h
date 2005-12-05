@@ -18,6 +18,14 @@ namespace gdcm
 class GDCM_EXPORT OStream
 {
 public:
+  bool operator ! ( ) const { return !InternalStream; }
+  bool eof ( ) const { return InternalStream.eof(); }
+  // Although correct this is not defined by the standart
+  //operator bool() const { return !InternalStream.eof(); }
+  //define the void* operation so that while( IStream ) becomes a valid cast
+  //defined cast/ user cast
+  operator void * ( ) const { return static_cast<void*>(InternalStream); }
+
   void SetFileName(const std::string& filename) { FileName = filename; }
   void Open() { InternalStream.open(FileName.c_str(), std::ios::binary);}
   void Close() { InternalStream.close(); }

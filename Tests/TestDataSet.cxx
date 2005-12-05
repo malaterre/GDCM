@@ -8,7 +8,8 @@ int TestDataSet(int argc, char *argv[])
   const char *outfilename;
   if( argc < 2 )
     {
-    filename = "/tmp/Explicit.dcm";
+    // Very simple file: Explicit, Little endian...
+    filename = GDCM_DATA_ROOT "/DermaColorLossLess.dcm";
     outfilename = "/tmp/Explicit2.dcm";
     }
   else if( argc == 3 )
@@ -39,11 +40,13 @@ int TestDataSet(int argc, char *argv[])
   gdcm::DICOMIStream Is;
   Is.SetFileName(filename);
   Is.Open();
+  if( !Is ) return 1;
   Is.Initialize();
 
   gdcm::DICOMOStream Os;
   Os.SetFileName(outfilename);
   Os.Open();
+  if( !Os ) return 1;
   Os.WriteDICM();
 
   std::cout << "Printint result:" << std::endl;
