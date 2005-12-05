@@ -319,3 +319,6 @@ Ce qui me fait dire qu'il doit y avoir un pb profond qq part.
 Il va *forcement* falloir qu'on retrouve les concepts de gdcm::SeqEntry 
 et de gdcm::SQItem pour modeliser la realité ...
 
+
+
+Another very important task is the partial reading often you only want to read a particular group, or a subset of tags. GDCM should allow a user to only read one group, or a subset of tags, and then stop reading.
