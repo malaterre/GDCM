@@ -14,18 +14,29 @@ void PrintEmptyUndefinedItem()
   std::cout << i << std::endl;
 }
 
-template<class DEType>
+template <class DEType>
 void FillDummyValues(gdcm::Item<DEType> &item)
 {
   DEType d;
   for(int i=0; i<10; ++i)
     {
     d.SetTag(gdcm::Tag(i,i));
-//    if( i%2 ) d.SetVR( gdcm::VR::OB );
-//    else      d.SetVR( gdcm::VR::OB );
     item.AddDataElement(d);
     }
 }
+
+void FillDummyValues(gdcm::Item<gdcm::ExplicitDataElement> &item)
+{
+  gdcm::ExplicitDataElement d;
+  for(int i=0; i<10; ++i)
+    {
+    d.SetTag(gdcm::Tag(i,i));
+    if( i%2 ) d.SetVR( gdcm::VR::OB );
+    else      d.SetVR( gdcm::VR::OB );
+    item.AddDataElement(d);
+    }
+}
+
 
 template<class DEType>
 void PrintItem()
