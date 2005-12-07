@@ -11,18 +11,19 @@ void PrintDataElements(gdcm::DICOMIStream &is)
 {
   DEType de;
   gdcm::DataElement &de_tag = de;
-
+  std ::cerr << "---------------" << std::endl;;
   while( !is.eof() && is >> de_tag )
     {
     is >> de;
     std::cout << de << std::endl;
     }
+  std ::cerr << "---------------" << std::endl;;
 }
 
 void TestPrint(const char *filename)
 {
-  std ::cerr << "===============================================" << std::endl;
-  std::cerr << filename << std::endl;
+  std ::cerr << "===============================================  " 
+             << filename << std::endl;
   gdcm::DICOMIStream Is;
   Is.SetFileName(filename);
   Is.Open();
@@ -43,7 +44,7 @@ void TestPrint(const char *filename)
 
 int TestAllPrint(int argc, char *argv[])
 {
-  std::cerr << std::endl;
+  std::cerr << std::endl << "--> in TestAllPrint " << std::endl;
   if( argc == 2 )
     {
     const char *filename = argv[1];
