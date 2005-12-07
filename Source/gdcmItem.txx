@@ -25,7 +25,11 @@ DICOMIStream& operator>>(DICOMIStream &_os, Item<DEType> &_val)
         _val.TagField = de.GetTag();
         _os.Read(_val.ItemLengthField);
         //std::cerr << "End of SQ item: l=" << _val.ItemLengthField << std::endl;
-        assert( _val.ItemLengthField == 0 );
+        if( _val.ItemLengthField != 0 )
+          {
+          std::cerr << "BUGGY HEADER: Length should be 0, instead is: " << _val.ItemLengthField 
+            << std::endl;
+          }
         break;
         }
       // else

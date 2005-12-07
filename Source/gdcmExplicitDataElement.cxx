@@ -90,11 +90,38 @@ DICOMIStream& operator>>(DICOMIStream &_os, ExplicitDataElement &_val)
         std::cerr << "BUGGY HEADER: vl=6 should be 4" << std::endl;
         vl = 4;
         }
+#ifndef NDEBUG
       if( vl == 1024 )
         {
-        abort();
+        abort(); // If your code reach here there is probably a bug in your image
+        // It happen for instance in the case of DICOM wrongly declared as BigEndian
         }
+#endif
       }
+//#define BIG_HACK2
+#ifdef BIG_HACK // Trying to read NM_FromJulius_Caesar.dcm
+    const Tag bug(0x0054,0x0200);
+    if( _val.TagField == bug )
+      {
+      vl = 20;
+      }
+#endif
+#ifdef BIG_HACK2 // Trying to read Siemens-leonardo-bugged.dcm
+      if(vl == 2573) // 0xa0d
+        {
+        vl = 11; // 0xb
+        }
+      if(vl == 149)
+        {
+        vl = 240;
+        }
+      const Tag bug(0x0019,0x1313);
+      if(_val.TagField == bug)
+        {
+        assert( vl == 6 );
+        vl = 7;
+        }
+#endif
     _val.ValueLengthField = vl;
     }
   // Read the Value
@@ -103,7 +130,6 @@ DICOMIStream& operator>>(DICOMIStream &_os, ExplicitDataElement &_val)
     // Check wether or not this is an undefined length sequence
     SequenceItems<ExplicitDataElement> si( _val.ValueLengthField  );
     _os >> si;
-    //_val.SequenceLength = si.GetLength(); //FIXME
     }
   else if( _val.ValueLengthField == 0xFFFFFFFF )
     {
@@ -114,7 +140,6 @@ DICOMIStream& operator>>(DICOMIStream &_os, ExplicitDataElement &_val)
     assert( _val.TagField == pixelData );
     SequenceItems<ExplicitDataElement> si;
     _os >> si;
-    //_val.SequenceLength = si.GetLength(); //FIXME
     }
   else
     {
@@ -126,7 +151,18 @@ DICOMIStream& operator>>(DICOMIStream &_os, ExplicitDataElement &_val)
       _os.Read(_val.ValueField);
       }
     else
+      {
+#ifdef BIG_HACK2
+      _val.ValueField.SetLength(_val.ValueLengthField);
+      _os.Read(_val.ValueField);
+      std::ofstream f("/tmp/pixel.raw");
+      f.write(_val.ValueField.GetPointer(), _val.ValueField.GetLength());
+      f.close();
+      _os.Seekg(0, std::ios::end); // FIXME garbage at the end...
+#else
       _os.Seekg(_val.ValueLengthField, std::ios::cur);
+#endif
+      }
     }
 
   return _os;

@@ -22,6 +22,8 @@ SET(TEST_SRCS
   TestGroupSet
   TestAllReadGroup
   TestItem
+  TestFileSeeker
+  TestDICOMType
   )
 
 # Add the include paths
@@ -57,6 +59,9 @@ SET(BLACK_LIST
   "diazpost.dcm" # This one is nasty
   #"CT-MONO2-12-lomb-an2.acr" # contains wrong group length !!
   #"MR-MONO2-12-angio-an1.acr" # idem
+  "Siemens-leonardo-bugged.dcm"
+  "NM_FromJulius_Caesar.dcm"
+  "1075235AnouncedAsBigEndianButIsLittleEndian.dcm"
   )
 
 SET(GDCM_DATA_IMAGES)

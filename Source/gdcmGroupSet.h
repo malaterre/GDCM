@@ -42,7 +42,7 @@ public:
     if( !Groups.empty() )
       {
       typename GroupVector::iterator it(Groups.end()-1);
-      assert(it->GetGroupNumber() < group.GetGroupNumber() );
+      assert(it->GetNumber() < group.GetNumber() );
       }
 #endif
     Groups.push_back(group);
@@ -50,13 +50,13 @@ public:
   // EXPENSIVE call
   void InsertGroup(const Group<DEType>& group)
     {
-    uint16_t group_number = group.GetGroupNumber();
+    uint16_t group_number = group.GetNumber();
     typename GroupVector::iterator it = Groups.begin();
-    while(it->GetGroupNumber() < group_number && it != Groups.end())
+    while(it->GetNumber() < group_number && it != Groups.end())
       {
       ++it;
       }
-    if( it->GetGroupNumber() == group_number )
+    if( it->GetNumber() == group_number )
       {
       std::cerr << "Error cannot add this group" << std::endl;
       }
@@ -67,11 +67,11 @@ public:
   const Group<DEType>& GetGroup(uint16_t group_number) const
     {
     typename GroupVector::const_iterator it = Groups.begin();
-    while(it->GetGroupNumber() < group_number && it != Groups.end())
+    while(it->GetNumber() < group_number && it != Groups.end())
       {
       ++it;
       }
-    if( it->GetGroupNumber() == group_number )
+    if( it->GetNumber() == group_number )
       return *it;
     return Group<DEType>(0xffff);
     }
@@ -91,19 +91,19 @@ public:
     return GetGroup(group_number).GetDataElement(t);
     }
   
-  const Iterator Begin() const
+  Iterator Begin()
     {
     return Groups.begin();
     }
-  const Iterator Begin()
+  ConstIterator Begin() const
     {
     return Groups.begin();
     }
-  const Iterator End() const
+  Iterator End()
     {
     return Groups.end();
     }
-  const Iterator End()
+  ConstIterator End() const
     {
     return Groups.end();
     }

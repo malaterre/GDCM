@@ -20,6 +20,7 @@ class GDCM_EXPORT IStream
 {
 public:
   IStream () { SwapCode = SC::Unknown; }
+  ~IStream() { assert( !(InternalStream.is_open())); }
 
   bool operator ! ( ) const { return !InternalStream; }
   bool eof ( ) const { return InternalStream.eof(); }

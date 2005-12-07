@@ -19,6 +19,7 @@ class GDCM_EXPORT DICOMIStream : public IStream
 {
 public:
   DICOMIStream() { NegociatedTS = Unknown; }
+  ~DICOMIStream() {};
 
   // Read a tag from the IStream
   IStream &Read(Tag &t);

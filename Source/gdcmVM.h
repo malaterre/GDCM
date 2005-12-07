@@ -32,7 +32,7 @@ class GDCM_EXPORT VM
 {
 public:
   typedef enum {
-    VM1,
+    VM1 = 1,
     VM2,
     VM3,
     VM4,

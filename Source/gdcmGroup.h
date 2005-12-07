@@ -30,46 +30,45 @@ template<class DEType> // DataElementType
 class GDCM_EXPORT Group
 {
 public:
-  Group() { GroupNumber = 0; }
-  Group(int number) { GroupNumber = number; }
-  typedef typename std::vector<DEType> GroupTagsVector;
+  Group(uint16_t number = 0) { Number = number; }
+  typedef typename std::vector<DEType> ElementsVector;
 
   friend std::ostream& operator<< < >(std::ostream& _os, const Group<DEType>&_val);
   friend DICOMIStream& operator>> < >(DICOMIStream& _os, Group<DEType> &_val);
   friend DICOMOStream& operator<< < >(DICOMOStream& _os, const Group<DEType> &_val);
 
-  void SetGroupNumber(uint16_t gnum) { GroupNumber = gnum; }
-  uint16_t GetGroupNumber() const { return GroupNumber; }
+  void SetNumber(uint16_t gnum) { Number = gnum; }
+  uint16_t GetNumber() const { return Number; }
 
   void AddDataElement(const DEType&_el)
     {
-    assert( _el.GetTag().GetGroup() == GroupNumber);
-    GroupTags.push_back( _el );
+    assert( _el.GetTag().GetGroup() == Number);
+    Tags.push_back( _el );
     }
   const DEType& operator[](unsigned int _id) const
     {
-    return GroupTags[_id];
+    return Tags[_id];
     }
 
   uint32_t GetLength() const;
 
   bool operator!=(const Group &_val) const
     {
-    return GroupNumber != _val.GroupNumber;
+    return Number != _val.Number;
     }
 
 private:
-  GroupTagsVector GroupTags; // All Data Element from within the same group
-  uint16_t GroupNumber;
+  ElementsVector Tags; // All Data Element from within the same group
+  uint16_t Number;
 };
 //-----------------------------------------------------------------------------
 template<class DEType>
 inline std::ostream& operator<<(std::ostream& _os, const Group<DEType> &_val)
 {
-  _os << "Group #" << std::hex << _val.GroupNumber << 
-    " (" << std::dec << _val.GroupTags.size() << " elements)" << std::endl;
-  for(typename Group<DEType>::GroupTagsVector::const_iterator it = _val.GroupTags.begin();
-    it != _val.GroupTags.end(); ++it)
+  _os << "Group #" << std::hex << _val.Number << 
+    " (" << std::dec << _val.Tags.size() << " elements)" << std::endl;
+  for(typename Group<DEType>::ElementsVector::const_iterator it = _val.Tags.begin();
+    it != _val.Tags.end(); ++it)
     {
     _os << *it << std::endl;
     }

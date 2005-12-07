@@ -68,6 +68,9 @@ int PrintFileGroup(const char *filename, int group_number)
     {
     return PrintGroup<gdcm::ImplicitDataElement>(Is, group_number);
     }
+  Is.Close();
+
+  return 0;
 }
 
 int TestPrintGroup(int argc, char *argv[])

@@ -9,7 +9,7 @@ void TestGroupInstanciation()
   DEType el;
 
   g.AddDataElement(el);
-  g.SetGroupNumber( 2 );
+  g.SetNumber( 2 );
 
   std::cout << el << std::endl;
   std::cout << g << std::endl;
@@ -19,7 +19,7 @@ void TestGroupInstanciation()
   DEType2 el2;
 
   g2.AddDataElement(el2);
-  g2.SetGroupNumber( 4 );
+  g2.SetNumber( 4 );
 
   std::cout << el2 << std::endl;
   std::cout << g2 << std::endl;

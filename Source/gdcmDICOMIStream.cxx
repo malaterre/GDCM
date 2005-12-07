@@ -60,6 +60,8 @@ void DICOMIStream::Initialize()
   ReadNonStandardDataElements();
   std::cout << "NegociatedTS: " << NegociatedTS << std::endl;
   std::cout << "SwapCode: " << SwapCode << std::endl;
+  assert( NegociatedTS != Unknown );
+  //assert( SwapCode != SC::Unknown );
 }
 
 bool DICOMIStream::ReadDICM()
@@ -103,7 +105,7 @@ void CheckNegociatedTS(gdcm::DICOMIStream &is)
     {
     is >> de;
     //std::cout << de << std::endl;
-   }
+    }
 }
 
 
@@ -235,7 +237,10 @@ void DICOMIStream::FindNegociatedTS()
     if( vr != VR::VR_END )
       NegociatedTS = Explicit;
     else
+      {
+      assert( !(VR::IsSwap(vr_str)));
       NegociatedTS = Implicit;
+      }
     }
 
   // When we return we moved back the stream after the DICM header

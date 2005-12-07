@@ -15,7 +15,7 @@ void PrintDataElements(gdcm::DICOMIStream &is)
   while( !is.eof() && is >> de_tag )
     {
     is >> de;
-    //std::cout << de << std::endl;
+    std::cout << de << std::endl;
     }
 }
 
@@ -38,11 +38,12 @@ void TestPrint(const char *filename)
     std ::cerr << "==gdcm::DICOMIStream::Implicit==" << std::endl;
     PrintDataElements<gdcm::ImplicitDataElement>(Is);
     }
+  Is.Close();
 }
 
 int TestAllPrint(int argc, char *argv[])
 {
-  std ::cerr << std::endl;
+  std::cerr << std::endl;
   if( argc == 2 )
     {
     const char *filename = argv[1];

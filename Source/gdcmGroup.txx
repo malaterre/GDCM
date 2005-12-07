@@ -16,8 +16,8 @@ template<class DEType>
 uint32_t Group<DEType>::GetLength() const
 {
   uint32_t length = 0;
-  for(typename GroupTagsVector::const_iterator it = GroupTags.begin();
-    it != GroupTags.end(); ++it)
+  for(typename ElementsVector::const_iterator it = Tags.begin();
+    it != Tags.end(); ++it)
     {
     if( it->GetTag().GetElement() != 0x0000 )
       {
@@ -38,12 +38,12 @@ DICOMIStream& operator>>(DICOMIStream& _os, Group<DEType> &_val)
     {
     if(!initialized)
       {
-      _val.SetGroupNumber(de_tag.GetTag().GetGroup());
+      _val.SetNumber(de_tag.GetTag().GetGroup());
       initialized = true;
       }
     else
       {
-      if( de_tag.GetTag().GetGroup() != _val.GroupNumber )
+      if( de_tag.GetTag().GetGroup() != _val.Number )
         {
         // Seek back
         _os.Seekg( -4 /*de_tag.GetLength()*/, std::ios::cur);

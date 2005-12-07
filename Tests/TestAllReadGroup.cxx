@@ -31,6 +31,7 @@ void TestReadGroup(const char *filename)
     {
     ReadGroups<gdcm::ImplicitDataElement>(Is);
     }
+  Is.Close();
 }
 
 int TestAllReadGroup(int argc, char *argv[])

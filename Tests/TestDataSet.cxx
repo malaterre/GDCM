@@ -66,5 +66,7 @@ int TestDataSet(int argc, char *argv[])
   //FIXME: This line should not compile:
   //gdcm::DataSet<int> dummy;
 
+  Is.Close();
+  Os.Close();
   return 0;
 }
