@@ -24,6 +24,8 @@ SET(TEST_SRCS
   TestItem
   TestFileSeeker
   TestDICOMType
+  TestDirectory
+  TestAllPrintUID
   )
 
 # Add the include paths
@@ -65,12 +67,15 @@ SET(BLACK_LIST
   )
 
 SET(GDCM_DATA_IMAGES)
+SET(GDCM_BLACK_LIST_DATA_IMAGES)
 FOREACH(filename ${GDCM_DATA_IMAGES_GLOB})
   GET_FILENAME_COMPONENT(filename_name ${filename} NAME)
   #MESSAGE( ${filename_name} )
   STRING(REGEX MATCH ${filename_name} bad_dicom ${BLACK_LIST})
   IF(NOT bad_dicom)
     SET(GDCM_DATA_IMAGES "${GDCM_DATA_IMAGES}\n\"${filename}\",")
+  ELSE(NOT bad_dicom)
+    SET(GDCM_BLACK_LIST_DATA_IMAGES "${GDCM_BLACK_LIST_DATA_IMAGES}\n\"${filename}\",")
   ENDIF(NOT bad_dicom)
 ENDFOREACH(filename)
 

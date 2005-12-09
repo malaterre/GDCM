@@ -24,6 +24,8 @@ template<> struct TypeEnumToType<VR::UL>
 { typedef uint32_t Type; };
 template<> struct TypeEnumToType<VR::US>
 { typedef uint16_t Type; };
+//template<> struct TypeEnumToType<VR::AS>
+//{ typedef char Type[4]; };
 
 template<int T> struct ValueEnumToLength;
 template<> struct ValueEnumToLength<VM::VM1>
@@ -58,6 +60,9 @@ class GDCM_EXPORT DICOMType
 public:
   typename TypeEnumToType<TVR>::Type Internal[ValueEnumToLength<TVM>::Len];
 
+  int GetLength() const {
+    return ValueEnumToLength<TVM>::Len;
+  }
   void Print(std::ostream &_os) const {
     _os << Internal[0]; // VM is at least garantee to be one
     for(int i=1; i<ValueEnumToLength<TVM>::Len; ++i)
@@ -84,36 +89,137 @@ public:
     }
 };
 
-/*
-template<int TVR, VM::VM1_n>
-class GDCM_EXPORT DICOMType
+
+template<int TVR>
+class GDCM_EXPORT DICOMType<TVR, VM::VM1_n>
 {
 public:
   typename TypeEnumToType<TVR>::Type *Internal;
-  DICOMType(TypeEnumToType<TVR>::Type *p)
-    {
-    Internal = new TypeEnumToType<TVR>::Type[]
-    for(int i=1; i<ValueEnumToLength<TVM>::Len; ++i)
-    }
+  int Length;
+  // FIXME is this the way to prevent default initialization
+  explicit DICOMType() { Internal=0; Length=0; }
 
-  void Print(std::ostream &_os)
-    {
+  int GetLength() const { return Length; }
+  void SetLength(int len) { 
+    if (len<0) return;
+    if( len ) {
+      if( len > Length ) {
+        // perform realloc
+        typename TypeEnumToType<TVR>::Type *internal = 
+          new typename TypeEnumToType<TVR>::Type[len];
+        memcpy(internal, Internal, Length);
+        delete[] Internal;
+        Internal = internal;
+        }
+      }
+    Length = len;
+  }
+
+  // If save is set to zero user should not delete the pointer
+  void SetArray(typename TypeEnumToType<TVR>::Type *array, int len, bool save = false) {
+    if( save ) {
+      SetLength(len); // realloc
+      memcpy(Internal, array, len);
+      }
+    else {
+      Length = len;
+      Internal = array;
+      }
+  }
+
+  void Print(std::ostream &_os) const {
+    if( !Internal ) return;
     _os << Internal[0]; // VM is at least garantee to be one
-    for(int i=1; i<ValueEnumToLength<TVM>::Len; ++i)
+    for(int i=1; i<Length; ++i)
       _os << "," << Internal[i];
     _os << std::endl;
     }
 
-  const std::string GetAsDICOM() const {
-    std::ostringstream os;
-    os << Internal[0];
-    for(int i=1; i<ValueEnumToLength<TVM>::Len; ++i)
-      {
-      os << "\\" << Internal[i];
+  void Read(std::istream &_is) {
+    if( !Internal ) return;
+    _is >> Internal[0];
+    for(int i=1; i<Length; ++i) {
+      assert( _is );
+      _is.get();
+      _is >> Internal[i];
       }
-    return os.str().c_str(); }
+    }
+
+  void Write(std::ostream &_os) const {
+    if( !Internal ) return;
+    _os << Internal[0]; // VM is at least garantee to be one
+    for(int i=1; i<Length; ++i)
+      _os << "\\" << Internal[i];
+    }
+
+  DICOMType(const DICOMType&_val) {
+    if( this != &_val) {
+      *this = _val;
+      }
+    }
+
+  DICOMType &operator=(const DICOMType &_val) {
+    Length = 0; // SYITF
+    Internal = 0;
+    SetArray(_val.Internal, _val.Length, true);
+    return *this;
+    }
 };
-*/
+
+template<int TVR>
+class GDCM_EXPORT DICOMType<TVR, VM::VM2_n> : public DICOMType<TVR, VM::VM1_n>
+{
+public:
+  typedef DICOMType<TVR, VM::VM1_n> Superclass;
+  void SetLength(int len) {
+    if( len <= 1 ) return;
+    Superclass::SetLength(len);
+  }
+};
+template<int TVR>
+class GDCM_EXPORT DICOMType<TVR, VM::VM2_2n> : public DICOMType<TVR, VM::VM2_n>
+{
+public:
+  typedef DICOMType<TVR, VM::VM2_n> Superclass;
+  void SetLength(int len) {
+    if( len % 2 ) return;
+    Superclass::SetLength(len);
+  }
+};
+template<int TVR>
+class GDCM_EXPORT DICOMType<TVR, VM::VM3_n> : public DICOMType<TVR, VM::VM1_n>
+{
+public:
+  typedef DICOMType<TVR, VM::VM1_n> Superclass;
+  void SetLength(int len) {
+    if( len <= 2 ) return;
+    Superclass::SetLength(len);
+  }
+};
+template<int TVR>
+class GDCM_EXPORT DICOMType<TVR, VM::VM3_3n> : public DICOMType<TVR, VM::VM3_n>
+{
+public:
+  typedef DICOMType<TVR, VM::VM3_n> Superclass;
+  void SetLength(int len) {
+    if( len % 3 ) return;
+    Superclass::SetLength(len);
+  }
+};
+
+template<int TVM>
+class GDCM_EXPORT DICOMTypeChar
+{
+public:
+  //char *Internal[ValueEnumToLength<TVM>::Len];
+  char Internal[5];
+};
+
+template<int TVM>
+class GDCM_EXPORT DICOMType<VR::AS, TVM> : public DICOMTypeChar<TVM>
+{
+};
+
 
 }
 

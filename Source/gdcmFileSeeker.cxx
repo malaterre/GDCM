@@ -21,7 +21,7 @@ bool SkipGroup(FileSeeker &is)
     {
     uint16_t current_group = de_tag.GetTag().GetGroup();
     is.AddOffset(current_group, offset);
-    std::cerr << "Group: " << std::hex << current_group << " " << offset << std::endl;
+    //std::cerr << "Group: " << std::hex << current_group << " " << offset << std::endl;
     uint16_t current_element = de_tag.GetTag().GetElement();
     if( current_element == 0x0 )
       {
@@ -85,7 +85,7 @@ bool SeekGroup(FileSeeker &is)
     if( current_group != last_group )
       {
       is.AddOffset(current_group, offset);
-      //std::cerr << "Group: " << std::hex << current_group << " " << offset << std::endl;
+      std::cerr << "Group: " << std::hex << current_group << " " << offset << std::endl;
       last_group = current_group;
       }
     }
@@ -133,8 +133,10 @@ bool SeekElements(DICOMIStream &is, const Tag& tag)
     {
     if( de_tag.GetTag().GetGroup() != tag.GetGroup() )
       break;
+    if( de_tag.GetTag().GetElement() > tag.GetElement() )
+      break;
     assert( de_tag.GetTag().GetGroup() == tag.GetGroup() );
-    assert( de_tag.GetTag().GetElement() <= tag.GetElement() );
+    assert( de_tag.GetTag().GetElement() <= tag.GetElement() ); // redundant ??
     if( de_tag.GetTag() != tag )
       is >> de; // FIXME is.Skip(de);
     else
@@ -144,6 +146,32 @@ bool SeekElements(DICOMIStream &is, const Tag& tag)
       }
     }
   return success;
+}
+
+template<class DEType>
+void ReadElements(DICOMIStream &is, DEType& de)
+{
+  const Tag tag = de.GetTag(); // Save the tag to search
+  DataElement &de_tag = de;
+  while(!is.eof() && is >> de_tag)
+    {
+    //std::cerr << "Reading: " << de_tag << std::endl;
+    if( de_tag.GetTag().GetGroup() != tag.GetGroup() )
+      break;
+    if( de_tag.GetTag().GetElement() > tag.GetElement() )
+      break;
+    assert( de_tag.GetTag().GetGroup() == tag.GetGroup() );
+    assert( de_tag.GetTag().GetElement() <= tag.GetElement() ); // redundant ??
+    if( de_tag.GetTag() != tag )
+      {
+      is >> de; // FIXME de.Skip(is);
+      }
+    else
+      {
+      is >> de;
+      break;
+      }
+    }
 }
 
 bool FileSeeker::FindTag(const Tag& tag)
@@ -160,14 +188,42 @@ bool FileSeeker::FindTag(const Tag& tag)
     }
 }
 
-void FileSeeker::GetTag(const Tag& tag)
+const char *FileSeeker::GetTagAsRaw(const Tag& tag)
 {
-  (void)tag;
+  static char buffer[512];
+  uint16_t group = tag.GetGroup();
+  SeekTo(group);
+  if( NegociatedTS == Explicit )
+    {
+    ExplicitDataElement de;
+    de.SetTag(tag);
+    ReadElements<ExplicitDataElement>(*this, de);
+    assert( de.GetValue().GetLength() < 512 );
+    memcpy(buffer, de.GetValue().GetPointer(), de.GetValue().GetLength() );
+    }
+  else
+    {
+    ImplicitDataElement de;
+    de.SetTag(tag);
+    ReadElements<ImplicitDataElement>(*this, de);
+    assert( de.GetValue().GetLength() < 512 );
+    memcpy(buffer, de.GetValue().GetPointer(), de.GetValue().GetLength() );
+    }
+  return buffer;
 }
 
 void FileSeeker::SeekTo(uint16_t group)
 {
-  Seekg(Offsets[group], std::ios::beg);
+  GroupOffsets::const_iterator it = Offsets.find(group);
+  if( it != Offsets.end() )
+    Seekg(Offsets[group], std::ios::beg);
+  else
+    {
+    // This is quite expensive...
+    Seekg(0, std::ios::beg);
+    if(!ReadDICM())
+      IStream::Seekg(0, std::ios::beg);
+    }
 }
 
 }

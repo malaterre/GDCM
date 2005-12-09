@@ -24,7 +24,8 @@ public:
   bool FindTag(const Tag& tag);
 
   // 
-  void GetTag(const Tag& tag);
+  //void GetTag(const Tag& tag);
+  const char *GetTagAsRaw(const Tag& tag);
 
   void AddOffset(uint16_t group, std::streampos pos) { 
 #ifndef NDEBUG

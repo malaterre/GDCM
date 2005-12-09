@@ -40,6 +40,8 @@ public:
 
   VM::VMType GetVM() const { return ValueMultiplicity; }
 
+  std::string GetName() const { return Name; }
+
 private:
   std::string Name;
   VR::VRType ValueRepresentation;
