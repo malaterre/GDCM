@@ -1,13 +1,16 @@
 0000 CMD Command
-0002 META Meta Elements
+0002 META Meta Elements / Meta Element
 0004 DIR Directory
-0008 ID Identification Informations
-0010 PAT Patient Informations
+0008 ID Identification Informations / Identifying
+0009 SPII SPI Identifying
+0010 PAT Patient Informations / Patient
 0012 CLI Clinical Trial Informations
-0018 ACQ Acquisition Informations
-0020 REL Relationship Informations
+0018 ACQ Acquisition Informations / Acquisition
+0019 SPIA SPI Acquisition
+0020 REL Relationship Informations /  Relationship
+0021 SPIIM SPI Image
 0022 ??? ???
-0028 IMG Image Informations
+0028 IMG Image Informations / Image Presentation
 0032 SDY Study Informations
 0038 VIS Visit Information
 003a WAV Waveform Information
@@ -56,4 +59,4 @@
 600a OLY Overlays
 600c OLY Overlays
 600e OLY Overlays
-7fe0 PXL Pixels
+7fe0 PXL Pixels / Pixel Data
