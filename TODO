@@ -1,0 +1,6 @@
+I like this kind of printing:
+...
+| (0045,1032) : FL   Len: 4      <Unknown Tag>                  Value: [     1.000]
+| (7FE0,0000) : UL   Len: 4      GroupLength7FE0                Value: [524300]
+| (7FE0,0010) : OW   Len: 524288 PixelData                      Value: [OW/OB Binary data]
+END-OF-DATASET 
