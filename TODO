@@ -4,3 +4,26 @@ I like this kind of printing:
 | (7FE0,0000) : UL   Len: 4      GroupLength7FE0                Value: [524300]
 | (7FE0,0010) : OW   Len: 524288 PixelData                      Value: [OW/OB Binary data]
 END-OF-DATASET 
+
+
+For debugging purpose, it would be nice to allow printing the value offset too.
+
+Remember :
+3 levels for message printing :
+
+Warning  : Warns the user when some oddity occured, and we used an heuristics to
+           bypass the trouble.
+           e.g. : SamplesPerPixel missing, we assume it's a grey level image
+                : Pixel Representation missing : we assume 'unsigned'
+           (we hope our assumption is OK, but user may disagree.)
+		  
+Log : we display messages when anything is not Dicom Kosher 
+      e.g. : non even length field
+           : file is declared as Explicit VR, but a DataElement is Implicit
+	   : a file hols illegal groups (0x0005, ...)
+    
+Debug : We help developper to trace, at a glace, the execution.
+
+Setting ON Debug leads to set ON Warning (but not Log)
+Setting ON Log   leads to set ON Warning (but not Debug)
+                  
