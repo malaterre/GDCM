@@ -24,16 +24,16 @@ DICOMOStream& operator<<(DICOMOStream& _os, const SequenceOfItems<DEType> &_val)
 template<class DEType>
 DICOMIStream& operator>>(DICOMIStream &_os, SequenceOfItems<DEType> &_val)
 {
-  const Tag itemStart(0xfffe,0xe000); // [Item]
-  const Tag itemEnd(0xfffe,0xe00d);   // [Item Delimitation Item]
-  const Tag seqDel(0xfffe,0xe0dd);    // [Sequence Delimitation Item]
+  const Tag itemStart(0xfffe,0xe000);   // [Item]
+  const Tag itemEnd(0xfffe,0xe00d);     // [Item Delimitation Item]
+  const Tag seqEnd(0xfffe,0xe0dd);      // [Sequence Delimitation Item]
   DataElement de; // = si;
   bool isBroken = false;
   if( _val.SequenceLengthField == 0xFFFFFFFF)
     {
     while( _os >> de ) // Read Tag only
       {
-      if(de.GetTag() == seqDel) 
+      if(de.GetTag() == seqEnd) 
         {
         uint32_t length;
         _os.Read(length);
@@ -72,7 +72,7 @@ DICOMIStream& operator>>(DICOMIStream &_os, SequenceOfItems<DEType> &_val)
       }
     if( !isBroken )
       {
-      assert( de.GetTag() == seqDel );
+      assert( de.GetTag() == seqEnd );
       }
     }
   else
