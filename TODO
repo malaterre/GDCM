@@ -22,7 +22,8 @@ Log : we display messages when anything is not Dicom Kosher
            : file is declared as Explicit VR, but a DataElement is Implicit
 	   : a file hols illegal groups (0x0005, ...)
     
-Debug : We help developper to trace, at a glace, the execution.
+Debug : We help developper to trace, at a glance, the execution 
+        (before refining it with a debugging tool)
 
 Setting ON Debug leads to set ON Warning (but not Log)
 Setting ON Log   leads to set ON Warning (but not Debug)
