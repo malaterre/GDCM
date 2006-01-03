@@ -24,9 +24,9 @@ DICOMOStream& operator<<(DICOMOStream& _os, const SequenceOfItems<DEType> &_val)
 template<class DEType>
 DICOMIStream& operator>>(DICOMIStream &_os, SequenceOfItems<DEType> &_val)
 {
-  const Tag itemStart(0xfffe,0xe000); // Item
-  const Tag itemEnd(0xfffe,0xe00d);
-  const Tag seqDel(0xfffe,0xe0dd); //[Sequence Delimitation Item]
+  const Tag itemStart(0xfffe,0xe000); // [Item]
+  const Tag itemEnd(0xfffe,0xe00d);   // [Item Delimitation Item]
+  const Tag seqDel(0xfffe,0xe0dd);    // [Sequence Delimitation Item]
   DataElement de; // = si;
   bool isBroken = false;
   if( _val.SequenceLengthField == 0xFFFFFFFF)
