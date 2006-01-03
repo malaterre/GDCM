@@ -31,7 +31,7 @@ DICOMIStream& operator>>(DICOMIStream &_os, SequenceItems<DEType> &_val)
   bool isBroken = false;
   if( _val.SequenceLengthField == 0xFFFFFFFF)
     {
-    while( _os >> de )
+    while( _os >> de ) // Read Tag only
       {
       if(de.GetTag() == seqDel) 
         {
@@ -44,7 +44,7 @@ DICOMIStream& operator>>(DICOMIStream &_os, SequenceItems<DEType> &_val)
         // Delimitation Item. A Sequence Delimitation Item shall be included after the last Item
         // in the sequence. Its Item Tag shall be (FFFE,E0DD) with an Item Length of 00000000H. 
         // No Value shall be present.
-        if( length != 0 )
+        if( length != 0 ) //*is* always true (hope so!)
           {
           std::cerr << "Wrong length for Sequence Delimitation Item: " << length; 
           abort();
@@ -78,7 +78,8 @@ DICOMIStream& operator>>(DICOMIStream &_os, SequenceItems<DEType> &_val)
   else
     {
     // Defined length, just read the SQItem
-    std::cerr << "Debug: " << _val.SequenceLengthField << std::endl;
+    std::cerr << "Debug: _val.SequenceLengthField=" 
+              << _val.SequenceLengthField << std::endl;
     uint32_t seq_length = 0;
     while( seq_length != _val.SequenceLengthField )
       {

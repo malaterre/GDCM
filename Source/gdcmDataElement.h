@@ -6,7 +6,7 @@
  * \brief Class to represent a Data Element
  * Implicit / Explicit
  * \note bla
- * \sea ExplicitDataElement ImplicitDataElement
+ * \see ExplicitDataElement ImplicitDataElement
  */
 
 #include "gdcmType.h"

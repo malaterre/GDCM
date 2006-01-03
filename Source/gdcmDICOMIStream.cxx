@@ -111,7 +111,7 @@ void CheckNegociatedTS(gdcm::DICOMIStream &is)
 
 void DICOMIStream::ReadNonStandardDataElements()
 {
-  // Standatyd Data Elements have an even Group Number that is not
+  // Standard Data Elements have an even Group Number that is not
   // -(0000,eeee)
   // -(0002,eeee)
   // -(0004,eeee)
