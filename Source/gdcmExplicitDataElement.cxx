@@ -1,5 +1,5 @@
 #include "gdcmExplicitDataElement.h"
-#include "gdcmSequenceItems.txx"
+#include "gdcmSequenceOfItems.txx"
 #include "gdcmDict.h"
 
 namespace gdcm
@@ -128,7 +128,7 @@ DICOMIStream& operator>>(DICOMIStream &_os, ExplicitDataElement &_val)
   if( _val.VRField == VR::SQ )
     {
     // Check wether or not this is an undefined length sequence
-    SequenceItems<ExplicitDataElement> si( _val.ValueLengthField  );
+    SequenceOfItems<ExplicitDataElement> si( _val.ValueLengthField  );
     _os >> si;
     }
   else if( _val.ValueLengthField == 0xFFFFFFFF )
@@ -138,7 +138,7 @@ DICOMIStream& operator>>(DICOMIStream &_os, ExplicitDataElement &_val)
     assert( _val.VRField == VR::OB 
          || _val.VRField == VR::OW );
     assert( _val.TagField == pixelData );
-    SequenceItems<ExplicitDataElement> si;
+    SequenceOfItems<ExplicitDataElement> si;
     _os >> si;
     }
   else

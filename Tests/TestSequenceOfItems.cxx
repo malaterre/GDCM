@@ -1,29 +1,29 @@
-#include "gdcmSequenceItems.txx"
+#include "gdcmSequenceOfItems.txx"
 
 template<class DEType>
 void TestInstanciation()
 {
-  gdcm::SequenceItems<DEType> si;
+  gdcm::SequenceOfItems<DEType> si;
   std::cout << si << std::endl;
 }
 
 template<class DEType>
-void PrintEmptySequenceItems()
+void PrintEmptySequenceOfItems()
 {
-  gdcm::SequenceItems<DEType> si;
+  gdcm::SequenceOfItems<DEType> si;
   std::cout << si << std::endl;
 }
 
-int TestSequenceItems(int , char *[])
+int TestSequenceOfItems(int , char *[])
 {
   TestInstanciation<gdcm::ExplicitDataElement>();
   TestInstanciation<gdcm::ImplicitDataElement>();
 
-  PrintEmptySequenceItems<gdcm::ExplicitDataElement>();
-  PrintEmptySequenceItems<gdcm::ImplicitDataElement>();
+  PrintEmptySequenceOfItems<gdcm::ExplicitDataElement>();
+  PrintEmptySequenceOfItems<gdcm::ImplicitDataElement>();
 
   typedef gdcm::ExplicitDataElement DEType;
-  gdcm::SequenceItems<DEType> sde;
+  gdcm::SequenceOfItems<DEType> sde;
   if( !sde.IsUndefinedLength() )
     return 1;
 

@@ -1,20 +1,20 @@
-#ifndef __gdcmSequenceItems_txx
-#define __gdcmSequenceItems_txx
+#ifndef __gdcmSequenceOfItems_txx
+#define __gdcmSequenceOfItems_txx
 
-#include "gdcmSequenceItems.h"
+#include "gdcmSequenceOfItems.h"
 #include "gdcmItem.txx"
 
 namespace gdcm
 {
 template<class DEType>
-void SequenceItems<DEType>::AddItem(Item<DEType> const &item)
+void SequenceOfItems<DEType>::AddItem(Item<DEType> const &item)
 {
   Items.push_back(item);
 }
 
 //-----------------------------------------------------------------------------
 template<class DEType>
-DICOMOStream& operator<<(DICOMOStream& _os, const SequenceItems<DEType> &_val)
+DICOMOStream& operator<<(DICOMOStream& _os, const SequenceOfItems<DEType> &_val)
 {
   (void)_val;
   assert( 0 );
@@ -22,7 +22,7 @@ DICOMOStream& operator<<(DICOMOStream& _os, const SequenceItems<DEType> &_val)
 }
 //-----------------------------------------------------------------------------
 template<class DEType>
-DICOMIStream& operator>>(DICOMIStream &_os, SequenceItems<DEType> &_val)
+DICOMIStream& operator>>(DICOMIStream &_os, SequenceOfItems<DEType> &_val)
 {
   const Tag itemStart(0xfffe,0xe000); // Item
   const Tag itemEnd(0xfffe,0xe00d);
@@ -103,5 +103,5 @@ DICOMIStream& operator>>(DICOMIStream &_os, SequenceItems<DEType> &_val)
   return _os;
 }
 }
-#endif //__gdcmSequenceItems_txx
+#endif //__gdcmSequenceOfItems_txx
 
