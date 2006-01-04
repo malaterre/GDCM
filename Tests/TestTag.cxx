@@ -2,6 +2,11 @@
 
 int TestTag(int , char * [])
 {
+#if 0
+  //TODO
+  //On big endian and little endian one should have:
+  Tag t(0x12345678) == Tag t(0x1234, 0x5678)
+#endif
   gdcm::Tag t1;
   gdcm::Tag t2(0,0);
   if (t1[0] != 0 )
