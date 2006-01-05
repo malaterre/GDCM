@@ -1,4 +1,6 @@
-I will try to organize the source tree as to separate what can be separated. For instance a DICOM Parser can existe without a full DICOM Implementation, eg be able to dump DICOM header without JPEG lib...
+I will try to organize the source tree as to separate what can be separated. 
+For instance a DICOM Parser can existe without a full DICOM Implementation, 
+e.g. be able to dump DICOM header without JPEG lib...
 
 So far I have :
 - Parser (PS5)
@@ -7,4 +9,5 @@ So far I have :
 - Reader (hate this name this is stupid)
 - Writer (hate this name this is stupid)
 
-Hopefully this is a good choice since reorganizing a cvs tree is just a pain...svn rocks !
+Hopefully this is a good choice since reorganizing a cvs tree is just a pain...
+svn rocks !
