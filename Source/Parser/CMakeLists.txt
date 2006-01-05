@@ -5,6 +5,7 @@ INCLUDE_REGULAR_EXPRESSION("^gdcm.*$")
 # Add the include paths
 INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/Common"
+  "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_BINARY_DIR}/Source/Parser"
   "${GDCM_SOURCE_DIR}/Source/Parser"
   )
