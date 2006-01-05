@@ -1,1 +1,1 @@
-SUBDIRS(Parser)
+SUBDIRS(Parser ModuleAttributes)

@@ -37,7 +37,7 @@ INCLUDE_DIRECTORIES(
 
 CREATE_TEST_SOURCELIST(Tests gdcmTests.cxx ${TEST_SRCS})
 ADD_EXECUTABLE(gdcmTests ${Tests})
-TARGET_LINK_LIBRARIES(gdcmTests gdcm)
+TARGET_LINK_LIBRARIES(gdcmTests gdcmParser)
 
 #Don't understand why I need that ??
 SET(GDCM_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmTests")
