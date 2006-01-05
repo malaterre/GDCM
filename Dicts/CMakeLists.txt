@@ -10,13 +10,13 @@ SET(DICT_SRCS
 
 # Add the include paths
 INCLUDE_DIRECTORIES(
-  "${GDCM_BINARY_DIR}/Source"
-  "${GDCM_SOURCE_DIR}/Source"
+  "${GDCM_BINARY_DIR}/Source/Parser"
+  "${GDCM_SOURCE_DIR}/Source/Parser"
   )
 
 ADD_EXECUTABLE(PrepDict ${DICT_SRCS}
-  "${GDCM_SOURCE_DIR}/Source/gdcmVR.cxx"
-  "${GDCM_SOURCE_DIR}/Source/gdcmVM.cxx"
+  "${GDCM_SOURCE_DIR}/Source/Parser/gdcmVR.cxx"
+  "${GDCM_SOURCE_DIR}/Source/Parser/gdcmVM.cxx"
   )
 
 ADD_EXECUTABLE(PrepGroupName
