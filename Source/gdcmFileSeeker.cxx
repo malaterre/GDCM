@@ -67,7 +67,7 @@ bool SkipGroup(FileSeeker &is)
   return true;
 }
 
-// fallback method is SkipGroup did not work (slower)
+// fallback method if SkipGroup did not work (slower)
 template<class DEType>
 bool SeekGroup(FileSeeker &is)
 {
