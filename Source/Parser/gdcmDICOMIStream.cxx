@@ -72,6 +72,8 @@ void DICOMIStream::Initialize()
   //assert( SwapCode != SC::Unknown );
 }
 
+/// \brief tells us if "DICM" is found as position 128 
+///        (i.e. the file is a 'true dicom' one)
 bool DICOMIStream::ReadDICM()
 {
   bool r = false;
@@ -85,6 +87,9 @@ bool DICOMIStream::ReadDICM()
     r = true; // Sometime not everything is set to zero: D_CLUNIE_VL4_RLE.dcm
     // It's not clearly specify that the 128 first bytes *must* be set to Zero
     // But usually it is report only when compiled in Debug mode
+
+    // Well... It's clearly specified the 128 first bytes are reserved 
+    //         for future (?) use.    
 #ifndef NDEBUG
     int i;
     for(i=0; i<128; ++i)
@@ -119,7 +124,7 @@ void CheckNegociatedTS(gdcm::DICOMIStream &is)
 
 void DICOMIStream::ReadNonStandardDataElements()
 {
-  // Standatyd Data Elements have an even Group Number that is not
+  // Standard Data Elements have an even Group Number that is not
   // -(0000,eeee)
   // -(0002,eeee)
   // -(0004,eeee)
@@ -137,7 +142,8 @@ void DICOMIStream::ReadNonStandardDataElements()
       {
       //std::cerr << "Tag: " << de_tag.GetTag() << std::endl;
       assert( de_tag.GetTag().GetGroup() <= 0x0010
-        || de_tag.GetTag().GetGroup() == 0x0800 ); // Byte Swap problem
+           || de_tag.GetTag().GetGroup() == 0x0800 ); // Byte Swap problem
+
       if( de_tag.GetTag().GetGroup() <= 0x0002 )
         {
         *this >> de;
@@ -170,6 +176,7 @@ void DICOMIStream::ReadNonStandardDataElements()
     }
 }
 
+/// \brief Sets the SwapCode (BigEndian, ...) and NegociatedTS (implVR, explVR)
 void DICOMIStream::FindNegociatedTS()
 {
   // Stream is passed the DICM header
@@ -179,11 +186,13 @@ void DICOMIStream::FindNegociatedTS()
     IStream::Seekg(0, std::ios::beg);
     }
   
-  // The idea being we try multiple heuristique until we are happy ... and then
-  // keep our finger cross 
+  // The idea being we try multiple heuristics until we are happy ... 
+  // and then keep our finger cross 
   Tag t;
   Read(t);
   assert( t.GetGroup() < 0x6000 ); // Magic number
+  /// \TODO fixme breaks on : gdcmData/LIBIDO-16-ACR_NEMA-Volume.dcm
+  //assert( t.GetGroup() < 0x0090 ); //Cannot start whith a group > 0008!   
   if( ! (t.GetGroup() % 2) )
     {
     // Purposely not Re-use ReadVR since we can read VR_END
@@ -211,16 +220,16 @@ void DICOMIStream::FindNegociatedTS()
         switch(group_length)
           {
         case 0x00040000 :
-          SwapCode = SC::BadLittleEndian;
+          SwapCode = SC::BadLittleEndian; // 3412
           break;
         case 0x04000000 :
-          SwapCode = SC::BigEndian;
-          break;
+          SwapCode = SC::BigEndian;       // 4321
+          break;  
         case 0x00000400 :
-          SwapCode = SC::BadBigEndian;
+          SwapCode = SC::BadBigEndian;    // 2143
           break;
         case 0x00000004 :
-          SwapCode = SC::LittleEndian;
+          SwapCode = SC::LittleEndian;    // 1234
           break;
         default:
           abort();
@@ -237,7 +246,7 @@ void DICOMIStream::FindNegociatedTS()
     }
   else
     {
-    //std::cerr << "Start with private element" << std::endl;
+    //std::cerr << "Start with private element" << std::endl;   
     char vr_str[3];
     IStream::Read(vr_str, 2);
     vr_str[2] = '\0';
