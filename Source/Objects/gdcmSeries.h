@@ -6,7 +6,7 @@ namespace gdcm
 {
 /**
  * \brief Class for reprensenting a Series
- * \note bla
+ * \note Why is it always plural ?
  */
 class GDCM_EXPORT Series
 {
