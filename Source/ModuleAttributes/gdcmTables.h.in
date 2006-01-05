@@ -1,0 +1,3 @@
+const char * const gdcmTables[] = { 
+  @GDCM_XML_TABLES@
+  0 };

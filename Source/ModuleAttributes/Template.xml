@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!--We need the DICOM Tag (group,element) but the Attribute is not necessary I don't see
+why we should repeat it. Type is compulsary and Description is not necessary either.-->
+
+<!-- Sample XML file to test XML parser -->
+
+<Table Name="Template">
+<Entry Tag="0008,1080" Attribute="Admitting Diagnoses Description" Type="3" Description="Description of the admitting diagnosis (diagnoses)">
+</Entry>
+</Table>
