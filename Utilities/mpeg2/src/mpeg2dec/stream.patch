@@ -1,0 +1,175 @@
+Index: CMakeLists.txt
+===================================================================
+RCS file: /cvs/public/gdcm/src/gdcmmpeg2/src/mpeg2dec/CMakeLists.txt,v
+retrieving revision 1.4
+diff -u -3 -p -r1.4 CMakeLists.txt
+--- CMakeLists.txt	21 May 2005 15:30:46 -0000	1.4
++++ CMakeLists.txt	21 May 2005 19:40:59 -0000
+@@ -20,5 +20,5 @@ IF(UNIX)
+   TARGET_LINK_LIBRARIES(gdcmmpeg2 -lm)
+ ENDIF(UNIX)
+ 
+-#ADD_EXECUTABLE(mpeg2decode mpeg2dec.c)
+-#TARGET_LINK_LIBRARIES(mpeg2decode gdcmmpeg2)
++ADD_EXECUTABLE(mpeg2decode mpeg2dec.c)
++TARGET_LINK_LIBRARIES(mpeg2decode gdcmmpeg2)
+Index: getbits.c
+===================================================================
+RCS file: /cvs/public/gdcm/src/gdcmmpeg2/src/mpeg2dec/getbits.c,v
+retrieving revision 1.3
+diff -u -3 -p -r1.3 getbits.c
+--- getbits.c	21 May 2005 02:12:43 -0000	1.3
++++ getbits.c	21 May 2005 19:40:59 -0000
+@@ -64,6 +64,7 @@ void Fill_Buffer()
+   int Buffer_Level;
+ 
+   Buffer_Level = read(ld->Infile,ld->Rdbfr,2048);
++  //Buffer_Level = ld->read_stream(ld->Infile,ld->Rdbfr,2048);
+   ld->Rdptr = ld->Rdbfr;
+ 
+   if (System_Stream_Flag)
+@@ -100,6 +101,7 @@ int Get_Byte()
+   while(ld->Rdptr >= ld->Rdbfr+2048)
+   {
+     read(ld->Infile,ld->Rdbfr,2048);
++    //ld->read_stream(ld->Infile,ld->Rdbfr,2048);
+     ld->Rdptr -= 2048;
+     ld->Rdmax -= 2048;
+   }
+Index: global.h
+===================================================================
+RCS file: /cvs/public/gdcm/src/gdcmmpeg2/src/mpeg2dec/global.h,v
+retrieving revision 1.1
+diff -u -3 -p -r1.1 global.h
+--- global.h	21 May 2005 01:20:15 -0000	1.1
++++ global.h	21 May 2005 19:40:59 -0000
+@@ -421,6 +421,10 @@ EXTERN int broken_link;
+ EXTERN struct layer_data {
+   /* bit input */
+   int Infile;
++//  int  (*open_stream) (char *filename);
++//  off_t   (*seek_stream) (int infile, off_t offset,int whence);
++//  ssize_t (*read_stream) (int infile, void *buf, size_t count);
++//  int  (*close_stream) (int infile);
+   unsigned char Rdbfr[2048];
+   unsigned char *Rdptr;
+   unsigned char Inbfr[16];
+Index: mpeg2dec.c
+===================================================================
+RCS file: /cvs/public/gdcm/src/gdcmmpeg2/src/mpeg2dec/mpeg2dec.c,v
+retrieving revision 1.6
+diff -u -3 -p -r1.6 mpeg2dec.c
+--- mpeg2dec.c	21 May 2005 16:30:54 -0000	1.6
++++ mpeg2dec.c	21 May 2005 19:40:59 -0000
+@@ -39,7 +39,7 @@
+ 
+ /* private prototypes */
+ static int  video_sequence _ANSI_ARGS_((int *framenum));
+-static int Decode_Bitstream _ANSI_ARGS_((void));
++static int  Decode_Bitstream _ANSI_ARGS_((void));
+ static int  Headers _ANSI_ARGS_((void));
+ static void Initialize_Sequence _ANSI_ARGS_((void));
+ static void Initialize_Decoder _ANSI_ARGS_((void));
+@@ -58,11 +58,34 @@ static void Clear_Options();
+ static void Print_Options();
+ #endif
+ 
++int my_open(char *filename)
++{
++  return open(filename,O_RDONLY|O_BINARY);
++}
++off_t my_seek(int infile, off_t offset,int whence)
++{
++  return lseek(infile, offset, whence);
++}
++ssize_t my_read(int infile,void *buf,size_t count)
++{
++  return read(infile,buf,count);
++}
++int my_close(int infile)
++{
++  return close(infile);
++}
++
++
++
+ int main(argc,argv)
+ int argc;
+ char *argv[];
+ {
+   int ret, code;
++//base.open_stream = my_open;
++//base.seek_stream = my_seek;
++//base.read_stream = my_read;
++//base.close_stream = my_close;
+ 
+   Clear_Options();
+ 
+@@ -78,6 +101,8 @@ char *argv[];
+   /* open MPEG base layer bitstream file(s) */
+   /* NOTE: this is either a base layer stream or a spatial enhancement stream */
+   if ((base.Infile=open(Main_Bitstream_Filename,O_RDONLY|O_BINARY))<0)
++//  base.Infile = ld->open_stream(Main_Bitstream_Filename);
++//  if( base.Infile < 0 )
+   {
+     fprintf(stderr,"Base layer input file %s not found\n", Main_Bitstream_Filename);
+     exit(1);
+@@ -113,12 +138,14 @@ char *argv[];
+     }
+ 
+     lseek(base.Infile, 0l, SEEK_SET);
++    //ld->seek_stream(base.Infile,0l,SEEK_SET);
+     Initialize_Buffer(); 
+   }
+ 
+   if(base.Infile!=0)
+   {
+     lseek(base.Infile, 0l, SEEK_SET);
++    //ld->seek_stream(base.Infile,0l,SEEK_SET);
+   }
+ 
+   Initialize_Buffer(); 
+@@ -128,6 +155,8 @@ char *argv[];
+     ld = &enhan; /* select enhancement layer context */
+ 
+     if ((enhan.Infile = open(Enhancement_Layer_Bitstream_Filename,O_RDONLY|O_BINARY))<0)
++    //enhan.Infile = ld->open_stream(Enhancement_Layer_Bitstream_Filename);
++    //if (enhan.Infile<0)
+     {
+       sprintf(Error_Text,"enhancment layer bitstream file %s not found\n",
+         Enhancement_Layer_Bitstream_Filename);
+@@ -144,9 +173,11 @@ char *argv[];
+   ret = Decode_Bitstream();
+ 
+   close(base.Infile);
++  //ld->close_stream(base.Infile);
+ 
+   if (Two_Streams)
+     close(enhan.Infile);
++    //ld->close_stream(enhan.Infile);
+ 
+   return ret;
+ }
+Index: subspic.c
+===================================================================
+RCS file: /cvs/public/gdcm/src/gdcmmpeg2/src/mpeg2dec/subspic.c,v
+retrieving revision 1.4
+diff -u -3 -p -r1.4 subspic.c
+--- subspic.c	21 May 2005 16:30:54 -0000	1.4
++++ subspic.c	21 May 2005 19:40:59 -0000
+@@ -260,6 +260,7 @@ int Height;
+     return(-1);
+   }
+ 
++  abort();
+   Bytes_Read = read(Infile, Frame, Size);
+   
+   if(Bytes_Read!=Size)
+@@ -288,6 +289,7 @@ int framenum;
+   FILE *fd;
+   int line;
+   int size, offset;
++  abort();
+ 
+ 
+   if (!(fd = fopen(filename,"rb")))

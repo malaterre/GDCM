@@ -4,4 +4,5 @@ SUBDIRS(expat
   openjpeg
   #jpegls
   jpeg
+  mpeg2
   )
