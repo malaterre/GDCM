@@ -1,1 +1,1 @@
-SUBDIRS(expat)
+SUBDIRS(expat zlib)
