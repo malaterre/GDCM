@@ -28,3 +28,5 @@ Debug : We help developper to trace, at a glance, the execution
 Setting ON Debug leads to set ON Warning (but not Log)
 Setting ON Log   leads to set ON Warning (but not Debug)
                   
+--------
+NEED a gdcmDictReader, right now the reading is done in the constructor of gdcm::Dict (this is so retarded)
