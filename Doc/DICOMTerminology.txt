@@ -1,0 +1,4 @@
+Abstract Syntax: Rules that are negociated for exchanging objects, specified by the SOP Class.
+AE: Application Entity
+Application Context:
+Attribute: Attributes are the components
