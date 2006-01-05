@@ -5,8 +5,9 @@ SET(TEST_SRCS
 
 # Add the include paths
 INCLUDE_DIRECTORIES(
+  "${GDCM_SOURCE_DIR}/Source/Common"
+  "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/Parser"
-  "${GDCM_BINARY_DIR}/Source/Parser"
   "${GDCM_SOURCE_DIR}/Source/ModuleAttributes"
   "${GDCM_BINARY_DIR}/Source/ModuleAttributes"
   "${GDCM_SOURCE_DIR}/Utilities"

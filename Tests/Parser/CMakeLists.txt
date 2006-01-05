@@ -31,7 +31,8 @@ SET(TEST_SRCS
 # Add the include paths
 INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Tests" # for gdcmDataImages.h
-  "${GDCM_BINARY_DIR}/Source/Parser"
+  "${GDCM_BINARY_DIR}/Source/Common"
+  "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/Parser"
   )
 
