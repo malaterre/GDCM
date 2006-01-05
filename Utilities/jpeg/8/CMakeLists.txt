@@ -1,0 +1,8 @@
+# JPEG 8 bits project
+
+INCLUDE_DIRECTORIES(
+  "${CMAKE_CURRENT_BINARY_DIR}"
+  "${GDCMJPEG_SOURCE_DIR}")
+ADD_LIBRARY(gdcmjpeg8 ${JPEG_SOURCES})
+INSTALL_TARGETS(/lib/gdcm/ gdcmjpeg8)
+
