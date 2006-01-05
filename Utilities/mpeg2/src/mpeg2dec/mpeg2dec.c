@@ -46,7 +46,7 @@ static void DeInitialize_Decoder _ANSI_ARGS_((void));
 static void Deinitialize_Sequence _ANSI_ARGS_((void));
 static void Process_Options _ANSI_ARGS_((int argc, char *argv[]));
 
-#define DEBUG
+
 #if OLD
 static int  Get_Val _ANSI_ARGS_((char *argv[]));
 #endif

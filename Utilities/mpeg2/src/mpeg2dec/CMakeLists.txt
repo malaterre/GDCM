@@ -23,12 +23,6 @@ IF(UNIX)
   TARGET_LINK_LIBRARIES(gdcmmpeg2 -lm)
 ENDIF(UNIX)
 
-<<<<<<< CMakeLists.txt
-ADD_DEFINITIONS(-DGDCM_BUILD_MPEG2DEC)
-ADD_EXECUTABLE(mpeg2decode mpeg2dec.c)
-TARGET_LINK_LIBRARIES(mpeg2decode gdcmmpeg2)
-=======
 #ADD_DEFINITIONS(-DGDCM_BUILD_MPEG2DEC)
 #ADD_EXECUTABLE(mpeg2decode ${GDCM_MPEG2DEC_SOURCES} mpeg2dec.c)
 #TARGET_LINK_LIBRARIES(mpeg2decode -lm)
->>>>>>> 1.7

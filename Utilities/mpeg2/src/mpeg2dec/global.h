@@ -424,27 +424,11 @@ EXTERN int broken_link;
 /* layer specific variables (needed for SNR and DP scalability) */
 EXTERN struct layer_data {
   /* bit input */
-<<<<<<< global.h
-#ifdef __cplusplus
-  std::ifstream *Infile;
-  int  (*open_stream) (std::ifstream *f, char *filename);
-  off_t   (*seek_stream) (std::ifstream *f, off_t offset,int whence);
-  ssize_t (*read_stream) (std::ifstream *f, void *buf, size_t count);
-  int  (*close_stream) (std::ifstream *f);
-#else
-  int Infile;
-  int  (*open_stream) (char *filename);
-  off_t   (*seek_stream) (int infile, off_t offset,int whence);
-  ssize_t (*read_stream) (int infile, void *buf, size_t count);
-  int  (*close_stream) (int infile);
-#endif
-=======
   istream *Infile;
 /*  int  (*open_stream) (char *filename);*/
   off_t   (*seek_stream) (istream *is, off_t offset,int whence);
   ssize_t (*read_stream) (istream *is, void *buf, size_t count);
   int  (*close_stream) (istream *is);
->>>>>>> 1.10
   unsigned char Rdbfr[2048];
   unsigned char *Rdptr;
   unsigned char Inbfr[16];
