@@ -1,0 +1,337 @@
+SPMG/JPEG-LS IMPLEMENTATION V.2.1
+=====================================
+These programs are Copyright (c) University of British Columbia. All rights reserved. 
+They may be freely redistributed in their entirety provided that this copyright
+notice is not removed. THEY MAY NOT BE SOLD FOR PROFIT OR INCORPORATED IN 
+COMMERCIAL PROGRAMS WITHOUT THE WRITTEN PERMISSION OF THE COPYRIGHT HOLDER.
+Each program is provided as is, without any express or implied warranty,
+without even the warranty of fitness for a particular purpose.
+
+=========================================================
+THIS SOFTWARE IS BASED ON HP's implementation of jpeg-ls:
+=========================================================
+
+LOCO-I/JPEG-LS IMPLEMENTATION V.0.90
+-------------------------------------------------------------------------------
+(c) COPYRIGHT HEWLETT-PACKARD COMPANY, 1995-1997.
+     HEWLETT-PACKARD COMPANY ("HP") DOES NOT WARRANT THE ACCURACY OR 
+COMPLETENESS OF THE INFORMATION GIVEN HERE.  ANY USE MADE OF, OR 
+RELIANCE ON, SUCH INFORMATION IS ENTIRELY AT USER'S OWN RISK.
+     BY DOWNLOADING THE LOCO-I/JPEG-LS COMPRESSORS/DECOMPRESSORS
+("THE SOFTWARE") YOU AGREE TO BE BOUND BY THE TERMS AND CONDITIONS
+OF THIS LICENSING AGREEMENT.
+     YOU MAY DOWNLOAD AND USE THE SOFTWARE FOR NON-COMMERCIAL PURPOSES
+FREE OF CHARGE OR FURTHER OBLIGATION.  YOU MAY NOT, DIRECTLY OR
+INDIRECTLY, DISTRIBUTE THE SOFTWARE FOR A FEE, INCORPORATE THIS 
+SOFTWARE INTO ANY PRODUCT OFFERED FOR SALE, OR USE THE SOFTWARE 
+TO PROVIDE A SERVICE FOR WHICH A FEE IS CHARGED.
+     YOU MAY MAKE COPIES OF THE SOFTWARE AND DISTRIBUTE SUCH COPIES TO 
+OTHER PERSONS PROVIDED THAT SUCH COPIES ARE ACCOMPANIED BY 
+HEWLETT-PACKARD'S COPYRIGHT NOTICE AND THIS AGREEMENT AND THAT
+SUCH OTHER PERSONS AGREE TO BE BOUND BY THE TERMS OF THIS AGREEMENT.
+     THE SOFTWARE IS NOT OF PRODUCT QUALITY AND MAY HAVE ERRORS OR DEFECTS.
+THE JPEG-LS STANDARD IS STILL UNDER DEVELOPMENT. THE SOFTWARE IS NOT A 
+FINAL OR FULL IMPLEMENTATION OF THE STANDARD.  HP GIVES NO EXPRESS OR 
+IMPLIED WARRANTY OF ANY KIND AND ANY IMPLIED WARRANTIES OF 
+MERCHANTABILITY AND FITNESS FOR PURPOSE ARE DISCLAIMED.
+     HP SHALL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL, 
+OR CONSEQUENTIAL DAMAGES ARISING OUT OF ANY USE OF THE SOFTWARE. 
+-------------------------------------------------------------------------------
+
+
+This software package contains an implementation of JPEG-LS, the
+emerging lossless/near-lossless compression standard for continuous-tone 
+images being developed by ISO/IEC JTC1/SC29/WG1 (draft document FCD14495 
+as of November 1997). The names of the executables in the software package 
+derive from the acronym LOCO, as the core of the new standard is
+based on the LOCO-I algorithm (LOw COmplexity LOssless
+COmpression for Images) developed at Hewlett-Packard Laboratories
+(reference: M. Weinberger, G. Seroussi, G. Sapiro, "LOCO-I: A Low
+Complexity, Context-Based, Lossless Image Compression Algorithm,"
+Proc. IEEE Data Compression Conference, Snowbird, Utah, March-April 1996).
+
+The term "near-lossless compression" refers to a lossy algorithm
+for which each decompressed image sample differs from the corresponding
+original image sample by not more than a pre-specified value, the (usually 
+small) "loss."  Lossless compression corresponds to loss=0. 
+Even though the term "continuous-tone image" refers in principle to any 
+image whose components have more than one bit per sample, palletized images 
+may require a reordering of the color palette for best compression results 
+using LOCO-I on the array of color indices. This functionality is not 
+implemented in the present software, although it is supported by the new 
+standard, and is easy enough to implement with the tools given. Notice, 
+however, that LOCO-I and JPEG-LS were not designed, and might not give 
+optimal performance, for images that have been palletized through dithering. 
+
+At various points in the README file, we refer to the FCD14495 draft
+standard. An electronic version of the draft is available from the official
+JPEG Web site at <http://www.disc.org.uk/public/jpegnew.htm> (a very nice
+site worth browsing in any case).
+
+
+THIS PACKAGE CONTAINS:
+----------------------
+
+	README.DIST - this file
+        Encoder - contains the encoder's source code. 
+        Decoder - contains the dncoder's source code.
+        JLSEncoder.exe - the executable of a Win95/NT based 
+                         GUI implementation of the jpeg-ls codec
+	(The images lena8b.jls and lena24b.jls are provided so that 
+          you can immediately "play" with the executable.)
+
+        Two table files which they can be used to test the mapping
+        tables:
+        "table_r" is for 8bpp PGM's which will reverse the colour.
+        "table24_no_red" is also for 8bpp PGM's and converts it to 
+         a RGB PPM file but has all its red values 0.  
+
+
+IMAGE FORMATS:
+--------------
+
+	Encoder input (uncompressed) or decoder output (decompressed) 
+	images are in either PGM (grayscale) or PPM (3-color) format. 
+	These input/output formats are NOT part of the JPEG-LS standard, 
+	and they were selected for the sake of simplicity in this 
+	implementation.
+
+	The PGM and PPM formats have an ASCII header consisting of 3 lines 
+	of the following form:
+
+	    * PGM (single component):
+
+		P5
+		cols rows
+		maxval
+
+	    * PPM (3 components)
+
+		P6
+		cols rows
+		maxval
+		
+	P5 and P6 appear verbatim in the header. The parameters "cols," 
+	"rows," and "maxval" are decimal numbers in ASCII representation.
+	For PGM, the header is followed by cols*rows samples in binary format,
+	where cols and rows are the number of columns and rows, respectively.
+	For this implementation, each sample occupies one 8-bit byte if 
+	maxval < 256, or two bytes if 256 <= maxval < 65536. In the case of 
+	16-bit samples, BIG ENDIAN convention is used (most significant byte 
+	first).
+
+	For PPM, the header is followed by cols*rows TRIPLETS of symbols in
+	binary format. Each symbol in a triplet represents a color plane 
+	value (viewers usually interpret PPM triplets as RGB).
+
+	A multi-component image can be specified to the encoder either as 
+	a list of PGM files (each representing a color plane), or as a single 
+	PPM-type file.
+
+MULTIPLE-COMPONENT IMAGES:
+--------------------------
+
+	Three modes of operation are supported for multi-component images
+	(images of the type RGB, CMYK, YUV, etc). This is a subset of the 
+	more general scan-based structure supported by JPEG-LS, and is 
+	briefly described next:
+
+	   * Plane-by-plane (PbP) compression. The image components are 
+	     compressed one after the other, in a completely independent 
+	     manner (in JPEG terminology, there is one component per scan). 
+	     In this mode, the input to the encoder is one PGM file per 
+	     component (i.e., no PPM input is allowed). The same applies to 
+	     the output of the decoder.
+
+           * Line-interleaved (LI) compression. One row per image component 
+	     is processed at a time, in an interleaved manner (in JPEG
+	     terminology, all the components are encoded in the same 
+	     scan).  Both multiple PGM file and single file PPM input 
+	     (output) are supported by the encoder (decoder). LI mode is 
+	     the default mode of this implementation. 
+
+	   * Sample-interleaved (SI) compression. One sample per image 
+	     component is processed at a time, in an interleaved manner
+	     (again, all the components are encoded in the same scan). 
+	     In this mode, the input to the encoder (output from the 
+	     decoder) is always a single PPM file.
+
+	Remarks:
+
+        a) Sub-sampled components can be specified to the encoder in
+	   PbP and LI modes (e.g., a YUV representation with the U and 
+	   V components having a fraction of the number of columns of 
+	   the Y component). For sub-sampled images, the input to the 
+	   encoder must be given as a sequence of PGM files. JPEG-LS 
+	   does not support sub-sampling in SI mode.
+
+	b) Regardless of the input format, the output of the encoder (input 
+	   to the decoder), is always a single JPEG-LS compressed bit-stream,
+	   consisting of marker segments and compressed image data segments.
+
+	c) The SI mode is recommended only for computer generated compound 
+  	   documents. On other image types, this mode is likely to be slower,
+	   and compress worse, than the other modes.
+
+	d) For single-component images, the three modes are equivalent.
+	   By default, the JPEG-LS header will indicate LI mode in this case.
+
+
+COMMAND LINES:
+--------------
+
+	encoder:
+	--------------------------
+
+        locoe [flags] infile1 [infile2,infile3,...] [-ooutfile]
+
+	FILES:
+	infile1    : Input file -- must be in PGM or PPM format. If there 
+		     are additional input files, then infile1 must be in 
+		     PGM format.
+	infile2,...: Additional input files for PbP or LI modes. Must be 
+		     in PGM format.
+	outfile    : Output file in JPEG-LS format. Default = locoe.jls.
+
+        FLAGS, PARAMETERS: 
+	(*** NOTE: no spaces allowed between a flag and its argument ***)
+
+	-i<infile> : Alternate input specification, use -i- for stdin.
+	-o<outfile>: Output specification, use -o- for stdout 
+		     (default=locoe.jls).
+	-c<num>    : Mode for multi-component images (program default=1):
+		     0:plane-by-plane  
+		     1:line-interleaved  
+		     2:sample-interleaved.
+        -n<error> or
+        -e<error>  : Max allowed loss per symbol (default = 0, lossless).
+
+	-h         : Print help.
+
+        OTHER FLAGS AND PARAMETERS:
+	The following optional flags allow for overriding of JPEG-LS
+	default parameters. Please refer to JPEG-LS specification (FCD14495)
+	for details.  *** Use only if you know what you are doing! ***
+
+	-r<num>	   : reset frequency
+	-Ta<num>,
+	-Tb<num>,
+	-Tc<num>   : context modeling thresholds
+        -m<table>  : Use mapping table where <table> is a file in the
+                     format:
+                     1st byte of <table> is the Table ID, 2nd byte
+                     of <table> is the Width of each table entry (in bytes),
+                     3rd - 6th byte of <table> is the Max Table Index Value
+                     specified as an integer (4 bytes), 7th byte and on
+                     are the table entries.
+        -t<num>    : Use Restart Markers where <num> is the restart interval
+                     (ie. number of MCU's between restart markers).
+
+
+	decoder:
+	--------------------------
+
+	locod [flags] [infile] [outfile1 [outfile2,outfile3,...]]
+
+	FILES:
+	infile   : Input file in JPEG-LS format. Default = locoe.jls.
+	outfile[1,2,...] : Output files. If a single PPM file is generated
+		   for a multi-component image (in LI or SI modes), the
+		   default name is locod.out. In all other cases, the
+		   default names for the of PGM output files are
+		   locod1.out, locod2.out, locod3.out, ...
+
+	FLAGS, PARAMETERS:
+	-i<infile> : Alternate input specification, use -i- for stdin.
+	-o<outfile>: Alternate output specification, use -o- for stdout.
+	-P         : Generate single PPM output file for SI or LI modes. This 
+		     is the default for SI mode. The default for LI mode (and 
+		     only option for PbP mode) is a sequence of PGM files.
+
+
+EXAMPLES:
+---------
+
+	For the examples, assume:
+	* red.pgm, green.pgm, and blue.pgm are 3 PGM components of a color
+	  image, of the same size.
+	* color.ppm is the color PPM image corresponding to red.pgm, 
+	  green.pgm, blue.pgm
+	* hotely.pgm, hotelu.pgm, hotelv.pgm are 3 components of a color 
+	  image sub-sampled in the horizontal direction 2:1:1
+
+
+	a) locoe red.pgm green.pgm blue.pgm
+
+	   Compresses the three components using the program default color 
+	   mode (LI, c=1). Compressed bit-stream is locoe.jls
+
+	   locod
+
+	   Decompresses locoe.jls into 3 PGM files:
+	   locod1.out, locod2.out, locod3.out
+
+	   locod locoe.jls a.pgm b.pgm c.pgm
+
+ 	   Decompresses locoe.jls into 3 PGM files: a.pgm, b.pgm, c.pgm
+
+ 	   locod -P
+
+ 	   Decompresses locoe.jls into one PPM file: locod.out
+
+
+	b) locoe color.ppm
+      
+ 	   Same as (a), using single input
+
+
+	c) locoe -c0 red.pgm green.pgm blue.pgm
+
+ 	   Compresses the three components in PbP mode. Compressed
+	   bit-stream is locoe.jls
+
+ 	   locod
+
+ 	   Decompresses locoe.jls into 3 PGM files: locod1.out, locod2.out, 
+ 	   locod3.out.
+
+ 	   locod -P
+
+	   Since c=0, this command will produce an error.
+
+	d) locoe -c2 color.ppm
+
+           Compresses color.ppm in SI mode. Only one (PPM) input file
+	   can be specified in this mode. Compressed bit stream is locoe.jls.
+
+ 	   locod
+
+ 	   Decompresses locoe.jls into locod.out, a PPM file.
+	   Note that -P needs not be specified in this case.
+
+	g) locoe -Ta5 -Tb9 red.pgm
+
+ 	   Compresses red.pgm with context thresholds Ta=5, Tb=9, 
+	   and Tc=DEFAULT
+
+	h) locoe -r128 green.pgm
+
+ 	   Compresses green.pgm with RESET=128.
+
+
+OTHER CAVEATS, LIMITATIONS, ANNOYANCES, BUGS (?)
+=================================================
+
+	* Annoyance: no spaces are allowed between flags and their arguments.
+          This will be fixed in a future version.
+	* Other bugs, annoyances: guaranteed to exist. Please tell us
+	  if you find significant ones. We will be thankful. However, we
+	  cannot guarantee that we will maintain the code or that we will
+	  satisfy requests for added functionality, recompilation,
+	  executables for other operating systems, etc.
+
+Feedback to the SPMG/JPEGLS at UBC:
+www.spmg.ece.ubc.ca, or
+
+LOCO-I/JPEG-LS team at HP Labs:
+http://www.hpl.hp.com/loco

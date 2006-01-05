@@ -1,1 +1,5 @@
-SUBDIRS(expat zlib openjpeg)
+SUBDIRS(expat 
+  zlib 
+  openjpeg
+  #jpegls
+  )

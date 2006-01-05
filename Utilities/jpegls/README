@@ -1,0 +1,246 @@
+COMPILATION INSTRUCTIONS:
+1. Unpack archive.
+2. Run 
+
+	make clean "name",
+   where "name" is
+	loco  -- for encoder/decoder
+
+This program supports:
+"8 bit"  images with 8 bits per color component or less.
+"16 bit" images with between 9 and 16 bits per color component.
+	 component.
+
+3. Executable for compressor is "locoe," decompressor is "locod".
+
+USAGE:
+	 General remarks for multiple-component images:
+
+	 a) Encoder input (uncompressed) or decoder output (decompressed) 
+	    images are in either PGM (grayscale) or PPM (3-color) format.
+	    This is of course NOT part of the JPEG-LS standard, and these
+	    input/output formats were selected for this implementation only.
+
+	    These formats have an ASCII header consisting of 3 lines of the 
+	    following form
+
+	    * PGM (single component):
+
+		P5
+		cols rows
+		maxval
+
+	    * PPM (3 components)
+
+		P6
+		cols rows
+		maxval
+
+		
+	  For PGM, the header is followed by cols*rows samples in binary 
+	  format, where cols and rows are the number of columns and rows, 
+	  respectively.  A test image "cmpnd2g.pgm" is included in the 
+	  archive. Samples have 8 bits if maxval < 256, or 16 bits if 
+	  256 <= maxval < 65536. 
+
+	  For PPM, the header is followed by cols*rows TRIPLETS of symbols in
+	  binary format. Each symbol in a triplet represents a color plane
+	  value (viewers usually interpret PPM triplets as RGB).
+
+	  For more than 3 components, the PPM output file
+	  format is extended to arbitrary m-tuples,
+	  where m is the number of components.
+	  The first row of the header is Px, where x = 10+m 
+	  (e.g. P15 for a 5-component image). P5 (m=1), P6 (m=3),
+	  and P7 (m=4) are used, in addition to P11, P13, and P14,
+	  respectively.
+
+	  A multi-component image can be specified to the encoder either
+	  as a list of PGM files (each representing a color plane), or
+	  a single PPM-type file.
+
+	 b) Three modes of operation are supported for multi-component
+	    images (images of the type RGB, CMYK, YUV, etc).
+	    We briefly describe them now, for details see the
+	    JPEG-LS Working Draft document.
+
+	   * Plane-interleaved. The image components are
+	     compressed one after the other, in a completely
+	     independent form. Only multiple input
+	     (one PGM file per plane) in the encoder, and multiple
+	     output (one PGM file per plane) in the decoder are supported
+	     in this mode. This mode also works when m=1.
+
+           * Line-interleaved. One row per image component is processed
+	     at a time, in an interleaved form.
+	     Common context statistics for all the components
+	     are used in this mode, and is plane independent otherwise.
+	     Both multiple PGM and single PPM input
+	     (output) are supported in the encoder (decoder). 
+	     Line-interleaved mode is the default mode of the encoder. 
+	     This mode also works when m=1.
+
+	   * Sample-interleaved mode. One sample per image component is 
+	     processed at a time, using common statistics. Only single PPM 
+	     input and single PPM output are supported in this mode.
+
+	 c) Which of the three multi-components modes runs faster depends
+	    on the specific system (UNIX or PC).
+	    For the line interleaved mode, the processing time relation
+	    between the single and the multiple files input/output depends 
+	    on the system as well.
+
+         d) Sub-sampled components can be specified to the encoder (e.g.,
+	    a YUV representation with the U and V components having a fraction
+	    of the number of columns of the Y component).
+	    For sub-sampled files, the input to the encoder must be
+	    given as a series of PGM files in non-increasing order of size.
+	    Sample-interleaved mode is not supported for images with
+	    sub-sampled components.
+
+	 e) The output of the encoder, and input to the decoder, is
+	    always a unique JPEG-LS compressed file, independently of the
+	    number of image components. All the image components share the
+	    same header in JPEG-LS.
+
+
+    COMMAND LINES:
+         
+        encoder:
+
+	  locoe [flags] infile1 [infile2,infile3,...] [-ooutfile]
+
+	  DEFAULTS:
+	  infile1     : must be in PGM or PPM format
+	  infile2,... : additional input files for Plane Interleaved
+	  	        or Line Interleaved modes. Must be in PGM (P5) format
+          outfile     : default is locoe.out
+
+          FLAGS, PARAMETERS:
+          -i<infile>  : alternate input-specification, use -i- for stdin
+          -o<outfile> : output specification, use -o- for stdout
+          -c          : mode for multi-component images:
+	  	        0: plane interleaved
+		        1: line interleaved (Default)
+		        2: sample interleaved
+          -n<error> or
+          -e<error>  : Max allowed loss per symbol (default = 0, lossless).
+	  -h          : print help
+
+        Remarks:
+		The following optional flags allow specification of
+		parameters in the algorithm. These parameters,
+		if not default, are included in the JPEG-LS 
+		header, and are part of the standard. Please
+		refer to Working Document for details.
+
+		-r	   : RESET (if not compiled with FIXRESET, see below)
+		-S<a,b,c>  : Context modeling thresholds
+                -m<table>  : Use mapping table where <table> is a file in the 
+                             format:
+               		     1st byte of <table> is the Table ID, 2nd byte
+                             of <table> is the Width of each table entry (in bytes),
+                             3rd - 6th byte of <table> is the Max Table Index Value 
+                             specified as an integer (4 bytes), 7th byte and on
+                             are the table entries.
+                -t<num>    : Use Restart Markers where <num> is the restart interval
+                             (ie. number of MCU's between restart markers).\n");
+
+		*** Use only if you know what you are doing!
+
+	 decoder:
+
+	  locod [flags] [infile] [outfile1 [outfile2, ...]]
+
+	  DEFAULTS:
+	  infile   = locoe.out
+	  outfile1 = locod.out for single output file
+	  outfile[1,2,...] = locod[1,2,...].out for multiple output files in
+			     Plane or Line Interleaved mode
+	  FLAGS, PARAMETERS:
+	  outfile2, ... : multiple output specification for plane- or
+			  line-interleaved mode
+	  -i<infile>    : alternate input specification, use -i- for stdin
+	  -o<outfile>   : alternate output specification, use -o- for stdout
+	  -P            : generate single (.ppm) output file for
+	  		  sample/line-int. mode. Mandatory for sample-int. mode.
+
+EXAMPLES:
+
+   For the examples, assume:
+   * red.pgm, green.pgm, and blue.pgm are 3 color components of
+     a color image, of the same size.
+   * color.ppm is the color image corresponding to red.pgm, green.pgm, blue.pgm
+   * hotely.pgm, hotelu.pgm, hotelv.pgm are 3 components of a color image
+     sub-sampled in the horizontal direction 2:1:1
+
+
+   a) locoe red.pgm green.pgm blue.pgm
+
+      Compresses the three files using the default color mode (line int., c=1)
+      Compressed file is in locoe.out
+
+      locod
+
+      Decompresses locoe.out into 3 pgm files: 
+      locod1.out, locod2.out, locod3.out
+
+      locod locoe.out a.pgm b.pgm c.pgm
+
+      Decompresses locoe.out into 3 pgm files: a.pgm, b.pgm, c.pgm
+
+      locod -P
+
+      Decompresses locoe.out into one ppm file: locod.out
+
+
+
+   b) locoe color.ppm
+      
+      Same as (a), using single input
+
+   c) locoe -c0 red.pgm green.pgm blue.pgm
+
+      Compresses the three files using the plane interleaved color mode
+
+      locod
+
+      Decompresses locoe.out into 3 pgm files: locod1.out, locod2.out, 
+      locod3.out In this case, since c=0, the command locod -P will give 
+      an error.
+
+   d) locoe -c2 color.ppm
+
+      Compresses color.ppm with sample int. mode. Note that only one (ppm) input
+      file must be given in this mode.
+      Output is in locoe.out
+
+      locod -P
+
+      Decompresses locoe.out into locod.out. Note that -P must be given, since
+      for sample int. mode, only single output file is supported.
+
+   g) locoe -Sa5 -Sb9 red.pgm
+
+      Compress red.pgm with Sa=5, Sb=9, and Sc=DEFAULT
+
+   h) locoe -r128 green.pgm
+
+      Compresses green.pgm with RESET=128.
+
+
+OTHER CAVEATS, LIMITATIONS, ANNOYANCES, BUGS (?)
+=================================================
+* The makefiles included in this version are very simple and could lead to 
+  a slower executable files than HP executables.
+* Annoyance: no spaces are allowed between flags and their arguments. This 
+  will be fixed in a future version.
+* Other bugs, annoyances: you tell us.
+  
+------------------------------------------------------------------------------ 
+
+Feedback to
+-----------
+The SPMG lab at the University of British Columbia:
+ismaeil R. Ismaeil ismail@ee.ubc.ca
+Dr. Faouzi Kossentini faouzi@ece.ubc.ca, or 
