@@ -39,7 +39,7 @@ template<class DEType>
 class GDCM_EXPORT SequenceOfItems
 {
 public:
-/// \brief contructor (UndefinedLength by default)
+/// \brief constructor (UndefinedLength by default)
   SequenceOfItems(uint32_t length = 0xFFFFFFFF) { SequenceLengthField = length; }
   typedef std::vector<Item<DEType> > ItemVector;
 
