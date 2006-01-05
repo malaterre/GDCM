@@ -94,8 +94,6 @@ IF (WIN32)
   ENDIF (BUILD_SHARED_LIBS)
 ENDIF (WIN32)
 
-CONFIGURE_FILE(${GDCMJPEG_SOURCE_DIR}/.NoDartCoverage
-               ${GDCMJPEG_BINARY_DIR}/.NoDartCoverage)
 
 # Generate three libraries: jpeg 8bits, 12bits and 16bits
 # using only one source directory
