@@ -12,10 +12,17 @@ void PrintDataElements(gdcm::DICOMIStream &is)
   DEType de;
   gdcm::DataElement &de_tag = de;
 
-  while( !is.eof() && is >> de_tag )
+  try
     {
-    is >> de;
-    std::cout << de << std::endl;
+    while( !is.eof() && is >> de_tag )
+      {
+      is >> de;
+      std::cout << de << std::endl;
+      }
+    }
+  catch(std::exception &e)
+    {
+    std::cerr << "Exception:" << typeid(e).name() << std::endl;
     }
 }
 
