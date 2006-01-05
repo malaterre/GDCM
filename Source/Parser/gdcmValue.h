@@ -28,7 +28,7 @@ public:
   void SetLength(uint32_t l) { 
     if (l%2)
       {
-      // Unfortunately, there is no way to know on *which* Tag the trouble is.
+      /// \TODO Unfortunately, there is no way to know on *which* Tag the trouble is.
       std::cerr << "BUGGY HEADER: Your dicom contain odd length value field." << std::endl;
       }
     // FIXME: man realloc
@@ -73,6 +73,22 @@ public:
 
   const char *GetPointer() const { return Internal; }
 
+/**
+ * \brief  Checks whether a 'Value' is printable or not (in order
+ *         to avoid corrupting the terminal of invocation when printing)
+ */
+bool Value::IsPrintable() const
+{
+   for(unsigned int i=0; i<Length; i++)
+   {
+      if (!isprint((unsigned char)Internal[i]) )
+      {
+         return false;
+      }
+   }
+   return true;   
+}
+
 private:
   char* Internal;
   uint32_t Length;
@@ -80,10 +96,25 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &_os, const Value &_val)
 {
+
+ /// \TODO Unfortunately, there is no way to know if the value is of 'printable VR'
+ ///       we have to check *all* the bytes
   if( _val.Internal )
+  {
+    if ( _val.IsPrintable() )
+    {
+ /// \TODO We cannot know wheter VR = US, SS, FD, ...-> we cannot display the value    
+       _os << _val.Internal;
+       return _os;
+    }
+    else
     _os << "Loaded:" << _val.Length;
+  }
   else
+  {
     _os << "Not Loaded";
+  }
+      
   _os << " (Length: " << _val.Length << ")";
   return _os;
 }
