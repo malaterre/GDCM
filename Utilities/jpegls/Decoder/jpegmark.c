@@ -80,7 +80,7 @@ check_range(int param, const char *name, int low, int high)
  */
 
 int
-write_n_bytes(std::ofstream *out, int value, int n)
+write_n_bytes(FILE *out, int value, int n)
 {
 
   int  l;
@@ -93,17 +93,15 @@ write_n_bytes(std::ofstream *out, int value, int n)
     
 
 #ifdef BIG_ENDIAN
-  for (l=n-1;l>=0;l--)  {
-    *out << ((value>>(8*l))&0x000000FF);
-    if ( out->eof() )
-      return EOF;
-  }
+        for (l=n-1;l>=0;l--)  {
+      if ( putc((value>>(8*l))&0x000000FF,out) == EOF )
+    return EOF;
+        }
 #else  /* little endian */
   for (l=0;l<n;l++) {
-    *out << ((value&0x000000FF));
-    if ( out->eof() )
-      return EOF;
-    value >>= 8;
+      if ( putc((value&0x000000FF),out) == EOF )
+    return EOF;
+      value >>= 8;
   }
 #endif
   return n;
@@ -111,13 +109,13 @@ write_n_bytes(std::ofstream *out, int value, int n)
 }
 
 int
-write_2_bytes(std::ofstream *out, int value)
+write_2_bytes(FILE *out, int value)
 {
   return write_n_bytes(out,value,2);
 }
 
 int
-write_marker(std::ofstream *out, int marker)
+write_marker(FILE *out, int marker)
 /* Write a two-byte marker (just the marker identifier) */
 {
   write_n_bytes(out, marker, 2);
@@ -125,7 +123,7 @@ write_marker(std::ofstream *out, int marker)
 }
 
 int
-write_jpegls_frame(std::ofstream *out, jpeg_ls_header *jp)
+write_jpegls_frame(FILE *out, jpeg_ls_header *jp)
 {
     int i, marker_len,
   bpp, ct = 0;
@@ -166,7 +164,7 @@ write_jpegls_frame(std::ofstream *out, jpeg_ls_header *jp)
 }
 
 int
-write_jpegls_scan(std::ofstream *out, jpeg_ls_header *jp)
+write_jpegls_scan(FILE *out, jpeg_ls_header *jp)
 {
     int i, marker_len, ct=0;
      
@@ -211,7 +209,7 @@ write_jpegls_scan(std::ofstream *out, jpeg_ls_header *jp)
 
 
 int
-write_jpegls_extmarker(std::ofstream *out, jpeg_ls_header *jp)
+write_jpegls_extmarker(FILE *out, jpeg_ls_header *jp)
 {
     int ct=0;
      
@@ -235,7 +233,7 @@ write_jpegls_extmarker(std::ofstream *out, jpeg_ls_header *jp)
  */
 
 int
-seek_marker(std::ifstream *in, int *mkp )
+seek_marker(FILE *in, int *mkp )
 /* Seeks a marker in the input stream. Returns the marker head, or EOF */
 {
     int c, c2, ct=0;
@@ -256,7 +254,7 @@ seek_marker(std::ifstream *in, int *mkp )
   
 
 unsigned int
-read_n_bytes(std::ifstream *in, int n)
+read_n_bytes(FILE *in, int n)
 /* reads n bytes (0 <= n <= 4) from the input stream */
 {
     unsigned int m = 0;
@@ -269,13 +267,13 @@ read_n_bytes(std::ifstream *in, int n)
 }
 
 int
-read_marker(std::ifstream *in, int *mkp)
+read_marker(FILE *in, int *mkp)
 /* reads a marker from the next two bytes in the input stream */
 {
   unsigned int m;
 
   m = read_n_bytes(in, 2);
-  if ( in->eof() ) return EOF;
+  if ( feof(in) ) return EOF;
   if ( (m & 0xFF00) != 0xFF00 )  {
       fprintf(stderr,"read_marker: Expected marker, got %04x\n",m);
       exit(10);
@@ -285,7 +283,7 @@ read_marker(std::ifstream *in, int *mkp)
 }
 
 int
-read_jpegls_frame(std::ifstream *in, jpeg_ls_header *jp)
+read_jpegls_frame(FILE *in, jpeg_ls_header *jp)
 /* reads the JPEG-LS frame marker (not including marker head) */
 {
     int i,
@@ -356,7 +354,7 @@ read_jpegls_frame(std::ifstream *in, jpeg_ls_header *jp)
 
 
 /* reads the JPEG-LS scan marker (not including marker head) */
-int read_jpegls_scan(std::ifstream *in, jpeg_ls_header *jp)
+int read_jpegls_scan(FILE *in, jpeg_ls_header *jp)
 {
     int i, marker_len,
   comp, ct=0;
@@ -431,7 +429,7 @@ int read_jpegls_scan(std::ifstream *in, jpeg_ls_header *jp)
 
 /* reads the JPEG-LS extension marker (not including marker head) */
 /* Supports non-default type (1) and mapping table type (2) */
-int read_jpegls_extmarker(std::ifstream *in, jpeg_ls_header *jp)
+int read_jpegls_extmarker(FILE *in, jpeg_ls_header *jp)
 
 {
     int marker_len,    /* marker length */
@@ -529,7 +527,7 @@ int read_jpegls_extmarker(std::ifstream *in, jpeg_ls_header *jp)
 
 
 /* Read DRI restart marker */
-int read_jpegls_restartmarker(std::ifstream *in, jpeg_ls_header *jp)
+int read_jpegls_restartmarker(FILE *in, jpeg_ls_header *jp)
 {
   int ct = 0;
   int marker_len;    /* the marker length */

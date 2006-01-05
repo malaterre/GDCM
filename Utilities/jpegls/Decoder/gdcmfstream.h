@@ -20,32 +20,24 @@
 #define __gdcmfstream_
 
 #include <fstream>
-#include <vector>
+#include <list>
 
 namespace gdcm {
 
-// First the position of the fragment, then the fragment lenght
-typedef std::pair<std::streampos, std::streamsize> fragment;
-typedef std::vector<fragment> listfragments;
-  
 class ifstream : public std::ifstream
 {
+// First the position of the fragment, then the fragment lenght
+typedef std::pair<std::streampos, std::streamsize> fragment;
+
 public:
   explicit ifstream(const char* filename,
     std::ios_base::openmode mode = std::ios_base::in);
-  ~ifstream() { fragments.clear(); }
 
-  // I need this one:
-  std::streamsize  gcount ( ) const;
   std::istream&  read (char* s, std::streamsize n );
   inline void add_fragment(fragment f) { fragments.push_back(f); }
 
-  // size_type ??
-  inline int numfrags() { return fragments.size(); }
-  inline std::streamsize filesize();
 private:
-  listfragments fragments;
-  int currentpos; // Current position in the fragments vector
+  std::list<fragment> fragments;
 };
 
 } //end namespace gdcm

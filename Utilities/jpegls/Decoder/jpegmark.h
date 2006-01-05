@@ -79,20 +79,20 @@
 
 
 /* Functions to write markers */
-int write_n_bytes(std::ofstream *out, int value, int n);
-int write_2_bytes(std::ofstream *out, int value);
-int write_marker(std::ofstream *out, int marker);
-int write_jpegls_frame(std::ofstream *out, jpeg_ls_header *jp);
-int write_jpegls_scan(std::ofstream *out, jpeg_ls_header *jp);
-int write_jpegls_extmarker(std::ofstream *out, jpeg_ls_header *jp);
+int write_n_bytes(FILE *out, int value, int n);
+int write_2_bytes(FILE *out, int value);
+int write_marker(FILE *out, int marker);
+int write_jpegls_frame(FILE *out, jpeg_ls_header *jp);
+int write_jpegls_scan(FILE *out, jpeg_ls_header *jp);
+int write_jpegls_extmarker(FILE *out, jpeg_ls_header *jp);
 
 
 /* Functions to read markers */
-unsigned int read_n_bytes(std::ifstream *in, int n);
-int read_marker(std::ifstream *in, int *mkp);
-int seek_marker(std::ifstream *in, int *mkp);
-int read_jpegls_frame(std::ifstream *in, jpeg_ls_header *jp);
-int read_jpegls_scan(std::ifstream *in, jpeg_ls_header *jp);
-int read_jpegls_extmarker(std::ifstream *in, jpeg_ls_header *jp);
+unsigned int read_n_bytes(FILE *in, int n);
+int read_marker(FILE *in, int *mkp);
+int seek_marker(FILE *in, int *mkp);
+int read_jpegls_frame(FILE *in, jpeg_ls_header *jp);
+int read_jpegls_scan(FILE *in, jpeg_ls_header *jp);
+int read_jpegls_extmarker(FILE *in, jpeg_ls_header *jp);
 
-int read_jpegls_restartmarker(std::ifstream *in, jpeg_ls_header *jp);
+int read_jpegls_restartmarker(FILE *in, jpeg_ls_header *jp);

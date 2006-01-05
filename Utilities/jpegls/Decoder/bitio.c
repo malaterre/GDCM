@@ -87,22 +87,23 @@ int bits;  /* number of bits free in bit buffer (on output) */
  ****************************************************************************/
 
 
-void bufiinit() {
+void bufiinit(FILE *fil) {
+    /* argument is ignored */
+    (void)fil;
     fp = BUFSIZE;
     truebufsize = 0;
     foundeof = 0;
 }
 
 
-byte fillinbuff(std::ifstream *fil)
+byte fillinbuff(FILE *fil)
 {
   int i;
 
   /* remember 4 last bytes of current buffer (for "undo") */
   for ( i=-4; i<0; i++ )
     buff[i] = buff[fp+i];
-  fil->read((char*)buff, 1* BUFSIZE);
-  truebufsize = fil->gcount();
+        truebufsize = fread(buff, 1, BUFSIZE, fil);
   if ( truebufsize < BUFSIZE ) 
   {
       if ( truebufsize <= 0 ) 

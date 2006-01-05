@@ -71,11 +71,10 @@ without the written permission of the copyright holder.\n\
 
 
 /* I/O files */
-std::ifstream *in;
-std::ofstream *out;
-std::ifstream *c_in[MAX_COMPONENTS];
-std::ofstream *c_out[MAX_COMPONENTS];
-std::ofstream *msgfile = NULL; /* = stdout;*/
+FILE *in, *out;
+FILE *c_in[MAX_COMPONENTS];
+FILE *c_out[MAX_COMPONENTS];
+FILE *msgfile = NULL; /* = stdout;*/
 
 /* Context quantization thresholds  - initially unset */
 int     T3 = -1,

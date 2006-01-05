@@ -18,7 +18,6 @@
 
 #include "gdcmfstream.h"
 #include <iostream>
-#include <assert.h>
 
 namespace gdcm {
 
@@ -26,51 +25,12 @@ namespace gdcm {
 ifstream::ifstream(const char* filename,openmode mode)
    :std::ifstream(filename,mode)
 {
-  fragments.clear();
-  currentpos = 0; // initial state
 }
 
 std::istream& ifstream::read(char* s, std::streamsize n )
 {
-  //std::cerr << "my read" << std::endl;
-  int numfrags = fragments.size();
-  assert( currentpos <= numfrags );
-  int i = 0;
-  std::streamsize fsize = fragments[i].second; //fragment size
-  if( n < fsize )
-    {
-    // If fragment size is bigger than requested num of bytes:
-    return this->std::ifstream::read(s,n);
-    }
-  else
-    {
-    this->std::ifstream::read(s,fsize);
-    ++i;
-    // recusive call
-    if( i == numfrags )
-      {
-      // gcount = fsize;
-      }
-    return this->read(s+fsize,n-fsize);
-    }
-}
-
-std::streamsize ifstream::filesize()
-{
-  std::streamsize size = 0;
-  for( listfragments::const_iterator it = fragments.begin();
-      it != fragments.end();
-      ++it)
-    {
-    size += it->second;
-    }
-  return size;
-}
-
-std::streamsize ifstream::gcount ( ) const
-{
-  //FIXME
-  abort();
+  std::cerr << "my read" << std::endl;
+  this->std::ifstream::read(s,n);
 }
 
 } //end namespace gdcm

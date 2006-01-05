@@ -72,18 +72,17 @@ extern int bits;          /* number of bits free in bit buffer (on output) */
 
 extern int zeroLUT[];     /* lookup table to find number of leading zeroes */
 
-//extern FILE *in, *out;
+extern FILE *in, *out;
 
 
 #define mygetc(fil) ((fp >= BUFSIZE) ? (fillinbuff(fil)) : (buff[fp++]))
 #define myungetc(x,fil) (buff[--fp]=x)
-//#define myfeof(fil) ((fp >= truebufsize) && feof(fil))
-#define myfeof(fil) ((fp >= truebufsize) && fil->eof())
+#define myfeof(fil) ((fp >= truebufsize) && feof(fil))
 
 
-extern void bufiinit();
+extern void bufiinit(FILE *fil);
 
-extern byte fillinbuff(std::ifstream *fil);
+extern byte fillinbuff(FILE *fil);
 
 
 

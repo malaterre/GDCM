@@ -51,8 +51,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-//#include <fstream>
-#include "gdcmfstream.h"
 #include <assert.h>
 #include "jpegls_config.h"
 
@@ -299,10 +297,9 @@ typedef unsigned short pixel;
 
 /****** Global variables prototypes */
 
-extern std::ifstream *in;
-extern std::ofstream *out, *msgfile;
-extern std::ifstream  *c_in[MAX_COMPONENTS];
-extern std::ofstream  *c_out[MAX_COMPONENTS];
+extern FILE *in, *out, *msgfile;
+extern FILE  *c_in[MAX_COMPONENTS];
+extern FILE  *c_out[MAX_COMPONENTS];
 extern int  inhandle;
 extern int  T1, T2, T3, Ta;
 extern int  verbose,
@@ -350,8 +347,8 @@ int undoscanline_pixel(pixel *psl, pixel *sl, int no);
 void bitiinit();
 void bitflush();
 void createzeroLUT();
-//void buffinit();
-void bufiinit();
+void buffinit(FILE *);
+void bufiinit(FILE *fil);
 void bitiflush();
 
 /*  melcode.c */
@@ -363,7 +360,6 @@ int  process_run_dec(int,int);
 void prepareLUTs();
 void prepare_qtables(int, int);
 void init_stats(int);
-void cleanup_qtables();
 
 /* lossless_d.c */
 int lossless_undoscanline(  pixel *psl, pixel *sl, int no, int color);

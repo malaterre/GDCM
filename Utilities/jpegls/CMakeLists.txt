@@ -1,4 +1,4 @@
-PROJECT(GDCMJPEGLS C++)
+PROJECT(GDCMJPEGLS)
 
 #-----------------------------------------------------------------------------
 # Test if os defines a lenght for sockaddr

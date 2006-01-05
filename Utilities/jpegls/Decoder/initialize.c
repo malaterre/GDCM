@@ -192,14 +192,6 @@ void prepareLUTs()
 
 
 
-void cleanup_qtables()
-{
-  free(qdiv0);
-  qdiv0 = NULL;
-  free(qmul0);
-  qmul0 = NULL;
-}
-
 /* prepare quantization tables for near-lossless quantization */
 void prepare_qtables(int absize, int NEAR)
 {

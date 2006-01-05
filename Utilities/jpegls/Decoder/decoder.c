@@ -54,7 +54,6 @@
 #include "global.h"
 #include <string.h>
 #include "jpegmark.h"
-#include <iostream>
 
 
 void usage();
@@ -130,8 +129,7 @@ int     highmask;
 
 
 /* Write one row of pixel values */
-//inline void write_one_line(pixel* line, int cols, FILE* outfile)
-inline void write_one_line(pixel* line, int cols, std::ofstream* outfile)
+inline void write_one_line(pixel* line, int cols, FILE* outfile)
 {
   int i, index;
   unsigned int* maptable;
@@ -146,13 +144,11 @@ inline void write_one_line(pixel* line, int cols, std::ofstream* outfile)
       for (i=0; i< cols; i++)
         *(line8+i)=(unsigned char)ENDIAN8(*(line+i));
     
-      //fwrite(line8, sizeof(unsigned char), cols, outfile);
-      outfile->write((char*)line8, sizeof(unsigned char)* cols);
+      fwrite(line8, sizeof(unsigned char), cols, outfile);
 
       free(line8);
     } else {
-      //fwrite(line, sizeof(short), cols, outfile);
-      outfile->write((char*)line, sizeof(short)* cols);
+      fwrite(line, sizeof(short), cols, outfile);
     }
 
   /* Mapping tables used */
@@ -174,8 +170,7 @@ inline void write_one_line(pixel* line, int cols, std::ofstream* outfile)
           *(line8+i) = ENDIAN8(maptable[index]);
         }
 
-        //fwrite(line8, sizeof(unsigned char), cols, outfile);
-        outfile->write((char*)line8, sizeof(unsigned char)* cols);
+        fwrite(line8, sizeof(unsigned char), cols, outfile);
 
         free(line8);
       }
@@ -193,8 +188,7 @@ inline void write_one_line(pixel* line, int cols, std::ofstream* outfile)
           *(line16+i) = (unsigned short) maptable[index];
         }
 
-        //fwrite(line16, sizeof(short), cols, outfile);
-        outfile->write((char*)line16, sizeof(short)* cols);
+        fwrite(line16, sizeof(short), cols, outfile);
 
         free(line16);
       }
@@ -214,8 +208,7 @@ inline void write_one_line(pixel* line, int cols, std::ofstream* outfile)
           *(line8_3 + (i*3) + 2) = (unsigned char) (maptable[index]);
         }
 
-        //fwrite(line8_3, sizeof(char), cols*3, outfile);
-        outfile->write((char*)line8_3, sizeof(char)* cols*3);
+        fwrite(line8_3, sizeof(char), cols*3, outfile);
 
         free(line8_3);
       }
@@ -293,49 +286,38 @@ void c_swaplines(int i)
   c_cscanline[i] = c_cscanl0[i] + (LEFTMARGIN-1);
 }
 
-  char *infilename = NULL,
-    *outfilename = OUTFILE ".out",
-    *c_outfilename[MAX_COMPONENTS];
-
 void closebuffers(int multi)
 {
 
   int i;
 
-  in->close();
-  delete in;
-  in = NULL;
+  fclose(in);
   if (multi==0)
-    {
-    // only close the stream if it is a file, and not std::cout
-    out->close();
-    delete out;
-    out = NULL;
-    }
+    fclose(out);
   else
     for (i=0;i<components;i++)
-      {
-      c_out[i]->close();
-      delete c_out[i];
-      c_out[i] = NULL;
-      }
+      fclose(c_out[i]);
 
   free(pscanl0);
   free(cscanl0);
-
-  for (i=0;i<MAX_COMPONENTS;i++) {
-    free(c_outfilename[i]);
-    }
 }
 
 
 /* command line argument parsing */
-void command_line_parse(int argc, char* argv[])
+int initialize(int argc, char *argv[])
 {
-  int i,
+  char *infilename = NULL;
+  const char *outfilename = OUTFILE ".out";
+  char *c_outfilename[MAX_COMPONENTS],
+    *color_mode_string;
+  int i, max_samp_columns, max_samp_rows, mk, n_s,
+    end_of_seek=0,
+    seek_return,
+    alpha0,
     gotinf = 0,
     gotoutf = 0,
     out_files=0;
+  int pos;   /* position in the file, after the header */
 
   for (i=0;i<MAX_COMPONENTS;i++) {
     c_outfilename[i]=(char*)malloc(strlen(OUTFILE)+20);
@@ -389,7 +371,6 @@ void command_line_parse(int argc, char* argv[])
     exit(10);
   }
 
-
   /* Open in file */
   if ( infilename == NULL ) {
     usage();
@@ -397,80 +378,15 @@ void command_line_parse(int argc, char* argv[])
   }
   else {
     if ( strcmp(infilename,"-")==0 )
-      abort();
-    //*in = std::cin;
-    //else if ( (in=fopen(infilename,"rb")) == NULL ) {
-    else
-      { 
-      in = new gdcm::ifstream(infilename,
-        std::ifstream::binary|std::ifstream::in);
-      if ( !*in )
-        {
-        perror(infilename);
-        exit(10);
-        }
-      }
-  }
-
-}
-
-void post_initialize()
-{
-  int i;
-  /* msgfile seems to start being used here, let's initialize it here */
-  //if ( !msgfile ) msgfile = stdout;
-  msgfile = new std::ofstream("/tmp/log",std::ofstream::out);
-  /* Open out file */
-  if ( outfilename == NULL ) {
-    usage();
-    exit(0);
-  }
-  else {
-    if ( strcmp(outfilename,"-")==0 ) {
-      abort();
-      //*out = std::cout;
-      //*msgfile = std::cerr;
-    }
-    else {
-      if (multi==0) {
-        out = new std::ofstream(outfilename, 
-          std::ofstream::out|std::ofstream::binary);
-        if( !*out ) {
-          perror(outfilename);
-          exit(10);
-        }
-      }
-      else 
-        {
-        for (i=0;i<components;i++)
-          {
-          c_out[i] = new std::ofstream(c_outfilename[i], 
-            std::ofstream::out|std::ofstream::binary);
-          //if ( (c_out[i]=fopen(c_outfilename[i],"wb")) == NULL )
-          if( !*c_out[i] ) {
-              {
-              perror(c_outfilename[i]);
-              exit(10);
-              }
-          }
-          }
-        }
+      in = stdin;
+    else if ( (in=fopen(infilename,"rb")) == NULL ) {
+      perror(infilename);
+      exit(10);
     }
   }
-}
-
-int initialize()
-{
-  char *color_mode_string;
-  int i, max_samp_columns, max_samp_rows, mk, n_s,
-    end_of_seek=0,
-    seek_return,
-    alpha0;
-  int pos;   /* position in the file, after the header */
-
 
   /* Read the compressed image frame header */
-  bufiinit();
+  bufiinit(in);
 
   head_frame = (jpeg_ls_header *) safecalloc(1,sizeof(jpeg_ls_header));
 
@@ -629,7 +545,6 @@ int initialize()
     error("Bad value for alpha. Sorry...\n");
   }
 
-  post_initialize();
 
   check_compatibility(head_frame,head_scan[0],0);
 
@@ -656,8 +571,6 @@ int initialize()
     multi = 0;   /* equivalent to specifying -P flag */
   }
 
-  //FIXME
-#if 0
   if ((out_files>1) && (color_mode==PIXEL_INT)) {
     fprintf(stderr,"ERROR: Pixel interleaved mode uses only 1 output file\n");
     exit(10);
@@ -667,7 +580,6 @@ int initialize()
     fprintf(stderr,"ERROR: Number of files, %d, for output must be equal to number of image components, %d\n",out_files,components);
     exit(10);
   }
-#endif
 
   /* Compute the image size for the different components */
   if (components==1) {
@@ -707,43 +619,72 @@ int initialize()
     }
   }
 
-  /* check that color mode is valid and pick color mode string */
-  switch ( color_mode ) 
-    {
-    case PLANE_INT:
-      color_mode_string = plane_int_string;
-      break;
 
-    case LINE_INT:
-      color_mode_string = line_int_string;
-      break;
-
-    case PIXEL_INT:
-      color_mode_string = pixel_int_string;
-      break;
-
-    default:
-      fprintf(stderr,"ERROR: Invalid color mode %d\n",color_mode);
-      usage();
-      exit(10);
+  /* msgfile seems to start being used here, let's initialize it here */
+  if ( !msgfile ) msgfile = stdout;
+  /* Open out file */
+  if ( outfilename == NULL ) {
+    usage();
+    exit(0);
+  }
+  else {
+    if ( strcmp(outfilename,"-")==0 ) {
+      out = stdout;
+      msgfile = stderr;
     }
+    else {
+      if (multi==0) {
+        if ( (out=fopen(outfilename,"wb")) == NULL ) {
+          perror(outfilename);
+          exit(10);
+        }
+      }
+      else 
+        for (i=0;i<components;i++)
+          if ( (c_out[i]=fopen(c_outfilename[i],"wb")) == NULL )
+          {
+            perror(c_outfilename[i]);
+            exit(10);
+          }
+      
+    }
+  }
+
+
+  /* check that color mode is valid and pick color mode string */
+  switch ( color_mode ) {
+
+  case PLANE_INT:
+    color_mode_string = plane_int_string;
+    break;
+
+  case LINE_INT:
+    color_mode_string = line_int_string;
+    break;
+  
+    case PIXEL_INT:
+    color_mode_string = pixel_int_string;
+    break;
+
+  default:
+    fprintf(stderr,"ERROR: Invalid color mode %d\n",color_mode);
+    usage();
+    exit(10);
+  }
 
   if ( verbose ) {
-    //fprintf(msgfile,"%s\n",banner);
-    *msgfile << banner << '\n';
+      fprintf(msgfile,"%s\n",banner);
   }
 
   if ( verbose ) {
     if (!multi) {
-      //fprintf(msgfile,"Input  file: %s\nOutput file: %s\n",infilename,outfilename);
-      *msgfile << "Input  file:" << infilename <<
-        "\nOutput file: " << outfilename << '\n';
+      fprintf(msgfile,"Input  file: %s\nOutput file: %s\n",infilename,outfilename);
       }
       else {
-      *msgfile << "Input  file: " << infilename << "\nOutput files: ";
+      fprintf(msgfile,"Input  file: %s\nOutput files: ",infilename);
       for (i=0;i<components;i++)
-        *msgfile << " " << c_outfilename[i] << " ";
-      *msgfile << "\n";
+        fprintf(msgfile," %s ",c_outfilename[i]);
+      fprintf(msgfile,"\n");
     }
   }
 
@@ -776,8 +717,7 @@ int initialize()
     ceil_half_qbeta = (qbeta+1)/2;
     negNEAR = -NEAR;
     alpha1eps = alpha-1+NEAR;
-    *msgfile << "Near-lossless mode: NEAR = " << NEAR <<
-      "  beta = " << beta << "  qbeta = " << qbeta << "\n";
+    fprintf(msgfile,"Near-lossless mode: NEAR = %d  beta = %d  qbeta = %d\n",NEAR,beta,qbeta);
   }
 
   /* compute bits per sample for input symbols */
@@ -800,27 +740,26 @@ int initialize()
   /* print out parameters */
   if ( verbose ) {
       if (!multi)
-    *msgfile << "Image: cols=" << columns << 
-      " rows=" << rows << "alpha=" << alpha0 << " comp=" << components <<
-      " mode=" << color_mode << "(" << color_mode_string << 
-      ")\nParameters: Ta=" << T1 << " Tb=" << T2 << " Tc=" << T3 <<
-      " RESET=" <<RESET << " limit=" << limit;
+    fprintf(msgfile,"Image: cols=%d rows=%d alpha=%d comp=%d mode=%d (%s)\nParameters: Ta=%d Tb=%d Tc=%d RESET=%d limit=%d",
+       columns, rows, alpha0, components, 
+       color_mode, color_mode_string,
+       T1, T2, T3, RESET,limit);
       else {
-      *msgfile << "Image: cols=";
+      fprintf(msgfile,"Image: cols=");
       for (i=0;i<components;i++)
-        *msgfile << " " << c_columns[i];
-      *msgfile << " rows=";
+        fprintf(msgfile," %d",c_columns[i]);
+      fprintf(msgfile," rows=");
       for (i=0;i<components;i++)
-        *msgfile << " " << c_rows[i];
-      *msgfile << " alpha=" << alpha0 << " comp=" << components << 
-        " mode=" << color_mode << " (" << color_mode_string <<
-        ")\nParameters: Ta=" << T1 <<
-        " Tb=" << T2 << " Tc=" << T3 << " RESET="  << RESET << " limit=" << limit;
+        fprintf(msgfile," %d",c_rows[i]);
+      fprintf(msgfile," alpha=%d comp=%d mode=%d (%s)\nParameters: Ta=%d Tb=%d Tc=%d RESET=%d limit=%d",
+         alpha0, components, 
+        color_mode, color_mode_string,
+        T1, T2, T3,RESET,limit);
     }
   }
 
   if ( verbose )
-      *msgfile << "\n";
+      fprintf(msgfile,"\n");
 
 
   /* Write out the image header for PGM or PPM files */
@@ -830,19 +769,19 @@ int initialize()
   if (!head_scan[0]->need_table)
   {
     if (!multi) {
-      if (components==1) *out << "P5\n";
-      else if (components==3) *out << "P6\n";
-      else if (components==4) *out << "P7\n";
-      else *out << "P" << 10+components << "\n";
+      if (components==1) fputs("P5\n", out);
+      else if (components==3) fputs("P6\n", out);  
+      else if (components==4) fputs("P7\n", out);
+      else fprintf(out,"P%d\n",10+components);
          
-      *out << columns << " " << rows << "\n";
-      *out << alpha - 1 << "\n";
+      fprintf(out,"%d %d\n", columns, rows);
+      fprintf(out,"%d\n", alpha - 1);
     }
     else
       for (i=0;i<components;i++) {
-        *c_out[i] << "P5\n";
-        *c_out[i] << c_columns[i] << " " << c_rows[i] << "\n";
-        *c_out[i] << alpha - 1 << "\n";
+        fputs("P5\n", c_out[i]);
+        fprintf(c_out[i],"%d %d\n", c_columns[i], c_rows[i]);
+        fprintf(c_out[i],"%d\n", alpha - 1);
       }
   }
 
@@ -867,20 +806,20 @@ int initialize()
 
       if (!multi) 
       {
-        if (components==1) *out << "P5\n";
-        else if (components==3) *out << "P6\n";  
-        else if (components==4) *out << "P7\n";
-        else *out << "P" << 10+components << "\n";
+        if (components==1) fputs("P5\n", out);
+        else if (components==3) fputs("P6\n", out);  
+        else if (components==4) fputs("P7\n", out);
+        else fprintf(out,"P%d\n",10+components);
          
-        *out << columns << " " << rows << "\n";
-        *out << alpha_temp - 1 << "\n";
+        fprintf(out,"%d %d\n", columns, rows);
+        fprintf(out,"%d\n", alpha_temp - 1);
       }
       else
         for (i=0;i<components;i++) 
         {
-          *c_out[i] << "P5\n";
-          *c_out[i] << c_columns[i] << " " << c_rows[i] << "\n";
-          *c_out[i] << alpha_temp - 1 << "\n";
+          fputs("P5\n", c_out[i]);
+          fprintf(c_out[i],"%d %d\n", c_columns[i], c_rows[i]);
+          fprintf(c_out[i],"%d\n", alpha_temp - 1);
         }
     }
     
@@ -889,22 +828,22 @@ int initialize()
     {
       if (!multi) 
       {
-        if (components==1) *out << "P6\n";
+        if (components==1) fputs("P6\n", out);
         else
         {
           fprintf(stderr,"Error : Cannot have a multi-component image and a mapping table with 3 bytes per element.\n");
           exit(0);
         }
 
-        *out << columns << " " << rows << "\n";
-        *out << alpha - 1 << "\n";
+        fprintf(out,"%d %d\n", columns, rows);
+        fprintf(out,"%d\n", alpha - 1);
       }
       else
         for (i=0;i<components;i++) 
         {
-          *c_out[i] << "P6\n";
-          *c_out[i] << c_columns[i] << " " << c_rows[i] << "\n";
-          *c_out[i] << alpha - 1 << "\n";
+          fputs("P6\n", c_out[i]);
+          fprintf(c_out[i],"%d %d\n", c_columns[i], c_rows[i]);
+          fprintf(c_out[i],"%d\n", alpha - 1);
         }
     }
 
@@ -915,10 +854,11 @@ int initialize()
       exit(0);
     }
   }
- 
+    
 
   /* Allocate memory pools. */
   initbuffers(multi, components);
+
 
   /* return size of the header, in bytes */
   return pos;
@@ -929,9 +869,10 @@ int initialize()
 
 
 
+/* Main loop for decoding files */
 
-int main_function () {
-  int i,n,n_c,n_r,my_i,n_s,mk,seek_return;
+int main (int argc, char *argv[]) {
+  int n,n_c,n_r,my_i,n_s,mk,seek_return;
   int found_EOF = 0;
   double t0, t1; /*, get_utime();*/
   long pos0, pos1,    
@@ -942,15 +883,10 @@ int main_function () {
   local_cscanline = local_pscanline = NULL;
   
   
-  // This function bufiinit is called twice... commenting out the one I 
-  // don't like :)
-#if 0
   /* Parse the parameters, initialize */
   /* Not yet fully implemented */
-  bufiinit();
-#endif
-
-  pos0 = initialize();
+  bufiinit(NULL);
+  pos0 = initialize(argc, argv); 
 
 
   /* start timer (must be AFTER initialize()) */
@@ -1006,10 +942,8 @@ int main_function () {
       }
       if ( seek_return > 2 )
       {
-        *msgfile << "*** WARNING: " << seek_return-2
-          << " extra bytes between end of scan and next marker.\n";
-          
-        *msgfile << "***          Added to marker segment count.\n";
+        fprintf(msgfile,"*** WARNING: %d extra bytes between end of scan and next marker.\n",seek_return-2);
+        fprintf(msgfile,"***          Added to marker segment count.\n");
       }
       pos0 +=seek_return;
       if (mk != SOS)
@@ -1503,9 +1437,8 @@ int main_function () {
   }
   if ( seek_return > 2 )
   {
-      *msgfile << "*** WARNING: " << seek_return-2 <<
-      " extra bytes between end of scan and next marker.\n";
-      *msgfile << "***          Added to marker segment count.\n";
+      fprintf(msgfile,"*** WARNING: %d extra bytes between end of scan and next marker.\n",seek_return-2);
+      fprintf(msgfile,"***          Added to marker segment count.\n");
   }
 
   pos0 += seek_return;
@@ -1519,14 +1452,13 @@ int main_function () {
     fprintf(msgfile,"A mapping table was used which had %d entries of %d bytes each.\n",head_scan[0]->MAXTAB, head_scan[0]->Wt);
 
   if (got_restart)
-    *msgfile << "Restart markers were found with a restart interval of " << 
-      restart_interval << "\n";
+    fprintf(msgfile,"Restart markers were found with a restart interval of %i.\n",restart_interval);
 
   if ( verbose )
-    *msgfile << "Marker segment bytes: " << pos0 << "\n";
+    fprintf(msgfile,"Marker segment bytes: %ld\n",pos0);
 
   /* position in input file */
-  pos1 = in->tellg();
+  pos1 = ftell(in);
   /* tot_in = 8*(pos1-pos0); */
 
   /* size of compressed file read (bits), incl. headers. */
@@ -1538,51 +1470,17 @@ int main_function () {
 
 
   t1 = get_utime();
-  *msgfile << "Total bits  in: " << tot_in <<
-    "  Symbols out: " << tot_out << " " << tot_in/(double)tot_out
-    << " bps\n";
-  *msgfile << "Time = " << t1-t0 << " secs : " << (tot_out)/(1024*(t1-t0)) <<
-    " KSymbols/sec\n";
-  msgfile->close();
-  delete msgfile;
-  msgfile = NULL;
+  fprintf(msgfile,"Total bits  in: %ld  Symbols out: %ld  %5.3f bps\n",
+           tot_in,tot_out,tot_in/(double)tot_out);
+  fprintf(msgfile,"Time = %1.3f secs : %1.0f KSymbols/sec\n",t1-t0,
+          (tot_out)/(1024*(t1-t0)));
 
-  // Free mem:
-  free(head_frame);
-  head_frame = NULL;
-  for (n_s=0;n_s<MAX_SCANS;n_s++) {
-    free(head_scan[n_s]);
-    head_scan[n_s] = NULL;
-  }
-  for (i=0;i<components;i++) {
-      free(c_pscanl0[i]);
-      c_pscanl0[i] = NULL;
-      free(c_cscanl0[i]);
-      c_cscanl0[i] = NULL;
-  }
-
-  //Also clean up qmul0. qdiv0
-  cleanup_qtables();
-
-
-  return found_EOF;
-}
-
-/* Main loop for decoding files */
-int main (int argc, char *argv[]) {
-  int found_eof;
-
-  // Parse command line args:
-  command_line_parse(argc, argv);
-
-  // execute main function
-  found_eof = main_function();
-
-  if( found_eof )
+  if ( found_EOF )
     exit(0);
   else
     return 1;
 }
+
 
 
 
