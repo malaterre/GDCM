@@ -23,7 +23,7 @@ namespace gdcm
 // -> Optional VR
 // -> ValueLength
 // -> Value
-// -> Store Offset, to further printing  ?
+/// \TODO Store Offset, to further printing  ?
 class GDCM_EXPORT DataElement
 {
 public:
@@ -71,7 +71,7 @@ protected:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &_os, const DataElement &_val)
 {
-  _os << _val.TagField << " VL=" << _val.ValueLengthField;
+  _os << _val.TagField << " VLgt=" << _val.ValueLengthField ; 
   return _os;
 }
 //-----------------------------------------------------------------------------

@@ -8,8 +8,7 @@
 namespace gdcm
 {
 /**
- * \brief Class to represent a Data Element
- * Implicit / Explicit
+ * \brief Class to represent an *Implicit VR* Data Element
  * \note bla
  */
 class GDCM_EXPORT ImplicitDataElement : public DataElement
@@ -45,7 +44,8 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const ImplicitDataElement &_val)
 {
-  _os << _val.TagField << " VL=" << std::dec << _val.ValueLengthField;
+  _os << _val.TagField << " VL=" << std::dec << _val.ValueLengthField
+      << " ValueField=[" << _val.ValueField << "]";
   return _os;
 }
 

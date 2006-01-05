@@ -5,20 +5,20 @@
 namespace gdcm
 {
 //-----------------------------------------------------------------------------
-DICOMOStream& operator<<(DICOMOStream& _os, const ImplicitDataElement &_val)
+DICOMOStream& operator<<(DICOMOStream &_os, const ImplicitDataElement &_val)
 {
   //const DataElement &de = _val;
   //_os << de;
-  // See PS 3.5, 7.1.3 Date Element Structure With Implicit VR
+  // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   assert(0 && "Not Implemented");
   (void)_val;
   return _os;
 }
 
 //-----------------------------------------------------------------------------
-DICOMIStream& operator>>(DICOMIStream& _os, ImplicitDataElement &_val)
+DICOMIStream& operator>>(DICOMIStream &_os, ImplicitDataElement &_val)
 {
-  // See PS 3.5, 7.1.3 Date Element Structure With Implicit VR
+  // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   // Read Tag
   //if( !_os.Read(_val.TagField) ) return _os;
   //static Dict d;
