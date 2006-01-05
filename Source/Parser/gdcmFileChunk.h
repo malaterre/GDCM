@@ -1,0 +1,44 @@
+
+#ifndef __gdcmFileChunk_h
+#define __gdcmFileChunk_h
+
+
+
+#include "gdcmType.h"
+#include <fstream>
+#include <assert.h>
+
+namespace gdcm
+{
+/**
+ * \brief Will retains an offset start and an offset end
+ * usefull to store the begining and end of let say a group
+ * usefull to store the begining and end of let say a Sequence
+ * \note bla
+ */
+class GDCM_EXPORT FileChunk
+{
+public:
+  FileChunk() { OffsetStart = OffsetEnd = 0; }
+  FileChunk(std::streampos start, std::streampos end) {
+    assert( start <= end );
+    OffsetStart = start; OffsetEnd = end; }
+
+  std::streampos GetOffsetStart() const { return OffsetStart; }
+  void SetOffsetStart(std::streampos start) { 
+    assert( start <= OffsetEnd );
+    OffsetStart = start; }
+
+  std::streampos GetOffsetEnd() const { return OffsetEnd; }
+  void SetOffsetEnd(std::streampos end) { 
+    assert( OffsetStart <= end );
+    OffsetEnd = end; }
+
+private:
+  std::streampos OffsetStart;
+  std::streampos OffsetEnd;
+};
+
+}
+
+#endif //__gdcmFileChunk_h

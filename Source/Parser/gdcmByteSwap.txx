@@ -1,0 +1,101 @@
+#ifndef __gdcmByteSwap_txx
+#define __gdcmByteSwap_txx
+
+#include "gdcmByteSwap.h"
+#include <iostream>
+
+namespace gdcm
+{
+
+/*
+  template (class T)
+{
+void bswap(inout T i)
+{
+byte* p = cast(byte*)&i;
+for (int b = 0; b < T.size/2; ++b)
+instance swap(byte).swap(p[b], p[T.size-1-b]);
+}
+}
+*/
+
+
+// Machine definitions
+#ifdef GDCM_WORDS_BIGENDIAN
+template <class T>
+bool ByteSwap<T>::SystemIsBigEndian() { return true; }
+template <class T>
+bool ByteSwap<T>::SystemIsLittleEndian() { return false; }
+#else
+template <class T>
+bool ByteSwap<T>::SystemIsBigEndian() { return false; }
+template <class T>
+bool ByteSwap<T>::SystemIsLittleEndian() { return true; }
+#endif  
+// Swaps the bytes so they agree with the processor order
+template <class T>
+void ByteSwap<T>::SwapFromSwapCodeIntoSystem(T &a, SC::SwapCodeType swapcode)
+{
+  //std::cerr << "sizeof(T)= " << sizeof(T) << " " << (int)a << std::endl;
+  switch(sizeof(T))
+    {
+  case 1:
+    break;
+  case 2:
+    Swap4(a, swapcode);
+    break;
+  case 4:
+    Swap8(a, swapcode);
+    break;
+  default:
+    std::cerr << "Impossible" << std::endl;
+    abort();
+    }
+}
+
+template <class T>
+void ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem(T *p, SC::SwapCodeType sc, unsigned int num)
+{
+  for(unsigned int i=0; i<num; i++)
+    {
+    ByteSwap<T>::SwapFromSwapCodeIntoSystem(p[i], sc);
+    }
+}
+
+// Private:
+//
+
+template<class T>
+void Swap4(T &a, SC::SwapCodeType swapcode)
+{
+  if ( swapcode == 4321 || swapcode == 2143 )
+    a = ( a << 8 ) | ( a >> 8 );
+}
+
+template<class T>
+void Swap8(T &a, SC::SwapCodeType swapcode)
+{
+  switch (swapcode)
+    {
+  case SC::Unknown:
+    break;
+  case 1234 :
+    break;
+  case 4321 :
+    a= (( a<<24) | ((a<<8)  & 0x00ff0000) | ((a>>8) & 0x0000ff00) | (a>>24) );
+    break;   
+  case 3412 :
+    a= ((a<<16) | (a>>16)  );
+    break;  
+  case 2143 :
+    a= (((a<< 8) & 0xff00ff00) | ((a>>8) & 0x00ff00ff) );
+    break;
+  default :
+    std::cerr << "Unexpected swap code:" << swapcode;
+    }
+}
+  
+
+} // end namespace gdcm
+
+#endif // __gdcmByteSwap_txx
