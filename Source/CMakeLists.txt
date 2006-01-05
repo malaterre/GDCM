@@ -1,1 +1,5 @@
-SUBDIRS(Parser ModuleAttributes)
+SUBDIRS(
+  Common
+  Dicts
+  Parser 
+  ModuleAttributes)

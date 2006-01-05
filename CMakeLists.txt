@@ -36,7 +36,6 @@ ENDIF(UNIX)
 #-----------------------------------------------------------------------------
 # Build the main lib...
 SUBDIRS(
-  Dicts
   Source
   Utilities
   )

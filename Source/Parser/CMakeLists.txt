@@ -2,15 +2,9 @@
 # Rebuild gdcm whenever a file starting with gdcm* is modified
 INCLUDE_REGULAR_EXPRESSION("^gdcm.*$")
 
-# configure the .h file
-CONFIGURE_FILE(
-  "${GDCM_SOURCE_DIR}/Source/Parser/gdcmConfigure.h.in"
-  "${GDCM_BINARY_DIR}/Source/Parser/gdcmConfigure.h"
-  IMMEDIATE
-  )
-
 # Add the include paths
 INCLUDE_DIRECTORIES(
+  "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_BINARY_DIR}/Source/Parser"
   "${GDCM_SOURCE_DIR}/Source/Parser"
   )
@@ -36,20 +30,20 @@ ENDIF(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.1)
 ADD_CUSTOM_COMMAND(
   OUTPUT    ${GDCM_BINARY_DIR}/Source/Parser/gdcmDefaultDicts.cxx
   COMMAND   ${PREP_DICT}
-  ARGS      ${GDCM_SOURCE_DIR}/Dicts/DataDict.dic
+  ARGS      ${GDCM_SOURCE_DIR}/Source/Dicts/DataDict.dic
             ${GDCM_BINARY_DIR}/Source/Parser/gdcmDefaultDicts.cxx
-  DEPENDS   ${GDCM_SOURCE_DIR}/Dicts/DataDict.dic
-            ${GDCM_SOURCE_DIR}/Dicts/gdcmPrepDict.cxx
+  DEPENDS   ${GDCM_SOURCE_DIR}/Source/Dicts/DataDict.dic
+            ${GDCM_SOURCE_DIR}/Source/Dicts/gdcmPrepDict.cxx
   COMMENT   "Generating gdcmDefaultDicts.cxx based on DataDict.dic"
   )
 
 ADD_CUSTOM_COMMAND(
   OUTPUT    ${GDCM_BINARY_DIR}/Source/Parser/gdcmDefaultGroupNames.cxx
   COMMAND   ${PREP_GROUPNAME}
-  ARGS      ${GDCM_SOURCE_DIR}/Dicts/GroupName.dic
+  ARGS      ${GDCM_SOURCE_DIR}/Source/Dicts/GroupName.dic
             ${GDCM_BINARY_DIR}/Source/Parser/gdcmDefaultGroupNames.cxx
-  DEPENDS   ${GDCM_SOURCE_DIR}/Dicts/GroupName.dic
-            ${GDCM_SOURCE_DIR}/Dicts/gdcmPrepGroupName.cxx
+  DEPENDS   ${GDCM_SOURCE_DIR}/Source/Dicts/GroupName.dic
+            ${GDCM_SOURCE_DIR}/Source/Dicts/gdcmPrepGroupName.cxx
   COMMENT   "Generating gdcmDefaultGroupNames.cxx based on GroupName.dic"
   )
 
@@ -60,9 +54,7 @@ ADD_CUSTOM_COMMAND(
 
 
 SET(SRCS
-  gdcmIStream.cxx
   gdcmDICOMIStream.cxx
-  gdcmOStream.cxx
   gdcmDICOMOStream.cxx
   gdcmVR.cxx
   gdcmVM.cxx
@@ -74,9 +66,9 @@ SET(SRCS
   #gdcmSequenceDataElement.cxx
   #gdcmSequenceItem.cxx
   gdcmFileSeeker.cxx
-  gdcmDirectory.cxx
   "${GDCM_BINARY_DIR}/Source/Parser/gdcmDefaultDicts.cxx"
   "${GDCM_BINARY_DIR}/Source/Parser/gdcmDefaultGroupNames.cxx"
   )
 
 ADD_LIBRARY(gdcmParser ${SRCS})
+TARGET_LINK_LIBRARIES(gdcmParser gdcmCommon)

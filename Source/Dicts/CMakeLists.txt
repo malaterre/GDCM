@@ -5,11 +5,12 @@ INCLUDE_REGULAR_EXPRESSION("^gdcm.*$")
 #-----------------------------------------------------------------------------
 # DICOM dictionary stuff
 SET(DICT_SRCS
-  ${GDCM_SOURCE_DIR}/Dicts/gdcmPrepDict.cxx
+  ${GDCM_SOURCE_DIR}/Source/Dicts/gdcmPrepDict.cxx
   )
 
 # Add the include paths
 INCLUDE_DIRECTORIES(
+  "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_BINARY_DIR}/Source/Parser"
   "${GDCM_SOURCE_DIR}/Source/Parser"
   )
@@ -20,6 +21,6 @@ ADD_EXECUTABLE(PrepDict ${DICT_SRCS}
   )
 
 ADD_EXECUTABLE(PrepGroupName
-  ${GDCM_SOURCE_DIR}/Dicts/gdcmPrepGroupName.cxx
+  ${GDCM_SOURCE_DIR}/Source/Dicts/gdcmPrepGroupName.cxx
   )
 
