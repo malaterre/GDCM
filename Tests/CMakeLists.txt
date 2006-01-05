@@ -1,1 +1,5 @@
-SUBDIRS(Parser ModuleAttributes)
+SUBDIRS(Parser 
+  ModuleAttributes
+  #Objects
+  )
+
