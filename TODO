@@ -30,3 +30,11 @@ Setting ON Log   leads to set ON Warning (but not Debug)
                   
 --------
 NEED a gdcmDictReader, right now the reading is done in the constructor of gdcm::Dict (this is so retarded)
+---------------
+
+TERMINOLOGY:
+- SKIP: DICOM has Group Length which allow us to skip elements
+- Seek: Read a Group/Element+Length and then *seek* through an element
+- Parse: Browse through a DICOM file without loading any information other than the minimum need for it's parsing (almost nothing for ACR, and group 0002 for DICOM)
+- Load: Actually load each and every single element of a DICOM file. Very usefull for a PRINT operation
+- DUMP/PRINT: Operation that consist of displaying all information (up to a certain level of detail) contained in a DICOM file
