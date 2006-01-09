@@ -80,7 +80,7 @@ inline std::ostream& operator<<(std::ostream& _os, const SequenceOfItems<DEType>
   for( ; it != _val.Items.end();
     ++it)
     {
-    _os << "Sequence #" << i++ << std::endl << *it << std::endl;
+    _os << "Sequence Item #" << i++ << std::endl << *it << std::endl;
     }
   // Print delimitation if undefined
   if( _val.SequenceLengthField == 0xFFFFFFFF )

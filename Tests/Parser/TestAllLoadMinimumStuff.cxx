@@ -5,7 +5,7 @@
 #include "gdcmFileSeeker.h"
 #include "gdcmDict.h"
 
-// Just to remember the tag we''ll *have* to load
+// Just to remember the tag we'll *have* to load
 // - to read the pixels
 // - to made a true DICOM browser
 

@@ -17,7 +17,7 @@ void PrintDataElements(gdcm::DICOMIStream &is)
     while( !is.eof() && is >> de_tag )
       {
       is >> de;
-      std::cout << de << std::endl;
+      std::cerr << de << std::endl;
       }
     }
   catch(std::exception &e)

@@ -13,7 +13,7 @@ void TestPrintUID(const std::string &filename)
   f.Open();
   f.Initialize();
   const gdcm::Tag siUID(0x0020,0x000d);  // [Study Instance UID]
-  static const gdcm::Dict d; // FIXME this thing is friggin slow
+  static const gdcm::Dict d; /// \TODO FIXME this thing is friggin slow
   const gdcm::DictEntry &de = d.GetDictEntry(siUID);
   if ( ! f.FindTag( siUID )  )
     {
