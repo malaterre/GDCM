@@ -1,4 +1,4 @@
-// <> in friend template
+// Compiler support <> in friend template ?
 #ifdef TEST_GDCM_CXX_HAS_NULL_TEMPLATE_ARGS
 template <class T> class A;
 template <class T> int f(A<T>&);
@@ -21,6 +21,7 @@ int main()
 }
 #endif
 
+// Test for particular structure
 #ifdef TEST_GDCM_STAT_HAS_ST_MTIM
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -34,6 +35,7 @@ int main()
 }
 #endif
 
+// 64 bits compilers
 #ifdef TEST_GDCM_CXX_SAME_LONG_AND___INT64
 void function(long**) {}
 int main()
@@ -44,6 +46,7 @@ int main()
 }
 #endif
 
+// Not all compilers support long long
 #ifdef TEST_GDCM_CXX_SAME_LONG_LONG_AND___INT64
 void function(long long**) {}
 int main()
@@ -54,6 +57,7 @@ int main()
 }
 #endif
 
+// Cast problem on some compilers
 #ifdef TEST_GDCM_CAN_CONVERT_UI64_TO_DOUBLE
 void function(double& l, unsigned __int64 const& r)
 {
@@ -69,6 +73,7 @@ int main()
 }
 #endif
 
+// Some compilers defines char as unsigned type. Indeed char, signed char and unisgned char are three completely different types
 #ifdef TEST_GDCM_CHAR_IS_SIGNED
 /* Return 1 for char signed and 0 for char unsigned.  */
 int main()

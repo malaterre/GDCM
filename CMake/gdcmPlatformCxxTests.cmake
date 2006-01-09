@@ -1,10 +1,11 @@
-# ...
+# Macro to centralize all the plateform specific
+# tests.
 MACRO(GDCM_PLATFORM_CXX_TEST var description invert)
   IF("${var}_COMPILED" MATCHES "^${var}_COMPILED$")
     MESSAGE(STATUS "${description}")
     TRY_COMPILE(${var}_COMPILED
       ${CMAKE_CURRENT_BINARY_DIR}
-      ${CMAKE_CURRENT_SOURCE_DIR}/kwsysPlatformCxxTests.cxx
+      ${CMAKE_CURRENT_SOURCE_DIR}/gdcmPlatformCxxTests.cxx
       COMPILE_DEFINITIONS -DTEST_${var} ${GDCM_PLATFORM_CXX_TEST_DEFINES}
       OUTPUT_VARIABLE OUTPUT)
     IF(${var}_COMPILED)
