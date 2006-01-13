@@ -2,7 +2,6 @@
 #define __gdcmTableReader_h
 
 #include "gdcmType.h"
-#include "expat/lib/expat.h"
 #include <string>
 
 namespace gdcm

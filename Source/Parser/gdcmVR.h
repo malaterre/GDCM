@@ -9,6 +9,7 @@
  */
 #include "gdcmType.h"
 #include <iostream>
+#include <assert.h>
 
 namespace gdcm
 {

@@ -5,6 +5,7 @@
 #include "gdcmType.h"
 #include <fstream>
 #include <iostream>
+#include <assert.h>
 
 namespace gdcm
 {
