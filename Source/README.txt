@@ -8,6 +8,7 @@ So far I have :
 - Dicts (PS6)
 - Reader (hate this name this is stupid)
 - Writer (hate this name this is stupid)
+Since DICOM is organized as Part 3 (IOD definition), Part 5 (data structures and encoding) and Part 6 (data dictionary)
 
 Hopefully this is a good choice since reorganizing a cvs tree is just a pain...
 svn rocks !
