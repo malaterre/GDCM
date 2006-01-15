@@ -1,3 +1,6 @@
+The main difference between ACR-NEMA and DICOM in this library is the conformance of the "meta header" 
+according to part 10 of the standard as well as the consistency between header and meta header.
+
 Abstract Syntax: Rules that are negociated for exchanging objects, specified by the SOP Class.
 AE: Application Entity
 Application Context:
