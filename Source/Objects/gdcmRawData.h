@@ -5,7 +5,7 @@
 namespace gdcm
 {
 /**
- * \brief Class for reprensenting a RawData
+ * \brief Class for representing a RawData
  * \note bla
  */
 class GDCM_EXPORT RawData

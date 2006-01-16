@@ -5,7 +5,7 @@
 namespace gdcm
 {
 /**
- * \brief Class for reprensenting a Study
+ * \brief Class for representing a Study
  * \note bla
  */
 class GDCM_EXPORT Study

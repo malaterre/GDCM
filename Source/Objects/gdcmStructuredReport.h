@@ -5,7 +5,7 @@
 namespace gdcm
 {
 /**
- * \brief Class for reprensenting a StructuredReport
+ * \brief Class for representing a StructuredReport
  * \note bla
  */
 class GDCM_EXPORT StructuredReport

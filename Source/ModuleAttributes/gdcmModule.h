@@ -5,7 +5,7 @@
 namespace gdcm
 {
 /**
- * \brief Class for reprensenting a Module
+ * \brief Class for representing a Module
  * \note bla
  * Module: A set of Attributes within an Information Entity or Normalized IOD which are logically related to each other.
  */

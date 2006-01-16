@@ -5,7 +5,7 @@
 namespace gdcm
 {
 /**
- * \brief Class for reprensenting a Overlay
+ * \brief Class for representing a Overlay
  * \note bla
  */
 class GDCM_EXPORT Overlay

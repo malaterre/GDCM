@@ -7,7 +7,7 @@
 namespace gdcm
 {
 /**
- * \brief Class for reprensenting a TableReader
+ * \brief Class for representing a TableReader
  * \note bla
  */
 class GDCM_EXPORT TableReader

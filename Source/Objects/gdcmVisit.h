@@ -5,7 +5,7 @@
 namespace gdcm
 {
 /**
- * \brief Class for reprensenting a Visit
+ * \brief Class for representing a Visit
  * \note bla
  */
 class GDCM_EXPORT Visit

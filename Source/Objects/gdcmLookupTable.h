@@ -5,7 +5,7 @@
 namespace gdcm
 {
 /**
- * \brief Class for reprensenting a LookupTable
+ * \brief Class for representing a LookupTable
  * \note bla
  */
 class GDCM_EXPORT LookupTable

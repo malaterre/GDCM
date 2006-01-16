@@ -5,7 +5,7 @@
 namespace gdcm
 {
 /**
- * \brief Class for reprensenting a Decompressor
+ * \brief Class for representing a Decompressor
  * \note bla
  */
 class GDCM_EXPORT Decompressor

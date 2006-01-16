@@ -5,7 +5,7 @@
 namespace gdcm
 {
 /**
- * \brief Class for reprensenting a UID
+ * \brief Class for representing a UID
  * \note
  * We should copy paste the old code from gdcm
  * including all the crazy stuff for creating new UID (Study, Serie and 

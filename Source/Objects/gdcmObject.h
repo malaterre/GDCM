@@ -5,7 +5,7 @@
 namespace gdcm
 {
 /**
- * \brief Class for reprensenting a Object
+ * \brief Class for representing a Object
  * \note bla
  */
 class GDCM_EXPORT Object

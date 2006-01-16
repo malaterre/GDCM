@@ -5,7 +5,7 @@
 namespace gdcm
 {
 /**
- * \brief Class for reprensenting a Patient
+ * \brief Class for representing a Patient
  * \note bla
  */
 class GDCM_EXPORT Patient

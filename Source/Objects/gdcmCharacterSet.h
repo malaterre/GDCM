@@ -4,7 +4,7 @@
 namespace gdcm
 {
 /**
- * \brief Class for reprensenting a CharacterSet
+ * \brief Class for representing a CharacterSet
  * \note bla
  * Encapsulate the functionality defined by the DICOM Specific Character 
  * Set attribute. should be able to

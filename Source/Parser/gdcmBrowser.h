@@ -5,7 +5,7 @@
 namespace gdcm
 {
 /**
- * \brief Class for reprensenting a Browser
+ * \brief Class for representing a Browser
  * \note
  * This class will take as input a directory and will be able to display (!!)
  * a tree structure of the DICOM files found (ala left window of 

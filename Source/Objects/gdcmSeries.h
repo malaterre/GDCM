@@ -5,7 +5,7 @@
 namespace gdcm
 {
 /**
- * \brief Class for reprensenting a Series
+ * \brief Class for representing a Series
  * \note Why is it always plural ?
  */
 class GDCM_EXPORT Series

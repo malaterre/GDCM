@@ -5,7 +5,7 @@
 namespace gdcm
 {
 /**
- * \brief Class for reprensenting a Image
+ * \brief Class for representing a Image
  * \note bla
  */
 class GDCM_EXPORT Image
