@@ -50,7 +50,7 @@ int TestTagIO(int , char *[])
   
   std::cout << "Just to inform : uint32_t read value=" << itag ; 
   std::cout << " stored in RAM as :";  
-  for (int j=0;j<sizeof(uint32_t);j++) 
+  for (unsigned int j=0;j<sizeof(uint32_t);j++) 
   {
      std::cout << std::hex <<"[" <<(uint32_t)((uint8_t*)&itag)[j] << "] " ;
   }
