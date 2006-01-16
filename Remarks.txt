@@ -322,3 +322,6 @@ et de gdcm::SQItem pour modeliser la realité ...
 
 
 Another very important task is the partial reading often you only want to read a particular group, or a subset of tags. GDCM should allow a user to only read one group, or a subset of tags, and then stop reading.
+
+
+What is the difference between Transfer Syntax and SOP Class ??
