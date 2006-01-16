@@ -1,7 +1,7 @@
 # Define the tests
 SET(TEST_SRCS
-  #TestCompressor.cxx
-  TestAttributeFactory.cxx
+  #TestCompressor
+  TestAttributeFactory
   )
 
 # Add the include paths
