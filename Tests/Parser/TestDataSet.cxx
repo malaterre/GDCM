@@ -49,7 +49,7 @@ int TestDataSet(int argc, char *argv[])
   if( !Os ) return 1;
   Os.WriteDICM();
 
-  std::cout << "Printint result:" << std::endl;
+  std::cout << "Printing result:" << std::endl;
   gdcm::DataElement &de_tag = de;
   while( Is >> de_tag )
     {
