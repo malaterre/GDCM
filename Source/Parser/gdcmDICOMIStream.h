@@ -60,6 +60,6 @@ protected:
   NegociatedTSType NegociatedTS;
 };
 
-}
+} // end namespace gdcm
 
 #endif //__gdcmDICOMIStream_h
