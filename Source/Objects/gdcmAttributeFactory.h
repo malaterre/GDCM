@@ -1,5 +1,5 @@
-#ifndef __gdcmDICOMType_h
-#define __gdcmDICOMType_h
+#ifndef __gdcmAttributeFactory_h
+#define __gdcmAttributeFactory_h
 
 #include "gdcmType.h"
 #include "gdcmVR.h"
@@ -55,7 +55,7 @@ template<> struct ValueEnumToLength<VM::VM1_99>
 //FIXME TODO: 2-2n and 3-3n...
 
 template<int TVR, int TVM>
-class GDCM_EXPORT DICOMType
+class GDCM_EXPORT AttributeFactory
 {
 public:
   typename TypeEnumToType<TVR>::Type Internal[ValueEnumToLength<TVM>::Len];
@@ -91,13 +91,13 @@ public:
 
 
 template<int TVR>
-class GDCM_EXPORT DICOMType<TVR, VM::VM1_n>
+class GDCM_EXPORT AttributeFactory<TVR, VM::VM1_n>
 {
 public:
   typename TypeEnumToType<TVR>::Type *Internal;
   int Length;
   // FIXME is this the way to prevent default initialization
-  explicit DICOMType() { Internal=0; Length=0; }
+  explicit AttributeFactory() { Internal=0; Length=0; }
 
   int GetLength() const { return Length; }
   void SetLength(int len) { 
@@ -152,13 +152,13 @@ public:
       _os << "\\" << Internal[i];
     }
 
-  DICOMType(const DICOMType&_val) {
+  AttributeFactory(const AttributeFactory&_val) {
     if( this != &_val) {
       *this = _val;
       }
     }
 
-  DICOMType &operator=(const DICOMType &_val) {
+  AttributeFactory &operator=(const AttributeFactory &_val) {
     Length = 0; // SYITF
     Internal = 0;
     SetArray(_val.Internal, _val.Length, true);
@@ -167,40 +167,40 @@ public:
 };
 
 template<int TVR>
-class GDCM_EXPORT DICOMType<TVR, VM::VM2_n> : public DICOMType<TVR, VM::VM1_n>
+class GDCM_EXPORT AttributeFactory<TVR, VM::VM2_n> : public AttributeFactory<TVR, VM::VM1_n>
 {
 public:
-  typedef DICOMType<TVR, VM::VM1_n> Superclass;
+  typedef AttributeFactory<TVR, VM::VM1_n> Superclass;
   void SetLength(int len) {
     if( len <= 1 ) return;
     Superclass::SetLength(len);
   }
 };
 template<int TVR>
-class GDCM_EXPORT DICOMType<TVR, VM::VM2_2n> : public DICOMType<TVR, VM::VM2_n>
+class GDCM_EXPORT AttributeFactory<TVR, VM::VM2_2n> : public AttributeFactory<TVR, VM::VM2_n>
 {
 public:
-  typedef DICOMType<TVR, VM::VM2_n> Superclass;
+  typedef AttributeFactory<TVR, VM::VM2_n> Superclass;
   void SetLength(int len) {
     if( len % 2 ) return;
     Superclass::SetLength(len);
   }
 };
 template<int TVR>
-class GDCM_EXPORT DICOMType<TVR, VM::VM3_n> : public DICOMType<TVR, VM::VM1_n>
+class GDCM_EXPORT AttributeFactory<TVR, VM::VM3_n> : public AttributeFactory<TVR, VM::VM1_n>
 {
 public:
-  typedef DICOMType<TVR, VM::VM1_n> Superclass;
+  typedef AttributeFactory<TVR, VM::VM1_n> Superclass;
   void SetLength(int len) {
     if( len <= 2 ) return;
     Superclass::SetLength(len);
   }
 };
 template<int TVR>
-class GDCM_EXPORT DICOMType<TVR, VM::VM3_3n> : public DICOMType<TVR, VM::VM3_n>
+class GDCM_EXPORT AttributeFactory<TVR, VM::VM3_3n> : public AttributeFactory<TVR, VM::VM3_n>
 {
 public:
-  typedef DICOMType<TVR, VM::VM3_n> Superclass;
+  typedef AttributeFactory<TVR, VM::VM3_n> Superclass;
   void SetLength(int len) {
     if( len % 3 ) return;
     Superclass::SetLength(len);
@@ -208,7 +208,7 @@ public:
 };
 
 template<int TVM>
-class GDCM_EXPORT DICOMTypeChar
+class GDCM_EXPORT AttributeFactoryChar
 {
 public:
   //char *Internal[ValueEnumToLength<TVM>::Len];
@@ -216,11 +216,11 @@ public:
 };
 
 template<int TVM>
-class GDCM_EXPORT DICOMType<VR::AS, TVM> : public DICOMTypeChar<TVM>
+class GDCM_EXPORT AttributeFactory<VR::AS, TVM> : public AttributeFactoryChar<TVM>
 {
 };
 
 
 }
 
-#endif //__gdcmDICOMType_h
+#endif //__gdcmAttributeFactory_h
