@@ -23,7 +23,6 @@ SET(TEST_SRCS
   TestAllReadGroup
   TestItem
   TestFileSeeker
-  TestDICOMType
   TestDirectory
   TestAllPrintUID
   )

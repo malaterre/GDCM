@@ -1,5 +1,5 @@
 SUBDIRS(Parser 
   ModuleAttributes
-  #Objects
+  Objects
   )
 
