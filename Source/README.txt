@@ -12,3 +12,6 @@ Since DICOM is organized as Part 3 (IOD definition), Part 5 (data structures and
 
 Hopefully this is a good choice since reorganizing a cvs tree is just a pain...
 svn rocks !
+
+Where does the Anonymiser fit, what spec describe it ? What are *exactly* which element to change ? Are we allowed to remove private tags, can we change the UID ?
+
