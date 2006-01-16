@@ -7,54 +7,63 @@ namespace gdcm
 //-----------------------------------------------------------------------------
 DICOMOStream& operator<<(DICOMOStream &_os, const ImplicitDataElement &_val)
 {
-  //const DataElement &de = _val;
+  return _val.Write(_os);
+}
+
+DICOMOStream& ImplicitDataElement::Write(DICOMOStream& _os) const
+{
+  //const DataElement &de = 
   //_os << de;
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   assert(0 && "Not Implemented");
-  (void)_val;
   return _os;
 }
 
 //-----------------------------------------------------------------------------
 DICOMIStream& operator>>(DICOMIStream &_os, ImplicitDataElement &_val)
 {
+  return _val.Read(_os);
+}
+
+DICOMIStream& ImplicitDataElement::Read(DICOMIStream& _os)
+{
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   // Read Tag
-  //if( !_os.Read(_val.TagField) ) return _os;
+  //if( !_os.Read(TagField) ) return _os;
   //static Dict d;
-  //const DictEntry &de = d.GetDictEntry(_val.TagField);
+  //const DictEntry &de = d.GetDictEntry(TagField);
   // Read Value Length
-  if( !(_os.Read(_val.ValueLengthField)) ) return _os;
+  if( !(_os.Read(ValueLengthField)) ) return _os;
   // THE WORST BUG EVER:
-  if(_val.ValueLengthField == 13 )
+  if(ValueLengthField == 13 )
     {
     const Tag theralys1(0x0008,0x0070);
     const Tag theralys2(0x0008,0x0080);
-    if( _val.GetTag() != theralys1
-     && _val.GetTag() != theralys2 )
+    if( GetTag() != theralys1
+     && GetTag() != theralys2 )
       {
       std::cerr << "BUGGY HEADER (GE, 13)" << std::endl;
-      _val.ValueLengthField = 10;
+      ValueLengthField = 10;
       }
     }
-  if(_val.ValueLengthField == 0xFFFFFFFF)
+  if(ValueLengthField == 0xFFFFFFFF)
     {
     //assert( de.GetVR() == VR::SQ );
     const Tag sdi(0xfffe,0xe0dd); // Sequence Delimitation Item
-    SequenceOfItems<ImplicitDataElement> si(_val.ValueLengthField);
+    SequenceOfItems<ImplicitDataElement> si(ValueLengthField);
     _os >> si;
     //std::cout << "Debug:" << si << std::endl;
     }
   else
     {
     // We have the length we should be able to read the value
-    if( _val.ValueLengthField < 0xfff )
+    if( ValueLengthField < 0xfff )
       {
-      _val.ValueField.SetLength(_val.ValueLengthField); // perform realloc
-      _os.Read(_val.ValueField);
+      ValueField.SetLength(ValueLengthField); // perform realloc
+      _os.Read(ValueField);
       }
     else
-      _os.Seekg(_val.ValueLengthField, std::ios::cur);
+      _os.Seekg(ValueLengthField, std::ios::cur);
     }
   return _os;
 }

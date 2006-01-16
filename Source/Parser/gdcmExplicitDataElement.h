@@ -34,6 +34,9 @@ public:
   uint32_t GetLength() const { return ComputeLength(); }
 
 protected:
+  DICOMIStream& Read(DICOMIStream &_os);
+  DICOMOStream& Write(DICOMOStream &_os) const;
+
   uint32_t ComputeLength() const
     {
     assert( ValueLengthField != 0xFFFFFFFF ); //FIXME

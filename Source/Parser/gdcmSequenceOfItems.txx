@@ -16,7 +16,12 @@ void SequenceOfItems<DEType>::AddItem(Item<DEType> const &item)
 template<class DEType>
 DICOMOStream& operator<<(DICOMOStream& _os, const SequenceOfItems<DEType> &_val)
 {
-  (void)_val;
+  return _val.Write(_os);
+}
+
+template<class DEType>
+DICOMOStream& SequenceOfItems<DEType>::Write(DICOMOStream& _os) const
+{
   assert( 0 );
   return _os;
 }
@@ -24,12 +29,18 @@ DICOMOStream& operator<<(DICOMOStream& _os, const SequenceOfItems<DEType> &_val)
 template<class DEType>
 DICOMIStream& operator>>(DICOMIStream &_os, SequenceOfItems<DEType> &_val)
 {
+  return _val.Read(_os);
+}
+
+template<class DEType>
+DICOMIStream& SequenceOfItems<DEType>::Read(DICOMIStream& _os)
+{
   const Tag itemStart(0xfffe,0xe000);   // [Item]
   const Tag itemEnd(0xfffe,0xe00d);     // [Item Delimitation Item]
   const Tag seqEnd(0xfffe,0xe0dd);      // [Sequence Delimitation Item]
   DataElement de; // = si;
   bool isBroken = false;
-  if( _val.SequenceLengthField == 0xFFFFFFFF)
+  if( SequenceLengthField == 0xFFFFFFFF)
     {
     while( _os >> de ) // Read Tag only
       {
@@ -64,11 +75,11 @@ DICOMIStream& operator>>(DICOMIStream &_os, SequenceOfItems<DEType> &_val)
         isBroken = true;
         break;
         }
-      Item<DEType> si; // = _val.SequenceItemField;
+      Item<DEType> si; // = SequenceItemField;
       assert( si.GetTag() == de.GetTag() ); // Should be an Item Start
       assert( si.GetTag() == itemStart );
       _os >> si;
-      _val.Items.push_back( si );
+      Items.push_back( si );
       }
     if( !isBroken )
       {
@@ -78,30 +89,32 @@ DICOMIStream& operator>>(DICOMIStream &_os, SequenceOfItems<DEType> &_val)
   else
     {
     // Defined length, just read the SQItem
-    std::cerr << "Debug: _val.SequenceLengthField=" 
-              << _val.SequenceLengthField << std::endl;
+    std::cerr << "Debug: SequenceLengthField=" 
+              << SequenceLengthField << std::endl;
     uint32_t seq_length = 0;
-    while( seq_length != _val.SequenceLengthField )
+    while( seq_length != SequenceLengthField )
       {
       _os >> de;
       if( de.GetTag() != itemStart )
         {
         std::cerr << "BUGGY header" << std::endl;
-        _os.Seekg( _val.SequenceLengthField - 4, std::ios::cur );
+        _os.Seekg( SequenceLengthField - 4, std::ios::cur );
         break;
         }
-      Item<DEType> si; // = _val.SequenceItemField;
+      Item<DEType> si; // = SequenceItemField;
       _os >> si;
-      _val.Items.push_back( si );
+      Items.push_back( si );
       // Sequence Length = Item Tag Length + Sequence Value Length
       seq_length += de.GetTag().GetLength() + 4;
       seq_length += si.GetLength();
       std::cerr << "Debug: seq_length="  << seq_length << std::endl;
-      assert( seq_length <= _val.SequenceLengthField );
+      assert( seq_length <= SequenceLengthField );
       }
     }
   return _os;
 }
-}
+
+} // end namespace gdcm
+
 #endif //__gdcmSequenceOfItems_txx
 

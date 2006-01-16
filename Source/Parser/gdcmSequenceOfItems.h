@@ -63,6 +63,10 @@ public:
 /// \brief Appends an Item to the already added ones
   void AddItem(Item<DEType> const &item);
 
+protected:
+  DICOMOStream& Write(DICOMOStream& _os) const;
+  DICOMIStream& Read(DICOMIStream& _os);
+
 private:
   /// \brief Total length of the Sequence (or 0xffffffff) if undefined
   uint32_t SequenceLengthField;
@@ -91,7 +95,6 @@ inline std::ostream& operator<<(std::ostream& _os, const SequenceOfItems<DEType>
     }
   return _os;
 }
-
 
 } // end namespace gdcm
 

@@ -7,75 +7,85 @@ namespace gdcm
 //-----------------------------------------------------------------------------
 DICOMOStream& operator<<(DICOMOStream &_os, const ExplicitDataElement &_val)
 {
-  //const DataElement &de = _val;
+  return _val.Write(_os);
+}
+
+DICOMOStream& ExplicitDataElement::Write(DICOMOStream &_os) const
+{
+  //const DataElement &de = 
   //_os << de;
-  _os.Write(_val.VRField);
+  _os.Write(VRField);
   // See PS 3.5, Date Element Structure With Explicit VR
-  if( _val.VRField == VR::OB
-   || _val.VRField == VR::OW
-   || _val.VRField == VR::OF
-   || _val.VRField == VR::SQ
-   || _val.VRField == VR::UN )
+  if( VRField == VR::OB
+   || VRField == VR::OW
+   || VRField == VR::OF
+   || VRField == VR::SQ
+   || VRField == VR::UN )
     {
     uint16_t check = 0x0;
     _os.Write(check);
     // Write Value Length (32bits)
-    _os.Write(_val.ValueLengthField);
+    _os.Write(ValueLengthField);
     }
-  else if( _val.VRField == VR::UT )
+  else if( VRField == VR::UT )
     {
     uint16_t check = 0x0;
     _os.Write(check);
     // Write Value Length (32bits)
-    assert( _val.ValueLengthField != 0xFFFFFFFF );
-    _os.Write(_val.ValueLengthField);
+    assert( ValueLengthField != 0xFFFFFFFF );
+    _os.Write(ValueLengthField);
     }
   else
     {
-    uint16_t vl = _val.ValueLengthField;
+    uint16_t vl = ValueLengthField;
     // Write Value Length (16bits)
     _os.Write(vl);
     }
   // We have the length we should be able to write the value
-  _os.Write(_val.ValueField);
+  _os.Write(ValueField);
   return _os;
 }
 
 //-----------------------------------------------------------------------------
 DICOMIStream& operator>>(DICOMIStream &_os, ExplicitDataElement &_val)
 {
+  return _val.Read(_os);
+}
+
+DICOMIStream& ExplicitDataElement::Read(DICOMIStream &_os)
+{
   // See PS 3.5, Date Element Structure With Explicit VR
   // Read Tag
-  //if( !_os.Read(_val.TagField) ) return _os;
+  //if( !_os.Read(TagField) ) return _os;
   //static Dict d;
-  //const DictEntry &de = d.GetDictEntry(_val.TagField);
+  //const DictEntry &de = d.GetDictEntry(TagField);
   // Read VR
-  if( !(_os.Read(_val.VRField)) ) return _os;
-//  if( !(de.GetVR() & _val.VRField) && de.GetVR() != VR::INVALID )
+  if( !(_os.Read(VRField)) ) return _os;
+//  if( !(de.GetVR() & VRField) && de.GetVR() != VR::INVALID )
 //    {
-//    std::cerr << "BUGGY VR for Tag: " << _val.TagField << " : " << VR::GetVRString(_val.VRField)
+//    std::cerr << "BUGGY VR for Tag: " << TagField << " : " << VR::GetVRString(VRField)
 //      << " should be: " << VR::GetVRString(de.GetVR()) << std::endl;
 //    }
-  if( _val.VRField == VR::OB
-   || _val.VRField == VR::OW
-   || _val.VRField == VR::OF
-   || _val.VRField == VR::SQ
-   || _val.VRField == VR::UN )
+  if( VRField == VR::OB
+   || VRField == VR::OW
+   || VRField == VR::OF
+   || VRField == VR::SQ
+   || VRField == VR::UN )
     {
     uint16_t check;
     _os.Read(check);
     assert( check == 0x0 );
     // Read Value Length (32bits)
-    _os.Read(_val.ValueLengthField);
+    _os.Read(ValueLengthField);
     }
-  else if( _val.VRField == VR::UT )
+  else if( VRField == VR::UT )
     {
     uint16_t check;
     _os.Read(check);
     assert( check == 0x0 );
     // Read Value Length (32bits)
-    _os.Read(_val.ValueLengthField);
-    assert( _val.ValueLengthField != 0xFFFFFFFF );
+    _os.Read(ValueLengthField);
+    assert( ValueLengthField != 0xFFFFFFFF );
     }
   else
     {
@@ -83,7 +93,7 @@ DICOMIStream& operator>>(DICOMIStream &_os, ExplicitDataElement &_val)
     uint16_t vl;
     // Read Value Length (16bits)
     _os.Read(vl);
-    if( _val.VRField == VR::UL )
+    if( VRField == VR::UL )
       {
       if(vl == 6)
         {
@@ -101,7 +111,7 @@ DICOMIStream& operator>>(DICOMIStream &_os, ExplicitDataElement &_val)
 //#define BIG_HACK2
 #ifdef BIG_HACK // Trying to read NM_FromJulius_Caesar.dcm
     const Tag bug(0x0054,0x0200);
-    if( _val.TagField == bug )
+    if( TagField == bug )
       {
       vl = 20;
       }
@@ -116,51 +126,51 @@ DICOMIStream& operator>>(DICOMIStream &_os, ExplicitDataElement &_val)
         vl = 240;
         }
       const Tag bug(0x0019,0x1313);
-      if(_val.TagField == bug)
+      if(TagField == bug)
         {
         assert( vl == 6 );
         vl = 7;
         }
 #endif
-    _val.ValueLengthField = vl;
+    ValueLengthField = vl;
     }
   // Read the Value
-  if( _val.VRField == VR::SQ )
+  if( VRField == VR::SQ )
     {
     // Check wether or not this is an undefined length sequence
-    SequenceOfItems<ExplicitDataElement> si( _val.ValueLengthField  );
+    SequenceOfItems<ExplicitDataElement> si( ValueLengthField  );
     _os >> si;
     }
-  else if( _val.ValueLengthField == 0xFFFFFFFF )
+  else if( ValueLengthField == 0xFFFFFFFF )
     {
     // Ok this is Pixel Data fragmented...
     const Tag pixelData(0x7fe0,0x0010);
-    assert( _val.VRField == VR::OB 
-         || _val.VRField == VR::OW );
-    assert( _val.TagField == pixelData );
+    assert( VRField == VR::OB 
+         || VRField == VR::OW );
+    assert( TagField == pixelData );
     SequenceOfItems<ExplicitDataElement> si;
     _os >> si;
     }
   else
     {
-    assert (_val.ValueLengthField != 0xFFFF ); // ??
+    assert (ValueLengthField != 0xFFFF ); // ??
     // We have the length we should be able to read the value
-    if( _val.ValueLengthField < 0xfff )
+    if( ValueLengthField < 0xfff )
       {
-      _val.ValueField.SetLength(_val.ValueLengthField); // perform realloc
-      _os.Read(_val.ValueField);
+      ValueField.SetLength(ValueLengthField); // perform realloc
+      _os.Read(ValueField);
       }
     else
       {
 #ifdef BIG_HACK2
-      _val.ValueField.SetLength(_val.ValueLengthField);
-      _os.Read(_val.ValueField);
+      ValueField.SetLength(ValueLengthField);
+      _os.Read(ValueField);
       std::ofstream f("/tmp/pixel.raw");
-      f.write(_val.ValueField.GetPointer(), _val.ValueField.GetLength());
+      f.write(ValueField.GetPointer(), ValueField.GetLength());
       f.close();
       _os.Seekg(0, std::ios::end); // FIXME garbage at the end...
 #else
-      _os.Seekg(_val.ValueLengthField, std::ios::cur);
+      _os.Seekg(ValueLengthField, std::ios::cur);
 #endif
       }
     }

@@ -39,6 +39,10 @@ public:
     return DataElement::GetLength() + sizeof(ValueLengthField) + ValueLengthField;
     }
 
+protected:
+  DICOMOStream& Write(DICOMOStream& _os) const;
+  DICOMIStream& Read(DICOMIStream& _os);
+
 private:
 };
 //-----------------------------------------------------------------------------
