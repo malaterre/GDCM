@@ -11,8 +11,8 @@ namespace gdcm
 {
 
 /**
- * \brief Class to represent a Data Element Tag (Group, Element).
- * Basically an uint32_t or expressed as two uint16_t (group and element)
+ * \brief Class to represent a DICOM Data Element (Attribute) Tag (Group, Element).
+ * Basically an uint32_t which can also be expressed as two uint16_t (group and element)
  * \note bla
  */
 class GDCM_EXPORT Tag
@@ -137,6 +137,9 @@ public:
     }
   // Should be always true
   uint32_t GetLength() const { return 4; }
+
+  // Is the Tag from the Public dict
+  bool IsPublic() const { return ElementTag.tags[0] % 2; }
 
 private:
   //uint16_t ElementTag[2]; // Group, Element
