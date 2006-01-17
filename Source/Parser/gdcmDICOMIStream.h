@@ -27,6 +27,11 @@ public:
   DICOMIStream() { NegociatedTS = Unknown; }
   ~DICOMIStream() {};
 
+  // The following methods are public.
+  // DO NOT EXPECT TO REMAIN LIKE THAT
+  // indeed there is multiple problem:
+  // - Expose to much of internals for users
+  // - VS6 cannot deal with templated method in non-templated class
   // Read a tag from the IStream
   IStream &Read(Tag &t) throw (std::exception);
 
