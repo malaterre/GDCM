@@ -30,7 +30,7 @@ int TestDataElement(int , char *[])
   is.SetFileName("/tmp/bla.bin");
   is.Open();
   gdcm::ExplicitDataElement de;
-  is >> de;
+  is.Read(de);
   is.Close();
 
   std::cout << de << std::endl;

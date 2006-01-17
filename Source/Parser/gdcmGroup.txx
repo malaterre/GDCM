@@ -28,37 +28,6 @@ uint32_t Group<DEType>::GetLength() const
   return length;
 }
 
-template<class DEType>
-DICOMIStream& operator>>(DICOMIStream& _os, Group<DEType> &_val)
-{
-  DEType de;
-  DataElement &de_tag = de;
-  bool initialized = false;
-  while( !_os.eof() && _os >> de_tag )
-    {
-    if(!initialized)
-      {
-      _val.SetNumber(de_tag.GetTag().GetGroup());
-      initialized = true;
-      }
-    else
-      {
-      if( de_tag.GetTag().GetGroup() != _val.Number )
-        {
-        // Seek back
-        _os.Seekg( -4 /*de_tag.GetLength()*/, std::ios::cur);
-        break;
-        }
-      }
-    if( !(_os >> de) )
-      {
-      assert( 0 && "Impossible" );
-      }
-    _val.AddDataElement(de);
-    }
-
-  return _os;
-}
 
 template<class DEType>
 DICOMOStream& operator<<(DICOMOStream& _os, const Group<DEType> &_val)

@@ -1,6 +1,9 @@
 // generated file
 #include "gdcmDataImages.h"
 
+#include "gdcmDICOMIStream.h"
+#include "gdcmExplicitDataElement.h"
+#include "gdcmImplicitDataElement.h"
 #include "gdcmGroup.txx"
 
 template<class DEType>
@@ -9,7 +12,7 @@ void ReadGroups(gdcm::DICOMIStream &is)
   while( !is.eof())
     {
     gdcm::Group<DEType> g;
-    is >> g;
+    is.Read(g);
     std::cout << g << std::endl;
     }
 }

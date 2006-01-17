@@ -12,7 +12,7 @@
 #include "gdcmType.h"
 #include "gdcmTag.h"
 #include "gdcmValue.h"
-#include "gdcmDICOMIStream.h"
+//#include "gdcmDICOMIStream.h"
 #include "gdcmDICOMOStream.h"
 
 namespace gdcm
@@ -31,7 +31,8 @@ public:
   virtual ~DataElement() {}
 
   friend std::ostream& operator<<(std::ostream &_os, const DataElement &_val);
-  friend DICOMIStream& operator>>(DICOMIStream &_os, DataElement &_val);
+  //friend DICOMIStream& operator>>(DICOMIStream &_os, DataElement &_val);
+  friend class DICOMIStream;
   friend DICOMOStream& operator<<(DICOMOStream &_os, const DataElement &_val);
 
   const Tag& GetTag() const { return TagField; }
@@ -62,6 +63,8 @@ public:
     }
 
 protected:
+  //DICOMIStream& Read(DICOMIStream &) { abort(); };
+
   Tag TagField;
   Value ValueField;
   // Value could be NULL if we don't read it, therefore we need an offset
@@ -72,14 +75,6 @@ protected:
 inline std::ostream& operator<<(std::ostream &_os, const DataElement &_val)
 {
   _os << _val.TagField << " VLgt=" << _val.ValueLengthField ; 
-  return _os;
-}
-//-----------------------------------------------------------------------------
-inline DICOMIStream& operator>>(DICOMIStream &_os, DataElement &_val)
-{
-  // Read Tag
-  assert( !_os.eof() ); // FIXME
-  if( !_os.Read(_val.TagField) ) return _os;
   return _os;
 }
 

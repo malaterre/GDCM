@@ -3,7 +3,7 @@
 #define __gdcmItem_h
 
 #include "gdcmDataElement.h"
-#include "gdcmDICOMIStream.h"
+//#include "gdcmDICOMIStream.h"
 #include "gdcmDICOMOStream.h"
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
@@ -17,14 +17,11 @@ class Item;
 template<class DEType>
 std::ostream& operator<<(std::ostream& _os, const Item<DEType> &_val);
 
-template<class DEType>
-DICOMIStream& operator>>(DICOMIStream& _os, Item<DEType> &_val);
+//template<class DEType>
+//DICOMIStream& operator>>(DICOMIStream& _os, Item<DEType> &_val);
 
 template<class DEType>
 DICOMOStream& operator<<(DICOMOStream& _os, const Item<DEType> &_val);
-
-// Sequence Item (Items within a SQ)
-template<class DEType> // DataElementType
 
 /**
  * \brief Class to represent an Item
@@ -38,13 +35,17 @@ template<class DEType> // DataElementType
  * \note bla
  */
 
+// Sequence Item (Items within a SQ)
+template<class DEType> // DataElementType
+
 class GDCM_EXPORT Item : public DataElement
 {
 public:
   Item(uint32_t length = 0xFFFFFFFF) { TagField = Tag(0xfffe,0xe000); ItemLengthField = length; }
 
   friend std::ostream& operator<< < >(std::ostream& _os, const Item<DEType> &_val);
-  friend DICOMIStream& operator>> < >(DICOMIStream& _os, Item<DEType> &_val);
+  //friend DICOMIStream& operator>> < >(DICOMIStream& _os, Item<DEType> &_val);
+  friend class DICOMIStream;
   friend DICOMOStream& operator<< < >(DICOMOStream& _os, const Item<DEType> &_val);
 
   uint32_t GetLength() { 

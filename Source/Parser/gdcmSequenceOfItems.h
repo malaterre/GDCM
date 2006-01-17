@@ -3,7 +3,7 @@
 #define __gdcmSequenceOfItems_h
 
 #include "gdcmType.h"
-#include "gdcmDICOMIStream.h"
+//#include "gdcmDICOMIStream.h"
 #include "gdcmDICOMOStream.h"
 #include "gdcmItem.h"
 #include <vector>
@@ -16,8 +16,8 @@ class SequenceOfItems;
 template<class DEType>
 std::ostream& operator<<(std::ostream& _os, const SequenceOfItems<DEType> &_val);
 
-template<class DEType>
-DICOMIStream& operator>>(DICOMIStream& _os, SequenceOfItems<DEType> &_val);
+//template<class DEType>
+//DICOMIStream& operator>>(DICOMIStream& _os, SequenceOfItems<DEType> &_val);
 
 template<class DEType>
 DICOMOStream& operator<<(DICOMOStream& _os, const SequenceOfItems<DEType> &_val);
@@ -44,7 +44,8 @@ public:
   typedef std::vector<Item<DEType> > ItemVector;
 
   friend std::ostream& operator<< < >(std::ostream& _os, const SequenceOfItems<DEType> &_val);
-  friend DICOMIStream& operator>> < >(DICOMIStream& _os, SequenceOfItems<DEType> &_val);
+  //friend DICOMIStream& operator>> < >(DICOMIStream& _os, SequenceOfItems<DEType> &_val);
+  friend class DICOMIStream;
   friend DICOMOStream& operator<< < >(DICOMOStream& _os, const SequenceOfItems<DEType> &_val);
 
   /// \brief Returns the SQ length, as read from disk
@@ -65,7 +66,7 @@ public:
 
 protected:
   DICOMOStream& Write(DICOMOStream& _os) const;
-  DICOMIStream& Read(DICOMIStream& _os);
+  //DICOMIStream& Read(DICOMIStream& _os);
 
 private:
   /// \brief Total length of the Sequence (or 0xffffffff) if undefined

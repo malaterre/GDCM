@@ -3,7 +3,7 @@
 #define __gdcmExplicitDataElement_h
 
 #include "gdcmDataElement.h"
-#include "gdcmDICOMIStream.h"
+//#include "gdcmDICOMIStream.h"
 #include "gdcmDICOMOStream.h"
 #include "gdcmVR.h"
 
@@ -20,7 +20,8 @@ public:
   ExplicitDataElement() { ValueLengthField = 0; VRField = VR::INVALID; }
 
   friend std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_val);
-  friend DICOMIStream& operator>>(DICOMIStream& _os, ExplicitDataElement &_val);
+//  friend DICOMIStream& operator>>(DICOMIStream& _os, ExplicitDataElement &_val);
+  friend class DICOMIStream;
   friend DICOMOStream& operator<<(DICOMOStream& _os, const ExplicitDataElement &_val);
 
   uint32_t GetValueLength() { return ValueLengthField; }
@@ -34,7 +35,7 @@ public:
   uint32_t GetLength() const { return ComputeLength(); }
 
 protected:
-  DICOMIStream& Read(DICOMIStream &_os);
+  //DICOMIStream& Read(DICOMIStream &_os);
   DICOMOStream& Write(DICOMOStream &_os) const;
 
   uint32_t ComputeLength() const

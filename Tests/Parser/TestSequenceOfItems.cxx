@@ -1,3 +1,5 @@
+#include "gdcmExplicitDataElement.h"
+#include "gdcmImplicitDataElement.h"
 #include "gdcmSequenceOfItems.txx"
 
 template<class DEType>

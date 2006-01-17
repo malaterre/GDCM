@@ -50,7 +50,7 @@ public:
   // EXPENSIVE call
   void InsertGroup(const Group<DEType>& group)
     {
-    uint16_t group_number = group.GetNumber();
+    const uint16_t group_number = group.GetNumber();
     typename GroupVector::iterator it = Groups.begin();
     while(it->GetNumber() < group_number && it != Groups.end())
       {

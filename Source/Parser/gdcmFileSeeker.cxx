@@ -16,7 +16,7 @@ bool SkipGroup(FileSeeker &is)
 
   std::streampos offset = is.Tellg();
   std::streampos last_offset = offset; // last valid offset to do seek back
-  is >> de_tag;
+  is.Read(de_tag);
   while( !is.eof() )
     {
     uint16_t current_group = de_tag.GetTag().GetGroup();
@@ -26,7 +26,7 @@ bool SkipGroup(FileSeeker &is)
     if( current_element == 0x0 )
       {
       // Great let's use the length
-      is >> de;
+      is.Read(de);
       uint32_t length;
       if( de.GetValue().GetLength() == 4)
         memcpy(&length, de.GetValue().GetPointer(), 4);
@@ -43,7 +43,7 @@ bool SkipGroup(FileSeeker &is)
       is.Seekg( length, std::ios::cur );
       last_offset = offset;
       offset = is.Tellg();
-      is >> de_tag;
+      is.Read(de_tag);
       if( is.eof() ) break;
       if( de_tag.GetTag().GetGroup() <= current_group 
         || de_tag.GetTag().GetElement() != 0x0 )
@@ -75,11 +75,11 @@ bool SeekGroup(FileSeeker &is)
   gdcm::DataElement &de_tag = de;
 
   uint16_t last_group = 0x0;
-  while( !is.eof() && is >> de_tag )
+  while( !is.eof() && is.Read(de_tag) )
     {
     std::streampos offset = is.Tellg();
     offset -= de_tag.GetLength();
-    is >> de; // FIXME de.Skip(is);
+    is.Read(de); // FIXME de.Skip(is);
     //std::cout << "DE : " << de << std::endl;
     uint16_t current_group = de_tag.GetTag().GetGroup();
     if( current_group != last_group )
@@ -129,7 +129,7 @@ bool SeekElements(DICOMIStream &is, const Tag& tag)
   DEType de;
   DataElement &de_tag = de;
   bool success = false;
-  while(!is.eof() && is >> de_tag)
+  while(!is.eof() && is.Read(de_tag) )
     {
     if( de_tag.GetTag().GetGroup() != tag.GetGroup() )
       break;
@@ -138,7 +138,7 @@ bool SeekElements(DICOMIStream &is, const Tag& tag)
     assert( de_tag.GetTag().GetGroup() == tag.GetGroup() );
     assert( de_tag.GetTag().GetElement() <= tag.GetElement() ); // redundant ??
     if( de_tag.GetTag() != tag )
-      is >> de; // FIXME is.Skip(de);
+      is.Read(de); // FIXME is.Skip(de);
     else
       {
       success = true;
@@ -153,7 +153,7 @@ void ReadElements(DICOMIStream &is, DEType& de)
 {
   const Tag tag = de.GetTag(); // Save the tag to search
   DataElement &de_tag = de;
-  while(!is.eof() && is >> de_tag)
+  while(!is.eof() && is.Read(de_tag) )
     {
     //std::cerr << "Reading: " << de_tag << std::endl;
     if( de_tag.GetTag().GetGroup() != tag.GetGroup() )
@@ -164,11 +164,11 @@ void ReadElements(DICOMIStream &is, DEType& de)
     assert( de_tag.GetTag().GetElement() <= tag.GetElement() ); // redundant ??
     if( de_tag.GetTag() != tag )
       {
-      is >> de; // FIXME de.Skip(is);
+      is.Read(de); // FIXME de.Skip(is);
       }
     else
       {
-      is >> de;
+      is.Read(de);
       break;
       }
     }

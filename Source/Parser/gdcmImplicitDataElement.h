@@ -2,7 +2,6 @@
 #ifndef __gdcmImplicitDataElement_h
 #define __gdcmImplicitDataElement_h
 
-
 #include "gdcmDataElement.h"
 
 namespace gdcm
@@ -17,7 +16,8 @@ public:
   ImplicitDataElement() { ValueLengthField = 0; }
 
   friend std::ostream& operator<<(std::ostream& _os, const ImplicitDataElement &_val);
-  friend DICOMIStream& operator>>(DICOMIStream& _os, ImplicitDataElement &_val);
+  //friend DICOMIStream& operator>>(DICOMIStream& _os, ImplicitDataElement &_val);
+  friend class DICOMIStream;
   friend DICOMOStream& operator<<(DICOMOStream& _os, const ImplicitDataElement &_val);
 
   uint32_t GetValueLength() const { return ValueLengthField; }
@@ -41,7 +41,7 @@ public:
 
 protected:
   DICOMOStream& Write(DICOMOStream& _os) const;
-  DICOMIStream& Read(DICOMIStream& _os);
+  //DICOMIStream& Read(DICOMIStream& _os);
 
 private:
 };

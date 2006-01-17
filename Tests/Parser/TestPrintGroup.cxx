@@ -6,6 +6,7 @@
 #include "gdcmByteSwap.txx"
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
+#include "gdcmDICOMIStream.h"
 
 uint32_t ReadLength(const char *value, gdcm::SC::SwapCodeType swapcode)
 {
@@ -29,9 +30,9 @@ int PrintGroup(gdcm::DICOMIStream &is, int group_number)
   bool group_length_present = false;
   uint32_t group_length = 0;
 
-  while( !is.eof() && is >> de_tag )
+  while( !is.eof() && is.Read(de_tag) )
     {
-    is >> de;
+    is.Read(de);
     if ( de.GetTag().GetGroup() == group_number )
       {
       if( de.GetTag().GetElement() == 0x0000 )

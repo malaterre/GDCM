@@ -12,14 +12,14 @@ void CheckSeek(gdcm::FileSeeker &f)
     {
     gdcm::ExplicitDataElement de;
     gdcm::DataElement &tag = de;
-    f >> tag >> de;
+    f.Read(tag); f.Read(de);
     std::cout << "DE: " << de << std::endl;
     }
   else
     {
     gdcm::ImplicitDataElement de;
     gdcm::DataElement &tag = de;
-    f >> tag >> de;
+    f.Read(tag); f.Read(de);
     std::cout << "DE: " << de << std::endl;
     }
 }

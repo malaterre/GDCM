@@ -6,6 +6,11 @@
 #include "gdcmTag.h"
 #include "gdcmVR.h"
 #include "gdcmValue.h"
+#include "gdcmImplicitDataElement.h"
+#include "gdcmExplicitDataElement.h"
+#include "gdcmSequenceOfItems.h"
+#include "gdcmItem.h"
+#include "gdcmGroup.h"
 #include <exception>
 
 namespace gdcm
@@ -37,6 +42,16 @@ public:
   // Read a Value from the Stream
   // The Value cannot be Undefined Length
   IStream &Read(Value &v);
+
+  IStream& Read(DataElement& da);
+  IStream& Read(ExplicitDataElement &xda);
+  IStream& Read(ImplicitDataElement &ida);
+  template<class DEType>
+  IStream& Read(SequenceOfItems<DEType> &_sq);
+  template<class DEType>
+  DICOMIStream& Read(Item<DEType> &_val);
+  template<class DEType>
+  IStream& Read(Group<DEType> &_val);
 
   void Initialize();
 

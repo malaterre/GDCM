@@ -1,6 +1,7 @@
 #include "gdcmDataSet.txx"
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
+#include "gdcmDICOMIStream.h"
 
 int TestDataSet(int argc, char *argv[])
 {
@@ -51,9 +52,9 @@ int TestDataSet(int argc, char *argv[])
 
   std::cout << "Printing result:" << std::endl;
   gdcm::DataElement &de_tag = de;
-  while( Is >> de_tag )
+  while( Is.Read(de_tag) )
     {
-    Is >> de;
+    Is.Read(de);
     assert( !(Is.eof()));
     std::cout << de << std::endl;
     Os << de;

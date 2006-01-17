@@ -5,6 +5,7 @@
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
 #include "gdcmTS.h"
+#include "gdcmDICOMIStream.h"
 
 template<class DEType>
 void PrintDataElements(gdcm::DICOMIStream &is)
@@ -14,9 +15,9 @@ void PrintDataElements(gdcm::DICOMIStream &is)
 
   try
     {
-    while( !is.eof() && is >> de_tag )
+    while( !is.eof() && is.Read(de_tag) )
       {
-      is >> de;
+      is.Read(de);
       std::cerr << de << std::endl;
       }
     }

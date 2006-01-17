@@ -20,7 +20,7 @@ SET(TEST_SRCS
   TestGroupDict
   TestPrintGroup
   TestGroupSet
-  TestAllReadGroup
+  #TestAllReadGroup
   TestItem
   TestFileSeeker
   TestDirectory

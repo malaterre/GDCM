@@ -19,8 +19,8 @@ class Group;
 template<class DEType>
 std::ostream& operator<<(std::ostream& _os, const Group<DEType> &_val);
 
-template<class DEType>
-DICOMIStream& operator>>(DICOMIStream& _os, Group<DEType> &_val);
+//template<class DEType>
+//DICOMIStream& operator>>(DICOMIStream& _os, Group<DEType> &_val);
 
 template<class DEType>
 DICOMOStream& operator<<(DICOMOStream& _os, const Group<DEType> &_val);
@@ -34,13 +34,14 @@ public:
   typedef typename std::vector<DEType> ElementsVector;
 
   friend std::ostream& operator<< < >(std::ostream& _os, const Group<DEType>&_val);
-  friend DICOMIStream& operator>> < >(DICOMIStream& _os, Group<DEType> &_val);
+  //friend DICOMIStream& operator>> < >(DICOMIStream& _os, Group<DEType> &_val);
+  friend class DICOMIStream;
   friend DICOMOStream& operator<< < >(DICOMOStream& _os, const Group<DEType> &_val);
 
   void SetNumber(uint16_t gnum) { Number = gnum; }
   uint16_t GetNumber() const { return Number; }
 
-  void AddDataElement(const DEType&_el)
+  void AddDataElement(const DEType& _el)
     {
     assert( _el.GetTag().GetGroup() == Number);
     Tags.push_back( _el );
