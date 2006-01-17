@@ -17,9 +17,10 @@ class GDCM_EXPORT Loader : public DICOMIStream
 public:
   Loader() {}
   ~Loader() {};
-  void Read();
+  void Update();
 
 protected:
+private:
 };
 
 } // end namespace gdcm

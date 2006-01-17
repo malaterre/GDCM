@@ -67,6 +67,7 @@ SET(SRCS
   #gdcmSequenceDataElement.cxx
   #gdcmSequenceItem.cxx
   gdcmFileSeeker.cxx
+  gdcmLoader.cxx
   "${GDCM_BINARY_DIR}/Source/Parser/gdcmDefaultDicts.cxx"
   "${GDCM_BINARY_DIR}/Source/Parser/gdcmDefaultGroupNames.cxx"
   )
