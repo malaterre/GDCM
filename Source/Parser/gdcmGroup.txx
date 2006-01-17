@@ -4,8 +4,6 @@
 
 #include "gdcmGroup.h"
 #include "gdcmDataElement.h"
-#include "gdcmExplicitDataElement.h"
-#include "gdcmImplicitDataElement.h"
 
 namespace gdcm
 {
@@ -19,6 +17,7 @@ uint32_t Group<DEType>::GetLength() const
   for(typename ElementsVector::const_iterator it = Tags.begin();
     it != Tags.end(); ++it)
     {
+    // Do not count Group Length Element
     if( it->GetTag().GetElement() != 0x0000 )
       {
       // length is length of each DataElement
