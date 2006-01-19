@@ -25,6 +25,7 @@ SET(TEST_SRCS
   TestFileSeeker
   TestDirectory
   TestAllPrintUID
+  TestLoader
   )
 
 # Add the include paths

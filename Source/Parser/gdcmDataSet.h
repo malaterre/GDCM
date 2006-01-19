@@ -3,8 +3,8 @@
 #define __gdcmDataSet_h
 
 
-
 #include "gdcmDataElement.h"
+#include "gdcmGroup.h"
 #include <map>
 
 namespace gdcm
@@ -34,22 +34,23 @@ class GDCM_EXPORT DataSet
 public:
   DataSet() {}
 
-  typedef typename std::map<Tag, DEType> ElementsMap;
+  // Structured Set of Attribute values
+  typedef typename std::map<Tag, DEType> StructuredSet;
   friend std::ostream& operator<< < >(std::ostream &_os, const DataSet<DEType> &_val);
 
   void AddDataElement(const DEType& de)
     {
-    // FIXME warn if about to enter duplicate ?
+    // FIXME warn if about to enter duplicate ? or compile only in debug mode ?
 #ifndef NDEBUG
-    typename ElementsMap::const_iterator it = DataElements.find(de.GetTag());
+    typename StructuredSet::const_iterator it = DataElements.find(de.GetTag());
     assert (it == DataElements.end());
 #endif
     DataElements.insert(typename
-      ElementsMap::value_type(de.GetTag(), de));
+      StructuredSet::value_type(de.GetTag(), de));
     }
   const DEType& GetDataElement(const Tag &t) const
     {
-    typename ElementsMap::const_iterator it = DataElements.find(t);
+    typename StructuredSet::const_iterator it = DataElements.find(t);
     if (it == DataElements.end())
       {
       assert( 0 && "Impossible" );
@@ -61,13 +62,19 @@ public:
   bool IsEmpty() { return DataElements.empty(); }
 
 private:
-  ElementsMap DataElements;
+  // Meta-Information Header, technically this is only needed for DICOM
+  // an ACR NEMA file should not need to define this as the Transfer Syntax
+  // remains the same all along the DICOM file
+  // Therefore you can assume that MetaInformation and DataElements have two
+  // different Transfer Syntax
+  Group<DEType> MetaInformation; // Basically group 0002
+  StructuredSet DataElements;
 };
 //-----------------------------------------------------------------------------
 template<class DEType>
 inline std::ostream& operator<<(std::ostream &_os, const DataSet<DEType> &_val)
 {
-  typename DataSet<DEType>::ElementsMap::const_iterator it = _val.DataElements.begin();
+  typename DataSet<DEType>::StructuredSet::const_iterator it = _val.DataElements.begin();
   for(;
     it != _val.DataElements.end();
     ++it)

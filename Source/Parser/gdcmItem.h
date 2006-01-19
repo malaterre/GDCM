@@ -68,6 +68,18 @@ public:
     return NestedDataSet.GetDataElement(t);
     }
 
+  // Completely defines it with the nested dataset
+  // destroy anything present
+  void SetNestedDataSet(const DataSet<DEType>& nested)
+    {
+    NestedDataSet = nested;
+    }
+  // Return a const ref to the Nested Data Set
+  const DataSet<DEType>& GetNestedDataSet() const
+    {
+    return NestedDataSet;
+    }
+
 private:
   // This is the value read from the file, might either be a defined lenght
   // or undefined

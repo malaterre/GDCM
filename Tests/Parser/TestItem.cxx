@@ -80,5 +80,6 @@ int TestItem(int , char *[])
   std::cout << "Implicit" << std::endl;
   PrintUndefinedItem<gdcm::ImplicitDataElement>();
 
+  // TODO do testing of passing/getting NestedDataSet
   return 0;
 }
