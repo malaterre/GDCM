@@ -64,91 +64,133 @@ From (PS 3.5-2004), Page 14-16
 
 3.10 DICOM DATA STRUCTURES AND ENCODING DEFINITIONS
 The following definitions are commonly used in this Standard:
-BASIC OFFSET TABLE: A table of pointers to individual frames of an encapsulated multi-frame image.
-BIG ENDIAN: A form of byte ordering where multiple byte binary values are encoded with the most
+
+BASIC OFFSET TABLE: 
+A table of pointers to individual frames of an encapsulated multi-frame image.
+
+BIG ENDIAN: 
+A form of byte ordering where multiple byte binary values are encoded with the most
 significant byte encoded first, and the remaining bytes encoded in decreasing order of significance.
-CHARACTER REPERTOIRE: A finite set of different characters that is considered to be complete for a
+
+CHARACTER REPERTOIRE: 
+A finite set of different characters that is considered to be complete for a
 given purpose and is specified independently of their encoding (also referred to as a character set).
-DATA ELEMENT: A unit of information as defined by a single entry in the data dictionary. An encoded
+
+DATA ELEMENT: 
+A unit of information as defined by a single entry in the data dictionary. An encoded
 Information Object Definition (IOD) Attribute that is composed of, at a minimum, three fields: a Data
 Element Tag, a Value Length, and a Value Field. For some specific Transfer Syntaxes, a Data Element
 also contains a VR Field where the Value Representation of that Data Element is specified explicitly.
-DATA ELEMENT TAG: A unique identifier for a Data Element composed of an ordered pair of numbers
+
+DATA ELEMENT TAG: 
+A unique identifier for a Data Element composed of an ordered pair of numbers
 (a Group Number followed by an Element Number).
-DATA ELEMENT TYPE: Used to specify whether an Attribute of an Information Object Definition or an
+
+DATA ELEMENT TYPE: 
+Used to specify whether an Attribute of an Information Object Definition or an
 Attribute of a SOP Class Definition is mandatory, mandatory only under certain conditions, or optional.
 This translates to whether a Data Element of a Data Set is mandatory, mandatory only under certain
 conditions, or optional.
-DATA SET: Exchanged information consisting of a structured set of Attribute values directly or indirectly
+
+DATA SET: 
+Exchanged information consisting of a structured set of Attribute values directly or indirectly
 related to Information Objects. The value of each Attribute in a Data Set is expressed as a Data Element.
 A collection of Data Elements ordered by increasing Data Element Tag number that is an encoding of the
 values of Attributes of a real world object.
+
 DEFINED TERM: The Value of a Data Element is a Defined Term when the Value of the element may be
 one of an explicitly specified set of standard values, and these values may be extended by implementors.
+
 ELEMENT NUMBER: The second number in the ordered pair of numbers that makes up a Data Element
 Tag.
+
 ENUMERATED VALUE: The Value of a Data Element is an Enumerated Value when the value of the
 element must be one of an explicitly specified set of standard values, and these values shall not be
 extended by implementors.
+
 GROUP NUMBER: The first number in the ordered pair of numbers that makes up a Data Element Tag.
+
 ITEM: A component of the Value of a Data Element that is of Value Representation Sequence of Items.
 An Item contains a Data Set.
+
 ITEM DELIMITATION DATA ELEMENT: Used to mark the end of an Item of Undefined Length in a
 Sequence of Items. This is the last Data Element in an Item of Undefined Length.
+
 LITTLE ENDIAN: A form of byte ordering where multiple byte binary values are encoded with the least
 significant byte encoded first; and the remaining bytes encoded in increasing order of significance.
+
 NESTED DATA SET: A Data Set contained within a Data Element of another Data Set. Data Sets can be
 nested recursively. Only Data Elements with Value Representation Sequence of Items may, themselves,
 contain Data Sets.
+
 PIXEL CELL: The container for a single Pixel Sample Value that may include unused bits or bits for data
 other than the Pixel Sample Value (e.g. overlay planes). The size of a Pixel Cell shall be specified by the
 Bits Allocated (0028, 0100) Data Element.
+
 PIXEL DATA: Graphical data (e.g., images or overlays) of variable pixel-depth encoded in the Pixel Data
 Element, with Value Representation OW or OB. Additional descriptor Data Elements are often used to
 describe the contents of the Pixel Data element.
+
 PIXEL SAMPLE VALUE: A value associated with an individual pixel. An individual pixel consists of one
 or more Pixel Sample Values (e.g. color images).
+
 PRIVATE DATA ELEMENT: Additional Data Element, defined by an implementor, to communicate
 information that is not contained in Standard Data Elements. Private Data elements have odd Group
 Numbers.
+
 REPEATING GROUP: Standard Data Elements within a particular range of Group Numbers where
 elements that have identical Element Numbers have the same meaning within each Group (and the same
 VR, VM, and Data Element Type). Repeating Groups shall only exist for Curves and Overlay Planes
 (Group Numbers (50xx,eeee) and (60xx,eeee), respectively) and are a remnant of versions of this
 standard prior to V3.0.
+
 RETIRED DATA ELEMENT: A Data Element that is unsupported beginning with Version 3.0 of this
 standard. Implementations may continue to support Retired Data Elements for the purpose of backward
 compatibility with versions prior to V3.0, but this is not a requirement of this version of the standard.
+
 SEQUENCE DELIMITATION ITEM: Item used to mark the end of a Sequence of Items of Undefined
 Length. This Item is the last Item in a Sequence of Items of Undefined Length.
+
 SEQUENCE OF ITEMS (VALUE REPRESENTATION SQ): A Value Representation for Data Elements
 that contain a sequence of Data Sets. Sequence of Items allows for Nested Data Sets.
+
 STANDARD DATA ELEMENT: A Data Element defined in the DICOM Standard, and therefore listed in
 the DICOM Data Element Dictionary in PS 3.6.
+
 TRANSFER SYNTAX (Standard and Private): A set of encoding rules that allow Application Entities to
 unambiguously negotiate the encoding techniques (e.g., Data Element structure, byte ordering,
 compression) they are able to support, thereby allowing these Application Entities to communicate.
+
 UNDEFINED LENGTH: The ability to specify an unknown length for a Data Element Value (of Value
 Representation SQ, OW, or OB) or Item. Data Elements and Items of Undefined Length are delimited
 with Sequence Delimitation Items and Item Delimiter Data Elements, respectively.
+
 UNIQUE IDENTIFIER (UID): A string of characters that uniquely identifies a wide variety of items;
 guaranteeing uniqueness across multiple countries, sites, vendors and equipment.
+
 VALUE: A component of a Value Field. A Value Field may consist of one or more of these components.
+
 VALUE FIELD: The field within a Data Element that contains the Value(s) of that Data Element.
+
 VALUE LENGTH: The field within a Data Element that contains the length of the Value Field of the Data
 Element.
+
 VALUE MULTIPLICITY (VM): Specifies the number of Values contained in the Value Field of a Data
 Element.
+
 VALUE REPRESENTATION (VR): Specifies the data type and format of the Value(s) contained in the
 Value Field of a Data Element.
+
 VALUE REPRESENTATION FIELD: The field where the Value Representation of a Data Element is
 stored in the encoding of a Data Element structure with explicit VR.
+
 3.11 CHARACTER HANDLING DEFINITIONS
 This part of the standard makes use of the following terms defined in ISO/IEC 2022:1994
 a) Coded Character Set; Code
 b) Code Extension
-c)Control Character
+c) Control Character
 d) To Designate
 e) Escape Sequence
 f) Graphic Character
 g) To Invoke
+
