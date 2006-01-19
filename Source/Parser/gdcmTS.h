@@ -7,6 +7,15 @@
 namespace gdcm
 {
 
+/**
+ * \brief Class to manipulate Transfer Syntax
+ * \note
+ * TRANSFER SYNTAX (Standard and Private): A set of encoding rules that
+ * allow Application Entities to unambiguously negotiate the encoding 
+ * techniques (e.g., Data Element structure, byte ordering, compression) 
+ * they are able to support, thereby allowing these Application Entities
+ * to communicate.
+ */
 class GDCM_EXPORT TS
 {
 public:

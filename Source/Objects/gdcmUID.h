@@ -7,6 +7,11 @@ namespace gdcm
 /**
  * \brief Class for representing a UID
  * \note
+ * UNIQUE IDENTIFIER (UID)
+ * A string of characters that uniquely identifies a wide variety of items;
+ * guaranteeing uniqueness across multiple countries, sites, vendors and 
+ * equipment.
+ * \todo
  * We should copy paste the old code from gdcm
  * including all the crazy stuff for creating new UID (Study, Serie and 
  * maybe SOP Instance UIDs)

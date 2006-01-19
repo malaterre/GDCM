@@ -13,7 +13,14 @@ namespace gdcm
 /**
  * \brief Class to represent a DICOM Data Element (Attribute) Tag (Group, Element).
  * Basically an uint32_t which can also be expressed as two uint16_t (group and element)
- * \note bla
+ * \note
+ * DATA ELEMENT TAG: 
+ * A unique identifier for a Data Element composed of an ordered pair of 
+ * numbers (a Group Number followed by an Element Number).
+ * GROUP NUMBER: The first number in the ordered pair of numbers that makes
+ * up a Data Element Tag.
+ * ELEMENT NUMBER: The second number in the ordered pair of numbers that
+ * makes up a Data Element Tag.
  */
 class GDCM_EXPORT Tag
 {
@@ -138,8 +145,16 @@ public:
   // Should be always true
   uint32_t GetLength() const { return 4; }
 
-  // Is the Tag from the Public dict
+  // STANDARD DATA ELEMENT: A Data Element defined in the DICOM Standard,
+  // and therefore listed in the DICOM Data Element Dictionary in PS 3.6.
+  // Is the Tag from the Public dict...well the implementation is buggy
+  // it does not prove the element is indeed in the dict...
   bool IsPublic() const { return ElementTag.tags[0] % 2; }
+
+  // PRIVATE DATA ELEMENT: Additional Data Element, defined by an 
+  // implementor, to communicate information that is not contained in 
+  // Standard Data Elements. Private Data elements have odd Group Numbers.
+  bool IsPrivate() const { return !IsPublic(); }
 
 private:
   //uint16_t ElementTag[2]; // Group, Element

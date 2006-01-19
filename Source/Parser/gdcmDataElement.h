@@ -5,25 +5,30 @@
 /**
  * \brief Class to represent a Data Element
  * Implicit / Explicit
- * \note bla
+ * \note
+ * DATA ELEMENT: 
+ * A unit of information as defined by a single entry in the data dictionary.
+ * An encoded Information Object Definition (IOD) Attribute that is composed
+ * of, at a minimum, three fields: a Data Element Tag, a Value Length, 
+ * and a Value Field. For some specific Transfer Syntaxes, a Data Element
+ * also contains a VR Field where the Value Representation of that Data 
+ * Element is specified explicitly.
  * \see ExplicitDataElement ImplicitDataElement
  */
 
 #include "gdcmType.h"
 #include "gdcmTag.h"
 #include "gdcmValue.h"
-//#include "gdcmDICOMIStream.h"
 #include "gdcmDICOMOStream.h"
 
 namespace gdcm
 {
 // Data Element
 // Contains multiple fields:
-// -> Tag (not store here since used as key)
-// -> Optional VR
+// -> Tag
+// -> Optional VR (Explicit Transfer Syntax)
 // -> ValueLength
 // -> Value
-/// \TODO Store Offset, to further printing  ?
 class GDCM_EXPORT DataElement
 {
 public:

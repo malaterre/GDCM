@@ -20,7 +20,14 @@ template<class DEType> // DataElementType
 /**
  * \brief Class to represent a Data Set (which contains Data Elements)
  * A Data Set represents an instance of a real world Information Object
- * \note bla
+ * \note
+ * DATA SET: 
+ * Exchanged information consisting of a structured set of Attribute values
+ * directly or indirectly related to Information Objects. The value of each
+ * Attribute in a Data Set is expressed as a Data Element.
+ * A collection of Data Elements ordered by increasing Data Element Tag 
+ * number that is an encoding of the values of Attributes of a real world 
+ * object.
  */
 class GDCM_EXPORT DataSet
 {

@@ -1,12 +1,6 @@
 #ifndef __gdcmVR_h
 #define __gdcmVR_h
 
-/* \brief VR class
- * This is adapated from DICOM standart
- * The biggest difference is the INVALID VR
- * and the composite one that differ from standart (more like an addidtion)
- * This allow us to represent all the possible case express in the DICOMV3 dict
- */
 #include "gdcmType.h"
 #include <iostream>
 #include <assert.h>
@@ -14,6 +8,19 @@
 namespace gdcm
 {
 
+/* \brief VR class
+ * This is adapated from DICOM standart
+ * The biggest difference is the INVALID VR
+ * and the composite one that differ from standart (more like an addidtion)
+ * This allow us to represent all the possible case express in the DICOMV3 dict
+ * \note
+ * VALUE REPRESENTATION (VR)
+ * Specifies the data type and format of the Value(s) contained in the
+ * Value Field of a Data Element.
+ * VALUE REPRESENTATION FIELD:
+ * The field where the Value Representation of a Data Element is
+ * stored in the encoding of a Data Element structure with explicit VR.
+ */
 class GDCM_EXPORT VR 
 {
 public:
