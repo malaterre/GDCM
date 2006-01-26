@@ -113,4 +113,9 @@ bool TS::IsBigEndian(const TSType &ts)
     || ts == ImplicitVRBigEndianPrivateGE;
 }
 
+bool TS::IsDataSetEncoded(const TSType &ts)
+{
+  return ts == DeflatedExplicitVRLittleEndian;
+}
+
 } // end namespace gdcm

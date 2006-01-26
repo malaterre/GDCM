@@ -65,6 +65,9 @@ SET(BLACK_LIST
   "Siemens-leonardo-bugged.dcm"
   "NM_FromJulius_Caesar.dcm"
   "1075235AnouncedAsBigEndianButIsLittleEndian.dcm"
+  "deflate_image_dfl.dcm" # Nasty compressed dataset
+  "deflate_wave_dfl.dcm"
+  "deflate_report_dfl.dcm"
   )
 
 SET(GDCM_DATA_IMAGES)

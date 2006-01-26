@@ -491,6 +491,12 @@ void DICOMIStream::ReadNonStandardDataElements()
           //std::cerr << "TS=" << de.GetValue().GetPointer() << std::endl;
           ts = gdcm::TS::GetTSType( de.GetValue().GetPointer() );
           assert( ts != TS::TS_END );
+          bool isDataSetEncoded = TS::IsDataSetEncoded( ts );
+          if( isDataSetEncoded )
+            {
+            // FIXME gdcm2 does not deal with deflate DataSet
+            Seekg(0, std::ios::end);
+            }
           }
         }
       else

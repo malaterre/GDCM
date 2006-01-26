@@ -50,6 +50,13 @@ public:
   static bool IsImplicit(const TSType &ts);
   static bool IsBigEndian(const TSType &ts);
 
+  // Very special case of the DICOM specification the *whole* dataset
+  // is encoded (typically compressed using the deflate algorithm)
+  // therefore you cannot parse the file out of the box without
+  // first uncompressing it (expensive operation)
+  // TODO: Can we partially uncompress in LZW ?
+  static bool IsDataSetEncoded(const TSType &ts);
+
 };
 
 } // end namespace gdcm
