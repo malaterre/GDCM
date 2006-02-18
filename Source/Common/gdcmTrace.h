@@ -9,6 +9,7 @@
 #include <fstream>
 #include <sstream>
 #include <assert.h>
+#include <errno.h>
 
 namespace gdcm 
 {

@@ -3,7 +3,6 @@
 #include "gdcmImplicitDataElement.h"
 #include "gdcmIStream.h"
 #include "gdcmTrace.h"
-#include <errno.h>
 
 namespace gdcm
 {

@@ -8,6 +8,7 @@
 #include "gdcmSequenceOfItems.txx"
 #include "gdcmItem.txx"
 #include "gdcmGroup.txx"
+#include "gdcmTrace.h"
 
 namespace gdcm
 {
@@ -99,7 +100,7 @@ IStream& DICOMIStream::Read(SequenceOfItems<DEType>& sq)
         // No Value shall be present.
         if( length != 0 ) //*is* always true (hope so!)
           {
-          std::cerr << "Wrong length for Sequence Delimitation Item: " << length; 
+          gdcmWarningMacro( "Wrong length for Sequence Delimitation Item: " << length ); 
           abort();
           }
         // Looks like some pixel data have instead: == 0xFFFFFFFF -> SIEMENS-MR-RGB-16Bits.dcm
@@ -112,8 +113,8 @@ IStream& DICOMIStream::Read(SequenceOfItems<DEType>& sq)
         std::streampos pos = Tellg();
         Seekg( 0, std::ios::end );
         std::streampos end = Tellg();
-        std::cerr << "Broken file: " << (long)(end-pos) 
-          << " bytes were skipped at the end of file" << std::endl;
+        gdcmWarningMacro( "Broken file: " << (long)(end-pos) 
+          << " bytes were skipped at the end of file" );
         isBroken = true;
         break;
         }
@@ -131,15 +132,14 @@ IStream& DICOMIStream::Read(SequenceOfItems<DEType>& sq)
   else
     {
     // Defined length, just read the SQItem
-    std::cerr << "Debug: SequenceLengthField=" 
-              << sq.SequenceLengthField << std::endl;
+    gdcmDebugMacro( "SequenceLengthField=" << sq.SequenceLengthField );
     uint32_t seq_length = 0;
     while( seq_length != sq.SequenceLengthField )
       {
       Read(de);
       if( de.GetTag() != itemStart )
         {
-        std::cerr << "BUGGY header" << std::endl;
+        gdcmWarningMacro( "BUGGY header" );
         Seekg( sq.SequenceLengthField - 4, std::ios::cur );
         break;
         }
@@ -149,7 +149,7 @@ IStream& DICOMIStream::Read(SequenceOfItems<DEType>& sq)
       // Sequence Length = Item Tag Length + Sequence Value Length
       seq_length += de.GetTag().GetLength() + 4;
       seq_length += si.GetLength();
-      std::cerr << "Debug: seq_length="  << seq_length << std::endl;
+      gdcmDebugMacro( "seq_length="  << seq_length );
       assert( seq_length <= sq.SequenceLengthField );
       }
     }
@@ -173,7 +173,7 @@ IStream& DICOMIStream::Read(ImplicitDataElement& ida)
     if( ida.GetTag() != theralys1
      && ida.GetTag() != theralys2 )
       {
-      std::cerr << "BUGGY HEADER (GE, 13)" << std::endl;
+      gdcmWarningMacro( "BUGGY HEADER (GE, 13)" );
       ida.ValueLengthField = 10;
       }
     }
@@ -183,7 +183,7 @@ IStream& DICOMIStream::Read(ImplicitDataElement& ida)
     const Tag sdi(0xfffe,0xe0dd); // Sequence Delimitation Item
     SequenceOfItems<ImplicitDataElement> si(ida.ValueLengthField);
     Read(si);
-    //std::cout << "Debug:" << si << std::endl;
+    gdcmDebugMacro( "SI: " << si );
     }
   else
     {
@@ -244,7 +244,7 @@ IStream& DICOMIStream::Read(ExplicitDataElement& xda)
       {
       if(vl == 6)
         {
-        std::cerr << "BUGGY HEADER: vl=6 should be 4" << std::endl;
+        gdcmWarningMacro( "BUGGY HEADER: vl=6 should be 4" );
         vl = 4;
         }
 #ifndef NDEBUG
@@ -375,11 +375,11 @@ DICOMIStream& DICOMIStream::Read(Item<DEType> &_val)
         {
         _val.TagField = de.GetTag();
         Read(_val.ItemLengthField);
-        //std::cerr << "End of SQ item: l=" << _val.ItemLengthField << std::endl;
+        gdcmDebugMacro( "End of SQ item: l=" << _val.ItemLengthField );
         if( _val.ItemLengthField != 0 )
           {
-          std::cerr << "BUGGY HEADER: Length should be 0, instead is: " << _val.ItemLengthField 
-            << std::endl;
+          gdcmWarningMacro( "BUGGY HEADER: Length should be 0, instead is: " << 
+            _val.ItemLengthField );
           }
         break;
         }
@@ -387,15 +387,15 @@ DICOMIStream& DICOMIStream::Read(Item<DEType> &_val)
       Read(exde);
       assert(exde.GetTag() == de.GetTag());
       _val.AddDataElement(exde);
-      //std::cout << "Debug SQ Item:\t" << exde << std::endl;
+      gdcmDebugMacro( "SQ Item:\t" << exde );
       }
     }
   else
     {
-    std::cout << "Debug Item: " << _val.ItemLengthField << std::endl;
+    gdcmDebugMacro( "Item Length: " << _val.ItemLengthField );
     _val.ValueField.SetLength(_val.ItemLengthField);
     Read(_val.ValueField);
-    //std::cout << "Debug \t" << _val << std::endl;
+    gdcmDebugMacro( "Val: \t" << _val );
     }
   return *this;
 }
@@ -404,8 +404,8 @@ void DICOMIStream::Initialize()
 {
   //FindNegociatedTS();
   ReadNonStandardDataElements();
-  std::cout << "NegociatedTS: " << NegociatedTS << std::endl;
-  std::cout << "SwapCode: " << SwapCode << std::endl;
+  gdcmDebugMacro( "NegociatedTS: " << NegociatedTS );
+  gdcmDebugMacro( "SwapCode: " << SwapCode );
   assert( NegociatedTS != Unknown );
   //assert( SwapCode != SC::Unknown );
 }
@@ -433,12 +433,12 @@ bool DICOMIStream::ReadDICM()
     for(i=0; i<128; ++i)
       if(dicm[i] != '\0' )
         {
-        std::cout << "Garbage in the DICOM Header" << std::endl;
+        gdcmDebugMacro( "Garbage in the DICOM Header" );
         break;
         }
     if( i == 128 )
       {
-      std::cout << "Real clean HEADER" << std::endl;
+      gdcmDebugMacro( "Real clean HEADER" );
       }
 #endif
     }
@@ -455,7 +455,7 @@ void CheckNegociatedTS(gdcm::DICOMIStream &is)
   while( is.Read(de_tag) )
     {
     is.Read(de);
-    //std::cout << de << std::endl;
+    gdcmDebugMacro( de );
     }
 }
 
@@ -478,17 +478,17 @@ void DICOMIStream::ReadNonStandardDataElements()
     gdcm::TS::TSType ts = TS::TS_END;
     while( Read(de_tag) )
       {
-      //std::cerr << "Tag: " << de_tag.GetTag() << std::endl;
+      gdcmDebugMacro( "Tag: " << de_tag.GetTag() );
       assert( de_tag.GetTag().GetGroup() <= 0x0010
            || de_tag.GetTag().GetGroup() == 0x0800 ); // Byte Swap problem
 
       if( de_tag.GetTag().GetGroup() <= 0x0002 )
         {
         Read(de);
-        //std::cout << "Debug: " << de << std::endl;
+        gdcmDebugMacro( de );
         if( de_tag.GetTag() == t )
           {
-          //std::cerr << "TS=" << de.GetValue().GetPointer() << std::endl;
+          gdcmDebugMacro( "TS=" << de.GetValue().GetPointer() );
           ts = gdcm::TS::GetTSType( de.GetValue().GetPointer() );
           assert( ts != TS::TS_END );
           bool isDataSetEncoded = TS::IsDataSetEncoded( ts );
@@ -526,7 +526,7 @@ void DICOMIStream::FindNegociatedTS()
   // Stream is passed the DICM header
   if( !ReadDICM() )
     {
-    //std::cerr << "Not a DICOM V3 file" << std::endl;
+    gdcmDebugMacro( "Not a DICOM V3 file" );
     IStream::Seekg(0, std::ios::beg);
     }
   
@@ -579,10 +579,10 @@ void DICOMIStream::FindNegociatedTS()
           abort();
           }
         Seekg(0, std::ios::beg);
-        //std::cerr << "T=" << Tellg() << std::endl;
+        gdcmDebugMacro( "T=" << Tellg() );
         if(!ReadDICM())
           IStream::Seekg(0, std::ios::beg);
-        //std::cerr << "T=" << Tellg() << std::endl;
+        gdcmDebugMacro( "T=" << Tellg() );
         Read(t);
         }
       NegociatedTS = Implicit;
@@ -590,7 +590,7 @@ void DICOMIStream::FindNegociatedTS()
     }
   else
     {
-    //std::cerr << "Start with private element" << std::endl;   
+    gdcmWarningMacro( "Start with private element" );
     char vr_str[3];
     IStream::Read(vr_str, 2);
     vr_str[2] = '\0';
