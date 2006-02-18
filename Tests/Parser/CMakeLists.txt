@@ -68,6 +68,7 @@ SET(BLACK_LIST
   "deflate_image_dfl.dcm" # Nasty compressed dataset
   "deflate_wave_dfl.dcm"
   "deflate_report_dfl.dcm"
+  "ExplicitVRforPublicElementsImplicitVRforShadowElements.dcm"
   )
 
 SET(GDCM_DATA_IMAGES)

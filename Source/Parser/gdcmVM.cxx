@@ -45,7 +45,7 @@ VM::VMType VM::GetVMType(const char *vm)
 
 bool VM::IsValid(const int &vm1, const VMType &vm2)
 {
-  bool r;
+  bool r = false;
   assert( vm1 >= 0 ); // Still need to check Part 3
   // If you update the VMType, you need to update this code. Hopefully a compiler is
   // able to tell when a case is missing

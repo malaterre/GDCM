@@ -24,7 +24,9 @@ public:
 
   void AddDictEntry(const Tag &tag, const DictEntry &de)
     {
+#ifndef NDEBUG
     MapDictEntry::size_type s = DictInternal.size();
+#endif
     DictInternal.insert(
       MapDictEntry::value_type(tag, de));
     assert( s < DictInternal.size() );

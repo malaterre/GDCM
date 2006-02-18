@@ -19,6 +19,7 @@ SET(SRCS
   gdcmIStream.cxx
   gdcmOStream.cxx
   gdcmDirectory.cxx
+  gdcmTrace.cxx
   )
 
 ADD_LIBRARY(gdcmCommon ${SRCS})

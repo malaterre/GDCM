@@ -2,6 +2,7 @@
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
 #include "gdcmIStream.h"
+#include "gdcmTrace.h"
 #include <errno.h>
 
 namespace gdcm
@@ -21,7 +22,7 @@ bool SkipGroup(FileSeeker &is)
     {
     uint16_t current_group = de_tag.GetTag().GetGroup();
     is.AddOffset(current_group, offset);
-    //std::cerr << "Group: " << std::hex << current_group << " " << offset << std::endl;
+    gdcmDebugMacro( "Group: " << std::hex << current_group << " " << offset );
     uint16_t current_element = de_tag.GetTag().GetElement();
     if( current_element == 0x0 )
       {
@@ -39,7 +40,7 @@ bool SkipGroup(FileSeeker &is)
       // Indeed group length is zero sometime 
       // e.g. MARCONI_MxTWin-12-MONO2-JpegLossless-ZeroLengthSQ.dcm
       assert( length );
-      //std::cout << "Debug Length: " << std::dec << length << std::endl;
+      gdcmDebugMacro( "Debug Length: " << std::dec << length );
       is.Seekg( length, std::ios::cur );
       last_offset = offset;
       offset = is.Tellg();
@@ -51,7 +52,7 @@ bool SkipGroup(FileSeeker &is)
         // Something went wrong (lenght is probably wrong)
         // First thing seek back to last know valid position
         is.Seekg(last_offset, std::ios::beg);
-        std::cerr << "Group length seems to be wrong" << std::endl;
+        gdcmWarningMacro( "Group length seems to be wrong" );
         return false;
         }
       }
@@ -60,7 +61,7 @@ bool SkipGroup(FileSeeker &is)
       // I gave up on writting a partial skip and seek method due to the image:
       // MARCONI_MxTWin-12-MONO2-JpegLossless-ZeroLengthSQ.dcm
       is.Seekg(last_offset, std::ios::beg);
-      std::cerr << "No group length found, fallback to seeking file instead" << std::endl;
+      gdcmWarningMacro( "No group length found, fallback to seeking file instead" );
       return false;
       }
     }
@@ -80,12 +81,12 @@ bool SeekGroup(FileSeeker &is)
     std::streampos offset = is.Tellg();
     offset -= de_tag.GetLength();
     is.Read(de); // FIXME de.Skip(is);
-    //std::cout << "DE : " << de << std::endl;
+    gdcmDebugMacro( "DE : " << de );
     uint16_t current_group = de_tag.GetTag().GetGroup();
     if( current_group != last_group )
       {
       is.AddOffset(current_group, offset);
-      std::cerr << "Group: " << std::hex << current_group << " " << offset << std::endl;
+      gdcmDebugMacro( "Group: " << std::hex << current_group << " " << offset );
       last_group = current_group;
       }
     }
@@ -155,7 +156,7 @@ void ReadElements(DICOMIStream &is, DEType& de)
   DataElement &de_tag = de;
   while(!is.eof() && is.Read(de_tag) )
     {
-    //std::cerr << "Reading: " << de_tag << std::endl;
+    gdcmDebugMacro( "Reading: " << de_tag );
     if( de_tag.GetTag().GetGroup() != tag.GetGroup() )
       break;
     if( de_tag.GetTag().GetElement() > tag.GetElement() )
