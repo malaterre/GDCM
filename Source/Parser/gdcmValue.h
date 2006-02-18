@@ -3,6 +3,8 @@
 #define __gdcmValue_h
 
 #include "gdcmType.h"
+#include "gdcmTrace.h"
+
 #include <iostream>
 #include <string.h>
 
@@ -30,7 +32,7 @@ public:
     if (l%2)
       {
       /// \TODO Unfortunately, there is no way to know on *which* Tag the trouble is.
-      std::cerr << "BUGGY HEADER: Your dicom contain odd length value field." << std::endl;
+      gdcmWarningMacro( "BUGGY HEADER: Your dicom contain odd length value field." );
       }
     // FIXME: man realloc
     if( l )

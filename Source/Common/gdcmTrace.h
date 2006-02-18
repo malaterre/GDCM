@@ -26,6 +26,7 @@ public :
   
   static void WarningOn(); //  { WarningFlag = true; };
   static void WarningOff(); // { WarningFlag = false; };
+  static bool GetWarningFlag();
 
   static void ErrorOn(); //  { ErrorFlag = true; };
   static void ErrorOff(); // { ErrorFlag = false; };
@@ -95,7 +96,7 @@ private:
 #else
 #define gdcmWarningMacro(msg)                               \
 {                                                           \
-   if( Trace::GetDebugFlag() )                              \
+   if( Trace::GetWarningFlag() )                            \
    {                                                        \
    std::ostringstream osmacro;                              \
    osmacro << "Warning: In " __FILE__ ", line " << __LINE__ \
