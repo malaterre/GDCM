@@ -31,6 +31,7 @@ public :
 
   static void ErrorOn(); //  { ErrorFlag = true; };
   static void ErrorOff(); // { ErrorFlag = false; };
+  static bool GetErrorFlag();
 
   static bool GetDebugToFile ();
   static std::ofstream &GetDebugFile ();
@@ -112,7 +113,8 @@ private:
 #endif //NDEBUG
 
 /**
- * \brief   Error 
+ * \brief   Error this is pretty bad, more than just warning
+ * It could mean lost of data, something not handle...
  * @param msg second message part 
  */
 #ifdef NDEBUG
@@ -120,6 +122,8 @@ private:
 #else
 #define gdcmErrorMacro(msg)                                 \
 {                                                           \
+   if( Trace::GetErrorFlag() )                              \
+   {                                                        \
    std::ostringstream osmacro;                              \
    osmacro << "Error: In " __FILE__ ", line " << __LINE__   \
            << ", function " << GDCM_FUNCTION << '\n'        \
@@ -128,6 +132,7 @@ private:
       Trace::GetDebugFile() << osmacro.str() << std::endl;  \
    else                                                     \
       std::cerr << osmacro.str() << std::endl;              \
+   }                                                        \
 }
 #endif //NDEBUG
 

@@ -84,9 +84,14 @@ static uint32_t GetLength(VRType vr) {
     return 2;
 }
 
+static bool CanDisplay(VRType vr);
+static bool IsBinary(VRType vr);
+static bool IsString(VRType vr);
+
 private:
 // Internal function that map a VRType to an index in the VRStrings table
 static int GetIndex(VRType vr);
+
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const VR::VRType&_val)

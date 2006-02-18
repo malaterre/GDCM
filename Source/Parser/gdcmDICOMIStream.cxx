@@ -318,6 +318,8 @@ IStream& DICOMIStream::Read(ExplicitDataElement& xda)
       }
     else
       {
+      gdcmWarningMacro( "Seeking long field: " << xda.GetTag() << " l= " 
+        << xda.ValueLengthField );
 #ifdef BIG_HACK2
       xda.ValueField.SetLength(xda.ValueLengthField);
       Read(xda.ValueField);

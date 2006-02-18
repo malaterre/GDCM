@@ -55,7 +55,9 @@ inline std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_v
 {
   _os << _val.TagField << " VR=" << _val.VRField;
   _os << ",VL=" << std::dec << _val.ValueLengthField
-      << " ValueField=[" << _val.ValueField << "]";
+      << " ValueField=["; /* << _val.ValueField << "]";*/
+   _val.ValueField.Print( _val.VRField, _os );
+  _os << "]";
   return _os;
 }
 

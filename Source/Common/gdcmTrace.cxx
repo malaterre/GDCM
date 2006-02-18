@@ -6,7 +6,7 @@ namespace gdcm
 // Warning message level to be displayed
 static bool DebugFlag   = false;
 static bool WarningFlag   = true;
-static bool ErrorFlag   = false;
+static bool ErrorFlag   = true;
 static bool DebugToFile = false;
 static std::ofstream DebugFile;
 
@@ -31,6 +31,11 @@ bool Trace::GetDebugFlag()
 }
 
 bool Trace::GetWarningFlag()
+{
+  return WarningFlag;
+}
+
+bool Trace::GetErrorFlag()
 {
   return WarningFlag;
 }

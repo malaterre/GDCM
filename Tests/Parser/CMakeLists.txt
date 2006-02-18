@@ -1,5 +1,6 @@
 # Define the tests
 SET(TEST_SRCS
+  TestAllLoadMinimumStuff
   TestTag
   TestFileIO
   TestFileChunk
@@ -16,7 +17,7 @@ SET(TEST_SRCS
   TestDict
   TestDataSet
   TestSequenceOfItems
-  TestAllPrint
+  #TestAllPrint
   TestGroupDict
   TestPrintGroup
   TestGroupSet
@@ -26,6 +27,7 @@ SET(TEST_SRCS
   TestDirectory
   TestAllPrintUID
   TestLoader
+  TestPrinter
   )
 
 # Add the include paths

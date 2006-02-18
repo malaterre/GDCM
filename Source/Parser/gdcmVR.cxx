@@ -129,4 +129,55 @@ bool VR::IsSwap(const char *vr)
   return GetVRType(vr_swap) != VR_END;
 }
 
+bool VR::IsString(VRType vr)
+{
+  return
+    vr == CS ||
+    vr == DA ||
+    vr == DS ||
+    vr == IS ||
+    vr == LO ||
+    vr == LT ||
+    vr == PN ||
+    vr == SH ||
+    vr == TM ||
+    vr == UI;
+}
+
+bool VR::CanDisplay(VRType vr)
+{
+  return 
+    vr == AE ||
+    vr == AS ||
+    vr == CS ||
+    vr == DA ||
+    vr == DS ||
+    vr == FL ||
+    vr == FD ||
+    vr == IS ||
+    vr == LO ||
+    vr == LT ||
+    vr == PN ||
+    vr == SH ||
+    vr == SL ||
+    vr == SS ||
+    vr == ST ||
+    vr == TM ||
+    vr == UI ||
+    vr == UL ||
+    vr == US ||
+    vr == UT;
+}
+
+bool VR::IsBinary(VRType vr)
+{
+  return 
+    vr == OB ||
+    vr == OW ||
+    vr == OF ||
+    vr == AT ||
+    vr == UN ||
+    vr == SQ ;
+}
+
 } // end of namespace gdcm

@@ -6,10 +6,10 @@
 
 namespace gdcm
 {
-template<class DEType>
-void PrintDataElement(gdcm::DICOMIStream &is)
+
+void PrintImplicitDataElements(gdcm::DICOMIStream &is)
 {
-  DEType de;
+  gdcm::ImplicitDataElement de;
   gdcm::DataElement &de_tag = de;
 
   static const gdcm::Dict d;
@@ -22,12 +22,46 @@ void PrintDataElement(gdcm::DICOMIStream &is)
       const gdcm::DictEntry &entry = d.GetDictEntry(de.GetTag());
       if( de.GetTag().GetElement() == 0x0 )
         {
-        std::cerr << de << "\t # (" << gd.GetName(de.GetTag().GetGroup() ) << ") " 
+        std::cout << de << "\t # (" << gd.GetName(de.GetTag().GetGroup() ) << ") " 
           << entry.GetName() << std::endl;
         }
       else
         {
-        std::cerr << de << "\t # " << entry.GetName() << std::endl;
+        // Use VR from dictionary
+        VR::VRType vr = entry.GetVR();
+        de.Print(vr, std::cout);
+        std::cout << "\t # " << entry.GetName() << std::endl;
+        }
+      }
+    }
+  catch(std::exception &e)
+    {
+    std::cerr << "Exception:" << typeid(e).name() << std::endl;
+    }
+}
+
+void PrintExplicitDataElements(gdcm::DICOMIStream &is)
+{
+  gdcm::ExplicitDataElement de;
+  gdcm::DataElement &de_tag = de;
+
+  static const gdcm::Dict d;
+  static const gdcm::GroupDict gd;
+  try
+    {
+    while( !is.eof() && is.Read(de_tag) )
+      {
+      is.Read(de);
+      const gdcm::DictEntry &entry = d.GetDictEntry(de.GetTag());
+      if( de.GetTag().GetElement() == 0x0 )
+        {
+        std::cout << de << "\t # (" << gd.GetName(de.GetTag().GetGroup() ) << ") " 
+          << entry.GetName() << std::endl;
+        }
+      else
+        {
+        //VR::VRType vr = entry.GetVR();
+        std::cout << de << "\t # " << entry.GetName() << std::endl;
         }
       }
     }
@@ -38,11 +72,11 @@ void PrintDataElement(gdcm::DICOMIStream &is)
 }
 
 
-template<class DEType>
-void PrintDataElements(Printer &is)
-{
-  PrintDataElement<DEType>(is);
-}
+//template<class DEType>
+//void PrintDataElements(Printer &is)
+//{
+//  PrintDataElement<DEType>(is);
+//}
 
 void Printer::Initialize()
 {
@@ -50,11 +84,13 @@ void Printer::Initialize()
 
   if( NegociatedTS == Explicit )
     {
-    PrintDataElements<gdcm::ExplicitDataElement>(*this);
+    //PrintDataElements<gdcm::ExplicitDataElement>(*this);
+    PrintExplicitDataElements(*this);
     }
   else
     {
-    PrintDataElements<gdcm::ImplicitDataElement>(*this);
+    //PrintDataElements<gdcm::ImplicitDataElement>(*this);
+    PrintImplicitDataElements(*this);
     }
   // FIXME a file that reach eof is not valid...
   Close();
