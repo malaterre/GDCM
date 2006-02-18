@@ -3,31 +3,31 @@
 namespace gdcm
 {
 
-std::string const &GroupDict::GetGroupAbbreviation(uint16_t num) const
+std::string const &GroupDict::GetAbbreviation(uint16_t num) const
 {
-  assert(num < GroupAbbreviation.size());
-  return GroupAbbreviation[num];
+  assert(num < Abbreviations.size());
+  return Abbreviations[num];
 }
 
-std::string const &GroupDict::GetGroupName(uint16_t num) const
+std::string const &GroupDict::GetName(uint16_t num) const
 {
-  assert(num < GroupName.size());
-  return GroupName[num];
+  assert(num < Names.size());
+  return Names[num];
 }
 
-void GroupDict::AddGroupEntry(std::string const &abbreviation, std::string const &name)
+void GroupDict::Add(std::string const &abbreviation, std::string const &name)
 {
-  GroupAbbreviation.push_back(abbreviation);
-  GroupName.push_back(name);
+  Abbreviations.push_back(abbreviation);
+  Names.push_back(name);
 }
 
-void GroupDict::InsertGroupEntry(uint16_t num, std::string const &abbreviation, 
+void GroupDict::Insert(uint16_t num, std::string const &abbreviation, 
   std::string const &name)
 {
-  GroupAbbreviation.resize(num+1);
-  GroupName.resize(num+1);
-  GroupAbbreviation.insert(GroupAbbreviation.begin()+num, abbreviation);
-  GroupName.insert(GroupName.begin()+num, name);
+  Abbreviations.resize(num+1);
+  Names.resize(num+1);
+  Abbreviations.insert(Abbreviations.begin()+num, abbreviation);
+  Names.insert(Names.begin()+num, name);
 }
 
 

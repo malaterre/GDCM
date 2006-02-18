@@ -28,16 +28,16 @@ public:
 
   unsigned long Size() const
     {
-    assert( GroupName.size() == GroupAbbreviation.size() );
-    return GroupName.size(); }
+    assert( Names.size() == Abbreviations.size() );
+    return Names.size(); }
 
-  std::string const &GetGroupAbbreviation(uint16_t num) const;
+  std::string const &GetAbbreviation(uint16_t num) const;
 
-  std::string const &GetGroupName(uint16_t num) const;
+  std::string const &GetName(uint16_t num) const;
 
 protected:
-  void AddGroupEntry(std::string const &abbreviation, std::string const &name);
-  void InsertGroupEntry(uint16_t num, std::string const &abbreviation, std::string const &name);
+  void Add(std::string const &abbreviation, std::string const &name);
+  void Insert(uint16_t num, std::string const &abbreviation, std::string const &name);
 
 private:
   // Generated implementation, see gdcmDefaultGroupNames
@@ -46,8 +46,8 @@ private:
   GroupDict &operator=(const GroupDict &_val); // purposely not implemented
   GroupDict(const GroupDict &_val); // purposely not implemented
 
-  GroupStringVector GroupAbbreviation;
-  GroupStringVector GroupName;
+  GroupStringVector Abbreviations;
+  GroupStringVector Names;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const GroupDict &_val)
@@ -55,7 +55,7 @@ inline std::ostream& operator<<(std::ostream& _os, const GroupDict &_val)
   unsigned int size = _val.Size();
   for(unsigned int i=0; i<size; ++i)
     {
-    _os << std::hex << i << "," << _val.GetGroupAbbreviation(i) << "," << _val.GetGroupName(i) << "\n";
+    _os << std::hex << i << "," << _val.GetAbbreviation(i) << "," << _val.GetName(i) << "\n";
     }
   return _os;
 }

@@ -195,7 +195,11 @@ IStream& DICOMIStream::Read(ImplicitDataElement& ida)
       Read(ida.ValueField);
       }
     else
+      {
+      gdcmWarningMacro( "Seeking long field: " << ida.GetTag() << " l= " 
+        << ida.ValueLengthField );
       Seekg(ida.ValueLengthField, std::ios::cur);
+      }
     }
   return *this;
 }

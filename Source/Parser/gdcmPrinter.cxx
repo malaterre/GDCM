@@ -1,21 +1,34 @@
 #include "gdcmPrinter.h"
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
+#include "gdcmDict.h"
+#include "gdcmGroupDict.h"
 
 namespace gdcm
 {
 template<class DEType>
-void PrintDataElements(gdcm::DICOMIStream &is)
+void PrintDataElement(gdcm::DICOMIStream &is)
 {
   DEType de;
   gdcm::DataElement &de_tag = de;
 
+  static const gdcm::Dict d;
+  static const gdcm::GroupDict gd;
   try
     {
     while( !is.eof() && is.Read(de_tag) )
       {
       is.Read(de);
-      std::cerr << de << std::endl;
+      const gdcm::DictEntry &entry = d.GetDictEntry(de.GetTag());
+      if( de.GetTag().GetElement() == 0x0 )
+        {
+        std::cerr << de << "\t # (" << gd.GetName(de.GetTag().GetGroup() ) << ") " 
+          << entry.GetName() << std::endl;
+        }
+      else
+        {
+        std::cerr << de << "\t # " << entry.GetName() << std::endl;
+        }
       }
     }
   catch(std::exception &e)
@@ -26,9 +39,9 @@ void PrintDataElements(gdcm::DICOMIStream &is)
 
 
 template<class DEType>
-void BrowseDataElements(Printer &is)
+void PrintDataElements(Printer &is)
 {
-  PrintDataElements<DEType>(is);
+  PrintDataElement<DEType>(is);
 }
 
 void Printer::Initialize()
@@ -37,11 +50,11 @@ void Printer::Initialize()
 
   if( NegociatedTS == Explicit )
     {
-    BrowseDataElements<gdcm::ExplicitDataElement>(*this);
+    PrintDataElements<gdcm::ExplicitDataElement>(*this);
     }
   else
     {
-    BrowseDataElements<gdcm::ImplicitDataElement>(*this);
+    PrintDataElements<gdcm::ImplicitDataElement>(*this);
     }
   // FIXME a file that reach eof is not valid...
   Close();
