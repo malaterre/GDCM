@@ -12,6 +12,7 @@ namespace gdcm
 class GDCM_EXPORT Printer : public DICOMIStream
 {
 public:
+  void Initialize();
 private:
 };
 

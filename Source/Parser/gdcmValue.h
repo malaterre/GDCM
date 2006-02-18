@@ -29,11 +29,10 @@ public:
   uint32_t GetLength() const { return Length; }
   // Does a reallocation
   void SetLength(uint32_t l) { 
-    if (l%2)
-      {
-      /// \TODO Unfortunately, there is no way to know on *which* Tag the trouble is.
-      gdcmWarningMacro( "BUGGY HEADER: Your dicom contain odd length value field." );
-      }
+//    if (l%2)
+//      {
+//      gdcmWarningMacro( "BUGGY HEADER: Your dicom contain odd length value field." );
+//      }
     // FIXME: man realloc
     if( l )
       {

@@ -139,7 +139,8 @@ IStream& DICOMIStream::Read(SequenceOfItems<DEType>& sq)
       Read(de);
       if( de.GetTag() != itemStart )
         {
-        gdcmWarningMacro( "BUGGY header" );
+        gdcmErrorMacro( "BUGGY header: Does not start with Item Start. Skipping sequence ("
+          << sq.SequenceLengthField - 4 << ") bytes");
         Seekg( sq.SequenceLengthField - 4, std::ios::cur );
         break;
         }
@@ -304,6 +305,10 @@ IStream& DICOMIStream::Read(ExplicitDataElement& xda)
     // We have the length we should be able to read the value
     if( xda.ValueLengthField < 0xfff )
       {
+      if (xda.ValueLengthField%2)
+        {
+        gdcmWarningMacro( "BUGGY HEADER: Your dicom contain odd length value field." );
+        }
       xda.ValueField.SetLength(xda.ValueLengthField); // perform realloc
       Read(xda.ValueField);
       }
