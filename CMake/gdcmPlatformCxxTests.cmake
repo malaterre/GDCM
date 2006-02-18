@@ -5,7 +5,7 @@ MACRO(GDCM_PLATFORM_CXX_TEST var description invert)
     MESSAGE(STATUS "${description}")
     TRY_COMPILE(${var}_COMPILED
       ${CMAKE_CURRENT_BINARY_DIR}
-      ${CMAKE_CURRENT_SOURCE_DIR}/gdcmPlatformCxxTests.cxx
+      ${CMAKE_CURRENT_SOURCE_DIR}/CMake/gdcmPlatformCxxTests.cxx
       COMPILE_DEFINITIONS -DTEST_${var} ${GDCM_PLATFORM_CXX_TEST_DEFINES}
       OUTPUT_VARIABLE OUTPUT)
     IF(${var}_COMPILED)

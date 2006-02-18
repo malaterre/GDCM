@@ -1,6 +1,7 @@
 #ifndef __gdcmTrace_h
 #define __gdcmTrace_h
 
+#include "gdcmConfigure.h"
 #include "gdcmType.h"
 
 #include <string>
@@ -48,7 +49,7 @@ private:
 
 // __FUNCTION is not always defined by preprocessor
 // In c++ we should use __PRETTY_FUNCTION__ instead...
-#ifdef GDCM_COMPILER_HAS_FUNCTION
+#ifdef GDCM_CXX_HAS_FUNCTION
 // Handle particular case for GNU C++ which also defines __PRETTY_FUNCTION__
 // which is a lot nice in C++
 #ifdef __BORLANDC__
@@ -61,7 +62,7 @@ private:
 #endif //__GNUC__
 #else
 #  define GDCM_FUNCTION "<unknow>"
-#endif //GDCM_COMPILER_HAS_FUNCTION
+#endif //GDCM_CXX_HAS_FUNCTION
 
 /**
  * \brief   Debug

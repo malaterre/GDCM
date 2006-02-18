@@ -33,6 +33,12 @@ IF(UNIX) #Avoid polluting Win32 cmakecache
   CHECK_INCLUDE_FILE("inttypes.h"     CMAKE_HAVE_INTTYPES_H)
 ENDIF(UNIX)
 
+INCLUDE(${GDCM_SOURCE_DIR}/CMake/gdcmPlatformCxxTests.cmake)
+
+GDCM_PLATFORM_CXX_TEST(GDCM_CXX_HAS_FUNCTION
+    "Checking whether compiler has __FUNCTION__" DIRECT)
+
+
 #-----------------------------------------------------------------------------
 # Build the main lib...
 SUBDIRS(

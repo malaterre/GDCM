@@ -51,7 +51,8 @@ bool SkipGroup(FileSeeker &is)
         // Something went wrong (lenght is probably wrong)
         // First thing seek back to last know valid position
         is.Seekg(last_offset, std::ios::beg);
-        gdcmWarningMacro( "Group length seems to be wrong" );
+        gdcmWarningMacro( "Group length seems to stop after group 0x" 
+          << std::hex << current_group );
         return false;
         }
       }
