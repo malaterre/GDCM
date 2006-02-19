@@ -4,7 +4,7 @@
 #include "gdcmDict.h"
 #include "gdcmGroupDict.h"
 //#include "gdcmVM.h"
-#include "gdcmAttributeFactory.h"
+#include "gdcmAttribute.h"
 
 namespace gdcm
 {
@@ -94,14 +94,16 @@ void PrintImplicitDataElements(gdcm::DICOMIStream &is)
       << " ValueField=["; /* << _val.ValueField << "]";*/
 //  PrintValue( val, vr, vm);
   
-  abort(); //FIXME
   // Need to do a super AttributeFactory to be dynamic:
   // gdcm::AttributeFactory af
   // af.SetVR()
   // af.SetVM()
   // af.SetValue();
   // af.Print()/Read/Write
-  gdcm::AttributeFactory<vr, vm> af = val.GetPointer();
+  gdcm::Attribute af;
+  af.SetVR(vr);
+  af.SetVM(vm);
+  af.SetValue( val.GetPointer() );
   af.Print( _os );
   _os << "]\n";
         }
