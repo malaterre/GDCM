@@ -4,7 +4,6 @@
 
 #include "gdcmType.h"
 #include "gdcmTrace.h"
-#include "gdcmVR.h"
 
 #include <iostream>
 #include <string.h>
@@ -94,50 +93,6 @@ public:
     return true;   
     }
 
-  void Print(VR::VRType vr, std::ostream &_os) const
-    {
-    if ( VR::IsString( vr ) )
-      {
-      assert( IsPrintable() );
-      _os << Internal;
-      }
-    else if ( vr == VR::FL )
-      {
-      }
-    else if ( vr == VR::SL )
-      {
-      int32_t length;
-      //assert( Length == 4);
-      memcpy(&length, Internal, 4);
-      _os << length;
-      }
-    else if ( vr == VR::SS )
-      {
-      int16_t length;
-      assert( Length == 2);
-      memcpy(&length, Internal, 2);
-      _os << length;
-      }
-    else if ( vr == VR::UL )
-      {
-      uint32_t length;
-      assert( Length == 4);
-      memcpy(&length, Internal, 4);
-      _os << length;
-      }
-    else if ( vr == VR::US )
-      {
-      uint16_t length;
-      assert( Length == 2);
-      memcpy(&length, Internal, 2);
-      _os << length;
-      }
-    else
-      {
-      _os << "FIXME";
-      _os << " (Length: " << Length << ")";
-      }
-    }
 
 private:
   char* Internal;

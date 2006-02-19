@@ -8,6 +8,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_BINARY_DIR}/Source/Parser"
   "${GDCM_SOURCE_DIR}/Source/Parser"
+  "${GDCM_SOURCE_DIR}/Source/Objects"
   )
 
 IF(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.1)

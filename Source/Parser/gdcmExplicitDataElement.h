@@ -5,7 +5,6 @@
 #include "gdcmDataElement.h"
 //#include "gdcmDICOMIStream.h"
 #include "gdcmDICOMOStream.h"
-#include "gdcmVR.h"
 
 namespace gdcm
 {
@@ -55,9 +54,9 @@ inline std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_v
 {
   _os << _val.TagField << " VR=" << _val.VRField;
   _os << ",VL=" << std::dec << _val.ValueLengthField
-      << " ValueField=["; /* << _val.ValueField << "]";*/
-   _val.ValueField.Print( _val.VRField, _os );
-  _os << "]";
+      << " ValueField=[" << _val.ValueField << "]";
+//   _val.ValueField.Print( _val.VRField, _os );
+//  _os << "]";
   return _os;
 }
 

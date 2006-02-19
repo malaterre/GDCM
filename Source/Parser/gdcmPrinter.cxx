@@ -3,15 +3,72 @@
 #include "gdcmImplicitDataElement.h"
 #include "gdcmDict.h"
 #include "gdcmGroupDict.h"
+//#include "gdcmVM.h"
+#include "gdcmAttributeFactory.h"
 
 namespace gdcm
 {
+//  uint32_t FindLength(VR::VRType vr, VM::VMType vm)
+//    {
+//    uint32_t size = VR::GetLength(vr);
+//    uint32_t nVM = VM::GetLength(vm); // number of separators
+//    size *= nVM;
+//    size += nVM - 1; // number of separators (\)
+//    return size;
+//    }
+//void PrintValue(const Value &val, VR::VRType vr, VM::VMType )
+//    {
+//    std::ostream &_os = std::cout;
+//    const char *p = val.GetPointer();
+//    if ( VR::IsString( vr ) )
+//      {
+//      assert( val.IsPrintable() );
+//      _os << p;
+//      }
+//    else if ( vr == VR::FL )
+//      {
+//      }
+//    else if ( vr == VR::SL )
+//      {
+//      int32_t length;
+//      assert( val.GetLength() == 4);
+//      memcpy(&length, p, 4);
+//      _os << length;
+//      }
+//    else if ( vr == VR::SS )
+//      {
+//      int16_t length;
+//      assert( val.GetLength() == 2);
+//      memcpy(&length, p, 2);
+//      _os << length;
+//      }
+//    else if ( vr == VR::UL )
+//      {
+//      uint32_t length;
+//      assert( val.GetLength() == 4);
+//      memcpy(&length, p, 4);
+//      _os << length;
+//      }
+//    else if ( vr == VR::US )
+//      {
+//      uint16_t length;
+//      assert( val.GetLength() == 2);
+//      memcpy(&length, p, 2);
+//      _os << length;
+//      }
+//    else
+//      {
+//      _os << "FIXME";
+//      _os << " (Length: " << val.GetLength() << ")";
+//      }
+//    }
 
 void PrintImplicitDataElements(gdcm::DICOMIStream &is)
 {
   gdcm::ImplicitDataElement de;
   gdcm::DataElement &de_tag = de;
 
+  std::ostream &_os = std::cout;
   static const gdcm::Dict d;
   static const gdcm::GroupDict gd;
   try
@@ -28,9 +85,25 @@ void PrintImplicitDataElements(gdcm::DICOMIStream &is)
       else
         {
         // Use VR from dictionary
-        VR::VRType vr = entry.GetVR();
-        de.Print(vr, std::cout);
-        std::cout << "\t # " << entry.GetName() << std::endl;
+        const VR::VRType vr = entry.GetVR();
+        const VM::VMType vm = entry.GetVM();
+        const Value& val = de.GetValue();
+        //std::cout << de << "\t # " << entry.GetName() << std::endl;
+  _os << de.GetTag() << " VR(?)=" << vr;
+  _os << ",VL=" << std::dec << de.GetValueLength()
+      << " ValueField=["; /* << _val.ValueField << "]";*/
+//  PrintValue( val, vr, vm);
+  
+  abort(); //FIXME
+  // Need to do a super AttributeFactory to be dynamic:
+  // gdcm::AttributeFactory af
+  // af.SetVR()
+  // af.SetVM()
+  // af.SetValue();
+  // af.Print()/Read/Write
+  gdcm::AttributeFactory<vr, vm> af = val.GetPointer();
+  af.Print( _os );
+  _os << "]\n";
         }
       }
     }

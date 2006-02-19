@@ -3,7 +3,6 @@
 #define __gdcmImplicitDataElement_h
 
 #include "gdcmDataElement.h"
-#include "gdcmVR.h"
 
 namespace gdcm
 {
@@ -40,14 +39,14 @@ public:
     return DataElement::GetLength() + sizeof(ValueLengthField) + ValueLengthField;
     }
 
-  void Print(VR::VRType vr, std::ostream &_os = std::cout ) const
-    {
-  _os << TagField << " VR(?)=" << vr;
-  _os << ",VL=" << std::dec << ValueLengthField
-      << " ValueField=["; /* << _val.ValueField << "]";*/
-   ValueField.Print( vr, _os );
-  _os << "]";
-    }
+//  void Print(VR::VRType vr, std::ostream &_os = std::cout ) const
+//    {
+//  _os << TagField << " VR(?)=" << vr;
+//  _os << ",VL=" << std::dec << ValueLengthField
+//      << " ValueField=["; /* << _val.ValueField << "]";*/
+//   ValueField.Print( vr, _os );
+//  _os << "]";
+//    }
 
 protected:
   DICOMOStream& Write(DICOMOStream& _os) const;
