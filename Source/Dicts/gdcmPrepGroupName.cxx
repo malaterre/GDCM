@@ -33,7 +33,7 @@ void write_footer(std::ofstream &of)
     "  GROUP_ENTRY n = groupname[i];\n"
     "  while( n.name != 0 )\n"
     "  {\n"
-    "    InsertGroupEntry( n.group, n.abbreviation, n.name );\n"
+    "    Insert( n.group, n.abbreviation, n.name );\n"
     "    n = groupname[++i];\n"
     "  }\n"
     "}\n\n"
