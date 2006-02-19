@@ -75,4 +75,4 @@ SET(SRCS
   )
 
 ADD_LIBRARY(gdcmParser ${SRCS})
-TARGET_LINK_LIBRARIES(gdcmParser gdcmCommon)
+TARGET_LINK_LIBRARIES(gdcmParser gdcmCommon gdcmObjects)
