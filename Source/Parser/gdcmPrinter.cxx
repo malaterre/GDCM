@@ -7,61 +7,14 @@
 
 namespace gdcm
 {
-//  uint32_t FindLength(VR::VRType vr, VM::VMType vm)
-//    {
-//    uint32_t size = VR::GetLength(vr);
-//    uint32_t nVM = VM::GetLength(vm); // number of separators
-//    size *= nVM;
-//    size += nVM - 1; // number of separators (\)
-//    return size;
-//    }
-//
-//void PrintValue(const Value &val, VR::VRType vr, VM::VMType )
-//    {
-//    std::ostream &_os = std::cout;
-//    const char *p = val.GetPointer();
-//    if ( VR::IsString( vr ) )
-//      {
-//      assert( val.IsPrintable() );
-//      _os << p;
-//      }
-//    else if ( vr == VR::FL )
-//      {
-//      }
-//    else if ( vr == VR::SL )
-//      {
-//      int32_t length;
-//      assert( val.GetLength() == 4);
-//      memcpy(&length, p, 4);
-//      _os << length;
-//      }
-//    else if ( vr == VR::SS )
-//      {
-//      int16_t length;
-//      assert( val.GetLength() == 2);
-//      memcpy(&length, p, 2);
-//      _os << length;
-//      }
-//    else if ( vr == VR::UL )
-//      {
-//      uint32_t length;
-//      assert( val.GetLength() == 4);
-//      memcpy(&length, p, 4);
-//      _os << length;
-//      }
-//    else if ( vr == VR::US )
-//      {
-//      uint16_t length;
-//      assert( val.GetLength() == 2);
-//      memcpy(&length, p, 2);
-//      _os << length;
-//      }
-//    else
-//      {
-//      _os << "FIXME";
-//      _os << " (Length: " << val.GetLength() << ")";
-//      }
-//    }
+Printer::Printer()
+{
+  PrintVR = false;
+}
+Printer::~Printer()
+{
+  PrintVR = false;
+}
 
 void PrintImplicitDataElements(gdcm::DICOMIStream &is)
 {
@@ -96,7 +49,11 @@ void PrintImplicitDataElements(gdcm::DICOMIStream &is)
         const VM::VMType vm = entry.GetVM();
         const Value& val = de.GetValue();
         //std::cout << de << "\t # " << entry.GetName() << std::endl;
-        _os << de.GetTag() << " VR(?)=" << vr;
+        _os << de.GetTag();
+        if ( false ) // PrintVR
+          {
+          _os << " VR(?)=" << vr;
+          }
         _os << ",VL=" << std::dec << de.GetValueLength()
           << " ValueField=[";
 

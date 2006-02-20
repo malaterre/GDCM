@@ -14,8 +14,17 @@ namespace gdcm
 class GDCM_EXPORT Printer : public DICOMIStream
 {
 public:
+  Printer();
+  ~Printer();
   void Initialize();
+
+  void SetPrintVR(bool b) { PrintVR = b; }
+  bool GetPrintVR() { return PrintVR; }
+
 private:
+  // If User wants to see the VR for ImplicitFile, option dont do anythin
+  // in Explicit Transfer Syntax
+  bool PrintVR;
 };
 
 }
