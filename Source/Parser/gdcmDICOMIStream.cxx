@@ -19,7 +19,8 @@ IStream &DICOMIStream::Read(Tag &t)
   assert( sizeof(t) == 4 );
   if( !IStream::Read((char*)(&t.ElementTag.tag), 4) ) return *this;
   //assert(!(t.GetGroup()%2));
-  ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem(t.ElementTag.tags, SwapCode, 2);
+  ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem(t.ElementTag.tags,
+    SwapCode, 2);
 #define BROKEN_DICOM_CONFORMANCE
 #ifdef BROKEN_DICOM_CONFORMANCE
   if( t == Tag(0,0) )
@@ -45,7 +46,8 @@ IStream &DICOMIStream::Read(uint16_t &vl)
 {
   char vl_str[2];
   IStream::Read(vl_str,2);
-  ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)(&vl_str), SwapCode, 1);
+  ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)(&vl_str),
+    SwapCode, 1);
   memcpy(&vl, vl_str, 2);
   return *this;
 }
@@ -54,7 +56,8 @@ IStream &DICOMIStream::Read(uint32_t &vl)
 {
   char vl_str[4];
   IStream::Read(vl_str,4);
-  ByteSwap<uint32_t>::SwapRangeFromSwapCodeIntoSystem((uint32_t*)(&vl_str), SwapCode, 1);
+  ByteSwap<uint32_t>::SwapRangeFromSwapCodeIntoSystem((uint32_t*)(&vl_str),
+    SwapCode, 1);
   memcpy(&vl, vl_str, 4);
   return *this;
 }
@@ -63,7 +66,10 @@ IStream &DICOMIStream::Read(Value &v)
 {
   uint32_t length = v.GetLength();
   assert( length != 0xFFFFFFFF );
-  return IStream::Read(v.Internal, length);
+  IStream::Read(v.Internal, length);
+//  ByteSwap<short>::SwapRangeFromSwapCodeIntoSystem((short*)(v.Internal),
+//    SwapCode, length);
+  return *this;
 }
 //-----------------------------------------------------------------------------
 //inline DICOMIStream& operator>>(DICOMIStream &_os, DataElement &_val)
@@ -389,8 +395,8 @@ DICOMIStream& DICOMIStream::Read(Item<DEType> &_val)
         gdcmDebugMacro( "End of SQ item: l=" << _val.ItemLengthField );
         if( _val.ItemLengthField != 0 )
           {
-          gdcmWarningMacro( "BUGGY HEADER: Length should be 0, instead is: " << 
-            _val.ItemLengthField );
+          gdcmWarningMacro( "BUGGY HEADER: Length should be 0, instead is: "
+            << _val.ItemLengthField );
           }
         break;
         }

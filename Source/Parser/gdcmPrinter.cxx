@@ -3,7 +3,6 @@
 #include "gdcmImplicitDataElement.h"
 #include "gdcmDict.h"
 #include "gdcmGroupDict.h"
-//#include "gdcmVM.h"
 #include "gdcmAttribute.h"
 
 namespace gdcm
@@ -16,6 +15,7 @@ namespace gdcm
 //    size += nVM - 1; // number of separators (\)
 //    return size;
 //    }
+//
 //void PrintValue(const Value &val, VR::VRType vr, VM::VMType )
 //    {
 //    std::ostream &_os = std::cout;
@@ -77,35 +77,38 @@ void PrintImplicitDataElements(gdcm::DICOMIStream &is)
       {
       is.Read(de);
       const gdcm::DictEntry &entry = d.GetDictEntry(de.GetTag());
-      if( de.GetTag().GetElement() == 0x0 )
-        {
-        std::cout << de << "\t # (" << gd.GetName(de.GetTag().GetGroup() ) << ") " 
-          << entry.GetName() << std::endl;
-        }
-      else
+//      if( de.GetTag().GetElement() == 0x0 )
+//        {
+//        std::cout << de << "\t # (" << gd.GetName(de.GetTag().GetGroup() )
+//          << ") " << entry.GetName() << std::endl;
+//        }
+//      else
         {
         // Use VR from dictionary
         const VR::VRType vr = entry.GetVR();
         const VM::VMType vm = entry.GetVM();
         const Value& val = de.GetValue();
         //std::cout << de << "\t # " << entry.GetName() << std::endl;
-  _os << de.GetTag() << " VR(?)=" << vr;
-  _os << ",VL=" << std::dec << de.GetValueLength()
-      << " ValueField=["; /* << _val.ValueField << "]";*/
-//  PrintValue( val, vr, vm);
-  
-  // Need to do a super AttributeFactory to be dynamic:
-  // gdcm::AttributeFactory af
-  // af.SetVR()
-  // af.SetVM()
-  // af.SetValue();
-  // af.Print()/Read/Write
-  gdcm::Attribute af;
-  af.SetVR(vr);
-  af.SetVM(vm);
-  af.SetValue( val.GetPointer() );
-  af.Print( _os );
-  _os << "]\n";
+        _os << de.GetTag() << " VR(?)=" << vr;
+        _os << ",VL=" << std::dec << de.GetValueLength()
+          << " ValueField=["; /* << _val.ValueField << "]";*/
+        //  PrintValue( val, vr, vm);
+
+        // Need to do a super AttributeFactory to be dynamic:
+        // gdcm::AttributeFactory af
+        // af.SetVR()
+        // af.SetVM()
+        // af.SetValue();
+        // af.Print()/Read/Write
+        gdcm::Attribute af;
+        af.SetVR(vr);
+        af.SetVM(vm);
+        af.SetLength( 1 ); //strlen(val.GetPointer()));
+        std::istringstream is;
+        is.str( std::string( val.GetPointer(), val.GetLength() ) );
+        af.Read( is );
+        af.Print( _os );
+        _os << "]\n";
         }
       }
     }
@@ -130,8 +133,8 @@ void PrintExplicitDataElements(gdcm::DICOMIStream &is)
       const gdcm::DictEntry &entry = d.GetDictEntry(de.GetTag());
       if( de.GetTag().GetElement() == 0x0 )
         {
-        std::cout << de << "\t # (" << gd.GetName(de.GetTag().GetGroup() ) << ") " 
-          << entry.GetName() << std::endl;
+        std::cout << de << "\t # (" << gd.GetName(de.GetTag().GetGroup() )
+          << ") " << entry.GetName() << std::endl;
         }
       else
         {

@@ -67,7 +67,7 @@ public:
     _os << Internal[0]; // VM is at least garantee to be one
     for(int i=1; i<ValueEnumToLength<TVM>::Len; ++i)
       _os << "," << Internal[i];
-    _os << std::endl;
+    //_os << std::endl;
     }
 
   void Read(std::istream &_is) {
@@ -88,7 +88,6 @@ public:
       }
     }
 };
-
 
 template<int TVR>
 class GDCM_EXPORT AttributeFactory<TVR, VM::VM1_n>
@@ -116,6 +115,7 @@ public:
   }
 
   // If save is set to zero user should not delete the pointer
+  //void SetArray(const typename TypeEnumToType<TVR>::Type *array, int len, bool save = false) {
   void SetArray(typename TypeEnumToType<TVR>::Type *array, int len, bool save = false) {
     if( save ) {
       SetLength(len); // realloc
@@ -132,7 +132,7 @@ public:
     _os << Internal[0]; // VM is at least garantee to be one
     for(int i=1; i<Length; ++i)
       _os << "," << Internal[i];
-    _os << std::endl;
+    //_os << std::endl;
     }
 
   void Read(std::istream &_is) {
@@ -164,6 +164,90 @@ public:
     SetArray(_val.Internal, _val.Length, true);
     return *this;
     }
+};
+
+template <>
+class GDCM_EXPORT AttributeFactory<VR::UL, VM::VM1_n>
+{
+public:
+  TypeEnumToType<VR::UL>::Type *Internal;
+  int Length;
+  // FIXME is this the way to prevent default initialization
+  explicit AttributeFactory() { Internal=0; Length=0; }
+
+  int GetLength() const { return Length; }
+  void SetLength(int len) { 
+    if (len<0) return;
+    if( len ) {
+      if( len > Length ) {
+        // perform realloc
+        TypeEnumToType<VR::UL>::Type *internal = 
+          new TypeEnumToType<VR::UL>::Type[len];
+        memcpy(internal, Internal, Length);
+        delete[] Internal;
+        Internal = internal;
+        }
+      }
+    Length = len;
+  }
+
+  // If save is set to zero user should not delete the pointer
+  //void SetArray(const typename TypeEnumToType<TVR>::Type *array, int len, bool save = false) {
+  void SetArray(TypeEnumToType<VR::UL>::Type *array, int len, bool save = false) {
+    if( save ) {
+      SetLength(len); // realloc
+      memcpy(Internal, array, len);
+      }
+    else {
+      Length = len;
+      Internal = array;
+      }
+  }
+
+  void Print(std::ostream &_os) const {
+    if( !Internal ) return;
+    _os << Internal[0]; // VM is at least garantee to be one
+    for(int i=1; i<Length; ++i)
+      _os << "," << Internal[i];
+    //_os << std::endl;
+    }
+
+  void Read(std::istream &_is) {
+    if( !Internal ) return;
+    _is.read( reinterpret_cast<char*>(&Internal[0]), 4 );
+    for(int i=1; i<Length/4; ++i) {
+      assert( _is );
+      _is.get();
+      _is.read( reinterpret_cast<char*>(&Internal[i]), 4 );
+      }
+    }
+
+  void Write(std::ostream &_os) const {
+    if( !Internal ) return;
+    _os << Internal[0]; // VM is at least garantee to be one
+    for(int i=1; i<Length; ++i)
+      _os << "\\" << Internal[i];
+    }
+
+  AttributeFactory(const AttributeFactory&_val) {
+    if( this != &_val) {
+      *this = _val;
+      }
+    }
+
+  AttributeFactory &operator=(const AttributeFactory &_val) {
+    Length = 0; // SYITF
+    Internal = 0;
+    SetArray(_val.Internal, _val.Length, true);
+    return *this;
+    }
+//public:
+//  void SetLength(int len) { abort(); }
+//  void Read(std::istream &_is)
+//    {
+//    abort();
+//    }
+//  void Print(std::ostream &_os) const { }
 };
 
 template<int TVR>
@@ -207,19 +291,18 @@ public:
   }
 };
 
-template<int TVM>
-class GDCM_EXPORT AttributeFactoryChar
-{
-public:
-  //char *Internal[ValueEnumToLength<TVM>::Len];
-  char Internal[5];
-};
-
-template<int TVM>
-class GDCM_EXPORT AttributeFactory<VR::AS, TVM> : public AttributeFactoryChar<TVM>
-{
-};
-
+//template<int TVM>
+//class GDCM_EXPORT AttributeFactoryChar
+//{
+//public:
+//  //char *Internal[ValueEnumToLength<TVM>::Len];
+//  char Internal[5];
+//};
+//
+//template<int TVM>
+//class GDCM_EXPORT AttributeFactory<VR::AS, TVM> : public AttributeFactoryChar<TVM>
+//{
+//};
 
 }
 

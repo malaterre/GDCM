@@ -1,6 +1,7 @@
 #ifndef __gdcmAttribute_h
 #define __gdcmAttribute_h
 
+#include "gdcmAttributeFactory.h"
 #include "gdcmVR.h"
 #include "gdcmVM.h"
 
@@ -18,13 +19,16 @@ public:
   void SetVR(VR::VRType vr);
   void SetVM(VM::VMType vm);
   /// Problem with \0 in the string ...
-  void SetValue(const char *val);
+  //void SetValue(const char *val);
+
+  void SetLength(int len);
+  void Read(std::istream &_is);
   void Print(std::ostream &_os) const;
 
 private:
   VR::VRType VRField;
   VM::VMType VMField;
-  char* Value;
+  AttributeFactory<VR::UL,VM::VM1_n> AF_UL;
 };
 
 } // end namespace gdcm
