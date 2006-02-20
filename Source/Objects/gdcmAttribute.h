@@ -29,6 +29,8 @@ private:
   VR::VRType VRField;
   VM::VMType VMField;
   AttributeFactory<VR::UL,VM::VM1_n> AF_UL;
+  AttributeFactory<VR::US,VM::VM1_n> AF_US;
+  AttributeFactory<VR::US,VM::VM1_n> AF_SS;
 };
 
 } // end namespace gdcm

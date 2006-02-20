@@ -132,6 +132,7 @@ bool VR::IsSwap(const char *vr)
 bool VR::IsString(VRType vr)
 {
   return
+    vr == INVALID || // FIXME ??
     vr == CS ||
     vr == DA ||
     vr == DS ||
@@ -174,6 +175,7 @@ bool VR::IsBinary(VRType vr)
   return 
     vr == OB ||
     vr == OW ||
+    vr == OB_OW ||
     vr == OF ||
     vr == AT ||
     vr == UN ||

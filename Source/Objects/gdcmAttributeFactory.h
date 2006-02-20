@@ -54,6 +54,7 @@ template<> struct ValueEnumToLength<VM::VM1_99>
 //{ enum { Len = 3 }; };
 //FIXME TODO: 2-2n and 3-3n...
 
+
 template<int TVR, int TVM>
 class GDCM_EXPORT AttributeFactory
 {
@@ -135,6 +136,7 @@ public:
     //_os << std::endl;
     }
 
+  // By default do a formatted read
   void Read(std::istream &_is) {
     if( !Internal ) return;
     _is >> Internal[0];
@@ -164,8 +166,42 @@ public:
     SetArray(_val.Internal, _val.Length, true);
     return *this;
     }
+
+protected:
+  // Provided method for specialized class
+  void BinaryRead(std::istream &_is) {
+    if( !Internal ) return;
+    const unsigned int type_size = 
+      sizeof(typename TypeEnumToType<TVR>::Type);
+    _is.read( reinterpret_cast<char*>(&Internal[0]), type_size);
+    for(unsigned int i=1; i<Length/type_size; ++i) {
+      assert( _is );
+      _is.get(); // Get separator
+      _is.read( reinterpret_cast<char*>(&Internal[i]), type_size );
+    }
+  }
 };
 
+// Specialization for Binary streams
+template<>
+void AttributeFactory<VR::UL, VM::VM1_n>::Read(std::istream &_is)
+{
+  BinaryRead(_is);
+}
+
+template<>
+void AttributeFactory<VR::US, VM::VM1_n>::Read(std::istream &_is)
+{
+  BinaryRead(_is);
+}
+
+template<>
+void AttributeFactory<VR::SS, VM::VM1_n>::Read(std::istream &_is)
+{
+  BinaryRead(_is);
+}
+
+#if 0
 template <>
 class GDCM_EXPORT AttributeFactory<VR::UL, VM::VM1_n>
 {
@@ -249,6 +285,7 @@ public:
 //    }
 //  void Print(std::ostream &_os) const { }
 };
+#endif
 
 template<int TVR>
 class GDCM_EXPORT AttributeFactory<TVR, VM::VM2_n> : public AttributeFactory<TVR, VM::VM1_n>

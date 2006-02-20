@@ -86,29 +86,31 @@ void PrintImplicitDataElements(gdcm::DICOMIStream &is)
         {
         // Use VR from dictionary
         const VR::VRType vr = entry.GetVR();
+        if( VR::IsString( vr ) || VR::IsBinary(vr) )
+          {
+        std::cout << de << "\t # (" << gd.GetName(de.GetTag().GetGroup() )
+          << ") " << entry.GetName() << std::endl;
+          }
+          else
+          {
         const VM::VMType vm = entry.GetVM();
         const Value& val = de.GetValue();
         //std::cout << de << "\t # " << entry.GetName() << std::endl;
         _os << de.GetTag() << " VR(?)=" << vr;
         _os << ",VL=" << std::dec << de.GetValueLength()
-          << " ValueField=["; /* << _val.ValueField << "]";*/
-        //  PrintValue( val, vr, vm);
+          << " ValueField=[";
 
-        // Need to do a super AttributeFactory to be dynamic:
-        // gdcm::AttributeFactory af
-        // af.SetVR()
-        // af.SetVM()
-        // af.SetValue();
-        // af.Print()/Read/Write
+        // Use super class of the template stuff
         gdcm::Attribute af;
         af.SetVR(vr);
         af.SetVM(vm);
-        af.SetLength( 1 ); //strlen(val.GetPointer()));
+        af.SetLength( strlen(val.GetPointer()));
         std::istringstream is;
         is.str( std::string( val.GetPointer(), val.GetLength() ) );
         af.Read( is );
         af.Print( _os );
         _os << "]\n";
+          }
         }
       }
     }
