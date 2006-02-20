@@ -2,5 +2,5 @@ SUBDIRS(
   Common
   Dicts
   Parser 
-  Objects
+  #Objects
   ModuleAttributes)

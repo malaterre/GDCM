@@ -11,7 +11,6 @@ INCLUDE_DIRECTORIES(
   )
 
 SET(SRCS
-  gdcmAttribute.cxx
   )
 
 ADD_LIBRARY(gdcmObjects ${SRCS})
