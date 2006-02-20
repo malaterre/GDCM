@@ -95,18 +95,8 @@ public:
   explicit AttributeFactory() { Internal=0; Length=0; }
 
   int GetLength() const { return Length; }
-  void SetLength(unsigned int len) { 
-    if( len ) {
-      if( len > Length ) {
-        // perform realloc
-        typename TypeEnumToType<TVR>::Type *internal = 
-          new typename TypeEnumToType<TVR>::Type[len];
-        memcpy(internal, Internal, Length);
-        delete[] Internal;
-        Internal = internal;
-        }
-      }
-    Length = len;
+  void SetLength(unsigned int len) {
+    SetTextLength(len);
   }
 
   // If save is set to zero user should not delete the pointer
@@ -164,10 +154,23 @@ public:
 
 protected:
   // Provided method for specialized class
+  void SetTextLength(unsigned int len) { 
+    if( len ) {
+      if( len > Length ) {
+        // perform realloc
+        typename TypeEnumToType<TVR>::Type *internal = 
+          new typename TypeEnumToType<TVR>::Type[len];
+        memcpy(internal, Internal, Length);
+        delete[] Internal;
+        Internal = internal;
+        }
+      }
+    Length = len;
+  }
   void SetBinaryLength(unsigned int len) { 
     const unsigned int type_size = 
       sizeof(typename TypeEnumToType<TVR>::Type);
-    SetLength( len/type_size );
+    SetTextLength( len/type_size );
   }
   void BinaryRead(std::istream &_is) {
     if( !Internal ) return;
