@@ -95,13 +95,12 @@ class GDCM_EXPORT AttributeFactory<TVR, VM::VM1_n>
 {
 public:
   typename TypeEnumToType<TVR>::Type *Internal;
-  int Length;
+  unsigned int Length;
   // FIXME is this the way to prevent default initialization
   explicit AttributeFactory() { Internal=0; Length=0; }
 
   int GetLength() const { return Length; }
-  void SetLength(int len) { 
-    if (len<0) return;
+  void SetLength(unsigned int len) { 
     if( len ) {
       if( len > Length ) {
         // perform realloc
@@ -131,7 +130,7 @@ public:
   void Print(std::ostream &_os) const {
     if( !Internal ) return;
     _os << Internal[0]; // VM is at least garantee to be one
-    for(int i=1; i<Length; ++i)
+    for(unsigned int i=1; i<Length; ++i)
       _os << "," << Internal[i];
     //_os << std::endl;
     }
@@ -140,7 +139,7 @@ public:
   void Read(std::istream &_is) {
     if( !Internal ) return;
     _is >> Internal[0];
-    for(int i=1; i<Length; ++i) {
+    for(unsigned int i=1; i<Length; ++i) {
       assert( _is );
       _is.get();
       _is >> Internal[i];
@@ -150,7 +149,7 @@ public:
   void Write(std::ostream &_os) const {
     if( !Internal ) return;
     _os << Internal[0]; // VM is at least garantee to be one
-    for(int i=1; i<Length; ++i)
+    for(unsigned int i=1; i<Length; ++i)
       _os << "\\" << Internal[i];
     }
 
@@ -169,12 +168,17 @@ public:
 
 protected:
   // Provided method for specialized class
+  void SetBinaryLength(unsigned int len) { 
+    const unsigned int type_size = 
+      sizeof(typename TypeEnumToType<TVR>::Type);
+    SetLength( len/type_size );
+  }
   void BinaryRead(std::istream &_is) {
     if( !Internal ) return;
     const unsigned int type_size = 
       sizeof(typename TypeEnumToType<TVR>::Type);
     _is.read( reinterpret_cast<char*>(&Internal[0]), type_size);
-    for(unsigned int i=1; i<Length/type_size; ++i) {
+    for(unsigned int i=1; i<Length; ++i) {
       assert( _is );
       _is.get(); // Get separator
       _is.read( reinterpret_cast<char*>(&Internal[i]), type_size );
@@ -184,17 +188,27 @@ protected:
 
 // Specialization for Binary streams
 template<>
-void AttributeFactory<VR::UL, VM::VM1_n>::Read(std::istream &_is)
-{
+void AttributeFactory<VR::UL, VM::VM1_n>::SetLength(unsigned int len) { 
+  SetBinaryLength(len);
+}
+template<>
+void AttributeFactory<VR::UL, VM::VM1_n>::Read(std::istream &_is) {
   BinaryRead(_is);
 }
 
 template<>
-void AttributeFactory<VR::US, VM::VM1_n>::Read(std::istream &_is)
-{
+void AttributeFactory<VR::US, VM::VM1_n>::SetLength(unsigned int len) { 
+  SetBinaryLength(len);
+}
+template<>
+void AttributeFactory<VR::US, VM::VM1_n>::Read(std::istream &_is) {
   BinaryRead(_is);
 }
 
+template<>
+void AttributeFactory<VR::SS, VM::VM1_n>::SetLength(unsigned int len) { 
+  SetBinaryLength(len);
+}
 template<>
 void AttributeFactory<VR::SS, VM::VM1_n>::Read(std::istream &_is)
 {
