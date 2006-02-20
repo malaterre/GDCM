@@ -65,9 +65,9 @@ void PrintImplicitDataElements(gdcm::DICOMIStream &is)
           af.SetVR(vr);
           af.SetVM(vm);
           af.SetLength( val.GetLength() );
-          std::istringstream is;
-          is.str( std::string( val.GetPointer(), val.GetLength() ) );
-          af.Read( is );
+          std::istringstream iss;
+          iss.str( std::string( val.GetPointer(), val.GetLength() ) );
+          af.Read( iss );
           af.Print( _os );
           _os << "]\n";
           }
