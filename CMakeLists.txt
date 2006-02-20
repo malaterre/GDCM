@@ -42,8 +42,8 @@ GDCM_PLATFORM_CXX_TEST(GDCM_CXX_HAS_FUNCTION
 #-----------------------------------------------------------------------------
 # Build the main lib...
 SUBDIRS(
-  Source
   Utilities
+  Source
   )
 
 #-----------------------------------------------------------------------------
