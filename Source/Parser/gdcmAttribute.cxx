@@ -1,5 +1,4 @@
 #include "gdcmAttribute.h"
-#include "gdcmAttributeFactory.h"
 #include "gdcmVM.h"
 #include "gdcmVR.h"
 #include <string.h>
