@@ -1,12 +1,12 @@
 #ifndef __gdcmAttribute_h
 #define __gdcmAttribute_h
 
-#include "gdcmAttributeFactory.h"
 #include "gdcmVR.h"
 #include "gdcmVM.h"
 
 namespace gdcm
 {
+class AttributeFactoryInternal;
 /**
  * \brief Abstract Class for representing an Attribute (PN: Person Name, UL: Unsigned Long...)
  * \note see concrete sub classed
@@ -28,9 +28,7 @@ public:
 private:
   VR::VRType VRField;
   VM::VMType VMField;
-  AttributeFactory<VR::UL,VM::VM1_n> AF_UL;
-  AttributeFactory<VR::US,VM::VM1_n> AF_US;
-  AttributeFactory<VR::US,VM::VM1_n> AF_SS;
+  AttributeFactoryInternal *AF;
 };
 
 } // end namespace gdcm

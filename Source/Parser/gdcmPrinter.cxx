@@ -105,8 +105,8 @@ void PrintImplicitDataElements(gdcm::DICOMIStream &is)
         af.SetVR(vr);
         af.SetVM(vm);
         //af.SetLength( val.GetLength() );
-        std::cerr << "Diff:" << val.GetLength() << " " << 
-          strlen(val.GetPointer()) << std::endl;
+        //std::cerr << "Diff:" << val.GetLength() << " " << 
+        //  strlen(val.GetPointer()) << std::endl;
         af.SetLength( strlen( val.GetPointer() ) );
         std::istringstream is;
         is.str( std::string( val.GetPointer(), val.GetLength() ) );

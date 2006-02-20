@@ -186,7 +186,6 @@ private:
 };
 
 // Specialization for Binary streams
-#if 0
 template<>
 void AttributeFactory<VR::UL, VM::VM1_n>::SetLength(unsigned int len) { 
   SetBinaryLength(len);
@@ -214,7 +213,6 @@ void AttributeFactory<VR::SS, VM::VM1_n>::Read(std::istream &_is)
 {
   BinaryRead(_is);
 }
-#endif
 
 
 // Specialization for derivatives of 1-n : 2-n, 3-n ...

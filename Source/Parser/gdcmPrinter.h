@@ -1,5 +1,5 @@
-#ifndef __gdcmFilePrinter_h
-#define __gdcmFilePrinter_h
+#ifndef __gdcmPrinter_h
+#define __gdcmPrinter_h
 // TODO Class to implement printing
 // Since DICOM does printing ?
 // Also I would like to encapsulate the IsCharacterPrintable thing 

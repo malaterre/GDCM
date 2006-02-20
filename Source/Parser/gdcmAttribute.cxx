@@ -1,3 +1,4 @@
+#include "gdcmAttributeFactory.h"
 #include "gdcmAttribute.h"
 #include "gdcmVM.h"
 #include "gdcmVR.h"
@@ -5,15 +6,24 @@
 
 namespace gdcm
 {
+class AttributeFactoryInternal
+  {
+  public:
+  AttributeFactory<VR::UL,VM::VM1_n> AF_UL;
+  AttributeFactory<VR::US,VM::VM1_n> AF_US;
+  AttributeFactory<VR::US,VM::VM1_n> AF_SS;
+  };
 
 Attribute::Attribute()
 {
   VRField = VR::VR_END;
   VMField = VM::VM_END;
+  AF = new AttributeFactoryInternal;
 }
 
 Attribute::~Attribute()
 {
+  delete AF;
 }
 
 void Attribute::SetVR(VR::VRType vr)
@@ -31,13 +41,13 @@ void Attribute::SetLength(int len)
   switch(VRField)
     {
   case VR::UL:
-    AF_UL.SetLength(len);
+    AF->AF_UL.SetLength(len);
     break;
   case VR::US:
-    AF_US.SetLength(len);
+    AF->AF_US.SetLength(len);
     break;
   case VR::SS:
-    AF_SS.SetLength(len);
+    AF->AF_SS.SetLength(len);
     break;
   default:
     abort();
@@ -49,13 +59,13 @@ void Attribute::Read(std::istream &_is)
   switch(VRField)
     {
   case VR::UL:
-    AF_UL.Read(_is);
+    AF->AF_UL.Read(_is);
     break;
   case VR::US:
-    AF_US.Read(_is);
+    AF->AF_US.Read(_is);
     break;
   case VR::SS:
-    AF_SS.Read(_is);
+    AF->AF_SS.Read(_is);
     break;
   default:
     abort();
@@ -84,13 +94,13 @@ void Attribute::Print(std::ostream &_os) const
   switch(VRField)
     {
   case VR::UL:
-      AF_UL.Print(_os);
+      AF->AF_UL.Print(_os);
       break;
   case VR::US:
-      AF_US.Print(_os);
+      AF->AF_US.Print(_os);
       break;
   case VR::SS:
-      AF_SS.Print(_os);
+      AF->AF_SS.Print(_os);
       break;
   default:
       abort();
