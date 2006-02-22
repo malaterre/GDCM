@@ -38,3 +38,12 @@ TERMINOLOGY:
 - Parse: Browse through a DICOM file without loading any information other than the minimum need for it's parsing (almost nothing for ACR, and group 0002 for DICOM)
 - Load: Actually load each and every single element of a DICOM file. Very usefull for a PRINT operation
 - DUMP/PRINT: Operation that consist of displaying all information (up to a certain level of detail) contained in a DICOM file
+
+
+http://groups.google.com/group/comp.protocols.dicom/msg/11e953d2c6cab964
+Secondary Capture:
+See:
+        http://www.pixelmed.com/index.html#PixelMedJavaDICOMToolkit
+and
+        http://www.pixelmed.com/software/javadoc/com/pixelmed/display/DicomIm...
+
