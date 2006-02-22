@@ -44,6 +44,7 @@ void Attribute::SetLength(int len)
     AF->AF_UL.SetLength(len);
     break;
   case VR::US:
+  case VR::US_SS:
     AF->AF_US.SetLength(len);
     break;
   case VR::SS:
@@ -62,6 +63,7 @@ void Attribute::Read(std::istream &_is)
     AF->AF_UL.Read(_is);
     break;
   case VR::US:
+  case VR::US_SS:
     AF->AF_US.Read(_is);
     break;
   case VR::SS:
@@ -97,6 +99,7 @@ void Attribute::Print(std::ostream &_os) const
       AF->AF_UL.Print(_os);
       break;
   case VR::US:
+  case VR::US_SS:
       AF->AF_US.Print(_os);
       break;
   case VR::SS:
