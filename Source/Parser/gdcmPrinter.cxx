@@ -10,16 +10,15 @@ namespace gdcm
 //-----------------------------------------------------------------------------
 Printer::Printer()
 {
-  PrintVR = false;
+  PrintVR = true;
 }
 //-----------------------------------------------------------------------------
 Printer::~Printer()
 {
-  PrintVR = false;
 }
 
 //-----------------------------------------------------------------------------
-void PrintImplicitDataElements(gdcm::DICOMIStream &is)
+void PrintImplicitDataElements(gdcm::DICOMIStream &is, bool printVR)
 {
   gdcm::ImplicitDataElement de;
   gdcm::DataElement &de_tag = de;
@@ -33,44 +32,42 @@ void PrintImplicitDataElements(gdcm::DICOMIStream &is)
       {
       is.Read(de);
       const gdcm::DictEntry &entry = d.GetDictEntry(de.GetTag());
-      //      if( de.GetTag().GetElement() == 0x0 )
-      //        {
-      //        std::cout << de << "\t # (" << gd.GetName(de.GetTag().GetGroup() )
-      //          << ") " << entry.GetName() << std::endl;
-      //        }
-      //      else
+      // Use VR from dictionary
+      const VR::VRType vr = entry.GetVR();
+      if( VR::IsString( vr ) || VR::IsBinary(vr) )
         {
-        // Use VR from dictionary
-        const VR::VRType vr = entry.GetVR();
-        if( VR::IsString( vr ) || VR::IsBinary(vr) )
+        _os << de;
+        }
+      else
+        {
+        const VM::VMType vm = entry.GetVM();
+        const Value& val = de.GetValue();
+        _os << de.GetTag();
+        if ( printVR )
           {
-          _os << de << "\t # (" << gd.GetName(de.GetTag().GetGroup() )
-            << ") " << entry.GetName() << std::endl;
+          _os << " VR(?)=" << vr;
           }
-        else
-          {
-          const VM::VMType vm = entry.GetVM();
-          const Value& val = de.GetValue();
-          //std::cout << de << "\t # " << entry.GetName() << std::endl;
-          _os << de.GetTag();
-          if ( false ) // PrintVR
-            {
-            _os << " VR(?)=" << vr;
-            }
-          _os << ",VL=" << std::dec << de.GetValueLength()
-            << " ValueField=[";
+        _os << ",VL=" << std::dec << de.GetValueLength() << " ValueField=[";
 
-          // Use super class of the template stuff
-          gdcm::Attribute af;
-          af.SetVR(vr);
-          af.SetVM(vm);
-          af.SetLength( val.GetLength() );
-          std::istringstream iss;
-          iss.str( std::string( val.GetPointer(), val.GetLength() ) );
-          af.Read( iss );
-          af.Print( _os );
-          _os << "]\n";
-          }
+        // Use super class of the template stuff
+        gdcm::Attribute af;
+        af.SetVR(vr);
+        af.SetVM(vm);
+        af.SetLength( val.GetLength() );
+        std::istringstream iss;
+        iss.str( std::string( val.GetPointer(), val.GetLength() ) );
+        af.Read( iss );
+        af.Print( _os );
+        _os << "]";
+        }
+      if( de.GetTag().GetElement() == 0x0 )
+        {
+        _os << "\t # (" << gd.GetName(de.GetTag().GetGroup() )
+          << ") " << entry.GetName() << std::endl;
+        }
+      else
+        {
+        _os << "\t # " << entry.GetName() << std::endl;
         }
       }
     }
@@ -124,7 +121,7 @@ void Printer::Initialize()
     }
   else
     {
-    PrintImplicitDataElements(*this);
+    PrintImplicitDataElements(*this, PrintVR);
     }
   // FIXME a file that reach eof is not valid...
   Close();

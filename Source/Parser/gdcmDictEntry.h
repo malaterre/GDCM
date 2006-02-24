@@ -6,6 +6,7 @@
 #include "gdcmType.h"
 #include "gdcmVR.h"
 #include "gdcmVM.h"
+
 #include <string>
 #include <iostream>
 #include <iomanip>

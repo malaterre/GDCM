@@ -2,6 +2,7 @@
 #include "gdcmAttribute.h"
 #include "gdcmVM.h"
 #include "gdcmVR.h"
+
 #include <string.h>
 
 namespace gdcm

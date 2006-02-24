@@ -195,17 +195,18 @@ IStream& DICOMIStream::Read(ImplicitDataElement& ida)
   else
     {
     // We have the length we should be able to read the value
-    if( ida.ValueLengthField < 0xfff )
+//    if( ida.ValueLengthField < 0xfff )
       {
       ida.ValueField.SetLength(ida.ValueLengthField); // perform realloc
       Read(ida.ValueField);
       }
-    else
-      {
-      gdcmWarningMacro( "Seeking long field: " << ida.GetTag() << " l= " 
-        << ida.ValueLengthField );
-      Seekg(ida.ValueLengthField, std::ios::cur);
-      }
+//    else
+//      {
+//      gdcmWarningMacro( "Seeking long field: " << ida.GetTag() << " l= " 
+//        << ida.ValueLengthField );
+//      ida.ValueField.SetLength(0); // perform realloc
+//      Seekg(ida.ValueLengthField, std::ios::cur);
+//      }
     }
   return *this;
 }

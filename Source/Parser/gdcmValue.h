@@ -119,7 +119,7 @@ inline std::ostream& operator<<(std::ostream &_os, const Value &_val)
     _os << "Not Loaded";
   }
       
-  _os << " (Length: " << _val.Length << ")";
+  //_os << " (Length: " << _val.Length << ")";
   return _os;
 }
 
