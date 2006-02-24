@@ -4,6 +4,7 @@
 
 
 #include "gdcmDataElement.h"
+#include "gdcmExplicitDataElement.h"
 #include "gdcmGroup.h"
 #include <map>
 
@@ -62,12 +63,12 @@ public:
   bool IsEmpty() { return DataElements.empty(); }
 
 private:
-  // Meta-Information Header, technically this is only needed for DICOM
-  // an ACR NEMA file should not need to define this as the Transfer Syntax
+  // Meta-Information Header, technically this is only needed for DICOM V3
+  // An ACR-NEMA  (V1 or V2) file should not need to define this as the Transfer Syntax
   // remains the same all along the DICOM file
   // Therefore you can assume that MetaInformation and DataElements have two
   // different Transfer Syntax
-  Group<DEType> MetaInformation; // Basically group 0002
+  Group<ExplicitDataElement> MetaInformation; // Basically group 0002
   StructuredSet DataElements;
 };
 //-----------------------------------------------------------------------------

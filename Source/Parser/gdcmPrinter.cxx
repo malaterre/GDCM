@@ -115,6 +115,11 @@ void Printer::Initialize()
 {
   DICOMIStream::Initialize();
 
+  std::cout << "Meta Header: " << std::endl;
+  std::cout << "Negociated Transfer Syntax: " << 
+    (NegociatedTS == Explicit ? "Explicit" : "Implicit") << std::endl;
+  // Skip one line:
+  std::cout << std::endl;
   if( NegociatedTS == Explicit )
     {
     PrintExplicitDataElements(*this);

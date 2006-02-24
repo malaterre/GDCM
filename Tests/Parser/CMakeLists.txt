@@ -17,7 +17,7 @@ SET(TEST_SRCS
   TestDict
   TestDataSet
   TestSequenceOfItems
-  #TestAllPrint
+  TestAllPrint
   TestGroupDict
   TestPrintGroup
   TestGroupSet
