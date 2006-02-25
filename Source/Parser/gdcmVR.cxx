@@ -132,15 +132,18 @@ bool VR::IsSwap(const char *vr)
 bool VR::IsString(VRType vr)
 {
   return
-    vr == INVALID || // FIXME ??
+    vr == AE ||
+    vr == AS ||
     vr == CS ||
     vr == DA ||
     vr == DS ||
+    vr == DT ||
     vr == IS ||
     vr == LO ||
     vr == LT ||
     vr == PN ||
     vr == SH ||
+    vr == ST ||
     vr == TM ||
     vr == UI;
 }

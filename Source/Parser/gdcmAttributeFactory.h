@@ -125,9 +125,11 @@ public:
   void Read(std::istream &_is) {
     if( !Internal ) return;
     _is >> Internal[0];
+    char sep;
     for(unsigned int i=1; i<Length; ++i) {
       assert( _is );
-      _is.get();
+      _is.get(sep);
+      assert( sep == '\\' );
       _is >> Internal[i];
       }
     }
@@ -179,7 +181,6 @@ protected:
     _is.read( reinterpret_cast<char*>(&Internal[0]), type_size);
     for(unsigned int i=1; i<Length; ++i) {
       assert( _is );
-      _is.get(); // Get separator
       _is.read( reinterpret_cast<char*>(&Internal[i]), type_size );
     }
   }
@@ -212,8 +213,34 @@ void AttributeFactory<VR::SS, VM::VM1_n>::SetLength(unsigned int len) {
   SetBinaryLength(len);
 }
 template<>
-void AttributeFactory<VR::SS, VM::VM1_n>::Read(std::istream &_is)
-{
+void AttributeFactory<VR::SS, VM::VM1_n>::Read(std::istream &_is) {
+  BinaryRead(_is);
+}
+
+template<>
+void AttributeFactory<VR::SL, VM::VM1_n>::SetLength(unsigned int len) { 
+  SetBinaryLength(len);
+}
+template<>
+void AttributeFactory<VR::SL, VM::VM1_n>::Read(std::istream &_is) {
+  BinaryRead(_is);
+}
+
+template<>
+void AttributeFactory<VR::FL, VM::VM1_n>::SetLength(unsigned int len) { 
+  SetBinaryLength(len);
+}
+template<>
+void AttributeFactory<VR::FL, VM::VM1_n>::Read(std::istream &_is) {
+  BinaryRead(_is);
+}
+
+template<>
+void AttributeFactory<VR::FD, VM::VM1_n>::SetLength(unsigned int len) { 
+  SetBinaryLength(len);
+}
+template<>
+void AttributeFactory<VR::FD, VM::VM1_n>::Read(std::istream &_is) {
   BinaryRead(_is);
 }
 

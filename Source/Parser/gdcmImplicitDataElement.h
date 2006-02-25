@@ -57,8 +57,8 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const ImplicitDataElement &_val)
 {
-  _os << _val.TagField << " VL=" << std::dec << _val.ValueLengthField
-      << " ValueField=[" << _val.ValueField << "]";
+  _os << _val.TagField << "\t\tVL=" << std::dec << _val.ValueLengthField
+      << "\tValueField=[" << _val.ValueField << "]";
   return _os;
 }
 

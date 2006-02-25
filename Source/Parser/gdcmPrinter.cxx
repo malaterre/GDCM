@@ -33,24 +33,31 @@ void PrintImplicitDataElements(gdcm::DICOMIStream &is, bool printVR)
       is.Read(de);
       const gdcm::DictEntry &entry = d.GetDictEntry(de.GetTag());
       // Use VR from dictionary
-      const VR::VRType vr = entry.GetVR();
-      if( VR::IsString( vr ) || VR::IsBinary(vr) )
+      VR::VRType vr = entry.GetVR();
+      VM::VMType vm = entry.GetVM();
+      if( de.GetTag().GetGroup()%2 && de.GetTag().GetElement() == 0 )
+        {
+        assert( vr == VR::INVALID );
+        vr = VR::UL;
+        vm = VM::VM1;
+        }
+      if( VR::IsString( vr ) || VR::IsBinary(vr) || vr == VR::INVALID )
         {
         _os << de;
         }
       else
         {
-        const VM::VMType vm = entry.GetVM();
         const Value& val = de.GetValue();
         _os << de.GetTag();
         if ( printVR )
           {
-          _os << " VR(?)=" << vr;
+          _os << " D_VR=" << vr;
           }
-        _os << ",VL=" << std::dec << de.GetValueLength() << " ValueField=[";
+        _os << "\tVL=" << std::dec << de.GetValueLength() << "\tValueField=[";
 
         // Use super class of the template stuff
         gdcm::Attribute af;
+        // Last minute check, is it a Group Length:
         af.SetVR(vr);
         af.SetVM(vm);
         af.SetLength( val.GetLength() );
@@ -62,12 +69,12 @@ void PrintImplicitDataElements(gdcm::DICOMIStream &is, bool printVR)
         }
       if( de.GetTag().GetElement() == 0x0 )
         {
-        _os << "\t # (" << gd.GetName(de.GetTag().GetGroup() )
+        _os << "\t\t# (" << gd.GetName(de.GetTag().GetGroup() )
           << ") " << entry.GetName() << std::endl;
         }
       else
         {
-        _os << "\t # " << entry.GetName() << std::endl;
+        _os << "\t\t# " << entry.GetName() << std::endl;
         }
       }
     }
@@ -78,30 +85,62 @@ void PrintImplicitDataElements(gdcm::DICOMIStream &is, bool printVR)
 }
 
 //-----------------------------------------------------------------------------
-void PrintExplicitDataElements(gdcm::DICOMIStream &is)
+void PrintExplicitDataElements(gdcm::DICOMIStream &is, bool printVR)
 {
   gdcm::ExplicitDataElement de;
   gdcm::DataElement &de_tag = de;
 
+  std::ostream &_os = std::cout;
   static const gdcm::Dict d;
   static const gdcm::GroupDict gd;
+  (void)printVR;
   try
     {
     while( !is.eof() && is.Read(de_tag) )
       {
       is.Read(de);
       const gdcm::DictEntry &entry = d.GetDictEntry(de.GetTag());
+      // Use VR from dictionary
+      const VR::VRType vr = entry.GetVR();
+      const VR::VRType vr_read = de.GetVR();
+      if( VR::IsString(vr_read) || VR::IsBinary(vr_read) )
+        {
+        _os << de;
+        }
+      else
+        {
+        const VM::VMType vm = entry.GetVM();
+        const Value& val = de.GetValue();
+        _os << de.GetTag();
+        _os << " VR=" << vr_read;
+        if( vr != VR::INVALID && !(vr_read & vr) ) //printVR )
+          {
+          gdcmWarningMacro( "Wrong VR" );
+          _os << " VR(?)=" << vr;
+          abort();
+          }
+        _os << "\tVL=" << std::dec << de.GetValueLength() << "\tValueField=[";
+
+        // Use super class of the template stuff
+        gdcm::Attribute af;
+        af.SetVR(vr_read);
+        af.SetVM(vm);
+        af.SetLength( val.GetLength() );
+        std::istringstream iss;
+        iss.str( std::string( val.GetPointer(), val.GetLength() ) );
+        af.Read( iss );
+        af.Print( _os );
+        _os << "]";
+        }
       if( de.GetTag().GetElement() == 0x0 )
         {
-        std::cout << de << "\t # (" << gd.GetName(de.GetTag().GetGroup() )
+        _os << "\t\t# (" << gd.GetName(de.GetTag().GetGroup() )
           << ") " << entry.GetName() << std::endl;
         }
       else
         {
-        //VR::VRType vr = entry.GetVR();
-        std::cout << de << "\t # " << entry.GetName() << std::endl;
-        }
-      }
+        _os << "\t\t# " << entry.GetName() << std::endl;
+        }      }
     }
   catch(std::exception &e)
     {
@@ -122,7 +161,7 @@ void Printer::Initialize()
   std::cout << std::endl;
   if( NegociatedTS == Explicit )
     {
-    PrintExplicitDataElements(*this);
+    PrintExplicitDataElements(*this, PrintVR);
     }
   else
     {

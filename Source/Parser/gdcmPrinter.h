@@ -22,8 +22,8 @@ public:
   bool GetPrintVR() { return PrintVR; }
 
 private:
-  // If User wants to see the VR for ImplicitFile, option dont do anythin
-  // in Explicit Transfer Syntax
+  // If User wants to see the VR from Dictionary. Make sense in Implicit
+  // Usefull in Explicit to very consistance.
   bool PrintVR;
 };
 

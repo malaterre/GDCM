@@ -43,8 +43,8 @@ public:
         delete[] Internal;
         Internal = internal;
         }
-      Internal[l] = '\0';
       }
+    if( Internal ) Internal[l] = '\0';
     Length = l;
   }
 
