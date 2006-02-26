@@ -5,6 +5,10 @@
 #include <sstream>
 #include <iomanip>
 
+#include <assert.h>
+#include <ctype.h> // isdigit
+#include <string.h> // for strncmp
+
 namespace gdcm
 {
 
@@ -18,12 +22,15 @@ struct DictConverterInternal
   //
   std::ifstream InputStream;
   std::ofstream OutputStream;
+
+  std::string DictName;
 };
 
 
 DictConverter::DictConverter()
 {
   Internal = new DictConverterInternal;
+  Internal->DictName = "Default";
   OutputType = DICT_DEFAULT;
 }
 
@@ -183,7 +190,7 @@ bool DictConverter::ReadVM(const char *raw, VM::VMType &type)
 {
   char vm[8];
   int r = sscanf(raw, "%s", vm);
-  (void)r;
+  assert( r == 1 );
   type = VM::GetVMType(vm);
   assert( type != VM::VM_END );
   return true;
@@ -205,65 +212,57 @@ bool DictConverter::Readuint16(const char *raw, uint16_t &ov)
 void DictConverter::WriteHeader()
 {
   std::ofstream &of = Internal->OutputStream;
-  const char header_start[] =
-    "#ifndef __gdcmDefaultDicts_cxx\n"
-    "#define __gdcmDefaultDicts_cxx\n\n"
-    "#include \"gdcmVR.h\"\n"
-    "#include \"gdcmDict.h\"\n"
-    "#include \"gdcmDictEntry.h\"\n\n"
-    "namespace gdcm\n{\n\n"
-    "typedef struct\n{\n"
-    "  uint16_t group;\n"
-    "  uint16_t element;\n";
-  of << header_start;
+  const std::string &name = Internal->DictName;
+  of << "#ifndef __gdcm" << name << "Dicts_cxx\n";
+  of << "#define __gdcm" << name << "Dicts_cxx\n\n";
+  of << "#include \"gdcmVR.h\"\n";
+  of << "#include \"gdcmDict.h\"\n";
+  of << "#include \"gdcmDictEntry.h\"\n\n";
+  of << "namespace gdcm\n{\n\n";
+  of << "typedef struct\n{\n";
+  of << "  uint16_t group;\n";
+  of << "  uint16_t element;\n";
   if( OutputType == DICT_DEBUG )
     {
-    const char header_middle[] = 
-      "  const char *vr;\n"
-      "  const char *vm;\n";
-    of << header_middle;
+    of << "  const char *vr;\n";
+    of << "  const char *vm;\n";
     }
   else
     {
-    const char header_middle[] = 
-      "  VR::VRType vr;\n"
-      "  VM::VMType vm;\n";
-    of << header_middle;
+    of << "  VR::VRType vr;\n";
+    of << "  VM::VMType vm;\n";
     }
-  const char header_end[] =
-    "  const char *name;\n"
-    "} DICT_ENTRY;\n\n"
-    "static DICT_ENTRY datadir[] = {\n";
-  of << header_end;
+  of << "  const char *name;\n";
+  of << "} DICT_ENTRY;\n\n";
+  of << "static DICT_ENTRY " << name << "DataDict[] = {\n";
 }
 
 void DictConverter::WriteFooter()
 {
   std::ofstream &of = Internal->OutputStream;
+  const std::string &name = Internal->DictName;
   if(OutputType == DICT_DEBUG )
     of << "   {0,0,0,0,0}\n";
   else
     of << "   {0,0,VR::VR_END,VM::VM_END,0}\n";
-  const char footer[] =
-    "};\n\n"
-    "void Dict::FillDefaultDataDict()\n"
-    "{\n"
-    "   unsigned int i = 0;\n"
-    "   DICT_ENTRY n = datadir[i];\n"
-    "   while( n.name != 0 )\n"
-    "   {  \n"
-    "      Tag t(n.group, n.element);\n"
-    "      DictEntry e( n.name, n.vr, n.vm );\n"
-    "      AddDictEntry( t, e );\n"
-    "      n = datadir[++i];\n"
-    "   }\n"
-    "   Tag t(0, 0);\n"
-    "   DictEntry e( \"\", (VR::VRType)0, (VM::VMType)0);\n"
-    "   AddDictEntry( t, e );\n"
-    "}\n\n"
-    "} //end gdcm namespace\n"
-    "\n#endif\n";
-  of << footer;
+  of << "};\n\n";
+  of << "void Dict::Fill" << name << "DataDict()\n";
+  of << "{\n";
+  of << "   unsigned int i = 0;\n";
+  of << "   DICT_ENTRY n = " << name << "DataDict[i];\n";
+  of << "   while( n.name != 0 )\n";
+  of << "   {  \n";
+  of << "      Tag t(n.group, n.element);\n";
+  of << "      DictEntry e( n.name, n.vr, n.vm );\n";
+  of << "      AddDictEntry( t, e );\n";
+  of << "      n = " << name << "DataDict[++i];\n";
+  of << "   }\n";
+  of << "   Tag t(0, 0);\n";
+  of << "   DictEntry e( \"\", (VR::VRType)0, (VM::VMType)0);\n";
+  of << "   AddDictEntry( t, e );\n";
+  of << "}\n\n";
+  of << "} //end gdcm namespace\n";
+  of << "\n#endif\n";
 }
 
 // Takes as input a raw text file, and converts it into a xml line
@@ -335,8 +334,8 @@ bool DictConverter::ConvertToCXX(const char *raw, std::string &cxx)
 
 void DictConverter::AddGroupLength() 
 {
-  std::ifstream &from = Internal->InputStream; //(filename, std::ios::binary);
-  std::ofstream &into = Internal->OutputStream; //(outfilename);
+  std::ifstream &from = Internal->InputStream;
+  std::ofstream &into = Internal->OutputStream;
 
   std::streampos p = from.tellg();
   char group[5];
