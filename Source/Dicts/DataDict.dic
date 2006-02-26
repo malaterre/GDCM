@@ -53,7 +53,7 @@
 0008 0033 TM 1 Content Time
 0008 0034 TM 1 Overlay Time
 0008 0035 TM 1 Curve Time
-0008 0040 SS 1 Data Set Type (RET)
+0008 0040 US or SS 1 Data Set Type (RET)
 0008 0041 LO 1 Data Set Subtype (RET)
 0008 0042 CS 1 Nuclear Medicine Series Type (RET)
 0008 0050 SH 1 Accession Number
