@@ -5,8 +5,9 @@
 
 void TestFilePrinter(const char *filename)
 {
-  //std ::cerr << "===============================================" << std::endl;
-  //std::cerr << filename << std::endl;
+  std::cout << "===============================================" << std::endl;
+  std::cout << filename << std::endl;
+
   gdcm::Printer p;
   p.SetFileName(filename);
   p.Open();
