@@ -25,6 +25,13 @@ public:
   void SetOutputFileName(const char* filename);
   const std::string &GetOutputFilename() const;
 
+  int GetOutputType() const {
+    return OutputType;
+  }
+  void SetOutputType(int type) {
+    OutputType = type;
+  }
+
   void Convert();
 
   // Leaving them public for now. Not really user oriented but may be 
@@ -38,15 +45,10 @@ protected:
   void WriteFooter();
   bool ConvertToXML(const char *raw, std::string &cxx);
   bool ConvertToCXX(const char *raw, std::string &cxx);
-  void AddGroupLength(); //std::ifstream &from, std::ofstream &into);
+  void AddGroupLength();
 
 private:
   DictConverterInternal *Internal;
-  //enum WriteModes {
-  //  CXX_OUTPUT=0,
-  //  XML_OUTPUT
-  //};
-  //int WriteMode;
 
   enum OutputTypes {
     DICT_DEFAULT = 0,

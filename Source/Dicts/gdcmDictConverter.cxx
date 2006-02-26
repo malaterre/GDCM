@@ -4,10 +4,6 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
-//#include <iostream>
-//#include <ctype.h>
-//#include <assert.h>
-//#include <stdio.h>
 
 namespace gdcm
 {
@@ -56,6 +52,7 @@ const std::string &DictConverter::GetOutputFilename() const
   return Internal->OutputFilename;
 }
 
+// \TODO this code reexecute...
 void DictConverter::Convert()
 {
   // Open files:
@@ -79,7 +76,7 @@ void DictConverter::Convert()
     if( *(line.c_str()) == '\0' )
       {
       // If an empty line is found then a new group starts
-      AddGroupLength(); //from, into);
+      AddGroupLength();
       continue;
       }
     if( line[2] == 'x' && line[3] == 'x' )
@@ -177,8 +174,8 @@ bool DictConverter::ReadVR(const char *raw, VR::VRType &type)
   while( !isdigit(*(raw+i)))
     ++i;
   std::string vm(raw, raw+i-1);
-  type = gdcm::VR::GetVRType(vm.c_str());
-  assert( type != gdcm::VR::VR_END );
+  type = VR::GetVRType(vm.c_str());
+  assert( type != VR::VR_END );
   return true;
 }
 
@@ -187,8 +184,8 @@ bool DictConverter::ReadVM(const char *raw, VM::VMType &type)
   char vm[8];
   int r = sscanf(raw, "%s", vm);
   (void)r;
-  type = gdcm::VM::GetVMType(vm);
-  assert( type != gdcm::VM::VM_END );
+  type = VM::GetVMType(vm);
+  assert( type != VM::VM_END );
   return true;
 }
 

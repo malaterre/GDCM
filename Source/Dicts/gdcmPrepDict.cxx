@@ -7,16 +7,12 @@
 
 #include "gdcmDictConverter.h"
 
-//#define DICT_DEBUG
-//#define DICT_XML
-
-
 int main(int argc, char *argv[])
 {
   if( argc < 3 )
     return 1;
 
-  // // Can use GDCM_SOURCE_DIR
+  // Can use GDCM_SOURCE_DIR
   // std::string path = GDCM_SOURCE_DIR;
   // path += "/Dicts/";
   // path += DictFilename;
