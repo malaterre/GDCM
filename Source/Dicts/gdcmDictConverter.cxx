@@ -225,53 +225,53 @@ void DictConverter::WriteHeader()
   const std::string &name = Internal->DictName;
   of << "#ifndef __gdcm" << name << "Dicts_cxx\n";
   of << "#define __gdcm" << name << "Dicts_cxx\n\n";
-  of << "#include \"gdcmVR.h\"\n";
-  of << "#include \"gdcmDict.h\"\n";
-  of << "#include \"gdcmDictEntry.h\"\n\n";
-  of << "namespace gdcm\n{\n\n";
-  of << "typedef struct\n{\n";
-  of << "  uint16_t group;\n";
-  of << "  uint16_t element;\n";
-  if( OutputType == DICT_DEBUG )
-    {
-    of << "  const char *vr;\n";
-    of << "  const char *vm;\n";
-    }
-  else
-    {
-    of << "  VR::VRType vr;\n";
-    of << "  VM::VMType vm;\n";
-    }
-  of << "  const char *name;\n";
-  of << "} DICT_ENTRY;\n\n";
-  of << "static DICT_ENTRY " << name << "DataDict[] = {\n";
+  //of << "#include \"gdcmVR.h\"\n";
+  //of << "#include \"gdcmDict.h\"\n";
+  //of << "#include \"gdcmDictEntry.h\"\n\n";
+  //of << "namespace gdcm\n{\n\n";
+  //of << "typedef struct\n{\n";
+  //of << "  uint16_t group;\n";
+  //of << "  uint16_t element;\n";
+  //if( OutputType == DICT_DEBUG )
+  //  {
+  //  of << "  const char *vr;\n";
+  //  of << "  const char *vm;\n";
+  //  }
+  //else
+  //  {
+  //  of << "  VR::VRType vr;\n";
+  //  of << "  VM::VMType vm;\n";
+  //  }
+  //of << "  const char *name;\n";
+  //of << "} DICT_ENTRY;\n\n";
+  of << "static const DICT_ENTRY " << name << "DataDict [] = {\n";
 }
 
 void DictConverter::WriteFooter()
 {
   std::ofstream &of = Internal->OutputStream;
-  const std::string &name = Internal->DictName;
+  //const std::string &name = Internal->DictName;
   if(OutputType == DICT_DEBUG )
     of << "   {0,0,0,0,0}\n";
   else
     of << "   {0,0,VR::VR_END,VM::VM_END,0}\n";
   of << "};\n\n";
-  of << "void Dict::Fill" << name << "DataDict()\n";
-  of << "{\n";
-  of << "   unsigned int i = 0;\n";
-  of << "   DICT_ENTRY n = " << name << "DataDict[i];\n";
-  of << "   while( n.name != 0 )\n";
-  of << "   {  \n";
-  of << "      Tag t(n.group, n.element);\n";
-  of << "      DictEntry e( n.name, n.vr, n.vm );\n";
-  of << "      AddDictEntry( t, e );\n";
-  of << "      n = " << name << "DataDict[++i];\n";
-  of << "   }\n";
-  of << "   Tag t(0, 0);\n";
-  of << "   DictEntry e( \"\", (VR::VRType)0, (VM::VMType)0);\n";
-  of << "   AddDictEntry( t, e );\n";
-  of << "}\n\n";
-  of << "} //end gdcm namespace\n";
+//  of << "void Dict::Fill" << name << "DataDict()\n";
+//  of << "{\n";
+//  of << "   unsigned int i = 0;\n";
+//  of << "   DICT_ENTRY n = " << name << "DataDict[i];\n";
+//  of << "   while( n.name != 0 )\n";
+//  of << "   {  \n";
+//  of << "      Tag t(n.group, n.element);\n";
+//  of << "      DictEntry e( n.name, n.vr, n.vm );\n";
+//  of << "      AddDictEntry( t, e );\n";
+//  of << "      n = " << name << "DataDict[++i];\n";
+//  of << "   }\n";
+//  of << "   Tag t(0, 0);\n";
+//  of << "   DictEntry e( \"\", (VR::VRType)0, (VM::VMType)0);\n";
+//  of << "   AddDictEntry( t, e );\n";
+//  of << "}\n\n";
+//  of << "} //end gdcm namespace\n";
   of << "\n#endif\n";
 }
 

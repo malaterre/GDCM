@@ -2,6 +2,7 @@
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
 #include "gdcmDict.h"
+#include "gdcmDicts.h"
 #include "gdcmGroupDict.h"
 #include "gdcmAttribute.h"
 #include "gdcmVR.h"
@@ -54,7 +55,8 @@ void PrintImplicitDataElements(gdcm::DICOMIStream &is, bool printVR)
   gdcm::DataElement &de_tag = de;
 
   std::ostream &_os = std::cout;
-  static const gdcm::Dict d;
+  static const gdcm::Dicts dicts;
+  const gdcm::Dict &d = dicts.GetPublicDict();
   static const gdcm::GroupDict gd;
   try
     {
