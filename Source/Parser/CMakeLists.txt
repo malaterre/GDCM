@@ -28,15 +28,27 @@ ELSE(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.1)
     )
 ENDIF(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.1)
 
-ADD_CUSTOM_COMMAND(
-  OUTPUT    ${GDCM_BINARY_DIR}/Source/Parser/gdcmDefaultDicts.cxx
-  COMMAND   ${PREP_DICT}
-  ARGS      ${GDCM_SOURCE_DIR}/Source/Dicts/DataDict.dic
-            ${GDCM_BINARY_DIR}/Source/Parser/gdcmDefaultDicts.cxx
-  DEPENDS   ${GDCM_SOURCE_DIR}/Source/Dicts/DataDict.dic
-            ${GDCM_SOURCE_DIR}/Source/Dicts/gdcmPrepDict.cxx
-  COMMENT   "Generating gdcmDefaultDicts.cxx based on DataDict.dic"
+SET(DICT_LIST
+  DICOMV3
+  #  NIH
   )
+
+# List of file needed to get all dict into c++ code
+SET(DICT_SRCS)
+FOREACH(dict ${DICT_LIST})
+  SET(CXX_DICT ${GDCM_BINARY_DIR}/Source/Parser/gdcm${dict}.cxx)
+  SET(DICT_SRCS ${DICT_SRCS} ${CXX_DICT})
+  ADD_CUSTOM_COMMAND(
+    OUTPUT    ${CXX_DICT}
+    COMMAND   ${PREP_DICT}
+    ARGS      ${GDCM_SOURCE_DIR}/Source/Dicts/${dict}.dic
+              ${CXX_DICT}
+              ${dict}
+    DEPENDS   ${GDCM_SOURCE_DIR}/Source/Dicts/${dict}.dic
+              ${PREP_DICT}
+    COMMENT   "Generating gdcmDefaultDicts.cxx based on ${dict}.dic"
+    )
+ENDFOREACH(dict)
 
 ADD_CUSTOM_COMMAND(
   OUTPUT    ${GDCM_BINARY_DIR}/Source/Parser/gdcmDefaultGroupNames.cxx
@@ -44,7 +56,7 @@ ADD_CUSTOM_COMMAND(
   ARGS      ${GDCM_SOURCE_DIR}/Source/Dicts/GroupName.dic
             ${GDCM_BINARY_DIR}/Source/Parser/gdcmDefaultGroupNames.cxx
   DEPENDS   ${GDCM_SOURCE_DIR}/Source/Dicts/GroupName.dic
-            ${GDCM_SOURCE_DIR}/Source/Dicts/gdcmPrepGroupName.cxx
+            ${PREP_GROUPNAME}
   COMMENT   "Generating gdcmDefaultGroupNames.cxx based on GroupName.dic"
   )
 
@@ -70,7 +82,7 @@ SET(SRCS
   gdcmLoader.cxx
   gdcmPrinter.cxx
   gdcmAttribute.cxx
-  "${GDCM_BINARY_DIR}/Source/Parser/gdcmDefaultDicts.cxx"
+  ${DICT_SRCS}
   "${GDCM_BINARY_DIR}/Source/Parser/gdcmDefaultGroupNames.cxx"
   )
 

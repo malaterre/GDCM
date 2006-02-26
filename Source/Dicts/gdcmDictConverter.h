@@ -32,6 +32,8 @@ public:
   void SetOutputType(int type) {
     OutputType = type;
   }
+  const std::string &GetDictName() const;
+  void SetDictName(const char *name);
 
   void Convert();
 

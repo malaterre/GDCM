@@ -39,6 +39,16 @@ DictConverter::~DictConverter()
   delete Internal;
 }
 
+const std::string &DictConverter::GetDictName() const
+{
+  return Internal->DictName;
+}
+
+void DictConverter::SetDictName(const char *name)
+{
+  Internal->DictName = name;
+}
+
 void DictConverter::SetInputFileName(const char* filename)
 {
   Internal->InputFilename = filename;

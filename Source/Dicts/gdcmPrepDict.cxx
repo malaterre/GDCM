@@ -9,7 +9,7 @@
 
 int main(int argc, char *argv[])
 {
-  if( argc < 3 )
+  if( argc < 4 )
     return 1;
 
   // Can use GDCM_SOURCE_DIR
@@ -19,12 +19,14 @@ int main(int argc, char *argv[])
   // std::cerr << "open: " << path << std::endl;
   const char *filename = argv[1]; // Full path to the dict
   const char *outfilename = argv[2]; // Full path to output the dict
+  const char *dictname = argv[3]; // Full path to output the dict
   //std::cerr << "open: " << filename << std::endl;
 
   gdcm::DictConverter dc;
   //dc.SetOutputType(gdcm::DictConverter::DICT_DEBUG);
   dc.SetInputFileName(filename);
   dc.SetOutputFileName(outfilename);
+  dc.SetDictName(dictname);
   dc.Convert();
 
   return 0;
