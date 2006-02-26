@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
   //std::cerr << "open: " << filename << std::endl;
 
   gdcm::DictConverter dc;
+  //dc.SetOutputType(gdcm::DictConverter::DICT_DEBUG);
   dc.SetInputFileName(filename);
   dc.SetOutputFileName(outfilename);
   dc.Convert();

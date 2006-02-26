@@ -41,6 +41,12 @@ public:
   static bool ReadVM(const char *raw, VM::VMType &type);
   static bool Readuint16(const char *raw, uint16_t &ov);
 
+  enum OutputTypes {
+    DICT_DEFAULT = 0,
+    DICT_DEBUG,
+    DICT_XML
+  };
+
 protected:
   void WriteHeader();
   void WriteFooter();
@@ -51,11 +57,6 @@ protected:
 private:
   DictConverterInternal *Internal;
 
-  enum OutputTypes {
-    DICT_DEFAULT = 0,
-    DICT_DEBUG,
-    DICT_XML
-  };
   int OutputType;
 };
 
