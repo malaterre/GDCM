@@ -5,6 +5,7 @@ INCLUDE_REGULAR_EXPRESSION("^gdcm.*$")
 #-----------------------------------------------------------------------------
 # DICOM dictionary stuff
 SET(DICT_SRCS
+  ${GDCM_SOURCE_DIR}/Source/Dicts/gdcmDictConverter.cxx
   ${GDCM_SOURCE_DIR}/Source/Dicts/gdcmPrepDict.cxx
   )
 
