@@ -4,6 +4,7 @@
 #include "gdcmDict.h"
 #include "gdcmGroupDict.h"
 #include "gdcmAttribute.h"
+#include "gdcmVR.h"
 
 namespace gdcm
 {
@@ -15,6 +16,35 @@ Printer::Printer()
 //-----------------------------------------------------------------------------
 Printer::~Printer()
 {
+}
+//-----------------------------------------------------------------------------
+void PrintExplicitDataElement(std::ostream& _os, const ExplicitDataElement &_val, bool printVR, VR::VRType dictVR)
+{
+  const Tag &t = _val.GetTag();
+  const VR::VRType vr = _val.GetVR();
+  const uint32_t vl = _val.GetValueLength();
+  const Value& value = _val.GetValue();
+  _os << t << " VR=" << vr;
+  if ( printVR )
+    {
+    _os << " ?VR=" << dictVR;
+    }
+  _os << "\tVL=" << std::dec << vl  
+      << "\tValueField=[" << value << "]";
+}
+//-----------------------------------------------------------------------------
+void PrintImplicitDataElement(std::ostream& _os, const ImplicitDataElement &_val, bool printVR, VR::VRType dictVR)
+{
+  const Tag &t = _val.GetTag();
+  const uint32_t vl = _val.GetValueLength();
+  const Value& value = _val.GetValue();
+  _os << t;
+  if ( printVR )
+    {
+    _os << " ?VR=" << dictVR;
+    }
+  _os << "\tVL=" << std::dec << vl
+    << "\tValueField=[" << value << "]";
 }
 
 //-----------------------------------------------------------------------------
@@ -43,7 +73,7 @@ void PrintImplicitDataElements(gdcm::DICOMIStream &is, bool printVR)
         }
       if( VR::IsString( vr ) || VR::IsBinary(vr) || vr == VR::INVALID )
         {
-        _os << de;
+        PrintImplicitDataElement(_os, de, printVR, entry.GetVR());
         }
       else
         {
@@ -51,7 +81,7 @@ void PrintImplicitDataElements(gdcm::DICOMIStream &is, bool printVR)
         _os << de.GetTag();
         if ( printVR )
           {
-          _os << " D_VR=" << vr;
+          _os << " ?VR=" << vr;
           }
         _os << "\tVL=" << std::dec << de.GetValueLength() << "\tValueField=[";
 
@@ -105,7 +135,7 @@ void PrintExplicitDataElements(gdcm::DICOMIStream &is, bool printVR)
       const VR::VRType vr_read = de.GetVR();
       if( VR::IsString(vr_read) || VR::IsBinary(vr_read) )
         {
-        _os << de;
+        PrintExplicitDataElement(_os, de, printVR, vr);
         }
       else
         {

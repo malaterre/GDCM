@@ -44,8 +44,6 @@ public:
   void SetTag(const Tag &t) { TagField = t; }
 
   const Value &GetValue() const { return ValueField; }
-//  virtual uint32_t GetLength();
-//  virtual uint32_t GetLength();
 
   DataElement(const DataElement&_val)
     {
@@ -68,8 +66,6 @@ public:
     }
 
 protected:
-  //DICOMIStream& Read(DICOMIStream &) { abort(); };
-
   Tag TagField;
   Value ValueField;
   // Value could be NULL if we don't read it, therefore we need an offset
@@ -94,3 +90,4 @@ inline DICOMOStream& operator<<(DICOMOStream &_os, const DataElement &_val)
 } // end namespace gdcm
 
 #endif //__gdcmDataElement_h
+

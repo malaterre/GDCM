@@ -19,22 +19,19 @@ public:
   ExplicitDataElement() { ValueLengthField = 0; VRField = VR::INVALID; }
 
   friend std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_val);
-//  friend DICOMIStream& operator>>(DICOMIStream& _os, ExplicitDataElement &_val);
   friend class DICOMIStream;
   friend DICOMOStream& operator<<(DICOMOStream& _os, const ExplicitDataElement &_val);
 
-  uint32_t GetValueLength() { return ValueLengthField; }
+  uint32_t GetValueLength() const { return ValueLengthField; }
   void SetValueLength(uint32_t vl) { ValueLengthField = vl; }
 
-  VR::VRType GetVR() { return VRField; }
+  VR::VRType GetVR() const { return VRField; }
   void SetVR(VR::VRType vr) { VRField = vr; }
 
+  uint32_t GetLength() const { return ComputeLength(); }
   uint32_t GetLength() { return ComputeLength(); }
 
-  uint32_t GetLength() const { return ComputeLength(); }
-
 protected:
-  //DICOMIStream& Read(DICOMIStream &_os);
   DICOMOStream& Write(DICOMOStream &_os) const;
 
   uint32_t ComputeLength() const
@@ -55,11 +52,10 @@ inline std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_v
   _os << _val.TagField << " VR=" << _val.VRField;
   _os << "\tVL=" << std::dec << _val.ValueLengthField
       << "\tValueField=[" << _val.ValueField << "]";
-//   _val.ValueField.Print( _val.VRField, _os );
-//  _os << "]";
   return _os;
 }
 
 } // end namespace gdcm
 
 #endif //__gdcmExplicitDataElement_h
+
