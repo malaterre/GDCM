@@ -39,9 +39,8 @@ SET(DEFAULT_DICTS)
 FOREACH(dict ${DICT_LIST})
   SET(CXX_DICT ${GDCM_BINARY_DIR}/Source/Parser/gdcm${dict}.cxx)
   SET(DICT_SRCS ${DICT_SRCS} ${CXX_DICT})
-  SET(DEFAULT_DICTS "${DEFAULT_DICTS}\n#include \"${CXX_DICT}\"")
-  SET(DEFAULT_DICTS_COMMAND 
-    "${DEFAULT_DICTS_COMMAND}\n  FillDataDict(PublicDicts[${dict}_DICT], ${dict}DataDict);")
+  #SET(DEFAULT_DICTS "${DEFAULT_DICTS}\n#include \"${CXX_DICT}\"")
+  #SET(DEFAULT_DICTS_COMMAND "${DEFAULT_DICTS_COMMAND}\n  FillDataDict(PublicDicts[${dict}_DICT], ${dict}DataDict);")
   ADD_CUSTOM_COMMAND(
     OUTPUT    ${CXX_DICT}
     COMMAND   ${PREP_DICT}
@@ -93,8 +92,8 @@ SET(SRCS
   gdcmPrinter.cxx
   gdcmAttribute.cxx
   gdcmDicts.cxx
-  #${DICT_SRCS}
-  "${GDCM_BINARY_DIR}/Source/Parser/gdcmDefaultDicts.cxx"
+  ${DICT_SRCS}
+  #"${GDCM_BINARY_DIR}/Source/Parser/gdcmDefaultDicts.cxx"
   "${GDCM_BINARY_DIR}/Source/Parser/gdcmDefaultGroupNames.cxx"
   )
 

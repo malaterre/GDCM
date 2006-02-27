@@ -6,7 +6,7 @@ namespace gdcm
 Dicts::Dicts()
 {
   PublicType = DICOMV3_DICT;
-  PublicDicts.resize(3, Dict() );
+  //PublicDicts.resize(3, Dict() );
 }
 
 Dicts::~Dicts()
@@ -15,6 +15,7 @@ Dicts::~Dicts()
 
 void Dicts::AddPublicDict(const Dict& dict)
 {
+  (void)dict;
   //PublicDicts.push_back( dict );
 }
 
@@ -25,12 +26,13 @@ void Dicts::SetPublicType(int type)
 
 const Dict &Dicts::GetPublicDict() const
 {
-  assert( PublicType < PublicDicts.size() );
+  //assert( PublicType < PublicDicts.size() );
   return PublicDicts[PublicType];
 }
 
 void Dicts::AddPrivateDict(const Dict& dict)
 {
+  (void)dict;
   //PrivateDicts.push_back( dict );
 }
 

@@ -55,8 +55,9 @@ void PrintImplicitDataElements(gdcm::DICOMIStream &is, bool printVR)
   gdcm::DataElement &de_tag = de;
 
   std::ostream &_os = std::cout;
-  static const gdcm::Dicts dicts;
-  const gdcm::Dict &d = dicts.GetPublicDict();
+  //static const gdcm::Dicts dicts;
+  //const gdcm::Dict &d = dicts.GetPublicDict();
+  static const gdcm::Dict d;
   static const gdcm::GroupDict gd;
   try
     {

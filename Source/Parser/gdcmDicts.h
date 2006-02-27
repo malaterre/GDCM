@@ -42,7 +42,8 @@ private:
   void FillDataDicts();
 
   unsigned int PublicType;
-  std::vector<Dict> PublicDicts;
+  //std::vector<Dict> PublicDicts;
+  Dict PublicDicts[3];
 
   std::string PrivateType;
   std::vector<Dict> PrivateDicts;

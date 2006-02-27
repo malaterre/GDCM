@@ -18,7 +18,10 @@ class GDCM_EXPORT Dict
 {
 public:
   typedef std::map<Tag, DictEntry> MapDictEntry;
-  Dict() { }
+  Dict() { 
+    FillDICOMV3DataDict();
+    //FillNIHDataDict();
+  }
 
   friend std::ostream& operator<<(std::ostream& _os, const Dict &_val);
 
@@ -51,9 +54,11 @@ protected:
 //    AddDictEntry(t, d);
 //    }
 private:
+  void FillDICOMV3DataDict();
+  void FillNIHDataDict();
 
-//  Dict &operator=(const Dict &_val); // purposely not implemented
-//  Dict(const Dict &_val); // purposely not implemented
+  Dict &operator=(const Dict &_val); // purposely not implemented
+  Dict(const Dict &_val); // purposely not implemented
 
   MapDictEntry DictInternal;
 };
