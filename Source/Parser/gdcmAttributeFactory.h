@@ -93,6 +93,10 @@ class GDCM_EXPORT AttributeFactory<TVR, VM::VM1_n>
 public:
   // This the way to prevent default initialization
   explicit AttributeFactory() { Internal=0; Length=0; }
+  ~AttributeFactory() {
+    delete[] Internal;
+    Internal = 0;
+  }
 
   int GetLength() const { return Length; }
   void SetLength(unsigned int len) {
