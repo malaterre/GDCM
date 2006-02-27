@@ -223,7 +223,7 @@ IStream& DICOMIStream::Read(ImplicitDataElement& ida)
       }
     else
       {
-      ida.ValueField.SetLength(0); // perform realloc
+      ida.ValueField.Clean();
       Seekg(ida.ValueLengthField, std::ios::cur);
       }
     }
@@ -335,7 +335,19 @@ IStream& DICOMIStream::Read(ExplicitDataElement& xda)
     {
     assert( xda.ValueLengthField != 0xFFFF ); // ??
     // We have the length we should be able to read the value
-//    if( xda.ValueLengthField < 0xfff )
+    bool needReading = true;
+    if( ReadForPrinting )
+      {
+      if( xda.VRField & VR::OB_OW )
+        {
+        needReading = false;
+        }
+      else
+        {
+        needReading = xda.ValueLengthField < 0xfff;
+        }
+      }
+    if( needReading )
       {
       if (xda.ValueLengthField%2)
         {
@@ -344,22 +356,22 @@ IStream& DICOMIStream::Read(ExplicitDataElement& xda)
       xda.ValueField.SetLength(xda.ValueLengthField); // perform realloc
       Read(xda.ValueField);
       }
-//    else
-//      {
-//      gdcmWarningMacro( "Seeking long field: " << xda.GetTag() << " l= " 
-//        << xda.ValueLengthField );
-//#ifdef BIG_HACK2
-//      xda.ValueField.SetLength(xda.ValueLengthField);
-//      Read(xda.ValueField);
-//      std::ofstream f("/tmp/pixel.raw");
-//      f.write(ValueField.GetPointer(), ValueField.GetLength());
-//      f.close();
-//      Seekg(0, std::ios::end); // FIXME garbage at the end...
-//#else
-//      xda.ValueField.SetLength(0); // perform realloc
-//      Seekg(xda.ValueLengthField, std::ios::cur);
-//#endif
-//      }
+    else
+      {
+      gdcmWarningMacro( "Seeking long field: " << xda.GetTag() << " l= " 
+        << xda.ValueLengthField );
+#ifdef BIG_HACK2
+      xda.ValueField.SetLength(xda.ValueLengthField);
+      Read(xda.ValueField);
+      std::ofstream f("/tmp/pixel.raw");
+      f.write(ValueField.GetPointer(), ValueField.GetLength());
+      f.close();
+      Seekg(0, std::ios::end); // FIXME garbage at the end...
+#else
+      xda.ValueField.Clean();
+      Seekg(xda.ValueLengthField, std::ios::cur);
+#endif
+      }
     }
 
   return *this;

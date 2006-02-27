@@ -22,7 +22,9 @@ class GDCM_EXPORT Value
   friend class DICOMOStream;
 public:
   Value() { Internal = 0; Length = 0; }
-  ~Value() { delete[] Internal; Internal = 0; Length = 0; }
+  ~Value() { 
+    Clean();
+  }
 
   friend std::ostream& operator<<(std::ostream &_os, const Value &_val);
 
@@ -73,6 +75,8 @@ public:
     return false;
     }
 
+  void Clean() {
+    delete[] Internal; Internal = 0; Length = 0; }
   const char *GetPointer() const { return Internal; }
 
   /**
@@ -101,24 +105,23 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &_os, const Value &_val)
 {
- /// \TODO Unfortunately, there is no way to know if the value is of 'printable VR'
- ///       we have to check *all* the bytes
-  if( _val.Internal && _val.Length )
-  {
-    if ( _val.IsPrintable() )
+  // This is perfectly valid to have a Length = 0 , so we cannot check
+  // the lenght for printing
+  if( _val.Internal )
     {
-       _os << _val.Internal;
-       return _os;
-    }
+    if ( _val.IsPrintable() )
+      {
+      _os << _val.Internal;
+      return _os;
+      }
     else
-    _os << "Loaded:" << _val.Length;
-  }
+      _os << "Loaded:" << _val.Length;
+    }
   else
-  {
+    {
     _os << "Not Loaded";
-  }
+    }
       
-  //_os << " (Length: " << _val.Length << ")";
   return _os;
 }
 
