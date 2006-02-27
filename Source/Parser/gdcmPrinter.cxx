@@ -13,6 +13,7 @@ namespace gdcm
 Printer::Printer()
 {
   PrintVR = true;
+  ReadForPrinting = true;
 }
 //-----------------------------------------------------------------------------
 Printer::~Printer()

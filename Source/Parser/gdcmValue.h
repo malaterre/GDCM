@@ -103,11 +103,10 @@ inline std::ostream& operator<<(std::ostream &_os, const Value &_val)
 {
  /// \TODO Unfortunately, there is no way to know if the value is of 'printable VR'
  ///       we have to check *all* the bytes
-  if( _val.Internal )
+  if( _val.Internal && _val.Length )
   {
     if ( _val.IsPrintable() )
     {
- /// \TODO We cannot know wheter VR = US, SS, FD, ...-> we cannot display the value    
        _os << _val.Internal;
        return _os;
     }

@@ -24,8 +24,8 @@ namespace gdcm
 class GDCM_EXPORT DICOMIStream : public IStream
 {
 public:
-  DICOMIStream() { NegociatedTS = Unknown; }
-  ~DICOMIStream() {};
+  DICOMIStream();
+  ~DICOMIStream();
 
   // The following methods are public.
   // DO NOT EXPECT TO REMAIN LIKE THAT
@@ -78,6 +78,9 @@ protected:
   void ReadNonStandardDataElements();
 
   NegociatedTSType NegociatedTS;
+ 
+  // If on try to skip no interesting data that cannot be printed anyway
+  bool ReadForPrinting;
 };
 
 } // end namespace gdcm

@@ -12,6 +12,15 @@
 
 namespace gdcm
 {
+DICOMIStream::DICOMIStream()
+{
+  NegociatedTS = Unknown; 
+  ReadForPrinting = false;
+}
+
+DICOMIStream::~DICOMIStream()
+{
+}
 
 IStream &DICOMIStream::Read(Tag &t)
   throw (std::exception)
@@ -202,18 +211,21 @@ IStream& DICOMIStream::Read(ImplicitDataElement& ida)
   else
     {
     // We have the length we should be able to read the value
-//    if( ida.ValueLengthField < 0xfff )
+    bool needReading = true;
+    if( ReadForPrinting )
+      {
+      needReading = ida.ValueLengthField < 0xfff;
+      }
+    if( needReading )
       {
       ida.ValueField.SetLength(ida.ValueLengthField); // perform realloc
       Read(ida.ValueField);
       }
-//    else
-//      {
-//      gdcmWarningMacro( "Seeking long field: " << ida.GetTag() << " l= " 
-//        << ida.ValueLengthField );
-//      ida.ValueField.SetLength(0); // perform realloc
-//      Seekg(ida.ValueLengthField, std::ios::cur);
-//      }
+    else
+      {
+      ida.ValueField.SetLength(0); // perform realloc
+      Seekg(ida.ValueLengthField, std::ios::cur);
+      }
     }
   return *this;
 }
