@@ -21,8 +21,7 @@ IStream &DICOMIStream::Read(Tag &t)
   //assert(!(t.GetGroup()%2));
   ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem(t.ElementTag.tags,
     SwapCode, 2);
-#define BROKEN_DICOM_CONFORMANCE
-#ifdef BROKEN_DICOM_CONFORMANCE
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
   if( t == Tag(0,0) )
     {
     throw std::exception( );
@@ -113,6 +112,7 @@ IStream& DICOMIStream::Read(SequenceOfItems<DEType>& sq)
         break;
         }
       // else
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
       if( de.GetTag() != itemStart )
         {
         // gdcm-JPEG-LossLess3a.dcm
@@ -124,6 +124,7 @@ IStream& DICOMIStream::Read(SequenceOfItems<DEType>& sq)
         isBroken = true;
         break;
         }
+#endif
       Item<DEType> si; // = SequenceItemField;
       assert( si.GetTag() == de.GetTag() ); // Should be an Item Start
       assert( si.GetTag() == itemStart );
@@ -143,6 +144,7 @@ IStream& DICOMIStream::Read(SequenceOfItems<DEType>& sq)
     while( seq_length != sq.SequenceLengthField )
       {
       Read(de);
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
       if( de.GetTag() != itemStart )
         {
         gdcmErrorMacro( "BUGGY header: Does not start with Item Start. Skipping sequence ("
@@ -150,6 +152,7 @@ IStream& DICOMIStream::Read(SequenceOfItems<DEType>& sq)
         Seekg( sq.SequenceLengthField - 4, std::ios::cur );
         break;
         }
+#endif
       Item<DEType> si; // = SequenceItemField;
       Read(si);
       sq.Items.push_back( si );
@@ -172,9 +175,12 @@ IStream& DICOMIStream::Read(ImplicitDataElement& ida)
   //const DictEntry &de = d.GetDictEntry(TagField);
   // Read Value Length
   if( !(Read(ida.ValueLengthField)) ) return *this;
-  // THE WORST BUG EVER:
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+  // THE WORST BUG EVER. From GE Workstartion
   if(ida.ValueLengthField == 13 )
     {
+    // Historically gdcm did not enforce proper length
+    // thus Theralys started writting illegal DICOM images:
     const Tag theralys1(0x0008,0x0070);
     const Tag theralys2(0x0008,0x0080);
     if( ida.GetTag() != theralys1
@@ -184,6 +190,7 @@ IStream& DICOMIStream::Read(ImplicitDataElement& ida)
       ida.ValueLengthField = 10;
       }
     }
+#endif
   if(ida.ValueLengthField == 0xFFFFFFFF)
     {
     //assert( de.GetVR() == VR::SQ );
@@ -252,6 +259,7 @@ IStream& DICOMIStream::Read(ExplicitDataElement& xda)
     uint16_t vl;
     // Read Value Length (16bits)
     Read(vl);
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     if( xda.VRField == VR::UL )
       {
       if(vl == 6)
@@ -267,6 +275,7 @@ IStream& DICOMIStream::Read(ExplicitDataElement& xda)
         }
 #endif
       }
+#endif // GDCM_SUPPORT_BROKEN_IMPLEMENTATION
 //#define BIG_HACK2
 #ifdef BIG_HACK // Trying to read NM_FromJulius_Caesar.dcm
     const Tag bug(0x0054,0x0200);

@@ -65,6 +65,11 @@
 
 #cmakedefine GDCM_FORCE_BIGENDIAN_EMULATION
 
+/* To Remove code that support broken DICOM implementation and therefore
+ * add some over head. Turn Off at your own risk 
+ */
+#cmakedefine GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+
 /*--------------------------------------------------------------------------*/
 /* GDCM Versioning                                                          */
 

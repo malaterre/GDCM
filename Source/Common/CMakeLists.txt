@@ -2,6 +2,9 @@
 # Rebuild gdcm whenever a file starting with gdcm* is modified
 INCLUDE_REGULAR_EXPRESSION("^gdcm.*$")
 
+# Turn off at your own risk
+SET(GDCM_SUPPORT_BROKEN_IMPLEMENTATION ON)
+
 # configure the .h file
 CONFIGURE_FILE(
   "${GDCM_SOURCE_DIR}/Source/Common/gdcmConfigure.h.in"

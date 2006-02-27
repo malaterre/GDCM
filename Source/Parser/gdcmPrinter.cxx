@@ -26,9 +26,13 @@ void PrintExplicitDataElement(std::ostream& _os, const ExplicitDataElement &_val
   const uint32_t vl = _val.GetValueLength();
   const Value& value = _val.GetValue();
   _os << t << " VR=" << vr;
-  if ( printVR )
+  (void)printVR;
+  if( dictVR != VR::INVALID && !(vr & dictVR) ) //printVR )
     {
-    _os << " ?VR=" << dictVR;
+    gdcmWarningMacro( "Wrong VR" );
+    _os << " VR(?)=" << dictVR;
+    // LEADTOOLS_FLOWERS-8-PAL-RLE.dcm has (0040,0253) : CS instead of SH
+    //abort();
     }
   _os << "\tVL=" << std::dec << vl  
       << "\tValueField=[" << value << "]";
