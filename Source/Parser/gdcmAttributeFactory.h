@@ -3,6 +3,7 @@
 
 #include "gdcmType.h"
 #include "gdcmVR.h"
+#include "gdcmTag.h"
 #include "gdcmVM.h"
 #include <string>
 #include <vector>
@@ -24,8 +25,8 @@ template<> struct TypeEnumToType<VR::UL>
 { typedef uint32_t Type; };
 template<> struct TypeEnumToType<VR::US>
 { typedef uint16_t Type; };
-//template<> struct TypeEnumToType<VR::AS>
-//{ typedef char Type[4]; };
+template<> struct TypeEnumToType<VR::AT>
+{ typedef Tag Type; };
 
 template<int T> struct ValueEnumToLength;
 template<> struct ValueEnumToLength<VM::VM1>
@@ -245,6 +246,15 @@ void AttributeFactory<VR::FD, VM::VM1_n>::SetLength(unsigned int len) {
 }
 template<>
 void AttributeFactory<VR::FD, VM::VM1_n>::Read(std::istream &_is) {
+  BinaryRead(_is);
+}
+
+template<>
+void AttributeFactory<VR::AT, VM::VM1_n>::SetLength(unsigned int len) { 
+  SetBinaryLength(len);
+}
+template<>
+void AttributeFactory<VR::AT, VM::VM1_n>::Read(std::istream &_is) {
   BinaryRead(_is);
 }
 

@@ -16,6 +16,7 @@ class AttributeFactoryInternal
   AttributeFactory<VR::SL,VM::VM1_n> AF_SL;
   AttributeFactory<VR::FL,VM::VM1_n> AF_FL;
   AttributeFactory<VR::FD,VM::VM1_n> AF_FD;
+  AttributeFactory<VR::AT,VM::VM1_n> AF_AT;
   };
 
 Attribute::Attribute()
@@ -63,6 +64,9 @@ void Attribute::SetLength(int len)
   case VR::FD:
     AF->AF_FD.SetLength(len);
     break;
+  case VR::AT:
+    AF->AF_AT.SetLength(len);
+    break;
   default:
     abort();
     }
@@ -90,6 +94,9 @@ void Attribute::Read(std::istream &_is)
     break;
   case VR::FD:
     AF->AF_FD.Read(_is);
+    break;
+  case VR::AT:
+    AF->AF_AT.Read(_is);
     break;
   default:
     abort();
@@ -135,6 +142,9 @@ void Attribute::Print(std::ostream &_os) const
       break;
   case VR::FD:
       AF->AF_FD.Print(_os);
+      break;
+  case VR::AT:
+      AF->AF_AT.Print(_os);
       break;
   default:
       abort();
