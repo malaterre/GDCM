@@ -51,10 +51,10 @@ int TestDataSet(int argc, char *argv[])
   Os.WriteDICM();
 
   std::cout << "Printing result:" << std::endl;
-  gdcm::DataElement &de_tag = de;
-  while( Is.Read(de_tag) )
+  //gdcm::DataElement &de_tag = de;
+  while( Is.Read(de) )
     {
-    Is.Read(de);
+    //Is.Read(de);
     assert( !(Is.eof()));
     std::cout << de << std::endl;
     Os << de;

@@ -75,7 +75,7 @@ const TS::TSType TS::GetTSType(const char *cstr)
 
 const char* TS::GetTSString(const TSType &ts)
 {
-  assert( ts < TS_END );
+  assert( ts <= TS_END );
   return TSStrings[(int)ts];
 }
 
@@ -105,6 +105,16 @@ bool TS::IsImplicit(const TSType &ts)
 {
   return ts == ImplicitVRLittleEndian
     || ts == ImplicitVRBigEndianPrivateGE;
+}
+
+bool TS::IsExplicit(const TSType &ts)
+{
+  return !IsImplicit(ts);
+}
+
+bool TS::IsLittleEndian(const TSType &ts)
+{
+  return !IsBigEndian(ts);
 }
 
 bool TS::IsBigEndian(const TSType &ts)

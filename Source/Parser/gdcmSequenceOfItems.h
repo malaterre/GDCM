@@ -92,9 +92,11 @@ inline std::ostream& operator<<(std::ostream& _os, const SequenceOfItems<DEType>
   // Print delimitation if undefined
   if( _val.SequenceLengthField == 0xFFFFFFFF )
     {
-    DataElement endSeq;
-    endSeq.SetTag( Tag(0xfffe,0xe0dd) ); // Sequence Delimitation Item
-    _os << endSeq << std::endl;
+    //DataElement endSeq;
+    //endSeq.SetTag( Tag(0xfffe,0xe0dd) ); // Sequence Delimitation Item
+    //_os << endSeq << std::endl;
+    // FIXME: Stupid code
+    _os << Tag(0xfffe,0xe00d) << std::endl;
     }
   return _os;
 }

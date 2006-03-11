@@ -21,10 +21,23 @@ public:
   void SetPrintVR(bool b) { PrintVR = b; }
   bool GetPrintVR() { return PrintVR; }
 
+  typedef enum {
+    GDCM_STYLE = 0,
+    DCMTK_STYLE
+  } PrintStyles;
+
+  PrintStyles GetPrintStyle() {
+    return PrintStyle;
+    }
+
+protected:
+  //std::ostream& PrintTag(std::ostream &_os, const Tag &_val);
+
 private:
   // If User wants to see the VR from Dictionary. Make sense in Implicit
   // Usefull in Explicit to very consistance.
   bool PrintVR;
+  PrintStyles PrintStyle;
 };
 
 }

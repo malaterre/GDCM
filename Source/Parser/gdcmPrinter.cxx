@@ -7,6 +7,8 @@
 #include "gdcmAttribute.h"
 #include "gdcmVR.h"
 
+#define MIMIC_DCMTK
+
 namespace gdcm
 {
 //-----------------------------------------------------------------------------
@@ -14,29 +16,67 @@ Printer::Printer()
 {
   PrintVR = true;
   ReadForPrinting = true;
+  PrintStyle = DCMTK_STYLE;
 }
 //-----------------------------------------------------------------------------
 Printer::~Printer()
 {
 }
+
 //-----------------------------------------------------------------------------
-void PrintExplicitDataElement(std::ostream& _os, const ExplicitDataElement &_val, bool printVR, VR::VRType dictVR)
+//std::ostream& Printer::PrintTag(std::ostream &_os, const Tag &_val)
+//{
+//  if (PrintStyle == DCMTK_STYLE )
+//    {
+//    _os.setf( std::ios::right);
+//    _os << "(" << std::hex << std::setw( 4 ) << std::setfill( '0' )
+//      << _val[0] << ',' << std::setw( 4 ) 
+//      << std::setfill( '0' )
+//      << _val[1] << std::setfill( ' ' ) << ")" << std::dec;
+//    }
+//  else
+//    {
+//    _os.setf( std::ios::right);
+//    _os << std::hex << std::setw( 4 ) << std::setfill( '0' )
+//      << _val[0] << ',' << std::setw( 4 ) << std::setfill( '0' )
+//      << _val[1] << std::setfill( ' ' ) << std::dec;
+//    }
+//  return _os;
+//}
+
+//-----------------------------------------------------------------------------
+void PrintExplicitDataElement(std::ostream& _os, const ExplicitDataElement &_val, bool printVR, VR::VRType dictVR, Printer::PrintStyles pstyle)
 {
   const Tag &t = _val.GetTag();
   const VR::VRType vr = _val.GetVR();
   const uint32_t vl = _val.GetValueLength();
   const Value& value = _val.GetValue();
-  _os << t << " VR=" << vr;
   (void)printVR;
+  if( pstyle == Printer::DCMTK_STYLE )
+    {
+  _os << t << " " << vr;
+    }
+  else
+    {
+  _os << t << " VR=" << vr;
+    }
   if( dictVR != VR::INVALID && !(vr & dictVR) ) //printVR )
     {
-    gdcmWarningMacro( "Wrong VR" );
-    _os << " VR(?)=" << dictVR;
+    gdcmErrorMacro( "Wrong VR should be " << dictVR );
     // LEADTOOLS_FLOWERS-8-PAL-RLE.dcm has (0040,0253) : CS instead of SH
     //abort();
     }
-  _os << "\tVL=" << std::dec << vl  
-      << "\tValueField=[" << value << "]";
+  if( pstyle == Printer::DCMTK_STYLE )
+    {
+  (void)vl;
+  _os /*<< "\t " << std::dec << vl  */
+      << " [" << value << "]";
+    }
+  else
+    {
+  _os << "\tVL=" << std::dec << vl <<
+      "\t ValueField=[" << value << "]";
+    }
 }
 //-----------------------------------------------------------------------------
 void PrintImplicitDataElement(std::ostream& _os, const ImplicitDataElement &_val, bool printVR, VR::VRType dictVR)
@@ -54,22 +94,23 @@ void PrintImplicitDataElement(std::ostream& _os, const ImplicitDataElement &_val
 }
 
 //-----------------------------------------------------------------------------
-void PrintImplicitDataElements(gdcm::DICOMIStream &is, bool printVR)
+void PrintImplicitDataElements(Printer &is)
 {
-  gdcm::ImplicitDataElement de;
-  gdcm::DataElement &de_tag = de;
+  ImplicitDataElement de;
+  Printer::PrintStyles pstyle = is.GetPrintStyle();
+  (void)pstyle;
+  bool printVR = is.GetPrintVR();
 
   std::ostream &_os = std::cout;
-  //static const gdcm::Dicts dicts;
-  //const gdcm::Dict &d = dicts.GetPublicDict();
-  static const gdcm::Dict d;
-  static const gdcm::GroupDict gd;
+  //static const Dicts dicts;
+  //const Dict &d = dicts.GetPublicDict();
+  static const Dict d;
+  static const GroupDict gd;
   try
     {
-    while( !is.eof() && is.Read(de_tag) )
+    while( is.Read(de) )
       {
-      is.Read(de);
-      const gdcm::DictEntry &entry = d.GetDictEntry(de.GetTag());
+      const DictEntry &entry = d.GetDictEntry(de.GetTag());
       // Use VR from dictionary
       VR::VRType vr = entry.GetVR();
       VM::VMType vm = entry.GetVM();
@@ -94,7 +135,7 @@ void PrintImplicitDataElements(gdcm::DICOMIStream &is, bool printVR)
         _os << "\tVL=" << std::dec << de.GetValueLength() << "\tValueField=[";
 
         // Use super class of the template stuff
-        gdcm::Attribute af;
+        Attribute af;
         // Last minute check, is it a Group Length:
         af.SetVR(vr);
         af.SetVM(vm);
@@ -123,44 +164,62 @@ void PrintImplicitDataElements(gdcm::DICOMIStream &is, bool printVR)
 }
 
 //-----------------------------------------------------------------------------
-void PrintExplicitDataElements(gdcm::DICOMIStream &is, bool printVR)
+void PrintExplicitDataElements(Printer &is)
 {
-  gdcm::ExplicitDataElement de;
-  gdcm::DataElement &de_tag = de;
+  ExplicitDataElement de;
 
   std::ostream &_os = std::cout;
-  static const gdcm::Dict d;
-  static const gdcm::GroupDict gd;
-  (void)printVR;
+  static const Dict d;
+  static const GroupDict gd;
+  Printer::PrintStyles pstyle = is.GetPrintStyle();
+  bool printVR = is.GetPrintVR();
   try
     {
-    while( !is.eof() && is.Read(de_tag) )
+    while( !is.eof() && is.Read(de) )
       {
       is.Read(de);
-      const gdcm::DictEntry &entry = d.GetDictEntry(de.GetTag());
+      const DictEntry &entry = d.GetDictEntry(de.GetTag());
       // Use VR from dictionary
       const VR::VRType vr = entry.GetVR();
       const VR::VRType vr_read = de.GetVR();
       if( VR::IsString(vr_read) || VR::IsBinary(vr_read) )
         {
-        PrintExplicitDataElement(_os, de, printVR, vr);
+        PrintExplicitDataElement(_os, de, printVR, vr, pstyle);
         }
       else
         {
         const VM::VMType vm = entry.GetVM();
         const Value& val = de.GetValue();
         _os << de.GetTag();
-        _os << " VR=" << vr_read;
-        if( vr != VR::INVALID && !(vr_read & vr) ) //printVR )
+        if( pstyle == Printer::DCMTK_STYLE )
           {
-          gdcmWarningMacro( "Wrong VR" );
-          _os << " VR(?)=" << vr;
-          abort();
+          _os << " " << vr_read;
           }
-        _os << "\tVL=" << std::dec << de.GetValueLength() << "\tValueField=[";
+        else
+          {
+          _os << " VR=" << vr_read;
+          }
+        if( vr != VR::INVALID && !(vr_read & vr) )
+          {
+          gdcmErrorMacro( "Wrong VR should be " << vr );
+          // PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
+          // 0008,0040 VR=SS VR(?)=US
+          // After posting to dicom newsgroup there were reasons for doing SS
+          // but in this case user should really do US...
+          }
+        if( pstyle == Printer::DCMTK_STYLE )
+          {
+        _os << /*"\t " << std::dec << de.GetValueLength() << */
+          " ";
+        }
+        else
+          {
+        _os << "\tVL=" << std::dec << de.GetValueLength() 
+          << "\tValueField=[";
+          }
 
         // Use super class of the template stuff
-        gdcm::Attribute af;
+        Attribute af;
         af.SetVR(vr_read);
         af.SetVM(vm);
         af.SetLength( val.GetLength() );
@@ -168,7 +227,10 @@ void PrintExplicitDataElements(gdcm::DICOMIStream &is, bool printVR)
         iss.str( std::string( val.GetPointer(), val.GetLength() ) );
         af.Read( iss );
         af.Print( _os );
+        if( pstyle == Printer::DCMTK_STYLE )
+          {
         _os << "]";
+        }
         }
       if( de.GetTag().GetElement() == 0x0 )
         {
@@ -178,7 +240,8 @@ void PrintExplicitDataElements(gdcm::DICOMIStream &is, bool printVR)
       else
         {
         _os << "\t\t# " << entry.GetName() << std::endl;
-        }      }
+        }
+      }
     }
   catch(std::exception &e)
     {
@@ -192,18 +255,35 @@ void Printer::Initialize()
 {
   DICOMIStream::Initialize();
 
-  std::cout << "Meta Header: " << std::endl;
-  std::cout << "Negociated Transfer Syntax: " << 
-    (NegociatedTS == Explicit ? "Explicit" : "Implicit") << std::endl;
+  if ( PrintStyle == DCMTK_STYLE )
+    {
+    std::cout << "# Dicom-File-Format" << std::endl;
+    std::cout << std::endl;
+    std::cout << "# Dicom-Meta-Information-Header" << std::endl;
+    // TODO Not always Little
+    std::cout << "# Used TransferSyntax: LittleEndian" <<
+      (NegociatedTS == Explicit ? "Explicit" : "Implicit") << std::endl;
+
+    std::cout << "# Dicom-Data-Set" << std::endl;
+    std::cout << "# Used TransferSyntax: " <<
+      TS::GetTSString(GetUsedTS()) << std::endl;
+    }
+  else
+    {
+    std::cout << "Meta Header: " << std::endl;
+    std::cout << "Negociated Transfer Syntax: " << 
+      (NegociatedTS == Explicit ? "Explicit" : "Implicit") << std::endl;
+    }
+
   // Skip one line:
   std::cout << std::endl;
   if( NegociatedTS == Explicit )
     {
-    PrintExplicitDataElements(*this, PrintVR);
+    PrintExplicitDataElements(*this);
     }
   else
     {
-    PrintImplicitDataElements(*this, PrintVR);
+    PrintImplicitDataElements(*this);
     }
   // FIXME a file that reach eof is not valid...
   Close();

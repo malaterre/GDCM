@@ -30,6 +30,8 @@ public:
 
   uint32_t GetLength() const { return ComputeLength(); }
   uint32_t GetLength() { return ComputeLength(); }
+ 
+  const Value &GetValue() const { return ValueField; }
 
 protected:
   DICOMOStream& Write(DICOMOStream &_os) const;
@@ -39,12 +41,13 @@ protected:
     assert( ValueLengthField != 0xFFFFFFFF ); //FIXME
     // Nice trick each time VR::GetLength() is 2 then Value Length is coded in 2
     //                                         4 then Value Length is coded in 4
-    return DataElement::GetLength() + 2*VR::GetLength(VRField) + ValueLengthField;
+    return TagField.GetLength() + 2*VR::GetLength(VRField) + ValueLengthField;
     }
 
 private:
   // Value Representation
   VR::VRType VRField;
+  Value ValueField;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_val)

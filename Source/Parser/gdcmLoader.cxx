@@ -11,15 +11,12 @@ void Loader::Update()
     try
       {
       ExplicitDataElement de;
-      gdcm::DataElement &de_tag = de;
 
-      while( !eof() && Read(de_tag) )
+      while( !eof() && Read(de) )
         {
-        Read(de);
-        //std::cerr << de << std::endl;
         ds.AddDataElement(de);
         }
-      std::cout << "Debug::\n" << ds << std::endl;
+      gdcmDebugMacro( ds );
       }
     catch(std::exception &e)
       {
@@ -32,15 +29,12 @@ void Loader::Update()
     try
       {
       ImplicitDataElement de;
-      gdcm::DataElement &de_tag = de;
 
-      while( !eof() && Read(de_tag) )
+      while( !eof() && Read(de) )
         {
-        Read(de);
-        //std::cerr << de << std::endl;
         ds.AddDataElement(de);
         }
-      std::cout << "Debug::\n" << ds << std::endl;
+      gdcmDebugMacro( ds );
       }
     catch(std::exception &e)
       {

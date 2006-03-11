@@ -68,7 +68,7 @@ public:
   void Print(std::ostream &_os) const {
     _os << Internal[0]; // VM is at least garantee to be one
     for(int i=1; i<ValueEnumToLength<TVM>::Len; ++i)
-      _os << "," << Internal[i];
+      _os << "\\" << Internal[i];
     }
 
   void Read(std::istream &_is) {
@@ -123,7 +123,7 @@ public:
     if( !Internal ) return;
     _os << Internal[0]; // VM is at least garantee to be one
     for(unsigned int i=1; i<Length; ++i)
-      _os << "," << Internal[i];
+      _os << "\\" << Internal[i];
     }
 
   // By default do a formatted read

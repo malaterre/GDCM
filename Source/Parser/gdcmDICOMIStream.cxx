@@ -2,8 +2,6 @@
 #include "gdcmDICOMIStream.h"
 #include "gdcmVR.h"
 #include "gdcmByteSwap.txx"
-#include "gdcmDataElement.h"
-#include "gdcmExplicitDataElement.h"
 #include "gdcmTS.h"
 #include "gdcmSequenceOfItems.txx"
 #include "gdcmItem.txx"
@@ -16,12 +14,15 @@ DICOMIStream::DICOMIStream()
 {
   NegociatedTS = Unknown; 
   ReadForPrinting = false;
+  UsedTS = TS::TS_END;
 }
 
+//-----------------------------------------------------------------------------
 DICOMIStream::~DICOMIStream()
 {
 }
 
+//-----------------------------------------------------------------------------
 IStream &DICOMIStream::Read(Tag &t)
   throw (std::exception)
 {
@@ -40,16 +41,19 @@ IStream &DICOMIStream::Read(Tag &t)
   return *this;
 }
 
+//-----------------------------------------------------------------------------
 IStream &DICOMIStream::Read(VR::VRType &vr)
 {
   char vr_str[3];
-  IStream::Read(vr_str, 2);
   vr_str[2] = '\0';
+  IStream::Read(vr_str, 2);
+  assert( vr_str[2] == '\0' );
   vr = VR::GetVRType(vr_str);
   assert( vr != VR::VR_END );
   return *this;
 }
 
+//-----------------------------------------------------------------------------
 IStream &DICOMIStream::Read(uint16_t &vl)
 {
   char vl_str[2];
@@ -57,9 +61,11 @@ IStream &DICOMIStream::Read(uint16_t &vl)
   ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)(&vl_str),
     SwapCode, 1);
   memcpy(&vl, vl_str, 2);
+  assert( vl != static_cast<uint16_t>(-1) );
   return *this;
 }
 
+//-----------------------------------------------------------------------------
 IStream &DICOMIStream::Read(uint32_t &vl)
 {
   char vl_str[4];
@@ -70,6 +76,7 @@ IStream &DICOMIStream::Read(uint32_t &vl)
   return *this;
 }
 
+//-----------------------------------------------------------------------------
 IStream &DICOMIStream::Read(Value &v)
 {
   uint32_t length = v.GetLength();
@@ -80,31 +87,35 @@ IStream &DICOMIStream::Read(Value &v)
   return *this;
 }
 //-----------------------------------------------------------------------------
-//inline DICOMIStream& operator>>(DICOMIStream &_os, DataElement &_val)
-IStream& DICOMIStream::Read(DataElement& da)
-{
-  // Read Tag
-  assert( !eof() ); // FIXME
-  if( !Read(da.TagField) ) return *this;
-  return *this;
-}
+//IStream& DICOMIStream::Read(DataElement& da)
+//{
+//  // Read Tag
+//  assert( !eof() ); // FIXME
+//  if( !Read(da.TagField) ) return *this;
+//  return *this;
+//}
 
+//-----------------------------------------------------------------------------
 template<class DEType>
 IStream& DICOMIStream::Read(SequenceOfItems<DEType>& sq)
 {
   const Tag itemStart(0xfffe,0xe000);   // [Item]
   const Tag itemEnd(0xfffe,0xe00d);     // [Item Delimitation Item]
   const Tag seqEnd(0xfffe,0xe0dd);      // [Sequence Delimitation Item]
-  DataElement de; // = si;
+  //DEType de; // = si;
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
   bool isBroken = false;
+#endif
   if( sq.SequenceLengthField == 0xFFFFFFFF)
     {
-    while( Read(de) ) // Read Tag only
+    Item<DEType> si; // = SequenceItemField;
+    while( Read(si) )
       {
-      if(de.GetTag() == seqEnd) 
+      if(si.GetTag() == seqEnd) 
         {
         uint32_t length;
-        Read(length);
+        length = si.GetValueLength();
+        //Read(length);
         // 7.5.2 Delimitation of the Sequence of Items
         // ...
         // b) Undefined Length: The Data Element Length Field shall contain a Value FFFFFFFFH to
@@ -122,7 +133,7 @@ IStream& DICOMIStream::Read(SequenceOfItems<DEType>& sq)
         }
       // else
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-      if( de.GetTag() != itemStart )
+      if( si.GetTag() != itemStart )
         {
         // gdcm-JPEG-LossLess3a.dcm
         std::streampos pos = Tellg();
@@ -134,16 +145,18 @@ IStream& DICOMIStream::Read(SequenceOfItems<DEType>& sq)
         break;
         }
 #endif
-      Item<DEType> si; // = SequenceItemField;
-      assert( si.GetTag() == de.GetTag() ); // Should be an Item Start
+      //std::cerr << si << std::endl;
+      //assert( si.GetTag() == de.GetTag() ); // Should be an Item Start
       assert( si.GetTag() == itemStart );
-      Read(si);
       sq.Items.push_back( si );
+      si.Clear(); // Clear structure to reuse in the loop
       }
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     if( !isBroken )
       {
-      assert( de.GetTag() == seqEnd );
+      assert( si.GetTag() == seqEnd );
       }
+#endif
     }
   else
     {
@@ -152,21 +165,22 @@ IStream& DICOMIStream::Read(SequenceOfItems<DEType>& sq)
     uint32_t seq_length = 0;
     while( seq_length != sq.SequenceLengthField )
       {
-      Read(de);
+      Item<DEType> si; // = SequenceItemField;
+      //Read(de);
+      Read(si);
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-      if( de.GetTag() != itemStart )
+      if( si.GetTag() != itemStart )
         {
-        gdcmErrorMacro( "BUGGY header: Does not start with Item Start. Skipping sequence ("
-          << sq.SequenceLengthField - 4 << ") bytes");
-        Seekg( sq.SequenceLengthField - 4, std::ios::cur );
+        gdcmErrorMacro( "BUGGY header: Does not start with Item Start. "
+          "Skipping sequence ("
+          << sq.SequenceLengthField - 8 << ") bytes");
+        Seekg( sq.SequenceLengthField - 8, std::ios::cur );
         break;
         }
 #endif
-      Item<DEType> si; // = SequenceItemField;
-      Read(si);
       sq.Items.push_back( si );
       // Sequence Length = Item Tag Length + Sequence Value Length
-      seq_length += de.GetTag().GetLength() + 4;
+      seq_length += si.GetTag().GetLength() + 4;
       seq_length += si.GetLength();
       gdcmDebugMacro( "seq_length="  << seq_length );
       assert( seq_length <= sq.SequenceLengthField );
@@ -175,21 +189,40 @@ IStream& DICOMIStream::Read(SequenceOfItems<DEType>& sq)
   return *this;
 }
 
+IStream& DICOMIStream::ReadMeta(ExplicitDataElement& xda)
+{
+  if( !Read(xda.TagField) )
+    {
+    assert(0 && "Should not happen");
+    }
+  if( xda.TagField.GetGroup() > 0x0002 )
+    {
+    // Finished reading group 0x0002
+    //assert( xda.TagField.GetLength() == 4 );
+    //Seekg(-4, std::ios::cur);
+    return *this;
+    }
+  //else
+  return ExplicitReadCommon(xda);
+}
+
 IStream& DICOMIStream::Read(ImplicitDataElement& ida)
 {
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   // Read Tag
-  //if( !_os.Read(TagField) ) return _os;
-  //static Dict d;
-  //const DictEntry &de = d.GetDictEntry(TagField);
+  if( !Read(ida.TagField) )
+    {
+    //assert(0 && "Should not happen");
+    return *this;
+    }
   // Read Value Length
   if( !(Read(ida.ValueLengthField)) ) return *this;
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
   // THE WORST BUG EVER. From GE Workstartion
-  if(ida.ValueLengthField == 13 )
+  if( ida.ValueLengthField == 13 )
     {
     // Historically gdcm did not enforce proper length
-    // thus Theralys started writting illegal DICOM images:
+    // thus Theralys started writing illegal DICOM images:
     const Tag theralys1(0x0008,0x0070);
     const Tag theralys2(0x0008,0x0080);
     if( ida.GetTag() != theralys1
@@ -223,27 +256,28 @@ IStream& DICOMIStream::Read(ImplicitDataElement& ida)
       }
     else
       {
-      ida.ValueField.Clean();
+      //gdcmWarningMacro( "Seeking long field: " << ida.GetTag() << " l= " 
+      //  << ida.ValueLengthField );
+      ida.ValueField.Clear();
       Seekg(ida.ValueLengthField, std::ios::cur);
       }
     }
   return *this;
 }
 
-IStream& DICOMIStream::Read(ExplicitDataElement& xda)
+
+IStream& DICOMIStream::ExplicitReadCommon(ExplicitDataElement& xda)
 {
-  // See PS 3.5, Date Element Structure With Explicit VR
-  // Read Tag
-  //if( !_os.Read(TagField) ) return _os;
-  //static Dict d;
-  //const DictEntry &de = d.GetDictEntry(TagField);
+  const Tag itemDelTag(0xfffe,0xe00d);
+  if( xda.TagField == itemDelTag )
+    {
+    Read(xda.ValueLengthField);
+    // SIEMENS-MR-RGB-16Bits.dcm
+    //assert( xda.ValueLengthField == 0 );
+    return *this;
+    }
   // Read VR
-  if( !(Read(xda.VRField)) ) return *this;
-//  if( !(de.GetVR() & VRField) && de.GetVR() != VR::INVALID )
-//    {
-//    std::cerr << "BUGGY VR for Tag: " << TagField << " : " << VR::GetVRString(VRField)
-//      << " should be: " << VR::GetVRString(de.GetVR()) << std::endl;
-//    }
+  if( !Read(xda.VRField) ) return *this;
   if( xda.VRField == VR::OB
    || xda.VRField == VR::OW
    || xda.VRField == VR::OF
@@ -267,7 +301,8 @@ IStream& DICOMIStream::Read(ExplicitDataElement& xda)
     }
   else
     {
-    // Two steps since ValueLengthField is 32 bits, we need to declare a 16bits int first
+    // Two steps since ValueLengthField is 32 bits, we need to declare 
+    // a 16bits int first
     uint16_t vl;
     // Read Value Length (16bits)
     Read(vl);
@@ -358,8 +393,8 @@ IStream& DICOMIStream::Read(ExplicitDataElement& xda)
       }
     else
       {
-      gdcmWarningMacro( "Seeking long field: " << xda.GetTag() << " l= " 
-        << xda.ValueLengthField );
+      //gdcmWarningMacro( "Seeking long field: " << xda.GetTag() << " l= " 
+      //  << xda.ValueLengthField );
 #ifdef BIG_HACK2
       xda.ValueField.SetLength(xda.ValueLengthField);
       Read(xda.ValueField);
@@ -368,7 +403,7 @@ IStream& DICOMIStream::Read(ExplicitDataElement& xda)
       f.close();
       Seekg(0, std::ios::end); // FIXME garbage at the end...
 #else
-      xda.ValueField.Clean();
+      xda.ValueField.Clear();
       Seekg(xda.ValueLengthField, std::ios::cur);
 #endif
       }
@@ -377,32 +412,44 @@ IStream& DICOMIStream::Read(ExplicitDataElement& xda)
   return *this;
 }
 
+IStream& DICOMIStream::Read(ExplicitDataElement& xda)
+{
+  // See PS 3.5, Date Element Structure With Explicit VR
+  // Read Tag
+  if( !Read(xda.TagField) )
+    {
+    //assert(0 && "Should not happen" );
+    return *this;
+    }
+  return ExplicitReadCommon(xda);
+}
+
 template<class DEType>
 IStream& DICOMIStream::Read(Group<DEType> &_val)
 {
   DEType de;
-  DataElement &de_tag = de;
+  //DataElement &de_tag = de;
   bool initialized = false;
-  while( !eof() && Read(de_tag) )
+  while( !eof() && Read(de) )
     {
     if(!initialized)
       {
-      _val.SetNumber(de_tag.GetTag().GetGroup());
+      _val.SetNumber(de.GetTag().GetGroup());
       initialized = true;
       }
     else
       {
-      if( de_tag.GetTag().GetGroup() != _val.Number )
+      if( de.GetTag().GetGroup() != _val.Number )
         {
         // Seek back
-        Seekg( -4 /*de_tag.GetLength()*/, std::ios::cur);
+        Seekg( -4 /*de.GetTag().GetLength()*/, std::ios::cur);
         break;
         }
       }
-    if( !(Read(de)) )
-      {
-      assert( 0 && "Impossible" );
-      }
+//    if( !(Read(de)) )
+//      {
+//      assert( 0 && "Impossible" );
+//      }
     _val.AddDataElement(de);
     }
 
@@ -413,40 +460,56 @@ template<class DEType>
 DICOMIStream& DICOMIStream::Read(Item<DEType> &_val)
 {
   const Tag item(0xfffe,0xe000);
-  //if( !(Read(_val.TagField))) return *this;
-  assert(_val.TagField == item); // KEEPME
-  Read(_val.ItemLengthField);
-  if( _val.ItemLengthField == 0xFFFFFFFF )
+  const Tag seqDelItem(0xfffe,0xe0dd);
+  if( !Read(_val.TagField))
+    {
+    assert( 0 && "Should not happen" );
+    }
+  if( !Read(_val.ValueLengthField) )
+    {
+    assert( 0 && "Should not happen" );
+    }
+  // Check in case we read the Sequence Delimiter Tag
+  if(_val.TagField != item)
+    {
+#ifndef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+    assert( _val.TagField == seqDelItem );
+    assert( _val.ValueLengthField == 0 );
+#endif
+    return *this;
+    }
+  assert( _val.TagField == item );
+  if( _val.ValueLengthField == 0xFFFFFFFF )
     {
     const Tag itemDel(0xfffe,0xe00d);
-    DEType exde;
-    DataElement &de = exde;
+    DEType de;
     while( Read(de) )
       {
+      //std::cerr << "   " << de << std::endl;
       if(de.GetTag() == itemDel ) 
         {
-        _val.TagField = de.GetTag();
-        Read(_val.ItemLengthField);
-        gdcmDebugMacro( "End of SQ item: l=" << _val.ItemLengthField );
-        if( _val.ItemLengthField != 0 )
+        gdcmDebugMacro( "End of SQ item: l=" << _val.ValueLengthField );
+        if( de.GetValueLength() != 0 )
           {
           gdcmWarningMacro( "BUGGY HEADER: Length should be 0, instead is: "
-            << _val.ItemLengthField );
+            << de.GetValueLength() );
           }
+        // End of Item, exit loop (found whole dataset within Item)
         break;
         }
       // else
-      Read(exde);
-      assert(exde.GetTag() == de.GetTag());
-      _val.AddDataElement(exde);
-      gdcmDebugMacro( "SQ Item:\t" << exde );
+      _val.AddDataElement(de);
+      gdcmDebugMacro( "SQ Item:\t" << de );
       }
     }
   else
     {
-    gdcmDebugMacro( "Item Length: " << _val.ItemLengthField );
-    _val.ValueField.SetLength(_val.ItemLengthField);
-    Read(_val.ValueField);
+    gdcmDebugMacro( "Item Length: " << _val.ValueLengthField );
+    //_val.ValueField.SetLength(_val.ValueLengthField);
+    //Read(_val.ValueField);
+    gdcmWarningMacro( "Seeking FIXME FIXME: " << _val.ValueLengthField );
+    Seekg( _val.ValueLengthField, std::ios::cur );
+    // FIXME FIXME FIXME
     gdcmDebugMacro( "Val: \t" << _val );
     }
   return *this;
@@ -500,13 +563,13 @@ bool DICOMIStream::ReadDICM()
 
 // Once our heuristic found
 template<class DEType>
-void CheckNegociatedTS(gdcm::DICOMIStream &is)
+void CheckNegociatedTS(DICOMIStream &is)
 {
   DEType de;
-  DataElement &de_tag = de;
-  while( is.Read(de_tag) )
+  //DataElement &de_tag = de;
+  while( is.Read(de) )
     {
-    is.Read(de);
+    //is.Read(de);
     gdcmDebugMacro( de );
     }
 }
@@ -525,23 +588,25 @@ void DICOMIStream::ReadNonStandardDataElements()
     {
     // So far we only found the potential TS
     ExplicitDataElement de;
-    DataElement &de_tag = de;
-    const gdcm::Tag t(0x0002,0x0010);
-    gdcm::TS::TSType ts = TS::TS_END;
-    while( Read(de_tag) )
+    //DataElement &de_tag = de;
+    const Tag t(0x0002,0x0010);
+    assert( UsedTS == TS::TS_END );
+    TS::TSType &ts = UsedTS;
+    std::streampos p_debug = Tellg();
+    while( ReadMeta(de) )
       {
-      gdcmDebugMacro( "Tag: " << de_tag.GetTag() );
-      assert( de_tag.GetTag().GetGroup() <= 0x0010
-           || de_tag.GetTag().GetGroup() == 0x0800 ); // Byte Swap problem
+      gdcmDebugMacro( "Tag: " << de.GetTag() );
+      assert( de.GetTag().GetGroup() <= 0x0010
+           || de.GetTag().GetGroup() == 0x0800 ); // Byte Swap problem
 
-      if( de_tag.GetTag().GetGroup() <= 0x0002 )
+      if( de.GetTag().GetGroup() <= 0x0002 )
         {
-        Read(de);
+        //Read(de);
         gdcmDebugMacro( de );
-        if( de_tag.GetTag() == t )
+        if( de.GetTag() == t )
           {
           gdcmDebugMacro( "TS=" << de.GetValue().GetPointer() );
-          ts = gdcm::TS::GetTSType( de.GetValue().GetPointer() );
+          ts = TS::GetTSType( de.GetValue().GetPointer() );
           assert( ts != TS::TS_END );
           bool isDataSetEncoded = TS::IsDataSetEncoded( ts );
           if( isDataSetEncoded )
@@ -553,9 +618,13 @@ void DICOMIStream::ReadNonStandardDataElements()
         }
       else
         {
-        // Ok seek back, since we only read de_tag, we need to seek back 4 bytes:
-        assert( de_tag.GetLength() == 4 );
+        // Ok seek back, since we only read de, we need to seek back 4 bytes:
+        assert( de.GetTag().GetLength() == 4 );
         Seekg(-4, std::ios::cur);
+        // FIXME
+        //std::streamoff l = de.GetLength();
+        //Seekg(-l, std::ios::cur);
+        //assert( Tellg() == p_debug );
         bool isImplicit = TS::IsImplicit( ts );
         if( isImplicit )
           {
@@ -568,6 +637,7 @@ void DICOMIStream::ReadNonStandardDataElements()
           }
         break;
         }
+      p_debug = Tellg();
       }
     }
 }

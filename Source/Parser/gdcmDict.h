@@ -50,7 +50,7 @@ protected:
 //  void AddDictEntry(uint16_t group, uint16_t element, const char *name, 
 //    const char *vr, const char *vm)
 //    {
-//    gdcm::Tag t(group, element);
+//    Tag t(group, element);
 //    AddDictEntry(t, d);
 //    }
 private:

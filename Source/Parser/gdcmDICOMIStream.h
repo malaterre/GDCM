@@ -11,6 +11,7 @@
 #include "gdcmSequenceOfItems.h"
 #include "gdcmItem.h"
 #include "gdcmGroup.h"
+#include "gdcmTS.h"
 #include <exception>
 
 namespace gdcm
@@ -48,7 +49,7 @@ public:
   // The Value cannot be Undefined Length
   IStream &Read(Value &v);
 
-  IStream& Read(DataElement& da);
+  //IStream& Read(DataElement& da);
   IStream& Read(ExplicitDataElement &xda);
   IStream& Read(ImplicitDataElement &ida);
   template<class DEType>
@@ -70,15 +71,21 @@ public:
     assert( NegociatedTS != Unknown );
     return NegociatedTS; } ;
 
+  TS::TSType GetUsedTS() { 
+    return UsedTS; } ;
+
 protected:
   // Read a true DICOM V3 header
   bool ReadDICM();
+  IStream& ExplicitReadCommon(ExplicitDataElement& xda);
+  IStream& ReadMeta(ExplicitDataElement& da);
 
   void FindNegociatedTS();
   void ReadNonStandardDataElements();
 
   NegociatedTSType NegociatedTS;
- 
+  TS::TSType UsedTS;
+
   // If on try to skip no interesting data that cannot be printed anyway
   bool ReadForPrinting;
 };

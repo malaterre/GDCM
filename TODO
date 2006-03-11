@@ -47,3 +47,9 @@ See:
 and
         http://www.pixelmed.com/software/javadoc/com/pixelmed/display/DicomIm...
 
+
+--------------------------
+One huge bug, huge problem of design is the fact that one can read a so called DataElememt. This does not exist in DICOM spec, this element is just a design of the class and should not be manipulated ! Reading a DataElement should either be reading an ExplicitELement(Tag,VR,Lenght) or ImplicitElement(Tag,Length) and that 'all. After that comes the problem or readin/skipping the value
+This is fixed as of 03/11. Required some hack -par ci par la-, but overall speed is not impacted. One thing I don't like though is that ReadExplicit now should check when reading an end item sequence...
+A better approach would be to thwrow an exection when VR does not match expection... but then again this is not the goal of exception since this is a design (will read this value on purpose).
+I really hate the ReadMeta approach this should really be rewritten ... when I have some time to loose...

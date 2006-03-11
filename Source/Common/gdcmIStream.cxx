@@ -7,7 +7,9 @@ namespace gdcm
 
 IStream& IStream::Read(char* s, std::streamsize n )
 {
-  if(s) { assert( memset(s,0,n) ); }
+  //Following operation is nice for debuging but is way to extensive and appear
+  //really high in the top ten expensive operation
+  //if(s) { assert( memset(s,0,n) ); }
   assert( !(!InternalStream) );
   assert( !InternalStream.eof() );
   //std::cout << InternalStream.tellg() << std::endl;

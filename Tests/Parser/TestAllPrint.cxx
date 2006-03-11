@@ -11,13 +11,10 @@ template<class DEType>
 void PrintDataElements(gdcm::DICOMIStream &is)
 {
   DEType de;
-  gdcm::DataElement &de_tag = de;
-
   try
     {
-    while( !is.eof() && is.Read(de_tag) )
+    while( is.Read(de) )
       {
-      is.Read(de);
       std::cerr << de << std::endl;
       }
     }

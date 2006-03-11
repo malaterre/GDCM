@@ -12,21 +12,21 @@ template<class DEType>
 bool SkipGroup(FileSeeker &is)
 {
   DEType de;
-  gdcm::DataElement &de_tag = de;
+  //DataElement &de_tag = de;
 
   std::streampos offset = is.Tellg();
   std::streampos last_offset = offset; // last valid offset to do seek back
-  is.Read(de_tag);
+  is.Read(de);
   while( !is.eof() )
     {
-    uint16_t current_group = de_tag.GetTag().GetGroup();
+    uint16_t current_group = de.GetTag().GetGroup();
     is.AddOffset(current_group, offset);
     gdcmDebugMacro( "Group: " << std::hex << current_group << " " << offset );
-    uint16_t current_element = de_tag.GetTag().GetElement();
+    uint16_t current_element = de.GetTag().GetElement();
     if( current_element == 0x0 )
       {
       // Great let's use the length
-      is.Read(de);
+      //is.Read(de);
       uint32_t length;
       if( de.GetValue().GetLength() == 4)
         memcpy(&length, de.GetValue().GetPointer(), 4);
@@ -43,10 +43,10 @@ bool SkipGroup(FileSeeker &is)
       is.Seekg( length, std::ios::cur );
       last_offset = offset;
       offset = is.Tellg();
-      is.Read(de_tag);
+      is.Read(de);
       if( is.eof() ) break;
-      if( de_tag.GetTag().GetGroup() <= current_group 
-        || de_tag.GetTag().GetElement() != 0x0 )
+      if( de.GetTag().GetGroup() <= current_group 
+        || de.GetTag().GetElement() != 0x0 )
         {
         // Something went wrong (lenght is probably wrong)
         // First thing seek back to last know valid position
@@ -73,16 +73,16 @@ template<class DEType>
 bool SeekGroup(FileSeeker &is)
 {
   DEType de;
-  gdcm::DataElement &de_tag = de;
+  //DataElement &de_tag = de;
 
   uint16_t last_group = 0x0;
-  while( !is.eof() && is.Read(de_tag) )
+  while( !is.eof() && is.Read(de) )
     {
     std::streampos offset = is.Tellg();
-    offset -= de_tag.GetLength();
-    is.Read(de); // FIXME de.Skip(is);
+    offset -= de.GetLength();
+    //is.Read(de); // FIXME de.Skip(is);
     gdcmDebugMacro( "DE : " << de );
-    uint16_t current_group = de_tag.GetTag().GetGroup();
+    uint16_t current_group = de.GetTag().GetGroup();
     if( current_group != last_group )
       {
       is.AddOffset(current_group, offset);
@@ -112,11 +112,11 @@ void FileSeeker::Initialize()
 
   if( NegociatedTS == Explicit )
     {
-    BrowseDataElements<gdcm::ExplicitDataElement>(*this);
+    BrowseDataElements<ExplicitDataElement>(*this);
     }
   else
     {
-    BrowseDataElements<gdcm::ImplicitDataElement>(*this);
+    BrowseDataElements<ImplicitDataElement>(*this);
     }
   // FIXME a file that reach eof is not valid...
   Close();
@@ -128,18 +128,21 @@ template<class DEType>
 bool SeekElements(DICOMIStream &is, const Tag& tag)
 {
   DEType de;
-  DataElement &de_tag = de;
+  //DataElement &de_tag = de;
   bool success = false;
-  while(!is.eof() && is.Read(de_tag) )
+  while(!is.eof() && is.Read(de) )
     {
-    if( de_tag.GetTag().GetGroup() != tag.GetGroup() )
+    if( de.GetTag().GetGroup() != tag.GetGroup() )
       break;
-    if( de_tag.GetTag().GetElement() > tag.GetElement() )
+    if( de.GetTag().GetElement() > tag.GetElement() )
       break;
-    assert( de_tag.GetTag().GetGroup() == tag.GetGroup() );
-    assert( de_tag.GetTag().GetElement() <= tag.GetElement() ); // redundant ??
-    if( de_tag.GetTag() != tag )
-      is.Read(de); // FIXME is.Skip(de);
+    assert( de.GetTag().GetGroup() == tag.GetGroup() );
+    assert( de.GetTag().GetElement() <= tag.GetElement() ); // redundant ??
+    if( de.GetTag() != tag )
+      {
+      //is.Read(de); // FIXME is.Skip(de);
+      abort();
+      }
     else
       {
       success = true;
@@ -153,23 +156,25 @@ template<class DEType>
 void ReadElements(DICOMIStream &is, DEType& de)
 {
   const Tag tag = de.GetTag(); // Save the tag to search
-  DataElement &de_tag = de;
-  while(!is.eof() && is.Read(de_tag) )
+  //DataElement &de_tag = de;
+  while(!is.eof() && is.Read(de) )
     {
-    gdcmDebugMacro( "Reading: " << de_tag );
-    if( de_tag.GetTag().GetGroup() != tag.GetGroup() )
+    gdcmDebugMacro( "Reading: " << de);
+    if( de.GetTag().GetGroup() != tag.GetGroup() )
       break;
-    if( de_tag.GetTag().GetElement() > tag.GetElement() )
+    if( de.GetTag().GetElement() > tag.GetElement() )
       break;
-    assert( de_tag.GetTag().GetGroup() == tag.GetGroup() );
-    assert( de_tag.GetTag().GetElement() <= tag.GetElement() ); // redundant ??
-    if( de_tag.GetTag() != tag )
+    assert( de.GetTag().GetGroup() == tag.GetGroup() );
+    assert( de.GetTag().GetElement() <= tag.GetElement() ); // redundant ??
+    if( de.GetTag() != tag )
       {
-      is.Read(de); // FIXME de.Skip(is);
+      //is.Read(de); // FIXME de.Skip(is);
+      abort();
       }
     else
       {
-      is.Read(de);
+      //is.Read(de);
+      abort();
       break;
       }
     }
@@ -181,11 +186,11 @@ bool FileSeeker::FindTag(const Tag& tag)
   SeekTo(group);
   if( NegociatedTS == Explicit )
     {
-    return SeekElements<gdcm::ExplicitDataElement>(*this, tag);
+    return SeekElements<ExplicitDataElement>(*this, tag);
     }
   else
     {
-    return SeekElements<gdcm::ImplicitDataElement>(*this, tag);
+    return SeekElements<ImplicitDataElement>(*this, tag);
     }
 }
 

@@ -43,7 +43,7 @@ public:
   const Tag& GetTag() const { return TagField; }
   void SetTag(const Tag &t) { TagField = t; }
 
-  const Value &GetValue() const { return ValueField; }
+  //const Value &GetValue() const { return ValueField; }
 
   DataElement(const DataElement&_val)
     {
@@ -56,18 +56,17 @@ public:
   DataElement &operator=(const DataElement &_val)
     {
     TagField = _val.TagField;
-    ValueField = _val.ValueField;
+    //ValueField = _val.ValueField;
     return *this;
     }
 
-  uint32_t GetLength() const
-    {
-    return TagField.GetLength();
-    }
+  virtual uint32_t GetLength() const = 0;
+//    {
+//    return TagField.GetLength();
+//    }
 
 protected:
   Tag TagField;
-  Value ValueField;
   // Value could be NULL if we don't read it, therefore we need an offset
   // This is the value read from the file, might be different from the length of Value Field
   uint32_t ValueLengthField; // Can be 0xFFFFFFFF

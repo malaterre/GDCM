@@ -328,3 +328,10 @@ What is the difference between Transfer Syntax and SOP Class ??
 
 About RescaleSlope/RescaleIntercept:
 This should ideally go into the gdcm library, since GE manage to produce PET image where Slope/Intercept is different from one slice to the other (yes no float image in DICOM only int type + rescale). Therefore it become very tricky to tell user what his *final* pixel type should be. In gdcm1.x we would only indicate user only the *stored* pixel type but never the output pixel type, so ITK-type application (anything templated) had to provide a helper class to find out what the real Pixel type should be (you can have almost all combination like: unsigned char becoming signed short ...)
+
+
+Implementation detail:
+At first I designed all DICOM object (ExplicitDataElement, ImplicitDataElement, Item, SequencesOfItems) to be able to read themself. But this does not make sense since you need a file level information: like TransferSyntax to be able to read / interpret properly.
+This can be worked around by not reading directly in an ostream but a DICOMOstream which would have a proper state saying wheterh or not it shold be read as big endian or not. And actually this argument is stupid...
+Another thing that I was trying to do is a proper printing of element as we PARSE the document. I think this is stupid to first load the dataset and THEN print it. A nice design should allow one to pass a function when starting to read an element and a function when ending reading an element. therefore the start function will increment the indent level, and then print the element (of whaterver user specify) and then the endMethod should decrement the indent level.
+This allow me to keep my current design where you don't have the control when reading a SQ element, once you enter to read this element (explicit or Implicit) the function only returns when the SQ is fully read/skip/whatever

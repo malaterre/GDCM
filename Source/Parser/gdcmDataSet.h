@@ -39,6 +39,11 @@ public:
   typedef typename std::map<Tag, DEType> StructuredSet;
   friend std::ostream& operator<< < >(std::ostream &_os, const DataSet<DEType> &_val);
 
+  void Clear()
+    {
+    DataElements.clear();
+    }
+
   void AddDataElement(const DEType& de)
     {
     // FIXME warn if about to enter duplicate ? or compile only in debug mode ?

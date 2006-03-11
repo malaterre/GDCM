@@ -15,6 +15,10 @@ namespace gdcm
  * techniques (e.g., Data Element structure, byte ordering, compression) 
  * they are able to support, thereby allowing these Application Entities
  * to communicate.
+ * \TODO: The implementation is completely retarded
+ * We need: IsSupported
+ * We need preprocess of raw/xml file
+ * We need GetFullName()
  */
 class GDCM_EXPORT TS
 {
@@ -47,7 +51,9 @@ public:
   static const TSType GetTSType(const char *str);
   static bool IsJPEG(const TSType &ts);
   static bool IsMPEG(const TSType &ts);
+  static bool IsExplicit(const TSType &ts);
   static bool IsImplicit(const TSType &ts);
+  static bool IsLittleEndian(const TSType &ts);
   static bool IsBigEndian(const TSType &ts);
 
   // Very special case of the DICOM specification the *whole* dataset

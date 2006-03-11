@@ -78,6 +78,7 @@ const char* VR::GetVRString(VRType vr)
   return VRStrings[idx];
 }
 
+// FIXME: This function is relatively expensive in Debug mode for some reason
 VR::VRType VR::GetVRType(const char *vr)
 {
   VRType r = VR::VR_END;
@@ -118,6 +119,7 @@ bool VR::IsValid(const char *vr1, const VRType& vr2)
   return (bool)(vr & vr2);
 }
 
+// FIXME: This function is relatively expensive in Debug mode for some reason
 bool VR::IsSwap(const char *vr)
 {
   assert( vr[2] == '\0' );

@@ -25,14 +25,12 @@ template<class DEType>
 int PrintGroup(gdcm::DICOMIStream &is, int group_number)
 {
   DEType de;
-  gdcm::DataElement &de_tag = de;
   gdcm::Group<DEType> group(group_number);
   bool group_length_present = false;
   uint32_t group_length = 0;
 
-  while( !is.eof() && is.Read(de_tag) )
+  while( !is.eof() && is.Read(de) )
     {
-    is.Read(de);
     if ( de.GetTag().GetGroup() == group_number )
       {
       if( de.GetTag().GetElement() == 0x0000 )

@@ -22,9 +22,7 @@ class GDCM_EXPORT Value
   friend class DICOMOStream;
 public:
   Value() { Internal = 0; Length = 0; }
-  ~Value() { 
-    Clean();
-  }
+  ~Value() { Clear(); }
 
   friend std::ostream& operator<<(std::ostream &_os, const Value &_val);
 
@@ -75,7 +73,7 @@ public:
     return false;
     }
 
-  void Clean() {
+  void Clear() {
     delete[] Internal; Internal = 0; Length = 0; }
   const char *GetPointer() const { return Internal; }
 
@@ -83,7 +81,7 @@ public:
    * \brief  Checks whether a 'Value' is printable or not (in order
    *         to avoid corrupting the terminal of invocation when printing)
    */
-  bool Value::IsPrintable() const
+  bool IsPrintable() const
     {
     for(unsigned int i=0; i<Length; i++)
       {

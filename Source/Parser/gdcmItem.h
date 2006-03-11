@@ -43,24 +43,29 @@ template<class DEType> // DataElementType
 class GDCM_EXPORT Item : public DataElement
 {
 public:
-  Item(uint32_t length = 0xFFFFFFFF) { TagField = Tag(0xfffe,0xe000); ItemLengthField = length; }
+  Item(uint32_t length = 0xFFFFFFFF) { TagField = Tag(0xfffe,0xe000); ValueLengthField = length; }
 
   friend std::ostream& operator<< < >(std::ostream& _os, const Item<DEType> &_val);
   //friend DICOMIStream& operator>> < >(DICOMIStream& _os, Item<DEType> &_val);
   friend class DICOMIStream;
   friend DICOMOStream& operator<< < >(DICOMOStream& _os, const Item<DEType> &_val);
 
-  uint32_t GetLength() { 
-    assert( ItemLengthField != 0xFFFFFFFF );
-    return ItemLengthField; }
+  void Clear()
+    {
+    NestedDataSet.Clear();
+    }
+  uint32_t GetValueLength() const { return ValueLengthField; }
+  uint32_t GetLength() const { 
+    assert( ValueLengthField != 0xFFFFFFFF );
+    return ValueLengthField; }
 
   void AddDataElement(const DEType& de)
     {
     NestedDataSet.AddDataElement(de);
     // Update the length
-    if (ItemLengthField != 0xFFFFFFFF )
+    if (ValueLengthField != 0xFFFFFFFF )
       {
-      ItemLengthField += de.GetLength();
+      ValueLengthField += de.GetLength();
       }
     }
   const DEType& GetDataElement(const Tag& t) const
@@ -83,7 +88,7 @@ public:
 private:
   // This is the value read from the file, might either be a defined lenght
   // or undefined
-  uint32_t ItemLengthField; // Can be 0xFFFFFFFF
+  //uint32_t ItemLengthField; // Can be 0xFFFFFFFF
 
   /* NESTED DATA SET  a Data Set contained within a Data Element of an other Data Set.
    * May be nested recursively.
@@ -95,14 +100,16 @@ private:
 template<class DEType>
 inline std::ostream& operator<<(std::ostream& _os, const Item<DEType> &_val)
 {
-  _os << _val.TagField << " Item Length=" << _val.ItemLengthField << " Item Value= " << _val.ValueField << std::endl;
+  _os << _val.TagField << " Item Length=" << _val.ValueLengthField << /*" Item Value= " << _val.ValueField <<*/ std::endl;
   _os << _val.NestedDataSet;
   // Print delimitation if undefined
-  if( _val.ItemLengthField == 0xFFFFFFFF )
+  if( _val.ValueLengthField == 0xFFFFFFFF )
     {
-    DataElement endItem;
-    endItem.SetTag( Tag(0xfffe,0xe00d) );
-    _os << endItem << std::endl;
+    //DataElement endItem;
+    //endItem.SetTag( Tag(0xfffe,0xe00d) );
+    //_os << endItem << std::endl;
+    //FIXME: Stupid code
+    _os << Tag(0xfffe, 0xe00d) << std::endl;
     }
 
   return _os;
