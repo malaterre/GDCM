@@ -2,6 +2,7 @@
 #define __gdcmByteSwap_h
 
 #include "gdcmType.h"
+#include "gdcmSwapCode.h"
 
 namespace gdcm
 {

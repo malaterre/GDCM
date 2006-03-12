@@ -3,6 +3,7 @@
 #define __gdcmIStream_h
 
 #include "gdcmType.h"
+#include "gdcmSwapCode.h"
 #include <fstream>
 #include <iostream>
 #include <assert.h>
