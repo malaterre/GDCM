@@ -5,11 +5,12 @@ namespace gdcm
 {
 
 static const char *SwapCodeStrings[] = {
-     "Unknown",
-     "LittleEndian",
-     "BigEndian",
-     "BadLittleEndian",
-     "BadBigEndian"
+  "Unknown",
+  "LittleEndian",
+  "BigEndian",
+  "BadLittleEndian",
+  "BadBigEndian",
+   0
 };
 
 int SC::GetIndex(SwapCodeType sc)
@@ -35,6 +36,7 @@ int SC::GetIndex(SwapCodeType sc)
   default:
     assert(0 && "Should not happen" );
     }
+  assert( idx < 5 );
   return idx;
 }
 
