@@ -82,13 +82,12 @@ template<int T> class ModeImplementation;
 template<int TVR, int TVM>
 class GDCM_EXPORT AttributeFactory
 {
-  //friend class ModeImplementation<TypeEnumToMode<TVR>::Mode>;
 public:
   typename TypeEnumToType<TVR>::Type Internal[ValueEnumToLength<TVM>::Len];
 
-  unsigned int GetTypeSize() const {
-    return sizeof(typename TypeEnumToType<TVR>::Type);
-  }
+//  unsigned int GetTypeSize() const {
+//    return sizeof(typename TypeEnumToType<TVR>::Type);
+//  }
   int GetLength() const {
     return ValueEnumToLength<TVM>::Len;
   }
@@ -100,40 +99,46 @@ public:
     }
 
   void Read(std::istream &_is) {
-    ModeImplementation<TypeEnumToMode<TVR>::Mode>::Read(this,_is);
+    ModeImplementation<TypeEnumToMode<TVR>::Mode>::Read(Internal, 
+      GetLength(),_is);
     }
   void Write(std::ostream &_os) const {
-    ModeImplementation<TypeEnumToMode<TVR>::Mode>::Write(this,_os);
+    ModeImplementation<TypeEnumToMode<TVR>::Mode>::Write(Internal, 
+      GetLength(),_os);
     }
 };
 
 // Implementation to perform formatted read and write
 template<> class ModeImplementation<ASCII_TYPE> {
 public:
-  template<int TVR, int TVM>
-  static inline void Read(const AttributeFactory<TVR,TVM> *af,std::istream &_is) {
-    assert( af->Internal );
+  template<typename T> // FIXME this should be TypeEnumToType<TVR>::Type
+  static inline void Read(const T* data, unsigned long length,
+                          std::istream &_is) {
+    assert( data );
+    assert( length ); // != 0
     assert( _is );
-    _is >> af->Internal[0];
+    _is >> data[0];
     char sep;
-    std::cout << "GetLength: " << af->GetLength() << std::endl;
-    for(int i=1; i<af->GetLength(); ++i) {
+    //std::cout << "GetLength: " << af->GetLength() << std::endl;
+    for(unsigned long i=1; i<length;++i) {
       assert( _is );
       // Get the separator in between the values
       _is.get(sep);
       assert( sep == '\\' ); // FIXME: Bad use of assert
-      _is >> af->Internal[i];
+      _is >> data[i];
       }
     }
 
-  template<int TVR, int TVM>
-  static inline void Write(const AttributeFactory<TVR,TVM> *af, std::ostream &_os)  {
-    assert( af->Internal );
+  template<typename T>
+  static inline void Write(const T* data, unsigned long length,
+                           std::ostream &_os)  {
+    assert( data );
+    assert( length );
     assert( _os );
-    _os << af->Internal[0];
-    for(int i=1; i<af->GetLength(); ++i) {
+    _os << data[0];
+    for(int i=1; i<length; ++i) {
       assert( _os );
-      _os << "\\" << af->Internal[i];
+      _os << "\\" << data[i];
       }
     }
 };
@@ -145,26 +150,30 @@ public:
 // (no notion of order in VM ...)
 template<> class ModeImplementation<BINARY_TYPE> {
 public:
-  template<int TVR, int TVM>
-  static inline void Read(const AttributeFactory<TVR,TVM> *af, std::istream &_is) {
-    const unsigned int type_size = af->GetTypeSize();
-    assert( af->Internal ); // Can we read from pointer ?
+  template<typename T>
+  static inline void Read(T* data, unsigned long length,
+    std::istream &_is) {
+    const unsigned int type_size = sizeof(T);
+    assert( data ); // Can we read from pointer ?
+    assert( length );
     assert( _is ); // Is stream valid ?
-    _is.read( reinterpret_cast<char*>(&(af->Internal[0])), type_size);
-    for(unsigned int i=1; i<af->GetLength(); ++i) {
+    _is.read( reinterpret_cast<char*>(&(data[0])), type_size);
+    for(unsigned long i=1; i<length; ++i) {
       assert( _is );
-      _is.read( reinterpret_cast<char*>(&(af->Internal[i])), type_size );
+      _is.read( reinterpret_cast<char*>(&(data[i])), type_size );
     }
   }
-  template<int TVR, int TVM>
-  static inline void Write(const AttributeFactory<TVR,TVM> *af, std::ostream &_os) { 
-    const unsigned int type_size = af->GetTypeSize();
-    assert( af->Internal ); // Can we write into pointer ?
+  template<typename T>
+  static inline void Write(const T* data, unsigned long length,
+    std::ostream &_os) { 
+    const unsigned int type_size = sizeof(T);
+    assert( data ); // Can we write into pointer ?
+    assert( length );
     assert( _os ); // Is stream valid ?
-    _os.write( reinterpret_cast<const char*>(&(af->Internal[0])), type_size);
-    for(int i=1; i<af->GetLength(); ++i) {
+    _os.write( reinterpret_cast<const char*>(&(data[0])), type_size);
+    for(unsigned long i=1; i<length;++i) {
       assert( _os );
-      _os.write( reinterpret_cast<const char*>(&(af->Internal[i])), type_size );
+      _os.write( reinterpret_cast<const char*>(&(data[i])), type_size );
     }
   }
 
