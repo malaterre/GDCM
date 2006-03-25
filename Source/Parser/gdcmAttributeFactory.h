@@ -12,6 +12,26 @@
 namespace gdcm
 {
 
+typedef enum {
+  ASCII_TYPE = 0,
+  BINARY_TYPE
+} AFModes; // AttributeFactory Modes
+template<int T> struct TypeEnumToMode;
+template<> struct TypeEnumToMode<VR::FL>
+{ enum { Mode = BINARY_TYPE }; };
+template<> struct TypeEnumToMode<VR::FD>
+{ enum { Mode = BINARY_TYPE }; };
+template<> struct TypeEnumToMode<VR::SL>
+{ enum { Mode = BINARY_TYPE }; };
+template<> struct TypeEnumToMode<VR::SS>
+{ enum { Mode = BINARY_TYPE }; };
+template<> struct TypeEnumToMode<VR::UL>
+{ enum { Mode = BINARY_TYPE }; };
+template<> struct TypeEnumToMode<VR::US>
+{ enum { Mode = BINARY_TYPE }; };
+template<> struct TypeEnumToMode<VR::AT>
+{ enum { Mode = BINARY_TYPE }; };
+
 template<int T> struct TypeEnumToType;
 template<> struct TypeEnumToType<VR::FL>
 { typedef float Type; };
@@ -56,15 +76,23 @@ template<> struct ValueEnumToLength<VM::VM1_99>
 //FIXME TODO: 2-2n and 3-3n...
 
 
+// Declaration, also serve as forward declaration
+template<int T> class ModeImplementation;
+
 template<int TVR, int TVM>
 class GDCM_EXPORT AttributeFactory
 {
+  //friend class ModeImplementation<TypeEnumToMode<TVR>::Mode>;
 public:
   typename TypeEnumToType<TVR>::Type Internal[ValueEnumToLength<TVM>::Len];
 
+  unsigned int GetTypeSize() const {
+    return sizeof(typename TypeEnumToType<TVR>::Type);
+  }
   int GetLength() const {
     return ValueEnumToLength<TVM>::Len;
   }
+  // Implementation of Print is common to all Mode (ASCII/Binary)
   void Print(std::ostream &_os) const {
     _os << Internal[0]; // VM is at least garantee to be one
     for(int i=1; i<ValueEnumToLength<TVM>::Len; ++i)
@@ -72,22 +100,78 @@ public:
     }
 
   void Read(std::istream &_is) {
-    _is >> Internal[0];
-    for(int i=1; i<ValueEnumToLength<TVM>::Len; ++i) {
+    ModeImplementation<TypeEnumToMode<TVR>::Mode>::Read(this,_is);
+    }
+  void Write(std::ostream &_os) const {
+    ModeImplementation<TypeEnumToMode<TVR>::Mode>::Write(this,_os);
+    }
+};
+
+// Implementation to perform formatted read and write
+template<> class ModeImplementation<ASCII_TYPE> {
+public:
+  template<int TVR, int TVM>
+  static inline void Read(const AttributeFactory<TVR,TVM> *af,std::istream &_is) {
+    assert( af->Internal );
+    assert( _is );
+    _is >> af->Internal[0];
+    char sep;
+    std::cout << "GetLength: " << af->GetLength() << std::endl;
+    for(int i=1; i<af->GetLength(); ++i) {
       assert( _is );
-      _is.get();
-      _is >> Internal[i];
+      // Get the separator in between the values
+      _is.get(sep);
+      assert( sep == '\\' ); // FIXME: Bad use of assert
+      _is >> af->Internal[i];
       }
     }
 
-  void Write(std::ostream &os) const {
-    os << Internal[0];
-    for(int i=1; i<ValueEnumToLength<TVM>::Len; ++i) {
-      os << "\\" << Internal[i];
+  template<int TVR, int TVM>
+  static inline void Write(const AttributeFactory<TVR,TVM> *af, std::ostream &_os)  {
+    assert( af->Internal );
+    assert( _os );
+    _os << af->Internal[0];
+    for(int i=1; i<af->GetLength(); ++i) {
+      assert( _os );
+      _os << "\\" << af->Internal[i];
       }
     }
 };
 
+// Implementation to perform binary read and write
+// TODO rewrite operation so that either:
+// #1. dummy implementation use a pointer to Internal and do ++p (faster)
+// #2. Actually do some meta programming to unroll the loop 
+// (no notion of order in VM ...)
+template<> class ModeImplementation<BINARY_TYPE> {
+public:
+  template<int TVR, int TVM>
+  static inline void Read(const AttributeFactory<TVR,TVM> *af, std::istream &_is) {
+    const unsigned int type_size = af->GetTypeSize();
+    assert( af->Internal ); // Can we read from pointer ?
+    assert( _is ); // Is stream valid ?
+    _is.read( reinterpret_cast<char*>(&(af->Internal[0])), type_size);
+    for(unsigned int i=1; i<af->GetLength(); ++i) {
+      assert( _is );
+      _is.read( reinterpret_cast<char*>(&(af->Internal[i])), type_size );
+    }
+  }
+  template<int TVR, int TVM>
+  static inline void Write(const AttributeFactory<TVR,TVM> *af, std::ostream &_os) { 
+    const unsigned int type_size = af->GetTypeSize();
+    assert( af->Internal ); // Can we write into pointer ?
+    assert( _os ); // Is stream valid ?
+    _os.write( reinterpret_cast<const char*>(&(af->Internal[0])), type_size);
+    for(int i=1; i<af->GetLength(); ++i) {
+      assert( _os );
+      _os.write( reinterpret_cast<const char*>(&(af->Internal[i])), type_size );
+    }
+  }
+
+};
+
+#if 0
+// Implementation for the undefined length (dynamically allocated array) 
 template<int TVR>
 class GDCM_EXPORT AttributeFactory<TVR, VM::VM1_n>
 {
@@ -99,13 +183,14 @@ public:
     Internal = 0;
   }
 
+  // Length manipulation
   int GetLength() const { return Length; }
   void SetLength(unsigned int len) {
     SetTextLength(len);
   }
 
   // If save is set to zero user should not delete the pointer
-  //void SetArray(const typename TypeEnumToType<TVR>::Type *array, int len, bool save = false) {
+  //void SetArray(const typename TypeEnumToType<TVR>::Type *array, int len, bool save = false) 
   void SetArray(typename TypeEnumToType<TVR>::Type *array, int len, 
     bool save = false) {
     if( save ) {
@@ -120,7 +205,7 @@ public:
   }
 
   void Print(std::ostream &_os) const {
-    if( !Internal ) return;
+    assert( Internal );
     _os << Internal[0]; // VM is at least garantee to be one
     for(unsigned int i=1; i<Length; ++i)
       _os << "\\" << Internal[i];
@@ -128,13 +213,13 @@ public:
 
   // By default do a formatted read
   void Read(std::istream &_is) {
-    if( !Internal ) return;
+    assert( Internal );
     _is >> Internal[0];
     char sep;
     for(unsigned int i=1; i<Length; ++i) {
       assert( _is );
       _is.get(sep);
-      assert( sep == '\\' );
+      assert( sep == '\\' );  //FIXME: Bad use of assert
       _is >> Internal[i];
       }
     }
@@ -193,7 +278,9 @@ private:
   typename TypeEnumToType<TVR>::Type *Internal;
   unsigned int Length;
 };
+#endif
 
+#if 0
 // Specialization for Binary streams
 template<>
 void AttributeFactory<VR::UL, VM::VM1_n>::SetLength(unsigned int len) { 
@@ -257,51 +344,51 @@ template<>
 void AttributeFactory<VR::AT, VM::VM1_n>::Read(std::istream &_is) {
   BinaryRead(_is);
 }
+#endif
 
 
 // Specialization for derivatives of 1-n : 2-n, 3-n ...
 template<int TVR>
-class GDCM_EXPORT AttributeFactory<TVR, VM::VM2_n> : public AttributeFactory<TVR, VM::VM1_n>
+class GDCM_EXPORT AttributeFactory<TVR, VM::VM2_n>
 {
 public:
-  typedef AttributeFactory<TVR, VM::VM1_n> Superclass;
+  typedef AttributeFactory<TVR, VM::VM1_n> Parent;
   void SetLength(int len) {
     if( len <= 1 ) return;
-    Superclass::SetLength(len);
+    Parent::SetLength(len);
   }
 };
 template<int TVR>
-class GDCM_EXPORT AttributeFactory<TVR, VM::VM2_2n> : public AttributeFactory<TVR, VM::VM2_n>
+class GDCM_EXPORT AttributeFactory<TVR, VM::VM2_2n>
 {
 public:
-  typedef AttributeFactory<TVR, VM::VM2_n> Superclass;
+  typedef AttributeFactory<TVR, VM::VM2_n> Parent;
   void SetLength(int len) {
     if( len % 2 ) return;
-    Superclass::SetLength(len);
+    Parent::SetLength(len);
   }
 };
 template<int TVR>
-class GDCM_EXPORT AttributeFactory<TVR, VM::VM3_n> : public AttributeFactory<TVR, VM::VM1_n>
+class GDCM_EXPORT AttributeFactory<TVR, VM::VM3_n>
 {
 public:
-  typedef AttributeFactory<TVR, VM::VM1_n> Superclass;
+  typedef AttributeFactory<TVR, VM::VM1_n> Parent;
   void SetLength(int len) {
     if( len <= 2 ) return;
-    Superclass::SetLength(len);
+    Parent::SetLength(len);
   }
 };
 template<int TVR>
-class GDCM_EXPORT AttributeFactory<TVR, VM::VM3_3n> : public AttributeFactory<TVR, VM::VM3_n>
+class GDCM_EXPORT AttributeFactory<TVR, VM::VM3_3n>
 {
 public:
-  typedef AttributeFactory<TVR, VM::VM3_n> Superclass;
+  typedef AttributeFactory<TVR, VM::VM3_n> Parent;
   void SetLength(int len) {
     if( len % 3 ) return;
-    Superclass::SetLength(len);
+    Parent::SetLength(len);
   }
 };
 
-
-}
+} // namespace gdcm
 
 #endif //__gdcmAttributeFactory_h
