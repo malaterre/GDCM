@@ -96,7 +96,7 @@ inline std::istream& operator>>(std::istream &_is, PersonName &_val)
 {
   char buffer[PersonNameMaxSize];
   _is.getline(buffer, PersonNameMaxSize, '\\');
-  //delete[] _val.RawString;
+  //delete[] _val.RawString; //FIXME
   const size_t len = strlen(buffer);
   _val.RawString = new char[len];
   strncpy(_val.RawString, buffer, len);
