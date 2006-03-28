@@ -5,6 +5,7 @@
 #include "gdcmVR.h"
 #include "gdcmTag.h"
 #include "gdcmVM.h"
+#include "gdcmString.h"
 #include <string>
 #include <vector>
 #include <sstream>
@@ -21,6 +22,8 @@ template<> struct TypeEnumToMode<VR::FL>
 { enum { Mode = BINARY_TYPE }; };
 template<> struct TypeEnumToMode<VR::FD>
 { enum { Mode = BINARY_TYPE }; };
+template<> struct TypeEnumToMode<VR::PN>
+{ enum { Mode = ASCII_TYPE }; };
 template<> struct TypeEnumToMode<VR::SL>
 { enum { Mode = BINARY_TYPE }; };
 template<> struct TypeEnumToMode<VR::SS>
@@ -37,6 +40,8 @@ template<> struct TypeEnumToType<VR::FL>
 { typedef float Type; };
 template<> struct TypeEnumToType<VR::FD>
 { typedef double Type; };
+template<> struct TypeEnumToType<VR::PN>
+{ typedef String Type; };
 template<> struct TypeEnumToType<VR::SL>
 { typedef int32_t Type; };
 template<> struct TypeEnumToType<VR::SS>
@@ -85,17 +90,14 @@ class AttributeFactory
 public:
   typename TypeEnumToType<TVR>::Type Internal[ValueEnumToLength<TVM>::Len];
 
-//  unsigned int GetTypeSize() const {
-//    return sizeof(typename TypeEnumToType<TVR>::Type);
-//  }
-  int GetLength() const {
+  unsigned long GetLength() const {
     return ValueEnumToLength<TVM>::Len;
   }
   // Implementation of Print is common to all Mode (ASCII/Binary)
   void Print(std::ostream &_os) const {
     _os << Internal[0]; // VM is at least garantee to be one
     for(int i=1; i<ValueEnumToLength<TVM>::Len; ++i)
-      _os << "\\" << Internal[i];
+      _os << "," << Internal[i];
     }
 
   void Read(std::istream &_is) {
@@ -108,11 +110,12 @@ public:
     }
 };
 
+
 // Implementation to perform formatted read and write
 template<> class ModeImplementation<ASCII_TYPE> {
 public:
   template<typename T> // FIXME this should be TypeEnumToType<TVR>::Type
-  static inline void Read(const T* data, unsigned long length,
+  static inline void Read(T* data, unsigned long length,
                           std::istream &_is) {
     assert( data );
     assert( length ); // != 0
@@ -136,7 +139,7 @@ public:
     assert( length );
     assert( _os );
     _os << data[0];
-    for(int i=1; i<length; ++i) {
+    for(unsigned long i=1; i<length; ++i) {
       assert( _os );
       _os << "\\" << data[i];
       }
@@ -176,7 +179,54 @@ public:
       _os.write( reinterpret_cast<const char*>(&(data[i])), type_size );
     }
   }
+};
 
+// For particular case for ASCII string
+// WARNING: This template explicitely instanciate a particular 
+// ModeImplementation THEREFORE it is required to be declared after the
+// ModeImplementation is needs (doh!)
+template<int TVM>
+class AttributeFactory<VR::PN, TVM>
+{
+public:
+  AttributeFactory(const char array[])
+    {
+    int i = 0;
+    const char sep = '\\';
+    std::string sarray = array;
+    std::string::size_type pos1 = 0;
+    std::string::size_type pos2 = sarray.find(sep, pos1+1);
+    while(pos2 != std::string::npos)
+      {
+      Internal[i++] = sarray.substr(pos1, pos2-pos1);
+      pos1 = pos2+1;
+      pos2 = sarray.find(sep, pos1+1);
+      } 
+    Internal[i] = sarray.substr(pos1, pos2-pos1);
+    //for(int j = 0; j <= i; ++j)
+    //  std::cout << "j:" << j << " " << Internal[j] << std::endl;
+    }
+
+  unsigned long GetLength() const {
+    return ValueEnumToLength<TVM>::Len;
+  }
+  // Implementation of Print is common to all Mode (ASCII/Binary)
+  void Print(std::ostream &_os) const {
+    _os << Internal[0]; // VM is at least garantee to be one
+    for(int i=1; i<ValueEnumToLength<TVM>::Len; ++i)
+      _os << "," << Internal[i];
+    }
+
+  void Read(std::istream &_is) {
+    ModeImplementation<TypeEnumToMode<VR::PN>::Mode>::Read(Internal, 
+      GetLength(),_is);
+    }
+  void Write(std::ostream &_os) const {
+    ModeImplementation<TypeEnumToMode<VR::PN>::Mode>::Write(Internal, 
+      GetLength(),_os);
+    }
+private:
+  typename TypeEnumToType<VR::PN>::Type Internal[ValueEnumToLength<TVM>::Len];
 };
 
 // Implementation for the undefined length (dynamically allocated array) 
@@ -192,7 +242,9 @@ public:
   }
 
   // Length manipulation
-  int GetLength() const { return Length; }
+  // SetLength should really be protected anyway...all operation
+  // should go through SetArray
+  unsigned long GetLength() const { return Length; }
   void SetLength(unsigned long len) {
     if( len ) {
       if( len > Length ) {
@@ -224,9 +276,12 @@ public:
   }
   // Implementation of Print is common to all Mode (ASCII/Binary)
   void Print(std::ostream &_os) const {
+    assert( Length );
+    assert( Internal );
     _os << Internal[0]; // VM is at least garantee to be one
-    for(int i=1; i<GetLength(); ++i)
-      _os << "\\" << Internal[i];
+    const unsigned long length = GetLength();
+    for(unsigned long i=1; i<length; ++i)
+      _os << "," << Internal[i];
     }
   void Read(std::istream &_is) {
     ModeImplementation<TypeEnumToMode<TVR>::Mode>::Read(Internal, 

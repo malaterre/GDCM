@@ -3,6 +3,7 @@
 #define __gdcmPersonName_h
 
 #include "gdcmType.h"
+#include "gdcmString.h"
 #include <iostream>
 #include <iomanip>
 #include <assert.h>
@@ -33,75 +34,22 @@ Used specify a name prefix (e.g., Dr.).
 Used to specify an educational degree (e.g., MD).
  */
 const unsigned int PersonNameMaxSize = 48;
-class GDCM_EXPORT PersonName
+class GDCM_EXPORT PersonName : public String
 {
 public:
-  PersonName() { RawString = 0; }
-  
-  PersonName(const char array[]);
-  ~PersonName() { delete[] RawString; }
-  
-  friend std::ostream& operator<<(std::ostream &_os, const PersonName &_val);
-  friend std::istream& operator>>(std::istream &_is, PersonName &_val);
+  typedef String Superclass;
+  PersonName() : Superclass() {}
+  PersonName(const value_type* s) : Superclass(s) {}
 
-  const char * GetRawString() {
-    return RawString;
-  }
-  unsigned long GetLength() {
-    return strlen(RawString);
-  }
- 
-  void SetArray(const char *array, unsigned long length)
-    {
-    //TODO
-    }
-  PersonName &operator=(const PersonName &_val)
-    {
-    if( *this != _val )
-      {
-      memcpy(RawString, _val.RawString, strlen(_val.RawString));
-      }
-    return *this;
-    }
-
-  bool operator==(const PersonName &_val) const
-    {
-    return strcmp(RawString, _val.RawString);
-    }
-  bool operator!=(const PersonName &_val) const
-    {
-    return !strcmp(RawString, _val.RawString);
-    }
-  bool operator<(const PersonName &_val) const
-    {
-    return strcmp(RawString, _val.RawString) < 0;
-    }
-
-  PersonName(const PersonName &_val)
-    {
-    memcpy(RawString, _val.RawString, strlen(_val.RawString));
-    }
+  unsigned int GetMaxSize() { return PersonNameMaxSize; }
 
 private:
-  char *RawString;
 };
-//-----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream &_os, const PersonName &_val)
-{
-  _os << (_val.RawString ? _val.RawString : "");
-  return _os;
-}
-//-----------------------------------------------------------------------------
-inline std::istream& operator>>(std::istream &_is, PersonName &_val)
-{
-  char buffer[PersonNameMaxSize];
-  _is.getline(buffer, PersonNameMaxSize, '\\');
-  //delete[] _val.RawString; //FIXME
-  const size_t len = strlen(buffer);
-  _val.RawString = new char[len];
-  strncpy(_val.RawString, buffer, len);
-  return _is;
-}
+
+//inline std::istream& operator>>(std::istream &_is, const PersonName &_val)
+//{
+//  _is.getline(_val, GetMaxSize(), '\\');
+//}
 
 } // end namespace gdcm
 

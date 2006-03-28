@@ -10,6 +10,7 @@ namespace gdcm
 class AttributeFactoryInternal
   {
   public:
+#if 0
   AttributeFactory<VR::UL,VM::VM1_n> AF_UL;
   AttributeFactory<VR::US,VM::VM1_n> AF_US;
   AttributeFactory<VR::SS,VM::VM1_n> AF_SS;
@@ -17,6 +18,7 @@ class AttributeFactoryInternal
   AttributeFactory<VR::FL,VM::VM1_n> AF_FL;
   AttributeFactory<VR::FD,VM::VM1_n> AF_FD;
   AttributeFactory<VR::AT,VM::VM1_n> AF_AT;
+#endif
   };
 
 Attribute::Attribute()
@@ -43,6 +45,7 @@ void Attribute::SetVM(VM::VMType vm)
 
 void Attribute::SetLength(int len)
 {
+#if 0
   switch(VRField)
     {
   case VR::UL:
@@ -70,10 +73,12 @@ void Attribute::SetLength(int len)
   default:
     abort();
     }
+#endif
 }
 
 void Attribute::Read(std::istream &_is)
 {
+#if 0
   switch(VRField)
     {
   case VR::UL:
@@ -101,6 +106,7 @@ void Attribute::Read(std::istream &_is)
   default:
     abort();
     }
+#endif
 }
 
 //void Attribute::SetValue(const char *val)
@@ -122,6 +128,7 @@ void Attribute::Read(std::istream &_is)
 //}
 void Attribute::Print(std::ostream &_os) const
 {
+#if 0
   switch(VRField)
     {
   case VR::UL:
@@ -149,6 +156,7 @@ void Attribute::Print(std::ostream &_os) const
   default:
       abort();
     }
+#endif
 }
 
 }

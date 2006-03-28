@@ -34,6 +34,7 @@ IStream &DICOMIStream::Read(Tag &t)
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
   if( t == Tag(0,0) )
     {
+    abort();
     throw std::exception( );
     }
 #endif
@@ -86,14 +87,6 @@ IStream &DICOMIStream::Read(Value &v)
 //    SwapCode, length);
   return *this;
 }
-//-----------------------------------------------------------------------------
-//IStream& DICOMIStream::Read(DataElement& da)
-//{
-//  // Read Tag
-//  assert( !eof() ); // FIXME
-//  if( !Read(da.TagField) ) return *this;
-//  return *this;
-//}
 
 //-----------------------------------------------------------------------------
 template<class DEType>
@@ -145,8 +138,7 @@ IStream& DICOMIStream::Read(SequenceOfItems<DEType>& sq)
         break;
         }
 #endif
-      //std::cerr << si << std::endl;
-      //assert( si.GetTag() == de.GetTag() ); // Should be an Item Start
+      // Should be an Item Start
       assert( si.GetTag() == itemStart );
       sq.Items.push_back( si );
       si.Clear(); // Clear structure to reuse in the loop
@@ -166,7 +158,6 @@ IStream& DICOMIStream::Read(SequenceOfItems<DEType>& sq)
     while( seq_length != sq.SequenceLengthField )
       {
       Item<DEType> si; // = SequenceItemField;
-      //Read(de);
       Read(si);
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
       if( si.GetTag() != itemStart )
@@ -185,6 +176,7 @@ IStream& DICOMIStream::Read(SequenceOfItems<DEType>& sq)
       gdcmDebugMacro( "seq_length="  << seq_length );
       assert( seq_length <= sq.SequenceLengthField );
       }
+      assert( seq_length == sq.SequenceLengthField );
     }
   return *this;
 }
@@ -198,8 +190,6 @@ IStream& DICOMIStream::ReadMeta(ExplicitDataElement& xda)
   if( xda.TagField.GetGroup() > 0x0002 )
     {
     // Finished reading group 0x0002
-    //assert( xda.TagField.GetLength() == 4 );
-    //Seekg(-4, std::ios::cur);
     return *this;
     }
   //else
@@ -274,6 +264,11 @@ IStream& DICOMIStream::ExplicitReadCommon(ExplicitDataElement& xda)
     Read(xda.ValueLengthField);
     // SIEMENS-MR-RGB-16Bits.dcm
     //assert( xda.ValueLengthField == 0 );
+    if( xda.ValueLengthField != 0 )
+      {
+      gdcmWarningMacro( "Wrong length for Sequence Delimitation Item: " 
+        << xda.ValueLengthField );
+      }
     return *this;
     }
   // Read VR
@@ -479,9 +474,9 @@ DICOMIStream& DICOMIStream::Read(Item<DEType> &_val)
     return *this;
     }
   assert( _val.TagField == item );
+  const Tag itemDel(0xfffe,0xe00d);
   if( _val.ValueLengthField == 0xFFFFFFFF )
     {
-    const Tag itemDel(0xfffe,0xe00d);
     DEType de;
     while( Read(de) )
       {
@@ -504,13 +499,40 @@ DICOMIStream& DICOMIStream::Read(Item<DEType> &_val)
     }
   else
     {
-    gdcmDebugMacro( "Item Length: " << _val.ValueLengthField );
-    //_val.ValueField.SetLength(_val.ValueLengthField);
-    //Read(_val.ValueField);
-    gdcmWarningMacro( "Seeking FIXME FIXME: " << _val.ValueLengthField );
-    Seekg( _val.ValueLengthField, std::ios::cur );
-    // FIXME FIXME FIXME
-    gdcmDebugMacro( "Val: \t" << _val );
+    gdcmDebugMacro( "Data Element Value Length (Items): " 
+      << _val.ValueLengthField );
+    uint32_t items_length = 0;
+    uint32_t total_length = _val.ValueLengthField;
+    _val.ValueLengthField = 0; // FIXME
+    while( items_length != total_length )
+      {
+      DEType de;
+      std::streampos pos = Tellg();
+      if( (int)pos == 14080 )
+        {
+        std::cerr << "Tellg()" << Tellg() << std::endl;
+        pos = 0;
+        }
+      if( !Read(de) )
+        {
+        gdcmErrorMacro( "BUGGY header. Don't know how to deal with error"
+          "Skipping: remaing of DICOM items" );
+        abort();
+        break;
+        }
+      if(de.GetTag() == itemDel ) 
+        {
+        abort();
+        }
+      // else
+      std::cerr << "de:" << de << std::endl;
+      _val.AddDataElement(de);
+      items_length += de.GetLength();
+      //std::cerr << "Length:" << items_length << " " << total_length << std::endl;
+      assert( items_length <= total_length );
+      }
+      // total of each elements should match what we read:
+      assert( total_length == _val.ValueLengthField );
     }
   return *this;
 }

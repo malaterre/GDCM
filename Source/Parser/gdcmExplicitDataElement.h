@@ -16,8 +16,9 @@ namespace gdcm
 class GDCM_EXPORT ExplicitDataElement : public DataElement
 {
 public:
-  ExplicitDataElement() { ValueLengthField = 0; VRField = VR::INVALID; }
+  ExplicitDataElement() { Clear(); }
 
+  void Clear() { ValueLengthField = 0; VRField = VR::INVALID; }
   friend std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_val);
   friend class DICOMIStream;
   friend DICOMOStream& operator<<(DICOMOStream& _os, const ExplicitDataElement &_val);

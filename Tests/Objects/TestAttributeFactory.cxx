@@ -24,17 +24,25 @@ void TestFloat()
   //gdcm::AttributeFactory<gdcm::VR::FL, 0> f0;
   //f0.Print(std::cout);
 
+  std::stringstream ss;
   //const float *p[] = {{ 2.5f }};
   gdcm::AttributeFactory<gdcm::VR::FL, gdcm::VM::VM1> f1 = {2.5f}; //Randomize<float,1>();
   f1.Print(std::cout);
-  f1.Write(std::cout);
+  std::cout << std::endl;
+  f1.Write(ss);
+  f1.Read(ss);
+  f1.Print(std::cout);
   std::cout << std::endl;
 
   gdcm::AttributeFactory<gdcm::VR::FL, gdcm::VM::VM2> f2  = { 2.5f, 3.5f};
   f2.Print(std::cout);
-  f2.Write(std::cout);
+  std::cout << std::endl;
+  f2.Write(ss);
+  f2.Read(ss);
+  f2.Print(std::cout);
   std::cout << std::endl;
 
+#if 0
   gdcm::AttributeFactory<gdcm::VR::FL, gdcm::VM::VM3> f3  = { 2.5f, 3.5f, 4.5f};
   f3.Print(std::cout);
   f3.Write(std::cout);
@@ -71,10 +79,14 @@ void TestFloat()
   f32.Print(std::cout);
   f32.Write(std::cout);
   std::cout << std::endl;
+#endif
 
   gdcm::AttributeFactory<gdcm::VR::FL, gdcm::VM::VM1_99> f99 = { 2.5f, 3.5f, 4.5f, 5.5f, 6.5f, 7.5f };
   f99.Print(std::cout);
-  f99.Write(std::cout);
+  std::cout << std::endl;
+  f99.Write(ss);
+  f99.Read(ss);
+  f99.Print(std::cout);
   std::cout << std::endl;
 
   // This one also should not compile
@@ -96,24 +108,27 @@ void TestFloat()
   gdcm::AttributeFactory<gdcm::VR::FL, gdcm::VM::VM6> ff;
   ff.Read(is);
   ff.Print(std::cout);
-  ff.Write(std::cout);
   std::cout << std::endl;
-
 }
 
 void TestFloatN()
 {
   // This one should not compile:
   // gdcm::AttributeFactory<gdcm::VR::FL, gdcm::VM::VM1_n> fn = {0,0};
+  std::cout << "TestFloatN" << std::endl;
 
   static float tab[] = { 1,2,3,4,5,6,7,8,9,10,11,12,13 };
   const int len = 13;
+  std::stringstream ss;
   gdcm::AttributeFactory<gdcm::VR::FL, gdcm::VM::VM1_n> fn;
   fn.SetLength(0);
   fn.SetLength(len);
-  fn.SetArray(tab, len);
+  fn.SetArray(tab, len, true);
   fn.Print(std::cout);
-  fn.Write(std::cout);
+  std::cout << std::endl;
+  fn.Write(ss);
+  fn.Read(ss);
+  fn.Print(std::cout);
   std::cout << std::endl;
 
   // Test Read
@@ -126,12 +141,12 @@ void TestFloatN()
   ff.SetLength(len);
   ff.Read(is);
   ff.Print(std::cout);
-  ff.Write(std::cout);
+  //ff.Write(std::cout);
   std::cout << std::endl;
 
   gdcm::AttributeFactory<gdcm::VR::FL, gdcm::VM::VM1_n> copy = ff;
   ff.Print(std::cout);
-  ff.Write(std::cout);
+  //ff.Write(std::cout);
   std::cout << std::endl;
 
   gdcm::AttributeFactory<gdcm::VR::FL, gdcm::VM::VM2_n> f2n;
@@ -150,10 +165,54 @@ void TestAS()
 //  gdcm::AttributeFactory<gdcm::VR::AS, gdcm::VM::VM1> as1 = "abcd";
 }
 
+void TestPN()
+{
+  /*
+   * istream becomes invalid if one do the following:
+   * std::istringstream is;
+   * is.str( "1 2 3" );
+   * int a;
+   * while( is >> a );
+   * //is.clear(); // Important
+   * is.str( "1.0 2.0" );
+   * double d;
+   * while( is >> d ); // nothing is done !
+   */
+  std::stringstream ss;
+  gdcm::AttributeFactory<gdcm::VR::PN, gdcm::VM::VM1> pn1("Marc^Simon");
+  pn1.Print(std::cout);
+  std::cout << std::endl;
+  pn1.Write(ss);
+  pn1.Read(ss);
+  pn1.Print(std::cout);
+  std::cout << std::endl;
+
+  ss.clear();
+  gdcm::AttributeFactory<gdcm::VR::PN, gdcm::VM::VM1> pn2 = "Simon^Marc";
+  pn2.Print(std::cout);
+  std::cout << std::endl;
+  pn2.Write(ss);
+  pn2.Read(ss);
+  pn2.Print(std::cout);
+  std::cout << std::endl;
+
+  ss.clear();
+  gdcm::AttributeFactory<gdcm::VR::PN, gdcm::VM::VM2> pn3 = 
+    "Simon^Marc\\Marc^Simon";
+  pn3.Print(std::cout);
+  std::cout << std::endl;
+  pn3.Write(ss);
+  pn3.Read(ss);
+  pn3.Print(std::cout);
+  std::cout << std::endl;
+}
+
 int TestAttributeFactory(int , char *[])
 {
   TestFloat();
   TestFloatN();
+  TestPN();
+
   return 0;
 }
 

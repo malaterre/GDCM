@@ -82,7 +82,6 @@ SET(SRCS
   gdcmVM.cxx
   gdcmTS.cxx
   gdcmTag.cxx
-  gdcmPersonName.cxx
   gdcmGroupDict.cxx
   gdcmExplicitDataElement.cxx
   gdcmImplicitDataElement.cxx

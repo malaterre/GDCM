@@ -55,3 +55,13 @@ A better approach would be to thwrow an exection when VR does not match expectio
 I really hate the ReadMeta approach this should really be rewritten ... when I have some time to loose...
 REcheck the implementation of AttributeFactory this is still very dumb to have two runtime function in a template where only one is ever used...
 For that need a table lookup at compile time to check who is binary and who is text and who is not supported (UN, and SQ for instance)
+
+ULTIMATE GOALS:
+
+1. Open and read DICOM file
+2. Create DICOM file
+3. Convert DICOM to any commercial image format (JPEG, PNG, GIF, etc.)
+4. Convert JPEG, PNG, GIF, etc. to DICOM
+5. Convert image series into video sequence
+
+
