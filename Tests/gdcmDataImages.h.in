@@ -1,8 +1,0 @@
-const char * const gdcmDataImages[] = { 
-  @GDCM_DATA_IMAGES@
-0 };
-
-const char * const gdcmBlackListDataImages[] = { 
-  @GDCM_BLACK_LIST_DATA_IMAGES@
-0 };
-

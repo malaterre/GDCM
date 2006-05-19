@@ -1,5 +1,0 @@
-/**
- * \mainpage gdcm documentation
- *
- * This is the users documentation
- */

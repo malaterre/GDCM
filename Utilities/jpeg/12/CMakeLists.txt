@@ -1,9 +1,0 @@
-# JPEG 12 bits project
-
-INCLUDE_DIRECTORIES(
-  "${CMAKE_CURRENT_BINARY_DIR}"
-  "${GDCMJPEG_SOURCE_DIR}")
-ADD_LIBRARY(gdcmjpeg12 ${JPEG_SOURCES})
-INSTALL_TARGETS(/lib/gdcm/ gdcmjpeg12)
-
-
