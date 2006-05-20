@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--
+  <xsd:element name="address">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="name"/>
+        <xsd:element ref="street"/>
+        <xsd:element ref="city"/>
+        <xsd:element ref="state"/>
+        <xsd:element ref="postal-code"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="name">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="title" minOccurs="0"/>
+        <xsd:element ref="first-Name"/>
+        <xsd:element ref="last-Name"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="title"      type="xsd:string"/>
+  <xsd:element name="first-Name" type="xsd:string"/>
+  <xsd:element name="last-Name"  type="xsd:string"/>
+  <xsd:element name="street"     type="xsd:string"/>
+  <xsd:element name="city"       type="xsd:string"/>
+
+  <xsd:element name="state">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+        <xsd:length value="2"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>
+
+  <xsd:element name="postal-code">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+        <xsd:pattern value="[0-9]{5}(-[0-9]{4})?"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>
+-->
+  <xsd:element name="DataElement">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="Tag"/>
+        <xsd:element ref="Vers"/>
+        <xsd:element ref="VR"/>
+        <xsd:element ref="VM"/>
+        <xsd:element ref="Name"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="Tag" type="xsd:string"/>
+  <xsd:element name="Vers" type="xsd:string"/>
+
+  <xsd:element name="VR">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+        <xsd:length value="2"/>
+        <!--<xsd:pattern value="[0-9]{5}(-[0-9]{4})?"/>-->
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>
+
+  <xsd:element name="VM">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+        <xsd:length value="2"/>
+        <!--<xsd:pattern value="[0-9]{5}(-[0-9]{4})?"/>-->
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>
+
+  <xsd:element name="Name" type="xsd:string"/>
+</xsd:schema>
+
+
