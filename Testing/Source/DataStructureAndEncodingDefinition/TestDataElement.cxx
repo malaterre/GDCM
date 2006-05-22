@@ -1,4 +1,5 @@
 #include "gdcmDataElement.h"
+#include "gdcmExplicitDataElement.h"
 #include "gdcmTag.h"
 #include <sstream>
 #include <fstream>
@@ -12,30 +13,26 @@ void WriteRead(gdcm::DataElement const &w, gdcm::DataElement &r)
   r.Read(ss);
 }
 
-// Test Data Element
-int TestDataElement(int , char *[])
+int TestDataElement1(const uint16_t group, const uint16_t element,
+  const uint16_t vl)
 {
   const char *str;
   std::stringstream ss;
-  const uint16_t group = 0x0010;
-  const uint16_t element = 0x0012;
-
   // SimpleData Element, just group,element and length
   str = reinterpret_cast<const char*>(&group);
   ss.write(str, sizeof(group));
   str = reinterpret_cast<const char*>(&element);
   ss.write(str, sizeof(element));
-  const uint16_t vl = 0x0;
   str = reinterpret_cast<const char*>(&vl);
   ss.write(str, sizeof(vl));
 
   gdcm::DataElement de;
   de.Read( ss );
-  //std::cerr << de << std::endl;
   if( de.GetTag().GetGroup()   != group ||
       de.GetTag().GetElement() != element ||
       de.GetValueLength()      != vl )
     {
+    std::cerr << de << std::endl;
     return 1;
     }
 
@@ -48,6 +45,62 @@ int TestDataElement(int , char *[])
     return 1;
     }
 
+  return 0;
+}
+
+// Explicit
+int TestDataElement2(const uint16_t group, const uint16_t element,
+  const char* vr, const char* value)
+{
+  const char *str;
+  const uint16_t vl = strlen( value );
+  std::stringstream ss;
+  // SimpleData Element, just group,element and length
+  str = reinterpret_cast<const char*>(&group);
+  ss.write(str, sizeof(group));
+  str = reinterpret_cast<const char*>(&element);
+  ss.write(str, sizeof(element));
+  if( gdcm::VR::GetVRType(vr) == gdcm::VR::INVALID )
+    {
+    std::cerr << "Test buggy" << std::endl;
+    return 1;
+    }
+  ss << vr;
+  str = reinterpret_cast<const char*>(&vl);
+  ss.write(str, sizeof(vl));
+  ss << value;
+
+  gdcm::ExplicitDataElement de;
+  de.Read( ss );
+  if( de.GetTag().GetGroup()   != group ||
+      de.GetTag().GetElement() != element ||
+      de.GetValueLength()      != vl )
+    {
+    std::cerr << de << std::endl;
+    return 1;
+    }
+
+  gdcm::ExplicitDataElement de2;
+  WriteRead(de, de2);
+  if( !(de == de2) )
+    {
+    std::cerr << de << std::endl;
+    std::cerr << de2 << std::endl;
+    return 1;
+    }
+
+  return 0;
+}
+
+// Test Data Element
+int TestDataElement(int , char *[])
+{
+  const uint16_t group = 0x0010;
+  const uint16_t element = 0x0012;
+  const uint16_t vl = 0x0;
+  int r = 0;
+  r += TestDataElement1(group, element, vl);
+
   // Full DataElement
   //const char value[] = "ABCDEFGHIJKLMNOP";
   //os << "AE";
@@ -57,5 +110,5 @@ int TestDataElement(int , char *[])
   //of.write(os.str().c_str(), os.str().size());
   //of.close();
 
-  return 0;
+  return r;
 }
