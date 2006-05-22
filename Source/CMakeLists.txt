@@ -1,5 +1,6 @@
 # ...
 SUBDIRS(
+  Common
   Attribute
   DataStructureAndEncodingDefinition
   InformationObjectDefinition

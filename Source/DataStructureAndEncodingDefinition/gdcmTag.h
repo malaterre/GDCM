@@ -3,9 +3,8 @@
 #define __gdcmTag_h
 
 #include "gdcmType.h"
-//#include <iostream>
-//#include <iomanip>
-//#include <assert.h>
+#include <iostream>
+#include <iomanip> // for setw, setfill
 
 namespace gdcm
 {
