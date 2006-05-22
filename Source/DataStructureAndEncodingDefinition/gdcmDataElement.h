@@ -33,6 +33,7 @@ public:
   virtual ~DataElement() {}
 
   friend std::ostream& operator<<(std::ostream &_os, const DataElement &_val);
+
   const Tag& GetTag() const { return TagField; }
   void SetTag(const Tag &t) { TagField = t; }
 
@@ -47,7 +48,7 @@ public:
   DataElement &operator=(const DataElement &_val)
     {
     TagField = _val.TagField;
-    //ValueField = _val.ValueField;
+    ValueField = _val.ValueField;
     return *this;
     }
 
