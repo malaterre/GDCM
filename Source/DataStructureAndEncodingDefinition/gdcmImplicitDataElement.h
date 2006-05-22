@@ -13,42 +13,20 @@ namespace gdcm
 class GDCM_EXPORT ImplicitDataElement : public DataElement
 {
 public:
-  ImplicitDataElement() { ValueLengthField = 0; }
+  ImplicitDataElement() : DataElement() {}
 
   friend std::ostream& operator<<(std::ostream& _os, const ImplicitDataElement &_val);
-  //friend DICOMIStream& operator>>(DICOMIStream& _os, ImplicitDataElement &_val);
-  friend class DICOMIStream;
-  friend DICOMOStream& operator<<(DICOMOStream& _os, const ImplicitDataElement &_val);
 
-  uint32_t GetValueLength() const { return ValueLengthField; }
-  void SetValueLength(uint32_t vl) { ValueLengthField = vl; }
-
-//  ImplicitDataElement(const ImplicitDataElement &_val)
-//    {
-//    }
-
-  ImplicitDataElement &operator=(const ImplicitDataElement &_val)
-    {
-    (void)_val;
-    abort();
-    }
-
-  uint32_t GetLength() const
-    {
-    //assert( ValueLengthField != 0xFFFFFFFF ); //FIXME
-    return DataElement::GetLength() + sizeof(ValueLengthField) + ValueLengthField;
-    }
-
-protected:
-  DICOMOStream& Write(DICOMOStream& _os) const;
+  void Read(std::istream& _os);
+  void Write(std::ostream& _os) const;
 
 private:
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const ImplicitDataElement &_val)
 {
-  _os << _val.TagField << "\t\tVL=" << std::dec << _val.ValueLengthField
-      << "\tValueField=[" << _val.ValueField << "]";
+  DataElement &de = _val;
+  _os << de;
   return _os;
 }
 

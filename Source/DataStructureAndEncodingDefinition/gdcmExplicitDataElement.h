@@ -3,6 +3,7 @@
 #define __gdcmExplicitDataElement_h
 
 #include "gdcmDataElement.h"
+#include "gdcmVR.h"
 
 namespace gdcm
 {
@@ -14,7 +15,7 @@ namespace gdcm
 class GDCM_EXPORT ExplicitDataElement : public DataElement
 {
 public:
-  ExplicitDataElement() { VRField = VR::INVALID; }
+  ExplicitDataElement() : DataElement() { VRField = VR::INVALID; }
 
   friend std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_val);
 
@@ -31,7 +32,7 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_val)
 {
-  DataElement &de = _val;
+  const DataElement &de = _val;
   _os << de;
   _os << _val.TagField << " VR=" << _val.VRField;
   return _os;
