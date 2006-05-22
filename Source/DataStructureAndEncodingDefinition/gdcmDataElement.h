@@ -37,6 +37,10 @@ public:
   const Tag& GetTag() const { return TagField; }
   void SetTag(const Tag &t) { TagField = t; }
 
+  uint32_t GetValueLength() const {
+    return ValueLengthField;
+  }
+
   DataElement(const DataElement&_val)
     {
     if( this != &_val)
@@ -48,8 +52,26 @@ public:
   DataElement &operator=(const DataElement &_val)
     {
     TagField = _val.TagField;
-    ValueField = _val.ValueField;
+    ValueLengthField = _val.ValueLengthField;
     return *this;
+    }
+
+  bool operator==(const DataElement &_de) const
+    {
+    return TagField == _de.TagField
+      && ValueLengthField == _de.ValueLengthField;
+    }
+
+  void Read(std::istream &is)
+    {
+    TagField.Read(is);
+    is.read((char*)(&ValueLengthField), 4);
+    }
+
+  void Write(std::ostream &os) const
+    {
+    TagField.Write(os);
+    os.write((char*)(&ValueLengthField), 4);
     }
 
 protected:
@@ -61,8 +83,8 @@ protected:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &_os, const DataElement &_val)
 {
-  _os << "Tag:" << _val.TagField << "\n";
-  _os << "VaLue length:" << _val.ValueLengthField << "\n"; 
+  _os << "Tag: " << _val.TagField << "\n";
+  _os << "Value length: " << _val.ValueLengthField << "\n"; 
   return _os;
 }
 

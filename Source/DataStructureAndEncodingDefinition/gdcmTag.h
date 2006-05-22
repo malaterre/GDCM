@@ -153,6 +153,15 @@ public:
   // Standard Data Elements. Private Data elements have odd Group Numbers.
   bool IsPrivate() const { return !IsPublic(); }
 
+  void Read(std::istream &is)
+    {
+    is.read((char*)(&ElementTag.tag), 4);
+    }
+  void Write(std::ostream &os) const
+    {
+    os.write((char*)(&ElementTag.tag), 4);
+    }
+
 private:
   //uint16_t ElementTag[2]; // Group, Element
   union { uint32_t tag; uint16_t tags[2]; } ElementTag;
