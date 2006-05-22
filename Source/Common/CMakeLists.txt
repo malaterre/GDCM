@@ -9,18 +9,18 @@ CONFIGURE_FILE(
   IMMEDIATE
   )
 
-## Add the include paths
-#INCLUDE_DIRECTORIES(
-#  "${GDCM_BINARY_DIR}/Source/Common"
-#  "${GDCM_SOURCE_DIR}/Source/Common"
-#  )
-#
-#SET(SRCS
-#  gdcmIStream.cxx
-#  gdcmOStream.cxx
-#  gdcmDirectory.cxx
-#  gdcmTrace.cxx
-#  gdcmSwapCode.cxx
-#  )
+# Add the include paths
+INCLUDE_DIRECTORIES(
+  "${GDCM_BINARY_DIR}/Source/Common"
+  "${GDCM_SOURCE_DIR}/Source/Common"
+  )
 
-#ADD_LIBRARY(gdcmCommon ${SRCS})
+SET(Common_SRCS
+  #  gdcmIStream.cxx
+  #  gdcmOStream.cxx
+  gdcmDirectory.cxx
+  gdcmTrace.cxx
+  gdcmSwapCode.cxx
+  )
+
+ADD_LIBRARY(gdcmCommon ${Common_SRCS})
