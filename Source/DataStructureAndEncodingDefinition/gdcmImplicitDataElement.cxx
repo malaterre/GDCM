@@ -1,28 +1,20 @@
 #include "gdcmImplicitDataElement.h"
-#include "gdcmDict.h"
 
 namespace gdcm
 {
+
 //-----------------------------------------------------------------------------
-DICOMOStream& operator<<(DICOMOStream &_os, const ImplicitDataElement &_val)
+void ImplicitDataElement::Read(std::istream &_is)
 {
-  return _val.Write(_os);
+  (void)_is;
 }
 
-DICOMOStream& ImplicitDataElement::Write(DICOMOStream& _os) const
+//-----------------------------------------------------------------------------
+void ImplicitDataElement::Write(std::ostream& _os) const
 {
-  //const DataElement &de = 
-  //_os << de;
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   assert(0 && "Not Implemented");
-  return _os;
+  (void)_os;
 }
-
-//-----------------------------------------------------------------------------
-//DICOMIStream& operator>>(DICOMIStream &_os, ImplicitDataElement &_val)
-//{
-//  return _val.Read(_os);
-//}
-
 
 } // end namespace gdcm

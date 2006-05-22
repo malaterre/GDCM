@@ -4,6 +4,7 @@
 
 #include "gdcmDataElement.h"
 #include "gdcmVR.h"
+#include "gdcmValue.h"
 
 namespace gdcm
 {
@@ -28,6 +29,7 @@ public:
 private:
   // Value Representation
   VR::VRType VRField;
+  Value ValueField;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_val)

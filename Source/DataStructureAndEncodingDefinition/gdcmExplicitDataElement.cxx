@@ -6,6 +6,7 @@ namespace gdcm
 //-----------------------------------------------------------------------------
 void ExplicitDataElement::Read(std::istream &_is)
 {
+  (void)_is;
 }
 
 //-----------------------------------------------------------------------------
@@ -20,27 +21,27 @@ void ExplicitDataElement::Write(std::ostream &_os) const
    || VRField == VR::UN )
     {
     uint16_t check = 0x0;
-    _os.Write(check);
+    _os.write(reinterpret_cast<char*>(check), sizeof(check));
     // Write Value Length (32bits)
-    _os.Write(ValueLengthField);
+    _os.write(reinterpret_cast<char*>(ValueLengthField), sizeof(ValueLengthField));
     }
   else if( VRField == VR::UT )
     {
     uint16_t check = 0x0;
-    _os.Write(check);
+    _os.write(reinterpret_cast<char*>(check), sizeof(check));
     // Write Value Length (32bits)
     assert( ValueLengthField != 0xFFFFFFFF );
-    _os.Write(ValueLengthField);
+    _os.write(reinterpret_cast<char*>(ValueLengthField), sizeof(ValueLengthField));
     }
   else
     {
     uint16_t vl = ValueLengthField;
     // Write Value Length (16bits)
-    _os.Write(vl);
+    _os.write(reinterpret_cast<char*>(vl), sizeof(vl));
     }
   // We have the length we should be able to write the value
-  _os.Write(ValueField);
-  return _os;
+  ValueField.Write(_os);
+
 }
 
 } // end namespace gdcm

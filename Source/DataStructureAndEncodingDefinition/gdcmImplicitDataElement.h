@@ -25,7 +25,7 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const ImplicitDataElement &_val)
 {
-  DataElement &de = _val;
+  const DataElement &de = _val;
   _os << de;
   return _os;
 }

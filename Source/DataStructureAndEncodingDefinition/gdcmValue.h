@@ -72,7 +72,12 @@ public:
 
   void Clear() {
     delete[] Internal; Internal = 0; Length = 0; }
-  const char *GetPointer() const { return Internal; }
+  //const char *GetPointer() const { return Internal; }
+
+  void Write(std::ostream &os) const
+    {
+    os.write(Internal, Length);
+    }
 
 protected:
   /**

@@ -97,7 +97,7 @@ public:
     assert( vr != VR::VR_END );
     }
 
-  static void Write(std::ostream &os, VRType const & vr) const
+  static void Write(std::ostream &os, VRType const & vr)
     {
     const char *vr_str = GetVRString(vr);
     assert( strlen( vr_str ) == 2 );
