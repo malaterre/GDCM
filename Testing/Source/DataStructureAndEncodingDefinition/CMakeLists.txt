@@ -2,6 +2,7 @@
 # DSED
 SET(DSED_TEST_SRCS
   TestTag
+  TestDataElement
   )
 
 # Add the include paths
