@@ -2,7 +2,7 @@
 #ifndef __gdcmSequenceOfItems_h
 #define __gdcmSequenceOfItems_h
 
-#include "gdcmCompositeDataElementValue.h"
+#include "gdcmCompositeValue.h"
 
 namespace gdcm
 {
@@ -19,7 +19,7 @@ namespace gdcm
  * A Value Representation for Data Elements that contain a sequence of 
  * Data Sets. Sequence of Items allows for Nested Data Sets.
  */
-class GDCM_EXPORT SequenceOfItems : public CompositeDataElementValue
+class GDCM_EXPORT SequenceOfItems : public CompositeValue
 {
 public:
   // Typdefs:
