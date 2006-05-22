@@ -129,7 +129,7 @@ bool VR::IsSwap(const char *vr)
   return GetVRType(vr_swap) != VR_END;
 }
 
-bool VR::IsString(VRType vr)
+bool VR::IsString(VRType const & vr)
 {
   return
     vr == AE ||
@@ -148,7 +148,7 @@ bool VR::IsString(VRType vr)
     vr == UI;
 }
 
-bool VR::CanDisplay(VRType vr)
+bool VR::CanDisplay(VRType const & vr)
 {
   return 
     vr == AE ||
@@ -174,14 +174,13 @@ bool VR::CanDisplay(VRType vr)
     vr == UT;
 }
 
-bool VR::IsBinary(VRType vr)
+bool VR::IsBinary(VRType const & vr)
 {
   assert( vr != OF );
   return 
     vr == OB ||
     vr == OW ||
     vr == OB_OW ||
-//    vr == OF ||
     vr == UN ||
     vr == SQ ;
 }

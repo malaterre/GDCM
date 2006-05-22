@@ -11,7 +11,7 @@ void ExplicitDataElement::Read(std::istream &_is)
 //-----------------------------------------------------------------------------
 void ExplicitDataElement::Write(std::ostream &_os) const
 {
-  _os.Write(VRField);
+  VR::Write(_os, VRField);
   // See PS 3.5, Date Element Structure With Explicit VR
   if( VRField == VR::OB
    || VRField == VR::OW
