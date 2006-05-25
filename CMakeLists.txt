@@ -1,4 +1,5 @@
 PROJECT(GDCM)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.2)
 
 #-----------------------------------------------------------------------------
 SET(GDCM_MAJOR_VERSION 0)
