@@ -4,7 +4,17 @@
 #include <sstream>
 #include <fstream>
 
-void WriteRead(gdcm::DataElement const &w, gdcm::DataElement &r)
+inline void DebugElement(std::stringstream const &os)
+{
+  std::ofstream of("/tmp/bla.bin", std::ios::binary);
+  const char *s = os.str().c_str();
+  int size = os.str().size();
+  of.write(s, size);
+  of.close();
+}
+
+
+inline void WriteRead(gdcm::DataElement const &w, gdcm::DataElement &r)
 {
   // w will be written
   // r will be read back
@@ -69,6 +79,7 @@ int TestDataElement2(const uint16_t group, const uint16_t element,
   str = reinterpret_cast<const char*>(&vl);
   ss.write(str, sizeof(vl));
   ss << value;
+  //DebugElement(ss);
 
   gdcm::ExplicitDataElement de;
   de.Read( ss );
@@ -102,13 +113,9 @@ int TestDataElement(int , char *[])
   r += TestDataElement1(group, element, vl);
 
   // Full DataElement
+  //const char vr[] = "UN";
   //const char value[] = "ABCDEFGHIJKLMNOP";
-  //os << "AE";
-  //os << value;
-
-  //std::ofstream of("/tmp/bla.bin", std::ios::binary);
-  //of.write(os.str().c_str(), os.str().size());
-  //of.close();
+  //r += TestDataElement2(group, element, vr, value);
 
   return r;
 }
