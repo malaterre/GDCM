@@ -3,6 +3,7 @@
 #define __gdcmValue_h
 
 #include "gdcmType.h"
+#include "gdcmTrace.h"
 
 //#include <iostream>
 //#include <string.h>
@@ -25,11 +26,11 @@ public:
 
   uint32_t GetLength() const { return Length; }
   // Does a reallocation
-  void SetLength(uint32_t l) { 
-//    if (l%2)
-//      {
-//      gdcmWarningMacro( "BUGGY HEADER: Your dicom contain odd length value field." );
-//      }
+  void SetLength(uint32_t l) {
+    if (l%2)
+      {
+      gdcmWarningMacro( "BUGGY HEADER: Your dicom contain odd length value field." );
+      }
     // FIXME: man realloc
     if( l )
       {
@@ -72,7 +73,6 @@ public:
 
   void Clear() {
     delete[] Internal; Internal = 0; Length = 0; }
-  //const char *GetPointer() const { return Internal; }
 
   void Write(std::ostream &os) const
     {
@@ -97,7 +97,7 @@ protected:
         return false;
         }
       }
-    return true;   
+    return true;
     }
 
 
@@ -105,7 +105,7 @@ private:
   char* Internal;
   uint32_t Length;
 };
-//-----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &_os, const Value &_val)
 {
   // This is perfectly valid to have a Length = 0 , so we cannot check
@@ -124,7 +124,7 @@ inline std::ostream& operator<<(std::ostream &_os, const Value &_val)
     {
     _os << "Not Loaded";
     }
-      
+
   return _os;
 }
 
