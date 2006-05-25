@@ -2,7 +2,7 @@
 #ifndef __gdcmItem_h
 #define __gdcmItem_h
 
-#include "gdcmCompositeDataElement.h"
+#include "gdcmDataElement.h"
 
 namespace gdcm
 {

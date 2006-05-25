@@ -3,6 +3,7 @@
 #define __gdcmSequenceOfItems_h
 
 #include "gdcmCompositeValue.h"
+#include "gdcmItem.h"
 
 namespace gdcm
 {
