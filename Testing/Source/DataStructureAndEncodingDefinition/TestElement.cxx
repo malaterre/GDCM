@@ -21,8 +21,8 @@ int TestFD()
   gdcm::Element<gdcm::VR::FD, gdcm::VM::VM1> a = { TPI };
   std::ostringstream os;
   a.Print( os );
-  const char *s = os.str().c_str();
-  std::cout << s << std::endl;
+  std::string st = os.str(); // important
+  const char *s = st.c_str();
   //double t = *reinterpret_cast<const double*>(*s);
   //std::cout << t << std::endl;
 
