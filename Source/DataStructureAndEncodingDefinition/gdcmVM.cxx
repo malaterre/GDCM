@@ -114,4 +114,9 @@ bool VM::IsValid(const int &vm1, const VMType &vm2)
   return r;
 }
 
+// TODO write some ugly macro to expand the template
+//int VM::GetLength()
+//{
+//}
+
 } // end namespace gdcm

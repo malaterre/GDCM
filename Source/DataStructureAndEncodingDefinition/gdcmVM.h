@@ -32,7 +32,8 @@ class GDCM_EXPORT VM
 {
 public:
   typedef enum {
-    VM1 = 0,
+    VM0 = 0,
+    VM1,
     VM2,
     VM3,
     VM4,
@@ -71,6 +72,32 @@ inline std::ostream& operator<<(std::ostream& _os, const VM::VMType&_val)
   _os << VM::GetVMString(_val);
   return _os;
 }
+
+template<int T> struct TypeToLength;
+#define TYPETOLENGTH(type,length) \
+  template<> struct TypeToLength<VM::type> \
+  { enum { Length = length }; };
+// TODO: Could be generated from XML file
+TYPETOLENGTH(VM0,1)
+TYPETOLENGTH(VM1,1)
+TYPETOLENGTH(VM2,2)
+TYPETOLENGTH(VM3,3)
+TYPETOLENGTH(VM4,4)
+TYPETOLENGTH(VM5,5)
+TYPETOLENGTH(VM6,6)
+TYPETOLENGTH(VM8,8)
+TYPETOLENGTH(VM16,16)
+TYPETOLENGTH(VM24,24)
+TYPETOLENGTH(VM1_2,2)
+TYPETOLENGTH(VM1_3,3)
+TYPETOLENGTH(VM1_8,8)
+TYPETOLENGTH(VM1_32,32)
+TYPETOLENGTH(VM1_99,99)
+//TYPETOLENGTH(VM1_n,
+//TYPETOLENGTH(VM2_2n,
+//TYPETOLENGTH(VM2_n,
+//TYPETOLENGTH(VM3_3n,
+//TYPETOLENGTH(VM3_n,
 
 } // end namespace gdcm
 

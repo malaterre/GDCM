@@ -13,53 +13,6 @@
 namespace gdcm
 {
 
-
-template<int T> struct TypeEnumToType;
-template<> struct TypeEnumToType<VR::FL>
-{ typedef float Type; };
-template<> struct TypeEnumToType<VR::FD>
-{ typedef double Type; };
-template<> struct TypeEnumToType<VR::PN>
-{ typedef char* Type; };
-template<> struct TypeEnumToType<VR::SL>
-{ typedef int32_t Type; };
-template<> struct TypeEnumToType<VR::SS>
-{ typedef int16_t Type; };
-template<> struct TypeEnumToType<VR::UL>
-{ typedef uint32_t Type; };
-template<> struct TypeEnumToType<VR::US>
-{ typedef uint16_t Type; };
-template<> struct TypeEnumToType<VR::AT>
-{ typedef Tag Type; };
-
-template<int T> struct ValueEnumToLength;
-template<> struct ValueEnumToLength<VM::VM1>
-{ enum { Len = 1 }; };
-template<> struct ValueEnumToLength<VM::VM2>
-{ enum { Len = 2 }; };
-template<> struct ValueEnumToLength<VM::VM3>
-{ enum { Len = 3 }; };
-template<> struct ValueEnumToLength<VM::VM4>
-{ enum { Len = 4 }; };
-template<> struct ValueEnumToLength<VM::VM5>
-{ enum { Len = 5 }; };
-template<> struct ValueEnumToLength<VM::VM6>
-{ enum { Len = 6 }; };
-template<> struct ValueEnumToLength<VM::VM8>
-{ enum { Len = 8 }; };
-template<> struct ValueEnumToLength<VM::VM16>
-{ enum { Len = 16 }; };
-template<> struct ValueEnumToLength<VM::VM24>
-{ enum { Len = 24 }; };
-template<> struct ValueEnumToLength<VM::VM1_32>
-{ enum { Len = 32 }; };
-template<> struct ValueEnumToLength<VM::VM1_99>
-{ enum { Len = 99 }; };
-//template<> struct ValueEnumToLength<VM::VM1_n>
-//{ enum { Len = 3 }; };
-//FIXME TODO: 2-2n and 3-3n...
-
-
 // Declaration, also serve as forward declaration
 template<int T> class ModeImplementation;
 
@@ -67,15 +20,15 @@ template<int TVR, int TVM>
 class Element
 {
 public:
-  typename TypeEnumToType<TVR>::Type Internal[ValueEnumToLength<TVM>::Len];
+  typename TypeToType<TVR>::Type Internal[TypeToLength<TVM>::Length];
 
   unsigned long GetLength() const {
-    return ValueEnumToLength<TVM>::Len;
+    return TypeToLength<TVM>::Length;
   }
   // Implementation of Print is common to all Mode (ASCII/Binary)
   void Print(std::ostream &_os) const {
     _os << Internal[0]; // VM is at least garantee to be one
-    for(int i=1; i<ValueEnumToLength<TVM>::Len; ++i)
+    for(int i=1; i<TypeToLength<TVM>::Length; ++i)
       _os << "," << Internal[i];
     }
 
@@ -93,7 +46,7 @@ public:
 // Implementation to perform formatted read and write
 template<> class ModeImplementation<VR::ASCII> {
 public:
-  template<typename T> // FIXME this should be TypeEnumToType<TVR>::Type
+  template<typename T> // FIXME this should be TypeToType<TVR>::Type
   static inline void Read(T* data, unsigned long length,
                           std::istream &_is) {
     assert( data );
@@ -189,12 +142,12 @@ public:
     }
 
   unsigned long GetLength() const {
-    return ValueEnumToLength<TVM>::Len;
+    return TypeToLength<TVM>::Length;
   }
   // Implementation of Print is common to all Mode (ASCII/Binary)
   void Print(std::ostream &_os) const {
     _os << Internal[0]; // VM is at least garantee to be one
-    for(int i=1; i<ValueEnumToLength<TVM>::Len; ++i)
+    for(int i=1; i<TypeToLength<TVM>::Length; ++i)
       _os << "," << Internal[i];
     }
 
@@ -205,7 +158,7 @@ public:
     ModeImplementation<VR::ASCII>::Write(Internal, GetLength(),_os);
     }
 private:
-  typename String Internal[ValueEnumToLength<TVM>::Len];
+  typename String Internal[TypeToLength<TVM>::Length];
 };
 
 template< int TVM>
@@ -234,8 +187,8 @@ public:
     if( len ) {
       if( len > Length ) {
         // perform realloc
-        typename TypeEnumToType<TVR>::Type *internal = 
-          new typename TypeEnumToType<TVR>::Type[len];
+        typename TypeToType<TVR>::Type *internal = 
+          new typename TypeToType<TVR>::Type[len];
         memcpy(internal, Internal, Length);
         delete[] Internal;
         Internal = internal;
@@ -245,8 +198,8 @@ public:
   }
 
   // If save is set to zero user should not delete the pointer
-  //void SetArray(const typename TypeEnumToType<TVR>::Type *array, int len, bool save = false) 
-  typedef typename TypeEnumToType<TVR>::Type ArrayType;
+  //void SetArray(const typename TypeToType<TVR>::Type *array, int len, bool save = false) 
+  typedef typename TypeToType<TVR>::Type ArrayType;
   void SetArray(ArrayType *array, unsigned long len,
     bool save = false) {
     if( save ) {
@@ -291,7 +244,7 @@ public:
     }
 
 private:
-  typename TypeEnumToType<TVR>::Type *Internal;
+  typename TypeToType<TVR>::Type *Internal;
   unsigned long Length; // unsigned int ??
 };
 
