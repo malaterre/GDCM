@@ -7,7 +7,6 @@
 
 namespace gdcm
 {
-
 /* \brief VR class
  * This is adapated from DICOM standart
  * The biggest difference is the INVALID VR
@@ -59,6 +58,10 @@ public:
     VR_END = UT+1  // Invalid VR, need to be max(VMType)+1
   } VRType;
 
+  typedef enum {
+    ASCII = 0,
+    BINARY
+  } VRRepresentation; // VR Representation
 
   static const char* GetVRString(VRType vr);
   static VRType GetVRType(const char *vr);
@@ -86,7 +89,9 @@ public:
   
   static bool CanDisplay(VRType const &vr);
   static bool IsBinary(VRType const &vr);
-  static bool IsString(VRType const &vr);
+  static bool IsASCII(VRType const &vr);
+  static bool IsBinary2(VRType const &vr);
+  static bool IsASCII2(VRType const &vr);
   
   static void Read(std::istream &is, VRType &vr)
     {
@@ -116,6 +121,42 @@ inline std::ostream& operator<<(std::ostream& _os, const VR::VRType&_val)
   return _os;
 }
 
+template<int T> struct TypeToRepresentation;
+#define TYPETOREPRESENTATION(type,rep) \
+  template<> struct TypeToRepresentation<VR::type> \
+{ enum { Mode = VR::rep }; };
+
+// TODO: Could be generated from XML file
+TYPETOREPRESENTATION(AE,ASCII)
+TYPETOREPRESENTATION(AS,ASCII)
+TYPETOREPRESENTATION(AT,BINARY)
+TYPETOREPRESENTATION(CS,ASCII)
+TYPETOREPRESENTATION(DA,ASCII)
+TYPETOREPRESENTATION(DS,ASCII)
+TYPETOREPRESENTATION(DT,ASCII)
+TYPETOREPRESENTATION(FL,BINARY)
+TYPETOREPRESENTATION(FD,BINARY)
+TYPETOREPRESENTATION(IS,ASCII)
+TYPETOREPRESENTATION(LO,ASCII)
+TYPETOREPRESENTATION(LT,ASCII)
+TYPETOREPRESENTATION(OB,BINARY)
+TYPETOREPRESENTATION(OF,BINARY)
+TYPETOREPRESENTATION(OW,BINARY)
+TYPETOREPRESENTATION(PN,ASCII)
+TYPETOREPRESENTATION(SH,ASCII)
+TYPETOREPRESENTATION(SL,BINARY)
+TYPETOREPRESENTATION(SQ,BINARY)
+TYPETOREPRESENTATION(SS,BINARY)
+TYPETOREPRESENTATION(ST,ASCII)
+TYPETOREPRESENTATION(TM,ASCII)
+TYPETOREPRESENTATION(UI,ASCII)
+TYPETOREPRESENTATION(UL,BINARY)
+TYPETOREPRESENTATION(UN,BINARY)
+TYPETOREPRESENTATION(US,BINARY)
+TYPETOREPRESENTATION(UT,BINARY)
+
+
 } // end namespace gdcm
 
 #endif //__gdcmVR_h
+

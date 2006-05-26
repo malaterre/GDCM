@@ -5,6 +5,7 @@ SET(DSED_TEST_SRCS
   TestDataElement
   TestComposite
   TestElement
+  TestVR
   )
 
 # Add the include paths

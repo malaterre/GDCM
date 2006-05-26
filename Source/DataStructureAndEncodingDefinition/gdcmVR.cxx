@@ -129,7 +129,51 @@ bool VR::IsSwap(const char *vr)
   return GetVRType(vr_swap) != VR_END;
 }
 
-bool VR::IsString(VRType const & vr)
+#define VRTemplateCase(type, rep) \
+  case VR::type: \
+    return (VR::VRRepresentation)TypeToRepresentation<VR::type>::Mode  \
+       == VR::rep;
+#define VRTemplate(rep) \
+VRTemplateCase(AE,rep) \
+VRTemplateCase(AS,rep) \
+VRTemplateCase(AT,rep) \
+VRTemplateCase(CS,rep) \
+VRTemplateCase(DA,rep) \
+VRTemplateCase(DS,rep) \
+VRTemplateCase(DT,rep) \
+VRTemplateCase(FL,rep) \
+VRTemplateCase(FD,rep) \
+VRTemplateCase(IS,rep) \
+VRTemplateCase(LO,rep) \
+VRTemplateCase(LT,rep) \
+VRTemplateCase(OB,rep) \
+VRTemplateCase(OF,rep) \
+VRTemplateCase(OW,rep) \
+VRTemplateCase(PN,rep) \
+VRTemplateCase(SH,rep) \
+VRTemplateCase(SL,rep) \
+VRTemplateCase(SQ,rep) \
+VRTemplateCase(SS,rep) \
+VRTemplateCase(ST,rep) \
+VRTemplateCase(TM,rep) \
+VRTemplateCase(UI,rep) \
+VRTemplateCase(UL,rep) \
+VRTemplateCase(UN,rep) \
+VRTemplateCase(US,rep) \
+VRTemplateCase(UT,rep)
+
+bool VR::IsASCII(VRType const & vr)
+{
+  switch(vr)
+    {
+    VRTemplate(ASCII)
+  default:
+      abort();
+      return false;
+    }
+}
+
+bool VR::IsASCII2(VRType const & vr )
 {
   return
     vr == AE ||
@@ -146,6 +190,28 @@ bool VR::IsString(VRType const & vr)
     vr == ST ||
     vr == TM ||
     vr == UI;
+}
+
+bool VR::IsBinary(VRType const & vr)
+{
+  switch(vr)
+    {
+    VRTemplate(BINARY)
+  default:
+      abort();
+      return false;
+    }
+}
+
+bool VR::IsBinary2(VRType const & vr)
+{
+  //assert( vr != OF );
+  return 
+    vr == OB ||
+    vr == OW ||
+    vr == OB_OW ||
+    vr == UN ||
+    vr == SQ ;
 }
 
 bool VR::CanDisplay(VRType const & vr)
@@ -174,15 +240,5 @@ bool VR::CanDisplay(VRType const & vr)
     vr == UT;
 }
 
-bool VR::IsBinary(VRType const & vr)
-{
-  assert( vr != OF );
-  return 
-    vr == OB ||
-    vr == OW ||
-    vr == OB_OW ||
-    vr == UN ||
-    vr == SQ ;
-}
 
 } // end of namespace gdcm

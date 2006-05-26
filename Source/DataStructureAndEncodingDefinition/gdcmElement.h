@@ -13,27 +13,6 @@
 namespace gdcm
 {
 
-typedef enum {
-  ASCII_TYPE = 0,
-  BINARY_TYPE
-} AFModes; // Element Modes
-template<int T> struct TypeEnumToMode;
-template<> struct TypeEnumToMode<VR::FL>
-{ enum { Mode = BINARY_TYPE }; };
-template<> struct TypeEnumToMode<VR::FD>
-{ enum { Mode = BINARY_TYPE }; };
-template<> struct TypeEnumToMode<VR::PN>
-{ enum { Mode = ASCII_TYPE }; };
-template<> struct TypeEnumToMode<VR::SL>
-{ enum { Mode = BINARY_TYPE }; };
-template<> struct TypeEnumToMode<VR::SS>
-{ enum { Mode = BINARY_TYPE }; };
-template<> struct TypeEnumToMode<VR::UL>
-{ enum { Mode = BINARY_TYPE }; };
-template<> struct TypeEnumToMode<VR::US>
-{ enum { Mode = BINARY_TYPE }; };
-template<> struct TypeEnumToMode<VR::AT>
-{ enum { Mode = BINARY_TYPE }; };
 
 template<int T> struct TypeEnumToType;
 template<> struct TypeEnumToType<VR::FL>
@@ -101,18 +80,18 @@ public:
     }
 
   void Read(std::istream &_is) {
-    ModeImplementation<TypeEnumToMode<TVR>::Mode>::Read(Internal, 
+    ModeImplementation<TypeToRepresentation<TVR>::Mode>::Read(Internal, 
       GetLength(),_is);
     }
   void Write(std::ostream &_os) const {
-    ModeImplementation<TypeEnumToMode<TVR>::Mode>::Write(Internal, 
+    ModeImplementation<TypeToRepresentation<TVR>::Mode>::Write(Internal, 
       GetLength(),_os);
     }
 };
 
 
 // Implementation to perform formatted read and write
-template<> class ModeImplementation<ASCII_TYPE> {
+template<> class ModeImplementation<VR::ASCII> {
 public:
   template<typename T> // FIXME this should be TypeEnumToType<TVR>::Type
   static inline void Read(T* data, unsigned long length,
@@ -151,7 +130,7 @@ public:
 // #1. dummy implementation use a pointer to Internal and do ++p (faster)
 // #2. Actually do some meta programming to unroll the loop 
 // (no notion of order in VM ...)
-template<> class ModeImplementation<BINARY_TYPE> {
+template<> class ModeImplementation<VR::BINARY> {
 public:
   template<typename T>
   static inline void Read(T* data, unsigned long length,
@@ -220,10 +199,10 @@ public:
     }
 
   void Read(std::istream &_is) {
-    ModeImplementation<ASCII_TYPE>::Read(Internal, GetLength(),_is);
+    ModeImplementation<VR::ASCII>::Read(Internal, GetLength(),_is);
     }
   void Write(std::ostream &_os) const {
-    ModeImplementation<ASCII_TYPE>::Write(Internal, GetLength(),_os);
+    ModeImplementation<VR::ASCII>::Write(Internal, GetLength(),_os);
     }
 private:
   typename String Internal[ValueEnumToLength<TVM>::Len];
@@ -290,11 +269,11 @@ public:
       _os << "," << Internal[i];
     }
   void Read(std::istream &_is) {
-    ModeImplementation<TypeEnumToMode<TVR>::Mode>::Read(Internal, 
+    ModeImplementation<TypeToRepresentation<TVR>::Mode>::Read(Internal, 
       GetLength(),_is);
     }
   void Write(std::ostream &_os) const {
-    ModeImplementation<TypeEnumToMode<TVR>::Mode>::Write(Internal, 
+    ModeImplementation<TypeToRepresentation<TVR>::Mode>::Write(Internal, 
       GetLength(),_os);
     }
 
