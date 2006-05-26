@@ -63,7 +63,7 @@ public:
   typedef enum {
     ASCII = 0,
     BINARY
-  } VRRepresentation; // VR Representation
+  } VREncoding; // VR Encoding
 
   static const char* GetVRString(VRType vr);
   static VRType GetVRType(const char *vr);
@@ -128,11 +128,11 @@ inline std::ostream& operator<<(std::ostream& _os, const VR::VRType&_val)
 }
 
 // Tells whether VR Type is ASCII or Binary
-template<int T> struct TypeToRepresentation;
+template<int T> struct TypeToEncoding;
 // Convert from VR Type to real underlying type
 template<int T> struct TypeToType;
 #define TYPETOREPRESENTATION(type,rep, rtype)              \
-  template<> struct TypeToRepresentation<VR::type>  \
+  template<> struct TypeToEncoding<VR::type>  \
   { enum { Mode = VR::rep }; };                     \
   template<> struct TypeToType<VR::type>        \
   { typedef rtype Type; };

@@ -14,7 +14,7 @@ namespace gdcm
 {
 
 // Declaration, also serve as forward declaration
-template<int T> class ModeImplementation;
+template<int T> class EncodingImplementation;
 
 template<int TVR, int TVM>
 class Element
@@ -33,18 +33,18 @@ public:
     }
 
   void Read(std::istream &_is) {
-    ModeImplementation<TypeToRepresentation<TVR>::Mode>::Read(Internal, 
+    EncodingImplementation<TypeToEncoding<TVR>::Mode>::Read(Internal, 
       GetLength(),_is);
     }
   void Write(std::ostream &_os) const {
-    ModeImplementation<TypeToRepresentation<TVR>::Mode>::Write(Internal, 
+    EncodingImplementation<TypeToEncoding<TVR>::Mode>::Write(Internal, 
       GetLength(),_os);
     }
 };
 
 
 // Implementation to perform formatted read and write
-template<> class ModeImplementation<VR::ASCII> {
+template<> class EncodingImplementation<VR::ASCII> {
 public:
   template<typename T> // FIXME this should be TypeToType<TVR>::Type
   static inline void Read(T* data, unsigned long length,
@@ -83,7 +83,7 @@ public:
 // #1. dummy implementation use a pointer to Internal and do ++p (faster)
 // #2. Actually do some meta programming to unroll the loop 
 // (no notion of order in VM ...)
-template<> class ModeImplementation<VR::BINARY> {
+template<> class EncodingImplementation<VR::BINARY> {
 public:
   template<typename T>
   static inline void Read(T* data, unsigned long length,
@@ -115,8 +115,8 @@ public:
 
 // For particular case for ASCII string
 // WARNING: This template explicitely instanciate a particular 
-// ModeImplementation THEREFORE it is required to be declared after the
-// ModeImplementation is needs (doh!)
+// EncodingImplementation THEREFORE it is required to be declared after the
+// EncodingImplementation is needs (doh!)
 #if 0
 template<int TVM>
 class Element<TVM>
@@ -152,10 +152,10 @@ public:
     }
 
   void Read(std::istream &_is) {
-    ModeImplementation<VR::ASCII>::Read(Internal, GetLength(),_is);
+    EncodingImplementation<VR::ASCII>::Read(Internal, GetLength(),_is);
     }
   void Write(std::ostream &_os) const {
-    ModeImplementation<VR::ASCII>::Write(Internal, GetLength(),_os);
+    EncodingImplementation<VR::ASCII>::Write(Internal, GetLength(),_os);
     }
 private:
   typename String Internal[TypeToLength<TVM>::Length];
@@ -222,11 +222,11 @@ public:
       _os << "," << Internal[i];
     }
   void Read(std::istream &_is) {
-    ModeImplementation<TypeToRepresentation<TVR>::Mode>::Read(Internal, 
+    EncodingImplementation<TypeToEncoding<TVR>::Mode>::Read(Internal, 
       GetLength(),_is);
     }
   void Write(std::ostream &_os) const {
-    ModeImplementation<TypeToRepresentation<TVR>::Mode>::Write(Internal, 
+    EncodingImplementation<TypeToEncoding<TVR>::Mode>::Write(Internal, 
       GetLength(),_os);
     }
 

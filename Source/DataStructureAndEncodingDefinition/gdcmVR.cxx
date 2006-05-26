@@ -131,7 +131,7 @@ bool VR::IsSwap(const char *vr)
 
 #define VRTemplateCase(type, rep) \
   case VR::type: \
-    return (VR::VRRepresentation)TypeToRepresentation<VR::type>::Mode  \
+    return (VR::VREncoding)TypeToEncoding<VR::type>::Mode  \
        == VR::rep;
 #define VRTemplate(rep) \
 VRTemplateCase(AE,rep) \
