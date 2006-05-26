@@ -4,6 +4,7 @@ SET(DSED_TEST_SRCS
   TestTag
   TestDataElement
   TestComposite
+  TestElement
   )
 
 # Add the include paths

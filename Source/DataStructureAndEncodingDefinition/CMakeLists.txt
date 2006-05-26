@@ -2,6 +2,7 @@
 # DSED
 SET(DSED_SRCS
   gdcmVR.cxx
+  gdcmVM.cxx
   gdcmExplicitDataElement.cxx
   gdcmImplicitDataElement.cxx
   )
