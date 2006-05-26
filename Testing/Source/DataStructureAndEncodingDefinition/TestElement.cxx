@@ -23,6 +23,7 @@ int TestFD()
   a.Print( os );
   std::string st = os.str(); // important
   const char *s = st.c_str();
+  std::cout << s << std::endl;
   //double t = *reinterpret_cast<const double*>(*s);
   //std::cout << t << std::endl;
 
