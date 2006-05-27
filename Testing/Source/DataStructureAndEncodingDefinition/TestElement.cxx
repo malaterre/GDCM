@@ -2,13 +2,16 @@
 
 #define TPI 3.1415926535897931
 
+namespace gdcm
+{
+  
 int TestFL()
 {
-  gdcm::Element<gdcm::VR::FL, gdcm::VM::VM1> a = { TPI };
+  Element<VR::FL, VM::VM1> a = { TPI };
   a.Print( std::cout );
   std::cout << std::endl;
 
-  gdcm::Element<gdcm::VR::FL, gdcm::VM::VM8> b = 
+  Element<VR::FL, VM::VM8> b = 
     { 0,1,2,3,4,5,6,7 };
   b.Print( std::cout );
   std::cout << std::endl;
@@ -18,28 +21,41 @@ int TestFL()
 
 int TestFD()
 {
-  gdcm::Element<gdcm::VR::FD, gdcm::VM::VM1> a = { TPI };
+  Element<VR::FD, VM::VM1> a = { TPI };
   std::ostringstream os;
   a.Print( os );
-  std::string st = os.str(); // important
+  const std::string st = os.str(); // important
   const char *s = st.c_str();
   std::cout << s << std::endl;
   //double t = *reinterpret_cast<const double*>(*s);
   //std::cout << t << std::endl;
 
-  gdcm::Element<gdcm::VR::FD, gdcm::VM::VM8> b = 
-    { 0,1,2,3,4,5,6,7 };
+  Element<VR::FD, VM::VM8> b; 
+  double array[] = { 1,2,3,4,5,6,7,9 };
+  b = reinterpret_cast<Element<VR::FD, VM::VM8>& >( array );
   b.Print( std::cout );
   std::cout << std::endl;
 
   return 0;
 }
 
+int TestAS()
+{
+  Element<VR::AS, VM::VM1> a = { "019Y" };
+  a.Print( std::cout );
+  std::cout << std::endl;
+
+  return 0;
+}
+
+}
+
 int TestElement(int , char *[])
 {
   int r = 0;
-  r += TestFL();
-  r += TestFD();
+  r += gdcm::TestFL();
+  r += gdcm::TestFD();
+  r += gdcm::TestAS();
 
   return r;
 }

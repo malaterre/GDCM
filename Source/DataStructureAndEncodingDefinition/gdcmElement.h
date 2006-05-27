@@ -290,6 +290,16 @@ public:
   }
 };
 
+template<>
+class Element<VR::AS, VM::VM1>
+{
+public:
+  char Internal[5];
+  void Print(std::ostream &_os) const {
+    _os << Internal;
+    }
+};
+
 } // namespace gdcm
 
 #endif //__gdcmElement_h
