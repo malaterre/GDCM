@@ -1,8 +1,7 @@
 #ifndef __gdcmTrace_h
 #define __gdcmTrace_h
 
-#include "gdcmConfigure.h"
-#include "gdcmType.h"
+#include "gdcmTypes.h"
 
 #include <string>
 #include <vector>

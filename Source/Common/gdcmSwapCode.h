@@ -1,7 +1,7 @@
 #ifndef __gdcmSwapCode_h
 #define __gdcmSwapCode_h
 
-#include "gdcmType.h"
+#include "gdcmTypes.h"
 
 namespace gdcm 
 {

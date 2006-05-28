@@ -1,7 +1,7 @@
 #ifndef __gdcmVM_h
 #define __gdcmVM_h
 
-#include "gdcmType.h"
+#include "gdcmTypes.h"
 #include <iostream>
 /* \brief Value Multiplicity
  * Looking at the DICOMV3 dict only there is very few cases:

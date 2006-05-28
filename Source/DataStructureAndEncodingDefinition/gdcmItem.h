@@ -3,6 +3,7 @@
 #define __gdcmItem_h
 
 #include "gdcmDataElement.h"
+#include "gdcmDataSet.h"
 
 namespace gdcm
 {
@@ -20,73 +21,55 @@ namespace gdcm
  * Representation Sequence of Items. An Item contains a Data Set.
  */
 
-// Implementation this is called the Composite Design Pattern
 class GDCM_EXPORT Item : public DataElement
 {
 public:
-  Item(uint32_t length = 0xFFFFFFFF) {
-    TagField = Tag(0xfffe,0xe000); ValueLengthField = length; }
+  Item(const Tag& t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl) {}
+  friend std::ostream& operator<<(std::ostream &os, const Item&val);
 
-  void Clear()
-    {
+  void Clear() {
     NestedDataSet.Clear();
     }
-  uint32_t GetValueLength() const { return ValueLengthField; }
 
-  void AddDataElement(const DEType& de)
-    {
-    NestedDataSet.AddDataElement(de);
+  void InsertDataElement(const DataElement& de) {
+    NestedDataSet.InsertDataElement(de);
     // Update the length
-    if (ValueLengthField != 0xFFFFFFFF )
+    if( !IsUndefinedLength() )
       {
-      ValueLengthField += de.GetLength();
+      //ValueLengthField += de.GetLength();
       }
     }
-  const DEType& GetDataElement(const Tag& t) const
+  const DataElement& GetDataElement(const Tag& t) const
     {
     return NestedDataSet.GetDataElement(t);
     }
 
   // Completely defines it with the nested dataset
   // destroy anything present
-  void SetNestedDataSet(const DataSet<DEType>& nested)
+  void SetNestedDataSet(const DataSet& nested)
     {
     NestedDataSet = nested;
     }
   // Return a const ref to the Nested Data Set
-  const DataSet<DEType>& GetNestedDataSet() const
+  const DataSet& GetNestedDataSet() const
     {
     return NestedDataSet;
     }
 
 private:
-  // This is the value read from the file, might either be a defined lenght
-  // or undefined
-  //uint32_t ItemLengthField; // Can be 0xFFFFFFFF
-
   /* NESTED DATA SET  a Data Set contained within a Data Element of an other Data Set.
    * May be nested recursively.
    * Only Data Elements with VR = SQ  may, themselves, contain Data Sets
    */
-  DataSet<DEType> NestedDataSet;
+  DataSet NestedDataSet;
 };
 //-----------------------------------------------------------------------------
-template<class DEType>
-inline std::ostream& operator<<(std::ostream& _os, const Item<DEType> &_val)
+inline std::ostream& operator<<(std::ostream& os, const Item &val)
 {
-  _os << _val.TagField << " Item Length=" << _val.ValueLengthField << /*" Item Value= " << _val.ValueField <<*/ std::endl;
-  _os << _val.NestedDataSet;
-  // Print delimitation if undefined
-  if( _val.ValueLengthField == 0xFFFFFFFF )
-    {
-    //DataElement endItem;
-    //endItem.SetTag( Tag(0xfffe,0xe00d) );
-    //_os << endItem << std::endl;
-    //FIXME: Stupid code
-    _os << Tag(0xfffe, 0xe00d) << std::endl;
-    }
+  os << " Item Length=" << val.ValueLengthField << std::endl;
+  os << val.NestedDataSet;
 
-  return _os;
+  return os;
 }
 
 

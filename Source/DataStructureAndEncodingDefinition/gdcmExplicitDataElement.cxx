@@ -1,4 +1,5 @@
 #include "gdcmExplicitDataElement.h"
+#include "gdcmValue.h"
 
 namespace gdcm
 {
@@ -40,7 +41,7 @@ void ExplicitDataElement::Write(std::ostream &_os) const
     _os.write(reinterpret_cast<char*>(vl), sizeof(vl));
     }
   // We have the length we should be able to write the value
-  ValueField.Write(_os);
+  ValueField->Write(_os);
 
 }
 

@@ -1,7 +1,7 @@
 #ifndef __gdcmDirectory_h
 #define __gdcmDirectory_h
 
-#include "gdcmType.h"
+#include "gdcmTypes.h"
 
 #include <string>
 #include <vector>

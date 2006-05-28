@@ -1,7 +1,6 @@
 #ifndef __gdcmVR_h
 #define __gdcmVR_h
 
-#include "gdcmType.h"
 #include "gdcmTag.h"
 
 #include <iostream>

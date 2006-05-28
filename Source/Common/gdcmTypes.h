@@ -1,6 +1,6 @@
 
-#ifndef __gdcmType_h
-#define __gdcmType_h
+#ifndef __gdcmTypes_h
+#define __gdcmTypes_h
 
 #include "gdcmConfigure.h"
 
@@ -51,4 +51,4 @@ typedef  unsigned int        uint32_t;
 //
 //} // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif // __gdcmType_h
+#endif // __gdcmTypes_h

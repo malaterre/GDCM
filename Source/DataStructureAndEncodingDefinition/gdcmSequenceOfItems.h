@@ -20,11 +20,11 @@ namespace gdcm
  * A Value Representation for Data Elements that contain a sequence of 
  * Data Sets. Sequence of Items allows for Nested Data Sets.
  */
-class GDCM_EXPORT SequenceOfItems : public CompositeValue
+class GDCM_EXPORT SequenceOfItems : public Value
 {
 public:
   // Typdefs:
-  typedef std::vector<Item<DEType> > ItemVector;
+  typedef std::vector<Item> ItemVector;
 
 /// \brief constructor (UndefinedLength by default)
   SequenceOfItems(uint32_t length = 0xFFFFFFFF) { SequenceLengthField = length; }

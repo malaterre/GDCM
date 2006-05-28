@@ -4,7 +4,6 @@
 
 #include "gdcmDataElement.h"
 #include "gdcmVR.h"
-#include "gdcmValue.h"
 
 namespace gdcm
 {
@@ -13,10 +12,11 @@ namespace gdcm
  * \brief Class to represent an *Explivit VR* Data Element
  * \note bla
  */
+class Value;
 class GDCM_EXPORT ExplicitDataElement : public DataElement
 {
 public:
-  ExplicitDataElement() : DataElement() { VRField = VR::INVALID; }
+  ExplicitDataElement(const Tag& t = Tag(0), uint32_t const &vl = 0, const VR::VRType &vr = VR::INVALID) : DataElement(t,vl),VRField(vr) { }
 
   friend std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_val);
 
@@ -29,7 +29,7 @@ public:
 private:
   // Value Representation
   VR::VRType VRField;
-  Value ValueField;
+  Value* ValueField;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_val)

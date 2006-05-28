@@ -2,7 +2,7 @@
 #ifndef __gdcmTag_h
 #define __gdcmTag_h
 
-#include "gdcmType.h"
+#include "gdcmTypes.h"
 #include <iostream>
 #include <iomanip> // for setw, setfill
 

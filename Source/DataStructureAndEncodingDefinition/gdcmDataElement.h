@@ -27,7 +27,7 @@ namespace gdcm
 // -> ValueLength
 // -> Value
 // TODO: This class SHOULD be pure virtual. I dont want a user
-// to shoot himeself in the foot.
+// to shoot himself in the foot.
 class GDCM_EXPORT DataElement
 {
 public:
@@ -42,8 +42,11 @@ public:
   uint32_t GetValueLength() const {
     return ValueLengthField;
   }
-  void SetValueLength(const uint32_t &vl) {
-    ValueLengthField = vl;
+  //void SetValueLength(const uint32_t &vl) {
+  //  ValueLengthField = vl;
+  //}
+  bool IsUndefinedLength() {
+    return ValueLengthField == 0xFFFFFFFF;
   }
 
   DataElement(const DataElement &_val)

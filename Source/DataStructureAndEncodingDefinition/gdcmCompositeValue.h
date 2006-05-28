@@ -11,6 +11,7 @@ namespace gdcm
  * Just a design pattern, not sure if this is worse keeping this
  * intermediate class
  */
+// Implementation this is called the Composite Design Pattern
 class GDCM_EXPORT CompositeValue : public Value
 {
 };
