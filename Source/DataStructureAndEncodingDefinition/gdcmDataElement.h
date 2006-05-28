@@ -40,8 +40,11 @@ public:
   uint32_t GetValueLength() const {
     return ValueLengthField;
   }
+  void SetValueLength(const uint32_t &vl) {
+    ValueLengthField = vl;
+  }
 
-  DataElement(const DataElement&_val)
+  DataElement(const DataElement &_val)
     {
     if( this != &_val)
       {
@@ -62,30 +65,27 @@ public:
       && ValueLengthField == _de.ValueLengthField;
     }
 
-  void Read(std::istream &is)
-    {
+  void Read(std::istream &is) {
     TagField.Read(is);
     is.read((char*)(&ValueLengthField), 4);
     }
 
-  void Write(std::ostream &os) const
-    {
+  void Write(std::ostream &os) const {
     TagField.Write(os);
     os.write((char*)(&ValueLengthField), 4);
     }
 
 protected:
   Tag TagField;
-  // Value could be NULL if we don't read it, therefore we need an offset
   // This is the value read from the file, might be different from the length of Value Field
   uint32_t ValueLengthField; // Can be 0xFFFFFFFF
 };
 //-----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream &_os, const DataElement &_val)
+inline std::ostream& operator<<(std::ostream &os, const DataElement &val)
 {
-  _os << "Tag: " << _val.TagField << "\n";
-  _os << "Value length: " << _val.ValueLengthField << "\n"; 
-  return _os;
+  os << "Tag: " << val.TagField << "\n";
+  os << "Value Length: " << val.ValueLengthField << "\n"; 
+  return os;
 }
 
 } // end namespace gdcm
