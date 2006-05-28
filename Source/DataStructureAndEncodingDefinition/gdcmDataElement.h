@@ -26,10 +26,12 @@ namespace gdcm
 // -> Optional VR (Explicit Transfer Syntax)
 // -> ValueLength
 // -> Value
+// TODO: This class SHOULD be pure virtual. I dont want a user
+// to shoot himeself in the foot.
 class GDCM_EXPORT DataElement
 {
 public:
-  DataElement() { ValueLengthField = 0; }
+  DataElement(const Tag& t = Tag(0), uint32_t const &vl = 0):TagField(t),ValueLengthField(vl) {}
   virtual ~DataElement() {}
 
   friend std::ostream& operator<<(std::ostream &_os, const DataElement &_val);

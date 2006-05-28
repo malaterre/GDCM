@@ -21,7 +21,7 @@ public:
   friend std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_val);
 
   VR::VRType GetVR() const { return VRField; }
-  void SetVR(VR::VRType vr) { VRField = vr; }
+  void SetVR(VR::VRType const &vr) { VRField = vr; }
 
   void Read(std::istream& _is);
   void Write(std::ostream& _os) const;
