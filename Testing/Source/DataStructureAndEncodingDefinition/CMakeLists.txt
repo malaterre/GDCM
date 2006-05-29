@@ -9,6 +9,7 @@ SET(DSED_TEST_SRCS
   TestVM
   TestDataSet
   TestItem
+  TestValue
   )
 
 # Add the include paths

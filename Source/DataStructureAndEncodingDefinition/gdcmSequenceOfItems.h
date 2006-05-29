@@ -29,19 +29,20 @@ public:
 /// \brief constructor (UndefinedLength by default)
   SequenceOfItems(uint32_t length = 0xFFFFFFFF) { SequenceLengthField = length; }
 
-  friend std::ostream& operator<< < >(std::ostream& _os, const SequenceOfItems<DEType> &_val);
+  friend std::ostream& operator<<(std::ostream& _os, const SequenceOfItems &_val);
 
   /// \brief Returns the SQ length, as read from disk
-  uint32_t GetSequenceLength() { return SequenceLengthField; }
+  uint32_t GetLength() const { return SequenceLengthField; }
   /// \brief Sets the actual SQ length
-  void SetSequenceLength(uint32_t length) { SequenceLengthField = length; }
+  void SetLength(uint32_t length) {
+    SequenceLengthField = length;
+  }
+  void Clear() {}
+  void Read(std::istream &is) {}
+  void Write(std::ostream &os) const {}
 
   /// \brief Appends an Item to the already added ones
-  void AddItem(Item<DEType> const &item);
-
-protected:
-  DICOMOStream& Write(DICOMOStream& _os) const;
-  //DICOMIStream& Read(DICOMIStream& _os);
+  void AddItem(Item const &item);
 
 private:
   /// \brief Total length of the Sequence (or 0xffffffff) if undefined
@@ -50,28 +51,10 @@ private:
   ItemVector Items;
 };
 //-----------------------------------------------------------------------------
-template<class DEType>
-inline std::ostream& operator<<(std::ostream& _os, const SequenceOfItems<DEType> &_val)
+inline std::ostream& operator<<(std::ostream& os, const SequenceOfItems &val)
 {
-  _os << "SQ L= " << _val.SequenceLengthField << std::endl;
-  typename SequenceOfItems<DEType>::ItemVector::const_iterator it = _val.Items.begin();
-  // Print each Item
-  int i = 0;
-  for( ; it != _val.Items.end();
-    ++it)
-    {
-    _os << "Sequence Item #" << i++ << std::endl << *it << std::endl;
-    }
-  // Print delimitation if undefined
-  if( _val.SequenceLengthField == 0xFFFFFFFF )
-    {
-    //DataElement endSeq;
-    //endSeq.SetTag( Tag(0xfffe,0xe0dd) ); // Sequence Delimitation Item
-    //_os << endSeq << std::endl;
-    // FIXME: Stupid code
-    _os << Tag(0xfffe,0xe00d) << std::endl;
-    }
-  return _os;
+  os << "SQ L= " << val.SequenceLengthField << std::endl;
+  return os;
 }
 
 } // end namespace gdcm
