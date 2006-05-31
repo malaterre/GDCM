@@ -1,6 +1,6 @@
 #include "gdcmItem.h"
 
-int TestItem(int argc, char *argv[])
+int TestItem(int , char *[])
 {
   gdcm::Item item;
   std::cout << item << std::endl;

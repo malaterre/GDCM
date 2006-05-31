@@ -3,9 +3,9 @@
 #include "gdcmExplicitDataElement.h"
 
 
-int TestDataSet(int argc, char *argv[])
+int TestDataSet(int , char *[])
 {
-  gdcm::DataSet ds; 
+  gdcm::DataSet ds;
   std::cout << sizeof ds << std::endl;
   gdcm::DataElement d;
   ds.InsertDataElement(d);
@@ -13,7 +13,7 @@ int TestDataSet(int argc, char *argv[])
 	  ds.GetDataElement( gdcm::Tag(0,0) );
   std::cout << r << std::endl;
 
-  const gdcm::Tag t = gdcm::Tag(0x1234, 0x5678); 
+  const gdcm::Tag t = gdcm::Tag(0x1234, 0x5678);
   gdcm::DataElement d2(t);
   std::cout << d2 << std::endl;
   ds.InsertDataElement(d2);
@@ -21,7 +21,7 @@ int TestDataSet(int argc, char *argv[])
 	  ds.GetDataElement( t );
   std::cout << r2 << std::endl;
 
-  const gdcm::Tag t3 = gdcm::Tag(0x1234, 0x5679); 
+  const gdcm::Tag t3 = gdcm::Tag(0x1234, 0x5679);
   gdcm::ExplicitDataElement d3(t3);
   std::cout << d3 << std::endl;
   ds.InsertDataElement(d3);

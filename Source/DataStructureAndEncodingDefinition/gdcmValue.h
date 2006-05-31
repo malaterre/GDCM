@@ -16,7 +16,7 @@ class GDCM_EXPORT Value
 {
 public:
   Value() { }
-  ~Value() { }
+  virtual ~Value() { }
 
   virtual uint32_t GetLength() const = 0;
   virtual void SetLength(uint32_t l) = 0;

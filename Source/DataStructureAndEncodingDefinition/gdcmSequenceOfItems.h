@@ -38,8 +38,8 @@ public:
     SequenceLengthField = length;
   }
   void Clear() {}
-  void Read(std::istream &is) {}
-  void Write(std::ostream &os) const {}
+  void Read(std::istream &is) { (void)is; }
+  void Write(std::ostream &os) const { (void)os; }
 
   /// \brief Appends an Item to the already added ones
   void AddItem(Item const &item);
