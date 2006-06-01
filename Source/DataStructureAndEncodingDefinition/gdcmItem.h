@@ -24,7 +24,7 @@ namespace gdcm
 class GDCM_EXPORT Item : public DataElement
 {
 public:
-  Item(const Tag& t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl) {}
+  Item(const Tag& t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl), NestedDataSet(TS::Implicit) {}
   friend std::ostream& operator<<(std::ostream &os, const Item&val);
 
   void Clear() {
@@ -54,6 +54,14 @@ public:
   const DataSet& GetNestedDataSet() const
     {
     return NestedDataSet;
+    }
+
+  void Read(std::istream &is) {
+    NestedDataSet.Read(is);
+    }
+
+  void Write(std::ostream &os) const {
+    NestedDataSet.Write(os);
     }
 
 private:

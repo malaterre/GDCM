@@ -4,6 +4,8 @@
 
 #include "gdcmTypes.h"
 
+#include <fstream>
+
 namespace gdcm
 {
 /**

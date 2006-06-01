@@ -41,6 +41,10 @@ public:
 
   //bool IsEmpty() { return DataElements.empty(); }
 
+  void Read(std::istream &is);
+
+  void Write(std::ostream &os) const;
+
 private:
   TS::NegociatedType NegociatedTS;
   StructuredSetBase *Internal;
@@ -48,6 +52,7 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const DataSet &val)
 {
+  (void)val;
   //std::copy(val.Internal.begin(), val.Internal.end(), 
   //  std::ostream_iterator<DataElement>(os, "\n"));
   return os;
@@ -56,3 +61,4 @@ inline std::ostream& operator<<(std::ostream &os, const DataSet &val)
 } // end namespace gdcm
 
 #endif //__gdcmDataSet_h
+

@@ -2,7 +2,7 @@
 #ifndef __gdcmSequenceOfItems_h
 #define __gdcmSequenceOfItems_h
 
-#include "gdcmCompositeValue.h"
+#include "gdcmValue.h"
 #include "gdcmItem.h"
 
 namespace gdcm
@@ -38,8 +38,20 @@ public:
     SequenceLengthField = length;
   }
   void Clear() {}
-  void Read(std::istream &is) { (void)is; }
-  void Write(std::ostream &os) const { (void)os; }
+  void Read(std::istream &is) {
+    ItemVector::iterator it = Items.begin();
+    for(;it != Items.end(); ++it)
+      {
+      it->Read(is);
+      }
+  }
+  void Write(std::ostream &os) const {
+    ItemVector::const_iterator it = Items.begin();
+    for(;it != Items.end(); ++it)
+      {
+      it->Write(os);
+      }
+  }
 
   /// \brief Appends an Item to the already added ones
   void AddItem(Item const &item);

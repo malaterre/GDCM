@@ -13,17 +13,42 @@ struct ltstr
     return s1.GetTag() < s2.GetTag();
   }
 };
+
 class StructuredSetBase {
-  virtual void Size() = 0;
+public:
+  virtual void Clear() = 0;
+  virtual unsigned int Size() = 0;
+protected:
+  virtual ~StructuredSetBase() {}
 };
+
 template<class DEType>
 class StructuredSet : public StructuredSetBase
 {
 public:
   typedef typename std::set<DEType, ltstr> DataElementSet;
-  typedef typename DataElementSet::iterator iterator;
+  //typedef typename DataElementSet::iterator iterator;
+  virtual unsigned int Size() {
+    return DES.size();
+  }
+  virtual void Clear() {
+    DES.clear();
+  }
+  virtual void Insert(const DEType& de) {
+    DES.insert(de);
+    }
+
+  const DEType& GetDataElement(const Tag &t) const
+    {
+    const DEType r(t);
+    typename DataElementSet::iterator it = DES.find(r);
+    return *it;
+    }
+
+private:
   DataElementSet DES;
 };
+
 
 DataSet::DataSet(TS::NegociatedType const &type)
 {
@@ -35,26 +60,53 @@ DataSet::DataSet(TS::NegociatedType const &type)
   {
     Internal = new StructuredSet<ImplicitDataElement>;
   }
+  NegociatedTS = type;
 }
 
 void DataSet::Clear() {
-  Internal->DES.clear();
+  Internal->Clear();
 }
 
 unsigned int DataSet::Size() {
-  return Internal->DES.size();
+  return Internal->Size();
 }
 
 void DataSet::InsertDataElement(const DataElement& de)
 {
-  Internal->DES.insert(de);
+  if(NegociatedTS == TS::Explicit)
+    {
+    dynamic_cast<StructuredSet<ExplicitDataElement>* >(Internal)->
+      Insert(dynamic_cast<const ExplicitDataElement&>(de));
+    }
+  else
+    {
+    dynamic_cast<StructuredSet<ImplicitDataElement>* >(Internal)->
+      Insert(dynamic_cast<const ImplicitDataElement&>(de));
+    }
 }
 
 const DataElement& DataSet::GetDataElement(const Tag &t) const
 {
-  const DataElement r(t);
-  StructuredSet::iterator it = Internal->DES.find(r);
-  return *it;
+  if(NegociatedTS == TS::Explicit)
+  {
+    return dynamic_cast<StructuredSet<ExplicitDataElement>* >(Internal)->
+      GetDataElement(t);
+  }
+  else
+  {
+    return dynamic_cast<StructuredSet<ImplicitDataElement>* >(Internal)->
+      GetDataElement(t);
+  }
+}
+
+void DataSet::Read(std::istream &is)
+{
+  (void)is;
+}
+
+void DataSet::Write(std::ostream &os) const
+{
+  (void)os;
 }
 
 } // end namespace gdcm

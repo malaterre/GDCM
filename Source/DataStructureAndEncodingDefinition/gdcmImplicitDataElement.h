@@ -13,7 +13,7 @@ namespace gdcm
 class GDCM_EXPORT ImplicitDataElement : public DataElement
 {
 public:
-  ImplicitDataElement() : DataElement() {}
+  ImplicitDataElement(const Tag& t = Tag(0), uint32_t const &vl = 0) : DataElement(t,vl) { }
 
   friend std::ostream& operator<<(std::ostream& _os, const ImplicitDataElement &_val);
 

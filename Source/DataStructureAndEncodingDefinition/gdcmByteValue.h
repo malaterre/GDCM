@@ -2,7 +2,7 @@
 #ifndef __gdcmByteValue_h
 #define __gdcmByteValue_h
 
-#include "gdcmType.h"
+#include "gdcmValue.h"
 #include "gdcmTrace.h"
 
 namespace gdcm
@@ -11,7 +11,7 @@ namespace gdcm
  * \brief Class to represent binary value (array of bytes)
  * \note
  */
-class GDCM_EXPORT ByteValue
+class GDCM_EXPORT ByteValue : public Value
 {
 public:
   ByteValue() { Internal = 0; Length = 0; }
@@ -25,6 +25,7 @@ public:
     if (l%2)
       {
       gdcmWarningMacro( "BUGGY HEADER: Your dicom contain odd length value field." );
+      ++l;
       }
     // FIXME: man realloc
     if( l )
@@ -41,13 +42,13 @@ public:
     Length = l;
   }
 
-  ByteValue(const ByteValue&_val)
-    {
-    if( this != &_val)
-      {
-      *this = _val;
-      }
-    }
+  //ByteValue(const ByteValue&_val)
+  //  {
+  //  if( this != &_val)
+  //    {
+  //    *this = _val;
+  //    }
+  //  }
 
   ByteValue &operator=(const ByteValue &_val)
     {
@@ -69,6 +70,10 @@ public:
   void Clear() {
     delete[] Internal; Internal = 0; Length = 0; }
 
+  void Read(std::istream &is)
+    {
+    is.read(Internal, Length);
+    }
   void Write(std::ostream &os) const
     {
     os.write(Internal, Length);
