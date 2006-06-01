@@ -18,7 +18,6 @@ class StructuredSetBase {
 public:
   virtual void Clear() = 0;
   virtual unsigned int Size() = 0;
-protected:
   virtual ~StructuredSetBase() {}
 };
 
@@ -61,6 +60,10 @@ DataSet::DataSet(TS::NegociatedType const &type)
     Internal = new StructuredSet<ImplicitDataElement>;
   }
   NegociatedTS = type;
+}
+DataSet::~DataSet()
+{
+  delete Internal;
 }
 
 void DataSet::Clear() {

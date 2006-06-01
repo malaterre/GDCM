@@ -28,6 +28,7 @@ class GDCM_EXPORT DataSet
 {
 public:
   DataSet(TS::NegociatedType const &type);
+  ~DataSet();
 
   friend std::ostream& operator<<(std::ostream &_os, const DataSet &_val);
 
