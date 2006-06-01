@@ -4,6 +4,7 @@
 
 
 #include "gdcmDataElement.h"
+#include "gdcmTS.h"
 
 #include <set>
 #include <iterator>
@@ -22,48 +23,33 @@ namespace gdcm
  * number that is an encoding of the values of Attributes of a real world 
  * object.
  */
+class StructuredSetBase;
 class GDCM_EXPORT DataSet
 {
 public:
-  DataSet() {}
+  DataSet(TS::NegociatedType const &type);
 
   friend std::ostream& operator<<(std::ostream &_os, const DataSet &_val);
 
-  void Clear() {
-    Internal.clear();
-  }
-  unsigned int Size() {
-    return Internal.size();
-  }
+  void Clear();
 
-  void InsertDataElement(const DataElement& de) {
-    Internal.insert(de);
-  }
-  const DataElement& GetDataElement(const Tag &t) const {
-    const DataElement r(t);
-    StructuredSet::iterator it = Internal.find(r);
-    return *it;
-  }
+  unsigned int Size();
+
+  void InsertDataElement(const DataElement& de);
+
+  const DataElement& GetDataElement(const Tag &t) const;
 
   //bool IsEmpty() { return DataElements.empty(); }
 
-struct ltstr
-{
-  bool operator()(const DataElement& s1,
-		  const DataElement& s2) const
-  {
-    return s1.GetTag() < s2.GetTag();
-  }
-};
-  typedef std::set<DataElement, ltstr> StructuredSet;
-  private:
-  StructuredSet Internal;
+private:
+  TS::NegociatedType NegociatedTS;
+  StructuredSetBase *Internal;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const DataSet &val)
 {
-  std::copy(val.Internal.begin(), val.Internal.end(), 
-    std::ostream_iterator<DataElement>(os, "\n"));
+  //std::copy(val.Internal.begin(), val.Internal.end(), 
+  //  std::ostream_iterator<DataElement>(os, "\n"));
   return os;
 }
 

@@ -5,6 +5,8 @@ SET(DSED_SRCS
   gdcmVM.cxx
   gdcmExplicitDataElement.cxx
   gdcmImplicitDataElement.cxx
+  gdcmDataSet.cxx
+  gdcmTS.cxx
   )
 
 # Add the include paths
