@@ -88,17 +88,17 @@ public:
   void Clear() {
     delete[] Internal; Internal = 0; Length = 0; }
 
-  void Read(std::istream &is,
+  std::istream &Read(std::istream &is,
     SC::SwapCode const &sc = SC::LittleEndian)
     {
     (void)sc;
-    is.read(Internal, Length);
+    return is.read(Internal, Length);
     }
-  void Write(std::ostream &os,
+  std::ostream const & Write(std::ostream &os,
     SC::SwapCode const &sc = SC::LittleEndian) const
     {
     (void)sc;
-    os.write(Internal, Length);
+    return os.write(Internal, Length);
     }
 
 protected:

@@ -30,9 +30,9 @@ public:
   virtual void Clear() = 0;
   virtual void Print(std::ostream &os) const = 0;
 
-  virtual void Read(std::istream &is,
+  virtual std::istream& Read(std::istream &is,
     SC::SwapCode const &sc = SC::LittleEndian) = 0;
-  virtual void Write(std::ostream &os,
+  virtual std::ostream const & Write(std::ostream &os,
     SC::SwapCode const &sc = SC::LittleEndian) const = 0;
 };
 

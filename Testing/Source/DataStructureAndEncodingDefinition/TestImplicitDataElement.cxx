@@ -65,6 +65,15 @@ int TestImplicitDataElement2(const uint16_t group,
   return 0;
 }
 
+inline void WriteRead(gdcm::DataElement const &w, gdcm::DataElement &r)
+{
+  // w will be written
+  // r will be read back
+  std::stringstream ss;
+  w.Write(ss);
+  r.Read(ss);
+}
+
 int TestImplicitDataElement(int, char *[])
 {
   const uint16_t group   = 0x0010;
@@ -75,6 +84,15 @@ int TestImplicitDataElement(int, char *[])
   r += TestImplicitDataElement1(group, element, vl);
   r += TestImplicitDataElement2(group, element, value);
 
+  gdcm::ImplicitDataElement de1(gdcm::Tag(0x1234, 0x5678), 0x4321);
+  gdcm::ImplicitDataElement de2(gdcm::Tag(0x1234, 0x6789), 0x9876);
+  WriteRead(de1, de2);
+  if( !(de1 == de2) )
+    {
+    std::cerr << de1 << std::endl;
+    std::cerr << de2 << std::endl;
+    return 1;
+    }
 
   return r;
 }

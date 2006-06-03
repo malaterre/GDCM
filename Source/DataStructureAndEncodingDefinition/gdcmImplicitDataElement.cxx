@@ -39,8 +39,12 @@ std::istream &ImplicitDataElement::Read(std::istream &is,
     }
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
-  ValueField->Read(is, sc);
-    (void)readValue;
+  if( !ValueField->Read(is, sc) )
+    {
+    assert(0 && "Should not happen");
+    return is;
+    }
+  (void)readValue;
   //Seekg(ida.ValueLengthField, std::ios::cur);
 
   return is;

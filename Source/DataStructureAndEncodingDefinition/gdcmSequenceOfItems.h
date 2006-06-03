@@ -41,21 +41,23 @@ public:
     SequenceLengthField = length;
   }
   void Clear() {}
-  void Read(std::istream &is,
+  std::istream &Read(std::istream &is,
     SC::SwapCode const &sc = SC::LittleEndian) {
     ItemVector::iterator it = Items.begin();
     for(;it != Items.end(); ++it)
       {
       it->Read(is, sc);
       }
+    return is;
   }
-  void Write(std::ostream &os,
+  std::ostream const & Write(std::ostream &os,
     SC::SwapCode const &sc = SC::LittleEndian) const {
     ItemVector::const_iterator it = Items.begin();
     for(;it != Items.end(); ++it)
       {
       it->Write(os, sc);
       }
+    return os;
   }
 
   /// \brief Appends an Item to the already added ones
