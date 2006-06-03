@@ -34,7 +34,48 @@ namespace gdcm
 
   char *Parser::GetBuffer(size_t len)
     {
+#if 0
+    if (len > bufferLim - bufferEnd)
+      {
+      /* FIXME avoid integer overflow */
+      int neededSize = len + (bufferEnd - bufferPtr);
+      if (neededSize  <= bufferLim - buffer)
+        {
+        memmove(buffer, bufferPtr, bufferEnd - bufferPtr);
+        bufferEnd = buffer + (bufferEnd - bufferPtr);
+        bufferPtr = buffer;
+        }
+      else
+        {
+        char *newBuf;
+        int bufferSize = bufferLim - bufferPtr;
+        if (bufferSize == 0)
+          bufferSize = INIT_BUFFER_SIZE;
+        do
+          {
+          bufferSize *= 2;
+          } while (bufferSize < neededSize);
+        newBuf = MALLOC(bufferSize);
+        if (newBuf == 0) 
+          {
+          errorCode = XML_ERROR_NO_MEMORY;
+          return 0;
+          }
+        bufferLim = newBuf + bufferSize;
+
+        if (bufferPtr) 
+          {
+          memcpy(newBuf, bufferPtr, bufferEnd - bufferPtr);
+          FREE(buffer);
+          }
+        bufferEnd = newBuf + (bufferEnd - bufferPtr);
+        bufferPtr = buffer = newBuf;
+        }
+      }
+    return bufferEnd;
+#else
     return Buffer;
+#endif
     }
 
   bool Parser::ParseBuffer(size_t len, bool isFinal)
@@ -64,13 +105,13 @@ namespace gdcm
   void Parser::SetUserData(void *userData) {}
   void Parser::SetElementHandler(StartElementHandler start, EndElementHandler end) {}
 
-  unsigned long Parser::GetCurrentOffset() const {
+  unsigned long Parser::GetCurrentByteIndex() const {
     return 0;
   }
   Parser::ErrorType Parser::GetErrorCode() const {
     return Parser::NoError;
   }
-  const char *Parser::ErrorString(ErrorType const &err) {
+  const char *Parser::GetErrorString(ErrorType const &err) {
     return ErrorStrings[(int)err];
   }
 

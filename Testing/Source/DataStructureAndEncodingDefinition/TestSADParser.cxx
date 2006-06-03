@@ -52,8 +52,8 @@ int TestSADParser(int argc, char *argv[])
     if ( parser.Parse(buf, len, done) ) {
       fprintf(stderr,
         "%s at line %" XML_FMT_INT_MOD "u\n",
-        gdcm::Parser::ErrorString(parser.GetErrorCode()),
-        parser.GetCurrentOffset());
+        gdcm::Parser::GetErrorString(parser.GetErrorCode()),
+        parser.GetCurrentByteIndex());
       return 1;
     }
   } while (!done);
