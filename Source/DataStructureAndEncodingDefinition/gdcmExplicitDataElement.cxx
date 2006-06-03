@@ -79,31 +79,10 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os,
     assert( 0 && "Should not happen" );
     return os;
     }
-  // See PS 3.5, Date Element Structure With Explicit VR
-  if( VRField == VR::OB
-   || VRField == VR::OW
-   || VRField == VR::OF
-   || VRField == VR::SQ
-   || VRField == VR::UN )
+  if( !ValueLengthField.Write(os, sc) )
     {
-    uint16_t check = 0x0;
-    os.write(reinterpret_cast<char*>(check), sizeof(check));
-    // Write Value Length (32bits)
-    ValueLengthField.Write(os, sc);
-    }
-  else if( VRField == VR::UT )
-    {
-    uint16_t check = 0x0;
-    os.write(reinterpret_cast<char*>(check), sizeof(check));
-    // Write Value Length (32bits)
-    assert( !ValueLengthField.IsUndefined() );
-    ValueLengthField.Write(os, sc);
-    }
-  else
-    {
-    uint16_t vl = ValueLengthField;
-    // Write Value Length (16bits)
-    os.write(reinterpret_cast<char*>(vl), sizeof(vl));
+    assert( 0 && "Should not happen" );
+    return os;
     }
   // We have the length we should be able to write the value
   ValueField->Write(os, sc);

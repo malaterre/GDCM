@@ -129,6 +129,7 @@ public:
     const char *vr = GetVRString(VRField);
     assert( strlen( vr ) == 2 );
     os.write(vr, 2);
+  // See PS 3.5, Date Element Structure With Explicit VR
     if( VRField == VR::OB
      || VRField == VR::OW
      || VRField == VR::OF

@@ -31,6 +31,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is,
   if( ValueLengthField.IsUndefined() )
     {
     //assert( de.GetVR() == VR::SQ );
+    // FIXME what if I am reading the pixel data...
     ValueField = new SequenceOfItems;
     }
   else
