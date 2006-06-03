@@ -68,6 +68,10 @@ public:
     return End;
     }
 
+  void UpdatePosition() {}
+  void ShitEnd(int len) {
+    End += len;
+  }
   const char *GetStart() const {
     return Start;
   }

@@ -41,7 +41,7 @@ public:
   // parser that this is the last piece of the document. Frequently, the 
   // last piece is empty (i.e. len is zero.) If a parse error occurred, 
   // it returns 0. Otherwise it returns a non-zero value.
-  bool Parse(const char* s, size_t len, bool isFinal);
+  bool Parse(const char* s, int len, bool isFinal);
 
   // Set handlers for start and end tags. Attributes are passed to the 
   // start handler as a pointer to a vector of char pointers. Each 
@@ -81,12 +81,14 @@ protected:
   // This is just like Parse, except in this case expat provides the buffer.
   // By obtaining the buffer from expat with the GetBuffer function, 
   // the application can avoid double copying of the input.
-  bool ParseBuffer(size_t len, bool isFinal);
+  bool ParseBuffer(int len, bool isFinal);
 
   // Obtain a buffer of size len to read a piece of the document into. 
   // A NULL value is returned if expat can't allocate enough memory for 
   // this buffer. This has to be called prior to every call to ParseBuffer.
   char *GetBuffer(int len);
+
+  ErrorType Process();
 
 private:
   void* UserData;

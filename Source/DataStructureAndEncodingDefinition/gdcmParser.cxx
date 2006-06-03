@@ -7,7 +7,7 @@ namespace gdcm
     NULL
   };
   
-  bool Parser::Parse(const char* buffer, size_t len, bool isFinal)
+  bool Parser::Parse(const char* buffer, int len, bool isFinal)
     {
     if (len == 0)
       {
@@ -36,27 +36,29 @@ namespace gdcm
     return Buffer.Get(len);
     }
 
-  bool Parser::ParseBuffer(size_t len, bool isFinal)
+  Parser::ErrorType Parser::Process() {
+    return Parser::NoError;
+  }
+
+  bool Parser::ParseBuffer(int len, bool isFinal)
     {
-    //const char *start = bufferPtr;
-    //positionPtr = start;
-    //bufferEnd += len;
+    const char *start = Buffer.GetStart();
+    const char *positionPtr = start;
+    Buffer.ShitEnd(len); //bufferEnd += len;
     //parseEndByteIndex += len;
-    //errorCode = processor(parser, start, parseEndPtr = bufferEnd,
-    //  isFinal ? (const char **)0 : &bufferPtr);
-    //if (errorCode == XML_ERROR_NONE)
-    //  {
-    //  if (!isFinal)
-    //    XmlUpdatePosition(encoding, positionPtr, bufferPtr, &position);
-    //  return 1;
-    //  }
-    //else
-    //  {
-    //  eventEndPtr = eventPtr;
-    //  processor = errorProcessor;
-    //  return 0;
-    //  }
-    return false;
+    ErrorCode = Process();
+    if (ErrorCode == Parser::NoError)
+      {
+      if (!isFinal)
+        Buffer.UpdatePosition();
+      return 1;
+      }
+    else
+      {
+      //eventEndPtr = eventPtr;
+      //processor = errorProcessor;
+      return 0;
+      }
     }
 
 
