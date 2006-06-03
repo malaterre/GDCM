@@ -4,6 +4,7 @@
 
 #include "gdcmTypes.h"
 #include "gdcmSwapCode.h"
+#include "gdcmVL.h"
 
 #include <fstream>
 
@@ -21,8 +22,8 @@ public:
   Value() { }
   virtual ~Value() { }
 
-  virtual uint32_t GetLength() const = 0;
-  virtual void SetLength(uint32_t l) = 0;
+  virtual const VL& GetLength() const = 0;
+  virtual void SetLength(VL const & l) = 0;
 
   virtual void Clear() = 0;
 

@@ -3,6 +3,8 @@
 #define __gdcmTag_h
 
 #include "gdcmTypes.h"
+#include "gdcmSwapCode.h"
+
 #include <iostream>
 #include <iomanip> // for setw, setfill
 
@@ -150,11 +152,13 @@ public:
   // Standard Data Elements. Private Data elements have odd Group Numbers.
   bool IsPrivate() const { return !IsPublic(); }
 
-  std::istream &Read(std::istream &is)
+  std::istream &Read(std::istream &is,
+    SC::SwapCode const &sc = SC::LittleEndian)
     {
     return is.read((char*)(&ElementTag.tag), 4);
     }
-  const std::ostream &Write(std::ostream &os) const
+  const std::ostream &Write(std::ostream &os,
+    SC::SwapCode const &sc = SC::LittleEndian) const
     {
     return os.write((char*)(&ElementTag.tag), 4);
     }

@@ -27,14 +27,14 @@ public:
   typedef std::vector<Item> ItemVector;
 
 /// \brief constructor (UndefinedLength by default)
-  SequenceOfItems(uint32_t length = 0xFFFFFFFF) { SequenceLengthField = length; }
+  SequenceOfItems(VL const & vl = 0xFFFFFFFF):SequenceLengthField(vl) { }
 
   friend std::ostream& operator<<(std::ostream& _os, const SequenceOfItems &_val);
 
   /// \brief Returns the SQ length, as read from disk
-  uint32_t GetLength() const { return SequenceLengthField; }
+  const VL& GetLength() const { return SequenceLengthField; }
   /// \brief Sets the actual SQ length
-  void SetLength(uint32_t length) {
+  void SetLength(VL const & length) {
     SequenceLengthField = length;
   }
   void Clear() {}
@@ -60,7 +60,7 @@ public:
 
 private:
   /// \brief Total length of the Sequence (or 0xffffffff) if undefined
-  uint32_t SequenceLengthField;
+  VL SequenceLengthField;
   /// \brief Vector of Sequence Items
   ItemVector Items;
 };

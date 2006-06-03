@@ -39,7 +39,7 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &_os,
     }
   else
     {
-    uint16_t vl = ValueLengthField.CastTo16();
+    uint16_t vl = ValueLengthField;
     // Write Value Length (16bits)
     _os.write(reinterpret_cast<char*>(vl), sizeof(vl));
     }

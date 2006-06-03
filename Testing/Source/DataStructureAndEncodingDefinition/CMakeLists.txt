@@ -12,6 +12,8 @@ SET(DSED_TEST_SRCS
   TestDataSet
   TestItem
   TestValue
+  TestVL
+  #TestReadPatientName
   )
 
 # Add the include paths

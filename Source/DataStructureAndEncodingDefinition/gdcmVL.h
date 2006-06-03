@@ -4,6 +4,8 @@
 #include "gdcmTypes.h"
 #include "gdcmSwapCode.h"
 
+#include <iostream>
+
 /* \brief Value Length
 */
 namespace gdcm
@@ -12,8 +14,7 @@ namespace gdcm
 class GDCM_EXPORT VL
 {
 public:
-  VL(uint32_t vl = 0) { ValueLength = vl; }
-
+  VL(uint32_t vl = 0):ValueLength(vl) { }
 
   bool IsOdd() const {
     return ValueLength % 2;
@@ -21,27 +22,6 @@ public:
   bool IsUndefined() const {
     return ValueLength == 0xFFFFFFFF;
   }
-
-  //bool operator==(const VL& val) const {
-  //  return ValueLength == val.ValueLength;
-  //  }
-  //bool operator!=(const VL& val) const {
-  //  return ValueLength != val.ValueLength;
-  //  }
-  //bool operator>(const VL & val) const {
-  //  return ValueLength > val.ValueLength;
-  //  }
-
-  //const uint32_t& operator*() const { return ValueLength; }
-
-  //VL& operator+=(const VL& n) {
-  //  ValueLength += n.ValueLength;
-  //  return *this;
-  //}
-  //VL& operator-=(const VL& n) {
-  //  ValueLength -= n.ValueLength;
-  //  return *this;
-  //}
 
   VL& operator++() {
     ValueLength++;
@@ -53,29 +33,7 @@ public:
     return tmp;
   }
 
-  //VL operator+(const VL& vl) const {
-  //  VL tmp(ValueLength+vl.ValueLength);
-  //  return tmp;
-  //}
   operator uint32_t() const { return ValueLength; }
-
-  // FIXME
-#if 1
-  uint16_t CastTo16() const {
-    assert ( ValueLength < 0xFFFF );
-    return ValueLength;
-  }
-#else
-//  bool operator!=(const uint32_t& val) const {
-//    return ValueLength != val;
-//    }
-//  operator uint32_t () const {
-//    return ValueLength;
-//  }
-//  operator uint16_t () const {
-//    return ValueLength;
-//  }
-#endif
 
   friend std::ostream& operator<<(std::ostream& os, const VL& vl);
   //TODO

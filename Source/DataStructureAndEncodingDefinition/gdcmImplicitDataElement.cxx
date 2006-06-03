@@ -1,62 +1,61 @@
 #include "gdcmImplicitDataElement.h"
+#include "gdcmValue.h"
+#include "gdcmByteValue.h"
 
 namespace gdcm
 {
 
-//-----------------------------------------------------------------------------
-std::istream &ImplicitDataElement::Read(std::istream &is)
+ImplicitDataElement::~ImplicitDataElement()
 {
-#if 0
+  delete ValueField;
+}
+
+//-----------------------------------------------------------------------------
+std::istream &ImplicitDataElement::Read(std::istream &is,
+    SC::SwapCode const &sc, bool readValue)
+{
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   // Read Tag
-  if( !TagField.Read(is) )
+  if( !TagField.Read(is, sc) )
     {
     assert(0 && "Should not happen");
     return is;
     }
   // Read Value Length
-  if( !(Read(ida.ValueLengthField)) )
+  if( !ValueLengthField.Read(is, sc) )
     {
+    assert(0 && "Should not happen");
+    return is;
     }
-  if(ida.ValueLengthField == 0xFFFFFFFF)
+  if( ValueLengthField.IsUndefined() )
     {
     //assert( de.GetVR() == VR::SQ );
-    const Tag sdi(0xfffe,0xe0dd); // Sequence Delimitation Item
-    SequenceOfItems<ImplicitDataElement> si(ida.ValueLengthField);
-    Read(si);
-    gdcmDebugMacro( "SI: " << si );
+    //const Tag sdi(0xfffe,0xe0dd); // Sequence Delimitation Item
+    //SequenceOfItems<ImplicitDataElement> si(ida.ValueLengthField);
+    //Read(si);
+    //gdcmDebugMacro( "SI: " << si );
+    abort();
     }
   else
     {
+    (void)readValue;
     // We have the length we should be able to read the value
-    bool needReading = true;
-    if( ReadForPrinting )
-      {
-      needReading = ida.ValueLengthField < 0xfff;
-      }
-    if( needReading )
-      {
-      ida.ValueField.SetLength(ida.ValueLengthField); // perform realloc
-      Read(ida.ValueField);
-      }
-    else
-      {
-      //gdcmWarningMacro( "Seeking long field: " << ida.GetTag() << " l= " 
-      //  << ida.ValueLengthField );
-      ida.ValueField.Clear();
-      Seekg(ida.ValueLengthField, std::ios::cur);
-      }
+    ValueField = new ByteValue;
+    ValueField->SetLength(ValueLengthField); // perform realloc
+    ValueField->Read(is, sc);
+    //Seekg(ida.ValueLengthField, std::ios::cur);
     }
-#endif
+
   return is;
 }
 
 //-----------------------------------------------------------------------------
-const std::ostream &ImplicitDataElement::Write(std::ostream& _os) const
+const std::ostream &ImplicitDataElement::Write(std::ostream& os,
+    SC::SwapCode const &sc) const
 {
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   assert(0 && "Not Implemented");
-  (void)_os;
+  (void)os;
 }
 
 } // end namespace gdcm

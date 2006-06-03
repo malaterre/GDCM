@@ -19,10 +19,11 @@ public:
 
   friend std::ostream& operator<<(std::ostream &_os, const ByteValue &_val);
 
-  uint32_t GetLength() const { return Length; }
+  const VL& GetLength() const { return Length; }
   // Does a reallocation
-  void SetLength(uint32_t l) {
-    if (l%2)
+  void SetLength(const VL& vl) {
+    VL l(vl);
+    if ( l.IsOdd() )
       {
       gdcmWarningMacro( "BUGGY HEADER: Your dicom contain odd length value field." );
       ++l;
@@ -107,7 +108,7 @@ protected:
 
 private:
   char* Internal;
-  uint32_t Length;
+  VL Length;
 };
 //----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &_os, const ByteValue &_val)
