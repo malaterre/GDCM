@@ -155,11 +155,13 @@ public:
   std::istream &Read(std::istream &is,
     SC::SwapCode const &sc = SC::LittleEndian)
     {
+    (void)sc;
     return is.read((char*)(&ElementTag.tag), 4);
     }
   const std::ostream &Write(std::ostream &os,
     SC::SwapCode const &sc = SC::LittleEndian) const
     {
+    (void)sc;
     return os.write((char*)(&ElementTag.tag), 4);
     }
 

@@ -56,6 +56,7 @@ const std::ostream &ImplicitDataElement::Write(std::ostream& os,
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   assert(0 && "Not Implemented");
   (void)os;
+  (void)sc;
 }
 
 } // end namespace gdcm

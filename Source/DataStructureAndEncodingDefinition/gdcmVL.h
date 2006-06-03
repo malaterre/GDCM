@@ -7,6 +7,8 @@
 #include <iostream>
 
 /* \brief Value Length
+ * \warning this is a 4bytes value ! Do not try to use it for 2bytes value
+ * length
 */
 namespace gdcm
 {
@@ -14,7 +16,7 @@ namespace gdcm
 class GDCM_EXPORT VL
 {
 public:
-  VL(uint32_t vl = 0):ValueLength(vl) { }
+  VL(uint32_t vl = 0) : ValueLength(vl) { }
 
   bool IsOdd() const {
     return ValueLength % 2;
@@ -24,12 +26,12 @@ public:
   }
 
   VL& operator++() {
-    ValueLength++;
+    ++ValueLength;
     return *this;
   }
   VL operator++(int) {
     uint32_t tmp(ValueLength);
-    ValueLength++;
+    ++ValueLength;
     return tmp;
   }
 
