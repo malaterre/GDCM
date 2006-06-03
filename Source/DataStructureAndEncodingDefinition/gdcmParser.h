@@ -4,6 +4,7 @@
 
 #include "gdcmIStream.h"
 #include "gdcmTag.h"
+#include "gdcmByteBuffer.h"
 
 namespace gdcm
 {
@@ -28,7 +29,7 @@ public:
     UnexpectedStateError
   } ErrorType;
 
-  Parser() : UserData(0),Buffer(0),ErrorCode(NoError) {}
+  Parser() : UserData(0),Buffer(),ErrorCode(NoError) {}
   ~Parser() {}
 
   // Parse some more of the document. The string s is a buffer containing 
@@ -85,11 +86,11 @@ protected:
   // Obtain a buffer of size len to read a piece of the document into. 
   // A NULL value is returned if expat can't allocate enough memory for 
   // this buffer. This has to be called prior to every call to ParseBuffer.
-  char *GetBuffer(size_t len);
+  char *GetBuffer(int len);
 
 private:
   void* UserData;
-  char *Buffer;
+  ByteBuffer Buffer;
   ErrorType ErrorCode;
 
   StartElementHandler StartElement;
