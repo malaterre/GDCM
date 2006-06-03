@@ -9,6 +9,7 @@ SET(DSED_SRCS
   gdcmTS.cxx
   gdcmParser.cxx
   gdcmReader.cxx
+  gdcmIStream.cxx
   )
 
 # Add the include paths
