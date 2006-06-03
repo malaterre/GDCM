@@ -43,7 +43,7 @@ public:
           {
           bufferSize *= 2;
           } while (bufferSize < neededSize);
-        //newBuf = MALLOC(bufferSize);
+        //newBuf = malloc(bufferSize);
         try
           {
           Internal.reserve(bufferSize);
@@ -51,7 +51,7 @@ public:
           }
         catch(...)
           {
-          //errorCode = XML_ERROR_NO_MEMORY;
+          //errorCode = NoMemoryError;
           return 0;
           }
         Limit = newBuf + bufferSize;
