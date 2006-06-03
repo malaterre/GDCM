@@ -31,9 +31,9 @@ public:
   virtual void Print(std::ostream &os) const = 0;
 
   virtual std::istream& Read(std::istream &is,
-    SC::SwapCode const &sc = SC::LittleEndian) = 0;
+    SwapCode const &sc = SwapCode::LittleEndian) = 0;
   virtual std::ostream const & Write(std::ostream &os,
-    SC::SwapCode const &sc = SC::LittleEndian) const = 0;
+    SwapCode const &sc = SwapCode::LittleEndian) const = 0;
 };
 
 //inline std::ostream& operator<<(std::ostream &os, const Value &val)

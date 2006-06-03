@@ -102,7 +102,7 @@ public:
   VR(VRType vr):VRField(vr) { }
   //VR(VR const &vr):VRField(vr.VRField) { }
   std::istream &Read(std::istream &is,
-    SC::SwapCode const &sc = SC::LittleEndian)
+    SwapCode const &sc = SwapCode::LittleEndian)
     {
     (void)sc;
     char vr[2];
@@ -123,7 +123,7 @@ public:
     }
 
   const std::ostream & Write(std::ostream &os,
-    SC::SwapCode const & sc = SC::LittleEndian) const
+    SwapCode const & sc = SwapCode::LittleEndian) const
     {
     (void)sc;
     const char *vr = GetVRString(VRField);

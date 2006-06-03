@@ -12,7 +12,7 @@ ExplicitDataElement::~ExplicitDataElement()
 
 //-----------------------------------------------------------------------------
 std::istream &ExplicitDataElement::Read(std::istream &is, 
-                                        SC::SwapCode const &sc)
+                                        SwapCode const &sc)
 {
   // See PS 3.5, Date Element Structure With Explicit VR
   // Read Tag
@@ -67,7 +67,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is,
 
 //-----------------------------------------------------------------------------
 const std::ostream &ExplicitDataElement::Write(std::ostream &os, 
-                                               SC::SwapCode const &sc) const
+                                               SwapCode const &sc) const
 {
   if( !TagField.Write(os, sc) )
     {

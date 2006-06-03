@@ -8,7 +8,7 @@ namespace gdcm
 
 /* \brief SwapCode class
  */
-class GDCM_EXPORT SC
+class GDCM_EXPORT SwapCode
 {
 public:
   typedef enum {
@@ -17,12 +17,17 @@ public:
     BigEndian       = 4321,
     BadLittleEndian = 3412,
     BadBigEndian    = 2143
-  } SwapCode;
+  } SwapCodeType;
 
+  operator SwapCode::SwapCodeType() const { return SwapCodeValue; }
+  SwapCode(SwapCodeType sc):SwapCodeValue(sc) { }
   static const char* GetSwapCodeString(SwapCode const & sc);
 
 protected:
   static int GetIndex(SwapCode const & sc);
+
+private:
+  SwapCodeType SwapCodeValue;
 };
 
 } // end namespace gdcm

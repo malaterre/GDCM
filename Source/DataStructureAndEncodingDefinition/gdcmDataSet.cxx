@@ -103,13 +103,13 @@ const DataElement& DataSet::GetDataElement(const Tag &t) const
   }
 }
 
-void DataSet::Read(std::istream &is, SC::SwapCode const &sc)
+void DataSet::Read(std::istream &is, SwapCode const &sc)
 {
   (void)is;
   (void)sc;
 }
 
-void DataSet::Write(std::ostream &os, SC::SwapCode const &sc) const
+void DataSet::Write(std::ostream &os, SwapCode const &sc) const
 {
   (void)os;
   (void)sc;

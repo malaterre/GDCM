@@ -13,7 +13,7 @@ ImplicitDataElement::~ImplicitDataElement()
 
 //-----------------------------------------------------------------------------
 std::istream &ImplicitDataElement::Read(std::istream &is,
-    SC::SwapCode const &sc, bool readValue)
+    SwapCode const &sc)
 {
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   // Read Tag
@@ -45,7 +45,6 @@ std::istream &ImplicitDataElement::Read(std::istream &is,
     assert(0 && "Should not happen");
     return is;
     }
-  (void)readValue;
   //Seekg(ida.ValueLengthField, std::ios::cur);
 
   return is;
@@ -53,7 +52,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is,
 
 //-----------------------------------------------------------------------------
 const std::ostream &ImplicitDataElement::Write(std::ostream& os,
-    SC::SwapCode const &sc) const
+    SwapCode const &sc) const
 {
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   assert(0 && "Not Implemented");

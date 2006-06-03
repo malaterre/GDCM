@@ -28,9 +28,9 @@ public:
   void SetVR(VR const &vr) { VRField = vr; }
 
   std::istream &Read(std::istream& is,
-    SC::SwapCode const &sc = SC::LittleEndian);
+    SwapCode const &sc = SwapCode::LittleEndian);
   const std::ostream &Write(std::ostream& _os,
-    SC::SwapCode const &sc = SC::LittleEndian) const;
+    SwapCode const &sc = SwapCode::LittleEndian) const;
 
 private:
   // Value Representation

@@ -2,94 +2,62 @@
 #ifndef __gdcmIStream_h
 #define __gdcmIStream_h
 
-#include "gdcmIStream.h"
-#include "gdcmTag.h"
-#include "gdcmVR.h"
-#include "gdcmValue.h"
-#include "gdcmImplicitDataElement.h"
-#include "gdcmExplicitDataElement.h"
-#include "gdcmSequenceOfItems.h"
-#include "gdcmItem.h"
-#include "gdcmGroup.h"
-#include "gdcmTS.h"
-#include <exception>
+#include "gdcmType.h"
+#include "gdcmSwapCode.h"
+#include <fstream>
+#include <iostream>
+#include <assert.h>
 
 namespace gdcm
 {
+
 /**
- * \brief Specialization of IFStream to read DICOM struct
- *
- * Detailled description here
+ * \brief Wrapper around ifstream
+ * Should only provide wrapper around big endian stuff
+ * Should not have any DICOM notion. See DICOMIStream for a specialization of IStream
  * \note bla
  */
-class GDCM_EXPORT IStream : public IStream
+
+class GDCM_EXPORT IStream
 {
 public:
-  IStream();
-  ~IStream();
+  IStream ():SwapCodeValue(SwapCode::Unknown) {}
+  ~IStream() { assert( !(InternalStream.is_open())); }
 
-  // The following methods are public.
-  // DO NOT EXPECT TO REMAIN LIKE THAT
-  // indeed there is multiple problem:
-  // - Expose to much of internals for users
-  // - VS6 cannot deal with templated method in non-templated class
-  // Read a tag from the IStream
-  IStream &Read(Tag &t) throw (std::exception);
+  bool operator ! ( ) const { return !InternalStream; }
+  bool eof ( ) const { return InternalStream.eof(); }
+  // Although correct this is not defined by the standart
+  //operator bool() const { return !InternalStream.eof(); }
+  //define the void* operation so that while( IStream ) becomes a valid cast
+  //defined cast/ user cast
+  operator void * ( ) const { return static_cast<void*>(InternalStream); }
 
-  // Read a VR from the IStream
-  IStream &Read(VR::VRType &t);
+  void SetFileName(const std::string& filename) { FileName = filename; }
+  void Open() { InternalStream.open(FileName.c_str(), std::ios::binary);}
+  void Close() { InternalStream.close(); }
 
-  // Read a uin16_t from the Stream
-  IStream &Read(uint16_t &vl);
+  std::streampos Tellg() { return InternalStream.tellg(); }
 
-  // Read a uin32_t from the Stream
-  IStream &Read(uint32_t &vl);
+  IStream& Seekg( std::streamoff off, std::ios_base::seekdir dir ) 
+    { 
+    //std::cerr << "off= " << off << std::endl;
+    InternalStream.seekg(off,dir); return *this; }
 
-  // Read a Value from the Stream
-  // The Value cannot be Undefined Length
-  IStream &Read(Value &v);
-
-  //IStream& Read(DataElement& da);
-  IStream& Read(ExplicitDataElement &xda);
-  IStream& Read(ImplicitDataElement &ida);
-  template<class DEType>
-  IStream& Read(SequenceOfItems<DEType> &_sq);
-  template<class DEType>
-  IStream& Read(Item<DEType> &_val);
-  template<class DEType>
-  IStream& Read(Group<DEType> &_val);
-
-  void Initialize();
-
-  typedef enum {
-    Unknown = 0,
-    Implicit,
-    Explicit
-    } NegociatedTSType;
-
-  NegociatedTSType GetNegociatedTS() { 
-    assert( NegociatedTS != Unknown );
-    return NegociatedTS; } ;
-
-  TS::TSType GetUsedTS() {
-    return UsedTS; } ;
+  SwapCode GetSwapCode() { return SwapCodeValue; }
 
 protected:
-  // Read a true DICOM V3 header
-  bool ReadDICM();
-  IStream& ExplicitReadCommon(ExplicitDataElement& xda);
-  IStream& ReadMeta(ExplicitDataElement& da);
+  // Only subclass should have access to this method... this is too general
+  // for end user
+  IStream& Read(char* s, std::streamsize n);
 
-  void FindNegociatedTS();
-  void ReadNonStandardDataElements();
+  SwapCode SwapCodeValue;
 
-  NegociatedTSType NegociatedTS;
-  TS::TSType UsedTS;
-
-  // If on try to skip no interesting data that cannot be printed anyway
-  bool ReadForPrinting;
+private:
+  std::string FileName;
+  std::ifstream InternalStream;
 };
 
-} // end namespace gdcm
+}
 
 #endif //__gdcmIStream_h
+

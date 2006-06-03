@@ -2,8 +2,7 @@
 #ifndef __gdcmParser_h
 #define __gdcmParser_h
 
-//#include "gdcmIStream.h"
-
+#include "gdcmIStream.h"
 #include "gdcmTag.h"
 
 namespace gdcm
@@ -20,7 +19,7 @@ namespace gdcm
  * Detailled description here
  * \note bla
  */
-class GDCM_EXPORT Parser /*: public IStream*/
+class GDCM_EXPORT Parser : public IStream
 {
 public:
   typedef void (*StartElementHandler) (void *userData,

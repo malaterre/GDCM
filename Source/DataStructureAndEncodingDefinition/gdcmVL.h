@@ -42,13 +42,13 @@ public:
   //friend std::istream& operator>>(std::istream& is, VL& n);
 
   std::istream &Read(std::istream &is,
-    SC::SwapCode const &sc = SC::LittleEndian)
+    SwapCode const &sc = SwapCode::LittleEndian)
     {
     (void)sc;
     return is.read((char*)(&ValueLength), 4);
     }
   const std::ostream &Write(std::ostream &os,
-    SC::SwapCode const &sc = SC::LittleEndian) const
+    SwapCode const &sc = SwapCode::LittleEndian) const
     {
     (void)sc;
     return os.write((char*)(&ValueLength), 4);

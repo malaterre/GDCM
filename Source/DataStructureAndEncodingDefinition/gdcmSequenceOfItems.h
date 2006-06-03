@@ -42,7 +42,7 @@ public:
   }
   void Clear() {}
   std::istream &Read(std::istream &is,
-    SC::SwapCode const &sc = SC::LittleEndian) {
+    SwapCode const &sc = SwapCode::LittleEndian) {
     ItemVector::iterator it = Items.begin();
     for(;it != Items.end(); ++it)
       {
@@ -51,7 +51,7 @@ public:
     return is;
   }
   std::ostream const & Write(std::ostream &os,
-    SC::SwapCode const &sc = SC::LittleEndian) const {
+    SwapCode const &sc = SwapCode::LittleEndian) const {
     ItemVector::const_iterator it = Items.begin();
     for(;it != Items.end(); ++it)
       {

@@ -58,12 +58,12 @@ public:
     }
 
   void Read(std::istream &is,
-    SC::SwapCode const &sc = SC::LittleEndian) {
+    SwapCode const &sc = SwapCode::LittleEndian) {
     NestedDataSet.Read(is, sc);
     }
 
   void Write(std::ostream &os,
-    SC::SwapCode const &sc = SC::LittleEndian) const {
+    SwapCode const &sc = SwapCode::LittleEndian) const {
     NestedDataSet.Write(os, sc);
     }
 

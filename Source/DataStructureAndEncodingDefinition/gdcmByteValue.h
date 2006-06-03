@@ -101,13 +101,13 @@ public:
     delete[] Internal; Internal = 0; Length = 0; }
 
   std::istream &Read(std::istream &is,
-    SC::SwapCode const &sc = SC::LittleEndian)
+    SwapCode const &sc = SwapCode::LittleEndian)
     {
     (void)sc;
     return is.read(Internal, Length);
     }
   std::ostream const & Write(std::ostream &os,
-    SC::SwapCode const &sc = SC::LittleEndian) const
+    SwapCode const &sc = SwapCode::LittleEndian) const
     {
     (void)sc;
     return os.write(Internal, Length);

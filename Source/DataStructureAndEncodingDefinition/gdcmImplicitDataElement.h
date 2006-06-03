@@ -24,9 +24,9 @@ public:
     return *ValueField;
   }
   std::istream &Read(std::istream& is,
-    SC::SwapCode const &sc = SC::LittleEndian, bool readValue = true);
+    SwapCode const &sc = SwapCode::LittleEndian);
   const std::ostream &Write(std::ostream& os,
-    SC::SwapCode const &sc = SC::LittleEndian) const;
+    SwapCode const &sc = SwapCode::LittleEndian) const;
 
 private:
   Value* ValueField;
