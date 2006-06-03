@@ -1,0 +1,16 @@
+#include "gdcm.h"
+
+int TestReadPatientName(int argc, char *argv[])
+{
+  (void)argc;
+  gdcm::Parser p;
+  std::string filename = argv[1];
+  p.SetFileName( filename );
+  gdcm::Tag t(0x0010, 0x0010);
+  const char *v = p.Request( t );
+  gdcm::Attributes<gdcm::VR::PN,gdcm::VM::VM1> pn( v );
+
+  std::cout << pn << std::endl;
+
+  return 0;
+}
