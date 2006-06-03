@@ -3,6 +3,7 @@
 SET(Common_TEST_SRCS
   TestByteSwap
   TestDirectory
+  TestTrace
   )
 
 # Add the include paths
