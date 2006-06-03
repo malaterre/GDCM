@@ -18,6 +18,23 @@ public:
   ~ByteValue() { Clear(); }
 
   friend std::ostream& operator<<(std::ostream &_os, const ByteValue &_val);
+  void Print(std::ostream &os) const {
+  // This is perfectly valid to have a Length = 0 , so we cannot check
+  // the lenght for printing
+  if( Internal )
+    {
+    if( IsPrintable() )
+      {
+      os << Internal;
+      }
+    else
+      os << "Loaded:" << Length;
+    }
+  else
+    {
+    os << "Not Loaded";
+    }
+  }
 
   const VL& GetLength() const { return Length; }
   // Does a reallocation
@@ -111,26 +128,10 @@ private:
   VL Length;
 };
 //----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream &_os, const ByteValue &_val)
+inline std::ostream& operator<<(std::ostream &os, const ByteValue &val)
 {
-  // This is perfectly valid to have a Length = 0 , so we cannot check
-  // the lenght for printing
-  if( _val.Internal )
-    {
-    if ( _val.IsPrintable() )
-      {
-      _os << _val.Internal;
-      return _os;
-      }
-    else
-      _os << "Loaded:" << _val.Length;
-    }
-  else
-    {
-    _os << "Not Loaded";
-    }
-
-  return _os;
+  val.Print(os);
+  return os;
 }
 
 } // end namespace gdcm

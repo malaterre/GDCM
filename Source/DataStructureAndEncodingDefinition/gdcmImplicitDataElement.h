@@ -3,6 +3,7 @@
 #define __gdcmImplicitDataElement_h
 
 #include "gdcmDataElement.h"
+#include "gdcmByteValue.h"
 
 namespace gdcm
 {
@@ -28,11 +29,14 @@ private:
   Value* ValueField;
 };
 //-----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream& _os, const ImplicitDataElement &_val)
+inline std::ostream& operator<<(std::ostream& os, const ImplicitDataElement &val)
 {
-  const DataElement &de = _val;
-  _os << de;
-  return _os;
+  const DataElement &de = val;
+  os << de;
+  const Value& v = *(val.ValueField);
+  // could not get operator to work on references (no dynamic type)
+  v.Print(os);
+  return os;
 }
 
 } // end namespace gdcm

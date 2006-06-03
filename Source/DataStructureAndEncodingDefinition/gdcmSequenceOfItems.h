@@ -30,6 +30,9 @@ public:
   SequenceOfItems(VL const & vl = 0xFFFFFFFF):SequenceLengthField(vl) { }
 
   friend std::ostream& operator<<(std::ostream& _os, const SequenceOfItems &_val);
+  void Print(std::ostream &os) const {
+    (void)os;
+  }
 
   /// \brief Returns the SQ length, as read from disk
   const VL& GetLength() const { return SequenceLengthField; }

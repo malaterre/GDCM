@@ -1,6 +1,7 @@
 #include "gdcmImplicitDataElement.h"
 #include "gdcmValue.h"
 #include "gdcmByteValue.h"
+#include "gdcmSequenceOfItems.h"
 
 namespace gdcm
 {
@@ -30,21 +31,17 @@ std::istream &ImplicitDataElement::Read(std::istream &is,
   if( ValueLengthField.IsUndefined() )
     {
     //assert( de.GetVR() == VR::SQ );
-    //const Tag sdi(0xfffe,0xe0dd); // Sequence Delimitation Item
-    //SequenceOfItems<ImplicitDataElement> si(ida.ValueLengthField);
-    //Read(si);
-    //gdcmDebugMacro( "SI: " << si );
-    abort();
+    ValueField = new SequenceOfItems;
     }
   else
     {
-    (void)readValue;
-    // We have the length we should be able to read the value
     ValueField = new ByteValue;
-    ValueField->SetLength(ValueLengthField); // perform realloc
-    ValueField->Read(is, sc);
-    //Seekg(ida.ValueLengthField, std::ios::cur);
     }
+  // We have the length we should be able to read the value
+  ValueField->SetLength(ValueLengthField); // perform realloc
+  ValueField->Read(is, sc);
+    (void)readValue;
+  //Seekg(ida.ValueLengthField, std::ios::cur);
 
   return is;
 }

@@ -22,16 +22,26 @@ public:
   Value() { }
   virtual ~Value() { }
 
+  //friend std::ostream& operator<<(std::ostream &os, const Value &val);
+
   virtual const VL& GetLength() const = 0;
   virtual void SetLength(VL const & l) = 0;
 
   virtual void Clear() = 0;
+  virtual void Print(std::ostream &os) const = 0;
 
   virtual void Read(std::istream &is,
     SC::SwapCode const &sc = SC::LittleEndian) = 0;
   virtual void Write(std::ostream &os,
     SC::SwapCode const &sc = SC::LittleEndian) const = 0;
 };
+
+//inline std::ostream& operator<<(std::ostream &os, const Value &val)
+//{
+//  (void)val;
+//  os << "Should not happen";
+//  return os;
+//}
 
 } // end namespace gdcm
 
