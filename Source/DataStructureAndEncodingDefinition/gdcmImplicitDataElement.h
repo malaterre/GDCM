@@ -33,9 +33,12 @@ inline std::ostream& operator<<(std::ostream& os, const ImplicitDataElement &val
 {
   const DataElement &de = val;
   os << de;
-  const Value& v = *(val.ValueField);
-  // could not get operator to work on references (no dynamic type)
-  v.Print(os);
+  if( val.ValueField )
+    {
+    const Value& v = *(val.ValueField);
+    // could not get operator to work on references (no dynamic type)
+    v.Print(os);
+    }
   return os;
 }
 
