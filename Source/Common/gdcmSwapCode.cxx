@@ -13,7 +13,7 @@ static const char *SwapCodeStrings[] = {
    0
 };
 
-int SC::GetIndex(SwapCodeType sc)
+int SC::GetIndex(SwapCode const & sc)
 {
   int idx = 0;
   switch(sc)
@@ -40,7 +40,7 @@ int SC::GetIndex(SwapCodeType sc)
   return idx;
 }
 
-const char* SC::GetSwapCodeString(SwapCodeType sc)
+const char* SC::GetSwapCodeString(SwapCode const & sc)
 {
   int idx = GetIndex(sc);
   return SwapCodeStrings[idx];

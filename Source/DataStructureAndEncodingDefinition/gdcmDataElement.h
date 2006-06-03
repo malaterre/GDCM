@@ -17,6 +17,7 @@
  */
 
 #include "gdcmTag.h"
+#include "gdcmVL.h"
 
 namespace gdcm
 {
@@ -31,7 +32,7 @@ namespace gdcm
 class GDCM_EXPORT DataElement
 {
 public:
-  DataElement(const Tag& t = Tag(0), uint32_t const &vl = 0):TagField(t),ValueLengthField(vl) {}
+  DataElement(const Tag& t = Tag(0), const VL& vl = 0):TagField(t),ValueLengthField(vl) {}
   virtual ~DataElement() {}
 
   friend std::ostream& operator<<(std::ostream &_os, const DataElement &_val);
@@ -39,14 +40,14 @@ public:
   const Tag& GetTag() const { return TagField; }
   void SetTag(const Tag &t) { TagField = t; }
 
-  uint32_t GetValueLength() const {
+  const VL& GetValueLength() const {
     return ValueLengthField;
   }
   //void SetValueLength(const uint32_t &vl) {
   //  ValueLengthField = vl;
   //}
-  bool IsUndefinedLength() {
-    return ValueLengthField == 0xFFFFFFFF;
+  bool IsUndefinedLength() const {
+    return ValueLengthField.IsUndefined();
   }
 
   DataElement(const DataElement &_val)
@@ -70,20 +71,26 @@ public:
       && ValueLengthField == _de.ValueLengthField;
     }
 
-  void Read(std::istream &is) {
-    TagField.Read(is);
-    is.read((char*)(&ValueLengthField), 4);
+  std::istream &Read(std::istream &is) {
+    if( TagField.Read(is) )
+      {
+      return ValueLengthField.Read(is);
+      }
+    return is;
     }
 
-  void Write(std::ostream &os) const {
-    TagField.Write(os);
-    os.write((char*)(&ValueLengthField), 4);
+  const std::ostream &Write(std::ostream &os) const {
+    if( TagField.Write(os) )
+      {
+      return ValueLengthField.Write(os);
+      }
+    return os;
     }
 
 protected:
   Tag TagField;
   // This is the value read from the file, might be different from the length of Value Field
-  uint32_t ValueLengthField; // Can be 0xFFFFFFFF
+  VL ValueLengthField; // Can be 0xFFFFFFFF
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const DataElement &val)

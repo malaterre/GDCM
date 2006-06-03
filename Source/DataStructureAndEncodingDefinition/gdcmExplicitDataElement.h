@@ -4,6 +4,7 @@
 
 #include "gdcmDataElement.h"
 #include "gdcmVR.h"
+#include "gdcmSwapCode.h"
 
 namespace gdcm
 {
@@ -16,15 +17,17 @@ class Value;
 class GDCM_EXPORT ExplicitDataElement : public DataElement
 {
 public:
-  ExplicitDataElement(const Tag& t = Tag(0), uint32_t const &vl = 0, const VR::VRType &vr = VR::INVALID) : DataElement(t,vl),VRField(vr) { }
+  ExplicitDataElement(const Tag& t = Tag(0), uint32_t const &vl = 0, const VR::VRType &vr = VR::INVALID) : DataElement(t,vl),VRField(vr),ValueField(0) { }
 
   friend std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_val);
 
   VR::VRType GetVR() const { return VRField; }
   void SetVR(VR::VRType const &vr) { VRField = vr; }
 
-  void Read(std::istream& _is);
-  void Write(std::ostream& _os) const;
+  std::istream &Read(std::istream& is,
+    SC::SwapCode const &sc = SC::LittleEndian);
+  const std::ostream &Write(std::ostream& _os,
+    SC::SwapCode const &sc = SC::LittleEndian) const;
 
 private:
   // Value Representation

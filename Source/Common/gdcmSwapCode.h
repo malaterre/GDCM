@@ -17,12 +17,12 @@ public:
     BigEndian       = 4321,
     BadLittleEndian = 3412,
     BadBigEndian    = 2143
-  } SwapCodeType;
+  } SwapCode;
 
-  static const char* GetSwapCodeString(SwapCodeType sc);
+  static const char* GetSwapCodeString(SwapCode const & sc);
 
 protected:
-  static int GetIndex(SwapCodeType sc);
+  static int GetIndex(SwapCode const & sc);
 };
 
 } // end namespace gdcm

@@ -3,6 +3,8 @@
 SET(DSED_TEST_SRCS
   TestTag
   TestDataElement
+  TestExplicitDataElement
+  TestImplicitDataElement
   TestComposite
   TestElement
   TestVR

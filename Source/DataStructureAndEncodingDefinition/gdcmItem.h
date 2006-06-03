@@ -4,6 +4,7 @@
 
 #include "gdcmDataElement.h"
 #include "gdcmDataSet.h"
+#include "gdcmSwapCode.h"
 
 namespace gdcm
 {
@@ -56,12 +57,14 @@ public:
     return NestedDataSet;
     }
 
-  void Read(std::istream &is) {
-    NestedDataSet.Read(is);
+  void Read(std::istream &is,
+    SC::SwapCode const &sc = SC::LittleEndian) {
+    NestedDataSet.Read(is, sc);
     }
 
-  void Write(std::ostream &os) const {
-    NestedDataSet.Write(os);
+  void Write(std::ostream &os,
+    SC::SwapCode const &sc = SC::LittleEndian) const {
+    NestedDataSet.Write(os, sc);
     }
 
 private:

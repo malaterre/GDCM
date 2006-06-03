@@ -5,13 +5,16 @@ namespace gdcm
 {
 
 //-----------------------------------------------------------------------------
-void ExplicitDataElement::Read(std::istream &_is)
+std::istream &ExplicitDataElement::Read(std::istream &is, 
+                                        SC::SwapCode const &sc)
 {
-  (void)_is;
+  (void)sc;
+  return is;
 }
 
 //-----------------------------------------------------------------------------
-void ExplicitDataElement::Write(std::ostream &_os) const
+const std::ostream &ExplicitDataElement::Write(std::ostream &_os, 
+                                               SC::SwapCode const &sc) const
 {
   VR::Write(_os, VRField);
   // See PS 3.5, Date Element Structure With Explicit VR
@@ -24,25 +27,26 @@ void ExplicitDataElement::Write(std::ostream &_os) const
     uint16_t check = 0x0;
     _os.write(reinterpret_cast<char*>(check), sizeof(check));
     // Write Value Length (32bits)
-    _os.write(reinterpret_cast<char*>(ValueLengthField), sizeof(ValueLengthField));
+    ValueLengthField.Write(_os, sc);
     }
   else if( VRField == VR::UT )
     {
     uint16_t check = 0x0;
     _os.write(reinterpret_cast<char*>(check), sizeof(check));
     // Write Value Length (32bits)
-    assert( ValueLengthField != 0xFFFFFFFF );
-    _os.write(reinterpret_cast<char*>(ValueLengthField), sizeof(ValueLengthField));
+    assert( !ValueLengthField.IsUndefined() );
+    ValueLengthField.Write(_os, sc);
     }
   else
     {
-    uint16_t vl = ValueLengthField;
+    uint16_t vl = ValueLengthField.CastTo16();
     // Write Value Length (16bits)
     _os.write(reinterpret_cast<char*>(vl), sizeof(vl));
     }
   // We have the length we should be able to write the value
-  ValueField->Write(_os);
+  ValueField->Write(_os, sc);
 
+  return _os;
 }
 
 } // end namespace gdcm

@@ -42,9 +42,11 @@ public:
 
   //bool IsEmpty() { return DataElements.empty(); }
 
-  void Read(std::istream &is);
+  void Read(std::istream &is,
+    SC::SwapCode const &sc = SC::LittleEndian);
 
-  void Write(std::ostream &os) const;
+  void Write(std::ostream &os,
+    SC::SwapCode const &sc = SC::LittleEndian) const;
 
 private:
   TS::NegociatedType NegociatedTS;

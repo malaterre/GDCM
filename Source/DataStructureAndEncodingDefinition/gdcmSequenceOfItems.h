@@ -38,18 +38,20 @@ public:
     SequenceLengthField = length;
   }
   void Clear() {}
-  void Read(std::istream &is) {
+  void Read(std::istream &is,
+    SC::SwapCode const &sc = SC::LittleEndian) {
     ItemVector::iterator it = Items.begin();
     for(;it != Items.end(); ++it)
       {
-      it->Read(is);
+      it->Read(is, sc);
       }
   }
-  void Write(std::ostream &os) const {
+  void Write(std::ostream &os,
+    SC::SwapCode const &sc = SC::LittleEndian) const {
     ItemVector::const_iterator it = Items.begin();
     for(;it != Items.end(); ++it)
       {
-      it->Write(os);
+      it->Write(os, sc);
       }
   }
 

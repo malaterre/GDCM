@@ -10,17 +10,19 @@ namespace gdcm
  * \brief Class to represent an *Implicit VR* Data Element
  * \note bla
  */
+class Value;
 class GDCM_EXPORT ImplicitDataElement : public DataElement
 {
 public:
-  ImplicitDataElement(const Tag& t = Tag(0), uint32_t const &vl = 0) : DataElement(t,vl) { }
+  ImplicitDataElement(const Tag& t = Tag(0), uint32_t const &vl = 0) : DataElement(t,vl),ValueField(0) { }
 
   friend std::ostream& operator<<(std::ostream& _os, const ImplicitDataElement &_val);
 
-  void Read(std::istream& _os);
-  void Write(std::ostream& _os) const;
+  std::istream &Read(std::istream& _os);
+  const std::ostream &Write(std::ostream& _os) const;
 
 private:
+  Value* ValueField;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const ImplicitDataElement &_val)

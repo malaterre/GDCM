@@ -24,11 +24,8 @@ namespace gdcm
 class GDCM_EXPORT Tag
 {
 public:
-/// \brief Constructor without param
-  Tag() { ElementTag.tag = 0; }
-  
 /// \brief Constructor with 1*uint32_t  
-  Tag(uint32_t tag) { ElementTag.tag = tag; }
+  Tag(uint32_t tag = 0) { ElementTag.tag = tag; }
   
   // Later, (Big Endian compatible) we'll have :
   /*
@@ -153,13 +150,13 @@ public:
   // Standard Data Elements. Private Data elements have odd Group Numbers.
   bool IsPrivate() const { return !IsPublic(); }
 
-  void Read(std::istream &is)
+  std::istream &Read(std::istream &is)
     {
-    is.read((char*)(&ElementTag.tag), 4);
+    return is.read((char*)(&ElementTag.tag), 4);
     }
-  void Write(std::ostream &os) const
+  const std::ostream &Write(std::ostream &os) const
     {
-    os.write((char*)(&ElementTag.tag), 4);
+    return os.write((char*)(&ElementTag.tag), 4);
     }
 
 private:

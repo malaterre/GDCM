@@ -3,6 +3,7 @@
 #define __gdcmValue_h
 
 #include "gdcmTypes.h"
+#include "gdcmSwapCode.h"
 
 #include <fstream>
 
@@ -25,8 +26,10 @@ public:
 
   virtual void Clear() = 0;
 
-  virtual void Read(std::istream &is) = 0;
-  virtual void Write(std::ostream &os) const = 0;
+  virtual void Read(std::istream &is,
+    SC::SwapCode const &sc = SC::LittleEndian) = 0;
+  virtual void Write(std::ostream &os,
+    SC::SwapCode const &sc = SC::LittleEndian) const = 0;
 };
 
 } // end namespace gdcm
