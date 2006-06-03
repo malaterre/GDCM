@@ -17,10 +17,15 @@ class GDCM_EXPORT Parser : public IStream
 {
 public:
   typedef enum {
-    StatusError
-  } Status;
-  typedef enum {
-    FatalError
+    NoError,
+    NoMemoryError,
+    SyntaxError,
+    NoElementsError,
+    TagMismatchError,
+    DuplicateAttributeError,
+    JunkAfterDocElementError,
+    UndefinedEntityError,
+    UnexpectedStateError
   } ErrorType;
 
   typedef void (*StartElementHandler) (void *userData,
@@ -30,7 +35,9 @@ public:
 
   Parser();
   ~Parser();
-  Status Parse(const char* buffer, size_t len, bool isFinal);
+  // If a parse error occurred, it returns 0. 
+  // Otherwise it returns a non-zero value.
+  bool Parse(const char* buffer, size_t len, bool isFinal);
 
   void SetUserData(void *userData);
   void SetElementHandler(StartElementHandler start, EndElementHandler end);
@@ -40,10 +47,26 @@ public:
   static const char *ErrorString(ErrorType const &err);
 
 protected:
+
+  char *GetBuffer(size_t len);
+  bool ParseBuffer(size_t len, bool isFinal);
+
 private:
   void* UserData;
+  char *Buffer;
+  // First character to be parsed
+  const char *BufferPtr;
+        char *BufferEnd;
+  const char *PositionPtr;
+  const char *ParseEndPtr;
+
+  const char *EventPtr;
+  const char *EventEndPtr;
+
   StartElementHandler StartElement;
   EndElementHandler EndElement;
+
+  ErrorType ErrorCode;
 };
 
 } // end namespace gdcm
