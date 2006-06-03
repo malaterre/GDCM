@@ -13,8 +13,7 @@ namespace gdcm
 
 /**
  * \brief Wrapper around ifstream
- * Should only provide wrapper around big endian stuff
- * Should not have any DICOM notion. See DICOMIStream for a specialization of IStream
+ * specialized for binary stream. Is able to read DICOM attribute
  * \note bla
  */
 
@@ -38,12 +37,13 @@ public:
 
   std::streampos Tellg() { return InternalStream.tellg(); }
 
-  IStream& Seekg( std::streamoff off, std::ios_base::seekdir dir ) 
-    { 
+  IStream& Seekg( std::streamoff off, std::ios_base::seekdir dir ) { 
     //std::cerr << "off= " << off << std::endl;
-    InternalStream.seekg(off,dir); return *this; }
+    InternalStream.seekg(off,dir); return *this;
+    }
 
-  SwapCode GetSwapCode() { return SwapCodeValue; }
+  SwapCode const &GetSwapCode() const { return SwapCodeValue; }
+  std::string const &GetFileName() const { return FileName; }
 
 protected:
   // Only subclass should have access to this method... this is too general

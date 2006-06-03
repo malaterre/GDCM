@@ -7,12 +7,6 @@
 
 namespace gdcm
 {
-  typedef enum {
-    STATUS_ERROR
-  } PARSER_STATUS;
-  typedef enum {
-    FATAL
-  } PARSER_ERROR_TYPE;
 /**
  * \brief Parser ala XML_Parser from expat (SAD)
  *
@@ -22,6 +16,13 @@ namespace gdcm
 class GDCM_EXPORT Parser : public IStream
 {
 public:
+  typedef enum {
+    StatusError
+  } Status;
+  typedef enum {
+    FatalError
+  } ErrorType;
+
   typedef void (*StartElementHandler) (void *userData,
                                        const Tag &tag,
                                        const char *atts[]);
@@ -29,14 +30,14 @@ public:
 
   Parser();
   ~Parser();
-  PARSER_STATUS Parse(const char* buffer, size_t len, bool isFinal);
+  Status Parse(const char* buffer, size_t len, bool isFinal);
 
   void SetUserData(void *userData);
   void SetElementHandler(StartElementHandler start, EndElementHandler end);
 
-  unsigned long GetCurrentOffset();
-  PARSER_ERROR_TYPE GetErrorCode();
-  static const char *ErrorString(PARSER_ERROR_TYPE err);
+  unsigned long GetCurrentOffset() const;
+  ErrorType GetErrorCode() const;
+  static const char *ErrorString(ErrorType const &err);
 
 protected:
 private:

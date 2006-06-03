@@ -49,7 +49,7 @@ int TestSADParser(int argc, char *argv[])
     is.read(buf, sizeof(buf));
     size_t len = is.gcount();
     done = len < sizeof(buf);
-    if (parser.Parse(buf, len, done) == gdcm::STATUS_ERROR) {
+    if (parser.Parse(buf, len, done) == gdcm::Parser::StatusError) {
       fprintf(stderr,
         "%s at line %" XML_FMT_INT_MOD "u\n",
         gdcm::Parser::ErrorString(parser.GetErrorCode()),
