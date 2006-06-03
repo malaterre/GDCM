@@ -15,12 +15,12 @@ namespace gdcm
  */
 class ByteBuffer
 {
-    static const int InitBufferSize = 1024;
-  public:
-    ByteBuffer() : Start(0), End(0),Limit(0) {}
-    char *Get(int len)
-      {
-      char *buffer = &Internal[0];
+  static const int InitBufferSize = 1024;
+public:
+  ByteBuffer() : Start(0), End(0),Limit(0) {}
+  char *Get(int len)
+    {
+    char *buffer = &Internal[0];
     if (len > Limit - End)
       {
       // FIXME avoid integer overflow
@@ -46,8 +46,8 @@ class ByteBuffer
         //newBuf = MALLOC(bufferSize);
         try
           {
-        Internal.reserve(bufferSize);
-        newBuf = &Internal[0];
+          Internal.reserve(bufferSize);
+          newBuf = &Internal[0];
           }
         catch(...)
           {
@@ -67,13 +67,13 @@ class ByteBuffer
     return End;
     }
 
-  private:
-    typedef std::vector<char> CharVector;
-    const char *Start;
-          char *End;
-    const char *Limit;
-    CharVector Internal;
-    };
+private:
+  typedef std::vector<char> CharVector;
+  const char *Start;
+        char *End;
+  const char *Limit;
+  CharVector Internal;
+};
 
 } // end namespace gdcm
 
