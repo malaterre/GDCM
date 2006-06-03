@@ -17,12 +17,14 @@ class Value;
 class GDCM_EXPORT ExplicitDataElement : public DataElement
 {
 public:
-  ExplicitDataElement(const Tag& t = Tag(0), uint32_t const &vl = 0, const VR::VRType &vr = VR::INVALID) : DataElement(t,vl),VRField(vr),ValueField(0) { }
+  ExplicitDataElement(const Tag& t = Tag(0), uint32_t const &vl = 0,
+                      const VR& vr = VR::INVALID ) : 
+    DataElement(t,vl),VRField(vr),ValueField(0) { }
 
   friend std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_val);
 
-  VR::VRType GetVR() const { return VRField; }
-  void SetVR(VR::VRType const &vr) { VRField = vr; }
+  VR const &GetVR() const { return VRField; }
+  void SetVR(VR const &vr) { VRField = vr; }
 
   std::istream &Read(std::istream& is,
     SC::SwapCode const &sc = SC::LittleEndian);
@@ -31,7 +33,7 @@ public:
 
 private:
   // Value Representation
-  VR::VRType VRField;
+  VR VRField;
   Value* ValueField;
 };
 //-----------------------------------------------------------------------------

@@ -98,31 +98,44 @@ public:
   // TODO: REMOVE ME
   static bool IsASCII2(VRType const &vr);
   
-  static void Read(std::istream &is, VRType &vr)
+  VR(VRType vr):VRField(vr) { }
+  //VR(VR const &vr):VRField(vr.VRField) { }
+  std::istream &Read(std::istream &is,
+    SC::SwapCode const &sc = SC::LittleEndian)
     {
-    char vr_str[3];
-    is.read(vr_str, 2);
-    vr_str[2] = '\0';
-    vr = VR::GetVRType(vr_str);
-    assert( vr != VR::VR_END );
+    (void)sc;
+    char vr[4];
+    is.read(vr, 4);
+    assert( vr[2] == '0' );
+    assert( vr[3] == '0' );
+    VRField = VR::GetVRType(vr);
+    assert( VRField != VR::VR_END );
+    return is;
     }
 
-  static void Write(std::ostream &os, VRType const & vr)
+  const std::ostream & Write(std::ostream &os,
+    SC::SwapCode const & sc = SC::LittleEndian) const
     {
-    const char *vr_str = GetVRString(vr);
-    assert( strlen( vr_str ) == 2 );
-    os.write(vr_str, 2);
+    (void)sc;
+    const char *vr = GetVRString(VRField);
+    assert( strlen( vr ) == 2 );
+    os.write(vr, 3);
+    os.write(0x0, 1);
+    return os;
     }
+  friend std::ostream& operator<<(std::ostream& os, const VR& vr);
+
+  operator VR::VRType() const { return VRField; }
 
 private:
   // Internal function that map a VRType to an index in the VRStrings table
   static int GetIndex(VRType vr);
-
+  VRType VRField;
 };
 //-----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream& _os, const VR::VRType&_val)
+inline std::ostream& operator<<(std::ostream& _os, const VR& val)
 {
-  _os << VR::GetVRString(_val);
+  _os << VR::GetVRString(val.VRField);
   return _os;
 }
 
