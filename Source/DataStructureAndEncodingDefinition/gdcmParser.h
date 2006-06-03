@@ -8,12 +8,12 @@
 namespace gdcm
 {
 /**
- * \brief Parser ala XML_Parser from expat (SAD)
+ * \brief Parser ala XML_Parser from expat (SAX)
  *
  * Detailled description here
- * \note bla
+ * \note Simple API for DICOM
  */
-class GDCM_EXPORT Parser : public IStream
+class GDCM_EXPORT Parser : private IStream
 {
 public:
   typedef enum {
@@ -73,7 +73,7 @@ public:
   void SetUserData(void *userData);
 
   // This returns the user data pointer that gets passed to handlers. 
-  void * GetUserData();
+  void * GetUserData() const;
 
 protected:
 
@@ -94,7 +94,6 @@ private:
 
   StartElementHandler StartElement;
   EndElementHandler EndElement;
-
 };
 
 } // end namespace gdcm

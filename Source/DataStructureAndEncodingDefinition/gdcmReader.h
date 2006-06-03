@@ -10,7 +10,6 @@ namespace gdcm
  * \brief Reader ala DOM (Document Object Model)
  *
  * Detailled description here
- * \note bla
  */
 class Document;
 class GDCM_EXPORT Reader /*: public IStream*/

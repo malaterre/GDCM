@@ -1,4 +1,5 @@
 #include "gdcmParser.h"
+#include <vector>
 
 namespace gdcm
 {
@@ -30,50 +31,69 @@ namespace gdcm
       }
     }
 
-  char *Parser::GetBuffer(size_t len)
+  class ByteBuffer
     {
-#if 0
-    if (len > bufferLim - bufferEnd)
+  public:
+    ByteBuffer() : Start(0), End(0),Limit(0) {}
+    char *Get(int len)
       {
-      /* FIXME avoid integer overflow */
-      int neededSize = len + (bufferEnd - bufferPtr);
-      if (neededSize  <= bufferLim - buffer)
+      char *buffer = &Internal[0];
+    if (len > Limit - End)
+      {
+      // FIXME avoid integer overflow
+      int neededSize = len + (End - Start);
+      if (neededSize  <= Limit - buffer)
         {
-        memmove(buffer, bufferPtr, bufferEnd - bufferPtr);
-        bufferEnd = buffer + (bufferEnd - bufferPtr);
-        bufferPtr = buffer;
+        memmove(buffer, Start, End - Start);
+        End = buffer + (End - Start);
+        Start = buffer;
         }
       else
         {
         char *newBuf;
-        int bufferSize = bufferLim - bufferPtr;
-        if (bufferSize == 0)
-          bufferSize = INIT_BUFFER_SIZE;
+        int bufferSize = Limit - Start;
+        if ( Internal.empty() )
+          bufferSize = InitBufferSize;
         do
           {
           bufferSize *= 2;
           } while (bufferSize < neededSize);
-        newBuf = MALLOC(bufferSize);
-        if (newBuf == 0) 
+        //newBuf = MALLOC(bufferSize);
+        try
           {
-          errorCode = XML_ERROR_NO_MEMORY;
+        Internal.reserve(bufferSize);
+        newBuf = &Internal[0];
+          }
+        catch(...)
+          {
+          //errorCode = XML_ERROR_NO_MEMORY;
           return 0;
           }
-        bufferLim = newBuf + bufferSize;
+        Limit = newBuf + bufferSize;
 
-        if (bufferPtr) 
+        if (Start) 
           {
-          memcpy(newBuf, bufferPtr, bufferEnd - bufferPtr);
-          FREE(buffer);
+          memcpy(newBuf, Start, End - Start);
           }
-        bufferEnd = newBuf + (bufferEnd - bufferPtr);
-        bufferPtr = buffer = newBuf;
+        End = newBuf + (End - Start);
+        Start = /*buffer =*/ newBuf;
         }
       }
-    return bufferEnd;
-#else
+    return End;
+    }
+
+  private:
+    static const size_t InitBufferSize = 1024;
+    typedef std::vector<char> CharVector;
+    const char *Start;
+          char *End;
+    const char *Limit;
+    CharVector Internal;
+    };
+
+  char *Parser::GetBuffer(size_t len)
+    {
     return Buffer;
-#endif
     }
 
   bool Parser::ParseBuffer(size_t len, bool isFinal)
@@ -101,6 +121,9 @@ namespace gdcm
 
 
   void Parser::SetUserData(void *userData) {}
+  void * Parser::GetUserData() const {
+    return UserData;
+  }
   void Parser::SetElementHandler(StartElementHandler start, EndElementHandler end) {}
 
   unsigned long Parser::GetCurrentByteIndex() const {
