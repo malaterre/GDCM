@@ -16,7 +16,16 @@ std::istream &ExplicitDataElement::Read(std::istream &is,
 const std::ostream &ExplicitDataElement::Write(std::ostream &os, 
                                                SC::SwapCode const &sc) const
 {
-  VRField.Write(os, sc);
+  if( !TagField.Write(os, sc) )
+    {
+    assert( 0 && "Should not happen" );
+    return os;
+    }
+  if( !VRField.Write(os, sc) )
+    {
+    assert( 0 && "Should not happen" );
+    return os;
+    }
   // See PS 3.5, Date Element Structure With Explicit VR
   if( VRField == VR::OB
    || VRField == VR::OW

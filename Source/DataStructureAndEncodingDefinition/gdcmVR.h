@@ -65,6 +65,7 @@ public:
   } VREncoding; // VR Encoding
 
   static const char* GetVRString(VRType vr);
+  static VRType GetVRTypeFromFile(const char *vr);
   static VRType GetVRType(const char *vr);
   // Check if vr1 is valid against vr2,
   // Typically vr1 is read from the file and vr2 is taken from the dict
@@ -104,12 +105,20 @@ public:
     SC::SwapCode const &sc = SC::LittleEndian)
     {
     (void)sc;
-    char vr[4];
-    is.read(vr, 4);
-    assert( vr[2] == '0' );
-    assert( vr[3] == '0' );
-    VRField = VR::GetVRType(vr);
+    char vr[2];
+    is.read(vr, 2);
+    VRField = VR::GetVRTypeFromFile(vr);
     assert( VRField != VR::VR_END );
+    assert( VRField != VR::INVALID );
+    if( VRField == VR::OB
+     || VRField == VR::OW
+     || VRField == VR::OF
+     || VRField == VR::SQ
+     || VRField == VR::UN )
+      {
+      char dum[2];
+      is.read(dum, 2);
+      }
     return is;
     }
 
@@ -119,8 +128,16 @@ public:
     (void)sc;
     const char *vr = GetVRString(VRField);
     assert( strlen( vr ) == 2 );
-    os.write(vr, 3);
-    os.write(0x0, 1);
+    os.write(vr, 2);
+    if( VRField == VR::OB
+     || VRField == VR::OW
+     || VRField == VR::OF
+     || VRField == VR::SQ
+     || VRField == VR::UN )
+      {
+      const char dum[2] = {0, 0};
+      os.write(dum, 2);
+      }
     return os;
     }
   friend std::ostream& operator<<(std::ostream& os, const VR& vr);

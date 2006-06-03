@@ -78,6 +78,24 @@ const char* VR::GetVRString(VRType vr)
   return VRStrings[idx];
 }
 
+// Optimized version for transforming a read VR from DICOM file
+// into a VRType (does not support OB_OW for instance)
+VR::VRType VR::GetVRTypeFromFile(const char *vr)
+{
+  VRType r = VR::VR_END;
+  for (int i = 0; VRStrings[i] != NULL; i++)
+    {
+    const char *ref = VRStrings[i];
+    // Use lazy evaluation instead of strncmp
+    if (ref[0] == vr[0] && ref[1] == vr[1] )
+      {
+      r = (VR::VRType)(1 << (i-1));
+      }
+    }
+
+  return r;
+}
+
 VR::VRType VR::GetVRType(const char *vr)
 {
   VRType r = VR::VR_END;
@@ -103,6 +121,7 @@ VR::VRType VR::GetVRType(const char *vr)
         r = VR_END; assert(0);
         break;
       default:
+        assert( vr[2] == 0 );
         r = (VR::VRType)(1 << (i-1));
         }
       break; // found one value, we can exit the for loop
