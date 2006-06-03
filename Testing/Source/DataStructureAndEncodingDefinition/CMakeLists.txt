@@ -15,6 +15,7 @@ SET(DSED_TEST_SRCS
   TestVL
   #TestReadPatientName
   TestSADParser
+  TestByteBuffer
   )
 
 # Add the include paths

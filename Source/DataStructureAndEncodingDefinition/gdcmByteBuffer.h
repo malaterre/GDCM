@@ -64,8 +64,13 @@ public:
         Start = /*buffer =*/ newBuf;
         }
       }
+    assert( (int)Internal.capacity() >= len );
     return End;
     }
+
+  const char *GetStart() const {
+    return Start;
+  }
 
 private:
   typedef std::vector<char> CharVector;
