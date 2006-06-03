@@ -28,8 +28,8 @@ public:
     UnexpectedStateError
   } ErrorType;
 
-  Parser();
-  ~Parser();
+  Parser() : UserData(0),Buffer(0),ErrorCode(NoError) {}
+  ~Parser() {}
 
   // Parse some more of the document. The string s is a buffer containing 
   // part (or perhaps all) of the document. The number of bytes of s that 
@@ -90,11 +90,11 @@ protected:
 private:
   void* UserData;
   char *Buffer;
+  ErrorType ErrorCode;
 
   StartElementHandler StartElement;
   EndElementHandler EndElement;
 
-  ErrorType ErrorCode;
 };
 
 } // end namespace gdcm

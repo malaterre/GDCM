@@ -6,8 +6,6 @@ namespace gdcm
     "FATAL",
     NULL
   };
-  Parser::Parser() {}
-  Parser::~Parser() {}
   
   bool Parser::Parse(const char* buffer, size_t len, bool isFinal)
     {
@@ -109,7 +107,7 @@ namespace gdcm
     return 0;
   }
   Parser::ErrorType Parser::GetErrorCode() const {
-    return Parser::NoError;
+    return ErrorCode;
   }
   const char *Parser::GetErrorString(ErrorType const &err) {
     return ErrorStrings[(int)err];
