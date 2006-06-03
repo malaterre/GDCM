@@ -61,6 +61,16 @@ int TestImplicitDataElement2(const uint16_t group,
     std::cerr << de << std::endl;
     return 1;
     }
+  const gdcm::ByteValue *bv =
+    dynamic_cast<const gdcm::ByteValue*>(&de.GetValue());
+  if( !bv )
+    {
+    return 1;
+    }
+  if( !(gdcm::ByteValue(value, vl) == *bv ) )
+    {
+    return 1;
+    }
   std::cout << de << std::endl;
   return 0;
 }

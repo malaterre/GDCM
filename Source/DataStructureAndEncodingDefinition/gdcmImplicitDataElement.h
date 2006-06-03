@@ -20,6 +20,9 @@ public:
 
   friend std::ostream& operator<<(std::ostream& _os, const ImplicitDataElement &_val);
 
+  Value const & GetValue() const {
+    return *ValueField;
+  }
   std::istream &Read(std::istream& is,
     SC::SwapCode const &sc = SC::LittleEndian, bool readValue = true);
   const std::ostream &Write(std::ostream& os,

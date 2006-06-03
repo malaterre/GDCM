@@ -20,6 +20,7 @@ public:
   ExplicitDataElement(const Tag& t = Tag(0), uint32_t const &vl = 0,
                       const VR& vr = VR::INVALID ) : 
     DataElement(t,vl),VRField(vr),ValueField(0) { }
+  ~ExplicitDataElement();
 
   friend std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_val);
 

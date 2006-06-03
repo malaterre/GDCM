@@ -14,7 +14,19 @@ namespace gdcm
 class GDCM_EXPORT ByteValue : public Value
 {
 public:
-  ByteValue() { Internal = 0; Length = 0; }
+  ByteValue(const char* array = 0, VL const &vl = 0):Internal(0) { 
+    // What happen if user pass ByteValue("BLA", 0) ??
+    if( array && *array && !vl )
+      {
+      assert(0 && "Should not happen" );
+      return;
+      }
+    SetLength(vl);
+    if( array )
+      {
+      memcpy(Internal, array, vl);
+      }
+  }
   ~ByteValue() { Clear(); }
 
   friend std::ostream& operator<<(std::ostream &_os, const ByteValue &_val);
