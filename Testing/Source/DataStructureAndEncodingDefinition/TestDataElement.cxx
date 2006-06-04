@@ -39,7 +39,7 @@ int TestDataElement1(const uint16_t group, const uint16_t element,
   de.Read( ss );
   if( de.GetTag().GetGroup()   != group ||
       de.GetTag().GetElement() != element ||
-      de.GetValueLength()      != vl )
+      de.GetVL()               != vl )
     {
     std::cerr << de << std::endl;
     return 1;
@@ -84,7 +84,7 @@ int TestDataElement2(const uint16_t group, const uint16_t element,
   de.Read( ss );
   if( de.GetTag().GetGroup()   != group ||
       de.GetTag().GetElement() != element ||
-      de.GetValueLength()      != vl )
+      de.GetVL()               != vl )
     {
     std::cerr << de << std::endl;
     return 1;

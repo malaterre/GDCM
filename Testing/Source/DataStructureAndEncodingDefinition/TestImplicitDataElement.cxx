@@ -22,7 +22,7 @@ int TestImplicitDataElement1(const uint16_t group,
     }
   if( de.GetTag().GetGroup()   != group ||
       de.GetTag().GetElement() != element ||
-      de.GetValueLength()      != vl )
+      de.GetVL()               != vl )
     {
     std::cerr << de << std::endl;
     return 1;
@@ -55,7 +55,7 @@ int TestImplicitDataElement2(const uint16_t group,
     }
   if( de.GetTag().GetGroup()   != group ||
       de.GetTag().GetElement() != element ||
-      de.GetValueLength()      != vl )
+      de.GetVL()               != vl )
     {
     std::cerr << de << std::endl;
     return 1;
