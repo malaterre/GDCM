@@ -49,6 +49,9 @@ public:
     return *this;
     }
   IStream& Read(char* s, std::streamsize n);
+  IStream& Get(char c) { 
+    return Read(&c,1);
+  }
 
 protected:
   // Store filename for later access

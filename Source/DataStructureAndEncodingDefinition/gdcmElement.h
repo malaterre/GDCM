@@ -58,8 +58,7 @@ public:
     for(unsigned long i=1; i<length;++i) {
       assert( _is );
       // Get the separator in between the values
-      //_is.get(sep);
-      _is.Read(&sep,1);
+      _is.Get(sep);
       assert( sep == '\\' ); // FIXME: Bad use of assert
       _is >> data[i];
       }
