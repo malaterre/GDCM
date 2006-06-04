@@ -42,14 +42,14 @@ int TestValue(int , char *[])
     }
   gdcm::StringStream ss;
   ss.Write(buffer, size);
-  PrintStream(ss);
+  //PrintStream(ss);
 
   v->SetLength( size );
   v->Read(ss);
   gdcm::StringStream ss2;
   v->Write(ss2);
   //PrintStream(ss2);
-  //r += CheckStream(ss2, size);
+  r += CheckStream(ss2, size);
 
   return r;
 }
