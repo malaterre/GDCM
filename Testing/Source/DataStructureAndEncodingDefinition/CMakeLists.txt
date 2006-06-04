@@ -17,6 +17,7 @@ SET(DSED_TEST_SRCS
   TestSADParser
   TestByteBuffer
   TestReader
+  TestStringStream
   )
 
 # Add the include paths

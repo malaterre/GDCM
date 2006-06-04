@@ -21,7 +21,7 @@ public:
   virtual void Open() { }
   virtual void Close() { }
 
-  operator void * ( ) const { assert(0); return 0; }
+  virtual operator void * ( ) const { assert(0); return 0; }
   virtual std::streampos Tellp() { assert(0); return 0; }
 
   virtual OStream& Seekp( std::streamoff , std::ios_base::seekdir ) { 

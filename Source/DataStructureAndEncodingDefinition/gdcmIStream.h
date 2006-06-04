@@ -34,7 +34,7 @@ public:
     return *this;
     }
   virtual IStream& Read(char* , std::streamsize ) { assert(0); return *this; }
-  virtual IStream& Get(char) { assert(0); return *this; }
+  virtual IStream& Get(char&) { assert(0); return *this; }
 
 protected:
 };

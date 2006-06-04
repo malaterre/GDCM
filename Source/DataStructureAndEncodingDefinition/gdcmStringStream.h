@@ -25,7 +25,7 @@ public:
     InternalStream.read(s,n);
     return *this;
   }
-  IStream& Get(char c) {
+  IStream& Get(char &c) {
     InternalStream.get(c);
     return *this;
   }
@@ -37,6 +37,9 @@ public:
   StringStream& operator<<(const char *a) {
     InternalStream << a;
     return *this;
+  }
+  std::string Str() const {
+    return InternalStream.str();
   }
 
 protected:

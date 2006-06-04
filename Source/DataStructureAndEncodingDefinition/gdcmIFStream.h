@@ -49,8 +49,9 @@ public:
     return *this;
     }
   IStream& Read(char* s, std::streamsize n);
-  IStream& Get(char c) { 
-    return Read(&c,1);
+  IStream& Get(char &c) { 
+    InternalStream.get(c);
+    return *this;
   }
 
 protected:

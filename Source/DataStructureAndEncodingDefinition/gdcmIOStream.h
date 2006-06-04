@@ -2,9 +2,8 @@
 #ifndef __gdcmIOStream_h
 #define __gdcmIOStream_h
 
-#include "gdcmType.h"
-
-#include <fstream>
+#include "gdcmIStream.h"
+#include "gdcmOStream.h"
 
 namespace gdcm
 {
