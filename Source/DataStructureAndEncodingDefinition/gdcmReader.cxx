@@ -1,9 +1,16 @@
 #include "gdcmReader.h"
 #include "gdcmTrace.h"
 #include "gdcmVR.h"
+#include "gdcmFileMetaInformation.h"
 
 namespace gdcm
 {
+
+Reader::~Reader()
+{
+  delete DS;
+  delete Header;
+}
 
 /// \brief tells us if "DICM" is found as position 128 
 ///        (i.e. the file is a 'true dicom' one)
@@ -38,13 +45,23 @@ bool Reader::ReadPreamble()
 /// Find out the TransferSyntax used (default: Little Endian Explicit)
 /// \precondition we are at the start of group 0x0002 (well after preamble)
 /// \postcondition we are at the beginning of the DataSet
-void Reader::ReadMetaInformation()
+bool Reader::ReadMetaInformation()
 {
-
+  if( !Header )
+    {
+    Header = new FileMetaInformation;
+    }
+  return Header->Read(Stream);
 }
 
 int Reader::Read()
 {
+  Stream.Open();
+  if( !ReadPreamble() )
+    {
+    gdcmDebugMacro( "No Preamble" );
+    }
+  ReadMetaInformation();
   return 0;
 }
 

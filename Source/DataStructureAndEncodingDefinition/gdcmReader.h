@@ -26,11 +26,12 @@ namespace gdcm
  * The main author of GDCM2 thought this was too dangerous and harmful and 
  * therefore this feaure did not make it into GDCM2
  */
+class FileMetaInformation;
 class GDCM_EXPORT Reader
 {
 public:
-  Reader():Stream(),DS(0) {}
-  ~Reader() {}
+  Reader():Stream(),DS(0),Header(0) {}
+  ~Reader();
 
   int Read(); // Execute()
   void SetFileName(std::string const &filename) {
@@ -43,14 +44,12 @@ public:
 
 protected:
   bool ReadPreamble();
-  void ReadMetaInformation();
+  bool ReadMetaInformation();
 
 private:
   IFStream Stream;
   DataSet *DS;
-
-  TS::NegociatedType MetaInformationTS;
-  TS::TSType       UsedTS;
+  FileMetaInformation *Header;
 };
 
 } // end namespace gdcm

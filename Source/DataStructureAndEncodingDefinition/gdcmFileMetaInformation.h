@@ -11,6 +11,7 @@ namespace gdcm
  * \note
  * In theory this should only be explicit, but just in case
  */
+class ExplicitDataElement;
 class GDCM_EXPORT FileMetaInformation : public DataSet
 {
 public:
@@ -27,6 +28,9 @@ public:
   IStream &Read(IStream &is);
 
   OStream &Write(OStream &os) const;
+
+protected:
+  bool ReadExplicitDataElement(IStream &is, ExplicitDataElement &de);
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const FileMetaInformation &val)
