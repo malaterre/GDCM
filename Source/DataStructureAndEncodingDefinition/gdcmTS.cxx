@@ -101,6 +101,15 @@ bool TS::IsJPEG(const TSType &ts)
   return false;
 }
 
+TS::NegociatedType TS::GetNegociatedType(const TSType &ts)
+{
+  if( IsImplicit(ts) )
+    {
+    return TS::Implicit;
+    }
+  return TS::Explicit;
+}
+
 bool TS::IsImplicit(const TSType &ts)
 {
   return ts == ImplicitVRLittleEndian

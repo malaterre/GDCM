@@ -6,8 +6,6 @@
 #include "gdcmDataElement.h"
 #include "gdcmTS.h"
 
-#include <set>
-#include <iterator>
 
 namespace gdcm
 {
@@ -27,24 +25,30 @@ class StructuredSetBase;
 class GDCM_EXPORT DataSet
 {
 public:
-  DataSet(TS::NegociatedType const &type);
-  ~DataSet();
+  DataSet(TS::NegociatedType const &type = TS::Explicit);
+  virtual ~DataSet();
 
   friend std::ostream& operator<<(std::ostream &_os, const DataSet &_val);
 
+  // Clear
   void Clear();
 
+  // Size
   unsigned int Size();
 
-  void InsertDataElement(const DataElement& de);
+  // Insert
+  virtual void InsertDataElement(const DataElement& de);
 
+  // Get
   const DataElement& GetDataElement(const Tag &t) const;
 
   //bool IsEmpty() { return DataElements.empty(); }
 
-  IStream &Read(IStream &is);
+  // Read
+  virtual IStream &Read(IStream &is);
 
-  OStream &Write(OStream &os) const;
+  // Write
+  virtual OStream &Write(OStream &os) const;
 
 private:
   TS::NegociatedType NegociatedTS;

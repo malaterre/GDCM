@@ -2,6 +2,9 @@
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
 
+#include <set>
+#include <iterator>
+
 namespace gdcm
 {
 

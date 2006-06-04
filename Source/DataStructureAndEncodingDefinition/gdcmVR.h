@@ -99,7 +99,7 @@ public:
   // TODO: REMOVE ME
   static bool IsASCII2(VRType const &vr);
   
-  VR(VRType vr):VRField(vr) { }
+  VR(VRType vr = INVALID):VRField(vr) { }
   //VR(VR const &vr):VRField(vr.VRField) { }
   IStream &Read(IStream &is)
     {

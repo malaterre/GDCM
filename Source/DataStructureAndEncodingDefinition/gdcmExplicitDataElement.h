@@ -27,6 +27,9 @@ public:
   VR const &GetVR() const { return VRField; }
   void SetVR(VR const &vr) { VRField = vr; }
 
+  Value const &GetValue() const { return *ValueField; }
+  void SetValue(Value const & vl) { ValueField = const_cast<Value*>(&vl); }
+
   IStream &Read(IStream& is);
   const OStream &Write(OStream& _os) const;
 

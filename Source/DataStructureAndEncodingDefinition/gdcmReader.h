@@ -48,13 +48,8 @@ protected:
 private:
   IFStream Stream;
   DataSet *DS;
-  typedef enum {
-    Unknown = 0,
-    Implicit,
-    Explicit
-    } NegociatedTSType;
 
-  NegociatedTSType MetaInformationTS;
+  TS::NegociatedType MetaInformationTS;
   TS::TSType       UsedTS;
 };
 

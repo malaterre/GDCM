@@ -46,14 +46,20 @@ public:
   } TSType;
 
   typedef enum {
-    Implicit = 0,
-    Explicit
+    Unknown = 0,
+    Explicit,
+    Implicit
   } NegociatedType;
 
   // Return the string as written in the official DICOM dict from 
   // a custom enum type
   static const char* GetTSString(const TSType &ts);
   static const TSType GetTSType(const char *str);
+
+  static NegociatedType GetNegociatedType(const TSType &ts);
+
+protected:
+  // TODO are those function actually usefull ?
   static bool IsJPEG(const TSType &ts);
   static bool IsMPEG(const TSType &ts);
   static bool IsExplicit(const TSType &ts);

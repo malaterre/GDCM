@@ -40,12 +40,9 @@ public:
   const Tag& GetTag() const { return TagField; }
   void SetTag(const Tag &t) { TagField = t; }
 
-  const VL& GetValueLength() const {
-    return ValueLengthField;
-  }
-  //void SetValueLength(const uint32_t &vl) {
-  //  ValueLengthField = vl;
-  //}
+  const VL& GetVL() const { return ValueLengthField; }
+  void SetVL(const VL &vl) { ValueLengthField = vl; }
+
   bool IsUndefinedLength() const {
     return ValueLengthField.IsUndefined();
   }
