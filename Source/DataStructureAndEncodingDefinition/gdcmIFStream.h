@@ -53,7 +53,8 @@ public:
     InternalStream.get(c);
     return *this;
   }
-
+  //IStream& Read(uint16_t &vl);
+    
 protected:
   // Store filename for later access
   std::string FileName;

@@ -24,5 +24,16 @@ IStream& IFStream::Read(char* s, std::streamsize n )
   return *this; 
 }
 
+//IStream& IFStream::Read(uint16_t &vl)
+//{
+//  union { uint16_t vl; char vl_str[2]; } uvl;
+//  InternalStream.read(uvl.vl_str,2);
+//  //ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)(&vl_str),
+//  //  SwapCode, 1);
+//  vl = uvl.vl;
+//  assert( vl != static_cast<uint16_t>(-1) );
+//  return *this;
+//}
+
 } // end namespace gdcm
 

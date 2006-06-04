@@ -39,13 +39,14 @@ bool FileMetaInformation::ReadExplicitDataElement(IStream &is,
 {
   // Read Tag
   std::streampos start = is.Tellg();
+  //std::cout << "Start: " << start << std::endl;
   Tag t;
   if( !t.Read(is) )
     {
     assert(0 && "Should not happen" );
     return false;
     }
-  std::cout << "Tag: " << t << std::endl;
+  //std::cout << "Tag: " << t << std::endl;
   if( t.GetGroup() != 0x0002 )
     {
     gdcmDebugMacro( "Done reading File Meta Information" );
@@ -59,15 +60,31 @@ bool FileMetaInformation::ReadExplicitDataElement(IStream &is,
     assert(0 && "Should not happen" );
     return false;
     }
-  std::cout << "VR : " << vr << std::endl;
+  //std::cout << "VR : " << vr << std::endl;
   // Read Value Length
   VL vl;
-  if( !vl.Read(is) )
+  if( vr == VR::OB
+   || vr == VR::OW
+   || vr == VR::OF
+   || vr == VR::SQ
+   || vr == VR::UN )
     {
-    assert(0 && "Should not happen");
-    return false;
+    if( !vl.Read(is) )
+      {
+      assert(0 && "Should not happen");
+      return false;
+      }
     }
-  std::cout << "VL : " << vl << std::endl;
+  else
+    {
+    union { uint16_t vl; char vl_str[2]; } uvl;
+    is.Read(uvl.vl_str,2);
+    //ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)(&vl_str),
+    //  SwapCode, 1);
+    assert( uvl.vl != static_cast<uint16_t>(-1) );
+    vl = uvl.vl;
+    }
+  gdcmDebugMacro( "VL : " << vl );
   // Read the Value
   ByteValue *bv = NULL;
   if( vr == VR::SQ )
@@ -91,6 +108,10 @@ bool FileMetaInformation::ReadExplicitDataElement(IStream &is,
     assert(0 && "Should not happen");
     return false;
     }
+  //std::cout << "Value : ";
+  //bv->Print( std::cout );
+  //std::cout << std::endl;
+
   de.SetTag(t);
   de.SetVR(vr);
   de.SetVL(vl);
