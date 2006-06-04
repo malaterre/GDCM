@@ -20,7 +20,7 @@ public:
   } SwapCodeType;
 
   operator SwapCode::SwapCodeType() const { return SwapCodeValue; }
-  SwapCode(SwapCodeType sc):SwapCodeValue(sc) { }
+  SwapCode(SwapCodeType sc = Unknown):SwapCodeValue(sc) { }
   static const char* GetSwapCodeString(SwapCode const & sc);
 
 protected:

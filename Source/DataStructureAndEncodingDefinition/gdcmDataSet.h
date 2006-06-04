@@ -42,11 +42,9 @@ public:
 
   //bool IsEmpty() { return DataElements.empty(); }
 
-  void Read(std::istream &is,
-    SwapCode const &sc = SwapCode::LittleEndian);
+  gdcm::IStream &Read(gdcm::IStream &is);
 
-  void Write(std::ostream &os,
-    SwapCode const &sc = SwapCode::LittleEndian) const;
+  gdcm::OStream &Write(gdcm::OStream &os) const;
 
 private:
   TS::NegociatedType NegociatedTS;

@@ -103,16 +103,14 @@ const DataElement& DataSet::GetDataElement(const Tag &t) const
   }
 }
 
-void DataSet::Read(std::istream &is, SwapCode const &sc)
+gdcm::IStream &DataSet::Read(gdcm::IStream &is)
 {
-  (void)is;
-  (void)sc;
+  return is;
 }
 
-void DataSet::Write(std::ostream &os, SwapCode const &sc) const
+gdcm::OStream &DataSet::Write(gdcm::OStream &os) const
 {
-  (void)os;
-  (void)sc;
+  return os;
 }
 
 } // end namespace gdcm

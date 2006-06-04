@@ -32,12 +32,12 @@ public:
       _os << "," << Internal[i];
     }
 
-  void Read(std::istream &_is) {
-    EncodingImplementation<TypeToEncoding<TVR>::Mode>::Read(Internal, 
+  gdcm::IStream &Read(gdcm::IStream &_is) {
+    return EncodingImplementation<TypeToEncoding<TVR>::Mode>::Read(Internal, 
       GetLength(),_is);
     }
-  void Write(std::ostream &_os) const {
-    EncodingImplementation<TypeToEncoding<TVR>::Mode>::Write(Internal, 
+  gdcm::OStream &Write(gdcm::OStream &_os) const {
+    return EncodingImplementation<TypeToEncoding<TVR>::Mode>::Write(Internal, 
       GetLength(),_os);
     }
 };
@@ -48,7 +48,7 @@ template<> class EncodingImplementation<VR::ASCII> {
 public:
   template<typename T> // FIXME this should be TypeToType<TVR>::Type
   static inline void Read(T* data, unsigned long length,
-                          std::istream &_is) {
+                          gdcm::IStream &_is) {
     assert( data );
     assert( length ); // != 0
     assert( _is );
@@ -58,7 +58,8 @@ public:
     for(unsigned long i=1; i<length;++i) {
       assert( _is );
       // Get the separator in between the values
-      _is.get(sep);
+      //_is.get(sep);
+      _is.Read(&sep,1);
       assert( sep == '\\' ); // FIXME: Bad use of assert
       _is >> data[i];
       }
@@ -66,14 +67,15 @@ public:
 
   template<typename T>
   static inline void Write(const T* data, unsigned long length,
-                           std::ostream &_os)  {
+                           gdcm::OStream &_os)  {
     assert( data );
     assert( length );
     assert( _os );
     _os << data[0];
     for(unsigned long i=1; i<length; ++i) {
       assert( _os );
-      _os << "\\" << data[i];
+      //_os << "\\" << data[i];
+      abort();
       }
     }
 };
@@ -87,28 +89,28 @@ template<> class EncodingImplementation<VR::BINARY> {
 public:
   template<typename T>
   static inline void Read(T* data, unsigned long length,
-    std::istream &_is) {
+    gdcm::IStream &_is) {
     const unsigned int type_size = sizeof(T);
     assert( data ); // Can we read from pointer ?
     assert( length );
     assert( _is ); // Is stream valid ?
-    _is.read( reinterpret_cast<char*>(&(data[0])), type_size);
+    _is.Read( reinterpret_cast<char*>(&(data[0])), type_size);
     for(unsigned long i=1; i<length; ++i) {
       assert( _is );
-      _is.read( reinterpret_cast<char*>(&(data[i])), type_size );
+      _is.Read( reinterpret_cast<char*>(&(data[i])), type_size );
     }
   }
   template<typename T>
   static inline void Write(const T* data, unsigned long length,
-    std::ostream &_os) { 
+    gdcm::OStream &_os) { 
     const unsigned int type_size = sizeof(T);
     assert( data ); // Can we write into pointer ?
     assert( length );
     assert( _os ); // Is stream valid ?
-    _os.write( reinterpret_cast<const char*>(&(data[0])), type_size);
+    _os.Write( reinterpret_cast<const char*>(&(data[0])), type_size);
     for(unsigned long i=1; i<length;++i) {
       assert( _os );
-      _os.write( reinterpret_cast<const char*>(&(data[i])), type_size );
+      _os.Write( reinterpret_cast<const char*>(&(data[i])), type_size );
     }
   }
 };
@@ -151,7 +153,7 @@ public:
       _os << "," << Internal[i];
     }
 
-  void Read(std::istream &_is) {
+  void Read(gdcm::IStream &_is) {
     EncodingImplementation<VR::ASCII>::Read(Internal, GetLength(),_is);
     }
   void Write(std::ostream &_os) const {
@@ -221,7 +223,7 @@ public:
     for(unsigned long i=1; i<length; ++i)
       _os << "," << Internal[i];
     }
-  void Read(std::istream &_is) {
+  void Read(gdcm::IStream &_is) {
     EncodingImplementation<TypeToEncoding<TVR>::Mode>::Read(Internal, 
       GetLength(),_is);
     }

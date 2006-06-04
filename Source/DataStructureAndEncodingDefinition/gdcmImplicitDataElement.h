@@ -23,10 +23,8 @@ public:
   Value const & GetValue() const {
     return *ValueField;
   }
-  std::istream &Read(std::istream& is,
-    SwapCode const &sc = SwapCode::LittleEndian);
-  const std::ostream &Write(std::ostream& os,
-    SwapCode const &sc = SwapCode::LittleEndian) const;
+  gdcm::IStream &Read(gdcm::IStream& is);
+  const gdcm::OStream &Write(gdcm::OStream& os) const;
 
 private:
   Value* ValueField;

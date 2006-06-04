@@ -100,17 +100,13 @@ public:
   void Clear() {
     delete[] Internal; Internal = 0; Length = 0; }
 
-  std::istream &Read(std::istream &is,
-    SwapCode const &sc = SwapCode::LittleEndian)
+  gdcm::IStream &Read(gdcm::IStream &is)
     {
-    (void)sc;
-    return is.read(Internal, Length);
+    return is.Read(Internal, Length);
     }
-  std::ostream const & Write(std::ostream &os,
-    SwapCode const &sc = SwapCode::LittleEndian) const
+  gdcm::OStream const & Write(gdcm::OStream &os) const
     {
-    (void)sc;
-    return os.write(Internal, Length);
+    return os.Write(Internal, Length);
     }
 
 protected:

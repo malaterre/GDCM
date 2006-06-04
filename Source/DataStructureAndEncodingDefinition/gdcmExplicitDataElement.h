@@ -27,10 +27,8 @@ public:
   VR const &GetVR() const { return VRField; }
   void SetVR(VR const &vr) { VRField = vr; }
 
-  std::istream &Read(std::istream& is,
-    SwapCode const &sc = SwapCode::LittleEndian);
-  const std::ostream &Write(std::ostream& _os,
-    SwapCode const &sc = SwapCode::LittleEndian) const;
+  gdcm::IStream &Read(gdcm::IStream& is);
+  const gdcm::OStream &Write(gdcm::OStream& _os) const;
 
 private:
   // Value Representation

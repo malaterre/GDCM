@@ -57,14 +57,12 @@ public:
     return NestedDataSet;
     }
 
-  void Read(std::istream &is,
-    SwapCode const &sc = SwapCode::LittleEndian) {
-    NestedDataSet.Read(is, sc);
+  gdcm::IStream &Read(gdcm::IStream &is) {
+    return NestedDataSet.Read(is);
     }
 
-  void Write(std::ostream &os,
-    SwapCode const &sc = SwapCode::LittleEndian) const {
-    NestedDataSet.Write(os, sc);
+  gdcm::OStream &Write(gdcm::OStream &os) const {
+    return NestedDataSet.Write(os);
     }
 
 private:

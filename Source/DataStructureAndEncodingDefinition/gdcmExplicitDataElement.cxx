@@ -11,24 +11,23 @@ ExplicitDataElement::~ExplicitDataElement()
 }
 
 //-----------------------------------------------------------------------------
-std::istream &ExplicitDataElement::Read(std::istream &is, 
-                                        SwapCode const &sc)
+gdcm::IStream &ExplicitDataElement::Read(gdcm::IStream &is)
 {
   // See PS 3.5, Date Element Structure With Explicit VR
   // Read Tag
-  if( !TagField.Read(is, sc) )
+  if( !TagField.Read(is) )
     {
     assert(0 && "Should not happen" );
     return is;
     }
   // Read VR
-  if( !VRField.Read(is,sc) )
+  if( !VRField.Read(is) )
     {
     assert(0 && "Should not happen" );
     return is;
     }
   // Read Value Length
-  if( !ValueLengthField.Read(is, sc) )
+  if( !ValueLengthField.Read(is) )
     {
     assert(0 && "Should not happen");
     return is;
@@ -56,7 +55,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is,
     }
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
-  if( !ValueField->Read(is, sc) )
+  if( !ValueField->Read(is) )
     {
     assert(0 && "Should not happen");
     return is;
@@ -66,26 +65,25 @@ std::istream &ExplicitDataElement::Read(std::istream &is,
 }
 
 //-----------------------------------------------------------------------------
-const std::ostream &ExplicitDataElement::Write(std::ostream &os, 
-                                               SwapCode const &sc) const
+const gdcm::OStream &ExplicitDataElement::Write(gdcm::OStream &os) const
 {
-  if( !TagField.Write(os, sc) )
+  if( !TagField.Write(os) )
     {
     assert( 0 && "Should not happen" );
     return os;
     }
-  if( !VRField.Write(os, sc) )
+  if( !VRField.Write(os) )
     {
     assert( 0 && "Should not happen" );
     return os;
     }
-  if( !ValueLengthField.Write(os, sc) )
+  if( !ValueLengthField.Write(os) )
     {
     assert( 0 && "Should not happen" );
     return os;
     }
   // We have the length we should be able to write the value
-  ValueField->Write(os, sc);
+  ValueField->Write(os);
 
   return os;
 }

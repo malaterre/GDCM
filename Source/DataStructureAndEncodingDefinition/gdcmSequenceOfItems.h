@@ -41,21 +41,19 @@ public:
     SequenceLengthField = length;
   }
   void Clear() {}
-  std::istream &Read(std::istream &is,
-    SwapCode const &sc = SwapCode::LittleEndian) {
+  gdcm::IStream &Read(gdcm::IStream &is) {
     ItemVector::iterator it = Items.begin();
     for(;it != Items.end(); ++it)
       {
-      it->Read(is, sc);
+      it->Read(is);
       }
     return is;
   }
-  std::ostream const & Write(std::ostream &os,
-    SwapCode const &sc = SwapCode::LittleEndian) const {
+  gdcm::OStream const & Write(gdcm::OStream &os) const {
     ItemVector::const_iterator it = Items.begin();
     for(;it != Items.end(); ++it)
       {
-      it->Write(os, sc);
+      it->Write(os);
       }
     return os;
   }

@@ -26,11 +26,12 @@ namespace gdcm
  * The main author of GDCM2 thought this was too dangerous and harmful and 
  * therefore this feaure did not make it into GDCM2
  */
-class GDCM_EXPORT Reader : public IStream
+class GDCM_EXPORT Reader
 {
 public:
-  Reader() {}
+  Reader():Stream(),DS(0) {}
   ~Reader() {}
+
   int Read(); // Execute()
 
   const DataSet &GetDataSet() const {
@@ -38,8 +39,20 @@ public:
   }
 
 protected:
+  bool ReadPreamble();
+  void ReadMetaInformation();
+
 private:
+  IStream Stream;
   DataSet *DS;
+  typedef enum {
+    Unknown = 0,
+    Implicit,
+    Explicit
+    } NegociatedTSType;
+
+  NegociatedTSType MetaInformationTS;
+  TS::TSType       UsedTS;
 };
 
 } // end namespace gdcm

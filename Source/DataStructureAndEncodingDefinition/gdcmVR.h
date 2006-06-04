@@ -101,12 +101,10 @@ public:
   
   VR(VRType vr):VRField(vr) { }
   //VR(VR const &vr):VRField(vr.VRField) { }
-  std::istream &Read(std::istream &is,
-    SwapCode const &sc = SwapCode::LittleEndian)
+  gdcm::IStream &Read(gdcm::IStream &is)
     {
-    (void)sc;
     char vr[2];
-    is.read(vr, 2);
+    is.Read(vr, 2);
     VRField = VR::GetVRTypeFromFile(vr);
     assert( VRField != VR::VR_END );
     assert( VRField != VR::INVALID );
@@ -117,18 +115,16 @@ public:
      || VRField == VR::UN )
       {
       char dum[2];
-      is.read(dum, 2);
+      is.Read(dum, 2);
       }
     return is;
     }
 
-  const std::ostream & Write(std::ostream &os,
-    SwapCode const & sc = SwapCode::LittleEndian) const
+  const gdcm::OStream & Write(gdcm::OStream &os) const
     {
-    (void)sc;
     const char *vr = GetVRString(VRField);
     assert( strlen( vr ) == 2 );
-    os.write(vr, 2);
+    os.Write(vr, 2);
   // See PS 3.5, Date Element Structure With Explicit VR
     if( VRField == VR::OB
      || VRField == VR::OW
@@ -137,7 +133,7 @@ public:
      || VRField == VR::UN )
       {
       const char dum[2] = {0, 0};
-      os.write(dum, 2);
+      os.Write(dum, 2);
       }
     return os;
     }

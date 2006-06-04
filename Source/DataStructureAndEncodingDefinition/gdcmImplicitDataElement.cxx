@@ -12,18 +12,17 @@ ImplicitDataElement::~ImplicitDataElement()
 }
 
 //-----------------------------------------------------------------------------
-std::istream &ImplicitDataElement::Read(std::istream &is,
-    SwapCode const &sc)
+gdcm::IStream &ImplicitDataElement::Read(gdcm::IStream &is)
 {
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   // Read Tag
-  if( !TagField.Read(is, sc) )
+  if( !TagField.Read(is) )
     {
     assert(0 && "Should not happen");
     return is;
     }
   // Read Value Length
-  if( !ValueLengthField.Read(is, sc) )
+  if( !ValueLengthField.Read(is) )
     {
     assert(0 && "Should not happen");
     return is;
@@ -40,7 +39,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is,
     }
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
-  if( !ValueField->Read(is, sc) )
+  if( !ValueField->Read(is) )
     {
     assert(0 && "Should not happen");
     return is;
@@ -51,13 +50,11 @@ std::istream &ImplicitDataElement::Read(std::istream &is,
 }
 
 //-----------------------------------------------------------------------------
-const std::ostream &ImplicitDataElement::Write(std::ostream& os,
-    SwapCode const &sc) const
+const gdcm::OStream &ImplicitDataElement::Write(gdcm::OStream& os) const
 {
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   assert(0 && "Not Implemented");
   (void)os;
-  (void)sc;
 }
 
 } // end namespace gdcm

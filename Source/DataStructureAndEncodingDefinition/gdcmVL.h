@@ -4,6 +4,9 @@
 #include "gdcmTypes.h"
 #include "gdcmSwapCode.h"
 
+#include "gdcmIStream.h"
+#include "gdcmOStream.h"
+
 #include <iostream>
 
 /* \brief Value Length
@@ -41,17 +44,13 @@ public:
   //TODO
   //friend std::istream& operator>>(std::istream& is, VL& n);
 
-  std::istream &Read(std::istream &is,
-    SwapCode const &sc = SwapCode::LittleEndian)
+  gdcm::IStream &Read(gdcm::IStream &is)
     {
-    (void)sc;
-    return is.read((char*)(&ValueLength), 4);
+    return is.Read((char*)(&ValueLength), 4);
     }
-  const std::ostream &Write(std::ostream &os,
-    SwapCode const &sc = SwapCode::LittleEndian) const
+  const gdcm::OStream &Write(gdcm::OStream &os) const
     {
-    (void)sc;
-    return os.write((char*)(&ValueLength), 4);
+    return os.Write((char*)(&ValueLength), 4);
     }
 
 private:

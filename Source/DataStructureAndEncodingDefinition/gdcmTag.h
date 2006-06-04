@@ -5,8 +5,11 @@
 #include "gdcmTypes.h"
 #include "gdcmSwapCode.h"
 
+#include "gdcmIStream.h"
+#include "gdcmOStream.h"
+
 #include <iostream>
-#include <iomanip> // for setw, setfill
+#include <iomanip>
 
 namespace gdcm
 {
@@ -152,17 +155,13 @@ public:
   // Standard Data Elements. Private Data elements have odd Group Numbers.
   bool IsPrivate() const { return !IsPublic(); }
 
-  std::istream &Read(std::istream &is,
-    SwapCode const &sc = SwapCode::LittleEndian)
+  gdcm::IStream &Read(gdcm::IStream &is)
     {
-    (void)sc;
-    return is.read((char*)(&ElementTag.tag), 4);
+    return is.Read((char*)(&ElementTag.tag), 4);
     }
-  const std::ostream &Write(std::ostream &os,
-    SwapCode const &sc = SwapCode::LittleEndian) const
+  const gdcm::OStream &Write(gdcm::OStream &os) const
     {
-    (void)sc;
-    return os.write((char*)(&ElementTag.tag), 4);
+    return os.Write((char*)(&ElementTag.tag), 4);
     }
 
 private:

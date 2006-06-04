@@ -30,10 +30,8 @@ public:
   virtual void Clear() = 0;
   virtual void Print(std::ostream &os) const = 0;
 
-  virtual std::istream& Read(std::istream &is,
-    SwapCode const &sc = SwapCode::LittleEndian) = 0;
-  virtual std::ostream const & Write(std::ostream &os,
-    SwapCode const &sc = SwapCode::LittleEndian) const = 0;
+  virtual gdcm::IStream& Read(gdcm::IStream &is) = 0;
+  virtual gdcm::OStream const & Write(gdcm::OStream &os) const = 0;
 };
 
 //inline std::ostream& operator<<(std::ostream &os, const Value &val)

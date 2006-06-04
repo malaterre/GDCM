@@ -4,9 +4,8 @@
 
 #include "gdcmType.h"
 #include "gdcmSwapCode.h"
+
 #include <fstream>
-#include <iostream>
-#include <assert.h>
 
 namespace gdcm
 {
@@ -21,40 +20,27 @@ class GDCM_EXPORT IStream
 {
 public:
   IStream ():SwapCodeValue(SwapCode::Unknown) {}
-  ~IStream() { assert( !(InternalStream.is_open())); }
+  ~IStream() {}
 
-  bool operator ! ( ) const { return !InternalStream; }
-  bool eof ( ) const { return InternalStream.eof(); }
-  // Although correct this is not defined by the standart
-  //operator bool() const { return !InternalStream.eof(); }
-  //define the void* operation so that while( IStream ) becomes a valid cast
-  //defined cast/ user cast
-  operator void * ( ) const { return static_cast<void*>(InternalStream); }
+  void Open() { }
+  void Close() {  }
 
-  void SetFileName(const std::string& filename) { FileName = filename; }
-  void Open() { InternalStream.open(FileName.c_str(), std::ios::binary);}
-  void Close() { InternalStream.close(); }
+  operator void * ( ) const { assert(0); return 0; }
+  std::streampos Tellg() { 
+    assert(0);
+    return 0; }
 
-  std::streampos Tellg() { return InternalStream.tellg(); }
-
-  IStream& Seekg( std::streamoff off, std::ios_base::seekdir dir ) { 
-    //std::cerr << "off= " << off << std::endl;
-    InternalStream.seekg(off,dir); return *this;
+  IStream& Seekg( std::streamoff , std::ios_base::seekdir ) { 
+    assert(0);
+    return *this;
     }
+  IStream& Read(char* , std::streamsize ) { assert(0); return *this; }
 
   SwapCode const &GetSwapCode() const { return SwapCodeValue; }
-  std::string const &GetFileName() const { return FileName; }
 
 protected:
-  // Only subclass should have access to this method... this is too general
-  // for end user
-  IStream& Read(char* s, std::streamsize n);
-
+  // SwapCode of the file once figured out (can be Unknown)
   SwapCode SwapCodeValue;
-
-private:
-  std::string FileName;
-  std::ifstream InternalStream;
 };
 
 }
