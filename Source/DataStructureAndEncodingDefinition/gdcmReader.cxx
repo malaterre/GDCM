@@ -2,7 +2,9 @@
 
 namespace gdcm
 {
-  int Reader::Read() {
-    return 0;
-  }
+int Reader::Read()
+{
+  return 0;
+}
+
 } // end namespace gdcm
