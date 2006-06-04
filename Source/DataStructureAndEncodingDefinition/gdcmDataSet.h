@@ -42,9 +42,9 @@ public:
 
   //bool IsEmpty() { return DataElements.empty(); }
 
-  gdcm::IStream &Read(gdcm::IStream &is);
+  IStream &Read(IStream &is);
 
-  gdcm::OStream &Write(gdcm::OStream &os) const;
+  OStream &Write(OStream &os) const;
 
 private:
   TS::NegociatedType NegociatedTS;

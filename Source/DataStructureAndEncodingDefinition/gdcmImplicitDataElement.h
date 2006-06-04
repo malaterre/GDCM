@@ -23,8 +23,8 @@ public:
   Value const & GetValue() const {
     return *ValueField;
   }
-  gdcm::IStream &Read(gdcm::IStream& is);
-  const gdcm::OStream &Write(gdcm::OStream& os) const;
+  IStream &Read(IStream& is);
+  const OStream &Write(OStream& os) const;
 
 private:
   Value* ValueField;

@@ -11,7 +11,7 @@ ExplicitDataElement::~ExplicitDataElement()
 }
 
 //-----------------------------------------------------------------------------
-gdcm::IStream &ExplicitDataElement::Read(gdcm::IStream &is)
+IStream &ExplicitDataElement::Read(IStream &is)
 {
   // See PS 3.5, Date Element Structure With Explicit VR
   // Read Tag
@@ -65,7 +65,7 @@ gdcm::IStream &ExplicitDataElement::Read(gdcm::IStream &is)
 }
 
 //-----------------------------------------------------------------------------
-const gdcm::OStream &ExplicitDataElement::Write(gdcm::OStream &os) const
+const OStream &ExplicitDataElement::Write(OStream &os) const
 {
   if( !TagField.Write(os) )
     {

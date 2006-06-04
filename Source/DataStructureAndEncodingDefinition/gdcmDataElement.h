@@ -71,7 +71,7 @@ public:
       && ValueLengthField == _de.ValueLengthField;
     }
 
-  gdcm::IStream &Read(gdcm::IStream &is) {
+  IStream &Read(IStream &is) {
     if( TagField.Read(is) )
       {
       return ValueLengthField.Read(is);
@@ -79,7 +79,7 @@ public:
     return is;
     }
 
-  const gdcm::OStream &Write(gdcm::OStream &os) const {
+  const OStream &Write(OStream &os) const {
     if( TagField.Write(os) )
       {
       return ValueLengthField.Write(os);

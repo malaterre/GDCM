@@ -30,8 +30,8 @@ public:
   virtual void Clear() = 0;
   virtual void Print(std::ostream &os) const = 0;
 
-  virtual gdcm::IStream& Read(gdcm::IStream &is) = 0;
-  virtual gdcm::OStream const & Write(gdcm::OStream &os) const = 0;
+  virtual IStream& Read(IStream &is) = 0;
+  virtual OStream const & Write(OStream &os) const = 0;
 };
 
 //inline std::ostream& operator<<(std::ostream &os, const Value &val)

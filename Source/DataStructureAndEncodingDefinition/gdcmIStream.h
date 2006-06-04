@@ -15,7 +15,7 @@ namespace gdcm
  * \note bla
  */
 
-class GDCM_EXPORT IStream : public IOS
+class GDCM_EXPORT IStream : virtual public IOS
 {
 public:
   IStream () {}

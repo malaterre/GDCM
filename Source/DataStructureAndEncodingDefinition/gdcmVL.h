@@ -44,11 +44,11 @@ public:
   //TODO
   //friend std::istream& operator>>(std::istream& is, VL& n);
 
-  gdcm::IStream &Read(gdcm::IStream &is)
+  IStream &Read(IStream &is)
     {
     return is.Read((char*)(&ValueLength), 4);
     }
-  const gdcm::OStream &Write(gdcm::OStream &os) const
+  const OStream &Write(OStream &os) const
     {
     return os.Write((char*)(&ValueLength), 4);
     }

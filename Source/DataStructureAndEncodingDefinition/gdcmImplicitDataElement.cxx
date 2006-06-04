@@ -12,7 +12,7 @@ ImplicitDataElement::~ImplicitDataElement()
 }
 
 //-----------------------------------------------------------------------------
-gdcm::IStream &ImplicitDataElement::Read(gdcm::IStream &is)
+IStream &ImplicitDataElement::Read(IStream &is)
 {
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   // Read Tag
@@ -50,7 +50,7 @@ gdcm::IStream &ImplicitDataElement::Read(gdcm::IStream &is)
 }
 
 //-----------------------------------------------------------------------------
-const gdcm::OStream &ImplicitDataElement::Write(gdcm::OStream& os) const
+const OStream &ImplicitDataElement::Write(OStream& os) const
 {
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   assert(0 && "Not Implemented");

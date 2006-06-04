@@ -27,8 +27,8 @@ public:
   VR const &GetVR() const { return VRField; }
   void SetVR(VR const &vr) { VRField = vr; }
 
-  gdcm::IStream &Read(gdcm::IStream& is);
-  const gdcm::OStream &Write(gdcm::OStream& _os) const;
+  IStream &Read(IStream& is);
+  const OStream &Write(OStream& _os) const;
 
 private:
   // Value Representation

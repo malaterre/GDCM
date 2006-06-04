@@ -41,7 +41,7 @@ public:
     SequenceLengthField = length;
   }
   void Clear() {}
-  gdcm::IStream &Read(gdcm::IStream &is) {
+  IStream &Read(IStream &is) {
     ItemVector::iterator it = Items.begin();
     for(;it != Items.end(); ++it)
       {
@@ -49,7 +49,7 @@ public:
       }
     return is;
   }
-  gdcm::OStream const & Write(gdcm::OStream &os) const {
+  OStream const & Write(OStream &os) const {
     ItemVector::const_iterator it = Items.begin();
     for(;it != Items.end(); ++it)
       {

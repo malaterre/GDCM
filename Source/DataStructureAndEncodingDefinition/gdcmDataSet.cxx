@@ -103,12 +103,12 @@ const DataElement& DataSet::GetDataElement(const Tag &t) const
   }
 }
 
-gdcm::IStream &DataSet::Read(gdcm::IStream &is)
+IStream &DataSet::Read(IStream &is)
 {
   return is;
 }
 
-gdcm::OStream &DataSet::Write(gdcm::OStream &os) const
+OStream &DataSet::Write(OStream &os) const
 {
   return os;
 }

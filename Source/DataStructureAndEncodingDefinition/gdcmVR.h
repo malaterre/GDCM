@@ -101,7 +101,7 @@ public:
   
   VR(VRType vr):VRField(vr) { }
   //VR(VR const &vr):VRField(vr.VRField) { }
-  gdcm::IStream &Read(gdcm::IStream &is)
+  IStream &Read(IStream &is)
     {
     char vr[2];
     is.Read(vr, 2);
@@ -120,7 +120,7 @@ public:
     return is;
     }
 
-  const gdcm::OStream & Write(gdcm::OStream &os) const
+  const OStream & Write(OStream &os) const
     {
     const char *vr = GetVRString(VRField);
     assert( strlen( vr ) == 2 );

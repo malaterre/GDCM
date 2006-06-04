@@ -57,11 +57,11 @@ public:
     return NestedDataSet;
     }
 
-  gdcm::IStream &Read(gdcm::IStream &is) {
+  IStream &Read(IStream &is) {
     return NestedDataSet.Read(is);
     }
 
-  gdcm::OStream &Write(gdcm::OStream &os) const {
+  OStream &Write(OStream &os) const {
     return NestedDataSet.Write(os);
     }
 

@@ -155,11 +155,11 @@ public:
   // Standard Data Elements. Private Data elements have odd Group Numbers.
   bool IsPrivate() const { return !IsPublic(); }
 
-  gdcm::IStream &Read(gdcm::IStream &is)
+  IStream &Read(IStream &is)
     {
     return is.Read((char*)(&ElementTag.tag), 4);
     }
-  const gdcm::OStream &Write(gdcm::OStream &os) const
+  const OStream &Write(OStream &os) const
     {
     return os.Write((char*)(&ElementTag.tag), 4);
     }

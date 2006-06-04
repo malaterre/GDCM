@@ -100,11 +100,11 @@ public:
   void Clear() {
     delete[] Internal; Internal = 0; Length = 0; }
 
-  gdcm::IStream &Read(gdcm::IStream &is)
+  IStream &Read(IStream &is)
     {
     return is.Read(Internal, Length);
     }
-  gdcm::OStream const & Write(gdcm::OStream &os) const
+  OStream const & Write(OStream &os) const
     {
     return os.Write(Internal, Length);
     }
