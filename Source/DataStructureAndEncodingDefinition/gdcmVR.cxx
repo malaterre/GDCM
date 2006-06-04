@@ -83,16 +83,22 @@ const char* VR::GetVRString(VRType vr)
 VR::VRType VR::GetVRTypeFromFile(const char *vr)
 {
   VRType r = VR::VR_END;
-  for (int i = 0; VRStrings[i] != NULL; i++)
+  for (int i = 1; VRStrings[i] != NULL; i++)
     {
     const char *ref = VRStrings[i];
     // Use lazy evaluation instead of strncmp
     if (ref[0] == vr[0] && ref[1] == vr[1] )
       {
       r = (VR::VRType)(1 << (i-1));
+      break;
       }
     }
-
+  // postcondition
+  assert( r != VR::INVALID
+       && r != VR::OB_OW
+       && r != VR::US_SS
+       && r != VR::US_SS_OW
+       && r != VR::VR_END );
   return r;
 }
 
