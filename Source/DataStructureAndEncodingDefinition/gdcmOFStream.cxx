@@ -1,11 +1,12 @@
-#include "gdcmIStream.h"
+#include "gdcmOStream.h"
 #include "gdcmByteSwap.txx"
+
 #include <assert.h>
 
 namespace gdcm
 {
 
-IStream& IStream::Read(char* s, std::streamsize n )
+OStream& OFStream::Write(const char* s, std::streamsize n )
 {
   // Following operation is nice for debuging but is way to extensive and
   // appear really high in the top ten expensive operation
@@ -13,7 +14,7 @@ IStream& IStream::Read(char* s, std::streamsize n )
   assert( !(!InternalStream) );
   assert( !InternalStream.eof() );
   //std::cout << InternalStream.tellg() << std::endl;
-  if( !InternalStream.read(s,n) )
+  if( !InternalStream.write(s,n) )
     {
     if( !(InternalStream.eof()))
       {

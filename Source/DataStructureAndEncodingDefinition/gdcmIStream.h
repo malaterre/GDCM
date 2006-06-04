@@ -2,8 +2,7 @@
 #ifndef __gdcmIStream_h
 #define __gdcmIStream_h
 
-#include "gdcmType.h"
-#include "gdcmSwapCode.h"
+#include "gdcmIOS.h"
 
 #include <fstream>
 
@@ -16,10 +15,10 @@ namespace gdcm
  * \note bla
  */
 
-class GDCM_EXPORT IStream
+class GDCM_EXPORT IStream : public IOS
 {
 public:
-  IStream ():SwapCodeValue(SwapCode::Unknown) {}
+  IStream () {}
   ~IStream() {}
 
   void Open() { }
@@ -36,11 +35,7 @@ public:
     }
   IStream& Read(char* , std::streamsize ) { assert(0); return *this; }
 
-  SwapCode const &GetSwapCode() const { return SwapCodeValue; }
-
 protected:
-  // SwapCode of the file once figured out (can be Unknown)
-  SwapCode SwapCodeValue;
 };
 
 }
