@@ -1,19 +1,18 @@
 #include "gdcmImplicitDataElement.h"
-
-#include <sstream>
+#include "gdcmStringStream.h"
 
 int TestImplicitDataElement1(const uint16_t group,
                              const uint16_t element,
                              const uint32_t vl)
 {
   const char *str;
-  std::stringstream ss;
+  gdcm::StringStream ss;
   str = reinterpret_cast<const char*>(&group);
-  ss.write(str, sizeof(group));
+  ss.Write(str, sizeof(group));
   str = reinterpret_cast<const char*>(&element);
-  ss.write(str, sizeof(element));
+  ss.Write(str, sizeof(element));
   str = reinterpret_cast<const char*>(&vl);
-  ss.write(str, sizeof(vl));
+  ss.Write(str, sizeof(vl));
 
   gdcm::ImplicitDataElement de;
   if( !de.Read(ss) )
@@ -38,15 +37,15 @@ int TestImplicitDataElement2(const uint16_t group,
 {
   const char *str;
   const uint32_t vl = strlen(value);
-  std::stringstream ss;
+  gdcm::StringStream ss;
   str = reinterpret_cast<const char*>(&group);
-  ss.write(str, sizeof(group));
+  ss.Write(str, sizeof(group));
   str = reinterpret_cast<const char*>(&element);
-  ss.write(str, sizeof(element));
+  ss.Write(str, sizeof(element));
   str = reinterpret_cast<const char*>(&vl);
-  ss.write(str, sizeof(vl));
+  ss.Write(str, sizeof(vl));
   str = value;
-  ss.write(str, vl);
+  ss.Write(str, vl);
 
   gdcm::ImplicitDataElement de;
   if( !de.Read(ss) )
@@ -79,7 +78,7 @@ inline void WriteRead(gdcm::DataElement const &w, gdcm::DataElement &r)
 {
   // w will be written
   // r will be read back
-  std::stringstream ss;
+  gdcm::StringStream ss;
   w.Write(ss);
   r.Read(ss);
 }

@@ -2,21 +2,21 @@
 # DSED
 SET(DSED_TEST_SRCS
   TestTag
-  #TestDataElement
-  #TestExplicitDataElement
-  #TestImplicitDataElement
+  TestDataElement
+  TestExplicitDataElement
+  TestImplicitDataElement
   TestComposite
   TestElement
   TestVR
   TestVM
   TestDataSet
   TestItem
-  #TestValue
+  TestValue
   TestVL
   #TestReadPatientName
   TestSADParser
   TestByteBuffer
-  #TestReader
+  TestReader
   )
 
 # Add the include paths

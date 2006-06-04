@@ -1,20 +1,23 @@
 #include "gdcmByteValue.h"
 #include "gdcmSequenceOfItems.h"
+#include "gdcmStringStream.h"
 
-void PrintStream(std::istream &is)
+#include "gdcmStringStream.h"
+
+void PrintStream(gdcm::IStream &is)
 {
   char c;
-  while(is.get(c))
+  while(is.Get(c))
     {
     std::cout << (int)c << std::endl;
     }
 }
 
-int CheckStream(std::istream &is, int size)
+int CheckStream(gdcm::IStream &is, int size)
 {
   char c;
   int t = 0;
-  while(is.get(c) && (int)c == t)
+  while(is.Get(c) && (int)c == t)
     {
     //std::cout << (int)c << std::endl;
     ++t;
@@ -37,15 +40,15 @@ int TestValue(int , char *[])
     {
     buffer[i] = static_cast<char>(i);
     }
-  std::stringstream ss;
-  ss.write(buffer, size);
-  //PrintStream(ss);
+  gdcm::StringStream ss;
+  ss.Write(buffer, size);
+  PrintStream(ss);
 
   v->SetLength( size );
   v->Read(ss);
-  std::stringstream ss2;
+  gdcm::StringStream ss2;
   v->Write(ss2);
-  //PrintStream(ss2);
+  PrintStream(ss2);
   r += CheckStream(ss2, size);
 
   return r;

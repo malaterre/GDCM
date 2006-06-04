@@ -12,23 +12,23 @@ namespace gdcm
  * \note bla
  */
 
-class GDCM_EXPORT OStream : public IOS
+class GDCM_EXPORT OStream : virtual public IOS
 {
 public:
   OStream () {}
-  ~OStream() {}
+  virtual ~OStream() {}
 
-  void Open() { }
-  void Close() { }
+  virtual void Open() { }
+  virtual void Close() { }
 
   operator void * ( ) const { assert(0); return 0; }
-  std::streampos Tellp() { assert(0); return 0; }
+  virtual std::streampos Tellp() { assert(0); return 0; }
 
-  OStream& Seekp( std::streamoff , std::ios_base::seekdir ) { 
+  virtual OStream& Seekp( std::streamoff , std::ios_base::seekdir ) { 
     assert(0);
     return *this;
     }
-  OStream& Write(const char* , std::streamsize ) { assert(0); return *this; }
+  virtual OStream& Write(const char* , std::streamsize ) { assert(0); return *this; }
 
 protected:
 };

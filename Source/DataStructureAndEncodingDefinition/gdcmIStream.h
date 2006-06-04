@@ -19,22 +19,22 @@ class GDCM_EXPORT IStream : virtual public IOS
 {
 public:
   IStream () {}
-  ~IStream() {}
+  virtual ~IStream() {}
 
-  void Open() { }
-  void Close() {  }
+  virtual void Open() { }
+  virtual void Close() {  }
 
-  operator void * ( ) const { assert(0); return 0; }
-  std::streampos Tellg() { 
+  virtual operator void * ( ) const { assert(0); return 0; }
+  virtual std::streampos Tellg() { 
     assert(0);
     return 0; }
 
-  IStream& Seekg( std::streamoff , std::ios_base::seekdir ) { 
+  virtual IStream& Seekg( std::streamoff , std::ios_base::seekdir ) { 
     assert(0);
     return *this;
     }
-  IStream& Read(char* , std::streamsize ) { assert(0); return *this; }
-  IStream& Get(char) { assert(0); return *this; }
+  virtual IStream& Read(char* , std::streamsize ) { assert(0); return *this; }
+  virtual IStream& Get(char) { assert(0); return *this; }
 
 protected:
 };

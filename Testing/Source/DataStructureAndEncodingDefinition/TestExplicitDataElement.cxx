@@ -1,6 +1,5 @@
 #include "gdcmExplicitDataElement.h"
-
-#include <sstream>
+#include "gdcmStringStream.h"
 
 int TestExplicitDataElement1(const uint16_t group,
                              const uint16_t element,
@@ -8,16 +7,16 @@ int TestExplicitDataElement1(const uint16_t group,
                              const uint32_t vl)
 {
   const char *str;
-  std::stringstream ss;
+  gdcm::StringStream ss;
   str = reinterpret_cast<const char*>(&group);
-  ss.write(str, sizeof(group));
+  ss.Write(str, sizeof(group));
   str = reinterpret_cast<const char*>(&element);
-  ss.write(str, sizeof(element));
+  ss.Write(str, sizeof(element));
   str = vr;
-  ss.write(str, 2);
-  ss.write("\0\0", 2);
+  ss.Write(str, 2);
+  ss.Write("\0\0", 2);
   str = reinterpret_cast<const char*>(&vl);
-  ss.write(str, sizeof(vl));
+  ss.Write(str, sizeof(vl));
 
   gdcm::ExplicitDataElement de;
   if( !de.Read(ss) )
@@ -43,18 +42,18 @@ int TestExplicitDataElement2(const uint16_t group,
 {
   const char *str;
   const uint32_t vl = strlen(value);
-  std::stringstream ss;
+  gdcm::StringStream ss;
   str = reinterpret_cast<const char*>(&group);
-  ss.write(str, sizeof(group));
+  ss.Write(str, sizeof(group));
   str = reinterpret_cast<const char*>(&element);
-  ss.write(str, sizeof(element));
+  ss.Write(str, sizeof(element));
   str = vr;
-  ss.write(str, 2);
-  ss.write("\0\0", 2);
+  ss.Write(str, 2);
+  ss.Write("\0\0", 2);
   str = reinterpret_cast<const char*>(&vl);
-  ss.write(str, sizeof(vl));
+  ss.Write(str, sizeof(vl));
   str = value;
-  ss.write(str, vl);
+  ss.Write(str, vl);
 
   gdcm::ExplicitDataElement de;
   if( !de.Read(ss) )
@@ -77,7 +76,7 @@ inline void WriteRead(gdcm::DataElement const &w, gdcm::DataElement &r)
 {
   // w will be written
   // r will be read back
-  std::stringstream ss;
+  gdcm::StringStream ss;
   w.Write(ss);
   r.Read(ss);
 }

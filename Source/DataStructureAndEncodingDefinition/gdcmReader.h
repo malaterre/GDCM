@@ -2,7 +2,7 @@
 #ifndef __gdcmReader_h
 #define __gdcmReader_h
 
-#include "gdcmIStream.h"
+#include "gdcmIFStream.h"
 #include "gdcmDataSet.h"
 
 namespace gdcm
@@ -33,6 +33,9 @@ public:
   ~Reader() {}
 
   int Read(); // Execute()
+  void SetFileName(std::string const &filename) {
+    Stream.SetFileName(filename);
+  }
 
   const DataSet &GetDataSet() const {
     return *DS;
@@ -43,7 +46,7 @@ protected:
   void ReadMetaInformation();
 
 private:
-  IStream Stream;
+  IFStream Stream;
   DataSet *DS;
   typedef enum {
     Unknown = 0,
