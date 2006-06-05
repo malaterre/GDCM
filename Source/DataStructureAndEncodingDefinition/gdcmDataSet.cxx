@@ -26,6 +26,7 @@ public:
   virtual void Clear() = 0;
   virtual unsigned int Size() const = 0;
   virtual void Print(std::ostream &os) const = 0;
+  virtual IStream &Read(IStream &is) = 0;
 };
 
 //-----------------------------------------------------------------------------
@@ -45,6 +46,13 @@ public:
   void Print(std::ostream &os) const {
     std::copy(DES.begin(), DES.end(), 
       std::ostream_iterator<DEType>(os, "\n"));
+  }
+
+  IStream &Read(IStream &is) {
+    DEType de;
+    de.Read(is);
+    std::cout << de << std::endl;
+    return is;
   }
 
   virtual void Insert(const DEType& de) {
@@ -138,6 +146,7 @@ const DataElement& DataSet::GetDataElement(const Tag &t) const
 //-----------------------------------------------------------------------------
 IStream &DataSet::Read(IStream &is)
 {
+  Internal->Read(is);
   return is;
 }
 

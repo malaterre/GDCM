@@ -3,13 +3,15 @@
 #define __gdcmFileMetaInformation_h
 
 #include "gdcmDataSet.h"
+#include "gdcmTS.h"
 
 namespace gdcm
 {
 /**
  * \brief Class to represent a File Meta Information
  * \note
- * In theory this should only be explicit, but just in case
+ * In theory this should only be explicit, but just in case we also handle
+ * the implicit case (illegal)
  */
 class ExplicitDataElement;
 class ImplicitDataElement;
@@ -21,25 +23,18 @@ public:
 
   friend std::ostream& operator<<(std::ostream &_os, const FileMetaInformation &_val);
 
-  
-  unsigned int Size() const {
-    return DS->Size();
-  }
+  TS::TSType GetTSType();
 
-  void InsertDataElement(const DataElement& de) {
-    assert( de.GetTag().GetGroup() == 0x0002 );
-    DS->InsertDataElement(de);
-  }
-
+  // Read
   IStream &Read(IStream &is);
 
+  // Write
   OStream &Write(OStream &os) const;
 
-protected:
+private:
   bool ReadExplicitDataElement(IStream &is, ExplicitDataElement &de);
   bool ReadImplicitDataElement(IStream &is, ImplicitDataElement &de);
 
-private:
   DataSet *DS;
 };
 //-----------------------------------------------------------------------------

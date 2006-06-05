@@ -12,12 +12,12 @@ Reader::~Reader()
   delete Header;
 }
 
-/// \brief tells us if "DICM" is found as position 128 
+/// \brief tells us if "DICM" is found as position 128
 ///        (i.e. the file is a 'true dicom' one)
 /// If not found then seek back at beginning of file (could be malinkroft
 /// or old ACRNEMA with no preamble
 /// \precondition we are at the beginning of file
-/// \postcondition we are at the beginning of the DataSet or 
+/// \postcondition we are at the beginning of the DataSet or
 /// Meta Information Header
 bool Reader::ReadPreamble()
 {
@@ -34,7 +34,7 @@ bool Reader::ReadPreamble()
   if(!r)
     {
     gdcmDebugMacro( "Not a DICOM V3 file" );
-    // Seek back 
+    // Seek back
     Stream.Seekg(0, std::ios::beg);
     }
 
@@ -54,16 +54,36 @@ bool Reader::ReadMetaInformation()
   return Header->Read(Stream);
 }
 
+bool Reader::ReadDataSet()
+{
+  if( !DS )
+    {
+    TS::TSType ts = Header->GetTSType();
+    //std::cerr << ts << std::endl;
+    if( TS::GetNegociatedType(ts) == TS::Explicit )
+      {
+      DS = new DataSet(TS::Explicit);
+      }
+    else // default to instanciating an implicit one (old ACRNEMA...)
+      {
+      DS = new DataSet(TS::Implicit);
+      }
+    }
+  return DS->Read(Stream);
+}
+
 int Reader::Read()
 {
   Stream.Open();
   if( !ReadPreamble() )
     {
-    gdcmDebugMacro( "No Preamble" );
+    gdcmWarningMacro( "No Preamble" );
     }
   ReadMetaInformation();
+  ReadDataSet();
+
   Stream.Close();
-    
+
   return 0;
 }
 

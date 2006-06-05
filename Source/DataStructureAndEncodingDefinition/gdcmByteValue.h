@@ -99,6 +99,7 @@ public:
 
   void Clear() {
     delete[] Internal; Internal = 0; Length = 0; }
+  const char *GetPointer() const { return Internal; }
 
   IStream &Read(IStream &is)
     {

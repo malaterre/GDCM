@@ -116,6 +116,7 @@ bool TS::IsImplicit(const TSType &ts)
     || ts == ImplicitVRBigEndianPrivateGE;
 }
 
+// By implementation those two functions form a partition
 bool TS::IsExplicit(const TSType &ts)
 {
   return !IsImplicit(ts);

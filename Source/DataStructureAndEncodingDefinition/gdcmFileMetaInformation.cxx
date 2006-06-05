@@ -31,7 +31,7 @@ FileMetaInformation::~FileMetaInformation()
 /// therefore compare it against the actual value we found...
 // \postcondition NegociatedTS and IStream::SwapCode are Unknown
 // \postcondition NegociatedTS and IStream::SwapCode are set
-IStream& FileMetaInformation::Read(IStream &is)
+IStream &FileMetaInformation::Read(IStream &is)
 {
   // First off save position in case we fail (no File Meta Information)
   // See PS 3.5, Date Element Structure With Explicit VR
@@ -74,12 +74,16 @@ IStream& FileMetaInformation::Read(IStream &is)
         }
       }
     }
+  else
+    {
+    gdcmWarningMacro( "No File Meta Information. Start with Tag: " << t );
+    is.Seekg(-4, std::ios::cur); // Seek back
+    }
 
   return is;
 }
 
-// \postcondition after the file meta information (well before the 
-// dataset)
+// \postcondition after the file meta information (well before the dataset)
 bool FileMetaInformation::ReadExplicitDataElement(IStream &is,
   ExplicitDataElement &de)
 {
@@ -214,6 +218,36 @@ bool FileMetaInformation::ReadImplicitDataElement(IStream &is,
   de.SetValue(*bv);
 
   return true;
+}
+
+TS::TSType FileMetaInformation::GetTSType()
+{
+  if(DS)
+    {
+    const gdcm::Tag t(0x0002,0x0010);
+    const DataElement& de = DS->GetDataElement(t);
+    TS::NegociatedType nt = DS->GetNegociatedType();
+    const char *ts = 0;
+    if( nt == TS::Explicit )
+      {
+      const Value &v = dynamic_cast<const ExplicitDataElement&>(de).GetValue();
+      const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
+      ts = bv.GetPointer();
+      }
+    else if( nt == TS::Implicit )
+      {
+      const Value &v = dynamic_cast<const ImplicitDataElement&>(de).GetValue();
+      const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
+      ts = bv.GetPointer();
+      }
+    else
+      {
+      assert( 0 && "Cannot happen" );
+      }
+    gdcmWarningMacro( "TS: " << ts );
+    return TS::GetTSType(ts);
+    }
+  return TS::TS_END;
 }
 
 OStream &FileMetaInformation::Write(OStream &os) const
