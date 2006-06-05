@@ -62,6 +62,8 @@ int Reader::Read()
     gdcmDebugMacro( "No Preamble" );
     }
   ReadMetaInformation();
+  Stream.Close();
+    
   return 0;
 }
 
