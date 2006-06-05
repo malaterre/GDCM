@@ -13,17 +13,22 @@ namespace gdcm
  */
 class ExplicitDataElement;
 class ImplicitDataElement;
-class GDCM_EXPORT FileMetaInformation : public DataSet
+class GDCM_EXPORT FileMetaInformation
 {
 public:
-  FileMetaInformation(TS::NegociatedType const &type = TS::Explicit) {}
-  ~FileMetaInformation() {}
+  FileMetaInformation():DS(0) {}
+  ~FileMetaInformation();
 
   friend std::ostream& operator<<(std::ostream &_os, const FileMetaInformation &_val);
 
+  
+  unsigned int Size() const {
+    return DS->Size();
+  }
+
   void InsertDataElement(const DataElement& de) {
     assert( de.GetTag().GetGroup() == 0x0002 );
-    DataSet::InsertDataElement(de);
+    DS->InsertDataElement(de);
   }
 
   IStream &Read(IStream &is);
@@ -33,13 +38,14 @@ public:
 protected:
   bool ReadExplicitDataElement(IStream &is, ExplicitDataElement &de);
   bool ReadImplicitDataElement(IStream &is, ImplicitDataElement &de);
+private:
+  DataSet *DS;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const FileMetaInformation &val)
 {
-  (void)val;
-  //std::copy(val.Internal.begin(), val.Internal.end(), 
-  //  std::ostream_iterator<DataElement>(os, "\n"));
+  DataSet ds = *(val.DS);
+  os << ds;
   return os;
 }
 

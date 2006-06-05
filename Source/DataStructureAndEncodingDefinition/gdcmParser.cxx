@@ -44,6 +44,7 @@ namespace gdcm
     {
     const char *start = Buffer.GetStart();
     const char *positionPtr = start;
+    (void)positionPtr;
     Buffer.ShitEnd(len); //bufferEnd += len;
     //parseEndByteIndex += len;
     ErrorCode = Process();
@@ -62,11 +63,11 @@ namespace gdcm
     }
 
 
-  void Parser::SetUserData(void *userData) {}
+  void Parser::SetUserData(void *userData) { (void)userData; }
   void * Parser::GetUserData() const {
     return UserData;
   }
-  void Parser::SetElementHandler(StartElementHandler start, EndElementHandler end) {}
+  void Parser::SetElementHandler(StartElementHandler start, EndElementHandler end) { (void)start; (void)end; }
 
   unsigned long Parser::GetCurrentByteIndex() const {
     return 0;

@@ -5,9 +5,14 @@
 namespace gdcm
 {
 
+//ExplicitDataElement(ExplicitDataElement const &)
+//{
+//}
+
 ExplicitDataElement::~ExplicitDataElement()
 {
-  delete ValueField;
+  //FIXME
+  //delete ValueField;
 }
 
 //-----------------------------------------------------------------------------

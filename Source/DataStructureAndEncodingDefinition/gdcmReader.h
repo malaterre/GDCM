@@ -38,6 +38,9 @@ public:
     Stream.SetFileName(filename);
   }
 
+  const FileMetaInformation &GetHeader() const {
+    return *Header;
+  }
   const DataSet &GetDataSet() const {
     return *DS;
   }

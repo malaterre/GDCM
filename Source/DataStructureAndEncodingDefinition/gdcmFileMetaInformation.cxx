@@ -7,6 +7,11 @@
 namespace gdcm
 {
 
+FileMetaInformation::~FileMetaInformation()
+{
+  delete DS;
+}
+
 /*
  * Except for the 128 byte preamble and the 4 byte prefix, the File Meta 
  * Information shall be encoded using the Explicit VR Little Endian Transfer
@@ -24,10 +29,14 @@ namespace gdcm
 /// For now I do a Seek back of 6 bytes. It would be better to finish reading 
 /// the first element of the FMI so that I can read the group length and 
 /// therefore compare it against the actual value we found...
+// \postcondition NegociatedTS and IStream::SwapCode are Unknown
+// \postcondition NegociatedTS and IStream::SwapCode are set
 IStream& FileMetaInformation::Read(IStream &is)
 {
   // First off save position in case we fail (no File Meta Information)
   // See PS 3.5, Date Element Structure With Explicit VR
+  assert( is.GetSwapCode()        == SwapCode::Unknown );
+  assert( !DS || DS->GetNegociatedType() == TS::Unknown );
   std::streampos start = is.Tellg();
   Tag t;
   t.Read(is);
@@ -42,12 +51,14 @@ IStream& FileMetaInformation::Read(IStream &is)
       // Looks like an Explicit File Meta Information Header.
       // Hourah !
       is.Seekg(-6, std::ios::cur); // Seek back
-      NegociatedTS = TS::Explicit;
+      DS = new DataSet( TS::Explicit );
       ExplicitDataElement xde;
       while( ReadExplicitDataElement(is, xde ) )
         {
-        std::cout << xde << std::endl;
+        //std::cout << xde << std::endl;
+        DS->InsertDataElement( xde );
         }
+      //std::cout << DS->Size() << std::endl;
       }
     else
       {
@@ -55,7 +66,7 @@ IStream& FileMetaInformation::Read(IStream &is)
       // Ok this might be an implicit encoded Meta File Information header...
       // GE_DLX-8-MONO2-PrivateSyntax.dcm
       is.Seekg(-6, std::ios::cur); // Seek back
-      NegociatedTS = TS::Implicit;
+      DS = new DataSet( TS::Implicit );
       ImplicitDataElement ide;
       while( ReadImplicitDataElement(is, ide ) )
         {

@@ -1,4 +1,5 @@
 #include "gdcmReader.h"
+#include "gdcmFileMetaInformation.h"
 
 int TestReader(int argc, char *argv[])
 {
@@ -10,6 +11,8 @@ int TestReader(int argc, char *argv[])
   reader.SetFileName( filename );
   if ( !reader.Read() )
     {
+    const gdcm::FileMetaInformation &h = reader.GetHeader();
+    std::cout << h << std::endl;
     return 1;
     }
 

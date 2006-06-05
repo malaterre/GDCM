@@ -24,7 +24,13 @@ class GDCM_EXPORT TS
 {
 public:
   typedef enum {
-    ImplicitVRLittleEndian = 0,
+    Unknown = 0,
+    Explicit,
+    Implicit
+  } NegociatedType;
+
+  typedef enum {
+    ImplicitVRLittleEndian = 3,
     ImplicitVRBigEndianPrivateGE,
     ExplicitVRLittleEndian,
     DeflatedExplicitVRLittleEndian,
@@ -44,12 +50,6 @@ public:
     MPEG2MainProfile,
     TS_END
   } TSType;
-
-  typedef enum {
-    Unknown = 0,
-    Explicit,
-    Implicit
-  } NegociatedType;
 
   // Return the string as written in the official DICOM dict from 
   // a custom enum type

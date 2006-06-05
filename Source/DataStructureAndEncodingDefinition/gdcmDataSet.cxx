@@ -8,6 +8,7 @@
 namespace gdcm
 {
 
+//-----------------------------------------------------------------------------
 struct ltstr
 {
   bool operator()(const DataElement& s1,
@@ -17,31 +18,40 @@ struct ltstr
   }
 };
 
+//-----------------------------------------------------------------------------
 class StructuredSetBase {
 public:
-  virtual void Clear() = 0;
-  virtual unsigned int Size() = 0;
   virtual ~StructuredSetBase() {}
+
+  virtual void Clear() = 0;
+  virtual unsigned int Size() const = 0;
+  virtual void Print(std::ostream &os) const = 0;
 };
 
+//-----------------------------------------------------------------------------
 template<class DEType>
 class StructuredSet : public StructuredSetBase
 {
 public:
   typedef typename std::set<DEType, ltstr> DataElementSet;
   //typedef typename DataElementSet::iterator iterator;
-  virtual unsigned int Size() {
+  virtual unsigned int Size() const {
     return DES.size();
   }
   virtual void Clear() {
     DES.clear();
   }
+
+  void Print(std::ostream &os) const {
+    std::copy(DES.begin(), DES.end(), 
+      std::ostream_iterator<DEType>(os, "\n"));
+  }
+
   virtual void Insert(const DEType& de) {
     DES.insert(de);
     }
 
-  const DEType& GetDataElement(const Tag &t) const
-    {
+  const DEType& GetDataElement(const Tag &t) const {
     const DEType r(t);
     typename DataElementSet::iterator it = DES.find(r);
     return *it;
@@ -51,34 +61,52 @@ private:
   DataElementSet DES;
 };
 
+//-----------------------------------------------------------------------------
+std::ostream& operator<<(std::ostream &os, const DataSet &val)
+{
+  os << "TS: " << val.NegociatedTS << "\n";
+  StructuredSetBase *p = val.Internal;
+  p->Print( os );
+  return os;
+}
 
+
+//-----------------------------------------------------------------------------
 DataSet::DataSet(TS::NegociatedType const &type)
 {
   if(type == TS::Explicit)
-  {
+    {
     Internal = new StructuredSet<ExplicitDataElement>;
-  }
-  else
-  {
+    }
+  else if ( type == TS::Implicit )
+    {
     Internal = new StructuredSet<ImplicitDataElement>;
-  }
+    }
+  else
+    {
+    Internal = 0;
+    }
   NegociatedTS = type;
 }
 
+//-----------------------------------------------------------------------------
 DataSet::~DataSet()
 {
   delete Internal;
 }
 
+//-----------------------------------------------------------------------------
 void DataSet::Clear() {
   Internal->Clear();
 }
 
-unsigned int DataSet::Size() {
+//-----------------------------------------------------------------------------
+unsigned int DataSet::Size() const {
   return Internal->Size();
 }
 
-void DataSet::InsertDataElement(const DataElement& de)
+//-----------------------------------------------------------------------------
+void DataSet::InsertDataElement(DataElement const & de)
 {
   if(NegociatedTS == TS::Explicit)
     {
@@ -92,6 +120,7 @@ void DataSet::InsertDataElement(const DataElement& de)
     }
 }
 
+//-----------------------------------------------------------------------------
 const DataElement& DataSet::GetDataElement(const Tag &t) const
 {
   if(NegociatedTS == TS::Explicit)
@@ -106,11 +135,13 @@ const DataElement& DataSet::GetDataElement(const Tag &t) const
   }
 }
 
+//-----------------------------------------------------------------------------
 IStream &DataSet::Read(IStream &is)
 {
   return is;
 }
 
+//-----------------------------------------------------------------------------
 OStream &DataSet::Write(OStream &os) const
 {
   return os;

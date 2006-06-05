@@ -26,7 +26,7 @@ class GDCM_EXPORT DataSet
 {
 public:
   DataSet(TS::NegociatedType const &type = TS::Explicit);
-  virtual ~DataSet();
+  ~DataSet();
 
   friend std::ostream& operator<<(std::ostream &_os, const DataSet &_val);
 
@@ -34,10 +34,13 @@ public:
   void Clear();
 
   // Size
-  unsigned int Size();
+  unsigned int Size() const;
+
+  // Resize
+  void Resize();
 
   // Insert
-  virtual void InsertDataElement(const DataElement& de);
+  void InsertDataElement(const DataElement& de);
 
   // Get
   const DataElement& GetDataElement(const Tag &t) const;
@@ -45,24 +48,20 @@ public:
   //bool IsEmpty() { return DataElements.empty(); }
 
   // Read
-  virtual IStream &Read(IStream &is);
+  IStream &Read(IStream &is);
 
   // Write
-  virtual OStream &Write(OStream &os) const;
+  OStream &Write(OStream &os) const;
 
-protected:
-  TS::NegociatedType NegociatedTS;
+  TS::NegociatedType GetNegociatedType() const {
+    return NegociatedTS;
+  }
+
 private:
+  TS::NegociatedType NegociatedTS;
   StructuredSetBase *Internal;
 };
 //-----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream &os, const DataSet &val)
-{
-  (void)val;
-  //std::copy(val.Internal.begin(), val.Internal.end(), 
-  //  std::ostream_iterator<DataElement>(os, "\n"));
-  return os;
-}
 
 } // end namespace gdcm
 
