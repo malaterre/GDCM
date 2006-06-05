@@ -38,14 +38,22 @@ public:
 protected:
   bool ReadExplicitDataElement(IStream &is, ExplicitDataElement &de);
   bool ReadImplicitDataElement(IStream &is, ImplicitDataElement &de);
+
 private:
   DataSet *DS;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const FileMetaInformation &val)
 {
-  DataSet ds = *(val.DS);
-  os << ds;
+  if(val.DS)
+    {
+    DataSet ds = *(val.DS);
+    os << ds;
+    }
+  else
+    {
+    os << "No File Meta Information Header";
+    }
   return os;
 }
 
