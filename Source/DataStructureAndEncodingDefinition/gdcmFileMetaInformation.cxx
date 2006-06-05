@@ -21,7 +21,7 @@ namespace gdcm
  * (0005,xxxx), and (0007,xxxx) shall not be used.
  */
 /// \TODO FIXME
-/// For now I do a Sekkk back of 6 bytes. It would be better to finish reading 
+/// For now I do a Seek back of 6 bytes. It would be better to finish reading 
 /// the first element of the FMI so that I can read the group length and 
 /// therefore compare it against the actual value we found...
 IStream& FileMetaInformation::Read(IStream &is)
@@ -42,6 +42,7 @@ IStream& FileMetaInformation::Read(IStream &is)
       // Looks like an Explicit File Meta Information Header.
       // Hourah !
       is.Seekg(-6, std::ios::cur); // Seek back
+      NegociatedTS = TS::Explicit;
       ExplicitDataElement xde;
       while( ReadExplicitDataElement(is, xde ) )
         {
@@ -54,6 +55,7 @@ IStream& FileMetaInformation::Read(IStream &is)
       // Ok this might be an implicit encoded Meta File Information header...
       // GE_DLX-8-MONO2-PrivateSyntax.dcm
       is.Seekg(-6, std::ios::cur); // Seek back
+      NegociatedTS = TS::Implicit;
       ImplicitDataElement ide;
       while( ReadImplicitDataElement(is, ide ) )
         {

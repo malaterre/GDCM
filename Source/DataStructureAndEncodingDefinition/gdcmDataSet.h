@@ -50,8 +50,9 @@ public:
   // Write
   virtual OStream &Write(OStream &os) const;
 
-private:
+protected:
   TS::NegociatedType NegociatedTS;
+private:
   StructuredSetBase *Internal;
 };
 //-----------------------------------------------------------------------------
