@@ -74,6 +74,8 @@ protected:
   // TODO: Can we partially uncompress in LZW ?
   static bool IsDataSetEncoded(const TSType &ts);
 
+//private:
+//  TSType TSField;
 };
 
 } // end namespace gdcm
