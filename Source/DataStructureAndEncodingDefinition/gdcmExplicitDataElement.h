@@ -5,6 +5,7 @@
 #include "gdcmDataElement.h"
 #include "gdcmVR.h"
 #include "gdcmSwapCode.h"
+#include "gdcmValue.h"
 
 namespace gdcm
 {
@@ -13,7 +14,7 @@ namespace gdcm
  * \brief Class to represent an *Explivit VR* Data Element
  * \note bla
  */
-class Value;
+//class Value; // FIXME
 class GDCM_EXPORT ExplicitDataElement : public DataElement
 {
 public:
@@ -39,12 +40,13 @@ private:
   Value* ValueField;
 };
 //-----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_val)
+inline std::ostream& operator<<(std::ostream& os, const ExplicitDataElement & val)
 {
-  const DataElement &de = _val;
-  _os << de;
-  _os << _val.TagField << " VR=" << _val.VRField;
-  return _os;
+  os << "Tag: " << val.TagField;
+  os << "\tVR=" << val.VRField;
+  os << "\tVL: " << val.ValueLengthField;
+  val.ValueField->Print( os );
+  return os;
 }
 
 } // end namespace gdcm
