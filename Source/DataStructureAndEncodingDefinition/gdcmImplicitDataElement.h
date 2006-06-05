@@ -20,9 +20,9 @@ public:
 
   friend std::ostream& operator<<(std::ostream& _os, const ImplicitDataElement &_val);
 
-  Value const & GetValue() const {
-    return *ValueField;
-  }
+  Value const & GetValue() const { return *ValueField; }
+  void SetValue(Value const & vl) { ValueField = const_cast<Value*>(&vl); }
+
   IStream &Read(IStream& is);
   const OStream &Write(OStream& os) const;
 

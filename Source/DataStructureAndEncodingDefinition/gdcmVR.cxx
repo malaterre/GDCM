@@ -136,6 +136,21 @@ VR::VRType VR::GetVRType(const char *vr)
   return r;
 }
 
+bool VR::IsValid(const char *vr)
+{
+  for (int i = 1; VRStrings[i] != NULL; i++)
+    {
+    const char *ref = VRStrings[i];
+    // Use lazy evaluation instead of strncmp
+    if (ref[0] == vr[0] && ref[1] == vr[1] )
+      {
+      assert( i < 28 ); // FIXME
+      return true;
+      }
+    }
+  return false;
+}
+
 bool VR::IsValid(const char *vr1, const VRType& vr2)
 {
   assert( strlen(vr1) == 2 );

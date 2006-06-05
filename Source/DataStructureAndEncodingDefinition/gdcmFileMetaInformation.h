@@ -12,6 +12,7 @@ namespace gdcm
  * In theory this should only be explicit, but just in case
  */
 class ExplicitDataElement;
+class ImplicitDataElement;
 class GDCM_EXPORT FileMetaInformation : public DataSet
 {
 public:
@@ -31,6 +32,7 @@ public:
 
 protected:
   bool ReadExplicitDataElement(IStream &is, ExplicitDataElement &de);
+  bool ReadImplicitDataElement(IStream &is, ImplicitDataElement &de);
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const FileMetaInformation &val)

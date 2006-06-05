@@ -92,8 +92,8 @@ protected:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const DataElement &val)
 {
-  os << "Tag: " << val.TagField << "\n";
-  os << "Value Length: " << val.ValueLengthField << "\n"; 
+  os << "Tag: " << val.TagField;
+  os << "\tVL: " << val.ValueLengthField;
   return os;
 }
 

@@ -45,7 +45,10 @@ inline std::ostream& operator<<(std::ostream& os, const ExplicitDataElement & va
   os << "Tag: " << val.TagField;
   os << "\tVR=" << val.VRField;
   os << "\tVL: " << val.ValueLengthField;
-  val.ValueField->Print( os );
+  if( val.ValueField )
+    {
+    val.ValueField->Print( os );
+    }
   return os;
 }
 

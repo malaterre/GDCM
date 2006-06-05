@@ -67,6 +67,7 @@ public:
   static const char* GetVRString(VRType vr);
   static VRType GetVRTypeFromFile(const char *vr);
   static VRType GetVRType(const char *vr);
+  static bool IsValid(const char *vr);
   // Check if vr1 is valid against vr2,
   // Typically vr1 is read from the file and vr2 is taken from the dict
   static bool IsValid(const char *vr1, const VRType& vr2);

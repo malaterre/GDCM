@@ -1,6 +1,7 @@
 #include "gdcmFileMetaInformation.h"
 #include "gdcmVR.h"
 #include "gdcmExplicitDataElement.h"
+#include "gdcmImplicitDataElement.h"
 #include "gdcmByteValue.h"
 
 namespace gdcm
@@ -19,14 +20,46 @@ namespace gdcm
  * Note: PS 3.5 specifies that Elements with Tags (0001,xxxx), (0003,xxxx),
  * (0005,xxxx), and (0007,xxxx) shall not be used.
  */
+/// \TODO FIXME
+/// For now I do a Sekkk back of 6 bytes. It would be better to finish reading 
+/// the first element of the FMI so that I can read the group length and 
+/// therefore compare it against the actual value we found...
 IStream& FileMetaInformation::Read(IStream &is)
 {
   // First off save position in case we fail (no File Meta Information)
   // See PS 3.5, Date Element Structure With Explicit VR
-  ExplicitDataElement de;
-  while( ReadExplicitDataElement(is, de ) )
+  std::streampos start = is.Tellg();
+  Tag t;
+  t.Read(is);
+  //assert( t.GetGroup() == 0x0002 );
+  if( t.GetGroup() == 0x0002 )
     {
-    std::cout << de << std::endl;
+    // Purposely not Re-use ReadVR since we can read VR_END
+    char vr_str[2];
+    is.Read(vr_str, 2);
+    if( VR::IsValid(vr_str) )
+      {
+      // Looks like an Explicit File Meta Information Header.
+      // Hourah !
+      is.Seekg(-6, std::ios::cur); // Seek back
+      ExplicitDataElement xde;
+      while( ReadExplicitDataElement(is, xde ) )
+        {
+        std::cout << xde << std::endl;
+        }
+      }
+    else
+      {
+      gdcmWarningMacro( "Not Explicit" );
+      // Ok this might be an implicit encoded Meta File Information header...
+      // GE_DLX-8-MONO2-PrivateSyntax.dcm
+      is.Seekg(-6, std::ios::cur); // Seek back
+      ImplicitDataElement ide;
+      while( ReadImplicitDataElement(is, ide ) )
+        {
+        std::cout << ide << std::endl;
+        }
+      }
     }
 
   return is;
@@ -57,7 +90,7 @@ bool FileMetaInformation::ReadExplicitDataElement(IStream &is,
   VR vr;
   if( !vr.Read(is) )
     {
-    assert(0 && "Should not happen" );
+    is.Seekg( start, std::ios::beg );
     return false;
     }
   //std::cout << "VR : " << vr << std::endl;
@@ -114,6 +147,56 @@ bool FileMetaInformation::ReadExplicitDataElement(IStream &is,
 
   de.SetTag(t);
   de.SetVR(vr);
+  de.SetVL(vl);
+  de.SetValue(*bv);
+
+  return true;
+}
+
+bool FileMetaInformation::ReadImplicitDataElement(IStream &is,
+  ImplicitDataElement &de)
+{
+  // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
+  std::streampos start = is.Tellg();
+  // Read Tag
+  Tag t;
+  if( !t.Read(is) )
+    {
+    assert(0 && "Should not happen");
+    return false;
+    }
+  //std::cout << "Tag: " << t << std::endl;
+  if( t.GetGroup() != 0x0002 )
+    {
+    gdcmDebugMacro( "Done reading File Meta Information" );
+    is.Seekg( start, std::ios::beg );
+    return false;
+    }
+  // Read Value Length
+  VL vl;
+  if( !vl.Read(is) )
+    {
+    assert(0 && "Should not happen");
+    return false;
+    }
+  ByteValue *bv = 0;
+  if( vl.IsUndefined() )
+    {
+    assert(0 && "Should not happen");
+    return false;
+    }
+  else
+    {
+    bv = new ByteValue;
+    }
+  // We have the length we should be able to read the value
+  bv->SetLength(vl); // perform realloc
+  if( !bv->Read(is) )
+    {
+    assert(0 && "Should not happen");
+    return false;
+    }
+  de.SetTag(t);
   de.SetVL(vl);
   de.SetValue(*bv);
 
