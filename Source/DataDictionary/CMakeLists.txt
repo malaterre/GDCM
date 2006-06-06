@@ -40,11 +40,11 @@ SET(DICT_LIST
   )
 
 # List of file needed to get all dict into c++ code
-SET(LIST_DICT_SRCS)
+SET(DICT_SRCS)
 SET(DEFAULT_DICTS)
 FOREACH(dict ${DICT_LIST})
   SET(CXX_DICT ${GDCM_BINARY_DIR}/Source/DataDictionary/gdcm${dict}.cxx)
-  SET(LIST_DICT_SRCS ${LIST_DICT_SRCS} ${CXX_DICT})
+  SET(DICT_SRCS ${DICT_SRCS} ${CXX_DICT})
   ADD_CUSTOM_COMMAND(
     OUTPUT    ${CXX_DICT}
     COMMAND   ${PREP_DICT}
@@ -79,6 +79,7 @@ CONFIGURE_FILE(
   )
 
 SET(DICT_SRCS
+  ${DICT_SRCS} # All the dicts cxx resources
   gdcmDicts.cxx
   gdcmGroupDict.cxx
   ${GDCM_BINARY_DIR}/Source/DataDictionary/gdcmDefaultGroupNames.cxx
