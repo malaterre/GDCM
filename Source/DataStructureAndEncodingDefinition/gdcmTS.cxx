@@ -103,7 +103,11 @@ bool TS::IsJPEG(const TSType &ts)
 
 TS::NegociatedType TS::GetNegociatedType(const TSType &ts)
 {
-  if( IsImplicit(ts) )
+  if( ts == TS_END )
+    {
+    return TS::Unknown;
+    }
+  else if( IsImplicit(ts) )
     {
     return TS::Implicit;
     }

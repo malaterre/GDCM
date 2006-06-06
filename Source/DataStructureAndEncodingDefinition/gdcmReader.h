@@ -33,7 +33,7 @@ public:
   Reader():Stream(),DS(0),Header(0) {}
   ~Reader();
 
-  int Read(); // Execute()
+  bool Read(); // Execute()
   void SetFileName(std::string const &filename) {
     Stream.SetFileName(filename);
   }

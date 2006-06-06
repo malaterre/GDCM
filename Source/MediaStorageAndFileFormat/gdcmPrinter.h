@@ -21,7 +21,7 @@ public:
   ~Printer();
 
   // Set the input dataset to the printer
-  void SetDataSet(DataSet const &ds) {
+  void SetDataSet(DataSet &ds) {
     DS = &ds;
   }
   DataSet const &GetDataSet() const {

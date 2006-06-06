@@ -23,14 +23,14 @@ class GDCM_EXPORT DictEntry
 {
 public:
   DictEntry(const char *name, VR::VRType const &vr, VM::VMType const &vm /*, bool ret = false*/) {
-    Name = name;
+    if(name) Name = name;
     ValueRepresentation = vr;
     ValueMultiplicity = vm;
     // Retired = ret;
   }
   // FIXME
   DictEntry(const char *name, const char *vr, const char *vm) {
-    Name = name;
+    if(name) Name = name;
     ValueRepresentation = VR::GetVRType(vr);
     ValueMultiplicity = VM::GetVMType(vm);
   }

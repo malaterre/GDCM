@@ -72,7 +72,7 @@ bool Reader::ReadDataSet()
   return DS->Read(Stream);
 }
 
-int Reader::Read()
+bool Reader::Read()
 {
   Stream.Open();
   if( !ReadPreamble() )
@@ -84,7 +84,7 @@ int Reader::Read()
 
   Stream.Close();
 
-  return 0;
+  return true;
 }
 
 } // end namespace gdcm

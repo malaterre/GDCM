@@ -105,6 +105,7 @@ VR::VRType VR::GetVRTypeFromFile(const char *vr)
 VR::VRType VR::GetVRType(const char *vr)
 {
   VRType r = VR::VR_END;
+  if(!vr) return r;
   for (int i = 0; VRStrings[i] != NULL; i++)
     //if (strncmp(VRStrings[i],vr, strlen(VRStrings[i])) == 0)
     if (strcmp(VRStrings[i],vr) == 0)

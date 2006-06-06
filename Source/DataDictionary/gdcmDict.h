@@ -3,6 +3,7 @@
 
 #include "gdcmTag.h"
 #include "gdcmDictEntry.h"
+
 #include <iostream>
 #include <iomanip>
 #include <map>
@@ -19,7 +20,7 @@ class GDCM_EXPORT Dict
 public:
   typedef std::map<Tag, DictEntry> MapDictEntry;
   Dict() { 
-    FillDICOMV3DataDict();
+    //FillDICOMV3DataDict();
     //FillNIHDataDict();
   }
 

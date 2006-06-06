@@ -50,8 +50,11 @@ public:
 
   IStream &Read(IStream &is) {
     DEType de;
-    de.Read(is);
-    std::cout << de << std::endl;
+    while( de.Read(is) )
+      {
+      //std::cerr << de << std::endl;
+      DES.insert( de );
+      }
     return is;
   }
 

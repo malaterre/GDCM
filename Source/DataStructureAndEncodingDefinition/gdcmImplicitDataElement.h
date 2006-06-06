@@ -38,7 +38,7 @@ inline std::ostream& operator<<(std::ostream& os, const ImplicitDataElement &val
     {
     const Value& v = *(val.ValueField);
     // could not get operator<< to work on references (no dynamic type)
-    v.Print(os);
+    v.Print(os << "\t");
     }
   return os;
 }

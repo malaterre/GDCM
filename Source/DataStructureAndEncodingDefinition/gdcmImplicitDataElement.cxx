@@ -8,7 +8,7 @@ namespace gdcm
 
 ImplicitDataElement::~ImplicitDataElement()
 {
-  delete ValueField;
+  //delete ValueField;
 }
 
 //-----------------------------------------------------------------------------
@@ -18,7 +18,7 @@ IStream &ImplicitDataElement::Read(IStream &is)
   // Read Tag
   if( !TagField.Read(is) )
     {
-    assert(0 && "Should not happen");
+    //assert(0 && "Should not happen");
     return is;
     }
   // Read Value Length

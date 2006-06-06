@@ -2,6 +2,7 @@
 #define __gdcmDicts_h
 
 #include "gdcmDict.h"
+
 #include <vector>
 #include <string>
 

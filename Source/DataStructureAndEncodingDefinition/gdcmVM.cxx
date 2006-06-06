@@ -35,10 +35,15 @@ const char* VM::GetVMString(const VMType &vm)
 
 VM::VMType VM::GetVMType(const char *vm)
 {
+  if(!vm) return VM::VM_END;
   for (int i = 0; VMStrings[i] != NULL; i++)
+    {
     //if (strncmp(VMStrings[i],vm,strlen(VMStrings[i])) == 0)
     if (strcmp(VMStrings[i],vm) == 0)
+      {
       return (VM::VMType)(i);
+      }
+    }
 
   return VM::VM_END;
 }

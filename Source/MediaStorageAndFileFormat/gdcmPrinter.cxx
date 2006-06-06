@@ -10,7 +10,7 @@
 namespace gdcm
 {
 //-----------------------------------------------------------------------------
-Printer::Printer():PrintStyle(PrintStyles::VERBOSE_STYLE)
+Printer::Printer():PrintStyle(Printer::VERBOSE_STYLE)
 {
 }
 //-----------------------------------------------------------------------------
@@ -18,27 +18,7 @@ Printer::~Printer()
 {
 }
 
-//-----------------------------------------------------------------------------
-//std::ostream& Printer::PrintTag(std::ostream &_os, const Tag &_val)
-//{
-//  if (PrintStyle == DCMTK_STYLE )
-//    {
-//    _os.setf( std::ios::right);
-//    _os << "(" << std::hex << std::setw( 4 ) << std::setfill( '0' )
-//      << _val[0] << ',' << std::setw( 4 ) 
-//      << std::setfill( '0' )
-//      << _val[1] << std::setfill( ' ' ) << ")" << std::dec;
-//    }
-//  else
-//    {
-//    _os.setf( std::ios::right);
-//    _os << std::hex << std::setw( 4 ) << std::setfill( '0' )
-//      << _val[0] << ',' << std::setw( 4 ) << std::setfill( '0' )
-//      << _val[1] << std::setfill( ' ' ) << std::dec;
-//    }
-//  return _os;
-//}
-
+#if 0
 //-----------------------------------------------------------------------------
 void PrintExplicitDataElement(std::ostream& _os, const ExplicitDataElement &_val, bool printVR, VR::VRType dictVR, Printer::PrintStyles pstyle)
 {
@@ -243,46 +223,14 @@ void PrintExplicitDataElements(Printer &is)
     std::cerr << "Exception:" << typeid(e).name() << std::endl;
     }
 }
-
+#endif
 
 //-----------------------------------------------------------------------------
-void Printer::Initialize()
+void Printer::Print(std::ostream& os)
 {
-  DICOMIStream::Initialize();
-
-  if ( PrintStyle == DCMTK_STYLE )
-    {
-    std::cout << "# Dicom-File-Format" << std::endl;
-    std::cout << std::endl;
-    std::cout << "# Dicom-Meta-Information-Header" << std::endl;
-    // TODO Not always Little
-    std::cout << "# Used TransferSyntax: LittleEndian" <<
-      (NegociatedTS == Explicit ? "Explicit" : "Implicit") << std::endl;
-
-    std::cout << "# Dicom-Data-Set" << std::endl;
-    std::cout << "# Used TransferSyntax: " <<
-      TS::GetTSString(GetUsedTS()) << std::endl;
-    }
-  else
-    {
-    std::cout << "Meta Header: " << std::endl;
-    std::cout << "Negociated Transfer Syntax: " << 
-      (NegociatedTS == Explicit ? "Explicit" : "Implicit") << std::endl;
-    }
-
-  // Skip one line:
-  std::cout << std::endl;
-  if( NegociatedTS == Explicit )
-    {
-    PrintExplicitDataElements(*this);
-    }
-  else
-    {
-    PrintImplicitDataElements(*this);
-    }
-  // FIXME a file that reach eof is not valid...
-  Close();
-  Open();
+  const gdcm::DataSet &ds = *DS;
+  os << ds << std::endl;
 }
 
 }
+

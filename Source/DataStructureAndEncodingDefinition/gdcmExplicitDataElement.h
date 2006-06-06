@@ -47,7 +47,7 @@ inline std::ostream& operator<<(std::ostream& os, const ExplicitDataElement & va
   os << "\tVL: " << val.ValueLengthField;
   if( val.ValueField )
     {
-    val.ValueField->Print( os );
+    val.ValueField->Print( os << "\t" );
     }
   return os;
 }
