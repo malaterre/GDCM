@@ -6,7 +6,7 @@
 namespace gdcm
 {
 
-IFStream::IFStream():IStream(NULL)
+IFStream::IFStream():IStream((new std::filebuf()))
 {
 }
 
@@ -17,10 +17,15 @@ void IFStream::SetFileName(const char* filename)
 
 void IFStream::Open()
 {
+  assert( !FileName.empty() );
+  std::filebuf *fb = static_cast<std::filebuf*>(Rdbuf());
+  fb->open(FileName.c_str(), std::ios::in | std::ios::binary);
 }
 
 void IFStream::Close()
 {
+  std::filebuf *fb = static_cast<std::filebuf*>(Rdbuf());
+  fb->close();
 }
 
 IFStream::IFStream(const char *filename):

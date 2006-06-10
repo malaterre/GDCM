@@ -20,10 +20,17 @@ namespace gdcm
 class GDCM_EXPORT OFStream : public OStream
 {
 public:
-  OFStream(const char *filename);
+  OFStream();
+  explicit OFStream(const char *filename);
   ~OFStream();
 
+  void SetFileName(const char* filename);
+  void Open();
+  void Close();
+
 private:
+  std::string FileName;
+
   OFStream(OFStream const &);
   OFStream &operator= (OFStream const &);
 };

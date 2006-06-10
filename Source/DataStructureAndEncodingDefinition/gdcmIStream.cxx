@@ -13,56 +13,67 @@ IStream::~IStream()
 
 IStream &IStream::operator>> (char &c)
 {
+  c = Rdbuf()->sbumpc();
   return *this;
 }
 
 IStream &IStream::operator>> (signed char &c)
 {
+  c = Rdbuf()->sbumpc();
   return *this;
 }
   
 IStream &IStream::operator>> (unsigned char &c)
 {
+  c = Rdbuf()->sbumpc();
   return *this;
 }
   
 IStream &IStream::operator>> (float &f)
 {
+  Rdbuf()->sgetn(reinterpret_cast<char*>(&f), sizeof(float));
   return *this;
 }
   
 IStream &IStream::operator>> (double &d)
 {
+  Rdbuf()->sgetn(reinterpret_cast<char*>(&d), sizeof(double));
   return *this;
 }
   
 IStream &IStream::operator>> (short &s)
 {
+  Rdbuf()->sgetn(reinterpret_cast<char*>(&s), sizeof(short));
   return *this;
 }
   
-IStream &IStream::operator>> (unsigned short &s)
+IStream &IStream::operator>> (unsigned short &us)
 {
+  Rdbuf()->sgetn(reinterpret_cast<char*>(&us), sizeof(unsigned short));
   return *this;
 }
   
 IStream &IStream::operator>> (int &i)
 {
+  Rdbuf()->sgetn(reinterpret_cast<char*>(&i), sizeof(int));
   return *this;
 }
   
-IStream &IStream::operator>> (unsigned int &i)
+IStream &IStream::operator>> (unsigned int &ui)
 {
+  Rdbuf()->sgetn(reinterpret_cast<char*>(&ui), sizeof(unsigned int));
   return *this;
 }
   
 IStream &IStream::operator>> (long &l)
 {
+  Rdbuf()->sgetn(reinterpret_cast<char*>(&l), sizeof(long));
   return *this;
 }
   
-IStream &IStream::operator>> (unsigned long &l)
+IStream &IStream::operator>> (unsigned long &ul)
 {
+  Rdbuf()->sgetn(reinterpret_cast<char*>(&ul), sizeof(unsigned long));
   return *this;
 }
 
@@ -70,7 +81,8 @@ IStream& IStream::operator>> (char *str)
 {
   assert(GetWidth() != 0);
 
-  size_t len = GetWidth();
+  std::streamsize wide = GetWidth();
+  Rdbuf()->sgetn(str, wide);
 
   return *this;
 }
@@ -78,13 +90,13 @@ IStream& IStream::operator>> (char *str)
 
 IStream &IStream::Seekg (std::streamoff off, std::ios_base::seekdir dir)
 {
-  abort();
+  Rdbuf()->pubseekoff(off, dir, std::ios_base::in);
   return *this;
 }
 
 std::streampos IStream::Tellg ( )
 {
-  return 0;
+  return Rdbuf()->pubseekoff(0, std::ios_base::cur, std::ios_base::in);
 }
 
 // DEPRECATED:
@@ -97,6 +109,7 @@ IStream& IStream::Read(char *str, std::streamsize n)
 IStream& IStream::Get (char& c )
 {
   abort();
+  return *this;
 }
 
 } // end namespace gdcm
