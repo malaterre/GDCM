@@ -33,7 +33,8 @@ public:
     {
     if( IsPrintable() )
       {
-      std::copy(Internal.begin(), Internal.end(),
+      // WARNING: Internal.end() != Internal.begin()+Length
+      std::copy(Internal.begin(), Internal.begin()+Length,
         std::ostream_iterator<char>(os));
       }
     else
@@ -45,7 +46,7 @@ public:
     }
   }
 
-  VL GetLength() const { return Internal.size(); }
+  const VL & GetLength() const { return Length; }
   // Does a reallocation
   void SetLength(const VL& vl) {
     VL l(vl);
@@ -55,6 +56,8 @@ public:
       ++l;
       }
     Internal.resize(l);
+    // Keep the exact length
+    Length = vl;
   }
 
   ByteValue &operator=(const ByteValue &val)
@@ -65,7 +68,7 @@ public:
 
   bool operator==(const ByteValue &val) const
     {
-    if( GetLength() != val.GetLength())
+    if( Length != val.Length )
       return false;
     if( Internal == val.Internal )
       return true;
@@ -79,11 +82,11 @@ public:
 
   IStream &Read(IStream &is)
     {
-    return is.Read(&Internal[0], GetLength());
+    return is.Read(&Internal[0], Length);
     }
   OStream const & Write(OStream &os) const
     {
-    return os.Write(&Internal[0], GetLength());
+    return os.Write(&Internal[0], Length);
     }
 
 protected:
@@ -95,10 +98,9 @@ protected:
    */
   bool IsPrintable() const
     {
-    VL length = GetLength();
-    for(unsigned int i=0; i<length; i++)
+    for(unsigned int i=0; i<Length; i++)
       {
-      if ( i == (length-1) && Internal[i] == '\0') continue;
+      if ( i == (Length-1) && Internal[i] == '\0') continue;
       if (!isprint((int)Internal[i]) )
         {
         //gdcmWarningMacro( "Cannot print :" << i );
@@ -112,7 +114,11 @@ protected:
 private:
   std::vector<char> Internal;
   //char* Internal;
-  //VL Length;
+
+  // WARNING Length IS NOT Internal.size() some featured DICOM 
+  // implementation define odd length, we always load them as even number
+  // of byte, so we need to keep the right Length
+  VL Length;
 };
 //----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const ByteValue &val)

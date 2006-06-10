@@ -29,12 +29,12 @@ public:
       Fragments.begin();
     for(;it != Fragments.end(); ++it)
       {
-      os << "\t" << *it << "\n";
+      os << "  " << *it << "\n";
       }
   }
 
   /// \brief Returns the SQ length, as read from disk
-  VL GetLength() const { return SequenceLengthField; }
+  const VL & GetLength() const { return SequenceLengthField; }
   /// \brief Sets the actual SQ length
   void SetLength(VL const & length) {
     SequenceLengthField = length;
