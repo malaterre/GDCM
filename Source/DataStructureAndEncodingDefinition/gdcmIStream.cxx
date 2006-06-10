@@ -124,5 +124,11 @@ IStream& IStream::Get (char& c )
   return *this;
 }
 
+bool IStream::Eof()
+{
+  abort();
+  return false;
+}
+
 } // end namespace gdcm
 

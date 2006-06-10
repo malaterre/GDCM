@@ -49,6 +49,7 @@ std::streampos IFStream::Tellg ( )
 
 IStream& IFStream::Read(char *str, std::streamsize n)
 {
+  memset(str, 0, n);
   InternalIStream.read(str, n);
   return *this;
 }

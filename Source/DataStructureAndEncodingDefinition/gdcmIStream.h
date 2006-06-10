@@ -43,6 +43,7 @@ public:
 
   virtual IStream& Read(char *str, std::streamsize n);
   virtual IStream& Get (char& c );
+  virtual bool Eof();
 
 private:
   IStream(IStream const &);

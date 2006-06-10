@@ -50,9 +50,10 @@ public:
 
   IStream &Read(IStream &is) {
     DEType de;
-    while( de.Read(is) )
+    while( !is.Eof() )
       {
-      std::cerr << de << std::endl;
+      de.Read(is);
+      //std::cerr << de << std::endl;
       DES.insert( de );
       }
     return is;
@@ -103,7 +104,7 @@ DataSet::DataSet(TS::NegociatedType const &type)
 //-----------------------------------------------------------------------------
 DataSet::~DataSet()
 {
-  delete Internal;
+  //delete Internal;
 }
 
 //-----------------------------------------------------------------------------

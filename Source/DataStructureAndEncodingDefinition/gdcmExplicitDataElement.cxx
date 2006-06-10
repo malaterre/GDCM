@@ -23,7 +23,10 @@ IStream &ExplicitDataElement::Read(IStream &is)
   // Read Tag
   if( !TagField.Read(is) )
     {
+    if( !is.Eof() )
+      {
     assert(0 && "Should not happen" );
+      }
     return is;
     }
   // Read VR
@@ -63,7 +66,8 @@ IStream &ExplicitDataElement::Read(IStream &is)
   else if( ValueLengthField.IsUndefined() )
     {
     // Ok this is Pixel Data fragmented...
-    //const Tag pixelData(0x7fe0,0x0010);
+    const Tag pixelData(0x7fe0,0x0010);
+    assert( TagField == pixelData );
     assert( VRField == VR::OB 
          || VRField == VR::OW );
     //assert( xda.TagField == pixelData );

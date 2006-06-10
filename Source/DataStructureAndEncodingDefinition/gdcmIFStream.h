@@ -31,6 +31,7 @@ public:
   IStream& Seekg (std::streamoff off, std::ios_base::seekdir dir);
   std::streampos Tellg ( );
   IStream& Read(char *str, std::streamsize n);
+  bool Eof() { return InternalIStream.eof(); }
 
 private:
   std::string FileName;

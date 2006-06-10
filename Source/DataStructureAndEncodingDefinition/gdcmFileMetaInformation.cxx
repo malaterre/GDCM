@@ -55,7 +55,7 @@ IStream &FileMetaInformation::Read(IStream &is)
       ExplicitDataElement xde;
       while( ReadExplicitDataElement(is, xde ) )
         {
-        std::cout << xde << std::endl;
+        //std::cout << xde << std::endl;
         DS->InsertDataElement( xde );
         }
       //std::cout << DS->Size() << std::endl;
@@ -70,7 +70,8 @@ IStream &FileMetaInformation::Read(IStream &is)
       ImplicitDataElement ide;
       while( ReadImplicitDataElement(is, ide ) )
         {
-        std::cout << ide << std::endl;
+        //std::cout << ide << std::endl;
+        DS->InsertDataElement( ide );
         }
       }
     }
@@ -244,7 +245,7 @@ TS::TSType FileMetaInformation::GetTSType()
       {
       assert( 0 && "Cannot happen" );
       }
-    gdcmWarningMacro( "TS: " << ts );
+    gdcmDebugMacro( "TS: " << ts );
     return TS::GetTSType(ts);
     }
   return TS::TS_END;

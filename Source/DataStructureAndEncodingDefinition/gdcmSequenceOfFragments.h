@@ -3,6 +3,7 @@
 #define __gdcmSequenceOfFragments_h
 
 #include "gdcmValue.h"
+#include "gdcmVL.h"
 #include "gdcmFragment.h"
 #include "gdcmBasicOffsetTable.h"
 
@@ -23,7 +24,13 @@ public:
 
   friend std::ostream& operator<<(std::ostream& _os, const SequenceOfFragments &_val);
   void Print(std::ostream &os) const {
-    (void)os;
+    os << "SQ L= " << SequenceLengthField << std::endl;
+    FragmentVector::const_iterator it =
+      Fragments.begin();
+    for(;it != Fragments.end(); ++it)
+      {
+      os << "\t" << *it << "\n";
+      }
   }
 
   /// \brief Returns the SQ length, as read from disk
@@ -33,22 +40,9 @@ public:
     SequenceLengthField = length;
   }
   void Clear() {}
-  IStream &Read(IStream &is) {
-    FragmentVector::iterator it = Fragments.begin();
-    for(;it != Fragments.end(); ++it)
-      {
-      it->Read(is);
-      }
-    return is;
-  }
-  OStream const & Write(OStream &os) const {
-    FragmentVector::const_iterator it = Fragments.begin();
-    for(;it != Fragments.end(); ++it)
-      {
-      it->Write(os);
-      }
-    return os;
-  }
+
+  IStream &Read(IStream &is);
+  OStream const & Write(OStream &os) const;
 
   /// \brief Appends a Fragment to the already added ones
   void AddFragment(Fragment const &item);
@@ -63,7 +57,7 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& os, const SequenceOfFragments &val)
 {
-  os << "SQ L= " << val.SequenceLengthField << std::endl;
+  val.Print(os);
   return os;
 }
 

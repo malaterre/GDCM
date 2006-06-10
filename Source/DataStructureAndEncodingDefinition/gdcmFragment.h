@@ -3,8 +3,7 @@
 #define __gdcmFragment_h
 
 #include "gdcmDataElement.h"
-#include "gdcmDataSet.h"
-#include "gdcmSwapCode.h"
+#include "gdcmByteValue.h"
 
 namespace gdcm
 {
@@ -21,8 +20,36 @@ public:
   void Clear() {
     }
 
-  IStream &Read(IStream &is) {
-    abort();
+  Fragment(const Fragment &val):DataElement(val)
+    {
+    FragmentValue = val.FragmentValue;
+    }
+  Fragment &operator=(Fragment const & val)
+    {
+    FragmentValue = val.FragmentValue;
+    return *this;
+    }
+
+  IStream &Read(IStream &is)
+    {
+    // Superclass 
+    if( !TagField.Read(is) )
+      {
+      assert(0 && "Should not happen");
+      return is;
+      }
+    if( !ValueLengthField.Read(is) )
+      {
+      assert(0 && "Should not happen");
+      return is;
+      }
+    // Self
+    FragmentValue.SetLength(ValueLengthField);
+    if( !FragmentValue.Read(is) )
+      {
+      assert(0 && "Should not happen");
+      return is;
+      }
     return is;
     }
 
@@ -37,7 +64,9 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& os, const Fragment &val)
 {
-  os << val.FragmentValue;
+  os << "Tag: " << val.TagField;
+  os << "\tVL: " << val.ValueLengthField;
+  os << "\t" << val.FragmentValue;
 
   return os;
 }
