@@ -3,9 +3,8 @@
 namespace gdcm
 {
 
-IStream::IStream(std::streambuf *sb):IOS(sb)
+IStream::IStream()
 {
-  Init(sb);
 }
 
 IStream::~IStream()
@@ -93,31 +92,31 @@ IStream& IStream::operator>> (char *str)
 
 IStream &IStream::Seekg (std::streamoff off, std::ios_base::seekdir dir)
 {
-  Rdbuf()->pubseekoff(off, dir, std::ios_base::in);
+//  Rdbuf()->pubseekoff(off, dir, std::ios_base::in);
   return *this;
 }
 
 std::streampos IStream::Tellg ( )
 {
-  return Rdbuf()->pubseekoff(0, std::ios_base::cur, std::ios_base::in);
+  return 0; //Rdbuf()->pubseekoff(0, std::ios_base::cur, std::ios_base::in);
 }
 
 IStream& IStream::Read(char *str, std::streamsize n)
 {
-  try
-    {
-  Rdbuf()->sgetn(str, n);
-    }
-  catch(...)
-    {
-    abort();
-    }
+//  try
+//    {
+//  Rdbuf()->sgetn(str, n);
+//    }
+//  catch(...)
+//    {
+//    abort();
+//    }
   return *this;
 }
 
 IStream& IStream::Get (char& c )
 {
-  c = Rdbuf()->sbumpc();
+//  c = Rdbuf()->sbumpc();
   return *this;
 }
 

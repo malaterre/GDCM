@@ -1,46 +1,39 @@
 #include "gdcmOFStream.h"
 #include "gdcmByteSwap.txx"
 
+#include <fstream>
 #include <assert.h>
 
 namespace gdcm
 {
 
-OFStream::OFStream():OStream((new std::filebuf()))
+OFStream::OFStream()
 {
-  Init(Rdbuf());
+  Rdbuf(InternalOStream.rdbuf());
 }
 
-void OFStream::SetFileName(const char* filename)
+OFStream::OFStream(const char *filename)
 {
-  FileName = filename;
-  Init(Rdbuf());
-}
-
-void OFStream::Open()
-{
-  assert( !FileName.empty() );
-  std::filebuf *fb = static_cast<std::filebuf*>(Rdbuf());
-  fb->open(FileName.c_str(), std::ios::in | std::ios::binary);
-}
-
-void OFStream::Close()
-{
-  std::filebuf *fb = static_cast<std::filebuf*>(Rdbuf());
-  fb->close();
-}
-
-OFStream::OFStream(const char *filename):
-  OStream((new std::filebuf())->open(
-    filename, std::ios::out | std::ios::binary))
-{
+  Rdbuf(InternalOStream.rdbuf());
+  Open(filename);
 }
 
 OFStream::~OFStream()
 {
-  std::filebuf *fb = static_cast<std::filebuf*>(Rdbuf());
-  Rdbuf(0);
-  delete fb;
+  assert( !InternalOStream.is_open());
+}
+
+void OFStream::Open(const char *filename)
+{
+  FileName = filename;
+  assert( !FileName.empty() );
+  InternalOStream.open(FileName.c_str(),
+    std::ios::out | std::ios::binary);
+}
+
+void OFStream::Close()
+{
+  InternalOStream.close();
 }
 
 } // end namespace gdcm

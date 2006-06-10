@@ -15,7 +15,7 @@ namespace gdcm
 class GDCM_EXPORT OStream : virtual public IOS
 {
 public:
-  OStream(std::streambuf *sb);
+  OStream();
   ~OStream();
 
 //  OStream &operator<< (char &c);
@@ -34,8 +34,7 @@ public:
 //
 //  OStream &operator<< (const char *str);
 
-  // DEPRECATED
-  OStream& Write(const char *str, std::streamsize n);
+  virtual OStream& Write(const char *str, std::streamsize n);
 
 private:
   OStream(OStream const &);

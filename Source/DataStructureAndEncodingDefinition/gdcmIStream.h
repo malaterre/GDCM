@@ -19,7 +19,7 @@ class GDCM_EXPORT IStream : virtual public IOS
 {
 
 public:
-  IStream(std::streambuf *sb);
+  IStream();
   ~IStream();
 
 //  IStream &operator>> (char &c);
@@ -38,11 +38,11 @@ public:
 //
 //  IStream &operator>> (char *str);
 
-  IStream& Seekg (std::streamoff off, std::ios_base::seekdir dir);
-  std::streampos Tellg ( );
+  virtual IStream& Seekg (std::streamoff off, std::ios_base::seekdir dir);
+  virtual std::streampos Tellg ( );
 
-  IStream& Read(char *str, std::streamsize n);
-  IStream& Get (char& c );
+  virtual IStream& Read(char *str, std::streamsize n);
+  virtual IStream& Get (char& c );
 
 private:
   IStream(IStream const &);

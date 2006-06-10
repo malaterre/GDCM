@@ -103,13 +103,11 @@ public:
 
   IStream &Read(IStream &is)
     {
-    //return is.Read(Internal, Length);
-    return is;
+    return is.Read(Internal, Length);
     }
   OStream const & Write(OStream &os) const
     {
-    //return os.Write(Internal, Length);
-    return os;
+    return os.Write(Internal, Length);
     }
 
 protected:

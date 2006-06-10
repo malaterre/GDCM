@@ -74,7 +74,7 @@ bool Reader::ReadDataSet()
 
 bool Reader::Read()
 {
-  Stream.Open();
+  //Stream.Open();
   if( !ReadPreamble() )
     {
     gdcmWarningMacro( "No Preamble" );

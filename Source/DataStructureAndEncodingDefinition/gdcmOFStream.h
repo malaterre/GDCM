@@ -4,9 +4,8 @@
 
 #include "gdcmOStream.h"
 
+#include <string>
 #include <fstream>
-#include <iostream>
-#include <assert.h>
 
 namespace gdcm
 {
@@ -24,12 +23,12 @@ public:
   explicit OFStream(const char *filename);
   ~OFStream();
 
-  void SetFileName(const char* filename);
-  void Open();
+  void Open(const char *filename);
   void Close();
 
 private:
   std::string FileName;
+  std::ofstream InternalOStream;
 
   OFStream(OFStream const &);
   OFStream &operator= (OFStream const &);

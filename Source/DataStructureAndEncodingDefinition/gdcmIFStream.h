@@ -4,9 +4,8 @@
 
 #include "gdcmIStream.h"
 
-//#include <fstream>
-//#include <iostream>
-//#include <assert.h>
+#include <string>
+#include <fstream>
 
 namespace gdcm
 {
@@ -24,12 +23,12 @@ public:
   explicit IFStream(const char *filename);
   ~IFStream();
 
-  void SetFileName(const char* filename);
-  void Open();
+  void Open(const char* filename);
   void Close();
 
 private:
   std::string FileName;
+  std::ifstream InternalIStream;
 
   IFStream(IFStream const &);
   IFStream &operator= (IFStream const &);

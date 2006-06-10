@@ -21,31 +21,32 @@ public:
   explicit StringStream (const std::string & str);
   ~StringStream() {}
 
-//  IStream& Read(char* s, std::streamsize n) {
-//    InternalStream.read(s,n);
-//    return *this;
-//  }
-//  IStream& Get(char &c) {
-//    InternalStream.get(c);
-//    return *this;
-//  }
-//  OStream& Write(const char* s, std::streamsize n) {
-//    InternalStream.write(s, n);
-//    return *this;
-//  }
-//
-//  StringStream& operator<<(const char *a) {
-//    InternalStream << a;
-//    return *this;
-//  }
+  operator void * ( ) const { return InternalSStream; }
+
+  IStream& Read(char* s, std::streamsize n) {
+    InternalSStream.read(s,n);
+    return *this;
+  }
+  IStream& Get(char &c) {
+    InternalSStream.get(c);
+    return *this;
+  }
+  OStream& Write(const char* s, std::streamsize n) {
+    InternalSStream.write(s, n);
+    return *this;
+  }
+
+  //StringStream& operator<<(const char *a) {
+  //  InternalSStream << a;
+  //  return *this;
+  //}
   std::string Str() const {
-    std::stringbuf *sb = static_cast<std::stringbuf*>(Rdbuf());
-    return sb->str();
+    return InternalSStream.str();
   }
 
 protected:
   // The real internal class
-  //std::stringstream InternalStream;
+  std::stringstream InternalSStream;
 };
 
 }
