@@ -24,7 +24,7 @@ public:
 
   //friend std::ostream& operator<<(std::ostream &os, const Value &val);
 
-  virtual const VL& GetLength() const = 0;
+  virtual VL GetLength() const = 0;
   virtual void SetLength(VL const & l) = 0;
 
   virtual void Clear() = 0;

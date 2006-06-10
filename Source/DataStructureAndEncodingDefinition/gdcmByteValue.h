@@ -5,6 +5,9 @@
 #include "gdcmValue.h"
 #include "gdcmTrace.h"
 
+#include <vector>
+#include <iterator>
+
 namespace gdcm
 {
 /**
@@ -14,33 +17,27 @@ namespace gdcm
 class GDCM_EXPORT ByteValue : public Value
 {
 public:
-  ByteValue(const char* array = 0, VL const &vl = 0):Internal(0) { 
-    // What happen if user pass ByteValue("BLA", 0) ??
-    if( array && *array && !vl )
-      {
-      assert(0 && "Should not happen" );
-      return;
-      }
-    SetLength(vl);
-    if( array )
-      {
-      memcpy(Internal, array, vl);
-      }
+  ByteValue(const char* array = 0, VL const &vl = 0):
+    Internal(array, array+vl) { 
   }
-  ~ByteValue() { Clear(); }
+  ~ByteValue() { 
+    Internal.clear(); 
+  }
 
   friend std::ostream& operator<<(std::ostream &_os, const ByteValue &_val);
+
   void Print(std::ostream &os) const {
   // This is perfectly valid to have a Length = 0 , so we cannot check
   // the lenght for printing
-  if( Internal )
+  if( !Internal.empty() )
     {
     if( IsPrintable() )
       {
-      os << Internal;
+      std::copy(Internal.begin(), Internal.end(),
+        std::ostream_iterator<char>(os));
       }
     else
-      os << "Loaded:" << Length;
+      os << "Loaded:" << Internal.size();
     }
   else
     {
@@ -48,7 +45,7 @@ public:
     }
   }
 
-  const VL& GetLength() const { return Length; }
+  VL GetLength() const { return Internal.size(); }
   // Does a reallocation
   void SetLength(const VL& vl) {
     VL l(vl);
@@ -57,57 +54,36 @@ public:
       gdcmWarningMacro( "BUGGY HEADER: Your dicom contain odd length value field." );
       ++l;
       }
-    // FIXME: man realloc
-    if( l )
-      {
-      if( l > Length )
-        {
-        char *internal = new char[l+1];
-        memcpy(internal, Internal, Length);
-        delete[] Internal;
-        Internal = internal;
-        }
-      }
-    if( Internal ) Internal[l] = '\0';
-    Length = l;
+    Internal.resize(l);
   }
 
-  //ByteValue(const ByteValue&_val)
-  //  {
-  //  if( this != &_val)
-  //    {
-  //    *this = _val;
-  //    }
-  //  }
-
-  ByteValue &operator=(const ByteValue &_val)
+  ByteValue &operator=(const ByteValue &val)
     {
-    Internal = new char[_val.Length];
-    memcpy(Internal,_val.Internal,_val.Length);
-    Length = _val.Length;
+    Internal = val.Internal;
     return *this;
     }
 
-  bool operator==(const ByteValue &_val) const
+  bool operator==(const ByteValue &val) const
     {
-    if( Length != _val.Length)
+    if( GetLength() != val.GetLength())
       return false;
-    if( memcmp(Internal, _val.Internal, Length) == 0 )
+    if( Internal == val.Internal )
       return true;
     return false;
     }
 
   void Clear() {
-    delete[] Internal; Internal = 0; Length = 0; }
-  const char *GetPointer() const { return Internal; }
+    Internal.clear();
+  }
+  const char *GetPointer() const { return &Internal[0]; }
 
   IStream &Read(IStream &is)
     {
-    return is.Read(Internal, Length);
+    return is.Read(&Internal[0], GetLength());
     }
   OStream const & Write(OStream &os) const
     {
-    return os.Write(Internal, Length);
+    return os.Write(&Internal[0], GetLength());
     }
 
 protected:
@@ -119,9 +95,10 @@ protected:
    */
   bool IsPrintable() const
     {
-    for(unsigned int i=0; i<Length; i++)
+    VL length = GetLength();
+    for(unsigned int i=0; i<length; i++)
       {
-      if ( i == (Length-1) && Internal[i] == '\0') continue;
+      if ( i == (length-1) && Internal[i] == '\0') continue;
       if (!isprint((int)Internal[i]) )
         {
         //gdcmWarningMacro( "Cannot print :" << i );
@@ -133,8 +110,9 @@ protected:
 
 
 private:
-  char* Internal;
-  VL Length;
+  std::vector<char> Internal;
+  //char* Internal;
+  //VL Length;
 };
 //----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const ByteValue &val)
