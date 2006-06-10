@@ -17,27 +17,37 @@ namespace gdcm
 
 class GDCM_EXPORT IStream : virtual public IOS
 {
+
 public:
-  IStream () {}
-  virtual ~IStream() {}
+  IStream(std::streambuf *sb);
+  ~IStream();
 
-  virtual void Open() { }
-  virtual void Close() {  }
+  IStream &operator>> (char &c);
+  IStream &operator>> (signed char &c);
+  IStream &operator>> (unsigned char &c);
 
-  virtual operator void * ( ) const { assert(0); return 0; }
-  virtual std::streampos Tellg() { 
-    assert(0);
-    return 0; }
+  IStream &operator>> (float &f);
+  IStream &operator>> (double &d);
 
-  virtual IStream& Seekg( std::streamoff , std::ios_base::seekdir ) { 
-    assert(0);
-    return *this;
-    }
-  virtual IStream& Read(char* , std::streamsize ) { assert(0); return *this; }
-  virtual IStream& Get(char&) { assert(0); return *this; }
-  //virtual IStream& Read(uint16_t &vl);
+  IStream &operator>> (short &s);
+  IStream &operator>> (unsigned short &s);
+  IStream &operator>> (int &i);
+  IStream &operator>> (unsigned int &i);
+  IStream &operator>> (long &l);
+  IStream &operator>> (unsigned long &l);
 
-protected:
+  IStream &operator>> (char *str);
+
+  IStream& Seekg (std::streamoff off, std::ios_base::seekdir dir);
+  std::streampos Tellg ( );
+
+  // DEPRECATED
+  IStream& Read(char *str, std::streamsize n);
+  IStream& Get (char& c );
+
+private:
+  IStream(IStream const &);
+  IStream &operator= (IStream const &);
 };
 
 }

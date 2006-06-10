@@ -17,10 +17,9 @@ namespace gdcm
 class GDCM_EXPORT StringStream : public IOStream
 {
 public:
-  StringStream () {}
+  explicit StringStream ():IOStream(NULL) {}
   ~StringStream() {}
 
-  operator void * ( ) const { return static_cast<void*>(InternalStream); }
   IStream& Read(char* s, std::streamsize n) {
     InternalStream.read(s,n);
     return *this;

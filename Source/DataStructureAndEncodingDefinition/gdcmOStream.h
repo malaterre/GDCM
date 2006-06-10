@@ -15,22 +15,31 @@ namespace gdcm
 class GDCM_EXPORT OStream : virtual public IOS
 {
 public:
-  OStream () {}
-  virtual ~OStream() {}
+  OStream(std::streambuf *sb);
+  ~OStream();
 
-  virtual void Open() { }
-  virtual void Close() { }
+  OStream &operator<< (char &c);
+  OStream &operator<< (signed char &c);
+  OStream &operator<< (unsigned char &c);
 
-  virtual operator void * ( ) const { assert(0); return 0; }
-  virtual std::streampos Tellp() { assert(0); return 0; }
+  OStream &operator<< (float &f);
+  OStream &operator<< (double &d);
 
-  virtual OStream& Seekp( std::streamoff , std::ios_base::seekdir ) { 
-    assert(0);
-    return *this;
-    }
-  virtual OStream& Write(const char* , std::streamsize ) { assert(0); return *this; }
+  OStream &operator<< (short &s);
+  OStream &operator<< (unsigned short &s);
+  OStream &operator<< (int &i);
+  OStream &operator<< (unsigned int &i);
+  OStream &operator<< (long &l);
+  OStream &operator<< (unsigned long &l);
 
-protected:
+  OStream &operator<< (const char *str);
+
+  // DEPRECATED
+  OStream& Write(const char *str, std::streamsize n);
+
+private:
+  OStream(OStream const &);
+  OStream &operator= (OStream const &);
 };
 
 }

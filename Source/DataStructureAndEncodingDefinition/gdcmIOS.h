@@ -2,10 +2,9 @@
 #ifndef __gdcmIOS_h
 #define __gdcmIOS_h
 
-#include "gdcmIOSBase.h"
 #include "gdcmSwapCode.h"
 
-#include <fstream>
+#include <streambuf>
 
 namespace gdcm
 {
@@ -15,17 +14,32 @@ namespace gdcm
  * \note bla
  */
 
-class GDCM_EXPORT IOS : public IOSBase
+class GDCM_EXPORT IOS
 {
 public:
-  IOS () {}
-  ~IOS() {}
+  IOS (std::streambuf *sb = NULL, SwapCode const &sc = SwapCode::Unknown);
+  virtual ~IOS();
+
+  operator void * ( ) const { assert(0); return 0; }
+
+  std::streambuf *Rdbuf() const { return Sbuf; }
+  void Rdbuf(std::streambuf *sb);
+
+  std::streamsize GetWidth() const { return Width; }
+  void SetWidth(std::streamsize wide) {
+    Width = wide; }
 
   SwapCode const &GetSwapCode() const { return SwapCodeValue; }
+  void SetSwapCode(SwapCode const &sc) { SwapCodeValue = sc; }
 
-protected:
+private:
   // SwapCode of the file once figured out (can be Unknown)
+  std::streambuf *Sbuf;
   SwapCode SwapCodeValue;
+  std::streamsize Width;
+
+  IOS(IOS const&);
+  IOS &operator= (IOS const&);
 };
 
 }

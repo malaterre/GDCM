@@ -157,11 +157,15 @@ public:
 
   IStream &Read(IStream &is)
     {
-    return is.Read((char*)(&ElementTag.tag), 4);
+    char *p = (char*)(&ElementTag.tag);
+    is.SetWidth(4);
+    return is >> p;
+    //return is.Read((char*)(&ElementTag.tag), 4);
     }
   const OStream &Write(OStream &os) const
     {
-    return os.Write((char*)(&ElementTag.tag), 4);
+    //return os.Write((char*)(&ElementTag.tag), 4);
+    return os;
     }
 
 private:

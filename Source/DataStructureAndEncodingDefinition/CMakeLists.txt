@@ -11,6 +11,11 @@ SET(DSED_SRCS
   gdcmReader.cxx
   gdcmIFStream.cxx
   gdcmFileMetaInformation.cxx
+  gdcmIOS.cxx
+  gdcmIStream.cxx
+  gdcmIFStream.cxx
+  gdcmOStream.cxx
+  gdcmOFStream.cxx
   )
 
 # Add the include paths

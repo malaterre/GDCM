@@ -17,7 +17,7 @@ namespace gdcm
 class GDCM_EXPORT IOStream : public IStream, public OStream
 {
 public:
-  IOStream () {}
+  IOStream (std::streambuf* sb):IStream(sb),OStream(sb) {}
   ~IOStream() {}
 
 protected:

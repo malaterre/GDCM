@@ -35,7 +35,7 @@ public:
 
   bool Read(); // Execute()
   void SetFileName(std::string const &filename) {
-    Stream.SetFileName(filename);
+    Stream.SetFileName(filename.c_str());
   }
 
   const FileMetaInformation &GetHeader() const {

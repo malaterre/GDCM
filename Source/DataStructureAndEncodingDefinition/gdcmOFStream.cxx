@@ -1,4 +1,4 @@
-#include "gdcmOStream.h"
+#include "gdcmOFStream.h"
 #include "gdcmByteSwap.txx"
 
 #include <assert.h>
@@ -6,23 +6,17 @@
 namespace gdcm
 {
 
-OStream& OFStream::Write(const char* s, std::streamsize n )
+OFStream::OFStream(const char *filename):
+  OStream((new std::filebuf())->open(
+    filename, std::ios::out | std::ios::binary))
 {
-  // Following operation is nice for debuging but is way to extensive and
-  // appear really high in the top ten expensive operation
-  if(s) { assert( memset(s,0,n) ); }
-  assert( !(!InternalStream) );
-  assert( !InternalStream.eof() );
-  //std::cout << InternalStream.tellg() << std::endl;
-  if( !InternalStream.write(s,n) )
-    {
-    if( !(InternalStream.eof()))
-      {
-      std::cerr << "Problem reading: " << n << " bytes" << std::endl;
-      assert(0);
-      }
-    }
-  return *this; 
+}
+
+OFStream::~OFStream()
+{
+  std::filebuf *fb = static_cast<std::filebuf*>(Rdbuf());
+  Rdbuf(0);
+  delete fb;
 }
 
 } // end namespace gdcm

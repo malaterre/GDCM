@@ -2,7 +2,7 @@
 #ifndef __gdcmParser_h
 #define __gdcmParser_h
 
-#include "gdcmIStream.h"
+#include "gdcmIFStream.h"
 #include "gdcmTag.h"
 #include "gdcmByteBuffer.h"
 
@@ -14,7 +14,7 @@ namespace gdcm
  * Detailled description here
  * \note Simple API for DICOM
  */
-class GDCM_EXPORT Parser : private IStream
+class GDCM_EXPORT Parser /*: private IStream*/
 {
 public:
   typedef enum {
@@ -91,6 +91,7 @@ protected:
   ErrorType Process();
 
 private:
+  IFStream Stream;
   void* UserData;
   ByteBuffer Buffer;
   ErrorType ErrorCode;

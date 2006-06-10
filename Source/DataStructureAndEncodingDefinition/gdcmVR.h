@@ -105,7 +105,8 @@ public:
   IStream &Read(IStream &is)
     {
     char vr[2];
-    is.Read(vr, 2);
+    is.SetWidth(2);
+    is >> vr;
     VRField = VR::GetVRTypeFromFile(vr);
     assert( VRField != VR::VR_END );
     assert( VRField != VR::INVALID );
@@ -116,7 +117,8 @@ public:
      || VRField == VR::UN )
       {
       char dum[2];
-      is.Read(dum, 2);
+      is.SetWidth(2);
+      is >> dum;
       }
     return is;
     }
@@ -125,7 +127,8 @@ public:
     {
     const char *vr = GetVRString(VRField);
     assert( strlen( vr ) == 2 );
-    os.Write(vr, 2);
+    os.SetWidth(2);
+    os << vr;
   // See PS 3.5, Date Element Structure With Explicit VR
     if( VRField == VR::OB
      || VRField == VR::OW
@@ -134,7 +137,8 @@ public:
      || VRField == VR::UN )
       {
       const char dum[2] = {0, 0};
-      os.Write(dum, 2);
+      os.SetWidth(2);
+      os << dum;
       }
     return os;
     }
