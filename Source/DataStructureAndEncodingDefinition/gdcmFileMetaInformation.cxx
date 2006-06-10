@@ -55,7 +55,7 @@ IStream &FileMetaInformation::Read(IStream &is)
       ExplicitDataElement xde;
       while( ReadExplicitDataElement(is, xde ) )
         {
-        //std::cout << xde << std::endl;
+        std::cout << xde << std::endl;
         DS->InsertDataElement( xde );
         }
       //std::cout << DS->Size() << std::endl;

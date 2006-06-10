@@ -52,7 +52,7 @@ public:
     DEType de;
     while( de.Read(is) )
       {
-      //std::cerr << de << std::endl;
+      std::cerr << de << std::endl;
       DES.insert( de );
       }
     return is;
