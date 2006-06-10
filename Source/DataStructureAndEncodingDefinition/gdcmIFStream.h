@@ -4,9 +4,9 @@
 
 #include "gdcmIStream.h"
 
-#include <fstream>
-#include <iostream>
-#include <assert.h>
+//#include <fstream>
+//#include <iostream>
+//#include <assert.h>
 
 namespace gdcm
 {

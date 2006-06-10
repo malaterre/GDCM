@@ -5,6 +5,7 @@ namespace gdcm
 
 IStream::IStream(std::streambuf *sb):IOS(sb)
 {
+  Init(sb);
 }
 
 IStream::~IStream()
@@ -103,7 +104,14 @@ std::streampos IStream::Tellg ( )
 
 IStream& IStream::Read(char *str, std::streamsize n)
 {
+  try
+    {
   Rdbuf()->sgetn(str, n);
+    }
+  catch(...)
+    {
+    abort();
+    }
   return *this;
 }
 

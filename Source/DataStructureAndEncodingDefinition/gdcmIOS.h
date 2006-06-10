@@ -17,7 +17,7 @@ namespace gdcm
 class GDCM_EXPORT IOS
 {
 public:
-  IOS (std::streambuf *sb = NULL, SwapCode const &sc = SwapCode::Unknown);
+  IOS (std::streambuf *sb, SwapCode const &sc = SwapCode::Unknown);
   virtual ~IOS();
 
   operator void * ( ) const { assert(0); return 0; }
@@ -30,6 +30,12 @@ public:
 
   SwapCode const &GetSwapCode() const { return SwapCodeValue; }
   void SetSwapCode(SwapCode const &sc) { SwapCodeValue = sc; }
+
+protected:
+  IOS() {}
+  void Init(std::streambuf *sb) {
+    StreamBuf = sb;
+  }
 
 private:
   std::streambuf *StreamBuf;

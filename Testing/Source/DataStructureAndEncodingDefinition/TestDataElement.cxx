@@ -74,10 +74,11 @@ int TestDataElement2(const uint16_t group, const uint16_t element,
     std::cerr << "Test buggy" << std::endl;
     return 1;
     }
-  ss << vr;
+  ss.Write(vr, strlen(vr) );
   str = reinterpret_cast<const char*>(&vl);
   ss.Write(str, sizeof(vl));
-  ss << value;
+  assert( !(strlen(value) % 2) );
+  ss.Write(value, strlen(value) );
   //DebugElement(ss);
 
   gdcm::ExplicitDataElement de;

@@ -4,7 +4,7 @@
 
 #include "gdcmIOS.h"
 
-#include <fstream>
+//#include <fstream>
 
 namespace gdcm
 {

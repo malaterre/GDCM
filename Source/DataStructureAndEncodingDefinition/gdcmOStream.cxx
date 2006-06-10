@@ -5,6 +5,7 @@ namespace gdcm
 
 OStream::OStream(std::streambuf *sb):IOS(sb)
 {
+  Init(sb);
 }
 
 OStream::~OStream()
@@ -78,7 +79,14 @@ OStream &OStream::operator<< (const char *str)
 
 OStream& OStream::Write(const char *str, std::streamsize n)
 {
+  try
+    {
   Rdbuf()->sputn(str, n);
+    }
+  catch(...)
+    {
+    abort();
+    }
   return *this;
 }
 

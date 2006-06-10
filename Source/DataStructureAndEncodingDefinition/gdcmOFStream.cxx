@@ -8,11 +8,13 @@ namespace gdcm
 
 OFStream::OFStream():OStream((new std::filebuf()))
 {
+  Init(Rdbuf());
 }
 
 void OFStream::SetFileName(const char* filename)
 {
   FileName = filename;
+  Init(Rdbuf());
 }
 
 void OFStream::Open()

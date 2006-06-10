@@ -17,33 +17,35 @@ namespace gdcm
 class GDCM_EXPORT StringStream : public IOStream
 {
 public:
-  explicit StringStream ():IOStream(NULL) {}
+  explicit StringStream ();
+  explicit StringStream (const std::string & str);
   ~StringStream() {}
 
-  IStream& Read(char* s, std::streamsize n) {
-    InternalStream.read(s,n);
-    return *this;
-  }
-  IStream& Get(char &c) {
-    InternalStream.get(c);
-    return *this;
-  }
-  OStream& Write(const char* s, std::streamsize n) {
-    InternalStream.write(s, n);
-    return *this;
-  }
-
-  StringStream& operator<<(const char *a) {
-    InternalStream << a;
-    return *this;
-  }
+//  IStream& Read(char* s, std::streamsize n) {
+//    InternalStream.read(s,n);
+//    return *this;
+//  }
+//  IStream& Get(char &c) {
+//    InternalStream.get(c);
+//    return *this;
+//  }
+//  OStream& Write(const char* s, std::streamsize n) {
+//    InternalStream.write(s, n);
+//    return *this;
+//  }
+//
+//  StringStream& operator<<(const char *a) {
+//    InternalStream << a;
+//    return *this;
+//  }
   std::string Str() const {
-    return InternalStream.str();
+    std::stringbuf *sb = static_cast<std::stringbuf*>(Rdbuf());
+    return sb->str();
   }
 
 protected:
   // The real internal class
-  std::stringstream InternalStream;
+  //std::stringstream InternalStream;
 };
 
 }
