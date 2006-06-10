@@ -11,6 +11,7 @@ OStream::~OStream()
 {
 }
 
+#if 0
 OStream &OStream::operator<< (char &c)
 {
   return *this;
@@ -73,11 +74,11 @@ OStream &OStream::operator<< (const char *str)
 
   return *this;
 }
+#endif
 
-// DEPRECATED
 OStream& OStream::Write(const char *str, std::streamsize n)
 {
-  abort();
+  Rdbuf()->sputn(str, n);
   return *this;
 }
 

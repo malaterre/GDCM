@@ -23,8 +23,7 @@ bool Reader::ReadPreamble()
 {
   bool r = false;
   char dicm[128+4];
-  Stream.SetWidth(128+4);
-  Stream >> dicm;
+  Stream.Read(dicm, 128+4);
   if( dicm[128+0] == 'D'
    && dicm[128+1] == 'I'
    && dicm[128+2] == 'C'

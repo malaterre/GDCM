@@ -22,26 +22,25 @@ public:
   IStream(std::streambuf *sb);
   ~IStream();
 
-  IStream &operator>> (char &c);
-  IStream &operator>> (signed char &c);
-  IStream &operator>> (unsigned char &c);
-
-  IStream &operator>> (float &f);
-  IStream &operator>> (double &d);
-
-  IStream &operator>> (short &s);
-  IStream &operator>> (unsigned short &s);
-  IStream &operator>> (int &i);
-  IStream &operator>> (unsigned int &i);
-  IStream &operator>> (long &l);
-  IStream &operator>> (unsigned long &l);
-
-  IStream &operator>> (char *str);
+//  IStream &operator>> (char &c);
+//  IStream &operator>> (signed char &c);
+//  IStream &operator>> (unsigned char &c);
+//
+//  IStream &operator>> (float &f);
+//  IStream &operator>> (double &d);
+//
+//  IStream &operator>> (short &s);
+//  IStream &operator>> (unsigned short &s);
+//  IStream &operator>> (int &i);
+//  IStream &operator>> (unsigned int &i);
+//  IStream &operator>> (long &l);
+//  IStream &operator>> (unsigned long &l);
+//
+//  IStream &operator>> (char *str);
 
   IStream& Seekg (std::streamoff off, std::ios_base::seekdir dir);
   std::streampos Tellg ( );
 
-  // DEPRECATED
   IStream& Read(char *str, std::streamsize n);
   IStream& Get (char& c );
 

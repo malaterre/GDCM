@@ -45,8 +45,7 @@ IStream &FileMetaInformation::Read(IStream &is)
     {
     // Purposely not Re-use ReadVR since we can read VR_END
     char vr_str[2];
-    is.SetWidth(2);
-    is >> vr_str;
+    is.Read(vr_str, 2);
     if( VR::IsValid(vr_str) )
       {
       // Looks like an Explicit File Meta Information Header.

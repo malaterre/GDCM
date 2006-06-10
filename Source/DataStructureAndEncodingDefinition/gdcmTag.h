@@ -157,19 +157,14 @@ public:
 
   IStream &Read(IStream &is)
     {
-    char *p = (char*)(&ElementTag.tag);
-    is.SetWidth(4);
-    return is >> p;
-    //return is.Read((char*)(&ElementTag.tag), 4);
+    return is.Read((char*)(&ElementTag.tag), 4);
     }
   const OStream &Write(OStream &os) const
     {
-    //return os.Write((char*)(&ElementTag.tag), 4);
-    return os;
+    return os.Write((char*)(&ElementTag.tag), 4);
     }
 
 private:
-  //uint16_t ElementTag[2]; // Group, Element
   union { uint32_t tag; uint16_t tags[2]; } ElementTag;
 };
 //-----------------------------------------------------------------------------

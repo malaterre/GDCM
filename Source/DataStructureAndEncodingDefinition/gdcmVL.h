@@ -46,14 +46,11 @@ public:
 
   IStream &Read(IStream &is)
     {
-    char *p = (char*)(&ValueLength);
-    is.SetWidth(4);
-    return is >> p;
+    return is.Read((char*)(&ValueLength), 4);
     }
   const OStream &Write(OStream &os) const
     {
-    //return os.Write((char*)(&ValueLength), 4);
-    return os;
+    return os.Write((char*)(&ValueLength), 4);
     }
 
 private:

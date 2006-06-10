@@ -11,6 +11,7 @@ IStream::~IStream()
 {
 }
 
+#if 0
 IStream &IStream::operator>> (char &c)
 {
   c = Rdbuf()->sbumpc();
@@ -86,6 +87,7 @@ IStream& IStream::operator>> (char *str)
 
   return *this;
 }
+#endif
 
 
 IStream &IStream::Seekg (std::streamoff off, std::ios_base::seekdir dir)
@@ -99,16 +101,15 @@ std::streampos IStream::Tellg ( )
   return Rdbuf()->pubseekoff(0, std::ios_base::cur, std::ios_base::in);
 }
 
-// DEPRECATED:
 IStream& IStream::Read(char *str, std::streamsize n)
 {
-  abort();
+  Rdbuf()->sgetn(str, n);
   return *this;
 }
 
 IStream& IStream::Get (char& c )
 {
-  abort();
+  c = Rdbuf()->sbumpc();
   return *this;
 }
 

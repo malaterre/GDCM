@@ -3,7 +3,7 @@
 namespace gdcm
 {
 
-IOS::IOS(std::streambuf *sb, SwapCode const &sc):StreamBuf(sb),SwapCodeValue(sc),Width(0)
+IOS::IOS(std::streambuf *sb, SwapCode const &sc):StreamBuf(sb),SwapCodeValue(sc)/*,Width(0)*/
 {
 }
 
