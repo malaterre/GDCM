@@ -17,6 +17,7 @@ SET(DSED_SRCS
   gdcmOFStream.cxx
   gdcmStringStream.cxx
   gdcmSequenceOfFragments.cxx
+  gdcmSequenceOfItems.cxx
   )
 
 # Add the include paths

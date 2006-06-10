@@ -52,7 +52,8 @@ public:
     VL l(vl);
     if ( l.IsOdd() )
       {
-      gdcmWarningMacro( "BUGGY HEADER: Your dicom contain odd length value field." );
+      gdcmWarningMacro(
+        "BUGGY HEADER: Your dicom contain odd length value field." );
       ++l;
       }
     Internal.resize(l);

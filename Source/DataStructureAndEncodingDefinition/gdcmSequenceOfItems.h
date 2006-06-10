@@ -5,6 +5,8 @@
 #include "gdcmValue.h"
 #include "gdcmItem.h"
 
+#include <vector>
+
 namespace gdcm
 {
 
@@ -41,22 +43,9 @@ public:
     SequenceLengthField = length;
   }
   void Clear() {}
-  IStream &Read(IStream &is) {
-    ItemVector::iterator it = Items.begin();
-    for(;it != Items.end(); ++it)
-      {
-      it->Read(is);
-      }
-    return is;
-  }
-  OStream const & Write(OStream &os) const {
-    ItemVector::const_iterator it = Items.begin();
-    for(;it != Items.end(); ++it)
-      {
-      it->Write(os);
-      }
-    return os;
-  }
+
+  IStream &Read(IStream &is);
+  OStream const & Write(OStream &os) const;
 
   /// \brief Appends an Item to the already added ones
   void AddItem(Item const &item);

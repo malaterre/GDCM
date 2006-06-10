@@ -49,6 +49,8 @@ public:
 
   // Read
   IStream &Read(IStream &is);
+  IStream &ReadNested(IStream &is);
+  IStream &ReadWithLength(IStream &is, VL const & length);
 
   // Write
   OStream &Write(OStream &os) const;

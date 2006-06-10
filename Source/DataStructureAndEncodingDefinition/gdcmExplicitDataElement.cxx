@@ -23,13 +23,21 @@ IStream &ExplicitDataElement::Read(IStream &is)
   // Read Tag
   if( !TagField.Read(is) )
     {
-    if( !is.Eof() )
+    if( !is.Eof() ) // FIXME This should not be needed
       {
     assert(0 && "Should not happen" );
       }
     return is;
     }
   // Read VR
+    const Tag seqDelItem(0xfffe,0xe00d);
+    if( TagField == seqDelItem )
+      {
+      VL vl;
+      vl.Read(is);
+      assert( vl == 0 );
+      return is;
+      }
   if( !VRField.Read(is) )
     {
     assert(0 && "Should not happen" );

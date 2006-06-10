@@ -18,6 +18,7 @@ public:
   friend std::ostream& operator<<(std::ostream &os, const Fragment&val);
 
   void Clear() {
+    FragmentValue.Clear();
     }
 
   Fragment(const Fragment &val):DataElement(val)

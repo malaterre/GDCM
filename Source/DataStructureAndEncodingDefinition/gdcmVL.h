@@ -28,6 +28,10 @@ public:
     return ValueLength == 0xFFFFFFFF;
   }
 
+  VL& operator+=(VL const &vl) {
+    ValueLength += vl.ValueLength;
+    return *this;
+  }
   VL& operator++() {
     ++ValueLength;
     return *this;

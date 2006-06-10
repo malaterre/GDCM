@@ -27,6 +27,8 @@ public:
   virtual unsigned int Size() const = 0;
   virtual void Print(std::ostream &os) const = 0;
   virtual IStream &Read(IStream &is) = 0;
+  virtual IStream &ReadNested(IStream &is) = 0;
+  virtual IStream &ReadWithLength(IStream &is, VL const & length) = 0;
 };
 
 //-----------------------------------------------------------------------------
@@ -53,9 +55,39 @@ public:
     while( !is.Eof() )
       {
       de.Read(is);
-      //std::cerr << de << std::endl;
+      //std::cout << de << std::endl;
       DES.insert( de );
       }
+    return is;
+  }
+
+  IStream &ReadWithLength(IStream &is, VL const & length) {
+    DEType de;
+    VL l = 0;
+    std::cout << "Length: " << l << std::endl;
+    while( l != length )
+      {
+      de.Read(is);
+      //std::cout << de << std::endl;
+      DES.insert( de );
+      l += de.GetVL();
+      assert( !de.GetVL().IsUndefined() );
+      assert( l <= length );
+      std::cout << "Length: " << l << std::endl;
+      }
+    return is;
+  }
+
+  IStream &ReadNested(IStream &is) {
+    DEType de;
+    const Tag seqDelItem(0xfffe,0xe00d);
+    do
+      {
+      de.Read(is);
+      //std::cout << de << std::endl;
+      DES.insert( de );
+      }
+    while( de.GetTag() != seqDelItem );
     return is;
   }
 
@@ -151,6 +183,18 @@ const DataElement& DataSet::GetDataElement(const Tag &t) const
 IStream &DataSet::Read(IStream &is)
 {
   Internal->Read(is);
+  return is;
+}
+
+IStream &DataSet::ReadNested(IStream &is)
+{
+  Internal->ReadNested(is);
+  return is;
+}
+
+IStream &DataSet::ReadWithLength(IStream &is, VL const & vl)
+{
+  Internal->ReadWithLength(is, vl);
   return is;
 }
 

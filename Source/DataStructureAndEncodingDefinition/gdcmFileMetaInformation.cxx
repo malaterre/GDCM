@@ -228,25 +228,27 @@ TS::TSType FileMetaInformation::GetTSType()
     const gdcm::Tag t(0x0002,0x0010);
     const DataElement& de = DS->GetDataElement(t);
     TS::NegociatedType nt = DS->GetNegociatedType();
-    const char *ts = 0;
+    std::string ts;
     if( nt == TS::Explicit )
       {
       const Value &v = dynamic_cast<const ExplicitDataElement&>(de).GetValue();
       const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
-      ts = bv.GetPointer();
+      // Pad string with a \0
+      ts = std::string(bv.GetPointer(), bv.GetLength());
       }
     else if( nt == TS::Implicit )
       {
       const Value &v = dynamic_cast<const ImplicitDataElement&>(de).GetValue();
       const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
-      ts = bv.GetPointer();
+      // Pad string with a \0
+      ts = std::string(bv.GetPointer(), bv.GetLength());
       }
     else
       {
       assert( 0 && "Cannot happen" );
       }
     gdcmDebugMacro( "TS: " << ts );
-    return TS::GetTSType(ts);
+    return TS::GetTSType(ts.c_str());
     }
   return TS::TS_END;
 }

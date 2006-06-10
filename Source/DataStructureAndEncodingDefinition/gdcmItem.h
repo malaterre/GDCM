@@ -3,6 +3,7 @@
 #define __gdcmItem_h
 
 #include "gdcmDataElement.h"
+#include "gdcmImplicitDataElement.h"
 #include "gdcmDataSet.h"
 #include "gdcmSwapCode.h"
 
@@ -25,7 +26,7 @@ namespace gdcm
 class GDCM_EXPORT Item : public DataElement
 {
 public:
-  Item(const Tag& t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl), NestedDataSet(TS::Implicit) {}
+  Item(const Tag& t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl), NestedDataSet(TS::Explicit) {}
   friend std::ostream& operator<<(std::ostream &os, const Item&val);
 
   void Clear() {
@@ -58,7 +59,31 @@ public:
     }
 
   IStream &Read(IStream &is) {
-    return NestedDataSet.Read(is);
+    // Superclass 
+    if( !TagField.Read(is) )
+      {
+      assert(0 && "Should not happen");
+      return is;
+      }
+    if( !ValueLengthField.Read(is) )
+      {
+      assert(0 && "Should not happen");
+      return is;
+      }
+    // Self
+    //FragmentValue.SetLength(ValueLengthField);
+    if( ValueLengthField.IsUndefined() )
+      {
+      NestedDataSet.ReadNested(is);
+      // WARNING we are not storing the Item Del Tag nor its length
+      // in the structure
+      }
+    else
+      {
+      NestedDataSet.ReadWithLength(is, ValueLengthField);
+      //is.Seekg(ValueLengthField, std::ios::cur);
+      }
+    return is;
     }
 
   OStream &Write(OStream &os) const {
@@ -77,6 +102,12 @@ inline std::ostream& operator<<(std::ostream& os, const Item &val)
 {
   os << " Item Length=" << val.ValueLengthField << std::endl;
   os << val.NestedDataSet;
+  if( val.ValueLengthField.IsUndefined() )
+    {
+    const Tag seqDelItem(0xfffe,0xe00d);
+    const ImplicitDataElement ide(seqDelItem);
+    os << ide;
+    }
 
   return os;
 }
