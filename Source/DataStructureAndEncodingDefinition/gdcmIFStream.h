@@ -23,6 +23,8 @@ public:
   explicit IFStream(const char *filename);
   ~IFStream();
 
+  operator void * ( ) const { return InternalIStream; }
+
   void Open(const char* filename);
   void Close();
 
