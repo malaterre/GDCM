@@ -3,7 +3,8 @@
 #define __gdcmSequenceOfFragments_h
 
 #include "gdcmValue.h"
-#include "gdcmItem.h"
+#include "gdcmFragment.h"
+#include "gdcmBasicOffsetTable.h"
 
 namespace gdcm
 {
@@ -15,7 +16,7 @@ class GDCM_EXPORT SequenceOfFragments : public Value
 {
 public:
   // Typdefs:
-  typedef std::vector<Item> ItemVector;
+  typedef std::vector<Fragment> FragmentVector;
 
 /// \brief constructor (UndefinedLength by default)
   SequenceOfFragments(VL const & vl = 0xFFFFFFFF):SequenceLengthField(vl) { }
@@ -33,7 +34,7 @@ public:
   }
   void Clear() {}
   IStream &Read(IStream &is) {
-    ItemVector::iterator it = Fragments.begin();
+    FragmentVector::iterator it = Fragments.begin();
     for(;it != Fragments.end(); ++it)
       {
       it->Read(is);
@@ -41,7 +42,7 @@ public:
     return is;
   }
   OStream const & Write(OStream &os) const {
-    ItemVector::const_iterator it = Fragments.begin();
+    FragmentVector::const_iterator it = Fragments.begin();
     for(;it != Fragments.end(); ++it)
       {
       it->Write(os);
@@ -49,14 +50,15 @@ public:
     return os;
   }
 
-  /// \brief Appends an Item to the already added ones
-  void AddItem(Item const &item);
+  /// \brief Appends a Fragment to the already added ones
+  void AddFragment(Fragment const &item);
 
 private:
   /// \brief Total length of the Sequence (or 0xffffffff) if undefined
   VL SequenceLengthField;
+  BasicOffsetTable Table;
   /// \brief Vector of Sequence Fragments
-  ItemVector Fragments;
+  FragmentVector Fragments;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& os, const SequenceOfFragments &val)
