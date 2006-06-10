@@ -92,17 +92,20 @@ IStream& IStream::operator>> (char *str)
 
 IStream &IStream::Seekg (std::streamoff off, std::ios_base::seekdir dir)
 {
+  abort();
 //  Rdbuf()->pubseekoff(off, dir, std::ios_base::in);
   return *this;
 }
 
 std::streampos IStream::Tellg ( )
 {
+  abort();
   return 0; //Rdbuf()->pubseekoff(0, std::ios_base::cur, std::ios_base::in);
 }
 
 IStream& IStream::Read(char *str, std::streamsize n)
 {
+  abort();
 //  try
 //    {
 //  Rdbuf()->sgetn(str, n);
@@ -116,8 +119,10 @@ IStream& IStream::Read(char *str, std::streamsize n)
 
 IStream& IStream::Get (char& c )
 {
+  abort();
 //  c = Rdbuf()->sbumpc();
   return *this;
 }
 
 } // end namespace gdcm
+

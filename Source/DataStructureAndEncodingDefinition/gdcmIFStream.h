@@ -28,6 +28,10 @@ public:
   void Open(const char* filename);
   void Close();
 
+  IStream& Seekg (std::streamoff off, std::ios_base::seekdir dir);
+  std::streampos Tellg ( );
+  IStream& Read(char *str, std::streamsize n);
+
 private:
   std::string FileName;
   std::ifstream InternalIStream;

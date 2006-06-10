@@ -36,5 +36,22 @@ void IFStream::Close()
   InternalIStream.close();
 }
 
+IStream& IFStream::Seekg (std::streamoff off, std::ios_base::seekdir dir)
+{
+  InternalIStream.seekg(off, dir);
+  return *this;
+}
+
+std::streampos IFStream::Tellg ( )
+{
+  return InternalIStream.tellg();
+}
+
+IStream& IFStream::Read(char *str, std::streamsize n)
+{
+  InternalIStream.read(str, n);
+  return *this;
+}
+
 } // end namespace gdcm
 
