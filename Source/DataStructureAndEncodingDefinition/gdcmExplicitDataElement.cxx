@@ -1,6 +1,7 @@
 #include "gdcmExplicitDataElement.h"
 #include "gdcmByteValue.h"
 #include "gdcmSequenceOfItems.h"
+#include "gdcmSequenceOfFragments.h"
 
 namespace gdcm
 {
@@ -32,10 +33,26 @@ IStream &ExplicitDataElement::Read(IStream &is)
     return is;
     }
   // Read Value Length
-  if( !ValueLengthField.Read(is) )
+  if( VRField == VR::OB
+   || VRField == VR::OW
+   || VRField == VR::OF
+   || VRField == VR::SQ
+   || VRField == VR::UN )
     {
-    assert(0 && "Should not happen");
-    return is;
+    if( !ValueLengthField.Read(is) )
+      {
+      assert(0 && "Should not happen");
+      return is;
+      }
+    }
+  else
+    {
+    union { uint16_t vl; char vl_str[2]; } uvl;
+    is.Read(uvl.vl_str,2);
+    //ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)(&vl_str),
+    //  SwapCode, 1);
+    assert( uvl.vl != static_cast<uint16_t>(-1) );
+    ValueLengthField = uvl.vl;
     }
   // Read the Value
   if( VRField == VR::SQ )
@@ -52,7 +69,7 @@ IStream &ExplicitDataElement::Read(IStream &is)
     //assert( xda.TagField == pixelData );
     //SequenceOfItems<ExplicitDataElement> si;
     //Read(si);
-    abort();
+    ValueField = new SequenceOfFragments;
     }
   else
     {
