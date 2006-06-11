@@ -55,7 +55,7 @@ public:
     while( !is.Eof() )
       {
       de.Read(is);
-      //std::cout << de << std::endl;
+      std::cout << de << std::endl;
       DES.insert( de );
       }
     return is;
@@ -64,16 +64,16 @@ public:
   IStream &ReadWithLength(IStream &is, VL const & length) {
     DEType de;
     VL l = 0;
-    std::cout << "Length: " << l << std::endl;
+    //std::cout << "Length: " << l << std::endl;
     while( l != length )
       {
       de.Read(is);
-      //std::cout << de << std::endl;
+      std::cout << "Nested: " << de << std::endl;
       DES.insert( de );
-      l += de.GetVL();
+      l += de.GetLength();
       assert( !de.GetVL().IsUndefined() );
       assert( l <= length );
-      std::cout << "Length: " << l << std::endl;
+      //std::cout << "Length: " << l << std::endl;
       }
     return is;
   }

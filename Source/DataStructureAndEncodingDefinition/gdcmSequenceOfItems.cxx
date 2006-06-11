@@ -16,14 +16,25 @@ IStream &SequenceOfItems::Read(IStream &is)
     do
       {
       item.Read(is);
-      std::cout << "Item: " << item << std::endl;
+      //std::cout << "Item: " << item << std::endl;
       Items.push_back( item );
       }
     while( item.GetTag() != seqDelItem );
     }
   else
     {
-    abort();
+    Item item;
+    VL l = 0;
+      //std::cout << "Length: " << l << std::endl;
+    while( l != SequenceLengthField )
+      {
+      item.Read(is);
+      std::cout << "Item: " << item << std::endl;
+      Items.push_back( item );
+      l += item.GetLength();
+      assert( !item.GetVL().IsUndefined() );
+      assert( l <= SequenceLengthField );
+      }
     }
   return is;
 }

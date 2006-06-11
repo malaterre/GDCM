@@ -33,6 +33,11 @@ public:
     NestedDataSet.Clear();
     }
 
+  virtual VL GetLength() const {
+    assert( !ValueLengthField.IsUndefined() );
+    return TagField.GetLength() + ValueLengthField.GetLength() + ValueLengthField;
+  }
+
   void InsertDataElement(const DataElement& de) {
     NestedDataSet.InsertDataElement(de);
     // Update the length

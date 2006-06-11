@@ -31,6 +31,13 @@ public:
   Value const &GetValue() const { return *ValueField; }
   void SetValue(Value const & vl) { ValueField = const_cast<Value*>(&vl); }
 
+  VL GetLength() const {
+    assert( ValueLengthField != 0xFFFFFFFF ); //FIXME
+    // Nice trick each time VR::GetLength() is 2 then Value Length is coded in 2
+    //                                         4 then Value Length is coded in 4
+    return TagField.GetLength() + 2*VRField.GetLength() + ValueLengthField;
+  }
+
   IStream &Read(IStream& is);
   const OStream &Write(OStream& _os) const;
 

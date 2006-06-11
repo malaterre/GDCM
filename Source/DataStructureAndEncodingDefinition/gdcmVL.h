@@ -44,6 +44,10 @@ public:
 
   operator uint32_t() const { return ValueLength; }
 
+  VL GetLength() const {
+    return 4;
+  }
+
   friend std::ostream& operator<<(std::ostream& os, const VL& vl);
   //TODO
   //friend std::istream& operator>>(std::istream& is, VL& n);

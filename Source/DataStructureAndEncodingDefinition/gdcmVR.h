@@ -2,6 +2,7 @@
 #define __gdcmVR_h
 
 #include "gdcmTag.h"
+#include "gdcmVL.h"
 
 #include <iostream>
 #include <assert.h>
@@ -76,13 +77,17 @@ public:
   static bool IsSwap(const char *vr);
   
   // Size read on disk
+  VL GetLength() const {
+    return VR::GetLength(VRField);
+  }
   static uint32_t GetLength(VRType vr) { 
     assert( vr != VR::INVALID );
     if( vr == VR::OB
      || vr == VR::OW
      || vr == VR::OF
      || vr == VR::SQ
-     || vr == VR::UN )
+     || vr == VR::UN
+     || vr == VR::UT )
       {
       return 4;
       }
@@ -113,7 +118,8 @@ public:
      || VRField == VR::OW
      || VRField == VR::OF
      || VRField == VR::SQ
-     || VRField == VR::UN )
+     || VRField == VR::UN
+     || VRField == VR::UT )
       {
       char dum[2];
       is.Read(dum, 2);
@@ -131,7 +137,8 @@ public:
      || VRField == VR::OW
      || VRField == VR::OF
      || VRField == VR::SQ
-     || VRField == VR::UN )
+     || VRField == VR::UN
+     || VRField == VR::UT )
       {
       const char dum[2] = {0, 0};
       os.Write(dum,2);

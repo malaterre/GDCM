@@ -24,6 +24,7 @@ SET(DSED_TEST_SRCS
 INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/Common"
+  "${GDCM_BINARY_DIR}/Testing/Source/Data"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   )
 
