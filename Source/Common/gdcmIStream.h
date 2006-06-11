@@ -22,22 +22,6 @@ public:
   IStream();
   ~IStream();
 
-//  IStream &operator>> (char &c);
-//  IStream &operator>> (signed char &c);
-//  IStream &operator>> (unsigned char &c);
-//
-//  IStream &operator>> (float &f);
-//  IStream &operator>> (double &d);
-//
-//  IStream &operator>> (short &s);
-//  IStream &operator>> (unsigned short &s);
-//  IStream &operator>> (int &i);
-//  IStream &operator>> (unsigned int &i);
-//  IStream &operator>> (long &l);
-//  IStream &operator>> (unsigned long &l);
-//
-//  IStream &operator>> (char *str);
-
   virtual IStream& Seekg (std::streamoff off, std::ios_base::seekdir dir);
   virtual std::streampos Tellg ( );
 

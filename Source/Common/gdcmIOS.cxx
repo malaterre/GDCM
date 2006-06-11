@@ -11,9 +11,4 @@ IOS::~IOS()
 {
 }
 
-void IOS::Rdbuf(std::streambuf *sb)
-{
-  StreamBuf = sb;
-}
-
 } // end namespace gdcm

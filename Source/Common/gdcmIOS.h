@@ -22,14 +22,10 @@ public:
 
   virtual operator void * ( ) const { assert(0); return 0; }
 
-  std::streambuf *Rdbuf() const { return StreamBuf; }
-  void Rdbuf(std::streambuf *sb);
-
   SwapCode const &GetSwapCode() const { return SwapCodeValue; }
   void SetSwapCode(SwapCode const &sc) { SwapCodeValue = sc; }
 
 private:
-  std::streambuf *StreamBuf;
   // SwapCode of the file once figured out (can be Unknown)
   SwapCode SwapCodeValue;
 

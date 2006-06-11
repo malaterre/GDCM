@@ -9,12 +9,10 @@ namespace gdcm
 
 OFStream::OFStream()
 {
-  Rdbuf(InternalOStream.rdbuf());
 }
 
 OFStream::OFStream(const char *filename)
 {
-  Rdbuf(InternalOStream.rdbuf());
   Open(filename);
 }
 

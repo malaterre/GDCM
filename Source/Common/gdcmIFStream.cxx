@@ -9,12 +9,10 @@ namespace gdcm
 
 IFStream::IFStream()
 {
-  Rdbuf(InternalIStream.rdbuf());
 }
 
 IFStream::IFStream(const char *filename)
 {
-  Rdbuf(InternalIStream.rdbuf());
   Open(filename);
 }
 
