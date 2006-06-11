@@ -109,8 +109,8 @@ inline std::ostream& operator<<(std::ostream& os, const Item &val)
   os << val.NestedDataSet;
   if( val.ValueLengthField.IsUndefined() )
     {
-    const Tag seqDelItem(0xfffe,0xe00d);
-    const ImplicitDataElement ide(seqDelItem);
+    const Tag itemDelItem(0xfffe,0xe00d);
+    const ImplicitDataElement ide(itemDelItem);
     os << ide;
     }
 
