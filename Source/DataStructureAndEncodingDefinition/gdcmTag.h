@@ -158,7 +158,7 @@ public:
 
   IStream &Read(IStream &is)
     {
-    is.Read((char*)(&ElementTag.tag), 4);
+    is.Read(ElementTag.bytes, 4);
     ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem(ElementTag.tags,
       is.GetSwapCode(), 2);
     return is;
@@ -169,7 +169,7 @@ public:
     }
 
 private:
-  union { uint32_t tag; uint16_t tags[2]; } ElementTag;
+  union { uint32_t tag; uint16_t tags[2]; char bytes[4]; } ElementTag;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &_os, const Tag &_val)
