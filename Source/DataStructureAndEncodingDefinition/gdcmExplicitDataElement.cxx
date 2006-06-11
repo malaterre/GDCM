@@ -6,14 +6,9 @@
 namespace gdcm
 {
 
-//ExplicitDataElement(ExplicitDataElement const &)
-//{
-//}
-
 ExplicitDataElement::~ExplicitDataElement()
 {
-  //FIXME
-  //delete ValueField;
+  delete ValueField;
 }
 
 //-----------------------------------------------------------------------------
@@ -30,8 +25,8 @@ IStream &ExplicitDataElement::Read(IStream &is)
     return is;
     }
   // Read VR
-    const Tag seqDelItem(0xfffe,0xe00d);
-    if( TagField == seqDelItem )
+    const Tag itemDelItem(0xfffe,0xe00d);
+    if( TagField == itemDelItem )
       {
       VL vl;
       vl.Read(is);
@@ -67,6 +62,7 @@ IStream &ExplicitDataElement::Read(IStream &is)
     ValueLengthField = vl16;
     }
   // Read the Value
+  assert( ValueField == 0 );
   if( VRField == VR::SQ )
     {
     // Check wether or not this is an undefined length sequence
