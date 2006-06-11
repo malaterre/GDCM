@@ -42,7 +42,7 @@ inline std::ostream& operator<<(std::ostream &os, const FileMetaInformation &val
 {
   if(val.DS)
     {
-    DataSet ds = *(val.DS);
+    const DataSet &ds = *(val.DS);
     os << ds;
     }
   else

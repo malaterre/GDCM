@@ -10,7 +10,7 @@ namespace gdcm
 
 ImplicitDataElement::~ImplicitDataElement()
 {
-  //delete ValueField;
+  delete ValueField;
 }
 
 //-----------------------------------------------------------------------------

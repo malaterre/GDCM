@@ -29,7 +29,10 @@ public:
   void SetVR(VR const &vr) { VRField = vr; }
 
   Value const &GetValue() const { return *ValueField; }
-  void SetValue(Value const & vl) { ValueField = const_cast<Value*>(&vl); }
+  void SetValue(Value const & vl) { 
+    assert( ValueField == 0 );
+    ValueField = const_cast<Value*>(&vl); 
+  }
 
   VL GetLength() const {
     assert( ValueLengthField != 0xFFFFFFFF ); //FIXME
@@ -40,6 +43,15 @@ public:
 
   IStream &Read(IStream& is);
   const OStream &Write(OStream& _os) const;
+
+  ExplicitDataElement(ExplicitDataElement const & val):DataElement(val)
+    {
+    //assert( val.ValueField );
+    VRField    = val.VRField;
+    ValueField = val.ValueField;
+    // FIXME: Invalidate old pointer
+    const_cast<ExplicitDataElement&>(val).ValueField = 0;
+    }
 
 private:
   // Value Representation

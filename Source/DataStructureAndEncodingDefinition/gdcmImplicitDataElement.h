@@ -32,6 +32,14 @@ public:
   IStream &Read(IStream& is);
   const OStream &Write(OStream& os) const;
 
+  ImplicitDataElement(ImplicitDataElement const & val):DataElement(val)
+    {
+    assert( val.ValueField );
+    ValueField = val.ValueField;
+    // FIXME: Invalidate old pointer
+    const_cast<ImplicitDataElement&>(val).ValueField = 0;
+    }
+
 private:
   Value* ValueField;
 };
