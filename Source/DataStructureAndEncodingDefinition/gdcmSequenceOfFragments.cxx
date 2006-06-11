@@ -16,6 +16,9 @@ IStream& SequenceOfFragments::Read(IStream &is)
     {
     Fragment frag;
     const Tag seqDelItem(0xfffe,0xe0dd);
+    // First item is the basic offset table:
+    Table.Read(is);
+    // not used for now...
     do
       {
       frag.Read(is);

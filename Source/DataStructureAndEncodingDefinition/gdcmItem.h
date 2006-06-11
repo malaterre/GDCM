@@ -105,8 +105,10 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& os, const Item &val)
 {
-  os << " Item Length=" << val.ValueLengthField << std::endl;
+  os << "Item Length=" << val.ValueLengthField << std::endl;
   os << val.NestedDataSet;
+  // GDCM is NOT storing this value, we need to explicitely print it:
+  // and incidently make sure to write it
   if( val.ValueLengthField.IsUndefined() )
     {
     const Tag itemDelItem(0xfffe,0xe00d);

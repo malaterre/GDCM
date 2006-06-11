@@ -24,7 +24,8 @@ public:
 
   friend std::ostream& operator<<(std::ostream& _os, const SequenceOfFragments &_val);
   void Print(std::ostream &os) const {
-    os << "SQ L= " << SequenceLengthField << std::endl;
+    os << "SQ L= " << SequenceLengthField << "\n";
+    os << "Table:" << Table << "\n";
     FragmentVector::const_iterator it =
       Fragments.begin();
     for(;it != Fragments.end(); ++it)

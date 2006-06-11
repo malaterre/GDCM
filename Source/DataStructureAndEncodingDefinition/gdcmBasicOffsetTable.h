@@ -22,7 +22,27 @@ public:
     }
 
   IStream &Read(IStream &is) {
-    abort();
+    // Superclass 
+    const Tag itemStart(0xfffe, 0xe000);
+    const Tag seqDelItem(0xfffe,0xe0dd);
+    if( !TagField.Read(is) )
+      {
+      assert(0 && "Should not happen");
+      return is;
+      }
+    assert( TagField == itemStart );
+    if( !ValueLengthField.Read(is) )
+      {
+      assert(0 && "Should not happen");
+      return is;
+      }
+    // Self
+    Offsets.SetLength(ValueLengthField);
+    if( !Offsets.Read(is) )
+      {
+      assert(0 && "Should not happen");
+      return is;
+      }
     return is;
     }
 

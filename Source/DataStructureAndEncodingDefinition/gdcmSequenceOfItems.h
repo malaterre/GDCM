@@ -33,7 +33,13 @@ public:
 
   friend std::ostream& operator<<(std::ostream& _os, const SequenceOfItems &_val);
   void Print(std::ostream &os) const {
-    (void)os;
+    os << "SQ L= " << SequenceLengthField << "\n";
+    ItemVector::const_iterator it =
+      Items.begin();
+    for(;it != Items.end(); ++it)
+      {
+      os << "  " << *it << "\n";
+      }
   }
 
   /// \brief Returns the SQ length, as read from disk
@@ -59,7 +65,7 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& os, const SequenceOfItems &val)
 {
-  os << "SQ L= " << val.SequenceLengthField << std::endl;
+  val.Print(os);
   return os;
 }
 
