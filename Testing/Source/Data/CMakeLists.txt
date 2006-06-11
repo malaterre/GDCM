@@ -19,6 +19,20 @@ SET(BLACK_LIST
   "deflate_wave_dfl.dcm"
   "deflate_report_dfl.dcm"
   "ExplicitVRforPublicElementsImplicitVRforShadowElements.dcm"
+
+  # TODO
+  "gdcm-MR-PHILIPS-16-Multi-Seq.dcm"
+  "PHILIPS_Intera-16-MONO2-Uncompress.dcm"
+  "KODAK-12-MONO1-Odd_Terminated_Sequence.dcm"
+  "PHILIPS_Gyroscan-8-MONO2-Odd_Sequence.dcm"
+  "PICKER-16-MONO2-Nested_icon.dcm"
+  "deflate_report.dcm"
+  "MR_Philips-Intera_BreaksNOSHADOW.dcm"
+  "MR_Philips_Intera_PrivateSequenceImplicitVR.dcm"
+  "MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.dcm"
+  "MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm"
+  # EASY:
+  "SIEMENS_MAGNETOM-12-MONO2-Uncompressed.dcm"
   )
 
 SET(GDCM_DATA_IMAGES)

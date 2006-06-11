@@ -140,7 +140,34 @@ TS::TSType Reader::GuessTransferSyntax()
     }
   else
     {
-    abort();
+    gdcmWarningMacro( "Start with a private tag creator" );
+    assert( t.GetGroup() > 0x0002 );
+    switch( t.GetElement() )
+      {
+    case 0x0010:
+      sc = SwapCode::LittleEndian;
+      break;
+    default:
+      abort();
+      }
+    // Purposely not Re-use ReadVR since we can read VR_END
+    char vr_str[3];
+    Stream.Read(vr_str, 2);
+    vr_str[2] = '\0';
+    // Cannot use GetVRTypeFromFile since is assert ...
+    VR::VRType vr = VR::GetVRType(vr_str);
+    if( vr != VR::VR_END )
+      {
+      nts = TS::Explicit;
+      }
+    else
+      {
+      nts = TS::Implicit;
+      // We are reading a private creator (0x0010) so it's LO, it's 
+      // difficult to come up with someting to check, maybe that
+      // VL < 256 ...
+      gdcmWarningMacro( "Very dangerous assertion needs some work" );
+      }
     }
   assert( nts != TS::Unknown );
   assert( sc != SwapCode::Unknown );
