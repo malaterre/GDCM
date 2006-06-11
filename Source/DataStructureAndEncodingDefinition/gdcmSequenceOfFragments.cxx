@@ -19,7 +19,7 @@ IStream& SequenceOfFragments::Read(IStream &is)
     do
       {
       frag.Read(is);
-      std::cout << "Frag: " << frag << std::endl;
+      //std::cout << "Frag: " << frag << std::endl;
       Fragments.push_back( frag );
       }
     while( frag.GetTag() != seqDelItem );
