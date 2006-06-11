@@ -35,12 +35,13 @@ public:
     {
     // Superclass 
     const Tag itemStart(0xfffe, 0xe000);
+    const Tag seqDelItem(0xfffe,0xe0dd);
     if( !TagField.Read(is) )
       {
       assert(0 && "Should not happen");
       return is;
       }
-    if( TagField != itemStart )
+    if( TagField != itemStart && TagField != seqDelItem )
       {
       // gdcm-JPEG-LossLess3a.dcm
       std::streampos pos = is.Tellg();
@@ -49,6 +50,7 @@ public:
       gdcmWarningMacro( "Broken file: " << (long)(end-pos) 
         << " bytes were skipped at the end of file. Use at own risk." );
       // Pretend to end properly...
+      abort();
       TagField = Tag(0xfffe,0xe0dd);
       ValueLengthField = 0;
       return is;
