@@ -55,7 +55,7 @@ public:
     while( !is.Eof() )
       {
       de.Read(is);
-      std::cout << de << std::endl;
+      std::cerr << de << std::endl;
       DES.insert( de );
       }
     return is;

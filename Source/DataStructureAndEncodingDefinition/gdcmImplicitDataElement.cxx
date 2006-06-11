@@ -3,6 +3,8 @@
 #include "gdcmByteValue.h"
 #include "gdcmSequenceOfItems.h"
 
+#define GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+
 namespace gdcm
 {
 
@@ -37,6 +39,22 @@ IStream &ImplicitDataElement::Read(IStream &is)
     {
     ValueField = new ByteValue;
     }
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+  // THE WORST BUG EVER. From GE Workstation
+  if( ValueLengthField == 13 )
+    {
+    // Historically gdcm did not enforce proper length
+    // thus Theralys started writing illegal DICOM images:
+    const Tag theralys1(0x0008,0x0070);
+    const Tag theralys2(0x0008,0x0080);
+    if( TagField != theralys1
+     && TagField != theralys2 )
+      {
+      gdcmWarningMacro( "BUGGY HEADER (GE, 13)" );
+      ValueLengthField = 10;
+      }
+    }
+#endif
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
   if( !ValueField->Read(is) )

@@ -4,6 +4,7 @@
 
 #include "gdcmTypes.h"
 #include "gdcmSwapCode.h"
+#include "gdcmByteSwap.txx"
 
 #include "gdcmIStream.h"
 #include "gdcmOStream.h"
@@ -157,7 +158,10 @@ public:
 
   IStream &Read(IStream &is)
     {
-    return is.Read((char*)(&ElementTag.tag), 4);
+    is.Read((char*)(&ElementTag.tag), 4);
+    ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem(ElementTag.tags,
+      is.GetSwapCode(), 2);
+    return is;
     }
   const OStream &Write(OStream &os) const
     {

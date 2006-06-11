@@ -35,7 +35,10 @@ IStream &ExplicitDataElement::Read(IStream &is)
       {
       VL vl;
       vl.Read(is);
-      assert( vl == 0 );
+      if( vl != 0 )
+        {
+        gdcmWarningMacro( "ouh les cornes" );
+        }
       return is;
       }
   if( !VRField.Read(is) )
@@ -58,12 +61,10 @@ IStream &ExplicitDataElement::Read(IStream &is)
     }
   else
     {
-    union { uint16_t vl; char vl_str[2]; } uvl;
-    is.Read(uvl.vl_str,2);
-    //ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)(&vl_str),
-    //  SwapCode, 1);
-    assert( uvl.vl != static_cast<uint16_t>(-1) );
-    ValueLengthField = uvl.vl;
+    // FIXME: Poorly written:
+    uint16_t vl16;
+    is.Read(vl16);
+    ValueLengthField = vl16;
     }
   // Read the Value
   if( VRField == VR::SQ )

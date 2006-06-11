@@ -80,6 +80,7 @@ bool Reader::Read()
     gdcmWarningMacro( "No Preamble" );
     }
   ReadMetaInformation();
+  std::cerr << *Header << std::endl;
   ReadDataSet();
 
   Stream.Close();

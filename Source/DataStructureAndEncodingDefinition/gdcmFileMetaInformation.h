@@ -18,7 +18,7 @@ class ImplicitDataElement;
 class GDCM_EXPORT FileMetaInformation
 {
 public:
-  FileMetaInformation():DS(0) {}
+  FileMetaInformation():DS(0),FakeTSType(TS::TS_END) {}
   ~FileMetaInformation();
 
   friend std::ostream& operator<<(std::ostream &_os, const FileMetaInformation &_val);
@@ -36,6 +36,7 @@ private:
   bool ReadImplicitDataElement(IStream &is, ImplicitDataElement &de);
 
   DataSet *DS;
+  TS::TSType FakeTSType; // ACR NEMA
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const FileMetaInformation &val)

@@ -3,6 +3,7 @@
 
 //#include "gdcmTransferSyntax.h" // Generated File from TransferSyntax.dic
 #include "gdcmType.h"
+#include "gdcmSwapCode.h"
 
 namespace gdcm
 {
@@ -30,7 +31,7 @@ public:
   } NegociatedType;
 
   typedef enum {
-    ImplicitVRLittleEndian = 3,
+    ImplicitVRLittleEndian = 0,
     ImplicitVRBigEndianPrivateGE,
     ExplicitVRLittleEndian,
     DeflatedExplicitVRLittleEndian,
@@ -57,6 +58,7 @@ public:
   static const TSType GetTSType(const char *str);
 
   static NegociatedType GetNegociatedType(const TSType &ts);
+  static SwapCode GetSwapCode(const TSType &ts);
 
 protected:
   // TODO are those function actually usefull ?
@@ -66,6 +68,7 @@ protected:
   static bool IsImplicit(const TSType &ts);
   static bool IsLittleEndian(const TSType &ts);
   static bool IsBigEndian(const TSType &ts);
+
 
   // Very special case of the DICOM specification the *whole* dataset
   // is encoded (typically compressed using the deflate algorithm)

@@ -45,6 +45,8 @@ public:
   virtual IStream& Get (char& c );
   virtual bool Eof();
 
+  IStream &Read(uint16_t &vl);
+
 private:
   IStream(IStream const &);
   IStream &operator= (IStream const &);

@@ -116,6 +116,7 @@ TS::NegociatedType TS::GetNegociatedType(const TSType &ts)
 
 bool TS::IsImplicit(const TSType &ts)
 {
+  assert( ts != TS::TS_END );
   return ts == ImplicitVRLittleEndian
     || ts == ImplicitVRBigEndianPrivateGE;
 }
@@ -123,18 +124,32 @@ bool TS::IsImplicit(const TSType &ts)
 // By implementation those two functions form a partition
 bool TS::IsExplicit(const TSType &ts)
 {
+  assert( ts != TS::TS_END );
   return !IsImplicit(ts);
 }
 
 bool TS::IsLittleEndian(const TSType &ts)
 {
+  assert( ts != TS::TS_END );
   return !IsBigEndian(ts);
 }
 
 bool TS::IsBigEndian(const TSType &ts)
 {
+  assert( ts != TS::TS_END );
   return ts == ExplicitVRBigEndian
     || ts == ImplicitVRBigEndianPrivateGE;
+}
+
+SwapCode TS::GetSwapCode(const TSType &ts)
+{
+  assert( ts != TS::TS_END );
+  if( IsBigEndian( ts ) )
+    {
+    return SwapCode::BigEndian;
+    }
+  assert( IsLittleEndian( ts ) );
+  return SwapCode::LittleEndian;
 }
 
 bool TS::IsDataSetEncoded(const TSType &ts)

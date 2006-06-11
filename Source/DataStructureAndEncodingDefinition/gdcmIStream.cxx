@@ -1,4 +1,5 @@
 #include "gdcmIStream.h"
+#include "gdcmByteSwap.txx"
 
 namespace gdcm
 {
@@ -114,6 +115,17 @@ IStream& IStream::Read(char *str, std::streamsize n)
 //    {
 //    abort();
 //    }
+  return *this;
+}
+
+IStream &IStream::Read(uint16_t &vl)
+{
+  union { uint16_t vl; char vl_str[2]; } uvl;
+  Read(uvl.vl_str,2);
+  ByteSwap<uint16_t>::SwapFromSwapCodeIntoSystem(uvl.vl,
+    GetSwapCode());
+  assert( uvl.vl != static_cast<uint16_t>(-1) );
+  vl = uvl.vl;
   return *this;
 }
 
