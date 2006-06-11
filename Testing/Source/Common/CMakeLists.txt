@@ -4,6 +4,7 @@ SET(Common_TEST_SRCS
   TestByteSwap
   TestDirectory
   TestTrace
+  TestStringStream
   )
 
 # Add the include paths

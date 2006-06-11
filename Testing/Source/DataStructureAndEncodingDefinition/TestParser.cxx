@@ -30,7 +30,7 @@ static void endElement(void *userData, const Tag &name)
 
 } // end namespace gdcm
 
-int TestSADParser(int argc, char *argv[])
+int TestParser(int argc, char *argv[])
 {
   if( argc < 2 )
     {
