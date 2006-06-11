@@ -34,7 +34,7 @@ FileMetaInformation::~FileMetaInformation()
 IStream &FileMetaInformation::Read(IStream &is)
 {
   // First off save position in case we fail (no File Meta Information)
-  // See PS 3.5, Date Element Structure With Explicit VR
+  // See PS 3.5, Data Element Structure With Explicit VR
   assert( is.GetSwapCode()        == SwapCode::Unknown );
   assert( !DS || DS->GetNegociatedType() == TS::Unknown );
   std::streampos start = is.Tellg();
@@ -74,58 +74,11 @@ IStream &FileMetaInformation::Read(IStream &is)
         DS->InsertDataElement( ide );
         }
       }
-    // Before return the stream make sure to set it approprietly for the
-    // user
-    TS::TSType ts = GetTSType();
-    is.SetSwapCode( TS::GetSwapCode(ts) );
     }
   else
     {
     gdcmWarningMacro( "No File Meta Information. Start with Tag: " << t );
-    if( ! (t.GetGroup() % 2) )
-      {
-      // Purposely not Re-use ReadVR since we can read VR_END
-      char vr_str[3];
-      is.Read(vr_str, 2);
-      vr_str[2] = '\0';
-      VR::VRType vr = VR::GetVRTypeFromFile(vr_str);
-      if( vr != VR::VR_END )
-        {
-        FakeTSType = TS::ExplicitVRLittleEndian;
-        }
-      else
-        {
-        assert( !(VR::IsSwap(vr_str)));
-        is.Seekg(-2, std::ios::cur); // Seek back
-        if( t.GetElement() == 0x0000 )
-          {
-          VL group_length;
-          SwapCode sc;
-          assert( is.GetSwapCode() == SwapCode::Unknown );
-          group_length.Read(is);
-          switch(group_length)
-            {
-          case 0x00040000 :
-            sc = SwapCode::BadLittleEndian; // 3412
-            break;
-          case 0x04000000 :
-            sc = SwapCode::BigEndian;       // 4321
-            break;  
-          case 0x00000400 :
-            sc = SwapCode::BadBigEndian;    // 2143
-            break;
-          case 0x00000004 :
-            sc = SwapCode::LittleEndian;    // 1234
-            break;
-          default:
-            abort();
-            }
-          // Sekk back sizeof(Tag)+sizeof(VL)
-          is.Seekg(-8, std::ios::cur); // Seek back
-          is.SetSwapCode( sc );
-          }
-        }
-      }
+    is.Seekg(-4, std::ios::cur); // Seek back
     }
 
   return is;
@@ -269,7 +222,6 @@ TS::TSType FileMetaInformation::GetTSType()
 {
   if(DS)
     {
-    assert( FakeTSType == TS::TS_END );
     const gdcm::Tag t(0x0002,0x0010);
     const DataElement& de = DS->GetDataElement(t);
     TS::NegociatedType nt = DS->GetNegociatedType();
@@ -296,7 +248,7 @@ TS::TSType FileMetaInformation::GetTSType()
     return TS::GetTSType(ts.c_str());
     }
 
-  return FakeTSType;
+  return TS::TS_END;
 }
 
 OStream &FileMetaInformation::Write(OStream &os) const
