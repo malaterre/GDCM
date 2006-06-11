@@ -52,10 +52,10 @@ public:
 
   IStream &Read(IStream &is) {
     DEType de;
-    while( !is.Eof() )
+    while( !is.Eof() && de.Read(is) )
       {
-      de.Read(is);
-      std::cerr << de << std::endl;
+      //std::cerr << de << std::endl;
+      assert( de.GetTag() != Tag(0,0) );
       DES.insert( de );
       }
     return is;
@@ -65,33 +65,33 @@ public:
     DEType de;
     VL l = 0;
     //std::cout << "Length: " << l << std::endl;
-    while( l != length )
+    while( l != length && de.Read(is))
       {
-      de.Read(is);
-      std::cout << "Nested: " << de << std::endl;
+      //std::cout << "Nested: " << de << std::endl;
       DES.insert( de );
       l += de.GetLength();
       assert( !de.GetVL().IsUndefined() );
       assert( l <= length );
       //std::cout << "Length: " << l << std::endl;
       }
+    assert( l == length );
     return is;
   }
 
   IStream &ReadNested(IStream &is) {
     DEType de;
     const Tag seqDelItem(0xfffe,0xe00d);
-    do
+    while( de.GetTag() != seqDelItem && de.Read(is) )
       {
-      de.Read(is);
       //std::cout << de << std::endl;
       DES.insert( de );
       }
-    while( de.GetTag() != seqDelItem );
+    assert( de.GetTag() == seqDelItem );
     return is;
   }
 
   virtual void Insert(const DEType& de) {
+    assert( de.GetTag() != Tag(0,0) );
     DES.insert(de);
     }
 

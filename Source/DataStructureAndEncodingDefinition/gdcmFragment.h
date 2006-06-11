@@ -47,8 +47,8 @@ public:
       is.Seekg( 0, std::ios::end );
       std::streampos end = is.Tellg();
       gdcmWarningMacro( "Broken file: " << (long)(end-pos) 
-        << " bytes were skipped at the end of file" );
-      // Pretend to end...
+        << " bytes were skipped at the end of file. Use at own risk." );
+      // Pretend to end properly...
       TagField = Tag(0xfffe,0xe0dd);
       ValueLengthField = 0;
       return is;
