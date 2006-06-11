@@ -49,6 +49,7 @@ public:
     JPEG2000,
     RLELossless,
     MPEG2MainProfile,
+    ImplicitVRBigEndianACRNEMA,
     TS_END
   } TSType;
 

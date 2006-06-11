@@ -46,6 +46,18 @@ public:
     }
   }
 
+  // When 'dumping' dicom file we still have some information from
+  // Either the VR: eg LO (private tag)
+  void PrintASCII(std::ostream &os) {
+    (void)os;
+  }
+
+  // Either from Element Number (== 0x0000)
+  void PrintGroupLength(std::ostream &os) {
+    assert( Length == 2 );
+    (void)os;
+  }
+
   const VL & GetLength() const { return Length; }
   // Does a reallocation
   void SetLength(const VL& vl) {

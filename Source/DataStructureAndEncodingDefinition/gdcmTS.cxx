@@ -46,6 +46,8 @@ static const char *TSStrings[] = {
   "1.2.840.10008.1.2.5",
   // MPEG2 Main Profile @ Main Level
   "1.2.840.10008.1.2.4.100",
+  // Old ACR NEMA, fake a TS
+  "ImplicitVRBigEndianACRNEMA",
   // Unknown
   "Unknown Transfer Syntax", // Pretty sure we never use this case...
   0 // Compilers have no obligation to finish by NULL, do it ourself
@@ -138,7 +140,8 @@ bool TS::IsBigEndian(const TSType &ts)
 {
   assert( ts != TS::TS_END );
   return ts == ExplicitVRBigEndian
-    || ts == ImplicitVRBigEndianPrivateGE;
+//    || ts == ImplicitVRBigEndianPrivateGE // Indeed this is little endian
+    || ts == ImplicitVRBigEndianACRNEMA;
 }
 
 SwapCode TS::GetSwapCode(const TSType &ts)

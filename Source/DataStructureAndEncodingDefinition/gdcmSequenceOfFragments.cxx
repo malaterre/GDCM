@@ -23,6 +23,7 @@ IStream& SequenceOfFragments::Read(IStream &is)
       Fragments.push_back( frag );
       }
     while( frag.GetTag() != seqDelItem );
+    assert( frag.GetVL() == 0 );
     }
   else
     {

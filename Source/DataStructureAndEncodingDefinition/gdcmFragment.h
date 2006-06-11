@@ -34,9 +34,23 @@ public:
   IStream &Read(IStream &is)
     {
     // Superclass 
+    const Tag itemStart(0xfffe, 0xe000);
     if( !TagField.Read(is) )
       {
       assert(0 && "Should not happen");
+      return is;
+      }
+    if( TagField != itemStart )
+      {
+      // gdcm-JPEG-LossLess3a.dcm
+      std::streampos pos = is.Tellg();
+      is.Seekg( 0, std::ios::end );
+      std::streampos end = is.Tellg();
+      gdcmWarningMacro( "Broken file: " << (long)(end-pos) 
+        << " bytes were skipped at the end of file" );
+      // Pretend to end...
+      TagField = Tag(0xfffe,0xe0dd);
+      ValueLengthField = 0;
       return is;
       }
     if( !ValueLengthField.Read(is) )

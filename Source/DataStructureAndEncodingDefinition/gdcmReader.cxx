@@ -69,7 +69,103 @@ bool Reader::ReadDataSet()
       DS = new DataSet(TS::Implicit);
       }
     }
+  assert( Stream.GetSwapCode() != SwapCode::Unknown );
   return DS->Read(Stream);
+}
+
+TS::TSType Reader::GuessTransferSyntax()
+{
+  // Don't call this function if you have a meta file info
+  assert( Header->GetTSType() == TS::TS_END );
+  assert( Stream.GetSwapCode() == SwapCode::Unknown );
+  std::streampos start = Stream.Tellg();
+  SwapCode sc = SwapCode::Unknown;
+  TS::NegociatedType nts = TS::Unknown;
+  TS::TSType ts = TS::TS_END;
+  Tag t;
+  t.Read(Stream);
+  if( ! (t.GetGroup() % 2) )
+    {
+    switch( t.GetGroup() )
+      {
+    case 0x0008:
+      sc = SwapCode::LittleEndian;
+      break;
+    case 0x0800:
+      sc = SwapCode::BigEndian;
+      break;
+    default:
+      abort();
+      }
+    // Purposely not Re-use ReadVR since we can read VR_END
+    char vr_str[3];
+    Stream.Read(vr_str, 2);
+    vr_str[2] = '\0';
+    // Cannot use GetVRTypeFromFile since is assert ...
+    VR::VRType vr = VR::GetVRType(vr_str);
+    if( vr != VR::VR_END )
+      {
+      nts = TS::Explicit;
+      }
+    else
+      {
+      assert( !(VR::IsSwap(vr_str)));
+      Stream.Seekg(-2, std::ios::cur); // Seek back
+      if( t.GetElement() == 0x0000 )
+        {
+        VL gl; // group length
+        gl.Read(Stream);
+        switch(gl)
+          {
+        case 0x00000004 :
+          sc = SwapCode::LittleEndian;    // 1234
+          break;
+        case 0x04000000 :
+          sc = SwapCode::BigEndian;       // 4321
+          break;  
+        case 0x00040000 :
+          sc = SwapCode::BadLittleEndian; // 3412
+          gdcmWarningMacro( "Bad Little Endian" );
+          break;
+        case 0x00000400 :
+          sc = SwapCode::BadBigEndian;    // 2143
+          gdcmWarningMacro( "Bad Big Endian" );
+          break;
+        default:
+          abort();
+          }
+        }
+      nts = TS::Implicit;
+      }
+    }
+  else
+    {
+    abort();
+    }
+  assert( nts != TS::Unknown );
+  assert( sc != SwapCode::Unknown );
+  if( nts == TS::Implicit )
+    {
+    if( sc == SwapCode::BigEndian )
+      {
+      ts = TS::ImplicitVRBigEndianACRNEMA;
+      }
+    else if ( sc == SwapCode::LittleEndian )
+      {
+      ts = TS::ImplicitVRLittleEndian;
+      }
+    else
+      {
+      abort();
+      }
+    }
+  else
+    {
+    abort();
+    }
+  Stream.Seekg( start, std::ios::beg );
+  assert( ts != TS::TS_END );
+  return ts;
 }
 
 bool Reader::Read()
@@ -80,7 +176,16 @@ bool Reader::Read()
     gdcmWarningMacro( "No Preamble" );
     }
   ReadMetaInformation();
-  std::cerr << *Header << std::endl;
+  //std::cerr << *Header << std::endl;
+  TS::TSType ts = Header->GetTSType();
+  if( ts == TS::TS_END )
+    {
+    ts = GuessTransferSyntax();
+    }
+  assert( ts != TS::TS_END );
+  // From ts set properly the Stream for reading the dataset:
+  Stream.SetSwapCode( TS::GetSwapCode( ts ) );
+  // Read !
   ReadDataSet();
 
   Stream.Close();

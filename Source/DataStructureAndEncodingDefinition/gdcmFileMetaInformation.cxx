@@ -245,7 +245,9 @@ TS::TSType FileMetaInformation::GetTSType()
       assert( 0 && "Cannot happen" );
       }
     gdcmDebugMacro( "TS: " << ts );
-    return TS::GetTSType(ts.c_str());
+    TS::TSType tst = TS::GetTSType(ts.c_str());
+    assert( tst != TS::TS_END );
+    return tst;
     }
 
   return TS::TS_END;

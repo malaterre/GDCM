@@ -49,6 +49,7 @@ protected:
   bool ReadPreamble();
   bool ReadMetaInformation();
   bool ReadDataSet();
+  TS::TSType GuessTransferSyntax();
 
 private:
   IFStream Stream;
