@@ -80,13 +80,13 @@ public:
 
   IStream &ReadNested(IStream &is) {
     DEType de;
-    const Tag seqDelItem(0xfffe,0xe00d);
-    while( de.GetTag() != seqDelItem && de.Read(is) )
+    const Tag itemDelItem(0xfffe,0xe00d);
+    while( de.GetTag() != itemDelItem && de.Read(is) )
       {
       //std::cout << de << std::endl;
       DES.insert( de );
       }
-    assert( de.GetTag() == seqDelItem );
+    assert( de.GetTag() == itemDelItem );
     return is;
   }
 
@@ -136,7 +136,7 @@ DataSet::DataSet(TS::NegociatedType const &type)
 //-----------------------------------------------------------------------------
 DataSet::~DataSet()
 {
-  //delete Internal;
+  delete Internal;
 }
 
 //-----------------------------------------------------------------------------
