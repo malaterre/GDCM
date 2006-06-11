@@ -10,12 +10,6 @@ SET(DSED_SRCS
   gdcmParser.cxx
   gdcmReader.cxx
   gdcmFileMetaInformation.cxx
-  gdcmIOS.cxx
-  gdcmIStream.cxx
-  gdcmOStream.cxx
-  gdcmIFStream.cxx
-  gdcmOFStream.cxx
-  gdcmStringStream.cxx
   gdcmSequenceOfFragments.cxx
   gdcmSequenceOfItems.cxx
   )

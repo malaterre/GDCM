@@ -16,11 +16,15 @@ INCLUDE_DIRECTORIES(
   )
 
 SET(Common_SRCS
-  #  gdcmIStream.cxx
-  #  gdcmOStream.cxx
   gdcmDirectory.cxx
   gdcmTrace.cxx
   gdcmSwapCode.cxx
+  gdcmIOS.cxx
+  gdcmIStream.cxx
+  gdcmOStream.cxx
+  gdcmIFStream.cxx
+  gdcmOFStream.cxx
+  gdcmStringStream.cxx
   )
 
 ADD_LIBRARY(gdcmCommon ${Common_SRCS})

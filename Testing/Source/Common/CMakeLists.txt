@@ -5,6 +5,8 @@ SET(Common_TEST_SRCS
   TestDirectory
   TestTrace
   TestStringStream
+  TestOFStream
+  TestIFStream
   )
 
 # Add the include paths
