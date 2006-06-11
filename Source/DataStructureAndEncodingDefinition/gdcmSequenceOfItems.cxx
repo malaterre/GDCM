@@ -29,7 +29,7 @@ IStream &SequenceOfItems::Read(IStream &is)
     while( l != SequenceLengthField )
       {
       item.Read(is);
-      std::cout << "Item: " << item << std::endl;
+      //std::cout << "Item: " << item << std::endl;
       Items.push_back( item );
       l += item.GetLength();
       assert( !item.GetVL().IsUndefined() );

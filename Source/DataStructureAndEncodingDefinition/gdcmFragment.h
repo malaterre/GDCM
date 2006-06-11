@@ -50,7 +50,6 @@ public:
       gdcmWarningMacro( "Broken file: " << (long)(end-pos) 
         << " bytes were skipped at the end of file. Use at own risk." );
       // Pretend to end properly...
-      abort();
       TagField = Tag(0xfffe,0xe0dd);
       ValueLengthField = 0;
       return is;
