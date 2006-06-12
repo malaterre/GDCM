@@ -18,7 +18,7 @@ class GDCM_EXPORT ByteValue : public Value
 {
 public:
   ByteValue(const char* array = 0, VL const &vl = 0):
-    Internal(array, array+vl) { 
+    Internal(array, array+vl),Length(vl) { 
   }
   ~ByteValue() { 
     Internal.clear(); 
