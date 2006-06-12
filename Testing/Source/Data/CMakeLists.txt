@@ -31,6 +31,17 @@ SET(BLACK_LIST
   "MR_Philips_Intera_PrivateSequenceImplicitVR.dcm"
   "MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.dcm"
   "MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm"
+  "MR_Philips_Intera_Broken.dcm"
+  "IM-0001-0052.dcm"
+  "Resultat_015.dcm"
+  "001073_Philips_Flair_Breaker_useNOSHADOWSEQ.dcm"
+  "001073_Philips_Flair_Breaker.dcm"
+  "001064_Philips_Flair_Breaker_useNOSHADOWSEQ.dcm"
+  "FFBE146B651B2A44C6ADC12DB614E3ED.dcm"
+  "Philips-Intera_Unexpected_Sequence_Terminator_1.dcm"
+  "Philips-Intera_Unexpected_Sequence_Terminator_2.dcm"
+  "Philips-Intera_Unexpected_Sequence_Terminator_3.dcm"
+  "ElemZeroNotGroupLength.dcm"
   # EASY:
   "SIEMENS_MAGNETOM-12-MONO2-Uncompressed.dcm"
   )
