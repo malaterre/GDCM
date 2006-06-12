@@ -16,6 +16,7 @@ SET(DSED_TEST_SRCS
   #TestReadPatientName
   TestParser
   TestByteBuffer
+  TestByteValue
   TestReader
   )
 

@@ -34,7 +34,7 @@ public:
 
   ImplicitDataElement(ImplicitDataElement const & val):DataElement(val)
     {
-    assert( val.ValueField );
+    //assert( val.ValueField );
     ValueField = val.ValueField;
     // FIXME: Invalidate old pointer
     const_cast<ImplicitDataElement&>(val).ValueField = 0;

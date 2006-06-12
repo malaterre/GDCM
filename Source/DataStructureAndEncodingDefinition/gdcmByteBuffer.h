@@ -12,6 +12,8 @@ namespace gdcm
  *
  * Detailled description here
  * \note 
+ * looks like a std::streambuf or std::filebuf class with the get and 
+ * peek pointer
  */
 class ByteBuffer
 {

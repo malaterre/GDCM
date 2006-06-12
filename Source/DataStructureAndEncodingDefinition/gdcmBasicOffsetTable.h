@@ -10,6 +10,7 @@ namespace gdcm
 {
 /**
  * \brief Class to represent an BasicOffsetTable
+ * TODO: this is A fragment need to subclass from fragment
  */
 
 class GDCM_EXPORT BasicOffsetTable : public DataElement

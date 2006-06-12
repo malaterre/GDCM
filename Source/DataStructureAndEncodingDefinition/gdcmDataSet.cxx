@@ -91,7 +91,7 @@ public:
   }
 
   virtual void Insert(const DEType& de) {
-    assert( de.GetTag() != Tag(0,0) );
+    //assert( de.GetTag() != Tag(0,0) );
     DES.insert(de);
     }
 
