@@ -156,32 +156,15 @@ void DataSet::InsertDataElement(DataElement const & de)
     {
     const ExplicitDataElement & xde =
       static_cast<const ExplicitDataElement&>(de);
-    if( &xde )
-      {
-      static_cast<StructuredSet<ExplicitDataElement>* >(Internal)->
-        Insert(xde);
-      }
-    else
-      {
-      gdcmWarningMacro( "Trying to insert a non Explicit Data Element"
-        " to an Explicit DataSet" );
-      }
+    static_cast<StructuredSet<ExplicitDataElement>* >(Internal)->
+      Insert(xde);
     }
   else
     {
     const ImplicitDataElement & ide =
       static_cast<const ImplicitDataElement&>(de);
-    if( &ide )
-      {
-      static_cast<StructuredSet<ImplicitDataElement>* >(Internal)->
-        Insert(ide);
-      }
-    else
-      {
-      gdcmWarningMacro( "Trying to insert a non Implicit Data Element"
-        " to an Implicit DataSet" );
-      abort();
-      }
+    static_cast<StructuredSet<ImplicitDataElement>* >(Internal)->
+      Insert(ide);
     }
 }
 
@@ -190,12 +173,12 @@ const DataElement& DataSet::GetDataElement(const Tag &t) const
 {
   if(NegociatedTS == TS::Explicit)
   {
-    return dynamic_cast<StructuredSet<ExplicitDataElement>* >(Internal)->
+    return static_cast<StructuredSet<ExplicitDataElement>* >(Internal)->
       GetDataElement(t);
   }
   else
   {
-    return dynamic_cast<StructuredSet<ImplicitDataElement>* >(Internal)->
+    return static_cast<StructuredSet<ImplicitDataElement>* >(Internal)->
       GetDataElement(t);
   }
 }
