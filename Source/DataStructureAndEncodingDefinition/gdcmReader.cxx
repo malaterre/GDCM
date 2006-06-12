@@ -122,7 +122,7 @@ TS::TSType Reader::GuessTransferSyntax()
           break;
         case 0x04000000 :
           sc = SwapCode::BigEndian;       // 4321
-          break;  
+          break;
         case 0x00040000 :
           sc = SwapCode::BadLittleEndian; // 3412
           gdcmWarningMacro( "Bad Little Endian" );
@@ -163,7 +163,7 @@ TS::TSType Reader::GuessTransferSyntax()
     else
       {
       nts = TS::Implicit;
-      // We are reading a private creator (0x0010) so it's LO, it's 
+      // We are reading a private creator (0x0010) so it's LO, it's
       // difficult to come up with someting to check, maybe that
       // VL < 256 ...
       gdcmWarningMacro( "Very dangerous assertion needs some work" );
@@ -197,7 +197,11 @@ TS::TSType Reader::GuessTransferSyntax()
 
 bool Reader::Read()
 {
-  //Stream.Open();
+  if( !Stream.IsOpen() )
+    {
+    gdcmErrorMacro( "No File" );
+    return false;
+    }
   if( !ReadPreamble() )
     {
     gdcmWarningMacro( "No Preamble" );

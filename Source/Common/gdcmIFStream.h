@@ -26,6 +26,7 @@ public:
   operator void * ( ) const { return InternalIStream; }
 
   void Open(const char* filename);
+  bool IsOpen() { return InternalIStream.is_open(); }
   void Close();
 
   IStream& Seekg (std::streamoff off, std::ios_base::seekdir dir);
