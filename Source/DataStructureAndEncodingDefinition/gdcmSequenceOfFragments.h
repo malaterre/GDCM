@@ -22,18 +22,6 @@ public:
 /// \brief constructor (UndefinedLength by default)
   SequenceOfFragments(VL const & vl = 0xFFFFFFFF):SequenceLengthField(vl) { }
 
-  friend std::ostream& operator<<(std::ostream& _os, const SequenceOfFragments &_val);
-  void Print(std::ostream &os) const {
-    os << "SQ L= " << SequenceLengthField << "\n";
-    os << "Table:" << Table << "\n";
-    FragmentVector::const_iterator it =
-      Fragments.begin();
-    for(;it != Fragments.end(); ++it)
-      {
-      os << "  " << *it << "\n";
-      }
-  }
-
   /// \brief Returns the SQ length, as read from disk
   const VL & GetLength() const { return SequenceLengthField; }
   /// \brief Sets the actual SQ length
@@ -48,6 +36,18 @@ public:
   /// \brief Appends a Fragment to the already added ones
   void AddFragment(Fragment const &item);
 
+protected:
+  void Print(std::ostream &os) const {
+    os << "SQ L= " << SequenceLengthField << "\n";
+    os << "Table:" << Table << "\n";
+    FragmentVector::const_iterator it =
+      Fragments.begin();
+    for(;it != Fragments.end(); ++it)
+      {
+      os << "  " << *it << "\n";
+      }
+  }
+
 private:
   /// \brief Total length of the Sequence (or 0xffffffff) if undefined
   VL SequenceLengthField;
@@ -55,12 +55,6 @@ private:
   /// \brief Vector of Sequence Fragments
   FragmentVector Fragments;
 };
-//-----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream& os, const SequenceOfFragments &val)
-{
-  val.Print(os);
-  return os;
-}
 
 } // end namespace gdcm
 

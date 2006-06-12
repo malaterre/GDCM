@@ -18,6 +18,8 @@ SET(DSED_TEST_SRCS
   TestByteBuffer
   TestByteValue
   TestReader
+  TestSequenceOfFragments
+  TestSequenceOfItems
   )
 
 # Add the include paths

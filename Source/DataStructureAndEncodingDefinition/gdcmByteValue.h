@@ -24,28 +24,6 @@ public:
     Internal.clear(); 
   }
 
-  friend std::ostream& operator<<(std::ostream &_os, const ByteValue &_val);
-
-  void Print(std::ostream &os) const {
-  // This is perfectly valid to have a Length = 0 , so we cannot check
-  // the lenght for printing
-  if( !Internal.empty() )
-    {
-    if( IsPrintable() )
-      {
-      // WARNING: Internal.end() != Internal.begin()+Length
-      std::copy(Internal.begin(), Internal.begin()+Length,
-        std::ostream_iterator<char>(os));
-      }
-    else
-      os << "Loaded:" << Internal.size();
-    }
-  else
-    {
-    os << "Not Loaded";
-    }
-  }
-
   // When 'dumping' dicom file we still have some information from
   // Either the VR: eg LO (private tag)
   void PrintASCII(std::ostream &os) {
@@ -123,6 +101,26 @@ protected:
     return true;
     }
 
+  void Print(std::ostream &os) const {
+  // This is perfectly valid to have a Length = 0 , so we cannot check
+  // the lenght for printing
+  if( !Internal.empty() )
+    {
+    if( IsPrintable() )
+      {
+      // WARNING: Internal.end() != Internal.begin()+Length
+      std::copy(Internal.begin(), Internal.begin()+Length,
+        std::ostream_iterator<char>(os));
+      }
+    else
+      os << "Loaded:" << Internal.size();
+    }
+  else
+    {
+    os << "Not Loaded";
+    }
+  }
+
 
 private:
   std::vector<char> Internal;
@@ -133,12 +131,6 @@ private:
   // of byte, so we need to keep the right Length
   VL Length;
 };
-//----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream &os, const ByteValue &val)
-{
-  val.Print(os);
-  return os;
-}
 
 } // end namespace gdcm
 

@@ -22,24 +22,28 @@ public:
   Value() { }
   virtual ~Value() { }
 
-  //friend std::ostream& operator<<(std::ostream &os, const Value &val);
+  friend std::ostream& operator<<(std::ostream &os, const Value &val);
 
   virtual const VL & GetLength() const = 0;
   virtual void SetLength(VL const & l) = 0;
 
   virtual void Clear() = 0;
-  virtual void Print(std::ostream &os) const = 0;
 
   virtual IStream& Read(IStream &is) = 0;
   virtual OStream const & Write(OStream &os) const = 0;
+
+  virtual void Print(std::ostream &os) const = 0;
 };
 
-//inline std::ostream& operator<<(std::ostream &os, const Value &val)
-//{
-//  (void)val;
-//  os << "Should not happen";
-//  return os;
-//}
+//----------------------------------------------------------------------------
+// function do not carry vtable. Thus define in the base class the operator
+// and use the member function ->Print() to call the appropriate function
+// NOTE: All subclass of Value needs to implement the Print function
+inline std::ostream& operator<<(std::ostream &os, const Value &val)
+{
+  val.Print(os);
+  return os;
+}
 
 } // end namespace gdcm
 
