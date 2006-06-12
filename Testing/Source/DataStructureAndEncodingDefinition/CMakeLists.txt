@@ -20,6 +20,7 @@ SET(DSED_TEST_SRCS
   TestReader
   TestSequenceOfFragments
   TestSequenceOfItems
+  TestCopyValue
   )
 
 # Add the include paths

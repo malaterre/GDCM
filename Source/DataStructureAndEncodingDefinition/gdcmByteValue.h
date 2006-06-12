@@ -19,6 +19,11 @@ class GDCM_EXPORT ByteValue : public Value
 public:
   ByteValue(const char* array = 0, VL const &vl = 0):
     Internal(array, array+vl),Length(vl) { 
+      if( vl.IsOdd() )
+        {
+        gdcmWarningMacro( "Odd length" );
+        Internal.resize(vl+1);
+        }
   }
   ~ByteValue() { 
     Internal.clear(); 
