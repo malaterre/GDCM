@@ -5,6 +5,8 @@
 #include "gdcmDataElement.h"
 #include "gdcmByteValue.h"
 
+#include <tr1/memory>
+
 namespace gdcm
 {
 /**
@@ -15,13 +17,13 @@ class Value;
 class GDCM_EXPORT ImplicitDataElement : public DataElement
 {
 public:
-  ImplicitDataElement(const Tag& t = Tag(0), uint32_t const &vl = 0) : DataElement(t,vl),ValueField(0) {}
+  ImplicitDataElement(const Tag& t = Tag(0), uint32_t const &vl = 0) : DataElement(t,vl),ValueField() {}
   ~ImplicitDataElement();
 
   friend std::ostream& operator<<(std::ostream& _os, const ImplicitDataElement &_val);
 
   Value const & GetValue() const { return *ValueField; }
-  void SetValue(Value const & vl) { ValueField = const_cast<Value*>(&vl); }
+  void SetValue(Value const & vl) { ValueField = ValuePtr(const_cast<Value*>(&vl)); }
 
   VL GetLength() const
     {
@@ -35,13 +37,14 @@ public:
   ImplicitDataElement(ImplicitDataElement const & val):DataElement(val)
     {
     //assert( val.ValueField );
-    ValueField = val.ValueField;
+    ValueField = ValuePtr(val.ValueField);
     // FIXME: Invalidate old pointer
-    const_cast<ImplicitDataElement&>(val).ValueField = 0;
+    //const_cast<ImplicitDataElement&>(val).ValueField = 0;
     }
 
 private:
-  Value* ValueField;
+  typedef std::tr1::shared_ptr<gdcm::Value> ValuePtr;
+  ValuePtr ValueField;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& os, const ImplicitDataElement &val)

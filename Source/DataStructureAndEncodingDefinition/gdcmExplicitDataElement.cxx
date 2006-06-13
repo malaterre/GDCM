@@ -8,7 +8,7 @@ namespace gdcm
 
 ExplicitDataElement::~ExplicitDataElement()
 {
-  delete ValueField;
+  //delete ValueField;
 }
 
 //-----------------------------------------------------------------------------
@@ -66,23 +66,23 @@ IStream &ExplicitDataElement::Read(IStream &is)
   if( VRField == VR::SQ )
     {
     // Check wether or not this is an undefined length sequence
-    ValueField = new SequenceOfItems;
+    ValueField = ValuePtr(new SequenceOfItems);
     }
   else if( ValueLengthField.IsUndefined() )
     {
     // Ok this is Pixel Data fragmented...
     const Tag pixelData(0x7fe0,0x0010);
     assert( TagField == pixelData );
-    assert( VRField == VR::OB 
+    assert( VRField == VR::OB
          || VRField == VR::OW );
     //assert( xda.TagField == pixelData );
     //SequenceOfItems<ExplicitDataElement> si;
     //Read(si);
-    ValueField = new SequenceOfFragments;
+    ValueField = ValuePtr(new SequenceOfFragments);
     }
   else
     {
-    ValueField = new ByteValue;
+    ValueField = ValuePtr(new ByteValue);
     }
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc

@@ -7,6 +7,8 @@
 #include "gdcmSwapCode.h"
 #include "gdcmValue.h"
 
+#include <tr1/memory>
+
 namespace gdcm
 {
 // Data Element (Explicit)
@@ -19,8 +21,8 @@ class GDCM_EXPORT ExplicitDataElement : public DataElement
 {
 public:
   ExplicitDataElement(const Tag& t = Tag(0), uint32_t const &vl = 0,
-                      const VR& vr = VR::INVALID ) : 
-    DataElement(t,vl),VRField(vr),ValueField(0) { }
+                      const VR& vr = VR::INVALID ) :
+    DataElement(t,vl),VRField(vr),ValueField() { }
   ~ExplicitDataElement();
 
   friend std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_val);
@@ -29,9 +31,9 @@ public:
   void SetVR(VR const &vr) { VRField = vr; }
 
   Value const &GetValue() const { return *ValueField; }
-  void SetValue(Value const & vl) { 
-    assert( ValueField == 0 );
-    ValueField = const_cast<Value*>(&vl); 
+  void SetValue(Value const & vl) {
+    //assert( ValueField == 0 );
+    ValueField = ValuePtr(const_cast<Value*>(&vl));
   }
 
   VL GetLength() const {
@@ -48,15 +50,16 @@ public:
     {
     //assert( val.ValueField );
     VRField    = val.VRField;
-    ValueField = val.ValueField;
+    ValueField = ValuePtr(val.ValueField);
     // FIXME: Invalidate old pointer
-    const_cast<ExplicitDataElement&>(val).ValueField = 0;
+    //const_cast<ExplicitDataElement&>(val).ValueField = 0;
     }
 
 private:
   // Value Representation
   VR VRField;
-  Value* ValueField;
+  typedef std::tr1::shared_ptr<gdcm::Value> ValuePtr;
+  ValuePtr ValueField;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& os, const ExplicitDataElement & val)
