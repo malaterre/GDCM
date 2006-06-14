@@ -36,6 +36,13 @@ IStream &ExplicitDataElement::Read(IStream &is)
         }
       return is;
       }
+    if( TagField == Tag(0x00ff, 0x4aa5) )
+      {
+    assert(0 && "Should not happen" );
+    //  char c;
+    //  is.Read(&c, 1);
+    //  std::cerr << "Debug: " << c << std::endl;
+      }
   if( !VRField.Read(is) )
     {
     assert(0 && "Should not happen" );
