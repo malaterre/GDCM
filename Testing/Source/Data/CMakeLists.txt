@@ -42,6 +42,8 @@ SET(BLACK_LIST
   "Philips-Intera_Unexpected_Sequence_Terminator_2.dcm"
   "Philips-Intera_Unexpected_Sequence_Terminator_3.dcm"
   "ElemZeroNotGroupLength.dcm"
+  "Run11"
+  "Bug_Philips_ItemTag_3F3F"
   # EASY:
   "SIEMENS_MAGNETOM-12-MONO2-Uncompressed.dcm"
   )
