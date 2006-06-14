@@ -4,6 +4,7 @@ SET(DICT_TEST_SRCS
   TestDictEntry
   TestDict
   TestDicts
+  TestGroupDict
   )
 
 # Add the include paths
