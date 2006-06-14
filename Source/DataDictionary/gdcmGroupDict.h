@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <iomanip>
 
 namespace gdcm
 {
@@ -54,7 +55,8 @@ inline std::ostream& operator<<(std::ostream& _os, const GroupDict &_val)
   unsigned int size = _val.Size();
   for(unsigned int i=0; i<size; ++i)
     {
-    _os << std::hex << i << "," << _val.GetAbbreviation(i) << "," << _val.GetName(i) << "\n";
+    _os << std::hex << std::setw(4) << std::setfill( '0' ) << i << ","
+      << _val.GetAbbreviation(i) << "," << _val.GetName(i) << "\n";
     }
   return _os;
 }
