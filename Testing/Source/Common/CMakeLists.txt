@@ -7,6 +7,7 @@ SET(Common_TEST_SRCS
   TestStringStream
   TestOFStream
   TestIFStream
+  TestImage
   )
 
 # Add the include paths

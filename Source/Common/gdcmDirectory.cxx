@@ -6,10 +6,10 @@
 #include <sys/stat.h>  //stat function
 
 #ifdef _MSC_VER
-   #include <windows.h> 
+   #include <windows.h>
    #include <direct.h>
 #else
-   #include <dirent.h>   
+   #include <dirent.h>
    #include <sys/types.h>
 #endif
 

@@ -8,11 +8,10 @@
 #include <iostream>
 #include <assert.h>
 
-namespace gdcm 
+namespace gdcm
 {
 /*
- * I did not like the DirList name just because of:
- * DirList::IsDirectory()
+ * \brief Class for Directory
  */
 //-----------------------------------------------------------------------------
 class GDCM_EXPORT Directory
