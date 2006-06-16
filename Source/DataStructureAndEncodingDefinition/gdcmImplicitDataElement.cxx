@@ -10,7 +10,7 @@ namespace gdcm
 
 ImplicitDataElement::~ImplicitDataElement()
 {
-  //delete ValueField;
+  delete ValueField;
 }
 
 //-----------------------------------------------------------------------------
@@ -33,11 +33,11 @@ IStream &ImplicitDataElement::Read(IStream &is)
     {
     //assert( de.GetVR() == VR::SQ );
     // FIXME what if I am reading the pixel data...
-    ValueField = ValuePtr(new SequenceOfItems);
+    ValueField = new SequenceOfItems;
     }
   else
     {
-    ValueField = ValuePtr(new ByteValue);
+    ValueField = new ByteValue;
     }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
   // THE WORST BUG EVER. From GE Workstation

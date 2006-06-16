@@ -7,7 +7,7 @@
 #include "gdcmSwapCode.h"
 #include "gdcmValue.h"
 
-#include <tr1/memory>
+//#include <tr1/memory>
 
 namespace gdcm
 {
@@ -33,7 +33,7 @@ public:
   Value const &GetValue() const { return *ValueField; }
   void SetValue(Value const & vl) {
     //assert( ValueField == 0 );
-    ValueField = ValuePtr(const_cast<Value*>(&vl));
+    ValueField = const_cast<Value*>(&vl);
   }
 
   VL GetLength() const {
@@ -50,7 +50,7 @@ public:
     {
     //assert( val.ValueField );
     VRField    = val.VRField;
-    ValueField = ValuePtr(val.ValueField);
+    ValueField = val.ValueField;
     // FIXME: Invalidate old pointer
     //const_cast<ExplicitDataElement&>(val).ValueField = 0;
     }
@@ -58,8 +58,8 @@ public:
 private:
   // Value Representation
   VR VRField;
-  typedef std::tr1::shared_ptr<gdcm::Value> ValuePtr;
-  ValuePtr ValueField;
+  //typedef std::tr1::shared_ptr<gdcm::Value> ValuePtr;
+  Value *ValueField;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& os, const ExplicitDataElement & val)

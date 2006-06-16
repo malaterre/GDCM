@@ -19,8 +19,14 @@ namespace gdcm
 class GDCM_EXPORT Value
 {
 public:
-  Value() { }
-  virtual ~Value() { }
+  Value():ReferenceCount(1) { }
+  virtual ~Value() { 
+    --ReferenceCount;
+    if( ReferenceCount > 1 )
+      {
+      abort();
+      }
+  }
 
   friend std::ostream& operator<<(std::ostream &os, const Value &val);
 
@@ -33,6 +39,12 @@ public:
   virtual OStream const & Write(OStream &os) const = 0;
 
   virtual void Print(std::ostream &os) const = 0;
+
+  void Register() { ++ReferenceCount; }
+  void UnRegister() { --ReferenceCount; }
+
+private:
+  int ReferenceCount;
 };
 
 //----------------------------------------------------------------------------

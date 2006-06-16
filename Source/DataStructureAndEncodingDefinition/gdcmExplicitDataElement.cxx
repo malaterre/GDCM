@@ -8,7 +8,7 @@ namespace gdcm
 
 ExplicitDataElement::~ExplicitDataElement()
 {
-  //delete ValueField;
+  delete ValueField;
 }
 
 //-----------------------------------------------------------------------------
@@ -73,7 +73,7 @@ IStream &ExplicitDataElement::Read(IStream &is)
   if( VRField == VR::SQ )
     {
     // Check wether or not this is an undefined length sequence
-    ValueField = ValuePtr(new SequenceOfItems);
+    ValueField = new SequenceOfItems;
     }
   else if( ValueLengthField.IsUndefined() )
     {
@@ -85,11 +85,11 @@ IStream &ExplicitDataElement::Read(IStream &is)
     //assert( xda.TagField == pixelData );
     //SequenceOfItems<ExplicitDataElement> si;
     //Read(si);
-    ValueField = ValuePtr(new SequenceOfFragments);
+    ValueField = new SequenceOfFragments;
     }
   else
     {
-    ValueField = ValuePtr(new ByteValue);
+    ValueField = new ByteValue;
     }
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc

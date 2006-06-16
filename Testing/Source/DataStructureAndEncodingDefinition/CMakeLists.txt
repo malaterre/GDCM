@@ -20,8 +20,16 @@ SET(DSED_TEST_SRCS
   TestReader
   TestSequenceOfFragments
   TestSequenceOfItems
-  TestCopyValue
   )
+
+OPTION(SHARED_PTR "shared_ptr" OFF)
+MARK_AS_ADVANCED(SHARED_PTR)
+IF(SHARED_PTR)
+  SET(DSED_TEST_SRCS
+    ${DSED_TEST_SRCS}
+    TestCopyValue
+    )
+ENDIF(SHARED_PTR)
 
 # Add the include paths
 INCLUDE_DIRECTORIES(

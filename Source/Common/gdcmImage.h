@@ -12,6 +12,9 @@ namespace gdcm
 /**
  * \brief Image
  * \note bla
+ * I think gdcm::Image is not the right approach I would rather see a
+ * gdcm::ExtractImageInformation coupled with the gdcm::PixelData
+ * ExtractImageInformation would use the SOP class to find out image info (spacing, origin...)
  */
 
 class PixelData;

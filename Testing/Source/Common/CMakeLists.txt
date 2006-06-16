@@ -8,6 +8,8 @@ SET(Common_TEST_SRCS
   TestOFStream
   TestIFStream
   TestImage
+  TestObject
+  TestSmartPointer
   )
 
 # Add the include paths
