@@ -35,24 +35,24 @@ int TestDataElement1(const uint16_t group, const uint16_t element,
   str = reinterpret_cast<const char*>(&vl);
   ss.Write(str, sizeof(vl));
 
-  gdcm::DataElement de;
-  de.Read( ss );
-  if( de.GetTag().GetGroup()   != group ||
-      de.GetTag().GetElement() != element ||
-      de.GetVL()               != vl )
-    {
-    std::cerr << de << std::endl;
-    return 1;
-    }
-
-  gdcm::DataElement de2;
-  WriteRead(de, de2);
-  if( !(de == de2) )
-    {
-    std::cerr << de << std::endl;
-    std::cerr << de2 << std::endl;
-    return 1;
-    }
+//  gdcm::DataElement de;
+//  de.Read( ss );
+//  if( de.GetTag().GetGroup()   != group ||
+//      de.GetTag().GetElement() != element ||
+//      de.GetVL()               != vl )
+//    {
+//    std::cerr << de << std::endl;
+//    return 1;
+//    }
+//
+//  gdcm::DataElement de2;
+//  WriteRead(de, de2);
+//  if( !(de == de2) )
+//    {
+//    std::cerr << de << std::endl;
+//    std::cerr << de2 << std::endl;
+//    return 1;
+//    }
 
   return 0;
 }

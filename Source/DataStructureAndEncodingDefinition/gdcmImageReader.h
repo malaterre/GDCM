@@ -21,6 +21,8 @@ public:
   const Image& GetImage() const;
   //void SetImage(Image const &img);
 
+  bool Read();
+
 private:
   ImageValue PixelData;
 };

@@ -38,10 +38,10 @@ public:
   const unsigned int *GetDimensions() const;
   void SetDimensions(unsigned int *dims);
 
-  double *GetSpacing() const;
+  const double *GetSpacing() const;
   void SetSpacing(double *spacing);
 
-  double *GetOrigin() const;
+  const double *GetOrigin() const;
   void SetOrigin(double *ori);
   //unsigned int GetNumberOfScalarComponents() const;
 
@@ -50,6 +50,9 @@ public:
 
 //  Image(Image const&);
 //  Image &operator= (Image const&);
+
+protected:
+  unsigned long GetBufferLength() const;
 
 private:
   unsigned int NumberOfDimensions;

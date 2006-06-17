@@ -52,6 +52,10 @@ public:
     return os;
     }
 
+  Value const & GetValue() const {
+    return Offsets;
+  }
+
 private:
   ByteValue Offsets;
 };

@@ -31,9 +31,9 @@ class GDCM_EXPORT Reader
 {
 public:
   Reader():Stream(),DS(0),Header(0) {}
-  ~Reader();
+  virtual ~Reader();
 
-  bool Read(); // Execute()
+  virtual bool Read(); // Execute()
   void SetFileName(std::string const &filename) {
     Stream.Open(filename.c_str());
   }

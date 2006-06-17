@@ -2,10 +2,9 @@
 #ifndef __gdcmDataSet_h
 #define __gdcmDataSet_h
 
-
 #include "gdcmDataElement.h"
 #include "gdcmTS.h"
-
+#include "gdcmValue.h"
 
 namespace gdcm
 {
@@ -22,7 +21,7 @@ namespace gdcm
  * object.
  */
 class StructuredSetBase;
-class GDCM_EXPORT DataSet
+class GDCM_EXPORT DataSet : public Value
 {
 public:
   DataSet(TS::NegociatedType const &type = TS::Explicit);
@@ -59,12 +58,20 @@ public:
   TS::NegociatedType GetNegociatedType() const {
     return NegociatedTS;
   }
+
+  const VL & GetLength() const { return Length; }
+  void SetLength(VL const & l) { Length = l; }
+
   DataSet &operator = (DataSet const &r);
   DataSet(DataSet const &ds);
 
 private:
   TS::NegociatedType NegociatedTS;
   StructuredSetBase *Internal;
+  
+  // Really only usefull in the nested dataset case
+  VL Length;
+
 };
 //-----------------------------------------------------------------------------
 

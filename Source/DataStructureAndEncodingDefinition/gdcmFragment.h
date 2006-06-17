@@ -74,6 +74,10 @@ public:
     return os;
     }
 
+  Value const & GetValue() const {
+    return FragmentValue;
+  }
+
 private:
   ByteValue FragmentValue;
 };

@@ -89,6 +89,8 @@ public:
       }
     return os;
     }
+
+  virtual Value const & GetValue() const = 0;
   
 protected:
   Tag TagField;

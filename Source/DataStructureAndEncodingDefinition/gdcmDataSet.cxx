@@ -127,7 +127,7 @@ std::ostream& operator<<(std::ostream &os, const DataSet &val)
 
 
 //-----------------------------------------------------------------------------
-DataSet::DataSet(TS::NegociatedType const &type)
+DataSet::DataSet(TS::NegociatedType const &type):Length(0)
 {
   if(type == TS::Explicit)
     {
@@ -158,7 +158,7 @@ DataSet& DataSet::operator=(DataSet const &)
 }
 
 //-----------------------------------------------------------------------------
-DataSet::DataSet(DataSet const &ds)
+DataSet::DataSet(DataSet const &ds):Value(ds)
 {
   NegociatedTS = ds.NegociatedTS;
   if ( NegociatedTS == TS::Explicit )

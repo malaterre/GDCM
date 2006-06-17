@@ -95,6 +95,8 @@ public:
     return NestedDataSet.Write(os);
     }
 
+  Value const & GetValue() const { return NestedDataSet; }
+
 private:
   /* NESTED DATA SET  a Data Set contained within a Data Element of an other Data Set.
    * May be nested recursively.

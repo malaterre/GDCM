@@ -24,6 +24,10 @@ public:
 
   bool GetBuffer(char *buffer) const;
 
+  void SetValue(Value const &v) {
+    PixelData = SmartPointer<Value>( const_cast<Value*>(&v) );
+  }
+
 private:
   typedef SmartPointer<Value> ValuePtr;
   ValuePtr PixelData; //copied from 7fe0,0010

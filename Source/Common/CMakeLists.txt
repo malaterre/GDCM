@@ -26,6 +26,7 @@ SET(Common_SRCS
   gdcmOFStream.cxx
   gdcmStringStream.cxx
   gdcmImage.cxx
+  gdcmImageIStream.cxx
   )
 
 ADD_LIBRARY(gdcmCommon ${Common_SRCS})

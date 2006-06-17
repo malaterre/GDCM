@@ -26,26 +26,47 @@ const unsigned int *Image::GetDimensions() const
 void Image::SetDimensions(unsigned int *dims)
 {
   assert( NumberOfDimensions );
-  //Dimensions = std::vector<unsigned int>(dims, NumberOfDimensions);
+  Dimensions = std::vector<unsigned int>(dims, 
+    dims+sizeof(unsigned int)*NumberOfDimensions);
 }
 
-double *Image::GetSpacing() const
+const double *Image::GetSpacing() const
 {
+  return &Spacing[0];
 }
 
 void Image::SetSpacing(double *spacing)
 {
+  assert( NumberOfDimensions );
+  Spacing = std::vector<double>(spacing, 
+    spacing+sizeof(double)*NumberOfDimensions);
 }
 
-double *Image::GetOrigin() const
+const double *Image::GetOrigin() const
 {
+  return &Origin[0];
 }
 
 void Image::SetOrigin(double *ori)
 {
+  assert( NumberOfDimensions );
+  Origin = std::vector<double>(ori, 
+    ori+sizeof(double)*NumberOfDimensions);
 }
 
-//unsigned int GetNumberOfScalarComponents() const;
+unsigned long Image::GetBufferLength() const
+{
+  assert( NumberOfDimensions );
+  assert( NumberOfDimensions == Dimensions.size() );
+  unsigned long len = 0;
+  unsigned int mul = 1;
+  std::vector<unsigned int>::const_iterator it = Dimensions.begin();
+  for(; it != Dimensions.end(); ++it)
+    {
+    mul *= *it;
+    }
+  return len;
+}
 
 // Acces the raw data
 bool Image::GetBuffer(char *buffer) const
