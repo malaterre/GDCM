@@ -24,7 +24,6 @@ public:
   virtual ~StructuredSetBase() {}
 
   virtual void Clear() = 0;
-  virtual unsigned int Size() const = 0;
   virtual void Print(std::ostream &os) const = 0;
   virtual IStream &Read(IStream &is) = 0;
   virtual IStream &ReadNested(IStream &is) = 0;
@@ -38,9 +37,6 @@ class StructuredSet : public StructuredSetBase
 public:
   typedef typename std::set<DEType, lttag> DataElementSet;
   //typedef typename DataElementSet::iterator iterator;
-  virtual unsigned int Size() const {
-    return DES.size();
-  }
   virtual void Clear() {
     DES.clear();
   }
@@ -179,11 +175,6 @@ DataSet::DataSet(DataSet const &ds):Value(ds)
 //-----------------------------------------------------------------------------
 void DataSet::Clear() {
   Internal->Clear();
-}
-
-//-----------------------------------------------------------------------------
-unsigned int DataSet::Size() const {
-  return Internal->Size();
 }
 
 //-----------------------------------------------------------------------------

@@ -19,6 +19,15 @@ namespace gdcm
  * A collection of Data Elements ordered by increasing Data Element Tag 
  * number that is an encoding of the values of Attributes of a real world 
  * object.
+ * \note
+ * Implementation note. If one do:
+ * DataSet ds;
+ * ds.SetLength(0);
+ * ds.Read(is);
+ * setting length to 0 actually means try to read is as if it was a root
+ * DataSet. Other value are undefined (nested dataset with undefined length)
+ * or defined length (different from 0) means nested dataset with defined
+ * length.
  */
 class StructuredSetBase;
 class GDCM_EXPORT DataSet : public Value
@@ -31,12 +40,6 @@ public:
 
   // Clear
   void Clear();
-
-  // Size
-  unsigned int Size() const;
-
-  // Resize
-  void Resize();
 
   // Insert
   void InsertDataElement(const DataElement& de);
