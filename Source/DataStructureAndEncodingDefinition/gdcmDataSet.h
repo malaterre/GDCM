@@ -43,6 +43,7 @@ public:
   void InsertDataElement(const DataElement& de);
 
   // Get
+  bool FindDataElement(const Tag &t) const;
   const DataElement& GetDataElement(const Tag &t) const;
 
   //bool IsEmpty() { return DataElements.empty(); }

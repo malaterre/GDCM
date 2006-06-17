@@ -29,6 +29,7 @@ namespace gdcm
 // -> Value
 // TODO: This class SHOULD be pure virtual. I dont want a user
 // to shoot himself in the foot.
+class Value;
 class GDCM_EXPORT DataElement
 {
 public:
@@ -88,7 +89,7 @@ public:
       }
     return os;
     }
-
+  
 protected:
   Tag TagField;
   // This is the value read from the file, might be different from the length of Value Field

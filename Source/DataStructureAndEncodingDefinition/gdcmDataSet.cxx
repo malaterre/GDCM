@@ -9,7 +9,7 @@ namespace gdcm
 {
 
 //-----------------------------------------------------------------------------
-struct ltstr
+struct lttag
 {
   bool operator()(const DataElement& s1,
 		  const DataElement& s2) const
@@ -36,7 +36,7 @@ template<class DEType>
 class StructuredSet : public StructuredSetBase
 {
 public:
-  typedef typename std::set<DEType, ltstr> DataElementSet;
+  typedef typename std::set<DEType, lttag> DataElementSet;
   //typedef typename DataElementSet::iterator iterator;
   virtual unsigned int Size() const {
     return DES.size();
@@ -98,7 +98,18 @@ public:
   const DEType& GetDataElement(const Tag &t) const {
     const DEType r(t);
     typename DataElementSet::iterator it = DES.find(r);
+    assert( DES.find(r) != DES.end() );
     return *it;
+    }
+
+  bool FindDataElement(const Tag &t) const {
+    const DEType r(t);
+    typename DataElementSet::iterator it = DES.find(r);
+    if( DES.find(r) != DES.end() )
+      {
+      return true;
+      }
+    return false;
     }
 
 private:
@@ -206,6 +217,20 @@ const DataElement& DataSet::GetDataElement(const Tag &t) const
   {
     return static_cast<StructuredSet<ImplicitDataElement>* >(Internal)->
       GetDataElement(t);
+  }
+}
+
+bool DataSet::FindDataElement(const Tag &t) const
+{
+  if(NegociatedTS == TS::Explicit)
+  {
+    return static_cast<StructuredSet<ExplicitDataElement>* >(Internal)->
+      FindDataElement(t);
+  }
+  else
+  {
+    return static_cast<StructuredSet<ImplicitDataElement>* >(Internal)->
+      FindDataElement(t);
   }
 }
 
