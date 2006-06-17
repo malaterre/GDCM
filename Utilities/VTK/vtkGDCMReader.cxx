@@ -15,16 +15,18 @@
 #include "vtkGDCMReader.h"
 
 #include "vtkObjectFactory.h"
+#include "vtkImageData.h"
+#include "vtkInformationVector.h"
+#include "vtkInformation.h"
 
-#include "gdcmReader.h"
+#include "gdcmImageReader.h"
 
 vtkCxxRevisionMacro(vtkGDCMReader, "$Revision: 1.20 $");
 vtkStandardNewMacro(vtkGDCMReader);
 
-using gdcm::Reader;
 struct vtkGDCMReaderInternals
 {
-  Reader DICOMReader;
+  gdcm::ImageReader DICOMReader;
 };
 
 vtkGDCMReader::vtkGDCMReader()
@@ -54,6 +56,18 @@ int vtkGDCMReader::RequestInformation(vtkInformation *request,
                                       vtkInformationVector **inputVector,
                                       vtkInformationVector *outputVector)
 {
+  const gdcm::Image &image = this->Internals->DICOMReader.GetImage();
+  assert( image.GetNumberOfDimensions() == 2 );
+  const unsigned int *dims = image.GetDimensions();
+
+  // Set the Extents.
+  this->DataExtent[0] = 0;
+  this->DataExtent[1] = dims[0] - 1;
+  this->DataExtent[2] = 0;
+  this->DataExtent[3] = dims[1] - 1;
+  this->DataExtent[4] = 0;
+  this->DataExtent[5] = 0;
+
   return this->Superclass::RequestInformation(
     request, inputVector, outputVector);
 }
@@ -64,8 +78,22 @@ int vtkGDCMReader::RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector *outputVector)
 {
   (void)outputVector;
-  //char *dest = static_cast<char *>(data->GetScalarPointer());
-  //memcpy(dest, Internals->DicomImage.GetPointer(), 2 );
+  const gdcm::Image &image = this->Internals->DICOMReader.GetImage();
+
+  //this->UpdateProgress(0.2);
+
+  // Make sure the output dimension is OK, and allocate its scalars
+
+  vtkInformation *outInfo = outputVector->GetInformationObject(0);
+  vtkImageData *output = vtkImageData::SafeDownCast(
+    outInfo->Get(vtkDataObject::DATA_OBJECT()));
+  int *dext = this->GetDataExtent();
+  output->SetDimensions(
+    dext[1] - dext[0] + 1, dext[3] - dext[2] + 1, dext[5] - dext[4] + 1);
+  output->AllocateScalars();
+
+  char * pointer = static_cast<char*>(output->GetScalarPointer());
+  image.GetBuffer(pointer);
 
   return 1;
 }
@@ -74,4 +102,5 @@ int vtkGDCMReader::RequestData(vtkInformation *vtkNotUsed(request),
 void vtkGDCMReader::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os,indent);
+  //this->Internals->DICOMReader.Print(os);
 }

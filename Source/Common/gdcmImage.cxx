@@ -27,7 +27,7 @@ void Image::SetDimensions(unsigned int *dims)
 {
   assert( NumberOfDimensions );
   Dimensions = std::vector<unsigned int>(dims, 
-    dims+sizeof(unsigned int)*NumberOfDimensions);
+    dims+NumberOfDimensions);
 }
 
 const double *Image::GetSpacing() const
@@ -39,7 +39,7 @@ void Image::SetSpacing(double *spacing)
 {
   assert( NumberOfDimensions );
   Spacing = std::vector<double>(spacing, 
-    spacing+sizeof(double)*NumberOfDimensions);
+    spacing+NumberOfDimensions);
 }
 
 const double *Image::GetOrigin() const
@@ -51,7 +51,7 @@ void Image::SetOrigin(double *ori)
 {
   assert( NumberOfDimensions );
   Origin = std::vector<double>(ori, 
-    ori+sizeof(double)*NumberOfDimensions);
+    ori+NumberOfDimensions);
 }
 
 unsigned long Image::GetBufferLength() const
@@ -65,6 +65,8 @@ unsigned long Image::GetBufferLength() const
     {
     mul *= *it;
     }
+  len = mul;
+  assert( len != 0 );
   return len;
 }
 

@@ -2,6 +2,7 @@
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
 #include "gdcmValue.h"
+//#include "gdcmElement.h"
 
 namespace gdcm
 {
@@ -50,27 +51,92 @@ bool ImageReader::Read()
     return false;
     }
 
-  // Ok we have the dataset let's feed the Image (PixelData)
-  // 1. Do the PixelData
-  const Tag pixeldata = gdcm::Tag(0x7fe0, 0x0010);
   const DataSet &ds = GetDataSet();
+  TS::NegociatedType type = ds.GetNegociatedType();
+  // Ok we have the dataset let's feed the Image (PixelData)
+  // 1. First find how many dimensions there is:
+  PixelData.SetNumberOfDimensions(2); // FIXME
+ 
+  // 2. What are the col & rows:
+  unsigned int dims[3];
+  dims[2] = 0; // FIXME
+  // D 0028|0010 [US] [Rows] [512]
+  const Tag trows = gdcm::Tag(0x0028, 0x0010);
+  const DataElement& rde = ds.GetDataElement( trows );
+  if( type == TS::Explicit )
+    {
+    abort();
+    //const ExplicitDataElement &xde =
+    //  dynamic_cast<const ExplicitDataElement&>(rde);
+    //Value &v = xde.GetValue();
+    }
+  else if( type == TS::Implicit )
+    {
+    const ImplicitDataElement &ide =
+      dynamic_cast<const ImplicitDataElement&>(rde);
+    const Value &v = ide.GetValue();
+    const Value *pv = &v;
+    const ByteValue *bv = dynamic_cast<const ByteValue*>(pv);
+    //Element<VR::US,VM::VM1> rows = 
+    //  reinterpret_cast<unsigned short>(bv->GetPointer());
+    const char *rows_str = bv->GetPointer();
+    const unsigned short *rows =
+      reinterpret_cast<const unsigned short*>(rows_str);
+    dims[0] = *rows;
+    }
+  else
+    {
+    gdcmErrorMacro( "Not sure how you are supposed to reach here" );
+    return false;
+    }
+  // D 0028|0011 [US] [Columns] [512]
+  const Tag tcolumns = gdcm::Tag(0x0028, 0x0011);
+  const DataElement& cde = ds.GetDataElement( tcolumns );
+  if( type == TS::Explicit )
+    {
+    abort();
+    //const ExplicitDataElement &xde =
+    //  dynamic_cast<const ExplicitDataElement&>(rde);
+    //Value &v = xde.GetValue();
+    }
+  else if( type == TS::Implicit )
+    {
+    const ImplicitDataElement &ide =
+      dynamic_cast<const ImplicitDataElement&>(cde);
+    const Value &v = ide.GetValue();
+    const Value *pv = &v;
+    const ByteValue *bv = dynamic_cast<const ByteValue*>(pv);
+    //Element<VR::US,VM::VM1> rows = 
+    //  reinterpret_cast<unsigned short>(bv->GetPointer());
+    const char *columns_str = bv->GetPointer();
+    const unsigned short *columns =
+      reinterpret_cast<const unsigned short*>(columns_str);
+    dims[1] = *columns;
+    }
+  else
+    {
+    gdcmErrorMacro( "Not sure how you are supposed to reach here" );
+    return false;
+    }
+  PixelData.SetDimensions( dims );
+  // 3. Do the PixelData
+  const Tag pixeldata = gdcm::Tag(0x7fe0, 0x0010);
   if( !ds.FindDataElement( pixeldata ) )
     {
     gdcmWarningMacro( "No Pixel Data Found" );
     return false;
     }
-  const DataElement& de = ds.GetDataElement( pixeldata );
-  TS::NegociatedType type = ds.GetNegociatedType();
+  const DataElement& pdde = ds.GetDataElement( pixeldata );
   if( type == TS::Explicit )
     {
     const ExplicitDataElement &xde =
-      dynamic_cast<const ExplicitDataElement&>(de);
+      dynamic_cast<const ExplicitDataElement&>(pdde);
     PixelData.SetValue( xde.GetValue() );
     }
   else if( type == TS::Implicit )
     {
     const ImplicitDataElement &ide =
-      dynamic_cast<const ImplicitDataElement&>(de);
+      dynamic_cast<const ImplicitDataElement&>(pdde);
     PixelData.SetValue( ide.GetValue() );
     }
   else
