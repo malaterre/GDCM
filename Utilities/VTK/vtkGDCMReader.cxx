@@ -68,6 +68,7 @@ int vtkGDCMReader::RequestInformation(vtkInformation *request,
   this->DataExtent[4] = 0;
   this->DataExtent[5] = 0;
 
+  this->SetDataScalarType( VTK_UNSIGNED_CHAR );
   return this->Superclass::RequestInformation(
     request, inputVector, outputVector);
 }
