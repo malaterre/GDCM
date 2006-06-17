@@ -113,12 +113,11 @@ private:
 };
 
 //-----------------------------------------------------------------------------
-std::ostream& operator<<(std::ostream &os, const DataSet &val)
+void DataSet::Print(std::ostream &os) const
 {
-  os << "TS: " << val.NegociatedTS << "\n";
-  StructuredSetBase *p = val.Internal;
+  os << "TS: " << NegociatedTS << "\n";
+  StructuredSetBase *p = Internal;
   p->Print( os );
-  return os;
 }
 
 

@@ -36,8 +36,6 @@ public:
   DataSet(TS::NegociatedType const &type = TS::Explicit);
   ~DataSet();
 
-  friend std::ostream& operator<<(std::ostream &_os, const DataSet &_val);
-
   // Clear
   void Clear();
 
@@ -65,6 +63,8 @@ public:
 
   DataSet &operator = (DataSet const &r);
   DataSet(DataSet const &ds);
+
+  void Print(std::ostream &os) const;
 
 private:
   TS::NegociatedType NegociatedTS;
