@@ -8,7 +8,6 @@ namespace gdcm
 
 ExplicitDataElement::~ExplicitDataElement()
 {
-  delete ValueField;
 }
 
 //-----------------------------------------------------------------------------

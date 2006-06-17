@@ -6,8 +6,7 @@
 #include "gdcmVR.h"
 #include "gdcmSwapCode.h"
 #include "gdcmValue.h"
-
-//#include <tr1/memory>
+#include "gdcmSmartPointer.h"
 
 namespace gdcm
 {
@@ -22,7 +21,7 @@ class GDCM_EXPORT ExplicitDataElement : public DataElement
 public:
   ExplicitDataElement(const Tag& t = Tag(0), uint32_t const &vl = 0,
                       const VR& vr = VR::INVALID ) :
-    DataElement(t,vl),VRField(vr),ValueField() { }
+    DataElement(t,vl),VRField(vr),ValueField(0) { }
   ~ExplicitDataElement();
 
   friend std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_val);
@@ -33,7 +32,7 @@ public:
   Value const &GetValue() const { return *ValueField; }
   void SetValue(Value const & vl) {
     //assert( ValueField == 0 );
-    ValueField = const_cast<Value*>(&vl);
+    ValueField = &vl;
   }
 
   VL GetLength() const {
@@ -51,15 +50,14 @@ public:
     //assert( val.ValueField );
     VRField    = val.VRField;
     ValueField = val.ValueField;
-    // FIXME: Invalidate old pointer
-    //const_cast<ExplicitDataElement&>(val).ValueField = 0;
     }
 
 private:
   // Value Representation
   VR VRField;
   //typedef std::tr1::shared_ptr<gdcm::Value> ValuePtr;
-  Value *ValueField;
+  typedef SmartPointer<Value> ValuePtr;
+  ValuePtr ValueField;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& os, const ExplicitDataElement & val)

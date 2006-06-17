@@ -3,19 +3,24 @@
 
 #include "gdcmTypes.h"
 #include <assert.h>
+#include <iostream> // grrrr
 
+//namespace std { class ostream; }
 namespace gdcm
 {
-
 class Object
 {
 public:
+  friend std::ostream& operator<<(std::ostream &os, const Object &obj);
+
   Object():ReferenceCount(0) {}
   virtual ~Object()
     {
     assert(ReferenceCount >= 0 );
-    assert(ReferenceCount == 0 );
+    //assert(ReferenceCount == 0 );
     }
+
+  // For the purpose of the invasive SmartPointer implementation
   void Register() {
     ReferenceCount++;
   }
@@ -28,10 +33,26 @@ public:
       }
     }
 
+
+//protected:
+  // For dealing with printing of object and polymorphism
+  virtual void Print(std::ostream &) const /*= 0*/ {};
+
 private:
   long ReferenceCount;
 };
 
+//----------------------------------------------------------------------------
+// function do not carry vtable. Thus define in the base class the operator
+// and use the member function ->Print() to call the appropriate function
+// NOTE: All subclass of Value needs to implement the Print function
+inline std::ostream& operator<<(std::ostream &os, const Object &obj)
+{
+  obj.Print(os);
+  return os;
+}
+
 } // end namespace gdcm
 
 #endif //__gdcmObject_h
+

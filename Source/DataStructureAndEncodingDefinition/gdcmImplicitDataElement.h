@@ -4,8 +4,7 @@
 
 #include "gdcmDataElement.h"
 #include "gdcmByteValue.h"
-
-//#include <tr1/memory>
+#include "gdcmSmartPointer.h"
 
 namespace gdcm
 {
@@ -17,7 +16,7 @@ class Value;
 class GDCM_EXPORT ImplicitDataElement : public DataElement
 {
 public:
-  ImplicitDataElement(const Tag& t = Tag(0), uint32_t const &vl = 0) : DataElement(t,vl),ValueField() {}
+  ImplicitDataElement(const Tag& t = Tag(0), uint32_t const &vl = 0) : DataElement(t,vl),ValueField(0) {}
   ~ImplicitDataElement();
 
   friend std::ostream& operator<<(std::ostream& _os, const ImplicitDataElement &_val);
@@ -38,13 +37,11 @@ public:
     {
     //assert( val.ValueField );
     ValueField = val.ValueField;
-    // FIXME: Invalidate old pointer
-    //const_cast<ImplicitDataElement&>(val).ValueField = 0;
     }
 
 private:
-  //typedef std::tr1::shared_ptr<gdcm::Value> ValuePtr;
-  Value *ValueField;
+  typedef SmartPointer<Value> ValuePtr;
+  ValuePtr ValueField;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& os, const ImplicitDataElement &val)

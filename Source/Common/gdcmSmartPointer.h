@@ -40,16 +40,16 @@ public:
     { return Pointer; }
 
   // Overload operator assignment.
-  SmartPointer &operator = (const SmartPointer &r)
+  SmartPointer &operator = (SmartPointer const &r)
     { return operator = (r.Pointer); }
   
   // Overload operator assignment.
-  SmartPointer &operator = (ObjectType *r)
+  SmartPointer &operator = (ObjectType const *r)
     {                                                              
     if (Pointer != r)
       {
       ObjectType* tmp = Pointer; //important
-      Pointer = r;
+      Pointer = const_cast<ObjectType*>(r);
       Register();
       if ( tmp ) { tmp->UnRegister(); }
       }
@@ -73,3 +73,4 @@ private:
 } // end namespace gdcm
 
 #endif //__gdcmSmartPointer_h
+
