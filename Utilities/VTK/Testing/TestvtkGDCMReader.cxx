@@ -8,7 +8,7 @@ int TestvtkGDCMReader(int, char *[])
 {
   const char filename[] = GDCM_DATA_ROOT "/test.acr";
   vtkGDCMReader *reader = vtkGDCMReader::New();
-  reader->CanReadFile( filename );
+  //reader->CanReadFile( filename );
   reader->SetFileName( filename );
   reader->Update();
 

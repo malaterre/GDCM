@@ -56,6 +56,11 @@ int vtkGDCMReader::RequestInformation(vtkInformation *request,
                                       vtkInformationVector **inputVector,
                                       vtkInformationVector *outputVector)
 {
+  this->Internals->DICOMReader.SetFileName( this->FileName );
+  if( !Internals->DICOMReader.Read() )
+    {
+    return 0;
+    }
   const gdcm::Image &image = this->Internals->DICOMReader.GetImage();
   assert( image.GetNumberOfDimensions() == 2 );
   const unsigned int *dims = image.GetDimensions();
@@ -68,7 +73,8 @@ int vtkGDCMReader::RequestInformation(vtkInformation *request,
   this->DataExtent[4] = 0;
   this->DataExtent[5] = 0;
 
-  this->SetDataScalarType( VTK_UNSIGNED_CHAR );
+  this->DataScalarType = VTK_UNSIGNED_CHAR;
+
   return this->Superclass::RequestInformation(
     request, inputVector, outputVector);
 }
@@ -95,6 +101,7 @@ int vtkGDCMReader::RequestData(vtkInformation *vtkNotUsed(request),
 
   char * pointer = static_cast<char*>(output->GetScalarPointer());
   image.GetBuffer(pointer);
+  //this->FileLowerLeft = 1;
 
   return 1;
 }
