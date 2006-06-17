@@ -11,38 +11,54 @@ namespace gdcm
 
 /**
  * \brief Image
- * \note bla
- * I think gdcm::Image is not the right approach I would rather see a
- * gdcm::ExtractImageInformation coupled with the gdcm::PixelData
- * ExtractImageInformation would use the SOP class to find out image info (spacing, origin...)
+ * \note
+ * This is the container for an Image in the general sense.
+ * From this container you should be able to request information like:
+ * - Origin
+ * - Dimension
+ * - PixelType
+ * ...
+ * But also to retrieve the image as a raw buffer (char *)
+ * Since we have to deal with both RAW data and JPEG stream (which
+ * internally encode all the above information) this API might seems 
+ * redundant. One way to solve that would be to subclass gdcm::Image
+ * with gdcm::JPEGImage which would from the stream extract the header info
+ * and fill it to please gdcm::Image...well except origin for instance
+ * 
  */
-
-class PixelData;
 class GDCM_EXPORT Image
 {
 public:
-  Image ():Dimensions() {}
-  ~Image() {}
+  Image ():NumberOfDimensions(0),Dimensions() {}
+  virtual ~Image() {}
 
-  unsigned int GetDimension();
+  unsigned int GetNumberOfDimensions() const;
+  void SetNumberOfDimensions(unsigned int dim);
 
-  unsigned int *GetSizes();
-  double *GetSpacing();
-  double *GetOrigin();
-  unsigned int GetNumberOfScalarComponents();
+  const unsigned int *GetDimensions() const;
+  void SetDimensions(unsigned int *dims);
+
+  double *GetSpacing() const;
+  void SetSpacing(double *spacing);
+
+  double *GetOrigin() const;
+  void SetOrigin(double *ori);
+  //unsigned int GetNumberOfScalarComponents() const;
+
+  // Acces the raw data
+  virtual bool GetBuffer(char *buffer) const;
+
+//  Image(Image const&);
+//  Image &operator= (Image const&);
 
 private:
-  std::vector<int> Dimensions;
+  unsigned int NumberOfDimensions;
+  std::vector<unsigned int> Dimensions;
   std::vector<double> Spacing;
   std::vector<double> Origin;
-  // Pixel Type ??
-  PixelData *Buffer;
-
-  Image(Image const&);
-  Image &operator= (Image const&);
 };
 
-}
+} // end namespace gdcm
 
 #endif //__gdcmImage_h
 

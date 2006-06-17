@@ -21,10 +21,14 @@ public:
   // delete p; // due to SmartPointer::operator ObjectType * () const 
   // but on the other hand one could not define an Object on the stack
   // Object obj;
+  // Furthermore it would not prevent anyone from doing:
+  // class MyObject : public Object {};
+  // SmartPointer<MyObject> o = new MyObject;
+  // delete o; // grrrrrr
   virtual ~Object()
     {
-    assert(ReferenceCount >= 0 );
-    //assert(ReferenceCount == 0 );
+    //assert(ReferenceCount >= 0 );
+    assert(ReferenceCount == 0 );
     }
 
   // For the purpose of the invasive SmartPointer implementation

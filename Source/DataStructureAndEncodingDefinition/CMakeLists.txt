@@ -13,6 +13,7 @@ SET(DSED_SRCS
   gdcmSequenceOfFragments.cxx
   gdcmSequenceOfItems.cxx
   gdcmImageReader.cxx
+  gdcmImageValue.cxx
   )
 
 # Add the include paths
