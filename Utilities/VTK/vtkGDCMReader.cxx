@@ -29,17 +29,19 @@ struct vtkGDCMReaderInternals
 
 vtkGDCMReader::vtkGDCMReader()
 {
-  Internals = new vtkGDCMReaderInternals;
+  this->Internals = new vtkGDCMReaderInternals;
+  //this->ScalarArrayName = NULL;
+  //this->SetScalarArrayName( "GDCM" );
 }
 
 vtkGDCMReader::~vtkGDCMReader()
 {
-  delete Internals;
+  delete this->Internals;
 }
 
 int vtkGDCMReader::CanReadFile(const char* fname)
 {
-  Internals->DICOMReader.SetFileName( fname );
+  this->Internals->DICOMReader.SetFileName( fname );
   if( Internals->DICOMReader.Read() )
     {
     return 0;
@@ -62,6 +64,9 @@ int vtkGDCMReader::RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector *outputVector)
 {
   (void)outputVector;
+  //char *dest = static_cast<char *>(data->GetScalarPointer());
+  //memcpy(dest, Internals->DicomImage.GetPointer(), 2 );
+
   return 1;
 }
 
