@@ -58,6 +58,8 @@ public:
   TS::NegociatedType GetNegociatedType() const {
     return NegociatedTS;
   }
+  DataSet &operator = (DataSet const &r);
+  DataSet(DataSet const &ds);
 
 private:
   TS::NegociatedType NegociatedTS;

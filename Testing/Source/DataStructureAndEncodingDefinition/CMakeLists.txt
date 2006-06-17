@@ -20,6 +20,7 @@ SET(DSED_TEST_SRCS
   TestReader
   TestSequenceOfFragments
   TestSequenceOfItems
+  TestCopyDataSet
   )
 
 OPTION(SHARED_PTR "shared_ptr" OFF)

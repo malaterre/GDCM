@@ -63,8 +63,8 @@ int TestSmartPointer(int, char *[])
   c2 = c1;
 
   // TODO:
-  SmartPointer<Object> s = new Foo;
-  delete s;
+  //SmartPointer<Object> s = new Foo;
+  //delete s;
 
   return 0;
 }

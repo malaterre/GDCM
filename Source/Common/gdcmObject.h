@@ -14,6 +14,13 @@ public:
   friend std::ostream& operator<<(std::ostream &os, const Object &obj);
 
   Object():ReferenceCount(0) {}
+
+  // If I move ~Object in the protected section I can prevent people
+  // from writing:
+  // SmartPointer<Object> p = new Object;
+  // delete p; // due to SmartPointer::operator ObjectType * () const 
+  // but on the other hand one could not define an Object on the stack
+  // Object obj;
   virtual ~Object()
     {
     assert(ReferenceCount >= 0 );

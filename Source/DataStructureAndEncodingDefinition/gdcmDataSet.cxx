@@ -140,6 +140,32 @@ DataSet::~DataSet()
 }
 
 //-----------------------------------------------------------------------------
+DataSet& DataSet::operator=(DataSet const &)
+{
+  abort();
+  return *this;
+}
+
+//-----------------------------------------------------------------------------
+DataSet::DataSet(DataSet const &ds)
+{
+  NegociatedTS = ds.NegociatedTS;
+  if ( NegociatedTS == TS::Explicit )
+    {
+    Internal = new StructuredSet<ExplicitDataElement>;
+    }
+  else if ( NegociatedTS == TS::Implicit )
+    {
+    Internal = new StructuredSet<ImplicitDataElement>;
+    }
+  else
+    {
+    Internal = 0;
+    }
+  *Internal = *(ds.Internal);
+}
+
+//-----------------------------------------------------------------------------
 void DataSet::Clear() {
   Internal->Clear();
 }
