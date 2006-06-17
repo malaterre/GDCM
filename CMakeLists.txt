@@ -48,7 +48,8 @@ SUBDIRS(
 
 #-----------------------------------------------------------------------------
 # Add the testing directories
-OPTION(BUILD_TESTING "Build testing." ON)
+OPTION(GDCM_BUILD_TESTING "Build testing." ON)
+SET(BUILD_TESTING ${GDCM_BUILD_TESTING})
 
 IF(BUILD_TESTING)
   #CONFIGURE_FILE(${GDCM_SOURCE_DIR}/CMake/CTestCustom.ctest.in
