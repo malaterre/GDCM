@@ -76,17 +76,17 @@ public:
       return is;
       }
     // Self
-    //FragmentValue.SetLength(ValueLengthField);
-    if( ValueLengthField.IsUndefined() )
+    NestedDataSet.SetLength( ValueLengthField );
+    // BUG: This test is required because DataSet::Read with a Length
+    // of 0 is actually thinking it is reading a root DataSet
+    // so we need to make sure not to call NestedDataSet.Read here
+    if( ValueLengthField == 0 )
       {
-      NestedDataSet.ReadNested(is);
-      // WARNING we are not storing the Item Del Tag nor its length
-      // in the structure
+      assert( TagField == Tag( 0xfffe, 0xe0dd) );
       }
     else
       {
-      NestedDataSet.ReadWithLength(is, ValueLengthField);
-      //is.Seekg(ValueLengthField, std::ios::cur);
+      NestedDataSet.Read(is);
       }
     return is;
     }

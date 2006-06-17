@@ -237,19 +237,21 @@ bool DataSet::FindDataElement(const Tag &t) const
 //-----------------------------------------------------------------------------
 IStream &DataSet::Read(IStream &is)
 {
-  Internal->Read(is);
-  return is;
-}
-
-IStream &DataSet::ReadNested(IStream &is)
-{
-  Internal->ReadNested(is);
-  return is;
-}
-
-IStream &DataSet::ReadWithLength(IStream &is, VL const & vl)
-{
-  Internal->ReadWithLength(is, vl);
+  if( Length == 0)
+    {
+    // Ok we are reading a root DataSet
+    Internal->Read(is);
+    }
+  else if( Length.IsUndefined() )
+    {
+    // Nested DataSet with undefined length 
+    Internal->ReadNested(is);
+    }
+  else
+    {
+    // Nested DataSet with defined length
+    Internal->ReadWithLength(is, Length);
+    }
   return is;
 }
 
