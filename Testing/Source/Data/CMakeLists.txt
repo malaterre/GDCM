@@ -61,6 +61,26 @@ FOREACH(filename ${GDCM_DATA_IMAGES_GLOB})
   ENDIF(NOT bad_dicom)
 ENDFOREACH(filename)
 
+# Adding extra file without no extension.
+# Ok I know this is retarded but I don't want to rename file on cvs too much of a pain
+
+SET(GDCM_NO_EXTENSION_FILES
+  # Looks like a hard one:
+  #1.3.12.2.1107.5.2.6.14121.30000006030706333268700005266
+  DICOMDIR
+  dicomdir_Acusson_WithPrivate_WithSR
+  DICOMDIR_MR_B_VA12A
+  DICOMDIR-Philips-EasyVision-4200-Entries
+  # Problem in my code. but very good for timing since so many SQ
+  #dicomdir_Pms_With_heavy_embedded_sequence
+  dicomdir_Pms_WithVisit_WithPrivate_WithStudyComponents
+  dicomdir_With_embedded_icons
+  )
+
+FOREACH(filename ${GDCM_NO_EXTENSION_FILES})
+  SET(GDCM_DATA_IMAGES "${GDCM_DATA_IMAGES}\n\"${GDCM_DATA_ROOT}/${filename}\",")
+ENDFOREACH(filename)
+
 # Populate GDCM_DATA_IMAGES:
 CONFIGURE_FILE(
   "${CMAKE_CURRENT_SOURCE_DIR}/gdcmDataImages.h.in"
