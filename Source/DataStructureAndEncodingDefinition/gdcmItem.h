@@ -82,7 +82,12 @@ public:
     // so we need to make sure not to call NestedDataSet.Read here
     if( ValueLengthField == 0 )
       {
-      assert( TagField == Tag( 0xfffe, 0xe0dd) );
+      assert( TagField == Tag( 0xfffe, 0xe0dd)
+           || TagField == Tag( 0xfffe, 0xe000) );
+      if( TagField != Tag( 0xfffe, 0xe0dd) )
+        {
+        gdcmErrorMacro( "SQ: " << TagField << " has a length of 0" );
+        }
       }
     else
       {
