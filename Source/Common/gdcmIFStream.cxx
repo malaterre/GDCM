@@ -47,8 +47,24 @@ std::streampos IFStream::Tellg ( )
 
 IStream& IFStream::Read(char *str, std::streamsize n)
 {
-  memset(str, 0, n);
+#ifndef NDEBUG
+  memset(str, 0, n); // DEBUG only
+  bool eof = InternalIStream.eof();
+  bool good = InternalIStream.good();
+#endif
   InternalIStream.read(str, n);
+#ifndef NDEBUG
+  bool eof2 = InternalIStream.eof();
+  bool good2 = InternalIStream.good();
+  const std::streamsize count = InternalIStream.gcount();
+  if( count != n )
+    {
+    assert( good && !good2 );
+    assert( !eof && eof2 );
+    assert( count == 0 );
+    }
+#endif
+    
   return *this;
 }
 
