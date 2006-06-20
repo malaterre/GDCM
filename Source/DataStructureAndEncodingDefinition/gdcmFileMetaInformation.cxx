@@ -218,7 +218,7 @@ bool FileMetaInformation::ReadImplicitDataElement(IStream &is,
   return true;
 }
 
-TS::TSType FileMetaInformation::GetTSType()
+TS::TSType FileMetaInformation::GetTSType() const
 {
   if(DS)
     {

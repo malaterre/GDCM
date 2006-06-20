@@ -3,6 +3,7 @@
 #define __gdcmImage_h
 
 #include "gdcmTypes.h"
+#include "gdcmPixelType.h"
 
 #include <vector>
 
@@ -38,20 +39,15 @@ public:
   const unsigned int *GetDimensions() const;
   void SetDimensions(unsigned int *dims);
 
-  unsigned int GetSamplesPerPixel() const;
-  void SetSamplesPerPixel(unsigned int spp);
-
-  // BitsAllocated
-  unsigned int GetBitsAllocated() const;
-  void SetBitsAllocated(unsigned int ba);
-
-  // BitsStored
-  unsigned int GetBitsStored() const;
-  void SetBitsStored(unsigned int bs);
-
-  // HighBit
-  unsigned int GetHighBit() const;
-  void SetHighBit(unsigned int hb);
+  // Get/Set PixelType
+  const PixelType &GetPixelType() const
+    {
+    return PT;
+    }
+  void SetPixelType(PixelType const &pt)
+    {
+    PT = pt;
+    }
 
   // Acces the raw data
   virtual bool GetBuffer(char *buffer) const;
@@ -63,6 +59,7 @@ public:
   const double *GetOrigin() const;
   void SetOrigin(double *ori);
 
+  void Print(std::ostream &os) const;
 
 //  Image(Image const&);
 //  Image &operator= (Image const&);
@@ -76,10 +73,7 @@ private:
   std::vector<double> Spacing;
   std::vector<double> Origin;
 
-  unsigned int SamplesPerPixel;
-  unsigned int BitsAllocated;
-  unsigned int BitsStored;
-  unsigned int HighBit;
+  PixelType PT;
 };
 
 } // end namespace gdcm

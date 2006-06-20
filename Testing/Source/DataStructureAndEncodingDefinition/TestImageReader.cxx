@@ -11,7 +11,7 @@ int TestImageRead(const char* filename)
     return 1;
     }
 
-  reader.GetPointer();
+  //reader.GetPointer();
 
   return 0;
 }

@@ -219,6 +219,7 @@ bool Reader::Read()
   // Read !
   ReadDataSet();
 
+  assert( Stream.Eof() );
   Stream.Close();
 
   return true;

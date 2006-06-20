@@ -23,6 +23,11 @@ public:
 
   bool Read();
 
+protected:
+  const char* GetPointerFromElement(Tag const &tag);
+  bool ReadImage();
+  bool ReadACRNEMAImage();
+
 private:
   ImageValue PixelData;
 };

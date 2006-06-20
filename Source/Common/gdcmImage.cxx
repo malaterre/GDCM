@@ -1,5 +1,7 @@
 #include "gdcmImage.h"
 
+#include <iostream>
+
 namespace gdcm
 {
 
@@ -70,54 +72,21 @@ unsigned long Image::GetBufferLength() const
   return len;
 }
 
-unsigned int Image::GetSamplesPerPixel() const
-{
-  return SamplesPerPixel;
-}
-
-void Image::SetSamplesPerPixel(unsigned int spp)
-{
-  SamplesPerPixel = spp;
-}
-
-// BitsAllocated
-unsigned int Image::GetBitsAllocated() const
-{
-  return BitsAllocated;
-}
-
-void Image::SetBitsAllocated(unsigned int ba)
-{
-  BitsAllocated = ba;
-}
-
-// BitsStored
-unsigned int Image::GetBitsStored() const
-{
-  return BitsStored;
-}
-
-void Image::SetBitsStored(unsigned int bs)
-{
-  BitsStored = bs;
-}
-
-// HighBit
-unsigned int Image::GetHighBit() const
-{
-  return HighBit;
-}
-
-void Image::SetHighBit(unsigned int hb)
-{
-  HighBit = hb;
-}
-
 // Acces the raw data
 bool Image::GetBuffer(char *buffer) const
 {
   buffer = 0;
   return false;
+}
+
+void Image::Print(std::ostream &os) const
+{
+  os << "NumberOfDimensions" << NumberOfDimensions << "\n";
+  //std::vector<unsigned int> Dimensions;
+  //std::vector<double> Spacing;
+  //std::vector<double> Origin;
+
+  PT.Print(os);
 }
 
 } // end namespace gdcm
