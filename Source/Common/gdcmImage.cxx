@@ -62,11 +62,14 @@ unsigned long Image::GetBufferLength() const
   assert( NumberOfDimensions == Dimensions.size() );
   unsigned long len = 0;
   unsigned int mul = 1;
+  // First multiply the dimensions:
   std::vector<unsigned int>::const_iterator it = Dimensions.begin();
   for(; it != Dimensions.end(); ++it)
     {
     mul *= *it;
     }
+  // Multiply by the pixel size:
+  mul *= PT.GetPixelSize();
   len = mul;
   assert( len != 0 );
   return len;

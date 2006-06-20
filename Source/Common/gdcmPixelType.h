@@ -22,13 +22,14 @@ namespace gdcm
 class GDCM_EXPORT PixelType
 {
 public:
+  // When adding a type please add its dual type (his unsigned conterpart)
   typedef enum {
-    INT8,
     UINT8,
-    INT12,
+    INT8,
     UINT12,
-    INT16,
+    INT12,
     UINT16,
+    INT16,
     UNKNOWN
   } TPixelType;
 
@@ -44,6 +45,9 @@ public:
   HighBit(highbit),
   PixelRepresentation(pixelrepresentation) {}
   ~PixelType() {}
+
+  // For transparence of use
+  operator TPixelType () const { return GetTPixelType(); }
 
   // Samples Per Pixel
   unsigned short GetSamplesPerPixel() const
@@ -92,6 +96,8 @@ public:
     }
   void SetPixelRepresentation(unsigned short pr)
     {
+    assert( PixelRepresentation == 0
+         || PixelRepresentation == 1 );
     PixelRepresentation = pr;
     }
 

@@ -43,7 +43,7 @@ public:
     return tmp;
   }
 
-  operator uint32_t() const { return ValueLength; }
+  operator uint32_t () const { return ValueLength; }
 
   VL GetLength() const {
     return 4;

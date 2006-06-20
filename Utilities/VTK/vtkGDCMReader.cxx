@@ -73,7 +73,32 @@ int vtkGDCMReader::RequestInformation(vtkInformation *request,
   this->DataExtent[4] = 0;
   this->DataExtent[5] = 0;
 
-  this->DataScalarType = VTK_UNSIGNED_CHAR;
+  gdcm::PixelType pixeltype = image.GetPixelType();
+  switch( pixeltype )
+    {
+  case gdcm::PixelType::INT8:
+    this->DataScalarType = VTK_SIGNED_CHAR;
+    break;
+  case gdcm::PixelType::UINT8:
+    this->DataScalarType = VTK_UNSIGNED_CHAR;
+    break;
+  case gdcm::PixelType::INT12:
+    abort();
+    this->DataScalarType = VTK_SHORT;
+    break;
+  case gdcm::PixelType::UINT12:
+    abort();
+    this->DataScalarType = VTK_UNSIGNED_SHORT;
+    break;
+  case gdcm::PixelType::INT16:
+    this->DataScalarType = VTK_SHORT;
+    break;
+  case gdcm::PixelType::UINT16:
+    this->DataScalarType = VTK_UNSIGNED_SHORT;
+    break;
+  default:
+    ;
+    }
 
   return this->Superclass::RequestInformation(
     request, inputVector, outputVector);
