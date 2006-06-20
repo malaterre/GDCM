@@ -2,6 +2,7 @@
 #define __gdcmSwapCode_h
 
 #include "gdcmTypes.h"
+#include <iostream>
 
 namespace gdcm 
 {
@@ -23,12 +24,19 @@ public:
   SwapCode(SwapCodeType sc = Unknown):SwapCodeValue(sc) { }
   static const char* GetSwapCodeString(SwapCode const & sc);
 
+  friend std::ostream& operator<<(std::ostream& os, const SwapCode& sc);
 protected:
   static int GetIndex(SwapCode const & sc);
 
 private:
   SwapCodeType SwapCodeValue;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream& operator<<(std::ostream& os, const SwapCode& sc)
+{
+  os << SwapCode::GetSwapCodeString(sc);
+  return os;
+}
 
 } // end namespace gdcm
 
