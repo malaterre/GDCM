@@ -102,7 +102,7 @@ public:
     }
 
   TPixelType GetTPixelType() const;
-  const char *PixelType::GetPixelTypeAsString(PixelType const &pt) const;
+  const char *GetPixelTypeAsString(PixelType const &pt) const;
 
   uint8_t GetPixelSize() const;
 

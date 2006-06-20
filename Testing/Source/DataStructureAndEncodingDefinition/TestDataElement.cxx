@@ -62,7 +62,7 @@ int TestDataElement2(const uint16_t group, const uint16_t element,
   const char* vr, const char* value)
 {
   const char *str;
-  const uint16_t vl = strlen( value );
+  const uint32_t vl = strlen( value );
   gdcm::StringStream ss;
   // SimpleData Element, just group,element and length
   str = reinterpret_cast<const char*>(&group);
