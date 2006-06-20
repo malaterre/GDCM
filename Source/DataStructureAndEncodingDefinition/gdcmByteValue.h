@@ -74,9 +74,8 @@ public:
   void Clear() {
     Internal.clear();
   }
-  // FIXME FIXME FIXME
+  // Use that only if you understand what you are doing
   const char *GetPointer() const { 
-    assert( Internal[Internal.size()] == '\0' );
     return &Internal[0];
   }
   bool GetBuffer(char *buffer, unsigned long length) const

@@ -32,10 +32,13 @@ const char* ImageReader::GetPointerFromElement(Tag const &tag)
   const DataElement& rde = ds.GetDataElement( tag );
   if( type == TS::Explicit )
     {
-    abort();
-    //const ExplicitDataElement &xde =
-    //  dynamic_cast<const ExplicitDataElement&>(rde);
-    //Value &v = xde.GetValue();
+    const ExplicitDataElement &xde =
+      dynamic_cast<const ExplicitDataElement&>(rde);
+    const Value &v = xde.GetValue();
+    const Value *pv = &v;
+    const ByteValue *bv = dynamic_cast<const ByteValue*>(pv);
+    const char *str = bv->GetPointer();
+    return str;
     }
   else if( type == TS::Implicit )
     {
@@ -95,19 +98,20 @@ bool ImageReader::ReadImage()
   // 2. What are the col & rows:
   unsigned int dims[2];
 
+  // D 0028|0011 [US] [Columns] [512]
+  const Tag tcolumns = gdcm::Tag(0x0028, 0x0011);
+  const char *columns_str = GetPointerFromElement(tcolumns);
+  const unsigned short *columns =
+    reinterpret_cast<const unsigned short*>(columns_str);
+  dims[0] = *columns;
+
   // D 0028|0010 [US] [Rows] [512]
   const Tag trows = gdcm::Tag(0x0028, 0x0010);
   const char *rows_str = GetPointerFromElement(trows);
   const unsigned short *rows =
     reinterpret_cast<const unsigned short*>(rows_str);
-  dims[0] = *rows;
+  dims[1] = *rows;
 
-  // D 0028|0011 [US] [Columns] [512]
-  const Tag tcolumns = gdcm::Tag(0x0028, 0x0011);
-  const char *columns_str = GetPointerFromElement(trows);
-  const unsigned short *columns =
-    reinterpret_cast<const unsigned short*>(columns_str);
-  dims[1] = *columns;
   PixelData.SetDimensions( dims );
 
   // 3. Pixel Type ?
@@ -196,20 +200,20 @@ bool ImageReader::ReadACRNEMAImage()
   // 2. What are the col & rows:
   unsigned int dims[2];
 
+  // D 0028|0011 [US] [Columns] [512]
+  const Tag tcolumns = gdcm::Tag(0x0028, 0x0011);
+  const char *columns_str = GetPointerFromElement(tcolumns);
+  const unsigned short *columns =
+    reinterpret_cast<const unsigned short*>(columns_str);
+  dims[0] = *columns;
 
   // D 0028|0010 [US] [Rows] [512]
   const Tag trows = gdcm::Tag(0x0028, 0x0010);
   const char *rows_str = GetPointerFromElement(trows);
   const unsigned short *rows =
     reinterpret_cast<const unsigned short*>(rows_str);
-  dims[0] = *rows;
+  dims[1] = *rows;
 
-  // D 0028|0011 [US] [Columns] [512]
-  const Tag tcolumns = gdcm::Tag(0x0028, 0x0011);
-  const char *columns_str = GetPointerFromElement(trows);
-  const unsigned short *columns =
-    reinterpret_cast<const unsigned short*>(columns_str);
-  dims[1] = *columns;
   PixelData.SetDimensions( dims );
 
   // 3. Pixel Type ?

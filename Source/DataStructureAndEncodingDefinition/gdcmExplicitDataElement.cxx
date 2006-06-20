@@ -65,6 +65,15 @@ IStream &ExplicitDataElement::Read(IStream &is)
     // FIXME: Poorly written:
     uint16_t vl16;
     is.Read(vl16);
+    // HACK for SIEMENS Leonardo
+    if( vl16 == 0x0006
+     && VRField == VR::UL
+     && TagField.GetGroup() == 0x0009 )
+      {
+      gdcmWarningMacro( "Replacing VL=0x0006 with VL=0x0004, for Tag=" <<
+        TagField << " in order to read a buggy DICOM file." );
+      vl16 = 0x0004;
+      }
     ValueLengthField = vl16;
     }
   // Read the Value

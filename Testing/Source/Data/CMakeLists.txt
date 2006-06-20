@@ -44,8 +44,6 @@ SET(BLACK_LIST
   "ElemZeroNotGroupLength.dcm"
   "Run11"
   "Bug_Philips_ItemTag_3F3F"
-  # EASY:
-  "SIEMENS_MAGNETOM-12-MONO2-Uncompressed.dcm"
   )
 
 SET(GDCM_DATA_IMAGES)

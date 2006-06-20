@@ -100,6 +100,8 @@ int vtkGDCMReader::RequestInformation(vtkInformation *request,
     ;
     }
 
+  this->NumberOfScalarComponents = pixeltype.GetSamplesPerPixel();
+
   return this->Superclass::RequestInformation(
     request, inputVector, outputVector);
 }
