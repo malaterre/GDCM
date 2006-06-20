@@ -74,7 +74,17 @@ public:
   void Clear() {
     Internal.clear();
   }
-  const char *GetPointer() const { return &Internal[0]; }
+  // FIXME FIXME FIXME
+  const char *GetPointer() const { 
+    assert( Internal[Internal.size()] == '\0' );
+    return &Internal[0];
+  }
+  bool GetBuffer(char *buffer, unsigned long length) const
+    {
+    assert( length <= Internal.size() );
+    memcpy(buffer, &Internal[0], length);
+    return true;
+    }
 
   IStream &Read(IStream &is)
     {
@@ -129,7 +139,6 @@ protected:
 
 private:
   std::vector<char> Internal;
-  //char* Internal;
 
   // WARNING Length IS NOT Internal.size() some featured DICOM 
   // implementation define odd length, we always load them as even number
