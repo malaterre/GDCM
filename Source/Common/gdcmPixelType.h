@@ -105,7 +105,6 @@ public:
   const char *PixelType::GetPixelTypeAsString(PixelType const &pt) const;
 
   uint8_t GetPixelSize() const;
-  uint8_t GetNumberOfComponents() const;
 
   void Print(std::ostream &os) const;
 
