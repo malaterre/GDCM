@@ -12,6 +12,7 @@ namespace gdcm
  * \note it's role is to convert the DICOM DataSet into a gdcm::Image
  * representation
  */
+class StringStream;
 class GDCM_EXPORT ImageReader : public Reader
 {
 public:
@@ -27,6 +28,10 @@ protected:
   const char* GetPointerFromElement(Tag const &tag);
   bool ReadImage();
   bool ReadACRNEMAImage();
+  
+  // ugliest thing ever:
+  unsigned short ReadUSFromTag( Tag const & t, StringStream &ss,
+    std::string &conversion );
 
 private:
   ImageValue PixelData;

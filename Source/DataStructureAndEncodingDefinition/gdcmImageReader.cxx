@@ -88,11 +88,23 @@ bool ImageReader::Read()
   return res;
 }
 
+unsigned short ImageReader::ReadUSFromTag( Tag const & t, StringStream &ss,
+  std::string &conversion )
+{
+  const char *t_str = GetPointerFromElement(t);
+  Element<VR::US,VM::VM1> el;
+  conversion = std::string(t_str, 2);
+  ss.Str( conversion );
+  el.Read( ss );
+  return el.GetValue();
+}
+
 bool ImageReader::ReadImage()
 {
   const DataSet &ds = GetDataSet();
   TS::NegociatedType type = ds.GetNegociatedType();
   StringStream ss;
+  std::string conversion;
   // Construct a stringstream to mimic the reading from the file
   ss.SetSwapCode( Stream.GetSwapCode() );
 
@@ -104,8 +116,8 @@ bool ImageReader::ReadImage()
     {
     const char *numberofframes_str = GetPointerFromElement(tnumberofframes);
     assert( numberofframes_str != "" );
-    std::string t = std::string(numberofframes_str);
-    ss.Str( t );
+    conversion = std::string(numberofframes_str);
+    ss.Str( conversion );
     Element<VR::IS,VM::VM1> a; // numberofframes;
     a.Read( ss );
     int numberofframes = a.GetValue();
@@ -129,56 +141,34 @@ bool ImageReader::ReadImage()
  
   // 2. What are the col & rows:
   // D 0028|0011 [US] [Columns] [512]
-  const Tag tcolumns = gdcm::Tag(0x0028, 0x0011);
-  const char *columns_str = GetPointerFromElement(tcolumns);
-  const unsigned short *columns =
-    reinterpret_cast<const unsigned short*>(columns_str);
-  PixelData.SetDimensions(0, *columns);
+  PixelData.SetDimensions(0,
+    ReadUSFromTag( Tag(0x0028, 0x0011), ss, conversion ) );
 
   // D 0028|0010 [US] [Rows] [512]
-  const Tag trows = gdcm::Tag(0x0028, 0x0010);
-  const char *rows_str = GetPointerFromElement(trows);
-  const unsigned short *rows =
-    reinterpret_cast<const unsigned short*>(rows_str);
-  PixelData.SetDimensions(1, *rows);
+  PixelData.SetDimensions(1,
+    ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
 
   // 3. Pixel Type ?
   PixelType pt;
   // D 0028|0002 [US] [Samples per Pixel] [1]
-  const Tag tsamplesperpixel = gdcm::Tag(0x0028, 0x0002);
-  const char *samplesperpixel_str = GetPointerFromElement(tsamplesperpixel);
-  const unsigned short *samplesperpixel =
-    reinterpret_cast<const unsigned short*>(samplesperpixel_str);
-  pt.SetSamplesPerPixel( *samplesperpixel );
+  pt.SetSamplesPerPixel(
+    ReadUSFromTag( Tag(0x0028, 0x0002), ss, conversion ) );
 
   // D 0028|0100 [US] [Bits Allocated] [16]
-  const Tag tbitsallocated = gdcm::Tag(0x0028, 0x0100);
-  const char *bitsallocated_str = GetPointerFromElement(tbitsallocated);
-  const unsigned short *bitsallocated =
-    reinterpret_cast<const unsigned short*>(bitsallocated_str);
-  pt.SetBitsAllocated( *bitsallocated );
+  pt.SetBitsAllocated(
+    ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
 
   // D 0028|0101 [US] [Bits Stored] [12]
-  const Tag tbitsstored = gdcm::Tag(0x0028, 0x0101);
-  const char *bitsstored_str = GetPointerFromElement(tbitsstored);
-  const unsigned short *bitsstored =
-    reinterpret_cast<const unsigned short*>(bitsstored_str);
-  pt.SetBitsStored( *bitsstored );
+  pt.SetBitsStored(
+    ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
 
   // D 0028|0102 [US] [High Bit] [11]
-  const Tag thighbit = gdcm::Tag(0x0028, 0x0102);
-  const char *highbit_str = GetPointerFromElement(thighbit);
-  const unsigned short *highbit =
-    reinterpret_cast<const unsigned short*>(highbit_str);
-  pt.SetHighBit( *highbit );
+  pt.SetHighBit(
+    ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
 
   // D 0028|0103 [US] [Pixel Representation] [0]
-  const Tag tpixelrepresentation = gdcm::Tag(0x0028, 0x0103);
-  const char *pixelrepresentation_str =
-    GetPointerFromElement(tpixelrepresentation);
-  const unsigned short *pixelrepresentation =
-    reinterpret_cast<const unsigned short*>(pixelrepresentation_str);
-  pt.SetPixelRepresentation( *pixelrepresentation );
+  pt.SetPixelRepresentation(
+    ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
 
   PixelData.SetPixelType( pt );
 

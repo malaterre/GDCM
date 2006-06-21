@@ -48,6 +48,15 @@ public:
   }
 
   //operator std::stringstream () const { return InternalSStream; }
+  
+  IStream& operator>> (int& val ) {
+    InternalSStream >> val;
+    return *this;
+  }
+  IStream& operator>> (unsigned short& val ) {
+    InternalSStream >> val;
+    return *this;
+  }
 
 protected:
   // The real internal class

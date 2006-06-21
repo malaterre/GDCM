@@ -37,11 +37,11 @@ public:
     return Internal[idx];
   }
 
-  IStream &Read(IStream &_is) {
+  void Read(IStream &_is) {
     return EncodingImplementation<TypeToEncoding<TVR>::Mode>::Read(Internal, 
       GetLength(),_is);
     }
-  OStream &Write(OStream &_os) const {
+  void Write(OStream &_os) const {
     return EncodingImplementation<TypeToEncoding<TVR>::Mode>::Write(Internal, 
       GetLength(),_os);
     }
@@ -98,11 +98,13 @@ public:
     assert( data ); // Can we read from pointer ?
     assert( length );
     assert( _is ); // Is stream valid ?
-    _is.Read( reinterpret_cast<char*>(&(data[0])), type_size);
+    _is.Read( reinterpret_cast<char*>(data+0), type_size);
     for(unsigned long i=1; i<length; ++i) {
       assert( _is );
-      _is.Read( reinterpret_cast<char*>(&(data[i])), type_size );
+      _is.Read( reinterpret_cast<char*>(data+i), type_size );
     }
+    ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem(data,
+      _is.GetSwapCode(), length*type_size);
   }
   template<typename T>
   static inline void Write(const T* data, unsigned long length,

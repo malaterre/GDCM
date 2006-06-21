@@ -142,5 +142,17 @@ bool IStream::Eof()
   return false;
 }
 
+IStream& IStream::operator>> (int& val )
+{
+  abort();
+  return *this;
+}
+
+IStream& IStream::operator>> (unsigned short& val )
+{
+  abort();
+  return *this;
+}
+
 } // end namespace gdcm
 

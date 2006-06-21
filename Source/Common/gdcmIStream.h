@@ -31,6 +31,9 @@ public:
 
   IStream &Read(uint16_t &vl);
 
+  IStream& operator>> (int& val );
+  IStream& operator>> (unsigned short& val );
+
 private:
   IStream(IStream const &);
   IStream &operator= (IStream const &);
