@@ -43,6 +43,11 @@ public:
   std::string Str() const {
     return InternalSStream.str();
   }
+  void Str(std::string & s ) {
+    InternalSStream.str(s);
+  }
+
+  //operator std::stringstream () const { return InternalSStream; }
 
 protected:
   // The real internal class

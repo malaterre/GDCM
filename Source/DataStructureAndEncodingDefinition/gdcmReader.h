@@ -49,10 +49,11 @@ protected:
   bool ReadPreamble();
   bool ReadMetaInformation();
   bool ReadDataSet();
-  TS::TSType GuessTransferSyntax();
+  TS GuessTransferSyntax();
+
+  IFStream Stream;
 
 private:
-  IFStream Stream;
   DataSet *DS;
   FileMetaInformation *Header;
 };

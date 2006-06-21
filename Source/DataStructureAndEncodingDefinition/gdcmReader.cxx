@@ -58,14 +58,15 @@ bool Reader::ReadDataSet()
 {
   if( !DS )
     {
-    TS::TSType ts = Header->GetTSType();
+    TS ts = Header->GetTSType();
     //std::cerr << ts << std::endl;
-    if( TS::GetNegociatedType(ts) == TS::Explicit )
+    if( ts.GetNegociatedType() == TS::Explicit )
       {
       DS = new DataSet(TS::Explicit);
       }
     else // default to instanciating an implicit one (old ACRNEMA...)
       {
+      assert( ts.GetNegociatedType() == TS::Implicit );
       DS = new DataSet(TS::Implicit);
       }
     }
@@ -73,7 +74,7 @@ bool Reader::ReadDataSet()
   return DS->Read(Stream);
 }
 
-TS::TSType Reader::GuessTransferSyntax()
+TS Reader::GuessTransferSyntax()
 {
   // Don't call this function if you have a meta file info
   assert( Header->GetTSType() == TS::TS_END );
@@ -81,7 +82,7 @@ TS::TSType Reader::GuessTransferSyntax()
   std::streampos start = Stream.Tellg();
   SwapCode sc = SwapCode::Unknown;
   TS::NegociatedType nts = TS::Unknown;
-  TS::TSType ts = TS::TS_END;
+  TS ts (TS::TS_END);
   Tag t;
   t.Read(Stream);
   if( ! (t.GetGroup() % 2) )
@@ -208,14 +209,14 @@ bool Reader::Read()
     }
   ReadMetaInformation();
   //std::cerr << *Header << std::endl;
-  TS::TSType ts = Header->GetTSType();
+  TS ts = Header->GetTSType();
   if( ts == TS::TS_END )
     {
     ts = GuessTransferSyntax();
     }
   assert( ts != TS::TS_END );
   // From ts set properly the Stream for reading the dataset:
-  Stream.SetSwapCode( TS::GetSwapCode( ts ) );
+  Stream.SetSwapCode( ts.GetSwapCode() );
   // Read !
   ReadDataSet();
 

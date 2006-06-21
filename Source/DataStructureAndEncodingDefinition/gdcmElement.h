@@ -1,7 +1,7 @@
 #ifndef __gdcmElement_h
 #define __gdcmElement_h
 
-#include "gdcmType.h"
+#include "gdcmTypes.h"
 #include "gdcmVR.h"
 #include "gdcmTag.h"
 #include "gdcmVM.h"
@@ -31,6 +31,11 @@ public:
     for(int i=1; i<TypeToLength<TVM>::Length; ++i)
       _os << "," << Internal[i];
     }
+
+  typename TypeToType<TVR>::Type GetValue(int idx = 0) {
+    assert( idx < TypeToLength<TVM>::Length );
+    return Internal[idx];
+  }
 
   IStream &Read(IStream &_is) {
     return EncodingImplementation<TypeToEncoding<TVR>::Mode>::Read(Internal, 

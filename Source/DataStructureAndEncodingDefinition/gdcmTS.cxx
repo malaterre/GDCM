@@ -103,13 +103,13 @@ bool TS::IsJPEG(const TSType &ts)
   return false;
 }
 
-TS::NegociatedType TS::GetNegociatedType(const TSType &ts)
+TS::NegociatedType TS::GetNegociatedType()
 {
-  if( ts == TS_END )
+  if( TSField == TS_END )
     {
     return TS::Unknown;
     }
-  else if( IsImplicit(ts) )
+  else if( IsImplicit(TSField) )
     {
     return TS::Implicit;
     }
@@ -144,14 +144,14 @@ bool TS::IsBigEndian(const TSType &ts)
     || ts == ImplicitVRBigEndianACRNEMA;
 }
 
-SwapCode TS::GetSwapCode(const TSType &ts)
+SwapCode TS::GetSwapCode()
 {
-  assert( ts != TS::TS_END );
-  if( IsBigEndian( ts ) )
+  assert( TSField != TS::TS_END );
+  if( IsBigEndian( TSField ) )
     {
     return SwapCode::BigEndian;
     }
-  assert( IsLittleEndian( ts ) );
+  assert( IsLittleEndian( TSField ) );
   return SwapCode::LittleEndian;
 }
 

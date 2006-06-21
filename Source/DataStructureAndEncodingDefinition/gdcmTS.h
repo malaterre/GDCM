@@ -30,7 +30,6 @@ public:
     Implicit
   } NegociatedType;
 
-#error redo TS to be a real class and not a type
   // TODO
   typedef enum {
     PixelSpacing,
@@ -67,8 +66,12 @@ public:
   static const char* GetTSString(const TSType &ts);
   static const TSType GetTSType(const char *str);
 
-  static NegociatedType GetNegociatedType(const TSType &ts);
-  static SwapCode GetSwapCode(const TSType &ts);
+  NegociatedType GetNegociatedType();
+  SwapCode GetSwapCode();
+
+  operator TSType () const { return TSField; }
+
+  TS(TSType type):TSField(type) {}
 
 protected:
   // TODO are those function actually usefull ?
@@ -87,8 +90,8 @@ protected:
   // TODO: Can we partially uncompress in LZW ?
   static bool IsDataSetEncoded(const TSType &ts);
 
-//private:
-//  TSType TSField;
+private:
+  TSType TSField;
 };
 
 } // end namespace gdcm

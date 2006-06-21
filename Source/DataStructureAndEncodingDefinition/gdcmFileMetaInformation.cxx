@@ -218,7 +218,7 @@ bool FileMetaInformation::ReadImplicitDataElement(IStream &is,
   return true;
 }
 
-TS::TSType FileMetaInformation::GetTSType() const
+TS FileMetaInformation::GetTSType() const
 {
   if(DS)
     {
@@ -245,7 +245,7 @@ TS::TSType FileMetaInformation::GetTSType() const
       assert( 0 && "Cannot happen" );
       }
     gdcmDebugMacro( "TS: " << ts );
-    TS::TSType tst = TS::GetTSType(ts.c_str());
+    TS tst(TS::GetTSType(ts.c_str()));
     assert( tst != TS::TS_END );
     return tst;
     }

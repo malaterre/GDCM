@@ -3,6 +3,8 @@
 #include "gdcmImplicitDataElement.h"
 #include "gdcmValue.h"
 #include "gdcmFileMetaInformation.h"
+#include "gdcmStringStream.h"
+#include "gdcmElement.h"
 
 namespace gdcm
 {
@@ -90,6 +92,9 @@ bool ImageReader::ReadImage()
 {
   const DataSet &ds = GetDataSet();
   TS::NegociatedType type = ds.GetNegociatedType();
+  StringStream ss;
+  // Construct a stringstream to mimic the reading from the file
+  ss.SetSwapCode( Stream.GetSwapCode() );
 
   // Ok we have the dataset let's feed the Image (PixelData)
   // 1. First find how many dimensions there is:
@@ -98,11 +103,12 @@ bool ImageReader::ReadImage()
   if( ds.FindDataElement( tnumberofframes ) )
     {
     const char *numberofframes_str = GetPointerFromElement(tnumberofframes);
-    std::istringstream is;
-    is.str( numberofframes_str );
-    int numberofframes;
     assert( numberofframes_str != "" );
-    is >> numberofframes;
+    std::string t = std::string(numberofframes_str);
+    ss.Str( t );
+    Element<VR::IS,VM::VM1> a; // numberofframes;
+    a.Read( ss );
+    int numberofframes = a.GetValue();
     assert( numberofframes != 0 );
     if( numberofframes > 1 )
       {
