@@ -62,16 +62,24 @@ int vtkGDCMReader::RequestInformation(vtkInformation *request,
     return 0;
     }
   const gdcm::Image &image = this->Internals->DICOMReader.GetImage();
-  assert( image.GetNumberOfDimensions() == 2 );
   const unsigned int *dims = image.GetDimensions();
 
   // Set the Extents.
+  assert( image.GetNumberOfDimensions() >= 2 );
   this->DataExtent[0] = 0;
   this->DataExtent[1] = dims[0] - 1;
   this->DataExtent[2] = 0;
   this->DataExtent[3] = dims[1] - 1;
-  this->DataExtent[4] = 0;
-  this->DataExtent[5] = 0;
+  if( image.GetNumberOfDimensions() == 2 )
+    {
+    this->DataExtent[4] = 0;
+    this->DataExtent[5] = 0;
+    }
+  else
+    {
+    this->DataExtent[4] = 0;
+    this->DataExtent[5] = dims[2] - 1;
+    }
 
   gdcm::PixelType pixeltype = image.GetPixelType();
   switch( pixeltype )

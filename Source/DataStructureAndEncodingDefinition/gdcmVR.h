@@ -152,7 +152,7 @@ public:
     }
   friend std::ostream& operator<<(std::ostream& os, const VR& vr);
 
-  operator VR::VRType() const { return VRField; }
+  operator VRType () const { return VRField; }
 
 private:
   // Internal function that map a VRType to an index in the VRStrings table

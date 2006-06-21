@@ -38,6 +38,7 @@ public:
 
   const unsigned int *GetDimensions() const;
   void SetDimensions(unsigned int *dims);
+  void SetDimensions(unsigned int idx, unsigned int dim);
 
   // Get/Set PixelType
   const PixelType &GetPixelType() const

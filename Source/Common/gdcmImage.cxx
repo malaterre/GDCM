@@ -28,8 +28,17 @@ const unsigned int *Image::GetDimensions() const
 void Image::SetDimensions(unsigned int *dims)
 {
   assert( NumberOfDimensions );
+  assert( Dimensions.empty() );
   Dimensions = std::vector<unsigned int>(dims, 
     dims+NumberOfDimensions);
+}
+
+void Image::SetDimensions(unsigned int idx, unsigned int dim)
+{
+  assert( NumberOfDimensions );
+  assert( idx < NumberOfDimensions );
+  Dimensions.resize( NumberOfDimensions );
+  Dimensions[idx] = dim;
 }
 
 const double *Image::GetSpacing() const

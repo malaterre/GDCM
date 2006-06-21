@@ -93,26 +93,48 @@ bool ImageReader::ReadImage()
 
   // Ok we have the dataset let's feed the Image (PixelData)
   // 1. First find how many dimensions there is:
-  PixelData.SetNumberOfDimensions(2); // FIXME
+  // D 0028|0008 [IS] [Number of Frames] [8 ]
+  const Tag tnumberofframes = gdcm::Tag(0x0028, 0x0008);
+  if( ds.FindDataElement( tnumberofframes ) )
+    {
+    const char *numberofframes_str = GetPointerFromElement(tnumberofframes);
+    std::istringstream is;
+    is.str( numberofframes_str );
+    int numberofframes;
+    assert( numberofframes_str != "" );
+    is >> numberofframes;
+    assert( numberofframes != 0 );
+    if( numberofframes > 1 )
+      {
+      PixelData.SetNumberOfDimensions(3);
+      PixelData.SetDimensions(2, numberofframes );
+      }
+    else
+      {
+      PixelData.SetNumberOfDimensions(2);
+      }
+    }
+  else
+    {
+    gdcmWarningMacro( "Attempting a guess for the number of dimensions" );
+    PixelData.SetNumberOfDimensions(2);
+    }
+
  
   // 2. What are the col & rows:
-  unsigned int dims[2];
-
   // D 0028|0011 [US] [Columns] [512]
   const Tag tcolumns = gdcm::Tag(0x0028, 0x0011);
   const char *columns_str = GetPointerFromElement(tcolumns);
   const unsigned short *columns =
     reinterpret_cast<const unsigned short*>(columns_str);
-  dims[0] = *columns;
+  PixelData.SetDimensions(0, *columns);
 
   // D 0028|0010 [US] [Rows] [512]
   const Tag trows = gdcm::Tag(0x0028, 0x0010);
   const char *rows_str = GetPointerFromElement(trows);
   const unsigned short *rows =
     reinterpret_cast<const unsigned short*>(rows_str);
-  dims[1] = *rows;
-
-  PixelData.SetDimensions( dims );
+  PixelData.SetDimensions(1, *rows);
 
   // 3. Pixel Type ?
   PixelType pt;
@@ -192,11 +214,20 @@ bool ImageReader::ReadACRNEMAImage()
   // 1. First find how many dimensions there is:
   // D 0028|0005 [SS] [Image Dimensions (RET)] [2]
   const Tag timagedimensions = gdcm::Tag(0x0028, 0x0005);
-  const char *imagedimensions_str = GetPointerFromElement(timagedimensions);
-  const signed short *imagedimensions =
-    reinterpret_cast<const signed short*>(imagedimensions_str);
-  PixelData.SetNumberOfDimensions( *imagedimensions );
- 
+  if( ds.FindDataElement( timagedimensions ) )
+    {
+    const char *imagedimensions_str = GetPointerFromElement(timagedimensions);
+    const signed short *imagedimensions =
+      reinterpret_cast<const signed short*>(imagedimensions_str);
+    PixelData.SetNumberOfDimensions( *imagedimensions );
+    }
+  else
+    {
+    gdcmWarningMacro( "Attempting a guess for the number of dimensions" );
+    PixelData.SetNumberOfDimensions( 2 );
+    }
+//#error US-MONO2-8-8x-execho.dcm 
+
   // 2. What are the col & rows:
   unsigned int dims[2];
 
