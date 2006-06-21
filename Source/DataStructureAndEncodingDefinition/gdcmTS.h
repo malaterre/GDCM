@@ -30,6 +30,15 @@ public:
     Implicit
   } NegociatedType;
 
+#error redo TS to be a real class and not a type
+  // TODO
+  typedef enum {
+    PixelSpacing,
+    ImagerPixelSpacing,
+    PixelAspectRatio
+  } ImageSpacingType;
+  ImageSpacingType GetImageSpacing();
+
   typedef enum {
     ImplicitVRLittleEndian = 0,
     ImplicitVRBigEndianPrivateGE,
