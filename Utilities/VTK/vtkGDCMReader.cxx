@@ -18,7 +18,6 @@
 #include "vtkImageData.h"
 #include "vtkInformationVector.h"
 #include "vtkInformation.h"
-#include "vtkImageAppend.h"
 
 #include "gdcmImageReader.h"
 
@@ -141,35 +140,22 @@ int vtkGDCMReader::RequestData(vtkInformation *vtkNotUsed(request),
   if( image.GetPlanarConfiguration() )
     {
     int *dims = output->GetDimensions();
-    assert( dims[2] );
     unsigned long size = dims[0]*dims[1]*dims[2];
-    vtkImageData *red = vtkImageData::New();
-    red->SetDimensions( dims );
-    red->AllocateScalars();
-    char *pred = static_cast<char*>(red->GetScalarPointer());
-    memcpy(pred, pointer+0, size );
-    vtkImageData *green = vtkImageData::New();
-    green->SetDimensions( dims );
-    green->AllocateScalars();
-    char *pgreen = static_cast<char*>(green->GetScalarPointer());
-    memcpy(pgreen, pointer+size, size );
-    vtkImageData *blue = vtkImageData::New();
-    blue->SetDimensions( dims );
-    blue->AllocateScalars();
-    char *pblue = static_cast<char*>(blue->GetScalarPointer());
-    memcpy(pblue, pointer+2*size, size );
+    char *copy = new char[ size * 3 ];
+    memmove( copy, pointer, size*3);
 
-    vtkImageAppend *append = vtkImageAppend::New();
-    append->AddInput(red);
-    append->AddInput(green);
-    append->AddInput(blue);
-    append->Update();
+    char *r = copy;
+    char *g = copy + size;
+    char *b = copy + size + size;
 
-    memcpy(pointer, append->GetOutput()->GetScalarPointer(), 3*size);
-    red->Delete();
-    green->Delete();
-    blue->Delete();
-    append->Delete();
+    char *p = pointer;
+    for (unsigned long j = 0; j < size; ++j)
+      {
+      *(p++) = *(r++);
+      *(p++) = *(g++);
+      *(p++) = *(b++);
+      }
+    delete[] copy;
     }
 
   return 1;
