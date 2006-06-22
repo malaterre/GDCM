@@ -20,27 +20,24 @@ void Image::SetNumberOfDimensions(unsigned int dim)
   NumberOfDimensions = dim;
 }
 
+// TODO does it make sense to PlanarConfiguration in Image
+// and SamplesPerPixel in PixelType when those two are linked...
 unsigned int Image::GetPlanarConfiguration() const
 {
+  if( PlanarConfiguration && PT.GetSamplesPerPixel() != 3 )
+    {
+    // User specify PlanarConfiguration whereas SamplesPerPixel != 3
+    gdcmWarningMacro( 
+      "Can't set PlanarConfiguration if SamplesPerPixel is not 3" );
+    // Let's assume it's this way...
+    return 0;
+    }
   return PlanarConfiguration;
 }
 
 void Image::SetPlanarConfiguration(unsigned int pc)
 {
-  assert( !PlanarConfiguration );
-  if( pc && PT.GetSamplesPerPixel() != 3 )
-    {
-    // This is the chicken and the egg, which one do we set first.
-    // Since SamplesPerPixel comes first (0028,0002), it is expected
-    // that at the time of setting PlanarConfiguration SamplesPerPixel
-    // would have the proper value
-    gdcmWarningMacro( 
-      "Can't set PlanarConfiguration if SamplesPerPixel is not 3" )
-    }
-  else
-    {
-    PlanarConfiguration = pc;
-    }
+  PlanarConfiguration = pc;
 }
 
 const unsigned int *Image::GetDimensions() const

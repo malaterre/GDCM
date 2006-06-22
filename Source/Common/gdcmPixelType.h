@@ -50,10 +50,7 @@ public:
   operator TPixelType () const { return GetTPixelType(); }
 
   // Samples Per Pixel
-  unsigned short GetSamplesPerPixel() const
-    {
-    return SamplesPerPixel;
-    }
+  unsigned short GetSamplesPerPixel() const;
   void SetSamplesPerPixel(unsigned short spp)
     {
     SamplesPerPixel = spp;

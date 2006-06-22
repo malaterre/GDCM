@@ -1,4 +1,5 @@
 #include "gdcmPixelType.h"
+#include "gdcmTrace.h"
 
 namespace gdcm
 {
@@ -11,6 +12,16 @@ static const char *PixelTypeStrings[] = {
   "UINT16",
   NULL,
 };
+
+unsigned short PixelType::GetSamplesPerPixel() const
+{
+  if ( BitsAllocated == 24 )
+    {
+    gdcmWarningMacro( "This is illegal in DICOM, assuming a RGB image" );
+    return 3;
+    }
+  return SamplesPerPixel;
+}
 
 PixelType::TPixelType PixelType::GetTPixelType() const
 {
@@ -26,7 +37,13 @@ PixelType::TPixelType PixelType::GetTPixelType() const
   case 16:
     type = PixelType::UINT16;
     break;
+  case 24:
+    gdcmWarningMacro( "This is illegal in DICOM, assuming a RGB image" );
+    type = PixelType::UINT8;
+    break;
   default:
+    gdcmErrorMacro( "I have never seen this before BitsAllocated "
+      << BitsAllocated );
     abort();
     }
   if( PixelRepresentation )

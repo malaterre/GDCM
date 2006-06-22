@@ -280,6 +280,20 @@ bool ImageReader::ReadACRNEMAImage()
   PixelData.SetDimensions(1,
     ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
 
+  // LIBIDO compatible code:
+  const ByteValue *libido = GetPointerFromElement( Tag(0x0008, 0x0010 ) );
+  std::string libido_str( libido->GetPointer(), libido->GetLength() );
+  assert( libido_str != "CANRME_AILIBOD1_1." );
+  if( libido_str == "ACRNEMA_LIBIDO_1.1" )
+    {
+    // Swap Columns & Rows
+    assert( PixelData.GetNumberOfDimensions() == 2 );
+    const unsigned int *dims = PixelData.GetDimensions();
+    unsigned int tmp = dims[0];
+    PixelData.SetDimensions(0, dims[1] );
+    PixelData.SetDimensions(1, tmp );
+    }
+
   // 3. Pixel Type ?
   PixelType pt;
   // D 0028|0100 [US] [Bits Allocated] [16]
