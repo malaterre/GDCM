@@ -30,7 +30,7 @@ namespace gdcm
 class GDCM_EXPORT Image
 {
 public:
-  Image ():NumberOfDimensions(0),Dimensions() {}
+  Image ():NumberOfDimensions(0),PlanarConfiguration(0),Dimensions() {}
   virtual ~Image() {}
 
   unsigned int GetNumberOfDimensions() const;
@@ -73,12 +73,12 @@ protected:
 
 private:
   unsigned int NumberOfDimensions;
+  unsigned int PlanarConfiguration;
   std::vector<unsigned int> Dimensions;
   std::vector<double> Spacing;
   std::vector<double> Origin;
 
   PixelType PT;
-  unsigned int PlanarConfiguration;
 };
 
 } // end namespace gdcm

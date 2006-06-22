@@ -151,8 +151,12 @@ bool ImageReader::ReadImage()
   // 3. Pixel Type ?
   PixelType pt;
   // D 0028|0002 [US] [Samples per Pixel] [1]
-  pt.SetSamplesPerPixel(
-    ReadUSFromTag( Tag(0x0028, 0x0002), ss, conversion ) );
+  const Tag samplesperpixel = Tag(0x0028, 0x0002);
+  if( ds.FindDataElement( samplesperpixel ) )
+    {
+    pt.SetSamplesPerPixel(
+      ReadUSFromTag( samplesperpixel, ss, conversion ) );
+    }
 
   // D 0028|0100 [US] [Bits Allocated] [16]
   pt.SetBitsAllocated(
@@ -174,8 +178,13 @@ bool ImageReader::ReadImage()
 
   // 4. Do the Planar configuration
   // D 0028|0006 [US] [Planar Configuration] [1]
-  PixelData.SetPlanarConfiguration(
-    ReadUSFromTag( Tag(0x0028, 0x0006), ss, conversion ) );
+  const Tag planarconfiguration = Tag(0x0028, 0x0006);
+  if( ds.FindDataElement( planarconfiguration ) )
+    {
+    PixelData.SetPlanarConfiguration(
+      ReadUSFromTag( planarconfiguration, ss, conversion ) );
+    }
+  assert( PixelData.GetPlanarConfiguration() == 0 );
 
   // 5. Do the PixelData
   const Tag pixeldata = gdcm::Tag(0x7fe0, 0x0010);
