@@ -1,4 +1,5 @@
 #include "gdcmImage.h"
+#include "gdcmTrace.h"
 
 #include <iostream>
 
@@ -26,7 +27,20 @@ unsigned int Image::GetPlanarConfiguration() const
 
 void Image::SetPlanarConfiguration(unsigned int pc)
 {
-  PlanarConfiguration = pc;
+  assert( !PlanarConfiguration );
+  if( pc && PT.GetSamplesPerPixel() != 3 )
+    {
+    // This is the chicken and the egg, which one do we set first.
+    // Since SamplesPerPixel comes first (0028,0002), it is expected
+    // that at the time of setting PlanarConfiguration SamplesPerPixel
+    // would have the proper value
+    gdcmWarningMacro( 
+      "Can't set PlanarConfiguration if SamplesPerPixel is not 3" )
+    }
+  else
+    {
+    PlanarConfiguration = pc;
+    }
 }
 
 const unsigned int *Image::GetDimensions() const

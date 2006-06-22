@@ -26,7 +26,7 @@ const Image& ImageReader::GetImage() const
 //  PixelData = img;
 //}
 
-const char* ImageReader::GetPointerFromElement(Tag const &tag)
+const ByteValue* ImageReader::GetPointerFromElement(Tag const &tag) const
 {
   const DataSet &ds = GetDataSet();
   TS::NegociatedType type = ds.GetNegociatedType();
@@ -39,8 +39,7 @@ const char* ImageReader::GetPointerFromElement(Tag const &tag)
     const Value &v = xde.GetValue();
     const Value *pv = &v;
     const ByteValue *bv = dynamic_cast<const ByteValue*>(pv);
-    const char *str = bv->GetPointer();
-    return str;
+    return bv;
     }
   else if( type == TS::Implicit )
     {
@@ -53,8 +52,7 @@ const char* ImageReader::GetPointerFromElement(Tag const &tag)
     // Using good ol' pointer instead
     const Value *pv = &v;
     const ByteValue *bv = dynamic_cast<const ByteValue*>(pv);
-    const char *str = bv->GetPointer();
-    return str;
+    return bv;
     }
   // ooops ?
     gdcmErrorMacro( "Not sure how you are supposed to reach here" );
@@ -88,15 +86,40 @@ bool ImageReader::Read()
   return res;
 }
 
-unsigned short ImageReader::ReadUSFromTag( Tag const & t, StringStream &ss,
+signed short ImageReader::ReadSSFromTag( Tag const & t, StringStream &ss,
   std::string &conversion )
 {
-  const char *t_str = GetPointerFromElement(t);
-  Element<VR::US,VM::VM1> el;
-  conversion = std::string(t_str, 2);
+  const ByteValue *bv = GetPointerFromElement(t);
+  Element<VR::SS,VM::VM1> el;
+  assert( bv->GetLength() == 2 );
+  conversion = std::string(bv->GetPointer(), 2); 
   ss.Str( conversion );
   el.Read( ss );
   return el.GetValue();
+}
+
+unsigned short ImageReader::ReadUSFromTag( Tag const & t, StringStream &ss,
+  std::string &conversion )
+{
+  const ByteValue *bv = GetPointerFromElement(t);
+  Element<VR::US,VM::VM1> el;
+  assert( bv->GetLength() == 2 );
+  conversion = std::string(bv->GetPointer(), 2); 
+  ss.Str( conversion );
+  el.Read( ss );
+  return el.GetValue();
+}
+
+int ImageReader::ReadISFromTag( Tag const & t, StringStream &ss,
+  std::string &conversion )
+{
+  const ByteValue *bv = GetPointerFromElement(t);
+  Element<VR::IS,VM::VM1> el;
+  conversion = std::string(bv->GetPointer(), bv->GetLength());
+  ss.Str( conversion );
+  el.Read( ss );
+  int r = el.GetValue();
+  return r;
 }
 
 bool ImageReader::ReadImage()
@@ -111,19 +134,15 @@ bool ImageReader::ReadImage()
   // Ok we have the dataset let's feed the Image (PixelData)
   // 1. First find how many dimensions there is:
   // D 0028|0008 [IS] [Number of Frames] [8 ]
-  const Tag tnumberofframes = gdcm::Tag(0x0028, 0x0008);
+  const Tag tnumberofframes = Tag(0x0028, 0x0008);
   if( ds.FindDataElement( tnumberofframes ) )
     {
-    const char *numberofframes_str = GetPointerFromElement(tnumberofframes);
-    assert( numberofframes_str != "" );
-    conversion = std::string(numberofframes_str);
-    ss.Str( conversion );
-    Element<VR::IS,VM::VM1> a; // numberofframes;
-    a.Read( ss );
-    int numberofframes = a.GetValue();
+    int numberofframes = ReadISFromTag( tnumberofframes, ss, conversion );
     assert( numberofframes != 0 );
+    gdcmWarningMacro( "I did not check the Transfer Syntax" );
     if( numberofframes > 1 )
       {
+      assert( numberofframes == 3 );
       PixelData.SetNumberOfDimensions(3);
       PixelData.SetDimensions(2, numberofframes );
       }
@@ -174,9 +193,9 @@ bool ImageReader::ReadImage()
   pt.SetPixelRepresentation(
     ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
 
+  // Very important to set the PixelType here before PlanarConfiguration
   PixelData.SetPixelType( pt );
 
-  // 4. Do the Planar configuration
   // D 0028|0006 [US] [Planar Configuration] [1]
   const Tag planarconfiguration = Tag(0x0028, 0x0006);
   if( ds.FindDataElement( planarconfiguration ) )
@@ -184,10 +203,9 @@ bool ImageReader::ReadImage()
     PixelData.SetPlanarConfiguration(
       ReadUSFromTag( planarconfiguration, ss, conversion ) );
     }
-  assert( PixelData.GetPlanarConfiguration() == 0 );
 
   // 5. Do the PixelData
-  const Tag pixeldata = gdcm::Tag(0x7fe0, 0x0010);
+  const Tag pixeldata = Tag(0x7fe0, 0x0010);
   if( !ds.FindDataElement( pixeldata ) )
     {
     gdcmWarningMacro( "No Pixel Data Found" );
@@ -219,79 +237,71 @@ bool ImageReader::ReadACRNEMAImage()
 {
   const DataSet &ds = GetDataSet();
   TS::NegociatedType type = ds.GetNegociatedType();
+  StringStream ss;
+  std::string conversion;
+  // Construct a stringstream to mimic the reading from the file
+  ss.SetSwapCode( Stream.GetSwapCode() );
 
   // Ok we have the dataset let's feed the Image (PixelData)
   // 1. First find how many dimensions there is:
   // D 0028|0005 [SS] [Image Dimensions (RET)] [2]
-  const Tag timagedimensions = gdcm::Tag(0x0028, 0x0005);
+  const Tag timagedimensions = Tag(0x0028, 0x0005);
   if( ds.FindDataElement( timagedimensions ) )
     {
-    const char *imagedimensions_str = GetPointerFromElement(timagedimensions);
-    const signed short *imagedimensions =
-      reinterpret_cast<const signed short*>(imagedimensions_str);
-    PixelData.SetNumberOfDimensions( *imagedimensions );
+    int imagedimensions = ReadSSFromTag( timagedimensions, ss, conversion );
+    if ( imagedimensions == 3 )
+      {
+      PixelData.SetNumberOfDimensions(3);
+      // D 0028|0012 [US] [Planes] [262]
+      PixelData.SetDimensions(2,
+        ReadUSFromTag( Tag(0x0028, 0x0012), ss, conversion ) );
+      }
+    else if ( imagedimensions == 2 )
+      {
+      PixelData.SetNumberOfDimensions(2);
+      }
+    else
+      {
+      abort();
+      }
     }
   else
     {
     gdcmWarningMacro( "Attempting a guess for the number of dimensions" );
     PixelData.SetNumberOfDimensions( 2 );
     }
-//#error US-MONO2-8-8x-execho.dcm 
 
   // 2. What are the col & rows:
-  unsigned int dims[2];
-
   // D 0028|0011 [US] [Columns] [512]
-  const Tag tcolumns = gdcm::Tag(0x0028, 0x0011);
-  const char *columns_str = GetPointerFromElement(tcolumns);
-  const unsigned short *columns =
-    reinterpret_cast<const unsigned short*>(columns_str);
-  dims[0] = *columns;
+  PixelData.SetDimensions(0,
+    ReadUSFromTag( Tag(0x0028, 0x0011), ss, conversion ) );
 
   // D 0028|0010 [US] [Rows] [512]
-  const Tag trows = gdcm::Tag(0x0028, 0x0010);
-  const char *rows_str = GetPointerFromElement(trows);
-  const unsigned short *rows =
-    reinterpret_cast<const unsigned short*>(rows_str);
-  dims[1] = *rows;
-
-  PixelData.SetDimensions( dims );
+  PixelData.SetDimensions(1,
+    ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
 
   // 3. Pixel Type ?
   PixelType pt;
   // D 0028|0100 [US] [Bits Allocated] [16]
-  const Tag tbitsallocated = gdcm::Tag(0x0028, 0x0100);
-  const char *bitsallocated_str = GetPointerFromElement(tbitsallocated);
-  const unsigned short *bitsallocated =
-    reinterpret_cast<const unsigned short*>(bitsallocated_str);
-  pt.SetBitsAllocated( *bitsallocated );
+  pt.SetBitsAllocated(
+    ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
 
   // D 0028|0101 [US] [Bits Stored] [12]
-  const Tag tbitsstored = gdcm::Tag(0x0028, 0x0101);
-  const char *bitsstored_str = GetPointerFromElement(tbitsstored);
-  const unsigned short *bitsstored =
-    reinterpret_cast<const unsigned short*>(bitsstored_str);
-  pt.SetBitsStored( *bitsstored );
+  pt.SetBitsStored(
+    ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
 
   // D 0028|0102 [US] [High Bit] [11]
-  const Tag thighbit = gdcm::Tag(0x0028, 0x0102);
-  const char *highbit_str = GetPointerFromElement(thighbit);
-  const unsigned short *highbit =
-    reinterpret_cast<const unsigned short*>(highbit_str);
-  pt.SetHighBit( *highbit );
+  pt.SetHighBit(
+    ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
 
   // D 0028|0103 [US] [Pixel Representation] [0]
-  const Tag tpixelrepresentation = gdcm::Tag(0x0028, 0x0103);
-  const char *pixelrepresentation_str =
-    GetPointerFromElement(tpixelrepresentation);
-  const unsigned short *pixelrepresentation =
-    reinterpret_cast<const unsigned short*>(pixelrepresentation_str);
-  pt.SetPixelRepresentation( *pixelrepresentation );
+  pt.SetPixelRepresentation(
+    ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
 
   PixelData.SetPixelType( pt );
 
   // 4. Do the PixelData
-  const Tag pixeldata = gdcm::Tag(0x7fe0, 0x0010);
+  const Tag pixeldata = Tag(0x7fe0, 0x0010);
   if( !ds.FindDataElement( pixeldata ) )
     {
     gdcmWarningMacro( "No Pixel Data Found" );

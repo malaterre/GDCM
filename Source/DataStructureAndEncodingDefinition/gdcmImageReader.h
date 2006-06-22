@@ -13,6 +13,7 @@ namespace gdcm
  * representation
  */
 class StringStream;
+class ByteValue;
 class GDCM_EXPORT ImageReader : public Reader
 {
 public:
@@ -25,12 +26,16 @@ public:
   bool Read();
 
 protected:
-  const char* GetPointerFromElement(Tag const &tag);
+  const ByteValue* GetPointerFromElement(Tag const &tag) const;
   bool ReadImage();
   bool ReadACRNEMAImage();
   
   // ugliest thing ever:
+  signed short ReadSSFromTag( Tag const & t, StringStream &ss,
+    std::string &conversion );
   unsigned short ReadUSFromTag( Tag const & t, StringStream &ss,
+    std::string &conversion );
+  int ReadISFromTag( Tag const & t, StringStream &ss,
     std::string &conversion );
 
 private:

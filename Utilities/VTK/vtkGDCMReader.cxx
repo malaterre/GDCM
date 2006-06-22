@@ -139,6 +139,7 @@ int vtkGDCMReader::RequestData(vtkInformation *vtkNotUsed(request),
   //this->FileLowerLeft = 1;
   if( image.GetPlanarConfiguration() )
     {
+    assert( image.GetNumberOfDimensions() == 3 );
     vtkIdType *dims = output->GetDimensions();
     unsigned long size = dims[0]*dims[1]*dims[2];
     char *copy = new char[ size * 3 ];
