@@ -66,7 +66,8 @@ bool Reader::ReadDataSet()
       }
     else // default to instanciating an implicit one (old ACRNEMA...)
       {
-      assert( ts.GetNegociatedType() == TS::Implicit );
+      assert( ts.GetNegociatedType() == TS::Implicit
+           || ts.GetNegociatedType() == TS::Unknown );
       DS = new DataSet(TS::Implicit);
       }
     }

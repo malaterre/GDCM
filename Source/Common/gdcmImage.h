@@ -62,6 +62,9 @@ public:
 
   void Print(std::ostream &os) const;
 
+  unsigned int GetPlanarConfiguration() const;
+  void SetPlanarConfiguration(unsigned int pc);
+
 //  Image(Image const&);
 //  Image &operator= (Image const&);
 
@@ -75,6 +78,7 @@ private:
   std::vector<double> Origin;
 
   PixelType PT;
+  unsigned int PlanarConfiguration;
 };
 
 } // end namespace gdcm

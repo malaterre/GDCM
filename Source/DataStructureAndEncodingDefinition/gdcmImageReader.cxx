@@ -172,7 +172,12 @@ bool ImageReader::ReadImage()
 
   PixelData.SetPixelType( pt );
 
-  // 4. Do the PixelData
+  // 4. Do the Planar configuration
+  // D 0028|0006 [US] [Planar Configuration] [1]
+  PixelData.SetPlanarConfiguration(
+    ReadUSFromTag( Tag(0x0028, 0x0006), ss, conversion ) );
+
+  // 5. Do the PixelData
   const Tag pixeldata = gdcm::Tag(0x7fe0, 0x0010);
   if( !ds.FindDataElement( pixeldata ) )
     {

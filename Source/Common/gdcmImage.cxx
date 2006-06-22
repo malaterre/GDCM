@@ -19,6 +19,16 @@ void Image::SetNumberOfDimensions(unsigned int dim)
   NumberOfDimensions = dim;
 }
 
+unsigned int Image::GetPlanarConfiguration() const
+{
+  return PlanarConfiguration;
+}
+
+void Image::SetPlanarConfiguration(unsigned int pc)
+{
+  PlanarConfiguration = pc;
+}
+
 const unsigned int *Image::GetDimensions() const
 {
   assert( NumberOfDimensions );
