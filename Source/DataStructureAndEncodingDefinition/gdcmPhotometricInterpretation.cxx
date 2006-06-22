@@ -5,8 +5,8 @@ namespace gdcm
 
 static const char *PIStrings[] = {
   "UNKNOW",
-  "MONOCHROME1",
-  "MONOCHROME2",
+  "MONOCHROME1 ",
+  "MONOCHROME2 ",
   "PALETTE_COLOR",
   "RGB",
   "HSV",

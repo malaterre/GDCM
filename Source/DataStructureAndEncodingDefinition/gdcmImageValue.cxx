@@ -19,6 +19,9 @@ bool ImageValue::GetBuffer(char *buffer) const
         " is different from computer value " << len );
       }
     bv->GetBuffer(buffer, len);
+    //MR_GE_with_Private_Compressed_Icon_0009_1110.dcm
+    //ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)
+    //  buffer, SwapCode::BigEndian, len);
     return true;
     }
   else

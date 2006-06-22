@@ -5,6 +5,7 @@
 #include "gdcmFileMetaInformation.h"
 #include "gdcmStringStream.h"
 #include "gdcmElement.h"
+#include "gdcmPhotometricInterpretation.h"
 
 namespace gdcm
 {
@@ -79,6 +80,7 @@ bool ImageReader::Read()
   else
     {
     // read true DICOM dataset
+    gdcmWarningMacro( "Looks like an ACR-NEMA file" );
     res = ReadImage();
     }
 
@@ -142,12 +144,13 @@ bool ImageReader::ReadImage()
     gdcmWarningMacro( "I did not check the Transfer Syntax" );
     if( numberofframes > 1 )
       {
-      assert( numberofframes == 3 );
       PixelData.SetNumberOfDimensions(3);
       PixelData.SetDimensions(2, numberofframes );
       }
     else
       {
+      gdcmDebugMacro( "NumberOfFrames was specified with a value of: "
+        << numberofframes );
       PixelData.SetNumberOfDimensions(2);
       }
     }
@@ -196,6 +199,7 @@ bool ImageReader::ReadImage()
   // Very important to set the PixelType here before PlanarConfiguration
   PixelData.SetPixelType( pt );
 
+  // 4. Planar Configuration
   // D 0028|0006 [US] [Planar Configuration] [1]
   const Tag planarconfiguration = Tag(0x0028, 0x0006);
   if( ds.FindDataElement( planarconfiguration ) )
@@ -204,7 +208,22 @@ bool ImageReader::ReadImage()
       ReadUSFromTag( planarconfiguration, ss, conversion ) );
     }
 
-  // 5. Do the PixelData
+  // 5. Photometric Interpretation
+  // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]
+  const Tag tphotometricinterpretation(0x0028, 0x0004);
+  const ByteValue *photometricinterpretation
+    = GetPointerFromElement( tphotometricinterpretation );
+  std::string photometricinterpretation_str(
+    photometricinterpretation->GetPointer(),
+    photometricinterpretation->GetLength() );
+  PhotometricInterpretation pi(
+    PhotometricInterpretation::GetPIType(
+      photometricinterpretation_str.c_str()));
+  assert( pi == PhotometricInterpretation::MONOCHROME2 );
+
+    
+
+  // 6. Do the PixelData
   const Tag pixeldata = Tag(0x7fe0, 0x0010);
   if( !ds.FindDataElement( pixeldata ) )
     {
@@ -216,6 +235,9 @@ bool ImageReader::ReadImage()
     {
     const ExplicitDataElement &xde =
       dynamic_cast<const ExplicitDataElement&>(pdde);
+    if( xde.GetVR() == VR::OW
+      && Stream.GetSwapCode() == SwapCode::BigEndian )
+      abort();
     PixelData.SetValue( xde.GetValue() );
     }
   else if( type == TS::Implicit )
@@ -281,17 +303,27 @@ bool ImageReader::ReadACRNEMAImage()
     ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
 
   // LIBIDO compatible code:
-  const ByteValue *libido = GetPointerFromElement( Tag(0x0008, 0x0010 ) );
-  std::string libido_str( libido->GetPointer(), libido->GetLength() );
-  assert( libido_str != "CANRME_AILIBOD1_1." );
-  if( libido_str == "ACRNEMA_LIBIDO_1.1" )
+  // D 0008|0010 [LO] [Recognition Code (RET)] [ACRNEMA_LIBIDO_1.1]
+  const Tag trecognitioncode(0x0008,0x0010);
+  if( ds.FindDataElement( trecognitioncode ) )
     {
-    // Swap Columns & Rows
-    assert( PixelData.GetNumberOfDimensions() == 2 );
-    const unsigned int *dims = PixelData.GetDimensions();
-    unsigned int tmp = dims[0];
-    PixelData.SetDimensions(0, dims[1] );
-    PixelData.SetDimensions(1, tmp );
+    const ByteValue *libido = GetPointerFromElement( trecognitioncode );
+    std::string libido_str( libido->GetPointer(), libido->GetLength() );
+    assert( libido_str != "CANRME_AILIBOD1_1." );
+    if( libido_str == "ACRNEMA_LIBIDO_1.1" )
+      {
+      // Swap Columns & Rows
+      assert( PixelData.GetNumberOfDimensions() == 2 );
+      const unsigned int *dims = PixelData.GetDimensions();
+      unsigned int tmp = dims[0];
+      PixelData.SetDimensions(0, dims[1] );
+      PixelData.SetDimensions(1, tmp );
+      }
+    }
+  else
+    {
+    gdcmWarningMacro(
+      "Reading as ACR NEMA an image which does not look likes ACR NEMA" );
     }
 
   // 3. Pixel Type ?
