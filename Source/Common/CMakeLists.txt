@@ -28,6 +28,7 @@ SET(Common_SRCS
   gdcmImage.cxx
   gdcmImageIStream.cxx
   gdcmPixelType.cxx
+  gdcmPhotometricInterpretation.cxx
   )
 
 ADD_LIBRARY(gdcmCommon ${Common_SRCS})

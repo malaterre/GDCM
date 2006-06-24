@@ -14,7 +14,6 @@ SET(DSED_SRCS
   gdcmSequenceOfItems.cxx
   gdcmImageReader.cxx
   gdcmImageValue.cxx
-  gdcmPhotometricInterpretation.cxx
   )
 
 # Add the include paths

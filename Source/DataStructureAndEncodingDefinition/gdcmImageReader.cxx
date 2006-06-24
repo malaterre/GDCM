@@ -220,6 +220,7 @@ bool ImageReader::ReadImage()
     PhotometricInterpretation::GetPIType(
       photometricinterpretation_str.c_str()));
   assert( pi == PhotometricInterpretation::MONOCHROME2 );
+  PixelData.SetPhotometricInterpretation( pi );
 
     
 

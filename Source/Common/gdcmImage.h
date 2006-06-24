@@ -4,6 +4,7 @@
 
 #include "gdcmTypes.h"
 #include "gdcmPixelType.h"
+#include "gdcmPhotometricInterpretation.h"
 
 #include <vector>
 
@@ -65,6 +66,15 @@ public:
   unsigned int GetPlanarConfiguration() const;
   void SetPlanarConfiguration(unsigned int pc);
 
+  const PhotometricInterpretation &GetPhotometricInterpretation() const
+    {
+    return PI;
+    }
+  void SetPhotometricInterpretation(PhotometricInterpretation const &pi)
+    {
+    PI = pi;
+    }
+
 //  Image(Image const&);
 //  Image &operator= (Image const&);
 
@@ -79,6 +89,7 @@ private:
   std::vector<double> Origin;
 
   PixelType PT;
+  PhotometricInterpretation PI;
 };
 
 } // end namespace gdcm
