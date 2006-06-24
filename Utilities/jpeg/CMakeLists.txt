@@ -1,6 +1,13 @@
-PROJECT(GDCMJPEG)
+IF(NOT JPEG_NAMESPACE)
+  SET(JPEG_NAMESPACE "JPEG")
+  STRING(TOLOWER ${JPEG_NAMESPACE} JPEG_LIBRARY_NAME)
+  SET(JPEG_STANDALONE 1)
+ENDIF(NOT JPEG_NAMESPACE)
 
-INCLUDE_REGULAR_EXPRESSION("^(jchuff|jconfig|jdct|jdhuff|jerror|jinclude|jmemsys|jmorecfg|jpegint|jpeglib|jversion|jpeg).*$")
+PROJECT(${JPEG_NAMESPACE})
+
+# Do full dependency headers.
+INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 # memmgr back ends: compile only one of these into a working library
 # (For now, let's use the mode that requires the image fit into memory.
@@ -28,7 +35,7 @@ jclossy.c
 # lossless
 jclossls.c
 
-jdarith.c
+#jdarith.c
 jcodec.c
 jcscale.c
 jcshuff.c
@@ -48,7 +55,7 @@ jdatasrc.c
 
 SET(decomp_lossy_SRCS
  jdlossls.c jdlossy.c
-jcarith.c
+ #jcarith.c
 jdlhuff.c
 jddiffct.c
 jdpred.c
@@ -81,15 +88,13 @@ FOREACH(src
   ${decomp_lossy_SRCS}
   )
   SET(JPEG_SOURCES ${JPEG_SOURCES}
-    "${GDCMJPEG_SOURCE_DIR}/${src}")
+    "${CMAKE_CURRENT_SOURCE_DIR}/${src}")
 ENDFOREACH(src)
 
 IF (WIN32)
   IF (BUILD_SHARED_LIBS)
-    #ADD_DEFINITIONS(-DJPEGDLL)
     SET(JPEGDLL 1)
   ELSE (BUILD_SHARED_LIBS)
-    #ADD_DEFINITIONS(-DJPEGSTATIC)
     SET(JPEGSTATIC 1)
   ENDIF (BUILD_SHARED_LIBS)
 ENDIF (WIN32)
@@ -98,22 +103,15 @@ ENDIF (WIN32)
 # Generate three libraries: jpeg 8bits, 12bits and 16bits
 # using only one source directory
 
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
 # Particular case jmorecfg.h needs to be specified either 8, 12 or 16 bits:
 FOREACH(bits 8 12 16)
   SET(CMAKE_BITS_IN_JSAMPLE ${bits})
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/jmorecfg.h.in
-                 ${CMAKE_CURRENT_BINARY_DIR}/${bits}/jmorecfg.h @ONLY IMMEDIATE)
-  SET(BITS_TYPE_JPEG_MANGLE_NAME "jpeg/mangle_jpeg${bits}bits.h")
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/jconfig.h.in
-                 ${CMAKE_CURRENT_BINARY_DIR}/${bits}/jconfig.h @ONLY IMMEDIATE)
-  # Dummy copy for GDCM to include <gdcmjpeg/8/jpeglib.h> with no conflict
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/jpeglib.h
-                 ${CMAKE_CURRENT_BINARY_DIR}/${bits}/jpeglib.h COPYONLY IMMEDIATE)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/jerror.h
-                 ${CMAKE_CURRENT_BINARY_DIR}/${bits}/jerror.h COPYONLY IMMEDIATE)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/jinclude.h
-                 ${CMAKE_CURRENT_BINARY_DIR}/${bits}/jinclude.h COPYONLY IMMEDIATE)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/jpegcmake.h.in
+                 ${CMAKE_CURRENT_BINARY_DIR}/${bits}/jpegcmake.h
+                 @ONLY IMMEDIATE)
+  #ADD_LIBRARY(${JPEG_LIBRARY_NAME}${bits} ${JPEG_SOURCES})
+  #INSTALL_TARGETS(/lib/InsightToolkit ${JPEG_NAMESPACE}jpeg${bits})
 ENDFOREACH(bits)
 
 SUBDIRS(8 12 16)
-
