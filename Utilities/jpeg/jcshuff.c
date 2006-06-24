@@ -629,6 +629,7 @@ finish_pass_gather (j_compress_ptr cinfo)
 METHODDEF(boolean)
 need_optimization_pass (j_compress_ptr cinfo)
 {
+  (void)cinfo;
   return TRUE;
 }
 

@@ -152,7 +152,7 @@ process_restart (j_decompress_ptr cinfo)
 {
   j_lossless_d_ptr losslsd = (j_lossless_d_ptr) cinfo->codec;
   lhuff_entropy_ptr entropy = (lhuff_entropy_ptr) losslsd->entropy_private;
-  int ci;
+  /* int ci; */
 
   /* Throw away any unused bits remaining in bit buffer; */
   /* include any full bytes in next_marker's count of discarded bytes */
@@ -196,7 +196,8 @@ decode_mcus (j_decompress_ptr cinfo, JDIFFIMAGE diff_buf,
 {
   j_lossless_d_ptr losslsd = (j_lossless_d_ptr) cinfo->codec;
   lhuff_entropy_ptr entropy = (lhuff_entropy_ptr) losslsd->entropy_private;
-  int mcu_num, sampn, ci, yoffset, MCU_width, ptrn;
+  unsigned int mcu_num;
+  int sampn, ci, yoffset, MCU_width, ptrn;
   BITREAD_STATE_VARS;
 
   /* Set output pointer locations based on MCU_col_num */

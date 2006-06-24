@@ -295,7 +295,7 @@ flush_bits (working_state * state)
 LOCAL(boolean)
 emit_restart (working_state * state, int restart_num)
 {
-  int ci;
+  /* int ci; */
 
   if (! flush_bits(state))
     return FALSE;
@@ -321,8 +321,9 @@ encode_mcus_huff (j_compress_ptr cinfo, JDIFFIMAGE diff_buf,
   j_lossless_c_ptr losslsc = (j_lossless_c_ptr) cinfo->codec;
   lhuff_entropy_ptr entropy = (lhuff_entropy_ptr) losslsc->entropy_private;
   working_state state;
-  int mcu_num, sampn, ci, yoffset, MCU_width, ptrn;
-  jpeg_component_info * compptr;
+  unsigned int mcu_num;
+  int sampn, ci, yoffset, MCU_width, ptrn;
+  /* jpeg_component_info * compptr; */
 
   /* Load up working state */
   state.next_output_byte = cinfo->dest->next_output_byte;
@@ -350,7 +351,7 @@ encode_mcus_huff (j_compress_ptr cinfo, JDIFFIMAGE diff_buf,
 
     /* Inner loop handles the samples in the MCU */
     for (sampn = 0; sampn < cinfo->data_units_in_MCU; sampn++) {
-      register int temp, temp2, temp3;
+      register int temp, temp2 /* , temp3 */ ;
       register int nbits;
       c_derived_tbl *dctbl = entropy->cur_tbls[sampn];
   
@@ -466,8 +467,9 @@ encode_mcus_gather (j_compress_ptr cinfo, JDIFFIMAGE diff_buf,
 {
   j_lossless_c_ptr losslsc = (j_lossless_c_ptr) cinfo->codec;
   lhuff_entropy_ptr entropy = (lhuff_entropy_ptr) losslsc->entropy_private;
-  int mcu_num, sampn, ci, yoffset, MCU_width, ptrn;
-  jpeg_component_info * compptr;
+  unsigned int mcu_num; 
+  int sampn, ci, yoffset, MCU_width, ptrn;
+  /* jpeg_component_info * compptr; */
 
   /* Take care of restart intervals if needed */
   if (cinfo->restart_interval) {
@@ -493,7 +495,7 @@ encode_mcus_gather (j_compress_ptr cinfo, JDIFFIMAGE diff_buf,
     for (sampn = 0; sampn < cinfo->data_units_in_MCU; sampn++) {
       register int temp;
       register int nbits;
-      c_derived_tbl *dctbl = entropy->cur_tbls[sampn];
+      /* c_derived_tbl *dctbl = entropy->cur_tbls[sampn]; */
       long * counts = entropy->cur_counts[sampn];
   
       /* Encode the difference per section H.1.2.2 */
@@ -567,6 +569,7 @@ finish_pass_gather (j_compress_ptr cinfo)
 METHODDEF(boolean)
 need_optimization_pass (j_compress_ptr cinfo)
 {
+  (void)cinfo;
   return TRUE;
 }
 

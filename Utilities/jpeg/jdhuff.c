@@ -80,8 +80,9 @@ jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, boolean isDC, int tblno,
     }
     /* code is now 1 more than the last code used for codelength si; but
      * it must still fit in si bits, since no code is allowed to be all ones.
+     * BUG FIX 2001-09-03: Comparison must be >, not >=
      */
-    if (((INT32) code) >= (((INT32) 1) << si))
+    if (((INT32) code) > (((INT32) 1) << si))
       ERREXIT(cinfo, JERR_BAD_HUFF_TABLE);
     code <<= 1;
     si++;
@@ -137,7 +138,12 @@ jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, boolean isDC, int tblno,
     for (i = 0; i < numsymbols; i++) {
       int sym = htbl->huffval[i];
       if (sym < 0 || sym > 16)
+/* The following is needed to be able to read certain Philips DICOM MRI images */
+#if BITS_IN_JSAMPLE == 12
+        htbl->huffval[i]=15;
+#else
 	ERREXIT(cinfo, JERR_BAD_HUFF_TABLE);
+#endif /* BITS_IN_JSAMPLE == 12 */
     }
   }
 }

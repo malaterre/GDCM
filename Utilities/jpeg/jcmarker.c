@@ -257,6 +257,8 @@ emit_dac (j_compress_ptr cinfo)
       emit_byte(cinfo, cinfo->arith_ac_K[i]);
     }
   }
+#else
+  (void)cinfo;
 #endif /* C_ARITH_CODING_SUPPORTED */
 }
 
@@ -497,11 +499,11 @@ write_frame_header (j_compress_ptr cinfo)
   boolean is_baseline;
   jpeg_component_info *compptr;
 
+  prec = 0;
   if (cinfo->process != JPROC_LOSSLESS) {
     /* Emit DQT for each quantization table.
      * Note that emit_dqt() suppresses any duplicate tables.
      */
-    prec = 0;
     for (ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
 	 ci++, compptr++) {
       prec += emit_dqt(cinfo, compptr->quant_tbl_no);
@@ -531,7 +533,12 @@ write_frame_header (j_compress_ptr cinfo)
 
   /* Emit the proper SOF marker */
   if (cinfo->arith_code) {
-    emit_sof(cinfo, M_SOF9);	/* SOF code for arithmetic coding */
+    if (cinfo->process == JPROC_PROGRESSIVE)
+      emit_sof(cinfo, M_SOF10); /* SOF code for progressive arithmetic */
+    else if (cinfo->process == JPROC_LOSSLESS)
+      emit_sof(cinfo, M_SOF11);  /* SOF code for lossless arithmetic */
+    else
+      emit_sof(cinfo, M_SOF9);  /* SOF code for sequential arithmetic */
   } else {
     if (cinfo->process == JPROC_PROGRESSIVE)
       emit_sof(cinfo, M_SOF2);	/* SOF code for progressive Huffman */

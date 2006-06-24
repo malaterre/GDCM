@@ -50,7 +50,7 @@ jinit_lossy_c_codec (j_compress_ptr cinfo)
   jinit_forward_dct(cinfo);
   /* Entropy encoding: either Huffman or arithmetic coding. */
   if (cinfo->arith_code) {
-    ERREXIT(cinfo, JERR_ARITH_NOTIMPL);
+    jinit_arith_encoder(cinfo);
   } else {
     if (cinfo->process == JPROC_PROGRESSIVE) {
 #ifdef C_PROGRESSIVE_SUPPORTED

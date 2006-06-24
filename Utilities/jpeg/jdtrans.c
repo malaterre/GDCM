@@ -45,7 +45,7 @@ LOCAL(void) transdecode_master_selection JPP((j_decompress_ptr cinfo));
 GLOBAL(jvirt_barray_ptr *)
 jpeg_read_coefficients (j_decompress_ptr cinfo)
 {
-  j_lossy_d_ptr decomp;
+  /* j_lossy_d_ptr decomp; */
 
   /* Can't read coefficients from lossless streams */
   if (cinfo->process == JPROC_LOSSLESS) {

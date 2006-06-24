@@ -22,9 +22,12 @@
 
 /* Expanded data destination object for stdio output */
 
+/**
+ * \brief very low level C 'structure', used to decode jpeg file
+ * Should not appear in the Doxygen supplied documentation
+ */
 typedef struct {
   struct jpeg_destination_mgr pub; /* public fields */
-
   FILE * outfile;		/* target stream */
   JOCTET * buffer;		/* start of buffer */
 } my_destination_mgr;

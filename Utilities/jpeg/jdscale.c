@@ -41,7 +41,7 @@ simple_upscale(j_decompress_ptr cinfo,
   j_lossless_d_ptr losslsd = (j_lossless_d_ptr) cinfo->codec;
   scaler_ptr scaler = (scaler_ptr) losslsd->scaler_private;
   int scale_factor = scaler->scale_factor;
-  int xindex;
+  unsigned int xindex;
 
   for (xindex = 0; xindex < width; xindex++)
     output_buf[xindex] = (JSAMPLE) (diff_buf[xindex] << scale_factor);
@@ -55,7 +55,8 @@ simple_downscale(j_decompress_ptr cinfo,
   j_lossless_d_ptr losslsd = (j_lossless_d_ptr) cinfo->codec;
   scaler_ptr scaler = (scaler_ptr) losslsd->scaler_private;
   int scale_factor = scaler->scale_factor;
-  int xindex;
+  unsigned int xindex;
+  SHIFT_TEMPS
 
   for (xindex = 0; xindex < width; xindex++)
     output_buf[xindex] = (JSAMPLE) RIGHT_SHIFT(diff_buf[xindex], scale_factor);
@@ -66,7 +67,8 @@ noscale(j_decompress_ptr cinfo,
 	JDIFFROW diff_buf, JSAMPROW output_buf,
 	JDIMENSION width)
 {
-  int xindex;
+  unsigned int xindex;
+  (void)cinfo;
 
   for (xindex = 0; xindex < width; xindex++)
     output_buf[xindex] = (JSAMPLE) diff_buf[xindex];

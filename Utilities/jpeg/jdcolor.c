@@ -72,7 +72,11 @@ build_ycc_rgb_table (j_decompress_ptr cinfo)
   my_cconvert_ptr cconvert = (my_cconvert_ptr) cinfo->cconvert;
   int i;
   INT32 x;
+#if BITS_IN_JSAMPLE == 16
+  /* no need for temporaries */
+#else
   SHIFT_TEMPS
+#endif
 
   cconvert->Cr_r_tab = (int *)
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
@@ -90,12 +94,25 @@ build_ycc_rgb_table (j_decompress_ptr cinfo)
   for (i = 0, x = -CENTERJSAMPLE; i <= MAXJSAMPLE; i++, x++) {
     /* i is the actual input pixel value, in the range 0..MAXJSAMPLE */
     /* The Cb or Cr value we are thinking of is x = i - CENTERJSAMPLE */
+
+#if BITS_IN_JSAMPLE == 16
+    /* Bug fix 2001-11-06 by Eichelberg: The integer routines below
+       produce an overflow when used with MAXJSAMPLE == 65535.
+       Use floating point calculation instead. */
+
+    /* Cr=>R value is nearest int to 1.40200 * x */
+    cconvert->Cr_r_tab[i] = (int)(1.40200 * (double)x + 0.5);
+    /* Cb=>B value is nearest int to 1.77200 * x */
+    cconvert->Cb_b_tab[i] = (int)(1.77200 * (double)x + 0.5);
+#else
     /* Cr=>R value is nearest int to 1.40200 * x */
     cconvert->Cr_r_tab[i] = (int)
 		    RIGHT_SHIFT(FIX(1.40200) * x + ONE_HALF, SCALEBITS);
     /* Cb=>B value is nearest int to 1.77200 * x */
     cconvert->Cb_b_tab[i] = (int)
 		    RIGHT_SHIFT(FIX(1.77200) * x + ONE_HALF, SCALEBITS);
+#endif
+
     /* Cr=>G value is scaled-up -0.71414 * x */
     cconvert->Cr_g_tab[i] = (- FIX(0.71414)) * x;
     /* Cb=>G value is scaled-up -0.34414 * x */
@@ -292,6 +309,7 @@ ycck_cmyk_convert (j_decompress_ptr cinfo,
 METHODDEF(void)
 start_pass_dcolor (j_decompress_ptr cinfo)
 {
+  (void)cinfo;
   /* no work needed */
 }
 

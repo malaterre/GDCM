@@ -157,7 +157,8 @@ decompress_data (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
   JDIMENSION MCU_col_num;	/* index of current MCU within row */
   JDIMENSION MCU_count;		/* number of MCUs decoded */
   JDIMENSION last_iMCU_row = cinfo->total_iMCU_rows - 1;
-  int comp, ci, yoffset, row, prev_row;
+  int comp, ci, row, prev_row;
+  unsigned int yoffset;
   jpeg_component_info *compptr;
 
   /* Loop to process as much as one whole iMCU row */
@@ -237,6 +238,7 @@ decompress_data (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
 METHODDEF(int)
 dummy_consume_data (j_decompress_ptr cinfo)
 {
+  (void)cinfo;
   return JPEG_SUSPENDED;	/* Always indicate nothing was done */
 }
 
@@ -255,10 +257,10 @@ consume_data (j_decompress_ptr cinfo)
 {
   j_lossless_d_ptr losslsd = (j_lossless_d_ptr) cinfo->codec;
   d_diff_ptr diff = (d_diff_ptr) losslsd->diff_private;
-  JDIMENSION MCU_col_num;	/* index of current MCU within row */
-  JDIMENSION MCU_count;		/* number of MCUs decoded */
-  JDIMENSION last_iMCU_row = cinfo->total_iMCU_rows - 1;
-  int comp, ci, yoffset, row, prev_row;
+  /* JDIMENSION MCU_col_num; */  /* index of current MCU within row */
+  /* JDIMENSION MCU_count; */  /* number of MCUs decoded */
+  /* JDIMENSION last_iMCU_row = cinfo->total_iMCU_rows - 1; */
+  int comp, ci /* , yoffset, row, prev_row */;
   JSAMPARRAY buffer[MAX_COMPS_IN_SCAN];
   jpeg_component_info *compptr;
 

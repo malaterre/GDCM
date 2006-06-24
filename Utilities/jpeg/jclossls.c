@@ -57,7 +57,7 @@ jinit_lossless_c_codec(j_compress_ptr cinfo)
 
   /* Entropy encoding: either Huffman or arithmetic coding. */
   if (cinfo->arith_code) {
-    ERREXIT(cinfo, JERR_ARITH_NOTIMPL);
+    jinit_arith_encoder(cinfo);
   } else {
     jinit_lhuff_encoder(cinfo);
   }

@@ -138,10 +138,12 @@ typedef jpeg_lossless_d_codec * j_lossless_d_ptr;
 
 
 /* Compression module initialization routines */
+EXTERN(void) jinit_lossless_c_codec JPP((j_compress_ptr cinfo));
 EXTERN(void) jinit_lhuff_encoder JPP((j_compress_ptr cinfo));
 EXTERN(void) jinit_differencer JPP((j_compress_ptr cinfo));
 EXTERN(void) jinit_c_scaler JPP((j_compress_ptr cinfo));
 /* Decompression module initialization routines */
+EXTERN(void) jinit_lossless_d_codec JPP((j_decompress_ptr cinfo));
 EXTERN(void) jinit_lhuff_decoder JPP((j_decompress_ptr cinfo));
 EXTERN(void) jinit_undifferencer JPP((j_decompress_ptr cinfo));
 EXTERN(void) jinit_d_scaler JPP((j_decompress_ptr cinfo));

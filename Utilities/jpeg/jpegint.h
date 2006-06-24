@@ -257,7 +257,9 @@ struct jpeg_color_quantizer {
 
 #ifdef NEED_SHORT_EXTERNAL_NAMES
 #define jinit_c_codec		jICCodec
+#define jinit_c_diff_controller  jICDiffC
 #define jinit_lossy_c_codec	jILossyC
+#define jinit_lossless_c_codec  jILosslessC
 #define jinit_compress_master	jICompress
 #define jinit_c_master_control	jICMaster
 #define jinit_c_main_controller	jICMainC
@@ -268,6 +270,7 @@ struct jpeg_color_quantizer {
 #define jinit_forward_dct	jIFDCT
 #define jinit_shuff_encoder	jISHEncoder
 #define jinit_phuff_encoder	jIPHEncoder
+#define jinit_arith_encoder  jIAEncoder
 #define jinit_marker_writer	jIMWriter
 #define jinit_d_codec		jIDCodec
 #define jinit_lossy_d_codec	jILossyD
@@ -281,6 +284,7 @@ struct jpeg_color_quantizer {
 #define jinit_marker_reader	jIMReader
 #define jinit_shuff_decoder	jISHDecoder
 #define jinit_phuff_decoder	jIPHDecoder
+#define jinit_arith_decoder  jIADecoder
 #define jinit_lhuff_decoder	jILHDecoder
 #define jinit_undifferencer	jIUndiff
 #define jinit_d_scaler		jIDScaler
@@ -302,6 +306,8 @@ struct jpeg_color_quantizer {
 
 
 /* Compression module initialization routines */
+EXTERN(void) jinit_c_codec JPP((j_compress_ptr cinfo));
+EXTERN(void) jinit_c_diff_controller JPP((j_compress_ptr cinfo, boolean need_full_buffer));
 EXTERN(void) jinit_compress_master JPP((j_compress_ptr cinfo));
 EXTERN(void) jinit_c_master_control JPP((j_compress_ptr cinfo,
 					 boolean transcode_only));
@@ -313,7 +319,10 @@ EXTERN(void) jinit_compressor JPP((j_compress_ptr cinfo));
 EXTERN(void) jinit_color_converter JPP((j_compress_ptr cinfo));
 EXTERN(void) jinit_downsampler JPP((j_compress_ptr cinfo));
 EXTERN(void) jinit_marker_writer JPP((j_compress_ptr cinfo));
+EXTERN(void) jinit_arith_encoder JPP((j_compress_ptr cinfo));
 /* Decompression module initialization routines */
+EXTERN(void) jinit_d_codec JPP((j_decompress_ptr cinfo));
+EXTERN(void) jinit_d_diff_controller JPP((j_decompress_ptr cinfo, boolean need_full_buffer));
 EXTERN(void) jinit_master_decompress JPP((j_decompress_ptr cinfo));
 EXTERN(void) jinit_d_main_controller JPP((j_decompress_ptr cinfo,
 					  boolean need_full_buffer));
@@ -322,6 +331,7 @@ EXTERN(void) jinit_d_post_controller JPP((j_decompress_ptr cinfo,
 					  boolean need_full_buffer));
 EXTERN(void) jinit_input_controller JPP((j_decompress_ptr cinfo));
 EXTERN(void) jinit_marker_reader JPP((j_decompress_ptr cinfo));
+EXTERN(void) jinit_arith_decoder JPP((j_decompress_ptr cinfo));
 EXTERN(void) jinit_upsampler JPP((j_decompress_ptr cinfo));
 EXTERN(void) jinit_color_deconverter JPP((j_decompress_ptr cinfo));
 EXTERN(void) jinit_1pass_quantizer JPP((j_decompress_ptr cinfo));

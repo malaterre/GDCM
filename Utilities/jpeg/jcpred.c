@@ -62,7 +62,7 @@ METHODDEF(void) start_pass
 	j_lossless_c_ptr losslsc = (j_lossless_c_ptr) cinfo->codec; \
 	c_pred_ptr pred = (c_pred_ptr) losslsc->pred_private; \
 	boolean restart = FALSE; \
-	int xindex; \
+  unsigned int xindex; \
 	int samp, Ra; \
  \
 	samp = GETJSAMPLE(input_buf[0]); \
@@ -98,7 +98,7 @@ METHODDEF(void) start_pass
 #define DIFFERENCE_2D(PREDICTOR) \
 	j_lossless_c_ptr losslsc = (j_lossless_c_ptr) cinfo->codec; \
 	c_pred_ptr pred = (c_pred_ptr) losslsc->pred_private; \
-	int xindex; \
+  unsigned int xindex; \
 	int samp, Ra, Rb, Rc; \
  \
 	Rb = GETJSAMPLE(prev_row[0]); \
@@ -164,6 +164,7 @@ jpeg_difference5(j_compress_ptr cinfo, int ci,
 		 JSAMPROW input_buf, JSAMPROW prev_row,
 		 JDIFFROW diff_buf, JDIMENSION width)
 {
+  SHIFT_TEMPS
   DIFFERENCE_2D(PREDICTOR5);
 }
 
@@ -172,6 +173,7 @@ jpeg_difference6(j_compress_ptr cinfo, int ci,
 		 JSAMPROW input_buf, JSAMPROW prev_row,
 		 JDIFFROW diff_buf, JDIMENSION width)
 {
+  SHIFT_TEMPS
   DIFFERENCE_2D(PREDICTOR6);
 }
 
@@ -180,6 +182,7 @@ jpeg_difference7(j_compress_ptr cinfo, int ci,
 		 JSAMPROW input_buf, JSAMPROW prev_row,
 		 JDIFFROW diff_buf, JDIMENSION width)
 {
+  SHIFT_TEMPS
   DIFFERENCE_2D(PREDICTOR7);
 }
 
@@ -197,6 +200,7 @@ jpeg_difference_first_row(j_compress_ptr cinfo, int ci,
 		 JDIFFROW diff_buf, JDIMENSION width)
 {
   DIFFERENCE_1D(INITIAL_PREDICTORx);
+  (void)prev_row;
 
   /*
    * Now that we have differenced the first row, we want to use the
@@ -259,8 +263,8 @@ reset_predictor (j_compress_ptr cinfo, int ci)
 METHODDEF(void)
 start_pass (j_compress_ptr cinfo)
 {
-  j_lossless_c_ptr losslsc = (j_lossless_c_ptr) cinfo->codec;
-  c_pred_ptr pred = (c_pred_ptr) losslsc->pred_private;
+  /* j_lossless_c_ptr losslsc = (j_lossless_c_ptr) cinfo->codec; */
+  /* c_pred_ptr pred = (c_pred_ptr) losslsc->pred_private; */
   int ci;
 
   /* Check that the restart interval is an integer multiple of the number 

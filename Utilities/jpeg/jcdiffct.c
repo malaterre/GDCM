@@ -145,7 +145,7 @@ compress_data (j_compress_ptr cinfo, JSAMPIMAGE input_buf)
   c_diff_ptr diff = (c_diff_ptr) losslsc->diff_private;
   JDIMENSION MCU_col_num;	/* index of current MCU within row */
   JDIMENSION MCU_count;		/* number of MCUs encoded */
-  JDIMENSION last_MCU_col = cinfo->MCUs_per_row - 1;
+  /* JDIMENSION last_MCU_col = cinfo->MCUs_per_row - 1; */
   JDIMENSION last_iMCU_row = cinfo->total_iMCU_rows - 1;
   int comp, ci, yoffset, samp_row, samp_rows, samps_across;
   jpeg_component_info *compptr;
@@ -304,11 +304,12 @@ compress_output (j_compress_ptr cinfo, JSAMPIMAGE input_buf)
 {
   j_lossless_c_ptr losslsc = (j_lossless_c_ptr) cinfo->codec;
   c_diff_ptr diff = (c_diff_ptr) losslsc->diff_private;
-  JDIMENSION MCU_col_num;	/* index of current MCU within row */
-  JDIMENSION MCU_count;		/* number of MCUs encoded */
-  int comp, ci, yoffset;
+  /* JDIMENSION MCU_col_num; */  /* index of current MCU within row */
+  /* JDIMENSION MCU_count; */  /* number of MCUs encoded */
+  int comp, ci /* , yoffset */ ;
   JSAMPARRAY buffer[MAX_COMPONENTS];
   jpeg_component_info *compptr;
+  (void)input_buf;
 
   /* Align the virtual buffers for the components used in this scan.
    * NB: during first pass, this is safe only because the buffers will

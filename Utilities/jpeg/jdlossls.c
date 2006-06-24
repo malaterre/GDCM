@@ -68,7 +68,7 @@ jinit_lossless_d_codec(j_decompress_ptr cinfo)
   /* Initialize sub-modules */
   /* Entropy decoding: either Huffman or arithmetic coding. */
   if (cinfo->arith_code) {
-    ERREXIT(cinfo, JERR_ARITH_NOTIMPL);
+    jinit_arith_decoder(cinfo);
   } else {
     jinit_lhuff_decoder(cinfo);
   }
