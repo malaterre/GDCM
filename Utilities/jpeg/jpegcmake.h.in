@@ -1,0 +1,6 @@
+#define HAVE_STDDEF_H
+#define HAVE_STDLIB_H
+
+#define BITS_IN_JSAMPLE @CMAKE_BITS_IN_JSAMPLE@
+
+

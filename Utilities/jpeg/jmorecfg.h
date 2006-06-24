@@ -10,6 +10,7 @@
  * optimizations.  Most users will not need to touch this file.
  */
 
+#include "jpegcmake.h"
 
 /*
  * Define BITS_IN_JSAMPLE as either
@@ -21,7 +22,22 @@
  */
 
 /*#define BITS_IN_JSAMPLE  8*//* use 8 or 12 (or 16 only for lossless) */
-#define BITS_IN_JSAMPLE @CMAKE_BITS_IN_JSAMPLE@
+//#define BITS_IN_JSAMPLE @CMAKE_BITS_IN_JSAMPLE@
+#ifndef BITS_IN_JSAMPLE
+#error You need to define BITS_IN_JSAMPLE
+#endif
+
+#if BITS_IN_JSAMPLE == 8
+#include "mangle_jpeg8bits.h"
+#endif
+
+#if BITS_IN_JSAMPLE == 12
+#include "mangle_jpeg12bits.h"
+#endif
+
+#if BITS_IN_JSAMPLE == 16
+#include "mangle_jpeg16bits.h"
+#endif
 
 /*
  * Maximum number of components (color channels) allowed in JPEG image.
