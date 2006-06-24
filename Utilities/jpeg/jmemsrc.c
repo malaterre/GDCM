@@ -14,6 +14,11 @@
  * custom source managers for other purposes.
  */
 
+/* code was tken from:
+ * [How to read JPEG resource using JpegLib ?]
+ * http://www.smalleranimals.com/vforum/archive/index.php?t-1922.html
+ */
+
 /* this is not a core library module, so it doesn't define JPEG_INTERNALS */
 #include "jinclude.h"
 #include "jpeglib.h"

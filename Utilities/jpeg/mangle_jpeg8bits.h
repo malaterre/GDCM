@@ -135,5 +135,6 @@ nm libgdcmjpeg8.a | grep " [R|T] " | colrm 1 11 | sort
 #define jround_up gdcm_jpeg8_jround_up
 #define jzero_far gdcm_jpeg8_jzero_far
 
+#define jpeg_memory_src gdcm_jpeg8_memory_src
 
 #endif

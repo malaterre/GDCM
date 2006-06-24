@@ -16,7 +16,7 @@ SET(systemdependent_SRCS jmemnobs.c)
 
 # library object files common to compression and decompression
 SET(common_SRCS
-jcomapi.c jutils.c jerror.c jmemmgr.c
+jcomapi.c jutils.c jerror.c jmemmgr.c jmemsrc.c
 )
 
 # compression library object files
