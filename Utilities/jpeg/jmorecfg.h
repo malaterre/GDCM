@@ -20,8 +20,8 @@
  * We do not support run-time selection of data precision, sorry.
  */
 
-#define BITS_IN_JSAMPLE  8	/* use 8 or 12 */
-
+/*#define BITS_IN_JSAMPLE  8*//* use 8 or 12 (or 16 only for lossless) */
+#define BITS_IN_JSAMPLE @CMAKE_BITS_IN_JSAMPLE@
 
 /*
  * Maximum number of components (color channels) allowed in JPEG image.
@@ -190,9 +190,10 @@ typedef short INT16;
 #endif
 
 /* INT32 must hold at least signed 32-bit values. */
+/* X11/xmd.h and basetsd.h correctly defines INT32 */
 
-#ifndef XMD_H			/* X11/xmd.h correctly defines INT32 */
-typedef long INT32;
+#if !defined(XMD_H) && !defined(_BASETSD_H_)
+typedef int INT32;
 #endif
 
 /* Datatype used for image dimensions.  The JPEG standard only supports
@@ -219,9 +220,25 @@ typedef unsigned int JDIMENSION;
 /* a function used only in its module: */
 #define LOCAL(type)		static type
 /* a function referenced thru EXTERNs: */
-#define GLOBAL(type)		type
+#if defined( _WIN32 ) && defined (JPEGDLL)
+#define GLOBAL(type)            __declspec(dllexport) type
+#else
+#define GLOBAL(type)            type
+#endif
+
 /* a reference to a GLOBAL function: */
-#define EXTERN(type)		extern type
+#if defined(_WIN32) && !defined(JPEGSTATIC)
+#ifdef JPEGDLL
+/* Win32, building a dll */
+#define EXTERN(type)            __declspec(dllexport) type
+#else
+/* Win32, not building a dll but using the dll */
+#define EXTERN(type)            __declspec(dllimport) type
+#endif
+#else
+/* not a Win32 system or building a static Win32 lib */
+#define EXTERN(type)            extern type
+#endif
 
 
 /* This macro is used to declare a "method", that is, a function pointer.
@@ -243,10 +260,12 @@ typedef unsigned int JDIMENSION;
  * explicit coding is needed; see uses of the NEED_FAR_POINTERS symbol.
  */
 
+#ifndef FAR
 #ifdef NEED_FAR_POINTERS
 #define FAR  far
 #else
 #define FAR
+#endif
 #endif
 
 

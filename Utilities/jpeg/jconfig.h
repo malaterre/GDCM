@@ -1,4 +1,4 @@
-/* jconfig.cfg --- source file edited by configure script */
+/* jconfig.h --- source file edited by configure script */
 /* see jconfig.doc for explanations */
 
 #undef HAVE_PROTOTYPES
@@ -15,6 +15,18 @@
 #undef NEED_SHORT_EXTERNAL_NAMES
 /* Define this if you get warnings about undefined structures. */
 #undef INCOMPLETE_TYPES_BROKEN
+
+
+#if defined(_WIN32) && !(defined(__CYGWIN__) || defined(__MINGW32__))
+/* Define "boolean" as unsigned char, not int, per Windows custom */
+/* don't conflict if rpcndr.h already read; Note that the w32api headers
+   used by Cygwin and Mingw do not define "boolean", so jmorecfg.h
+   handles it later. */
+#ifndef __RPCNDR_H__
+typedef unsigned char boolean;
+#endif
+#define HAVE_BOOLEAN            /* prevent jmorecfg.h from redefining it */
+#endif
 
 #ifdef JPEG_INTERNALS
 
