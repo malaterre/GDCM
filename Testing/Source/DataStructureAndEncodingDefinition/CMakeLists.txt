@@ -22,7 +22,6 @@ SET(DSED_TEST_SRCS
   TestSequenceOfItems
   TestCopyDataSet
   TestImageReader
-  TestPhotometricInterpretation
   )
 
 OPTION(SHARED_PTR "shared_ptr" OFF)

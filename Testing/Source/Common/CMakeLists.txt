@@ -11,6 +11,7 @@ SET(Common_TEST_SRCS
   TestObject
   TestSmartPointer
   TestPixelType
+  TestPhotometricInterpretation
   )
 
 # Add the include paths
