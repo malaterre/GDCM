@@ -7,8 +7,8 @@
 #undef void
 #undef const
 #undef CHAR_IS_UNSIGNED
-//#undef HAVE_STDDEF_H
-//#undef HAVE_STDLIB_H
+#undef HAVE_STDDEF_H
+#undef HAVE_STDLIB_H
 #undef NEED_BSD_STRINGS
 #undef NEED_SYS_TYPES_H
 #undef NEED_FAR_POINTERS
@@ -54,3 +54,7 @@ typedef unsigned char boolean;
 #undef PROGRESS_REPORT
 
 #endif /* JPEG_CJPEG_DJPEG */
+
+#include "jpegcmake.h"
+
+

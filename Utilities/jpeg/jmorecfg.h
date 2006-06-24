@@ -10,8 +10,6 @@
  * optimizations.  Most users will not need to touch this file.
  */
 
-#include "jpegcmake.h"
-
 /*
  * Define BITS_IN_JSAMPLE as either
  *   8   for 8-bit sample values (the usual setting)
@@ -22,7 +20,6 @@
  */
 
 /*#define BITS_IN_JSAMPLE  8*//* use 8 or 12 (or 16 only for lossless) */
-//#define BITS_IN_JSAMPLE @CMAKE_BITS_IN_JSAMPLE@
 #ifndef BITS_IN_JSAMPLE
 #error You need to define BITS_IN_JSAMPLE
 #endif

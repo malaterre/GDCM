@@ -103,6 +103,11 @@ ENDIF (WIN32)
 # Generate three libraries: jpeg 8bits, 12bits and 16bits
 # using only one source directory
 
+#-----------------------------------------------------------------------------
+INCLUDE (${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)
+CHECK_INCLUDE_FILE("stddef.h"       HAVE_STDDEF_H)
+CHECK_INCLUDE_FILE("stdlib.h"       HAVE_STDLIB_H)
+
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
 # Particular case jmorecfg.h needs to be specified either 8, 12 or 16 bits:
 FOREACH(bits 8 12 16)
