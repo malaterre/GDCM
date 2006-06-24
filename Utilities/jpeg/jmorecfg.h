@@ -24,18 +24,6 @@
 #error You need to define BITS_IN_JSAMPLE
 #endif
 
-#if BITS_IN_JSAMPLE == 8
-#include "mangle_jpeg8bits.h"
-#endif
-
-#if BITS_IN_JSAMPLE == 12
-#include "mangle_jpeg12bits.h"
-#endif
-
-#if BITS_IN_JSAMPLE == 16
-#include "mangle_jpeg16bits.h"
-#endif
-
 /*
  * Maximum number of components (color channels) allowed in JPEG image.
  * To meet the letter of the JPEG spec, set this to 255.  However, darn

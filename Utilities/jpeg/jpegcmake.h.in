@@ -11,4 +11,16 @@
 
 #define BITS_IN_JSAMPLE @CMAKE_BITS_IN_JSAMPLE@
 
+#if BITS_IN_JSAMPLE == 8
+#include "mangle_jpeg8bits.h"
+#endif
+
+#if BITS_IN_JSAMPLE == 12
+#include "mangle_jpeg12bits.h"
+#endif
+
+#if BITS_IN_JSAMPLE == 16
+#include "mangle_jpeg16bits.h"
+#endif
+
 
