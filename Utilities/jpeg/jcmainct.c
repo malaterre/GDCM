@@ -171,7 +171,7 @@ process_data_buffer_main (j_compress_ptr cinfo,
 			  JSAMPARRAY input_buf, JDIMENSION *in_row_ctr,
 			  JDIMENSION in_rows_avail)
 {
-  my_main_ptr main = (my_main_ptr) cinfo->main;
+  my_main_ptr mainPtr = (my_main_ptr) cinfo->main;
   int ci;
   jpeg_component_info *compptr;
   boolean writing = (mainPtr->pass_mode != JBUF_CRANK_DEST);

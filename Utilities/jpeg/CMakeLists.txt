@@ -71,7 +71,7 @@ SET(JPEG_HEADER_FILES
   jerror.h  
   jinclude.h  
   jmemsys.h  
-#  jmorecfg.h     #this one need to be configured
+  jmorecfg.h
   jpegint.h  
   jpeglib.h  
   jversion.h
@@ -110,7 +110,8 @@ CHECK_INCLUDE_FILE("stddef.h"       HAVE_STDDEF_H)
 CHECK_INCLUDE_FILE("stdlib.h"       HAVE_STDLIB_H)
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
-# Particular case jmorecfg.h needs to be specified either 8, 12 or 16 bits:
+# Particular case jpegcmake.h needs to be specified either 8, 12 or 16 bits:
+# also configure the name mangling
 FOREACH(bits 8 12 16)
   SET(CMAKE_BITS_IN_JSAMPLE ${bits})
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/jpegcmake.h.in
@@ -120,8 +121,10 @@ FOREACH(bits 8 12 16)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/mangle_jpeg.h.in
                  ${CMAKE_CURRENT_BINARY_DIR}/${bits}/mangle_jpeg${bits}bits.h
                  @ONLY IMMEDIATE)
-  #ADD_LIBRARY(${JPEG_LIBRARY_NAME}${bits} ${JPEG_SOURCES})
-  #INSTALL_TARGETS(/lib/InsightToolkit ${JPEG_NAMESPACE}jpeg${bits})
 ENDFOREACH(bits)
 
+# I could not get the depencencies in CMake to work properly so instead
+# have multiple directory for each target that will ensure proper recompilation
+# of the objects files
 SUBDIRS(8 12 16)
+

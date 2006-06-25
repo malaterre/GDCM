@@ -199,7 +199,11 @@ jinit_lossy_d_codec (j_decompress_ptr cinfo)
   jinit_inverse_dct(cinfo);
   /* Entropy decoding: either Huffman or arithmetic coding. */
   if (cinfo->arith_code) {
+#ifdef WITH_ARITHMETIC_PATCH
     jinit_arith_decoder(cinfo);
+#else
+    ERREXIT(cinfo, JERR_ARITH_NOTIMPL);
+#endif
   } else {
     if (cinfo->process == JPROC_PROGRESSIVE) {
 #ifdef D_PROGRESSIVE_SUPPORTED

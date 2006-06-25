@@ -533,12 +533,16 @@ write_frame_header (j_compress_ptr cinfo)
 
   /* Emit the proper SOF marker */
   if (cinfo->arith_code) {
+#ifdef WITH_ARITHMETIC_PATCH
     if (cinfo->process == JPROC_PROGRESSIVE)
       emit_sof(cinfo, M_SOF10); /* SOF code for progressive arithmetic */
     else if (cinfo->process == JPROC_LOSSLESS)
       emit_sof(cinfo, M_SOF11);  /* SOF code for lossless arithmetic */
     else
       emit_sof(cinfo, M_SOF9);  /* SOF code for sequential arithmetic */
+#else
+    emit_sof(cinfo, M_SOF9);	/* SOF code for arithmetic coding */
+#endif
   } else {
     if (cinfo->process == JPROC_PROGRESSIVE)
       emit_sof(cinfo, M_SOF2);	/* SOF code for progressive Huffman */

@@ -28,6 +28,7 @@
  */
 typedef struct {
   struct jpeg_destination_mgr pub; /* public fields */
+
   FILE * outfile;		/* target stream */
   JOCTET * buffer;		/* start of buffer */
 } my_destination_mgr;

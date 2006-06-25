@@ -485,7 +485,11 @@ prepare_for_pass (j_compress_ptr cinfo)
     /* Do Huffman optimization for a scan after the first one. */
     select_scan_parameters(cinfo);
     per_scan_setup(cinfo);
+#ifdef WITH_ARITHMETIC_PATCH
     if ((*cinfo->codec->need_optimization_pass) (cinfo)) {
+#else
+    if ((*cinfo->codec->need_optimization_pass) (cinfo) || cinfo->arith_code) {
+#endif
       (*cinfo->codec->entropy_start_pass) (cinfo, TRUE);
       (*cinfo->codec->start_pass) (cinfo, JBUF_CRANK_DEST);
       master->pub.call_pass_startup = FALSE;
@@ -622,9 +626,14 @@ jinit_c_master_control (j_compress_ptr cinfo, boolean transcode_only)
     cinfo->num_scans = 1;
   }
 
+#ifdef WITH_ARITHMETIC_PATCH
   if ((cinfo->arith_code == 0) &&
       (cinfo->process == JPROC_PROGRESSIVE ||  /*  TEMPORARY HACK ??? */
        cinfo->process == JPROC_LOSSLESS))
+#else
+  if (cinfo->process == JPROC_PROGRESSIVE ||	/*  TEMPORARY HACK ??? */
+      cinfo->process == JPROC_LOSSLESS)
+#endif
     cinfo->optimize_coding = TRUE; /* assume default tables no good for
 				    * progressive mode or lossless mode */
 
