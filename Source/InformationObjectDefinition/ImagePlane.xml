@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<Table Name="IMAGE PLANE MODULE ATTRIBUTES (C.7-10)">
+<Entry Tag="(0028,0030)"	Attribute="Pixel Spacing" Type="1" Description="Physical distance in the patient between the center of each pixel, specified by a numeric pair - adjacent row spacing (delimiter) adjacent column spacing in mm."/>
+<Entry Tag="(0020,0037)"	Attribute="Image Orientation (Patient)" Type="1" Description="The direction cosines of the first row and the first column with respect to the patient. See C.7.6.2.1.1 for further explanation."/>
+<Entry Tag="(0020,0032)" Attribute="Image Position (Patient)" Type="1" Description="The x, y, and z coordinates of the upper left hand corner (center of the first voxel transmitted) of the image, in mm. See C.7.6.2.1.1 for further explanation."/>
+<Entry Tag="(0018,0050)" Attribute="Slice Thickness" Type="2" Description="Nominal slice thickness, in mm."/>
+<Entry Tag="(0020,1041)" Attribute="Slice Location" Type="3" 	Description="Relative position of exposure expressed in mm. C.7.6.2.1.2 for further explanation."/>
+</Table>
+
+
