@@ -1,1 +1,31 @@
+IF(NOT EXPAT_NAMESPACE)
+  SET(EXPAT_NAMESPACE "EXPAT")
+  SET(EXPAT_STANDALONE 1)
+ENDIF(NOT EXPAT_NAMESPACE)
+# In all cases:
+STRING(TOLOWER ${EXPAT_NAMESPACE} EXPAT_LIBRARY_NAME)
+
+PROJECT(${EXPAT_NAMESPACE})
+
+# Do full dependency headers.
+INCLUDE_REGULAR_EXPRESSION("^.*$")
+
+IF(WIN32)
+  IF(BUILD_SHARED_LIBS)
+    SET(EXPATDLL 1)
+  ELSE(BUILD_SHARED_LIBS)
+    SET (EXPATSTATIC 1)
+  ENDIF(BUILD_SHARED_LIBS)
+ENDIF(WIN32)
+
+#-----------------------------------------------------------------------------
+INCLUDE (${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)
+# FIXME not the right way of doing it:
+CHECK_INCLUDE_FILE("string.h"       HAVE_MEMMOVE)
+
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/expat_config.h.in
+               ${CMAKE_CURRENT_BINARY_DIR}/expat_config.h)
+
+# for expat_config.h
+INCLUDE_DIRECTORIES(BEFORE ${CMAKE_CURRENT_BINARY_DIR})
 SUBDIRS(lib)
