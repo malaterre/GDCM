@@ -14,14 +14,18 @@ SET(DSED_SRCS
   gdcmSequenceOfItems.cxx
   gdcmImageReader.cxx
   gdcmImageValue.cxx
+  gdcmJPEGCodec.cxx
   )
 
 # Add the include paths
 INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_BINARY_DIR}/Source/Common"
+  "${GDCM_BINARY_DIR}/Utilities/jpeg/8"
+  "${GDCM_SOURCE_DIR}/Utilities/jpeg"
   )
 
 ADD_LIBRARY(gdcmDSED ${DSED_SRCS})
-TARGET_LINK_LIBRARIES(gdcmDSED gdcmCommon)
+TARGET_LINK_LIBRARIES(gdcmDSED gdcmCommon
+  gdcmjpeg8 gdcmjpeg12 gdcmjpeg16)
 

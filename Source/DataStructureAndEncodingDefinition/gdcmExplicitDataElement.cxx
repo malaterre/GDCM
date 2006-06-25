@@ -81,13 +81,13 @@ IStream &ExplicitDataElement::Read(IStream &is)
   if( VRField == VR::SQ )
     {
     // Check wether or not this is an undefined length sequence
+    assert( TagField != Tag(0x7fe0,0x0010) );
     ValueField = new SequenceOfItems;
     }
   else if( ValueLengthField.IsUndefined() )
     {
     // Ok this is Pixel Data fragmented...
-    const Tag pixelData(0x7fe0,0x0010);
-    assert( TagField == pixelData );
+    assert( TagField == Tag(0x7fe0,0x0010) );
     assert( VRField == VR::OB
          || VRField == VR::OW );
     //assert( xda.TagField == pixelData );
@@ -97,6 +97,7 @@ IStream &ExplicitDataElement::Read(IStream &is)
     }
   else
     {
+    assert( TagField != Tag(0x7fe0,0x0010) );
     ValueField = new ByteValue;
     }
   // We have the length we should be able to read the value

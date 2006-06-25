@@ -32,10 +32,12 @@ IStream &ImplicitDataElement::Read(IStream &is)
     {
     //assert( de.GetVR() == VR::SQ );
     // FIXME what if I am reading the pixel data...
+    assert( TagField != Tag(0x7fe0,0x0010) );
     ValueField = new SequenceOfItems;
     }
   else
     {
+    assert( TagField != Tag(0x7fe0,0x0010) );
     ValueField = new ByteValue;
     }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
