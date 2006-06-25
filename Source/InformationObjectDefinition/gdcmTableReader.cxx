@@ -22,7 +22,7 @@ static void XMLCALL startElement(void *userData, const char *name, const char **
   int *depthPtr = (int *)userData;
   for (i = 0; i < *depthPtr; i++)
     putchar('\t');
-  puts(name);
+  std::cout << name << " : " << atts[0] << "=" << atts[1] << std::endl;
   *depthPtr += 1;
 }
 
