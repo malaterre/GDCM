@@ -7,11 +7,11 @@
  * This header file mangles all symbols exported from the expat library.
  * It is included in all files while building the expat library.  Due to
  * namespace pollution, no expat headers should be included in .h files in
- * VTK.
+ * GDCM.
  * 
  * The following command was used to obtain the symbol list:
  * 
- * nm libgdcmexpat.a |grep " [TR] "
+ * nm lib@MANGLE_PREFIX@.a |grep " [TR] "
  */
 
 #define asParser @MANGLE_PREFIX@_asParser 
