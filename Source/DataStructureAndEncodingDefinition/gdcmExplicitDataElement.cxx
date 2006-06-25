@@ -97,7 +97,7 @@ IStream &ExplicitDataElement::Read(IStream &is)
     }
   else
     {
-    assert( TagField != Tag(0x7fe0,0x0010) );
+    //assert( TagField != Tag(0x7fe0,0x0010) );
     ValueField = new ByteValue;
     }
   // We have the length we should be able to read the value

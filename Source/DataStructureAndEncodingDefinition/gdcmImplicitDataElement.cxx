@@ -37,7 +37,7 @@ IStream &ImplicitDataElement::Read(IStream &is)
     }
   else
     {
-    assert( TagField != Tag(0x7fe0,0x0010) );
+    //assert( TagField != Tag(0x7fe0,0x0010) );
     ValueField = new ByteValue;
     }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION

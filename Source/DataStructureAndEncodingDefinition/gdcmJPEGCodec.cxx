@@ -1,6 +1,7 @@
 #include "gdcmJPEGCodec.h"
 #include "gdcmTS.h"
 #include "gdcmOStream.h"
+#include "gdcmIStream.h"
 
 extern "C"
 {
@@ -74,7 +75,7 @@ bool JPEGCodec::Decode(IStream &is, OStream &os)
   JSAMPARRAY buffer;		/* Output row buffer */
   int row_stride;		/* physical row width in output buffer */
 
-  //if( ! *is )
+  //if( !is /*|| !is.good()*/ )
   //  {
   //  abort();
   //  return false;
@@ -100,6 +101,13 @@ bool JPEGCodec::Decode(IStream &is, OStream &os)
   // Step 2: specify data source (eg, a file)
 
   //jpeg_stdio_src(&cinfo, infile);
+  // FIXME: Do some stupid work:
+  is.Seekg( 0, std::ios::end);
+  std::streampos buf_size = is.Tellg();
+  char *dummy_buffer = new char[buf_size];
+  is.Seekg(0, std::ios::beg);
+  is.Read( dummy_buffer, buf_size);
+  jpeg_memory_src(&cinfo, reinterpret_cast<const JOCTET*>(dummy_buffer), buf_size);
 
   // Step 3: read file parameters with jpeg_read_header()
 

@@ -61,10 +61,56 @@ public:
     TS_END
   } TSType;
 
+  typedef enum {
+    ComputedRadiographyImageStorage = 0,
+    DigitalXRayImageStorageForPresentation,
+    DigitalXRayImageStorageForProcessing,
+    DigitalMammographyImageStorageForPresentation,
+    DigitalMammographyImageStorageForProcessing,
+    DigitalIntraoralXrayImageStorageForPresentation,
+    DigitalIntraoralXRayImageStorageForProcessing,
+    CTImageStorage,
+    EnhancedCTImageStorage,
+    UltrasoundMultiFrameImageStorageRetired,
+    UltrasoundMultiFrameImageStorage,
+    MRImageStorage,
+    EnhancedMRImageStorage,
+    MRSpectroscopyStorage,
+    NuclearMedicineImageStorageRetired,
+    UltrasoundImageStorageRetired,
+    UltrasoundImageStorage,
+    SecondaryCaptureImageStorage,
+    MultiframeSingleBitSecondaryCaptureImageStorage,
+    MultiframeGrayscaleByteSecondaryCaptureImageStorage,
+    MultiframeGrayscaleWordSecondaryCaptureImageStorage,
+    MultiframeTrueColorSecondaryCaptureImageStorage,
+    StandaloneOverlayStorage,
+    StandaloneCurveStorage,
+    LeadECGWaveformStorage, // 12-
+    GeneralECGWaveformStorage,
+    AmbulatoryECGWaveformStorage,
+    HemodynamicWaveformStorage,
+    CardiacElectrophysiologyWaveformStorage,
+    BasicVoiceAudioWaveformStorage,
+    StandaloneModalityLUTStorage,
+    StandaloneVOILUTStorage,
+    GrayscaleSoftcopyPresentationStateStorageSOPClass,
+    XRayAngiographicImageStorage,
+    XRayRadiofluoroscopingImageStorage,
+    XRayAngiographicBiPlaneImageStorageRetired,
+    NuclearMedicineImageStorage,
+    RawDataStorage,
+    SpacialRegistrationStorage,
+    SpacialFiducialsStorage,
+    MS_END
+  } MSType; // Media Storage Type
+
   // Return the string as written in the official DICOM dict from 
   // a custom enum type
   static const char* GetTSString(const TSType &ts);
+  static const char* GetMSString(const MSType &ts);
   static const TSType GetTSType(const char *str);
+  static const MSType GetMSType(const char *str);
 
   NegociatedType GetNegociatedType();
   SwapCode GetSwapCode();
@@ -72,6 +118,8 @@ public:
   operator TSType () const { return TSField; }
 
   TS(TSType type):TSField(type) {}
+
+  static bool IsImage(const MSType &ts);
 
 protected:
   // TODO are those function actually usefull ?

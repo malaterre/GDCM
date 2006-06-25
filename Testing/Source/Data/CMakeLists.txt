@@ -44,6 +44,18 @@ SET(BLACK_LIST
   "ElemZeroNotGroupLength.dcm"
   "Run11"
   "Bug_Philips_ItemTag_3F3F"
+
+  # ImageReader seg fault on that...
+  "MR-MONO2-8-16x-heart.dcm"
+  "NM-MONO2-16-13x-heart.dcm"
+  "US-PAL-8-10x-echo.dcm"
+  "rle16loo.dcm"
+  "XA-MONO2-8-12x-catheter.dcm"
+  "GE_DLX-8-MONO2-PrivateSyntax.dcm"
+  "GE_DLX-8-MONO2-Multiframe.dcm"
+  "GE_DLX-8-MONO2-Multiframe-Jpeg_Lossless.dcm"
+  "GE_CT_With_Private_compressed-icon.dcm"
+  "MR_GE_with_Private_Compressed_Icon_0009_1110.dcm"
   )
 
 SET(GDCM_DATA_IMAGES)

@@ -154,5 +154,11 @@ IStream& IStream::operator>> (unsigned short& val )
   return *this;
 }
 
+//bool IStream::operator ! ( ) const
+//{
+//  abort();
+//  return false;
+//}
+
 } // end namespace gdcm
 

@@ -23,7 +23,8 @@ public:
 
   friend std::ostream& operator<<(std::ostream &_os, const FileMetaInformation &_val);
 
-  TS GetTSType() const;
+  TS GetTransferSyntaxType() const;
+  TS::MSType GetMediaStorageType() const;
 
   // Read
   IStream &Read(IStream &is);

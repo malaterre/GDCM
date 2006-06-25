@@ -6,6 +6,7 @@
 #include "gdcmStringStream.h"
 #include "gdcmElement.h"
 #include "gdcmPhotometricInterpretation.h"
+#include "gdcmTS.h"
 
 namespace gdcm
 {
@@ -68,23 +69,47 @@ bool ImageReader::Read()
     }
 
   const FileMetaInformation &header = GetHeader();
-  TS::TSType ts = header.GetTSType();
-  
-  bool res;
-  if( ts == TS::ImplicitVRBigEndianACRNEMA 
-   || ts == TS::TS_END )
+  TS::TSType ts = header.GetTransferSyntaxType();
+
+  bool res = false;
+  TS::MSType ms = header.GetMediaStorageType();
+  bool isImage = TS::IsImage( ms );
+  if( isImage )
     {
-    // do compatible code
-    res = ReadACRNEMAImage();
+    assert( ts != TS::TS_END && ms != TS::MS_END );
+    // Good it's the easy case. It's declared as an Image:
+    gdcmDebugMacro( "Sweet ! Finally a good DICOM file !" );
+    res = ReadImage();
     }
   else
     {
-    // read true DICOM dataset
-    gdcmWarningMacro( "Looks like an ACR-NEMA file" );
-    res = ReadImage();
+    if( ms != TS::MS_END )
+      {
+      gdcmWarningMacro( "DICOM file is not an Image file but a : " <<
+        TS::GetMSString(ms) << " SOP Class UID" );
+      res = false;
+      }
+    else
+      {
+      // Too bad the media storage type was not recognized...
+      // what should we do ?
+      if( ts == TS::ImplicitVRBigEndianACRNEMA 
+       || ts == TS::TS_END )
+        {
+        // Those transfer syntax have a high probability of being ACR NEMA
+        gdcmWarningMacro( "Looks like an ACR-NEMA file" );
+        res = ReadACRNEMAImage();
+        }
+      else
+        {
+        // god damit I don't know what to do...
+        gdcmWarningMacro( "Attempting to read this file as a DICOM file" );
+        res = ReadImage();
+        }
+      }
     }
 
-  PixelData.Print( std::cout );
+  if(res) PixelData.Print( std::cout );
   return res;
 }
 
@@ -141,7 +166,6 @@ bool ImageReader::ReadImage()
     {
     int numberofframes = ReadISFromTag( tnumberofframes, ss, conversion );
     assert( numberofframes != 0 );
-    gdcmWarningMacro( "I did not check the Transfer Syntax" );
     if( numberofframes > 1 )
       {
       PixelData.SetNumberOfDimensions(3);
@@ -163,8 +187,19 @@ bool ImageReader::ReadImage()
  
   // 2. What are the col & rows:
   // D 0028|0011 [US] [Columns] [512]
-  PixelData.SetDimensions(0,
-    ReadUSFromTag( Tag(0x0028, 0x0011), ss, conversion ) );
+  const Tag tcolumns(0x0028, 0x0011);
+  if( ds.FindDataElement( tcolumns ) )
+    {
+    PixelData.SetDimensions(0,
+      ReadUSFromTag( tcolumns, ss, conversion ) );
+    }
+  else
+    {
+    // Pretty bad we really need this information. Should not 
+    // happen in theory. Maybe papyrus files ??
+    gdcmErrorMacro( "This should not happen !" );
+    return false;
+    }
 
   // D 0028|0010 [US] [Rows] [512]
   PixelData.SetDimensions(1,
@@ -219,7 +254,7 @@ bool ImageReader::ReadImage()
   PhotometricInterpretation pi(
     PhotometricInterpretation::GetPIType(
       photometricinterpretation_str.c_str()));
-  assert( pi == PhotometricInterpretation::MONOCHROME2 );
+  //assert( pi == PhotometricInterpretation::MONOCHROME2 );
   PixelData.SetPhotometricInterpretation( pi );
 
     
@@ -238,7 +273,10 @@ bool ImageReader::ReadImage()
       dynamic_cast<const ExplicitDataElement&>(pdde);
     if( xde.GetVR() == VR::OW
       && Stream.GetSwapCode() == SwapCode::BigEndian )
+      {
+      // Need to byte swap
       abort();
+      }
     PixelData.SetValue( xde.GetValue() );
     }
   else if( type == TS::Implicit )
@@ -258,6 +296,10 @@ bool ImageReader::ReadImage()
 
 bool ImageReader::ReadACRNEMAImage()
 {
+  // FIXME
+  // TODO:
+  // This is the definition of an ACR NEMA image:
+  // D 0008|0010 [LO] [Recognition Code (RET)] [ACR-NEMA 2.0]
   const DataSet &ds = GetDataSet();
   TS::NegociatedType type = ds.GetNegociatedType();
   StringStream ss;
@@ -314,7 +356,7 @@ bool ImageReader::ReadACRNEMAImage()
     if( libido_str == "ACRNEMA_LIBIDO_1.1" )
       {
       // Swap Columns & Rows
-      assert( PixelData.GetNumberOfDimensions() == 2 );
+      // assert( PixelData.GetNumberOfDimensions() == 2 );
       const unsigned int *dims = PixelData.GetDimensions();
       unsigned int tmp = dims[0];
       PixelData.SetDimensions(0, dims[1] );
@@ -325,6 +367,7 @@ bool ImageReader::ReadACRNEMAImage()
     {
     gdcmWarningMacro(
       "Reading as ACR NEMA an image which does not look likes ACR NEMA" );
+    //abort();
     }
 
   // 3. Pixel Type ?

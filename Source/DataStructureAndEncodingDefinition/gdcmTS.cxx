@@ -53,6 +53,50 @@ static const char *TSStrings[] = {
   0 // Compilers have no obligation to finish by NULL, do it ourself
 };
 
+static const char *MSStrings[] = {
+  "1.2.840.10008.5.1.4.1.1.1",    
+  "1.2.840.10008.5.1.4.1.1.1.1",  
+  "1.2.840.10008.5.1.4.1.1.1.1.1",
+  "1.2.840.10008.5.1.4.1.1.1.2",  
+  "1.2.840.10008.5.1.4.1.1.1.2.1",
+  "1.2.840.10008.5.1.4.1.1.1.3",  
+  "1.2.840.10008.5.1.4.1.1.1.3.1",
+  "1.2.840.10008.5.1.4.1.1.2",    
+  "1.2.840.10008.5.1.4.1.1.2.1",  
+  "1.2.840.10008.5.1.4.1.1.3",    
+  "1.2.840.10008.5.1.4.1.1.3.1",  
+  "1.2.840.10008.5.1.4.1.1.4",    
+  "1.2.840.10008.5.1.4.1.1.4.1",  
+  "1.2.840.10008.5.1.4.1.1.4.2",  
+  "1.2.840.10008.5.1.4.1.1.5",    
+  "1.2.840.10008.5.1.4.1.1.6",    
+  "1.2.840.10008.5.1.4.1.1.6.1",  
+  "1.2.840.10008.5.1.4.1.1.7",    
+  "1.2.840.10008.5.1.4.1.1.7.1",  
+  "1.2.840.10008.5.1.4.1.1.7.2",  
+  "1.2.840.10008.5.1.4.1.1.7.3",  
+  "1.2.840.10008.5.1.4.1.1.7.4",  
+  "1.2.840.10008.5.1.4.1.1.8",    
+  "1.2.840.10008.5.1.4.1.1.9",    
+  "1.2.840.10008.5.1.4.1.1.9.1.1",
+  "1.2.840.10008.5.1.4.1.1.9.1.2",
+  "1.2.840.10008.5.1.4.1.1.9.1.3",
+  "1.2.840.10008.5.1.4.1.1.9.2.1",
+  "1.2.840.10008.5.1.4.1.1.9.3.1",
+  "1.2.840.10008.5.1.4.1.1.9.4.1",
+  "1.2.840.10008.5.1.4.1.1.10",   
+  "1.2.840.10008.5.1.4.1.1.11",   
+  "1.2.840.10008.5.1.4.1.1.11.1", 
+  "1.2.840.10008.5.1.4.1.1.12.1", 
+  "1.2.840.10008.5.1.4.1.1.12.2", 
+  "1.2.840.10008.5.1.4.1.1.12.3", 
+  "1.2.840.10008.5.1.4.1.1.20",   
+  "1.2.840.10008.5.1.4.1.1.66",   
+  "1.2.840.10008.5.1.4.1.1.66.1", 
+  "1.2.840.10008.5.1.4.1.1.66.2", 
+  0
+};
+
 const TS::TSType TS::GetTSType(const char *cstr)
 {
   // trim trailing whitespace
@@ -79,6 +123,24 @@ const char* TS::GetTSString(const TSType &ts)
 {
   assert( ts <= TS_END );
   return TSStrings[(int)ts];
+}
+
+const TS::MSType TS::GetMSType(const char *str)
+{
+  int i = 0;
+  while(MSStrings[i] != 0)
+    {
+    if( strcmp(str, MSStrings[i]) == 0 )
+      return (MSType)i;
+    ++i;
+    }
+  return MS_END;
+}
+
+const char* TS::GetMSString(const MSType &ms)
+{
+  assert( ms <= MS_END );
+  return MSStrings[(int)ms];
 }
 
 // FIXME IsJPEG and IsMPEG and real bad implementation... NEED TO REDO
@@ -158,6 +220,23 @@ SwapCode TS::GetSwapCode()
 bool TS::IsDataSetEncoded(const TSType &ts)
 {
   return ts == DeflatedExplicitVRLittleEndian;
+}
+
+// FIXME
+// Currently the implementation is bogus it only define the TS which
+// are associated with an image so indeed the implementation of IsImage 
+// is only the verification of TSType is != TS_END
+bool TS::IsImage(const MSType &ms)
+{
+  if ( ms == MS_END )
+    {
+    return false;
+    }
+  if ( ms == HemodynamicWaveformStorage )
+    {
+    return false;
+    }
+  return true;
 }
 
 } // end namespace gdcm

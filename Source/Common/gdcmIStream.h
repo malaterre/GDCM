@@ -24,6 +24,7 @@ public:
 
   virtual IStream& Seekg (std::streamoff off, std::ios_base::seekdir dir);
   virtual std::streampos Tellg ( );
+  //virtual bool operator ! ( ) const;
 
   virtual IStream& Read(char *str, std::streamsize n);
   virtual IStream& Get (char& c );

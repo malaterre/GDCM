@@ -58,7 +58,7 @@ bool Reader::ReadDataSet()
 {
   if( !DS )
     {
-    TS ts = Header->GetTSType();
+    TS ts = Header->GetTransferSyntaxType();
     //std::cerr << ts << std::endl;
     if( ts.GetNegociatedType() == TS::Explicit )
       {
@@ -78,7 +78,7 @@ bool Reader::ReadDataSet()
 TS Reader::GuessTransferSyntax()
 {
   // Don't call this function if you have a meta file info
-  assert( Header->GetTSType() == TS::TS_END );
+  assert( Header->GetTransferSyntaxType() == TS::TS_END );
   assert( Stream.GetSwapCode() == SwapCode::Unknown );
   std::streampos start = Stream.Tellg();
   SwapCode sc = SwapCode::Unknown;
@@ -210,7 +210,7 @@ bool Reader::Read()
     }
   ReadMetaInformation();
   //std::cerr << *Header << std::endl;
-  TS ts = Header->GetTSType();
+  TS ts = Header->GetTransferSyntaxType();
   if( ts == TS::TS_END )
     {
     ts = GuessTransferSyntax();

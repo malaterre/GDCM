@@ -218,7 +218,7 @@ bool FileMetaInformation::ReadImplicitDataElement(IStream &is,
   return true;
 }
 
-TS FileMetaInformation::GetTSType() const
+TS FileMetaInformation::GetTransferSyntaxType() const
 {
   if(DS)
     {
@@ -251,6 +251,53 @@ TS FileMetaInformation::GetTSType() const
     }
 
   return TS::TS_END;
+}
+
+TS::MSType FileMetaInformation::GetMediaStorageType() const
+{
+  // D 0002|0002 [UI] [Media Storage SOP Class UID]
+  // [1.2.840.10008.5.1.4.1.1.12.1]
+  // ==>       [X-Ray Angiographic Image Storage]
+  if(DS)
+    {
+    const gdcm::Tag t(0x0002,0x0002);
+    if( !DS->FindDataElement( t ) )
+      {
+      gdcmWarningMacro( "File Meta information is present but does not"
+        "contains " << t );
+      return TS::MS_END;
+      }
+    const DataElement& de = DS->GetDataElement(t);
+    TS::NegociatedType nt = DS->GetNegociatedType();
+    std::string ts;
+    if( nt == TS::Explicit )
+      {
+      const Value &v = dynamic_cast<const ExplicitDataElement&>(de).GetValue();
+      const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
+      // Pad string with a \0
+      ts = std::string(bv.GetPointer(), bv.GetLength());
+      }
+    else if( nt == TS::Implicit )
+      {
+      const Value &v = dynamic_cast<const ImplicitDataElement&>(de).GetValue();
+      const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
+      // Pad string with a \0
+      ts = std::string(bv.GetPointer(), bv.GetLength());
+      }
+    else
+      {
+      assert( 0 && "Cannot happen" );
+      }
+    gdcmDebugMacro( "TS: " << ts );
+    TS::MSType ms = TS::GetMSType(ts.c_str());
+    if( ms == TS::MS_END )
+      {
+      gdcmWarningMacro( "Media Storage Class UID: " << ts << " is unknow" );
+      }
+    return ms;
+    }
+
+  return TS::MS_END;
 }
 
 OStream &FileMetaInformation::Write(OStream &os) const

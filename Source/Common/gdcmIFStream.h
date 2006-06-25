@@ -24,6 +24,7 @@ public:
   ~IFStream();
 
   operator void * ( ) const { return InternalIStream; }
+  bool operator ! ( ) const { return !InternalIStream; }
 
   void Open(const char* filename);
   bool IsOpen() { return InternalIStream.is_open(); }

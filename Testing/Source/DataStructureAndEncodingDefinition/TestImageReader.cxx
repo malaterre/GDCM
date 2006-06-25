@@ -8,6 +8,7 @@ int TestImageRead(const char* filename)
   reader.SetFileName( filename );
   if ( !reader.Read() )
     {
+    std::cerr << "Failed to read image from file: " << filename << std::endl;
     return 1;
     }
 
