@@ -1,26 +1,22 @@
-#-----------------------------------------------------------------------------
-# Rebuild gdcm whenever a file starting with gdcm* is modified
-INCLUDE_REGULAR_EXPRESSION("^gdcm.*$")
+# Define the srcs for the Information Object Definition
+# IOD
+SET(IOD_SRCS
+  gdcmTableReader.cxx
+  )
 
 # Add the include paths
 INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_BINARY_DIR}/Source/Common"
-  "${GDCM_SOURCE_DIR}/Source/Parser"
-  "${GDCM_BINARY_DIR}/Source/Parser"
   "${GDCM_SOURCE_DIR}/Utilities"
   )
 
-SET(SRCS
-  gdcmTableReader.cxx
-  )
-
-ADD_LIBRARY(gdcmModuleAttributes ${SRCS})
-TARGET_LINK_LIBRARIES(gdcmModuleAttributes gdcmParser gdcmexpat)
+ADD_LIBRARY(gdcmIOD ${IOD_SRCS})
+TARGET_LINK_LIBRARIES(gdcmIOD gdcmCommon gdcmexpat)
 
 #-----------------------------------------------------------------------------
 FILE(GLOB GDCM_XML_TABLES_GLOB
-  "${GDCM_SOURCE_DIR}/Source/ModuleAttributes/*.xml"
+  "${CMAKE_CURRENT_SOURCE_DIR}/*.xml"
   )
 
 SET(GDCM_XML_TABLES)
@@ -30,7 +26,7 @@ ENDFOREACH(filename)
 
 # Populate GDCM_DATA_IMAGES:
 CONFIGURE_FILE(
-  "${GDCM_SOURCE_DIR}/Source/ModuleAttributes/gdcmTables.h.in"
-  "${GDCM_BINARY_DIR}/Source/ModuleAttributes/gdcmTables.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/gdcmTables.h.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/gdcmTables.h"
   )
 

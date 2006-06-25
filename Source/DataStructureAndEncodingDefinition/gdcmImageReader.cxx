@@ -72,6 +72,12 @@ bool ImageReader::Read()
   TS::TSType ts = header.GetTransferSyntaxType();
 
   bool res = false;
+  /* Does it really make sense to check for Media Storage SOP Class UID ?
+   * I need then to check consistency with 0008 0016 Instance SOP Class UID
+   * ... I don't think there is an end. 
+   * I'd rather go the old way check a bunch of tags (From Image Plane
+   * Module).
+   */
   TS::MSType ms = header.GetMediaStorageType();
   bool isImage = TS::IsImage( ms );
   if( isImage )

@@ -1,7 +1,7 @@
 #ifndef __gdcmTableReader_h
 #define __gdcmTableReader_h
 
-#include "gdcmType.h"
+#include "gdcmTypes.h"
 #include <string>
 
 namespace gdcm
@@ -17,8 +17,8 @@ public:
   ~TableReader() {}
 
   // Set/Get filename
-  void SetFilename(std::string const &filename) { Filename = filename; }
-  std::string const &GetFilename() { return Filename; }
+  void SetFilename(const char *filename) { Filename = filename; }
+  const char *GetFilename() { return Filename.c_str(); }
 
   int Read();
 
