@@ -25,7 +25,12 @@ CHECK_INCLUDE_FILE("string.h"       HAVE_MEMMOVE)
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/expat_config.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/expat_config.h)
+SET(MANGLE_PREFIX ${EXPAT_LIBRARY_NAME})
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/expat_mangle.h.in
+               ${CMAKE_CURRENT_BINARY_DIR}/expat_mangle.h
+               @ONLY IMMEDIATE)
 
 # for expat_config.h
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_CURRENT_BINARY_DIR})
 SUBDIRS(lib)
+
