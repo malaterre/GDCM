@@ -45,17 +45,8 @@ SET(BLACK_LIST
   "Run11"
   "Bug_Philips_ItemTag_3F3F"
 
-  # ImageReader seg fault on that...
-  "MR-MONO2-8-16x-heart.dcm"
-  "NM-MONO2-16-13x-heart.dcm"
-  "US-PAL-8-10x-echo.dcm"
-  "rle16loo.dcm"
-  "XA-MONO2-8-12x-catheter.dcm"
-  "GE_DLX-8-MONO2-PrivateSyntax.dcm"
-  "GE_DLX-8-MONO2-Multiframe.dcm"
-  "GE_DLX-8-MONO2-Multiframe-Jpeg_Lossless.dcm"
-  "GE_CT_With_Private_compressed-icon.dcm"
-  "MR_GE_with_Private_Compressed_Icon_0009_1110.dcm"
+  # FIXME "NM-MONO2-16-13x-heart.dcm" has a buggy FileMetaInformation (no 0002,0002)
+  # So I need to check SOP Class UID in DataSet 0008,0016
   )
 
 SET(GDCM_DATA_IMAGES)

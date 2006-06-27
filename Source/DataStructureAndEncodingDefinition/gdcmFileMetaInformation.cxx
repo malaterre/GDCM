@@ -264,7 +264,7 @@ TS::MSType FileMetaInformation::GetMediaStorageType() const
     if( !DS->FindDataElement( t ) )
       {
       gdcmWarningMacro( "File Meta information is present but does not"
-        "contains " << t );
+        " contains " << t );
       return TS::MS_END;
       }
     const DataElement& de = DS->GetDataElement(t);

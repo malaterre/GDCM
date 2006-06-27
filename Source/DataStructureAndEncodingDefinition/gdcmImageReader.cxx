@@ -149,6 +149,9 @@ int ImageReader::ReadISFromTag( Tag const & t, StringStream &ss,
   const ByteValue *bv = GetPointerFromElement(t);
   Element<VR::IS,VM::VM1> el;
   conversion = std::string(bv->GetPointer(), bv->GetLength());
+  assert( conversion.size() == bv->GetLength() );
+  const char *debug = conversion.c_str();
+  assert( debug[bv->GetLength()] == '\0' ); 
   ss.Str( conversion );
   el.Read( ss );
   int r = el.GetValue();
@@ -281,7 +284,8 @@ bool ImageReader::ReadImage()
       && Stream.GetSwapCode() == SwapCode::BigEndian )
       {
       // Need to byte swap
-      abort();
+      gdcmErrorMacro( "Need to byte swap" );
+      return false;
       }
     PixelData.SetValue( xde.GetValue() );
     }

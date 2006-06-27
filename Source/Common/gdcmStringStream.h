@@ -23,10 +23,8 @@ public:
 
   operator void * ( ) const { return InternalSStream; }
 
-  IStream& Read(char* s, std::streamsize n) {
-    InternalSStream.read(s,n);
-    return *this;
-  }
+  IStream& Read(char* s, std::streamsize n);
+
   IStream& Get(char &c) {
     InternalSStream.get(c);
     return *this;
@@ -41,10 +39,17 @@ public:
   //  return *this;
   //}
   std::string Str() const {
+    assert( InternalSStream.good() );
     return InternalSStream.str();
   }
   void Str(std::string & s ) {
+    // FIXME For some reason it is very important to reset the stringstream before
+    // reusing it. See MR-MONO2-8-16x-heart.dcm for instance
+    // I don't quite understand why it would be image dependant
+    InternalSStream.clear();
+    assert( InternalSStream.good() );
     InternalSStream.str(s);
+    assert( InternalSStream.good() );
   }
 
   //operator std::stringstream () const { return InternalSStream; }
