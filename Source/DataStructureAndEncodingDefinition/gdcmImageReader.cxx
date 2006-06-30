@@ -102,7 +102,7 @@ bool ImageReader::Read()
       if( ts == TS::ImplicitVRBigEndianACRNEMA 
        || ts == TS::TS_END )
         {
-        // Those transfer syntax have a high probability of being gdcmImageReader.cxxACR NEMA
+        // Those transfer syntax have a high probability of being ACR NEMA
         gdcmWarningMacro( "Looks like an ACR-NEMA file" );
         res = ReadACRNEMAImage();
         }
