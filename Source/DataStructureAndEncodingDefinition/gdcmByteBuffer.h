@@ -4,7 +4,7 @@
 
 #include "gdcmTypes.h"
 #include <vector>
-
+#include <assert.h>
 namespace gdcm
 {
 /**
