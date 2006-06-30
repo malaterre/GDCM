@@ -5,6 +5,9 @@
 int TestImageRead(const char* filename)
 {
   gdcm::ImageReader reader;
+    std::cout << "=========TestImageRead image from file: [" << filename  << "]"
+              << std::endl;
+
   reader.SetFileName( filename );
   if ( !reader.Read() )
     {

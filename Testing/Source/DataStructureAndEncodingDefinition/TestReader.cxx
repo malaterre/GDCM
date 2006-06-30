@@ -5,6 +5,8 @@
 
 int TestRead(const char* filename)
 {
+  std::cout << "------------------------- Parsing file :[" << filename << "]" 
+            << std::endl;
   gdcm::Reader reader;
   reader.SetFileName( filename );
   if ( !reader.Read() )

@@ -32,13 +32,15 @@ static void endElement(void *userData, const Tag &name)
 
 int TestParser(int argc, char *argv[])
 {
-  if( argc < 2 )
+  if( argc == 2 )
     {
+    std::cout << "argc " << argc << std::endl;
     return 1;
     }
   std::string filename = argv[1];
   std::ifstream is( filename.c_str() );
-
+  std::cout << "---------------------------Parsing file :[" << filename << "]" 
+            << std::endl;
   char buf[BUFSIZ];
   gdcm::Parser parser;
   int done;
