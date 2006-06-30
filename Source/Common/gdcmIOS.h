@@ -3,7 +3,7 @@
 #define __gdcmIOS_h
 
 #include "gdcmSwapCode.h"
-
+#include <assert.h>
 #include <streambuf>
 
 namespace gdcm
