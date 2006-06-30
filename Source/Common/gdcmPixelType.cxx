@@ -37,10 +37,14 @@ PixelType::TPixelType PixelType::GetTPixelType() const
   case 16:
     type = PixelType::UINT16;
     break;
+  case 32:
+    type = PixelType::UINT32;
+    break;    
   case 24:
     gdcmWarningMacro( "This is illegal in DICOM, assuming a RGB image" );
     type = PixelType::UINT8;
     break;
+    
   default:
     gdcmErrorMacro( "I have never seen this before BitsAllocated "
       << BitsAllocated );
@@ -48,7 +52,7 @@ PixelType::TPixelType PixelType::GetTPixelType() const
     }
   if( PixelRepresentation )
     {
-    assert( type <= INT16 );
+    assert( type <= INT32 );
     // That's why you need to order properly type in TPixelType
     type = TPixelType(int(type)+1);
     }
@@ -71,10 +75,10 @@ uint8_t PixelType::GetPixelSize() const
 
 void PixelType::Print(std::ostream &os) const
 {
-  os << "SamplesPerPixel    :" << SamplesPerPixel << "\n"; 
-  os << "BitsAllocated      :" << BitsAllocated << "\n";
-  os << "BitsStored         :" << BitsStored << "\n";
-  os << "HighBit            :" << HighBit << "\n";
+  os << "SamplesPerPixel    :" << SamplesPerPixel     << "\n"; 
+  os << "BitsAllocated      :" << BitsAllocated       << "\n";
+  os << "BitsStored         :" << BitsStored          << "\n";
+  os << "HighBit            :" << HighBit             << "\n";
   os << "PixelRepresentation:" << PixelRepresentation << "\n";
 }
 

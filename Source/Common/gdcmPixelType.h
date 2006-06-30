@@ -4,6 +4,7 @@
 
 #include "gdcmTypes.h"
 #include <iostream>
+#include <assert.h>
 
 namespace gdcm
 {
@@ -30,6 +31,8 @@ public:
     INT12,
     UINT16,
     INT16,
+    UINT32,  // For some Dicom files (RT)
+    INT32,
     UNKNOWN
   } TPixelType;
 
