@@ -1,4 +1,5 @@
 #include "gdcmPhotometricInterpretation.h"
+#include <assert.h>
 
 namespace gdcm
 {
