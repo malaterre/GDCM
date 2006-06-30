@@ -41,7 +41,7 @@ public:
     (void)os;
   }
 
-  const VL & GetLength() const { return Length; }
+  const VL &GetLength() const { return Length; }
   // Does a reallocation
   void SetLength(const VL& vl) {
     VL l(vl);
@@ -89,7 +89,7 @@ public:
     {
     return is.Read(&Internal[0], Length);
     }
-  OStream const & Write(OStream &os) const
+  OStream const &Write(OStream &os) const
     {
     return os.Write(&Internal[0], Length);
     }

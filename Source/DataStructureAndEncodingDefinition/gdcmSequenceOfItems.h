@@ -29,12 +29,12 @@ public:
   typedef std::vector<Item> ItemVector;
 
 /// \brief constructor (UndefinedLength by default)
-  SequenceOfItems(VL const & vl = 0xFFFFFFFF):SequenceLengthField(vl) { }
+  SequenceOfItems(VL const &vl = 0xFFFFFFFF):SequenceLengthField(vl) { }
 
   /// \brief Returns the SQ length, as read from disk
-  const VL & GetLength() const { return SequenceLengthField; }
+  const VL &GetLength() const { return SequenceLengthField; }
   /// \brief Sets the actual SQ length
-  void SetLength(VL const & length) {
+  void SetLength(VL const &length) {
     SequenceLengthField = length;
   }
   void Clear() {}

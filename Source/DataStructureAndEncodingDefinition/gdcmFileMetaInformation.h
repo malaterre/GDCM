@@ -11,7 +11,7 @@ namespace gdcm
  * \brief Class to represent a File Meta Information
  * \note
  * In theory this should only be explicit, but just in case we also handle
- * the implicit case (illegal)
+ * the implicit case (illegal, but so usual)
  */
 class ExplicitDataElement;
 class ImplicitDataElement;
@@ -21,7 +21,7 @@ public:
   FileMetaInformation():DS(0) {}
   ~FileMetaInformation();
 
-  friend std::ostream& operator<<(std::ostream &_os, const FileMetaInformation &_val);
+  friend std::ostream &operator<<(std::ostream &_os, const FileMetaInformation &_val);
 
   TS GetTransferSyntaxType() const;
   TS::MSType GetMediaStorageType() const;

@@ -13,7 +13,7 @@ FileMetaInformation::~FileMetaInformation()
 }
 
 /*
- * Except for the 128 byte preamble and the 4 byte prefix, the File Meta 
+ * Except for the 128 bytes preamble and the 4 bytes prefix, the File Meta 
  * Information shall be encoded using the Explicit VR Little Endian Transfer
  * Syntax (UID=1.2.840.10008.1.2.1) as defined in DICOM PS 3.5.
  * Values of each File Meta Element shall be padded when necessary to achieve
@@ -223,7 +223,7 @@ TS FileMetaInformation::GetTransferSyntaxType() const
   if(DS)
     {
     const gdcm::Tag t(0x0002,0x0010);
-    const DataElement& de = DS->GetDataElement(t);
+    const DataElement &de = DS->GetDataElement(t);
     TS::NegociatedType nt = DS->GetNegociatedType();
     std::string ts;
     if( nt == TS::Explicit )
@@ -267,7 +267,7 @@ TS::MSType FileMetaInformation::GetMediaStorageType() const
         " contains " << t );
       return TS::MS_END;
       }
-    const DataElement& de = DS->GetDataElement(t);
+    const DataElement &de = DS->GetDataElement(t);
     TS::NegociatedType nt = DS->GetNegociatedType();
     std::string ts;
     if( nt == TS::Explicit )

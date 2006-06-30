@@ -31,7 +31,7 @@ IStream &ExplicitDataElement::Read(IStream &is)
       vl.Read(is);
       if( vl != 0 )
         {
-        gdcmWarningMacro( "ouh les cornes" );
+        gdcmWarningMacro( "ouh les cornes / shame on you !" );
         }
       return is;
       }

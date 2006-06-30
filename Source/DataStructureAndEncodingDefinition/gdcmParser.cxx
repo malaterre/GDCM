@@ -7,7 +7,7 @@ namespace gdcm
     NULL
   };
   
-  bool Parser::Parse(const char* buffer, int len, bool isFinal)
+  bool Parser::Parse(const char *buffer, int len, bool isFinal)
     {
     if (len == 0)
       {

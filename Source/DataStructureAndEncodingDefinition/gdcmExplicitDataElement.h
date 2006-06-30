@@ -12,19 +12,19 @@ namespace gdcm
 {
 // Data Element (Explicit)
 /**
- * \brief Class to represent an *Explivit VR* Data Element
+ * \brief Class to represent an *Explicit VR* Data Element
  * \note bla
  */
 //class Value; // FIXME
 class GDCM_EXPORT ExplicitDataElement : public DataElement
 {
 public:
-  ExplicitDataElement(const Tag& t = Tag(0), uint32_t const &vl = 0,
-                      const VR& vr = VR::INVALID ) :
+  ExplicitDataElement(const Tag& & = Tag(0), uint32_t const &vl = 0,
+                      const VR &vr = VR::INVALID ) :
     DataElement(t,vl),VRField(vr),ValueField(0) { }
   ~ExplicitDataElement();
 
-  friend std::ostream& operator<<(std::ostream& _os, const ExplicitDataElement &_val);
+  friend std::ostream& operator<<(std::ostream &_os, const ExplicitDataElement &_val);
 
   VR const &GetVR() const { return VRField; }
   void SetVR(VR const &vr) { VRField = vr; }
@@ -42,10 +42,10 @@ public:
     return TagField.GetLength() + 2*VRField.GetLength() + ValueLengthField;
   }
 
-  IStream &Read(IStream& is);
-  const OStream &Write(OStream& _os) const;
+  IStream &Read(IStream &is);
+  const OStream &Write(OStream &_os) const;
 
-  ExplicitDataElement(ExplicitDataElement const & val):DataElement(val)
+  ExplicitDataElement(ExplicitDataElement const &val):DataElement(val)
     {
     //assert( val.ValueField );
     VRField    = val.VRField;
@@ -60,7 +60,7 @@ private:
   ValuePtr ValueField;
 };
 //-----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream& os, const ExplicitDataElement & val)
+inline std::ostream& operator<<(std::ostream &os, const ExplicitDataElement &val)
 {
   os << "Tag: " << val.TagField;
   os << "\tVR=" << val.VRField;

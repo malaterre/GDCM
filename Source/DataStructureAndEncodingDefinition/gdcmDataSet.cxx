@@ -11,8 +11,8 @@ namespace gdcm
 //-----------------------------------------------------------------------------
 struct lttag
 {
-  bool operator()(const DataElement& s1,
-		  const DataElement& s2) const
+  bool operator()(const DataElement &s1,
+		  const DataElement &s2) const
   {
     return s1.GetTag() < s2.GetTag();
   }
@@ -27,7 +27,7 @@ public:
   virtual void Print(std::ostream &os) const = 0;
   virtual IStream &Read(IStream &is) = 0;
   virtual IStream &ReadNested(IStream &is) = 0;
-  virtual IStream &ReadWithLength(IStream &is, VL const & length) = 0;
+  virtual IStream &ReadWithLength(IStream &is, VL const &length) = 0;
 };
 
 //-----------------------------------------------------------------------------
@@ -57,7 +57,7 @@ public:
     return is;
   }
 
-  IStream &ReadWithLength(IStream &is, VL const & length) {
+  IStream &ReadWithLength(IStream &is, VL const &length) {
     DEType de;
     VL l = 0;
     //std::cout << "Length: " << l << std::endl;
@@ -177,7 +177,7 @@ void DataSet::Clear() {
 }
 
 //-----------------------------------------------------------------------------
-void DataSet::InsertDataElement(DataElement const & de)
+void DataSet::InsertDataElement(DataElement const &de)
 {
   if(NegociatedTS == TS::Explicit)
     {

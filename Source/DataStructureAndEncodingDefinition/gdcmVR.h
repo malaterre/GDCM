@@ -10,9 +10,9 @@
 namespace gdcm
 {
 /* \brief VR class
- * This is adapated from DICOM standart
+ * This is adapted from DICOM standard
  * The biggest difference is the INVALID VR
- * and the composite one that differ from standart (more like an addidtion)
+ * and the composite one that differ from standard (more like an addition)
  * This allow us to represent all the possible case express in the DICOMV3 dict
  * \note
  * VALUE REPRESENTATION (VR)
@@ -65,7 +65,7 @@ public:
     BINARY
   } VREncoding; // VR Encoding
 
-  static const char* GetVRString(VRType vr);
+  static const char *GetVRString(VRType vr);
 
   // This function will only look at the very first two chars nothing else
   static VRType GetVRTypeFromFile(const char *vr);
@@ -76,8 +76,8 @@ public:
   static bool IsValid(const char *vr);
   // Check if vr1 is valid against vr2,
   // Typically vr1 is read from the file and vr2 is taken from the dict
-  static bool IsValid(const char *vr1, const VRType& vr2);
-  //static bool IsValid(const VRType& vr1, const VRType& vr2);
+  static bool IsValid(const char *vr1, const VRType &vr2);
+  //static bool IsValid(const VRType &vr1, const VRType &vr2);
   // Find out if the string read is byte swapped
   static bool IsSwap(const char *vr);
   
@@ -132,12 +132,12 @@ public:
     return is;
     }
 
-  const OStream & Write(OStream &os) const
+  const OStream &Write(OStream &os) const
     {
     const char *vr = GetVRString(VRField);
     assert( strlen( vr ) == 2 );
     os.Write(vr, 2);
-    // See PS 3.5, Date Element Structure With Explicit VR
+    // See PS 3.5, Data Element Structure With Explicit VR
     if( VRField == VR::OB
      || VRField == VR::OW
      || VRField == VR::OF
@@ -150,7 +150,7 @@ public:
       }
     return os;
     }
-  friend std::ostream& operator<<(std::ostream& os, const VR& vr);
+  friend std::ostream &operator<<(std::ostream &os, const VR &vr);
 
   operator VRType () const { return VRField; }
 
@@ -160,7 +160,7 @@ private:
   VRType VRField;
 };
 //-----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream& _os, const VR& val)
+inline std::ostream &operator<<(std::ostream &_os, const VR &val)
 {
   _os << VR::GetVRString(val.VRField);
   return _os;

@@ -69,7 +69,7 @@ IStream &ImplicitDataElement::Read(IStream &is)
 }
 
 //-----------------------------------------------------------------------------
-const OStream &ImplicitDataElement::Write(OStream& os) const
+const OStream &ImplicitDataElement::Write(OStream &os) const
 {
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   assert(0 && "Not Implemented");

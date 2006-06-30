@@ -16,8 +16,8 @@ namespace gdcm
 class GDCM_EXPORT BasicOffsetTable : public DataElement
 {
 public:
-  BasicOffsetTable(const Tag& t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl) {}
-  friend std::ostream& operator<<(std::ostream &os, const BasicOffsetTable&val);
+  BasicOffsetTable(const Tag &t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl) {}
+  friend std::ostream &operator<<(std::ostream &os, const BasicOffsetTable &val);
 
   void Clear() {
     }
@@ -52,7 +52,7 @@ public:
     return os;
     }
 
-  Value const & GetValue() const {
+  Value const &GetValue() const {
     return Offsets;
   }
 
@@ -60,7 +60,7 @@ private:
   ByteValue Offsets;
 };
 //-----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream& os, const BasicOffsetTable &val)
+inline std::ostream &operator<<(std::ostream &os, const BasicOffsetTable &val)
 {
   os << " BasicOffsetTable Length=" << val.ValueLengthField << std::endl;
   os << val.Offsets;

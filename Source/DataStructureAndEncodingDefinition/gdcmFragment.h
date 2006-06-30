@@ -14,8 +14,8 @@ namespace gdcm
 class GDCM_EXPORT Fragment : public DataElement
 {
 public:
-  Fragment(const Tag& t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl) {}
-  friend std::ostream& operator<<(std::ostream &os, const Fragment&val);
+  Fragment(const Tag &t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl) {}
+  friend std::ostream &operator<<(std::ostream &os, const Fragment &val);
 
   void Clear() {
     FragmentValue.Clear();
@@ -25,7 +25,7 @@ public:
     {
     FragmentValue = val.FragmentValue;
     }
-  Fragment &operator=(Fragment const & val)
+  Fragment &operator=(Fragment const &val)
     {
     FragmentValue = val.FragmentValue;
     return *this;
@@ -74,7 +74,7 @@ public:
     return os;
     }
 
-  Value const & GetValue() const {
+  Value const &GetValue() const {
     return FragmentValue;
   }
 
@@ -82,7 +82,7 @@ private:
   ByteValue FragmentValue;
 };
 //-----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream& os, const Fragment &val)
+inline std::ostream &operator<<(std::ostream &os, const Fragment &val)
 {
   os << "Tag: " << val.TagField;
   os << "\tVL: " << val.ValueLengthField;

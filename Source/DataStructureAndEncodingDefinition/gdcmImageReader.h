@@ -31,11 +31,11 @@ protected:
   bool ReadACRNEMAImage();
   
   // ugliest thing ever:
-  signed short ReadSSFromTag( Tag const & t, StringStream &ss,
+  signed short ReadSSFromTag( Tag const &t, StringStream &ss,
     std::string &conversion );
-  unsigned short ReadUSFromTag( Tag const & t, StringStream &ss,
+  unsigned short ReadUSFromTag( Tag const &t, StringStream &ss,
     std::string &conversion );
-  int ReadISFromTag( Tag const & t, StringStream &ss,
+  int ReadISFromTag( Tag const &t, StringStream &ss,
     std::string &conversion );
 
 private:

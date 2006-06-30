@@ -27,7 +27,7 @@ static const char *VMStrings[] = {
   0
 };
 
-const char* VM::GetVMString(const VMType &vm)
+const char *VM::GetVMString(const VMType &vm)
 {
   assert( vm <= VM_END );
   return VMStrings[(int)vm];

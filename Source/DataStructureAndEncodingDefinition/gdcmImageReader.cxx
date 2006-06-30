@@ -72,7 +72,7 @@ bool ImageReader::Read()
   TS::TSType ts = header.GetTransferSyntaxType();
 
   bool res = false;
-  /* Does it really make sense to check for Media Storage SOP Class UID ?
+  /* Does it really make sense to check for Media Storage SOP Class UID?
    * I need then to check consistency with 0008 0016 Instance SOP Class UID
    * ... I don't think there is an end. 
    * I'd rather go the old way check a bunch of tags (From Image Plane
@@ -102,7 +102,7 @@ bool ImageReader::Read()
       if( ts == TS::ImplicitVRBigEndianACRNEMA 
        || ts == TS::TS_END )
         {
-        // Those transfer syntax have a high probability of being ACR NEMA
+        // Those transfer syntax have a high probability of being gdcmImageReader.cxxACR NEMA
         gdcmWarningMacro( "Looks like an ACR-NEMA file" );
         res = ReadACRNEMAImage();
         }
@@ -119,7 +119,7 @@ bool ImageReader::Read()
   return res;
 }
 
-signed short ImageReader::ReadSSFromTag( Tag const & t, StringStream &ss,
+signed short ImageReader::ReadSSFromTag( Tag const &t, StringStream &ss,
   std::string &conversion )
 {
   const ByteValue *bv = GetPointerFromElement(t);
@@ -131,7 +131,7 @@ signed short ImageReader::ReadSSFromTag( Tag const & t, StringStream &ss,
   return el.GetValue();
 }
 
-unsigned short ImageReader::ReadUSFromTag( Tag const & t, StringStream &ss,
+unsigned short ImageReader::ReadUSFromTag( Tag const &t, StringStream &ss,
   std::string &conversion )
 {
   const ByteValue *bv = GetPointerFromElement(t);
@@ -143,7 +143,7 @@ unsigned short ImageReader::ReadUSFromTag( Tag const & t, StringStream &ss,
   return el.GetValue();
 }
 
-int ImageReader::ReadISFromTag( Tag const & t, StringStream &ss,
+int ImageReader::ReadISFromTag( Tag const &t, StringStream &ss,
   std::string &conversion )
 {
   const ByteValue *bv = GetPointerFromElement(t);

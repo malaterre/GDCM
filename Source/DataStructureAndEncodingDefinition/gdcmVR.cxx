@@ -72,7 +72,7 @@ int VR::GetIndex(VRType vr)
   return l;
 }
 
-const char* VR::GetVRString(VRType vr)
+const char *VR::GetVRString(VRType vr)
 {
   int idx = GetIndex(vr);
   return VRStrings[idx];
@@ -152,7 +152,7 @@ bool VR::IsValid(const char *vr)
   return false;
 }
 
-bool VR::IsValid(const char *vr1, const VRType& vr2)
+bool VR::IsValid(const char *vr1, const VRType &vr2)
 {
   assert( strlen(vr1) == 2 );
   VR::VRType vr = GetVRType(vr1);
@@ -203,7 +203,7 @@ VRTemplateCase(UN,rep) \
 VRTemplateCase(US,rep) \
 VRTemplateCase(UT,rep)
 
-bool VR::IsASCII(VRType const & vr)
+bool VR::IsASCII(VRType const &vr)
 {
   switch(vr)
     {
@@ -214,7 +214,7 @@ bool VR::IsASCII(VRType const & vr)
     }
 }
 
-bool VR::IsASCII2(VRType const & vr )
+bool VR::IsASCII2(VRType const &vr)
 {
   return
     vr == AE ||
@@ -233,7 +233,7 @@ bool VR::IsASCII2(VRType const & vr )
     vr == UI;
 }
 
-bool VR::IsBinary(VRType const & vr)
+bool VR::IsBinary(VRType const &vr)
 {
   switch(vr)
     {
@@ -244,7 +244,7 @@ bool VR::IsBinary(VRType const & vr)
     }
 }
 
-bool VR::IsBinary2(VRType const & vr)
+bool VR::IsBinary2(VRType const &vr)
 {
   //assert( vr != OF );
   return 
@@ -255,7 +255,7 @@ bool VR::IsBinary2(VRType const & vr)
     vr == SQ ;
 }
 
-bool VR::CanDisplay(VRType const & vr)
+bool VR::CanDisplay(VRType const &vr)
 {
   return 
     vr == AE ||

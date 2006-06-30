@@ -39,7 +39,7 @@ IStream &SequenceOfItems::Read(IStream &is)
   return is;
 }
 
-OStream const & SequenceOfItems::Write(OStream &os) const
+OStream const &SequenceOfItems::Write(OStream &os) const
 {
   ItemVector::const_iterator it = Items.begin();
   for(;it != Items.end(); ++it)
