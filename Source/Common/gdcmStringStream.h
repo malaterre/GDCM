@@ -63,6 +63,9 @@ public:
     return *this;
   }
 
+  IStream& Seekg (std::streamoff off, std::ios_base::seekdir dir);
+  std::streampos Tellg ( );
+
 protected:
   // The real internal class
   std::stringstream InternalSStream;

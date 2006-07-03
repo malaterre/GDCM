@@ -2,6 +2,9 @@
 #include "gdcmExplicitDataElement.h"
 #include "gdcmByteValue.h"
 #include "gdcmDataSet.h"
+#include "gdcmSequenceOfFragments.h"
+#include "gdcmJPEGCodec.h"
+#include "gdcmStringStream.h"
 
 namespace gdcm
 {
@@ -27,7 +30,22 @@ bool ImageValue::GetBuffer(char *buffer) const
   else
     {
     // Fragments...
-    abort();
+    const SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(p);
+    sf->GetBuffer(buffer, len);
+//#define MDEBUG
+#ifdef MDEBUG
+    std::ofstream f("/tmp/debug.jpg");
+    unsigned long totalLen = sf->ComputeLength();
+    f.write(buffer, totalLen);
+    f.close();
+#endif
+    JPEGCodec codec;
+    StringStream is;
+    is.Write(buffer, len);
+    StringStream os;
+    bool r = codec.Decode(is, os);
+    memcpy(buffer, os.Str().c_str(), len);
+    return r;
     }
 
   buffer = 0;

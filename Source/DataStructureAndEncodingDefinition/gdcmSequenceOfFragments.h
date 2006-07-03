@@ -36,6 +36,12 @@ public:
   /// \brief Appends a Fragment to the already added ones
   void AddFragment(Fragment const &item);
 
+  // Compute the length of all fragments
+  unsigned long ComputeLength() const;
+
+  // Get the buffer
+  bool GetBuffer(char *buffer, unsigned long length) const;
+
 protected:
   void Print(std::ostream &os) const {
     os << "SQ L= " << SequenceLengthField << "\n";

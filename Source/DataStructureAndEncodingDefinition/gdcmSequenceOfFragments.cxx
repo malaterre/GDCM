@@ -45,4 +45,32 @@ OStream const & SequenceOfFragments::Write(OStream &os) const
   return os;
 }
 
+unsigned long SequenceOfFragments::ComputeLength() const
+{
+  unsigned long r = 0;
+  FragmentVector::const_iterator it = Fragments.begin();
+  for(;it != Fragments.end(); ++it)
+    {
+    r += it->GetVL();
+    }
+  return r;
+}
+
+bool SequenceOfFragments::GetBuffer(char *buffer, unsigned long length) const
+{
+  FragmentVector::const_iterator it = Fragments.begin();
+  unsigned long total = 0;
+  for(;it != Fragments.end(); ++it)
+    {
+    const Fragment &frag = *it;
+    const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
+    const VL len = frag.GetVL();
+    bv.GetBuffer(buffer, len);
+    buffer += len;
+    total += len;
+    }
+  std::cerr << " DEBUG: " << total << " " << length << std::endl;
+  return true;
+}
+
 } // end namespace gdcm

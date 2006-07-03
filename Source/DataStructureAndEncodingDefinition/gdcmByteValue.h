@@ -80,7 +80,7 @@ public:
   }
   bool GetBuffer(char *buffer, unsigned long length) const
     {
-    assert( length <= Internal.size() );
+    assert( length == Internal.size() );
     memcpy(buffer, &Internal[0], length);
     return true;
     }

@@ -107,7 +107,8 @@ bool JPEGCodec::Decode(IStream &is, OStream &os)
   char *dummy_buffer = new char[buf_size];
   is.Seekg(0, std::ios::beg);
   is.Read( dummy_buffer, buf_size);
-  jpeg_memory_src(&cinfo, reinterpret_cast<const JOCTET*>(dummy_buffer), buf_size);
+  jpeg_memory_src(&cinfo,
+    reinterpret_cast<const JOCTET*>(dummy_buffer), buf_size);
 
   // Step 3: read file parameters with jpeg_read_header()
 
@@ -123,6 +124,11 @@ bool JPEGCodec::Decode(IStream &is, OStream &os)
   /* In this example, we don't need to change any of the defaults set by
    * jpeg_read_header(), so we do nothing here.
    */
+  if ( cinfo.process == JPROC_LOSSLESS )
+    {
+    cinfo.jpeg_color_space = JCS_UNKNOWN;
+    cinfo.out_color_space = JCS_UNKNOWN;
+    }
 
   /* Step 5: Start decompressor */
 

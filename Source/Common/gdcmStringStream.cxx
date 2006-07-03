@@ -33,4 +33,14 @@ StringStream::StringStream(const std::string &str)
   InternalSStream.str(str);
 }
 
+IStream& StringStream::Seekg (std::streamoff off, std::ios_base::seekdir dir)
+{
+  InternalSStream.seekg(off, dir);
+  return *this;
+}
+std::streampos StringStream::Tellg ( )
+{
+  return InternalSStream.tellg();
+}
+
 } // end namespace gdcm
