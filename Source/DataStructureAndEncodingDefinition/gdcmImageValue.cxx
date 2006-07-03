@@ -3,6 +3,7 @@
 #include "gdcmByteValue.h"
 #include "gdcmDataSet.h"
 #include "gdcmSequenceOfFragments.h"
+#include "gdcmRAWCodec.h"
 #include "gdcmJPEGCodec.h"
 #include "gdcmStringStream.h"
 
@@ -25,7 +26,13 @@ bool ImageValue::GetBuffer(char *buffer) const
     //MR_GE_with_Private_Compressed_Icon_0009_1110.dcm
     //ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)
     //  buffer, SwapCode::BigEndian, len);
-    return true;
+    RAWCodec codec;
+    StringStream is;
+    is.Write(buffer, len);
+    StringStream os;
+    bool r = codec.Decode(is, os);
+    memcpy(buffer, os.Str().c_str(), len);
+    return r;
     }
   else
     {

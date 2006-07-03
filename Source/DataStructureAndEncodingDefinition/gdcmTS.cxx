@@ -165,6 +165,15 @@ bool TS::IsJPEG(const TSType &ts)
   return false;
 }
 
+bool TS::IsRAW(const TSType &ts)
+{
+  if( ts == TS::ImplicitVRLittleEndian )
+    {
+    return true;
+    }
+  return false;
+}
+
 TS::NegociatedType TS::GetNegociatedType()
 {
   if( TSField == TS_END )

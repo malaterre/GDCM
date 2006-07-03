@@ -69,7 +69,7 @@ bool SequenceOfFragments::GetBuffer(char *buffer, unsigned long length) const
     buffer += len;
     total += len;
     }
-  std::cerr << " DEBUG: " << total << " " << length << std::endl;
+  //std::cerr << " DEBUG: " << total << " " << length << std::endl;
   return true;
 }
 
