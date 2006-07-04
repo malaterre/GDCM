@@ -136,7 +136,7 @@ bool ImageReader::Read()
         PixelData.SetCompressionType( Compression::RAW );
         res = ReadACRNEMAImage();
         }
-      else
+      else // there is a Unknown TransferSyntax
         {
         // god damit I don't know what to do...
         gdcmWarningMacro( "Attempting to read this file as a DICOM file"
@@ -148,6 +148,7 @@ bool ImageReader::Read()
           // Someone defined the Transfer Syntax but I have no clue what
           // it is. Since there is Pixel Data element, let's try to read
           // that as a buggy DICOM Image file...
+          PixelData.SetCompressionType( Compression::RAW );
           res = ReadImage();
           }
         else
