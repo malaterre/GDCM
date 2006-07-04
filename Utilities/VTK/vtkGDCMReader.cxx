@@ -145,9 +145,9 @@ int vtkGDCMReader::RequestData(vtkInformation *vtkNotUsed(request),
     char *copy = new char[ size * 3 ];
     memmove( copy, pointer, size*3);
 
-    char *r = copy;
-    char *g = copy + size;
-    char *b = copy + size + size;
+    const char *r = copy;
+    const char *g = copy + size;
+    const char *b = copy + size + size;
 
     char *p = pointer;
     for (unsigned long j = 0; j < size; ++j)

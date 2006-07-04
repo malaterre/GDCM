@@ -280,13 +280,13 @@ bool ImageReader::ReadImage()
     {
     const ExplicitDataElement &xde =
       dynamic_cast<const ExplicitDataElement&>(pdde);
-    if( xde.GetVR() == VR::OW
-      && Stream.GetSwapCode() == SwapCode::BigEndian )
-      {
-      // Need to byte swap
-      gdcmErrorMacro( "Need to byte swap" );
-      return false;
-      }
+    //if( xde.GetVR() == VR::OW
+    //  && Stream.GetSwapCode() == SwapCode::BigEndian )
+    //  {
+    //  // Need to byte swap
+    //  gdcmErrorMacro( "Need to byte swap" );
+    //  return false;
+    //  }
     PixelData.SetValue( xde.GetValue() );
     }
   else if( type == TS::Implicit )
