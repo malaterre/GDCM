@@ -52,10 +52,15 @@
 
 #include <time.h>
 #include "global.h"
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#else
+#include <io.h>
+#endif
 
 
 
-char *disclaimer = "\
+char disclaimer[] = "\
 This program is Copyright (c) University of British Columbia.\n\
 All rights reserved. It may be freely redistributed in its\n\
 entirety provided that this copyright notice is not removed.\n\
@@ -69,7 +74,7 @@ without the written permission of the copyright holder.\n\
 FILE *in, *out;
 FILE *c_in[MAX_COMPONENTS];
 FILE *c_out[MAX_COMPONENTS];
-FILE *msgfile = stdout;
+FILE *msgfile = NULL; /* = stdout;*/
 
 /* Context quantization thresholds  - initially unset */
 int     T3 = -1,
@@ -98,14 +103,10 @@ int bpp,    /* bits per sample */
     limit_reduce;  /* reduction on above for EOR states */
 
 
-/* define color mode strings */
-char *plane_int_string = "plane by plane",
-	 *line_int_string = "line intlv",
-	 *pixel_int_string = "sample intlv";
 
 
 /* function to print out error messages */
-void error(char *msg) {
+void error(const char *msg) {
 	fprintf(stderr, msg);
 	exit(-1);
 }
@@ -140,14 +141,15 @@ void *safecalloc(size_t numels, size_t size) {
 
 double get_utime()
 {
-	clock_t c;
+  /*clock_t c;
+  (void)c;*/
 
 	return (double)clock()/CLOCKS_PER_SEC;
 }
 
 
 /* Set thresholds to default unless specified by header: */
-set_thresholds(int alfa, int NEAR, int *T1p, int *T2p, int *T3p)
+int set_thresholds(int alfa, int NEAR, int *T1p, int *T2p, int *T3p)
 {
 	int lambda,
 	    ilambda = 256/alfa,
@@ -155,6 +157,8 @@ set_thresholds(int alfa, int NEAR, int *T1p, int *T2p, int *T3p)
 	    T1 = *T1p, 
 	    T2 = *T2p, 
 	    T3 = *T3p;
+  /* Unused */
+  (void)quant;
 	
 	if (alfa<4096)
 	   lambda = (alfa+127)/256;
@@ -318,15 +322,15 @@ void check_compatibility(jpeg_ls_header *head_frame, jpeg_ls_header *head_scan, 
 
 /* for writing disclaimer to command line in DOS */
 
-char *ttyfilename = "CON";
+char ttyfilename[] = "CON";
 
 #define PAUSE	20
 
-fprint_disclaimer(FILE *fp, int nopause)
+void fprint_disclaimer(FILE *fp, int nopause)
 {
     char *p0, *p1;
-    FILE *ttyf;
-    int  i, c;
+  FILE *ttyf = NULL;
+  int  i; /*, c;*/
 
     nopause = nopause | !isatty(fileno(fp));
 
@@ -340,7 +344,7 @@ fprint_disclaimer(FILE *fp, int nopause)
 	    fflush(fp);
 	    fprintf(stderr, "--- (press RETURN to continue) ---"); 
 	    fflush(stderr);
-	    c = getc(ttyf);
+/*      c = getc(ttyf);*/
 	}
 	for ( p1=p0; (*p1 != '\n') && (*p1 != 0); p1++ );
 	*p1 = 0;

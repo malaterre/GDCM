@@ -51,11 +51,12 @@
 
 #include "global.h"
 #include "bitio.h"
+#include <string.h> /* for memset */
 
 
-extern int zeroLUT[];     /* lookup table to find number of leading zeroes */
+/*extern int zeroLUT[];  */   /* lookup table to find number of leading zeroes */
 
-extern FILE *in, *out;
+/*extern FILE *in, *out; */
 
 byte negbuff[BUFSIZE+4];    /* byte I/O buffer, allowing for 4 "negative" 
 						       locations  */
@@ -88,6 +89,7 @@ int bits;  /* number of bits free in bit buffer (on output) */
 
 void bufiinit(FILE *fil) {
     /* argument is ignored */
+    (void)fil;
     fp = BUFSIZE;
     truebufsize = 0;
     foundeof = 0;
@@ -141,7 +143,8 @@ void bitiflush()  {
     int filled,
 	discard, 
 	dbytes,
-	i, k, treg;
+  i, k;
+  unsigned int treg;
     byte *bp;
 
     filled = 24 - bits;    /* how many bits at the MS part of reg 
@@ -184,11 +187,11 @@ void bitiflush()  {
     }
     discard = filled-k;
     if ( treg != (reg<<discard) ) {
-	fprintf(stderr,"bitiflush: inconsistent bits=%d discard=%d reg=%08x treg=%08x\n",bits, discard, reg, treg);
+      fprintf(stderr,"bitiflush: inconsistent bits=%d discard=%d reg=%08lx treg=%08x\n",bits, discard, reg, treg);
 	exit(10);
     }
     if ( reg & (((1<<discard)-1)<<(BITBUFSIZE-discard)) )
-	fprintf(stderr,"bitiflush: Warning: discarding nonzero bits; reg=%08x bits=%d discard=%d\n",reg,bits,discard);
+      fprintf(stderr,"bitiflush: Warning: discarding nonzero bits; reg=%08lx bits=%d discard=%d\n",reg,bits,discard);
 
     fp -= dbytes;  /* do the unget */
     if ( buff[fp-1]==0xff && buff[fp]==0 ) fp++;

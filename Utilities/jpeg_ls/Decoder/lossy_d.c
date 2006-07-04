@@ -72,7 +72,7 @@ inline int lossy_regular_mode_d(int Q, int SIGN, int Px)
 	At = A[Q];
 	/* Estimate k */
 	{
-	    register nst = Nt;
+      register int nst = Nt;
 	    for(k=0; nst < At; nst *=2, k++);
 	}
 	
@@ -195,8 +195,7 @@ inline int lossy_regular_mode_d(int Q, int SIGN, int Px)
 /* Do end of run DECODING for LOSSY images */
 inline pixel lossy_end_of_run_d(pixel Ra, pixel Rb, int RItype)
 {
-	int xpr,
-		Ix,
+  int Ix,
 		Errval,
 		absErrval,
 		MErrval,
@@ -312,13 +311,11 @@ int lossy_undoscanline(	pixel *psl,			/* previous scanline */
 /*** watch it! actual pixels in the scan line are numbered 1 to no .
      pixels with indices < 1 or > no are dummy "border" pixels  */
 {
-	int i, psfix;
+  int i;
 	pixel Ra, Rb, Rc, Rd;
 	int SIGN;
 	int cont;
 	int run_int_type;
-
-	psfix = 0;
 
 	/**********************************************/
 	/* Do for all pixels in the row in 8-bit mode */
@@ -518,7 +515,7 @@ int lossy_undoscanline_pixel(	pixel *psl,		/* previous scanline */
 /*** watch it! actual pixels in the scan line are numbered 1 to no .
      pixels with indices < 1 or > no are dummy "border" pixels  */
 {
-	int i, psfix, n_c, color, enter_run=0, break_run, was_in_run = 0,
+  int i, n_c, color, was_in_run = 0,
 	    test_run;
 	pixel Ra, Rb, Rc, Rd;
 	pixel c_aa[MAX_COMPONENTS],
@@ -528,8 +525,6 @@ int lossy_undoscanline_pixel(	pixel *psl,		/* previous scanline */
 	      c_xx[MAX_COMPONENTS];
 	int	SIGN;
 	int cont,c_cont[MAX_COMPONENTS];
-
-	psfix = 0;
 
 
 	/**********************************************/
@@ -570,7 +565,7 @@ int lossy_undoscanline_pixel(	pixel *psl,		/* previous scanline */
 			Rd=c_dd[color];
 			cont=c_cont[color];
 
-			enter_run = was_in_run = test_run = 0;
+      was_in_run = test_run = 0;
 		
 			if (color == 0) {
 				test_run = 1;
@@ -587,7 +582,7 @@ int lossy_undoscanline_pixel(	pixel *psl,		/* previous scanline */
 
 				register int n, m;
 
-				enter_run = was_in_run = 1;
+        was_in_run = 1;
 
 				/* get length of the run */
 				/* arg is # of pixels left */
@@ -721,7 +716,7 @@ int lossy_undoscanline_pixel(	pixel *psl,		/* previous scanline */
 			Rd=c_dd[color];
 			cont=c_cont[color];
 
-			enter_run = was_in_run = test_run = 0;
+      was_in_run = test_run = 0;
 		
 			if (color == 0) {
 				test_run = 1;
@@ -738,7 +733,7 @@ int lossy_undoscanline_pixel(	pixel *psl,		/* previous scanline */
 
 				register int n, m;
 
-				enter_run = was_in_run = 1;
+        was_in_run = 1;
 
 				/* get length of the run */
 				/* arg is # of pixels left */

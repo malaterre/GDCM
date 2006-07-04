@@ -64,7 +64,7 @@
 #endif
 
 void
-check_range(int param, char *name, int low, int high)
+check_range(int param, const char *name, int low, int high)
 {
     if ( param < low || param > high ) {
 	fprintf(stderr,"Allowed range for %s is [%d..%d]: got %d\n",
@@ -211,7 +211,7 @@ write_jpegls_scan(FILE *out, jpeg_ls_header *jp)
 int
 write_jpegls_extmarker(FILE *out, jpeg_ls_header *jp)
 {
-    int marker_len, ct=0;
+    int ct=0;
 		 
     ct += write_marker(out, LSE);   /* write JPEG-LS extended marker id */
 
@@ -270,7 +270,7 @@ int
 read_marker(FILE *in, int *mkp)
 /* reads a marker from the next two bytes in the input stream */
 {
-	unsigned int m, ct=0;
+  unsigned int m;
 
 	m = read_n_bytes(in, 2);
 	if ( feof(in) ) return EOF;
@@ -434,7 +434,6 @@ int read_jpegls_extmarker(FILE *in, jpeg_ls_header *jp)
 {
     int marker_len,		/* marker length */
 		maxval,			/* max value */
-		T1, T2, T3,		/* thresholds */
 		ct = 0;			
 	int IDtype;			/* LSE type */
 	int TID;			/* table ID */

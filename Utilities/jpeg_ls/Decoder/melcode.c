@@ -57,7 +57,7 @@
 
 #define MELCSTATES	32	/* number of melcode states */
 
-static J[MELCSTATES] = {
+static int J[MELCSTATES] = {
 	0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3,4,4,5,5,6,6,7,
 	7,8,9,10,11,12,13,14,15 
 };
@@ -78,6 +78,7 @@ void init_process_run(int maxrun)    /* maxrun is ignoreed when using MELCODE,
 					kept here for function compatibility */				    
 {
 	int	n_c;
+  (void)maxrun;
 
 	for (n_c=0;n_c<components;n_c++)
 	{
@@ -97,7 +98,7 @@ int process_run_dec(int lineleft, int color)
 	int runlen = 0;
 		
 	do {
-		register temp, hits;
+    register int temp, hits;
 		temp = zeroLUT[(byte)(~(reg >> 24))];   /* number of leading ones in the
 							   input stream, up to 8 */
 		for ( hits = 1; hits<=temp; hits++ ) 
@@ -131,7 +132,7 @@ int process_run_dec(int lineleft, int color)
 	/* read the length of the remainder */
 	if ( melclen[color] ) 
 	{
-		register temp;
+    register int temp;
 		GETBITS(temp, melclen[color]);  /*** GETBITS is a macro, not a function */
 		runlen += temp;
 	}

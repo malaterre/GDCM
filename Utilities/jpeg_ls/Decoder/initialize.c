@@ -77,7 +77,6 @@ int N[TOT_CONTEXTS],
 void prepareLUTs()
 {
 	int i, j, idx, lmax;
-	byte k;
 
 	lmax = min(alpha,lutmax);
 	

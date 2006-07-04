@@ -94,3 +94,5 @@ int seek_marker(FILE *in, int *mkp);
 int read_jpegls_frame(FILE *in, jpeg_ls_header *jp);
 int read_jpegls_scan(FILE *in, jpeg_ls_header *jp);
 int read_jpegls_extmarker(FILE *in, jpeg_ls_header *jp);
+
+int read_jpegls_restartmarker(FILE *in, jpeg_ls_header *jp);

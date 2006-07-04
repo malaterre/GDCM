@@ -15,8 +15,11 @@ CONFIGURE_FILE(
   "${CMAKE_CURRENT_BINARY_DIR}/jpegls_config.h"
   @ONLY IMMEDIATE)
 
+INCLUDE_DIRECTORIES(BEFORE
+  ${CMAKE_CURRENT_BINARY_DIR}
+  )
 SUBDIRS(
   Decoder
-  Encoder
+  #Encoder
   )
 

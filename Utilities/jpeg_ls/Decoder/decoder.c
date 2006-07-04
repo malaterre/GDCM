@@ -55,10 +55,19 @@
 #include <string.h>
 #include "jpegmark.h"
 
+
+void usage();
+
+
 #define  PGMNAME PGMPREFIX "d"
 #define  EPGMNAME PGMPREFIX "e"
 
-static char *banner="\n\
+/* define color mode strings */
+char plane_int_string[] = "plane by plane",
+   line_int_string[] = "line intlv",
+   pixel_int_string[] = "sample intlv";
+
+static char banner[]="\n\
 =============================================\n\
 SPMG/JPEG-LS DECOMPRESSOR " JPEGLSVERSION "\n\
 =============================================\n\
@@ -138,7 +147,7 @@ inline void write_one_line(pixel* line, int cols, FILE* outfile)
 			line8 = (unsigned char*)safealloc(cols);
 	
 			for (i=0; i< cols; i++)
-				*(line8+i)=ENDIAN8(*(line+i));
+        *(line8+i)=(unsigned char)ENDIAN8(*(line+i));
 		
 			fwrite(line8, sizeof(unsigned char), cols, outfile);
 
@@ -226,7 +235,8 @@ inline void write_one_line(pixel* line, int cols, FILE* outfile)
 
 
 
-void initbuffers(int multi, int comp) {
+void initbuffers(int multi, int comp)
+{
 
 	int	i;
 
@@ -261,7 +271,7 @@ void initbuffers(int multi, int comp) {
 
 }
 
-swaplines()
+void swaplines()
 {
 	pixel *temp;
 	temp = pscanl0;
@@ -271,7 +281,7 @@ swaplines()
 	cscanline = cscanl0 + components*(LEFTMARGIN-1);
 }
 
-c_swaplines(int i)
+void c_swaplines(int i)
 {
 	pixel *temp;
 	temp = c_pscanl0[i];
@@ -281,7 +291,8 @@ c_swaplines(int i)
 	c_cscanline[i] = c_cscanl0[i] + (LEFTMARGIN-1);
 }
 
-void closebuffers(int multi) {
+void closebuffers(int multi)
+{
 
 	int     i;
 
@@ -297,13 +308,12 @@ void closebuffers(int multi) {
 }
 
 
-
-
-int initialize(int argc, char *argv[]) {
-	char line[256],tmp_char[1],   
-		*infilename = NULL,
-		*outfilename = OUTFILE ".out",
-		*c_outfilename[MAX_COMPONENTS],
+/* command line argument parsing */
+int initialize(int argc, char *argv[])
+{
+  char *infilename = NULL;
+  const char *outfilename = OUTFILE ".out";
+  char *c_outfilename[MAX_COMPONENTS],
 		*color_mode_string;
 	int i, max_samp_columns, max_samp_rows, mk, n_s,
 		end_of_seek=0,
@@ -315,7 +325,7 @@ int initialize(int argc, char *argv[]) {
 	int pos;   /* position in the file, after the header */
 
 	for (i=0;i<MAX_COMPONENTS;i++) {
-		c_outfilename[i]=malloc(strlen(OUTFILE)+20);
+    c_outfilename[i]=(char*)malloc(strlen(OUTFILE)+20);
 		sprintf(c_outfilename[i],"%s%d.out",OUTFILE,i+1);
 	}
 
@@ -554,10 +564,12 @@ int initialize(int argc, char *argv[]) {
 	}
 
 	if ((!multi) && (color_mode==PLANE_INT))
+    {
 		if (components>1) {
 			fprintf(stderr,"\nERROR: Cannot use -P (PPM output) with plane intereleaved mode\n");
 			exit(10);
 		}
+    }
 	else multi=1;
 
 	if ((multi) && (color_mode==PIXEL_INT)) {
@@ -570,7 +582,7 @@ int initialize(int argc, char *argv[]) {
 	}
 
 	if ((multi) && (out_files) && (out_files!=components)) {
-		fprintf(stderr,"ERROR: Number of files, %d%, for output must be equal to number of image components, %d\n",out_files,components);
+    fprintf(stderr,"ERROR: Number of files, %d, for output must be equal to number of image components, %d\n",out_files,components);
 		exit(10);
 	}
 
@@ -613,6 +625,8 @@ int initialize(int argc, char *argv[]) {
 	}
 
 
+  /* msgfile seems to start being used here, let's initialize it here */
+  if ( !msgfile ) msgfile = stdout;
 	/* Open out file */
 	if ( outfilename == NULL ) {
 		usage();
@@ -865,17 +879,18 @@ int initialize(int argc, char *argv[]) {
 int main (int argc, char *argv[]) {
 	int n,n_c,n_r,my_i,n_s,mk,seek_return;
 	int found_EOF = 0;
-	double t0, t1, get_utime();
+  double t0, t1; /*, get_utime();*/
 	long pos0, pos1,    
 		tot_in = 0,
 		tot_out = 0;
 	pixel *local_scanl0,*local_scanl1,*local_pscanline,*local_cscanline;
 	int MCUs_counted;
+  local_cscanline = local_pscanline = NULL;
 	
 	
 	/* Parse the parameters, initialize */
 	/* Not yet fully implemented */
-	bufiinit();
+  bufiinit(NULL);
 	pos0 = initialize(argc, argv); 
 
 
@@ -1439,7 +1454,7 @@ int main (int argc, char *argv[]) {
 	}
 
 	if (head_scan[0]->need_table)
-		fprintf(msgfile,"A mapping table was used which had %i entries of %i bytes each.\n",head_scan[0]->MAXTAB, head_scan[0]->Wt);
+    fprintf(msgfile,"A mapping table was used which had %d entries of %d bytes each.\n",head_scan[0]->MAXTAB, head_scan[0]->Wt);
 
 	if (got_restart)
 		fprintf(msgfile,"Restart markers were found with a restart interval of %i.\n",restart_interval);
@@ -1460,9 +1475,9 @@ int main (int argc, char *argv[]) {
 
 
 	t1 = get_utime();
-	fprintf(msgfile,"Total bits  in: %ld  Symbols out: %ld  %5.3lf bps\n",
+  fprintf(msgfile,"Total bits  in: %ld  Symbols out: %ld  %5.3f bps\n",
 		       tot_in,tot_out,tot_in/(double)tot_out);
-	fprintf(msgfile,"Time = %1.3lf secs : %1.0lf KSymbols/sec\n",t1-t0,
+  fprintf(msgfile,"Time = %1.3f secs : %1.0f KSymbols/sec\n",t1-t0,
 					(tot_out)/(1024*(t1-t0)));
 
 	if ( found_EOF )
@@ -1474,7 +1489,7 @@ int main (int argc, char *argv[]) {
 
 
 
-usage()
+void usage()
 {
 	fprintf(stderr,"Usage: %s [flags] [infile] [outfile1 [outfile2, ...]]\n\
 DEFAULTS:\n\
@@ -1500,7 +1515,7 @@ outfile2, ... : Multiple output specification for plane or line int. mode.\n\
 }
 
 
-bad_flag(char *s)
+void bad_flag(char *s)
 {
     fprintf(stderr,"Bad flag %s\n",s);
     usage();
