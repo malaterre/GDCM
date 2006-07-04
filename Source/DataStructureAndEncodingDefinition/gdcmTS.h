@@ -128,6 +128,7 @@ public:
 protected:
   // TODO are those function actually usefull ?
   static bool IsJPEG(const TSType &ts);
+  static bool IsJPEG2000(const TSType &ts);
   static bool IsRAW(const TSType &ts);
   static bool IsRLE(const TSType &ts);
   static bool IsMPEG(const TSType &ts);

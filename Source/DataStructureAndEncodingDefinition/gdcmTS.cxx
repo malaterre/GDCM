@@ -162,7 +162,21 @@ bool TS::IsJPEG(const TSType &ts)
   if( strcmp(s, mpeg) == 0)
     return false;
   if( strncmp(s, jpeg, strlen(jpeg)) == 0)
+    {
+    assert( !IsJPEG2000(ts) );
     return true;
+    }
+  return false;
+}
+
+bool TS::IsJPEG2000(const TSType &ts)
+{
+  if( ts == JPEG2000Lossless
+    || ts == JPEG2000 )
+    {
+    assert( !IsJPEG(ts) );
+    return true;
+    }
   return false;
 }
 
@@ -274,6 +288,10 @@ Compression::Types TS::GetCompressionType() const
   else if ( IsJPEG( TSField ) )
     {
     return Compression::JPEG;
+    }
+  else if ( IsJPEG2000( TSField ) )
+    {
+    return Compression::JPEG2000;
     }
   else if ( IsRLE( TSField ) )
     {

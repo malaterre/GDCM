@@ -45,6 +45,7 @@ public:
     UNKNOWN = 0,
     RAW,
     JPEG,
+    JPEG2000,
     RLE
   } Types;
 };
