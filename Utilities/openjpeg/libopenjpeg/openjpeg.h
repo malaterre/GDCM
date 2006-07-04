@@ -32,6 +32,8 @@
 
 #define OPENJPEG_VERSION "1.0.0"
 
+#include "openjpeg_mangle.h"
+
 /* 
 ==========================================================
    Compiler directives

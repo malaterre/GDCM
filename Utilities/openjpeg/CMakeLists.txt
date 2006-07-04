@@ -38,8 +38,15 @@ SET(OPENJPEG_VERSION
 # For the codec...
 OPTION(BUILD_EXAMPLES "Build the Examples (codec...)." OFF)
 
+
+SET(MANGLE_PREFIX ${OPENJPEG_LIBRARY_NAME})
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in
+               ${CMAKE_CURRENT_BINARY_DIR}/openjpeg_mangle.h
+               @ONLY IMMEDIATE)
+
 #-----------------------------------------------------------------------------
 # Always build the library
+INCLUDE_DIRECTORIES(BEFORE ${CMAKE_CURRENT_BINARY_DIR})
 SUBDIRS(
   libopenjpeg
   )
