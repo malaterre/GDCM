@@ -115,8 +115,8 @@ bool ImageReader::Read()
         bool isImage2 = TS::IsImage( ms2 );
         if( isImage2 )
           {
-          gdcmDebugMacro( "After all it might be a DICOM file "
-            "(Malinkroft like)" );
+          gdcmWarningMacro( "After all it might be a DICOM file "
+            "(Malinkroft-like)" );
           PixelData.SetCompressionType( Compression::RAW );
           res = ReadImage();
           }
@@ -213,6 +213,14 @@ bool ImageReader::ReadImage()
   // Construct a stringstream to mimic the reading from the file
   ss.SetSwapCode( Stream.GetSwapCode() );
   PixelData.SetSwapCode( Stream.GetSwapCode() );
+
+  const Tag trecognitioncode(0x0008,0x0010);
+  if( ds.FindDataElement( trecognitioncode ) )
+    {
+    // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
+    // PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
+    gdcmWarningMacro( "Mixture of ACR NEMA and DICOM file" );
+    }
 
   // Ok we have the dataset let's feed the Image (PixelData)
   // 1. First find how many dimensions there is:
