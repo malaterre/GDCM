@@ -22,7 +22,7 @@ bool ImageValue::GetBuffer(char *buffer) const
     if( len != bv->GetLength() )
       {
       gdcmWarningMacro( "Pixel Length " << bv->GetLength() <<
-        " is different from computer value " << len );
+        " is different from computed value " << len );
       }
     bv->GetBuffer(buffer, len);
     RAWCodec codec;

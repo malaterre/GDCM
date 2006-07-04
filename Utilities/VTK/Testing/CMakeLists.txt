@@ -7,6 +7,7 @@ SET(VTK_GDCM_TEST_SRCS
 # Add the include paths
 INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Utilities/VTK"
+  "${GDCM_BINARY_DIR}/Testing/Source/Data" # for gdcmDataImages.h
   )
 
 CREATE_TEST_SOURCELIST(vtkGDCMTests gdcmvtkGDCMTests.cxx ${VTK_GDCM_TEST_SRCS})

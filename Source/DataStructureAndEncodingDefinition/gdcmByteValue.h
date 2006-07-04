@@ -80,7 +80,9 @@ public:
   }
   bool GetBuffer(char *buffer, unsigned long length) const
     {
-    assert( length == Internal.size() );
+    // SIEMENS_GBS_III-16-ACR_NEMA_1.acr has a weird pixel length
+    // so we need an inequality
+    assert( length <= Internal.size() );
     memcpy(buffer, &Internal[0], length);
     return true;
     }
