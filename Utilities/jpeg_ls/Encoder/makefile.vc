@@ -1,0 +1,44 @@
+CC=CL
+PKGNAME=loco
+OPTFLAGS= /O2 /G5 /DMSDOS /Dinline=""
+MAKE=nmake
+
+O=.obj
+E=.exe
+
+CFLAGS  = $(OPTFLAGS) $(VFL) $(DFL) /DPGMPREFIX=\"$(PREFIX)\" /DMELCODE /DEXTERNDISTRIB /DNDEBUG
+
+SRCS = global.c jpegmark.c initialize.c encoder.c lossless_e.c lossy_e.c bitio.c melcode.c 
+INCL = global.h jpegmark.h bitio.h
+
+EOBJS = global$(O) jpegmark$(O) initialize$(O) encoder$(O) lossless_e$(O) lossy_e$(O) bitio$(O) melcode$(O)
+
+loco:
+	$(MAKE) $(MAKEFLAGS) -f makefile.vc VFL="" PREFIX="loco" codec
+
+ENCODER = $(PREFIX)e$(E)
+
+codec: $(ENCODER)
+
+jpegmark$(O): jpegmark.c jpegmark.h bitio.h global.h
+
+global$(O): global.h global.c
+
+initialize$(O): initialize.c bitio.h global.h
+
+lossless_e$(O): global.h lossless_e.c bitio.h 
+
+lossy_e$(O): global.h lossy_e.c bitio.h
+
+encoder$(O): encoder.c jpegmark.c global.h 
+
+bitio$(O): bitio.c bitio.h global.h
+
+melcode$(O): melcode.c bitio.h global.h
+
+
+$(ENCODER): $(EOBJS)
+	$(CC) $(CFLAGS) /Fe$@ $(EOBJS) $(LNKFLAGS)
+
+clean:
+	-rm -f *$(O) core loco* *.out
