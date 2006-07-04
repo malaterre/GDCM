@@ -131,6 +131,8 @@ bool ImageReader::Read()
         {
         // Those transfer syntax have a high probability of being ACR NEMA
         gdcmWarningMacro( "Looks like an ACR-NEMA file" );
+        // Hopefully all ACR-NEMA are RAW:
+        PixelData.SetCompressionType( Compression::RAW );
         res = ReadACRNEMAImage();
         }
       else
