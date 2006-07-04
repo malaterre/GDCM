@@ -2,7 +2,6 @@
 #ifndef __gdcmImage_h
 #define __gdcmImage_h
 
-#include "gdcmTypes.h"
 #include "gdcmPixelType.h"
 #include "gdcmSwapCode.h"
 #include "gdcmPhotometricInterpretation.h"
@@ -32,7 +31,7 @@ namespace gdcm
 class GDCM_EXPORT Image
 {
 public:
-  Image ():NumberOfDimensions(0),PlanarConfiguration(0),Dimensions(),SC() {}
+  Image ():NumberOfDimensions(0),PlanarConfiguration(0),Dimensions(),SC(),CompressionType(Compression::UNKNOWN) {}
   virtual ~Image() {}
 
   unsigned int GetNumberOfDimensions() const;
@@ -85,6 +84,15 @@ public:
     SC = sc;
     }
 
+  Compression::Types GetCompressionType() const
+    {
+    return CompressionType;
+    }
+  void SetCompressionType(Compression::Types ct)
+    {
+    CompressionType = ct;
+    }
+
 //  Image(Image const&);
 //  Image &operator= (Image const&);
 
@@ -102,6 +110,7 @@ private:
   PhotometricInterpretation PI;
 
   SwapCode SC;
+  Compression::Types CompressionType;
 };
 
 } // end namespace gdcm

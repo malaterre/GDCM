@@ -85,6 +85,7 @@ bool ImageReader::Read()
     assert( ts != TS::TS_END && ms != TS::MS_END );
     // Good it's the easy case. It's declared as an Image:
     gdcmDebugMacro( "Sweet ! Finally a good DICOM file !" );
+    PixelData.SetCompressionFromTransferSyntax( ts );
     res = ReadImage();
     }
   else

@@ -167,7 +167,17 @@ bool TS::IsJPEG(const TSType &ts)
 
 bool TS::IsRAW(const TSType &ts)
 {
-  if( ts == TS::ImplicitVRLittleEndian )
+  if( ts == TS::ImplicitVRLittleEndian
+   || ts == TS::ExplicitVRBigEndian )
+    {
+    return true;
+    }
+  return false;
+}
+
+bool TS::IsRLE(const TSType &ts)
+{
+  if( ts == TS::RLELossless )
     {
     return true;
     }
@@ -246,6 +256,24 @@ bool TS::IsImage(const MSType &ms)
     return false;
     }
   return true;
+}
+
+Compression::Types TS::GetCompressionType() const
+{
+  if( IsRAW( TSField ) )
+    {
+    return Compression::RAW;
+    }
+  else if ( IsJPEG( TSField ) )
+    {
+    return Compression::JPEG;
+    }
+  else if ( IsRLE( TSField ) )
+    {
+    return Compression::RLE;
+    }
+
+  return Compression::UNKNOWN;
 }
 
 } // end namespace gdcm

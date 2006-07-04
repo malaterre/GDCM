@@ -16,6 +16,7 @@ SET(DSED_SRCS
   gdcmImageValue.cxx
   gdcmJPEGCodec.cxx
   gdcmRAWCodec.cxx
+  gdcmRLECodec.cxx
   gdcmImageConverter.cxx
   )
 

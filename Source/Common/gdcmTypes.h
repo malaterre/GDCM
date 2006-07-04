@@ -35,6 +35,23 @@ typedef  unsigned int        uint32_t;
 #define UINT32_MAX    (4294967295U)
 #endif
 
+namespace gdcm
+{
+
+class Compression
+{
+public:
+  typedef enum {
+    UNKNOWN = 0,
+    RAW,
+    JPEG,
+    RLE
+  } Types;
+};
+
+}
+
+
 //namespace gdcm 
 //{
 //  class GDCM_EXPORT SC // SwapCode

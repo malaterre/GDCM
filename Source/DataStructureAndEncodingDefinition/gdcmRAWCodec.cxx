@@ -25,7 +25,7 @@ RAWCodec::~RAWCodec()
 
 bool RAWCodec::CanDecode(TS const &ts)
 {
-  return TS::IsRAW(ts);
+  return ts.GetCompressionType() == Compression::RAW;
 }
 
 bool RAWCodec::Decode(IStream &is, OStream &os)
@@ -40,16 +40,18 @@ bool RAWCodec::Decode(IStream &is, OStream &os)
   if( sc == SwapCode::BigEndian )
     {
     //MR_GE_with_Private_Compressed_Icon_0009_1110.dcm
+    assert( !(buf_size % 2) );
     ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)
       dummy_buffer, SwapCode::BigEndian, buf_size/2);
     }
   if( PlanarConfiguration )
     {
+    // US-RGB-8-epicard.dcm
     //assert( image.GetNumberOfDimensions() == 3 );
-    //vtkIdType *dims = output->GetDimensions();
+    assert( !(buf_size % 3) );
     unsigned long size = buf_size/3;
-    char *copy = new char[ size * 3 ];
-    memmove( copy, dummy_buffer, size*3);
+    char *copy = new char[ buf_size ];
+    memmove( copy, dummy_buffer, buf_size);
 
     const char *r = copy;
     const char *g = copy + size;
@@ -65,6 +67,7 @@ bool RAWCodec::Decode(IStream &is, OStream &os)
     delete[] copy;
     }
   os.Write(dummy_buffer, buf_size);
+  delete[] dummy_buffer;
   return true;
 }
 

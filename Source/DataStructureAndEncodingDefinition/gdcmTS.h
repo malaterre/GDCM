@@ -61,6 +61,7 @@ public:
     TS_END
   } TSType;
 
+
   typedef enum {
     ComputedRadiographyImageStorage = 0,
     DigitalXRayImageStorageForPresentation,
@@ -121,12 +122,13 @@ public:
 
   static bool IsImage(const MSType &ts);
 
+  Compression::Types GetCompressionType() const;
+
 protected:
   // TODO are those function actually usefull ?
-  friend class JPEGCodec; // FIXME
   static bool IsJPEG(const TSType &ts);
-  friend class RAWCodec; // FIXME
   static bool IsRAW(const TSType &ts);
+  static bool IsRLE(const TSType &ts);
   static bool IsMPEG(const TSType &ts);
   static bool IsExplicit(const TSType &ts);
   static bool IsImplicit(const TSType &ts);

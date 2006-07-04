@@ -38,7 +38,7 @@ JPEGCodec::~JPEGCodec()
 
 bool JPEGCodec::CanDecode(TS const &ts)
 {
-  return TS::IsJPEG(ts);
+  return ts.GetCompressionType() == Compression::JPEG;
 }
 
 /*
@@ -176,6 +176,7 @@ bool JPEGCodec::Decode(IStream &is, OStream &os)
 
   /* This is an important step since it will release a good deal of memory. */
   jpeg_destroy_decompress(&cinfo);
+  delete[] dummy_buffer;
 
   /* After finish_decompress, we can close the input file.
    * Here we postpone it until after no more JPEG errors are possible,

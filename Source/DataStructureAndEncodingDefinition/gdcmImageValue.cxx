@@ -12,6 +12,7 @@ namespace gdcm
 
 bool ImageValue::GetBuffer(char *buffer) const
 {
+  assert( GetCompressionType() != Compression::UNKNOWN );
   unsigned long len = GetBufferLength();
   Value *p = PixelData;
   const ByteValue *bv = dynamic_cast<ByteValue*>(p);

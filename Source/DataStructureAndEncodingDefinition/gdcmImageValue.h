@@ -4,6 +4,7 @@
 
 #include "gdcmImage.h"
 #include "gdcmSmartPointer.h"
+#include "gdcmTS.h"
 
 #include <vector>
 
@@ -27,6 +28,16 @@ public:
   void SetValue(Value const &v) {
     PixelData = SmartPointer<Value>( const_cast<Value*>(&v) );
   }
+  
+  // Helper to set Compression based on Transfer Syntax
+  // It will find out the compression used and approrpietly call
+  // the superclass SetCompressionType
+  void SetCompressionFromTransferSyntax(TS const & ts)
+    {
+    Compression::Types type = ts.GetCompressionType();
+    assert( type != Compression::UNKNOWN );
+    SetCompressionType( type );
+    }
 
 private:
   typedef SmartPointer<Value> ValuePtr;
