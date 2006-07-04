@@ -353,10 +353,6 @@ bool ImageReader::ReadImage()
 
 bool ImageReader::ReadACRNEMAImage()
 {
-  // FIXME
-  // TODO:
-  // This is the definition of an ACR NEMA image:
-  // D 0008|0010 [LO] [Recognition Code (RET)] [ACR-NEMA 2.0]
   const DataSet &ds = GetDataSet();
   TS::NegociatedType type = ds.GetNegociatedType();
   StringStream ss;
@@ -403,6 +399,8 @@ bool ImageReader::ReadACRNEMAImage()
   PixelData.SetDimensions(1,
     ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
 
+  // This is the definition of an ACR NEMA image:
+  // D 0008|0010 [LO] [Recognition Code (RET)] [ACR-NEMA 2.0]
   // LIBIDO compatible code:
   // D 0008|0010 [LO] [Recognition Code (RET)] [ACRNEMA_LIBIDO_1.1]
   const Tag trecognitioncode(0x0008,0x0010);
@@ -425,7 +423,7 @@ bool ImageReader::ReadACRNEMAImage()
     {
     gdcmWarningMacro(
       "Reading as ACR NEMA an image which does not look likes ACR NEMA" );
-    //abort();
+    abort();
     }
 
   // 3. Pixel Type ?

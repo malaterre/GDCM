@@ -10,8 +10,6 @@ FILE(GLOB GDCM_DATA_IMAGES_GLOB
 SET(BLACK_LIST
   "dummy.dcm"
   "diazpost.dcm" # This one is nasty
-  #"CT-MONO2-12-lomb-an2.acr" # contains wrong group length !!
-  #"MR-MONO2-12-angio-an1.acr" # idem
   "Siemens-leonardo-bugged.dcm"
   "NM_FromJulius_Caesar.dcm"
   "1075235AnouncedAsBigEndianButIsLittleEndian.dcm"
@@ -19,6 +17,7 @@ SET(BLACK_LIST
   "deflate_wave_dfl.dcm"
   "deflate_report_dfl.dcm"
   "ExplicitVRforPublicElementsImplicitVRforShadowElements.dcm"
+  "1.3.12.2.1107.5.2.6.14121.30000006030706333268700005266.dcm"
 
   # TODO
   "gdcm-MR-PHILIPS-16-Multi-Seq.dcm"
