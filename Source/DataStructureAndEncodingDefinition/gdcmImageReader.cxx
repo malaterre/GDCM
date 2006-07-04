@@ -166,6 +166,7 @@ bool ImageReader::ReadImage()
   std::string conversion;
   // Construct a stringstream to mimic the reading from the file
   ss.SetSwapCode( Stream.GetSwapCode() );
+  PixelData.SetSwapCode( Stream.GetSwapCode() );
 
   // Ok we have the dataset let's feed the Image (PixelData)
   // 1. First find how many dimensions there is:
@@ -316,6 +317,7 @@ bool ImageReader::ReadACRNEMAImage()
   std::string conversion;
   // Construct a stringstream to mimic the reading from the file
   ss.SetSwapCode( Stream.GetSwapCode() );
+  PixelData.SetSwapCode( Stream.GetSwapCode() );
 
   // Ok we have the dataset let's feed the Image (PixelData)
   // 1. First find how many dimensions there is:

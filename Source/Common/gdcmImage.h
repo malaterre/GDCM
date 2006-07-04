@@ -4,6 +4,7 @@
 
 #include "gdcmTypes.h"
 #include "gdcmPixelType.h"
+#include "gdcmSwapCode.h"
 #include "gdcmPhotometricInterpretation.h"
 
 #include <vector>
@@ -31,7 +32,7 @@ namespace gdcm
 class GDCM_EXPORT Image
 {
 public:
-  Image ():NumberOfDimensions(0),PlanarConfiguration(0),Dimensions() {}
+  Image ():NumberOfDimensions(0),PlanarConfiguration(0),Dimensions(),SC() {}
   virtual ~Image() {}
 
   unsigned int GetNumberOfDimensions() const;
@@ -75,6 +76,15 @@ public:
     PI = pi;
     }
 
+  SwapCode GetSwapCode() const
+    {
+    return SC;
+    }
+  void SetSwapCode(SwapCode sc)
+    {
+    SC = sc;
+    }
+
 //  Image(Image const&);
 //  Image &operator= (Image const&);
 
@@ -90,6 +100,8 @@ private:
 
   PixelType PT;
   PhotometricInterpretation PI;
+
+  SwapCode SC;
 };
 
 } // end namespace gdcm

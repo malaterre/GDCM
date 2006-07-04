@@ -2,7 +2,7 @@
 #ifndef __gdcmImageConverter_h
 #define __gdcmImageConverter_h
 
-#include "gdcmImage.h"
+#include "gdcmTypes.h"
 
 namespace gdcm
 {
@@ -16,17 +16,21 @@ namespace gdcm
  * pass to third party application.
  * This filter is application level and not integrated directly in GDCM
  */
-class Filter;
-class GDCM_EXPORT ImageConverter : public Filter
+class Image;
+class GDCM_EXPORT ImageConverter
 {
 public:
-  ImageConverter() {}
-  ~ImageConverter() {}
+  ImageConverter();
+  ~ImageConverter();
 
   void SetInput(Image const &input);
   const Image& GetOuput() const;
 
+  void Convert();
+
 private:
+  Image *Input;
+  Image *Output;
 };
 
 } // end namespace gdcm

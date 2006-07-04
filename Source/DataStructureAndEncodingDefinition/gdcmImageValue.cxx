@@ -28,6 +28,7 @@ bool ImageValue::GetBuffer(char *buffer) const
     //  buffer, SwapCode::BigEndian, len);
     RAWCodec codec;
     StringStream is;
+    is.SetSwapCode( GetSwapCode() );
     is.Write(buffer, len);
     StringStream os;
     bool r = codec.Decode(is, os);
