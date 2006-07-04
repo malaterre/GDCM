@@ -136,28 +136,6 @@ int vtkGDCMReader::RequestData(vtkInformation *vtkNotUsed(request),
 
   char * pointer = static_cast<char*>(output->GetScalarPointer());
   image.GetBuffer(pointer);
-  //this->FileLowerLeft = 1;
-  if( image.GetPlanarConfiguration() )
-    {
-    assert( image.GetNumberOfDimensions() == 3 );
-    vtkIdType *dims = output->GetDimensions();
-    unsigned long size = dims[0]*dims[1]*dims[2];
-    char *copy = new char[ size * 3 ];
-    memmove( copy, pointer, size*3);
-
-    const char *r = copy;
-    const char *g = copy + size;
-    const char *b = copy + size + size;
-
-    char *p = pointer;
-    for (unsigned long j = 0; j < size; ++j)
-      {
-      *(p++) = *(r++);
-      *(p++) = *(g++);
-      *(p++) = *(b++);
-      }
-    delete[] copy;
-    }
 
   return 1;
 }
