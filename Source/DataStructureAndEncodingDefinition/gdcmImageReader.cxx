@@ -99,7 +99,33 @@ bool ImageReader::Read()
       {
       // Too bad the media storage type was not recognized...
       // what should we do ?
-      if( ts == TS::ImplicitVRBigEndianACRNEMA 
+      // Let's check 0008,0016:
+      // D 0008|0016 [UI] [SOP Class UID] [1.2.840.10008.5.1.4.1.1.7 ]
+      // ==> [Secondary Capture Image Storage]
+      const Tag tsopclassuid(0x0008, 0x0016);
+      if( GetDataSet().FindDataElement( tsopclassuid) )
+        {
+        const ByteValue *sopclassuid
+          = GetPointerFromElement( tsopclassuid );
+        std::string sopclassuid_str(
+          sopclassuid->GetPointer(),
+          sopclassuid->GetLength() );
+        TS::MSType ms2 = TS::GetMSType(sopclassuid_str.c_str());
+        bool isImage2 = TS::IsImage( ms2 );
+        if( isImage2 )
+          {
+          gdcmDebugMacro( "After all it might be a DICOM file "
+            "(Malinkroft like)" );
+          res = ReadImage();
+          }
+        else
+          {
+          gdcmWarningMacro( "DICOM file is not an Image file but a : " <<
+            TS::GetMSString(ms2) << " SOP Class UID" );
+          res = false;
+          }
+        }
+      else if( ts == TS::ImplicitVRBigEndianACRNEMA 
        || ts == TS::TS_END )
         {
         // Those transfer syntax have a high probability of being ACR NEMA
@@ -109,7 +135,8 @@ bool ImageReader::Read()
       else
         {
         // god damit I don't know what to do...
-        gdcmWarningMacro( "Attempting to read this file as a DICOM file" );
+        gdcmWarningMacro( "Attempting to read this file as a DICOM file"
+          "\nDesperate attempt" );
         res = ReadImage();
         }
       }
