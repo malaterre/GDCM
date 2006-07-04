@@ -5,14 +5,15 @@
 
 int TestRead(const char* filename)
 {
-  std::cout << "------------------------- Parsing file :[" << filename << "]" 
-            << std::endl;
   gdcm::Reader reader;
   reader.SetFileName( filename );
   if ( !reader.Read() )
     {
+    std::cerr << "Failed to read: " << filename << std::endl;
     return 1;
     }
+
+  std::cerr << "Success to read: " << filename << std::endl;
 
   const gdcm::FileMetaInformation &h = reader.GetHeader();
   std::cout << h << std::endl;
