@@ -1,0 +1,36 @@
+/* Avoid problems due to multiple inclusion. */
+#ifndef JPEGPLS_CONFIG_H
+#define JPEGPLS_CONFIG_H
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#cmakedefine HAVE_UNISTD_H
+
+#cmakedefine JPEGLSSTATIC
+
+#cmakedefine HAVE_C_INLINE
+
+#ifndef HAVE_C_INLINE
+#define inline
+#endif
+
+/* a function referenced thru EXTERNs: */
+#if defined( _WIN32 ) && defined (JPEGLSDLL)
+#define GLOBAL(type)            __declspec(dllexport) type
+#else
+#define GLOBAL(type)            type
+#endif
+
+/* a reference to a GLOBAL function: */
+#if defined(_WIN32) && !defined(JPEGLSSTATIC)
+#ifdef JPEGLSDLL
+#define EXTERN(type)            __declspec(dllexport) type
+#else
+#define EXTERN(type)            __declspec(dllimport) type
+#endif
+#else
+#define EXTERN(type)            extern type
+#endif
+
+
+#endif
+

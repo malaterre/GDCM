@@ -1,8 +1,6 @@
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
-INCLUDE_DIRECTORIES("${GDCMJPEGLS_BINARY_DIR}")
-
-SET(GDCMJPEGLS_SRCS
+SET(JPEGLS_SRCS
   global.c 
   jpegmark.c 
   initialize.c 
@@ -14,16 +12,16 @@ SET(GDCMJPEGLS_SRCS
 
 # Do the -fno-common magic
 IF(APPLE)
-  FOREACH(f ${GDCMJPEGLS_SRCS})
+  FOREACH(f ${JPEGLS_SRCS})
     SET_SOURCE_FILES_PROPERTIES(
-      "${GDCMJPEGLS_SOURCE_DIR}/Decoder/${f}"
+      "${JPEGLS_SOURCE_DIR}/Decoder/${f}"
       PROPERTIES COMPILE_FLAGS -fno-common)
   ENDFOREACH(f)
 ENDIF(APPLE)
 
 
-ADD_LIBRARY(gdcmjpegls ${GDCMJPEGLS_SRCS})
-#ADD_EXECUTABLE(locod ${GDCMJPEGLS_SRCS})
+ADD_LIBRARY(jpegls ${JPEGLS_SRCS})
+#ADD_EXECUTABLE(locod ${JPEGLS_SRCS})
 
 # TODO must do the INSTALL_ blah thing
-INSTALL_TARGETS(/lib/gdcm/ gdcmjpegls)
+INSTALL_TARGETS(/lib/ jpegls)
