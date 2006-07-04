@@ -3,8 +3,49 @@
 #include "gdcmOStream.h"
 #include "gdcmIStream.h"
 
+extern "C" {
+  #include <openjpeg.h>
+
+/**
+sample error callback expecting a FILE* client object
+*/
+void error_callback(const char *msg, void *) {
+  std::cerr << "Error in gdcmopenjpeg" << msg << std::endl;
+}
+/**
+sample warning callback expecting a FILE* client object
+*/
+void warning_callback(const char *msg, void *) {
+  std::cerr << "Warning in gdcmopenjpeg" << msg << std::endl;
+}
+/**
+sample debug callback expecting no client object
+*/
+void info_callback(const char *msg, void *) {
+  std::cerr << "Info in gdcmopenjpeg" << msg << std::endl;
+}
+}
+
 namespace gdcm
 {
+
+#define J2K_CFMT 0
+#define JP2_CFMT 1
+#define JPT_CFMT 2
+#define MJ2_CFMT 3
+#define PXM_DFMT 0
+#define PGX_DFMT 1
+#define BMP_DFMT 2
+#define YUV_DFMT 3
+
+/*
+ * Divide an integer by a power of 2 and round upwards.
+ *
+ * a divided by 2^b
+ */
+inline int int_ceildivpow2(int a, int b) {
+  return (a + (1 << b) - 1) >> b;
+}
 
 class JPEG2000Internals
 {
@@ -28,6 +69,118 @@ bool JPEG2000Codec::CanDecode(TS const &ts)
 
 bool JPEG2000Codec::Decode(IStream &is, OStream &os)
 {
+  opj_dparameters_t parameters;  /* decompression parameters */
+  opj_event_mgr_t event_mgr;    /* event manager */
+  opj_image_t *image;
+  opj_dinfo_t* dinfo;  /* handle to a decompressor */
+  opj_cio_t *cio;
+  // FIXME: Do some stupid work:
+  is.Seekg( 0, std::ios::end);
+  std::streampos buf_size = is.Tellg();
+  char *dummy_buffer = new char[buf_size];
+  is.Seekg(0, std::ios::beg);
+  is.Read( dummy_buffer, buf_size);
+  unsigned char *src = (unsigned char*)dummy_buffer;
+  int file_length = buf_size;
+  char *raw = NULL;
+
+  /* configure the event callbacks (not required) */
+  memset(&event_mgr, 0, sizeof(opj_event_mgr_t));
+  event_mgr.error_handler = error_callback;
+  event_mgr.warning_handler = warning_callback;
+  event_mgr.info_handler = info_callback;
+
+  /* set decoding parameters to default values */
+  opj_set_default_decoder_parameters(&parameters);
+ 
+   // default blindly copied
+   parameters.cp_layer=0;
+   parameters.cp_reduce=0;
+//   parameters.decod_format=-1;
+//   parameters.cod_format=-1;
+
+      /* JPEG-2000 codestream */
+    parameters.decod_format = J2K_CFMT;
+    assert(parameters.decod_format == J2K_CFMT);
+  parameters.cod_format = PGX_DFMT;
+  assert(parameters.cod_format == PGX_DFMT);
+
+      /* get a decoder handle */
+      dinfo = opj_create_decompress(CODEC_J2K);
+      
+      /* catch events using our callbacks and give a local context */
+      opj_set_event_mgr((opj_common_ptr)dinfo, &event_mgr, NULL);      
+
+      /* setup the decoder decoding parameters using user parameters */
+      opj_setup_decoder(dinfo, &parameters);
+
+      /* open a byte stream */
+      cio = opj_cio_open((opj_common_ptr)dinfo, src, file_length);
+
+      /* decode the stream and fill the image structure */
+      image = opj_decode(dinfo, cio);
+      if(!image) {
+        opj_destroy_decompress(dinfo);
+        opj_cio_close(cio);
+        return 1;
+      }
+      
+      /* close the byte stream */
+      opj_cio_close(cio);
+
+  /* free the memory containing the code-stream */
+  delete[] src;  //FIXME
+
+   // Copy buffer
+   for (int compno = 0; compno < image->numcomps; compno++)
+   {
+      opj_image_comp_t *comp = &image->comps[compno];
+  
+      int w = image->comps[compno].w;
+      int wr = int_ceildivpow2(image->comps[compno].w, image->comps[compno].factor);
+  
+      //int h = image.comps[compno].h;
+      int hr = int_ceildivpow2(image->comps[compno].h, image->comps[compno].factor);
+  
+      if (comp->prec <= 8)
+      {
+         uint8_t *data8 = (uint8_t*)raw;
+         for (int i = 0; i < wr * hr; i++) 
+         {
+            int v = image->comps[compno].data[i / wr * w + i % wr];
+            *data8++ = (uint8_t)v;
+         }
+      }
+      else if (comp->prec <= 16)
+      {
+         uint16_t *data16 = (uint16_t*)raw;
+         for (int i = 0; i < wr * hr; i++) 
+         {
+            int v = image->comps[compno].data[i / wr * w + i % wr];
+            *data16++ = (uint16_t)v;
+         }
+      }
+      else
+      {
+         uint32_t *data32 = (uint32_t*)raw;
+         for (int i = 0; i < wr * hr; i++) 
+         {
+            int v = image->comps[compno].data[i / wr * w + i % wr];
+            *data32++ = (uint32_t)v;
+         }
+      }
+      //free(image.comps[compno].data);
+   }
+ 
+
+  /* free remaining structures */
+  if(dinfo) {
+    opj_destroy_decompress(dinfo);
+  }
+
+  /* free image data structure */
+  opj_image_destroy(image);
+
   return true;
 }
 

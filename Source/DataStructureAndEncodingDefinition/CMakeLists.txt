@@ -15,6 +15,7 @@ SET(DSED_SRCS
   gdcmImageReader.cxx
   gdcmImageValue.cxx
   gdcmJPEGCodec.cxx
+  gdcmJPEG2000Codec.cxx
   gdcmRAWCodec.cxx
   gdcmRLECodec.cxx
   gdcmImageConverter.cxx
@@ -26,9 +27,11 @@ INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_BINARY_DIR}/Utilities/jpeg/8"
   "${GDCM_SOURCE_DIR}/Utilities/jpeg"
+  "${GDCM_SOURCE_DIR}/Utilities/openjpeg/libopenjpeg"
+  "${GDCM_BINARY_DIR}/Utilities/openjpeg"
   )
 
 ADD_LIBRARY(gdcmDSED ${DSED_SRCS})
 TARGET_LINK_LIBRARIES(gdcmDSED gdcmCommon
-  gdcmjpeg8 gdcmjpeg12 gdcmjpeg16)
+  gdcmjpeg8 gdcmjpeg12 gdcmjpeg16 gdcmopenjpeg)
 

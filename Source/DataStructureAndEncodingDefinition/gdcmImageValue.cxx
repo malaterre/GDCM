@@ -5,6 +5,7 @@
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmRAWCodec.h"
 #include "gdcmJPEGCodec.h"
+#include "gdcmJPEG2000Codec.h"
 #include "gdcmRLECodec.h"
 #include "gdcmStringStream.h"
 
@@ -50,6 +51,16 @@ bool ImageValue::GetBuffer(char *buffer) const
     if( GetCompressionType() == Compression::JPEG )
       {
       JPEGCodec codec;
+      StringStream is;
+      is.Write(buffer, len);
+      StringStream os;
+      bool r = codec.Decode(is, os);
+      memcpy(buffer, os.Str().c_str(), len);
+      return r;
+      }
+    else if ( GetCompressionType() == Compression::JPEG2000 )
+      {
+      JPEG2000Codec codec;
       StringStream is;
       is.Write(buffer, len);
       StringStream os;
