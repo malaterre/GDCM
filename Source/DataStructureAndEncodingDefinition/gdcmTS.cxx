@@ -169,7 +169,8 @@ bool TS::IsRAW(const TSType &ts)
 {
   if( ts == TS::ImplicitVRLittleEndian
    || ts == TS::ExplicitVRLittleEndian
-   || ts == TS::ExplicitVRBigEndian )
+   || ts == TS::ExplicitVRBigEndian
+   || ts == TS::ImplicitVRBigEndianPrivateGE )
     {
     return true;
     }

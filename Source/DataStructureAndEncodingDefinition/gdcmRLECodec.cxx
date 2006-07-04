@@ -109,7 +109,7 @@ bool RLECodec::Decode(IStream &is, OStream &os)
       {
       char byte;
       unsigned long numOutBytes = 0;
-      std::cerr << "Length: " << Length << "\n";
+      //std::cerr << "Length: " << Length << "\n";
       while( numOutBytes < Length)
         {
         //std::cerr << "numOutBytes: " << numOutBytes << "\n";
@@ -137,7 +137,7 @@ bool RLECodec::Decode(IStream &is, OStream &os)
           assert( byte == -128 );
           }
         }
-      std::cerr << "numOutBytes:" << numOutBytes << "\n";
+      //std::cerr << "numOutBytes:" << numOutBytes << "\n";
       }
 
   return true;
