@@ -5,6 +5,7 @@
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmRAWCodec.h"
 #include "gdcmJPEGCodec.h"
+#include "gdcmRLECodec.h"
 #include "gdcmStringStream.h"
 
 namespace gdcm
@@ -46,13 +47,32 @@ bool ImageValue::GetBuffer(char *buffer) const
     f.write(buffer, totalLen);
     f.close();
 #endif
-    JPEGCodec codec;
-    StringStream is;
-    is.Write(buffer, len);
-    StringStream os;
-    bool r = codec.Decode(is, os);
-    memcpy(buffer, os.Str().c_str(), len);
-    return r;
+    if( GetCompressionType() == Compression::JPEG )
+      {
+      JPEGCodec codec;
+      StringStream is;
+      is.Write(buffer, len);
+      StringStream os;
+      bool r = codec.Decode(is, os);
+      memcpy(buffer, os.Str().c_str(), len);
+      return r;
+      }
+    else if ( GetCompressionType() == Compression::RLE )
+      {
+      RLECodec codec;
+      unsigned long rle_len = sf->ComputeLength();
+      codec.SetLength( rle_len );
+      StringStream is;
+      is.Write(buffer, rle_len);
+      StringStream os;
+      bool r = codec.Decode(is, os);
+      memcpy(buffer, os.Str().c_str(), len);
+      return r;
+      }
+    else
+      {
+      abort();
+      }
     }
 
   buffer = 0;

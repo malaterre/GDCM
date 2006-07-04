@@ -15,8 +15,13 @@ public:
   bool CanDecode(TS const &ts);
   bool Decode(IStream &is, OStream &os);
 
+  void SetLength(unsigned long l)
+    {
+    Length = l;
+    }
 private:
   RLEInternals *Internals;
+  unsigned long Length;
 };
 
 } // end namespace gdcm

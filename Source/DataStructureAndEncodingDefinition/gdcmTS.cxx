@@ -168,6 +168,7 @@ bool TS::IsJPEG(const TSType &ts)
 bool TS::IsRAW(const TSType &ts)
 {
   if( ts == TS::ImplicitVRLittleEndian
+   || ts == TS::ExplicitVRLittleEndian
    || ts == TS::ExplicitVRBigEndian )
     {
     return true;
