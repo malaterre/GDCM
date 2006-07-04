@@ -1,10 +1,18 @@
 # Wrapping and stuff
 
 SUBDIRS(Wrapping)
-# Do jpeg (8,12, 16 lossly lossless)
+# Do jpeg (8,12, 16 lossly lossless). From ijg
 SET(JPEG_NAMESPACE "GDCMJPEG")
 SUBDIRS(jpeg)
 
 # Do expat
 SET(EXPAT_NAMESPACE "GDCMEXPAT")
 SUBDIRS(expat)
+
+# Do openjpeg (jpeg2000 implementation)
+SET(OPENJPEG_NAMESPACE "GDCMOPENJPEG")
+SUBDIRS(openjpeg)
+
+# Do jpegls (JPEG-LS aka near lossless implementation)
+SET(JPEGLS_NAMESPACE "GDCMJPEGLS")
+SUBDIRS(jpegls)
