@@ -54,6 +54,7 @@ static const char *TSStrings[] = {
 };
 
 static const char *MSStrings[] = {
+  "1.2.840.10008.1.3.10",
   "1.2.840.10008.5.1.4.1.1.1",    
   "1.2.840.10008.5.1.4.1.1.1.1",  
   "1.2.840.10008.5.1.4.1.1.1.1.1",
@@ -254,6 +255,10 @@ bool TS::IsImage(const MSType &ms)
     return false;
     }
   if ( ms == HemodynamicWaveformStorage )
+    {
+    return false;
+    }
+  if ( ms == MediaStorageDirectoryStorage )
     {
     return false;
     }

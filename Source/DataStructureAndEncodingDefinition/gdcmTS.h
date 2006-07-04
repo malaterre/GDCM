@@ -63,7 +63,8 @@ public:
 
 
   typedef enum {
-    ComputedRadiographyImageStorage = 0,
+    MediaStorageDirectoryStorage = 0,
+    ComputedRadiographyImageStorage,
     DigitalXRayImageStorageForPresentation,
     DigitalXRayImageStorageForProcessing,
     DigitalMammographyImageStorageForPresentation,

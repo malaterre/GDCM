@@ -138,7 +138,21 @@ bool ImageReader::Read()
         // god damit I don't know what to do...
         gdcmWarningMacro( "Attempting to read this file as a DICOM file"
           "\nDesperate attempt" );
-        res = ReadImage();
+        const Tag tpixeldata(0x7fe0, 0x0010);
+        if( GetDataSet().FindDataElement( tpixeldata) )
+          {
+          // gdcm-CR-DCMTK-16-NonSamplePerPix.dcm
+          // Someone defined the Transfer Syntax but I have no clue what
+          // it is. Since there is Pixel Data element, let's try to read
+          // that as a buggy DICOM Image file...
+          res = ReadImage();
+          }
+        else
+          {
+          // Giving up
+          abort();
+          res = false;
+          }
         }
       }
     }
