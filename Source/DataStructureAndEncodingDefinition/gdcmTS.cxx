@@ -163,7 +163,7 @@ bool TS::IsJPEG(const TSType &ts)
     return false;
   if( strncmp(s, jpeg, strlen(jpeg)) == 0)
     {
-    assert( !IsJPEG2000(ts) );
+    //assert( !IsJPEG2000(ts) );
     return true;
     }
   return false;
