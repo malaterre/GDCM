@@ -6,7 +6,7 @@
 
 namespace gdcm
 {
-  
+
 class Codec : public Coder, public Decoder
 {
 };

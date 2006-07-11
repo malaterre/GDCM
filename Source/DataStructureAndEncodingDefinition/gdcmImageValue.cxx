@@ -40,6 +40,7 @@ bool ImageValue::GetBuffer(char *buffer) const
     {
     // Fragments...
     const SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(p);
+    assert( sf );
     sf->GetBuffer(buffer, len);
 //#define MDEBUG
 #ifdef MDEBUG

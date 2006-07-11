@@ -3,6 +3,8 @@
 #include "gdcmTag.h"
 #include "gdcmStringStream.h"
 
+#include <fstream>
+
 inline void DebugElement(std::stringstream const &os)
 {
   std::ofstream of("/tmp/bla.bin", std::ios::binary);

@@ -4,6 +4,7 @@
 
 #include "gdcmValue.h"
 #include "gdcmTrace.h"
+#include "gdcmVL.h"
 
 #include <vector>
 #include <iterator>
@@ -18,15 +19,15 @@ class GDCM_EXPORT ByteValue : public Value
 {
 public:
   ByteValue(const char* array = 0, VL const &vl = 0):
-    Internal(array, array+vl),Length(vl) { 
+    Internal(array, array+vl),Length(vl) {
       if( vl.IsOdd() )
         {
         gdcmWarningMacro( "Odd length" );
         Internal.resize(vl+1);
         }
   }
-  ~ByteValue() { 
-    Internal.clear(); 
+  ~ByteValue() {
+    Internal.clear();
   }
 
   // When 'dumping' dicom file we still have some information from
@@ -45,8 +46,7 @@ public:
   // Does a reallocation
   void SetLength(const VL& vl) {
     VL l(vl);
-    if ( l.IsOdd() )
-      {
+    if ( l.IsOdd() ) {
       gdcmWarningMacro(
         "BUGGY HEADER: Your dicom contain odd length value field." );
       ++l;
@@ -56,14 +56,12 @@ public:
     Length = vl;
   }
 
-  ByteValue &operator=(const ByteValue &val)
-    {
+  ByteValue &operator=(const ByteValue &val) {
     Internal = val.Internal;
     return *this;
     }
 
-  bool operator==(const ByteValue &val) const
-    {
+  bool operator==(const ByteValue &val) const {
     if( Length != val.Length )
       return false;
     if( Internal == val.Internal )
@@ -75,24 +73,25 @@ public:
     Internal.clear();
   }
   // Use that only if you understand what you are doing
-  const char *GetPointer() const { 
+  const char *GetPointer() const {
     return &Internal[0];
   }
-  bool GetBuffer(char *buffer, unsigned long length) const
-    {
+  bool GetBuffer(char *buffer, unsigned long length) const {
     // SIEMENS_GBS_III-16-ACR_NEMA_1.acr has a weird pixel length
     // so we need an inequality
-    assert( length <= Internal.size() );
-    memcpy(buffer, &Internal[0], length);
-    return true;
+    if( length <= Internal.size() )
+      {
+      memcpy(buffer, &Internal[0], length);
+      return true;
+      }
+    abort();
+    return false;
     }
 
-  IStream &Read(IStream &is)
-    {
+  IStream &Read(IStream &is) {
     return is.Read(&Internal[0], Length);
     }
-  OStream const &Write(OStream &os) const
-    {
+  OStream const &Write(OStream &os) const {
     return os.Write(&Internal[0], Length);
     }
 
@@ -103,8 +102,7 @@ protected:
    *         I dont think this function is working since it does not handle
    *         UNICODE or character set...
    */
-  bool IsPrintable() const
-    {
+  bool IsPrintable() const {
     for(unsigned int i=0; i<Length; i++)
       {
       if ( i == (Length-1) && Internal[i] == '\0') continue;
@@ -141,7 +139,7 @@ protected:
 private:
   std::vector<char> Internal;
 
-  // WARNING Length IS NOT Internal.size() some featured DICOM 
+  // WARNING Length IS NOT Internal.size() some *featured* DICOM
   // implementation define odd length, we always load them as even number
   // of byte, so we need to keep the right Length
   VL Length;

@@ -6,7 +6,7 @@
 
 namespace gdcm
 {
-  
+
 class TS;
 class IStream;
 class OStream;

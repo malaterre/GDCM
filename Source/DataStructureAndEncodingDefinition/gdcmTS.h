@@ -109,7 +109,7 @@ public:
     MS_END
   } MSType; // Media Storage Type
 
-  // Return the string as written in the official DICOM dict from 
+  // Return the string as written in the official DICOM dict from
   // a custom enum type
   static const char* GetTSString(const TSType &ts);
   static const char* GetMSString(const MSType &ts);

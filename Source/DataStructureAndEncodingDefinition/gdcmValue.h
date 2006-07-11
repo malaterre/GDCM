@@ -3,10 +3,6 @@
 #define __gdcmValue_h
 
 #include "gdcmObject.h"
-#include "gdcmSwapCode.h"
-#include "gdcmVL.h"
-
-#include <fstream>
 
 namespace gdcm
 {
@@ -16,6 +12,9 @@ namespace gdcm
  * VALUE: A component of a Value Field. A Value Field may consist of one
  * or more of these components.
  */
+class VL;
+class IStream;
+class OStream;
 class GDCM_EXPORT Value : public Object
 {
 public:

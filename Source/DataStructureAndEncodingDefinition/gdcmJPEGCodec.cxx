@@ -3,8 +3,7 @@
 #include "gdcmOStream.h"
 #include "gdcmIStream.h"
 
-extern "C"
-{
+extern "C" {
 #include "jpeglib.h"
 }
 
