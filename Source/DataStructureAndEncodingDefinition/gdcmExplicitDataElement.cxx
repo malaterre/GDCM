@@ -82,7 +82,7 @@ IStream &ExplicitDataElement::Read(IStream &is)
     {
     // Check wether or not this is an undefined length sequence
     assert( TagField != Tag(0x7fe0,0x0010) );
-    ValueField = new SequenceOfItems;
+    ValueField = new SequenceOfItems(TS::Explicit);
     }
   else if( ValueLengthField.IsUndefined() )
     {

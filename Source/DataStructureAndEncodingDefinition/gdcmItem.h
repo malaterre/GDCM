@@ -26,11 +26,13 @@ namespace gdcm
 class GDCM_EXPORT Item : public DataElement
 {
 public:
-  Item(const Tag& t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl), NestedDataSet(TS::Explicit) {}
+  Item(TS::NegociatedType const &type, const Tag& t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl), NestedDataSet(0) { 
+    NestedDataSet = new DataSet(type);
+  }
   friend std::ostream& operator<<(std::ostream &os, const Item&val);
 
   void Clear() {
-    NestedDataSet.Clear();
+    NestedDataSet->Clear();
     }
 
   virtual VL GetLength() const {
@@ -39,7 +41,7 @@ public:
   }
 
   void InsertDataElement(const DataElement& de) {
-    NestedDataSet.InsertDataElement(de);
+    NestedDataSet->InsertDataElement(de);
     // Update the length
     if( !IsUndefinedLength() )
       {
@@ -48,19 +50,19 @@ public:
     }
   const DataElement& GetDataElement(const Tag& t) const
     {
-    return NestedDataSet.GetDataElement(t);
+    return NestedDataSet->GetDataElement(t);
     }
 
   // Completely defines it with the nested dataset
   // destroy anything present
   void SetNestedDataSet(const DataSet& nested)
     {
-    NestedDataSet = nested;
+    NestedDataSet = &nested;
     }
   // Return a const ref to the Nested Data Set
   const DataSet& GetNestedDataSet() const
     {
-    return NestedDataSet;
+    return *NestedDataSet;
     }
 
   IStream &Read(IStream &is) {
@@ -76,7 +78,7 @@ public:
       return is;
       }
     // Self
-    NestedDataSet.SetLength( ValueLengthField );
+    NestedDataSet->SetLength( ValueLengthField );
     // BUG: This test is required because DataSet::Read with a Length
     // of 0 is actually thinking it is reading a root DataSet
     // so we need to make sure not to call NestedDataSet.Read here
@@ -91,29 +93,35 @@ public:
       }
     else
       {
-      NestedDataSet.Read(is);
+      NestedDataSet->Read(is);
       }
     return is;
     }
 
   OStream &Write(OStream &os) const {
-    return NestedDataSet.Write(os);
+    return NestedDataSet->Write(os);
     }
 
-  Value const & GetValue() const { return NestedDataSet; }
+  Value const & GetValue() const { return *NestedDataSet; }
+
+  Item(Item const &val):DataElement(val)
+    {
+    NestedDataSet = val.NestedDataSet;
+    }
 
 private:
   /* NESTED DATA SET  a Data Set contained within a Data Element of an other Data Set.
    * May be nested recursively.
    * Only Data Elements with VR = SQ  may, themselves, contain Data Sets
    */
-  DataSet NestedDataSet;
+  typedef SmartPointer<DataSet> DataSetPtr;
+  DataSetPtr NestedDataSet;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& os, const Item &val)
 {
   os << "Item Length=" << val.ValueLengthField << std::endl;
-  os << val.NestedDataSet;
+  val.NestedDataSet->Print( os << "\t" );
   // GDCM is NOT storing this value, we need to explicitely print it:
   // and incidently make sure to write it
   if( val.ValueLengthField.IsUndefined() )
@@ -122,6 +130,7 @@ inline std::ostream& operator<<(std::ostream& os, const Item &val)
     const ImplicitDataElement ide(itemDelItem);
     os << ide;
     }
+  os << "End of Item" << std::endl;
 
   return os;
 }

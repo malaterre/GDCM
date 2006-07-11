@@ -29,7 +29,7 @@ public:
   typedef std::vector<Item> ItemVector;
 
 /// \brief constructor (UndefinedLength by default)
-  SequenceOfItems(VL const &vl = 0xFFFFFFFF):SequenceLengthField(vl) { }
+  SequenceOfItems(TS::NegociatedType const &type, VL const &vl = 0xFFFFFFFF):SequenceLengthField(vl),NType(type) { }
 
   /// \brief Returns the SQ length, as read from disk
   const VL &GetLength() const { return SequenceLengthField; }
@@ -47,7 +47,7 @@ public:
 
 protected:
   void Print(std::ostream &os) const {
-    os << "SQ L= " << SequenceLengthField << "\n";
+    os << "\n\tSQ L= " << SequenceLengthField << "\n";
     ItemVector::const_iterator it =
       Items.begin();
     for(;it != Items.end(); ++it)
@@ -61,8 +61,10 @@ private:
   VL SequenceLengthField;
   /// \brief Vector of Sequence Items
   ItemVector Items;
+  TS::NegociatedType NType;
 };
 
 } // end namespace gdcm
 
 #endif //__gdcmSequenceOfItems_h
+

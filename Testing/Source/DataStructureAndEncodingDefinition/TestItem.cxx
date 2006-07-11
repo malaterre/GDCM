@@ -25,11 +25,11 @@ void CreateDataElement(gdcm::ExplicitDataElement &de, int offset)
 
 int TestItem(int , char *[])
 {
-  gdcm::Item item;
+  gdcm::Item item(gdcm::TS::Explicit);
   std::cout << item << std::endl;
 
-  gdcm::Item it1;
-  gdcm::Item it2;
+  gdcm::Item it1(gdcm::TS::Explicit);
+  gdcm::Item it2(gdcm::TS::Explicit);
 
   gdcm::DataSet ds;
   gdcm::ExplicitDataElement xde;

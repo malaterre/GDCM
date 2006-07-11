@@ -22,6 +22,10 @@ IStream &ImplicitDataElement::Read(IStream &is)
     //assert(0 && "Should not happen");
     return is;
     }
+    if( TagField == Tag(0x2005,0x1084) )
+      {
+      std::cerr << "coucou" << std::endl;
+      }
   // Read Value Length
   if( !ValueLengthField.Read(is) )
     {
@@ -33,7 +37,7 @@ IStream &ImplicitDataElement::Read(IStream &is)
     //assert( de.GetVR() == VR::SQ );
     // FIXME what if I am reading the pixel data...
     assert( TagField != Tag(0x7fe0,0x0010) );
-    ValueField = new SequenceOfItems;
+    ValueField = new SequenceOfItems(TS::Implicit);
     }
   else
     {
@@ -50,8 +54,7 @@ IStream &ImplicitDataElement::Read(IStream &is)
       is.Seekg(-4, std::ios::cur );
       if( item == itemStart )
         {
-        ValueField = new ByteValue;
-        //ValueField = new SequenceOfItems;
+        ValueField = new SequenceOfItems(TS::Implicit);
         }
       else
         {

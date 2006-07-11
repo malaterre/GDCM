@@ -29,7 +29,7 @@ int TestValue(int , char *[])
 {
   int r = 0;
   gdcm::Value *v;
-  gdcm::SequenceOfItems si;
+  gdcm::SequenceOfItems si(gdcm::TS::Explicit);
   gdcm::ByteValue bv;
   v = &si;
   v = &bv;

@@ -11,7 +11,7 @@ IStream &SequenceOfItems::Read(IStream &is)
 //    }
   if( SequenceLengthField.IsUndefined() )
     {
-    Item item;
+    Item item(NType);
     const Tag seqDelItem(0xfffe,0xe0dd);
     do
       {
@@ -23,9 +23,9 @@ IStream &SequenceOfItems::Read(IStream &is)
     }
   else
     {
-    Item item;
+    Item item(NType);
     VL l = 0;
-      //std::cout << "Length: " << l << std::endl;
+    //std::cout << "Length: " << l << std::endl;
     while( l != SequenceLengthField )
       {
       item.Read(is);

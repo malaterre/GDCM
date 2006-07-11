@@ -42,6 +42,8 @@ public:
   }
 
   void Print(std::ostream &os) const {
+    int s = DES.size();
+    assert( s );
     std::copy(DES.begin(), DES.end(), 
       std::ostream_iterator<DEType>(os, "\n"));
   }
