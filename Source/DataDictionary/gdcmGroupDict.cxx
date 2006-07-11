@@ -21,7 +21,7 @@ void GroupDict::Add(std::string const &abbreviation, std::string const &name)
   Names.push_back(name);
 }
 
-void GroupDict::Insert(uint16_t num, std::string const &abbreviation, 
+void GroupDict::Insert(uint16_t num, std::string const &abbreviation,
   std::string const &name)
 {
   Abbreviations.resize(num+1);
