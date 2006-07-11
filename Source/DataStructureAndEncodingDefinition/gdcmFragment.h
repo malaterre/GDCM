@@ -33,7 +33,7 @@ public:
 
   IStream &Read(IStream &is)
     {
-    // Superclass 
+    // Superclass
     const Tag itemStart(0xfffe, 0xe000);
     const Tag seqDelItem(0xfffe,0xe0dd);
     if( !TagField.Read(is) )

@@ -21,7 +21,7 @@ Trace::~Trace()
 {
   if ( DebugFile.is_open() )
     {
-    DebugFile.close();     
+    DebugFile.close();
     }
 }
 

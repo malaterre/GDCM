@@ -20,6 +20,8 @@ namespace gdcm
  * We need: IsSupported
  * We need preprocess of raw/xml file
  * We need GetFullName()
+ *
+ * Need a notion of Private Syntax. As defined in Ps 3.5. Section 9.2
  */
 class GDCM_EXPORT TS
 {

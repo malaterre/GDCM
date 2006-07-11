@@ -18,11 +18,12 @@ IStream& SequenceOfFragments::Read(IStream &is)
     const Tag seqDelItem(0xfffe,0xe0dd);
     // First item is the basic offset table:
     Table.Read(is);
+    gdcmDebugMacro( "Table: " << frag );
     // not used for now...
     do
       {
       frag.Read(is);
-      //std::cout << "Frag: " << frag << std::endl;
+      gdcmDebugMacro( "Frag: " << frag );
       Fragments.push_back( frag );
       }
     while( frag.GetTag() != seqDelItem );

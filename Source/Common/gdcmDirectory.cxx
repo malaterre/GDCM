@@ -67,14 +67,14 @@ unsigned int Directory::Explore(FilenameType const &name, bool recursive)
     }
   DWORD dwError = GetLastError();
   if (hFile != INVALID_HANDLE_VALUE) FindClose(hFile);
-  if (dwError != ERROR_NO_MORE_FILES) 
+  if (dwError != ERROR_NO_MORE_FILES)
     {
     //gdcmErrorMacro("FindNextFile error. Error is " << dwError);
     return 0;
     }
 
 #else
-  // Real POSIX implementation: scandir is a BSD extension only, and doesn't 
+  // Real POSIX implementation: scandir is a BSD extension only, and doesn't
   // work on debian for example
 
   DIR* dir = opendir(dirName.c_str());

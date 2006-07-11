@@ -14,8 +14,8 @@ Reader::~Reader()
 
 /// \brief tells us if "DICM" is found as position 128
 ///        (i.e. the file is a 'true dicom' one)
-/// If not found then seek back at beginning of file (could be malinkroft
-/// or old ACRNEMA with no preamble
+/// If not found then seek back at beginning of file (could be Mallinckrodt
+/// or old ACRNEMA with no preamble)
 /// \precondition we are at the beginning of file
 /// \postcondition we are at the beginning of the DataSet or
 /// Meta Information Header
