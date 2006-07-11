@@ -7,6 +7,37 @@ FILE(GLOB GDCM_DATA_IMAGES_GLOB
   "${GDCM_DATA_ROOT}/*.acr"
   "${GDCM_DATA_ROOT}/*.dcm"
   )
+# Intersting images:
+# Implicit with defined length SQ:
+#  MR_SIEMENS_forceLoad29-1010_29-1020.dcm # 0008,1140
+#  MR_forceLoad29-1010_29-1020.dcm
+#  eclipse_dose.dcm # 300c,0002
+#  GE_DLX-8-MONO2-PrivateSyntax.dcm # 0028,6100; (0050,0010)
+#  PET-cardio-Multiframe-Papyrus.dcm # (0041,1010); (0041,1050)
+#  gdcm-US-ALOKA-16.dcm #(0018,6011)
+#  spine.dcm # (0008,1140)
+#  gdcm-CT-GE-16-GantryTilt.dcm #(0008,1140)
+#  abdominal.dcm # (0008,1140)
+#  MR_Philips_Intera_Kosher.dcm #(0008,1111) , (0008,1140)
+#  #Tag: (0008,1111) is a defined length SQ of 248
+#  #Tag: (0008,1140) is a defined length SQ of 408
+#  #Tag: (0029,200f) is a defined length SQ of 244
+#  #Tag: (0029,201b) is a defined length SQ of 216
+#  #Tag: (0029,2021) is a defined length SQ of 114
+#  #Tag: (0029,204c) is a defined length SQ of 140
+#  #Tag: (2001,105f) is a defined length SQ of 338
+#  #Tag: (2005,1080) is a defined length SQ of 778
+#  #Tag: (2005,1084) is a defined length SQ of 172
+#  MR_Philips_Intera_No_PrivateSequenceImplicitVR.dcm
+#  eclipse_plan.dcm
+#  # Tag: (0008,1140) is a defined length SQ of 324
+#  # Tag: (2001,fc5f) is a defined length SQ of 322
+#  # Tag: (2005,fb80) is a defined length SQ of 444
+#  brain.dcm
+#  SYNGORTImage.dcm
+#  GE_DLX-8-MONO2-Multiframe.dcm
+#  PrivateGEImplicitVRBigEndianTransferSyntax16Bits.dcm
+
 SET(BLACK_LIST
   "dummy.dcm"
   "diazpost.dcm" # This one is nasty
