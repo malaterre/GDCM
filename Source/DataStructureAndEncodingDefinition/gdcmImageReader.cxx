@@ -426,12 +426,18 @@ bool ImageReader::ReadACRNEMAImage()
       PixelData.SetDimensions(0, dims[1] );
       PixelData.SetDimensions(1, tmp );
       }
+    else
+      {
+      assert( libido_str == "ACR-NEMA 2.0"
+           || libido_str == "ACR-NEMA 1.0" );
+      }
     }
   else
     {
     gdcmWarningMacro(
       "Reading as ACR NEMA an image which does not look likes ACR NEMA" );
-    abort();
+    // File: acc-max.dcm is it ACR or DICOM ?
+    // abort();
     }
 
   // 3. Pixel Type ?
