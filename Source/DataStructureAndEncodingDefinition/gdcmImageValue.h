@@ -28,7 +28,7 @@ public:
   void SetValue(Value const &v) {
     PixelData = SmartPointer<Value>( const_cast<Value*>(&v) );
   }
-  
+
   // Helper to set Compression based on Transfer Syntax
   // It will find out the compression used and approrpietly call
   // the superclass SetCompressionType

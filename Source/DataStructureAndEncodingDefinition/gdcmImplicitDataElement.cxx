@@ -38,7 +38,26 @@ IStream &ImplicitDataElement::Read(IStream &is)
   else
     {
     //assert( TagField != Tag(0x7fe0,0x0010) );
-    ValueField = new ByteValue;
+    if( ValueLengthField < 8 )
+      {
+      ValueField = new ByteValue;
+      }
+    else
+      {
+      const Tag itemStart(0xfffe, 0xe000);
+      gdcm::Tag item;
+      item.Read(is);
+      is.Seekg(-4, std::ios::cur );
+      if( item == itemStart )
+        {
+        ValueField = new ByteValue;
+        //ValueField = new SequenceOfItems;
+        }
+      else
+        {
+        ValueField = new ByteValue;
+        }
+      }
     }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
   // THE WORST BUG EVER. From GE Workstation
@@ -63,6 +82,17 @@ IStream &ImplicitDataElement::Read(IStream &is)
     assert(0 && "Should not happen");
     return is;
     }
+  //if( !ValueLengthField.IsUndefined() && ValueLengthField >= 8 )
+  //  {
+  //  Value *p = ValueField;
+  //  const ByteValue *bv = dynamic_cast<ByteValue*>(p);
+  //  union { uint16_t group; char bytes[2]; } testSQ;
+  //  bv->GetBuffer( testSQ.bytes, sizeof(testSQ) );
+  //  if( testSQ.group == 0xfffe || testSQ.group == 0xfeff )
+  //    {
+  //    std::cerr << "Tag: " << TagField << " is a defined length SQ of " << ValueLengthField << "\n";
+  //    }
+  //  }
   //Seekg(ida.ValueLengthField, std::ios::cur);
 
   return is;

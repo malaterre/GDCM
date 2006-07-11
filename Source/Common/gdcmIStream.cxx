@@ -24,55 +24,55 @@ IStream &IStream::operator>> (signed char &c)
   c = Rdbuf()->sbumpc();
   return *this;
 }
-  
+
 IStream &IStream::operator>> (unsigned char &c)
 {
   c = Rdbuf()->sbumpc();
   return *this;
 }
-  
+
 IStream &IStream::operator>> (float &f)
 {
   Rdbuf()->sgetn(reinterpret_cast<char*>(&f), sizeof(float));
   return *this;
 }
-  
+
 IStream &IStream::operator>> (double &d)
 {
   Rdbuf()->sgetn(reinterpret_cast<char*>(&d), sizeof(double));
   return *this;
 }
-  
+
 IStream &IStream::operator>> (short &s)
 {
   Rdbuf()->sgetn(reinterpret_cast<char*>(&s), sizeof(short));
   return *this;
 }
-  
+
 IStream &IStream::operator>> (unsigned short &us)
 {
   Rdbuf()->sgetn(reinterpret_cast<char*>(&us), sizeof(unsigned short));
   return *this;
 }
-  
+
 IStream &IStream::operator>> (int &i)
 {
   Rdbuf()->sgetn(reinterpret_cast<char*>(&i), sizeof(int));
   return *this;
 }
-  
+
 IStream &IStream::operator>> (unsigned int &ui)
 {
   Rdbuf()->sgetn(reinterpret_cast<char*>(&ui), sizeof(unsigned int));
   return *this;
 }
-  
+
 IStream &IStream::operator>> (long &l)
 {
   Rdbuf()->sgetn(reinterpret_cast<char*>(&l), sizeof(long));
   return *this;
 }
-  
+
 IStream &IStream::operator>> (unsigned long &ul)
 {
   Rdbuf()->sgetn(reinterpret_cast<char*>(&ul), sizeof(unsigned long));
