@@ -26,7 +26,7 @@ namespace gdcm
  * \brief Class to represent a File Meta Information
  * \note
  * In theory this should only be explicit, but just in case we also handle
- * the implicit case (illegal, but so usual)
+ * the implicit case (illegal)
  */
 class ExplicitDataElement;
 class ImplicitDataElement;
