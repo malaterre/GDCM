@@ -15,10 +15,12 @@
 =========================================================================*/
 #include "gdcmReader.h"
 #include "gdcmWriter.h"
+#include "gdcmFilename.h"
 
-int TestWriter(int, char *[])
+#include "gdcmDataImages.h"
+
+int TestWrite(const char* filename)
 {
-  const char filename[] = GDCM_DATA_ROOT "/test.acr";
   gdcm::Reader reader;
   reader.SetFileName( filename );
   if ( !reader.Read() )
@@ -27,9 +29,14 @@ int TestWriter(int, char *[])
     return 1;
     }
 
+  gdcm::Filename out(filename);
+  std::string tmpdir = "/tmp/debug";
+  std::string outfilename = tmpdir;
+  outfilename += "/";
+  outfilename += out.GetName();
+
   gdcm::Writer writer;
-  const char outfilename[] = "/tmp/debug.dcm";
-  writer.SetFileName( outfilename );
+  writer.SetFileName( outfilename.c_str() );
   writer.SetPreamble( reader.GetPreamble() );
   writer.SetHeader( reader.GetHeader() );
   writer.SetDataSet( reader.GetDataSet() );
@@ -38,6 +45,25 @@ int TestWriter(int, char *[])
     std::cerr << "Failed to write: " << outfilename << std::endl;
     return 1;
     }
-
   return 0;
+}
+
+int TestWriter(int argc, char *argv[])
+{
+  if( argc == 2 )
+    {
+    const char *filename = argv[1];
+    return TestWrite(filename);
+    }
+
+  // else
+  int r = 0, i = 0;
+  const char *filename;
+  while( (filename = gdcmDataImages[i]) )
+    {
+    r += TestWrite( filename );
+    ++i;
+    }
+
+  return r;
 }

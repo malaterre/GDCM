@@ -13,6 +13,7 @@ SET(Common_TEST_SRCS
   TestPixelType
   TestPhotometricInterpretation
   TestCodec
+  TestFilename
   )
 
 # Add the include paths

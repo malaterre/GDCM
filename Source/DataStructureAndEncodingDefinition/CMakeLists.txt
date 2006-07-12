@@ -21,6 +21,7 @@ SET(DSED_SRCS
   gdcmImageConverter.cxx
   gdcmItem.cxx
   gdcmWriter.cxx
+  gdcmFragment.cxx
   )
 
 # Add the include paths
