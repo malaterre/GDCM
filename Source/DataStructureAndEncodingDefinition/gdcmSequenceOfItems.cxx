@@ -44,6 +44,7 @@ IStream &SequenceOfItems::Read(IStream &is)
       l += item.GetLength();
       //assert( !item.GetVL().IsUndefined() );
       assert( l <= SequenceLengthField );
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
       // MR_Philips_Intera_No_PrivateSequenceImplicitVR.dcm
       // (0x2005, 0x1080): for some reason computation of length fails...
       if( SequenceLengthField == 778 && l == 774 )
@@ -60,6 +61,7 @@ IStream &SequenceOfItems::Read(IStream &is)
         gdcmWarningMacro( "PMS: Super bad hack" );
         l = SequenceLengthField;
         }
+#endif
       }
     assert( l == SequenceLengthField );
     }

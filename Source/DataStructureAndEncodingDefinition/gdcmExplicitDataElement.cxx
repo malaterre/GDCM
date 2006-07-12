@@ -34,29 +34,29 @@ IStream &ExplicitDataElement::Read(IStream &is)
     {
     if( !is.Eof() ) // FIXME This should not be needed
       {
-    assert(0 && "Should not happen" );
+      assert(0 && "Should not happen" );
       }
     return is;
     }
-  // Read VR
-    const Tag itemDelItem(0xfffe,0xe00d);
-    if( TagField == itemDelItem )
+  const Tag itemDelItem(0xfffe,0xe00d);
+  if( TagField == itemDelItem )
+    {
+    VL vl;
+    vl.Read(is);
+    if( vl != 0 )
       {
-      VL vl;
-      vl.Read(is);
-      if( vl != 0 )
-        {
-        gdcmWarningMacro( "ouh les cornes / shame on you !" );
-        }
-      return is;
+      gdcmWarningMacro( "Item Delimitation Item has a length different from 0" );
       }
-    if( TagField == Tag(0x00ff, 0x4aa5) )
-      {
+    return is;
+    }
+  if( TagField == Tag(0x00ff, 0x4aa5) )
+    {
     assert(0 && "Should not happen" );
     //  char c;
     //  is.Read(&c, 1);
     //  std::cerr << "Debug: " << c << std::endl;
-      }
+    }
+  // Read VR
   if( !VRField.Read(is) )
     {
     assert(0 && "Should not happen" );
@@ -80,6 +80,7 @@ IStream &ExplicitDataElement::Read(IStream &is)
     // FIXME: Poorly written:
     uint16_t vl16;
     is.Read(vl16);
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     // HACK for SIEMENS Leonardo
     if( vl16 == 0x0006
      && VRField == VR::UL
@@ -89,6 +90,7 @@ IStream &ExplicitDataElement::Read(IStream &is)
         TagField << " in order to read a buggy DICOM file." );
       vl16 = 0x0004;
       }
+#endif
     ValueLengthField = vl16;
     }
   // Read the Value
@@ -106,8 +108,6 @@ IStream &ExplicitDataElement::Read(IStream &is)
     assert( VRField == VR::OB
          || VRField == VR::OW );
     //assert( xda.TagField == pixelData );
-    //SequenceOfItems<ExplicitDataElement> si;
-    //Read(si);
     ValueField = new SequenceOfFragments;
     }
   else

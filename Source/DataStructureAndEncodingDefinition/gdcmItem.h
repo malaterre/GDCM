@@ -18,9 +18,9 @@
 #define __gdcmItem_h
 
 #include "gdcmDataElement.h"
-#include "gdcmImplicitDataElement.h"
 #include "gdcmDataSet.h"
-#include "gdcmSwapCode.h"
+#include "gdcmImplicitDataElement.h"
+#include "gdcmTS.h"
 
 namespace gdcm
 {
@@ -51,19 +51,7 @@ public:
     NestedDataSet->Clear();
     }
 
-  virtual VL GetLength() const {
-    if( ValueLengthField.IsUndefined() )
-      {
-      assert( !NestedDataSet->GetLength().IsUndefined() );
-      return TagField.GetLength() + ValueLengthField.GetLength()
-        + NestedDataSet->GetLength() + 8;
-      }
-    else
-      {
-      return TagField.GetLength() + ValueLengthField.GetLength()
-        + ValueLengthField;
-      }
-  }
+  virtual VL GetLength() const;
 
   void InsertDataElement(const DataElement& de) {
     NestedDataSet->InsertDataElement(de);
@@ -90,44 +78,7 @@ public:
     return *NestedDataSet;
     }
 
-  IStream &Read(IStream &is) {
-    // Superclass
-    if( !TagField.Read(is) )
-      {
-      assert(0 && "Should not happen");
-      return is;
-      }
-    assert ( TagField == Tag(0xfffe, 0xe000)
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-          || TagField == Tag(0x3f3f, 0x3f00)
-//          || TagField == Tag(0xfeff, 0x00e0)
-#endif
-          || TagField == Tag(0xfffe, 0xe0dd) );
-    if( !ValueLengthField.Read(is) )
-      {
-      assert(0 && "Should not happen");
-      return is;
-      }
-    // Self
-    NestedDataSet->SetLength( ValueLengthField );
-    // BUG: This test is required because DataSet::Read with a Length
-    // of 0 is actually thinking it is reading a root DataSet
-    // so we need to make sure not to call NestedDataSet.Read here
-    if( ValueLengthField == 0 )
-      {
-      assert( TagField == Tag( 0xfffe, 0xe0dd)
-           || TagField == Tag( 0xfffe, 0xe000) );
-      if( TagField != Tag( 0xfffe, 0xe0dd) )
-        {
-        gdcmErrorMacro( "SQ: " << TagField << " has a length of 0" );
-        }
-      }
-    else
-      {
-      NestedDataSet->Read(is);
-      }
-    return is;
-    }
+  IStream &Read(IStream &is);
 
   OStream &Write(OStream &os) const {
     return NestedDataSet->Write(os);

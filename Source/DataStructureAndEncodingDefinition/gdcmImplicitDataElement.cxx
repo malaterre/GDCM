@@ -134,18 +134,6 @@ IStream &ImplicitDataElement::Read(IStream &is)
     assert(0 && "Should not happen");
     return is;
     }
-  //if( !ValueLengthField.IsUndefined() && ValueLengthField >= 8 )
-  //  {
-  //  Value *p = ValueField;
-  //  const ByteValue *bv = dynamic_cast<ByteValue*>(p);
-  //  union { uint16_t group; char bytes[2]; } testSQ;
-  //  bv->GetBuffer( testSQ.bytes, sizeof(testSQ) );
-  //  if( testSQ.group == 0xfffe || testSQ.group == 0xfeff )
-  //    {
-  //    std::cerr << "Tag: " << TagField << " is a defined length SQ of " << ValueLengthField << "\n";
-  //    }
-  //  }
-  //Seekg(ida.ValueLengthField, std::ios::cur);
 
   return is;
 }
