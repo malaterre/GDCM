@@ -56,7 +56,6 @@ IStream &ImplicitDataElement::Read(IStream &is)
       }
     else
       {
-      assert( TagField != Tag(0x7fe0,0x0010) );
       // In the following we read 4 more bytes in the Value field
       // to find out if this is a SQ or not
       // there is still work to do to handle the PMS featured SQ
@@ -73,6 +72,7 @@ IStream &ImplicitDataElement::Read(IStream &is)
       is.Seekg(-4, std::ios::cur );
       if( item == itemStart )
         {
+        assert( TagField != Tag(0x7fe0,0x0010) );
         ValueField = new SequenceOfItems(TS::Implicit);
         }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
