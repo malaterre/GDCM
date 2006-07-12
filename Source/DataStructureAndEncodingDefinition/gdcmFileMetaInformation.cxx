@@ -317,6 +317,11 @@ TS::MSType FileMetaInformation::GetMediaStorageType() const
 
 OStream &FileMetaInformation::Write(OStream &os) const
 {
+  if( DS )
+    {
+    DS->Write(os);
+    }
+
   return os;
 }
 

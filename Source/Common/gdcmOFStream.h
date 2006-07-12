@@ -38,8 +38,17 @@ public:
   explicit OFStream(const char *filename);
   ~OFStream();
 
+  operator void * ( ) const { return InternalOStream; }
+  bool operator ! ( ) const { return !InternalOStream; }
+
   void Open(const char *filename);
+  bool IsOpen() { return InternalOStream.is_open(); }
   void Close();
+
+  OStream& Seekp (std::streamoff off, std::ios_base::seekdir dir);
+  std::streampos Tellp ( );
+  OStream& Write(const char *str, std::streamsize n);
+  bool Eof() { return InternalOStream.eof(); }
 
 private:
   std::string FileName;

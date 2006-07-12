@@ -49,5 +49,40 @@ void OFStream::Close()
   InternalOStream.close();
 }
 
+OStream& OFStream::Seekp (std::streamoff off, std::ios_base::seekdir dir)
+{
+  InternalOStream.seekp(off, dir);
+  return *this;
+}
+
+std::streampos OFStream::Tellp ( )
+{
+  return InternalOStream.tellp();
+}
+
+OStream& OFStream::Write(const char *str, std::streamsize n)
+{
+#ifndef NDEBUG
+  bool eof = InternalOStream.eof();
+  bool good = InternalOStream.good();
+  std::streampos start = InternalOStream.tellp ( );
+#endif
+  InternalOStream.write(str, n);
+#ifndef NDEBUG
+  bool eof2 = InternalOStream.eof();
+  bool good2 = InternalOStream.good();
+  std::streampos end = InternalOStream.tellp ( );
+  std::streamsize count = end - start;
+  if( count != n )
+    {
+    assert( good && !good2 );
+    assert( !eof && eof2 );
+    assert( count == 0 );
+    }
+#endif
+
+  return *this;
+}
+
 } // end namespace gdcm
 

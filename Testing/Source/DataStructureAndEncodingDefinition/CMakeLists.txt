@@ -24,6 +24,7 @@ SET(DSED_TEST_SRCS
   TestImageReader
   TestJPEGCodec
   TestRLECodec
+  TestWriter
   )
 
 OPTION(SHARED_PTR "shared_ptr" OFF)

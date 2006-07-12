@@ -20,6 +20,7 @@ SET(DSED_SRCS
   gdcmRLECodec.cxx
   gdcmImageConverter.cxx
   gdcmItem.cxx
+  gdcmWriter.cxx
   )
 
 # Add the include paths

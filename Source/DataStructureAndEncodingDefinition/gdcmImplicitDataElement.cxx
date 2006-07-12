@@ -143,8 +143,23 @@ IStream &ImplicitDataElement::Read(IStream &is)
 const OStream &ImplicitDataElement::Write(OStream &os) const
 {
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
-  assert(0 && "Not Implemented");
-  (void)os;
+  // Write Tag
+  if( !TagField.Write(os) )
+    {
+    assert(0 && "Should not happen");
+    return os;
+    }
+  // Write Value Length
+  if( !ValueLengthField.Write(os) )
+    {
+    assert(0 && "Should not happen");
+    return os;
+    }
+  if( !ValueField->Write(os) )
+    {
+    assert(0 && "Should not happen");
+    return os;
+    }
   return os;
 }
 

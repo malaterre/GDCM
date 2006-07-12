@@ -44,6 +44,7 @@ public:
   virtual IStream &ReadNested(IStream &is) = 0;
   virtual IStream &ReadWithLength(IStream &is, VL const &length) = 0;
   virtual VL GetLength() const = 0;
+  virtual OStream &Write(OStream &os) = 0;
 };
 
 //-----------------------------------------------------------------------------
@@ -74,6 +75,15 @@ public:
       DES.insert( de );
       }
     return is;
+  }
+  OStream &Write(OStream &os) {
+    DEType de;
+    typename DataElementSet::const_iterator it = DES.begin();
+    for( ; it != DES.end(); ++it)
+      {
+      it->Write(os);
+      }
+    return os;
   }
 
   IStream &ReadWithLength(IStream &is, VL const &length) {
@@ -302,6 +312,7 @@ const VL & DataSet::GetLength() const
 //-----------------------------------------------------------------------------
 OStream &DataSet::Write(OStream &os) const
 {
+  Internal->Write(os);
   return os;
 }
 
