@@ -70,12 +70,8 @@ SET(BLACK_LIST
   "Run11"
   "Bug_Philips_ItemTag_3F3F"
 
-  # FIXME "NM-MONO2-16-13x-heart.dcm" has a buggy FileMetaInformation (no 0002,0002)
-  # So I need to check SOP Class UID in DataSet 0008,0016
-
   # TODO
   "MR-MONO2-12-angio-an1.acr" # 12 bits
-  00191113.dcm
   )
 
 SET(GDCM_DATA_IMAGES)

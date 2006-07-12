@@ -37,6 +37,10 @@ IStream &ImplicitDataElement::Read(IStream &is)
     //assert(0 && "Should not happen");
     return is;
     }
+  if( TagField == Tag(0x2005,0x1080) )
+    {
+    std::cout << "copucou" << std::endl;
+    }
   // Read Value Length
   if( !ValueLengthField.Read(is) )
     {
@@ -79,6 +83,8 @@ IStream &ImplicitDataElement::Read(IStream &is)
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
       else if ( item == itemPMSStart )
         {
+        gdcmWarningMacro( "Illegal: Explicit SQ found in a file with TransferSyntax=Implicit"
+          " for tag: " << TagField );
         ValueField = new SequenceOfItems(TS::Explicit);
         SwapCode oldsw = is.GetSwapCode();
         assert( oldsw == SwapCode::LittleEndian );
