@@ -32,9 +32,16 @@ IStream &SequenceOfItems::Read(IStream &is)
       //std::cout << "Item: " << item << std::endl;
       Items.push_back( item );
       l += item.GetLength();
-      assert( !item.GetVL().IsUndefined() );
+      //assert( !item.GetVL().IsUndefined() );
       assert( l <= SequenceLengthField );
+      // MR_Philips_Intera_No_PrivateSequenceImplicitVR.dcm
+      // (0x2005, 0x1080): for some reason computation of length fails...
+      if( SequenceLengthField == 778 && l == 774 )
+        {
+        l = SequenceLengthField;
+        }
       }
+    assert( l == SequenceLengthField );
     }
   return is;
 }

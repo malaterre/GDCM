@@ -22,10 +22,6 @@ IStream &ImplicitDataElement::Read(IStream &is)
     //assert(0 && "Should not happen");
     return is;
     }
-    if( TagField == Tag(0x2005,0x1084) )
-      {
-      std::cerr << "coucou" << std::endl;
-      }
   // Read Value Length
   if( !ValueLengthField.Read(is) )
     {
@@ -48,14 +44,38 @@ IStream &ImplicitDataElement::Read(IStream &is)
       }
     else
       {
+      // In the following we read 4 more bytes in the Value field
+      // to find out if this is a SQ or not
+      // there is still work to do to handle the PMS featured SQ
+      // where item Start is in fact 0xfeff, 0x00e0 ... sigh
       const Tag itemStart(0xfffe, 0xe000);
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+      const Tag itemPMSStart(0xfeff, 0x00e0);
+#endif
       gdcm::Tag item;
       item.Read(is);
+      // Maybe this code can later be rewritten as I believe that seek back
+      // is very slow...
       is.Seekg(-4, std::ios::cur );
       if( item == itemStart )
         {
         ValueField = new SequenceOfItems(TS::Implicit);
         }
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+      else if ( item == itemPMSStart )
+        {
+        ValueField = new SequenceOfItems(TS::Explicit);
+        SwapCode oldsw = is.GetSwapCode();
+        is.SetSwapCode( SwapCode::BigEndian );
+        ValueField->SetLength(ValueLengthField); // perform realloc
+        if( !ValueField->Read(is) )
+          {
+          assert(0 && "Should not happen");
+          }
+        is.SetSwapCode( oldsw );
+        return is;
+        }
+#endif
       else
         {
         ValueField = new ByteValue;

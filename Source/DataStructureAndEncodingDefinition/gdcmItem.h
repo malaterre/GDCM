@@ -36,8 +36,17 @@ public:
     }
 
   virtual VL GetLength() const {
-    assert( !ValueLengthField.IsUndefined() );
-    return TagField.GetLength() + ValueLengthField.GetLength() + ValueLengthField;
+    if( ValueLengthField.IsUndefined() )
+      {
+      assert( !NestedDataSet->GetLength().IsUndefined() );
+      return TagField.GetLength() + ValueLengthField.GetLength()
+        + NestedDataSet->GetLength() + 8;
+      }
+    else
+      {
+      return TagField.GetLength() + ValueLengthField.GetLength()
+        + ValueLengthField;
+      }
   }
 
   void InsertDataElement(const DataElement& de) {
@@ -72,6 +81,8 @@ public:
       assert(0 && "Should not happen");
       return is;
       }
+    assert ( TagField == Tag(0xfffe, 0xe000) 
+          || TagField == Tag(0xfffe, 0xe0dd) );
     if( !ValueLengthField.Read(is) )
       {
       assert(0 && "Should not happen");
@@ -128,7 +139,7 @@ inline std::ostream& operator<<(std::ostream& os, const Item &val)
     {
     const Tag itemDelItem(0xfffe,0xe00d);
     const ImplicitDataElement ide(itemDelItem);
-    os << ide;
+    os << ide << "\n";
     }
   os << "End of Item" << std::endl;
 

@@ -58,7 +58,7 @@ public:
     return NegociatedTS;
   }
 
-  const VL & GetLength() const { return Length; }
+  const VL & GetLength() const;
   void SetLength(VL const & l) { Length = l; }
 
   DataSet &operator = (DataSet const &r);

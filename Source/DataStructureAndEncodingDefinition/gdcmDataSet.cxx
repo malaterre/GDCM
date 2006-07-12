@@ -28,6 +28,7 @@ public:
   virtual IStream &Read(IStream &is) = 0;
   virtual IStream &ReadNested(IStream &is) = 0;
   virtual IStream &ReadWithLength(IStream &is, VL const &length) = 0;
+  virtual VL GetLength() const = 0;
 };
 
 //-----------------------------------------------------------------------------
@@ -42,8 +43,9 @@ public:
   }
 
   void Print(std::ostream &os) const {
-    int s = DES.size();
-    assert( s );
+    // CT_Phillips_JPEG2K_Decompr_Problem.dcm has a SQ of length == 0
+    //int s = DES.size();
+    //assert( s );
     std::copy(DES.begin(), DES.end(), 
       std::ostream_iterator<DEType>(os, "\n"));
   }
@@ -76,12 +78,28 @@ public:
     return is;
   }
 
+  VL GetLength() const {
+    assert( !DES.empty() );
+    VL ll = 0;
+    assert( ll == 0 );
+    typename DataElementSet::const_iterator it = DES.begin();
+    for( ; it != DES.end(); ++it)
+      {
+      assert( !(it->GetLength().IsUndefined()) );
+      VL len = it->GetLength();
+      if ( it->GetTag() != Tag(0xfffe,0xe00d) )
+        {
+        ll += it->GetLength();
+        }
+      }
+    return ll;
+  }
   IStream &ReadNested(IStream &is) {
     DEType de;
     const Tag itemDelItem(0xfffe,0xe00d);
     while( de.GetTag() != itemDelItem && de.Read(is) )
       {
-      //std::cout << de << std::endl;
+      //std::cout << "DEBUG: " << de << std::endl;
       DES.insert( de );
       }
     assert( de.GetTag() == itemDelItem );
@@ -245,6 +263,17 @@ IStream &DataSet::Read(IStream &is)
     Internal->ReadWithLength(is, Length);
     }
   return is;
+}
+
+const VL & DataSet::GetLength() const
+{
+  static VL length = 0;
+  if( Length.IsUndefined() )
+    {
+    length = Internal->GetLength();
+    return length;
+    }
+  return Length;
 }
 
 //-----------------------------------------------------------------------------
