@@ -16,3 +16,7 @@ SUBDIRS(openjpeg)
 # Do jpegls (JPEG-LS aka near lossless implementation)
 SET(JPEGLS_NAMESPACE "GDCMJPEGLS")
 SUBDIRS(jpegls)
+
+# Do md5
+SET(MD5_NAMESPACE "GDCMMD5")
+SUBDIRS(md5)
