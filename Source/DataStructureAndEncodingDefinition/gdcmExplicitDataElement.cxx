@@ -171,10 +171,25 @@ const OStream &ExplicitDataElement::Write(OStream &os) const
     assert( 0 && "Should not happen" );
     return os;
     }
-  if( !ValueLengthField.Write(os) )
+  if( VRField == VR::OB
+   || VRField == VR::OW
+   || VRField == VR::OF
+   || VRField == VR::SQ
+   || VRField == VR::UN )
     {
-    assert( 0 && "Should not happen" );
-    return os;
+    if( !ValueLengthField.Write(os) )
+      {
+      assert( 0 && "Should not happen" );
+      return os;
+      }
+    }
+  else
+    {
+    // 16bits only
+    uint16_t vl16;
+    assert( ValueLengthField <= 0xffff );
+    vl16 = ValueLengthField;
+    os.Write(vl16);
     }
   // We have the length we should be able to write the value
   ValueField->Write(os);

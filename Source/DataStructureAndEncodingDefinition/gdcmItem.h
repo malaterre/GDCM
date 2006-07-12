@@ -80,9 +80,7 @@ public:
 
   IStream &Read(IStream &is);
 
-  OStream &Write(OStream &os) const {
-    return NestedDataSet->Write(os);
-    }
+  OStream &Write(OStream &os) const;
 
   Value const & GetValue() const { return *NestedDataSet; }
 

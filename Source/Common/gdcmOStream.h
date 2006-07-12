@@ -33,23 +33,14 @@ public:
   OStream();
   ~OStream();
 
-//  OStream &operator<< (char &c);
-//  OStream &operator<< (signed char &c);
-//  OStream &operator<< (unsigned char &c);
-//
-//  OStream &operator<< (float &f);
-//  OStream &operator<< (double &d);
-//
-//  OStream &operator<< (short &s);
-//  OStream &operator<< (unsigned short &s);
-//  OStream &operator<< (int &i);
-//  OStream &operator<< (unsigned int &i);
-//  OStream &operator<< (long &l);
-//  OStream &operator<< (unsigned long &l);
-//
-//  OStream &operator<< (const char *str);
+  virtual OStream& Seekp (std::streamoff off, std::ios_base::seekdir dir);
+  virtual std::streampos Tellp ( );
+  //virtual bool operator ! ( ) const;
 
   virtual OStream& Write(const char *str, std::streamsize n);
+  virtual bool Eof();
+
+  OStream &Write(uint16_t const &vl);
 
 private:
   OStream(OStream const &);

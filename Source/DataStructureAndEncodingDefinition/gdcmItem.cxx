@@ -81,5 +81,31 @@ IStream &Item::Read(IStream &is)
   return is;
 }
 
+OStream &Item::Write(OStream &os) const
+{
+  if( !TagField.Write(os) )
+    {
+    assert(0 && "Should not happen");
+    return os;
+    }
+  assert ( TagField != Tag(0xfffe, 0xe000) );
+  if( !ValueLengthField.Write(os) )
+    {
+    assert(0 && "Should not happen");
+    return os;
+    }
+  // Self
+  NestedDataSet->Write(os);
+  //if( ValueLengthField.IsUndefined() )
+  //  {
+  //  const Tag itemDelItem(0xfffe,0xe00d);
+  //  const ImplicitDataElement ide(itemDelItem);
+  //  assert( ide.GetVL() == 0 );
+  //  ide.Write(os);
+  //  }
+
+  return os;
+}
+
 } // end namespace gdcm
 

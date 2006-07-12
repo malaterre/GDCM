@@ -14,6 +14,7 @@
 
 =========================================================================*/
 #include "gdcmOStream.h"
+#include "gdcmByteSwap.txx"
 
 namespace gdcm
 {
@@ -91,6 +92,24 @@ OStream &OStream::operator<< (const char *str)
 }
 #endif
 
+OStream& OStream::Seekp (std::streamoff off, std::ios_base::seekdir dir)
+{
+  abort();
+  return *this;
+}
+
+std::streampos OStream::Tellp ( )
+{
+  abort();
+  return 0;
+}
+  //virtual bool operator ! ( ) const;
+bool OStream::Eof()
+{
+  abort();
+  return true;
+}
+
 OStream& OStream::Write(const char *str, std::streamsize n)
 {
 //  try
@@ -101,6 +120,18 @@ OStream& OStream::Write(const char *str, std::streamsize n)
 //    {
 //    abort();
 //    }
+  return *this;
+}
+
+OStream &OStream::Write(uint16_t const &vl)
+{
+  union { uint16_t vl; char vl_str[2]; } uvl;
+  uvl.vl = vl;
+  ByteSwap<uint16_t>::SwapFromSwapCodeIntoSystem(uvl.vl,
+    GetSwapCode());
+  assert( uvl.vl != static_cast<uint16_t>(-1) );
+  Write(uvl.vl_str,2);
+
   return *this;
 }
 
