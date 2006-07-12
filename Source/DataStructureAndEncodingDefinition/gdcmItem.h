@@ -102,6 +102,7 @@ public:
     assert ( TagField == Tag(0xfffe, 0xe000)
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
           || TagField == Tag(0x3f3f, 0x3f00)
+//          || TagField == Tag(0xfeff, 0x00e0)
 #endif
           || TagField == Tag(0xfffe, 0xe0dd) );
     if( !ValueLengthField.Read(is) )

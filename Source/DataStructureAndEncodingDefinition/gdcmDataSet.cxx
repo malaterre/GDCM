@@ -69,7 +69,7 @@ public:
     DEType de;
     while( !is.Eof() && de.Read(is) )
       {
-      //std::cerr << de << std::endl;
+      //std::cerr << "DEBUG:" << de << std::endl;
       assert( de.GetTag() != Tag(0,0) );
       DES.insert( de );
       }

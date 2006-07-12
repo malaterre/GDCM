@@ -122,6 +122,20 @@ IStream &ExplicitDataElement::Read(IStream &is)
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
   if( TagField == Tag(0x2001, 0xe05f) )
     {
+    assert( VRField == VR::SQ );
+    SwapCode oldsw = is.GetSwapCode();
+    assert( oldsw == SwapCode::LittleEndian );
+    is.SetSwapCode( SwapCode::BigEndian );
+    if( !ValueField->Read(is) )
+      {
+      assert(0 && "Should not happen");
+      }
+    is.SetSwapCode( oldsw );
+    return is;
+    }
+  else if( TagField == Tag(0x2001, 0xe100) )
+    {
+    assert( VRField == VR::SQ );
     SwapCode oldsw = is.GetSwapCode();
     assert( oldsw == SwapCode::LittleEndian );
     is.SetSwapCode( SwapCode::BigEndian );

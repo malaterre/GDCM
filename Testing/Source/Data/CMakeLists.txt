@@ -58,7 +58,6 @@ SET(BLACK_LIST
   "MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.dcm"
   "MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm"
   "MR_Philips_Intera_Broken.dcm"
-  "IM-0001-0052.dcm"
   "Resultat_015.dcm"
   "001073_Philips_Flair_Breaker_useNOSHADOWSEQ.dcm"
   "001073_Philips_Flair_Breaker.dcm"
@@ -72,6 +71,8 @@ SET(BLACK_LIST
 
   # TODO
   "MR-MONO2-12-angio-an1.acr" # 12 bits
+  # Do not detect 4D:
+  "IM-0001-0052.dcm"
   )
 
 SET(GDCM_DATA_IMAGES)
