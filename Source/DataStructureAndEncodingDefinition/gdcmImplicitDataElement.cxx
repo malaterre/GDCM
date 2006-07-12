@@ -50,13 +50,13 @@ IStream &ImplicitDataElement::Read(IStream &is)
     }
   else
     {
-    //assert( TagField != Tag(0x7fe0,0x0010) );
     if( ValueLengthField < 8 )
       {
       ValueField = new ByteValue;
       }
     else
       {
+      assert( TagField != Tag(0x7fe0,0x0010) );
       // In the following we read 4 more bytes in the Value field
       // to find out if this is a SQ or not
       // there is still work to do to handle the PMS featured SQ

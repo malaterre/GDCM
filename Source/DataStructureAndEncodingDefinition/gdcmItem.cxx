@@ -68,7 +68,7 @@ IStream &Item::Read(IStream &is)
   if( ValueLengthField == 0 )
     {
     assert( TagField == Tag( 0xfffe, 0xe0dd)
-      || TagField == Tag( 0xfffe, 0xe000) );
+         || TagField == Tag( 0xfffe, 0xe000) );
     if( TagField != Tag( 0xfffe, 0xe0dd) )
       {
       gdcmErrorMacro( "SQ: " << TagField << " has a length of 0" );
@@ -82,3 +82,4 @@ IStream &Item::Read(IStream &is)
 }
 
 } // end namespace gdcm
+

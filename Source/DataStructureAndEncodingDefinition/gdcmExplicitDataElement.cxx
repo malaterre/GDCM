@@ -49,6 +49,7 @@ IStream &ExplicitDataElement::Read(IStream &is)
       }
     return is;
     }
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
   if( TagField == Tag(0x00ff, 0x4aa5) )
     {
     assert(0 && "Should not happen" );
@@ -56,6 +57,7 @@ IStream &ExplicitDataElement::Read(IStream &is)
     //  is.Read(&c, 1);
     //  std::cerr << "Debug: " << c << std::endl;
     }
+#endif
   // Read VR
   if( !VRField.Read(is) )
     {
