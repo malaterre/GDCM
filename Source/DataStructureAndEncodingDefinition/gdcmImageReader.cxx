@@ -116,7 +116,7 @@ bool ImageReader::Read()
         if( isImage2 )
           {
           gdcmWarningMacro( "After all it might be a DICOM file "
-            "(Malinkroft-like)" );
+            "(Mallinckrodt-like)" );
           PixelData.SetCompressionType( Compression::RAW );
           res = ReadImage();
           }
