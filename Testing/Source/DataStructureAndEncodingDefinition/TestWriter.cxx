@@ -16,6 +16,7 @@
 #include "gdcmReader.h"
 #include "gdcmWriter.h"
 #include "gdcmFilename.h"
+#include "gdcmSystem.h"
 
 #include "gdcmDataImages.h"
 
@@ -45,7 +46,21 @@ int TestWrite(const char* filename)
     std::cerr << "Failed to write: " << outfilename << std::endl;
     return 1;
     }
-  return 0;
+
+  // Ok we have now two files let's compare their md5 sum:
+  bool b = gdcm::System::CompareMD5(filename, outfilename.c_str());
+  if( b )
+    {
+    std::cerr << filename << " and "
+      << outfilename << " are different\n";
+    return 1;
+    }
+  else
+    {
+    std::cerr << filename << " and "
+      << outfilename << " are identical\n";
+    return 0;
+    }
 }
 
 int TestWriter(int argc, char *argv[])

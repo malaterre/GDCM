@@ -15,6 +15,8 @@ CONFIGURE_FILE(
 INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/Common"
+  "${GDCM_SOURCE_DIR}/Utilities/md5"
+  "${GDCM_BINARY_DIR}/Utilities/md5"
   )
 
 SET(Common_SRCS
@@ -32,6 +34,8 @@ SET(Common_SRCS
   gdcmPixelType.cxx
   gdcmPhotometricInterpretation.cxx
   gdcmFilename.cxx
+  gdcmSystem.cxx
   )
 
 ADD_LIBRARY(gdcmCommon ${Common_SRCS})
+TARGET_LINK_LIBRARIES(gdcmCommon gdcmmd5)
