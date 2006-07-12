@@ -19,11 +19,6 @@ namespace gdcm
 {
 IStream &SequenceOfItems::Read(IStream &is)
 {
-//  ItemVector::iterator it = Items.begin();
-//  for(;it != Items.end(); ++it)
-//    {
-//    it->Read(is);
-//    }
   if( SequenceLengthField.IsUndefined() )
     {
     Item item(NType);
@@ -53,6 +48,16 @@ IStream &SequenceOfItems::Read(IStream &is)
       // (0x2005, 0x1080): for some reason computation of length fails...
       if( SequenceLengthField == 778 && l == 774 )
         {
+        gdcmWarningMacro( "PMS: Super bad hack" );
+        l = SequenceLengthField;
+        }
+      // Bug_Philips_ItemTag_3F3F
+      // (0x2005, 0x1080): Because we do not handle fully the bug at the item
+      // level we need to check here too
+      else if ( SequenceLengthField == 444 && l == 3*71 )
+        {
+        // This one is a double bug. Item length is wrong and impact SQ length
+        gdcmWarningMacro( "PMS: Super bad hack" );
         l = SequenceLengthField;
         }
       }

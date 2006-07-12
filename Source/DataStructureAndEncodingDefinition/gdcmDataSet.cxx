@@ -80,16 +80,24 @@ public:
     DEType de;
     VL l = 0;
     //std::cout << "Length: " << l << std::endl;
-    while( l != length && de.Read(is))
+    VL locallength = length;
+    while( l != locallength && de.Read(is))
       {
       //std::cout << "Nested: " << de << std::endl;
       DES.insert( de );
       l += de.GetLength();
       assert( !de.GetVL().IsUndefined() );
-      assert( l <= length );
       //std::cout << "Length: " << l << std::endl;
+      // Bug_Philips_ItemTag_3F3F
+      //  (0x2005, 0x1080): for some reason computation of length fails...
+      if( l == 70 && locallength == 63 )
+        {
+        gdcmWarningMacro( "PMS: Super bad hack" );
+        locallength = 140;
+        }
+      assert( l <= locallength );
       }
-    assert( l == length );
+    assert( l == locallength );
     return is;
   }
 

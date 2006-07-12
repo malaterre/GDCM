@@ -37,10 +37,6 @@ IStream &ImplicitDataElement::Read(IStream &is)
     //assert(0 && "Should not happen");
     return is;
     }
-  if( TagField == Tag(0x2005,0x1080) )
-    {
-    std::cout << "copucou" << std::endl;
-    }
   // Read Value Length
   if( !ValueLengthField.Read(is) )
     {
@@ -70,6 +66,7 @@ IStream &ImplicitDataElement::Read(IStream &is)
       const Tag itemStart(0xfffe, 0xe000);
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
       const Tag itemPMSStart(0xfeff, 0x00e0);
+      const Tag itemPMSStart2(0x3f3f, 0x3f00);
 #endif
       gdcm::Tag item;
       item.Read(is);
@@ -95,6 +92,18 @@ IStream &ImplicitDataElement::Read(IStream &is)
           assert(0 && "Should not happen");
           }
         is.SetSwapCode( oldsw );
+        return is;
+        }
+      else if ( item == itemPMSStart2 )
+        {
+        gdcmWarningMacro( "Illegal: SQ start with " << itemPMSStart2 << " instead of "
+          << itemStart << " for tag: " << TagField );
+        ValueField = new SequenceOfItems(TS::Implicit);
+        ValueField->SetLength(ValueLengthField); // perform realloc
+        if( !ValueField->Read(is) )
+          {
+          assert(0 && "Should not happen");
+          }
         return is;
         }
 #endif

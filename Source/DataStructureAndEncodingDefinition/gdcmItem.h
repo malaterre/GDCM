@@ -22,6 +22,8 @@
 #include "gdcmDataSet.h"
 #include "gdcmSwapCode.h"
 
+#define GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+
 namespace gdcm
 {
 /**
@@ -41,7 +43,8 @@ namespace gdcm
 class GDCM_EXPORT Item : public DataElement
 {
 public:
-  Item(TS::NegociatedType const &type, const Tag& t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl), NestedDataSet(0) { 
+  Item(TS::NegociatedType const &type, const Tag& t = Tag(0),
+    uint32_t const &vl = 0) : DataElement(t, vl), NestedDataSet(0) {
     NestedDataSet = new DataSet(type);
   }
   friend std::ostream& operator<<(std::ostream &os, const Item&val);
@@ -90,13 +93,16 @@ public:
     }
 
   IStream &Read(IStream &is) {
-    // Superclass 
+    // Superclass
     if( !TagField.Read(is) )
       {
       assert(0 && "Should not happen");
       return is;
       }
-    assert ( TagField == Tag(0xfffe, 0xe000) 
+    assert ( TagField == Tag(0xfffe, 0xe000)
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+          || TagField == Tag(0x3f3f, 0x3f00)
+#endif
           || TagField == Tag(0xfffe, 0xe0dd) );
     if( !ValueLengthField.Read(is) )
       {
