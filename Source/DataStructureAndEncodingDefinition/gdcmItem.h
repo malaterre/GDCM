@@ -22,8 +22,6 @@
 #include "gdcmDataSet.h"
 #include "gdcmSwapCode.h"
 
-#define GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-
 namespace gdcm
 {
 /**

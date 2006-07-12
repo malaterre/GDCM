@@ -18,8 +18,6 @@
 #include "gdcmByteValue.h"
 #include "gdcmSequenceOfItems.h"
 
-#define GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-
 namespace gdcm
 {
 

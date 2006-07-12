@@ -18,8 +18,6 @@
 #include "gdcmSequenceOfItems.h"
 #include "gdcmSequenceOfFragments.h"
 
-#define GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-
 namespace gdcm
 {
 
