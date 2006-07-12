@@ -1,3 +1,18 @@
+/*=========================================================================
+
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006 Mathieu Malaterre
+  Copyright (c) 1993-2005 CREATIS
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+
+=========================================================================*/
 /* Executable meant to preprocess the DICOM V3 Dictionary
  * CMake regular expression are great but as far as cmake 2.2 is concerned there is
  * no math operation which makes the preprocess stage extremely difficult to write

@@ -1,3 +1,18 @@
+/*=========================================================================
+
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006 Mathieu Malaterre
+  Copyright (c) 1993-2005 CREATIS
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+
+=========================================================================*/
 /*
  * Executable meant to preprocess a GroupName dictionary, entry should look like this:
  * 0000 CMD Command
