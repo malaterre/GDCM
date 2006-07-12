@@ -53,11 +53,7 @@ SET(BLACK_LIST
   # TODO
   "gdcm-MR-PHILIPS-16-Multi-Seq.dcm"
   "PHILIPS_Intera-16-MONO2-Uncompress.dcm"
-  "KODAK-12-MONO1-Odd_Terminated_Sequence.dcm"
-  "PHILIPS_Gyroscan-8-MONO2-Odd_Sequence.dcm"
-  "PICKER-16-MONO2-Nested_icon.dcm"
   "deflate_report.dcm"
-  "MR_Philips-Intera_BreaksNOSHADOW.dcm"
   "MR_Philips_Intera_PrivateSequenceImplicitVR.dcm"
   "MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.dcm"
   "MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm"
@@ -71,7 +67,6 @@ SET(BLACK_LIST
   "Philips-Intera_Unexpected_Sequence_Terminator_1.dcm"
   "Philips-Intera_Unexpected_Sequence_Terminator_2.dcm"
   "Philips-Intera_Unexpected_Sequence_Terminator_3.dcm"
-  "ElemZeroNotGroupLength.dcm"
   "Run11"
   "Bug_Philips_ItemTag_3F3F"
 

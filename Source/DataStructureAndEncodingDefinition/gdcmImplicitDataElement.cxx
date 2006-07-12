@@ -66,6 +66,7 @@ IStream &ImplicitDataElement::Read(IStream &is)
         {
         ValueField = new SequenceOfItems(TS::Explicit);
         SwapCode oldsw = is.GetSwapCode();
+        assert( oldsw == SwapCode::LittleEndian );
         is.SetSwapCode( SwapCode::BigEndian );
         ValueField->SetLength(ValueLengthField); // perform realloc
         if( !ValueField->Read(is) )

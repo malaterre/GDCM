@@ -3,6 +3,8 @@
 #include "gdcmSequenceOfItems.h"
 #include "gdcmSequenceOfFragments.h"
 
+#define GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+
 namespace gdcm
 {
 
@@ -102,6 +104,20 @@ IStream &ExplicitDataElement::Read(IStream &is)
     }
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+  if( TagField == Tag(0x2001, 0xe05f) )
+    {
+    SwapCode oldsw = is.GetSwapCode();
+    assert( oldsw == SwapCode::LittleEndian );
+    is.SetSwapCode( SwapCode::BigEndian );
+    if( !ValueField->Read(is) )
+      {
+      assert(0 && "Should not happen");
+      }
+    is.SetSwapCode( oldsw );
+    return is;
+    }
+#endif
   if( !ValueField->Read(is) )
     {
     assert(0 && "Should not happen");
