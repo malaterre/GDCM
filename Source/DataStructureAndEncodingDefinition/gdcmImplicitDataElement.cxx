@@ -122,7 +122,8 @@ IStream &ImplicitDataElement::Read(IStream &is)
     if( TagField != theralys1
      && TagField != theralys2 )
       {
-      gdcmWarningMacro( "BUGGY HEADER (GE, 13)" );
+      gdcmWarningMacro( "GE,13: Replacing VL=0x000d with VL=0x000a, for Tag=" <<
+        TagField << " in order to read a buggy DICOM file." );
       ValueLengthField = 10;
       }
     }
