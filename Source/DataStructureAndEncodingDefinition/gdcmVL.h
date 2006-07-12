@@ -83,10 +83,10 @@ public:
 private:
   uint32_t ValueLength;
 };
-//-----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& os, const VL& val)
 {
-  os << val.ValueLength;
+  os << std::hex << val.ValueLength;
   return os;
 }
 

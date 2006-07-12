@@ -41,9 +41,12 @@ IStream &ExplicitDataElement::Read(IStream &is)
   const Tag itemDelItem(0xfffe,0xe00d);
   if( TagField == itemDelItem )
     {
-    VL vl;
-    vl.Read(is);
-    if( vl != 0 )
+    if( !ValueLengthField.Read(is) )
+      {
+      assert(0 && "Should not happen");
+      return is;
+      }
+    if( ValueLengthField != 0 )
       {
       gdcmWarningMacro( "Item Delimitation Item has a length different from 0" );
       }
@@ -109,7 +112,6 @@ IStream &ExplicitDataElement::Read(IStream &is)
     assert( TagField == Tag(0x7fe0,0x0010) );
     assert( VRField == VR::OB
          || VRField == VR::OW );
-    //assert( xda.TagField == pixelData );
     ValueField = new SequenceOfFragments;
     }
   else
