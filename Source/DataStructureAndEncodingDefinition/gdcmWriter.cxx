@@ -33,7 +33,7 @@ bool Writer::WritePreamble()
 
 bool Writer::Write()
 {
-  if ( !WritePreamble() )
+  if ( Preamble && !WritePreamble() )
     {
     return false;
     }

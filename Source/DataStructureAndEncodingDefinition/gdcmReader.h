@@ -45,7 +45,7 @@ class FileMetaInformation;
 class GDCM_EXPORT Reader
 {
 public:
-  Reader():Stream(),DS(0),Header(0) {}
+  Reader():Stream(),Preamble(true),DS(0),Header(0) {}
   virtual ~Reader();
 
   virtual bool Read(); // Execute()
@@ -59,6 +59,7 @@ public:
   const DataSet &GetDataSet() const {
     return *DS;
   }
+  bool GetPreamble() { return Preamble; }
 
 protected:
   bool ReadPreamble();
@@ -67,6 +68,7 @@ protected:
   TS GuessTransferSyntax();
 
   IFStream Stream;
+  bool Preamble;
 
 private:
   DataSet *DS;

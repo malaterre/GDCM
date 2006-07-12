@@ -30,6 +30,7 @@ int TestWriter(int, char *[])
   gdcm::Writer writer;
   const char outfilename[] = "/tmp/debug.dcm";
   writer.SetFileName( outfilename );
+  writer.SetPreamble( reader.GetPreamble() );
   writer.SetHeader( reader.GetHeader() );
   writer.SetDataSet( reader.GetDataSet() );
   if( !writer.Write() )
