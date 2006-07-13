@@ -129,7 +129,8 @@ OStream &OStream::Write(uint16_t const &vl)
   uvl.vl = vl;
   ByteSwap<uint16_t>::SwapFromSwapCodeIntoSystem(uvl.vl,
     GetSwapCode());
-  assert( uvl.vl != static_cast<uint16_t>(-1) );
+  // MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm
+  //assert( uvl.vl != static_cast<uint16_t>(-1) ); // FIXME
   Write(uvl.vl_str,2);
 
   return *this;

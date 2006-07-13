@@ -81,6 +81,7 @@ public:
     typename DataElementSet::const_iterator it = DES.begin();
     for( ; it != DES.end(); ++it)
       {
+      std::cerr << "DEBUG:" << *it << std::endl;
       it->Write(os);
       }
     return os;

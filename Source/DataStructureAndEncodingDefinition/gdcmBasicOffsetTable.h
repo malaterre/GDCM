@@ -31,7 +31,7 @@ namespace gdcm
 class GDCM_EXPORT BasicOffsetTable : public DataElement
 {
 public:
-  BasicOffsetTable(const Tag &t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl) {}
+  BasicOffsetTable(const Tag &t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl), Offsets(0) {}
   friend std::ostream &operator<<(std::ostream &os, const BasicOffsetTable &val);
 
   void Clear() {
@@ -53,8 +53,9 @@ public:
       return is;
       }
     // Self
-    Offsets.SetLength(ValueLengthField);
-    if( !Offsets.Read(is) )
+    Offsets = new ByteValue;
+    Offsets->SetLength(ValueLengthField);
+    if( !Offsets->Read(is) )
       {
       assert(0 && "Should not happen");
       return is;
@@ -63,22 +64,47 @@ public:
     }
 
   OStream &Write(OStream &os) const {
-    abort();
+    // Superclass 
+    const Tag itemStart(0xfffe, 0xe000);
+    const Tag seqDelItem(0xfffe,0xe0dd);
+    if( !TagField.Write(os) )
+      {
+      assert(0 && "Should not happen");
+      return os;
+      }
+    assert( TagField == itemStart );
+    if( !ValueLengthField.Write(os) )
+      {
+      assert(0 && "Should not happen");
+      return os;
+      }
+    // Self
+    if( !Offsets->Write(os) )
+      {
+      assert(0 && "Should not happen");
+      return os;
+      }
     return os;
     }
 
   Value const &GetValue() const {
-    return Offsets;
+    return *Offsets;
   }
 
+  //BasicOffsetTable(BasicOffsetTable const &val):DataElement(val)
+  //  {
+  //  NestedDataSet = val.NestedDataSet;
+  //  }
+
 private:
-  ByteValue Offsets;
+  typedef SmartPointer<ByteValue> ByteValuePtr;
+  ByteValuePtr Offsets;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream &operator<<(std::ostream &os, const BasicOffsetTable &val)
 {
   os << " BasicOffsetTable Length=" << val.ValueLengthField << std::endl;
-  os << val.Offsets;
+  os << *(val.Offsets);
 
   return os;
 }

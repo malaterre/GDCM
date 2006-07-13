@@ -18,6 +18,7 @@
 #define __gdcmFragment_h
 
 #include "gdcmDataElement.h"
+#include "gdcmSmartPointer.h"
 #include "gdcmByteValue.h"
 
 namespace gdcm
@@ -29,12 +30,20 @@ namespace gdcm
 class GDCM_EXPORT Fragment : public DataElement
 {
 public:
-  Fragment(const Tag &t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl) {}
+  Fragment(const Tag &t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl) , FragmentValue(0) { }
   friend std::ostream &operator<<(std::ostream &os, const Fragment &val);
 
   void Clear() {
-    FragmentValue.Clear();
+    FragmentValue->Clear();
     }
+
+  IStream &Read(IStream &is);
+
+  OStream &Write(OStream &os) const;
+
+  Value const &GetValue() const {
+    return *FragmentValue;
+  }
 
   Fragment(const Fragment &val):DataElement(val)
     {
@@ -46,23 +55,17 @@ public:
     return *this;
     }
 
-  IStream &Read(IStream &is);
-
-  OStream &Write(OStream &os) const;
-
-  Value const &GetValue() const {
-    return FragmentValue;
-  }
 
 private:
-  ByteValue FragmentValue;
+  typedef SmartPointer<ByteValue> ByteValuePtr;
+  ByteValuePtr FragmentValue;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream &operator<<(std::ostream &os, const Fragment &val)
 {
   os << "Tag: " << val.TagField;
   os << "\tVL: " << val.ValueLengthField;
-  os << "\t" << val.FragmentValue;
+  os << "\t" << *(val.FragmentValue);
 
   return os;
 }

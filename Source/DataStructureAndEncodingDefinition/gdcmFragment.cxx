@@ -48,14 +48,16 @@ namespace gdcm
       return is;
       }
     // Self
-    FragmentValue.SetLength(ValueLengthField);
-    if( !FragmentValue.Read(is) )
+    FragmentValue = new ByteValue;
+    FragmentValue->SetLength(ValueLengthField);
+    if( !FragmentValue->Read(is) )
       {
       assert(0 && "Should not happen");
       return is;
       }
     return is;
     }
+
 
   OStream &Fragment::Write(OStream &os) const {
     const Tag itemStart(0xfffe, 0xe000);
@@ -73,7 +75,7 @@ namespace gdcm
       return os;
       }
     // Self
-    if( !FragmentValue.Write(os) )
+    if( !FragmentValue->Write(os) )
       {
       assert(0 && "Should not happen");
       return os;

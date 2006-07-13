@@ -88,7 +88,7 @@ OStream &Item::Write(OStream &os) const
     assert(0 && "Should not happen");
     return os;
     }
-  assert ( TagField != Tag(0xfffe, 0xe000) );
+  //assert ( TagField != Tag(0xfffe, 0xe000) );
   if( !ValueLengthField.Write(os) )
     {
     assert(0 && "Should not happen");

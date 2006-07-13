@@ -14,7 +14,7 @@
 
 =========================================================================*/
 #include "gdcmSequenceOfFragments.h"
-//#include "gdcmFragment.h"
+#include "gdcmImplicitDataElement.h"
 
 namespace gdcm
 {
@@ -53,6 +53,11 @@ IStream& SequenceOfFragments::Read(IStream &is)
 
 OStream const & SequenceOfFragments::Write(OStream &os) const
 {
+  if( !Table.Write(os) )
+    {
+    assert(0 && "Should not happen");
+    return os;
+    }
   FragmentVector::const_iterator it = Fragments.begin();
   for(;it != Fragments.end(); ++it)
     {

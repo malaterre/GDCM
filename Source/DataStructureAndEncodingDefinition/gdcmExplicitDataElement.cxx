@@ -187,7 +187,8 @@ const OStream &ExplicitDataElement::Write(OStream &os) const
     {
     // 16bits only
     uint16_t vl16;
-    assert( ValueLengthField <= 0xffff );
+    // MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm
+    //assert( ValueLengthField <= 0xffff ); // FIXME
     vl16 = ValueLengthField;
     os.Write(vl16);
     }

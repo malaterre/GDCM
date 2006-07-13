@@ -156,10 +156,13 @@ const OStream &ImplicitDataElement::Write(OStream &os) const
     return os;
     }
   // Write Value
-  if( ValueField && !ValueField->Write(os) )
+  if( ValueField )
     {
-    assert(0 && "Should not happen");
-    return os;
+    if( !ValueField->Write(os) )
+      {
+      assert(0 && "Should not happen");
+      return os;
+      }
     }
   else
     {
