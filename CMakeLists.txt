@@ -2,10 +2,18 @@ PROJECT(GDCM)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.2)
 
 #-----------------------------------------------------------------------------
+# Disallow insource build since I never test that
+STRING(COMPARE EQUAL "${GDCM_SOURCE_DIR}" "${GDCM_BINARY_DIR}" INSOURCE)
+IF(INSOURCE)
+  MESSAGE(FATAL_ERROR "GDCM requires an out of source Build. "
+    "Please create a separate binary directory and run CMake there.")
+ENDIF(INSOURCE)
+
+#-----------------------------------------------------------------------------
 SET(GDCM_MAJOR_VERSION 0)
 SET(GDCM_MINOR_VERSION 0)
 SET(GDCM_BUILD_VERSION 0)
-SET(GDCM_VERSION 
+SET(GDCM_VERSION
   "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}.${GDCM_BUILD_VERSION}")
 
 #-----------------------------------------------------------------------------
