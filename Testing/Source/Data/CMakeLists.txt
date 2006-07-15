@@ -91,6 +91,8 @@ SET(BLACK_LIST_WRITER
   # Contains: b00c 0eb6 d150 0e02
   # instead of the regular SQ termination element: fffe e0dd 0000 0000
   gdcm-JPEG-LossLess3a.dcm
+  # Length for (0009,1113) & (0009,1114) is set to 6 instead of 4
+  SIEMENS_MAGNETOM-12-MONO2-Uncompressed.dcm
   )
 
 SET(GDCM_DATA_IMAGES)
