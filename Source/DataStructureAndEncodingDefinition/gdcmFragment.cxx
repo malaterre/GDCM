@@ -39,6 +39,9 @@ namespace gdcm
       // Pretend to end properly...
       TagField = Tag(0xfffe,0xe0dd);
       ValueLengthField = 0;
+      // Make sure to clear the FragmentValue
+      FragmentValue = new ByteValue;
+      FragmentValue->SetLength( ValueLengthField );
       return is;
       }
 #endif

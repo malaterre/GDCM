@@ -88,6 +88,9 @@ SET(BLACK_LIST_READER
 SET(BLACK_LIST_WRITER
   # Length is set to 13 instead of 10
   GE_GENESIS-16-MONO2-WrongLengthItem.dcm
+  # Contains: b00c 0eb6 d150 0e02
+  # instead of the regular SQ termination element: fffe e0dd 0000 0000
+  gdcm-JPEG-LossLess3a.dcm
   )
 
 SET(GDCM_DATA_IMAGES)
