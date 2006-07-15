@@ -41,6 +41,7 @@ public:
   void SetTransferSyntaxType(TS const &ts);
   TS GetTransferSyntaxType() const;
   TS::MSType GetMediaStorageType() const;
+  bool IsEmpty() const { return DS == 0; };
 
   // Read
   IStream &Read(IStream &is);

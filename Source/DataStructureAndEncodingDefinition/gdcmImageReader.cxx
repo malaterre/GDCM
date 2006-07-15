@@ -142,8 +142,7 @@ bool ImageReader::Read()
           res = false;
           }
         }
-      else if( ts == TS::ImplicitVRBigEndianACRNEMA 
-       || ts == TS::TS_END )
+      else if( ts == TS::ImplicitVRBigEndianACRNEMA || header.IsEmpty() )
         {
         // Those transfer syntax have a high probability of being ACR NEMA
         gdcmWarningMacro( "Looks like an ACR-NEMA file" );
@@ -176,7 +175,7 @@ bool ImageReader::Read()
       }
     }
 
-  if(res) PixelData.Print( std::cout );
+  //if(res) PixelData.Print( std::cout );
   return res;
 }
 
