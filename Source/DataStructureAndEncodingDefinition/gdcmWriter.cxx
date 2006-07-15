@@ -21,6 +21,14 @@
 namespace gdcm
 {
 
+Writer::~Writer()
+{
+  if( Preamble )
+    {
+    delete[] Preamble;
+    }
+}
+
 /// \precondition we are at the beginning of file
 bool Writer::WritePreamble()
 {

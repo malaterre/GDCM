@@ -32,7 +32,7 @@ class GDCM_EXPORT Writer
 {
 public:
   Writer():Stream(),Preamble(0),DS(0),Header(0) {}
-  virtual ~Writer() {};
+  virtual ~Writer();
 
   virtual bool Write(); // Execute()
   void SetFileName(std::string const &filename) {

@@ -25,6 +25,10 @@ Reader::~Reader()
 {
   delete DS;
   delete Header;
+  if( Preamble )
+    {
+    delete[] Preamble;
+    }
 }
 
 /// \brief tells us if "DICM" is found as position 128

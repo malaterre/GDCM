@@ -48,7 +48,8 @@ IStream &ExplicitDataElement::Read(IStream &is)
       }
     if( ValueLengthField != 0 )
       {
-      gdcmWarningMacro( "Item Delimitation Item has a length different from 0" );
+      gdcmWarningMacro(
+        "Item Delimitation Item has a length different from 0" );
       }
     return is;
     }
@@ -166,6 +167,22 @@ const OStream &ExplicitDataElement::Write(OStream &os) const
     assert( 0 && "Should not happen" );
     return os;
     }
+  assert( TagField != Tag(0xfffe,0xe0dd) );
+  const Tag itemDelItem(0xfffe,0xe00d);
+  if( TagField == itemDelItem )
+    {
+    if( !ValueLengthField.Write(os) )
+      {
+      assert( 0 && "Should not happen" );
+      return os;
+      }
+    if( ValueLengthField != 0 )
+      {
+      gdcmWarningMacro(
+        "Item Delimitation Item has a length different from 0" );
+      }
+    return os;
+    }
   if( !VRField.Write(os) )
     {
     assert( 0 && "Should not happen" );
@@ -193,7 +210,11 @@ const OStream &ExplicitDataElement::Write(OStream &os) const
     os.Write(vl16);
     }
   // We have the length we should be able to write the value
-  ValueField->Write(os);
+  if( !ValueField->Write(os) )
+    {
+    assert( 0 && "Should not happen" );
+    return os;
+    }
 
   return os;
 }

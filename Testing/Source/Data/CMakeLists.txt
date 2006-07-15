@@ -38,7 +38,9 @@ FILE(GLOB GDCM_DATA_IMAGES_GLOB
 #  GE_DLX-8-MONO2-Multiframe.dcm
 #  PrivateGEImplicitVRBigEndianTransferSyntax16Bits.dcm
 
-SET(BLACK_LIST
+# List of images that are technically difficult to read
+# Hopefully we will soon be able to read them
+SET(BLACK_LIST_READER
   "dummy.dcm"
   "diazpost.dcm" # This one is nasty
   "Siemens-leonardo-bugged.dcm"
@@ -79,17 +81,32 @@ SET(BLACK_LIST
   ALOKA_SSD-8-MONO2-RLE-SQ.dcm
   )
 
+# List of files that are impossible to rewrite
+# basically they contains something like a wrong length
+# therefore it does not make any sense to try to rewrite them identically
+# Necessary condition they should break toolkit like dcmtk -for instance-
+SET(BLACK_LIST_WRITER
+  # Length is set to 13 instead of 10
+  GE_GENESIS-16-MONO2-WrongLengthItem.dcm
+  )
+
 SET(GDCM_DATA_IMAGES)
-SET(GDCM_BLACK_LIST_DATA_IMAGES)
+SET(GDCM_BLACK_LIST_READER_DATA_IMAGES)
 FOREACH(filename ${GDCM_DATA_IMAGES_GLOB})
   GET_FILENAME_COMPONENT(filename_name ${filename} NAME)
   #MESSAGE( ${filename_name} )
-  STRING(REGEX MATCH ${filename_name} bad_dicom ${BLACK_LIST})
+  STRING(REGEX MATCH ${filename_name} bad_dicom ${BLACK_LIST_READER})
   IF(NOT bad_dicom)
     SET(GDCM_DATA_IMAGES "${GDCM_DATA_IMAGES}\n\"${filename}\",")
   ELSE(NOT bad_dicom)
-    SET(GDCM_BLACK_LIST_DATA_IMAGES "${GDCM_BLACK_LIST_DATA_IMAGES}\n\"${filename}\",")
+    SET(GDCM_BLACK_LIST_READER_DATA_IMAGES "${GDCM_BLACK_LIST_READER_DATA_IMAGES}\n\"${filename}\",")
   ENDIF(NOT bad_dicom)
+
+  # Files that cannot be rewritten
+  STRING(REGEX MATCH ${filename_name} no_rewrite ${BLACK_LIST_WRITER})
+  IF(no_rewrite)
+    SET(GDCM_BLACK_LIST_WRITER_DATA_IMAGES "${GDCM_BLACK_LIST_WRITER_DATA_IMAGES}\n\"${filename}\",")
+  ENDIF(no_rewrite)
 ENDFOREACH(filename)
 
 # Adding extra file without no extension.

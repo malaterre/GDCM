@@ -20,11 +20,21 @@
 
 #include "gdcmDataImages.h"
 
-// Some fine notes
-// ACUSON-24-YBR_FULL-RLE-b.dcm cannot be completely rewritten
-// indeed they use the 'extension' of DICOM where you can write almost
-// anything in the preamble for instance they write something like: C.mdat
-// which of course I cannot reproduce...thus md5 fails
+bool IsImpossibleToRewrite(const char *filename)
+{
+  const char *impossible;
+  int i = 0;
+  while( (impossible= gdcmBlackListWriterDataImages[i]) )
+    {
+    if( strcmp( impossible, filename ) == 0 )
+      {
+      return true;
+      }
+    ++i;
+    }
+  return false;
+}
+
 int TestWrite(const char* filename)
 {
   gdcm::Reader reader;
@@ -56,9 +66,18 @@ int TestWrite(const char* filename)
   bool b = gdcm::System::CompareMD5(filename, outfilename.c_str());
   if( b )
     {
-    std::cerr << filename << " and "
-      << outfilename << " are different\n";
-    return 1;
+    if( IsImpossibleToRewrite(filename) )
+      {
+      std::cerr << filename << " and "
+        << outfilename << " should be compatible\n";
+      return 0;
+      }
+    else
+      {
+      std::cerr << filename << " and "
+        << outfilename << " are different\n";
+      return 1;
+      }
     }
   else
     {

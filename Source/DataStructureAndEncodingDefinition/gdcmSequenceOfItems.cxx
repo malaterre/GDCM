@@ -75,13 +75,13 @@ OStream const &SequenceOfItems::Write(OStream &os) const
     {
     it->Write(os);
     }
-  if( SequenceLengthField.IsUndefined() )
-    {
-    const Tag seqDelItem(0xfffe,0xe0dd);
-    const ImplicitDataElement ide(seqDelItem);
-    assert( ide.GetVL() == 0 );
-    ide.Write(os);
-    }
+  //if( SequenceLengthField.IsUndefined() )
+  //  {
+  //  const Tag seqDelItem(0xfffe,0xe0dd);
+  //  const ImplicitDataElement ide(seqDelItem);
+  //  assert( ide.GetVL() == 0 );
+  //  ide.Write(os);
+  //  }
   return os;
 }
 
