@@ -131,8 +131,8 @@ public:
   static const TSType GetTSType(const char *str);
   static const MSType GetMSType(const char *str);
 
-  NegociatedType GetNegociatedType();
-  SwapCode GetSwapCode();
+  NegociatedType GetNegociatedType() const;
+  SwapCode GetSwapCode() const;
 
   operator TSType () const { return TSField; }
 

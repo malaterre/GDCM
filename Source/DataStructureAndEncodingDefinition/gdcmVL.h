@@ -77,7 +77,10 @@ public:
     }
   const OStream &Write(OStream &os) const
     {
-    return os.Write((char*)(&ValueLength), 4);
+    uint32_t copy = ValueLength;
+    ByteSwap<uint32_t>::SwapFromSwapCodeIntoSystem(copy,
+      os.GetSwapCode());
+    return os.Write((char*)(&copy), 4);
     }
 
 private:

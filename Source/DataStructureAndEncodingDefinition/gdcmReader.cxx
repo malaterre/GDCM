@@ -236,6 +236,8 @@ bool Reader::Read()
   if( ts == TS::TS_END )
     {
     ts = GuessTransferSyntax();
+    // Then save it in the 'pseudo' header
+    Header->SetTransferSyntaxType( ts );
     }
   assert( ts != TS::TS_END );
   // From ts set properly the Stream for reading the dataset:

@@ -62,6 +62,12 @@ bool Writer::Write()
     Header = new FileMetaInformation;
     }
   Header->Write(Stream);
+  TS ts = Header->GetTransferSyntaxType();
+  if( ts != TS::TS_END )
+    {
+    // Set the endianness requested by the Header
+    Stream.SetSwapCode( ts.GetSwapCode() );
+    }
   if( !DS )
     {
     DS = new DataSet;

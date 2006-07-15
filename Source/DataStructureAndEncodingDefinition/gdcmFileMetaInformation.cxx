@@ -233,6 +233,12 @@ bool FileMetaInformation::ReadImplicitDataElement(IStream &is,
   return true;
 }
 
+void FileMetaInformation::SetTransferSyntaxType(TS const &ts)
+{
+  assert( DS == 0 );
+  InternalTS = ts;
+}
+
 TS FileMetaInformation::GetTransferSyntaxType() const
 {
   if(DS)
@@ -265,7 +271,7 @@ TS FileMetaInformation::GetTransferSyntaxType() const
     return tst;
     }
 
-  return TS::TS_END;
+  return InternalTS;
 }
 
 TS::MSType FileMetaInformation::GetMediaStorageType() const

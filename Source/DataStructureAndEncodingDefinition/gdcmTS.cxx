@@ -216,7 +216,7 @@ bool TS::IsRLE(const TSType &ts)
   return false;
 }
 
-TS::NegociatedType TS::GetNegociatedType()
+TS::NegociatedType TS::GetNegociatedType() const
 {
   if( TSField == TS_END )
     {
@@ -233,6 +233,7 @@ bool TS::IsImplicit(const TSType &ts)
 {
   assert( ts != TS::TS_END );
   return ts == ImplicitVRLittleEndian
+    || ts == ImplicitVRBigEndianACRNEMA
     || ts == ImplicitVRBigEndianPrivateGE;
 }
 
@@ -257,7 +258,7 @@ bool TS::IsBigEndian(const TSType &ts)
     || ts == ImplicitVRBigEndianACRNEMA;
 }
 
-SwapCode TS::GetSwapCode()
+SwapCode TS::GetSwapCode() const
 {
   assert( TSField != TS::TS_END );
   if( IsBigEndian( TSField ) )

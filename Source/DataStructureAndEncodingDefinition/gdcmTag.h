@@ -180,7 +180,12 @@ public:
     }
   const OStream &Write(OStream &os) const
     {
-    return os.Write((char*)(&ElementTag.tag), 4);
+    uint16_t copy[2];
+    copy[0]= ElementTag.tags[0];
+    copy[1]= ElementTag.tags[1];
+    ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem(copy,
+      os.GetSwapCode(), 2);
+    return os.Write((char*)(&copy), 4);
     }
 
 private:

@@ -33,11 +33,12 @@ class ImplicitDataElement;
 class GDCM_EXPORT FileMetaInformation
 {
 public:
-  FileMetaInformation():DS(0) {}
+  FileMetaInformation():DS(0),InternalTS(TS::TS_END) {}
   ~FileMetaInformation();
 
   friend std::ostream &operator<<(std::ostream &_os, const FileMetaInformation &_val);
 
+  void SetTransferSyntaxType(TS const &ts);
   TS GetTransferSyntaxType() const;
   TS::MSType GetMediaStorageType() const;
 
@@ -52,6 +53,7 @@ private:
   bool ReadImplicitDataElement(IStream &is, ImplicitDataElement &de);
 
   DataSet *DS;
+  TS InternalTS;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const FileMetaInformation &val)
