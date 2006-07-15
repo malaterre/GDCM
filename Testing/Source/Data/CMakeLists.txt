@@ -6,7 +6,11 @@
 FILE(GLOB GDCM_DATA_IMAGES_GLOB
   "${GDCM_DATA_ROOT}/*.acr"
   "${GDCM_DATA_ROOT}/*.dcm"
+  # Those files do not have any extension, special regex:
+  "${GDCM_DATA_ROOT}/DICOMDIR*"
+  "${GDCM_DATA_ROOT}/dicomdir*"
   )
+
 # Intersting images:
 # Implicit with defined length SQ:
 #  MR_SIEMENS_forceLoad29-1010_29-1020.dcm # 0008,1140
@@ -77,8 +81,7 @@ SET(BLACK_LIST_READER
   "IM-0001-0052.dcm"
 
   # TODO: TestWriter cannot rewrite those:
-  deflate_wave.dcm
-  ALOKA_SSD-8-MONO2-RLE-SQ.dcm
+  MR_Philips_Intera_No_PrivateSequenceImplicitVR.dcm
   )
 
 # List of files that are impossible to rewrite
@@ -93,6 +96,11 @@ SET(BLACK_LIST_WRITER
   gdcm-JPEG-LossLess3a.dcm
   # Length for (0009,1113) & (0009,1114) is set to 6 instead of 4
   SIEMENS_MAGNETOM-12-MONO2-Uncompressed.dcm
+  # Elements are not ordered...GDCM2 is not able to produce a warning
+  # for that...TODO FIXME
+  # In SQ: 0004|1220, Elements are: (00a9,0020), (0010,0030), (0010,0040)
+  # instead of (0010,0030), (0010,0040), (00a9,0020)
+  dicomdir_Pms_WithVisit_WithPrivate_WithStudyComponents
   )
 
 SET(GDCM_DATA_IMAGES)
@@ -114,25 +122,6 @@ FOREACH(filename ${GDCM_DATA_IMAGES_GLOB})
   ENDIF(no_rewrite)
 ENDFOREACH(filename)
 
-# Adding extra file without no extension.
-# Ok I know this is retarded but I don't want to rename file on cvs too much of a pain
-
-SET(GDCM_NO_EXTENSION_FILES
-  # Looks like a hard one:
-  #1.3.12.2.1107.5.2.6.14121.30000006030706333268700005266
-  DICOMDIR
-  dicomdir_Acusson_WithPrivate_WithSR
-  DICOMDIR_MR_B_VA12A
-  DICOMDIR-Philips-EasyVision-4200-Entries
-  # Problem in my code. but very good for timing since so many SQ
-  #dicomdir_Pms_With_heavy_embedded_sequence
-  dicomdir_Pms_WithVisit_WithPrivate_WithStudyComponents
-  dicomdir_With_embedded_icons
-  )
-
-FOREACH(filename ${GDCM_NO_EXTENSION_FILES})
-  SET(GDCM_DATA_IMAGES "${GDCM_DATA_IMAGES}\n\"${GDCM_DATA_ROOT}/${filename}\",")
-ENDFOREACH(filename)
 
 # Populate GDCM_DATA_IMAGES:
 CONFIGURE_FILE(
