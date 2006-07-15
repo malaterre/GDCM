@@ -104,7 +104,10 @@ private:
 inline std::ostream &operator<<(std::ostream &os, const BasicOffsetTable &val)
 {
   os << " BasicOffsetTable Length=" << val.ValueLengthField << std::endl;
-  os << *(val.Offsets);
+  if( val.Offsets )
+    {
+    os << *(val.Offsets);
+    }
 
   return os;
 }

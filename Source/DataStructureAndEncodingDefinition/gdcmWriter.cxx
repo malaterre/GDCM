@@ -16,6 +16,7 @@
 #include "gdcmWriter.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmDataSet.h"
+#include "gdcmTrace.h"
 
 namespace gdcm
 {
@@ -23,17 +24,28 @@ namespace gdcm
 /// \precondition we are at the beginning of file
 bool Writer::WritePreamble()
 {
+  if( Preamble )
+    {
+    Stream.Write( Preamble, 128+4);
+    }
+#if 0
   char dicm[128];
   memset( dicm, 0, 128 );
   Stream.Write( dicm, 128);
   Stream.Write( "DICM", 4);
+#endif
 
   return true;
 }
 
 bool Writer::Write()
 {
-  if ( Preamble && !WritePreamble() )
+  if( !Stream.IsOpen() )
+    {
+    gdcmErrorMacro( "No File" );
+    return false;
+    }
+  if ( !WritePreamble() )
     {
     return false;
     }

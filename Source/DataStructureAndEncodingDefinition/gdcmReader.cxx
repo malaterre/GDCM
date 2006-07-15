@@ -37,18 +37,20 @@ Reader::~Reader()
 bool Reader::ReadPreamble()
 {
   bool r = false;
-  char dicm[128+4];
-  Stream.Read(dicm, 128+4);
-  if( dicm[128+0] == 'D'
-   && dicm[128+1] == 'I'
-   && dicm[128+2] == 'C'
-   && dicm[128+3] == 'M')
+  Preamble = new char[128+4];
+  Stream.Read(Preamble, 128+4);
+  if( Preamble[128+0] == 'D'
+   && Preamble[128+1] == 'I'
+   && Preamble[128+2] == 'C'
+   && Preamble[128+3] == 'M')
     {
     r = true;
     }
   if(!r)
     {
     gdcmDebugMacro( "Not a DICOM V3 file" );
+    delete[] Preamble;
+    Preamble = 0;
     // Seek back
     Stream.Seekg(0, std::ios::beg);
     }
@@ -221,8 +223,8 @@ bool Reader::Read()
     }
   if( !ReadPreamble() )
     {
+    assert( Preamble == 0 );
     gdcmWarningMacro( "No Preamble" );
-    Preamble = false;
     }
   ReadMetaInformation();
   //std::cerr << *Header << std::endl;

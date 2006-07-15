@@ -61,6 +61,7 @@ IStream &Item::Read(IStream &is)
     return is;
     }
   // Self
+  NestedDataSet = new DataSet(NType);
   NestedDataSet->SetLength( ValueLengthField );
   // BUG: This test is required because DataSet::Read with a Length
   // of 0 is actually thinking it is reading a root DataSet
@@ -88,7 +89,8 @@ OStream &Item::Write(OStream &os) const
     assert(0 && "Should not happen");
     return os;
     }
-  //assert ( TagField != Tag(0xfffe, 0xe000) );
+  assert ( TagField == Tag(0xfffe, 0xe000)
+        || TagField == Tag(0xfffe, 0xe0dd) );
   if( !ValueLengthField.Write(os) )
     {
     assert(0 && "Should not happen");

@@ -45,7 +45,7 @@ class FileMetaInformation;
 class GDCM_EXPORT Reader
 {
 public:
-  Reader():Stream(),Preamble(true),DS(0),Header(0) {}
+  Reader():Stream(),Preamble(0),DS(0),Header(0) {}
   virtual ~Reader();
 
   virtual bool Read(); // Execute()
@@ -59,7 +59,13 @@ public:
   const DataSet &GetDataSet() const {
     return *DS;
   }
-  bool GetPreamble() { return Preamble; }
+
+  // Some fine notes
+  // ACUSON-24-YBR_FULL-RLE-b.dcm cannot be completely rewritten
+  // indeed they use the 'extension' of DICOM where you can write almost
+  // anything in the preamble for instance they write something like: C.mdat
+  // which of course is difficult to reproduce
+  const char *GetPreamble() const { return Preamble; }
 
 protected:
   bool ReadPreamble();
@@ -68,7 +74,7 @@ protected:
   TS GuessTransferSyntax();
 
   IFStream Stream;
-  bool Preamble;
+  char *Preamble;
 
 private:
   DataSet *DS;

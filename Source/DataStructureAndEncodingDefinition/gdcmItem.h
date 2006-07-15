@@ -42,8 +42,7 @@ class GDCM_EXPORT Item : public DataElement
 {
 public:
   Item(TS::NegociatedType const &type, const Tag& t = Tag(0),
-    uint32_t const &vl = 0) : DataElement(t, vl), NestedDataSet(0) {
-    NestedDataSet = new DataSet(type);
+    uint32_t const &vl = 0) : DataElement(t, vl), NType(type), NestedDataSet(0) {
   }
   friend std::ostream& operator<<(std::ostream &os, const Item&val);
 
@@ -56,6 +55,7 @@ public:
   void InsertDataElement(const DataElement& de) {
     NestedDataSet->InsertDataElement(de);
     // Update the length
+    abort();
     if( !IsUndefinedLength() )
       {
       //ValueLengthField += de.GetLength();
@@ -94,6 +94,7 @@ private:
    * May be nested recursively.
    * Only Data Elements with VR = SQ  may, themselves, contain Data Sets
    */
+  TS::NegociatedType NType;
   typedef SmartPointer<DataSet> DataSetPtr;
   DataSetPtr NestedDataSet;
 };
@@ -101,7 +102,10 @@ private:
 inline std::ostream& operator<<(std::ostream& os, const Item &val)
 {
   os << "Item Length=" << val.ValueLengthField << std::endl;
-  val.NestedDataSet->Print( os << "\t" );
+  if( val.NestedDataSet )
+    {
+    val.NestedDataSet->Print( os << "\t" );
+    }
   // GDCM is NOT storing this value, we need to explicitely print it:
   // and incidently make sure to write it
   if( val.ValueLengthField.IsUndefined() )

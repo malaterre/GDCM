@@ -70,4 +70,11 @@ bool System::CompareMD5(const char *filename1, const char *filename2)
   return bool(r);
 }
 
+int Mkdir(const char *pathname)
+{
+  (void)pathname;
+  abort();
+  return -1;
+}
+
 }

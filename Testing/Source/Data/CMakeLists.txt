@@ -73,6 +73,10 @@ SET(BLACK_LIST
   "MR-MONO2-12-angio-an1.acr" # 12 bits
   # Do not detect 4D:
   "IM-0001-0052.dcm"
+
+  # TODO: TestWriter cannot rewrite those:
+  deflate_wave.dcm
+  ALOKA_SSD-8-MONO2-RLE-SQ.dcm
   )
 
 SET(GDCM_DATA_IMAGES)

@@ -31,7 +31,7 @@ class FileMetaInformation;
 class GDCM_EXPORT Writer
 {
 public:
-  Writer():Stream(),Preamble(true),DS(0),Header(0) {}
+  Writer():Stream(),Preamble(0),DS(0),Header(0) {}
   virtual ~Writer() {};
 
   virtual bool Write(); // Execute()
@@ -52,13 +52,28 @@ public:
     DS = const_cast<DataSet*>(&ds);
   }
 
-  void SetPreamble(bool preamble) { Preamble = preamble; }
+  void SetPreamble(const char *preamble) {
+    assert( Preamble == 0 );
+    if( !Preamble && preamble)
+      {
+      Preamble = new char[128+4];
+      }
+    if( preamble )
+      {
+      assert( Preamble );
+      memcpy(Preamble,preamble, 128+4);
+      }
+    else
+      {
+      assert( Preamble == 0 );
+      }
+  }
 
 protected:
   OFStream Stream;
 
   bool WritePreamble();
-  bool Preamble;
+  char *Preamble;
 
 private:
   DataSet *DS;

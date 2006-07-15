@@ -22,6 +22,10 @@ class System
 {
 public:
   static bool CompareMD5(const char *filename1, const char *filename2);
+  static int  Mkdir(const char *pathname); 
+  // TODO some system calls
+  // GetLastError
+  // Chdir
 };
 
 } // end namespace gdcm

@@ -20,6 +20,11 @@
 
 #include "gdcmDataImages.h"
 
+// Some fine notes
+// ACUSON-24-YBR_FULL-RLE-b.dcm cannot be completely rewritten
+// indeed they use the 'extension' of DICOM where you can write almost
+// anything in the preamble for instance they write something like: C.mdat
+// which of course I cannot reproduce...thus md5 fails
 int TestWrite(const char* filename)
 {
   gdcm::Reader reader;
