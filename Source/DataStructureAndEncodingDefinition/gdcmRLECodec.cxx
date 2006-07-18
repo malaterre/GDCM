@@ -116,44 +116,51 @@ bool RLECodec::Decode(IStream &is, OStream &os)
   //while()
   //  {
   //  }
+
+  // DEBUG
+  is.Seekg( 0, std::ios::end);
+  std::streampos buf_size = is.Tellg();
+  is.Seekg(0, std::ios::beg);
+  // END DEBUG
+
   RLEFrame &frame = Internals->Frame;
   frame.Read(is);
   frame.Print(std::cout);
   unsigned long numSegments = frame.Header.NumSegments;
-    for(unsigned long i = 0; i<numSegments; ++i)
+  for(unsigned long i = 0; i<numSegments; ++i)
+    {
+    char byte;
+    unsigned long numOutBytes = 0;
+    //std::cerr << "Length: " << Length << "\n";
+    while( numOutBytes < Length )
       {
-      char byte;
-      unsigned long numOutBytes = 0;
-      //std::cerr << "Length: " << Length << "\n";
-      while( numOutBytes < Length)
+      //std::cerr << "numOutBytes: " << numOutBytes << "\n";
+      is.Read(&byte, 1);
+      //std::cerr << "Byte: " << int(byte) << "\n";
+      if( byte >= 0 /*&& byte <= 127*/ )
         {
-        //std::cerr << "numOutBytes: " << numOutBytes << "\n";
-        is.Read(&byte, 1);
-        //std::cerr << "Byte: " << int(byte) << "\n";
-        if( byte >= 0 /*&& byte <= 127*/ )
-          {
-          is.Read( dummy_buffer, byte+1 );
-          numOutBytes += byte+ 1;
-          os.Write( dummy_buffer, byte+1 );
-          }
-        else if( byte <= -1 && byte >= -127 )
-          {
-          char nextByte;
-          is.Read( &nextByte, 1);
-          for( int c = 0; c < -byte + 1; ++c )
-            {
-            dummy_buffer[i] = nextByte;
-            }
-          numOutBytes += -byte + 1;
-          os.Write( dummy_buffer, -byte+1 );
-          }
-        else /* byte == -128 */
-          {
-          assert( byte == -128 );
-          }
+        is.Read( dummy_buffer, byte+1 );
+        numOutBytes += byte+ 1;
+        os.Write( dummy_buffer, byte+1 );
         }
-      //std::cerr << "numOutBytes:" << numOutBytes << "\n";
+      else if( byte <= -1 && byte >= -127 )
+        {
+        char nextByte;
+        is.Read( &nextByte, 1);
+        for( int c = 0; c < -byte + 1; ++c )
+          {
+          dummy_buffer[c] = nextByte;
+          }
+        numOutBytes += -byte + 1;
+        os.Write( dummy_buffer, -byte+1 );
+        }
+      else /* byte == -128 */
+        {
+        assert( byte == -128 );
+        }
       }
+    //std::cerr << "numOutBytes:" << numOutBytes << "\n";
+    }
 
   return true;
 }

@@ -19,14 +19,27 @@
 
 #include "gdcmTypes.h"
 
+#include <vector>
+
 namespace gdcm
 {
   
 class LookupTable
 {
 public:
+  typedef enum {
+    UNKNOWN = 0,
+    GRAY,
+    RED,
+    GREEN,
+    BLUE,
+  } LookupTableType;
+
   LookupTable() {}
   ~LookupTable() {}
+
+private:
+  vector<char> Internal; // 512 ?
 };
 
 } // end namespace gdcm

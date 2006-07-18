@@ -81,14 +81,8 @@ public:
   unsigned int GetPlanarConfiguration() const;
   void SetPlanarConfiguration(unsigned int pc);
 
-  const PhotometricInterpretation &GetPhotometricInterpretation() const
-    {
-    return PI;
-    }
-  void SetPhotometricInterpretation(PhotometricInterpretation const &pi)
-    {
-    PI = pi;
-    }
+  const PhotometricInterpretation &GetPhotometricInterpretation() const;
+  void SetPhotometricInterpretation(PhotometricInterpretation const &pi);
 
   SwapCode GetSwapCode() const
     {
@@ -111,7 +105,6 @@ public:
 //  Image(Image const&);
 //  Image &operator= (Image const&);
 
-protected:
   unsigned long GetBufferLength() const;
 
 private:

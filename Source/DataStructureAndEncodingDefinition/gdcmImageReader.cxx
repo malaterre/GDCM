@@ -335,7 +335,8 @@ bool ImageReader::ReadImage()
   //assert( pi == PhotometricInterpretation::MONOCHROME2 );
   PixelData.SetPhotometricInterpretation( pi );
 
-    
+  // TODO
+  assert( pi.GetSamplesPerPixel() == pt.GetSamplesPerPixel() );
 
   // 6. Do the PixelData
   const Tag pixeldata = Tag(0x7fe0, 0x0010);

@@ -55,6 +55,17 @@ void Image::SetPlanarConfiguration(unsigned int pc)
   PlanarConfiguration = pc;
 }
 
+const PhotometricInterpretation &Image::GetPhotometricInterpretation() const
+{
+  return PI;
+}
+
+void Image::SetPhotometricInterpretation(
+  PhotometricInterpretation const &pi)
+{
+  PI = pi;
+}
+
 const unsigned int *Image::GetDimensions() const
 {
   assert( NumberOfDimensions );

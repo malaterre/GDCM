@@ -23,8 +23,8 @@ static const char *PIStrings[] = {
   "UNKNOW",
   "MONOCHROME1 ",
   "MONOCHROME2 ",
-  "PALETTE_COLOR",
-  "RGB",
+  "PALETTE COLOR ",
+  "RGB ",
   "HSV",
   "ARGB",
   "CMYK",
@@ -55,12 +55,40 @@ PhotometricInterpretation::PIType PhotometricInterpretation::GetPIType(const cha
     ++i;
     }
 
+  abort();
   return PI_END;
 }
 
 bool PhotometricInterpretation::IsRetired(PIType pi)
 {
   return pi == HSV || pi == ARGB || pi == CMYK;
+}
+
+int PhotometricInterpretation::GetSamplesPerPixel()
+{
+  if( PIField == MONOCHROME1
+   || PIField == MONOCHROME2 )
+    {
+    return 1;
+    }
+  else
+    {
+    assert( PIField != UNKNOW );
+    assert( PIField != PI_END );
+    assert( PIField == PALETTE_COLOR
+         || PIField == RGB
+         || PIField == HSV
+         || PIField == ARGB
+         || PIField == CMYK
+         || PIField == YBR_FULL
+         || PIField == YBR_FULL_422
+         || PIField == YBR_PARTIAL_422
+         || PIField == YBR_PARTIAL_420
+         || PIField == YBR_ICT
+         || PIField == YBR_RCT
+      );
+    return 3;
+    }
 }
 
 } // end namespace gdcm

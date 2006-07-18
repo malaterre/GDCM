@@ -14,6 +14,8 @@
 
 =========================================================================*/
 #include "gdcmImageReader.h"
+#include "gdcmFileMetaInformation.h"
+#include "gdcmTS.h"
 
 #include "gdcmDataImages.h"
 
@@ -22,15 +24,28 @@ int TestImageRead(const char* filename)
   gdcm::ImageReader reader;
 
   reader.SetFileName( filename );
-  if ( !reader.Read() )
+  if ( reader.Read() )
+    {
+    const gdcm::Image &img = reader.GetImage();
+    //std::cerr << "Success to read image from file: " << filename << std::endl;
+    unsigned long len = img.GetBufferLength();
+    char *buffer = new char[len];
+    img.GetBuffer(buffer);
+    delete[] buffer;
+    return 0;
+    }
+
+  const gdcm::FileMetaInformation &header = reader.GetHeader();
+  gdcm::TS::MSType ms = header.GetMediaStorageType();
+  bool isImage = gdcm::TS::IsImage( ms );
+  if( isImage )
     {
     std::cerr << "Failed to read image from file: " << filename << std::endl;
     return 1;
     }
-
-  //reader.GetPointer();
-  std::cerr << "Success to read image from file: " << filename << std::endl;
-
+  // else
+  // well this is not an image, so thankfully we fail to read it
+  assert( ms != gdcm::TS::MS_END );
   return 0;
 }
 

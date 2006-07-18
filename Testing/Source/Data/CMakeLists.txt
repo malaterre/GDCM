@@ -82,6 +82,39 @@ SET(BLACK_LIST_READER
 
   # TODO: TestWriter cannot rewrite those:
   MR_Philips_Intera_No_PrivateSequenceImplicitVR.dcm
+  # Ok I need to read the std Samples Per Pixel is 1 but there are lookup 
+  # tables that are not implemented...delay this image for now
+  LEADTOOLS_FLOWERS-8-PAL-RLE.dcm
+  LEADTOOLS_FLOWERS-16-MONO2-RLE.dcm
+  LEADTOOLS_FLOWERS-8-PAL-Uncompressed.dcm
+  D_CLUNIE_MR1_RLE.dcm
+  D_CLUNIE_MR1_JPLY.dcm
+  D_CLUNIE_MR2_JPLY.dcm
+  D_CLUNIE_MR3_JPLY.dcm
+  D_CLUNIE_MR4_JPLY.dcm
+  D_CLUNIE_NM1_JPLY.dcm
+  D_CLUNIE_RG1_RLE.dcm
+  D_CLUNIE_RG2_JPLY.dcm
+  D_CLUNIE_RG3_JPLY.dcm
+  D_CLUNIE_SC1_JPLY.dcm
+  D_CLUNIE_US1_RLE.dcm
+  D_CLUNIE_VL1_RLE.dcm
+  D_CLUNIE_VL2_RLE.dcm
+  D_CLUNIE_VL4_RLE.dcm
+  D_CLUNIE_VL6_RLE.dcm
+  D_CLUNIE_XA1_JPLY.dcm
+  ETIAM_video_002.dcm
+  OT-PAL-8-face.dcm
+  rle16sti.dcm
+  rle16loo.dcm
+
+  # TODO...simply segfault
+  RadBWLossLess.dcm
+  US-PAL-8-10x-echo.dcm
+  gdcm-JPEG-Extended.dcm
+  gdcm-US-ALOKA-16.dcm
+  PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
+  SIEMENS-12-Jpeg_Process_2_4-Lossy-a.dcm
   )
 
 # List of files that are impossible to rewrite

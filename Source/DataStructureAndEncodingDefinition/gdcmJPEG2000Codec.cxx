@@ -143,9 +143,7 @@ bool JPEG2000Codec::Decode(IStream &is, OStream &os)
       /* close the byte stream */
       opj_cio_close(cio);
 
-  /* free the memory containing the code-stream */
-  delete[] src;  //FIXME
-
+   raw = (char*)src;
    // Copy buffer
    for (int compno = 0; compno < image->numcomps; compno++)
    {
@@ -184,8 +182,12 @@ bool JPEG2000Codec::Decode(IStream &is, OStream &os)
             *data32++ = (uint32_t)v;
          }
       }
+      os.Write(raw, wr * hr * (comp->prec/8));
       //free(image.comps[compno].data);
    }
+  /* free the memory containing the code-stream */
+  delete[] src;  //FIXME
+
  
 
   /* free remaining structures */

@@ -55,6 +55,8 @@ public:
 
   static bool IsRetired(PIType pi);
 
+  int GetSamplesPerPixel();
+
   // TODO
   // not all PhotometricInterpretation are allowed for compressed Transfer 
   // syntax
