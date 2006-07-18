@@ -39,7 +39,7 @@ int	opterr = 1,		/* if error message should be printed */
 	optind = 1,		/* index into parent argv vector */
 	optopt,			/* character checked for validity */
 	optreset;		/* reset getopt */
-char	*optarg;		/* argument associated with option */
+const char	*optarg;		/* argument associated with option */
 
 #define	BADCH	(int)'?'
 #define	BADARG	(int)':'
@@ -52,7 +52,7 @@ char	*optarg;		/* argument associated with option */
 int
 getopt(int argc, char * const argv[], const char *optstring)
 {
-	static char *place = EMSG;		/* option letter processing */
+	static const char *place = EMSG;		/* option letter processing */
 	char *oli;				/* option letter list index */
 
 	if (optreset || *place == 0) {		/* update scanning pointer */
