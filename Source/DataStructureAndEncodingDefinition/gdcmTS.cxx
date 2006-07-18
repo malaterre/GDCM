@@ -110,6 +110,21 @@ static const char *MSStrings[] = {
   "1.2.840.10008.5.1.4.1.1.66",   
   "1.2.840.10008.5.1.4.1.1.66.1", 
   "1.2.840.10008.5.1.4.1.1.66.2", 
+
+  // See PETAt001_PT001.dcm
+  "1.2.840.10008.5.1.4.1.1.128",
+  // SYNGORTImage.dcm
+  "1.2.840.10008.5.1.4.1.1.481.1",
+  // eclipse_dose.dcm
+  "1.2.840.10008.5.1.4.1.1.481.2",
+  // exRT_Structure_Set_Storage.dcm
+  "1.2.840.10008.5.1.4.1.1.481.3",
+  // eclipse_plan.dcm
+  "1.2.840.10008.5.1.4.1.1.481.5",
+  // exCSA_Non-Image_Storage.dcm
+  "1.3.12.2.1107.5.9.1",
+  // 3DDCM011.dcm
+  "1.2.840.113543.6.6.1.3.10002",
   0
 };
 
@@ -282,15 +297,13 @@ bool TS::IsDataSetEncoded(const TSType &ts)
 // is only the verification of TSType is != TS_END
 bool TS::IsImage(const MSType &ms)
 {
-  if ( ms == MS_END )
-    {
-    return false;
-    }
-  if ( ms == HemodynamicWaveformStorage )
-    {
-    return false;
-    }
-  if ( ms == MediaStorageDirectoryStorage )
+  if ( ms == MS_END // most frequent first
+    // lexicographical order then...
+    || ms == CSANonImageStorage
+    || ms == HemodynamicWaveformStorage
+    || ms == MediaStorageDirectoryStorage
+    || ms == RTPlanStorage
+    || ms == RTStructureSetStorage )
     {
     return false;
     }

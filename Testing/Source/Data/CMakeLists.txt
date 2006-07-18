@@ -115,6 +115,12 @@ SET(BLACK_LIST_READER
   gdcm-US-ALOKA-16.dcm
   PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
   SIEMENS-12-Jpeg_Process_2_4-Lossy-a.dcm
+  PET-cardio-Multiframe-Papyrus.dcm
+  10200901_8b_Palette_RLE_blinker.dcm
+  10200900_8b_Palette_RLE_blinker.dcm
+  10200905_8b_Palette_RLE_blinker.dcm
+  rle16loop_16b_Palette_RLE.dcm
+  bla.dcm
   )
 
 # List of files that are impossible to rewrite

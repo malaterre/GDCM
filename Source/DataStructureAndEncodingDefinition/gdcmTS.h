@@ -121,6 +121,13 @@ public:
     RawDataStorage,
     SpacialRegistrationStorage,
     SpacialFiducialsStorage,
+    PETImageStorage,
+    RTImageStorage,
+    RTDoseStorage,
+    RTStructureSetStorage,
+    RTPlanStorage,
+    CSANonImageStorage,
+    Philips3D,
     MS_END
   } MSType; // Media Storage Type
 
