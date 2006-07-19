@@ -21,7 +21,10 @@ namespace gdcm
 class System
 {
 public:
-  static bool CompareMD5(const char *filename1, const char *filename2);
+  // digest_str needs to be at least : strlen = [2*16+1];
+  static void ComputeMD5(const char *buffer, const unsigned long buf_len,
+    char *digest_str);
+  static void ComputeFileMD5(const char *filename, char *digest_str);
   static int  Mkdir(const char *pathname); 
   // TODO some system calls
   // GetLastError

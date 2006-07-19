@@ -63,8 +63,10 @@ int TestWrite(const char* filename)
     }
 
   // Ok we have now two files let's compare their md5 sum:
-  bool b = gdcm::System::CompareMD5(filename, outfilename.c_str());
-  if( b )
+  char digest[33], outdigest[33];
+  gdcm::System::ComputeFileMD5(filename, digest);
+  gdcm::System::ComputeFileMD5(outfilename.c_str(), outdigest);
+  if( strcmp(digest, outdigest) )
     {
     if( IsImpossibleToRewrite(filename) )
       {

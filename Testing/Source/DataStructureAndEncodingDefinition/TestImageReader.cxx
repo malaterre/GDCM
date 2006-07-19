@@ -16,8 +16,29 @@
 #include "gdcmImageReader.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmTS.h"
+#include "gdcmSystem.h"
+#include "gdcmFilename.h"
 
 #include "gdcmDataImages.h"
+#include "gdcmMD5DataImages.h"
+
+const char *GetMD5Ref(const char *filepath)
+{
+  int i = 0;
+  const char *p = gdcmMD5DataImages[i][1];
+  gdcm::Filename comp(filepath);
+  const char *filename = comp.GetName();
+  while( p != 0 )
+    {
+    if( strcmp( filename, p ) == 0 )
+      {
+      break;
+      }
+    ++i;
+    p = gdcmMD5DataImages[i][1];
+    }
+  return gdcmMD5DataImages[i][0];
+}
 
 int TestImageRead(const char* filename)
 {
@@ -26,13 +47,22 @@ int TestImageRead(const char* filename)
   reader.SetFileName( filename );
   if ( reader.Read() )
     {
+    int res = 0;
     const gdcm::Image &img = reader.GetImage();
     //std::cerr << "Success to read image from file: " << filename << std::endl;
     unsigned long len = img.GetBufferLength();
     char *buffer = new char[len];
     img.GetBuffer(buffer);
+    const char *ref = GetMD5Ref(filename);
+    char digest[33];
+    gdcm::System::ComputeMD5(buffer, len, digest);
+    if( strcmp(digest, ref) )
+      {
+      std::cerr << "Problem reading image from: " << filename << std::endl;
+      res = 1;
+      }
     delete[] buffer;
-    return 0;
+    return res;
     }
 
   const gdcm::FileMetaInformation &header = reader.GetHeader();

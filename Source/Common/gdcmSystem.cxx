@@ -22,6 +22,8 @@
 #include <string.h>
 #include <assert.h>
 
+#include <iostream>
+
 namespace gdcm
 {
 
@@ -54,20 +56,36 @@ void process_file(const char *filename, md5_byte_t *digest)
   fclose(file);
 }
 
-bool System::CompareMD5(const char *filename1, const char *filename2)
+void System::ComputeMD5(const char *buffer, const unsigned long buf_len,
+  char *digest_str)
 {
-  md5_byte_t digest1[16];
-  md5_byte_t digest2[16];
+  md5_byte_t digest[16];
+  md5_state_t state;
+  md5_init(&state);
+  md5_append(&state, (const md5_byte_t *)buffer, buf_len);
+  md5_finish(&state, digest);
 
-  /* Do file1 */
-  process_file(filename1, digest1);
+  //char digest_str[2*16+1];
+  for (int di = 0; di < 16; ++di)
+  {
+    sprintf(digest_str+2*di, "%02x", digest[di]);
+  }
+  digest_str[2*16] = '\0';
+}
 
-  /* Do file2 */
-  process_file(filename2, digest2);
+void System::ComputeFileMD5(const char *filename, char *digest_str)
+{
+  md5_byte_t digest[16];
 
-  int r = memcmp(digest1, digest2, 16);
+  /* Do the file */
+  process_file(filename, digest);
 
-  return bool(r);
+  //char digest_str[2*16+1];
+  for (int di = 0; di < 16; ++di)
+  {
+    sprintf(digest_str+2*di, "%02x", digest[di]);
+  }
+  digest_str[2*16] = '\0';
 }
 
 int Mkdir(const char *pathname)

@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
   s = fread (&num_comp, 1, 2, file);
   assert( s == 2 );
   /* Display header */
-  printf( "%s %d %d %d %d %d\n", buffer, size_x, size_y, size_z,
+  printf( "/* %s %d %d %d %d %d */\n", buffer, size_x, size_y, size_z,
     byte_per_scalar, num_comp );
 
   /* Compute len of image */
@@ -77,11 +77,12 @@ int main(int argc, char *argv[])
   md5_append(&state, (const md5_byte_t *)image, len);
   md5_finish(&state, digest);
   /*printf("MD5 (\"%s\") = ", test[i]); */
+  printf( "{ \"" );
   for (di = 0; di < 16; ++di)
   {
     printf("%02x", digest[di]);
   }
-  printf("\t%s\n", filename);
+  printf("\" , \"%s\" },\n", filename);
 
   free(image);
   fclose(file);
