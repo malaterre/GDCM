@@ -27,7 +27,7 @@
 namespace gdcm
 {
 
-void process_file(const char *filename, md5_byte_t *digest)
+inline void process_file(const char *filename, md5_byte_t *digest)
 {
   int di;
   size_t file_size, read;

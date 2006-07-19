@@ -59,7 +59,14 @@ int TestImageRead(const char* filename)
     if( strcmp(digest, ref) )
       {
       std::cerr << "Problem reading image from: " << filename << std::endl;
+      std::cerr << "Found " << digest << " instead of " << ref << std::endl;
       res = 1;
+#if 0
+      std::ofstream debug("/tmp/dump.raw");
+      debug.write(buffer, len);
+      debug.close();
+      //abort();
+#endif
       }
     delete[] buffer;
     return res;
