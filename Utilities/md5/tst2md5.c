@@ -20,15 +20,14 @@
 #define MAGIC_LEN 4
 int main(int argc, char *argv[])
 {
+  const char *filename;
   const char magic[] = "gdcm";
   char buffer[MAGIC_LEN+1];
   int di;
   md5_state_t state;
   md5_byte_t digest[16];
   uint32_t size_x, size_y, size_z;
-  uint16_t byte_per_scalar;
-  uint16_t num_comp;
-  const char *filename;
+  uint16_t byte_per_scalar, num_comp;
   FILE *file;
   size_t s, len;
   void *image;
@@ -40,6 +39,7 @@ int main(int argc, char *argv[])
   filename = argv[1];
   file = fopen(filename, "rb");
   s = fread(buffer, 1, MAGIC_LEN, file);
+  /* end with 0 */
   buffer[MAGIC_LEN] = '\0';
   assert( s == MAGIC_LEN );
   assert( strcmp(magic, buffer) == 0 );
@@ -60,14 +60,19 @@ int main(int argc, char *argv[])
   /* Number of Components */
   s = fread (&num_comp, 1, 2, file);
   assert( s == 2 );
-  printf( "%s %d %d %d %d %d\n", buffer, size_x, size_y, size_z, byte_per_scalar,
-    num_comp );
+  /* Display header */
+  printf( "%s %d %d %d %d %d\n", buffer, size_x, size_y, size_z,
+    byte_per_scalar, num_comp );
 
+  /* Compute len of image */
   len = size_x*size_y*size_z* (byte_per_scalar/8)*num_comp;
+  /* allocate */
   image = malloc(len);
+  /* read image */
   s = fread(image, 1, len, file);
   assert( s == len );
 
+  /* compute md5 */
   md5_init(&state);
   md5_append(&state, (const md5_byte_t *)image, len);
   md5_finish(&state, digest);
