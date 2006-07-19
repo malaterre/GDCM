@@ -19,7 +19,7 @@
 #include "gdcmIStream.h"
 
 extern "C" {
-  #include <openjpeg.h>
+  #include "openjpeg.h"
 
 /**
 sample error callback expecting a FILE* client object

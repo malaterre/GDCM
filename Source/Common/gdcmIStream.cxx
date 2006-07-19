@@ -133,6 +133,11 @@ IStream& IStream::Read(char *str, std::streamsize n)
   return *this;
 }
 
+std::streamsize IStream::Gcount ( ) const
+{
+  abort();
+}
+
 IStream &IStream::Read(uint16_t &vl)
 {
   union { uint16_t vl; char vl_str[2]; } uvl;

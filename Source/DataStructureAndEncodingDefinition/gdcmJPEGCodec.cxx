@@ -18,9 +18,11 @@
 #include "gdcmOStream.h"
 #include "gdcmIStream.h"
 
-extern "C" {
-#include "jpeglib.h"
-}
+//extern "C" {
+//#include "jpeglib.h"
+//}
+
+#include "gdcmJPEGDataSrc.cxx"
 
 #include <setjmp.h>
 
@@ -36,8 +38,10 @@ typedef struct my_error_mgr* my_error_ptr;
 class JPEGInternals
 {
 public:
+  JPEGInternals():cinfo(),jerr(),StateSuspension(0) {}
   jpeg_decompress_struct cinfo;
   my_error_mgr jerr;
+  int StateSuspension;
 };
 
 JPEGCodec::JPEGCodec()
@@ -116,13 +120,14 @@ bool JPEGCodec::Decode(IStream &is, OStream &os)
 
   //jpeg_stdio_src(&cinfo, infile);
   // FIXME: Do some stupid work:
-  is.Seekg( 0, std::ios::end);
-  std::streampos buf_size = is.Tellg();
-  char *dummy_buffer = new char[buf_size];
-  is.Seekg(0, std::ios::beg);
-  is.Read( dummy_buffer, buf_size);
-  jpeg_memory_src(&cinfo,
-    reinterpret_cast<const JOCTET*>(dummy_buffer), buf_size);
+  //is.Seekg( 0, std::ios::end);
+  //std::streampos buf_size = is.Tellg();
+  //char *dummy_buffer = new char[buf_size];
+  //is.Seekg(0, std::ios::beg);
+  //is.Read( dummy_buffer, buf_size);
+  //jpeg_memory_src(&cinfo,
+  //  reinterpret_cast<const JOCTET*>(dummy_buffer), buf_size);
+  jpeg_stdio_src(&cinfo, is);
 
   // Step 3: read file parameters with jpeg_read_header()
 
@@ -190,7 +195,7 @@ bool JPEGCodec::Decode(IStream &is, OStream &os)
 
   /* This is an important step since it will release a good deal of memory. */
   jpeg_destroy_decompress(&cinfo);
-  delete[] dummy_buffer;
+  //delete[] dummy_buffer;
 
   /* After finish_decompress, we can close the input file.
    * Here we postpone it until after no more JPEG errors are possible,

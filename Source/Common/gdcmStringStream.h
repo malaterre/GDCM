@@ -39,6 +39,7 @@ public:
   operator void * ( ) const { return InternalSStream; }
 
   IStream& Read(char* s, std::streamsize n);
+  std::streamsize Gcount ( ) const;
 
   IStream& Get(char &c) {
     InternalSStream.get(c);

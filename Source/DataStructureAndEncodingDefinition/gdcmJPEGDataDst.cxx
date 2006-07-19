@@ -15,10 +15,12 @@
  */
 
 /* this is not a core library module, so it doesn't define JPEG_INTERNALS */
-#include "jinclude.h"
-#include "jpeglib.h"
-#include "jerror.h"
+//#include "jinclude.h"
+//#include "jpeglib.h"
+//#include "jerror.h"
 
+namespace gdcm
+{
 
 /* Expanded data destination object for stdio output */
 
@@ -153,3 +155,6 @@ jpeg_stdio_dest (j_compress_ptr cinfo, FILE * outfile)
   dest->pub.term_destination = term_destination;
   dest->outfile = outfile;
 }
+
+} // end namespace gdcm
+

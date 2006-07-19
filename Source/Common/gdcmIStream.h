@@ -42,6 +42,7 @@ public:
   //virtual bool operator ! ( ) const;
 
   virtual IStream& Read(char *str, std::streamsize n);
+  virtual std::streamsize Gcount ( ) const;
   virtual IStream& Get (char& c );
   virtual bool Eof();
 

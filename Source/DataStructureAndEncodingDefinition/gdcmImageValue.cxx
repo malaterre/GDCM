@@ -57,10 +57,10 @@ bool ImageValue::GetBuffer(char *buffer) const
     const SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(p);
     assert( sf );
     sf->GetBuffer(buffer, len);
+    unsigned long totalLen = sf->ComputeLength();
 //#define MDEBUG
 #ifdef MDEBUG
     std::ofstream f("/tmp/debug.jpg");
-    unsigned long totalLen = sf->ComputeLength();
     f.write(buffer, totalLen);
     f.close();
 #endif
@@ -68,9 +68,11 @@ bool ImageValue::GetBuffer(char *buffer) const
       {
       JPEGCodec codec;
       StringStream is;
-      is.Write(buffer, len);
+      is.Write(buffer, totalLen);
       StringStream os;
       bool r = codec.Decode(is, os);
+      std::string::size_type check = os.Str().size();
+      //assert( check == len );
       memcpy(buffer, os.Str().c_str(), len);
       return r;
       }

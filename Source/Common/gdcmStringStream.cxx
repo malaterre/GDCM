@@ -58,4 +58,9 @@ std::streampos StringStream::Tellg ( )
   return InternalSStream.tellg();
 }
 
+std::streamsize StringStream::Gcount ( ) const
+{
+  return InternalSStream.gcount();
+}
+
 } // end namespace gdcm

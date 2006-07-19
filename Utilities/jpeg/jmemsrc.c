@@ -14,7 +14,7 @@
  * custom source managers for other purposes.
  */
 
-/* code was tken from:
+/* code was taken from:
  * [How to read JPEG resource using JpegLib ?]
  * http://www.smalleranimals.com/vforum/archive/index.php?t-1922.html
  */

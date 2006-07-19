@@ -15,17 +15,21 @@
  */
 
 /* this is not a core library module, so it doesn't define JPEG_INTERNALS */
-//#include "jinclude.h"
-//#include "jpeglib.h"
-//#include "jerror.h"
+extern "C" {
+#include "jinclude.h"
+#include "jpeglib.h"
+#include "jerror.h"
+}
 
+namespace gdcm
+{
 
 /* Expanded data source object for stdio input */
 
 typedef struct {
   struct jpeg_source_mgr pub;	/* public fields */
 
-  FILE * infile;		/* source stream */
+  IStream * infile;		/* source stream */
   JOCTET * buffer;		/* start of buffer */
   boolean start_of_file;	/* have we gotten any data yet? */
 } my_source_mgr;
@@ -92,7 +96,9 @@ fill_input_buffer (j_decompress_ptr cinfo)
   my_src_ptr src = (my_src_ptr) cinfo->src;
   size_t nbytes;
 
-  nbytes = JFREAD(src->infile, src->buffer, INPUT_BUF_SIZE);
+  //nbytes = JFREAD(src->infile, src->buffer, INPUT_BUF_SIZE);
+  src->infile->Read( (char*)src->buffer, INPUT_BUF_SIZE);
+  nbytes = src->infile->Gcount();
 
   if (nbytes <= 0) {
     if (src->start_of_file)	/* Treat empty input file as fatal error */
@@ -180,7 +186,7 @@ term_source (j_decompress_ptr cinfo)
  */
 
 GLOBAL(void)
-jpeg_stdio_src (j_decompress_ptr cinfo, FILE * infile)
+jpeg_stdio_src (j_decompress_ptr cinfo, IStream const & infile)
 {
   my_src_ptr src;
 
@@ -207,7 +213,10 @@ jpeg_stdio_src (j_decompress_ptr cinfo, FILE * infile)
   src->pub.skip_input_data = skip_input_data;
   src->pub.resync_to_restart = jpeg_resync_to_restart; /* use default method */
   src->pub.term_source = term_source;
-  src->infile = infile;
+  src->infile = const_cast<IStream*>(&infile);
   src->pub.bytes_in_buffer = 0; /* forces fill_input_buffer on first read */
   src->pub.next_input_byte = NULL; /* until buffer loaded */
 }
+
+} // end namespace gdcm
+

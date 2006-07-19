@@ -83,5 +83,10 @@ IStream& IFStream::Read(char *str, std::streamsize n)
   return *this;
 }
 
+std::streamsize IFStream::Gcount ( ) const
+{
+  return InternalIStream.gcount();
+}
+
 } // end namespace gdcm
 
