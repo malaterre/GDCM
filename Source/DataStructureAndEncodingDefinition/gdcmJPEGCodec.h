@@ -29,6 +29,7 @@ public:
   ~JPEGCodec();
   bool CanDecode(TS const &ts);
   bool Decode(IStream &is, OStream &os);
+
 private:
   JPEGInternals *Internals;
 };

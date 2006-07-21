@@ -56,10 +56,10 @@ bool ImageValue::GetBuffer(char *buffer) const
     // Fragments...
     const SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(p);
     assert( sf );
-    sf->GetBuffer(buffer, len);
-    unsigned long totalLen = sf->ComputeLength();
 //#define MDEBUG
 #ifdef MDEBUG
+    sf->GetBuffer(buffer, len);
+    unsigned long totalLen = sf->ComputeLength();
     std::ofstream f("/tmp/debug.jpg");
     f.write(buffer, totalLen);
     f.close();
@@ -67,14 +67,26 @@ bool ImageValue::GetBuffer(char *buffer) const
     if( GetCompressionType() == Compression::JPEG )
       {
       JPEGCodec codec;
-      StringStream is;
-      is.Write(buffer, totalLen);
-      StringStream os;
-      bool r = codec.Decode(is, os);
-      std::string::size_type check = os.Str().size();
-      //assert( check == len );
-      memcpy(buffer, os.Str().c_str(), len);
-      return r;
+      unsigned long pos = 0;
+      for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
+        {
+        StringStream is;
+        unsigned long flen;
+        char mybuffer[82000];
+        sf->GetFragBuffer(i, mybuffer, flen);
+        assert( flen < 82000 );
+        is.Write(mybuffer, flen);
+        StringStream os;
+        bool r = codec.Decode(is, os);
+        //assert( r == true );
+        std::streampos p = is.Tellg();
+        //assert( (flen - p) == 0 );
+        std::string::size_type check = os.Str().size();
+        memcpy(buffer+pos, os.Str().c_str(), os.Str().size());
+        pos += check;
+        }
+      assert( pos == len );
+      return true;
       }
     else if ( GetCompressionType() == Compression::JPEG2000 )
       {

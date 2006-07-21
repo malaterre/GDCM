@@ -38,10 +38,11 @@ typedef struct my_error_mgr* my_error_ptr;
 class JPEGInternals
 {
 public:
-  JPEGInternals():cinfo(),jerr(),StateSuspension(0) {}
+  JPEGInternals():cinfo(),jerr(),StateSuspension(0),SampBuffer(0) {}
   jpeg_decompress_struct cinfo;
   my_error_mgr jerr;
   int StateSuspension;
+  void *SampBuffer;
 };
 
 JPEGCodec::JPEGCodec()
@@ -81,13 +82,13 @@ bool JPEGCodec::Decode(IStream &is, OStream &os)
   /* This struct contains the JPEG decompression parameters and pointers to
    * working space (which is allocated as needed by the JPEG library).
    */
-  jpeg_decompress_struct cinfo = Internals->cinfo;
+  jpeg_decompress_struct &cinfo = Internals->cinfo;
 
   /* We use our private extension JPEG error handler.
    * Note that this struct must live as long as the main JPEG parameter
    * struct, to avoid dangling-pointer problems.
    */
-  my_error_mgr jerr = Internals->jerr;
+  my_error_mgr &jerr = Internals->jerr;
   /* More stuff */
   //FILE * infile;		/* source file */
   JSAMPARRAY buffer;		/* Output row buffer */
@@ -111,62 +112,75 @@ bool JPEGCodec::Decode(IStream &is, OStream &os)
     // We need to clean up the JPEG object, close the input file, and return.
     jpeg_destroy_decompress(&cinfo);
     //fclose(infile);
-    return 0;
+    return false;
   }
-  // Now we can initialize the JPEG decompression object.
-  jpeg_create_decompress(&cinfo);
 
-  // Step 2: specify data source (eg, a file)
-
-  //jpeg_stdio_src(&cinfo, infile);
-  // FIXME: Do some stupid work:
-  //is.Seekg( 0, std::ios::end);
-  //std::streampos buf_size = is.Tellg();
-  //char *dummy_buffer = new char[buf_size];
-  //is.Seekg(0, std::ios::beg);
-  //is.Read( dummy_buffer, buf_size);
-  //jpeg_memory_src(&cinfo,
-  //  reinterpret_cast<const JOCTET*>(dummy_buffer), buf_size);
-  jpeg_stdio_src(&cinfo, is);
-
-  // Step 3: read file parameters with jpeg_read_header()
-
-  (void) jpeg_read_header(&cinfo, TRUE);
-  /* We can ignore the return value from jpeg_read_header since
-   *   (a) suspension is not possible with the stdio data source, and
-   *   (b) we passed TRUE to reject a tables-only JPEG file as an error.
-   * See libjpeg.doc for more info.
-   */
-
-  /* Step 4: set parameters for decompression */
-
-  /* In this example, we don't need to change any of the defaults set by
-   * jpeg_read_header(), so we do nothing here.
-   */
-  if ( cinfo.process == JPROC_LOSSLESS )
+  if( Internals->StateSuspension == 0 )
     {
-    cinfo.jpeg_color_space = JCS_UNKNOWN;
-    cinfo.out_color_space = JCS_UNKNOWN;
+    // Now we can initialize the JPEG decompression object.
+    jpeg_create_decompress(&cinfo);
+
+    // Step 2: specify data source (eg, a file)
+    jpeg_stdio_src(&cinfo, is, true);
+    }
+  else
+    {
+    jpeg_stdio_src(&cinfo, is, false);
+    }
+
+  /* Step 3: read file parameters with jpeg_read_header() */
+
+  if ( Internals->StateSuspension < 2 )
+    {
+    if( jpeg_read_header(&cinfo, TRUE) == JPEG_SUSPENDED )
+      {
+      Internals->StateSuspension = 2;
+      }
+
+    /* Step 4: set parameters for decompression */
+    /* prevent the library from performing any color space conversion */
+    if ( cinfo.process == JPROC_LOSSLESS )
+      {
+      cinfo.jpeg_color_space = JCS_UNKNOWN;
+      cinfo.out_color_space = JCS_UNKNOWN;
+      }
     }
 
   /* Step 5: Start decompressor */
 
-  (void) jpeg_start_decompress(&cinfo);
-  /* We can ignore the return value since suspension is not possible
-   * with the stdio data source.
-   */
+  if (Internals->StateSuspension < 3 )
+    {
+    if ( jpeg_start_decompress(&cinfo) == FALSE )
+      {
+      /* Suspension: jpeg_start_decompress */
+      Internals->StateSuspension = 3;
+      }
 
-  /* We may need to do some setup of our own at this point before reading
-   * the data.  After jpeg_start_decompress() we have the correct scaled
-   * output image dimensions available, as well as the output colormap
-   * if we asked for color quantization.
-   * In this example, we need to make an output work buffer of the right size.
-   */ 
-  /* JSAMPLEs per row in output buffer */
-  row_stride = cinfo.output_width * cinfo.output_components;
-  /* Make a one-row-high sample array that will go away when done with image */
-  buffer = (*cinfo.mem->alloc_sarray)
-		((j_common_ptr) &cinfo, JPOOL_IMAGE, row_stride, 1);
+    /* We may need to do some setup of our own at this point before reading
+     * the data.  After jpeg_start_decompress() we have the correct scaled
+     * output image dimensions available, as well as the output colormap
+     * if we asked for color quantization.
+     * In this example, we need to make an output work buffer of the right size.
+     */ 
+    /* JSAMPLEs per row in output buffer */
+    row_stride = cinfo.output_width * cinfo.output_components;
+    row_stride *= sizeof(JSAMPLE);
+    /* Make a one-row-high sample array that will go away when done with image */
+    buffer = (*cinfo.mem->alloc_sarray)
+      ((j_common_ptr) &cinfo, JPOOL_IMAGE, row_stride, 1);
+
+    /* Save the buffer in case of suspension to be able to reuse it later: */
+    Internals->SampBuffer = buffer;
+    }
+  else
+    {
+    /* JSAMPLEs per row in output buffer */
+    row_stride = cinfo.output_width * cinfo.output_components;
+    row_stride *= sizeof(JSAMPLE);
+
+    /* Suspension: re-use the buffer: */
+    buffer = (JSAMPARRAY)Internals->SampBuffer;
+    }
 
   /* Step 6: while (scan lines remain to be read) */
   /*           jpeg_read_scanlines(...); */
@@ -179,23 +193,28 @@ bool JPEGCodec::Decode(IStream &is, OStream &os)
      * Here the array is only one element long, but you could ask for
      * more than one scanline at a time if that's more convenient.
      */
-    (void) jpeg_read_scanlines(&cinfo, buffer, 1);
+    if( jpeg_read_scanlines(&cinfo, buffer, 1) == 0 )
+      {
+      /* Suspension in jpeg_read_scanlines */
+      Internals->StateSuspension = 3;
+      return true;
+      }
     //memcpy(buffer[0], row_stride);
     os.Write((char*)buffer[0], row_stride);
   }
 
   /* Step 7: Finish decompression */
 
-  (void) jpeg_finish_decompress(&cinfo);
-  /* We can ignore the return value since suspension is not possible
-   * with the stdio data source.
-   */
+  if( jpeg_finish_decompress(&cinfo) == FALSE )
+    {
+    /* Suspension: jpeg_finish_decompress */
+    Internals->StateSuspension = 4;
+    }
 
   /* Step 8: Release JPEG decompression object */
 
   /* This is an important step since it will release a good deal of memory. */
   jpeg_destroy_decompress(&cinfo);
-  //delete[] dummy_buffer;
 
   /* After finish_decompress, we can close the input file.
    * Here we postpone it until after no more JPEG errors are possible,

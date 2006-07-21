@@ -66,6 +66,11 @@ OStream const & SequenceOfFragments::Write(OStream &os) const
   return os;
 }
 
+unsigned int SequenceOfFragments::GetNumberOfFragments() const
+{
+  return Fragments.size();
+}
+
 unsigned long SequenceOfFragments::ComputeLength() const
 {
   unsigned long r = 0;
@@ -75,6 +80,19 @@ unsigned long SequenceOfFragments::ComputeLength() const
     r += it->GetVL();
     }
   return r;
+}
+
+bool SequenceOfFragments::GetFragBuffer(unsigned int fragNb, char *buffer, unsigned long &length) const
+{
+  FragmentVector::const_iterator it = Fragments.begin();
+    {
+    const Fragment &frag = *(it+fragNb);
+    const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
+    const VL len = frag.GetVL();
+    bv.GetBuffer(buffer, len);
+    length = len;
+    }
+  return true;
 }
 
 bool SequenceOfFragments::GetBuffer(char *buffer, unsigned long length) const

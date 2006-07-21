@@ -96,8 +96,26 @@ fill_input_buffer (j_decompress_ptr cinfo)
   my_src_ptr src = (my_src_ptr) cinfo->src;
   size_t nbytes;
 
+  //FIXME FIXME FIXME FIXME FIXME
   //nbytes = JFREAD(src->infile, src->buffer, INPUT_BUF_SIZE);
-  src->infile->Read( (char*)src->buffer, INPUT_BUF_SIZE);
+  std::streampos pos = src->infile->Tellg();
+  std::streampos end = src->infile->Seekg(0, std::ios::end).Tellg();
+  src->infile->Seekg(pos, std::ios::beg);
+  //FIXME FIXME FIXME FIXME FIXME
+  if( end == pos )
+    {
+    /* Start the I/O suspension simply by returning false here: */
+    return FALSE;
+    }
+  if( (end - pos) < INPUT_BUF_SIZE )
+    {
+    src->infile->Read( (char*)src->buffer, (end - pos) );
+    }
+  else
+    {
+    src->infile->Read( (char*)src->buffer, INPUT_BUF_SIZE);
+    }
+
   nbytes = src->infile->Gcount();
 
   if (nbytes <= 0) {
@@ -186,7 +204,7 @@ term_source (j_decompress_ptr cinfo)
  */
 
 GLOBAL(void)
-jpeg_stdio_src (j_decompress_ptr cinfo, IStream const & infile)
+jpeg_stdio_src (j_decompress_ptr cinfo, IStream & infile, bool flag)
 {
   my_src_ptr src;
 
@@ -213,9 +231,12 @@ jpeg_stdio_src (j_decompress_ptr cinfo, IStream const & infile)
   src->pub.skip_input_data = skip_input_data;
   src->pub.resync_to_restart = jpeg_resync_to_restart; /* use default method */
   src->pub.term_source = term_source;
-  src->infile = const_cast<IStream*>(&infile);
-  src->pub.bytes_in_buffer = 0; /* forces fill_input_buffer on first read */
-  src->pub.next_input_byte = NULL; /* until buffer loaded */
+  src->infile = &infile;
+  if( flag )
+    {
+    src->pub.bytes_in_buffer = 0; /* forces fill_input_buffer on first read */
+    src->pub.next_input_byte = NULL; /* until buffer loaded */
+    }
 }
 
 } // end namespace gdcm
