@@ -21,6 +21,37 @@
 #include "vtkImageViewer.h"
 #include "vtkImageViewer2.h"
 #include "vtkImageData.h"
+#include "vtkCommand.h"
+
+//----------------------------------------------------------------------------
+// Callback for the interaction
+class vtkGDCMObserver : public vtkCommand
+{
+public:
+  static vtkGDCMObserver *New() 
+    { 
+    return new vtkGDCMObserver; 
+    }
+  vtkGDCMObserver()
+    {
+    ImageViewer = NULL;
+    }
+  virtual void Execute(vtkObject *, unsigned long event, void* )
+    {
+    if ( this->ImageViewer )
+      {
+      if ( event == vtkCommand::CharEvent )
+        {
+        int max = ImageViewer->GetWholeZMax();
+        int slice = (ImageViewer->GetZSlice() + 1) % ++max;
+        ImageViewer->SetZSlice( slice );
+        ImageViewer->Render();
+        }
+      }
+    }
+  vtkImageViewer *ImageViewer;
+};
+
 
 int main(int argc, char *argv[])
 {
@@ -35,6 +66,9 @@ int main(int argc, char *argv[])
 
   vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::New();
 
+  //const char *viewer_type = argv[0];
+  //assert( strcmp(viewer_type, "gdcmviewer"  ) == 0
+  //     || strcmp(viewer_type, "gdcmviewer2" ) == 0 );
   vtkImageViewer *viewer = vtkImageViewer::New();
 
   // For a single medical image, it would be more efficient to use
@@ -50,6 +84,12 @@ int main(int argc, char *argv[])
 
   viewer->SetInputConnection ( reader->GetOutputPort() );
   viewer->SetupInteractor (iren);
+
+   // Here is where we setup the observer, 
+   vtkGDCMObserver *obs = vtkGDCMObserver::New();
+   obs->ImageViewer = viewer;
+   iren->AddObserver(vtkCommand::CharEvent,obs);
+   obs->Delete();
 
   iren->Initialize();
   iren->Start();
