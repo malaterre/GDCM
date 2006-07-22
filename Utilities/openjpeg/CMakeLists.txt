@@ -39,10 +39,14 @@ SET(OPENJPEG_VERSION
 OPTION(BUILD_EXAMPLES "Build the Examples (codec...)." OFF)
 
 
+# configure name mangling to allow multiple libraries to coexist
+# peacefully
+IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in)
 SET(MANGLE_PREFIX ${OPENJPEG_LIBRARY_NAME})
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/openjpeg_mangle.h
                @ONLY IMMEDIATE)
+ENDIF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in)
 
 #-----------------------------------------------------------------------------
 # Always build the library
