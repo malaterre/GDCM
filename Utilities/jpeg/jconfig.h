@@ -55,6 +55,8 @@ typedef unsigned char boolean;
 
 #endif /* JPEG_CJPEG_DJPEG */
 
+#ifndef __jpegcmake_h
 #include "jpegcmake.h"
+#endif
 
 
