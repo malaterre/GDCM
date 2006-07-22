@@ -31,6 +31,8 @@ INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Source/Common"
 
   # FIXME:
+  #"${GDCM_SOURCE_DIR}/Utilities"
+  #"${GDCM_BINARY_DIR}/Utilities"
   "${GDCM_BINARY_DIR}/Utilities/jpeg/8"
   "${GDCM_SOURCE_DIR}/Utilities/jpeg"
   "${GDCM_SOURCE_DIR}/Utilities/openjpeg/libopenjpeg"

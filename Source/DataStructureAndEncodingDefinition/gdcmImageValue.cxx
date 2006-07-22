@@ -72,9 +72,9 @@ bool ImageValue::GetBuffer(char *buffer) const
         {
         StringStream is;
         unsigned long flen;
-        char mybuffer[82000];
+        char mybuffer[90000];
         sf->GetFragBuffer(i, mybuffer, flen);
-        assert( flen < 82000 );
+        assert( flen < 90000 );
         is.Write(mybuffer, flen);
         StringStream os;
         bool r = codec.Decode(is, os);
