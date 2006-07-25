@@ -14,16 +14,25 @@
 
 =========================================================================*/
 
+#include "gdcmReader.h"
+#include "gdcmFileMetaInformation.h"
+#include "gdcmDataSet.h"
+
+#include <string>
+#include <iostream>
+
 #include <stdio.h>     /* for printf */
 #include <stdlib.h>    /* for exit */
 #include <getopt.h>
+#include <string.h>
 
 int main (int argc, char **argv) {
   int c;
-  int digit_optind = 0;
+  //int digit_optind = 0;
 
+  std::string filename;
   while (1) {
-    int this_option_optind = optind ? optind : 1;
+    //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
     static struct option long_options[] = {
         {"input", 1, 0, 0},
@@ -46,6 +55,7 @@ int main (int argc, char **argv) {
 
     case 'i':
       printf ("option i with value ’%s’\n", optarg);
+      filename = optarg;
       break;
 
     case 'o':
@@ -67,6 +77,25 @@ int main (int argc, char **argv) {
     printf ("\n");
   }
 
+  if( filename.empty() )
+    {
+    return 1;
+    }
+  // else
+  //std::cout << "Filename: " << filename << std::endl;
+  gdcm::Reader reader;
+  reader.SetFileName( filename.c_str() );
+  if( !reader.Read() )
+    {
+    std::cerr << "Failed to read: " << filename << std::endl;
+    }
+
+  const gdcm::FileMetaInformation &h = reader.GetHeader();
+  std::cout << h << std::endl;
+
+  const gdcm::DataSet &ds = reader.GetDataSet();
+  std::cout << ds << std::endl;
+ 
   return 0;
 }
 

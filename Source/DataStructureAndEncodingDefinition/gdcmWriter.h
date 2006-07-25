@@ -35,8 +35,8 @@ public:
   virtual ~Writer();
 
   virtual bool Write(); // Execute()
-  void SetFileName(std::string const &filename) {
-    Stream.Open(filename.c_str());
+  void SetFileName(const char *filename) {
+    Stream.Open(filename);
   }
 
   const FileMetaInformation &GetHeader() const {

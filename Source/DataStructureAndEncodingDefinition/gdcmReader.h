@@ -49,8 +49,8 @@ public:
   virtual ~Reader();
 
   virtual bool Read(); // Execute()
-  void SetFileName(std::string const &filename) {
-    Stream.Open(filename.c_str());
+  void SetFileName(const char *filename) {
+    Stream.Open(filename);
   }
 
   const FileMetaInformation &GetHeader() const {

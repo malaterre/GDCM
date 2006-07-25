@@ -67,6 +67,7 @@ bool ImageValue::GetBuffer(char *buffer) const
     if( GetCompressionType() == Compression::JPEG )
       {
       JPEGCodec codec;
+      //codec.SetBitSample( GetPixelType().GetBitsAllocated() );
       unsigned long pos = 0;
       for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
         {
