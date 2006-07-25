@@ -123,6 +123,24 @@ FOREACH(bits 8 12 16)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/mangle_jpeg.h.in
                  ${CMAKE_CURRENT_BINARY_DIR}/${bits}/mangle_jpeg${bits}bits.h
                  @ONLY IMMEDIATE)
+
+
+  # FIXME FIXME FIXME
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/jmorecfg.h
+                 ${CMAKE_CURRENT_BINARY_DIR}/${bits}/jmorecfg.h
+                 COPYONLY)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/jconfig.h
+                 ${CMAKE_CURRENT_BINARY_DIR}/${bits}/jconfig.h
+                 COPYONLY)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/jpeglib.h
+                 ${CMAKE_CURRENT_BINARY_DIR}/${bits}/jpeglib.h
+                 COPYONLY)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/jerror.h
+                 ${CMAKE_CURRENT_BINARY_DIR}/${bits}/jerror.h
+                 COPYONLY)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/jinclude.h
+                 ${CMAKE_CURRENT_BINARY_DIR}/${bits}/jinclude.h
+                 COPYONLY)
 ENDFOREACH(bits)
 
 # I could not get the depencencies in CMake to work properly so instead
