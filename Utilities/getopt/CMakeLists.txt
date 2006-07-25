@@ -10,8 +10,13 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.2)
 
 SET(GETOPT_SRCS
   getopt.c
+  getopt_long.c
   )
+ADD_DEFINITIONS(-D_NETBSD_SOURCE)
 
+INCLUDE_DIRECTORIES(BEFORE
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  )
 # Only build this lib static. On most unix system
 # we will be using the standart getopt
 # so this liob will be for the poor Win32 user (those

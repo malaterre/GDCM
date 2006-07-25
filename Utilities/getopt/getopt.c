@@ -1,3 +1,5 @@
+/*	$NetBSD: getopt.c,v 1.27 2005/11/29 03:12:00 christos Exp $	*/
+
 /*
  * Copyright (c) 1987, 1993, 1994
  *	The Regents of the University of California.  All rights reserved.
@@ -28,12 +30,28 @@
  */
 
 #if 0
-static char sccsid[] = "@(#)getopt.c	8.3 (Berkeley) 4/27/95";
-__RCSID("$NetBSD: getopt.c,v 1.26 2003/08/07 16:43:40 agc Exp $");
+#include <sys/cdefs.h>
 #endif
+#if defined(LIBC_SCCS) && !defined(lint)
+#if 0
+static char sccsid[] = "@(#)getopt.c	8.3 (Berkeley) 4/27/95";
+#else
+__RCSID("$NetBSD: getopt.c,v 1.27 2005/11/29 03:12:00 christos Exp $");
+#endif
+#endif /* LIBC_SCCS and not lint */
 
-#include <stdio.h>
-#include <string.h>
+/*#include "namespace.h"*/
+
+#include <assert.h> /* assert() */
+/*#include <errno.h>*/
+#include <stdio.h> /* fprintf */
+#include <stdlib.h> /* abort() */
+#include <string.h> /* strchr */
+/*#include <unistd.h>*/
+
+#ifdef __weak_alias
+__weak_alias(getopt,_getopt)
+#endif
 
 int	opterr = 1,		/* if error message should be printed */
 	optind = 1,		/* index into parent argv vector */
@@ -45,20 +63,32 @@ const char	*optarg;		/* argument associated with option */
 #define	BADARG	(int)':'
 #define	EMSG	""
 
+inline const char *getprogname()
+{
+  abort();
+  return "";
+}
+
 /*
  * getopt --
  *	Parse argc/argv argument vector.
  */
 int
-getopt(int argc, char * const argv[], const char *optstring)
+getopt(nargc, nargv, ostr)
+	int nargc;
+	char * const nargv[];
+	const char *ostr;
 {
-	static const char *place = EMSG;		/* option letter processing */
+	static const char *place = EMSG;	/* option letter processing */
 	char *oli;				/* option letter list index */
+
+	assert(nargv != NULL);
+	assert(ostr != NULL);
 
 	if (optreset || *place == 0) {		/* update scanning pointer */
 		optreset = 0;
-		place = argv[optind];
-		if (optind >= argc || *place++ != '-') {
+		place = nargv[optind];
+		if (optind >= nargc || *place++ != '-') {
 			/* Argument is absent or is not an option */
 			place = EMSG;
 			return (-1);
@@ -74,7 +104,7 @@ getopt(int argc, char * const argv[], const char *optstring)
 			/* Solitary '-', treat as a '-' option
 			   if the program (eg su) is looking for it. */
 			place = EMSG;
-			if (strchr(optstring, '-') == NULL)
+			if (strchr(ostr, '-') == NULL)
 				return -1;
 			optopt = '-';
 		}
@@ -82,12 +112,13 @@ getopt(int argc, char * const argv[], const char *optstring)
 		optopt = *place++;
 
 	/* See if option letter is one the caller wanted... */
-	if (optopt == ':' || (oli = strchr(optstring, optopt)) == NULL) {
+	if (optopt == ':' || (oli = strchr(ostr, optopt)) == NULL) {
 		if (*place == 0)
 			++optind;
-		if (opterr && *optstring != ':')
+		if (opterr && *ostr != ':')
 			(void)fprintf(stderr,
-                                      "unknown option -- %c\n", optopt);
+			    "%s: unknown option -- %c\n", getprogname(),
+			    optopt);
 		return (BADCH);
 	}
 
@@ -102,17 +133,17 @@ getopt(int argc, char * const argv[], const char *optstring)
 		   entire next argument. */
 		if (*place)
 			optarg = place;
-		else if (argc > ++optind)
-			optarg = argv[optind];
+		else if (nargc > ++optind)
+			optarg = nargv[optind];
 		else {
 			/* option-argument absent */
 			place = EMSG;
-			if (*optstring == ':')
+			if (*ostr == ':')
 				return (BADARG);
 			if (opterr)
 				(void)fprintf(stderr,
-                                        "option requires an argument -- %c\n",
-                                        optopt);
+				    "%s: option requires an argument -- %c\n",
+				    getprogname(), optopt);
 			return (BADCH);
 		}
 		place = EMSG;
