@@ -1,0 +1,56 @@
+MPEG-2 Verification Sequence
+test%d    /* name of source files */
+q%d       /* name of reconstructed images ("-": don't store) */
+-         /* name of intra quant matrix file     ("-": default matrix) */ 
+-         /* name of non intra quant matrix file ("-": default matrix) */
+stat.out  /* name of statistics file ("-": stdout ) */
+0         /* input picture file format: 0=*.Y,*.U,*.V, 1=*.yuv, 2=*.ppm */ 
+3         /* number of frames */
+0         /* number of first frame */
+23:59:59:24 /* timecode of first frame */
+6         /* N (# of frames in GOP) */
+2         /* M (I/P frame distance) */
+0         /* ISO/IEC 11172-2 stream */
+0         /* 0:frame pictures, 1:field pictures */
+128       /* horizontal_size */
+128       /* vertical_size */
+2         /* aspect_ratio_information 1=square pel, 2=4:3, 3=16:9, 4=2.11:1 */
+3         /* frame_rate_code 2=23.976, 3=25, 4=29.97, 5=30 frames/second */
+400000.0  /* bit_rate (bits/s) */
+6         /* vbv_buffer_size (in multiples of 16 kbit) */
+0         /* low_delay  */
+0         /* constrained_parameters_flag */
+4         /* Profile ID: Simple = 5, Main = 4, SNR = 3, Spatial = 2, High = 1 */
+8         /* Level ID:   Low = 10, Main = 8, High 1440 = 6, High = 4          */
+0         /* progressive_sequence */
+1         /* chroma_format: 1=4:2:0, 2=4:2:2, 3=4:4:4 */
+1         /* video_format: 0=comp., 1=PAL, 2=NTSC, 3=SECAM, 4=MAC, 5=unspec. */
+5         /* color_primaries */
+5         /* transfer_characteristics */
+5         /* matrix_coefficients */
+128       /* display_horizontal_size */
+128       /* display_vertical_size */
+1         /* intra_dc_precision (0: 8 bit, 1: 9 bit, 2: 10 bit, 3: 11 bit */
+1         /* top_field_first */
+1 0 0     /* frame_pred_frame_dct (I P B) */
+0 0 0     /* concealment_motion_vectors (I P B) */
+0 1 1     /* q_scale_type  (I P B) */
+1 1 0     /* intra_vlc_format (I P B)*/
+1 0 1     /* alternate_scan (I P B) */
+0         /* repeat_first_field */
+0         /* progressive_frame */
+0         /* P distance between complete intra slice refresh */
+0         /* rate control: r (reaction parameter) */
+0         /* rate control: avg_act (initial average activity) */
+0         /* rate control: Xi (initial I frame global complexity measure) */
+0         /* rate control: Xp (initial P frame global complexity measure) */
+0         /* rate control: Xb (initial B frame global complexity measure) */
+0         /* rate control: d0i (initial I frame virtual buffer fullness) */
+0         /* rate control: d0p (initial P frame virtual buffer fullness) */
+0         /* rate control: d0b (initial B frame virtual buffer fullness) */
+2 2 11 11 /* P:  forw_hor_f_code forw_vert_f_code search_width/height */
+1 1 3  3  /* B1: forw_hor_f_code forw_vert_f_code search_width/height */
+1 1 7  7  /* B1: back_hor_f_code back_vert_f_code search_width/height */
+1 1 7  7  /* B2: forw_hor_f_code forw_vert_f_code search_width/height */
+1 1 3  3  /* B2: back_hor_f_code back_vert_f_code search_width/height */
+
