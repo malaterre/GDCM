@@ -1,0 +1,28 @@
+INCLUDE_REGULAR_EXPRESSION("^.*$")
+
+SET(MPEG2DEC_SRCS
+  getpic.c
+  motion.c
+  getvlc.c
+  gethdr.c
+  getblk.c
+  getbits.c
+  store.c
+  recon.c
+  spatscal.c
+  idct.c
+  idctref.c
+  #  display.c
+  systems.c
+  subspic.c
+  #  verify.c
+  )
+
+ADD_LIBRARY(${MPEG2_LIBRARY_NAME} ${MPEG2DEC_SRCS} mpeg2dec.c)
+IF(UNIX)
+  TARGET_LINK_LIBRARIES(${MPEG2_LIBRARY_NAME} -lm)
+ENDIF(UNIX)
+
+#ADD_DEFINITIONS(-DBUILD_MPEG2DEC)
+#ADD_EXECUTABLE(mpeg2decode ${MPEG2DEC_SRCS} mpeg2dec.c)
+#TARGET_LINK_LIBRARIES(mpeg2decode -lm)
