@@ -26,7 +26,8 @@
 #include <getopt.h>
 #include <string.h>
 
-int main (int argc, char **argv) {
+int main (int argc, char *argv[])
+{
   int c;
   //int digit_optind = 0;
 
@@ -43,24 +44,27 @@ int main (int argc, char **argv) {
     c = getopt_long (argc, argv, "i:o:",
       long_options, &option_index);
     if (c == -1)
+      {
       break;
+      }
 
-    switch (c) {
+    switch (c)
+      {
     case 0:
         {
-      const char *s = long_options[option_index].name;
-      printf ("option %s", s);
-      if (optarg)
-        {
-        if( option_index == 0 ) /* input */
+        const char *s = long_options[option_index].name;
+        printf ("option %s", s);
+        if (optarg)
           {
-          assert( strcmp(s, "input") == 0 );
-          assert( filename.empty() );
-          filename = optarg;
+          if( option_index == 0 ) /* input */
+            {
+            assert( strcmp(s, "input") == 0 );
+            assert( filename.empty() );
+            filename = optarg;
+            }
+          printf (" with arg %s", optarg);
           }
-        printf (" with arg %s", optarg);
-        }
-      printf ("\n");
+        printf ("\n");
         }
       break;
 
@@ -79,15 +83,18 @@ int main (int argc, char **argv) {
 
     default:
       printf ("?? getopt returned character code 0%o ??\n", c);
-    }
+      }
   }
 
-  if (optind < argc) {
+  if (optind < argc)
+    {
     printf ("non-option ARGV-elements: ");
     while (optind < argc)
+      {
       printf ("%s ", argv[optind++]);
+      }
     printf ("\n");
-  }
+    }
 
   if( filename.empty() )
     {
@@ -108,7 +115,7 @@ int main (int argc, char **argv) {
 
   const gdcm::DataSet &ds = reader.GetDataSet();
   std::cout << ds << std::endl;
- 
+
   return 0;
 }
 
