@@ -24,7 +24,7 @@
 namespace gdcm
 {
 
-JPEGCodec::JPEGCodec()
+JPEGCodec::JPEGCodec():BitSample(0)
 {
   Internal = NULL;
 }
@@ -44,22 +44,24 @@ void JPEGCodec::SetBitSample(int bit)
   BitSample = bit;
   assert( Internal == NULL );
   if ( BitSample == 8 )
-  {
-  Internal = new JPEG8Codec;
-  }
+    {
+    Internal = new JPEG8Codec;
+    }
   else if ( BitSample == 12 )
-  {
-  Internal = new JPEG16Codec;
-  }
+    {
+    Internal = new JPEG12Codec;
+    }
   else if ( BitSample == 16 )
-  {
-  Internal = new JPEG16Codec;
-  }
+    {
+    Internal = new JPEG16Codec;
+    }
   else
-  {
-  gdcmWarningMacro( "bla" );
-  delete Internal;
-  }
+    {
+    gdcmWarningMacro( "bla" );
+    // Clearly make sure Internal will not be used
+    delete Internal;
+    Internal = NULL;
+    }
 }
 
 bool JPEGCodec::Decode(IStream &is, OStream &os)

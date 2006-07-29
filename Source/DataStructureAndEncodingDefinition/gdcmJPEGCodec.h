@@ -30,9 +30,11 @@ public:
   bool Decode(IStream &is, OStream &os);
   void SetBitSample(int bit);
 
+protected:
+  int BitSample;
+
 private:
   JPEGCodec *Internal;
-  int BitSample;
 };
 
 } // end namespace gdcm

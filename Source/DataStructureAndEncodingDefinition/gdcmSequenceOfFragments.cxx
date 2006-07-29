@@ -68,6 +68,12 @@ OStream const & SequenceOfFragments::Write(OStream &os) const
 
 unsigned int SequenceOfFragments::GetNumberOfFragments() const
 {
+  // Do not count the last fragment
+  if( SequenceLengthField.IsUndefined() )
+    {
+    return Fragments.size() - 1;
+    }
+  // else
   return Fragments.size();
 }
 

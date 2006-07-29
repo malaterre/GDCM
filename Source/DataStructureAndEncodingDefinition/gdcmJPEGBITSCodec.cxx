@@ -275,6 +275,7 @@ public:
 JPEGBITSCodec::JPEGBITSCodec()
 {
   Internals = new JPEGInternals;
+  BitSample = BITS_IN_JSAMPLE;
 }
 
 JPEGBITSCodec::~JPEGBITSCodec()
@@ -358,6 +359,8 @@ bool JPEGBITSCodec::Decode(IStream &is, OStream &os)
       {
       Internals->StateSuspension = 2;
       }
+    //assert( cinfo.data_precision == BITS_IN_JSAMPLE );
+    //assert( cinfo.data_precision == this->BitSample );
 
     /* Step 4: set parameters for decompression */
     /* prevent the library from performing any color space conversion */

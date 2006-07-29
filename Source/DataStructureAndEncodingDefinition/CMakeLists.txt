@@ -24,6 +24,7 @@ SET(DSED_SRCS
   gdcmFragment.cxx
   #gdcmJPEGDataSrc.cxx
   gdcmJPEG8Codec.cxx
+  gdcmJPEG12Codec.cxx
   gdcmJPEG16Codec.cxx
   )
 
