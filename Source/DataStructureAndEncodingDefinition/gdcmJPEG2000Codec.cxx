@@ -143,48 +143,54 @@ bool JPEG2000Codec::Decode(IStream &is, OStream &os)
       /* close the byte stream */
       opj_cio_close(cio);
 
-   raw = (char*)src;
+   //raw = (char*)src;
    // Copy buffer
-   for (int compno = 0; compno < image->numcomps; compno++)
-   {
-      opj_image_comp_t *comp = &image->comps[compno];
-  
-      int w = image->comps[compno].w;
-      int wr = int_ceildivpow2(image->comps[compno].w, image->comps[compno].factor);
-  
-      //int h = image.comps[compno].h;
-      int hr = int_ceildivpow2(image->comps[compno].h, image->comps[compno].factor);
-  
-      if (comp->prec <= 8)
-      {
-         uint8_t *data8 = (uint8_t*)raw;
-         for (int i = 0; i < wr * hr; i++) 
-         {
+      for (int compno = 0; compno < image->numcomps; compno++)
+        {
+        opj_image_comp_t *comp = &image->comps[compno];
+
+        int w = image->comps[compno].w;
+        int wr = int_ceildivpow2(image->comps[compno].w, image->comps[compno].factor);
+
+        //int h = image.comps[compno].h;
+        int hr = int_ceildivpow2(image->comps[compno].h, image->comps[compno].factor);
+
+        if (comp->prec <= 8)
+          {
+          raw = new char[wr * hr];
+          uint8_t *data8 = (uint8_t*)raw;
+          for (int i = 0; i < wr * hr; i++) 
+            {
             int v = image->comps[compno].data[i / wr * w + i % wr];
             *data8++ = (uint8_t)v;
-         }
-      }
-      else if (comp->prec <= 16)
-      {
-         uint16_t *data16 = (uint16_t*)raw;
-         for (int i = 0; i < wr * hr; i++) 
-         {
+            }
+          os.Write(raw, wr * hr * 1);
+          }
+        else if (comp->prec <= 16)
+          {
+          raw = new char[wr * hr * 2];
+          uint16_t *data16 = (uint16_t*)raw;
+          for (int i = 0; i < wr * hr; i++) 
+            {
             int v = image->comps[compno].data[i / wr * w + i % wr];
             *data16++ = (uint16_t)v;
-         }
-      }
-      else
-      {
-         uint32_t *data32 = (uint32_t*)raw;
-         for (int i = 0; i < wr * hr; i++) 
-         {
+            }
+          os.Write(raw, wr * hr * 2);
+          }
+        else
+          {
+          raw = new char[wr * hr * 4];
+          uint32_t *data32 = (uint32_t*)raw;
+          for (int i = 0; i < wr * hr; i++) 
+            {
             int v = image->comps[compno].data[i / wr * w + i % wr];
             *data32++ = (uint32_t)v;
-         }
-      }
-      os.Write(raw, wr * hr * (comp->prec/8));
-      //free(image.comps[compno].data);
-   }
+            }
+          os.Write(raw, wr * hr * 4);
+          }
+        delete[] raw;
+        //free(image.comps[compno].data);
+        }
   /* free the memory containing the code-stream */
   delete[] src;  //FIXME
 
