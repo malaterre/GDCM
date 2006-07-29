@@ -132,4 +132,25 @@ bool SequenceOfFragments::GetBuffer(char *buffer, unsigned long length) const
   return true;
 }
 
+bool SequenceOfFragments::WriteBuffer(std::ostream &os) const
+{
+  FragmentVector::const_iterator it = Fragments.begin();
+  unsigned long total = 0;
+  for(;it != Fragments.end(); ++it)
+    {
+    const Fragment &frag = *it;
+    const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
+    const VL len = frag.GetVL();
+    bv.WriteBuffer(os);
+    total += len;
+    }
+  //if( total != length )
+  //  {
+  //  //std::cerr << " DEBUG: " << total << " " << length << std::endl;
+  //  abort();
+  //  return false;
+  //  }
+  return true;
+}
+
 } // end namespace gdcm

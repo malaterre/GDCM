@@ -43,7 +43,6 @@ public:
 
   virtual IStream& Read(IStream &is) = 0;
   virtual OStream const & Write(OStream &os) const = 0;
-
 };
 
 

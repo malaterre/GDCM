@@ -102,6 +102,11 @@ public:
     abort();
     return false;
     }
+  bool WriteBuffer(std::ostream &os) const {
+    assert( Internal.size() <= Length );
+    os.write(&Internal[0], Internal.size() );
+    return true;
+  }
 
   IStream &Read(IStream &is) {
     return is.Read(&Internal[0], Length);

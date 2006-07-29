@@ -38,6 +38,7 @@ bool ImageValue::GetBuffer(char *buffer) const
     {
     if( len != bv->GetLength() )
       {
+      // SIEMENS_GBS_III-16-ACR_NEMA_1.acr
       gdcmWarningMacro( "Pixel Length " << bv->GetLength() <<
         " is different from computed value " << len );
       }
