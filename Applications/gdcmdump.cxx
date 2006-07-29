@@ -47,14 +47,26 @@ int main (int argc, char **argv) {
 
     switch (c) {
     case 0:
-      printf ("option %s", long_options[option_index].name);
+        {
+      const char *s = long_options[option_index].name;
+      printf ("option %s", s);
       if (optarg)
+        {
+        if( option_index == 0 ) /* input */
+          {
+          assert( strcmp(s, "input") == 0 );
+          assert( filename.empty() );
+          filename = optarg;
+          }
         printf (" with arg %s", optarg);
+        }
       printf ("\n");
+        }
       break;
 
     case 'i':
       printf ("option i with value ’%s’\n", optarg);
+      assert( filename.empty() );
       filename = optarg;
       break;
 
@@ -88,6 +100,7 @@ int main (int argc, char **argv) {
   if( !reader.Read() )
     {
     std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
     }
 
   const gdcm::FileMetaInformation &h = reader.GetHeader();

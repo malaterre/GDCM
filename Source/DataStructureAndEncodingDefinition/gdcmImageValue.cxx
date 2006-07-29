@@ -127,6 +127,11 @@ bool ImageValue::GetBuffer(char *buffer) const
         assert( !(len%2) );
         len /= 2;
         }
+      else if( pt.GetSamplesPerPixel() == 3 )
+        {
+        // FIXME FIXME
+        len /= 3;
+        }
       codec.SetLength( len );
       StringStream is;
       sf->GetBuffer(buffer, rle_len);

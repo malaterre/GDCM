@@ -18,5 +18,7 @@
 int TestDict(int, char *[])
 {
   gdcm::Dict d;
+  std::cerr << sizeof(d) << std::endl;
+
   return 0;
 }
