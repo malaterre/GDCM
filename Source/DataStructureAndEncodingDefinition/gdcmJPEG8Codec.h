@@ -13,28 +13,27 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmJPEGcodec_h
-#define __gdcmJPEGcodec_h
+#ifndef __gdcmJPEG8Codec_h
+#define __gdcmJPEG8Codec_h
 
-#include "gdcmCodec.h"
+#include "gdcmJPEGCodec.h"
 
 namespace gdcm
 {
   
-class JPEGCodec : public Codec
+class JPEGInternals;
+class JPEG8Codec : public JPEGCodec
 {
 public:
-  JPEGCodec();
-  ~JPEGCodec();
-  bool CanDecode(TS const &ts);
+  JPEG8Codec();
+  ~JPEG8Codec();
+
   bool Decode(IStream &is, OStream &os);
-  void SetBitSample(int bit);
 
 private:
-  JPEGCodec *Internal;
-  int BitSample;
+  JPEGInternals *Internals;
 };
 
 } // end namespace gdcm
 
-#endif //__gdcmJPEGcodec_h
+#endif //__gdcmJPEG8Codec_h

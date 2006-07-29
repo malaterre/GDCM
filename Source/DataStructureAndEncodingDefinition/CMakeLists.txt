@@ -23,6 +23,8 @@ SET(DSED_SRCS
   gdcmWriter.cxx
   gdcmFragment.cxx
   #gdcmJPEGDataSrc.cxx
+  gdcmJPEG8Codec.cxx
+  gdcmJPEG16Codec.cxx
   )
 
 # Add the include paths
@@ -32,9 +34,9 @@ INCLUDE_DIRECTORIES(
 
   # FIXME:
   "${GDCM_SOURCE_DIR}/Utilities"
-  #"${GDCM_BINARY_DIR}/Utilities"
-  "${GDCM_BINARY_DIR}/Utilities/jpeg/8"
-  "${GDCM_SOURCE_DIR}/Utilities/jpeg"
+  "${GDCM_BINARY_DIR}/Utilities"
+  #"${GDCM_BINARY_DIR}/Utilities/jpeg/8"
+  #"${GDCM_SOURCE_DIR}/Utilities/jpeg"
   #"${GDCM_SOURCE_DIR}/Utilities/openjpeg/libopenjpeg"
   "${GDCM_BINARY_DIR}/Utilities/openjpeg"
   )

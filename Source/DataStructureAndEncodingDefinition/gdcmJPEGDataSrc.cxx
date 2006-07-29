@@ -15,11 +15,6 @@
  */
 
 /* this is not a core library module, so it doesn't define JPEG_INTERNALS */
-extern "C" {
-#include "jinclude.h"
-#include "jpeglib.h"
-#include "jerror.h"
-}
 
 namespace gdcm
 {

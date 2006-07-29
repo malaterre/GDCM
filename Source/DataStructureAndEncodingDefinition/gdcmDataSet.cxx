@@ -53,6 +53,7 @@ class StructuredSet : public StructuredSetBase
 {
 public:
   typedef typename std::set<DEType, lttag> DataElementSet;
+  typedef typename DataElementSet::iterator DataElementSetIterator;
   //typedef typename DataElementSet::iterator iterator;
   virtual void Clear() {
     DES.clear();
@@ -165,6 +166,20 @@ public:
 private:
   DataElementSet DES;
 };
+
+//-----------------------------------------------------------------------------
+class DataSetIteratorInternal
+{
+  //std
+};
+
+void DataSetIterator::Next()
+{
+  if( Internal == 0 )
+    {
+    Internal = new DataSetIteratorInternal();
+    }
+}
 
 //-----------------------------------------------------------------------------
 void DataSet::Print(std::ostream &os) const
