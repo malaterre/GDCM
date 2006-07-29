@@ -317,26 +317,24 @@ bool JPEGBITSCodec::Decode(IStream &is, OStream &os)
   JSAMPARRAY buffer;		/* Output row buffer */
   int row_stride;		/* physical row width in output buffer */
 
-  //if( !is /*|| !is.good()*/ )
-  //  {
-  //  abort();
-  //  return false;
-  //  }
-
-  // Step 1: allocate and initialize JPEG decompression object
-  //
-  // We set up the normal JPEG error routines, then override error_exit.
-  cinfo.err = jpeg_std_error(&jerr.pub);
-  jerr.pub.error_exit = my_error_exit;
-  // Establish the setjmp return context for my_error_exit to use.
-  if (setjmp(jerr.setjmp_buffer))
+  if( Internals->StateSuspension == 0 )
     {
-    // If we get here, the JPEG code has signaled an error.
-    // We need to clean up the JPEG object, close the input file, and return.
-    jpeg_destroy_decompress(&cinfo);
-    //fclose(infile);
-    return false;
-  }
+    // Step 1: allocate and initialize JPEG decompression object
+    //
+    // We set up the normal JPEG error routines, then override error_exit.
+    cinfo.err = jpeg_std_error(&jerr.pub);
+    jerr.pub.error_exit = my_error_exit;
+    // Establish the setjmp return context for my_error_exit to use.
+    if (setjmp(jerr.setjmp_buffer))
+      {
+      // If we get here, the JPEG code has signaled an error.
+      // We need to clean up the JPEG object, close the input file, and return.
+      jpeg_destroy_decompress(&cinfo);
+      //fclose(infile);
+      abort();
+      return false;
+      }
+    }
 
   if( Internals->StateSuspension == 0 )
     {
@@ -451,6 +449,8 @@ bool JPEGBITSCodec::Decode(IStream &is, OStream &os)
   /* At this point you may want to check to see whether any corrupt-data
    * warnings occurred (test whether jerr.pub.num_warnings is nonzero).
    */
+  /* In any case make sure the we reset the internal state suspension */
+  Internals->StateSuspension = 0;
 
   /* And we're done! */
   return true;
