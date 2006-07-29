@@ -74,6 +74,7 @@ unsigned int SequenceOfFragments::GetNumberOfFragments() const
     return Fragments.size() - 1;
     }
   // else
+  abort();
   return Fragments.size();
 }
 
@@ -99,6 +100,14 @@ bool SequenceOfFragments::GetFragBuffer(unsigned int fragNb, char *buffer, unsig
     length = len;
     }
   return true;
+}
+
+const Fragment& SequenceOfFragments::GetFragment(unsigned int num) const
+{
+  assert( num < Fragments.size() );
+  FragmentVector::const_iterator it = Fragments.begin();
+  const Fragment &frag = *(it+num);
+  return frag;
 }
 
 bool SequenceOfFragments::GetBuffer(char *buffer, unsigned long length) const

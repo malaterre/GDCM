@@ -18,6 +18,7 @@
 #include "gdcmByteValue.h"
 #include "gdcmDataSet.h"
 #include "gdcmSequenceOfFragments.h"
+#include "gdcmFragment.h"
 #include "gdcmRAWCodec.h"
 #include "gdcmJPEGCodec.h"
 #include "gdcmJPEG2000Codec.h"
@@ -50,6 +51,8 @@ bool ImageValue::GetBuffer(char *buffer) const
     is.Write(buffer, len);
     StringStream os;
     bool r = codec.Decode(is, os);
+    std::string::size_type check = os.Str().size();
+    assert( check == len );
     memcpy(buffer, os.Str().c_str(), len);
     return r;
     }
@@ -76,16 +79,21 @@ bool ImageValue::GetBuffer(char *buffer) const
       for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
         {
         StringStream is;
-        unsigned long flen;
-        char mybuffer[90000];
-        sf->GetFragBuffer(i, mybuffer, flen);
-        assert( flen < 90000 );
-        is.Write(mybuffer, flen);
+        //unsigned long flen;
+        //char mybuffer[90000];
+        //sf->GetFragBuffer(i, mybuffer, flen);
+        //assert( flen < 90000 );
+        const Fragment &frag = sf->GetFragment(i);
+        const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
+        char *mybuffer = new char[bv.GetLength()];
+        bv.GetBuffer(mybuffer, bv.GetLength());
+        is.Write(mybuffer, bv.GetLength());
+        delete[] mybuffer;
         StringStream os;
         bool r = codec.Decode(is, os);
         assert( r == true );
         std::streampos p = is.Tellg();
-        assert( (flen - p) == 0 );
+        assert( (bv.GetLength() - p) == 0 );
         std::string::size_type check = os.Str().size();
         memcpy(buffer+pos, os.Str().c_str(), os.Str().size());
         pos += check;

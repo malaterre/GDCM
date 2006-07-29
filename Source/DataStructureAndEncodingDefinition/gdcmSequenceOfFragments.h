@@ -58,6 +58,7 @@ public:
   bool GetBuffer(char *buffer, unsigned long length) const;
   bool GetFragBuffer(unsigned int fragNb, char *buffer, unsigned long &length) const;
   unsigned int GetNumberOfFragments() const;
+  const Fragment& GetFragment(unsigned int num) const;
 
 protected:
   void Print(std::ostream &os) const {
