@@ -86,7 +86,7 @@ inline std::ostream& operator<<(std::ostream& _os, const Dict &_val)
     {
     const Tag &t = it->first;
     const DictEntry &de = it->second;
-    _os << "(" << t << ") " << de << '\n';
+    _os << t << " " << de << '\n';
     }
 
   return _os;

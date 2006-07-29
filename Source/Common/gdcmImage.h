@@ -101,6 +101,14 @@ public:
     {
     CompressionType = ct;
     }
+  bool GetNeedByteSwap() const
+    {
+    return NeedByteSwap;
+    }
+  void SetNeedByteSwap(bool b)
+    {
+    NeedByteSwap = b;
+    }
 
 //  Image(Image const&);
 //  Image &operator= (Image const&);
@@ -119,6 +127,7 @@ private:
 
   SwapCode SC;
   Compression::Types CompressionType;
+  bool NeedByteSwap;
 };
 
 } // end namespace gdcm

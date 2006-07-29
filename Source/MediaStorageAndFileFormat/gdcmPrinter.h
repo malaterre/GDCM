@@ -36,8 +36,8 @@ public:
   ~Printer();
 
   // Set the input dataset to the printer
-  void SetDataSet(DataSet &ds) {
-    DS = &ds;
+  void SetDataSet(DataSet const &ds) {
+    DS = const_cast<DataSet*>(&ds);
   }
   DataSet const &GetDataSet() const {
     return *DS;

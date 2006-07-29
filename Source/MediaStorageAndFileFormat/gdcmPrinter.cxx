@@ -16,9 +16,9 @@
 #include "gdcmPrinter.h"
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
-//#include "gdcmDict.h"
+#include "gdcmDict.h"
 //#include "gdcmDicts.h"
-//#include "gdcmGroupDict.h"
+#include "gdcmGroupDict.h"
 //#include "gdcmAttribute.h"
 #include "gdcmVR.h"
 
@@ -33,22 +33,22 @@ Printer::~Printer()
 {
 }
 
-#if 0
+#if 1
 //-----------------------------------------------------------------------------
 void PrintExplicitDataElement(std::ostream& _os, const ExplicitDataElement &_val, bool printVR, VR::VRType dictVR, Printer::PrintStyles pstyle)
 {
   const Tag &t = _val.GetTag();
   const VR::VRType vr = _val.GetVR();
-  const uint32_t vl = _val.GetValueLength();
+  const uint32_t vl = _val.GetVL();
   const Value& value = _val.GetValue();
   (void)printVR;
-  if( pstyle == Printer::DCMTK_STYLE )
+  if( pstyle == Printer::CONDENSED_STYLE )
     {
-  _os << t << " " << vr;
+    _os << t << " " << vr;
     }
   else
     {
-  _os << t << " VR=" << vr;
+    _os << t << " VR=" << vr;
     }
   if( dictVR != VR::INVALID && !(vr & dictVR) ) //printVR )
     {
@@ -56,15 +56,15 @@ void PrintExplicitDataElement(std::ostream& _os, const ExplicitDataElement &_val
     // LEADTOOLS_FLOWERS-8-PAL-RLE.dcm has (0040,0253) : CS instead of SH
     //abort();
     }
-  if( pstyle == Printer::DCMTK_STYLE )
+  if( pstyle == Printer::CONDENSED_STYLE )
     {
-  (void)vl;
-  _os /*<< "\t " << std::dec << vl  */
+    (void)vl;
+    _os /*<< "\t " << std::dec << vl  */
       << " [" << value << "]";
     }
   else
     {
-  _os << "\tVL=" << std::dec << vl <<
+    _os << "\tVL=" << std::dec << vl <<
       "\t ValueField=[" << value << "]";
     }
 }
@@ -72,7 +72,7 @@ void PrintExplicitDataElement(std::ostream& _os, const ExplicitDataElement &_val
 void PrintImplicitDataElement(std::ostream& _os, const ImplicitDataElement &_val, bool printVR, VR::VRType dictVR)
 {
   const Tag &t = _val.GetTag();
-  const uint32_t vl = _val.GetValueLength();
+  const uint32_t vl = _val.GetVL();
   const Value& value = _val.GetValue();
   _os << t;
   if ( printVR )
@@ -89,7 +89,7 @@ void PrintImplicitDataElements(Printer &is)
   ImplicitDataElement de;
   Printer::PrintStyles pstyle = is.GetPrintStyle();
   (void)pstyle;
-  bool printVR = is.GetPrintVR();
+  bool printVR = false; //is.GetPrintVR();
 
   std::ostream &_os = std::cout;
   //static const Dicts dicts;
@@ -98,7 +98,7 @@ void PrintImplicitDataElements(Printer &is)
   static const GroupDict gd;
   try
     {
-    while( is.Read(de) )
+    //while( is.Read(de) )
       {
       const DictEntry &entry = d.GetDictEntry(de.GetTag());
       // Use VR from dictionary
@@ -110,7 +110,7 @@ void PrintImplicitDataElements(Printer &is)
         vr = VR::UL;
         vm = VM::VM1;
         }
-      if( VR::IsString( vr ) || VR::IsBinary(vr) || vr == VR::INVALID )
+      if( VR::IsASCII( vr ) || VR::IsBinary(vr) || vr == VR::INVALID )
         {
         PrintImplicitDataElement(_os, de, printVR, entry.GetVR());
         }
@@ -122,18 +122,18 @@ void PrintImplicitDataElements(Printer &is)
           {
           _os << " ?VR=" << vr;
           }
-        _os << "\tVL=" << std::dec << de.GetValueLength() << "\tValueField=[";
+        _os << "\tVL=" << std::dec << de.GetVL() << "\tValueField=[";
 
         // Use super class of the template stuff
-        Attribute af;
-        // Last minute check, is it a Group Length:
-        af.SetVR(vr);
-        af.SetVM(vm);
-        af.SetLength( val.GetLength() );
-        std::istringstream iss;
-        iss.str( std::string( val.GetPointer(), val.GetLength() ) );
-        af.Read( iss );
-        af.Print( _os );
+        //Attribute af;
+        //// Last minute check, is it a Group Length:
+        //af.SetVR(vr);
+        //af.SetVM(vm);
+        //af.SetLength( val.GetLength() );
+        //std::istringstream iss;
+        //iss.str( std::string( val.GetPointer(), val.GetLength() ) );
+        //af.Read( iss );
+        //af.Print( _os );
         _os << "]";
         }
       if( de.GetTag().GetElement() == 0x0 )
@@ -162,17 +162,17 @@ void PrintExplicitDataElements(Printer &is)
   static const Dict d;
   static const GroupDict gd;
   Printer::PrintStyles pstyle = is.GetPrintStyle();
-  bool printVR = is.GetPrintVR();
+  bool printVR = false; //is.GetPrintVR();
   try
     {
-    while( !is.eof() && is.Read(de) )
+    //while( !is.eof() && is.Read(de) )
       {
-      is.Read(de);
+      //is.Read(de);
       const DictEntry &entry = d.GetDictEntry(de.GetTag());
       // Use VR from dictionary
       const VR::VRType vr = entry.GetVR();
       const VR::VRType vr_read = de.GetVR();
-      if( VR::IsString(vr_read) || VR::IsBinary(vr_read) )
+      if( VR::IsASCII(vr_read) || VR::IsBinary(vr_read) )
         {
         PrintExplicitDataElement(_os, de, printVR, vr, pstyle);
         }
@@ -181,7 +181,7 @@ void PrintExplicitDataElements(Printer &is)
         const VM::VMType vm = entry.GetVM();
         const Value& val = de.GetValue();
         _os << de.GetTag();
-        if( pstyle == Printer::DCMTK_STYLE )
+        if( pstyle == Printer::CONDENSED_STYLE )
           {
           _os << " " << vr_read;
           }
@@ -197,27 +197,27 @@ void PrintExplicitDataElements(Printer &is)
           // After posting to dicom newsgroup there were reasons for doing SS
           // but in this case user should really do US...
           }
-        if( pstyle == Printer::DCMTK_STYLE )
+        if( pstyle == Printer::CONDENSED_STYLE )
           {
-        _os << /*"\t " << std::dec << de.GetValueLength() << */
+        _os << /*"\t " << std::dec << de.GetVL() << */
           " ";
         }
         else
           {
-        _os << "\tVL=" << std::dec << de.GetValueLength() 
+        _os << "\tVL=" << std::dec << de.GetVL() 
           << "\tValueField=[";
           }
 
         // Use super class of the template stuff
-        Attribute af;
-        af.SetVR(vr_read);
-        af.SetVM(vm);
-        af.SetLength( val.GetLength() );
-        std::istringstream iss;
-        iss.str( std::string( val.GetPointer(), val.GetLength() ) );
-        af.Read( iss );
-        af.Print( _os );
-        if( pstyle == Printer::DCMTK_STYLE )
+        //Attribute af;
+        //af.SetVR(vr_read);
+        //af.SetVM(vm);
+        //af.SetLength( val.GetLength() );
+        //std::istringstream iss;
+        //iss.str( std::string( val.GetPointer(), val.GetLength() ) );
+        //af.Read( iss );
+        //af.Print( _os );
+        if( pstyle == Printer::CONDENSED_STYLE )
           {
         _os << "]";
         }
@@ -245,6 +245,7 @@ void Printer::Print(std::ostream& os)
 {
   const gdcm::DataSet &ds = *DS;
   os << ds << std::endl;
+  DataSet::Iterator it = ds.Begin();
 }
 
 }

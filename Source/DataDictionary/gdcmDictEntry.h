@@ -52,15 +52,15 @@ public:
 
   friend std::ostream& operator<<(std::ostream& _os, const DictEntry &_val);
 
-  VR::VRType GetVR() const { return ValueRepresentation; }
+  const VR &GetVR() const { return ValueRepresentation; }
 
   VM::VMType GetVM() const { return ValueMultiplicity; }
 
-  std::string GetName() const { return Name; }
+  const char *GetName() const { return Name.c_str(); }
 
 private:
   std::string Name;
-  VR::VRType ValueRepresentation;
+  VR ValueRepresentation;
   VM::VMType ValueMultiplicity;
   //bool Retired;
 };
