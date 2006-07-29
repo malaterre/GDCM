@@ -121,6 +121,12 @@ bool ImageValue::GetBuffer(char *buffer) const
       codec.SetPlanarConfiguration( GetPlanarConfiguration() );
       codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
       unsigned long rle_len = sf->ComputeLength();
+      PixelType pt = GetPixelType();
+      if ( pt.GetBitsAllocated() == 16 )
+        {
+        assert( !(len%2) );
+        len /= 2;
+        }
       codec.SetLength( len );
       StringStream is;
       sf->GetBuffer(buffer, rle_len);
@@ -129,7 +135,19 @@ bool ImageValue::GetBuffer(char *buffer) const
       bool r = codec.Decode(is, os);
       std::string::size_type check = os.Str().size();
       assert( check == len );
-      memcpy(buffer, os.Str().c_str(), os.Str().size());
+      if ( pt.GetBitsAllocated() == 16 )
+        {
+        std::string rle8 = os.Str();
+        for(std::string::size_type i = 0; i < check; ++i)
+          {
+          buffer[2*i] = rle8[i];
+          buffer[2*i+1]= rle8[i];
+          }
+        }
+      else
+        {
+        memcpy(buffer, os.Str().c_str(), os.Str().size());
+        }
       return r;
       }
     else

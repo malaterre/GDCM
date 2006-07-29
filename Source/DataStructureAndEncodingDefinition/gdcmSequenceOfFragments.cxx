@@ -123,7 +123,7 @@ bool SequenceOfFragments::GetBuffer(char *buffer, unsigned long length) const
     buffer += len;
     total += len;
     }
-  if( total > length )
+  if( total != length )
     {
     //std::cerr << " DEBUG: " << total << " " << length << std::endl;
     abort();
