@@ -504,6 +504,16 @@ bool ImageReader::ReadACRNEMAImage()
     return false;
     }
 
+  // There is no such thing as Photometric Interpretation and 
+  // Planar Configuration in ACR NEMA so let's default to something ...
+  PixelData.SetPhotometricInterpretation(
+    PhotometricInterpretation::MONOCHROME2 );
+  PixelData.SetPlanarConfiguration(0);
+  const Tag planarconfiguration = Tag(0x0028, 0x0006);
+  assert( !ds.FindDataElement( planarconfiguration ) );
+  const Tag tphotometricinterpretation(0x0028, 0x0004);
+  assert( !ds.FindDataElement( tphotometricinterpretation ) );
+
   return true;
 }
 
