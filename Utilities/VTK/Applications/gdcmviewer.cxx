@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
 {
   if( argc < 2 )
     {
+    std::cerr << argv[0] << " filename.dcm\n";
     return 1;
     }
 
