@@ -30,18 +30,8 @@ public:
   bool CanDecode(TS const &ts);
   bool Decode(IStream &is, OStream &os);
 
-  unsigned int GetPlanarConfiguration() const
-    {
-    return PlanarConfiguration;
-    }
-  void SetPlanarConfiguration(unsigned int pc)
-    {
-    PlanarConfiguration = pc;
-    }
-
 private:
   RAWInternals *Internals;
-  unsigned int PlanarConfiguration;
 };
 
 } // end namespace gdcm

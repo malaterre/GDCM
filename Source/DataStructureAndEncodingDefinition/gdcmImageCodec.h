@@ -17,6 +17,7 @@
 #define __gdcmImagecodec_h
 
 #include "gdcmCodec.h"
+#include "gdcmPhotometricInterpretation.h"
 
 namespace gdcm
 {
@@ -38,8 +39,22 @@ public:
     PlanarConfiguration = pc;
     }
 
+  const PhotometricInterpretation &GetPhotometricInterpretation() const;
+  void SetPhotometricInterpretation(PhotometricInterpretation const &pi);
+
+  bool GetNeedByteSwap() const
+    {
+    return NeedByteSwap;
+    }
+  void SetNeedByteSwap(bool b)
+    {
+    NeedByteSwap = b;
+    }
+
 private:
   unsigned int PlanarConfiguration;
+  PhotometricInterpretation PI;
+  bool NeedByteSwap;
 };
 
 } // end namespace gdcm

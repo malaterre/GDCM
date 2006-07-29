@@ -16,13 +16,13 @@
 #ifndef __gdcmJPEG2000codec_h
 #define __gdcmJPEG2000codec_h
 
-#include "gdcmCodec.h"
+#include "gdcmImageCodec.h"
 
 namespace gdcm
 {
   
 class JPEG2000Internals;
-class JPEG2000Codec : public Codec
+class JPEG2000Codec : public ImageCodec
 {
 public:
   JPEG2000Codec();

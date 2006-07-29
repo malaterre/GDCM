@@ -16,12 +16,12 @@
 #ifndef __gdcmJPEGcodec_h
 #define __gdcmJPEGcodec_h
 
-#include "gdcmCodec.h"
+#include "gdcmImageCodec.h"
 
 namespace gdcm
 {
   
-class JPEGCodec : public Codec
+class JPEGCodec : public ImageCodec
 {
 public:
   JPEGCodec();

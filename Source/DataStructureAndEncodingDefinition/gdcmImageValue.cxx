@@ -43,8 +43,10 @@ bool ImageValue::GetBuffer(char *buffer) const
     bv->GetBuffer(buffer, len);
     RAWCodec codec;
     codec.SetPlanarConfiguration( GetPlanarConfiguration() );
+    codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
+    codec.SetNeedByteSwap( GetNeedByteSwap() );
     StringStream is;
-    is.SetSwapCode( GetSwapCode() );
+    //is.SetSwapCode( GetSwapCode() );
     is.Write(buffer, len);
     StringStream os;
     bool r = codec.Decode(is, os);
@@ -67,6 +69,8 @@ bool ImageValue::GetBuffer(char *buffer) const
     if( GetCompressionType() == Compression::JPEG )
       {
       JPEGCodec codec;
+      codec.SetPlanarConfiguration( GetPlanarConfiguration() );
+      codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
       codec.SetBitSample( GetPixelType().GetBitsAllocated() );
       unsigned long pos = 0;
       for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
@@ -92,6 +96,8 @@ bool ImageValue::GetBuffer(char *buffer) const
     else if ( GetCompressionType() == Compression::JPEG2000 )
       {
       JPEG2000Codec codec;
+      codec.SetPlanarConfiguration( GetPlanarConfiguration() );
+      codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
       StringStream is;
       unsigned long totalLen = sf->ComputeLength();
       sf->GetBuffer(buffer, totalLen);
@@ -105,6 +111,7 @@ bool ImageValue::GetBuffer(char *buffer) const
       {
       RLECodec codec;
       codec.SetPlanarConfiguration( GetPlanarConfiguration() );
+      codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
       unsigned long rle_len = sf->ComputeLength();
       codec.SetLength( len );
       StringStream is;
