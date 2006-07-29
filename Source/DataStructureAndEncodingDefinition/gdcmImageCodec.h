@@ -13,32 +13,35 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmRLEcodec_h
-#define __gdcmRLEcodec_h
+#ifndef __gdcmImagecodec_h
+#define __gdcmImagecodec_h
 
-#include "gdcmImageCodec.h"
+#include "gdcmCodec.h"
 
 namespace gdcm
 {
   
-class RLEInternals;
-class RLECodec : public ImageCodec
+class ImageCodec : public Codec
 {
 public:
-  RLECodec();
-  ~RLECodec();
-  bool CanDecode(TS const &ts);
+  ImageCodec();
+  ~ImageCodec();
+  bool CanDecode(TS const &) { return false; }
   bool Decode(IStream &is, OStream &os);
 
-  void SetLength(unsigned long l)
+  unsigned int GetPlanarConfiguration() const
     {
-    Length = l;
+    return PlanarConfiguration;
     }
+  void SetPlanarConfiguration(unsigned int pc)
+    {
+    PlanarConfiguration = pc;
+    }
+
 private:
-  RLEInternals *Internals;
-  unsigned long Length;
+  unsigned int PlanarConfiguration;
 };
 
 } // end namespace gdcm
 
-#endif //__gdcmRLEcodec_h
+#endif //__gdcmImagecodec_h

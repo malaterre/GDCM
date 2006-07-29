@@ -79,9 +79,9 @@ bool ImageValue::GetBuffer(char *buffer) const
         is.Write(mybuffer, flen);
         StringStream os;
         bool r = codec.Decode(is, os);
-        //assert( r == true );
+        assert( r == true );
         std::streampos p = is.Tellg();
-        //assert( (flen - p) == 0 );
+        assert( (flen - p) == 0 );
         std::string::size_type check = os.Str().size();
         memcpy(buffer+pos, os.Str().c_str(), os.Str().size());
         pos += check;
@@ -93,7 +93,9 @@ bool ImageValue::GetBuffer(char *buffer) const
       {
       JPEG2000Codec codec;
       StringStream is;
-      is.Write(buffer, len);
+      unsigned long totalLen = sf->ComputeLength();
+      sf->GetBuffer(buffer, totalLen);
+      is.Write(buffer, totalLen);
       StringStream os;
       bool r = codec.Decode(is, os);
       memcpy(buffer, os.Str().c_str(), len);
@@ -102,13 +104,17 @@ bool ImageValue::GetBuffer(char *buffer) const
     else if ( GetCompressionType() == Compression::RLE )
       {
       RLECodec codec;
+      codec.SetPlanarConfiguration( GetPlanarConfiguration() );
       unsigned long rle_len = sf->ComputeLength();
-      codec.SetLength( rle_len );
+      codec.SetLength( len );
       StringStream is;
+      sf->GetBuffer(buffer, rle_len);
       is.Write(buffer, rle_len);
       StringStream os;
       bool r = codec.Decode(is, os);
-      memcpy(buffer, os.Str().c_str(), len);
+      std::string::size_type check = os.Str().size();
+      assert( check == len );
+      memcpy(buffer, os.Str().c_str(), os.Str().size());
       return r;
       }
     else

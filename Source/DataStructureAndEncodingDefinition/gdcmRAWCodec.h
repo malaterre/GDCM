@@ -16,13 +16,13 @@
 #ifndef __gdcmRAWcodec_h
 #define __gdcmRAWcodec_h
 
-#include "gdcmCodec.h"
+#include "gdcmImageCodec.h"
 
 namespace gdcm
 {
   
 class RAWInternals;
-class RAWCodec : public Codec
+class RAWCodec : public ImageCodec
 {
 public:
   RAWCodec();

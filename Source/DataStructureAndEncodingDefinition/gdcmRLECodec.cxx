@@ -17,6 +17,7 @@
 #include "gdcmTS.h"
 #include "gdcmOStream.h"
 #include "gdcmIStream.h"
+#include "gdcmStringStream.h"
 
 #include <vector>
 
@@ -116,7 +117,7 @@ bool RLECodec::Decode(IStream &is, OStream &os)
   //while()
   //  {
   //  }
-
+  StringStream tmpos;
   // DEBUG
   is.Seekg( 0, std::ios::end);
   std::streampos buf_size = is.Tellg();
@@ -127,41 +128,55 @@ bool RLECodec::Decode(IStream &is, OStream &os)
   frame.Read(is);
   frame.Print(std::cout);
   unsigned long numSegments = frame.Header.NumSegments;
-  for(unsigned long i = 0; i<numSegments; ++i)
+
+  unsigned long numberOfReadBytes = 0;
+
+//  for(unsigned long i = 0; i<numSegments; ++i)
     {
-    char byte;
     unsigned long numOutBytes = 0;
+    char byte;
     //std::cerr << "Length: " << Length << "\n";
+    //assert( (unsigned long)is.Tellg() == frame.Header.Offset[i] );
     while( numOutBytes < Length )
       {
       //std::cerr << "numOutBytes: " << numOutBytes << "\n";
       is.Read(&byte, 1);
+      numberOfReadBytes++;
       //std::cerr << "Byte: " << int(byte) << "\n";
       if( byte >= 0 /*&& byte <= 127*/ )
         {
         is.Read( dummy_buffer, byte+1 );
+      numberOfReadBytes += byte+1;
         numOutBytes += byte+ 1;
-        os.Write( dummy_buffer, byte+1 );
+        tmpos.Write( dummy_buffer, byte+1 );
         }
       else if( byte <= -1 && byte >= -127 )
         {
         char nextByte;
         is.Read( &nextByte, 1);
+      numberOfReadBytes += 1;
         for( int c = 0; c < -byte + 1; ++c )
           {
           dummy_buffer[c] = nextByte;
           }
         numOutBytes += -byte + 1;
-        os.Write( dummy_buffer, -byte+1 );
+        tmpos.Write( dummy_buffer, -byte+1 );
         }
       else /* byte == -128 */
         {
         assert( byte == -128 );
         }
       }
-    //std::cerr << "numOutBytes:" << numOutBytes << "\n";
+    std::cerr << "numOutBytes:" << numOutBytes << " " << Length << "\n";
     }
+  //if( numOutBytes != Length )
+  //  {
+  //  std::cerr << "DEBUG: " << numberOfReadBytes << std::endl;
+  //  std::cerr << numOutBytes << " " << Length << std::endl;
+  //  }
 
+
+  ImageCodec::Decode(tmpos,os);
   return true;
 }
 
