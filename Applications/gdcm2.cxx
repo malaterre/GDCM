@@ -13,6 +13,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+// provide a dicom2 compatible API
 int main(int argc, char *argv[])
 {
   return 0;

@@ -13,6 +13,23 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+// DCKEY(1)       DICOM PS3 - Extract attribute values      DCKEY(1)
+//
+// NAME
+//       dckey - ACR/NEMA DICOM PS3 ... Extract attribute values
+//
+// SYNOPSIS
+//       dckey [ -v|verbose ] [ -describe ] [ -key|k  attributename
+//                 ]
+//
+// DESCRIPTION
+//       dckey reads the named dicom input file  and  displays  the
+//       values of the selected attributes.
+//
+//       Binary  attributes  are written in hexadecimal with a pre-
+//       ceding "0x". Numeric string attributes are written in dec-
+//       imal.
+//
 int main(int argc, char *argv[])
 {
   return 0;
