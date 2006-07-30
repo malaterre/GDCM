@@ -3,29 +3,30 @@
 
 #define RLE_LIB_VERSION 0.0
 
-struct rle_error_mgr
+typedef struct
 {
-  void (*error_exit) (rle_common_ptr cinfo);
-  void (*output_message) (rle_common_ptr cinfo);
+  unsigned long num_segments;
+  unsigned long offset[15];
+  void (*print_header) (void);
+} rle_header;
 
-};
-
-struct rle_common_struct
+typedef struct
 {
-  struct rle_error_mgr * err;
-};
+  rle_header * header;
+} rle_compressed_frame;
 
-typedef struct rle_common_struct * rle_common_ptr;
-typedef struct rle_compress_struct * rle_compress_ptr;
-typedef struct rle_decompress_struct * rle_decompress_ptr;
-
-struct rle_decompress_struct
+typedef struct
 {
-  struct rle_error_mgr * err;
-};
+  rle_header * header;
+} rle_decompressed_frame;
 
-/* Destruction of JPEG compression objects */
-void rle_destroy_compress (rle_compress_ptr cinfo);
-void rle_destroy_decompress (rle_decompress_ptr cinfo);
+typedef struct
+{
+  int (*fill_input_buffer) (rle_decompressed_frame*);
+} source_mgr;
+
+void rle_stdio_src(rle_decompressed_frame * frame, FILE *infile)
+{
+}
 
 #endif /* __rlelib_h */
