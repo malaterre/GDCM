@@ -18,6 +18,7 @@
 
 #include "gdcmCodec.h"
 #include "gdcmPhotometricInterpretation.h"
+#include "gdcmLookupTable.h"
 
 namespace gdcm
 {
@@ -54,6 +55,7 @@ public:
 private:
   unsigned int PlanarConfiguration;
   PhotometricInterpretation PI;
+  LookupTable LUT;
   bool NeedByteSwap;
 };
 

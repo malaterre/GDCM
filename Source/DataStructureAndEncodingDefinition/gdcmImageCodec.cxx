@@ -32,6 +32,7 @@ ImageCodec::ImageCodec()
 {
   PlanarConfiguration = 2;
   PI = PhotometricInterpretation::UNKNOW;
+  //LUT = LookupTable(LookupTable::UNKNOWN);
   NeedByteSwap = false;
 }
 
@@ -139,6 +140,10 @@ bool ImageCodec::Decode(IStream &is, OStream &os)
       c++;
       }
     delete[] copy;
+    }
+  else if ( PI == PhotometricInterpretation::PALETTE_COLOR )
+    {
+    // TODO FIXME
     }
   else
     {

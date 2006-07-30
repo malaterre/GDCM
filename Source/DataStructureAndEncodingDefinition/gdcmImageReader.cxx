@@ -335,8 +335,38 @@ bool ImageReader::ReadImage()
   assert( pi != PhotometricInterpretation::UNKNOW);
   PixelData.SetPhotometricInterpretation( pi );
 
+  if ( pi == PhotometricInterpretation::PALETTE_COLOR )
+    {
+    // for each red, green, blue:
+    for(int i=0; i<3; ++i)
+      {
+      // (0028,1101) US 0\0\16
+      // (0028,1102) US 0\0\16
+      // (0028,1103) US 0\0\16
+      const Tag tdescriptor(0x0028, (0x1101 + i));
+      const ByteValue *descriptor = GetPointerFromElement( tdescriptor );
+      Element<VR::US,VM::VM3> el_us3;
+      assert( descriptor->GetLength() == 6 );
+      std::string descriptor_str(
+        descriptor->GetPointer(),
+        descriptor->GetLength() );
+      ss.Str( descriptor_str );
+      el_us3.Read( ss );
+      el_us3.Print( std::cerr << std::endl );
+
+      // (0028,1201) OW 
+      // (0028,1202) OW
+      // (0028,1203) OW 
+      const Tag tlut(0x0028, (0x1201 + i));
+      const ByteValue *lut = GetPointerFromElement( tlut );
+      //std::string descriptor_str(
+      //  descriptor_str->GetPointer(),
+      //  descriptor_str->GetLength() );
+      //std::cerr << descriptor_str << std::endl;
+      }
+    }
   // TODO
-  assert( pi.GetSamplesPerPixel() == pt.GetSamplesPerPixel() );
+  //assert( pi.GetSamplesPerPixel() == pt.GetSamplesPerPixel() );
 
   // 6. Do the PixelData
   const Tag pixeldata = Tag(0x7fe0, 0x0010);

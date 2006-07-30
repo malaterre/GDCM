@@ -142,7 +142,7 @@ bool RLECodec::Decode(IStream &is, OStream &os)
       // This should be at most the \0 padding
       gdcmDebugMacro( "RLE Header says: " << frame.Header.Offset[i] <<
          " when it should says: " << pos << std::endl );
-      assert( frame.Header.Offset[i] - pos == 1 );
+      //assert( frame.Header.Offset[i] - pos == 1 );
       is.Seekg( frame.Header.Offset[i], std::ios::beg );
       }
 
@@ -188,6 +188,13 @@ bool RLECodec::Decode(IStream &is, OStream &os)
     //  }
     }
 
+  std::streampos start = is.Tellg();
+  is.Seekg( 0, std::ios::end );
+  std::streampos end = is.Tellg();
+  if( end - start != 0 )
+    {
+    //abort();
+    }
 
   ImageCodec::Decode(tmpos,os);
   return true;

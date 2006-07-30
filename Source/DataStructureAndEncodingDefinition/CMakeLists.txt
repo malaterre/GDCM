@@ -22,11 +22,11 @@ SET(DSED_SRCS
   gdcmItem.cxx
   gdcmWriter.cxx
   gdcmFragment.cxx
-  #gdcmJPEGDataSrc.cxx
   gdcmJPEG8Codec.cxx
   gdcmJPEG12Codec.cxx
   gdcmJPEG16Codec.cxx
   gdcmImageCodec.cxx
+  gdcmLookupTable.cxx
   )
 
 # Add the include paths
