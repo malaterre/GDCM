@@ -123,16 +123,6 @@ bool ImageValue::GetBuffer(char *buffer) const
       codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
       unsigned long rle_len = sf->ComputeLength();
       PixelType pt = GetPixelType();
-      if ( pt.GetBitsAllocated() == 16 )
-        {
-        assert( !(len%2) );
-        len /= 2;
-        }
-      else if( pt.GetSamplesPerPixel() == 3 )
-        {
-        // FIXME FIXME
-        len /= 3;
-        }
       codec.SetLength( len );
       StringStream is;
       sf->GetBuffer(buffer, rle_len);
@@ -143,11 +133,12 @@ bool ImageValue::GetBuffer(char *buffer) const
       assert( check == len );
       if ( pt.GetBitsAllocated() == 16 )
         {
+        assert( !(check%2) );
         std::string rle8 = os.Str();
-        for(std::string::size_type i = 0; i < check; ++i)
+        for(std::string::size_type i = 0; i < check/2; ++i)
           {
-          buffer[2*i] = rle8[i];
-          buffer[2*i+1]= rle8[i];
+          buffer[2*i]= rle8[i+check/2];
+          buffer[2*i+1] = rle8[i];
           }
         }
       else

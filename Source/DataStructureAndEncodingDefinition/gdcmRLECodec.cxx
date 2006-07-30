@@ -131,13 +131,21 @@ bool RLECodec::Decode(IStream &is, OStream &os)
 
   unsigned long numberOfReadBytes = 0;
 
-//  for(unsigned long i = 0; i<numSegments; ++i)
+  for(unsigned long i = 0; i<numSegments; ++i)
     {
+    std::streampos pos = is.Tellg();
+    if ( frame.Header.Offset[i] - pos != 0 )
+      {
+      std::cerr << "OLD POS: " << pos << " new pos " << frame.Header.Offset[i] << std::endl;
+      is.Seekg(frame.Header.Offset[i], std::ios::beg);
+      abort();
+      }
+
     unsigned long numOutBytes = 0;
     char byte;
     //std::cerr << "Length: " << Length << "\n";
     //assert( (unsigned long)is.Tellg() == frame.Header.Offset[i] );
-    while( numOutBytes < Length )
+    while( numOutBytes < Length / numSegments )
       {
       //std::cerr << "numOutBytes: " << numOutBytes << "\n";
       is.Read(&byte, 1);
@@ -168,12 +176,12 @@ bool RLECodec::Decode(IStream &is, OStream &os)
         }
       }
     std::cerr << "numOutBytes:" << numOutBytes << " " << Length << "\n";
+    std::cerr << "DEBUG: " << numberOfReadBytes << std::endl;
+    //if( numOutBytes != Length )
+    //  {
+    //  std::cerr << numOutBytes << " " << Length << std::endl;
+    //  }
     }
-  //if( numOutBytes != Length )
-  //  {
-  //  std::cerr << "DEBUG: " << numberOfReadBytes << std::endl;
-  //  std::cerr << numOutBytes << " " << Length << std::endl;
-  //  }
 
 
   ImageCodec::Decode(tmpos,os);

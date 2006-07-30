@@ -32,7 +32,7 @@ ImageCodec::ImageCodec()
 {
   PlanarConfiguration = 2;
   PI = PhotometricInterpretation::UNKNOW;
-  NeedByteSwap = true;
+  NeedByteSwap = false;
 }
 
 ImageCodec::~ImageCodec()
