@@ -84,6 +84,7 @@ private:
   bool DoPlanarConfiguration(IStream &is, OStream &os);
   bool DoSimpleCopy(IStream &is, OStream &os);
   bool DoPaddedCompositePixelCode(IStream &is, OStream &os);
+  bool DoInvertMonochrome(IStream &is, OStream &os);
 };
 
 } // end namespace gdcm

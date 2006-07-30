@@ -209,6 +209,21 @@ bool ImageCodec::DoPaddedCompositePixelCode(IStream &is, OStream &os)
   return true;
 }
 
+bool ImageCodec::DoInvertMonochrome(IStream &is, OStream &os)
+{
+  char c;
+  while( !is.Eof() )
+    {
+    is.Get(c);
+    // FIXME
+    if( is.Eof() ) break;
+    unsigned char invert(c);
+    invert = 255 - invert;
+    os.Write((char*)&invert, 1 );
+    }
+  return true;
+}
+
 bool ImageCodec::Decode(IStream &is, OStream &os)
 {
   assert( PlanarConfiguration == 0 || PlanarConfiguration == 1);
@@ -241,8 +256,9 @@ bool ImageCodec::Decode(IStream &is, OStream &os)
     }
   else if (PI == PhotometricInterpretation::MONOCHROME1)
     {
-    // TODO
-    abort();
+    // CR-MONO1-10-chest.dcm
+    DoInvertMonochrome(*cur_is, pi_os);
+    cur_is = &pi_os;
     }
   else if ( PI == PhotometricInterpretation::YBR_FULL )
     {
