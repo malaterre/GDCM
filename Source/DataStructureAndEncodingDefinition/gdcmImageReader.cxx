@@ -108,7 +108,7 @@ bool ImageReader::Read()
     {
     if( ms != TS::MS_END )
       {
-      gdcmWarningMacro( "DICOM file is not an Image file but a : " <<
+      gdcmDebugMacro( "DICOM file is not an Image file but a : " <<
         TS::GetMSString(ms) << " SOP Class UID" );
       res = false;
       }
@@ -131,14 +131,14 @@ bool ImageReader::Read()
         bool isImage2 = TS::IsImage( ms2 );
         if( isImage2 )
           {
-          gdcmWarningMacro( "After all it might be a DICOM file "
+          gdcmDebugMacro( "After all it might be a DICOM file "
             "(Mallinckrodt-like)" );
           PixelData.SetCompressionType( Compression::RAW );
           res = ReadImage();
           }
         else
           {
-          gdcmWarningMacro( "DICOM file is not an Image file but a : " <<
+          gdcmDebugMacro( "DICOM file is not an Image file but a : " <<
             TS::GetMSString(ms2) << " SOP Class UID" );
           res = false;
           }
@@ -146,7 +146,7 @@ bool ImageReader::Read()
       else if( ts == TS::ImplicitVRBigEndianACRNEMA || header.IsEmpty() )
         {
         // Those transfer syntax have a high probability of being ACR NEMA
-        gdcmWarningMacro( "Looks like an ACR-NEMA file" );
+        gdcmDebugMacro( "Looks like an ACR-NEMA file" );
         // Hopefully all ACR-NEMA are RAW:
         PixelData.SetCompressionType( Compression::RAW );
         res = ReadACRNEMAImage();
@@ -154,7 +154,7 @@ bool ImageReader::Read()
       else // there is a Unknown TransferSyntax
         {
         // god damit I don't know what to do...
-        gdcmWarningMacro( "Attempting to read this file as a DICOM file"
+        gdcmDebugMacro( "Attempting to read this file as a DICOM file"
           "\nDesperate attempt" );
         const Tag tpixeldata(0x7fe0, 0x0010);
         if( GetDataSet().FindDataElement( tpixeldata) )
@@ -234,7 +234,7 @@ bool ImageReader::ReadImage()
     {
     // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
     // PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
-    gdcmWarningMacro( "Mixture of ACR NEMA and DICOM file" );
+    gdcmDebugMacro( "Mixture of ACR NEMA and DICOM file" );
     }
 
   // Ok we have the dataset let's feed the Image (PixelData)
@@ -259,7 +259,7 @@ bool ImageReader::ReadImage()
     }
   else
     {
-    gdcmWarningMacro( "Attempting a guess for the number of dimensions" );
+    gdcmDebugMacro( "Attempting a guess for the number of dimensions" );
     PixelData.SetNumberOfDimensions(2);
     }
 

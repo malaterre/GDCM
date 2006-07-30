@@ -127,7 +127,7 @@ bool RLECodec::Decode(IStream &is, OStream &os)
 
   RLEFrame &frame = Internals->Frame;
   frame.Read(is);
-  frame.Print(std::cout);
+  //frame.Print(std::cout);
   unsigned long numSegments = frame.Header.NumSegments;
 
   unsigned long numberOfReadBytes = 0;
@@ -193,12 +193,8 @@ bool RLECodec::Decode(IStream &is, OStream &os)
         assert( byte == -128 );
         }
       }
-    std::cerr << "numOutBytes:" << numOutBytes << " " << length << "\n";
-    std::cerr << "DEBUG: " << numberOfReadBytes << std::endl;
-    //if( numOutBytes != Length )
-    //  {
-    //  std::cerr << numOutBytes << " " << Length << std::endl;
-    //  }
+    //std::cerr << "numOutBytes:" << numOutBytes << " " << length << "\n";
+    //std::cerr << "DEBUG: " << numberOfReadBytes << std::endl;
     }
 
   //std::streampos start = is.Tellg();
@@ -208,11 +204,11 @@ bool RLECodec::Decode(IStream &is, OStream &os)
   //  {
   //  //abort();
   //  }
-  std::streampos start = tmpos.Tellg();
-  tmpos.Seekg( 0, std::ios::end);
-  std::streampos end   = tmpos.Tellg();
-  std::cerr << "DEBUG tmpos: " << end - start << std::endl;
-  tmpos.Seekg( start, std::ios::beg );
+  //std::streampos start = tmpos.Tellg();
+  //tmpos.Seekg( 0, std::ios::end);
+  //std::streampos end   = tmpos.Tellg();
+  //std::cerr << "DEBUG tmpos: " << end - start << std::endl;
+  //tmpos.Seekg( start, std::ios::beg );
 
   ImageCodec::Decode(tmpos,os);
   return true;

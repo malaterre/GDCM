@@ -228,7 +228,7 @@ bool Reader::Read()
   if( !ReadPreamble() )
     {
     assert( Preamble == 0 );
-    gdcmWarningMacro( "No Preamble" );
+    gdcmDebugMacro( "No Preamble" );
     }
   ReadMetaInformation();
   //std::cerr << *Header << std::endl;

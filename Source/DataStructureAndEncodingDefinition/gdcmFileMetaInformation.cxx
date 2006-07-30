@@ -77,7 +77,7 @@ IStream &FileMetaInformation::Read(IStream &is)
       }
     else
       {
-      gdcmWarningMacro( "Not Explicit" );
+      gdcmDebugMacro( "Not Explicit" );
       // Ok this might be an implicit encoded Meta File Information header...
       // GE_DLX-8-MONO2-PrivateSyntax.dcm
       is.Seekg(-6, std::ios::cur); // Seek back
@@ -92,7 +92,7 @@ IStream &FileMetaInformation::Read(IStream &is)
     }
   else
     {
-    gdcmWarningMacro( "No File Meta Information. Start with Tag: " << t );
+    gdcmDebugMacro( "No File Meta Information. Start with Tag: " << t );
     is.Seekg(-4, std::ios::cur); // Seek back
     }
 
@@ -284,7 +284,7 @@ TS::MSType FileMetaInformation::GetMediaStorageType() const
     const gdcm::Tag t(0x0002,0x0002);
     if( !DS->FindDataElement( t ) )
       {
-      gdcmWarningMacro( "File Meta information is present but does not"
+      gdcmDebugMacro( "File Meta information is present but does not"
         " contains " << t );
       return TS::MS_END;
       }
