@@ -33,6 +33,8 @@ public:
 ImageCodec::ImageCodec()
 {
   PlanarConfiguration = 2;
+  RequestPlanarConfiguration = false;
+  RequestPaddedCompositePixelCode = false;
   PI = PhotometricInterpretation::UNKNOW;
   //LUT = LookupTable(LookupTable::UNKNOWN);
   NeedByteSwap = false;
@@ -180,11 +182,39 @@ bool ImageCodec::DoSimpleCopy(IStream &is, OStream &os)
   return true;
 }
 
+bool ImageCodec::DoPaddedCompositePixelCode(IStream &is, OStream &os)
+{
+  // FIXME: Do some stupid work:
+  std::streampos start = is.Tellg();
+  assert( 0 - start == 0 );
+  is.Seekg( 0, std::ios::end);
+  std::streampos buf_size = is.Tellg();
+  char *dummy_buffer = new char[buf_size];
+  is.Seekg(start, std::ios::beg);
+  is.Read( dummy_buffer, buf_size);
+  is.Seekg(start, std::ios::beg); // reset
+  SwapCode sc = is.GetSwapCode();
+
+  assert( !(buf_size % 2) );
+//   assert( !(check%2) );
+//   std::string rle8 = os.Str();
+   for(unsigned long i = 0; i < buf_size/2; ++i)
+     {
+     //buffer[2*i]= rle8[i+check/2];
+     //buffer[2*i+1] = rle8[i];
+     os.Write( dummy_buffer+i+buf_size/2, 1 );
+     os.Write( dummy_buffer+i, 1 );
+     }
+  //os.Write(dummy_buffer, buf_size);
+  return true;
+}
+
 bool ImageCodec::Decode(IStream &is, OStream &os)
 {
   assert( PlanarConfiguration == 0 || PlanarConfiguration == 1);
   assert( PI != PhotometricInterpretation::UNKNOW );
   StringStream bs_os; // ByteSwap
+  StringStream pcpc_os; // Padeed Composite Pixel Code
   StringStream pi_os; // PhotometricInterpretation
   IStream *cur_is = &is;
 
@@ -194,6 +224,12 @@ bool ImageCodec::Decode(IStream &is, OStream &os)
     //MR_GE_with_Private_Compressed_Icon_0009_1110.dcm
     DoByteSwap(*cur_is,bs_os);
     cur_is = &bs_os;
+    }
+  if ( RequestPaddedCompositePixelCode )
+    {
+    // D_CLUNIE_CT2_RLE.dcm
+    DoPaddedCompositePixelCode(*cur_is,pcpc_os);
+    cur_is = &pcpc_os;
     }
 
   // Second thing do palette color.
@@ -206,6 +242,7 @@ bool ImageCodec::Decode(IStream &is, OStream &os)
   else if (PI == PhotometricInterpretation::MONOCHROME1)
     {
     // TODO
+    abort();
     }
   else if ( PI == PhotometricInterpretation::YBR_FULL )
     {
@@ -214,8 +251,7 @@ bool ImageCodec::Decode(IStream &is, OStream &os)
     }
   else if ( PI == PhotometricInterpretation::PALETTE_COLOR )
     {
-    //LUT->Decode(*cur_is, pi_os);
-      DoSimpleCopy(*cur_is,pi_os);
+    LUT->Decode(*cur_is, pi_os);
     cur_is = &pi_os;
     }
   else
@@ -223,7 +259,7 @@ bool ImageCodec::Decode(IStream &is, OStream &os)
     abort();
     }
 
-  if( PlanarConfiguration )
+  if( PlanarConfiguration || RequestPlanarConfiguration )
     {
     if ( PI == PhotometricInterpretation::YBR_FULL )
       {

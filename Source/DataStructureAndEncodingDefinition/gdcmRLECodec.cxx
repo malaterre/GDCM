@@ -139,6 +139,11 @@ bool RLECodec::Decode(IStream &is, OStream &os)
     {
     length /= 3;
     }
+  else if ( GetPhotometricInterpretation() ==
+    PhotometricInterpretation::RGB )
+    {
+    SetRequestPlanarConfiguration(true);
+    }
   length /= numSegments;
   for(unsigned long i = 0; i<numSegments; ++i)
     {

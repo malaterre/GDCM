@@ -123,7 +123,12 @@ public:
 //  Image(Image const&);
 //  Image &operator= (Image const&);
 
+  // Return the length of the image after decompression
+  // It will NOT take into account the Palette Color
   unsigned long GetBufferLength() const;
+
+  // Same as above but takes into account Palette Color
+  unsigned long GetBufferPaletteLength() const;
 
 private:
   unsigned int NumberOfDimensions;

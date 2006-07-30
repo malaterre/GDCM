@@ -46,6 +46,7 @@ bool ImageValue::GetBuffer(char *buffer) const
     RAWCodec codec;
     codec.SetPlanarConfiguration( GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
+    codec.SetLUT( GetLUT() );
     codec.SetNeedByteSwap( GetNeedByteSwap() );
     StringStream is;
     //is.SetSwapCode( GetSwapCode() );
@@ -53,7 +54,16 @@ bool ImageValue::GetBuffer(char *buffer) const
     StringStream os;
     bool r = codec.Decode(is, os);
     std::string::size_type check = os.Str().size();
-    assert( check == len );
+    // FIXME
+    if ( GetPhotometricInterpretation() == 
+      PhotometricInterpretation::PALETTE_COLOR )
+      {
+      assert( check == 3*len );
+      }
+    else
+      {
+      assert( check == len );
+      }
     memcpy(buffer, os.Str().c_str(), len);
     return r;
     }
@@ -124,6 +134,10 @@ bool ImageValue::GetBuffer(char *buffer) const
       codec.SetLUT( GetLUT() );
       unsigned long rle_len = sf->ComputeLength();
       PixelType pt = GetPixelType();
+      if( pt.GetBitsAllocated() == 16 )
+        {
+        codec.SetRequestPaddedCompositePixelCode( true );
+        }
       codec.SetLength( len );
       StringStream is;
       sf->GetBuffer(buffer, rle_len);
@@ -133,20 +147,7 @@ bool ImageValue::GetBuffer(char *buffer) const
       std::string::size_type check = os.Str().size();
       // If the following assert fail expect big troubles:
       assert( check == len );
-      if ( pt.GetBitsAllocated() == 16 )
-        {
-        assert( !(check%2) );
-        std::string rle8 = os.Str();
-        for(std::string::size_type i = 0; i < check/2; ++i)
-          {
-          buffer[2*i]= rle8[i+check/2];
-          buffer[2*i+1] = rle8[i];
-          }
-        }
-      else
-        {
-        memcpy(buffer, os.Str().c_str(), os.Str().size());
-        }
+      memcpy(buffer, os.Str().c_str(), os.Str().size());
       return r;
       }
     else

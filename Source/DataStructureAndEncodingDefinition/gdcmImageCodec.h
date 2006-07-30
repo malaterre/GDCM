@@ -60,9 +60,19 @@ public:
     {
     return *LUT;
     }
+  void SetRequestPaddedCompositePixelCode(bool b) {
+    RequestPaddedCompositePixelCode = b;
+  }
 
+
+protected:
+  void SetRequestPlanarConfiguration(bool b) {
+    RequestPlanarConfiguration = b;
+  }
 private:
   unsigned int PlanarConfiguration;
+  bool RequestPlanarConfiguration;
+  bool RequestPaddedCompositePixelCode;
   PhotometricInterpretation PI;
   bool NeedByteSwap;
 
@@ -73,6 +83,7 @@ private:
   bool DoYBR(IStream &is, OStream &os);
   bool DoPlanarConfiguration(IStream &is, OStream &os);
   bool DoSimpleCopy(IStream &is, OStream &os);
+  bool DoPaddedCompositePixelCode(IStream &is, OStream &os);
 };
 
 } // end namespace gdcm
