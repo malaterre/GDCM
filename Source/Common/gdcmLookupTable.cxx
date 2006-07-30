@@ -121,16 +121,15 @@ void LookupTable::Decode(IStream &is, OStream &os)
   if ( Internal->BitSize[RED] == 16 )
     {
   unsigned char rgb[3];
-    const unsigned short *rgb16 = (unsigned short*)(&Internal->RGB[0]);
   while( !is.Eof() )
     {
     is.Get(c);
     // FIXME
     if( is.Eof() ) break;
     unsigned char idx(c);
-    rgb[RED]   = rgb16[idx+RED];
-    rgb[GREEN] = rgb16[idx+GREEN];
-    rgb[BLUE]  = rgb16[idx+BLUE];
+    rgb[RED]   = Internal->RGB[2*idx+1+RED];
+    rgb[GREEN] = Internal->RGB[2*idx+1+GREEN];
+    rgb[BLUE]  = Internal->RGB[2*idx+1+BLUE];
     os.Write((char*)rgb, 3 );
     }
     }

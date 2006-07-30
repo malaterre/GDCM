@@ -41,6 +41,7 @@ unsigned int Image::GetPlanarConfiguration() const
 {
   if( PlanarConfiguration && PT.GetSamplesPerPixel() != 3 )
     {
+    // LEADTOOLS_FLOWERS-8-PAL-RLE.dcm
     // User specify PlanarConfiguration whereas SamplesPerPixel != 3
     gdcmWarningMacro( 
       "Can't set PlanarConfiguration if SamplesPerPixel is not 3" );
@@ -128,10 +129,10 @@ unsigned long Image::GetBufferLength() const
   mul *= PT.GetPixelSize();
   len = mul;
   // if Palette Color:
-  if( PI == PhotometricInterpretation::PALETTE_COLOR )
-    {
-    len *= 3;
-    }
+  //if( PI == PhotometricInterpretation::PALETTE_COLOR )
+  //  {
+  //  len *= 3;
+  //  }
   assert( len != 0 );
   return len;
 }

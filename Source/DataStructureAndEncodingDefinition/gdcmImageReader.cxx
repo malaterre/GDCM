@@ -380,6 +380,7 @@ bool ImageReader::ReadImage()
         (unsigned char*)lut_raw->GetPointer() );
       unsigned long check = length * el_us3.GetValue(2) / 8;
       assert( check == lut_raw->GetLength() );
+      assert( pt.GetBitsAllocated() == 8 );
       }
     PixelData.SetLUT(*lut);
     }

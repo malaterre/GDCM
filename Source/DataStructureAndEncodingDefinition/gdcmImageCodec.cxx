@@ -214,9 +214,8 @@ bool ImageCodec::Decode(IStream &is, OStream &os)
     }
   else if ( PI == PhotometricInterpretation::PALETTE_COLOR )
     {
-    // TODO FIXME
-    assert( !NeedByteSwap );
-    LUT->Decode(*cur_is, pi_os);
+    //LUT->Decode(*cur_is, pi_os);
+      DoSimpleCopy(*cur_is,pi_os);
     cur_is = &pi_os;
     }
   else
