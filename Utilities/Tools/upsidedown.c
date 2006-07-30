@@ -1,26 +1,48 @@
+/*=========================================================================
+
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006 Mathieu Malaterre
+  Copyright (c) 1993-2005 CREATIS
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+
+=========================================================================*/
+
 #include <stdio.h>
 #include <assert.h>
+#include <stdlib.h>
 
 int main(int argc, char *argv[])
 {
-  int i = 1;
-  const char *filename = argv[1];
-  const char *outfilename = argv[2];
-  FILE *in = fopen(filename, "rb" );
-  FILE *out = fopen(outfilename, "wb" );
   const unsigned int x = 512;
   const unsigned int y = 512;
   const unsigned int bit = 2;
-  char buffer[x*y*bit];
-  size_t len = fread(buffer,1,bit*x*y,in);
+  char *buffer = malloc(x*y*bit);
+  int i = 1;
+  size_t len;
+  const char *filename, *outfilename;
+  FILE *in, *out;
+  if( argc < 3 )
+    return 1;
+  filename = argv[1];
+  outfilename = argv[2];
+  in = fopen(filename, "rb" );
+  out = fopen(outfilename, "wb" );
+  len = fread(buffer,1,bit*x*y,in);
   assert( len == x*y*bit );
 
-  const char *p = buffer;
   for(i = y; i > 0; --i)
   {
-  fwrite(p+bit*x*(i-1),1,bit*x,out);
+  fwrite(buffer+bit*x*(i-1),1,bit*x,out);
   }
   fclose(in);
   fclose(out);
+  free(buffer);
   return 0;
 }
