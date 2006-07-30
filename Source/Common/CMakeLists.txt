@@ -36,6 +36,7 @@ SET(Common_SRCS
   gdcmFilename.cxx
   gdcmSystem.cxx
   gdcmMemoryStream.cxx
+  gdcmLookupTable.cxx
   )
 
 ADD_LIBRARY(gdcmCommon ${Common_SRCS})
