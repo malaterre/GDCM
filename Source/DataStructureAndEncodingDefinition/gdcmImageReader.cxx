@@ -356,7 +356,12 @@ bool ImageReader::ReadImage()
         descriptor->GetLength() );
       ss.Str( descriptor_str );
       el_us3.Read( ss );
-      unsigned short length = el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536;
+      unsigned short length = el_us3.GetValue(0);
+      if ( !length )
+        {
+        // if = 2^16, this shall be 0 see : CP-143
+        length = 65536;
+        }
       lut->InitializeLUT( LookupTable::LookupTableType(i),
         length, el_us3.GetValue(1), el_us3.GetValue(2) );
       //el_us3.Print( std::cerr << std::endl );
@@ -373,6 +378,8 @@ bool ImageReader::ReadImage()
       // LookupTableType::RED == 0
       lut->SetLUT( LookupTable::LookupTableType(i),
         (unsigned char*)lut_raw->GetPointer() );
+      unsigned long check = length * el_us3.GetValue(2) / 8;
+      assert( check == lut_raw->GetLength() );
       }
     PixelData.SetLUT(*lut);
     }

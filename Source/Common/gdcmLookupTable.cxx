@@ -62,99 +62,83 @@ if( bitsample == 8 )
 void LookupTable::InitializeLUT(LookupTableType type, unsigned short length,
     unsigned short subscript, unsigned short bitsize)
   {
-switch(type)
-{
-case RED:
-InitializeRedLUT(length, subscript, bitsize);
-break;
-case GREEN:
-InitializeGreenLUT(length, subscript, bitsize);
-break;
-case BLUE:
-InitializeBlueLUT(length, subscript, bitsize);
-break;
-default:
-abort();
-}
-
+  assert( type >= RED && type <= BLUE );
+  assert( length != 0 );
+  assert( subscript == 0 );
+  assert( bitsize == 8 || bitsize == 16 );
+  Internal->Length[type] = length;
+  Internal->Subscript[type] = subscript;
+  Internal->BitSize[type] = bitsize;
   }
 
 void LookupTable::SetLUT(LookupTableType type, unsigned char *array)
 {
-switch(type)
-{
-case RED:
-SetRedLUT(array);
-break;
-case GREEN:
-SetGreenLUT(array);
-break;
-case BLUE:
-SetBlueLUT(array);
-break;
-default:
-abort();
-}
+ // dummy assert need some work:
+  assert( Internal->RGB.size() > Internal->Length[type] );
+  for( int i = 0; i < Internal->Length[type]; ++i)
+  {
+  Internal->RGB[3*i+type] = array[i];
+  }
 }
 
 void LookupTable::InitializeRedLUT(unsigned short length,
 unsigned short subscript,
 unsigned short bitsize)
   {
-  Internal->Length[RED] = length;
-  Internal->Subscript[RED] = subscript;
-  Internal->BitSize[RED] = bitsize;
+  InitializeLUT(RED, length, subscript, bitsize);
   }
 void LookupTable::InitializeGreenLUT(unsigned short length,
 unsigned short subscript,
 unsigned short bitsize)
   {
-  Internal->Length[GREEN] = length;
-  Internal->Subscript[GREEN] = subscript;
-  Internal->BitSize[GREEN] = bitsize;
+  InitializeLUT(GREEN, length, subscript, bitsize);
   }
 void LookupTable::InitializeBlueLUT(unsigned short length,
 unsigned short subscript,
 unsigned short bitsize)
   {
-  Internal->Length[BLUE] = length;
-  Internal->Subscript[BLUE] = subscript;
-  Internal->BitSize[BLUE] = bitsize;
+  InitializeLUT(BLUE, length, subscript, bitsize);
   }
 
 void LookupTable::SetRedLUT(unsigned char *red)
 {
-  assert( Internal->RGB.size() > Internal->Length[RED] );
-  for( int i = 0; i < Internal->Length[RED]; ++i)
-  {
-  Internal->RGB[3*i+RED] = red[i];
-  }
+  SetLUT(RED, red);
 }
 
 void LookupTable::SetGreenLUT(unsigned char *green)
 {
-  assert( Internal->RGB.size() > Internal->Length[GREEN] );
-  for( int i = 0; i < Internal->Length[GREEN]; ++i)
-  {
-  Internal->RGB[3*i+GREEN] = green[i];
-  }
+  SetLUT(GREEN, green);
 }
 
 void LookupTable::SetBlueLUT(unsigned char *blue)
 {
-  assert( Internal->RGB.size() > Internal->Length[BLUE] );
-  for( int i = 0; i < Internal->Length[BLUE]; ++i)
-  {
-  Internal->RGB[3*i+BLUE] = blue[i];
-  }
+  SetLUT(BLUE, blue);
 }
 
 void LookupTable::Decode(IStream &is, OStream &os)
 {
-  unsigned char rgb[3];
   char c;
+  if ( Internal->BitSize[RED] == 16 )
+    {
+  unsigned char rgb[3];
+    const unsigned short *rgb16 = (unsigned short*)(&Internal->RGB[0]);
   while( !is.Eof() )
     {
+    is.Get(c);
+    // FIXME
+    if( is.Eof() ) break;
+    unsigned char idx(c);
+    rgb[RED]   = rgb16[idx+RED];
+    rgb[GREEN] = rgb16[idx+GREEN];
+    rgb[BLUE]  = rgb16[idx+BLUE];
+    os.Write((char*)rgb, 3 );
+    }
+    }
+    else
+    {
+  while( !is.Eof() )
+    {
+  unsigned char rgb[3];
     is.Get(c);
     // FIXME
     if( is.Eof() ) break;
@@ -163,6 +147,7 @@ void LookupTable::Decode(IStream &is, OStream &os)
     rgb[GREEN] = Internal->RGB[idx+GREEN];
     rgb[BLUE]  = Internal->RGB[idx+BLUE];
     os.Write((char*)rgb, 3);
+    }
     }
 }
 
