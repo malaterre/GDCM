@@ -121,6 +121,7 @@ bool ImageValue::GetBuffer(char *buffer) const
       RLECodec codec;
       codec.SetPlanarConfiguration( GetPlanarConfiguration() );
       codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
+      codec.SetLUT( GetLUT() );
       unsigned long rle_len = sf->ComputeLength();
       PixelType pt = GetPixelType();
       codec.SetLength( len );
@@ -130,6 +131,7 @@ bool ImageValue::GetBuffer(char *buffer) const
       StringStream os;
       bool r = codec.Decode(is, os);
       std::string::size_type check = os.Str().size();
+      // If the following assert fail expect big troubles:
       assert( check == len );
       if ( pt.GetBitsAllocated() == 16 )
         {

@@ -20,6 +20,8 @@
 #include "gdcmPixelType.h"
 #include "gdcmSwapCode.h"
 #include "gdcmPhotometricInterpretation.h"
+#include "gdcmLookupTable.h"
+#include "gdcmSmartPointer.h"
 
 #include <vector>
 
@@ -110,6 +112,14 @@ public:
     NeedByteSwap = b;
     }
 
+  void SetLUT(LookupTable const &lut)
+    {
+    LUT = SmartPointer<LookupTable>( const_cast<LookupTable*>(&lut) );
+    }
+  const LookupTable &GetLUT() const
+    {
+    return *LUT;
+    }
 //  Image(Image const&);
 //  Image &operator= (Image const&);
 
@@ -128,6 +138,9 @@ private:
   SwapCode SC;
   Compression::Types CompressionType;
   bool NeedByteSwap;
+
+  typedef SmartPointer<LookupTable> LUTPtr;
+  LUTPtr LUT;
 };
 
 } // end namespace gdcm

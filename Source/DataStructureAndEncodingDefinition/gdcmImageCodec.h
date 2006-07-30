@@ -19,6 +19,7 @@
 #include "gdcmCodec.h"
 #include "gdcmPhotometricInterpretation.h"
 #include "gdcmLookupTable.h"
+#include "gdcmSmartPointer.h"
 
 namespace gdcm
 {
@@ -51,12 +52,27 @@ public:
     {
     NeedByteSwap = b;
     }
+  void SetLUT(LookupTable const &lut)
+    {
+    LUT = SmartPointer<LookupTable>( const_cast<LookupTable*>(&lut) );
+    }
+  const LookupTable &GetLUT() const
+    {
+    return *LUT;
+    }
 
 private:
   unsigned int PlanarConfiguration;
   PhotometricInterpretation PI;
-  LookupTable LUT;
   bool NeedByteSwap;
+
+  typedef SmartPointer<LookupTable> LUTPtr;
+  LUTPtr LUT;
+
+  bool DoByteSwap(IStream &is, OStream &os);
+  bool DoYBR(IStream &is, OStream &os);
+  bool DoPlanarConfiguration(IStream &is, OStream &os);
+  bool DoSimpleCopy(IStream &is, OStream &os);
 };
 
 } // end namespace gdcm

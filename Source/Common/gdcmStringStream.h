@@ -40,6 +40,7 @@ public:
 
   IStream& Read(char* s, std::streamsize n);
   std::streamsize Gcount ( ) const;
+  bool Eof();
 
   IStream& Get(char &c) {
     InternalSStream.get(c);

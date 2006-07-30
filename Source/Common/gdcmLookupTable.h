@@ -18,31 +18,50 @@
 #define __gdcmLookupTable_h
 
 #include "gdcmTypes.h"
+#include "gdcmObject.h"
 
-#include <vector>
 
 namespace gdcm
 {
   
 class LookupTableInternal;
 class ByteValue;
-class LookupTable
+class IStream;
+class OStream;
+class LookupTable : public Object
 {
 public:
   typedef enum {
-    UNKNOWN = 0,
-    GRAY,
-    RED,
+    RED = 0,  // Keep RED == 0 
     GREEN,
     BLUE,
+    GRAY,
+    UNKNOWN,
   } LookupTableType;
 
   LookupTable();
   ~LookupTable();
 
-  void SetRedLUT(ByteValue const &bv);
-  void SetGreenLUT(ByteValue const &bv);
-  void SetBlueLUT(ByteValue const &bv);
+  void Allocate( int bitsample = 8 );
+  void InitializeLUT(LookupTableType type, unsigned short length,
+    unsigned short subscript, unsigned short bitsize);
+  void SetLUT(LookupTableType type, unsigned char *array);
+  void InitializeRedLUT(unsigned short length, unsigned short subscript,
+    unsigned short bitsize);
+  void SetRedLUT(unsigned char *red);
+  void InitializeBlueLUT(unsigned short length, unsigned short subscript,
+    unsigned short bitsize);
+  void SetGreenLUT(unsigned char *green);
+  void InitializeGreenLUT(unsigned short length, unsigned short subscript,
+    unsigned short bitsize);
+  void SetBlueLUT(unsigned char *blue);
+
+  void Decode(IStream &is, OStream &os);
+
+  LookupTable(LookupTable const &lut):Object(lut)
+    {
+    abort();
+    }
 
 private:
   LookupTableInternal *Internal;

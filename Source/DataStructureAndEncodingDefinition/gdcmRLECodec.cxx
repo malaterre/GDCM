@@ -132,6 +132,14 @@ bool RLECodec::Decode(IStream &is, OStream &os)
 
   unsigned long numberOfReadBytes = 0;
 
+  unsigned long length = Length;
+  // Special case:
+  if( GetPhotometricInterpretation() == 
+    PhotometricInterpretation::PALETTE_COLOR )
+    {
+    length /= 3;
+    }
+  length /= numSegments;
   for(unsigned long i = 0; i<numSegments; ++i)
     {
     std::streampos pos = is.Tellg();
@@ -150,7 +158,7 @@ bool RLECodec::Decode(IStream &is, OStream &os)
     char byte;
     //std::cerr << "Length: " << Length << "\n";
     //assert( (unsigned long)is.Tellg() == frame.Header.Offset[i] );
-    while( numOutBytes < Length / numSegments )
+    while( numOutBytes < length )
       {
       //std::cerr << "numOutBytes: " << numOutBytes << "\n";
       is.Read(&byte, 1);
@@ -180,7 +188,7 @@ bool RLECodec::Decode(IStream &is, OStream &os)
         assert( byte == -128 );
         }
       }
-    std::cerr << "numOutBytes:" << numOutBytes << " " << Length << "\n";
+    std::cerr << "numOutBytes:" << numOutBytes << " " << length << "\n";
     std::cerr << "DEBUG: " << numberOfReadBytes << std::endl;
     //if( numOutBytes != Length )
     //  {
@@ -188,13 +196,18 @@ bool RLECodec::Decode(IStream &is, OStream &os)
     //  }
     }
 
-  std::streampos start = is.Tellg();
-  is.Seekg( 0, std::ios::end );
-  std::streampos end = is.Tellg();
-  if( end - start != 0 )
-    {
-    //abort();
-    }
+  //std::streampos start = is.Tellg();
+  //is.Seekg( 0, std::ios::end );
+  //std::streampos end = is.Tellg();
+  //if( end - start != 0 )
+  //  {
+  //  //abort();
+  //  }
+  std::streampos start = tmpos.Tellg();
+  tmpos.Seekg( 0, std::ios::end);
+  std::streampos end   = tmpos.Tellg();
+  std::cerr << "DEBUG tmpos: " << end - start << std::endl;
+  tmpos.Seekg( start, std::ios::beg );
 
   ImageCodec::Decode(tmpos,os);
   return true;

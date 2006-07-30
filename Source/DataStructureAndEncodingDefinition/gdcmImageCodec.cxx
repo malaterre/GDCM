@@ -17,7 +17,9 @@
 #include "gdcmTS.h"
 #include "gdcmOStream.h"
 #include "gdcmIStream.h"
+#include "gdcmStringStream.h"
 #include "gdcmByteSwap.txx"
+#include "gdcmTrace.h"
 
 
 namespace gdcm
@@ -51,59 +53,39 @@ void ImageCodec::SetPhotometricInterpretation(
   PI = pi;
 }
 
-bool ImageCodec::Decode(IStream &is, OStream &os)
+bool ImageCodec::DoByteSwap(IStream &is, OStream &os)
 {
-  assert( PlanarConfiguration == 0 || PlanarConfiguration == 1);
-  assert( PI != PhotometricInterpretation::UNKNOW );
   // FIXME: Do some stupid work:
+  std::streampos start = is.Tellg();
+  assert( 0 - start == 0 );
   is.Seekg( 0, std::ios::end);
   std::streampos buf_size = is.Tellg();
   char *dummy_buffer = new char[buf_size];
-  is.Seekg(0, std::ios::beg);
+  is.Seekg(start, std::ios::beg);
   is.Read( dummy_buffer, buf_size);
+  is.Seekg(start, std::ios::beg); // reset
   SwapCode sc = is.GetSwapCode();
-  //if( sc == SwapCode::BigEndian )
-  if( NeedByteSwap )
-    {
-    //MR_GE_with_Private_Compressed_Icon_0009_1110.dcm
-    assert( !(buf_size % 2) );
-    ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)
-      dummy_buffer, SwapCode::BigEndian, buf_size/2);
-    }
-  // ACUSON-24-YBR_FULL-RLE.dcm declare PlanarConfiguration=1
-  // but it's only pure YBR...
-  if( PlanarConfiguration && PI != PhotometricInterpretation::YBR_FULL )
-    {
-    // US-RGB-8-epicard.dcm
-    //assert( image.GetNumberOfDimensions() == 3 );
-    assert( !(buf_size % 3) );
-    unsigned long size = buf_size/3;
-    char *copy = new char[ buf_size ];
-    memmove( copy, dummy_buffer, buf_size);
 
-    const char *r = copy;
-    const char *g = copy + size;
-    const char *b = copy + size + size;
+  assert( !(buf_size % 2) );
+  ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)
+    dummy_buffer, SwapCode::BigEndian, buf_size/2);
+  os.Write(dummy_buffer, buf_size);
+  return true;
+}
 
-    char *p = dummy_buffer;
-    for (unsigned long j = 0; j < size; ++j)
-      {
-      *(p++) = *(r++);
-      *(p++) = *(g++);
-      *(p++) = *(b++);
-      }
-    delete[] copy;
-    }
-  if (PI == PhotometricInterpretation::MONOCHROME2
-   || PI == PhotometricInterpretation::RGB )
-    {
-    }
-  else if (PI == PhotometricInterpretation::MONOCHROME1)
-    {
-    // TODO
-    }
-  else if ( PI == PhotometricInterpretation::YBR_FULL )
-    {
+bool ImageCodec::DoYBR(IStream &is, OStream &os)
+{
+  // FIXME: Do some stupid work:
+  std::streampos start = is.Tellg();
+  assert( 0 - start == 0 );
+  is.Seekg( 0, std::ios::end);
+  std::streampos buf_size = is.Tellg();
+  char *dummy_buffer = new char[buf_size];
+  is.Seekg(start, std::ios::beg);
+  is.Read( dummy_buffer, buf_size);
+  is.Seekg(start, std::ios::beg); // reset
+  SwapCode sc = is.GetSwapCode();
+
     assert( !(buf_size % 3) );
     unsigned long size = buf_size/3;
     unsigned char *copy = new unsigned char[ buf_size ];
@@ -140,17 +122,127 @@ bool ImageCodec::Decode(IStream &is, OStream &os)
       c++;
       }
     delete[] copy;
+
+  os.Write(dummy_buffer, buf_size);
+  return true;
+}
+
+bool ImageCodec::DoPlanarConfiguration(IStream &is, OStream &os)
+{
+  // FIXME: Do some stupid work:
+  std::streampos start = is.Tellg();
+  assert( 0 - start == 0 );
+  is.Seekg( 0, std::ios::end);
+  std::streampos buf_size = is.Tellg();
+  char *dummy_buffer = new char[buf_size];
+  is.Seekg(start, std::ios::beg);
+  is.Read( dummy_buffer, buf_size);
+  is.Seekg(start, std::ios::beg); // reset
+  SwapCode sc = is.GetSwapCode();
+
+    // US-RGB-8-epicard.dcm
+    //assert( image.GetNumberOfDimensions() == 3 );
+    assert( !(buf_size % 3) );
+    unsigned long size = buf_size/3;
+    char *copy = new char[ buf_size ];
+    memmove( copy, dummy_buffer, buf_size);
+
+    const char *r = copy;
+    const char *g = copy + size;
+    const char *b = copy + size + size;
+
+    char *p = dummy_buffer;
+    for (unsigned long j = 0; j < size; ++j)
+      {
+      *(p++) = *(r++);
+      *(p++) = *(g++);
+      *(p++) = *(b++);
+      }
+    delete[] copy;
+
+  os.Write(dummy_buffer, buf_size);
+  return true;
+}
+
+bool ImageCodec::DoSimpleCopy(IStream &is, OStream &os)
+{
+  std::streampos start = is.Tellg();
+  assert( 0 - start == 0 );
+  is.Seekg( 0, std::ios::end);
+  std::streampos buf_size = is.Tellg();
+  char *dummy_buffer = new char[buf_size];
+  is.Seekg(start, std::ios::beg);
+  is.Read( dummy_buffer, buf_size);
+  is.Seekg(start, std::ios::beg); // reset
+  os.Write( dummy_buffer, buf_size);
+  delete[] dummy_buffer ;
+
+  return true;
+}
+
+bool ImageCodec::Decode(IStream &is, OStream &os)
+{
+  assert( PlanarConfiguration == 0 || PlanarConfiguration == 1);
+  assert( PI != PhotometricInterpretation::UNKNOW );
+  StringStream bs_os; // ByteSwap
+  StringStream pi_os; // PhotometricInterpretation
+  IStream *cur_is = &is;
+
+  // First thing do the byte swap:
+  if( NeedByteSwap )
+    {
+    //MR_GE_with_Private_Compressed_Icon_0009_1110.dcm
+    DoByteSwap(*cur_is,bs_os);
+    cur_is = &bs_os;
+    }
+
+  // Second thing do palette color.
+  // This way PALETTE COLOR will be applied before we do
+  // Planar Configuration
+  if (PI == PhotometricInterpretation::MONOCHROME2
+   || PI == PhotometricInterpretation::RGB )
+    {
+    }
+  else if (PI == PhotometricInterpretation::MONOCHROME1)
+    {
+    // TODO
+    }
+  else if ( PI == PhotometricInterpretation::YBR_FULL )
+    {
+    DoYBR(*cur_is,pi_os);
+    cur_is = &pi_os;
     }
   else if ( PI == PhotometricInterpretation::PALETTE_COLOR )
     {
     // TODO FIXME
+    assert( !NeedByteSwap );
+    LUT->Decode(*cur_is, pi_os);
+    cur_is = &pi_os;
     }
   else
     {
     abort();
     }
-  os.Write(dummy_buffer, buf_size);
-  delete[] dummy_buffer;
+
+  if( PlanarConfiguration )
+    {
+    if ( PI == PhotometricInterpretation::YBR_FULL )
+      {
+      // ACUSON-24-YBR_FULL-RLE.dcm declare PlanarConfiguration=1
+      // but it's only pure YBR...
+      gdcmWarningMacro( "Not sure what to do" );
+      DoSimpleCopy(*cur_is,os);
+      }
+    else
+      {
+      DoPlanarConfiguration(*cur_is,os);
+      }
+    }
+  else
+    {
+    DoSimpleCopy(*cur_is,os);
+    }
+
   return true;
 }
 

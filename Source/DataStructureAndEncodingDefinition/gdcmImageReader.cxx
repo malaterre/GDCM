@@ -22,6 +22,7 @@
 #include "gdcmElement.h"
 #include "gdcmPhotometricInterpretation.h"
 #include "gdcmTS.h"
+#include "gdcmLookupTable.h"
 
 namespace gdcm
 {
@@ -335,8 +336,11 @@ bool ImageReader::ReadImage()
   assert( pi != PhotometricInterpretation::UNKNOW);
   PixelData.SetPhotometricInterpretation( pi );
 
+  // Do the Palette Color:
   if ( pi == PhotometricInterpretation::PALETTE_COLOR )
     {
+    SmartPointer<LookupTable> lut = new LookupTable;
+    lut->Allocate();
     // for each red, green, blue:
     for(int i=0; i<3; ++i)
       {
@@ -352,18 +356,25 @@ bool ImageReader::ReadImage()
         descriptor->GetLength() );
       ss.Str( descriptor_str );
       el_us3.Read( ss );
-      el_us3.Print( std::cerr << std::endl );
+      unsigned short length = el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536;
+      lut->InitializeLUT( LookupTable::LookupTableType(i),
+        length, el_us3.GetValue(1), el_us3.GetValue(2) );
+      //el_us3.Print( std::cerr << std::endl );
 
       // (0028,1201) OW 
       // (0028,1202) OW
       // (0028,1203) OW 
       const Tag tlut(0x0028, (0x1201 + i));
-      const ByteValue *lut = GetPointerFromElement( tlut );
+      const ByteValue *lut_raw = GetPointerFromElement( tlut );
       //std::string descriptor_str(
       //  descriptor_str->GetPointer(),
       //  descriptor_str->GetLength() );
       //std::cerr << descriptor_str << std::endl;
+      // LookupTableType::RED == 0
+      lut->SetLUT( LookupTable::LookupTableType(i),
+        (unsigned char*)lut_raw->GetPointer() );
       }
+    PixelData.SetLUT(*lut);
     }
   // TODO
   //assert( pi.GetSamplesPerPixel() == pt.GetSamplesPerPixel() );

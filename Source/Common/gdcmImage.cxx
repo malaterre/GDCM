@@ -127,6 +127,11 @@ unsigned long Image::GetBufferLength() const
   // Multiply by the pixel size:
   mul *= PT.GetPixelSize();
   len = mul;
+  // if Palette Color:
+  if( PI == PhotometricInterpretation::PALETTE_COLOR )
+    {
+    len *= 3;
+    }
   assert( len != 0 );
   return len;
 }

@@ -63,4 +63,9 @@ std::streamsize StringStream::Gcount ( ) const
   return InternalSStream.gcount();
 }
 
+bool StringStream::StringStream::Eof()
+{
+  return InternalSStream.eof();
+}
+
 } // end namespace gdcm

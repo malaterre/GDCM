@@ -42,7 +42,8 @@ public:
   // delete o; // grrrrrr
   virtual ~Object()
     {
-    //assert(ReferenceCount >= 0 );
+    // If your debugger reach here it means you are doing something silly
+    // like using SmartPointer on object allocated on the stack (vs heap)
     assert(ReferenceCount == 0 );
     }
 
