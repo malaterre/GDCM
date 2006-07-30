@@ -18,6 +18,7 @@
 #include "gdcmOStream.h"
 #include "gdcmIStream.h"
 #include "gdcmStringStream.h"
+#include "gdcmTrace.h"
 
 #include <vector>
 
@@ -136,9 +137,13 @@ bool RLECodec::Decode(IStream &is, OStream &os)
     std::streampos pos = is.Tellg();
     if ( frame.Header.Offset[i] - pos != 0 )
       {
-      std::cerr << "OLD POS: " << pos << " new pos " << frame.Header.Offset[i] << std::endl;
-      is.Seekg(frame.Header.Offset[i], std::ios::beg);
-      abort();
+      // ACUSON-24-YBR_FULL-RLE.dcm
+      // D_CLUNIE_CT1_RLE.dcm
+      // This should be at most the \0 padding
+      gdcmDebugMacro( "RLE Header says: " << frame.Header.Offset[i] <<
+         " when it should says: " << pos << std::endl );
+      assert( frame.Header.Offset[i] - pos == 1 );
+      is.Seekg( frame.Header.Offset[i], std::ios::beg );
       }
 
     unsigned long numOutBytes = 0;
