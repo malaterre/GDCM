@@ -80,6 +80,9 @@ int vtkGDCMReader::RequestInformation(vtkInformation *request,
     this->DataExtent[4] = 0;
     this->DataExtent[5] = dims[2] - 1;
     }
+  //this->DataSpacing[0] = 1.;
+  //this->DataSpacing[1] = -1.;
+  //this->DataSpacing[2] = 1.;
 
   gdcm::PixelType pixeltype = image.GetPixelType();
   switch( pixeltype )
@@ -109,6 +112,12 @@ int vtkGDCMReader::RequestInformation(vtkInformation *request,
     }
 
   this->NumberOfScalarComponents = pixeltype.GetSamplesPerPixel();
+  if( image.GetPhotometricInterpretation() == 
+    gdcm::PhotometricInterpretation::PALETTE_COLOR )
+    {
+    assert( this->NumberOfScalarComponents == 1 );
+    this->NumberOfScalarComponents = 3;
+    }
 
   return this->Superclass::RequestInformation(
     request, inputVector, outputVector);
