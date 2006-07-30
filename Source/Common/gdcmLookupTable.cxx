@@ -13,36 +13,34 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
-#ifndef __gdcmLookupTable_h
-#define __gdcmLookupTable_h
-
-#include "gdcmTypes.h"
-
-#include <vector>
+#include "gdcmLookupTable.h"
 
 namespace gdcm
 {
-  
-class LookupTableInternal;
-class LookupTable
+
+class LookupTableInternal
 {
 public:
-  typedef enum {
-    UNKNOWN = 0,
-    GRAY,
-    RED,
-    GREEN,
-    BLUE,
-  } LookupTableType;
-
-  LookupTable();
-  ~LookupTable();
-
-private:
-  LookupTableInternal *Internal;
+  ByteValue *Red;
+  ByteValue *Green;
+  ByteValue *Blue;
 };
 
-} // end namespace gdcm
+LookupTable::LookupTable()
+{
+  Internal = new LookupTableInternal;
+}
 
-#endif //__gdcmLookupTable_h
+void LookupTable::Allocate(int bitsample)
+{
+  if ( bitsample == 8 )
+    {
+    RGB.reserve( 256 * 3 );
+    }
+  else
+    {
+    abort();
+    }
+}
+
+} // end namespace gdcm
