@@ -211,15 +211,55 @@ bool ImageCodec::DoPaddedCompositePixelCode(IStream &is, OStream &os)
 
 bool ImageCodec::DoInvertMonochrome(IStream &is, OStream &os)
 {
-  char c;
-  while( !is.Eof() )
+  if ( PT.GetPixelRepresentation() )
     {
-    is.Get(c);
-    // FIXME
-    if( is.Eof() ) break;
-    unsigned char invert(c);
-    invert = 255 - invert;
-    os.Write((char*)&invert, 1 );
+    if ( PT.GetBitsAllocated() == 8 )
+      {
+      uint8_t c;
+      while( is.Read((char*)&c,1) )
+        {
+        c = 255 - c;
+        os.Write((char*)&c, 1 );
+        }
+      }
+    else if ( PT.GetBitsAllocated() == 16 )
+      {
+      uint16_t smask16 = 65535;
+      uint16_t c;
+      while( is.Read((char*)&c,2) )
+        {
+        c = smask16 - c;
+        os.Write((char*)&c, 2);
+        }
+      }
+    }
+  else
+    {
+    if ( PT.GetBitsAllocated() == 8 )
+      {
+      uint8_t c;
+      while( is.Read((char*)&c,1) )
+        {
+        c = 255 - c;
+        os.Write((char*)&c, 1);
+        }
+      }
+    else if ( PT.GetBitsAllocated() == 16 )
+      {
+      uint16_t mask = 1;
+      for (int j=0; j<PT.GetBitsStored()-1; ++j)
+        {
+        mask = (mask << 1) + 1; // will be 0x0fff when BitsStored = 12
+        }
+
+      uint16_t c;
+      while( is.Read((char*)&c,2) )
+        {
+        c = mask - c;
+        os.Write((char*)&c, 2);
+        }
+      }
+
     }
   return true;
 }

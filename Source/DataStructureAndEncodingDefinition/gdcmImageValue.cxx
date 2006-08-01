@@ -47,6 +47,7 @@ bool ImageValue::GetBuffer(char *buffer) const
     codec.SetPlanarConfiguration( GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
     codec.SetLUT( GetLUT() );
+    codec.SetPixelType( GetPixelType() );
     codec.SetNeedByteSwap( GetNeedByteSwap() );
     StringStream is;
     //is.SetSwapCode( GetSwapCode() );
