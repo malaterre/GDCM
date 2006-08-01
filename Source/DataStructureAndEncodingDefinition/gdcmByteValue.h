@@ -62,7 +62,7 @@ public:
   void SetLength(const VL& vl) {
     VL l(vl);
     if ( l.IsOdd() ) {
-      gdcmWarningMacro(
+      gdcmDebugMacro(
         "BUGGY HEADER: Your dicom contain odd length value field." );
       ++l;
       }

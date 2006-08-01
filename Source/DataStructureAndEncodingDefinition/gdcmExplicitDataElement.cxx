@@ -48,7 +48,7 @@ IStream &ExplicitDataElement::Read(IStream &is)
       }
     if( ValueLengthField != 0 )
       {
-      gdcmWarningMacro(
+      gdcmDebugMacro(
         "Item Delimitation Item has a length different from 0" );
       }
     return is;

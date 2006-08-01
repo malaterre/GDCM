@@ -17,32 +17,31 @@
 #include "gdcmTS.h"
 #include "gdcmOStream.h"
 #include "gdcmIStream.h"
+#include "gdcmTrace.h"
 
 #include "gdcm_openjpeg.h"
 
-extern "C" {
+namespace gdcm
+{
+
 /**
 sample error callback expecting a FILE* client object
 */
 void error_callback(const char *msg, void *) {
-  std::cerr << "Error in gdcmopenjpeg" << msg << std::endl;
+  gdcmErrorMacro( "Error in gdcmopenjpeg" << msg );
 }
 /**
 sample warning callback expecting a FILE* client object
 */
 void warning_callback(const char *msg, void *) {
-  std::cerr << "Warning in gdcmopenjpeg" << msg << std::endl;
+  gdcmWarningMacro( "Warning in gdcmopenjpeg" << msg );
 }
 /**
 sample debug callback expecting no client object
 */
 void info_callback(const char *msg, void *) {
-  std::cerr << "Info in gdcmopenjpeg" << msg << std::endl;
+  gdcmDebugMacro( "Info in gdcmopenjpeg" << msg );
 }
-}
-
-namespace gdcm
-{
 
 #define J2K_CFMT 0
 #define JP2_CFMT 1

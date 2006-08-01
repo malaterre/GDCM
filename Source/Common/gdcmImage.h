@@ -48,7 +48,7 @@ namespace gdcm
 class GDCM_EXPORT Image
 {
 public:
-  Image ():NumberOfDimensions(0),PlanarConfiguration(0),Dimensions(),SC(),CompressionType(Compression::UNKNOWN) {}
+  Image ():NumberOfDimensions(0),PlanarConfiguration(0),Dimensions(),SC(),CompressionType(Compression::UNKNOWN),NeedByteSwap(false),LUT(0) {}
   virtual ~Image() {}
 
   unsigned int GetNumberOfDimensions() const;
