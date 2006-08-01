@@ -402,12 +402,25 @@ bool ImageReader::ReadImage()
     if( xde.GetVR() == VR::OW )
       {
       // Need to byte swap
-      PixelData.SetNeedByteSwap(true);
+      assert( GetHeader().GetTransferSyntaxType() 
+        != TS::ImplicitVRBigEndianPrivateGE );
+      bool need = 
+        ByteSwap<int>::SystemIsLittleEndian() &&
+        (Stream.GetSwapCode() != SwapCode::LittleEndian)
+     || ByteSwap<int>::SystemIsBigEndian() &&
+        (Stream.GetSwapCode() != SwapCode::BigEndian );
+      PixelData.SetNeedByteSwap( need );
       }
     PixelData.SetValue( xde.GetValue() );
     }
   else if( type == TS::Implicit )
     {
+    TS ts = GetHeader().GetTransferSyntaxType();
+    if( ts == TS::ImplicitVRBigEndianPrivateGE
+      && pt.GetBitsAllocated() == 16 )
+      {
+      PixelData.SetNeedByteSwap( true );
+      }
     const ImplicitDataElement &ide =
       dynamic_cast<const ImplicitDataElement&>(pdde);
     PixelData.SetValue( ide.GetValue() );
