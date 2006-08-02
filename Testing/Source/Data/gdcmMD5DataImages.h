@@ -223,7 +223,7 @@ const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 128 128 1 8 1 */
 { "fc5db4e2e7fca8445342b83799ff16d8" , "LIBIDO-8-ACR_NEMA-Lena_128_128.acr" },
 /* gdcm 512 512 1 16 1 */
-{ "3d2d94917a52353b996037ccb5288168" , "MARCONI_MxTWin-12-MONO2-JpegLossless-ZeroLengthSQ.dcm" },
+{ "b1476cacdd32216b3295d2a494af2945" , "MARCONI_MxTWin-12-MONO2-JpegLossless-ZeroLengthSQ.dcm" },
 /* gdcm 256 192 1 16 1 */
 { "d9f47017de79e8755e4bc5d3c9146ebd" , "MR-Brucker-CineTagging-NonSquarePixels.dcm" },
 /* gdcm 512 512 1 16 1 */
@@ -261,7 +261,7 @@ const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 512 512 1 16 1 */
 { "4b0021efe5a675f24c82e1ff28a1e2eb" , "PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm" },
 /* gdcm 256 256 1 16 1 */
-{ "c5b1145071f92752946b9c28593f0a6e" , "PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm" },
+{ "b78366162d9d43b2852d2637c5365c89" , "PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm" },
 /* gdcm 256 256 1 16 1 */
 { "4842ccbaac5b563ce915d2e21eb4c06e" , "PHILIPS_Gyroscan-8-MONO2-Odd_Sequence.dcm" },
 /* gdcm 512 512 76 8 1 */
@@ -333,7 +333,8 @@ const char * const gdcmMD5DataImages[][2] = {
 
 
 // Those where added manually:
-// Image1 & Image2 are crap...
+// Image1 & Image2 are crap, some kind of decompression went wrong
+// and PixelData is raw so not much you can do...
 { "1b0768a3518a6b6ed425c3c1d7a7ea3b" , "Image1.dcm" },
 { "a41c7f4e75cf637ae8912f5c3cd2c69d" , "Image2.dcm" },
 { "22c9be23446a7be61a90d3578f3c9739" , "deflate_image.dcm" },
