@@ -556,6 +556,12 @@ bool ImageReader::ReadACRNEMAImage()
     }
   else if( type == TS::Implicit )
     {
+    TS ts = GetHeader().GetTransferSyntaxType();
+    if( ts == TS::ImplicitVRBigEndianACRNEMA
+      && pt.GetBitsAllocated() == 16 )
+      {
+      PixelData.SetNeedByteSwap( true );
+      }
     const ImplicitDataElement &ide =
       dynamic_cast<const ImplicitDataElement&>(pdde);
     PixelData.SetValue( ide.GetValue() );
