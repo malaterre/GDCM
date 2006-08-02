@@ -36,7 +36,7 @@ public:
     GREEN,
     BLUE,
     GRAY,
-    UNKNOWN,
+    UNKNOWN
   } LookupTableType;
 
   LookupTable();
