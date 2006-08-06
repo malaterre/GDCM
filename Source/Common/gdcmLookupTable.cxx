@@ -41,6 +41,7 @@ public:
 LookupTable::LookupTable()
 {
   Internal = new LookupTableInternal;
+  IncompleteLUT = false;
 }
 
 LookupTable::~LookupTable()
@@ -77,6 +78,10 @@ void LookupTable::InitializeLUT(LookupTableType type, unsigned short length,
     }
   else
     {
+    if( length != 256 )
+      {
+      IncompleteLUT = true;
+      }
     Internal->Length[type] = length;
     }
   Internal->Subscript[type] = subscript;
@@ -86,7 +91,10 @@ void LookupTable::InitializeLUT(LookupTableType type, unsigned short length,
 void LookupTable::SetLUT(LookupTableType type, const unsigned char *array,
   unsigned int length)
 {
-  assert( Internal->RGB.size() == 3*Internal->Length[type]*(BitSample/8) );
+  if( !IncompleteLUT )
+    {
+    assert( Internal->RGB.size() == 3*Internal->Length[type]*(BitSample/8) );
+    }
   if( BitSample == 8 )
     {
     const unsigned int mult = Internal->BitSize[type]/8;
@@ -158,6 +166,12 @@ void LookupTable::Decode(IStream &is, OStream &os)
       is.Read( (char*)(&idx), 1);
       // FIXME
       if( is.Eof() ) break;
+      if( IncompleteLUT )
+        {
+        assert( idx < Internal->Length[RED] );
+        assert( idx < Internal->Length[GREEN] );
+        assert( idx < Internal->Length[BLUE] );
+        }
       rgb[RED]   = Internal->RGB[3*idx+RED];
       rgb[GREEN] = Internal->RGB[3*idx+GREEN];
       rgb[BLUE]  = Internal->RGB[3*idx+BLUE];
@@ -175,7 +189,12 @@ void LookupTable::Decode(IStream &is, OStream &os)
       //is.Get(c);
       // FIXME
       if( is.Eof() ) break;
-      //unsigned char idx(c);
+      if( IncompleteLUT )
+        {
+        assert( idx < Internal->Length[RED] );
+        assert( idx < Internal->Length[GREEN] );
+        assert( idx < Internal->Length[BLUE] );
+        }
       rgb[RED]   = rgb16[3*idx+RED];
       rgb[GREEN] = rgb16[3*idx+GREEN];
       rgb[BLUE]  = rgb16[3*idx+BLUE];

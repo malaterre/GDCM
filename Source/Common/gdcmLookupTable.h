@@ -67,6 +67,7 @@ public:
 private:
   LookupTableInternal *Internal;
   int BitSample; // refer to the pixel type (no the bit size of LUT)
+  bool IncompleteLUT;
 };
 
 } // end namespace gdcm
