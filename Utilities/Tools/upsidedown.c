@@ -20,9 +20,9 @@
 
 int main(int argc, char *argv[])
 {
-  const unsigned int x = 512;
-  const unsigned int y = 512;
-  const unsigned int bit = 2;
+  const unsigned int x = 420;
+  const unsigned int y = 608;
+  const unsigned int bit = 1;
   char *buffer = malloc(x*y*bit);
   int i = 1;
   size_t len;

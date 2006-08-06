@@ -51,11 +51,21 @@ int TestImageRead(const char* filename)
     const gdcm::Image &img = reader.GetImage();
     //std::cerr << "Success to read image from file: " << filename << std::endl;
     unsigned long len = img.GetBufferLength();
-    char *buffer = new char[len];
+    if ( img.GetPhotometricInterpretation() ==
+      gdcm::PhotometricInterpretation::PALETTE_COLOR )
+      {
+      len *= 3;
+      }
+    char* buffer = new char[len];
     img.GetBuffer(buffer);
     const char *ref = GetMD5Ref(filename);
     char digest[33];
     gdcm::System::ComputeMD5(buffer, len, digest);
+    if( !ref )
+      {
+      // new regression image needs a md5 sum
+      abort();
+      }
     if( strcmp(digest, ref) )
       {
       std::cerr << "Problem reading image from: " << filename << std::endl;

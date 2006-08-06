@@ -43,15 +43,15 @@ void JPEGCodec::SetBitSample(int bit)
 {
   BitSample = bit;
   assert( Internal == NULL );
-  if ( BitSample == 8 )
+  if ( BitSample <= 8 )
     {
     Internal = new JPEG8Codec;
     }
-  else if ( BitSample == 12 )
+  else if ( BitSample <= 12 )
     {
     Internal = new JPEG12Codec;
     }
-  else if ( BitSample == 16 )
+  else if ( BitSample <= 16 )
     {
     Internal = new JPEG16Codec;
     }

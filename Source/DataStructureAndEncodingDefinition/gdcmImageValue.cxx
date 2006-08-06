@@ -86,7 +86,8 @@ bool ImageValue::GetBuffer(char *buffer) const
       JPEGCodec codec;
       codec.SetPlanarConfiguration( GetPlanarConfiguration() );
       codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
-      codec.SetBitSample( GetPixelType().GetBitsAllocated() );
+      //codec.SetBitSample( GetPixelType().GetBitsAllocated() );
+      codec.SetBitSample( GetPixelType().GetBitsStored() );
       unsigned long pos = 0;
       for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
         {

@@ -14,6 +14,7 @@
 
 =========================================================================*/
 #include "gdcmElement.h"
+#include "gdcmStringStream.h"
 
 #define TPI 3.1415926535897931
 
@@ -63,6 +64,52 @@ int TestAS()
   return 0;
 }
 
+
+int TestUSVM3()
+{
+  Element<VR::US, VM::VM3> a = { 0x0001, 0x0002, 0x0003 };
+  a.Print( std::cout );
+  std::cout << std::endl;
+  unsigned short tmp = a.GetValue(0);
+  if( tmp != 0x0001 )
+    {
+    return 1;
+    }
+  tmp = a.GetValue(1);
+  if( tmp != 0x0002 )
+    {
+    return 1;
+    }
+  tmp = a.GetValue(2);
+  if( tmp != 0x0003 )
+    {
+    return 1;
+    }
+  StringStream ss;
+  a.Write( ss );
+
+  Element<VR::US, VM::VM3> b;
+  b.Read( ss );
+  b.Print( std::cout );
+  tmp = b.GetValue(0);
+  if( tmp != 0x0001 )
+    {
+    return 1;
+    }
+  tmp = b.GetValue(1);
+  if( tmp != 0x0002 )
+    {
+    return 1;
+    }
+  tmp = b.GetValue(2);
+  if( tmp != 0x0003 )
+    {
+    return 1;
+    }
+  std::cout << std::endl;
+
+  return 0;
+}
 }
 
 int TestElement(int , char *[])
@@ -71,6 +118,7 @@ int TestElement(int , char *[])
   r += gdcm::TestFL();
   r += gdcm::TestFD();
   r += gdcm::TestAS();
+  r += gdcm::TestUSVM3();
 
   return r;
 }
