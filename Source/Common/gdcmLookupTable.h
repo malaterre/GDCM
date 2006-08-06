@@ -45,17 +45,17 @@ public:
   void Allocate( int bitsample = 8 );
   void InitializeLUT(LookupTableType type, unsigned short length,
     unsigned short subscript, unsigned short bitsize);
-  void SetLUT(LookupTableType type, unsigned char *array,
+  void SetLUT(LookupTableType type, const unsigned char *array,
     unsigned int length);
   void InitializeRedLUT(unsigned short length, unsigned short subscript,
     unsigned short bitsize);
-  void SetRedLUT(unsigned char *red, unsigned int length);
+  void SetRedLUT(const unsigned char *red, unsigned int length);
   void InitializeBlueLUT(unsigned short length, unsigned short subscript,
     unsigned short bitsize);
-  void SetGreenLUT(unsigned char *green, unsigned int length);
+  void SetGreenLUT(const unsigned char *green, unsigned int length);
   void InitializeGreenLUT(unsigned short length, unsigned short subscript,
     unsigned short bitsize);
-  void SetBlueLUT(unsigned char *blue, unsigned int length);
+  void SetBlueLUT(const unsigned char *blue, unsigned int length);
 
   void Decode(IStream &is, OStream &os);
 
@@ -66,6 +66,7 @@ public:
 
 private:
   LookupTableInternal *Internal;
+  int BitSample; // refer to the pixel type (no the bit size of LUT)
 };
 
 } // end namespace gdcm

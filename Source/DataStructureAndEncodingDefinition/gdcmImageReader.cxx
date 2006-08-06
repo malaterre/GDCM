@@ -378,7 +378,7 @@ bool ImageReader::ReadImage()
         (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
         * el_us3.GetValue(2) / 8;
       assert( check == lut_raw->GetLength() );
-      assert( pt.GetBitsAllocated() == 8 );
+      //assert( pt.GetBitsAllocated() == 8 );
       }
     PixelData.SetLUT(*lut);
     }
