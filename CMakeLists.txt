@@ -123,3 +123,10 @@ IF("${GDCM_BINARY_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
 ENDIF("${GDCM_BINARY_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
 ENDIF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
 
+#-----------------------------------------------------------------------------
+OPTION(GDCM_BUILD_WRAPPING "wrapping ?" OFF)
+SET(BUILD_WRAPPING ${GDCM_BUILD_WRAPPING})
+IF(BUILD_WRAPPING)
+  SUBDIRS(Wrapping)
+ENDIF(BUILD_WRAPPING)
+
