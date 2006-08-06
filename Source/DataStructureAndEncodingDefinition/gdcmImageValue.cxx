@@ -65,7 +65,7 @@ bool ImageValue::GetBuffer(char *buffer) const
       {
       assert( check == len );
       }
-    memcpy(buffer, os.Str().c_str(), len);
+    memcpy(buffer, os.Str().c_str(), check);  // FIXME
     return r;
     }
   else
@@ -147,8 +147,16 @@ bool ImageValue::GetBuffer(char *buffer) const
       bool r = codec.Decode(is, os);
       std::string::size_type check = os.Str().size();
       // If the following assert fail expect big troubles:
-      assert( check == len );
-      memcpy(buffer, os.Str().c_str(), os.Str().size());
+      if ( GetPhotometricInterpretation() == 
+        PhotometricInterpretation::PALETTE_COLOR )
+        {
+        assert( check == 3*len );
+        }
+      else
+        {
+        assert( check == len );
+        }
+      memcpy(buffer, os.Str().c_str(), check);
       return r;
       }
     else

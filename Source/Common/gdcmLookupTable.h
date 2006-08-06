@@ -45,16 +45,17 @@ public:
   void Allocate( int bitsample = 8 );
   void InitializeLUT(LookupTableType type, unsigned short length,
     unsigned short subscript, unsigned short bitsize);
-  void SetLUT(LookupTableType type, unsigned char *array);
+  void SetLUT(LookupTableType type, unsigned char *array,
+    unsigned int length);
   void InitializeRedLUT(unsigned short length, unsigned short subscript,
     unsigned short bitsize);
-  void SetRedLUT(unsigned char *red);
+  void SetRedLUT(unsigned char *red, unsigned int length);
   void InitializeBlueLUT(unsigned short length, unsigned short subscript,
     unsigned short bitsize);
-  void SetGreenLUT(unsigned char *green);
+  void SetGreenLUT(unsigned char *green, unsigned int length);
   void InitializeGreenLUT(unsigned short length, unsigned short subscript,
     unsigned short bitsize);
-  void SetBlueLUT(unsigned char *blue);
+  void SetBlueLUT(unsigned char *blue, unsigned int length);
 
   void Decode(IStream &is, OStream &os);
 

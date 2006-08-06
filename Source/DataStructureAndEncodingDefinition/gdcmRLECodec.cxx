@@ -137,7 +137,7 @@ bool RLECodec::Decode(IStream &is, OStream &os)
   if( GetPhotometricInterpretation() == 
     PhotometricInterpretation::PALETTE_COLOR )
     {
-    length /= 3;
+    //length /= 3;
     }
   else if ( GetPhotometricInterpretation() ==
     PhotometricInterpretation::RGB )
@@ -147,6 +147,7 @@ bool RLECodec::Decode(IStream &is, OStream &os)
   length /= numSegments;
   for(unsigned long i = 0; i<numSegments; ++i)
     {
+    numberOfReadBytes = 0;
     std::streampos pos = is.Tellg();
     if ( frame.Header.Offset[i] - pos != 0 )
       {
@@ -192,7 +193,10 @@ bool RLECodec::Decode(IStream &is, OStream &os)
         {
         assert( byte == -128 );
         }
+        assert( is.Eof()
+        || numberOfReadBytes + frame.Header.Offset[i] - is.Tellg() == 0);
       }
+    assert( numOutBytes == length );
     //std::cerr << "numOutBytes:" << numOutBytes << " " << length << "\n";
     //std::cerr << "DEBUG: " << numberOfReadBytes << std::endl;
     }
