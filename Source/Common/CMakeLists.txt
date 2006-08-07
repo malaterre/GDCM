@@ -5,6 +5,11 @@ INCLUDE_REGULAR_EXPRESSION("^gdcm.*$")
 # configure the .h file
 OPTION(GDCM_SUPPORT_BROKEN_IMPLEMENTATION "Handle broken DICOM" ON)
 MARK_AS_ADVANCED(GDCM_SUPPORT_BROKEN_IMPLEMENTATION)
+
+# Big endian thing:
+INCLUDE (${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
+TEST_BIG_ENDIAN(GDCM_WORDS_BIGENDIAN)
+
 CONFIGURE_FILE(
   "${GDCM_SOURCE_DIR}/Source/Common/gdcmConfigure.h.in"
   "${GDCM_BINARY_DIR}/Source/Common/gdcmConfigure.h"
