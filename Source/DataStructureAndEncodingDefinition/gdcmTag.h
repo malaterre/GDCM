@@ -76,18 +76,12 @@ public:
   } 
   /// \brief Returns the full tag value of the given Tag
   uint32_t GetElementTag() const { 
-#ifndef GDCM_WORDS_BIGENDIAN	  
     return (ElementTag.tag<<16) | (ElementTag.tag>>16);
-#else
-    return ElementTag.tag;
-#endif
   }
  
 /// \brief Sets the full tag value of the given Tag
   void SetElementTag(uint32_t tag) {
-#ifndef GDCM_WORDS_BIGENDIAN
     tag = ( (tag<<16) | (tag>>16) );
-#endif
     ElementTag.tag = tag;
   }
 
