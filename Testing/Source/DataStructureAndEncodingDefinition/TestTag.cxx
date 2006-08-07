@@ -14,24 +14,16 @@
 
 =========================================================================*/
 #include "gdcmTag.h"
+#include "gdcmStringStream.h"
 
 int TestTag(int , char * [])
 {
   const uint32_t dummy = 0x12345678;
-  gdcm::Tag t32(dummy);
   gdcm::Tag t16(0x1234, 0x5678);
-  if( t32 != t16 )
-    {
-    return 1;
-    }
-  if( t32.GetElementTag() != dummy )
-    {
-    return 1;
-    }
-  if( t16.GetElementTag() != dummy )
-    {
-    return 1;
-    }
+  gdcm::StringStream ss;
+  t16.Write( ss );
+  gdcm::Tag t16_2;
+  t16_2.Read( ss );
 
   gdcm::Tag t1;
   gdcm::Tag t2(0,0);
