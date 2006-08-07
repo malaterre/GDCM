@@ -9,5 +9,5 @@ SET(GDCM_VIEWER_APP_SRCS
   gdcmviewer.cxx
   )
 
-ADD_EXECUTABLE(gdcmviewer ${GDCM_VIEWER_APP_SRCS})
+ADD_EXECUTABLE(gdcmviewer MACOSX_BUNDLE ${GDCM_VIEWER_APP_SRCS})
 TARGET_LINK_LIBRARIES(gdcmviewer vtkgdcm vtkRendering)
