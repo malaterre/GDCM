@@ -25,6 +25,12 @@ int TestTag(int , char * [])
   gdcm::Tag t16_2;
   t16_2.Read( ss );
 
+  gdcm::Tag t32( dummy );
+  if( t32 != t16 )
+    {
+    return 1;
+    }
+
   gdcm::Tag t1;
   gdcm::Tag t2(0,0);
   if ( t1[0] != 0 )
