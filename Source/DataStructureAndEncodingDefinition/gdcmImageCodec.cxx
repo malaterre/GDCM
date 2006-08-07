@@ -323,10 +323,10 @@ bool ImageCodec::Decode(IStream &is, OStream &os)
 {
   assert( PlanarConfiguration == 0 || PlanarConfiguration == 1);
   assert( PI != PhotometricInterpretation::UNKNOW );
-  StringStream pt_os; // PixelType
   StringStream bs_os; // ByteSwap
   StringStream pcpc_os; // Padeed Composite Pixel Code
   StringStream pi_os; // PhotometricInterpretation
+  StringStream pl_os; // PlanarConf
   IStream *cur_is = &is;
 
   // First thing do the byte swap:
@@ -336,14 +336,6 @@ bool ImageCodec::Decode(IStream &is, OStream &os)
     DoByteSwap(*cur_is,bs_os);
     cur_is = &bs_os;
     }
-  // Do the pixel type (cleanup the unused bits)
-  if ( PT.GetBitsAllocated() != PT.GetBitsStored()
-    && PT.GetBitsAllocated() != 8 )
-    {
-    DoPixelType(*cur_is,pt_os);
-    cur_is = &pt_os;
-    }
-
   if ( RequestPaddedCompositePixelCode )
     {
     // D_CLUNIE_CT2_RLE.dcm
@@ -391,12 +383,20 @@ bool ImageCodec::Decode(IStream &is, OStream &os)
       // ACUSON-24-YBR_FULL-RLE.dcm declare PlanarConfiguration=1
       // but it's only pure YBR...
       gdcmWarningMacro( "Not sure what to do" );
-      DoSimpleCopy(*cur_is,os);
       }
     else
       {
-      DoPlanarConfiguration(*cur_is,os);
+      DoPlanarConfiguration(*cur_is,pl_os);
+      cur_is = &pl_os;
       }
+    }
+
+  // Do the pixel type (cleanup the unused bits)
+  // must be the last operation (duh!)
+  if ( PT.GetBitsAllocated() != PT.GetBitsStored()
+    && PT.GetBitsAllocated() != 8 )
+    {
+    DoPixelType(*cur_is,os);
     }
   else
     {
