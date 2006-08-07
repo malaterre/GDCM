@@ -82,6 +82,7 @@ private:
   typedef SmartPointer<LookupTable> LUTPtr;
   LUTPtr LUT;
 
+  bool DoPixelType(IStream &is, OStream &os);
   bool DoByteSwap(IStream &is, OStream &os);
   bool DoYBR(IStream &is, OStream &os);
   bool DoPlanarConfiguration(IStream &is, OStream &os);

@@ -69,6 +69,7 @@ bool ImageCodec::DoByteSwap(IStream &is, OStream &os)
   SwapCode sc = is.GetSwapCode();
 
   assert( !(buf_size % 2) );
+  assert( PT.GetBitsAllocated() == 16 );
   ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)
     dummy_buffer, SwapCode::BigEndian, buf_size/2);
   os.Write(dummy_buffer, buf_size);
@@ -255,7 +256,9 @@ bool ImageCodec::DoInvertMonochrome(IStream &is, OStream &os)
       uint16_t c;
       while( is.Read((char*)&c,2) )
         {
+        assert( c <= mask );
         c = mask - c;
+        assert( c <= mask );
         os.Write((char*)&c, 2);
         }
       }
@@ -264,10 +267,63 @@ bool ImageCodec::DoInvertMonochrome(IStream &is, OStream &os)
   return true;
 }
 
+bool ImageCodec::DoPixelType(IStream &is, OStream &os)
+{
+  assert( PT.GetBitsAllocated() > 8 );
+  if( PT.GetBitsAllocated() == 16 )
+    {
+    // pmask : to mask the 'unused bits' (may contain overlays)
+    uint16_t pmask = 0xffff;
+    pmask = pmask >> ( PT.GetBitsAllocated() - PT.GetBitsStored() );
+
+    if( PT.GetPixelRepresentation() )
+      {
+      // smask : to check the 'sign' when BitsStored != BitsAllocated
+      uint16_t smask = 0x0001;
+      smask =
+        smask << ( 16 - (PT.GetBitsAllocated() - PT.GetBitsStored() + 1) );
+      // nmask : to propagate sign bit on negative values
+      int16_t nmask = 0x8000;  
+      nmask = nmask >> ( PT.GetBitsAllocated() - PT.GetBitsStored() - 1 );
+
+      uint16_t c;
+      while( is.Read((char*)&c,2) )
+        {
+        c = c >> (PT.GetBitsStored() - PT.GetHighBit() - 1);
+        if ( c & smask )
+          {
+          c = c | nmask;
+          }
+        else
+          {
+          c = c & pmask;
+          }
+        os.Write((char*)&c, 2 );
+        }
+      }
+    else // Pixel are unsigned
+      {
+      uint16_t c;
+      while( is.Read((char*)&c,2) )
+        {
+        c =
+          (c >> (PT.GetBitsStored() - PT.GetHighBit() - 1)) & pmask;
+        os.Write((char*)&c, 2 );
+        }
+      }
+    }
+  else
+    {
+    abort(); // TODO
+    }
+  return true;
+}
+
 bool ImageCodec::Decode(IStream &is, OStream &os)
 {
   assert( PlanarConfiguration == 0 || PlanarConfiguration == 1);
   assert( PI != PhotometricInterpretation::UNKNOW );
+  StringStream pt_os; // PixelType
   StringStream bs_os; // ByteSwap
   StringStream pcpc_os; // Padeed Composite Pixel Code
   StringStream pi_os; // PhotometricInterpretation
@@ -280,6 +336,14 @@ bool ImageCodec::Decode(IStream &is, OStream &os)
     DoByteSwap(*cur_is,bs_os);
     cur_is = &bs_os;
     }
+  // Do the pixel type (cleanup the unused bits)
+  if ( PT.GetBitsAllocated() != PT.GetBitsStored()
+    && PT.GetBitsAllocated() != 8 )
+    {
+    DoPixelType(*cur_is,pt_os);
+    cur_is = &pt_os;
+    }
+
   if ( RequestPaddedCompositePixelCode )
     {
     // D_CLUNIE_CT2_RLE.dcm
