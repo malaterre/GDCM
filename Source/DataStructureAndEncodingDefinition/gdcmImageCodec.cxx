@@ -70,8 +70,13 @@ bool ImageCodec::DoByteSwap(IStream &is, OStream &os)
 
   assert( !(buf_size % 2) );
   assert( PT.GetBitsAllocated() == 16 );
+#ifdef GDCM_WORDS_BIGENDIAN
+  ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)
+    dummy_buffer, SwapCode::LittleEndian, buf_size/2);
+#else
   ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)
     dummy_buffer, SwapCode::BigEndian, buf_size/2);
+#endif
   os.Write(dummy_buffer, buf_size);
   return true;
 }
