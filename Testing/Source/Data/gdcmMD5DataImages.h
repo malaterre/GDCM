@@ -55,7 +55,7 @@ const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 512 512 1 8 1 */
 { "86d3e09a5858aa3844cb3be1b822a069" , "CT-MONO2-8-abdo.dcm" },
 /* gdcm 512 614 1 16 1 */
-{ "a08ad54ba5b3a9174c78f60a130950e4" , "CT_Phillips_JPEG2K_Decompr_Problem.dcm" },
+{ "3695d167c298646b877efccaeff92682" , "CT_Phillips_JPEG2K_Decompr_Problem.dcm" },
 /* gdcm 512 512 1 16 1 */
 { "3372195a35448b76daee682d23502090" , "CT-SIEMENS-Icone-With-PaletteColor.dcm" },
 /* gdcm 512 512 1 16 1 */
