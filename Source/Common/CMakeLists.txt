@@ -13,7 +13,6 @@ TEST_BIG_ENDIAN(GDCM_WORDS_BIGENDIAN)
 CONFIGURE_FILE(
   "${GDCM_SOURCE_DIR}/Source/Common/gdcmConfigure.h.in"
   "${GDCM_BINARY_DIR}/Source/Common/gdcmConfigure.h"
-  IMMEDIATE
   )
 
 # Add the include paths
