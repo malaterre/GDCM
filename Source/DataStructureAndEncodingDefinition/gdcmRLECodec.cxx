@@ -19,6 +19,7 @@
 #include "gdcmIStream.h"
 #include "gdcmStringStream.h"
 #include "gdcmTrace.h"
+#include "gdcmByteSwap.txx"
 
 #include <vector>
 
@@ -49,6 +50,8 @@ public:
     {
     // read Header (64 bytes)
     is.Read((char*)(&Header), sizeof(unsigned long)*16);
+    ByteSwap<unsigned long>::SwapRangeFromSwapCodeIntoSystem(
+      (unsigned long*)&Header, is.GetSwapCode(), 16);
     unsigned long numSegments = Header.NumSegments;
     if( numSegments >= 1 )
       {
