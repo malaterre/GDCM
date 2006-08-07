@@ -357,6 +357,14 @@ bool JPEGBITSCodec::Decode(IStream &is, OStream &os)
       {
       Internals->StateSuspension = 2;
       }
+    if( jerr.pub.num_warnings )
+      {
+      if ( jerr.pub.msg_code == 128 )
+        {
+        this->BitSample = jerr.pub.msg_parm.i[0];
+        return false;
+        }
+      }
     //assert( cinfo.data_precision == BITS_IN_JSAMPLE );
     //assert( cinfo.data_precision == this->BitSample );
 

@@ -46,7 +46,7 @@ public:
     {
     return PT;
     }
-  void SetPixelType(PixelType const &pt)
+  virtual void SetPixelType(PixelType const &pt)
     {
     PT = pt;
     }
@@ -69,19 +69,12 @@ public:
     {
     return *LUT;
     }
-  void SetRequestPaddedCompositePixelCode(bool b) {
-    RequestPaddedCompositePixelCode = b;
-  }
-
 
 protected:
-  void SetRequestPlanarConfiguration(bool b) {
-    RequestPlanarConfiguration = b;
-  }
-private:
-  unsigned int PlanarConfiguration;
   bool RequestPlanarConfiguration;
   bool RequestPaddedCompositePixelCode;
+private:
+  unsigned int PlanarConfiguration;
   PhotometricInterpretation PI;
   PixelType PT;
   bool NeedByteSwap;

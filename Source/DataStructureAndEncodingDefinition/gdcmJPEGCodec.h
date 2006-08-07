@@ -28,6 +28,11 @@ public:
   ~JPEGCodec();
   bool CanDecode(TS const &ts);
   bool Decode(IStream &is, OStream &os);
+  void SetPixelType(PixelType const &pt);
+
+protected:
+  // Internal method called by SetPixelType
+  // Instanciate the right jpeg codec (8, 12 or 16)
   void SetBitSample(int bit);
 
 protected:

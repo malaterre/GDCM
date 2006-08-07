@@ -134,6 +134,10 @@ bool RLECodec::Decode(IStream &is, OStream &os)
 
   unsigned long length = Length;
   // Special case:
+  if( GetPixelType().GetBitsAllocated() == 16 )
+    {
+    RequestPaddedCompositePixelCode = true;
+    }
   if( GetPhotometricInterpretation() == 
     PhotometricInterpretation::PALETTE_COLOR )
     {
@@ -142,7 +146,7 @@ bool RLECodec::Decode(IStream &is, OStream &os)
   else if ( GetPhotometricInterpretation() ==
     PhotometricInterpretation::RGB )
     {
-    SetRequestPlanarConfiguration(true);
+    RequestPlanarConfiguration = true;
     }
   length /= numSegments;
   for(unsigned long i = 0; i<numSegments; ++i)
@@ -214,8 +218,7 @@ bool RLECodec::Decode(IStream &is, OStream &os)
   //std::cerr << "DEBUG tmpos: " << end - start << std::endl;
   //tmpos.Seekg( start, std::ios::beg );
 
-  ImageCodec::Decode(tmpos,os);
-  return true;
+  return ImageCodec::Decode(tmpos,os);
 }
 
 } // end namespace gdcm

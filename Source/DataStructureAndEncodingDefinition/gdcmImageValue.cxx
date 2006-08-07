@@ -86,8 +86,7 @@ bool ImageValue::GetBuffer(char *buffer) const
       JPEGCodec codec;
       codec.SetPlanarConfiguration( GetPlanarConfiguration() );
       codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
-      //codec.SetBitSample( GetPixelType().GetBitsAllocated() );
-      codec.SetBitSample( GetPixelType().GetBitsStored() );
+      codec.SetPixelType( GetPixelType() );
       unsigned long pos = 0;
       for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
         {
@@ -133,13 +132,9 @@ bool ImageValue::GetBuffer(char *buffer) const
       RLECodec codec;
       codec.SetPlanarConfiguration( GetPlanarConfiguration() );
       codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
+      codec.SetPixelType( GetPixelType() );
       codec.SetLUT( GetLUT() );
       unsigned long rle_len = sf->ComputeLength();
-      PixelType pt = GetPixelType();
-      if( pt.GetBitsAllocated() == 16 )
-        {
-        codec.SetRequestPaddedCompositePixelCode( true );
-        }
       codec.SetLength( len );
       StringStream is;
       sf->GetBuffer(buffer, rle_len);

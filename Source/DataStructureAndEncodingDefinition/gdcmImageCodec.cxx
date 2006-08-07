@@ -310,6 +310,11 @@ bool ImageCodec::Decode(IStream &is, OStream &os)
     LUT->Decode(*cur_is, pi_os);
     cur_is = &pi_os;
     }
+  else if ( PI == PhotometricInterpretation::YBR_FULL_422 )
+    {
+    // TODO
+    abort();
+    }
   else
     {
     abort();
