@@ -16,6 +16,8 @@
 #include "gdcmJPEGCodec.h"
 #include "gdcmTS.h"
 #include "gdcmTrace.h"
+#include "gdcmIStream.h"
+#include "gdcmStringStream.h"
 
 #include "gdcmJPEG8Codec.h"
 #include "gdcmJPEG12Codec.h"
@@ -37,6 +39,13 @@ JPEGCodec::~JPEGCodec()
 bool JPEGCodec::CanDecode(TS const &ts)
 {
   return ts.GetCompressionType() == Compression::JPEG;
+}
+
+void JPEGCodec::SetPixelType(PixelType const &pt)
+{
+  //SetBitSample( pt.GetBitsAllocated() );
+  SetBitSample( pt.GetBitsStored() );
+  ImageCodec::SetPixelType(pt);
 }
 
 void JPEGCodec::SetBitSample(int bit)
@@ -66,7 +75,43 @@ void JPEGCodec::SetBitSample(int bit)
 
 bool JPEGCodec::Decode(IStream &is, OStream &os)
 {
-  return Internal->Decode(is,os); 
+  StringStream tmpos;
+  if ( !Internal->Decode(is,tmpos) )
+    {
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+    // let's check if this is one of those buggy lossless JPEG
+    if( this->BitSample != Internal->BitSample )
+      {
+      // MARCONI_MxTWin-12-MONO2-JpegLossless-ZeroLengthSQ.dcm
+      // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
+      gdcmWarningMacro( "DICOM header said it was " << this->BitSample <<
+        " but JPEG header says it's: " << Internal->BitSample );
+      delete Internal;
+      is.Seekg(0, std::ios::beg);
+      switch( Internal->BitSample )
+        {
+      case 8:
+        Internal = new JPEG8Codec;
+        break;
+      case 12:
+        Internal = new JPEG12Codec;
+        break;
+      case 16:
+        Internal = new JPEG16Codec;
+        break;
+      default:
+        abort();
+        }
+      if( Internal->Decode(is,tmpos) )
+        {
+        return ImageCodec::Decode(tmpos,os);
+        }
+      }
+#endif
+    return false;
+    }
+
+  return ImageCodec::Decode(tmpos,os);
 }
 
 } // end namespace gdcm
