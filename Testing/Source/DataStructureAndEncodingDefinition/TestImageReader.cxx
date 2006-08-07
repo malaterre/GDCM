@@ -72,7 +72,7 @@ int TestImageRead(const char* filename)
       std::cerr << "Found " << digest << " instead of " << ref << std::endl;
       res = 1;
 #if 0
-      std::ofstream debug("/tmp/dump.raw");
+      std::ofstream debug("/tmp/dump.gray");
       debug.write(buffer, len);
       debug.close();
       //abort();
