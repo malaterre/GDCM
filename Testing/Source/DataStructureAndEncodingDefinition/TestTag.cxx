@@ -17,17 +17,29 @@
 
 int TestTag(int , char * [])
 {
-
- #if 0
-   //TODO
-   //On big endian and little endian one should have:
-   Tag t(0x12345678) == Tag t(0x1234, 0x5678)
- #endif
+  const uint32_t dummy = 0x12345678;
+  gdcm::Tag t32(dummy);
+  gdcm::Tag t16(0x1234, 0x5678);
+  if( t32 != t16 )
+    {
+    return 1;
+    }
+  if( t32.GetElementTag() != dummy )
+    {
+    return 1;
+    }
+  if( t16.GetElementTag() != dummy )
+    {
+    return 1;
+    }
 
   gdcm::Tag t1;
   gdcm::Tag t2(0,0);
-  if (t1[0] != 0 )
-    {std::cout << "1" << std::endl ; return 1; }
+  if ( t1[0] != 0 )
+    {
+    std::cerr << "1" << std::endl;
+    return 1; 
+    }
   if (t1[1] != 0 )
     {std::cout << "2" << std::endl ; return 1; }
     
@@ -45,34 +57,32 @@ int TestTag(int , char * [])
 
   unsigned int i;
 
- // WARNING : user has to swap 'manually' the bytes, on LittleEndian machines  
-  //const uint32_t tag = 0x12345678;
-  const uint32_t tag = 0x56781234;
+  const uint32_t tag = dummy;
   std::cout << "Just to inform : uint32_t value=" << std::hex << tag ; 
   std::cout << " stored in RAM as :";  
-   for (i=0;i<sizeof(uint32_t);i++) 
-   {
-      std::cout << std::hex <<"[" <<(uint32_t)((uint8_t*)&tag)[i] << "] " ;
-   }
-   std::cout << std::endl;
+  for (i=0;i<sizeof(uint32_t);i++) 
+    {
+    std::cout << std::hex <<"[" <<(uint32_t)((uint8_t*)&tag)[i] << "] " ;
+    }
+  std::cout << std::endl;
 
   const uint16_t group   = 0x1234;
   const uint16_t element = 0x5678;
 
   std::cout << "Just to inform : uint16_t values= " << group <<"," << element ; 
   std::cout << " stored in RAM as : ";  
-   for (i=0;i<sizeof(uint16_t);i++) 
-   {
-      std::cout << std::hex <<"[" <<(uint32_t)((uint8_t*)&group)[i] << "] " ;
-   }
-   for (i=0;i<sizeof(uint16_t);i++) 
-   {
-      std::cout << std::hex <<"[" <<(uint32_t)((uint8_t*)&element)[i] << "] " ;
-   }
-   std::cout << std::endl;
-       
+  for (i=0;i<sizeof(uint16_t);i++) 
+    {
+    std::cout << std::hex <<"[" <<(uint32_t)((uint8_t*)&group)[i] << "] " ;
+    }
+  for (i=0;i<sizeof(uint16_t);i++) 
+    {
+    std::cout << std::hex <<"[" <<(uint32_t)((uint8_t*)&element)[i] << "] " ;
+    }
+  std::cout << std::endl;
+
   std::cout << "Constructor with 2 x uin16_t : " << group <<"," << element
-            << std::endl;
+    << std::endl;
 
   const gdcm::Tag t3(group, element);
   std::cout << "t3=" << t3 << std::endl;
@@ -89,7 +99,7 @@ int TestTag(int , char * [])
   if( t3 < t1 )
     {std::cout << "14" << std::endl ; return 1; }
 
-     
+
   std::cout << "Constructor with 1x uin32_t : " << std::hex <<tag <<std::endl;  
   const gdcm::Tag t4(tag);
   std::cout << "t4=" << t4 << std::endl;     
@@ -107,7 +117,7 @@ int TestTag(int , char * [])
     {std::cout << "20" << std::endl ; return 1; }
   if( !(t4 == t3) )
     {std::cout << "21" << std::endl ; return 1; }
- 
+
   if( t4.GetElementTag() != tag )
     {std::cout << "22" << std::endl;
     std::cout << std::hex << t4.GetElementTag() << std::endl; 
@@ -130,8 +140,8 @@ int TestTag(int , char * [])
   gdcm::Tag o3(0x0000,0x0010);
   gdcm::Tag o4(0x0010,0x0010);
   std::cout << " o1:" << o1 << " o2:" << o2 << " o3:" << o3 << " o4:" << o4
-            << std::endl;
-	    	    
+    << std::endl;
+
   // Clearly order should be o1 < o3 < o2 < 04
   // Test o1
   if( !(o1 < o3)
@@ -159,46 +169,39 @@ int TestTag(int , char * [])
 
 
   std::cout << "Constructor with 1 x uin32_t" << std::endl;
-  // WARNING : user has to swap 'manually' the bytes, on LittleEndian machines
-  /*
   gdcm::Tag O1(0x00000000);
   gdcm::Tag O2(0x00100000);
   gdcm::Tag O3(0x00000010);
   gdcm::Tag O4(0x00100010);
-  */
-  
-  gdcm::Tag O1(0x00000000);
-  gdcm::Tag O2(0x00000010);
-  gdcm::Tag O3(0x00100000);
-  gdcm::Tag O4(0x00100010);
-  std::cout << " O1:" << O1 << " O2:" << O2 << " O3:" << O3 << " O4:" << O4
-            << std::endl;
 
-	    
+  std::cout << " O1:" << O1 << " O2:" << O2 << " O3:" << O3 << " O4:" << O4
+    << std::endl;
+
+
   // Clearly order should be O1 < O3 < O2 < 04
   // Test O1
   if( !(O1 < O3)
     ||!(O1 < O2) 
     ||!(O1 < O4) )
-    {std::cout << "24" << std::endl ; return 1; }
+    {std::cout << "28" << std::endl ; return 1; }
 
   // Test O2
   if( !(O2 < O4)
     ||!(O1 < O2) 
     ||!(O3 < O2) )
-    {std::cout << "25" << std::endl ; return 1;}
+    {std::cout << "29" << std::endl ; return 1;}
 
   // Test O3
   if( !(O3 < O2)
     ||!(O3 < O4) 
     ||!(O1 < O3) )
-    {std::cout << "26" << std::endl ; return 1; }
+    {std::cout << "30" << std::endl ; return 1; }
 
   // Test O4 (I know this duplicate some tests, but we don't need to optimize a test!)
   if( !(O1 < O4)
     ||!(O2 < O4) 
     ||!(O3 < O4) )
-    {std::cout << "27" << std::endl ; return 1; }
-    
+    {std::cout << "31" << std::endl ; return 1; }
+
   return 0;
 }

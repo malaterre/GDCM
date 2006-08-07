@@ -45,28 +45,14 @@ namespace gdcm
 class GDCM_EXPORT Tag
 {
 public:
-/// \brief Constructor with 1*uint32_t  
-  Tag(uint32_t tag = 0) { ElementTag.tag = tag; }
-  
-  // Later, (Big Endian compatible) we'll have :
-  /*
- /// \brief Constructor with 1*uint32_t  
-   Tag(uint32_t tag) {
- #ifndef GDCM_WORDS_BIGENDIAN
-   tag = ( (tag<<16) | (tag>>16) );
- #endif
-   ElementTag.tag = tag;
-   std::cout << "constructor 1*uint32_t " <<std::hex << ElementTag.tag << std::endl; 
-   } 
-*/
+  /// \brief Constructor with 2*uint16_t 
+  Tag(uint16_t group, uint16_t element) {
+    ElementTag.tags[0] = group; ElementTag.tags[1] = element;
+  }
 
-/// \brief Constructor with 2*uint16_t 
-  Tag(uint16_t group, uint16_t element) 
-                   { ElementTag.tags[0] = group; ElementTag.tags[1] = element; }
+
 
   friend std::ostream& operator<<(std::ostream &_os, const Tag &_val);
-  //friend DICOMIStream& operator>>(DICOMIStream &_os, Tag &_val);
-  //friend DICOMOStream& operator<<(DICOMOStream &_os, Tag &_val);
 
 /// \brief Returns the 'Group number' of the given Tag
   uint16_t GetGroup() const { return ElementTag.tags[0]; }
@@ -76,25 +62,34 @@ public:
   void SetGroup(uint16_t group) { ElementTag.tags[0] = group; }
 /// \brief Sets the 'Element number' of the given Tag
   void SetElement(uint16_t element) { ElementTag.tags[1] = element; }
-/// \brief Returns the full tag value of the given Tag
-  uint32_t GetElementTag() const { return ElementTag.tag; }  
-    // Later, (Big Endian compatible) we'll have :
-/*
-  /// \brief Returns the full tag value of the given Tag
-   uint32_t GetElementTag() const { 
- #ifndef GDCM_WORDS_BIGENDIAN	  
-      return (ElementTag.tag<<16) | (ElementTag.tag>>16);
- #else
-      return ElementTag.tag;
- #endif
+/// \brief Sets the 'Group number' & 'Element number' of the given Tag
+  void SetElementTag(uint16_t group, uint16_t element) {
+    ElementTag.tags[0] = group; ElementTag.tags[1] = element;
   }
-*/    
- 
-  //void SetElementTag(uint16_t group, uint16_t element) 
-  //               { ElementTag.tags[0] = group; ElementTag.tags[1] = element; }
 
+
+
+  /// \brief Constructor with 1*uint32_t  
+  /// Prefer the cstor that takes two uint16_t
+  Tag(uint32_t tag = 0) {
+    SetElementTag(tag);
+  } 
+  /// \brief Returns the full tag value of the given Tag
+  uint32_t GetElementTag() const { 
+#ifndef GDCM_WORDS_BIGENDIAN	  
+    return (ElementTag.tag<<16) | (ElementTag.tag>>16);
+#else
+    return ElementTag.tag;
+#endif
+  }
+ 
 /// \brief Sets the full tag value of the given Tag
-  void SetElementTag(uint32_t tag) { ElementTag.tag = tag; }
+  void SetElementTag(uint32_t tag) {
+#ifndef GDCM_WORDS_BIGENDIAN
+    tag = ( (tag<<16) | (tag>>16) );
+#endif
+    ElementTag.tag = tag;
+  }
 
 // \brief Returns the Group or Element of the given Tag, depending on id (0/1)
   const uint16_t &operator[](const unsigned int &_id) const
@@ -123,19 +118,9 @@ public:
     {
     return ElementTag.tag != _val.ElementTag.tag;
     }
+
   // DICOM Standard expects the Data Element to be sorted by Tags
   // All other comparison can be constructed from this one and operator ==
-  bool operator<(const Tag &_val) const
-    {
-    if( ElementTag.tags[0] < _val.ElementTag.tags[0] )
-      return true;
-    if( ElementTag.tags[0] == _val.ElementTag.tags[0]
-     && ElementTag.tags[1] <  _val.ElementTag.tags[1] )
-      return true;
-    return false;
-    }
-    // Later, (Big Endian compatible) we'll have :
-/*
   bool operator<(const Tag &_val) const
     {
 #ifndef GDCM_WORDS_BIGENDIAN
@@ -150,8 +135,6 @@ public:
      return ( ElementTag.tag < _val.ElementTag.tag );
 #endif
    }      
-*/    
-    
 
   Tag(const Tag &_val)
     {
