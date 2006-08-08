@@ -69,11 +69,7 @@ IStream &ExplicitDataElement::Read(IStream &is)
     return is;
     }
   // Read Value Length
-  if( VRField == VR::OB
-   || VRField == VR::OW
-   || VRField == VR::OF
-   || VRField == VR::SQ
-   || VRField == VR::UN )
+  if( VRField & (VR::OB | VR::OW | VR::OF | VR::SQ | VR::UN ) )
     {
     if( !ValueLengthField.Read(is) )
       {
