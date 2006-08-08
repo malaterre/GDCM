@@ -69,11 +69,14 @@ void ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem(T *p, SwapCode const &sc,
 template<class T>
 void Swap4(T &a, SwapCode const &swapcode)
 {
+#ifndef GDCM_WORDS_BIGENDIAN
   if ( swapcode == 4321 || swapcode == 2143 )
+    a = ( a << 8 ) | ( a >> 8 );
+#else
+  if ( swapcode == 1234 || swapcode == 3412 )
     a = ( a << 8 ) | ( a >> 8 );
   // On big endian as long as the SwapCode is Unknown let's pretend we were
   // on a LittleEndian system (might introduce overhead on those system).
-#ifdef GDCM_WORDS_BIGENDIAN
   else if ( swapcode == SwapCode::Unknown )
     a = ( a << 8 ) | ( a >> 8 );
 #endif
