@@ -202,16 +202,16 @@ bool ImageCodec::DoPaddedCompositePixelCode(IStream &is, OStream &os)
   SwapCode sc = is.GetSwapCode();
 
   assert( !(buf_size % 2) );
-//   assert( !(check%2) );
-//   std::string rle8 = os.Str();
-   for(unsigned long i = 0; i < buf_size/2; ++i)
-     {
-     //buffer[2*i]= rle8[i+check/2];
-     //buffer[2*i+1] = rle8[i];
-     os.Write( dummy_buffer+i+buf_size/2, 1 );
-     os.Write( dummy_buffer+i, 1 );
-     }
-  //os.Write(dummy_buffer, buf_size);
+  for(unsigned long i = 0; i < buf_size/2; ++i)
+    {
+#ifdef GDCM_WORDS_BIGENDIAN
+    os.Write( dummy_buffer+i, 1 );
+    os.Write( dummy_buffer+i+buf_size/2, 1 );
+#else
+    os.Write( dummy_buffer+i+buf_size/2, 1 );
+    os.Write( dummy_buffer+i, 1 );
+#endif
+    }
   return true;
 }
 
