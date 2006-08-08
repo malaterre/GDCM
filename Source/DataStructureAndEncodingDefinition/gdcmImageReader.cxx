@@ -407,6 +407,14 @@ bool ImageReader::ReadImage()
         (Stream.GetSwapCode() != SwapCode::LittleEndian)
      || ByteSwap<int>::SystemIsBigEndian() &&
         (Stream.GetSwapCode() != SwapCode::BigEndian );
+//      if( need )
+//        {
+//#ifdef GDCM_WORDS_BIGENDIAN
+//      assert( ts.GetSwapCode() == SwapCode::LittleEndian );
+//#else
+//      assert( ts.GetSwapCode() == SwapCode::BigEndian );
+//#endif
+//        }
       PixelData.SetNeedByteSwap( need );
       }
     PixelData.SetValue( xde.GetValue() );
@@ -414,9 +422,16 @@ bool ImageReader::ReadImage()
   else if( type == TS::Implicit )
     {
     TS ts = GetHeader().GetTransferSyntaxType();
+#ifdef GDCM_WORDS_BIGENDIAN
+    if( ts != TS::ImplicitVRBigEndianPrivateGE
+      && pt.GetBitsAllocated() == 16 )
+#else
     if( ts == TS::ImplicitVRBigEndianPrivateGE
       && pt.GetBitsAllocated() == 16 )
+#endif
       {
+      // TS::ImplicitVRBigEndianPrivateGE is written in BigEndian except the
+      // image which is in LittleEndian
       PixelData.SetNeedByteSwap( true );
       }
     const ImplicitDataElement &ide =
@@ -555,9 +570,19 @@ bool ImageReader::ReadACRNEMAImage()
   else if( type == TS::Implicit )
     {
     TS ts = GetHeader().GetTransferSyntaxType();
+#ifdef GDCM_WORDS_BIGENDIAN
+    if( ts != TS::ImplicitVRBigEndianACRNEMA
+      && pt.GetBitsAllocated() == 16 )
+#else
     if( ts == TS::ImplicitVRBigEndianACRNEMA
       && pt.GetBitsAllocated() == 16 )
+#endif
       {
+#ifdef GDCM_WORDS_BIGENDIAN
+      assert( ts.GetSwapCode() == SwapCode::LittleEndian );
+#else
+      assert( ts.GetSwapCode() == SwapCode::BigEndian );
+#endif
       PixelData.SetNeedByteSwap( true );
       }
     const ImplicitDataElement &ide =

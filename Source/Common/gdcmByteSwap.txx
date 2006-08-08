@@ -71,6 +71,12 @@ void Swap4(T &a, SwapCode const &swapcode)
 {
   if ( swapcode == 4321 || swapcode == 2143 )
     a = ( a << 8 ) | ( a >> 8 );
+  // On big endian as long as the SwapCode is Unknown let's pretend we were
+  // on a LittleEndian system (might introduce overhead on those system).
+#ifdef GDCM_WORDS_BIGENDIAN
+  else if ( swapcode == SwapCode::Unknown )
+    a = ( a << 8 ) | ( a >> 8 );
+#endif
 }
 
 template<class T>
@@ -79,11 +85,19 @@ void Swap8(T &a, SwapCode const &swapcode)
   switch (swapcode)
     {
   case SwapCode::Unknown:
+#ifdef GDCM_WORDS_BIGENDIAN
+    a= (( a<<24) | ((a<<8)  & 0x00ff0000) | ((a>>8) & 0x0000ff00) | (a>>24) );
+#endif
     break;
   case 1234 :
+#ifdef GDCM_WORDS_BIGENDIAN
+    a= (( a<<24) | ((a<<8)  & 0x00ff0000) | ((a>>8) & 0x0000ff00) | (a>>24) );
+#endif
     break;
   case 4321 :
+#ifndef GDCM_WORDS_BIGENDIAN
     a= (( a<<24) | ((a<<8)  & 0x00ff0000) | ((a>>8) & 0x0000ff00) | (a>>24) );
+#endif
     break;   
   case 3412 :
     a= ((a<<16) | (a>>16)  );
