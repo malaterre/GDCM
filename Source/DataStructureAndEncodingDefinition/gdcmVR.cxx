@@ -55,6 +55,36 @@ static const char *VRStrings[] = {
   0
 };
 
+static VR::VRType VRValue[] = {
+    VR::AE ,
+    VR::AS ,
+    VR::AT ,
+    VR::CS ,
+    VR::DA ,
+    VR::DS ,
+    VR::DT ,
+    VR::FD ,
+    VR::FL ,
+    VR::IS ,
+    VR::LO ,
+    VR::LT ,
+    VR::OB ,
+    VR::OF ,
+    VR::OW ,
+    VR::PN ,
+    VR::SH ,
+    VR::SL ,
+    VR::SQ ,
+    VR::SS ,
+    VR::ST ,
+    VR::TM ,
+    VR::UI ,
+    VR::UL ,
+    VR::UN ,
+    VR::US ,
+    VR::UT
+};
+
 int VR::GetIndex(VRType vr)
 {
   assert( vr <= VR_END );
@@ -93,10 +123,54 @@ const char *VR::GetVRString(VRType vr)
   return VRStrings[idx];
 }
 
+const char *VR::GetVRStringFromFile(VRType vr)
+{
+#if 1
+  static const int N = sizeof(VRValue) / sizeof(VRType);
+  assert( N == 27 );
+  static VRType *start = VRValue;
+  static VRType *end   = VRValue+N;
+  const VRType *p =
+    std::lower_bound(start, end, vr);
+  assert( *p == vr );
+  assert( ( p - start + 1) == GetIndex(vr) );
+  return VRStrings[p-start+1];
+#else
+  int idx = GetIndex(vr);
+  return VRStrings[idx];
+#endif
+}
+
+class MySort
+{
+public:
+  bool operator() (const char *a, const char *b)
+    {
+    if( a[0] == b[0] )
+      return a[1] < b[1];
+    return a[0] < b[0];
+    }
+};
+
 // Optimized version for transforming a read VR from DICOM file
 // into a VRType (does not support OB_OW for instance)
 VR::VRType VR::GetVRTypeFromFile(const char *vr)
 {
+/*
+ * You need to compile with -DNDEBUG
+ * Running TestReader on gdcmData, leads to 2.2% improvement
+ */
+#if 1
+  static const int N = sizeof(VRValue) / sizeof(VRType);
+  assert( N == 27 );
+  static const char **start = VRStrings+1;
+  static const char **end   = VRStrings+N+1;
+  const char **p =
+    std::lower_bound(start, end, vr, MySort());
+  assert( (*p)[0] == vr[0] && (*p)[1] == vr[1] );
+  VRType r = VRValue[p-start];
+  assert( r == (VR::VRType)(1 << (p-start)) );
+#else // old version not optimized
   VRType r = VR::VR_END;
   for (int i = 1; VRStrings[i] != NULL; i++)
     {
@@ -108,6 +182,7 @@ VR::VRType VR::GetVRTypeFromFile(const char *vr)
       break;
       }
     }
+#endif
   // postcondition
   assert( r != VR::INVALID
        && r != VR::OB_OW

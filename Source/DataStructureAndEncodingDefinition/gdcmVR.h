@@ -87,6 +87,7 @@ public:
 
   // You need to make sure end of string is \0
   static VRType GetVRType(const char *vr);
+  static const char *GetVRStringFromFile(VRType vr);
 
   static bool IsValid(const char *vr);
   // Check if vr1 is valid against vr2,
@@ -131,18 +132,19 @@ public:
     {
     char vr[2];
     is.Read(vr, 2);
-    VRField = VR::GetVRTypeFromFile(vr);
+    VRField = GetVRTypeFromFile(vr);
     assert( VRField != VR::VR_END );
     assert( VRField != VR::INVALID );
-    if( VRField == VR::OB
-     || VRField == VR::OW
-     || VRField == VR::OF
-     || VRField == VR::SQ
-     || VRField == VR::UN
-     || VRField == VR::UT )
+    if( VRField & ( VR::OB | VR::OW | VR::OF | VR::SQ | VR::UN | VR::UT ) )
       {
+#if 0
+      // For some reason this seems slower on my linux box...
+      is.Seekg(2, std::ios::cur );
+#else
       char dum[2];
       is.Read(dum, 2);
+      assert( dum[0] == 0 && dum[1] == 0 );
+#endif
       }
     return is;
     }
@@ -177,7 +179,7 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream &operator<<(std::ostream &_os, const VR &val)
 {
-  _os << VR::GetVRString(val.VRField);
+  _os << VR::GetVRStringFromFile(val.VRField);
   return _os;
 }
 
