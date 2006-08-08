@@ -29,8 +29,8 @@ static const char *VRStrings[] = {
   "DA",        // 5
   "DS",        // 6
   "DT",        // 7
-  "FL",        // 8
-  "FD",        // 9
+  "FD",        // 8
+  "FL",        // 9
   "IS",        // 10
   "LO",        // 11
   "LT",        // 12
