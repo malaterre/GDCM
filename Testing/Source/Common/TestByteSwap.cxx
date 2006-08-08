@@ -74,6 +74,8 @@ int TestByteSwap(int , char *[])
       std::cerr << std::hex << "t: " << t << std::endl;
       return 1;
       }
+    // ok test pass rest value to old one
+    t = 0x1234;
     }
   else if ( sc == gdcm::SwapCode::LittleEndian )
     {
@@ -95,6 +97,8 @@ int TestByteSwap(int , char *[])
       std::cerr << std::hex << "tn: " << tn << std::endl;
       return 1;
       }
+    // ok test pass rest value to old one
+    t = 0x1234;
     }
   else if ( sc == gdcm::SwapCode::LittleEndian )
     {

@@ -98,6 +98,8 @@ SET(BLACK_LIST_READER
   10200905_8b_Palette_RLE_blinker.dcm
   rle16loop_16b_Palette_RLE.dcm
   bla.dcm
+  # There are multiple versions...
+  SIEMENS-MR-RGB-16Bits.dcm
   )
 
 # List of files that are impossible to rewrite
