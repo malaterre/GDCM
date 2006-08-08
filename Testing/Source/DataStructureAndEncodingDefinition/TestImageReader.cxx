@@ -68,8 +68,8 @@ int TestImageRead(const char* filename)
     if( img.GetPixelType().GetBitsAllocated() == 16 )
       {
       assert( !(len % 2) );
-      assert( img.GetPhotometricInterpretation() == MONOCHROME1
-        || img.GetPhotometricInterpretation() == MONOCHROME2 );
+      assert( img.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME1
+        || img.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME2 );
       gdcm::ByteSwap<unsigned short>::SwapRangeFromSwapCodeIntoSystem(
         (unsigned short*)buffer, gdcm::SwapCode::LittleEndian, len/2);
       }
