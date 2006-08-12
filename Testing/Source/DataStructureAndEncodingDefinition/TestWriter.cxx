@@ -20,20 +20,20 @@
 
 #include "gdcmDataImages.h"
 
-bool IsImpossibleToRewrite(const char *filename)
-{
-  const char *impossible;
-  int i = 0;
-  while( (impossible= gdcmBlackListWriterDataImages[i]) )
-    {
-    if( strcmp( impossible, filename ) == 0 )
-      {
-      return true;
-      }
-    ++i;
-    }
-  return false;
-}
+//bool IsImpossibleToRewrite(const char *filename)
+//{
+//  const char *impossible;
+//  int i = 0;
+//  while( (impossible= gdcmBlackListWriterDataImages[i]) )
+//    {
+//    if( strcmp( impossible, filename ) == 0 )
+//      {
+//      return true;
+//      }
+//    ++i;
+//    }
+//  return false;
+//}
 
 int TestWrite(const char* filename)
 {
@@ -68,18 +68,20 @@ int TestWrite(const char* filename)
   gdcm::System::ComputeFileMD5(outfilename.c_str(), outdigest);
   if( strcmp(digest, outdigest) )
     {
-    if( IsImpossibleToRewrite(filename) )
-      {
-      std::cerr << filename << " and "
-        << outfilename << " should be compatible\n";
-      return 0;
-      }
-    else
+    // too bad the file is not identical, so let's be paranoid and
+    // try to reread-rewrite this just-writen file:
+    // TODO: Copy file gdcm::System::CopyFile( );
+    if( TestWrite( outfilename.c_str() ) )
       {
       std::cerr << filename << " and "
         << outfilename << " are different\n";
       return 1;
       }
+    // In theory I need to compare the two documents to check they
+    // are identical... TODO
+    std::cerr << filename << " and "
+      << outfilename << " should be compatible\n";
+    return 0;
     }
   else
     {

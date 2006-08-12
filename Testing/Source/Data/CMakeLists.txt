@@ -102,25 +102,6 @@ SET(BLACK_LIST_READER
   SIEMENS-MR-RGB-16Bits.dcm
   )
 
-# List of files that are impossible to rewrite
-# basically they contains something like a wrong length
-# therefore it does not make any sense to try to rewrite them identically
-# Necessary condition they should break toolkit like dcmtk -for instance-
-SET(BLACK_LIST_WRITER
-  # Length is set to 13 instead of 10
-  GE_GENESIS-16-MONO2-WrongLengthItem.dcm
-  # Contains: b00c 0eb6 d150 0e02
-  # instead of the regular SQ termination element: fffe e0dd 0000 0000
-  gdcm-JPEG-LossLess3a.dcm
-  # Length for (0009,1113) & (0009,1114) is set to 6 instead of 4
-  SIEMENS_MAGNETOM-12-MONO2-Uncompressed.dcm
-  # Elements are not ordered...GDCM2 is not able to produce a warning
-  # for that...TODO FIXME
-  # In SQ: 0004|1220, Elements are: (00a9,0020), (0010,0030), (0010,0040)
-  # instead of (0010,0030), (0010,0040), (00a9,0020)
-  dicomdir_Pms_WithVisit_WithPrivate_WithStudyComponents
-  )
-
 SET(GDCM_DATA_IMAGES)
 SET(GDCM_BLACK_LIST_READER_DATA_IMAGES)
 FOREACH(filename ${GDCM_DATA_IMAGES_GLOB})
@@ -142,12 +123,6 @@ FOREACH(filename ${GDCM_DATA_IMAGES_GLOB})
   ELSE(NOT bad_dicom)
     SET(GDCM_BLACK_LIST_READER_DATA_IMAGES "${GDCM_BLACK_LIST_READER_DATA_IMAGES}\n\"${filename}\",")
   ENDIF(NOT bad_dicom)
-
-  # Files that cannot be rewritten
-  STRING(REGEX MATCH ${filename_name} no_rewrite ${BLACK_LIST_WRITER})
-  IF(no_rewrite)
-    SET(GDCM_BLACK_LIST_WRITER_DATA_IMAGES "${GDCM_BLACK_LIST_WRITER_DATA_IMAGES}\n\"${filename}\",")
-  ENDIF(no_rewrite)
 ENDFOREACH(filename)
 
 
