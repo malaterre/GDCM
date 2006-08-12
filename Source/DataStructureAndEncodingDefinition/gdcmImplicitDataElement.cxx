@@ -78,8 +78,8 @@ IStream &ImplicitDataElement::Read(IStream &is)
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
       else if ( item == itemPMSStart )
         {
-        gdcmWarningMacro( "Illegal: Explicit SQ found in a file with TransferSyntax=Implicit"
-          " for tag: " << TagField );
+        gdcmWarningMacro( "Illegal: Explicit SQ found in a file with "
+          "TransferSyntax=Implicit for tag: " << TagField );
         ValueField = new SequenceOfItems(TS::Explicit);
         SwapCode oldsw = is.GetSwapCode();
         assert( oldsw == SwapCode::LittleEndian );
