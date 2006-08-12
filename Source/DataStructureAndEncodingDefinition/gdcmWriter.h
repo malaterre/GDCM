@@ -26,6 +26,16 @@ namespace gdcm
  * \brief Writer ala DOM (Document Object Model)
  *
  * Detailled description here
+ * To avoid GDCM being yet another broken DICOM lib we try to 
+ * be user level and avoid writing illegal stuff (odd length,
+ * non-zero value for Item start/end length ...)
+ * Therefore you cannot (well unless you are really smart) write
+ * DICOM with even length tag.
+ * All the check are consider basics:
+ * - Correct Meta Information Header (see gdcm::FileMetaInformation)
+ * - Zero value for Item Length (0xfffe, 0xe00d/0xe0dd)
+ * - Even length for any elements
+ * - Alphabetical order for elements (garanteed by design of internals)
  */
 class FileMetaInformation;
 class GDCM_EXPORT Writer

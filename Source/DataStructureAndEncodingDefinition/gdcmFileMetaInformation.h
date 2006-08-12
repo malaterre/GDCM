@@ -27,6 +27,10 @@ namespace gdcm
  * \note
  * In theory this should only be explicit, but just in case we also handle
  * the implicit case (illegal)
+ * Warning (TODO):
+ * When writing the Meta Header we make sure to have at least:
+ * - the Group Length
+ * - the File Meta Information Version
  */
 class ExplicitDataElement;
 class ImplicitDataElement;

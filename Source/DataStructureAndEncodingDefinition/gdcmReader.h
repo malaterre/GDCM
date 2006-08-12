@@ -40,6 +40,10 @@ namespace gdcm
  * control the size of the Value to be read. By default it was 0xfff.
  * The main author of GDCM2 thought this was too dangerous and harmful and
  * therefore this feaure did not make it into GDCM2
+ *
+ * WARNING:
+ * GDCM will not produce warning for unorder (non-alphabetical order). 
+ * See gdcm::Writer for more info
  */
 class FileMetaInformation;
 class GDCM_EXPORT Reader

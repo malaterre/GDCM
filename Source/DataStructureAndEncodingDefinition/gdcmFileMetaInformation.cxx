@@ -19,6 +19,9 @@
 #include "gdcmImplicitDataElement.h"
 #include "gdcmByteValue.h"
 
+#include "gdcmElement.h"
+#include "gdcmStringStream.h"
+
 namespace gdcm
 {
 
@@ -325,6 +328,21 @@ OStream &FileMetaInformation::Write(OStream &os) const
 {
   if( DS )
     {
+    //if( !DS->FindDataElement( Tag(0x0002, 0x0000) ) )
+    //  {
+    //  ExplicitDataElement xde( Tag(0x0002, 0x0000), 4, VR::UL );
+    //  SmartPointer<ByteValue> bv = new ByteValue;
+    //  bv->SetLength( 4 );
+    //  unsigned short len = DS->GetLength();
+    //  Element<VR::UL, VM::VM1> el = 
+    //    reinterpret_cast< Element<VR::UL, VM::VM1>& > ( len );
+    //  StringStream ss;
+    //  el.Write( ss );
+    //  bv->Read( ss );
+    //  xde.SetValue( *bv );
+    //  xde.Write(os);
+    //  //abort();
+    //  }
     DS->Write(os);
     }
 
