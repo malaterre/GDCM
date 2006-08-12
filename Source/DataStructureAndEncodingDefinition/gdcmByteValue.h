@@ -66,6 +66,9 @@ public:
         "BUGGY HEADER: Your dicom contain odd length value field." );
       ++l;
       }
+    // I cannot use reserve for now. I need to implement:
+    // STL - vector<> and istream
+    // http://groups.google.com/group/comp.lang.c++/msg/37ec052ed8283e74
     Internal.resize(l);
     // Keep the exact length
     Length = vl;
