@@ -51,6 +51,8 @@ IStream &ExplicitDataElement::Read(IStream &is)
       gdcmDebugMacro(
         "Item Delimitation Item has a length different from 0" );
       }
+    // Set pointer to NULL to avoid user error
+    ValueField = 0;
     return is;
     }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
@@ -167,15 +169,23 @@ const OStream &ExplicitDataElement::Write(OStream &os) const
   const Tag itemDelItem(0xfffe,0xe00d);
   if( TagField == itemDelItem )
     {
+    assert( ValueField == 0 );
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+    if( ValueLengthField != 0 )
+      {
+      gdcmWarningMacro(
+        "Item Delimitation Item had a length different from 0." );
+      VL zero = 0;
+      zero.Write(os);
+      return os;
+      }
+#endif
+    // else
+    assert( ValueLengthField == 0 );
     if( !ValueLengthField.Write(os) )
       {
       assert( 0 && "Should not happen" );
       return os;
-      }
-    if( ValueLengthField != 0 )
-      {
-      gdcmWarningMacro(
-        "Item Delimitation Item has a length different from 0" );
       }
     return os;
     }
@@ -201,8 +211,9 @@ const OStream &ExplicitDataElement::Write(OStream &os) const
     // 16bits only
     uint16_t vl16;
     // MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm
-    //assert( ValueLengthField <= 0xffff ); // FIXME
+    assert( ValueLengthField <= 0xffff ); // FIXME
     vl16 = ValueLengthField;
+    assert( !(vl16 % 2) );
     os.Write(vl16);
     }
   // We have the length we should be able to write the value

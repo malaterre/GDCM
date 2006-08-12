@@ -34,6 +34,7 @@ namespace gdcm
       std::streampos pos = is.Tellg();
       is.Seekg( 0, std::ios::end );
       std::streampos end = is.Tellg();
+      assert( (long)(end-pos) == 4 );
       gdcmWarningMacro( "Broken file: " << (long)(end-pos)
         << " bytes were skipped at the end of file. Use at own risk." );
       // Pretend to end properly...

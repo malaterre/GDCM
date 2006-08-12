@@ -41,7 +41,13 @@ IStream &ImplicitDataElement::Read(IStream &is)
     assert(0 && "Should not happen");
     return is;
     }
-  if( ValueLengthField.IsUndefined() )
+  if( ValueLengthField == 0 )
+    {
+    // Simple fast path
+    ValueField = 0;
+    return is;
+    }
+  else if( ValueLengthField.IsUndefined() )
     {
     //assert( de.GetVR() == VR::SQ );
     // FIXME what if I am reading the pixel data...
@@ -94,8 +100,8 @@ IStream &ImplicitDataElement::Read(IStream &is)
         }
       else if ( item == itemPMSStart2 )
         {
-        gdcmWarningMacro( "Illegal: SQ start with " << itemPMSStart2 << " instead of "
-          << itemStart << " for tag: " << TagField );
+        gdcmWarningMacro( "Illegal: SQ start with " << itemPMSStart2
+          << " instead of " << itemStart << " for tag: " << TagField );
         ValueField = new SequenceOfItems(TS::Implicit);
         ValueField->SetLength(ValueLengthField); // perform realloc
         if( !ValueField->Read(is) )
@@ -122,8 +128,8 @@ IStream &ImplicitDataElement::Read(IStream &is)
     if( TagField != theralys1
      && TagField != theralys2 )
       {
-      gdcmWarningMacro( "GE,13: Replacing VL=0x000d with VL=0x000a, for Tag=" <<
-        TagField << " in order to read a buggy DICOM file." );
+      gdcmWarningMacro( "GE,13: Replacing VL=0x000d with VL=0x000a, for Tag="
+        << TagField << " in order to read a buggy DICOM file." );
       ValueLengthField = 10;
       }
     }
@@ -156,18 +162,16 @@ const OStream &ImplicitDataElement::Write(OStream &os) const
     return os;
     }
   // Write Value
-  if( ValueField )
+  if( ValueLengthField )
     {
+    assert( ValueField );
+    assert( TagField != Tag(0xfffe, 0xe00d)
+         && TagField != Tag(0xfffe, 0xe0dd) );
     if( !ValueField->Write(os) )
       {
       assert(0 && "Should not happen");
       return os;
       }
-    }
-  else
-    {
-    assert( TagField == Tag(0xfffe, 0xe00d)
-         || TagField == Tag(0xfffe, 0xe0dd) );
     }
   return os;
 }

@@ -61,6 +61,7 @@ public:
   // Does a reallocation
   void SetLength(const VL& vl) {
     VL l(vl);
+    assert( !l.IsUndefined() );
     if ( l.IsOdd() ) {
       gdcmDebugMacro(
         "BUGGY HEADER: Your dicom contain odd length value field." );
@@ -107,15 +108,25 @@ public:
     }
   bool WriteBuffer(std::ostream &os) const {
     assert( Internal.size() <= Length );
+    assert( !(Internal.size() % 2) );
     os.write(&Internal[0], Internal.size() );
     return true;
   }
 
   IStream &Read(IStream &is) {
+    // If Length is odd we have detected that in SetLength
+    // and calling std::vector::resize make sure to allocate *AND* 
+    // initialize values to 0 so we are sure to have a \0 at the end
+    // even in this case
     return is.Read(&Internal[0], Length);
     }
   OStream const &Write(OStream &os) const {
+#ifdef GDCM_WRITE_ODD_LENGTH
     return os.Write(&Internal[0], Length);
+#else
+    assert( !(Internal.size() % 2) );
+    return os.Write(&Internal[0], Internal.size());
+#endif
     }
 
 protected:
