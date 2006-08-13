@@ -252,7 +252,7 @@ bool System::SetPermissions(const char* file, unsigned short mode)
 bool System::RemoveFile(const char* source)
 {
 #ifdef _WIN32
-  mode_t mode;
+  unsigned short mode;
   if ( !System::GetPermissions(source, mode) )
     {
     return false;
@@ -260,7 +260,7 @@ bool System::RemoveFile(const char* source)
   /* Win32 unlink is stupid --- it fails if the file is read-only  */
   System::SetPermissions(source, S_IWRITE);
 #endif
-  bool res = unlink(source) != 0 ? false : true;
+  bool res = unlink(source) ? true : false;
 #ifdef _WIN32
   if ( !res )
     {
