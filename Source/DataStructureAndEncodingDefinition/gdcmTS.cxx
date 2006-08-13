@@ -273,7 +273,7 @@ bool TS::IsBigEndian(const TSType &ts)
 {
   assert( ts != TS::TS_END );
   return ts == ExplicitVRBigEndian
-//    || ts == ImplicitVRBigEndianPrivateGE // Indeed this is little endian
+//    || ts == ImplicitVRBigEndianPrivateGE // Indeed this is LittleEndian
     || ts == ImplicitVRBigEndianACRNEMA;
 }
 
