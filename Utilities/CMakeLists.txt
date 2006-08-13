@@ -28,3 +28,5 @@ SUBDIRS(zlib)
 # Do getopt
 #SET(GETOPT_NAMESPACE "GDCMGETOPT")
 #SUBDIRS(getopt)
+
+SUBDIRS(doxygen)

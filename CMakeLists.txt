@@ -1,5 +1,5 @@
 PROJECT(GDCM)
-CMAKE_MINIMUM_REQUIRED(VERSION 2.2)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
 
 #-----------------------------------------------------------------------------
 # Disallow insource build since I never test that
@@ -10,7 +10,7 @@ IF(INSOURCE)
 ENDIF(INSOURCE)
 
 #-----------------------------------------------------------------------------
-SET(GDCM_MAJOR_VERSION 0)
+SET(GDCM_MAJOR_VERSION 2)
 SET(GDCM_MINOR_VERSION 0)
 SET(GDCM_BUILD_VERSION 0)
 SET(GDCM_VERSION
@@ -71,15 +71,8 @@ ENDIF(BUILD_TESTING)
 
 
 #-----------------------------------------------------------------------------
-#OPTION(GDCM_DOCUMENTATION "Build source documentation using doxygen." OFF)
-## if doxygen enable
-#IF(GDCM_DOCUMENTATION)
-#  # Search Doxygen:
-#  FIND_PACKAGE(Doxygen)
-#  IF(DOXYGEN)
-#    SUBDIRS(Doc)
-#  ENDIF(DOXYGEN)
-#ENDIF(GDCM_DOCUMENTATION)
+OPTION(GDCM_DOCUMENTATION "Build source documentation using doxygen." OFF)
+#SET(BUILD_APPLICATIONS ${GDCM_BUILD_APPLICATIONS})
 
 OPTION(GDCM_USE_VTK "vtk bridge ?" OFF)
 IF(GDCM_USE_VTK)
