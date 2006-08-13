@@ -14,6 +14,7 @@
 
 =========================================================================*/
 #include "gdcmSystem.h"
+#include "gdcmFilename.h"
 
 #include "md5.h"
 
@@ -21,6 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <errno.h>
 
 #include <iostream>
 
@@ -96,11 +98,114 @@ bool System::ComputeFileMD5(const char *filename, char *digest_str)
   return true;
 }
 
-int Mkdir(const char *pathname)
+#if defined(_WIN32) && (defined(_MSC_VER) || defined(__WATCOMC__) || defined(__BORLANDC__) || defined(__MINGW32__)) 
+#include <io.h>
+#include <direct.h>
+#define _unlink unlink
+inline int Mkdir(const char* dir)
 {
-  (void)pathname;
-  abort();
-  return -1;
+  return _mkdir(dir);
+}
+inline int Rmdir(const char* dir)
+{
+  return _rmdir(dir);
+}
+#else
+#include <sys/types.h>
+#include <fcntl.h>
+#include <unistd.h>
+inline int Mkdir(const char* dir)
+{
+  return mkdir(dir, 00777);
+}
+inline int Rmdir(const char* dir)
+{
+  return rmdir(dir);
+}
+#endif
+
+bool System::MakeDirectory(const char *path)
+{
+  if(System::FileExists(path))
+    {
+    return true;
+    }
+  Filename fn(path);
+  std::string dir = fn.ToUnixSlashes();
+
+  std::string::size_type pos = dir.find(':');
+  if(pos == std::string::npos)
+    {
+    pos = 0;
+    }
+  std::string topdir;
+  while((pos = dir.find('/', pos)) != std::string::npos)
+    {
+    topdir = dir.substr(0, pos);
+    Mkdir(topdir.c_str());
+    pos++;
+    }
+  if(dir[dir.size()-1] == '/')
+    {
+    topdir = dir.substr(0, dir.size());
+    }
+  else
+    {
+    topdir = dir;
+    }
+  if(Mkdir(topdir.c_str()) != 0)
+    {
+    // There is a bug in the Borland Run time library which makes MKDIR
+    // return EACCES when it should return EEXISTS
+    // if it is some other error besides directory exists
+    // then return false
+    if( (errno != EEXIST)
+#ifdef __BORLANDC__
+        && (errno != EACCES)
+#endif
+      )
+      {
+      return false;
+      }
+    }
+  return true;
+}
+
+// return true if the file exists
+bool System::FileExists(const char* filename)
+{
+#ifdef _MSC_VER
+# define access _access
+#endif
+#ifndef R_OK
+# define R_OK 04
+#endif
+  if ( access(filename, R_OK) != 0 )
+    {
+    return false;
+    }
+  else
+    {
+    assert( !FileIsDirectory(filename) );
+    return true;
+    }
+}
+
+bool System::FileIsDirectory(const char* name)
+{
+  struct stat fs;
+  if(stat(name, &fs) == 0)
+    {
+#if _WIN32
+    return ((fs.st_mode & _S_IFDIR) != 0);
+#else
+    return S_ISDIR(fs.st_mode);
+#endif
+    }
+  else
+    {
+    return false;
+    }
 }
 
 }

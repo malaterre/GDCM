@@ -65,5 +65,16 @@ const char *Filename::GetName()
   return Name.c_str();
 }
 
+// convert windows slashes to unix slashes 
+const char *Filename::ToUnixSlashes()
+{
+  Conversion = FileName;
+  std::string::size_type s = Conversion.find("\\");
+  assert( s == std::string::npos );
+  assert( !Conversion.empty() );
+
+  return Conversion.c_str();
+}
+
 } // end namespace gdcm
 

@@ -28,11 +28,13 @@ public:
 
   const char *GetPath();
   const char *GetName();
+  const char *ToUnixSlashes();
 
 private:
   std::string FileName;
   std::string Path;
   std::string Name;
+  std::string Conversion;
 };
 
 } // end namespace gdcm

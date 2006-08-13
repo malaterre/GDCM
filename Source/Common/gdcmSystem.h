@@ -25,7 +25,9 @@ public:
   static bool ComputeMD5(const char *buffer, const unsigned long buf_len,
     char *digest_str);
   static bool ComputeFileMD5(const char *filename, char *digest_str);
-  static int  Mkdir(const char *pathname); 
+  static bool MakeDirectory(const char *path); 
+  static bool FileExists(const char* filename);
+  static bool FileIsDirectory(const char* name);
   // TODO some system calls
   // GetLastError
   // Chdir
