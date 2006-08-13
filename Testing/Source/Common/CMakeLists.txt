@@ -2,18 +2,24 @@
 # Common
 SET(Common_TEST_SRCS
   TestByteSwap
-  TestDirectory
-  TestTrace
-  TestStringStream
-  TestOFStream
-  TestIFStream
-  TestImage
-  TestObject
-  TestSmartPointer
-  TestPixelType
-  TestPhotometricInterpretation
   TestCodec
+  TestDirectory
   TestFilename
+  TestIFStream
+  TestIOS
+  TestImage
+  TestLookupTable
+  TestMemoryStream
+  TestOFStream
+  TestOStream
+  TestObject
+  TestPhotometricInterpretation
+  TestPixelType
+  TestSmartPointer
+  TestStringStream
+  TestSwapCode
+  TestSystem
+  TestTrace
   )
 
 # Add the include paths

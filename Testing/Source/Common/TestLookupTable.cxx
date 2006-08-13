@@ -13,12 +13,9 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmFileMetaInformation.h"
+#include "gdcmLookupTable.h"
 
-int TestFileMetaInformation(int argc, char *argv[])
+int TestLookupTable(int, char *[])
 {
-  (void)argc;
-  (void)argv;
-
   return 0;
 }
