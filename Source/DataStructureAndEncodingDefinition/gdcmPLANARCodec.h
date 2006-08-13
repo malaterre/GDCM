@@ -22,7 +22,7 @@ namespace gdcm
 {
   
 class PLANARInternals;
-class PLANARCodec : public Codec
+class PLANARCodec : public ImageCodec
 {
 public:
   PLANARCodec();
