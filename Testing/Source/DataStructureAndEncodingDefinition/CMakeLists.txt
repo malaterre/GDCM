@@ -1,31 +1,38 @@
 # Define the tests for Data Structure and Encoding Definitions
 # DSED
 SET(DSED_TEST_SRCS
-  TestTag
-  TestDataElement
-  TestExplicitDataElement
-  TestImplicitDataElement
-  TestComposite
-  TestElement
-  TestVR
-  TestVM
-  TestDataSet
-  TestItem
-  TestValue
-  TestVL
   #TestReadPatientName
-  TestParser
   TestByteBuffer
   TestByteValue
+  TestComposite
+  TestCopyDataSet
+  TestDataElement
+  TestDataSet
+  TestElement
+  TestExplicitDataElement
+  TestFileMetaInformation
+  TestFragment
+  TestImageCodec
+  TestImageConverter
+  TestImageReader
+  TestImageValue
+  TestImageWriter
+  TestImplicitDataElement
+  TestItem
+  TestJPEGCodec
+  TestParser
+  TestRAWCodec
+  TestRLECodec
   TestReader
   TestSequenceOfFragments
   TestSequenceOfItems
-  TestCopyDataSet
-  TestImageReader
-  TestJPEGCodec
-  TestRLECodec
+  TestTag
+  TestTS
+  TestVL
+  TestVM
+  TestVR
+  TestValue
   TestWriter
-  TestImageWriter
   )
 
 OPTION(SHARED_PTR "shared_ptr" OFF)
