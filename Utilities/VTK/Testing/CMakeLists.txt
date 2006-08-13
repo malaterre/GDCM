@@ -2,6 +2,7 @@
 # vtkGDCM
 SET(VTK_GDCM_TEST_SRCS
   TestvtkGDCMReader
+  TestvtkGDCMWriter
   )
 
 # Add the include paths
