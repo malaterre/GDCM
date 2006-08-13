@@ -81,21 +81,23 @@ IStream &ExplicitDataElement::Read(IStream &is)
     }
   else
     {
-    // FIXME: Poorly written:
-    uint16_t vl16;
-    is.Read(vl16);
+    // 16bits only
+    if( !ValueLengthField.Read16(is) )
+      {
+      assert(0 && "Should not happen");
+      return is;
+      }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     // HACK for SIEMENS Leonardo
-    if( vl16 == 0x0006
+    if( ValueLengthField == 0x0006
      && VRField == VR::UL
      && TagField.GetGroup() == 0x0009 )
       {
       gdcmWarningMacro( "Replacing VL=0x0006 with VL=0x0004, for Tag=" <<
         TagField << " in order to read a buggy DICOM file." );
-      vl16 = 0x0004;
+      ValueLengthField = 0x0004;
       }
 #endif
-    ValueLengthField = vl16;
     }
   // Read the Value
   //assert( ValueField == 0 );
@@ -205,12 +207,11 @@ const OStream &ExplicitDataElement::Write(OStream &os) const
   else
     {
     // 16bits only
-    uint16_t vl16;
-    // MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm
-    assert( ValueLengthField <= 0xffff ); // FIXME
-    vl16 = ValueLengthField;
-    assert( !(vl16 % 2) );
-    os.Write(vl16);
+    if( !ValueLengthField.Write16(os) )
+      {
+      assert( 0 && "Should not happen" );
+      return os;
+      }
     }
   // We have the length we should be able to write the value
   if( !ValueField->Write(os) )
