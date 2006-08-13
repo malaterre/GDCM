@@ -26,7 +26,8 @@
 #include "vtkMedicalImageReader2.h"
 
 struct vtkGDCMReaderInternals;
-class VTK_IO_EXPORT vtkGDCMReader : public vtkMedicalImageReader2
+class vtkLookupTable;
+class VTK_EXPORT vtkGDCMReader : public vtkMedicalImageReader2
 {
 public:
   static vtkGDCMReader *New();
@@ -48,13 +49,20 @@ public:
   // A descriptive name for this format
   virtual const char* GetDescriptiveName()
     {
-    return "GDCM";
+    return "DICOM";
     }
+
+  // 
+  vtkGetObjectMacro(LookupTable, vtkLookupTable);
+
+  //
+  vtkGetObjectMacro(MedicalImageProperties, vtkMedicalImageProperties);
 
 protected:
   vtkGDCMReader();
   ~vtkGDCMReader();
 
+  void FillMedicalImageInformation();
   int RequestInformation(vtkInformation *request,
                          vtkInformationVector **inputVector,
                          vtkInformationVector *outputVector);
@@ -68,6 +76,10 @@ private:
 
   //PIMPL
   vtkGDCMReaderInternals *Internals;
+
+  // VTK structs:
+  vtkLookupTable *LookupTable;
+  vtkMedicalImageProperties *ImageProperties;
 };
 #endif
 

@@ -18,8 +18,16 @@
 #include "vtkImageData.h"
 #include "vtkInformationVector.h"
 #include "vtkInformation.h"
+#include "vtkLookupTable.h"
+
+#if (VTK_MAJOR_VERSION < 5)
+#error Your VTK version is too old
+#else
+#include "vtkMedicalImageProperties.h"
+#endif
 
 #include "gdcmImageReader.h"
+#include <sstream>
 
 vtkCxxRevisionMacro(vtkGDCMReader, "$Revision: 1.20 $");
 vtkStandardNewMacro(vtkGDCMReader);
@@ -34,6 +42,9 @@ vtkGDCMReader::vtkGDCMReader()
   this->Internals = new vtkGDCMReaderInternals;
   //this->ScalarArrayName = NULL;
   //this->SetScalarArrayName( "GDCM" );
+
+  this->LookupTable = vtkLookupTable::New();
+  this->MedicalImageProperties = vtkMedicalImageProperties::New();
 }
 
 vtkGDCMReader::~vtkGDCMReader()
@@ -49,6 +60,66 @@ int vtkGDCMReader::CanReadFile(const char* fname)
     return 0;
     }
   return 3;
+}
+
+//
+void vtkGDCMReader::FillMedicalImageInformation()
+{
+  // For now only do:
+  // PatientName, PatientID, PatientAge, PatientSex, PatientBirthDate,
+  // StudyID
+  std::ostringstream str;
+  const gdcm::DataSet &ds = this->Internals->DICOMReader.GetDataSet();
+  const gdcm::Tag patname(0x0010, 0x0010);
+  if( ds.FindDataElement( patname ) )
+    {
+    const gdcm::DataElement& de = ds.GetDataElement( patname );
+    }
+
+/*
+    {
+    if (medprop->GetPatientName())
+      {
+      str.str("");
+      str << medprop->GetPatientName();
+      file->InsertValEntry(str.str(),0x0010,0x0010); // PN 1 Patient's Name
+      }
+
+    if (medprop->GetPatientID())
+      {
+      str.str("");
+      str << medprop->GetPatientID();
+      file->InsertValEntry(str.str(),0x0010,0x0020); // LO 1 Patient ID
+      }
+
+    if (medprop->GetPatientAge())
+      {
+      str.str("");
+      str << medprop->GetPatientAge();
+      file->InsertValEntry(str.str(),0x0010,0x1010); // AS 1 Patient's Age
+      }
+
+    if (medprop->GetPatientSex())
+      {
+      str.str("");
+      str << medprop->GetPatientSex();
+      file->InsertValEntry(str.str(),0x0010,0x0040); // CS 1 Patient's Sex
+      }
+
+    if (medprop->GetPatientBirthDate())
+      {
+      str.str("");
+      str << medprop->GetPatientBirthDate();
+      file->InsertValEntry(str.str(),0x0010,0x0030); // DA 1 Patient's Birth Date
+      }
+
+    if (medprop->GetStudyID())
+      {
+      str.str("");
+      str << medprop->GetStudyID();
+      file->InsertValEntry(str.str(),0x0020,0x0010); // SH 1 Study ID
+      }
+    }*/
 }
 
 //----------------------------------------------------------------------------
@@ -128,7 +199,6 @@ int vtkGDCMReader::RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector **vtkNotUsed(inputVector),
                                 vtkInformationVector *outputVector)
 {
-  (void)outputVector;
   const gdcm::Image &image = this->Internals->DICOMReader.GetImage();
 
   //this->UpdateProgress(0.2);
