@@ -75,18 +75,31 @@ public:
       is.GetSwapCode());
     return is;
     }
-  const OStream &Write(OStream &os) const
+
+  template<typename T>
+  const OStream &WriteT(OStream &os) const
     {
-    uint32_t copy = ValueLength;
+    T copy = ValueLength;
 #ifndef GDCM_WRITE_ODD_LENGTH
     if( !IsUndefined() && IsOdd() )
       {
       ++copy;
       }
 #endif
-    ByteSwap<uint32_t>::SwapFromSwapCodeIntoSystem(copy,
+    ByteSwap<T>::SwapFromSwapCodeIntoSystem(copy,
       os.GetSwapCode());
-    return os.Write((char*)(&copy), 4);
+    return os.Write((char*)(&copy), sizeof(T));
+    }
+
+  const OStream &Write(OStream &os) const
+    {
+    return WriteT<uint32_t>(os);
+    }
+
+  const OStream &Write16(OStream &os) const
+    {
+    assert( ValueLength <= 0xffff );
+    return WriteT<uint16_t>(os);
     }
 
 private:
