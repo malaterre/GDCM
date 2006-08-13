@@ -317,11 +317,13 @@ IStream &DataSet::Read(IStream &is)
 const VL & DataSet::GetLength() const
 {
   static VL length = 0;
-  if( Length.IsUndefined() )
+  if( Length.IsUndefined() || Length == 0 )
     {
     length = Internal->GetLength();
+    assert( length != 0 );
     return length;
     }
+  assert( Length != 0 );
   return Length;
 }
 
