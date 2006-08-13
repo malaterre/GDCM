@@ -23,11 +23,11 @@
 #include "vtkMedicalImageProperties.h"
 #endif
 
-#include "gdcmImageReader.h"
+#include "gdcmImageWriter.h"
 
 struct vtkGDCMWriterInternals
 {
-//  gdcm::ImageWriter DICOMWriter;
+  gdcm::ImageWriter DICOMWriter;
 };
 
 vtkCxxRevisionMacro(vtkGDCMWriter, "$Revision: 1.1 $")

@@ -29,7 +29,7 @@
 #include "gdcmImageReader.h"
 #include <sstream>
 
-vtkCxxRevisionMacro(vtkGDCMReader, "$Revision: 1.20 $");
+vtkCxxRevisionMacro(vtkGDCMReader, "$Revision: 1.1 $");
 vtkStandardNewMacro(vtkGDCMReader);
 
 struct vtkGDCMReaderInternals

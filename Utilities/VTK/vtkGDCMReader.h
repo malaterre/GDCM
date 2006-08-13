@@ -18,7 +18,7 @@
 // bla bla
 
 // .SECTION See Also
-// vtkImageReader2 vtkMedicalImageProperties
+// vtkMedicalImageReader2 vtkMedicalImageProperties
 
 #ifndef __vtkGDCMReader_h
 #define __vtkGDCMReader_h
