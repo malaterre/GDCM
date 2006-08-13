@@ -68,12 +68,25 @@ public:
   //TODO
   //friend std::istream& operator>>(std::istream& is, VL& n);
 
+  template <typename T>
+  IStream &ReadT(IStream &is)
+    {
+    T copy;
+    is.Read((char*)(&copy), sizeof(T));
+    ByteSwap<T>::SwapFromSwapCodeIntoSystem(copy,
+      is.GetSwapCode());
+    ValueLength = copy;
+    return is;
+    }
+
   IStream &Read(IStream &is)
     {
-    is.Read((char*)(&ValueLength), 4);
-    ByteSwap<uint32_t>::SwapFromSwapCodeIntoSystem(ValueLength,
-      is.GetSwapCode());
-    return is;
+    return ReadT<uint32_t>(is);
+    }
+
+  IStream &Read16(IStream &is)
+    {
+    return ReadT<uint16_t>(is);
     }
 
   template<typename T>
