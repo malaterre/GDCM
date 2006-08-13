@@ -50,6 +50,16 @@ int TestWrite(const char* filename)
   std::string outfilename = tmpdir;
   outfilename += "/";
   outfilename += out.GetName();
+  if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
+    {
+    if( !gdcm::System::MakeDirectory( tmpdir.c_str() ) )
+      {
+      std::cerr << "Error cannot execute test" << std::endl;
+      std::cerr << "Last error was: " << gdcm::System::GetLastSystemError()
+        << std::endl;
+      return 1;
+      }
+    }
 
   gdcm::Writer writer;
   writer.SetFileName( outfilename.c_str() );
