@@ -26,6 +26,7 @@ SET(DSED_SRCS
   gdcmJPEG12Codec.cxx
   gdcmJPEG16Codec.cxx
   gdcmImageCodec.cxx
+  gdcmImageWriter.cxx
   )
 
 # Add the include paths
