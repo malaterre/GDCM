@@ -20,6 +20,7 @@
 #include "gdcmImage.h"
 #include "gdcmSmartPointer.h"
 #include "gdcmTS.h"
+#include "gdcmValue.h"
 
 #include <vector>
 
@@ -31,7 +32,6 @@ namespace gdcm
  * \note
  * Can be ByteValue or SequenceOfFragments and nothing else AFAIK
  */
-class Value;
 class GDCM_EXPORT ImageValue : public Image
 {
 public:

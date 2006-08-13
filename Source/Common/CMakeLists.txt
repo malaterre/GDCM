@@ -29,22 +29,21 @@ INCLUDE_DIRECTORIES(
 
 SET(Common_SRCS
   gdcmDirectory.cxx
-  gdcmTrace.cxx
-  gdcmSwapCode.cxx
+  gdcmFilename.cxx
+  gdcmIFStream.cxx
   gdcmIOS.cxx
   gdcmIStream.cxx
-  gdcmOStream.cxx
-  gdcmIFStream.cxx
-  gdcmOFStream.cxx
-  gdcmStringStream.cxx
   gdcmImage.cxx
-  gdcmImageIStream.cxx
-  gdcmPixelType.cxx
-  gdcmPhotometricInterpretation.cxx
-  gdcmFilename.cxx
-  gdcmSystem.cxx
-  gdcmMemoryStream.cxx
   gdcmLookupTable.cxx
+  gdcmMemoryStream.cxx
+  gdcmOFStream.cxx
+  gdcmOStream.cxx
+  gdcmPhotometricInterpretation.cxx
+  gdcmPixelType.cxx
+  gdcmStringStream.cxx
+  gdcmSwapCode.cxx
+  gdcmSystem.cxx
+  gdcmTrace.cxx
   )
 
 ADD_LIBRARY(gdcmCommon ${Common_SRCS})

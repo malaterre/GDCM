@@ -1,32 +1,32 @@
 # Define the srcs for Data Structure and Encoding Definitions
 # DSED
 SET(DSED_SRCS
-  gdcmVR.cxx
-  gdcmVM.cxx
-  gdcmExplicitDataElement.cxx
-  gdcmImplicitDataElement.cxx
   gdcmDataSet.cxx
-  gdcmTS.cxx
-  gdcmParser.cxx
-  gdcmReader.cxx
+  gdcmExplicitDataElement.cxx
   gdcmFileMetaInformation.cxx
-  gdcmSequenceOfFragments.cxx
-  gdcmSequenceOfItems.cxx
+  gdcmFragment.cxx
+  gdcmImageCodec.cxx
+  gdcmImageConverter.cxx
   gdcmImageReader.cxx
   gdcmImageValue.cxx
-  gdcmJPEGCodec.cxx
-  gdcmJPEG2000Codec.cxx
-  gdcmRAWCodec.cxx
-  gdcmRLECodec.cxx
-  gdcmImageConverter.cxx
+  gdcmImageWriter.cxx
+  gdcmImplicitDataElement.cxx
   gdcmItem.cxx
-  gdcmWriter.cxx
-  gdcmFragment.cxx
-  gdcmJPEG8Codec.cxx
   gdcmJPEG12Codec.cxx
   gdcmJPEG16Codec.cxx
-  gdcmImageCodec.cxx
-  gdcmImageWriter.cxx
+  gdcmJPEG2000Codec.cxx
+  gdcmJPEG8Codec.cxx
+  gdcmJPEGCodec.cxx
+  gdcmParser.cxx
+  gdcmRAWCodec.cxx
+  gdcmRLECodec.cxx
+  gdcmReader.cxx
+  gdcmSequenceOfFragments.cxx
+  gdcmSequenceOfItems.cxx
+  gdcmTS.cxx
+  gdcmVM.cxx
+  gdcmVR.cxx
+  gdcmWriter.cxx
   )
 
 # Add the include paths
