@@ -155,12 +155,7 @@ public:
     assert( strlen( vr ) == 2 );
     os.Write(vr, 2);
     // See PS 3.5, Data Element Structure With Explicit VR
-    if( VRField == VR::OB
-     || VRField == VR::OW
-     || VRField == VR::OF
-     || VRField == VR::SQ
-     || VRField == VR::UN
-     || VRField == VR::UT )
+    if( VRField & ( VR::OB | VR::OW | VR::OF | VR::SQ | VR::UN | VR::UT ) )
       {
       const char dum[2] = {0, 0};
       os.Write(dum,2);
