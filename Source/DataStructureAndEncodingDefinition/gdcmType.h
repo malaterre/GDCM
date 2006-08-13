@@ -19,6 +19,9 @@
 
 #include "gdcmTypes.h"
 
+namespace gdcm
+{
+
 class Type
 {
   enum {
@@ -26,5 +29,7 @@ class Type
 	  T1C
   };
 };
+
+} // end namespace gdcm
 
 #endif // __gdcmType_h
