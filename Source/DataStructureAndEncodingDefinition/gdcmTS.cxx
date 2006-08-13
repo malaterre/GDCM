@@ -14,6 +14,8 @@
 
 =========================================================================*/
 #include "gdcmTS.h"
+#include "gdcmTrace.h"
+
 #include <assert.h>
 #include <string.h>
 
@@ -135,8 +137,8 @@ const TS::TSType TS::GetTSType(const char *cstr)
   std::string::size_type notspace = str.find_last_not_of(" ") + 1;
   if( notspace != str.size() )
     {
-    std::cerr << "BUGGY HEADER: TS contains " << 
-      str.size()-notspace << " whitespace character(s)" << std::endl;
+    gdcmDebugMacro( "BUGGY HEADER: TS contains " << 
+      str.size()-notspace << " whitespace character(s)" );
     str.erase(notspace);
     }
 
