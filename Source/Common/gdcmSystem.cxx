@@ -260,7 +260,7 @@ bool System::RemoveFile(const char* source)
   /* Win32 unlink is stupid --- it fails if the file is read-only  */
   System::SetPermissions(source, S_IWRITE);
 #endif
-  bool res = unlink(source) ? true : false;
+  bool res = unlink(source) != 0 ? false : true;
 #ifdef _WIN32
   if ( !res )
     {
@@ -268,6 +268,20 @@ bool System::RemoveFile(const char* source)
     }
 #endif
   return res;
+}
+
+// return size of file; also returns zero if no file exists
+unsigned long System::FileSize(const char* filename)
+{
+  struct stat fs;
+  if (stat(filename, &fs) != 0) 
+    {
+    return 0;
+    }
+  else
+    {
+    return fs.st_size;
+    }
 }
 
 }

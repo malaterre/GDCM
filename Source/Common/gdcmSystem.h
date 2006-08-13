@@ -13,26 +13,38 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+
+#ifndef __gdcmSystem_h
+#define __gdcmSystem_h
+
 #include "gdcmTypes.h"
 
 namespace gdcm
 {
 
+/**
+ * \brief Class to do system operation
+ * \note bla
+ */
 class System
 {
 public:
-  // digest_str needs to be at least : strlen = [2*16+1];
-  static bool ComputeMD5(const char *buffer, const unsigned long buf_len,
-    char *digest_str);
-  static bool ComputeFileMD5(const char *filename, char *digest_str);
+  // system operation 
   static bool MakeDirectory(const char *path); 
   static bool FileExists(const char* filename);
   static bool FileIsDirectory(const char* name);
   static bool RemoveFile(const char* source);
 
   static const char *GetLastSystemError();
+  static unsigned long FileSize(const char* filename);
+
+  // MD5 stuff
+  // digest_str needs to be at least : strlen = [2*16+1];
+  static bool ComputeMD5(const char *buffer, const unsigned long buf_len,
+    char *digest_str);
+  static bool ComputeFileMD5(const char *filename, char *digest_str);
+
   // TODO some system calls
-  // GetLastError
   // Chdir
   // copy a file
 
@@ -42,3 +54,5 @@ protected:
 };
 
 } // end namespace gdcm
+
+#endif //__gdcmSystem_h
