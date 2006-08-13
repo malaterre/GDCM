@@ -194,11 +194,7 @@ const OStream &ExplicitDataElement::Write(OStream &os) const
     assert( 0 && "Should not happen" );
     return os;
     }
-  if( VRField == VR::OB
-   || VRField == VR::OW
-   || VRField == VR::OF
-   || VRField == VR::SQ
-   || VRField == VR::UN )
+  if( VRField & ( VR::OB | VR::OW | VR::OF | VR::SQ | VR::UN | VR::UT ) )
     {
     if( !ValueLengthField.Write(os) )
       {
