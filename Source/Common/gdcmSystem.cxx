@@ -23,6 +23,7 @@
 #include <string.h>
 #include <assert.h>
 #include <errno.h>
+#include <sys/stat.h>
 
 #include <iostream>
 
@@ -206,6 +207,67 @@ bool System::FileIsDirectory(const char* name)
     {
     return false;
     }
+}
+
+const char *System::GetLastSystemError()
+{
+  int e = errno;
+  return strerror(e);
+}
+
+bool System::GetPermissions(const char* file, unsigned short& mode)
+{
+  if ( !file )
+    {
+    return false;
+    }
+
+  struct stat st;
+  if ( stat(file, &st) < 0 )
+    {
+    return false;
+    }
+  mode = st.st_mode;
+  return true;
+}
+
+bool System::SetPermissions(const char* file, unsigned short mode)
+{
+  if ( !file )
+    {
+    return false;
+    }
+  if ( !System::FileExists(file) )
+    {
+    return false;
+    }
+  if ( chmod(file, mode) < 0 )
+    {
+    return false;
+    }
+
+  return true;
+}
+
+bool System::RemoveFile(const char* source)
+{
+#ifdef _WIN32
+  mode_t mode;
+  if ( !System::GetPermissions(source, mode) )
+    {
+    return false;
+    }
+  /* Win32 unlink is stupid --- it fails if the file is read-only  */
+  System::SetPermissions(source, S_IWRITE);
+#endif
+  bool res = unlink(source) != 0 ? false : true;
+#ifdef _WIN32
+  if ( !res )
+    {
+    System::SetPermissions(source, mode);
+    }
+#endif
+  return res;
 }
 
 }

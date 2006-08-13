@@ -28,10 +28,17 @@ public:
   static bool MakeDirectory(const char *path); 
   static bool FileExists(const char* filename);
   static bool FileIsDirectory(const char* name);
+  static bool RemoveFile(const char* source);
+
+  static const char *GetLastSystemError();
   // TODO some system calls
   // GetLastError
   // Chdir
   // copy a file
+
+protected:
+  bool GetPermissions(const char* file, unsigned short& mode);
+  bool SetPermissions(const char* file, unsigned short mode);
 };
 
 } // end namespace gdcm
