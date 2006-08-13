@@ -32,4 +32,4 @@ class Type
 
 } // end namespace gdcm
 
-#endif // __gdcmType_h
+#endif //__gdcmType_h
