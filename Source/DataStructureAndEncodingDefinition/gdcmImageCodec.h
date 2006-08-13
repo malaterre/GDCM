@@ -13,8 +13,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmImagecodec_h
-#define __gdcmImagecodec_h
+#ifndef __gdcmImageCodec_h
+#define __gdcmImageCodec_h
 
 #include "gdcmCodec.h"
 #include "gdcmPhotometricInterpretation.h"
@@ -93,4 +93,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmImagecodec_h
+#endif //__gdcmImageCodec_h

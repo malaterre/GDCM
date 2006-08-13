@@ -13,38 +13,25 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmImageWriter.h"
-#include "gdcmTrace.h"
+#ifndef __gdcmAudioCodec_h
+#define __gdcmAudioCodec_h
+
+#include "gdcmCodec.h"
 
 namespace gdcm
 {
-
-ImageWriter::ImageWriter()
+  
+class AudioCodec : public Codec
 {
-}
+public:
+  AudioCodec();
+  ~AudioCodec();
+  bool CanDecode(TS const &) { return false; }
+  bool Decode(IStream &is, OStream &os);
 
-ImageWriter::~ImageWriter()
-{
-}
-
-void ImageWriter::SetImage(Image const &img)
-{
-  (void)img;
-}
-
-bool ImageWriter::Write()
-{
-  return true;
-}
-
-bool ImageWriter::WriteImage()
-{
-  return true;
-}
-
-bool ImageWriter::WriteACRNEMAImage()
-{
-  return true;
-}
+private:
+};
 
 } // end namespace gdcm
+
+#endif //__gdcmAudioCodec_h
