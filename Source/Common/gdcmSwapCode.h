@@ -55,4 +55,4 @@ inline std::ostream& operator<<(std::ostream& os, const SwapCode& sc)
 
 } // end namespace gdcm
 
-#endif
+#endif //__gdcmSwapCode_h

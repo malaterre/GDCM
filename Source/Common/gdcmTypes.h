@@ -84,4 +84,4 @@ public:
 //
 //} // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif // __gdcmTypes_h
+#endif //__gdcmTypes_h

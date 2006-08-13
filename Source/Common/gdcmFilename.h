@@ -14,13 +14,19 @@
 
 =========================================================================*/
 
+#ifndef __gdcmFilename_h
+#define __gdcmFilename_h
+
 #include "gdcmTypes.h"
 
 #include <string>
 
 namespace gdcm
 {
-
+/**
+ * \brief Class to manipulate file name's
+ * \note bla
+ */
 class Filename
 {
 public:
@@ -38,3 +44,5 @@ private:
 };
 
 } // end namespace gdcm
+
+#endif //__gdcmFilename_h

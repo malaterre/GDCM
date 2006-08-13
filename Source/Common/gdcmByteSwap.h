@@ -50,4 +50,4 @@ private:
 
 } // end namespace gdcm
 
-#endif
+#endif //__gdcmByteSwap_h

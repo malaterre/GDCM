@@ -78,4 +78,4 @@ private :
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif
+#endif //__gdcmDirectory_h
