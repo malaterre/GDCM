@@ -19,6 +19,8 @@
 
 #include "gdcmTypes.h"
 
+#include <iostream>
+
 namespace gdcm
 {
 
@@ -33,8 +35,8 @@ public:
 
   Type(TypeType type = INVALID) : TypeField(type) { }
 
-  //operator TypeType () const { return TypeField; }
-  //friend std::ostream &operator<<(std::ostream &os, const Type &vr);
+  operator TypeType () const { return TypeField; }
+  friend std::ostream &operator<<(std::ostream &os, const Type &vr);
 
 private:
   TypeType TypeField;

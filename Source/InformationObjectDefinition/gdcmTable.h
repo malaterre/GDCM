@@ -17,8 +17,9 @@
 #define __gdcmTable_h
 
 #include "gdcmTableEntry.h"
+#include "gdcmTag.h"
 
-#include <string>
+#include <map>
 
 namespace gdcm
 {
@@ -28,16 +29,39 @@ namespace gdcm
 class Table
 {
 public:
+  typedef std::map<Tag, TableEntry> MapTableEntry;
   Table() {}
   ~Table() {}
 
-  void InsertEntry(TableEntry const &te);
+  friend std::ostream& operator<<(std::ostream& _os, const Table &_val);
+
+  void InsertEntry(Tag const &tag, TableEntry const &te)
+    {
+#ifndef NDEBUG
+    MapTableEntry::size_type s = TableInternal.size();
+#endif
+    TableInternal.insert(
+      MapTableEntry::value_type(tag, te));
+    assert( s < TableInternal.size() );
+    }
+
+  const TableEntry &GetTableEntry(const Tag &tag) const
+    {
+    MapTableEntry::const_iterator it = 
+      TableInternal.find(tag);
+    if (it == TableInternal.end())
+      {
+      assert( 0 && "Impossible" );
+      return GetTableEntry(Tag(0,0));
+      }
+    return it->second;
+    }
 
 private:
-  Tag TagField;
-  std::string Attribute;
-  Type TypeField;
-  std::string Description;
+  Table &operator=(const Table &_val); // purposely not implemented
+  Table(const Table&_val); // purposely not implemented
+
+  MapTableEntry TableInternal;
 };
 
 } // end namespace gdcm

@@ -2,6 +2,7 @@
 # IOD
 SET(IOD_SRCS
   gdcmTableReader.cxx
+  gdcmTable.cxx
   )
 
 # Add the include paths

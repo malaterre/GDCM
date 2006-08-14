@@ -16,7 +16,6 @@
 #ifndef __gdcmTableEntry_h
 #define __gdcmTableEntry_h
 
-#include "gdcmTag.h"
 #include "gdcmType.h"
 
 #include <string>
@@ -29,13 +28,12 @@ namespace gdcm
 class TableEntry
 {
 public:
-  TableEntry(Tag const &tag = Tag(), const char *attribute = 0,
+  TableEntry(const char *attribute = 0,
     Type const &type = Type(), const char * des = 0 ) :
-    TagField(tag),Attribute(attribute),TypeField(type),Description(des) {}
+    Attribute(attribute),TypeField(type),Description(des) {}
   ~TableEntry() {}
 
 private:
-  Tag TagField;
   std::string Attribute;
   Type TypeField;
   std::string Description;
