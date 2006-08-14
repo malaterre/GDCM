@@ -30,13 +30,19 @@ public:
   typedef enum {
 	  T1 = 0,
 	  T1C,
-    INVALID
+    T2,
+    T2C,
+    T3,
+    UNKNOWN
   } TypeType;
 
-  Type(TypeType type = INVALID) : TypeField(type) { }
+  Type(TypeType type = UNKNOWN) : TypeField(type) { }
 
   operator TypeType () const { return TypeField; }
   friend std::ostream &operator<<(std::ostream &os, const Type &vr);
+
+  const char *GetTypeString(TypeType type);
+  TypeType GetTypeType(const char *type);
 
 private:
   TypeType TypeField;

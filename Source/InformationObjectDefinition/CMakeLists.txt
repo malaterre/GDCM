@@ -3,6 +3,7 @@
 SET(IOD_SRCS
   gdcmTableReader.cxx
   gdcmTable.cxx
+  gdcmType.cxx
   )
 
 # Add the include paths
