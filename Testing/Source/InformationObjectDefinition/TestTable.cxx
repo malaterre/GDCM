@@ -13,36 +13,10 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmTableReader.h"
+#include "gdcmTable.h"
 
-// generated file:
-#include "gdcmTables.h"
-
-void TestReadTable(const char *filename)
+int TestTable(int, char *[])
 {
-  gdcm::TableReader tr;
-  tr.SetFilename(filename);
-  tr.Read();
-}
-
-int TestTableReader(int argc, char *argv[])
-{
-  if( argc == 2 )
-    {
-    const char *filename = argv[1];
-    TestReadTable(filename);
-    return 0;
-    }
-
-  // else
-  int i = 0;
-  const char *filename;
-  while( (filename = gdcmTables[i]) )
-    {
-    TestReadTable( filename );
-    ++i;
-    }
-
+  gdcm::Table t;
   return 0;
 }
-

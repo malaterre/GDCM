@@ -2,14 +2,17 @@
 # IOD
 SET(IOD_TEST_SRCS
   TestTableReader
+  TestTable
+  TestTableEntry
   )
 
 # Add the include paths
 INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/Common"
+  "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
-  "${GDCM_BINARY_DIR}/Source/InformationObjectDefinition"
+  "${GDCM_BINARY_DIR}/Source/InformationObjectDefinition" # gdcmTables.h
   )
 
 CREATE_TEST_SOURCELIST(IODTests gdcmIODTests.cxx ${IOD_TEST_SRCS})
