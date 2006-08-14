@@ -14,6 +14,7 @@
 
 =========================================================================*/
 #include "gdcmTableReader.h"
+#include "gdcmTable.h"
 
 #include <iostream>
 #include <fstream>
@@ -35,10 +36,16 @@ static void XMLCALL startElement(void *userData, const char *name, const char **
 {
   int i;
   int *depthPtr = (int *)userData;
-  for (i = 0; i < *depthPtr; i++)
-    putchar('\t');
-  std::cout << name << " : " << atts[0] << "=" << atts[1] << std::endl;
-  *depthPtr += 1;
+//  for (i = 0; i < *depthPtr; i++)
+//    putchar('\t');
+//  std::cout << name << " : " << atts[0] << "=" << atts[1] << std::endl;
+  if( strcmp(name, "Table" ) == 0 )
+    {
+    *depthPtr += 1;
+    }
+  else
+    {
+    }
 }
 
 static void XMLCALL endElement(void *userData, const char *name)
