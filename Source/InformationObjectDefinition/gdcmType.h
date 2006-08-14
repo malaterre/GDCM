@@ -22,13 +22,29 @@
 namespace gdcm
 {
 
-class Type
+class GDCM_EXPORT Type
 {
-  enum {
-	  T1,
-	  T1C
-  };
+public:
+  typedef enum {
+	  T1 = 0,
+	  T1C,
+    INVALID
+  } TypeType;
+
+  Type(TypeType type = INVALID) : TypeField(type) { }
+
+  //operator TypeType () const { return TypeField; }
+  //friend std::ostream &operator<<(std::ostream &os, const Type &vr);
+
+private:
+  TypeType TypeField;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream &operator<<(std::ostream &_os, const Type &val)
+{
+  //_os << VR::GetVRStringFromFile(val.VRField);
+  return _os;
+}
 
 } // end namespace gdcm
 

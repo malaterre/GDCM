@@ -27,7 +27,7 @@
 
 void write_header(std::ofstream &of)
 {
-  of << "#include \"gdcmType.h\"\n"
+  of << "#include \"gdcmTypes.h\"\n"
     "#include \"gdcmGroupDict.h\"\n\n"
     "namespace gdcm {\n\n"
     "typedef struct\n{\n"

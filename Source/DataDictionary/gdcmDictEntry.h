@@ -13,12 +13,9 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #ifndef __gdcmDictEntry_h
 #define __gdcmDictEntry_h
 
-
-#include "gdcmType.h"
 #include "gdcmVR.h"
 #include "gdcmVM.h"
 

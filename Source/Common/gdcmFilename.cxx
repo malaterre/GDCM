@@ -25,8 +25,7 @@ namespace gdcm
  */
 const char *Filename::GetPath()
 {
-  std::string fn = FileName;
-  //Filename::ConvertToUnixSlashes(fn);
+  std::string fn = ToUnixSlashes();
 
   std::string::size_type slash_pos = fn.rfind("/");
   if(slash_pos != std::string::npos)

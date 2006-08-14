@@ -8,6 +8,7 @@ SET(IOD_SRCS
 INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_BINARY_DIR}/Source/Common"
+  "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   "${GDCM_SOURCE_DIR}/Utilities"
   )
 
