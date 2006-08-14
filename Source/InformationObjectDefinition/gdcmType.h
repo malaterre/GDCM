@@ -41,8 +41,8 @@ public:
   operator TypeType () const { return TypeField; }
   friend std::ostream &operator<<(std::ostream &os, const Type &vr);
 
-  const char *GetTypeString(TypeType type);
-  TypeType GetTypeType(const char *type);
+  static const char *GetTypeString(TypeType type);
+  static TypeType GetTypeType(const char *type);
 
 private:
   TypeType TypeField;
@@ -50,7 +50,7 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream &operator<<(std::ostream &_os, const Type &val)
 {
-  //_os << VR::GetVRStringFromFile(val.VRField);
+  _os << Type::GetTypeString(val.TypeField);
   return _os;
 }
 
