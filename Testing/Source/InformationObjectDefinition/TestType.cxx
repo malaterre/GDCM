@@ -21,3 +21,4 @@ int TestType(int, char *[])
   gdcm::Type type;
   return 0;
 }
+
