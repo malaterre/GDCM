@@ -18,7 +18,7 @@ SET(JPEGLS_VERSION
 
 #-----------------------------------------------------------------------------
 # Build shared lib by default
-OPTION(BUILD_SHARED_LIBS "Build JPEG-LS with shared libraries." ON)
+#OPTION(BUILD_SHARED_LIBS "Build JPEG-LS with shared libraries." ON)
 
 #-----------------------------------------------------------------------------
 SET (EXECUTABLE_OUTPUT_PATH ${JPEGLS_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
