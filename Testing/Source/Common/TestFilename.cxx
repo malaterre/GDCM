@@ -20,7 +20,7 @@
 
 int TestFilename(int argc, char *argv[])
 {
-  (void)argc;
+  (void)argc;(void)argv;
   gdcm::Filename f("/tmp/debug.dcm");
   std::cout << f.GetPath() << std::endl;
   std::cout << f.GetName() << std::endl;
