@@ -15,6 +15,7 @@
 =========================================================================*/
 
 #include "gdcmFilename.h"
+#include <assert.h>
 
 namespace gdcm
 {
@@ -73,6 +74,45 @@ const char *Filename::ToUnixSlashes()
   assert( !Conversion.empty() );
 
   return Conversion.c_str();
+}
+
+#if defined(_WIN32) && (defined(_MSC_VER) || defined(__WATCOMC__) || defined(__BORLANDC__) || defined(__MINGW32__)) 
+inline void Realpath(const char *path, std::string & resolved_path)
+{
+  char *ptemp;
+  char fullpath[MAX_PATH];
+  if( GetFullPathName(path, sizeof(fullpath), fullpath, &ptemp) )
+    {
+    Filename fn( fullpath );
+    resolved_path = fn.ToUnixSlashes();
+    }
+}
+#else
+/* The maximum length of a file name.  */
+#if defined(PATH_MAX)
+# define GDCM_FILENAME_MAXPATH PATH_MAX
+#elif defined(MAXPATHLEN)
+# define GDCM_FILENAME_MAXPATH MAXPATHLEN
+#else
+# define GDCM_FILENAME_MAXPATH 16384
+#endif
+
+inline void Realpath(const char *path, std::string & resolved_path)
+{
+  char resolved_name[GDCM_FILENAME_MAXPATH];
+
+  realpath(path, resolved_name);
+  resolved_path = resolved_name;
+}
+#endif
+
+bool Filename::IsIdentical(Filename const &fn) const
+{
+  std::string realpath1;
+  std::string realpath2;
+  Realpath(FileName.c_str(), realpath1);
+  Realpath(fn.GetFileName(), realpath2);
+  return realpath1 == realpath2;
 }
 
 } // end namespace gdcm
