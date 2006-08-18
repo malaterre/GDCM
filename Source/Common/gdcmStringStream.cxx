@@ -63,7 +63,7 @@ std::streamsize StringStream::Gcount ( ) const
   return InternalSStream.gcount();
 }
 
-bool StringStream::StringStream::Eof()
+bool StringStream::Eof()
 {
   return InternalSStream.eof();
 }
