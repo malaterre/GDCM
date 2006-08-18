@@ -88,10 +88,9 @@ ENDIF(BUILD_APPLICATIONS)
 #-----------------------------------------------------------------------------
 # CPack stuff
 IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
-IF("${GDCM_BINARY_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
 
   SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "GDCM - Grass Root DICOM")
-  SET(CPACK_PACKAGE_VENDOR "CREATIS")
+  SET(CPACK_PACKAGE_VENDOR "GDCM")
   SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt")
   SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt")
   SET(CPACK_PACKAGE_VERSION_MAJOR "${GDCM_MAJOR_VERSION}")
@@ -99,21 +98,29 @@ IF("${GDCM_BINARY_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
   SET(CPACK_PACKAGE_VERSION_PATCH "${GDCM_BUILD_VERSION}")
   SET(CPACK_PACKAGE_INSTALL_DIRECTORY "GDCM ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}")
   SET(CPACK_SOURCE_PACKAGE_FILE_NAME "gdcm-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
-  SET(CPACK_PACKAGE_EXECUTABLES "gdcmviewer" "VIEWER")
 
-  IF(WIN32)
+  #SET(CPACK_PACKAGE_INSTALL_DIRECTORY "CMake ${CMake_VERSION_MAJOR}.${CMake_VERSION_MINOR}")
+  IF(WIN32 AND NOT UNIX)
     #STRING(REGEX REPLACE "/" "\\\\\\\\" CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/Utilities/Release/GDCMInstall.bmp")
 
+    # There is a bug in NSI that does not handle full unix paths properly. Make
+    # sure there is at least one set of four (4) backlasshes.
+    #SET(CPACK_PACKAGE_ICON "${CMake_SOURCE_DIR}/Utilities/Release\\\\InstallIcon.bmp")
     SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\gdcmviewer.exe")
     SET(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_INSTALL_DIRECTORY}")
     SET(CPACK_NSIS_HELP_LINK "http://gdcm.sourceforge.net")
     SET(CPACK_NSIS_URL_INFO_ABOUT "http://gdcm.sourceforge.net")
     SET(CPACK_NSIS_CONTACT "gdcm-developers@lists.sourceforge.net")
-  ENDIF(WIN32)
+    SET(CPACK_NSIS_MODIFY_PATH ON)
+  ELSE(WIN32 AND NOT UNIX)
+    #SET(CPACK_STRIP_FILES "bin/MyExecutable")
+    #SET(CPACK_SOURCE_STRIP_FILES "")
+  ENDIF(WIN32 AND NOT UNIX)
 
+  # List executables
+  SET(CPACK_PACKAGE_EXECUTABLES "gdcmviewer" "VIEWER")
   INCLUDE(CPack)
 
-ENDIF("${GDCM_BINARY_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
 ENDIF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
 
 #-----------------------------------------------------------------------------
