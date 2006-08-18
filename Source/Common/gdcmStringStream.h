@@ -36,7 +36,22 @@ public:
   explicit StringStream (const std::string & str);
   ~StringStream() {}
 
-  operator void * ( ) const { return (void*)InternalSStream; }
+  operator void * ( ) const { 
+#ifdef _MSC_VER
+    /* http://groups.google.com/group/microsoft.public.vc.stl/msg/81a009857c2facf5
+     * Looks like a bug in how virtual base class is handled. It works with
+     * istringstream and ostringstream, but not for stringstream. The
+     * difference is stringstream is derived from ios twice, via istream and
+     * ostream, as a virtual base class. It appears the compiler does not
+     * realize that and fails because it doesn't know which copy of the base
+     * class to call operator void*() on.
+     * The bug appears to affect only implicitly invoked conversion operators.
+     */
+    return InternalSStream.operator void *();
+#else
+    return InternalSStream; 
+#endif
+  }
 
   IStream& Read(char* s, std::streamsize n);
   std::streamsize Gcount ( ) const;
