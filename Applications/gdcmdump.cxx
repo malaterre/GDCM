@@ -98,6 +98,7 @@ int main (int argc, char *argv[])
 
   if( filename.empty() )
     {
+    std::cerr << "Need input file (-i)\n";
     return 1;
     }
   // else

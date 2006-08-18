@@ -32,6 +32,7 @@ on the encoding of the input file and cannot be changed.
 #include "gdcmTag.h"
 #include "gdcmByteValue.h"
 #include "gdcmSequenceOfFragments.h"
+#include "gdcmFilename.h"
 
 #include <string>
 #include <iostream>
@@ -43,8 +44,11 @@ on the encoding of the input file and cannot be changed.
 
 gdcm::Tag ReadTagFromString(const char *str)
 {
-  unsigned int group, element;
-  sscanf(str, "%04x,%04x", &group , &element);
+  unsigned int group = 0, element = 0;
+  if( sscanf(str, "%04x,%04x", &group , &element) != 2 )
+    {
+    std::cerr << "Problem reading the Tag\n";
+    }
   return gdcm::Tag(group, element);
 }
 
@@ -108,7 +112,7 @@ int main(int argc, char *argv[])
     case 't':
       printf ("option t with value ’%s’\n", optarg);
       rawTag = ReadTagFromString(optarg);
-      std::cerr << rawTag << std::endl;
+      //std::cerr << rawTag << std::endl;
       break;
 
     case '?':
@@ -131,7 +135,7 @@ int main(int argc, char *argv[])
 
   if( filename.empty() )
     {
-    std::cerr << "Need input file\n";
+    std::cerr << "Need input file (-i)\n";
     return 1;
     }
   // else
@@ -158,7 +162,13 @@ int main(int argc, char *argv[])
 
   if( outfilename.empty() )
     {
-    std::cerr << "Need output file\n";
+    std::cerr << "Need output file (-o)\n";
+    return 1;
+    }
+  gdcm::Filename fn1(filename.c_str()), fn2(outfilename.c_str());
+  if( fn1.IsIdentical(fn2) )
+    {
+    std::cerr << "Ouput is Input\n";
     return 1;
     }
 
