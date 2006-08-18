@@ -49,8 +49,8 @@ public:
   // copy a file
 
 protected:
-  bool GetPermissions(const char* file, unsigned short& mode);
-  bool SetPermissions(const char* file, unsigned short mode);
+  static bool GetPermissions(const char* file, unsigned short& mode);
+  static bool SetPermissions(const char* file, unsigned short mode);
 };
 
 } // end namespace gdcm
