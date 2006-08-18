@@ -36,7 +36,7 @@ public:
   explicit StringStream (const std::string & str);
   ~StringStream() {}
 
-  operator void * ( ) const { return InternalSStream; }
+  operator void * ( ) const { return (void*)InternalSStream; }
 
   IStream& Read(char* s, std::streamsize n);
   std::streamsize Gcount ( ) const;
