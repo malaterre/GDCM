@@ -77,6 +77,8 @@ const char *Filename::ToUnixSlashes()
 }
 
 #if defined(_WIN32) && (defined(_MSC_VER) || defined(__WATCOMC__) || defined(__BORLANDC__) || defined(__MINGW32__)) 
+#include <windows.h>
+
 inline void Realpath(const char *path, std::string & resolved_path)
 {
   char *ptemp;
