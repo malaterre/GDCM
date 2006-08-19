@@ -148,14 +148,14 @@ public:
 
   const DEType& GetDataElement(const Tag &t) const {
     const DEType r(t);
-    typename DataElementSet::iterator it = DES.find(r);
+    typename DataElementSet::const_iterator it = DES.find(r);
     assert( DES.find(r) != DES.end() );
     return *it;
     }
 
   bool FindDataElement(const Tag &t) const {
     const DEType r(t);
-    typename DataElementSet::iterator it = DES.find(r);
+    typename DataElementSet::const_iterator it = DES.find(r);
     if( DES.find(r) != DES.end() )
       {
       return true;
