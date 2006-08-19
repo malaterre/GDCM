@@ -19,7 +19,7 @@ int TestDicts(int, char *[])
 {
   gdcm::Dicts dicts;
   const gdcm::Dict &d = dicts.GetPublicDict();
-  std::cout << d << std::endl;
+  //std::cout << d << std::endl;
 
   return 0;
 }
