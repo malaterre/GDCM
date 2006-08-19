@@ -1,4 +1,7 @@
 PROJECT(WXGDCM)
+# wxWidgets stuff changed a lot within the 2.4.2 to 2.4.3
+# so I'll only support the version I have, sorry :(
+CMAKE_MINIMUM_REQUIRED(VERSION 2.4.3)
 
 #-----------------------------------------------------------------------------
 FIND_PACKAGE(VTK REQUIRED)
@@ -21,14 +24,16 @@ ELSE(WIN32)
     ENDIF(NOT VTK_USE_X)
     FIND_PACKAGE(GTK REQUIRED)
     INCLUDE_DIRECTORIES(${GTK_INCLUDE_DIR} )
-    SET(WXWINDOWS_USE_GL 1)
+    #SET(WXWINDOWS_USE_GL 1) # CMake 2.4.2
+    # important on GNU/Linux since we need wxGLCanvas
+    SET(wxWidgets_USE_LIBS  gl)
   ENDIF(APPLE)
 ENDIF(WIN32)
 
 # wxWidgets is required to build the project
 FIND_PACKAGE(wxWidgets REQUIRED)
-INCLUDE(UsewxWidgets)
-
+#INCLUDE(UsewxWidgets) # CMake 2.4.2
+INCLUDE( ${wxWidgets_USE_FILE} )
 
 ADD_EXECUTABLE(exe main.cpp MyFrame.cpp wxVTKRenderWindowInteractor.cxx)
-TARGET_LINK_LIBRARIES(exe vtkRendering)
+TARGET_LINK_LIBRARIES(exe vtkRendering ${wxWidgets_LIBRARIES})
