@@ -39,6 +39,7 @@ int TestDataSet(int , char *[])
 
   const gdcm::Tag t3 = gdcm::Tag(0x1234, 0x5679);
   gdcm::ExplicitDataElement d3(t3);
+  d3.SetVR( gdcm::VR::UL );
   std::cout << d3 << std::endl;
   ds.InsertDataElement(d3);
   const gdcm::DataElement& r3 =
