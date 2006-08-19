@@ -55,6 +55,10 @@ IStream &Item::Read(IStream &is)
   assert ( TagField == Tag(0xfffe, 0xe000)
         || TagField == Tag(0xfffe, 0xe0dd) 
         || TagField == Tag(0x3f3f, 0x3f00) );
+//  if( TagField == Tag(0x3f3f, 0x3f00) )
+//    {
+//    TagField = Tag(0xfffe, 0xe000);
+//    }
 #else
   assert ( TagField == Tag(0xfffe, 0xe000)
         || TagField == Tag(0xfffe, 0xe0dd) );
@@ -83,6 +87,17 @@ IStream &Item::Read(IStream &is)
     {
     NestedDataSet->Read(is);
     }
+//#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+//  // Ok we have read the item, sometime the ValueLengthField was wrong
+//  // check that:
+//  if( !ValueLengthField.IsUndefined() && ValueLengthField != 0 )
+//    {
+//    if( ValueLengthField != NestedDataSet->GetLength() )
+//      {
+//      ValueLengthField = NestedDataSet->GetLength();
+//      }
+//    }
+//#endif
   return is;
 }
 

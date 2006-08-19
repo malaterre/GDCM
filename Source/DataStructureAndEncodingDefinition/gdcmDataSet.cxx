@@ -42,7 +42,7 @@ public:
   virtual void Print(std::ostream &os) const = 0;
   virtual IStream &Read(IStream &is) = 0;
   virtual IStream &ReadNested(IStream &is) = 0;
-  virtual IStream &ReadWithLength(IStream &is, VL const &length) = 0;
+  virtual IStream &ReadWithLength(IStream &is, VL &length) = 0;
   virtual VL GetLength() const = 0;
   virtual OStream &Write(OStream &os) = 0;
 };
@@ -88,7 +88,7 @@ public:
     return os;
   }
 
-  IStream &ReadWithLength(IStream &is, VL const &length) {
+  IStream &ReadWithLength(IStream &is, VL &length) {
     DEType de;
     VL l = 0;
     //std::cout << "Length: " << l << std::endl;
@@ -99,13 +99,14 @@ public:
       DES.insert( de );
       l += de.GetLength();
       assert( !de.GetVL().IsUndefined() );
-      //std::cout << "Length: " << l << std::endl;
+      //std::cerr << "DEBUG: " << de.GetTag() << " "<< de.GetLength() << 
+      //  "," << de.GetVL() << "," << l << std::endl;
       // Bug_Philips_ItemTag_3F3F
       //  (0x2005, 0x1080): for some reason computation of length fails...
       if( l == 70 && locallength == 63 )
         {
-        gdcmWarningMacro( "PMS: Super bad hack" );
-        locallength = 140;
+        gdcmWarningMacro( "PMS: Super bad hack. Changing length" );
+        length = locallength = 140;
         }
       assert( l <= locallength );
       }
