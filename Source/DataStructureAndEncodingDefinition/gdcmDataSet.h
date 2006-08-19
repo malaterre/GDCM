@@ -82,7 +82,7 @@ public:
   IStream &Read(IStream &is);
 
   // Write
-  OStream &Write(OStream &os) const;
+  OStream const &Write(OStream &os) const;
 
   TS::NegociatedType GetNegociatedType() const {
     return NegociatedTS;

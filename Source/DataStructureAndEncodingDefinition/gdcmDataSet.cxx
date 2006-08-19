@@ -329,7 +329,7 @@ const VL & DataSet::GetLength() const
 }
 
 //-----------------------------------------------------------------------------
-OStream &DataSet::Write(OStream &os) const
+OStream const &DataSet::Write(OStream &os) const
 {
   Internal->Write(os);
   return os;
