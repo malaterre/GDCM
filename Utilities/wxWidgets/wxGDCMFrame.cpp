@@ -3,6 +3,7 @@
 #include "wxGDCMFrame.h"
 #include "wxVTKRenderWindowInteractor.h"
 #include "vtkImageViewer.h"
+#include "vtkGDCMReader.h"
 
 BEGIN_EVENT_TABLE( wxGDCMFrame, wxFrame )
     EVT_MENU(wxID_OPEN, wxGDCMFrame::OnOpen)
@@ -45,12 +46,16 @@ wxGDCMFrame::wxGDCMFrame(wxWindow* parent, int id, const wxString& title, const 
     do_layout();
     // end wxGlade
     imageViewer = vtkImageViewer::New();
+    imageViewer->SetupInteractor( VTKwindow );
+    Reader      = vtkGDCMReader::New();
+    directory = wxT("/home/mathieu/Projects/GDCM/gdcmData");
 }
 
 wxGDCMFrame::~wxGDCMFrame()
 {
   delete VTKwindow;
   imageViewer->Delete();
+  Reader->Delete();
 }
 
 void wxGDCMFrame::set_properties()
@@ -106,6 +111,14 @@ void wxGDCMFrame::OnOpen(wxCommandEvent& event)
     filename  = dialog->GetFilename();
     std::cerr << "Dir: " << directory.fn_str() << std::endl;
     std::cerr << "File: " << filename.fn_str() << std::endl;
+    //wxString fn = dialog->GetFilename();
+    //std::cerr << "fn: " << fn.fn_str() << std::endl;
+    std::string fn = (const char*)directory.fn_str();
+    fn += "/";
+    fn += (const char *)filename.fn_str();
+    Reader->SetFileName( fn.c_str() );
+    imageViewer->SetInputConnection( Reader->GetOutputPort() );
+    imageViewer->Render();
   }
   dialog->Close();
   dialog->Destroy();

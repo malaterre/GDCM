@@ -12,6 +12,7 @@
 
 class wxVTKRenderWindowInteractor;
 class vtkImageViewer;
+class vtkGDCMReader;
 class wxGDCMFrame: public wxFrame {
 public:
     // begin wxGlade: wxGDCMFrame::ids
@@ -43,6 +44,7 @@ protected:
     // end wxGlade
 
     vtkImageViewer *imageViewer;
+    vtkGDCMReader  *Reader;
 
     DECLARE_EVENT_TABLE( );
 }; // wxGlade: end class

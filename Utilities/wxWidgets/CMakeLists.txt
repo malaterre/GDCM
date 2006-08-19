@@ -35,5 +35,7 @@ FIND_PACKAGE(wxWidgets REQUIRED)
 #INCLUDE(UsewxWidgets) # CMake 2.4.2
 INCLUDE( ${wxWidgets_USE_FILE} )
 
+INCLUDE_DIRECTORIES(${GDCM_SOURCE_DIR}/Utilities/VTK)
+
 ADD_EXECUTABLE(wxGDCM main.cpp wxGDCMFrame.cpp wxVTKRenderWindowInteractor.cxx)
-TARGET_LINK_LIBRARIES(wxGDCM vtkRendering ${wxWidgets_LIBRARIES})
+TARGET_LINK_LIBRARIES(wxGDCM vtkRendering ${wxWidgets_LIBRARIES} vtkgdcm)
