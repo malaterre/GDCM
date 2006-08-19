@@ -51,10 +51,13 @@ IStream &Item::Read(IStream &is)
     assert(0 && "Should not happen");
     return is;
     }
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+  assert ( TagField == Tag(0xfffe, 0xe000)
+        || TagField == Tag(0xfffe, 0xe0dd) 
+        || TagField == Tag(0x3f3f, 0x3f00) );
+#else
   assert ( TagField == Tag(0xfffe, 0xe000)
         || TagField == Tag(0xfffe, 0xe0dd) );
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-    assert( TagField == Tag(0x3f3f, 0x3f00) );
 #endif
   if( !ValueLengthField.Read(is) )
     {

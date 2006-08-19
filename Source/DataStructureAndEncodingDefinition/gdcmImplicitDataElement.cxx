@@ -134,6 +134,15 @@ IStream &ImplicitDataElement::Read(IStream &is)
       }
     }
 #endif
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+  if( ValueLengthField == 0x31f031c && TagField == Tag(0x031e,0x0324) )
+    {
+    // TestImages/elbow.pap
+    gdcmWarningMacro( "Replacing a VL. To be able to read a supposively"
+      "broken Payrus file." );
+    ValueLengthField = 202; // 0xca
+    }
+#endif
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
   if( !ValueField->Read(is) )

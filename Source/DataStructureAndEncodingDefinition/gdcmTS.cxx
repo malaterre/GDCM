@@ -65,6 +65,10 @@ static const char *TSStrings[] = {
   "1.2.840.10008.1.2.4.100",
   // Old ACR NEMA, fake a TS
   "ImplicitVRBigEndianACRNEMA",
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+  // Weird Papyrus
+  "1.2.840.10008.1.20",
+#endif
   // Unknown
   "Unknown Transfer Syntax", // Pretty sure we never use this case...
   0 // Compilers have no obligation to finish by NULL, do it ourself
@@ -253,7 +257,8 @@ bool TS::IsImplicit(const TSType &ts)
   assert( ts != TS::TS_END );
   return ts == ImplicitVRLittleEndian
     || ts == ImplicitVRBigEndianACRNEMA
-    || ts == ImplicitVRBigEndianPrivateGE;
+    || ts == ImplicitVRBigEndianPrivateGE
+    || ts == WeirdPapryus;
 }
 
 // By implementation those two functions form a partition

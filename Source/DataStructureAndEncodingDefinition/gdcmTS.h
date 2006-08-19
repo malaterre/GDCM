@@ -75,6 +75,9 @@ public:
     RLELossless,
     MPEG2MainProfile,
     ImplicitVRBigEndianACRNEMA,
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+    WeirdPapryus,
+#endif
     TS_END
   } TSType;
 

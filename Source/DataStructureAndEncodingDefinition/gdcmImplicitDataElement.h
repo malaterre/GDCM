@@ -51,14 +51,14 @@ public:
   ImplicitDataElement(ImplicitDataElement const & val):DataElement(val)
     {
     //assert( val.ValueField );
-    if( ValueField )
-      {
+//    if( ValueField )
+//      {
       ValueField = val.ValueField;
-      }
-    else
-      {
-      assert( !val.ValueField );
-      }
+//      }
+//    else
+//      {
+//      assert( !val.ValueField );
+//      }
     }
 
 private:
