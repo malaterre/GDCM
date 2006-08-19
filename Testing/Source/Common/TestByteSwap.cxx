@@ -50,7 +50,7 @@ int myfunc()
 
 int TestByteSwap(int , char *[])
 {
-  gdcm::SwapCode::SwapCode sc = gdcm::SwapCode::Unknown;
+  gdcm::SwapCode sc = gdcm::SwapCode::Unknown;
   if ( gdcm::ByteSwap<uint16_t>::SystemIsBigEndian() )
     {
     sc = gdcm::SwapCode::BigEndian;
