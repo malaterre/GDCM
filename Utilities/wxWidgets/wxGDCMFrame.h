@@ -10,12 +10,20 @@
 // end wxGlade
 
 
+class wxVTKRenderWindowInteractor;
+class vtkImageViewer;
 class wxGDCMFrame: public wxFrame {
 public:
     // begin wxGlade: wxGDCMFrame::ids
     // end wxGlade
 
     wxGDCMFrame(wxWindow* parent, int id, const wxString& title, const wxPoint& pos=wxDefaultPosition, const wxSize& size=wxDefaultSize, long style=wxDEFAULT_FRAME_STYLE);
+    ~wxGDCMFrame();
+
+    void OnQuit( wxCommandEvent& event );
+    void OnOpen(wxCommandEvent& event);
+    void OnAbout(wxCommandEvent& event);
+    void OnCloseFrame( wxCloseEvent& event );
 
 private:
     // begin wxGlade: wxGDCMFrame::methods
@@ -31,6 +39,10 @@ protected:
     wxVTKRenderWindowInteractor* VTKwindow;
     wxPanel* Panel;
     // end wxGlade
+
+    vtkImageViewer *imageViewer;
+
+    DECLARE_EVENT_TABLE( );
 }; // wxGlade: end class
 
 
