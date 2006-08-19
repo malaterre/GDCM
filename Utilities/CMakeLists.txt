@@ -30,3 +30,4 @@ SUBDIRS(zlib)
 #SUBDIRS(getopt)
 
 SUBDIRS(doxygen)
+
