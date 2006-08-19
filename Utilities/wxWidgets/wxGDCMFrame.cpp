@@ -5,8 +5,6 @@
 #include "vtkImageViewer.h"
 
 BEGIN_EVENT_TABLE( wxGDCMFrame, wxFrame )
-    //EVT_MENU( ID_TOOLBAR_DATA_BROWSER, wxMaracasFrame::OnLoadPatientData )
-    //EVT_MENU( ID_TOOLBAR_HELP, wxMaracasFrame::OnHelp )
     EVT_MENU(wxID_OPEN, wxGDCMFrame::OnOpen)
     EVT_MENU(wxID_HELP, wxGDCMFrame::OnAbout)
     EVT_MENU(wxID_EXIT, wxGDCMFrame::OnQuit)
