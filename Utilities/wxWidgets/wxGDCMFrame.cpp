@@ -20,12 +20,15 @@ wxGDCMFrame::wxGDCMFrame(wxWindow* parent, int id, const wxString& title, const 
     TopFrameMenubar = new wxMenuBar();
     SetMenuBar(TopFrameMenubar);
     wxMenu* wxglade_tmp_menu_1 = new wxMenu();
-    wxglade_tmp_menu_1->Append(wxID_OPEN, wxT("&Open"), wxT("Open DICOM file"), wxITEM_NORMAL);
+    wxglade_tmp_menu_1->Append(wxID_OPEN, wxT("&Open...\tCtrl+o"),
+      wxT("Open DICOM file"), wxITEM_NORMAL);
     wxglade_tmp_menu_1->AppendSeparator();
-    wxglade_tmp_menu_1->Append(wxID_EXIT, wxT("E&xit"), wxT("Exit app"), wxITEM_NORMAL);
+    wxglade_tmp_menu_1->Append(wxID_EXIT, wxT("E&xit...\tCtrl+x"),
+      wxT("Exit app"), wxITEM_NORMAL);
     TopFrameMenubar->Append(wxglade_tmp_menu_1, wxT("File"));
     wxMenu* wxglade_tmp_menu_2 = new wxMenu();
-    wxglade_tmp_menu_2->Append(wxID_HELP, wxT("&About"), wxT("About Dialog"), wxITEM_NORMAL);
+    wxglade_tmp_menu_2->Append(wxID_HELP, wxT("&About...\tCtrl+a"), 
+      wxT("About Dialog"), wxITEM_NORMAL);
     TopFrameMenubar->Append(wxglade_tmp_menu_2, wxT("Help"));
     TopFrameStatusbar = CreateStatusBar(1, 0);
     TopFrameToolbar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_TEXT);
@@ -93,6 +96,19 @@ void wxGDCMFrame::OnCloseFrame( wxCloseEvent& event )
 void wxGDCMFrame::OnOpen(wxCommandEvent& event)
 {
   std::cerr << "Open" << std::endl;
+  wxString filemask = wxT("DICOM files (*.dcm)|*.dcm");
+  wxFileDialog* dialog = new wxFileDialog( this, wxT("Open DICOM"), directory,
+	filename, filemask, wxOPEN );
+  dialog->CentreOnParent();
+  if ( dialog->ShowModal() == wxID_OK )
+  {
+    directory = dialog->GetDirectory();
+    filename  = dialog->GetFilename();
+    std::cerr << "Dir: " << directory.fn_str() << std::endl;
+    std::cerr << "File: " << filename.fn_str() << std::endl;
+  }
+  dialog->Close();
+  dialog->Destroy();
 }
 
 void wxGDCMFrame::OnQuit( wxCommandEvent& event )
@@ -104,6 +120,14 @@ void wxGDCMFrame::OnQuit( wxCommandEvent& event )
 void wxGDCMFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox( _T("This is the about box for wxGDCM"), _T("About wxGDCM"));
+/*
+  wxMessageDialog* msgDialog = new wxMessageDialog( this, wxString(
+	text.c_str(), wxConvUTF8 ), wxString( title.c_str(), wxConvUTF8 ), wxOK );
+  msgDialog->ShowModal();
+  msgDialog->Close();
+  msgDialog->Destroy();
+*/
+
 }
 
 

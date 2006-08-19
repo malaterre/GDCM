@@ -31,6 +31,8 @@ private:
     void do_layout();
     // end wxGlade
 
+    wxString	      directory;
+    wxString        filename;
 protected:
     // begin wxGlade: wxGDCMFrame::attributes
     wxMenuBar* TopFrameMenubar;
