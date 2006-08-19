@@ -21,6 +21,8 @@
 #include <iostream>
 #include <fstream>
 
+#include <stdio.h> // for putchar
+
 namespace gdcm
 {
   // FIXME
