@@ -50,6 +50,8 @@ vtkGDCMReader::vtkGDCMReader()
 vtkGDCMReader::~vtkGDCMReader()
 {
   delete this->Internals;
+  this->LookupTable->Delete();
+  this->MedicalImageProperties->Delete();
 }
 
 int vtkGDCMReader::CanReadFile(const char* fname)

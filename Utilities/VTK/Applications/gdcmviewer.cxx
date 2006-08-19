@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
   reader->Update();
   reader->GetOutput()->Print( cout );
   double *range = reader->GetOutput()->GetScalarRange();
-  //std::cerr << "Range: " << range[0] << " " << range[1] << std::endl;
+  std::cerr << "Range: " << range[0] << " " << range[1] << std::endl;
   viewer->SetColorLevel (0.5 * (range[1] + range[0]));
   viewer->SetColorWindow (range[1] - range[0]);
 

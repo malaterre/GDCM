@@ -49,6 +49,8 @@ vtkGDCMWriter::vtkGDCMWriter()
 vtkGDCMWriter::~vtkGDCMWriter()
 {
   delete this->Internals;
+  this->LookupTable->Delete();
+  this->MedicalImageProperties->Delete();
 }
 
 //----------------------------------------------------------------------------
