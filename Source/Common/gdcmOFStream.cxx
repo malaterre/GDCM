@@ -49,7 +49,7 @@ void OFStream::Close()
   InternalOStream.close();
 }
 
-OStream& OFStream::Seekp (std::streamoff off, std::ios_base::seekdir dir)
+OStream& OFStream::Seekp (std::streamoff off, std::ios::seekdir dir)
 {
   InternalOStream.seekp(off, dir);
   return *this;

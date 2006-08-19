@@ -14,6 +14,7 @@
 
 =========================================================================*/
 #include "gdcmVR.h"
+#include <algorithm> // for std::lower_bound
 #include <string.h>
 #include <assert.h>
 

@@ -20,6 +20,8 @@
 #include "gdcmVR.h"
 #include "gdcmVM.h"
 
+#include <string>
+
 namespace gdcm
 {
 

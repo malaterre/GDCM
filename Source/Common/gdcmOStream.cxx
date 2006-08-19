@@ -92,7 +92,7 @@ OStream &OStream::operator<< (const char *str)
 }
 #endif
 
-OStream& OStream::Seekp (std::streamoff off, std::ios_base::seekdir dir)
+OStream& OStream::Seekp (std::streamoff off, std::ios::seekdir dir)
 {
   abort();
   return *this;

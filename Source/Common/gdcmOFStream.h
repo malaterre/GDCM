@@ -45,7 +45,7 @@ public:
   bool IsOpen() { return InternalOStream.is_open(); }
   void Close();
 
-  OStream& Seekp (std::streamoff off, std::ios_base::seekdir dir);
+  OStream& Seekp (std::streamoff off, std::ios::seekdir dir);
   std::streampos Tellp ( );
   OStream& Write(const char *str, std::streamsize n);
   bool Eof() { return InternalOStream.eof(); }

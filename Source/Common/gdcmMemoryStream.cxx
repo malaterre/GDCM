@@ -35,7 +35,7 @@ std::streamsize MemoryStream::Gcount ( ) const
   return Length;
 }
 
-IStream& MemoryStream::Seekg (std::streamoff off, std::ios_base::seekdir dir)
+IStream& MemoryStream::Seekg (std::streamoff off, std::ios::seekdir dir)
 {
   switch(dir)
     {

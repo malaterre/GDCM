@@ -22,6 +22,8 @@
 //#include "gdcmAttribute.h"
 #include "gdcmVR.h"
 
+#include <typeinfo> // for typeid
+
 namespace gdcm
 {
 //-----------------------------------------------------------------------------

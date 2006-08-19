@@ -33,7 +33,7 @@ public:
   OStream();
   ~OStream();
 
-  virtual OStream& Seekp (std::streamoff off, std::ios_base::seekdir dir);
+  virtual OStream& Seekp (std::streamoff off, std::ios::seekdir dir);
   virtual std::streampos Tellp ( );
   //virtual bool operator ! ( ) const;
 

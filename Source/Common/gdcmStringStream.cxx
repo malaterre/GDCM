@@ -48,7 +48,7 @@ StringStream::StringStream(const std::string &str)
   InternalSStream.str(str);
 }
 
-IStream& StringStream::Seekg (std::streamoff off, std::ios_base::seekdir dir)
+IStream& StringStream::Seekg (std::streamoff off, std::ios::seekdir dir)
 {
   InternalSStream.seekg(off, dir);
   return *this;
@@ -60,7 +60,12 @@ std::streampos StringStream::Tellg ( )
 
 std::streamsize StringStream::Gcount ( ) const
 {
+#if defined(__GNUC__) && (__GNUC__ == 2) && (__GNUC_MINOR__ == 95)
+  std::stringstream &f = const_cast<std::stringstream&>(InternalSStream);
+  return f.gcount();
+#else
   return InternalSStream.gcount();
+#endif
 }
 
 bool StringStream::Eof()

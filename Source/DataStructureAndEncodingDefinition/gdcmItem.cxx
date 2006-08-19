@@ -15,6 +15,8 @@
 =========================================================================*/
 #include "gdcmItem.h"
 
+#include <assert.h>
+
 namespace gdcm
 {
 
@@ -50,11 +52,10 @@ IStream &Item::Read(IStream &is)
     return is;
     }
   assert ( TagField == Tag(0xfffe, 0xe000)
+        || TagField == Tag(0xfffe, 0xe0dd) );
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-    || TagField == Tag(0x3f3f, 0x3f00)
-    //|| TagField == Tag(0xfeff, 0x00e0)
+    assert( TagField == Tag(0x3f3f, 0x3f00) );
 #endif
-    || TagField == Tag(0xfffe, 0xe0dd) );
   if( !ValueLengthField.Read(is) )
     {
     assert(0 && "Should not happen");

@@ -17,8 +17,8 @@
 #define __gdcmTS_h
 
 //#include "gdcmTransferSyntax.h" // Generated File from TransferSyntax.dic
-//#include "gdcmType.h"
 #include "gdcmSwapCode.h"
+#include "gdcmCompression.h"
 
 namespace gdcm
 {

@@ -106,7 +106,7 @@ IStream& IStream::operator>> (char *str)
 #endif
 
 
-IStream &IStream::Seekg (std::streamoff off, std::ios_base::seekdir dir)
+IStream &IStream::Seekg (std::streamoff off, std::ios::seekdir dir)
 {
   abort();
 //  Rdbuf()->pubseekoff(off, dir, std::ios_base::in);

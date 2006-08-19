@@ -95,7 +95,7 @@ public:
     return *this;
   }
 
-  IStream& Seekg (std::streamoff off, std::ios_base::seekdir dir);
+  IStream& Seekg (std::streamoff off, std::ios::seekdir dir);
   std::streampos Tellg ( );
 
 protected:

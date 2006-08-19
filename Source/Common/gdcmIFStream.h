@@ -45,7 +45,7 @@ public:
   bool IsOpen() { return InternalIStream.is_open(); }
   void Close();
 
-  IStream& Seekg (std::streamoff off, std::ios_base::seekdir dir);
+  IStream& Seekg (std::streamoff off, std::ios::seekdir dir);
   std::streampos Tellg ( );
   IStream& Read(char *str, std::streamsize n);
   std::streamsize Gcount ( ) const;

@@ -20,6 +20,8 @@
 #include <fstream>
 #include "expat/lib/expat.h"
 
+#include <stdio.h> // for stderr
+
 namespace gdcm
 {
 #ifdef XML_LARGE_SIZE
@@ -32,13 +34,17 @@ namespace gdcm
 #define XML_FMT_INT_MOD "l"
 #endif
 
+#ifndef BUFSIZ
+#define BUFSIZ 4096
+#endif
+
 static void XMLCALL startElement(void *userData, const char *name, const char **atts)
 {
   int i;
   int *depthPtr = (int *)userData;
 //  for (i = 0; i < *depthPtr; i++)
 //    putchar('\t');
-//  std::cout << name << " : " << atts[0] << "=" << atts[1] << std::endl;
+  std::cout << name << " : " << atts[0] << "=" << atts[1] << std::endl;
   if( strcmp(name, "Table" ) == 0 )
     {
     *depthPtr += 1;

@@ -49,7 +49,7 @@ void IFStream::Close()
   InternalIStream.close();
 }
 
-IStream& IFStream::Seekg (std::streamoff off, std::ios_base::seekdir dir)
+IStream& IFStream::Seekg (std::streamoff off, std::ios::seekdir dir)
 {
   InternalIStream.seekg(off, dir);
   return *this;
@@ -85,7 +85,12 @@ IStream& IFStream::Read(char *str, std::streamsize n)
 
 std::streamsize IFStream::Gcount ( ) const
 {
+#if defined(__GNUC__) && (__GNUC__ == 2) && (__GNUC_MINOR__ == 95)
+  std::ifstream &f = const_cast<std::ifstream&>(InternalIStream);
+  return f.gcount();
+#else
   return InternalIStream.gcount();
+#endif
 }
 
 } // end namespace gdcm

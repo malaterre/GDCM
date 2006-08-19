@@ -23,6 +23,7 @@
 #include <assert.h>
 #include <ctype.h> // isdigit
 #include <string.h> // for strncmp
+#include <stdio.h> // for sscanf
 
 namespace gdcm
 {

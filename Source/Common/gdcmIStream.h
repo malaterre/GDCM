@@ -37,7 +37,7 @@ public:
   IStream();
   ~IStream();
 
-  virtual IStream& Seekg (std::streamoff off, std::ios_base::seekdir dir);
+  virtual IStream& Seekg (std::streamoff off, std::ios::seekdir dir);
   virtual std::streampos Tellg ( );
   //virtual bool operator ! ( ) const;
 

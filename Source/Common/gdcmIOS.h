@@ -19,7 +19,7 @@
 
 #include "gdcmSwapCode.h"
 #include <assert.h>
-#include <streambuf>
+//#include <streambuf>
 
 namespace gdcm
 {

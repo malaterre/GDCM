@@ -18,6 +18,7 @@ SET(PREP_DICT_SRCS
   )
 
 ADD_EXECUTABLE(PrepDict ${PREP_DICT_SRCS}
+  "${GDCM_SOURCE_DIR}/Source/Common/gdcmSwapCode.cxx"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition/gdcmVR.cxx"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition/gdcmVM.cxx"
   )
