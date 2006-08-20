@@ -60,6 +60,7 @@ bool Writer::Write()
   if( !Header )
     {
     Header = new FileMetaInformation;
+    abort();
     }
   Header->Write(Stream);
   TS ts = Header->GetTransferSyntaxType();

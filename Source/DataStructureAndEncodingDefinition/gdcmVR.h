@@ -18,6 +18,7 @@
 
 #include "gdcmTag.h"
 #include "gdcmVL.h"
+#include "gdcmTrace.h"
 
 #include <iostream>
 #include <assert.h>
@@ -143,7 +144,11 @@ public:
 #else
       char dum[2];
       is.Read(dum, 2);
-      assert( dum[0] == 0 && dum[1] == 0 );
+      if( !(dum[0] == 0 && dum[1] == 0 ))
+        {
+        // JDDICOM_Sample4.dcm
+        gdcmDebugMacro( "32bits VR contains non zero bytes. Skipped" );
+        }
 #endif
       }
     return is;
