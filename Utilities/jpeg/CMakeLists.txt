@@ -102,6 +102,10 @@ IF (WIN32)
   ENDIF (BUILD_SHARED_LIBS)
 ENDIF (WIN32)
 
+# By default support DICOMObjects bug, if this is a speed penalty for you
+# you should consider disabling it
+SET(SUPPORT_DICOMOBJECTS_BUG ON)
+
 
 # Generate three libraries: jpeg 8bits, 12bits and 16bits
 # using only one source directory
@@ -118,11 +122,11 @@ FOREACH(bits 8 12 16)
   SET(CMAKE_BITS_IN_JSAMPLE ${bits})
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/jpegcmake.h.in
                  ${CMAKE_CURRENT_BINARY_DIR}/${bits}/jpegcmake.h
-                 @ONLY IMMEDIATE)
+                 @ONLY)
   SET(MANGLE_PREFIX ${JPEG_LIBRARY_NAME}${bits})
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/mangle_jpeg.h.in
                  ${CMAKE_CURRENT_BINARY_DIR}/${bits}/mangle_jpeg${bits}bits.h
-                 @ONLY IMMEDIATE)
+                 @ONLY)
 
 
   # FIXME FIXME FIXME
