@@ -55,6 +55,7 @@ SET(BLACK_LIST_READER
   "deflate_report_dfl.dcm"
   "ExplicitVRforPublicElementsImplicitVRforShadowElements.dcm"
   "1.3.12.2.1107.5.2.6.14121.30000006030706333268700005266.dcm"
+  "BuggedDicomWorksImage_Hopeless.dcm"
 
   # TODO
   "gdcm-MR-PHILIPS-16-Multi-Seq.dcm"
