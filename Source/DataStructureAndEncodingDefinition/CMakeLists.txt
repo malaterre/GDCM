@@ -29,6 +29,16 @@ SET(DSED_SRCS
   gdcmWriter.cxx
   )
 
+# Do the proper thing when building static...if only there was configured
+# headers or def files instead
+IF(NOT BUILD_SHARED_LIBS)
+  #ADD_DEFINITIONS(-DOPJ_STATIC)
+  SET_SOURCE_FILES_PROPERTIES(gdcmJPEG2000Codec.cxx
+                              PROPERTIES 
+                              COMPILE_FLAGS -DOPJ_STATIC
+                              )
+ENDIF(NOT BUILD_SHARED_LIBS)
+
 # Add the include paths
 INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/Common"
