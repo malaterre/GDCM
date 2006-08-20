@@ -72,6 +72,18 @@
  * logically AND the result with 0xFFFF.
  */
 
+#define UNDIFFERENCE_2D_BUG(PREDICTOR) \
+  Rb = GETJSAMPLE(prev_row[0]); \
+  Ra = (diff_buf[0] + PREDICTOR2) & 0xFFFF; \
+  undiff_buf[0] = Ra; \
+ \
+  for (xindex = 1; xindex < width; xindex++) { \
+    Rc = Rb; \
+    Rb = GETJSAMPLE(prev_row[xindex]); \
+    Ra = (diff_buf[xindex] + PREDICTOR) & 0xFFFF; \
+    undiff_buf[xindex] = Ra; \
+  }
+
 #define UNDIFFERENCE_2D(PREDICTOR) \
   unsigned int xindex; \
 	int Ra, Rb, Rc; \
@@ -141,14 +153,56 @@ jpeg_undifference5(j_decompress_ptr cinfo, int comp_index,
   (void)cinfo;(void)comp_index;(void)diff_buf;(void)prev_row;(void)undiff_buf;(void)width;
 }
 
+#ifdef SUPPORT_DICOMOBJECTS_BUG
+/* uninitialized */
+static int dicomobjectsbug = -1; /* 0 == nobug, 1 == bug */
+#endif
+
 METHODDEF(void)
 jpeg_undifference6(j_decompress_ptr cinfo, int comp_index,
 		   JDIFFROW diff_buf, JDIFFROW prev_row,
 		   JDIFFROW undiff_buf, JDIMENSION width)
 {
+#ifdef SUPPORT_DICOMOBJECTS_BUG
+  unsigned int xindex;
+  int Ra, Rb, Rc;
+  int min, max, temp;
+  SHIFT_TEMPS
+  if( dicomobjectsbug == -1 )
+    {
+    dicomobjectsbug = 0; /* no bug by default */
+
+    Rb = GETJSAMPLE(prev_row[0]);
+    Ra = (diff_buf[0] + PREDICTOR2) & 0xFFFF;
+    undiff_buf[0] = Ra;
+    temp = min = max = undiff_buf[0];
+
+    for (xindex = 1; xindex < width; xindex++) {
+      Rc = Rb;
+      Rb = GETJSAMPLE(prev_row[xindex]);
+      Ra = (diff_buf[xindex] + PREDICTOR6) & 0xFFFF;
+      temp = Ra;
+      min = temp < min ? temp : min;
+      max = temp > max ? temp : max;
+    }
+    if( (max - min) > 50000) /* magic number */
+      {
+      dicomobjectsbug = 1;
+      }
+    }
+  if(dicomobjectsbug)
+    {
+    UNDIFFERENCE_2D_BUG(PREDICTOR6_BUG);
+    }
+  else
+    {
+    UNDIFFERENCE_2D_BUG(PREDICTOR6);
+    }
+#else
   SHIFT_TEMPS
   UNDIFFERENCE_2D(PREDICTOR6);
-  (void)cinfo;(void)comp_index;(void)diff_buf;(void)prev_row;(void)undiff_buf;(void)width;
+#endif
+  (void)comp_index;(void)cinfo;
 }
 
 METHODDEF(void)
