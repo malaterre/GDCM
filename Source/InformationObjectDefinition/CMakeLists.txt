@@ -6,6 +6,14 @@ SET(IOD_SRCS
   gdcmType.cxx
   )
 
+# expat stuff
+IF(NOT BUILD_SHARED_LIBS)
+  SET_SOURCE_FILES_PROPERTIES(gdcmTableReader.cxx
+                              PROPERTIES 
+                              COMPILE_FLAGS -DXML_STATIC
+                              )
+ENDIF(NOT BUILD_SHARED_LIBS)
+
 # Add the include paths
 INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/Common"
