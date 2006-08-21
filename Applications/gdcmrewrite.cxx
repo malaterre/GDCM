@@ -22,20 +22,25 @@
  * - Elements are written in alphabetical order
  * - 32bits VR have the residue bytes sets to 0x0,0x0
  * - Same goes from Item Length end delimitor, sets to 0x0,0x0
+ * - All buggy files (wrong length: GE, 13 and Siemens Leonardo) are fixed
+ * - All size are even (no odd length from gdcm 1.x)
  *
  *
  * \todo in a close future:
+ * - Set appropriate VR from DICOM dict
  * - Rewrite PMS SQ into DICOM SQ
  * - Rewrite Implicit SQ with defined length as undefined length
- * - Set appropriate VR from DICOM dict
  * - PixelData with `overlay` in unused bits should be cleanup
  * - Any broken JPEG file (wrong bits) should be fixed
  * - DicomObject bug should be fixed
  * - Meta and Dataset should have a matching UID (more generally File Meta
  *   should be correct (Explicit!) and consistant with DataSet)
  * - User should be able to specify he wants Group Length (or remove them)
+ * - Media SOP should be correct (deduct from something else or set to
+ *   SOP Secondary if all else fail).
+ * - Padding character should be correct
  *
- *
+ * \todo distant future:
  * - Later on, it should run through a Validator
  *   which will make sure all field 1, 1C are present and those only
  * - In a perfect world I should remove private tags and transform them into
