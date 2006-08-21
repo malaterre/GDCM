@@ -31,6 +31,8 @@ namespace gdcm
  * When writing the Meta Header we make sure to have at least:
  * - the Group Length
  * - the File Meta Information Version
+ * \todo
+ * If user adds an element with group != 0x0002 it will be written...
  */
 class ExplicitDataElement;
 class ImplicitDataElement;

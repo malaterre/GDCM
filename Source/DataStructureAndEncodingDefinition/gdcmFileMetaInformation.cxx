@@ -331,19 +331,22 @@ OStream &FileMetaInformation::Write(OStream &os) const
     // At least make sure to have group length
     if( !DS->FindDataElement( Tag(0x0002, 0x0000) ) )
       {
-      ExplicitDataElement xde( Tag(0x0002, 0x0000), 4, VR::UL );
-      SmartPointer<ByteValue> bv = new ByteValue;
-      bv->SetLength( 4 );
-      uint32_t len = DS->GetLength();
-      Element<VR::UL, VM::VM1> el = 
-        reinterpret_cast< Element<VR::UL, VM::VM1>& > ( len );
-      StringStream ss;
-      el.Write( ss );
-      bv->Read( ss );
-      xde.SetValue( *bv );
-      // This is the first element, so simply write the element and
-      // then start writing the remaining of the File Meta Information
-      xde.Write(os);
+      if( DS->GetNegociatedType() == TS::Explicit )
+        {
+        ExplicitDataElement xde( Tag(0x0002, 0x0000), 4, VR::UL );
+        SmartPointer<ByteValue> bv = new ByteValue;
+        bv->SetLength( 4 );
+        uint32_t len = DS->GetLength();
+        Element<VR::UL, VM::VM1> el = 
+          reinterpret_cast< Element<VR::UL, VM::VM1>& > ( len );
+        StringStream ss;
+        el.Write( ss );
+        bv->Read( ss );
+        xde.SetValue( *bv );
+        // This is the first element, so simply write the element and
+        // then start writing the remaining of the File Meta Information
+        xde.Write(os);
+        }
       }
     DS->Write(os);
     }

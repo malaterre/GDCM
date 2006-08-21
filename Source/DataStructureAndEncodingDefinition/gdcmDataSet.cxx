@@ -88,7 +88,16 @@ public:
       //std::cerr << "DEBUG:" << *it << std::endl;
       const DEType & de = *it;
       // If this is a group length make sure this is consistant
-      if( de.GetTag().GetElement() == 0x0 )
+      if( de.GetTag().GetGroup() == 0x0001
+       || de.GetTag().GetGroup() == 0x0003
+       || de.GetTag().GetGroup() == 0x0005
+       || de.GetTag().GetGroup() == 0x0007 )
+        {
+        gdcmWarningMacro( "DataSet contains illegal Tags. "
+          "Those elements will be discarded:" << de.GetTag() );
+        }
+      // After that we are sure the elements are valid
+      else if( de.GetTag().GetElement() == 0x0 )
         {
         Element<VR::UL, VM::VM1> el;
         StringStream ss;
