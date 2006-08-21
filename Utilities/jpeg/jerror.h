@@ -195,6 +195,9 @@ JMESSAGE(JWRN_MUST_RESYNC,
 	 "Corrupt JPEG data: found marker 0x%02x instead of RST%d")
 JMESSAGE(JWRN_NOT_SEQUENTIAL, "Invalid SOS parameters for sequential JPEG")
 JMESSAGE(JWRN_TOO_MUCH_DATA, "Application transferred too many scanlines")
+/* For more information see:
+ * http://www.medicalconnections.co.uk/html/lossless_bug.html */
+JMESSAGE(JWRN_SIGNED_ARITH, "Corrupt JPEG data: using signed arithmetic")
 
 #ifdef JMAKE_ENUM_LIST
 

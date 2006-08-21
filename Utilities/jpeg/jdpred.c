@@ -188,6 +188,7 @@ jpeg_undifference6(j_decompress_ptr cinfo, int comp_index,
     if( (max - min) > 50000) /* magic number */
       {
       dicomobjectsbug = 1;
+      WARNMS(cinfo, JWRN_SIGNED_ARITH);
       }
     }
   if(dicomobjectsbug)
