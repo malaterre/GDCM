@@ -367,6 +367,12 @@ const char * const gdcmMD5DataImages[][2] = {
 // Name is poorly choosen since it's actually a Dicom Objects bug
 // Cannot only be read by gdcm 1.2.x
 { "f1436c1800ccbba8da82acb7f2dff29d" , "GE_JPEG-Broken.dcm" },
+// For some reason the numbers gets funny
+{ "73dd2a43ab7c2810714a8ea1079f3c38" , "10200901_8b_Palette_RLE_blinker.dcm" },
+{ "609ede096636ae804dbb0fb4d78be2c2" , "10200900_8b_Palette_RLE_blinker.dcm" },
+{ "ed6078d83f467f9eda5d8cd06f87080f" , "10200905_8b_Palette_RLE_blinker.dcm" },
+// This is the same image as rle16loo ...
+{ "49ca8ad45fa7f24b0406a5a03ba8aff6" , "rle16loop_16b_Palette_RLE.dcm" },
 
 
 /* Stopping condition */

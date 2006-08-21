@@ -86,16 +86,12 @@ SET(BLACK_LIST_READER
   # Ok I need to read the std Samples Per Pixel is 1 but there are lookup 
   # tables that are not implemented...delay this image for now
   ETIAM_video_002.dcm
+  # YBR_FULL_422
   US-GE-4AICL142.dcm
-
-  # TODO...simply segfault
-  US-PAL-8-10x-echo.dcm
+  # Segmented LUT
   gdcm-US-ALOKA-16.dcm
+  # Papyrus
   PET-cardio-Multiframe-Papyrus.dcm
-  10200901_8b_Palette_RLE_blinker.dcm
-  10200900_8b_Palette_RLE_blinker.dcm
-  10200905_8b_Palette_RLE_blinker.dcm
-  rle16loop_16b_Palette_RLE.dcm
   bla.dcm
   # There are multiple versions...
   SIEMENS-MR-RGB-16Bits.dcm
