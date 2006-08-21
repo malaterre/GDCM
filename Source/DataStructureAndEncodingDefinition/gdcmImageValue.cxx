@@ -146,18 +146,13 @@ bool ImageValue::GetBuffer(char *buffer) const
         bool r = codec.Decode(is, os);
         assert( r == true );
         std::streampos p = is.Tellg();
-        //assert( (bv.GetLength() - p) == 0 );
+        assert( (bv.GetLength() - p) == 0 
+             || (bv.GetLength() - 1 - p) == 0 );
         std::string::size_type check = os.Str().size();
         // If the following assert fail expect big troubles:
-        if ( GetPhotometricInterpretation() == 
-          PhotometricInterpretation::PALETTE_COLOR )
-          {
-          assert( check == 3*len );
-          }
-        else
-          {
-          assert( check == len );
-          }
+        assert( check == len 
+            || (check == 3*len && GetPhotometricInterpretation() 
+            == PhotometricInterpretation::PALETTE_COLOR) );
         memcpy(buffer+pos, os.Str().c_str(), check);
         pos += check;
         }
@@ -165,7 +160,7 @@ bool ImageValue::GetBuffer(char *buffer) const
       //codec.SetLength( len );
       //sf->GetBuffer(buffer, rle_len);
       //is.Write(buffer, rle_len);
-      //assert( pos == len );
+      assert( pos == len || pos == 3*len );
       return true;
       }
     else
