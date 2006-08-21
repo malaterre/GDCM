@@ -18,13 +18,6 @@
 #include "vtkImageData.h"
 #include "vtkInformationVector.h"
 #include "vtkInformation.h"
-#include "vtkLookupTable.h"
-
-#if (VTK_MAJOR_VERSION < 5)
-#error Your VTK version is too old
-#else
-#include "vtkMedicalImageProperties.h"
-#endif
 
 #include "gdcmImageReader.h"
 #include <sstream>
@@ -43,21 +36,19 @@ vtkGDCMReader::vtkGDCMReader()
   //this->ScalarArrayName = NULL;
   //this->SetScalarArrayName( "GDCM" );
 
-  this->LookupTable = vtkLookupTable::New();
-  this->MedicalImageProperties = vtkMedicalImageProperties::New();
+  // vtkDataArray has an internal vtkLookupTable why not used it ?
+  // vtkMedicalImageProperties is in the parent class
 }
 
 vtkGDCMReader::~vtkGDCMReader()
 {
   delete this->Internals;
-  this->LookupTable->Delete();
-  this->MedicalImageProperties->Delete();
 }
 
 int vtkGDCMReader::CanReadFile(const char* fname)
 {
   this->Internals->DICOMReader.SetFileName( fname );
-  if( Internals->DICOMReader.Read() )
+  if( this->Internals->DICOMReader.Read() )
     {
     return 0;
     }
@@ -130,7 +121,7 @@ int vtkGDCMReader::RequestInformation(vtkInformation *request,
                                       vtkInformationVector *outputVector)
 {
   this->Internals->DICOMReader.SetFileName( this->FileName );
-  if( !Internals->DICOMReader.Read() )
+  if( !this->Internals->DICOMReader.Read() )
     {
     return 0;
     }

@@ -26,7 +26,6 @@
 #include "vtkMedicalImageReader2.h"
 
 struct vtkGDCMReaderInternals;
-class vtkLookupTable;
 class VTK_EXPORT vtkGDCMReader : public vtkMedicalImageReader2
 {
 public:
@@ -52,12 +51,6 @@ public:
     return "DICOM";
     }
 
-  // 
-  vtkGetObjectMacro(LookupTable, vtkLookupTable);
-
-  //
-  vtkGetObjectMacro(MedicalImageProperties, vtkMedicalImageProperties);
-
 protected:
   vtkGDCMReader();
   ~vtkGDCMReader();
@@ -76,11 +69,6 @@ private:
 
   //PIMPL
   vtkGDCMReaderInternals *Internals;
-
-  // VTK structs:
-  vtkLookupTable *LookupTable;
-  vtkMedicalImageProperties *ImageProperties;
 };
 #endif
-
 
