@@ -14,18 +14,37 @@
 
 =========================================================================*/
 /*
- * Tools to rewrite. Goals being to 'purify' a DICOM file, eg:
+ * Tools to rewrite. Goals being to 'purify' a DICOM file.
+ * For now it will do the minimum:
+ * - If Group Length is present, the length is garantee to be correct
+ * - If Element with Group Tag 0x1, 0x3, 0x5 or 0x7 are present they are
+ *   simply discarded (not written).
+ * - Elements are written in alphabetical order
+ * - 32bits VR have the residue bytes sets to 0x0,0x0
+ * - Same goes from Item Length end delimitor, sets to 0x0,0x0
+ *
+ *
+ * \todo in a close future:
  * - Rewrite PMS SQ into DICOM SQ
  * - Rewrite Implicit SQ with defined length as undefined length
  * - Set appropriate VR from DICOM dict
+ * - PixelData with `overlay` in unused bits should be cleanup
+ * - Any broken JPEG file (wrong bits) should be fixed
+ * - DicomObject bug should be fixed
+ * - Meta and Dataset should have a matching UID (more generally File Meta
+ *   should be correct (Explicit!) and consistant with DataSet)
+ * - User should be able to specify he wants Group Length (or remove them)
  *
  *
  * - Later on, it should run through a Validator
  *   which will make sure all field 1, 1C are present and those only
  * - In a perfect world I should remove private tags and transform them into
  *   public fields.
+ * - DA should be correct, PN should be correct (no space!)
+ * - Enumerated Value should be correct
  */
 #include "gdcmReader.h"
+#include "gdcmWriter.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmDataSet.h"
 
@@ -43,6 +62,7 @@ int main (int argc, char *argv[])
   //int digit_optind = 0;
 
   std::string filename;
+  std::string outfilename;
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -87,6 +107,8 @@ int main (int argc, char *argv[])
 
     case 'o':
       printf ("option o with value ’%s’\n", optarg);
+      assert( outfilename.empty() );
+      outfilename = optarg;
       break;
 
     case '?':
@@ -109,6 +131,7 @@ int main (int argc, char *argv[])
 
   if( filename.empty() )
     {
+    std::cerr << "Need input file (-i)\n";
     return 1;
     }
   // else
@@ -121,11 +144,28 @@ int main (int argc, char *argv[])
     return 1;
     }
 
-  const gdcm::FileMetaInformation &h = reader.GetHeader();
-  std::cout << h << std::endl;
+  //const gdcm::FileMetaInformation &h = reader.GetHeader();
+  //std::cout << h << std::endl;
 
-  const gdcm::DataSet &ds = reader.GetDataSet();
-  std::cout << ds << std::endl;
+  //const gdcm::DataSet &ds = reader.GetDataSet();
+  //std::cout << ds << std::endl;
+
+  if( outfilename.empty() )
+    {
+    std::cerr << "Need output file (-o)\n";
+    return 1;
+    }
+
+  gdcm::Writer writer;
+  writer.SetFileName( outfilename.c_str() );
+  writer.SetPreamble( reader.GetPreamble() );
+  writer.SetHeader( reader.GetHeader() );
+  writer.SetDataSet( reader.GetDataSet() );
+  if( !writer.Write() )
+    {
+    std::cerr << "Failed to write: " << outfilename << std::endl;
+    return 1;
+    }
 
   return 0;
 }

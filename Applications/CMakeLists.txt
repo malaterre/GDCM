@@ -17,5 +17,10 @@ INCLUDE_DIRECTORIES(
 ADD_EXECUTABLE(gdcmdump ${GDCMDUMP_APPS_SRCS})
 TARGET_LINK_LIBRARIES(gdcmdump gdcmDSED)
 
+# gdcmraw
 ADD_EXECUTABLE(gdcmraw gdcmraw.cxx)
 TARGET_LINK_LIBRARIES(gdcmraw gdcmDSED)
+
+# gdcmrewrite
+ADD_EXECUTABLE(gdcmrewrite gdcmrewrite.cxx)
+TARGET_LINK_LIBRARIES(gdcmrewrite gdcmDSED)
