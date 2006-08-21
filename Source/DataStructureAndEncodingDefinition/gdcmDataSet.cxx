@@ -16,6 +16,8 @@
 #include "gdcmDataSet.h"
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
+#include "gdcmElement.h"
+#include "gdcmStringStream.h"
 
 #include <set>
 #include <iterator>
@@ -77,16 +79,73 @@ public:
       }
     return is;
   }
+
   OStream &Write(OStream &os) {
-    DEType de;
+    //DEType de;
     typename DataElementSet::const_iterator it = DES.begin();
     for( ; it != DES.end(); ++it)
       {
       //std::cerr << "DEBUG:" << *it << std::endl;
-      it->Write(os);
+      const DEType & de = *it;
+      // If this is a group length make sure this is consistant
+      if( de.GetTag().GetElement() == 0x0 )
+        {
+        Element<VR::UL, VM::VM1> el;
+        StringStream ss;
+        ss.SetSwapCode( os.GetSwapCode() );
+        const Value &v = de.GetValue();
+        const Value *pv = &v;
+        const ByteValue *bv = dynamic_cast<const ByteValue*>(pv);
+        bv->Write( ss );
+        el.Read( ss );
+        //std::cerr << "GL=";
+        //el.Print( std::cerr );
+        //std::cerr << std::endl;
+        unsigned int len = ComputeGroupLength( de.GetTag() );
+        //std::cerr << len << std::endl;
+        if( len != el.GetValue() )
+          {
+          gdcmWarningMacro( "Wrong group length for " << de.GetTag() << ":"
+            << el.GetValue() << " should be " << len << ". Corrected." );
+          DEType correct(de);
+          // Set correct value:
+          el.SetValue( len );
+          el.Write( ss );
+          // Pass it to the ByteValue
+          ByteValue *bv2 = new ByteValue;
+          bv2->SetLength(4);
+          bv2->Read(ss);
+          correct.SetValue( *bv2 );
+          correct.Write(os);
+          }
+        else
+          {
+          // okay good value
+          it->Write(os);
+          }
+        }
+      else // well simply writes it
+        {
+        it->Write(os);
+        }
       }
     return os;
   }
+
+  unsigned int ComputeGroupLength(Tag const &tag)
+    {
+    assert( tag.GetElement() == 0x0 );
+    const DEType r(tag);
+    typename DataElementSet::const_iterator it = DES.find(r);
+    unsigned int res = 0;
+    for( ++it; it != DES.end()
+      && it->GetTag().GetGroup() == tag.GetGroup(); ++it)
+      {
+      assert( it->GetTag().GetElement() != 0x0 );
+      res += it->GetLength();
+      }
+    return res;
+    }
 
   IStream &ReadWithLength(IStream &is, VL &length) {
     DEType de;

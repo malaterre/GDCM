@@ -45,6 +45,13 @@ public:
     return *FragmentValue;
   }
 
+  VL GetLength() const {
+    assert( !ValueLengthField.IsUndefined() );
+    assert( !FragmentValue || FragmentValue->GetLength() == ValueLengthField );
+    return TagField.GetLength() + ValueLengthField.GetLength() 
+      + ValueLengthField;
+  }
+
   Fragment(const Fragment &val):DataElement(val)
     {
     FragmentValue = val.FragmentValue;

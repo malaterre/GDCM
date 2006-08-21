@@ -223,4 +223,34 @@ const OStream &ExplicitDataElement::Write(OStream &os) const
   return os;
 }
 
+  VL ExplicitDataElement::GetLength() const {
+    if( ValueLengthField.IsUndefined() )
+      {
+      assert( ValueField->GetLength().IsUndefined() );
+      Value *p = ValueField;
+      // If this is a SQ we need to compute it's proper length
+      SequenceOfItems *sq = dynamic_cast<SequenceOfItems*>(p);
+      if( sq )
+        {
+        return TagField.GetLength() + VRField.GetLength() + 
+          ValueLengthField.GetLength() + sq->ComputeLength();
+        }
+      SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(p);
+      if( sf )
+        {
+        assert( VRField & (VR::OB | VR::OW) );
+        return TagField.GetLength() + VRField.GetLength() 
+          + ValueLengthField.GetLength() + sf->ComputeLength();
+        }
+      abort();
+      }
+    else
+      {
+      // Each time VR::GetLength() is 2 then Value Length is coded in 2
+      //                              4 then Value Length is coded in 4
+      assert( !ValueField || ValueField->GetLength() == ValueLengthField );
+      return TagField.GetLength() + 2*VRField.GetLength() + ValueLengthField;
+      }
+  }
+
 } // end namespace gdcm

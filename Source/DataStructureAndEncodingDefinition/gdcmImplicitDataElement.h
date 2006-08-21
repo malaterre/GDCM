@@ -39,11 +39,7 @@ public:
   Value const & GetValue() const { return *ValueField; }
   void SetValue(Value const & vl) { ValueField = const_cast<Value*>(&vl); }
 
-  VL GetLength() const
-    {
-    assert( !ValueLengthField.IsUndefined() ); //FIXME
-    return TagField.GetLength() + ValueLengthField.GetLength() + ValueLengthField;
-    }
+  VL GetLength() const;
 
   IStream &Read(IStream& is);
   const OStream &Write(OStream& os) const;

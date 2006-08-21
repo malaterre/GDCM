@@ -76,7 +76,7 @@ bool ImageValue::GetBuffer(char *buffer) const
 //#define MDEBUG
 #ifdef MDEBUG
     sf->GetBuffer(buffer, len);
-    unsigned long totalLen = sf->ComputeLength();
+    unsigned long totalLen = sf->ComputeByteLength();
     std::ofstream f("/tmp/debug.jpg");
     f.write(buffer, totalLen);
     f.close();
@@ -119,7 +119,7 @@ bool ImageValue::GetBuffer(char *buffer) const
       codec.SetPlanarConfiguration( GetPlanarConfiguration() );
       codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
       StringStream is;
-      unsigned long totalLen = sf->ComputeLength();
+      unsigned long totalLen = sf->ComputeByteLength();
       sf->GetBuffer(buffer, totalLen);
       is.Write(buffer, totalLen);
       StringStream os;
@@ -134,7 +134,7 @@ bool ImageValue::GetBuffer(char *buffer) const
       codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
       codec.SetPixelType( GetPixelType() );
       codec.SetLUT( GetLUT() );
-      unsigned long rle_len = sf->ComputeLength();
+      unsigned long rle_len = sf->ComputeByteLength();
       codec.SetLength( len );
       StringStream is;
       sf->GetBuffer(buffer, rle_len);

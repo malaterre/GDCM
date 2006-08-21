@@ -21,12 +21,6 @@ namespace gdcm
 
 IStream& SequenceOfFragments::Read(IStream &is)
 {
-  //FragmentVector::iterator it = Fragments.begin();
-  //for(;it != Fragments.end(); ++it)
-  //  {
-  //  it->Read(is);
-  //  std::cout << *it << std::endl;
-  //  }
   if( SequenceLengthField.IsUndefined() )
     {
     Fragment frag;
@@ -69,16 +63,26 @@ OStream const & SequenceOfFragments::Write(OStream &os) const
 unsigned int SequenceOfFragments::GetNumberOfFragments() const
 {
   // Do not count the last fragment
-  if( SequenceLengthField.IsUndefined() )
-    {
-    return Fragments.size() - 1;
-    }
-  // else
-  abort();
-  return Fragments.size();
+  assert( SequenceLengthField.IsUndefined() );
+  return Fragments.size() - 1;
 }
 
-unsigned long SequenceOfFragments::ComputeLength() const
+VL SequenceOfFragments::ComputeLength() const
+{
+  VL length = 0;
+  // First the table
+  length += Table.GetLength();
+  // Then all the fragments
+  FragmentVector::const_iterator it = Fragments.begin();
+  for(;it != Fragments.end(); ++it)
+    {
+    length += it->GetLength();
+    }
+  assert( SequenceLengthField.IsUndefined() );
+  return length;
+}
+
+unsigned long SequenceOfFragments::ComputeByteLength() const
 {
   unsigned long r = 0;
   FragmentVector::const_iterator it = Fragments.begin();

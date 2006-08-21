@@ -185,4 +185,27 @@ const OStream &ImplicitDataElement::Write(OStream &os) const
   return os;
 }
 
+  VL ImplicitDataElement::GetLength() const
+    {
+    if( ValueLengthField.IsUndefined() )
+      {
+      assert( ValueField->GetLength().IsUndefined() );
+      Value *p = ValueField;
+      SequenceOfItems *sq = dynamic_cast<SequenceOfItems*>(p);
+      if( sq )
+        {
+        return TagField.GetLength() + ValueLengthField.GetLength() 
+          + sq->ComputeLength();
+        }
+      abort();
+      return ValueLengthField;
+      }
+    else
+      {
+      assert( !ValueField || ValueField->GetLength() == ValueLengthField );
+      return TagField.GetLength() + ValueLengthField.GetLength() 
+        + ValueLengthField;
+      }
+    }
+
 } // end namespace gdcm

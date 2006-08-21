@@ -91,6 +91,13 @@ public:
     return *Offsets;
   }
 
+  VL GetLength() const {
+    assert( !ValueLengthField.IsUndefined() );
+    assert( !Offsets || Offsets->GetLength() == ValueLengthField );
+    return TagField.GetLength() + ValueLengthField.GetLength() 
+      + ValueLengthField;
+  }
+
   //BasicOffsetTable(BasicOffsetTable const &val):DataElement(val)
   //  {
   //  NestedDataSet = val.NestedDataSet;

@@ -51,6 +51,10 @@ public:
     assert( idx < TypeToLength<TVM>::Length );
     return Internal[idx];
   }
+  void SetValue(typename TypeToType<TVR>::Type v, int idx = 0) {
+    assert( idx < TypeToLength<TVM>::Length );
+    Internal[idx] = v;
+  }
 
   void Read(IStream &_is) {
     return EncodingImplementation<TypeToEncoding<TVR>::Mode>::Read(Internal, 
@@ -119,7 +123,7 @@ public:
       _is.Read( reinterpret_cast<char*>(data+i), type_size );
     }
     ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem(data,
-      _is.GetSwapCode(), length*type_size);
+      _is.GetSwapCode(), length);
   }
   template<typename T>
   static inline void Write(const T* data, unsigned long length,
@@ -128,11 +132,15 @@ public:
     assert( data ); // Can we write into pointer ?
     assert( length );
     assert( _os ); // Is stream valid ?
+    ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem((T*)data,
+      _os.GetSwapCode(), length);
     _os.Write( reinterpret_cast<const char*>(&(data[0])), type_size);
     for(unsigned long i=1; i<length;++i) {
       assert( _os );
       _os.Write( reinterpret_cast<const char*>(&(data[i])), type_size );
     }
+    ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem((T*)data,
+      _os.GetSwapCode(), length);
   }
 };
 

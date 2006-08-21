@@ -27,6 +27,7 @@ namespace gdcm
 
 /**
  * \brief Class to represent a Sequence Of Fragments
+ * \todo I do not enforce that Sequence of Fragments ends with a SQ end del
  */
 class GDCM_EXPORT SequenceOfFragments : public Value
 {
@@ -51,8 +52,13 @@ public:
   /// \brief Appends a Fragment to the already added ones
   void AddFragment(Fragment const &item);
 
-  // Compute the length of all fragments
-  unsigned long ComputeLength() const;
+  // Compute the length of all fragments (and framents only!).
+  // Basically the size of the PixelData as stored (in bytes).
+  unsigned long ComputeByteLength() const;
+
+  // Compute the length of fragments (in bytes)+ length of tag...
+  // to be used for computation of Group Length
+  VL ComputeLength() const;
 
   // Get the buffer
   bool GetBuffer(char *buffer, unsigned long length) const;

@@ -52,6 +52,7 @@ public:
   void SetLength(VL const &length) {
     SequenceLengthField = length;
   }
+  VL ComputeLength() const;
   void Clear() {}
 
   IStream &Read(IStream &is);
