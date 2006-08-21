@@ -364,21 +364,40 @@ bool ImageReader::ReadImage()
       // (0028,1202) OW
       // (0028,1203) OW 
       const Tag tlut(0x0028, (0x1201 + i));
-      const ByteValue *lut_raw = GetPointerFromElement( tlut );
-      //std::string descriptor_str(
-      //  descriptor_str->GetPointer(),
-      //  descriptor_str->GetLength() );
-      //std::cerr << descriptor_str << std::endl;
-      // LookupTableType::RED == 0
-      lut->SetLUT( LookupTable::LookupTableType(i),
-        (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
-      //assert( pt.GetBitsAllocated() == el_us3.GetValue(2) );
       
-      unsigned long check =
-        (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
-        * el_us3.GetValue(2) / 8;
-      assert( check == lut_raw->GetLength() );
-      //assert( pt.GetBitsAllocated() == 8 );
+      // Segmented LUT
+      // (0028,1221) OW 
+      // (0028,1222) OW
+      // (0028,1223) OW 
+      const Tag seglut(0x0028, (0x1221 + i));
+      if( ds.FindDataElement( tlut ) )
+        {
+        const ByteValue *lut_raw = GetPointerFromElement( tlut );
+        //std::string descriptor_str(
+        //  descriptor_str->GetPointer(),
+        //  descriptor_str->GetLength() );
+        //std::cerr << descriptor_str << std::endl;
+        // LookupTableType::RED == 0
+        lut->SetLUT( LookupTable::LookupTableType(i),
+          (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
+        //assert( pt.GetBitsAllocated() == el_us3.GetValue(2) );
+
+        unsigned long check =
+          (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
+          * el_us3.GetValue(2) / 8;
+        assert( check == lut_raw->GetLength() );
+        }
+      else if( ds.FindDataElement( seglut ) )
+        {
+        gdcmWarningMacro( "TODO" ); abort();
+        const ByteValue *lut_raw = GetPointerFromElement( seglut );
+        lut->SetLUT( LookupTable::LookupTableType(i),
+          (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
+        }
+      else
+        {
+        abort();
+        }
       }
     PixelData.SetLUT(*lut);
     }

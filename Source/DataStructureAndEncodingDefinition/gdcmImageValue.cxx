@@ -151,10 +151,18 @@ bool ImageValue::GetBuffer(char *buffer) const
         bool r = codec.Decode(is, os);
         assert( r == true );
         std::streampos p = is.Tellg();
-        // Indeed the length of the RLE stream has been padded with a \0
-        // which is discarded
-        assert( (bv.GetLength() - p) == 0 
-             || (bv.GetLength() - 1 - p) == 0 );
+        if( is )
+          {
+          // Indeed the length of the RLE stream has been padded with a \0
+          // which is discarded
+          assert( (bv.GetLength() - p) == 0 
+               || (bv.GetLength() - 1 - p) == 0 );
+          }
+        else
+          {
+          // ALOKA_SSD-8-MONO2-RLE-SQ.dcm
+          gdcmWarningMacro( "Bad RLE stream" );
+          }
         std::string::size_type check = os.Str().size();
         // If the following assert fail expect big troubles:
         assert( check == llen 

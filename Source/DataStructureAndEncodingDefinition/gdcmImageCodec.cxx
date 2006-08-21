@@ -377,6 +377,7 @@ bool ImageCodec::Decode(IStream &is, OStream &os)
     }
   else if ( PI == PhotometricInterpretation::PALETTE_COLOR )
     {
+    assert( LUT );
     LUT->Decode(*cur_is, pi_os);
     cur_is = &pi_os;
     }
