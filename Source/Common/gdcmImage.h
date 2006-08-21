@@ -55,6 +55,7 @@ public:
   void SetNumberOfDimensions(unsigned int dim);
 
   const unsigned int *GetDimensions() const;
+  unsigned int GetDimensions(unsigned int idx) const;
   void SetDimensions(unsigned int *dims);
   void SetDimensions(unsigned int idx, unsigned int dim);
 

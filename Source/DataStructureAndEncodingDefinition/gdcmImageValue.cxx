@@ -125,13 +125,18 @@ bool ImageValue::GetBuffer(char *buffer) const
       }
     else if ( GetCompressionType() == Compression::RLE )
       {
-      assert( sf->GetNumberOfFragments() == 1 );
+      //assert( sf->GetNumberOfFragments() == 1 );
+      //assert( sf->GetNumberOfFragments() == GetDimensions(2) );
       RLECodec codec;
       codec.SetPlanarConfiguration( GetPlanarConfiguration() );
       codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
       codec.SetPixelType( GetPixelType() );
       codec.SetLUT( GetLUT() );
       unsigned long pos = 0;
+      // Each RLE Frame store a 2D frame. len is the 3d length
+      unsigned long llen = len / sf->GetNumberOfFragments();
+      assert( !GetDimensions(2)
+           || GetDimensions(2) == sf->GetNumberOfFragments() );
       for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
         {
         StringStream is;
@@ -142,24 +147,22 @@ bool ImageValue::GetBuffer(char *buffer) const
         is.Write(mybuffer, bv.GetLength());
         delete[] mybuffer;
         StringStream os;
-        codec.SetLength( len );
+        codec.SetLength( llen );
         bool r = codec.Decode(is, os);
         assert( r == true );
         std::streampos p = is.Tellg();
+        // Indeed the length of the RLE stream has been padded with a \0
+        // which is discarded
         assert( (bv.GetLength() - p) == 0 
              || (bv.GetLength() - 1 - p) == 0 );
         std::string::size_type check = os.Str().size();
         // If the following assert fail expect big troubles:
-        assert( check == len 
-            || (check == 3*len && GetPhotometricInterpretation() 
+        assert( check == llen 
+            || (check == 3*llen && GetPhotometricInterpretation() 
             == PhotometricInterpretation::PALETTE_COLOR) );
         memcpy(buffer+pos, os.Str().c_str(), check);
         pos += check;
         }
-      //unsigned long rle_len = sf->ComputeByteLength();
-      //codec.SetLength( len );
-      //sf->GetBuffer(buffer, rle_len);
-      //is.Write(buffer, rle_len);
       assert( pos == len || pos == 3*len );
       return true;
       }
