@@ -19,6 +19,8 @@ int TestFragment(int argc, char *argv[])
 {
   (void)argc;
   (void)argv;
+  gdcm::Fragment frag;
+  std::cout << frag << std::endl;
 
   return 0;
 }

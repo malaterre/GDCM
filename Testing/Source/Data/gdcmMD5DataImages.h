@@ -362,6 +362,11 @@ const char * const gdcmMD5DataImages[][2] = {
 { "308b1b6fbc01df4dc3fb168830777cb1" , "JDDICOM_Sample3.dcm" },
 // Same thing
 { "b8b5030261f92574227fe91902738558" , "JDDICOM_Sample5.dcm" },
+// This one was computed from dcmtk, gdcm 1.x fails to read it...
+{ "49ca8ad45fa7f24b0406a5a03ba8aff6" , "rle16loo.dcm" },
+// Name is poorly choosen since it's actually a Dicom Objects bug
+// Cannot only be read by gdcm 1.2.x
+{ "f1436c1800ccbba8da82acb7f2dff29d" , "GE_JPEG-Broken.dcm" },
 
 
 /* Stopping condition */

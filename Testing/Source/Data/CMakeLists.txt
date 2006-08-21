@@ -86,7 +86,6 @@ SET(BLACK_LIST_READER
   # Ok I need to read the std Samples Per Pixel is 1 but there are lookup 
   # tables that are not implemented...delay this image for now
   ETIAM_video_002.dcm
-  rle16loo.dcm
   US-GE-4AICL142.dcm
   ALOKA_SSD-8-MONO2-RLE-SQ.dcm
 
