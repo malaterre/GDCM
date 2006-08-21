@@ -336,6 +336,12 @@ const char * const gdcmMD5DataImages[][2] = {
 
 
 // Those where added manually:
+// If you are lucky and the image is raw (MONOCHROME2) you simply need to 
+// do (assuming you are under UNIX)
+// $ ./bin/gdcmraw -i 42166745.dcm -o bla.raw
+// $ md5sum bla.raw
+// For JPEG and RLE file, you need to check result against dcmtk (dcmdjpeg,
+// dcmdrle will help you).
 // Image1 & Image2 are crap, some kind of decompression went wrong
 // and PixelData is raw so not much you can do...
 { "1b0768a3518a6b6ed425c3c1d7a7ea3b" , "Image1.dcm" },
@@ -345,6 +351,17 @@ const char * const gdcmMD5DataImages[][2] = {
 { "d4d365f0500f2ccff932317833d8804b" , "abdominal.dcm" },
 { "138d9bd642c6f1cdc427ef6f99132677" , "ankle.dcm" },
 { "ff8d450e47e8989478a1b6f19d0988cc" , "spine.dcm" },
+{ "c78c1721a5ac585a12cf9a52abc25d4c" , "42166745.dcm" },
+{ "d48ae6ccc815fd171169591a1048c5ed" , "JDDICOM_Sample4.dcm" },
+{ "63c45c2e73403af781d07ae02247654f" , "I20051107115955.dcm" },
+{ "938ac04374eadbe6ac4d7df80e5aa178" , "JDDICOM_Sample1.dcm" },
+// This one can not be decompressed properly with dcmdjpeg. Until
+// they fix dcmdjpeg I'll assume decompression went right
+{ "c40f979bca11742e697d9451c60691e5" , "JDDICOM_Sample2.dcm" },
+// Same problem
+{ "308b1b6fbc01df4dc3fb168830777cb1" , "JDDICOM_Sample3.dcm" },
+// Same thing
+{ "b8b5030261f92574227fe91902738558" , "JDDICOM_Sample5.dcm" },
 
 
 /* Stopping condition */
