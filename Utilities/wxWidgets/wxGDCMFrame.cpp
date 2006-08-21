@@ -20,26 +20,45 @@ wxGDCMFrame::wxGDCMFrame(wxWindow* parent, int id, const wxString& title, const 
     Panel = new wxPanel(this, -1);
     TopFrameMenubar = new wxMenuBar();
     SetMenuBar(TopFrameMenubar);
+
+    // First menu
     wxMenu* wxglade_tmp_menu_1 = new wxMenu();
     wxglade_tmp_menu_1->Append(wxID_OPEN, wxT("&Open...\tCtrl+o"),
       wxT("Open DICOM file"), wxITEM_NORMAL);
+    wxglade_tmp_menu_1->Append(wxID_SAVE, wxT("&Rewrite...\tCtrl+r"),
+      wxT("Rewrite DICOM file"), wxITEM_NORMAL);
     wxglade_tmp_menu_1->AppendSeparator();
     wxglade_tmp_menu_1->Append(wxID_EXIT, wxT("E&xit...\tCtrl+x"),
       wxT("Exit app"), wxITEM_NORMAL);
     TopFrameMenubar->Append(wxglade_tmp_menu_1, wxT("File"));
+
+    // Second menu
     wxMenu* wxglade_tmp_menu_2 = new wxMenu();
-    wxglade_tmp_menu_2->Append(wxID_HELP, wxT("&About...\tCtrl+a"), 
+    //wxglade_tmp_menu_2->Append(wxID_TOOLS, wxT("&Tools...\tCtrl+t"), 
+    //  wxT("Tools"), wxITEM_NORMAL);
+    TopFrameMenubar->Append(wxglade_tmp_menu_2, wxT("Tools"));
+
+    // Third menu
+    wxMenu* wxglade_tmp_menu_3 = new wxMenu();
+    wxglade_tmp_menu_3->Append(wxID_HELP, wxT("&About...\tCtrl+a"), 
       wxT("About Dialog"), wxITEM_NORMAL);
-    TopFrameMenubar->Append(wxglade_tmp_menu_2, wxT("Help"));
+    TopFrameMenubar->Append(wxglade_tmp_menu_3, wxT("Help"));
+    // Status bar
     TopFrameStatusbar = CreateStatusBar(1, 0);
-    TopFrameToolbar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_TEXT);
+    // Toolbar
+    TopFrameToolbar = new wxToolBar(this, -1, wxDefaultPosition,
+      wxDefaultSize, wxTB_HORIZONTAL|wxTB_TEXT);
     SetToolBar(TopFrameToolbar);
-    TopFrameToolbar->AddTool(wxNewId(), wxT("tool"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxT(""), wxT(""));
+    TopFrameToolbar->AddTool(wxNewId(), wxT("tool"), wxNullBitmap,
+      wxNullBitmap, wxITEM_NORMAL, wxT(""), wxT(""));
     TopFrameToolbar->AddSeparator();
-    TopFrameToolbar->AddTool(wxNewId(), wxT("tool"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxT(""), wxT(""));
+    TopFrameToolbar->AddTool(wxNewId(), wxT("tool"), wxNullBitmap, 
+      wxNullBitmap, wxITEM_NORMAL, wxT(""), wxT(""));
     TopFrameToolbar->AddSeparator();
-    TopFrameToolbar->AddTool(wxNewId(), wxT("tool"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxT(""), wxT(""));
+    TopFrameToolbar->AddTool(wxNewId(), wxT("tool"), wxNullBitmap, 
+      wxNullBitmap, wxITEM_NORMAL, wxT(""), wxT(""));
     TopFrameToolbar->Realize();
+    // VTK window
     VTKwindow = new wxVTKRenderWindowInteractor(Panel, -1);
 
     set_properties();
@@ -117,6 +136,7 @@ void wxGDCMFrame::OnOpen(wxCommandEvent& event)
     fn += "/";
     fn += (const char *)filename.fn_str();
     Reader->SetFileName( fn.c_str() );
+    //Reader->Update();
     imageViewer->SetInputConnection( Reader->GetOutputPort() );
     imageViewer->Render();
   }
