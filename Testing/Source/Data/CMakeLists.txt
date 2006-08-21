@@ -87,7 +87,6 @@ SET(BLACK_LIST_READER
   # tables that are not implemented...delay this image for now
   ETIAM_video_002.dcm
   US-GE-4AICL142.dcm
-  ALOKA_SSD-8-MONO2-RLE-SQ.dcm
 
   # TODO...simply segfault
   US-PAL-8-10x-echo.dcm

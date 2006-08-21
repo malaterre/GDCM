@@ -37,7 +37,7 @@ const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 768 576 25 8 3 */
 { "e36350b0711fd34eb86c386164554679" , "ACUSON-8-YBR_FULL-JPEG-TrailingInfo.dcm" },
 /* gdcm 608 420 1 8 1 */
-{ "b0ec78a7731ef04fbd8c774ed4b5ec40" , "ALOKA_SSD-8-MONO2-RLE-SQ.dcm" },
+{ "7d8858e3419392b7f39a99fdc8028064" , "ALOKA_SSD-8-MONO2-RLE-SQ.dcm" },
 /* gdcm 440 440 1 16 1 */
 { "8acaa88edcc2c29d3be3ee373fbaed5e" , "CR-MONO1-10-chest.dcm" },
 /* gdcm 512 512 1 16 1 */
