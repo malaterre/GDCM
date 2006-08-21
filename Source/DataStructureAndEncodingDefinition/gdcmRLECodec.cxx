@@ -161,9 +161,9 @@ bool RLECodec::Decode(IStream &is, OStream &os)
       // ACUSON-24-YBR_FULL-RLE.dcm
       // D_CLUNIE_CT1_RLE.dcm
       // This should be at most the \0 padding
-      gdcmDebugMacro( "RLE Header says: " << frame.Header.Offset[i] <<
-         " when it should says: " << pos << std::endl );
-      //assert( frame.Header.Offset[i] - pos == 1 );
+      //gdcmWarningMacro( "RLE Header says: " << frame.Header.Offset[i] <<
+      //   " when it should says: " << pos << std::endl );
+      assert( frame.Header.Offset[i] - pos == 1 );
       is.Seekg( frame.Header.Offset[i], std::ios::beg );
       }
 

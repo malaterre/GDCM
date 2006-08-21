@@ -91,10 +91,6 @@ bool ImageValue::GetBuffer(char *buffer) const
       for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
         {
         StringStream is;
-        //unsigned long flen;
-        //char mybuffer[90000];
-        //sf->GetFragBuffer(i, mybuffer, flen);
-        //assert( flen < 90000 );
         const Fragment &frag = sf->GetFragment(i);
         const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
         char *mybuffer = new char[bv.GetLength()];
@@ -107,7 +103,7 @@ bool ImageValue::GetBuffer(char *buffer) const
         std::streampos p = is.Tellg();
         assert( (bv.GetLength() - p) == 0 );
         std::string::size_type check = os.Str().size();
-        memcpy(buffer+pos, os.Str().c_str(), os.Str().size());
+        memcpy(buffer+pos, os.Str().c_str(), check);
         pos += check;
         }
       assert( pos == len );
@@ -129,31 +125,48 @@ bool ImageValue::GetBuffer(char *buffer) const
       }
     else if ( GetCompressionType() == Compression::RLE )
       {
+      assert( sf->GetNumberOfFragments() == 1 );
       RLECodec codec;
       codec.SetPlanarConfiguration( GetPlanarConfiguration() );
       codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
       codec.SetPixelType( GetPixelType() );
       codec.SetLUT( GetLUT() );
-      unsigned long rle_len = sf->ComputeByteLength();
-      codec.SetLength( len );
-      StringStream is;
-      sf->GetBuffer(buffer, rle_len);
-      is.Write(buffer, rle_len);
-      StringStream os;
-      bool r = codec.Decode(is, os);
-      std::string::size_type check = os.Str().size();
-      // If the following assert fail expect big troubles:
-      if ( GetPhotometricInterpretation() == 
-        PhotometricInterpretation::PALETTE_COLOR )
+      unsigned long pos = 0;
+      for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
         {
-        assert( check == 3*len );
+        StringStream is;
+        const Fragment &frag = sf->GetFragment(i);
+        const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
+        char *mybuffer = new char[bv.GetLength()];
+        bv.GetBuffer(mybuffer, bv.GetLength());
+        is.Write(mybuffer, bv.GetLength());
+        delete[] mybuffer;
+        StringStream os;
+        codec.SetLength( len );
+        bool r = codec.Decode(is, os);
+        assert( r == true );
+        std::streampos p = is.Tellg();
+        //assert( (bv.GetLength() - p) == 0 );
+        std::string::size_type check = os.Str().size();
+        // If the following assert fail expect big troubles:
+        if ( GetPhotometricInterpretation() == 
+          PhotometricInterpretation::PALETTE_COLOR )
+          {
+          assert( check == 3*len );
+          }
+        else
+          {
+          assert( check == len );
+          }
+        memcpy(buffer+pos, os.Str().c_str(), check);
+        pos += check;
         }
-      else
-        {
-        assert( check == len );
-        }
-      memcpy(buffer, os.Str().c_str(), check);
-      return r;
+      //unsigned long rle_len = sf->ComputeByteLength();
+      //codec.SetLength( len );
+      //sf->GetBuffer(buffer, rle_len);
+      //is.Write(buffer, rle_len);
+      //assert( pos == len );
+      return true;
       }
     else
       {

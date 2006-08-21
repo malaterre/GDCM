@@ -113,7 +113,8 @@ inline std::ostream &operator<<(std::ostream &os, const BasicOffsetTable &val)
   os << " BasicOffsetTable Length=" << val.ValueLengthField << std::endl;
   if( val.Offsets )
     {
-    os << *(val.Offsets);
+    const ByteValue &bv = *(val.Offsets);
+    os << bv;
     }
 
   return os;

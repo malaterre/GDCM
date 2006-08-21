@@ -23,12 +23,12 @@ IStream& SequenceOfFragments::Read(IStream &is)
 {
   if( SequenceLengthField.IsUndefined() )
     {
-    Fragment frag;
     const Tag seqDelItem(0xfffe,0xe0dd);
     // First item is the basic offset table:
     Table.Read(is);
-    gdcmDebugMacro( "Table: " << frag );
+    gdcmDebugMacro( "Table: " << Table );
     // not used for now...
+    Fragment frag;
     do
       {
       frag.Read(is);
