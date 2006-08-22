@@ -69,13 +69,13 @@ int main (int argc, char *argv[])
       break;
 
     case 'i':
-      printf ("option i with value ’%s’\n", optarg);
+      printf ("option i with value '%s'\n", optarg);
       assert( filename.empty() );
       filename = optarg;
       break;
 
     case 'o':
-      printf ("option o with value ’%s’\n", optarg);
+      printf ("option o with value '%s'\n", optarg);
       break;
 
     case '?':

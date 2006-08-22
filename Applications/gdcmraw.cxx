@@ -98,19 +98,19 @@ int main(int argc, char *argv[])
       break;
 
     case 'i':
-      printf ("option i with value ’%s’\n", optarg);
+      printf ("option i with value '%s'\n", optarg);
       assert( filename.empty() );
       filename = optarg;
       break;
 
     case 'o':
-      printf ("option o with value ’%s’\n", optarg);
+      printf ("option o with value '%s'\n", optarg);
       assert( outfilename.empty() );
       outfilename = optarg;
       break;
 
     case 't':
-      printf ("option t with value ’%s’\n", optarg);
+      printf ("option t with value '%s'\n", optarg);
       rawTag = ReadTagFromString(optarg);
       //std::cerr << rawTag << std::endl;
       break;
