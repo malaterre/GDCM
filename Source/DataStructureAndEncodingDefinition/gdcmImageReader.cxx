@@ -622,7 +622,19 @@ bool ImageReader::ReadACRNEMAImage()
   const Tag planarconfiguration = Tag(0x0028, 0x0006);
   assert( !ds.FindDataElement( planarconfiguration ) );
   const Tag tphotometricinterpretation(0x0028, 0x0004);
-  assert( !ds.FindDataElement( tphotometricinterpretation ) );
+  // Some funny ACR NEMA file have PhotometricInterpretation ...
+  if( ds.FindDataElement( tphotometricinterpretation ) )
+    {
+    const ByteValue *photometricinterpretation
+      = GetPointerFromElement( tphotometricinterpretation );
+    std::string photometricinterpretation_str(
+      photometricinterpretation->GetPointer(),
+      photometricinterpretation->GetLength() );
+    PhotometricInterpretation pi(
+      PhotometricInterpretation::GetPIType(
+        photometricinterpretation_str.c_str()));
+    assert( pi == PhotometricInterpretation::MONOCHROME2 );
+    }
 
   return true;
 }

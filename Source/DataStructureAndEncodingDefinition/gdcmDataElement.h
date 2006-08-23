@@ -17,20 +17,6 @@
 #ifndef __gdcmDataElement_h
 #define __gdcmDataElement_h
 
-/**
- * \brief Class to represent a Data Element
- * Implicit / Explicit
- * \note
- * DATA ELEMENT: 
- * A unit of information as defined by a single entry in the data dictionary.
- * An encoded Information Object Definition (IOD) Attribute that is composed
- * of, at a minimum, three fields: a Data Element Tag, a Value Length, 
- * and a Value Field. For some specific Transfer Syntaxes, a Data Element
- * also contains a VR Field where the Value Representation of that Data 
- * Element is specified explicitly.
- * \see ExplicitDataElement ImplicitDataElement
- */
-
 #include "gdcmTag.h"
 #include "gdcmVL.h"
 
@@ -45,6 +31,20 @@ namespace gdcm
 // TODO: This class SHOULD be pure virtual. I dont want a user
 // to shoot himself in the foot.
 class Value;
+/**
+ * \brief Class to represent a Data Element
+ * Implicit / Explicit
+ * \note
+ * DATA ELEMENT: 
+ * A unit of information as defined by a single entry in the data dictionary.
+ * An encoded Information Object Definition (IOD) Attribute that is composed
+ * of, at a minimum, three fields: a Data Element Tag, a Value Length, 
+ * and a Value Field. For some specific Transfer Syntaxes, a Data Element
+ * also contains a VR Field where the Value Representation of that Data 
+ * Element is specified explicitly.
+ * \see ExplicitDataElement ImplicitDataElement
+ */
+
 class GDCM_EXPORT DataElement
 {
 public:

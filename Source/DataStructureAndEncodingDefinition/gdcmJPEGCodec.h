@@ -20,7 +20,11 @@
 
 namespace gdcm
 {
-  
+
+/**
+ * \brief Class to do JPEG
+ * \note
+ */
 class JPEGCodec : public ImageCodec
 {
 public:

@@ -135,7 +135,7 @@ bool ImageValue::GetBuffer(char *buffer) const
       unsigned long pos = 0;
       // Each RLE Frame store a 2D frame. len is the 3d length
       unsigned long llen = len / sf->GetNumberOfFragments();
-      assert( !GetDimensions(2)
+      assert( GetNumberOfDimensions() == 2
            || GetDimensions(2) == sf->GetNumberOfFragments() );
       for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
         {

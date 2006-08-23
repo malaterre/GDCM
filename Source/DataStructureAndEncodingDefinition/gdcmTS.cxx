@@ -306,6 +306,7 @@ bool TS::IsImage(const MSType &ms)
 {
   if ( ms == MS_END // most frequent first
     // lexicographical order then...
+    || ms == BasicVoiceAudioWaveformStorage
     || ms == CSANonImageStorage
     || ms == HemodynamicWaveformStorage
     || ms == MediaStorageDirectoryStorage

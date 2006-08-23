@@ -20,7 +20,7 @@
 
 namespace gdcm
 {
-  
+
 class JPEGInternals;
 class JPEG8Codec : public JPEGCodec
 {

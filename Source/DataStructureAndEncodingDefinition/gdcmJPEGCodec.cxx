@@ -71,6 +71,7 @@ void JPEGCodec::SetBitSample(int bit)
     delete Internal;
     Internal = NULL;
     }
+  Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
 }
 
 bool JPEGCodec::Decode(IStream &is, OStream &os)
@@ -102,6 +103,8 @@ bool JPEGCodec::Decode(IStream &is, OStream &os)
       default:
         abort();
         }
+      Internal->SetPhotometricInterpretation(
+        this->GetPhotometricInterpretation() );
       if( Internal->Decode(is,tmpos) )
         {
         return ImageCodec::Decode(tmpos,os);

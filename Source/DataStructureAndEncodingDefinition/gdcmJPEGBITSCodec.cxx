@@ -13,6 +13,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+#include "gdcmTrace.h"
 
 /*
  * jdatasrc.c
@@ -357,6 +358,7 @@ bool JPEGBITSCodec::Decode(IStream &is, OStream &os)
       {
       Internals->StateSuspension = 2;
       }
+    // First of all are we using the proper JPEG decoder (correct bit sample):
     if( jerr.pub.num_warnings )
       {
       if ( jerr.pub.msg_code == 128 )
@@ -365,16 +367,45 @@ bool JPEGBITSCodec::Decode(IStream &is, OStream &os)
         return false;
         }
       }
+    // Let's check the color space:
+    switch ( cinfo.jpeg_color_space )
+      {
+    case JCS_GRAYSCALE:
+      assert( GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1
+           || GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2 );
+      break;
+    case JCS_RGB:
+      assert( GetPhotometricInterpretation() == PhotometricInterpretation::RGB );
+      break;
+    case JCS_YCbCr:
+      if( GetPhotometricInterpretation() != PhotometricInterpretation::YBR_FULL )
+        {
+        // DermaColorLossLess.dcm (lossless)
+        // LEADTOOLS_FLOWERS-24-RGB-JpegLossy.dcm (lossy)
+        gdcmWarningMacro( "Wrong PhotometricInterpretation. DICOM says: " <<
+          GetPhotometricInterpretation() << " but JPEG says: "
+          << cinfo.jpeg_color_space );
+        // Here it gets nasty since apparently when this occurs lossless means
+        // we should not do any color conversion, but we *might* be breaking
+        // correct DICOM file.
+        // FIXME FIXME
+        /* prevent the library from performing any color space conversion */
+        if ( cinfo.process == JPROC_LOSSLESS )
+          {
+          cinfo.jpeg_color_space = JCS_UNKNOWN;
+          cinfo.out_color_space = JCS_UNKNOWN;
+          }
+        }
+      break;
+    default:
+      abort();
+      return false;
+      }
     //assert( cinfo.data_precision == BITS_IN_JSAMPLE );
     //assert( cinfo.data_precision == this->BitSample );
 
     /* Step 4: set parameters for decompression */
-    /* prevent the library from performing any color space conversion */
-    if ( cinfo.process == JPROC_LOSSLESS )
-      {
-      cinfo.jpeg_color_space = JCS_UNKNOWN;
-      cinfo.out_color_space = JCS_UNKNOWN;
-      }
+    /* no op */
     }
 
   /* Step 5: Start decompressor */
