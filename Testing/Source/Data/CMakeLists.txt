@@ -80,6 +80,8 @@ SET(BLACK_LIST_READER
   "MR-MONO2-12-angio-an1.acr" # 12 bits
   # Do not detect 4D:
   "IM-0001-0052.dcm"
+  # 4D Philips:
+  3DDCM011.dcm
 
   # TODO: TestWriter cannot rewrite those:
   MR_Philips_Intera_No_PrivateSequenceImplicitVR.dcm
@@ -95,6 +97,13 @@ SET(BLACK_LIST_READER
   bla.dcm
   # There are multiple versions...
   SIEMENS-MR-RGB-16Bits.dcm
+  # RLE...
+  2929J888_8b_YBR_RLE_PlanConf0_breaker.dcm
+  2929J686_8b_YBR_RLE_PlanConf0_breaker.dcm
+  # White is Black...
+  CT.3073.1_FromIRAD_BlackWhite_breaker.dcm
+  CT.3073.1_FromIRAD_Almost_BlackWhite.dcm
+  05119848_IS_Black_hasOverlayData.dcm
   )
 
 SET(GDCM_DATA_IMAGES)

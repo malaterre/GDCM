@@ -373,6 +373,52 @@ const char * const gdcmMD5DataImages[][2] = {
 { "ed6078d83f467f9eda5d8cd06f87080f" , "10200905_8b_Palette_RLE_blinker.dcm" },
 // This is the same image as rle16loo ...
 { "49ca8ad45fa7f24b0406a5a03ba8aff6" , "rle16loop_16b_Palette_RLE.dcm" },
+// dummy image, this is the same as US-IRAD-NoPreambleStartWith0005.dcm
+{ "1bde104ba256fb73528c5d9a02e363d7" , "US.irad.27702.1.dcm"},
+// ACR NEMA with a PhotometricInterpretation..
+{ "1e3acacba2ae92b52011804ebddbf5df" , "acc-max.dcm" },
+{ "d5037d66855c7815f55185b808e48750" , "Originale_015.dcm" },
+{ "bbca0e3e26acdd1ab4f6c4871810ac50" , "PETAt001_PT001.dcm" },
+{ "5a33e3a2cd414d734984c7a6a5a32a41" , "i0116.dcm" },
+{ "5a0ebe04ffe50d4373624e444093b855" , "eclipse_dose.dcm" },
+{ "c4e4589b884cfee49db81746cd18a41c" , "MRMN1786V1L.dcm" },
+{ "bc8f9791b75916e85c91e458cd1364a3" , "MRMN1786V1T.dcm" },
+{ "6cee5011d0dcce93d259d272eb94336f" , "MRMN1786V2L.dcm" },
+{ "793d177bd10188e66483ddc04cbca9e7" , "gdcm-CT-GE-16-GantryTilt.dcm" },
+{ "7db6d7da455d94ed1a3afda437c3f09e" , "MRMN1786V2T.dcm" },
+// JPEG lossy:
+{ "bea6e06fe30abd455288e35aaf47477d" , "angiograms.dcm" },
+{ "350aea8820dbbdbb15eabc88f3dd3b16" , "image09-bis.dcm" },
+// The same as US-IRAD-NoPreambleStartWith0003.dcm
+{ "ba092234639594ee9091b46997532cce" , "US.irad.28317.1.dcm" },
+{ "21a11f961726c81684be3241eb961819" , "PETAt001_PT204.dcm" },
+{ "23b5d0a918fb882c08c458c1507c39f7" , "SiemensIcon.dcm" },
+{ "0121cd64c3b9957f76dd338d27454bc6" , "RMI_Mattes_1_150_001_7_150_cEval0_038.dcm" },
+{ "350aea8820dbbdbb15eabc88f3dd3b16" , "image09.dcm" },
+{ "1bde104ba256fb73528c5d9a02e363d7" , "image12.dcm" },
+{ "417ca9bf1db40dd8656cfb6de0aef181" , "JPEGLosslessLongSQ.dcm" },
+{ "d5037d66855c7815f55185b808e48750" , "readWrite.dcm" },
+// Visible Human written in DICOM with ITK-GDCM (1.2)
+{ "e114252b9acf985cf53b06c39118a290" , "vhm.1001.dcm" },
+{ "0b4dff77726ccf037fa83c42cc186a98" , "MR_Philips_Intera_Kosher.dcm" },
+{ "f9d9898ad844a73c0656539388fec85c" , "0001.dcm" },
+{ "c4031c607b7312952bb560e55cbbb072" , "exp000.dcm" },
+{ "2bb620b2c516b66faeef7397d30b83f1" , "exp001.dcm" },
+{ "0dfbe8aa4c20b52e1b8bf3cb6cbdf193" , "RMI_Mattes_unevenLengthTags.dcm" },
+// The famous Siemens 0029-1010/1020
+{ "6a925f871c58553f84ad24195e155c52" , "MR_forceLoad29-1010_29-1020.dcm" },
+{ "255769e6c9d8a161fce520c958c94de7" , "MR_Siemens_ShadowGroupsImplicitVR.dcm" },
+{ "5c25c435ecd8eeac124ab427668186de" , "01f7_7fdf.dcm" },
+{ "0dfbe8aa4c20b52e1b8bf3cb6cbdf193" , "RMI_Mattes_1_1_001_7_1_cEval0_000.dcm" },
+{ "620012cfec4ae2e6dd0137b2e16947d7" , "ElemZeroNotGroupLength.dcm" },
+{ "57994245238730f4b4c5eaed21c4144b" , "File000138.dcm" },
+{ "826b6bc1e36efda1b727b08248a71dd2" , "File000139.dcm" },
+{ "6b26a5561678b26aa2f21a68ea334819" , "SYNGORTImage.dcm" },
+{ "a198893279520631657781d47c4097b2" , "Implicit-0001.dcm" },
+{ "99540b33d088646b8e424a57afdccbe6" , "CT_PET001_CT001.dcm" },
+{ "343e27f0867b55af74b21a5ba55bd9cc" , "rattag.dcm" },
+{ "0038402afc09d44d3c75ed207171976b" , "i0002.dcm" },
+
 
 
 /* Stopping condition */
