@@ -1,7 +1,7 @@
 PROJECT(WXGDCM)
 # wxWidgets stuff changed a lot within the 2.4.2 to 2.4.3
 # so I'll only support the version I have, sorry :(
-CMAKE_MINIMUM_REQUIRED(VERSION 2.4.3)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.4.2)
 
 #-----------------------------------------------------------------------------
 FIND_PACKAGE(VTK REQUIRED)
@@ -32,8 +32,12 @@ ENDIF(WIN32)
 
 # wxWidgets is required to build the project
 FIND_PACKAGE(wxWidgets REQUIRED)
-#INCLUDE(UsewxWidgets) # CMake 2.4.2
-INCLUDE( ${wxWidgets_USE_FILE} )
+IF("${CMake_VERSION_FULL}" EQUAL 2.4.2)
+  INCLUDE(UsewxWidgets) # CMake 2.4.2
+ENDIF("${CMake_VERSION_FULL}" EQUAL 2.4.2)
+IF("${CMake_VERSION_FULL}" GREATER 2.4.2)
+  INCLUDE( ${wxWidgets_USE_FILE} )
+ENDIF("${CMake_VERSION_FULL}" GREATER 2.4.2)
 
 INCLUDE_DIRECTORIES(${GDCM_SOURCE_DIR}/Utilities/VTK)
 
