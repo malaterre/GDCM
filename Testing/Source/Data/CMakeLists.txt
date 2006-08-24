@@ -47,6 +47,7 @@ FILE(GLOB GDCM_DATA_IMAGES_GLOB
 SET(BLACK_LIST_READER
   "dummy.dcm"
   "diazpost.dcm" # This one is nasty
+  "diazpost2.dcm" # ??
   "Siemens-leonardo-bugged.dcm"
   "NM_FromJulius_Caesar.dcm"
   "1075235AnouncedAsBigEndianButIsLittleEndian.dcm"
