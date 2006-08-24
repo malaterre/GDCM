@@ -1,6 +1,6 @@
 PROJECT(WXGDCM)
 # wxWidgets stuff changed a lot within the 2.4.2 to 2.4.3
-# so I'll only support the version I have, sorry :(
+# I wonder if this has something to do with adding features on a stable branch?
 CMAKE_MINIMUM_REQUIRED(VERSION 2.4.2)
 
 #-----------------------------------------------------------------------------
@@ -22,22 +22,27 @@ ELSE(WIN32)
     IF(NOT VTK_USE_X)
       MESSAGE(FATAL_ERROR "You need to have VTK_USE_X")
     ENDIF(NOT VTK_USE_X)
+    # See also:
+    # FindGTK.cmake update
+    # http://www.cmake.org/Bug/bug.php?op=show&bugid=3582
     FIND_PACKAGE(GTK REQUIRED)
     INCLUDE_DIRECTORIES(${GTK_INCLUDE_DIR} )
-    #SET(WXWINDOWS_USE_GL 1) # CMake 2.4.2
+    SET(WXWINDOWS_USE_GL 1) # CMake 2.4.2
     # important on GNU/Linux since we need wxGLCanvas
-    SET(wxWidgets_USE_LIBS  gl)
+    SET(wxWidgets_USE_LIBS  gl) # CMake 2.4.3 and up
   ENDIF(APPLE)
 ENDIF(WIN32)
 
 # wxWidgets is required to build the project
 FIND_PACKAGE(wxWidgets REQUIRED)
-IF("${CMake_VERSION_FULL}" EQUAL 2.4.2)
-  INCLUDE(UsewxWidgets) # CMake 2.4.2
-ENDIF("${CMake_VERSION_FULL}" EQUAL 2.4.2)
-IF("${CMake_VERSION_FULL}" GREATER 2.4.2)
-  INCLUDE( ${wxWidgets_USE_FILE} )
-ENDIF("${CMake_VERSION_FULL}" GREATER 2.4.2)
+# Blocker to do the right thing depending of CMake version
+IF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" EQUAL 2.4)
+  IF(${CMAKE_CACHE_RELEASE_VERSION} STREQUAL "patch 2")
+    INCLUDE(UsewxWidgets) # CMake 2.4.2
+  ELSE(${CMAKE_CACHE_RELEASE_VERSION} STREQUAL "patch 2")
+    INCLUDE( ${wxWidgets_USE_FILE} )
+  ENDIF(${CMAKE_CACHE_RELEASE_VERSION} STREQUAL "patch 2")
+ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" EQUAL 2.4)
 
 INCLUDE_DIRECTORIES(${GDCM_SOURCE_DIR}/Utilities/VTK)
 
