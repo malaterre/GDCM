@@ -86,12 +86,18 @@ int main(int argc, char *argv[])
 
   viewer->SetInputConnection ( reader->GetOutputPort() );
   viewer->SetupInteractor (iren);
+  int dims[3];
+  reader->GetOutput()->GetDimensions(dims);
+  // Make sure to display on most screen
+  dims[0] = (dims[0] < 600 ) ? dims[0] : 600;
+  dims[1] = (dims[1] < 600 ) ? dims[1] : 600;
+  viewer->SetSize( dims );
 
-   // Here is where we setup the observer, 
-   vtkGDCMObserver *obs = vtkGDCMObserver::New();
-   obs->ImageViewer = viewer;
-   iren->AddObserver(vtkCommand::CharEvent,obs);
-   obs->Delete();
+  // Here is where we setup the observer, 
+  vtkGDCMObserver *obs = vtkGDCMObserver::New();
+  obs->ImageViewer = viewer;
+  iren->AddObserver(vtkCommand::CharEvent,obs);
+  obs->Delete();
 
   iren->Initialize();
   iren->Start();

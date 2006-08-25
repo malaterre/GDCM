@@ -84,6 +84,7 @@ const char *PixelType::GetPixelTypeAsString(PixelType const &pt) const
 
 uint8_t PixelType::GetPixelSize() const
 {
+  assert( !(BitsAllocated % 8 ) );
   uint8_t pixelsize = BitsAllocated / 8;
   pixelsize *= SamplesPerPixel;
 

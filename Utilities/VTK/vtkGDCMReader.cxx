@@ -38,6 +38,7 @@ vtkGDCMReader::vtkGDCMReader()
 
   // vtkDataArray has an internal vtkLookupTable why not used it ?
   // vtkMedicalImageProperties is in the parent class
+  //this->FileLowerLeft = 1;
 }
 
 vtkGDCMReader::~vtkGDCMReader()
@@ -183,6 +184,8 @@ int vtkGDCMReader::RequestInformation(vtkInformation *request,
     this->NumberOfScalarComponents = 3;
     }
 
+//  this->FileLowerLeftOn();
+
   return this->Superclass::RequestInformation(
     request, inputVector, outputVector);
 }
@@ -207,7 +210,30 @@ int vtkGDCMReader::RequestData(vtkInformation *vtkNotUsed(request),
   output->AllocateScalars();
 
   char * pointer = static_cast<char*>(output->GetScalarPointer());
-  image.GetBuffer(pointer);
+  unsigned long len = image.GetBufferLength();
+  char *tempimage = new char[len];
+  image.GetBuffer(tempimage);
+
+  const unsigned int *dims = image.GetDimensions();
+  gdcm::PixelType pixeltype = image.GetPixelType();
+  long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
+  //std::cerr << "dext: " << dext[2] << " " << dext[3] << std::endl;
+  //std::cerr << "dext: " << dext[4] << " " << dext[5] << std::endl;
+  //memcpy(pointer, tempimage, len);
+  for(int j = dext[4]; j <= dext[5]; ++j)
+  {
+  //std::cerr << j << std::endl;
+    for(int i = dext[2]; i <= dext[3]; ++i)
+      {
+      //memcpy(pointer, tempimage+i*outsize, outsize);
+      //memcpy(pointer, tempimage+(this->DataExtent[3] - i)*outsize, outsize);
+      //memcpy(pointer, tempimage+(i+j*(dext[3]+1))*outsize, outsize);
+      memcpy(pointer,
+        tempimage+((this->DataExtent[3] - i)+j*(dext[3]+1))*outsize, outsize);
+      pointer += outsize;
+      }
+  }
+  delete[] tempimage;
 
   return 1;
 }
