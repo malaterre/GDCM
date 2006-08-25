@@ -46,7 +46,7 @@ wxWindow* wxGetTopLevelParent(wxWindow *win)
 // This trick is no longer need in VTK CVS, should get rid of that:
 #define id Id
 #else
-#error Build mismatch you need both wxWidgets and VTK to be configure agains Cocoa to work
+#error Build mismatch you need both wxWidgets and VTK to be configure against Cocoa to work
 #endif //VTK_USE_COCOA
 #endif //__WXCOCOA__
 

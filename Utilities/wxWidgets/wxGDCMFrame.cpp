@@ -72,7 +72,7 @@ wxGDCMFrame::wxGDCMFrame(wxWindow* parent, int id, const wxString& title, const 
 
 wxGDCMFrame::~wxGDCMFrame()
 {
-  delete VTKwindow;
+  VTKwindow->Delete();
   imageViewer->Delete();
   Reader->Delete();
 }
