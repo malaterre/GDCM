@@ -34,7 +34,10 @@ void ImageWriter::SetImage(Image const &img)
 
 bool ImageWriter::Write()
 {
-  Writer::Write();
+  if( !Writer::Write() )
+    {
+    return false;
+    }
   return true;
 }
 
