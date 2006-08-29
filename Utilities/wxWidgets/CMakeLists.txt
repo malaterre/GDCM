@@ -29,7 +29,8 @@ ELSE(WIN32)
     INCLUDE_DIRECTORIES(${GTK_INCLUDE_DIR} )
     SET(WXWINDOWS_USE_GL 1) # CMake 2.4.2
     # important on GNU/Linux since we need wxGLCanvas
-    SET(wxWidgets_USE_LIBS  gl) # CMake 2.4.3 and up
+    # adv is for wxGrid::CreateGrid
+    SET(wxWidgets_USE_LIBS adv gl) # CMake 2.4.3 and up
   ENDIF(APPLE)
 ENDIF(WIN32)
 
@@ -46,5 +47,5 @@ ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" EQUAL 2.4)
 
 INCLUDE_DIRECTORIES(${GDCM_SOURCE_DIR}/Utilities/VTK)
 
-ADD_EXECUTABLE(wxGDCM main.cpp wxGDCMFrame.cpp wxVTKRenderWindowInteractor.cxx)
+ADD_EXECUTABLE(wxGDCM main.cpp wxGDCMFrame.cpp wxGDCMFrameBase.cpp wxVTKRenderWindowInteractor.cxx)
 TARGET_LINK_LIBRARIES(wxGDCM vtkRendering ${wxWidgets_LIBRARIES} vtkgdcm)
