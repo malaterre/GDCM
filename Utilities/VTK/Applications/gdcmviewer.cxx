@@ -23,8 +23,13 @@
 #include "vtkImageData.h"
 #include "vtkCommand.h"
 
+#include "gdcmFilename.h"
+
+#include <assert.h>
+
 //----------------------------------------------------------------------------
 // Callback for the interaction
+template <typename TViewer>
 class vtkGDCMObserver : public vtkCommand
 {
 public:
@@ -42,36 +47,27 @@ public:
       {
       if ( event == vtkCommand::CharEvent )
         {
-        int max = ImageViewer->GetWholeZMax();
-        int slice = (ImageViewer->GetZSlice() + 1) % ++max;
-        ImageViewer->SetZSlice( slice );
+        //int max = ImageViewer->GetWholeZMax();
+        //int slice = (ImageViewer->GetZSlice() + 1) % ++max;
+        //ImageViewer->SetZSlice( slice );
         ImageViewer->Render();
         }
       }
     }
-  vtkImageViewer *ImageViewer;
+  TViewer *ImageViewer;
 };
 
 
-int main(int argc, char *argv[])
+// A feature in VS6 make it painfull to write template code
+// that do not contain the template parameter in the function
+// signature. Thus always pass parameter in the function:
+template <typename TViewer>
+void ExecuteViewer(TViewer *viewer, const char *filename)
 {
-  if( argc < 2 )
-    {
-    std::cerr << argv[0] << " filename.dcm\n";
-    return 1;
-    }
-
-  const char *filename = argv[1];
   vtkGDCMReader *reader = vtkGDCMReader::New();
   reader->SetFileName( filename );
 
   vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::New();
-
-  //const char *viewer_type = argv[0];
-  //assert( strcmp(viewer_type, "gdcmviewer"  ) == 0
-  //     || strcmp(viewer_type, "gdcmviewer2" ) == 0 );
-  vtkImageViewer *viewer = vtkImageViewer::New();
-
   // For a single medical image, it would be more efficient to use
   // 0028|1050 [DS] [Window Center]
   // 0028|1051 [DS] [Window Width]
@@ -94,7 +90,7 @@ int main(int argc, char *argv[])
   viewer->SetSize( dims );
 
   // Here is where we setup the observer, 
-  vtkGDCMObserver *obs = vtkGDCMObserver::New();
+  vtkGDCMObserver<TViewer> *obs = vtkGDCMObserver<TViewer>::New();
   obs->ImageViewer = viewer;
   iren->AddObserver(vtkCommand::CharEvent,obs);
   obs->Delete();
@@ -123,6 +119,37 @@ int main(int argc, char *argv[])
   reader->Delete();
   iren->Delete();
   viewer->Delete();
+}
+
+int main(int argc, char *argv[])
+{
+  if( argc < 2 )
+    {
+    std::cerr << argv[0] << " filename.dcm\n";
+    return 1;
+    }
+
+  const char *filename = argv[1];
+
+  gdcm::Filename viewer_type(argv[0]);
+  //assert( strcmp(viewer_type, "gdcmviewer"  ) == 0
+  //     || strcmp(viewer_type, "gdcmviewer2" ) == 0 );
+  
+  if( strcmp(viewer_type.GetName(), "gdcmviewer" ) == 0 )
+    {
+    vtkImageViewer *viewer = vtkImageViewer::New();
+    ExecuteViewer<vtkImageViewer>(viewer, filename);
+    }
+  else if( strcmp(viewer_type.GetName(), "gdcmviewer2" ) == 0 )
+    {
+    vtkImageViewer2 *viewer = vtkImageViewer2::New();
+    ExecuteViewer<vtkImageViewer2>(viewer, filename);
+    }
+  else
+    {
+    std::cerr << "Unhandled : " << viewer_type.GetName() << std::endl;
+    return 1;
+    }
 
   return 0;
 }
