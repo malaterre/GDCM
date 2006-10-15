@@ -12,11 +12,12 @@ SET(GETOPT_SRCS
   getopt.c
   getopt_long.c
   )
-ADD_DEFINITIONS(-D_NETBSD_SOURCE)
+#ADD_DEFINITIONS(-D_NETBSD_SOURCE)
 
-INCLUDE_DIRECTORIES(BEFORE
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  )
+#INCLUDE_DIRECTORIES(BEFORE
+#  ${CMAKE_CURRENT_SOURCE_DIR}
+#  )
+
 # Only build this lib static. On most unix system
 # we will be using the standart getopt
 # so this liob will be for the poor Win32 user (those

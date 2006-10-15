@@ -1,5 +1,3 @@
-/*	$NetBSD: getopt.c,v 1.27 2005/11/29 03:12:00 christos Exp $	*/
-
 /*
  * Copyright (c) 1987, 1993, 1994
  *	The Regents of the University of California.  All rights reserved.
@@ -12,7 +10,11 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. Neither the name of the University nor the names of its contributors
+ * 3. All advertising materials mentioning features or use of this software
+ *    must display the following acknowledgement:
+ *	This product includes software developed by the University of
+ *	California, Berkeley and its contributors.
+ * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
  *
@@ -29,45 +31,29 @@
  * SUCH DAMAGE.
  */
 
-#if 0
-#include <sys/cdefs.h>
-#endif
-#if defined(LIBC_SCCS) && !defined(lint)
-#if 0
+/*#if defined(LIBC_SCCS) && !defined(lint)
 static char sccsid[] = "@(#)getopt.c	8.3 (Berkeley) 4/27/95";
-#else
-__RCSID("$NetBSD: getopt.c,v 1.27 2005/11/29 03:12:00 christos Exp $");
-#endif
-#endif /* LIBC_SCCS and not lint */
+#endif /* LIBC_SCCS and not lint
+#include <sys/cdefs.h>
+//__FBSDID("$FreeBSD: src/lib/libc/stdlib/getopt.c,v 1.6 2002/03/29 22:43:42 markm Exp $");
 
-/*#include "namespace.h"*/
+#include "namespace.h"*/
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+/*#include "un-namespace.h"*/
 
-#include <assert.h> /* assert() */
-/*#include <errno.h>*/
-#include <stdio.h> /* fprintf */
-#include <stdlib.h> /* abort() */
-#include <string.h> /* strchr */
-/*#include <unistd.h>*/
-
-#ifdef __weak_alias
-__weak_alias(getopt,_getopt)
-#endif
+/*#include "libc_private.h"*/
 
 int	opterr = 1,		/* if error message should be printed */
 	optind = 1,		/* index into parent argv vector */
 	optopt,			/* character checked for validity */
 	optreset;		/* reset getopt */
-const char	*optarg;		/* argument associated with option */
+char	*optarg;		/* argument associated with option */
 
 #define	BADCH	(int)'?'
 #define	BADARG	(int)':'
 #define	EMSG	""
-
-inline const char *getprogname()
-{
-  abort();
-  return "";
-}
 
 /*
  * getopt --
@@ -76,78 +62,61 @@ inline const char *getprogname()
 int
 getopt(nargc, nargv, ostr)
 	int nargc;
-	char * const nargv[];
+	char * const *nargv;
 	const char *ostr;
 {
-	static const char *place = EMSG;	/* option letter processing */
+	static char *place = EMSG;		/* option letter processing */
 	char *oli;				/* option letter list index */
 
-	assert(nargv != NULL);
-	assert(ostr != NULL);
-
-	if (optreset || *place == 0) {		/* update scanning pointer */
+	if (optreset || !*place) {		/* update scanning pointer */
 		optreset = 0;
-		place = nargv[optind];
-		if (optind >= nargc || *place++ != '-') {
-			/* Argument is absent or is not an option */
+		if (optind >= nargc || *(place = nargv[optind]) != '-') {
 			place = EMSG;
 			return (-1);
 		}
-		optopt = *place++;
-		if (optopt == '-' && *place == 0) {
-			/* "--" => end of options */
+		if (place[1] && *++place == '-') {	/* found "--" */
 			++optind;
 			place = EMSG;
 			return (-1);
 		}
-		if (optopt == 0) {
-			/* Solitary '-', treat as a '-' option
-			   if the program (eg su) is looking for it. */
-			place = EMSG;
-			if (strchr(ostr, '-') == NULL)
-				return -1;
-			optopt = '-';
-		}
-	} else
-		optopt = *place++;
-
-	/* See if option letter is one the caller wanted... */
-	if (optopt == ':' || (oli = strchr(ostr, optopt)) == NULL) {
-		if (*place == 0)
+	}					/* option letter okay? */
+	if ((optopt = (int)*place++) == (int)':' ||
+	    !(oli = strchr(ostr, optopt))) {
+		/*
+		 * if the user didn't specify '-' as an option,
+		 * assume it means -1.
+		 */
+		if (optopt == (int)'-')
+			return (-1);
+		if (!*place)
 			++optind;
-		if (opterr && *ostr != ':')
-			(void)fprintf(stderr,
-			    "%s: unknown option -- %c\n", getprogname(),
-			    optopt);
+		if (opterr && *ostr != ':' && optopt != BADCH)
+			(void)fprintf(stderr, "%s: illegal option -- %c\n",
+			    "progname", optopt);
 		return (BADCH);
 	}
-
-	/* Does this option need an argument? */
-	if (oli[1] != ':') {
-		/* don't need argument */
+	if (*++oli != ':') {			/* don't need argument */
 		optarg = NULL;
-		if (*place == 0)
+		if (!*place)
 			++optind;
-	} else {
-		/* Option-argument is either the rest of this argument or the
-		   entire next argument. */
-		if (*place)
+	}
+	else {					/* need an argument */
+		if (*place)			/* no white space */
 			optarg = place;
-		else if (nargc > ++optind)
-			optarg = nargv[optind];
-		else {
-			/* option-argument absent */
+		else if (nargc <= ++optind) {	/* no arg */
 			place = EMSG;
 			if (*ostr == ':')
 				return (BADARG);
 			if (opterr)
 				(void)fprintf(stderr,
 				    "%s: option requires an argument -- %c\n",
-				    getprogname(), optopt);
+				    "progname", optopt);
 			return (BADCH);
 		}
+	 	else				/* white space */
+			optarg = nargv[optind];
 		place = EMSG;
 		++optind;
 	}
-	return (optopt);			/* return option letter */
+	return (optopt);			/* dump back option letter */
 }

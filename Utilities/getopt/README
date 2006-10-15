@@ -1,9 +1,1 @@
-After some search on internet this is the same version as the one in libtiff that was used.
-License is compatible. 
-Look for any update at:
-http://cvsweb.netbsd.org/bsdweb.cgi/src/include/getopt.h
-http://cvsweb.netbsd.org/bsdweb.cgi/src/lib/libc/stdlib/getopt.c
-and
-http://cvsweb.netbsd.org/bsdweb.cgi/src/lib/libc/stdlib/getopt_long.c
-
-The lib compiles with warnings but since my main target plateform remains a GNU/Linux whoever wants the warnings to be fix, should send me a patch.
+The source was taken from http://svn.xiph.org/trunk/theora-exp/win32/compatibility/

@@ -1,4 +1,5 @@
-/*	$NetBSD: getopt.h,v 1.7 2005/02/03 04:39:32 perry Exp $	*/
+/*      $NetBSD: getopt.h,v 1.4 2000/07/07 10:43:54 ad Exp $    */
+/*      $FreeBSD: src/include/getopt.h,v 1.1 2002/09/29 04:14:30 eric Exp $ */
 
 /*-
  * Copyright (c) 2000 The NetBSD Foundation, Inc.
@@ -39,39 +40,71 @@
 #ifndef _GETOPT_H_
 #define _GETOPT_H_
 
-#if 0
-#include <sys/cdefs.h>
-#include <sys/featuretest.h>
+#ifdef _WIN32
+/* from <sys/cdefs.h> */
+# ifdef  __cplusplus
+#  define __BEGIN_DECLS  extern "C" {
+#  define __END_DECLS    }
+# else
+#  define __BEGIN_DECLS
+#  define __END_DECLS
+# endif
+# define __P(args)      args
 #endif
+
+/*#ifndef _WIN32
+#include <sys/cdefs.h>
 #include <unistd.h>
+#endif*/
+
+#ifdef _WIN32
+# if !defined(GETOPT_API)
+#  define GETOPT_API __declspec(dllimport)
+# endif
+#endif
 
 /*
  * Gnu like getopt_long() and BSD4.4 getsubopt()/optreset extensions
  */
-#if defined(_NETBSD_SOURCE) || defined(HAVE_NBTOOL_CONFIG_H)
+#if !defined(_POSIX_SOURCE) && !defined(_XOPEN_SOURCE)
 #define no_argument        0
 #define required_argument  1
 #define optional_argument  2
 
 struct option {
-	/* name of long option */
-	const char *name;
-	/*
-	 * one of no_argument, required_argument, and optional_argument:
-	 * whether option takes an argument
-	 */
-	int has_arg;
-	/* if not NULL, set *flag to val when option found */
-	int *flag;
-	/* if flag not NULL, value to set *flag to; else return value */
-	int val;
+        /* name of long option */
+        const char *name;
+        /*
+         * one of no_argument, required_argument, and optional_argument:
+         * whether option takes an argument
+         */
+        int has_arg;
+        /* if not NULL, set *flag to val when option found */
+        int *flag;
+        /* if flag not NULL, value to set *flag to; else return value */
+        int val;
 };
+
+__BEGIN_DECLS
+GETOPT_API int getopt_long __P((int, char * const *, const char *,
+    const struct option *, int *));
+__END_DECLS
 #endif
 
-#if defined(_NETBSD_SOURCE)
+#ifdef _WIN32
+/* These are global getopt variables */
 __BEGIN_DECLS
-int getopt_long(int, char * const *, const char *,
-    const struct option *, int *);
+
+#error bla
+GETOPT_API extern int   opterr,   /* if error message should be printed */
+                        optind,   /* index into parent argv vector */
+                        optopt,   /* character checked for validity */
+                        optreset; /* reset getopt */
+GETOPT_API extern char* optarg;   /* argument associated with option */
+
+/* Original getopt */
+GETOPT_API int getopt __P((int, char * const *, const char *));
+
 __END_DECLS
 #endif
  

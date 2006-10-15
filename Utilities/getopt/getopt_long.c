@@ -1,4 +1,5 @@
-/*	$NetBSD: getopt_long.c,v 1.19 2005/12/02 14:08:51 yamt Exp $	*/
+/*	$NetBSD: getopt_long.c,v 1.15 2002/01/31 22:43:40 tv Exp $	*/
+/*	$FreeBSD: src/lib/libc/stdlib/getopt_long.c,v 1.2 2002/10/16 22:18:42 alfred Exp $ */
 
 /*-
  * Copyright (c) 2000 The NetBSD Foundation, Inc.
@@ -36,31 +37,51 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if HAVE_NBTOOL_CONFIG_H
-#include "nbtool_config.h"
-#endif
 
-#include <sys/cdefs.h>
-#if defined(LIBC_SCCS) && !defined(lint)
-__RCSID("$NetBSD: getopt_long.c,v 1.19 2005/12/02 14:08:51 yamt Exp $");
-#endif /* LIBC_SCCS and not lint */
-
-/*#include "namespace.h"*/
-
-#include <assert.h>
-#include <err.h>
-#include <errno.h>
-#if HAVE_NBTOOL_CONFIG_H
-#include "compat_getopt.h"
-#else
 #include "getopt.h"
-#endif
 #include <stdlib.h>
 #include <string.h>
 
-/*#if HAVE_NBTOOL_CONFIG_H && !HAVE_GETOPT_LONG && !HAVE_DECL_OPTIND*/
+#ifdef _WIN32
+
+/* Windows needs warnx().  We change the definition though:
+ *  1. (another) global is defined, opterrmsg, which holds the error message
+ *  2. errors are always printed out on stderr w/o the program name
+ * Note that opterrmsg always gets set no matter what opterr is set to.  The
+ * error message will not be printed if opterr is 0 as usual.
+ */
+
+#include <stdio.h>
+#include <stdarg.h>
+
+GETOPT_API extern char opterrmsg[128];
+char opterrmsg[128]; /* last error message is stored here */
+
+static void warnx(int print_error, const char *fmt, ...)
+{
+	va_list ap;
+	va_start(ap, fmt);
+	if (fmt != NULL)
+		_vsnprintf(opterrmsg, 128, fmt, ap);
+	else
+		opterrmsg[0]='\0';
+	va_end(ap);
+	if (print_error) {
+		fprintf(stderr, opterrmsg);
+		fprintf(stderr, "\n");
+	}
+}
+
+#endif /*_WIN32*/
+
+/* not part of the original file */
+#ifndef _DIAGASSERT
+#define _DIAGASSERT(X)
+#endif
+
+#if HAVE_CONFIG_H && !HAVE_GETOPT_LONG && !HAVE_DECL_OPTIND
 #define REPLACE_GETOPT
-/*#endif*/
+#endif
 
 #ifdef REPLACE_GETOPT
 #ifdef __weak_alias
@@ -70,8 +91,8 @@ int	opterr = 1;		/* if error message should be printed */
 int	optind = 1;		/* index into parent argv vector */
 int	optopt = '?';		/* character checked for validity */
 int	optreset;		/* reset getopt */
-const char    *optarg;		/* argument associated with option */
-#elif HAVE_NBTOOL_CONFIG_H && !HAVE_DECL_OPTRESET
+char    *optarg;		/* argument associated with option */
+#elif HAVE_CONFIG_H && !HAVE_DECL_OPTRESET
 static int optreset;
 #endif
 
@@ -96,11 +117,11 @@ __weak_alias(getopt_long,_getopt_long)
 
 #define	EMSG	""
 
-static int getopt_internal __P((int, char * const *, const char *));
-static int gcd __P((int, int));
-static void permute_args __P((int, int, int, char * *));
+static int getopt_internal(int, char * const *, const char *);
+static int gcd(int, int);
+static void permute_args(int, int, int, char * const *);
 
-static const char *place = EMSG; /* option letter processing */
+static char *place = EMSG; /* option letter processing */
 
 /* XXX: set optreset to 1 rather than these two */
 static int nonopt_start = -1; /* first non option argument (for permute) */
@@ -145,12 +166,12 @@ permute_args(panonopt_start, panonopt_end, opt_end, nargv)
 	int panonopt_start;
 	int panonopt_end;
 	int opt_end;
-	char * *nargv;
+	char * const *nargv;
 {
 	int cstart, cyclelen, i, j, ncycle, nnonopts, nopts, pos;
 	char *swap;
 
-	assert(nargv != NULL);
+	_DIAGASSERT(nargv != NULL);
 
 	/*
 	 * compute lengths of blocks and number and size of cycles
@@ -169,8 +190,10 @@ permute_args(panonopt_start, panonopt_end, opt_end, nargv)
 			else
 				pos += nopts;
 			swap = nargv[pos];
-			nargv[pos] = nargv[cstart];
-			nargv[cstart] = swap;
+			/* LINTED const cast */
+			((char **) nargv)[pos] = nargv[cstart];
+			/* LINTED const cast */
+			((char **)nargv)[cstart] = swap;
 		}
 	}
 }
@@ -189,8 +212,8 @@ getopt_internal(nargc, nargv, options)
 	char *oli;				/* option letter list index */
 	int optchar;
 
-	assert(nargv != NULL);
-	assert(options != NULL);
+	_DIAGASSERT(nargv != NULL);
+	_DIAGASSERT(options != NULL);
 
 	optarg = NULL;
 
@@ -269,8 +292,12 @@ start:
 		/* option letter unknown or ':' */
 		if (!*place)
 			++optind;
+#ifndef _WIN32
 		if (PRINT_ERROR)
 			warnx(illoptchar, optchar);
+#else
+			warnx(PRINT_ERROR, illoptchar, optchar);
+#endif
 		optopt = optchar;
 		return BADCH;
 	}
@@ -281,8 +308,12 @@ start:
 
 		if (++optind >= nargc) {	/* no arg */
 			place = EMSG;
+#ifndef _WIN32
 			if (PRINT_ERROR)
 				warnx(recargchar, optchar);
+#else
+				warnx(PRINT_ERROR, recargchar, optchar);
+#endif
 			optopt = optchar;
 			return BADARG;
 		} else				/* white space */
@@ -304,8 +335,12 @@ start:
 		else if (oli[1] != ':') {	/* arg not optional */
 			if (++optind >= nargc) {	/* no arg */
 				place = EMSG;
+#ifndef _WIN32
 				if (PRINT_ERROR)
 					warnx(recargchar, optchar);
+#else
+					warnx(PRINT_ERROR, recargchar, optchar);
+#endif
 				optopt = optchar;
 				return BADARG;
 			} else
@@ -333,11 +368,10 @@ getopt(nargc, nargv, options)
 {
 	int retval;
 
-	assert(nargv != NULL);
-	assert(options != NULL);
+	_DIAGASSERT(nargv != NULL);
+	_DIAGASSERT(options != NULL);
 
-	retval = getopt_internal(nargc, nargv, options);
-	if (retval == -2) {
+	if ((retval = getopt_internal(nargc, nargv, options)) == -2) {
 		++optind;
 		/*
 		 * We found an option (--), so if we skipped non-options,
@@ -369,13 +403,12 @@ getopt_long(nargc, nargv, options, long_options, idx)
 {
 	int retval;
 
-	assert(nargv != NULL);
-	assert(options != NULL);
-	assert(long_options != NULL);
+	_DIAGASSERT(nargv != NULL);
+	_DIAGASSERT(options != NULL);
+	_DIAGASSERT(long_options != NULL);
 	/* idx may be NULL */
 
-	retval = getopt_internal(nargc, nargv, options);
-	if (retval == -2) {
+	if ((retval = getopt_internal(nargc, nargv, options)) == -2) {
 		char *current_argv, *has_equal;
 		size_t current_argv_len;
 		int i, match;
@@ -422,9 +455,14 @@ getopt_long(nargc, nargv, options, long_options, idx)
 				match = i;
 			else {
 				/* ambiguous abbreviation */
+#ifndef _WIN32
 				if (PRINT_ERROR)
 					warnx(ambig, (int)current_argv_len,
 					     current_argv);
+#else
+					warnx(PRINT_ERROR, ambig, (int)current_argv_len,
+					     current_argv);
+#endif
 				optopt = 0;
 				return BADCH;
 			}
@@ -432,9 +470,14 @@ getopt_long(nargc, nargv, options, long_options, idx)
 		if (match != -1) {			/* option found */
 		        if (long_options[match].has_arg == no_argument
 			    && has_equal) {
+#ifndef _WIN32
 				if (PRINT_ERROR)
 					warnx(noarg, (int)current_argv_len,
 					     current_argv);
+#else
+					warnx(PRINT_ERROR, noarg, (int)current_argv_len,
+					     current_argv);
+#endif
 				/*
 				 * XXX: GNU sets optopt to val regardless of
 				 * flag
@@ -464,8 +507,12 @@ getopt_long(nargc, nargv, options, long_options, idx)
 				 * Missing argument; leading ':'
 				 * indicates no error should be generated
 				 */
+#ifndef _WIN32
 				if (PRINT_ERROR)
 					warnx(recargstring, current_argv);
+#else
+					warnx(PRINT_ERROR, recargstring, current_argv);
+#endif
 				/*
 				 * XXX: GNU sets optopt to val regardless
 				 * of flag
@@ -478,8 +525,12 @@ getopt_long(nargc, nargv, options, long_options, idx)
 				return BADARG;
 			}
 		} else {			/* unknown option */
+#ifndef _WIN32
 			if (PRINT_ERROR)
 				warnx(illoptstring, current_argv);
+#else
+				warnx(PRINT_ERROR, illoptstring, current_argv);
+#endif
 			optopt = 0;
 			return BADCH;
 		}
