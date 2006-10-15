@@ -136,6 +136,7 @@ IStream& IStream::Read(char *str, std::streamsize n)
 std::streamsize IStream::Gcount ( ) const
 {
   abort();
+  return 0;
 }
 
 IStream &IStream::Read(uint16_t &vl)
