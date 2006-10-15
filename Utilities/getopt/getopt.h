@@ -95,7 +95,6 @@ __END_DECLS
 /* These are global getopt variables */
 __BEGIN_DECLS
 
-#error bla
 GETOPT_API extern int   opterr,   /* if error message should be printed */
                         optind,   /* index into parent argv vector */
                         optopt,   /* character checked for validity */
