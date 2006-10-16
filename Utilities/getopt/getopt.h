@@ -59,7 +59,7 @@
 
 #ifdef _WIN32
 # if !defined(GETOPT_API)
-#  define GETOPT_API __declspec(dllimport)
+#  define GETOPT_API __declspec(dllexport)
 # endif
 #endif
 
