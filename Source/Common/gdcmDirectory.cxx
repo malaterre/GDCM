@@ -56,6 +56,7 @@ unsigned int Directory::Explore(FilenameType const &name, bool recursive)
   std::string fileName;
   //std::string dirName = Util::NormalizePath(Toplevel);
   std::string dirName = name;
+  Directories.push_back( dirName );
 #ifdef _MSC_VER
   WIN32_FIND_DATA fileData;
   assert( Toplevel[Toplevel.size()-1] == '/' );
@@ -130,7 +131,6 @@ unsigned int Directory::Explore(FilenameType const &name, bool recursive)
       assert( d->d_name[0] != '.' ); // hidden directory ??
       if ( recursive )
         {
-        Directories.push_back( fileName );
         nFiles += Explore( fileName, recursive);
         }
       }

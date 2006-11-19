@@ -55,6 +55,8 @@ public :
 
   // construct a list of filenames and subdirectory beneath directory: name
   unsigned int Load(FilenameType const &name, bool recursive = false) {
+    Filenames.clear(); // clear previous
+    Directories.clear(); // clear previous
     Toplevel = name;
     return Explore( Toplevel, recursive );
   }
