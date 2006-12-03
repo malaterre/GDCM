@@ -33,6 +33,7 @@ SET(DSED_TEST_SRCS
   TestVR
   TestValue
   TestWriter
+  TestTorture
   )
 
 OPTION(SHARED_PTR "shared_ptr" OFF)
