@@ -8,7 +8,6 @@
 0002 0016 AE 1 Source Application Entity Title
 0002 0100 UI 1 Private Information Creator UID
 0002 0102 OB 1 Private Information
-
 0004 0000 UL 1 Group Length
 0004 1130 CS 1 File-set ID
 0004 1141 CS 1-8 File-set Descriptor File ID
@@ -253,7 +252,7 @@
 0018 003a ST 1 Intervention Description
 0018 0040 IS 1 Cine Rate
 0018 0050 DS 1 Slice Thickness
-0018 0060 DS 1 KVP
+0018 0060 DS 1 kVp
 0018 0070 IS 1 Counts Accumulated
 0018 0071 CS 1 Acquisition Termination Condition
 0018 0072 DS 1 Effective Duration
