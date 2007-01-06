@@ -798,6 +798,7 @@
 0018 9440 SS 2 Center of Circular Exposure Control Sensing Region
 0018 9441 US 1 Radius of Circular Exposure Control Sensing Region
 0018 9442 SS 2-n Vertices of the Polygonal Exposure Control Sensing Region
+0018 9445 FL 1 SHALL NOT BE USED (RET)
 0018 9447 FL 1 Column Angulation (Patient)
 0018 9449 FL 1 Beam Angle
 0018 9451 SQ 1 Frame Detector Parameters Sequence
