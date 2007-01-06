@@ -48,7 +48,18 @@ class PdfTextParser:
       return True
     elif s == "PS 3.6-2006":
       return True
+    elif s == "PS 3.6-2007":
+      return True
     patt = re.compile('^Page [0-9]+$') 
+    if( patt.match(s) ):
+      return True
+    patt = re.compile('^(.*)PS 3.6-2007(.*)$') 
+    if( patt.match(s) ):
+      return True
+    patt = re.compile('^\s*(- Standard -)\s*')
+    if( patt.match(s) ):
+      return True
+    patt = re.compile('^\s*Tag\s+Name\s+VR\s+VM\s*$')
     if( patt.match(s) ):
       return True
     return False
@@ -60,9 +71,14 @@ class PdfTextParser:
     return False
 
   def IsAFullLine(self,s):
-    patt = re.compile('^\\([0-9a-fA-Fx]+,[0-9a-fA-F]+\\) (.*) [A-Z][A-Z] [0-9]$')
+    #patt = re.compile('^\\([0-9a-fA-Fx]+,[0-9a-fA-F]+\\) (.*) [A-Z][A-Z] [0-9]$')
+    patt = re.compile('^\\([0-9a-fA-Fx]+,[0-9a-fA-F]+\\)\s+(.*)\s+[A-Z][A-Z]\s+([0-9n-]+)\s*$')
     if( patt.match(s) ):
       return True
+    patt = re.compile('^\\([0-9a-fA-Fx]+,[0-9a-fA-F]+\\)\s+(.*)\s+[A-Z][A-Z]\s+([0-9n-]+)\s+RET\s*$')
+    if( patt.match(s) ):
+      return True
+    print "IsAFullLine failed on", s
     return False
 
   # FIXME this function could be avoided...
@@ -184,7 +200,8 @@ class DicomV3Expander:
         return s
       else:
         print "Impossible case:", s
-        os.sys.exit(1)
+        #os.sys.exit(1)
+        return ""
 
   def AddOutputLine(self,s):
     if s.__class__ == list:
@@ -319,21 +336,21 @@ class Converter:
     for line in self._Infile.readlines():
       line = line[:-1] # remove '\n'
       if (not self.IsAFullLine(line) ):
-        print line
+        print "Convert pb:", line
 
   def IsAFullLine(self,s):
-    patt = re.compile('^\\(([0-9a-fA-Fx]+),([0-9a-fA-F]+)\\) (.*) ([A-Z][A-Z]) ([0-9n-]+)[ ]*$')
+    patt = re.compile('^\\(([0-9a-fA-Fx]+),([0-9a-fA-F]+)\\)\s+(.*)\s+([A-Z][A-Z])\s+([0-9n-]+)\s*$')
     m = patt.match(s)
     if( m ):
       output = ''
-      output = m.group(1).lower() + ' ' + m.group(2).lower() + ' ' + m.group(4) + ' ' + m.group(5) + ' ' + m.group(3)
+      output = m.group(1).lower() + ' ' + m.group(2).lower() + ' ' + m.group(4) + ' ' + m.group(5) + ' ' + m.group(3).strip()
       self.AddOutputLine( output )
       return True
-    patt_ret = re.compile('^\\(([0-9a-fA-Fx]+),([0-9a-fA-F]+)\\) (.*) ([A-Z][A-Z]) ([0-9n-]+) (RET)[ ]*$')
+    patt_ret = re.compile('^\\(([0-9a-fA-Fx]+),([0-9a-fA-F]+)\\)\s+(.*)\s+([A-Z][A-Z])\s+([0-9n-]+)\s+(RET)\s*$')
     m = patt_ret.match(s)
     if( m ):
       output = ''
-      output = m.group(1).lower() + ' ' + m.group(2).lower() + ' ' + m.group(4) + ' ' + m.group(5) + ' ' + m.group(3) + ' (' + m.group(6) + ')'
+      output = m.group(1).lower() + ' ' + m.group(2).lower() + ' ' + m.group(4) + ' ' + m.group(5) + ' ' + m.group(3).strip() + ' (' + m.group(6) + ')'
       self.AddOutputLine( output )
       return True
     return False
