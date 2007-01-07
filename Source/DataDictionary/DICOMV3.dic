@@ -997,7 +997,7 @@
 0028 1102 US or SS 3 Green Palette Color Lookup Table Descriptor
 0028 1103 US or SS 3 Blue Palette Color Lookup Table Descriptor
 0028 1199 UI 1 Palette Color Lookup Table UID
-0028 1200 OW 1 Gray Lookup Table Data (RET)
+0028 1200 US or SS or OW 1-n Gray Lookup Table Data (RET)
 0028 1201 OW 1 Red Palette Color Lookup Table Data
 0028 1202 OW 1 Green Palette Color Lookup Table Data
 0028 1203 OW 1 Blue Palette Color Lookup Table Data
