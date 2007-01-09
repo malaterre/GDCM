@@ -70,7 +70,7 @@
 0008 0081 ST 1 Institution Address
 0008 0082 SQ 1 Institution Code Sequence
 0008 0090 PN 1 Referring Physician’s Name
-0008 0092 ST 1 Referring Physician's Address
+0008 0092 ST 1 Referring Physician’s Address
 0008 0094 SH 1-n Referring Physician’s Telephone Numbers
 0008 0096 SQ 1 Referring Physician Identification Sequence
 0008 0100 SH 1 Code Value
@@ -180,22 +180,22 @@
 0010 0020 LO 1 Patient ID
 0010 0021 LO 1 Issuer of Patient ID
 0010 0022 CS 1 Type of Patient ID
-0010 0030 DA 1 Patient's Birth Date
-0010 0032 TM 1 Patient's Birth Time
-0010 0040 CS 1 Patient's Sex
-0010 0050 SQ 1 Patient's Insurance Plan Code Sequence
+0010 0030 DA 1 Patient’s Birth Date
+0010 0032 TM 1 Patient’s Birth Time
+0010 0040 CS 1 Patient’s Sex
+0010 0050 SQ 1 Patient’s Insurance Plan Code Sequence
 0010 0101 SQ 1 Patient’s Primary Language Code Sequence
 0010 0102 SQ 1 Patient’s Primary Language Code Modifier Sequence
 0010 1000 LO 1-n Other Patient IDs
 0010 1001 PN 1-n Other Patient Names
 0010 1002 SQ 1 Other Patient IDs Sequence
-0010 1005 PN 1 Patient's Birth Name
-0010 1010 AS 1 Patient's Age
-0010 1020 DS 1 Patient's Size
-0010 1030 DS 1 Patient's Weight
-0010 1040 LO 1 Patient's Address
+0010 1005 PN 1 Patient’s Birth Name
+0010 1010 AS 1 Patient’s Age
+0010 1020 DS 1 Patient’s Size
+0010 1030 DS 1 Patient’s Weight
+0010 1040 LO 1 Patient’s Address
 0010 1050 LO 1-n Insurance Plan Identification (RET)
-0010 1060 PN 1 Patient's Mother's Birth Name
+0010 1060 PN 1 Patient’s Mother’s Birth Name
 0010 1080 LO 1 Military Rank
 0010 1081 LO 1 Branch of Service
 0010 1090 LO 1 Medical Record Locator
@@ -210,7 +210,7 @@
 0010 21b0 LT 1 Additional Patient History
 0010 21c0 US 1 Pregnancy Status
 0010 21d0 DA 1 Last Menstrual Date
-0010 21f0 LO 1 Patient's Religious Preference
+0010 21f0 LO 1 Patient’s Religious Preference
 0010 2201 LO 1 Patient Species Description
 0010 2202 SQ 1 Patient Species Code Sequence
 0010 2203 CS 1 Patient’s Sex Neutered
@@ -304,7 +304,7 @@
 0018 1018 LO 1 Secondary Capture Device Manufacturer’s Model Name
 0018 1019 LO 1-n Secondary Capture Device Software Version(s)
 0018 101a LO 1-n Hardcopy Device Software Version
-0018 101b LO 1 Hardcopy Device Manufacturer's Model Name
+0018 101b LO 1 Hardcopy Device Manufacturer’s Model Name
 0018 1020 LO 1-n Software Version(s)
 0018 1022 SH 1 Video Image Format Acquired
 0018 1023 LO 1 Digital Image Format Acquired
