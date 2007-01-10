@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   <xsl:output method="text" indent="yes"/>
-<!-- XSL to convert XML GDCM2 data dictionay into the old 
-     GDCM1 data dictionary -->
+<!-- XSL to convert XML GDCM2 data dictionay into
+     David Clunie's dicom3tools data dictionary 
+Checked against:
+     dicom3tools_1.00.snapshot.20061120/libsrc/standard/elmdict/dicom3.tpl
+-->
 
-<!--life save xsl script found at:
+<!--life saver xsl script found at:
 http://www.thescripts.com/forum/thread86881.html
 -->
   <xsl:template name="upperCase">
