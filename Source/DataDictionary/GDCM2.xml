@@ -4,6 +4,162 @@
 $ xsltproc gdcm2html.xsl GDCM2.xml
 -->
 <dict>
+  <entry group="0000" element="0000" retired="false">
+    <description>Group Length</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="0001" retired="true" version="2">
+    <description>Command Length to End</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="0002" retired="false">
+    <description>Affected SOP Class UID</description>
+    <representations>
+      <representation vr="UI" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="0003" retired="false">
+    <description>Requested SOP Class UID</description>
+    <representations>
+      <representation vr="UI" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="0010" retired="true" version="2">
+    <description>Command Recognition Code</description>
+    <representations>
+      <representation vr="SH" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="0100" retired="false">
+    <description>Command Field</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="0110" retired="false">
+    <description>Message ID (first)</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="0120" retired="false">
+    <description>Message ID Responded to</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="0600" retired="false">
+    <description>Move Destination</description>
+    <representations>
+      <representation vr="AE" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="0700" retired="false">
+    <description>Priority</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="0800" retired="false">
+    <description>Data Set Type</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="0900" retired="false">
+    <description>Status</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="0901" retired="false">
+    <description>Offending Element</description>
+    <representations>
+      <representation vr="AT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="0902" retired="false">
+    <description>Error Comment</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="0903" retired="false">
+    <description>Error ID</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="1000" retired="false">
+    <description>SOP Affected Instance UID</description>
+    <representations>
+      <representation vr="UI" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="1001" retired="false">
+    <description>SOP Requested Instance UID</description>
+    <representations>
+      <representation vr="UI" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="1002" retired="false">
+    <description>Event Type ID</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="1005" retired="false">
+    <description>Attribute Identifier List</description>
+    <representations>
+      <representation vr="AT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="1008" retired="false">
+    <description>Action Type ID</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="1020" retired="false">
+    <description>Remaining Suboperations</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="1021" retired="false">
+    <description>Completed Suboperations</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="1022" retired="false">
+    <description>Failed Suboperations</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="1023" retired="false">
+    <description>Warning Suboperations</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="1030" retired="false">
+    <description>AE Title</description>
+    <representations>
+      <representation vr="AE" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0000" element="1031" retired="false">
+    <description>Message ID (second)</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
   <entry group="0002" element="0000" retired="false">
     <description>Group Length</description>
     <representations>
@@ -64,7 +220,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="OB" vm="1"/>
     </representations>
   </entry>
-  <entry group="0004" element="0000" retired="false">
+  <entry group="0004" element="0000" retired="true">
     <description>Group Length</description>
     <representations>
       <representation vr="UL" vm="1"/>
@@ -184,7 +340,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="UL" vm="1"/>
     </representations>
   </entry>
-  <entry group="0008" element="0001" retired="true">
+  <entry group="0008" element="0001" retired="true" version="2">
     <description>Length to End</description>
     <representations>
       <representation vr="UL" vm="1"/>
@@ -202,7 +358,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="CS" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0008" element="0010" retired="true">
+  <entry group="0008" element="0010" retired="true" version="2">
     <description>Recognition Code</description>
     <representations>
       <representation vr="CS" vm="1"/>
@@ -328,13 +484,13 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="TM" vm="1"/>
     </representations>
   </entry>
-  <entry group="0008" element="0040" retired="true">
+  <entry group="0008" element="0040" retired="true" version="2">
     <description>Data Set Type</description>
     <representations>
       <representation vr="US" vm="1"/>
     </representations>
   </entry>
-  <entry group="0008" element="0041" retired="true">
+  <entry group="0008" element="0041" retired="true" version="2">
     <description>Data Set Subtype</description>
     <representations>
       <representation vr="LO" vm="1"/>
@@ -556,7 +712,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="0008" element="1000" retired="true">
+  <entry group="0008" element="1000" retired="true" version="2">
     <description>Network ID</description>
     <representations>
       <representation vr="AE" vm="1"/>
@@ -964,7 +1120,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="UI" vm="1"/>
     </representations>
   </entry>
-  <entry group="0008" element="4000" retired="true">
+  <entry group="0008" element="4000" retired="true" version="2">
     <description>Identifying Comments</description>
     <representations>
       <representation vr="LT" vm="1"/>
@@ -1180,7 +1336,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="0010" element="1050" retired="true">
+  <entry group="0010" element="1050" retired="true" version="2">
     <description>Insurance Plan Identification</description>
     <representations>
       <representation vr="LO" vm="1-n"/>
@@ -2434,7 +2590,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="SH" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0018" element="1240" retired="true">
+  <entry group="0018" element="1240" retired="true" version="2">
     <description>Upper/Lower Pixel Values</description>
     <representations>
       <representation vr="IS" vm="1-n"/>
@@ -2890,7 +3046,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="IS" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0018" element="4000" retired="true">
+  <entry group="0018" element="4000" retired="true" version="2">
     <description>Acquisition Comments</description>
     <representations>
       <representation vr="LT" vm="1"/>
@@ -2962,13 +3118,13 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="5030" retired="true">
+  <entry group="0018" element="5030" retired="true" version="2">
     <description>Dynamic Range</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="5040" retired="true">
+  <entry group="0018" element="5040" retired="true" version="2">
     <description>Total Gain</description>
     <representations>
       <representation vr="DS" vm="1"/>
@@ -5059,7 +5215,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0020" element="0030" retired="true">
+  <entry group="0020" element="0030" retired="true" version="2">
     <description>Image Position</description>
     <representations>
       <representation vr="DS" vm="3"/>
@@ -5071,7 +5227,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="DS" vm="3"/>
     </representations>
   </entry>
-  <entry group="0020" element="0035" retired="true">
+  <entry group="0020" element="0035" retired="true" version="2">
     <description>Image Orientation</description>
     <representations>
       <representation vr="DS" vm="6"/>
@@ -5083,7 +5239,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="DS" vm="6"/>
     </representations>
   </entry>
-  <entry group="0020" element="0050" retired="true">
+  <entry group="0020" element="0050" retired="true" version="2">
     <description>Location</description>
     <representations>
       <representation vr="DS" vm="1"/>
@@ -5107,13 +5263,13 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0020" element="0070" retired="true">
+  <entry group="0020" element="0070" retired="true" version="2">
     <description>Image Geometry Type</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="0020" element="0080" retired="true">
+  <entry group="0020" element="0080" retired="true" version="2">
     <description>Masking Image</description>
     <representations>
       <representation vr="CS" vm="1-n"/>
@@ -5149,7 +5305,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0020" element="1001" retired="true">
+  <entry group="0020" element="1001" retired="true" version="2">
     <description>Acquisitions in Series</description>
     <representations>
       <representation vr="IS" vm="1"/>
@@ -5161,7 +5317,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0020" element="1003" retired="true">
+  <entry group="0020" element="1003" retired="true" version="2">
     <description>Images in Series</description>
     <representations>
       <representation vr="IS" vm="1"/>
@@ -5173,13 +5329,13 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0020" element="1005" retired="true">
+  <entry group="0020" element="1005" retired="true" version="2">
     <description>Images in Study</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0020" element="1020" retired="true">
+  <entry group="0020" element="1020" retired="true" version="2">
     <description>Reference</description>
     <representations>
       <representation vr="CS" vm="1-n"/>
@@ -5239,43 +5395,43 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0020" element="31xx" retired="true">
+  <entry group="0020" element="31xx" retired="true" version="2">
     <description>Source Image IDs</description>
     <representations>
       <representation vr="CS" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0020" element="3401" retired="true">
+  <entry group="0020" element="3401" retired="true" version="2">
     <description>Modifying Device ID</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0020" element="3402" retired="true">
+  <entry group="0020" element="3402" retired="true" version="2">
     <description>Modified Image ID</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0020" element="3403" retired="true">
+  <entry group="0020" element="3403" retired="true" version="2">
     <description>Modified Image Date</description>
     <representations>
       <representation vr="DA" vm="1"/>
     </representations>
   </entry>
-  <entry group="0020" element="3404" retired="true">
+  <entry group="0020" element="3404" retired="true" version="2">
     <description>Modifying Device Manufacturer</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="0020" element="3405" retired="true">
+  <entry group="0020" element="3405" retired="true" version="2">
     <description>Modified Image Time</description>
     <representations>
       <representation vr="TM" vm="1"/>
     </representations>
   </entry>
-  <entry group="0020" element="3406" retired="true">
+  <entry group="0020" element="3406" retired="true" version="2">
     <description>Modified Image Description</description>
     <representations>
       <representation vr="LO" vm="1"/>
@@ -5287,13 +5443,13 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="LT" vm="1"/>
     </representations>
   </entry>
-  <entry group="0020" element="5000" retired="true">
+  <entry group="0020" element="5000" retired="true" version="2">
     <description>Original Image Identification</description>
     <representations>
       <representation vr="AT" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0020" element="5002" retired="true">
+  <entry group="0020" element="5002" retired="true" version="2">
     <description>Original Image Identification Nomenclature</description>
     <representations>
       <representation vr="CS" vm="1-n"/>
@@ -5438,7 +5594,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
     </representations>
   </entry>
   <entry group="0020" element="9251" retired="false">
-    <description>R – R Interval Time Measured</description>
+    <description>R-R Interval Time Measured</description>
     <representations>
       <representation vr="FD" vm="1"/>
     </representations>
@@ -5689,7 +5845,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0028" element="0005" retired="true">
+  <entry group="0028" element="0005" retired="true" version="2">
     <description>Image Dimensions</description>
     <representations>
       <representation vr="US" vm="1"/>
@@ -5767,13 +5923,13 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="IS" vm="2"/>
     </representations>
   </entry>
-  <entry group="0028" element="0040" retired="true">
+  <entry group="0028" element="0040" retired="true" version="2">
     <description>Image Format</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0028" element="0050" retired="true">
+  <entry group="0028" element="0050" retired="true" version="2">
     <description>Manipulated Image</description>
     <representations>
       <representation vr="LO" vm="1-n"/>
@@ -5785,7 +5941,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="CS" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0028" element="0060" retired="true">
+  <entry group="0028" element="0060" retired="true" version="2">
     <description>Compression Code</description>
     <representations>
       <representation vr="CS" vm="1"/>
@@ -5815,14 +5971,14 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="US" vm="1"/>
     </representations>
   </entry>
-  <entry group="0028" element="0104" retired="true">
+  <entry group="0028" element="0104" retired="true" version="2">
     <description>Smallest Valid Pixel Value</description>
     <representations>
       <representation vr="US" vm="1"/>
       <representation vr="SS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0028" element="0105" retired="true">
+  <entry group="0028" element="0105" retired="true" version="2">
     <description>Largest Valid Pixel Value</description>
     <representations>
       <representation vr="US" vm="1"/>
@@ -5878,7 +6034,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="SS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0028" element="0200" retired="true">
+  <entry group="0028" element="0200" retired="true" version="2">
     <description>Image Location</description>
     <representations>
       <representation vr="US" vm="1"/>
@@ -5962,7 +6118,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0028" element="1080" retired="true">
+  <entry group="0028" element="1080" retired="true" version="2">
     <description>Gray Scale</description>
     <representations>
       <representation vr="CS" vm="1"/>
@@ -5974,7 +6130,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0028" element="1100" retired="true">
+  <entry group="0028" element="1100" retired="true" version="2">
     <description>Gray Lookup Table Descriptor</description>
     <representations>
       <representation vr="US" vm="3"/>
@@ -6008,7 +6164,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="UI" vm="1"/>
     </representations>
   </entry>
-  <entry group="0028" element="1200" retired="true">
+  <entry group="0028" element="1200" retired="true" version="2">
     <description>Gray Lookup Table Data</description>
     <representations>
       <representation vr="US" vm="1-n"/>
@@ -6151,7 +6307,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0028" element="4000" retired="true">
+  <entry group="0028" element="4000" retired="true" version="2">
     <description>Image Presentation Comments</description>
     <representations>
       <representation vr="LT" vm="1"/>
@@ -13895,13 +14051,13 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="PN" vm="1"/>
     </representations>
   </entry>
-  <entry group="4000" element="0010" retired="true">
+  <entry group="4000" element="0010" retired="true" version="2">
     <description>Arbitrary</description>
     <representations>
       <representation vr="LT" vm="1"/>
     </representations>
   </entry>
-  <entry group="4000" element="4000" retired="true">
+  <entry group="4000" element="4000" retired="true" version="2">
     <description>Text Comments</description>
     <representations>
       <representation vr="LT" vm="1"/>
@@ -14363,7 +14519,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="US" vm="1"/>
     </representations>
   </entry>
-  <entry group="60xx" element="0060" retired="true">
+  <entry group="60xx" element="0060" retired="true" version="2">
     <description>Overlay Compression Code</description>
     <representations>
       <representation vr="CS" vm="1"/>
@@ -14381,13 +14537,13 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="US" vm="1"/>
     </representations>
   </entry>
-  <entry group="60xx" element="0110" retired="true">
+  <entry group="60xx" element="0110" retired="true" version="2">
     <description>Overlay Format</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="60xx" element="0200" retired="true">
+  <entry group="60xx" element="0200" retired="true" version="2">
     <description>Overlay Location</description>
     <representations>
       <representation vr="US" vm="1"/>
@@ -14478,7 +14634,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="OW" vm="1"/>
     </representations>
   </entry>
-  <entry group="60xx" element="4000" retired="true">
+  <entry group="60xx" element="4000" retired="true" version="2">
     <description>Overlay Comments</description>
     <representations>
       <representation vr="LT" vm="1"/>
