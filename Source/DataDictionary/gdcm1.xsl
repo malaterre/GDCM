@@ -6,21 +6,19 @@
 <!-- The main template that loop over all dict/entry -->
   <xsl:template match="/">
     <xsl:for-each select="dict/entry">
-      <xsl:value-of select="@group"/>
+      <xsl:value-of select="translate(@group,'x','0')"/>
       <xsl:text> </xsl:text>
-      <xsl:value-of select="@element"/>
+      <xsl:value-of select="translate(@element,'x','0')"/>
       <xsl:text> </xsl:text>
-      <xsl:for-each select="representations/r">
-        <xsl:value-of select="@vr"/>
-        <xsl:if test="position() != last()">
-          <xsl:text> or </xsl:text>
+      <xsl:for-each select="representations/representation">
+        <xsl:if test="position() = 1">
+          <xsl:value-of select="@vr"/>
         </xsl:if>
       </xsl:for-each>
       <xsl:text> </xsl:text>
-      <xsl:for-each select="representations/r">
-        <xsl:value-of select="@vm"/>
-        <xsl:if test="position() != last()">
-          <xsl:text> or </xsl:text>
+      <xsl:for-each select="representations/representation">
+        <xsl:if test="position() = 1">
+          <xsl:value-of select="@vm"/>
         </xsl:if>
       </xsl:for-each>
       <xsl:text> </xsl:text>
