@@ -1776,7 +1776,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
     </representations>
   </entry>
   <entry group="0018" element="0060" retired="false">
-    <description>KVP</description>
+    <description>kVp</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
