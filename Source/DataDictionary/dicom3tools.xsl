@@ -57,6 +57,7 @@ http://www.thescripts.com/forum/thread86881.html
       <xsl:for-each select="representations/representation">
         <xsl:value-of select="@vr"/>
         <xsl:if test="position() != last()">
+          <!--xsl:text> or </xsl:text--> <!-- not very consistant -->
           <xsl:text>/</xsl:text>
         </xsl:if>
       </xsl:for-each>
