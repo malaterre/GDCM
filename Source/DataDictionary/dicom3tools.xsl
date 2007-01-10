@@ -6,6 +6,19 @@
 Checked against:
      dicom3tools_1.00.snapshot.20061120/libsrc/standard/elmdict/dicom3.tpl
 -->
+<!--
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006 Mathieu Malaterre
+  Copyright (c) 1993-2005 CREATIS
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+-->
 
 <!--life saver xsl script found at:
 http://www.thescripts.com/forum/thread86881.html
