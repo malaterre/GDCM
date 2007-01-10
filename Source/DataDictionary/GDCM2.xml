@@ -2460,7 +2460,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
     </representations>
   </entry>
   <entry group="0018" element="1153" retired="false">
-    <description>Exposure in uAs</description>
+    <description>Exposure in µAs</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
