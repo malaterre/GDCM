@@ -14,10 +14,21 @@ class Attribute:
     self._Tag = '(0000,0000)'
     self._Type = ''
     self._Description= ''
+  def SetInit(self,s):
+    # Should be something like:
+    # Blue Palette Color Lookup Table       (0028,1103)     1C   Specifies the format of the Blue Palette
+    patt = re.compile("^(.*)(\\([0-9A-F]+,[0-9A-F]+\\))\s+([1-3C]+)\s+(.*)\s*$")
+    m = patt.match(s)
+    assert m
+    self._Name = m.group(1).strip()
+    self._Tag = m.group(2).strip()
+    self._Type = m.group(3).strip()
+    self._Description = m.group(4).strip()
   def SetName(self,s):
     self._Name = s
   def AppendName(self,s):
-    self._Name += s
+    self._Name += " "
+    self._Name += s.strip()
   def SetTag(self,s):
     self._Tag = s
   def SetType(self,s):
@@ -25,7 +36,12 @@ class Attribute:
   def SetDescription(self,s):
     self._Description = s
   def AppendDescription(self,s):
-    self._Description += s
+    self._Description += " "
+    self._Description += s.strip()
+  def GetAsXML(self):
+    return "<entry name=\""+self._Name+"\" tag=\""+self._Tag+"\" type=\""+self._Type+"\" description=\""+self._Description+"\"></entry>"
+  def Print(self):
+    print self.GetAsXML()
 
 class Part3Parser:
   # Cstor
@@ -100,17 +116,19 @@ class Part3Parser:
       s1 = m.group(1).strip()
       if s1 == '':
         return False
-      print "First Line Attribute:", s1, s
+      #print "First Line Attribute:", s1, s
       return True
     #print "No:", s
     return False
 
-  def IsNextLineAttribute(self,s):
+  def IsIncludeTable(self,s):
     # Need to support : "Include `Image Pixel Macro' Table C.7-11b"
-    if self._Shift == 0:
-      patt = re.compile("^Include `(.*)' Table C.[0-9a-z-]+$")
-      m = patt.match(s)
-      return m
+    #assert self._Shift == 0
+    patt = re.compile("^Include `(.*)' Table C.[0-9a-z-]+$")
+    m = patt.match(s)
+    return m
+
+  def IsNextLineAttribute(self,s):
     assert self._Shift != 0
     if len(s) <= self._Shift:
       return False
@@ -118,11 +136,12 @@ class Part3Parser:
     blank = blank.strip()
     #print "BLANK:", blank
     if blank == '':
+      self._CurrentAttribute.AppendDescription( s )
       return True
-    " The following is really ugly ... need to be fixed"
-    if blank == 'Descriptor':
-      return True
-    if blank == 'Data':
+    # The following is really ugly ... need to be fixed
+    if blank == 'Descriptor' or blank == 'Data':
+      self._CurrentAttribute.AppendName( blank )
+      self._CurrentAttribute.AppendDescription( s[self._Shift:-1] )
       return True
 
   def FindShiftValue(self,s):
@@ -154,22 +173,32 @@ class Part3Parser:
         if(self.IsTableName(line2)):
           line3 = cmd_input.next()[:-1]
           if( self.IsTableDescription(line3) ):
-            #line4 = cmd_input.next()[:-1]
+            # Ok we found a table
+            outfile.write( 
+              "<table ref=\""+line.strip()+"\" name=\""+line2.strip()+"\">"
+            )
             buffer = ''
+            self._CurrentAttribute = Attribute()
             self._Shift = 0
             for subline_ori in cmd_input:
               subline = subline_ori[:-1]
-              if( self.IsFirstLineAttribute(subline)):
-                print "Previous Buffer was: ", buffer
-                if( buffer != '' ):
-                  outfile.write( buffer )
+              if( self.IsIncludeTable(subline)):
+                #print "Include Table:", subline
+                if( subline != '' ):
+                  outfile.write( "<entry ref=\""+subline+"\"/>" )
                   outfile.write( '\n' )
+              elif( self.IsFirstLineAttribute(subline)):
+                #print "Previous Buffer was: ", buffer
+                if( buffer != '' ):
+                  outfile.write( self._CurrentAttribute.GetAsXML() )
+                  outfile.write( '\n' )
+                self._CurrentAttribute.SetInit(subline)
                 self.FindShiftValue(subline)
                 assert self._Shift != 0
                 buffer = subline
               else:
                 if( self.IsComment(subline) ):
-                  print "Found Comment"
+                  print "Found Comment: ", subline
                 else:
                   if( self.IsNextLineAttribute(subline) ):
                     buffer += ' ' + subline.strip()
@@ -178,8 +207,9 @@ class Part3Parser:
                     self._Shift = 0
                     self._IsInTable = False
                     if( buffer != '' ):
-                      outfile.write( buffer )
+                      outfile.write( self._CurrentAttribute.GetAsXML() )
                       outfile.write( '\n' )
+                    outfile.write( '</table>' )
                     break
               #print "Working on: ", subline
               if not subline_ori:
