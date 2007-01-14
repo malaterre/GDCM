@@ -3,6 +3,10 @@
 
 """
 $ pdftotext -layout -nopgbrk -f 303 -l 305 07_03pu.pdf page303.txt
+
+$ python  ParseAttributes.py page273-1000.txt out.txt > log2
+$ grep ADD log2 | grep -v "Notes:" | grep -v "Note:" | grep -v "C.8" | grep -v "C.7"
+
 """
 import re,os
 
@@ -43,7 +47,9 @@ class Attribute:
     self._Description += " "
     self._Description += s.strip()
   def GetAsXML(self):
-    return "<entry group=\""+self._Tag[1:5]+"\" element=\""+self._Tag[6:10]+"\" name=\""+self._Name+"\" type=\""+self._Type+"\" description=\""+self._Description+"\"></entry>"
+    description = self._Description.replace('"','&quot;')
+    description = description.replace('&','&amp;')
+    return "<entry group=\""+self._Tag[1:5]+"\" element=\""+self._Tag[6:10]+"\" name=\""+self._Name.replace('&','&amp;')+"\" type=\""+self._Type+"\" description=\""+description+"\"></entry>"
   def Print(self):
     print self.GetAsXML()
 
@@ -69,11 +75,12 @@ class Part3Parser:
     patt1 = re.compile("^\s+- Standard -\s*$")
     patt2 = re.compile("^\s+PS 3.3 - 2007\s*")
     patt3 = re.compile("^\s+Page [0-9]+\s*$")
-    patt3 = re.compile("^\s*Notes:$")
+    patt4 = re.compile("^\s*Notes:$")
     m1 = patt1.match(s)
     m2 = patt2.match(s)
     m3 = patt3.match(s)
-    if(m1 or m2 or m3):
+    m4 = patt4.match(s)
+    if(m1 or m2 or m3 or m4):
       print "Comment:", s
       return True
     if self.IsTableDescription(s):
@@ -260,6 +267,7 @@ class Part3Parser:
       print "IsNextLineAttribute failed with", s
       return False
     if len(s) <= self._Shift:
+      print "IsNextLineAttribute failed with", s
       return False
     blank = s[0:self._Shift]
     blank = blank.strip()
@@ -273,6 +281,28 @@ class Part3Parser:
       or blank == 'Sequence' \
       or blank == 'Distance' \
       or blank == 'Index' \
+      or blank == 'Time' \
+      or blank == 'Device Number' \
+      or blank == 'Justification' \
+      or blank == 'Shape' \
+      or blank == 'Relationship' \
+      or blank == 'in Float' \
+      or blank == 'Left Vertical Edge' \
+      or blank == 'State Sequence' \
+      or blank == 'In-plane' \
+      or blank == 'Certification Number' \
+      or blank == 'Right Vertical Edge' \
+      or blank == 'Accumulated' \
+      or blank == 'Equivalent Thickness' \
+      or blank == 'Distances' \
+      or blank == 'Upper Horizontal Edge' \
+      or blank == 'Modification' \
+      or blank == 'Power Ratio' \
+      or blank == 'Lower Horizontal Edge' \
+      or blank == 'Device Distance' \
+      or blank == 'Sensing Region' \
+      or blank == 'Control Sensing Region' \
+      or blank == 'Water Equivalent Thickness' \
       or blank == 'Columns' \
       or blank == 'Rows' \
       or blank == 'Ratio' \
@@ -373,6 +403,7 @@ class Part3Parser:
       return True
     else:
       print "ADD KEYWORD:", blank
+    return False
 
   def FindShiftValue(self,s):
     # Line should look like:
@@ -426,7 +457,8 @@ class Part3Parser:
                 # BUG DO NOT SUPPORT MULTI_LINE INCLUDE 
                 #print "Include Table:", subline
                 if( subline != '' ):
-                  outfile.write( "<include ref=\""+subline+"\"/>" )
+                  outfile.write( "<include ref=\""+\
+                    subline.replace('"','&quot;')+"\"/>" )
                   outfile.write( '\n' )
               elif( self.IsFirstLineAttribute(subline)):
                 #print "Previous Buffer was: ", buffer
