@@ -18,7 +18,14 @@
   <xsl:template match="/">
     <html>
       <body>
+<!-- The main template that loop over all dict/entry -->
+          <xsl:for-each select="tables/table">
         <table border="1">
+          <caption>
+                <xsl:value-of select="@name"/>
+                <br/>
+                <xsl:value-of select="@ref"/>
+          </caption>
           <tr bgcolor="#d6d6d6"> <!--rgb(214,214,214) -->
             <th>Group</th>
             <th>Element</th>
@@ -26,8 +33,7 @@
             <th>Type</th>
             <th>Description</th>
           </tr>
-<!-- The main template that loop over all dict/entry -->
-          <xsl:for-each select="tables/table/entry">
+          <xsl:for-each select="entry">
             <tr>
               <td>
                 <xsl:value-of select="@group"/>
@@ -47,6 +53,7 @@
             </tr>
           </xsl:for-each>
         </table>
+          </xsl:for-each>
       </body>
     </html>
   </xsl:template>
