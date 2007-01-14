@@ -87,6 +87,7 @@ class Part3Parser:
     assert self._IsInTable != True
     self._IsInTable = False
     if s.strip() == 'Table C.7-23' or s.strip() == 'Table C.7-24' \
+      or s.strip() == 'Table C.7.6.10-1' \
       or s.strip() == 'Table C.7-25' \
       or s.strip() == 'Table C.7-26' \
       or s.strip() == 'Table C.7-27' \
@@ -115,7 +116,31 @@ class Part3Parser:
       or s.strip() == 'Table C.8-131' \
       or s.strip() == 'Table C.8-132' \
       or s.strip() == 'Table C.8-133' \
-      or s.strip() == 'Table C.8-134':
+      or s.strip() == 'Table C.8-134' \
+      or s.strip() == 'Table C.8.19.2-2' \
+      or s.strip() == 'Table C.10-10' \
+      or s.strip() == 'Table C.11-4' \
+      or s.strip() == 'Table C.12-2' \
+      or s.strip() == 'Table C.12-3' \
+      or s.strip() == 'Table C.12-4' \
+      or s.strip() == 'Table C.12-5' \
+      or s.strip() == 'Table C.12-7' \
+      or s.strip() == 'Table C.13-1' \
+      or s.strip() == 'Table C.13-2' \
+      or s.strip() == 'Table C.13-3' \
+      or s.strip() == 'Table C.13-4' \
+      or s.strip() == 'Table C.13-5' \
+      or s.strip() == 'Table C.13-7' \
+      or s.strip() == 'Table C.13-8' \
+      or s.strip() == 'Table C.13-9' \
+      or s.strip() == 'Table C.13-13' \
+      or s.strip() == 'Table C.14-1' \
+      or s.strip() == 'Table C.17.3-7' \
+      or s.strip() == 'Table C.17.3-8' \
+      or s.strip() == 'Table C.22.1-1':
+      # C.11-4, C.13-*, C.22.1-1:  Does not even comes with column type !!!
+      # C.12-7 is difficult to parse
+      # TODO: Last line of C.19-1...
       return False
     if(m):
       print "Start", s
@@ -159,6 +184,18 @@ class Part3Parser:
     if(m):
       print "Table Name", s
       return True
+    # Enhanced XA/XRF Image Module Table
+    patt = re.compile("^\s+[A-Z/a-z\s]+Module Table\s*$")
+    m = patt.match(s)
+    if(m):
+      print "Table Name", s
+      return True
+    # Presentation LUT Module
+    #patt = re.compile("^\s+Presentation LUT Module\s*$")
+    #m = patt.match(s)
+    #if(m):
+    #  print "Table Name", s
+    #  return True
     return False
 
   def IsTableName2(self,s):
@@ -179,7 +216,7 @@ class Part3Parser:
       print "Table Description:", s
       return True
     # Around page 574
-    patt  = re.compile("^\s*Attribute Name\s+Tag\s+Type\s+Description\s*$")
+    patt  = re.compile("^\s*Attribute [Nn]ame\s+Tag\s+Type\s+Description\s*$")
     m = patt.match(s)
     if(m):
       print "Table Description:", s
@@ -238,7 +275,23 @@ class Part3Parser:
       or blank == 'Index' \
       or blank == 'Columns' \
       or blank == 'Rows' \
+      or blank == 'Ratio' \
+      or blank == 'Display Grayscale Value' \
+      or blank == 'Display CIELab Value' \
+      or blank == 'UID' \
+      or blank == 'Pointer' \
+      or blank == 'Value' \
+      or blank == 'Annotation' \
+      or blank == 'Pointer Private Creator' \
+      or blank == 'Creator' \
+      or blank == 'Value Mapping Sequence' \
+      or blank == 'Performed Procedure' \
+      or blank == 'MAC Sequence' \
+      or blank == 'Class UID' \
+      or blank == 'Instance UID' \
+      or blank == 'Syntax UID' \
       or blank == 'Used' \
+      or blank == 'Identifier' \
       or blank == 'Datetime' \
       or blank == 'plane Phase Steps' \
       or blank == '(Patient)' \
@@ -253,6 +306,8 @@ class Part3Parser:
       or blank == 'Steps in-plane' \
       or blank == 'Steps out-of-plane' \
       or blank == 'Type' \
+      or blank == 'Explanation' \
+      or blank == 'Mapped' \
       or blank == 'Calibration' \
       or blank == 'Manufactured' \
       or blank == 'Thickness' \
@@ -280,9 +335,38 @@ class Part3Parser:
       or blank == 'Lookup Table Data' \
       or blank == 'Version' \
       or blank == 'Images' \
+      or blank == 'Wavelength' \
+      or blank == 'Code Sequence' \
+      or blank == 'Housing' \
+      or blank == 'Exposure' \
+      or blank == 'Beam' \
+      or blank == 'Angle' \
+      or blank == 'Rotation Angle' \
+      or blank == 'Corner' \
       or blank == 'Factor' \
       or blank == 'Product' \
       or blank == "Manufacturer's Model Name" \
+      or blank == 'Qualifier Code' \
+      or blank == 'Mapping Instance Sequence' \
+      or blank == 'Channels' \
+      or blank == 'Transformation Comment' \
+      or blank == 'Pixels' \
+      or blank == 'Group' \
+      or blank == 'Spatial Position' \
+      or blank == 'Creation Datetime' \
+      or blank == 'Grayscale Bit Depth' \
+      or blank == 'Bit Depth' \
+      or blank == 'Repaint Time' \
+      or blank == 'Definition Sequence' \
+      or blank == 'Procedure Code' \
+      or blank == 'Referenced' \
+      or blank == 'Usage Flag' \
+      or blank == 'Horizontal Dimension' \
+      or blank == 'Dimension' \
+      or blank == 'Direction' \
+      or blank == 'Registration Sequence' \
+      or blank == 'Transformation Matrix' \
+      or blank == 'Transformation Matrix Type' \
       or blank == 'Step Sequence':
       self._CurrentAttribute.AppendName( blank )
       self._CurrentAttribute.AppendDescription( s[self._Shift:] )
@@ -293,7 +377,7 @@ class Part3Parser:
   def FindShiftValue(self,s):
     # Line should look like:
     # Bits Stored ... (0028,0101) ... 1 ... Number of bits stored for each pixel
-    patt = re.compile("^[A-Za-z0-9µ /()'>-]+\s+\\([0-9A-F]+,[0-9A-F]+\\)\s+[1-3][C]*\s+(.*)$")
+    patt = re.compile("^[A-Za-z0-9µ /()'>-]+\s+\\([0-9A-Fx]+,[0-9A-F]+\\)\s+[1-3][C]*\s+(.*)$")
     m = patt.match(s)
     if(m):
       # worse case happen around page 448 with `Required`
