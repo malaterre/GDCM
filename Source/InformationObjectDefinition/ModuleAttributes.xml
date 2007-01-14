@@ -1760,8 +1760,8 @@
     <entry group="0028" element="1090" attribute="Recommended Viewing Mode" type="1C" description="Specifies the recommended viewing protocol(s). Enumerated Value: SUB = for subtraction with mask images Required if Mask Subtraction Sequence (0028,6100) is present. Note: The requirement in this module is type 1C and an Enumerated Value is specified which override the requirements of the Mask Module."/>
   </table>
   <table name="SOP COMMON MODULE ATTRIBUTES (C.12-1)">
-    <entry group="0008" element="0016" attribute="SOP Class UID" type="xx" description="Uniquely identifies the SOP Class. See PS 3.4."/>
-    <entry group="0008" element="0018" attribute="SOP Instance UID" type="xx" description="Uniquely identifies the SOP Instance. See PS 3.4."/>
+    <entry group="0008" element="0016" attribute="SOP Class UID" type="1" description="Uniquely identifies the SOP Class. See PS 3.4."/>
+    <entry group="0008" element="0018" attribute="SOP Instance UID" type="1" description="Uniquely identifies the SOP Instance. See PS 3.4."/>
     <entry group="0008" element="0005" attribute="Specific Character Set" type="1C" description="Character Set that expands or replaces the Basic Graphic Set. Required if an expanded or replacement character set is used. See C.12.1.1.2 for Defined Terms."/>
     <entry group="0008" element="0012" attribute="Instance Creation Date" type="3" description="Date the SOP Instance was created."/>
     <entry group="0008" element="0013" attribute="Instance Creation Time" type="3" description="Time the SOP Instance was created."/>
