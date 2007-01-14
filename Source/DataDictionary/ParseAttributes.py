@@ -100,7 +100,22 @@ class Part3Parser:
       or s.strip() == 'Table C.8-83' \
       or s.strip() == 'Table C.8-84' \
       or s.strip() == 'Table C.8-85' \
-      or s.strip() == 'Table C.8-86':
+      or s.strip() == 'Table C.8-86' \
+      or s.strip() == 'Table C.8-108' \
+      or s.strip() == 'Table C.8-109' \
+      or s.strip() == 'Table C.8-110' \
+      or s.strip() == 'Table C.8-111' \
+      or s.strip() == 'Table C.8-112' \
+      or s.strip() == 'Table C.8-115' \
+      or s.strip() == 'Table C.8-116' \
+      or s.strip() == 'Table C.8-127' \
+      or s.strip() == 'Table C.8-128' \
+      or s.strip() == 'Table C.8-129' \
+      or s.strip() == 'Table C.8-130' \
+      or s.strip() == 'Table C.8-131' \
+      or s.strip() == 'Table C.8-132' \
+      or s.strip() == 'Table C.8-133' \
+      or s.strip() == 'Table C.8-134':
       return False
     if(m):
       print "Start", s
@@ -221,6 +236,14 @@ class Part3Parser:
       or blank == 'Sequence' \
       or blank == 'Distance' \
       or blank == 'Index' \
+      or blank == 'Columns' \
+      or blank == 'Rows' \
+      or blank == 'Used' \
+      or blank == 'Datetime' \
+      or blank == 'plane Phase Steps' \
+      or blank == '(Patient)' \
+      or blank == 'Collection Center' \
+      or blank == 'Technique' \
       or blank == 'Interpretation' \
       or blank == 'Representation' \
       or blank == 'Configuration' \
