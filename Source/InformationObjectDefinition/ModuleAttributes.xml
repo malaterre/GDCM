@@ -558,7 +558,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0018" element="1150" name="Exposure Time" type="3" description="Time of x-ray exposure in msec"/>
     <entry group="0018" element="1151" name="X-ray Tube Current" type="3" description="X-ray Tube Current in mA."/>
     <entry group="0018" element="1152" name="Exposure" type="3" description="The exposure expressed in mAs, for example calculated from Exposure Time and X-ray Tube Current."/>
-    <entry group="0018" element="1153" name="Exposure in ?As" type="3" description="The exposure expressed in ?As, for example calculated from Exposure Time and X-ray Tube Current."/>
+    <entry group="0018" element="1153" name="Exposure in µAs" type="3" description="The exposure expressed in ?As, for example calculated from Exposure Time and X-ray Tube Current."/>
     <include ref="Include Basic Pixel Spacing Calibration Macro (Table 10-10)"/>
     <entry group="0018" element="1164" name="Imager Pixel Spacing" type="3" description="Physical distance measured at the front plane of the Image Receptor housing between the center of each pixel. Specified by a numeric pair - row spacing value (delimiter) column spacing value - in mm. In the case of CR, the front plane is defined to be the external surface of the CR plate closest to the patient and radiation source."/>
     <entry group="0018" element="1170" name="Generator Power" type="3" description="Power in kW to the x-ray generator."/>
@@ -593,7 +593,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0018" element="1150" name="Exposure Time" type="3" description="Time of x-ray exposure in msec"/>
     <entry group="0018" element="1151" name="X-ray Tube Current" type="3" description="X-ray Tube Current in mA."/>
     <entry group="0018" element="1152" name="Exposure" type="3" description="The exposure expressed in mAs, for example calculated from Exposure Time and X-ray Tube Current."/>
-    <entry group="0018" element="1153" name="Exposure in ?As" type="3" description="The exposure expressed in ?As, for example calculated from Exposure Time and X-ray Tube Current."/>
+    <entry group="0018" element="1153" name="Exposure in µAs" type="3" description="The exposure expressed in ?As, for example calculated from Exposure Time and X-ray Tube Current."/>
     <entry group="0018" element="1160" name="Filter Type" type="3" description="Label for the type of filter inserted into the x-ray beam."/>
     <entry group="0018" element="1170" name="Generator Power" type="3" description="Power in kW to the x-ray generator."/>
     <entry group="0018" element="1190" name="Focal Spot" type="3" description="Size of the focal spot in mm. For devices with variable focal spot or multiple focal spots, small dimension followed by large dimension."/>
@@ -1015,9 +1015,9 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0018" element="1151" name="X-Ray Tube Current" type="3" description="X-Ray Tube Current in mA."/>
     <entry group="0018" element="8151" name="X-Ray Tube Current in ?A" type="3" description="X-Ray Tube Current in ?A."/>
     <entry group="0018" element="1150" name="Exposure Time" type="3" description="Duration of X-Ray exposure in msec."/>
-    <entry group="0018" element="8150" name="Exposure Time in ?S" type="3" description="Duration of X-Ray exposure in ?sec."/>
+    <entry group="0018" element="8150" name="Exposure Time in µS" type="3" description="Duration of X-Ray exposure in ?sec."/>
     <entry group="0018" element="1152" name="Exposure" type="3" description="The exposure expressed in mAs, for example calculated from Exposure Time and X-ray Tube Current."/>
-    <entry group="0018" element="1153" name="Exposure in ?As" type="3" description="The exposure expressed in ?As, for example calculated from Exposure Time and X-ray Tube Current."/>
+    <entry group="0018" element="1153" name="Exposure in µAs" type="3" description="The exposure expressed in ?As, for example calculated from Exposure Time and X-ray Tube Current."/>
     <entry group="0018" element="1110" name="Distance Source to Detector" type="3" description="Distance in mm from source to detector center. Note:     This value is traditionally referred to as Source Image Receptor Distance (SID)."/>
     <entry group="0018" element="1111" name="Distance Source to Patient" type="3" description="Distance in mm from source to the table, support or bucky side that is closest to the Imaging Subject, as measured along the central ray of the X-Ray beam. Note:     1. This definition is less useful in terms of estimating geometric magnification than a measurement to a defined point within the Imaging Subject, but accounts for what is realistically measurable in an automated fashion in a clinical setting. 2. This measurement does not take into account any air gap between the Imaging Subject and the &amp;quot;front&amp;quot; of the table or bucky. 3. If the detector is not mounted in a table or bucky, then the actual position relative to the patient is implementation or operator defined. 4. This value is traditionally referred to as Source Object Distance (SOD)."/>
     <entry group="0018" element="115E" name="Image and Fluoroscopy Area Dose Product" type="3" description="X-Ray dose, measured in dGy*cm*cm, to which the patient was exposed for the acquisition of this image plus any non- digitally recorded fluoroscopy which may have been performed to prepare for the acquisition of this image. Notes:   1. The sum of the area dose product of all images of a Series or a Study may not result in the total area dose product to which the patient was exposed. 2. This may be an estimated value based on assumptions about the patient's body size and habitus."/>
@@ -1043,9 +1043,9 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0018" element="1151" name="X-Ray Tube Current" type="3" description="X-Ray Tube Current in mA."/>
     <entry group="0018" element="8151" name="X-Ray Tube Current in ?A" type="3" description="X-Ray Tube Current in ?A."/>
     <entry group="0018" element="1150" name="Exposure Time" type="3" description="Duration of X-Ray exposure in msec."/>
-    <entry group="0018" element="8150" name="Exposure Time in ?S" type="3" description="Duration of X-Ray exposure in ?sec."/>
+    <entry group="0018" element="8150" name="Exposure Time in µS" type="3" description="Duration of X-Ray exposure in ?sec."/>
     <entry group="0018" element="1152" name="Exposure" type="3" description="The exposure expressed in mAs, for example calculated from Exposure Time and X-ray Tube Current."/>
-    <entry group="0018" element="1153" name="Exposure in ?As" type="3" description="The exposure expressed in ?As, for example calculated from Exposure Time and X-ray Tube Current."/>
+    <entry group="0018" element="1153" name="Exposure in µAs" type="3" description="The exposure expressed in ?As, for example calculated from Exposure Time and X-ray Tube Current."/>
     <entry group="0018" element="7060" name="Exposure Control Mode" type="3" description="Type of exposure control. Defined Terms: MANUAL AUTOMATIC"/>
     <entry group="0018" element="7062" name="Exposure Control Mode Description" type="3" description="Text description of the mechanism of exposure control. May describe the number and type of exposure sensors or position of the sensitive area of the imaging detector."/>
     <entry group="0018" element="7064" name="Exposure Status" type="3" description="Whether the exposure was normally completed or not. Defined Terms: NORMAL ABORTED"/>
