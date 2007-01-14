@@ -19,41 +19,42 @@
     <html>
       <body>
 <!-- The main template that loop over all dict/entry -->
-          <xsl:for-each select="tables/table">
-        <table border="1">
-          <caption>
-                <xsl:value-of select="@name"/>
-                <br/>
-                <xsl:value-of select="@ref"/>
-          </caption>
-          <tr bgcolor="#d6d6d6"> <!--rgb(214,214,214) -->
-            <th>Group</th>
-            <th>Element</th>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Description</th>
-          </tr>
-          <xsl:for-each select="entry">
-            <tr>
-              <td>
-                <xsl:value-of select="@group"/>
-              </td>
-              <td>
-                <xsl:value-of select="@element"/>
-              </td>
-              <td>
-                <xsl:value-of select="@name"/>
-              </td>
-              <td>
-                <xsl:value-of select="@type"/>
-              </td>
-              <td>
-                <xsl:value-of select="@description"/>
-              </td>
+        <xsl:for-each select="tables/table">
+          <table border="1">
+            <caption>
+              <xsl:value-of select="@name"/>
+              <br/>
+              <xsl:value-of select="@ref"/>
+            </caption>
+            <tr bgcolor="#d6d6d6">
+<!--rgb(214,214,214) -->
+              <th>Group</th>
+              <th>Element</th>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Description</th>
             </tr>
-          </xsl:for-each>
-        </table>
-          </xsl:for-each>
+            <xsl:for-each select="entry">
+              <tr>
+                <td>
+                  <xsl:value-of select="@group"/>
+                </td>
+                <td>
+                  <xsl:value-of select="@element"/>
+                </td>
+                <td>
+                  <xsl:value-of select="@name"/>
+                </td>
+                <td>
+                  <xsl:value-of select="@type"/>
+                </td>
+                <td>
+                  <xsl:value-of select="@description"/>
+                </td>
+              </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:for-each>
       </body>
     </html>
   </xsl:template>
