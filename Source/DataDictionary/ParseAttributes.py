@@ -188,7 +188,7 @@ class Part3Parser:
       or blank == 'Lookup Table Data' \
       or blank == 'Step Sequence':
       self._CurrentAttribute.AppendName( blank )
-      self._CurrentAttribute.AppendDescription( s[self._Shift:-1] )
+      self._CurrentAttribute.AppendDescription( s[self._Shift:] )
       return True
     else:
       print "ADD KEYWORD:", blank
