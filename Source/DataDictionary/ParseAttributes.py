@@ -1,4 +1,6 @@
 #! /usr/bin/env python
+# vim: set fileencoding=iso-8859-1
+
 """
 $ pdftotext -layout -nopgbrk -f 303 -l 305 07_03pu.pdf page303.txt
 """
@@ -17,7 +19,7 @@ class Attribute:
   def SetInit(self,s):
     # Should be something like:
     # Blue Palette Color Lookup Table       (0028,1103)     1C   Specifies the format of the Blue Palette
-    patt = re.compile("^(.*)(\\([0-9A-F]+,[0-9A-F]+\\))\s+([1-3C]+)\s+(.*)\s*$")
+    patt = re.compile("^(.*)(\\([0-9A-Fx]+,[0-9A-F]+\\))\s+([1-3C]+)\s+(.*)\s*$")
     m = patt.match(s)
     if not m:
       print s
@@ -96,6 +98,13 @@ class Part3Parser:
       print "Start", s
       self._IsInTable = True
       return True
+    # grrrrr: Table C.8-37 - RT SERIES MODULE ATTRIBUTES
+    patt = re.compile("^\s+Table\s+C.[0-9A-Za-z-]+\s+-\s+[A-Z ]+\s*$")
+    m = patt.match(s)
+    if(m):
+      print "Start", s
+      self._IsInTable = True
+      return True
     return False
 
   def IsEndTable(self,s):
@@ -123,6 +132,15 @@ class Part3Parser:
       return True
     return False
 
+  def IsTableName2(self,s):
+    # grrrrr: Table C.8-37 - RT SERIES MODULE ATTRIBUTES
+    patt = re.compile("^\s+Table\s+C.[0-9A-Za-z-]+\s+-\s+([A-Z ]+)\s*$")
+    m = patt.match(s)
+    if(m):
+      print "Table Name", m.group(1)
+      return True
+    return False
+
   def IsTableDescription(self,s):
     patt  = re.compile("^\s*Attribute Name\s+Tag\s+Type\s+Attribute Description\s*$")
     m = patt.match(s)
@@ -134,7 +152,7 @@ class Part3Parser:
   def IsFirstLineAttribute(self,s):
     # Line should look like:
     # Bits Stored ... (0028,0101) ... 1 ... Number of bits stored for each pixel
-    patt = re.compile("^\s*(.*)\\([0-9A-F]+,[0-9A-F]+\\)\s+([1-3C]+).*\s*$") #MACRO/MODULE
+    patt = re.compile("^\s*(.*)\\([0-9A-Fx]+,[0-9A-F]+\\)\s+([1-3C]+).*\s*$") #MACRO/MODULE
     m = patt.match(s)
     if(m):
       s1 = m.group(1).strip()
@@ -157,7 +175,7 @@ class Part3Parser:
     #m = patt.match(s)
     #return m
     #print "FALLBACK"
-    patt = re.compile("^>*\s*Include [`']*([A-Za-z ]*)'* \\(*Table [A-Z0-9a-z-.]+\\)*.*$")
+    patt = re.compile("^>*\s*Include [`'\"]*([A-Za-z ]*)['\"]* \\(*Table [A-Z0-9a-z-.]+\\)*.*$")
     m = patt.match(s)
     #if not m:
     #  print "FAIL", s
@@ -185,7 +203,13 @@ class Part3Parser:
       or blank == 'Description Code Sequence' \
       or blank == 'Concentration' \
       or blank == 'Procedure Step' \
+      or blank == 'Manufacturer' \
       or blank == 'Lookup Table Data' \
+      or blank == 'Version' \
+      or blank == 'Images' \
+      or blank == 'Factor' \
+      or blank == 'Product' \
+      or blank == "Manufacturer's Model Name" \
       or blank == 'Step Sequence':
       self._CurrentAttribute.AppendName( blank )
       self._CurrentAttribute.AppendDescription( s[self._Shift:] )
@@ -220,8 +244,15 @@ class Part3Parser:
       #line= cmd_input.next() 
       line = line_ori[:-1]
       if( self.IsStartTable(line) ):
-        line2 = cmd_input.next()[:-1]
-        if(self.IsTableName(line2)):
+        table_name_found = self.IsTableName2(line)
+        line2 = line
+        # Okay table is on next line:
+        if ( not table_name_found ):
+          line2 = cmd_input.next()[:-1]
+          table_name_found = self.IsTableName(line2)
+        # Either way we need to find the table name
+        assert table_name_found
+        if( table_name_found ):
           line3 = cmd_input.next()[:-1]
           if( self.IsTableDescription(line3) ):
             # Ok we found a table
