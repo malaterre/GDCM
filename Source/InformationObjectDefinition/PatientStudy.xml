@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Table Name="Patient Study Module Attribute">
+<Table Name="Patient Study Module Attributes">
   <Entry Tag="(0008,1080)" Attribute="Admitting Diagnoses Description"   Type="3" Description="Description of the admitting diagnosis (diagnoses)"/>
   <Entry Tag="(0008,1084)" Attribute="Admitting Diagnoses Code Sequence" Type="3" Description="A sequence that conveys the admitting diagnosis (diagnoses).">
     <Properties VM="1-n"/>
