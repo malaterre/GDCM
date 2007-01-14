@@ -19,7 +19,9 @@ class Attribute:
     # Blue Palette Color Lookup Table       (0028,1103)     1C   Specifies the format of the Blue Palette
     patt = re.compile("^(.*)(\\([0-9A-F]+,[0-9A-F]+\\))\s+([1-3C]+)\s+(.*)\s*$")
     m = patt.match(s)
-    assert m
+    if not m:
+      print s
+      assert 0
     self._Name = m.group(1).strip()
     self._Tag = m.group(2).strip()
     self._Type = m.group(3).strip()
@@ -39,7 +41,7 @@ class Attribute:
     self._Description += " "
     self._Description += s.strip()
   def GetAsXML(self):
-    return "<entry name=\""+self._Name+"\" tag=\""+self._Tag+"\" type=\""+self._Type+"\" description=\""+self._Description+"\"></entry>"
+    return "<entry group=\""+self._Tag[1:5]+"\" element=\""+self._Tag[6:10]+"\" name=\""+self._Name+"\" type=\""+self._Type+"\" description=\""+self._Description+"\"></entry>"
   def Print(self):
     print self.GetAsXML()
 
@@ -75,10 +77,21 @@ class Part3Parser:
 
   def IsStartTable(self,s):
     #patt = re.compile("^\s+Table C[0-9a-z\.-]+.*\s+$")
-    patt = re.compile("^\s+Table\s+C.[0-9a-z-]+\s*$")
+    patt = re.compile("^\s+Table\s+C.[0-9A-Za-z-]+\s*$")
     m = patt.match(s)
     assert self._IsInTable != True
     self._IsInTable = False
+    if s.strip() == 'Table C.7-23' or s.strip() == 'Table C.7-24' \
+      or s.strip() == 'Table C.7-25' \
+      or s.strip() == 'Table C.7-26' \
+      or s.strip() == 'Table C.7-27' \
+      or s.strip() == 'Table C.8-8'  \
+      or s.strip() == 'Table C.8-19' \
+      or s.strip() == 'Table C.8-20' \
+      or s.strip() == 'Table C.8-21' \
+      or s.strip() == 'Table C.8-22' \
+      or s.strip() == 'Table C.8-23':
+      return False
     if(m):
       print "Start", s
       self._IsInTable = True
@@ -92,7 +105,18 @@ class Part3Parser:
     return True
 
   def IsTableName(self,s):
-    patt = re.compile("^\s+[A-Z\s]+ ATTRIBUTES\s*$") #MACRO/MODULE
+    patt = re.compile("^\s+[A-Z/\s-]+ATTRIBUTES\s*$") #MACRO/MODULE
+    m = patt.match(s)
+    if(m):
+      print "Table Name", s
+      return True
+    patt = re.compile("^\s+[A-Za-z\s]+Attributes\s*$") #MACRO/MODULE
+    m = patt.match(s)
+    if(m):
+      print "Table Name", s
+      return True
+    # PALETTE COLOR LOOKUP MODULE
+    patt = re.compile("^\s+[A-Z\s]+MODULE\s*$") #MACRO/MODULE
     m = patt.match(s)
     if(m):
       print "Table Name", s
@@ -124,12 +148,25 @@ class Part3Parser:
   def IsIncludeTable(self,s):
     # Need to support : "Include `Image Pixel Macro' Table C.7-11b"
     #assert self._Shift == 0
-    patt = re.compile("^Include `(.*)' Table C.[0-9a-z-]+$")
+    #print "Include:", s
+    #patt = re.compile("^>*Include `(.*)' Table [A-Z0-9a-z-.]+$")
+    #m = patt.match(s)
+    #if m:
+    #  return True
+    #patt = re.compile("^>*Include [`|'](.*)' Table [A-Z0-9a-z-.]+\s+Defined Context ID is.*$")
+    #m = patt.match(s)
+    #return m
+    #print "FALLBACK"
+    patt = re.compile("^>*\s*Include [`']*([A-Za-z ]*)'* \\(*Table [A-Z0-9a-z-.]+\\)*.*$")
     m = patt.match(s)
+    #if not m:
+    #  print "FAIL", s
     return m
 
   def IsNextLineAttribute(self,s):
-    assert self._Shift != 0
+    if self._Shift == 0:
+      print "IsNextLineAttribute failed with", s
+      return False
     if len(s) <= self._Shift:
       return False
     blank = s[0:self._Shift]
@@ -139,18 +176,31 @@ class Part3Parser:
       self._CurrentAttribute.AppendDescription( s )
       return True
     # The following is really ugly ... need to be fixed
-    if blank == 'Descriptor' or blank == 'Data':
+    if blank == 'Descriptor' or blank == 'Data' or blank == 'Center Name' \
+      or blank == 'Description' \
+      or blank == 'Sequence' \
+      or blank == 'Identification Sequence' \
+      or blank == 'Reference UID' \
+      or blank == 'Synchronized' \
+      or blank == 'Description Code Sequence' \
+      or blank == 'Concentration' \
+      or blank == 'Procedure Step' \
+      or blank == 'Lookup Table Data' \
+      or blank == 'Step Sequence':
       self._CurrentAttribute.AppendName( blank )
       self._CurrentAttribute.AppendDescription( s[self._Shift:-1] )
       return True
+    else:
+      print "ADD KEYWORD:", blank
 
   def FindShiftValue(self,s):
     # Line should look like:
     # Bits Stored ... (0028,0101) ... 1 ... Number of bits stored for each pixel
-    patt = re.compile("^[A-Za-z ]+\s+\\([0-9A-F]+,[0-9A-F]+\\)\s+[1-3][C]*\s+(.*)$")
+    patt = re.compile("^[A-Za-z0-9µ /()'>-]+\s+\\([0-9A-F]+,[0-9A-F]+\\)\s+[1-3][C]*\s+(.*)$")
     m = patt.match(s)
     if(m):
-      self._Shift = s.find( m.group(1) ) - 10
+      # worse case happen around page 448 with `Required`
+      self._Shift = s.find( m.group(1) ) - 15
       return self._Shift
     print "OUCH:", s
     return 0
@@ -163,11 +213,12 @@ class Part3Parser:
     #    print line.next()
     cmd_input = open(self._InputFilename,'r')
     outfile = open(self._OutputFilename, 'w')
-    for line in cmd_input:
+    outfile.write( '<tables>' )
+    for line_ori in cmd_input:
       #while  line.startswith('%') : # skip comment lines
       #print "!!!",line
       #line= cmd_input.next() 
-      line = line[:-1]
+      line = line_ori[:-1]
       if( self.IsStartTable(line) ):
         line2 = cmd_input.next()[:-1]
         if(self.IsTableName(line2)):
@@ -183,9 +234,10 @@ class Part3Parser:
             for subline_ori in cmd_input:
               subline = subline_ori[:-1]
               if( self.IsIncludeTable(subline)):
+                # BUG DO NOT SUPPORT MULTI_LINE INCLUDE 
                 #print "Include Table:", subline
                 if( subline != '' ):
-                  outfile.write( "<entry ref=\""+subline+"\"/>" )
+                  outfile.write( "<include ref=\""+subline+"\"/>" )
                   outfile.write( '\n' )
               elif( self.IsFirstLineAttribute(subline)):
                 #print "Previous Buffer was: ", buffer
@@ -216,9 +268,10 @@ class Part3Parser:
                 break
         else:
           print "Problem with:", line, line2
-      line = cmd_input.next()
-      if not line: break
+      #line = cmd_input.next()
+      if not line_ori: break
     cmd_input.close() 
+    outfile.write( '</tables>' )
     self.Write()
 
   def Write(self):
