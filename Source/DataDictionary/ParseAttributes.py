@@ -69,17 +69,20 @@ class Part3Parser:
     patt1 = re.compile("^\s+- Standard -\s*$")
     patt2 = re.compile("^\s+PS 3.3 - 2007\s*")
     patt3 = re.compile("^\s+Page [0-9]+\s*$")
+    patt3 = re.compile("^\s*Notes:$")
     m1 = patt1.match(s)
     m2 = patt2.match(s)
     m3 = patt3.match(s)
     if(m1 or m2 or m3):
       print "Comment:", s
       return True
+    if self.IsTableDescription(s):
+      return True
     return False
 
   def IsStartTable(self,s):
     #patt = re.compile("^\s+Table C[0-9a-z\.-]+.*\s+$")
-    patt = re.compile("^\s+Table\s+C.[0-9A-Za-z-]+\s*$")
+    patt = re.compile("^\s+Table\s+C.[0-9A-Za-z-.]+\s*$")
     m = patt.match(s)
     assert self._IsInTable != True
     self._IsInTable = False
@@ -92,14 +95,19 @@ class Part3Parser:
       or s.strip() == 'Table C.8-20' \
       or s.strip() == 'Table C.8-21' \
       or s.strip() == 'Table C.8-22' \
-      or s.strip() == 'Table C.8-23':
+      or s.strip() == 'Table C.8-23' \
+      or s.strip() == 'Table C.8-80' \
+      or s.strip() == 'Table C.8-83' \
+      or s.strip() == 'Table C.8-84' \
+      or s.strip() == 'Table C.8-85' \
+      or s.strip() == 'Table C.8-86':
       return False
     if(m):
       print "Start", s
       self._IsInTable = True
       return True
     # grrrrr: Table C.8-37 - RT SERIES MODULE ATTRIBUTES
-    patt = re.compile("^\s+Table\s+C.[0-9A-Za-z-]+\s+-\s+[A-Z ]+\s*$")
+    patt = re.compile("^\s+Table\s+C.[0-9A-Za-z-]+\s*[-]*\s*([A-Z ]+)\s*$")
     m = patt.match(s)
     if(m):
       print "Start", s
@@ -114,7 +122,7 @@ class Part3Parser:
     return True
 
   def IsTableName(self,s):
-    patt = re.compile("^\s+[A-Z/\s-]+ATTRIBUTES\s*$") #MACRO/MODULE
+    patt = re.compile("^\s*[A-Z/\s-]+ATTRIBUTES\s*$") #MACRO/MODULE
     m = patt.match(s)
     if(m):
       print "Table Name", s
@@ -130,19 +138,33 @@ class Part3Parser:
     if(m):
       print "Table Name", s
       return True
+    # MR IMAGE AND SPECTROSCOPY INSTANCE MACRO
+    patt = re.compile("^\s+[A-Z\s]+MACRO\s*$") #MACRO/MODULE
+    m = patt.match(s)
+    if(m):
+      print "Table Name", s
+      return True
     return False
 
   def IsTableName2(self,s):
     # grrrrr: Table C.8-37 - RT SERIES MODULE ATTRIBUTES
-    patt = re.compile("^\s+Table\s+C.[0-9A-Za-z-]+\s+-\s+([A-Z ]+)\s*$")
+    # Table C.8-39--RT DOSE MODULE ATTRIBUTES
+    patt = re.compile("^\s+Table\s+C.[0-9A-Za-z-]+\s*[-]*\s*([A-Z ]+)\s*$")
     m = patt.match(s)
     if(m):
-      print "Table Name", m.group(1)
+      print "Table Name:", m.group(1)
+      assert self.IsTableName( m.group(1) )
       return True
     return False
 
   def IsTableDescription(self,s):
     patt  = re.compile("^\s*Attribute Name\s+Tag\s+Type\s+Attribute Description\s*$")
+    m = patt.match(s)
+    if(m):
+      print "Table Description:", s
+      return True
+    # Around page 574
+    patt  = re.compile("^\s*Attribute Name\s+Tag\s+Type\s+Description\s*$")
     m = patt.match(s)
     if(m):
       print "Table Description:", s
@@ -175,7 +197,7 @@ class Part3Parser:
     #m = patt.match(s)
     #return m
     #print "FALLBACK"
-    patt = re.compile("^>*\s*Include [`'\"]*([A-Za-z ]*)['\"]* \\(*Table [A-Z0-9a-z-.]+\\)*.*$")
+    patt = re.compile("^>*\s*Include [`'\"]*([A-Za-z/ ]*)['\"]* \\(*Table [A-Z0-9a-z-.]+\\)*.*$")
     m = patt.match(s)
     #if not m:
     #  print "FAIL", s
@@ -197,6 +219,34 @@ class Part3Parser:
     if blank == 'Descriptor' or blank == 'Data' or blank == 'Center Name' \
       or blank == 'Description' \
       or blank == 'Sequence' \
+      or blank == 'Distance' \
+      or blank == 'Index' \
+      or blank == 'Interpretation' \
+      or blank == 'Representation' \
+      or blank == 'Configuration' \
+      or blank == 'Compression' \
+      or blank == 'Reference Code' \
+      or blank == 'Encoding Steps' \
+      or blank == 'Steps in-plane' \
+      or blank == 'Steps out-of-plane' \
+      or blank == 'Type' \
+      or blank == 'Calibration' \
+      or blank == 'Manufactured' \
+      or blank == 'Thickness' \
+      or blank == 'Reference Sequence' \
+      or blank == 'Reference Number' \
+      or blank == 'Transmission' \
+      or blank == 'Matrix' \
+      or blank == 'Comment' \
+      or blank == 'Setup Sequence' \
+      or blank == 'Setup Number' \
+      or blank == 'Fraction' \
+      or blank == 'Tolerance' \
+      or blank == 'Number' \
+      or blank == 'Day' \
+      or blank == 'Parameters' \
+      or blank == 'Coefficient' \
+      or blank == 'Specification Point' \
       or blank == 'Identification Sequence' \
       or blank == 'Reference UID' \
       or blank == 'Synchronized' \
@@ -224,7 +274,8 @@ class Part3Parser:
     m = patt.match(s)
     if(m):
       # worse case happen around page 448 with `Required`
-      self._Shift = s.find( m.group(1) ) - 15
+      # worse case happen around page 475 with `LOG`...
+      self._Shift = s.find( m.group(1) ) - 17
       return self._Shift
     print "OUCH:", s
     return 0
