@@ -426,6 +426,8 @@ class Part3Parser:
     #    print line.next()
     cmd_input = open(self._InputFilename,'r')
     outfile = open(self._OutputFilename, 'w')
+    # To support some weird output from pdftotext
+    outfile.write( '<?xml version="1.0" encoding="ISO-8859-1"?>' )
     outfile.write( '<tables>' )
     for line_ori in cmd_input:
       #while  line.startswith('%') : # skip comment lines
