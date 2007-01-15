@@ -324,6 +324,18 @@
   <table ref="Table C.7-17" name="DISPLAY SHUTTER MODULE ATTRIBUTES">
     <include ref="Include `Display Shutter Macro' Table C.7-17A."/>
   </table>
+  <table ref="Table C.7-17A" name="DISPLAY SHUTTER MACRO ATTRIBUTES">
+    <entry group="0018" element="1600" name="Shutter Shape" type="1" description="Shape(s) of the shutter defined for display. Enumerated Values: RECTANGULAR CIRCULAR POLYGONAL This multi-valued Attribute shall contain at most one of each Enumerated Value."/>
+    <entry group="0018" element="1602" name="Shutter Left Vertical Edge" type="1C" description="Required if Shutter Shape (0018,1600) is RECTANGULAR. Location of the left edge of the rectangular shutter with respect to pixels in the image given as column."/>
+    <entry group="0018" element="1604" name="Shutter Right Vertical Edge" type="1C" description="Required if Shutter Shape (0018,1600) is RECTANGULAR. Location of the right edge of the rectangular shutter with respect to pixels in the image given as column."/>
+    <entry group="0018" element="1606" name="Shutter Upper Horizontal Edge" type="1C" description="Required if Shutter Shape (0018,1600) is RECTANGULAR. Location of the upper edge of the rectangular shutter with respect to pixels in the image given as row."/>
+    <entry group="0018" element="1608" name="Shutter Lower Horizontal Edge" type="1C" description="Required if Shutter Shape (0018,1600) is RECTANGULAR. Location of the lower edge of the rectangular shutter with respect to pixels in the image given as row."/>
+    <entry group="0018" element="1610" name="Center of Circular Shutter" type="1C" description="Required if Shutter Shape (0018,1600) is CIRCULAR. Location of the center of the circular shutter with respect to pixels in the image given as row and column."/>
+    <entry group="0018" element="1612" name="Radius of Circular Shutter" type="1C" description="Required if Shutter Shape (0018,1600) is CIRCULAR. Radius of the circular shutter with respect to pixels in the image given as a number of pixels along the row direction."/>
+    <entry group="0018" element="1620" name="Vertices of the Polygonal Shutter" type="1C" description="Required if Shutter Shape (0018,1600) is POLYGONAL. Multiple Values where the first set of two values are: row of the origin vertex column of the origin vertex Two or more pairs of values follow and are the row and column coordinates of the other vertices of the polygon shutter. Polygon shutters are implicitly closed from the last vertex to the origin vertex and all edges shall be non-intersecting except at the vertices."/>
+    <entry group="0018" element="1622" name="Shutter Presentation Value" type="3" description="A single gray unsigned value used to replace those parts of the image occluded by the shutter, when rendered on a monochrome display. The units are specified in P-Values, from a minimum of 0000H (black) up to a maximum of FFFFH (white). Note:     The maximum P-Value for this Attribute may be different from the maximum P-Value from the output of the Presentation LUT, which may be less than 16 bits in depth."/>
+    <entry group="0018" element="1624" name="Shutter Presentation Color CIELab Value" type="3" description="A color triplet value used to replace those parts of the image occluded by the shutter, when rendered on a color display. The units are specified in PCS-Values, and the value is encoded as CIELab. See C.10.7.1.1."/>
+  </table>
   <table ref="Table C.7-18" name="DEVICE MODULE ATTRIBUTES">
     <include ref="&gt;Include `Code Sequence Macro' Table 8.8-1                Baseline Context ID is 4051."/>
     <entry group="0050" element="0010" name="Device Sequence" type="3" description="Introduces sequence of items describing devices used that may be visible in the image. One or more Items may be included in this Sequence."/>
@@ -357,7 +369,7 @@
     <entry group="0018" element="1624" name="Shutter Presentation Color CIELab Value" type="3" description="A color triplet value used to replace those parts of the image occluded by the shutter, when rendered on a color display. The units are specified in PCS-Values, and the value is encoded as CIELab. See C.10.7.1.1."/>
   </table>
   <table ref="Table C.7.6.16-1" name="MULTI-FRAME FUNCTIONAL GROUPS MODULE ATTRIBUTES">
-    <entry group="5200" element="9229" name="Shared Functional Groups Sequence" type="2" description="Sequence that contains the Functional Group Macros that are shared for all frames in this SOP Instance and Concatenation. Note:    The contents of this sequence are the same in all SOP Instances that comprise a Concatenation. Zero or one Item may be included in this sequence. See section C.7.6.16.1.1 for further explanation. See section C.7.6.16.1.1 for further"/>
+    <entry group="5200" element="9229" name="Shared Functional Groups Sequence" type="2" description="Sequence that contains the Functional Group Macros that are shared for all frames in this SOP Instance and Concatenation. Note:    The contents of this sequence are the same in all SOP Instances that comprise a Concatenation. Zero or one Item may be included in this sequence. See section C.7.6.16.1.1 for further explanation."/>
   </table>
   <table ref="Table C.7.6.16-2" name="PIXEL MEASURES MACRO ATTRIBUTES">
     <entry group="0028" element="9110" name="Pixel Measures Sequence" type="1" description="Identifies the physical characteristics of the pixels of this frame. Only a single Item shall be permitted in this sequence."/>
@@ -1347,7 +1359,38 @@
     <entry group="0018" element="5100" name="&gt;Patient Position" type="1C" description="Patient position descriptor relative to the equipment. Required if Patient Additional Position (300A,0184) is not present. See Section C.7.3.1.1.2 for Defined Terms and further explanation."/>
     <entry group="300A" element="0184" name="&gt;Patient Additional Position" type="1C" description="User-defined additional description of patient position. Required if Patient Position (0018,5100) is not present."/>
     <entry group="300A" element="0401" name="&gt;Referenced Setup Image Sequence" type="3" description="Introduces sequence of setup verification images for this patient setup. One or more items may be included in this sequence. See C.8.8.12.1.1"/>
+    <include ref="&gt;&gt;Include `Image SOP Instance Reference Macro' Table 10-3"/>
     <entry group="300A" element="0402" name="&gt;&gt;Setup Image Comment" type="3" description="Comment on the Setup Image."/>
+    <entry group="300A" element="0190" name="&gt;Fixation Device Sequence" type="3" description="Introduces sequence of Fixation Devices used in Patient Setup. One or more items may be included in this sequence."/>
+    <entry group="300A" element="0192" name="&gt;&gt;Fixation Device Type" type="1C" description="Type of Fixation Device used during in Patient Setup. Required if Fixation Device Sequence (300A,0190) is sent. Defined Terms: BITEBLOCK HEADFRAME MASK MOLD CAST HEADREST BREAST_BOARD BODY_FRAME VACUUM_MOLD WHOLE_BODY_POD RECTAL_BALLOON"/>
+    <entry group="300A" element="0194" name="&gt;&gt;Fixation Device Label" type="2C" description="User-defined label identifier for Fixation Device. Required if Fixation Device Sequence (300A,0190) is sent."/>
+    <entry group="300A" element="0196" name="&gt;&gt;Fixation Device Description" type="3" description="User-defined description of Fixation Device."/>
+    <entry group="300A" element="0198" name="&gt;&gt;Fixation Device Position" type="3" description="Position/Notch number of Fixation Device."/>
+    <entry group="300A" element="0199" name="&gt;&gt;Fixation Device Pitch Angle" type="3" description="The Fixation Device Pitch Angle, i.e. orientation of PITCHED FIXATION DEVICE coordinate system with respect to IEC PATIENT SUPPORT coordinate system (degrees). Pitching is the rotation around IEC PATIENT SUPPORT X-axis."/>
+    <entry group="300A" element="019A" name="&gt;&gt;Fixation Device Roll Angle" type="3" description="The Fixation Device Roll Angle, i.e. orientation of ROLLED FIXATION DEVICE coordinate system with respect to IEC PITCHED FIXATION DEVICE coordinate system (degrees). Rolling is the rotation around IEC PATIENT SUPPORT Y-axis."/>
+    <entry group="300A" element="00F9" name="&gt;&gt;Accessory Code" type="3" description="An identifier for the accessory intended to be read by a device such as a bar-code reader."/>
+    <entry group="300A" element="01A0" name="&gt;Shielding Device Sequence" type="3" description="Introduces sequence of Shielding Devices used in Patient Setup. One or more items may be included in this sequence."/>
+    <entry group="300A" element="01A2" name="&gt;&gt;Shielding Device Type" type="1C" description="Type of Shielding Device used in Patient Setup. Required if Shielding Device Sequence (300A,01A0) is sent. Defined Terms: GUM EYE GONAD"/>
+    <entry group="300A" element="01A4" name="&gt;&gt;Shielding Device Label" type="2C" description="User-defined label for Shielding Device. Required if Shielding Device Sequence (300A,01A0) is sent."/>
+    <entry group="300A" element="01A6" name="&gt;&gt;Shielding Device Description" type="3" description="User-defined description of Shielding Device."/>
+    <entry group="300A" element="01A8" name="&gt;&gt;Shielding Device Position" type="3" description="Position/Notch number of Shielding Device."/>
+    <entry group="300A" element="00F9" name="&gt;&gt;Accessory Code" type="3" description="An identifier for the accessory intended to be read by a device such as a bar-code reader."/>
+    <entry group="300A" element="01B0" name="&gt;Setup Technique" type="3" description="Setup Technique used in Patient Setup. Defined Terms: ISOCENTRIC FIXED_SSD TBI BREAST_BRIDGE SKIN_APPOSITION"/>
+    <entry group="300A" element="01B2" name="&gt;Setup Technique Description" type="3" description="User-defined description of Setup Technique."/>
+    <entry group="300A" element="01B4" name="&gt;Setup Device Sequence" type="3" description="Introduces sequence of devices used for patient alignment in Patient Setup. One or more items may be included in this sequence."/>
+    <entry group="300A" element="01B6" name="&gt;&gt;Setup Device Type" type="1C" description="Type of Setup Device used for Patient alignment. Required if Setup Device Sequence (300A,01B4) is sent. Defined Terms: LASER_POINTER DISTANCE_METER TABLE_HEIGHT MECHANICAL_PTR ARC"/>
+    <entry group="300A" element="01B8" name="&gt;&gt;Setup Device Label" type="2C" description="User-defined label for Setup Device used for patient alignment. Required if Setup Device Sequence (300A,01B4) is sent."/>
+    <entry group="300A" element="01BA" name="&gt;&gt;Setup Device Description" type="3" description="User-defined description for Setup Device used for patient alignment."/>
+    <entry group="300A" element="01BC" name="&gt;&gt;Setup Device Parameter" type="2C" description="Setup Parameter for Setup Device in appropriate IEC 61217 coordinate system. Units shall be mm for distances and degrees for angles. Required if Setup Device Sequence (300A,011B4) is sent."/>
+    <entry group="300A" element="01D0" name="&gt;&gt;Setup Reference Description" type="3" description="User-defined description of Setup Reference used for patient alignment."/>
+    <entry group="300A" element="01D2" name="&gt;Table Top Vertical Setup Displacement" type="3" description="Vertical Displacement in IEC TABLE TOP coordinate system (in mm) relative to initial Setup Position, i.e. vertical offset between patient positioning performed using setup and treatment position."/>
+    <entry group="300A" element="01D4" name="&gt;Table Top Longitudinal Setup Displacement" type="3" description="Longitudinal Displacement in IEC TABLE TOP coordinate system (in mm) relative to initial Setup Position, i.e. longitudinal offset between patient positioning performed using setup and treatment position."/>
+    <entry group="300A" element="01D6" name="&gt;Table Top Lateral Setup Displacement" type="3" description="Lateral Displacement in IEC TABLE TOP coordinate system (in mm) relative to initial Setup Position, i.e. lateral offset between patient positioning performed using setup and treatment position."/>
+    <entry group="300A" element="0410" name="&gt;Motion Synchronization Sequence" type="3" description="Introduces sequence of Motion Synchronization. One or more items may be included in this sequence."/>
+    <entry group="0018" element="9170" name="&gt;&gt;Respiratory Motion Compensation Technique" type="1" description="Technique applied to reduce respiratory motion artifacts. Defined Terms: NONE BREATH_HOLD REALTIME = image acquisition shorter than respiratory cycle GATING = Prospective gating TRACKING         = prospective through- plane or in-plane motion tracking PHASE_ORDERING = prospective phase ordering PHASE_RESCANNING = prospective techniques, such as real-time averaging, diminishing variance and motion adaptive gating RETROSPECTIVE = retrospective gating CORRECTION = retrospective image correction UNKNOWN = technique not known"/>
+    <entry group="0018" element="9171" name="&gt;&gt;Respiratory Signal Source" type="1" description="Signal source from which respiratory motion is derived. Defined Terms: NONE BELT NASAL_PROBE CO2_SENSOR NAVIGATOR = MR navigator and organ edge detection MR_PHASE = phase (of center k-space line) ECG = baseline demodulation of the ECG SPIROMETER = Signal derived from flow sensor EXTERNAL_MARKER = Signal determined from external motion surrogate INTERNAL_MARKER = Signal determined from internal motion surrogate IMAGE = Signal derived from an image UNKNOWN = Signal source not known"/>
+    <entry group="0018" element="9185" name="&gt;&gt;Respiratory Motion Compensation Technique Description" type="3" description="Description of respiratory motion compensation technique."/>
+    <entry group="0018" element="9186" name="&gt;&gt;Respiratory Signal Source ID" type="3" description="Identifies the device providing the respiratory signal."/>
   </table>
   <table ref="Table C.8-49--RT FRACTION SCHEME MODULE ATTRIBUTES" name="Table C.8-49--RT FRACTION SCHEME MODULE ATTRIBUTES">
     <entry group="300A" element="0070" name="Fraction Group Sequence" type="1" description="Introduces sequence of Fraction Groups in current Fraction Scheme. One or more items may be included in this sequence."/>
@@ -2267,7 +2310,20 @@
     <entry group="0028" element="1051" name="Window Width" type="1C" description="Window Width for display. See C.8.11.3.1.5 for further explanation. Required if Window Center (0028,1050) is sent."/>
     <entry group="0028" element="1055" name="Window Center &amp; Width Explanation" type="3" description="Free form explanation of the meaning of the Window Center and Width. Multiple values correspond to multiple Window Center and Width values."/>
   </table>
-  <table ref="Table C.8-71" name="DX DETECTOR MODULE ATTRIBUTES"/>
+  <table ref="Table C.8-71" name="DX DETECTOR MODULE ATTRIBUTES">
+    <include ref="Include `Digital X-Ray Detector Macro' Table C.8-71b"/>
+    <entry group="0018" element="7014" name="Detector Active Time" type="3" description="Time in mSec that the detector is active during acquisition of this image. Note:    This activation window overlaps the time of the X-Ray exposure as defined by Exposure Time (0018,1150) and Detector Activation Offset From Exposure (0018,7016)."/>
+    <entry group="0018" element="7016" name="Detector Activation Offset From Exposure" type="3" description="Offset time in mSec that the detector becomes active after the X-Ray beam is turned on during acquisition of this image. May be negative."/>
+    <entry group="0018" element="1147" name="Field of View Shape" type="3" description="Shape of the Field of View, that is the image pixels stored in Pixel Data (7FE0,0010). Enumerated Values: RECTANGLE ROUND HEXAGONAL"/>
+    <entry group="0018" element="1149" name="Field of View Dimension(s)" type="3" description="Dimensions in mm of the Field of View, that is the image pixels stored in Pixel Data (7FE0,0010). If Field of View Shape (0018,1147) is: RECTANGLE: row dimension followed by column. ROUND: diameter. HEXAGONAL: diameter of a circumscribed circle."/>
+    <entry group="0018" element="7030" name="Field of View Origin" type="1C" description="Offset of the TLHC of a rectangle circumscribing the Field of View, that is the image pixels stored in Pixel Data (7FE0,0010), before rotation or flipping, from the TLHC of the physical detector area measured in physical detector pixels as a row offset followed by a column offset. Required if Field of View Rotation (0018,7032) or Field of View Horizontal Flip (0018,7034) is present. See C.8.11.4.1.1 for further explanation."/>
+    <entry group="0018" element="7032" name="Field of View Rotation" type="1C" description="Clockwise rotation in degrees of Field of View, that is the image pixels stored in Pixel Data (7FE0,0010), relative to the physical detector. Enumerated Values: 0, 90, 180, 270 Required if Field of View Horizontal Flip (0018,7034) is present. See C.8.11.4.1.1 for further explanation."/>
+    <entry group="0018" element="7034" name="Field of View Horizontal Flip" type="1C" description="Whether or not a horizontal flip has been applied to the Field of View, that is the image pixels stored in Pixel Data (7FE0,0010), after rotation relative to the physical detector as described in Field of View Rotation (0018,7032). Enumerated Values: NO YES Required if Field of View Rotation (0018,7032) is present. See C.8.11.4.1.1 for further explanation."/>
+    <include ref="Include Basic Pixel Spacing Calibration Macro (Table 10-10)"/>
+    <entry group="0018" element="1164" name="Imager Pixel Spacing" type="1" description="Physical distance measured at the front plane of the detector housing between the center of each image pixel specified by a numeric pair - row spacing value(delimiter) column spacing value in mm. See 10.7.1.3 for further explanation of the value order. The value of this attribute shall never be adjusted to account for correction for the effect of geometric magnification or calibration against an object of known size; Pixel Spacing (0028,0030) is specified for that purpose."/>
+    <entry group="0018" element="1007" name="Cassette ID" type="3" description="Identifier of the cassette that contains the photostimulable phosphor plate, for CR acquisitions."/>
+    <entry group="0018" element="1004" name="Plate ID" type="3" description="Identifier of the photostimulable phosphor plate, for CR acquisitions."/>
+  </table>
   <table ref="Table C.8-71b" name="DIGITAL X-RAY DETECTOR MACRO ATTRIBUTES">
     <entry group="0018" element="7004" name="Detector Type" type="2" description="The type of detector used to acquire this image. Defined Terms: DIRECT = X-Ray photoconductor SCINTILLATOR = Phosphor used STORAGE = Storage phosphor FILM = Scanned film/screen"/>
     <entry group="0018" element="7005" name="Detector Configuration" type="3" description="The physical configuration of the detector. Defined Terms: AREA = single or tiled detector SLOT = scanned slot, slit or spot"/>
@@ -2373,7 +2429,25 @@
     <entry group="0040" element="A170" name="&gt;Purpose of Reference Code" type="2" description="Describes the purpose for which the reference is made. Only a single Item shall be permitted in this Sequence."/>
   </table>
   <table ref="Table C.8-78" name="Slide Coordinates Module Attributes"/>
-  <table ref="Table C.8-79" name="ENHANCED MR IMAGE MODULE ATTRIBUTES"/>
+  <table ref="Table C.8-79" name="ENHANCED MR IMAGE MODULE ATTRIBUTES">
+    <include ref="Include ' MR Image and Spectroscopy Instance Macro' Table C.8-81"/>
+    <include ref="Include Common CT/MR Image Description Macro' Table C.8- 131"/>
+    <include ref="Include 'MR Image Description Macro' Table C.8.82"/>
+    <entry group="0008" element="0008" name="Image Type" type="1" description="Image characteristics. See C.8.16.1 and C.8.13.3.1.1."/>
+    <entry group="0028" element="0002" name="Samples per Pixel" type="1" description="Number of samples (planes) in this image. This value shall be 1."/>
+    <entry group="0028" element="0004" name="Photometric Interpretation" type="1" description="Specifies the intended interpretation of the pixel data. Enumerated Value: MONOCHROME2. See C.7.6.3.1.2 for definition of this term."/>
+    <entry group="0028" element="0100" name="Bits Allocated" type="1" description="Number of bits allocated for each pixel sample. Each sample shall have the same number of bits allocated. Enumerated Values: 8 and 16."/>
+    <entry group="0028" element="0101" name="Bits Stored" type="1" description="Number of bits stored for each pixel sample. Each sample shall have the same number of bits stored. Enumerated Values: 8, 12 and 16. See C.8.13.1.1.1 for specialization."/>
+    <entry group="0028" element="0102" name="High Bit" type="1" description="Most significant bit for pixel sample data. Each sample shall have the same high bit. Shall be one less than the value in Bits Stored (0028,0101)."/>
+    <entry group="0018" element="0088" name="Spacing between Slices" type="3" description="Value of the prescribed spacing to be applied between the slices in a volume that is to be acquired. The spacing in mm is defined as the center-to-center distance of adjacent slices."/>
+    <entry group="0028" element="0301" name="Burned In Annotation" type="1" description="Indicates whether or not the image contains sufficient burned in annotation to identify the patient and date the image was acquired. Enumerated Values: NO This means that images that contain this Module shall not contain such burned in annotations."/>
+    <entry group="0028" element="2110" name="Lossy Image Compression" type="1" description="Specifies whether an Image has undergone lossy compression. Enumerated Values: 00 = Image has NOT been subjected to lossy compression. 01 = Image has been subjected to lossy compression. See C.7.6.1.1.5 for further explanation."/>
+    <entry group="0028" element="2112" name="Lossy Image Compression Ratio" type="1C" description="Describes the approximate lossy compression ratio(s) that have been applied to this image. See C.7.6.1.1.5 for further explanation. May be multivalued if successive lossy compression steps have been applied. Note:    For example, a compression ratio of 30:1 would be described in this Attribute with a single value of 30. Required if Lossy Images Compression (0028,2110) is &amp;quot;01&amp;quot;."/>
+    <entry group="0028" element="2114" name="Lossy Image Compression Method" type="1C" description="A label for the lossy compression method(s) that have been applied to this image. See C.7.6.1.1.5 for further explanation. May be multivalued if successive lossy compression steps have been applied; the value order shall correspond to the values of Lossy Image Compression Ratio (0028,2112). Required if Lossy Image Compression (0028,2110) is &amp;quot;01&amp;quot;."/>
+    <entry group="2050" element="0020" name="Presentation LUT Shape" type="1" description="Specifies an identity transformation for the Presentation LUT, such that the output of all grayscale transformations defined in the IOD containing this Module are defined to be P-Values. Enumerated Values: IDENTITY - output is in P-Values."/>
+    <include ref="&gt; Include `Image Pixel Macro' Table C.7-11b                      See Section F.7."/>
+    <entry group="0088" element="0200" name="Icon Image Sequence" type="3" description="This icon image is representative of the Image."/>
+  </table>
   <table ref="Table C.8-81" name="MR IMAGE AND SPECTROSCOPY INSTANCE MACRO">
     <entry group="0020" element="0012" name="Acquisition Number" type="3" description="A number identifying the single continuous gathering of data over a period of time that resulted in this image. Note:   This number is not required to be unique across SOP Instances in a series. See also the description of the Referenced Raw Data Sequence (0008,9121)."/>
     <entry group="0008" element="002A" name="Acquisition Datetime" type="1C" description="The date and time that the acquisition of data started. Note:   The synchronization of this time with an external clock is specified in the synchronization Module in Acquisition Time synchronized (0018,1800). Required if Image Type (0008,0008) Value 1 is ORIGINAL or MIXED. May be present otherwise."/>
@@ -2421,6 +2495,8 @@
   </table>
   <table ref="Table C.8-88" name="MR IMAGE FRAME TYPE MACRO ATTRIBUTES">
     <entry group="0018" element="9226" name="MR Image Frame Type Sequence" type="1" description="Identifies the characteristics of this frame. Only a single Item shall be permitted in this sequence."/>
+    <include ref="&gt;Include Common CT/MR Image Description Macro' Table C.8-131"/>
+    <include ref="&gt;Include 'MR Image Description Macro' Table C.8-82"/>
     <entry group="0008" element="9007" name="&gt;Frame Type" type="1" description="Type of Frame. A multi-valued attribute analogous to the Image Type (0008,0008). Enumerated Values and Defined Terms are the same as those for the four values of the Image Type (0008,0008) attribute, except that the value MIXED is not allowed. See C.8.16.1 and C.8.13.3.1.1."/>
   </table>
   <table ref="Table C.8-89" name="MR TIMING AND RELATED PARAMETERS MACRO ATTRIBUTES">
@@ -2523,7 +2599,18 @@
     <entry group="0008" element="1150" name="&gt;Referenced SOP Class UID" type="1" description="Uniquely identifies the referenced SOP Class."/>
     <entry group="0008" element="1155" name="&gt;Referenced SOP Instance UID" type="1" description="Uniquely identifies the referenced SOP Instance."/>
   </table>
-  <table ref="Table C.8-102" name="MR SPECTROSCOPY MODULE ATTRIBUTES"/>
+  <table ref="Table C.8-102" name="MR SPECTROSCOPY MODULE ATTRIBUTES">
+    <include ref="     Include ' MR Image and Spectroscopy Instance Macro' Table C.8-81"/>
+    <include ref="Include 'MR Spectroscopy Description Macro' Table C.8.107"/>
+    <entry group="0008" element="0008" name="Image Type" type="1" description="Spectroscopy data characteristics. See C.8.14.5.1.1."/>
+    <entry group="0018" element="9098" name="Transmitter Frequency" type="1C" description="Precession frequency in MHz of the nucleus being addressed for each spectral axis. See section C.8.14.1.1 for further explanation of the ordering. Required if Image Type (0008,0008) Value 1 is ORIGINAL. May be present otherwise."/>
+    <entry group="0018" element="9052" name="Spectral Width" type="1C" description="Spectral width in Hz. See section C.8.14.1.1 for further explanation of the ordering. Required if Image Type (0008,0008) Value 1 is ORIGINAL or MIXED. May be present otherwise."/>
+    <entry group="0018" element="9053" name="Chemical Shift Reference" type="1C" description="The chemical shift at the transmitter frequency in ppm. See section C.8.14.1.1 for further explanation of the ordering. Required if Image Type (0008,0008) Value 1 is ORIGINAL or MIXED. May be present otherwise."/>
+    <entry group="0018" element="9054" name="Volume Localization Technique" type="1C" description="Name of volume localization technique used. Shall be &amp;quot;NONE&amp;quot; if no spatial localization was performed. Defined Terms: ILOPS ISIS PRIME PRESS SLIM SLOOP STEAM NONE Required if Image Type (0008,0008) Value 1 is ORIGINAL or MIXED. May be present otherwise."/>
+    <entry group="0018" element="9126" name="Volume Localization Sequence" type="1C" description="A sequence of one or more Items that provide the position of RF excitations used to select a volume of tissue. The selected volume is described by the intersection of the sequence Items. Required if Image Type (0008,0008) Value 1 is ORIGINAL or MIXED and Volume Localization Technique (0018,9054) is other than NONE. May be present if Volume Localization Technique (0018,9054) is other than NONE."/>
+    <entry group="0018" element="9104" name="&gt;Slab Thickness" type="1" description="Thickness of slab in mm."/>
+    <entry group="0018" element="9105" name="&gt;Slab Orientation" type="1" description="The direction cosines of a normal vector"/>
+  </table>
   <table ref="Table C.8-103" name="MR SPECTROSCOPY PULSE SEQUENCE MODULE ATTRIBUTES">
     <entry group="0018" element="9005" name="Pulse Sequence Name" type="1C" description="Name of the pulse sequence for annotation purposes. Potentially vendor- specific name. Required if Image Type (0008,0008) Value 1 is ORIGINAL or MIXED. May be present otherwise."/>
     <entry group="0018" element="9200" name="MR Spectroscopy Acquisition Type" type="1C" description="Identification of data encoding scheme. Defined Terms: SINGLE_VOXEL ROW PLANE VOLUME Required if Image Type (0008,0008) Value 1 is ORIGINAL or MIXED. May be present otherwise."/>
@@ -2574,6 +2661,7 @@
   </table>
   <table ref="Table C.8-117" name="CT IMAGE FRAME TYPE MACRO ATTRIBUTES">
     <entry group="0018" element="9329" name="CT Image Frame Type Sequence" type="1" description="Identifies the characteristics of this frame. Only a single Item shall be permitted in this sequence."/>
+    <include ref="&gt; Include Common CT/MR Image Description Macro' Table C.8-131"/>
     <entry group="0008" element="9007" name="&gt;Frame Type" type="1" description="Type of Frame. A multi-valued attribute analogous to the Image Type (0008,0008). Enumerated Values and Defined Terms are the same as those for the four values of the Image Type (0008,0008) attribute, except that the value MIXED is not allowed. See sections C.8.16.1 and C.8.15.2.1.1.1."/>
   </table>
   <table ref="Table C.8-118" name="CT ACQUISITION TYPE MACRO ATTRIBUTES">
@@ -2777,7 +2865,11 @@
     <entry group="0018" element="9427" name="Intensifier Active Shape" type="1" description="Shape of the active area used for acquiring this image. Enumerated Value: RECTANGLE ROUND HEXAGONAL Note:      This may be different from the Field of View Shape (0018,1147), and should not be assumed to describe the stored image."/>
     <entry group="0018" element="9428" name="Intensifier Active Dimension(s)" type="1" description="Dimensions in mm of the active area used for acquiring this image. If Intensifier Active Shape (0018,9427) is: RECTANGLE: row dimension followed by column. ROUND:     diameter. HEXAGONAL: diameter of the circle circumscribing the hexagon. Note:      This may be different from the Field of View Dimension(s) in Float (0018,9461), and should not be assumed to describe the stored image."/>
   </table>
-  <table ref="Table C.8.19.5-1" name="X-RAY DETECTOR MODULE ATTRIBUTES"/>
+  <table ref="Table C.8.19.5-1" name="X-RAY DETECTOR MODULE ATTRIBUTES">
+    <include ref="Include `Digital X-Ray Detector Macro' Table C.8-71b"/>
+    <entry group="0018" element="9429" name="Physical Detector Size" type="1" description="Dimensions of the physical detector measured in mm as a row size followed by a column size."/>
+    <entry group="0018" element="9430" name="Position of Isocenter Projection" type="1C" description="Position of the Isocenter measured in physical detector elements as a row offset followed by a column offset from the TLHC of a rectangle circumscribing the physical detector area. Required if Isocenter Reference System Sequence (0018,9462) is present."/>
+  </table>
   <table ref="Table C.8.19.6-1" name="XA/XRF FRAME CHARACTERISTICS MACRO ATTRIBUTES">
     <entry group="0018" element="9412" name="XA/XRF Frame Characteristics Sequence" type="1" description="A sequence that describes general characteristics of this frame. Only a single Item shall be permitted in this sequence."/>
     <entry group="0008" element="2111" name="&gt;Derivation Description" type="3" description="A text description of how this frame was derived. See C.8.7.1.1.5 for further explanation."/>
@@ -3075,6 +3167,11 @@
   <table ref="Table C.11.11-1" name="PRESENTATION STATE RELATIONSHIP MODULE ATTRIBUTES">
     <include ref="Include Presentation State Relationship Macro Table C.11.11-1b"/>
   </table>
+  <table ref="Table C.11.11-1b" name="PRESENTATION STATE RELATIONSHIP MACRO ATTRIBUTES">
+    <entry group="0008" element="1115" name="Referenced Series Sequence" type="1" description="Sequence of Items where each Item includes the Attributes of one Series to which the Presentation applies. One or more Items shall be present."/>
+    <entry group="0020" element="000E" name="&gt;Series Instance UID" type="1" description="Unique identifier of a Series that is part of the Study defined by the Study Instance UID (0020,000D) in the enclosing dataset. Note:    The Study Instance UID (0020,000D) will be that of the presentation state itself, unless the macro is invoked from the Blending Sequence (0070,0402) in the Presentation State Blending Module, in which case it will be explicitly specified."/>
+    <entry group="0008" element="1140" name="&gt;Referenced Image Sequence" type="1" description="Sequence of Items where each Item provides reference to a selected set of Image SOP Class/SOP Instance pairs to which the Presentation applies that are part of the Study defined by Study Instance UID (0020,000D) and the Series defined by Series Instance UID (0020,000E). One or more Items shall be present. The referenced SOP Class shall be the same for all Images in any Item of this Referenced Series Sequence (0008,1115)."/>
+  </table>
   <table ref="Table C.11.12-1" name="PRESENTATION STATE SHUTTER MODULE ATTRIBUTES">
     <entry group="0018" element="1622" name="Shutter Presentation Value" type="1C" description="A single grayscale unsigned value used to replace those parts of the image occluded by the shutter, when rendered on a monochrome display. The units are specified in P-Values. Required if the Display Shutter Module or Bitmap Display Shutter Module is present. Note:     The requirement in this module is type 1C which overrides the type 3 in the Display Shutter Module."/>
     <entry group="0018" element="1624" name="Shutter Presentation Color CIELab Value" type="1C" description="A color triplet value used to replace those parts of the image occluded by the shutter, when rendered on a color display. The units are specified in PCS-Values, and the value is encoded as CIELab. See C.10.7.1.1. Required if the Display Shutter Module or Bitmap Display Shutter Module is present and the SOP Class is other than Grayscale Softcopy Presentation State Storage. Note: The requirement in this module is type 1C, which overrides the type 3 in the Display Shutter and Bitmap Display Shutter Modules."/>
@@ -3221,6 +3318,20 @@
   <table ref="Table C.17-4" name="SR DOCUMENT CONTENT MODULE ATTRIBUTES">
     <include ref="Include Document Content Macro Table C.17-5. with a Value Type (0040,A040) of CONTAINER"/>
     <include ref="Include Document Relationship Macro Table C.17-6."/>
+  </table>
+  <table ref="Table C.17-5" name="DOCUMENT CONTENT MACRO ATTRIBUTES">
+    <entry group="0040" element="A040" name="Value Type" type="1" description="The type of the value encoded in this Content Item. Defined Terms: TEXT NUM CODE DATETIME DATE TIME UIDREF PNAME COMPOSITE IMAGE WAVEFORM SCOORD TCOORD CONTAINER See C.17.3.2.1 for further explanation."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1        No Baseline Context ID."/>
+    <entry group="0040" element="A043" name="Concept Name Code Sequence" type="1C" description="Code describing the concept represented by this Content Item. Also conveys the value of Document Title and section headings in documents. Only a single Item shall be permitted in this sequence. Required if Value Type (0040,A040) is TEXT or NUM or CODE or DATETIME or DATE or TIME or UIDREF or PNAME. Required if Value Type (0040,A040) is CONTAINER and a heading is present, or this is the Root Content Item. Note:    That is, containers without headings do not require Concept Name Code Sequence Required if Value Type (0040,A040) is COMPOSITE, IMAGE, WAVEFORM, SCOORD or TCOORD, and the Purpose of Reference is conveyed in the Concept Name. See C.17.3.2.2 for further explanation."/>
+    <entry group="0040" element="A160" name="Text Value" type="1C" description="This is the value of the Content Item. Required if Value Type (0040,A040) is TEXT. Text data which is unformatted and whose manner of display is implementation dependent. The text value may contain spaces, as well as multiple lines separated by either LF, CR, CR LF or LF CR, but otherwise no format control characters (such as horizontal or vertical tab and form feed) shall be present, even if permitted by the Value Representation of UT. The text shall be interpreted as specified by Specific Character Set (0008,0005) if present in the SOP Common Module. Note:    The text may contain single or multi- byte characters and use code extension techniques as described in PS 3.5 if permitted by the values of Specific Character Set (0008,0005)."/>
+    <entry group="0040" element="A120" name="DateTime" type="1C" description="This is the value of the Content Item. Required if Value Type (0040,A040) is DATETIME."/>
+    <entry group="0040" element="A121" name="Date" type="1C" description="This is the value of the Content Item. Required if Value Type (0040,A040) is DATE."/>
+    <entry group="0040" element="A122" name="Time" type="1C" description="This is the value of the Content Item. Required if Value Type (0040,A040) is TIME."/>
+    <entry group="0040" element="A123" name="Person Name" type="1C" description="This is the value of the Content Item. Required if Value Type (0040,A040) is PNAME."/>
+    <include ref="Include 'Numeric Measurement Macro' Table C.18.1-1 if and only if Value Type (0040,A040) is NUM."/>
+    <include ref="Include 'Code Macro' Table C.18.2-1 if and only if Value Type (0040,A040) is CODE."/>
+    <include ref="Include 'Composite Object Reference Macro' Table C.18.3-1 if and only if Value Type (0040,A040) is"/>
+    <entry group="0040" element="A124" name="UID" type="1C" description="This is the value of the Content Item. Required if Value Type (0040,A040) is UIDREF."/>
   </table>
   <table ref="Table C.17-6" name="DOCUMENT RELATIONSHIP MACRO ATTRIBUTES">
     <entry group="0040" element="A032" name="Observation DateTime" type="1C" description="The date and time on which this Content Item was completed. For the purpose of recording measurements or logging events, completion time is defined as the time of data acquisition of the measurement, or the time of occurrence of the event. Required if the date and time are different from the Content Date (0008,0023) and Content Time (0008,0033) or the Observation DateTime (0040,A032) defined in higher items. May be present otherwise. Note:    When Content Items are copied into successor reports, the Content Date (0008,0023) and Content Time (0008,0033) of the new report are likely to be different than the date and time of the original observation. Therefore this attribute may need to be included in any copied Content Items to satisfy the condition."/>

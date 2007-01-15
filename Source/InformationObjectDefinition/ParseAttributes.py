@@ -147,6 +147,7 @@ class Part3Parser:
       or s.strip() == 'Table C.22.1-1':
       # C.11-4, C.13-*, C.22.1-1:  Does not even comes with column type !!!
       # C.12-7 is difficult to parse
+      # C.7.6.16-1 is insane...
       # TODO: Last line of C.19-1...
       return False
     if(m):
@@ -210,7 +211,10 @@ class Part3Parser:
     # Table C.8-39--RT DOSE MODULE ATTRIBUTES
     patt = re.compile("^\s+Table\s+C.[0-9A-Za-z-]+\s*[-]*\s*([A-Z ]+)\s*$")
     m = patt.match(s)
-    if(m):
+    # The previous regex would think : Table C.7-17A
+    # is correct...I don't know how to fix the regex, so discard result if 
+    # len(m.group(1)) <= 1
+    if(m and len(m.group(1)) > 1):
       print "Table Name:", m.group(1)
       assert self.IsTableName( m.group(1) )
       return True
@@ -256,7 +260,7 @@ class Part3Parser:
     #m = patt.match(s)
     #return m
     #print "FALLBACK"
-    patt = re.compile("^>*\s*Include [`'\"]*([A-Za-z/ ]*)['\"]* \\(*Table [A-Z0-9a-z-.]+\\)*.*$")
+    patt = re.compile("^>*\s*Include [`'\"]*([A-Za-z/ -]*)['\"]* \\(*Table [A-Z0-9a-z-.]+\\)*.*$")
     m = patt.match(s)
     #if not m:
     #  print "FAIL", s
@@ -287,6 +291,8 @@ class Part3Parser:
       or blank == 'Shape' \
       or blank == 'Relationship' \
       or blank == 'in Float' \
+      or blank == 'Displacement' \
+      or blank == 'Technique Description' \
       or blank == 'Left Vertical Edge' \
       or blank == 'State Sequence' \
       or blank == 'In-plane' \
@@ -472,9 +478,8 @@ class Part3Parser:
                 assert self._Shift != 0
                 buffer = subline
               else:
-                if( self.IsComment(subline) ):
-                  print "Found Comment: ", subline
-                else:
+                if( not self.IsComment(subline) ):
+                  #print "Found Comment: ", subline
                   if( self.IsNextLineAttribute(subline) ):
                     buffer += ' ' + subline.strip()
                   else:
