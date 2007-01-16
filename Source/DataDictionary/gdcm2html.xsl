@@ -20,8 +20,7 @@
       <body>
         <table border="1">
           <tr bgcolor="#d6d6d6"> <!--rgb(214,214,214) -->
-            <th>Group</th>
-            <th>Element</th>
+            <th>Tag</th>
             <th>VR</th>
             <th>VM</th>
             <th>Description</th>
@@ -29,12 +28,16 @@
           </tr>
 <!-- The main template that loop over all dict/entry -->
           <xsl:for-each select="dict/entry">
+            <xsl:variable name="my_italic" value="@retired != 'false'"/>
             <tr>
               <td>
+                <!--xsl:if test="@retired != 'false'"><i></xsl:if-->
+                <xsl:text>(</xsl:text>
                 <xsl:value-of select="@group"/>
-              </td>
-              <td>
+                <xsl:text>,</xsl:text>
                 <xsl:value-of select="@element"/>
+                <xsl:text>)</xsl:text>
+                <!--xsl:if test="$my_italic"></i></xsl:if-->
               </td>
               <td>
                 <xsl:for-each select="representations/representation">
@@ -56,7 +59,7 @@
                 <xsl:value-of select="description"/>
               </td>
               <td>
-                <xsl:if test="@retired != &quot;false&quot;">
+                <xsl:if test="@retired != 'false'">
                   <xsl:text> (RET)</xsl:text>
                 </xsl:if>
               </td>
