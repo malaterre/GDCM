@@ -21,27 +21,29 @@
 <!-- The main template that loop over all dict/entry -->
         <xsl:for-each select="tables/table">
           <table border="1">
-            <caption>
+            <caption><em>
               <xsl:value-of select="@name"/>
               <br/>
               <xsl:value-of select="@ref"/>
-            </caption>
+            </em></caption>
             <tr bgcolor="#d6d6d6">
 <!--rgb(214,214,214) -->
-              <th>Group</th>
-              <th>Element</th>
+              <th>Tag</th>
               <th>Name</th>
               <th>Type</th>
               <th>Description</th>
             </tr>
             <xsl:for-each select="entry">
               <tr>
-                <td>
-                  <xsl:value-of select="@group"/>
-                </td>
-                <td>
-                  <xsl:value-of select="@element"/>
-                </td>
+                <!-- TODO which one is expected ? -->
+                <!-- Version 1 -->
+                <!--xsl:text>(</xsl:text>
+                <xsl:value-of select="@group"/>
+                <xsl:text>,</xsl:text>
+                <xsl:value-of select="@element"/>
+                <xsl:text>)</xsl:text-->
+                <!-- Version 2 -->
+                <td>(<xsl:value-of select="@group"/>,<xsl:value-of select="@element"/>)</td>
                 <td>
                   <xsl:value-of select="@name"/>
                 </td>
