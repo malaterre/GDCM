@@ -30,28 +30,25 @@
         <fo:flow flow-name="xsl-region-body">
           <fo:block>
             <fo:table table-layout="fixed" border-color="rgb(0,0,0)" border-style="solid" border-width="1pt">
-              <fo:table-column column-width="20mm"/>
-              <fo:table-column column-width="20mm"/>
-              <fo:table-column column-width="10mm"/>
-              <fo:table-column column-width="10mm"/>
+              <fo:table-column column-width="40mm"/>
+              <!--fo:table-column column-width="20mm"/-->
               <fo:table-column column-width="90mm"/>
+              <fo:table-column column-width="10mm"/>
+              <fo:table-column column-width="10mm"/>
               <fo:table-column column-width="15mm"/>
               <fo:table-header background-color="rgb(214,214,214)" font-size="8pt" font-weight="bold" text-align="center">
                 <fo:table-row text-align="center" font-size="8pt">
                   <fo:table-cell border-color="rgb(0,0,0)" border-style="solid" border-width="1pt">
-                    <fo:block>Group</fo:block>
+                    <fo:block>Tag</fo:block>
                   </fo:table-cell>
                   <fo:table-cell border-color="rgb(0,0,0)" border-style="solid" border-width="1pt">
-                    <fo:block>Element</fo:block>
+                    <fo:block>Name</fo:block>
                   </fo:table-cell>
                   <fo:table-cell border-color="rgb(0,0,0)" border-style="solid" border-width="1pt">
                     <fo:block>VR</fo:block>
                   </fo:table-cell>
                   <fo:table-cell border-color="rgb(0,0,0)" border-style="solid" border-width="1pt">
                     <fo:block>VM</fo:block>
-                  </fo:table-cell>
-                  <fo:table-cell border-color="rgb(0,0,0)" border-style="solid" border-width="1pt">
-                    <fo:block>Description</fo:block>
                   </fo:table-cell>
                   <fo:table-cell border-color="rgb(0,0,0)" border-style="solid" border-width="1pt">
                     <fo:block>Retired</fo:block>
@@ -63,12 +60,16 @@
                   <fo:table-row text-align="center" font-size="8pt">
                     <fo:table-cell border-color="rgb(0,0,0)" border-style="solid" border-width="1pt">
                       <fo:block vertical-align="middle">
+                        <xsl:text>(</xsl:text>
                         <xsl:value-of select="@group"/>
+                        <xsl:text>,</xsl:text>
+                        <xsl:value-of select="@element"/>
+                        <xsl:text>)</xsl:text>
                       </fo:block>
                     </fo:table-cell>
                     <fo:table-cell border-color="rgb(0,0,0)" border-style="solid" border-width="1pt">
                       <fo:block vertical-align="middle">
-                        <xsl:value-of select="@element"/>
+                        <xsl:value-of select="description"/>
                       </fo:block>
                     </fo:table-cell>
                     <fo:table-cell border-color="rgb(0,0,0)" border-style="solid" border-width="1pt">
@@ -91,11 +92,6 @@
                             <fo:block><xsl:text>&#xA;</xsl:text></fo:block>
                           </xsl:if>
                         </xsl:for-each>
-                      </fo:block>
-                    </fo:table-cell>
-                    <fo:table-cell border-color="rgb(0,0,0)" border-style="solid" border-width="1pt">
-                      <fo:block vertical-align="middle">
-                        <xsl:value-of select="description"/>
                       </fo:block>
                     </fo:table-cell>
                     <fo:table-cell border-color="rgb(0,0,0)" border-style="solid" border-width="1pt">
