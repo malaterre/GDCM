@@ -48,11 +48,11 @@
         <fo:flow flow-name="xsl-region-body">
           <fo:block>
             <fo:table table-layout="fixed" border-color="rgb(0,0,0)" border-width="1pt">
-              <fo:table-column column-width="30mm"/>
-              <fo:table-column column-width="90mm"/>
-              <fo:table-column column-width="10mm"/>
-              <fo:table-column column-width="10mm"/>
-              <fo:table-column column-width="15mm"/>
+              <fo:table-column column-width="30mm"/><!--Tag-->
+              <fo:table-column column-width="90mm"/><!--Name-->
+              <fo:table-column column-width="7.5mm"/><!--VR-->
+              <fo:table-column column-width="10mm"/><!--VM-->
+              <fo:table-column column-width="15mm"/><!--Retired?-->
               <fo:table-header background-color="rgb(214,214,214)" font-size="10pt" font-weight="bold" text-align="justify">
                 <fo:table-row text-align="justify" font-size="10pt">
                   <fo:table-cell border-color="rgb(0,0,0)" border-width="1pt">
@@ -61,10 +61,10 @@
                   <fo:table-cell border-color="rgb(0,0,0)" border-width="1pt">
                     <fo:block>Name</fo:block>
                   </fo:table-cell>
-                  <fo:table-cell text-align="center" border-color="rgb(0,0,0)" border-width="1pt">
+                  <fo:table-cell border-color="rgb(0,0,0)" border-width="1pt">
                     <fo:block>VR</fo:block>
                   </fo:table-cell>
-                  <fo:table-cell text-align="center" border-color="rgb(0,0,0)" border-width="1pt">
+                  <fo:table-cell border-color="rgb(0,0,0)" border-width="1pt">
                     <fo:block>VM</fo:block>
                   </fo:table-cell>
                   <fo:table-cell border-color="rgb(0,0,0)" border-width="1pt">
@@ -96,7 +96,7 @@
                         <xsl:value-of select="description"/>
                       </fo:block>
                     </fo:table-cell>
-                    <fo:table-cell text-align="center" border-color="rgb(0,0,0)" border-width="1pt">
+                    <fo:table-cell border-color="rgb(0,0,0)" border-width="1pt">
                       <fo:block vertical-align="middle">
                         <xsl:for-each select="representations/representation">
                           <xsl:value-of select="@vr"/>
@@ -110,7 +110,7 @@
                         </xsl:for-each>
                       </fo:block>
                     </fo:table-cell>
-                    <fo:table-cell text-align="center" border-color="rgb(0,0,0)" border-width="1pt">
+                    <fo:table-cell border-color="rgb(0,0,0)" border-width="1pt">
                       <fo:block vertical-align="middle">
                         <xsl:for-each select="representations/representation">
                           <xsl:value-of select="@vm"/>
