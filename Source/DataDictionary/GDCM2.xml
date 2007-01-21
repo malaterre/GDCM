@@ -233,7 +233,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
       <representation vr="OB" vm="1"/>
     </representations>
   </entry>
-  <entry group="0004" element="0000" retired="true">
+  <entry group="0004" element="0000" retired="false">
     <description>Group Length</description>
     <representations>
       <representation vr="UL" vm="1"/>
@@ -14676,9 +14676,9 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
     <description>Item</description>
   </entry>
   <entry group="fffe" element="e00d" retired="false">
-    <description>Item Delimiter</description>
+    <description>Item Delimitation Item</description>
   </entry>
   <entry group="fffe" element="e0dd" retired="false">
-    <description>Sequence Delimiter</description>
+    <description>Sequence Delimitation Item</description>
   </entry>
 </dict>
