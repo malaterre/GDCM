@@ -3227,7 +3227,22 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="003A" element="0210" name="&gt;&gt; Channel Sensitivity" type="1C" description="Nominal numeric value of unit quantity of sample. Required if samples represent defined (not arbitrary) units."/>
     <include ref="&gt;&gt;&gt; Include 'Code Sequence Macro' Table 8.8-1.         Defined Context ID = 3082"/>
     <entry group="003A" element="0211" name="&gt;&gt; Channel Sensitivity Units Sequence" type="1C" description="A coded descriptor of the Units of measure for the Channel Sensitivity. Only a single Item shall be permitted in this sequence. (see C.10.9.1.4.2) Required if Channel Sensitivity (003A,0210) is present."/>
-    <entry group="003A" element="0212" name="&gt;&gt; Channel Sensitivity" type="1C" description="Multiplier to be applied to encoded sample values to"/>
+    <entry group="003A" element="0212" name="&gt;&gt; Channel Sensitivity Correction Factor" type="1C" description="Multiplier to be applied to encoded sample values to match units specified in Channel Sensitivity (003A,0210) (e.g., based on calibration data) (see C.10.9.1.4.2) Required if Channel Sensitivity (003A,0210) is present."/>
+    <entry group="003A" element="0213" name="&gt;&gt; Channel Baseline" type="1C" description="Offset of encoded sample value 0 from actual 0 using the units defined in the Channel Sensitivity Units Sequence (003A,0211). Required if Channel Sensitivity (003A,0210) is present."/>
+    <entry group="003A" element="0214" name="&gt;&gt; Channel Time Skew" type="1C" description="Offset of first sample of channel from waveform multiplex group start time, in seconds (see C.10.9.1.4.3) Required if Channel Sample Skew is not present."/>
+    <entry group="003A" element="0215" name="&gt;&gt; Channel Sample Skew" type="1C" description="Offset of first sample of channel from waveform multiplex group start time, in samples (see C.10.9.1.4.3) Required if Channel Time Skew is not present."/>
+    <entry group="003A" element="0218" name="&gt;&gt; Channel Offset" type="3" description="Additional offset of first sample of channel to be used in aligning multiple channels for presentation or analysis, in seconds (see C.10.9.1.4.3)"/>
+    <entry group="003A" element="021A" name="&gt;&gt; Waveform Bits Stored" type="1" description="Number of significant bits within the waveform samples (see C.10.9.1.4.4)"/>
+    <entry group="003A" element="0220" name="&gt;&gt; Filter Low Frequency" type="3" description="Nominal 3dB point of lower frequency of pass band; in Hz"/>
+    <entry group="003A" element="0221" name="&gt;&gt; Filter High Frequency" type="3" description="Nominal 3dB point of upper frequency of pass band; in Hz"/>
+    <entry group="003A" element="0222" name="&gt;&gt; Notch Filter Frequency" type="3" description="Center frequency of notch filter(s); in Hz"/>
+    <entry group="003A" element="0223" name="&gt;&gt; Notch Filter Bandwidth" type="3" description="Nominal 3dB bandwidth of notch filter(s); in Hz"/>
+    <entry group="5400" element="0110" name="&gt;&gt; Channel Minimum Value" type="3" description="Minimum valid sample value as limited by the acquisition equipment (see C.10.9.1.4.5)"/>
+    <entry group="5400" element="0112" name="&gt;&gt; Channel Maximum Value" type="3" description="Maximum valid sample value as limited by the acquisition equipment (see C.10.9.1.4.5)"/>
+    <entry group="5400" element="1004" name="&gt; Waveform Bits Allocated" type="1" description="Size of each waveform data sample within the Waveform Data; see section C.10.9.1.5"/>
+    <entry group="5400" element="1006" name="&gt; Waveform Sample Interpretation" type="1" description="Data representation of the waveform data points. See C.10.9.1.5."/>
+    <entry group="5400" element="100A" name="&gt; Waveform Padding Value" type="1C" description="Value of waveform samples inserted in channels when input is absent or invalid. Required if acquisition equipment inserts padding. See C.10.9.1.6."/>
+    <entry group="5400" element="1010" name="&gt; Waveform Data" type="1" description="Encoded data samples - channel multiplexed See section C.10.9.1.7"/>
   </table>
   <table ref="Table C.11-1" name="MODALITY LUT MODULE ATTRIBUTES">
     <include ref="Include Modality LUT Macro Table C.11-1b"/>
