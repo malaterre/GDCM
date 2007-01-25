@@ -317,6 +317,7 @@ class Part3Parser:
       or blank == 'Display Grayscale Value' \
       or blank == 'Display CIELab Value' \
       or blank == 'UID' \
+      or blank == 'Units' \
       or blank == 'Pointer' \
       or blank == 'Value' \
       or blank == 'Annotation' \
