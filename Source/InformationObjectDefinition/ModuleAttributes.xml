@@ -3207,7 +3207,27 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0018" element="1069" name="&gt; Trigger Time Offset" type="1C" description="Offset time in milliseconds from a synchronization trigger to the first sample of a waveform multiplex group. May be positive or negative. Required if waveform acquisition is synchronized to a trigger."/>
     <entry group="0018" element="106E" name="&gt; Trigger Sample Position" type="3" description="Sample number whose time corresponds to a synchronization trigger (see C.10.9.1.2)."/>
     <entry group="003A" element="0004" name="&gt; Waveform Originality" type="1" description="See C.10.9.1.3. Enumerated values: ORIGINAL DERIVED"/>
-    <entry group="003A" element="0005" name="&gt; Number of Waveform" type="1" description="Number of channels for this multiplex group."/>
+    <entry group="003A" element="0005" name="&gt; Number of Waveform Channels" type="1" description="Number of channels for this multiplex group."/>
+    <entry group="003A" element="0010" name="&gt; Number of Waveform Samples" type="1" description="Number of samples per channel in this multiplex group."/>
+    <entry group="003A" element="001A" name="&gt; Sampling Frequency" type="1" description="Frequency in Hz"/>
+    <entry group="003A" element="0020" name="&gt; Multiplex Group Label" type="3" description="Label for multiplex group"/>
+    <entry group="003A" element="0200" name="&gt; Channel Definition Sequence" type="1" description="Sequence of one or more Items, with one Item per channel (see C.10.9.1.4). Ordering of Items in this Sequence is significant for reference to specific channels."/>
+    <entry group="003A" element="0202" name="&gt;&gt; Waveform Channel Number" type="3" description="Equipment physical channel number used for acquisition."/>
+    <entry group="003A" element="0203" name="&gt;&gt; Channel Label" type="3" description="Text label for channel which may be used for display purposes"/>
+    <entry group="003A" element="0205" name="&gt;&gt; Channel Status" type="3" description="One or more values for the status of this channel within this SOP Instance. Defined terms: OK TEST DATA DISCONNECTED QUESTIONABLE INVALID UNCALIBRATED UNZEROED Precise location of a change in status may be noted in an Annotation."/>
+    <include ref="&gt;&gt;&gt; Include 'Code Sequence Macro' Table 8.8-1.         Baseline Context ID determined by IOD specialization"/>
+    <entry group="003A" element="0208" name="&gt;&gt; Channel Source Sequence" type="1" description="A coded descriptor of the waveform channel source (metric, anatomical position, function, and technique). Only a single Item shall be permitted in this sequence. (See C.10.9.1.4.1)"/>
+    <include ref="&gt;&gt;&gt; Include 'Code Sequence Macro' Table 8.8-1.         Baseline Context ID determined by IOD specialization"/>
+    <entry group="003A" element="0209" name="&gt;&gt; Channel Source Modifiers Sequence" type="1C" description="Sequence of one or more Items which further qualify the Waveform Source. Required if Channel Source Sequence (003A,0208) does not fully specify the semantics of the source. Ordering of Items in this Sequence may be semantically significant."/>
+    <entry group="003A" element="020A" name="&gt;&gt; Source Waveform Sequence" type="3" description="A sequence which provides reference to a DICOM waveform from which this channel was derived. One or more Items may be included in this Sequence."/>
+    <entry group="0008" element="1150" name="&gt;&gt;&gt;Referenced SOP Class UID" type="1C" description="Identifies the referenced SOP Class. Required if a Sequence Item is present."/>
+    <entry group="0008" element="1155" name="&gt;&gt;&gt;Referenced SOP Instance UID" type="1C" description="Identifies the referenced SOP Instance. Required if a Sequence Item is present."/>
+    <entry group="0040" element="A0B0" name="&gt;&gt;&gt; Referenced Waveform Channels" type="1C" description="Identifies the waveform multiplex group and channel within the referenced SOP Instance. Pair of values (M,C). Required if a Sequence Item is present."/>
+    <entry group="003A" element="020C" name="&gt;&gt; Channel Derivation Description" type="3" description="Additional description of waveform channel derivation"/>
+    <entry group="003A" element="0210" name="&gt;&gt; Channel Sensitivity" type="1C" description="Nominal numeric value of unit quantity of sample. Required if samples represent defined (not arbitrary) units."/>
+    <include ref="&gt;&gt;&gt; Include 'Code Sequence Macro' Table 8.8-1.         Defined Context ID = 3082"/>
+    <entry group="003A" element="0211" name="&gt;&gt; Channel Sensitivity Units Sequence" type="1C" description="A coded descriptor of the Units of measure for the Channel Sensitivity. Only a single Item shall be permitted in this sequence. (see C.10.9.1.4.2) Required if Channel Sensitivity (003A,0210) is present."/>
+    <entry group="003A" element="0212" name="&gt;&gt; Channel Sensitivity" type="1C" description="Multiplier to be applied to encoded sample values to"/>
   </table>
   <table ref="Table C.11-1" name="MODALITY LUT MODULE ATTRIBUTES">
     <include ref="Include Modality LUT Macro Table C.11-1b"/>

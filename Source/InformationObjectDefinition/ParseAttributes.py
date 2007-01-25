@@ -391,6 +391,7 @@ class Part3Parser:
       or blank == 'Qualifier Code' \
       or blank == 'Mapping Instance Sequence' \
       or blank == 'Channels' \
+      or blank == 'Samples' \
       or blank == 'Transformation Comment' \
       or blank == 'Pixels' \
       or blank == 'Group' \
