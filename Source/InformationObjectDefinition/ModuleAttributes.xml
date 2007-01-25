@@ -1014,6 +1014,21 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0018" element="1155" name="Radiation Setting" type="1" description="Identify the general level of X-Ray dose exposure. Enumerated values are: SC = low dose exposure generally corresponding to fluoroscopic settings (e.g. preparation for diagnostic quality image acquisition); GR = high dose for diagnostic quality image acquisition (also called digital spot or cine);"/>
     <entry group="0018" element="1151" name="X-Ray Tube Current" type="2C" description="X-Ray Tube Current in mA. Required if Exposure (0018,1152) is not present."/>
     <entry group="0018" element="8151" name="X-Ray Tube Current in µA" type="3" description="X-Ray Tube Current in µA."/>
+    <entry group="0018" element="1150" name="Exposure Time" type="2C" description="Duration of X-Ray exposure in msec. See 8.7.2.1.1. Required if Exposure (0018,1152) is not present."/>
+    <entry group="0018" element="8150" name="Exposure Time in µS" type="3" description="Duration of X-Ray exposure in µsec."/>
+    <entry group="0018" element="1152" name="Exposure" type="2C" description="The exposure expressed in mAs, for example calculated from Exposure Time and X-ray Tube Current. Required if either Exposure Time (0018,1150) or X-Ray Tube Current (0018,1151) are not present."/>
+    <entry group="0018" element="1153" name="Exposure in µAs" type="3" description="The exposure expressed in µAs, for example calculated from Exposure Time and X-ray Tube Current."/>
+    <entry group="0018" element="1166" name="Grid" type="3" description="Identify the grid. Only a single value shall be present. Defined Terms are: IN = A Grid is positioned; NONE = No Grid is used."/>
+    <entry group="0018" element="1154" name="Average Pulse Width" type="3" description="Average width of X-Ray pulse in msec."/>
+    <entry group="0018" element="115A" name="Radiation Mode" type="3" description="Specifies X-Ray radiation mode. Defined Terms: CONTINUOUS PULSED"/>
+    <entry group="0018" element="1161" name="Type of Filters" type="3" description="Type of filter(s) inserted into the X-Ray beam (e.g. wedges)."/>
+    <entry group="0018" element="1162" name="Intensifier Size" type="3" description="Diameter of X-Ray intensifier in mm"/>
+    <entry group="0018" element="1147" name="Field of View Shape" type="3" description="Shape of the Image Intensifier Field of View. See C.8.7.2.1.2. Defined Terms are: ROUND RECTANGLE"/>
+    <entry group="0018" element="1149" name="Field of View Dimension(s)" type="3" description="Dimensions of the Image Intensifier Field of View in mm. If Rectangle, row dimension followed by column; if Round, diameter."/>
+    <include ref="Include Basic Pixel Spacing Calibration Macro (Table 10-10)"/>
+    <entry group="0018" element="1164" name="Imager Pixel Spacing" type="3" description="Physical distance measured at the front plane of the Image Receptor housing between the center of each pixel specified by a numeric pair - row spacing value(delimiter) column spacing value in mm. See 10.7.1.3 for further explanation of the value order. The value of this attribute shall never be adjusted to account for correction for the effect of geometric magnification or calibration against an object of known size; Pixel Spacing (0028,0030) is specified for that purpose."/>
+    <entry group="0018" element="1190" name="Focal Spot" type="3" description="Nominal focal spot size in mm used to acquire this image."/>
+    <entry group="0018" element="115E" name="Image and Fluoroscopy Area Dose Product" type="3" description="X-Ray dose, measured in dGy*cm*cm, to which the patient was exposed for the acquisition of this image plus any non- digitally recorded fluoroscopy which may have been performed to prepare for the acquisition of this image. Note:    The sum of the area dose product of all images of a Series or a Study may not result in the total area dose product to which the patient was exposed."/>
   </table>
   <table ref="Table C.8-28" name="X-RAY COLLIMATOR MODULE ATTRIBUTES">
     <entry group="0018" element="1700" name="Collimator Shape" type="1" description="Shape(s) of the collimator. Enumerated Values: RECTANGULAR CIRCULAR POLYGONAL This multi-valued Attribute shall contain at most one of each Enumerated Value."/>
