@@ -394,6 +394,7 @@ class Part3Parser:
       or blank == 'Samples' \
       or blank == 'Transformation Comment' \
       or blank == 'Pixels' \
+      or blank == 'Correction Factor' \
       or blank == 'Group' \
       or blank == 'Amount' \
       or blank == 'Priority' \
