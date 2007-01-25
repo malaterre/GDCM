@@ -3244,6 +3244,24 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="5400" element="100A" name="&gt; Waveform Padding Value" type="1C" description="Value of waveform samples inserted in channels when input is absent or invalid. Required if acquisition equipment inserts padding. See C.10.9.1.6."/>
     <entry group="5400" element="1010" name="&gt; Waveform Data" type="1" description="Encoded data samples - channel multiplexed See section C.10.9.1.7"/>
   </table>
+  <table ref="Table C.10-11 - WAVEFORM ANNOTATION MODULE ATTRIBUTES" name="Table C.10-11 - WAVEFORM ANNOTATION MODULE ATTRIBUTES">
+    <entry group="0040" element="B020" name="Waveform Annotation Sequence" type="1" description="Sequence of Annotation Items; one or more items shall be present"/>
+    <entry group="0070" element="0006" name="&gt; Unformatted Text Value" type="1C" description="Text Observation Value (annotation). Mutually exclusive with Concept Name Code Sequence (0040,A043)"/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1               Baseline Context ID may be defined in IOD"/>
+    <entry group="0040" element="A043" name="&gt; Concept Name Code Sequence" type="1C" description="Code representing the fully specified name of the NUMERIC measurement or CODED concept. This sequence shall contain exactly one item. Mutually exclusive with Text Value (0070,0006). definition."/>
+    <include ref="&gt;&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1              Baseline Context ID may be defined in IOD"/>
+    <entry group="0040" element="A195" name="&gt;&gt; Modifier Code Sequence" type="1C" description="A sequence of items modifying or specializing the Concept Name. Any number of items may be present. Required if Concept Name Code Sequence (0040,A043) is sent and the value does not fully describe the semantics of the measurement or concept. definition."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1               Baseline Context ID may be defined in IOD"/>
+    <entry group="0040" element="A168" name="&gt; Concept Code Sequence" type="3" description="A sequence that conveys the categorical coded nominal value. definition."/>
+    <include ref="&gt;&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1              Baseline Context ID may be defined in IOD"/>
+    <entry group="0040" element="A195" name="&gt;&gt; Modifier Code Sequence" type="1C" description="A sequence of items modifying or specializing the Concept. Any number of items may be present. Required if Concept Code Sequence (0040,A168) is sent and the value does not fully describe the semantics of the concept value. definition."/>
+    <entry group="0040" element="A30A" name="&gt; Numeric Value" type="3" description="Numeric measurement value or values."/>
+    <include ref="&gt;&gt; Include 'Code Sequence Macro' Table 8.8-1              Baseline Context ID 82"/>
+    <entry group="0040" element="08EA" name="&gt; Measurement Units Code Sequence" type="3" description="Units of measurement. Coded entry sequence with one item only."/>
+    <entry group="0040" element="A0B0" name="&gt; Referenced Waveform Channels" type="1" description="List of channels in waveform to which annotation applies. See C.10.10.1.1"/>
+    <entry group="0040" element="A130" name="&gt; Temporal Range Type" type="1C" description="See C.10.10.1.2 for Enumerated Values. Required if Annotation does not apply to entire Referenced Waveform Channels; shall not be present if Annotation applies to entire temporal extent of referenced channels."/>
+    <entry group="0040" element="A132" name="&gt; Referenced Sample" type="1C" description="List of samples within a multiplex group"/>
+  </table>
   <table ref="Table C.11-1" name="MODALITY LUT MODULE ATTRIBUTES">
     <include ref="Include Modality LUT Macro Table C.11-1b"/>
   </table>

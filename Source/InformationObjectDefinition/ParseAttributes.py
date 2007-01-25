@@ -156,6 +156,7 @@ class Part3Parser:
       return True
     # grrrrr: Table C.8-37 - RT SERIES MODULE ATTRIBUTES
     patt = re.compile("^\s+Table\s+C.[0-9A-Za-z-]+\s*[-]*\s*([A-Z/\s-]+)\s*$")
+    #patt = re.compile("^\s+Table\s+C.[0-9A-Za-z-]+[-\s]+([A-Z/\s-]+)\s*$")
     m = patt.match(s)
     if(m):
       print "Start", s
