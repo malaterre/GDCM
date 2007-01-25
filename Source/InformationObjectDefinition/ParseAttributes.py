@@ -73,8 +73,8 @@ class Part3Parser:
     if len(s) == 0:
       return True
     patt1 = re.compile("^\s+- Standard -\s*$")
-    patt2 = re.compile("^\s+PS 3.3 - 2007\s*")
-    patt3 = re.compile("^\s+Page [0-9]+\s*$")
+    patt2 = re.compile("^\s*PS 3.3 - 2007\s*")
+    patt3 = re.compile("^\s*Page\s+[0-9]+\s*$")
     patt4 = re.compile("^\s*Notes:$")
     m1 = patt1.match(s)
     m2 = patt2.match(s)
@@ -285,6 +285,7 @@ class Part3Parser:
       or blank == 'Sequence' \
       or blank == 'Distance' \
       or blank == 'Index' \
+      or blank == 'Reordering' \
       or blank == 'Time' \
       or blank == 'Device Number' \
       or blank == 'Justification' \
@@ -301,6 +302,7 @@ class Part3Parser:
       or blank == 'Accumulated' \
       or blank == 'Equivalent Thickness' \
       or blank == 'Distances' \
+      or blank == 'Definition' \
       or blank == 'Upper Horizontal Edge' \
       or blank == 'Modification' \
       or blank == 'Power Ratio' \
@@ -388,6 +390,25 @@ class Part3Parser:
       or blank == 'Transformation Comment' \
       or blank == 'Pixels' \
       or blank == 'Group' \
+      or blank == 'Amount' \
+      or blank == 'Priority' \
+      or blank == 'Group Name' \
+      or blank == 'Frame Rate' \
+      or blank == 'Presence' \
+      or blank == 'Sequencing' \
+      or blank == 'Orientation' \
+      or blank == 'Inverted' \
+      or blank == 'Numbers' \
+      or blank == 'Flag' \
+      or blank == 'Annotation Flag' \
+      or blank == 'Demographics Flag' \
+      or blank == 'Techniques Flag' \
+      or blank == 'Group Description' \
+      or blank == 'Handling' \
+      or blank == 'Initial View Direction' \
+      or blank == 'Identification Code Sequence' \
+      or blank == 'Identification Code' \
+      or blank == 'Category' \
       or blank == 'Spatial Position' \
       or blank == 'Creation Datetime' \
       or blank == 'Grayscale Bit Depth' \
@@ -396,6 +417,7 @@ class Part3Parser:
       or blank == 'Definition Sequence' \
       or blank == 'Procedure Code' \
       or blank == 'Referenced' \
+      or blank == 'Reference' \
       or blank == 'Usage Flag' \
       or blank == 'Horizontal Dimension' \
       or blank == 'Dimension' \
