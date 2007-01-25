@@ -2301,6 +2301,14 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0018" element="0027" name="&gt;Intervention Drug Stop Time" type="3" description="Time of completion of administration of the intervention drug, using the same time base as for the Series Time (0008,0031)."/>
     <entry group="0018" element="0028" name="&gt;Intervention Drug Dose" type="3" description="Intervention drug dose, in mg."/>
   </table>
+  <table ref="Table C.8-62 - PET MULTI-GATED ACQUISITION MODULE ATTRIBUTES" name="Table C.8-62 - PET MULTI-GATED ACQUISITION MODULE ATTRIBUTES">
+    <entry group="0018" element="1080" name="Beat Rejection Flag" type="2" description="Heart beat duration sorting has been applied. Enumerated values: Y = yes N = no"/>
+    <entry group="0018" element="1061" name="Trigger Source or Type" type="3" description="Text indicating trigger source. Defined terms: EKG"/>
+    <entry group="0018" element="1085" name="PVC Rejection" type="3" description="Description of the type of PVC rejection criteria used."/>
+    <entry group="0018" element="1086" name="Skip Beats" type="3" description="Number of beats skipped after a detected arrhythmia."/>
+    <entry group="0018" element="1088" name="Heart Rate" type="3" description="Average number of heart beats per minute for the collection period for this image. This shall include all accepted beats as well as rejected beats."/>
+    <entry group="0018" element="1064" name="Framing Type" type="3" description="Description of type of framing performed. Defined Terms: FORW = forward BACK = backward PCNT = forward/backward by percentage"/>
+  </table>
   <table ref="Table C.8-63 - PET IMAGE MODULE ATTRIBUTES" name="Table C.8-63 - PET IMAGE MODULE ATTRIBUTES">
     <entry group="0008" element="0008" name="Image Type" type="1" description="Image identification characteristics. See C.8.9.4.1.1 for specialization."/>
     <entry group="0028" element="0002" name="Samples per Pixel" type="1" description="Number of samples (planes) in this image. This value shall be 1."/>

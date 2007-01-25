@@ -155,12 +155,13 @@ class Part3Parser:
       self._IsInTable = True
       return True
     # grrrrr: Table C.8-37 - RT SERIES MODULE ATTRIBUTES
-    patt = re.compile("^\s+Table\s+C.[0-9A-Za-z-]+\s*[-]*\s*([A-Z ]+)\s*$")
+    patt = re.compile("^\s+Table\s+C.[0-9A-Za-z-]+\s*[-]*\s*([A-Z/\s-]+)\s*$")
     m = patt.match(s)
     if(m):
       print "Start", s
       self._IsInTable = True
       return True
+    print "IsTable failed with:", s
     return False
 
   def IsEndTable(self,s):
@@ -204,12 +205,13 @@ class Part3Parser:
     #if(m):
     #  print "Table Name", s
     #  return True
+    print "TableName failed with:", s
     return False
 
   def IsTableName2(self,s):
     # grrrrr: Table C.8-37 - RT SERIES MODULE ATTRIBUTES
     # Table C.8-39--RT DOSE MODULE ATTRIBUTES
-    patt = re.compile("^\s+Table\s+C.[0-9A-Za-z-]+\s*[-]*\s*([A-Z ]+)\s*$")
+    patt = re.compile("^\s+Table\s+C.[0-9A-Za-z-]+\s*[-]*\s*([A-Z/\s-]+)\s*$")
     m = patt.match(s)
     # The previous regex would think : Table C.7-17A
     # is correct...I don't know how to fix the regex, so discard result if 
@@ -218,6 +220,7 @@ class Part3Parser:
       print "Table Name:", m.group(1)
       assert self.IsTableName( m.group(1) )
       return True
+    print "TableName2 failed with:", s
     return False
 
   def IsTableDescription(self,s):
