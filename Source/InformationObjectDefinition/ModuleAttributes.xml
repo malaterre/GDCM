@@ -2233,7 +2233,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="300A" element="0352" name="Patient Support ID" type="3" description="User-specified identifier for manufacturer specific patient support devices."/>
     <entry group="300A" element="0354" name="Patient Support Accessory Code" type="3" description="A Patient Support accessory identifier to be read by a device such as a bar code reader."/>
   </table>
-  <table ref="Table C.8-60 - PET SERIES MODULE ATTRIBUTES" name="Table C.8-60 - PET SERIES MODULE ATTRIBUTES">
+  <table ref="Table C.8-60" name="PET SERIES MODULE ATTRIBUTES">
     <entry group="0008" element="0021" name="Series Date" type="1" description="Date the Series started. See C.8.9.1.1.2 for specialization."/>
     <entry group="0008" element="0031" name="Series Time" type="1" description="Time the Series started. See C.8.9.1.1.2 for specialization."/>
     <entry group="0054" element="1001" name="Units" type="1" description="Pixel value units. See C.8.9.1.1.3 for explanation. Defined terms: CNTS, NONE, CM2, PCNT, CPS, BQML, MGMINML, UMOLMINML, MLMING, MLG, 1CM, UMOLML, PROPCNTS, PROPCPS, MLMINML, MLML, GML, STDDEV"/>
@@ -3244,7 +3244,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="5400" element="100A" name="&gt; Waveform Padding Value" type="1C" description="Value of waveform samples inserted in channels when input is absent or invalid. Required if acquisition equipment inserts padding. See C.10.9.1.6."/>
     <entry group="5400" element="1010" name="&gt; Waveform Data" type="1" description="Encoded data samples - channel multiplexed See section C.10.9.1.7"/>
   </table>
-  <table ref="Table C.10-11 - WAVEFORM ANNOTATION MODULE ATTRIBUTES" name="Table C.10-11 - WAVEFORM ANNOTATION MODULE ATTRIBUTES">
+  <table ref="Table C.10-11" name="WAVEFORM ANNOTATION MODULE ATTRIBUTES">
     <entry group="0040" element="B020" name="Waveform Annotation Sequence" type="1" description="Sequence of Annotation Items; one or more items shall be present"/>
     <entry group="0070" element="0006" name="&gt; Unformatted Text Value" type="1C" description="Text Observation Value (annotation). Mutually exclusive with Concept Name Code Sequence (0040,A043)"/>
     <entry group="0040" element="A043" name="&gt; Concept Name Code Sequence" type="1C" description="Code representing the fully specified name of the NUMERIC measurement or CODED concept. This sequence shall contain exactly one item. Mutually exclusive with Text Value (0070,0006). definition."/>
@@ -3809,8 +3809,8 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0072" element="007A" name="Selector US Value" type="1C" description="The value(s) of the attribute identified by Selector Attribute (0072,0026). Required if Selector Attribute VR (0072,0050) is present and the value is US."/>
     <entry group="0072" element="007C" name="Selector SL Value" type="1C" description="The value(s) of the attribute identified by Selector Attribute (0072,0026). Required if Selector Attribute VR (0072,0050) is present and the value is SL."/>
     <entry group="0072" element="007E" name="Selector SS Value" type="1C" description="The value(s) of the attribute identified by Selector Attribute (0072,0026). Required if Selector Attribute VR (0072,0050) is present and the value is SS."/>
-    <include ref="&gt;Include Code Sequence Macro Table 8.8-1 No baseline context ID is defined."/>
     <entry group="0072" element="0080" name="Selector Code Sequence Value" type="1C" description="The value(s) of the attribute identified by Selector Attribute (0072,0026). One or more sequence items shall be present. See C.23.4.2.1.2. Required if Selector Attribute VR (0072,0050) is present and the value is SQ, and Selector Attribute (0072,0026) is a code sequence."/>
+    <include ref="&gt;Include Code Sequence Macro Table 8.8-1 No baseline context ID is defined."/>
   </table>
   <table ref="Table C.24-1" name="Encapsulated Document Series Module Attributes">
     <entry group="0008" element="0060" name="Modality" type="1" description="The modality appropriate for the encapsulated document. This Type definition shall override the definition in the SC Equipment Module. See section C.7.3.1.1.1 for Defined Terms."/>
