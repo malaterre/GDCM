@@ -36,29 +36,29 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0010" element="2160" name="Ethnic Group" type="3" description="Ethnic group or race of the patient."/>
     <entry group="0010" element="4000" name="Patient Comments" type="3" description="User-defined additional information about the patient."/>
     <entry group="0010" element="2201" name="Patient Species Description" type="1C" description="The species of the patient. Required if the patient is an animal and if Patient Species Code Sequence (0010,2202) is not present. May be present otherwise."/>
-    <include ref="&gt;Include `Code Sequence Macro' Table 8.8-1             Defined Context ID is 7454."/>
     <entry group="0010" element="2202" name="Patient Species Code Sequence" type="1C" description="The species of the patient. One Item shall be present. Required if the patient is an animal and if Patient Species Description (0010,2201) is not present. May be present otherwise."/>
+    <include ref="&gt;Include `Code Sequence Macro' Table 8.8-1             Defined Context ID is 7454."/>
     <entry group="0010" element="2292" name="Patient Breed Description" type="2C" description="The breed of the patient. Required if the patient is an animal and if Patient Breed Code Sequence (0010,2293) is empty. May be present otherwise."/>
-    <include ref="&gt;Include `Code Sequence Macro' Table 8.8-1             Defined Context ID is 7480."/>
     <entry group="0010" element="2293" name="Patient Breed Code Sequence" type="2C" description="The breed of the patient. Zero or more Items shall be present. Required if the patient is an animal."/>
+    <include ref="&gt;Include `Code Sequence Macro' Table 8.8-1             Defined Context ID is 7480."/>
     <entry group="0010" element="2294" name="Breed Registration Sequence" type="2C" description="Information identifying an animal within a breed registry. Zero or more Items shall be present. Required if the patient is an animal."/>
     <entry group="0010" element="2295" name="&gt;Breed Registration Number" type="1" description="Identification number of an animal within the registry."/>
-    <include ref="&gt;&gt;Include `Code Sequence Macro' Table 8.8-1            Defined Context ID is 7481."/>
     <entry group="0010" element="2296" name="&gt;Breed Registry Code Sequence" type="1" description="Identification of the organization with which an animal is registered. One Item shall be present."/>
+    <include ref="&gt;&gt;Include `Code Sequence Macro' Table 8.8-1            Defined Context ID is 7481."/>
     <entry group="0010" element="2297" name="Responsible Person" type="2C" description="Name of person with medical decision making authority for the patient. Required if the patient is an animal. May be present otherwise."/>
     <entry group="0010" element="2298" name="Responsible Person Role" type="1C" description="Relationship of Responsible Person to the patient. Defined Terms: OWNER Required if Responsible Person is present and has a value."/>
     <entry group="0010" element="2299" name="Responsible Organization" type="2C" description="Name of organization with medical decision making authority for the patient. Required if patient is an animal. May be present otherwise."/>
     <entry group="0012" element="0062" name="Patient Identity Removed" type="3" description="The true identity of the patient has been removed from the Attributes and the Pixel Data Enumerated Values: YES NO"/>
-    <entry group="0012" element="0063" name="De-identification Method" type="1C" description="A description or label of the mechanism or method use to remove the patient's identity. May be multi-valued if successive de-identification steps have been performed. Note:    This may be used to describe the extent or thoroughness of the de- identification, for example whether or not the de-identification is for a &amp;quot;Limited Data Set&amp;quot; (as per HIPAA Privacy Rule). Required if Patient Identity Removed (0012,0062) is present and has a value of YES and De-identification Method Code Sequence (0012,0064) is not present."/>
-    <include ref="&gt;Include Code Sequence Macro Table 8.8-1                  No Baseline Context ID is defined."/>
+    <entry group="0012" element="0063" name="De-identification Method" type="1C" description="A description or label of the mechanism or method use to remove the patient's identity. May be multi-valued if successive de-identification steps have been performed. Note: This may be used to describe the extent or thoroughness of the de-identification, for example whether or not the de-identification is for a &amp;quot;Limited Data Set&amp;quot; (as per HIPAA Privacy Rule). Required if Patient Identity Removed (0012,0062) is present and has a value of YES and De-identification Method Code Sequence (0012,0064) is not present."/>
     <entry group="0012" element="0064" name="De-identification Method Code Sequence" type="1C" description="A code describing the mechanism or method use to remove the patient's identity. One or more Items shall be present. Multiple items are used if successive de-identification steps have been performed Required if Patient Identity Removed (0012,0062) is present and has a value of YES and De-identification Method (0012,0063) is not present."/>
+    <include ref="&gt;Include Code Sequence Macro Table 8.8-1                  No Baseline Context ID is defined."/>
   </table>
   <table ref="Table C.7-2a" name="SPECIMEN IDENTIFICATION MODULE ATTRIBUTES">
     <entry group="0040" element="050A" name="Specimen Accession Number" type="1" description="A departmental Information System identifier that identifies the Accession. See Section C.7.1.2.1.1 for further explanation."/>
     <entry group="0040" element="0550" name="Specimen Sequence" type="2" description="Detailed description of one or more specimens. Zero or more Items may be included in this Sequence."/>
     <entry group="0040" element="0551" name="&gt;Specimen Identifier" type="2C" description="A departmental information system identifier for the Specimen. See Section C.7.1.2.1.2 for further explanation. Required if a sequence item is present."/>
-    <include ref="&gt;&gt;Include `Code Sequence Macro' Table 8.8-1                     No Baseline Context IDs are defined"/>
     <entry group="0040" element="059A" name="&gt;Specimen Type Code Sequence" type="2C" description="Specimen Type. Only a single Item shall be permitted in this Sequence. Required if a sequence item is present and Specimen Identifier (0040,0551) is sent."/>
+    <include ref="&gt;&gt;Include `Code Sequence Macro' Table 8.8-1                     No Baseline Context IDs are defined"/>
     <entry group="0040" element="06FA" name="&gt;Slide Identifier" type="2C" description="Identifier of the Slide. Required if a sequence item is present and the Specimen is a Slide."/>
   </table>
   <table ref="Table C.7-2b" name="CLINICAL TRIAL SUBJECT MODULE ATTRIBUTES">
@@ -75,27 +75,27 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0008" element="0020" name="Study Date" type="2" description="Date the Study started."/>
     <entry group="0008" element="0030" name="Study Time" type="2" description="Time the Study started."/>
     <entry group="0008" element="0090" name="Referring Physician's Name" type="2" description="Name of the patient's referring physician"/>
-    <include ref="&gt;Include `Person Identification Macro' Table 10-1"/>
     <entry group="0008" element="0096" name="Referring Physician Identification Sequence" type="3" description="Identification of the patient's referring physician. Only a single item shall be permitted in this sequence."/>
+    <include ref="&gt;Include `Person Identification Macro' Table 10-1"/>
     <entry group="0020" element="0010" name="Study ID" type="2" description="User or equipment generated Study identifier."/>
     <entry group="0008" element="0050" name="Accession Number" type="2" description="A RIS generated number that identifies the order for the Study."/>
     <entry group="0008" element="1030" name="Study Description" type="3" description="Institution-generated description or classification of the Study (component) performed."/>
     <entry group="0008" element="1048" name="Physician(s) of Record" type="3" description="Names of the physician(s) who are responsible for overall patient care at time of Study (see Section C.7.3.1 for Performing Physician)"/>
-    <include ref="&gt;Include `Person Identification Macro' Table 10-1"/>
     <entry group="0008" element="1049" name="Physician(s) of Record Identification Sequence" type="3" description="Identification of the physician(s) who are responsible for overall patient care at time of Study. One or more items shall be included in this sequence. If more than one Item, the number and order shall correspond to the value of Physician(s) of Record (0008,1048), if present."/>
-    <entry group="0008" element="1060" name="Name of Physician(s) Reading Study" type="3" description="Names of the physician(s) reading the Study."/>
     <include ref="&gt;Include `Person Identification Macro' Table 10-1"/>
+    <entry group="0008" element="1060" name="Name of Physician(s) Reading Study" type="3" description="Names of the physician(s) reading the Study."/>
     <entry group="0008" element="1062" name="Physician(s) Reading Study Identification Sequence" type="3" description="Identification of the physician(s) reading the Study. One or more items shall be included in this sequence. If more than one Item, the number and order shall correspond to the value of Name of Physician(s) Reading Study (0008,1060), if present."/>
+    <include ref="&gt;Include `Person Identification Macro' Table 10-1"/>
     <entry group="0008" element="1110" name="Referenced Study Sequence" type="3" description="A sequence that provides reference to a Study SOP Class/Instance pair. The sequence may have zero or more Items."/>
     <entry group="0008" element="1150" name="&gt;Referenced SOP Class UID" type="1C" description="Uniquely identifies the referenced SOP Class. Required if Referenced Study Sequence (0008,1110) is sent."/>
     <entry group="0008" element="1155" name="&gt;Referenced SOP Instance UID" type="1C" description="Uniquely identifies the referenced SOP Instance. Required if Referenced Study Sequence (0008,1110) is sent."/>
-    <include ref="&gt;Include `Code Sequence Macro' Table 8.8-1              No Baseline Context ID is defined."/>
     <entry group="0008" element="1032" name="Procedure Code Sequence" type="3" description="A Sequence that conveys the type of procedure performed. One or more Items may be included in this Sequence."/>
+    <include ref="&gt;Include `Code Sequence Macro' Table 8.8-1              No Baseline Context ID is defined."/>
   </table>
   <table ref="Table C.7-4a" name="PATIENT STUDY MODULE ATTRIBUTES">
     <entry group="0008" element="1080" name="Admitting Diagnoses Description" type="3" description="Description of the admitting diagnosis (diagnoses)"/>
-    <include ref="&gt;Include `Code Sequence Macro' Table 8.8-1                       No Baseline Context ID is defined."/>
     <entry group="0008" element="1084" name="Admitting Diagnoses Code Sequence" type="3" description="A sequence that conveys the admitting diagnosis (diagnoses). One or more Items may be included in this Sequence."/>
+    <include ref="&gt;Include `Code Sequence Macro' Table 8.8-1                       No Baseline Context ID is defined."/>
     <entry group="0010" element="1010" name="Patient's Age" type="3" description="Age of the Patient."/>
     <entry group="0010" element="1020" name="Patient's Size" type="3" description="Length or size of the Patient, in meters."/>
     <entry group="0010" element="1030" name="Patient's Weight" type="3" description="Weight of the Patient, in kilograms."/>
@@ -103,7 +103,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0010" element="21B0" name="Additional Patient's History" type="3" description="Additional information about the Patient's medical history."/>
     <entry group="0038" element="0010" name="Admission ID" type="3" description="Identification number of the visit as assigned by the healthcare provider"/>
     <entry group="0038" element="0011" name="Issuer of Admission ID" type="3" description="Name of healthcare provider that issued the Admission ID"/>
-    <entry group="0010" element="2203" name="Patient's Sex Neutered" type="2C" description="Whether or not a procedure has been performed in an effort to render the patient sterile. Enumerated value: ALTERED = Altered/Neutered UNALTERED = Unaltered/intact Note:     If this Attribute is present but has no value then the status is unknown. Required if patient is an animal. May be present otherwise."/>
+    <entry group="0010" element="2203" name="Patient's Sex Neutered" type="2C" description="Whether or not a procedure has been performed in an effort to render the patient sterile. Enumerated value: ALTERED = Altered/Neutered UNALTERED = Unaltered/intact Note: If this Attribute is present but has no value then the status is unknown. Required if patient is an animal. May be present otherwise."/>
   </table>
   <table ref="Table C.7-4b" name="CLINICAL TRIAL STUDY MODULE ATTRIBUTES">
     <entry group="0012" element="0050" name="Clinical Trial Time Point ID" type="2" description="An identifier specifying the one or more studies that are grouped together as a clinical time point or submission in a clinical trial. See C.7.2.3.1.1."/>
@@ -113,41 +113,41 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0008" element="0060" name="Modality" type="1" description="Type of equipment that originally acquired the data used to create the images in this Series. See C.7.3.1.1.1 for Defined Terms."/>
     <entry group="0020" element="000E" name="Series Instance UID" type="1" description="Unique identifier of the Series."/>
     <entry group="0020" element="0011" name="Series Number" type="2" description="A number that identifies this Series."/>
-    <entry group="0020" element="0060" name="Laterality" type="2C" description="Laterality of (paired) body part examined. Required if the body part examined is a paired structure and Image Laterality (0020,0062) or Frame Laterality (0020,9072) are not sent. Enumerated Values: R = right L = left Note:    Some IODs support Image Laterality (0020,0062) at the Image level or Frame Laterality(0020,9072) at the Frame level in the Frame Anatomy functional group macro, which can provide a more comprehensive mechanism for specifying the laterality of the body part(s) being examined."/>
+    <entry group="0020" element="0060" name="Laterality" type="2C" description="Laterality of (paired) body part examined. Required if the body part examined is a paired structure and Image Laterality (0020,0062) or Frame Laterality (0020,9072) are not sent. Enumerated Values: R = right L = left Note: Some IODs support Image Laterality (0020,0062) at the Image level or Frame Laterality(0020,9072) at the Frame level in the Frame Anatomy functional group macro, which can provide a more comprehensive mechanism for specifying the laterality of the body part(s) being examined."/>
     <entry group="0008" element="0021" name="Series Date" type="3" description="Date the Series started."/>
     <entry group="0008" element="0031" name="Series Time" type="3" description="Time the Series started."/>
     <entry group="0008" element="1050" name="Performing Physicians' Name" type="3" description="Name of the physician(s) administering the Series."/>
-    <include ref="&gt;Include `Person Identification Macro' Table 10-1"/>
     <entry group="0008" element="1052" name="Performing Physician Identification Sequence" type="3" description="Identification of the physician(s) administering the Series. One or more items shall be included in this sequence. If more than one Item, the number and order shall correspond to the value of Performing Physicians' Name (0008,1050), if present."/>
-    <entry group="0018" element="1030" name="Protocol Name" type="3" description="User-defined description of the conditions under which the Series was performed. Note:    This attribute conveys series-specific protocol identification and may or may not be identical to the one presented in the Performed Protocol Code Sequence (0040,0260)."/>
+    <include ref="&gt;Include `Person Identification Macro' Table 10-1"/>
+    <entry group="0018" element="1030" name="Protocol Name" type="3" description="User-defined description of the conditions under which the Series was performed. Note: This attribute conveys series-specific protocol identification and may or may not be identical to the one presented in the Performed Protocol Code Sequence (0040,0260)."/>
     <entry group="0008" element="103E" name="Series Description" type="3" description="User provided description of the Series"/>
     <entry group="0008" element="1070" name="Operators' Name" type="3" description="Name(s) of the operator(s) supporting the Series."/>
-    <include ref="&gt;Include `Person Identification Macro' Table 10-1"/>
     <entry group="0008" element="1072" name="Operator Identification Sequence" type="3" description="Identification of the operator(s) supporting the Series. One or more items shall be included in this sequence. If more than one Item, the number and order shall correspond to the value of Operators' Name (0008,1070), if present."/>
+    <include ref="&gt;Include `Person Identification Macro' Table 10-1"/>
     <entry group="0008" element="1111" name="Referenced Performed Procedure Step Sequence" type="3" description="Uniquely identifies the Performed Procedure Step SOP Instance to which the Series is related (e.g. a Modality or General-Purpose Performed Procedure Step SOP Instance). The Sequence shall have zero or one Item."/>
     <entry group="0008" element="1150" name="&gt;Referenced SOP Class UID" type="1C" description="Uniquely identifies the referenced SOP Class. Required if Referenced Performed Procedure Step Sequence (0008,1111) is sent."/>
     <entry group="0008" element="1155" name="&gt;Referenced SOP Instance UID" type="1C" description="Uniquely identifies the referenced SOP Instance. Required if Referenced Performed Procedure Step Sequence (0008,1111) is sent."/>
-    <entry group="0008" element="1250" name="Related Series Sequence" type="3" description="Identification of Series significantly related to this Series. Zero or more Items may be present. Notes:    1. For example, for a combined CT and PET acquisition, the CT images and PET images would be in separate series that could cross- reference each other with multiple purpose of reference codes meaning same anatomy, simultaneously acquired and same indication. 2. The related series may have different Frames of Reference and hence require some sort of registration before spatial coordinates can be directly compared. 3. This attribute is not intended for conveying localizer reference information, for which Referenced Image Sequence (0008,1140) should be used."/>
+    <entry group="0008" element="1250" name="Related Series Sequence" type="3" description="Identification of Series significantly related to this Series. Zero or more Items may be present. Notes: 1. For example, for a combined CT and PET acquisition, the CT images and PET images would be in separate series that could cross-reference each other with multiple purpose of reference codes meaning same anatomy, simultaneously acquired and same indication. 2. The related series may have different Frames of Reference and hence require some sort of registration before spatial coordinates can be directly compared. 3. This attribute is not intended for conveying localizer reference information, for which Referenced Image Sequence (0008,1140) should be used."/>
     <entry group="0020" element="000D" name="&gt;Study Instance UID" type="1" description="Instance UID of Study to which the related Series belongs"/>
     <entry group="0020" element="000E" name="&gt;Series Instance UID" type="1" description="Instance UID of Related Series"/>
-    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1           DCID 7210"/>
     <entry group="0040" element="A170" name="&gt;Purpose of Reference Code Sequence" type="2" description="Describes the purpose for which the reference is made. Zero or more Items may be present. When absent, implies that the reason for the reference is unknown."/>
-    <entry group="0018" element="0015" name="Body Part Examined" type="3" description="Text description of the part of the body examined. Defined Terms: SKULL, CSPINE, TSPINE, LSPINE, SSPINE, COCCYX, CHEST, CLAVICLE, BREAST, ABDOMEN, PELVIS, HIP, SHOULDER, ELBOW, KNEE, ANKLE, HAND, FOOT, EXTREMITY, HEAD, HEART, NECK, LEG, ARM, JAW Note:     Some IODs support the Anatomic Region Sequence (0008,2218), which can provide a more comprehensive mechanism for specifying the body part being examined."/>
+    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1           DCID 7210"/>
+    <entry group="0018" element="0015" name="Body Part Examined" type="3" description="Text description of the part of the body examined. Defined Terms: SKULL, CSPINE, TSPINE, LSPINE, SSPINE, COCCYX, CHEST, CLAVICLE, BREAST, ABDOMEN, PELVIS, HIP, SHOULDER, ELBOW, KNEE, ANKLE, HAND, FOOT, EXTREMITY, HEAD, HEART, NECK, LEG, ARM, JAW Note: Some IODs support the Anatomic Region Sequence (0008,2218), which can provide a more comprehensive mechanism for specifying the body part being examined."/>
     <entry group="0018" element="5100" name="Patient Position" type="2C" description="Patient position descriptor relative to the equipment. Required for CT and MR images; shall not be present if Patient Orientation Code Sequence (0054,0410) is present; may be present otherwise. See C.7.3.1.1.2 for Defined Terms and further explanation."/>
     <entry group="0028" element="0108" name="Smallest Pixel Value in Series" type="3" description="The minimum value of all images in this Series."/>
     <entry group="0028" element="0109" name="Largest Pixel Value in Series" type="3" description="The maximum value of all images in this Series."/>
-    <include ref="&gt;Include Request Attributes Macro Table 10-9               No Baseline Context IDs defined"/>
     <entry group="0040" element="0275" name="Request Attributes Sequence" type="3" description="Sequence that contains attributes from the Imaging Service Request. The sequence may have one or more Items."/>
+    <include ref="&gt;Include Request Attributes Macro Table 10-9               No Baseline Context IDs defined"/>
     <entry group="0040" element="0253" name="Performed Procedure Step ID" type="3" description="User or equipment generated identifier of that part of a Procedure that has been carried out within this step."/>
     <entry group="0040" element="0244" name="Performed Procedure Step Start Date" type="3" description="Date on which the Performed Procedure Step started."/>
     <entry group="0040" element="0245" name="Performed Procedure Step Start Time" type="3" description="Time on which the Performed Procedure Step started."/>
     <entry group="0040" element="0254" name="Performed Procedure Step Description" type="3" description="Institution-generated description or classification of the Procedure Step that was performed."/>
-    <include ref="&gt;Include `Code Sequence Macro' Table 8.8-1                 No Baseline Context ID is defined."/>
     <entry group="0040" element="0260" name="Performed Protocol Code Sequence" type="3" description="Sequence describing the Protocol performed for this Procedure Step. One or more Items may be included in this Sequence."/>
-    <include ref="&gt;&gt;Include `Content Item Macro' Table 10-2                  No Baseline Template is defined."/>
+    <include ref="&gt;Include `Code Sequence Macro' Table 8.8-1                 No Baseline Context ID is defined."/>
     <entry group="0040" element="0440" name="&gt;Protocol Context Sequence" type="3" description="Sequence that specifies the context for the Performed Protocol Code Sequence Item. One or more items may be included in this sequence."/>
-    <include ref="&gt;&gt;&gt;Include `Content Item Macro' Table 10-2                 No Baseline Template is defined."/>
+    <include ref="&gt;&gt;Include `Content Item Macro' Table 10-2                  No Baseline Template is defined."/>
     <entry group="0040" element="0441" name="&gt;&gt; Content Item Modifier Sequence" type="3" description="Sequence that specifies modifiers for a Protocol Context Content Item. One or more items may be included in this sequence. See Section C.4.10.1."/>
+    <include ref="&gt;&gt;&gt;Include `Content Item Macro' Table 10-2                 No Baseline Template is defined."/>
     <entry group="0040" element="0280" name="Comments on the Performed Procedure Step" type="3" description="User-defined comments on the Performed Procedure Step."/>
   </table>
   <table ref="Table C.7-5b" name="CLINICAL TRIAL SERIES MODULE ATTRIBUTES">
@@ -155,7 +155,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
   </table>
   <table ref="Table C.7-6" name="FRAME OF REFERENCE MODULE ATTRIBUTES">
     <entry group="0020" element="0052" name="Frame of Reference UID" type="1" description="Uniquely identifies the frame of reference for a Series. See C.7.4.1.1.1 for further explanation."/>
-    <entry group="0020" element="1040" name="Position Reference Indicator" type="2" description="Part of the patient's anatomy used as a reference, such as the iliac crest, orbital- medial, sternal notch, symphysis pubis, xiphoid, lower coastal margin, external auditory meatus. See C.7.4.1.1.2 for further explanation."/>
+    <entry group="0020" element="1040" name="Position Reference Indicator" type="2" description="Part of the patient's anatomy used as a reference, such as the iliac crest, orbital-medial, sternal notch, symphysis pubis, xiphoid, lower coastal margin, external auditory meatus. See C.7.4.1.1.2 for further explanation."/>
   </table>
   <table ref="Table C.7-7" name="Synchronization Module Attributes">
     <entry group="0020" element="0200" name="Synchronization Frame of Reference UID" type="1" description="UID of common synchronization environment. See C.7.4.2.1.1."/>
@@ -174,7 +174,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0008" element="1010" name="Station Name" type="3" description="User defined name identifying the machine that produced the composite instances."/>
     <entry group="0008" element="1040" name="Institutional Department Name" type="3" description="Department in the institution where the equipment that produced the composite instances is located."/>
     <entry group="0008" element="1090" name="Manufacturer's Model Name" type="3" description="Manufacturer's model name of the equipment that produced the composite instances."/>
-    <entry group="0018" element="1000" name="Device Serial Number" type="3" description="Manufacturer's serial number of the equipment that produced the composite instances. Note:      This identifier corresponds to the device that actually created the images, such as a CR plate reader or a CT console, and may not be sufficient to identify all of the equipment in the imaging chain, such as the generator or gantry or plate."/>
+    <entry group="0018" element="1000" name="Device Serial Number" type="3" description="Manufacturer's serial number of the equipment that produced the composite instances. Note: This identifier corresponds to the device that actually created the images, such as a CR plate reader or a CT console, and may not be sufficient to identify all of the equipment in the imaging chain, such as the generator or gantry or plate."/>
     <entry group="0018" element="1020" name="Software Versions" type="3" description="Manufacturer's designation of software version of the equipment that produced the composite instances."/>
     <entry group="0018" element="1008" name="Gantry ID" type="3" description="Identifier of the gantry or positioner."/>
     <entry group="0018" element="1050" name="Spatial Resolution" type="3" description="The inherent limiting resolution in mm of the acquisition equipment for high contrast objects for the data gathering and reconstruction technique chosen. If variable across the images of the series, the value at the image center."/>
@@ -189,33 +189,33 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0018" element="1020" name="Software Versions" type="1" description="Manufacturer's designation of software version of the equipment that produced the composite instances."/>
   </table>
   <table ref="Table C.7-9" name="GENERAL IMAGE MODULE ATTRIBUTES">
-    <entry group="0020" element="0013" name="Instance Number" type="2" description="A number that identifies this image. Note:    This Attribute was named Image Number in earlier versions of this Standard."/>
-    <entry group="0020" element="0020" name="Patient Orientation" type="2C" description="Patient direction of the rows and columns of the image. Required if image does not require Image Orientation (Patient) (0020,0037) and Image Position (Patient) (0020,0032). See C.7.6.1.1.1 for further explanation. Note:    IOD's may have attributes other than Patient Orientation, Image Orientation, or Image Position (Patient) to describe orientation in which case this attribute will be zero length."/>
-    <entry group="0008" element="0023" name="Content Date" type="2C" description="The date the image pixel data creation started. Required if image is part of a series in which the images are temporally related. Note:    This Attribute was formerly known as Image Date."/>
+    <entry group="0020" element="0013" name="Instance Number" type="2" description="A number that identifies this image. Note: This Attribute was named Image Number in earlier versions of this Standard."/>
+    <entry group="0020" element="0020" name="Patient Orientation" type="2C" description="Patient direction of the rows and columns of the image. Required if image does not require Image Orientation (Patient) (0020,0037) and Image Position (Patient) (0020,0032). See C.7.6.1.1.1 for further explanation. Note: IOD's may have attributes other than Patient Orientation, Image Orientation, or Image Position (Patient) to describe orientation in which case this attribute will be zero length."/>
+    <entry group="0008" element="0023" name="Content Date" type="2C" description="The date the image pixel data creation started. Required if image is part of a series in which the images are temporally related. Note: This Attribute was formerly known as Image Date."/>
     <entry group="0008" element="0033" name="Content Time" type="2C" description="The time the image pixel data creation started. Required if image is part of a series in which the images are temporally related."/>
     <entry group="0008" element="0008" name="Image Type" type="3" description="Image identification characteristics. See C.7.6.1.1.2 for Defined Terms and further explanation."/>
     <entry group="0020" element="0012" name="Acquisition Number" type="3" description="A number identifying the single continuous gathering of data over a period of time that resulted in this image."/>
     <entry group="0008" element="0022" name="Acquisition Date" type="3" description="The date the acquisition of data that resulted in this image started"/>
     <entry group="0008" element="0032" name="Acquisition Time" type="3" description="The time the acquisition of data that resulted in this image started"/>
     <entry group="0008" element="002A" name="Acquisition Datetime" type="3" description="The date and time that the acquisition of data that resulted in this image started. Note:    The synchronization of this time with an external clock is specified in the Synchronization Module in Acquisition Time Synchronized (0018,1800)."/>
-    <include ref="&gt;Include `Image SOP Instance Reference Macro' Table 10-3"/>
     <entry group="0008" element="1140" name="Referenced Image Sequence" type="3" description="A sequence that references other images significantly related to this image (e.g. post-localizer CT image or Mammographic biopsy or partial view images). One or more Items may be included in this sequence."/>
-    <include ref="&gt;&gt;Include `Code Sequence Macro' Table 8.8-1                      Defined Context ID is 7201."/>
-    <entry group="0040" element="A170" name="&gt;Purpose of Reference Code Sequence" type="3" description="Describes the purpose for which the reference is made. Only a single Item shall be permitted in this sequence."/>
-    <entry group="0008" element="2111" name="Derivation Description" type="3" description="A text description of how this image was derived. See C.7.6.1.1.3 for further explanation."/>
-    <include ref="&gt;Include `Code Sequence Macro' Table 8.8-1                       Defined Context ID is 7203."/>
-    <entry group="0008" element="9215" name="Derivation Code Sequence" type="3" description="A coded description of how this image was derived. See C.7.6.1.1.3 for further explanation. One or more Items may be included in this Sequence. More than one Item indicates that successive derivation steps have been applied."/>
     <include ref="&gt;Include `Image SOP Instance Reference Macro' Table 10-3"/>
+    <entry group="0040" element="A170" name="&gt;Purpose of Reference Code Sequence" type="3" description="Describes the purpose for which the reference is made. Only a single Item shall be permitted in this sequence."/>
+    <include ref="&gt;&gt;Include `Code Sequence Macro' Table 8.8-1                      Defined Context ID is 7201."/>
+    <entry group="0008" element="2111" name="Derivation Description" type="3" description="A text description of how this image was derived. See C.7.6.1.1.3 for further explanation."/>
+    <entry group="0008" element="9215" name="Derivation Code Sequence" type="3" description="A coded description of how this image was derived. See C.7.6.1.1.3 for further explanation. One or more Items may be included in this Sequence. More than one Item indicates that successive derivation steps have been applied."/>
+    <include ref="&gt;Include `Code Sequence Macro' Table 8.8-1                       Defined Context ID is 7203."/>
     <entry group="0008" element="2112" name="Source Image Sequence" type="3" description="A Sequence that identifies the set of Image SOP Class/Instance pairs of the Images that were used to derive this Image. Zero or more Items may be included in this Sequence. See C.7.6.1.1.4 for further explanation."/>
-    <include ref="&gt;&gt;Include `Code Sequence Macro' Table 8.8-1                      Defined Context ID is 7202."/>
+    <include ref="&gt;Include `Image SOP Instance Reference Macro' Table 10-3"/>
     <entry group="0040" element="A170" name="&gt;Purpose of Reference Code Sequence" type="3" description="Describes the purpose for which the reference is made, that is what role the source image or frame(s) played in the derivation of this image. Only a single Item shall be permitted in this sequence."/>
+    <include ref="&gt;&gt;Include `Code Sequence Macro' Table 8.8-1                      Defined Context ID is 7202."/>
     <entry group="0028" element="135A" name="&gt;Spatial Locations Preserved" type="3" description="The extent to which the spatial locations of all pixels are preserved during the processing of the source image that resulted in the current image Enumerated Values: YES NO REORIENTED_ONLY - A projection radiograph that has been flipped, and/or rotated by a multiple of 90 degrees Notes:   1. This applies not only to images with a known relationship to a 3D space, but also to projection images. For example, a projection radiograph such as a mammogram that is processed by a point image processing operation such as contrast enhancement, or a smoothing or edge enhancing convolution, would have a value of YES for this attribute. A projection radiograph that had been magnified or warped geometrically would have a value of NO for this attribute. A projection radiograph that has been flipped, and/or rotated by a multiple of 90 degrees, such that transformation of pixel locations is possible by comparison of the values of Patient Orientation (0020,0020) would have a value of REORIENTED_ONLY. This attribute is typically of importance in relating images with Presentation Intent Type (0008,0068) values of FOR PROCESSING and FOR PRESENTATION. 2. When the value of this attribute is NO, it is not possible to locate on the current image any pixel coordinates that are referenced relative to the source image, such as for example, might be required for rendering CAD findings derived from a referenced FOR PROCESSING image on the current FOR PRESENTATION image."/>
     <entry group="0020" element="0020" name="&gt;Patient Orientation" type="1C" description="The Patient Orientation values of the source image. Required if the value of Spatial Locations Preserved (0028,135A) is REORIENTED_ONLY."/>
     <entry group="0008" element="114A" name="Referenced Instance Sequence" type="3" description="A sequence which provides reference to a set of non-image SOP Class/Instance pairs significantly related to this Image, including waveforms that may or may not be temporally synchronized with this image . One or more Items may be included in this sequence."/>
     <entry group="0008" element="1150" name="&gt;Referenced SOP Class UID" type="1" description="Uniquely identifies the referenced SOP Class."/>
     <entry group="0008" element="1155" name="&gt;Referenced SOP Instance UID" type="1" description="Uniquely identifies the referenced SOP Instance."/>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1            Defined Context ID is CID 7004 for referenced"/>
     <entry group="0040" element="A170" name="&gt;Purpose of Reference Code Sequence" type="1" description="Code describing the purpose of the reference to the Instance(s). Only a single Item shall be permitted in this sequence. waveforms."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1            Defined Context ID is CID 7004 for referenced"/>
     <entry group="0020" element="1002" name="Images in Acquisition" type="3" description="Number of images that resulted from this acquisition of data"/>
     <entry group="0020" element="4000" name="Image Comments" type="3" description="User-defined comments about the image"/>
     <entry group="0028" element="0300" name="Quality Control Image" type="3" description="Indicates whether or not this image is a quality control or phantom image. Enumerated Values: YES NO If this Attribute is absent, then the image may or may not be a quality control or phantom image. The phantom device in the image can be described using the Device Module. See C.7.6.12"/>
@@ -223,8 +223,8 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0028" element="2110" name="Lossy Image Compression" type="3" description="Specifies whether an Image has undergone lossy compression. Enumerated Values: 00 = Image has NOT been subjected to lossy compression. 01 = Image has been subjected to lossy compression. See C.7.6.1.1.5"/>
     <entry group="0028" element="2112" name="Lossy Image Compression Ratio" type="3" description="Describes the approximate lossy compression ratio(s) that have been applied to this image. See C.7.6.1.1.5 for further explanation. May be multivalued if successive lossy compression steps have been applied. Notes:   1. For example, a compression ratio of 30:1 would be described in this Attribute with a single value of 30. 2. For historical reasons, the lossy compression ratio may also be described in Derivation Description (0008,2111)."/>
     <entry group="0028" element="2114" name="Lossy Image Compression Method" type="3" description="A label for the lossy compression method(s) that have been applied to this image. See C.7.6.1.1.5 for further explanation. May be multivalued if successive lossy compression steps have been applied; the value order shall correspond to the values of Lossy Image Compression Ratio (0028,2112). Note:    For historical reasons, the lossy compression method may also be described in Derivation Description (0008,2111)."/>
-    <include ref="&gt; Include `Image Pixel Macro' Table C.7-11b                      See C.7.6.1.1.6 for further explanation."/>
     <entry group="0088" element="0200" name="Icon Image Sequence" type="3" description="This icon image is representative of the Image."/>
+    <include ref="&gt; Include `Image Pixel Macro' Table C.7-11b                      See C.7.6.1.1.6 for further explanation."/>
     <entry group="2050" element="0020" name="Presentation LUT Shape" type="3" description="When present, specifies an identity transformation for the Presentation LUT such that the output of all grayscale transformations, if any, are defined to be in P-Values. Enumerated Values are: IDENTITY - output is in P-Values - shall be used if Photometric Interpretation (0028,0004) is MONOCHROME2 or any color photometric interpretation. INVERSE - output after inversion is in P- Values - shall be used if Photometric Interpretation (0028,0004) is MONOCHROME1. When this attribute is used with a color photometric interpretation then the luminance component is in P-Values."/>
     <entry group="0008" element="3010" name="Irradiation Event UID" type="3" description="Unique identification of the irradiation event(s) associated with the acquisition of this image. See C.7.6.1.1.7."/>
   </table>
@@ -263,13 +263,13 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
   </table>
   <table ref="Table C.7-12" name="CONTRAST/BOLUS MODULE ATTRIBUTES">
     <entry group="0018" element="0010" name="Contrast/Bolus Agent" type="2" description="Contrast or bolus agent"/>
-    <include ref="&gt;Include `Code Sequence Macro' Table 8.8-1                    Baseline Context ID is 12."/>
     <entry group="0018" element="0012" name="Contrast/Bolus Agent Sequence" type="3" description="Sequence that identifies the contrast agent. One or more Items may be present."/>
+    <include ref="&gt;Include `Code Sequence Macro' Table 8.8-1                    Baseline Context ID is 12."/>
     <entry group="0018" element="1040" name="Contrast/Bolus Route" type="3" description="Administration route of contrast agent"/>
-    <include ref="&gt;Include `Code Sequence Macro' Table 8.8-1                    Baseline Context ID is 11."/>
     <entry group="0018" element="0014" name="Contrast/Bolus Administration Route Sequence" type="3" description="Sequence that identifies the route of administration of contrast agent. Only a single Item shall be permitted in this sequence."/>
-    <include ref="&gt;&gt;Include `Code Sequence Macro' Table 8.8-1                   No Baseline Context ID is defined."/>
+    <include ref="&gt;Include `Code Sequence Macro' Table 8.8-1                    Baseline Context ID is 11."/>
     <entry group="0018" element="002A" name="&gt;Additional Drug Sequence" type="3" description="Sequence that identifies any additional drug that is administered with the contrast agent bolus. One or more Items may be present."/>
+    <include ref="&gt;&gt;Include `Code Sequence Macro' Table 8.8-1                   No Baseline Context ID is defined."/>
     <entry group="0018" element="1041" name="Contrast/Bolus Volume" type="3" description="Volume injected in milliliters of diluted contrast agent"/>
     <entry group="0018" element="1042" name="Contrast/Bolus Start Time" type="3" description="Time of start of injection"/>
     <entry group="0018" element="1043" name="Contrast/Bolus Stop Time" type="3" description="Time of end of contrast injection"/>
@@ -280,13 +280,13 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0018" element="1049" name="Contrast/Bolus Ingredient Concentration" type="3" description="Milligrams of active ingredient per milliliter of (diluted) agent"/>
   </table>
   <table ref="Table C.7-12b" name="ENHANCED CONTRAST/BOLUS MODULE ATTRIBUTES">
-    <include ref="&gt;Include `Code Sequence Macro' Table 8.8-1               Baseline Context ID is 12."/>
     <entry group="0018" element="0012" name="Contrast/Bolus Agent Sequence" type="1" description="Sequence that identifies one or more contrast agents administered prior to or during the acquisition. Shall contain one or more Items."/>
+    <include ref="&gt;Include `Code Sequence Macro' Table 8.8-1               Baseline Context ID is 12."/>
     <entry group="0018" element="9337" name="&gt;Contrast/Bolus Agent Number" type="1" description="Identifying number, unique within this SOP Instance, of the agent administered. Used to reference this particular agent from the Contrast/Bolus Functional Group Macro. The number shall be 1 for the first Item and increase by 1 for each subsequent Item."/>
-    <include ref="&gt;&gt;Include `Code Sequence Macro' Table 8.8-1              Baseline Context ID is 11."/>
     <entry group="0018" element="0014" name="&gt;Contrast/Bolus Administration Route Sequence" type="1" description="Sequence that identifies the route of administration of contrast agent. Shall contain exactly one Item."/>
-    <include ref="&gt;&gt;Include `Code Sequence Macro' Table 8.8-1              Baseline Context ID is 13."/>
+    <include ref="&gt;&gt;Include `Code Sequence Macro' Table 8.8-1              Baseline Context ID is 11."/>
     <entry group="0018" element="9338" name="&gt;Contrast/Bolus Ingredient Code Sequence" type="2" description="Active ingredient of agent. Zero or more Items may be included in the Sequence."/>
+    <include ref="&gt;&gt;Include `Code Sequence Macro' Table 8.8-1              Baseline Context ID is 13."/>
     <entry group="0018" element="1041" name="&gt;Contrast/Bolus Volume" type="2" description="Total volume administered in milliliters of diluted contrast agent."/>
     <entry group="0018" element="1049" name="&gt;Contrast/Bolus Ingredient Concentration" type="2" description="Milligrams of active ingredient per milliliter of agent."/>
     <entry group="0018" element="9425" name="&gt;Contrast/Bolus Ingredient Opaque" type="3" description="Absorption of the ingredient greater than the absorption of water (tissue). Enumerated Values: YES NO See Section C.7.6.4b.1."/>
@@ -312,8 +312,8 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="003A" element="0300" name="Multiplexed Audio Channels Description Code Sequence" type="2C" description="Description of any multiplexed audio channels. See Section C.7.6.5.1.3. Required if the Transfer Syntax used to encode the multi-frame image contains multiplexed (interleaved) audio channels, such as is possible with MPEG2. Zero or more items may be present in this sequence."/>
     <entry group="003A" element="0301" name="&gt;Channel Identification Code" type="1" description="A reference to the audio channel as identified within Transfer Syntax encoded bit stream (1 for the main channel, 2 for the second channel and 3 to 9 to the complementary channels)."/>
     <entry group="003A" element="0302" name="&gt;Channel Mode" type="1" description="A coded descriptor qualifying the mode of the channel: Enumerated Values: MONO = 1 signal STEREO = 2 simultaneously acquired (left and right) signals"/>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1.              Defined Context ID Audio Channel Source 3000."/>
     <entry group="003A" element="0208" name="&gt;Channel Source Sequence" type="1" description="A coded descriptor of the audio channel source. Only a single Item shall be permitted in this sequence."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1.              Defined Context ID Audio Channel Source 3000."/>
   </table>
   <table ref="Table C.7-14" name="MULTI-FRAME MODULE ATTRIBUTES">
     <entry group="0028" element="0008" name="Number of Frames" type="1" description="Number of frames in a Multi-frame Image. See C.7.6.6.1.1 for further explanation."/>
@@ -332,7 +332,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0028" element="6102" name="&gt;Applicable Frame Range" type="1C" description="Each pair of numbers in this multi- valued attribute specify a beginning and ending frame number inclusive of a range where this particular mask operation is valid. Discontinuous ranges are represented by multiple pairs of numbers. Frames in a Multi- frame Image are specified by sequentially increasing number values beginning with 1. If this Attribute is missing in this particular sequence item, then the mask operation is applicable throughout the entire Multi- frame Image, subject to certain limits as described in C.7.6.10.1.1. Required if Mask Operation (0028,6101) equals REV_TID. May be present otherwise."/>
     <entry group="0028" element="6110" name="&gt;Mask Frame Numbers" type="1C" description="Specifies the frame numbers of the pixel data used to generate this mask. Frames in a Multi-frame Image are specified by sequentially increasing number values beginning with 1. Required if the Mask Operation (0028,6101) is AVG_SUB."/>
     <entry group="0028" element="6112" name="&gt;Contrast Frame Averaging" type="3" description="Specifies the number of contrast frames to average together before performing the mask operation. If the Attribute is missing, no averaging is performed."/>
-    <entry group="0028" element="6114" name="&gt;Mask Sub-pixel Shift" type="3" description="A pair of floating point numbers specifying the fractional vertical [adjacent row spacing] and horizontal [adjacent column spacing] pixel shift applied to the mask before subtracting it from the contrast frame. See Section C.7.6.10.1.2. Note:      When the Frame Pixel Shift Functional Group is present the values of the Mask Pixel Shift attribute of that Functional Group prevails over the values specified in this module."/>
+    <entry group="0028" element="6114" name="&gt;Mask Sub-pixel Shift" type="3" description="A pair of floating point numbers specifying the fractional vertical [adjacent row spacing] and horizontal [adjacent column spacing] pixel shift applied to the mask before subtracting it from the contrast frame. See Section C.7.6.10.1.2. Note: When the Frame Pixel Shift Functional Group is present the values of the Mask Pixel Shift attribute of that Functional Group prevails over the values specified in this module."/>
     <entry group="0028" element="6120" name="&gt;TID Offset" type="2C" description="If Mask Operation is TID, specifies the offset to be subtracted from the current frame number in order to locate the mask frame in TID mode. If Mask Operation is REV_TID, specifies the initial offset to be subtracted from the first contrast frame number. See section C.7.6.10.1.1. If zero length, TID Offset defaults to 1. Required if Mask Operation (0028,6101) is TID or REV_TID."/>
     <entry group="0028" element="6190" name="&gt;Mask Operation Explanation" type="3" description="Free form explanation of this particular mask operation."/>
     <entry group="0028" element="9454" name="&gt;Mask Selection Mode" type="3" description="Specifies the method of selection of the mask operations of this item. Defined Terms: SYSTEM USER"/>
@@ -3525,8 +3525,8 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
   </table>
   <table ref="Table C.17.6-1" name="KEY OBJECT DOCUMENT SERIES MODULE ATTRIBUTES">
     <entry group="0008" element="0060" name="Modality" type="1" description="Modality type. Enumerated Value: KO = Key Object Selection"/>
-    <entry group="0020" element="000E" name="Series Instance UID" type="1" description="Unique identifier of the Series. Note:      No specific semantics are specified."/>
-    <entry group="0020" element="0011" name="Series Number" type="1" description="A number that identifies the Series. Note:      No specific semantics are specified."/>
+    <entry group="0020" element="000E" name="Series Instance UID" type="1" description="Unique identifier of the Series. Note: No specific semantics are specified."/>
+    <entry group="0020" element="0011" name="Series Number" type="1" description="A number that identifies the Series. Note: No specific semantics are specified."/>
     <entry group="0008" element="1111" name="Referenced Performed Procedure Step Sequence" type="2" description="Uniquely identifies the Performed Procedure Step SOP Instance for which the Series is created. Only a single Item shall be permitted in this sequence. Notes:     See notes on this attribute in Section C.17.1 SR Document Series Module"/>
     <entry group="0008" element="1150" name="&gt;Referenced SOP Class UID" type="1C" description="Uniquely identifies the referenced SOP Class. Required if Referenced Performed Procedure Step Sequence (0008,1111) is sent."/>
     <entry group="0008" element="1155" name="&gt; Referenced SOP Instance UID" type="1C" description="Uniquely identifies the referenced SOP Instance. Required if Referenced Performed Procedure Step Sequence (0008,1111) is sent."/>
@@ -3544,14 +3544,14 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
   <table ref="Table C.18.1-1" name="NUMERIC MEASUREMENT MACRO ATTRIBUTES">
     <entry group="0040" element="A300" name="Measured Value Sequence" type="2" description="This is the value of the Content Item. Shall consist of a Sequence of Items conveying the measured value(s), which represent integers or real numbers and units of measurement. Zero or one Items shall be permitted in this sequence."/>
     <entry group="0040" element="A30A" name="&gt;Numeric Value" type="1" description="Numeric measurement value. Only a single value shall be present."/>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1           Defined Context ID is 82."/>
     <entry group="0040" element="08EA" name="&gt;Measurement Units Code Sequence" type="1" description="Units of measurement. Only a single Item shall be permitted in this sequence."/>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1            Defined Context ID is 42."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1           Defined Context ID is 82."/>
     <entry group="0040" element="A301" name="Numeric Value Qualifier Code Sequence" type="3" description="Qualification of Numeric Value in Measured Value Sequence, or reason for absence of Measured Value Sequence Item. Only a single Item shall be permitted in this sequence."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1            Defined Context ID is 42."/>
   </table>
   <table ref="Table C.18.2-1" name="CODE MACRO ATTRIBUTES">
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1            No Baseline Context ID is specified."/>
     <entry group="0040" element="A168" name="Concept Code Sequence" type="1" description="This is the value of the Content Item. Only a single Item shall be permitted in this sequence."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1            No Baseline Context ID is specified."/>
   </table>
   <table ref="Table C.18.3-1" name="COMPOSITE OBJECT REFERENCE MACRO ATTRIBUTES">
     <entry group="0008" element="1199" name="Referenced SOP Sequence" type="1" description="References to Composite Object SOP Class/SOP Instance pairs. Only a single Item shall be permitted in this Sequence."/>
@@ -3560,7 +3560,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
   </table>
   <table ref="Table C.18.4-1" name="IMAGE REFERENCE MACRO ATTRIBUTES">
     <include ref="Include 'Composite Object Reference Macro' Table C.18.3-1"/>
-    <entry group="0008" element="1160" name="&gt;Referenced Frame Number" type="1C" description="Identifies the frame numbers within the Referenced SOP Instance to which the reference applies. The first frame shall be denoted as frame number 1. Note:    This Attribute may be multi-valued. Required if the Referenced SOP Instance is a multi-frame image and the reference does not apply to all frames, and Referenced Segment Number (0062,000B) is not present."/>
+    <entry group="0008" element="1160" name="&gt;Referenced Frame Number" type="1C" description="Identifies the frame numbers within the Referenced SOP Instance to which the reference applies. The first frame shall be denoted as frame number 1. Note: This Attribute may be multi-valued. Required if the Referenced SOP Instance is a multi-frame image and the reference does not apply to all frames, and Referenced Segment Number (0062,000B) is not present."/>
     <entry group="0062" element="000B" name="&gt;Referenced Segment Number" type="1C" description="Identifies the segments to which the reference applies identified by Segment Number (0062,0004). Required if the Referenced SOP Instance is a Segmentation and the reference does not apply to all segments and Referenced Frame Number (0008,1160) is not present."/>
     <entry group="0008" element="1199" name="&gt;Referenced SOP Sequence" type="3" description="Reference to a Softcopy Presentation State SOP Class/SOP Instance pair. Only a single Item shall be permitted in this sequence."/>
     <entry group="0008" element="1150" name="&gt;&gt;Referenced SOP Class UID" type="1" description="Uniquely identifies the referenced SOP Class."/>
@@ -3568,8 +3568,8 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0008" element="114B" name="&gt;Referenced Real World Value Mapping Instance Sequence" type="3" description="Reference to a Real World Value Mapping SOP Class/SOP Instance pair. Only a single Item shall be permitted in this sequence."/>
     <entry group="0008" element="1150" name="&gt;&gt;Referenced SOP Class UID" type="1" description="Uniquely identifies the referenced SOP Class."/>
     <entry group="0008" element="1155" name="&gt;&gt;Referenced SOP Instance UID" type="1" description="Uniquely identifies the referenced SOP Instance."/>
-    <include ref="&gt;&gt; Include `Image Pixel Macro' Table C.7-11b                      See Section F.7."/>
     <entry group="0088" element="0200" name="&gt;Icon Image Sequence" type="3" description="This Icon Image is representative of the Image. The Icon Image may be no greater than 128 rows by 128 columns."/>
+    <include ref="&gt;&gt; Include `Image Pixel Macro' Table C.7-11b                      See Section F.7."/>
   </table>
   <table ref="Table C.18.5-1" name="WAVEFORM REFERENCE MACRO ATTRIBUTES">
     <include ref=" Include 'Composite Object Reference Macro' Table C.18.3-1"/>
@@ -3597,44 +3597,44 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0008" element="0033" name="Content Time" type="1" description="The time the raw data creation was started."/>
     <entry group="0008" element="002A" name="Acquisition Datetime" type="3" description="The date and time that the acquisition of data started. Note:    The synchronization of this time with an external clock is specified in the synchronization Module in Acquisition Time synchronized (0018,1800)."/>
     <entry group="0008" element="9123" name="Creator-Version UID" type="1" description="Unique identification of the equipment and version of the software that has created the Raw Data information. The UID allows one to avoid attempting to interpret raw data with an unknown format."/>
-    <include ref="&gt;Include `Image SOP Instance Reference Macro' Table 10-3"/>
     <entry group="0008" element="114A" name="Referenced Instance Sequence" type="3" description="A sequence that provides reference to a set of SOP Class/Instance pairs identifying other Instances significantly related to this Instance. One or more Items may be included in this Sequence."/>
-    <include ref="&gt;&gt;Include `Code Sequence Macro' Table 8.8-1"/>
+    <include ref="&gt;Include `Image SOP Instance Reference Macro' Table 10-3"/>
     <entry group="0040" element="A170" name="&gt;Purpose of Reference Code Sequence" type="1" description="Describes the purpose for which the reference is made. Only a single Item shall be permitted in this sequence. See C.7.6.16.2.5.1. No Baseline Context ID is defined."/>
+    <include ref="&gt;&gt;Include `Code Sequence Macro' Table 8.8-1"/>
   </table>
   <table ref="Table C.20.1-1" name="SPATIAL REGISTRATION SERIES MODULE ATTRIBUTES">
     <entry group="0008" element="0060" name="Modality" type="1" description="Modality type. Enumerated Value: REG"/>
   </table>
   <table ref="Table C.20.2-1" name="SPATIAL REGISTRATION MODULE ATTRIBUTES">
     <entry group="0008" element="0023" name="Content Date" type="1" description="The date the content creation started."/>
-    <include ref="Include Content Identification Macro Table 10-12"/>
     <entry group="0008" element="0033" name="Content Time" type="1" description="The time the content creation started."/>
+    <include ref="Include Content Identification Macro Table 10-12"/>
     <entry group="0070" element="0308" name="Registration Sequence" type="1" description="A sequence of one or more registration items. Each item defines a spatial registration to the referenced images in that item. All referenced images are in the same spatial frame of reference or atlas."/>
     <entry group="0020" element="0052" name="&gt;Frame of Reference UID" type="1C" description="Identifies a Frame of Reference that may or may not be an image set (e.g. atlas or physical space). See C.7.4.1.1.1 for further explanation. Required if Referenced Image Sequence (0008,1140) is absent. May be present otherwise."/>
-    <include ref="&gt;&gt;Include 'Image SOP Instance Reference Macro' Table 10-3"/>
     <entry group="0008" element="1140" name="&gt;Referenced Image Sequence" type="1C" description="Identifies the set of images registered in this sequence item. One or more items shall be present. Required if Frame of Reference UID (0020,0052) is absent. May be present otherwise."/>
+    <include ref="&gt;&gt;Include 'Image SOP Instance Reference Macro' Table 10-3"/>
     <entry group="0070" element="0309" name="&gt;Matrix Registration Sequence" type="1" description="A sequence that specifies one spatial registration. Exactly one item shall be present"/>
     <entry group="3006" element="00C8" name="&gt;&gt;Frame of Reference Transformation Comment" type="3" description="User description or comments about the registration."/>
-    <include ref="&gt;&gt;&gt;Include `Code Sequence Macro' Table 8.8-1                     Baseline Context ID is 7100"/>
     <entry group="0070" element="030D" name="&gt;&gt;Registration Type Code Sequence" type="2" description="Describes the information input into the registration process. Only one item may be present."/>
+    <include ref="&gt;&gt;&gt;Include `Code Sequence Macro' Table 8.8-1                     Baseline Context ID is 7100"/>
     <entry group="0070" element="030A" name="&gt;&gt;Matrix Sequence" type="1" description="One or more items shall be present. Each item specifies a transformation. The item order is significant and corresponds to matrix multiplication order. See C.20.2.1.1."/>
     <entry group="3006" element="00C6" name="&gt;&gt;&gt;Frame of Reference Transformation Matrix" type="1" description="A 4x4 homogeneous transformation matrix that registers the referenced images to the local RCS. Matrix elements shall be listed in row-major order. See C.20.2.1.1."/>
     <entry group="0070" element="030C" name="&gt;&gt;&gt;Frame of Reference Transformation Matrix Type" type="1" description="Type of Frame of Reference Transformation Matrix (3006,00C6). Defined terms: RIGID RIGID_SCALE AFFINE See C.20.2.1.2"/>
-    <include ref="&gt;&gt;Include `SOP Instance Reference Macro' Table 10-8                 Reference to the Spatial Fiducial SOP"/>
     <entry group="0070" element="0314" name="&gt;Used Fiducials Sequence" type="3" description="The fiducials used to determine the Frame of Reference Transformation Matrix. One or more Items may be present. Instance identifying the Used Fiducial(s)"/>
+    <include ref="&gt;&gt;Include `SOP Instance Reference Macro' Table 10-8                 Reference to the Spatial Fiducial SOP"/>
     <entry group="0070" element="031A" name="&gt;&gt;Fiducial UID" type="1" description="The UID that identifies the fiducial used as registration input."/>
   </table>
   <table ref="Table C.20.3-1" name="DEFORMABLE SPATIAL REGISTRATION MODULE ATTRIBUTES">
     <entry group="0008" element="0023" name="Content Date" type="1" description="The date the vector grid data creation started."/>
-    <include ref="Include Content Identification Macro Table 10-12"/>
     <entry group="0008" element="0033" name="Content Time" type="1" description="The time the vector grid data creation started."/>
+    <include ref="Include Content Identification Macro Table 10-12"/>
     <entry group="0064" element="0002" name="Deformable Registration Sequence" type="1" description="A sequence of one or more registration items. Each item defines a spatial registration to the referenced images in that item. At least one item shall have a Deformable Registration Grid Sequence (0064,0005) with one item. See C.20.3.1.1."/>
     <entry group="0064" element="0003" name="&gt;Source Frame of Reference UID" type="1" description="Identifies the Frame of Reference of a Source RCS. The Source RCS may or may not include an image set (e.g. atlas). See C.7.4.1.1.1 for further explanation."/>
-    <include ref="&gt;&gt;Include 'Image SOP Instance Reference Macro' Table 10-3"/>
     <entry group="0008" element="1140" name="&gt;Referenced Image Sequence" type="1C" description="Identifies the set of images registered in this sequence item. One or more items shall be present. Required if the registration applies to a subset of images within the specified Source Frame of Reference UID (0064,0003). All referenced images shall be in the same spatial frame of reference."/>
+    <include ref="&gt;&gt;Include 'Image SOP Instance Reference Macro' Table 10-3"/>
     <entry group="3006" element="00C8" name="&gt;Frame of Reference Transformation Comment" type="3" description="User description or comments about the registration."/>
-    <include ref="&gt;&gt;Include `Code Sequence Macro' Table 8.8-1          Baseline Context ID is 7100"/>
     <entry group="0070" element="030D" name="&gt;Registration Type Code Sequence" type="2" description="Describes the method used for the registration process. Zero or one item shall be present."/>
+    <include ref="&gt;&gt;Include `Code Sequence Macro' Table 8.8-1          Baseline Context ID is 7100"/>
     <entry group="0064" element="000F" name="&gt;Pre Deformation Matrix Registration Sequence" type="1C" description="A sequence that specifies one spatial registration to be applied prior to the deformation. Exactly one item shall be present. Required if a matrix transformation is to be applied prior to deformation."/>
     <entry group="3006" element="00C6" name="&gt;&gt;Frame of Reference Transformation Matrix" type="1" description="A 4x4 homogeneous transformation matrix. Matrix elements shall be listed in row- major order. See C.20.2.1.1."/>
     <entry group="0070" element="030C" name="&gt;&gt;Frame of Reference Transformation Matrix Type" type="1" description="Type of Frame of Reference Transformation Matrix (3006,00C6). Defined terms: RIGID RIGID_SCALE AFFINE See C.20.2.1.2"/>
@@ -3647,24 +3647,24 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0064" element="0007" name="&gt;&gt;Grid Dimensions" type="1" description="The dimensions of the grid, in voxels. A triple representing the number of voxels along the X, Y, and Z axes."/>
     <entry group="0064" element="0008" name="&gt;&gt;Grid Resolution" type="1" description="The resolution of the grid voxels. A triple representing the size of a deformation voxel in along the X, Y, and Z dimension, in mm."/>
     <entry group="0064" element="0009" name="&gt;&gt;Vector Grid Data" type="1" description="A data stream of vectors. See C.20.3.1.3 for further explanation."/>
-    <include ref="&gt;&gt; Include 'Image SOP Instance Reference Macro' Table 10-               Reference to the Spatial Fiducial SOP"/>
     <entry group="0070" element="0314" name="&gt;Used Fiducials Sequence" type="3" description="The fiducials used to determine the registration. One or more Items may be present. Instance identifying the Used Fiducial(s)"/>
+    <include ref="&gt;&gt; Include 'Image SOP Instance Reference Macro' Table 10-               Reference to the Spatial Fiducial SOP"/>
   </table>
   <table ref="Table C.21.1-1" name="SPATIAL FIDUCIALS SERIES MODULE ATTRIBUTES">
     <entry group="0008" element="0060" name="Modality" type="1" description="Modality type. Enumerated Value: FID"/>
   </table>
   <table ref="Table C.21.2-1" name="SPATIAL FIDUCIALS MODULE ATTRIBUTES">
     <entry group="0008" element="0023" name="Content Date" type="1" description="The date the content creation started."/>
-    <include ref="Include Content Identification Macro Table 10-12"/>
     <entry group="0008" element="0033" name="Content Time" type="1" description="The time the content creation started."/>
+    <include ref="Include Content Identification Macro Table 10-12"/>
     <entry group="0070" element="031C" name="Fiducial Set Sequence" type="1" description="A sequence of one or more items, each of which is a fiducial set."/>
     <entry group="0020" element="0052" name="&gt;Frame of Reference UID" type="1C" description="Identifies a Frame of Reference that may or may not be an image set (e.g. an atlas or physical space). See C.7.4.1.1.1 for further explanation. Required if Referenced Image Sequence (0008,1140) is absent. May be present otherwise."/>
-    <include ref="&gt;&gt;Include 'Image SOP Instance Reference Macro' Table 10-3"/>
     <entry group="0008" element="1140" name="&gt;Referenced Image Sequence" type="1C" description="Identifies the set of images in which the fiducials are located. Required if Frame of Reference UID (0020,0052) is absent. May be present otherwise. One or more Items shall be present. All referenced images shall have the same Frame of Reference UID if present in the images."/>
+    <include ref="&gt;&gt;Include 'Image SOP Instance Reference Macro' Table 10-3"/>
     <entry group="0070" element="031E" name="&gt;Fiducial Sequence" type="1" description="A sequence that specifies one or more fiducials, one item per fiducial."/>
     <entry group="0070" element="0310" name="&gt;&gt;Fiducial Identifier" type="1" description="A fiducial assignment identifier that is unique within this Fiducial Sequence item but may match the fiducial identifier of an equivalent feature in another item."/>
-    <include ref="&gt;&gt;&gt;Include `Code Sequence Macro' Table 8.8-1                    DCID 7101"/>
     <entry group="0070" element="0311" name="&gt;&gt;Fiducial Identifier Code Sequence" type="1C" description="A code sequence for a term that identifies a well-known fiducial type (potentially including methodology, anatomy, tools, etc.). Only one item shall be present. Required if Identifier (0070,0310) is absent. May be present otherwise."/>
+    <include ref="&gt;&gt;&gt;Include `Code Sequence Macro' Table 8.8-1                    DCID 7101"/>
     <entry group="0070" element="031A" name="&gt;&gt;Fiducial UID" type="3" description="Globally unique identifier for the fiducial instance of this fiducial assignment."/>
     <entry group="0070" element="030F" name="&gt;&gt;Fiducial Description" type="3" description="User description or comments about the fiducial."/>
     <entry group="0070" element="0306" name="&gt;&gt;Shape Type" type="1" description="See C.21.2.1.1 for defined terms."/>
@@ -3673,8 +3673,8 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0070" element="0312" name="&gt;&gt;Contour Uncertainty Radius" type="3" description="The estimated uncertainty radius for the Contour Data in mm. See C.21.2.1.3"/>
     <entry group="0070" element="0318" name="&gt;&gt;Graphic Coordinates Data Sequence" type="1C" description="The image pixel locations of the fiducial's points. Shall contain one or more items. More than one item shall be present only if a fiducial spans more than one image. Required if Contour Data is not present. May be present otherwise."/>
     <entry group="0070" element="0022" name="&gt;&gt;&gt;Graphic Data" type="1" description="Graphic point coordinates of the fiducial points in the image of the Referenced Image Sequence. If Fiducial's Contour Data (3006,0050) is present, these points correlate to the points in the Contour Data, one row-column pair for each point and in the same order. See C.10.5.1.2 for further explanation."/>
-    <include ref="&gt;&gt;&gt;&gt;Include 'Image SOP Instance Reference Macro' Table 10-3"/>
     <entry group="0008" element="1140" name="&gt;&gt;&gt;Referenced Image Sequence" type="1" description="A sequence that specifies the image containing the fiducial's graphic coordinates. Only one item shall be present. Shall be an image within the set of the images in the Referenced Image Sequence (0008,1140) of the encapsulating Fiducial Set Sequence (0070,031C) item."/>
+    <include ref="&gt;&gt;&gt;&gt;Include 'Image SOP Instance Reference Macro' Table 10-3"/>
   </table>
   <table ref="Table C.23.1-1" name="Hanging Protocol Definition Module Attributes">
     <entry group="0072" element="0002" name="Hanging Protocol Name" type="1" description="Short descriptor that identifies the Hanging Protocol."/>
