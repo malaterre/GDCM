@@ -1,1 +1,1 @@
-some sort of utilities. Li,e byte swapping not really defined in DICOM but usefull
+some sort of utilities. Like byte swapping not really defined in DICOM but usefull
