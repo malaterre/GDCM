@@ -47,60 +47,79 @@
         </fo:static-content>
         <fo:flow flow-name="xsl-region-body">
           <fo:block>
-            <fo:table table-layout="fixed" border-color="rgb(0,0,0)" border-width="1pt">
-              <fo:table-column column-width="30mm"/><!--Tag-->
-              <fo:table-column column-width="50mm"/><!--Name-->
-              <fo:table-column column-width="10mm"/><!--Type-->
-              <fo:table-column column-width="85mm"/><!--Description-->
-              <fo:table-header background-color="rgb(214,214,214)" font-size="10pt" font-weight="bold" text-align="justify">
-                <fo:table-row text-align="justify" font-size="10pt">
-                  <fo:table-cell border-color="rgb(0,0,0)" border-width="1pt">
-                    <fo:block>Tag</fo:block>
-                  </fo:table-cell>
-                  <fo:table-cell border-color="rgb(0,0,0)" border-width="1pt">
-                    <fo:block>Name</fo:block>
-                  </fo:table-cell>
-                  <fo:table-cell border-color="rgb(0,0,0)" border-width="1pt">
-                    <fo:block>Type</fo:block>
-                  </fo:table-cell>
-                  <fo:table-cell border-color="rgb(0,0,0)" border-width="1pt">
-                    <fo:block>Description</fo:block>
-                  </fo:table-cell>
-                </fo:table-row>
-              </fo:table-header>
-              <fo:table-body>
-                <xsl:for-each select="tables/table">
-            <xsl:for-each select="entry">
+            <xsl:for-each select="tables/table">
+<!-- fop does not support table and caption -->
+<!--fo:table-and-caption>
+            <fo:table-caption>
+              <fo:block>Caption for this table</fo:block>
+            </fo:table-caption-->
+              <fo:block>
+                <fo:marker marker-class-name="cont">
+                  <fo:block/>
+                </fo:marker>
+                <xsl:value-of select="@ref"/>
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="@name"/>
+              </fo:block>
+              <fo:table table-layout="fixed" border-color="rgb(0,0,0)" border-width="1pt">
+                <fo:table-column column-width="50mm"/> <!--Name-->
+                <fo:table-column column-width="20mm"/> <!--Tag-->
+                <fo:table-column column-width="10mm"/> <!--Type-->
+                <fo:table-column column-width="90mm"/> <!--Description-->
+                <fo:table-header background-color="rgb(214,214,214)" font-size="10pt" font-weight="bold" text-align="justify">
                   <fo:table-row text-align="justify" font-size="10pt">
                     <fo:table-cell border-color="rgb(0,0,0)" border-width="1pt">
-                      <fo:block vertical-align="middle">
-                        <xsl:text>(</xsl:text>
-                        <xsl:value-of select="@group"/>
-                        <xsl:text>,</xsl:text>
-                        <xsl:value-of select="@element"/>
-                        <xsl:text>)</xsl:text>
-                      </fo:block>
+                      <fo:block>Name</fo:block>
                     </fo:table-cell>
                     <fo:table-cell border-color="rgb(0,0,0)" border-width="1pt">
-                      <fo:block vertical-align="middle">
-                        <xsl:value-of select="@name"/>
-                      </fo:block>
+                      <fo:block>Tag</fo:block>
                     </fo:table-cell>
                     <fo:table-cell border-color="rgb(0,0,0)" border-width="1pt">
-                      <fo:block vertical-align="middle">
-                        <xsl:value-of select="@type"/>
-                      </fo:block>
+                      <fo:block>Type</fo:block>
                     </fo:table-cell>
                     <fo:table-cell border-color="rgb(0,0,0)" border-width="1pt">
-                      <fo:block vertical-align="middle">
-                        <xsl:value-of select="@type"/>
-                      </fo:block>
+                      <fo:block>Description</fo:block>
                     </fo:table-cell>
                   </fo:table-row>
-                </xsl:for-each>
-                </xsl:for-each>
-              </fo:table-body>
-            </fo:table>
+                </fo:table-header>
+                <fo:table-body>
+                  <xsl:for-each select="entry">
+                    <fo:table-row text-align="left" font-size="10pt">
+                      <fo:table-cell border-color="rgb(0,0,0)" border-width="1pt">
+                        <fo:block vertical-align="middle">
+                          <xsl:value-of select="@name"/>
+                        </fo:block>
+                      </fo:table-cell>
+                      <fo:table-cell border-color="rgb(0,0,0)" border-width="1pt">
+                        <fo:block vertical-align="middle">
+                          <xsl:text>(</xsl:text>
+                          <xsl:value-of select="@group"/>
+                          <xsl:text>,</xsl:text>
+                          <xsl:value-of select="@element"/>
+                          <xsl:text>)</xsl:text>
+                        </fo:block>
+                      </fo:table-cell>
+                      <fo:table-cell border-color="rgb(0,0,0)" border-width="1pt">
+                        <fo:block vertical-align="middle">
+                          <xsl:value-of select="@type"/>
+                        </fo:block>
+                      </fo:table-cell>
+                      <fo:table-cell border-color="rgb(0,0,0)" border-width="1pt">
+                        <fo:block vertical-align="middle">
+                          <xsl:value-of select="@description"/>
+                        </fo:block>
+                      </fo:table-cell>
+                    </fo:table-row>
+                  </xsl:for-each>
+                </fo:table-body>
+              </fo:table>
+<!--/fo:table-and-caption-->
+<!-- Create a new page -->
+              <fo:block break-after="page">
+                <xsl:text>
+</xsl:text>
+              </fo:block>
+            </xsl:for-each>
           </fo:block>
         </fo:flow>
       </fo:page-sequence>
