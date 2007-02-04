@@ -247,7 +247,7 @@ void Printer::Print(std::ostream& os)
 {
   const gdcm::DataSet &ds = *DS;
   os << ds << std::endl;
-  DataSet::Iterator it = ds.Begin();
+  //DataSet::Iterator it = ds.Begin();
 }
 
 }

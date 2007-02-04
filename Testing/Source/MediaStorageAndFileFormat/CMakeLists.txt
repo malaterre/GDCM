@@ -2,12 +2,19 @@
 # MSFF
 SET(MSFF_TEST_SRCS
   TestPrinter
+  TestReader
+  TestImageReader
+  TestCopyDataSet
+  TestImageWriter
+  TestWriter
   )
 
 # Add the include paths
 INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/Common"
+  "${GDCM_SOURCE_DIR}/Testing/Source/Data"
+  "${GDCM_BINARY_DIR}/Testing/Source/Data"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"

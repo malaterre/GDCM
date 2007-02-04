@@ -25,13 +25,13 @@
       <xsl:text> </xsl:text>
       <xsl:for-each select="representations/representation">
         <xsl:if test="position() = 1">
-          <xsl:value-of select="@vr"/>
+          <!--xsl:value-of select="@vr"/-->
         </xsl:if>
       </xsl:for-each>
       <xsl:text> </xsl:text>
       <xsl:for-each select="representations/representation">
         <xsl:if test="position() = 1">
-          <xsl:value-of select="@vm"/>
+          <!--xsl:value-of select="@vm"/-->
         </xsl:if>
       </xsl:for-each>
       <xsl:text> </xsl:text>

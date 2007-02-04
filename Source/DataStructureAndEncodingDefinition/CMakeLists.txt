@@ -7,9 +7,7 @@ SET(DSED_SRCS
   gdcmFragment.cxx
   gdcmImageCodec.cxx
   gdcmImageConverter.cxx
-  gdcmImageReader.cxx
   gdcmImageValue.cxx
-  gdcmImageWriter.cxx
   gdcmImplicitDataElement.cxx
   gdcmItem.cxx
   gdcmJPEG12Codec.cxx
@@ -20,13 +18,11 @@ SET(DSED_SRCS
   gdcmParser.cxx
   gdcmRAWCodec.cxx
   gdcmRLECodec.cxx
-  gdcmReader.cxx
   gdcmSequenceOfFragments.cxx
   gdcmSequenceOfItems.cxx
   gdcmTS.cxx
   gdcmVM.cxx
   gdcmVR.cxx
-  gdcmWriter.cxx
   )
 
 # Do the proper thing when building static...if only there was configured

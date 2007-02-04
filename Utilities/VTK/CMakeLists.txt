@@ -13,10 +13,11 @@ INCLUDE_DIRECTORIES(
   ${GDCM_BINARY_DIR}/Source/Common
   ${GDCM_SOURCE_DIR}/Source/Common
   ${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition
+  ${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat
   )
 
 ADD_LIBRARY(vtkgdcm ${VTK_GDCM_SRCS})
-TARGET_LINK_LIBRARIES(vtkgdcm gdcmDSED vtkIO)
+TARGET_LINK_LIBRARIES(vtkgdcm gdcmMSFF vtkIO)
 
 IF(BUILD_TESTING)
   SUBDIRS(Testing)

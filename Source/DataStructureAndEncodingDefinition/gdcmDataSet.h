@@ -45,26 +45,11 @@ namespace gdcm
  * length.
  */
 class StructuredSetBase;
-class DataSetIteratorInternal;
-class DataSetIterator
-{
-public:
-  DataSetIterator(StructuredSetBase *ssb = 0):SSB(ssb),Internal(0) {}
-  void Next();
-private:
-  StructuredSetBase *SSB;
-  DataSetIteratorInternal *Internal;
-};
 class GDCM_EXPORT DataSet : public Value
 {
 public:
   DataSet(TS::NegociatedType const &type = TS::Explicit);
   ~DataSet();
-
-  typedef DataSetIterator Iterator;
-  Iterator Begin() const {
-    return DataSetIterator(Internal);
-  }
 
   // Clear
   void Clear();

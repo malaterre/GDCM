@@ -5,7 +5,6 @@ SET(DSED_TEST_SRCS
   TestByteBuffer
   TestByteValue
   TestComposite
-  TestCopyDataSet
   TestDataElement
   TestDataSet
   TestElement
@@ -14,16 +13,13 @@ SET(DSED_TEST_SRCS
   TestFragment
   TestImageCodec
   TestImageConverter
-  TestImageReader
   TestImageValue
-  TestImageWriter
   TestImplicitDataElement
   TestItem
   TestJPEGCodec
   TestParser
   TestRAWCodec
   TestRLECodec
-  TestReader
   TestSequenceOfFragments
   TestSequenceOfItems
   TestTag
@@ -32,7 +28,6 @@ SET(DSED_TEST_SRCS
   TestVM
   TestVR
   TestValue
-  TestWriter
   #TestTorture
   )
 
@@ -49,8 +44,6 @@ ENDIF(SHARED_PTR)
 INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/Common"
-  "${GDCM_SOURCE_DIR}/Testing/Source/Data"
-  "${GDCM_BINARY_DIR}/Testing/Source/Data"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   )
 
