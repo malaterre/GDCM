@@ -74,13 +74,14 @@ void ExecuteViewer(TViewer *viewer, const char *filename)
   // but gdcmviewer doesn't know about them :-(
 
   reader->Update();
-  reader->GetOutput()->Print( cout );
+  //reader->GetOutput()->Print( cout );
   double *range = reader->GetOutput()->GetScalarRange();
   std::cerr << "Range: " << range[0] << " " << range[1] << std::endl;
   viewer->SetColorLevel (0.5 * (range[1] + range[0]));
   viewer->SetColorWindow (range[1] - range[0]);
 
   viewer->SetInputConnection ( reader->GetOutputPort() );
+  //viewer->SetInput( reader->GetOutput() );
   viewer->SetupInteractor (iren);
   int dims[3];
   reader->GetOutput()->GetDimensions(dims);
@@ -97,6 +98,7 @@ void ExecuteViewer(TViewer *viewer, const char *filename)
 
   iren->Initialize();
   iren->Start();
+  //iren->Render();
 
   //if you wish you can export dicom to a vtk file
 #if 0
@@ -142,6 +144,7 @@ int main(int argc, char *argv[])
     }
   else if( strcmp(viewer_type.GetName(), "gdcmviewer2" ) == 0 )
     {
+    std::cerr << "Does not work with VTK 5.x -- Mathieu" << std::endl;
     vtkImageViewer2 *viewer = vtkImageViewer2::New();
     ExecuteViewer<vtkImageViewer2>(viewer, filename);
     }

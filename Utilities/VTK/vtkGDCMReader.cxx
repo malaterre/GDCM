@@ -18,6 +18,8 @@
 #include "vtkImageData.h"
 #include "vtkInformationVector.h"
 #include "vtkInformation.h"
+#include "vtkDemandDrivenPipeline.h"
+#include "vtkStreamingDemandDrivenPipeline.h"
 
 #include "gdcmImageReader.h"
 #include <sstream>
@@ -46,6 +48,14 @@ vtkGDCMReader::~vtkGDCMReader()
   delete this->Internals;
 }
 
+void vtkGDCMReader::ExecuteInformation()
+{
+  std::cerr << "ExecuteInformation" << std::endl;
+}
+void vtkGDCMReader::ExecuteData(vtkDataObject *output)
+{
+  std::cerr << "ExecuteData" << std::endl;
+}
 int vtkGDCMReader::CanReadFile(const char* fname)
 {
   this->Internals->DICOMReader.SetFileName( fname );
@@ -55,6 +65,27 @@ int vtkGDCMReader::CanReadFile(const char* fname)
     }
   return 3;
 }
+
+//----------------------------------------------------------------------------
+int vtkGDCMReader::ProcessRequest(vtkInformation* request,
+                                 vtkInformationVector** inputVector,
+                                 vtkInformationVector* outputVector)
+{
+  // generate the data
+  if(request->Has(vtkDemandDrivenPipeline::REQUEST_DATA()))
+    {
+    return this->RequestData(request, inputVector, outputVector);
+    }
+
+  // execute information
+  if(request->Has(vtkDemandDrivenPipeline::REQUEST_INFORMATION()))
+    {
+    return this->RequestInformation(request, inputVector, outputVector);
+    }
+
+  return this->Superclass::ProcessRequest(request, inputVector, outputVector);
+}
+
 
 //
 void vtkGDCMReader::FillMedicalImageInformation()
@@ -184,10 +215,33 @@ int vtkGDCMReader::RequestInformation(vtkInformation *request,
     this->NumberOfScalarComponents = 3;
     }
 
-//  this->FileLowerLeftOn();
+  int numvol = 1;
+  this->SetNumberOfOutputPorts(numvol);
+  // For each output:
+  for(int i = 0; i < numvol; ++i)
+    {
+    // Allocate !
+    if( !this->GetOutput(i) )
+      {
+      vtkImageData *img = vtkImageData::New();
+      this->GetExecutive()->SetOutputData(i, img );
+      img->Delete();
+      }
+    vtkInformation *outInfo = outputVector->GetInformationObject(i);
+    outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(),
+      0, DataExtent[1], 0, DataExtent[3], 0, DataExtent[5]);
 
-  return this->Superclass::RequestInformation(
-    request, inputVector, outputVector);
+    vtkDataObject::SetPointDataActiveScalarInfo(outInfo, this->DataScalarType, this->NumberOfScalarComponents);
+    //outInfo->Set(vtkDataObject::SPACING(), spcs, 3);
+
+    double origin[3] = {};
+    outInfo->Set(vtkDataObject::ORIGIN(), origin, 3);
+    }
+
+
+//  return this->Superclass::RequestInformation(
+//    request, inputVector, outputVector);
+  return 1;
 }
 
 //----------------------------------------------------------------------------
@@ -201,14 +255,30 @@ int vtkGDCMReader::RequestData(vtkInformation *vtkNotUsed(request),
 
   // Make sure the output dimension is OK, and allocate its scalars
 
-  vtkInformation *outInfo = outputVector->GetInformationObject(0);
-  vtkImageData *output = vtkImageData::SafeDownCast(
-    outInfo->Get(vtkDataObject::DATA_OBJECT()));
-  int *dext = this->GetDataExtent();
-  output->SetDimensions(
-    dext[1] - dext[0] + 1, dext[3] - dext[2] + 1, dext[5] - dext[4] + 1);
-  output->AllocateScalars();
+  for(int i = 0; i < this->GetNumberOfOutputPorts(); ++i)
+  {
+  // Copy/paste from vtkImageAlgorithm::AllocateScalars. Cf. "this needs to be fixed -Ken"
+    vtkStreamingDemandDrivenPipeline *sddp = 
+      vtkStreamingDemandDrivenPipeline::SafeDownCast(this->GetExecutive());
+    if (sddp)
+      {
+      int extent[6];
+      sddp->GetOutputInformation(i)->Get(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(),extent);
+      this->GetOutput(i)->SetExtent(extent);
+      }
+    this->GetOutput(i)->AllocateScalars();
+  }
 
+
+//  vtkInformation *outInfo = outputVector->GetInformationObject(0);
+//  vtkImageData *output = vtkImageData::SafeDownCast(
+//    outInfo->Get(vtkDataObject::DATA_OBJECT()));
+  int *dext = this->GetDataExtent();
+//  output->SetDimensions(
+//    dext[1] - dext[0] + 1, dext[3] - dext[2] + 1, dext[5] - dext[4] + 1);
+//  output->AllocateScalars();
+
+  vtkImageData *output = this->GetOutput(0);
   char * pointer = static_cast<char*>(output->GetScalarPointer());
   unsigned long len = image.GetBufferLength();
   char *tempimage = new char[len];
@@ -244,3 +314,4 @@ void vtkGDCMReader::PrintSelf(ostream& os, vtkIndent indent)
   this->Superclass::PrintSelf(os,indent);
   //this->Internals->DICOMReader.Print(os);
 }
+

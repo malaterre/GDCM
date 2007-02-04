@@ -56,12 +56,18 @@ protected:
   ~vtkGDCMReader();
 
   void FillMedicalImageInformation();
+  int ProcessRequest(vtkInformation* request,
+                                 vtkInformationVector** inputVector,
+                                 vtkInformationVector* outputVector);
   int RequestInformation(vtkInformation *request,
                          vtkInformationVector **inputVector,
                          vtkInformationVector *outputVector);
   int RequestData(vtkInformation *request,
                   vtkInformationVector **inputVector,
                   vtkInformationVector *outputVector);
+
+  virtual void ExecuteInformation();
+  virtual void ExecuteData(vtkDataObject *out);
 
 private:
   vtkGDCMReader(const vtkGDCMReader&);  // Not implemented.
