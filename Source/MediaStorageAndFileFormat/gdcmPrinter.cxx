@@ -37,7 +37,7 @@ Printer::~Printer()
 }
 
 #if 1
-void PrintValue(VR::VRType const &vr, VM::VMType const &vl, const Value &v);
+void PrintValue(VR::VRType const &vr, VM::VMType const &vm, const Value &v);
 //-----------------------------------------------------------------------------
 void PrintExplicitDataElement(std::ostream& _os, const ExplicitDataElement &_val, bool printVR, VR::VRType dictVR, VM::VMType vm, Printer::PrintStyles pstyle)
 {
@@ -100,19 +100,28 @@ void PrintImplicitDataElement(std::ostream& _os, const ImplicitDataElement &_val
 
 //     = reinterpret_cast< const Element<VR::type, VM::VM1>& > ( array );
 // os.flush();
+#define PrinterTemplateSubCaseOB(type,rep) \
+  case VM::rep: \
+    {Element<VR::OB, VM::rep> e; \
+    assert( VR::type == VR::OB ); \
+    e.SetArray( (unsigned char*)array, length, true ); \
+    e.Print( os ); }\
+    break;
 #define PrinterTemplateSubCase(type,rep) \
   case VM::rep: \
     {Element<VR::type, VM::rep> e; \
-    /*assert( bv.GetLength() == TypeToLength<VM::rep>::Length );*/ \
-    memcpy( (void*)(&e), array, TypeToLength<VM::rep>::Length * sizeof( TypeToType<VR::type>::Type) ); \
+    /*assert( bv.GetLength() == TypeToLength<VM::rep>::Length * sizeof( TypeToType<VR::type>::Type) ); */ \
+    assert( bv.GetLength() == e.GetLength() * sizeof( TypeToType<VR::type>::Type) ); \
+    memcpy( (void*)(&e), array, e.GetLength() * sizeof( TypeToType<VR::type>::Type) ); \
     e.Print( os ); }\
     break;
 #define PrinterTemplateSub(type) \
-switch(vl) { \
+switch(vm) { \
 PrinterTemplateSubCase(type, VM::VM1) \
 PrinterTemplateSubCase(type, VM::VM2) \
 PrinterTemplateSubCase(type, VM::VM3) \
 PrinterTemplateSubCase(type, VM::VM4) \
+PrinterTemplateSubCaseOB(type, VM::VM1_n) \
 default: abort(); }
 
 #define PrinterTemplateCase(type) \
@@ -150,7 +159,7 @@ PrinterTemplateCase(US) \
 PrinterTemplateCase(UT) \
 default: abort(); }
 
-void PrintValue(VR::VRType const &vr, VM::VMType const &vl, const Value &v)
+void PrintValue(VR::VRType const &vr, VM::VMType const &vm, const Value &v)
 {
   try
     {
@@ -259,11 +268,43 @@ void PrintExplicitDataElements(Printer &is, StructuredSet<ExplicitDataElement> &
       {
       const ExplicitDataElement &de = *it;
       //is.Read(de);
+  if( de.GetTag() == Tag(0x0043,0x1028) )
+    {
+    std::cerr << "bla" << std::endl;
+    }
       const DictEntry &entry = d.GetDictEntry(de.GetTag());
       // Use VR from dictionary
-      const VR::VRType vr = entry.GetVR();
-      const VM::VMType vm = entry.GetVM();
+      VR::VRType vr = entry.GetVR();
+      VM::VMType vm = entry.GetVM();
+      // TODO: FIXME FIXME FIXME
+      if ( de.GetTag().GetElement() == 0x0 )
+        {
+        if( vm == VM::VM0 ) // not found
+          {
+          vm = VM::VM1; // this is a group length (VR=UL,VM=1)
+          }
+        if( vr == VR::INVALID ) // not found
+          {
+          vr = VR::UL;  // this is a group length (VR=UL,VM=1)
+          }
+        }
       const VR::VRType vr_read = de.GetVR();
+      if( de.GetTag().IsPrivate() )
+        {
+        assert( !de.GetTag().GetElement() || vr == VR::INVALID );
+        assert( !de.GetTag().GetElement() || vm == VM::VM0 );
+        vr = vr_read; // we have no choice for now but trust it
+        if( vr & VR::OB_OW )
+          {
+          vm = VM::VM1_n;
+          }
+        else
+          {
+          vm = VM::VM1;
+          }
+        }
+      assert( vr != VR::INVALID );
+      assert( vm != VM::VM0 );
       if( VR::IsASCII(vr_read) || VR::IsBinary(vr_read) )
         {
         //PrintExplicitDataElement(_os, de, printVR, vr, pstyle);

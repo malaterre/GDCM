@@ -20,6 +20,7 @@ namespace gdcm
 {
 
 static const char *VMStrings[] = {
+  "INVALID",
   "1",
   "2",
   "3",

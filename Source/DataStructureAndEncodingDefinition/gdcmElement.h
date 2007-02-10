@@ -41,6 +41,8 @@ public:
     return TypeToLength<TVM>::Length;
   }
   // Implementation of Print is common to all Mode (ASCII/Binary)
+  // TODO: Can we print a \ when in ASCII...well I don't think so
+  // it would mean we used a bad VM then, right ?
   void Print(std::ostream &_os) const {
     _os << Internal[0]; // VM is at least garantee to be one
     for(int i=1; i<TypeToLength<TVM>::Length; ++i)

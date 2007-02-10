@@ -147,7 +147,7 @@ public:
   // and therefore listed in the DICOM Data Element Dictionary in PS 3.6.
   // Is the Tag from the Public dict...well the implementation is buggy
   // it does not prove the element is indeed in the dict...
-  bool IsPublic() const { return ElementTag.tags[0] % 2; }
+  bool IsPublic() const { return !(ElementTag.tags[0] % 2); }
 
   // PRIVATE DATA ELEMENT: Additional Data Element, defined by an 
   // implementor, to communicate information that is not contained in 

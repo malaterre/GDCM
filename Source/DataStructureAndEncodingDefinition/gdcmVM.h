@@ -47,8 +47,8 @@ class GDCM_EXPORT VM
 {
 public:
   typedef enum {
-    VM0 = -1,
-    VM1 = 0,
+    VM0 = 0,
+    VM1,
     VM2,
     VM3,
     VM4,
@@ -93,7 +93,7 @@ template<int T> struct TypeToLength;
   template<> struct TypeToLength<VM::type> \
   { enum { Length = length }; };
 // TODO: Could be generated from XML file
-TYPETOLENGTH(VM0,1)
+//TYPETOLENGTH(VM0,1)
 TYPETOLENGTH(VM1,1)
 TYPETOLENGTH(VM2,2)
 TYPETOLENGTH(VM3,3)
