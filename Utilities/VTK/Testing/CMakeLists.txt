@@ -2,6 +2,7 @@
 # vtkGDCM
 SET(VTK_GDCM_TEST_SRCS
   TestvtkGDCMReader
+  #TestvtkGDCMImageActor
   TestvtkGDCMWriter
   )
 

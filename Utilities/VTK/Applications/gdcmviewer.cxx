@@ -89,6 +89,7 @@ void ExecuteViewer(TViewer *viewer, const char *filename)
   dims[0] = (dims[0] < 600 ) ? dims[0] : 600;
   dims[1] = (dims[1] < 600 ) ? dims[1] : 600;
   viewer->SetSize( dims );
+  viewer->Render(); // EXTREMELY IMPORTANT
 
   // Here is where we setup the observer, 
   vtkGDCMObserver<TViewer> *obs = vtkGDCMObserver<TViewer>::New();
@@ -98,7 +99,6 @@ void ExecuteViewer(TViewer *viewer, const char *filename)
 
   iren->Initialize();
   iren->Start();
-  //iren->Render();
 
   //if you wish you can export dicom to a vtk file
 #if 0
@@ -144,7 +144,6 @@ int main(int argc, char *argv[])
     }
   else if( strcmp(viewer_type.GetName(), "gdcmviewer2" ) == 0 )
     {
-    std::cerr << "Does not work with VTK 5.x -- Mathieu" << std::endl;
     vtkImageViewer2 *viewer = vtkImageViewer2::New();
     ExecuteViewer<vtkImageViewer2>(viewer, filename);
     }
