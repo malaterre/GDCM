@@ -57,13 +57,40 @@ int TestFD()
 
 int TestAS()
 {
-  Element<VR::AS, VM::VM1> a = { "019Y" };
+  Element<VR::AS, VM::VM5> a = { "019Y" };
   a.Print( std::cout );
   std::cout << std::endl;
 
   return 0;
 }
 
+int TestUL()
+{
+  const char array[4] = {-78, 1, 0, 0}; // 434
+  {
+  Element<VR::UL, VM::VM1> a;
+  // reinterpret_cast< const Element<VR::UL, VM::VM1>& > ( array );
+  memcpy((void*)&a, array, 4);
+  a.Print( std::cout );
+  }
+  std::cout << std::endl;
+
+  return 0;
+}
+
+int TestOB()
+{
+  const unsigned char array[] =
+    { 0x00,0x00,0x00,0x01,0x42,0x12,0xf9,0x22,0x00,0x31,0x00,0x00,0x00,0xc0,0x00,0x00,0x00,0x00,0x03,0xfe,0x02,0x71 };
+  Element<VR::OB, VM::VM1_n> a;
+  a.SetArray( array, sizeof(array), true );
+  // reinterpret_cast< const Element<VR::UL, VM::VM1>& > ( array );
+  //memcpy((void*)&a, array, sizeof(array));
+  a.Print( std::cout );
+  std::cout << std::endl;
+
+  return 0;
+}
 
 int TestUSVM3()
 {
@@ -119,6 +146,8 @@ int TestElement(int , char *[])
   r += gdcm::TestFD();
   r += gdcm::TestAS();
   r += gdcm::TestUSVM3();
+  r += gdcm::TestUL();
+  r += gdcm::TestOB();
 
   return r;
 }
