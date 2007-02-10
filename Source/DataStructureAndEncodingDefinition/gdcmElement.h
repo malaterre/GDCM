@@ -231,7 +231,7 @@ public:
   // If save is set to zero user should not delete the pointer
   //void SetArray(const typename TypeToType<TVR>::Type *array, int len, bool save = false) 
   typedef typename TypeToType<TVR>::Type ArrayType;
-  void SetArray(ArrayType *array, unsigned long len,
+  void SetArray(const ArrayType *array, unsigned long len,
     bool save = false) {
     if( save ) {
       SetLength(len); // realloc
@@ -240,7 +240,8 @@ public:
     else {
       // TODO rewrite this stupid code:
       Length = len;
-      Internal = array;
+      //Internal = array;
+      abort();
       }
   }
   // Implementation of Print is common to all Mode (ASCII/Binary)
@@ -278,6 +279,9 @@ private:
   typename TypeToType<TVR>::Type *Internal;
   unsigned long Length; // unsigned int ??
 };
+
+//template <int TVM = VM::VM1_n>
+//class Element<VR::OB, TVM > : public Element<VR::OB, VM::VM1_n> {};
 
 // Partial specialization for derivatives of 1-n : 2-n, 3-n ...
 template<int TVR>
@@ -321,11 +325,19 @@ public:
   }
 };
 
+
+//template<int T> struct VRToLength;
+//template <> struct VRToLength<VR::AS>
+//{ enum { Length  = VM::VM1 }; }
+//template<>
+//class Element<VR::AS> : public Element<VR::AS, VRToLength<VR::AS>::Length >
+
+// only 0010 1010 AS 1 Patient’s Age
 template<>
-class Element<VR::AS, VM::VM1>
+class Element<VR::AS, VM::VM5>
 {
 public:
-  char Internal[5];
+  char Internal[TypeToLength<VM::VM5>::Length];
   void Print(std::ostream &_os) const {
     _os << Internal;
     }

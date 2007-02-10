@@ -37,9 +37,9 @@ Printer::~Printer()
 }
 
 #if 1
-void PrintValue(VR::VRType const &vr, const Value &v);
+void PrintValue(VR::VRType const &vr, VM::VMType const &vl, const Value &v);
 //-----------------------------------------------------------------------------
-void PrintExplicitDataElement(std::ostream& _os, const ExplicitDataElement &_val, bool printVR, VR::VRType dictVR, Printer::PrintStyles pstyle)
+void PrintExplicitDataElement(std::ostream& _os, const ExplicitDataElement &_val, bool printVR, VR::VRType dictVR, VM::VMType vm, Printer::PrintStyles pstyle)
 {
   const Tag &t = _val.GetTag();
   const VR::VRType vr = _val.GetVR();
@@ -76,7 +76,7 @@ void PrintExplicitDataElement(std::ostream& _os, const ExplicitDataElement &_val
     else if ( VR::IsBinary(vr) )
       {
       _os << "\t ValueField=[";
-      PrintValue(vr, value );
+      PrintValue(vr, vm, value );
       _os << "]";
       }
     else 
@@ -98,53 +98,73 @@ void PrintImplicitDataElement(std::ostream& _os, const ImplicitDataElement &_val
     << "\tValueField=[" << value << "]";
 }
 
-//     = reinterpret_cast< const Element<VR::type, VM::VM1>& > ( array ); 
-#define PrinterTemplateCase(type, rep) \
-  case VR::type: \
-    {Element<VR::type, VM::VM1> e; \
-    memcpy( (void*)(&e), array, sizeof(TypeToType<VR::type>::Type) ); \
+//     = reinterpret_cast< const Element<VR::type, VM::VM1>& > ( array );
+// os.flush();
+#define PrinterTemplateSubCase(type,rep) \
+  case VM::rep: \
+    {Element<VR::type, VM::rep> e; \
+    /*assert( bv.GetLength() == TypeToLength<VM::rep>::Length );*/ \
+    memcpy( (void*)(&e), array, TypeToLength<VM::rep>::Length * sizeof( TypeToType<VR::type>::Type) ); \
     e.Print( os ); }\
     break;
-#define PrinterTemplate(rep) \
-PrinterTemplateCase(AE,rep) \
-PrinterTemplateCase(AS,rep) \
-PrinterTemplateCase(AT,rep) \
-PrinterTemplateCase(CS,rep) \
-PrinterTemplateCase(DA,rep) \
-PrinterTemplateCase(DS,rep) \
-PrinterTemplateCase(DT,rep) \
-PrinterTemplateCase(FL,rep) \
-PrinterTemplateCase(FD,rep) \
-PrinterTemplateCase(IS,rep) \
-PrinterTemplateCase(LO,rep) \
-PrinterTemplateCase(LT,rep) \
-PrinterTemplateCase(OB,rep) \
-PrinterTemplateCase(OF,rep) \
-PrinterTemplateCase(OW,rep) \
-PrinterTemplateCase(PN,rep) \
-PrinterTemplateCase(SH,rep) \
-PrinterTemplateCase(SL,rep) \
-PrinterTemplateCase(SQ,rep) \
-PrinterTemplateCase(SS,rep) \
-PrinterTemplateCase(ST,rep) \
-PrinterTemplateCase(TM,rep) \
-PrinterTemplateCase(UI,rep) \
-PrinterTemplateCase(UL,rep) \
-PrinterTemplateCase(UN,rep) \
-PrinterTemplateCase(US,rep) \
-PrinterTemplateCase(UT,rep)
+#define PrinterTemplateSub(type) \
+switch(vl) { \
+PrinterTemplateSubCase(type, VM::VM1) \
+PrinterTemplateSubCase(type, VM::VM2) \
+PrinterTemplateSubCase(type, VM::VM3) \
+PrinterTemplateSubCase(type, VM::VM4) \
+default: abort(); }
 
-void PrintValue(VR::VRType const &vr, const Value &v)
+#define PrinterTemplateCase(type) \
+  case VR::type: \
+    PrinterTemplateSub(type) \
+    break;
+#define PrinterTemplate() \
+switch(vr) { \
+PrinterTemplateCase(AE) \
+PrinterTemplateCase(AS) \
+PrinterTemplateCase(AT) \
+PrinterTemplateCase(CS) \
+PrinterTemplateCase(DA) \
+PrinterTemplateCase(DS) \
+PrinterTemplateCase(DT) \
+PrinterTemplateCase(FL) \
+PrinterTemplateCase(FD) \
+PrinterTemplateCase(IS) \
+PrinterTemplateCase(LO) \
+PrinterTemplateCase(LT) \
+PrinterTemplateCase(OB) \
+PrinterTemplateCase(OF) \
+PrinterTemplateCase(OW) \
+PrinterTemplateCase(PN) \
+PrinterTemplateCase(SH) \
+PrinterTemplateCase(SL) \
+PrinterTemplateCase(SQ) \
+PrinterTemplateCase(SS) \
+PrinterTemplateCase(ST) \
+PrinterTemplateCase(TM) \
+PrinterTemplateCase(UI) \
+PrinterTemplateCase(UL) \
+PrinterTemplateCase(UN) \
+PrinterTemplateCase(US) \
+PrinterTemplateCase(UT) \
+default: abort(); }
+
+void PrintValue(VR::VRType const &vr, VM::VMType const &vl, const Value &v)
 {
-  const ByteValue &bv = static_cast<const ByteValue&>(v);
-  const char *array = bv.GetPointer();
-  //unsigned short val = *(unsigned short*)(array);
-  std::ostream &os = std::cout;
-  switch(vr)
+  try
     {
-    PrinterTemplate(rep)
-    default:
-      abort();
+    const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
+    const char *array = bv.GetPointer();
+    const VL &length = bv.GetLength();
+    //unsigned short val = *(unsigned short*)(array);
+    std::ostream &os = std::cout;
+
+    // Big phat MACRO:
+    PrinterTemplate()
+    }
+  catch(...)
+    {
     }
 }
 
@@ -157,9 +177,9 @@ void PrintImplicitDataElements(Printer &is, StructuredSet<ImplicitDataElement>&d
   bool printVR = false; //is.GetPrintVR();
 
   std::ostream &_os = std::cout;
-  static const Dicts dicts;
-  const Dict &d = dicts.GetPublicDict();
-  //static const Dict d;
+  //static const Dicts dicts;
+  //const Dict &d = dicts.GetPublicDict();
+  static const Dict d;
   static const GroupDict gd;
   try
     {
@@ -242,14 +262,16 @@ void PrintExplicitDataElements(Printer &is, StructuredSet<ExplicitDataElement> &
       const DictEntry &entry = d.GetDictEntry(de.GetTag());
       // Use VR from dictionary
       const VR::VRType vr = entry.GetVR();
+      const VM::VMType vm = entry.GetVM();
       const VR::VRType vr_read = de.GetVR();
       if( VR::IsASCII(vr_read) || VR::IsBinary(vr_read) )
         {
         //PrintExplicitDataElement(_os, de, printVR, vr, pstyle);
-        PrintExplicitDataElement(_os, de, printVR, vr_read, pstyle);
+        PrintExplicitDataElement(_os, de, printVR, vr_read, vm, pstyle);
         }
       else
         {
+        abort();
         const VM::VMType vm = entry.GetVM();
         const Value& val = de.GetValue();
         _os << de.GetTag();
