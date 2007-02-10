@@ -63,6 +63,9 @@ class StructuredSet : public StructuredSetBase
 public:
   typedef typename std::set<DEType, lttag> DataElementSet;
   typedef typename DataElementSet::iterator DataElementSetIterator;
+  DataElementSetIterator Begin() { return DES.begin(); }
+  DataElementSetIterator End() { return DES.end(); }
+
   //typedef typename DataElementSet::iterator iterator;
   virtual void Clear() {
     DES.clear();

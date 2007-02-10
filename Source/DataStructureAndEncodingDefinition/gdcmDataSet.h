@@ -81,6 +81,8 @@ public:
 
   void Print(std::ostream &os) const;
 
+  const StructuredSetBase *GetInternal() const { return Internal; }
+
 private:
   TS::NegociatedType NegociatedTS;
   StructuredSetBase *Internal;
