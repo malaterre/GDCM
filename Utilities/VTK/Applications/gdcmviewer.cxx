@@ -88,8 +88,8 @@ void ExecuteViewer(TViewer *viewer, const char *filename)
   // Make sure to display on most screen
   dims[0] = (dims[0] < 600 ) ? dims[0] : 600;
   dims[1] = (dims[1] < 600 ) ? dims[1] : 600;
-  viewer->SetSize( dims );
   viewer->Render(); // EXTREMELY IMPORTANT
+  viewer->SetSize( dims );
 
   // Here is where we setup the observer, 
   vtkGDCMObserver<TViewer> *obs = vtkGDCMObserver<TViewer>::New();
