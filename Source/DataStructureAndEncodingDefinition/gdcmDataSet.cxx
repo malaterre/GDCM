@@ -19,8 +19,6 @@
 #include "gdcmElement.h"
 #include "gdcmStructuredSet.h"
 
-#include <iterator>
-
 namespace gdcm
 {
 
