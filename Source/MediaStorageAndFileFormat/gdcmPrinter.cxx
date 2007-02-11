@@ -100,11 +100,11 @@ void PrintImplicitDataElement(std::ostream& _os, const ImplicitDataElement &_val
 
 //     = reinterpret_cast< const Element<VR::type, VM::VM1>& > ( array );
 // os.flush();
-#define PrinterTemplateSubCaseOB(type,rep) \
+#define PrinterTemplateSubCase1n(type,rep) \
   case VM::rep: \
-    {Element<VR::OB, VM::rep> e; \
-    assert( VR::type == VR::OB ); \
-    e.SetArray( (unsigned char*)array, length, true ); \
+    {Element<VR::type, VM::rep> e; \
+    /*assert( VM::rep == VM::VM1_n );*/ \
+    e.SetArray( (TypeToType<VR::type>::Type *)array, length, true ); \
     e.Print( os ); }\
     break;
 #define PrinterTemplateSubCase(type,rep) \
@@ -121,7 +121,7 @@ PrinterTemplateSubCase(type, VM::VM1) \
 PrinterTemplateSubCase(type, VM::VM2) \
 PrinterTemplateSubCase(type, VM::VM3) \
 PrinterTemplateSubCase(type, VM::VM4) \
-PrinterTemplateSubCaseOB(type, VM::VM1_n) \
+PrinterTemplateSubCase1n(type, VM::VM1_n) \
 default: abort(); }
 
 #define PrinterTemplateCase(type) \
@@ -268,10 +268,10 @@ void PrintExplicitDataElements(Printer &is, StructuredSet<ExplicitDataElement> &
       {
       const ExplicitDataElement &de = *it;
       //is.Read(de);
-  if( de.GetTag() == Tag(0x0043,0x1028) )
-    {
-    std::cerr << "bla" << std::endl;
-    }
+//  if( de.GetTag() == Tag(0x0043,0x1038) )
+//    {
+//    std::cerr << "bla" << std::endl;
+//    }
       const DictEntry &entry = d.GetDictEntry(de.GetTag());
       // Use VR from dictionary
       VR::VRType vr = entry.GetVR();
@@ -294,7 +294,8 @@ void PrintExplicitDataElements(Printer &is, StructuredSet<ExplicitDataElement> &
         assert( !de.GetTag().GetElement() || vr == VR::INVALID );
         assert( !de.GetTag().GetElement() || vm == VM::VM0 );
         vr = vr_read; // we have no choice for now but trust it
-        if( vr & VR::OB_OW )
+        if( vr & VR::OB_OW 
+         || vr & VR::FL )
           {
           vm = VM::VM1_n;
           }

@@ -216,28 +216,29 @@ public:
   // SetLength should really be protected anyway...all operation
   // should go through SetArray
   unsigned long GetLength() const { return Length; }
+  typedef typename TypeToType<TVR>::Type ArrayType;
   void SetLength(unsigned long len) {
+    const unsigned int size = sizeof(ArrayType);
     if( len ) {
       if( len > Length ) {
         // perform realloc
-        typename TypeToType<TVR>::Type *internal = 
-          new typename TypeToType<TVR>::Type[len];
-        memcpy(internal, Internal, Length);
+        assert( (len / size) * size == len );
+        ArrayType *internal = new ArrayType[len / size];
+        memcpy(internal, Internal, Length * size);
         delete[] Internal;
         Internal = internal;
         }
       }
-    Length = len;
+    Length = len / size;
   }
 
   // If save is set to zero user should not delete the pointer
   //void SetArray(const typename TypeToType<TVR>::Type *array, int len, bool save = false) 
-  typedef typename TypeToType<TVR>::Type ArrayType;
   void SetArray(const ArrayType *array, unsigned long len,
     bool save = false) {
     if( save ) {
       SetLength(len); // realloc
-      memcpy(Internal, array, len*sizeof(ArrayType));
+      memcpy(Internal, array, len/*/sizeof(ArrayType)*/);
       }
     else {
       // TODO rewrite this stupid code:
