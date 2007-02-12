@@ -1,0 +1,1464 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet href="gdcm2html.xsl" type="text/xsl"
+?>
+<!--
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006 Mathieu Malaterre
+  Copyright (c) 1993-2005 CREATIS
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+-->
+<dict>
+  <entry group="0003" element="0000" retired="false" owner="AEGIS_DICOM_2.00" version="AEG">
+    <description>?</description>
+    <representations>
+      <representation vr="US" vm="1-n"/>
+    </representations>
+  </entry>
+  <entry group="0005" element="0000" retired="false" owner="AEGIS_DICOM_2.00" version="AEG">
+    <description>?</description>
+    <representations>
+      <representation vr="US" vm="1-n"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0000" retired="false" owner="AEGIS_DICOM_2.00" version="AEG">
+    <description>?</description>
+    <representations>
+      <representation vr="US" vm="1-n"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0000" retired="false" owner="MERGE TECHNOLOGIES, INC." version="MRG">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0011" element="0000" retired="false" owner="Hologic" version="HOL">
+    <description>Hx Questionnaire</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0011" element="0000" retired="false" owner="HOLOGIC" version="HOL">
+    <description>Hx Questionnaire</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0000" retired="false" owner="AEGIS_DICOM_2.00" version="AEG">
+    <description>?</description>
+    <representations>
+      <representation vr="US" vm="1-n"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0010" retired="false" owner="1.2.840.113681" version="DUP">
+    <description>CR Image Params Common</description>
+    <representations>
+      <representation vr="ST" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0011" retired="false" owner="1.2.840.113681" version="DUP">
+    <description>CR Image IP Params Single</description>
+    <representations>
+      <representation vr="ST" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0012" retired="false" owner="1.2.840.113681" version="DUP">
+    <description>CR Image IP Params Left</description>
+    <representations>
+      <representation vr="ST" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0013" retired="false" owner="1.2.840.113681" version="DUP">
+    <description>CR Image IP Params Right</description>
+    <representations>
+      <representation vr="ST" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0001" retired="false" owner="LODOX_STATSCAN" version="LDX">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1-n"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0002" retired="false" owner="LODOX_STATSCAN" version="LDX">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0003" retired="false" owner="LODOX_STATSCAN" version="LDX">
+    <description>?</description>
+    <representations>
+      <representation vr="DS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0004" retired="false" owner="LODOX_STATSCAN" version="LDX">
+    <description>?</description>
+    <representations>
+      <representation vr="DS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0005" retired="false" owner="LODOX_STATSCAN" version="LDX">
+    <description>?</description>
+    <representations>
+      <representation vr="DS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0006" retired="false" owner="LODOX_STATSCAN" version="LDX">
+    <description>?</description>
+    <representations>
+      <representation vr="DS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0007" retired="false" owner="LODOX_STATSCAN" version="LDX">
+    <description>?</description>
+    <representations>
+      <representation vr="DS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0008" retired="false" owner="LODOX_STATSCAN" version="LDX">
+    <description>?</description>
+    <representations>
+      <representation vr="DS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0021" element="0001" retired="false" owner="SCHICK TECHNOLOGIES - Change List Creator ID" version="SCH">
+    <description>?</description>
+    <representations>
+      <representation vr="UI" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0021" element="0002" retired="false" owner="SCHICK TECHNOLOGIES - Change List Creator ID" version="SCH">
+    <description>?</description>
+    <representations>
+      <representation vr="SQ" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0021" element="0001" retired="false" owner="SCHICK TECHNOLOGIES - Note List Creator ID" version="SCH">
+    <description>?</description>
+    <representations>
+      <representation vr="UI" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0021" element="0002" retired="false" owner="SCHICK TECHNOLOGIES - Note List Creator ID" version="SCH">
+    <description>?</description>
+    <representations>
+      <representation vr="SQ" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0021" element="0001" retired="false" owner="SCHICK TECHNOLOGIES - Change Item Creator ID" version="SCH">
+    <description>?</description>
+    <representations>
+      <representation vr="UI" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0021" element="0002" retired="false" owner="SCHICK TECHNOLOGIES - Change Item Creator ID" version="SCH">
+    <description>?</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0021" element="0003" retired="false" owner="SCHICK TECHNOLOGIES - Change Item Creator ID" version="SCH">
+    <description>?</description>
+    <representations>
+      <representation vr="DT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0021" element="0004" retired="false" owner="SCHICK TECHNOLOGIES - Change Item Creator ID" version="SCH">
+    <description>?</description>
+    <representations>
+      <representation vr="PN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0021" element="0005" retired="false" owner="SCHICK TECHNOLOGIES - Change Item Creator ID" version="SCH">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0021" element="0001" retired="false" owner="Hologic" version="HOL">
+    <description>Image Analysis Data in XML</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0021" element="0001" retired="false" owner="HOLOGIC" version="HOL">
+    <description>Image Analysis Data in XML</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0023" element="0000" retired="false" owner="Hologic" version="HOL">
+    <description>Encoding Scheme Version</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0023" element="0000" retired="false" owner="HOLOGIC" version="HOL">
+    <description>Encoding Scheme Version</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0023" element="0001" retired="false" owner="Hologic" version="HOL">
+    <description>P File Name</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0023" element="0001" retired="false" owner="HOLOGIC" version="HOL">
+    <description>P File Name</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0023" element="0002" retired="false" owner="Hologic" version="HOL">
+    <description>P File Data</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0023" element="0002" retired="false" owner="HOLOGIC" version="HOL">
+    <description>P File Data</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0023" element="0003" retired="false" owner="Hologic" version="HOL">
+    <description>P File Length</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0023" element="0003" retired="false" owner="HOLOGIC" version="HOL">
+    <description>P File Length</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0023" element="0004" retired="false" owner="Hologic" version="HOL">
+    <description>R File Data</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0023" element="0004" retired="false" owner="HOLOGIC" version="HOL">
+    <description>R File Data</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0023" element="0005" retired="false" owner="Hologic" version="HOL">
+    <description>R File Length</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0023" element="0005" retired="false" owner="HOLOGIC" version="HOL">
+    <description>R File Length</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0000" retired="false" owner="AEGIS_DICOM_2.00" version="AEG">
+    <description>?</description>
+    <representations>
+      <representation vr="US" vm="1-n"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0001" retired="false" owner="SCHICK TECHNOLOGIES - Image Security Creator ID" version="SCH">
+    <description>?</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0020" retired="false" owner="2.16.840.1.114059.1.1.6.1.50.1" version="DEX">
+    <description>?</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0021" retired="false" owner="2.16.840.1.114059.1.1.6.1.50.1" version="DEX">
+    <description>?</description>
+    <representations>
+      <representation vr="ST" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0022" retired="false" owner="2.16.840.1.114059.1.1.6.1.50.1" version="DEX">
+    <description>?</description>
+    <representations>
+      <representation vr="ST" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0023" retired="false" owner="2.16.840.1.114059.1.1.6.1.50.1" version="DEX">
+    <description>?</description>
+    <representations>
+      <representation vr="ST" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0024" retired="false" owner="2.16.840.1.114059.1.1.6.1.50.1" version="DEX">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0025" retired="false" owner="2.16.840.1.114059.1.1.6.1.50.1" version="DEX">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0026" retired="false" owner="2.16.840.1.114059.1.1.6.1.50.1" version="DEX">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0027" retired="false" owner="2.16.840.1.114059.1.1.6.1.50.1" version="DEX">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0073" element="0001" retired="false" owner="STENTOR" version="STE">
+    <description>?</description>
+    <representations>
+      <representation vr="ST" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0073" element="0002" retired="false" owner="STENTOR" version="STE">
+    <description>?</description>
+    <representations>
+      <representation vr="ST" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0073" element="0003" retired="false" owner="STENTOR" version="STE">
+    <description>?</description>
+    <representations>
+      <representation vr="ST" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0087" element="0010" retired="false" owner="1.2.840.113708.794.1.1.2.0" version="ARM">
+    <description>Media Type</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0087" element="0020" retired="false" owner="1.2.840.113708.794.1.1.2.0" version="ARM">
+    <description>Media Location</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0087" element="0050" retired="false" owner="1.2.840.113708.794.1.1.2.0" version="ARM">
+    <description>Estimated Retrieve Time</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="1369" element="0000" retired="false" owner="AEGIS_DICOM_2.00" version="AEG">
+    <description>?</description>
+    <representations>
+      <representation vr="US" vm="1-n"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0004" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Image Control Unit</description>
+    <representations>
+      <representation vr="SH" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0005" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Image UID</description>
+    <representations>
+      <representation vr="OW" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0006" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Route Image UID</description>
+    <representations>
+      <representation vr="OW" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0008" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Image Display Information Version Number</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0009" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Patient Information Version Number</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="000C" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Film UID</description>
+    <representations>
+      <representation vr="OW" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0010" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Exposure Unit Type Code</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0080" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Kanji Hospital Name</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0090" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Distribution Code</description>
+    <representations>
+      <representation vr="ST" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0092" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Kanji Department Name</description>
+    <representations>
+      <representation vr="SH" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="00F0" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Blackening Process Flag</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="00F1" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0015" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Kanji Body Part for Exposure</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0030" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Menu Character String</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0032" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Kanji Menu Name</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0040" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Image Processing Type</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0050" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>EDR Mode</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0060" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Radiographer's Code</description>
+    <representations>
+      <representation vr="SH" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0070" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Split Exposure Format</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0071" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Number of Split Exposure Frames</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0080" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Reading Position Specification</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0081" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Reading Sensitivity Center</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0090" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Film Annotation Character String 1</description>
+    <representations>
+      <representation vr="SH" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0091" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Film Annotation Character String 2</description>
+    <representations>
+      <representation vr="SH" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0021" element="0010" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>FCR Image ID</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0021" element="0030" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Set Number</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0021" element="0040" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Image Number in the Set</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0021" element="0050" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Pair Processing Information</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0021" element="0070" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Film Number within the Series</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0021" element="0080" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Equipment Type-Specific Information</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0021" element="0090" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>LUT Number</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0025" element="0010" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Relative Light Emission Amount Sk</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0025" element="0011" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Term of Correction for Each IP Type St</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0025" element="0012" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Reading Gain Gp</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0020" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Image Scanning Direction</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0025" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Image Rotation/Reversal Information</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0030" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Extended Reading Size Value</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0034" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Mag./Reduc. Ratio</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0044" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Line Density Code</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0050" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Data Compression Code</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0032" element="1032" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Requesting Physician</description>
+    <representations>
+      <representation vr="PN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0032" element="1033" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Requesting Service</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="2011" element="0000" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Trim Density</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="2011" element="0001" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Trim Width</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="2011" element="0002" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Image Mag./Reduc. Range</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="2011" element="0010" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Image Display Format</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="2011" element="0011" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Image Position Specifying Flag</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="2011" element="0020" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Interpolation A-VRS System Format</description>
+    <representations>
+      <representation vr="OW" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="50F1" element="0006" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Energy Subtraction Parameter</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="50F1" element="0007" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Subtraction Registration Result</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="50F1" element="0008" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Energy Subtraction Parameter 2</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="50F1" element="0009" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Afin Conversion Coefficient</description>
+    <representations>
+      <representation vr="SL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="50F1" element="0010" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Film Output Format</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="50F1" element="0020" retired="false" owner="FDMS 1.0" version="FUJ">
+    <description>Image Processing Modification Flag</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0010" retired="false" owner="Canon Inc." version="CAN">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0013" retired="false" owner="Canon Inc." version="CAN">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0015" retired="false" owner="Canon Inc." version="CAN">
+    <description>?</description>
+    <representations>
+      <representation vr="DS" vm="2"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0016" retired="false" owner="Canon Inc." version="CAN">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0017" retired="false" owner="Canon Inc." version="CAN">
+    <description>?</description>
+    <representations>
+      <representation vr="DS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0018" retired="false" owner="Canon Inc." version="CAN">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0019" retired="false" owner="Canon Inc." version="CAN">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="001a" retired="false" owner="Canon Inc." version="CAN">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="001b" retired="false" owner="Canon Inc." version="CAN">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="001c" retired="false" owner="Canon Inc." version="CAN">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="001e" retired="false" owner="Canon Inc." version="CAN">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="001f" retired="false" owner="Canon Inc." version="CAN">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0021" retired="false" owner="Canon Inc." version="CAN">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0002" retired="false" owner="ADAC_IMG" version="ADAC">
+    <description>ADAC Pegasys File Size</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0021" retired="false" owner="ADAC_IMG" version="ADAC">
+    <description>Number of ADAC Headers</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0041" retired="false" owner="ADAC_IMG" version="ADAC">
+    <description>ADAC Header/Image Size</description>
+    <representations>
+      <representation vr="IS" vm="1-n"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0061" retired="false" owner="ADAC_IMG" version="ADAC">
+    <description>ADAC Pegasys Headers</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0001" retired="false" owner="SECTRA_Ident_01" version="SEC">
+    <description>Request number</description>
+    <representations>
+      <representation vr="SH" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0002" retired="false" owner="SECTRA_Ident_01" version="SEC">
+    <description>Examination number</description>
+    <representations>
+      <representation vr="SH" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0004" retired="false" owner="SECTRA_Ident_01" version="SEC">
+    <description>Series Identifier</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0005" retired="false" owner="SECTRA_Ident_01" version="SEC">
+    <description>Series Order</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0006" retired="false" owner="SECTRA_Ident_01" version="SEC">
+    <description>File Name</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0007" retired="false" owner="SECTRA_Ident_01" version="SEC">
+    <description>Image Data ID</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0001" retired="false" owner="SECTRA_ImageInfo_01" version="SEC">
+    <description>Image info</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0002" retired="false" owner="SECTRA_ImageInfo_01" version="SEC">
+    <description>Marking</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0003" retired="false" owner="SECTRA_ImageInfo_01" version="SEC">
+    <description>No decompression</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0004" retired="false" owner="SECTRA_ImageInfo_01" version="SEC">
+    <description>Image info new</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="6001" element="0001" retired="false" owner="SECTRA_OverlayInfo_01" version="SEC">
+    <description>Sectra Overlay</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0000" retired="false" owner="BioPri" version="BIO">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0001" retired="false" owner="BioPri" version="BIO">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0002" retired="false" owner="BioPri" version="BIO">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0003" retired="false" owner="BioPri" version="BIO">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1-n"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0004" retired="false" owner="BioPri" version="BIO">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0005" retired="false" owner="BioPri" version="BIO">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0007" retired="false" owner="BioPri" version="BIO">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0008" retired="false" owner="BioPri" version="BIO">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0009" retired="false" owner="BioPri" version="BIO">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0010" retired="false" owner="BioPri" version="BIO">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0013" retired="false" owner="Silhouette VRS 3.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0014" retired="false" owner="Silhouette VRS 3.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0017" retired="false" owner="Silhouette VRS 3.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0018" retired="false" owner="Silhouette VRS 3.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0019" retired="false" owner="Silhouette VRS 3.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="001a" retired="false" owner="Silhouette VRS 3.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="001b" retired="false" owner="Silhouette VRS 3.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="001c" retired="false" owner="Silhouette VRS 3.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="001d" retired="false" owner="Silhouette VRS 3.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="001e" retired="false" owner="Silhouette VRS 3.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0027" retired="false" owner="Silhouette VRS 3.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0028" retired="false" owner="Silhouette VRS 3.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0030" retired="false" owner="Silhouette VRS 3.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0032" retired="false" owner="Silhouette VRS 3.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0034" retired="false" owner="Silhouette VRS 3.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0035" retired="false" owner="Silhouette VRS 3.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0036" retired="false" owner="Silhouette VRS 3.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0006" retired="false" owner="LORAD Selenia" version="LOR">
+    <description>Paddle ID</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0007" retired="false" owner="LORAD Selenia" version="LOR">
+    <description>Paddle Position</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0008" retired="false" owner="LORAD Selenia" version="LOR">
+    <description>Collimation Size</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0026" retired="false" owner="LORAD Selenia" version="LOR">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0027" retired="false" owner="LORAD Selenia" version="LOR">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0028" retired="false" owner="LORAD Selenia" version="LOR">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0029" retired="false" owner="LORAD Selenia" version="LOR">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0030" retired="false" owner="LORAD Selenia" version="LOR">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0031" retired="false" owner="LORAD Selenia" version="LOR">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0032" retired="false" owner="LORAD Selenia" version="LOR">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0033" retired="false" owner="LORAD Selenia" version="LOR">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0034" retired="false" owner="LORAD Selenia" version="LOR">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0035" retired="false" owner="LORAD Selenia" version="LOR">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0040" retired="false" owner="LORAD Selenia" version="LOR">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0041" retired="false" owner="LORAD Selenia" version="LOR">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0050" retired="false" owner="LORAD Selenia" version="LOR">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0051" retired="false" owner="LORAD Selenia" version="LOR">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0052" retired="false" owner="LORAD Selenia" version="LOR">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0053" retired="false" owner="LORAD Selenia" version="LOR">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0070" retired="false" owner="LORAD Selenia" version="LOR">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0071" retired="false" owner="LORAD Selenia" version="LOR">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0000" retired="false" owner="1.2.840.113663.1" version="ATL">
+    <description>?</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0001" retired="false" owner="1.2.840.113663.1" version="ATL">
+    <description>?</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0048" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="004e" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0011" element="0001" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0001" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0002" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0003" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="SH" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0004" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="DS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0005" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0008" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="DS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0009" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="DS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="000a" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="000b" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="DS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="000c" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="000f" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0010" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0001" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0002" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0005" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0006" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0008" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0009" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="000a" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="000b" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="000c" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="000d" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="000e" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="000f" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0010" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0011" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0012" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0013" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0014" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0015" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0016" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0017" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0018" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="001c" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0020" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0021" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="DS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0022" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="ST" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0023" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0024" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="DS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0025" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="DS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0026" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="DS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0027" retired="false" owner="MMCPrivate" version="HIT">
+    <description>?</description>
+    <representations>
+      <representation vr="DS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0001" retired="false" owner="MeVis BreastCare" version="MEV">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0071" element="0001" retired="false" owner="MeVis BreastCare" version="MEV">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0065" element="0093" retired="false" owner="Viewing Protocol" version="">
+    <description>?</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="1455" element="0000" retired="false" owner="Mortara_Inc" version="MOR">
+    <description>?</description>
+    <representations>
+      <representation vr="OW" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0031" element="0098" retired="false" owner="SEGAMI MIML" version="MOR">
+    <description>?</description>
+    <representations>
+      <representation vr="OW" vm="1"/>
+    </representations>
+  </entry>
+</dict>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet href="gdcm2html.xsl" type="text/xsl"
+?>
+<!--
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006 Mathieu Malaterre
+  Copyright (c) 1993-2005 CREATIS
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+-->
+<dict>
+  <entry group="0029" element="0010" retired="false" owner="CAMTRONICS IP" version="CMT">
+    <description>?</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0010" retired="false" owner="CAMTRONICS" version="CMT">
+    <description>Commentline</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0020" retired="false" owner="CAMTRONICS" version="CMT">
+    <description>Edge Enhancement Coefficient</description>
+    <representations>
+      <representation vr="DS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0020" retired="false" owner="CAMTRONICS IP" version="CMT">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0030" retired="false" owner="CAMTRONICS IP" version="CMT">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0040" retired="false" owner="CAMTRONICS IP" version="CMT">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0050" retired="false" owner="CAMTRONICS" version="CMT">
+    <description>Scene Text</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0060" retired="false" owner="CAMTRONICS" version="CMT">
+    <description>Image Text</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0070" retired="false" owner="CAMTRONICS" version="CMT">
+    <description>Pixel Shift Horizontal</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0080" retired="false" owner="CAMTRONICS" version="CMT">
+    <description>Pixel Shift Vertical</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0090" retired="false" owner="CAMTRONICS" version="CMT">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+</dict>

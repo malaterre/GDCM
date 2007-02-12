@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet href="gdcm2html.xsl" type="text/xsl"
+?>
+<!--
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006 Mathieu Malaterre
+  Copyright (c) 1993-2005 CREATIS
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+-->
+<dict>
+  <entry group="0009" element="0010" retired="false" owner="AGFA" version="AGFA">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0011" retired="false" owner="AGFA" version="AGFA">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0013" retired="false" owner="AGFA" version="AGFA">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0014" retired="false" owner="AGFA" version="AGFA">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0015" retired="false" owner="AGFA" version="AGFA">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0010" retired="false" owner="AGFA" version="AGFA">
+    <description>Image Processing Parameters</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0011" retired="false" owner="AGFA" version="AGFA">
+    <description>Identification Data</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0013" retired="false" owner="AGFA" version="AGFA">
+    <description>Sensitometry Name</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0014" retired="false" owner="AGFA" version="AGFA">
+    <description>Window Level List</description>
+    <representations>
+      <representation vr="ST" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0015" retired="false" owner="AGFA" version="AGFA">
+    <description>Dose Monitoring</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0016" retired="false" owner="AGFA" version="AGFA">
+    <description>Other Info</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="001a" retired="false" owner="AGFA" version="AGFA">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="001b" retired="false" owner="AGFA" version="AGFA">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0030" retired="false" owner="AGFA_ADC_Compact" version="AGFA">
+    <description>Data stream from cassette</description>
+    <representations>
+      <representation vr="ST" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0030" retired="false" owner="AGFA_ADC_Compact" version="AGFA">
+    <description>Set of destination types</description>
+    <representations>
+      <representation vr="ST" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0040" retired="false" owner="AGFA_ADC_Compact" version="AGFA">
+    <description>Set of destination Ids</description>
+    <representations>
+      <representation vr="ST" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0050" retired="false" owner="AGFA_ADC_Compact" version="AGFA">
+    <description>Set of processing codes</description>
+    <representations>
+      <representation vr="ST" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0060" retired="false" owner="AGFA_ADC_Compact" version="AGFA">
+    <description>Number of series in study</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0061" retired="false" owner="AGFA_ADC_Compact" version="AGFA">
+    <description>Session Number</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0062" retired="false" owner="AGFA_ADC_Compact" version="AGFA">
+    <description>ID station name</description>
+    <representations>
+      <representation vr="SH" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0070" retired="false" owner="AGFA_ADC_Compact" version="AGFA">
+    <description>Number of images in series</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0071" retired="false" owner="AGFA_ADC_Compact" version="AGFA">
+    <description>Break condition</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0072" retired="false" owner="AGFA_ADC_Compact" version="AGFA">
+    <description>Wait (or Hold) flag</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0073" retired="false" owner="AGFA_ADC_Compact" version="AGFA">
+    <description>ScanRes flag</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0074" retired="false" owner="AGFA_ADC_Compact" version="AGFA">
+    <description>Operation code</description>
+    <representations>
+      <representation vr="SH" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0019" element="0095" retired="false" owner="AGFA_ADC_Compact" version="AGFA">
+    <description>Image quality</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0031" element="0000" retired="false" owner="AGFA PACS Archive Mirroring 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="CS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0031" element="0001" retired="false" owner="AGFA PACS Archive Mirroring 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0000" retired="false" owner="MITRA PRESENTATION 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0001" retired="false" owner="MITRA PRESENTATION 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0002" retired="false" owner="MITRA PRESENTATION 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0003" retired="false" owner="MITRA PRESENTATION 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0000" retired="false" owner="MITRA OBJECT DOCUMENT 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0000" retired="false" owner="MITRA MARKUP 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1-n"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0001" retired="false" owner="MITRA MARKUP 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1-n"/>
+    </representations>
+  </entry>
+  <entry group="0033" element="0002" retired="false" owner="MITRA OBJECT UTF8 ATTRIBUTES 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0033" element="0004" retired="false" owner="MITRA OBJECT UTF8 ATTRIBUTES 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0033" element="0006" retired="false" owner="MITRA OBJECT UTF8 ATTRIBUTES 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0033" element="0008" retired="false" owner="MITRA OBJECT UTF8 ATTRIBUTES 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0033" element="000a" retired="false" owner="MITRA OBJECT UTF8 ATTRIBUTES 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0033" element="000c" retired="false" owner="MITRA OBJECT UTF8 ATTRIBUTES 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0033" element="000e" retired="false" owner="MITRA OBJECT UTF8 ATTRIBUTES 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0033" element="0013" retired="false" owner="MITRA OBJECT UTF8 ATTRIBUTES 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0033" element="0014" retired="false" owner="MITRA OBJECT UTF8 ATTRIBUTES 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0033" element="0015" retired="false" owner="MITRA OBJECT UTF8 ATTRIBUTES 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0033" element="0016" retired="false" owner="MITRA OBJECT UTF8 ATTRIBUTES 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0033" element="0019" retired="false" owner="MITRA OBJECT UTF8 ATTRIBUTES 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="OB" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0033" element="0002" retired="false" owner="MITRA OBJECT ATTRIBUTES 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0033" element="0004" retired="false" owner="MITRA OBJECT ATTRIBUTES 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0033" element="0006" retired="false" owner="MITRA OBJECT ATTRIBUTES 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0033" element="0008" retired="false" owner="MITRA OBJECT ATTRIBUTES 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0033" element="000a" retired="false" owner="MITRA OBJECT ATTRIBUTES 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0031" element="0020" retired="false" owner="MITRA LINKED ATTRIBUTES 1.0" version="MIT">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+</dict>

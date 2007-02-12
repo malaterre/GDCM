@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet href="gdcm2html.xsl" type="text/xsl"
+?>
+<!--
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006 Mathieu Malaterre
+  Copyright (c) 1993-2005 CREATIS
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+-->
+<dict>
+  <entry group="0009" element="0000" retired="false" owner="ACUSON" version="ACU">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0001" retired="false" owner="ACUSON" version="ACU">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0002" retired="false" owner="ACUSON" version="ACU">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0003" retired="false" owner="ACUSON" version="ACU">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0004" retired="false" owner="ACUSON" version="ACU">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0005" retired="false" owner="ACUSON" version="ACU">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0006" retired="false" owner="ACUSON" version="ACU">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0007" retired="false" owner="ACUSON" version="ACU">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0008" retired="false" owner="ACUSON" version="ACU">
+    <description>?</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0009" retired="false" owner="ACUSON" version="ACU">
+    <description>?</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="000a" retired="false" owner="ACUSON" version="ACU">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="000b" retired="false" owner="ACUSON" version="ACU">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="000c" retired="false" owner="ACUSON" version="ACU">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="000d" retired="false" owner="ACUSON" version="ACU">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="000e" retired="false" owner="ACUSON" version="ACU">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="000f" retired="false" owner="ACUSON" version="ACU">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0010" retired="false" owner="ACUSON" version="ACU">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0011" retired="false" owner="ACUSON" version="ACU">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0012" retired="false" owner="ACUSON" version="ACU">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0013" retired="false" owner="ACUSON" version="ACU">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0014" retired="false" owner="ACUSON" version="ACU">
+    <description>?</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0015" retired="false" owner="ACUSON" version="ACU">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+</dict>

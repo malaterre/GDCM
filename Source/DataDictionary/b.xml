@@ -1,0 +1,27 @@
+<dict>
+<entry group="0000" element="0000"><representations><representation vr="UL" vm="1"/></representations><description>Group Length</description></entry>
+<entry group="0000" element="0001"><representations><representation vr="UL" vm="1"/></representations><description>Command Length to End (RET)</description></entry>
+<entry group="0000" element="0002"><representations><representation vr="UI" vm="1"/></representations><description>Affected SOP Class UID</description></entry>
+<entry group="0000" element="0003"><representations><representation vr="UI" vm="1"/></representations><description>Requested SOP Class UID</description></entry>
+<entry group="0000" element="0010"><representations><representation vr="SH" vm="1"/></representations><description>Command Recognition Code (RET)</description></entry>
+<entry group="0000" element="0100"><representations><representation vr="US" vm="1"/></representations><description>Command Field</description></entry>
+<entry group="0000" element="0110"><representations><representation vr="US" vm="1"/></representations><description>Message ID (first)</description></entry>
+<entry group="0000" element="0120"><representations><representation vr="US" vm="1"/></representations><description>Message ID Responded to</description></entry>
+<entry group="0000" element="0600"><representations><representation vr="AE" vm="1"/></representations><description>Move Destination</description></entry>
+<entry group="0000" element="0700"><representations><representation vr="US" vm="1"/></representations><description>Priority</description></entry>
+<entry group="0000" element="0800"><representations><representation vr="US" vm="1"/></representations><description>Data Set Type</description></entry>
+<entry group="0000" element="0900"><representations><representation vr="US" vm="1"/></representations><description>Status</description></entry>
+<entry group="0000" element="0901"><representations><representation vr="AT" vm="1"/></representations><description>Offending Element</description></entry>
+<entry group="0000" element="0902"><representations><representation vr="LO" vm="1"/></representations><description>Error Comment</description></entry>
+<entry group="0000" element="0903"><representations><representation vr="US" vm="1"/></representations><description>Error ID</description></entry>
+<entry group="0000" element="1001"><representations><representation vr="UI" vm="1"/></representations><description>SOP Requested Instance UID</description></entry>
+<entry group="0000" element="1000"><representations><representation vr="UI" vm="1"/></representations><description>SOP Affected Instance UID</description></entry>
+<entry group="0000" element="1002"><representations><representation vr="US" vm="1"/></representations><description>Event Type ID</description></entry>
+<entry group="0000" element="1008"><representations><representation vr="US" vm="1"/></representations><description>Action Type ID</description></entry>
+<entry group="0000" element="1020"><representations><representation vr="US" vm="1"/></representations><description>Remaining Suboperations</description></entry>
+<entry group="0000" element="1021"><representations><representation vr="US" vm="1"/></representations><description>Completed Suboperations</description></entry>
+<entry group="0000" element="1022"><representations><representation vr="US" vm="1"/></representations><description>Failed Suboperations</description></entry>
+<entry group="0000" element="1023"><representations><representation vr="US" vm="1"/></representations><description>Warning Suboperations</description></entry>
+<entry group="0000" element="1030"><representations><representation vr="AE" vm="1"/></representations><description>AE Title</description></entry>
+<entry group="0000" element="1031"><representations><representation vr="US" vm="1"/></representations><description>Message ID (second)</description></entry>
+<entry group="0000" element="1005"><representations><representation vr="AT" vm="1"/></representations><description>Attribute Identifier List</description></entry></dict>

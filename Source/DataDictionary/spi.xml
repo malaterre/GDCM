@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet href="gdcm2html.xsl" type="text/xsl"
+?>
+<!--
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006 Mathieu Malaterre
+  Copyright (c) 1993-2005 CREATIS
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+-->
+<dict>
+  <entry group="0009" element="0010" retired="false" owner="SPI" version="SPI">
+    <description>Comments</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0010" retired="false" owner="SPI RELEASE 1" version="SPI">
+    <description>Comments</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0010" retired="false" owner="SPI Release 1" version="SPI">
+    <description>Comments</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0015" retired="false" owner="SPI" version="SPI">
+    <description>UID</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0015" retired="false" owner="SPI RELEASE 1" version="SPI">
+    <description>UID</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0015" retired="false" owner="SPI Release 1" version="SPI">
+    <description>UID</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0040" retired="false" owner="SPI" version="SPI">
+    <description>Data Object Type</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0040" retired="false" owner="SPI RELEASE 1" version="SPI">
+    <description>Data Object Type</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0040" retired="false" owner="SPI Release 1" version="SPI">
+    <description>Data Object Type</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0041" retired="false" owner="SPI" version="SPI">
+    <description>Data Object Subtype</description>
+    <representations>
+      <representation vr="SH" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0041" retired="false" owner="SPI RELEASE 1" version="SPI">
+    <description>Data Object Subtype</description>
+    <representations>
+      <representation vr="SH" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0009" element="0041" retired="false" owner="SPI Release 1" version="SPI">
+    <description>Data Object Subtype</description>
+    <representations>
+      <representation vr="SH" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0011" element="0010" retired="false" owner="SPI" version="SPI">
+    <description>Organ</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0011" element="0010" retired="false" owner="SPI RELEASE 1" version="SPI">
+    <description>Organ</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0011" element="0010" retired="false" owner="SPI Release 1" version="SPI">
+    <description>Organ</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0011" element="0015" retired="false" owner="SPI" version="SPI">
+    <description>Allergy Indication</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0011" element="0015" retired="false" owner="SPI RELEASE 1" version="SPI">
+    <description>Allergy Indication</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0011" element="0015" retired="false" owner="SPI Release 1" version="SPI">
+    <description>Allergy Indication</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0011" element="0020" retired="false" owner="SPI" version="SPI">
+    <description>Pregnancy</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0011" element="0020" retired="false" owner="SPI RELEASE 1" version="SPI">
+    <description>Pregnancy</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0011" element="0020" retired="false" owner="SPI Release 1" version="SPI">
+    <description>Pregnancy</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0060" retired="false" owner="SPI RELEASE 1" version="SPI">
+    <description>Compression Algorithm</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0060" retired="false" owner="SPI Release 1" version="SPI">
+    <description>Compression Algorithm</description>
+    <representations>
+      <representation vr="LO" vm="1"/>
+    </representations>
+  </entry>
+</dict>

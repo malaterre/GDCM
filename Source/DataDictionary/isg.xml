@@ -1,0 +1,678 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet href="gdcm2html.xsl" type="text/xsl"
+?>
+<!--
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006 Mathieu Malaterre
+  Copyright (c) 1993-2005 CREATIS
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+-->
+<dict>
+  <entry group="0029" element="0070" retired="false" owner="ISG shadow" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0080" retired="false" owner="ISG shadow" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0090" retired="false" owner="ISG shadow" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0013" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0014" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0017" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0018" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0019" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="001a" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="001b" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="001c" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="001d" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="001e" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0021" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0022" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0023" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0024" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0025" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0027" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0028" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0029" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0030" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0052" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="US" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0053" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0054" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0055" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0056" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0057" retired="false" owner="Silhouette V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0000" retired="false" owner="Silhouette Graphics Export V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="UI" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0011" retired="false" owner="Silhouette Line V1.0" version="ISG">
+    <description>Line Name</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0012" retired="false" owner="Silhouette Line V1.0" version="ISG">
+    <description>Line Name Font</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0013" retired="false" owner="Silhouette Line V1.0" version="ISG">
+    <description>Line Name Display</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0014" retired="false" owner="Silhouette Line V1.0" version="ISG">
+    <description>Line Normal Color</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0015" retired="false" owner="Silhouette Line V1.0" version="ISG">
+    <description>Line Type</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0016" retired="false" owner="Silhouette Line V1.0" version="ISG">
+    <description>Line Thickness</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0017" retired="false" owner="Silhouette Line V1.0" version="ISG">
+    <description>Line Style</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0018" retired="false" owner="Silhouette Line V1.0" version="ISG">
+    <description>Line Dash Length</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0019" retired="false" owner="Silhouette Line V1.0" version="ISG">
+    <description>Line Interactivity</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0020" retired="false" owner="Silhouette Line V1.0" version="ISG">
+    <description>Line Measurement Color</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0021" retired="false" owner="Silhouette Line V1.0" version="ISG">
+    <description>Line Measurement Font</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0022" retired="false" owner="Silhouette Line V1.0" version="ISG">
+    <description>Line Measurement Dash Length</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0023" retired="false" owner="Silhouette Line V1.0" version="ISG">
+    <description>Line Point Space</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0024" retired="false" owner="Silhouette Line V1.0" version="ISG">
+    <description>Line Points</description>
+    <representations>
+      <representation vr="FD" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0025" retired="false" owner="Silhouette Line V1.0" version="ISG">
+    <description>Line Control Point Size</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0026" retired="false" owner="Silhouette Line V1.0" version="ISG">
+    <description>Line Control Point Space</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0027" retired="false" owner="Silhouette Line V1.0" version="ISG">
+    <description>Line Control Points</description>
+    <representations>
+      <representation vr="FD" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0028" retired="false" owner="Silhouette Line V1.0" version="ISG">
+    <description>Line Label</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0029" retired="false" owner="Silhouette Line V1.0" version="ISG">
+    <description>Line Don't Save</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0041" retired="false" owner="Silhouette Sequence Ids V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="SQ" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0042" retired="false" owner="Silhouette Sequence Ids V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="SQ" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0043" retired="false" owner="Silhouette Sequence Ids V1.0" version="ISG">
+    <description>?</description>
+    <representations>
+      <representation vr="SQ" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0011" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Name</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0012" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Font</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0013" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Text Foreground Color</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0014" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Text Background Color</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0015" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Text Backing Mode</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0016" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Text Justification</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0017" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Text Location</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0018" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Text String</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0019" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Text Attach Mode</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0020" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Text Cursor Mode</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0021" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Text Shadow Offset X</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0022" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Text Shadow Offset Y</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0023" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Line Color</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0024" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Line Thickness</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0025" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Line Type</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0026" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Line Style</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0027" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Line Dash Length</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0028" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Line Attach Mode</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0029" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Line Point Count</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0030" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Line Points</description>
+    <representations>
+      <representation vr="FD" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0031" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Line Control Size</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0032" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Marker Color</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0033" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Marker Type</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0034" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Marker Size</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0035" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Marker Location</description>
+    <representations>
+      <representation vr="FD" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0036" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Marker Attach Mode</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0037" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Geom Color</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0038" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Geom Thickness</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0039" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Geom Line Style</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0040" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Geom Dash Length</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0041" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Geom Fill Pattern</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0042" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Interactivity</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0043" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Arrow Length</description>
+    <representations>
+      <representation vr="FD" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0044" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Arrow Angle</description>
+    <representations>
+      <representation vr="FD" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0045" retired="false" owner="Silhouette Annot V1.0" version="ISG">
+    <description>Annotation Don't Save</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0011" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Name</description>
+    <representations>
+      <representation vr="IS" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0012" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Name Font</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0013" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Normal Color</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0014" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Fill Pattern</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0015" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Bp Seg</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0016" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Bp Seg Pairs</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0017" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Seed Space</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0018" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Seeds</description>
+    <representations>
+      <representation vr="UN" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0019" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Line Thickness</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0020" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Line Style</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0021" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Line Dash Length</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0022" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Interactivity</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0023" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Name Position</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0024" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Name Display</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0025" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Label</description>
+    <representations>
+      <representation vr="LT" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0026" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Shape</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0027" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Shape Tilt</description>
+    <representations>
+      <representation vr="FD" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0028" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Shape Points Count</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0029" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Shape Points Space</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0030" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Shape Points</description>
+    <representations>
+      <representation vr="FD" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0031" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Shape Control Points Count</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0032" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Shape Control Points Space</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0033" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Shape Control Points</description>
+    <representations>
+      <representation vr="FD" vm="1"/>
+    </representations>
+  </entry>
+  <entry group="0029" element="0034" retired="false" owner="Silhouette ROI V1.0" version="ISG">
+    <description>ROI Don't Save</description>
+    <representations>
+      <representation vr="UL" vm="1"/>
+    </representations>
+  </entry>
+</dict>
