@@ -21,22 +21,23 @@
     <html>
       <body>
         <table border="1">
-          <tr bgcolor="#d6d6d6"> <!--rgb(214,214,214) -->
+          <tr bgcolor="#d6d6d6">
+<!--rgb(214,214,214) -->
             <th>Tag</th>
             <th>VR</th>
             <th>VM</th>
             <th>Description</th>
             <th>Version</th>
             <xsl:choose>
-            <xsl:when test="$has_owner">
-            <th>Owner</th>
-            </xsl:when>
-            <xsl:when test="$has_retired">
-            <th>Retired</th>
-            </xsl:when>
-            <xsl:otherwise>
-            <th>bla</th>
-            </xsl:otherwise>
+              <xsl:when test="$has_owner">
+                <th>Owner</th>
+              </xsl:when>
+              <xsl:when test="$has_retired">
+                <th>Retired</th>
+              </xsl:when>
+              <xsl:otherwise>
+                <th>bla</th>
+              </xsl:otherwise>
             </xsl:choose>
           </tr>
 <!-- The main template that loop over all dict/entry -->
@@ -44,13 +45,13 @@
             <xsl:variable name="my_italic" value="@retired != 'false'"/>
             <tr>
               <td>
-                <!--xsl:if test="@retired != 'false'"><i></xsl:if-->
+<!--xsl:if test="@retired != 'false'"><i></xsl:if-->
                 <xsl:text>(</xsl:text>
                 <xsl:value-of select="@group"/>
                 <xsl:text>,</xsl:text>
                 <xsl:value-of select="@element"/>
                 <xsl:text>)</xsl:text>
-                <!--xsl:if test="$my_italic"></i></xsl:if-->
+<!--xsl:if test="$my_italic"></i></xsl:if-->
               </td>
               <td>
                 <xsl:for-each select="representations/representation">
@@ -75,15 +76,15 @@
                 <xsl:value-of select="@version"/>
               </td>
               <td>
-            <xsl:choose>
-            <xsl:when test="$has_owner">
-                <xsl:value-of select="@owner"/>
-            </xsl:when>
-            <xsl:when test="$has_retired">
-                <xsl:if test="@retired != 'false'">
-                  <xsl:text> (RET)</xsl:text>
-                </xsl:if>
-                </xsl:when>
+                <xsl:choose>
+                  <xsl:when test="$has_owner">
+                    <xsl:value-of select="@owner"/>
+                  </xsl:when>
+                  <xsl:when test="$has_retired">
+                    <xsl:if test="@retired != 'false'">
+                      <xsl:text> (RET)</xsl:text>
+                    </xsl:if>
+                  </xsl:when>
                 </xsl:choose>
               </td>
             </tr>
