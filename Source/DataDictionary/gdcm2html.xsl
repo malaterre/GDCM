@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-  <xsl:output method="html" indent="yes"/>
+<!--xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+  <xsl:output method="html"
+  media-type="text/html" encoding="UTF-8"
+indent="no" omit-xml-declaration="yes" doctype-public="-//W3C//DTD HTML 4.01//EN" doctype-system="http://www.w3.org/TR/html4/strict.dtd"/-->
+<xsl:stylesheet xmlns:xsl=
+"http://www.w3.org/1999/XSL/Transform" 
+xmlns=
+"http://www.w3.org/TR/xhtml1/strict" 
+version="1.0">
+<xsl:output method="xml" indent="yes" 
+encoding="iso-8859-1"/>
+
 <!-- XSL to convert XML GDCM2 data dictionay into HTML form -->
 <!--
   Program: GDCM (Grass Root DICOM). A DICOM library
@@ -20,7 +30,9 @@
     <xsl:variable name="has_retired" select="dict/entry/@retired"/>
     <html>
     <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+    <title>
+    DICOM DICTIONARY
+    </title>
       <style type="text/css">
 tr.normal
    {
@@ -31,6 +43,7 @@ tr.italic
    font-style:italic;
    }
 </style>
+
     </head>
       <body>
         <table border="1">
