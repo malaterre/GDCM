@@ -18,7 +18,9 @@
   <xsl:template match="/">
     <xsl:variable name="has_owner" select="dict/entry/@owner"/>
     <xsl:variable name="has_retired" select="dict/entry/@retired"/>
+    <html>
     <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
       <style type="text/css">
 tr.normal
    {
@@ -30,7 +32,6 @@ tr.italic
    }
 </style>
     </head>
-    <html>
       <body>
         <table border="1">
           <tr bgcolor="#d6d6d6">
