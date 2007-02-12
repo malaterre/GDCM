@@ -16,6 +16,8 @@
      PURPOSE.  See the above copyright notice for more information.
 -->
   <xsl:template match="/">
+    <xsl:variable name="has_owner" select="dict/entry/@owner"/>
+    <xsl:variable name="has_retired" select="dict/entry/@retired"/>
     <html>
       <body>
         <table border="1">
@@ -24,7 +26,18 @@
             <th>VR</th>
             <th>VM</th>
             <th>Description</th>
+            <th>Version</th>
+            <xsl:choose>
+            <xsl:when test="$has_owner">
+            <th>Owner</th>
+            </xsl:when>
+            <xsl:when test="$has_retired">
             <th>Retired</th>
+            </xsl:when>
+            <xsl:otherwise>
+            <th>bla</th>
+            </xsl:otherwise>
+            </xsl:choose>
           </tr>
 <!-- The main template that loop over all dict/entry -->
           <xsl:for-each select="dict/entry">
@@ -59,9 +72,19 @@
                 <xsl:value-of select="description"/>
               </td>
               <td>
+                <xsl:value-of select="@version"/>
+              </td>
+              <td>
+            <xsl:choose>
+            <xsl:when test="$has_owner">
+                <xsl:value-of select="@owner"/>
+            </xsl:when>
+            <xsl:when test="$has_retired">
                 <xsl:if test="@retired != 'false'">
                   <xsl:text> (RET)</xsl:text>
                 </xsl:if>
+                </xsl:when>
+                </xsl:choose>
               </td>
             </tr>
           </xsl:for-each>
