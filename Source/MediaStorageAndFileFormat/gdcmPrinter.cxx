@@ -88,7 +88,6 @@ void PrintImplicitDataElement(std::ostream& _os, const ImplicitDataElement &_val
 {
   const Tag &t = _val.GetTag();
   const uint32_t vl = _val.GetVL();
-  const Value& value = _val.GetValue();
   _os << t;
 
   if ( printVR )
@@ -97,13 +96,19 @@ void PrintImplicitDataElement(std::ostream& _os, const ImplicitDataElement &_val
     }
   _os << "\tVL=" << std::dec << vl
     << "\tValueField=[";
-  if( VR::IsBinary(dictVR) )
+  if( _val.GetVL() )
     {
-    PrintValue(dictVR, vm, value);
-    }
-  else
-    {
-    _os << value;
+  // FIXME FIXME: 
+  // value could dereference a NULL pointer in case of 0 length...
+  const Value& value = _val.GetValue();
+    if( VR::IsBinary(dictVR) )
+      {
+      PrintValue(dictVR, vm, value);
+      }
+    else
+      {
+      _os << value;
+      }
     }
   _os  << "]";
 }
