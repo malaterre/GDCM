@@ -252,7 +252,7 @@ public:
     assert( Length );
     assert( Internal );
     _os << Internal[0]; // VM is at least garantee to be one
-    const unsigned long length = GetLength();
+    const unsigned long length = GetLength() < 25 ? GetLength() : 25;
     for(unsigned long i=1; i<length; ++i)
       _os << "," << Internal[i];
     }

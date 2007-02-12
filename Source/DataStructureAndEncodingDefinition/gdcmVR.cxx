@@ -329,6 +329,13 @@ bool VR::IsBinary(VRType const &vr)
   switch(vr)
     {
     VRTemplate(BINARY)
+// TODO FIXME FIXME:
+  case US_SS_OW:
+    return true;
+  case US_SS:
+    return true;
+  case OB_OW:
+    return true;
   default:
       abort();
       return false;

@@ -47,7 +47,7 @@ class GDCM_EXPORT VM
 {
 public:
   typedef enum {
-    VM0 = 0,
+    VM0 = 0, // aka the invalid VM
     VM1,
     VM2,
     VM3,

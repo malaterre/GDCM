@@ -84,18 +84,28 @@ void PrintExplicitDataElement(std::ostream& _os, const ExplicitDataElement &_val
     }
 }
 //-----------------------------------------------------------------------------
-void PrintImplicitDataElement(std::ostream& _os, const ImplicitDataElement &_val, bool printVR, VR::VRType dictVR)
+void PrintImplicitDataElement(std::ostream& _os, const ImplicitDataElement &_val, bool printVR, VR::VRType dictVR, VM::VMType vm)
 {
   const Tag &t = _val.GetTag();
   const uint32_t vl = _val.GetVL();
   const Value& value = _val.GetValue();
   _os << t;
+
   if ( printVR )
     {
-    _os << " ?VR=" << dictVR;
+    _os << " (VR=" << VR::GetVRString(dictVR) << ")";
     }
   _os << "\tVL=" << std::dec << vl
-    << "\tValueField=[" << value << "]";
+    << "\tValueField=[";
+  if( VR::IsBinary(dictVR) )
+    {
+    PrintValue(dictVR, vm, value);
+    }
+  else
+    {
+    _os << value;
+    }
+  _os  << "]";
 }
 
 //     = reinterpret_cast< const Element<VR::type, VM::VM1>& > ( array );
@@ -183,7 +193,7 @@ void PrintImplicitDataElements(Printer &is, StructuredSet<ImplicitDataElement>&d
   //ImplicitDataElement de;
   Printer::PrintStyles pstyle = is.GetPrintStyle();
   (void)pstyle;
-  bool printVR = false; //is.GetPrintVR();
+  bool printVR = true; //is.GetPrintVR();
 
   std::ostream &_os = std::cout;
   //static const Dicts dicts;
@@ -197,11 +207,12 @@ void PrintImplicitDataElements(Printer &is, StructuredSet<ImplicitDataElement>&d
     for( ; it != ds.End(); ++it )
       {
       const ImplicitDataElement &de = *it;
+      const Tag &t = de.GetTag();
       const DictEntry &entry = d.GetDictEntry(de.GetTag());
       // Use VR from dictionary
       VR::VRType vr = entry.GetVR();
       VM::VMType vm = entry.GetVM();
-      if( de.GetTag().GetGroup()%2 && de.GetTag().GetElement() == 0 )
+      if( /*de.GetTag().GetGroup()%2 &&*/ de.GetTag().GetElement() == 0 )
         {
         assert( vr == VR::INVALID );
         vr = VR::UL;
@@ -209,10 +220,58 @@ void PrintImplicitDataElements(Printer &is, StructuredSet<ImplicitDataElement>&d
         }
       if( vr == VR::INVALID || VR::IsBinary(vr) || VR::IsASCII( vr ) )
         {
-        PrintImplicitDataElement(_os, de, printVR, entry.GetVR());
+      // TODO: FIXME FIXME FIXME
+      if ( de.GetTag().GetElement() == 0x0 )
+        {
+        if( vr == VR::INVALID ) // not found
+          {
+          vr = VR::UL;  // this is a group length (VR=UL,VM=1)
+          }
+        }
+      if( vr == VR::INVALID && entry.GetVR() != VR::INVALID )
+        {
+        vr = entry.GetVR();
+        }
+  // TODO FIXME FIXME FIXME
+  // Data Element (7FE0,0010) Pixel Data has the Value Representation 
+  // OW and shall be encoded in Little Endian.
+  //VM::VMType vm = VM::VM1;
+  if( t == Tag(0x7fe0,0x0010) )
+    {
+    assert( vr == VR::OB_OW );
+    vr = VR::OW;
+    vm = VM::VM1_n;
+    }
+  // Value of pixels not present in the native image added to an image 
+  // to pad to rectangular format. See C.7.5.1.1.2 for further explanation. 
+  // Note:     The Value Representation of this Attribute is determined 
+  // by the value of Pixel Representation (0028,0103).
+  if( vr == VR::US_SS )
+    {
+    if( t == Tag(0x0028,0x0120)  // Pixel Padding Value
+      || t == Tag(0x0028,0x0106) // Smallest Image Pixel Value
+      || t == Tag(0x0028,0x0107) // Largest Image Pixel Value
+    )
+      {
+      // TODO It would be nice to have a TagToVR<0x0028,0x0103>::VRType
+      // and TagToVM<0x0028,0x0103>::VMType ...
+      // to be able to have an independant Standard from implementation :)
+      const ImplicitDataElement &pixel_rep = 
+        ds.GetDataElement( Tag(0x0028, 0x0103) );
+      const Value &value = pixel_rep.GetValue();
+      const ByteValue &bv = static_cast<const ByteValue&>(value);
+      // FIXME:
+      unsigned short pixel_rep_value = *(unsigned short*)(bv.GetPointer());
+      assert( pixel_rep_value == 0x0 || pixel_rep_value == 0x1 );
+      vr = pixel_rep_value ? VR::SS : VR::US;
+      }
+    }
+
+        PrintImplicitDataElement(_os, de, printVR, vr /*entry.GetVR()*/, vm);
         }
       else
         {
+        abort();
         const Value& val = de.GetValue();
         _os << de.GetTag();
         if ( printVR )
@@ -277,6 +336,7 @@ void PrintExplicitDataElements(Printer &is, StructuredSet<ExplicitDataElement> &
       VR::VRType vr = entry.GetVR();
       VM::VMType vm = entry.GetVM();
       // TODO: FIXME FIXME FIXME
+      const Tag& t = de.GetTag();
       if ( de.GetTag().GetElement() == 0x0 )
         {
         if( vm == VM::VM0 ) // not found
@@ -289,6 +349,12 @@ void PrintExplicitDataElements(Printer &is, StructuredSet<ExplicitDataElement> &
           }
         }
       const VR::VRType vr_read = de.GetVR();
+  if( t == Tag(0x7fe0,0x0010) )
+    {
+    assert( vr & VR::OB_OW );
+    //vr = VR::OW;
+    vm = VM::VM1_n;
+    }
       if( de.GetTag().IsPrivate() )
         {
         assert( !de.GetTag().GetElement() || vr == VR::INVALID );
