@@ -18,8 +18,8 @@
   <xsl:template match="/">
     <xsl:variable name="has_owner" select="dict/entry/@owner"/>
     <xsl:variable name="has_retired" select="dict/entry/@retired"/>
-<head>
-    <STYLE TYPE="text/css">
+    <head>
+      <style type="text/css">
 tr.normal
    {
    font-style:normal;
@@ -28,9 +28,8 @@ tr.italic
    {
    font-style:italic;
    }
-</STYLE>
-
-</head>
+</style>
+    </head>
     <html>
       <body>
         <table border="1">
@@ -57,18 +56,18 @@ tr.italic
           <xsl:for-each select="dict/entry">
             <xsl:variable name="my_italic" value="@retired != 'false'"/>
             <xsl:variable name="my_class">
-            <xsl:choose>
-              <!--xsl:when test="$has_owner">
+              <xsl:choose>
+<!--xsl:when test="$has_owner">
               <xsl:text>normal</xsl:text>
               </xsl:when-->
-              <!--xsl:when test="$has_retired"-->
-              <xsl:when test="@retired !='false'">
+<!--xsl:when test="$has_retired"-->
+                <xsl:when test="@retired !='false'">
               italic
               </xsl:when>
-              <xsl:otherwise>
+                <xsl:otherwise>
               normal
               </xsl:otherwise>
-            </xsl:choose>
+              </xsl:choose>
             </xsl:variable>
             <tr class="{$my_class}">
               <td>
