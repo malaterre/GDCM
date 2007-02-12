@@ -21,9 +21,16 @@ Checked against:
 -->
 <!-- The main template that loop over all dict/entry -->
   <xsl:template match="/">
+    <xsl:text>
+#ifndef __gdcmTagToType_h
+#define __gdcmTagToType_h
+#include "gdcmVR.h"
+namespace gdcm {
+template &lt;uint16_t,uint16_t&gt; struct TagToType;
+</xsl:text>
     <xsl:for-each select="dict/entry">
-    <xsl:text>template &lt;&gt; struct TagToType&lt;</xsl:text>
-    <xsl:value-of select="@group"/><xsl:text>,</xsl:text>
+    <xsl:text>template &lt;&gt; struct TagToType&lt;0x</xsl:text>
+    <xsl:value-of select="@group"/><xsl:text>,0x</xsl:text>
     <xsl:value-of select="@element"/>
 <xsl:text>&gt; { typedef VRToType&lt;</xsl:text>
     <xsl:value-of select="representations/representation/@vr"/>
@@ -31,5 +38,9 @@ Checked against:
 <xsl:text>
 </xsl:text>
     </xsl:for-each>
+<xsl:text>
+} // end namespace gdcm
+#endif
+</xsl:text>
   </xsl:template>
 </xsl:stylesheet>
