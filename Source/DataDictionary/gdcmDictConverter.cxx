@@ -283,9 +283,9 @@ void DictConverter::WriteFooter()
   of << "      AddDictEntry( t, e );\n";
   of << "      n = " << name << "DataDict[++i];\n";
   of << "   }\n";
-  of << "   Tag t(0, 0);\n";
-  of << "   DictEntry e( \"\", (VR::VRType)0, (VM::VMType)0);\n";
-  of << "   AddDictEntry( t, e );\n";
+  of << "   //Tag t(0, 0);\n";
+  of << "   //DictEntry e( \"\", (VR::VRType)0, (VM::VMType)0);\n";
+  of << "   //AddDictEntry( t, e );\n";
   of << "}\n\n";
   of << "} //end gdcm namespace\n";
   of << "\n#endif\n";

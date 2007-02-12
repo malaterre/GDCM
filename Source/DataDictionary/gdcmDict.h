@@ -36,7 +36,10 @@ public:
   typedef std::map<Tag, DictEntry> MapDictEntry;
   Dict() { 
     FillDICOMV3DataDict();
-    //FillNIHDataDict();
+    FillNIHDataDict();
+   Tag t(0, 0);
+   DictEntry e( "", (VR::VRType)0, (VM::VMType)0);
+   AddDictEntry( t, e );
   }
 
   friend std::ostream& operator<<(std::ostream& _os, const Dict &_val);

@@ -44,9 +44,9 @@ void FillDataDict(Dict &dict, const DICT_ENTRY * const array)
       dict.AddDictEntry( t, e );
       n = array[++i];
    }
-   Tag t(0, 0);
-   DictEntry e( "", (VR::VRType)0, (VM::VMType)0);
-   dict.AddDictEntry( t, e );
+//   Tag t(0, 0);
+//   DictEntry e( "", (VR::VRType)0, (VM::VMType)0);
+//   dict.AddDictEntry( t, e );
 }
 
 @DEFAULT_DICTS@
