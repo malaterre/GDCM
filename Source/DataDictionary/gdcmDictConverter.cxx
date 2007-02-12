@@ -333,7 +333,8 @@ bool DictConverter::ConvertToCXX(const char *raw, std::string &cxx)
   VR::VRType vr;
   VM::VMType vm;
   Readuint16(raw, group);
-  assert( !(group%2) );
+  //assert( !(group%2) );
+  //
   Readuint16(raw+5, element);
   ReadVR(raw+10, vr);
   int len = 11+strlen(VR::GetVRString(vr));

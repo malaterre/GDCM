@@ -38,6 +38,7 @@ ADD_EXECUTABLE(PrepGroupName
 SET(DICT_LIST
   DICOMV3
   NIH
+  SPI
   )
 
 # List of file needed to get all dict into c++ code

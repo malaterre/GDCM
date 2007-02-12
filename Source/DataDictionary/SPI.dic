@@ -1,21 +1,23 @@
-0009 0010 LO 1 Comments
-0009 0015 LO 1 UID
-0009 0040 US 1 Data Object Type
-0009 0041 SH 1 Data Object Subtype
-0011 0010 LO 1 Organ
-0011 0015 LO 1 Allergy Indication
-0011 0020 LO 1 Pregnancy
-0029 0060 LO 1 Compression Algorithm
-
+0009 0010 LO 1 Private Creator
+0009 0011 LO 1 Private Creator
 0009 0012 LO 1 Private Creator
 0009 0013 LO 1 Private Creator
+0009 0015 LO 1 UID
 0009 0020 LO 1 Private Creator
 0009 0030 LO 1 Private Creator
 0009 0031 SH 1 Unknown (SIENET)
+0009 0040 US 1 Data Object Type
+0009 0041 SH 1 Data Object Subtype
+0009 1010 LO 1 Comments
+0009 1015 LO 1 SPI Image UID 
+0009 1110 LO 1 Recognition Code 
+0009 1130 US 1 Byte Offset Of Original Header
+0009 1131 US 1 Length Of Original Header 
+0009 1140 US 1 Byte Offset Of Pixelmatrix 
+0009 1141 UL 1 Length Of Pixelmatrix In Bytes 
 0009 1210 CS 1 Storage Mode
 0009 1226 DA 1 Last Move Date
 0009 1227 TM 1 Last Move Time
-
 0009 2010 LO 1 Private Creator
 0009 2030 CS 1 Unknown (IMA)
 0009 2031 SH 1 Unknown (TOPO)
@@ -26,4 +28,17 @@
 0009 2051 TM 1 Unknown (093757.981000)
 0009 3172 LO 1 Unknown 001S00OT002001082217540946
 0009 3175 LO 1 Unknown 001S60CT012001082209470996
-
+0011 0010 LO 1 Organ
+0011 0015 LO 1 Allergy Indication
+0011 0020 LO 1 Pregnancy
+0021 0010 LO 1 PrivateCreator
+0021 1010 DS 1 Zoom
+0021 1011 DS 1 Target
+0021 1020 US 1 ROI Mask
+0029 0060 LO 1 Compression Algorithm
+7001 0010 LO 1 PrivateCreator
+7001 1010 LO 1 Dummy
+7003 0010 LO 1 PrivateCreator
+7003 1010 LO 1 Header
+7005 0010 LO 1 PrivateCreator
+7005 1010 LO 1 Dummy

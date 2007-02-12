@@ -37,6 +37,7 @@ public:
   Dict() { 
     FillDICOMV3DataDict();
     FillNIHDataDict();
+  FillSPIDataDict();
    Tag t(0, 0);
    DictEntry e( "", (VR::VRType)0, (VM::VMType)0);
    AddDictEntry( t, e );
@@ -75,6 +76,7 @@ protected:
 private:
   void FillDICOMV3DataDict();
   void FillNIHDataDict();
+  void FillSPIDataDict();
 
   Dict &operator=(const Dict &_val); // purposely not implemented
   Dict(const Dict &_val); // purposely not implemented
