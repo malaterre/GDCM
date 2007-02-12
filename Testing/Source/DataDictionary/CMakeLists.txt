@@ -5,6 +5,7 @@ SET(DICT_TEST_SRCS
   TestDict
   TestDicts
   TestGroupDict
+  TestTagToType
   )
 
 # Add the include paths
