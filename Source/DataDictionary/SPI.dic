@@ -1,0 +1,29 @@
+0009 0010 LO 1 Comments
+0009 0015 LO 1 UID
+0009 0040 US 1 Data Object Type
+0009 0041 SH 1 Data Object Subtype
+0011 0010 LO 1 Organ
+0011 0015 LO 1 Allergy Indication
+0011 0020 LO 1 Pregnancy
+0029 0060 LO 1 Compression Algorithm
+
+0009 0012 LO 1 Private Creator
+0009 0013 LO 1 Private Creator
+0009 0020 LO 1 Private Creator
+0009 0030 LO 1 Private Creator
+0009 0031 SH 1 Unknown (SIENET)
+0009 1210 CS 1 Storage Mode
+0009 1226 DA 1 Last Move Date
+0009 1227 TM 1 Last Move Time
+
+0009 2010 LO 1 Private Creator
+0009 2030 CS 1 Unknown (IMA)
+0009 2031 SH 1 Unknown (TOPO)
+0009 2032 SH 1 Unknown (NONE)
+0009 2040 LO 1 Unknown (TOPO)
+0009 2042 LO 1 Unknown (2.9)
+0009 2050 DA 1 Unknown
+0009 2051 TM 1 Unknown (093757.981000)
+0009 3172 LO 1 Unknown 001S00OT002001082217540946
+0009 3175 LO 1 Unknown 001S60CT012001082209470996
+
