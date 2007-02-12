@@ -62,8 +62,12 @@ http://www.thescripts.com/forum/thread86881.html
         <xsl:when test="@version = 2">
           <xsl:text>2</xsl:text>
         </xsl:when>
-        <xsl:otherwise>
+        <xsl:when test="@version = 3">
           <xsl:text>3</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <!--message-->
+          <xsl:text>1</xsl:text>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:if test="@retired != &quot;false&quot;">
