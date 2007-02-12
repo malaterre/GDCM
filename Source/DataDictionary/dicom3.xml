@@ -279,13 +279,13 @@
       <representation vr="LT" vm="1"/>
     </representations>
   </entry>
-  <entry group="0000" element="51A0" retired="true" version="2">
+  <entry group="0000" element="51a0" retired="true" version="2">
     <description>Print</description>
     <representations>
       <representation vr="LT" vm="1"/>
     </representations>
   </entry>
-  <entry group="0000" element="51B0" retired="true" version="2">
+  <entry group="0000" element="51b0" retired="true" version="2">
     <description>Overlays</description>
     <representations>
       <representation vr="US" vm="1-n"/>
@@ -459,7 +459,7 @@
       <representation vr="UI" vm="1"/>
     </representations>
   </entry>
-  <entry group="0004" element="151A" retired="false" version="3">
+  <entry group="0004" element="151a" retired="false" version="3">
     <description>Referenced Related General SOP Class UID in File</description>
     <representations>
       <representation vr="UI" vm="1-n"/>
@@ -531,13 +531,13 @@
       <representation vr="UI" vm="1"/>
     </representations>
   </entry>
-  <entry group="0008" element="001A" retired="false" version="3">
+  <entry group="0008" element="001a" retired="false" version="3">
     <description>Related General SOP Class UID</description>
     <representations>
       <representation vr="UI" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0008" element="001B" retired="false" version="3">
+  <entry group="0008" element="001b" retired="false" version="3">
     <description>Original Specialized SOP Class UID</description>
     <representations>
       <representation vr="UI" vm="1"/>
@@ -579,7 +579,7 @@
       <representation vr="DA" vm="1"/>
     </representations>
   </entry>
-  <entry group="0008" element="002A" retired="false" version="3">
+  <entry group="0008" element="002a" retired="false" version="3">
     <description>Acquisition Date Time</description>
     <representations>
       <representation vr="DT" vm="1"/>
@@ -789,25 +789,25 @@
       <representation vr="DT" vm="1"/>
     </representations>
   </entry>
-  <entry group="0008" element="010B" retired="false" version="3">
+  <entry group="0008" element="010b" retired="false" version="3">
     <description>Context Group Extension Flag</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0008" element="010C" retired="false" version="3">
+  <entry group="0008" element="010c" retired="false" version="3">
     <description>Coding Scheme UID</description>
     <representations>
       <representation vr="UI" vm="1"/>
     </representations>
   </entry>
-  <entry group="0008" element="010D" retired="false" version="3">
+  <entry group="0008" element="010d" retired="false" version="3">
     <description>Context Group Extension Creator UID</description>
     <representations>
       <representation vr="UI" vm="1"/>
     </representations>
   </entry>
-  <entry group="0008" element="010F" retired="false" version="3">
+  <entry group="0008" element="010f" retired="false" version="3">
     <description>Context Identifier</description>
     <representations>
       <representation vr="CS" vm="1"/>
@@ -873,7 +873,7 @@
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0008" element="103E" retired="false" version="3">
+  <entry group="0008" element="103e" retired="false" version="3">
     <description>Series Description</description>
     <representations>
       <representation vr="LO" vm="1"/>
@@ -993,7 +993,7 @@
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0008" element="113A" retired="false" version="3">
+  <entry group="0008" element="113a" retired="false" version="3">
     <description>Referenced Waveform Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
@@ -1011,13 +1011,13 @@
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0008" element="114A" retired="false" version="3">
+  <entry group="0008" element="114a" retired="false" version="3">
     <description>Referenced Instance Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0008" element="114B" retired="false" version="3">
+  <entry group="0008" element="114b" retired="false" version="3">
     <description>Referenced Real World Value Mapping Instance Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
@@ -1035,7 +1035,7 @@
       <representation vr="UI" vm="1"/>
     </representations>
   </entry>
-  <entry group="0008" element="115A" retired="false" version="3">
+  <entry group="0008" element="115a" retired="false" version="3">
     <description>SOP Classes Supported</description>
     <representations>
       <representation vr="UI" vm="1-n"/>
@@ -1137,7 +1137,7 @@
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0008" element="212A" retired="false" version="3">
+  <entry group="0008" element="212a" retired="false" version="3">
     <description>Number of Views in Stage</description>
     <representations>
       <representation vr="IS" vm="1"/>
@@ -1605,31 +1605,31 @@
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="0010" element="21A0" retired="false" version="3">
+  <entry group="0010" element="21a0" retired="false" version="3">
     <description>Smoking Status</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0010" element="21B0" retired="false" version="3">
+  <entry group="0010" element="21b0" retired="false" version="3">
     <description>Additional Patient History</description>
     <representations>
       <representation vr="LT" vm="1"/>
     </representations>
   </entry>
-  <entry group="0010" element="21C0" retired="false" version="3">
+  <entry group="0010" element="21c0" retired="false" version="3">
     <description>Pregnancy Status</description>
     <representations>
       <representation vr="US" vm="1"/>
     </representations>
   </entry>
-  <entry group="0010" element="21D0" retired="false" version="3">
+  <entry group="0010" element="21d0" retired="false" version="3">
     <description>Last Menstrual Date</description>
     <representations>
       <representation vr="DA" vm="1"/>
     </representations>
   </entry>
-  <entry group="0010" element="21F0" retired="false" version="3">
+  <entry group="0010" element="21f0" retired="false" version="3">
     <description>Patient's Religious Preference</description>
     <representations>
       <representation vr="LO" vm="1"/>
@@ -1881,7 +1881,7 @@
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="002A" retired="false" version="3">
+  <entry group="0018" element="002a" retired="false" version="3">
     <description>Additional Drug Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
@@ -1947,7 +1947,7 @@
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="003A" retired="false" version="3">
+  <entry group="0018" element="003a" retired="false" version="3">
     <description>Intervention Description</description>
     <representations>
       <representation vr="CS" vm="1"/>
@@ -2169,13 +2169,13 @@
       <representation vr="LO" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0018" element="101A" retired="false" version="3">
+  <entry group="0018" element="101a" retired="false" version="3">
     <description>Hardcopy Device Software Version</description>
     <representations>
       <representation vr="LO" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0018" element="101B" retired="false" version="3">
+  <entry group="0018" element="101b" retired="false" version="3">
     <description>Hardcopy Device Manufacturer's Model Name</description>
     <representations>
       <representation vr="LO" vm="1"/>
@@ -2331,19 +2331,19 @@
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="106A" retired="false" version="3">
+  <entry group="0018" element="106a" retired="false" version="3">
     <description>Synchronization Trigger</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="106C" retired="false" version="3">
+  <entry group="0018" element="106c" retired="false" version="3">
     <description>Synchronization Channel</description>
     <representations>
       <representation vr="US" vm="2"/>
     </representations>
   </entry>
-  <entry group="0018" element="106E" retired="false" version="3">
+  <entry group="0018" element="106e" retired="false" version="3">
     <description>Trigger Sample Position</description>
     <representations>
       <representation vr="UL" vm="1"/>
@@ -2547,7 +2547,7 @@
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="113A" retired="false" version="3">
+  <entry group="0018" element="113a" retired="false" version="3">
     <description>Table Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
@@ -2649,13 +2649,13 @@
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="115A" retired="false" version="3">
+  <entry group="0018" element="115a" retired="false" version="3">
     <description>Radiation Mode</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="115E" retired="false" version="3">
+  <entry group="0018" element="115e" retired="false" version="3">
     <description>Image and Fluoroscopy Area Dose Product</description>
     <representations>
       <representation vr="DS" vm="1"/>
@@ -2739,13 +2739,13 @@
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="11A0" retired="false" version="3">
+  <entry group="0018" element="11a0" retired="false" version="3">
     <description>Body Part Thickness</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="11A2" retired="false" version="3">
+  <entry group="0018" element="11a2" retired="false" version="3">
     <description>Compression Force</description>
     <representations>
       <representation vr="DS" vm="1"/>
@@ -3381,19 +3381,19 @@
       <representation vr="UL" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="601A" retired="false" version="3">
+  <entry group="0018" element="601a" retired="false" version="3">
     <description>Region Location Min Y0</description>
     <representations>
       <representation vr="UL" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="601C" retired="false" version="3">
+  <entry group="0018" element="601c" retired="false" version="3">
     <description>Region Location Max X1</description>
     <representations>
       <representation vr="UL" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="601E" retired="false" version="3">
+  <entry group="0018" element="601e" retired="false" version="3">
     <description>Region Location Max Y1</description>
     <representations>
       <representation vr="UL" vm="1"/>
@@ -3429,19 +3429,19 @@
       <representation vr="FD" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="602A" retired="false" version="3">
+  <entry group="0018" element="602a" retired="false" version="3">
     <description>Reference Pixel Physical Value Y</description>
     <representations>
       <representation vr="FD" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="602C" retired="false" version="3">
+  <entry group="0018" element="602c" retired="false" version="3">
     <description>Physical Delta X</description>
     <representations>
       <representation vr="FD" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="602E" retired="false" version="3">
+  <entry group="0018" element="602e" retired="false" version="3">
     <description>Physical Delta Y</description>
     <representations>
       <representation vr="FD" vm="1"/>
@@ -3489,37 +3489,37 @@
       <representation vr="SL" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="603A" retired="true" version="3">
+  <entry group="0018" element="603a" retired="true" version="3">
     <description>Doppler Sample Volume Y Position (Retired)</description>
     <representations>
       <representation vr="UL" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="603B" retired="false" version="3">
+  <entry group="0018" element="603b" retired="false" version="3">
     <description>Doppler Sample Volume Y Position</description>
     <representations>
       <representation vr="SL" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="603C" retired="true" version="3">
+  <entry group="0018" element="603c" retired="true" version="3">
     <description>TM-Line Position X0 (Retired)</description>
     <representations>
       <representation vr="UL" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="603D" retired="false" version="3">
+  <entry group="0018" element="603d" retired="false" version="3">
     <description>TM-Line Position X0</description>
     <representations>
       <representation vr="SL" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="603E" retired="true" version="3">
+  <entry group="0018" element="603e" retired="true" version="3">
     <description>TM-Line Position Y0 (Retired)</description>
     <representations>
       <representation vr="UL" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="603F" retired="false" version="3">
+  <entry group="0018" element="603f" retired="false" version="3">
     <description>TM-Line Position Y0</description>
     <representations>
       <representation vr="SL" vm="1"/>
@@ -3567,19 +3567,19 @@
       <representation vr="UL" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="604A" retired="false" version="3">
+  <entry group="0018" element="604a" retired="false" version="3">
     <description>Pixel Component Range Stop</description>
     <representations>
       <representation vr="UL" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="604C" retired="false" version="3">
+  <entry group="0018" element="604c" retired="false" version="3">
     <description>Pixel Component Physical Units</description>
     <representations>
       <representation vr="US" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="604E" retired="false" version="3">
+  <entry group="0018" element="604e" retired="false" version="3">
     <description>Pixel Component Data Type</description>
     <representations>
       <representation vr="US" vm="1"/>
@@ -3615,7 +3615,7 @@
       <representation vr="UL" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0018" element="605A" retired="false" version="3">
+  <entry group="0018" element="605a" retired="false" version="3">
     <description>Table of Parameter Values</description>
     <representations>
       <representation vr="FL" vm="1-n"/>
@@ -3663,19 +3663,19 @@
       <representation vr="LT" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="700A" retired="false" version="3">
+  <entry group="0018" element="700a" retired="false" version="3">
     <description>Detector ID</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="700C" retired="false" version="3">
+  <entry group="0018" element="700c" retired="false" version="3">
     <description>Date of Last Detector Calibration </description>
     <representations>
       <representation vr="DA" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="700E" retired="false" version="3">
+  <entry group="0018" element="700e" retired="false" version="3">
     <description>Time of Last Detector Calibration</description>
     <representations>
       <representation vr="TM" vm="1"/>
@@ -3711,7 +3711,7 @@
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="701A" retired="false" version="3">
+  <entry group="0018" element="701a" retired="false" version="3">
     <description>Detector Binning</description>
     <representations>
       <representation vr="DS" vm="2"/>
@@ -3747,13 +3747,13 @@
       <representation vr="DS" vm="2"/>
     </representations>
   </entry>
-  <entry group="0018" element="702A" retired="false" version="3">
+  <entry group="0018" element="702a" retired="false" version="3">
     <description>Detector Manufacturer Name</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="702B" retired="false" version="3">
+  <entry group="0018" element="702b" retired="false" version="3">
     <description>Detector Manufacturer's Model Name</description>
     <representations>
       <representation vr="LO" vm="1"/>
@@ -3813,7 +3813,7 @@
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="704C" retired="false" version="3">
+  <entry group="0018" element="704c" retired="false" version="3">
     <description>Grid Focal Distance</description>
     <representations>
       <representation vr="DS" vm="1"/>
@@ -5277,19 +5277,19 @@
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="A001" retired="false" version="3">
+  <entry group="0018" element="a001" retired="false" version="3">
     <description>Contributing Equipment Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="A002" retired="false" version="3">
+  <entry group="0018" element="a002" retired="false" version="3">
     <description>Contribution DateTime</description>
     <representations>
       <representation vr="DT" vm="1"/>
     </representations>
   </entry>
-  <entry group="0018" element="A003" retired="false" version="3">
+  <entry group="0018" element="a003" retired="false" version="3">
     <description>Contribution Description</description>
     <representations>
       <representation vr="ST" vm="1"/>
@@ -5301,13 +5301,13 @@
       <representation vr="UL" vm="1"/>
     </representations>
   </entry>
-  <entry group="0020" element="000D" retired="false" version="3">
+  <entry group="0020" element="000d" retired="false" version="3">
     <description>Study Instance UID</description>
     <representations>
       <representation vr="UI" vm="1"/>
     </representations>
   </entry>
-  <entry group="0020" element="000E" retired="false" version="3">
+  <entry group="0020" element="000e" retired="false" version="3">
     <description>Series Instance UID</description>
     <representations>
       <representation vr="UI" vm="1"/>
@@ -5877,31 +5877,31 @@
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="0022" element="000A" retired="false" version="3">
+  <entry group="0022" element="000a" retired="false" version="3">
     <description>Emmetropic Magnification</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="0022" element="000B" retired="false" version="3">
+  <entry group="0022" element="000b" retired="false" version="3">
     <description>Intra Ocular Pressure</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="0022" element="000C" retired="false" version="3">
+  <entry group="0022" element="000c" retired="false" version="3">
     <description>Horizontal Field of View</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="0022" element="000D" retired="false" version="3">
+  <entry group="0022" element="000d" retired="false" version="3">
     <description>Pupil Dilated</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0022" element="000E" retired="false" version="3">
+  <entry group="0022" element="000e" retired="false" version="3">
     <description>Degree of Dilation</description>
     <representations>
       <representation vr="FL" vm="1"/>
@@ -5967,25 +5967,25 @@
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0022" element="001A" retired="false" version="3">
+  <entry group="0022" element="001a" retired="false" version="3">
     <description>Channel Description Code Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0022" element="001B" retired="false" version="3">
+  <entry group="0022" element="001b" retired="false" version="3">
     <description>Refractive State Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0022" element="001C" retired="false" version="3">
+  <entry group="0022" element="001c" retired="false" version="3">
     <description>Mydriatic Agent Code Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0022" element="001D" retired="false" version="3">
+  <entry group="0022" element="001d" retired="false" version="3">
     <description>Relative Image Position Code Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
@@ -6057,7 +6057,7 @@
       <representation vr="AT" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0028" element="000A" retired="false" version="3">
+  <entry group="0028" element="000a" retired="false" version="3">
     <description>Frame Dimension Pointer</description>
     <representations>
       <representation vr="AT" vm="1-n"/>
@@ -6681,7 +6681,7 @@
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0028" element="135A" retired="false" version="3">
+  <entry group="0028" element="135a" retired="false" version="3">
     <description>Spatial Locations Preserved</description>
     <representations>
       <representation vr="CS" vm="1"/>
@@ -6849,7 +6849,7 @@
       <representation vr="ST" vm="1"/>
     </representations>
   </entry>
-  <entry group="0028" element="7FE0" retired="false" version="3">
+  <entry group="0028" element="7fe0" retired="false" version="3">
     <description>Pixel Data Provider URL</description>
     <representations>
       <representation vr="UT" vm="1"/>
@@ -6975,13 +6975,13 @@
       <representation vr="UL" vm="1"/>
     </representations>
   </entry>
-  <entry group="0032" element="000A" retired="true" version="3">
+  <entry group="0032" element="000a" retired="true" version="3">
     <description>Study Status ID</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0032" element="000C" retired="true" version="3">
+  <entry group="0032" element="000c" retired="true" version="3">
     <description>Study Priority ID</description>
     <representations>
       <representation vr="CS" vm="1"/>
@@ -7167,31 +7167,31 @@
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="0038" element="001A" retired="true" version="3">
+  <entry group="0038" element="001a" retired="true" version="3">
     <description>Scheduled Admission Date</description>
     <representations>
       <representation vr="DA" vm="1"/>
     </representations>
   </entry>
-  <entry group="0038" element="001B" retired="true" version="3">
+  <entry group="0038" element="001b" retired="true" version="3">
     <description>Scheduled Admission Time</description>
     <representations>
       <representation vr="TM" vm="1"/>
     </representations>
   </entry>
-  <entry group="0038" element="001C" retired="true" version="3">
+  <entry group="0038" element="001c" retired="true" version="3">
     <description>Scheduled Discharge Date</description>
     <representations>
       <representation vr="DA" vm="1"/>
     </representations>
   </entry>
-  <entry group="0038" element="001D" retired="true" version="3">
+  <entry group="0038" element="001d" retired="true" version="3">
     <description>Scheduled Discharge Time</description>
     <representations>
       <representation vr="TM" vm="1"/>
     </representations>
   </entry>
-  <entry group="0038" element="001E" retired="true" version="3">
+  <entry group="0038" element="001e" retired="true" version="3">
     <description>Scheduled Patient Institution Residence</description>
     <representations>
       <representation vr="LO" vm="1"/>
@@ -7275,169 +7275,169 @@
       <representation vr="LT" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="0004" retired="false" version="3">
+  <entry group="003a" element="0004" retired="false" version="3">
     <description>Waveform Originality</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="0005" retired="false" version="3">
+  <entry group="003a" element="0005" retired="false" version="3">
     <description>Number of Waveform Channels</description>
     <representations>
       <representation vr="US" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="0010" retired="false" version="3">
+  <entry group="003a" element="0010" retired="false" version="3">
     <description>Number of Waveform Samples</description>
     <representations>
       <representation vr="UL" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="001A" retired="false" version="3">
+  <entry group="003a" element="001a" retired="false" version="3">
     <description>Sampling Frequency</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="0020" retired="false" version="3">
+  <entry group="003a" element="0020" retired="false" version="3">
     <description>Multiplex Group Label</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="0200" retired="false" version="3">
+  <entry group="003a" element="0200" retired="false" version="3">
     <description>Channel Definition Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="0202" retired="false" version="3">
+  <entry group="003a" element="0202" retired="false" version="3">
     <description>Waveform Channel Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="0203" retired="false" version="3">
+  <entry group="003a" element="0203" retired="false" version="3">
     <description>Channel Label</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="0205" retired="false" version="3">
+  <entry group="003a" element="0205" retired="false" version="3">
     <description>Channel Status</description>
     <representations>
       <representation vr="CS" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="003A" element="0208" retired="false" version="3">
+  <entry group="003a" element="0208" retired="false" version="3">
     <description>Channel Source Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="0209" retired="false" version="3">
+  <entry group="003a" element="0209" retired="false" version="3">
     <description>Channel Source Modifiers Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="020A" retired="false" version="3">
+  <entry group="003a" element="020a" retired="false" version="3">
     <description>Source Waveform Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="020C" retired="false" version="3">
+  <entry group="003a" element="020c" retired="false" version="3">
     <description>Channel Derivation Description</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="0210" retired="false" version="3">
+  <entry group="003a" element="0210" retired="false" version="3">
     <description>Channel Sensitivity</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="0211" retired="false" version="3">
+  <entry group="003a" element="0211" retired="false" version="3">
     <description>Channel Sensitivity Units Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="0212" retired="false" version="3">
+  <entry group="003a" element="0212" retired="false" version="3">
     <description>Channel Sensitivity Correction Factor</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="0213" retired="false" version="3">
+  <entry group="003a" element="0213" retired="false" version="3">
     <description>Channel Baseline</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="0214" retired="false" version="3">
+  <entry group="003a" element="0214" retired="false" version="3">
     <description>Channel Time Skew</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="0215" retired="false" version="3">
+  <entry group="003a" element="0215" retired="false" version="3">
     <description>Channel Sample Skew</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="0218" retired="false" version="3">
+  <entry group="003a" element="0218" retired="false" version="3">
     <description>Channel Offset</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="021A" retired="false" version="3">
+  <entry group="003a" element="021a" retired="false" version="3">
     <description>Waveform Bits Stored</description>
     <representations>
       <representation vr="US" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="0220" retired="false" version="3">
+  <entry group="003a" element="0220" retired="false" version="3">
     <description>Filter Low Frequency</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="0221" retired="false" version="3">
+  <entry group="003a" element="0221" retired="false" version="3">
     <description>Filter High Frequency</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="0222" retired="false" version="3">
+  <entry group="003a" element="0222" retired="false" version="3">
     <description>Notch Filter Frequency</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="0223" retired="false" version="3">
+  <entry group="003a" element="0223" retired="false" version="3">
     <description>Notch Filter Bandwidth</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="0300" retired="false" version="3">
+  <entry group="003a" element="0300" retired="false" version="3">
     <description>Multiplexed Audio Channels Description Code Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="0301" retired="false" version="3">
+  <entry group="003a" element="0301" retired="false" version="3">
     <description>Channel Identification Code</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="003A" element="0302" retired="false" version="3">
+  <entry group="003a" element="0302" retired="false" version="3">
     <description>Channel Mode</description>
     <representations>
       <representation vr="CS" vm="1"/>
@@ -7497,13 +7497,13 @@
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="000A" retired="false" version="3">
+  <entry group="0040" element="000a" retired="false" version="3">
     <description>Stage Code Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="000B" retired="false" version="3">
+  <entry group="0040" element="000b" retired="false" version="3">
     <description>Scheduled Performing Physician Identification Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
@@ -7701,7 +7701,7 @@
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="030E" retired="false" version="3">
+  <entry group="0040" element="030e" retired="false" version="3">
     <description>Exposure Dose Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
@@ -7785,7 +7785,7 @@
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="050A" retired="false" version="3">
+  <entry group="0040" element="050a" retired="false" version="3">
     <description>Specimen Accession Number</description>
     <representations>
       <representation vr="LO" vm="1"/>
@@ -7827,61 +7827,61 @@
       <representation vr="ST" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="059A" retired="false" version="3">
+  <entry group="0040" element="059a" retired="false" version="3">
     <description>Specimen Type Code Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="06FA" retired="false" version="3">
+  <entry group="0040" element="06fa" retired="false" version="3">
     <description>Slide Identifier</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="071A" retired="false" version="3">
+  <entry group="0040" element="071a" retired="false" version="3">
     <description>Image Center Point Coordinates Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="072A" retired="false" version="3">
+  <entry group="0040" element="072a" retired="false" version="3">
     <description>X Offset In Slide Coordinate System</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="073A" retired="false" version="3">
+  <entry group="0040" element="073a" retired="false" version="3">
     <description>Y Offset In Slide Coordinate System</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="074A" retired="false" version="3">
+  <entry group="0040" element="074a" retired="false" version="3">
     <description>Z Offset In Slide Coordinate System</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="08D8" retired="false" version="3">
+  <entry group="0040" element="08d8" retired="false" version="3">
     <description>Pixel Spacing Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="08DA" retired="false" version="3">
+  <entry group="0040" element="08da" retired="false" version="3">
     <description>Coordinate System Axis Code Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="08EA" retired="false" version="3">
+  <entry group="0040" element="08ea" retired="false" version="3">
     <description>Measurement Units Code Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="09F8" retired="false" version="3">
+  <entry group="0040" element="09f8" retired="false" version="3">
     <description>Vital Stain Code Sequence - Trial</description>
     <representations>
       <representation vr="SQ" vm="1"/>
@@ -7941,7 +7941,7 @@
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="100A" retired="false" version="3">
+  <entry group="0040" element="100a" retired="false" version="3">
     <description>Reason for Requested Procedure Code Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
@@ -8301,373 +8301,373 @@
       <representation vr="FD" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A010" retired="false" version="3">
+  <entry group="0040" element="a010" retired="false" version="3">
     <description>Relationship Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A027" retired="false" version="3">
+  <entry group="0040" element="a027" retired="false" version="3">
     <description>Verifying Organization</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A030" retired="false" version="3">
+  <entry group="0040" element="a030" retired="false" version="3">
     <description>Verification DateTime</description>
     <representations>
       <representation vr="DT" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A032" retired="false" version="3">
+  <entry group="0040" element="a032" retired="false" version="3">
     <description>Observation DateTime</description>
     <representations>
       <representation vr="DT" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A040" retired="false" version="3">
+  <entry group="0040" element="a040" retired="false" version="3">
     <description>Value Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A043" retired="false" version="3">
+  <entry group="0040" element="a043" retired="false" version="3">
     <description>Concept Name Code Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A050" retired="false" version="3">
+  <entry group="0040" element="a050" retired="false" version="3">
     <description>Continuity Of Content</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A073" retired="false" version="3">
+  <entry group="0040" element="a073" retired="false" version="3">
     <description>Verifying Observer Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A075" retired="false" version="3">
+  <entry group="0040" element="a075" retired="false" version="3">
     <description>Verifying Observer Name</description>
     <representations>
       <representation vr="PN" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A078" retired="false" version="3">
+  <entry group="0040" element="a078" retired="false" version="3">
     <description>Author Observer Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A07A" retired="false" version="3">
+  <entry group="0040" element="a07a" retired="false" version="3">
     <description>Participant Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A07C" retired="false" version="3">
+  <entry group="0040" element="a07c" retired="false" version="3">
     <description>Custodial Organization Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A080" retired="false" version="3">
+  <entry group="0040" element="a080" retired="false" version="3">
     <description>Participation Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A082" retired="false" version="3">
+  <entry group="0040" element="a082" retired="false" version="3">
     <description>Participation Datetime</description>
     <representations>
       <representation vr="DT" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A084" retired="false" version="3">
+  <entry group="0040" element="a084" retired="false" version="3">
     <description>Observer Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A088" retired="false" version="3">
+  <entry group="0040" element="a088" retired="false" version="3">
     <description>Verifying Observer Identification Code Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A090" retired="false" version="3">
+  <entry group="0040" element="a090" retired="false" version="3">
     <description>Equivalent CDA Document Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A0B0" retired="false" version="3">
+  <entry group="0040" element="a0b0" retired="false" version="3">
     <description>Referenced Waveform Channels</description>
     <representations>
       <representation vr="US" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0040" element="A120" retired="false" version="3">
+  <entry group="0040" element="a120" retired="false" version="3">
     <description>DateTime</description>
     <representations>
       <representation vr="DT" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A121" retired="false" version="3">
+  <entry group="0040" element="a121" retired="false" version="3">
     <description>Date</description>
     <representations>
       <representation vr="DA" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A122" retired="false" version="3">
+  <entry group="0040" element="a122" retired="false" version="3">
     <description>Time</description>
     <representations>
       <representation vr="TM" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A123" retired="false" version="3">
+  <entry group="0040" element="a123" retired="false" version="3">
     <description>Person Name</description>
     <representations>
       <representation vr="PN" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A124" retired="false" version="3">
+  <entry group="0040" element="a124" retired="false" version="3">
     <description>UID</description>
     <representations>
       <representation vr="UI" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A130" retired="false" version="3">
+  <entry group="0040" element="a130" retired="false" version="3">
     <description>Temporal Range Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A132" retired="false" version="3">
+  <entry group="0040" element="a132" retired="false" version="3">
     <description>Referenced Sample Positions</description>
     <representations>
       <representation vr="UL" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0040" element="A136" retired="false" version="3">
+  <entry group="0040" element="a136" retired="false" version="3">
     <description>Referenced Frame Numbers</description>
     <representations>
       <representation vr="US" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0040" element="A138" retired="false" version="3">
+  <entry group="0040" element="a138" retired="false" version="3">
     <description>Referenced Time Offsets</description>
     <representations>
       <representation vr="DS" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0040" element="A13A" retired="false" version="3">
+  <entry group="0040" element="a13a" retired="false" version="3">
     <description>Referenced Datetime</description>
     <representations>
       <representation vr="DT" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0040" element="A160" retired="false" version="3">
+  <entry group="0040" element="a160" retired="false" version="3">
     <description>Text Value</description>
     <representations>
       <representation vr="UT" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A168" retired="false" version="3">
+  <entry group="0040" element="a168" retired="false" version="3">
     <description>Concept Code Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A170" retired="false" version="3">
+  <entry group="0040" element="a170" retired="false" version="3">
     <description>Purpose of Reference Code Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A180" retired="false" version="3">
+  <entry group="0040" element="a180" retired="false" version="3">
     <description>Annotation Group Number</description>
     <representations>
       <representation vr="US" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A195" retired="false" version="3">
+  <entry group="0040" element="a195" retired="false" version="3">
     <description>Modifier Code Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A300" retired="false" version="3">
+  <entry group="0040" element="a300" retired="false" version="3">
     <description>Measured Value Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A301" retired="false" version="3">
+  <entry group="0040" element="a301" retired="false" version="3">
     <description>Numeric Value Qualifier Code Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A30A" retired="false" version="3">
+  <entry group="0040" element="a30a" retired="false" version="3">
     <description>Numeric Value</description>
     <representations>
       <representation vr="DS" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0040" element="A353" retired="false" version="3">
+  <entry group="0040" element="a353" retired="false" version="3">
     <description>Address - Trial</description>
     <representations>
       <representation vr="ST" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A354" retired="false" version="3">
+  <entry group="0040" element="a354" retired="false" version="3">
     <description>Telephone Number - Trial</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A360" retired="false" version="3">
+  <entry group="0040" element="a360" retired="false" version="3">
     <description>Predecessor Documents Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A370" retired="false" version="3">
+  <entry group="0040" element="a370" retired="false" version="3">
     <description>Referenced Request Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A372" retired="false" version="3">
+  <entry group="0040" element="a372" retired="false" version="3">
     <description>Performed Procedure Code Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A375" retired="false" version="3">
+  <entry group="0040" element="a375" retired="false" version="3">
     <description>Current Requested Procedure Evidence Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A385" retired="false" version="3">
+  <entry group="0040" element="a385" retired="false" version="3">
     <description>Pertinent Other Evidence Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A390" retired="false" version="3">
+  <entry group="0040" element="a390" retired="false" version="3">
     <description>HL7 Structured Document Reference Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A491" retired="false" version="3">
+  <entry group="0040" element="a491" retired="false" version="3">
     <description>Completion Flag</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A492" retired="false" version="3">
+  <entry group="0040" element="a492" retired="false" version="3">
     <description>Completion Flag Description</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A493" retired="false" version="3">
+  <entry group="0040" element="a493" retired="false" version="3">
     <description>Verification Flag</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A504" retired="false" version="3">
+  <entry group="0040" element="a504" retired="false" version="3">
     <description>Content Template Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A525" retired="false" version="3">
+  <entry group="0040" element="a525" retired="false" version="3">
     <description>Identical Documents Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="A730" retired="false" version="3">
+  <entry group="0040" element="a730" retired="false" version="3">
     <description>Content Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="B020" retired="false" version="3">
+  <entry group="0040" element="b020" retired="false" version="3">
     <description>Annotation Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="DB00" retired="false" version="3">
+  <entry group="0040" element="db00" retired="false" version="3">
     <description>Template Identifier</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="DB06" retired="true" version="3">
+  <entry group="0040" element="db06" retired="true" version="3">
     <description>Template Version</description>
     <representations>
       <representation vr="DT" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="DB07" retired="true" version="3">
+  <entry group="0040" element="db07" retired="true" version="3">
     <description>Template Local Version</description>
     <representations>
       <representation vr="DT" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="DB0B" retired="true" version="3">
+  <entry group="0040" element="db0b" retired="true" version="3">
     <description>Template Extension Flag</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="DB0C" retired="true" version="3">
+  <entry group="0040" element="db0c" retired="true" version="3">
     <description>Template Extension Organization UID</description>
     <representations>
       <representation vr="UI" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="DB0D" retired="true" version="3">
+  <entry group="0040" element="db0d" retired="true" version="3">
     <description>Template Extension Creator UID</description>
     <representations>
       <representation vr="UI" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="DB73" retired="false" version="3">
+  <entry group="0040" element="db73" retired="false" version="3">
     <description>Referenced Content Item Identifier</description>
     <representations>
       <representation vr="UL" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0040" element="E001" retired="false" version="3">
+  <entry group="0040" element="e001" retired="false" version="3">
     <description>HL7 Instance Identifier</description>
     <representations>
       <representation vr="ST" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="E004" retired="false" version="3">
+  <entry group="0040" element="e004" retired="false" version="3">
     <description>HL7 Document Effective Time</description>
     <representations>
       <representation vr="DT" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="E006" retired="false" version="3">
+  <entry group="0040" element="e006" retired="false" version="3">
     <description>HL7 Document Type Code Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0040" element="E010" retired="false" version="3">
+  <entry group="0040" element="e010" retired="false" version="3">
     <description>Retrieve URI</description>
     <representations>
       <representation vr="UT" vm="1"/>
@@ -9423,7 +9423,7 @@
       <representation vr="SL" vm="2"/>
     </representations>
   </entry>
-  <entry group="0070" element="005A" retired="false" version="3">
+  <entry group="0070" element="005a" retired="false" version="3">
     <description>Displayed Area Selection Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
@@ -9537,25 +9537,25 @@
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0070" element="030A" retired="false" version="3">
+  <entry group="0070" element="030a" retired="false" version="3">
     <description>Matrix Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0070" element="030C" retired="false" version="3">
+  <entry group="0070" element="030c" retired="false" version="3">
     <description>Frame of Reference Transformation Matrix Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0070" element="030D" retired="false" version="3">
+  <entry group="0070" element="030d" retired="false" version="3">
     <description>Registration Type Code Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0070" element="030F" retired="false" version="3">
+  <entry group="0070" element="030f" retired="false" version="3">
     <description>Fiducial Description</description>
     <representations>
       <representation vr="ST" vm="1"/>
@@ -9591,19 +9591,19 @@
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0070" element="031A" retired="false" version="3">
+  <entry group="0070" element="031a" retired="false" version="3">
     <description>Fiducial UID</description>
     <representations>
       <representation vr="UI" vm="1"/>
     </representations>
   </entry>
-  <entry group="0070" element="031C" retired="false" version="3">
+  <entry group="0070" element="031c" retired="false" version="3">
     <description>Fiducial Set Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0070" element="031E" retired="false" version="3">
+  <entry group="0070" element="031e" retired="false" version="3">
     <description>Fiducial Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
@@ -9663,19 +9663,19 @@
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="0072" element="000A" retired="false" version="3">
+  <entry group="0072" element="000a" retired="false" version="3">
     <description>Hanging Protocol Creation Datetime</description>
     <representations>
       <representation vr="DT" vm="1"/>
     </representations>
   </entry>
-  <entry group="0072" element="000C" retired="false" version="3">
+  <entry group="0072" element="000c" retired="false" version="3">
     <description>Hanging Protocol Definition Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="0072" element="000E" retired="false" version="3">
+  <entry group="0072" element="000e" retired="false" version="3">
     <description>Hanging Protocol User Identification Code Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
@@ -9753,19 +9753,19 @@
       <representation vr="US" vm="2"/>
     </representations>
   </entry>
-  <entry group="0072" element="003A" retired="false" version="3">
+  <entry group="0072" element="003a" retired="false" version="3">
     <description>Relative Time Units</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="0072" element="003C" retired="false" version="3">
+  <entry group="0072" element="003c" retired="false" version="3">
     <description>Abstract Prior Value</description>
     <representations>
       <representation vr="SS" vm="2"/>
     </representations>
   </entry>
-  <entry group="0072" element="003E" retired="false" version="3">
+  <entry group="0072" element="003e" retired="false" version="3">
     <description>Abstract Prior Code Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
@@ -9831,19 +9831,19 @@
       <representation vr="LT" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0072" element="006A" retired="false" version="3">
+  <entry group="0072" element="006a" retired="false" version="3">
     <description>Selector PN Value</description>
     <representations>
       <representation vr="PN" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0072" element="006C" retired="false" version="3">
+  <entry group="0072" element="006c" retired="false" version="3">
     <description>Selector SH Value</description>
     <representations>
       <representation vr="SH" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0072" element="006E" retired="false" version="3">
+  <entry group="0072" element="006e" retired="false" version="3">
     <description>Selector ST Value</description>
     <representations>
       <representation vr="ST" vm="1-n"/>
@@ -9879,19 +9879,19 @@
       <representation vr="UL" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0072" element="007A" retired="false" version="3">
+  <entry group="0072" element="007a" retired="false" version="3">
     <description>Selector US Value</description>
     <representations>
       <representation vr="US" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0072" element="007C" retired="false" version="3">
+  <entry group="0072" element="007c" retired="false" version="3">
     <description>Selector SL Value</description>
     <representations>
       <representation vr="SL" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="0072" element="007E" retired="false" version="3">
+  <entry group="0072" element="007e" retired="false" version="3">
     <description>Selector SS Value</description>
     <representations>
       <representation vr="SS" vm="1-n"/>
@@ -9933,19 +9933,19 @@
       <representation vr="FD" vm="4"/>
     </representations>
   </entry>
-  <entry group="0072" element="010A" retired="false" version="3">
+  <entry group="0072" element="010a" retired="false" version="3">
     <description>Screen Minimum Grayscale Bit Depth</description>
     <representations>
       <representation vr="US" vm="1"/>
     </representations>
   </entry>
-  <entry group="0072" element="010C" retired="false" version="3">
+  <entry group="0072" element="010c" retired="false" version="3">
     <description>Screen Minimum Color Bit Depth</description>
     <representations>
       <representation vr="US" vm="1"/>
     </representations>
   </entry>
-  <entry group="0072" element="010E" retired="false" version="3">
+  <entry group="0072" element="010e" retired="false" version="3">
     <description>Application Maximum Repaint Time</description>
     <representations>
       <representation vr="US" vm="1"/>
@@ -10509,7 +10509,7 @@
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="2000" element="001E" retired="false" version="3">
+  <entry group="2000" element="001e" retired="false" version="3">
     <description>Printer Configuration Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
@@ -10581,37 +10581,37 @@
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="2000" element="006A" retired="true" version="3">
+  <entry group="2000" element="006a" retired="true" version="3">
     <description>Image Box Presentation LUT Flag</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="2000" element="00A0" retired="false" version="3">
+  <entry group="2000" element="00a0" retired="false" version="3">
     <description>Memory Bit Depth</description>
     <representations>
       <representation vr="US" vm="1"/>
     </representations>
   </entry>
-  <entry group="2000" element="00A1" retired="false" version="3">
+  <entry group="2000" element="00a1" retired="false" version="3">
     <description>Printing Bit Depth</description>
     <representations>
       <representation vr="US" vm="1"/>
     </representations>
   </entry>
-  <entry group="2000" element="00A2" retired="false" version="3">
+  <entry group="2000" element="00a2" retired="false" version="3">
     <description>Media Installed Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="2000" element="00A4" retired="false" version="3">
+  <entry group="2000" element="00a4" retired="false" version="3">
     <description>Other Media Available Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="2000" element="00A8" retired="false" version="3">
+  <entry group="2000" element="00a8" retired="false" version="3">
     <description>Supported Image Display Formats Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
@@ -10683,25 +10683,25 @@
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="2010" element="00A6" retired="false" version="3">
+  <entry group="2010" element="00a6" retired="false" version="3">
     <description>Default Magnification Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="2010" element="00A7" retired="false" version="3">
+  <entry group="2010" element="00a7" retired="false" version="3">
     <description>Other Magnification Types Available</description>
     <representations>
       <representation vr="CS" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="2010" element="00A8" retired="false" version="3">
+  <entry group="2010" element="00a8" retired="false" version="3">
     <description>Default Smoothing Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="2010" element="00A9" retired="false" version="3">
+  <entry group="2010" element="00a9" retired="false" version="3">
     <description>Other Smoothing Types Available</description>
     <representations>
       <representation vr="CS" vm="1-n"/>
@@ -10755,7 +10755,7 @@
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="2010" element="015E" retired="false" version="3">
+  <entry group="2010" element="015e" retired="false" version="3">
     <description>Illumination</description>
     <representations>
       <representation vr="US" vm="1"/>
@@ -10827,13 +10827,13 @@
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="2020" element="00A0" retired="false" version="3">
+  <entry group="2020" element="00a0" retired="false" version="3">
     <description>Requested Image Size Flag</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="2020" element="00A2" retired="false" version="3">
+  <entry group="2020" element="00a2" retired="false" version="3">
     <description>Decimate/Crop Result</description>
     <representations>
       <representation vr="CS" vm="1"/>
@@ -11133,13 +11133,13 @@
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="2130" element="00A0" retired="true" version="3">
+  <entry group="2130" element="00a0" retired="true" version="3">
     <description>Proposed Study Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="2130" element="00C0" retired="true" version="3">
+  <entry group="2130" element="00c0" retired="true" version="3">
     <description>Original Image Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
@@ -11199,37 +11199,37 @@
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="2200" element="000A" retired="false" version="3">
+  <entry group="2200" element="000a" retired="false" version="3">
     <description>Preserve Composite Instances After Media Creation</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="2200" element="000B" retired="false" version="3">
+  <entry group="2200" element="000b" retired="false" version="3">
     <description>Total Number of Pieces of Media Created</description>
     <representations>
       <representation vr="US" vm="1"/>
     </representations>
   </entry>
-  <entry group="2200" element="000C" retired="false" version="3">
+  <entry group="2200" element="000c" retired="false" version="3">
     <description>Requested Media Application Profile</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="2200" element="000D" retired="false" version="3">
+  <entry group="2200" element="000d" retired="false" version="3">
     <description>Referenced Storage Media Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="2200" element="000E" retired="false" version="3">
+  <entry group="2200" element="000e" retired="false" version="3">
     <description>Failure Attributes</description>
     <representations>
       <representation vr="AT" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="2200" element="000F" retired="false" version="3">
+  <entry group="2200" element="000f" retired="false" version="3">
     <description>Allow Lossy Compression</description>
     <representations>
       <representation vr="CS" vm="1"/>
@@ -11259,25 +11259,25 @@
       <representation vr="ST" vm="1"/>
     </representations>
   </entry>
-  <entry group="3002" element="000A" retired="false" version="3">
+  <entry group="3002" element="000a" retired="false" version="3">
     <description>Reported Values Origin</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="3002" element="000C" retired="false" version="3">
+  <entry group="3002" element="000c" retired="false" version="3">
     <description>RT Image Plane</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="3002" element="000D" retired="false" version="3">
+  <entry group="3002" element="000d" retired="false" version="3">
     <description>X-Ray Image Receptor Translation</description>
     <representations>
       <representation vr="DS" vm="3"/>
     </representations>
   </entry>
-  <entry group="3002" element="000E" retired="false" version="3">
+  <entry group="3002" element="000e" retired="false" version="3">
     <description>X-Ray Image Receptor Angle</description>
     <representations>
       <representation vr="DS" vm="1"/>
@@ -11403,19 +11403,19 @@
       <representation vr="DS" vm="3"/>
     </representations>
   </entry>
-  <entry group="3004" element="000A" retired="false" version="3">
+  <entry group="3004" element="000a" retired="false" version="3">
     <description>Dose Summation Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="3004" element="000C" retired="false" version="3">
+  <entry group="3004" element="000c" retired="false" version="3">
     <description>GridFrame Offset Vector</description>
     <representations>
       <representation vr="DS" vm="2-n"/>
     </representations>
   </entry>
-  <entry group="3004" element="000E" retired="false" version="3">
+  <entry group="3004" element="000e" retired="false" version="3">
     <description>Dose Grid Scaling</description>
     <representations>
       <representation vr="DS" vm="1"/>
@@ -11595,13 +11595,13 @@
       <representation vr="ST" vm="1"/>
     </representations>
   </entry>
-  <entry group="3006" element="002A" retired="false" version="3">
+  <entry group="3006" element="002a" retired="false" version="3">
     <description>ROI Display Color</description>
     <representations>
       <representation vr="IS" vm="3"/>
     </representations>
   </entry>
-  <entry group="3006" element="002C" retired="false" version="3">
+  <entry group="3006" element="002c" retired="false" version="3">
     <description>ROI Volume</description>
     <representations>
       <representation vr="DS" vm="1"/>
@@ -11721,67 +11721,67 @@
       <representation vr="ST" vm="1"/>
     </representations>
   </entry>
-  <entry group="3006" element="00A0" retired="false" version="3">
+  <entry group="3006" element="00a0" retired="false" version="3">
     <description>Related RT ROI Observations Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="3006" element="00A4" retired="false" version="3">
+  <entry group="3006" element="00a4" retired="false" version="3">
     <description>RT ROI Interpreted Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="3006" element="00A6" retired="false" version="3">
+  <entry group="3006" element="00a6" retired="false" version="3">
     <description>ROI Interpreter</description>
     <representations>
       <representation vr="PN" vm="1"/>
     </representations>
   </entry>
-  <entry group="3006" element="00B0" retired="false" version="3">
+  <entry group="3006" element="00b0" retired="false" version="3">
     <description>ROI Physical Properties Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="3006" element="00B2" retired="false" version="3">
+  <entry group="3006" element="00b2" retired="false" version="3">
     <description>ROI Physical Property</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="3006" element="00B4" retired="false" version="3">
+  <entry group="3006" element="00b4" retired="false" version="3">
     <description>ROI Physical Property Value</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="3006" element="00C0" retired="false" version="3">
+  <entry group="3006" element="00c0" retired="false" version="3">
     <description>Frame of Reference Relationship Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="3006" element="00C2" retired="false" version="3">
+  <entry group="3006" element="00c2" retired="false" version="3">
     <description>Related Frame of Reference UID</description>
     <representations>
       <representation vr="UI" vm="1"/>
     </representations>
   </entry>
-  <entry group="3006" element="00C4" retired="false" version="3">
+  <entry group="3006" element="00c4" retired="false" version="3">
     <description>Frame of Reference Transformation Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="3006" element="00C6" retired="false" version="3">
+  <entry group="3006" element="00c6" retired="false" version="3">
     <description>Frame of Reference Transformation Matrix</description>
     <representations>
       <representation vr="DS" vm="16"/>
     </representations>
   </entry>
-  <entry group="3006" element="00C8" retired="false" version="3">
+  <entry group="3006" element="00c8" retired="false" version="3">
     <description>Frame of Reference Transformation Comment</description>
     <representations>
       <representation vr="LO" vm="1"/>
@@ -11841,19 +11841,19 @@
       <representation vr="TM" vm="1"/>
     </representations>
   </entry>
-  <entry group="3008" element="002A" retired="false" version="3">
+  <entry group="3008" element="002a" retired="false" version="3">
     <description>Treatment Termination Status</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="3008" element="002B" retired="false" version="3">
+  <entry group="3008" element="002b" retired="false" version="3">
     <description>Treatment Termination Code</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="3008" element="002C" retired="false" version="3">
+  <entry group="3008" element="002c" retired="false" version="3">
     <description>Treatment Verification Status</description>
     <representations>
       <representation vr="CS" vm="1"/>
@@ -11889,13 +11889,13 @@
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="3008" element="003A" retired="false" version="3">
+  <entry group="3008" element="003a" retired="false" version="3">
     <description>Specified Treatment  Time</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="3008" element="003B" retired="false" version="3">
+  <entry group="3008" element="003b" retired="false" version="3">
     <description>Delivered Treatment Time</description>
     <representations>
       <representation vr="DS" vm="1"/>
@@ -11973,7 +11973,7 @@
       <representation vr="DA" vm="1"/>
     </representations>
   </entry>
-  <entry group="3008" element="005A" retired="false" version="3">
+  <entry group="3008" element="005a" retired="false" version="3">
     <description>Number of Fractions Delivered</description>
     <representations>
       <representation vr="IS" vm="1"/>
@@ -12027,7 +12027,7 @@
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="3008" element="006A" retired="false" version="3">
+  <entry group="3008" element="006a" retired="false" version="3">
     <description>Correction Value</description>
     <representations>
       <representation vr="FL" vm="1"/>
@@ -12063,7 +12063,7 @@
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="3008" element="007A" retired="false" version="3">
+  <entry group="3008" element="007a" retired="false" version="3">
     <description>End Meterset</description>
     <representations>
       <representation vr="DS" vm="1"/>
@@ -12093,55 +12093,55 @@
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="3008" element="00A0" retired="false" version="3">
+  <entry group="3008" element="00a0" retired="false" version="3">
     <description>Beam Limiting Device Leaf Pairs Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="3008" element="00B0" retired="false" version="3">
+  <entry group="3008" element="00b0" retired="false" version="3">
     <description>Recorded Wedge Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="3008" element="00C0" retired="false" version="3">
+  <entry group="3008" element="00c0" retired="false" version="3">
     <description>Recorded Compensator Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="3008" element="00D0" retired="false" version="3">
+  <entry group="3008" element="00d0" retired="false" version="3">
     <description>Recorded Block Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="3008" element="00E0" retired="false" version="3">
+  <entry group="3008" element="00e0" retired="false" version="3">
     <description>Treatment Summary Measured Dose Reference Sequence </description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="3008" element="00F0" retired="false" version="3">
+  <entry group="3008" element="00f0" retired="false" version="3">
     <description>Recorded Snout Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="3008" element="00F2" retired="false" version="3">
+  <entry group="3008" element="00f2" retired="false" version="3">
     <description>Recorded Range Shifter Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="3008" element="00F4" retired="false" version="3">
+  <entry group="3008" element="00f4" retired="false" version="3">
     <description>Recorded Lateral Spreading Device Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="3008" element="00F6" retired="false" version="3">
+  <entry group="3008" element="00f6" retired="false" version="3">
     <description>Recorded Range Modulator Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
@@ -12213,13 +12213,13 @@
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="3008" element="013A" retired="false" version="3">
+  <entry group="3008" element="013a" retired="false" version="3">
     <description>Specified Pulse Repetition Interval</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="3008" element="013C" retired="false" version="3">
+  <entry group="3008" element="013c" retired="false" version="3">
     <description>Delivered Pulse Repetition Interval</description>
     <representations>
       <representation vr="DS" vm="1"/>
@@ -12333,2197 +12333,2197 @@
       <representation vr="TM" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0002" retired="false" version="3">
+  <entry group="300a" element="0002" retired="false" version="3">
     <description>RT Plan Label</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0003" retired="false" version="3">
+  <entry group="300a" element="0003" retired="false" version="3">
     <description>RT Plan Name</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0004" retired="false" version="3">
+  <entry group="300a" element="0004" retired="false" version="3">
     <description>RT Plan Description</description>
     <representations>
       <representation vr="ST" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0006" retired="false" version="3">
+  <entry group="300a" element="0006" retired="false" version="3">
     <description>RT Plan Date</description>
     <representations>
       <representation vr="DA" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0007" retired="false" version="3">
+  <entry group="300a" element="0007" retired="false" version="3">
     <description>RT Plan Time</description>
     <representations>
       <representation vr="TM" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0009" retired="false" version="3">
+  <entry group="300a" element="0009" retired="false" version="3">
     <description>Treatment Protocols</description>
     <representations>
       <representation vr="LO" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="300A" element="000A" retired="false" version="3">
+  <entry group="300a" element="000a" retired="false" version="3">
     <description>Plan Intent</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="000B" retired="false" version="3">
+  <entry group="300a" element="000b" retired="false" version="3">
     <description>Treatment Sites</description>
     <representations>
       <representation vr="LO" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="300A" element="000C" retired="false" version="3">
+  <entry group="300a" element="000c" retired="false" version="3">
     <description>RT Plan Geometry</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="000E" retired="false" version="3">
+  <entry group="300a" element="000e" retired="false" version="3">
     <description>Prescription Description</description>
     <representations>
       <representation vr="ST" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0010" retired="false" version="3">
+  <entry group="300a" element="0010" retired="false" version="3">
     <description>Dose Reference Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0012" retired="false" version="3">
+  <entry group="300a" element="0012" retired="false" version="3">
     <description>Dose Reference Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0013" retired="false" version="3">
+  <entry group="300a" element="0013" retired="false" version="3">
     <description>Dose Reference UID</description>
     <representations>
       <representation vr="UI" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0014" retired="false" version="3">
+  <entry group="300a" element="0014" retired="false" version="3">
     <description>Dose Reference Structure Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0015" retired="false" version="3">
+  <entry group="300a" element="0015" retired="false" version="3">
     <description>Nominal Beam Energy Unit</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0016" retired="false" version="3">
+  <entry group="300a" element="0016" retired="false" version="3">
     <description>Dose Reference Description</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0018" retired="false" version="3">
+  <entry group="300a" element="0018" retired="false" version="3">
     <description>Dose Reference Point Coordinates</description>
     <representations>
       <representation vr="DS" vm="3"/>
     </representations>
   </entry>
-  <entry group="300A" element="001A" retired="false" version="3">
+  <entry group="300a" element="001a" retired="false" version="3">
     <description>Nominal Prior Dose</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0020" retired="false" version="3">
+  <entry group="300a" element="0020" retired="false" version="3">
     <description>Dose Reference Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0021" retired="false" version="3">
+  <entry group="300a" element="0021" retired="false" version="3">
     <description>Constraint Weight</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0022" retired="false" version="3">
+  <entry group="300a" element="0022" retired="false" version="3">
     <description>Delivery Warning Dose</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0023" retired="false" version="3">
+  <entry group="300a" element="0023" retired="false" version="3">
     <description>Delivery Maximum Dose</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0025" retired="false" version="3">
+  <entry group="300a" element="0025" retired="false" version="3">
     <description>Target Minimum Dose</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0026" retired="false" version="3">
+  <entry group="300a" element="0026" retired="false" version="3">
     <description>Target Prescription Dose</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0027" retired="false" version="3">
+  <entry group="300a" element="0027" retired="false" version="3">
     <description>Target Maximum Dose</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0028" retired="false" version="3">
+  <entry group="300a" element="0028" retired="false" version="3">
     <description>Target Underdose Volume Fraction</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="002A" retired="false" version="3">
+  <entry group="300a" element="002a" retired="false" version="3">
     <description>Organ at Risk Full-volume Dose</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="002B" retired="false" version="3">
+  <entry group="300a" element="002b" retired="false" version="3">
     <description>Organ at Risk Limit Dose</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="002C" retired="false" version="3">
+  <entry group="300a" element="002c" retired="false" version="3">
     <description>Organ at Risk Maximum Dose</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="002D" retired="false" version="3">
+  <entry group="300a" element="002d" retired="false" version="3">
     <description>Organ at Risk Overdose Volume Fraction</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0040" retired="false" version="3">
+  <entry group="300a" element="0040" retired="false" version="3">
     <description>Tolerance Table Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0042" retired="false" version="3">
+  <entry group="300a" element="0042" retired="false" version="3">
     <description>Tolerance Table Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0043" retired="false" version="3">
+  <entry group="300a" element="0043" retired="false" version="3">
     <description>Tolerance Table Label</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0044" retired="false" version="3">
+  <entry group="300a" element="0044" retired="false" version="3">
     <description>Gantry Angle Tolerance</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0046" retired="false" version="3">
+  <entry group="300a" element="0046" retired="false" version="3">
     <description>Beam Limiting Device Angle Tolerance</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0048" retired="false" version="3">
+  <entry group="300a" element="0048" retired="false" version="3">
     <description>Beam Limiting Device Tolerance Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="004A" retired="false" version="3">
+  <entry group="300a" element="004a" retired="false" version="3">
     <description>Beam Limiting Device Position Tolerance</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="004B" retired="false" version="3">
+  <entry group="300a" element="004b" retired="false" version="3">
     <description>Snout Position Tolerance</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="004C" retired="false" version="3">
+  <entry group="300a" element="004c" retired="false" version="3">
     <description>Patient Support Angle Tolerance</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="004E" retired="false" version="3">
+  <entry group="300a" element="004e" retired="false" version="3">
     <description>Table Top Eccentric Angle Tolerance</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="004F" retired="false" version="3">
+  <entry group="300a" element="004f" retired="false" version="3">
     <description>Table Top Pitch Angle Tolerance</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0050" retired="false" version="3">
+  <entry group="300a" element="0050" retired="false" version="3">
     <description>Table Top Roll Angle Tolerance</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0051" retired="false" version="3">
+  <entry group="300a" element="0051" retired="false" version="3">
     <description>Table Top Vertical Position Tolerance</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0052" retired="false" version="3">
+  <entry group="300a" element="0052" retired="false" version="3">
     <description>Table Top Longitudinal Position Tolerance</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0053" retired="false" version="3">
+  <entry group="300a" element="0053" retired="false" version="3">
     <description>Table Top Lateral Position Tolerance</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0055" retired="false" version="3">
+  <entry group="300a" element="0055" retired="false" version="3">
     <description>RT Plan Relationship</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0070" retired="false" version="3">
+  <entry group="300a" element="0070" retired="false" version="3">
     <description>Fraction Group Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0071" retired="false" version="3">
+  <entry group="300a" element="0071" retired="false" version="3">
     <description>Fraction Group Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0072" retired="false" version="3">
+  <entry group="300a" element="0072" retired="false" version="3">
     <description>Fraction Group Description</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0078" retired="false" version="3">
+  <entry group="300a" element="0078" retired="false" version="3">
     <description>Number of Fractions Planned</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0079" retired="false" version="3">
+  <entry group="300a" element="0079" retired="false" version="3">
     <description>Number of Fraction Pattern Digits Per Day</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="007A" retired="false" version="3">
+  <entry group="300a" element="007a" retired="false" version="3">
     <description>Repeat Fraction Cycle Length</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="007B" retired="false" version="3">
+  <entry group="300a" element="007b" retired="false" version="3">
     <description>Fraction Pattern</description>
     <representations>
       <representation vr="LT" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0080" retired="false" version="3">
+  <entry group="300a" element="0080" retired="false" version="3">
     <description>Number of Beams</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0082" retired="false" version="3">
+  <entry group="300a" element="0082" retired="false" version="3">
     <description>Beam Dose Specification Point</description>
     <representations>
       <representation vr="DS" vm="3"/>
     </representations>
   </entry>
-  <entry group="300A" element="0084" retired="false" version="3">
+  <entry group="300a" element="0084" retired="false" version="3">
     <description>Beam Dose</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0086" retired="false" version="3">
+  <entry group="300a" element="0086" retired="false" version="3">
     <description>Beam Meterset</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0088" retired="false" version="3">
+  <entry group="300a" element="0088" retired="false" version="3">
     <description>Beam Dose Point Depth</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0089" retired="false" version="3">
+  <entry group="300a" element="0089" retired="false" version="3">
     <description>Beam Dose Point Equivalent Depth</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="008A" retired="false" version="3">
+  <entry group="300a" element="008a" retired="false" version="3">
     <description>Beam Dose Point SSD</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00A0" retired="false" version="3">
+  <entry group="300a" element="00a0" retired="false" version="3">
     <description>Number of Brachy Application Setups</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00A2" retired="false" version="3">
+  <entry group="300a" element="00a2" retired="false" version="3">
     <description>Brachy Application Setup Dose Specification Point</description>
     <representations>
       <representation vr="DS" vm="3"/>
     </representations>
   </entry>
-  <entry group="300A" element="00A4" retired="false" version="3">
+  <entry group="300a" element="00a4" retired="false" version="3">
     <description>Brachy Application Setup Dose</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00B0" retired="false" version="3">
+  <entry group="300a" element="00b0" retired="false" version="3">
     <description>Beam Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00B2" retired="false" version="3">
+  <entry group="300a" element="00b2" retired="false" version="3">
     <description>Treatment Machine Name </description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00B3" retired="false" version="3">
+  <entry group="300a" element="00b3" retired="false" version="3">
     <description>Primary Dosimeter Unit</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00B4" retired="false" version="3">
+  <entry group="300a" element="00b4" retired="false" version="3">
     <description>Source-Axis Distance</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00B6" retired="false" version="3">
+  <entry group="300a" element="00b6" retired="false" version="3">
     <description>Beam Limiting Device Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00B8" retired="false" version="3">
+  <entry group="300a" element="00b8" retired="false" version="3">
     <description>RT Beam Limiting Device Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00BA" retired="false" version="3">
+  <entry group="300a" element="00ba" retired="false" version="3">
     <description>Source to Beam Limiting Device Distance</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00BB" retired="false" version="3">
+  <entry group="300a" element="00bb" retired="false" version="3">
     <description>Isocenter to Beam Limiting Device Distance</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00BC" retired="false" version="3">
+  <entry group="300a" element="00bc" retired="false" version="3">
     <description>Number of Leaf/Jaw Pairs</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00BE" retired="false" version="3">
+  <entry group="300a" element="00be" retired="false" version="3">
     <description>Leaf Position Boundaries</description>
     <representations>
       <representation vr="DS" vm="3-n"/>
     </representations>
   </entry>
-  <entry group="300A" element="00C0" retired="false" version="3">
+  <entry group="300a" element="00c0" retired="false" version="3">
     <description>Beam Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00C2" retired="false" version="3">
+  <entry group="300a" element="00c2" retired="false" version="3">
     <description>Beam Name</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00C3" retired="false" version="3">
+  <entry group="300a" element="00c3" retired="false" version="3">
     <description>Beam Description</description>
     <representations>
       <representation vr="ST" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00C4" retired="false" version="3">
+  <entry group="300a" element="00c4" retired="false" version="3">
     <description>Beam Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00C6" retired="false" version="3">
+  <entry group="300a" element="00c6" retired="false" version="3">
     <description>Radiation Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00C7" retired="false" version="3">
+  <entry group="300a" element="00c7" retired="false" version="3">
     <description>High-Dose Technique Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00C8" retired="false" version="3">
+  <entry group="300a" element="00c8" retired="false" version="3">
     <description>Reference Image Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00CA" retired="false" version="3">
+  <entry group="300a" element="00ca" retired="false" version="3">
     <description>Planned Verification Image Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00CC" retired="false" version="3">
+  <entry group="300a" element="00cc" retired="false" version="3">
     <description>Imaging Device Specific Acquisition Parameters</description>
     <representations>
       <representation vr="LO" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="300A" element="00CE" retired="false" version="3">
+  <entry group="300a" element="00ce" retired="false" version="3">
     <description>Treatment Delivery Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00D0" retired="false" version="3">
+  <entry group="300a" element="00d0" retired="false" version="3">
     <description>Number of Wedges</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00D1" retired="false" version="3">
+  <entry group="300a" element="00d1" retired="false" version="3">
     <description>Wedge Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00D2" retired="false" version="3">
+  <entry group="300a" element="00d2" retired="false" version="3">
     <description>Wedge Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00D3" retired="false" version="3">
+  <entry group="300a" element="00d3" retired="false" version="3">
     <description>Wedge Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00D4" retired="false" version="3">
+  <entry group="300a" element="00d4" retired="false" version="3">
     <description>Wedge ID</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00D5" retired="false" version="3">
+  <entry group="300a" element="00d5" retired="false" version="3">
     <description>Wedge Angle</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00D6" retired="false" version="3">
+  <entry group="300a" element="00d6" retired="false" version="3">
     <description>Wedge Factor</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00D7" retired="false" version="3">
+  <entry group="300a" element="00d7" retired="false" version="3">
     <description>Total Wedge Tray Water-Equivalent Thickness</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00D8" retired="false" version="3">
+  <entry group="300a" element="00d8" retired="false" version="3">
     <description>Wedge Orientation</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00D9" retired="false" version="3">
+  <entry group="300a" element="00d9" retired="false" version="3">
     <description>Isocenter to Wedge Tray Distance</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00DA" retired="false" version="3">
+  <entry group="300a" element="00da" retired="false" version="3">
     <description>Source to Wedge Tray Distance</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00DB" retired="false" version="3">
+  <entry group="300a" element="00db" retired="false" version="3">
     <description>Wedge Thin Edge Position</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00DC" retired="false" version="3">
+  <entry group="300a" element="00dc" retired="false" version="3">
     <description>Bolus ID</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00DD" retired="false" version="3">
+  <entry group="300a" element="00dd" retired="false" version="3">
     <description>Bolus Description</description>
     <representations>
       <representation vr="ST" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00E0" retired="false" version="3">
+  <entry group="300a" element="00e0" retired="false" version="3">
     <description>Number of Compensators</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00E1" retired="false" version="3">
+  <entry group="300a" element="00e1" retired="false" version="3">
     <description>Material ID</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00E2" retired="false" version="3">
+  <entry group="300a" element="00e2" retired="false" version="3">
     <description>Total Compensator Tray Factor</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00E3" retired="false" version="3">
+  <entry group="300a" element="00e3" retired="false" version="3">
     <description>Compensator Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00E4" retired="false" version="3">
+  <entry group="300a" element="00e4" retired="false" version="3">
     <description>Compensator Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00E5" retired="false" version="3">
+  <entry group="300a" element="00e5" retired="false" version="3">
     <description>Compensator ID</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00E6" retired="false" version="3">
+  <entry group="300a" element="00e6" retired="false" version="3">
     <description>Source to Compensator Tray Distance</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00E7" retired="false" version="3">
+  <entry group="300a" element="00e7" retired="false" version="3">
     <description>Compensator Rows</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00E8" retired="false" version="3">
+  <entry group="300a" element="00e8" retired="false" version="3">
     <description>Compensator Columns</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00E9" retired="false" version="3">
+  <entry group="300a" element="00e9" retired="false" version="3">
     <description>Compensator Pixel Spacing</description>
     <representations>
       <representation vr="DS" vm="2"/>
     </representations>
   </entry>
-  <entry group="300A" element="00EA" retired="false" version="3">
+  <entry group="300a" element="00ea" retired="false" version="3">
     <description>Compensator Position</description>
     <representations>
       <representation vr="DS" vm="2"/>
     </representations>
   </entry>
-  <entry group="300A" element="00EB" retired="false" version="3">
+  <entry group="300a" element="00eb" retired="false" version="3">
     <description>Compensator Transmission Data</description>
     <representations>
       <representation vr="DS" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="300A" element="00EC" retired="false" version="3">
+  <entry group="300a" element="00ec" retired="false" version="3">
     <description>Compensator Thickness Data</description>
     <representations>
       <representation vr="DS" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="300A" element="00ED" retired="false" version="3">
+  <entry group="300a" element="00ed" retired="false" version="3">
     <description>Number of Boli</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00EE" retired="false" version="3">
+  <entry group="300a" element="00ee" retired="false" version="3">
     <description>CompensatorType</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00F0" retired="false" version="3">
+  <entry group="300a" element="00f0" retired="false" version="3">
     <description>Number of Blocks</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00F2" retired="false" version="3">
+  <entry group="300a" element="00f2" retired="false" version="3">
     <description>Total Block Tray Factor</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00F3" retired="false" version="3">
+  <entry group="300a" element="00f3" retired="false" version="3">
     <description>Total Block Tray Water-Equivalent Thickness</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00F4" retired="false" version="3">
+  <entry group="300a" element="00f4" retired="false" version="3">
     <description>Block Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00F5" retired="false" version="3">
+  <entry group="300a" element="00f5" retired="false" version="3">
     <description>Block Tray ID</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00F6" retired="false" version="3">
+  <entry group="300a" element="00f6" retired="false" version="3">
     <description>Source to Block Tray Distance</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00F7" retired="false" version="3">
+  <entry group="300a" element="00f7" retired="false" version="3">
     <description>Isocenter to Block Tray Distance</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00F8" retired="false" version="3">
+  <entry group="300a" element="00f8" retired="false" version="3">
     <description>Block Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00F9" retired="false" version="3">
+  <entry group="300a" element="00f9" retired="false" version="3">
     <description>Accessory Code</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00FA" retired="false" version="3">
+  <entry group="300a" element="00fa" retired="false" version="3">
     <description>Block Divergence</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00FB" retired="false" version="3">
+  <entry group="300a" element="00fb" retired="false" version="3">
     <description>Block Mounting Position</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00FC" retired="false" version="3">
+  <entry group="300a" element="00fc" retired="false" version="3">
     <description>Block Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="00FE" retired="false" version="3">
+  <entry group="300a" element="00fe" retired="false" version="3">
     <description>Block Name</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0100" retired="false" version="3">
+  <entry group="300a" element="0100" retired="false" version="3">
     <description>Block Thickness</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0102" retired="false" version="3">
+  <entry group="300a" element="0102" retired="false" version="3">
     <description>Block Transmission</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0104" retired="false" version="3">
+  <entry group="300a" element="0104" retired="false" version="3">
     <description>Block Number of Points</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0106" retired="false" version="3">
+  <entry group="300a" element="0106" retired="false" version="3">
     <description>Block Data</description>
     <representations>
       <representation vr="DS" vm="2-n"/>
     </representations>
   </entry>
-  <entry group="300A" element="0107" retired="false" version="3">
+  <entry group="300a" element="0107" retired="false" version="3">
     <description>Applicator Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0108" retired="false" version="3">
+  <entry group="300a" element="0108" retired="false" version="3">
     <description>Applicator ID</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0109" retired="false" version="3">
+  <entry group="300a" element="0109" retired="false" version="3">
     <description>Applicator Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="010A" retired="false" version="3">
+  <entry group="300a" element="010a" retired="false" version="3">
     <description>Applicator Description</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="010C" retired="false" version="3">
+  <entry group="300a" element="010c" retired="false" version="3">
     <description>Cumulative Dose Reference Coefficient</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="010E" retired="false" version="3">
+  <entry group="300a" element="010e" retired="false" version="3">
     <description>Final Cumulative Meterset Weight</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0110" retired="false" version="3">
+  <entry group="300a" element="0110" retired="false" version="3">
     <description>Number of Control Points</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0111" retired="false" version="3">
+  <entry group="300a" element="0111" retired="false" version="3">
     <description>Control Point Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0112" retired="false" version="3">
+  <entry group="300a" element="0112" retired="false" version="3">
     <description>Control Point Index</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0114" retired="false" version="3">
+  <entry group="300a" element="0114" retired="false" version="3">
     <description>Nominal Beam Energy</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0115" retired="false" version="3">
+  <entry group="300a" element="0115" retired="false" version="3">
     <description>Dose Rate Set</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0116" retired="false" version="3">
+  <entry group="300a" element="0116" retired="false" version="3">
     <description>Wedge Position Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0118" retired="false" version="3">
+  <entry group="300a" element="0118" retired="false" version="3">
     <description>Wedge Position</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="011A" retired="false" version="3">
+  <entry group="300a" element="011a" retired="false" version="3">
     <description>Beam Limiting Device Position Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="011C" retired="false" version="3">
+  <entry group="300a" element="011c" retired="false" version="3">
     <description>Leaf Jaw Positions</description>
     <representations>
       <representation vr="DS" vm="2-n"/>
     </representations>
   </entry>
-  <entry group="300A" element="011E" retired="false" version="3">
+  <entry group="300a" element="011e" retired="false" version="3">
     <description>Gantry Angle</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="011F" retired="false" version="3">
+  <entry group="300a" element="011f" retired="false" version="3">
     <description>Gantry Rotation Direction</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0120" retired="false" version="3">
+  <entry group="300a" element="0120" retired="false" version="3">
     <description>Beam Limiting Device Angle</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0121" retired="false" version="3">
+  <entry group="300a" element="0121" retired="false" version="3">
     <description>Beam Limiting Device Rotation Direction</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0122" retired="false" version="3">
+  <entry group="300a" element="0122" retired="false" version="3">
     <description>Patient Support Angle</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0123" retired="false" version="3">
+  <entry group="300a" element="0123" retired="false" version="3">
     <description>Patient Support Rotation Direction</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0124" retired="false" version="3">
+  <entry group="300a" element="0124" retired="false" version="3">
     <description>Table Top Eccentric Axis Distance</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0125" retired="false" version="3">
+  <entry group="300a" element="0125" retired="false" version="3">
     <description>Table Top Eccentric Angle</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0126" retired="false" version="3">
+  <entry group="300a" element="0126" retired="false" version="3">
     <description>Table Top Eccentric Rotation Direction</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0128" retired="false" version="3">
+  <entry group="300a" element="0128" retired="false" version="3">
     <description>Table Top Vertical Position</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0129" retired="false" version="3">
+  <entry group="300a" element="0129" retired="false" version="3">
     <description>Table Top Longitudinal Position</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="012A" retired="false" version="3">
+  <entry group="300a" element="012a" retired="false" version="3">
     <description>Table Top Lateral Position</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="012C" retired="false" version="3">
+  <entry group="300a" element="012c" retired="false" version="3">
     <description>Isocenter Position</description>
     <representations>
       <representation vr="DS" vm="3"/>
     </representations>
   </entry>
-  <entry group="300A" element="012E" retired="false" version="3">
+  <entry group="300a" element="012e" retired="false" version="3">
     <description>Surface Entry Point</description>
     <representations>
       <representation vr="DS" vm="3"/>
     </representations>
   </entry>
-  <entry group="300A" element="0130" retired="false" version="3">
+  <entry group="300a" element="0130" retired="false" version="3">
     <description>Source to Surface Distance</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0134" retired="false" version="3">
+  <entry group="300a" element="0134" retired="false" version="3">
     <description>Cumulative Meterset Weight</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0140" retired="false" version="3">
+  <entry group="300a" element="0140" retired="false" version="3">
     <description>Table Top Pitch Angle</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0142" retired="false" version="3">
+  <entry group="300a" element="0142" retired="false" version="3">
     <description>Table Top Pitch Rotation Direction</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0144" retired="false" version="3">
+  <entry group="300a" element="0144" retired="false" version="3">
     <description>Table Top Roll Angle</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0146" retired="false" version="3">
+  <entry group="300a" element="0146" retired="false" version="3">
     <description>Table Top Roll Rotation Direction</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0148" retired="false" version="3">
+  <entry group="300a" element="0148" retired="false" version="3">
     <description>Head Fixation Angle</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="014A" retired="false" version="3">
+  <entry group="300a" element="014a" retired="false" version="3">
     <description>Gantry Pitch Angle</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="014C" retired="false" version="3">
+  <entry group="300a" element="014c" retired="false" version="3">
     <description>Gantry Pitch Rotation Direction</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="014E" retired="false" version="3">
+  <entry group="300a" element="014e" retired="false" version="3">
     <description>Gantry Pitch Angle Tolerance</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0180" retired="false" version="3">
+  <entry group="300a" element="0180" retired="false" version="3">
     <description>Patient Setup Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0182" retired="false" version="3">
+  <entry group="300a" element="0182" retired="false" version="3">
     <description>Patient Setup Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0183" retired="false" version="3">
+  <entry group="300a" element="0183" retired="false" version="3">
     <description>Patient Setup Label</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0184" retired="false" version="3">
+  <entry group="300a" element="0184" retired="false" version="3">
     <description>Patient Additional Position</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0190" retired="false" version="3">
+  <entry group="300a" element="0190" retired="false" version="3">
     <description>Fixation Device Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0192" retired="false" version="3">
+  <entry group="300a" element="0192" retired="false" version="3">
     <description>Fixation Device Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0194" retired="false" version="3">
+  <entry group="300a" element="0194" retired="false" version="3">
     <description>Fixation Device Label</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0196" retired="false" version="3">
+  <entry group="300a" element="0196" retired="false" version="3">
     <description>Fixation Device Description</description>
     <representations>
       <representation vr="ST" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0198" retired="false" version="3">
+  <entry group="300a" element="0198" retired="false" version="3">
     <description>Fixation Device Position</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0199" retired="false" version="3">
+  <entry group="300a" element="0199" retired="false" version="3">
     <description>Fixation Device Pitch Angle</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="019A" retired="false" version="3">
+  <entry group="300a" element="019a" retired="false" version="3">
     <description>Fixation Device Roll Angle</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="01A0" retired="false" version="3">
+  <entry group="300a" element="01a0" retired="false" version="3">
     <description>Shielding Device Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="01A2" retired="false" version="3">
+  <entry group="300a" element="01a2" retired="false" version="3">
     <description>Shielding Device Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="01A4" retired="false" version="3">
+  <entry group="300a" element="01a4" retired="false" version="3">
     <description>Shielding Device Label</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="01A6" retired="false" version="3">
+  <entry group="300a" element="01a6" retired="false" version="3">
     <description>Shielding Device Description</description>
     <representations>
       <representation vr="ST" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="01A8" retired="false" version="3">
+  <entry group="300a" element="01a8" retired="false" version="3">
     <description>Shielding Device Position</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="01B0" retired="false" version="3">
+  <entry group="300a" element="01b0" retired="false" version="3">
     <description>Setup Technique</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="01B2" retired="false" version="3">
+  <entry group="300a" element="01b2" retired="false" version="3">
     <description>Setup TechniqueDescription</description>
     <representations>
       <representation vr="ST" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="01B4" retired="false" version="3">
+  <entry group="300a" element="01b4" retired="false" version="3">
     <description>Setup Device Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="01B6" retired="false" version="3">
+  <entry group="300a" element="01b6" retired="false" version="3">
     <description>Setup Device Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="01B8" retired="false" version="3">
+  <entry group="300a" element="01b8" retired="false" version="3">
     <description>Setup Device Label</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="01BA" retired="false" version="3">
+  <entry group="300a" element="01ba" retired="false" version="3">
     <description>Setup Device Description</description>
     <representations>
       <representation vr="ST" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="01BC" retired="false" version="3">
+  <entry group="300a" element="01bc" retired="false" version="3">
     <description>Setup Device Parameter</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="01D0" retired="false" version="3">
+  <entry group="300a" element="01d0" retired="false" version="3">
     <description>Setup ReferenceDescription</description>
     <representations>
       <representation vr="ST" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="01D2" retired="false" version="3">
+  <entry group="300a" element="01d2" retired="false" version="3">
     <description>Table Top Vertical Setup Displacement</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="01D4" retired="false" version="3">
+  <entry group="300a" element="01d4" retired="false" version="3">
     <description>Table Top Longitudinal Setup Displacement</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="01D6" retired="false" version="3">
+  <entry group="300a" element="01d6" retired="false" version="3">
     <description>Table Top Lateral Setup Displacement</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0200" retired="false" version="3">
+  <entry group="300a" element="0200" retired="false" version="3">
     <description>Brachy Treatment Technique</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0202" retired="false" version="3">
+  <entry group="300a" element="0202" retired="false" version="3">
     <description>Brachy Treatment Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0206" retired="false" version="3">
+  <entry group="300a" element="0206" retired="false" version="3">
     <description>Treatment Machine Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0210" retired="false" version="3">
+  <entry group="300a" element="0210" retired="false" version="3">
     <description>Source Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0212" retired="false" version="3">
+  <entry group="300a" element="0212" retired="false" version="3">
     <description>Source Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0214" retired="false" version="3">
+  <entry group="300a" element="0214" retired="false" version="3">
     <description>Source Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0216" retired="false" version="3">
+  <entry group="300a" element="0216" retired="false" version="3">
     <description>Source Manufacturer</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0218" retired="false" version="3">
+  <entry group="300a" element="0218" retired="false" version="3">
     <description>Active Source Diameter</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="021A" retired="false" version="3">
+  <entry group="300a" element="021a" retired="false" version="3">
     <description>Active Source Length</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0222" retired="false" version="3">
+  <entry group="300a" element="0222" retired="false" version="3">
     <description>Source Encapsulation Nominal Thickness</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0224" retired="false" version="3">
+  <entry group="300a" element="0224" retired="false" version="3">
     <description>Source Encapsulation Nominal Transmission</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0226" retired="false" version="3">
+  <entry group="300a" element="0226" retired="false" version="3">
     <description>Source IsotopeName</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0228" retired="false" version="3">
+  <entry group="300a" element="0228" retired="false" version="3">
     <description>Source Isotope Half Life</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0229" retired="false" version="3">
+  <entry group="300a" element="0229" retired="false" version="3">
     <description>Source Strength Units</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="022A" retired="false" version="3">
+  <entry group="300a" element="022a" retired="false" version="3">
     <description>Reference Air Kerma Rate</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="022B" retired="false" version="3">
+  <entry group="300a" element="022b" retired="false" version="3">
     <description>Source Strength</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="022C" retired="false" version="3">
+  <entry group="300a" element="022c" retired="false" version="3">
     <description>Source Strength Reference Date</description>
     <representations>
       <representation vr="DA" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="022E" retired="false" version="3">
+  <entry group="300a" element="022e" retired="false" version="3">
     <description>Source Strength Reference Time</description>
     <representations>
       <representation vr="TM" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0230" retired="false" version="3">
+  <entry group="300a" element="0230" retired="false" version="3">
     <description>Application Setup Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0232" retired="false" version="3">
+  <entry group="300a" element="0232" retired="false" version="3">
     <description>Application Setup Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0234" retired="false" version="3">
+  <entry group="300a" element="0234" retired="false" version="3">
     <description>Application Setup Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0236" retired="false" version="3">
+  <entry group="300a" element="0236" retired="false" version="3">
     <description>Application Setup Name</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0238" retired="false" version="3">
+  <entry group="300a" element="0238" retired="false" version="3">
     <description>Application Setup Manufacturer</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0240" retired="false" version="3">
+  <entry group="300a" element="0240" retired="false" version="3">
     <description>Template Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0242" retired="false" version="3">
+  <entry group="300a" element="0242" retired="false" version="3">
     <description>Template Type</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0244" retired="false" version="3">
+  <entry group="300a" element="0244" retired="false" version="3">
     <description>Template Name</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0250" retired="false" version="3">
+  <entry group="300a" element="0250" retired="false" version="3">
     <description>Total Reference Air Kerma</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0260" retired="false" version="3">
+  <entry group="300a" element="0260" retired="false" version="3">
     <description>Brachy Accessory Device Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0262" retired="false" version="3">
+  <entry group="300a" element="0262" retired="false" version="3">
     <description>Brachy Accessory Device Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0263" retired="false" version="3">
+  <entry group="300a" element="0263" retired="false" version="3">
     <description>Brachy Accessory Device ID</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0264" retired="false" version="3">
+  <entry group="300a" element="0264" retired="false" version="3">
     <description>Brachy Accessory Device Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0266" retired="false" version="3">
+  <entry group="300a" element="0266" retired="false" version="3">
     <description>Brachy Accessory Device Name</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="026A" retired="false" version="3">
+  <entry group="300a" element="026a" retired="false" version="3">
     <description>Brachy Accessory Device Nominal Thickness</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="026C" retired="false" version="3">
+  <entry group="300a" element="026c" retired="false" version="3">
     <description>Brachy Accessory Device Nominal Transmission</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0280" retired="false" version="3">
+  <entry group="300a" element="0280" retired="false" version="3">
     <description>Channel Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0282" retired="false" version="3">
+  <entry group="300a" element="0282" retired="false" version="3">
     <description>Channel Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0284" retired="false" version="3">
+  <entry group="300a" element="0284" retired="false" version="3">
     <description>Channel Length</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0286" retired="false" version="3">
+  <entry group="300a" element="0286" retired="false" version="3">
     <description>Channel Total Time</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0288" retired="false" version="3">
+  <entry group="300a" element="0288" retired="false" version="3">
     <description>Source Movement Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="028A" retired="false" version="3">
+  <entry group="300a" element="028a" retired="false" version="3">
     <description>Number of Pulses</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="028C" retired="false" version="3">
+  <entry group="300a" element="028c" retired="false" version="3">
     <description>Pulse Repetition Interval</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0290" retired="false" version="3">
+  <entry group="300a" element="0290" retired="false" version="3">
     <description>Source Applicator Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0291" retired="false" version="3">
+  <entry group="300a" element="0291" retired="false" version="3">
     <description>Source Applicator ID</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0292" retired="false" version="3">
+  <entry group="300a" element="0292" retired="false" version="3">
     <description>Source Applicator Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0294" retired="false" version="3">
+  <entry group="300a" element="0294" retired="false" version="3">
     <description>Source Applicator Name</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0296" retired="false" version="3">
+  <entry group="300a" element="0296" retired="false" version="3">
     <description>Source Applicator Length</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0298" retired="false" version="3">
+  <entry group="300a" element="0298" retired="false" version="3">
     <description>Source Applicator Manufacturer</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="029C" retired="false" version="3">
+  <entry group="300a" element="029c" retired="false" version="3">
     <description>Source Applicator Wall Nominal Thickness</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="029E" retired="false" version="3">
+  <entry group="300a" element="029e" retired="false" version="3">
     <description>Source Applicator Wall Nominal Transmission</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="02A0" retired="false" version="3">
+  <entry group="300a" element="02a0" retired="false" version="3">
     <description>Source Applicator Step Size</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="02A2" retired="false" version="3">
+  <entry group="300a" element="02a2" retired="false" version="3">
     <description>Transfer Tube Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="02A4" retired="false" version="3">
+  <entry group="300a" element="02a4" retired="false" version="3">
     <description>Transfer Tube Length</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="02B0" retired="false" version="3">
+  <entry group="300a" element="02b0" retired="false" version="3">
     <description>Channel Shield Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="02B2" retired="false" version="3">
+  <entry group="300a" element="02b2" retired="false" version="3">
     <description>Channel Shield Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="02B3" retired="false" version="3">
+  <entry group="300a" element="02b3" retired="false" version="3">
     <description>Channel Shield ID</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="02B4" retired="false" version="3">
+  <entry group="300a" element="02b4" retired="false" version="3">
     <description>Channel Shield Name</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="02B8" retired="false" version="3">
+  <entry group="300a" element="02b8" retired="false" version="3">
     <description>Channel Shield Nominal Thickness</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="02BA" retired="false" version="3">
+  <entry group="300a" element="02ba" retired="false" version="3">
     <description>Channel Shield Nominal Transmission</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="02C8" retired="false" version="3">
+  <entry group="300a" element="02c8" retired="false" version="3">
     <description>Final Cumulative Time Weight</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="02D0" retired="false" version="3">
+  <entry group="300a" element="02d0" retired="false" version="3">
     <description>Brachy Control Point Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="02D2" retired="false" version="3">
+  <entry group="300a" element="02d2" retired="false" version="3">
     <description>Control Point Relative Position</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="02D4" retired="false" version="3">
+  <entry group="300a" element="02d4" retired="false" version="3">
     <description>Control Point 3D Position</description>
     <representations>
       <representation vr="DS" vm="3"/>
     </representations>
   </entry>
-  <entry group="300A" element="02D6" retired="false" version="3">
+  <entry group="300a" element="02d6" retired="false" version="3">
     <description>Cumulative Time Weight</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="02E0" retired="false" version="3">
+  <entry group="300a" element="02e0" retired="false" version="3">
     <description>Compensator Divergence</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="02E1" retired="false" version="3">
+  <entry group="300a" element="02e1" retired="false" version="3">
     <description>Compensator Mounting Position</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="02E2" retired="false" version="3">
+  <entry group="300a" element="02e2" retired="false" version="3">
     <description>Source to Compensator Distance</description>
     <representations>
       <representation vr="DS" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="300A" element="02E3" retired="false" version="3">
+  <entry group="300a" element="02e3" retired="false" version="3">
     <description>Total Compensator Tray Water-Equivalent Thickness</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="02E4" retired="false" version="3">
+  <entry group="300a" element="02e4" retired="false" version="3">
     <description>Isocenter to Compensator Tray Distance</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="02E5" retired="false" version="3">
+  <entry group="300a" element="02e5" retired="false" version="3">
     <description>Compensator Column Offset</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="02E6" retired="false" version="3">
+  <entry group="300a" element="02e6" retired="false" version="3">
     <description>Isocenter to Compensator Distances</description>
     <representations>
       <representation vr="FL" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="300A" element="02E7" retired="false" version="3">
+  <entry group="300a" element="02e7" retired="false" version="3">
     <description>Compensator Relative Stopping Power Ratio</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="02E8" retired="false" version="3">
+  <entry group="300a" element="02e8" retired="false" version="3">
     <description>Compensator Milling Tool Diameter</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="02EA" retired="false" version="3">
+  <entry group="300a" element="02ea" retired="false" version="3">
     <description>Ion Range Compensator Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0302" retired="false" version="3">
+  <entry group="300a" element="0302" retired="false" version="3">
     <description>Radiation Mass Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0304" retired="false" version="3">
+  <entry group="300a" element="0304" retired="false" version="3">
     <description>Radiation Atomic Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0306" retired="false" version="3">
+  <entry group="300a" element="0306" retired="false" version="3">
     <description>Radiation Charge State</description>
     <representations>
       <representation vr="SS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0308" retired="false" version="3">
+  <entry group="300a" element="0308" retired="false" version="3">
     <description>Scan Mode</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="030A" retired="false" version="3">
+  <entry group="300a" element="030a" retired="false" version="3">
     <description>Virtual Source-Axis Distances</description>
     <representations>
       <representation vr="FL" vm="2"/>
     </representations>
   </entry>
-  <entry group="300A" element="030C" retired="false" version="3">
+  <entry group="300a" element="030c" retired="false" version="3">
     <description>Snout Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="030D" retired="false" version="3">
+  <entry group="300a" element="030d" retired="false" version="3">
     <description>Snout Position</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="030F" retired="false" version="3">
+  <entry group="300a" element="030f" retired="false" version="3">
     <description>Snout ID</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0312" retired="false" version="3">
+  <entry group="300a" element="0312" retired="false" version="3">
     <description>Number of Range Shifters</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0314" retired="false" version="3">
+  <entry group="300a" element="0314" retired="false" version="3">
     <description>Range Shifter Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0316" retired="false" version="3">
+  <entry group="300a" element="0316" retired="false" version="3">
     <description>Range Shifter Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0318" retired="false" version="3">
+  <entry group="300a" element="0318" retired="false" version="3">
     <description>Range Shifter ID</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0320" retired="false" version="3">
+  <entry group="300a" element="0320" retired="false" version="3">
     <description>Range Shifter Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0322" retired="false" version="3">
+  <entry group="300a" element="0322" retired="false" version="3">
     <description>Range Shifter Description</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0330" retired="false" version="3">
+  <entry group="300a" element="0330" retired="false" version="3">
     <description>Number of Lateral Spreading Devices</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0332" retired="false" version="3">
+  <entry group="300a" element="0332" retired="false" version="3">
     <description>Lateral Spreading Device Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0334" retired="false" version="3">
+  <entry group="300a" element="0334" retired="false" version="3">
     <description>Lateral Spreading Device Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0336" retired="false" version="3">
+  <entry group="300a" element="0336" retired="false" version="3">
     <description>Lateral Spreading Device ID</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0338" retired="false" version="3">
+  <entry group="300a" element="0338" retired="false" version="3">
     <description>Lateral Spreading Device Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="033A" retired="false" version="3">
+  <entry group="300a" element="033a" retired="false" version="3">
     <description>Lateral Spreading Device Description</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="033C" retired="false" version="3">
+  <entry group="300a" element="033c" retired="false" version="3">
     <description>Lateral Spreading Device Water Equivalent Thickness</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0340" retired="false" version="3">
+  <entry group="300a" element="0340" retired="false" version="3">
     <description>Number of Range Modulators</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0342" retired="false" version="3">
+  <entry group="300a" element="0342" retired="false" version="3">
     <description>Range Modulator Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0344" retired="false" version="3">
+  <entry group="300a" element="0344" retired="false" version="3">
     <description>Range Modulator Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0346" retired="false" version="3">
+  <entry group="300a" element="0346" retired="false" version="3">
     <description>Range Modulator ID</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0348" retired="false" version="3">
+  <entry group="300a" element="0348" retired="false" version="3">
     <description>Range Modulator Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="034A" retired="false" version="3">
+  <entry group="300a" element="034a" retired="false" version="3">
     <description>Range Modulator Description</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="034C" retired="false" version="3">
+  <entry group="300a" element="034c" retired="false" version="3">
     <description>Beam Current Modulation ID</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0350" retired="false" version="3">
+  <entry group="300a" element="0350" retired="false" version="3">
     <description>Patient Support Type</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0352" retired="false" version="3">
+  <entry group="300a" element="0352" retired="false" version="3">
     <description>Patient Support ID</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0354" retired="false" version="3">
+  <entry group="300a" element="0354" retired="false" version="3">
     <description>Patient Support Accessory Code</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0356" retired="false" version="3">
+  <entry group="300a" element="0356" retired="false" version="3">
     <description>Fixation Light Azimuthal Angle</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0358" retired="false" version="3">
+  <entry group="300a" element="0358" retired="false" version="3">
     <description>Fixation Light Polar Angle</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="035A" retired="false" version="3">
+  <entry group="300a" element="035a" retired="false" version="3">
     <description>Meterset Rate</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0360" retired="false" version="3">
+  <entry group="300a" element="0360" retired="false" version="3">
     <description>Range Shifter Settings Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0362" retired="false" version="3">
+  <entry group="300a" element="0362" retired="false" version="3">
     <description>Range Shifter Setting</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0364" retired="false" version="3">
+  <entry group="300a" element="0364" retired="false" version="3">
     <description>Isocenter to Range Shifter Distance</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0366" retired="false" version="3">
+  <entry group="300a" element="0366" retired="false" version="3">
     <description>Range Shifter Water Equivalent Thickness</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0370" retired="false" version="3">
+  <entry group="300a" element="0370" retired="false" version="3">
     <description>Lateral Spreading Device Settings Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0372" retired="false" version="3">
+  <entry group="300a" element="0372" retired="false" version="3">
     <description>Lateral Spreading Device Setting</description>
     <representations>
       <representation vr="LO" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0374" retired="false" version="3">
+  <entry group="300a" element="0374" retired="false" version="3">
     <description>Isocenter to Lateral Spreading Device Distance</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0380" retired="false" version="3">
+  <entry group="300a" element="0380" retired="false" version="3">
     <description>Range Modulator Settings Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0382" retired="false" version="3">
+  <entry group="300a" element="0382" retired="false" version="3">
     <description>Range Modulator Gating Start Value</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0384" retired="false" version="3">
+  <entry group="300a" element="0384" retired="false" version="3">
     <description>Range Modulator Gating Stop Value</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0386" retired="false" version="3">
+  <entry group="300a" element="0386" retired="false" version="3">
     <description>Range Modulator Gating Start Water Equivalent Thickness</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0388" retired="false" version="3">
+  <entry group="300a" element="0388" retired="false" version="3">
     <description>Range Modulator Gating Stop Water Equivalent Thickness</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="038A" retired="false" version="3">
+  <entry group="300a" element="038a" retired="false" version="3">
     <description>Isocenter to Range Modulator Distance</description>
     <representations>
       <representation vr="FL" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0390" retired="false" version="3">
+  <entry group="300a" element="0390" retired="false" version="3">
     <description>Scan Spot Tune ID</description>
     <representations>
       <representation vr="SH" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0392" retired="false" version="3">
+  <entry group="300a" element="0392" retired="false" version="3">
     <description>Number of Scan Spot Positions</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0394" retired="false" version="3">
+  <entry group="300a" element="0394" retired="false" version="3">
     <description>Scan Spot Position Map</description>
     <representations>
       <representation vr="FL" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="300A" element="0396" retired="false" version="3">
+  <entry group="300a" element="0396" retired="false" version="3">
     <description>Scan Spot Meterset Weights</description>
     <representations>
       <representation vr="FL" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="300A" element="0398" retired="false" version="3">
+  <entry group="300a" element="0398" retired="false" version="3">
     <description>Scanning Spot Size</description>
     <representations>
       <representation vr="FL" vm="2"/>
     </representations>
   </entry>
-  <entry group="300A" element="039A" retired="false" version="3">
+  <entry group="300a" element="039a" retired="false" version="3">
     <description>Number of Paintings</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="03A0" retired="false" version="3">
+  <entry group="300a" element="03a0" retired="false" version="3">
     <description>Ion Tolerance Table Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="03A2" retired="false" version="3">
+  <entry group="300a" element="03a2" retired="false" version="3">
     <description>Ion Beam Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="03A4" retired="false" version="3">
+  <entry group="300a" element="03a4" retired="false" version="3">
     <description>Ion Beam Limiting Device Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="03A6" retired="false" version="3">
+  <entry group="300a" element="03a6" retired="false" version="3">
     <description>Ion Block Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="03A8" retired="false" version="3">
+  <entry group="300a" element="03a8" retired="false" version="3">
     <description>Ion Control Point Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="03AA" retired="false" version="3">
+  <entry group="300a" element="03aa" retired="false" version="3">
     <description>Ion Wedge Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="03AC" retired="false" version="3">
+  <entry group="300a" element="03ac" retired="false" version="3">
     <description>Ion Wedge Position Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0401" retired="false" version="3">
+  <entry group="300a" element="0401" retired="false" version="3">
     <description>Referenced Setup Image Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0402" retired="false" version="3">
+  <entry group="300a" element="0402" retired="false" version="3">
     <description>Setup Image Comment</description>
     <representations>
       <representation vr="ST" vm="1"/>
     </representations>
   </entry>
-  <entry group="300A" element="0410" retired="false" version="3">
+  <entry group="300a" element="0410" retired="false" version="3">
     <description>Motion Synchronization Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="0002" retired="false" version="3">
+  <entry group="300c" element="0002" retired="false" version="3">
     <description>Referenced RT Plan Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="0004" retired="false" version="3">
+  <entry group="300c" element="0004" retired="false" version="3">
     <description>Referenced Beam Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="0006" retired="false" version="3">
+  <entry group="300c" element="0006" retired="false" version="3">
     <description>Referenced Beam Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="0007" retired="false" version="3">
+  <entry group="300c" element="0007" retired="false" version="3">
     <description>Referenced Reference Image Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="0008" retired="false" version="3">
+  <entry group="300c" element="0008" retired="false" version="3">
     <description>Start Cumulative Meterset Weight</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="0009" retired="false" version="3">
+  <entry group="300c" element="0009" retired="false" version="3">
     <description>End Cumulative Meterset Weight</description>
     <representations>
       <representation vr="DS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="000A" retired="false" version="3">
+  <entry group="300c" element="000a" retired="false" version="3">
     <description>Referenced Brachy Application Setup Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="000C" retired="false" version="3">
+  <entry group="300c" element="000c" retired="false" version="3">
     <description>Referenced Brachy Application Setup Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="000E" retired="false" version="3">
+  <entry group="300c" element="000e" retired="false" version="3">
     <description>Referenced Source Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="0020" retired="false" version="3">
+  <entry group="300c" element="0020" retired="false" version="3">
     <description>Referenced Fraction Group Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="0022" retired="false" version="3">
+  <entry group="300c" element="0022" retired="false" version="3">
     <description>Referenced Fraction Group Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="0040" retired="false" version="3">
+  <entry group="300c" element="0040" retired="false" version="3">
     <description>Referenced Verification Image Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="0042" retired="false" version="3">
+  <entry group="300c" element="0042" retired="false" version="3">
     <description>Referenced Reference Image Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="0050" retired="false" version="3">
+  <entry group="300c" element="0050" retired="false" version="3">
     <description>Referenced Dose Reference Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="0051" retired="false" version="3">
+  <entry group="300c" element="0051" retired="false" version="3">
     <description>Referenced Dose Reference Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="0055" retired="false" version="3">
+  <entry group="300c" element="0055" retired="false" version="3">
     <description>Brachy Referenced Dose Reference Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="0060" retired="false" version="3">
+  <entry group="300c" element="0060" retired="false" version="3">
     <description>Referenced Structure Set Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="006A" retired="false" version="3">
+  <entry group="300c" element="006a" retired="false" version="3">
     <description>Referenced Patient Setup Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="0080" retired="false" version="3">
+  <entry group="300c" element="0080" retired="false" version="3">
     <description>Referenced Dose Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="00A0" retired="false" version="3">
+  <entry group="300c" element="00a0" retired="false" version="3">
     <description>Referenced Tolerance Table Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="00B0" retired="false" version="3">
+  <entry group="300c" element="00b0" retired="false" version="3">
     <description>Referenced Bolus Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="00C0" retired="false" version="3">
+  <entry group="300c" element="00c0" retired="false" version="3">
     <description>Referenced Wedge Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="00D0" retired="false" version="3">
+  <entry group="300c" element="00d0" retired="false" version="3">
     <description>Referenced Compensator Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="00E0" retired="false" version="3">
+  <entry group="300c" element="00e0" retired="false" version="3">
     <description>Referenced Block Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="00F0" retired="false" version="3">
+  <entry group="300c" element="00f0" retired="false" version="3">
     <description>Referenced Control Point Index</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="00F2" retired="false" version="3">
+  <entry group="300c" element="00f2" retired="false" version="3">
     <description>Referenced Control Point Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="00F4" retired="false" version="3">
+  <entry group="300c" element="00f4" retired="false" version="3">
     <description>Referenced Start Control Point Index</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="00F6" retired="false" version="3">
+  <entry group="300c" element="00f6" retired="false" version="3">
     <description>Referenced Stop Control Point Index</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="0100" retired="false" version="3">
+  <entry group="300c" element="0100" retired="false" version="3">
     <description>Referenced Range Shifter Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="0102" retired="false" version="3">
+  <entry group="300c" element="0102" retired="false" version="3">
     <description>Referenced Lateral Spreading Device Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300C" element="0104" retired="false" version="3">
+  <entry group="300c" element="0104" retired="false" version="3">
     <description>Referenced Range Modulator Number</description>
     <representations>
       <representation vr="IS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300E" element="0002" retired="false" version="3">
+  <entry group="300e" element="0002" retired="false" version="3">
     <description>Approval Status</description>
     <representations>
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="300E" element="0004" retired="false" version="3">
+  <entry group="300e" element="0004" retired="false" version="3">
     <description>Review Date</description>
     <representations>
       <representation vr="DA" vm="1"/>
     </representations>
   </entry>
-  <entry group="300E" element="0005" retired="false" version="3">
+  <entry group="300e" element="0005" retired="false" version="3">
     <description>Review Time</description>
     <representations>
       <representation vr="TM" vm="1"/>
     </representations>
   </entry>
-  <entry group="300E" element="0008" retired="false" version="3">
+  <entry group="300e" element="0008" retired="false" version="3">
     <description>Reviewer Name</description>
     <representations>
       <representation vr="PN" vm="1"/>
@@ -14607,19 +14607,19 @@
       <representation vr="TM" vm="1"/>
     </representations>
   </entry>
-  <entry group="4008" element="010A" retired="true" version="3">
+  <entry group="4008" element="010a" retired="true" version="3">
     <description>Interpretation Transcriber</description>
     <representations>
       <representation vr="PN" vm="1"/>
     </representations>
   </entry>
-  <entry group="4008" element="010B" retired="true" version="3">
+  <entry group="4008" element="010b" retired="true" version="3">
     <description>Interpretation Text</description>
     <representations>
       <representation vr="ST" vm="1"/>
     </representations>
   </entry>
-  <entry group="4008" element="010C" retired="true" version="3">
+  <entry group="4008" element="010c" retired="true" version="3">
     <description>Interpretation Author</description>
     <representations>
       <representation vr="PN" vm="1"/>
@@ -14673,7 +14673,7 @@
       <representation vr="PN" vm="1"/>
     </representations>
   </entry>
-  <entry group="4008" element="011A" retired="true" version="3">
+  <entry group="4008" element="011a" retired="true" version="3">
     <description>Distribution Address</description>
     <representations>
       <representation vr="LO" vm="1"/>
@@ -14715,7 +14715,7 @@
       <representation vr="ST" vm="1"/>
     </representations>
   </entry>
-  <entry group="4FFE" element="0001" retired="false" version="3">
+  <entry group="4ffe" element="0001" retired="false" version="3">
     <description>MAC Parameters Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
@@ -14841,19 +14841,19 @@
       <representation vr="UL" vm="1"/>
     </representations>
   </entry>
-  <entry group="50xx" element="200A" retired="true" version="3">
+  <entry group="50xx" element="200a" retired="true" version="3">
     <description>Total Time</description>
     <representations>
       <representation vr="UL" vm="1"/>
     </representations>
   </entry>
-  <entry group="50xx" element="200C" retired="true" version="3">
+  <entry group="50xx" element="200c" retired="true" version="3">
     <description>Audio Sample Data</description>
     <representations>
       <representation vr="OW/OB" vm="1"/>
     </representations>
   </entry>
-  <entry group="50xx" element="200E" retired="true" version="3">
+  <entry group="50xx" element="200e" retired="true" version="3">
     <description>Audio Comments</description>
     <representations>
       <representation vr="LT" vm="1"/>
@@ -14925,7 +14925,7 @@
       <representation vr="CS" vm="1"/>
     </representations>
   </entry>
-  <entry group="5400" element="100A" retired="false" version="3">
+  <entry group="5400" element="100a" retired="false" version="3">
     <description>Waveform Padding Value</description>
     <representations>
       <representation vr="OW/OB" vm="1"/>
@@ -15195,97 +15195,97 @@
       <representation vr="LT" vm="1-n"/>
     </representations>
   </entry>
-  <entry group="7FE0" element="0000" retired="true" version="3">
+  <entry group="7fe0" element="0000" retired="true" version="3">
     <description>Pixel Data Group Length</description>
     <representations>
       <representation vr="UL" vm="1"/>
     </representations>
   </entry>
-  <entry group="7FE0" element="0010" retired="false" version="3">
+  <entry group="7fe0" element="0010" retired="false" version="3">
     <description>Pixel Data</description>
     <representations>
       <representation vr="OW/OB" vm="1"/>
     </representations>
   </entry>
-  <entry group="7FE0" element="0020" retired="true" version="2">
+  <entry group="7fe0" element="0020" retired="true" version="2">
     <description>Coefficients SDVN</description>
     <representations>
       <representation vr="OW" vm="1"/>
     </representations>
   </entry>
-  <entry group="7FE0" element="0030" retired="true" version="2">
+  <entry group="7fe0" element="0030" retired="true" version="2">
     <description>Coefficients SDHN</description>
     <representations>
       <representation vr="OW" vm="1"/>
     </representations>
   </entry>
-  <entry group="7FE0" element="0040" retired="true" version="2">
+  <entry group="7fe0" element="0040" retired="true" version="2">
     <description>Coefficients SDDN</description>
     <representations>
       <representation vr="OW" vm="1"/>
     </representations>
   </entry>
-  <entry group="7Fxx" element="0000" retired="true" version="2">
+  <entry group="7fxx" element="0000" retired="true" version="2">
     <description>Variable Pixel Data Group Length</description>
     <representations>
       <representation vr="UL" vm="1"/>
     </representations>
   </entry>
-  <entry group="7Fxx" element="0010" retired="true" version="2">
+  <entry group="7fxx" element="0010" retired="true" version="2">
     <description>Variable Pixel Data</description>
     <representations>
       <representation vr="OW/OB" vm="1"/>
     </representations>
   </entry>
-  <entry group="7Fxx" element="0011" retired="true" version="2">
+  <entry group="7fxx" element="0011" retired="true" version="2">
     <description>Variable Next Data Group</description>
     <representations>
       <representation vr="US" vm="1"/>
     </representations>
   </entry>
-  <entry group="7Fxx" element="0020" retired="true" version="2">
+  <entry group="7fxx" element="0020" retired="true" version="2">
     <description>Variable Coefficients SDVN</description>
     <representations>
       <representation vr="OW" vm="1"/>
     </representations>
   </entry>
-  <entry group="7Fxx" element="0030" retired="true" version="2">
+  <entry group="7fxx" element="0030" retired="true" version="2">
     <description>Variable Coefficients SDHN</description>
     <representations>
       <representation vr="OW" vm="1"/>
     </representations>
   </entry>
-  <entry group="7Fxx" element="0040" retired="true" version="2">
+  <entry group="7fxx" element="0040" retired="true" version="2">
     <description>Variable Coefficients SDDN</description>
     <representations>
       <representation vr="OW" vm="1"/>
     </representations>
   </entry>
-  <entry group="FFFA" element="FFFA" retired="false" version="3">
+  <entry group="fffa" element="fffa" retired="false" version="3">
     <description>Digital Signatures Sequence</description>
     <representations>
       <representation vr="SQ" vm="1"/>
     </representations>
   </entry>
-  <entry group="FFFC" element="FFFC" retired="false" version="3">
+  <entry group="fffc" element="fffc" retired="false" version="3">
     <description>Data Set Trailing Padding</description>
     <representations>
       <representation vr="OB" vm="1"/>
     </representations>
   </entry>
-  <entry group="FFFE" element="E000" retired="false" version="3">
+  <entry group="fffe" element="e000" retired="false" version="3">
     <description>Item</description>
     <representations>
       <representation vr="NONE" vm="1"/>
     </representations>
   </entry>
-  <entry group="FFFE" element="E00D" retired="false" version="3">
+  <entry group="fffe" element="e00d" retired="false" version="3">
     <description>Item Delimitation Item</description>
     <representations>
       <representation vr="NONE" vm="1"/>
     </representations>
   </entry>
-  <entry group="FFFE" element="E0DD" retired="false" version="3">
+  <entry group="fffe" element="e0dd" retired="false" version="3">
     <description>Sequence Delimitation Item</description>
     <representations>
       <representation vr="NONE" vm="1"/>
