@@ -20,7 +20,7 @@
     <xsl:variable name="has_retired" select="dict/entry/@retired"/>
     <html>
     <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
       <style type="text/css">
 tr.normal
    {
