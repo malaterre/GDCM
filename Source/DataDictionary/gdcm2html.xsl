@@ -18,6 +18,19 @@
   <xsl:template match="/">
     <xsl:variable name="has_owner" select="dict/entry/@owner"/>
     <xsl:variable name="has_retired" select="dict/entry/@retired"/>
+<head>
+    <STYLE TYPE="text/css">
+tr.normal
+   {
+   font-style:normal;
+   }
+tr.italic
+   {
+   font-style:italic;
+   }
+</STYLE>
+
+</head>
     <html>
       <body>
         <table border="1">
@@ -43,7 +56,21 @@
 <!-- The main template that loop over all dict/entry -->
           <xsl:for-each select="dict/entry">
             <xsl:variable name="my_italic" value="@retired != 'false'"/>
-            <tr>
+            <xsl:variable name="my_class">
+            <xsl:choose>
+              <!--xsl:when test="$has_owner">
+              <xsl:text>normal</xsl:text>
+              </xsl:when-->
+              <!--xsl:when test="$has_retired"-->
+              <xsl:when test="@retired !='false'">
+              italic
+              </xsl:when>
+              <xsl:otherwise>
+              normal
+              </xsl:otherwise>
+            </xsl:choose>
+            </xsl:variable>
+            <tr class="{$my_class}">
               <td>
 <!--xsl:if test="@retired != 'false'"><i></xsl:if-->
                 <xsl:text>(</xsl:text>
