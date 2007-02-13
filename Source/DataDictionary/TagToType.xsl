@@ -31,7 +31,10 @@ Checked against:
 #include "gdcmVR.h"
 
 namespace gdcm {
+// default template:
 template &lt;uint16_t,uint16_t&gt; struct TagToType;
+// template for group length:
+template &lt;uint16_t group&gt; struct TagToType&lt;group,0x0000&gt; { typedef VRToType&lt;VR::UL&gt;::Type Type; };
 </xsl:text>
     <xsl:for-each select="dict/entry">
       <xsl:if test="substring(@group,3) != 'xx' and substring(@element,3) != 'xx' and representations/representation/@vr">

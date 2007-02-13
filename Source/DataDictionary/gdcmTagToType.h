@@ -8,7 +8,10 @@
 #include "gdcmVR.h"
 
 namespace gdcm {
+// default template:
 template <uint16_t,uint16_t> struct TagToType;
+// template for group length:
+template <uint16_t group> struct TagToType<group,0x0000> { typedef VRToType<VR::UL>::Type Type; };
 template <> struct TagToType<0x0000,0x0000> { typedef VRToType<VR::UL>::Type Type; };
 template <> struct TagToType<0x0000,0x0001> { typedef VRToType<VR::UL>::Type Type; };
 template <> struct TagToType<0x0000,0x0002> { typedef VRToType<VR::UI>::Type Type; };
