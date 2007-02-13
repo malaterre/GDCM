@@ -88,9 +88,9 @@ inline std::ostream& operator<<(std::ostream& _os, const VM::VMType&_val)
   return _os;
 }
 
-template<int T> struct TypeToLength;
+template<int T> struct VMToLength;
 #define TYPETOLENGTH(type,length) \
-  template<> struct TypeToLength<VM::type> \
+  template<> struct VMToLength<VM::type> \
   { enum { Length = length }; };
 // TODO: Could be generated from XML file
 //TYPETOLENGTH(VM0,1)

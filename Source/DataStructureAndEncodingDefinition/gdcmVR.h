@@ -184,13 +184,13 @@ inline std::ostream &operator<<(std::ostream &_os, const VR &val)
 }
 
 // Tells whether VR Type is ASCII or Binary
-template<int T> struct TypeToEncoding;
+template<int T> struct VRToEncoding;
 // Convert from VR Type to real underlying type
-template<int T> struct TypeToType;
+template<int T> struct VRToType;
 #define TYPETOENCODING(type,rep, rtype)         \
-  template<> struct TypeToEncoding<VR::type>    \
+  template<> struct VRToEncoding<VR::type>    \
   { enum { Mode = VR::rep }; };                 \
-  template<> struct TypeToType<VR::type>        \
+  template<> struct VRToType<VR::type>        \
   { typedef rtype Type; };
 
 // TODO: Could be generated from XML file

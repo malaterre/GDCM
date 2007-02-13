@@ -35,35 +35,35 @@ template<int TVR, int TVM>
 class Element
 {
 public:
-  typename TypeToType<TVR>::Type Internal[TypeToLength<TVM>::Length];
+  typename VRToType<TVR>::Type Internal[VMToLength<TVM>::Length];
 
   unsigned long GetLength() const {
-    return TypeToLength<TVM>::Length;
+    return VMToLength<TVM>::Length;
   }
   // Implementation of Print is common to all Mode (ASCII/Binary)
   // TODO: Can we print a \ when in ASCII...well I don't think so
   // it would mean we used a bad VM then, right ?
   void Print(std::ostream &_os) const {
     _os << Internal[0]; // VM is at least garantee to be one
-    for(int i=1; i<TypeToLength<TVM>::Length; ++i)
+    for(int i=1; i<VMToLength<TVM>::Length; ++i)
       _os << "," << Internal[i];
     }
 
-  typename TypeToType<TVR>::Type GetValue(int idx = 0) {
-    assert( idx < TypeToLength<TVM>::Length );
+  typename VRToType<TVR>::Type GetValue(int idx = 0) {
+    assert( idx < VMToLength<TVM>::Length );
     return Internal[idx];
   }
-  void SetValue(typename TypeToType<TVR>::Type v, int idx = 0) {
-    assert( idx < TypeToLength<TVM>::Length );
+  void SetValue(typename VRToType<TVR>::Type v, int idx = 0) {
+    assert( idx < VMToLength<TVM>::Length );
     Internal[idx] = v;
   }
 
   void Read(IStream &_is) {
-    return EncodingImplementation<TypeToEncoding<TVR>::Mode>::Read(Internal, 
+    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
       GetLength(),_is);
     }
   void Write(OStream &_os) const {
-    return EncodingImplementation<TypeToEncoding<TVR>::Mode>::Write(Internal, 
+    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
       GetLength(),_os);
     }
 };
@@ -72,7 +72,7 @@ public:
 // Implementation to perform formatted read and write
 template<> class EncodingImplementation<VR::ASCII> {
 public:
-  template<typename T> // FIXME this should be TypeToType<TVR>::Type
+  template<typename T> // FIXME this should be VRToType<TVR>::Type
   static inline void Read(T* data, unsigned long length,
                           IStream &_is) {
     assert( data );
@@ -175,12 +175,12 @@ public:
     }
 
   unsigned long GetLength() const {
-    return TypeToLength<TVM>::Length;
+    return VMToLength<TVM>::Length;
   }
   // Implementation of Print is common to all Mode (ASCII/Binary)
   void Print(std::ostream &_os) const {
     _os << Internal[0]; // VM is at least garantee to be one
-    for(int i=1; i<TypeToLength<TVM>::Length; ++i)
+    for(int i=1; i<VMToLength<TVM>::Length; ++i)
       _os << "," << Internal[i];
     }
 
@@ -191,7 +191,7 @@ public:
     EncodingImplementation<VR::ASCII>::Write(Internal, GetLength(),_os);
     }
 private:
-  typename String Internal[TypeToLength<TVM>::Length];
+  typename String Internal[VMToLength<TVM>::Length];
 };
 
 template< int TVM>
@@ -216,7 +216,7 @@ public:
   // SetLength should really be protected anyway...all operation
   // should go through SetArray
   unsigned long GetLength() const { return Length; }
-  typedef typename TypeToType<TVR>::Type ArrayType;
+  typedef typename VRToType<TVR>::Type ArrayType;
   void SetLength(unsigned long len) {
     const unsigned int size = sizeof(ArrayType);
     if( len ) {
@@ -233,7 +233,7 @@ public:
   }
 
   // If save is set to zero user should not delete the pointer
-  //void SetArray(const typename TypeToType<TVR>::Type *array, int len, bool save = false) 
+  //void SetArray(const typename VRToType<TVR>::Type *array, int len, bool save = false) 
   void SetArray(const ArrayType *array, unsigned long len,
     bool save = false) {
     if( save ) {
@@ -257,11 +257,11 @@ public:
       _os << "," << Internal[i];
     }
   void Read(IStream &_is) {
-    EncodingImplementation<TypeToEncoding<TVR>::Mode>::Read(Internal, 
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
       GetLength(),_is);
     }
   void Write(std::ostream &_os) const {
-    EncodingImplementation<TypeToEncoding<TVR>::Mode>::Write(Internal, 
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
       GetLength(),_os);
     }
 
@@ -279,7 +279,7 @@ public:
     }
 
 private:
-  typename TypeToType<TVR>::Type *Internal;
+  typename VRToType<TVR>::Type *Internal;
   unsigned long Length; // unsigned int ??
 };
 
@@ -340,7 +340,7 @@ template<>
 class Element<VR::AS, VM::VM5>
 {
 public:
-  char Internal[TypeToLength<VM::VM5>::Length];
+  char Internal[VMToLength<VM::VM5>::Length];
   void Print(std::ostream &_os) const {
     _os << Internal;
     }

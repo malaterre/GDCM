@@ -119,15 +119,15 @@ void PrintImplicitDataElement(std::ostream& _os, const ImplicitDataElement &_val
   case VM::rep: \
     {Element<VR::type, VM::rep> e; \
     /*assert( VM::rep == VM::VM1_n );*/ \
-    e.SetArray( (TypeToType<VR::type>::Type *)array, length, true ); \
+    e.SetArray( (VRToType<VR::type>::Type *)array, length, true ); \
     e.Print( os ); }\
     break;
 #define PrinterTemplateSubCase(type,rep) \
   case VM::rep: \
     {Element<VR::type, VM::rep> e; \
-    /*assert( bv.GetLength() == TypeToLength<VM::rep>::Length * sizeof( TypeToType<VR::type>::Type) ); */ \
-    assert( bv.GetLength() == e.GetLength() * sizeof( TypeToType<VR::type>::Type) ); \
-    memcpy( (void*)(&e), array, e.GetLength() * sizeof( TypeToType<VR::type>::Type) ); \
+    /*assert( bv.GetLength() == VMToLength<VM::rep>::Length * sizeof( VRToType<VR::type>::Type) ); */ \
+    assert( bv.GetLength() == e.GetLength() * sizeof( VRToType<VR::type>::Type) ); \
+    memcpy( (void*)(&e), array, e.GetLength() * sizeof( VRToType<VR::type>::Type) ); \
     e.Print( os ); }\
     break;
 #define PrinterTemplateSub(type) \

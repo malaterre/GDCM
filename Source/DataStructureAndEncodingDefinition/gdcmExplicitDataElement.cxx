@@ -110,9 +110,12 @@ IStream &ExplicitDataElement::Read(IStream &is)
   else if( ValueLengthField.IsUndefined() )
     {
     // Ok this is Pixel Data fragmented...
-    assert( TagField == Tag(0x7fe0,0x0010) );
-    assert( VRField == VR::OB
-         || VRField == VR::OW );
+    if( VRField != VR::UN )
+      {
+      assert( TagField == Tag(0x7fe0,0x0010) );
+      assert( VRField == VR::OB
+           || VRField == VR::OW );
+      }
     ValueField = new SequenceOfFragments;
     }
   else
