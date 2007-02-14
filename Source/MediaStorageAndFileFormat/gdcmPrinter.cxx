@@ -98,10 +98,10 @@ void PrintImplicitDataElement(std::ostream& _os, const ImplicitDataElement &_val
     << "\tValueField=[";
   if( _val.GetVL() )
     {
-  // FIXME FIXME: 
-  // value could dereference a NULL pointer in case of 0 length...
-  const Value& value = _val.GetValue();
-    if( VR::IsBinary(dictVR) )
+    // FIXME FIXME: 
+    // value could dereference a NULL pointer in case of 0 length...
+    const Value& value = _val.GetValue();
+    if( dictVR != VR::INVALID && VR::IsBinary(dictVR) )
       {
       PrintValue(dictVR, vm, value);
       }
@@ -169,7 +169,7 @@ PrinterTemplateCase(ST) \
 PrinterTemplateCase(TM) \
 PrinterTemplateCase(UI) \
 PrinterTemplateCase(UL) \
-PrinterTemplateCase(UN) \
+/*PrinterTemplateCase(UN)*/ \
 PrinterTemplateCase(US) \
 PrinterTemplateCase(UT) \
 default: abort(); }

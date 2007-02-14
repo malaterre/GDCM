@@ -17,6 +17,7 @@
 #include "gdcmReader.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmDataSet.h"
+#include "gdcmPrinter.h"
 
 #include <string>
 #include <iostream>
@@ -111,11 +112,15 @@ int main (int argc, char *argv[])
     return 1;
     }
 
+  // TODO:
   const gdcm::FileMetaInformation &h = reader.GetHeader();
   std::cout << h << std::endl;
 
-  const gdcm::DataSet &ds = reader.GetDataSet();
-  std::cout << ds << std::endl;
+  //const gdcm::DataSet &ds = reader.GetDataSet();
+  //std::cout << ds << std::endl;
+  gdcm::Printer printer;
+  printer.SetDataSet( reader.GetDataSet() );
+  printer.Print( std::cout );
 
   return 0;
 }

@@ -16,20 +16,41 @@
 #include "gdcmReader.h"
 #include "gdcmPrinter.h"
 
-int TestPrinter(int argc, char *argv[])
+#include "gdcmDataImages.h"
+
+int TestPrint(const char *filename)
 {
-  if( argc < 2 )
-    {
-    return 1;
-    }
   gdcm::Reader r;
-  r.SetFileName( argv[1] );
+  r.SetFileName( filename );
   r.Read();
 
   gdcm::Printer p;
+  //p.SetDataSet( r.GetHeader() );
+  //p.Print( std::cout );
   p.SetDataSet( r.GetDataSet() );
   p.Print( std::cout );
 
   return 0;
+}
+
+
+int TestPrinter(int argc, char *argv[])
+{
+  if( argc == 2 )
+    {
+    const char *filename = argv[1];
+    return TestPrint(filename);
+    }
+
+  // else
+  int r = 0, i = 0;
+  const char *filename;
+  while( (filename = gdcmDataImages[i]) )
+    {
+    r += TestPrint( filename );
+    ++i;
+    }
+
+  return r;
 }
 

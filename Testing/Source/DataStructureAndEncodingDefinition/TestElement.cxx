@@ -32,6 +32,12 @@ int TestFL()
   b.Print( std::cout );
   std::cout << std::endl;
 
+  float f[10] = {};
+  Element<VR::FL, VM::VM1_n> c;
+  c.SetArray( f, sizeof(f), true);
+  c.Print( std::cout );
+  std::cout << std::endl;
+
   return 0;
 }
 

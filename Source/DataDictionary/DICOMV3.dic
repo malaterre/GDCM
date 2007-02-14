@@ -265,7 +265,7 @@
 0018 003a ST 1 Intervention Description
 0018 0040 IS 1 Cine Rate
 0018 0050 DS 1 Slice Thickness
-0018 0060 DS 1 KVP
+0018 0060 DS 1 kVp
 0018 0070 IS 1 Counts Accumulated
 0018 0071 CS 1 Acquisition Termination Condition
 0018 0072 DS 1 Effective Duration
