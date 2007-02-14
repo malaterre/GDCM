@@ -80,6 +80,8 @@ public:
   // Check if vm1 is valid compare to vm2, i.e vm1 is element of vm2
   // vm1 is typically deduct from counting in a ValueField
   static bool IsValid(const int &vm1, const VMType &vm2);
+
+  static VMType GetVMTypeFromLength(unsigned int length, unsigned int size);
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const VM::VMType&_val)
@@ -87,6 +89,10 @@ inline std::ostream& operator<<(std::ostream& _os, const VM::VMType&_val)
   _os << VM::GetVMString(_val);
   return _os;
 }
+
+//template <int TVM> struct LengthToVM;
+//template <> struct LengthToVM<1>
+//{ enum { TVM = VM::VM1 }; };
 
 template<int T> struct VMToLength;
 #define TYPETOLENGTH(type,length) \

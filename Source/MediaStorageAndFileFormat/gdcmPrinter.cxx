@@ -76,7 +76,7 @@ void PrintExplicitDataElement(std::ostream& _os, const ExplicitDataElement &_val
     else if ( VR::IsBinary(vr) )
       {
       _os << "\t ValueField=[";
-      PrintValue(vr, vm, value );
+      if( vl ) PrintValue(vr, vm, value );
       _os << "]";
       }
     else 
@@ -139,9 +139,18 @@ PrinterTemplateSubCase(type, VM::VM4) \
 PrinterTemplateSubCase1n(type, VM::VM1_n) \
 default: abort(); }
 
+#define PrinterTemplateSub2(type) \
+switch(vm) { \
+PrinterTemplateSubCase1n(type, VM::VM1) \
+default: abort(); }
+
 #define PrinterTemplateCase(type) \
   case VR::type: \
     PrinterTemplateSub(type) \
+    break;
+#define PrinterTemplateCase2(type) \
+  case VR::type: \
+    PrinterTemplateSub2(type) \
     break;
 #define PrinterTemplate() \
 switch(vr) { \
@@ -157,9 +166,9 @@ PrinterTemplateCase(FD) \
 PrinterTemplateCase(IS) \
 PrinterTemplateCase(LO) \
 PrinterTemplateCase(LT) \
-PrinterTemplateCase(OB) \
+PrinterTemplateCase2(OB) \
 PrinterTemplateCase(OF) \
-PrinterTemplateCase(OW) \
+PrinterTemplateCase2(OW) \
 PrinterTemplateCase(PN) \
 PrinterTemplateCase(SH) \
 PrinterTemplateCase(SL) \
@@ -169,7 +178,7 @@ PrinterTemplateCase(ST) \
 PrinterTemplateCase(TM) \
 PrinterTemplateCase(UI) \
 PrinterTemplateCase(UL) \
-/*PrinterTemplateCase(UN)*/ \
+PrinterTemplateCase(UN) \
 PrinterTemplateCase(US) \
 PrinterTemplateCase(UT) \
 default: abort(); }
@@ -219,7 +228,8 @@ void PrintImplicitDataElements(Printer &is, StructuredSet<ImplicitDataElement>&d
       VM::VMType vm = entry.GetVM();
       if( /*de.GetTag().GetGroup()%2 &&*/ de.GetTag().GetElement() == 0 )
         {
-        assert( vr == VR::INVALID );
+        assert( vr == VR::INVALID || vr == VR::UL );
+        assert( vm == VM::VM0 || vm == VM::VM1 );
         vr = VR::UL;
         vm = VM::VM1;
         }
@@ -245,7 +255,18 @@ void PrintImplicitDataElements(Printer &is, StructuredSet<ImplicitDataElement>&d
     {
     assert( vr == VR::OB_OW );
     vr = VR::OW;
-    vm = VM::VM1_n;
+    //vm = VM::VM1_n;
+    }
+  // RETIRED:
+  // See PS 3.5 - 2004
+  // Data Element (50xx,3000) Curve Data has the Value Representation OB 
+  // with its component points (n-tuples) having the Value Representation
+  // specified in Data Value Representation (50xx,0103). 
+  // The component points shall be encoded in Little Endian.
+  else if( t == Tag(0x5004,0x3000) ) // FIXME
+    {
+    assert( vr == VR::OB_OW );
+    vr = VR::OB;
     }
   // Value of pixels not present in the native image added to an image 
   // to pad to rectangular format. See C.7.5.1.1.2 for further explanation. 
@@ -256,6 +277,9 @@ void PrintImplicitDataElements(Printer &is, StructuredSet<ImplicitDataElement>&d
     if( t == Tag(0x0028,0x0120)  // Pixel Padding Value
       || t == Tag(0x0028,0x0106) // Smallest Image Pixel Value
       || t == Tag(0x0028,0x0107) // Largest Image Pixel Value
+      || t == Tag(0x0028,0x1101) // Red Palette Color Lookup Table Descriptor
+      || t == Tag(0x0028,0x1102)  // Green Palette Color Lookup Table Descriptor
+      || t == Tag(0x0028,0x1103) // Blue Palette Color Lookup Table Descriptor
     )
       {
       // TODO It would be nice to have a TagToVR<0x0028,0x0103>::VRType
@@ -342,41 +366,46 @@ void PrintExplicitDataElements(Printer &is, StructuredSet<ExplicitDataElement> &
       VM::VMType vm = entry.GetVM();
       // TODO: FIXME FIXME FIXME
       const Tag& t = de.GetTag();
+      const VR::VRType vr_read = de.GetVR();
+      if( t == Tag(0x7fe0,0x0010) )
+        {
+        assert( vr & VR::OB_OW );
+        //vr = VR::OW;
+        //vm = VM::VM1_n;
+        }
       if ( de.GetTag().GetElement() == 0x0 )
         {
-        if( vm == VM::VM0 ) // not found
-          {
-          vm = VM::VM1; // this is a group length (VR=UL,VM=1)
-          }
-        if( vr == VR::INVALID ) // not found
-          {
-          vr = VR::UL;  // this is a group length (VR=UL,VM=1)
-          }
+        assert( vm == VM::VM0 || vm == VM::VM1 ); // not found
+        vm = VM::VM1; // this is a group length (VR=UL,VM=1)
+        assert( vr == VR::INVALID || vr == VR::UL ); // not found
+        vr = VR::UL;  // this is a group length (VR=UL,VM=1)
         }
-      const VR::VRType vr_read = de.GetVR();
-  if( t == Tag(0x7fe0,0x0010) )
-    {
-    assert( vr & VR::OB_OW );
-    //vr = VR::OW;
-    vm = VM::VM1_n;
-    }
-      if( de.GetTag().IsPrivate() )
+      else if( de.GetTag().IsPrivate() )
         {
         assert( !de.GetTag().GetElement() || vr == VR::INVALID );
         assert( !de.GetTag().GetElement() || vm == VM::VM0 );
         vr = vr_read; // we have no choice for now but trust it
-        if( vr & VR::OB_OW 
+        /*if( vr & VR::OB_OW 
          || vr & VR::FL )
           {
-          vm = VM::VM1_n;
+          //vm = VM::VM1_n;
           }
         else
           {
           vm = VM::VM1;
+          }*/
+        assert( vm == VM::VM0 );
+        if( vr & VR::OB_OW )
+          {
+          vm = VM::VM1;
+          }
+        else
+          {
+          vm = VM::VM1_n; // FIXME: Is this always correct ?
           }
         }
-      assert( vr != VR::INVALID );
       assert( vm != VM::VM0 );
+      assert( vr != VR::INVALID );
       if( VR::IsASCII(vr_read) || VR::IsBinary(vr_read) )
         {
         //PrintExplicitDataElement(_os, de, printVR, vr, pstyle);

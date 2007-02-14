@@ -37,7 +37,7 @@ public:
   Dict() { 
     FillDICOMV3DataDict();
     FillNIHDataDict();
-  FillSPIDataDict();
+//  FillSPIDataDict();
    Tag t(0, 0);
    DictEntry e( "", (VR::VRType)0, (VM::VMType)0);
    AddDictEntry( t, e );

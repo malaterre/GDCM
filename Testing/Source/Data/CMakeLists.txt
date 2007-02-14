@@ -105,6 +105,10 @@ SET(BLACK_LIST_READER
   CT.3073.1_FromIRAD_BlackWhite_breaker.dcm
   CT.3073.1_FromIRAD_Almost_BlackWhite.dcm
   05119848_IS_Black_hasOverlayData.dcm
+
+  # Printer does not like Aquisition Matrix with 13 elements instead of 4:
+  GE_GENESIS-16-MONO2-WrongLengthItem.dcm
+  MR-MONO2-16-head.dcm
   )
 
 SET(GDCM_DATA_IMAGES)

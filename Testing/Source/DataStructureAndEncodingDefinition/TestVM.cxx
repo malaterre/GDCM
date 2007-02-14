@@ -17,5 +17,6 @@
 
 int TestVM(int, char *[])
 {
+  //gdcm::VM::VMType vm = gdcm::LengthToVM<1>::TVM;
   return 0;
 }

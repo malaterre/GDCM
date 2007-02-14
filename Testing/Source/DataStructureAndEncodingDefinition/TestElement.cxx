@@ -67,6 +67,9 @@ int TestAS()
   a.Print( std::cout );
   std::cout << std::endl;
 
+  // TODO this should not compile:
+  Element<VR::AS, VM::VM6> b = { "019Yb" };
+
   return 0;
 }
 
@@ -84,15 +87,43 @@ int TestUL()
   return 0;
 }
 
+int TestAT()
+{
+  // = (0020,5000) : (0010,0010)\(0010,0020)\(0020,0013) 
+  Element<VR::AT, VM::VM3> a; 
+  Tag list[3];
+  list[0] = Tag(0x0010,0x0010);
+  list[1] = Tag(0x0010,0x0020);
+  list[2] = Tag(0x0020,0x0013);
+  memcpy(&a, list, sizeof(list));
+  a.Print( std::cout );
+  std::cout << std::endl;
+
+  Element<VR::AT, VM::VM1_n> b; 
+  b.SetArray( list, sizeof(list), true);
+  b.Print( std::cout );
+  std::cout << std::endl;
+
+  return 0;
+}
+
 int TestOB()
 {
   const unsigned char array[] =
     { 0x00,0x00,0x00,0x01,0x42,0x12,0xf9,0x22,0x00,0x31,0x00,0x00,0x00,0xc0,0x00,0x00,0x00,0x00,0x03,0xfe,0x02,0x71 };
+  // Bad no such thing as 1-n for OB/OW:
   Element<VR::OB, VM::VM1_n> a;
   a.SetArray( array, sizeof(array), true );
   // reinterpret_cast< const Element<VR::UL, VM::VM1>& > ( array );
   //memcpy((void*)&a, array, sizeof(array));
   a.Print( std::cout );
+  std::cout << std::endl;
+
+  Element<VR::OB, VM::VM1> b;
+  b.SetArray( array, sizeof(array), true );
+  // reinterpret_cast< const Element<VR::UL, VM::VM1>& > ( array );
+  //memcpy((void*)&a, array, sizeof(array));
+  b.Print( std::cout );
   std::cout << std::endl;
 
   return 0;
@@ -154,6 +185,7 @@ int TestElement(int , char *[])
   r += gdcm::TestUSVM3();
   r += gdcm::TestUL();
   r += gdcm::TestOB();
+  r += gdcm::TestAT();
 
   return r;
 }
