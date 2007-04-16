@@ -3,6 +3,9 @@
 # UGLY: I reuse CPACK_NSIS_CONTACT to get the contact name for the debian package...
 # TODO: How do I transmit the 'Depends' line ?
 
+# Thanks:
+# Eric Noulard for initial UseRpmTools used as template
+
 IF(UNIX)
   IF(NOT CMAKE_AR)
     MESSAGE(FATAL_ERROR "No ar")
