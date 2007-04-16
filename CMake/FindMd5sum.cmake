@@ -20,18 +20,15 @@ ${CMAKE_BINARY_DIR}/md5sum.cmake
     ${DIRECTORY}/*
   )
   
-  #MESSAGE( ${MD5SUM_INPUT_FILES} )
-  #MESSAGE( ${CMAKE_BINARY_DIR}/debian_package )
-  
   EXECUTE_PROCESS(
     COMMAND md5sum \${MD5SUM_INPUT_FILES}
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/debian_package
+    WORKING_DIRECTORY ${DIRECTORY}
     OUTPUT_VARIABLE md5sum_VAR
   #  OUTPUT_STRIP_TRAILING_WHITESPACE
     RESULT_VARIABLE md5sum_RES
   )
   # apparently md5sums start with: usr/...
-  STRING(REPLACE ${CMAKE_BINARY_DIR}/debian_package/
+  STRING(REPLACE ${DIRECTORY}/
                   \"\" md5sum_VAR_clean
                   \${md5sum_VAR})
   FILE(WRITE ${CMAKE_BINARY_DIR}/md5sums \${md5sum_VAR_clean})
@@ -50,7 +47,6 @@ ADD_CUSTOM_COMMAND(
 ENDMACRO(COMPUTE_MD5SUMS)
 
 # Report the results.
-#  MESSAGE("Mathieu: ${Md5sum_FIND_QUIETLY}")
 IF(NOT Md5sum_FOUND)
   SET(Md5sum_DIR_MESSAGE
     "Md5sum was not found. Make sure the entries Md5sum_* are set.")
