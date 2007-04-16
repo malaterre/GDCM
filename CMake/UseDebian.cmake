@@ -48,27 +48,6 @@ Description: ${CPACK_PACKAGE_DESCRIPTION_SUMMARY}
 ")
 
 
-# TODO: No dependencies is done for now:
-FIND_PACKAGE(Md5sum REQUIRED)
-
-# BUG: md5sum are computed everytime
-EXECUTE_PROCESS(
-  COMMAND ${Md5sum_EXECUTABLE} ${CMAKE_BINARY_DIR}/CPackConfig.cmake
-  OUTPUT_VARIABLE md5sum_VAR
-#  OUTPUT_STRIP_TRAILING_WHITESPACE
-  RESULT_VARIABLE md5sum_RES
-)
-FILE(WRITE ${CMAKE_BINARY_DIR}/md5sums ${md5sum_VAR})
-
-ADD_CUSTOM_COMMAND(
-  OUTPUT    ${CMAKE_BINARY_DIR}/control.tar.gz
-  COMMAND   cmake -E tar
-  ARGS      cfvz ${CMAKE_BINARY_DIR}/control.tar.gz control ${CMAKE_BINARY_DIR}/md5sums
-  DEPENDS   ${CMAKE_BINARY_DIR}/control ${CMAKE_BINARY_DIR}/md5sums
-  COMMENT   "Generating control.tar.gz"
-  )
-
-
 # FIXME:
 # I have no friggin clue how cpack works, let's reinvent the wheel instead
 
@@ -99,6 +78,33 @@ ADD_CUSTOM_COMMAND(
 #  DEPENDS
   COMMENT   "Generating data.tar.gz"
   )
+
+# TODO: No dependencies is done for now:
+FIND_PACKAGE(Md5sum REQUIRED)
+
+# BUG: md5sum are computed everytime
+FILE(GLOB_RECURSE MD5SUM_INPUT_FILES
+  ${CMAKE_BINARY_DIR}/debian_package/*
+)
+
+EXECUTE_PROCESS(
+  COMMAND ${Md5sum_EXECUTABLE} ${MD5SUM_INPUT_FILES}
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/debian_package
+  OUTPUT_VARIABLE md5sum_VAR
+#  OUTPUT_STRIP_TRAILING_WHITESPACE
+  RESULT_VARIABLE md5sum_RES
+)
+FILE(WRITE ${CMAKE_BINARY_DIR}/md5sums ${md5sum_VAR})
+
+ADD_CUSTOM_COMMAND(
+  OUTPUT    ${CMAKE_BINARY_DIR}/control.tar.gz
+  COMMAND   cmake -E tar
+  ARGS      cfvz ${CMAKE_BINARY_DIR}/control.tar.gz control ${CMAKE_BINARY_DIR}/md5sums
+  DEPENDS   ${CMAKE_BINARY_DIR}/control ${CMAKE_BINARY_DIR}/md5sums
+  COMMENT   "Generating control.tar.gz"
+  )
+
+
 
 # Warning order is important:
 # ar -r your-package-name.deb debian-binary control.tar.gz data.tar.gz
