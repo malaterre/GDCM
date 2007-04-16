@@ -82,11 +82,12 @@ ADD_CUSTOM_COMMAND(
 # TODO: No dependencies is done for now:
 FIND_PACKAGE(Md5sum REQUIRED)
 
-# BUG: md5sum are computed everytime
+# get all the files to be installed:
 FILE(GLOB_RECURSE MD5SUM_INPUT_FILES
   ${CMAKE_BINARY_DIR}/debian_package/*
 )
 
+# BUG: md5sum are computed everytime
 EXECUTE_PROCESS(
   COMMAND ${Md5sum_EXECUTABLE} ${MD5SUM_INPUT_FILES}
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/debian_package
@@ -96,6 +97,7 @@ EXECUTE_PROCESS(
 )
 FILE(WRITE ${CMAKE_BINARY_DIR}/md5sums ${md5sum_VAR})
 
+# create a tarball (control.tar.gz) of control and md5sums
 ADD_CUSTOM_COMMAND(
   OUTPUT    ${CMAKE_BINARY_DIR}/control.tar.gz
   COMMAND   cmake -E tar
@@ -118,6 +120,7 @@ ADD_CUSTOM_COMMAND(
   COMMENT   "Generating deb package"
   )
 
+# the final target:
 ADD_CUSTOM_TARGET(debpackage
   DEPENDS ${CMAKE_BINARY_DIR}/${DEBIAN_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}-1_i386.deb
   )
