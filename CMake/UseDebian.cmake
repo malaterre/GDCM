@@ -132,6 +132,11 @@ ADD_CUSTOM_TARGET(debpackage
   )
 ADD_DEPENDENCIES(debpackage deb_destdir_install)
 
+
+# BUG: debian_package is not removed during a 'make clean':
+SET_DIRECTORY_PROPERTIES(PROPERTIES
+ ADDITIONAL_MAKE_CLEAN_FILES "debian-binary;control;md5sums;debian_package;") 
+
   ENDMACRO(ADD_DEBIAN_TARGETS DEBNAME)
 
 
