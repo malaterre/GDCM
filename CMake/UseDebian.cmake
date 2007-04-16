@@ -95,7 +95,11 @@ EXECUTE_PROCESS(
 #  OUTPUT_STRIP_TRAILING_WHITESPACE
   RESULT_VARIABLE md5sum_RES
 )
-FILE(WRITE ${CMAKE_BINARY_DIR}/md5sums ${md5sum_VAR})
+# apparently md5sums start with: usr/...
+STRING(REPLACE ${CMAKE_BINARY_DIR}/debian_package/
+                "" md5sum_VAR_clean
+                ${md5sum_VAR})
+FILE(WRITE ${CMAKE_BINARY_DIR}/md5sums ${md5sum_VAR_clean})
 
 # create a tarball (control.tar.gz) of control and md5sums
 ADD_CUSTOM_COMMAND(
