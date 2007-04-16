@@ -41,10 +41,11 @@ Priority: optional
 Architecture: i386
 Depends: libc6 (>= 2.3.6-6), libgcc1 (>= 1:4.1.1-12), libncurses5 (>= 5.4-5), libstdc++6 (>= 4.1.1-12)
 Maintainer: ${CPACK_NSIS_CONTACT}
-Description: ${DEBIAN_PACKAGE_NAME} is a super duper package.
+Description: ${CPACK_PACKAGE_DESCRIPTION_SUMMARY}
  .
  ${DEBIAN_PACKAGE_NAME} was packaged by UseDebian and CPack
- .")
+ .
+")
 
 
 # TODO: No dependencies is done for now:
