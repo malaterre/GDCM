@@ -93,7 +93,10 @@ FILE(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/debian_package)
 # calling cmake -P cmake_install.cmake is the same as calling make install:
   ADD_CUSTOM_TARGET(deb_destdir_install
     COMMAND DESTDIR=${CMAKE_BINARY_DIR}/debian_package cmake -P cmake_install.cmake
+    DEPENDS ${CMAKE_BINARY_DIR}/cmake_install.cmake
+    COMMENT "Building debian_package directory with DESTDIR"
   )
+  ADD_DEPENDENCIES(deb_destdir_install all preinstall)
 
 # create data.tar.gz from the make install stuff
 # all files starts with: ./usr
