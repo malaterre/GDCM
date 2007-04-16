@@ -28,10 +28,17 @@ IF(UNIX)
 " )
 
 # debian policy enforce lower case for package name
+IF(NOT DEBIAN_PACKAGE_NAME)
     STRING(TOLOWER
       ${CPACK_PACKAGE_NAME}
       DEBIAN_PACKAGE_NAME
     )
+ENDIF(NOT DEBIAN_PACKAGE_NAME)
+IF(NOT DEBIAN_PACKAGE_DEPENDS)
+  SET(DEBIAN_PACKAGE_DEPENDS
+    "libc6 (>= 2.3.1-6), libgcc1 (>= 1:3.4.2-12)"
+  )
+ENDIF(NOT DEBIAN_PACKAGE_DEPENDS)
 
     FILE(WRITE ${CMAKE_BINARY_DIR}/control
 "Package: ${DEBIAN_PACKAGE_NAME}
@@ -39,11 +46,11 @@ Version: ${CPACK_PACKAGE_VERSION}
 Section: devel
 Priority: optional
 Architecture: i386
-Depends: libc6 (>= 2.3.1-6), libgcc1 (>= 1:3.4.2-12)
+Depends: ${DEBIAN_PACKAGE_DEPENDS}
 Maintainer: ${CPACK_NSIS_CONTACT}
 Description: ${CPACK_PACKAGE_DESCRIPTION_SUMMARY}
  .
- ${DEBIAN_PACKAGE_NAME} was packaged by UseDebian and CPack
+ ${DEBIAN_PACKAGE_NAME} was packaged by UseDebian and CMake.
  .
 ")
 
@@ -76,7 +83,7 @@ ADD_CUSTOM_COMMAND(
   COMMAND   cmake -E tar
   ARGS      cfvz ${CMAKE_BINARY_DIR}/data.tar.gz .
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/debian_package
-#  DEPENDS
+  DEPENDS   ${CMAKE_BINARY_DIR}/debian_package
   COMMENT   "Generating data.tar.gz"
   )
 
@@ -103,6 +110,7 @@ STRING(REPLACE ${CMAKE_BINARY_DIR}/debian_package/
 FILE(WRITE ${CMAKE_BINARY_DIR}/md5sums ${md5sum_VAR_clean})
 
 # create a tarball (control.tar.gz) of control and md5sums
+# files need to be in relative path: ./md5sums ./control ...
 ADD_CUSTOM_COMMAND(
   OUTPUT    ${CMAKE_BINARY_DIR}/control.tar.gz
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
@@ -138,7 +146,6 @@ SET_DIRECTORY_PROPERTIES(PROPERTIES
  ADDITIONAL_MAKE_CLEAN_FILES "debian-binary;control;md5sums;debian_package;") 
 
   ENDMACRO(ADD_DEBIAN_TARGETS DEBNAME)
-
 
 ENDIF(UNIX)
 
