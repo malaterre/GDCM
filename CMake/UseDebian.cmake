@@ -3,6 +3,14 @@
 # UGLY: I reuse CPACK_NSIS_CONTACT to get the contact name for the debian package...
 # TODO: How do I transmit the 'Depends' line ?
 
+# DOCUMENTATION; You need to fill these values to set the control file:
+# "Package: ${DEBIAN_PACKAGE_NAME}
+# Version: ${DEBIAN_PACKAGE_VERSION}
+# Architecture: ${DEBIAN_ARCHITECTURE}
+# Depends: ${DEBIAN_PACKAGE_DEPENDS}
+# Maintainer: ${CPACK_NSIS_CONTACT}
+# Description: ${CPACK_PACKAGE_DESCRIPTION_SUMMARY}
+
 # Thanks:
 # Eric Noulard for initial UseRpmTools used as template
 
@@ -39,13 +47,24 @@ IF(NOT DEBIAN_PACKAGE_DEPENDS)
     "libc6 (>= 2.3.1-6), libgcc1 (>= 1:3.4.2-12)"
   )
 ENDIF(NOT DEBIAN_PACKAGE_DEPENDS)
+IF(NOT DEBIAN_ARCHITECTURE)
+  # There is no such thing as i686 architecture on debian, you should use i386 instead
+  # $ dpkg --print-architecture
+  SET(DEBIAN_ARCHITECTURE i386)
+ENDIF(NOT DEBIAN_ARCHITECTURE)
+IF(NOT DEBIAN_PACKAGE_VERSION)
+  SET(DEBIAN_PACKAGE_VERSION
+    ${CPACK_PACKAGE_VERSION})
+ENDIF(NOT DEBIAN_PACKAGE_VERSION)
+
+#MESSAGE(${CMAKE_SYSTEM_PROCESSOR})
 
     FILE(WRITE ${CMAKE_BINARY_DIR}/control
 "Package: ${DEBIAN_PACKAGE_NAME}
 Version: ${CPACK_PACKAGE_VERSION}
 Section: devel
 Priority: optional
-Architecture: i386
+Architecture: ${DEBIAN_ARCHITECTURE}
 Depends: ${DEBIAN_PACKAGE_DEPENDS}
 Maintainer: ${CPACK_NSIS_CONTACT}
 Description: ${CPACK_PACKAGE_DESCRIPTION_SUMMARY}
@@ -126,9 +145,10 @@ ADD_CUSTOM_COMMAND(
 # ar -r your-package-name.deb debian-binary control.tar.gz data.tar.gz
 # eg: cmake_2.4.5-1_i386.deb
 ADD_CUSTOM_COMMAND(
-  OUTPUT    ${CMAKE_BINARY_DIR}/${DEBIAN_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}-1_i386.deb
+  OUTPUT    ${CMAKE_BINARY_DIR}/${DEBIAN_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}-1_${DEBIAN_ARCHITECTURE}.deb
   COMMAND   ${CMAKE_AR}
-  ARGS      -r ${CMAKE_BINARY_DIR}/${DEBIAN_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}-1_i386.deb ${CMAKE_BINARY_DIR}/debian-binary
+  ARGS      -r ${CMAKE_BINARY_DIR}/${DEBIAN_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}-1_${DEBIAN_ARCHITECTURE}.deb
+               ${CMAKE_BINARY_DIR}/debian-binary
                ${CMAKE_BINARY_DIR}/control.tar.gz ${CMAKE_BINARY_DIR}/data.tar.gz
   DEPENDS   ${CMAKE_BINARY_DIR}/debian-binary ${CMAKE_BINARY_DIR}/control.tar.gz ${CMAKE_BINARY_DIR}/data.tar.gz
   COMMENT   "Generating deb package"
@@ -136,7 +156,7 @@ ADD_CUSTOM_COMMAND(
 
 # the final target:
 ADD_CUSTOM_TARGET(debpackage
-  DEPENDS ${CMAKE_BINARY_DIR}/${DEBIAN_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}-1_i386.deb
+  DEPENDS ${CMAKE_BINARY_DIR}/${DEBIAN_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}-1_${DEBIAN_ARCHITECTURE}.deb
   )
 ADD_DEPENDENCIES(debpackage deb_destdir_install)
 
