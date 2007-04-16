@@ -69,12 +69,36 @@ ADD_CUSTOM_COMMAND(
   )
 
 
-INCLUDE(${CMAKE_BINARY_DIR}/CPackConfig.cmake)
-ADD_CUSTOM_TARGET(data_tgz
-  COMMAND cpack -G TGZ --config CPackConfig.cmake
-# TODO: How to get the cpack package name ?
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/${CPACK_PACKAGE_FILE_NAME}.tar.gz ${CMAKE_BINARY_DIR}/data.tar.gz
-)  
+# FIXME:
+# I have no friggin clue how cpack works, let's reinvent the wheel instead
+
+#INCLUDE(${CMAKE_BINARY_DIR}/CPackConfig.cmake)
+#ADD_CUSTOM_TARGET(data_tgz
+#  COMMAND cpack -G TGZ --config CPackConfig.cmake
+## TODO: How to get the cpack package name ?
+#  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/${CPACK_PACKAGE_FILE_NAME}.tar.gz ${CMAKE_BINARY_DIR}/data.tar.gz
+#)  
+
+# let's create a temp directory to call 'DESTDIR=... make install' into:
+# cleanup
+FILE(REMOVE ${CMAKE_BINARY_DIR}/debian_package)
+# make dir:
+FILE(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/debian_package)
+
+# calling cmake -P cmake_install.cmake is the same as calling make install:
+  ADD_CUSTOM_TARGET(deb_destdir_install
+    COMMAND DESTDIR=${CMAKE_BINARY_DIR}/debian_package cmake -P cmake_install.cmake
+  )
+
+# create data.tar.gz from the make install stuff
+ADD_CUSTOM_COMMAND(
+  OUTPUT    ${CMAKE_BINARY_DIR}/data.tar.gz
+  COMMAND   cmake -E tar
+  ARGS      cfvz ${CMAKE_BINARY_DIR}/data.tar.gz .
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/debian_package
+#  DEPENDS
+  COMMENT   "Generating data.tar.gz"
+  )
 
 # Warning order is important:
 # ar -r your-package-name.deb debian-binary control.tar.gz data.tar.gz
@@ -91,7 +115,7 @@ ADD_CUSTOM_COMMAND(
 ADD_CUSTOM_TARGET(debpackage
   DEPENDS ${CMAKE_BINARY_DIR}/${DEBIAN_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}-1_i386.deb
   )
-ADD_DEPENDENCIES(debpackage data_tgz)
+ADD_DEPENDENCIES(debpackage deb_destdir_install)
 
   ENDMACRO(ADD_DEBIAN_TARGETS DEBNAME)
 
