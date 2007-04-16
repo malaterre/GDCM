@@ -16,7 +16,7 @@ IF(UNIX)
     MESSAGE(FATAL_ERROR "CPack was not included, you should include CPack before Using UseDebian")
   ENDIF (NOT DEFINED "CPACK_PACKAGE_NAME")
 
-  MACRO(ADD_DEBIAN_TARGETS DEBNAME)
+  MACRO(ADD_DEBIAN_TARGETS)
 # $ ar tv cmake_2.4.5-1_i386.deb
 # rw-r--r-- 0/0      4 Dec  4 22:58 2006 debian-binary
 # rw-r--r-- 0/0   8981 Dec  4 22:58 2006 control.tar.gz
@@ -32,7 +32,6 @@ IF(UNIX)
       ${CPACK_PACKAGE_NAME}
       DEBIAN_PACKAGE_NAME
     )
-MESSAGE(${CPACK_PACKAGE_NAME})
 
     FILE(WRITE ${CMAKE_BINARY_DIR}/control
 "Package: ${DEBIAN_PACKAGE_NAME}
@@ -69,7 +68,6 @@ ADD_CUSTOM_COMMAND(
   )
 
 
-MESSAGE(${CPACK_PACKAGE_NAME})
 INCLUDE(${CMAKE_BINARY_DIR}/CPackConfig.cmake)
 ADD_CUSTOM_TARGET(data_tgz
   COMMAND cpack -G TGZ --config CPackConfig.cmake
@@ -90,7 +88,6 @@ ADD_CUSTOM_COMMAND(
   )
 
 ADD_CUSTOM_TARGET(debpackage
-#  ALL echo
   DEPENDS ${CMAKE_BINARY_DIR}/${DEBIAN_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}-1_i386.deb
   )
 ADD_DEPENDENCIES(debpackage data_tgz)
