@@ -70,6 +70,7 @@ FILE(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/debian_package)
   )
 
 # create data.tar.gz from the make install stuff
+# all files starts with: ./usr
 ADD_CUSTOM_COMMAND(
   OUTPUT    ${CMAKE_BINARY_DIR}/data.tar.gz
   COMMAND   cmake -E tar
@@ -104,8 +105,9 @@ FILE(WRITE ${CMAKE_BINARY_DIR}/md5sums ${md5sum_VAR_clean})
 # create a tarball (control.tar.gz) of control and md5sums
 ADD_CUSTOM_COMMAND(
   OUTPUT    ${CMAKE_BINARY_DIR}/control.tar.gz
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
   COMMAND   cmake -E tar
-  ARGS      cfvz ${CMAKE_BINARY_DIR}/control.tar.gz control ${CMAKE_BINARY_DIR}/md5sums
+  ARGS      cfvz ${CMAKE_BINARY_DIR}/control.tar.gz ./control ./md5sums
   DEPENDS   ${CMAKE_BINARY_DIR}/control ${CMAKE_BINARY_DIR}/md5sums
   COMMENT   "Generating control.tar.gz"
   )
