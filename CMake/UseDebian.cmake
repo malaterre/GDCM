@@ -106,27 +106,47 @@ ADD_CUSTOM_COMMAND(
   COMMENT   "Generating data.tar.gz"
   )
 
-# TODO: No dependencies is done for now:
-FIND_PACKAGE(Md5sum REQUIRED)
 
 # get all the files to be installed:
 FILE(GLOB_RECURSE MD5SUM_INPUT_FILES
   ${CMAKE_BINARY_DIR}/debian_package/*
 )
 
-# BUG: md5sum are computed everytime
-EXECUTE_PROCESS(
-  COMMAND ${Md5sum_EXECUTABLE} ${MD5SUM_INPUT_FILES}
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/debian_package
-  OUTPUT_VARIABLE md5sum_VAR
-#  OUTPUT_STRIP_TRAILING_WHITESPACE
-  RESULT_VARIABLE md5sum_RES
+# Super ugly and barely readable but you need that in order to
+# work around a deficiency in EXECUTE_PROCESS which does not have dependencie scanning
+FILE(WRITE
+${CMAKE_BINARY_DIR}/md5sum.cmake
+"
+  FILE(GLOB_RECURSE MD5SUM_INPUT_FILES
+    ${CMAKE_BINARY_DIR}/debian_package/*
+  )
+  
+  #MESSAGE( ${MD5SUM_INPUT_FILES} )
+  #MESSAGE( ${CMAKE_BINARY_DIR}/debian_package )
+  
+  EXECUTE_PROCESS(
+    COMMAND md5sum ${MD5SUM_INPUT_FILES}
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/debian_package
+    OUTPUT_VARIABLE md5sum_VAR
+  #  OUTPUT_STRIP_TRAILING_WHITESPACE
+    RESULT_VARIABLE md5sum_RES
+  )
+  # apparently md5sums start with: usr/...
+  STRING(REPLACE ${CMAKE_BINARY_DIR}/debian_package/
+                  \"\" md5sum_VAR_clean
+                  \${md5sum_VAR})
+  FILE(WRITE ${CMAKE_BINARY_DIR}/md5sums \${md5sum_VAR_clean})
+"
 )
-# apparently md5sums start with: usr/...
-STRING(REPLACE ${CMAKE_BINARY_DIR}/debian_package/
-                "" md5sum_VAR_clean
-                ${md5sum_VAR})
-FILE(WRITE ${CMAKE_BINARY_DIR}/md5sums ${md5sum_VAR_clean})
+
+ADD_CUSTOM_COMMAND(
+  OUTPUT    ${CMAKE_BINARY_DIR}/md5sums
+  COMMAND   cmake
+  ARGS      -P ${CMAKE_BINARY_DIR}/md5sum.cmake
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+  DEPENDS   ${CMAKE_BINARY_DIR}/debian_package ${CMAKE_BINARY_DIR}/md5sum.cmake
+  COMMENT   "Generating md5sums"
+  )
 
 # create a tarball (control.tar.gz) of control and md5sums
 # files need to be in relative path: ./md5sums ./control ...
