@@ -1,10 +1,9 @@
 # create .deb file
 # You need to setup CPack first !
 # UGLY: I reuse CPACK_NSIS_CONTACT to get the contact name for the debian package...
-# TODO: How do I transmit the 'Depends' line ?
 
 # DOCUMENTATION; You need to fill these values to set the control file:
-# "Package: ${DEBIAN_PACKAGE_NAME}
+# Package: ${DEBIAN_PACKAGE_NAME}
 # Version: ${DEBIAN_PACKAGE_VERSION}
 # Architecture: ${DEBIAN_ARCHITECTURE}
 # Depends: ${DEBIAN_PACKAGE_DEPENDS}
@@ -90,9 +89,11 @@ FILE(REMOVE ${CMAKE_BINARY_DIR}/debian_package)
 # make dir:
 FILE(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/debian_package)
 
-# calling cmake -P cmake_install.cmake is the same as calling make install:
   ADD_CUSTOM_TARGET(deb_destdir_install
-    COMMAND DESTDIR=${CMAKE_BINARY_DIR}/debian_package cmake -P cmake_install.cmake
+# technicall cmake -P cmake_install.cmake should work, but there is a missing dependencie, I could
+# not figure out what it was, thus fallback to the 'make install' solution 
+#    COMMAND DESTDIR=${CMAKE_BINARY_DIR}/debian_package cmake -P cmake_install.cmake
+    COMMAND DESTDIR=${CMAKE_BINARY_DIR}/debian_package ${CMAKE_MAKE_PROGRAM} install
     DEPENDS ${CMAKE_BINARY_DIR}/cmake_install.cmake
     COMMENT "Building debian_package directory with DESTDIR"
   )
@@ -102,7 +103,7 @@ FILE(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/debian_package)
 # all files starts with: ./usr
 ADD_CUSTOM_COMMAND(
   OUTPUT    ${CMAKE_BINARY_DIR}/data.tar.gz
-  COMMAND   cmake -E tar
+  COMMAND   ${CMAKE_COMMAND} -E tar
   ARGS      cfvz ${CMAKE_BINARY_DIR}/data.tar.gz .
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/debian_package
   DEPENDS   ${CMAKE_BINARY_DIR}/debian_package
@@ -122,7 +123,7 @@ COMPUTE_MD5SUMS(
 ADD_CUSTOM_COMMAND(
   OUTPUT    ${CMAKE_BINARY_DIR}/control.tar.gz
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-  COMMAND   cmake -E tar
+  COMMAND   ${CMAKE_COMMAND} -E tar
   ARGS      cfvz ${CMAKE_BINARY_DIR}/control.tar.gz ./control ./md5sums
   DEPENDS   ${CMAKE_BINARY_DIR}/control ${CMAKE_BINARY_DIR}/md5sums
   COMMENT   "Generating control.tar.gz"
