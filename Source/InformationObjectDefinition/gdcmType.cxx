@@ -19,8 +19,8 @@ namespace gdcm
 {
 
 static const char *TypeStrings[] = {
-	 "1",
-	 "1C",
+   "1",
+   "1C",
    "2",
    "2C",
    "3",
