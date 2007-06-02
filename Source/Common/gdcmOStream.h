@@ -17,9 +17,15 @@
 #ifndef __gdcmOStream_h
 #define __gdcmOStream_h
 
-#include "gdcmIOS.h"
+//#include "gdcmIOS.h"
 
-namespace gdcm
+#include <iostream>
+#include <sstream>
+#include <fstream>
+
+#define OStream std::ostream
+
+namespace gdcm_old
 {
 
 /**
@@ -27,6 +33,7 @@ namespace gdcm
  * \note bla
  */
 
+#if 0
 class GDCM_EXPORT OStream : virtual public IOS
 {
 public:
@@ -47,6 +54,7 @@ private:
   OStream &operator= (OStream const &);
 };
 
+#endif
 }
 
 #endif //__gdcmIStream_h

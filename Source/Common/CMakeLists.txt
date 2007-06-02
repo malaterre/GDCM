@@ -30,17 +30,18 @@ INCLUDE_DIRECTORIES(
 SET(Common_SRCS
   gdcmDirectory.cxx
   gdcmFilename.cxx
-  gdcmIFStream.cxx
-  gdcmIOS.cxx
-  gdcmIStream.cxx
+  gdcmFilenameGenerator.cxx
+  #  gdcmIFStream.cxx
+#  gdcmIOS.cxx
+#  gdcmIStream.cxx
   gdcmImage.cxx
   gdcmLookupTable.cxx
-  gdcmMemoryStream.cxx
-  gdcmOFStream.cxx
-  gdcmOStream.cxx
+  # gdcmMemoryStream.cxx
+  #  gdcmOFStream.cxx
+#  gdcmOStream.cxx
   gdcmPhotometricInterpretation.cxx
   gdcmPixelType.cxx
-  gdcmStringStream.cxx
+  #  gdcmStringStream.cxx
   gdcmSwapCode.cxx
   gdcmSystem.cxx
   gdcmTrace.cxx

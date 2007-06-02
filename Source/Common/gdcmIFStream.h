@@ -17,12 +17,14 @@
 #ifndef __gdcmIFStream_h
 #define __gdcmIFStream_h
 
-#include "gdcmIStream.h"
+//#include "gdcmIStream.h"
 
 #include <string>
 #include <fstream>
 
-namespace gdcm
+#define IFStream std::ifstream
+
+namespace gdcm_old
 {
 
 /**
@@ -31,6 +33,7 @@ namespace gdcm
  * \note bla
  */
 
+#if 0
 class GDCM_EXPORT IFStream : public IStream
 {
 public:
@@ -59,6 +62,7 @@ private:
   IFStream &operator= (IFStream const &);
 };
 
+#endif
 }
 
 #endif //__gdcmIFStream_h

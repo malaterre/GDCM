@@ -1,3 +1,18 @@
+/*=========================================================================
+
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006 Mathieu Malaterre
+  Copyright (c) 1993-2005 CREATIS
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+
+=========================================================================*/
 #ifndef __gdcmByteSwap_txx
 #define __gdcmByteSwap_txx
 
@@ -32,6 +47,17 @@ bool ByteSwap<T>::SystemIsBigEndian() { return false; }
 template <class T>
 bool ByteSwap<T>::SystemIsLittleEndian() { return true; }
 #endif  
+
+template <class T>
+void ByteSwap<T>::Swap(T &p)
+{
+#ifdef GDCM_WORDS_BIGENDIAN
+    ByteSwap<T>::SwapFromSwapCodeIntoSystem(p, SwapCode::LittleEndian);
+#else
+    ByteSwap<T>::SwapFromSwapCodeIntoSystem(p, SwapCode::BigEndian);
+#endif
+}
+
 // Swaps the bytes so they agree with the processor order
 template <class T>
 void ByteSwap<T>::SwapFromSwapCodeIntoSystem(T &a, SwapCode const &swapcode)
@@ -50,6 +76,15 @@ void ByteSwap<T>::SwapFromSwapCodeIntoSystem(T &a, SwapCode const &swapcode)
   default:
     std::cerr << "Impossible" << std::endl;
     abort();
+    }
+}
+
+template <class T>
+void ByteSwap<T>::SwapRange(T *p, unsigned int num)
+{
+  for(unsigned int i=0; i<num; i++)
+    {
+    ByteSwap<T>::Swap(p[i]);
     }
 }
 

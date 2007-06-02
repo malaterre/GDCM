@@ -20,14 +20,19 @@
 #include "gdcmTypes.h"
 #include "gdcmObject.h"
 
+// FIXME
+#include "gdcmIStream.h"
+#include "gdcmOStream.h"
+
+
 
 namespace gdcm
 {
   
 class LookupTableInternal;
 class ByteValue;
-class IStream;
-class OStream;
+//class IStream;
+//class OStream;
 class LookupTable : public Object
 {
 public:
@@ -41,6 +46,7 @@ public:
 
   LookupTable();
   ~LookupTable();
+  void Print(std::ostream &) const {}
 
   void Allocate( int bitsample = 8 );
   void InitializeLUT(LookupTableType type, unsigned short length,

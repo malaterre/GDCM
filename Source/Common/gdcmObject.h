@@ -63,7 +63,7 @@ public:
 
 //protected:
   // For dealing with printing of object and polymorphism
-  virtual void Print(std::ostream &) const {}
+  virtual void Print(std::ostream &) const {};
 
 private:
   long ReferenceCount;

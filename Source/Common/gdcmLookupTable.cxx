@@ -14,9 +14,6 @@
 
 =========================================================================*/
 #include "gdcmLookupTable.h"
-#include "gdcmIStream.h"
-#include "gdcmOStream.h"
-
 #include <vector>
 
 namespace gdcm
@@ -160,12 +157,12 @@ void LookupTable::Decode(IStream &is, OStream &os)
     {
     unsigned char idx;
     unsigned char rgb[3];
-    while( !is.Eof() )
+    while( !is.eof() )
       {
       //is.Get(c);
-      is.Read( (char*)(&idx), 1);
+      is.read( (char*)(&idx), 1);
       // FIXME
-      if( is.Eof() ) break;
+      if( is.eof() ) break;
       if( IncompleteLUT )
         {
         assert( idx < Internal->Length[RED] );
@@ -175,20 +172,20 @@ void LookupTable::Decode(IStream &is, OStream &os)
       rgb[RED]   = Internal->RGB[3*idx+RED];
       rgb[GREEN] = Internal->RGB[3*idx+GREEN];
       rgb[BLUE]  = Internal->RGB[3*idx+BLUE];
-      os.Write((char*)rgb, 3 );
+      os.write((char*)rgb, 3 );
       }
     }
   else
     {
     const uint16_t *rgb16 = (uint16_t*)&Internal->RGB[0];
-    while( !is.Eof() )
+    while( !is.eof() )
       {
       unsigned short idx;
       unsigned short rgb[3];
-      is.Read( (char*)(&idx), 2);
+      is.read( (char*)(&idx), 2);
       //is.Get(c);
       // FIXME
-      if( is.Eof() ) break;
+      if( is.eof() ) break;
       if( IncompleteLUT )
         {
         assert( idx < Internal->Length[RED] );
@@ -198,7 +195,7 @@ void LookupTable::Decode(IStream &is, OStream &os)
       rgb[RED]   = rgb16[3*idx+RED];
       rgb[GREEN] = rgb16[3*idx+GREEN];
       rgb[BLUE]  = rgb16[3*idx+BLUE];
-      os.Write((char*)rgb, 3*2);
+      os.write((char*)rgb, 3*2);
       }
     }
 }

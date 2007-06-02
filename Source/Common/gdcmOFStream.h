@@ -17,12 +17,14 @@
 #ifndef __gdcmOFStream_h
 #define __gdcmOFStream_h
 
-#include "gdcmOStream.h"
+//#include "gdcmOStream.h"
 
 #include <string>
 #include <fstream>
 
-namespace gdcm
+#define OFStream std::ofstream
+
+namespace gdcm_old
 {
 
 /**
@@ -31,6 +33,7 @@ namespace gdcm
  * \note bla
  */
 
+#if 0
 class GDCM_EXPORT OFStream : public OStream
 {
 public:
@@ -58,6 +61,7 @@ private:
   OFStream &operator= (OFStream const &);
 };
 
+#endif
 }
 
 #endif //__gdcmOFStream_h

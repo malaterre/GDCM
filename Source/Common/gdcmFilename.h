@@ -40,7 +40,7 @@ public:
   // FIXME: I don't like this function
   // It hides the realpath call (maybe usefull)
   // and it forces file to exist on the disk whereas Filename
-  // should be independant to file existence.
+  // should be independant from file existence.
   bool IsIdentical(Filename const &fn) const;
 
 private:

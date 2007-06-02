@@ -21,11 +21,11 @@
 #include <sys/stat.h>  //stat function
 
 #ifdef _MSC_VER
-   #include <windows.h>
-   #include <direct.h>
+  #include <windows.h>
+  #include <direct.h>
 #else
-   #include <dirent.h>
-   #include <sys/types.h>
+  #include <dirent.h>
+  #include <sys/types.h>
 #endif
 
 namespace gdcm
@@ -56,6 +56,7 @@ unsigned int Directory::Explore(FilenameType const &name, bool recursive)
   std::string fileName;
   //std::string dirName = Util::NormalizePath(Toplevel);
   std::string dirName = name;
+  // FIXME: IsDirectory( dirName )
   Directories.push_back( dirName );
 #ifdef _MSC_VER
   WIN32_FIND_DATA fileData;
@@ -153,7 +154,7 @@ unsigned int Directory::Explore(FilenameType const &name, bool recursive)
 
 void Directory::Print(std::ostream &_os)
 {
-  // FIXME Both structured are FilenamesType I could factorize the code
+  // FIXME Both structures are FilenamesType I could factorize the code
   _os << "Directories: ";
   if( Directories.empty() )
     _os << "(None)" << std::endl;

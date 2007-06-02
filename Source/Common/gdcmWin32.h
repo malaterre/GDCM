@@ -53,5 +53,7 @@
 // //#pragma warning ( disable : 4800 )
 #endif //_MSC_VER
 
+#include <assert.h>
+
 //-----------------------------------------------------------------------------
 #endif //__gdcmWin32_h

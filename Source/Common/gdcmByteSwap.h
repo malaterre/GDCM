@@ -36,7 +36,9 @@ public:
   static bool SystemIsBigEndian ();
   static bool SystemIsLittleEndian ();
 
+  static void Swap(T &p);
   static void SwapFromSwapCodeIntoSystem(T &p, SwapCode const &sc);
+  static void SwapRange(T *p, unsigned int num);
   static void SwapRangeFromSwapCodeIntoSystem(T *p, SwapCode const &sc,
     unsigned int num);
 

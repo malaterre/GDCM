@@ -33,6 +33,7 @@ unsigned int Image::GetNumberOfDimensions() const
 void Image::SetNumberOfDimensions(unsigned int dim)
 {
   NumberOfDimensions = dim;
+  assert( NumberOfDimensions );
 }
 
 // TODO does it make sense to PlanarConfiguration in Image

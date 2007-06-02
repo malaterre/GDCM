@@ -17,10 +17,12 @@
 #ifndef __gdcmStringStream_h
 #define __gdcmStringStream_h
 
-#include "gdcmIOStream.h"
+//#include "gdcmIOStream.h"
 #include <sstream>
 
-namespace gdcm
+#define StringStream std::stringstream
+
+namespace gdcm_old
 {
 
 /**
@@ -29,6 +31,7 @@ namespace gdcm
  * \note bla
  */
 
+#if 0
 class GDCM_EXPORT StringStream : public IOStream
 {
 public:
@@ -103,6 +106,7 @@ protected:
   std::stringstream InternalSStream;
 };
 
+#endif
 }
 
 #endif //__gdcmStringStream_h

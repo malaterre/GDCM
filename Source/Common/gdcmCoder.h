@@ -18,12 +18,16 @@
 
 #include "gdcmTypes.h"
 
+// FIXME
+#include "gdcmIStream.h"
+#include "gdcmOStream.h"
+
 namespace gdcm
 {
 
 class TS;
-class IStream;
-class OStream;
+//class IStream;
+//class OStream;
 class Coder
 {
 public:
