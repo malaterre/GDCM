@@ -78,7 +78,7 @@ class wxSizeEvent;
 #ifdef __WXGTK__
 class VTK_RENDERING_EXPORT wxVTKRenderWindowInteractor : public wxGLCanvas, virtual public vtkRenderWindowInteractor
 #else
-class VTK_RENDERING_EXPORT wxVTKRenderWindowInteractor : public wxWindow, virtual public vtkRenderWindowInteractor
+class /*VTK_RENDERING_EXPORT*/ wxVTKRenderWindowInteractor : public wxWindow, virtual public vtkRenderWindowInteractor
 #endif //__WXGTK__
 {
   DECLARE_DYNAMIC_CLASS(wxVTKRenderWindowInteractor)
