@@ -50,6 +50,8 @@ public:
   friend std::ostream& operator<<(std::ostream& _os, const DictEntry &_val);
 
   const VR &GetVR() const { return ValueRepresentation; }
+//  bool IsValid() const { return ValueRepresentation != VR::VR_END; }
+//	  !Name.empty() /*&& ValueRepresentation && ValueMultiplicity*/; }
 
   VM::VMType GetVM() const { return ValueMultiplicity; }
 

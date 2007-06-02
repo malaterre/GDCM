@@ -69,9 +69,9 @@
 0008 0080 LO 1 Institution Name
 0008 0081 ST 1 Institution Address
 0008 0082 SQ 1 Institution Code Sequence
-0008 0090 PN 1 Referring Physicianâ€™s Name
-0008 0092 ST 1 Referring Physicianâ€™s Address
-0008 0094 SH 1-n Referring Physicianâ€™s Telephone Numbers
+0008 0090 PN 1 Referring Physician’s Name
+0008 0092 ST 1 Referring Physician’s Address
+0008 0094 SH 1-n Referring Physician’s Telephone Numbers
 0008 0096 SQ 1 Referring Physician Identification Sequence
 0008 0100 SH 1 Code Value
 0008 0102 SH 1 Coding Scheme Designator
@@ -98,15 +98,15 @@
 0008 1040 LO 1 Institutional Department Name
 0008 1048 PN 1-n Physician(s) of Record
 0008 1049 SQ 1 Physician(s) of Record Identification Sequence
-0008 1050 PN 1-n Performing Physicianâ€™s Name
+0008 1050 PN 1-n Performing Physician’s Name
 0008 1052 SQ 1 Performing Physician Identification Sequence
 0008 1060 PN 1-n Name of Physician(s) Reading Study
 0008 1062 SQ 1 Physician(s) Reading Study Identification Sequence
-0008 1070 PN 1-n Operatorsâ€™ Name
+0008 1070 PN 1-n Operators’ Name
 0008 1072 SQ 1 Operator Identification Sequence
 0008 1080 LO 1-n Admitting Diagnoses Description
 0008 1084 SQ 1 Admitting Diagnoses Code Sequence
-0008 1090 LO 1 Manufacturerâ€™s Model Name
+0008 1090 LO 1 Manufacturer’s Model Name
 0008 1100 SQ 1 Referenced Results Sequence (RET)
 0008 1110 SQ 1 Referenced Study Sequence
 0008 1111 SQ 1 Referenced Performed Procedure Step Sequence
@@ -176,26 +176,26 @@
 0008 9458 SQ 1 Frame Display Sequence
 0008 9459 FL 1 Recommended Display Frame Rate in Float
 0008 9460 CS 1 Skip Frame Range Flag
-0010 0010 PN 1 Patientâ€™s Name
+0010 0010 PN 1 Patient’s Name
 0010 0020 LO 1 Patient ID
 0010 0021 LO 1 Issuer of Patient ID
 0010 0022 CS 1 Type of Patient ID
-0010 0030 DA 1 Patientâ€™s Birth Date
-0010 0032 TM 1 Patientâ€™s Birth Time
-0010 0040 CS 1 Patientâ€™s Sex
-0010 0050 SQ 1 Patientâ€™s Insurance Plan Code Sequence
-0010 0101 SQ 1 Patientâ€™s Primary Language Code Sequence
-0010 0102 SQ 1 Patientâ€™s Primary Language Code Modifier Sequence
+0010 0030 DA 1 Patient’s Birth Date
+0010 0032 TM 1 Patient’s Birth Time
+0010 0040 CS 1 Patient’s Sex
+0010 0050 SQ 1 Patient’s Insurance Plan Code Sequence
+0010 0101 SQ 1 Patient’s Primary Language Code Sequence
+0010 0102 SQ 1 Patient’s Primary Language Code Modifier Sequence
 0010 1000 LO 1-n Other Patient IDs
 0010 1001 PN 1-n Other Patient Names
 0010 1002 SQ 1 Other Patient IDs Sequence
-0010 1005 PN 1 Patientâ€™s Birth Name
-0010 1010 AS 1 Patientâ€™s Age
-0010 1020 DS 1 Patientâ€™s Size
-0010 1030 DS 1 Patientâ€™s Weight
-0010 1040 LO 1 Patientâ€™s Address
+0010 1005 PN 1 Patient’s Birth Name
+0010 1010 AS 1 Patient’s Age
+0010 1020 DS 1 Patient’s Size
+0010 1030 DS 1 Patient’s Weight
+0010 1040 LO 1 Patient’s Address
 0010 1050 LO 1-n Insurance Plan Identification (RET)
-0010 1060 PN 1 Patientâ€™s Motherâ€™s Birth Name
+0010 1060 PN 1 Patient’s Mother’s Birth Name
 0010 1080 LO 1 Military Rank
 0010 1081 LO 1 Branch of Service
 0010 1090 LO 1 Medical Record Locator
@@ -203,17 +203,17 @@
 0010 2110 LO 1-n Contrast Allergies
 0010 2150 LO 1 Country of Residence
 0010 2152 LO 1 Region of Residence
-0010 2154 SH 1-n Patientâ€™s Telephone Numbers
+0010 2154 SH 1-n Patient’s Telephone Numbers
 0010 2160 SH 1 Ethnic Group
 0010 2180 SH 1 Occupation
 0010 21a0 CS 1 Smoking Status
 0010 21b0 LT 1 Additional Patient History
 0010 21c0 US 1 Pregnancy Status
 0010 21d0 DA 1 Last Menstrual Date
-0010 21f0 LO 1 Patientâ€™s Religious Preference
+0010 21f0 LO 1 Patient’s Religious Preference
 0010 2201 LO 1 Patient Species Description
 0010 2202 SQ 1 Patient Species Code Sequence
-0010 2203 CS 1 Patientâ€™s Sex Neutered
+0010 2203 CS 1 Patient’s Sex Neutered
 0010 2292 LO 1 Patient Breed Description
 0010 2293 SQ 1 Patient Breed Code Sequence
 0010 2294 SQ 1 Breed Registration Sequence
@@ -301,10 +301,10 @@
 0018 1014 TM 1 Time of Secondary Capture
 0018 1016 LO 1 Secondary Capture Device Manufacturer
 0018 1017 LO 1 Hardcopy Device Manufacturer
-0018 1018 LO 1 Secondary Capture Device Manufacturerâ€™s Model Name
+0018 1018 LO 1 Secondary Capture Device Manufacturer’s Model Name
 0018 1019 LO 1-n Secondary Capture Device Software Version(s)
 0018 101a LO 1-n Hardcopy Device Software Version
-0018 101b LO 1 Hardcopy Device Manufacturerâ€™s Model Name
+0018 101b LO 1 Hardcopy Device Manufacturer’s Model Name
 0018 1020 LO 1-n Software Version(s)
 0018 1022 SH 1 Video Image Format Acquired
 0018 1023 LO 1 Digital Image Format Acquired
@@ -567,7 +567,7 @@
 0018 7026 DS 1-2 Detector Active Dimension(s)
 0018 7028 DS 2 Detector Active Origin
 0018 702a LO 1 Detector Manufacturer Name
-0018 702b LO 1 Detector Manufacturerâ€™s Model Name
+0018 702b LO 1 Detector Manufacturer’s Model Name
 0018 7030 DS 2 Field of View Origin
 0018 7032 DS 1 Field of View Rotation
 0018 7034 CS 1 Field of View Horizontal Flip
@@ -585,8 +585,8 @@
 0018 7062 LT 1 Exposure Control Mode Description
 0018 7064 CS 1 Exposure Status
 0018 7065 DS 1 Phototimer Setting
-0018 8150 DS 1 Exposure Time in ÂµS
-0018 8151 DS 1 X-Ray Tube Current in ÂµA
+0018 8150 DS 1 Exposure Time in µS
+0018 8151 DS 1 X-Ray Tube Current in µA
 0018 9004 CS 1 Content Qualification
 0018 9005 SH 1 Pulse Sequence Name
 0018 9006 SQ 1 MR Imaging Modifier Sequence
@@ -1101,7 +1101,7 @@
 0038 0050 LO 1 Special Needs
 0038 0100 SQ 1 Pertinent Documents Sequence
 0038 0300 LO 1 Current Patient Location
-0038 0400 LO 1 Patientâ€™s Institution Residence
+0038 0400 LO 1 Patient’s Institution Residence 
 0038 0500 LO 1 Patient State
 0038 0502 SQ 1 Patient Clinical Trial Participation Sequence
 0038 4000 LT 1 Visit Comments
@@ -1138,7 +1138,7 @@
 0040 0003 TM 1 Scheduled Procedure Step Start Time
 0040 0004 DA 1 Scheduled Procedure Step End Date
 0040 0005 TM 1 Scheduled Procedure Step End Time
-0040 0006 PN 1 Scheduled Performing Physicianâ€™s Name
+0040 0006 PN 1 Scheduled Performing Physician’s Name
 0040 0007 LO 1 Scheduled Procedure Step Description
 0040 0008 SQ 1 Scheduled Protocol Code Sequence
 0040 0009 SH 1 Scheduled Procedure Step ID
@@ -1217,8 +1217,8 @@
 0040 1010 PN 1-n Names of Intended Recipients of Results
 0040 1011 SQ 1 Intended Recipients of Results Identification Sequence
 0040 1101 SQ 1 Person Identification Code Sequence
-0040 1102 ST 1 Personâ€™s Address
-0040 1103 LO 1-n Personâ€™s Telephone Numbers
+0040 1102 ST 1 Person’s Address
+0040 1103 LO 1-n Person’s Telephone Numbers
 0040 1400 LT 1 Requested Procedure Comments
 0040 2001 LO 1 Reason for the Imaging Service Request (RET)
 0040 2004 DA 1 Issue Date of Imaging Service Request
@@ -1226,7 +1226,7 @@
 0040 2006 SH 1 Placer Order Number / Imaging Service Request (RET)
 0040 2007 SH 1 Filler Order Number / Imaging Service Request (RET)
 0040 2008 PN 1 Order Entered By
-0040 2009 SH 1 Order Entererâ€™s Location
+0040 2009 SH 1 Order Enterer’s Location
 0040 2010 SH 1 Order Callback Phone Number
 0040 2016 LO 1 Placer Order Number / Imaging Service Request
 0040 2017 LO 1 Filler Order Number / Imaging Service Request
@@ -1261,8 +1261,8 @@
 0040 4033 SQ 1 Output Information Sequence
 0040 4034 SQ 1 Scheduled Human Performers Sequence
 0040 4035 SQ 1 Actual Human Performers Sequence
-0040 4036 LO 1 Human Performerâ€™s Organization
-0040 4037 PN 1 Human Performerâ€™s Name
+0040 4036 LO 1 Human Performer’s Organization
+0040 4037 PN 1 Human Performer’s Name
 0040 8302 DS 1 Entrance Dose in mGy
 0040 9094 SQ 1 Referenced Image Real World Value Mapping Sequence
 0040 9096 SQ 1 Real World Value Mapping Sequence
@@ -1486,8 +1486,8 @@
 0070 0081 LO 1 Content Description
 0070 0082 DA 1 Presentation Creation Date
 0070 0083 TM 1 Presentation Creation Time
-0070 0084 PN 1 Content Creatorâ€™s Name
-0070 0086 SQ 1 Content Creatorâ€™s Identification Code Sequence
+0070 0084 PN 1 Content Creator’s Name
+0070 0086 SQ 1 Content Creator’s Identification Code Sequence
 0070 0100 CS 1 Presentation Size Mode
 0070 0101 DS 2 Presentation Pixel Spacing
 0070 0102 IS 2 Presentation Pixel Aspect Ratio
