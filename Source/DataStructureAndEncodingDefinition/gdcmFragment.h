@@ -29,6 +29,7 @@ namespace gdcm
 
 class GDCM_EXPORT Fragment : public DataElement
 {
+  template <typename TSwap> friend class IOSerialize;
 public:
   Fragment(const Tag &t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl) , FragmentValue(0) { }
   friend std::ostream &operator<<(std::ostream &os, const Fragment &val);
@@ -37,9 +38,11 @@ public:
     FragmentValue->Clear();
     }
 
-  IStream &Read(IStream &is);
-
-  OStream &Write(OStream &os) const;
+//  template <typename TSwap>
+//  IStream &Read(IStream &is);
+//
+//  template <typename TSwap>
+//  OStream &Write(OStream &os) const;
 
   Value const &GetValue() const {
     return *FragmentValue;

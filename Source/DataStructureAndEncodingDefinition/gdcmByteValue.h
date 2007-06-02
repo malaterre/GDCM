@@ -32,6 +32,7 @@ namespace gdcm
  */
 class GDCM_EXPORT ByteValue : public Value
 {
+  template <typename TSwap> friend class IOSerialize;
 public:
   ByteValue(const char* array = 0, VL const &vl = 0):
     Internal(array, array+vl),Length(vl) {
@@ -57,9 +58,9 @@ public:
     (void)os;
   }
 
-  const VL &GetLength() const { return Length; }
+  VL GetLength() const { return Length; }
   // Does a reallocation
-  void SetLength(const VL& vl) {
+  void SetLength(VL vl) {
     VL l(vl);
     assert( !l.IsUndefined() );
     if ( l.IsOdd() ) {
@@ -113,22 +114,6 @@ public:
     return true;
   }
 
-  IStream &Read(IStream &is) {
-    // If Length is odd we have detected that in SetLength
-    // and calling std::vector::resize make sure to allocate *AND* 
-    // initialize values to 0 so we are sure to have a \0 at the end
-    // even in this case
-    return is.Read(&Internal[0], Length);
-    }
-  OStream const &Write(OStream &os) const {
-#ifdef GDCM_WRITE_ODD_LENGTH
-    return os.Write(&Internal[0], Length);
-#else
-    assert( !(Internal.size() % 2) );
-    return os.Write(&Internal[0], Internal.size());
-#endif
-    }
-
 protected:
   /**
    * \brief  Checks whether a 'ByteValue' is printable or not (in order
@@ -165,7 +150,8 @@ protected:
     }
   else
     {
-    os << "Not Loaded";
+    //os << "Not Loaded";
+    os << "(no value available)";
     }
   }
 

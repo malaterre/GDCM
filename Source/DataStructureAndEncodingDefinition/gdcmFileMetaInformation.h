@@ -25,29 +25,25 @@ namespace gdcm
 /**
  * \brief Class to represent a File Meta Information
  * \note
- * In theory this should only be explicit, but just in case we also handle
- * the implicit case (illegal)
- * Warning (TODO):
- * When writing the Meta Header we make sure to have at least:
- * - the Group Length
- * - the File Meta Information Version
+ * FileMetaInformation is a Explicit Structured Set.
+ * Whenever the file contains an ImplicitDataElement StructuredSet, a conversion
+ * will take place.
  * \todo
  * If user adds an element with group != 0x0002 it will be written...
  */
-class ExplicitDataElement;
-class ImplicitDataElement;
-class GDCM_EXPORT FileMetaInformation
+class GDCM_EXPORT FileMetaInformation : public StructuredSet<ExplicitDataElement>
 {
 public:
-  FileMetaInformation():DS(0),InternalTS(TS::TS_END) {}
-  ~FileMetaInformation();
+  FileMetaInformation():DataSetTS(),MetaInformationTS(TS::Unknown) {}
+ ~FileMetaInformation() { };
 
   friend std::ostream &operator<<(std::ostream &_os, const FileMetaInformation &_val);
 
-  void SetTransferSyntaxType(TS const &ts);
-  TS GetTransferSyntaxType() const;
+  bool IsValid() const { return true; }
+
+  TS::NegociatedType GetMetaInformationTS() const { return MetaInformationTS; }
+  const TS &GetDataSetTransferSyntax() const { return DataSetTS; }
   TS::MSType GetMediaStorageType() const;
-  bool IsEmpty() const { return DS == 0; };
 
   // Read
   IStream &Read(IStream &is);
@@ -55,25 +51,23 @@ public:
   // Write
   OStream &Write(OStream &os) const;
 
-private:
-  bool ReadExplicitDataElement(IStream &is, ExplicitDataElement &de);
-  bool ReadImplicitDataElement(IStream &is, ImplicitDataElement &de);
+  // Construct a FileMetaInformation from an already existing DataSet:
+  void FillFromDataSet(DataSet const &ds);
+ 
+protected:
+  void Default();
+  void ComputeDataSetTransferSyntax();
 
-  DataSet *DS;
-  TS InternalTS;
+  TS DataSetTS;
+  //MS DataSetMS; // TODO
+  TS::NegociatedType MetaInformationTS;
+
+private:
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const FileMetaInformation &val)
 {
-  if(val.DS)
-    {
-    const DataSet &ds = *(val.DS);
-    os << ds;
-    }
-  else
-    {
-    os << "No File Meta Information Header";
-    }
+  val.Print( os );
   return os;
 }
 

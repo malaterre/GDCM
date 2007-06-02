@@ -110,9 +110,9 @@ fill_input_buffer (j_decompress_ptr cinfo)
 
   //FIXME FIXME FIXME FIXME FIXME
   //nbytes = JFREAD(src->infile, src->buffer, INPUT_BUF_SIZE);
-  std::streampos pos = src->infile->Tellg();
-  std::streampos end = src->infile->Seekg(0, std::ios::end).Tellg();
-  src->infile->Seekg(pos, std::ios::beg);
+  std::streampos pos = src->infile->tellg();
+  std::streampos end = src->infile->seekg(0, std::ios::end).tellg();
+  src->infile->seekg(pos, std::ios::beg);
   //FIXME FIXME FIXME FIXME FIXME
   if( end == pos )
     {
@@ -121,14 +121,14 @@ fill_input_buffer (j_decompress_ptr cinfo)
     }
   if( (end - pos) < INPUT_BUF_SIZE )
     {
-    src->infile->Read( (char*)src->buffer, (end - pos) );
+    src->infile->read( (char*)src->buffer, (end - pos) );
     }
   else
     {
-    src->infile->Read( (char*)src->buffer, INPUT_BUF_SIZE);
+    src->infile->read( (char*)src->buffer, INPUT_BUF_SIZE);
     }
 
-  nbytes = src->infile->Gcount();
+  nbytes = src->infile->gcount();
 
   if (nbytes <= 0) {
     if (src->start_of_file)	/* Treat empty input file as fatal error */
@@ -462,7 +462,7 @@ bool JPEGBITSCodec::Decode(IStream &is, OStream &os)
       return true;
       }
     //memcpy(buffer[0], row_stride);
-    os.Write((char*)buffer[0], row_stride);
+    os.write((char*)buffer[0], row_stride);
   }
 
   /* Step 7: Finish decompression */

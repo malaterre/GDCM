@@ -20,7 +20,7 @@
 #include "gdcmDataElement.h"
 #include "gdcmVR.h"
 #include "gdcmSwapCode.h"
-#include "gdcmValue.h"
+#include "gdcmByteValue.h"
 #include "gdcmSmartPointer.h"
 
 namespace gdcm
@@ -31,8 +31,11 @@ namespace gdcm
  * \note bla
  */
 //class Value; // FIXME
+class ImplicitDataElement;
 class GDCM_EXPORT ExplicitDataElement : public DataElement
 {
+  template <typename TSwap> friend class IOSerialize;
+  friend class ImplicitDataElement;
 public:
   ExplicitDataElement(const Tag &t = Tag(0), uint32_t const &vl = 0,
                       const VR &vr = VR::INVALID ) :
@@ -49,11 +52,20 @@ public:
     //assert( ValueField == 0 );
     ValueField = &vl;
   }
+  void SetByteValue(const char *array, VL length)
+  {
+  ByteValue *bv = new ByteValue(array,length);
+  SetVL( length );
+  SetValue( *bv );
+   }
 
   VL GetLength() const;
 
-  IStream &Read(IStream &is);
-  const OStream &Write(OStream &_os) const;
+//  template <typename TSwap>
+//  IStream &Read(IStream &is);
+//
+//  template <typename TSwap>
+//  const OStream &Write(OStream &_os) const;
 
   ExplicitDataElement(ExplicitDataElement const &val):DataElement(val)
     {
@@ -61,6 +73,8 @@ public:
     VRField    = val.VRField;
     ValueField = val.ValueField;
     }
+
+  ExplicitDataElement(ImplicitDataElement const &val);
 
 private:
   // Value Representation

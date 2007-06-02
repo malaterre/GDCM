@@ -140,10 +140,12 @@ bool VM::IsValid(const int &vm1, const VMType &vm2)
 //{
 //}
 
-VM::VMType GetVMTypeFromLength(unsigned int length, unsigned int size)
+VM::VMType VM::GetVMTypeFromLength(unsigned int length, unsigned int size)
 {
-  if ( !(length % size) ) return VM::VM0;
+  // Check first of length is a indeed a multiple of size:
+  if ( length % size ) return VM::VM0;
   const unsigned int ratio = length / size;
+  //std::cerr << "RATIO=" << ratio << std::endl;
   switch( ratio )
     {
   case 1: return VM::VM1;

@@ -18,8 +18,9 @@
 #define __gdcmBasicOffsetTable_h
 
 #include "gdcmDataElement.h"
-#include "gdcmDataSet.h"
-#include "gdcmSwapCode.h"
+#include "gdcmFragment.h"
+#include "gdcmTag.h"
+//#include "gdcmSwapCode.h"
 
 namespace gdcm
 {
@@ -30,6 +31,7 @@ namespace gdcm
 
 class GDCM_EXPORT BasicOffsetTable : public DataElement
 {
+  template <typename TSwap> friend class IOSerialize;
 public:
   BasicOffsetTable(const Tag &t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl), Offsets(0) {}
   friend std::ostream &operator<<(std::ostream &os, const BasicOffsetTable &val);
@@ -37,57 +39,7 @@ public:
   void Clear() {
     }
 
-  IStream &Read(IStream &is) {
-    // Superclass 
-    const Tag itemStart(0xfffe, 0xe000);
-    const Tag seqDelItem(0xfffe,0xe0dd);
-    if( !TagField.Read(is) )
-      {
-      assert(0 && "Should not happen");
-      return is;
-      }
-    assert( TagField == itemStart );
-    if( !ValueLengthField.Read(is) )
-      {
-      assert(0 && "Should not happen");
-      return is;
-      }
-    // Self
-    Offsets = new ByteValue;
-    Offsets->SetLength(ValueLengthField);
-    if( !Offsets->Read(is) )
-      {
-      assert(0 && "Should not happen");
-      return is;
-      }
-    return is;
-    }
-
-  OStream &Write(OStream &os) const {
-    // Superclass 
-    const Tag itemStart(0xfffe, 0xe000);
-    const Tag seqDelItem(0xfffe,0xe0dd);
-    if( !TagField.Write(os) )
-      {
-      assert(0 && "Should not happen");
-      return os;
-      }
-    assert( TagField == itemStart );
-    if( !ValueLengthField.Write(os) )
-      {
-      assert(0 && "Should not happen");
-      return os;
-      }
-    // Self
-    if( !Offsets->Write(os) )
-      {
-      assert(0 && "Should not happen");
-      return os;
-      }
-    return os;
-    }
-
-  Value const &GetValue() const {
+ Value const &GetValue() const {
     return *Offsets;
   }
 
@@ -98,10 +50,12 @@ public:
       + ValueLengthField;
   }
 
-  //BasicOffsetTable(BasicOffsetTable const &val):DataElement(val)
-  //  {
-  //  NestedDataSet = val.NestedDataSet;
-  //  }
+  BasicOffsetTable(BasicOffsetTable const &val):DataElement(val)
+    {
+    }
+  BasicOffsetTable &operator=(BasicOffsetTable const &val)
+    {
+    }
 
 private:
   typedef SmartPointer<ByteValue> ByteValuePtr;

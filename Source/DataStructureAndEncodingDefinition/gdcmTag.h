@@ -18,8 +18,9 @@
 #define __gdcmTag_h
 
 #include "gdcmTypes.h"
-#include "gdcmSwapCode.h"
-#include "gdcmByteSwap.txx"
+//#include "gdcmSwapCode.h"
+//#include "gdcmByteSwap.txx"
+//#include "gdcmSwapper.h"
 
 #include "gdcmIStream.h"
 #include "gdcmOStream.h"
@@ -44,6 +45,7 @@ namespace gdcm
  */
 class GDCM_EXPORT Tag
 {
+  template <typename TSwap> friend class IOSerialize;
 public:
   /// \brief Constructor with 2*uint16_t 
   Tag(uint16_t group, uint16_t element) {
@@ -154,23 +156,6 @@ public:
   // Standard Data Elements. Private Data elements have odd Group Numbers.
   bool IsPrivate() const { return !IsPublic(); }
 
-  IStream &Read(IStream &is)
-    {
-    is.Read(ElementTag.bytes, 4);
-    ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem(ElementTag.tags,
-      is.GetSwapCode(), 2);
-    return is;
-    }
-  const OStream &Write(OStream &os) const
-    {
-    uint16_t copy[2];
-    copy[0]= ElementTag.tags[0];
-    copy[1]= ElementTag.tags[1];
-    ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem(copy,
-      os.GetSwapCode(), 2);
-    return os.Write((char*)(&copy), 4);
-    }
-
 private:
   union { uint32_t tag; uint16_t tags[2]; char bytes[4]; } ElementTag;
 };
@@ -187,3 +172,4 @@ inline std::ostream& operator<<(std::ostream &_os, const Tag &_val)
 } // end namespace gdcm
 
 #endif //__gdcmTag_h
+

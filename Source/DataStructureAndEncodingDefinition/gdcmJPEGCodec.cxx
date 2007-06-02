@@ -88,7 +88,7 @@ bool JPEGCodec::Decode(IStream &is, OStream &os)
       gdcmWarningMacro( "DICOM header said it was " << this->BitSample <<
         " but JPEG header says it's: " << Internal->BitSample );
       delete Internal;
-      is.Seekg(0, std::ios::beg);
+      is.seekg(0, std::ios::beg);
       switch( Internal->BitSample )
         {
       case 8:

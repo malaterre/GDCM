@@ -19,6 +19,10 @@
 
 #include "gdcmObject.h"
 
+// FIXME
+#include "gdcmIStream.h"
+#include "gdcmOStream.h"
+
 namespace gdcm
 {
 /**
@@ -28,21 +32,21 @@ namespace gdcm
  * or more of these components.
  */
 class VL;
-class IStream;
-class OStream;
 class GDCM_EXPORT Value : public Object
 {
 public:
   Value() {}
   ~Value() {}
 
-  virtual const VL & GetLength() const = 0;
-  virtual void SetLength(VL const & l) = 0;
+  virtual VL GetLength() const = 0;
+  virtual void SetLength(VL l) = 0;
 
   virtual void Clear() = 0;
 
-  virtual IStream& Read(IStream &is) = 0;
-  virtual OStream const & Write(OStream &os) const = 0;
+  //template <typename TSwap>
+  //IStream& Read(IStream &is); // { return is;}
+  //template <typename TSwap>
+  //OStream const & Write(OStream &os); // const { return os;}
 };
 
 

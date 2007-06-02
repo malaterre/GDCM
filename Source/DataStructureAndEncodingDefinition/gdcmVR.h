@@ -17,7 +17,7 @@
 #define __gdcmVR_h
 
 #include "gdcmTag.h"
-#include "gdcmVL.h"
+//#include "gdcmVL.h"
 #include "gdcmTrace.h"
 
 #include <iostream>
@@ -73,7 +73,7 @@ public:
     OB_OW = OB | OW,
     US_SS = US | SS,
     US_SS_OW = US | SS | OW,
-    VR_END = UT+1  // Invalid VR, need to be max(VMType)+1
+    VR_END = UT+1  // Invalid VR, need to be max(VRType)+1
   } VRType;
 
   typedef enum {
@@ -99,7 +99,8 @@ public:
   static bool IsSwap(const char *vr);
   
   // Size read on disk
-  VL GetLength() const {
+  // FIXME: int ?
+  int GetLength() const {
     return VR::GetLength(VRField);
   }
   static uint32_t GetLength(VRType vr) { 
@@ -132,7 +133,7 @@ public:
   IStream &Read(IStream &is)
     {
     char vr[2];
-    is.Read(vr, 2);
+    is.read(vr, 2);
     VRField = GetVRTypeFromFile(vr);
     assert( VRField != VR::VR_END );
     assert( VRField != VR::INVALID );
@@ -143,7 +144,7 @@ public:
       is.Seekg(2, std::ios::cur );
 #else
       char dum[2];
-      is.Read(dum, 2);
+      is.read(dum, 2);
       if( !(dum[0] == 0 && dum[1] == 0 ))
         {
         // JDDICOM_Sample4.dcm
@@ -158,18 +159,20 @@ public:
     {
     const char *vr = GetVRString(VRField);
     assert( strlen( vr ) == 2 );
-    os.Write(vr, 2);
+    os.write(vr, 2);
     // See PS 3.5, Data Element Structure With Explicit VR
     if( VRField & ( VR::OB | VR::OW | VR::OF | VR::SQ | VR::UN | VR::UT ) )
       {
       const char dum[2] = {0, 0};
-      os.Write(dum,2);
+      os.write(dum,2);
       }
     return os;
     }
   friend std::ostream &operator<<(std::ostream &os, const VR &vr);
 
   operator VRType () const { return VRField; }
+
+  unsigned int GetSize() const;
 
 private:
   // Internal function that map a VRType to an index in the VRStrings table
@@ -221,6 +224,47 @@ TYPETOENCODING(UL,BINARY,uint32_t)
 TYPETOENCODING(UN,ASCII,unsigned char) // FIXME ?
 TYPETOENCODING(US,BINARY,uint16_t)
 TYPETOENCODING(UT,BINARY,float)
+
+#define VRTypeTemplateCase(type) \
+  case VR::type: \
+    return sizeof ( VRToType<VR::type>::Type );
+
+inline unsigned int VR::GetSize() const
+{
+	switch(VRField)
+	{
+		VRTypeTemplateCase(AE)
+                VRTypeTemplateCase(AS)
+                VRTypeTemplateCase(AT)
+                VRTypeTemplateCase(CS)
+                VRTypeTemplateCase(DA)
+                VRTypeTemplateCase(DS)
+                VRTypeTemplateCase(DT)
+                VRTypeTemplateCase(FL)
+                VRTypeTemplateCase(FD)
+                VRTypeTemplateCase(IS)
+                VRTypeTemplateCase(LO)
+                VRTypeTemplateCase(LT)
+                VRTypeTemplateCase(OB)
+                VRTypeTemplateCase(OF)
+                VRTypeTemplateCase(OW)
+                VRTypeTemplateCase(PN)
+                VRTypeTemplateCase(SH)
+                VRTypeTemplateCase(SL)
+                VRTypeTemplateCase(SQ)
+                VRTypeTemplateCase(SS)
+                VRTypeTemplateCase(ST)
+                VRTypeTemplateCase(TM)
+                VRTypeTemplateCase(UI)
+                VRTypeTemplateCase(UL)
+                VRTypeTemplateCase(UN)
+                VRTypeTemplateCase(US)
+                VRTypeTemplateCase(UT)
+		default:
+			 assert( 0 && "should not" );
+	}
+	return 0;
+}
 
 
 } // end namespace gdcm

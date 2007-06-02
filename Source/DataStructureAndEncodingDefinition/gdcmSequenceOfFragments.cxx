@@ -19,52 +19,11 @@
 namespace gdcm
 {
 
-IStream& SequenceOfFragments::Read(IStream &is)
-{
-  if( SequenceLengthField.IsUndefined() )
-    {
-    const Tag seqDelItem(0xfffe,0xe0dd);
-    // First item is the basic offset table:
-    Table.Read(is);
-    gdcmDebugMacro( "Table: " << Table );
-    // not used for now...
-    Fragment frag;
-    do
-      {
-      frag.Read(is);
-      gdcmDebugMacro( "Frag: " << frag );
-      Fragments.push_back( frag );
-      }
-    while( frag.GetTag() != seqDelItem );
-    assert( frag.GetVL() == 0 );
-    }
-  else
-    {
-    abort();
-    }
-  return is;
-}
-
-OStream const & SequenceOfFragments::Write(OStream &os) const
-{
-  if( !Table.Write(os) )
-    {
-    assert(0 && "Should not happen");
-    return os;
-    }
-  FragmentVector::const_iterator it = Fragments.begin();
-  for(;it != Fragments.end(); ++it)
-    {
-    it->Write(os);
-    }
-  return os;
-}
-
 unsigned int SequenceOfFragments::GetNumberOfFragments() const
 {
   // Do not count the last fragment
-  assert( SequenceLengthField.IsUndefined() );
-  return Fragments.size() - 1;
+  //assert( SequenceLengthField.IsUndefined() );
+  return Fragments.size();
 }
 
 VL SequenceOfFragments::ComputeLength() const
@@ -78,7 +37,7 @@ VL SequenceOfFragments::ComputeLength() const
     {
     length += it->GetLength();
     }
-  assert( SequenceLengthField.IsUndefined() );
+  //assert( SequenceLengthField.IsUndefined() );
   return length;
 }
 

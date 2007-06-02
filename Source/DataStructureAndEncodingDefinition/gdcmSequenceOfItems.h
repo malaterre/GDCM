@@ -39,27 +39,37 @@ namespace gdcm
  */
 class GDCM_EXPORT SequenceOfItems : public Value
 {
+  template <typename TSwap> friend class IOSerialize;
 public:
   // Typdefs:
   typedef std::vector<Item> ItemVector;
 
 /// \brief constructor (UndefinedLength by default)
-  SequenceOfItems(TS::NegociatedType const &type, VL const &vl = 0xFFFFFFFF):SequenceLengthField(vl),NType(type) { }
+  //SequenceOfItems(VL const &vl = 0xFFFFFFFF):SequenceLengthField(vl),NType(type) { }
 
   /// \brief Returns the SQ length, as read from disk
-  const VL &GetLength() const { return SequenceLengthField; }
+  VL GetLength() const { return SequenceLengthField; }
   /// \brief Sets the actual SQ length
-  void SetLength(VL const &length) {
+  void SetLength(VL length) {
     SequenceLengthField = length;
   }
   VL ComputeLength() const;
   void Clear() {}
 
+template <typename TSwap>
   IStream &Read(IStream &is);
+template <typename TSwap>
   OStream const & Write(OStream &os) const;
 
   /// \brief Appends an Item to the already added ones
   void AddItem(Item const &item);
+
+  SequenceOfItems &operator=(const SequenceOfItems &val) {
+    SequenceLengthField = val.SequenceLengthField;
+    Items = val.Items;
+    return *this;
+    }
+
 
 protected:
   void Print(std::ostream &os) const {
@@ -73,11 +83,11 @@ protected:
   }
 
 private:
+public:
   /// \brief Total length of the Sequence (or 0xffffffff) if undefined
   VL SequenceLengthField;
   /// \brief Vector of Sequence Items
   ItemVector Items;
-  TS::NegociatedType NType;
 };
 
 } // end namespace gdcm

@@ -51,10 +51,10 @@ bool ImageValue::GetBuffer(char *buffer) const
     codec.SetNeedByteSwap( GetNeedByteSwap() );
     StringStream is;
     //is.SetSwapCode( GetSwapCode() );
-    is.Write(buffer, len);
+    is.write(buffer, len);
     StringStream os;
     bool r = codec.Decode(is, os);
-    std::string::size_type check = os.Str().size();
+    std::string::size_type check = os.str().size();
     // FIXME
     if ( GetPhotometricInterpretation() == 
       PhotometricInterpretation::PALETTE_COLOR )
@@ -65,7 +65,7 @@ bool ImageValue::GetBuffer(char *buffer) const
       {
       assert( check == len );
       }
-    memcpy(buffer, os.Str().c_str(), check);  // FIXME
+    memcpy(buffer, os.str().c_str(), check);  // FIXME
     return r;
     }
   else
@@ -95,15 +95,15 @@ bool ImageValue::GetBuffer(char *buffer) const
         const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
         char *mybuffer = new char[bv.GetLength()];
         bv.GetBuffer(mybuffer, bv.GetLength());
-        is.Write(mybuffer, bv.GetLength());
+        is.write(mybuffer, bv.GetLength());
         delete[] mybuffer;
         StringStream os;
         bool r = codec.Decode(is, os);
         assert( r == true );
-        std::streampos p = is.Tellg();
+        std::streampos p = is.tellg();
         assert( (bv.GetLength() - p) == 0 );
-        std::string::size_type check = os.Str().size();
-        memcpy(buffer+pos, os.Str().c_str(), check);
+        std::string::size_type check = os.str().size();
+        memcpy(buffer+pos, os.str().c_str(), check);
         pos += check;
         }
       assert( pos == len );
@@ -117,10 +117,10 @@ bool ImageValue::GetBuffer(char *buffer) const
       StringStream is;
       unsigned long totalLen = sf->ComputeByteLength();
       sf->GetBuffer(buffer, totalLen);
-      is.Write(buffer, totalLen);
+      is.write(buffer, totalLen);
       StringStream os;
       bool r = codec.Decode(is, os);
-      memcpy(buffer, os.Str().c_str(), len);
+      memcpy(buffer, os.str().c_str(), len);
       return r;
       }
     else if ( GetCompressionType() == Compression::RLE )
@@ -144,13 +144,13 @@ bool ImageValue::GetBuffer(char *buffer) const
         const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
         char *mybuffer = new char[bv.GetLength()];
         bv.GetBuffer(mybuffer, bv.GetLength());
-        is.Write(mybuffer, bv.GetLength());
+        is.write(mybuffer, bv.GetLength());
         delete[] mybuffer;
         StringStream os;
         codec.SetLength( llen );
         bool r = codec.Decode(is, os);
         assert( r == true );
-        std::streampos p = is.Tellg();
+        std::streampos p = is.tellg();
         if( is )
           {
           // Indeed the length of the RLE stream has been padded with a \0
@@ -163,12 +163,12 @@ bool ImageValue::GetBuffer(char *buffer) const
           // ALOKA_SSD-8-MONO2-RLE-SQ.dcm
           gdcmWarningMacro( "Bad RLE stream" );
           }
-        std::string::size_type check = os.Str().size();
+        std::string::size_type check = os.str().size();
         // If the following assert fail expect big troubles:
         assert( check == llen 
             || (check == 3*llen && GetPhotometricInterpretation() 
             == PhotometricInterpretation::PALETTE_COLOR) );
-        memcpy(buffer+pos, os.Str().c_str(), check);
+        memcpy(buffer+pos, os.str().c_str(), check);
         pos += check;
         }
       assert( pos == len || pos == 3*len );

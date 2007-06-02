@@ -23,6 +23,8 @@ SET(DSED_SRCS
   gdcmTS.cxx
   gdcmVM.cxx
   gdcmVR.cxx
+  gdcmFile.cxx
+  gdcmPreamble.cxx
   )
 
 # Do the proper thing when building static...if only there was configured

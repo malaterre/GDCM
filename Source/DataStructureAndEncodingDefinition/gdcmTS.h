@@ -49,6 +49,7 @@ public:
 
   // TODO
   typedef enum {
+    NoSpacing = 0,
     PixelSpacing,
     ImagerPixelSpacing,
     PixelAspectRatio
@@ -147,9 +148,11 @@ public:
   // endian but the Pixel Data is in Big Endian.
   SwapCode GetSwapCode() const;
 
+  bool IsValid() const { return TSField != TS_END; }
+
   operator TSType () const { return TSField; }
 
-  TS(TSType type):TSField(type) {}
+  TS(TSType type = ImplicitVRLittleEndian):TSField(type) {}
 
   static bool IsImage(const MSType &ts);
 

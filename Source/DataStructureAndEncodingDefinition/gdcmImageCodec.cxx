@@ -58,15 +58,15 @@ void ImageCodec::SetPhotometricInterpretation(
 bool ImageCodec::DoByteSwap(IStream &is, OStream &os)
 {
   // FIXME: Do some stupid work:
-  std::streampos start = is.Tellg();
+  std::streampos start = is.tellg();
   assert( 0 - start == 0 );
-  is.Seekg( 0, std::ios::end);
-  std::streampos buf_size = is.Tellg();
+  is.seekg( 0, std::ios::end);
+  std::streampos buf_size = is.tellg();
   char *dummy_buffer = new char[buf_size];
-  is.Seekg(start, std::ios::beg);
-  is.Read( dummy_buffer, buf_size);
-  is.Seekg(start, std::ios::beg); // reset
-  SwapCode sc = is.GetSwapCode();
+  is.seekg(start, std::ios::beg);
+  is.read( dummy_buffer, buf_size);
+  is.seekg(start, std::ios::beg); // reset
+  //SwapCode sc = is.GetSwapCode();
 
   assert( !(buf_size % 2) );
 #ifdef GDCM_WORDS_BIGENDIAN
@@ -84,22 +84,22 @@ bool ImageCodec::DoByteSwap(IStream &is, OStream &os)
   ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)
     dummy_buffer, SwapCode::BigEndian, buf_size/2);
 #endif
-  os.Write(dummy_buffer, buf_size);
+  os.write(dummy_buffer, buf_size);
   return true;
 }
 
 bool ImageCodec::DoYBR(IStream &is, OStream &os)
 {
   // FIXME: Do some stupid work:
-  std::streampos start = is.Tellg();
+  std::streampos start = is.tellg();
   assert( 0 - start == 0 );
-  is.Seekg( 0, std::ios::end);
-  std::streampos buf_size = is.Tellg();
+  is.seekg( 0, std::ios::end);
+  std::streampos buf_size = is.tellg();
   char *dummy_buffer = new char[buf_size];
-  is.Seekg(start, std::ios::beg);
-  is.Read( dummy_buffer, buf_size);
-  is.Seekg(start, std::ios::beg); // reset
-  SwapCode sc = is.GetSwapCode();
+  is.seekg(start, std::ios::beg);
+  is.read( dummy_buffer, buf_size);
+  is.seekg(start, std::ios::beg); // reset
+  //SwapCode sc = is.GetSwapCode();
 
   // Code is coming from:
   // http://lestourtereaux.free.fr/papers/data/yuvrgb.pdf
@@ -140,22 +140,22 @@ bool ImageCodec::DoYBR(IStream &is, OStream &os)
     }
   delete[] copy;
 
-  os.Write(dummy_buffer, buf_size);
+  os.write(dummy_buffer, buf_size);
   return true;
 }
 
 bool ImageCodec::DoPlanarConfiguration(IStream &is, OStream &os)
 {
   // FIXME: Do some stupid work:
-  std::streampos start = is.Tellg();
+  std::streampos start = is.tellg();
   assert( 0 - start == 0 );
-  is.Seekg( 0, std::ios::end);
-  std::streampos buf_size = is.Tellg();
+  is.seekg( 0, std::ios::end);
+  std::streampos buf_size = is.tellg();
   char *dummy_buffer = new char[buf_size];
-  is.Seekg(start, std::ios::beg);
-  is.Read( dummy_buffer, buf_size);
-  is.Seekg(start, std::ios::beg); // reset
-  SwapCode sc = is.GetSwapCode();
+  is.seekg(start, std::ios::beg);
+  is.read( dummy_buffer, buf_size);
+  is.seekg(start, std::ios::beg); // reset
+  //SwapCode sc = is.GetSwapCode();
 
     // US-RGB-8-epicard.dcm
     //assert( image.GetNumberOfDimensions() == 3 );
@@ -177,21 +177,21 @@ bool ImageCodec::DoPlanarConfiguration(IStream &is, OStream &os)
       }
     delete[] copy;
 
-  os.Write(dummy_buffer, buf_size);
+  os.write(dummy_buffer, buf_size);
   return true;
 }
 
 bool ImageCodec::DoSimpleCopy(IStream &is, OStream &os)
 {
-  std::streampos start = is.Tellg();
+  std::streampos start = is.tellg();
   assert( 0 - start == 0 );
-  is.Seekg( 0, std::ios::end);
-  std::streampos buf_size = is.Tellg();
+  is.seekg( 0, std::ios::end);
+  std::streampos buf_size = is.tellg();
   char *dummy_buffer = new char[buf_size];
-  is.Seekg(start, std::ios::beg);
-  is.Read( dummy_buffer, buf_size);
-  is.Seekg(start, std::ios::beg); // reset
-  os.Write( dummy_buffer, buf_size);
+  is.seekg(start, std::ios::beg);
+  is.read( dummy_buffer, buf_size);
+  is.seekg(start, std::ios::beg); // reset
+  os.write( dummy_buffer, buf_size);
   delete[] dummy_buffer ;
 
   return true;
@@ -200,25 +200,25 @@ bool ImageCodec::DoSimpleCopy(IStream &is, OStream &os)
 bool ImageCodec::DoPaddedCompositePixelCode(IStream &is, OStream &os)
 {
   // FIXME: Do some stupid work:
-  std::streampos start = is.Tellg();
+  std::streampos start = is.tellg();
   assert( 0 - start == 0 );
-  is.Seekg( 0, std::ios::end);
-  std::streampos buf_size = is.Tellg();
+  is.seekg( 0, std::ios::end);
+  std::streampos buf_size = is.tellg();
   char *dummy_buffer = new char[buf_size];
-  is.Seekg(start, std::ios::beg);
-  is.Read( dummy_buffer, buf_size);
-  is.Seekg(start, std::ios::beg); // reset
-  SwapCode sc = is.GetSwapCode();
+  is.seekg(start, std::ios::beg);
+  is.read( dummy_buffer, buf_size);
+  is.seekg(start, std::ios::beg); // reset
+  //SwapCode sc = is.GetSwapCode();
 
   assert( !(buf_size % 2) );
   for(unsigned long i = 0; i < buf_size/2; ++i)
     {
 #ifdef GDCM_WORDS_BIGENDIAN
-    os.Write( dummy_buffer+i, 1 );
-    os.Write( dummy_buffer+i+buf_size/2, 1 );
+    os.write( dummy_buffer+i, 1 );
+    os.write( dummy_buffer+i+buf_size/2, 1 );
 #else
-    os.Write( dummy_buffer+i+buf_size/2, 1 );
-    os.Write( dummy_buffer+i, 1 );
+    os.write( dummy_buffer+i+buf_size/2, 1 );
+    os.write( dummy_buffer+i, 1 );
 #endif
     }
   return true;
@@ -231,20 +231,20 @@ bool ImageCodec::DoInvertMonochrome(IStream &is, OStream &os)
     if ( PT.GetBitsAllocated() == 8 )
       {
       uint8_t c;
-      while( is.Read((char*)&c,1) )
+      while( is.read((char*)&c,1) )
         {
         c = 255 - c;
-        os.Write((char*)&c, 1 );
+        os.write((char*)&c, 1 );
         }
       }
     else if ( PT.GetBitsAllocated() == 16 )
       {
       uint16_t smask16 = 65535;
       uint16_t c;
-      while( is.Read((char*)&c,2) )
+      while( is.read((char*)&c,2) )
         {
         c = smask16 - c;
-        os.Write((char*)&c, 2);
+        os.write((char*)&c, 2);
         }
       }
     }
@@ -253,10 +253,10 @@ bool ImageCodec::DoInvertMonochrome(IStream &is, OStream &os)
     if ( PT.GetBitsAllocated() == 8 )
       {
       uint8_t c;
-      while( is.Read((char*)&c,1) )
+      while( is.read((char*)&c,1) )
         {
         c = 255 - c;
-        os.Write((char*)&c, 1);
+        os.write((char*)&c, 1);
         }
       }
     else if ( PT.GetBitsAllocated() == 16 )
@@ -268,12 +268,12 @@ bool ImageCodec::DoInvertMonochrome(IStream &is, OStream &os)
         }
 
       uint16_t c;
-      while( is.Read((char*)&c,2) )
+      while( is.read((char*)&c,2) )
         {
         //assert( c <= mask );
         c = mask - c;
         //assert( c <= mask ); // FIXME does not work for D_CLUNIE_RG3_JPLY.dcm
-        os.Write((char*)&c, 2);
+        os.write((char*)&c, 2);
         }
       }
 
@@ -301,7 +301,7 @@ bool ImageCodec::DoPixelType(IStream &is, OStream &os)
       nmask = nmask >> ( PT.GetBitsAllocated() - PT.GetBitsStored() - 1 );
 
       uint16_t c;
-      while( is.Read((char*)&c,2) )
+      while( is.read((char*)&c,2) )
         {
         c = c >> (PT.GetBitsStored() - PT.GetHighBit() - 1);
         if ( c & smask )
@@ -312,17 +312,17 @@ bool ImageCodec::DoPixelType(IStream &is, OStream &os)
           {
           c = c & pmask;
           }
-        os.Write((char*)&c, 2 );
+        os.write((char*)&c, 2 );
         }
       }
     else // Pixel are unsigned
       {
       uint16_t c;
-      while( is.Read((char*)&c,2) )
+      while( is.read((char*)&c,2) )
         {
         c =
           (c >> (PT.GetBitsStored() - PT.GetHighBit() - 1)) & pmask;
-        os.Write((char*)&c, 2 );
+        os.write((char*)&c, 2 );
         }
       }
     }

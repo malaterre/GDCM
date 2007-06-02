@@ -30,7 +30,7 @@ namespace gdcm
 // -> Value
 // TODO: This class SHOULD be pure virtual. I dont want a user
 // to shoot himself in the foot.
-class Value;
+//class Value;
 /**
  * \brief Class to represent a Data Element
  * Implicit / Explicit
@@ -47,9 +47,10 @@ class Value;
 
 class GDCM_EXPORT DataElement
 {
+  template <typename TSwap> friend class IOSerialize;
 public:
   DataElement(const Tag& t = Tag(0), const VL& vl = 0):TagField(t),ValueLengthField(vl) {}
-  virtual ~DataElement() {}
+//  virtual ~DataElement() {}
 
   friend std::ostream& operator<<(std::ostream &_os, const DataElement &_val);
 
@@ -59,10 +60,10 @@ public:
   const VL& GetVL() const { return ValueLengthField; }
   void SetVL(const VL &vl) { ValueLengthField = vl; }
 
-  virtual VL GetLength() const {
-    abort();
-    return 0;
-  }
+//  virtual VL GetLength() const {
+//    abort();
+//    return 0;
+//  }
 
   bool IsUndefinedLength() const {
     return ValueLengthField.IsUndefined();
@@ -89,23 +90,29 @@ public:
       && ValueLengthField == _de.ValueLengthField;
     }
 
-  IStream &Read(IStream &is) {
-    if( TagField.Read(is) )
-      {
-      return ValueLengthField.Read(is);
-      }
-    return is;
-    }
+//  template <typename TSwap>
+//  IStream &Read(IStream &is) {
+//    if( !TagField.Read<TSwap>(is) )
+//      {
+//      abort();
+//      }
+//    if( !ValueLengthField.Read<TSwap>(is) )
+//      {
+//      abort();
+//      }
+//    return is;
+//    }
+//
+//  template <typename TSwap>
+//  const OStream &Write(OStream &os) const {
+//    if( TagField.Write<TSwap>(os) )
+//      {
+//      return ValueLengthField.Write<TSwap>(os);
+//      }
+//    return os;
+//    }
 
-  const OStream &Write(OStream &os) const {
-    if( TagField.Write(os) )
-      {
-      return ValueLengthField.Write(os);
-      }
-    return os;
-    }
-
-  virtual Value const & GetValue() const = 0;
+  //virtual Value const & GetValue() const = 0;
   
 protected:
   Tag TagField;

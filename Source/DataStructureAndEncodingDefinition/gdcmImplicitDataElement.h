@@ -28,8 +28,11 @@ namespace gdcm
  * \note bla
  */
 class Value;
+class ExplicitDataElement;
 class GDCM_EXPORT ImplicitDataElement : public DataElement
 {
+  template <typename TSwap> friend class IOSerialize;
+  friend class ExplicitDataElement;
 public:
   ImplicitDataElement(const Tag& t = Tag(0), uint32_t const &vl = 0) : DataElement(t,vl),ValueField(0) {}
   ~ImplicitDataElement();
@@ -41,8 +44,10 @@ public:
 
   VL GetLength() const;
 
-  IStream &Read(IStream& is);
-  const OStream &Write(OStream& os) const;
+//template <typename TSwap>
+//  IStream &Read(IStream& is);
+//template <typename TSwap>
+//  const OStream &Write(OStream& os) const;
 
   ImplicitDataElement(ImplicitDataElement const & val):DataElement(val)
     {
@@ -56,6 +61,8 @@ public:
 //      assert( !val.ValueField );
 //      }
     }
+
+  ImplicitDataElement(ExplicitDataElement const &val);
 
 private:
   typedef SmartPointer<Value> ValuePtr;

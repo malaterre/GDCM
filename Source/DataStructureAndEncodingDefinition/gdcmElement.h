@@ -53,7 +53,7 @@ public:
     assert( idx < VMToLength<TVM>::Length );
     return Internal[idx];
   }
-  void SetValue(typename VRToType<TVR>::Type v, int idx = 0) {
+  void SetValue(typename VRToType<TVR>::Type v, unsigned int idx = 0) {
     assert( idx < VMToLength<TVM>::Length );
     Internal[idx] = v;
   }
@@ -84,7 +84,7 @@ public:
     for(unsigned long i=1; i<length;++i) {
       assert( _is );
       // Get the separator in between the values
-      _is.Get(sep);
+      _is.get(sep);
       assert( sep == '\\' ); // FIXME: Bad use of assert
       _is >> data[i];
       }
@@ -119,13 +119,13 @@ public:
     assert( data ); // Can we read from pointer ?
     assert( length );
     assert( _is ); // Is stream valid ?
-    _is.Read( reinterpret_cast<char*>(data+0), type_size);
+    _is.read( reinterpret_cast<char*>(data+0), type_size);
     for(unsigned long i=1; i<length; ++i) {
       assert( _is );
-      _is.Read( reinterpret_cast<char*>(data+i), type_size );
+      _is.read( reinterpret_cast<char*>(data+i), type_size );
     }
-    ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem(data,
-      _is.GetSwapCode(), length);
+    //ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem(data,
+    //  _is.GetSwapCode(), length);
   }
   template<typename T>
   static inline void Write(const T* data, unsigned long length,
@@ -134,15 +134,15 @@ public:
     assert( data ); // Can we write into pointer ?
     assert( length );
     assert( _os ); // Is stream valid ?
-    ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem((T*)data,
-      _os.GetSwapCode(), length);
-    _os.Write( reinterpret_cast<const char*>(&(data[0])), type_size);
+    //ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem((T*)data,
+    //  _os.GetSwapCode(), length);
+    _os.write( reinterpret_cast<const char*>(&(data[0])), type_size);
     for(unsigned long i=1; i<length;++i) {
       assert( _os );
-      _os.Write( reinterpret_cast<const char*>(&(data[i])), type_size );
+      _os.write( reinterpret_cast<const char*>(&(data[i])), type_size );
     }
-    ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem((T*)data,
-      _os.GetSwapCode(), length);
+    //ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem((T*)data,
+    //  _os.GetSwapCode(), length);
   }
 };
 

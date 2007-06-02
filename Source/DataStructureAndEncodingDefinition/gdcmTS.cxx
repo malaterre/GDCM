@@ -258,7 +258,10 @@ bool TS::IsImplicit(const TSType &ts)
   return ts == ImplicitVRLittleEndian
     || ts == ImplicitVRBigEndianACRNEMA
     || ts == ImplicitVRBigEndianPrivateGE
-    || ts == WeirdPapryus;
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+    || ts == WeirdPapryus
+#endif
+    ;
 }
 
 // By implementation those two functions form a partition

@@ -49,9 +49,9 @@ public:
   void Read(IStream &is)
     {
     // read Header (64 bytes)
-    is.Read((char*)(&Header), sizeof(unsigned long)*16);
-    ByteSwap<unsigned long>::SwapRangeFromSwapCodeIntoSystem(
-      (unsigned long*)&Header, is.GetSwapCode(), 16);
+    is.read((char*)(&Header), sizeof(unsigned long)*16);
+    //ByteSwap<unsigned long>::SwapRangeFromSwapCodeIntoSystem(
+    //  (unsigned long*)&Header, is.GetSwapCode(), 16);
     unsigned long numSegments = Header.NumSegments;
     if( numSegments >= 1 )
       {
@@ -115,7 +115,7 @@ bool RLECodec::Decode(IStream &is, OStream &os)
   //is.Seekg(0, std::ios::beg);
   //is.Read( dummy_buffer, buf_size);
   //SwapCode sc = is.GetSwapCode();
-  //os.Write(dummy_buffer, buf_size);
+  //os.write(dummy_buffer, buf_size);
   //delete[] dummy_buffer;
   //long numOutBytes = 0;
   //while()
@@ -123,9 +123,9 @@ bool RLECodec::Decode(IStream &is, OStream &os)
   //  }
   StringStream tmpos;
   // DEBUG
-  is.Seekg( 0, std::ios::end);
-  std::streampos buf_size = is.Tellg();
-  is.Seekg(0, std::ios::beg);
+  is.seekg( 0, std::ios::end);
+  std::streampos buf_size = is.tellg();
+  is.seekg(0, std::ios::beg);
   // END DEBUG
 
   RLEFrame &frame = Internals->Frame;
@@ -155,7 +155,7 @@ bool RLECodec::Decode(IStream &is, OStream &os)
   for(unsigned long i = 0; i<numSegments; ++i)
     {
     numberOfReadBytes = 0;
-    std::streampos pos = is.Tellg();
+    std::streampos pos = is.tellg();
     if ( frame.Header.Offset[i] - pos != 0 )
       {
       // ACUSON-24-YBR_FULL-RLE.dcm
@@ -164,7 +164,7 @@ bool RLECodec::Decode(IStream &is, OStream &os)
       //gdcmWarningMacro( "RLE Header says: " << frame.Header.Offset[i] <<
       //   " when it should says: " << pos << std::endl );
       assert( frame.Header.Offset[i] - pos == 1 );
-      is.Seekg( frame.Header.Offset[i], std::ios::beg );
+      is.seekg( frame.Header.Offset[i], std::ios::beg );
       }
 
     unsigned long numOutBytes = 0;
@@ -174,34 +174,34 @@ bool RLECodec::Decode(IStream &is, OStream &os)
     while( numOutBytes < length )
       {
       //std::cerr << "numOutBytes: " << numOutBytes << "\n";
-      is.Read(&byte, 1);
+      is.read(&byte, 1);
       numberOfReadBytes++;
       //std::cerr << "Byte: " << int(byte) << "\n";
       if( byte >= 0 /*&& byte <= 127*/ )
         {
-        is.Read( dummy_buffer, byte+1 );
+        is.read( dummy_buffer, byte+1 );
       numberOfReadBytes += byte+1;
         numOutBytes += byte+ 1;
-        tmpos.Write( dummy_buffer, byte+1 );
+        tmpos.write( dummy_buffer, byte+1 );
         }
       else if( byte <= -1 && byte >= -127 )
         {
         char nextByte;
-        is.Read( &nextByte, 1);
+        is.read( &nextByte, 1);
       numberOfReadBytes += 1;
         for( int c = 0; c < -byte + 1; ++c )
           {
           dummy_buffer[c] = nextByte;
           }
         numOutBytes += -byte + 1;
-        tmpos.Write( dummy_buffer, -byte+1 );
+        tmpos.write( dummy_buffer, -byte+1 );
         }
       else /* byte == -128 */
         {
         assert( byte == -128 );
         }
-        assert( is.Eof()
-        || numberOfReadBytes + frame.Header.Offset[i] - is.Tellg() == 0);
+        assert( is.eof()
+        || numberOfReadBytes + frame.Header.Offset[i] - is.tellg() == 0);
       }
     assert( numOutBytes == length );
     //std::cerr << "numOutBytes:" << numOutBytes << " " << length << "\n";

@@ -25,29 +25,35 @@
 namespace gdcm
 {
 
+	// FIXME gdcmSequenceOfItems qnd gdcmSequenceOfFragments 
+	// should be rethink (duplicate code)
 /**
  * \brief Class to represent a Sequence Of Fragments
  * \todo I do not enforce that Sequence of Fragments ends with a SQ end del
  */
 class GDCM_EXPORT SequenceOfFragments : public Value
 {
+  template <typename TSwap> friend class IOSerialize;
 public:
   // Typdefs:
   typedef std::vector<Fragment> FragmentVector;
 
 /// \brief constructor (UndefinedLength by default)
-  SequenceOfFragments(VL const & vl = 0xFFFFFFFF):SequenceLengthField(vl) { }
+  SequenceOfFragments():Table(),SequenceLengthField(0) { }
 
   /// \brief Returns the SQ length, as read from disk
-  const VL & GetLength() const { return SequenceLengthField; }
+  VL GetLength() const { 
+	  return SequenceLengthField; }
   /// \brief Sets the actual SQ length
-  void SetLength(VL const & length) {
+  void SetLength(VL length) {
     SequenceLengthField = length;
   }
   void Clear() {}
 
-  IStream &Read(IStream &is);
-  OStream const & Write(OStream &os) const;
+//template <typename TSwap>
+//  IStream &Read(IStream &is);
+//template <typename TSwap>
+//  OStream const & Write(OStream &os) const;
 
   /// \brief Appends a Fragment to the already added ones
   void AddFragment(Fragment const &item);
@@ -70,6 +76,8 @@ public:
   // ByteValue). No Table information is written.
   bool WriteBuffer(std::ostream &os) const;
 
+  const BasicOffsetTable &GetTable() const { return Table; }
+
 protected:
   void Print(std::ostream &os) const {
     os << "SQ L= " << SequenceLengthField << "\n";
@@ -83,7 +91,7 @@ protected:
   }
 
 private:
-  /// \brief Total length of the Sequence (or 0xffffffff) if undefined
+public:
   VL SequenceLengthField;
   BasicOffsetTable Table;
   /// \brief Vector of Sequence Fragments

@@ -24,14 +24,14 @@ VL Item::GetLength() const
 {
   if( ValueLengthField.IsUndefined() )
     {
-    assert( !NestedDataSet->GetLength().IsUndefined() );
+    assert( !NestedDataSet.GetLength().IsUndefined() );
     // Item Start             4
     // Item Length            4
     // DataSet                ?
     // Item End Delimitation  4
     // Item End Length        4
     return TagField.GetLength() /* 4 */ + ValueLengthField.GetLength() /* 4 */
-      + NestedDataSet->GetLength() + 4 + 4;
+      + NestedDataSet.GetLength() + 4 + 4;
     }
   else
     {
@@ -41,91 +41,6 @@ VL Item::GetLength() const
     return TagField.GetLength() /* 4 */ + ValueLengthField.GetLength() /* 4 */
       + ValueLengthField;
     }
-}
-
-IStream &Item::Read(IStream &is)
-{
-  // Superclass
-  if( !TagField.Read(is) )
-    {
-    assert(0 && "Should not happen");
-    return is;
-    }
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-  assert ( TagField == Tag(0xfffe, 0xe000)
-        || TagField == Tag(0xfffe, 0xe0dd) 
-        || TagField == Tag(0x3f3f, 0x3f00) );
-//  if( TagField == Tag(0x3f3f, 0x3f00) )
-//    {
-//    TagField = Tag(0xfffe, 0xe000);
-//    }
-#else
-  assert ( TagField == Tag(0xfffe, 0xe000)
-        || TagField == Tag(0xfffe, 0xe0dd) );
-#endif
-  if( !ValueLengthField.Read(is) )
-    {
-    assert(0 && "Should not happen");
-    return is;
-    }
-  // Self
-  NestedDataSet = new DataSet(NType);
-  NestedDataSet->SetLength( ValueLengthField );
-  // BUG: This test is required because DataSet::Read with a Length
-  // of 0 is actually thinking it is reading a root DataSet
-  // so we need to make sure not to call NestedDataSet.Read here
-  if( ValueLengthField == 0 )
-    {
-    assert( TagField == Tag( 0xfffe, 0xe0dd)
-         || TagField == Tag( 0xfffe, 0xe000) );
-    if( TagField != Tag( 0xfffe, 0xe0dd) )
-      {
-      gdcmErrorMacro( "SQ: " << TagField << " has a length of 0" );
-      }
-    }
-  else
-    {
-    NestedDataSet->Read(is);
-    }
-//#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-//  // Ok we have read the item, sometime the ValueLengthField was wrong
-//  // check that:
-//  if( !ValueLengthField.IsUndefined() && ValueLengthField != 0 )
-//    {
-//    if( ValueLengthField != NestedDataSet->GetLength() )
-//      {
-//      ValueLengthField = NestedDataSet->GetLength();
-//      }
-//    }
-//#endif
-  return is;
-}
-
-OStream &Item::Write(OStream &os) const
-{
-  if( !TagField.Write(os) )
-    {
-    assert(0 && "Should not happen");
-    return os;
-    }
-  assert ( TagField == Tag(0xfffe, 0xe000)
-        || TagField == Tag(0xfffe, 0xe0dd) );
-  if( !ValueLengthField.Write(os) )
-    {
-    assert(0 && "Should not happen");
-    return os;
-    }
-  // Self
-  NestedDataSet->Write(os);
-  //if( ValueLengthField.IsUndefined() )
-  //  {
-  //  const Tag itemDelItem(0xfffe,0xe00d);
-  //  const ImplicitDataElement ide(itemDelItem);
-  //  assert( ide.GetVL() == 0 );
-  //  ide.Write(os);
-  //  }
-
-  return os;
 }
 
 } // end namespace gdcm

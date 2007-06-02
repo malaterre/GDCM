@@ -13,13 +13,13 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #ifndef __gdcmDataSet_h
 #define __gdcmDataSet_h
 
-#include "gdcmDataElement.h"
+//#include "gdcmDataElement.h"
 #include "gdcmTS.h"
 #include "gdcmValue.h"
+#include "gdcmStructuredSet.h"
 
 namespace gdcm
 {
@@ -44,52 +44,51 @@ namespace gdcm
  * or defined length (different from 0) means nested dataset with defined
  * length.
  */
-class StructuredSetBase;
 class GDCM_EXPORT DataSet : public Value
 {
+  template <typename TSwap> friend class IOSerialize;
 public:
-  DataSet(TS::NegociatedType const &type = TS::Explicit);
+  DataSet(TS::NegociatedType type = TS::Explicit);
   ~DataSet();
 
   // Clear
   void Clear();
 
-  // Insert
-  void InsertDataElement(const DataElement& de);
-
-  // Get
-  bool FindDataElement(const Tag &t) const;
-  const DataElement& GetDataElement(const Tag &t) const;
-
-  //bool IsEmpty() { return DataElements.empty(); }
+  bool IsValid() { return true; }
 
   // Read
-  IStream &Read(IStream &is);
+//  template <typename TSwap>
+//  IStream &Read(IStream &is);
+//
+//  // Write
+//  template <typename TSwap>
+//  OStream const &Write(OStream &os) const;
 
-  // Write
-  OStream const &Write(OStream &os) const;
-
-  TS::NegociatedType GetNegociatedType() const {
-    return NegociatedTS;
+  VL GetLength() const;
+  void SetLength(VL l) { 
+    Length = l; 
   }
 
-  const VL & GetLength() const;
-  void SetLength(VL const & l) { Length = l; }
+  void InsertDataElement(ExplicitDataElement const &de);
+  const ExplicitDataElement& GetDataElement(const Tag &t) const;
+  bool FindDataElement(const Tag &t) const;
 
   DataSet &operator = (DataSet const &r);
   DataSet(DataSet const &ds);
 
   void Print(std::ostream &os) const;
 
-  const StructuredSetBase *GetInternal() const { return Internal; }
+  const StructuredSet<ExplicitDataElement> &GetInternal() const { return Internal; }
+
+  // TODO
+  // This function should not be in the public API:
+  void SetType(TS::NegociatedType type) { NegociatedTS = type; }
 
 private:
   TS::NegociatedType NegociatedTS;
-  StructuredSetBase *Internal;
-  
-  // Really only usefull in the nested dataset case
-  VL Length;
+  StructuredSet<ExplicitDataElement> Internal;
 
+  VL Length;
 };
 //-----------------------------------------------------------------------------
 

@@ -22,7 +22,7 @@ namespace gdcm
 {
 
 static const char *VRStrings[] = {
-  "INVALID",   // 0
+  "INVALID",        // 0
   "AE",        // 1 
   "AS",        // 2
   "AT",        // 3
@@ -166,6 +166,7 @@ VR::VRType VR::GetVRTypeFromFile(const char *vr)
   assert( N == 27 );
   static const char **start = VRStrings+1;
   static const char **end   = VRStrings+N+1;
+  //std::cerr << "VR=" << vr << std::endl;
   const char **p =
     std::lower_bound(start, end, vr, MySort());
   assert( (*p)[0] == vr[0] && (*p)[1] == vr[1] );

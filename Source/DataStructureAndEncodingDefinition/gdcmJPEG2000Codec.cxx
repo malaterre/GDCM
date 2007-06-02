@@ -89,11 +89,11 @@ bool JPEG2000Codec::Decode(IStream &is, OStream &os)
   opj_dinfo_t* dinfo;  /* handle to a decompressor */
   opj_cio_t *cio;
   // FIXME: Do some stupid work:
-  is.Seekg( 0, std::ios::end);
-  std::streampos buf_size = is.Tellg();
+  is.seekg( 0, std::ios::end);
+  std::streampos buf_size = is.tellg();
   char *dummy_buffer = new char[buf_size];
-  is.Seekg(0, std::ios::beg);
-  is.Read( dummy_buffer, buf_size);
+  is.seekg(0, std::ios::beg);
+  is.read( dummy_buffer, buf_size);
   unsigned char *src = (unsigned char*)dummy_buffer;
   int file_length = buf_size;
   char *raw = NULL;
@@ -163,7 +163,7 @@ bool JPEG2000Codec::Decode(IStream &is, OStream &os)
             int v = image->comps[compno].data[i / wr * w + i % wr];
             *data8++ = (uint8_t)v;
             }
-          os.Write(raw, wr * hr * 1);
+          os.write(raw, wr * hr * 1);
           }
         else if (comp->prec <= 16)
           {
@@ -174,7 +174,7 @@ bool JPEG2000Codec::Decode(IStream &is, OStream &os)
             int v = image->comps[compno].data[i / wr * w + i % wr];
             *data16++ = (uint16_t)v;
             }
-          os.Write(raw, wr * hr * 2);
+          os.write(raw, wr * hr * 2);
           }
         else
           {
@@ -185,7 +185,7 @@ bool JPEG2000Codec::Decode(IStream &is, OStream &os)
             int v = image->comps[compno].data[i / wr * w + i % wr];
             *data32++ = (uint32_t)v;
             }
-          os.Write(raw, wr * hr * 4);
+          os.write(raw, wr * hr * 4);
           }
         delete[] raw;
         //free(image.comps[compno].data);

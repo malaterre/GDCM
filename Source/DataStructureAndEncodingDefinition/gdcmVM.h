@@ -80,6 +80,7 @@ public:
   // Check if vm1 is valid compare to vm2, i.e vm1 is element of vm2
   // vm1 is typically deduct from counting in a ValueField
   static bool IsValid(const int &vm1, const VMType &vm2);
+  //bool IsValid() { return VMField != VM0 && VMField < VM_END; }
 
   static VMType GetVMTypeFromLength(unsigned int length, unsigned int size);
 };
