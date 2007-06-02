@@ -16,11 +16,14 @@
 #include "gdcmPrinter.h"
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
+#include "gdcmSequenceOfItems.h"
+#include "gdcmSequenceOfFragments.h"
 #include "gdcmDict.h"
 #include "gdcmDicts.h"
 #include "gdcmGroupDict.h"
-//#include "gdcmAttribute.h"
 #include "gdcmVR.h"
+#include "gdcmVM.h"
+
 #include "gdcmStructuredSet.h"
 
 #include <typeinfo> // for typeid
@@ -28,7 +31,7 @@
 namespace gdcm
 {
 //-----------------------------------------------------------------------------
-Printer::Printer():PrintStyle(Printer::VERBOSE_STYLE)
+Printer::Printer():/*PrintStyle(Printer::VERBOSE_STYLE),*/F(0)
 {
 }
 //-----------------------------------------------------------------------------
@@ -36,66 +39,142 @@ Printer::~Printer()
 {
 }
 
-#if 1
 void PrintValue(VR::VRType const &vr, VM::VMType const &vm, const Value &v);
+
 //-----------------------------------------------------------------------------
-void PrintExplicitDataElement(std::ostream& _os, const ExplicitDataElement &_val, bool printVR, VR::VRType dictVR, VM::VMType vm, Printer::PrintStyles pstyle)
+void Printer::PrintElement(std::ostream& os, const ExplicitDataElement &xde, const DictEntry& entry) 
 {
-  const Tag &t = _val.GetTag();
-  const VR::VRType vr = _val.GetVR();
-  const uint32_t vl = _val.GetVL();
-  const Value& value = _val.GetValue();
-  (void)printVR;
-  if( pstyle == Printer::CONDENSED_STYLE )
+  const Tag &t = xde.GetTag();
+  const VR &vr = xde.GetVR();
+  const VL &vl = xde.GetVL();
+  const Value& value = xde.GetValue();
+  VR lvr = vr;
+
+  // first of' do the VR:
+  if( lvr == VR::UN )
+  {
+	  if( t.GetElement() == 0x0 )
+	  {
+		  lvr = VR::UL;
+	  }
+	  else
+	  {
+    lvr = entry.GetVR();
+	  }
+  // Data Element (7FE0,0010) Pixel Data has the Value Representation 
+  // OW and shall be encoded in Little Endian.
+  if( t == Tag(0x7fe0,0x0010) )
     {
-    _os << t << " " << vr;
+    assert( lvr == VR::OB_OW );
+    lvr = VR::OW;
     }
-  else
+   }
+
+  /*const*/ VM::VMType vm = entry.GetVM();
+  if( vm == VM::VM0 )
+  {
+    assert( lvr != VR::UN );
+    assert( t.IsPrivate() || t.GetElement() == 0x0 );
+    if ( lvr & (VR::OB | VR::OW))
     {
-    _os << t << " VR=" << VR::GetVRString(vr);
+      vm = VM::VM1;
     }
-  if( dictVR != VR::INVALID && !(vr & dictVR) ) //printVR )
+    else
     {
-    gdcmErrorMacro( "Wrong VR should be " << dictVR );
-    // LEADTOOLS_FLOWERS-8-PAL-RLE.dcm has (0040,0253) : CS instead of SH
-    //abort();
-    }
-  if( pstyle == Printer::CONDENSED_STYLE )
-    {
-    (void)vl;
-    _os /*<< "\t " << std::dec << vl  */
-      << " [" << value << "]";
-    }
-  else
-    {
-    _os << "\tVL=" << std::dec << vl;
-    if( VR::IsASCII(vr)  )
+      //gdcmWarningMacro( "VM for " << t );
+      vm = VM::GetVMTypeFromLength( value.GetLength(), lvr.GetSize() );
+      if( t.GetElement() == 0x0 )
       {
-      _os << "\t ValueField=[" << value << "]";
+        //gdcmErrorMacro( "Le= " << value.GetLength() << " size= " << vr.GetSize() );
+        assert( vm == VM::VM1 && lvr == VR::UL );
       }
-    else if ( VR::IsBinary(vr) )
+    }
+  }
+  // Print Tag and VR:
+  os << t << " " << VR::GetVRString(lvr);
+  //os << " " << VM::GetVMString( vm ) ;
+//  if( dictVR != VR::INVALID && !(vr & dictVR) )
+//    {
+//    gdcmErrorMacro( "Wrong VR should be " << dictVR );
+//    // LEADTOOLS_FLOWERS-8-PAL-RLE.dcm has (0040,0253) : CS instead of SH
+//    //abort();
+//    }
+//  if( pstyle == Printer::CONDENSED_STYLE )
+//    {
+//    (void)vl;
+//    _os /*<< "\t " << std::dec << vl  */
+//      << " [" << value << "]";
+//    }
+
+    if( VR::IsASCII(lvr)  )
       {
-      _os << "\t ValueField=[";
-      if( vl ) PrintValue(vr, vm, value );
-      _os << "]";
+      os << " [" << value << "] ";
+      }
+    else if ( lvr == VR::SQ || vl.IsUndefined() )
+    {
+//	    os << "DEBUG";
+//	    value.Print( _os );
+    }
+    else if ( VR::IsBinary(lvr) )
+      {
+      //os << "\t ValueField=[";
+      os << " ";
+      if( vl ) PrintValue(lvr, vm, value );
+      //os << "]";
+      os << " ";
       }
     else 
-      abort();
+    {
+      std::cerr << "Should not happen: " << lvr << std::endl;
     }
-}
+    //
+    os << "\t\t# " << std::dec << vl;
+    os << ", 1";
+
+    if( vl.IsUndefined() ) { assert ( t == Tag(0x7fe0, 0x0010) || lvr == VR::SQ ) ; }
+    if ( lvr == VR::SQ )
+    {
+      os << std::endl;
+      const SequenceOfItems &sqi = static_cast<const SequenceOfItems&>(value);
+      SequenceOfItems::ItemVector::const_iterator it = sqi.Items.begin();
+      for(; it != sqi.Items.end(); ++it)
+      {
+      const Item &item = *it;
+      const DataSet &ds = item.GetNestedDataSet();
+      const StructuredSet<ExplicitDataElement> &exds = ds.GetInternal();
+      PrintDataSet(os << "  ", exds);
+      }
+    }
+    else if ( vl.IsUndefined() )
+    {
+      os << std::endl;
+      const SequenceOfFragments &sqf = static_cast<const SequenceOfFragments&>(value);
+      os << sqf.GetTable() << std::endl;
+      SequenceOfFragments::FragmentVector::const_iterator it = sqf.Fragments.begin();
+      for(; it != sqf.Fragments.end(); ++it)
+      {
+      const Fragment &frag = *it;
+      const Value &val = frag.GetValue();
+      //PrintValue(lvr, vm, val );
+      os << "  " << frag << std::endl;
+      }
+    }
+  }
+
 //-----------------------------------------------------------------------------
-void PrintImplicitDataElement(std::ostream& _os, const ImplicitDataElement &_val, bool printVR, VR::VRType dictVR, VM::VMType vm)
+void Printer::PrintElement(std::ostream& os, const ImplicitDataElement &ide, DictEntry const &entry)
 {
+	/*
   const Tag &t = _val.GetTag();
   const uint32_t vl = _val.GetVL();
   _os << t;
 
   if ( printVR )
     {
-    _os << " (VR=" << VR::GetVRString(dictVR) << ")";
+    //_os << " (VR=" << VR::GetVRString(dictVR) << ")";
+    _os << " " << VR::GetVRString(dictVR) << " ";
     }
-  _os << "\tVL=" << std::dec << vl
-    << "\tValueField=[";
+  //_os << "\tVL=" << std::dec << vl << "\tValueField=[";
   if( _val.GetVL() )
     {
     // FIXME FIXME: 
@@ -107,10 +186,13 @@ void PrintImplicitDataElement(std::ostream& _os, const ImplicitDataElement &_val
       }
     else
       {
-      _os << value;
+      _os << "[" << value << "]";
       }
     }
-  _os  << "]";
+  //_os  << "]";
+  _os  << "\t\t";
+  _os << "#" << std::setw(4) << std::setfill(' ') << std::dec << vl << ", 1 ";
+  */
 }
 
 //     = reinterpret_cast< const Element<VR::type, VM::VM1>& > ( array );
@@ -132,16 +214,17 @@ void PrintImplicitDataElement(std::ostream& _os, const ImplicitDataElement &_val
     break;
 #define PrinterTemplateSub(type) \
 switch(vm) { \
-PrinterTemplateSubCase(type, VM::VM1) \
-PrinterTemplateSubCase(type, VM::VM2) \
-PrinterTemplateSubCase(type, VM::VM3) \
-PrinterTemplateSubCase(type, VM::VM4) \
-PrinterTemplateSubCase1n(type, VM::VM1_n) \
+PrinterTemplateSubCase(type, VM1) \
+PrinterTemplateSubCase(type, VM2) \
+PrinterTemplateSubCase(type, VM3) \
+PrinterTemplateSubCase(type, VM4) \
+PrinterTemplateSubCase(type, VM24) \
+PrinterTemplateSubCase1n(type, VM1_n) \
 default: abort(); }
 
 #define PrinterTemplateSub2(type) \
 switch(vm) { \
-PrinterTemplateSubCase1n(type, VM::VM1) \
+	PrinterTemplateSubCase1n(type, VM1) \
 default: abort(); }
 
 #define PrinterTemplateCase(type) \
@@ -198,12 +281,15 @@ void PrintValue(VR::VRType const &vr, VM::VMType const &vm, const Value &v)
     }
   catch(...)
     {
+	    // Indeed a SequenceOfFragments is not handle ...
+	    std::cerr << "Problem in PrintValue" << std::endl;
     }
 }
 
 //-----------------------------------------------------------------------------
-void PrintImplicitDataElements(Printer &is, StructuredSet<ImplicitDataElement>&ds)
+void Printer::PrintDataSet(std::ostream& os, const StructuredSet<ImplicitDataElement> &ds)
 {
+#if 0
   //ImplicitDataElement de;
   Printer::PrintStyles pstyle = is.GetPrintStyle();
   (void)pstyle;
@@ -217,7 +303,7 @@ void PrintImplicitDataElements(Printer &is, StructuredSet<ImplicitDataElement>&d
   try
     {
     //while( is.Read(de) )
-    StructuredSet<ImplicitDataElement>::DataElementSetIterator it = ds.Begin();
+    StructuredSet<ImplicitDataElement>::ConstIterator it = ds.Begin();
     for( ; it != ds.End(); ++it )
       {
       const ImplicitDataElement &de = *it;
@@ -277,6 +363,8 @@ void PrintImplicitDataElements(Printer &is, StructuredSet<ImplicitDataElement>&d
     if( t == Tag(0x0028,0x0120)  // Pixel Padding Value
       || t == Tag(0x0028,0x0106) // Smallest Image Pixel Value
       || t == Tag(0x0028,0x0107) // Largest Image Pixel Value
+      || t == Tag(0x0028,0x0108) // Smallest Pixel Value in Series
+      || t == Tag(0x0028,0x0109) // Largest Pixel Value in Series
       || t == Tag(0x0028,0x1101) // Red Palette Color Lookup Table Descriptor
       || t == Tag(0x0028,0x1102)  // Green Palette Color Lookup Table Descriptor
       || t == Tag(0x0028,0x1103) // Blue Palette Color Lookup Table Descriptor
@@ -294,6 +382,10 @@ void PrintImplicitDataElements(Printer &is, StructuredSet<ImplicitDataElement>&d
       assert( pixel_rep_value == 0x0 || pixel_rep_value == 0x1 );
       vr = pixel_rep_value ? VR::SS : VR::US;
       }
+    else
+    {
+	    abort();
+    }
     }
 
         PrintImplicitDataElement(_os, de, printVR, vr /*entry.GetVR()*/, vm);
@@ -305,9 +397,11 @@ void PrintImplicitDataElements(Printer &is, StructuredSet<ImplicitDataElement>&d
         _os << de.GetTag();
         if ( printVR )
           {
-          _os << " ?VR=" << vr;
+          //_os << " ?VR=" << vr;
+          _os << " " << vr;
           }
-        _os << "\tVL=" << std::dec << de.GetVL() << "\tValueField=[";
+        //_os << "\tVL=" << std::dec << de.GetVL() << "\tValueField=[";
+        _os << "\t" << std::dec << de.GetVL() << "\tValueField=[";
 
         // Use super class of the template stuff
         //Attribute af;
@@ -323,12 +417,16 @@ void PrintImplicitDataElements(Printer &is, StructuredSet<ImplicitDataElement>&d
         }
       if( de.GetTag().GetElement() == 0x0 )
         {
-        _os << "\t\t# (" << gd.GetName(de.GetTag().GetGroup() )
-          << ") " << entry.GetName() << std::endl;
+        _os << "\t\t" << gd.GetName(de.GetTag().GetGroup() )
+          << " " << entry.GetName() << std::endl;
         }
       else
         {
-        _os << "\t\t# " << entry.GetName() << std::endl;
+//		_os.flush();
+//        std::streampos pos = _os.tellp();
+//        streambuf *s = _os.rdbuf();
+        //int pos = _os.str().size();
+        _os << " " << entry.GetName() << std::endl;
         }
       }
     }
@@ -336,36 +434,27 @@ void PrintImplicitDataElements(Printer &is, StructuredSet<ImplicitDataElement>&d
     {
     std::cerr << "Exception:" << typeid(e).name() << std::endl;
     }
+#endif
 }
 
 //-----------------------------------------------------------------------------
-void PrintExplicitDataElements(Printer &is, StructuredSet<ExplicitDataElement> &ds)
+void Printer::PrintDataSet(std::ostream &os, const StructuredSet<ExplicitDataElement> &ds)
 {
-  //ExplicitDataElement de;
-
-  std::ostream &_os = std::cout;
   static const Dict d;
   static const GroupDict gd;
-  Printer::PrintStyles pstyle = is.GetPrintStyle();
-  bool printVR = false; //is.GetPrintVR();
   try
     {
-    StructuredSet<ExplicitDataElement>::DataElementSetIterator it = ds.Begin();
+    StructuredSet<ExplicitDataElement>::ConstIterator it = ds.Begin();
     for( ; it != ds.End(); ++it )
-    //while( !is.eof() && is.Read(de) )
       {
       const ExplicitDataElement &de = *it;
-      //is.Read(de);
-//  if( de.GetTag() == Tag(0x0043,0x1038) )
-//    {
-//    std::cerr << "bla" << std::endl;
-//    }
       const DictEntry &entry = d.GetDictEntry(de.GetTag());
       // Use VR from dictionary
       VR::VRType vr = entry.GetVR();
       VM::VMType vm = entry.GetVM();
       // TODO: FIXME FIXME FIXME
       const Tag& t = de.GetTag();
+      //std::cerr << t << std::endl;
       const VR::VRType vr_read = de.GetVR();
       if( t == Tag(0x7fe0,0x0010) )
         {
@@ -408,22 +497,22 @@ void PrintExplicitDataElements(Printer &is, StructuredSet<ExplicitDataElement> &
       assert( vr != VR::INVALID );
       if( VR::IsASCII(vr_read) || VR::IsBinary(vr_read) )
         {
-        //PrintExplicitDataElement(_os, de, printVR, vr, pstyle);
-        PrintExplicitDataElement(_os, de, printVR, vr_read, vm, pstyle);
+	//	_os << de << std::endl;
+        PrintElement(os, de, entry);
         }
       else
         {
         abort();
         const VM::VMType vm = entry.GetVM();
         const Value& val = de.GetValue();
-        _os << de.GetTag();
-        if( pstyle == Printer::CONDENSED_STYLE )
+        os << de.GetTag();
+        //if( pstyle == Printer::CONDENSED_STYLE )
+        //  {
+        //  os << " " << vr_read;
+        //  }
           {
-          _os << " " << vr_read;
-          }
-        else
-          {
-          _os << " VR=" << VR::GetVRString(vr_read);
+          //os << " VR=" << VR::GetVRString(vr_read);
+          os << " " << VR::GetVRString(vr_read);
           }
         if( vr != VR::INVALID && !(vr_read & vr) )
           {
@@ -433,15 +522,14 @@ void PrintExplicitDataElements(Printer &is, StructuredSet<ExplicitDataElement> &
           // After posting to dicom newsgroup there were reasons for doing SS
           // but in this case user should really do US...
           }
-        if( pstyle == Printer::CONDENSED_STYLE )
+        //if( pstyle == Printer::CONDENSED_STYLE )
+        //  {
+        //  os << /*"\t " << std::dec << de.GetVL() << */
+        //    " ";
+        //  }
           {
-          _os << /*"\t " << std::dec << de.GetVL() << */
-            " ";
-          }
-        else
-          {
-          _os << "\tVL=" << std::dec << de.GetVL() 
-            << "\tValueField=[";
+          //_os << "\tVL=" << std::dec << de.GetVL() << "\tValueField=[";
+          os << " " << std::dec << de.GetVL() << " ";
           }
 
         // Use super class of the template stuff
@@ -453,19 +541,19 @@ void PrintExplicitDataElements(Printer &is, StructuredSet<ExplicitDataElement> &
         //iss.str( std::string( val.GetPointer(), val.GetLength() ) );
         //af.Read( iss );
         //af.Print( _os );
-        if( pstyle == Printer::CONDENSED_STYLE )
-          {
-          _os << "]";
-          }
+        //if( pstyle == Printer::CONDENSED_STYLE )
+        //  {
+        //  os << "]";
+        //  }
         }
       if( de.GetTag().GetElement() == 0x0 )
         {
-        _os << "\t\t# (" << gd.GetName(de.GetTag().GetGroup() )
+        os << " (" << gd.GetName(de.GetTag().GetGroup() )
           << ") " << entry.GetName() << std::endl;
         }
       else
         {
-        _os << "\t\t# " << entry.GetName() << std::endl;
+        os << " " << entry.GetName() << std::endl;
         }
       }
     }
@@ -474,27 +562,23 @@ void PrintExplicitDataElements(Printer &is, StructuredSet<ExplicitDataElement> &
     std::cerr << "Exception:" << typeid(e).name() << std::endl;
     }
 }
-#endif
 
 //-----------------------------------------------------------------------------
 void Printer::Print(std::ostream& os)
 {
-  const gdcm::DataSet &ds = *DS;
-  const StructuredSetBase *base = ds.GetInternal();
-  if ( ds.GetNegociatedType() == TS::Explicit )
-    {
-    const StructuredSet<ExplicitDataElement> *exds = 
-      dynamic_cast< const StructuredSet<ExplicitDataElement>* > ( base );
-    PrintExplicitDataElements(*this, const_cast<StructuredSet<ExplicitDataElement>& >(*exds));
-    }
-  else if ( ds.GetNegociatedType() == TS::Implicit )
-    {
-    const StructuredSet<ImplicitDataElement> *exds = 
-      dynamic_cast< const StructuredSet<ImplicitDataElement>* > ( base );
-    PrintImplicitDataElements(*this, const_cast<StructuredSet<ImplicitDataElement>& >(*exds));
-    }
-  //os << ds << std::endl;
-  //DataSet::Iterator it = ds.Begin();
+  std::cout << "# Dicom-File-Format\n";
+  std::cout << "\n";
+  std::cout << "# Dicom-Meta-Information-Header\n";
+  std::cout << "# Used TransferSyntax: \n";
+
+  const FileMetaInformation &meta = F->GetHeader();
+  PrintDataSet(os, meta);
+
+  std::cout << "\n# Dicom-Data-Set\n";
+  std::cout << "# Used TransferSyntax: \n";
+  const DataSet &ds = F->GetDataSet();
+  const StructuredSet<ExplicitDataElement> &exds = ds.GetInternal();
+  PrintDataSet(os, exds);
 }
 
 }

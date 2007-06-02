@@ -46,9 +46,10 @@ const Image& ImageReader::GetImage() const
 
 const ByteValue* ImageReader::GetPointerFromElement(Tag const &tag) const
 {
-  const DataSet &ds = GetDataSet();
-  TS::NegociatedType type = ds.GetNegociatedType();
+  const DataSet &ds = F->GetDataSet();
+  TS::NegociatedType type; // = ds.GetNegociatedType();
 
+#if 0
   const DataElement& rde = ds.GetDataElement( tag );
   if( type == TS::Explicit )
     {
@@ -73,6 +74,7 @@ const ByteValue* ImageReader::GetPointerFromElement(Tag const &tag) const
     return bv;
     }
   // ooops ?
+#endif
     gdcmErrorMacro( "Not sure how you are supposed to reach here" );
   return 0;
 }
@@ -84,8 +86,8 @@ bool ImageReader::Read()
     return false;
     }
 
-  const FileMetaInformation &header = GetHeader();
-  TS::TSType ts = header.GetTransferSyntaxType();
+  const FileMetaInformation &header = F->GetHeader();
+  TS::TSType ts; // = header.GetTransferSyntaxType();
 
   bool res = false;
   /* Does it really make sense to check for Media Storage SOP Class UID?
@@ -94,7 +96,7 @@ bool ImageReader::Read()
    * I'd rather go the old way check a bunch of tags (From Image Plane
    * Module).
    */
-  TS::MSType ms = header.GetMediaStorageType();
+  TS::MSType ms; // = header.GetMediaStorageType();
   bool isImage = TS::IsImage( ms );
   if( isImage )
     {
@@ -120,7 +122,7 @@ bool ImageReader::Read()
       // D 0008|0016 [UI] [SOP Class UID] [1.2.840.10008.5.1.4.1.1.7 ]
       // ==> [Secondary Capture Image Storage]
       const Tag tsopclassuid(0x0008, 0x0016);
-      if( GetDataSet().FindDataElement( tsopclassuid) )
+      if( F->GetDataSet().FindDataElement( tsopclassuid) )
         {
         const ByteValue *sopclassuid
           = GetPointerFromElement( tsopclassuid );
@@ -157,7 +159,7 @@ bool ImageReader::Read()
         gdcmDebugMacro( "Attempting to read this file as a DICOM file"
           "\nDesperate attempt" );
         const Tag tpixeldata(0x7fe0, 0x0010);
-        if( GetDataSet().FindDataElement( tpixeldata) )
+        if( F->GetDataSet().FindDataElement( tpixeldata) )
           {
           // gdcm-CR-DCMTK-16-NonSamplePerPix.dcm
           // Someone defined the Transfer Syntax but I have no clue what
@@ -187,7 +189,7 @@ signed short ImageReader::ReadSSFromTag( Tag const &t, StringStream &ss,
   Element<VR::SS,VM::VM1> el;
   assert( bv->GetLength() == 2 );
   conversion = std::string(bv->GetPointer(), 2); 
-  ss.Str( conversion );
+  ss.str( conversion );
   el.Read( ss );
   return el.GetValue();
 }
@@ -199,7 +201,7 @@ unsigned short ImageReader::ReadUSFromTag( Tag const &t, StringStream &ss,
   Element<VR::US,VM::VM1> el;
   assert( bv->GetLength() == 2 );
   conversion = std::string(bv->GetPointer(), 2); 
-  ss.Str( conversion );
+  ss.str( conversion );
   el.Read( ss );
   return el.GetValue();
 }
@@ -213,7 +215,7 @@ int ImageReader::ReadISFromTag( Tag const &t, StringStream &ss,
   assert( conversion.size() == bv->GetLength() );
   const char *debug = conversion.c_str();
   assert( debug[bv->GetLength()] == '\0' ); 
-  ss.Str( conversion );
+  ss.str( conversion );
   el.Read( ss );
   int r = el.GetValue();
   return r;
@@ -221,13 +223,13 @@ int ImageReader::ReadISFromTag( Tag const &t, StringStream &ss,
 
 bool ImageReader::ReadImage()
 {
-  const DataSet &ds = GetDataSet();
-  TS::NegociatedType type = ds.GetNegociatedType();
+  const DataSet &ds = F->GetDataSet();
+  TS::NegociatedType type; // = ds.GetNegociatedType();
   StringStream ss;
   std::string conversion;
   // Construct a stringstream to mimic the reading from the file
-  ss.SetSwapCode( Stream.GetSwapCode() );
-  PixelData.SetSwapCode( Stream.GetSwapCode() );
+  //ss.SetSwapCode( Stream.GetSwapCode() );
+  //PixelData.SetSwapCode( Stream.GetSwapCode() );
 
   const Tag trecognitioncode(0x0008,0x0010);
   if( ds.FindDataElement( trecognitioncode ) )
@@ -354,7 +356,7 @@ bool ImageReader::ReadImage()
       std::string descriptor_str(
         descriptor->GetPointer(),
         descriptor->GetLength() );
-      ss.Str( descriptor_str );
+      ss.str( descriptor_str );
       el_us3.Read( ss );
       lut->InitializeLUT( LookupTable::LookupTableType(i),
         el_us3.GetValue(0), el_us3.GetValue(1), el_us3.GetValue(2) );
@@ -412,6 +414,7 @@ bool ImageReader::ReadImage()
     return false;
     }
   const DataElement& pdde = ds.GetDataElement( pixeldata );
+#if 0
   if( type == TS::Explicit )
     {
     const ExplicitDataElement &xde =
@@ -421,7 +424,8 @@ bool ImageReader::ReadImage()
       // Need to byte swap
       assert( GetHeader().GetTransferSyntaxType() 
         != TS::ImplicitVRBigEndianPrivateGE );
-      bool need = 
+      bool need;
+      = 
         ByteSwap<int>::SystemIsLittleEndian() &&
         (Stream.GetSwapCode() != SwapCode::LittleEndian)
      || ByteSwap<int>::SystemIsBigEndian() &&
@@ -462,19 +466,20 @@ bool ImageReader::ReadImage()
     gdcmErrorMacro( "Not sure how you are supposed to reach here" );
     return false;
     }
+#endif
 
   return true;
 }
 
 bool ImageReader::ReadACRNEMAImage()
 {
-  const DataSet &ds = GetDataSet();
-  TS::NegociatedType type = ds.GetNegociatedType();
+  const DataSet &ds = F->GetDataSet();
+  TS::NegociatedType type; // = ds.GetNegociatedType();
   StringStream ss;
   std::string conversion;
   // Construct a stringstream to mimic the reading from the file
-  ss.SetSwapCode( Stream.GetSwapCode() );
-  PixelData.SetSwapCode( Stream.GetSwapCode() );
+  //ss.SetSwapCode( Stream.GetSwapCode() );
+  //PixelData.SetSwapCode( Stream.GetSwapCode() );
 
   // Ok we have the dataset let's feed the Image (PixelData)
   // 1. First find how many dimensions there is:
@@ -575,6 +580,7 @@ bool ImageReader::ReadACRNEMAImage()
     return false;
     }
   const DataElement& pdde = ds.GetDataElement( pixeldata );
+#if 0
   if( type == TS::Explicit )
     {
     const ExplicitDataElement &xde =
@@ -613,6 +619,7 @@ bool ImageReader::ReadACRNEMAImage()
     gdcmErrorMacro( "Not sure how you are supposed to reach here" );
     return false;
     }
+#endif
 
   // There is no such thing as Photometric Interpretation and 
   // Planar Configuration in ACR NEMA so let's default to something ...

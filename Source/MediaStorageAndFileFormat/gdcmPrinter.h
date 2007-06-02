@@ -23,11 +23,15 @@
 // \todo I still need to implement skiping of group (shadow)
 // need to implement longer field to read
 
-#include "gdcmDataSet.h"
+#include "gdcmFile.h"
 
 namespace gdcm
 {
 
+class ExplicitDataElement;
+class ImplicitDataElement;
+template <typename DEType> class StructuredSet;
+class DictEntry;
 // It's a sink there is no output
 class GDCM_EXPORT Printer
 {
@@ -35,32 +39,32 @@ public:
   Printer();
   ~Printer();
 
-  // Set the input dataset to the printer
-  void SetDataSet(DataSet const &ds) {
-    DS = const_cast<DataSet*>(&ds);
-  }
-  DataSet const &GetDataSet() const {
-    return *DS;
-  }
-  typedef enum {
-    VERBOSE_STYLE = 0, // GDCM Legacy VERBOSE one
-    CONDENSED_STYLE,         //
-    // Ok I am missing voc here ...better naming would be nice
-    XML // sure why not
-  } PrintStyles;
+  void SetFile(File const &f) { F = &f; }
 
-  void SetStyle(PrintStyles ps) {
-    PrintStyle = ps;
-  }
-  PrintStyles GetPrintStyle() const {
-    return PrintStyle;
-    }
+//  typedef enum {
+//    VERBOSE_STYLE = 0, // GDCM Legacy VERBOSE one
+//    CONDENSED_STYLE,         //
+//    // Ok I am missing voc here ...better naming would be nice
+//    XML // sure why not
+//  } PrintStyles;
+//
+//  void SetStyle(PrintStyles ps) {
+//    PrintStyle = ps;
+//  }
+//  PrintStyles GetPrintStyle() const {
+//    return PrintStyle;
+//    }
 
   void Print(std::ostream& os);
 
-private:
-  PrintStyles PrintStyle;
-  DataSet *DS;
+protected:
+  void PrintElement(std::ostream& os, const ExplicitDataElement &xde, const DictEntry &entry);
+  void PrintElement(std::ostream& os, const ImplicitDataElement &ide, const DictEntry &entry);
+  void PrintDataSet(std::ostream& os, const StructuredSet<ExplicitDataElement> &ds);
+  void PrintDataSet(std::ostream& os, const StructuredSet<ImplicitDataElement> &ds);
+
+//  PrintStyles PrintStyle;
+  const File *F;
 };
 
 } // end namespace gdcm

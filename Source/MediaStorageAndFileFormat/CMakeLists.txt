@@ -2,10 +2,12 @@
 # MSFF
 SET(MSFF_SRCS
   gdcmPrinter.cxx
+  gdcmDictPrinter.cxx
   gdcmReader.cxx
   gdcmImageReader.cxx
   gdcmImageWriter.cxx
   gdcmWriter.cxx
+  gdcmValidate.cxx
   )
 
 # Add the include paths

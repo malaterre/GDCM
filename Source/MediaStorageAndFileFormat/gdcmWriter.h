@@ -18,7 +18,7 @@
 #define __gdcmWriter_h
 
 #include "gdcmOFStream.h"
-#include "gdcmDataSet.h"
+#include "gdcmFile.h"
 
 namespace gdcm
 {
@@ -44,53 +44,54 @@ class FileMetaInformation;
 class GDCM_EXPORT Writer
 {
 public:
-  Writer():Stream(),Preamble(0),DS(0),Header(0) {}
+  Writer():Stream(),F(0) {}
   virtual ~Writer();
 
   virtual bool Write(); // Execute()
   void SetFileName(const char *filename) {
-    Stream.Open(filename);
+    Stream.open(filename, std::ios::out | std::ios::binary );
+    //std::cerr << Stream.is_open() << std::endl;
   }
 
-  const FileMetaInformation &GetHeader() const {
-    return *Header;
-  }
-  void SetHeader(FileMetaInformation const &fmi) {
-    Header = const_cast<FileMetaInformation*>(&fmi);
-  }
-  const DataSet &GetDataSet() const {
-    return *DS;
-  }
-  void SetDataSet(DataSet const &ds) {
-    DS = const_cast<DataSet*>(&ds);
-  }
+  void SetFile( const File& f) { F = &f; }
 
-  void SetPreamble(const char *preamble) {
-    assert( Preamble == 0 );
-    if( !Preamble && preamble)
-      {
-      Preamble = new char[128+4];
-      }
-    if( preamble )
-      {
-      assert( Preamble );
-      memcpy(Preamble,preamble, 128+4);
-      }
-    else
-      {
-      assert( Preamble == 0 );
-      }
-  }
+//  const FileMetaInformation &GetHeader() const {
+//    return *Header;
+//  }
+//  void SetHeader(FileMetaInformation const &fmi) {
+//    Header = const_cast<FileMetaInformation*>(&fmi);
+//  }
+//  const DataSet &GetDataSet() const {
+//    return *DS;
+//  }
+//  void SetDataSet(DataSet const &ds) {
+//    DS = const_cast<DataSet*>(&ds);
+//  }
+
+//  void SetPreamble(const char *preamble) {
+//    assert( Preamble == 0 );
+//    if( !Preamble && preamble)
+//      {
+//      Preamble = new char[128+4];
+//      }
+//    if( preamble )
+//      {
+//      assert( Preamble );
+//      memcpy(Preamble,preamble, 128+4);
+//      }
+//    else
+//      {
+//      assert( Preamble == 0 );
+//      }
+//  }
 
 protected:
-  OFStream Stream;
+  /*OFStream */ std::ofstream Stream;
 
-  bool WritePreamble();
-  char *Preamble;
+  //bool WritePreamble();
 
 private:
-  DataSet *DS;
-  FileMetaInformation *Header;
+  const File *F;
 };
 
 } // end namespace gdcm

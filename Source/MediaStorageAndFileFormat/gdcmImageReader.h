@@ -17,6 +17,7 @@
 #ifndef __gdcmImageReader_h
 #define __gdcmImageReader_h
 
+#include "gdcmStringStream.h"
 #include "gdcmReader.h"
 #include "gdcmImageValue.h"
 
@@ -27,7 +28,6 @@ namespace gdcm
  * \note it's role is to convert the DICOM DataSet into a gdcm::Image
  * representation
  */
-class StringStream;
 class ByteValue;
 class GDCM_EXPORT ImageReader : public Reader
 {

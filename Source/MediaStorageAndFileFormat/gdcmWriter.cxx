@@ -23,61 +23,24 @@ namespace gdcm
 
 Writer::~Writer()
 {
-  if( Preamble )
-    {
-    delete[] Preamble;
-    }
-}
-
-/// \precondition we are at the beginning of file
-bool Writer::WritePreamble()
-{
-  if( Preamble )
-    {
-    Stream.Write( Preamble, 128+4);
-    }
-#if 0
-  char dicm[128];
-  memset( dicm, 0, 128 );
-  Stream.Write( dicm, 128);
-  Stream.Write( "DICM", 4);
-#endif
-
-  return true;
 }
 
 bool Writer::Write()
 {
-  if( !Stream.IsOpen() )
+  if( !Stream.is_open() )
     {
-    gdcmErrorMacro( "No File" );
+    gdcmErrorMacro( "No Filename" );
     return false;
     }
-  if ( !WritePreamble() )
-    {
-    return false;
-    }
-  if( !Header )
-    {
-    Header = new FileMetaInformation;
-    abort();
-    }
-  Header->Write(Stream);
-  TS ts = Header->GetTransferSyntaxType();
-  if( ts != TS::TS_END )
-    {
-    // Set the endianness requested by the Header
-    Stream.SetSwapCode( ts.GetSwapCode() );
-    }
-  if( !DS )
-    {
-    DS = new DataSet;
-    }
-  DS->Write(Stream);
 
-  Stream.Close();
+  assert( F );
+  F->Write( Stream );
+
+  // FIXME : call this function twice...
+  Stream.close();
 
   return true;
 }
 
 } // end namespace gdcm
+

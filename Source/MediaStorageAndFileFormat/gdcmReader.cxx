@@ -17,18 +17,21 @@
 #include "gdcmTrace.h"
 #include "gdcmVR.h"
 #include "gdcmFileMetaInformation.h"
+#include "gdcmSwapper.h"
+#include "gdcmIOSerialize.txx"
 
 namespace gdcm
 {
 
 Reader::~Reader()
 {
-  delete DS;
-  delete Header;
+  delete F;
+#if 0
   if( Preamble )
     {
     delete[] Preamble;
     }
+#endif
 }
 
 /// \brief tells us if "DICM" is found as position 128
@@ -40,26 +43,7 @@ Reader::~Reader()
 /// Meta Information Header
 bool Reader::ReadPreamble()
 {
-  bool r = false;
-  Preamble = new char[128+4];
-  Stream.Read(Preamble, 128+4);
-  if( Preamble[128+0] == 'D'
-   && Preamble[128+1] == 'I'
-   && Preamble[128+2] == 'C'
-   && Preamble[128+3] == 'M')
-    {
-    r = true;
-    }
-  if(!r)
-    {
-    gdcmDebugMacro( "Not a DICOM V3 file" );
-    delete[] Preamble;
-    Preamble = 0;
-    // Seek back
-    Stream.Seekg(0, std::ios::beg);
-    }
-
-  return r;
+ return true;
 }
 
 /// \brief read the DICOM Meta Information Header
@@ -68,45 +52,51 @@ bool Reader::ReadPreamble()
 /// \postcondition we are at the beginning of the DataSet
 bool Reader::ReadMetaInformation()
 {
+#if 0
   if( !Header )
     {
     Header = new FileMetaInformation;
     }
   return Header->Read(Stream);
+#endif
+  return true;
 }
 
 bool Reader::ReadDataSet()
 {
+#if 0
   if( !DS )
     {
-    TS ts = Header->GetTransferSyntaxType();
+    TS ts (TS::TSType(0)); // = Header->GetTransferSyntaxType();
     //std::cerr << ts << std::endl;
     if( ts.GetNegociatedType() == TS::Explicit )
       {
-      DS = new DataSet(TS::Explicit);
+      DS = new DataSet; //<ExplicitDataElement>;
       }
     else // default to instanciating an implicit one (old ACRNEMA...)
       {
       assert( ts.GetNegociatedType() == TS::Implicit
            || ts.GetNegociatedType() == TS::Unknown );
-      DS = new DataSet(TS::Implicit);
+      DS = new DataSet; //<ImplicitDataElement>;
       }
     }
-  assert( Stream.GetSwapCode() != SwapCode::Unknown );
+  //assert( Stream.GetSwapCode() != SwapCode::Unknown );
   return DS->Read(Stream);
+#endif
+  return true;
 }
 
 TS Reader::GuessTransferSyntax()
 {
   // Don't call this function if you have a meta file info
-  assert( Header->GetTransferSyntaxType() == TS::TS_END );
-  assert( Stream.GetSwapCode() == SwapCode::Unknown );
-  std::streampos start = Stream.Tellg();
+  //assert( Header->GetTransferSyntaxType() == TS::TS_END );
+  //assert( Stream.GetSwapCode() == SwapCode::Unknown );
+  std::streampos start = Stream.tellg();
   SwapCode sc = SwapCode::Unknown;
   TS::NegociatedType nts = TS::Unknown;
   TS ts (TS::TS_END);
   Tag t;
-  t.Read(Stream);
+  IOSerialize<SwapperNoOp>::Read(Stream,t);
   if( ! (t.GetGroup() % 2) )
     {
     switch( t.GetGroup() )
@@ -122,7 +112,7 @@ TS Reader::GuessTransferSyntax()
       }
     // Purposely not Re-use ReadVR since we can read VR_END
     char vr_str[3];
-    Stream.Read(vr_str, 2);
+    Stream.read(vr_str, 2);
     vr_str[2] = '\0';
     // Cannot use GetVRTypeFromFile since is assert ...
     VR::VRType vr = VR::GetVRType(vr_str);
@@ -133,11 +123,11 @@ TS Reader::GuessTransferSyntax()
     else
       {
       assert( !(VR::IsSwap(vr_str)));
-      Stream.Seekg(-2, std::ios::cur); // Seek back
+      Stream.seekg(-2, std::ios::cur); // Seek back
       if( t.GetElement() == 0x0000 )
         {
         VL gl; // group length
-        gl.Read(Stream);
+        IOSerialize<SwapperNoOp>::Read(Stream,gl);
         switch(gl)
           {
         case 0x00000004 :
@@ -175,7 +165,7 @@ TS Reader::GuessTransferSyntax()
       }
     // Purposely not Re-use ReadVR since we can read VR_END
     char vr_str[3];
-    Stream.Read(vr_str, 2);
+    Stream.read(vr_str, 2);
     vr_str[2] = '\0';
     // Cannot use GetVRTypeFromFile since is assert ...
     VR::VRType vr = VR::GetVRType(vr_str);
@@ -213,40 +203,25 @@ TS Reader::GuessTransferSyntax()
     {
     abort();
     }
-  Stream.Seekg( start, std::ios::beg );
+  Stream.seekg( start, std::ios::beg );
   assert( ts != TS::TS_END );
   return ts;
 }
 
 bool Reader::Read()
 {
-  if( !Stream.IsOpen() )
+  if( !Stream.is_open() )
     {
     gdcmErrorMacro( "No File" );
     return false;
     }
-  if( !ReadPreamble() )
-    {
-    assert( Preamble == 0 );
-    gdcmDebugMacro( "No Preamble" );
-    }
-  ReadMetaInformation();
-  //std::cerr << *Header << std::endl;
-  TS ts = Header->GetTransferSyntaxType();
-  if( ts == TS::TS_END )
-    {
-    ts = GuessTransferSyntax();
-    // Then save it in the 'pseudo' header
-    Header->SetTransferSyntaxType( ts );
-    }
-  assert( ts != TS::TS_END );
-  // From ts set properly the Stream for reading the dataset:
-  Stream.SetSwapCode( ts.GetSwapCode() );
-  // Read !
-  ReadDataSet();
 
-  assert( Stream.Eof() );
-  Stream.Close();
+  F = new File;
+  F->Read( Stream );
+
+  assert( Stream.eof() );
+  // FIXME : call this function twice...
+  Stream.close();
 
   return true;
 }
