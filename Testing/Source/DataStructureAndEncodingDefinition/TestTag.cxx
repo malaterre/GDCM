@@ -16,14 +16,16 @@
 #include "gdcmTag.h"
 #include "gdcmStringStream.h"
 
+#include "gdcmSwapper.h"
+
 int TestTag(int , char * [])
 {
   const uint32_t dummy = 0x12345678;
   gdcm::Tag t16(0x1234, 0x5678);
-  gdcm::StringStream ss;
-  t16.Write( ss );
+  std::stringstream ss;
+  t16.Write<gdcm::SwapperNoOp>( ss );
   gdcm::Tag t16_2;
-  t16_2.Read( ss );
+  t16_2.Read<gdcm::SwapperNoOp>( ss );
 
   gdcm::Tag t32( dummy );
   if( t32 != t16 )

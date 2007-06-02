@@ -15,22 +15,23 @@
 =========================================================================*/
 #include "gdcmImplicitDataElement.h"
 #include "gdcmStringStream.h"
+#include "gdcmSwapper.h"
 
 int TestImplicitDataElement1(const uint16_t group,
                              const uint16_t element,
                              const uint32_t vl)
 {
   const char *str;
-  gdcm::StringStream ss;
+  std::stringstream ss;
   str = reinterpret_cast<const char*>(&group);
-  ss.Write(str, sizeof(group));
+  ss.write(str, sizeof(group));
   str = reinterpret_cast<const char*>(&element);
-  ss.Write(str, sizeof(element));
+  ss.write(str, sizeof(element));
   str = reinterpret_cast<const char*>(&vl);
-  ss.Write(str, sizeof(vl));
+  ss.write(str, sizeof(vl));
 
   gdcm::ImplicitDataElement de;
-  if( !de.Read(ss) )
+  if( !de.Read<gdcm::SwapperNoOp>(ss) )
     {
     std::cerr << de << std::endl;
     return 1;
@@ -52,18 +53,18 @@ int TestImplicitDataElement2(const uint16_t group,
 {
   const char *str;
   const uint32_t vl = strlen(value);
-  gdcm::StringStream ss;
+  std::stringstream ss;
   str = reinterpret_cast<const char*>(&group);
-  ss.Write(str, sizeof(group));
+  ss.write(str, sizeof(group));
   str = reinterpret_cast<const char*>(&element);
-  ss.Write(str, sizeof(element));
+  ss.write(str, sizeof(element));
   str = reinterpret_cast<const char*>(&vl);
-  ss.Write(str, sizeof(vl));
+  ss.write(str, sizeof(vl));
   str = value;
-  ss.Write(str, vl);
+  ss.write(str, vl);
 
   gdcm::ImplicitDataElement de;
-  if( !de.Read(ss) )
+  if( !de.Read<gdcm::SwapperNoOp>(ss) )
     {
     std::cerr << de << std::endl;
     return 1;
@@ -93,9 +94,9 @@ inline void WriteRead(gdcm::DataElement const &w, gdcm::DataElement &r)
 {
   // w will be written
   // r will be read back
-  gdcm::StringStream ss;
-  w.Write(ss);
-  r.Read(ss);
+  std::stringstream ss;
+  w.Write<gdcm::SwapperNoOp>(ss);
+  r.Read<gdcm::SwapperNoOp>(ss);
 }
 
 int TestImplicitDataElement(int, char *[])

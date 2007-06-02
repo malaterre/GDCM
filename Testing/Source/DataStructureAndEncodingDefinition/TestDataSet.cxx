@@ -21,7 +21,7 @@
 
 int TestDataSet(int , char *[])
 {
-  gdcm::DataSet ds ( gdcm::TS::Implicit );
+  gdcm::DataSet ds; // ( gdcm::TS::Implicit );
   std::cout << sizeof ds << std::endl;
   gdcm::ImplicitDataElement d;
   ds.InsertDataElement(d);

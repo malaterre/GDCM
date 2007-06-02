@@ -5,18 +5,18 @@ SET(Common_TEST_SRCS
   TestCodec
   TestDirectory
   TestFilename
-  TestIFStream
+  #TestIFStream
   TestIOS
   TestImage
   TestLookupTable
-  TestMemoryStream
-  TestOFStream
-  TestOStream
+  #TestMemoryStream
+  #TestOFStream
+  #TestOStream
   TestObject
   TestPhotometricInterpretation
   TestPixelType
   TestSmartPointer
-  TestStringStream
+  #TestStringStream
   TestSwapCode
   TestSystem
   TestTrace

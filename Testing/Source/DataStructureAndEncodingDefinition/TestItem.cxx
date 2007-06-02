@@ -17,10 +17,11 @@
 #include "gdcmStringStream.h"
 #include "gdcmVR.h"
 #include "gdcmExplicitDataElement.h"
+#include "gdcmSwapper.h"
 
 void CreateDataElement(gdcm::ExplicitDataElement &de, int offset)
 {
-  gdcm::StringStream ss;
+  std::stringstream ss;
 
   gdcm::Tag tag(0x1234, 0x5678+offset);
   gdcm::VR vr = gdcm::VR::UN;
@@ -28,23 +29,23 @@ void CreateDataElement(gdcm::ExplicitDataElement &de, int offset)
   uint32_t len = strlen(str);
   assert( sizeof(uint32_t) == 4 );
   gdcm::ByteValue val(str, len);
-  tag.Write(ss);
+  tag.Write<gdcm::SwapperNoOp>(ss);
   vr.Write(ss);
   const char *slen = reinterpret_cast<char*>(&len);
-  ss.Write( slen, 4);
-  val.Write(ss);
-  de.Read( ss );
+  ss.write( slen, 4);
+  val.Write<gdcm::SwapperNoOp>(ss);
+  de.Read<gdcm::SwapperNoOp>( ss );
 
   std::cout << de << std::endl;
 }
 
 int TestItem(int , char *[])
 {
-  gdcm::Item item(gdcm::TS::Explicit);
+  gdcm::Item item;
   std::cout << item << std::endl;
 
-  gdcm::Item it1(gdcm::TS::Explicit);
-  gdcm::Item it2(gdcm::TS::Explicit);
+  gdcm::Item it1;
+  gdcm::Item it2;
 
   gdcm::DataSet ds;
   gdcm::ExplicitDataElement xde;

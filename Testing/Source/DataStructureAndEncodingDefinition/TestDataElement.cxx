@@ -16,7 +16,8 @@
 #include "gdcmDataElement.h"
 #include "gdcmExplicitDataElement.h"
 #include "gdcmTag.h"
-#include "gdcmStringStream.h"
+
+#include "gdcmSwapper.h"
 
 #include <fstream>
 
@@ -34,23 +35,23 @@ inline void WriteRead(gdcm::DataElement const &w, gdcm::DataElement &r)
 {
   // w will be written
   // r will be read back
-  gdcm::StringStream ss;
-  w.Write(ss);
-  r.Read(ss);
+  std::stringstream ss;
+  w.Write<gdcm::SwapperNoOp>(ss);
+  r.Read<gdcm::SwapperNoOp>(ss);
 }
 
 int TestDataElement1(const uint16_t group, const uint16_t element,
   const uint16_t vl)
 {
   const char *str;
-  gdcm::StringStream ss;
+  std::stringstream ss;
   // SimpleData Element, just group,element and length
   str = reinterpret_cast<const char*>(&group);
-  ss.Write(str, sizeof(group));
+  ss.write(str, sizeof(group));
   str = reinterpret_cast<const char*>(&element);
-  ss.Write(str, sizeof(element));
+  ss.write(str, sizeof(element));
   str = reinterpret_cast<const char*>(&vl);
-  ss.Write(str, sizeof(vl));
+  ss.write(str, sizeof(vl));
 
 //  gdcm::DataElement de;
 //  de.Read( ss );
@@ -80,26 +81,26 @@ int TestDataElement2(const uint16_t group, const uint16_t element,
 {
   const char *str;
   const uint32_t vl = strlen( value );
-  gdcm::StringStream ss;
+  std::stringstream ss;
   // SimpleData Element, just group,element and length
   str = reinterpret_cast<const char*>(&group);
-  ss.Write(str, sizeof(group));
+  ss.write(str, sizeof(group));
   str = reinterpret_cast<const char*>(&element);
-  ss.Write(str, sizeof(element));
+  ss.write(str, sizeof(element));
   if( gdcm::VR::GetVRType(vr) == gdcm::VR::INVALID )
     {
     std::cerr << "Test buggy" << std::endl;
     return 1;
     }
-  ss.Write(vr, strlen(vr) );
+  ss.write(vr, strlen(vr) );
   str = reinterpret_cast<const char*>(&vl);
-  ss.Write(str, sizeof(vl));
+  ss.write(str, sizeof(vl));
   assert( !(strlen(value) % 2) );
-  ss.Write(value, strlen(value) );
+  ss.write(value, strlen(value) );
   //DebugElement(ss);
 
   gdcm::ExplicitDataElement de;
-  de.Read( ss );
+  de.Read<gdcm::SwapperNoOp>( ss );
   if( de.GetTag().GetGroup()   != group ||
       de.GetTag().GetElement() != element ||
       de.GetVL()               != vl )

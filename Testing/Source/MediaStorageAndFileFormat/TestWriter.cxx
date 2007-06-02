@@ -63,9 +63,7 @@ int TestWrite(const char* filename)
 
   gdcm::Writer writer;
   writer.SetFileName( outfilename.c_str() );
-  writer.SetPreamble( reader.GetPreamble() );
-  writer.SetHeader( reader.GetHeader() );
-  writer.SetDataSet( reader.GetDataSet() );
+  writer.SetFile( reader.GetFile() );
   if( !writer.Write() )
     {
     std::cerr << "Failed to write: " << outfilename << std::endl;

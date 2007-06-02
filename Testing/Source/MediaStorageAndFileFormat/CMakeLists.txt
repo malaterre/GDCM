@@ -3,9 +3,9 @@
 SET(MSFF_TEST_SRCS
   TestPrinter
   TestReader
-  TestImageReader
+  #  TestImageReader
   TestCopyDataSet
-  TestImageWriter
+  #TestImageWriter
   TestWriter
   )
 

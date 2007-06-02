@@ -14,7 +14,8 @@
 
 =========================================================================*/
 #include "gdcmByteValue.h"
-#include "gdcmStringStream.h"
+
+#include "gdcmSwapper.h"
 
 int TestByteValue(int, char *[])
 {
@@ -26,10 +27,10 @@ int TestByteValue(int, char *[])
     {
     return 1;
     }
-  gdcm::StringStream ss( array );
+  std::stringstream ss( array );
   gdcm::ByteValue bv2;
   bv2.SetLength( len );
-  bv2.Read( ss );
+  bv2.Read<gdcm::SwapperNoOp>( ss );
   std::cout << bv2 << std::endl;
   if( memcmp(bv2.GetPointer(), array, len ) != 0 )
     {

@@ -15,6 +15,7 @@
 =========================================================================*/
 #include "gdcmReader.h"
 #include "gdcmFileMetaInformation.h"
+#include "gdcmFile.h"
 
 #include "gdcmDataImages.h"
 
@@ -30,10 +31,10 @@ int TestRead(const char* filename)
 
   std::cerr << "Success to read: " << filename << std::endl;
 
-  const gdcm::FileMetaInformation &h = reader.GetHeader();
+  const gdcm::FileMetaInformation &h = reader.GetFile().GetHeader();
   std::cout << h << std::endl;
 
-  const gdcm::DataSet &ds = reader.GetDataSet();
+  const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
   std::cout << ds << std::endl;
 
   return 0;

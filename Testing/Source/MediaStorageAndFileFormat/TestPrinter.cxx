@@ -25,9 +25,7 @@ int TestPrint(const char *filename)
   r.Read();
 
   gdcm::Printer p;
-  //p.SetDataSet( r.GetHeader() );
-  //p.Print( std::cout );
-  p.SetDataSet( r.GetDataSet() );
+  p.SetFile( r.GetFile() );
   p.Print( std::cout );
 
   return 0;

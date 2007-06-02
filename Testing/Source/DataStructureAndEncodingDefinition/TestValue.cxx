@@ -17,22 +17,22 @@
 #include "gdcmSequenceOfItems.h"
 #include "gdcmStringStream.h"
 
-#include "gdcmStringStream.h"
+#include "gdcmSwapper.h"
 
-void PrintStream(gdcm::IStream &is)
+void PrintStream(IStream &is)
 {
   char c;
-  while(is.Get(c))
+  while(is.get(c))
     {
     std::cout << (int)c << std::endl;
     }
 }
 
-int CheckStream(gdcm::IStream &is, int size)
+int CheckStream(IStream &is, int size)
 {
   char c;
   int t = 0;
-  while(is.Get(c) && (int)c == t)
+  while(is.get(c) && (int)c == t)
     {
     std::cerr << (int)c << std::endl;
     ++t;
@@ -44,7 +44,7 @@ int TestValue(int , char *[])
 {
   int r = 0;
   gdcm::Value *v;
-  gdcm::SequenceOfItems si(gdcm::TS::Explicit);
+  gdcm::SequenceOfItems si;
   gdcm::ByteValue bv;
   v = &si;
   v = &bv;
@@ -55,14 +55,14 @@ int TestValue(int , char *[])
     {
     buffer[i] = static_cast<char>(i);
     }
-  gdcm::StringStream ss;
-  ss.Write(buffer, size);
+  std::stringstream ss;
+  ss.write(buffer, size);
   //PrintStream(ss);
 
   v->SetLength( size );
-  v->Read(ss);
-  gdcm::StringStream ss2;
-  v->Write(ss2);
+  v->Read<gdcm::SwapperNoOp>(ss);
+  std::stringstream ss2;
+  v->Write<gdcm::SwapperNoOp>(ss2);
   //PrintStream(ss2);
   r += CheckStream(ss2, size);
 

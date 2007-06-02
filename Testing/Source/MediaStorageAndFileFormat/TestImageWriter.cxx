@@ -17,6 +17,7 @@
 #include "gdcmImageWriter.h"
 #include "gdcmFilename.h"
 #include "gdcmSystem.h"
+#include "gdcmFileMetaInformation.h"
 
 #include "gdcmDataImages.h"
 
@@ -26,8 +27,19 @@ int TestImageWrite(const char* filename)
   reader.SetFileName( filename );
   if ( !reader.Read() )
     {
-    std::cerr << "Failed to read: " << filename << std::endl;
+  const gdcm::FileMetaInformation &header = reader.GetHeader();
+  gdcm::TS::MSType ms = header.GetMediaStorageType();
+  bool isImage = gdcm::TS::IsImage( ms );
+  if( isImage )
+  {
+     std::cerr << "Failed to read: " << filename << std::endl;
     return 1;
+  }
+  else
+  {
+	  // not an image give up...
+	  return 0;
+  }
     }
 
   gdcm::Filename out(filename);
