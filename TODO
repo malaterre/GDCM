@@ -1,5 +1,11 @@
 RLE is still not fully operational
 TransferSyntax needs some rework
 JPEG YCbrCr in jpeg header vs DICOM header need to produce a warning for: http://www.jddi.com/Download/JDDICOM_Sample2.dcm
+PrepGroupName.cxx does not handle Pixel Data group name since it has a space in the name...
+
+gdcmDictPrinter allowed me to find bug in dclunie tool:
+gems.tpl:(0043,001b) VERS="GEM" VR="SS" VM="1"  Owner="GEMS_PARM_01"
+dcmtk is confused:
+(0028,0034) IS [ 185\185]               # 8, 1 Pixel Aspect Ratio
 
 Offer mapping from UID to Manufacturer:  eg. 1.3.12.2.1107 -> SIEMENS
