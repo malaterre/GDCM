@@ -18,6 +18,9 @@
 #include "gdcmFileMetaInformation.h"
 #include "gdcmDataSet.h"
 #include "gdcmPrinter.h"
+#include "gdcmDictPrinter.h"
+#include "gdcmValidate.h"
+#include "gdcmWriter.h"
 
 #include <string>
 #include <iostream>
@@ -33,16 +36,18 @@ int main (int argc, char *argv[])
   //int digit_optind = 0;
 
   std::string filename;
+  bool printdict = false;
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
     static struct option long_options[] = {
         {"input", 1, 0, 0},
         {"output", 1, 0, 0},
+        {"dict", 1, 0, 0},
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:",
+    c = getopt_long (argc, argv, "i:o:d:",
       long_options, &option_index);
     if (c == -1)
       {
@@ -79,6 +84,11 @@ int main (int argc, char *argv[])
       printf ("option o with value '%s'\n", optarg);
       break;
 
+    case 'd':
+      printf ("option d with value '%s'\n", optarg);
+      printdict = true;
+      break;
+
     case '?':
       break;
 
@@ -112,15 +122,60 @@ int main (int argc, char *argv[])
     return 1;
     }
 
-  // TODO:
-  const gdcm::FileMetaInformation &h = reader.GetHeader();
-  std::cout << h << std::endl;
+  gdcm::Validate vali;
+  vali.SetFile( reader.GetFile() );
+  vali.Validation();
 
-  //const gdcm::DataSet &ds = reader.GetDataSet();
-  //std::cout << ds << std::endl;
-  gdcm::Printer printer;
-  printer.SetDataSet( reader.GetDataSet() );
-  printer.Print( std::cout );
+  gdcm::Printer *p = 0;
+  gdcm::Printer     printer;
+  //std::cerr << "PRINTDICT:" << printdict << std::endl;
+  if( printdict )
+  {
+	  //	  FIXME: need virtual mechanism
+//	  p = &dictprinter;
+  gdcm::DictPrinter dictprinter;
+  dictprinter.SetFile ( reader.GetFile() );
+  dictprinter.Print( std::cout );
+  return 0;
+  }
+  else
+  {
+	  p = &printer;
+  }
+  // TODO:
+
+  //p->SetFile( reader.GetFile() );
+  p->SetFile( vali.GetValidatedFile() );
+  //const gdcm::FileMetaInformation &h = reader.GetHeader();
+  ////std::cout << h << std::endl;
+  //if(!h.IsEmpty())
+  //{
+  ////printer.SetDataSet( h );
+  ////printer.Print( std::cout );
+  //}
+
+ //const gdcm::DataSet &ds = reader.GetDataSet();
+  ////std::cout << ds << std::endl;
+  //printer.SetDataSet( reader.GetDataSet() );
+  p->Print( std::cout );
+  //std::cout << reader.GetFile() << std::endl;
+
+  std::ofstream of;
+  of.open( "/tmp/valii.dcm", std::ios::out | std::ios::binary );
+  const char line[] = "coucou mathieu";
+  //of.write( line, strlen(line) );
+  of << line;
+  of.close();
+  gdcm::Writer writer;
+  writer.SetFileName( "/tmp/vali2.dcm" );
+  writer.SetFile( reader.GetFile() );
+  //writer.SetFile( vali.GetValidatedFile() );
+  if( !writer.Write() )
+    {
+    std::cerr << "Failed to write: "  << std::endl;
+    return 1;
+    }
+
 
   return 0;
 }

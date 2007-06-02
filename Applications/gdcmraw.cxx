@@ -148,10 +148,10 @@ int main(int argc, char *argv[])
     return 1;
     }
 
-  const gdcm::FileMetaInformation &h = reader.GetHeader();
+  const gdcm::FileMetaInformation &h = reader.GetFile().GetHeader();
   std::cout << h << std::endl;
 
-  const gdcm::DataSet &ds = reader.GetDataSet();
+  const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
   std::cout << ds << std::endl;
 
   if( !ds.FindDataElement( rawTag ) )
@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
     }
 
   std::ofstream output(outfilename.c_str(), std::ios::binary);
-  const gdcm::DataElement& pdde = ds.GetDataElement( rawTag );
+  const gdcm::ExplicitDataElement& pdde = ds.GetDataElement( rawTag );
   const gdcm::Value &v = pdde.GetValue();
   const gdcm::ByteValue *bv = dynamic_cast<const gdcm::ByteValue*>(&v);
   if( bv )
