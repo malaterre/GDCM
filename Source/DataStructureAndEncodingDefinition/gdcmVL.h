@@ -63,7 +63,7 @@ public:
   operator uint32_t () const { return ValueLength; }
 
   VL GetLength() const {
-	  abort(); // VL cannot know it's length...
+	  //abort(); // VL cannot know it's length...well in implicit yes...
     return 4;
   }
 
