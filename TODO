@@ -9,3 +9,13 @@ dcmtk is confused:
 (0028,0034) IS [ 185\185]               # 8, 1 Pixel Aspect Ratio
 
 Offer mapping from UID to Manufacturer:  eg. 1.3.12.2.1107 -> SIEMENS
+
+-----------------------------------------------------------------------
+> We use a Philips ENVISOR machine to do Cardiac TOE Echo. We are about
+> to produce a CD of some of the Echo loops. Can anyone suggest a good
+> DICOM to AVI converted for Echo loops.
+
+we have implemented a tool called "dcm2avi" that can be used for this
+purpose. Please send an email to dicom/at/offis/dot/de in case you are
+interested in an evaluation version of this program. 
+-----------------------------------------------------------------------
