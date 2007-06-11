@@ -411,7 +411,7 @@ const OStream &IOSerialize<TSwap>::Write(OStream &os, ExplicitDataElement const 
       return os;
       }
     // Self
-    //if( !Offsets->Write(os) )
+    if( !Write(os, *(bot.Offsets)) )
       {
       assert(0 && "Should not happen");
       return os;
@@ -919,7 +919,7 @@ const OStream &IOSerialize<TSwap>::Write(OStream &os, ImplicitDataElement const 
     DEType de;
     while( !is.eof() && IOSerialize<TSwap>::Read(is,de) )
       {
-      std::cerr << "DEBUG:" << de << std::endl;
+      //std::cerr << "DEBUG:" << de << std::endl;
       assert( de.GetTag() != Tag(0,0) );
       ss.DES.insert( de );
       }
