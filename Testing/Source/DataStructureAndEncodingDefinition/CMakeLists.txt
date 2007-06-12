@@ -3,31 +3,31 @@
 SET(DSED_TEST_SRCS
   #TestReadPatientName
   TestByteBuffer
-  TestByteValue
+  #TestByteValue
   TestComposite
-  TestDataElement
+  #TestDataElement
   TestDataSet
   TestElement
-  TestExplicitDataElement
+  #TestExplicitDataElement
   TestFileMetaInformation
   TestFragment
   TestImageCodec
   TestImageConverter
   TestImageValue
-  TestImplicitDataElement
-  TestItem
+  #TestImplicitDataElement
+  #TestItem
   TestJPEGCodec
   TestParser
   TestRAWCodec
   TestRLECodec
   TestSequenceOfFragments
   TestSequenceOfItems
-  TestTag
+  #TestTag
   TestTS
   TestVL
   TestVM
   TestVR
-  TestValue
+  #TestValue
   #TestTorture
   TestStructuredSet
   TestElement2
