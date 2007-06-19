@@ -1,3 +1,18 @@
+############################################################################
+#
+#  Program: GDCM (Grass Root DICOM). A DICOM library
+#  Module:  $URL$
+#
+#  Copyright (c) 2006-2007 Mathieu Malaterre
+#  All rights reserved.
+#  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+#
+#     This software is distributed WITHOUT ANY WARRANTY; without even
+#     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+#     PURPOSE.  See the above copyright notice for more information.
+#
+############################################################################
+
 # create .deb file
 # You need to setup CPack first !
 # UGLY: I reuse CPACK_NSIS_CONTACT to get the contact name for the debian package...
