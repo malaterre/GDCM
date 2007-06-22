@@ -30,3 +30,5 @@ from sup58_ft2.doc
 >CTDIvol  	(0018,9445)  	2C  	Computed Tomography Dose Index (CTDIvol), im mGy according to IEC 60601-2-44, Ed.2.1 (Clause 29.1.103.4), The Volume CTDIvol. It describes the average dose for this frame for the selected CT conditions of operation.
 -----------------------------------------------------------------------
 gdcmdump --use-dict should also replace any UN with proper VR from dict
+-----------------------------------------------------------------------
+Calling dcmodify [1][2] with option --erase-tag should do what you want. 
