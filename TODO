@@ -32,3 +32,6 @@ from sup58_ft2.doc
 gdcmdump --use-dict should also replace any UN with proper VR from dict
 -----------------------------------------------------------------------
 Calling dcmodify [1][2] with option --erase-tag should do what you want. 
+-----------------------------------------------------------------------
+PHILIPS_PrivateSeqWithPublicElems this File contains a private sequence 
+which itself contains public elements...
