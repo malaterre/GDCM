@@ -34,7 +34,7 @@ class GDCM_EXPORT Dict
 {
 public:
   typedef std::map<Tag, DictEntry> MapDictEntry;
-  Dict() { 
+  Dict() {
     FillDICOMV3DataDict();
     FillNIHDataDict();
 //  FillSPIDataDict();
