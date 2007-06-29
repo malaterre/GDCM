@@ -1,3 +1,10 @@
+# same as boost settings:
+SET(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_ERRORS 1000)
+SET(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_WARNINGS 1000)
+#SET(CTEST_CUSTOM_MAXIMUM_PASSED_TEST_OUTPUT_SIZE 1000000)
+SET(CTEST_CUSTOM_MAXIMUM_PASSED_TEST_OUTPUT_SIZE 49152)
+SET(CTEST_CUSTOM_MAXIMUM_FAILED_TEST_OUTPUT_SIZE 49152)
+
 SET(CTEST_CUSTOM_WARNING_EXCEPTION
   ${CTEST_CUSTOM_WARNING_EXCEPTION}
   "comparison is always (true|false) due to limited range of data type"
@@ -10,6 +17,10 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   "\"/.../gdcm/src/gdcmjpeg/jccolor.c\", line 107: warning: integer overflow detected: op \"<<\""
   "Warning W8004.*gdcmjasper[\\]src[\\]libjasper.*"
   "Warning W8004.*gdcmopenjpeg[\\]libopenjpeg.*"
+  "/.../gdcm/Utilities/expat.*"
   )
 
-
+# Disable dynamic analysis on some tests:
+#SET(CTEST_CUSTOM_MEMCHECK_IGNORE
+#  ${CTEST_CUSTOM_MEMCHECK_IGNORE}
+#  )
