@@ -34,7 +34,7 @@ namespace gdcm
 class GDCM_EXPORT FileMetaInformation : public StructuredSet<ExplicitDataElement>
 {
 public:
-  FileMetaInformation():DataSetTS(),MetaInformationTS(TS::Unknown) {}
+  FileMetaInformation():DataSetTS(),MetaInformationTS(TS::Unknown),DataSetMS(TS::MS_END) {}
  ~FileMetaInformation() { };
 
   friend std::ostream &operator<<(std::ostream &_os, const FileMetaInformation &_val);
