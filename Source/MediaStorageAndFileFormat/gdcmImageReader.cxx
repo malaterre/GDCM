@@ -49,31 +49,28 @@ const ByteValue* ImageReader::GetPointerFromElement(Tag const &tag) const
   const DataSet &ds = F->GetDataSet();
   TS::NegociatedType type; // = ds.GetNegociatedType();
 
-#if 0
-  const DataElement& rde = ds.GetDataElement( tag );
-  if( type == TS::Explicit )
+#if 1
+  const ExplicitDataElement &de = ds.GetDataElement( tag );
+//  if( type == TS::Explicit )
     {
-    const ExplicitDataElement &xde =
-      dynamic_cast<const ExplicitDataElement&>(rde);
-    const Value &v = xde.GetValue();
-    const Value *pv = &v;
-    const ByteValue *bv = dynamic_cast<const ByteValue*>(pv);
+    const Value &v = de.GetValue();
+    const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
     return bv;
     }
-  else if( type == TS::Implicit )
-    {
-    const ImplicitDataElement &ide =
-      dynamic_cast<const ImplicitDataElement&>(rde);
-    const Value &v = ide.GetValue();
-    //const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
-    // C++ would throw an exception when dynamic_cast to a reference
-    // since you could not construct a ref from NULL
-    // Using good ol' pointer instead
-    const Value *pv = &v;
-    const ByteValue *bv = dynamic_cast<const ByteValue*>(pv);
-    return bv;
-    }
-  // ooops ?
+//  else if( type == TS::Implicit )
+//    {
+//    const ImplicitDataElement &ide =
+//      dynamic_cast<const ImplicitDataElement&>(rde);
+//    const Value &v = ide.GetValue();
+//    //const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
+//    // C++ would throw an exception when dynamic_cast to a reference
+//    // since you could not construct a ref from NULL
+//    // Using good ol' pointer instead
+//    const Value *pv = &v;
+//    const ByteValue *bv = dynamic_cast<const ByteValue*>(pv);
+//    return bv;
+//    }
+//  // ooops ?
 #endif
     gdcmErrorMacro( "Not sure how you are supposed to reach here" );
   return 0;
@@ -87,7 +84,7 @@ bool ImageReader::Read()
     }
 
   const FileMetaInformation &header = F->GetHeader();
-  TS::TSType ts; // = header.GetTransferSyntaxType();
+  const TS &ts = header.GetDataSetTransferSyntax();
 
   bool res = false;
   /* Does it really make sense to check for Media Storage SOP Class UID?
@@ -96,7 +93,7 @@ bool ImageReader::Read()
    * I'd rather go the old way check a bunch of tags (From Image Plane
    * Module).
    */
-  TS::MSType ms; // = header.GetMediaStorageType();
+  TS::MSType ms = header.GetMediaStorageType();
   bool isImage = TS::IsImage( ms );
   if( isImage )
     {

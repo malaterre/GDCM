@@ -313,7 +313,7 @@ IStream &FileMetaInformation::Read(IStream &is)
       }
   // Now is a good time to find out the dataset transfer syntax
   ComputeDataSetTransferSyntax();
-
+	ComputeDataSetMediaStorageSOPClass();
      }
   else
     {
@@ -365,6 +365,24 @@ void FileMetaInformation::ComputeDataSetTransferSyntax()
   DataSetTS.IsValid();
 }
 
+void FileMetaInformation::ComputeDataSetMediaStorageSOPClass()
+{
+  const gdcm::Tag t(0x0002,0x0002);
+  const ExplicitDataElement &de = GetDataElement(t);
+  std::string ms;
+	const Value &v = de.GetValue();
+	const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
+	// Pad string with a \0
+	ms = std::string(bv.GetPointer(), bv.GetLength());
+  gdcmDebugMacro( "Media Storage: " << ms );
+
+  TS::MSType mst = TS::GetMSType(ms.c_str());
+
+  // postcondition
+  assert( mst != TS::MS_END );
+	DataSetMS = mst;
+}
+
 TS::MSType FileMetaInformation::GetMediaStorageType() const
 {
 #if 0
@@ -411,7 +429,7 @@ TS::MSType FileMetaInformation::GetMediaStorageType() const
     }
 
 #endif
-  return TS::MS_END;
+  return DataSetMS;
 }
 
 void FileMetaInformation::Default()

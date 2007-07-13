@@ -57,9 +57,10 @@ public:
 protected:
   void Default();
   void ComputeDataSetTransferSyntax();
+  void ComputeDataSetMediaStorageSOPClass();
 
   TS DataSetTS;
-  //MS DataSetMS; // TODO
+  TS::MSType DataSetMS;
   TS::NegociatedType MetaInformationTS;
 
 private:
