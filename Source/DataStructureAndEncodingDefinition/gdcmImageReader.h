@@ -27,7 +27,6 @@ namespace gdcm
  * \note its role is to convert the DICOM DataSet into a gdcm::Image
  * representation
  */
-class StringStream;
 class ByteValue;
 class GDCM_EXPORT ImageReader : public Reader
 {
