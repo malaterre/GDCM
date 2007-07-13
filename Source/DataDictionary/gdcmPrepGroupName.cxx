@@ -24,6 +24,7 @@
 #include <sstream>  // for std::getline
 #include <assert.h>
 #include <stdio.h>
+#include <iomanip> // std::setw
 
 void write_header(std::ofstream &of)
 {
@@ -53,6 +54,16 @@ void write_footer(std::ofstream &of)
     "  }\n"
     "}\n\n"
     "} // namespace gdcm\n";
+}
+
+bool check_abbr(std::string &abbr)
+{
+	std::string::const_iterator it = abbr.begin();
+	for(; it != abbr.end(); ++it)
+		{
+		if ( *it < 'A' || *it > 'Z' ) return false;
+		}
+	return true;
 }
 
 int main(int argc, char *argv[])
@@ -87,15 +98,20 @@ int main(int argc, char *argv[])
        if( *e == '\r' ) line.erase(e);
        }
     unsigned int group; // Group Number
-    char abbr[512]; // NHI Abbreviation (when known) - not part of DICOM standard -
-    char meaning[512]; // Meaning          (when known) - not part of DICOM standard -
-    //std::cout << line << std::endl;
-    if ( sscanf(line.c_str(), "%04x %s %s", &group, abbr, meaning) != 3 )
-      {
-      error = 1;
-      assert( 0 && "Should not happen" );
-      }
-    into << "\t{0x" << std::hex << group << ",\"" << abbr << "\",\"" << meaning << "\"},\n";
+    std::string abbr; // NHI Abbreviation (when known) - not part of DICOM standard -
+		std::string meaning; // Meaning          (when known) - not part of DICOM standard -
+		std::istringstream is(line);
+		is >> std::hex >> group;
+		if ( group > 0xffff)
+			return 1;
+		is >> abbr;
+		if( !check_abbr(abbr) )
+			return 1;
+		// skip any whitespace before calling getline
+		is >> std::ws;
+		// get all the remaining characters
+		std::getline(is,meaning);
+    into << "\t{0x" << std::hex << std::setw(4) << std::setfill('0') << group << ",\"" << abbr << "\",\"" << meaning << "\"},\n";
     }
   write_footer(into);
 

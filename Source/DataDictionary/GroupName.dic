@@ -51,7 +51,6 @@
 4000 TXT Text
 4008 RES Results
 4ffe MAC MAC Parameters
-5000-50ff Curve
 5000 CRV Curve
 5002 CRV Curve
 5004 CRV Curve
@@ -60,10 +59,7 @@
 500a CRV Curve
 500c CRV Curve
 500e CRV Curve
-5200 ??? ???
-5400 Waveform Data
-5600 ??? ???
-6000-60ff Overlay
+5400 WFM Waveform Data
 6000 OLY Overlays
 6002 OLY Overlays
 6004 OLY Overlays
