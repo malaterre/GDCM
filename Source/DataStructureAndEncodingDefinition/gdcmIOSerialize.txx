@@ -765,6 +765,10 @@ IStream &IOSerialize<TSwap>::Read(IStream &is,ImplicitDataElement & ide)
       assert(0 && "Should not happen");
     return is;
     }
+//	if( ide.TagField == Tag(0x0028,0x6100))
+//		{
+//		std::cerr << "here" << std::endl;
+//		}
   // Read Value Length
   if( !Read(is,ide.ValueLengthField) )
     {
@@ -817,6 +821,9 @@ IStream &IOSerialize<TSwap>::Read(IStream &is,ImplicitDataElement & ide)
         gdcmWarningMacro( "Illegal: Explicit SQ found in a file with "
           "TransferSyntax=Implicit for tag: " << ide.TagField );
         ide.ValueField = new SequenceOfItems; //(TS::Explicit);
+
+// cannot read: GE_DLX-8-MONO2-PrivateSyntax.dcm
+abort();
         //SwapCode oldsw = is.GetSwapCode();
         //assert( oldsw == SwapCode::LittleEndian );
         //is.SetSwapCode( SwapCode::BigEndian );
