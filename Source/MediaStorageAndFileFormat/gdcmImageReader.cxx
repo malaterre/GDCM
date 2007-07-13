@@ -410,23 +410,21 @@ bool ImageReader::ReadImage()
     gdcmWarningMacro( "No Pixel Data Found" );
     return false;
     }
-  const DataElement& pdde = ds.GetDataElement( pixeldata );
-#if 0
-  if( type == TS::Explicit )
+  const ExplicitDataElement& xde = ds.GetDataElement( pixeldata );
+#if 1
+  //if( type == TS::Explicit )
     {
-    const ExplicitDataElement &xde =
-      dynamic_cast<const ExplicitDataElement&>(pdde);
     if( xde.GetVR() == VR::OW )
       {
       // Need to byte swap
-      assert( GetHeader().GetTransferSyntaxType() 
+      assert( F->GetHeader().GetDataSetTransferSyntax() 
         != TS::ImplicitVRBigEndianPrivateGE );
-      bool need;
-      = 
-        ByteSwap<int>::SystemIsLittleEndian() &&
-        (Stream.GetSwapCode() != SwapCode::LittleEndian)
-     || ByteSwap<int>::SystemIsBigEndian() &&
-        (Stream.GetSwapCode() != SwapCode::BigEndian );
+      bool need = false;
+//      = 
+//        ByteSwap<int>::SystemIsLittleEndian() &&
+//        (Stream.GetSwapCode() != SwapCode::LittleEndian)
+//     || ByteSwap<int>::SystemIsBigEndian() &&
+//        (Stream.GetSwapCode() != SwapCode::BigEndian );
 //      if( need )
 //        {
 //#ifdef GDCM_WORDS_BIGENDIAN
@@ -439,30 +437,30 @@ bool ImageReader::ReadImage()
       }
     PixelData.SetValue( xde.GetValue() );
     }
-  else if( type == TS::Implicit )
-    {
-    TS ts = GetHeader().GetTransferSyntaxType();
-#ifdef GDCM_WORDS_BIGENDIAN
-    if( ts != TS::ImplicitVRBigEndianPrivateGE
-      && pt.GetBitsAllocated() == 16 )
-#else
-    if( ts == TS::ImplicitVRBigEndianPrivateGE
-      && pt.GetBitsAllocated() == 16 )
-#endif
-      {
-      // TS::ImplicitVRBigEndianPrivateGE is written in BigEndian except the
-      // image which is in LittleEndian
-      PixelData.SetNeedByteSwap( true );
-      }
-    const ImplicitDataElement &ide =
-      dynamic_cast<const ImplicitDataElement&>(pdde);
-    PixelData.SetValue( ide.GetValue() );
-    }
-  else
-    {
-    gdcmErrorMacro( "Not sure how you are supposed to reach here" );
-    return false;
-    }
+//  else if( type == TS::Implicit )
+//    {
+//    TS ts = GetHeader().GetTransferSyntaxType();
+//#ifdef GDCM_WORDS_BIGENDIAN
+//    if( ts != TS::ImplicitVRBigEndianPrivateGE
+//      && pt.GetBitsAllocated() == 16 )
+//#else
+//    if( ts == TS::ImplicitVRBigEndianPrivateGE
+//      && pt.GetBitsAllocated() == 16 )
+//#endif
+//      {
+//      // TS::ImplicitVRBigEndianPrivateGE is written in BigEndian except the
+//      // image which is in LittleEndian
+//      PixelData.SetNeedByteSwap( true );
+//      }
+//    const ImplicitDataElement &ide =
+//      dynamic_cast<const ImplicitDataElement&>(pdde);
+//    PixelData.SetValue( ide.GetValue() );
+//    }
+//  else
+//    {
+//    gdcmErrorMacro( "Not sure how you are supposed to reach here" );
+//    return false;
+//    }
 #endif
 
   return true;
@@ -576,12 +574,10 @@ bool ImageReader::ReadACRNEMAImage()
     gdcmWarningMacro( "No Pixel Data Found" );
     return false;
     }
-  const DataElement& pdde = ds.GetDataElement( pixeldata );
-#if 0
-  if( type == TS::Explicit )
+  const ExplicitDataElement& xde = ds.GetDataElement( pixeldata );
+#if 1
+  //if( type == TS::Explicit )
     {
-    const ExplicitDataElement &xde =
-      dynamic_cast<const ExplicitDataElement&>(pdde);
     if ( xde.GetVR() == VR::OW )
       {
       abort();
@@ -589,33 +585,33 @@ bool ImageReader::ReadACRNEMAImage()
       }
     PixelData.SetValue( xde.GetValue() );
     }
-  else if( type == TS::Implicit )
-    {
-    TS ts = GetHeader().GetTransferSyntaxType();
-#ifdef GDCM_WORDS_BIGENDIAN
-    if( ts != TS::ImplicitVRBigEndianACRNEMA
-      && pt.GetBitsAllocated() == 16 )
-#else
-    if( ts == TS::ImplicitVRBigEndianACRNEMA
-      && pt.GetBitsAllocated() == 16 )
-#endif
-      {
-#ifdef GDCM_WORDS_BIGENDIAN
-      assert( ts.GetSwapCode() == SwapCode::LittleEndian );
-#else
-      assert( ts.GetSwapCode() == SwapCode::BigEndian );
-#endif
-      PixelData.SetNeedByteSwap( true );
-      }
-    const ImplicitDataElement &ide =
-      dynamic_cast<const ImplicitDataElement&>(pdde);
-    PixelData.SetValue( ide.GetValue() );
-    }
-  else
-    {
-    gdcmErrorMacro( "Not sure how you are supposed to reach here" );
-    return false;
-    }
+//  else if( type == TS::Implicit )
+//    {
+//    TS ts = GetHeader().GetTransferSyntaxType();
+//#ifdef GDCM_WORDS_BIGENDIAN
+//    if( ts != TS::ImplicitVRBigEndianACRNEMA
+//      && pt.GetBitsAllocated() == 16 )
+//#else
+//    if( ts == TS::ImplicitVRBigEndianACRNEMA
+//      && pt.GetBitsAllocated() == 16 )
+//#endif
+//      {
+//#ifdef GDCM_WORDS_BIGENDIAN
+//      assert( ts.GetSwapCode() == SwapCode::LittleEndian );
+//#else
+//      assert( ts.GetSwapCode() == SwapCode::BigEndian );
+//#endif
+//      PixelData.SetNeedByteSwap( true );
+//      }
+//    const ImplicitDataElement &ide =
+//      dynamic_cast<const ImplicitDataElement&>(pdde);
+//    PixelData.SetValue( ide.GetValue() );
+//    }
+//  else
+//    {
+//    gdcmErrorMacro( "Not sure how you are supposed to reach here" );
+//    return false;
+//    }
 #endif
 
   // There is no such thing as Photometric Interpretation and 
