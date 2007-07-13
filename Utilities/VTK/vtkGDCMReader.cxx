@@ -94,6 +94,7 @@ void vtkGDCMReader::FillMedicalImageInformation()
   // PatientName, PatientID, PatientAge, PatientSex, PatientBirthDate,
   // StudyID
   std::ostringstream str;
+/*
   const gdcm::DataSet &ds = this->Internals->DICOMReader.GetDataSet();
   const gdcm::Tag patname(0x0010, 0x0010);
   if( ds.FindDataElement( patname ) )
@@ -101,7 +102,6 @@ void vtkGDCMReader::FillMedicalImageInformation()
     const gdcm::DataElement& de = ds.GetDataElement( patname );
     }
 
-/*
     {
     if (medprop->GetPatientName())
       {
