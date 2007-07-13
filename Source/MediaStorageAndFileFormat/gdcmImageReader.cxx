@@ -186,6 +186,7 @@ signed short ImageReader::ReadSSFromTag( Tag const &t, StringStream &ss,
   Element<VR::SS,VM::VM1> el;
   assert( bv->GetLength() == 2 );
   conversion = std::string(bv->GetPointer(), 2); 
+  ss.clear();
   ss.str( conversion );
   el.Read( ss );
   return el.GetValue();
@@ -198,6 +199,7 @@ unsigned short ImageReader::ReadUSFromTag( Tag const &t, StringStream &ss,
   Element<VR::US,VM::VM1> el;
   assert( bv->GetLength() == 2 );
   conversion = std::string(bv->GetPointer(), 2); 
+  ss.clear();
   ss.str( conversion );
   el.Read( ss );
   return el.GetValue();
@@ -212,6 +214,7 @@ int ImageReader::ReadISFromTag( Tag const &t, StringStream &ss,
   assert( conversion.size() == bv->GetLength() );
   const char *debug = conversion.c_str();
   assert( debug[bv->GetLength()] == '\0' ); 
+  ss.clear();
   ss.str( conversion );
   el.Read( ss );
   int r = el.GetValue();
@@ -353,6 +356,7 @@ bool ImageReader::ReadImage()
       std::string descriptor_str(
         descriptor->GetPointer(),
         descriptor->GetLength() );
+      ss.clear();
       ss.str( descriptor_str );
       el_us3.Read( ss );
       lut->InitializeLUT( LookupTable::LookupTableType(i),

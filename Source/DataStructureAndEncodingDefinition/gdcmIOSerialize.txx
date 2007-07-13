@@ -506,7 +506,7 @@ IStream& IOSerialize<TSwap>::Read(IStream &is, SequenceOfFragments &sf)
     gdcmDebugMacro( "Table: " << sf.Table );
     // not used for now...
     Fragment frag;
-    while( Read(is,frag) && frag.GetTag() != seqDelItem );
+    while( Read(is,frag) && frag.GetTag() != seqDelItem )
       {
       gdcmDebugMacro( "Frag: " << frag );
       sf.Fragments.push_back( frag );
