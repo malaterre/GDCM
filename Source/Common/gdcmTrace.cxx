@@ -19,7 +19,7 @@ namespace gdcm
 {
 //-----------------------------------------------------------------------------
 // Warning message level to be displayed
-static bool DebugFlag   = true;
+static bool DebugFlag   = false;
 static bool WarningFlag = true;
 static bool ErrorFlag   = true;
 static bool DebugToFile = false;
