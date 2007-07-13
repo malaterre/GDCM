@@ -723,6 +723,8 @@ IStream &IOSerialize<TSwap>::Read(IStream &is,DataSet &ds)
   else if( ds.Length.IsUndefined() )
     {
     // Nested DataSet with undefined length 
+    //  StructuredSet<ImplicitDataElement> ssi;
+    //ReadNested(is,ssi);
     ReadNested(is,ds.Internal);
     }
   else

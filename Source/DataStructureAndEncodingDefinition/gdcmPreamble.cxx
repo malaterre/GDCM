@@ -49,12 +49,12 @@ IStream &Preamble::Read(IStream &is)
 OStream const &Preamble::Write(OStream &os) const
 {
 //  assert ( os.tellg()+0 == 0 );
-  if( IsEmpty() || true )
+  if( IsEmpty() )
     {
-    char dicm[128];
-    memset( dicm, 0, 128 );
-    os.write( dicm, 128);
-    os.write( "DICM" , 4);
+//    char dicm[128];
+//    memset( dicm, 0, 128 );
+//    os.write( dicm, 128);
+//    os.write( "DICM" , 4);
     }
   else if( IsValid() )
   {

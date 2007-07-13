@@ -19,8 +19,10 @@
 #include "gdcmTag.h"
 //#include "gdcmVL.h"
 #include "gdcmTrace.h"
+#include "gdcmIFStream.h"
 
 #include <iostream>
+#include <fstream>
 #include <assert.h>
 
 namespace gdcm

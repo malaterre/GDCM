@@ -422,11 +422,11 @@ OStream &FileMetaInformation::Write(OStream &os) const
 {
   if( IsEmpty() )
   {
-    std::cerr << "IsEmpty" << std::endl;
-    FileMetaInformation fmi;
-    fmi.Default();
-    //fmi.Write(os);
-    IOSerialize<SwapperNoOp>::Write(os,fmi);
+//    std::cerr << "IsEmpty" << std::endl;
+//    FileMetaInformation fmi;
+//    fmi.Default();
+//    //fmi.Write(os);
+//    IOSerialize<SwapperNoOp>::Write(os,fmi);
   }
   else if( IsValid() )
   {
