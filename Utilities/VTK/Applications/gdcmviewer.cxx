@@ -22,6 +22,7 @@
 #include "vtkImageViewer2.h"
 #include "vtkImageData.h"
 #include "vtkCommand.h"
+#include "vtkRenderer.h"
 
 #include "gdcmFilename.h"
 
@@ -47,9 +48,16 @@ public:
       {
       if ( event == vtkCommand::CharEvent )
         {
-        //int max = ImageViewer->GetWholeZMax();
-        //int slice = (ImageViewer->GetZSlice() + 1) % ++max;
-        //ImageViewer->SetZSlice( slice );
+#if (VTK_MAJOR_VERSION < 5) || 1
+        int max = ImageViewer->GetWholeZMax();
+        int slice = (ImageViewer->GetZSlice() + 1 ) % ++max;
+        ImageViewer->SetZSlice( slice );
+        ImageViewer->GetRenderer()->ResetCameraClippingRange();
+#else
+        int max = ImageViewer->GetSliceMax();
+        int slice = (ImageViewer->GetSlice() + 1) % ++max;
+        ImageViewer->SetSlice( slice );
+#endif
         ImageViewer->Render();
         }
       }
@@ -66,6 +74,8 @@ void ExecuteViewer(TViewer *viewer, const char *filename)
 {
   vtkGDCMReader *reader = vtkGDCMReader::New();
   reader->SetFileName( filename );
+	//reader->Update();
+	//reader->GetOutput()->Print( std::cout );
 
   vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::New();
   // For a single medical image, it would be more efficient to use
