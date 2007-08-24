@@ -81,8 +81,8 @@ void Printer::PrintElement(std::ostream& os, const ExplicitDataElement &xde, con
     }
     else
     {
-      //gdcmWarningMacro( "VM for " << t );
       vm = VM::GetVMTypeFromLength( value.GetLength(), lvr.GetSize() );
+      //gdcmWarningMacro( "VM for " << vm );
       if( t.GetElement() == 0x0 )
       {
         //gdcmErrorMacro( "Le= " << value.GetLength() << " size= " << vr.GetSize() );
@@ -161,6 +161,18 @@ void Printer::PrintElement(std::ostream& os, const ExplicitDataElement &xde, con
     }
   }
 
+template <typename T>
+inline char *bswap(char *out, const char *in, size_t length)
+{
+  assert( !(length % sizeof(T)) );
+  for(size_t i = 0; i < length; i+=2)
+  {
+    //const char copy = in[i];
+    out[i] = in[i+1];
+    out[i+1] = in[i];
+  }
+}
+
 //-----------------------------------------------------------------------------
 void Printer::PrintElement(std::ostream& os, const ImplicitDataElement &ide, DictEntry const &entry)
 {
@@ -197,6 +209,8 @@ void Printer::PrintElement(std::ostream& os, const ImplicitDataElement &ide, Dic
 
 //     = reinterpret_cast< const Element<VR::type, VM::VM1>& > ( array );
 // os.flush();
+    // memcpy( (void*)(&e), array, e.GetLength() * sizeof( VRToType<VR::type>::Type) ); 
+    // bswap<VRToType<VR::type>::Type>( (char*)(&e), array, e.GetLength() * sizeof( VRToType<VR::type>::Type) ); 
 #define PrinterTemplateSubCase1n(type,rep) \
   case VM::rep: \
     {Element<VR::type, VM::rep> e; \
