@@ -144,8 +144,8 @@ int main (int argc, char *argv[])
   }
   // TODO:
 
-  //p->SetFile( reader.GetFile() );
-  p->SetFile( vali.GetValidatedFile() );
+  p->SetFile( reader.GetFile() );
+  //p->SetFile( vali.GetValidatedFile() );
   //const gdcm::FileMetaInformation &h = reader.GetHeader();
   ////std::cout << h << std::endl;
   //if(!h.IsEmpty())
@@ -160,21 +160,21 @@ int main (int argc, char *argv[])
   p->Print( std::cout );
   //std::cout << reader.GetFile() << std::endl;
 
-  std::ofstream of;
-  of.open( "/tmp/valii.dcm", std::ios::out | std::ios::binary );
-  const char line[] = "coucou mathieu";
-  //of.write( line, strlen(line) );
-  of << line;
-  of.close();
-  gdcm::Writer writer;
-  writer.SetFileName( "/tmp/vali2.dcm" );
-  writer.SetFile( reader.GetFile() );
-  //writer.SetFile( vali.GetValidatedFile() );
-  if( !writer.Write() )
-    {
-    std::cerr << "Failed to write: "  << std::endl;
-    return 1;
-    }
+//  std::ofstream of;
+//  of.open( "/tmp/valii.dcm", std::ios::out | std::ios::binary );
+//  const char line[] = "coucou mathieu";
+//  //of.write( line, strlen(line) );
+//  of << line;
+//  of.close();
+//  gdcm::Writer writer;
+//  writer.SetFileName( "/tmp/vali2.dcm" );
+//  writer.SetFile( reader.GetFile() );
+//  //writer.SetFile( vali.GetValidatedFile() );
+//  if( !writer.Write() )
+//    {
+//    std::cerr << "Failed to write: "  << std::endl;
+//    return 1;
+//    }
 
 
   return 0;
