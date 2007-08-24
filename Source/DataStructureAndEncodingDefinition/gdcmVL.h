@@ -63,10 +63,7 @@ public:
   operator uint32_t () const { return ValueLength; }
 
   VL GetLength() const {
-<<<<<<< .mine
-=======
 	  //abort(); // VL cannot know it's length...well in implicit yes...
->>>>>>> .r1079
     return 4;
   }
 
