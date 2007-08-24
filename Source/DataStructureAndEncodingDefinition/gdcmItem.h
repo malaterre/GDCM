@@ -90,6 +90,8 @@ public:
     NestedDataSet = val.NestedDataSet;
     }
 
+  void SetType(TS::NegociatedType type) { NestedDataSet.SetType(type); }
+
 private:
   /* NESTED DATA SET  a Data Set contained within a Data Element of an other Data Set.
    * May be nested recursively.

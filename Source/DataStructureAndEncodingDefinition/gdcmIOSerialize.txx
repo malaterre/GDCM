@@ -411,7 +411,7 @@ const OStream &IOSerialize<TSwap>::Write(OStream &os, ExplicitDataElement const 
       return os;
       }
     // Self
-    if( !Write(os, *(bot.Offsets)) )
+    //if( !Offsets->Write(os) )
       {
       assert(0 && "Should not happen");
       return os;
@@ -506,7 +506,7 @@ IStream& IOSerialize<TSwap>::Read(IStream &is, SequenceOfFragments &sf)
     gdcmDebugMacro( "Table: " << sf.Table );
     // not used for now...
     Fragment frag;
-    while( Read(is,frag) && frag.GetTag() != seqDelItem )
+    while( Read(is,frag) && frag.GetTag() != seqDelItem );
       {
       gdcmDebugMacro( "Frag: " << frag );
       sf.Fragments.push_back( frag );
@@ -633,6 +633,7 @@ IStream &IOSerialize<TSwap>::Read(IStream &is, SequenceOfItems &si)
   if( si.SequenceLengthField.IsUndefined() )
     {
     Item item;
+    item.SetType( si.GetType() );
     const Tag seqDelItem(0xfffe,0xe0dd);
     do
       {
@@ -645,6 +646,7 @@ IStream &IOSerialize<TSwap>::Read(IStream &is, SequenceOfItems &si)
   else
     {
     Item item;
+    item.SetType( si.GetType() );
     VL l = 0;
     //std::cout << "l: " << l << std::endl;
     while( l != si.SequenceLengthField )
@@ -722,15 +724,35 @@ IStream &IOSerialize<TSwap>::Read(IStream &is,DataSet &ds)
     }
   else if( ds.Length.IsUndefined() )
     {
+    if(ds.NegociatedTS == TS::Implicit)
+    {
+      StructuredSet<ImplicitDataElement> ssi;
+      //std::cerr << "passed nested 0" << std::endl;
+      ReadNested(is,ssi);
+      //std::cerr << "passed nested" << std::endl;
+      ds.Internal.Copy(ssi);
+     }
+    else if ( ds.NegociatedTS == TS::Explicit )
+    {
     // Nested DataSet with undefined length 
-    //  StructuredSet<ImplicitDataElement> ssi;
-    //ReadNested(is,ssi);
     ReadNested(is,ds.Internal);
+    }
     }
   else
     {
-    // Nested DataSet with defined length
+    if(ds.NegociatedTS == TS::Implicit)
+    {
+      StructuredSet<ImplicitDataElement> ssi;
+      //std::cerr << "passed 0" << std::endl;
+      ReadWithLength(is,ssi, ds.Length);
+      //std::cerr << "passed" << std::endl;
+      ds.Internal.Copy(ssi);
+     }
+    else if ( ds.NegociatedTS == TS::Explicit )
+    {
+     // Nested DataSet with defined length
     ReadWithLength(is, ds.Internal, ds.Length);
+    }
     }
   //std::cerr << "Finished DataSet::Read" << std::endl;
   return is;
@@ -765,10 +787,6 @@ IStream &IOSerialize<TSwap>::Read(IStream &is,ImplicitDataElement & ide)
       assert(0 && "Should not happen");
     return is;
     }
-//	if( ide.TagField == Tag(0x0028,0x6100))
-//		{
-//		std::cerr << "here" << std::endl;
-//		}
   // Read Value Length
   if( !Read(is,ide.ValueLengthField) )
     {
@@ -786,7 +804,7 @@ IStream &IOSerialize<TSwap>::Read(IStream &is,ImplicitDataElement & ide)
     //assert( de.GetVR() == VR::SQ );
     // FIXME what if I am reading the pixel data...
     assert( ide.TagField != Tag(0x7fe0,0x0010) );
-    ide.ValueField = new SequenceOfItems; //(TS::Implicit);
+    ide.ValueField = new SequenceOfItems(TS::Implicit);
     }
   else
     {
@@ -813,7 +831,7 @@ IStream &IOSerialize<TSwap>::Read(IStream &is,ImplicitDataElement & ide)
       if( item == itemStart )
         {
         assert( ide.TagField != Tag(0x7fe0,0x0010) );
-        ide.ValueField = new SequenceOfItems; //(TS::Implicit);
+        ide.ValueField = new SequenceOfItems(TS::Implicit);
         }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
       else if ( item == itemPMSStart )
@@ -821,9 +839,6 @@ IStream &IOSerialize<TSwap>::Read(IStream &is,ImplicitDataElement & ide)
         gdcmWarningMacro( "Illegal: Explicit SQ found in a file with "
           "TransferSyntax=Implicit for tag: " << ide.TagField );
         ide.ValueField = new SequenceOfItems; //(TS::Explicit);
-
-// cannot read: GE_DLX-8-MONO2-PrivateSyntax.dcm
-abort();
         //SwapCode oldsw = is.GetSwapCode();
         //assert( oldsw == SwapCode::LittleEndian );
         //is.SetSwapCode( SwapCode::BigEndian );
@@ -839,7 +854,7 @@ abort();
         {
         gdcmWarningMacro( "Illegal: SQ start with " << itemPMSStart2
           << " instead of " << itemStart << " for tag: " << ide.TagField );
-        ide.ValueField = new SequenceOfItems; //(TS::Implicit);
+        ide.ValueField = new SequenceOfItems(TS::Implicit);
         ide.ValueField->SetLength(ide.ValueLengthField); // perform realloc
         if( !Read(is,*(ide.ValueField)) )
           {
@@ -1002,7 +1017,7 @@ const OStream &IOSerialize<TSwap>::Write(OStream &os, ImplicitDataElement const 
   IStream &IOSerialize<TSwap>::ReadWithLength(IStream &is, StructuredSet<DEType> &ss, VL &length) {
     DEType de;
     VL l = 0;
-    //std::cout << "ReadWithLength Length: " << l << std::endl;
+    std::cout << "ReadWithLength Length: " << length << std::endl;
     VL locallength = length;
     while( l != locallength && Read(is,de))
       {

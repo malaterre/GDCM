@@ -45,7 +45,6 @@ ImplicitDataElement::ImplicitDataElement(ExplicitDataElement const &val)
         return TagField.GetLength() + ValueLengthField.GetLength() 
           + sq->ComputeLength();
         }
-      abort();
       return ValueLengthField;
       }
     else // BUG !!! When a sequence is explicit length...

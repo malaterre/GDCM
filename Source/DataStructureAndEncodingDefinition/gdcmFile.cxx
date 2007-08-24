@@ -38,7 +38,15 @@ IStream &File::Read(IStream &is)
   {
 	  DS.SetType( TS::Implicit );
   }
+  if( ts.GetSwapCode() == SwapCode::BigEndian )
+  {
+  //US-RGB-8-epicard.dcm is big endian
+  IOSerialize<SwapperDoOp>::Read(is,DS);
+  }
+  else
+  {
   IOSerialize<SwapperNoOp>::Read(is,DS);
+  }
 
   return is;
 }

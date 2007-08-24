@@ -46,6 +46,7 @@ public:
 
 /// \brief constructor (UndefinedLength by default)
   //SequenceOfItems(VL const &vl = 0xFFFFFFFF):SequenceLengthField(vl),NType(type) { }
+  SequenceOfItems(TS::NegociatedType type = TS::Explicit):NType(type) { }
 
   /// \brief Returns the SQ length, as read from disk
   VL GetLength() const { return SequenceLengthField; }
@@ -67,9 +68,11 @@ template <typename TSwap>
   SequenceOfItems &operator=(const SequenceOfItems &val) {
     SequenceLengthField = val.SequenceLengthField;
     Items = val.Items;
+    NType = val.NType;
     return *this;
     }
 
+  TS::NegociatedType GetType() const { return NType; }
 
 protected:
   void Print(std::ostream &os) const {
@@ -88,6 +91,7 @@ public:
   VL SequenceLengthField;
   /// \brief Vector of Sequence Items
   ItemVector Items;
+  TS::NegociatedType NType;
 };
 
 } // end namespace gdcm
