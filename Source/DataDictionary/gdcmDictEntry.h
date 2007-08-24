@@ -30,15 +30,17 @@ namespace gdcm
  * Does not really exist within the DICOM definition, just a way to minimize 
  * storage and have a mapping from gdcm::Tag to the needed information
  * \note bla
+ * TODO FIXME: Need a PublicDictEntry...indeed DictEntry has a notion of retired which
+ * does not exist in PrivateDictEntry...
  */
 class GDCM_EXPORT DictEntry
 {
 public:
-  DictEntry(const char *name, VR::VRType const &vr, VM::VMType const &vm /*, bool ret = false*/) {
+  DictEntry(const char *name, VR::VRType const &vr, VM::VMType const &vm , bool ret = false) {
     if(name) Name = name;
     ValueRepresentation = vr;
     ValueMultiplicity = vm;
-    // Retired = ret;
+    Retired = ret;
   }
   // FIXME
   DictEntry(const char *name, const char *vr, const char *vm) {
@@ -57,11 +59,28 @@ public:
 
   const char *GetName() const { return Name.c_str(); }
 
+  // same as GetName but without spaces
+  const char *GetKeyword() const { return ""; }
+
+  const bool GetRetired() const { return Retired; }
+
 private:
   std::string Name;
   VR ValueRepresentation;
   VM::VMType ValueMultiplicity;
-  //bool Retired;
+  bool Retired;
+};
+
+class GDCM_EXPORT PrivateDictEntry : public DictEntry
+{
+public:
+  PrivateDictEntry(const char *name, VR::VRType const &vr, VM::VMType const &vm , bool ret = false, const char *owner):DictEntry(name,vr,vm,ret),Owner(owner) {}
+
+  const char *GetOwner() const { return Owner.c_str(); }
+
+private:
+  // SIEMENS MED, GEMS_PETD_01 ...
+  std::string Owner;
 };
 
 //-----------------------------------------------------------------------------

@@ -20,7 +20,7 @@ namespace gdcm
 
 Dicts::Dicts()
 {
-  PublicType = DICOMV3_DICT;
+  //PublicType = DICOMV3_DICT;
   //PublicDicts.resize(3, Dict() );
 }
 
@@ -28,38 +28,57 @@ Dicts::~Dicts()
 {
 }
 
-void Dicts::AddPublicDict(const Dict& dict)
+//void Dicts::AddPublicDict(const Dict& dict)
+//{
+//  (void)dict;
+//  //PublicDicts.push_back( dict );
+//}
+
+//void Dicts::SetPublicType(int type)
+//{
+//  PublicType = type;
+//}
+
+const DictEntry &Dicts::GetDictEntry(const Tag& tag, const char *owner)
 {
-  (void)dict;
-  //PublicDicts.push_back( dict );
+  if( tag.IsPublic() )
+  {
+    return PublicDict.GetDictEntry(tag);
+  }
+  else
+  {
+    // Test is tag.GetElement() < 0x10... return LO somehow
+    return PrivateDicts[0].GetDictEntry(tag,owner);
+  }
 }
 
-void Dicts::SetPublicType(int type)
+const char *Dicts::GetConstructorString(ConstructorType type)
 {
-  PublicType = type;
+  (void)type;
+  return "";
 }
 
 const Dict &Dicts::GetPublicDict() const
 {
   //assert( PublicType < PublicDicts.size() );
-  return PublicDicts[PublicType];
+  return PublicDict; //[PublicType];
 }
 
-void Dicts::AddPrivateDict(const Dict& dict)
+void Dicts::AddPrivateDict(const PrivateDict& dict)
 {
   (void)dict;
   //PrivateDicts.push_back( dict );
 }
 
-void Dicts::SetPrivateType(const char *type)
-{
-  PrivateType = type;
-}
+//void Dicts::SetPrivateType(const char *type)
+//{
+//  PrivateType = type;
+//}
 
-const Dict &Dicts::GetPrivateDict()
+const PrivateDict &Dicts::GetPrivateDict(unsigned int constructor) const
 {
-  abort();
-  return PrivateDicts[0];
+  return PrivateDicts[constructor];
 }
 
 } // end namespace gdcm
+

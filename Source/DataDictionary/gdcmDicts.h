@@ -33,36 +33,41 @@ public:
   Dicts();
   ~Dicts();
 
+  // works for both public and private dicts:
+  // owner is null for public dict
+  const DictEntry &GetDictEntry(const Tag& tag, const char *owner = NULL);
 
-  enum PublicTypes {
-    DICOMV3_DICT,
-    ACRNEMA_DICT,
-    NIH_DICT
-  };
-  // Set public dict to a particular type: DICOMV3, ACR-NEMA, NIH
-  void SetPublicType(int type);
-  int GetPublicType() const { return PublicType; }
+  //enum PublicTypes {
+  //  DICOMV3_DICT,
+  //  ACRNEMA_DICT,
+  //  NIH_DICT
+  //};
   const Dict &GetPublicDict() const;
 
-  // TODO define the private dict API
-  void SetPrivateType(const char *);
-  const std::string &GetPrivateType() { return PrivateType; }
-  const Dict &GetPrivateDict();
-
 protected:
-  void AddPublicDict(const Dict& dict);
-  void AddPrivateDict(const Dict& dict);
+  typedef enum {
+    PHILIPS,
+    GEMS,
+    SIEMENS
+  //  ...
+  } ConstructorType;
+  static const char *GetConstructorString(ConstructorType type);
+
+
+  // TODO define the private dict API
+  const PrivateDict &GetPrivateDict(unsigned int constructor = 0) const;
+
+  void AddPrivateDict(const PrivateDict& dict);
 
 private:
   // Generated implementation, see gdcmDataDicts
   void FillDataDicts();
 
-  unsigned int PublicType;
-  //std::vector<Dict> PublicDicts;
-  Dict PublicDicts[3];
+  // Public dict:
+  Dict PublicDict;
 
-  std::string PrivateType;
-  std::vector<Dict> PrivateDicts;
+  // Private Dicts:
+  std::vector<PrivateDict> PrivateDicts;
 };
 
 
