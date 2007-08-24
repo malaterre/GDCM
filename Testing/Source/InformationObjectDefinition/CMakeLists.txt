@@ -5,6 +5,7 @@ SET(IOD_TEST_SRCS
   TestTable
   TestTableEntry
   TestType
+  TestModule
   )
 
 # Add the include paths

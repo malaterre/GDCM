@@ -1,6 +1,7 @@
 # Define the tests for Data Structure and Encoding Definitions
 # DSED
 SET(DSED_TEST_SRCS
+	#TestAttribute
   #TestReadPatientName
   TestByteBuffer
   #TestByteValue
@@ -61,5 +62,7 @@ FOREACH(name ${DSED_TEST_SRCS})
   ADD_TEST(${name} ${GDCM_DSED_TESTS} ${name})
 ENDFOREACH(name)
 
-
+ADD_EXECUTABLE(TestAttribute TestAttribute.cxx)
+ADD_EXECUTABLE(TestAttribute2 TestAttribute2.cxx)
+ADD_EXECUTABLE(TestElement3 TestElement3.cxx)
 
