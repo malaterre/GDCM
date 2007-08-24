@@ -16,20 +16,51 @@
 #ifndef __gdcmModule_h
 #define __gdcmModule_h
 
+#include "gdcmTypes.h"
+#include "gdcmTag.h"
+#include "gdcmModuleEntry.h"
+
+#include <map>
 
 namespace gdcm
 {
 /**
  * \brief Class for representing a Module
  * \note bla
- * Module: A set of Attributes within an Information Entity or Normalized IOD which are logically related to each other.
+ * Module: A set of Attributes within an Information Entity or Normalized IOD which
+ * are logically related to each other.
+ * \sea Dict
  */
 class GDCM_EXPORT Module
 {
 public:
+  typedef std::map<Tag, ModuleEntry> MapModuleEntry;
+
+  Module() {}
+  friend std::ostream& operator<<(std::ostream& _os, const Module &_val);
+
 private:
+  Module &operator=(const Module &_val); // purposely not implemented
+  Module(const Module &_val); // purposely not implemented
+
+  MapModuleEntry ModuleInternal;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream& operator<<(std::ostream& _os, const Module &_val)
+{
+  Module::MapModuleEntry::const_iterator it = _val.ModuleInternal.begin();
+  for(;it != _val.ModuleInternal.end(); ++it)
+    {
+    const Tag &t = it->first;
+    const ModuleEntry &de = it->second;
+    _os << t << " " << de << '\n';
+    }
+
+  return _os;
+}
+
 
 } // end namespace gdcm
 
 #endif //__gdcmModule_h
+
