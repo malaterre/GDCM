@@ -32,6 +32,7 @@ SET(DSED_TEST_SRCS
   #TestTorture
   TestStructuredSet
   TestElement2
+  TestElement4
   )
 
 OPTION(SHARED_PTR "shared_ptr" OFF)
@@ -47,6 +48,7 @@ ENDIF(SHARED_PTR)
 INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/Common"
+  "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   )
 
@@ -64,5 +66,6 @@ ENDFOREACH(name)
 
 ADD_EXECUTABLE(TestAttribute TestAttribute.cxx)
 ADD_EXECUTABLE(TestAttribute2 TestAttribute2.cxx)
+ADD_EXECUTABLE(TestAttribute3 TestAttribute3.cxx)
 ADD_EXECUTABLE(TestElement3 TestElement3.cxx)
 

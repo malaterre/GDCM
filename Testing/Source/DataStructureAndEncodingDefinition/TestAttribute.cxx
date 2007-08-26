@@ -56,7 +56,8 @@ int main(int argc, char *argv[])
   }
   std::ofstream os(filename);
 
-  gdcm::Attribute<0x0008,0x0000, gdcm::VR::UL, gdcm::VM::VM1> a = { 38 };
+  //gdcm::Attribute<0x0008,0x0000, gdcm::VR::UL, gdcm::VM::VM1> a = { 38 };
+  gdcm::Attribute<0x0008,0x0000> a = { 38 };
   a.Print( std::cout << std::endl );
   a.Write(os);
   gdcm::Attribute<0x0008,0x0001, gdcm::VR::UL, gdcm::VM::VM1> b = { 262302 };

@@ -119,7 +119,22 @@ struct LT
 };
 
 
-struct OB;
+struct OB
+{
+  explicit OB(const char *array = 0, uint32_t length = 0):Internal(array),Length(length) {}
+	void Print( std::ostream &os )
+	{
+		const char *p = Internal;
+		const char *end = Internal+Length;
+		while(p != end)
+		{
+			os << "\\" << (int)*p++;
+		}
+	}
+private:
+  const char *Internal;
+  uint32_t Length;
+};
 
 struct OF;
 
@@ -306,6 +321,10 @@ int main()
 
 	LT lt = { "very long text\0hello mathieu" };
 	lt.Print( std::cout );
+	std::cout << std::endl;
+
+	OB ob("\0\1", 2);
+	ob.Print( std::cout );
 	std::cout << std::endl;
 
 	PN pn1 = { "abc123", "def", "ghi", "klm", "opq" };
