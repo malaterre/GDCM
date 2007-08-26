@@ -18,7 +18,7 @@
 
 #include "gdcmTypes.h"
 #include "gdcmVR.h"
-//#include "gdcmTagToType.h"
+#include "gdcmTagToType.h"
 #include "gdcmVM.h"
 
 #include <string>
@@ -28,21 +28,23 @@
 namespace gdcm
 {
 
-template<uint16_t Group, uint16_t Element> class TagToVR;
-template<uint16_t Group, uint16_t Element> class TagToVM;
+//template<uint16_t Group, uint16_t Element> class TagToVR;
+//template<uint16_t Group, uint16_t Element> class TagToVM;
 
 // Declaration, also serve as forward declaration
 template<int T> class EncodingImplementation;
 
 struct void_;
 template<uint16_t Group, uint16_t Element, 
-	 int TVR = TagToVR<Group, Element>::VRType, 
-	 int TVM = TagToVM<Group, Element>::VMType,
+	 int TVR = TagToType<Group, Element>::VRType, 
+	 int TVM = TagToType<Group, Element>::VMType,
 	 typename SQAttribute = void_ >
 class Attribute
 {
 public:
-  typename VRToType<TVR>::Type Internal[VMToLength<TVM>::Length];
+  typedef typename VRToType<TVR>::Type VRType;
+  enum { VMType = VMToLength<TVM>::Length };
+  VRType Internal[VMToLength<TVM>::Length];
 
   unsigned long GetLength() const {
     return VMToLength<TVM>::Length;
@@ -58,13 +60,28 @@ public:
       _os << "," << Internal[i];
     }
 
-  typename VRToType<TVR>::Type GetValue(int idx = 0) {
+  // copy:
+  VRType GetValue(int idx = 0) {
     assert( idx < VMToLength<TVM>::Length );
     return Internal[idx];
   }
-  void SetValue(typename VRToType<TVR>::Type v, unsigned int idx = 0) {
+  // const reference
+  VRType const &GetValue(int idx = 0) const {
+    assert( idx < VMToLength<TVM>::Length );
+    return Internal[idx];
+  }
+  void SetValue(VRType v, unsigned int idx = 0) {
     assert( idx < VMToLength<TVM>::Length );
     Internal[idx] = v;
+  }
+  void SetBytes(const VRType* array, unsigned long numel = VMType ) {
+    assert( array && numel && numel <= GetLength() );
+    memcpy(Internal, array, numel * sizeof(VRType) );
+    // should I fill with 0 the remaining
+    assert( numel == GetLength() ); // for now disable array smaller ...
+  }
+  const VRType* GetBytes() const {
+    return Internal;
   }
   void Read(IStream &_is) {
     uint16_t cref[] = { Group, Element };

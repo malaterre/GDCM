@@ -123,6 +123,11 @@ public:
 
   // DICOM Standard expects the Data Element to be sorted by Tags
   // All other comparison can be constructed from this one and operator ==
+  // FIXME FIXME FIXME TODO
+  // the following is pretty dumb. Since we have control over who is group
+  // and who is element, we should reverse them in little endian and big endian case
+  // since what we really want is fast comparison and not garantee that group is in #0
+  // ...
   bool operator<(const Tag &_val) const
     {
 #ifndef GDCM_WORDS_BIGENDIAN

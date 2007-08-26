@@ -198,6 +198,18 @@ template<int T> struct VRToType;
   template<> struct VRToType<VR::type>        \
   { typedef rtype Type; };
 
+
+struct UI { char Internal[64+1]; 
+  friend std::ostream& operator<<(std::ostream &_os, const UI &_val);
+};
+inline std::ostream& operator<<(std::ostream &_os, const UI &_val)
+{
+  _os << _val.Internal;
+  return _os;
+}
+
+
+
 // TODO: Could be generated from XML file
 TYPETOENCODING(AE,ASCII ,float)
 TYPETOENCODING(AS,ASCII ,char)
@@ -221,7 +233,7 @@ TYPETOENCODING(SQ,BINARY,float)
 TYPETOENCODING(SS,BINARY,int16_t)
 TYPETOENCODING(ST,ASCII ,float)
 TYPETOENCODING(TM,ASCII ,float)
-TYPETOENCODING(UI,ASCII ,float)
+TYPETOENCODING(UI,ASCII ,UI)
 TYPETOENCODING(UL,BINARY,uint32_t)
 TYPETOENCODING(UN,ASCII,unsigned char) // FIXME ?
 TYPETOENCODING(US,BINARY,uint16_t)
