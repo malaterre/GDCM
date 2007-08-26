@@ -14,7 +14,7 @@ typedef enum {
 	DAY = 'D',
 	WEEK = 'W',
 	MONTH = 'M',
-	YEAR = 'Y',
+	YEAR = 'Y'
 } DateFormat;
 
 //template <int Format> struct ASValid;
