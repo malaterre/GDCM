@@ -114,6 +114,8 @@ int main (int argc, char *argv[])
     }
   // else
   //std::cout << "Filename: " << filename << std::endl;
+//  for(int i=0; i <100; i++)
+//{
   gdcm::Reader reader;
   reader.SetFileName( filename.c_str() );
   if( !reader.Read() )
@@ -121,6 +123,8 @@ int main (int argc, char *argv[])
     std::cerr << "Failed to read: " << filename << std::endl;
     return 1;
     }
+//}
+//return 0;
 
   gdcm::Validate vali;
   vali.SetFile( reader.GetFile() );
