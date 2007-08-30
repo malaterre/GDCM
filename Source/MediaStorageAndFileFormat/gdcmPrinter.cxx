@@ -106,9 +106,10 @@ void Printer::PrintElement(std::ostream& os, const ExplicitDataElement &xde, con
 //      << " [" << value << "]";
 //    }
 
-    if( VR::IsASCII(lvr)  )
+    if( VR::IsASCII(lvr) )
       {
-      os << " [" << value << "] ";
+      // TODO FIXME (value is a null object)
+      if( vl ) os << " [" << value << "] ";
       }
     else if ( lvr == VR::SQ || vl.IsUndefined() )
     {
