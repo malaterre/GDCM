@@ -2,6 +2,8 @@
 #include <iomanip>
 #include <vector>
 
+#include <stdint.h>
+
 struct AE
 {
   char Internal[16+1];
