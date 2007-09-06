@@ -41,3 +41,6 @@ Provide an alternative to SIEMENS dcmInfo.exe and dump shadow elements
 67 - 'SlicePosition_PCS'        VM 3, VR FD, SyngoDT 4, NoOfItems 6, Data '-185.77913332'\'-163.80459213'\'72.73944092'
 -----------------------------------------------------------------------
 http://www.kodak.com/global/plugins/acrobat/en/health/pdf/prod/dicom/1F9242.pdf
+-----------------------------------------------------------------------
+Add a FindKAKADU to find kakadu and thus be able to check compressiong
+done by openjpeg
