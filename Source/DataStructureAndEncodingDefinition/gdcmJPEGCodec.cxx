@@ -87,9 +87,15 @@ bool JPEGCodec::Decode(IStream &is, OStream &os)
       // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
       gdcmWarningMacro( "DICOM header said it was " << this->BitSample <<
         " but JPEG header says it's: " << Internal->BitSample );
+      if( this->BitSample < Internal->BitSample )
+        {
+        //abort(); // Outside buffer will be too small
+        }
+      this->BitSample = Internal->BitSample;
       delete Internal;
+      Internal = 0; // Do not attempt to reuse the pointer
       is.seekg(0, std::ios::beg);
-      switch( Internal->BitSample )
+      switch( this->BitSample )
         {
       case 8:
         Internal = new JPEG8Codec;
@@ -108,6 +114,10 @@ bool JPEGCodec::Decode(IStream &is, OStream &os)
       if( Internal->Decode(is,tmpos) )
         {
         return ImageCodec::Decode(tmpos,os);
+        }
+      else
+        {
+        abort(); // FATAL ERROR
         }
       }
 #endif
