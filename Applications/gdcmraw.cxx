@@ -14,16 +14,15 @@
 
 =========================================================================*/
 /*
-gdcmraw - ACR/NEMA DICOM PS3 ... DICOM PS3 - DICOM image to raw file
-Synopsis:
-gdcmraw [ -t | --tag Tag# (default: 07fe,0010) ] -i inputfile
-Description:
-gdcmraw
-reads the named dicom or acr-nema input file and copies the raw image
-pixel data to a raw binary file without a header of any kind.
-The byte order, packing or encapsulation of the raw result is dependent
-only
-on the encoding of the input file and cannot be changed.
+ * gdcmraw - ACR/NEMA DICOM PS3 ... DICOM PS3 - DICOM image to raw file
+ * Synopsis:
+ * gdcmraw [ -t | --tag Tag# (default: 07fe,0010) ] -i inputfile
+ * Description:
+ * gdcmraw
+ * reads the named dicom or acr-nema input file and copies the raw image
+ * pixel data to a raw binary file without a header of any kind.
+ * The byte order, packing or encapsulation of the raw result is dependent
+ * only on the encoding of the input file and cannot be changed.
 */
 
 #include "gdcmReader.h"
@@ -57,7 +56,7 @@ int main(int argc, char *argv[])
   int c;
   //int digit_optind = 0;
 
-  gdcm::Tag rawTag(0x7fe0, 0x0010);
+  gdcm::Tag rawTag(0x7fe0, 0x0010); // Default to Pixel Data
   std::string filename;
   std::string outfilename;
   while (1) {
@@ -184,8 +183,14 @@ int main(int argc, char *argv[])
     {
     const gdcm::SequenceOfFragments *sf =
       dynamic_cast<const gdcm::SequenceOfFragments*>(&v);
+    if( !sf )
+      {
+      std::cerr << "Unknown error" << std::endl;
+      return 1;
+      }
     sf->WriteBuffer(output);
     }
 
   return 0;
 }
+
