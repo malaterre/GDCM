@@ -4970,6 +4970,166 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0004" element="151A" name="&gt;Referenced Related General SOP Class UID in File" type="1C" description="Unique ID for the Related General SOP Class(es) related to the SOP Class of the Instance stored in the referenced file. Required if the Directory Record references a SOP Instance that encodes the Related General SOP Class UID (0008,001A). Note: This may be useful to an FSR that does not support the SOP Class of the referenced Instance, but which does support one of the Related General SOP Classes."/>
     <include ref="&gt;Record Selection Keys See F.5 See F.5 A number of DICOM Data Elements which contain specific keys defined for each type of Directory Record (0004,1430) defined in Section F.5."/>
   </table>
+  <table ref="Table F.5-1" name="PATIENT KEYS">
+    <include ref="Key Tag Type Attribute Description"/>
+    <entry group="0008" element="0005" name="Specific Character Set" type="1C" description="Required if an extended or replacement character set is used in one of the keys"/>
+    <entry group="0010" element="0010" name="Patient's Name" type="2" description=""/>
+    <entry group="0010" element="0020" name="Patient ID" type="1" description=""/>
+    <include ref="Any other Attribute of the Patient IOD or Patient IE Modules 3"/>
+  </table>
+  <table ref="Table F.5-2" name="STUDY KEYS">
+    <include ref="Key Tag Type Attribute Description"/>
+    <entry group="0008" element="0005" name="Specific Character Set" type="1C" description="Required if an extended or replacement character set is used in one of the keys"/>
+    <entry group="0008" element="0020" name="Study Date" type="1" description=""/>
+    <entry group="0008" element="0030" name="Study Time" type="1" description=""/>
+    <entry group="0008" element="1030" name="Study Description" type="2" description=""/>
+    <entry group="0020" element="000D" name="Study Instance UID" type="1C" description="Required only if (0004,1511) is absent. (See Note)"/>
+    <entry group="0020" element="0010" name="Study ID" type="1" description=""/>
+    <entry group="0008" element="0050" name="Accession Number" type="2" description=""/>
+    <include ref="Any other Attribute of the Study IOD or Study IE Modules 3"/>
+  </table>
+  <table ref="Table F.5-3" name="SERIES KEYS">
+    <include ref="Key Tag Type Attribute Description"/>
+    <entry group="0008" element="0005" name="Specific Character Set" type="1C" description="Required if an extended or replacement character set is used in one of the keys"/>
+    <entry group="0008" element="0060" name="Modality" type="1" description=""/>
+    <entry group="0020" element="000E" name="Series Instance UID" type="1" description=""/>
+    <entry group="0020" element="0011" name="Series Number" type="1" description=""/>
+    <entry group="0088" element="0200" name="Icon Image Sequence" type="3" description="This Icon Image is representative of the Series. It may or may not correspond to one of the images of the Series."/>
+    <include ref="&gt; Include ‘Image Pixel Macro’ Table C.7-11b See Section F.7 of this Part."/>
+    <include ref="Any other Attribute of the Series IE Modules 3"/>
+  </table>
+  <table ref="Table F.5-4" name="IMAGE KEYS">
+    <include ref="Key Tag Type Attribute Description"/>
+    <entry group="0008" element="0005" name="Specific Character Set" type="1C" description="Required if an extended or replacement character set is used in one of the keys."/>
+    <entry group="0020" element="0013" name="Instance Number" type="1" description=""/>
+    <entry group="0088" element="0200" name="Icon Image Sequence" type="3" description="This Icon Image is representative of the Image."/>
+    <include ref="&gt; Include ‘Image Pixel Macro’ Table C.7-11b See Section F.7 of this Part."/>
+    <include ref="Any other Attribute of the Image IE Modules 3"/>
+  </table>
+  <table ref="Table F.5-19" name="RT DOSE KEYS">
+    <include ref="Key Tag Type Attribute Description"/>
+    <entry group="0008" element="0005" name="Specific Character Set" type="1C" description="Required if an extended or replacement character set is used in one of the keys."/>
+    <entry group="0020" element="0013" name="Instance Number" type="1" description=""/>
+    <entry group="3004" element="000A" name="Dose Summation Type" type="1" description=""/>
+    <entry group="3004" element="0006" name="Dose Comment" type="3" description=""/>
+    <entry group="0088" element="0200" name="Icon Image Sequence" type="3" description="This Icon Image is representative of the RT Dose."/>
+    <include ref="&gt; Include ‘Image Pixel Macro’ Table C.7-11b See Section F.7 of this part."/>
+    <include ref="Any other Attribute of the Dose IE Modules 3"/>
+  </table>
+  <table ref="Table F.5-20" name="RT STRUCTURE SET KEYS">
+    <include ref="Key Tag Type Attribute Description"/>
+    <entry group="0008" element="0005" name="Specific Character Set" type="1C" description="Required if an extended or replacement character set is used in one of the keys."/>
+    <entry group="0020" element="0013" name="Instance Number" type="1" description=""/>
+    <entry group="3006" element="0002" name="Structure Set Label" type="1" description=""/>
+    <entry group="3006" element="0008" name="Structure Set Date" type="2" description=""/>
+    <entry group="3006" element="0009" name="Structure Set Time" type="2" description=""/>
+    <include ref="Any other Attribute of the Structure Set IE Modules 3"/>
+  </table>
+  <table ref="Table F.5-21" name="RT PLAN KEYS">
+    <include ref="Key Tag Type Attribute Description"/>
+    <entry group="0008" element="0005" name="Specific Character Set" type="1C" description="Required if an extended or replacement character set is used in one of the keys"/>
+    <entry group="0020" element="0013" name="Instance Number" type="1" description=""/>
+    <entry group="300A" element="0002" name="RT Plan Label" type="1" description=""/>
+    <entry group="300A" element="0006" name="RT Plan Date" type="2" description=""/>
+    <entry group="300A" element="0007" name="RT Plan Time" type="2" description=""/>
+    <include ref="Any other Attribute of the Plan IE Modules 3"/>
+  </table>
+  <table ref="Table F.5-22" name="RT TREATMENT RECORD KEYS">
+    <include ref="Key Tag Type Attribute Description"/>
+    <entry group="0008" element="0005" name="Specific Character Set" type="1C" description="Required if an extended or replacement character set is used in one of the keys"/>
+    <entry group="0020" element="0013" name="Instance Number" type="1" description=""/>
+    <entry group="3008" element="0250" name="Treatment Date" type="2" description=""/>
+    <entry group="3008" element="0251" name="Treatment Time" type="2" description=""/>
+    <include ref="Any other Attribute of the Treatment Record IE Modules 3"/>
+  </table>
+  <table ref="Table F.5-23" name="PRESENTATION KEYS">
+    <include ref="Key Tag Type Attribute Description"/>
+    <entry group="0008" element="0005" name="Specific Character Set" type="1C" description="Required if an extended or replacement character set is used in one of the keys."/>
+    <entry group="0070" element="0082" name="Presentation Creation Date" type="1" description="Date on which this presentation was created. Note: This date may be different from the date that the DICOM SOP Instance was created, since the presentation state information contained may have been recorded earlier."/>
+    <entry group="0070" element="0083" name="Presentation Creation Time" type="1" description="Time at which this presentation was created. Note: This time may be different from the time that the DICOM SOP Instance was created, since the presentation state information contained may have been recorded earlier."/>
+    <include ref="Include Content Identification Macro Table 10-12"/>
+    <entry group="0008" element="1115" name="Referenced Series Sequence" type="1" description="Sequence of Repeating Items where each Item includes the Attributes of one or more Series."/>
+    <entry group="0020" element="000E" name="&gt;Series Instance UID" type="1C" description="Unique identifier of a Series that is part of this Study. Required if sequence item is present."/>
+    <entry group="0008" element="1140" name="&gt;Referenced Image Sequence" type="1C" description="Sequence of Repeating Items where each Item provides reference to a selected set of Image SOP Class/SOP Instance pairs that are part of this Study and the Series defined by Series Instance UID (0020,000E). Required if a sequence item is present."/>
+    <entry group="0008" element="1150" name="&gt;&gt;Referenced SOP Class UID" type="1C" description="Uniquely identifies the referenced SOP Class. Required if sequence item is present. Shall be the same for all Images referenced by this presentation state."/>
+    <entry group="0008" element="1155" name="&gt;&gt;Referenced SOP Instance UID" type="1C" description="Uniquely identifies the referenced SOP Instance. Required if sequence item is present."/>
+    <include ref="Any other Attribute of the Presentation IE Modules 3"/>
+  </table>
+  <table ref="Table F.5-24" name="WAVEFORM KEYS">
+    <include ref="Key Tag Type Attribute Description"/>
+    <entry group="0008" element="0005" name="Specific Character Set" type="1C" description="Required if an extended or replacement character set is used in one of the keys."/>
+    <entry group="0020" element="0013" name="Instance Number" type="1" description=""/>
+    <entry group="0008" element="0023" name="Content Date" type="1" description=""/>
+    <entry group="0008" element="0033" name="Content Time" type="1" description=""/>
+    <include ref="Any other Attribute of the Waveform IE Modules 3"/>
+  </table>
+  <table ref="Table F.5-25" name="SR DOCUMENT KEYS">
+    <include ref="Key Tag Type Attribute Description"/>
+    <entry group="0008" element="0005" name="Specific Character Set" type="1C" description="Required if an extended or replacement character set is used in one of the keys."/>
+    <entry group="0020" element="0013" name="Instance Number" type="1" description=""/>
+    <entry group="0040" element="A491" name="Completion Flag" type="1" description=""/>
+    <entry group="0040" element="A493" name="Verification Flag" type="1" description=""/>
+    <entry group="0008" element="0023" name="Content Date" type="1" description=""/>
+    <entry group="0008" element="0033" name="Content Time" type="1" description=""/>
+    <entry group="0040" element="A030" name="Verification DateTime" type="1C" description="Most recent Date and Time of verification among those defined in the Verifying Observer Sequence (0040,A073). Required if Verification Flag (0040,A493) is VERIFIED."/>
+    <entry group="0040" element="A043" name="Concept Name Code Sequence" type="1" description="Code describing the concept represented by the root Content Item (Document Title). This sequence shall contain exactly one Item."/>
+    <entry group="0040" element="A730" name="Content Sequence" type="1C" description="Contains the Target Content Items that modify the Concept Name Code Sequence of the root Content Item (Document Title). Required if the root Content Item is the Source Content Item of HAS CONCEPT MOD relationships."/>
+    <include ref="Any Attribute of the Document IE Modules 3"/>
+  </table>
+  <table ref="Table F.5-26" name="KEY OBJECT DOCUMENT KEYS">
+    <include ref="Key Tag Type Attribute Description"/>
+    <entry group="0008" element="0005" name="Specific Character Set" type="1C" description="Required if an extended or replacement character set is used in one of the keys."/>
+    <entry group="0020" element="0013" name="Instance Number" type="1" description=""/>
+    <entry group="0008" element="0023" name="Content Date" type="1" description=""/>
+    <entry group="0008" element="0033" name="Content Time" type="1" description=""/>
+    <entry group="0040" element="A043" name="Concept Name Code Sequence" type="1" description="Code describing the concept represented by the root Content Item (Document Title). This sequence shall contain exactly one Item."/>
+    <entry group="0040" element="A730" name="Content Sequence" type="1C" description="Contains the Target Content Items that modify the Concept Name Code Sequence of the root Content Item (Document Title). Required if the root Content Item is the Source Content Item of HAS CONCEPT MOD relationships."/>
+    <include ref="Any Attribute of the Document IE Modules 3"/>
+  </table>
+  <table ref="Table F.5-27" name="SPECTROSCOPY KEYS">
+    <include ref="Key Tag Type Attribute Description"/>
+    <entry group="0008" element="0005" name="Specific Character Set" type="1C" description="Required if an extended or replacement character set is used in one of the keys."/>
+    <entry group="0008" element="0008" name="Image Type" type="1" description=""/>
+    <entry group="0008" element="0023" name="Content Date" type="1" description=""/>
+    <entry group="0008" element="0033" name="Content Time" type="1" description=""/>
+    <entry group="0020" element="0013" name="Instance Number" type="1" description=""/>
+    <entry group="0008" element="9092" name="Referenced Image Evidence Sequence" type="1C" description="Required if present in the spectroscopy instance."/>
+    <include ref="&gt;Include 'SOP Instance Reference Macro' Table C.17-3"/>
+    <entry group="0028" element="0008" name="Number of Frames" type="1" description=""/>
+    <entry group="0028" element="0010" name="Rows" type="1" description=""/>
+    <entry group="0028" element="0011" name="Columns" type="1" description=""/>
+    <entry group="0028" element="9001" name="Data Point Rows" type="1" description=""/>
+    <entry group="0028" element="9002" name="Data Point Columns" type="1" description=""/>
+    <entry group="0088" element="0200" name="Icon Image Sequence" type="3" description="This Icon Image is representative of the Spectroscopy instance."/>
+    <include ref="&gt;Image Pixel Module See Section F.7 of this Part."/>
+    <include ref="Any other Attribute of the Spectroscopy IE Modules 3"/>
+  </table>
+  <table ref="Table F.5-28" name="RAW DATA KEYS">
+    <include ref="Key Tag Type Attribute Description"/>
+    <entry group="0008" element="0005" name="Specific Character Set" type="1C" description="Required if an extended or replacement character set is used in one of the keys."/>
+    <entry group="0008" element="0023" name="Content Date" type="1" description=""/>
+    <entry group="0008" element="0033" name="Content Time" type="1" description=""/>
+    <entry group="0020" element="0013" name="Instance Number" type="2" description=""/>
+    <entry group="0088" element="0200" name="Icon Image Sequence" type="3" description="This Icon Image is representative of the Raw Data instance."/>
+    <include ref="&gt;Image Pixel Module See Section F.7 of this Part."/>
+    <include ref="Any other Attribute of the Raw Data IE Modules 3"/>
+  </table>
+  <table ref="Table F.5-29" name="REGISTRATION KEYS">
+    <include ref="Key Tag Type Attribute Description"/>
+    <entry group="0008" element="0005" name="Specific Character Set" type="1C" description="Required if an extended or replacement character set is used in one of the keys."/>
+    <entry group="0008" element="0023" name="Content Date" type="1" description="The date the content creation started."/>
+    <entry group="0008" element="0033" name="Content Time" type="1" description="The time the content creation started."/>
+    <include ref="Include Content Identification Macro Table 10-12"/>
+    <include ref="Any other Attribute of the Spatial Registration IE Modules 3"/>
+  </table>
+  <table ref="Table F.5-30" name="FIDUCIAL KEYS">
+    <include ref="Key Tag Type Attribute Description"/>
+    <entry group="0008" element="0005" name="Specific Character Set" type="1C" description="Required if an extended or replacement character set is used in one of the keys."/>
+    <entry group="0008" element="0023" name="Content Date" type="1" description="The date the content creation started."/>
+    <entry group="0008" element="0033" name="Content Time" type="1" description="The time the content creation started."/>
+    <include ref="Include Content Identification Macro Table 10-12"/>
+    <include ref="Any other Attribute of the Spatial Fiducials IE Modules 3"/>
+  </table>
   <table ref="Table F.5-31" name="HANGING PROTOCOL KEYS">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C" description="Required if an extended or replacement character set is used in one of the keys"/>
     <entry group="0072" element="0002" name="Hanging Protocol Name" type="1" description=""/>
@@ -4981,5 +5141,38 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0072" element="0014" name="Number of Priors Referenced" type="1" description=""/>
     <entry group="0072" element="000E" name="Hanging Protocol User Identification Code Sequence" type="2" description=""/>
     <include ref="Any other Attribute of the Hanging Protocol IOD 3"/>
+  </table>
+  <table ref="Table F.5-32" name="ENCAPSULATED DOCUMENT KEYS">
+    <include ref="Key Tag Type Attribute Description"/>
+    <entry group="0008" element="0023" name="Content Date" type="2" description="The date the content creation started."/>
+    <entry group="0008" element="0033" name="Content Time" type="2" description="The time the content creation started."/>
+    <entry group="0020" element="0013" name="Instance Number" type="1" description="A number that identifies this instance"/>
+    <entry group="0042" element="0010" name="Document Title" type="2" description="The title of the document."/>
+    <entry group="0040" element="A043" name="Concept Name Code Sequence" type="2" description="A coded representation of the document title. Zero or one item may be present."/>
+    <include ref="&gt;Include ‘Code Sequence Macro’ Table 8.8-1 1 Baseline Context Group 7020"/>
+    <entry group="0042" element="0012" name="MIME Type of Encapsulated Document" type="1" description="The type of the encapsulated document stream described using the MIME Media Type (see RFC 2046)."/>
+    <include ref="Any other Attribute of the Encapsulated Document Module except Encapsulated Document (0042,0011) 3"/>
+  </table>
+  <table ref="Table F.5-33" name="HL7 STRUCTURED DOCUMENT KEYS">
+    <include ref="Key Tag Type Attribute Description"/>
+    <entry group="0008" element="0005" name="Specific Character Set" type="1C" description="Required if an extended or replacement character set is used in one of the keys."/>
+    <entry group="0040" element="E001" name="HL7 Instance Identifier" type="1" description="Instance Identifier from the referenced HL7 Structured Document, encoded as a UID (OID or UUID), concatenated with a caret (“^”) and Extension value (if Extension is present in Instance Identifier)."/>
+    <entry group="0040" element="E004" name="HL7 Document Effective Time" type="1" description="Effective Time from the referenced HL7 Structured Document"/>
+    <entry group="0040" element="E006" name="HL7 Document Type Code Sequence" type="1C" description="Document Type Code from the referenced HL7 Structured Document. Required if the HL7 Structured Document contains a Document Type Code."/>
+    <include ref="&gt;Include ‘Code Sequence Macro’ Table 8.8-1 No BCID defined"/>
+    <entry group="0042" element="0010" name="Document Title" type="1C" description="Document Title from the referenced HL7 Structured Document. Required if the HL7 Structured Document contains a Document Title."/>
+  </table>
+  <table ref="Table F.5-34" name="REAL WORLD VALUE MAPPING KEYS">
+    <include ref="Key Tag Type Attribute Description"/>
+    <entry group="0008" element="0005" name="Specific Character Set" type="1C" description="Required if an extended or replacement character set is used in one of the keys."/>
+    <entry group="0008" element="0023" name="Content Date" type="1" description="The date the content creation started."/>
+    <entry group="0008" element="0033" name="Content Time" type="1" description="The time the content creation started."/>
+    <include ref="Include Content Identification Macro Table 10-12"/>
+    <include ref="Any other Attribute of the Real World Value Mapping IE Modules 3"/>
+  </table>
+  <table ref="Table F.5-35" name="STEREOMETRIC RELATIONSHIP KEYS">
+    <include ref="Key Tag Type Attribute Description"/>
+    <entry group="0008" element="0005" name="Specific Character Set" type="1C" description="Required if an extended or replacement character set is used in one of the keys."/>
+    <include ref="Any other Attribute of the Stereometric relationship IE Modules 3"/>
   </table>
 </tables>
