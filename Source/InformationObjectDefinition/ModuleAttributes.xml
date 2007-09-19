@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="ma2html.xsl"?>
+<?xml-stylesheet type="text/xsl" href="ma2html.xsl"
+?>
 <!-- to produce output use:
 $ xsltproc ma2html.xsl ModuleAttributes.xml
--->
+    -->
 <!--
- Program: GDCM (Grass Root DICOM). A DICOM library
- Module: $URL$
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
 
- Copyright (c) 2006 Mathieu Malaterre
- Copyright (c) 1993-2005 CREATIS
- All rights reserved.
- See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+  Copyright (c) 2006 Mathieu Malaterre
+  Copyright (c) 1993-2005 CREATIS
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
- This software is distributed WITHOUT ANY WARRANTY; without even
- the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- PURPOSE. See the above copyright notice for more information.
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
 -->
 <tables>
   <table ref="ERROR: NO TABLE REF" name="NOTES: 1. SOME SECTIONS OF THE STANDARD OFTEN INCLUDE ATTRIBUTES WITHIN A SEQUENCE OF ITEMS UNDER THE CONDITION THAT A SEQUENCE ITEM IS PRESENT. FOR EXAMPLE, AS SHOWN IN THE FOLLOWING TABLE, REQUESTED PROCEDURE ID (0040,1001) HAS TYPE 1C AND IS INCLUDED UNDER THE CONDITION THAT “REQUIRED IF SEQUENCE ITEM IS PRESENT”:">
