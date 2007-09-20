@@ -162,6 +162,1302 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="0070" element="0086" name="Content Creator’s Identification Sequence" type="3" description="Identification of the person who created the real world value mapping. Only a single item shall be present in this sequence."/>
     <include ref="&gt; Include Person Identification Macro Table 10-1"/>
   </table>
+  <table ref="Table A.2-1" name="CR IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="CR Series" reference="C.8.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Contrast/bolus" reference="C.7.6.4" usage="C - Required if contrast media was used in this image"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="CR Image" reference="C.8.1.2" usage="M"/>
+    <entry ie="" module="Overlay Plane" reference="C.9.2" usage="U"/>
+    <entry ie="" module="Modality LUT" reference="C.11.1" usage="U"/>
+    <entry ie="" module="VOILUT" reference="C.11.2" usage="U"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.3-1" name="CT IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of Reference" module="Frame of Reference" reference="C.7.4.1" usage="M"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Plane" reference="C.7.6.2" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Contrast/bolus" reference="C.7.6.4" usage="C - Required if contrast media was used in this image"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="CT Image" reference="C.8.2.1" usage="M"/>
+    <entry ie="" module="Overlay Plane" reference="C.9.2" usage="U"/>
+    <entry ie="" module="VOI LUT" reference="C.11.2" usage="U"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.4-1" name="MR IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of Reference" module="Frame of Reference" reference="C.7.4.1" usage="M"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Plane" reference="C.7.6.2" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Contrast/bolus" reference="C.7.6.4" usage="C - Required if contrast media was used in this image"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="MR Image" reference="C.8.3.1" usage="M"/>
+    <entry ie="" module="Overlay Plane" reference="C.9.2" usage="U"/>
+    <entry ie="" module="VOI LUT" reference="C.11.2" usage="U"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.5-1" name="NM IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="" module="NM/PET Patient Orientation" reference="C.8.4.6" usage="M"/>
+    <entry ie="Frame of Reference" module="Frame of Reference" reference="C.7.4.1" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Acquisition Context" reference="C.7.6.14" usage="U – See Section A.5.4.1"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="NM Image Pixel" reference="C.8.4.7" usage="M"/>
+    <entry ie="" module="Multi-frame" reference="C.7.6.6" usage="M"/>
+    <entry ie="" module="NM Multi-frame" reference="C.8.4.8" usage="M"/>
+    <entry ie="" module="NM Image" reference="C.8.4.9" usage="M"/>
+    <entry ie="" module="NM Isotope" reference="C.8.4.10" usage="M"/>
+    <entry ie="" module="NM Detector" reference="C.8.4.11" usage="M"/>
+    <entry ie="" module="NM TOMO Acquisition" reference="C.8.4.12" usage="C - Required if Image Type (0008,0008) Value 3 is TOMO, GATED TOMO, RECON TOMO or RECON GATED TOMO"/>
+    <entry ie="" module="NM Multi-gated Acquisition" reference="C.8.4.13" usage="C - Required if Image Type (0008,0008) Value 3 is GATED, GATED TOMO, or RECON GATED TOMO"/>
+    <entry ie="" module="NM Phase" reference="C.8.4.14" usage="C - Required if Image Type (0008,0008) Value 3 is DYNAMIC"/>
+    <entry ie="" module="NM Reconstruction" reference="C.8.4.15" usage="C - Required if Image Type (0008,0008) Value 3 is RECON TOMO or RECON GATED TOMO"/>
+    <entry ie="" module="Overlay Plane" reference="C.9.2" usage="U"/>
+    <entry ie="" module="Multi-frame Overlay" reference="C.9.3" usage="U"/>
+    <entry ie="" module="VOI LUT" reference="C.11.2" usage="U"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.6-1" name="US IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of Reference" module="Frame of Reference" reference="C.7.4.1" usage="U"/>
+    <entry ie="" module="Synchronization" reference="C.7.4.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Contrast/bolus" reference="C.7.6.4" usage="C - Required if contrast media was used in this image"/>
+    <entry ie="" module="Palette Color Lookup Table" reference="C.7.9" usage="C - Required if Photometic Interpretation (0028,0004) has a value of PALETTE COLOR"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="US Region Calibration" reference="C.8.5.5" usage="U"/>
+    <entry ie="" module="US Image" reference="C.8.5.6" usage="M"/>
+    <entry ie="" module="Overlay Plane" reference="C.9.2" usage="U"/>
+    <entry ie="" module="VOI LUT" reference="C.11.2" usage="U"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.7-1" name="US MULTI-FRAME IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of" module="Frame of Reference" reference="C.7.4.1" usage="U"/>
+    <entry ie="Reference" module="Synchronization" reference="C.7.4.2" usage="C – Required if Modality (0008,0060) = IVUS. May be present otherwise."/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Contrast/bolus" reference="C.7.6.4" usage="C - Required if contrast media was used in this image."/>
+    <entry ie="" module="Cine" reference="C.7.6.5" usage="M"/>
+    <entry ie="" module="Multi-frame" reference="C.7.6.6" usage="M"/>
+    <entry ie="" module="Frame Pointers" reference="C.7.6.9" usage="U"/>
+    <entry ie="" module="Palette Color Lookup Table" reference="C.7.9" usage="C - Required if Photometric Interpretation (0028,0004) has a value of PALETTE COLOR"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="US Region Calibration" reference="C.8.5.5" usage="U"/>
+    <entry ie="" module="US Image" reference="C.8.5.6" usage="M"/>
+    <entry ie="" module="VOI LUT" reference="C.11.2" usage="U"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.8-1" name="SC IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="U"/>
+    <entry ie="" module="SC Equipment" reference="C.8.6.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="SC Image" reference="C.8.6.2" usage="M"/>
+    <entry ie="" module="Overlay Plane" reference="C.9.2" usage="U"/>
+    <entry ie="" module="Modality LUT" reference="C.11.1" usage="U"/>
+    <entry ie="" module="VOI LUT" reference="C.11.2" usage="U"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.8-2" name="MULTI-FRAME SINGLE BIT SC IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="U"/>
+    <entry ie="" module="SC Equipment" reference="C.8.6.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Cine" reference="C.7.6.5" usage="C – Required if Frame Increment Pointer (0028,0009) is Frame Time (0018,1063) or Frame Time Vector (0018,1065)"/>
+    <entry ie="" module="Multi-frame" reference="C.7.6.6" usage="M"/>
+    <entry ie="" module="Frame Pointers" reference="C.7.6.9" usage="U"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="SC Image" reference="C.8.6.2" usage="U"/>
+    <entry ie="" module="SC Multi-frame Image" reference="C.8.6.3" usage="M"/>
+    <entry ie="" module="SC Multi-frame Vector" reference="C.8.6.4" usage="C – Required if Number of Frames is greater than 1"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.8-3" name="MULTI-FRAME GRAYSCALE BYTE SC IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="U"/>
+    <entry ie="" module="SC Equipment" reference="C.8.6.1" usage="M"/>
+    <entry ie="Frame of Reference" module="Frame of Reference" reference="C.7.4.1" usage="C – Required if Pixel Measures or Plane Position or Plane Orientation Functional Group Macros Present"/>
+    <entry ie="" module="Synchronization" reference="C.7.4.2" usage="U"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Cine" reference="C.7.6.5" usage="C – Required if Frame Increment Pointer (0028,0009) is Frame Time (0018,1063) or Frame Time Vector (0018,1065)"/>
+    <entry ie="" module="Multi-frame" reference="C.7.6.6" usage="M"/>
+    <entry ie="" module="Frame Pointers" reference="C.7.6.9" usage="U"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="Multi-frame Functional Groups" reference="C.7.6.16" usage="U"/>
+    <entry ie="" module="Multi-frame Dimension" reference="C.7.6.17" usage="U"/>
+    <entry ie="" module="SC Image" reference="C.8.6.2" usage="U"/>
+    <entry ie="" module="SC Multi-frame Image" reference="C.8.6.3" usage="M"/>
+    <entry ie="" module="SC Multi-frame Vector" reference="C.8.6.4" usage="C – Required if Number of Frames is greater than 1"/>
+    <entry ie="" module="VOI LUT" reference="C.11.2" usage="C – Required if the VOI LUT stage is not an identity transformation"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.8-4" name="MULTI-FRAME GRAYSCALE WORD SC IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="U"/>
+    <entry ie="" module="SC Equipment" reference="C.8.6.1" usage="M"/>
+    <entry ie="Frame of Reference" module="Frame of Reference" reference="C.7.4.1" usage="C – Required if Pixel Measures or Plane Position or Plane Orientation Functional Group Macros Present"/>
+    <entry ie="" module="Synchronization" reference="C.7.4.2" usage="U"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Cine" reference="C.7.6.5" usage="C – Required if Frame Increment Pointer (0028,0009) is Frame Time (0018,1063) or Frame Time Vector (0018,1065)"/>
+    <entry ie="" module="Multi-frame" reference="C.7.6.6" usage="M"/>
+    <entry ie="" module="Frame Pointers" reference="C.7.6.9" usage="U"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="Multi-frame Functional Groups" reference="C.7.6.16" usage="U"/>
+    <entry ie="" module="Multi-frame Dimension" reference="C.7.6.17" usage="U"/>
+    <entry ie="" module="SC Image" reference="C.8.6.2" usage="U"/>
+    <entry ie="" module="SC Multi-frame Image" reference="C.8.6.3" usage="M"/>
+    <entry ie="" module="SC Multi-frame Vector" reference="C.8.6.4" usage="C – Required if Number of Frames is greater than 1"/>
+    <entry ie="" module="VOI LUT" reference="C.11.2" usage="C – Required if the VOI LUT stage is not an identity transformation"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.8-5" name="MULTI-FRAME TRUE COLOR SC IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of Reference" module="Frame of Reference" reference="C.7.4.1" usage="C – Required if Pixel Measures or Plane Position or Plane Orientation Functional Group Macros Present"/>
+    <entry ie="" module="Synchronization" reference="C.7.4.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="U"/>
+    <entry ie="" module="SC Equipment" reference="C.8.6.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Cine" reference="C.7.6.5" usage="C – Required if Frame Increment Pointer (0028,0009) is Frame Time (0018,1063) or Frame Time Vector (0018,1065)"/>
+    <entry ie="" module="Multi-frame" reference="C.7.6.6" usage="M"/>
+    <entry ie="" module="Frame Pointers" reference="C.7.6.9" usage="U"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="Multi-frame Functional Groups" reference="C.7.6.16" usage="U"/>
+    <entry ie="" module="Multi-frame Dimension" reference="C.7.6.17" usage="U"/>
+    <entry ie="" module="SC Image" reference="C.8.6.2" usage="U"/>
+    <entry ie="" module="SC Multi-frame Image" reference="C.8.6.3" usage="M"/>
+    <entry ie="" module="SC Multi-frame Vector" reference="C.8.6.4" usage="C – Required if Number of Frames is greater than 1"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.14-1" name="X-RAY ANGIOGRAPHIC IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of Reference" module="Synchronization" reference="C.7.4.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Contrast/Bolus" reference="C.7.6.4" usage="C - Required if contrast media was used in this Image"/>
+    <entry ie="" module="Cine" reference="C.7.6.5" usage="C - Required if pixel data is Multi-Frame Cine data"/>
+    <entry ie="" module="Multi-Frame" reference="C.7.6.6" usage="C - Required if pixel data is Multi-Frame Cine data"/>
+    <entry ie="" module="Frame Pointers" reference="C.7.6.9" usage="U"/>
+    <entry ie="" module="Mask" reference="C.7.6.10" usage="C - Required if the Image may be subtracted"/>
+    <entry ie="" module="Display Shutter" reference="C.7.6.11" usage="U"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="Intervention" reference="C.7.6.13" usage="U"/>
+    <entry ie="" module="X-Ray Image" reference="C.8.7.1" usage="M"/>
+    <entry ie="" module="X-Ray Acquisition" reference="C.8.7.2" usage="M"/>
+    <entry ie="" module="X-Ray Collimator" reference="C.8.7.3" usage="U"/>
+    <entry ie="" module="X-Ray Table" reference="C.8.7.4" usage="C - Required if Image is created with table motion, may be present otherwise"/>
+    <entry ie="" module="XA Positioner" reference="C.8.7.5" usage="M"/>
+    <entry ie="" module="DX Detector" reference="C.8.11.4" usage="U"/>
+    <entry ie="" module="Overlay Plane" reference="C.9.2" usage="U"/>
+    <entry ie="" module="Multi-Frame Overlay" reference="C.9.3" usage="C - Required if Overlay data contains multiple frames."/>
+    <entry ie="" module="Modality LUT" reference="C.11.1" usage="C - Required if Pixel Intensity Relationship (0028,1040) is LOG U - Optional if Pixel Intensity Relationship (0028,1040) is DISP"/>
+    <entry ie="" module="VOI LUT" reference="C.11.2" usage="U"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.16-1" name="XRF IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of Reference" module="Synchronization" reference="C.7.4.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Contrast/bolus" reference="C.7.6.4" usage="C - Required if contrast media was used in this Image"/>
+    <entry ie="" module="Cine" reference="C.7.6.5" usage="C - Required if pixel data is Multi-Frame Cine Data"/>
+    <entry ie="" module="Multi-Frame" reference="C.7.6.6" usage="C - Required if pixel data is Multi-Frame Cine Data"/>
+    <entry ie="" module="Frame Pointers" reference="C.7.6.9" usage="U"/>
+    <entry ie="" module="Mask" reference="C.7.6.10" usage="C - Required if the Image may be subtracted"/>
+    <entry ie="" module="X-Ray Image" reference="C.8.7.1" usage="M"/>
+    <entry ie="" module="X-Ray Acquisition" reference="C.8.7.2" usage="M"/>
+    <entry ie="" module="X-Ray Collimator" reference="C.8.7.3" usage="U"/>
+    <entry ie="" module="Display Shutter" reference="C.7.6.11" usage="U"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="Intervention" reference="C.7.6.13" usage="U"/>
+    <entry ie="" module="X-Ray Table" reference="C.8.7.4" usage="U"/>
+    <entry ie="" module="XRF Positioner" reference="C.8.7.6" usage="U"/>
+    <entry ie="" module="X-Ray Tomo Acquisition" reference="C.8.7.7" usage="C - Required if Scan Option (0018,0022) is TOMO"/>
+    <entry ie="" module="DX Detector" reference="C.8.11.4" usage="U"/>
+    <entry ie="" module="Overlay Plane" reference="C.9.2" usage="U"/>
+    <entry ie="" module="Multi-frame Overlay" reference="C.9.3" usage="C - Required if Overlay Data contains multiple frames"/>
+    <entry ie="" module="Modality LUT" reference="C.11.1" usage="C - Required if Pixel Intensity Relationship (0028,1040) is LOG U - Optional if Pixel Intensity Relationship (0028,1040) is DISP"/>
+    <entry ie="" module="VOI LUT" reference="C.11.2" usage="U"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.17.3-1" name="RT IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="RT Series" reference="C.8.8.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of Reference" module="Frame of Reference" reference="C.7.4.1" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Contrast/bolus" reference="C.7.6.4" usage="C-Required if contrast media was used in this image."/>
+    <entry ie="" module="Cine" reference="C.7.6.5" usage="C - Required if multi-frame image is a cine image."/>
+    <entry ie="" module="Multi-Frame" reference="C.7.6.6" usage="C - Required if pixel data is multi-frame data."/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="RT Image" reference="C.8.8.2" usage="M"/>
+    <entry ie="" module="Modality LUT" reference="C.11.1" usage="U"/>
+    <entry ie="" module="VOI LUT" reference="C.11.2" usage="U"/>
+    <entry ie="" module="Approval" reference="C.8.8.16" usage="U"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.18.3-1" name="RT DOSE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="RT Series" reference="C.8.8.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of Reference" module="Frame of Reference" reference="C.7.4.1" usage="M"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Dose" module="General Image" reference="C.7.6.1" usage="C - Required if dose data contains grid-based doses."/>
+    <entry ie="" module="Image Plane" reference="C.7.6.2" usage="C - Required if dose data contains grid-based doses."/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="C - Required if dose data contains grid-based doses."/>
+    <entry ie="" module="Multi-Frame" reference="C.7.6.6" usage="C - Required if dose data contains grid-based doses and pixel data is multi-frame data."/>
+    <entry ie="" module="Overlay Plane" reference="C.9.2" usage="U"/>
+    <entry ie="" module="Multi-Frame Overlay" reference="C.9.3" usage="U"/>
+    <entry ie="" module="Modality LUT" reference="C.11.1" usage="U"/>
+    <entry ie="" module="RT Dose" reference="C.8.8.3" usage="M"/>
+    <entry ie="" module="RT DVH" reference="C.8.8.4" usage="U"/>
+    <entry ie="" module="Structure Set" reference="C.8.8.5" usage="C - Required if dose data contains dose points or isodose curves"/>
+    <entry ie="" module="ROI Contour" reference="C.8.8.6" usage="C - Required if dose data contains dose points or isodose curves"/>
+    <entry ie="" module="RT Dose ROI" reference="C.8.8.7" usage="C - Required if dose data contains dose points or isodose curves"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.19.3-1" name="RT STRUCTURE SET IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="RT Series" reference="C.8.8.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Structure Set" module="Structure Set" reference="C.8.8.5" usage="M"/>
+    <entry ie="" module="ROI Contour" reference="C.8.8.6" usage="M"/>
+    <entry ie="" module="RT ROI Observations" reference="C.8.8.8" usage="M"/>
+    <entry ie="" module="Approval" reference="C.8.8.16" usage="U"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.20.3-1" name="RT PLAN IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="RT Series" reference="C.8.8.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of Reference" module="Frame of Reference" reference="C.7.4.1" usage="U – See Note."/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Plan" module="RT General Plan" reference="C.8.8.9" usage="M"/>
+    <entry ie="" module="RT Prescription" reference="C.8.8.10" usage="U"/>
+    <entry ie="" module="RT Tolerance Tables" reference="C.8.8.11" usage="U"/>
+    <entry ie="" module="RT Patient Setup" reference="C.8.8.12" usage="U"/>
+    <entry ie="" module="RT Fraction Scheme" reference="C.8.8.13" usage="U"/>
+    <entry ie="" module="RT Beams" reference="C.8.8.14" usage="C - Required if RT Fraction Scheme Module exists and Number of Beams (300A,0080) is greater than zero for one or more fraction groups"/>
+    <entry ie="" module="RT Brachy Application Setups" reference="C.8.8.15" usage="C - Required if RT Fraction Scheme Module exists and Number of Brachy Application Setups (300A,00A0) is greater than zero for one or more fraction groups"/>
+    <entry ie="" module="Approval" reference="C.8.8.16" usage="U"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.21.3-1" name="PET IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="" module="PET Series" reference="C.8.9.1" usage="M"/>
+    <entry ie="" module="PET Isotope" reference="C.8.9.2" usage="M"/>
+    <entry ie="" module="PET Multi-gated Acquisition" reference="C.8.9.3" usage="C - Required if Series Type (0054,1000) Value 1 is GATED."/>
+    <entry ie="" module="NM/PET Patient Orientation" reference="C.8.4.6" usage="M"/>
+    <entry ie="Frame of Reference" module="Frame of Reference" reference="C.7.4.1" usage="M"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Plane" reference="C.7.6.2" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="PET Image" reference="C.8.9.4" usage="M"/>
+    <entry ie="" module="Overlay Plane" reference="C.9.2" usage="U"/>
+    <entry ie="" module="VOI LUT" reference="C.11.2" usage="U"/>
+    <entry ie="" module="Acquisition Context" reference="C.7.6.14" usage="U"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.26-1" name="DIGITAL X-RAY IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Specimen Identification" reference="C.7.1.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="" module="DX Series" reference="C.8.11.1" usage="M"/>
+    <entry ie="Frame of Reference" module="Frame of Reference" reference="C.7.4.1" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Contrast/Bolus" reference="C.7.6.4" usage="U"/>
+    <entry ie="" module="Display Shutter" reference="C.7.6.11" usage="U"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="Intervention" reference="C.7.6.13" usage="U"/>
+    <entry ie="" module="DX Anatomy Imaged" reference="C.8.11.2" usage="M"/>
+    <entry ie="" module="DX Image" reference="C.8.11.3" usage="M"/>
+    <entry ie="" module="DX Detector" reference="C.8.11.4" usage="M"/>
+    <entry ie="" module="X-Ray Collimator" reference="C.8.7.3" usage="U"/>
+    <entry ie="" module="DX Positioning" reference="C.8.11.5" usage="U"/>
+    <entry ie="" module="X-Ray Tomo Acquisition" reference="C.8.7.7" usage="U"/>
+    <entry ie="" module="X-Ray Acquisition Dose" reference="C.8.7.8" usage="U"/>
+    <entry ie="" module="X-Ray Generation" reference="C.8.7.9" usage="U"/>
+    <entry ie="" module="X-Ray Filtration" reference="C.8.7.10" usage="U"/>
+    <entry ie="" module="X-Ray Grid" reference="C.8.7.11" usage="U"/>
+    <entry ie="" module="Overlay Plane" reference="C.9.2" usage="C - Required if graphic annotation is present - See A.26.4"/>
+    <entry ie="" module="VOI LUT" reference="C.11.2" usage="C - Required if Presentation Intent Type (0008,0068) is FOR PRESENTATION. Shall not be present otherwise. See Note 8."/>
+    <entry ie="" module="Image Histogram" reference="C.11.5" usage="U"/>
+    <entry ie="" module="Acquisition Context" reference="C.7.6.14" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.27-1" name="DIGITAL MAMMOGRAPHY X-RAY IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Specimen Identification" reference="C.7.1.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="" module="DX Series" reference="C.8.11.1" usage="M"/>
+    <entry ie="" module="Mammography Series" reference="C.8.11.6" usage="M"/>
+    <entry ie="Frame of Reference" module="Frame of Reference" reference="C.7.4.1" usage="C - Required if multiple images are obtained without releasing breast compression"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Contrast/Bolus" reference="C.7.6.4" usage="U"/>
+    <entry ie="" module="Display Shutter" reference="C.7.6.11" usage="U"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="Intervention" reference="C.7.6.13" usage="U"/>
+    <entry ie="" module="DX Anatomy Imaged" reference="C.8.11.2" usage="M"/>
+    <entry ie="" module="DX Image" reference="C.8.11.3" usage="M"/>
+    <entry ie="" module="DX Detector" reference="C.8.11.4" usage="M"/>
+    <entry ie="" module="X-Ray Collimator" reference="C.8.7.3" usage="U"/>
+    <entry ie="" module="DX Positioning" reference="C.8.11.5" usage="U"/>
+    <entry ie="" module="X-Ray Tomo Acquisition" reference="C.8.7.7" usage="U"/>
+    <entry ie="" module="X-Ray Acquisition Dose" reference="C.8.7.8" usage="U"/>
+    <entry ie="" module="X-Ray Generation" reference="C.8.7.9" usage="U"/>
+    <entry ie="" module="X-Ray Filtration" reference="C.8.7.10" usage="U"/>
+    <entry ie="" module="X-Ray Grid" reference="C.8.7.11" usage="U"/>
+    <entry ie="" module="Mammography Image" reference="C.8.11.7" usage="M"/>
+    <entry ie="" module="Overlay Plane" reference="C.9.2" usage="C - Required if graphic annotation is present - See A.27.3"/>
+    <entry ie="" module="VOI LUT" reference="C.11.2" usage="C - Required if Presentation Intent Type (0008,0068) is FOR PRESENTATION. Shall not be present otherwise."/>
+    <entry ie="" module="Image Histogram" reference="C.11.5" usage="U"/>
+    <entry ie="" module="Acquisition Context" reference="C.7.6.14" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.28-1" name="DIGITAL INTRA-ORAL X-RAY IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Specimen Identification" reference="C.7.1.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="" module="DX Series" reference="C.8.11.1" usage="M"/>
+    <entry ie="" module="Intra-oral Series" reference="C.8.11.8" usage="M"/>
+    <entry ie="Frame of Reference" module="Frame of Reference" reference="C.7.4.1" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Contrast/Bolus" reference="C.7.6.4" usage="U"/>
+    <entry ie="" module="Display Shutter" reference="C.7.6.11" usage="U"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="Intervention" reference="C.7.6.13" usage="U"/>
+    <entry ie="" module="DX Anatomy Imaged" reference="C.8.11.2" usage="M"/>
+    <entry ie="" module="DX Image" reference="C.8.11.3" usage="M"/>
+    <entry ie="" module="DX Detector" reference="C.8.11.4" usage="M"/>
+    <entry ie="" module="X-Ray Collimator" reference="C.8.7.3" usage="U"/>
+    <entry ie="" module="DX Positioning" reference="C.8.11.5" usage="U"/>
+    <entry ie="" module="X-Ray Tomo Acquisition" reference="C.8.7.7" usage="U"/>
+    <entry ie="" module="X-Ray Acquisition Dose" reference="C.8.7.8" usage="U"/>
+    <entry ie="" module="X-Ray Generation" reference="C.8.7.9" usage="U"/>
+    <entry ie="" module="X-Ray Filtration" reference="C.8.7.10" usage="U"/>
+    <entry ie="" module="X-Ray Grid" reference="C.8.7.11" usage="U"/>
+    <entry ie="" module="Intra-oral Image" reference="C.8.11.9" usage="M"/>
+    <entry ie="" module="Overlay Plane" reference="C.9.2" usage="C - Required if graphic annotation is present - See A.28.3"/>
+    <entry ie="" module="VOI LUT" reference="C.11.2" usage="C - Required if Presentation Intent Type (0008,0068) is FOR PRESENTATION. Shall not be present otherwise."/>
+    <entry ie="" module="Image Histogram" reference="C.11.5" usage="U"/>
+    <entry ie="" module="Acquisition Context" reference="C.7.6.14" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.29.3-1" name="RT BEAMS TREATMENT RECORD IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="RT Series" reference="C.8.8.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Treatment Record" module="RT General Treatment Record" reference="C.8.8.17" usage="M"/>
+    <entry ie="" module="RT Patient Setup" reference="C.8.8.12" usage="U"/>
+    <entry ie="" module="RT Treatment Machine Record" reference="C.8.8.18" usage="M"/>
+    <entry ie="" module="Measured Dose Reference Record" reference="C.8.8.19" usage="U"/>
+    <entry ie="" module="Calculated Dose Reference Record" reference="C.8.8.20" usage="U"/>
+    <entry ie="" module="RT Beams Session Record" reference="C.8.8.21" usage="M"/>
+    <entry ie="" module="RT Treatment Summary Record" reference="C.8.8.23" usage="U"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.30.3-1" name="RT BRACHY TREATMENT RECORD IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="RT Series" reference="C.8.8.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Treatment Record" module="RT General Treatment Record" reference="C.8.8.17" usage="M"/>
+    <entry ie="" module="RT Patient Setup" reference="C.8.8.12" usage="U"/>
+    <entry ie="" module="RT Treatment Machine Record" reference="C.8.8.18" usage="M"/>
+    <entry ie="" module="Measured Dose Reference Record" reference="C.8.8.19" usage="U"/>
+    <entry ie="" module="Calculated Dose Reference Record" reference="C.8.8.20" usage="U"/>
+    <entry ie="" module="RT Brachy Session Record" reference="C.8.8.22" usage="M"/>
+    <entry ie="" module="RT Treatment Summary Record" reference="C.8.8.23" usage="U"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.31.3-1" name="RT TREATMENT SUMMARY RECORD IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="RT Series" reference="C.8.8.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Treatment Record" module="RT General Treatment Record" reference="C.8.8.17" usage="M"/>
+    <entry ie="" module="RT Treatment Summary Record" reference="C.8.8.23" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.32.1-1" name="VL ENDOSCOPIC IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Acquisition Context" reference="C.7.6.14" usage="M"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="VL Image" reference="C.8.12.1" usage="M"/>
+    <entry ie="" module="Overlay Plane" reference="C.9.2" usage="U"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.32.1-2" name="VL MICROSCOPIC IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Specimen Identification" reference="C.7.1.2" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Acquisition Context" reference="C.7.6.14" usage="M"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="VL Image" reference="C.8.12.1" usage="M"/>
+    <entry ie="" module="Overlay Plane" reference="C.9.2" usage="U"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.32.1-3" name="VL SLIDE-COORDINATES MICROSCOPIC IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Specimen Identification" reference="C.7.1.2" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="" module="Frame of Reference" reference="C.7.4.1" usage="M"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Acquisition Context" reference="C.7.6.14" usage="M"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="VL Image" reference="C.8.12.1" usage="M"/>
+    <entry ie="" module="Slide Coordinates" reference="C.8.12.2" usage="M"/>
+    <entry ie="" module="Overlay Plane" reference="C.9.2" usage="U"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.32.4-1" name="VL PHOTOGRAPHIC IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Specimen Identification" reference="C.7.1.2" usage="C - Required if the Imaging Subject is a Specimen"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Acquisition Context" reference="C.7.6.14" usage="M"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="VL Image" reference="C.8.12.1" usage="M"/>
+    <entry ie="" module="Overlay Plane" reference="C.9.2" usage="U"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.32.5-1" name="VIDEO ENDOSCOPIC IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Cine" reference="C.7.6.5" usage="M"/>
+    <entry ie="" module="Multi-frame" reference="C.7.6.6" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Acquisition Context" reference="C.7.6.14" usage="M"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="VL Image" reference="C.8.12.1" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.32.6-1" name="VIDEO MICROSCOPIC IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Specimen Identification" reference="C.7.1.2" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Cine" reference="C.7.6.5" usage="M"/>
+    <entry ie="" module="Multi-frame" reference="C.7.6.6" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Acquisition Context" reference="C.7.6.14" usage="M"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="VL Image" reference="C.8.12.1" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.32.7-1" name="VIDEO PHOTOGRAPHIC IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Specimen Identification" reference="C.7.1.2" usage="C - Required if the Imaging Subject is a Specimen"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Cine" reference="C.7.6.5" usage="M"/>
+    <entry ie="" module="Multi-frame" reference="C.7.6.6" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Acquisition Context" reference="C.7.6.14" usage="M"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="VL Image" reference="C.8.12.1" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.33.1-1" name="GRAYSCALE SOFTCOPY PRESENTATION STATE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="" module="Presentation Series" reference="C.11.9" usage="M"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Presentation" module="Presentation State Identification" reference="C.11.10" usage="M"/>
+    <entry ie="State" module="Presentation State Relationship" reference="C.11.11" usage="M"/>
+    <entry ie="" module="Presentation State Shutter" reference="C.11.12" usage="M"/>
+    <entry ie="" module="Presentation State Mask" reference="C.11.13" usage="M"/>
+    <entry ie="" module="Mask" reference="C.7.6.10" usage="C - Required if the referenced image(s) are multi-frame and are to be subtracted"/>
+    <entry ie="" module="Display Shutter" reference="C.7.6.11" usage="C - Required if a Display Shutter is to be applied to referenced image(s) and the Bitmap Display Shutter Module is not present"/>
+    <entry ie="" module="Bitmap Display Shutter" reference="C.7.6.15" usage="C - Required if a Display Shutter is to be applied to referenced image(s) and the Display Shutter Module is not present"/>
+    <entry ie="" module="Overlay Plane" reference="C.9.2" usage="C - Required if Overlay is to be applied to referenced image(s) or the Bitmap Display Shutter Module is present"/>
+    <entry ie="" module="Overlay Activation" reference="C.11.7" usage="C- Required if referenced image contains overlay data that is to be displayed"/>
+    <entry ie="" module="Displayed Area" reference="C.10.4" usage="M"/>
+    <entry ie="" module="Graphic Annotation" reference="C.10.5" usage="C - Required if Graphic Annotations are to be applied to referenced image(s)"/>
+    <entry ie="" module="Spatial Transformation" reference="C.10.6" usage="C - Required if rotation or flipping are to be applied to referenced image(s)"/>
+    <entry ie="" module="Graphic Layer" reference="C.10.7" usage="C - Required if Graphic Annotations or Overlays or Curves are to be applied to referenced image(s)"/>
+    <entry ie="" module="Modality LUT" reference="C.11.1" usage="C - Required if a Modality LUT is to be applied to referenced image(s)"/>
+    <entry ie="" module="Softcopy VOI LUT" reference="C.11.8" usage="C - Required if a VOI LUT is to be applied to referenced image(s)"/>
+    <entry ie="" module="Softcopy Presentation LUT" reference="C.11.6" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.33.2-1" name="COLOR SOFTCOPY PRESENTATION STATE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="" reference="" usage=""/>
+    <entry ie="Study" module="" reference="" usage=""/>
+    <entry ie="Series" module="" reference="" usage=""/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Presentation" module="Presentation State Identification" reference="C.11.10" usage="M"/>
+    <entry ie="State" module="Presentation State Relationship" reference="C.11.11" usage="M"/>
+    <entry ie="" module="Presentation State Shutter" reference="C.11.12" usage="M"/>
+    <entry ie="" module="Display Shutter" reference="C.7.6.11" usage="C – Required if a Display Shutter is to be applied to referenced image(s) and the Bitmap Display Shutter Module is not present"/>
+    <entry ie="" module="Bitmap Display Shutter" reference="C.7.6.15" usage="C – Required if a Display Shutter is to be applied to referenced image(s) and the Display Shutter Module is not present"/>
+    <entry ie="" module="Overlay Plane" reference="C.9.2" usage="C – Required if Overlay is to be applied to referenced image(s) or the Bitmap Display Shutter Module is present"/>
+    <entry ie="" module="Overlay Activation" reference="C.11.7" usage="C- Required if referenced image contains overlay data which is to be displayed"/>
+    <entry ie="" module="Displayed Area" reference="C.10.4" usage="M"/>
+    <entry ie="" module="Graphic Annotation" reference="C.10.5" usage="C – Required if Graphic Annotations are to be applied to referenced image(s)"/>
+    <entry ie="" module="Spatial Transformation" reference="C.10.6" usage="C – Required if rotation, flipping or magnification are to be applied to referenced image(s)"/>
+    <entry ie="" module="Graphic Layer" reference="C.10.7" usage="C – Required if Graphic Annotations or Overlays or Curves are to be applied to referenced image(s)"/>
+    <entry ie="" module="ICC Profile" reference="C.11.15" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.33.3-1" name="PSEUDO-COLOR SOFTCOPY PRESENTATION STATE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="" module="Presentation Series" reference="C.11.9" usage="M"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Presentation" module="Presentation State Identification" reference="C.11.10" usage="M"/>
+    <entry ie="State" module="Presentation State Relationship" reference="C.11.11" usage="M"/>
+    <entry ie="" module="Presentation State Shutter" reference="C.11.12" usage="M"/>
+    <entry ie="" module="Presentation State Mask" reference="C.11.13" usage="M"/>
+    <entry ie="" module="Mask" reference="C.7.6.10" usage="C - Required if the referenced image(s) are multi-frame and are to be subtracted"/>
+    <entry ie="" module="Display Shutter" reference="C.7.6.11" usage="C - Required if a Display Shutter is to be applied to referenced image(s) and the Bitmap Display Shutter Module is not present"/>
+    <entry ie="" module="Bitmap Display Shutter" reference="C.7.6.15" usage="C - Required if a Display Shutter is to be applied to referenced image(s) and the Display Shutter Module is not present"/>
+    <entry ie="" module="Overlay Plane" reference="C.9.2" usage="C - Required if Overlay is to be applied to referenced image(s) or the Bitmap Display Shutter Module is present"/>
+    <entry ie="" module="Overlay Activation" reference="C.11.7" usage="C- Required if referenced image contains overlay data that is to be displayed"/>
+    <entry ie="" module="Displayed Area" reference="C.10.4" usage="M"/>
+    <entry ie="" module="Graphic Annotation" reference="C.10.5" usage="C - Required if Graphic Annotations are to be applied to referenced image(s)"/>
+    <entry ie="" module="Spatial Transformation" reference="C.10.6" usage="C - Required if rotation or flipping are to be applied to referenced image(s)"/>
+    <entry ie="" module="Graphic Layer" reference="C.10.7" usage="C - Required if Graphic Annotations or Overlays or Curves are to be applied to referenced image(s)"/>
+    <entry ie="" module="Modality LUT" reference="C.11.1" usage="C - Required if a Modality LUT is to be applied to referenced image(s)"/>
+    <entry ie="" module="Softcopy VOI LUT" reference="C.11.8" usage="C - Required if a VOI LUT is to be applied to referenced image(s)"/>
+    <entry ie="" module="Palette Color LUT" reference="C.7.9" usage="M"/>
+    <entry ie="" module="ICC Profile" reference="C.11.15" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.33.4-1" name="BLENDING SOFTCOPY PRESENTATION STATE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="" module="Presentation Series" reference="C.11.9" usage="M"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Presentation" module="Presentation State Identification" reference="C.11.10" usage="M"/>
+    <entry ie="State" module="Presentation State Blending" reference="C.11.14" usage="M"/>
+    <entry ie="" module="Displayed Area" reference="C.10.4" usage="M"/>
+    <entry ie="" module="Graphic Annotation" reference="C.10.5" usage="C - Required if Graphic Annotations are to be applied"/>
+    <entry ie="" module="Spatial Transformation" reference="C.10.6" usage="C - Required if rotation or flipping are to be applied"/>
+    <entry ie="" module="Graphic Layer" reference="C.10.7" usage="C - Required if Graphic Annotation Module is present"/>
+    <entry ie="" module="Palette Color LUT" reference="C.7.9" usage="M"/>
+    <entry ie="" module="ICC Profile" reference="C.11.15" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.34.2-1" name="BASIC VOICE AUDIO IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of Reference" module="Synchronization" reference="C.7.4.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Waveform" module="Waveform Identification" reference="C.10.8" usage="M"/>
+    <entry ie="" module="Waveform" reference="C.10.9" usage="M"/>
+    <entry ie="" module="Acquisition Context" reference="C.7.6.14" usage="M"/>
+    <entry ie="" module="Waveform Annotation" reference="C.10.10" usage="U"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.34.3-1" name="12-LEAD ECG IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of Reference" module="Synchronization" reference="C.7.4.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Waveform" module="Waveform Identification" reference="C.10.8" usage="M"/>
+    <entry ie="" module="Waveform" reference="C.10.9" usage="M"/>
+    <entry ie="" module="Acquisition Context" reference="C.7.6.14" usage="M"/>
+    <entry ie="" module="Waveform Annotation" reference="C.10.10" usage="C – required if annotation is present"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.34.4-1" name="GENERAL ECG IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of Reference" module="Synchronization" reference="C.7.4.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Waveform" module="Waveform Identification" reference="C.10.8" usage="M"/>
+    <entry ie="" module="Waveform" reference="C.10.9" usage="M"/>
+    <entry ie="" module="Acquisition Context" reference="C.7.6.14" usage="M"/>
+    <entry ie="" module="Waveform Annotation" reference="C.10.10" usage="C – required if annotation is present"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.34.5-1" name="AMBULATORY ECG IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of Reference" module="Synchronization" reference="C.7.4.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Waveform" module="Waveform Identification" reference="C.10.8" usage="M"/>
+    <entry ie="" module="Waveform" reference="C.10.9" usage="M"/>
+    <entry ie="" module="Acquisition Context" reference="C.7.6.14" usage="U"/>
+    <entry ie="" module="Waveform Annotation" reference="C.10.10" usage="C – required if annotation is present"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.34.6-1" name="HEMODYNAMIC IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of Reference" module="Synchronization" reference="C.7.4.2" usage="C – Required if Waveform Originality (003A,0004) is ORIGINAL; may be present otherwise"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Waveform" module="Waveform Identification" reference="C.10.8" usage="M"/>
+    <entry ie="" module="Waveform" reference="C.10.9" usage="M"/>
+    <entry ie="" module="Acquisition Context" reference="C.7.6.14" usage="M"/>
+    <entry ie="" module="Waveform Annotation" reference="C.10.10" usage="C – required if annotation is present"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.34.7-1" name="BASIC CARDIAC EP IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of Reference" module="Synchronization" reference="C.7.4.2" usage="C – Required if Waveform Originality (003A,0004) value is ORIGINAL; may be present otherwise"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Waveform" module="Waveform Identification" reference="C.10.8" usage="M"/>
+    <entry ie="" module="Waveform" reference="C.10.9" usage="M"/>
+    <entry ie="" module="Acquisition Context" reference="C.7.6.14" usage="M"/>
+    <entry ie="" module="Waveform Annotation" reference="C.10.10" usage="C – required if annotation is present"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.35.1-1" name="BASIC TEXT SR IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Specimen Identification" reference="C.7.1.2" usage="C - Required if the Observation Subject is a Specimen"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="SR Document Series" reference="C.17.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Document" module="SR Document General" reference="C.17.2" usage="M"/>
+    <entry ie="" module="SR Document Content" reference="C.17.3" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.35.2-1" name="ENHANCED SR IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Specimen Identification" reference="C.7.1.2" usage="C - Required if the Observation Subject is a Specimen"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="SR Document Series" reference="C.17.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Document" module="SR Document General" reference="C.17.2" usage="M"/>
+    <entry ie="" module="SR Document Content" reference="C.17.3" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.35.3-1" name="COMPREHENSIVE SR IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Specimen Identification" reference="C.7.1.2" usage="C - Required if the Observation Subject is a Specimen"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="SR Document Series" reference="C.17.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of Reference" module="" reference="" usage=""/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Document" module="SR Document General" reference="C.17.2" usage="M"/>
+    <entry ie="" module="SR Document Content" reference="C.17.3" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.35.4-1" name="KEY OBJECT SELECTION DOCUMENT IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Specimen Identification" reference="C.7.1.2" usage="C - Required if the Observation Subject is a Specimen"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="Key Object Document Series" reference="C.17.6.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Document" module="Key Object Document" reference="C.17.6.2" usage="M"/>
+    <entry ie="" module="SR Document Content" reference="C.17.3" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.35.5-1" name="MAMMOGRAPHY CAD SR IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Specimen Identification" reference="C.7.1.2" usage="C - Required if the Observation Subject is a Specimen"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="SR Document Series" reference="C.17.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Document" module="SR Document General" reference="C.17.2" usage="M"/>
+    <entry ie="" module="SR Document Content" reference="C.17.3" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.35.6-1" name="CHEST CAD SR IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Specimen Identification" reference="C.7.1.2" usage="C - Required if the Observation Subject is a Specimen"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="SR Document Series" reference="C.17.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Document" module="SR Document General" reference="C.17.2" usage="M"/>
+    <entry ie="" module="SR Document Content" reference="C.17.3" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.35.7-1" name="PROCEDURE LOG IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="SR Document Series" reference="C.17.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of Reference" module="Synchronization" reference="C.7.4.2" usage="M"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Document" module="SR Document General" reference="C.17.2" usage="M"/>
+    <entry ie="" module="SR Document Content" reference="C.17.3" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.35.8-1" name="X-RAY RADIATION DOSE SR IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="SR Document Series" reference="C.17.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of Reference" module="Synchronization" reference="C.7.4.2" usage="C - shall be present if system time is synchronized to an external reference. May be present otherwise."/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Document" module="SR Document General" reference="C.17.2" usage="M"/>
+    <entry ie="" module="SR Document Content" reference="C.17.3" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.36-1" name="ENHANCED MR IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="" reference="" usage=""/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="" reference="" usage=""/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="" module="MR Series" reference="C.8.13.6" usage="M"/>
+    <entry ie="Frame of Reference" module="" reference="" usage=""/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="" module="Enhanced General Equipment" reference="C.7.5.2" usage="M"/>
+    <entry ie="Image" module="" reference="" usage=""/>
+  </table>
+  <table ref="Table A.36-3" name="MR SPECTROSCOPY IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="" reference="" usage=""/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="" reference="" usage=""/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="" module="MR Series" reference="C.8.13.6" usage="M"/>
+    <entry ie="Frame of Reference" module="" reference="" usage=""/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="" module="Enhanced General Equipment" reference="C.7.5.2" usage="M"/>
+    <entry ie="MR Spectroscopy" module="" reference="" usage=""/>
+  </table>
+  <table ref="Table A.37-1" name="RAW DATA IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="" reference="" usage=""/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="" reference="" usage=""/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of Reference" module="" reference="" usage=""/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Raw Data" module="" reference="" usage=""/>
+  </table>
+  <table ref="Table A.38-1" name="ENHANCED CT IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="" reference="" usage=""/>
+    <entry ie="Study" module="" reference="" usage=""/>
+    <entry ie="Series" module="" reference="" usage=""/>
+    <entry ie="Frame of Reference" module="" reference="" usage=""/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="" module="Enhanced General Equipment" reference="C.7.5.2" usage="M"/>
+    <entry ie="Image" module="" reference="" usage=""/>
+  </table>
+  <table ref="Table A.39.1-1" name="SPATIAL REGISTRATION IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="" reference="" usage=""/>
+    <entry ie="Study" module="" reference="" usage=""/>
+    <entry ie="Series" module="" reference="" usage=""/>
+    <entry ie="Frame of Reference" module="Frame of Reference" reference="C.7.4.1" usage="M"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Spatial Registration" module="Spatial Registration" reference="C.20.2" usage="M"/>
+    <entry ie="" module="Common Instance Reference" reference="C.12.2" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.39.2-1" name="DEFORMABLE SPATIAL REGISTRATION IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="" reference="" usage=""/>
+    <entry ie="Study" module="" reference="" usage=""/>
+    <entry ie="Series" module="" reference="" usage=""/>
+    <entry ie="Frame of Reference" module="Frame of Reference" reference="C.7.4.1" usage="M"/>
+    <entry ie="Equipment" module="" reference="" usage=""/>
+    <entry ie="Deformable Registration" module="" reference="" usage=""/>
+  </table>
+  <table ref="Table A.40-1" name="SPATIAL FIDUCIALS IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="" reference="" usage=""/>
+    <entry ie="Study" module="" reference="" usage=""/>
+    <entry ie="Series" module="" reference="" usage=""/>
+    <entry ie="" module="Spatial Fiducials Series" reference="C.21.1" usage="M"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Spatial Fiducials" module="Spatial Fiducials" reference="C.21.2" usage="M"/>
+    <entry ie="" module="Common Instance Reference" reference="C.12.2" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.41-1" name="OPHTHALMIC PHOTOGRAPHY 8 BIT IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Specimen Identification" reference="C.7.1.2" usage="C - Required if the Imaging Subject is a Specimen"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Ophthalmic Photography Series" reference="C.8.17.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of Reference" module="Synchronization" reference="C.7.4.2" usage="M"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Enhanced Contrast/Bolus" reference="C 7.6.4.b" usage="C – Required if contrast was administered, see A.41.4.2"/>
+    <entry ie="" module="Cine" reference="C.7.6.5" usage="C - Required if there is a sequential temporal relationship between all frames"/>
+    <entry ie="" module="Multi-frame" reference="C.7.6.6" usage="M"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="Ophthalmic Photography Image" reference="C.8.17.2" usage="M"/>
+    <entry ie="" module="Ocular Region Imaged" reference="C.8.17.5" usage="M"/>
+    <entry ie="" module="Ophthalmic Photography Acquisition Parameters" reference="C.8.17.4" usage="M"/>
+    <entry ie="" module="Ophthalmic Photographic Parameters" reference="C.8.17.3" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.42-1" name="OPHTHALMIC PHOTOGRAPHY 16 BIT IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Specimen Identification" reference="C.7.1.2" usage="C - Required if the Imaging Subject is a Specimen"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="General Series" reference="C.7.3.1" usage="M"/>
+    <entry ie="" module="Ophthalmic Photography Series" reference="C.8.17.1" usage="M"/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of Reference" module="Synchronization" reference="C.7.4.2" usage="M"/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Image" module="General Image" reference="C.7.6.1" usage="M"/>
+    <entry ie="" module="Image Pixel" reference="C.7.6.3" usage="M"/>
+    <entry ie="" module="Enhanced Contrast/Bolus" reference="C 7.6.4.b" usage="C – Required if contrast was administered; see A.42.4.2"/>
+    <entry ie="" module="Cine" reference="C.7.6.5" usage="C - Required if there is a sequential temporal relationship between all frames"/>
+    <entry ie="" module="Multi-frame" reference="C.7.6.6" usage="M"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="Ophthalmic Photography Image" reference="C.8.17.2" usage="M"/>
+    <entry ie="" module="Ocular Region Imaged" reference="C.8.17.5" usage="M"/>
+    <entry ie="" module="Ophthalmic Photography Acquisition Parameters" reference="C.8.17.4" usage="M"/>
+    <entry ie="" module="Ophthalmic Photographic Parameters" reference="C.8.17.3" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.43-2" name="STEREOMETRIC RELATIONSHIP IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="Patient" reference="C.7.1.1" usage="M"/>
+    <entry ie="" module="Specimen Identification" reference="C.7.1.2" usage="C - Required if the Imaging Subject is a Specimen"/>
+    <entry ie="" module="Clinical Trial Subject" reference="C.7.1.3" usage="U"/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="" reference="" usage=""/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Stereometric Relationship" module="Stereometric Relationship Module" reference="C.8.18.2" usage="M"/>
+    <entry ie="" module="Common Instance Reference Module" reference="C.12.2" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.44.3-1" name="HANGING PROTOCOL IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Hanging Protocol" module="SOP Common" reference="C.12.1" usage="M"/>
+    <entry ie="" module="Hanging Protocol Definition" reference="C.23.1" usage="M"/>
+    <entry ie="" module="Hanging Protocol Environment" reference="C.23.2" usage="M"/>
+    <entry ie="" module="Hanging Protocol Display" reference="C.23.3" usage="M"/>
+  </table>
+  <table ref="Table A.45.1-1" name="ENCAPSULATED PDF IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="" reference="" usage=""/>
+    <entry ie="Study" module="" reference="" usage=""/>
+    <entry ie="Series" module="" reference="" usage=""/>
+    <entry ie="Equipment" module="" reference="" usage=""/>
+    <entry ie="Encapsulated Document" module="" reference="" usage=""/>
+  </table>
+  <table ref="Table A.46-1" name="REAL WORLD VALUE MAPPING IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="" reference="" usage=""/>
+    <entry ie="Study" module="" reference="" usage=""/>
+    <entry ie="Series" module="" reference="" usage=""/>
+    <entry ie="Equipment" module="General Equipment" reference="C.7.5.1" usage="M"/>
+    <entry ie="Real World Value Mapping" module="Real World Value Mapping" reference="C.25.22" usage="M"/>
+    <entry ie="" module="Common Instance Reference" reference="C.12.2" usage="M"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.47-1" name="ENHANCED X-RAY ANGIOGRAPHIC IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="" reference="" usage=""/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="" reference="" usage=""/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of Reference" module="" reference="" usage=""/>
+    <entry ie="Equipment" module="" reference="" usage=""/>
+    <entry ie="Image" module="" reference="" usage=""/>
+    <entry ie="" module="Mask" reference="C.7.6.10" usage="U"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="Intervention" reference="C.7.6.13" usage="U"/>
+    <entry ie="" module="Acquisition Context" reference="C.7.6.14" usage="M"/>
+    <entry ie="" module="Multi-frame Functional Groups" reference="C.7.6.16" usage="M"/>
+    <entry ie="" module="Multi-frame Dimension Module" reference="C.7.6.17" usage="U"/>
+    <entry ie="" module="Cardiac Synchronization" reference="C.7.6.18.1" usage="C – Required if cardiac synchronization was applied."/>
+    <entry ie="" module="Respiratory Synchronization" reference="C.7.6.18.2" usage="C – Required if respiratory synchronization was applied."/>
+    <entry ie="" module="X-Ray Filtration" reference="C.8.7.10" usage="U"/>
+    <entry ie="" module="X-Ray Grid" reference="C.8.7.11" usage="U"/>
+    <entry ie="" module="Enhanced XA/XRF Image" reference="C.8.19.2" usage="M"/>
+    <entry ie="" module="XA/XRF Acquisition" reference="C.8.19.3" usage="C – Required if Image Type (0008,0008) Value 1 equals ORIGINAL. May be present otherwise."/>
+    <entry ie="" module="X-Ray Image Intensifier" reference="C.8.19.4" usage="C – Required if X-Ray Receptor Type (0018,9420) is present and equals IMG_INTENSIFIER."/>
+    <entry ie="" module="X-Ray Detector" reference="C.8.19.5" usage="C – Required if X-Ray Receptor Type (0018,9420) is present and equals DIGITAL_DETECTOR."/>
+    <entry ie="" module="XA/XRF Multi-frame Presentation" reference="C.8.19.7" usage="U"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.48.-1" name="ENHANCED X-RAY RF IMAGE IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="" reference="" usage=""/>
+    <entry ie="Study" module="General Study" reference="C.7.2.1" usage="M"/>
+    <entry ie="" module="Patient Study" reference="C.7.2.2" usage="U"/>
+    <entry ie="" module="Clinical Trial Study" reference="C.7.2.3" usage="U"/>
+    <entry ie="Series" module="" reference="" usage=""/>
+    <entry ie="" module="Clinical Trial Series" reference="C.7.3.2" usage="U"/>
+    <entry ie="Frame of Reference" module="" reference="" usage=""/>
+    <entry ie="Equipment" module="" reference="" usage=""/>
+    <entry ie="Image" module="" reference="" usage=""/>
+    <entry ie="" module="Mask" reference="C.7.6.10" usage="U"/>
+    <entry ie="" module="Device" reference="C.7.6.12" usage="U"/>
+    <entry ie="" module="Intervention" reference="C.7.6.13" usage="U"/>
+    <entry ie="" module="Acquisition Context" reference="C.7.6.14" usage="M"/>
+    <entry ie="" module="Multi-frame Functional Groups" reference="C.7.6.16" usage="M"/>
+    <entry ie="" module="Multi-frame Dimension Module" reference="C.7.6.17" usage="U"/>
+    <entry ie="" module="Cardiac Synchronization" reference="C.7.6.18.1" usage="C - Required if cardiac synchronization was applied."/>
+    <entry ie="" module="Respiratory Synchronization" reference="C.7.6.18.2" usage="C - Required if respiratory synchronization was applied."/>
+    <entry ie="" module="X-Ray Tomography Acquisition" reference="C.8.7.7" usage="U"/>
+    <entry ie="" module="X-Ray Filtration" reference="C.8.7.10" usage="U"/>
+    <entry ie="" module="X-Ray Grid" reference="C.8.7.11" usage="U"/>
+    <entry ie="" module="Enhanced XA/XRF Image" reference="C.8.19.2" usage="M"/>
+    <entry ie="" module="XA/XRF Acquisition" reference="C.8.19.3" usage="C – Required if Image Type (0008,0008) Value 1 equals ORIGINAL. May be present otherwise."/>
+    <entry ie="" module="X-Ray Image Intensifier" reference="C.8.19.4" usage="C – Required if X-Ray Receptor Type (0018,9420) is present and equals IMG_INTENSIFIER."/>
+    <entry ie="" module="X-Ray Detector" reference="C.8.19.5" usage="C – Required if X-Ray Receptor Type (0018,9420) is present and equals DIGITAL_DETECTOR."/>
+    <entry ie="" module="XA/XRF Multi-frame Presentation" reference="C.8.19.7" usage="U"/>
+    <entry ie="" module="SOP Common" reference="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table A.51-1" name="SEGMENTATION IOD MODULES">
+    <entry ie="IE" module="Module" reference="Reference" usage="Usage"/>
+    <entry ie="Patient" module="" reference="" usage=""/>
+    <entry ie="Study" module="" reference="" usage=""/>
+    <entry ie="Series" module="" reference="" usage=""/>
+    <entry ie="Frame of Reference" module="Frame of Reference" reference="C.7.4.1" usage="C – Required if Derivation Image Functional Group (C.7.16.2.6) is not present."/>
+    <entry ie="Equipment" module="" reference="" usage=""/>
+    <entry ie="Segmentation" module="" reference="" usage=""/>
+  </table>
   <table ref="Table C.2-1" name="PATIENT RELATIONSHIP MODULE ATTRIBUTES">
     <entry group="0008" element="1110" name="Referenced Study Sequence" type="??" description="Uniquely identifies the Study SOP Instances associated with the Patient SOP Instance. One or more Items may be included in this Sequence."/>
     <entry group="0008" element="1150" name="&gt;Referenced SOP Class UID" type="??" description="Uniquely identifies the referenced SOP Class."/>
