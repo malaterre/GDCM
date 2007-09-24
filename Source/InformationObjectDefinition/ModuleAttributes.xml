@@ -879,23 +879,23 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Series" name="Presentation Series" ref="C.11.9" usage="M"/>
     <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
-    <entry ie="Presentation" name="Presentation State Identification" ref="C.11.10" usage="M"/>
-    <entry ie="State" name="Presentation State Relationship" ref="C.11.11" usage="M"/>
-    <entry ie="State" name="Presentation State Shutter" ref="C.11.12" usage="M"/>
-    <entry ie="State" name="Presentation State Mask" ref="C.11.13" usage="M"/>
-    <entry ie="State" name="Mask " ref="C.7.6.10" usage="C - Required if the referenced image(s) are multi-frame and are to be subtracted"/>
-    <entry ie="State" name="Display Shutter" ref="C.7.6.11" usage="C - Required if a Display Shutter is to be applied to referenced image(s) and the Bitmap Display Shutter Module is not present"/>
-    <entry ie="State" name="Bitmap Display Shutter" ref="C.7.6.15" usage="C - Required if a Display Shutter is to be applied to referenced image(s) and the Display Shutter Module is not present"/>
-    <entry ie="State" name="Overlay Plane" ref="C.9.2" usage="C - Required if Overlay is to be applied to referenced image(s) or the Bitmap Display Shutter Module is present"/>
-    <entry ie="State" name="Overlay Activation" ref="C.11.7" usage="C- Required if referenced image contains overlay data that is to be displayed"/>
-    <entry ie="State" name="Displayed Area" ref="C.10.4" usage="M"/>
-    <entry ie="State" name="Graphic Annotation" ref="C.10.5" usage="C - Required if Graphic Annotations are to be applied to referenced image(s)"/>
-    <entry ie="State" name="Spatial Transformation" ref="C.10.6" usage="C - Required if rotation or flipping are to be applied to referenced image(s)"/>
-    <entry ie="State" name="Graphic Layer" ref="C.10.7" usage="C - Required if Graphic Annotations or Overlays or Curves are to be applied to referenced image(s)"/>
-    <entry ie="State" name="Modality LUT" ref="C.11.1" usage="C - Required if a Modality LUT is to be applied to referenced image(s)"/>
-    <entry ie="State" name="Softcopy VOI LUT" ref="C.11.8" usage="C - Required if a VOI LUT is to be applied to referenced image(s)"/>
-    <entry ie="State" name="Softcopy Presentation LUT" ref="C.11.6" usage="M"/>
-    <entry ie="State" name="SOP Common" ref="C.12.1" usage="M"/>
+    <entry ie="Presentation State" name="Presentation State Identification" ref="C.11.10" usage="M"/>
+    <entry ie="Presentation State" name="Presentation State Relationship" ref="C.11.11" usage="M"/>
+    <entry ie="Presentation State" name="Presentation State Shutter" ref="C.11.12" usage="M"/>
+    <entry ie="Presentation State" name="Presentation State Mask" ref="C.11.13" usage="M"/>
+    <entry ie="Presentation State" name="Mask " ref="C.7.6.10" usage="C - Required if the referenced image(s) are multi-frame and are to be subtracted"/>
+    <entry ie="Presentation State" name="Display Shutter" ref="C.7.6.11" usage="C - Required if a Display Shutter is to be applied to referenced image(s) and the Bitmap Display Shutter Module is not present"/>
+    <entry ie="Presentation State" name="Bitmap Display Shutter" ref="C.7.6.15" usage="C - Required if a Display Shutter is to be applied to referenced image(s) and the Display Shutter Module is not present"/>
+    <entry ie="Presentation State" name="Overlay Plane" ref="C.9.2" usage="C - Required if Overlay is to be applied to referenced image(s) or the Bitmap Display Shutter Module is present"/>
+    <entry ie="Presentation State" name="Overlay Activation" ref="C.11.7" usage="C- Required if referenced image contains overlay data that is to be displayed"/>
+    <entry ie="Presentation State" name="Displayed Area" ref="C.10.4" usage="M"/>
+    <entry ie="Presentation State" name="Graphic Annotation" ref="C.10.5" usage="C - Required if Graphic Annotations are to be applied to referenced image(s)"/>
+    <entry ie="Presentation State" name="Spatial Transformation" ref="C.10.6" usage="C - Required if rotation or flipping are to be applied to referenced image(s)"/>
+    <entry ie="Presentation State" name="Graphic Layer" ref="C.10.7" usage="C - Required if Graphic Annotations or Overlays or Curves are to be applied to referenced image(s)"/>
+    <entry ie="Presentation State" name="Modality LUT" ref="C.11.1" usage="C - Required if a Modality LUT is to be applied to referenced image(s)"/>
+    <entry ie="Presentation State" name="Softcopy VOI LUT" ref="C.11.8" usage="C - Required if a VOI LUT is to be applied to referenced image(s)"/>
+    <entry ie="Presentation State" name="Softcopy Presentation LUT" ref="C.11.6" usage="M"/>
+    <entry ie="Presentation State" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.33.2-1" name="COLOR SOFTCOPY PRESENTATION STATE IOD MODULES">
     <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
@@ -931,24 +931,24 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Series" name="Presentation Series" ref="C.11.9" usage="M"/>
     <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
-    <entry ie="Presentation" name="Presentation State Identification" ref="C.11.10" usage="M"/>
-    <entry ie="State" name="Presentation State Relationship" ref="C.11.11" usage="M"/>
-    <entry ie="State" name="Presentation State Shutter" ref="C.11.12" usage="M"/>
-    <entry ie="State" name="Presentation State Mask" ref="C.11.13" usage="M"/>
-    <entry ie="State" name="Mask " ref="C.7.6.10" usage="C - Required if the referenced image(s) are multi-frame and are to be subtracted"/>
-    <entry ie="State" name="Display Shutter" ref="C.7.6.11" usage="C - Required if a Display Shutter is to be applied to referenced image(s) and the Bitmap Display Shutter Module is not present"/>
-    <entry ie="State" name="Bitmap Display Shutter" ref="C.7.6.15" usage="C - Required if a Display Shutter is to be applied to referenced image(s) and the Display Shutter Module is not present"/>
-    <entry ie="State" name="Overlay Plane" ref="C.9.2" usage="C - Required if Overlay is to be applied to referenced image(s) or the Bitmap Display Shutter Module is present"/>
-    <entry ie="State" name="Overlay Activation" ref="C.11.7" usage="C- Required if referenced image contains overlay data that is to be displayed"/>
-    <entry ie="State" name="Displayed Area" ref="C.10.4" usage="M"/>
-    <entry ie="State" name="Graphic Annotation" ref="C.10.5" usage="C - Required if Graphic Annotations are to be applied to referenced image(s)"/>
-    <entry ie="State" name="Spatial Transformation" ref="C.10.6" usage="C - Required if rotation or flipping are to be applied to referenced image(s)"/>
-    <entry ie="State" name="Graphic Layer" ref="C.10.7" usage="C - Required if Graphic Annotations or Overlays or Curves are to be applied to referenced image(s)"/>
-    <entry ie="State" name="Modality LUT" ref="C.11.1" usage="C - Required if a Modality LUT is to be applied to referenced image(s)"/>
-    <entry ie="State" name="Softcopy VOI LUT" ref="C.11.8" usage="C - Required if a VOI LUT is to be applied to referenced image(s)"/>
-    <entry ie="State" name="Palette Color LUT" ref="C.7.9" usage="M"/>
-    <entry ie="State" name="ICC Profile" ref="C.11.15" usage="M"/>
-    <entry ie="State" name="SOP Common" ref="C.12.1" usage="M"/>
+    <entry ie="Presentation State" name="Presentation State Identification" ref="C.11.10" usage="M"/>
+    <entry ie="Presentation State" name="Presentation State Relationship" ref="C.11.11" usage="M"/>
+    <entry ie="Presentation State" name="Presentation State Shutter" ref="C.11.12" usage="M"/>
+    <entry ie="Presentation State" name="Presentation State Mask" ref="C.11.13" usage="M"/>
+    <entry ie="Presentation State" name="Mask " ref="C.7.6.10" usage="C - Required if the referenced image(s) are multi-frame and are to be subtracted"/>
+    <entry ie="Presentation State" name="Display Shutter" ref="C.7.6.11" usage="C - Required if a Display Shutter is to be applied to referenced image(s) and the Bitmap Display Shutter Module is not present"/>
+    <entry ie="Presentation State" name="Bitmap Display Shutter" ref="C.7.6.15" usage="C - Required if a Display Shutter is to be applied to referenced image(s) and the Display Shutter Module is not present"/>
+    <entry ie="Presentation State" name="Overlay Plane" ref="C.9.2" usage="C - Required if Overlay is to be applied to referenced image(s) or the Bitmap Display Shutter Module is present"/>
+    <entry ie="Presentation State" name="Overlay Activation" ref="C.11.7" usage="C- Required if referenced image contains overlay data that is to be displayed"/>
+    <entry ie="Presentation State" name="Displayed Area" ref="C.10.4" usage="M"/>
+    <entry ie="Presentation State" name="Graphic Annotation" ref="C.10.5" usage="C - Required if Graphic Annotations are to be applied to referenced image(s)"/>
+    <entry ie="Presentation State" name="Spatial Transformation" ref="C.10.6" usage="C - Required if rotation or flipping are to be applied to referenced image(s)"/>
+    <entry ie="Presentation State" name="Graphic Layer" ref="C.10.7" usage="C - Required if Graphic Annotations or Overlays or Curves are to be applied to referenced image(s)"/>
+    <entry ie="Presentation State" name="Modality LUT" ref="C.11.1" usage="C - Required if a Modality LUT is to be applied to referenced image(s)"/>
+    <entry ie="Presentation State" name="Softcopy VOI LUT" ref="C.11.8" usage="C - Required if a VOI LUT is to be applied to referenced image(s)"/>
+    <entry ie="Presentation State" name="Palette Color LUT" ref="C.7.9" usage="M"/>
+    <entry ie="Presentation State" name="ICC Profile" ref="C.11.15" usage="M"/>
+    <entry ie="Presentation State" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.33.4-1" name="BLENDING SOFTCOPY PRESENTATION STATE IOD MODULES">
     <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
@@ -960,15 +960,15 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Series" name="Presentation Series" ref="C.11.9" usage="M"/>
     <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
-    <entry ie="Presentation" name="Presentation State Identification" ref="C.11.10" usage="M"/>
-    <entry ie="State" name="Presentation State Blending" ref="C.11.14" usage="M"/>
-    <entry ie="State" name="Displayed Area" ref="C.10.4" usage="M"/>
-    <entry ie="State" name="Graphic Annotation" ref="C.10.5" usage="C - Required if Graphic Annotations are to be applied "/>
-    <entry ie="State" name="Spatial Transformation" ref="C.10.6" usage="C - Required if rotation or flipping are to be applied"/>
-    <entry ie="State" name="Graphic Layer" ref="C.10.7" usage="C - Required if Graphic Annotation Module is present"/>
-    <entry ie="State" name="Palette Color LUT" ref="C.7.9" usage="M"/>
-    <entry ie="State" name="ICC Profile" ref="C.11.15" usage="M"/>
-    <entry ie="State" name="SOP Common" ref="C.12.1" usage="M"/>
+    <entry ie="Presentation State" name="Presentation State Identification" ref="C.11.10" usage="M"/>
+    <entry ie="Presentation State" name="Presentation State Blending" ref="C.11.14" usage="M"/>
+    <entry ie="Presentation State" name="Displayed Area" ref="C.10.4" usage="M"/>
+    <entry ie="Presentation State" name="Graphic Annotation" ref="C.10.5" usage="C - Required if Graphic Annotations are to be applied "/>
+    <entry ie="Presentation State" name="Spatial Transformation" ref="C.10.6" usage="C - Required if rotation or flipping are to be applied"/>
+    <entry ie="Presentation State" name="Graphic Layer" ref="C.10.7" usage="C - Required if Graphic Annotation Module is present"/>
+    <entry ie="Presentation State" name="Palette Color LUT" ref="C.7.9" usage="M"/>
+    <entry ie="Presentation State" name="ICC Profile" ref="C.11.15" usage="M"/>
+    <entry ie="Presentation State" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.34.2-1" name="BASIC VOICE AUDIO IOD MODULES">
     <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
