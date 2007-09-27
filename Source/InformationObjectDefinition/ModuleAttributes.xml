@@ -282,8 +282,8 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
-    <entry ie="Frame of" name="Frame of Reference" ref="C.7.4.1" usage="U"/>
-    <entry ie="Reference" name="Synchronization" ref="C.7.4.2" usage="C – Required if Modality (0008,0060) = IVUS. May be present otherwise."/>
+    <entry ie="Frame of Reference" name="Frame of Reference" ref="C.7.4.1" usage="U"/>
+    <entry ie="Frame of Reference" name="Synchronization" ref="C.7.4.2" usage="C – Required if Modality (0008,0060) = IVUS. May be present otherwise."/>
     <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
     <entry ie="Image " name="General Image" ref="C.7.6.1" usage="M"/>
     <entry ie="Image " name="Image Pixel " ref="C.7.6.3" usage="M"/>
@@ -1505,6 +1505,87 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Segmentation" name="Multi-frame Dimension" ref="C.7.6.17" usage="M"/>
     <entry ie="Segmentation" name="Common Instance Reference" ref="C.12.2" usage="C – Required if Derivation Image Functional Group (C.7.16.2.6) is present."/>
     <entry ie="Segmentation" name="SOP Common" ref="C.12.1" usage="M"/>
+  </table>
+  <table ref="Table B.7-1" name="FILM SESSION IOD MODULES">
+    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
+    <entry ie="SOP Common" name="C.12.1" ref="Contains SOP Common information" usage=""/>
+    <entry ie="Basic Film Session Presentation" name="C.13.1" ref="Contains Film Session presentations information" usage=""/>
+    <entry ie="Basic Film Session Relationship" name="C.13.2" ref="References to related SOPs" usage=""/>
+  </table>
+  <table ref="Table B.8-1" name="BASIC FILM BOX IOD MODULES">
+    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
+    <entry ie="SOP Common" name="C.12.1" ref="Contains SOP Common information" usage=""/>
+    <entry ie="Basic Film Box Presentation Module" name="C.13.3" ref="Contains Film Box presentation information" usage=""/>
+    <entry ie="Basic Film Box Relationship" name="C.13.4" ref="References to related SOPs" usage=""/>
+  </table>
+  <table ref="Table B.9-1" name="BASIC IMAGE BOX IOD MODULES">
+    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
+    <entry ie="SOP Common" name="C.12.1" ref="Contains SOP Common information" usage=""/>
+    <entry ie="Image Box Presentation Module" name="C.13.5" ref="Contains Image Box presentation information" usage=""/>
+    <entry ie="Image Box Presentation Module" name="" ref="" usage=""/>
+  </table>
+  <table ref="Table B.10-1" name="BASIC ANNOTATION BOX IOD MODULES">
+    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
+    <entry ie="SOP Common" name="C.12.1" ref="Contains SOP Common information" usage=""/>
+    <entry ie="Basic Annotation Presentation Module" name="C.13.7" ref="Contains annotation presentation information" usage=""/>
+  </table>
+  <table ref="Table B.11-1" name="PRINT JOB IOD MODULES">
+    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
+    <entry ie="SOP Common" name="C.12.1" ref="Contains SOP Common information" usage=""/>
+    <entry ie="Print Job Module" name="C.13.8" ref="Contains print job transaction information" usage=""/>
+  </table>
+  <table ref="Table B.12-1" name="PRINTER IOD MODULES">
+    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
+    <entry ie="SOP Common" name="C.12.1" ref="Contains SOP Common information" usage=""/>
+    <entry ie="Printer Module" name="C.13.9" ref="Contains status information to monitor the printer" usage=""/>
+  </table>
+  <table ref="Table B.15-1" name="STORAGE COMMITMENT IOD MODULES">
+    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
+    <entry ie="SOP Common" name="C.12.1" ref="Contains SOP common information" usage=""/>
+    <entry ie="Storage Commitment" name="C.14" ref="Contains references to the SOP Instances and associated information that are contained in Storage Commitment." usage=""/>
+  </table>
+  <table ref="Table B.17.2-1" name="MODALITY PERFORMED PROCEDURE STEP IOD MODULES">
+    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
+    <entry ie="SOP Common" name="C.12.1" ref="Contains SOP common information" usage=""/>
+    <entry ie="Performed Procedure Step Rela­tionship " name="C.4.13" ref="References the related SOPs and IEs." usage=""/>
+    <entry ie="Performed Procedure Step Information" name="C.4.14" ref="Includes identifying and status information as well as place and time " usage=""/>
+    <entry ie="Image Acquisition Results" name="C.4.15" ref="Identifies Series and Images related to this PPS and specific image acquisition conditions." usage=""/>
+    <entry ie="Radiation Dose " name="C.4.16" ref="Contains radiation dose information related to this Per­formed Procedure Step." usage=""/>
+    <entry ie="Billing and Material Management Codes " name="C.4.17" ref="Contains codes for billing and mate­rial management." usage=""/>
+  </table>
+  <table ref="Table B.18.2" name="IOD MODULES">
+    <entry ie="Module" name="Reference" ref="" usage=""/>
+    <entry ie="SOP Common Information" name="C.12.1" ref="" usage=""/>
+    <entry ie="Presentation LUT Module" name="C.11.4" ref="" usage=""/>
+  </table>
+  <table ref="Table B.20-1" name="PRINTER CONFIGURATION IOD MODULES">
+    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
+    <entry ie="SOP Common" name="C.12.1" ref="Contains SOP Common Information" usage=""/>
+    <entry ie="Printer" name="C13.9" ref="Contains information about the printer" usage=""/>
+    <entry ie="Printer Configuration" name="C.13.13" ref="Contains Printer Configuration Information" usage=""/>
+  </table>
+  <table ref="Table B.22.2-1" name="GENERAL PURPOSE SCHEDULED PROCEDURE STEP IOD MODULES">
+    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
+    <entry ie="SOP Common" name="C.12.1" ref="Contains SOP common information" usage=""/>
+    <entry ie="General Purpose Scheduled Procedure Step Rela­tionship " name="C.4.18" ref="References the related SOPs and IEs." usage=""/>
+    <entry ie="General Purpose Scheduled Procedure Step Information" name="C.4.19" ref="Includes identifying and status information as well as place and time " usage=""/>
+  </table>
+  <table ref="Table B.23.2-1" name="GENERAL PURPOSE PERFORMED PROCEDURE STEP IOD MODULES">
+    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
+    <entry ie="SOP Common" name="C.12.1" ref="Contains SOP common information" usage=""/>
+    <entry ie="General Purpose Performed Procedure Step Rela­tionship " name="C.4.20" ref="References the related SOPs and IEs." usage=""/>
+    <entry ie="General Purpose Performed Procedure Step Information" name="C.4.21" ref="Includes identifying and status information as well as place and time " usage=""/>
+    <entry ie="General Purpose Results" name="C.4.22" ref="Identifies Results related to this GP-PPS." usage=""/>
+  </table>
+  <table ref="Table B.24.2-1" name="INSTANCE AVAILABILITY NOTIFICATION IOD MODULES">
+    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
+    <entry ie="SOP Common" name="C.12.1" ref="Contains SOP common information" usage=""/>
+    <entry ie="Instance Availability Notification " name="C.4.23" ref="References the related SOPs and IEs." usage=""/>
+  </table>
+  <table ref="Table B.25.2-1" name="MEDIA CREATION MANAGEMENT IOD MODULES">
+    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
+    <entry ie="SOP Common" name="C.12.1" ref="Contains SOP common information" usage=""/>
+    <entry ie="Media Creation Management" name="C.22.1" ref="Contains references to the SOP instances to be used for this media creation request, and the information about its status." usage=""/>
   </table>
   <table ref="Table C.2-1" name="PATIENT RELATIONSHIP MODULE ATTRIBUTES">
     <entry group="0008" element="1110" name="Referenced Study Sequence" type="??" description="Uniquely identifies the Study SOP Instances associated with the Patient SOP Instance. One or more Items may be included in this Sequence."/>
@@ -6292,6 +6373,11 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <include ref="&gt;Include Real World Value Mapping Macro Table C.7.6.16-12, overriding the Defined Context ID for Measurement Units Code Sequence with DCID 83."/>
     <entry group="0008" element="1140" name="&gt;Referenced Image Sequence" type="1" description="A sequence listing the images to which the mapping applies. One or more items shall be present."/>
     <include ref="&gt;&gt;Include 'Image SOP Instance Reference Macro' Table 10-3"/>
+  </table>
+  <table ref="Table F.3-1" name="BASIC DIRECTORY IOD MODULES">
+    <entry ie="Module" name="Reference" ref="Usage" usage="Module Description"/>
+    <entry ie="File-set Identification" name="F.3.2.1" ref="M" usage="File-set identification information"/>
+    <entry ie="Directory Information" name="F.3.2.2" ref="U" usage="Directory Information followed by a Sequence of Directory Records. Note: The Directory Information Module is optional. This Directory Information Module should be present in all but primitive environments where a directory is not needed. In this case, only the File-set Identification Information is present."/>
   </table>
   <table ref="Table F.3-2" name="FILE-SET IDENTIFICATION MODULE">
     <entry group="0004" element="1130" name="File-set ID" type="2" description="User or implementation specific Identifier (up to 16 characters). For definition, see PS 3.10. The File-set ID is intended to be a short human readable label to easily (but not necessarily uniquely) identify a specific File-set to facilitate operator manipulation of the physical media on which the File-set is stored. Assignment of Value and semantics are environment specific."/>
