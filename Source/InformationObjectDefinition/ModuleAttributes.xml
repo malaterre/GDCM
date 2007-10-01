@@ -183,7 +183,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.3-1" name="CT IMAGE IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
     <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
@@ -191,10 +191,10 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Frame of Reference" name="Frame of Reference" ref="C.7.4.1" usage="M"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
-    <entry ie="Image" name="Image Plane " ref="C.7.6.2" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Plane" ref="C.7.6.2" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Contrast/bolus" ref="C.7.6.4" usage="C - Required if contrast media was used in this image"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
     <entry ie="Image" name="CT Image" ref="C.8.2.1" usage="M"/>
@@ -203,7 +203,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.4-1" name="MR IMAGE IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
     <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
@@ -211,19 +211,19 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Frame of Reference" name="Frame of Reference" ref="C.7.4.1" usage="M"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
-    <entry ie="Image" name="Image Plane " ref="C.7.6.2" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Plane" ref="C.7.6.2" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Contrast/bolus" ref="C.7.6.4" usage="C - Required if contrast media was used in this image"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
-    <entry ie="Image" name="MR Image " ref="C.8.3.1" usage="M"/>
-    <entry ie="Image" name="Overlay Plane " ref="C.9.2" usage="U"/>
+    <entry ie="Image" name="MR Image" ref="C.8.3.1" usage="M"/>
+    <entry ie="Image" name="Overlay Plane" ref="C.9.2" usage="U"/>
     <entry ie="Image" name="VOI LUT" ref="C.11.2" usage="U"/>
     <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.5-1" name="NM IMAGE IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
     <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
@@ -232,28 +232,28 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Series" name="NM/PET Patient Orientation" ref="C.8.4.6" usage="M"/>
     <entry ie="Frame of Reference" name="Frame of Reference" ref="C.7.4.1" usage="U"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Acquisition Context" ref="C.7.6.14" usage="U – See Section A.5.4.1"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
     <entry ie="Image" name="NM Image Pixel" ref="C.8.4.7" usage="M"/>
     <entry ie="Image" name="Multi-frame" ref="C.7.6.6" usage="M"/>
     <entry ie="Image" name="NM Multi-frame" ref="C.8.4.8" usage="M"/>
-    <entry ie="Image" name="NM Image " ref="C.8.4.9" usage="M"/>
+    <entry ie="Image" name="NM Image" ref="C.8.4.9" usage="M"/>
     <entry ie="Image" name="NM Isotope" ref="C.8.4.10" usage="M"/>
-    <entry ie="Image" name="NM Detector " ref="C.8.4.11" usage="M"/>
+    <entry ie="Image" name="NM Detector" ref="C.8.4.11" usage="M"/>
     <entry ie="Image" name="NM TOMO Acquisition" ref="C.8.4.12" usage="C - Required if Image Type (0008,0008) Value 3 is TOMO, GATED TOMO, RECON TOMO or RECON GATED TOMO"/>
     <entry ie="Image" name="NM Multi-gated Acquisition" ref="C.8.4.13" usage="C - Required if Image Type (0008,0008) Value 3 is GATED, GATED TOMO, or RECON GATED TOMO"/>
     <entry ie="Image" name="NM Phase" ref="C.8.4.14" usage="C - Required if Image Type (0008,0008) Value 3 is DYNAMIC"/>
     <entry ie="Image" name="NM Reconstruction" ref="C.8.4.15" usage="C - Required if Image Type (0008,0008) Value 3 is RECON TOMO or RECON GATED TOMO"/>
-    <entry ie="Image" name="Overlay Plane " ref="C.9.2" usage="U"/>
+    <entry ie="Image" name="Overlay Plane" ref="C.9.2" usage="U"/>
     <entry ie="Image" name="Multi-frame Overlay" ref="C.9.3" usage="U"/>
     <entry ie="Image" name="VOI LUT" ref="C.11.2" usage="U"/>
     <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.6-1" name="US IMAGE IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
     <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
@@ -262,10 +262,10 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Frame of Reference" name="Frame of Reference" ref="C.7.4.1" usage="U"/>
     <entry ie="Frame of Reference" name="Synchronization" ref="C.7.4.2" usage="U"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
-    <entry ie="Image" name="Contrast/bolus" ref="C.7.6.4" usage="C - Required if contrast media was used in this image "/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Contrast/bolus" ref="C.7.6.4" usage="C - Required if contrast media was used in this image"/>
     <entry ie="Image" name="Palette Color Lookup Table" ref="C.7.9" usage="C - Required if Photometic Interpretation (0028,0004) has a value of PALETTE COLOR"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
     <entry ie="Image" name="US Region Calibration" ref="C.8.5.5" usage="U"/>
@@ -284,114 +284,114 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Frame of Reference" name="Frame of Reference" ref="C.7.4.1" usage="U"/>
     <entry ie="Frame of Reference" name="Synchronization" ref="C.7.4.2" usage="C – Required if Modality (0008,0060) = IVUS. May be present otherwise."/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
-    <entry ie="Image " name="General Image" ref="C.7.6.1" usage="M"/>
-    <entry ie="Image " name="Image Pixel " ref="C.7.6.3" usage="M"/>
-    <entry ie="Image " name="Contrast/bolus " ref="C.7.6.4" usage="C - Required if contrast media was used in this image."/>
-    <entry ie="Image " name="Cine" ref="C.7.6.5" usage="M "/>
-    <entry ie="Image " name="Multi-frame" ref="C.7.6.6" usage="M"/>
-    <entry ie="Image " name="Frame Pointers" ref="C.7.6.9" usage="U"/>
-    <entry ie="Image " name="Palette Color Lookup Table" ref="C.7.9" usage="C - Required if Photometric Interpretation (0028,0004) has a value of PALETTE COLOR"/>
-    <entry ie="Image " name="Device" ref="C.7.6.12" usage="U"/>
-    <entry ie="Image " name="US Region Calibration" ref="C.8.5.5" usage="U"/>
-    <entry ie="Image " name="US Image" ref="C.8.5.6" usage="M"/>
-    <entry ie="Image " name="VOI LUT" ref="C.11.2" usage="U"/>
-    <entry ie="Image " name="SOP Common" ref="C.12.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
+    <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Contrast/bolus" ref="C.7.6.4" usage="C - Required if contrast media was used in this image."/>
+    <entry ie="Image" name="Cine" ref="C.7.6.5" usage="M"/>
+    <entry ie="Image" name="Multi-frame" ref="C.7.6.6" usage="M"/>
+    <entry ie="Image" name="Frame Pointers" ref="C.7.6.9" usage="U"/>
+    <entry ie="Image" name="Palette Color Lookup Table" ref="C.7.9" usage="C - Required if Photometric Interpretation (0028,0004) has a value of PALETTE COLOR"/>
+    <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
+    <entry ie="Image" name="US Region Calibration" ref="C.8.5.5" usage="U"/>
+    <entry ie="Image" name="US Image" ref="C.8.5.6" usage="M"/>
+    <entry ie="Image" name="VOI LUT" ref="C.11.2" usage="U"/>
+    <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.8-1" name="SC IMAGE IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
     <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
     <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="U"/>
-    <entry ie="Equipment" name="SC Equipment " ref="C.8.6.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="U"/>
+    <entry ie="Equipment" name="SC Equipment" ref="C.8.6.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
-    <entry ie="Image" name="SC Image " ref="C.8.6.2" usage="M"/>
-    <entry ie="Image" name="Overlay Plane " ref="C.9.2" usage="U"/>
+    <entry ie="Image" name="SC Image" ref="C.8.6.2" usage="M"/>
+    <entry ie="Image" name="Overlay Plane" ref="C.9.2" usage="U"/>
     <entry ie="Image" name="Modality LUT" ref="C.11.1" usage="U"/>
     <entry ie="Image" name="VOI LUT" ref="C.11.2" usage="U"/>
     <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.8-2" name="MULTI-FRAME SINGLE BIT SC IMAGE IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
     <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
     <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="U"/>
-    <entry ie="Equipment" name="SC Equipment " ref="C.8.6.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="U"/>
+    <entry ie="Equipment" name="SC Equipment" ref="C.8.6.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Cine" ref="C.7.6.5" usage="C – Required if Frame Increment Pointer (0028,0009) is Frame Time (0018,1063) or Frame Time Vector (0018,1065)"/>
-    <entry ie="Image" name="Multi-frame " ref="C.7.6.6" usage="M"/>
+    <entry ie="Image" name="Multi-frame" ref="C.7.6.6" usage="M"/>
     <entry ie="Image" name="Frame Pointers" ref="C.7.6.9" usage="U"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
-    <entry ie="Image" name="SC Image " ref="C.8.6.2" usage="U"/>
-    <entry ie="Image" name="SC Multi-frame Image " ref="C.8.6.3" usage="M"/>
-    <entry ie="Image" name="SC Multi-frame Vector " ref="C.8.6.4" usage="C – Required if Number of Frames is greater than 1"/>
+    <entry ie="Image" name="SC Image" ref="C.8.6.2" usage="U"/>
+    <entry ie="Image" name="SC Multi-frame Image" ref="C.8.6.3" usage="M"/>
+    <entry ie="Image" name="SC Multi-frame Vector" ref="C.8.6.4" usage="C – Required if Number of Frames is greater than 1"/>
     <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.8-3" name="MULTI-FRAME GRAYSCALE BYTE SC IMAGE IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
     <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
     <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="U"/>
-    <entry ie="Equipment" name="SC Equipment " ref="C.8.6.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="U"/>
+    <entry ie="Equipment" name="SC Equipment" ref="C.8.6.1" usage="M"/>
     <entry ie="Frame of Reference" name="Frame of Reference" ref="C.7.4.1" usage="C – Required if Pixel Measures or Plane Position or Plane Orientation Functional Group Macros Present"/>
     <entry ie="Frame of Reference" name="Synchronization" ref="C.7.4.2" usage="U"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Cine" ref="C.7.6.5" usage="C – Required if Frame Increment Pointer (0028,0009) is Frame Time (0018,1063) or Frame Time Vector (0018,1065)"/>
-    <entry ie="Image" name="Multi-frame " ref="C.7.6.6" usage="M"/>
+    <entry ie="Image" name="Multi-frame" ref="C.7.6.6" usage="M"/>
     <entry ie="Image" name="Frame Pointers" ref="C.7.6.9" usage="U"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
     <entry ie="Image" name="Multi-frame Functional Groups" ref="C.7.6.16" usage="U"/>
     <entry ie="Image" name="Multi-frame Dimension" ref="C.7.6.17" usage="U"/>
-    <entry ie="Image" name="SC Image " ref="C.8.6.2" usage="U"/>
-    <entry ie="Image" name="SC Multi-frame Image " ref="C.8.6.3" usage="M"/>
-    <entry ie="Image" name="SC Multi-frame Vector " ref="C.8.6.4" usage="C – Required if Number of Frames is greater than 1"/>
+    <entry ie="Image" name="SC Image" ref="C.8.6.2" usage="U"/>
+    <entry ie="Image" name="SC Multi-frame Image" ref="C.8.6.3" usage="M"/>
+    <entry ie="Image" name="SC Multi-frame Vector" ref="C.8.6.4" usage="C – Required if Number of Frames is greater than 1"/>
     <entry ie="Image" name="VOI LUT" ref="C.11.2" usage="C – Required if the VOI LUT stage is not an identity transformation"/>
     <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.8-4" name="MULTI-FRAME GRAYSCALE WORD SC IMAGE IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
     <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
     <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="U"/>
-    <entry ie="Equipment" name="SC Equipment " ref="C.8.6.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="U"/>
+    <entry ie="Equipment" name="SC Equipment" ref="C.8.6.1" usage="M"/>
     <entry ie="Frame of Reference" name="Frame of Reference" ref="C.7.4.1" usage="C – Required if Pixel Measures or Plane Position or Plane Orientation Functional Group Macros Present"/>
     <entry ie="Frame of Reference" name="Synchronization" ref="C.7.4.2" usage="U"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Cine" ref="C.7.6.5" usage="C – Required if Frame Increment Pointer (0028,0009) is Frame Time (0018,1063) or Frame Time Vector (0018,1065)"/>
-    <entry ie="Image" name="Multi-frame " ref="C.7.6.6" usage="M"/>
+    <entry ie="Image" name="Multi-frame" ref="C.7.6.6" usage="M"/>
     <entry ie="Image" name="Frame Pointers" ref="C.7.6.9" usage="U"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
     <entry ie="Image" name="Multi-frame Functional Groups" ref="C.7.6.16" usage="U"/>
     <entry ie="Image" name="Multi-frame Dimension" ref="C.7.6.17" usage="U"/>
-    <entry ie="Image" name="SC Image " ref="C.8.6.2" usage="U"/>
-    <entry ie="Image" name="SC Multi-frame Image " ref="C.8.6.3" usage="M"/>
-    <entry ie="Image" name="SC Multi-frame Vector " ref="C.8.6.4" usage="C – Required if Number of Frames is greater than 1"/>
+    <entry ie="Image" name="SC Image" ref="C.8.6.2" usage="U"/>
+    <entry ie="Image" name="SC Multi-frame Image" ref="C.8.6.3" usage="M"/>
+    <entry ie="Image" name="SC Multi-frame Vector" ref="C.8.6.4" usage="C – Required if Number of Frames is greater than 1"/>
     <entry ie="Image" name="VOI LUT" ref="C.11.2" usage="C – Required if the VOI LUT stage is not an identity transformation"/>
     <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.8-5" name="MULTI-FRAME TRUE COLOR SC IMAGE IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
     <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
@@ -400,46 +400,46 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Frame of Reference" name="Frame of Reference" ref="C.7.4.1" usage="C – Required if Pixel Measures or Plane Position or Plane Orientation Functional Group Macros Present"/>
     <entry ie="Frame of Reference" name="Synchronization" ref="C.7.4.2" usage="U"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="U"/>
-    <entry ie="Equipment" name="SC Equipment " ref="C.8.6.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="U"/>
+    <entry ie="Equipment" name="SC Equipment" ref="C.8.6.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Cine" ref="C.7.6.5" usage="C – Required if Frame Increment Pointer (0028,0009) is Frame Time (0018,1063) or Frame Time Vector (0018,1065)"/>
-    <entry ie="Image" name="Multi-frame " ref="C.7.6.6" usage="M"/>
+    <entry ie="Image" name="Multi-frame" ref="C.7.6.6" usage="M"/>
     <entry ie="Image" name="Frame Pointers" ref="C.7.6.9" usage="U"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
     <entry ie="Image" name="Multi-frame Functional Groups" ref="C.7.6.16" usage="U"/>
     <entry ie="Image" name="Multi-frame Dimension" ref="C.7.6.17" usage="U"/>
-    <entry ie="Image" name="SC Image " ref="C.8.6.2" usage="U"/>
-    <entry ie="Image" name="SC Multi-frame Image " ref="C.8.6.3" usage="M"/>
-    <entry ie="Image" name="SC Multi-frame Vector " ref="C.8.6.4" usage="C – Required if Number of Frames is greater than 1"/>
+    <entry ie="Image" name="SC Image" ref="C.8.6.2" usage="U"/>
+    <entry ie="Image" name="SC Multi-frame Image" ref="C.8.6.3" usage="M"/>
+    <entry ie="Image" name="SC Multi-frame Vector" ref="C.8.6.4" usage="C – Required if Number of Frames is greater than 1"/>
     <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.14-1" name="X-RAY ANGIOGRAPHIC IMAGE IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
-    <entry ie="Study" name="Patient Study " ref="C.7.2.2" usage="U"/>
+    <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
     <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Frame of Reference" name="Synchronization" ref="C.7.4.2" usage="U"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Contrast/Bolus" ref="C.7.6.4" usage="C - Required if contrast media was used in this Image"/>
     <entry ie="Image" name="Cine" ref="C.7.6.5" usage="C - Required if pixel data is Multi-Frame Cine data"/>
-    <entry ie="Image" name="Multi-Frame " ref="C.7.6.6" usage="C - Required if pixel data is Multi-Frame Cine data"/>
+    <entry ie="Image" name="Multi-Frame" ref="C.7.6.6" usage="C - Required if pixel data is Multi-Frame Cine data"/>
     <entry ie="Image" name="Frame Pointers" ref="C.7.6.9" usage="U"/>
-    <entry ie="Image" name="Mask " ref="C.7.6.10" usage="C - Required if the Image may be subtracted"/>
+    <entry ie="Image" name="Mask" ref="C.7.6.10" usage="C - Required if the Image may be subtracted"/>
     <entry ie="Image" name="Display Shutter" ref="C.7.6.11" usage="U"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
     <entry ie="Image" name="Intervention" ref="C.7.6.13" usage="U"/>
-    <entry ie="Image" name="X-Ray Image " ref="C.8.7.1" usage="M"/>
+    <entry ie="Image" name="X-Ray Image" ref="C.8.7.1" usage="M"/>
     <entry ie="Image" name="X-Ray Acquisition" ref="C.8.7.2" usage="M"/>
-    <entry ie="Image" name="X-Ray Collimator " ref="C.8.7.3" usage="U"/>
+    <entry ie="Image" name="X-Ray Collimator" ref="C.8.7.3" usage="U"/>
     <entry ie="Image" name="X-Ray Table" ref="C.8.7.4" usage="C - Required if Image is created with table motion, may be present otherwise"/>
-    <entry ie="Image" name="XA Positioner " ref="C.8.7.5" usage="M"/>
+    <entry ie="Image" name="XA Positioner" ref="C.8.7.5" usage="M"/>
     <entry ie="Image" name="DX Detector" ref="C.8.11.4" usage="U"/>
     <entry ie="Image" name="Overlay Plane" ref="C.9.2" usage="U"/>
     <entry ie="Image" name="Multi-Frame Overlay" ref="C.9.3" usage="C - Required if Overlay data contains multiple frames."/>
@@ -448,7 +448,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.16-1" name="XRF IMAGE IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
     <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
@@ -456,9 +456,9 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Frame of Reference" name="Synchronization" ref="C.7.4.2" usage="U"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Contrast/bolus" ref="C.7.6.4" usage="C - Required if contrast media was used in this Image"/>
     <entry ie="Image" name="Cine" ref="C.7.6.5" usage="C - Required if pixel data is Multi-Frame Cine Data"/>
     <entry ie="Image" name="Multi-Frame" ref="C.7.6.6" usage="C - Required if pixel data is Multi-Frame Cine Data"/>
@@ -466,8 +466,8 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Image" name="Mask" ref="C.7.6.10" usage="C - Required if the Image may be subtracted"/>
     <entry ie="Image" name="X-Ray Image" ref="C.8.7.1" usage="M"/>
     <entry ie="Image" name="X-Ray Acquisition" ref="C.8.7.2" usage="M"/>
-    <entry ie="Image" name="X-Ray Collimator" ref="C.8.7.3 " usage="U"/>
-    <entry ie="Image" name="Display Shutter" ref="C.7.6.11 " usage="U"/>
+    <entry ie="Image" name="X-Ray Collimator" ref="C.8.7.3" usage="U"/>
+    <entry ie="Image" name="Display Shutter" ref="C.7.6.11" usage="U"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
     <entry ie="Image" name="Intervention" ref="C.7.6.13" usage="U"/>
     <entry ie="Image" name="X-Ray Table" ref="C.8.7.4" usage="U"/>
@@ -481,7 +481,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.17.3-1" name="RT IMAGE IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
     <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
@@ -489,9 +489,9 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="RT Series" ref="C.8.8.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Frame of Reference" name="Frame of Reference" ref="C.7.4.1" usage="U"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Contrast/bolus" ref="C.7.6.4" usage="C-Required if contrast media was used in this image."/>
     <entry ie="Image" name="Cine" ref="C.7.6.5" usage="C - Required if multi-frame image is a cine image."/>
     <entry ie="Image" name="Multi-Frame" ref="C.7.6.6" usage="C - Required if pixel data is multi-frame data."/>
@@ -503,7 +503,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.18.3-1" name="RT DOSE IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
     <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
@@ -514,7 +514,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Dose" name="General Image" ref="C.7.6.1" usage="C - Required if dose data contains grid-based doses."/>
     <entry ie="Dose" name="Image Plane" ref="C.7.6.2" usage="C - Required if dose data contains grid-based doses."/>
-    <entry ie="Dose" name="Image Pixel " ref="C.7.6.3" usage="C - Required if dose data contains grid-based doses."/>
+    <entry ie="Dose" name="Image Pixel" ref="C.7.6.3" usage="C - Required if dose data contains grid-based doses."/>
     <entry ie="Dose" name="Multi-Frame" ref="C.7.6.6" usage="C - Required if dose data contains grid-based doses and pixel data is multi-frame data."/>
     <entry ie="Dose" name="Overlay Plane" ref="C.9.2" usage="U"/>
     <entry ie="Dose" name="Multi-Frame Overlay" ref="C.9.3" usage="U"/>
@@ -527,7 +527,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Dose" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.19.3-1" name="RT STRUCTURE SET IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
     <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
@@ -542,7 +542,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Structure Set" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.20.3-1" name="RT PLAN IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
     <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
@@ -586,19 +586,19 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.26-1" name="DIGITAL X-RAY IMAGE IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Specimen Identification" ref="C.7.1.2" usage="U"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
-    <entry ie="Study" name="Patient Study " ref="C.7.2.2" usage="U"/>
+    <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
     <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Series" name="DX Series" ref="C.8.11.1" usage="M"/>
-    <entry ie="Frame of Reference" name="Frame of Reference " ref="C.7.4.1" usage="U"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Frame of Reference" name="Frame of Reference" ref="C.7.4.1" usage="U"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Contrast/Bolus" ref="C.7.6.4" usage="U"/>
     <entry ie="Image" name="Display Shutter" ref="C.7.6.11" usage="U"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
@@ -620,20 +620,20 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.27-1" name="DIGITAL MAMMOGRAPHY X-RAY IMAGE IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Specimen Identification" ref="C.7.1.2" usage="U"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
-    <entry ie="Study" name="Patient Study " ref="C.7.2.2" usage="U"/>
+    <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
     <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Series" name="DX Series" ref="C.8.11.1" usage="M"/>
     <entry ie="Series" name="Mammography Series" ref="C.8.11.6" usage="M"/>
-    <entry ie="Frame of Reference" name="Frame of Reference " ref="C.7.4.1" usage="C - Required if multiple images are obtained without releasing breast compression"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Frame of Reference" name="Frame of Reference" ref="C.7.4.1" usage="C - Required if multiple images are obtained without releasing breast compression"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Contrast/Bolus" ref="C.7.6.4" usage="U"/>
     <entry ie="Image" name="Display Shutter" ref="C.7.6.11" usage="U"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
@@ -656,20 +656,20 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.28-1" name="DIGITAL INTRA-ORAL X-RAY IMAGE IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Specimen Identification" ref="C.7.1.2" usage="U"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
-    <entry ie="Study" name="Patient Study " ref="C.7.2.2" usage="U"/>
+    <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
     <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Series" name="DX Series" ref="C.8.11.1" usage="M"/>
     <entry ie="Series" name="Intra-oral Series" ref="C.8.11.8" usage="M"/>
-    <entry ie="Frame of Reference" name="Frame of Reference " ref="C.7.4.1" usage="U"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Frame of Reference" name="Frame of Reference" ref="C.7.4.1" usage="U"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Contrast/Bolus" ref="C.7.6.4" usage="U"/>
     <entry ie="Image" name="Display Shutter" ref="C.7.6.11" usage="U"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
@@ -692,7 +692,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.29.3-1" name="RT BEAMS TREATMENT RECORD IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
     <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
@@ -701,7 +701,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Treatment Record" name="RT General Treatment Record" ref="C.8.8.17" usage="M"/>
-    <entry ie="Treatment Record" name="RT Patient Setup " ref="C.8.8.12" usage="U"/>
+    <entry ie="Treatment Record" name="RT Patient Setup" ref="C.8.8.12" usage="U"/>
     <entry ie="Treatment Record" name="RT Treatment Machine Record" ref="C.8.8.18" usage="M"/>
     <entry ie="Treatment Record" name="Measured Dose Reference Record" ref="C.8.8.19" usage="U"/>
     <entry ie="Treatment Record" name="Calculated Dose Reference Record" ref="C.8.8.20" usage="U"/>
@@ -710,7 +710,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Treatment Record" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.30.3-1" name="RT BRACHY TREATMENT RECORD IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
     <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
@@ -719,7 +719,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Treatment Record" name="RT General Treatment Record" ref="C.8.8.17" usage="M"/>
-    <entry ie="Treatment Record" name="RT Patient Setup " ref="C.8.8.12" usage="U"/>
+    <entry ie="Treatment Record" name="RT Patient Setup" ref="C.8.8.12" usage="U"/>
     <entry ie="Treatment Record" name="RT Treatment Machine Record" ref="C.8.8.18" usage="M"/>
     <entry ie="Treatment Record" name="Measured Dose Reference Record" ref="C.8.8.19" usage="U"/>
     <entry ie="Treatment Record" name="Calculated Dose Reference Record" ref="C.8.8.20" usage="U"/>
@@ -728,7 +728,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Treatment Record" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.31.3-1" name="RT TREATMENT SUMMARY RECORD IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
     <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
@@ -748,9 +748,9 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Acquisition Context" ref="C.7.6.14" usage="M"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
     <entry ie="Image" name="VL Image" ref="C.8.12.1" usage="M"/>
@@ -766,9 +766,9 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Acquisition Context" ref="C.7.6.14" usage="M"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
     <entry ie="Image" name="VL Image" ref="C.8.12.1" usage="M"/>
@@ -785,9 +785,9 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Series" name="Frame of Reference" ref="C.7.4.1" usage="M"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Acquisition Context" ref="C.7.6.14" usage="M"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
     <entry ie="Image" name="VL Image" ref="C.8.12.1" usage="M"/>
@@ -804,9 +804,9 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Acquisition Context" ref="C.7.6.14" usage="M"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
     <entry ie="Image" name="VL Image" ref="C.8.12.1" usage="M"/>
@@ -821,11 +821,11 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
     <entry ie="Image" name="Cine" ref="C.7.6.5" usage="M"/>
     <entry ie="Image" name="Multi-frame" ref="C.7.6.6" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Acquisition Context" ref="C.7.6.14" usage="M"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
     <entry ie="Image" name="VL Image" ref="C.8.12.1" usage="M"/>
@@ -840,11 +840,11 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
     <entry ie="Image" name="Cine" ref="C.7.6.5" usage="M"/>
     <entry ie="Image" name="Multi-frame" ref="C.7.6.6" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Acquisition Context" ref="C.7.6.14" usage="M"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
     <entry ie="Image" name="VL Image" ref="C.8.12.1" usage="M"/>
@@ -859,31 +859,31 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
     <entry ie="Image" name="Cine" ref="C.7.6.5" usage="M"/>
     <entry ie="Image" name="Multi-frame" ref="C.7.6.6" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Acquisition Context" ref="C.7.6.14" usage="M"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
     <entry ie="Image" name="VL Image" ref="C.8.12.1" usage="M"/>
     <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.33.1-1" name="GRAYSCALE SOFTCOPY PRESENTATION STATE IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
-    <entry ie="Study" name="Patient Study " ref="C.7.2.2" usage="U"/>
+    <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
     <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Series" name="Presentation Series" ref="C.11.9" usage="M"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Presentation State" name="Presentation State Identification" ref="C.11.10" usage="M"/>
     <entry ie="Presentation State" name="Presentation State Relationship" ref="C.11.11" usage="M"/>
     <entry ie="Presentation State" name="Presentation State Shutter" ref="C.11.12" usage="M"/>
     <entry ie="Presentation State" name="Presentation State Mask" ref="C.11.13" usage="M"/>
-    <entry ie="Presentation State" name="Mask " ref="C.7.6.10" usage="C - Required if the referenced image(s) are multi-frame and are to be subtracted"/>
+    <entry ie="Presentation State" name="Mask" ref="C.7.6.10" usage="C - Required if the referenced image(s) are multi-frame and are to be subtracted"/>
     <entry ie="Presentation State" name="Display Shutter" ref="C.7.6.11" usage="C - Required if a Display Shutter is to be applied to referenced image(s) and the Bitmap Display Shutter Module is not present"/>
     <entry ie="Presentation State" name="Bitmap Display Shutter" ref="C.7.6.15" usage="C - Required if a Display Shutter is to be applied to referenced image(s) and the Display Shutter Module is not present"/>
     <entry ie="Presentation State" name="Overlay Plane" ref="C.9.2" usage="C - Required if Overlay is to be applied to referenced image(s) or the Bitmap Display Shutter Module is present"/>
@@ -898,15 +898,15 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Presentation State" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.33.2-1" name="COLOR SOFTCOPY PRESENTATION STATE IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
-    <entry ie="Study" name="Patient Study " ref="C.7.2.2" usage="U"/>
+    <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
     <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Series" name="Presentation Series" ref="C.11.9" usage="M"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Presentation State" name="Presentation State Identification" ref="C.11.10" usage="M"/>
     <entry ie="Presentation State" name="Presentation State Relationship" ref="C.11.11" usage="M"/>
     <entry ie="Presentation State" name="Presentation State Shutter" ref="C.11.12" usage="M"/>
@@ -922,20 +922,20 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Presentation State" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.33.3-1" name="PSEUDO-COLOR SOFTCOPY PRESENTATION STATE IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
-    <entry ie="Study" name="Patient Study " ref="C.7.2.2" usage="U"/>
+    <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
     <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Series" name="Presentation Series" ref="C.11.9" usage="M"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Presentation State" name="Presentation State Identification" ref="C.11.10" usage="M"/>
     <entry ie="Presentation State" name="Presentation State Relationship" ref="C.11.11" usage="M"/>
     <entry ie="Presentation State" name="Presentation State Shutter" ref="C.11.12" usage="M"/>
     <entry ie="Presentation State" name="Presentation State Mask" ref="C.11.13" usage="M"/>
-    <entry ie="Presentation State" name="Mask " ref="C.7.6.10" usage="C - Required if the referenced image(s) are multi-frame and are to be subtracted"/>
+    <entry ie="Presentation State" name="Mask" ref="C.7.6.10" usage="C - Required if the referenced image(s) are multi-frame and are to be subtracted"/>
     <entry ie="Presentation State" name="Display Shutter" ref="C.7.6.11" usage="C - Required if a Display Shutter is to be applied to referenced image(s) and the Bitmap Display Shutter Module is not present"/>
     <entry ie="Presentation State" name="Bitmap Display Shutter" ref="C.7.6.15" usage="C - Required if a Display Shutter is to be applied to referenced image(s) and the Display Shutter Module is not present"/>
     <entry ie="Presentation State" name="Overlay Plane" ref="C.9.2" usage="C - Required if Overlay is to be applied to referenced image(s) or the Bitmap Display Shutter Module is present"/>
@@ -951,19 +951,19 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Presentation State" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.33.4-1" name="BLENDING SOFTCOPY PRESENTATION STATE IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
-    <entry ie="Study" name="Patient Study " ref="C.7.2.2" usage="U"/>
+    <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
     <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Series" name="Presentation Series" ref="C.11.9" usage="M"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Presentation State" name="Presentation State Identification" ref="C.11.10" usage="M"/>
     <entry ie="Presentation State" name="Presentation State Blending" ref="C.11.14" usage="M"/>
     <entry ie="Presentation State" name="Displayed Area" ref="C.10.4" usage="M"/>
-    <entry ie="Presentation State" name="Graphic Annotation" ref="C.10.5" usage="C - Required if Graphic Annotations are to be applied "/>
+    <entry ie="Presentation State" name="Graphic Annotation" ref="C.10.5" usage="C - Required if Graphic Annotations are to be applied"/>
     <entry ie="Presentation State" name="Spatial Transformation" ref="C.10.6" usage="C - Required if rotation or flipping are to be applied"/>
     <entry ie="Presentation State" name="Graphic Layer" ref="C.10.7" usage="C - Required if Graphic Annotation Module is present"/>
     <entry ie="Presentation State" name="Palette Color LUT" ref="C.7.9" usage="M"/>
@@ -971,7 +971,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Presentation State" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.34.2-1" name="BASIC VOICE AUDIO IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
     <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
@@ -979,7 +979,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Frame of Reference" name="Synchronization" ref="C.7.4.2" usage="U"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Waveform" name="Waveform Identification" ref="C.10.8" usage="M"/>
     <entry ie="Waveform" name="Waveform" ref="C.10.9" usage="M"/>
     <entry ie="Waveform" name="Acquisition Context" ref="C.7.6.14" usage="M"/>
@@ -987,7 +987,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Waveform" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.34.3-1" name="12-LEAD ECG IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
     <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
@@ -995,7 +995,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Frame of Reference" name="Synchronization" ref="C.7.4.2" usage="U"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Waveform" name="Waveform Identification" ref="C.10.8" usage="M"/>
     <entry ie="Waveform" name="Waveform" ref="C.10.9" usage="M"/>
     <entry ie="Waveform" name="Acquisition Context" ref="C.7.6.14" usage="M"/>
@@ -1003,7 +1003,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Waveform" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.34.4-1" name="GENERAL ECG IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
     <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
@@ -1011,7 +1011,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Frame of Reference" name="Synchronization" ref="C.7.4.2" usage="U"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Waveform" name="Waveform Identification" ref="C.10.8" usage="M"/>
     <entry ie="Waveform" name="Waveform" ref="C.10.9" usage="M"/>
     <entry ie="Waveform" name="Acquisition Context" ref="C.7.6.14" usage="M"/>
@@ -1019,7 +1019,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Waveform" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.34.5-1" name="AMBULATORY ECG IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
     <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
@@ -1027,7 +1027,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Frame of Reference" name="Synchronization" ref="C.7.4.2" usage="U"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Waveform" name="Waveform Identification" ref="C.10.8" usage="M"/>
     <entry ie="Waveform" name="Waveform" ref="C.10.9" usage="M"/>
     <entry ie="Waveform" name="Acquisition Context" ref="C.7.6.14" usage="U"/>
@@ -1035,7 +1035,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Waveform" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.34.6-1" name="HEMODYNAMIC IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
     <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
@@ -1043,7 +1043,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Frame of Reference" name="Synchronization" ref="C.7.4.2" usage="C – Required if Waveform Originality (003A,0004) is ORIGINAL; may be present otherwise"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Waveform" name="Waveform Identification" ref="C.10.8" usage="M"/>
     <entry ie="Waveform" name="Waveform" ref="C.10.9" usage="M"/>
     <entry ie="Waveform" name="Acquisition Context" ref="C.7.6.14" usage="M"/>
@@ -1051,7 +1051,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Waveform" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.34.7-1" name="BASIC CARDIAC EP IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
     <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
@@ -1059,7 +1059,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Frame of Reference" name="Synchronization" ref="C.7.4.2" usage="C – Required if Waveform Originality (003A,0004) value is ORIGINAL; may be present otherwise"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Waveform" name="Waveform Identification" ref="C.10.8" usage="M"/>
     <entry ie="Waveform" name="Waveform" ref="C.10.9" usage="M"/>
     <entry ie="Waveform" name="Acquisition Context" ref="C.7.6.14" usage="M"/>
@@ -1120,7 +1120,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="Key Object Document Series" ref="C.17.6.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
-    <entry ie="Document" name="Key Object Document " ref="C.17.6.2" usage="M"/>
+    <entry ie="Document" name="Key Object Document" ref="C.17.6.2" usage="M"/>
     <entry ie="Document" name="SR Document Content" ref="C.17.3" usage="M"/>
     <entry ie="Document" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
@@ -1173,7 +1173,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
     <entry ie="Series" name="SR Document Series" ref="C.17.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
-    <entry ie="Frame of Reference" name="Synchronization" ref="C.7.4.2" usage="C - shall be present if system time is synchronized to an external reference. May be present otherwise. "/>
+    <entry ie="Frame of Reference" name="Synchronization" ref="C.7.4.2" usage="C - shall be present if system time is synchronized to an external reference. May be present otherwise."/>
     <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Document" name="SR Document General" ref="C.17.2" usage="M"/>
     <entry ie="Document" name="SR Document Content" ref="C.17.3" usage="M"/>
@@ -1196,7 +1196,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Enhanced Contrast/Bolus" ref="C.7.6.4b" usage="C - Required if contrast media were applied."/>
     <entry ie="Image" name="Multi-frame Functional Groups" ref="C.7.6.16" usage="M"/>
-    <entry ie="Image" name="Multi-frame Dimension " ref="C.7.6.17" usage="M"/>
+    <entry ie="Image" name="Multi-frame Dimension" ref="C.7.6.17" usage="M"/>
     <entry ie="Image" name="Cardiac Synchronization" ref="C.7.6.18.1" usage="C - Required if cardiac synchronization was applied."/>
     <entry ie="Image" name="Respiratory Synchronization" ref="C.7.6.18.2" usage="C - Required if respiratory synchronization was applied."/>
     <entry ie="Image" name="Bulk Motion Synchronization" ref="C.7.6.18.3" usage="C - Required if bulk motion synchronization was applied."/>
@@ -1223,7 +1223,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Equipment" name="Enhanced General Equipment" ref="C.7.5.2" usage="M"/>
     <entry ie="MR Spectroscopy" name="Enhanced Contrast/Bolus" ref="C.7.6.4b" usage="C – Required if contrast media were applied."/>
     <entry ie="MR Spectroscopy" name="Multi-frame Functional Groups" ref="C.7.6.16" usage="M"/>
-    <entry ie="MR Spectroscopy" name="Multi-frame Dimension " ref="C.7.6.17" usage="M"/>
+    <entry ie="MR Spectroscopy" name="Multi-frame Dimension" ref="C.7.6.17" usage="M"/>
     <entry ie="MR Spectroscopy" name="Cardiac Synchronization" ref="C.7.6.18.1" usage="C - Required if cardiac synchronization was applied."/>
     <entry ie="MR Spectroscopy" name="Respiratory Synchronization" ref="C.7.6.18.2" usage="C - Required if respiratory synchronization was applied."/>
     <entry ie="MR Spectroscopy" name="Bulk Motion Synchronization" ref="C.7.6.18.3" usage="C - Required if bulk motion synchronization was applied."/>
@@ -1250,7 +1250,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Raw Data" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.38-1" name="ENHANCED CT IMAGE IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Specimen Identification" ref="C.7.1.2" usage="U"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
@@ -1261,7 +1261,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Frame of Reference" name="Frame of Reference" ref="C.7.4.1" usage="M"/>
     <entry ie="Frame of Reference" name="Synchronization" ref="C.7.4.2" usage="C- Required if time synchronization was applied."/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Equipment" name="Enhanced General Equipment" ref="C.7.5.2" usage="M"/>
     <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Enhanced Contrast/Bolus" ref="C.7.6.4b" usage="C – Required if contrast media was applied."/>
@@ -1287,8 +1287,8 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="Spatial Registration Series" ref="C.20.1" usage="M"/>
     <entry ie="Frame of Reference" name="Frame of Reference" ref="C.7.4.1" usage="M"/>
     <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
-    <entry ie="Spatial Registration" name="Spatial Registration " ref="C.20.2" usage="M"/>
-    <entry ie="Spatial Registration" name="Common Instance Reference " ref="C.12.2" usage="M"/>
+    <entry ie="Spatial Registration" name="Spatial Registration" ref="C.20.2" usage="M"/>
+    <entry ie="Spatial Registration" name="Common Instance Reference" ref="C.12.2" usage="M"/>
     <entry ie="Spatial Registration" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.39.2-1" name="DEFORMABLE SPATIAL REGISTRATION IOD MODULES">
@@ -1302,8 +1302,8 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Frame of Reference" name="Frame of Reference" ref="C.7.4.1" usage="M"/>
     <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Equipment" name="Enhanced Equipment" ref="C.7.5.2" usage="M"/>
-    <entry ie="Deformable Registration" name="Deformable Spatial Registration " ref="C.20.3" usage="M"/>
-    <entry ie="Deformable Registration" name="Common Instance Reference " ref="C.12.2" usage="M"/>
+    <entry ie="Deformable Registration" name="Deformable Spatial Registration" ref="C.20.3" usage="M"/>
+    <entry ie="Deformable Registration" name="Common Instance Reference" ref="C.12.2" usage="M"/>
     <entry ie="Deformable Registration" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.40-1" name="SPATIAL FIDUCIALS IOD MODULES">
@@ -1317,7 +1317,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Series" name="Spatial Fiducials Series" ref="C.21.1" usage="M"/>
     <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
-    <entry ie="Spatial Fiducials" name="Spatial Fiducials " ref="C.21.2" usage="M"/>
+    <entry ie="Spatial Fiducials" name="Spatial Fiducials" ref="C.21.2" usage="M"/>
     <entry ie="Spatial Fiducials" name="Common Instance Reference" ref="C.12.2" usage="M"/>
     <entry ie="Spatial Fiducials" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
@@ -1332,12 +1332,12 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="Ophthalmic Photography Series" ref="C.8.17.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Frame of Reference" name="Synchronization" ref="C.7.4.2" usage="M"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Enhanced Contrast/Bolus" ref="C 7.6.4.b" usage="C – Required if contrast was administered, see A.41.4.2"/>
     <entry ie="Image" name="Cine" ref="C.7.6.5" usage="C - Required if there is a sequential temporal relationship between all frames"/>
-    <entry ie="Image" name="Multi-frame " ref="C.7.6.6" usage="M"/>
+    <entry ie="Image" name="Multi-frame" ref="C.7.6.6" usage="M"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
     <entry ie="Image" name="Ophthalmic Photography Image" ref="C.8.17.2" usage="M"/>
     <entry ie="Image" name="Ocular Region Imaged" ref="C.8.17.5" usage="M"/>
@@ -1356,12 +1356,12 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="Ophthalmic Photography Series" ref="C.8.17.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Frame of Reference" name="Synchronization" ref="C.7.4.2" usage="M"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Enhanced Contrast/Bolus" ref="C 7.6.4.b" usage="C – Required if contrast was administered; see A.42.4.2"/>
     <entry ie="Image" name="Cine" ref="C.7.6.5" usage="C - Required if there is a sequential temporal relationship between all frames"/>
-    <entry ie="Image" name="Multi-frame " ref="C.7.6.6" usage="M"/>
+    <entry ie="Image" name="Multi-frame" ref="C.7.6.6" usage="M"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
     <entry ie="Image" name="Ophthalmic Photography Image" ref="C.8.17.2" usage="M"/>
     <entry ie="Image" name="Ocular Region Imaged" ref="C.8.17.5" usage="M"/>
@@ -1378,8 +1378,8 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Series" name="Stereometric Series" ref="C.8.18.1" usage="M"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
-    <entry ie="Stereometric Relationship" name="Stereometric Relationship Module " ref="C.8.18.2" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
+    <entry ie="Stereometric Relationship" name="Stereometric Relationship Module" ref="C.8.18.2" usage="M"/>
     <entry ie="Stereometric Relationship" name="Common Instance Reference Module" ref="C.12.2" usage="M"/>
     <entry ie="Stereometric Relationship" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
@@ -1415,24 +1415,24 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="Real World Value Mapping Series" ref="C.25.1" usage="M"/>
     <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Real World Value Mapping" name="Real World Value Mapping" ref="C.25.22" usage="M"/>
-    <entry ie="Real World Value Mapping" name="Common Instance Reference " ref="C.12.2" usage="M"/>
+    <entry ie="Real World Value Mapping" name="Common Instance Reference" ref="C.12.2" usage="M"/>
     <entry ie="Real World Value Mapping" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.47-1" name="ENHANCED X-RAY ANGIOGRAPHIC IMAGE IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Specimen Identification" ref="C.7.1.2" usage="U"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
-    <entry ie="Study" name="Patient Study " ref="C.7.2.2" usage="U"/>
+    <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
     <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="XA/XRF Series" ref="C.8.19.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Frame of Reference" name="Frame of Reference" ref="C.7.4.1" usage="C – Required if C-arm Positioner Tabletop Relationship (0018,9474) equals YES. May be present otherwise."/>
     <entry ie="Frame of Reference" name="Synchronization" ref="C.7.4.2" usage="C – Required if C-arm Positioner Tabletop Relationship (0018,9474) equals YES. May be present otherwise."/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Equipment" name="Enhanced General Equipment" ref="C.7.5.2" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Enhanced Contrast/Bolus" ref="C.7.6.4b" usage="C – Required if contrast media was applied and the system is able to register contrast usage."/>
     <entry ie="Image" name="Mask" ref="C.7.6.10" usage="U"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
@@ -1444,7 +1444,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Image" name="Respiratory Synchronization" ref="C.7.6.18.2" usage="C – Required if respiratory synchronization was applied."/>
     <entry ie="Image" name="X-Ray Filtration" ref="C.8.7.10" usage="U"/>
     <entry ie="Image" name="X-Ray Grid" ref="C.8.7.11" usage="U"/>
-    <entry ie="Image" name="Enhanced XA/XRF Image " ref="C.8.19.2" usage="M"/>
+    <entry ie="Image" name="Enhanced XA/XRF Image" ref="C.8.19.2" usage="M"/>
     <entry ie="Image" name="XA/XRF Acquisition" ref="C.8.19.3" usage="C – Required if Image Type (0008,0008) Value 1 equals ORIGINAL. May be present otherwise."/>
     <entry ie="Image" name="X-Ray Image Intensifier" ref="C.8.19.4" usage="C – Required if X-Ray Receptor Type (0018,9420) is present and equals IMG_INTENSIFIER."/>
     <entry ie="Image" name="X-Ray Detector" ref="C.8.19.5" usage="C – Required if X-Ray Receptor Type (0018,9420) is present and equals DIGITAL_DETECTOR."/>
@@ -1452,20 +1452,20 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.48.-1" name="ENHANCED X-RAY RF IMAGE IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Specimen Identification" ref="C.7.1.2" usage="U"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
-    <entry ie="Study" name="Patient Study " ref="C.7.2.2" usage="U"/>
+    <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
     <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
     <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
     <entry ie="Series" name="XA/XRF Series" ref="C.8.19.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Frame of Reference" name="Frame of Reference" ref="C.7.4.1" usage="U"/>
     <entry ie="Frame of Reference" name="Synchronization" ref="C.7.4.2" usage="U"/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Equipment" name="Enhanced General Equipment" ref="C.7.5.2" usage="M"/>
-    <entry ie="Image" name="Image Pixel " ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
     <entry ie="Image" name="Enhanced Contrast/Bolus" ref="C.7.6.4b" usage="C – Required if contrast media was applied and the system is able to register contrast usage."/>
     <entry ie="Image" name="Mask" ref="C.7.6.10" usage="U"/>
     <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
@@ -1478,7 +1478,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Image" name="X-Ray Tomography Acquisition" ref="C.8.7.7" usage="U"/>
     <entry ie="Image" name="X-Ray Filtration" ref="C.8.7.10" usage="U"/>
     <entry ie="Image" name="X-Ray Grid" ref="C.8.7.11" usage="U"/>
-    <entry ie="Image" name="Enhanced XA/XRF Image " ref="C.8.19.2" usage="M"/>
+    <entry ie="Image" name="Enhanced XA/XRF Image" ref="C.8.19.2" usage="M"/>
     <entry ie="Image" name="XA/XRF Acquisition" ref="C.8.19.3" usage="C – Required if Image Type (0008,0008) Value 1 equals ORIGINAL. May be present otherwise."/>
     <entry ie="Image" name="X-Ray Image Intensifier" ref="C.8.19.4" usage="C – Required if X-Ray Receptor Type (0018,9420) is present and equals IMG_INTENSIFIER."/>
     <entry ie="Image" name="X-Ray Detector" ref="C.8.19.5" usage="C – Required if X-Ray Receptor Type (0018,9420) is present and equals DIGITAL_DETECTOR."/>
@@ -1486,7 +1486,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table A.51-1" name="SEGMENTATION IOD MODULES">
-    <entry ie="Patient" name="Patient " ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Specimen Identification" ref="C.7.1.2" usage="U"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
@@ -1496,7 +1496,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Series" name="Segmentation Series" ref="C.8.20.1" usage="M"/>
     <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
     <entry ie="Frame of Reference" name="Frame of Reference" ref="C.7.4.1" usage="C – Required if Derivation Image Functional Group (C.7.16.2.6) is not present."/>
-    <entry ie="Equipment" name="General Equipment " ref="C.7.5.1" usage="M"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
     <entry ie="Equipment" name="Enhanced General Equipment" ref="C.7.5.2" usage="M"/>
     <entry ie="Segmentation" name="General Image" ref="C.7.6.1" usage="M"/>
     <entry ie="Segmentation" name="Image Pixel" ref="C.7.6.3" usage="M"/>
@@ -1507,83 +1507,69 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry ie="Segmentation" name="SOP Common" ref="C.12.1" usage="M"/>
   </table>
   <table ref="Table B.7-1" name="FILM SESSION IOD MODULES">
-    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
     <entry ie="SOP Common" name="C.12.1" ref="Contains SOP Common information" usage=""/>
     <entry ie="Basic Film Session Presentation" name="C.13.1" ref="Contains Film Session presentations information" usage=""/>
     <entry ie="Basic Film Session Relationship" name="C.13.2" ref="References to related SOPs" usage=""/>
   </table>
   <table ref="Table B.8-1" name="BASIC FILM BOX IOD MODULES">
-    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
     <entry ie="SOP Common" name="C.12.1" ref="Contains SOP Common information" usage=""/>
     <entry ie="Basic Film Box Presentation Module" name="C.13.3" ref="Contains Film Box presentation information" usage=""/>
     <entry ie="Basic Film Box Relationship" name="C.13.4" ref="References to related SOPs" usage=""/>
   </table>
   <table ref="Table B.9-1" name="BASIC IMAGE BOX IOD MODULES">
-    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
     <entry ie="SOP Common" name="C.12.1" ref="Contains SOP Common information" usage=""/>
     <entry ie="Image Box Presentation Module" name="C.13.5" ref="Contains Image Box presentation information" usage=""/>
     <entry ie="Image Box Presentation Module" name="" ref="" usage=""/>
   </table>
   <table ref="Table B.10-1" name="BASIC ANNOTATION BOX IOD MODULES">
-    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
     <entry ie="SOP Common" name="C.12.1" ref="Contains SOP Common information" usage=""/>
     <entry ie="Basic Annotation Presentation Module" name="C.13.7" ref="Contains annotation presentation information" usage=""/>
   </table>
   <table ref="Table B.11-1" name="PRINT JOB IOD MODULES">
-    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
     <entry ie="SOP Common" name="C.12.1" ref="Contains SOP Common information" usage=""/>
     <entry ie="Print Job Module" name="C.13.8" ref="Contains print job transaction information" usage=""/>
   </table>
   <table ref="Table B.12-1" name="PRINTER IOD MODULES">
-    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
     <entry ie="SOP Common" name="C.12.1" ref="Contains SOP Common information" usage=""/>
     <entry ie="Printer Module" name="C.13.9" ref="Contains status information to monitor the printer" usage=""/>
   </table>
   <table ref="Table B.15-1" name="STORAGE COMMITMENT IOD MODULES">
-    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
     <entry ie="SOP Common" name="C.12.1" ref="Contains SOP common information" usage=""/>
     <entry ie="Storage Commitment" name="C.14" ref="Contains references to the SOP Instances and associated information that are contained in Storage Commitment." usage=""/>
   </table>
   <table ref="Table B.17.2-1" name="MODALITY PERFORMED PROCEDURE STEP IOD MODULES">
-    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
     <entry ie="SOP Common" name="C.12.1" ref="Contains SOP common information" usage=""/>
-    <entry ie="Performed Procedure Step Rela­tionship " name="C.4.13" ref="References the related SOPs and IEs." usage=""/>
-    <entry ie="Performed Procedure Step Information" name="C.4.14" ref="Includes identifying and status information as well as place and time " usage=""/>
+    <entry ie="Performed Procedure Step Rela­tionship" name="C.4.13" ref="References the related SOPs and IEs." usage=""/>
+    <entry ie="Performed Procedure Step Information" name="C.4.14" ref="Includes identifying and status information as well as place and time" usage=""/>
     <entry ie="Image Acquisition Results" name="C.4.15" ref="Identifies Series and Images related to this PPS and specific image acquisition conditions." usage=""/>
-    <entry ie="Radiation Dose " name="C.4.16" ref="Contains radiation dose information related to this Per­formed Procedure Step." usage=""/>
-    <entry ie="Billing and Material Management Codes " name="C.4.17" ref="Contains codes for billing and mate­rial management." usage=""/>
+    <entry ie="Radiation Dose" name="C.4.16" ref="Contains radiation dose information related to this Per­formed Procedure Step." usage=""/>
+    <entry ie="Billing and Material Management Codes" name="C.4.17" ref="Contains codes for billing and mate­rial management." usage=""/>
   </table>
   <table ref="Table B.18.2" name="IOD MODULES">
-    <entry ie="Module" name="Reference" ref="" usage=""/>
     <entry ie="SOP Common Information" name="C.12.1" ref="" usage=""/>
     <entry ie="Presentation LUT Module" name="C.11.4" ref="" usage=""/>
   </table>
   <table ref="Table B.20-1" name="PRINTER CONFIGURATION IOD MODULES">
-    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
     <entry ie="SOP Common" name="C.12.1" ref="Contains SOP Common Information" usage=""/>
     <entry ie="Printer" name="C13.9" ref="Contains information about the printer" usage=""/>
     <entry ie="Printer Configuration" name="C.13.13" ref="Contains Printer Configuration Information" usage=""/>
   </table>
   <table ref="Table B.22.2-1" name="GENERAL PURPOSE SCHEDULED PROCEDURE STEP IOD MODULES">
-    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
     <entry ie="SOP Common" name="C.12.1" ref="Contains SOP common information" usage=""/>
-    <entry ie="General Purpose Scheduled Procedure Step Rela­tionship " name="C.4.18" ref="References the related SOPs and IEs." usage=""/>
-    <entry ie="General Purpose Scheduled Procedure Step Information" name="C.4.19" ref="Includes identifying and status information as well as place and time " usage=""/>
+    <entry ie="General Purpose Scheduled Procedure Step Rela­tionship" name="C.4.18" ref="References the related SOPs and IEs." usage=""/>
+    <entry ie="General Purpose Scheduled Procedure Step Information" name="C.4.19" ref="Includes identifying and status information as well as place and time" usage=""/>
   </table>
   <table ref="Table B.23.2-1" name="GENERAL PURPOSE PERFORMED PROCEDURE STEP IOD MODULES">
-    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
     <entry ie="SOP Common" name="C.12.1" ref="Contains SOP common information" usage=""/>
-    <entry ie="General Purpose Performed Procedure Step Rela­tionship " name="C.4.20" ref="References the related SOPs and IEs." usage=""/>
-    <entry ie="General Purpose Performed Procedure Step Information" name="C.4.21" ref="Includes identifying and status information as well as place and time " usage=""/>
+    <entry ie="General Purpose Performed Procedure Step Rela­tionship" name="C.4.20" ref="References the related SOPs and IEs." usage=""/>
+    <entry ie="General Purpose Performed Procedure Step Information" name="C.4.21" ref="Includes identifying and status information as well as place and time" usage=""/>
     <entry ie="General Purpose Results" name="C.4.22" ref="Identifies Results related to this GP-PPS." usage=""/>
   </table>
   <table ref="Table B.24.2-1" name="INSTANCE AVAILABILITY NOTIFICATION IOD MODULES">
-    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
     <entry ie="SOP Common" name="C.12.1" ref="Contains SOP common information" usage=""/>
-    <entry ie="Instance Availability Notification " name="C.4.23" ref="References the related SOPs and IEs." usage=""/>
+    <entry ie="Instance Availability Notification" name="C.4.23" ref="References the related SOPs and IEs." usage=""/>
   </table>
   <table ref="Table B.25.2-1" name="MEDIA CREATION MANAGEMENT IOD MODULES">
-    <entry ie="Module" name="Reference" ref="Module Description" usage=""/>
     <entry ie="SOP Common" name="C.12.1" ref="Contains SOP common information" usage=""/>
     <entry ie="Media Creation Management" name="C.22.1" ref="Contains references to the SOP instances to be used for this media creation request, and the information about its status." usage=""/>
   </table>
@@ -6375,9 +6361,8 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <include ref="&gt;&gt;Include 'Image SOP Instance Reference Macro' Table 10-3"/>
   </table>
   <table ref="Table F.3-1" name="BASIC DIRECTORY IOD MODULES">
-    <entry ie="Module" name="Reference" ref="Usage" usage="Module Description"/>
-    <entry ie="File-set Identification" name="F.3.2.1" ref="M" usage="File-set identification information"/>
-    <entry ie="Directory Information" name="F.3.2.2" ref="U" usage="Directory Information followed by a Sequence of Directory Records. Note: The Directory Information Module is optional. This Directory Information Module should be present in all but primitive environments where a directory is not needed. In this case, only the File-set Identification Information is present."/>
+    <entry ie="File-set Identification" name="File-set Identification" ref="F.3.2.1" usage="M"/>
+    <entry ie="Directory Information" name="Directory Information" ref="F.3.2.2" usage="U"/>
   </table>
   <table ref="Table F.3-2" name="FILE-SET IDENTIFICATION MODULE">
     <entry group="0004" element="1130" name="File-set ID" type="2" description="User or implementation specific Identifier (up to 16 characters). For definition, see PS 3.10. The File-set ID is intended to be a short human readable label to easily (but not necessarily uniquely) identify a specific File-set to facilitate operator manipulation of the physical media on which the File-set is stored. Assignment of Value and semantics are environment specific."/>
