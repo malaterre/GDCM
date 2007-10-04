@@ -14,18 +14,15 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 -->
+  <!-- TODO: Need to distinguish IODs, modules and macros -->
 
   <!-- an Entry line -->
-  <xsl:template match="entry">
+  <xsl:template match="entry" mode="iod">
+    <todo/>
+  </xsl:template>
+
+  <xsl:template match="entry" mode="module">
     <tr>
-<!-- TODO which one is expected ? -->
-<!-- Version 1 -->
-<!--xsl:text>(</xsl:text>
-                <xsl:value-of select="@group"/>
-                <xsl:text>,</xsl:text>
-                <xsl:value-of select="@element"/>
-                <xsl:text>)</xsl:text-->
-<!-- Version 2 -->
       <td>(<xsl:value-of select="@group"/>,<xsl:value-of select="@element"/>)</td>
       <td>
         <xsl:value-of select="@name"/>
@@ -41,9 +38,9 @@
 
 
   <!-- an Include line -->
-  <xsl:template match="include">
+  <xsl:template match="include" mode="module">
     <tr>
-      <td colspan="4">
+      <td colspan="4"> <!-- FIXME hardcoded value -->
         <xsl:value-of select="@ref"/>
       </td>
     </tr>
@@ -70,10 +67,11 @@
               <th>Type</th>
               <th>Description</th>
             </tr>
-            <xsl:apply-templates/>
+            <xsl:apply-templates mode="module"/>
           </table>
         </xsl:for-each>
       </body>
     </html>
   </xsl:template>
 </xsl:stylesheet>
+
