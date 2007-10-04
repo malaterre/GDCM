@@ -1,3 +1,7 @@
+XML Stuff:
+* Part 3: Exctract section that are referenced in informaltable
+
+Implementation:
 RLE is still not fully operational
 -----------------------------------------------------------------------
 TransferSyntax needs some rework
