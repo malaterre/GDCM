@@ -140,7 +140,14 @@ Only a single Item shall be permitted in this Sequence.</description>
     <entry group="0040" element="A040" name="Value Type" type="1">
       <description>The type of the value encoded in this name-value Item.
 Defined Terms:
- DATETIME  DATE  TIME  PNAME   UIDREF  TEXT  CODE  NUMERIC</description>
+ DATETIME
+ DATE
+ TIME
+ PNAME 
+ UIDREF
+ TEXT
+ CODE
+ NUMERIC</description>
     </entry>
     <entry group="0040" element="A043" name="Concept Name Code Sequence" type="1">
       <description>Coded concept name of this name-value Item.</description>
@@ -1828,7 +1835,9 @@ Note: Issuer of Patient ID (0010,0021) is equivalent to HL7 v2 PID-3 component 4
     </entry>
     <entry group="0010" element="0022" name="&gt;Type of Patient ID" type="??">
       <description>The type of identifier in this item. Defined Terms:
- TEXT  RFID  BARCODE
+ TEXT
+ RFID
+ BARCODE
 Note: The identifier is coded as a string regardless of the type, not as a binary value.</description>
     </entry>
     <entry group="0010" element="1001" name="Other Patient Names" type="??">
@@ -1861,7 +1870,10 @@ Note: The identifier is coded as a string regardless of the type, not as a binar
       <description>Time of birth of the named patient</description>
     </entry>
     <entry group="0010" element="0040" name="Patient's Sex" type="??">
-      <description>Sex of the named patient. Enumerated Values:  M = male  F = female  O = other</description>
+      <description>Sex of the named patient. Enumerated Values:
+ M = male
+ F = female
+ O = other</description>
     </entry>
     <entry group="0010" element="0050" name="Patient's Insurance Plan Code Sequence" type="??">
       <description>A sequence that conveys the patient's insurance plan. Zero or more Items may be included in this Sequence.</description>
@@ -1954,13 +1966,22 @@ Defined Terms:
       <description>Description of prior reaction to contrast agents.</description>
     </entry>
     <entry group="0010" element="21A0" name="Smoking Status" type="??">
-      <description>Indicates whether patient smokes.  Enumerated Values:  YES  NO  UNKNOWN</description>
+      <description>Indicates whether patient smokes. 
+Enumerated Values:
+ YES
+ NO
+ UNKNOWN</description>
     </entry>
     <entry group="0010" element="21B0" name="Additional Patient History" type="??">
       <description>Additional information about the patient's medical history</description>
     </entry>
     <entry group="0010" element="21C0" name="Pregnancy Status" type="??">
-      <description>Describes pregnancy state of patient. Enumerated Values:  0001 = not pregnant  0002 = possibly pregnant  0003 = definitely pregnant  0004 = unknown</description>
+      <description>Describes pregnancy state of patient.
+Enumerated Values:
+ 0001 = not pregnant
+ 0002 = possibly pregnant
+ 0003 = definitely pregnant
+ 0004 = unknown</description>
     </entry>
     <entry group="0010" element="21D0" name="Last Menstrual Date" type="??">
       <description>Date of onset of last menstrual period</description>
@@ -2060,7 +2081,11 @@ Zero or more Items may be included in this sequence.</description>
   </table>
   <table ref="Table C.3-3" name="VISIT STATUS MODULE ATTRIBUTES">
     <entry group="0038" element="0008" name="Visit Status ID" type="??">
-      <description>Identifies the state of the visit. Defined Terms: CREATED = Created but not yet scheduled SCHEDULED = Scheduled but not yet admitted ADMITTED = Patient admitted to institution DISCHARGED = Patient Discharged</description>
+      <description>Identifies the state of the visit. Defined Terms:
+CREATED = Created but not yet scheduled
+SCHEDULED = Scheduled but not yet admitted
+ADMITTED = Patient admitted to institution
+DISCHARGED = Patient Discharged</description>
     </entry>
     <entry group="0038" element="0300" name="Current Patient Location" type="??">
       <description>Describes the current known location of the patient</description>
@@ -2614,7 +2639,9 @@ Notes: 1. The sum of the area dose product of all images of a Series or a Study 
     <entry group="0010" element="0040" name="Patient's Sex" type="??">
       <description>Sex of the named Patient.
 Enumerated Values:
- M = male  F = female  O = other</description>
+ M = male
+ F = female
+ O = other</description>
     </entry>
     <entry group="0040" element="A370" name="Referenced Request Sequence" type="??">
       <description>The list of Requested Procedures the Procedure Step shall contribute to.
@@ -2772,7 +2799,8 @@ Zero or more Items may be included in this sequence.</description>
     <entry group="0040" element="4020" name="Input Availability Flag" type="??">
       <description>Flag that indicates the availability of Composite SOP Instances in the Attribute “Input Information Sequence” (0040,4021) of the General Purpose Scheduled Procedure Step.
 Enumerated values are:
- PARTIAL  COMPLETE
+ PARTIAL
+ COMPLETE
 The value PARTIAL denotes that the list of Composite SOP Instances may not yet be complete, and additional ones may be added at a later time.
 The value COMPLETE denotes that all Composite SOP Instances are available and listed.
 Note: It may happen that the list of Composite SOP Instances is empty when the value of the Input Availability Flag is COMPLETE. In such a case a Workitem has been scheduled that does not require input information. </description>
@@ -2802,7 +2830,8 @@ Note:  This value should be the same as that in the instances in the Input Infor
     <entry group="0040" element="4006" name="Multiple Copies Flag" type="??">
       <description>This flag indicates that multiple copies have to be made of a Composite SOP Instance that supports the notion of multiple copies. This includes the SR SOP Class. If set the Study Instance UIDs in the Referenced Request Sequence (0040,A370) shall be used for the created multiple copies.
 Enumerated Values:
- Y = Yes  N = No</description>
+ Y = Yes
+ N = No</description>
     </entry>
     <entry group="0040" element="4015" name="Resulting General Purpose Performed Procedure Steps Sequence" type="??">
       <description>List of all General Purpose Performed Procedure Steps that result from the performance of the procedure step. 
@@ -2848,7 +2877,9 @@ Only a single Item shall be permitted in this sequence.</description>
     <entry group="0010" element="0040" name="Patient's Sex" type="??">
       <description>Sex of the named Patient.
 Enumerated Values:
- M = male  F = female  O = other</description>
+ M = male
+ F = female
+ O = other</description>
     </entry>
     <entry group="0040" element="A370" name="Referenced Request Sequence" type="??">
       <description>The list of Requested Procedures the Procedure Step shall contribute to.
@@ -3058,7 +3089,11 @@ See Section C.4.23.1.1</description>
       <description>Birth date of the patient.</description>
     </entry>
     <entry group="0010" element="0040" name="Patient's Sex" type="2">
-      <description>Sex of the named patient.  Enumerated Values:  M = male  F = female  O = other</description>
+      <description>Sex of the named patient. 
+Enumerated Values:
+ M = male
+ F = female
+ O = other</description>
     </entry>
     <entry group="0008" element="1120" name="Referenced Patient Sequence" type="3">
       <description>A sequence that provides reference to a Patient SOP Class/Instance pair. Only a single Item shall be permitted in this Sequence. </description>
@@ -3087,7 +3122,9 @@ If present, shall contain one or more items.</description>
     </entry>
     <entry group="0010" element="0022" name="&gt;Type of Patient ID" type="1">
       <description>The type of identifier in this item. Defined Terms:
- TEXT  RFID  BARCODE
+ TEXT
+ RFID
+ BARCODE
 Note: The identifier is coded as a string regardless of the type, not as a binary value.</description>
     </entry>
     <entry group="0010" element="1001" name="Other Patient Names" type="3">
@@ -3149,7 +3186,8 @@ Required if patient is an animal. May be present otherwise.</description>
     <entry group="0012" element="0062" name="Patient Identity Removed" type="3">
       <description>The true identity of the patient has been removed from the Attributes and the Pixel Data
 Enumerated Values:
- YES  NO</description>
+ YES
+ NO</description>
     </entry>
     <entry group="0012" element="0063" name="De-identification Method" type="1C">
       <description>A description or label of the mechanism or method use to remove the patient's identity. May be multi-valued if successive de-identification steps have been performed.
@@ -3316,7 +3354,9 @@ Required if patient is an animal. May be present otherwise.</description>
       <description>A number that identifies this Series.</description>
     </entry>
     <entry group="0020" element="0060" name="Laterality" type="2C">
-      <description>Laterality of (paired) body part examined. Required if the body part examined is a paired structure and Image Laterality (0020,0062) or Frame Laterality (0020,9072) are not sent. Enumerated Values:  R = right  L = left
+      <description>Laterality of (paired) body part examined. Required if the body part examined is a paired structure and Image Laterality (0020,0062) or Frame Laterality (0020,9072) are not sent. Enumerated Values:
+ R = right
+ L = left
 Note: Some IODs support Image Laterality (0020,0062) at the Image level or Frame Laterality(0020,9072) at the Frame level in the Frame Anatomy functional group macro, which can provide a more comprehensive mechanism for specifying the laterality of the body part(s) being examined.</description>
     </entry>
     <entry group="0008" element="0021" name="Series Date" type="3">
@@ -3350,7 +3390,8 @@ Note: This attribute conveys series-specific protocol identification and may or 
       <description>Uniquely identifies the Performed Procedure Step SOP Instance to which the Series is related (e.g. a Modality or General-Purpose Performed Procedure Step SOP Instance). The Sequence shall have zero or one Item.</description>
     </entry>
     <entry group="0008" element="1150" name="&gt;Referenced SOP Class UID" type="1C">
-      <description>Uniquely identifies the referenced SOP Class.  Required if Referenced Performed Procedure Step Sequence (0008,1111) is sent.</description>
+      <description>Uniquely identifies the referenced SOP Class. 
+Required if Referenced Performed Procedure Step Sequence (0008,1111) is sent.</description>
     </entry>
     <entry group="0008" element="1155" name="&gt;Referenced SOP Instance UID" type="1C">
       <description>Uniquely identifies the referenced SOP Instance. Required if Referenced Performed Procedure Step Sequence (0008,1111) is sent.</description>
@@ -3373,7 +3414,8 @@ When absent, implies that the reason for the reference is unknown.</description>
     </entry>
     <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1 DCID 7210"/>
     <entry group="0018" element="0015" name="Body Part Examined" type="3">
-      <description>Text description of the part of the body examined. Defined Terms: SKULL, CSPINE, TSPINE, LSPINE, SSPINE, COCCYX, CHEST, CLAVICLE, BREAST, ABDOMEN, PELVIS, HIP, SHOULDER, ELBOW, KNEE, ANKLE, HAND, FOOT, EXTREMITY, HEAD, HEART, NECK, LEG, ARM, JAW
+      <description>Text description of the part of the body examined. Defined Terms:
+SKULL, CSPINE, TSPINE, LSPINE, SSPINE, COCCYX, CHEST, CLAVICLE, BREAST, ABDOMEN, PELVIS, HIP, SHOULDER, ELBOW, KNEE, ANKLE, HAND, FOOT, EXTREMITY, HEAD, HEART, NECK, LEG, ARM, JAW
 Note: Some IODs support the Anatomic Region Sequence (0008,2218), which can provide a more comprehensive mechanism for specifying the body part being examined.</description>
     </entry>
     <entry group="0018" element="5100" name="Patient Position" type="2C">
@@ -3438,7 +3480,10 @@ The sequence may have one or more Items.</description>
     <entry group="0018" element="106A" name="Synchronization Trigger" type="1">
       <description>Data acquisition synchronization with external equipment
 Enumerated Values:
-SOURCE - this equipment provides synchronization channel or trigger to other equipment EXTERNAL - this equipment receives synchronization channel or trigger from other equipment PASSTHRU - this equipment receives synchronization channel or trigger and forwards it  NO TRIGGER - data acquisition not synchronized by common channel or trigger</description>
+SOURCE - this equipment provides synchronization channel or trigger to other equipment
+EXTERNAL - this equipment receives synchronization channel or trigger from other equipment
+PASSTHRU - this equipment receives synchronization channel or trigger and forwards it 
+NO TRIGGER - data acquisition not synchronized by common channel or trigger</description>
     </entry>
     <entry group="0018" element="1061" name="Trigger Source or Type" type="3">
       <description>Specifies equipment ID of trigger source and/or type of trigger</description>
@@ -3458,7 +3503,10 @@ See C.7.4.2.1.4</description>
     <entry group="0018" element="1802" name="Time Distribution Protocol" type="3">
       <description>Method of time distribution used to synchronize this equipment.
 Defined Terms:
-NTP - Network Time Protocol IRIG - InterRange Instrumentation Group GPS - Global Positioning System SNTP – Simple Network Time Protocol</description>
+NTP - Network Time Protocol
+IRIG - InterRange Instrumentation Group
+GPS - Global Positioning System
+SNTP – Simple Network Time Protocol</description>
     </entry>
     <entry group="0018" element="1803" name="NTP Source Address" type="3">
       <description>IP Address of NTP time source. IPv4 addresses shall be in dotted decimal (e.g. 192.168.1.1). The IPv6 addresses shall be in colon separated hexadecimal (e.g. 12:34:56:78:9a:bc:de:f0).
@@ -3581,7 +3629,9 @@ See C.7.6.1.1.4 for further explanation.</description>
     <entry group="0028" element="135A" name="&gt;Spatial Locations Preserved" type="3">
       <description>The extent to which the spatial locations of all pixels are preserved during the processing of the source image that resulted in the current image
 Enumerated Values:
-YES NO REORIENTED_ONLY - A projection radiograph that has been flipped, and/or rotated by a multiple of 90 degrees
+YES
+NO
+REORIENTED_ONLY - A projection radiograph that has been flipped, and/or rotated by a multiple of 90 degrees
 
 Notes: 1. This applies not only to images with a known relationship to a 3D space, but also to projection images. For example, a projection radiograph such as a mammogram that is processed by a point image processing operation such as contrast enhancement, or a smoothing or edge enhancing convolution, would have a value of YES for this attribute. A projection radiograph that had been magnified or warped geometrically would have a value of NO for this attribute. A projection radiograph that has been flipped, and/or rotated by a multiple of 90 degrees, such that transformation of pixel locations is possible by comparison of the values of Patient Orientation (0020,0020) would have a value of REORIENTED_ONLY. This attribute is typically of importance in relating images with Presentation Intent Type (0008,0068) values of FOR PROCESSING and FOR PRESENTATION.
  2. When the value of this attribute is NO, it is not possible to locate on the current image any pixel coordinates that are referenced relative to the source image, such as for example, might be required for rendering CAD findings derived from a referenced FOR PROCESSING image on the current FOR PRESENTATION image.</description>
@@ -3613,13 +3663,15 @@ One or more Items may be included in this sequence.</description>
     <entry group="0028" element="0300" name="Quality Control Image" type="3">
       <description>Indicates whether or not this image is a quality control or phantom image.
 Enumerated Values: 
- YES  NO
+ YES
+ NO
 If this Attribute is absent, then the image may or may not be a quality control or phantom image. The phantom device in the image can be described using the Device Module. See C.7.6.12</description>
     </entry>
     <entry group="0028" element="0301" name="Burned In Annotation" type="3">
       <description>Indicates whether or not image contains sufficient burned in annotation to identify the patient and date the image was acquired.
 Enumerated Values: 
- YES  NO
+ YES
+ NO
 If this Attribute is absent, then the image may or may not contain burned in annotation.</description>
     </entry>
     <entry group="0028" element="2110" name="Lossy Image Compression" type="3">
@@ -3705,7 +3757,9 @@ Required if the image is to be transferred in one of the following presentation 
       <description>Most significant bit for pixel sample data. Each sample shall have the same high bit. See PS 3.5 for further explanation.</description>
     </entry>
     <entry group="0028" element="0103" name="Pixel Representation" type="1">
-      <description>Data representation of the pixel samples. Each sample shall have the same pixel representation. Enumerated Values:   0000H = unsigned integer.  0001H = 2's complement</description>
+      <description>Data representation of the pixel samples. Each sample shall have the same pixel representation. Enumerated Values: 
+ 0000H = unsigned integer.
+ 0001H = 2's complement</description>
     </entry>
     <entry group="7FE0" element="0010" name="Pixel Data" type="1C">
       <description>A data stream of the pixel samples that comprise the Image. See C.7.6.3.1.4 for further explanation.
@@ -3733,7 +3787,8 @@ Required if Pixel Data Provider URL (0028,7FE0) is not present.</description>
       <description>Specifies the format of the Blue Palette Color Lookup Table Data (0028,1203) Required if Photometric Interpretation (0028,0004) has a value of PALETTE COLOR or Pixel Presentation (0008,9205) at the image level equals COLOR or MIXED. See C.7.6.3.1.5 for further explanation.</description>
     </entry>
     <entry group="0028" element="1201" name="Red Palette Color Lookup Table Data" type="1C">
-      <description>Red Palette Color Lookup Table Data.  Required if Photometric Interpretation (0028,0004) has a value of PALETTE COLOR or Pixel Presentation (0008,9205) at the image level equals COLOR or MIXED. See C.7.6.3.1.6 for further explanation.</description>
+      <description>Red Palette Color Lookup Table Data. 
+Required if Photometric Interpretation (0028,0004) has a value of PALETTE COLOR or Pixel Presentation (0008,9205) at the image level equals COLOR or MIXED. See C.7.6.3.1.6 for further explanation.</description>
     </entry>
     <entry group="0028" element="1202" name="Green Palette Color Lookup Table Data" type="1C">
       <description>Green Palette Color Lookup Table Data. Required if Photometric Interpretation (0028,0004) has a value of PALETTE COLOR or Pixel Presentation (0008,9205) at the image level equals COLOR or MIXED. See C.7.6.3.1.6 for further explanation.</description>
@@ -3787,7 +3842,10 @@ Note: The profile applies only to the Pixel Data (7FE0,0010) attribute at the sa
     </entry>
     <entry group="0018" element="1048" name="Contrast/Bolus Ingredient" type="3">
       <description>Active ingredient of agent. Defined Terms:
- IODINE  GADOLINIUM  CARBON DIOXIDE  BARIUM</description>
+ IODINE
+ GADOLINIUM
+ CARBON DIOXIDE
+ BARIUM</description>
     </entry>
     <entry group="0018" element="1049" name="Contrast/Bolus Ingredient Concentration" type="3">
       <description>Milligrams of active ingredient per milliliter of (diluted) agent</description>
@@ -3818,7 +3876,8 @@ Note: The profile applies only to the Pixel Data (7FE0,0010) attribute at the sa
     <entry group="0018" element="9425" name="&gt;Contrast/Bolus Ingredient Opaque" type="3">
       <description>Absorption of the ingredient greater than the absorption of water (tissue).
 Enumerated Values:
- YES  NO
+ YES
+ NO
 See Section C.7.6.4b.1.</description>
     </entry>
     <entry group="0018" element="9340" name="&gt;Contrast Administration Profile Sequence" type="3">
@@ -3842,7 +3901,10 @@ See Section C.7.6.4b.1.</description>
   </table>
   <table ref="Table C.7-13" name="CINE MODULE ATTRIBUTES">
     <entry group="0018" element="1244" name="Preferred Playback Sequencing" type="3">
-      <description>Describes the preferred playback sequencing for a multi-frame image. Enumerated Values: 0 = Looping (1,2...n,1,2,...n,1,2,....n,...) 1 = Sweeping (1,2,...n,n-1,...2,1,2,...n,...)</description>
+      <description>Describes the preferred playback sequencing for a multi-frame image.
+Enumerated Values:
+0 = Looping (1,2...n,1,2,...n,1,2,....n,...)
+1 = Sweeping (1,2,...n,n-1,...2,1,2,...n,...)</description>
     </entry>
     <entry group="0018" element="1063" name="Frame Time" type="1C">
       <description>Nominal time (in msec) per individual frame. See C.7.6.5.1.1 for further explanation. Required if Frame Increment Pointer (0028,0009) points to Frame Time.</description>
@@ -3885,7 +3947,8 @@ Required if the Transfer Syntax used to encode the multi-frame image contains mu
     <entry group="003A" element="0302" name="&gt;Channel Mode" type="1">
       <description>A coded descriptor qualifying the mode of the channel:
 Enumerated Values:
-MONO = 1 signal STEREO = 2 simultaneously acquired (left and right) signals</description>
+MONO = 1 signal
+STEREO = 2 simultaneously acquired (left and right) signals</description>
     </entry>
     <entry group="003A" element="0208" name="&gt;Channel Source Sequence" type="1">
       <description>A coded descriptor of the audio channel source. Only a single Item shall be permitted in this sequence.</description>
@@ -3956,12 +4019,14 @@ If zero length, TID Offset defaults to 1. Required if Mask Operation (0028,6101)
     <entry group="0028" element="9454" name="&gt;Mask Selection Mode" type="3">
       <description>Specifies the method of selection of the mask operations of this item.
 Defined Terms:
- SYSTEM  USER</description>
+ SYSTEM
+ USER</description>
     </entry>
     <entry group="0028" element="1090" name="Recommended Viewing Mode" type="2">
       <description>Specifies the recommended viewing protocol(s).
 Defined terms:
-SUB = for subtraction with mask images; NAT = native viewing of image as sent.
+SUB = for subtraction with mask images;
+NAT = native viewing of image as sent.
 Note: If an implementation does not recognize the defined term for Recommended Viewing Mode (0028,1090) , reverting to native display mode is recommended.</description>
     </entry>
   </table>
@@ -3971,7 +4036,9 @@ Note: If an implementation does not recognize the defined term for Recommended V
   <table ref="Table C.7-17a" name="DISPLAY SHUTTER MACRO ATTRIBUTES">
     <entry group="0018" element="1600" name="Shutter Shape" type="1">
       <description>Shape(s) of the shutter defined for display. Enumerated Values:
- RECTANGULAR  CIRCULAR  POLYGONAL
+ RECTANGULAR
+ CIRCULAR
+ POLYGONAL
 This multi-valued Attribute shall contain at most one of each Enumerated Value.</description>
     </entry>
     <entry group="0018" element="1602" name="Shutter Left Vertical Edge" type="1C">
@@ -3995,7 +4062,8 @@ This multi-valued Attribute shall contain at most one of each Enumerated Value.<
     <entry group="0018" element="1620" name="Vertices of the Polygonal Shutter" type="1C">
       <description>Required if Shutter Shape (0018,1600) is POLYGONAL. 
 Multiple Values where the first set of two values are:
- row of the origin vertex  column of the origin vertex
+ row of the origin vertex
+ column of the origin vertex
 Two or more pairs of values follow and are the row and column coordinates of the other vertices of the polygon shutter. Polygon shutters are implicitly closed from the last vertex to the origin vertex and all edges shall be non-intersecting except at the vertices.</description>
     </entry>
     <entry group="0018" element="1622" name="Shutter Presentation Value" type="3">
@@ -4056,7 +4124,10 @@ One or more Items may be included in this Sequence.</description>
     <entry group="0018" element="0038" name="&gt;Intervention Status" type="2">
       <description>Temporal relation of SOP Instance to intervention
 Enumerated Values:
- PRE  INTERMEDIATE  POST  NONE
+ PRE
+ INTERMEDIATE
+ POST
+ NONE
 </description>
     </entry>
     <entry group="0018" element="0029" name="&gt;Intervention Drug Sequence" type="3">
@@ -4391,13 +4462,15 @@ US = Unspecified if Modality (0008,0060) equals MR.</description>
 Defined Terms for CT:
 BRAIN
 SOFT_TISSUE
-LUNG BONE</description>
+LUNG
+BONE</description>
     </entry>
     <entry group="0028" element="1056" name="&gt;VOI LUT Function" type="3">
       <description>Describes a VOI LUT function to apply to the values of Window Center (0028,1050) and Window Width (0028,1051).
 See C.11.2.1.3 for further explanation.
 Defined terms:
- LINEAR  SIGMOID
+ LINEAR
+ SIGMOID
 When this attribute is not present, the interpretation of the values of Window Center (0028,1050) and Window Width (0028,1051) is linear as in C.11.2.1.2.</description>
     </entry>
   </table>
@@ -4448,18 +4521,29 @@ Required if Real World Value Intercept (0040,9224) is not present.</description>
     <entry group="0018" element="9342" name="&gt;Contrast/Bolus Agent Administered" type="1">
       <description>The administration of the selected agent had begun by the time this frame was acquired.
 Enumerated Values:
- YES   NO</description>
+ YES 
+ NO</description>
     </entry>
     <entry group="0018" element="9343" name="&gt;Contrast/Bolus Agent Detected" type="2">
       <description>The selected agent was detected in the frame.
 Enumerated Values:
- YES   NO
+ YES 
+ NO
 May only be zero length if the acquisition device is not capable of detecting the presence of this contrast agent in the frame.</description>
     </entry>
     <entry group="0018" element="9344" name="&gt;Contrast/Bolus Agent Phase" type="2C">
       <description>Nominal phase of intravenous contrast administration.
 Defined terms:
- PRE_CONTRAST  POST_CONTRAST  IMMEDIATE  DYNAMIC  STEADY_STATE  DELAYED  ARTERIAL  CAPILLARY  VENOUS  PORTAL_VENOUS
+ PRE_CONTRAST
+ POST_CONTRAST
+ IMMEDIATE
+ DYNAMIC
+ STEADY_STATE
+ DELAYED
+ ARTERIAL
+ CAPILLARY
+ VENOUS
+ PORTAL_VENOUS
 Required if Contrast/Bolus Administration Route Sequence (0018,0014) for the Contrast/Bolus Agent Number (0018,9337) defined in the Contrast/Bolus Agent Sequence (0018,0012) is (SNM3, G-D101, “Intravenous route”).</description>
     </entry>
   </table>
@@ -4578,8 +4662,10 @@ Required if the value of the Dimension Index Sequence (0020,9222) contains Items
 Enumerated Values:
 NONE
 REALTIME = total time for the acquisition is shorter than cardiac cycle, no gating is applied
-PROSPECTIVE = certain thresholds have been set for a gating window that defines the acceptance of measurement data during the acquisition
-RETROSPECTIVE = certain thresholds have been set for a gating window that defines the acceptance of measurement data after the acquisition
+PROSPECTIVE =
+certain thresholds have been set for a gating window that defines the acceptance of measurement data during the acquisition
+RETROSPECTIVE =
+certain thresholds have been set for a gating window that defines the acceptance of measurement data after the acquisition
 PACED = there is a constant RR interval (e.g., Pacemaker), which makes thresholding not required
 Required if Image Type (0008,0008) Value 1 is ORIGINAL or MIXED. May be present otherwise.</description>
     </entry>
@@ -4602,9 +4688,12 @@ Otherwise may be present if Image Type (0008,0008) Value 1 is DERIVED and Cardi
       <description>Cardiac arrhythmia rejection technique.
 Defined Terms:
 NONE
-RR_INTERVAL = rejection based on deviation from average RR interval
-QRS_LOOP = rejection based on deviation from regular QRS loop
-PVC = rejection based on PVC criteria
+RR_INTERVAL =
+rejection based on deviation from average RR interval
+QRS_LOOP =
+rejection based on deviation from regular QRS loop
+PVC =
+rejection based on PVC criteria
 Required if Image Type (0008,0008) Value 1 is ORIGINAL or MIXED and Cardiac Synchronization Technique (0018,9037) equals PROSPECTIVE or RETROSPECTIVE.
 Otherwise may be present if Image Type (0008,0008) Value 1 is DERIVED and Cardiac Synchronization Technique (0018,9037) equals PROSPECTIVE or RETROSPECTIVE.</description>
     </entry>
@@ -4635,13 +4724,19 @@ Otherwise may be present if Image Type (0008,0008) Value 1 is DERIVED and Cardi
 Defined Terms:
 NONE
 BREATH_HOLD
-REALTIME = image acquisition shorter than respiratory cycle
+REALTIME =
+image acquisition shorter than respiratory cycle
 GATING = Prospective gating
-TRACKING = prospective through-plane or in-plane motion tracking
-PHASE_ORDERING = prospective phase ordering
-PHASE_RESCANNING = prospective techniques, such as real-time averaging, diminishing variance and motion adaptive gating
-RETROSPECTIVE = retrospective gating
-CORRECTION = retrospective image correction
+TRACKING =
+prospective through-plane or in-plane motion tracking
+PHASE_ORDERING =
+prospective phase ordering
+PHASE_RESCANNING =
+prospective techniques, such as real-time averaging, diminishing variance and motion adaptive gating
+RETROSPECTIVE =
+retrospective gating
+CORRECTION =
+retrospective image correction
 Required if Image Type (0008,0008) Value 1 is ORIGINAL or MIXED. May be present otherwise.</description>
     </entry>
     <entry group="0018" element="9171" name="Respiratory Signal Source" type="1C">
@@ -4670,7 +4765,8 @@ NONE
 REALTIME = image acquisition shorter than motion cycle
 GATING = prospective gating
 TRACKING = prospective through and/or in‑plane motion tracking
-RETROSPECTIVE = retrospective gating
+RETROSPECTIVE =
+retrospective gating
 CORRECTION = retrospective image correction 
 Required if Image Type (0008,0008) Value 1 is ORIGINAL or MIXED. May be present otherwise.</description>
     </entry>
@@ -4739,11 +4835,42 @@ Otherwise may be present if Image Type (0008,0008) Value 1 is DERIVED and Bulk 
   <table ref="Table C.8-1" name="CR SERIES MODULE ATTRIBUTES">
     <entry group="0018" element="0015" name="Body Part Examined" type="2">
       <description>Text description of the part of the body examined. Defined Terms:
- SKULL  CSPINE  TSPINE  LSPINE  SSPINE  COCCYX  CHEST  CLAVICLE  BREAST  ABDOMEN  PELVIS  HIP  SHOULDER  ELBOW  KNEE  ANKLE  HAND  FOOT  EXTREMITY  HEAD  HEART  NECK  LEG  ARM  JAW</description>
+ SKULL
+ CSPINE
+ TSPINE
+ LSPINE
+ SSPINE
+ COCCYX
+ CHEST
+ CLAVICLE
+ BREAST
+ ABDOMEN
+ PELVIS
+ HIP
+ SHOULDER
+ ELBOW
+ KNEE
+ ANKLE
+ HAND
+ FOOT
+ EXTREMITY
+ HEAD
+ HEART
+ NECK
+ LEG
+ ARM
+ JAW</description>
     </entry>
     <entry group="0018" element="5101" name="View Position" type="2">
       <description>Radiographic view associated with Patient Position (0018,5100). Defined Terms:
- AP = Anterior/Posterior  PA = Posterior/Anterior  LL = Left Lateral  RL = Right Lateral  RLD = Right Lateral Decubitus  LLD = Left Lateral Decubitus  RLO = Right Lateral Oblique  LLO = Left Lateral Oblique </description>
+ AP = Anterior/Posterior
+ PA = Posterior/Anterior
+ LL = Left Lateral
+ RL = Right Lateral
+ RLD = Right Lateral Decubitus
+ LLD = Left Lateral Decubitus
+ RLO = Right Lateral Oblique
+ LLO = Left Lateral Oblique </description>
     </entry>
     <entry group="0018" element="1160" name="Filter Type" type="3">
       <description>Label for the type of filter inserted into the x-ray beam</description>
@@ -4790,7 +4917,7 @@ Note: This value is traditionally referred to as Source Object Distance (SOD).</
     <entry group="0018" element="1152" name="Exposure" type="3">
       <description>The exposure expressed in mAs, for example calculated from Exposure Time and X-ray Tube Current.</description>
     </entry>
-    <entry group="0018" element="1153" name="Exposure in µAs" type="3">
+    <entry group="0018" element="1153" name="Exposure in As" type="3">
       <description>The exposure expressed in µAs, for example calculated from Exposure Time and X-ray Tube Current.</description>
     </entry>
     <entry group="0018" element="1164" name="Imager Pixel Spacing" type="3">
@@ -4808,12 +4935,24 @@ In the case of CR, the front plane is defined to be the external surface of the 
       <description>Code representing the device-specific processing associated with the image (e.g. CR Organ Filtering code)</description>
     </entry>
     <entry group="0018" element="1402" name="Cassette Orientation" type="3">
-      <description>Orientation of cassette, used to properly position the image for display. Enumerated Values:
- LANDSCAPE  PORTRAIT</description>
+      <description>Orientation of cassette, used to properly position the image for display.
+Enumerated Values:
+ LANDSCAPE
+ PORTRAIT</description>
     </entry>
     <entry group="0018" element="1403" name="Cassette Size" type="3">
       <description>Size of cassette. Defined Terms:
- 18CMX24CM  8INX10IN  24CMX30CM  10INX12IN  30CMX35CM  30CMX40CM  11INX14IN  35CMX35CM  14INX14IN  35CMX43CM  14INX17IN</description>
+ 18CMX24CM
+ 8INX10IN
+ 24CMX30CM
+ 10INX12IN
+ 30CMX35CM
+ 30CMX40CM
+ 11INX14IN
+ 35CMX35CM
+ 14INX14IN
+ 35CMX43CM
+ 14INX17IN</description>
     </entry>
     <entry group="0018" element="1404" name="Exposures on Plate" type="3">
       <description>Total number of x-ray exposures that have been made on the plate identified in Plate ID (0018,1004)</description>
@@ -4881,8 +5020,10 @@ Note: This value is traditionally referred to as Source Object Distance (SOD).</
       <description>The distance in mm of the top of the patient table to the center of rotation; below the center is positive.</description>
     </entry>
     <entry group="0018" element="1140" name="Rotation Direction" type="3">
-      <description>Direction of rotation of the source when relevant, about nearest principal axis of equipment. Enumerated Values:
- CW = clockwise  CC = counter clockwise</description>
+      <description>Direction of rotation of the source when relevant, about nearest principal axis of equipment.
+Enumerated Values:
+ CW = clockwise
+ CC = counter clockwise</description>
     </entry>
     <entry group="0018" element="1150" name="Exposure Time" type="3">
       <description>Time of x-ray exposure in msec</description>
@@ -4893,7 +5034,7 @@ Note: This value is traditionally referred to as Source Object Distance (SOD).</
     <entry group="0018" element="1152" name="Exposure" type="3">
       <description>The exposure expressed in mAs, for example calculated from Exposure Time and X-ray Tube Current.</description>
     </entry>
-    <entry group="0018" element="1153" name="Exposure in µAs" type="3">
+    <entry group="0018" element="1153" name="Exposure in As" type="3">
       <description>The exposure expressed in µAs, for example calculated from Exposure Time and X-ray Tube Current.</description>
     </entry>
     <entry group="0018" element="1160" name="Filter Type" type="3">
@@ -4955,21 +5096,47 @@ Defined Terms:
       <description>Number of bits allocated for each pixel sample. Each sample shall have the same number of bits allocated. See C.8.3.1.1.4 for specialization.</description>
     </entry>
     <entry group="0018" element="0020" name="Scanning Sequence" type="1">
-      <description>Description of the type of data taken.  Enumerated Values:
- SE = Spin Echo  IR = Inversion Recovery  GR = Gradient Recalled  EP = Echo Planar  RM = Research Mode
+      <description>Description of the type of data taken. 
+Enumerated Values:
+ SE = Spin Echo
+ IR = Inversion Recovery
+ GR = Gradient Recalled
+ EP = Echo Planar
+ RM = Research Mode
 Note: Multi-valued, but not all combinations are valid (e.g. SE/GR, etc.).</description>
     </entry>
     <entry group="0018" element="0021" name="Sequence Variant" type="1">
-      <description>Variant of the Scanning Sequence. Defined Terms:
- SK = segmented k-space  MTC = magnetization transfer    contrast  SS = steady state  TRSS = time reversed steady    state  SP = spoiled  MP = MAG prepared  OSP = oversampling phase  NONE = no sequence variant</description>
+      <description>Variant of the Scanning Sequence.
+Defined Terms:
+ SK = segmented k-space
+ MTC = magnetization transfer
+   contrast
+ SS = steady state
+ TRSS = time reversed steady
+   state
+ SP = spoiled
+ MP = MAG prepared
+ OSP = oversampling phase
+ NONE = no sequence variant</description>
     </entry>
     <entry group="0018" element="0022" name="Scan Options" type="2">
       <description>Parameters of scanning sequence. Defined Terms:
- PER = Phase Encode    Reordering  RG = Respiratory Gating  CG = Cardiac Gating  PPG = Peripheral Pulse Gating  FC = Flow Compensation  PFF = Partial Fourier -    Frequency  PFP = Partial Fourier - Phase  SP = Spatial Presaturation  FS = Fat Saturation</description>
+ PER = Phase Encode
+   Reordering
+ RG = Respiratory Gating
+ CG = Cardiac Gating
+ PPG = Peripheral Pulse Gating
+ FC = Flow Compensation
+ PFF = Partial Fourier -
+   Frequency
+ PFP = Partial Fourier - Phase
+ SP = Spatial Presaturation
+ FS = Fat Saturation</description>
     </entry>
     <entry group="0018" element="0023" name="MR Acquisition Type" type="2">
       <description>Identification of data encoding scheme. Enumerated Values:
- 2D = frequency x phase  3D = frequency x phase x phase</description>
+ 2D = frequency x phase
+ 3D = frequency x phase x phase</description>
     </entry>
     <entry group="0018" element="0080" name="Repetition Time" type="2C">
       <description>The period of time in msec between the beginning of a pulse sequence and the beginning of the succeeding (essentially identical) pulse sequence. Required except when Scanning Sequence (0018,0020) is EP and Sequence Variant (0018,0021) is not SK.</description>
@@ -4991,7 +5158,8 @@ Note: Multi-valued, but not all combinations are valid (e.g. SE/GR, etc.).</desc
     </entry>
     <entry group="0018" element="0025" name="Angio Flag" type="3">
       <description>Angio Image Indicator. Primary image for Angio processing. Enumerated Values:
- Y = Image is Angio  N = Image is not Angio</description>
+ Y = Image is Angio
+ N = Image is not Angio</description>
     </entry>
     <entry group="0018" element="0083" name="Number of Averages" type="3">
       <description>Number of times a given pulse sequence is repeated before any parameter is changed</description>
@@ -5027,8 +5195,10 @@ Note: Multi-valued, but not all combinations are valid (e.g. SE/GR, etc.).</desc
       <description>Average R-R interval used for the scans, in msec</description>
     </entry>
     <entry group="0018" element="1080" name="Beat Rejection Flag" type="3">
-      <description>Beat length sorting has been applied. Enumerated Values:
- Y = yes  N = No</description>
+      <description>Beat length sorting has been applied.
+Enumerated Values:
+ Y = yes
+ N = No</description>
     </entry>
     <entry group="0018" element="1081" name="Low R-R Value" type="3">
       <description>R-R interval low limit for beat rejection, in msec</description>
@@ -5072,7 +5242,8 @@ Multi-valued: frequency rowsfrequency columnsphase rowsphase columns.</descripti
     </entry>
     <entry group="0018" element="1312" name="In-plane Phase Encoding Direction" type="3">
       <description>The axis of phase encoding with respect to the image. Enumerated Values:
- ROW = phase encoded in rows.  COL = phase encoded in columns.</description>
+ ROW = phase encoded in rows.
+ COL = phase encoded in columns.</description>
     </entry>
     <entry group="0018" element="1314" name="Flip Angle" type="3">
       <description>Steady state angle in degrees to which the magnetic vector is flipped from the magnetic vector of the primary field.</description>
@@ -5082,7 +5253,8 @@ Multi-valued: frequency rowsfrequency columnsphase rowsphase columns.</descripti
     </entry>
     <entry group="0018" element="1315" name="Variable Flip Angle Flag" type="3">
       <description>Flip angle variation applied during image acquisition. Enumerated Values:
- Y = yes  N = no</description>
+ Y = yes
+ N = no</description>
     </entry>
     <entry group="0018" element="1318" name="dB/dt" type="3">
       <description>The rate of change of the gradient coil magnetic flux density with time (T/s).</description>
@@ -5120,13 +5292,16 @@ Multi-valued: frequency rowsfrequency columnsphase rowsphase columns.</descripti
       <description>Specifies the intended interpretation of the pixel data. See C.8.4.7.1.1 for further explanation.</description>
     </entry>
     <entry group="0028" element="0100" name="Bits Allocated" type="1">
-      <description>Number of bits allocated for each pixel sample. Each sample shall have the same number of bits allocated. Enumerated Values: 8, 16.</description>
+      <description>Number of bits allocated for each pixel sample. Each sample shall have the same number of bits allocated.
+Enumerated Values: 8, 16.</description>
     </entry>
     <entry group="0028" element="0101" name="Bits Stored" type="1">
-      <description>Number of bits stored for each pixel sample. Each sample shall have the same number of bits stored. The value shall be the same as the value in Bits Allocated (0028,0100).</description>
+      <description>Number of bits stored for each pixel sample. Each sample shall have the same number of bits stored.
+The value shall be the same as the value in Bits Allocated (0028,0100).</description>
     </entry>
     <entry group="0028" element="0102" name="High Bit" type="1">
-      <description>Most significant bit for pixel sample data. Each sample shall have the same high bit. Shall be one less than the value in Bits Stored (0028,0101).</description>
+      <description>Most significant bit for pixel sample data. Each sample shall have the same high bit.
+Shall be one less than the value in Bits Stored (0028,0101).</description>
     </entry>
     <entry group="0028" element="0030" name="Pixel Spacing" type="2">
       <description>Physical distance in the patient between the center of each pixel, specified by a numeric pair - adjacent row spacing (delimiter) adjacent column spacing, in mm. See 10.7.1.3 for further explanation of the value order.</description>
@@ -5159,7 +5334,10 @@ Multi-valued: frequency rowsfrequency columnsphase rowsphase columns.</descripti
     </entry>
     <entry group="0054" element="0051" name="Number of Rotations" type="1C">
       <description>Number of rotations. Required if Image Type (0008,0008), Value 3 is
- TOMO,  GATED TOMO,  RECON TOMO, or  RECON GATED TOMO.
+ TOMO,
+ GATED TOMO,
+ RECON TOMO, or
+ RECON GATED TOMO.
 See C.8.4.8.1.5 for specialization.</description>
     </entry>
     <entry group="0054" element="0060" name="R-R Interval Vector" type="1C">
@@ -5206,16 +5384,27 @@ Required if Lossy Compression has been performed on the Image.</description>
     </entry>
     <entry group="0018" element="0071" name="Acquisition Termination Condition" type="3">
       <description>Description of how the data collection was stopped. Defined Terms:
- CNTS = counts  DENS = density  MANU = manual   OVFL = data overflow  TIME = time  TRIG = physiological trigger
+ CNTS = counts
+ DENS = density
+ MANU = manual 
+ OVFL = data overflow
+ TIME = time
+ TRIG = physiological trigger
 See C.8.4.9.1.3 for specialization.</description>
     </entry>
     <entry group="0018" element="1130" name="Table Height" type="3">
       <description>The height of the patient table in mm. The range and values of this element are determined by the manufacturer. Should not be included if Image Type (0008,0008), Value 3, is
- TOMO,  GATED TOMO,  RECON TOMO or  RECON GATED TOMO.</description>
+ TOMO,
+ GATED TOMO,
+ RECON TOMO or
+ RECON GATED TOMO.</description>
     </entry>
     <entry group="0018" element="1131" name="Table Traverse" type="3">
       <description>Location of the patient table (or gantry relative to the table) in mm. The range and values of this element are determined by the manufacturer. Should not be included if Image Type (0008,0008), Value 3, is
- TOMO,  GATED TOMO,  RECON TOMO or  RECON GATED TOMO.</description>
+ TOMO,
+ GATED TOMO,
+ RECON TOMO or
+ RECON GATED TOMO.</description>
     </entry>
     <entry group="0018" element="1242" name="Actual Frame Duration" type="1C">
       <description>Elapsed time for data acquisition in msec. Required if Image Type (0008,0008) Value 3 is:
@@ -5230,14 +5419,32 @@ See C.8.4.9.1.4 for specialization.</description>
       <description>Code or description of processing functions applied to the data.</description>
     </entry>
     <entry group="0028" element="0051" name="Corrected Image" type="3">
-      <description>A value that indicates which, if any, corrections have been applied to the image. Corrections are applied to all frames in the image. Defined Terms:   UNIF = flood corrected  COR = center of rotation corrected  NCO = non-circular orbit corrected  DECY = decay corrected  ATTN = attenuation corrected  SCAT = scatter corrected  DTIM = dead time corrected  NRGY = energy corrected  LIN = linearity corrected  MOTN = motion corrected  CLN = count loss normalization; Any type of normalization applied to correct for count loss in Time Slots.</description>
+      <description>A value that indicates which, if any, corrections have been applied to the image. Corrections are applied to all frames in the image. Defined Terms: 
+ UNIF = flood corrected
+ COR = center of rotation corrected
+ NCO = non-circular orbit corrected
+ DECY = decay corrected
+ ATTN = attenuation corrected
+ SCAT = scatter corrected
+ DTIM = dead time corrected
+ NRGY = energy corrected
+ LIN = linearity corrected
+ MOTN = motion corrected
+ CLN = count loss normalization; Any type of normalization applied to correct for count loss in Time Slots.</description>
     </entry>
     <entry group="0018" element="1301" name="Whole Body Technique" type="3">
       <description>The type of scan performed. Used only if Image Type (0008,0008), Value 3, contains the value WHOLE BODY. Enumerated Values:
- 1PS = one pass   2PS = two pass   PCN = patient contour following   employed  MSP = multiple static frames   collected into a whole   body frame.</description>
+ 1PS = one pass 
+ 2PS = two pass 
+ PCN = patient contour following
+  employed
+ MSP = multiple static frames
+  collected into a whole
+  body frame.</description>
     </entry>
     <entry group="0018" element="1300" name="Scan Velocity" type="2C">
-      <description>The speed of the camera motion over the body in mm/sec. Required if Image Type (0008,0008) Value 3 contains the value WHOLE BODY.</description>
+      <description>The speed of the camera motion over the body in mm/sec.
+Required if Image Type (0008,0008) Value 3 contains the value WHOLE BODY.</description>
     </entry>
     <entry group="0018" element="1302" name="Scan Length" type="2C">
       <description>Size of the imaged area in the direction of scanning motion, in mm. Required if Image Type (0008,0008) Value 3 contains the value WHOLE BODY.</description>
@@ -5342,12 +5549,22 @@ See C.8.4.9.1.4 for specialization.</description>
     </entry>
     <entry group="0018" element="1181" name="&gt;Collimator Type" type="2C">
       <description>Collimator type. Defined Terms:
- PARA = Parallel (default)  PINH = Pinhole  FANB = Fan-beam  CONE = Cone-beam  SLNT = Slant hole  ASTG = Astigmatic  DIVG = Diverging  NONE = No collimator  UNKN = Unknown
+ PARA = Parallel (default)
+ PINH = Pinhole
+ FANB = Fan-beam
+ CONE = Cone-beam
+ SLNT = Slant hole
+ ASTG = Astigmatic
+ DIVG = Diverging
+ NONE = No collimator
+ UNKN = Unknown
 Required if a sequence Item is present.</description>
     </entry>
     <entry group="0018" element="1147" name="&gt;Field of View Shape" type="3">
       <description>Shape of the field of view of the Nuclear Medicine detector. Defined Terms:
- RECTANGLE  ROUND  HEXAGONAL</description>
+ RECTANGLE
+ ROUND
+ HEXAGONAL</description>
     </entry>
     <entry group="0018" element="1149" name="&gt;Field of View Dimension(s)" type="3">
       <description>Dimensions of the field of view, in mm. If Field of View Shape (0018,1147) is:
@@ -5381,10 +5598,17 @@ HEXAGONAL: diameter of a circumscribed circle.</description>
     </entry>
     <entry group="0054" element="0200" name="&gt;Start Angle" type="3">
       <description>Position of the detector about the patient for the start of the acquisition, in degrees. Zero degrees is referenced to the origin at the patient's back. Viewing from the patient's feet, angle increases in a counter-clockwise direction (detector normal rotating from the patient's back towards the patient's left side). Should not be included if Image Type (0008,0008), Value 3, is
- TOMO,  GATED TOMO,  RECON TOMO or  RECON GATED TOMO.</description>
+ TOMO,
+ GATED TOMO,
+ RECON TOMO or
+ RECON GATED TOMO.</description>
     </entry>
     <entry group="0018" element="1142" name="&gt; Radial Position" type="3">
-      <description>Radial distance of the detector from the center of rotation, in mm. Should not be included if Image Type (0008,0008), Value 3, is  TOMO,  GATED TOMO,  RECON TOMO or  RECON GATED TOMO.</description>
+      <description>Radial distance of the detector from the center of rotation, in mm. Should not be included if Image Type (0008,0008), Value 3, is
+ TOMO,
+ GATED TOMO,
+ RECON TOMO or
+ RECON GATED TOMO.</description>
     </entry>
     <entry group="0020" element="0037" name="&gt;Image Orientation (Patient)" type="2C">
       <description>The direction cosines of the first row and the first column with respect to the patient. See C.7.6.2.1.1 for further explanation. Required if a sequence Item is present.</description>
@@ -5412,8 +5636,10 @@ HEXAGONAL: diameter of a circumscribed circle.</description>
       <description>The angular scan arc step between views of the TOMO acquisition, in degrees. See C.8.4.12.1.1 for further explanation. Required if a sequence Item is present.</description>
     </entry>
     <entry group="0018" element="1140" name="&gt;Rotation Direction" type="1C">
-      <description>Direction of rotation of the detector about the patient. See Start Angle (0054,0200) for further explanation of direction. Enumerated Values:
-CW = clockwise (decreasing angle) CC = counter-clockwise (increasing angle).
+      <description>Direction of rotation of the detector about the patient. See Start Angle (0054,0200) for further explanation of direction.
+Enumerated Values:
+CW = clockwise (decreasing angle)
+CC = counter-clockwise (increasing angle).
 Required if a sequence Item is present.</description>
     </entry>
     <entry group="0018" element="1143" name="&gt;Scan Arc" type="1C">
@@ -5423,7 +5649,8 @@ Required if a sequence Item is present.</description>
       <description>Nominal acquisition time per angular position, in msec. Required if a sequence Item is present.</description>
     </entry>
     <entry group="0018" element="1142" name="&gt;Radial Position" type="3">
-      <description>Radial distance of the detector from the center of rotation, in mm. It shall have a single value which is an average value for this rotation, or it shall have one value per angular view.</description>
+      <description>Radial distance of the detector
+from the center of rotation, in mm. It shall have a single value which is an average value for this rotation, or it shall have one value per angular view.</description>
     </entry>
     <entry group="0018" element="1110" name="&gt;Distance Source to Detector" type="2C">
       <description>Distance in mm from transmission source to the detector face. Required if Image Type (0008,0008), Value 4, is TRANSMISSION and a sequence Item is present.</description>
@@ -5447,7 +5674,8 @@ ACQ DURING STEP = Interrupted motion, acquisition is continuous.</description>
   <table ref="Table C.8-13" name="NM MULTI-GATED ACQUISITION MODULE ATTRIBUTES">
     <entry group="0018" element="1080" name="Beat Rejection Flag" type="3">
       <description>Heart beat duration sorting has been applied. Enumerated Values:
- Y = yes  N = no</description>
+ Y = yes
+ N = no</description>
     </entry>
     <entry group="0018" element="1085" name="PVC Rejection" type="3">
       <description>Description of type of arrhythmic beat rejection criteria used.</description>
@@ -5520,7 +5748,11 @@ ACQ DURING STEP = Interrupted motion, acquisition is continuous.</description>
     <entry group="0054" element="0039" name="&gt;Phase Description" type="3">
       <description>Description of this phase of the Dynamic image. 
 Defined Terms:
- FLOW  WASHOUT  UPTAKE  EMPTYING  EXCRETION</description>
+ FLOW
+ WASHOUT
+ UPTAKE
+ EMPTYING
+ EXCRETION</description>
     </entry>
   </table>
   <table ref="Table C.8-15" name="NM RECONSTRUCTION MODULE ATTRIBUTES">
@@ -5768,7 +6000,13 @@ See C.8.5.6.10</description>
     </entry>
     <entry group="0008" element="2120" name="Stage Name" type="3">
       <description>A Stage is a particular time slice of a protocol in which a set of images are collected. The names can be free form text. Recommended text for Stress Echo stage names are:
- PRE-EXERCISE,  POST-EXERCISE,  PEAK-EXERCISE,  RECOVERY,  BASELINE,  LOW DOSE,  PEAK DOSE</description>
+ PRE-EXERCISE,
+ POST-EXERCISE,
+ PEAK-EXERCISE,
+ RECOVERY,
+ BASELINE,
+ LOW DOSE,
+ PEAK DOSE</description>
     </entry>
     <entry group="0040" element="000A" name="Stage Code Sequence" type="3">
       <description>Sequence of items describing the performed Ultrasound Protocol Stage(s).</description>
@@ -5819,7 +6057,8 @@ Note: The synchronization of this time with an external clock is specified in th
     </entry>
     <entry group="0018" element="1080" name="Beat Rejection Flag" type="3">
       <description>Beat length sorting has been applied. Enumerated Values:
- Y = yes  N = no</description>
+ Y = yes
+ N = no</description>
     </entry>
     <entry group="0018" element="1081" name="Low R-R Value" type="3">
       <description>R-R interval low limit for beat rejection, in msec</description>
@@ -5867,7 +6106,22 @@ See C.8.5.6.1.26.</description>
     </entry>
     <entry group="0018" element="6031" name="Transducer Type" type="3">
       <description>Defined Terms:
- SECTOR_PHASED  SECTOR_MECH  SECTOR_ANNULAR  LINEAR   CURVED LINEAR   SINGLE CRYSTAL  SPLIT XTAL CWD  IV_PHASED  IV_ROT XTAL  IV_ROT MIRROR  ENDOCAV_PA  ENDOCAV_MECH  ENDOCAV_CLA  ENDOCAV_AA  ENDOCAV_LINEAR  VECTOR_PHASED</description>
+ SECTOR_PHASED
+ SECTOR_MECH
+ SECTOR_ANNULAR
+ LINEAR 
+ CURVED LINEAR 
+ SINGLE CRYSTAL
+ SPLIT XTAL CWD
+ IV_PHASED
+ IV_ROT XTAL
+ IV_ROT MIRROR
+ ENDOCAV_PA
+ ENDOCAV_MECH
+ ENDOCAV_CLA
+ ENDOCAV_AA
+ ENDOCAV_LINEAR
+ VECTOR_PHASED</description>
     </entry>
     <entry group="0018" element="5012" name="Focus Depth" type="3">
       <description>The depth, from the transducer face, of the manufacturer defined beam focus used for the image, in cm.</description>
@@ -5904,7 +6158,14 @@ See C.8.5.6.1.11 for specialization.</description>
   <table ref="Table C.8-24" name="SC EQUIPMENT MODULE ATTRIBUTES">
     <entry group="0008" element="0064" name="Conversion Type" type="1">
       <description>Describes the kind of image conversion. Defined Terms :
- DV = Digitized Video  DI = Digital Interface  DF = Digitized Film  WSD = Workstation  SD = Scanned Document  SI = Scanned Image  DRW = Drawing  SYN = Synthetic Image</description>
+ DV = Digitized Video
+ DI = Digital Interface
+ DF = Digitized Film
+ WSD = Workstation
+ SD = Scanned Document
+ SI = Scanned Image
+ DRW = Drawing
+ SYN = Synthetic Image</description>
     </entry>
     <entry group="0008" element="0060" name="Modality" type="3">
       <description>Source equipment for the image. This type definition shall override the definition in the General Series Module.
@@ -5946,7 +6207,8 @@ Shall be consistent with Pixel Aspect Ratio (0028,0034), if present.</descriptio
     <entry group="0028" element="0301" name="Burned In Annotation" type="1">
       <description>Indicates whether or not image contains sufficient burned in annotation to identify the patient and date the image was acquired.
 Enumerated Values: 
- YES  NO</description>
+ YES
+ NO</description>
     </entry>
     <entry group="2050" element="0020" name="Presentation LUT Shape" type="1C">
       <description>Specifies an identity transformation for the Presentation LUT, such that the output of all grayscale transformations defined in the IOD containing this Module are defined to be P-Values.
@@ -5994,7 +6256,8 @@ Shall be consistent with Pixel Aspect Ratio (0028,0034), if present.</descriptio
     <include ref="Include Basic Pixel Spacing Calibration Macro (Table 10-10)"/>
     <entry group="0018" element="2020" name="Digitizing Device Transport Direction" type="3">
       <description>Enumerated Values:
- ROW  COLUMN</description>
+ ROW
+ COLUMN</description>
     </entry>
     <entry group="0018" element="2030" name="Rotation of Scanned Film" type="3">
       <description>Angle of the edge of the film relative to the transport direction in degrees greater than or equal to -45 and less than or equal to +45.</description>
@@ -6036,7 +6299,8 @@ Required if Frame Increment Pointer (0028,0009) points to Display Window Label V
     <entry group="0028" element="0009" name="Frame Increment Pointer" type="1C">
       <description>Required if Multi-Frame Image.
 Contains the Data Element Tag of the attribute that is used as the Frame increment in Multi-frame image pixel data (See C.7.6.6). Specialized for X-Ray as Enumerated Value:
-00181063H = Frame Time (0018,1063); 00181065H = Frame Time Vector (0018,1065).</description>
+00181063H = Frame Time (0018,1063);
+00181065H = Frame Time Vector (0018,1065).</description>
     </entry>
     <entry group="0028" element="2110" name="Lossy Image Compression" type="1C">
       <description>Specifies whether an Image has undergone lossy compression. Enumerated Values:
@@ -6127,20 +6391,20 @@ GR = high dose for diagnostic quality image acquisition (also called digital spo
     <entry group="0018" element="1151" name="X-Ray Tube Current" type="2C">
       <description>X-Ray Tube Current in mA. Required if Exposure (0018,1152) is not present.</description>
     </entry>
-    <entry group="0018" element="8151" name="X-Ray Tube Current in µA" type="3">
-      <description>X-Ray Tube Current in µA.</description>
+    <entry group="0018" element="8151" name="X-Ray Tube Current in A" type="3">
+      <description>X-Ray Tube Current in A.</description>
     </entry>
     <entry group="0018" element="1150" name="Exposure Time" type="2C">
       <description>Duration of X-Ray exposure in msec. See 8.7.2.1.1. Required if Exposure (0018,1152) is not present.</description>
     </entry>
-    <entry group="0018" element="8150" name="Exposure Time in µS" type="3">
-      <description>Duration of X-Ray exposure in µsec.</description>
+    <entry group="0018" element="8150" name="Exposure Time in S" type="3">
+      <description>Duration of X-Ray exposure in sec.</description>
     </entry>
     <entry group="0018" element="1152" name="Exposure" type="2C">
       <description>The exposure expressed in mAs, for example calculated from Exposure Time and X-ray Tube Current. Required if either Exposure Time (0018,1150) or X-Ray Tube Current (0018,1151) are not present.</description>
     </entry>
-    <entry group="0018" element="1153" name="Exposure in µAs" type="3">
-      <description>The exposure expressed in µAs, for example calculated from Exposure Time and X-ray Tube Current.</description>
+    <entry group="0018" element="1153" name="Exposure in As" type="3">
+      <description>The exposure expressed in As, for example calculated from Exposure Time and X-ray Tube Current.</description>
     </entry>
     <entry group="0018" element="1166" name="Grid" type="3">
       <description>Identify the grid. Only a single value shall be present. Defined Terms are:
@@ -6252,7 +6516,8 @@ Note: This value is traditionally referred to as Source Image Receptor Distance 
     </entry>
     <entry group="0018" element="1500" name="Positioner Motion" type="2C">
       <description>Used to describe the activity of the imaging devices. Defined terms:
- DYNAMIC,  STATIC.
+ DYNAMIC,
+ STATIC.
 Required if Multi-frame data. See C.8.7.5.1.1.</description>
     </entry>
     <entry group="0018" element="1510" name="Positioner Primary Angle" type="2">
@@ -6312,12 +6577,16 @@ Note: The detector plane is assumed to be parallel to the table plane.</descript
     <entry group="0018" element="1490" name="Tomo Type" type="3">
       <description>Type of tomography.
 Defined Terms:
- LINEAR  SPIRAL  POLYCYCLOIDAL  CIRCULAR</description>
+ LINEAR
+ SPIRAL
+ POLYCYCLOIDAL
+ CIRCULAR</description>
     </entry>
     <entry group="0018" element="1491" name="Tomo Class" type="3">
       <description>Form of tomography:
 Defined Terms:
- MOTION  TOMOSYNTHESIS</description>
+ MOTION
+ TOMOSYNTHESIS</description>
     </entry>
     <entry group="0018" element="1495" name="Number of Tomosynthesis Source Images" type="3">
       <description>The number of source images used to construct this tomosynthetic image. Only meaningful if Tomo Class (0018,1491) is TOMOSYNTHESIS. These may be listed in Source Image Sequence (0008,2112) of the General Image Module.</description>
@@ -6330,19 +6599,19 @@ Defined Terms:
     <entry group="0018" element="1151" name="X-Ray Tube Current" type="3">
       <description>X-Ray Tube Current in mA.</description>
     </entry>
-    <entry group="0018" element="8151" name="X-Ray Tube Current in µA" type="3">
-      <description>X-Ray Tube Current in µA.</description>
+    <entry group="0018" element="8151" name="X-Ray Tube Current in A" type="3">
+      <description>X-Ray Tube Current in A.</description>
     </entry>
     <entry group="0018" element="1150" name="Exposure Time" type="3">
       <description>Duration of X-Ray exposure in msec.</description>
     </entry>
-    <entry group="0018" element="8150" name="Exposure Time in µS" type="3">
-      <description>Duration of X-Ray exposure in µsec.</description>
+    <entry group="0018" element="8150" name="Exposure Time in S" type="3">
+      <description>Duration of X-Ray exposure in sec.</description>
     </entry>
     <entry group="0018" element="1152" name="Exposure" type="3">
       <description>The exposure expressed in mAs, for example calculated from Exposure Time and X-ray Tube Current.</description>
     </entry>
-    <entry group="0018" element="1153" name="Exposure in µAs" type="3">
+    <entry group="0018" element="1153" name="Exposure in As" type="3">
       <description>The exposure expressed in µAs, for example calculated from Exposure Time and X-ray Tube Current.</description>
     </entry>
     <entry group="0018" element="1110" name="Distance Source to Detector" type="3">
@@ -6405,18 +6674,30 @@ Note: This may be an estimated value.</description>
     <entry group="0040" element="0318" name="Organ Exposed" type="3">
       <description>Organ to which Organ Dose (0040,0316) applies.
 Defined Terms:
- BREAST  GONADS  BONE MARROW  FETUS  LENS
+ BREAST
+ GONADS
+ BONE MARROW
+ FETUS
+ LENS
 Note: The anatomic regions described by these terms are those that are particularly radiosensitive and for which it is conventional to obtain organ specific dose parameters.</description>
     </entry>
     <entry group="0018" element="1191" name="Anode Target Material" type="3">
       <description>The primary material in the anode of the X-Ray source.
 Defined Terms:
- TUNGSTEN  MOLYBDENUM  RHODIUM</description>
+ TUNGSTEN
+ MOLYBDENUM
+ RHODIUM</description>
     </entry>
     <entry group="0018" element="7050" name="Filter Material" type="3">
       <description>The X-Ray absorbing material used in the filter. May be multi-valued.
 Defined Terms:
- MOLYBDENUM  ALUMINUM  COPPER  RHODIUM  NIOBIUM  EUROPIUM  LEAD</description>
+ MOLYBDENUM
+ ALUMINUM
+ COPPER
+ RHODIUM
+ NIOBIUM
+ EUROPIUM
+ LEAD</description>
     </entry>
     <entry group="0018" element="7052" name="Filter Thickness Minimum" type="3">
       <description>The minimum thickness in mm of the X-Ray absorbing material used in the filters. May be multi-valued, with values corresponding to the respective values in Filter Material (0018,7050).</description>
@@ -6427,7 +6708,9 @@ Defined Terms:
     <entry group="0018" element="1156" name="Rectification Type" type="3">
       <description>Type of rectification used in the X-Ray generator.
 Defined Terms:
- SINGLE PHASE  THREE PHASE  CONST POTENTIAL</description>
+ SINGLE PHASE
+ THREE PHASE
+ CONST POTENTIAL</description>
     </entry>
   </table>
   <table ref="Table C.8-34" name="X-RAY GENERATION MODULE ATTRIBUTES">
@@ -6437,25 +6720,26 @@ Defined Terms:
     <entry group="0018" element="1151" name="X-Ray Tube Current" type="3">
       <description>X-Ray Tube Current in mA.</description>
     </entry>
-    <entry group="0018" element="8151" name="X-Ray Tube Current in µA" type="3">
-      <description>X-Ray Tube Current in µA.</description>
+    <entry group="0018" element="8151" name="X-Ray Tube Current in A" type="3">
+      <description>X-Ray Tube Current in A.</description>
     </entry>
     <entry group="0018" element="1150" name="Exposure Time" type="3">
       <description>Duration of X-Ray exposure in msec.</description>
     </entry>
-    <entry group="0018" element="8150" name="Exposure Time in µS" type="3">
-      <description>Duration of X-Ray exposure in µsec.</description>
+    <entry group="0018" element="8150" name="Exposure Time in S" type="3">
+      <description>Duration of X-Ray exposure in sec.</description>
     </entry>
     <entry group="0018" element="1152" name="Exposure" type="3">
       <description>The exposure expressed in mAs, for example calculated from Exposure Time and X-ray Tube Current.</description>
     </entry>
-    <entry group="0018" element="1153" name="Exposure in µAs" type="3">
+    <entry group="0018" element="1153" name="Exposure in As" type="3">
       <description>The exposure expressed in µAs, for example calculated from Exposure Time and X-ray Tube Current.</description>
     </entry>
     <entry group="0018" element="7060" name="Exposure Control Mode" type="3">
       <description>Type of exposure control.
 Defined Terms:
- MANUAL  AUTOMATIC</description>
+ MANUAL
+ AUTOMATIC</description>
     </entry>
     <entry group="0018" element="7062" name="Exposure Control Mode Description" type="3">
       <description>Text description of the mechanism of exposure control.
@@ -6464,7 +6748,8 @@ May describe the number and type of exposure sensors or position of the sensitiv
     <entry group="0018" element="7064" name="Exposure Status" type="3">
       <description>Whether the exposure was normally completed or not.
 Defined Terms:
- NORMAL  ABORTED</description>
+ NORMAL
+ ABORTED</description>
     </entry>
     <entry group="0018" element="7065" name="Phototimer Setting" type="3">
       <description>Nominal percentage phototimer setting, where a more positive value indicates greater exposure and a more negative value indicates less exposure.</description>
@@ -6475,12 +6760,16 @@ Defined Terms:
     <entry group="0018" element="1191" name="Anode Target Material" type="3">
       <description>The primary material in the anode of the X-Ray source.
 Defined Terms:
- TUNGSTEN  MOLYBDENUM  RHODIUM</description>
+ TUNGSTEN
+ MOLYBDENUM
+ RHODIUM</description>
     </entry>
     <entry group="0018" element="1156" name="Rectification Type" type="3">
       <description>Type of rectification used in the X-Ray generator.
 Defined Terms:
- SINGLE PHASE  THREE PHASE  CONST POTENTIAL</description>
+ SINGLE PHASE
+ THREE PHASE
+ CONST POTENTIAL</description>
     </entry>
     <entry group="0018" element="1005" name="Generator ID" type="3">
       <description>Identifier of the generator</description>
@@ -6490,12 +6779,22 @@ Defined Terms:
     <entry group="0018" element="1160" name="Filter Type" type="3">
       <description>Type of filter(s) inserted into the X-Ray beam (e.g. wedges).
 Defined Terms:
- STRIP  WEDGE  BUTTERFLY  MULTIPLE  NONE </description>
+ STRIP
+ WEDGE
+ BUTTERFLY
+ MULTIPLE
+ NONE </description>
     </entry>
     <entry group="0018" element="7050" name="Filter Material" type="3">
       <description>The X-Ray absorbing material used in the filter. May be multi-valued.
 Defined Terms:
- MOLYBDENUM  ALUMINUM  COPPER  RHODIUM  NIOBIUM  EUROPIUM  LEAD</description>
+ MOLYBDENUM
+ ALUMINUM
+ COPPER
+ RHODIUM
+ NIOBIUM
+ EUROPIUM
+ LEAD</description>
     </entry>
     <entry group="0018" element="7052" name="Filter Thickness Minimum" type="3">
       <description>The minimum thickness in mm of the X-Ray absorbing material used in the filters. May be multi-valued, with values corresponding to the respective values in Filter Material (0018,7050).</description>
@@ -6508,7 +6807,12 @@ Defined Terms:
     <entry group="0018" element="1166" name="Grid" type="3">
       <description>Identifies the grid. May be multi-valued.
 Defined Terms are:
- FIXED  FOCUSED  RECIPROCATING  PARALLEL  CROSSED  NONE </description>
+ FIXED
+ FOCUSED
+ RECIPROCATING
+ PARALLEL
+ CROSSED
+ NONE </description>
     </entry>
     <entry group="0018" element="7040" name="Grid Absorbing Material" type="3">
       <description>The X-Ray absorbing material used in the grid.</description>
@@ -6822,7 +7126,8 @@ ABSENT = block edges are not shaped for beam divergence</description>
     <entry group="300A" element="00FB" name="&gt;&gt;Block Mounting Position" type="3">
       <description>Indicates on which side of the Block Tray the block is mounted.
 Enumerated Values:
-PATIENT_SIDE = the block is mounted on the side of the Block Tray which is towards the patient. SOURCE_SIDE = the block is mounted on the side of the Block Tray which is towards the radiation source.</description>
+PATIENT_SIDE = the block is mounted on the side of the Block Tray which is towards the patient.
+SOURCE_SIDE = the block is mounted on the side of the Block Tray which is towards the radiation source.</description>
     </entry>
     <entry group="300A" element="00FC" name="&gt;&gt;Block Number" type="1C">
       <description>Identification Number of the Block. The value of Block Number (300A,00FC) shall be unique within the Beam in which it is created. Required if Block Sequence (300A,00F4) is sent.</description>
@@ -7825,7 +8130,9 @@ PROTON</description>
     <entry group="300A" element="00C7" name="&gt;High-Dose Technique Type" type="1C">
       <description>Type of high-dose treatment technique.
 Defined Terms:
-NORMAL = Standard treatment TBI = Total Body Irradiation HDR = High Dose Rate
+NORMAL = Standard treatment
+TBI = Total Body Irradiation
+HDR = High Dose Rate
 Required if treatment technique requires a dose that would normally require overriding of treatment machine safety controls.</description>
     </entry>
     <entry group="300A" element="00B2" name="&gt;Treatment Machine Name" type="2">
@@ -8007,7 +8314,8 @@ MOTORIZED = single wedge which can be removed from beam remotely</description>
     </entry>
     <entry group="3004" element="00EE" name="&gt;&gt;Compensator Type" type="3">
       <description>Type of compensator (if any). Defined Terms:
-STANDARD = physical (static) compensator DYNAMIC = moving Beam Limiting Device (collimator) simulating physical compensator</description>
+STANDARD = physical (static) compensator
+DYNAMIC = moving Beam Limiting Device (collimator) simulating physical compensator</description>
     </entry>
     <entry group="300A" element="00E1" name="&gt;&gt;Material ID" type="2C">
       <description>User-supplied identifier for material used to manufacture Compensator. Required if Number of Compensators (300A,00E0) is non-zero.</description>
@@ -8022,10 +8330,17 @@ STANDARD = physical (static) compensator DYNAMIC = moving Beam Limiting Device (
       <description>Radiation source to compensator tray attachment edge distance (in mm) for current compensator. Required if Compensator Sequence (300A,00E3) is sent.</description>
     </entry>
     <entry group="300A" element="02E0" name="&gt;&gt;Compensator Divergence" type="3">
-      <description>Indicates presence or absence of geometrical divergence of the compensator. Enumerated Values: PRESENT = the compensator is shaped according to the beam geometrical divergence. ABSENT = the compensator is not shaped according to the beam geometrical divergence.</description>
+      <description>Indicates presence or absence of geometrical divergence of the compensator.
+Enumerated Values:
+PRESENT = the compensator is shaped according to the beam geometrical divergence.
+ABSENT = the compensator is not shaped according to the beam geometrical divergence.</description>
     </entry>
     <entry group="300A" element="02E1" name="&gt;&gt;Compensator Mounting Position" type="3">
-      <description>Indicates on which side of the Compensator Tray the compensator is mounted. Enumerated Values: PATIENT_SIDE = the compensator is mounted on the side of the Compensator Tray which is towards the patient. SOURCE_SIDE = the compensator is mounted on the side of the Compensator Tray which is towards the radiation source. DOUBLE_SIDED = the compensator has a shaped (i.e. non-flat) surface on both sides of the Compensator Tray.</description>
+      <description>Indicates on which side of the Compensator Tray the compensator is mounted.
+Enumerated Values:
+PATIENT_SIDE = the compensator is mounted on the side of the Compensator Tray which is towards the patient.
+SOURCE_SIDE = the compensator is mounted on the side of the Compensator Tray which is towards the radiation source.
+DOUBLE_SIDED = the compensator has a shaped (i.e. non-flat) surface on both sides of the Compensator Tray.</description>
     </entry>
     <entry group="300A" element="00E7" name="&gt;&gt;Compensator Rows" type="1C">
       <description>Number of rows in the compensator. Required if Compensator Sequence (300A,00E3) is sent.</description>
@@ -8101,7 +8416,8 @@ ABSENT = block edges are not shaped for beam divergence</description>
     <entry group="300A" element="00FB" name="&gt;&gt;Block Mounting Position" type="3">
       <description>Indicates on which side of the Block Tray the block is mounted.
 Enumerated Values:
-PATIENT_SIDE = the block is mounted on the side of the Block Tray which is towards the patient. SOURCE_SIDE = the block is mounted on the side of the Block Tray which is towards the radiation source.</description>
+PATIENT_SIDE = the block is mounted on the side of the Block Tray which is towards the patient.
+SOURCE_SIDE = the block is mounted on the side of the Block Tray which is towards the radiation source.</description>
     </entry>
     <entry group="300A" element="00FC" name="&gt;&gt;Block Number" type="1C">
       <description>Identification number of the Block. The value of Block Number (300A,00FC) shall be unique within the Beam in which it is created. Required if Block Sequence (300A,00F4) is sent.</description>
@@ -8759,7 +9075,9 @@ PHOTON, ELECTRON, NEUTRON, PROTON.</description>
     <entry group="300A" element="00C7" name="&gt;High-Dose Technique Type" type="1C">
       <description>Type of high-dose treatment technique.
 Defined Terms:
-NORMAL = Standard treatment TBI = Total Body Irradiation HDR = High Dose Rate
+NORMAL = Standard treatment
+TBI = Total Body Irradiation
+HDR = High Dose Rate
 Required if treatment technique requires a dose that would normally require overriding of treatment machine safety controls.</description>
     </entry>
     <entry group="300C" element="0040" name="&gt;Referenced Verification Image Sequence" type="3">
@@ -9777,10 +10095,15 @@ See section C.8.8.25.4</description>
       <description>Isocenter to compensator tray attachment edge distance (in mm) for current range compensator. Required if Compensator Mounting Position (300A,02E1) is not DOUBLE_SIDED. See section C.8.8.25.4</description>
     </entry>
     <entry group="300A" element="02E0" name="&gt;&gt;Compensator Divergence" type="1">
-      <description>Indicates presence or absence of geometrical divergence of the range compensator. Enumerated Values: PRESENT = the range compensator is shaped according to the beam geometrical divergence. ABSENT = the range compensator is not shaped according to the beam geometrical divergence.</description>
+      <description>Indicates presence or absence of geometrical divergence of the range compensator.
+Enumerated Values:
+PRESENT = the range compensator is shaped according to the beam geometrical divergence.
+ABSENT = the range compensator is not shaped according to the beam geometrical divergence.</description>
     </entry>
     <entry group="300A" element="02E1" name="&gt;&gt;Compensator Mounting Position" type="1">
-      <description>Indicates on which side of the Compensator Tray the compensator is mounted. Enumerated Values: PATIENT_SIDE = the Compensator is mounted on the side of the Compensator Tray that is towards the patient.
+      <description>Indicates on which side of the Compensator Tray the compensator is mounted.
+Enumerated Values:
+PATIENT_SIDE = the Compensator is mounted on the side of the Compensator Tray that is towards the patient.
 SOURCE_SIDE = the Compensator is mounted on the side of the Compensator Tray that is towards the radiation source.
 DOUBLE_SIDED = the Compensator has a shaped (i.e. non-flat) surface on both sides of the Compensator Tray.</description>
     </entry>
@@ -10789,18 +11112,24 @@ CNTS, NONE, CM2, PCNT, CPS, BQML, MGMINML, UMOLMINML, MLMING, MLG, 1CM, UMOLML, 
     </entry>
     <entry group="0054" element="1002" name="Counts Source" type="1">
       <description>The primary source of counts. The primary source leads to the underlying image Units (0054,1001), as opposed to secondary sources which are used during reconstruction correction. Enumerated Values:
- EMISSION  TRANSMISSION</description>
+ EMISSION
+ TRANSMISSION</description>
     </entry>
     <entry group="0054" element="1000" name="Series Type" type="1">
       <description>A multi-valued indicator of the type of Series. See C.8.9.1.1.4 for explanation. 
 Value 1 Enumerated Values:
- STATIC  DYNAMIC  GATED  WHOLE BODY
+ STATIC
+ DYNAMIC
+ GATED
+ WHOLE BODY
 Value 2 Enumerated Values:
- IMAGE  REPROJECTION</description>
+ IMAGE
+ REPROJECTION</description>
     </entry>
     <entry group="0054" element="1004" name="Reprojection Method" type="2C">
       <description>Method for projecting volumetric data onto planar projection. Required if Series Type (0054,1000), Value 2 is REPROJECTION. Defined terms:
- SUM  MAX PIXEL</description>
+ SUM
+ MAX PIXEL</description>
     </entry>
     <entry group="0054" element="0061" name="Number of R-R Intervals" type="1C">
       <description>The maximum number of R-R Intervals that may exist in this Series. Required if Series Type (0054,1000), Value 1 is GATED.</description>
@@ -10816,11 +11145,23 @@ Value 2 Enumerated Values:
     </entry>
     <entry group="0028" element="0051" name="Corrected Image" type="2">
       <description>A value that indicates which, if any, corrections have been applied to the images in this series. Defined terms:
- DECY=decay corrected  ATTN=attenuation corrected  SCAT=scatter corrected  DTIM=dead time corrected  MOTN=gantry motion corrected (e.g. wobble, clamshell)  PMOT=patient motion corrected  CLN=count loss normalization (correction for count loss in gated Time Slots).  RAN=randoms corrected  RADL=non-uniform radial sampling corrected  DCAL=sensitivity calibrated using dose calibrator  NORM=detector normalization</description>
+ DECY=decay corrected
+ ATTN=attenuation corrected
+ SCAT=scatter corrected
+ DTIM=dead time corrected
+ MOTN=gantry motion corrected (e.g. wobble, clamshell)
+ PMOT=patient motion corrected
+ CLN=count loss normalization (correction for count loss in gated Time Slots).
+ RAN=randoms corrected
+ RADL=non-uniform radial sampling corrected
+ DCAL=sensitivity calibrated using dose calibrator
+ NORM=detector normalization</description>
     </entry>
     <entry group="0054" element="1100" name="Randoms Correction Method" type="3">
       <description>Type of randoms correction processing. Defined terms:
- NONE = no randoms correction  DLYD = delayed event subtraction  SING = singles estimation</description>
+ NONE = no randoms correction
+ DLYD = delayed event subtraction
+ SING = singles estimation</description>
     </entry>
     <entry group="0054" element="1101" name="Attenuation Correction Method" type="3">
       <description>A textual description of the attenuation correction processing. e.g. measured vs. calculated, transmission source type (ring, line, point), assumed patient geometry (polygon, ellipse, segmented, attenuation coefficient, skull thickness), post-injection transmission, smoothing.</description>
@@ -10830,7 +11171,9 @@ Value 2 Enumerated Values:
     </entry>
     <entry group="0054" element="1102" name="Decay Correction" type="1">
       <description>The real-world event to which images in this Series were decay corrected. See C.8.9.1.1.5 for explanation. Defined terms:
- NONE = no decay correction  START= acquisition start time  ADMIN = radiopharmaceutical administration time</description>
+ NONE = no decay correction
+ START= acquisition start time
+ ADMIN = radiopharmaceutical administration time</description>
     </entry>
     <entry group="0018" element="1100" name="Reconstruction Diameter" type="3">
       <description>Diameter, in mm, of the region within which the data was used in creating the reconstruction of the image. Data may exist outside this region and portions of the patient may exist outside this region.</description>
@@ -10846,7 +11189,12 @@ Value 2 Enumerated Values:
     </entry>
     <entry group="0018" element="0073" name="Acquisition Start Condition" type="3">
       <description>Description of how the data collection was started. Defined terms:
- DENS = density (counts/sec)  RDD = relative density difference (change in counts/sec)  MANU = manual  TIME = time  AUTO = automatic, when ready  TRIG = physiological trigger
+ DENS = density (counts/sec)
+ RDD = relative density difference (change in counts/sec)
+ MANU = manual
+ TIME = time
+ AUTO = automatic, when ready
+ TRIG = physiological trigger
 See C.8.9.1.1.6 for explanation.</description>
     </entry>
     <entry group="0018" element="0074" name="Acquisition Start Condition Data" type="3">
@@ -10854,7 +11202,13 @@ See C.8.9.1.1.6 for explanation.</description>
     </entry>
     <entry group="0018" element="0071" name="Acquisition Termination Condition" type="3">
       <description>Description of how the data collection for the series was stopped. Defined terms:
- CNTS = counts  DENS = density (counts/sec)  RDD = relative density difference (change in counts/sec)  MANU = manual  OVFL = data overflow  TIME = time  TRIG = physiological trigger
+ CNTS = counts
+ DENS = density (counts/sec)
+ RDD = relative density difference (change in counts/sec)
+ MANU = manual
+ OVFL = data overflow
+ TIME = time
+ TRIG = physiological trigger
 See C.8.4.9.1.3 for explanation.</description>
     </entry>
     <entry group="0018" element="0075" name="Acquisition Termination Condition Data" type="3">
@@ -10862,7 +11216,9 @@ See C.8.4.9.1.3 for explanation.</description>
     </entry>
     <entry group="0018" element="1147" name="Field of View Shape" type="3">
       <description>Shape of the field of view of the PET camera. Defined Terms:
- CYLINDRICAL RING  HEXAGONAL  MULTIPLE PLANAR</description>
+ CYLINDRICAL RING
+ HEXAGONAL
+ MULTIPLE PLANAR</description>
     </entry>
     <entry group="0018" element="1149" name="Field of View Dimensions" type="3">
       <description>Dimensions of the field of view, in mm. Transverse detector diameter followed by axial width.</description>
@@ -10875,11 +11231,16 @@ See C.8.4.9.1.3 for explanation.</description>
     </entry>
     <entry group="0054" element="0202" name="Type of Detector Motion" type="3">
       <description>Describes the detector motion during acquisition. Defined Terms:
- NONE = stationary gantry  STEP AND SHOOT = Interrupted motion, acquire only while stationary  CONTINUOUS = Gantry motion and acquisition are simultaneous and continuous  WOBBLE = wobble motion  CLAMSHELL = clamshell motion</description>
+ NONE = stationary gantry
+ STEP AND SHOOT = Interrupted motion, acquire only while stationary
+ CONTINUOUS = Gantry motion and acquisition are simultaneous and continuous
+ WOBBLE = wobble motion
+ CLAMSHELL = clamshell motion</description>
     </entry>
     <entry group="0018" element="1181" name="Collimator Type" type="2">
       <description>Collimator Type. Defined Terms:
- NONE = no collimator  RING = transverse septa</description>
+ NONE = no collimator
+ RING = transverse septa</description>
     </entry>
     <entry group="0018" element="1180" name="Collimator/Grid Name" type="3">
       <description>Label describing the collimator used.</description>
@@ -10910,7 +11271,10 @@ See C.8.4.9.1.3 for explanation.</description>
     </entry>
     <entry group="0054" element="1220" name="Secondary Counts Type" type="3">
       <description>Array defining the type of additional counts accumulated during acquisition. Defined terms:
- DLYD=delayed events  SCAT=scattered events in secondary window  SING=singles  DTIM=events lost due to deadtime</description>
+ DLYD=delayed events
+ SCAT=scattered events in secondary window
+ SING=singles
+ DTIM=events lost due to deadtime</description>
     </entry>
   </table>
   <table ref="Table C.8-61" name="PET ISOTOPE MODULE ATTRIBUTES">
@@ -10990,7 +11354,8 @@ Note: In other IODs, such as the NM IOD, this same attribute is specified in Meg
   <table ref="Table C.8-62" name="PET MULTI-GATED ACQUISITION MODULE ATTRIBUTES">
     <entry group="0018" element="1080" name="Beat Rejection Flag" type="2">
       <description>Heart beat duration sorting has been applied. Enumerated values:
- Y = yes  N = no</description>
+ Y = yes
+ N = no</description>
     </entry>
     <entry group="0018" element="1061" name="Trigger Source or Type" type="3">
       <description>Text indicating trigger source. Defined terms:
@@ -11007,7 +11372,9 @@ Note: In other IODs, such as the NM IOD, this same attribute is specified in Meg
     </entry>
     <entry group="0018" element="1064" name="Framing Type" type="3">
       <description>Description of type of framing performed. Defined Terms:
- FORW = forward  BACK = backward  PCNT = forward/backward by percentage</description>
+ FORW = forward
+ BACK = backward
+ PCNT = forward/backward by percentage</description>
     </entry>
   </table>
   <table ref="Table C.8-63" name="PET IMAGE MODULE ATTRIBUTES">
@@ -11027,7 +11394,8 @@ Note: In other IODs, such as the NM IOD, this same attribute is specified in Meg
       <description>Number of bits stored for each pixel sample. Each sample shall have the same number of bits stored. The value shall be the same as the value in Bits Allocated (0028,0100).</description>
     </entry>
     <entry group="0028" element="0102" name="High Bit" type="1">
-      <description>Most significant bit for pixel sample data. Each sample shall have the same high bit. Shall be one less than the value in Bits Stored (0028,0101).</description>
+      <description>Most significant bit for pixel sample data. Each sample shall have the same high bit.
+Shall be one less than the value in Bits Stored (0028,0101).</description>
     </entry>
     <entry group="0028" element="1052" name="Rescale Intercept" type="1">
       <description>The value b in relationship between stored values (SV) and pixel value units (U) defined in Units (0054,1001): U = m*SV+b. The Rescale Intercept is always zero for PET images.</description>
@@ -11122,7 +11490,10 @@ Only a single Item shall be permitted in this sequence.</description>
     <entry group="0008" element="0060" name="Modality" type="1">
       <description>Type of equipment that originally acquired the data used to create the images in this Series.
 Enumerated Values:
- DX  PX  IO  MG
+ DX
+ PX
+ IO
+ MG
 See section C.7.3.1.1.1 for further explanation. </description>
     </entry>
     <entry group="0008" element="1111" name="Referenced Performed Procedure Step Sequence" type="1C">
@@ -11139,14 +11510,20 @@ Required if Referenced Performed Procedure Step Sequence (0008,1111) is sent.</d
     </entry>
     <entry group="0008" element="0068" name="Presentation Intent Type" type="1">
       <description>Identifies the intent of the images that are contained within this Series.
-Enumerated Values:  FOR PRESENTATION  FOR PROCESSING
+Enumerated Values:
+ FOR PRESENTATION
+ FOR PROCESSING
 See C.8.11.1.1.1 for further explanation.</description>
     </entry>
   </table>
   <table ref="Table C.8-69" name="DX ANATOMY IMAGED MODULE ATTRIBUTES">
     <entry group="0020" element="0062" name="Image Laterality" type="1">
       <description>Laterality of (possibly paired) body part (as described in Anatomic Region Sequence (0008,2218)) examined. 
-Enumerated Values:  R = right  L = left  U = unpaired  B = both left and right
+Enumerated Values:
+ R = right
+ L = left
+ U = unpaired
+ B = both left and right
 
 Note: This Attribute is mandatory, in order to ensure that images may be positioned correctly relative to one another for display.
 Shall be consistent with any laterality information contained in Primary Anatomic Structure Modifier Sequence (0008,2230), if present.
@@ -11165,7 +11542,8 @@ See C.8.11.3.1.1 for specialization.</description>
     <entry group="0028" element="0004" name="Photometric Interpretation" type="1">
       <description>Specifies the intended interpretation of the pixel data.
 Enumerated Values:
- MONOCHROME1  MONOCHROME2</description>
+ MONOCHROME1
+ MONOCHROME2</description>
     </entry>
     <entry group="0028" element="0100" name="Bits Allocated" type="1">
       <description>Number of bits allocated for each pixel sample.
@@ -11187,7 +11565,8 @@ Shall have the Enumerated Value:
     <entry group="0028" element="1040" name="Pixel Intensity Relationship" type="1">
       <description>The relationship between the Pixel sample values and the X-Ray beam intensity.
 Enumerated Values: 
-LIN = Linearly proportional to X-Ray beam intensity LOG = Logarithmically proportional to X-Ray beam intensity
+LIN = Linearly proportional to X-Ray beam intensity
+LOG = Logarithmically proportional to X-Ray beam intensity
 See C.8.11.3.1.2 for further explanation.</description>
     </entry>
     <entry group="0028" element="1041" name="Pixel Intensity Relationship Sign" type="1">
@@ -11248,13 +11627,15 @@ See C.7.6.1.1.1 for further explanation.</description>
     </entry>
     <entry group="0050" element="0004" name="Calibration Image" type="3">
       <description>Indicates whether a reference object (phantom) of known size is present in the image and was used for calibration. Enumerated Values: 
- YES  NO
+ YES
+ NO
 Device is identified using the Device module. See C.7.6.12 for further explanation.</description>
     </entry>
     <entry group="0028" element="0301" name="Burned In Annotation" type="1">
       <description>Indicates whether or not image contains sufficient burned in annotation to identify the patient and date the image was acquired.
 Enumerated Values: 
- YES  NO</description>
+ YES
+ NO</description>
     </entry>
     <entry group="0028" element="3010" name="VOI LUT Sequence" type="1C">
       <description>Defines a sequence of VOI LUTs.
@@ -11298,7 +11679,9 @@ Note: This activation window overlaps the time of the X-Ray exposure as defined 
     <entry group="0018" element="1147" name="Field of View Shape" type="3">
       <description>Shape of the Field of View, that is the image pixels stored in Pixel Data (7FE0,0010).
 Enumerated Values:
- RECTANGLE  ROUND  HEXAGONAL</description>
+ RECTANGLE
+ ROUND
+ HEXAGONAL</description>
     </entry>
     <entry group="0018" element="1149" name="Field of View Dimension(s)" type="3">
       <description>Dimensions in mm of the Field of View, that is the image pixels stored in Pixel Data (7FE0,0010). If Field of View Shape (0018,1147) is:
@@ -11321,7 +11704,8 @@ See C.8.11.4.1.1 for further explanation.</description>
     <entry group="0018" element="7034" name="Field of View Horizontal Flip" type="1C">
       <description>Whether or not a horizontal flip has been applied to the Field of View, that is the image pixels stored in Pixel Data (7FE0,0010), after rotation relative to the physical detector as described in Field of View Rotation (0018,7032).
 Enumerated Values:
- NO  YES
+ NO
+ YES
 Required if Field of View Rotation (0018,7032) is present.
 See C.8.11.4.1.1 for further explanation.</description>
     </entry>
@@ -11341,12 +11725,16 @@ The value of this attribute shall never be adjusted to account for correction fo
     <entry group="0018" element="7004" name="Detector Type" type="2">
       <description>The type of detector used to acquire this image.
 Defined Terms:
- DIRECT = X-Ray photoconductor  SCINTILLATOR = Phosphor used  STORAGE = Storage phosphor  FILM = Scanned film/screen</description>
+ DIRECT = X-Ray photoconductor
+ SCINTILLATOR = Phosphor used
+ STORAGE = Storage phosphor
+ FILM = Scanned film/screen</description>
     </entry>
     <entry group="0018" element="7005" name="Detector Configuration" type="3">
       <description>The physical configuration of the detector.
 Defined Terms:
- AREA = single or tiled detector  SLOT = scanned slot, slit or spot</description>
+ AREA = single or tiled detector
+ SLOT = scanned slot, slit or spot</description>
     </entry>
     <entry group="0018" element="7006" name="Detector Description" type="3">
       <description>Free text description of detector.</description>
@@ -11384,7 +11772,8 @@ Defined Terms:
     <entry group="0018" element="7000" name="Detector Conditions Nominal Flag" type="3">
       <description>Whether or not the detector is operating within normal tolerances during this image acquisition.
 Enumerated Values:
- YES  NO
+ YES
+ NO
 Note: This flag is intended to indicate whether or not there may have been some compromise of the diagnostic quality of the image due to some condition such as over-temperature, etc.</description>
     </entry>
     <entry group="0018" element="7001" name="Detector Temperature" type="3">
@@ -11407,7 +11796,9 @@ Note: This may not be the same as the Imager Pixel Spacing (0018,1164), and shou
     <entry group="0018" element="7024" name="Detector Active Shape" type="3">
       <description>Shape of the active area.
 Enumerated Value:
- RECTANGLE  ROUND  HEXAGONAL
+ RECTANGLE
+ ROUND
+ HEXAGONAL
 Note: This may be different from the Field of View Shape (0018,1147), and should not be assumed to describe the stored image.</description>
     </entry>
     <entry group="0018" element="7026" name="Detector Active Dimension(s)" type="3">
@@ -11489,7 +11880,13 @@ See C.8.11.7 Mammography Image Module for explanation if Positioner Type (0018,1
     </entry>
     <entry group="0018" element="1508" name="Positioner Type" type="2">
       <description>Defined Terms:
- CARM  COLUMN  MAMMOGRAPHIC  PANORAMIC  CEPHALOSTAT  RIGID  NONE
+ CARM
+ COLUMN
+ MAMMOGRAPHIC
+ PANORAMIC
+ CEPHALOSTAT
+ RIGID
+ NONE
 Notes: 1. The term CARM can apply to any positioner with 2 degrees of freedom of rotation of the X-Ray beam about the Imaging Subject.
  2. The term COLUMN can apply to any positioner with 1 degree of freedom of rotation of the X-Ray beam about the Imaging Subject.</description>
     </entry>
@@ -11520,7 +11917,9 @@ Only meaningful if Positioner Type (0018,1508) is COLUMN.</description>
     </entry>
     <entry group="0018" element="113A" name="Table Type" type="3">
       <description>Defined Terms:
- FIXED  TILTING  NONE</description>
+ FIXED
+ TILTING
+ NONE</description>
     </entry>
     <entry group="0018" element="1138" name="Table Angle" type="3">
       <description>Angle of table plane in degrees relative to horizontal plane [Gravity plane]. Positive values indicate that the head of the table is upward.
@@ -11549,7 +11948,8 @@ The sequence may have one or more Items.</description>
   <table ref="Table C.8-74" name="MAMMOGRAPHY IMAGE MODULE ATTRIBUTES">
     <entry group="0018" element="1508" name="Positioner Type" type="1">
       <description>Enumerated Values:
- MAMMOGRAPHIC  NONE</description>
+ MAMMOGRAPHIC
+ NONE</description>
     </entry>
     <entry group="0018" element="1110" name="Distance Source to Detector" type="3">
       <description>Distance in mm from source to detector center on the chest wall line
@@ -11571,7 +11971,9 @@ Notes: 1. This value is traditionally referred to as Source Object Distance (SOD
     <entry group="0020" element="0062" name="Image Laterality" type="1">
       <description>Laterality of the region examined.
 Enumerated Values:
- R = right  L = left  B = both (e.g. cleavage)</description>
+ R = right
+ L = left
+ B = both (e.g. cleavage)</description>
     </entry>
     <entry group="0040" element="0318" name="Organ Exposed" type="1">
       <description>Organ to which Organ Dose (0040,0316) applies.
@@ -11581,7 +11983,8 @@ Note: In the Mammography IOD, Organ Dose (0040,0316) refers to the mean glandula
     </entry>
     <entry group="0028" element="1300" name="Implant Present" type="3">
       <description>Whether or not an implant is present. Enumerated Values:
- YES  NO</description>
+ YES
+ NO</description>
     </entry>
     <entry group="0028" element="1350" name="Partial View" type="3">
       <description>Indicates whether this image is a partial view, that is a subset of a single view of the breast.
@@ -11623,12 +12026,16 @@ See section C.7.3.1.1.1 for further explanation. </description>
   <table ref="Table C.8-76" name="INTRA-ORAL IMAGE MODULE ATTRIBUTES">
     <entry group="0018" element="1508" name="Positioner Type" type="1">
       <description>Enumerated Values:
- NONE  CEPHALOSTAT  RIGID</description>
+ NONE
+ CEPHALOSTAT
+ RIGID</description>
     </entry>
     <entry group="0020" element="0062" name="Image Laterality" type="1">
       <description>Laterality of the region examined.
 Enumerated Values:
- R = right  L = left  B = both (i.e. midline)</description>
+ R = right
+ L = left
+ B = both (i.e. midline)</description>
     </entry>
     <entry group="0008" element="2218" name="Anatomic Region Sequence" type="1">
       <description>Sequence that identifies the anatomic region of interest in this image.
@@ -12003,7 +12410,8 @@ Required if Image Type (0008,0008) Value 1 is ORIGINAL or MIXED. May be present
       <description>Spectrally Selected Suppression.
 Defined Terms:
  FAT 
- WATER   FAT_AND_WATER
+ WATER 
+ FAT_AND_WATER
  SILICON_GEL
  NONE 
 Required if Image Type (0008,0008) Value 1 is ORIGINAL or MIXED. May be present otherwise.</description>
@@ -13058,7 +13466,8 @@ Required if Frame Type (0008,9007) Value 1 of this frame is ORIGINAL. May be pre
     <entry group="0018" element="1140" name="&gt;Rotation Direction" type="1C">
       <description>Direction of rotation of the source about the gantry, as viewed while facing the gantry where the table enters the gantry.
 Enumerated Values:
- CW = clockwise  CC = counter clockwise
+ CW = clockwise
+ CC = counter clockwise
 Required if Frame Type (0008,9007) Value 1 of this frame is ORIGINAL and Acquisition Type (0018,9302) is other than CONSTANT_ANGLE.
 Otherwise may be present if Frame Type (0008,9007) Value 1 of this frame is DERIVED and Acquisition Type (0018,9302) is other than CONSTANT_ANGLE.</description>
     </entry>
@@ -13243,13 +13652,25 @@ Required if Frame Type (0008,9007) Value 1 of this frame is ORIGINAL. May be pre
     <entry group="0018" element="1160" name="&gt;Filter Type" type="1C">
       <description>Type of filter(s) inserted into the X-Ray beam.
 Defined Terms:
- WEDGE  BUTTERFLY  MULTIPLE  FLAT  SHAPED  NONE 
+ WEDGE
+ BUTTERFLY
+ MULTIPLE
+ FLAT
+ SHAPED
+ NONE 
 Required if Frame Type (0008,9007) Value 1 of this frame is ORIGINAL. May be present otherwise.</description>
     </entry>
     <entry group="0018" element="7050" name="&gt;Filter Material" type="1C">
       <description>The X-Ray absorbing material used in the filter. May be multi-valued.
 Defined Terms:
- MOLYBDENUM  ALUMINUM  COPPER  RHODIUM  NIOBIUM  EUROPIUM  LEAD  MIXED
+ MOLYBDENUM
+ ALUMINUM
+ COPPER
+ RHODIUM
+ NIOBIUM
+ EUROPIUM
+ LEAD
+ MIXED
 Note: MIXED may be used to indicate a filter type of complex composition for which listing the individual materials would be excessive or undesirable; it is not intended to mean “unknown”.
 Required if Frame Type (0008,9007) Value 1 of this frame is ORIGINAL and the value of Filter Type (0018,1160) is other than NONE. May be present otherwise.</description>
     </entry>
@@ -13429,7 +13850,8 @@ Shall have the same number of items as the Value of Samples per Pixel Used (0028
   <table ref="Table C.8.17.4-1" name="OPHTHALMIC PHOTOGRAPHY ACQUISITION PARAMETERS MODULE ATTRIBUTES">
     <entry group="0022" element="0005" name="Patient Eye Movement Commanded" type="2">
       <description>Enumerated Values:
- YES  NO</description>
+ YES
+ NO</description>
     </entry>
     <entry group="0022" element="0006" name="Patient Eye Movement Command Code Sequence" type="1C">
       <description>Coded value for patient movement or orientation, which is the intent, and not necessarily the result, based on what the patient is capable of.
@@ -13462,7 +13884,8 @@ Zero length means the pressure was not measured.</description>
     </entry>
     <entry group="0022" element="000D" name="Pupil Dilated" type="2">
       <description>Enumerated Values:
- YES  NO</description>
+ YES
+ NO</description>
     </entry>
     <entry group="0022" element="001C" name="Mydriatic Agent Code Sequence" type="2C">
       <description>The agent administered to dilate the pupil. Required if the value of Pupil Dilated (0022,000D) is YES.
@@ -13477,7 +13900,10 @@ Required if the value of Pupil Dilated (0022,000D) is YES.</description>
   <table ref="Table C.8.17.5-1" name="OCULAR REGION IMAGED MODULE ATTRIBUTES">
     <entry group="0020" element="0062" name="Image Laterality" type="1">
       <description>Laterality of object imaged (as described in Anatomic Region Sequence (0008,2218)) examined. 
-Enumerated Values:  R = right eye  L = left eye  B = both left and right eye
+Enumerated Values:
+ R = right eye
+ L = left eye
+ B = both left and right eye
 Shall be consistent with any laterality information contained in Primary Anatomic Structure Modifier Sequence (0008,2230), if present.
 Note: Laterality (0020,0060) is a Series level Attribute and must be the same for all Images in the Series. Since most Ophthalmic Photographic Image studies contain images of both eyes, the series level attribute will rarely be present.</description>
     </entry>
@@ -13492,7 +13918,7 @@ Note: Laterality (0020,0060) is a Series level Attribute and must be the same fo
       <description>Source equipment that produced the Stereometric Series. Enumerated Value: SMR</description>
     </entry>
   </table>
-  <table ref="Table C.8.18.2-1" name="STEREOMETRIC RELATIONSHIP MODULE ATTRIBUTES">
+  <table ref="Table C.8.18.2" name="1 STEREOMETRIC RELATIONSHIP MODULE ATTRIBUTES">
     <entry group="0022" element="0020" name="Stereo Pairs Sequence" type="1">
       <description>Sequence of items identifying pairs of images. There shall be one or more items in this sequence.</description>
     </entry>
@@ -13524,7 +13950,8 @@ Note: Laterality (0020,0060) is a Series level Attribute and must be the same fo
     <entry group="0008" element="0060" name="Modality" type="1">
       <description>Type of equipment that originally acquired the data used to create the images in this Series.
 Enumerated Values:
- XA  RF
+ XA
+ RF
 See section C.7.3.1.1.1 for further explanation. </description>
     </entry>
     <entry group="0020" element="0011" name="Series Number" type="1">
@@ -13584,7 +14011,8 @@ Shall have the value:
     <entry group="0028" element="0004" name="Photometric Interpretation" type="1">
       <description>Specifies the intended interpretation of the pixel data.
 Enumerated Values:
- MONOCHROME1  MONOCHROME2</description>
+ MONOCHROME1
+ MONOCHROME2</description>
     </entry>
     <entry group="0018" element="9423" name="Acquisition Protocol Name" type="3">
       <description>User defined name of the protocol used to acquire this image.</description>
@@ -13693,7 +14121,8 @@ Only a single Item shall be permitted in this sequence.</description>
     <entry group="0028" element="0300" name="Quality Control Image" type="3">
       <description>Indicates whether or not this image is a quality control or phantom image.
 Enumerated Values: 
- YES  NO
+ YES
+ NO
 If this Attribute is absent, then the image may or may not be a quality control or phantom image.</description>
     </entry>
     <entry group="0088" element="0200" name="Icon Image Sequence" type="3">
@@ -13746,12 +14175,16 @@ See C.7.6.16.2.2.1 for further explanation</description>
     <entry group="0018" element="1191" name="Anode Target Material" type="3">
       <description>The primary material in the anode of the X-Ray source.
 Defined Terms:
- TUNGSTEN  MOLYBDENUM  RHODIUM</description>
+ TUNGSTEN
+ MOLYBDENUM
+ RHODIUM</description>
     </entry>
     <entry group="0018" element="1156" name="Rectification Type" type="3">
       <description>Type of rectification used in the X-Ray generator.
 Defined Terms:
- SINGLE PHASE  THREE PHASE  CONST POTENTIAL</description>
+ SINGLE PHASE
+ THREE PHASE
+ CONST POTENTIAL</description>
     </entry>
     <entry group="0018" element="9420" name="X-Ray Receptor Type" type="1">
       <description>Identifies with type of X-ray receptor is used.
@@ -13770,7 +14203,8 @@ Note: 1. A negative value is allowed in the case of an image intensifier the rec
     </entry>
     <entry group="0018" element="1508" name="Positioner Type" type="1">
       <description>Defined Terms:
- CARM  COLUMN 
+ CARM
+ COLUMN 
 Notes: 1. The term CARM can apply to any positioner with 2 degrees of freedom of rotation of the X-Ray beam about the Imaging Subject.
  2. The term COLUMN can apply to any positioner with 1 degree of freedom of rotation of the X-Ray beam about the Imaging Subject.</description>
     </entry>
@@ -13796,7 +14230,9 @@ Note: This attribute does not specify the field of view. The attribute Field of 
     <entry group="0018" element="9427" name="Intensifier Active Shape" type="1">
       <description>Shape of the active area used for acquiring this image.
 Enumerated Value:
- RECTANGLE  ROUND  HEXAGONAL
+ RECTANGLE
+ ROUND
+ HEXAGONAL
 Note: This may be different from the Field of View Shape (0018,1147), and should not be assumed to describe the stored image.</description>
     </entry>
     <entry group="0018" element="9428" name="Intensifier Active Dimension(s)" type="1">
@@ -13848,7 +14284,9 @@ One or more items may be included in this sequence.</description>
     <entry group="0018" element="1147" name="&gt;Field of View Shape" type="3">
       <description>Shape of the Field of View, that is the image pixels stored in Pixel Data (7FE0,0010).
 Enumerated Values:
- RECTANGLE  ROUND  HEXAGONAL</description>
+ RECTANGLE
+ ROUND
+ HEXAGONAL</description>
     </entry>
     <entry group="0018" element="9461" name="&gt;Field of View Dimension(s) in Float" type="3">
       <description>Dimensions in mm of the Field of View, that is the image pixels stored in Pixel Data (7FE0,0010). If Field of View Shape (0018,1147) is:
@@ -13870,7 +14308,8 @@ See C.8.11.4.1.1 for further explanation.</description>
     <entry group="0018" element="7034" name="&gt;Field of View Horizontal Flip" type="1">
       <description>Whether or not a horizontal flip has been applied to the Field of View, i.e., the image pixels stored in Pixel Data (7FE0,0010), after rotation relative to the physical detector as described in Field of View Rotation (0018,7032).
 Enumerated Values:
- NO  YES
+ NO
+ YES
 See C.8.11.4.1.1 for further explanation.</description>
     </entry>
     <entry group="0018" element="9433" name="&gt;Field of View Description" type="3">
@@ -14165,7 +14604,10 @@ Note: This value is traditionally referred to as Source Image Receptor Distance 
   </table>
   <table ref="Table C.8.19.7-1" name="XA/XRF MULTI-FRAME PRESENTATION MODULE ATTRIBUTES">
     <entry group="0018" element="1244" name="Preferred Playback Sequencing" type="3">
-      <description>Describes the preferred playback sequencing for a multi-frame image. Enumerated Values: 0 = Looping (1,2...n,1,2,...n,1,2,....n,...) 1 = Sweeping (1,2,...n,n -1,...2,1,2,...n,...)</description>
+      <description>Describes the preferred playback sequencing for a multi-frame image.
+Enumerated Values:
+0 = Looping (1,2...n,1,2,...n,1,2,....n,...)
+1 = Sweeping (1,2,...n,n -1,...2,1,2,...n,...)</description>
     </entry>
     <entry group="0008" element="9458" name="Frame Display Sequence" type="3">
       <description>Sequence that specifies the display frame rate of a selected set of frames. The Items are ordered in increasing frame number. The range of the frames may not overlap and the ranges shall be adjacent.
@@ -14189,7 +14631,8 @@ Defined Terms:
     <entry group="0028" element="1090" name="Recommended Viewing Mode" type="2">
       <description>Specifies the recommended viewing protocol(s).
 Defined terms:
-SUB = subtraction with mask images NAT = native viewing of image as stored
+SUB = subtraction with mask images
+NAT = native viewing of image as stored
 Note: If an implementation does not recognize the defined term for Recommended Viewing Mode (0028,1090), reverting to native display mode is recommended.</description>
     </entry>
     <entry group="0028" element="9411" name="Display Filter Percentage" type="2">
@@ -14334,7 +14777,8 @@ Note: The maximum P-Value for this Attribute may be different from the maximum P
     </entry>
     <entry group="60xx" element="0040" name="Overlay Type" type="1">
       <description>Indicates whether this overlay represents a region of interest or other graphics. Enumerated Values:
- G = Graphics  R = ROI.</description>
+ G = Graphics
+ R = ROI.</description>
     </entry>
     <entry group="60xx" element="0050" name="Overlay Origin" type="1">
       <description>Location of first overlay point with respect to pixels in the image, given as rowcolumn.
@@ -14406,7 +14850,9 @@ Required if a sequence item is present, and if the displayed area selection in t
     <entry group="0070" element="0100" name="&gt;Presentation Size Mode" type="1">
       <description>Manner of selection of display size.
 Enumerated Values:
- SCALE TO FIT  TRUE SIZE  MAGNIFY
+ SCALE TO FIT
+ TRUE SIZE
+ MAGNIFY
 See C.10.4 for further explanation.</description>
     </entry>
     <entry group="0070" element="0101" name="&gt;Presentation Pixel Spacing" type="1C">
@@ -14477,7 +14923,9 @@ Required if Anchor Point (0070,0014) is not present.</description>
     </entry>
     <entry group="0070" element="0012" name="&gt;&gt;Bounding Box Text Horizontal Justification" type="1C">
       <description>Location of the text relative to the vertical edges of the bounding box. Enumerated Values:
- LEFT = closest to left edge  RIGHT = closest to right edge  CENTER = centered
+ LEFT = closest to left edge
+ RIGHT = closest to right edge
+ CENTER = centered
 Required if Bounding Box Top Left Hand Corner (0070,0010) is present.</description>
     </entry>
     <entry group="0070" element="0014" name="&gt;&gt;Anchor Point" type="1C">
@@ -14487,7 +14935,9 @@ May be present even if a bounding box is specified (i.e. Bounding Box Top Left H
     </entry>
     <entry group="0070" element="0015" name="&gt;&gt;Anchor Point Visibility" type="1C">
       <description>Flag to indicate whether or not a visible indication (such as a line or arrow) of the relationship between the text and the anchor point is to be displayed.
-Enumerated Values:  Y = yes  N = no
+Enumerated Values:
+ Y = yes
+ N = no
 Required if Anchor Point (0070,0014) is present.</description>
     </entry>
     <entry group="0070" element="0009" name="&gt;Graphic Object Sequence" type="1C">
@@ -14511,11 +14961,17 @@ See C.10.5.1.2 for further explanation.</description>
     <entry group="0070" element="0023" name="&gt;&gt;Graphic Type" type="1">
       <description>The shape of graphic that is to be drawn. See C.10.5.1.2.
 Enumerated Values:
- POINT  POLYLINE  INTERPOLATED  CIRCLE  ELLIPSE</description>
+ POINT
+ POLYLINE
+ INTERPOLATED
+ CIRCLE
+ ELLIPSE</description>
     </entry>
     <entry group="0070" element="0024" name="&gt;&gt;Graphic Filled" type="1C">
       <description>Whether or not the closed graphics element is displayed as filled (in some unspecified manner that shall be distinguishable from an outline) or as an outline. See C.10.5.1.2.
-Enumerated Values:  Y = yes  N = no
+Enumerated Values:
+ Y = yes
+ N = no
 Required if Graphic Data (0070,0022) is “closed”, that is Graphic Type (0070,0023) is CIRCLE or ELLIPSE, or Graphic Type (0070,0023) is POLYLINE or INTERPOLATED and the first data point is the same as the last data point.</description>
     </entry>
   </table>
@@ -14529,7 +14985,8 @@ Notes: Negative values are not permitted since the Value Representation is unsig
     <entry group="0070" element="0041" name="Image Horizontal Flip" type="1">
       <description>Whether or not to flip the image horizontally after any Image Rotation has been applied such that the left side of the image becomes the right side.
 Enumerated Values:
- Y = yes,  N = no
+ Y = yes,
+ N = no
 Note: No vertical flip is specified since the same result can be achieved by a combination of a 180 degree rotation and a horizontal flip.</description>
     </entry>
   </table>
@@ -14600,7 +15057,8 @@ Required if Acquisition Time Synchronized (0018,1800) value is Y; may be present
     </entry>
     <entry group="003A" element="0004" name="&gt; Waveform Originality" type="1">
       <description>See C.10.9.1.3. Enumerated values:
-ORIGINAL DERIVED</description>
+ORIGINAL
+DERIVED</description>
     </entry>
     <entry group="003A" element="0005" name="&gt; Number of Waveform Channels" type="1">
       <description>Number of channels for this multiplex group.</description>
@@ -14625,7 +15083,13 @@ ORIGINAL DERIVED</description>
     </entry>
     <entry group="003A" element="0205" name="&gt;&gt; Channel Status" type="3">
       <description>One or more values for the status of this channel within this SOP Instance. Defined terms:
-OK TEST DATA DISCONNECTED QUESTIONABLE INVALID UNCALIBRATED UNZEROED
+OK
+TEST DATA
+DISCONNECTED
+QUESTIONABLE
+INVALID
+UNCALIBRATED
+UNZEROED
 Precise location of a change in status may be noted in an Annotation.</description>
     </entry>
     <entry group="003A" element="0208" name="&gt;&gt; Channel Source Sequence" type="1">
@@ -14706,7 +15170,8 @@ Required if Channel Time Skew is not present.</description>
       <description>Value of waveform samples inserted in channels when input is absent or invalid. Required if acquisition equipment inserts padding. See C.10.9.1.6.</description>
     </entry>
     <entry group="5400" element="1010" name="&gt; Waveform Data" type="1">
-      <description>Encoded data samples - channel multiplexed See section C.10.9.1.7</description>
+      <description>Encoded data samples - channel multiplexed
+See section C.10.9.1.7</description>
     </entry>
   </table>
   <table ref="Table C.10-11" name="WAVEFORM ANNOTATION MODULE ATTRIBUTES">
@@ -14837,7 +15302,8 @@ Required if Window Center (0028,1050) is sent.</description>
       <description>Describes a VOI LUT function to apply to the values of Window Center (0028,1050) and Window Width (0028,1051).
 See C.11.2.1.3 for further explanation.
 Defined terms:
- LINEAR  SIGMOID
+ LINEAR
+ SIGMOID
 When this attribute is not present, the interpretation of the values of Window Center (0028,1050) and Window Width (0028,1051) is linear as in C.11.2.1.2.</description>
     </entry>
   </table>
@@ -14996,7 +15462,9 @@ Notes: 1. This Sequence is replicated here in order to specify one Item, additio
     </entry>
     <entry group="0028" element="6101" name="&gt;Mask Operation" type="1">
       <description>Type of mask operation to be performed 
-Enumerated Values:  AVG_SUB  TID
+Enumerated Values:
+ AVG_SUB
+ TID
 See C.7.6.10.1 for further explanation.
 Note: The requirement in this module is for Enumerated Values which override the requirements of the Mask Module.</description>
     </entry>
@@ -15176,7 +15644,8 @@ See C.12.1.1.5 for further explanation.</description>
     </entry>
     <entry group="0100" element="0410" name="SOP Instance Status" type="3">
       <description>A flag that indicates the storage status of the SOP Instance. Not Specified (NS) implies that this SOP Instance has no special storage status, and hence no special actions need be taken. Original (OR) implies that this is the primary SOP instance for the purpose of storage, but that it has not yet been authorized for diagnostic use. Authorized Original (AO) implies that this is the primary SOP instance for the purpose of storage, which has been authorized for diagnostic use. Any copies of an Authorized Original should be given the status of Authorized Copy. Authorized Copy (AC) implies that this is a copy of an Authorized Original SOP Instance.
-Enumerated Values:  NS, OR, AO, AC
+Enumerated Values:
+ NS, OR, AO, AC
 Note: Proper use of these flags is specified in Security Profiles. Implementations that do not conform to such Security Profiles may not necessarily handle these flags properly.</description>
     </entry>
     <entry group="0100" element="0420" name="SOP Authorization Date and Time" type="3">
@@ -15251,7 +15720,9 @@ Notes: Certain Transfer Syntaxes, particularly those that are used with compress
     </entry>
     <entry group="0400" element="0015" name="&gt;MAC Algorithm" type="1">
       <description>The algorithm used in generating the MAC to be encrypted to form the Digital Signature. 
-Defined Terms: RIPEMD160   MD5   SHA1
+Defined Terms: RIPEMD160
+  MD5
+  SHA1
 .
 Note: Digital Signature Security Profiles (see PS 3.15) may require the use of a restricted subset of these terms.</description>
     </entry>
@@ -15318,12 +15789,19 @@ Note: Digital Signature Security Profiles (see PS 3.15) may require the use of a
       <description>Number of copies to be printed for each film of the film session.</description>
     </entry>
     <entry group="2000" element="0020" name="Print Priority" type="??">
-      <description>Specifies the priority of the print job.  Enumerated Values:
- HIGH  MED  LOW</description>
+      <description>Specifies the priority of the print job. 
+Enumerated Values:
+ HIGH
+ MED
+ LOW</description>
     </entry>
     <entry group="2000" element="0030" name="Medium Type" type="??">
       <description>Type of medium on which the print job will be printed. Defined Terms: 
- PAPER  CLEAR FILM  BLUE FILM  MAMMO CLEAR FILM  MAMMO BLUE FILM</description>
+ PAPER
+ CLEAR FILM
+ BLUE FILM
+ MAMMO CLEAR FILM
+ MAMMO BLUE FILM</description>
     </entry>
     <entry group="2000" element="0040" name="Film Destination" type="??">
       <description>Film destination. Defined Terms: 
@@ -15372,12 +15850,28 @@ LANDSCAPE = horizontal film position</description>
     </entry>
     <entry group="2010" element="0050" name="Film Size ID" type="??">
       <description>Film size identification. Defined Terms: 
- 8INX10IN  8_5INX11IN  10INX12IN  10INX14IN  11INX14IN  11INX17IN  14INX14IN  14INX17IN  24CMX24CM  24CMX30CM  A4  A3
-Note: 10INX14IN corresponds with 25.7CMX36.4CM A4 corresponds with 210 x 297 millimeters A3 corresponds with 297 x 420 millimeters</description>
+ 8INX10IN
+ 8_5INX11IN
+ 10INX12IN
+ 10INX14IN
+ 11INX14IN
+ 11INX17IN
+ 14INX14IN
+ 14INX17IN
+ 24CMX24CM
+ 24CMX30CM
+ A4
+ A3
+Note: 10INX14IN corresponds with 25.7CMX36.4CM
+A4 corresponds with 210 x 297 millimeters
+A3 corresponds with 297 x 420 millimeters</description>
     </entry>
     <entry group="2010" element="0060" name="Magnification Type" type="??">
       <description>Interpolation type by which the printer magnifies or decimates the image in order to fit the image in the image box on film. Defined Terms: 
- REPLICATE  BILINEAR  CUBIC  NONE</description>
+ REPLICATE
+ BILINEAR
+ CUBIC
+ NONE</description>
     </entry>
     <entry group="2010" element="0080" name="Smoothing Type" type="??">
       <description>Further specifies the type of the interpolation function. Values are defined in Conformance Statement. Only valid for Magnification Type (2010,0060) = CUBIC</description>
@@ -15502,7 +15996,8 @@ See PS 3.4 for further description.</description>
     </entry>
     <entry group="0028" element="0004" name="&gt;Photometric Interpretation" type="??">
       <description>See C.7.6.3 for description of Image Pixel Module. Enumerated Values:
- MONOCHROME1  MONOCHROME2</description>
+ MONOCHROME1
+ MONOCHROME2</description>
     </entry>
     <entry group="0028" element="0010" name="&gt;Rows" type="??">
       <description>See C.7.6.3 for description of Image Pixel Module</description>
@@ -15515,15 +16010,18 @@ See PS 3.4 for further description.</description>
     </entry>
     <entry group="0028" element="0100" name="&gt;Bits Allocated" type="??">
       <description>See C.7.6.3 for description of Image Pixel Module. Enumerated Values:
- 8 (if Bits Stored = 8)  16 (if Bits Stored = 12)</description>
+ 8 (if Bits Stored = 8)
+ 16 (if Bits Stored = 12)</description>
     </entry>
     <entry group="0028" element="0101" name="&gt;Bits Stored" type="??">
       <description>See C.7.6.3 for description of Image Pixel Module. Enumerated Values:
- 8  12</description>
+ 8
+ 12</description>
     </entry>
     <entry group="0028" element="0102" name="&gt;High Bit" type="??">
       <description>See C.7.6.3 for description of Image Pixel Module. Enumerated Values:
- 7 (if BITS STORED = 8)  11 (if BITS STORED = 12)</description>
+ 7 (if BITS STORED = 8)
+ 11 (if BITS STORED = 12)</description>
     </entry>
     <entry group="0028" element="0103" name="&gt;Pixel Representation" type="??">
       <description>See C.7.6.3 for description of Image Pixel Module. Enumerated Value:
@@ -15731,7 +16229,9 @@ One item for each display format, film orientation, film size, and printer resol
     </entry>
     <entry group="2020" element="00A0" name="&gt;&gt;Requested Image Size Flag" type="??">
       <description>Indicates whether the printer supports Requested Image Size (2020,0030) for this display format and film orientation and size combination.
-Enumerated Values: NO = not supported YES = supported</description>
+Enumerated Values:
+NO = not supported
+YES = supported</description>
     </entry>
     <entry group="2010" element="0054" name="&gt;Default Printer Resolution ID" type="??">
       <description>The printer's default resolution identification. Defined Terms are the same as Requested Resolution ID (2020,0050). See C.13.3.</description>
@@ -15757,8 +16257,15 @@ Enumerated Values: NO = not supported YES = supported</description>
     <entry group="2020" element="00A2" name="&gt;Decimate/Crop Result" type="??">
       <description>Indicates whether the printer will decimate or crop image pixels if the image rows or columns is greater than the available printable pixels in an Image Box.
 See C.13.5.
-Enumerated Values when the printer does not support Requested Decimate/Crop Behavior (2020,0040):  DECIMATE = image will be decimated to fit. CROP = image will be cropped to fit. FAIL = N-SET of the Image Box will fail
-Enumerated Values when the printer supports Requested Decimate/Crop Behavior (2020,0040):    DEF DECIMATE = image will be decimated to fit. DEF CROP = image will be cropped to fit DEF FAIL = N-SET of the Image Box will fail 
+Enumerated Values when the printer does not support Requested Decimate/Crop Behavior (2020,0040):
+ DECIMATE = image will be decimated to fit.
+CROP = image will be cropped to fit.
+FAIL = N-SET of the Image Box will fail
+Enumerated Values when the printer supports Requested Decimate/Crop Behavior (2020,0040): 
+ 
+DEF DECIMATE = image will be decimated to fit.
+DEF CROP = image will be cropped to fit
+DEF FAIL = N-SET of the Image Box will fail 
 This value indicates the printer default if the SCU does not create or set Requested Decimate/Crop Behavior for the Image Box.</description>
     </entry>
   </table>
@@ -15823,7 +16330,10 @@ Note:  No SR-specific semantics are specified.</description>
     </entry>
     <entry group="0008" element="1111" name="Referenced Performed Procedure Step Sequence" type="2">
       <description>Uniquely identifies the Performed Procedure Step SOP Instance for which the Series is created. Only a single Item shall be permitted in this sequence.
-Notes: 1. The Performed Procedure Step referred to by this Attribute is the Step during which this Document is generated. 2. If this Document is generated during the same Modality or General Purpose Performed Procedure Step as the evidence in the current interpretation procedure, this attribute may contain reference to that Modality or General Purpose Performed Procedure Step.  3. This Attribute is not used to convey reference to the evidence in the current interpretation procedure. See Current Requested Procedure Evidence Sequence (0040,A375). 4. This Sequence may be sent zero length if the Performed Procedure Step is unknown.</description>
+Notes: 1. The Performed Procedure Step referred to by this Attribute is the Step during which this Document is generated.
+2. If this Document is generated during the same Modality or General Purpose Performed Procedure Step as the evidence in the current interpretation procedure, this attribute may contain reference to that Modality or General Purpose Performed Procedure Step. 
+3. This Attribute is not used to convey reference to the evidence in the current interpretation procedure. See Current Requested Procedure Evidence Sequence (0040,A375).
+4. This Sequence may be sent zero length if the Performed Procedure Step is unknown.</description>
     </entry>
     <entry group="0008" element="1150" name="&gt;Referenced SOP Class UID" type="1C">
       <description>Uniquely identifies the referenced SOP Class.
@@ -15842,14 +16352,16 @@ Required if Referenced Performed Procedure Step Sequence (0008,1111) is sent.</d
       <description>The estimated degree of completeness of this SR Document with respect to externally defined criteria in a manner specified in the Conformance Statement. 
 Note: It may be desirable to make these criteria adaptable to local policies or user decisions.
 Enumerated Values:
-PARTIAL = Partial content.  COMPLETE = Complete content.</description>
+PARTIAL = Partial content. 
+COMPLETE = Complete content.</description>
     </entry>
     <entry group="0040" element="A492" name="Completion Flag Description" type="3">
       <description>Explanation of the value sent in Completion Flag (0040,A491).</description>
     </entry>
     <entry group="0040" element="A493" name="Verification Flag" type="1">
       <description>Indicates whether this SR Document is Verified. Enumerated Values:
-UNVERIFIED = Not attested to. VERIFIED = Attested to by a Verifying Observer Name (0040,A075) who is accountable for its content.
+UNVERIFIED = Not attested to.
+VERIFIED = Attested to by a Verifying Observer Name (0040,A075) who is accountable for its content.
 Note: The intent of this specification is that the "prevailing final version" of an SR Document is the version having the most recent Verification DateTime (0040,A030), Completion Flag (0040,A491) of COMPLETE and Verification Flag (0040,A493) of VERIFIED.</description>
     </entry>
     <entry group="0008" element="0023" name="Content Date" type="1">
@@ -16112,7 +16624,20 @@ Zero or one Items shall be permitted in this Sequence.</description>
     <entry group="0040" element="A040" name="Value Type" type="1">
       <description>The type of the value encoded in this Content Item.
 Defined Terms:
- TEXT  NUM  CODE  DATETIME  DATE  TIME  UIDREF  PNAME  COMPOSITE  IMAGE  WAVEFORM  SCOORD  TCOORD  CONTAINER
+ TEXT
+ NUM
+ CODE
+ DATETIME
+ DATE
+ TIME
+ UIDREF
+ PNAME
+ COMPOSITE
+ IMAGE
+ WAVEFORM
+ SCOORD
+ TCOORD
+ CONTAINER
 See C.17.3.2.1 for further explanation.</description>
     </entry>
     <entry group="0040" element="A043" name="Concept Name Code Sequence" type="1C">
@@ -16179,7 +16704,13 @@ See C.17.3.2.4 for further explanation.</description>
       <description>The type of relationship between the (enclosing) Source Content Item and the Target Content Item.
 IODs specify additional constraints on Relationships (including lists of Enumerated Values). 
 Defined Terms:
- CONTAINS  HAS PROPERTIES  HAS OBS CONTEXT  HAS ACQ CONTEXT  INFERRED FROM  SELECTED FROM  HAS CONCEPT MOD
+ CONTAINS
+ HAS PROPERTIES
+ HAS OBS CONTEXT
+ HAS ACQ CONTEXT
+ INFERRED FROM
+ SELECTED FROM
+ HAS CONCEPT MOD
 See C.17.3.2.4 for further explanation.</description>
     </entry>
     <include ref="&gt;Include Document Relationship Macro Table C.17-6 if the Target Content Item is included by-value in the Source Content Item. The Macro shall not be present if the relationship is by-reference."/>
@@ -16385,7 +16916,8 @@ Required if Referenced Sample Positions (0040,A132) and Referenced Time Offsets 
     <entry group="0040" element="A050" name="Continuity of Content" type="1">
       <description>This flag specifies for a CONTAINER whether or not its contained Content Items are logically linked in a continuous textual flow, or are separate items.
 Enumerated Values:
- SEPARATE  CONTINUOUS
+ SEPARATE
+ CONTINUOUS
 See C.18.8.1.1 for further explanation.</description>
     </entry>
     <entry group="0040" element="A504" name="Content Template Sequence" type="1C">
@@ -16641,12 +17173,17 @@ See C.10.5.1.2 for further explanation. </description>
 Note: If the entire request fits on a single piece of media per copy, then this value corresponds to the actual number of pieces of media to be created.</description>
     </entry>
     <entry group="2200" element="0020" name="Request Priority" type="??">
-      <description>Specifies the priority of the request.  Enumerated Values:
- HIGH  MED  LOW</description>
+      <description>Specifies the priority of the request. 
+Enumerated Values:
+ HIGH
+ MED
+ LOW</description>
     </entry>
     <entry group="2200" element="0001" name="Label Using Information Extracted From Instances" type="??">
-      <description>Specifies whether or not to extract label information from the instances.  Enumerated Values:
- YES  NO</description>
+      <description>Specifies whether or not to extract label information from the instances. 
+Enumerated Values:
+ YES
+ NO</description>
     </entry>
     <entry group="2200" element="0002" name="Label Text" type="??">
       <description>Unformatted free text to include in the label instead of or in addition to information extracted from the instances.</description>
@@ -16692,11 +17229,14 @@ Defined Terms:
     <entry group="2200" element="0009" name="Include Display Application" type="??">
       <description>A flag indicating if the SCP should include on the media a DICOM Instance Display Application.
 Enumerated Values:
- NO  YES</description>
+ NO
+ YES</description>
     </entry>
     <entry group="2200" element="000A" name="Preserve Composite Instances After Media Creation" type="??">
-      <description>A flag to indicate whether or not the SCU intends to issue a subsequent media creation request referencing some or all of the instances contained in Referenced SOP Sequence (0008,1199).  Enumerated Values:
- YES  NO</description>
+      <description>A flag to indicate whether or not the SCU intends to issue a subsequent media creation request referencing some or all of the instances contained in Referenced SOP Sequence (0008,1199). 
+Enumerated Values:
+ YES
+ NO</description>
     </entry>
     <entry group="0008" element="1199" name="Referenced SOP Sequence" type="??">
       <description>A sequence of repeating Items where each Item references a single SOP Instance, the Media Application Profile to be used, and, where applicable, the icon representing the referenced image</description>
@@ -17145,7 +17685,8 @@ Enumerated Values:
     </entry>
     <entry group="0072" element="0702" name="&gt;VOI Type" type="3">
       <description>Expected value of interest transformation for display (e.g., Window Center and Window Width or VOI LUT).
-Defined Terms: LUNG
+Defined Terms:
+LUNG
 MEDIASTINUM
 ABDO_PELVIS
 LIVER
@@ -17166,7 +17707,8 @@ DEFAULT</description>
 Enumerated values:
 YES = The maximum output value after the display pipeline has been applied shall be displayed with the minimum available luminance.
 NO = The maximum output value after the display pipeline has been applied shall be displayed with the maximum available luminance.
-Notes:    1. The YES and NO values of this Attribute correspond to the Presentation LUT Shape (2050,0020) values of INVERSE and IDENTITY, as described in C.11.6.1.2. 2. Only applicable to display of grayscale images.</description>
+Notes:    1. The YES and NO values of this Attribute correspond to the Presentation LUT Shape (2050,0020) values of INVERSE and IDENTITY, as described in C.11.6.1.2.
+2. Only applicable to display of grayscale images.</description>
     </entry>
     <entry group="0072" element="0710" name="&gt;Show Image True Size Flag" type="3">
       <description>Indicates whether or not to display images with the physical size of the rendered image pixel the same on the screen as specified in the image attributes, unless overridden by a Presentation State instance.
@@ -17417,7 +17959,8 @@ One or more sequence items may be present.</description>
     <entry group="0028" element="0301" name="Burned In Annotation" type="1">
       <description>Indicates whether or not the encapsulated document contains sufficient burned in annotation to identify the patient and date the data was acquired.
 Enumerated Values: 
- YES  NO</description>
+ YES
+ NO</description>
     </entry>
     <entry group="0042" element="0013" name="Source Instance Sequence" type="1C">
       <description>A sequence that identifies the set of Instances that were used to derive the encapsulated document. One or more Items may be included in this Sequence. 
@@ -17477,7 +18020,7 @@ Enumerated Value:
   </table>
   <table ref="Table F.3-1" name="BASIC DIRECTORY IOD MODULES">
     <entry ie="File-set Identification" name="File-set Identification" ref="F.3.2.1" usage="M"/>
-    <entry ie="Directory Information" name="Directory Information" ref="F.3.2.2" usage="U"/>
+    <entry ie="Directory Information" name="F.3.2.2" ref="U" usage="Directory Information followed by a Sequence of Directory Records. Note: The Directory Information Module is optional. This Directory Information Module should be present in all but primitive environments where a directory is not needed. In this case, only the File-set Identification Information is present."/>
   </table>
   <table ref="Table F.3-2" name="FILE-SET IDENTIFICATION MODULE">
     <entry group="0004" element="1130" name="File-set ID" type="2">
@@ -17533,7 +18076,19 @@ Note: This offset includes the File Preamble and the DICM Prefix.</description>
     <entry group="0004" element="1430" name="&gt;Directory Record Type" type="1C">
       <description>Defines a specialized type of Directory Record by reference to its position in the Media Storage Directory Information Model (see Section F.4).
 Required if the Directory Record Sequence (0004,1220) is not zero length.
-Enumerated Values (see Section F.5):  PATIENT STUDY  SERIES  IMAGE RT DOSE RT STRUCTURE SET RT PLAN RT TREAT RECORD PRESENTATION  WAVEFORM SR DOCUMENT  KEY OBJECT DOC SPECTROSCOPY  RAW DATA REGISTRATION  FIDUCIAL HANGING PROTOCOL  ENCAP DOC HL7 STRUC DOC  VALUE MAP STEREOMETRIC 
+Enumerated Values (see Section F.5): 
+PATIENT STUDY  SERIES 
+IMAGE
+RT DOSE RT STRUCTURE SET
+RT PLAN RT TREAT RECORD
+PRESENTATION  WAVEFORM
+SR DOCUMENT  KEY OBJECT DOC
+SPECTROSCOPY  RAW DATA
+REGISTRATION  FIDUCIAL
+HANGING PROTOCOL  ENCAP DOC
+HL7 STRUC DOC  VALUE MAP
+STEREOMETRIC
+
 PRIVATE = Privately defined record hierarchy position. Type shall be defined by Private Record UID (0004,1432).
 Notes: 1. Enumerated Values PRINT QUEUE, FILM SESSION, FILM BOX, and IMAGE BOX were previously defined in DICOM for this Attribute. They are now retired. See PS3.3-1998.
  2. Enumerated Values OVERLAY, MODALITY LUT, VOI LUT, CURVE, TOPIC, VISIT, RESULTS, INTERPRETATION, STUDY COMPONENT and STORED PRINT were previously defined in DICOM for this Attribute. They are now retired. See PS3.3-2004.
@@ -17594,7 +18149,8 @@ Note:  This may be useful to an FSR that does not support the SOP Class of the r
       <description/>
     </entry>
     <entry group="0020" element="000D" name="Study Instance UID" type="1C">
-      <description>Required only if (0004,1511) is absent. (See Note)</description>
+      <description>Required only if (0004,1511) is absent.
+(See Note)</description>
     </entry>
     <entry group="0020" element="0010" name="Study ID" type="1">
       <description/>
