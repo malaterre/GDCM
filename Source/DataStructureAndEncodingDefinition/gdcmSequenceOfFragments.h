@@ -92,8 +92,8 @@ protected:
 
 private:
 public:
-  VL SequenceLengthField;
   BasicOffsetTable Table;
+  VL SequenceLengthField;
   /// \brief Vector of Sequence Fragments
   FragmentVector Fragments;
 };
