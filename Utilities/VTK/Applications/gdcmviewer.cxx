@@ -48,7 +48,7 @@ public:
       {
       if ( event == vtkCommand::CharEvent )
         {
-#if (VTK_MAJOR_VERSION < 5) || 1
+#if (VTK_MAJOR_VERSION < 5) 
         int max = ImageViewer->GetWholeZMax();
         int slice = (ImageViewer->GetZSlice() + 1 ) % ++max;
         ImageViewer->SetZSlice( slice );
@@ -136,6 +136,12 @@ void ExecuteViewer(TViewer *viewer, const char *filename)
 int main(int argc, char *argv[])
 {
   if( argc < 2 )
+    {
+    std::cerr << argv[0] << " filename.dcm\n";
+    return 1;
+    }
+	// Later on I will allow multiple files on the command line
+	if( argc > 2 )
     {
     std::cerr << argv[0] << " filename.dcm\n";
     return 1;
