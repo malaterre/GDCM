@@ -106,7 +106,7 @@
                       </fo:table-cell>
                       <fo:table-cell border-color="rgb(0,0,0)" border-width="1pt">
                         <fo:block vertical-align="middle">
-                          <xsl:value-of select="@description"/>
+                          <xsl:value-of select="description"/>
                         </fo:block>
                       </fo:table-cell>
                     </fo:table-row>

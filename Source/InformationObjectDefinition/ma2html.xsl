@@ -51,7 +51,7 @@
                   <xsl:value-of select="@type"/>
                 </td>
                 <td>
-                  <xsl:value-of select="@description"/>
+                  <xsl:value-of select="description"/>
                 </td>
               </tr>
             </xsl:for-each>
