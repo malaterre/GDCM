@@ -166,6 +166,7 @@ template <typename T>
 inline char *bswap(char *out, const char *in, size_t length)
 {
   assert( !(length % sizeof(T)) );
+  assert( out != in );
   for(size_t i = 0; i < length; i+=2)
   {
     //const char copy = in[i];
@@ -515,7 +516,7 @@ void Printer::PrintDataSet(std::ostream &os, const StructuredSet<ExplicitDataEle
 	//	_os << de << std::endl;
         PrintElement(os, de, entry);
         }
-      else
+      else // INVALID case
         {
         abort();
         const VM::VMType vm = entry.GetVM();
