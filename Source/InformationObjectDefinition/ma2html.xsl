@@ -15,17 +15,55 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 -->
+
+  <!-- an Entry line -->
+  <xsl:template match="entry">
+    <tr>
+<!-- TODO which one is expected ? -->
+<!-- Version 1 -->
+<!--xsl:text>(</xsl:text>
+                <xsl:value-of select="@group"/>
+                <xsl:text>,</xsl:text>
+                <xsl:value-of select="@element"/>
+                <xsl:text>)</xsl:text-->
+<!-- Version 2 -->
+      <td>(<xsl:value-of select="@group"/>,<xsl:value-of select="@element"/>)</td>
+      <td>
+        <xsl:value-of select="@name"/>
+      </td>
+      <td>
+        <xsl:value-of select="@type"/>
+      </td>
+      <td>
+        <xsl:value-of select="description"/>
+      </td>
+    </tr>
+  </xsl:template>
+
+
+  <!-- an Include line -->
+  <xsl:template match="include">
+    <tr>
+      <td colspan="4">
+        <xsl:value-of select="@ref"/>
+      </td>
+    </tr>
+  </xsl:template>
+
+
   <xsl:template match="/">
     <html>
       <body>
 <!-- The main template that loop over all dict/entry -->
         <xsl:for-each select="tables/table">
           <table border="1">
-            <caption><em>
-              <xsl:value-of select="@name"/>
-              <br/>
-              <xsl:value-of select="@ref"/>
-            </em></caption>
+            <caption>
+              <em>
+                <xsl:value-of select="@name"/>
+                <br/>
+                <xsl:value-of select="@ref"/>
+              </em>
+            </caption>
             <tr bgcolor="#d6d6d6">
 <!--rgb(214,214,214) -->
               <th>Tag</th>
@@ -33,28 +71,7 @@
               <th>Type</th>
               <th>Description</th>
             </tr>
-            <xsl:for-each select="entry">
-              <tr>
-                <!-- TODO which one is expected ? -->
-                <!-- Version 1 -->
-                <!--xsl:text>(</xsl:text>
-                <xsl:value-of select="@group"/>
-                <xsl:text>,</xsl:text>
-                <xsl:value-of select="@element"/>
-                <xsl:text>)</xsl:text-->
-                <!-- Version 2 -->
-                <td>(<xsl:value-of select="@group"/>,<xsl:value-of select="@element"/>)</td>
-                <td>
-                  <xsl:value-of select="@name"/>
-                </td>
-                <td>
-                  <xsl:value-of select="@type"/>
-                </td>
-                <td>
-                  <xsl:value-of select="description"/>
-                </td>
-              </tr>
-            </xsl:for-each>
+            <xsl:apply-templates/>
           </table>
         </xsl:for-each>
       </body>
