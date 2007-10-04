@@ -38,7 +38,7 @@ public:
   static void SwapArray(T *array, unsigned int n)
   {
     // TODO: need to unroll loop:
-    for(int i = 0; i < n; ++i)
+    for(unsigned int i = 0; i < n; ++i)
     {
       array[i] = Swap<T>(array[i]);
     }
