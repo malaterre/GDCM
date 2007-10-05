@@ -18121,7 +18121,6 @@ Note:  This may be useful to an FSR that does not support the SOP Class of the r
     <include ref="&gt;Record Selection Keys See F.5 See F.5 A number of DICOM Data Elements which contain specific keys defined for each type of Directory Record (0004,1430) defined in Section F.5."/>
   </table>
   <table ref="Table F.5-1" name="PATIENT KEYS">
-    <include ref="Key Tag Type Attribute Description"/>
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
       <description>Required if an extended or replacement character set is used in one of the keys</description>
     </entry>
@@ -18134,7 +18133,6 @@ Note:  This may be useful to an FSR that does not support the SOP Class of the r
     <include ref="Any other Attribute of the Patient IOD or Patient IE Modules 3"/>
   </table>
   <table ref="Table F.5-2" name="STUDY KEYS">
-    <include ref="Key Tag Type Attribute Description"/>
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
       <description>Required if an extended or replacement character set is used in one of the keys</description>
     </entry>
@@ -18160,7 +18158,6 @@ Note:  This may be useful to an FSR that does not support the SOP Class of the r
     <include ref="Any other Attribute of the Study IOD or Study IE Modules 3"/>
   </table>
   <table ref="Table F.5-3" name="SERIES KEYS">
-    <include ref="Key Tag Type Attribute Description"/>
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
       <description>Required if an extended or replacement character set is used in one of the keys</description>
     </entry>
@@ -18180,7 +18177,6 @@ Note:  This may be useful to an FSR that does not support the SOP Class of the r
     <include ref="Any other Attribute of the Series IE Modules 3"/>
   </table>
   <table ref="Table F.5-4" name="IMAGE KEYS">
-    <include ref="Key Tag Type Attribute Description"/>
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
       <description>Required if an extended or replacement character set is used in one of the keys.</description>
     </entry>
@@ -18194,7 +18190,6 @@ Note:  This may be useful to an FSR that does not support the SOP Class of the r
     <include ref="Any other Attribute of the Image IE Modules 3"/>
   </table>
   <table ref="Table F.5-19" name="RT DOSE KEYS">
-    <include ref="Key Tag Type Attribute Description"/>
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
       <description>Required if an extended or replacement character set is used in one of the keys.</description>
     </entry>
@@ -18214,7 +18209,6 @@ Note:  This may be useful to an FSR that does not support the SOP Class of the r
     <include ref="Any other Attribute of the Dose IE Modules 3"/>
   </table>
   <table ref="Table F.5-20" name="RT STRUCTURE SET KEYS">
-    <include ref="Key Tag Type Attribute Description"/>
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
       <description>Required if an extended or replacement character set is used in one of the keys.</description>
     </entry>
@@ -18233,7 +18227,6 @@ Note:  This may be useful to an FSR that does not support the SOP Class of the r
     <include ref="Any other Attribute of the Structure Set IE Modules 3"/>
   </table>
   <table ref="Table F.5-21" name="RT PLAN KEYS">
-    <include ref="Key Tag Type Attribute Description"/>
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
       <description>Required if an extended or replacement character set is used in one of the keys</description>
     </entry>
@@ -18252,7 +18245,6 @@ Note:  This may be useful to an FSR that does not support the SOP Class of the r
     <include ref="Any other Attribute of the Plan IE Modules 3"/>
   </table>
   <table ref="Table F.5-22" name="RT TREATMENT RECORD KEYS">
-    <include ref="Key Tag Type Attribute Description"/>
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
       <description>Required if an extended or replacement character set is used in one of the keys</description>
     </entry>
@@ -18268,7 +18260,6 @@ Note:  This may be useful to an FSR that does not support the SOP Class of the r
     <include ref="Any other Attribute of the Treatment Record IE Modules 3"/>
   </table>
   <table ref="Table F.5-23" name="PRESENTATION KEYS">
-    <include ref="Key Tag Type Attribute Description"/>
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
       <description>Required if an extended or replacement character set is used in one of the keys.</description>
     </entry>
@@ -18299,7 +18290,6 @@ Note: This time may be different from the time that the DICOM SOP Instance was c
     <include ref="Any other Attribute of the Presentation IE Modules 3"/>
   </table>
   <table ref="Table F.5-24" name="WAVEFORM KEYS">
-    <include ref="Key Tag Type Attribute Description"/>
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
       <description>Required if an extended or replacement character set is used in one of the keys.</description>
     </entry>
@@ -18315,7 +18305,6 @@ Note: This time may be different from the time that the DICOM SOP Instance was c
     <include ref="Any other Attribute of the Waveform IE Modules 3"/>
   </table>
   <table ref="Table F.5-25" name="SR DOCUMENT KEYS">
-    <include ref="Key Tag Type Attribute Description"/>
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
       <description>Required if an extended or replacement character set is used in one of the keys.</description>
     </entry>
@@ -18348,7 +18337,6 @@ Required if the root Content Item is the Source Content Item of HAS CONCEPT MOD 
     <include ref="Any Attribute of the Document IE Modules 3"/>
   </table>
   <table ref="Table F.5-26" name="KEY OBJECT DOCUMENT KEYS">
-    <include ref="Key Tag Type Attribute Description"/>
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
       <description>Required if an extended or replacement character set is used in one of the keys.</description>
     </entry>
@@ -18371,7 +18359,6 @@ Required if the root Content Item is the Source Content Item of HAS CONCEPT MOD 
     <include ref="Any Attribute of the Document IE Modules 3"/>
   </table>
   <table ref="Table F.5-27" name="SPECTROSCOPY KEYS">
-    <include ref="Key Tag Type Attribute Description"/>
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
       <description>Required if an extended or replacement character set is used in one of the keys.</description>
     </entry>
@@ -18413,7 +18400,6 @@ Required if the root Content Item is the Source Content Item of HAS CONCEPT MOD 
     <include ref="Any other Attribute of the Spectroscopy IE Modules 3"/>
   </table>
   <table ref="Table F.5-28" name="RAW DATA KEYS">
-    <include ref="Key Tag Type Attribute Description"/>
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
       <description>Required if an extended or replacement character set is used in one of the keys.</description>
     </entry>
@@ -18433,7 +18419,6 @@ Required if the root Content Item is the Source Content Item of HAS CONCEPT MOD 
     <include ref="Any other Attribute of the Raw Data IE Modules 3"/>
   </table>
   <table ref="Table F.5-29" name="REGISTRATION KEYS">
-    <include ref="Key Tag Type Attribute Description"/>
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
       <description>Required if an extended or replacement character set is used in one of the keys.</description>
     </entry>
@@ -18447,7 +18432,6 @@ Required if the root Content Item is the Source Content Item of HAS CONCEPT MOD 
     <include ref="Any other Attribute of the Spatial Registration IE Modules 3"/>
   </table>
   <table ref="Table F.5-30" name="FIDUCIAL KEYS">
-    <include ref="Key Tag Type Attribute Description"/>
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
       <description>Required if an extended or replacement character set is used in one of the keys.</description>
     </entry>
@@ -18491,7 +18475,6 @@ Required if the root Content Item is the Source Content Item of HAS CONCEPT MOD 
     <include ref="Any other Attribute of the Hanging Protocol IOD 3"/>
   </table>
   <table ref="Table F.5-32" name="ENCAPSULATED DOCUMENT KEYS">
-    <include ref="Key Tag Type Attribute Description"/>
     <entry group="0008" element="0023" name="Content Date" type="2">
       <description>The date the content creation started.</description>
     </entry>
@@ -18514,7 +18497,6 @@ Required if the root Content Item is the Source Content Item of HAS CONCEPT MOD 
     <include ref="Any other Attribute of the Encapsulated Document Module except Encapsulated Document (0042,0011) 3"/>
   </table>
   <table ref="Table F.5-33" name="HL7 STRUCTURED DOCUMENT KEYS">
-    <include ref="Key Tag Type Attribute Description"/>
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
       <description>Required if an extended or replacement character set is used in one of the keys.</description>
     </entry>
@@ -18533,7 +18515,6 @@ Required if the root Content Item is the Source Content Item of HAS CONCEPT MOD 
     </entry>
   </table>
   <table ref="Table F.5-34" name="REAL WORLD VALUE MAPPING KEYS">
-    <include ref="Key Tag Type Attribute Description"/>
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
       <description>Required if an extended or replacement character set is used in one of the keys.</description>
     </entry>
@@ -18547,7 +18528,6 @@ Required if the root Content Item is the Source Content Item of HAS CONCEPT MOD 
     <include ref="Any other Attribute of the Real World Value Mapping IE Modules 3"/>
   </table>
   <table ref="Table F.5-35" name="STEREOMETRIC RELATIONSHIP KEYS">
-    <include ref="Key Tag Type Attribute Description"/>
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
       <description>Required if an extended or replacement character set is used in one of the keys.</description>
     </entry>
