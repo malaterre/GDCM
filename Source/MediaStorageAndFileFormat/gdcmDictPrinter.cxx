@@ -312,17 +312,12 @@ static const OWNER_VERSION OwnerVersionTable[] ={
 {"Viewing Protocol",""},
 {"http://www.gemedicalsystems.com/it_solutions/rad_pacs/","GEM"},
 
-// Manually added:
+// Manualy added:
 { "GEMS_Ultrasound_ImageGroup_001", "GEM" },
 { "GEMS_Ultrasound_MovieGroup_001", "GEM" },
 { "SIEMENS MED OCS SITE NAME ", "SSPI" },
-{ "SIEMENS MEDCOM HEADER ", "SSPI" },
 { "PHILIPS IMAGING DD 001", "PMFE" },
 { "PHILIPS MR IMAGING DD 001 ", "PMFE" },
-{ "SIEMENS MED ", "SSPI" },
-{ "SPI RELEASE 1 ", "SSPI" },
-{ "SIEMENS CSA NON-IMAGE ", "SSPI" },
-{ "SIEMENS MED DISPLAY ", "SSPI" },
 { "INTELERAD MEDICAL SYSTEMS ", "IMS" },
 { "SIEMENS CT VA1 DUMMY", "SSPI" },
 { "PATRIOT_PRIVATE_IMAGE_DATA", "PPID" },
@@ -331,7 +326,6 @@ static const OWNER_VERSION OwnerVersionTable[] ={
 { "HMC ", "HMC" },
 { "Philips3D ", "PM3D" },
 { "SIEMENS MED SMS USG ANTARES ", "SSPI" },
-{ "CARDIO-D.R. 1.0 ", "CDR1" },
 { "ACUSON:1.2.840.113680.1.0:7f10", "ACU" },
 { "ACUSON:1.2.840.113680.1.0 ", "ACU" },
 { "SIEMENS MR HEADER ", "SSPI" },
