@@ -51,7 +51,7 @@
     <html>
       <body>
 <!-- The main template that loop over all dict/entry -->
-        <xsl:for-each select="tables/table">
+        <xsl:for-each select="tables/macro">
           <table border="1">
             <caption>
               <em>
