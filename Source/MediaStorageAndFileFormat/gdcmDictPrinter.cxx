@@ -336,9 +336,11 @@ static const OWNER_VERSION OwnerVersionTable[] ={
 { "ACUSON:1.2.840.113680.1.0 ", "ACU" },
 { "SIEMENS MR HEADER ", "SSPI" },
 { "INTEGRIS 1.0", "INT1" },
+{ "SYNARC_1.0", "SYN" },
 
 { "XXXXXXXXXXXXXXXX", "ANO" }, // FIXME !
-{ "XXXXXXXXX_xx", "ANO_" }, // FIXME
+{ "XXXXXXXXX_xx", "ANO" }, // FIXME
+{ "        MED NM", "ANO" }, // Clearly should be SIEMENS
 
   { NULL, NULL },
 };
@@ -349,12 +351,14 @@ std::string GetVersion(std::string const &owner)
   const OWNER_VERSION *p = OwnerVersionTable;
   while( p->owner )
     {
+#ifndef NDEBUG
     if( strlen(p->owner) % 2 )
       {
       // HEY !
       std::cerr << "OWNER= \"" << p->owner << "\"" << std::endl;
       abort();
       }
+#endif
     if( owner == p->owner )
       {
       return p->version;
