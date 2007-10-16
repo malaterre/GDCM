@@ -20,6 +20,7 @@
 #include "gdcmVR.h"
 #include "gdcmTagToType.h"
 #include "gdcmVM.h"
+#include "gdcmElement.h"
 
 #include <string>
 #include <vector>
@@ -28,18 +29,12 @@
 namespace gdcm
 {
 
-//template<uint16_t Group, uint16_t Element> class TagToVR;
-//template<uint16_t Group, uint16_t Element> class TagToVM;
-
-// Declaration, also serve as forward declaration
-template<int T> class EncodingImplementation;
-
 struct void_;
 template<uint16_t Group, uint16_t Element, 
 	 int TVR = TagToType<Group, Element>::VRType, 
 	 int TVM = TagToType<Group, Element>::VMType,
 	 typename SQAttribute = void_ >
-class Attribute
+class ImplicitAttribute
 {
 public:
   typedef typename VRToType<TVR>::Type VRType;
@@ -104,84 +99,108 @@ public:
     }
 };
 
+// Declaration, also serve as forward declaration
+template<int T> class VRVLSize;
 
-// Implementation to perform formatted read and write
-template<> class EncodingImplementation<VR::ASCII> {
+// Implementation when VL is codec on 16 bits:
+template<> class VRVLSize<0> {
 public:
-  template<typename T> // FIXME this should be VRToType<TVR>::Type
-  static inline void Read(T* data, unsigned long length,
-                          IStream &_is) {
-    assert( data );
-    assert( length ); // != 0
-    assert( _is );
-    _is >> data[0];
-    char sep;
-    //std::cout << "GetLength: " << af->GetLength() << std::endl;
-    for(unsigned long i=1; i<length;++i) {
-      assert( _is );
-      // Get the separator in between the values
-      //_is.get(sep);
-      //assert( sep == '\\' ); // FIXME: Bad use of assert
-      _is >> data[i];
-      }
+  static inline uint16_t Read(IStream &_is) {
+    uint16_t l;
+    _is.read((char*)&l, 2);
+    return l;
     }
 
-  template<typename T>
-  static inline void Write(const T* data, unsigned long length,
-                           OStream &_os)  {
-    assert( data );
-    assert( length );
-    assert( _os );
-    _os << data[0];
-    for(unsigned long i=1; i<length; ++i) {
-      assert( _os );
-      //_os << "\\" << data[i];
-      _os << data[i];
-      //abort();
-      }
+  static inline void Write(OStream &_os)  {
+    }
+};
+// Implementation when VL is codec on 32 bits:
+template<> class VRVLSize<1> {
+public:
+  static inline uint32_t Read(IStream &_is) {
+    char dummy[2];
+    _is.read(dummy, 2);
+
+    uint32_t l;
+    _is.read((char*)&l, 4);
+    return l;
+    }
+
+  static inline void Write(OStream &_os)  {
     }
 };
 
-// Implementation to perform binary read and write
-// TODO rewrite operation so that either:
-// #1. dummy implementation use a pointer to Internal and do ++p (faster)
-// #2. Actually do some meta programming to unroll the loop 
-// (no notion of order in VM ...)
-template<> class EncodingImplementation<VR::BINARY> {
+template<uint16_t Group, uint16_t Element, 
+	 int TVR = TagToType<Group, Element>::VRType, 
+	 int TVM = TagToType<Group, Element>::VMType,
+	 typename SQAttribute = void_ >
+class ExplicitAttribute
+{
 public:
-  template<typename T>
-  static inline void Read(T* data, unsigned long length,
-    IStream &_is) {
-    const unsigned int type_size = sizeof(T);
-    assert( data ); // Can we read from pointer ?
-    assert( length );
-    assert( _is ); // Is stream valid ?
-    _is.read( reinterpret_cast<char*>(data+0), type_size);
-    for(unsigned long i=1; i<length; ++i) {
-      assert( _is );
-      _is.read( reinterpret_cast<char*>(data+i), type_size );
-    }
-    //ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem(data,
-    //  _is.GetSwapCode(), length);
+  typedef typename VRToType<TVR>::Type VRType;
+  enum { VMType = VMToLength<TVM>::Length };
+  VRType Internal[VMToLength<TVM>::Length];
+
+  unsigned long GetLength() const {
+    return VMToLength<TVM>::Length;
   }
-  template<typename T>
-  static inline void Write(const T* data, unsigned long length,
-    OStream &_os) { 
-    const unsigned int type_size = sizeof(T);
-    assert( data ); // Can we write into pointer ?
-    assert( length );
-    assert( _os ); // Is stream valid ?
-    //ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem((T*)data,
-    //  _os.GetSwapCode(), length);
-    _os.write( reinterpret_cast<const char*>(&(data[0])), type_size);
-    for(unsigned long i=1; i<length;++i) {
-      assert( _os );
-      _os.write( reinterpret_cast<const char*>(&(data[i])), type_size );
+  // Implementation of Print is common to all Mode (ASCII/Binary)
+  // TODO: Can we print a \ when in ASCII...well I don't think so
+  // it would mean we used a bad VM then, right ?
+  void Print(std::ostream &_os) const {
+    _os << Tag(Group, Element) << " ";
+    _os << VR((VR::VRType)TVR) << " ";
+    _os << Internal[0]; // VM is at least garantee to be one
+    for(int i=1; i<VMToLength<TVM>::Length; ++i)
+      _os << "," << Internal[i];
     }
-    //ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem((T*)data,
-    //  _os.GetSwapCode(), length);
+
+  // copy:
+  VRType GetValue(int idx = 0) {
+    assert( idx < VMToLength<TVM>::Length );
+    return Internal[idx];
   }
+  // const reference
+  VRType const &GetValue(int idx = 0) const {
+    assert( idx < VMToLength<TVM>::Length );
+    return Internal[idx];
+  }
+  void SetValue(VRType v, unsigned int idx = 0) {
+    assert( idx < VMToLength<TVM>::Length );
+    Internal[idx] = v;
+  }
+  void SetBytes(const VRType* array, unsigned long numel = VMType ) {
+    assert( array && numel && numel <= GetLength() );
+    memcpy(Internal, array, numel * sizeof(VRType) );
+    // should I fill with 0 the remaining
+    assert( numel == GetLength() ); // for now disable array smaller ...
+  }
+  const VRType* GetBytes() const {
+    return Internal;
+  }
+  void Read(IStream &_is) {
+    uint16_t cref[] = { Group, Element };
+    uint16_t c[2];
+    _is.read((char*)&c, 4);
+    char vr[2];
+    _is.read(vr, 2); // Check consistency ?
+    const uint32_t lref = GetLength() * sizeof( typename VRToType<TVR>::Type );
+    uint32_t l = VRVLSize< (TVR & VR::VR_VL32) >::Read(_is);
+    l /= sizeof( typename VRToType<TVR>::Type );
+     return EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+      l,_is);
+    }
+  void Write(OStream &_os) const {
+    uint16_t c[] = { Group, Element };
+    _os.write((char*)&c, 4);
+    uint32_t l = GetLength() * sizeof( typename VRToType<TVR>::Type );
+    _os.write((char*)&l, 4);
+    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
+      GetLength(),_os);
+    }
 };
+
+
 
 // For particular case for ASCII string
 // WARNING: This template explicitely instanciates a particular 
@@ -398,7 +417,7 @@ template <int TVM> class Attribute<VR::OW, TVM>;
 #endif
 
 template<>
-class Attribute<0x7fe0,0x0010, VR::OW, VM::VM1>
+class ImplicitAttribute<0x7fe0,0x0010, VR::OW, VM::VM1>
 {
 public:
   char *Internal;
@@ -428,7 +447,7 @@ public:
 };
 
 template<uint16_t Group, uint16_t Element, typename SQA>
-class Attribute<Group,Element, VR::SQ, VM::VM1, SQA>
+class ImplicitAttribute<Group,Element, VR::SQ, VM::VM1, SQA>
 {
 public:
   SQA sqa;
