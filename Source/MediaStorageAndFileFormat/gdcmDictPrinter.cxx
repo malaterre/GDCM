@@ -377,11 +377,16 @@ std::string GetOwner(StructuredSet<ExplicitDataElement> const &ds, ExplicitDataE
 {
   const Tag &t = de.GetTag();
   Tag towner(t);
-  towner.SetElement( 0x0010 );
-  if( !ds.FindDataElement(towner) )
-  {
-	  return "";
-  }
+  uint16_t end = 0x001f; // Start by the end
+  towner.SetElement( end );
+  while( !ds.FindDataElement(towner) && end >= 0x0010 )
+    {
+    end--;
+    towner.SetElement( end );
+    }
+  // Nothing found...
+  if( end == 0x0010 ) return "";
+
   //std::cout << "REF: " << towner << std::endl;
   const ExplicitDataElement& xde = ds.GetDataElement(towner);
   const Value &value = xde.GetValue();

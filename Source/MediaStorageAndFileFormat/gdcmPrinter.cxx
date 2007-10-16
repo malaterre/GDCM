@@ -53,12 +53,13 @@ void Printer::PrintElement(std::ostream& os, const ExplicitDataElement &xde, con
   // first of' do the VR:
   if( lvr == VR::UN )
   {
-	  if( t.GetElement() == 0x0 )
+	  if( t.GetElement() == 0x0 || t.GetElement() == 0x1 ) // is 0x1 actually UN ?
 	  {
 		  lvr = VR::UL;
 	  }
 	  else
 	  {
+    assert( t.IsPublic() );
     lvr = entry.GetVR();
 	  }
   // Data Element (7FE0,0010) Pixel Data has the Value Representation 
@@ -74,6 +75,7 @@ void Printer::PrintElement(std::ostream& os, const ExplicitDataElement &xde, con
   if( vm == VM::VM0 )
   {
     assert( lvr != VR::UN );
+    assert( lvr != VR::INVALID );
     assert( t.IsPrivate() || t.GetElement() == 0x0 );
     if ( lvr & (VR::OB | VR::OW))
     {
@@ -85,8 +87,9 @@ void Printer::PrintElement(std::ostream& os, const ExplicitDataElement &xde, con
       //gdcmWarningMacro( "VM for " << vm );
       if( t.GetElement() == 0x0 )
       {
-        //gdcmErrorMacro( "Le= " << value.GetLength() << " size= " << vr.GetSize() );
-        assert( vm == VM::VM1 && lvr == VR::UL );
+        //gdcmWarningMacro( "Lgt= " << value.GetLength() << " size= " << vr.GetSize() );
+        //assert( vm == VM::VM1 && lvr == VR::UL );
+        if( vm != VM::VM1 )  gdcmWarningMacro( "Problem with " << t << " VM would be " << vm );
       }
     }
   }
