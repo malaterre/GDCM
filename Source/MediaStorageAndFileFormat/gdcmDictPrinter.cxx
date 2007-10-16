@@ -31,52 +31,60 @@ DictPrinter::~DictPrinter()
 
 VM::VMType GuessVMType(ExplicitDataElement const &de)
 {
-      const VR &vr = de.GetVR();
-      const VL &vl = de.GetVL();
-      const Value& value = de.GetValue();
-      VM::VMType vm;
-      if( VR::IsBinary( vr ) )
+  const VR &vr = de.GetVR();
+  const VL &vl = de.GetVL();
+  const Value& value = de.GetValue();
+  VM::VMType vm;
+  if( VR::IsBinary( vr ) )
+    {
+    if( vr == VR::SQ  )
       {
-	      if( vr & ( VR::OB | VR::OW ) )
-	      {
-		      vm = VM::VM1;
-	      }
-	      else
-	      {
-        vm = VM::GetVMTypeFromLength( value.GetLength(), vr.GetSize() );
-	      }
+      vm = VM::VM1; // ??
       }
-      else
+    else if( vr & ( VR::OB | VR::OW ) )
       {
-	      assert( VR::IsASCII( vr ) );
-	      switch(vr)
-	      {
-		      case VR::SH: case VR::UI: case VR::LO: case VR::CS:
-			      vm = VM::VM1;
-			      break;
-		      case VR::IS: case VR::DS: case VR::DT:
-			      {
-			      // Need to count \\ character
-			      const ByteValue *bv = dynamic_cast<const ByteValue*>(&value);
-			      assert( bv && "not bv" );
-                              const char *array = bv->GetPointer();
-			      const char *p = array;
-			      const char *end = array + vl;
-			      unsigned int c=1;
-			      while(p != end)
-			      {
-				      if( *p++ == '\\' ) ++c;
-			      }
-			      //std::cout << "INVALID: " << c << std::endl;
-                        vm = VM::GetVMTypeFromLength( c, 1 );
-			      }
-			      break;
-		      default:
-	                vm = VM::VM0;
-	      }
+      vm = VM::VM1;
       }
+    else
+      {
+      vm = VM::GetVMTypeFromLength( value.GetLength(), vr.GetSize() );
+      }
+    }
+  else
+    {
+    assert( VR::IsASCII( vr ) );
+    switch(vr)
+      {
+    case VR::SH: case VR::UI: case VR::LO:
+      vm = VM::VM1;
+      break;
+    case VR::IS: case VR::DS: case VR::DT: case VR::PN: case VR::CS:
+        {
+        // Need to count \\ character
+        const ByteValue *bv = dynamic_cast<const ByteValue*>(&value);
+        assert( bv && "not bv" );
+        const char *array = bv->GetPointer();
+        unsigned int c=0;
+        if ( array ) // hum attribute could be empty. Thus cannot deduce VM, this time
+          {
+          const char *p = array;
+          const char *end = array + vl;
+          c = 1;
+          while(p != end)
+            {
+            if( *p++ == '\\' ) ++c;
+            }
+          }
+        vm = VM::GetVMTypeFromLength( c, 1 );
+        }
+      break;
+    default:
+      vm = VM::VM0;
+      abort();
+      }
+    }
 
-      return vm;
+  return vm;
 }
 
 struct OWNER_VERSION
