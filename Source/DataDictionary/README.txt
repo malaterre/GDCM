@@ -18,3 +18,9 @@ spi.xml
 toshiba.xml
 
 where all converted from the dicom3tools (see COPYRIGHT.dicom3tools) own format into an XML form
+
+
+
+
+
+GroupName.dic is missing the Variable Pixel Data
