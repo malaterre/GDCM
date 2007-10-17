@@ -16,7 +16,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 -->
-<dict>
+<dict edition="2007">
   <entry group="0000" element="0000" retired="false" version="3">
     <description>Group Length</description>
     <representations>
