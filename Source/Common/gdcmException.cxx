@@ -18,4 +18,4 @@
 namespace gdcm
 {
 
-} // end namespace itk
+} // end namespace gdcm
