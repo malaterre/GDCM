@@ -88,9 +88,6 @@
       
       
       
-         <entry group="" element="" vr="VR" vm="VM" retired="true" version="2">
-  <description>Message Field</description>
-</entry>
          <entry group="0000" element="0001" vr="UL" vm="1" retired="true" version="2">
   <description>Length to End</description>
 </entry>
