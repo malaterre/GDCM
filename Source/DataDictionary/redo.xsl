@@ -40,6 +40,25 @@
 </xsl:template>
 
 <xsl:template match="/dict">
+    <xsl:processing-instruction name="xml-stylesheet">
+type="text/xsl" href="gdcm2html.xsl"
+</xsl:processing-instruction>
+    <xsl:comment> to produce output use:
+$ xsltproc gdcm2html.xsl GDCM2.xml
+    </xsl:comment>
+    <xsl:comment>
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006-2007 Mathieu Malaterre
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+</xsl:comment>
+
 <dict edition="2007">
   <xsl:apply-templates/>
 </dict>
