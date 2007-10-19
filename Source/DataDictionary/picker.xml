@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<?xml-stylesheet href="gdcm2html.xsl" type="text/xsl"
+<?xml-stylesheet type="text/xsl" href="gdcm2html.xsl"
 ?>
 <!--
   Program: GDCM (Grass Root DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006 Mathieu Malaterre
-  Copyright (c) 1993-2005 CREATIS
+  Copyright (c) 2006-2007 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -14,143 +13,74 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 -->
-<dict>
-  <entry group="7001" element="0001" retired="false" owner="Picker NM Private Group" version="PCK">
+<dict edition="2007">
+  <entry group="7001" element="0001" vr="UI" vm="1" owner="Picker NM Private Group" version="PCK">
     <description>?</description>
-    <representations>
-      <representation vr="UI" vm="1"/>
-    </representations>
   </entry>
-  <entry group="7001" element="0002" retired="false" owner="Picker NM Private Group" version="PCK">
+  <entry group="7001" element="0002" vr="OB" vm="1" owner="Picker NM Private Group" version="PCK">
     <description>?</description>
-    <representations>
-      <representation vr="OB" vm="1"/>
-    </representations>
   </entry>
-  <entry group="7001" element="0003" retired="false" owner="Picker NM Private Group" version="PCK">
+  <entry group="7001" element="0003" vr="OB" vm="1" owner="Picker NM Private Group" version="PCK">
     <description>?</description>
-    <representations>
-      <representation vr="OB" vm="1"/>
-    </representations>
   </entry>
-  <entry group="7001" element="0004" retired="false" owner="Picker NM Private Group" version="PCK">
+  <entry group="7001" element="0004" vr="OB" vm="1" owner="Picker NM Private Group" version="PCK">
     <description>?</description>
-    <representations>
-      <representation vr="OB" vm="1"/>
-    </representations>
   </entry>
-  <entry group="7001" element="0005" retired="false" owner="Picker NM Private Group" version="PCK">
+  <entry group="7001" element="0005" vr="OB" vm="1" owner="Picker NM Private Group" version="PCK">
     <description>?</description>
-    <representations>
-      <representation vr="OB" vm="1"/>
-    </representations>
   </entry>
-  <entry group="7001" element="0006" retired="false" owner="Picker NM Private Group" version="PCK">
+  <entry group="7001" element="0006" vr="OB" vm="1" owner="Picker NM Private Group" version="PCK">
     <description>?</description>
-    <representations>
-      <representation vr="OB" vm="1"/>
-    </representations>
   </entry>
-  <entry group="7001" element="0007" retired="false" owner="Picker NM Private Group" version="PCK">
+  <entry group="7001" element="0007" vr="OB" vm="1" owner="Picker NM Private Group" version="PCK">
     <description>?</description>
-    <representations>
-      <representation vr="OB" vm="1"/>
-    </representations>
   </entry>
-  <entry group="7001" element="0008" retired="false" owner="Picker NM Private Group" version="PCK">
+  <entry group="7001" element="0008" vr="OB" vm="1" owner="Picker NM Private Group" version="PCK">
     <description>?</description>
-    <representations>
-      <representation vr="OB" vm="1"/>
-    </representations>
   </entry>
-  <entry group="7001" element="0009" retired="false" owner="Picker NM Private Group" version="PCK">
+  <entry group="7001" element="0009" vr="OB" vm="1" owner="Picker NM Private Group" version="PCK">
     <description>?</description>
-    <representations>
-      <representation vr="OB" vm="1"/>
-    </representations>
   </entry>
-  <entry group="7001" element="0010" retired="false" owner="Picker NM Private Group" version="PCK">
+  <entry group="7001" element="0010" vr="SQ" vm="1" owner="Picker NM Private Group" version="PCK">
     <description>?</description>
-    <representations>
-      <representation vr="SQ" vm="1"/>
-    </representations>
   </entry>
-  <entry group="7001" element="0011" retired="false" owner="Picker NM Private Group" version="PCK">
+  <entry group="7001" element="0011" vr="LO" vm="1" owner="Picker NM Private Group" version="PCK">
     <description>?</description>
-    <representations>
-      <representation vr="LO" vm="1"/>
-    </representations>
   </entry>
-  <entry group="7001" element="0012" retired="false" owner="Picker NM Private Group" version="PCK">
+  <entry group="7001" element="0012" vr="OB" vm="1" owner="Picker NM Private Group" version="PCK">
     <description>?</description>
-    <representations>
-      <representation vr="OB" vm="1"/>
-    </representations>
   </entry>
-  <entry group="7001" element="0013" retired="false" owner="Picker NM Private Group" version="PCK">
+  <entry group="7001" element="0013" vr="US" vm="1" owner="Picker NM Private Group" version="PCK">
     <description>?</description>
-    <representations>
-      <representation vr="US" vm="1"/>
-    </representations>
   </entry>
-  <entry group="7001" element="0014" retired="false" owner="Picker NM Private Group" version="PCK">
+  <entry group="7001" element="0014" vr="OB" vm="1" owner="Picker NM Private Group" version="PCK">
     <description>?</description>
-    <representations>
-      <representation vr="OB" vm="1"/>
-    </representations>
   </entry>
-  <entry group="7001" element="0016" retired="false" owner="Picker NM Private Group" version="PCK">
+  <entry group="7001" element="0016" vr="OB" vm="1" owner="Picker NM Private Group" version="PCK">
     <description>?</description>
-    <representations>
-      <representation vr="OB" vm="1"/>
-    </representations>
   </entry>
-  <entry group="7101" element="0000" retired="false" owner="Picker MR Private Group" version="PCK">
+  <entry group="7101" element="0000" vr="OB" vm="1" owner="Picker MR Private Group" version="PCK">
     <description>?</description>
-    <representations>
-      <representation vr="OB" vm="1"/>
-    </representations>
   </entry>
-  <entry group="7101" element="0001" retired="false" owner="Picker MR Private Group" version="PCK">
+  <entry group="7101" element="0001" vr="SL" vm="1" owner="Picker MR Private Group" version="PCK">
     <description>?</description>
-    <representations>
-      <representation vr="SL" vm="1"/>
-    </representations>
   </entry>
-  <entry group="7101" element="0002" retired="false" owner="Picker MR Private Group" version="PCK">
+  <entry group="7101" element="0002" vr="OB" vm="1" owner="Picker MR Private Group" version="PCK">
     <description>?</description>
-    <representations>
-      <representation vr="OB" vm="1"/>
-    </representations>
   </entry>
-  <entry group="7101" element="0003" retired="false" owner="Picker MR Private Group" version="PCK">
+  <entry group="7101" element="0003" vr="SL" vm="1" owner="Picker MR Private Group" version="PCK">
     <description>?</description>
-    <representations>
-      <representation vr="SL" vm="1"/>
-    </representations>
   </entry>
-  <entry group="7101" element="0004" retired="false" owner="Picker MR Private Group" version="PCK">
+  <entry group="7101" element="0004" vr="SH" vm="1" owner="Picker MR Private Group" version="PCK">
     <description>?</description>
-    <representations>
-      <representation vr="SH" vm="1"/>
-    </representations>
   </entry>
-  <entry group="7101" element="0005" retired="false" owner="Picker MR Private Group" version="PCK">
+  <entry group="7101" element="0005" vr="SH" vm="2" owner="Picker MR Private Group" version="PCK">
     <description>?</description>
-    <representations>
-      <representation vr="SH" vm="2"/>
-    </representations>
   </entry>
-  <entry group="7101" element="0006" retired="false" owner="Picker MR Private Group" version="PCK">
+  <entry group="7101" element="0006" vr="SH" vm="4" owner="Picker MR Private Group" version="PCK">
     <description>?</description>
-    <representations>
-      <representation vr="SH" vm="4"/>
-    </representations>
   </entry>
-  <entry group="7101" element="0010" retired="false" owner="Picker MR Private Group" version="PCK">
+  <entry group="7101" element="0010" vr="DS" vm="1" owner="Picker MR Private Group" version="PCK">
     <description>?</description>
-    <representations>
-      <representation vr="DS" vm="1"/>
-    </representations>
   </entry>
 </dict>
