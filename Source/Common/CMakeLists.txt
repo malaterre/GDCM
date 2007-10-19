@@ -45,6 +45,7 @@ SET(Common_SRCS
   gdcmSwapCode.cxx
   gdcmSystem.cxx
   gdcmTrace.cxx
+  gdcmException.cxx
   )
 
 ADD_LIBRARY(gdcmCommon ${Common_SRCS})
