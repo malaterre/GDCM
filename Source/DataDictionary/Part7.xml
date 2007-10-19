@@ -1,0 +1,148 @@
+<informaltable>
+   <tgroup cols="4">
+      <colspec colnum="1" colname="col1" colwidth="144pt"/>
+      <colspec colnum="2" colname="col2" colwidth="72pt"/>
+      <colspec colnum="3" colname="col3" colwidth="54pt"/>
+      <colspec colnum="4" colname="col4" colwidth="45pt"/>
+      <tbody>
+         <row>
+            <entry>Message Field</entry>
+            <entry>Tag</entry>
+            <entry>VR</entry>
+            <entry>VM</entry>
+         </row>
+         <row>
+            <entry>Length to End</entry>
+            <entry>(0000,0001)</entry>
+            <entry>UL</entry>
+            <entry>1</entry>
+         </row>
+         <row>
+            <entry>Recognition Code</entry>
+            <entry>(0000,0010)</entry>
+            <entry>CS</entry>
+            <entry>1</entry>
+         </row>
+         <row>
+            <entry>Initiator</entry>
+            <entry>(0000,0200)</entry>
+            <entry>AE</entry>
+            <entry>1</entry>
+         </row>
+         <row>
+            <entry>Receiver</entry>
+            <entry>(0000,0300)</entry>
+            <entry>AE</entry>
+            <entry>1</entry>
+         </row>
+         <row>
+            <entry>Find Location</entry>
+            <entry>(0000,0400)</entry>
+            <entry>AE</entry>
+            <entry>1</entry>
+         </row>
+         <row>
+            <entry>Number of Matches</entry>
+            <entry>(0000,0850)</entry>
+            <entry>US</entry>
+            <entry>1</entry>
+         </row>
+         <row>
+            <entry>Response Sequence Number</entry>
+            <entry>(0000,0860)</entry>
+            <entry>US</entry>
+            <entry>1</entry>
+         </row>
+         <row>
+            <entry>DIALOG Receiver</entry>
+            <entry>(0000,4000)</entry>
+            <entry>AT</entry>
+            <entry>1</entry>
+         </row>
+         <row>
+            <entry>Terminal Type</entry>
+            <entry>(0000,4010)</entry>
+            <entry>AT</entry>
+            <entry>1</entry>
+         </row>
+         <row>
+            <entry>Message Set ID</entry>
+            <entry>(0000,5010)</entry>
+            <entry>SH</entry>
+            <entry>1</entry>
+         </row>
+         <row>
+            <entry>End Message ID</entry>
+            <entry>(0000,5020)</entry>
+            <entry>SH</entry>
+            <entry>1</entry>
+         </row>
+         <row>
+            <entry>Display Format</entry>
+            <entry>(0000,5110)</entry>
+            <entry>AT</entry>
+            <entry>1</entry>
+         </row>
+         <row>
+            <entry>Page Position ID</entry>
+            <entry>(0000,5120)</entry>
+            <entry>AT</entry>
+            <entry>1</entry>
+         </row>
+         <row>
+            <entry>Text Format ID</entry>
+            <entry>(0000,5130)</entry>
+            <entry>CS</entry>
+            <entry>1</entry>
+         </row>
+         <row>
+            <entry>Nor/Rev</entry>
+            <entry>(0000,5140)</entry>
+            <entry>CS</entry>
+            <entry>1</entry>
+         </row>
+         <row>
+            <entry>Add Gray Scale</entry>
+            <entry>(0000,5150)</entry>
+            <entry>CS</entry>
+            <entry>1</entry>
+         </row>
+         <row>
+            <entry>Borders</entry>
+            <entry>(0000,5160)</entry>
+            <entry>CS</entry>
+            <entry>1</entry>
+         </row>
+         <row>
+            <entry>Copies</entry>
+            <entry>(0000,5170)</entry>
+            <entry>IS</entry>
+            <entry>1</entry>
+         </row>
+         <row>
+            <entry>Magnification Type</entry>
+            <entry>(0000,5180)</entry>
+            <entry>CS</entry>
+            <entry>1</entry>
+         </row>
+         <row>
+            <entry>Erase</entry>
+            <entry>(0000,5190)</entry>
+            <entry>CS</entry>
+            <entry>1</entry>
+         </row>
+         <row>
+            <entry>Print</entry>
+            <entry>(0000,51A0)</entry>
+            <entry>CS</entry>
+            <entry>1</entry>
+         </row>
+         <row>
+            <entry>Overlays</entry>
+            <entry>(0000,51B0)</entry>
+            <entry>US</entry>
+            <entry>1-n</entry>
+         </row>
+      </tbody>
+   </tgroup>
+</informaltable>
