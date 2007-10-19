@@ -23,17 +23,9 @@
       <xsl:text> </xsl:text>
       <xsl:value-of select="translate(@element,'x','0')"/>
       <xsl:text> </xsl:text>
-      <xsl:for-each select="representations/representation">
-        <xsl:if test="position() = 1">
-          <!--xsl:value-of select="@vr"/-->
-        </xsl:if>
-      </xsl:for-each>
+      <xsl:value-of select="@vr"/>
       <xsl:text> </xsl:text>
-      <xsl:for-each select="representations/representation">
-        <xsl:if test="position() = 1">
-          <!--xsl:value-of select="@vm"/-->
-        </xsl:if>
-      </xsl:for-each>
+      <xsl:value-of select="@vm"/>
       <xsl:text> </xsl:text>
       <xsl:value-of select="description"/>
       <!--<xsl:if test="@retired = &quot;true&quot;">-->

@@ -94,20 +94,10 @@ tr.italic
 <!--xsl:if test="$my_italic"></i></xsl:if-->
               </td>
               <td>
-                <xsl:for-each select="representations/representation">
-                  <xsl:value-of select="@vr"/>
-                  <xsl:if test="position() != last()">
-                    <br/>
-                  </xsl:if>
-                </xsl:for-each>
+                <xsl:value-of select="@vr"/>
               </td>
               <td>
-                <xsl:for-each select="representations/representation">
-                  <xsl:value-of select="@vm"/>
-                  <xsl:if test="position() != last()">
-                    <br/>
-                  </xsl:if>
-                </xsl:for-each>
+                <xsl:value-of select="@vm"/>
               </td>
               <td>
                 <xsl:value-of select="description"/>
