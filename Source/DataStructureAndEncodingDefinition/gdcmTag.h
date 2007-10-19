@@ -51,8 +51,11 @@ public:
   Tag(uint16_t group, uint16_t element) {
     ElementTag.tags[0] = group; ElementTag.tags[1] = element;
   }
-
-
+  /// \brief Constructor with 1*uint32_t  
+  /// Prefer the cstor that takes two uint16_t
+  Tag(uint32_t tag = 0) {
+    SetElementTag(tag);
+  } 
 
   friend std::ostream& operator<<(std::ostream &_os, const Tag &_val);
 
@@ -71,11 +74,6 @@ public:
 
 
 
-  /// \brief Constructor with 1*uint32_t  
-  /// Prefer the cstor that takes two uint16_t
-  Tag(uint32_t tag = 0) {
-    SetElementTag(tag);
-  } 
   /// \brief Returns the full tag value of the given Tag
   uint32_t GetElementTag() const { 
 #ifndef GDCM_WORDS_BIGENDIAN	  

@@ -130,7 +130,7 @@ bool VM::IsValid(const int &vm1, const VMType &vm2)
     r = (vm1 >= 3);
     break;
   default:
-    assert(0); // shoult not happen
+    assert(0); // should not happen
     }
   return r;
 }
@@ -140,10 +140,12 @@ bool VM::IsValid(const int &vm1, const VMType &vm2)
 //{
 //}
 
+// This function should not be used in production code.
+// Indeed this only return a 'guess' at the VM (ie. a lower bound)
 VM::VMType VM::GetVMTypeFromLength(unsigned int length, unsigned int size)
 {
-  // Check first of length is a indeed a multiple of size:
-  if ( length % size ) return VM::VM0;
+  // Check first of length is a indeed a multiple of size and that length is != 0
+  if ( !length || length % size ) return VM::VM0;
   const unsigned int ratio = length / size;
   //std::cerr << "RATIO=" << ratio << std::endl;
   switch( ratio )
@@ -158,7 +160,7 @@ VM::VMType VM::GetVMTypeFromLength(unsigned int length, unsigned int size)
   case 16: return VM::VM16;
   case 24: return VM::VM24;
   default:
-          return VM::VM0;
+           return VM::VM1_n;
     }
 }
 
