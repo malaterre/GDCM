@@ -55,7 +55,10 @@ VM::VMType GuessVMType(ExplicitDataElement const &de)
     assert( VR::IsASCII( vr ) );
     switch(vr)
       {
-    case VR::SH: case VR::UI: case VR::LO:
+    case VR::UN: // TODO need to do some magic guessing
+      vm = VM::VM1;
+      break;
+    case VR::SH: case VR::UI: case VR::LO: case VR::ST:
       vm = VM::VM1;
       break;
     case VR::IS: case VR::DS: case VR::DT: case VR::PN: case VR::CS:
@@ -339,6 +342,7 @@ static const OWNER_VERSION OwnerVersionTable[] ={
 { "SIEMENS MR HEADER ", "SSPI" },
 { "INTEGRIS 1.0", "INT1" },
 { "SYNARC_1.0", "SYN" },
+{ "MeVis eatDicom", "MVD" },
 
 { "XXXXXXXXXXXXXXXX", "ANO" }, // FIXME !
 { "XXXXXXXXX_xx", "ANO" }, // FIXME

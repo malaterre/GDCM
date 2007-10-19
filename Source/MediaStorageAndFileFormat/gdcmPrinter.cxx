@@ -59,7 +59,7 @@ void Printer::PrintElement(std::ostream& os, const ExplicitDataElement &xde, con
 	  }
 	  else
 	  {
-    assert( t.IsPublic() );
+    //assert( t.IsPublic() );
     lvr = entry.GetVR();
 	  }
   // Data Element (7FE0,0010) Pixel Data has the Value Representation 
@@ -69,13 +69,14 @@ void Printer::PrintElement(std::ostream& os, const ExplicitDataElement &xde, con
     assert( lvr == VR::OB_OW );
     lvr = VR::OW;
     }
+  //if( lvr == VR::UN ) lvr = VR::LO; // why not ?
    }
 
   /*const*/ VM::VMType vm = entry.GetVM();
   if( vm == VM::VM0 )
   {
     assert( lvr != VR::UN );
-    assert( lvr != VR::INVALID );
+    //assert( lvr != VR::INVALID );
     assert( t.IsPrivate() || t.GetElement() == 0x0 );
     if ( lvr & (VR::OB | VR::OW))
     {
