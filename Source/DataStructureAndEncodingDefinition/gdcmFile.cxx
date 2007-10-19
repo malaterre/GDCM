@@ -30,7 +30,20 @@ IStream &File::Read(IStream &is)
 {
   P.Read( is );
 
-  Header.Read( is );
+  try
+    {
+    Header.Read( is );
+    }
+  catch( std::exception &ex )
+    {
+    //std::cerr << ex.what() << std::endl;
+    //Header.ReadCompat(is);
+    throw ex; // re throw for now but we are loosing it's real type...
+    return is;
+    }
+
+  // Now is a good time to find out the dataset transfer syntax
+  Header.ComputeDataSetTransferSyntax(); // FIXME !
 
   const TS &ts = Header.GetDataSetTransferSyntax();
   //std::cerr << ts.GetNegociatedType() << std::endl;

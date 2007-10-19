@@ -14,6 +14,7 @@
 
 =========================================================================*/
 #include "gdcmFileMetaInformation.h"
+#include "gdcmAttribute.h"
 #include "gdcmVR.h"
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
@@ -21,102 +22,98 @@
 #include "gdcmSwapper.h"
 #include "gdcmIOSerialize.txx"
 
-#include "gdcmElement.h"
+//#include "gdcmElement.h"
 #include "gdcmStringStream.h"
 
 namespace gdcm
 {
+
 void FileMetaInformation::FillFromDataSet(DataSet const &ds)
 {
   // Example: CR-MONO1-10-chest.dcm is missing a file meta header:
   ExplicitDataElement xde;
-  std::cout << "Here" << std::endl;
- // File Meta Information Version (0002,0001) -> computed
+  // File Meta Information Version (0002,0001) -> computed
   if( !FindDataElement( Tag(0x0002, 0x0001) ) )
-{
-  xde.SetByteValue( "\0\1", 2);
-  xde.SetTag( Tag(0x0002, 0x0001) );
-  xde.SetVR( VR::OB );
-  Insert( xde );
-  }
-  std::cout << "Here" << std::endl;
+    {
+    xde.SetByteValue( "\0\1", 2);
+    xde.SetTag( Tag(0x0002, 0x0001) );
+    xde.SetVR( VR::OB );
+    Insert( xde );
+    }
   // Media Storage SOP Class UID (0002,0002) -> see (0008,0016)
   if( !FindDataElement( Tag(0x0002, 0x0002) ) )
-{
-  if( !FindDataElement( Tag(0x0008, 0x0016) ) )
-  {
-  }
-  else
-  {
-  const ExplicitDataElement& msclass = ds.GetDataElement( Tag(0x0008, 0x0016) );
-  xde = msclass;
-  xde.SetTag( Tag(0x0002, 0x0002) );
-  if( msclass.GetVR() == VR::UN )
-  {
-  xde.SetVR( VR::UI );
-  }
-  Insert( xde );
-  }
-}
-  std::cout << "Here" << std::endl;
+    {
+    if( !FindDataElement( Tag(0x0008, 0x0016) ) )
+      {
+      }
+    else
+      {
+      const ExplicitDataElement& msclass = ds.GetDataElement( Tag(0x0008, 0x0016) );
+      xde = msclass;
+      xde.SetTag( Tag(0x0002, 0x0002) );
+      if( msclass.GetVR() == VR::UN )
+        {
+        xde.SetVR( VR::UI );
+        }
+      Insert( xde );
+      }
+    }
   // Media Storage SOP Instance UID (0002,0003) -> see (0008,0018)
   if( !FindDataElement( Tag(0x0002, 0x0003) ) )
-{
-  if( FindDataElement( Tag(0x0008, 0x0018) ) )
-  {
-  const ExplicitDataElement& msinst = ds.GetDataElement( Tag(0x0008, 0x0018) );
-  xde = msinst;
-  xde.SetTag( Tag(0x0002, 0x0003) );
-  if( msinst.GetVR() == VR::UN )
-  {
-  xde.SetVR( VR::UI );
-  }
-   Insert( xde );
-  }
-}
-  std::cout << "Here" << std::endl;
+    {
+    if( FindDataElement( Tag(0x0008, 0x0018) ) )
+      {
+      const ExplicitDataElement& msinst = ds.GetDataElement( Tag(0x0008, 0x0018) );
+      xde = msinst;
+      xde.SetTag( Tag(0x0002, 0x0003) );
+      if( msinst.GetVR() == VR::UN )
+        {
+        xde.SetVR( VR::UI );
+        }
+      Insert( xde );
+      }
+    }
   // Transfer Syntax UID (0002,0010) -> ??? (computed at write time at most)
   // Implementation Class UID (0002,0012) -> ??
   // Implementation Version Name (0002,0013) -> ??
   if( !FindDataElement( Tag(0x0002, 0x0013) ) )
-{
-  xde.SetByteValue( "2.0.0", 5);
-  xde.SetTag( Tag(0x0002, 0x0013) );
-  xde.SetVR( VR::SH );
-  Insert( xde );
-}
-   // Source Application Entity Title (0002,0016) -> ??
+    {
+    xde.SetByteValue( "2.0.0", 5);
+    xde.SetTag( Tag(0x0002, 0x0013) );
+    xde.SetVR( VR::SH );
+    Insert( xde );
+    }
+  // Source Application Entity Title (0002,0016) -> ??
   if( !FindDataElement( Tag(0x0002, 0x0016) ) )
-{
-  xde.SetByteValue( "GDCM", 4);
-  xde.SetTag( Tag(0x0002, 0x0016) );
-  xde.SetVR( VR::AE );
-  Insert( xde );
-}
+    {
+    xde.SetByteValue( "GDCM", 4);
+    xde.SetTag( Tag(0x0002, 0x0016) );
+    xde.SetVR( VR::AE );
+    Insert( xde );
+    }
   // Do this one last !
   // (Meta) Group Length (0002,0000) -> computed
- //unsigned int glen = ComputeGroupLength( Tag(0x0002, 0x0000) );
- unsigned int glen = GetLength();
- ExplicitDataElement xgl( Tag(0x0002, 0x0000), 4, VR::UL );
-        Element<VR::UL, VM::VM1> el = 
-          reinterpret_cast< Element<VR::UL, VM::VM1>& > ( glen );
-        StringStream ss;
-        el.Write( ss );
-        SmartPointer<ByteValue> bv = new ByteValue;
-	bv->SetLength( 4 );
-	IOSerialize<SwapperNoOp>::Read( ss, *bv );
-        xgl.SetValue( *bv );
-	Insert( xgl );
-  
-    assert( !IsEmpty() );
-  std::cout << "Here" << std::endl;
+  //unsigned int glen = ComputeGroupLength( Tag(0x0002, 0x0000) );
+  unsigned int glen = GetLength();
+  ExplicitDataElement xgl( Tag(0x0002, 0x0000), 4, VR::UL );
+  Element<VR::UL, VM::VM1> el = 
+    reinterpret_cast< Element<VR::UL, VM::VM1>& > ( glen );
+  StringStream ss;
+  el.Write( ss );
+  SmartPointer<ByteValue> bv = new ByteValue;
+  bv->SetLength( 4 );
+  IOSerialize<SwapperNoOp>::Read( ss, *bv );
+  xgl.SetValue( *bv );
+  Insert( xgl );
+
+  assert( !IsEmpty() );
 }
 
 // FIXME
 // This code should clearly be rewritten with some template meta programing to 
 // enable reuse of code...
 //
-// \postcondition after the file meta information (well before the dataset)
+// \postcondition after the file meta information (well before the dataset...)
 template <typename TSwap>
 bool ReadExplicitDataElement(IStream &is, ExplicitDataElement &de)
 {
@@ -270,6 +267,29 @@ bool ReadImplicitDataElement(IStream &is, ImplicitDataElement &de)
 // \postcondition NegociatedTS and IStream::SwapCode are set
 IStream &FileMetaInformation::Read(IStream &is)
 {
+  //ExplicitAttribute<0x0002,0x0000> metagl;
+  //metagl.Read(is);
+
+  // TODO: Can now load data from std::ios::cur to std::ios::cur + metagl.GetValue()
+
+  ExplicitDataElement xde;
+  IOSerialize<SwapperNoOp>::Read(is,xde);
+  //if( xde.GetTag() != Tag(0x0002,0x0000) 
+  // First off save position in case we fail (no File Meta Information)
+  // See PS 3.5, Data Element Structure With Explicit VR
+      while( ReadExplicitDataElement<SwapperNoOp>(is, xde ) )
+        {
+        //std::cout << xde << std::endl;
+        Insert( xde );
+        }
+
+
+  // we are at the end of the meta file information and before the dataset
+  return is;
+}
+
+IStream &FileMetaInformation::ReadCompat(IStream &is)
+{
   // First off save position in case we fail (no File Meta Information)
   // See PS 3.5, Data Element Structure With Explicit VR
   assert( IsEmpty() );
@@ -311,17 +331,16 @@ IStream &FileMetaInformation::Read(IStream &is)
         Insert(xde);
         }
       }
-  // Now is a good time to find out the dataset transfer syntax
-  ComputeDataSetTransferSyntax();
+    // Now is a good time to find out the dataset transfer syntax
+    ComputeDataSetTransferSyntax();
 
-     }
+    }
   else
     {
     gdcmDebugMacro( "No File Meta Information. Start with Tag: " << t );
     is.seekg(-4, std::ios::cur); // Seek back
     }
 
- //Print( std::cout );
   // we are at the end of the meta file information and before the dataset
   return is;
 }
@@ -420,23 +439,23 @@ void FileMetaInformation::Default()
 
 OStream &FileMetaInformation::Write(OStream &os) const
 {
-  if( IsEmpty() )
-  {
-    std::cerr << "IsEmpty" << std::endl;
-    FileMetaInformation fmi;
-    fmi.Default();
-    //fmi.Write(os);
-    IOSerialize<SwapperNoOp>::Write(os,fmi);
-  }
-  else if( IsValid() )
+//  if( IsEmpty() )
+//  {
+//    std::cerr << "IsEmpty" << std::endl;
+//    FileMetaInformation fmi;
+//    fmi.Default();
+//    //fmi.Write(os);
+//    IOSerialize<SwapperNoOp>::Write(os,fmi);
+//  }
+//  else if( IsValid() )
   {
     std::cerr << "IsValid" << std::endl;
     IOSerialize<SwapperNoOp>::Write(os,*this);
   }
-  else
-  {
-    abort();
-  }
+//  else
+//  {
+//    abort();
+//  }
 #if 0
     // At least make sure to have group length
     //if( !DS->FindDataElement( Tag(0x0002, 0x0000) ) )

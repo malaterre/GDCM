@@ -47,6 +47,7 @@ public:
 
   // Read
   IStream &Read(IStream &is);
+  IStream &ReadCompat(IStream &is);
 
   // Write
   OStream &Write(OStream &os) const;
@@ -54,14 +55,14 @@ public:
   // Construct a FileMetaInformation from an already existing DataSet:
   void FillFromDataSet(DataSet const &ds);
  
+  void ComputeDataSetTransferSyntax(); // FIXME
 protected:
   void Default();
-  void ComputeDataSetTransferSyntax();
   void ComputeDataSetMediaStorageSOPClass();
 
   TS DataSetTS;
-  TS::MSType DataSetMS;
   TS::NegociatedType MetaInformationTS;
+  TS::MSType DataSetMS;
 
 private:
 };
