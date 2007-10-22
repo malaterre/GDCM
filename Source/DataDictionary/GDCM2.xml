@@ -4,9 +4,14 @@
 $ xsltproc gdcm2html.xsl GDCM2.xml
  -->
 <!--
-Most of this file was automatically generated. Exceptions:
+Most of this file was automatically generated. Using the following:
+
+ $ xsltproc oo.xsl 07_06_oowriter.xml > 2
+ $ xmllint --format 2 > GDCM2.xml
+
+Exceptions:
 * version attribute was done using dicom3tools dictionary
-* ...
+* uAs and KVP were manually modified
 -->
 <!--
   Program: GDCM (Grass Root DICOM). A DICOM library
@@ -6216,7 +6221,7 @@ Most of this file was automatically generated. Exceptions:
   <entry group="300a" element="00bc" vr="IS" vm="1" retired="false" version="3">
     <description>Number of Leaf/Jaw Pairs</description>
   </entry>
-  <entry group="300a" element="00be" vr="DS" vm="3-3n" retired="false" version="3">
+  <entry group="300a" element="00be" vr="DS" vm="3-n" retired="false" version="3">
     <description>Leaf Position Boundaries</description>
   </entry>
   <entry group="300a" element="00c0" vr="IS" vm="1" retired="false" version="3">
