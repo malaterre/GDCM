@@ -90,31 +90,31 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
     <description>Move Originator Message ID</description>
   </entry>
   <!-- Table E.2-1 RETIRED COMMAND FIELDS -->
-  <entry group="0000" element="0001" vr="UL" vm="1" retired="true" version="3">
+  <entry group="0000" element="0001" vr="UL" vm="1" retired="true" version="2">
     <description>Length to End</description>
   </entry>
-  <entry group="0000" element="0010" vr="CS" vm="1" retired="true" version="3">
+  <entry group="0000" element="0010" vr="CS" vm="1" retired="true" version="2">
     <description>Recognition Code</description>
   </entry>
-  <entry group="0000" element="0200" vr="AE" vm="1" retired="true" version="3">
+  <entry group="0000" element="0200" vr="AE" vm="1" retired="true" version="2">
     <description>Initiator</description>
   </entry>
-  <entry group="0000" element="0300" vr="AE" vm="1" retired="true" version="3">
+  <entry group="0000" element="0300" vr="AE" vm="1" retired="true" version="2">
     <description>Receiver</description>
   </entry>
-  <entry group="0000" element="0400" vr="AE" vm="1" retired="true" version="3">
+  <entry group="0000" element="0400" vr="AE" vm="1" retired="true" version="2">
     <description>Find Location</description>
   </entry>
-  <entry group="0000" element="0850" vr="US" vm="1" retired="true" version="3">
+  <entry group="0000" element="0850" vr="US" vm="1" retired="true" version="2">
     <description>Number of Matches</description>
   </entry>
-  <entry group="0000" element="0860" vr="US" vm="1" retired="true" version="3">
+  <entry group="0000" element="0860" vr="US" vm="1" retired="true" version="2">
     <description>Response Sequence Number</description>
   </entry>
-  <entry group="0000" element="4000" vr="AT" vm="1" retired="true" version="3">
+  <entry group="0000" element="4000" vr="AT" vm="1" retired="true" version="2">
     <description>DIALOG Receiver</description>
   </entry>
-  <entry group="0000" element="4010" vr="AT" vm="1" retired="true" version="3">
+  <entry group="0000" element="4010" vr="AT" vm="1" retired="true" version="2">
     <description>Terminal Type</description>
   </entry>
   <entry group="0000" element="5010" vr="SH" vm="1" retired="true" version="3">
@@ -123,37 +123,37 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
   <entry group="0000" element="5020" vr="SH" vm="1" retired="true" version="3">
     <description>End Message ID</description>
   </entry>
-  <entry group="0000" element="5110" vr="AT" vm="1" retired="true" version="3">
+  <entry group="0000" element="5110" vr="AT" vm="1" retired="true" version="2">
     <description>Display Format</description>
   </entry>
-  <entry group="0000" element="5120" vr="AT" vm="1" retired="true" version="3">
+  <entry group="0000" element="5120" vr="AT" vm="1" retired="true" version="2">
     <description>Page Position ID</description>
   </entry>
-  <entry group="0000" element="5130" vr="CS" vm="1" retired="true" version="3">
+  <entry group="0000" element="5130" vr="CS" vm="1" retired="true" version="2">
     <description>Text Format ID</description>
   </entry>
-  <entry group="0000" element="5140" vr="CS" vm="1" retired="true" version="3">
+  <entry group="0000" element="5140" vr="CS" vm="1" retired="true" version="2">
     <description>Nor/Rev</description>
   </entry>
-  <entry group="0000" element="5150" vr="CS" vm="1" retired="true" version="3">
+  <entry group="0000" element="5150" vr="CS" vm="1" retired="true" version="2">
     <description>Add Gray Scale</description>
   </entry>
-  <entry group="0000" element="5160" vr="CS" vm="1" retired="true" version="3">
+  <entry group="0000" element="5160" vr="CS" vm="1" retired="true" version="2">
     <description>Borders</description>
   </entry>
-  <entry group="0000" element="5170" vr="IS" vm="1" retired="true" version="3">
+  <entry group="0000" element="5170" vr="IS" vm="1" retired="true" version="2">
     <description>Copies</description>
   </entry>
-  <entry group="0000" element="5180" vr="CS" vm="1" retired="true" version="3">
+  <entry group="0000" element="5180" vr="CS" vm="1" retired="true" version="2">
     <description>Magnification Type</description>
   </entry>
-  <entry group="0000" element="5190" vr="CS" vm="1" retired="true" version="3">
+  <entry group="0000" element="5190" vr="CS" vm="1" retired="true" version="2">
     <description>Erase</description>
   </entry>
-  <entry group="0000" element="51A0" vr="CS" vm="1" retired="true" version="3">
+  <entry group="0000" element="51a0" vr="CS" vm="1" retired="true" version="2">
     <description>Print</description>
   </entry>
-  <entry group="0000" element="51B0" vr="US" vm="1-n" retired="true" version="3">
+  <entry group="0000" element="51b0" vr="US" vm="1-n" retired="true" version="3">
     <description>Overlays</description>
   </entry>
   <!-- Registry of DICOM File Meta Elements -->
