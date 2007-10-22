@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006-2007 Mathieu Malaterre
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+-->
 <dict edition="2007">
-  <table name="Table A-1UID VALUES">
+  <table ref="Table A-1" name="UID VALUES">
     <uid value="1.2.840.10008.1.1" name="Verification SOP Class" type="SOP Class" part="PS 3.4"/>
     <uid value="1.2.840.10008.1.2" name="Implicit VR Little Endian: Default Transfer Syntax for DICOM" type="Transfer Syntax" part="PS 3.5"/>
     <uid value="1.2.840.10008.1.2.1" name="Explicit VR Little Endian" type="Transfer Syntax" part="PS 3.5"/>
@@ -247,7 +259,7 @@
     <uid value="1.2.840.10008.15.0.4.7" name="dicomUniqueAETitle" type="LDAP OID" part="PS 3.15"/>
     <uid value="1.2.840.10008.15.0.4.8" name="dicomTransferCapability" type="LDAP OID" part="PS 3.15"/>
   </table>
-  <table name="Table A-2Well-known Frames of Reference">
+  <table ref="Table A-2" name="Well-known Frames of Reference">
     <uid value="1.2.840.10008.1.4.1.1" name="Talairach Brain Atlas Frame of Reference" normative-reference="Talairach J. and Tournoux P. Co-Planar stereotactic atlas of the human brain. Stutgart: Georg Thieme Verlag, 1988."/>
     <uid value="1.2.840.10008.1.4.1.2" name="SPM2 T1 Frame of Reference" normative-reference="SPM2 /templates/T1.mnc"/>
     <uid value="1.2.840.10008.1.4.1.3" name="SPM2 T2 Frame of Reference" normative-reference="SPM2 /templates/T2.mnc"/>
