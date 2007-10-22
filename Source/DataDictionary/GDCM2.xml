@@ -2564,7 +2564,7 @@ Exceptions:
   <entry group="0018" element="9441" vr="US" vm="1" retired="false" version="3">
     <description>Radius of Circular Exposure Control Sensing Region</description>
   </entry>
-  <entry group="0018" element="9442" vr="SS" vm="2-2n" retired="false" version="3">
+  <entry group="0018" element="9442" vr="SS" vm="2-n" retired="false" version="3">
     <description>Vertices of the Polygonal Exposure Control Sensing Region</description>
   </entry>
   <entry group="0018" element="9445" vr="" vm="" retired="true" version="3">
