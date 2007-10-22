@@ -4575,7 +4575,7 @@ Most of this file was automatically generated. Exceptions:
   <entry group="0070" element="0021" vr="US" vm="1" retired="false" version="3">
     <description>Number of Graphic Points</description>
   </entry>
-  <entry group="0070" element="0022" vr="FL" vm="2-2n" retired="false" version="3">
+  <entry group="0070" element="0022" vr="FL" vm="2-n" retired="false" version="3">
     <description>Graphic Data</description>
   </entry>
   <entry group="0070" element="0023" vr="CS" vm="1" retired="false" version="3">
@@ -4881,7 +4881,7 @@ Most of this file was automatically generated. Exceptions:
   <entry group="0072" element="0210" vr="SQ" vm="1" retired="false" version="3">
     <description>Synchronized Scrolling Sequence</description>
   </entry>
-  <entry group="0072" element="0212" vr="US" vm="2-2n" retired="false" version="3">
+  <entry group="0072" element="0212" vr="US" vm="2-n" retired="false" version="3">
     <description>Display Set Scrolling Group</description>
   </entry>
   <entry group="0072" element="0214" vr="SQ" vm="1" retired="false" version="3">
@@ -5538,7 +5538,7 @@ Most of this file was automatically generated. Exceptions:
   <entry group="3004" element="000a" vr="CS" vm="1" retired="false" version="3">
     <description>Dose Summation Type</description>
   </entry>
-  <entry group="3004" element="000c" vr="DS" vm="2-2n" retired="false" version="3">
+  <entry group="3004" element="000c" vr="DS" vm="2-n" retired="false" version="3">
     <description>Grid Frame Offset Vector</description>
   </entry>
   <entry group="3004" element="000e" vr="DS" vm="1" retired="false" version="3">
