@@ -7,7 +7,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
 Most of this file was automatically generated. Using the following:
 
  $ xsltproc oo.xsl 07_06_oowriter.xml > 2
- $ xmllint --format 2 > GDCM2.xml
+ $ xmllint - -format 2 > GDCM2.xml
 
 Exceptions:
 * version attribute was done using dicom3tools dictionary
