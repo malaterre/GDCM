@@ -4,6 +4,11 @@
 $ xsltproc gdcm2html.xsl GDCM2.xml
  -->
 <!--
+Most of this file was automatically generated. Exceptions:
+* version attribute was done using dicom3tools dictionary
+* ...
+-->
+<!--
   Program: GDCM (Grass Root DICOM). A DICOM library
   Module:  $URL$
 
@@ -16,15 +21,21 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
      PURPOSE.  See the above copyright notice for more information.
 -->
 <dict edition="2007">
-  <!-- Table E.1-1 COMMAND FIELDS (PART 1) -->
+  <!-- Table E.1-1 COMMAND FIELDS / Table E.2-1 RETIRED COMMAND FIELDS -->
   <entry group="0000" element="0000" vr="UL" vm="1" retired="false" version="3">
     <description>Group Length</description>
+  </entry>
+  <entry group="0000" element="0001" vr="UL" vm="1" retired="true" version="2">
+    <description>Length to End</description>
   </entry>
   <entry group="0000" element="0002" vr="UI" vm="1" retired="false" version="3">
     <description>Affected SOP Class UID</description>
   </entry>
   <entry group="0000" element="0003" vr="UI" vm="1" retired="false" version="3">
     <description>Requested SOP Class UID</description>
+  </entry>
+  <entry group="0000" element="0010" vr="CS" vm="1" retired="true" version="2">
+    <description>Recognition Code</description>
   </entry>
   <entry group="0000" element="0100" vr="US" vm="1" retired="false" version="3">
     <description>Command Field</description>
@@ -35,6 +46,15 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
   <entry group="0000" element="0120" vr="US" vm="1" retired="false" version="3">
     <description>Message ID Being Responded To</description>
   </entry>
+  <entry group="0000" element="0200" vr="AE" vm="1" retired="true" version="2">
+    <description>Initiator</description>
+  </entry>
+  <entry group="0000" element="0300" vr="AE" vm="1" retired="true" version="2">
+    <description>Receiver</description>
+  </entry>
+  <entry group="0000" element="0400" vr="AE" vm="1" retired="true" version="2">
+    <description>Find Location</description>
+  </entry>
   <entry group="0000" element="0600" vr="AE" vm="1" retired="false" version="3">
     <description>Move Destination</description>
   </entry>
@@ -43,6 +63,12 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
   </entry>
   <entry group="0000" element="0800" vr="US" vm="1" retired="false" version="3">
     <description>Data Set Type</description>
+  </entry>
+  <entry group="0000" element="0850" vr="US" vm="1" retired="true" version="2">
+    <description>Number of Matches</description>
+  </entry>
+  <entry group="0000" element="0860" vr="US" vm="1" retired="true" version="2">
+    <description>Response Sequence Number</description>
   </entry>
   <entry group="0000" element="0900" vr="US" vm="1" retired="false" version="3">
     <description>Status</description>
@@ -89,28 +115,6 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
   <entry group="0000" element="1031" vr="US" vm="1" retired="false" version="3">
     <description>Move Originator Message ID</description>
   </entry>
-  <!-- Table E.2-1 RETIRED COMMAND FIELDS -->
-  <entry group="0000" element="0001" vr="UL" vm="1" retired="true" version="2">
-    <description>Length to End</description>
-  </entry>
-  <entry group="0000" element="0010" vr="CS" vm="1" retired="true" version="2">
-    <description>Recognition Code</description>
-  </entry>
-  <entry group="0000" element="0200" vr="AE" vm="1" retired="true" version="2">
-    <description>Initiator</description>
-  </entry>
-  <entry group="0000" element="0300" vr="AE" vm="1" retired="true" version="2">
-    <description>Receiver</description>
-  </entry>
-  <entry group="0000" element="0400" vr="AE" vm="1" retired="true" version="2">
-    <description>Find Location</description>
-  </entry>
-  <entry group="0000" element="0850" vr="US" vm="1" retired="true" version="2">
-    <description>Number of Matches</description>
-  </entry>
-  <entry group="0000" element="0860" vr="US" vm="1" retired="true" version="2">
-    <description>Response Sequence Number</description>
-  </entry>
   <entry group="0000" element="4000" vr="AT" vm="1" retired="true" version="2">
     <description>DIALOG Receiver</description>
   </entry>
@@ -153,7 +157,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
   <entry group="0000" element="51a0" vr="CS" vm="1" retired="true" version="2">
     <description>Print</description>
   </entry>
-  <entry group="0000" element="51b0" vr="US" vm="1-n" retired="true" version="3">
+  <entry group="0000" element="51b0" vr="US" vm="1-n" retired="true" version="2">
     <description>Overlays</description>
   </entry>
   <!-- Registry of DICOM File Meta Elements -->
