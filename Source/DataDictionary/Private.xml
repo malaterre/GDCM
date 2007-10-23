@@ -1,5 +1,22 @@
-<?xml version="1.0"?>
-<dict>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The whole file was generated using :
+
+ $ find /path/to/dicom/files -type f -exec gdcmdump {} -d \; > dict.xml
+
+-->
+<!--
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006-2007 Mathieu Malaterre
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+-->
+<dict edition="2007">
   <entry group="0009" element="0000" vr="UL" vm="1" owner="GEIIS " version="GEM"/>
   <entry group="0009" element="0000" vr="UL" vm="1" owner="GEMS_IDEN_01" version="GEM"/>
   <entry group="0009" element="0000" vr="UL" vm="1" owner="SIEMENS CT VA1 DUMMY" version="SSPI"/>
