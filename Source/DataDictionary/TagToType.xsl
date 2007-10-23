@@ -102,7 +102,7 @@ template &lt;uint16_t,uint16_t&gt; struct TagToType;
 template &lt;uint16_t group&gt; struct TagToType&lt;group,0x0000&gt; { typedef VRToType&lt;VR::UL&gt;::Type Type; enum { VRType = VR::UL }; enum { VMType = VM::VM1 }; };
 </xsl:text>
     <xsl:for-each select="dict/entry">
-      <xsl:if test="substring(@group,3) != 'xx' and substring(@element,3) != 'xx' and representations/representation/@vr">
+      <xsl:if test="substring(@group,3) != 'xx' and substring(@element,3) != 'xx' and @vr">
       <xsl:text>template &lt;&gt; struct TagToType&lt;0x</xsl:text>
       <xsl:value-of select="@group"/>
       <xsl:text>,0x</xsl:text>
@@ -111,18 +111,18 @@ template &lt;uint16_t group&gt; struct TagToType&lt;group,0x0000&gt; { typedef V
       <xsl:text>
 </xsl:text>
       <xsl:text>typedef VRToType&lt;VR::</xsl:text>
-      <xsl:value-of select="representations/representation/@vr"/>
+      <xsl:value-of select="@vr"/>
       <xsl:text>&gt;::Type Type;</xsl:text>
       <xsl:text>
 </xsl:text>
       <xsl:text>enum { VRType = VR::</xsl:text>
-      <xsl:value-of select="representations/representation/@vr"/>
+      <xsl:value-of select="@vr"/>
       <xsl:text> };</xsl:text>
       <xsl:text>
 </xsl:text>
       <xsl:text>enum { VMType = VM::</xsl:text>
         <xsl:call-template name="VMStringToVMType">
-          <xsl:with-param name="vmstring" select="representations/representation/@vm"/>
+          <xsl:with-param name="vmstring" select="@vm"/>
         </xsl:call-template>
       <xsl:text> };</xsl:text>
       <xsl:text>

@@ -98,30 +98,12 @@
                     </fo:table-cell>
                     <fo:table-cell border-color="rgb(0,0,0)" border-width="1pt">
                       <fo:block vertical-align="middle">
-                        <xsl:for-each select="representations/representation">
                           <xsl:value-of select="@vr"/>
-<!-- add a new line: -->
-                          <xsl:if test="position() != last()">
-                            <fo:block>
-                              <xsl:text>
-</xsl:text>
-                            </fo:block>
-                          </xsl:if>
-                        </xsl:for-each>
                       </fo:block>
                     </fo:table-cell>
                     <fo:table-cell border-color="rgb(0,0,0)" border-width="1pt">
                       <fo:block vertical-align="middle">
-                        <xsl:for-each select="representations/representation">
                           <xsl:value-of select="@vm"/>
-                          <xsl:if test="position() != last()">
-<!-- add a new line: -->
-                            <fo:block>
-                              <xsl:text>
-</xsl:text>
-                            </fo:block>
-                          </xsl:if>
-                        </xsl:for-each>
                       </fo:block>
                     </fo:table-cell>
                     <fo:table-cell border-color="rgb(0,0,0)" border-width="1pt">

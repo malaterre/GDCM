@@ -74,19 +74,9 @@ http://www.thescripts.com/forum/thread86881.html
         <xsl:text>RET</xsl:text>
       </xsl:if>
       <xsl:text>" VR="</xsl:text>
-      <xsl:for-each select="representations/representation">
         <xsl:value-of select="@vr"/>
-        <xsl:if test="position() != last()">
-          <!--xsl:text> or </xsl:text--> <!-- not very consistant -->
-          <xsl:text>/</xsl:text>
-        </xsl:if>
-      </xsl:for-each>
       <xsl:text>" VM="</xsl:text>
-      <xsl:for-each select="representations/representation">
         <xsl:value-of select="@vm"/>
-        <xsl:if test="position() != last()">
-          <xsl:text>/</xsl:text>
-        </xsl:if>
       </xsl:for-each>
       <xsl:text>" Keyword="</xsl:text>
       <xsl:variable name="apos">'</xsl:variable>
