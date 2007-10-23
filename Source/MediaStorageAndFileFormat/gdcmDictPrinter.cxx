@@ -430,6 +430,7 @@ void DictPrinter::Print(std::ostream& os)
         "<entry group=\"" << std::hex << std::setw(4) << std::setfill('0') << 
         t.GetGroup() << "\" element=\"" << std::setw(4) << t.GetElement() << "\" ";
 
+      os <<  " vr=\"" << vr << "\" vm=\"" << vm << "\" ";
       //os <<  "\" retired=\"false\";
       if( de.GetTag().IsPrivate() )
         {
@@ -440,10 +441,10 @@ void DictPrinter::Print(std::ostream& os)
       //os << "  <description>Unknown ";
       //os << (t.IsPrivate() ? "Private" : "Public");
       //os << " Tag & Data</description>\n";
-      os << "  <representations>\n";
-      os << "    <representation vr=\"" << vr << "\" vm=\"" << 
-        VM::GetVMString(vm) << "\"/>\n";
-      os << "  </representations>\n";
+      //os << "  <representations>\n";
+      //os << "    <representation vr=\"" << vr << "\" vm=\"" << 
+      //  VM::GetVMString(vm) << "\"/>\n";
+      //os << "  </representations>\n";
       os << "</entry>\n";
       }
     }
