@@ -48,3 +48,6 @@ http://www.kodak.com/global/plugins/acrobat/en/health/pdf/prod/dicom/1F9242.pdf
 -----------------------------------------------------------------------
 Add a FindKAKADU to find kakadu and thus be able to check compressiong
 done by openjpeg
+-----------------------------------------------------------------------
+You should be able to say: this file is a ACR NEMA read it ! So the wizard 
+should be bypass and the discovery step can be skipped.
