@@ -18,6 +18,11 @@
 namespace gdcm
 {
 
+Preamble::~Preamble()
+{
+  delete[] Internal;
+}
+
 IStream &Preamble::Read(IStream &is)
 {
   // \precondition: we are at beg of Preamble

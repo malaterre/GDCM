@@ -25,8 +25,8 @@ namespace gdcm
 class GDCM_EXPORT Preamble
 {
 public:
-  Preamble():Internal(0) {};
-  ~Preamble() {};
+  Preamble():Internal(0) {}
+  ~Preamble();
 
   friend std::ostream &operator<<(std::ostream &_os, const Preamble &_val);
 
@@ -47,7 +47,7 @@ protected:
   bool IsEmpty() const { return !Internal; }
   //
   bool IsValid() const { 
-    // Need to check last 4 bytes == DICM
+    // is (IsValid == true) => Internal was read
     return true; 
   }
 
