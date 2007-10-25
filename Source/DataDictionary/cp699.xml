@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dict edition="2007">
+<?xml-stylesheet type="text/xsl" href="gdcm2html.xsl"?>
+<!--
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006-2007 Mathieu Malaterre
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+-->
+<dict edition="cp699">
   <entry group="0028" element="0051" vr="CS" vm="1-n" retired="false" version="3">
     <description>Corrected Image</description>
   </entry>
