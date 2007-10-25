@@ -148,10 +148,10 @@
   <entry group="0028" element="08x8" vr="AT" vm="1-n" retired="true" version="3">
     <description>Image Data Location</description>
   </entry>
-  <entry group="0028" element=" 04020a02" vr="CS" vm="1" retired="false" version="3">
+  <entry group="0028" element="0a02" vr="CS" vm="1" retired="false" version="3">
     <description>Pixel Spacing Calibration Type</description>
   </entry>
-  <entry group="0028" element=" 04040a04" vr="LO" vm="1" retired="false" version="3">
+  <entry group="0028" element="0a04" vr="LO" vm="1" retired="false" version="3">
     <description>Pixel Spacing Calibration Description</description>
   </entry>
   <entry group="0028" element="1040" vr="CS" vm="1" retired="false" version="3">
