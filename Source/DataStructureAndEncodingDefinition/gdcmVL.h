@@ -34,7 +34,6 @@ namespace gdcm
 
 class GDCM_EXPORT VL
 {
-  template <typename TSwap> friend class IOSerialize;
 public:
   VL(uint32_t vl = 0) : ValueLength(vl) { }
 
@@ -70,6 +69,56 @@ public:
   friend std::ostream& operator<<(std::ostream& os, const VL& vl);
   //TODO
   //friend std::istream& operator>>(std::istream& is, VL& n);
+
+  template <typename TSwap>
+  IStream &Read(IStream &is)
+    {
+    is.read((char*)(&ValueLength), sizeof(uint32_t));
+    TSwap::SwapArray(&ValueLength,1);
+    return is;
+    }
+
+  template <typename TSwap>
+  IStream &Read16(IStream &is)
+    {
+    uint16_t copy;
+    is.read((char*)(&copy), sizeof(uint16_t));
+    TSwap::SwapArray(&copy,1);
+    ValueLength = copy;
+    assert( ValueLength <= UINT16_MAX ); // ?? doh !
+    return is;
+    }
+
+  template <typename TSwap>
+  const OStream &Write(OStream &os) const
+    {
+    uint32_t copy = ValueLength;
+#ifndef GDCM_WRITE_ODD_LENGTH
+    if( IsOdd() )
+      {
+      ++copy;
+      }
+#endif
+    TSwap::SwapArray(&copy,1);
+    return os.write((char*)(&copy), sizeof(uint32_t));
+    }
+
+  template <typename TSwap>
+  const OStream &Write16(OStream &os)
+    {
+    assert( ValueLength <= UINT16_MAX );
+    uint16_t copy = ValueLength;
+#ifndef GDCM_WRITE_ODD_LENGTH
+    if( IsOdd() )
+      {
+      ++copy;
+      }
+#endif
+    TSwap::SwapArray(&copy,1);
+    return os.write((char*)(&copy), sizeof(uint16_t));
+    }
+
+
 
 private:
   uint32_t ValueLength;

@@ -15,6 +15,7 @@
 =========================================================================*/
 #include "gdcmDataSet.h"
 #include "gdcmExplicitDataElement.h"
+#include "gdcmImplicitDataElement.h"
 //#include "gdcmElement.h"
 
 namespace gdcm

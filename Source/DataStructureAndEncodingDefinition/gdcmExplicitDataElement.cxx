@@ -68,5 +68,4 @@ ExplicitDataElement::ExplicitDataElement(ImplicitDataElement const &val)
   }
 
 
-
 } // end namespace gdcm

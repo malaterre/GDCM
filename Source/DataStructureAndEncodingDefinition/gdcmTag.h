@@ -158,6 +158,27 @@ public:
   // implementor, to communicate information that is not contained in 
   // Standard Data Elements. Private Data elements have odd Group Numbers.
   bool IsPrivate() const { return !IsPublic(); }
+//-----------------------------------------------------------------------------
+  template <typename TSwap>
+  IStream &Read(IStream &is)
+    {
+    is.read(ElementTag.bytes, 4);
+    TSwap::SwapArray(ElementTag.tags, 2);
+    return is;
+    }
+
+  template <typename TSwap>
+  const OStream &Write(OStream &os) const
+    {
+    uint16_t copy[2];
+    copy[0]= ElementTag.tags[0];
+    copy[1]= ElementTag.tags[1];
+    TSwap::SwapArray(copy, 2);
+    return os.write((char*)(&copy), 4);
+    }
+
+
+
 
 private:
   union { uint32_t tag; uint16_t tags[2]; char bytes[4]; } ElementTag;

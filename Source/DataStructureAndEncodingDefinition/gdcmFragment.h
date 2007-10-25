@@ -65,7 +65,81 @@ public:
     return *this;
     }
 
+  template <typename TSwap>
+  IStream &Read(IStream &is)
+    {
+    // Superclass
+    const Tag itemStart(0xfffe, 0xe000);
+    const Tag seqDelItem(0xfffe,0xe0dd);
+    if( !TagField.Read<TSwap>(is) )
+      {
+      assert(0 && "Should not happen");
+      return is;
+      }
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+    if( TagField != itemStart && TagField != seqDelItem )
+      {
+      // gdcm-JPEG-LossLess3a.dcm
+      std::streampos pos = is.tellg();
+      is.seekg( 0, std::ios::end );
+      std::streampos end = is.tellg();
+      assert( (long)(end-pos) == 4 );
+      gdcmWarningMacro( "Broken file: " << (long)(end-pos)
+        << " bytes were skipped at the end of file. Use at own risk." );
+      // Pretend to end properly...
+      TagField = Tag(0xfffe,0xe0dd);
+      ValueLengthField = 0;
+      // Make sure to clear the FragmentValue
+      FragmentValue = new ByteValue;
+      FragmentValue->SetLength( ValueLengthField );
+      return is;
+      }
+#endif
+    if( !Read(is,ValueLengthField) )
+      {
+      assert(0 && "Should not happen");
+      return is;
+      }
+    // Self
+    ByteValue *bv = new ByteValue;
+    bv->SetLength(ValueLengthField);
+    if( !Read(is,*bv) )
+      {
+      assert(0 && "Should not happen");
+      return is;
+      }
+    FragmentValue = bv;
+    return is;
+    }
 
+
+  template <typename TSwap>
+  OStream &Write(OStream &os) const
+  {
+    const Tag itemStart(0xfffe, 0xe000);
+    const Tag seqDelItem(0xfffe,0xe0dd);
+    if( !Write(os,TagField) )
+      {
+      assert(0 && "Should not happen");
+      return os;
+      }
+    assert( TagField == itemStart
+         || TagField == seqDelItem );
+    if( !Write(os,ValueLengthField) )
+      {
+      assert(0 && "Should not happen");
+      return os;
+      }
+    // Self
+    if( !Write(os,*(FragmentValue)) )
+      {
+      assert(0 && "Should not happen");
+      return os;
+      }
+    return os;
+    }
+
+ 
 private:
   typedef SmartPointer<ByteValue> ByteValuePtr;
   ByteValuePtr FragmentValue;

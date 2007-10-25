@@ -44,10 +44,10 @@ public:
 
   VL GetLength() const;
 
-//template <typename TSwap>
-//  IStream &Read(IStream& is);
-//template <typename TSwap>
-//  const OStream &Write(OStream& os) const;
+  template <typename TSwap>
+    IStream &Read(IStream& is);
+  template <typename TSwap>
+    const OStream &Write(OStream& os) const;
 
   ImplicitDataElement(ImplicitDataElement const & val):DataElement(val)
     {

@@ -78,6 +78,49 @@ public:
 
   const BasicOffsetTable &GetTable() const { return Table; }
 
+
+template <typename TSwap>
+IStream& Read(IStream &is)
+{
+  assert( SequenceLengthField.IsUndefined() );
+  //if( SequenceLengthField.IsUndefined() )
+    {
+    const Tag seqDelItem(0xfffe,0xe0dd);
+    // First item is the basic offset table:
+    Read(is,Table);
+    gdcmDebugMacro( "Table: " << Table );
+    // not used for now...
+    Fragment frag;
+    while( Read(is,frag) && frag.GetTag() != seqDelItem )
+      {
+      gdcmDebugMacro( "Frag: " << frag );
+      Fragments.push_back( frag );
+      }
+    assert( frag.GetTag() == seqDelItem && frag.GetVL() == 0 );
+    }
+  //else
+  //  {
+  //  abort();
+  //  }
+  return is;
+}
+
+template <typename TSwap>
+OStream const &Write(OStream &os) const
+{
+  if( !Write(os,Table) )
+    {
+    assert(0 && "Should not happen");
+    return os;
+    }
+  SequenceOfFragments::FragmentVector::const_iterator it = Fragments.begin();
+  for(;it != Fragments.end(); ++it)
+    {
+    Write(os,*it);
+    }
+  return os;
+}
+
 protected:
   void Print(std::ostream &os) const {
     os << "SQ L= " << SequenceLengthField << "\n";

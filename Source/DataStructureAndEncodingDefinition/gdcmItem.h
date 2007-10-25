@@ -38,7 +38,6 @@ namespace gdcm
 
 class GDCM_EXPORT Item : public DataElement
 {
-  template <typename TSwap> friend class IOSerialize;
 public:
   Item(const Tag& t = Tag(0), uint32_t const &vl = 0) 
 	  : DataElement(t, vl), NestedDataSet() {
@@ -91,6 +90,97 @@ public:
     }
 
   void SetType(TS::NegociatedType type) { NestedDataSet.SetType(type); }
+
+
+template <typename TSwap>
+IStream &Read(IStream &is)
+{
+  // Superclass
+  if( !Read(is,TagField) )
+    {
+	    //std::cerr << TagField << std::endl;
+    assert(0 && "Should not happen");
+    return is;
+    }
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+  assert ( TagField == Tag(0xfffe, 0xe000)
+        || TagField == Tag(0xfffe, 0xe0dd) 
+        || TagField == Tag(0x3f3f, 0x3f00) );
+//  if( TagField == Tag(0x3f3f, 0x3f00) )
+//    {
+//    TagField = Tag(0xfffe, 0xe000);
+//    }
+#else
+  assert ( TagField == Tag(0xfffe, 0xe000)
+        || TagField == Tag(0xfffe, 0xe0dd) );
+#endif
+  if( !Read(is,ValueLengthField) )
+    {
+    assert(0 && "Should not happen");
+    return is;
+    }
+  // Self
+  //NestedDataSet = new DataSet; //StructuredSet<DEType>;
+  //std::cerr << "NestedDataSet Length=" << ValueLengthField << std::endl;
+  NestedDataSet.SetLength( ValueLengthField );
+  // BUG: This test is required because DataSet::Read with a Length
+  // of 0 is actually thinking it is reading a root DataSet
+  // so we need to make sure not to call NestedDataSet.Read here
+  if( ValueLengthField == 0 )
+    {
+    assert( TagField == Tag( 0xfffe, 0xe0dd)
+         || TagField == Tag( 0xfffe, 0xe000) );
+    if( TagField != Tag( 0xfffe, 0xe0dd) )
+      {
+      gdcmErrorMacro( "SQ: " << TagField << " has a length of 0" );
+      }
+    }
+  else
+    {
+    Read(is,NestedDataSet);
+    }
+//#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+//  // Ok we have read the item, sometime the ValueLengthField was wrong
+//  // check that:
+//  if( !ValueLengthField.IsUndefined() && ValueLengthField != 0 )
+//    {
+//    if( ValueLengthField != NestedDataSet->GetLength() )
+//      {
+//      ValueLengthField = NestedDataSet->GetLength();
+//      }
+//    }
+//#endif
+  return is;
+}
+
+template <typename TSwap>
+const OStream &Write(OStream &os) const
+{
+  if( !Write(os,TagField) )
+    {
+    assert(0 && "Should not happen");
+    return os;
+    }
+  assert ( TagField == Tag(0xfffe, 0xe000)
+        || TagField == Tag(0xfffe, 0xe0dd) );
+  if( !Write(os,ValueLengthField) )
+    {
+    assert(0 && "Should not happen");
+    return os;
+    }
+  // Self
+  Write(os,NestedDataSet);
+  //if( ValueLengthField.IsUndefined() )
+  //  {
+  //  const Tag itemDelItem(0xfffe,0xe00d);
+  //  const ImplicitDataElement ide(itemDelItem);
+  //  assert( ide.GetVL() == 0 );
+  //  ide.Write(os);
+  //  }
+
+  return os;
+}
+
 
 private:
   /* NESTED DATA SET  a Data Set contained within a Data Element of an other Data Set.

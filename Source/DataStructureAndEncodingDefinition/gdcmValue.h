@@ -47,6 +47,47 @@ public:
   //IStream& Read(IStream &is); // { return is;}
   //template <typename TSwap>
   //OStream const & Write(OStream &os); // const { return os;}
+  template <typename TSwap>
+  IStream &Read(IStream &is) {
+//    if( ByteValue *bv = dynamic_cast<ByteValue*>(&v) )
+//    {
+//	    Read(is,*bv);
+//    }
+//    else if( SequenceOfItems *si = dynamic_cast<SequenceOfItems*>(&v) )
+//    {
+//	    Read(is,*si);
+//    }
+//    else if( SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(&v) )
+//    {
+//	    Read(is,*sf);
+//    }
+//    else
+    {
+	    assert( 0 && "error" );
+    }
+    return is;
+  }
+  template <typename TSwap>
+  const OStream &Write(OStream &os) const {
+//    if( const ByteValue *bv = dynamic_cast<const ByteValue*>(&v) )
+//    {
+//	    Write(os,*bv);
+//    }
+//    else if( const SequenceOfItems *si = dynamic_cast<const SequenceOfItems*>(&v) )
+//    {
+//	    Write(os,*si);
+//    }
+//    else if( const SequenceOfFragments *sf = dynamic_cast<const SequenceOfFragments*>(&v) )
+//    {
+//	    Write(os,*sf);
+//    }
+//    else
+    {
+	    assert( 0 && "error" );
+    }
+    return os;
+  }
+  
 };
 
 

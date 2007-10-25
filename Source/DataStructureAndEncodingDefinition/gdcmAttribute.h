@@ -185,7 +185,7 @@ public:
     char vr[2];
     _is.read(vr, 2); // Check consistency ?
     const uint32_t lref = GetLength() * sizeof( typename VRToType<TVR>::Type );
-    uint32_t l = VRVLSize< (TVR & VR::VR_VL32) >::Read(_is);
+    uint32_t l = VRVLSize< (TVR & VR::VL32) >::Read(_is);
     l /= sizeof( typename VRToType<TVR>::Type );
      return EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
       l,_is);

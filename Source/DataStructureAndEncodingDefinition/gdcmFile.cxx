@@ -17,8 +17,8 @@
 
 #include "gdcmSwapper.txx"
 #include "gdcmDataSet.txx"
-#include "gdcmExplicitDataElement.txx"
-#include "gdcmImplicitDataElement.txx"
+#include "gdcmExplicitDataElement.h"
+#include "gdcmImplicitDataElement.h"
 #include "gdcmValue.h"
 
 #include "gdcmIOSerialize.txx"

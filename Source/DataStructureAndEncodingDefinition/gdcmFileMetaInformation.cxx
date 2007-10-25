@@ -102,7 +102,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
   el.Write( ss );
   SmartPointer<ByteValue> bv = new ByteValue;
   bv->SetLength( 4 );
-  IOSerialize<SwapperNoOp>::Read( ss, *bv );
+  bv->Read<SwapperNoOp>( ss );
   xgl.SetValue( *bv );
   Insert( xgl );
 
@@ -203,7 +203,7 @@ bool ReadImplicitDataElement(IStream &is, ImplicitDataElement &de)
   std::streampos start = is.tellg();
   // Read Tag
   Tag t;
-  if( !IOSerialize<TSwap>::Read(is,t) )
+  if( !t.Read<TSwap>(is) )
     {
     assert(0 && "Should not happen");
     return false;
@@ -217,7 +217,7 @@ bool ReadImplicitDataElement(IStream &is, ImplicitDataElement &de)
     }
   // Read Value Length
   VL vl;
-  if( !IOSerialize<TSwap>::Read(is,vl) )
+  if( !vl.Read<TSwap>(is,vl) )
     {
     assert(0 && "Should not happen");
     return false;
@@ -234,7 +234,7 @@ bool ReadImplicitDataElement(IStream &is, ImplicitDataElement &de)
     }
   // We have the length we should be able to read the value
   bv->SetLength(vl); // perform realloc
-  if( !IOSerialize<TSwap>::Read(is,*bv) )
+  if( !bv->Read<TSwap>(is) )
     {
     assert(0 && "Should not happen");
     return false;
@@ -273,7 +273,7 @@ IStream &FileMetaInformation::Read(IStream &is)
   // TODO: Can now load data from std::ios::cur to std::ios::cur + metagl.GetValue()
 
   ExplicitDataElement xde;
-  IOSerialize<SwapperNoOp>::Read(is,xde);
+  xde.Read<SwapperNoOp>(is);
   //if( xde.GetTag() != Tag(0x0002,0x0000) 
   // First off save position in case we fail (no File Meta Information)
   // See PS 3.5, Data Element Structure With Explicit VR
@@ -295,7 +295,7 @@ IStream &FileMetaInformation::ReadCompat(IStream &is)
   assert( IsEmpty() );
   std::streampos start = is.tellg();
   Tag t;
-  IOSerialize<SwapperNoOp>::Read(is,t);
+  t.Read<SwapperNoOp>(is);
   //assert( t.GetGroup() == 0x0002 );
   if( t.GetGroup() == 0x0002 )
     {

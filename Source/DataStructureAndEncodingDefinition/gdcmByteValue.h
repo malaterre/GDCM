@@ -115,6 +115,38 @@ public:
     return true;
   }
 
+
+  template <typename TSwap>
+  IStream &Read(IStream &is) {
+    // If Length is odd we have detected that in SetLength
+    // and calling std::vector::resize make sure to allocate *AND* 
+    // initialize values to 0 so we are sure to have a \0 at the end
+    // even in this case
+#ifdef SHORT_READ_HACK
+    if( Length > 0xfff )
+      {
+      is.seekg(Length, std::ios::cur);
+      }
+    else
+      {
+      is.read(&Internal[0], Length);
+      }
+    return is;
+#else
+    return is.read(&Internal[0], Length);
+#endif
+  }
+
+  template <typename TSwap>
+  OStream const &Write(OStream &os) const {
+#ifdef GDCM_WRITE_ODD_LENGTH
+    return os.write(&Internal[0], Length);
+#else
+    assert( !(Internal.size() % 2) );
+    return os.write(&Internal[0], Internal.size());
+#endif
+    }
+
 protected:
   /**
    * \brief  Checks whether a 'ByteValue' is printable or not (in order

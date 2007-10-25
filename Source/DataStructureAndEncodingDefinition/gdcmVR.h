@@ -75,7 +75,7 @@ public:
     OB_OW = OB | OW,
     US_SS = US | SS,
     US_SS_OW = US | SS | OW,
-    VR_VL32 = OB | OW | OF | SQ | UN, // if( VR & VR_VL32 ) => VR has its VL coded over 32bits
+    VL32 = OB | OW | OF | SQ | UN | UT, // if( VR & VR_VL32 ) => VR has its VL coded over 32bits
     VR_END = UT+1  // Invalid VR, need to be max(VRType)+1
   } VRType;
 

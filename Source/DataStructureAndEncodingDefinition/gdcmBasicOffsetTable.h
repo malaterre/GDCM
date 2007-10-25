@@ -58,6 +58,57 @@ public:
     abort();
     return *this;
     }
+  template <typename TSwap>
+  IStream &Read(IStream &is) {
+    // Superclass 
+    const Tag itemStart(0xfffe, 0xe000);
+    const Tag seqDelItem(0xfffe,0xe0dd);
+    if( !Read(is,TagField) )
+      {
+      assert(0 && "Should not happen");
+      return is;
+      }
+    assert( TagField == itemStart );
+    if( !Read(is,ValueLengthField) )
+      {
+      assert(0 && "Should not happen");
+      return is;
+      }
+    // Self
+    Offsets = new ByteValue;
+    Offsets->SetLength(ValueLengthField);
+    if( !Read(is,*(Offsets)) )
+      {
+      assert(0 && "Should not happen");
+      return is;
+      }
+    return is;
+    }
+
+  template <typename TSwap>
+  OStream &Write(OStream &os) const {
+    // Superclass 
+    const Tag itemStart(0xfffe, 0xe000);
+    const Tag seqDelItem(0xfffe,0xe0dd);
+    if( !Write(os,TagField) )
+      {
+      assert(0 && "Should not happen");
+      return os;
+      }
+    assert( TagField == itemStart );
+    if( !Write(os,ValueLengthField) )
+      {
+      assert(0 && "Should not happen");
+      return os;
+      }
+    // Self
+    //if( !Offsets->Write(os) )
+      {
+      assert(0 && "Should not happen");
+      return os;
+      }
+    return os;
+    }
 
 private:
   typedef SmartPointer<ByteValue> ByteValuePtr;
