@@ -169,6 +169,10 @@ VR::VRType VR::GetVRTypeFromFile(const char *vr)
   //std::cerr << "VR=" << vr << std::endl;
   const char **p =
     std::lower_bound(start, end, vr, MySort());
+  if( (*p)[0] != vr[0] || (*p)[1] != vr[1] )
+    {
+    return VR::INVALID;
+    }
   assert( (*p)[0] == vr[0] && (*p)[1] == vr[1] );
   VRType r = VRValue[p-start];
   assert( r == (VR::VRType)(1 << (p-start)) );
@@ -301,8 +305,9 @@ bool VR::IsASCII(VRType const &vr)
     {
     VRTemplate(ASCII)
   default:
-      abort();
-      return false;
+      // 1.3.12.2.1107.5.1.4.54035.30000005100516290423400005768-no-phi.dcm has a VR=RT
+      //abort();
+      return true;
     }
 }
 
@@ -338,7 +343,8 @@ bool VR::IsBinary(VRType const &vr)
   case OB_OW:
     return true;
   default:
-      abort();
+      // 1.3.12.2.1107.5.1.4.54035.30000005100516290423400005768-no-phi.dcm has a VR=RT
+      //abort();
       return false;
     }
 }

@@ -26,6 +26,8 @@
 #include "gdcmByteValue.h"
 #include "gdcmSequenceOfItems.h"
 #include "gdcmSequenceOfFragments.h"
+#include "gdcmStringStream.h"
+#include "gdcmElement.h"
 
 
 namespace gdcm
@@ -354,8 +356,20 @@ const OStream &IOSerialize<TSwap>::Write(OStream &os, ExplicitDataElement const 
     // and calling std::vector::resize make sure to allocate *AND* 
     // initialize values to 0 so we are sure to have a \0 at the end
     // even in this case
+#ifdef SHORT_READ_HACK
+    if( bv.Length > 0xfff )
+      {
+      is.seekg(bv.Length, std::ios::cur);
+      }
+    else
+      {
+      is.read(&bv.Internal[0], bv.Length);
+      }
+    return is;
+#else
     return is.read(&bv.Internal[0], bv.Length);
-    }
+#endif
+  }
 
   template <typename TSwap>
   OStream const &IOSerialize<TSwap>::Write(OStream &os,ByteValue const &bv) {
@@ -1017,7 +1031,7 @@ const OStream &IOSerialize<TSwap>::Write(OStream &os, ImplicitDataElement const 
   IStream &IOSerialize<TSwap>::ReadWithLength(IStream &is, StructuredSet<DEType> &ss, VL &length) {
     DEType de;
     VL l = 0;
-    std::cout << "ReadWithLength Length: " << length << std::endl;
+    //std::cout << "ReadWithLength Length: " << length << std::endl;
     VL locallength = length;
     while( l != locallength && Read(is,de))
       {
@@ -1059,5 +1073,5 @@ const OStream &IOSerialize<TSwap>::Write(OStream &os, ImplicitDataElement const 
 
 } // end namespace gdcm
 
-#endif // __gdcmExplicitDataElement_txx
+#endif // __gdcmIOSerialize_txx
 

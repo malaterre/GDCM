@@ -16,12 +16,9 @@
 #ifndef __gdcmStructuredSet_h
 #define __gdcmStructuredSet_h
 
+#include "gdcmDataElement.h"
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
-#include "gdcmElement.h"
-#include "gdcmStringStream.h"
-#include "gdcmByteValue.h"
-//#include "gdcmIOSerialize.txx"
 
 #include <set>
 #include <iterator>
@@ -126,9 +123,10 @@ public:
   
   bool IsEmpty() const { return DES.empty(); };
 
-  void Copy(const StructuredSet<ImplicitDataElement>& ss)
+  template <typename OtherDEType> // TODO: Should be only Implicit or Explicit DataElement
+  void Copy(const StructuredSet<OtherDEType>& ss)
   {
-    StructuredSet<ImplicitDataElement>::ConstIterator it = ss.Begin();
+    typename StructuredSet<OtherDEType>::ConstIterator it = ss.Begin();
     for( ; it != ss.End(); ++it)
       {
       //std::cerr << *it << std::endl;
@@ -136,17 +134,6 @@ public:
       Insert(de);
       }
    }
-  void Copy(const StructuredSet<ExplicitDataElement>& ss)
-  {
-    StructuredSet<ExplicitDataElement>::ConstIterator it = ss.Begin();
-    for( ; it != ss.End(); ++it)
-      {
-      //std::cerr << *it << std::endl;
-      DEType de( *it );
-      Insert(de);
-      }
-   }
-
 
   StructuredSet<DEType>& operator=(StructuredSet<DEType> const &val)
   {
@@ -161,6 +148,7 @@ public:
 private:
   DataElementSet DES;
 };
+
 
 } // end namespace gdcm
 

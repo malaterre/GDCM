@@ -55,6 +55,8 @@ public:
     }
   BasicOffsetTable &operator=(BasicOffsetTable const &val)
     {
+    abort();
+    return *this;
     }
 
 private:

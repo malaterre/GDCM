@@ -38,8 +38,13 @@ ENDIF(NOT BUILD_SHARED_LIBS)
 
 # Add the include paths
 INCLUDE_DIRECTORIES(
-  "${GDCM_SOURCE_DIR}/Source/Common"
+  # Bin:
   "${GDCM_BINARY_DIR}/Source/Common"
+
+  # src:
+  "${GDCM_SOURCE_DIR}/Source/Common"
+  "${GDCM_SOURCE_DIR}/Source/DataDictionary"
+  "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition/"
 
   # FIXME:
   "${GDCM_SOURCE_DIR}/Utilities"

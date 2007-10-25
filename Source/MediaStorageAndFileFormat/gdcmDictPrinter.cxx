@@ -58,6 +58,7 @@ VM::VMType GuessVMType(ExplicitDataElement const &de)
     case VR::UN: // TODO need to do some magic guessing
       vm = VM::VM1;
       break;
+    case VR::DA: case VR::TM:
     case VR::SH: case VR::UI: case VR::LO: case VR::ST:
       vm = VM::VM1;
       break;
@@ -398,8 +399,13 @@ std::string GetOwner(StructuredSet<ExplicitDataElement> const &ds, ExplicitDataE
   const ByteValue *bv = dynamic_cast<const ByteValue*>(&value);
   assert( bv && "not bv" );
   const char *array = bv->GetPointer();
-  return std::string(array, bv->GetLength());
+  // 2 case:
+  // LO is padded with a \0 bad
+  // LO simply ends with its last character
+  // we need to handle both cases:
+  std::string s = std::string(array, bv->GetLength());
 
+  return s.c_str(); // 
 }
 
 //-----------------------------------------------------------------------------
@@ -438,7 +444,7 @@ void DictPrinter::Print(std::ostream& os)
         os << "owner=\"" << owner
           << "\" version=\"" << version << "\"";
         }
-      os << ">\n";
+      os << "/>\n";
       //os << "  <description>Unknown ";
       //os << (t.IsPrivate() ? "Private" : "Public");
       //os << " Tag & Data</description>\n";
@@ -446,7 +452,7 @@ void DictPrinter::Print(std::ostream& os)
       //os << "    <representation vr=\"" << vr << "\" vm=\"" << 
       //  VM::GetVMString(vm) << "\"/>\n";
       //os << "  </representations>\n";
-      os << "</entry>\n";
+      //os << "</entry>\n";
       }
     }
   //os << "</dict>\n";

@@ -16,10 +16,10 @@
 #ifndef __gdcmDataSet_h
 #define __gdcmDataSet_h
 
-//#include "gdcmDataElement.h"
 #include "gdcmTS.h"
 #include "gdcmValue.h"
 #include "gdcmStructuredSet.h"
+#include "gdcmExplicitDataElement.h"
 
 namespace gdcm
 {

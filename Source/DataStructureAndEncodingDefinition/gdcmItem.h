@@ -17,8 +17,8 @@
 #ifndef __gdcmItem_h
 #define __gdcmItem_h
 
-#include "gdcmDataElement.h"
 #include "gdcmDataSet.h"
+#include "gdcmImplicitDataElement.h"
 
 namespace gdcm
 {

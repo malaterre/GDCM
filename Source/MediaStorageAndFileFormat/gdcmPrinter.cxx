@@ -23,6 +23,7 @@
 #include "gdcmGroupDict.h"
 #include "gdcmVR.h"
 #include "gdcmVM.h"
+#include "gdcmElement.h"
 
 #include "gdcmStructuredSet.h"
 

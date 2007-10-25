@@ -75,7 +75,7 @@ int main (int argc, char *argv[])
       break;
 
     case 'i':
-      printf ("option i with value '%s'\n", optarg);
+      //printf ("option i with value '%s'\n", optarg);
       assert( filename.empty() );
       filename = optarg;
       break;
@@ -85,7 +85,7 @@ int main (int argc, char *argv[])
       break;
 
     case 'd':
-      printf ("option d with value '%s'\n", optarg);
+      //printf ("option d with value '%s'\n", optarg);
       printdict = true;
       break;
 
@@ -113,7 +113,7 @@ int main (int argc, char *argv[])
     return 1;
     }
   // else
-  //std::cout << "Filename: " << filename << std::endl;
+  std::cerr << "Filename: " << filename << std::endl;
 //  for(int i=0; i <100; i++)
 //{
   gdcm::Reader reader;
@@ -124,11 +124,10 @@ int main (int argc, char *argv[])
     return 1;
     }
 //}
-//return 0;
 
   gdcm::Validate vali;
   vali.SetFile( reader.GetFile() );
-  vali.Validation();
+  //vali.Validation();
 
   gdcm::Printer *p = 0;
   gdcm::Printer     printer;

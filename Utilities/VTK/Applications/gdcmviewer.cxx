@@ -48,7 +48,7 @@ public:
       {
       if ( event == vtkCommand::CharEvent )
         {
-#if (VTK_MAJOR_VERSION < 5) 
+#if !(VTK_MAJOR_VERSION < 5) 
         int max = ImageViewer->GetWholeZMax();
         int slice = (ImageViewer->GetZSlice() + 1 ) % ++max;
         ImageViewer->SetZSlice( slice );

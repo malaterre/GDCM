@@ -14,7 +14,7 @@
 
 =========================================================================*/
 #include "gdcmDataSet.h"
-//#include "gdcmExplicitDataElement.h"
+#include "gdcmExplicitDataElement.h"
 //#include "gdcmElement.h"
 
 namespace gdcm
@@ -84,15 +84,18 @@ bool DataSet::FindDataElement(const Tag &t) const
 //-----------------------------------------------------------------------------
 VL DataSet::GetLength() const
 {
-  static VL length = 0;
-  if( Length.IsUndefined() || Length == 0 )
-    {
-    length = Internal.GetLength();
-    assert( length != 0 );
-    return length;
-    }
-  assert( Length != 0 );
-  return Length;
+  //static VL length = 0;
+  //if( Length.IsUndefined() || Length == 0 )
+  //  {
+  //  length = Internal.GetLength();
+  //  assert( length != 0 );
+  //  return length;
+  //  }
+  //assert( Length != 0 );
+  //return Length;
+  assert( NegociatedTS != TS::Implicit ); // TODO: when copying an internal DataSet GetLength
+  // will take into account the VR... sigh
+  return Internal.GetLength();
 }
 
 } // end namespace gdcm
