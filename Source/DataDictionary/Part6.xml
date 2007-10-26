@@ -11,7 +11,13 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 -->
+<!DOCTYPE doc [
+<!ENTITY cp699 SYSTEM "cp699.xml">
+<!ENTITY part7 SYSTEM "Part7.xml">
+]>
 <dicts edition="2007">
+  &cp699;
+  &part7;
   <dict ref="6" name="Registry of DICOM data elements">
     <entry group="0008" element="0001" vr="UL" vm="1" retired="true" version="3">
       <description>Length to End</description>
@@ -726,6 +732,7 @@
     </entry>
     <entry group="0018" element="0060" vr="DS" vm="1" retired="false" version="3">
       <description>KVP</description>
+      <correction>kVp</correction>
     </entry>
     <entry group="0018" element="0070" vr="IS" vm="1" retired="false" version="3">
       <description>Counts Accumulated</description>
@@ -1068,6 +1075,7 @@
     </entry>
     <entry group="0018" element="1153" vr="IS" vm="1" retired="false" version="3">
       <description>Exposure in uAs</description>
+      <correction>Exposure in µAs</correction>
     </entry>
     <entry group="0018" element="1154" vr="DS" vm="1" retired="false" version="3">
       <description>Average Pulse Width</description>
@@ -2540,7 +2548,7 @@
     <entry group="0020" element="1209" vr="IS" vm="1" retired="false" version="3">
       <description>Number of Series Related Instances</description>
     </entry>
-    <entry group="0020" element="3100 to 31ff" vr="CS" vm="1-n" retired="true" version="3">
+    <entry group="0020" element="31xx" vr="CS" vm="1-n" retired="true" version="3">
       <description>Source Image IDs</description>
     </entry>
     <entry group="0020" element="3401" vr="CS" vm="1" retired="true" version="3">
@@ -2918,7 +2926,7 @@
     <entry group="0028" element="1199" vr="UI" vm="1" retired="false" version="3">
       <description>Palette Color Lookup Table UID</description>
     </entry>
-    <entry group="0028" element="1200" vr="US_SS_OW" vm="1-n1" retired="true" version="3">
+    <entry group="0028" element="1200" vr="US_SS_OW" vm="1-n" retired="true" version="3">
       <description>Gray Lookup Table Data</description>
     </entry>
     <entry group="0028" element="1201" vr="OW" vm="1" retired="false" version="3">
@@ -2978,7 +2986,7 @@
     <entry group="0028" element="3004" vr="LO" vm="1" retired="false" version="3">
       <description>Modality LUT Type</description>
     </entry>
-    <entry group="0028" element="3006" vr="US_SS_OW" vm="1-n1" retired="false" version="3">
+    <entry group="0028" element="3006" vr="US_SS_OW" vm="1-n" retired="false" version="3">
       <description>LUT Data</description>
     </entry>
     <entry group="0028" element="3010" vr="SQ" vm="1" retired="false" version="3">
@@ -7157,13 +7165,13 @@
     <entry group="fffc" element="fffc" vr="OB" vm="1" retired="false" version="3">
       <description>Data Set Trailing Padding</description>
     </entry>
-    <entry group="fffe" element="e000" vr="see note" vm="1" retired="false" version="3">
+    <entry group="fffe" element="e000" vr="" vm="" retired="false" version="3">
       <description>Item</description>
     </entry>
-    <entry group="fffe" element="e00d" vr="see note" vm="1" retired="false" version="3">
+    <entry group="fffe" element="e00d" vr="" vm="" retired="false" version="3">
       <description>Item Delimitation Item</description>
     </entry>
-    <entry group="fffe" element="e0dd" vr="see note" vm="1" retired="false" version="3">
+    <entry group="fffe" element="e0dd" vr="" vm="" retired="false" version="3">
       <description>Sequence Delimitation Item</description>
     </entry>
   </dict>
