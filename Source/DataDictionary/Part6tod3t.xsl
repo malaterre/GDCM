@@ -53,6 +53,8 @@ http://www.thescripts.com/forum/thread86881.html
 <!-- The main template that loop over all dict/entry -->
   <xsl:template match="/">
     <xsl:for-each select="dicts/dict/entry">
+    <xsl:sort select="@group"/>
+    <xsl:sort select="@element"/>
       <xsl:text>(</xsl:text>
       <xsl:value-of select="translate(@group,'abcdef','ABCDEF')"/>
       <xsl:text>,</xsl:text>
