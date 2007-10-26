@@ -1,380 +1,160 @@
-<tables>
-<informaltable>
-   <tgroup cols="5">
-      <colspec colnum="1" colname="col1" colwidth="108pt"/>
-      <colspec colnum="2" colname="col2" colwidth="72pt"/>
-      <colspec colnum="3" colname="col3" colwidth="36pt"/>
-      <colspec colnum="4" colname="col4" colwidth="36pt"/>
-      <colspec colnum="5" colname="col5" colwidth="216pt"/>
-      <tbody>
-         <row>
-            <entry>Message Field</entry>
-            <entry>Tag</entry>
-            <entry>VR</entry>
-            <entry>VM</entry>
-            <entry>Description of Field</entry>
-         </row>
-         <row>
-            <entry>Group Length</entry>
-            <entry>(0000,0000)</entry>
-            <entry>UL</entry>
-            <entry>1</entry>
-            <entry>The even number of bytes from the end of the value field to the beginning of the next group.</entry>
-         </row>
-         <row>
-            <entry>Affected SOP Class UID</entry>
-            <entry>(0000,0002)</entry>
-            <entry>UI</entry>
-            <entry>1</entry>
-            <entry>The affected SOP Class UID associated with the operation.</entry>
-         </row>
-         <row>
-            <entry>Requested SOP Class UID</entry>
-            <entry>(0000,0003)</entry>
-            <entry>UI</entry>
-            <entry>1</entry>
-            <entry>The requested SOP Class UID associated with the operation.</entry>
-         </row>
-         <row>
-            <entry>Command Field</entry>
-            <entry>(0000,0100)</entry>
-            <entry>US</entry>
-            <entry>1</entry>
-            <entry>
-               <nomatch>This field distinguishes the DIMSE operation conveyed by this Message. This field shall be set to one of the following values:</nomatch>
-               <nomatch>0001H       C-STORE-RQ</nomatch>
-               <nomatch>8001H       C-STORE-RSP</nomatch>
-               <nomatch>0010H       C-GET-RQ</nomatch>
-               <nomatch>8010H       C-GET-RSP</nomatch>
-               <nomatch>0020H       C-FIND-RQ</nomatch>
-               <nomatch>8020H       C-FIND-RSP</nomatch>
-               <nomatch>0021H       C-MOVE-RQ</nomatch>
-               <nomatch>8021H       C-MOVE-RSP</nomatch>
-               <nomatch>0030H       C-ECHO-RQ</nomatch>
-               <nomatch>8030H       C-ECHO-RSP</nomatch>
-               <nomatch>0100H       N-EVENT-REPORT-RQ</nomatch>
-               <nomatch>8100H       N-EVENT-REPORT-RSP</nomatch>
-               <nomatch>0110H       N-GET-RQ</nomatch>
-               <nomatch>8110H       N-GET-RSP</nomatch>
-               <nomatch>0120H       N-SET-RQ</nomatch>
-               <nomatch>8120H       N-SET-RSP</nomatch>
-               <nomatch>0130H       N-ACTION-RQ</nomatch>
-               <nomatch>8130H       N-ACTION-RSP</nomatch>
-               <nomatch>0140H       N-CREATE-RQ</nomatch>
-               <nomatch>8140H       N-CREATE-RSP</nomatch>
-               <nomatch>0150H       N-DELETE-RQ</nomatch>
-               <nomatch>8150H       N-DELETE-RSP</nomatch>
-               <nomatch>0FFFH       C-CANCEL-RQ</nomatch>
-            </entry>
-         </row>
-         <row>
-            <entry>Message ID</entry>
-            <entry>(0000,0110)</entry>
-            <entry>US</entry>
-            <entry>1</entry>
-            <entry>Implementation-specific value that distinguishes this Message from other Messages.</entry>
-         </row>
-         <row>
-            <entry>Message ID Being Responded To</entry>
-            <entry>(0000,0120)</entry>
-            <entry>US</entry>
-            <entry>1</entry>
-            <entry>Shall be set to the value of the Message ID (0000,0110) field used in associated request Message.</entry>
-         </row>
-         <row>
-            <entry>Move Destination</entry>
-            <entry>(0000,0600)</entry>
-            <entry>AE</entry>
-            <entry>1</entry>
-            <entry>Shall be set to the DICOM AE Title of the destination DICOM AE for which the C-STORE sub-operations are being performed.</entry>
-         </row>
-         <row>
-            <entry>Priority</entry>
-            <entry>(0000,0700)</entry>
-            <entry>US</entry>
-            <entry>1</entry>
-            <entry>
-               <nomatch>The priority shall be set to one of the following values:</nomatch>
-               <nomatch>LOW = 0002H</nomatch>
-               <nomatch>MEDIUM = 0000H</nomatch>
-               <nomatch>HIGH = 0001H</nomatch>
-            </entry>
-         </row>
-         <row>
-            <entry>Data Set Type</entry>
-            <entry>(0000,0800)</entry>
-            <entry>US</entry>
-            <entry>1</entry>
-            <entry>This field indicates if a Data Set is present in the Message. This field shall be set to the value of 0101H if no Data Set is present; any other value indicates a Data Set is included in the Message.</entry>
-         </row>
-         <row>
-            <entry>Status</entry>
-            <entry>(0000,0900)</entry>
-            <entry>US</entry>
-            <entry>1</entry>
-            <entry>Confirmation status of the operation. See Annex C.</entry>
-         </row>
-         <row>
-            <entry>Offending Element</entry>
-            <entry>(0000,0901)</entry>
-            <entry>AT</entry>
-            <entry>1-n</entry>
-            <entry>
-               <nomatch>If status is Cxxx, then this field contains a list of</nomatch>
-               <nomatch> the elements in which the error was detected.</nomatch>
-            </entry>
-         </row>
-         <row>
-            <entry>Error Comment</entry>
-            <entry>(0000,0902)</entry>
-            <entry>LO</entry>
-            <entry>1</entry>
-            <entry>This field contains an application-specific text description of the error detected.</entry>
-         </row>
-         <row>
-            <entry>Error ID</entry>
-            <entry>(0000,0903)</entry>
-            <entry>US</entry>
-            <entry>1</entry>
-            <entry>This field shall optionally contain an application-specific error code.</entry>
-         </row>
-         <row>
-            <entry>Affected SOP Instance UID</entry>
-            <entry>(0000,1000)</entry>
-            <entry>UI</entry>
-            <entry>1</entry>
-            <entry>Contains the UID of the SOP Instance for which this operation occurred.</entry>
-         </row>
-         <row>
-            <entry>Requested SOP Instance UID</entry>
-            <entry>(0000,1001)</entry>
-            <entry>UI</entry>
-            <entry>1</entry>
-            <entry>Contains the UID of the SOP Instance for which this operation occurred.</entry>
-         </row>
-         <row>
-            <entry>Event Type ID</entry>
-            <entry>(0000,1002)</entry>
-            <entry>US</entry>
-            <entry>1</entry>
-            <entry>Values for this field are application-specific.</entry>
-         </row>
-         <row>
-            <entry>Attribute Identifier List</entry>
-            <entry>(0000,1005)</entry>
-            <entry>AT</entry>
-            <entry>1-n</entry>
-            <entry>This field contains an Attribute Tag for each of the n Attributes applicable.</entry>
-         </row>
-         <row>
-            <entry>Action Type ID</entry>
-            <entry>(0000,1008)</entry>
-            <entry>US</entry>
-            <entry>1</entry>
-            <entry>Values for this field are application-specific.</entry>
-         </row>
-         <row>
-            <entry>Number of Remaining Sub-operations</entry>
-            <entry>
-               <nomatch>(0000,1020)</nomatch>
-               <nomatch/>
-            </entry>
-            <entry>US</entry>
-            <entry>1</entry>
-            <entry>The number of remaining C-STORE sub-operations to be invoked for the operation.</entry>
-         </row>
-         <row>
-            <entry>Number of Completed Sub-operations</entry>
-            <entry>
-               <nomatch>(0000,1021)</nomatch>
-               <nomatch/>
-            </entry>
-            <entry>US</entry>
-            <entry>1</entry>
-            <entry>The number of C-STORE sub-operations associated with this operation that have completed successfully.</entry>
-         </row>
-         <row>
-            <entry>Number of Failed Sub-operations</entry>
-            <entry>
-               <nomatch>(0000,1022)</nomatch>
-               <nomatch/>
-            </entry>
-            <entry>US</entry>
-            <entry>1</entry>
-            <entry>The number of C-STORE sub-operations associated with this operation that have failed.</entry>
-         </row>
-         <row>
-            <entry>Number of Warning Sub-operations</entry>
-            <entry>
-               <nomatch>(0000,1023)</nomatch>
-               <nomatch/>
-            </entry>
-            <entry>US</entry>
-            <entry>1</entry>
-            <entry>The number of C-STORE sub-operations associated with this operation that generated warning responses.</entry>
-         </row>
-         <row>
-            <entry>Move Originator Application Entity Title</entry>
-            <entry>(0000,1030)</entry>
-            <entry>AE</entry>
-            <entry>1</entry>
-            <entry>Contains the DICOM AE Title of the DICOM AE that invoked the C-MOVE operation from which this C-STORE sub-operation is being performed.</entry>
-         </row>
-         <row>
-            <entry>Move Originator Message ID</entry>
-            <entry>(0000,1031)</entry>
-            <entry>US</entry>
-            <entry>1</entry>
-            <entry>Contains the Message ID (0000,0110) of the C-MOVE-RQ Message from which this C-STORE sub-operation is being performed.</entry>
-         </row>
-      </tbody>
-   </tgroup>
-</informaltable><informaltable>
-   <tgroup cols="4">
-      <colspec colnum="1" colname="col1" colwidth="144pt"/>
-      <colspec colnum="2" colname="col2" colwidth="72pt"/>
-      <colspec colnum="3" colname="col3" colwidth="54pt"/>
-      <colspec colnum="4" colname="col4" colwidth="45pt"/>
-      <tbody>
-         <row>
-            <entry>Message Field</entry>
-            <entry>Tag</entry>
-            <entry>VR</entry>
-            <entry>VM</entry>
-         </row>
-         <row>
-            <entry>Length to End</entry>
-            <entry>(0000,0001)</entry>
-            <entry>UL</entry>
-            <entry>1</entry>
-         </row>
-         <row>
-            <entry>Recognition Code</entry>
-            <entry>(0000,0010)</entry>
-            <entry>CS</entry>
-            <entry>1</entry>
-         </row>
-         <row>
-            <entry>Initiator</entry>
-            <entry>(0000,0200)</entry>
-            <entry>AE</entry>
-            <entry>1</entry>
-         </row>
-         <row>
-            <entry>Receiver</entry>
-            <entry>(0000,0300)</entry>
-            <entry>AE</entry>
-            <entry>1</entry>
-         </row>
-         <row>
-            <entry>Find Location</entry>
-            <entry>(0000,0400)</entry>
-            <entry>AE</entry>
-            <entry>1</entry>
-         </row>
-         <row>
-            <entry>Number of Matches</entry>
-            <entry>(0000,0850)</entry>
-            <entry>US</entry>
-            <entry>1</entry>
-         </row>
-         <row>
-            <entry>Response Sequence Number</entry>
-            <entry>(0000,0860)</entry>
-            <entry>US</entry>
-            <entry>1</entry>
-         </row>
-         <row>
-            <entry>DIALOG Receiver</entry>
-            <entry>(0000,4000)</entry>
-            <entry>AT</entry>
-            <entry>1</entry>
-         </row>
-         <row>
-            <entry>Terminal Type</entry>
-            <entry>(0000,4010)</entry>
-            <entry>AT</entry>
-            <entry>1</entry>
-         </row>
-         <row>
-            <entry>Message Set ID</entry>
-            <entry>(0000,5010)</entry>
-            <entry>SH</entry>
-            <entry>1</entry>
-         </row>
-         <row>
-            <entry>End Message ID</entry>
-            <entry>(0000,5020)</entry>
-            <entry>SH</entry>
-            <entry>1</entry>
-         </row>
-         <row>
-            <entry>Display Format</entry>
-            <entry>(0000,5110)</entry>
-            <entry>AT</entry>
-            <entry>1</entry>
-         </row>
-         <row>
-            <entry>Page Position ID</entry>
-            <entry>(0000,5120)</entry>
-            <entry>AT</entry>
-            <entry>1</entry>
-         </row>
-         <row>
-            <entry>Text Format ID</entry>
-            <entry>(0000,5130)</entry>
-            <entry>CS</entry>
-            <entry>1</entry>
-         </row>
-         <row>
-            <entry>Nor/Rev</entry>
-            <entry>(0000,5140)</entry>
-            <entry>CS</entry>
-            <entry>1</entry>
-         </row>
-         <row>
-            <entry>Add Gray Scale</entry>
-            <entry>(0000,5150)</entry>
-            <entry>CS</entry>
-            <entry>1</entry>
-         </row>
-         <row>
-            <entry>Borders</entry>
-            <entry>(0000,5160)</entry>
-            <entry>CS</entry>
-            <entry>1</entry>
-         </row>
-         <row>
-            <entry>Copies</entry>
-            <entry>(0000,5170)</entry>
-            <entry>IS</entry>
-            <entry>1</entry>
-         </row>
-         <row>
-            <entry>Magnification Type</entry>
-            <entry>(0000,5180)</entry>
-            <entry>CS</entry>
-            <entry>1</entry>
-         </row>
-         <row>
-            <entry>Erase</entry>
-            <entry>(0000,5190)</entry>
-            <entry>CS</entry>
-            <entry>1</entry>
-         </row>
-         <row>
-            <entry>Print</entry>
-            <entry>(0000,51A0)</entry>
-            <entry>CS</entry>
-            <entry>1</entry>
-         </row>
-         <row>
-            <entry>Overlays</entry>
-            <entry>(0000,51B0)</entry>
-            <entry>US</entry>
-            <entry>1-n</entry>
-         </row>
-      </tbody>
-   </tgroup>
-</informaltable>
-</tables>
+<?xml version="1.0"?>
+
+
+   
+      
+     <dict>
+      
+      
+      
+         <entry group="0000" element="0000" vr="UL" vm="1" retired="false" version="2">
+  <description>Group Length</description>
+</entry>
+         <entry group="0000" element="0002" vr="UI" vm="1" retired="false" version="2">
+  <description>Affected SOP Class UID</description>
+</entry>
+         <entry group="0000" element="0003" vr="UI" vm="1" retired="false" version="2">
+  <description>Requested SOP Class UID</description>
+</entry>
+         <entry group="0000" element="0100" vr="US" vm="1" retired="false" version="2">
+  <description>Command Field</description>
+</entry>
+         <entry group="0000" element="0110" vr="US" vm="1" retired="false" version="2">
+  <description>Message ID</description>
+</entry>
+         <entry group="0000" element="0120" vr="US" vm="1" retired="false" version="2">
+  <description>Message ID Being Responded To</description>
+</entry>
+         <entry group="0000" element="0600" vr="AE" vm="1" retired="false" version="2">
+  <description>Move Destination</description>
+</entry>
+         <entry group="0000" element="0700" vr="US" vm="1" retired="false" version="2">
+  <description>Priority</description>
+</entry>
+         <entry group="0000" element="0800" vr="US" vm="1" retired="false" version="2">
+  <description>Data Set Type</description>
+</entry>
+         <entry group="0000" element="0900" vr="US" vm="1" retired="false" version="2">
+  <description>Status</description>
+</entry>
+         <entry group="0000" element="0901" vr="AT" vm="1-n" retired="false" version="2">
+  <description>Offending Element</description>
+</entry>
+         <entry group="0000" element="0902" vr="LO" vm="1" retired="false" version="2">
+  <description>Error Comment</description>
+</entry>
+         <entry group="0000" element="0903" vr="US" vm="1" retired="false" version="2">
+  <description>Error ID</description>
+</entry>
+         <entry group="0000" element="1000" vr="UI" vm="1" retired="false" version="2">
+  <description>Affected SOP Instance UID</description>
+</entry>
+         <entry group="0000" element="1001" vr="UI" vm="1" retired="false" version="2">
+  <description>Requested SOP Instance UID</description>
+</entry>
+         <entry group="0000" element="1002" vr="US" vm="1" retired="false" version="2">
+  <description>Event Type ID</description>
+</entry>
+         <entry group="0000" element="1005" vr="AT" vm="1-n" retired="false" version="2">
+  <description>Attribute Identifier List</description>
+</entry>
+         <entry group="0000" element="1008" vr="US" vm="1" retired="false" version="2">
+  <description>Action Type ID</description>
+</entry>
+         <entry group="0000" element="1020" vr="US" vm="1" retired="false" version="2">
+  <description>Number of Remaining Sub-operations</description>
+</entry>
+         <entry group="0000" element="1021" vr="US" vm="1" retired="false" version="2">
+  <description>Number of Completed Sub-operations</description>
+</entry>
+         <entry group="0000" element="1022" vr="US" vm="1" retired="false" version="2">
+  <description>Number of Failed Sub-operations</description>
+</entry>
+         <entry group="0000" element="1023" vr="US" vm="1" retired="false" version="2">
+  <description>Number of Warning Sub-operations</description>
+</entry>
+         <entry group="0000" element="1030" vr="AE" vm="1" retired="false" version="2">
+  <description>Move Originator Application Entity Title</description>
+</entry>
+         <entry group="0000" element="1031" vr="US" vm="1" retired="false" version="2">
+  <description>Move Originator Message ID</description>
+</entry>
+      
+   
+
+   
+      
+      
+      
+      
+      
+         <entry group="0000" element="0001" vr="UL" vm="1" retired="true" version="2">
+  <description>Length to End</description>
+</entry>
+         <entry group="0000" element="0010" vr="CS" vm="1" retired="true" version="2">
+  <description>Recognition Code</description>
+</entry>
+         <entry group="0000" element="0200" vr="AE" vm="1" retired="true" version="2">
+  <description>Initiator</description>
+</entry>
+         <entry group="0000" element="0300" vr="AE" vm="1" retired="true" version="2">
+  <description>Receiver</description>
+</entry>
+         <entry group="0000" element="0400" vr="AE" vm="1" retired="true" version="2">
+  <description>Find Location</description>
+</entry>
+         <entry group="0000" element="0850" vr="US" vm="1" retired="true" version="2">
+  <description>Number of Matches</description>
+</entry>
+         <entry group="0000" element="0860" vr="US" vm="1" retired="true" version="2">
+  <description>Response Sequence Number</description>
+</entry>
+         <entry group="0000" element="4000" vr="AT" vm="1" retired="true" version="2">
+  <description>DIALOG Receiver</description>
+</entry>
+         <entry group="0000" element="4010" vr="AT" vm="1" retired="true" version="2">
+  <description>Terminal Type</description>
+</entry>
+         <entry group="0000" element="5010" vr="SH" vm="1" retired="true" version="2">
+  <description>Message Set ID</description>
+</entry>
+         <entry group="0000" element="5020" vr="SH" vm="1" retired="true" version="2">
+  <description>End Message ID</description>
+</entry>
+         <entry group="0000" element="5110" vr="AT" vm="1" retired="true" version="2">
+  <description>Display Format</description>
+</entry>
+         <entry group="0000" element="5120" vr="AT" vm="1" retired="true" version="2">
+  <description>Page Position ID</description>
+</entry>
+         <entry group="0000" element="5130" vr="CS" vm="1" retired="true" version="2">
+  <description>Text Format ID</description>
+</entry>
+         <entry group="0000" element="5140" vr="CS" vm="1" retired="true" version="2">
+  <description>Nor/Rev</description>
+</entry>
+         <entry group="0000" element="5150" vr="CS" vm="1" retired="true" version="2">
+  <description>Add Gray Scale</description>
+</entry>
+         <entry group="0000" element="5160" vr="CS" vm="1" retired="true" version="2">
+  <description>Borders</description>
+</entry>
+         <entry group="0000" element="5170" vr="IS" vm="1" retired="true" version="2">
+  <description>Copies</description>
+</entry>
+         <entry group="0000" element="5180" vr="CS" vm="1" retired="true" version="2">
+  <description>Magnification Type</description>
+</entry>
+         <entry group="0000" element="5190" vr="CS" vm="1" retired="true" version="2">
+  <description>Erase</description>
+</entry>
+         <entry group="0000" element="51A0" vr="CS" vm="1" retired="true" version="2">
+  <description>Print</description>
+</entry>
+         <entry group="0000" element="51B0" vr="US" vm="1-n" retired="true" version="2">
+  <description>Overlays</description>
+</entry>
+      
+   
+
+</dict> 
