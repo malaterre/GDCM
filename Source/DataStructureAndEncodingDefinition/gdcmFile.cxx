@@ -23,6 +23,8 @@
 
 #include "gdcmIOSerialize.txx"
 #include "gdcmValue.txx"
+#include "gdcmItem.txx"
+#include "gdcmSequenceOfItems.txx"
 
 namespace gdcm
 {

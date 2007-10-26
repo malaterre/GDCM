@@ -15,7 +15,7 @@
 =========================================================================*/
 #include "gdcmExplicitDataElement.h"
 #include "gdcmByteValue.h"
-#include "gdcmSequenceOfItems.h"
+#include "gdcmSequenceOfItems.txx"
 #include "gdcmSequenceOfFragments.h"
 
 // FIXME
@@ -43,7 +43,7 @@ ExplicitDataElement::ExplicitDataElement(ImplicitDataElement const &val)
       assert( ValueField->GetLength().IsUndefined() );
       Value *p = ValueField;
       // If this is a SQ we need to compute it's proper length
-      SequenceOfItems *sq = dynamic_cast<SequenceOfItems*>(p);
+      SequenceOfItems<ExplicitDataElement> *sq = dynamic_cast<SequenceOfItems<ExplicitDataElement>*>(p);
       if( sq )
         {
         return TagField.GetLength() + VRField.GetLength() + 

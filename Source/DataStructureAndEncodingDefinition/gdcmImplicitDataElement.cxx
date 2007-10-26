@@ -16,7 +16,7 @@
 #include "gdcmImplicitDataElement.h"
 
 #include "gdcmByteValue.h"
-#include "gdcmSequenceOfItems.h"
+#include "gdcmSequenceOfItems.txx"
 #include "gdcmExplicitDataElement.h"
 
 namespace gdcm
@@ -39,7 +39,7 @@ ImplicitDataElement::ImplicitDataElement(ExplicitDataElement const &val)
       {
       assert( ValueField->GetLength().IsUndefined() );
       Value *p = ValueField;
-      SequenceOfItems *sq = dynamic_cast<SequenceOfItems*>(p);
+      SequenceOfItems<ImplicitDataElement> *sq = dynamic_cast<SequenceOfItems<ImplicitDataElement>*>(p);
       if( sq )
         {
         return TagField.GetLength() + ValueLengthField.GetLength() 

@@ -37,12 +37,12 @@ namespace gdcm
  * A Value Representation for Data Elements that contain a sequence of 
  * Data Sets. Sequence of Items allows for Nested Data Sets.
  */
+template <typename DEType>
 class GDCM_EXPORT SequenceOfItems : public Value
 {
-  template <typename TSwap> friend class IOSerialize;
 public:
   // Typdefs:
-  typedef std::vector<Item> ItemVector;
+  typedef std::vector< Item<DEType> > ItemVector;
 
 /// \brief constructor (UndefinedLength by default)
   //SequenceOfItems(VL const &vl = 0xFFFFFFFF):SequenceLengthField(vl),NType(type) { }
@@ -63,7 +63,7 @@ public:
 //  OStream const & Write(OStream &os) const;
 
   /// \brief Appends an Item to the already added ones
-  void AddItem(Item const &item);
+  void AddItem(Item<DEType> const &item);
 
   SequenceOfItems &operator=(const SequenceOfItems &val) {
     SequenceLengthField = val.SequenceLengthField;
@@ -80,8 +80,8 @@ IStream &Read(IStream &is)
 	//std::cerr << "SequenceLengthField: " << SequenceLengthField << std::endl;
   if( SequenceLengthField.IsUndefined() )
     {
-    Item item;
-    item.SetType( GetType() );
+    Item<DEType> item;
+//    item.SetType( GetType() );
     const Tag seqDelItem(0xfffe,0xe0dd);
     do
       {
@@ -93,8 +93,8 @@ IStream &Read(IStream &is)
     }
   else
     {
-    Item item;
-    item.SetType( GetType() );
+    Item<DEType> item;
+//    item.SetType( GetType() );
     VL l = 0;
     //std::cout << "l: " << l << std::endl;
     while( l != SequenceLengthField )
@@ -133,7 +133,7 @@ IStream &Read(IStream &is)
 template <typename TSwap>
 OStream const &Write(OStream &os) const
 {
-  SequenceOfItems::ItemVector::const_iterator it = Items.begin();
+  typename ItemVector::const_iterator it = Items.begin();
   for(;it != Items.end(); ++it)
     {
     it->Write<TSwap>(os);
@@ -151,7 +151,7 @@ OStream const &Write(OStream &os) const
 protected:
   void Print(std::ostream &os) const {
     os << "\n\tSQ L= " << SequenceLengthField << "\n";
-    ItemVector::const_iterator it =
+    typename ItemVector::const_iterator it =
       Items.begin();
     for(;it != Items.end(); ++it)
       {

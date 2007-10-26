@@ -36,8 +36,6 @@ class ByteValue;
 class BasicOffsetTable;
 class Fragment;
 class SequenceOfFragments;
-class Item;
-class SequenceOfItems;
 class DataSet;
 
 template <typename TSwap>

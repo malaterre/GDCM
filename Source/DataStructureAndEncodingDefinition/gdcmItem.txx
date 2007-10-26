@@ -21,6 +21,30 @@
 namespace gdcm
 {
 
+template <typename DEType>
+VL Item<DEType>::GetLength() const
+{
+  if( ValueLengthField.IsUndefined() )
+    {
+    assert( !NestedDataSet.GetLength().IsUndefined() );
+    // Item Start             4
+    // Item Length            4
+    // DataSet                ?
+    // Item End Delimitation  4
+    // Item End Length        4
+    return TagField.GetLength() /* 4 */ + ValueLengthField.GetLength() /* 4 */
+      + NestedDataSet.GetLength() + 4 + 4;
+    }
+  else
+    {
+    // Item Start             4
+    // Item Length            4
+    // DataSet                ?
+    return TagField.GetLength() /* 4 */ + ValueLengthField.GetLength() /* 4 */
+      + ValueLengthField;
+    }
+}
+
 } // end namespace gdcm
 
 #endif // __gdcmItem_txx

@@ -141,14 +141,14 @@ void Printer::PrintElement(std::ostream& os, const ExplicitDataElement &xde, con
     if ( lvr == VR::SQ )
     {
       os << std::endl;
-      const SequenceOfItems &sqi = static_cast<const SequenceOfItems&>(value);
-      SequenceOfItems::ItemVector::const_iterator it = sqi.Items.begin();
+      const SequenceOfItems<ExplicitDataElement> &sqi = static_cast<const SequenceOfItems<ExplicitDataElement>&>(value);
+      SequenceOfItems<ExplicitDataElement>::ItemVector::const_iterator it = sqi.Items.begin();
       for(; it != sqi.Items.end(); ++it)
       {
-      const Item &item = *it;
-      const DataSet &ds = item.GetNestedDataSet();
-      const StructuredSet<ExplicitDataElement> &exds = ds.GetInternal();
-      PrintDataSet(os << "  ", exds);
+      const Item<ExplicitDataElement> &item = *it;
+      const StructuredSet<ExplicitDataElement> &ds = item.GetNestedDataSet();
+      //const StructuredSet<ExplicitDataElement> &exds = ds.GetInternal();
+      PrintDataSet(os << "  ", ds);
       }
     }
     else if ( vl.IsUndefined() )

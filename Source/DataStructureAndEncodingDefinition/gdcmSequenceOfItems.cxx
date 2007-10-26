@@ -19,20 +19,6 @@
 namespace gdcm
 {
 
-VL SequenceOfItems::ComputeLength() const
-{
-  ItemVector::const_iterator it = Items.begin();
-  VL length = 0;
-  for(;it != Items.end(); ++it)
-    {
-    length += it->GetLength();
-    }
-  // For defined length SQ, make sure computation is correct (compare
-  // to original length)
-  assert( SequenceLengthField.IsUndefined()
-    || length == SequenceLengthField );
-  return length;
-}
 
 } // end namespace gdcm
 

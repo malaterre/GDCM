@@ -50,7 +50,7 @@ IStream &ImplicitDataElement::Read(IStream &is)
     //assert( de.GetVR() == VR::SQ );
     // FIXME what if I am reading the pixel data...
     assert( TagField != Tag(0x7fe0,0x0010) );
-    ValueField = new SequenceOfItems(TS::Implicit);
+    ValueField = new SequenceOfItems<ImplicitDataElement>(TS::Implicit);
     }
   else
     {
@@ -77,14 +77,14 @@ IStream &ImplicitDataElement::Read(IStream &is)
       if( item == itemStart )
         {
         assert( TagField != Tag(0x7fe0,0x0010) );
-        ValueField = new SequenceOfItems(TS::Implicit);
+        ValueField = new SequenceOfItems<ImplicitDataElement>(TS::Implicit);
         }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
       else if ( item == itemPMSStart )
         {
         gdcmWarningMacro( "Illegal: Explicit SQ found in a file with "
           "TransferSyntax=Implicit for tag: " << TagField );
-        ValueField = new SequenceOfItems; //(TS::Explicit);
+        ValueField = new SequenceOfItems<ImplicitDataElement>; //(TS::Explicit);
         //SwapCode oldsw = is.GetSwapCode();
         //assert( oldsw == SwapCode::LittleEndian );
         //is.SetSwapCode( SwapCode::BigEndian );
@@ -100,7 +100,7 @@ IStream &ImplicitDataElement::Read(IStream &is)
         {
         gdcmWarningMacro( "Illegal: SQ start with " << itemPMSStart2
           << " instead of " << itemStart << " for tag: " << TagField );
-        ValueField = new SequenceOfItems(TS::Implicit);
+        ValueField = new SequenceOfItems<ImplicitDataElement>(TS::Implicit);
         ValueField->SetLength(ValueLengthField); // perform realloc
         if( !ValueField->Read<TSwap>(is) )
           {

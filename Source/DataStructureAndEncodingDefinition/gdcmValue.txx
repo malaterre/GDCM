@@ -28,7 +28,11 @@ namespace gdcm
     {
 	    bv->Read<TSwap>(is);
     }
-    else if( SequenceOfItems *si = dynamic_cast<SequenceOfItems*>(v) )
+    else if( SequenceOfItems<ExplicitDataElement> *si = dynamic_cast<SequenceOfItems<ExplicitDataElement>*>(v) )
+    {
+	    si->Read<TSwap>(is);
+    }
+    else if( SequenceOfItems<ImplicitDataElement> *si = dynamic_cast<SequenceOfItems<ImplicitDataElement>*>(v) )
     {
 	    si->Read<TSwap>(is);
     }
