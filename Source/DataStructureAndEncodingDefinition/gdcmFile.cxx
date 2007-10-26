@@ -22,6 +22,7 @@
 #include "gdcmValue.h"
 
 #include "gdcmIOSerialize.txx"
+#include "gdcmValue.txx"
 
 namespace gdcm
 {
