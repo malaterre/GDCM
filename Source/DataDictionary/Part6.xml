@@ -19,7 +19,7 @@
   &cp699;
   &part7;
   <dict ref="6" name="Registry of DICOM data elements">
-    <entry group="0008" element="0001" vr="UL" vm="1" retired="true" version="3">
+    <entry group="0008" element="0001" vr="UL" vm="1" retired="true" version="2">
       <description>Length to End</description>
     </entry>
     <entry group="0008" element="0005" vr="CS" vm="1-n" retired="false" version="3">
@@ -28,7 +28,7 @@
     <entry group="0008" element="0008" vr="CS" vm="1-n" retired="false" version="3">
       <description>Image Type</description>
     </entry>
-    <entry group="0008" element="0010" vr="CS" vm="1" retired="true" version="3">
+    <entry group="0008" element="0010" vr="CS" vm="1" retired="true" version="2">
       <description>Recognition Code</description>
     </entry>
     <entry group="0008" element="0012" vr="DA" vm="1" retired="false" version="3">
@@ -91,10 +91,10 @@
     <entry group="0008" element="0035" vr="TM" vm="1" retired="true" version="3">
       <description>Curve Time</description>
     </entry>
-    <entry group="0008" element="0040" vr="US" vm="1" retired="true" version="3">
+    <entry group="0008" element="0040" vr="US" vm="1" retired="true" version="2">
       <description>Data Set Type</description>
     </entry>
-    <entry group="0008" element="0041" vr="LO" vm="1" retired="true" version="3">
+    <entry group="0008" element="0041" vr="LO" vm="1" retired="true" version="2">
       <description>Data Set Subtype</description>
     </entry>
     <entry group="0008" element="0042" vr="CS" vm="1" retired="true" version="3">
@@ -205,7 +205,7 @@
     <entry group="0008" element="0201" vr="SH" vm="1" retired="false" version="3">
       <description>Timezone Offset From UTC</description>
     </entry>
-    <entry group="0008" element="1000" vr="AE" vm="1" retired="true" version="3">
+    <entry group="0008" element="1000" vr="AE" vm="1" retired="true" version="2">
       <description>Network ID</description>
     </entry>
     <entry group="0008" element="1010" vr="SH" vm="1" retired="false" version="3">
@@ -409,7 +409,7 @@
     <entry group="0008" element="3010" vr="UI" vm="1" retired="false" version="3">
       <description>Irradiation Event UID</description>
     </entry>
-    <entry group="0008" element="4000" vr="LT" vm="1" retired="true" version="3">
+    <entry group="0008" element="4000" vr="LT" vm="1" retired="true" version="2">
       <description>Identifying Comments</description>
     </entry>
     <entry group="0008" element="9007" vr="CS" vm="4" retired="false" version="3">
@@ -517,7 +517,7 @@
     <entry group="0010" element="1040" vr="LO" vm="1" retired="false" version="3">
       <description>Patient's Address</description>
     </entry>
-    <entry group="0010" element="1050" vr="LO" vm="1-n" retired="true" version="3">
+    <entry group="0010" element="1050" vr="LO" vm="1-n" retired="true" version="2">
       <description>Insurance Plan Identification</description>
     </entry>
     <entry group="0010" element="1060" vr="PN" vm="1" retired="false" version="3">
@@ -1146,7 +1146,7 @@
     <entry group="0018" element="1210" vr="SH" vm="1-n" retired="false" version="3">
       <description>Convolution Kernel</description>
     </entry>
-    <entry group="0018" element="1240" vr="IS" vm="1-n" retired="true" version="3">
+    <entry group="0018" element="1240" vr="IS" vm="1-n" retired="true" version="2">
       <description>Upper/Lower Pixel Values</description>
     </entry>
     <entry group="0018" element="1242" vr="IS" vm="1" retired="false" version="3">
@@ -1374,7 +1374,7 @@
     <entry group="0018" element="3105" vr="IS" vm="1-n" retired="false" version="3">
       <description>Lesion Number</description>
     </entry>
-    <entry group="0018" element="4000" vr="LT" vm="1" retired="true" version="3">
+    <entry group="0018" element="4000" vr="LT" vm="1" retired="true" version="2">
       <description>Acquisition Comments</description>
     </entry>
     <entry group="0018" element="5000" vr="SH" vm="1-n" retired="false" version="3">
@@ -1410,10 +1410,10 @@
     <entry group="0018" element="5029" vr="DS" vm="1" retired="false" version="3">
       <description>Soft Tissue-surface Thermal Index</description>
     </entry>
-    <entry group="0018" element="5030" vr="DS" vm="1" retired="true" version="3">
+    <entry group="0018" element="5030" vr="DS" vm="1" retired="true" version="2">
       <description>Dynamic Range</description>
     </entry>
-    <entry group="0018" element="5040" vr="DS" vm="1" retired="true" version="3">
+    <entry group="0018" element="5040" vr="DS" vm="1" retired="true" version="2">
       <description>Total Gain</description>
     </entry>
     <entry group="0018" element="5050" vr="IS" vm="1" retired="false" version="3">
@@ -2458,19 +2458,19 @@
     <entry group="0020" element="0026" vr="IS" vm="1" retired="true" version="3">
       <description>Lookup Table Number</description>
     </entry>
-    <entry group="0020" element="0030" vr="DS" vm="3" retired="true" version="3">
+    <entry group="0020" element="0030" vr="DS" vm="3" retired="true" version="2">
       <description>Image Position</description>
     </entry>
     <entry group="0020" element="0032" vr="DS" vm="3" retired="false" version="3">
       <description>Image Position (Patient)</description>
     </entry>
-    <entry group="0020" element="0035" vr="DS" vm="6" retired="true" version="3">
+    <entry group="0020" element="0035" vr="DS" vm="6" retired="true" version="2">
       <description>Image Orientation</description>
     </entry>
     <entry group="0020" element="0037" vr="DS" vm="6" retired="false" version="3">
       <description>Image Orientation (Patient)</description>
     </entry>
-    <entry group="0020" element="0050" vr="DS" vm="1" retired="true" version="3">
+    <entry group="0020" element="0050" vr="DS" vm="1" retired="true" version="2">
       <description>Location</description>
     </entry>
     <entry group="0020" element="0052" vr="UI" vm="1" retired="false" version="3">
@@ -2482,10 +2482,10 @@
     <entry group="0020" element="0062" vr="CS" vm="1" retired="false" version="3">
       <description>Image Laterality</description>
     </entry>
-    <entry group="0020" element="0070" vr="LO" vm="1" retired="true" version="3">
+    <entry group="0020" element="0070" vr="LO" vm="1" retired="true" version="2">
       <description>Image Geometry Type</description>
     </entry>
-    <entry group="0020" element="0080" vr="CS" vm="1-n" retired="true" version="3">
+    <entry group="0020" element="0080" vr="CS" vm="1-n" retired="true" version="2">
       <description>Masking Image</description>
     </entry>
     <entry group="0020" element="0100" vr="IS" vm="1" retired="false" version="3">
@@ -2503,22 +2503,22 @@
     <entry group="0020" element="1000" vr="IS" vm="1" retired="true" version="3">
       <description>Series in Study</description>
     </entry>
-    <entry group="0020" element="1001" vr="IS" vm="1" retired="true" version="3">
+    <entry group="0020" element="1001" vr="IS" vm="1" retired="true" version="2">
       <description>Acquisitions in Series</description>
     </entry>
     <entry group="0020" element="1002" vr="IS" vm="1" retired="false" version="3">
       <description>Images in Acquisition</description>
     </entry>
-    <entry group="0020" element="1003" vr="IS" vm="1" retired="true" version="3">
+    <entry group="0020" element="1003" vr="IS" vm="1" retired="true" version="2">
       <description>Images in Series</description>
     </entry>
     <entry group="0020" element="1004" vr="IS" vm="1" retired="true" version="3">
       <description>Acquisitions in Study</description>
     </entry>
-    <entry group="0020" element="1005" vr="IS" vm="1" retired="true" version="3">
+    <entry group="0020" element="1005" vr="IS" vm="1" retired="true" version="2">
       <description>Images in Study</description>
     </entry>
-    <entry group="0020" element="1020" vr="CS" vm="1-n" retired="true" version="3">
+    <entry group="0020" element="1020" vr="CS" vm="1-n" retired="true" version="2">
       <description>Reference</description>
     </entry>
     <entry group="0020" element="1040" vr="LO" vm="1" retired="false" version="3">
@@ -2548,34 +2548,34 @@
     <entry group="0020" element="1209" vr="IS" vm="1" retired="false" version="3">
       <description>Number of Series Related Instances</description>
     </entry>
-    <entry group="0020" element="31xx" vr="CS" vm="1-n" retired="true" version="3">
+    <entry group="0020" element="31xx" vr="CS" vm="1-n" retired="true" version="2">
       <description>Source Image IDs</description>
     </entry>
-    <entry group="0020" element="3401" vr="CS" vm="1" retired="true" version="3">
+    <entry group="0020" element="3401" vr="CS" vm="1" retired="true" version="2">
       <description>Modifying Device ID</description>
     </entry>
-    <entry group="0020" element="3402" vr="CS" vm="1" retired="true" version="3">
+    <entry group="0020" element="3402" vr="CS" vm="1" retired="true" version="2">
       <description>Modified Image ID</description>
     </entry>
-    <entry group="0020" element="3403" vr="DA" vm="1" retired="true" version="3">
+    <entry group="0020" element="3403" vr="DA" vm="1" retired="true" version="2">
       <description>Modified Image Date</description>
     </entry>
-    <entry group="0020" element="3404" vr="LO" vm="1" retired="true" version="3">
+    <entry group="0020" element="3404" vr="LO" vm="1" retired="true" version="2">
       <description>Modifying Device Manufacturer</description>
     </entry>
-    <entry group="0020" element="3405" vr="TM" vm="1" retired="true" version="3">
+    <entry group="0020" element="3405" vr="TM" vm="1" retired="true" version="2">
       <description>Modified Image Time</description>
     </entry>
-    <entry group="0020" element="3406" vr="LO" vm="1" retired="true" version="3">
+    <entry group="0020" element="3406" vr="LO" vm="1" retired="true" version="2">
       <description>Modified Image Description</description>
     </entry>
     <entry group="0020" element="4000" vr="LT" vm="1" retired="false" version="3">
       <description>Image Comments</description>
     </entry>
-    <entry group="0020" element="5000" vr="AT" vm="1-n" retired="true" version="3">
+    <entry group="0020" element="5000" vr="AT" vm="1-n" retired="true" version="2">
       <description>Original Image Identification</description>
     </entry>
-    <entry group="0020" element="5002" vr="CS" vm="1-n" retired="true" version="3">
+    <entry group="0020" element="5002" vr="CS" vm="1-n" retired="true" version="2">
       <description>Original Image Identification Nomenclature</description>
     </entry>
     <entry group="0020" element="9056" vr="SH" vm="1" retired="false" version="3">
@@ -2648,7 +2648,7 @@
       <description>Functional Group Private Creator</description>
     </entry>
     <entry group="0020" element="9251" vr="FD" vm="1" retired="false" version="3">
-      <description>R – R Interval Time Measured</description>
+      <description>R-R Interval Time Measured</description>
     </entry>
     <entry group="0020" element="9253" vr="SQ" vm="1" retired="false" version="3">
       <description>Respiratory Trigger Sequence</description>
@@ -2773,7 +2773,7 @@
     <entry group="0028" element="0004" vr="CS" vm="1" retired="false" version="3">
       <description>Photometric Interpretation</description>
     </entry>
-    <entry group="0028" element="0005" vr="US" vm="1" retired="true" version="3">
+    <entry group="0028" element="0005" vr="US" vm="1" retired="true" version="2">
       <description>Image Dimensions</description>
     </entry>
     <entry group="0028" element="0006" vr="US" vm="1" retired="false" version="3">
@@ -2812,10 +2812,10 @@
     <entry group="0028" element="0034" vr="IS" vm="2" retired="false" version="3">
       <description>Pixel Aspect Ratio</description>
     </entry>
-    <entry group="0028" element="0040" vr="CS" vm="1" retired="true" version="3">
+    <entry group="0028" element="0040" vr="CS" vm="1" retired="true" version="2">
       <description>Image Format</description>
     </entry>
-    <entry group="0028" element="0050" vr="LO" vm="1-n" retired="true" version="3">
+    <entry group="0028" element="0050" vr="LO" vm="1-n" retired="true" version="2">
       <description>Manipulated Image</description>
     </entry>
     <entry group="0028" element="0051" vr="CS" vm="1-n" retired="false" version="3">
@@ -2836,10 +2836,10 @@
     <entry group="0028" element="0103" vr="US" vm="1" retired="false" version="3">
       <description>Pixel Representation</description>
     </entry>
-    <entry group="0028" element="0104" vr="US_SS" vm="1" retired="true" version="3">
+    <entry group="0028" element="0104" vr="US_SS" vm="1" retired="true" version="2">
       <description>Smallest Valid Pixel Value</description>
     </entry>
-    <entry group="0028" element="0105" vr="US_SS" vm="1" retired="true" version="3">
+    <entry group="0028" element="0105" vr="US_SS" vm="1" retired="true" version="2">
       <description>Largest Valid Pixel Value</description>
     </entry>
     <entry group="0028" element="0106" vr="US_SS" vm="1" retired="false" version="3">
@@ -2863,7 +2863,7 @@
     <entry group="0028" element="0120" vr="US_SS" vm="1" retired="false" version="3">
       <description>Pixel Padding Value</description>
     </entry>
-    <entry group="0028" element="0200" vr="US" vm="1" retired="true" version="3">
+    <entry group="0028" element="0200" vr="US" vm="1" retired="true" version="2">
       <description>Image Location</description>
     </entry>
     <entry group="0028" element="0300" vr="CS" vm="1" retired="false" version="3">
@@ -2905,13 +2905,13 @@
     <entry group="0028" element="1056" vr="CS" vm="1" retired="false" version="3">
       <description>VOI LUT Function</description>
     </entry>
-    <entry group="0028" element="1080" vr="CS" vm="1" retired="true" version="3">
+    <entry group="0028" element="1080" vr="CS" vm="1" retired="true" version="2">
       <description>Gray Scale</description>
     </entry>
     <entry group="0028" element="1090" vr="CS" vm="1" retired="false" version="3">
       <description>Recommended Viewing Mode</description>
     </entry>
-    <entry group="0028" element="1100" vr="US_SS" vm="3" retired="true" version="3">
+    <entry group="0028" element="1100" vr="US_SS" vm="3" retired="true" version="2">
       <description>Gray Lookup Table Descriptor</description>
     </entry>
     <entry group="0028" element="1101" vr="US_SS" vm="3" retired="false" version="3">
@@ -2926,7 +2926,7 @@
     <entry group="0028" element="1199" vr="UI" vm="1" retired="false" version="3">
       <description>Palette Color Lookup Table UID</description>
     </entry>
-    <entry group="0028" element="1200" vr="US_SS_OW" vm="1-n" retired="true" version="3">
+    <entry group="0028" element="1200" vr="US_SS_OW" vm="1-n" retired="true" version="2">
       <description>Gray Lookup Table Data</description>
     </entry>
     <entry group="0028" element="1201" vr="OW" vm="1" retired="false" version="3">
@@ -2995,7 +2995,7 @@
     <entry group="0028" element="3110" vr="SQ" vm="1" retired="false" version="3">
       <description>Softcopy VOI LUT Sequence</description>
     </entry>
-    <entry group="0028" element="4000" vr="LT" vm="1" retired="true" version="3">
+    <entry group="0028" element="4000" vr="LT" vm="1" retired="true" version="2">
       <description>Image Presentation Comments</description>
     </entry>
     <entry group="0028" element="5000" vr="SQ" vm="1" retired="false" version="3">
@@ -6865,10 +6865,10 @@
     <entry group="300e" element="0008" vr="PN" vm="1" retired="false" version="3">
       <description>Reviewer Name</description>
     </entry>
-    <entry group="4000" element="0010" vr="LT" vm="1" retired="true" version="3">
+    <entry group="4000" element="0010" vr="LT" vm="1" retired="true" version="2">
       <description>Arbitrary</description>
     </entry>
-    <entry group="4000" element="4000" vr="LT" vm="1" retired="true" version="3">
+    <entry group="4000" element="4000" vr="LT" vm="1" retired="true" version="2">
       <description>Text Comments</description>
     </entry>
     <entry group="4008" element="0040" vr="SH" vm="1" retired="true" version="3">
@@ -7115,28 +7115,28 @@
       <description>Overlay Activation Layer</description>
     </entry>
     <entry group="60xx" element="1100" vr="US" vm="1" retired="true" version="3">
-      <description>Overlay Descriptor – Gray</description>
+      <description>Overlay Descriptor - Gray</description>
     </entry>
     <entry group="60xx" element="1101" vr="US" vm="1" retired="true" version="3">
-      <description>Overlay Descriptor – Red</description>
+      <description>Overlay Descriptor - Red</description>
     </entry>
     <entry group="60xx" element="1102" vr="US" vm="1" retired="true" version="3">
-      <description>Overlay Descriptor – Green</description>
+      <description>Overlay Descriptor - Green</description>
     </entry>
     <entry group="60xx" element="1103" vr="US" vm="1" retired="true" version="3">
-      <description>Overlay Descriptor – Blue</description>
+      <description>Overlay Descriptor - Blue</description>
     </entry>
     <entry group="60xx" element="1200" vr="US" vm="1-n" retired="true" version="3">
-      <description>Overlays- Gray</description>
+      <description>Overlays - Gray</description>
     </entry>
     <entry group="60xx" element="1201" vr="US" vm="1-n" retired="true" version="3">
-      <description>Overlays – Red</description>
+      <description>Overlays - Red</description>
     </entry>
     <entry group="60xx" element="1202" vr="US" vm="1-n" retired="true" version="3">
-      <description>Overlays – Green</description>
+      <description>Overlays - Green</description>
     </entry>
     <entry group="60xx" element="1203" vr="US" vm="1-n" retired="true" version="3">
-      <description>Overlays- Blue</description>
+      <description>Overlays - Blue</description>
     </entry>
     <entry group="60xx" element="1301" vr="IS" vm="1" retired="false" version="3">
       <description>ROI Area</description>
@@ -7153,7 +7153,7 @@
     <entry group="60xx" element="3000" vr="OB_OW" vm="1" retired="false" version="3">
       <description>Overlay Data</description>
     </entry>
-    <entry group="60xx" element="4000" vr="LT" vm="1" retired="true" version="3">
+    <entry group="60xx" element="4000" vr="LT" vm="1" retired="true" version="2">
       <description>Overlay Comments</description>
     </entry>
     <entry group="7fe0" element="0010" vr="OB_OW" vm="1" retired="false" version="3">
