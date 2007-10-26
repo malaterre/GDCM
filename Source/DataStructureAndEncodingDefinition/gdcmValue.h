@@ -49,19 +49,19 @@ public:
   //OStream const & Write(OStream &os); // const { return os;}
   template <typename TSwap>
   IStream &Read(IStream &is) {
-//    if( ByteValue *bv = dynamic_cast<ByteValue*>(&v) )
-//    {
-//	    Read(is,*bv);
-//    }
-//    else if( SequenceOfItems *si = dynamic_cast<SequenceOfItems*>(&v) )
-//    {
-//	    Read(is,*si);
-//    }
-//    else if( SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(&v) )
-//    {
-//	    Read(is,*sf);
-//    }
-//    else
+    if( ByteValue *bv = dynamic_cast<ByteValue*>(&v) )
+    {
+	    Read(is,*bv);
+    }
+    else if( SequenceOfItems *si = dynamic_cast<SequenceOfItems*>(&v) )
+    {
+	    Read(is,*si);
+    }
+    else if( SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(&v) )
+    {
+	    Read(is,*sf);
+    }
+    else
     {
 	    assert( 0 && "error" );
     }

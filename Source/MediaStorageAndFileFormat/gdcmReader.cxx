@@ -96,7 +96,7 @@ TS Reader::GuessTransferSyntax()
   TS::NegociatedType nts = TS::Unknown;
   TS ts (TS::TS_END);
   Tag t;
-  IOSerialize<SwapperNoOp>::Read(Stream,t);
+  t.Read<SwapperNoOp>(Stream);
   if( ! (t.GetGroup() % 2) )
     {
     switch( t.GetGroup() )
@@ -127,7 +127,7 @@ TS Reader::GuessTransferSyntax()
       if( t.GetElement() == 0x0000 )
         {
         VL gl; // group length
-        IOSerialize<SwapperNoOp>::Read(Stream,gl);
+        gl.Read<SwapperNoOp>(Stream);
         switch(gl)
           {
         case 0x00000004 :

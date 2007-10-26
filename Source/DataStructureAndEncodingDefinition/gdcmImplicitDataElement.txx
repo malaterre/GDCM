@@ -27,14 +27,14 @@ IStream &ImplicitDataElement::Read(IStream &is)
 {
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   // Read Tag
-  if( !Read(is,TagField) )
+  if( !TagField.Read<TSwap>(is) )
     {
     if( !is.eof() ) // FIXME This should not be needed
       assert(0 && "Should not happen");
     return is;
     }
   // Read Value Length
-  if( !Read(is,ValueLengthField) )
+  if( !ValueLengthField.Read<TSwap>(is) )
     {
     assert(0 && "Should not happen");
     return is;
@@ -70,7 +70,7 @@ IStream &ImplicitDataElement::Read(IStream &is)
       const Tag itemPMSStart2(0x3f3f, 0x3f00);
 #endif
       gdcm::Tag item;
-      Read(is,item);
+      item.Read<TSwap>(is);
       // Maybe this code can later be rewritten as I believe that seek back
       // is very slow...
       is.seekg(-4, std::ios::cur );
@@ -89,7 +89,7 @@ IStream &ImplicitDataElement::Read(IStream &is)
         //assert( oldsw == SwapCode::LittleEndian );
         //is.SetSwapCode( SwapCode::BigEndian );
         ValueField->SetLength(ValueLengthField); // perform realloc
-        if( !Read(is,*(ValueField)) )
+        if( !ValueField->Read<TSwap>(is) )
           {
           assert(0 && "Should not happen");
           }
@@ -102,7 +102,7 @@ IStream &ImplicitDataElement::Read(IStream &is)
           << " instead of " << itemStart << " for tag: " << TagField );
         ValueField = new SequenceOfItems(TS::Implicit);
         ValueField->SetLength(ValueLengthField); // perform realloc
-        if( !Read(is,*(ValueField)) )
+        if( !ValueField->Read<TSwap>(is) )
           {
           assert(0 && "Should not happen");
           }
@@ -143,7 +143,7 @@ IStream &ImplicitDataElement::Read(IStream &is)
 #endif
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
-  if( !Read(is,*(ValueField)) )
+  if( !ValueField->Read<TSwap>(is) )
     {
     assert(0 && "Should not happen");
     return is;
@@ -158,13 +158,13 @@ const OStream &ImplicitDataElement::Write(OStream &os) const
 {
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   // Write Tag
-  if( !Write(os,TagField) )
+  if( !TagField.Write<TSwap>(os) )
     {
     assert(0 && "Should not happen");
     return os;
     }
   // Write Value Length
-  if( !Write(os,ValueLengthField) )
+  if( !ValueLengthField.Write<TSwap>(os) )
     {
     assert(0 && "Should not happen");
     return os;
@@ -175,7 +175,7 @@ const OStream &ImplicitDataElement::Write(OStream &os) const
     assert( ValueField );
     assert( TagField != Tag(0xfffe, 0xe00d)
          && TagField != Tag(0xfffe, 0xe0dd) );
-    if( !Write(os,*(ValueField)) )
+    if( !ValueField->Write<TSwap>(os) )
       {
       assert(0 && "Should not happen");
       return os;

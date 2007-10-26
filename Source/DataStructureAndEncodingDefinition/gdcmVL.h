@@ -85,7 +85,7 @@ public:
     is.read((char*)(&copy), sizeof(uint16_t));
     TSwap::SwapArray(&copy,1);
     ValueLength = copy;
-    assert( ValueLength <= UINT16_MAX ); // ?? doh !
+    assert( ValueLength <=  65535 /*UINT16_MAX*/ ); // ?? doh !
     return is;
     }
 
@@ -104,9 +104,9 @@ public:
     }
 
   template <typename TSwap>
-  const OStream &Write16(OStream &os)
+  const OStream &Write16(OStream &os) const
     {
-    assert( ValueLength <= UINT16_MAX );
+    assert( ValueLength <=   65535 /*UINT16_MAX*/ );
     uint16_t copy = ValueLength;
 #ifndef GDCM_WRITE_ODD_LENGTH
     if( IsOdd() )

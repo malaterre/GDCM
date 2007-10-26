@@ -85,7 +85,7 @@ IStream &Read(IStream &is)
     const Tag seqDelItem(0xfffe,0xe0dd);
     do
       {
-      Read(is,item);
+      item.Read<TSwap>(is);
       //std::cout << "Item: " << item << std::endl;
       Items.push_back( item );
       }
@@ -99,7 +99,7 @@ IStream &Read(IStream &is)
     //std::cout << "l: " << l << std::endl;
     while( l != SequenceLengthField )
       {
-      Read(is,item);
+      item.Read<TSwap>(is);
       //std::cout << "Item: " << item << std::endl;
       Items.push_back( item );
       l += item.GetLength();
@@ -136,7 +136,7 @@ OStream const &Write(OStream &os) const
   SequenceOfItems::ItemVector::const_iterator it = Items.begin();
   for(;it != Items.end(); ++it)
     {
-    Write(os, *it);
+    it->Write<TSwap>(os);
     }
   //if( SequenceLengthField.IsUndefined() )
   //  {

@@ -25,7 +25,11 @@
 
 //-----------------------------------------------------------------------------
 #ifdef CMAKE_HAVE_STDINT_H
+#ifndef __STDC_LIMIT_MACROS
+#define __STDC_LIMIT_MACROS
+#endif // __STDC_LIMIT_MACROS
 #include <stdint.h>
+//#undef __STDC_LIMIT_MACROS
 #else
 #ifdef CMAKE_HAVE_INTTYPES_H
 // Old system only have this

@@ -24,6 +24,7 @@
 
 //#include "gdcmElement.h"
 #include "gdcmStringStream.h"
+#include "gdcmTag.h"
 
 namespace gdcm
 {
@@ -121,7 +122,7 @@ bool ReadExplicitDataElement(IStream &is, ExplicitDataElement &de)
   std::streampos start = is.tellg();
   //std::cout << "Start: " << start << std::endl;
   Tag t;
-  if( !IOSerialize<TSwap>::Read(is,t) )
+  if( !t.Read<TSwap>(is) )
     {
     assert(0 && "Should not happen" );
     return false;
@@ -149,7 +150,7 @@ bool ReadExplicitDataElement(IStream &is, ExplicitDataElement &de)
    || vr == VR::SQ
    || vr == VR::UN )
     {
-    if( !IOSerialize<TSwap>::Read(is,vl) )
+    if( !vl.Read<TSwap>(is) )
       {
       assert(0 && "Should not happen");
       return false;
@@ -158,7 +159,7 @@ bool ReadExplicitDataElement(IStream &is, ExplicitDataElement &de)
   else
     {
     // Value Length is stored on 16bits only
-    IOSerialize<TSwap>::Read16(is,vl);
+    vl.Read16<TSwap>(is);
     }
   //gdcmDebugMacro( "VL : " << vl );
   // Read the Value
@@ -179,7 +180,7 @@ bool ReadExplicitDataElement(IStream &is, ExplicitDataElement &de)
     }
   // We have the length we should be able to read the value
   bv->SetLength(vl); // perform realloc
-  if( !IOSerialize<TSwap>::Read(is,*bv) )
+  if( !bv->Read<TSwap>(is) )
     {
     assert(0 && "Should not happen");
     return false;
@@ -217,7 +218,7 @@ bool ReadImplicitDataElement(IStream &is, ImplicitDataElement &de)
     }
   // Read Value Length
   VL vl;
-  if( !vl.Read<TSwap>(is,vl) )
+  if( !vl.Read<TSwap>(is) )
     {
     assert(0 && "Should not happen");
     return false;
@@ -450,7 +451,7 @@ OStream &FileMetaInformation::Write(OStream &os) const
 //  else if( IsValid() )
   {
     std::cerr << "IsValid" << std::endl;
-    IOSerialize<SwapperNoOp>::Write(os,*this);
+    this->StructuredSet<ExplicitDataElement>::Write<SwapperNoOp>(os);
   }
 //  else
 //  {

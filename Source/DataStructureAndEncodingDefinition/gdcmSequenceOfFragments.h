@@ -87,11 +87,11 @@ IStream& Read(IStream &is)
     {
     const Tag seqDelItem(0xfffe,0xe0dd);
     // First item is the basic offset table:
-    Read(is,Table);
+    Table.Read<TSwap>(is);
     gdcmDebugMacro( "Table: " << Table );
     // not used for now...
     Fragment frag;
-    while( Read(is,frag) && frag.GetTag() != seqDelItem )
+    while( frag.Read<TSwap>(is) && frag.GetTag() != seqDelItem )
       {
       gdcmDebugMacro( "Frag: " << frag );
       Fragments.push_back( frag );
@@ -108,7 +108,7 @@ IStream& Read(IStream &is)
 template <typename TSwap>
 OStream const &Write(OStream &os) const
 {
-  if( !Write(os,Table) )
+  if( !Table.Write<TSwap>(os) )
     {
     assert(0 && "Should not happen");
     return os;
@@ -116,7 +116,7 @@ OStream const &Write(OStream &os) const
   SequenceOfFragments::FragmentVector::const_iterator it = Fragments.begin();
   for(;it != Fragments.end(); ++it)
     {
-    Write(os,*it);
+    it->Write<TSwap>(os);
     }
   return os;
 }

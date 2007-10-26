@@ -18,11 +18,11 @@
 
 #include "gdcmIOSerialize.h"
 
+#include "gdcmStructuredSet.h"
 #include "gdcmTag.h"
 #include "gdcmVL.h"
 #include "gdcmExplicitDataElement.txx"
 #include "gdcmImplicitDataElement.txx"
-#include "gdcmStructuredSet.h"
 #include "gdcmDataSet.h"
 #include "gdcmByteValue.h"
 #include "gdcmSequenceOfItems.h"
@@ -79,14 +79,14 @@ IStream &IOSerialize<TSwap>::Read(IStream &is,DataSet &ds)
     {
       StructuredSet<ImplicitDataElement> ssi;
       //std::cerr << "passed 0" << std::endl;
-      ssi.ReadWithLength(is,ds.Length);
+      ssi.ReadWithLength<TSwap>(is,ds.Length);
       //std::cerr << "passed" << std::endl;
       ds.Internal.Copy(ssi);
      }
     else if ( ds.NegociatedTS == TS::Explicit )
     {
      // Nested DataSet with defined length
-    ds.Internal.ReadWithLength(is, ds.Length);
+    ds.Internal.ReadWithLength<TSwap>(is, ds.Length);
     }
     }
   //std::cerr << "Finished DataSet::Read" << std::endl;
@@ -101,11 +101,11 @@ OStream const &IOSerialize<TSwap>::Write(OStream &os,DataSet const &ds)
       {
       StructuredSet<ImplicitDataElement> ssi;
       ssi.Copy(ds.Internal);
-      Write(os,ssi);
+      ssi.Write<TSwap>(os);
       }
     else if ( ds.NegociatedTS == TS::Explicit )
     {
-   Write(os,ds.Internal);
+   ds.Internal.Write<TSwap>(os);
     }
   return os;
 }

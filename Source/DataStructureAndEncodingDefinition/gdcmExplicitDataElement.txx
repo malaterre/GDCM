@@ -83,7 +83,7 @@ IStream &ExplicitDataElement::Read(IStream &is)
   else
     {
     // 16bits only
-    //if( ! ValueLengthField.Read16 < TSwap > ( is ) )
+    if( !ValueLengthField.Read16<TSwap>(is) )
       {
       assert(0 && "Should not happen");
       return is;
@@ -170,7 +170,7 @@ IStream &ExplicitDataElement::Read(IStream &is)
 template <typename TSwap>
 const OStream &ExplicitDataElement::Write(OStream &os) const
 {
-  if( !TagField.Write(os) )
+  if( !TagField.Write<TSwap>(os) )
     {
     assert( 0 && "Should not happen" );
     return os;
@@ -186,13 +186,13 @@ const OStream &ExplicitDataElement::Write(OStream &os) const
       gdcmWarningMacro(
         "Item Delimitation Item had a length different from 0." );
       VL zero = 0;
-      zero.Write(os);
+      zero.Write<TSwap>(os);
       return os;
       }
 #endif
     // else
     assert( ValueLengthField == 0 );
-    if( !ValueLengthField.Write(os) )
+    if( !ValueLengthField.Write<TSwap>(os) )
       {
       assert( 0 && "Should not happen" );
       return os;
@@ -204,9 +204,9 @@ const OStream &ExplicitDataElement::Write(OStream &os) const
     assert( 0 && "Should not happen" );
     return os;
     }
-  if( VRField & VR_VL32 )
+  if( VRField & VR::VL32 )
     {
-    if( !ValueLengthField.Write(os) )
+    if( !ValueLengthField.Write<TSwap>(os) )
       {
       assert( 0 && "Should not happen" );
       return os;
@@ -215,14 +215,14 @@ const OStream &ExplicitDataElement::Write(OStream &os) const
   else
     {
     // 16bits only
-    if( !ValueLengthField.Write16(os) )
+    if( !ValueLengthField.Write16<TSwap>(os) )
       {
       assert( 0 && "Should not happen" );
       return os;
       }
     }
   // We have the length we should be able to write the value
-  if( ! ValueField->Write(os) )
+  if( ! ValueField->Write<TSwap>(os) )
     {
     assert( 0 && "Should not happen" );
     return os;

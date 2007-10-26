@@ -63,13 +63,13 @@ public:
     // Superclass 
     const Tag itemStart(0xfffe, 0xe000);
     const Tag seqDelItem(0xfffe,0xe0dd);
-    if( !Read(is,TagField) )
+    if( !TagField.Read<TSwap>(is) )
       {
       assert(0 && "Should not happen");
       return is;
       }
     assert( TagField == itemStart );
-    if( !Read(is,ValueLengthField) )
+    if( !ValueLengthField.Read<TSwap>(is) )
       {
       assert(0 && "Should not happen");
       return is;
@@ -77,7 +77,7 @@ public:
     // Self
     Offsets = new ByteValue;
     Offsets->SetLength(ValueLengthField);
-    if( !Read(is,*(Offsets)) )
+    if( !Offsets->Read<TSwap>(is) )
       {
       assert(0 && "Should not happen");
       return is;
@@ -90,13 +90,13 @@ public:
     // Superclass 
     const Tag itemStart(0xfffe, 0xe000);
     const Tag seqDelItem(0xfffe,0xe0dd);
-    if( !Write(os,TagField) )
+    if( !TagField.Write<TSwap>(os) )
       {
       assert(0 && "Should not happen");
       return os;
       }
     assert( TagField == itemStart );
-    if( !Write(os,ValueLengthField) )
+    if( !ValueLengthField.Write<TSwap>(os) )
       {
       assert(0 && "Should not happen");
       return os;

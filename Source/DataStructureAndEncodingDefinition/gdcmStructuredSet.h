@@ -162,7 +162,7 @@ public:
   }
 
   template <typename TSwap>
-  OStream const &Write(OStream &os) {
+  OStream const &Write(OStream &os) const {
     //DEType de;
     typename StructuredSet<DEType>::ConstIterator it = DES.begin();
     for( ; it != DES.end(); ++it)
@@ -205,19 +205,19 @@ public:
           // Pass it to the ByteValue
           ByteValue *bv2 = new ByteValue;
           bv2->SetLength(4);
-          Read(sst,*bv2);
+          bv2->Read<TSwap>(sst);
           correct.SetValue( *bv2 );
-          IOSerialize<TSwap>::Write(os,correct);
+          correct.Write<TSwap>(os);
           }
         else
           {
           // okay good value
-          IOSerialize<TSwap>::Write(os,de);
+          de.Write<TSwap>(os);
           }
         }
       else // well simply writes it
         {
-        IOSerialize<TSwap>::Write(os,de);
+        de.Write<TSwap>(os);
         }
       }
     return os;
@@ -230,7 +230,7 @@ public:
     VL l = 0;
     //std::cout << "ReadWithLength Length: " << length << std::endl;
     VL locallength = length;
-    while( l != locallength && Read(is,de))
+    while( l != locallength && de.Read<TSwap>(is))
       {
       //std::cout << "Nested: " << de << std::endl;
       DES.insert( de );
@@ -255,7 +255,7 @@ public:
   IStream &ReadNested(IStream &is) {
     DEType de;
     const Tag itemDelItem(0xfffe,0xe00d);
-    while( Read(is,de) && de.GetTag() != itemDelItem )
+    while( de.Read<TSwap>(is) && de.GetTag() != itemDelItem )
       {
       //std::cout << "DEBUG Nested: " << de << std::endl;
       DES.insert( de );

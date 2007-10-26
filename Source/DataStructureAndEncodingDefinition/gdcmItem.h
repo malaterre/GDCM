@@ -96,7 +96,7 @@ template <typename TSwap>
 IStream &Read(IStream &is)
 {
   // Superclass
-  if( !Read(is,TagField) )
+  if( !TagField.Read<TSwap>(is) )
     {
 	    //std::cerr << TagField << std::endl;
     assert(0 && "Should not happen");
@@ -114,7 +114,7 @@ IStream &Read(IStream &is)
   assert ( TagField == Tag(0xfffe, 0xe000)
         || TagField == Tag(0xfffe, 0xe0dd) );
 #endif
-  if( !Read(is,ValueLengthField) )
+  if( !ValueLengthField.Read<TSwap>(is) )
     {
     assert(0 && "Should not happen");
     return is;
@@ -137,7 +137,7 @@ IStream &Read(IStream &is)
     }
   else
     {
-    Read(is,NestedDataSet);
+    NestedDataSet.Read<TSwap>(is);
     }
 //#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
 //  // Ok we have read the item, sometime the ValueLengthField was wrong
@@ -156,20 +156,20 @@ IStream &Read(IStream &is)
 template <typename TSwap>
 const OStream &Write(OStream &os) const
 {
-  if( !Write(os,TagField) )
+  if( !TagField.Write<TSwap>(os) )
     {
     assert(0 && "Should not happen");
     return os;
     }
   assert ( TagField == Tag(0xfffe, 0xe000)
         || TagField == Tag(0xfffe, 0xe0dd) );
-  if( !Write(os,ValueLengthField) )
+  if( !ValueLengthField.Write<TSwap>(os) )
     {
     assert(0 && "Should not happen");
     return os;
     }
   // Self
-  Write(os,NestedDataSet);
+  NestedDataSet.Write<TSwap>(os);
   //if( ValueLengthField.IsUndefined() )
   //  {
   //  const Tag itemDelItem(0xfffe,0xe00d);
