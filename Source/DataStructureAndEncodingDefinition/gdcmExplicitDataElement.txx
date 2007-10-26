@@ -38,7 +38,7 @@ IStream &ExplicitDataElement::Read(IStream &is)
       }
     return is;
     }
-  //std::cerr << "cur tag=" << TagField << std::endl;
+  std::cerr << "cur tag=" << TagField << std::endl;
   const Tag itemDelItem(0xfffe,0xe00d);
   if( TagField == itemDelItem )
     {

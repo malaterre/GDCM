@@ -28,14 +28,6 @@ namespace gdcm
  * \note TODO rename IOSerialize into Serialize 
  */
 
-class Tag;
-class VL;
-class ExplicitDataElement;
-class Value;
-class ByteValue;
-class BasicOffsetTable;
-class Fragment;
-class SequenceOfFragments;
 class DataSet;
 
 template <typename TSwap>

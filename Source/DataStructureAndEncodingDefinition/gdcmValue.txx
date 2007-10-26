@@ -13,6 +13,9 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+#ifndef __gdcmValue_txx
+#define __gdcmValue_txx
+
 #include "gdcmValue.h"
 
 #include "gdcmByteValue.h"
@@ -48,3 +51,5 @@ namespace gdcm
   }
 
 } // end namespace gdcm
+
+#endif // __gdcmValue_txx

@@ -139,6 +139,7 @@ public:
     is.read(vr, 2);
     VRField = GetVRTypeFromFile(vr);
     assert( VRField != VR::VR_END );
+    assert( VRField != VR::INVALID );
     if( VRField == VR::INVALID ) throw Exception( "INVALID VR" );
     if( VRField & ( VR::OB | VR::OW | VR::OF | VR::SQ | VR::UN | VR::UT ) )
       {

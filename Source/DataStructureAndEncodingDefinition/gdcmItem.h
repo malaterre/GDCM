@@ -145,7 +145,8 @@ IStream &Read(IStream &is)
     }
   else
     {
-    NestedDataSet.Read<TSwap>(is);
+    StructuredSet<DEType> &nested = NestedDataSet;
+    nested.ReadNested<TSwap>(is);
     }
 //#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
 //  // Ok we have read the item, sometime the ValueLengthField was wrong
