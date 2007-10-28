@@ -41,5 +41,7 @@ public:
 
 } // end namespace gdcm
 
+#include "gdcmIOSerialize.txx"
+
 #endif //__gdcmIOSerialize_h
 

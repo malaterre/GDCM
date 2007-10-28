@@ -231,5 +231,7 @@ private:
 
 } // end namespace gdcm
 
+#include "gdcmStructuredSet.txx"
+
 #endif //__gdcmStructuredSet_h
 

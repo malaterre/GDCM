@@ -76,5 +76,7 @@ public:
 
 } // end namespace gdcm
 
+#include "gdcmValue.txx"
+
 #endif //__gdcmValue_h
 

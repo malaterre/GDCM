@@ -16,15 +16,15 @@
 #include "gdcmFile.h"
 
 #include "gdcmSwapper.txx"
-#include "gdcmDataSet.txx"
+#include "gdcmDataSet.h"
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
 #include "gdcmValue.h"
 
-#include "gdcmIOSerialize.txx"
-#include "gdcmValue.txx"
-#include "gdcmItem.txx"
-#include "gdcmSequenceOfItems.txx"
+#include "gdcmIOSerialize.h"
+#include "gdcmValue.h"
+#include "gdcmItem.h"
+#include "gdcmSequenceOfItems.h"
 
 namespace gdcm
 {

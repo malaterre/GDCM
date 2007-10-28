@@ -18,8 +18,8 @@
 
 #include "gdcmTS.h"
 #include "gdcmValue.h"
-#include "gdcmExplicitDataElement.h"
-#include "gdcmImplicitDataElement.h"
+//#include "gdcmExplicitDataElement.h"
+//#include "gdcmImplicitDataElement.h"
 
 #include "gdcmStructuredSet.h"
 

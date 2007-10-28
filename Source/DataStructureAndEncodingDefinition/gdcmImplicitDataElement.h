@@ -84,4 +84,6 @@ inline std::ostream& operator<<(std::ostream& os, const ImplicitDataElement &val
 
 } // end namespace gdcm
 
+#include "gdcmImplicitDataElement.txx"
+
 #endif //__gdcmImplicitDataElement_h

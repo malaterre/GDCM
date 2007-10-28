@@ -16,7 +16,8 @@
 #ifndef __gdcmImplicitDataElement_txx
 #define __gdcmImplicitDataElement_txx
 
-#include "gdcmImplicitDataElement.h"
+#include "gdcmSequenceOfItems.h"
+//#include "gdcmImplicitDataElement.h"
 
 namespace gdcm
 {

@@ -17,7 +17,6 @@
 #define __gdcmSequenceOfItems_txx
 
 #include "gdcmSequenceOfItems.h"
-#include "gdcmItem.h"
 
 namespace gdcm
 {

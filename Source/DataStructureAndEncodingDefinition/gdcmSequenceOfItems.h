@@ -170,5 +170,7 @@ public:
 
 } // end namespace gdcm
 
+#include "gdcmSequenceOfItems.txx"
+
 #endif //__gdcmSequenceOfItems_h
 

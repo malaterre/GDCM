@@ -146,7 +146,7 @@ IStream &Read(IStream &is)
   else
     {
     StructuredSet<DEType> &nested = NestedDataSet;
-    nested.ReadNested<TSwap>(is);
+    nested.template ReadNested<TSwap>(is);
     }
 //#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
 //  // Ok we have read the item, sometime the ValueLengthField was wrong
@@ -220,5 +220,7 @@ inline std::ostream& operator<<(std::ostream& os, const Item<DEType> &val)
 
 
 } // end namespace gdcm
+
+#include "gdcmItem.txx"
 
 #endif //__gdcmItem_h

@@ -15,7 +15,7 @@
 =========================================================================*/
 #include "gdcmExplicitDataElement.h"
 #include "gdcmByteValue.h"
-#include "gdcmSequenceOfItems.txx"
+#include "gdcmSequenceOfItems.h"
 #include "gdcmSequenceOfFragments.h"
 
 // FIXME

@@ -97,5 +97,7 @@ inline std::ostream& operator<<(std::ostream &os, const ExplicitDataElement &val
 
 } // end namespace gdcm
 
+#include "gdcmExplicitDataElement.txx"
+
 #endif //__gdcmExplicitDataElement_h
 

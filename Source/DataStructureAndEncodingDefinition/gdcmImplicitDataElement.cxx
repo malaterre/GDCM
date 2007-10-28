@@ -16,7 +16,7 @@
 #include "gdcmImplicitDataElement.h"
 
 #include "gdcmByteValue.h"
-#include "gdcmSequenceOfItems.txx"
+#include "gdcmSequenceOfItems.h"
 #include "gdcmExplicitDataElement.h"
 
 namespace gdcm

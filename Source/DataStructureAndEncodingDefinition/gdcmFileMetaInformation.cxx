@@ -20,7 +20,7 @@
 #include "gdcmImplicitDataElement.h"
 #include "gdcmByteValue.h"
 #include "gdcmSwapper.h"
-#include "gdcmIOSerialize.txx"
+#include "gdcmIOSerialize.h"
 
 //#include "gdcmElement.h"
 #include "gdcmStringStream.h"
