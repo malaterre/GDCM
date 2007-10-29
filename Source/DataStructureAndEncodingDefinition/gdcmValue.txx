@@ -19,13 +19,13 @@
 #include "gdcmValue.h"
 
 /*
-#include "gdcmByteValue.h"
 #include "gdcmSequenceOfItems.h"
-#include "gdcmSequenceOfFragments.h"
 
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
+#include "gdcmSequenceOfFragments.h"
 */
+#include "gdcmByteValue.h"
 
 namespace gdcm
 {

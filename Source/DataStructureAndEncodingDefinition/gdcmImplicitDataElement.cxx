@@ -18,6 +18,8 @@
 #include "gdcmByteValue.h"
 #include "gdcmSequenceOfItems.h"
 
+#include "gdcmExplicitDataElement.h"
+
 namespace gdcm
 {
 
@@ -25,12 +27,12 @@ ImplicitDataElement::~ImplicitDataElement()
 {
 }
 
-//ImplicitDataElement::ImplicitDataElement(ExplicitDataElement const &val)
-//{
-//  TagField = val.GetTag();
-//  ValueLengthField = val.GetVL();
-//  ValueField = val.ValueField;
-//}
+ImplicitDataElement::ImplicitDataElement(ExplicitDataElement const &val)
+{
+  TagField = val.GetTag();
+  ValueLengthField = val.GetVL();
+  ValueField = val.ValueField;
+}
 
   VL ImplicitDataElement::GetLength() const
     {

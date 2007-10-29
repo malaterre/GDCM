@@ -28,8 +28,10 @@ namespace gdcm
  * \note bla
  */
 class Value;
+class ExplicitDataElement;
 class GDCM_EXPORT ImplicitDataElement : public DataElement
 {
+  friend class ExplicitDataElement;
 public:
   ImplicitDataElement(const Tag& t = Tag(0), uint32_t const &vl = 0) : DataElement(t,vl),ValueField(0) {}
   ~ImplicitDataElement();
@@ -59,7 +61,7 @@ public:
 //      }
     }
 
-//  ImplicitDataElement(ExplicitDataElement const &val);
+  ImplicitDataElement(ExplicitDataElement const &val);
 
 private:
   typedef SmartPointer<Value> ValuePtr;

@@ -328,8 +328,7 @@ IStream &FileMetaInformation::ReadCompat(IStream &is)
       ImplicitDataElement ide;
       while( ReadImplicitDataElement<SwapperNoOp>(is, ide ) )
         {
-        ExplicitDataElement xde; //(ide);
-  abort();
+        ExplicitDataElement xde(ide);
         Insert(xde);
         }
       }

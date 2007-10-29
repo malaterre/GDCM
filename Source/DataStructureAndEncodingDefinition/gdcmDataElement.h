@@ -59,11 +59,11 @@ public:
   const VL& GetVL() const { return ValueLengthField; }
   void SetVL(const VL &vl) { ValueLengthField = vl; }
 
-  VL GetLength() const {
+/*  VL GetLength() const {
     abort();
     return 0;
   }
-
+*/
   bool IsUndefinedLength() const {
     return ValueLengthField.IsUndefined();
   }

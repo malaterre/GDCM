@@ -133,8 +133,7 @@ public:
     for( ; it != ss.End(); ++it)
       {
       //std::cerr << *it << std::endl;
-      DEType de; //( *it );
-abort();
+      DEType de( *it );
       Insert(de);
       }
    }
