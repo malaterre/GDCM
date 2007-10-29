@@ -45,7 +45,6 @@ namespace gdcm
  */
 class GDCM_EXPORT Tag
 {
-  template <typename TSwap> friend class IOSerialize;
 public:
   /// \brief Constructor with 2*uint16_t 
   Tag(uint16_t group, uint16_t element) {

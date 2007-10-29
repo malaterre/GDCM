@@ -30,7 +30,6 @@ namespace gdcm
 class Value;
 class GDCM_EXPORT ImplicitDataElement : public DataElement
 {
-  template <typename TSwap> friend class IOSerialize;
 public:
   ImplicitDataElement(const Tag& t = Tag(0), uint32_t const &vl = 0) : DataElement(t,vl),ValueField(0) {}
   ~ImplicitDataElement();

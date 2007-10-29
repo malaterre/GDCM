@@ -18,37 +18,35 @@
 
 #include "gdcmValue.h"
 
-/*
 #include "gdcmByteValue.h"
 #include "gdcmSequenceOfItems.h"
 #include "gdcmSequenceOfFragments.h"
 
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
-*/
 
 namespace gdcm
 {
   template <typename TSwap>
   IStream &Value::Read(IStream &is) {
     Value* v = this;
- //   if( ByteValue *bv = dynamic_cast<ByteValue*>(v) )
- //   {
- //     bv->Read<TSwap>(is);
- //   }
- //   else if( SequenceOfItems<ExplicitDataElement> *si = dynamic_cast<SequenceOfItems<ExplicitDataElement>*>(v) )
- //   {
- //     si->Read<TSwap>(is);
- //   }
- //   else if( SequenceOfItems<ImplicitDataElement> *si = dynamic_cast<SequenceOfItems<ImplicitDataElement>*>(v) )
- //   {
- //     si->Read<TSwap>(is);
- //   }
- //   else if( SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(v) )
- //   {
- //     sf->Read<TSwap>(is);
- //   }
- //   else
+    if( ByteValue *bv = dynamic_cast<ByteValue*>(v) )
+    {
+      bv->Read<TSwap>(is);
+    }
+    else if( SequenceOfItems<ExplicitDataElement> *si = dynamic_cast<SequenceOfItems<ExplicitDataElement>*>(v) )
+    {
+      si->Read<TSwap>(is);
+    }
+    else if( SequenceOfItems<ImplicitDataElement> *si = dynamic_cast<SequenceOfItems<ImplicitDataElement>*>(v) )
+    {
+      si->Read<TSwap>(is);
+    }
+    else if( SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(v) )
+    {
+      sf->Read<TSwap>(is);
+    }
+    else
     {
 	    assert( 0 && "error" );
     }

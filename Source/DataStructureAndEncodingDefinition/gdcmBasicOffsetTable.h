@@ -29,7 +29,6 @@ namespace gdcm
 
 class GDCM_EXPORT BasicOffsetTable : public DataElement
 {
-  template <typename TSwap> friend class IOSerialize;
 public:
   BasicOffsetTable(const Tag &t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl), Offsets(0) {}
   friend std::ostream &operator<<(std::ostream &os, const BasicOffsetTable &val);

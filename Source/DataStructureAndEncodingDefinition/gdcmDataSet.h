@@ -47,7 +47,6 @@ namespace gdcm
 class ExplicitDataElement;
 class GDCM_EXPORT DataSet : public Value
 {
-  template <typename TSwap> friend class IOSerialize;
 public:
   DataSet(TS::NegociatedType type = TS::Explicit);
   ~DataSet();

@@ -31,7 +31,6 @@ namespace gdcm
  */
 class GDCM_EXPORT ByteValue : public Value
 {
-  template <typename TSwap> friend class IOSerialize;
 public:
   ByteValue(const char* array = 0, VL const &vl = 0):
     Internal(array, array+vl),Length(vl) {
