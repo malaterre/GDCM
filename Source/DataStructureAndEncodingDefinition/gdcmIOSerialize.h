@@ -20,6 +20,7 @@
 #include "gdcmTypes.h"
 #include "gdcmIStream.h"
 #include "gdcmOStream.h"
+#include "gdcmDataSet.h"
 
 namespace gdcm
 {
