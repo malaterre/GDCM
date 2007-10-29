@@ -18,18 +18,21 @@
 
 #include "gdcmValue.h"
 
+/*
 #include "gdcmByteValue.h"
 #include "gdcmSequenceOfItems.h"
 #include "gdcmSequenceOfFragments.h"
 
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
+*/
 
 namespace gdcm
 {
   template <typename TSwap>
   IStream &Value::Read(IStream &is) {
     Value* v = this;
+/*
     if( ByteValue *bv = dynamic_cast<ByteValue*>(v) )
     {
       bv->Read<TSwap>(is);
@@ -47,6 +50,7 @@ namespace gdcm
       sf->Read<TSwap>(is);
     }
     else
+*/
     {
 	    assert( 0 && "error" );
     }
