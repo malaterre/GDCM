@@ -13,7 +13,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #ifndef __gdcmSequenceOfFragments_h
 #define __gdcmSequenceOfFragments_h
 
@@ -33,7 +32,6 @@ namespace gdcm
  */
 class GDCM_EXPORT SequenceOfFragments : public Value
 {
-  template <typename TSwap> friend class IOSerialize;
 public:
   // Typdefs:
   typedef std::vector<Fragment> FragmentVector;

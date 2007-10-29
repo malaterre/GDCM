@@ -21,8 +21,8 @@
 #include "gdcmStructuredSet.h"
 #include "gdcmTag.h"
 #include "gdcmVL.h"
-#include "gdcmExplicitDataElement.txx"
-#include "gdcmImplicitDataElement.txx"
+#include "gdcmExplicitDataElement.h"
+#include "gdcmImplicitDataElement.h"
 #include "gdcmDataSet.h"
 #include "gdcmByteValue.h"
 #include "gdcmSequenceOfItems.h"
@@ -47,13 +47,13 @@ IStream &IOSerialize<TSwap>::Read(IStream &is,DataSet &ds)
       {
       StructuredSet<ImplicitDataElement> ssi;
       //std::cerr << "passed 0" << std::endl;
-      ssi.Read<TSwap>(is);
+      ssi.template Read<TSwap>(is);
       //std::cerr << "passed" << std::endl;
       ds.Internal.Copy(ssi);
       }
     else if ( ds.NegociatedTS == TS::Explicit )
       {
-      ds.Internal.Read<TSwap>(is);
+      ds.Internal.template Read<TSwap>(is);
       //Internal.ReadSwap(is);
       }
     }
@@ -63,14 +63,14 @@ IStream &IOSerialize<TSwap>::Read(IStream &is,DataSet &ds)
     {
       StructuredSet<ImplicitDataElement> ssi;
       //std::cerr << "passed nested 0" << std::endl;
-      ssi.ReadNested<TSwap>(is);
+      ssi.template ReadNested<TSwap>(is);
       //std::cerr << "passed nested" << std::endl;
       ds.Internal.Copy(ssi);
      }
     else if ( ds.NegociatedTS == TS::Explicit )
     {
     // Nested DataSet with undefined length 
-    ds.Internal.ReadNested<TSwap>(is);
+    ds.Internal.template ReadNested<TSwap>(is);
     }
     }
   else
@@ -79,14 +79,14 @@ IStream &IOSerialize<TSwap>::Read(IStream &is,DataSet &ds)
     {
       StructuredSet<ImplicitDataElement> ssi;
       //std::cerr << "passed 0" << std::endl;
-      ssi.ReadWithLength<TSwap>(is,ds.Length);
+      ssi.template ReadWithLength<TSwap>(is,ds.Length);
       //std::cerr << "passed" << std::endl;
       ds.Internal.Copy(ssi);
      }
     else if ( ds.NegociatedTS == TS::Explicit )
     {
      // Nested DataSet with defined length
-    ds.Internal.ReadWithLength<TSwap>(is, ds.Length);
+    ds.Internal.template ReadWithLength<TSwap>(is, ds.Length);
     }
     }
   //std::cerr << "Finished DataSet::Read" << std::endl;
@@ -101,11 +101,11 @@ OStream const &IOSerialize<TSwap>::Write(OStream &os,DataSet const &ds)
       {
       StructuredSet<ImplicitDataElement> ssi;
       ssi.Copy(ds.Internal);
-      ssi.Write<TSwap>(os);
+      ssi.template Write<TSwap>(os);
       }
     else if ( ds.NegociatedTS == TS::Explicit )
     {
-   ds.Internal.Write<TSwap>(os);
+   ds.Internal.template Write<TSwap>(os);
     }
   return os;
 }

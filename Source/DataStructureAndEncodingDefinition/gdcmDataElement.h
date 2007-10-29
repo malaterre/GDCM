@@ -47,7 +47,6 @@ namespace gdcm
 
 class GDCM_EXPORT DataElement
 {
-  template <typename TSwap> friend class IOSerialize;
 public:
   DataElement(const Tag& t = Tag(0), const VL& vl = 0):TagField(t),ValueLengthField(vl) {}
 //  virtual ~DataElement() {}
@@ -60,10 +59,10 @@ public:
   const VL& GetVL() const { return ValueLengthField; }
   void SetVL(const VL &vl) { ValueLengthField = vl; }
 
-//  virtual VL GetLength() const {
-//    abort();
-//    return 0;
-//  }
+  VL GetLength() const {
+    abort();
+    return 0;
+  }
 
   bool IsUndefinedLength() const {
     return ValueLengthField.IsUndefined();

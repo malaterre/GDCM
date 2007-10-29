@@ -16,7 +16,7 @@
 #ifndef __gdcmSequenceOfItems_txx
 #define __gdcmSequenceOfItems_txx
 
-#include "gdcmSequenceOfItems.h"
+//#include "gdcmSequenceOfItems.h"
 
 namespace gdcm
 {

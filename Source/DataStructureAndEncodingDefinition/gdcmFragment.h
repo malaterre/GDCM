@@ -13,13 +13,12 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #ifndef __gdcmFragment_h
 #define __gdcmFragment_h
 
 #include "gdcmDataElement.h"
-#include "gdcmSmartPointer.h"
 #include "gdcmByteValue.h"
+#include "gdcmSmartPointer.h"
 
 namespace gdcm
 {
@@ -29,7 +28,6 @@ namespace gdcm
 
 class GDCM_EXPORT Fragment : public DataElement
 {
-  template <typename TSwap> friend class IOSerialize;
 public:
   Fragment(const Tag &t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl) , FragmentValue(0) { }
   friend std::ostream &operator<<(std::ostream &os, const Fragment &val);

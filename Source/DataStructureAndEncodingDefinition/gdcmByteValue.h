@@ -13,7 +13,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #ifndef __gdcmByteValue_h
 #define __gdcmByteValue_h
 

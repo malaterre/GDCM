@@ -18,9 +18,7 @@
 
 #include "gdcmTS.h"
 #include "gdcmValue.h"
-//#include "gdcmExplicitDataElement.h"
-//#include "gdcmImplicitDataElement.h"
-
+#include "gdcmDataElement.h"
 #include "gdcmStructuredSet.h"
 
 namespace gdcm
@@ -46,6 +44,7 @@ namespace gdcm
  * or defined length (different from 0) means nested dataset with defined
  * length.
  */
+class ExplicitDataElement;
 class GDCM_EXPORT DataSet : public Value
 {
   template <typename TSwap> friend class IOSerialize;

@@ -83,7 +83,7 @@ IStream &ExplicitDataElement::Read(IStream &is)
   else
     {
     // 16bits only
-    if( !ValueLengthField.Read16<TSwap>(is) )
+    if( !ValueLengthField.template Read16<TSwap>(is) )
       {
       assert(0 && "Should not happen");
       return is;
@@ -215,7 +215,7 @@ const OStream &ExplicitDataElement::Write(OStream &os) const
   else
     {
     // 16bits only
-    if( !ValueLengthField.Write16<TSwap>(os) )
+    if( !ValueLengthField.template Write16<TSwap>(os) )
       {
       assert( 0 && "Should not happen" );
       return os;

@@ -19,6 +19,7 @@
 
 #include "gdcmDataSet.h"
 #include "gdcmTS.h"
+#include "gdcmExplicitDataElement.h"
 
 namespace gdcm
 {

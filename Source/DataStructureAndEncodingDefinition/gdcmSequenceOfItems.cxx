@@ -14,7 +14,6 @@
 
 =========================================================================*/
 #include "gdcmSequenceOfItems.h"
-#include "gdcmItem.h"
 
 namespace gdcm
 {

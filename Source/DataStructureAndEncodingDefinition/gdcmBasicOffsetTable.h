@@ -18,9 +18,7 @@
 #define __gdcmBasicOffsetTable_h
 
 #include "gdcmDataElement.h"
-#include "gdcmFragment.h"
 #include "gdcmTag.h"
-//#include "gdcmSwapCode.h"
 
 namespace gdcm
 {

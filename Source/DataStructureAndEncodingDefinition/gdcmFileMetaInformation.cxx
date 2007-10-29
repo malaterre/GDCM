@@ -122,7 +122,7 @@ bool ReadExplicitDataElement(IStream &is, ExplicitDataElement &de)
   std::streampos start = is.tellg();
   //std::cout << "Start: " << start << std::endl;
   Tag t;
-  if( !t.Read<TSwap>(is) )
+  if( !t.template Read<TSwap>(is) )
     {
     assert(0 && "Should not happen" );
     return false;
@@ -150,7 +150,7 @@ bool ReadExplicitDataElement(IStream &is, ExplicitDataElement &de)
    || vr == VR::SQ
    || vr == VR::UN )
     {
-    if( !vl.Read<TSwap>(is) )
+    if( !vl.template Read<TSwap>(is) )
       {
       assert(0 && "Should not happen");
       return false;
@@ -159,7 +159,7 @@ bool ReadExplicitDataElement(IStream &is, ExplicitDataElement &de)
   else
     {
     // Value Length is stored on 16bits only
-    vl.Read16<TSwap>(is);
+    vl.template Read16<TSwap>(is);
     }
   //gdcmDebugMacro( "VL : " << vl );
   // Read the Value
@@ -180,7 +180,7 @@ bool ReadExplicitDataElement(IStream &is, ExplicitDataElement &de)
     }
   // We have the length we should be able to read the value
   bv->SetLength(vl); // perform realloc
-  if( !bv->Read<TSwap>(is) )
+  if( !bv->template Read<TSwap>(is) )
     {
     assert(0 && "Should not happen");
     return false;
@@ -204,7 +204,7 @@ bool ReadImplicitDataElement(IStream &is, ImplicitDataElement &de)
   std::streampos start = is.tellg();
   // Read Tag
   Tag t;
-  if( !t.Read<TSwap>(is) )
+  if( !t.template Read<TSwap>(is) )
     {
     assert(0 && "Should not happen");
     return false;
@@ -218,7 +218,7 @@ bool ReadImplicitDataElement(IStream &is, ImplicitDataElement &de)
     }
   // Read Value Length
   VL vl;
-  if( !vl.Read<TSwap>(is) )
+  if( !vl.template Read<TSwap>(is) )
     {
     assert(0 && "Should not happen");
     return false;
@@ -235,7 +235,7 @@ bool ReadImplicitDataElement(IStream &is, ImplicitDataElement &de)
     }
   // We have the length we should be able to read the value
   bv->SetLength(vl); // perform realloc
-  if( !bv->Read<TSwap>(is) )
+  if( !bv->template Read<TSwap>(is) )
     {
     assert(0 && "Should not happen");
     return false;
@@ -328,7 +328,8 @@ IStream &FileMetaInformation::ReadCompat(IStream &is)
       ImplicitDataElement ide;
       while( ReadImplicitDataElement<SwapperNoOp>(is, ide ) )
         {
-        ExplicitDataElement xde(ide);
+        ExplicitDataElement xde; //(ide);
+  abort();
         Insert(xde);
         }
       }

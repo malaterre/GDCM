@@ -30,10 +30,10 @@ namespace gdcm
  * \note bla
  */
 //class Value; // FIXME
-class ImplicitDataElement;
+//class ImplicitDataElement;
 class GDCM_EXPORT ExplicitDataElement : public DataElement
 {
-  friend class ImplicitDataElement;
+//  friend class ImplicitDataElement;
 public:
   ExplicitDataElement(const Tag &t = Tag(0), uint32_t const &vl = 0,
                       const VR &vr = VR::INVALID ) :
@@ -67,7 +67,7 @@ public:
     ValueField = val.ValueField;
     }
 
-  ExplicitDataElement(ImplicitDataElement const &val);
+//  ExplicitDataElement(ImplicitDataElement const &val);
 
   template <typename TSwap>
   IStream &Read(IStream &is);

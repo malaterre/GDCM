@@ -14,12 +14,11 @@
 
 =========================================================================*/
 #include "gdcmExplicitDataElement.h"
-#include "gdcmByteValue.h"
 #include "gdcmSequenceOfItems.h"
 #include "gdcmSequenceOfFragments.h"
 
 // FIXME
-#include "gdcmImplicitDataElement.h"
+//#include "gdcmImplicitDataElement.h"
 
 namespace gdcm
 {
@@ -29,6 +28,7 @@ ExplicitDataElement::~ExplicitDataElement()
 }
 
 //-----------------------------------------------------------------------------
+/*
 ExplicitDataElement::ExplicitDataElement(ImplicitDataElement const &val)
 {
   TagField = val.GetTag();
@@ -36,6 +36,7 @@ ExplicitDataElement::ExplicitDataElement(ImplicitDataElement const &val)
   VRField = VR::UN;
   ValueField = val.ValueField;
 }
+*/
 
   VL ExplicitDataElement::GetLength() const {
     if( ValueLengthField.IsUndefined() )

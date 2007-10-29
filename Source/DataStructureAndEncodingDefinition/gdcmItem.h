@@ -17,9 +17,9 @@
 #ifndef __gdcmItem_h
 #define __gdcmItem_h
 
+//#include "gdcmTS.h"
+#include "gdcmDataElement.h"
 #include "gdcmStructuredSet.h"
-#include "gdcmTS.h"
-#include "gdcmImplicitDataElement.h"
 
 namespace gdcm
 {
@@ -42,6 +42,8 @@ std::ostream& operator<<(std::ostream& _os, const Item<DEType> &_val);
  * ITEM: A component of the Value of a Data Element that is of Value
  * Representation Sequence of Items. An Item contains a Data Set.
  */
+template<class DEType>
+class StructuredSet;
 
 template <typename DEType>
 class GDCM_EXPORT Item : public DataElement
@@ -210,8 +212,8 @@ inline std::ostream& operator<<(std::ostream& os, const Item<DEType> &val)
   if( val.ValueLengthField.IsUndefined() )
     {
     const Tag itemDelItem(0xfffe,0xe00d);
-    const ImplicitDataElement ide(itemDelItem);
-    os << ide << "\n";
+    //const ImplicitDataElement ide(itemDelItem);
+    //os << ide << "\n";
     }
   os << "End of Item" << std::endl;
 

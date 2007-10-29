@@ -217,16 +217,16 @@ bool Reader::Read()
     }
 
   F = new File;
-  try
+//  try
     {
     F->Read( Stream );
     assert( Stream.eof() );
     }
-  catch( std::exception &ex )
-    {
-    std::cerr << ex.what() << std::endl;
-    return false;
-    }
+//  catch( std::exception &ex )
+//    {
+//    std::cerr << ex.what() << std::endl;
+//    return false;
+//    }
 
   // FIXME : call this function twice...
   Stream.close();

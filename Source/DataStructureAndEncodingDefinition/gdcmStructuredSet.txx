@@ -16,7 +16,8 @@
 #ifndef __gdcmStructuredSet_txx
 #define __gdcmStructuredSet_txx
 
-#include "gdcmStructuredSet.h"
+//#include "gdcmStructuredSet.h"
+#include "gdcmByteValue.h"
 
 namespace gdcm
 {
@@ -77,6 +78,68 @@ namespace gdcm
     return is;
   }
 
+  template <typename DEType>
+  template <typename TSwap>
+  OStream const &StructuredSet<DEType>::Write(OStream &os) const {
+    //DEType de;
+    typename StructuredSet<DEType>::ConstIterator it = DES.begin();
+    for( ; it != DES.end(); ++it)
+      {
+      std::cerr << "DEBUG:" << *it << std::endl;
+      const DEType & de = *it;
+      // If this is a group length make sure this is consistant
+      if( de.GetTag().GetGroup() == 0x0001
+       || de.GetTag().GetGroup() == 0x0003
+       || de.GetTag().GetGroup() == 0x0005
+       || de.GetTag().GetGroup() == 0x0007 )
+        {
+        gdcmWarningMacro( "DataSet contains illegal Tags. "
+          "Those elements will be discarded:" << de.GetTag() );
+        }
+      // After that we are sure the elements are valid
+      else if( de.GetTag().GetElement() == 0x0 )
+        {
+        Element<VR::UL, VM::VM1> el;
+        StringStream sst;
+        //sst.SetSwapCode( os.GetSwapCode() );
+        const Value &v = de.GetValue();
+        const Value *pv = &v;
+        const ByteValue *bv = dynamic_cast<const ByteValue*>(pv);
+	      bv->Write<TSwap>(sst);
+        el.Read( sst );
+        //std::cerr << "GL=";
+        //el.Print( std::cerr );
+        //std::cerr << std::endl;
+        unsigned int len = ComputeGroupLength( de.GetTag() );
+        //std::cerr << len << std::endl;
+        if( len != el.GetValue() )
+          {
+          gdcmWarningMacro( "Wrong group length for " << de.GetTag() << ":"
+            << el.GetValue() << " should be " << len << ". Corrected." );
+          DEType correct(de);
+          // Set correct value:
+          el.SetValue( len );
+          el.Write( sst );
+          // Pass it to the ByteValue
+          ByteValue *bv2 = new ByteValue;
+          bv2->SetLength(4);
+          bv2->Read<TSwap>(sst);
+          correct.SetValue( *bv2 );
+          correct.Write<TSwap>(os);
+          }
+        else
+          {
+          // okay good value
+          de.Write<TSwap>(os);
+          }
+        }
+      else // well simply writes it
+        {
+        de.Write<TSwap>(os);
+        }
+      }
+    return os;
+  }
 } // end namespace gdcm
 
 #endif // __gdcmStructuredSet_txx
