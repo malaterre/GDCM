@@ -22,6 +22,8 @@
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmVL.h"
 
+#include "gdcmValueIO.h"
+
 namespace gdcm
 {
 //-----------------------------------------------------------------------------
@@ -157,7 +159,8 @@ IStream &ExplicitDataElement::Read(IStream &is)
     return is;
     }
 #endif
-  if( !ValueField->Read<TSwap>(is) )
+  //if( !ValueField->Read<TSwap>(is) )
+  if( !ValueIO<TSwap>::Read(is,*ValueField) )
     {
     assert(0 && "Should not happen");
     return is;

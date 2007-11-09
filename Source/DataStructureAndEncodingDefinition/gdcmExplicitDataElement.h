@@ -75,6 +75,12 @@ public:
   template <typename TSwap>
   const OStream &Write(OStream &_os) const;
 
+protected:
+  //void DoTheRead(ByteValue* bv);
+  //void DoTheRead(SequenceOfFragments* sf);
+  //template <typename DE>
+  //void DoTheRead(SequenceOfItems<DE>* si);
+
 private:
   // Value Representation
   VR VRField;
