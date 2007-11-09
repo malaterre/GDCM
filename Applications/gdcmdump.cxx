@@ -160,7 +160,7 @@ int main (int argc, char *argv[])
  //const gdcm::DataSet &ds = reader.GetDataSet();
   ////std::cout << ds << std::endl;
   //printer.SetDataSet( reader.GetDataSet() );
-  p->Print( std::cout );
+  //p->Print( std::cout );
   //std::cout << reader.GetFile() << std::endl;
 
 //  std::ofstream of;

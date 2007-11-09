@@ -14,10 +14,11 @@
 
 =========================================================================*/
 #include "gdcmSequenceOfItems.h"
+#include "gdcmExplicitDataElement.h"
 
 int TestSequenceOfItems(int, char *[])
 {
-  gdcm::SequenceOfItems si;
+  gdcm::SequenceOfItems<gdcm::ExplicitDataElement> si;
   std::cout << si << std::endl;
 
   return 0;
