@@ -40,6 +40,8 @@ IStream &File::Read(IStream &is)
   catch( std::exception &ex )
     {
     //std::cerr << ex.what() << std::endl;
+    is.seekg(0, std::ios::beg );
+    P.Read( is ); // FIXME: leak
     Header.ReadCompat(is);
     //throw ex; // re throw for now but we are loosing it's real type...
     //return is;

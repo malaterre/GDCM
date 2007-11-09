@@ -27,7 +27,7 @@ IStream &Preamble::Read(IStream &is)
 {
   // \precondition: we are at beg of Preamble
   bool r = false;
-  assert ( IsEmpty() /*&& is.tellg() == 0*/ );
+  //assert ( IsEmpty() /*&& is.tellg() == 0*/ );
   Internal = new char[128+4];
   is.read(Internal, 128+4);
   if( Internal[128+0] == 'D'

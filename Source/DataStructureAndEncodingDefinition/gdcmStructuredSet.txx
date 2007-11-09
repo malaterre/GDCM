@@ -26,7 +26,8 @@ namespace gdcm
   IStream &StructuredSet<DEType>::ReadNested(IStream &is) {
     DEType de;
     const Tag itemDelItem(0xfffe,0xe00d);
-    while( de.Read<TSwap>(is) && de.GetTag() != itemDelItem )
+    assert( de.GetTag() != itemDelItem ); // precondition before while loop
+    while( de.Read<TSwap>(is) && de.GetTag() != itemDelItem  ) // Keep that order please !
       {
       //std::cout << "DEBUG Nested: " << de << std::endl;
       DES.insert( de );

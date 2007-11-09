@@ -145,10 +145,15 @@ IStream &Read(IStream &is)
       gdcmErrorMacro( "SQ: " << TagField << " has a length of 0" );
       }
     }
-  else
+  else if( ValueLengthField.IsUndefined() )
     {
     StructuredSet<DEType> &nested = NestedDataSet;
     nested.template ReadNested<TSwap>(is);
+    }
+  else /* if( ValueLengthField.IsUndefinedLength() ) */
+    {
+    StructuredSet<DEType> &nested = NestedDataSet;
+    nested.template ReadWithLength<TSwap>(is, ValueLengthField);
     }
 //#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
 //  // Ok we have read the item, sometime the ValueLengthField was wrong

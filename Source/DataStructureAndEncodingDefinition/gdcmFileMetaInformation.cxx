@@ -298,8 +298,26 @@ IStream &FileMetaInformation::ReadCompat(IStream &is)
   std::streampos start = is.tellg();
   Tag t;
   t.Read<SwapperNoOp>(is);
-  //assert( t.GetGroup() == 0x0002 );
   if( t.GetGroup() == 0x0002 )
+    {
+    // GE_DLX-8-MONO2-PrivateSyntax.dcm is in Implicit...
+    return ReadCompatInternal<SwapperNoOp>(is);
+    }
+  else if( t.GetGroup() == 0x0012 )
+    {
+    return ReadCompatInternal<SwapperDoOp>(is);
+    }
+  else
+    {
+  abort();
+    }
+}
+
+template <typename TSwap>
+IStream &FileMetaInformation::ReadCompatInternal(IStream &is)
+{
+  //assert( t.GetGroup() == 0x0002 );
+//  if( t.GetGroup() == 0x0002 )
     {
     // Purposely not Re-use ReadVR since we can read VR_END
     char vr_str[2];
@@ -310,16 +328,16 @@ IStream &FileMetaInformation::ReadCompat(IStream &is)
       // Hourah !
       // Looks like an Explicit File Meta Information Header.
       is.seekg(-6, std::ios::cur); // Seek back
-	  //is.seekg(start, std::ios::beg); // Seek back
-	  std::streampos dpos = is.tellg();
+      //is.seekg(start, std::ios::beg); // Seek back
+      std::streampos dpos = is.tellg();
       ExplicitDataElement xde;
       while( ReadExplicitDataElement<SwapperNoOp>(is, xde ) )
         {
         //std::cout << xde << std::endl;
         Insert( xde );
         }
-    // Now is a good time to find out the dataset transfer syntax
-    ComputeDataSetTransferSyntax<ExplicitDataElement>();
+      // Now is a good time to find out the dataset transfer syntax
+      ComputeDataSetTransferSyntax<ExplicitDataElement>();
       }
     else
       {
@@ -334,15 +352,15 @@ IStream &FileMetaInformation::ReadCompat(IStream &is)
         ExplicitDataElement xde(ide);
         Insert(xde);
         }
-    // Now is a good time to find out the dataset transfer syntax
-    ComputeDataSetTransferSyntax<ImplicitDataElement>();
+      // Now is a good time to find out the dataset transfer syntax
+      ComputeDataSetTransferSyntax<ImplicitDataElement>();
       }
     }
-  else
-    {
-    gdcmDebugMacro( "No File Meta Information. Start with Tag: " << t );
-    is.seekg(-4, std::ios::cur); // Seek back
-    }
+//  else
+//    {
+//    gdcmDebugMacro( "No File Meta Information. Start with Tag: " << t );
+//    is.seekg(-4, std::ios::cur); // Seek back
+//    }
 
   // we are at the end of the meta file information and before the dataset
   return is;

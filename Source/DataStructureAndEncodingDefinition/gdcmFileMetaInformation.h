@@ -59,6 +59,10 @@ public:
 protected:
   template <typename DE>
   void ComputeDataSetTransferSyntax(); // FIXME
+
+  template <typename TSwap>
+  IStream &ReadCompatInternal(IStream &is);
+
   void Default();
   void ComputeDataSetMediaStorageSOPClass();
 
