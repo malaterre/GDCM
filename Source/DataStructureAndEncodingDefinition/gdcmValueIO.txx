@@ -27,18 +27,14 @@
 namespace gdcm
 {
 
-  template <typename TSwap>
-  IStream &ValueIO<TSwap>::Read(IStream &is, Value& _v) {
+  template <typename DE, typename TSwap>
+  IStream &ValueIO<DE,TSwap>::Read(IStream &is, Value& _v) {
     Value* v = &_v;
     if( ByteValue *bv = dynamic_cast<ByteValue*>(v) )
     {
       bv->template Read<TSwap>(is);
     }
-    else if( SequenceOfItems<ExplicitDataElement> *si = dynamic_cast<SequenceOfItems<ExplicitDataElement>*>(v) )
-    {
-      si->template Read<TSwap>(is);
-    }
-    else if( SequenceOfItems<ImplicitDataElement> *si = dynamic_cast<SequenceOfItems<ImplicitDataElement>*>(v) )
+    else if( SequenceOfItems<DE> *si = dynamic_cast<SequenceOfItems<DE>*>(v) )
     {
       si->template Read<TSwap>(is);
     }
@@ -53,22 +49,22 @@ namespace gdcm
     return is;
   }
 
-  template <typename TSwap>
-  const OStream &ValueIO<TSwap>::Write(OStream &os, const Value& _v) {
+  template <typename DE, typename TSwap>
+  const OStream &ValueIO<DE,TSwap>::Write(OStream &os, const Value& _v) {
     const Value* v = &_v;
-//    if( const ByteValue *bv = dynamic_cast<const ByteValue*>(&v) )
-//    {
-//	    bv->template Write<TSwap>(os);
-//    }
-//    else if( const SequenceOfItems *si = dynamic_cast<const SequenceOfItems*>(&v) )
-//    {
-//	    si->template Write<TSwap>(os);
-//    }
-//    else if( const SequenceOfFragments *sf = dynamic_cast<const SequenceOfFragments*>(&v) )
-//    {
-//	    sf->template Write<TSwap>(os);
-//    }
-//    else
+    if( const ByteValue *bv = dynamic_cast<const ByteValue*>(&v) )
+    {
+	    bv->template Write<TSwap>(os);
+    }
+    else if( const SequenceOfItems<DE> *si = dynamic_cast<const SequenceOfItems<DE>*>(&v) )
+    {
+	    si->template Write<TSwap>(os);
+    }
+    else if( const SequenceOfFragments *sf = dynamic_cast<const SequenceOfFragments*>(&v) )
+    {
+	    sf->template Write<TSwap>(os);
+    }
+    else
     {
 	    assert( 0 && "error" );
     }

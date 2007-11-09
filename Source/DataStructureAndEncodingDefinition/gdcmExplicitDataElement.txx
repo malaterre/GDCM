@@ -160,7 +160,7 @@ IStream &ExplicitDataElement::Read(IStream &is)
     }
 #endif
   //if( !ValueField->Read<TSwap>(is) )
-  if( !ValueIO<TSwap>::Read(is,*ValueField) )
+  if( !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField) )
     {
     assert(0 && "Should not happen");
     return is;
