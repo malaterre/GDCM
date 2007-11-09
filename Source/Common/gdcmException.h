@@ -36,7 +36,7 @@ public:
   Exception(const char *desc = "None", 
             const char *file = __FILE__,
             unsigned int lineNumber = __LINE__,
-            const char *loc = 0/*__FUNCTION__*/ )
+            const char *loc = ""/*__FUNCTION__*/ )
   {
     Description = desc;
     File = file;

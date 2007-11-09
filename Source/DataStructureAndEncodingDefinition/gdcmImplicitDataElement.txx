@@ -19,6 +19,8 @@
 #include "gdcmSequenceOfItems.h"
 //#include "gdcmImplicitDataElement.h"
 
+#include "gdcmValueIO.h"
+
 namespace gdcm
 {
 
@@ -144,7 +146,8 @@ IStream &ImplicitDataElement::Read(IStream &is)
 #endif
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
-  if( !ValueField->Read<TSwap>(is) )
+  //if( !ValueField->Read<TSwap>(is) )
+  if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) )
     {
     assert(0 && "Should not happen");
     return is;
@@ -176,7 +179,8 @@ const OStream &ImplicitDataElement::Write(OStream &os) const
     assert( ValueField );
     assert( TagField != Tag(0xfffe, 0xe00d)
          && TagField != Tag(0xfffe, 0xe0dd) );
-    if( !ValueField->Write<TSwap>(os) )
+    //if( !ValueField->Write<TSwap>(os) )
+    if( !ValueIO<ImplicitDataElement,TSwap>::Write(os,*ValueField) )
       {
       assert(0 && "Should not happen");
       return os;

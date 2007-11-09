@@ -56,8 +56,9 @@ public:
   // Construct a FileMetaInformation from an already existing DataSet:
   void FillFromDataSet(DataSet const &ds);
  
-  void ComputeDataSetTransferSyntax(); // FIXME
 protected:
+  template <typename DE>
+  void ComputeDataSetTransferSyntax(); // FIXME
   void Default();
   void ComputeDataSetMediaStorageSOPClass();
 

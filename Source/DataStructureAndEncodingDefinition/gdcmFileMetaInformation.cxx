@@ -284,6 +284,7 @@ IStream &FileMetaInformation::Read(IStream &is)
         Insert( xde );
         }
 
+    ComputeDataSetTransferSyntax<ExplicitDataElement>();
 
   // we are at the end of the meta file information and before the dataset
   return is;
@@ -317,6 +318,8 @@ IStream &FileMetaInformation::ReadCompat(IStream &is)
         //std::cout << xde << std::endl;
         Insert( xde );
         }
+    // Now is a good time to find out the dataset transfer syntax
+    ComputeDataSetTransferSyntax<ExplicitDataElement>();
       }
     else
       {
@@ -331,10 +334,9 @@ IStream &FileMetaInformation::ReadCompat(IStream &is)
         ExplicitDataElement xde(ide);
         Insert(xde);
         }
-      }
     // Now is a good time to find out the dataset transfer syntax
-    ComputeDataSetTransferSyntax();
-
+    ComputeDataSetTransferSyntax<ImplicitDataElement>();
+      }
     }
   else
     {
@@ -352,22 +354,23 @@ IStream &FileMetaInformation::ReadCompat(IStream &is)
 //  //InternalTS = ts;
 //}
 
+template <typename DE>
 void FileMetaInformation::ComputeDataSetTransferSyntax()
 {
   const gdcm::Tag t(0x0002,0x0010);
-  const ExplicitDataElement &de = GetDataElement(t);
+  const DE &de = GetDataElement(t);
   //TS::NegociatedType nt = GetNegociatedType();
   std::string ts;
-//  if( nt == TS::Explicit )
+//  if( const ExplicitDataElement *xde = dynamic_cast<const ExplicitDataElement*>(&de) )
     {
     const Value &v = de.GetValue();
     const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
     // Pad string with a \0
     ts = std::string(bv.GetPointer(), bv.GetLength());
     }
-//  else if( nt == TS::Implicit )
+//  else if( const ImplicitDataElement *ide = dynamic_cast<const ImplicitDataElement*>(&de) )
 //    {
-//    const Value &v = dynamic_cast<const ImplicitDataElement&>(de).GetValue();
+//    const Value &v = ide.GetValue();
 //    const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
 //    // Pad string with a \0
 //    ts = std::string(bv.GetPointer(), bv.GetLength());

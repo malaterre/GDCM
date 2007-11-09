@@ -52,15 +52,15 @@ namespace gdcm
   template <typename DE, typename TSwap>
   const OStream &ValueIO<DE,TSwap>::Write(OStream &os, const Value& _v) {
     const Value* v = &_v;
-    if( const ByteValue *bv = dynamic_cast<const ByteValue*>(&v) )
+    if( const ByteValue *bv = dynamic_cast<const ByteValue*>(v) )
     {
 	    bv->template Write<TSwap>(os);
     }
-    else if( const SequenceOfItems<DE> *si = dynamic_cast<const SequenceOfItems<DE>*>(&v) )
+    else if( const SequenceOfItems<DE> *si = dynamic_cast<const SequenceOfItems<DE>*>(v) )
     {
 	    si->template Write<TSwap>(os);
     }
-    else if( const SequenceOfFragments *sf = dynamic_cast<const SequenceOfFragments*>(&v) )
+    else if( const SequenceOfFragments *sf = dynamic_cast<const SequenceOfFragments*>(v) )
     {
 	    sf->template Write<TSwap>(os);
     }

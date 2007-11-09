@@ -225,7 +225,8 @@ const OStream &ExplicitDataElement::Write(OStream &os) const
       }
     }
   // We have the length we should be able to write the value
-  if( ! ValueField->Write<TSwap>(os) )
+  //if( ! ValueField->Write<TSwap>(os) )
+  if( !ValueIO<ExplicitDataElement,TSwap>::Write(os,*ValueField) )
     {
     assert( 0 && "Should not happen" );
     return os;
