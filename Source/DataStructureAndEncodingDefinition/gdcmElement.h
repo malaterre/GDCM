@@ -344,6 +344,9 @@ public:
   void Print(std::ostream &_os) const {
     _os << Internal;
     }
+  unsigned long GetLength() const {
+    return VMToLength<VM::VM5>::Length;
+  }
 };
 
 template <>

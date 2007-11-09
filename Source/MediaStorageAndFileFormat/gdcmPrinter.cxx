@@ -239,6 +239,8 @@ PrinterTemplateSubCase(type, VM1) \
 PrinterTemplateSubCase(type, VM2) \
 PrinterTemplateSubCase(type, VM3) \
 PrinterTemplateSubCase(type, VM4) \
+PrinterTemplateSubCase(type, VM5) \
+PrinterTemplateSubCase(type, VM6) \
 PrinterTemplateSubCase(type, VM24) \
 PrinterTemplateSubCase1n(type, VM1_n) \
 default: abort(); }
