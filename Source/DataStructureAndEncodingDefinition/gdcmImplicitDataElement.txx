@@ -17,7 +17,6 @@
 #define __gdcmImplicitDataElement_txx
 
 #include "gdcmSequenceOfItems.h"
-//#include "gdcmImplicitDataElement.h"
 
 #include "gdcmValueIO.h"
 
