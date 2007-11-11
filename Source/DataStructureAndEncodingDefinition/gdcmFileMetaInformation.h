@@ -19,7 +19,7 @@
 
 #include "gdcmDataSet.h"
 #include "gdcmTS.h"
-#include "gdcmExplicitDataElement.h"
+#include "gdcmDataElement.h"
 
 namespace gdcm
 {
@@ -32,7 +32,7 @@ namespace gdcm
  * \todo
  * If user adds an element with group != 0x0002 it will be written...
  */
-class GDCM_EXPORT FileMetaInformation : public StructuredSet<ExplicitDataElement>
+class GDCM_EXPORT FileMetaInformation : public StructuredSet<DataElement>
 {
 public:
   FileMetaInformation():DataSetTS(),MetaInformationTS(TS::Unknown),DataSetMS(TS::MS_END) {}
@@ -57,7 +57,6 @@ public:
   void FillFromDataSet(DataSet const &ds);
  
 protected:
-  template <typename DE>
   void ComputeDataSetTransferSyntax(); // FIXME
 
   template <typename TSwap>

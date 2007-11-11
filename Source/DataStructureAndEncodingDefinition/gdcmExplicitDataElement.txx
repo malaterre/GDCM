@@ -40,7 +40,7 @@ IStream &ExplicitDataElement::Read(IStream &is)
       }
     return is;
     }
-  std::cerr << "cur tag=" << TagField << std::endl;
+  //std::cerr << "cur tag=" << TagField << std::endl;
   const Tag itemDelItem(0xfffe,0xe00d);
   if( TagField == itemDelItem )
     {
@@ -103,16 +103,12 @@ IStream &ExplicitDataElement::Read(IStream &is)
 #endif
     }
   // Read the Value
-  //assert( ValueField == 0 );
-  //if ( TagField == Tag(0x0008,0x1120) )
-  //{
-  //        assert( VRField == VR::SQ );
-  //}
+  assert( ValueField == 0 );
   if( VRField == VR::SQ )
     {
     // Check wether or not this is an undefined length sequence
     assert( TagField != Tag(0x7fe0,0x0010) );
-    ValueField = new SequenceOfItems<ExplicitDataElement>;
+    ValueField = new SequenceOfItems<DataElement>;
     }
   else if( ValueLengthField.IsUndefined() )
     {

@@ -29,7 +29,7 @@ DictPrinter::~DictPrinter()
 {
 }
 
-VM::VMType GuessVMType(ExplicitDataElement const &de)
+VM::VMType GuessVMType(DataElement const &de)
 {
   const VR &vr = de.GetVR();
   const VL &vl = de.GetVL();
@@ -379,7 +379,7 @@ std::string GetVersion(std::string const &owner)
 }
 
 // TODO: make it protected:
-std::string GetOwner(StructuredSet<ExplicitDataElement> const &ds, ExplicitDataElement const &de)
+std::string GetOwner(StructuredSet<DataElement> const &ds, DataElement const &de)
 {
   const Tag &t = de.GetTag();
   Tag towner(t);
@@ -394,7 +394,7 @@ std::string GetOwner(StructuredSet<ExplicitDataElement> const &ds, ExplicitDataE
   if( end == 0x0009 ) return "";
 
   //std::cout << "REF: " << towner << std::endl;
-  const ExplicitDataElement& xde = ds.GetDataElement(towner);
+  const DataElement& xde = ds.GetDataElement(towner);
   const Value &value = xde.GetValue();
   const ByteValue *bv = dynamic_cast<const ByteValue*>(&value);
   assert( bv && "not bv" );
@@ -413,12 +413,12 @@ void DictPrinter::Print(std::ostream& os)
 {
   static const Dict d;
   const DataSet &ds = F->GetDataSet();
-  const StructuredSet<ExplicitDataElement> &exds = ds.GetInternal();
-  StructuredSet<ExplicitDataElement>::ConstIterator it = exds.Begin();
+  const StructuredSet<DataElement> &exds = ds.GetInternal();
+  StructuredSet<DataElement>::ConstIterator it = exds.Begin();
   //os << "<dict>\n";
   for( ; it != exds.End(); ++it )
     {
-    const ExplicitDataElement &de = *it;
+    const DataElement &de = *it;
     const DictEntry &entry = d.GetDictEntry(de.GetTag());
 
       std::string owner;

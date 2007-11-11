@@ -14,9 +14,6 @@
 
 =========================================================================*/
 #include "gdcmDataSet.h"
-#include "gdcmExplicitDataElement.h"
-#include "gdcmImplicitDataElement.h"
-//#include "gdcmElement.h"
 
 namespace gdcm
 {
@@ -66,13 +63,13 @@ void DataSet::Clear()
 }
 
 //-----------------------------------------------------------------------------
-void DataSet::InsertDataElement(ExplicitDataElement const &de)
+void DataSet::InsertDataElement(DataElement const &de)
 {
   Internal.Insert(de);
 }
 
 //-----------------------------------------------------------------------------
-const ExplicitDataElement& DataSet::GetDataElement(const Tag &t) const
+const DataElement& DataSet::GetDataElement(const Tag &t) const
 {
     return Internal.GetDataElement(t);
 }

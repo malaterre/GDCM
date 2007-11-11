@@ -24,12 +24,11 @@
 // need to implement longer field to read
 
 #include "gdcmFile.h"
+#include "gdcmDataElement.h"
 
 namespace gdcm
 {
 
-class ExplicitDataElement;
-class ImplicitDataElement;
 template <typename DEType> class StructuredSet;
 class DictEntry;
 // It's a sink there is no output
@@ -58,10 +57,8 @@ public:
   void Print(std::ostream& os);
 
 protected:
-  void PrintElement(std::ostream& os, const ExplicitDataElement &xde, const DictEntry &entry);
-  void PrintElement(std::ostream& os, const ImplicitDataElement &ide, const DictEntry &entry);
-  void PrintDataSet(std::ostream& os, const StructuredSet<ExplicitDataElement> &ds);
-  void PrintDataSet(std::ostream& os, const StructuredSet<ImplicitDataElement> &ds);
+  void PrintElement(std::ostream& os, const DataElement &xde, const DictEntry &entry);
+  void PrintDataSet(std::ostream& os, const StructuredSet<DataElement> &ds);
 
 //  PrintStyles PrintStyle;
   const File *F;

@@ -18,88 +18,25 @@
 #define __gdcmExplicitDataElement_h
 
 #include "gdcmDataElement.h"
-#include "gdcmVR.h"
-#include "gdcmByteValue.h"
-#include "gdcmSmartPointer.h"
 
 namespace gdcm
 {
 // Data Element (Explicit)
 /**
- * \brief Class to represent an *Explicit VR* Data Element
+ * \brief Class to read/write a DataElement as Explicit Data Element
  * \note bla
  */
-//class Value; // FIXME
-class ImplicitDataElement;
 class GDCM_EXPORT ExplicitDataElement : public DataElement
 {
-  friend class ImplicitDataElement;
 public:
-  ExplicitDataElement(const Tag &t = Tag(0), uint32_t const &vl = 0,
-                      const VR &vr = VR::INVALID ) :
-    DataElement(t,vl),VRField(vr),ValueField(0) { }
-  ~ExplicitDataElement();
-
-  friend std::ostream& operator<<(std::ostream &_os, const ExplicitDataElement &_val);
-
-  VR const &GetVR() const { return VRField; }
-  void SetVR(VR const &vr) { VRField = vr; }
-
-  Value const &GetValue() const { return *ValueField; }
-  void SetValue(Value const & vl) {
-    //assert( ValueField == 0 );
-    ValueField = &vl;
-  }
-
-  void SetByteValue(const char *array, VL length)
-    {
-    ByteValue *bv = new ByteValue(array,length);
-    SetVL( length );
-    SetValue( *bv );
-    }
-
-  VL GetLength() const;
-
-  ExplicitDataElement(ExplicitDataElement const &val):DataElement(val)
-    {
-    //assert( val.ValueField );
-    VRField    = val.VRField;
-    ValueField = val.ValueField;
-    }
-
-  ExplicitDataElement(ImplicitDataElement const &val);
+  VL ExplicitDataElement::GetLength() const;
 
   template <typename TSwap>
   IStream &Read(IStream &is);
 
   template <typename TSwap>
-  const OStream &Write(OStream &_os) const;
-
-protected:
-  //void DoTheRead(ByteValue* bv);
-  //void DoTheRead(SequenceOfFragments* sf);
-  //template <typename DE>
-  //void DoTheRead(SequenceOfItems<DE>* si);
-
-private:
-  // Value Representation
-  VR VRField;
-  //typedef std::tr1::shared_ptr<gdcm::Value> ValuePtr;
-  typedef SmartPointer<Value> ValuePtr;
-  ValuePtr ValueField;
+  const OStream &Write(OStream &os) const;
 };
-//-----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream &os, const ExplicitDataElement &val)
-{
-  os << "Tag: " << val.TagField;
-  os << "\tVR=" << val.VRField;
-  os << "\tVL: " << val.ValueLengthField;
-  if( val.ValueField )
-    {
-    val.ValueField->Print( os << "\t" );
-    }
-  return os;
-}
 
 } // end namespace gdcm
 

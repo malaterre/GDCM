@@ -99,7 +99,7 @@ public:
       return os;
       }
     // Self
-    //if( !Offsets->Write(os) )
+    if( !Offsets->Write<TSwap>(os) )
       {
       assert(0 && "Should not happen");
       return os;

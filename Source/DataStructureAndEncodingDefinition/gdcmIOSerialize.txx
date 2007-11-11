@@ -45,48 +45,36 @@ IStream &IOSerialize<TSwap>::Read(IStream &is,DataSet &ds)
     // Ok we are reading a root DataSet
     if(ds.NegociatedTS == TS::Implicit)
       {
-      StructuredSet<ImplicitDataElement> ssi;
-      //std::cerr << "passed 0" << std::endl;
-      ssi.template Read<TSwap>(is);
-      //std::cerr << "passed" << std::endl;
-      ds.Internal.Copy(ssi);
+      ds.Internal.template Read<ImplicitDataElement,TSwap>(is);
       }
     else if ( ds.NegociatedTS == TS::Explicit )
       {
-      ds.Internal.template Read<TSwap>(is);
+      ds.Internal.template Read<ExplicitDataElement,TSwap>(is);
       //Internal.ReadSwap(is);
       }
     }
   else if( ds.Length.IsUndefined() )
     {
     if(ds.NegociatedTS == TS::Implicit)
-    {
-      StructuredSet<ImplicitDataElement> ssi;
-      //std::cerr << "passed nested 0" << std::endl;
-      ssi.template ReadNested<TSwap>(is);
-      //std::cerr << "passed nested" << std::endl;
-      ds.Internal.Copy(ssi);
-     }
+      {
+      ds.Internal.template ReadNested<ImplicitDataElement,TSwap>(is);
+      }
     else if ( ds.NegociatedTS == TS::Explicit )
     {
     // Nested DataSet with undefined length 
-    ds.Internal.template ReadNested<TSwap>(is);
+    ds.Internal.template ReadNested<ExplicitDataElement,TSwap>(is);
     }
     }
   else
     {
     if(ds.NegociatedTS == TS::Implicit)
-    {
-      StructuredSet<ImplicitDataElement> ssi;
-      //std::cerr << "passed 0" << std::endl;
-      ssi.template ReadWithLength<TSwap>(is,ds.Length);
-      //std::cerr << "passed" << std::endl;
-      ds.Internal.Copy(ssi);
+     {
+      ds.Internal.template ReadWithLength<ImplicitDataElement,TSwap>(is,ds.Length);
      }
     else if ( ds.NegociatedTS == TS::Explicit )
     {
      // Nested DataSet with defined length
-    ds.Internal.template ReadWithLength<TSwap>(is, ds.Length);
+    ds.Internal.template ReadWithLength<ExplicitDataElement,TSwap>(is, ds.Length);
     }
     }
   //std::cerr << "Finished DataSet::Read" << std::endl;
@@ -99,13 +87,11 @@ OStream const &IOSerialize<TSwap>::Write(OStream &os,DataSet const &ds)
 {
     if(ds.NegociatedTS == TS::Implicit)
       {
-      StructuredSet<ImplicitDataElement> ssi;
-      ssi.Copy(ds.Internal);
-      ssi.template Write<TSwap>(os);
+      ds.Internal.template Write<ImplicitDataElement,TSwap>(os);
       }
     else if ( ds.NegociatedTS == TS::Explicit )
     {
-   ds.Internal.template Write<TSwap>(os);
+   ds.Internal.template Write<ExplicitDataElement,TSwap>(os);
     }
   return os;
 }

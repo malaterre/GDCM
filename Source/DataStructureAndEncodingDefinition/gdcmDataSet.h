@@ -45,7 +45,6 @@ namespace gdcm
  * or defined length (different from 0) means nested dataset with defined
  * length.
  */
-class ExplicitDataElement;
 class GDCM_EXPORT DataSet : public Value
 {
   template <typename TSwap> friend class IOSerialize;
@@ -71,8 +70,8 @@ public:
     Length = l; 
   }
 
-  void InsertDataElement(ExplicitDataElement const &de);
-  const ExplicitDataElement& GetDataElement(const Tag &t) const;
+  void InsertDataElement(DataElement const &de);
+  const DataElement& GetDataElement(const Tag &t) const;
   bool FindDataElement(const Tag &t) const;
 
   DataSet &operator = (DataSet const &r);
@@ -80,7 +79,7 @@ public:
 
   void Print(std::ostream &os) const;
 
-  const StructuredSet<ExplicitDataElement> &GetInternal() const { return Internal; }
+  const StructuredSet<DataElement> &GetInternal() const { return Internal; }
 
   // TODO
   // This function should not be in the public API:
@@ -88,7 +87,7 @@ public:
 
 private:
   TS::NegociatedType NegociatedTS;
-  StructuredSet<ExplicitDataElement> Internal;
+  StructuredSet<DataElement> Internal;
 
   VL Length;
 };

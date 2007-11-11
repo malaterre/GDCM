@@ -27,16 +27,16 @@
 namespace gdcm
 {
 
-  template <typename DE, typename TSwap>
-  IStream &ValueIO<DE,TSwap>::Read(IStream &is, Value& _v) {
+  template <typename TDE, typename TSwap>
+  IStream &ValueIO<TDE,TSwap>::Read(IStream &is, Value& _v) {
     Value* v = &_v;
     if( ByteValue *bv = dynamic_cast<ByteValue*>(v) )
     {
       bv->template Read<TSwap>(is);
     }
-    else if( SequenceOfItems<DE> *si = dynamic_cast<SequenceOfItems<DE>*>(v) )
+    else if( SequenceOfItems<DataElement> *si = dynamic_cast<SequenceOfItems<DataElement>*>(v) )
     {
-      si->template Read<TSwap>(is);
+      si->template Read<TDE,TSwap>(is);
     }
     else if( SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(v) )
     {
@@ -56,9 +56,9 @@ namespace gdcm
     {
 	    bv->template Write<TSwap>(os);
     }
-    else if( const SequenceOfItems<DE> *si = dynamic_cast<const SequenceOfItems<DE>*>(v) )
+    else if( const SequenceOfItems<DataElement> *si = dynamic_cast<const SequenceOfItems<DataElement>*>(v) )
     {
-	    si->template Write<TSwap>(os);
+	    si->template Write<DE,TSwap>(os);
     }
     else if( const SequenceOfFragments *sf = dynamic_cast<const SequenceOfFragments*>(v) )
     {

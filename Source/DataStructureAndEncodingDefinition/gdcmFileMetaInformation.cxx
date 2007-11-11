@@ -32,7 +32,7 @@ namespace gdcm
 void FileMetaInformation::FillFromDataSet(DataSet const &ds)
 {
   // Example: CR-MONO1-10-chest.dcm is missing a file meta header:
-  ExplicitDataElement xde;
+  DataElement xde;
   // File Meta Information Version (0002,0001) -> computed
   if( !FindDataElement( Tag(0x0002, 0x0001) ) )
     {
@@ -49,7 +49,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
       }
     else
       {
-      const ExplicitDataElement& msclass = ds.GetDataElement( Tag(0x0008, 0x0016) );
+      const DataElement& msclass = ds.GetDataElement( Tag(0x0008, 0x0016) );
       xde = msclass;
       xde.SetTag( Tag(0x0002, 0x0002) );
       if( msclass.GetVR() == VR::UN )
@@ -64,7 +64,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     {
     if( FindDataElement( Tag(0x0008, 0x0018) ) )
       {
-      const ExplicitDataElement& msinst = ds.GetDataElement( Tag(0x0008, 0x0018) );
+      const DataElement& msinst = ds.GetDataElement( Tag(0x0008, 0x0018) );
       xde = msinst;
       xde.SetTag( Tag(0x0002, 0x0003) );
       if( msinst.GetVR() == VR::UN )
@@ -96,7 +96,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
   // (Meta) Group Length (0002,0000) -> computed
   //unsigned int glen = ComputeGroupLength( Tag(0x0002, 0x0000) );
   unsigned int glen = GetLength();
-  ExplicitDataElement xgl( Tag(0x0002, 0x0000), 4, VR::UL );
+  DataElement xgl( Tag(0x0002, 0x0000), 4, VR::UL );
   Element<VR::UL, VM::VM1> el = 
     reinterpret_cast< Element<VR::UL, VM::VM1>& > ( glen );
   StringStream ss;
@@ -284,7 +284,7 @@ IStream &FileMetaInformation::Read(IStream &is)
         Insert( xde );
         }
 
-    ComputeDataSetTransferSyntax<ExplicitDataElement>();
+    ComputeDataSetTransferSyntax();
 
   // we are at the end of the meta file information and before the dataset
   return is;
@@ -305,6 +305,7 @@ IStream &FileMetaInformation::ReadCompat(IStream &is)
     }
   else if( t.GetGroup() == 0x0012 )
     {
+	    abort();
     return ReadCompatInternal<SwapperDoOp>(is);
     }
   else
@@ -337,7 +338,7 @@ IStream &FileMetaInformation::ReadCompatInternal(IStream &is)
         Insert( xde );
         }
       // Now is a good time to find out the dataset transfer syntax
-      ComputeDataSetTransferSyntax<ExplicitDataElement>();
+      ComputeDataSetTransferSyntax();
       }
     else
       {
@@ -349,11 +350,11 @@ IStream &FileMetaInformation::ReadCompatInternal(IStream &is)
       ImplicitDataElement ide;
       while( ReadImplicitDataElement<SwapperNoOp>(is, ide ) )
         {
-        ExplicitDataElement xde(ide);
+        DataElement xde(ide);
         Insert(xde);
         }
       // Now is a good time to find out the dataset transfer syntax
-      ComputeDataSetTransferSyntax<ImplicitDataElement>();
+      ComputeDataSetTransferSyntax();
       }
     }
 //  else
@@ -372,11 +373,12 @@ IStream &FileMetaInformation::ReadCompatInternal(IStream &is)
 //  //InternalTS = ts;
 //}
 
-template <typename DE>
+// FIXME: If any boozoo ever write a SQ in the meta header
+// we are in bad shape...
 void FileMetaInformation::ComputeDataSetTransferSyntax()
 {
   const gdcm::Tag t(0x0002,0x0010);
-  const DE &de = GetDataElement(t);
+  const DataElement &de = GetDataElement(t);
   //TS::NegociatedType nt = GetNegociatedType();
   std::string ts;
 //  if( const ExplicitDataElement *xde = dynamic_cast<const ExplicitDataElement*>(&de) )
@@ -471,8 +473,7 @@ OStream &FileMetaInformation::Write(OStream &os) const
 //  }
 //  else if( IsValid() )
   {
-    std::cerr << "IsValid" << std::endl;
-    this->StructuredSet<ExplicitDataElement>::Write<SwapperNoOp>(os);
+    this->StructuredSet<DataElement>::Write<ExplicitDataElement,SwapperNoOp>(os);
   }
 //  else
 //  {

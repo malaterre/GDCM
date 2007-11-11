@@ -22,12 +22,12 @@
 namespace gdcm
 {
   template <typename DEType>
-  template <typename TSwap>
+  template <typename TDE, typename TSwap>
   IStream &StructuredSet<DEType>::ReadNested(IStream &is) {
     DEType de;
     const Tag itemDelItem(0xfffe,0xe00d);
     assert( de.GetTag() != itemDelItem ); // precondition before while loop
-    while( de.Read<TSwap>(is) && de.GetTag() != itemDelItem  ) // Keep that order please !
+    while( de.Read<TDE,TSwap>(is) && de.GetTag() != itemDelItem  ) // Keep that order please !
       {
       //std::cout << "DEBUG Nested: " << de << std::endl;
       DES.insert( de );
@@ -38,12 +38,12 @@ namespace gdcm
 }
 
   template <typename DEType>
-  template <typename TSwap>
+  template <typename TDE, typename TSwap>
   IStream &StructuredSet<DEType>::Read(IStream &is) {
     DEType de;
-    while( !is.eof() && de.Read<TSwap>(is) )
+    while( !is.eof() && de.Read<TDE,TSwap>(is) )
       {
-      std::cerr << "DEBUG:" << de << std::endl;
+      //std::cerr << "DEBUG:" << de << std::endl;
       assert( de.GetTag() != Tag(0,0) );
       DES.insert( de );
       }
@@ -52,13 +52,13 @@ namespace gdcm
   }
 
   template <typename DEType>
-  template <typename TSwap>
+  template <typename TDE, typename TSwap>
   IStream &StructuredSet<DEType>::ReadWithLength(IStream &is, VL &length) {
     DEType de;
     VL l = 0;
     //std::cout << "ReadWithLength Length: " << length << std::endl;
     VL locallength = length;
-    while( l != locallength && de.Read<TSwap>(is))
+    while( l != locallength && de.Read<TDE,TSwap>(is))
       {
       //std::cout << "Nested: " << de << std::endl;
       DES.insert( de );
@@ -80,13 +80,12 @@ namespace gdcm
   }
 
   template <typename DEType>
-  template <typename TSwap>
+  template <typename TDE, typename TSwap>
   OStream const &StructuredSet<DEType>::Write(OStream &os) const {
-    //DEType de;
     typename StructuredSet<DEType>::ConstIterator it = DES.begin();
     for( ; it != DES.end(); ++it)
       {
-      std::cerr << "DEBUG:" << *it << std::endl;
+      //std::cerr << "DEBUG:" << *it << std::endl;
       const DEType & de = *it;
       // If this is a group length make sure this is consistant
       if( de.GetTag().GetGroup() == 0x0001
@@ -100,6 +99,10 @@ namespace gdcm
       // After that we are sure the elements are valid
       else if( de.GetTag().GetElement() == 0x0 )
         {
+		// FIXME
+		// This is not a good design !
+		// A Writer should not have this kind of knowledge.
+		// writting is simply serializing on disk !
         Element<VR::UL, VM::VM1> el;
         StringStream sst;
         //sst.SetSwapCode( os.GetSwapCode() );
@@ -126,17 +129,17 @@ namespace gdcm
           bv2->SetLength(4);
           bv2->Read<TSwap>(sst);
           correct.SetValue( *bv2 );
-          correct.Write<TSwap>(os);
+          correct.Write<TDE,TSwap>(os);
           }
         else
           {
           // okay good value
-          de.Write<TSwap>(os);
+          de.Write<TDE,TSwap>(os);
           }
         }
       else // well simply writes it
         {
-        de.Write<TSwap>(os);
+        de.Write<TDE,TSwap>(os);
         }
       }
     return os;

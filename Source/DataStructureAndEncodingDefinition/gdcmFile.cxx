@@ -78,9 +78,7 @@ IStream &File::Read(IStream &is)
 OStream const &File::Write(OStream &os) const
 {
 
-	std::cerr << "Write" << std::endl;
   P.Write(os);
-	std::cerr << "Write header" << std::endl;
 
   Header.Write(os);
 

@@ -13,32 +13,14 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
-#ifndef __gdcmImplicitDataElement_h
-#define __gdcmImplicitDataElement_h
-
 #include "gdcmDataElement.h"
+
+#include "gdcmByteValue.h"
+#include "gdcmSequenceOfItems.h"
 
 namespace gdcm
 {
-/**
- * \brief Class to represent an *Implicit VR* Data Element
- * \note bla
- */
-class GDCM_EXPORT ImplicitDataElement : public DataElement
-{
-public:
-  VL GetLength() const;
 
-  template <typename TSwap>
-  IStream &Read(IStream& is);
-
-  template <typename TSwap>
-  const OStream &Write(OStream& os) const;
-};
 
 } // end namespace gdcm
 
-#include "gdcmImplicitDataElement.txx"
-
-#endif //__gdcmImplicitDataElement_h

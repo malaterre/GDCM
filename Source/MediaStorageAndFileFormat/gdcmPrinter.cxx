@@ -43,7 +43,7 @@ Printer::~Printer()
 void PrintValue(VR::VRType const &vr, VM::VMType const &vm, const Value &v);
 
 //-----------------------------------------------------------------------------
-void Printer::PrintElement(std::ostream& os, const ExplicitDataElement &xde, const DictEntry& entry) 
+void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictEntry& entry) 
 {
   const Tag &t = xde.GetTag();
   const VR &vr = xde.GetVR();
@@ -141,13 +141,13 @@ void Printer::PrintElement(std::ostream& os, const ExplicitDataElement &xde, con
     if ( lvr == VR::SQ )
     {
       os << std::endl;
-      const SequenceOfItems<ExplicitDataElement> &sqi = static_cast<const SequenceOfItems<ExplicitDataElement>&>(value);
-      SequenceOfItems<ExplicitDataElement>::ItemVector::const_iterator it = sqi.Items.begin();
+      const SequenceOfItems<DataElement> &sqi = static_cast<const SequenceOfItems<DataElement>&>(value);
+      SequenceOfItems<DataElement>::ItemVector::const_iterator it = sqi.Items.begin();
       for(; it != sqi.Items.end(); ++it)
       {
-      const Item<ExplicitDataElement> &item = *it;
-      const StructuredSet<ExplicitDataElement> &ds = item.GetNestedDataSet();
-      //const StructuredSet<ExplicitDataElement> &exds = ds.GetInternal();
+      const Item<DataElement> &item = *it;
+      const StructuredSet<DataElement> &ds = item.GetNestedDataSet();
+      //const StructuredSet<DataElement> &exds = ds.GetInternal();
       PrintDataSet(os << "  ", ds);
       }
     }
@@ -181,9 +181,9 @@ inline char *bswap(char *out, const char *in, size_t length)
 }
 
 //-----------------------------------------------------------------------------
+	/*
 void Printer::PrintElement(std::ostream& os, const ImplicitDataElement &ide, DictEntry const &entry)
 {
-	/*
   const Tag &t = _val.GetTag();
   const uint32_t vl = _val.GetVL();
   _os << t;
@@ -211,8 +211,8 @@ void Printer::PrintElement(std::ostream& os, const ImplicitDataElement &ide, Dic
   //_os  << "]";
   _os  << "\t\t";
   _os << "#" << std::setw(4) << std::setfill(' ') << std::dec << vl << ", 1 ";
-  */
 }
+  */
 
 //     = reinterpret_cast< const Element<VR::type, VM::VM1>& > ( array );
 // os.flush();
@@ -310,9 +310,9 @@ void PrintValue(VR::VRType const &vr, VM::VMType const &vm, const Value &v)
 }
 
 //-----------------------------------------------------------------------------
+#if 0
 void Printer::PrintDataSet(std::ostream& os, const StructuredSet<ImplicitDataElement> &ds)
 {
-#if 0
   //ImplicitDataElement de;
   Printer::PrintStyles pstyle = is.GetPrintStyle();
   (void)pstyle;
@@ -457,20 +457,20 @@ void Printer::PrintDataSet(std::ostream& os, const StructuredSet<ImplicitDataEle
     {
     std::cerr << "Exception:" << typeid(e).name() << std::endl;
     }
-#endif
 }
+#endif
 
 //-----------------------------------------------------------------------------
-void Printer::PrintDataSet(std::ostream &os, const StructuredSet<ExplicitDataElement> &ds)
+void Printer::PrintDataSet(std::ostream &os, const StructuredSet<DataElement> &ds)
 {
   static const Dict d;
   static const GroupDict gd;
   try
     {
-    StructuredSet<ExplicitDataElement>::ConstIterator it = ds.Begin();
+    StructuredSet<DataElement>::ConstIterator it = ds.Begin();
     for( ; it != ds.End(); ++it )
       {
-      const ExplicitDataElement &de = *it;
+      const DataElement &de = *it;
       const DictEntry &entry = d.GetDictEntry(de.GetTag());
       // Use VR from dictionary
       VR::VRType vr = entry.GetVR();
@@ -600,7 +600,7 @@ void Printer::Print(std::ostream& os)
   std::cout << "\n# Dicom-Data-Set\n";
   std::cout << "# Used TransferSyntax: \n";
   const DataSet &ds = F->GetDataSet();
-  const StructuredSet<ExplicitDataElement> &exds = ds.GetInternal();
+  const StructuredSet<DataElement> &exds = ds.GetInternal();
   PrintDataSet(os, exds);
 }
 

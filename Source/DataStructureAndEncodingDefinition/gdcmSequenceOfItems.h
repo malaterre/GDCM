@@ -47,7 +47,7 @@ public:
 
 /// \brief constructor (UndefinedLength by default)
   //SequenceOfItems(VL const &vl = 0xFFFFFFFF):SequenceLengthField(vl),NType(type) { }
-  SequenceOfItems(TS::NegociatedType type = TS::Explicit):NType(type) { }
+  SequenceOfItems() { }
 
   /// \brief Returns the SQ length, as read from disk
   VL GetLength() const { return SequenceLengthField; }
@@ -58,24 +58,17 @@ public:
   VL ComputeLength() const;
   void Clear() {}
 
-//template <typename TSwap>
-//  IStream &Read(IStream &is);
-//template <typename TSwap>
-//  OStream const & Write(OStream &os) const;
-
   /// \brief Appends an Item to the already added ones
   void AddItem(Item<DEType> const &item);
 
   SequenceOfItems &operator=(const SequenceOfItems &val) {
     SequenceLengthField = val.SequenceLengthField;
     Items = val.Items;
-    NType = val.NType;
     return *this;
     }
 
-  TS::NegociatedType GetType() const { return NType; }
 
-template <typename TSwap>
+template <typename TDE, typename TSwap>
 IStream &Read(IStream &is)
 {
 	//std::cerr << "SequenceLengthField: " << SequenceLengthField << std::endl;
@@ -86,7 +79,7 @@ IStream &Read(IStream &is)
     const Tag seqDelItem(0xfffe,0xe0dd);
     do
       {
-      item.Read<TSwap>(is);
+      item.Read<TDE,TSwap>(is);
       //std::cout << "Item: " << item << std::endl;
       Items.push_back( item );
       }
@@ -100,7 +93,7 @@ IStream &Read(IStream &is)
     //std::cout << "l: " << l << std::endl;
     while( l != SequenceLengthField )
       {
-      item.Read<TSwap>(is);
+      item.Read<TDE,TSwap>(is);
       //std::cout << "Item: " << item << std::endl;
       Items.push_back( item );
       l += item.GetLength();
@@ -131,13 +124,13 @@ IStream &Read(IStream &is)
   return is;
 }
 
-template <typename TSwap>
+template <typename TDE,typename TSwap>
 OStream const &Write(OStream &os) const
 {
   typename ItemVector::const_iterator it = Items.begin();
   for(;it != Items.end(); ++it)
     {
-    it->Write<TSwap>(os);
+    it->Write<TDE,TSwap>(os);
     }
   //if( SequenceLengthField.IsUndefined() )
   //  {
@@ -166,7 +159,6 @@ public:
   VL SequenceLengthField;
   /// \brief Vector of Sequence Items
   ItemVector Items;
-  TS::NegociatedType NType;
 };
 
 } // end namespace gdcm

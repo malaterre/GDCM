@@ -17,17 +17,11 @@
 #include "gdcmSequenceOfItems.h"
 #include "gdcmSequenceOfFragments.h"
 
-// FIXME
-#include "gdcmImplicitDataElement.h"
-
 namespace gdcm
 {
 
-ExplicitDataElement::~ExplicitDataElement()
-{
-}
-
 //-----------------------------------------------------------------------------
+/*
 ExplicitDataElement::ExplicitDataElement(ImplicitDataElement const &val)
 {
   TagField = val.GetTag();
@@ -35,6 +29,7 @@ ExplicitDataElement::ExplicitDataElement(ImplicitDataElement const &val)
   VRField = VR::UN;
   ValueField = val.ValueField;
 }
+*/
 
   VL ExplicitDataElement::GetLength() const {
     if( ValueLengthField.IsUndefined() )
@@ -43,6 +38,7 @@ ExplicitDataElement::ExplicitDataElement(ImplicitDataElement const &val)
       Value *p = ValueField;
       // If this is a SQ we need to compute it's proper length
       SequenceOfItems<ExplicitDataElement> *sq = dynamic_cast<SequenceOfItems<ExplicitDataElement>*>(p);
+      // TODO can factor the code:
       if( sq )
         {
         return TagField.GetLength() + VRField.GetLength() + 

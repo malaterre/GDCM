@@ -31,10 +31,8 @@ public:
   void Print(std::ostream& os);
 
 protected:
-  void PrintElement(std::ostream& os, const ExplicitDataElement &xde, const DictEntry &entry);
-  void PrintElement(std::ostream& os, const ImplicitDataElement &ide, const DictEntry &entry);
-  void PrintDataSet(std::ostream& os, const StructuredSet<ExplicitDataElement> &ds);
-  void PrintDataSet(std::ostream& os, const StructuredSet<ImplicitDataElement> &ds);
+  void PrintElement(std::ostream& os, const DataElement &ide, const DictEntry &entry);
+  void PrintDataSet(std::ostream& os, const StructuredSet<DataElement> &ds);
 };
 
 } // end namespace gdcm

@@ -40,6 +40,9 @@ public:
         Internal.resize(vl+1);
         }
   }
+  ByteValue(std::ostringstream const &os) {
+	   abort(); // TODO
+  }
   ~ByteValue() {
     Internal.clear();
   }

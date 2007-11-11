@@ -102,7 +102,7 @@ public:
   //void SetType(TS::NegociatedType type) { NestedDataSet.SetType(type); }
 
 
-template <typename TSwap>
+template <typename TDE, typename TSwap>
 IStream &Read(IStream &is)
 {
   // Superclass
@@ -148,12 +148,12 @@ IStream &Read(IStream &is)
   else if( ValueLengthField.IsUndefined() )
     {
     StructuredSet<DEType> &nested = NestedDataSet;
-    nested.template ReadNested<TSwap>(is);
+    nested.template ReadNested<TDE,TSwap>(is);
     }
   else /* if( ValueLengthField.IsUndefinedLength() ) */
     {
     StructuredSet<DEType> &nested = NestedDataSet;
-    nested.template ReadWithLength<TSwap>(is, ValueLengthField);
+    nested.template ReadWithLength<TDE,TSwap>(is, ValueLengthField);
     }
 //#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
 //  // Ok we have read the item, sometime the ValueLengthField was wrong
@@ -169,7 +169,7 @@ IStream &Read(IStream &is)
   return is;
 }
 
-template <typename TSwap>
+template <typename TDE, typename TSwap>
 const OStream &Write(OStream &os) const
 {
   if( !TagField.Write<TSwap>(os) )
@@ -185,7 +185,7 @@ const OStream &Write(OStream &os) const
     return os;
     }
   // Self
-  NestedDataSet.Write<TSwap>(os);
+  NestedDataSet.Write<TDE,TSwap>(os);
   //if( ValueLengthField.IsUndefined() )
   //  {
   //  const Tag itemDelItem(0xfffe,0xe00d);

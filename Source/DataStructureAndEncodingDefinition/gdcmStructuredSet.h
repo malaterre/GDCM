@@ -148,21 +148,18 @@ public:
   //        assert( 0 && "TODO" );
   //}
 
-  template <typename TSwap>
+  template <typename TDE, typename TSwap>
   IStream &ReadNested(IStream &is);
 
-  template <typename TSwap>
+  template <typename TDE, typename TSwap>
   IStream &Read(IStream &is);
 
-  template <typename TSwap>
+  template <typename TDE, typename TSwap>
   OStream const &Write(OStream &os) const;
 
-  template <typename TSwap>
+  template <typename TDE, typename TSwap>
   IStream &ReadWithLength(IStream &is, VL &length);
 
-protected:
- 
- 
 private:
   DataElementSet DES;
 };

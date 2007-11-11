@@ -50,7 +50,7 @@ const ByteValue* ImageReader::GetPointerFromElement(Tag const &tag) const
   TS::NegociatedType type; // = ds.GetNegociatedType();
 
 #if 1
-  const ExplicitDataElement &de = ds.GetDataElement( tag );
+  const DataElement &de = ds.GetDataElement( tag );
 //  if( type == TS::Explicit )
     {
     const Value &v = de.GetValue();
@@ -417,7 +417,7 @@ bool ImageReader::ReadImage()
     gdcmWarningMacro( "No Pixel Data Found" );
     return false;
     }
-  const ExplicitDataElement& xde = ds.GetDataElement( pixeldata );
+  const DataElement& xde = ds.GetDataElement( pixeldata );
 #if 1
   //if( type == TS::Explicit )
     {
@@ -581,7 +581,7 @@ bool ImageReader::ReadACRNEMAImage()
     gdcmWarningMacro( "No Pixel Data Found" );
     return false;
     }
-  const ExplicitDataElement& xde = ds.GetDataElement( pixeldata );
+  const DataElement& xde = ds.GetDataElement( pixeldata );
 #if 1
   //if( type == TS::Explicit )
     {

@@ -83,7 +83,7 @@
 /* To Remove code that support broken DICOM implementation and therefore
  * add some over head. Turn Off at your own risk 
  */
-#cmakedefine GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+//#cmakedefine GDCM_SUPPORT_BROKEN_IMPLEMENTATION
 
 /* Undocumented on purpose :-P */
 #cmakedefine GDCM_WRITE_ODD_LENGTH

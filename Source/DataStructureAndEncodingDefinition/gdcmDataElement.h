@@ -19,6 +19,9 @@
 
 #include "gdcmTag.h"
 #include "gdcmVL.h"
+#include "gdcmVR.h"
+#include "gdcmValue.h"
+#include "gdcmSmartPointer.h"
 
 namespace gdcm
 {
@@ -48,8 +51,7 @@ namespace gdcm
 class GDCM_EXPORT DataElement
 {
 public:
-  DataElement(const Tag& t = Tag(0), const VL& vl = 0):TagField(t),ValueLengthField(vl) {}
-//  virtual ~DataElement() {}
+  DataElement(const Tag& t = Tag(0), const VL& vl = 0, const VR &vr = VR::INVALID):TagField(t),ValueLengthField(vl),VRField(vr),ValueField(0) {}
 
   friend std::ostream& operator<<(std::ostream &_os, const DataElement &_val);
 
@@ -59,11 +61,25 @@ public:
   const VL& GetVL() const { return ValueLengthField; }
   void SetVL(const VL &vl) { ValueLengthField = vl; }
 
-/*  VL GetLength() const {
-    abort();
-    return 0;
+  VR const &GetVR() const { return VRField; }
+  void SetVR(VR const &vr) { VRField = vr; }
+
+  VL GetLength() const { abort(); }
+
+
+  Value const &GetValue() const { return *ValueField; }
+  void SetValue(Value const & vl) {
+    //assert( ValueField == 0 );
+    ValueField = &vl;
   }
-*/
+
+  void SetByteValue(const char *array, VL length)
+    {
+    ByteValue *bv = new ByteValue(array,length);
+    SetVL( length );
+    SetValue( *bv );
+    }
+
   bool IsUndefinedLength() const {
     return ValueLengthField.IsUndefined();
   }
@@ -89,40 +105,37 @@ public:
       && ValueLengthField == _de.ValueLengthField;
     }
 
-//  template <typename TSwap>
-//  IStream &Read(IStream &is) {
-//    if( !TagField.Read<TSwap>(is) )
-//      {
-//      abort();
-//      }
-//    if( !ValueLengthField.Read<TSwap>(is) )
-//      {
-//      abort();
-//      }
-//    return is;
-//    }
-//
-//  template <typename TSwap>
-//  const OStream &Write(OStream &os) const {
-//    if( TagField.Write<TSwap>(os) )
-//      {
-//      return ValueLengthField.Write<TSwap>(os);
-//      }
-//    return os;
-//    }
+  template <typename TDE, typename TSwap>
+  IStream &Read(IStream &is) {
+    static_cast<TDE&>(*this).template Read<TSwap>(is);
+  }
 
-  //virtual Value const & GetValue() const = 0;
-  
+  template <typename TDE, typename TSwap>
+  const OStream &Write(OStream &os) const {
+    static_cast<const TDE&>(*this).template Write<TSwap>(os);
+  }
+
 protected:
   Tag TagField;
   // This is the value read from the file, might be different from the length of Value Field
   VL ValueLengthField; // Can be 0xFFFFFFFF
+
+  // Value Representation
+  VR VRField;
+  //typedef std::tr1::shared_ptr<gdcm::Value> ValuePtr;
+  typedef SmartPointer<Value> ValuePtr;
+  ValuePtr ValueField;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const DataElement &val)
 {
   os << "Tag: " << val.TagField;
+  os << "\tVR=" << val.VRField;
   os << "\tVL: " << val.ValueLengthField;
+  if( val.ValueField )
+    {
+    val.ValueField->Print( os << "\t" );
+    }
   return os;
 }
 
