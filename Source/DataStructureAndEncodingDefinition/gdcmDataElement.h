@@ -20,7 +20,7 @@
 #include "gdcmTag.h"
 #include "gdcmVL.h"
 #include "gdcmVR.h"
-#include "gdcmValue.h"
+#include "gdcmByteValue.h"
 #include "gdcmSmartPointer.h"
 
 namespace gdcm
@@ -72,6 +72,7 @@ public:
     //assert( ValueField == 0 );
     ValueField = &vl;
   }
+  bool IsValueEmpty() const { return ValueField == 0; }
 
   void SetByteValue(const char *array, VL length)
     {

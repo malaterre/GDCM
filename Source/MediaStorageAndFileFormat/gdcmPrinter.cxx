@@ -51,6 +51,13 @@ void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictE
   const Value& value = xde.GetValue();
   VR lvr = vr;
 
+  // FIXME:
+  if( xde.IsValueEmpty() // 0xfffe item thingy
+    || entry.GetVR() == VR::INVALID ) // private element with no known VR
+    {
+    os << xde; 
+    return;
+    }
   // first of' do the VR:
   if( lvr == VR::UN )
   {

@@ -19,10 +19,6 @@
 
 #include "gdcmObject.h"
 
-// FIXME
-#include "gdcmIStream.h"
-#include "gdcmOStream.h"
-
 namespace gdcm
 {
 /**
@@ -42,35 +38,6 @@ public:
   virtual void SetLength(VL l) = 0;
 
   virtual void Clear() = 0;
-
-  //template <typename TSwap>
-  //IStream& Read(IStream &is); // { return is;}
-  //template <typename TSwap>
-  //OStream const & Write(OStream &os); // const { return os;}
-  template <typename TSwap>
-  IStream &Read(IStream &is);
-
-  template <typename TSwap>
-  const OStream &Write(OStream &os) const {
-//    if( const ByteValue *bv = dynamic_cast<const ByteValue*>(&v) )
-//    {
-//	    Write(os,*bv);
-//    }
-//    else if( const SequenceOfItems *si = dynamic_cast<const SequenceOfItems*>(&v) )
-//    {
-//	    Write(os,*si);
-//    }
-//    else if( const SequenceOfFragments *sf = dynamic_cast<const SequenceOfFragments*>(&v) )
-//    {
-//	    Write(os,*sf);
-//    }
-//    else
-    {
-	    assert( 0 && "error" );
-    }
-    return os;
-  }
-  
 };
 
 
