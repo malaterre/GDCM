@@ -139,7 +139,8 @@ protected:
 inline std::ostream& operator<<(std::ostream &os, const DataElement &val)
 {
   os << "Tag: " << val.TagField;
-  os << "\tVR=" << val.VRField;
+  if( val.VRField != VR::INVALID ) // FIXME
+    os << "\tVR=" << val.VRField;
   os << "\tVL: " << val.ValueLengthField;
   if( val.ValueField )
     {

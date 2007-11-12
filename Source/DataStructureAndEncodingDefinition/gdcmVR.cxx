@@ -301,6 +301,7 @@ VRTemplateCase(UT,rep)
 
 bool VR::IsASCII(VRType const &vr)
 {
+  //assert( vr != VR::INVALID );
   switch(vr)
     {
     VRTemplate(ASCII)
@@ -313,6 +314,7 @@ bool VR::IsASCII(VRType const &vr)
 
 bool VR::IsASCII2(VRType const &vr)
 {
+  assert( vr != VR::INVALID );
   return
     vr == AE ||
     vr == AS ||
@@ -332,6 +334,7 @@ bool VR::IsASCII2(VRType const &vr)
 
 bool VR::IsBinary(VRType const &vr)
 {
+  //assert( vr != VR::INVALID );
   switch(vr)
     {
     VRTemplate(BINARY)

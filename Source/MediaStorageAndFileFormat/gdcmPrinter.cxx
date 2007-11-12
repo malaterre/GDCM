@@ -517,7 +517,14 @@ void Printer::PrintDataSet(std::ostream &os, const StructuredSet<DataElement> &d
           }
         }
       assert( vm != VM::VM0 );
-      assert( vr != VR::INVALID );
+      //assert( vr != VR::INVALID );
+      /*if( vr == VR::INVALID )
+        {
+        const VM::VMType vm = entry.GetVM();
+        const Value& val = de.GetValue();
+        os << de.GetTag();
+        }
+      else */
       if( VR::IsASCII(vr_read) || VR::IsBinary(vr_read) )
         {
 	//	_os << de << std::endl;
