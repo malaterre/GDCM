@@ -40,10 +40,10 @@ public:
   friend std::ostream &operator<<(std::ostream &_os, const File &_val);
 
   // Read
-  IStream &Read(IStream &is);
+  std::istream &Read(std::istream &is);
 
   // Write
-  OStream const &Write(OStream &os) const;
+  std::ostream const &Write(std::ostream &os) const;
 
   const Preamble &GetPreamble() const { return P; }
   void SetPreamble(const Preamble &p) { P = p; }

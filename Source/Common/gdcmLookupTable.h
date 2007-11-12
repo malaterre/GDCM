@@ -20,12 +20,6 @@
 #include "gdcmTypes.h"
 #include "gdcmObject.h"
 
-// FIXME
-#include "gdcmIStream.h"
-#include "gdcmOStream.h"
-
-
-
 namespace gdcm
 {
   
@@ -63,7 +57,7 @@ public:
     unsigned short bitsize);
   void SetBlueLUT(const unsigned char *blue, unsigned int length);
 
-  void Decode(IStream &is, OStream &os);
+  void Decode(std::istream &is, std::ostream &os);
 
   LookupTable(LookupTable const &lut):Object(lut)
     {

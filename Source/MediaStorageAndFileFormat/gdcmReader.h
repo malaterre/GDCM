@@ -17,8 +17,9 @@
 #ifndef __gdcmReader_h
 #define __gdcmReader_h
 
-#include "gdcmIFStream.h"
 #include "gdcmFile.h"
+
+#include <fstream>
 
 namespace gdcm
 {
@@ -74,7 +75,7 @@ protected:
   File *F;
 private:
   TS GuessTransferSyntax();
-  IFStream Stream;
+  std::ifstream Stream;
 
 };
 

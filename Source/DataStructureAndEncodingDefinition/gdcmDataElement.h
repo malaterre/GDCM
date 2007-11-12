@@ -135,12 +135,12 @@ public:
   }
 
   template <typename TDE, typename TSwap>
-  IStream &Read(IStream &is) {
+  std::istream &Read(std::istream &is) {
     return static_cast<TDE*>(this)->template Read<TSwap>(is);
   }
 
   template <typename TDE, typename TSwap>
-  const OStream &Write(OStream &os) const {
+  const std::ostream &Write(std::ostream &os) const {
     return static_cast<const TDE*>(this)->template Write<TSwap>(os);
   }
 

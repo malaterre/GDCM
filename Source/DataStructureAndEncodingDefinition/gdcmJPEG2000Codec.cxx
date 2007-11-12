@@ -15,8 +15,6 @@
 =========================================================================*/
 #include "gdcmJPEG2000Codec.h"
 #include "gdcmTS.h"
-#include "gdcmOStream.h"
-#include "gdcmIStream.h"
 #include "gdcmTrace.h"
 
 #include "gdcm_openjpeg.h"
@@ -81,7 +79,7 @@ bool JPEG2000Codec::CanDecode(TS const &ts)
   return ts.GetCompressionType() == Compression::JPEG2000;
 }
 
-bool JPEG2000Codec::Decode(IStream &is, OStream &os)
+bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
 {
   opj_dparameters_t parameters;  /* decompression parameters */
   opj_event_mgr_t event_mgr;    /* event manager */

@@ -34,10 +34,10 @@ public:
   void Clear();
 
  // Read
-  IStream &Read(IStream &is);
+  std::istream &Read(std::istream &is);
 
   // Write
-  OStream const &Write(OStream &os) const;
+  std::ostream const &Write(std::ostream &os) const;
 
   void Print(std::ostream &os) const;
 

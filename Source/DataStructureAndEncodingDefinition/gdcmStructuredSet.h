@@ -20,9 +20,6 @@
 #include "gdcmTag.h"
 #include "gdcmVR.h"
 #include "gdcmElement.h"
-#include "gdcmStringStream.h"
-//#include "gdcmExplicitDataElement.h"
-//#include "gdcmImplicitDataElement.h"
 
 #include <set>
 #include <iterator>
@@ -151,16 +148,16 @@ public:
   //}
 
   template <typename TDE, typename TSwap>
-  IStream &ReadNested(IStream &is);
+  std::istream &ReadNested(std::istream &is);
 
   template <typename TDE, typename TSwap>
-  IStream &Read(IStream &is);
+  std::istream &Read(std::istream &is);
 
   template <typename TDE, typename TSwap>
-  OStream const &Write(OStream &os) const;
+  std::ostream const &Write(std::ostream &os) const;
 
   template <typename TDE, typename TSwap>
-  IStream &ReadWithLength(IStream &is, VL &length);
+  std::istream &ReadWithLength(std::istream &is, VL &length);
 
 private:
   DataElementSet DES;

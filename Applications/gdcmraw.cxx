@@ -172,7 +172,7 @@ int main(int argc, char *argv[])
     }
 
   std::ofstream output(outfilename.c_str(), std::ios::binary);
-  const gdcm::ExplicitDataElement& pdde = ds.GetDataElement( rawTag );
+  const gdcm::DataElement& pdde = ds.GetDataElement( rawTag );
   const gdcm::Value &v = pdde.GetValue();
   const gdcm::ByteValue *bv = dynamic_cast<const gdcm::ByteValue*>(&v);
   if( bv )

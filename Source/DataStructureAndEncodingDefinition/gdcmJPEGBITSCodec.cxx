@@ -41,7 +41,7 @@ namespace gdcm
 typedef struct {
   struct jpeg_source_mgr pub;	/* public fields */
 
-  IStream * infile;		/* source stream */
+  std::istream * infile;		/* source stream */
   JOCTET * buffer;		/* start of buffer */
   boolean start_of_file;	/* have we gotten any data yet? */
 } my_source_mgr;
@@ -216,7 +216,7 @@ term_source (j_decompress_ptr cinfo)
  */
 
 GLOBAL(void)
-jpeg_stdio_src (j_decompress_ptr cinfo, IStream & infile, bool flag)
+jpeg_stdio_src (j_decompress_ptr cinfo, std::istream & infile, bool flag)
 {
   my_src_ptr src;
 
@@ -301,7 +301,7 @@ METHODDEF(void) my_error_exit (j_common_ptr cinfo) {
 }
 }
 
-bool JPEGBITSCodec::Decode(IStream &is, OStream &os)
+bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
 {
   /* This struct contains the JPEG decompression parameters and pointers to
    * working space (which is allocated as needed by the JPEG library).

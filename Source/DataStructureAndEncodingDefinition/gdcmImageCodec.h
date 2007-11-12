@@ -31,7 +31,7 @@ public:
   ImageCodec();
   ~ImageCodec();
   bool CanDecode(TS const &) { return false; }
-  bool Decode(IStream &is, OStream &os);
+  bool Decode(std::istream &is, std::ostream &os);
 
   unsigned int GetPlanarConfiguration() const
     {
@@ -82,13 +82,13 @@ private:
   typedef SmartPointer<LookupTable> LUTPtr;
   LUTPtr LUT;
 
-  bool DoPixelType(IStream &is, OStream &os);
-  bool DoByteSwap(IStream &is, OStream &os);
-  bool DoYBR(IStream &is, OStream &os);
-  bool DoPlanarConfiguration(IStream &is, OStream &os);
-  bool DoSimpleCopy(IStream &is, OStream &os);
-  bool DoPaddedCompositePixelCode(IStream &is, OStream &os);
-  bool DoInvertMonochrome(IStream &is, OStream &os);
+  bool DoPixelType(std::istream &is, std::ostream &os);
+  bool DoByteSwap(std::istream &is, std::ostream &os);
+  bool DoYBR(std::istream &is, std::ostream &os);
+  bool DoPlanarConfiguration(std::istream &is, std::ostream &os);
+  bool DoSimpleCopy(std::istream &is, std::ostream &os);
+  bool DoPaddedCompositePixelCode(std::istream &is, std::ostream &os);
+  bool DoInvertMonochrome(std::istream &is, std::ostream &os);
 };
 
 } // end namespace gdcm

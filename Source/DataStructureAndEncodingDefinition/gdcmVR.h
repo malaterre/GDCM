@@ -17,9 +17,7 @@
 #define __gdcmVR_h
 
 #include "gdcmTag.h"
-//#include "gdcmVL.h"
 #include "gdcmTrace.h"
-#include "gdcmIFStream.h"
 
 #include <iostream>
 #include <fstream>
@@ -133,7 +131,7 @@ public:
   
   VR(VRType vr = INVALID):VRField(vr) { }
   //VR(VR const &vr):VRField(vr.VRField) { }
-  IStream &Read(IStream &is)
+  std::istream &Read(std::istream &is)
     {
     char vr[2];
     is.read(vr, 2);
@@ -159,7 +157,7 @@ public:
     return is;
     }
 
-  const OStream &Write(OStream &os) const
+  const std::ostream &Write(std::ostream &os) const
     {
     const char *vr = GetVRString(VRField);
     assert( strlen( vr ) == 2 );

@@ -23,7 +23,6 @@
 #include "gdcmJPEGCodec.h"
 #include "gdcmJPEG2000Codec.h"
 #include "gdcmRLECodec.h"
-#include "gdcmStringStream.h"
 
 namespace gdcm
 {
@@ -49,10 +48,10 @@ bool ImageValue::GetBuffer(char *buffer) const
     codec.SetLUT( GetLUT() );
     codec.SetPixelType( GetPixelType() );
     codec.SetNeedByteSwap( GetNeedByteSwap() );
-    StringStream is;
+    std::stringstream is;
     //is.SetSwapCode( GetSwapCode() );
     is.write(buffer, len);
-    StringStream os;
+    std::stringstream os;
     bool r = codec.Decode(is, os);
     std::string::size_type check = os.str().size();
     // FIXME
@@ -90,14 +89,14 @@ bool ImageValue::GetBuffer(char *buffer) const
       unsigned long pos = 0;
       for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
         {
-        StringStream is;
+        std::stringstream is;
         const Fragment &frag = sf->GetFragment(i);
         const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
         char *mybuffer = new char[bv.GetLength()];
         bv.GetBuffer(mybuffer, bv.GetLength());
         is.write(mybuffer, bv.GetLength());
         delete[] mybuffer;
-        StringStream os;
+        std::stringstream os;
         bool r = codec.Decode(is, os);
         assert( r == true );
         std::streampos p = is.tellg();
@@ -114,11 +113,11 @@ bool ImageValue::GetBuffer(char *buffer) const
       JPEG2000Codec codec;
       codec.SetPlanarConfiguration( GetPlanarConfiguration() );
       codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
-      StringStream is;
+      std::stringstream is;
       unsigned long totalLen = sf->ComputeByteLength();
       sf->GetBuffer(buffer, totalLen);
       is.write(buffer, totalLen);
-      StringStream os;
+      std::stringstream os;
       bool r = codec.Decode(is, os);
       memcpy(buffer, os.str().c_str(), len);
       return r;
@@ -139,14 +138,14 @@ bool ImageValue::GetBuffer(char *buffer) const
            || GetDimensions(2) == sf->GetNumberOfFragments() );
       for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
         {
-        StringStream is;
+        std::stringstream is;
         const Fragment &frag = sf->GetFragment(i);
         const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
         char *mybuffer = new char[bv.GetLength()];
         bv.GetBuffer(mybuffer, bv.GetLength());
         is.write(mybuffer, bv.GetLength());
         delete[] mybuffer;
-        StringStream os;
+        std::stringstream os;
         codec.SetLength( llen );
         bool r = codec.Decode(is, os);
         assert( r == true );

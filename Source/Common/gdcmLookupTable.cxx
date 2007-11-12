@@ -151,7 +151,7 @@ void LookupTable::SetBlueLUT(const unsigned char *blue, unsigned int length)
   SetLUT(BLUE, blue, length);
 }
 
-void LookupTable::Decode(IStream &is, OStream &os)
+void LookupTable::Decode(std::istream &is, std::ostream &os)
 {
   if ( BitSample == 8 )
     {

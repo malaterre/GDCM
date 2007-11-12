@@ -17,7 +17,6 @@
 #ifndef __gdcmWriter_h
 #define __gdcmWriter_h
 
-#include "gdcmOFStream.h"
 #include "gdcmFile.h"
 
 namespace gdcm
@@ -86,7 +85,7 @@ public:
 //  }
 
 protected:
-  /*OFStream */ std::ofstream Stream;
+  std::ofstream Stream;
 
   //bool WritePreamble();
 

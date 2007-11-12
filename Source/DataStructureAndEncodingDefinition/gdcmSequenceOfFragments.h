@@ -48,11 +48,6 @@ public:
   }
   void Clear() {}
 
-//template <typename TSwap>
-//  IStream &Read(IStream &is);
-//template <typename TSwap>
-//  OStream const & Write(OStream &os) const;
-
   /// \brief Appends a Fragment to the already added ones
   void AddFragment(Fragment const &item);
 
@@ -78,7 +73,7 @@ public:
 
 
 template <typename TSwap>
-IStream& Read(IStream &is)
+std::istream& Read(std::istream &is)
 {
   assert( SequenceLengthField.IsUndefined() );
   //if( SequenceLengthField.IsUndefined() )
@@ -104,7 +99,7 @@ IStream& Read(IStream &is)
 }
 
 template <typename TSwap>
-OStream const &Write(OStream &os) const
+std::ostream const &Write(std::ostream &os) const
 {
   if( !Table.Write<TSwap>(os) )
     {

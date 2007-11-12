@@ -18,12 +18,6 @@
 #define __gdcmTag_h
 
 #include "gdcmTypes.h"
-//#include "gdcmSwapCode.h"
-//#include "gdcmByteSwap.txx"
-//#include "gdcmSwapper.h"
-
-#include "gdcmIStream.h"
-#include "gdcmOStream.h"
 
 #include <iostream>
 #include <iomanip>
@@ -159,7 +153,7 @@ public:
   bool IsPrivate() const { return !IsPublic(); }
 //-----------------------------------------------------------------------------
   template <typename TSwap>
-  IStream &Read(IStream &is)
+  std::istream &Read(std::istream &is)
     {
     is.read(ElementTag.bytes, 4);
     TSwap::SwapArray(ElementTag.tags, 2);
@@ -167,7 +161,7 @@ public:
     }
 
   template <typename TSwap>
-  const OStream &Write(OStream &os) const
+  const std::ostream &Write(std::ostream &os) const
     {
     uint16_t copy[2];
     copy[0]= ElementTag.tags[0];

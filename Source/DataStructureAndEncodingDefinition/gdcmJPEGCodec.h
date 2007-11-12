@@ -31,7 +31,7 @@ public:
   JPEGCodec();
   ~JPEGCodec();
   bool CanDecode(TS const &ts);
-  bool Decode(IStream &is, OStream &os);
+  bool Decode(std::istream &is, std::ostream &os);
   void SetPixelType(PixelType const &pt);
 
 protected:

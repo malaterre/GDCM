@@ -31,10 +31,10 @@ public:
   VL GetLength() const;
 
   template <typename TSwap>
-  IStream &Read(IStream &is);
+  std::istream &Read(std::istream &is);
 
   template <typename TSwap>
-  const OStream &Write(OStream &os) const;
+  const std::ostream &Write(std::ostream &os) const;
 };
 
 } // end namespace gdcm

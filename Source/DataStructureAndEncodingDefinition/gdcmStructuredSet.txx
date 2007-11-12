@@ -23,7 +23,7 @@ namespace gdcm
 {
   template <typename DEType>
   template <typename TDE, typename TSwap>
-  IStream &StructuredSet<DEType>::ReadNested(IStream &is) {
+  std::istream &StructuredSet<DEType>::ReadNested(std::istream &is) {
     DEType de;
     const Tag itemDelItem(0xfffe,0xe00d);
     assert( de.GetTag() != itemDelItem ); // precondition before while loop
@@ -39,7 +39,7 @@ namespace gdcm
 
   template <typename DEType>
   template <typename TDE, typename TSwap>
-  IStream &StructuredSet<DEType>::Read(IStream &is) {
+  std::istream &StructuredSet<DEType>::Read(std::istream &is) {
     DEType de;
     while( !is.eof() && de.Read<TDE,TSwap>(is) )
       {
@@ -53,7 +53,7 @@ namespace gdcm
 
   template <typename DEType>
   template <typename TDE, typename TSwap>
-  IStream &StructuredSet<DEType>::ReadWithLength(IStream &is, VL &length) {
+  std::istream &StructuredSet<DEType>::ReadWithLength(std::istream &is, VL &length) {
     DEType de;
     VL l = 0;
     //std::cout << "ReadWithLength Length: " << length << std::endl;
@@ -81,7 +81,7 @@ namespace gdcm
 
   template <typename DEType>
   template <typename TDE, typename TSwap>
-  OStream const &StructuredSet<DEType>::Write(OStream &os) const {
+  std::ostream const &StructuredSet<DEType>::Write(std::ostream &os) const {
     typename StructuredSet<DEType>::ConstIterator it = DES.begin();
     for( ; it != DES.end(); ++it)
       {
@@ -104,7 +104,7 @@ namespace gdcm
 		// A Writer should not have this kind of knowledge.
 		// writting is simply serializing on disk !
         Element<VR::UL, VM::VM1> el;
-        StringStream sst;
+        std::stringstream sst;
         //sst.SetSwapCode( os.GetSwapCode() );
         const Value &v = de.GetValue();
         const Value *pv = &v;

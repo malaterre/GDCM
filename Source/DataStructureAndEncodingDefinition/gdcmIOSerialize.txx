@@ -27,7 +27,6 @@
 #include "gdcmByteValue.h"
 #include "gdcmSequenceOfItems.h"
 #include "gdcmSequenceOfFragments.h"
-#include "gdcmStringStream.h"
 #include "gdcmElement.h"
 
 
@@ -37,7 +36,7 @@ namespace gdcm
 
 //-----------------------------------------------------------------------------
 template <typename TSwap>
-IStream &IOSerialize<TSwap>::Read(IStream &is,DataSet &ds)
+std::istream &IOSerialize<TSwap>::Read(std::istream &is,DataSet &ds)
 {
   //std::cerr << "DataSet::Read Length=" << Length << std::endl;
   if( ds.Length == 0)
@@ -83,7 +82,7 @@ IStream &IOSerialize<TSwap>::Read(IStream &is,DataSet &ds)
 
 //-----------------------------------------------------------------------------
 template <typename TSwap>
-OStream const &IOSerialize<TSwap>::Write(OStream &os,DataSet const &ds)
+std::ostream const &IOSerialize<TSwap>::Write(std::ostream &os,DataSet const &ds)
 {
     if(ds.NegociatedTS == TS::Implicit)
       {

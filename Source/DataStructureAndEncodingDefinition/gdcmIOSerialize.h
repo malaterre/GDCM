@@ -18,8 +18,6 @@
 #define __gdcmIOSerialize_h
 
 #include "gdcmTypes.h"
-#include "gdcmIStream.h"
-#include "gdcmOStream.h"
 #include "gdcmDataSet.h"
 
 namespace gdcm
@@ -35,8 +33,8 @@ template <typename TSwap>
 class GDCM_EXPORT IOSerialize
 {
 public:
-  static IStream &Read(IStream &is,DataSet &ds);
-  static OStream const &Write(OStream &os,DataSet const &ds);
+  static std::istream &Read(std::istream &is,DataSet &ds);
+  static std::ostream const &Write(std::ostream &os,DataSet const &ds);
 
 };
 

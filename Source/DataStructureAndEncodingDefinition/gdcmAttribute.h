@@ -78,7 +78,7 @@ public:
   const VRType* GetBytes() const {
     return Internal;
   }
-  void Read(IStream &_is) {
+  void Read(std::istream &_is) {
     uint16_t cref[] = { Group, Element };
     uint16_t c[2];
     _is.read((char*)&c, 4);
@@ -89,7 +89,7 @@ public:
      return EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
       l,_is);
     }
-  void Write(OStream &_os) const {
+  void Write(std::ostream &_os) const {
     uint16_t c[] = { Group, Element };
     _os.write((char*)&c, 4);
     uint32_t l = GetLength() * sizeof( typename VRToType<TVR>::Type );
@@ -105,19 +105,19 @@ template<int T> class VRVLSize;
 // Implementation when VL is codec on 16 bits:
 template<> class VRVLSize<0> {
 public:
-  static inline uint16_t Read(IStream &_is) {
+  static inline uint16_t Read(std::istream &_is) {
     uint16_t l;
     _is.read((char*)&l, 2);
     return l;
     }
 
-  static inline void Write(OStream &_os)  {
+  static inline void Write(std::ostream &_os)  {
     }
 };
 // Implementation when VL is codec on 32 bits:
 template<> class VRVLSize<1> {
 public:
-  static inline uint32_t Read(IStream &_is) {
+  static inline uint32_t Read(std::istream &_is) {
     char dummy[2];
     _is.read(dummy, 2);
 
@@ -126,7 +126,7 @@ public:
     return l;
     }
 
-  static inline void Write(OStream &_os)  {
+  static inline void Write(std::ostream &_os)  {
     }
 };
 
@@ -178,7 +178,7 @@ public:
   const VRType* GetBytes() const {
     return Internal;
   }
-  void Read(IStream &_is) {
+  void Read(std::istream &_is) {
     uint16_t cref[] = { Group, Element };
     uint16_t c[2];
     _is.read((char*)&c, 4);
@@ -190,7 +190,7 @@ public:
      return EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
       l,_is);
     }
-  void Write(OStream &_os) const {
+  void Write(std::ostream &_os) const {
     uint16_t c[] = { Group, Element };
     _os.write((char*)&c, 4);
     uint32_t l = GetLength() * sizeof( typename VRToType<TVR>::Type );
@@ -240,7 +240,7 @@ public:
       _os << "," << Internal[i];
     }
 
-  void Read(IStream &_is) {
+  void Read(std::istream &_is) {
     EncodingImplementation<VR::ASCII>::Read(Internal, GetLength(),_is);
     }
   void Write(std::ostream &_os) const {
@@ -314,7 +314,7 @@ public:
     for(unsigned long i=1; i<length; ++i)
       _os << "," << Internal[i];
     }
-  void Read(IStream &_is) {
+  void Read(std::istream &_is) {
     EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
       GetLength(),_is);
     }
@@ -430,7 +430,7 @@ public:
     Internal = bytes;
     Length = length;
   }
-  void Read(IStream &_is) {
+  void Read(std::istream &_is) {
      uint16_t c[2];
     _is.read((char*)&c, 4);
     uint32_t l;
@@ -438,7 +438,7 @@ public:
     Length = l;
     _is.read( Internal, Length );
     }
-  void Write(OStream &_os) const {
+  void Write(std::ostream &_os) const {
      uint16_t c[] = {0x7fe0, 0x0010};
     _os.write((char*)&c, 4);
     _os.write((char*)&Length, 4);
@@ -455,7 +455,7 @@ public:
     _os << Tag(Group,Element);
     sqa.Print(_os << std::endl << '\t');
     }
- void Write(OStream &_os) const {
+ void Write(std::ostream &_os) const {
     uint16_t c[] = {Group, Element};
     _os.write((char*)&c, 4);
     uint32_t undef = 0xffffffff;

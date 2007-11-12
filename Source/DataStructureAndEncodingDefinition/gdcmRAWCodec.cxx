@@ -15,8 +15,6 @@
 =========================================================================*/
 #include "gdcmRAWCodec.h"
 #include "gdcmTS.h"
-#include "gdcmOStream.h"
-#include "gdcmIStream.h"
 #include "gdcmByteSwap.txx"
 
 
@@ -43,7 +41,7 @@ bool RAWCodec::CanDecode(TS const &ts)
   return ts.GetCompressionType() == Compression::RAW;
 }
 
-bool RAWCodec::Decode(IStream &is, OStream &os)
+bool RAWCodec::Decode(std::istream &is, std::ostream &os)
 {
   ImageCodec::Decode(is, os);
   return true;

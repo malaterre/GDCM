@@ -47,11 +47,11 @@ public:
   TS::MSType GetMediaStorageType() const;
 
   // Read
-  IStream &Read(IStream &is);
-  IStream &ReadCompat(IStream &is);
+  std::istream &Read(std::istream &is);
+  std::istream &ReadCompat(std::istream &is);
 
   // Write
-  OStream &Write(OStream &os) const;
+  std::ostream &Write(std::ostream &os) const;
 
   // Construct a FileMetaInformation from an already existing DataSet:
   void FillFromDataSet(DataSet const &ds);
@@ -60,7 +60,7 @@ protected:
   void ComputeDataSetTransferSyntax(); // FIXME
 
   template <typename TSwap>
-  IStream &ReadCompatInternal(IStream &is);
+  std::istream &ReadCompatInternal(std::istream &is);
 
   void Default();
   void ComputeDataSetMediaStorageSOPClass();

@@ -17,9 +17,7 @@
 #ifndef __gdcmValueIO_h
 #define __gdcmValueIO_h
 
-// FIXME
-#include "gdcmIStream.h"
-#include "gdcmOStream.h"
+#include "gdcmTypes.h"
 
 namespace gdcm
 {
@@ -33,9 +31,9 @@ template <typename TDE, typename TSwap>
 class GDCM_EXPORT ValueIO
 {
 public:
-  static IStream &Read(IStream &is, Value& v);
+  static std::istream &Read(std::istream &is, Value& v);
 
-  static const OStream &Write(OStream &os, const Value& v);
+  static const std::ostream &Write(std::ostream &os, const Value& v);
 };
 
 

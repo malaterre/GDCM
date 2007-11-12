@@ -18,7 +18,6 @@
 #include "gdcmImplicitDataElement.h"
 #include "gdcmValue.h"
 #include "gdcmFileMetaInformation.h"
-#include "gdcmStringStream.h"
 #include "gdcmElement.h"
 #include "gdcmPhotometricInterpretation.h"
 #include "gdcmTS.h"
@@ -182,7 +181,7 @@ bool ImageReader::Read()
   return res;
 }
 
-signed short ImageReader::ReadSSFromTag( Tag const &t, StringStream &ss,
+signed short ImageReader::ReadSSFromTag( Tag const &t, std::stringstream &ss,
   std::string &conversion )
 {
   const ByteValue *bv = GetPointerFromElement(t);
@@ -195,7 +194,7 @@ signed short ImageReader::ReadSSFromTag( Tag const &t, StringStream &ss,
   return el.GetValue();
 }
 
-unsigned short ImageReader::ReadUSFromTag( Tag const &t, StringStream &ss,
+unsigned short ImageReader::ReadUSFromTag( Tag const &t, std::stringstream &ss,
   std::string &conversion )
 {
   const ByteValue *bv = GetPointerFromElement(t);
@@ -208,7 +207,7 @@ unsigned short ImageReader::ReadUSFromTag( Tag const &t, StringStream &ss,
   return el.GetValue();
 }
 
-int ImageReader::ReadISFromTag( Tag const &t, StringStream &ss,
+int ImageReader::ReadISFromTag( Tag const &t, std::stringstream &ss,
   std::string &conversion )
 {
   const ByteValue *bv = GetPointerFromElement(t);
@@ -228,7 +227,7 @@ bool ImageReader::ReadImage()
 {
   const DataSet &ds = F->GetDataSet();
   TS::NegociatedType type; // = ds.GetNegociatedType();
-  StringStream ss;
+  std::stringstream ss;
   std::string conversion;
   // Construct a stringstream to mimic the reading from the file
   //ss.SetSwapCode( Stream.GetSwapCode() );
@@ -477,7 +476,7 @@ bool ImageReader::ReadACRNEMAImage()
 {
   const DataSet &ds = F->GetDataSet();
   TS::NegociatedType type; // = ds.GetNegociatedType();
-  StringStream ss;
+  std::stringstream ss;
   std::string conversion;
   // Construct a stringstream to mimic the reading from the file
   //ss.SetSwapCode( Stream.GetSwapCode() );

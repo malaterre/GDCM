@@ -56,7 +56,7 @@ public:
     return *this;
     }
   template <typename TSwap>
-  IStream &Read(IStream &is) {
+  std::istream &Read(std::istream &is) {
     // Superclass 
     const Tag itemStart(0xfffe, 0xe000);
     const Tag seqDelItem(0xfffe,0xe0dd);
@@ -83,7 +83,7 @@ public:
     }
 
   template <typename TSwap>
-  OStream &Write(OStream &os) const {
+  std::ostream &Write(std::ostream &os) const {
     // Superclass 
     const Tag itemStart(0xfffe, 0xe000);
     const Tag seqDelItem(0xfffe,0xe0dd);

@@ -29,7 +29,7 @@
 namespace gdcm
 {
 
-IStream &File::Read(IStream &is) 
+std::istream &File::Read(std::istream &is) 
 {
   P.Read( is );
 
@@ -75,7 +75,7 @@ IStream &File::Read(IStream &is)
   return is;
 }
 
-OStream const &File::Write(OStream &os) const
+std::ostream const &File::Write(std::ostream &os) const
 {
 
   P.Write(os);

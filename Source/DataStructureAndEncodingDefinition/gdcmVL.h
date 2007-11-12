@@ -17,11 +17,6 @@
 #define __gdcmVL_h
 
 #include "gdcmTypes.h"
-//#include "gdcmSwapCode.h"
-//#include "gdcmByteSwap.txx"
-
-#include "gdcmIStream.h"
-#include "gdcmOStream.h"
 
 #include <iostream>
 
@@ -71,7 +66,7 @@ public:
   //friend std::istream& operator>>(std::istream& is, VL& n);
 
   template <typename TSwap>
-  IStream &Read(IStream &is)
+  std::istream &Read(std::istream &is)
     {
     is.read((char*)(&ValueLength), sizeof(uint32_t));
     TSwap::SwapArray(&ValueLength,1);
@@ -79,7 +74,7 @@ public:
     }
 
   template <typename TSwap>
-  IStream &Read16(IStream &is)
+  std::istream &Read16(std::istream &is)
     {
     uint16_t copy;
     is.read((char*)(&copy), sizeof(uint16_t));
@@ -90,7 +85,7 @@ public:
     }
 
   template <typename TSwap>
-  const OStream &Write(OStream &os) const
+  const std::ostream &Write(std::ostream &os) const
     {
     uint32_t copy = ValueLength;
 #ifndef GDCM_WRITE_ODD_LENGTH
@@ -104,7 +99,7 @@ public:
     }
 
   template <typename TSwap>
-  const OStream &Write16(OStream &os) const
+  const std::ostream &Write16(std::ostream &os) const
     {
     assert( ValueLength <=   65535 /*UINT16_MAX*/ );
     uint16_t copy = ValueLength;

@@ -28,7 +28,7 @@ public:
   JPEG12Codec();
   ~JPEG12Codec();
 
-  bool Decode(IStream &is, OStream &os);
+  bool Decode(std::istream &is, std::ostream &os);
 
 private:
   JPEGInternals *Internals;

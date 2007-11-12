@@ -23,7 +23,7 @@ Preamble::~Preamble()
   delete[] Internal;
 }
 
-IStream &Preamble::Read(IStream &is)
+std::istream &Preamble::Read(std::istream &is)
 {
   // \precondition: we are at beg of Preamble
   bool r = false;
@@ -51,7 +51,7 @@ IStream &Preamble::Read(IStream &is)
 }
 
 // \precondition we are at the beginning of file
-OStream const &Preamble::Write(OStream &os) const
+std::ostream const &Preamble::Write(std::ostream &os) const
 {
 //  assert ( os.tellg()+0 == 0 );
   if( IsEmpty() )

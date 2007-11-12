@@ -15,9 +15,6 @@
 =========================================================================*/
 #include "gdcmRLECodec.h"
 #include "gdcmTS.h"
-#include "gdcmOStream.h"
-#include "gdcmIStream.h"
-#include "gdcmStringStream.h"
 #include "gdcmTrace.h"
 #include "gdcmByteSwap.txx"
 
@@ -46,7 +43,7 @@ public:
 class RLEFrame
 {
 public:
-  void Read(IStream &is)
+  void Read(std::istream &is)
     {
     // read Header (64 bytes)
     is.read((char*)(&Header), sizeof(unsigned long)*16);
@@ -106,7 +103,7 @@ bool RLECodec::CanDecode(TS const &ts)
 // Endif
 // Endloop
 
-bool RLECodec::Decode(IStream &is, OStream &os)
+bool RLECodec::Decode(std::istream &is, std::ostream &os)
 {
   // FIXME: Do some stupid work:
   //is.Seekg( 0, std::ios::end);
@@ -121,7 +118,7 @@ bool RLECodec::Decode(IStream &is, OStream &os)
   //while()
   //  {
   //  }
-  StringStream tmpos;
+  std::stringstream tmpos;
   // DEBUG
   is.seekg( 0, std::ios::end);
   std::streampos buf_size = is.tellg();

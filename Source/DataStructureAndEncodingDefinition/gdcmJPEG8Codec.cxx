@@ -14,8 +14,6 @@
 
 =========================================================================*/
 #include "gdcmJPEG8Codec.h"
-#include "gdcmOStream.h"
-#include "gdcmIStream.h"
 
 extern "C" {
 #include "jpeg/8/jinclude.h"

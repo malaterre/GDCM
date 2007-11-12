@@ -28,7 +28,7 @@ namespace gdcm
 {
 
   template <typename TDE, typename TSwap>
-  IStream &ValueIO<TDE,TSwap>::Read(IStream &is, Value& _v) {
+  std::istream &ValueIO<TDE,TSwap>::Read(std::istream &is, Value& _v) {
     Value* v = &_v;
     if( ByteValue *bv = dynamic_cast<ByteValue*>(v) )
     {
@@ -50,7 +50,7 @@ namespace gdcm
   }
 
   template <typename DE, typename TSwap>
-  const OStream &ValueIO<DE,TSwap>::Write(OStream &os, const Value& _v) {
+  const std::ostream &ValueIO<DE,TSwap>::Write(std::ostream &os, const Value& _v) {
     const Value* v = &_v;
     if( const ByteValue *bv = dynamic_cast<const ByteValue*>(v) )
     {

@@ -25,7 +25,7 @@ namespace gdcm
 
 //-----------------------------------------------------------------------------
 template <typename TSwap>
-IStream &ImplicitDataElement::Read(IStream &is)
+std::istream &ImplicitDataElement::Read(std::istream &is)
 {
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   // Read Tag
@@ -159,7 +159,7 @@ IStream &ImplicitDataElement::Read(IStream &is)
 
 //-----------------------------------------------------------------------------
 template <typename TSwap>
-const OStream &ImplicitDataElement::Write(OStream &os) const
+const std::ostream &ImplicitDataElement::Write(std::ostream &os) const
 {
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   // Write Tag

@@ -28,7 +28,7 @@ namespace gdcm
 {
 //-----------------------------------------------------------------------------
 template <typename TSwap>
-IStream &ExplicitDataElement::Read(IStream &is)
+std::istream &ExplicitDataElement::Read(std::istream &is)
 {
   // See PS 3.5, Data Element Structure With Explicit VR
   // Read Tag
@@ -167,7 +167,7 @@ IStream &ExplicitDataElement::Read(IStream &is)
 
 //-----------------------------------------------------------------------------
 template <typename TSwap>
-const OStream &ExplicitDataElement::Write(OStream &os) const
+const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
 {
   if( !TagField.Write<TSwap>(os) )
     {

@@ -17,7 +17,6 @@
 #ifndef __gdcmImageReader_h
 #define __gdcmImageReader_h
 
-#include "gdcmStringStream.h"
 #include "gdcmReader.h"
 #include "gdcmImageValue.h"
 
@@ -46,11 +45,11 @@ protected:
   bool ReadACRNEMAImage();
   
   // ugliest thing ever:
-  signed short ReadSSFromTag( Tag const &t, StringStream &ss,
+  signed short ReadSSFromTag( Tag const &t, std::stringstream &ss,
     std::string &conversion );
-  unsigned short ReadUSFromTag( Tag const &t, StringStream &ss,
+  unsigned short ReadUSFromTag( Tag const &t, std::stringstream &ss,
     std::string &conversion );
-  int ReadISFromTag( Tag const &t, StringStream &ss,
+  int ReadISFromTag( Tag const &t, std::stringstream &ss,
     std::string &conversion );
 
 private:

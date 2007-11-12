@@ -14,8 +14,6 @@
 
 =========================================================================*/
 #include "gdcmJPEG12Codec.h"
-#include "gdcmOStream.h"
-#include "gdcmIStream.h"
 
 extern "C" {
 #include "jpeg/12/jinclude.h"

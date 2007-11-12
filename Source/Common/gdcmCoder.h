@@ -18,22 +18,16 @@
 
 #include "gdcmTypes.h"
 
-// FIXME
-#include "gdcmIStream.h"
-#include "gdcmOStream.h"
-
 namespace gdcm
 {
 
 class TS;
-//class IStream;
-//class OStream;
 class Coder
 {
 public:
   virtual ~Coder() {}
   virtual bool CanCode(TS const &) { return false; }
-  virtual bool Code(IStream &is, OStream &os) { return false; }
+  virtual bool Code(std::istream &is, std::ostream &os) { return false; }
 };
 
 } // end namespace gdcm

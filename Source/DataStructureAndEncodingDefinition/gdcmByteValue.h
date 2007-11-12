@@ -118,7 +118,7 @@ public:
 
 
   template <typename TSwap>
-  IStream &Read(IStream &is) {
+  std::istream &Read(std::istream &is) {
     // If Length is odd we have detected that in SetLength
     // and calling std::vector::resize make sure to allocate *AND* 
     // initialize values to 0 so we are sure to have a \0 at the end
@@ -139,7 +139,7 @@ public:
   }
 
   template <typename TSwap>
-  OStream const &Write(OStream &os) const {
+  std::ostream const &Write(std::ostream &os) const {
 #ifdef GDCM_WRITE_ODD_LENGTH
     return os.write(&Internal[0], Length);
 #else

@@ -58,11 +58,11 @@ public:
     Internal[idx] = v;
   }
 
-  void Read(IStream &_is) {
+  void Read(std::istream &_is) {
     return EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
       GetLength(),_is);
     }
-  void Write(OStream &_os) const {
+  void Write(std::ostream &_os) const {
     return EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
       GetLength(),_os);
     }
@@ -74,7 +74,7 @@ template<> class EncodingImplementation<VR::ASCII> {
 public:
   template<typename T> // FIXME this should be VRToType<TVR>::Type
   static inline void Read(T* data, unsigned long length,
-                          IStream &_is) {
+                          std::istream &_is) {
     assert( data );
     assert( length ); // != 0
     assert( _is );
@@ -92,7 +92,7 @@ public:
 
   template<typename T>
   static inline void Write(const T* data, unsigned long length,
-                           OStream &_os)  {
+                           std::ostream &_os)  {
     assert( data );
     assert( length );
     assert( _os );
@@ -114,7 +114,7 @@ template<> class EncodingImplementation<VR::BINARY> {
 public:
   template<typename T>
   static inline void Read(T* data, unsigned long length,
-    IStream &_is) {
+    std::istream &_is) {
     const unsigned int type_size = sizeof(T);
     assert( data ); // Can we read from pointer ?
     assert( length );
@@ -129,7 +129,7 @@ public:
   }
   template<typename T>
   static inline void Write(const T* data, unsigned long length,
-    OStream &_os) { 
+    std::ostream &_os) { 
     const unsigned int type_size = sizeof(T);
     assert( data ); // Can we write into pointer ?
     assert( length );
@@ -184,7 +184,7 @@ public:
       _os << "," << Internal[i];
     }
 
-  void Read(IStream &_is) {
+  void Read(std::istream &_is) {
     EncodingImplementation<VR::ASCII>::Read(Internal, GetLength(),_is);
     }
   void Write(std::ostream &_os) const {
@@ -256,7 +256,7 @@ public:
     for(unsigned long i=1; i<length; ++i)
       _os << "," << Internal[i];
     }
-  void Read(IStream &_is) {
+  void Read(std::istream &_is) {
     EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
       GetLength(),_is);
     }

@@ -28,7 +28,7 @@ public:
   RLECodec();
   ~RLECodec();
   bool CanDecode(TS const &ts);
-  bool Decode(IStream &is, OStream &os);
+  bool Decode(std::istream &is, std::ostream &os);
 
   void SetLength(unsigned long l)
     {

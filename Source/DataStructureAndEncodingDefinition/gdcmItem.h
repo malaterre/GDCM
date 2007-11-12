@@ -88,10 +88,10 @@ public:
     }
 
 //  template <typename TSwap>
-//  IStream &Read(IStream &is);
+//  std::istream &Read(std::istream &is);
 //
 //  template <typename TSwap>
-//  const OStream &Write(OStream &os) const;
+//  const std::ostream &Write(std::ostream &os) const;
 
   //Value const & GetValue() const { return *NestedDataSet; }
 
@@ -104,7 +104,7 @@ public:
 
 
 template <typename TDE, typename TSwap>
-IStream &Read(IStream &is)
+std::istream &Read(std::istream &is)
 {
   // Superclass
   if( !TagField.Read<TSwap>(is) )
@@ -171,7 +171,7 @@ IStream &Read(IStream &is)
 }
 
 template <typename TDE, typename TSwap>
-const OStream &Write(OStream &os) const
+const std::ostream &Write(std::ostream &os) const
 {
   if( !TagField.Write<TSwap>(os) )
     {

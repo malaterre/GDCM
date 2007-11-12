@@ -28,7 +28,7 @@ public:
   JPEG2000Codec();
   ~JPEG2000Codec();
   bool CanDecode(TS const &ts);
-  bool Decode(IStream &is, OStream &os);
+  bool Decode(std::istream &is, std::ostream &os);
 private:
   JPEG2000Internals *Internals;
 };

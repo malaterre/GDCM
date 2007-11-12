@@ -16,8 +16,6 @@
 #include "gdcmJPEGCodec.h"
 #include "gdcmTS.h"
 #include "gdcmTrace.h"
-#include "gdcmIStream.h"
-#include "gdcmStringStream.h"
 
 #include "gdcmJPEG8Codec.h"
 #include "gdcmJPEG12Codec.h"
@@ -74,9 +72,9 @@ void JPEGCodec::SetBitSample(int bit)
   Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
 }
 
-bool JPEGCodec::Decode(IStream &is, OStream &os)
+bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
 {
-  StringStream tmpos;
+  std::stringstream tmpos;
   if ( !Internal->Decode(is,tmpos) )
     {
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION

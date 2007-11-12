@@ -23,7 +23,6 @@
 #include "gdcmIOSerialize.h"
 
 //#include "gdcmElement.h"
-#include "gdcmStringStream.h"
 #include "gdcmTag.h"
 
 namespace gdcm
@@ -99,7 +98,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
   DataElement xgl( Tag(0x0002, 0x0000), 4, VR::UL );
   Element<VR::UL, VM::VM1> el = 
     reinterpret_cast< Element<VR::UL, VM::VM1>& > ( glen );
-  StringStream ss;
+  std::stringstream ss;
   el.Write( ss );
   SmartPointer<ByteValue> bv = new ByteValue;
   bv->SetLength( 4 );
@@ -116,7 +115,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
 //
 // \postcondition after the file meta information (well before the dataset...)
 template <typename TSwap>
-bool ReadExplicitDataElement(IStream &is, ExplicitDataElement &de)
+bool ReadExplicitDataElement(std::istream &is, ExplicitDataElement &de)
 {
   // Read Tag
   std::streampos start = is.tellg();
@@ -198,7 +197,7 @@ bool ReadExplicitDataElement(IStream &is, ExplicitDataElement &de)
 }
 
 template <typename TSwap>
-bool ReadImplicitDataElement(IStream &is, ImplicitDataElement &de)
+bool ReadImplicitDataElement(std::istream &is, ImplicitDataElement &de)
 {
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   std::streampos start = is.tellg();
@@ -264,9 +263,9 @@ bool ReadImplicitDataElement(IStream &is, ImplicitDataElement &de)
 /// For now I do a Seek back of 6 bytes. It would be better to finish reading 
 /// the first element of the FMI so that I can read the group length and 
 /// therefore compare it against the actual value we found...
-// \postcondition NegociatedTS and IStream::SwapCode are Unknown
-// \postcondition NegociatedTS and IStream::SwapCode are set
-IStream &FileMetaInformation::Read(IStream &is)
+// \postcondition NegociatedTS and std::istream::SwapCode are Unknown
+// \postcondition NegociatedTS and std::istream::SwapCode are set
+std::istream &FileMetaInformation::Read(std::istream &is)
 {
   //ExplicitAttribute<0x0002,0x0000> metagl;
   //metagl.Read(is);
@@ -290,7 +289,7 @@ IStream &FileMetaInformation::Read(IStream &is)
   return is;
 }
 
-IStream &FileMetaInformation::ReadCompat(IStream &is)
+std::istream &FileMetaInformation::ReadCompat(std::istream &is)
 {
   // First off save position in case we fail (no File Meta Information)
   // See PS 3.5, Data Element Structure With Explicit VR
@@ -315,7 +314,7 @@ IStream &FileMetaInformation::ReadCompat(IStream &is)
 }
 
 template <typename TSwap>
-IStream &FileMetaInformation::ReadCompatInternal(IStream &is)
+std::istream &FileMetaInformation::ReadCompatInternal(std::istream &is)
 {
   //assert( t.GetGroup() == 0x0002 );
 //  if( t.GetGroup() == 0x0002 )
@@ -461,7 +460,7 @@ void FileMetaInformation::Default()
 {
 }
 
-OStream &FileMetaInformation::Write(OStream &os) const
+std::ostream &FileMetaInformation::Write(std::ostream &os) const
 {
 //  if( IsEmpty() )
 //  {
@@ -491,7 +490,7 @@ OStream &FileMetaInformation::Write(OStream &os) const
         uint32_t len = DS->GetLength();
         Element<VR::UL, VM::VM1> el = 
           reinterpret_cast< Element<VR::UL, VM::VM1>& > ( len );
-        StringStream ss;
+        std::stringstream ss;
         el.Write( ss );
         bv->Read( ss );
         xde.SetValue( *bv );

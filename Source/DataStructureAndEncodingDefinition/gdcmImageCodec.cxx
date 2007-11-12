@@ -15,9 +15,6 @@
 =========================================================================*/
 #include "gdcmImageCodec.h"
 #include "gdcmTS.h"
-#include "gdcmOStream.h"
-#include "gdcmIStream.h"
-#include "gdcmStringStream.h"
 #include "gdcmByteSwap.txx"
 #include "gdcmTrace.h"
 
@@ -55,7 +52,7 @@ void ImageCodec::SetPhotometricInterpretation(
   PI = pi;
 }
 
-bool ImageCodec::DoByteSwap(IStream &is, OStream &os)
+bool ImageCodec::DoByteSwap(std::istream &is, std::ostream &os)
 {
   // FIXME: Do some stupid work:
   std::streampos start = is.tellg();
@@ -88,7 +85,7 @@ bool ImageCodec::DoByteSwap(IStream &is, OStream &os)
   return true;
 }
 
-bool ImageCodec::DoYBR(IStream &is, OStream &os)
+bool ImageCodec::DoYBR(std::istream &is, std::ostream &os)
 {
   // FIXME: Do some stupid work:
   std::streampos start = is.tellg();
@@ -144,7 +141,7 @@ bool ImageCodec::DoYBR(IStream &is, OStream &os)
   return true;
 }
 
-bool ImageCodec::DoPlanarConfiguration(IStream &is, OStream &os)
+bool ImageCodec::DoPlanarConfiguration(std::istream &is, std::ostream &os)
 {
   // FIXME: Do some stupid work:
   std::streampos start = is.tellg();
@@ -181,7 +178,7 @@ bool ImageCodec::DoPlanarConfiguration(IStream &is, OStream &os)
   return true;
 }
 
-bool ImageCodec::DoSimpleCopy(IStream &is, OStream &os)
+bool ImageCodec::DoSimpleCopy(std::istream &is, std::ostream &os)
 {
   std::streampos start = is.tellg();
   assert( 0 - start == 0 );
@@ -197,7 +194,7 @@ bool ImageCodec::DoSimpleCopy(IStream &is, OStream &os)
   return true;
 }
 
-bool ImageCodec::DoPaddedCompositePixelCode(IStream &is, OStream &os)
+bool ImageCodec::DoPaddedCompositePixelCode(std::istream &is, std::ostream &os)
 {
   // FIXME: Do some stupid work:
   std::streampos start = is.tellg();
@@ -224,7 +221,7 @@ bool ImageCodec::DoPaddedCompositePixelCode(IStream &is, OStream &os)
   return true;
 }
 
-bool ImageCodec::DoInvertMonochrome(IStream &is, OStream &os)
+bool ImageCodec::DoInvertMonochrome(std::istream &is, std::ostream &os)
 {
   if ( PT.GetPixelRepresentation() )
     {
@@ -281,7 +278,7 @@ bool ImageCodec::DoInvertMonochrome(IStream &is, OStream &os)
   return true;
 }
 
-bool ImageCodec::DoPixelType(IStream &is, OStream &os)
+bool ImageCodec::DoPixelType(std::istream &is, std::ostream &os)
 {
   assert( PT.GetBitsAllocated() > 8 );
   if( PT.GetBitsAllocated() == 16 )
@@ -333,15 +330,15 @@ bool ImageCodec::DoPixelType(IStream &is, OStream &os)
   return true;
 }
 
-bool ImageCodec::Decode(IStream &is, OStream &os)
+bool ImageCodec::Decode(std::istream &is, std::ostream &os)
 {
   assert( PlanarConfiguration == 0 || PlanarConfiguration == 1);
   assert( PI != PhotometricInterpretation::UNKNOW );
-  StringStream bs_os; // ByteSwap
-  StringStream pcpc_os; // Padeed Composite Pixel Code
-  StringStream pi_os; // PhotometricInterpretation
-  StringStream pl_os; // PlanarConf
-  IStream *cur_is = &is;
+  std::stringstream bs_os; // ByteSwap
+  std::stringstream pcpc_os; // Padeed Composite Pixel Code
+  std::stringstream pi_os; // PhotometricInterpretation
+  std::stringstream pl_os; // PlanarConf
+  std::istream *cur_is = &is;
 
   // First thing do the byte swap:
   if( NeedByteSwap )

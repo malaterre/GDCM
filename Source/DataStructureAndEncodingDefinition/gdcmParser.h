@@ -17,9 +17,10 @@
 #ifndef __gdcmParser_h
 #define __gdcmParser_h
 
-#include "gdcmIFStream.h"
 #include "gdcmTag.h"
 #include "gdcmByteBuffer.h"
+
+#include <fstream> // std::ifstream
 
 namespace gdcm
 {
@@ -106,7 +107,7 @@ protected:
   ErrorType Process();
 
 private:
-  IFStream Stream;
+  std::ifstream Stream;
   void* UserData;
   ByteBuffer Buffer;
   ErrorType ErrorCode;
