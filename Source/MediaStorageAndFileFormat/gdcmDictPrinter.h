@@ -32,7 +32,7 @@ public:
 
 protected:
   void PrintElement(std::ostream& os, const DataElement &ide, const DictEntry &entry);
-  void PrintDataSet(std::ostream& os, const StructuredSet<DataElement> &ds);
+  void PrintDataSet(std::ostream& os, const StructuredSet &ds);
 };
 
 } // end namespace gdcm

@@ -148,13 +148,13 @@ void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictE
     if ( lvr == VR::SQ )
     {
       os << std::endl;
-      const SequenceOfItems<DataElement> &sqi = static_cast<const SequenceOfItems<DataElement>&>(value);
-      SequenceOfItems<DataElement>::ItemVector::const_iterator it = sqi.Items.begin();
+      const SequenceOfItems &sqi = static_cast<const SequenceOfItems&>(value);
+      SequenceOfItems::ItemVector::const_iterator it = sqi.Items.begin();
       for(; it != sqi.Items.end(); ++it)
       {
-      const Item<DataElement> &item = *it;
-      const StructuredSet<DataElement> &ds = item.GetNestedDataSet();
-      //const StructuredSet<DataElement> &exds = ds.GetInternal();
+      const Item &item = *it;
+      const StructuredSet &ds = item.GetNestedDataSet();
+      //const StructuredSet &exds = ds.GetInternal();
       PrintDataSet(os << "  ", ds);
       }
     }
@@ -468,13 +468,13 @@ void Printer::PrintDataSet(std::ostream& os, const StructuredSet<ImplicitDataEle
 #endif
 
 //-----------------------------------------------------------------------------
-void Printer::PrintDataSet(std::ostream &os, const StructuredSet<DataElement> &ds)
+void Printer::PrintDataSet(std::ostream &os, const StructuredSet &ds)
 {
   static const Dict d;
   static const GroupDict gd;
   try
     {
-    StructuredSet<DataElement>::ConstIterator it = ds.Begin();
+    StructuredSet::ConstIterator it = ds.Begin();
     for( ; it != ds.End(); ++it )
       {
       const DataElement &de = *it;
@@ -614,7 +614,7 @@ void Printer::Print(std::ostream& os)
   std::cout << "\n# Dicom-Data-Set\n";
   std::cout << "# Used TransferSyntax: \n";
   const DataSet &ds = F->GetDataSet();
-  const StructuredSet<DataElement> &exds = ds.GetInternal();
+  const StructuredSet &exds = ds.GetInternal();
   PrintDataSet(os, exds);
 }
 

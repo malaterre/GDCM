@@ -21,9 +21,8 @@
 namespace gdcm
 {
 
-template <typename DEType>
 template <typename TDE>
-VL Item<DEType>::GetLength() const
+VL Item::GetLength() const
 {
   if( ValueLengthField.IsUndefined() )
     {

@@ -27,7 +27,7 @@ VL ImplicitDataElement::GetLength() const
     {
     assert( ValueField->GetLength().IsUndefined() );
     Value *p = ValueField;
-    SequenceOfItems<DataElement> *sq = dynamic_cast<SequenceOfItems<DataElement>*>(p);
+    SequenceOfItems *sq = dynamic_cast<SequenceOfItems*>(p);
     if( sq )
       {
       return TagField.GetLength() + ValueLengthField.GetLength() 

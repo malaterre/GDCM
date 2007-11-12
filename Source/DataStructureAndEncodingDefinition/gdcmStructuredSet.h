@@ -41,13 +41,12 @@ struct lttag
 };
 
 //-----------------------------------------------------------------------------
-template<class DEType>
 class StructuredSet
 {
 public:
-  typedef typename std::set<DEType, lttag> DataElementSet;
-  typedef typename DataElementSet::iterator Iterator;
-  typedef typename DataElementSet::const_iterator ConstIterator;
+  typedef std::set<DataElement, lttag> DataElementSet;
+  typedef DataElementSet::iterator Iterator;
+  typedef DataElementSet::const_iterator ConstIterator;
   Iterator Begin() { return DES.begin(); }
   Iterator End() { return DES.end(); }
   ConstIterator Begin() const { return DES.begin(); }
@@ -64,14 +63,14 @@ public:
     //int s = DES.size();
     //assert( s );
     std::copy(DES.begin(), DES.end(), 
-      std::ostream_iterator<DEType>(os, "\n"));
+      std::ostream_iterator<DataElement>(os, "\n"));
   }
 
   template <typename TDE>
  unsigned int ComputeGroupLength(Tag const &tag) const
     {
     assert( tag.GetElement() == 0x0 );
-    const DEType r(tag);
+    const DataElement r(tag);
     ConstIterator it = DES.find(r);
     unsigned int res = 0;
     for( ++it; it != DES.end()
@@ -101,20 +100,20 @@ public:
       }
     return ll;
   }
- void Insert(const DEType& de) {
+ void Insert(const DataElement& de) {
     //assert( de.GetTag() != Tag(0,0) );
     DES.insert(de);
     }
 
-  const DEType& GetDataElement(const Tag &t) const {
-    const DEType r(t);
+  const DataElement& GetDataElement(const Tag &t) const {
+    const DataElement r(t);
     ConstIterator it = DES.find(r);
     assert( it != DES.end() );
     return *it;
     }
 
   bool FindDataElement(const Tag &t) const {
-    const DEType r(t);
+    const DataElement r(t);
     ConstIterator it = DES.find(r);
     if( DES.find(r) != DES.end() )
       {
@@ -125,24 +124,12 @@ public:
   
   bool IsEmpty() const { return DES.empty(); };
 
-  template <typename OtherDEType> // TODO: Should be only Implicit or Explicit DataElement
-  void Copy(const StructuredSet<OtherDEType>& ss)
-  {
-    typename StructuredSet<OtherDEType>::ConstIterator it = ss.Begin();
-    for( ; it != ss.End(); ++it)
-      {
-      //std::cerr << *it << std::endl;
-      DEType de( *it );
-      Insert(de);
-      }
-   }
-
-  StructuredSet<DEType>& operator=(StructuredSet<DEType> const &val)
+  StructuredSet& operator=(StructuredSet const &val)
   {
     DES = val.DES;
     return *this;
   }
-  //StructuredSet<DEType>(StructuredSet<DEType> const &ds)
+  //StructuredSet<DataElement>(StructuredSet<DataElement> const &ds)
   //{
   //        assert( 0 && "TODO" );
   //}

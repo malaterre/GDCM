@@ -34,7 +34,7 @@ namespace gdcm
     {
       bv->template Read<TSwap>(is);
     }
-    else if( SequenceOfItems<DataElement> *si = dynamic_cast<SequenceOfItems<DataElement>*>(v) )
+    else if( SequenceOfItems *si = dynamic_cast<SequenceOfItems*>(v) )
     {
       si->template Read<TDE,TSwap>(is);
     }
@@ -56,7 +56,7 @@ namespace gdcm
     {
 	    bv->template Write<TSwap>(os);
     }
-    else if( const SequenceOfItems<DataElement> *si = dynamic_cast<const SequenceOfItems<DataElement>*>(v) )
+    else if( const SequenceOfItems *si = dynamic_cast<const SequenceOfItems*>(v) )
     {
 	    si->template Write<DE,TSwap>(os);
     }

@@ -24,10 +24,8 @@
 namespace gdcm
 {
 // This is needed in order to declare a friend of template class
-template <typename DEType>
 class Item;
-template <typename DEType>
-std::ostream& operator<<(std::ostream& _os, const Item<DEType> &_val);
+std::ostream& operator<<(std::ostream& os, const Item &val);
 
 /**
  * \brief Class to represent an Item
@@ -42,17 +40,15 @@ std::ostream& operator<<(std::ostream& _os, const Item<DEType> &_val);
  * ITEM: A component of the Value of a Data Element that is of Value
  * Representation Sequence of Items. An Item contains a Data Set.
  */
-template<class DEType>
 class StructuredSet;
 
-template <typename DEType>
 class GDCM_EXPORT Item : public DataElement
 {
 public:
   Item(const Tag& t = Tag(0), uint32_t const &vl = 0) 
 	  : DataElement(t, vl), NestedDataSet() {
   }
-  friend std::ostream& operator<< < >(std::ostream &os, const Item<DEType> &val);
+  friend std::ostream& operator<< (std::ostream &os, const Item &val);
 
   void Clear() {
     NestedDataSet.Clear();
@@ -61,8 +57,8 @@ public:
   template <typename TDE>
   VL GetLength() const;
 
-  void InsertDataElement(const DEType & de) {
-    NestedDataSet.InsertDataElement(de);
+  void InsertDataElement(const DataElement & de) {
+    NestedDataSet.Insert(de);
     // Update the length
     assert( 0 && "InsertDataElement" );
     if( !IsUndefinedLength() )
@@ -70,19 +66,19 @@ public:
       //ValueLengthField += de.GetLength();
       }
     }
-  const DEType& GetDataElement(const Tag& t) const
+  const DataElement& GetDataElement(const Tag& t) const
     {
     return NestedDataSet.GetDataElement(t);
     }
 
   // Completely defines it with the nested dataset
   // destroy anything present
-  void SetNestedDataSet(const StructuredSet<DEType>& nested)
+  void SetNestedDataSet(const StructuredSet& nested)
     {
     NestedDataSet = nested;
     }
   // Return a const ref to the Nested Data Set
-  const StructuredSet<DEType> &GetNestedDataSet() const
+  const StructuredSet &GetNestedDataSet() const
     {
     return NestedDataSet;
     }
@@ -131,7 +127,7 @@ std::istream &Read(std::istream &is)
     return is;
     }
   // Self
-  //NestedDataSet = new DataSet; //StructuredSet<DEType>;
+  //NestedDataSet = new DataSet; //StructuredSet;
   //std::cerr << "NestedDataSet Length=" << ValueLengthField << std::endl;
 //  NestedDataSet.SetLength( ValueLengthField ); // FIXME
   // BUG: This test is required because DataSet::Read with a Length
@@ -148,12 +144,12 @@ std::istream &Read(std::istream &is)
     }
   else if( ValueLengthField.IsUndefined() )
     {
-    StructuredSet<DEType> &nested = NestedDataSet;
+    StructuredSet &nested = NestedDataSet;
     nested.template ReadNested<TDE,TSwap>(is);
     }
   else /* if( ValueLengthField.IsUndefinedLength() ) */
     {
-    StructuredSet<DEType> &nested = NestedDataSet;
+    StructuredSet &nested = NestedDataSet;
     nested.template ReadWithLength<TDE,TSwap>(is, ValueLengthField);
     }
 //#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
@@ -204,11 +200,10 @@ private:
    * May be nested recursively.
    * Only Data Elements with VR = SQ  may, themselves, contain Data Sets
    */
-  StructuredSet<DEType> NestedDataSet;
+  StructuredSet NestedDataSet;
 };
 //-----------------------------------------------------------------------------
-template <typename DEType>
-inline std::ostream& operator<<(std::ostream& os, const Item<DEType> &val)
+inline std::ostream& operator<<(std::ostream& os, const Item &val)
 {
   os << DataElement(val) << std::endl;
   os << "Item Length=" << val.ValueLengthField << std::endl;

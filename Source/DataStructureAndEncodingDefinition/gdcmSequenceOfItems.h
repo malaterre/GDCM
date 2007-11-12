@@ -38,12 +38,11 @@ namespace gdcm
  * A Value Representation for Data Elements that contain a sequence of 
  * Data Sets. Sequence of Items allows for Nested Data Sets.
  */
-template <typename DEType>
 class GDCM_EXPORT SequenceOfItems : public Value
 {
 public:
   // Typdefs:
-  typedef std::vector< Item<DEType> > ItemVector;
+  typedef std::vector< Item > ItemVector;
 
 /// \brief constructor (UndefinedLength by default)
   //SequenceOfItems(VL const &vl = 0xFFFFFFFF):SequenceLengthField(vl),NType(type) { }
@@ -60,7 +59,7 @@ public:
   void Clear() {}
 
   /// \brief Appends an Item to the already added ones
-  void AddItem(Item<DEType> const &item);
+  void AddItem(Item const &item);
 
   SequenceOfItems &operator=(const SequenceOfItems &val) {
     SequenceLengthField = val.SequenceLengthField;
@@ -75,7 +74,7 @@ public:
     //std::cerr << "SequenceLengthField: " << SequenceLengthField << std::endl;
     if( SequenceLengthField.IsUndefined() )
       {
-      Item<DEType> item;
+      Item item;
       //    item.SetType( GetType() );
       const Tag seqDelItem(0xfffe,0xe0dd);
       do
@@ -88,7 +87,7 @@ public:
       }
     else
       {
-      Item<DEType> item;
+      Item item;
       //    item.SetType( GetType() );
       VL l = 0;
       //std::cout << "l: " << l << std::endl;
@@ -146,7 +145,7 @@ public:
 protected:
   void Print(std::ostream &os) const {
     os << "\n\tSQ L= " << SequenceLengthField << "\n";
-    typename ItemVector::const_iterator it =
+    ItemVector::const_iterator it =
       Items.begin();
     for(;it != Items.end(); ++it)
       {

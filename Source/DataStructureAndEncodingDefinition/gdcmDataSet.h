@@ -79,7 +79,7 @@ public:
 
   void Print(std::ostream &os) const;
 
-  const StructuredSet<DataElement> &GetInternal() const { return Internal; }
+  const StructuredSet &GetInternal() const { return Internal; }
 
   // TODO
   // This function should not be in the public API:
@@ -87,7 +87,7 @@ public:
 
 private:
   TS::NegociatedType NegociatedTS;
-  StructuredSet<DataElement> Internal;
+  StructuredSet Internal;
 
   VL Length;
 };

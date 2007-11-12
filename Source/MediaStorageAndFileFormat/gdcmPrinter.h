@@ -29,7 +29,7 @@
 namespace gdcm
 {
 
-template <typename DEType> class StructuredSet;
+class StructuredSet;
 class DictEntry;
 // It's a sink there is no output
 class GDCM_EXPORT Printer
@@ -58,7 +58,7 @@ public:
 
 protected:
   void PrintElement(std::ostream& os, const DataElement &xde, const DictEntry &entry);
-  void PrintDataSet(std::ostream& os, const StructuredSet<DataElement> &ds);
+  void PrintDataSet(std::ostream& os, const StructuredSet &ds);
 
 //  PrintStyles PrintStyle;
   const File *F;

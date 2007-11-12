@@ -21,9 +21,8 @@
 namespace gdcm
 {
 
-template <typename DEType>
 template <typename TDE>
-VL SequenceOfItems<DEType>::ComputeLength() const
+VL SequenceOfItems::ComputeLength() const
 {
   typename ItemVector::const_iterator it = Items.begin();
   VL length = 0;

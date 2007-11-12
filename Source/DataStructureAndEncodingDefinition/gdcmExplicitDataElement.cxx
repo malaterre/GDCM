@@ -29,7 +29,7 @@ VL ExplicitDataElement::GetLength() const
     assert( ValueField->GetLength().IsUndefined() );
     Value *p = ValueField;
     // If this is a SQ we need to compute it's proper length
-    SequenceOfItems<DataElement> *sq = dynamic_cast<SequenceOfItems<DataElement>*>(p);
+    SequenceOfItems *sq = dynamic_cast<SequenceOfItems*>(p);
     // TODO can factor the code:
     if( sq )
       {

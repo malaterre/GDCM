@@ -32,7 +32,7 @@ namespace gdcm
  * \todo
  * If user adds an element with group != 0x0002 it will be written...
  */
-class GDCM_EXPORT FileMetaInformation : public StructuredSet<DataElement>
+class GDCM_EXPORT FileMetaInformation : public StructuredSet
 {
 public:
   FileMetaInformation():DataSetTS(),MetaInformationTS(TS::Unknown),DataSetMS(TS::MS_END) {}

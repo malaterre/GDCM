@@ -472,7 +472,7 @@ std::ostream &FileMetaInformation::Write(std::ostream &os) const
 //  }
 //  else if( IsValid() )
   {
-    this->StructuredSet<DataElement>::Write<ExplicitDataElement,SwapperNoOp>(os);
+    this->StructuredSet::Write<ExplicitDataElement,SwapperNoOp>(os);
   }
 //  else
 //  {

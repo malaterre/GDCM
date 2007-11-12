@@ -21,10 +21,9 @@
 
 namespace gdcm
 {
-  template <typename DEType>
   template <typename TDE, typename TSwap>
-  std::istream &StructuredSet<DEType>::ReadNested(std::istream &is) {
-    DEType de;
+  std::istream &StructuredSet::ReadNested(std::istream &is) {
+    DataElement de;
     const Tag itemDelItem(0xfffe,0xe00d);
     assert( de.GetTag() != itemDelItem ); // precondition before while loop
     while( de.Read<TDE,TSwap>(is) && de.GetTag() != itemDelItem  ) // Keep that order please !
@@ -37,10 +36,9 @@ namespace gdcm
     return is;
 }
 
-  template <typename DEType>
   template <typename TDE, typename TSwap>
-  std::istream &StructuredSet<DEType>::Read(std::istream &is) {
-    DEType de;
+  std::istream &StructuredSet::Read(std::istream &is) {
+    DataElement de;
     while( !is.eof() && de.Read<TDE,TSwap>(is) )
       {
       //std::cerr << "DEBUG:" << de << std::endl;
@@ -51,10 +49,9 @@ namespace gdcm
     return is;
   }
 
-  template <typename DEType>
   template <typename TDE, typename TSwap>
-  std::istream &StructuredSet<DEType>::ReadWithLength(std::istream &is, VL &length) {
-    DEType de;
+  std::istream &StructuredSet::ReadWithLength(std::istream &is, VL &length) {
+    DataElement de;
     VL l = 0;
     //std::cout << "ReadWithLength Length: " << length << std::endl;
     VL locallength = length;
@@ -79,14 +76,13 @@ namespace gdcm
     return is;
   }
 
-  template <typename DEType>
   template <typename TDE, typename TSwap>
-  std::ostream const &StructuredSet<DEType>::Write(std::ostream &os) const {
-    typename StructuredSet<DEType>::ConstIterator it = DES.begin();
+  std::ostream const &StructuredSet::Write(std::ostream &os) const {
+    typename StructuredSet::ConstIterator it = DES.begin();
     for( ; it != DES.end(); ++it)
       {
       //std::cerr << "DEBUG:" << *it << std::endl;
-      const DEType & de = *it;
+      const DataElement & de = *it;
       // If this is a group length make sure this is consistant
       if( de.GetTag().GetGroup() == 0x0001
        || de.GetTag().GetGroup() == 0x0003
@@ -120,7 +116,7 @@ namespace gdcm
           {
           gdcmWarningMacro( "Wrong group length for " << de.GetTag() << ":"
             << el.GetValue() << " should be " << len << ". Corrected." );
-          DEType correct(de);
+          DataElement correct(de);
           // Set correct value:
           el.SetValue( len );
           el.Write( sst );

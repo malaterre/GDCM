@@ -52,7 +52,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
     //assert( de.GetVR() == VR::SQ );
     // FIXME what if I am reading the pixel data...
     assert( TagField != Tag(0x7fe0,0x0010) );
-    ValueField = new SequenceOfItems<DataElement>;
+    ValueField = new SequenceOfItems;
     }
   else
     {
@@ -79,7 +79,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
       if( item == itemStart )
         {
         assert( TagField != Tag(0x7fe0,0x0010) );
-        ValueField = new SequenceOfItems<DataElement>;
+        ValueField = new SequenceOfItems;
         }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
       else if ( item == itemPMSStart )
