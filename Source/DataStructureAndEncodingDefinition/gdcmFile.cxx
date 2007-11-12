@@ -59,18 +59,18 @@ std::istream &File::Read(std::istream &is)
   const TS &ts = Header.GetDataSetTransferSyntax();
   //std::cerr << ts.GetNegociatedType() << std::endl;
   if( ts.GetNegociatedType() == TS::Implicit )
-  {
-	  DS.SetType( TS::Implicit );
-  }
+    {
+    DS.SetType( TS::Implicit );
+    }
   if( ts.GetSwapCode() == SwapCode::BigEndian )
-  {
-  //US-RGB-8-epicard.dcm is big endian
-  IOSerialize<SwapperDoOp>::Read(is,DS);
-  }
+    {
+    //US-RGB-8-epicard.dcm is big endian
+    IOSerialize<SwapperDoOp>::Read(is,DS);
+    }
   else
-  {
-  IOSerialize<SwapperNoOp>::Read(is,DS);
-  }
+    {
+    IOSerialize<SwapperNoOp>::Read(is,DS);
+    }
 
   return is;
 }

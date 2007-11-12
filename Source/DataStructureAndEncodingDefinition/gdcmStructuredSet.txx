@@ -16,7 +16,6 @@
 #ifndef __gdcmStructuredSet_txx
 #define __gdcmStructuredSet_txx
 
-//#include "gdcmStructuredSet.h"
 #include "gdcmByteValue.h"
 
 namespace gdcm
