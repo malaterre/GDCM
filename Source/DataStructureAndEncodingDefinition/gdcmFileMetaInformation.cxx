@@ -279,7 +279,7 @@ std::istream &FileMetaInformation::Read(std::istream &is)
   // See PS 3.5, Data Element Structure With Explicit VR
       while( ReadExplicitDataElement<SwapperNoOp>(is, xde ) )
         {
-        std::cout << xde << std::endl;
+        //std::cout << xde << std::endl;
         Insert( xde );
         }
 
