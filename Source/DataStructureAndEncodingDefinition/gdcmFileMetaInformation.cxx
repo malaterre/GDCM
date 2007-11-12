@@ -95,7 +95,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
   // Do this one last !
   // (Meta) Group Length (0002,0000) -> computed
   //unsigned int glen = ComputeGroupLength( Tag(0x0002, 0x0000) );
-  unsigned int glen = GetLength();
+  unsigned int glen = GetLength<ExplicitDataElement>();
   DataElement xgl( Tag(0x0002, 0x0000), 4, VR::UL );
   Element<VR::UL, VM::VM1> el = 
     reinterpret_cast< Element<VR::UL, VM::VM1>& > ( glen );
@@ -280,7 +280,7 @@ IStream &FileMetaInformation::Read(IStream &is)
   // See PS 3.5, Data Element Structure With Explicit VR
       while( ReadExplicitDataElement<SwapperNoOp>(is, xde ) )
         {
-        //std::cout << xde << std::endl;
+        std::cout << xde << std::endl;
         Insert( xde );
         }
 

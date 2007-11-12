@@ -64,7 +64,7 @@ public:
   VR const &GetVR() const { return VRField; }
   void SetVR(VR const &vr) { VRField = vr; }
 
-  VL GetLength() const { abort(); }
+  //VL GetLength() const { abort(); }
 
 
   Value const &GetValue() const { return *ValueField; }
@@ -92,27 +92,36 @@ public:
       }
     }
 
-  DataElement &operator=(const DataElement &_val)
+  DataElement &operator=(const DataElement &de)
     {
-    TagField = _val.TagField;
-    ValueLengthField = _val.ValueLengthField;
+    TagField = de.TagField;
+    ValueLengthField = de.ValueLengthField;
+    VRField = de.VRField;
+    ValueField = de.ValueField;
     return *this;
     }
 
-  bool operator==(const DataElement &_de) const
+  bool operator==(const DataElement &de) const
     {
-    return TagField == _de.TagField
-      && ValueLengthField == _de.ValueLengthField;
+    return TagField == de.TagField
+      && ValueLengthField == de.ValueLengthField
+      && VRField == de.VRField
+      && ValueField == de.ValueField;
     }
+
+  template <typename TDE>
+  VL GetLength() const {
+    return static_cast<const TDE&>(*this).GetLength();
+  }
 
   template <typename TDE, typename TSwap>
   IStream &Read(IStream &is) {
-    static_cast<TDE&>(*this).template Read<TSwap>(is);
+    return static_cast<TDE&>(*this).template Read<TSwap>(is);
   }
 
   template <typename TDE, typename TSwap>
   const OStream &Write(OStream &os) const {
-    static_cast<const TDE&>(*this).template Write<TSwap>(os);
+    return static_cast<const TDE&>(*this).template Write<TSwap>(os);
   }
 
 protected:

@@ -62,7 +62,7 @@ namespace gdcm
       {
       //std::cout << "Nested: " << de << std::endl;
       DES.insert( de );
-      l += de.GetLength();
+      l += de.GetLength<TDE>();
       assert( !de.GetVL().IsUndefined() );
       //std::cerr << "DEBUG: " << de.GetTag() << " "<< de.GetLength() << 
       //  "," << de.GetVL() << "," << l << std::endl;
@@ -114,7 +114,7 @@ namespace gdcm
         //std::cerr << "GL=";
         //el.Print( std::cerr );
         //std::cerr << std::endl;
-        unsigned int len = ComputeGroupLength( de.GetTag() );
+        unsigned int len = ComputeGroupLength<TDE>( de.GetTag() );
         //std::cerr << len << std::endl;
         if( len != el.GetValue() )
           {

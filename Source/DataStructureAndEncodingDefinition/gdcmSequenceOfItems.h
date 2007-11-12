@@ -55,6 +55,7 @@ public:
   void SetLength(VL length) {
     SequenceLengthField = length;
   }
+  template <typename TDE>
   VL ComputeLength() const;
   void Clear() {}
 
@@ -96,7 +97,7 @@ IStream &Read(IStream &is)
       item.Read<TDE,TSwap>(is);
       //std::cout << "Item: " << item << std::endl;
       Items.push_back( item );
-      l += item.GetLength();
+      l += item.template GetLength<TDE>();
       //std::cerr << "l=" << l << std::endl;
       //assert( !item.GetVL().IsUndefined() );
       assert( l <= SequenceLengthField );

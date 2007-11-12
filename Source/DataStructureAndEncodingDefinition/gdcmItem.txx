@@ -22,18 +22,19 @@ namespace gdcm
 {
 
 template <typename DEType>
+template <typename TDE>
 VL Item<DEType>::GetLength() const
 {
   if( ValueLengthField.IsUndefined() )
     {
-    assert( !NestedDataSet.GetLength().IsUndefined() );
+    assert( !NestedDataSet.GetLength<TDE>().IsUndefined() );
     // Item Start             4
     // Item Length            4
     // DataSet                ?
     // Item End Delimitation  4
     // Item End Length        4
     return TagField.GetLength() /* 4 */ + ValueLengthField.GetLength() /* 4 */
-      + NestedDataSet.GetLength() + 4 + 4;
+      + NestedDataSet.GetLength<TDE>() + 4 + 4;
     }
   else
     {

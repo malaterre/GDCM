@@ -22,13 +22,14 @@ namespace gdcm
 {
 
 template <typename DEType>
+template <typename TDE>
 VL SequenceOfItems<DEType>::ComputeLength() const
 {
   typename ItemVector::const_iterator it = Items.begin();
   VL length = 0;
   for(;it != Items.end(); ++it)
     {
-    length += it->GetLength();
+    length += it->template GetLength<TDE>();
     }
   // For defined length SQ, make sure computation is correct (compare
   // to original length)

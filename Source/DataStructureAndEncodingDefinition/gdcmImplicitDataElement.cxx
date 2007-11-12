@@ -41,11 +41,11 @@ ImplicitDataElement::ImplicitDataElement(ExplicitDataElement const &val)
       {
       assert( ValueField->GetLength().IsUndefined() );
       Value *p = ValueField;
-      SequenceOfItems<ImplicitDataElement> *sq = dynamic_cast<SequenceOfItems<ImplicitDataElement>*>(p);
+      SequenceOfItems<DataElement> *sq = dynamic_cast<SequenceOfItems<DataElement>*>(p);
       if( sq )
         {
         return TagField.GetLength() + ValueLengthField.GetLength() 
-          + sq->ComputeLength();
+          + sq->ComputeLength<ImplicitDataElement>();
         }
       return ValueLengthField;
       }

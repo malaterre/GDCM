@@ -52,7 +52,7 @@ IStream &ImplicitDataElement::Read(IStream &is)
     //assert( de.GetVR() == VR::SQ );
     // FIXME what if I am reading the pixel data...
     assert( TagField != Tag(0x7fe0,0x0010) );
-    ValueField = new SequenceOfItems<ImplicitDataElement>();
+    ValueField = new SequenceOfItems<DataElement>;
     }
   else
     {
@@ -79,7 +79,7 @@ IStream &ImplicitDataElement::Read(IStream &is)
       if( item == itemStart )
         {
         assert( TagField != Tag(0x7fe0,0x0010) );
-        ValueField = new SequenceOfItems<ImplicitDataElement>();
+        ValueField = new SequenceOfItems<DataElement>;
         }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
       else if ( item == itemPMSStart )
@@ -88,7 +88,7 @@ IStream &ImplicitDataElement::Read(IStream &is)
           "TransferSyntax=Implicit for tag: " << TagField );
 	// TODO: We READ Explicit ok...but we store Implicit !
 	// Indeed when copynig the VR will be saved... pretty cool eh ?
-        ValueField = new SequenceOfItems<ExplicitDataElement>;
+        ValueField = new SequenceOfItems<DataElement>;
         //SwapCode oldsw = is.GetSwapCode();
         //assert( oldsw == SwapCode::LittleEndian );
         //is.SetSwapCode( SwapCode::BigEndian );
@@ -104,7 +104,7 @@ IStream &ImplicitDataElement::Read(IStream &is)
         {
         gdcmWarningMacro( "Illegal: SQ start with " << itemPMSStart2
           << " instead of " << itemStart << " for tag: " << TagField );
-        ValueField = new SequenceOfItems<ImplicitDataElement>;
+        ValueField = new SequenceOfItems<DataElement>;
         ValueField->SetLength(ValueLengthField); // perform realloc
         if( !ValueField->Read<TSwap>(is) )
           {

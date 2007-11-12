@@ -70,6 +70,7 @@ public:
       std::ostream_iterator<DEType>(os, "\n"));
   }
 
+  template <typename TDE>
  unsigned int ComputeGroupLength(Tag const &tag) const
     {
     assert( tag.GetElement() == 0x0 );
@@ -81,11 +82,12 @@ public:
       {
       assert( it->GetTag().GetElement() != 0x0 );
       assert( it->GetTag().GetGroup() == tag.GetGroup() );
-      res += it->GetLength();
+      res += it->GetLength<TDE>();
       }
     return res;
     }
 
+  template <typename TDE>
   VL GetLength() const {
     assert( !DES.empty() );
     VL ll = 0;
@@ -93,11 +95,11 @@ public:
     ConstIterator it = DES.begin();
     for( ; it != DES.end(); ++it)
       {
-      assert( !(it->GetLength().IsUndefined()) );
-      VL len = it->GetLength();
+      assert( !(it->GetLength<TDE>().IsUndefined()) );
+      VL len = it->GetLength<TDE>();
       if ( it->GetTag() != Tag(0xfffe,0xe00d) )
         {
-        ll += it->GetLength();
+        ll += it->GetLength<TDE>();
         }
       }
     return ll;

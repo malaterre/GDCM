@@ -37,12 +37,12 @@ ExplicitDataElement::ExplicitDataElement(ImplicitDataElement const &val)
       assert( ValueField->GetLength().IsUndefined() );
       Value *p = ValueField;
       // If this is a SQ we need to compute it's proper length
-      SequenceOfItems<ExplicitDataElement> *sq = dynamic_cast<SequenceOfItems<ExplicitDataElement>*>(p);
+      SequenceOfItems<DataElement> *sq = dynamic_cast<SequenceOfItems<DataElement>*>(p);
       // TODO can factor the code:
       if( sq )
         {
         return TagField.GetLength() + VRField.GetLength() + 
-          ValueLengthField.GetLength() + sq->ComputeLength();
+          ValueLengthField.GetLength() + sq->ComputeLength<ExplicitDataElement>();
         }
       SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(p);
       if( sf )

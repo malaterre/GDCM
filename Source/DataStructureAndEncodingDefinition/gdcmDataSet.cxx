@@ -15,6 +15,9 @@
 =========================================================================*/
 #include "gdcmDataSet.h"
 
+#include "gdcmImplicitDataElement.h"
+#include "gdcmExplicitDataElement.h"
+
 namespace gdcm
 {
 
@@ -91,9 +94,17 @@ VL DataSet::GetLength() const
   //  }
   //assert( Length != 0 );
   //return Length;
-  assert( NegociatedTS != TS::Implicit ); // TODO: when copying an internal DataSet GetLength
+  //assert( NegociatedTS != TS::Implicit ); // TODO: when copying an internal DataSet GetLength
   // will take into account the VR... sigh
-  return Internal.GetLength();
+  if( NegociatedTS == TS::Implicit )
+    {
+    return Internal.GetLength<ImplicitDataElement>();
+    }
+  else if ( NegociatedTS == TS::Explicit )
+    {
+    return Internal.GetLength<ExplicitDataElement>();
+    }
+  abort();
 }
 
 } // end namespace gdcm

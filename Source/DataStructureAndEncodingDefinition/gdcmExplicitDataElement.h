@@ -29,7 +29,7 @@ namespace gdcm
 class GDCM_EXPORT ExplicitDataElement : public DataElement
 {
 public:
-  VL ExplicitDataElement::GetLength() const;
+  VL GetLength() const;
 
   template <typename TSwap>
   IStream &Read(IStream &is);

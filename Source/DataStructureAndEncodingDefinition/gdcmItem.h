@@ -58,6 +58,7 @@ public:
     NestedDataSet.Clear();
     }
 
+  template <typename TDE>
   VL GetLength() const;
 
   void InsertDataElement(const DEType & de) {

@@ -103,7 +103,7 @@ IStream &ExplicitDataElement::Read(IStream &is)
 #endif
     }
   // Read the Value
-  assert( ValueField == 0 );
+  //assert( ValueField == 0 );
   if( VRField == VR::SQ )
     {
     // Check wether or not this is an undefined length sequence
