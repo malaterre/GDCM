@@ -13,7 +13,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #ifndef __gdcmExplicitDataElement_h
 #define __gdcmExplicitDataElement_h
 

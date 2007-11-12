@@ -21,46 +21,38 @@ namespace gdcm
 {
 
 //-----------------------------------------------------------------------------
-/*
-ExplicitDataElement::ExplicitDataElement(ImplicitDataElement const &val)
-{
-  TagField = val.GetTag();
-  ValueLengthField = val.GetVL();
-  VRField = VR::UN;
-  ValueField = val.ValueField;
-}
-*/
 
-  VL ExplicitDataElement::GetLength() const {
-    if( ValueLengthField.IsUndefined() )
+VL ExplicitDataElement::GetLength() const
+{
+  if( ValueLengthField.IsUndefined() )
+    {
+    assert( ValueField->GetLength().IsUndefined() );
+    Value *p = ValueField;
+    // If this is a SQ we need to compute it's proper length
+    SequenceOfItems<DataElement> *sq = dynamic_cast<SequenceOfItems<DataElement>*>(p);
+    // TODO can factor the code:
+    if( sq )
       {
-      assert( ValueField->GetLength().IsUndefined() );
-      Value *p = ValueField;
-      // If this is a SQ we need to compute it's proper length
-      SequenceOfItems<DataElement> *sq = dynamic_cast<SequenceOfItems<DataElement>*>(p);
-      // TODO can factor the code:
-      if( sq )
-        {
-        return TagField.GetLength() + VRField.GetLength() + 
-          ValueLengthField.GetLength() + sq->ComputeLength<ExplicitDataElement>();
-        }
-      SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(p);
-      if( sf )
-        {
-        assert( VRField & (VR::OB | VR::OW) );
-        return TagField.GetLength() + VRField.GetLength() 
-          + ValueLengthField.GetLength() + sf->ComputeLength();
-        }
-      abort();
+      return TagField.GetLength() + VRField.GetLength() + 
+        ValueLengthField.GetLength() + sq->ComputeLength<ExplicitDataElement>();
       }
-    else
+    SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(p);
+    if( sf )
       {
-      // Each time VR::GetLength() is 2 then Value Length is coded in 2
-      //                              4 then Value Length is coded in 4
-      assert( !ValueField || ValueField->GetLength() == ValueLengthField );
-      return TagField.GetLength() + 2*VRField.GetLength() + ValueLengthField;
+      assert( VRField & (VR::OB | VR::OW) );
+      return TagField.GetLength() + VRField.GetLength() 
+        + ValueLengthField.GetLength() + sf->ComputeLength();
       }
-  }
+    abort();
+    }
+  else
+    {
+    // Each time VR::GetLength() is 2 then Value Length is coded in 2
+    //                              4 then Value Length is coded in 4
+    assert( !ValueField || ValueField->GetLength() == ValueLengthField );
+    return TagField.GetLength() + 2*VRField.GetLength() + ValueLengthField;
+    }
+}
 
 
 } // end namespace gdcm

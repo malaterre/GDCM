@@ -13,7 +13,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #ifndef __gdcmDataElement_h
 #define __gdcmDataElement_h
 
@@ -45,6 +44,12 @@ namespace gdcm
  * and a Value Field. For some specific Transfer Syntaxes, a Data Element
  * also contains a VR Field where the Value Representation of that Data 
  * Element is specified explicitly.
+ *
+ * Design:
+ * # A DataElement in GDCM always store VL (Value Length) on a 32 bits integer even when VL is 16 bits
+ * # A DataElement always store the VR even for Implicit TS, in which case VR is defaulted to VR::INVALID
+ * # For Item start/end (See 0xfffe tags), Value is NULL
+ *
  * \see ExplicitDataElement ImplicitDataElement
  */
 
@@ -55,18 +60,19 @@ public:
 
   friend std::ostream& operator<<(std::ostream &_os, const DataElement &_val);
 
+  // Set/Get Tag
   const Tag& GetTag() const { return TagField; }
   void SetTag(const Tag &t) { TagField = t; }
 
+  // Set/Get VL
   const VL& GetVL() const { return ValueLengthField; }
   void SetVL(const VL &vl) { ValueLengthField = vl; }
 
+  // Set/Get VR
   VR const &GetVR() const { return VRField; }
   void SetVR(VR const &vr) { VRField = vr; }
 
-  //VL GetLength() const { abort(); }
-
-
+  // Set/Get Value (bytes array, SQ of items, SQ of fragments):
   Value const &GetValue() const { return *ValueField; }
   void SetValue(Value const & vl) {
     //assert( ValueField == 0 );
@@ -74,6 +80,7 @@ public:
   }
   bool IsValueEmpty() const { return ValueField == 0; }
 
+  // Helper:
   void SetByteValue(const char *array, VL length)
     {
     ByteValue *bv = new ByteValue(array,length);
@@ -81,6 +88,7 @@ public:
     SetValue( *bv );
     }
 
+  // Helper:
   bool IsUndefinedLength() const {
     return ValueLengthField.IsUndefined();
   }
@@ -98,7 +106,7 @@ public:
     TagField = de.TagField;
     ValueLengthField = de.ValueLengthField;
     VRField = de.VRField;
-    ValueField = de.ValueField;
+    ValueField = de.ValueField; // Pointer copy
     return *this;
     }
 
@@ -110,19 +118,30 @@ public:
       && ValueField == de.ValueField;
     }
 
+  // The following fonctionalities are dependant on:
+  // # The Transfer Syntax: Explicit or Implicit
+  // # The Byte encoding: Little Endian / Big Endian
+
+  /*
+   * The following was inspired by a C++ idiom: Curiously Recurring Template Pattern
+   * Ref: http://en.wikipedia.org/wiki/Curiously_Recurring_Template_Pattern
+   * The typename TDE is typically a derived class *without* any data
+   * while TSwap is a simple template parameter to achieve byteswapping (and allow factorization of
+   * highly identical code)
+   */
   template <typename TDE>
   VL GetLength() const {
-    return static_cast<const TDE&>(*this).GetLength();
+    return static_cast<const TDE*>(this)->GetLength();
   }
 
   template <typename TDE, typename TSwap>
   IStream &Read(IStream &is) {
-    return static_cast<TDE&>(*this).template Read<TSwap>(is);
+    return static_cast<TDE*>(this)->template Read<TSwap>(is);
   }
 
   template <typename TDE, typename TSwap>
   const OStream &Write(OStream &os) const {
-    return static_cast<const TDE&>(*this).template Write<TSwap>(os);
+    return static_cast<const TDE*>(this)->template Write<TSwap>(os);
   }
 
 protected:
