@@ -41,7 +41,7 @@ void write_header(std::ofstream &of)
 
 void write_footer(std::ofstream &of)
 {
-  of << "\t{0xffff,0,0} // will not be added to the dict \n"
+  of << "\t{0,0,0} // will not be added to the dict \n"
     "};\n\n"
     "void GroupDict::FillDefaultGroupName()\n"
     "{\n"
