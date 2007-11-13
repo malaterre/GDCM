@@ -274,6 +274,7 @@ std::istream &FileMetaInformation::Read(std::istream &is)
 
   ExplicitDataElement xde;
   xde.Read<SwapperNoOp>(is);
+        Insert( xde );
   //if( xde.GetTag() != Tag(0x0002,0x0000) 
   // First off save position in case we fail (no File Meta Information)
   // See PS 3.5, Data Element Structure With Explicit VR
