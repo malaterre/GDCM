@@ -105,7 +105,7 @@ public:
     return VR::GetLength(VRField);
   }
   static uint32_t GetLength(VRType vr) { 
-    assert( vr != VR::INVALID );
+    //assert( vr != VR::INVALID );
     if( vr & VL32 )
       {
       return 4;
@@ -133,7 +133,7 @@ public:
     VRField = GetVRTypeFromFile(vr);
     assert( VRField != VR::VR_END );
     //assert( VRField != VR::INVALID );
-    if( VRField == VR::INVALID ) throw Exception( "INVALID VR" );
+    //if( VRField == VR::INVALID ) throw Exception( "INVALID VR" );
     if( VRField & VL32 )
       {
 #if 0
