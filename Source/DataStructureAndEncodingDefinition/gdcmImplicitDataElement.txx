@@ -53,6 +53,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
     // FIXME what if I am reading the pixel data...
     assert( TagField != Tag(0x7fe0,0x0010) );
     ValueField = new SequenceOfItems;
+    VRField = VR::SQ;
     }
   else
     {
@@ -80,6 +81,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
         {
         assert( TagField != Tag(0x7fe0,0x0010) );
         ValueField = new SequenceOfItems;
+        VRField = VR::SQ;
         }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
       else if ( item == itemPMSStart )
@@ -89,6 +91,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
 	// TODO: We READ Explicit ok...but we store Implicit !
 	// Indeed when copynig the VR will be saved... pretty cool eh ?
         ValueField = new SequenceOfItems<DataElement>;
+        VRField = VR::SQ;
         //SwapCode oldsw = is.GetSwapCode();
         //assert( oldsw == SwapCode::LittleEndian );
         //is.SetSwapCode( SwapCode::BigEndian );
