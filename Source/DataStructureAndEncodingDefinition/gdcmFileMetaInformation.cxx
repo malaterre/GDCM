@@ -377,7 +377,7 @@ std::istream &FileMetaInformation::ReadCompatInternal(std::istream &is)
 // we are in bad shape...
 void FileMetaInformation::ComputeDataSetTransferSyntax()
 {
-  const gdcm::Tag t(0x0002,0x0010);
+  const Tag t(0x0002,0x0010);
   const DataElement &de = GetDataElement(t);
   //TS::NegociatedType nt = GetNegociatedType();
   std::string ts;
@@ -416,7 +416,7 @@ TS::MSType FileMetaInformation::GetMediaStorageType() const
   // ==>       [X-Ray Angiographic Image Storage]
   if(DS)
     {
-    const gdcm::Tag t(0x0002,0x0002);
+    const Tag t(0x0002,0x0002);
     if( !DS->FindDataElement( t ) )
       {
       gdcmDebugMacro( "File Meta information is present but does not"
