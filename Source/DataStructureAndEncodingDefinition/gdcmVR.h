@@ -106,12 +106,7 @@ public:
   }
   static uint32_t GetLength(VRType vr) { 
     assert( vr != VR::INVALID );
-    if( vr == VR::OB
-     || vr == VR::OW
-     || vr == VR::OF
-     || vr == VR::SQ
-     || vr == VR::UN
-     || vr == VR::UT )
+    if( vr & VL32 )
       {
       return 4;
       }
@@ -139,7 +134,7 @@ public:
     assert( VRField != VR::VR_END );
     //assert( VRField != VR::INVALID );
     if( VRField == VR::INVALID ) throw Exception( "INVALID VR" );
-    if( VRField & ( VR::OB | VR::OW | VR::OF | VR::SQ | VR::UN | VR::UT ) )
+    if( VRField & VL32 )
       {
 #if 0
       // For some reason this seems slower on my linux box...
@@ -163,7 +158,7 @@ public:
     assert( strlen( vr ) == 2 );
     os.write(vr, 2);
     // See PS 3.5, Data Element Structure With Explicit VR
-    if( VRField & ( VR::OB | VR::OW | VR::OF | VR::SQ | VR::UN | VR::UT ) )
+    if( VRField & VL32 )
       {
       const char dum[2] = {0, 0};
       os.write(dum,2);

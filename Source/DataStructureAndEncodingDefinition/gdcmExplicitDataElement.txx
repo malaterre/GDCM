@@ -74,7 +74,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     return is;
     }
   // Read Value Length
-  if( VRField & VR::VL32 )
+  if( VR::GetLength(VRField) == 4 )
     {
     if( !ValueLengthField.Read<TSwap>(is) )
       {
