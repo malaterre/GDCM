@@ -72,7 +72,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
       const Tag itemPMSStart(0xfeff, 0x00e0);
       const Tag itemPMSStart2(0x3f3f, 0x3f00);
 #endif
-      gdcm::Tag item;
+      Tag item;
       item.Read<TSwap>(is);
       // Maybe this code can later be rewritten as I believe that seek back
       // is very slow...
