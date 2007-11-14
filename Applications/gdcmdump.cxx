@@ -21,6 +21,7 @@
 #include "gdcmDictPrinter.h"
 #include "gdcmValidate.h"
 #include "gdcmWriter.h"
+#include "gdcmDumper.h"
 
 #include <string>
 #include <iostream>
@@ -125,6 +126,7 @@ int main (int argc, char *argv[])
     }
 //}
 
+#if 0
   gdcm::Validate vali;
   vali.SetFile( reader.GetFile() );
   //vali.Validation();
@@ -169,16 +171,20 @@ int main (int argc, char *argv[])
 //  //of.write( line, strlen(line) );
 //  of << line;
 //  of.close();
-//  gdcm::Writer writer;
-//  writer.SetFileName( "vali2.dcm" );
-//  writer.SetFile( reader.GetFile() );
-//  //writer.SetFile( vali.GetValidatedFile() );
+  gdcm::Writer writer;
+  writer.SetFileName( "vali2.dcm" );
+  writer.SetFile( reader.GetFile() );
+  //writer.SetFile( vali.GetValidatedFile() );
 //  if( !writer.Write() )
 //    {
 //    std::cerr << "Failed to write: "  << std::endl;
 //    return 1;
 //    }
+#endif
 
+  gdcm::Dumper dumper;
+  dumper.SetFile( reader.GetFile() );
+  dumper.Print( std::cout );
 
   return 0;
 }
