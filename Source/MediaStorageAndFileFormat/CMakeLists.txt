@@ -8,6 +8,7 @@ SET(MSFF_SRCS
   gdcmImageWriter.cxx
   gdcmWriter.cxx
   gdcmValidate.cxx
+  gdcmDumper.cxx
   )
 
 # Add the include paths
