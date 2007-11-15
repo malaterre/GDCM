@@ -35,16 +35,17 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
   // File Meta Information Version (0002,0001) -> computed
   if( !FindDataElement( Tag(0x0002, 0x0001) ) )
     {
-    xde.SetByteValue( "\0\1", 2);
     xde.SetTag( Tag(0x0002, 0x0001) );
     xde.SetVR( VR::OB );
+    xde.SetByteValue( "\0\1", 2);
     Insert( xde );
     }
   // Media Storage SOP Class UID (0002,0002) -> see (0008,0016)
   if( !FindDataElement( Tag(0x0002, 0x0002) ) )
     {
-    if( !FindDataElement( Tag(0x0008, 0x0016) ) )
+    if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )
       {
+abort();
       }
     else
       {
@@ -61,7 +62,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
   // Media Storage SOP Instance UID (0002,0003) -> see (0008,0018)
   if( !FindDataElement( Tag(0x0002, 0x0003) ) )
     {
-    if( FindDataElement( Tag(0x0008, 0x0018) ) )
+    if( ds.FindDataElement( Tag(0x0008, 0x0018) ) )
       {
       const DataElement& msinst = ds.GetDataElement( Tag(0x0008, 0x0018) );
       xde = msinst;
@@ -78,17 +79,17 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
   // Implementation Version Name (0002,0013) -> ??
   if( !FindDataElement( Tag(0x0002, 0x0013) ) )
     {
-    xde.SetByteValue( "2.0.0", 5);
     xde.SetTag( Tag(0x0002, 0x0013) );
     xde.SetVR( VR::SH );
+    xde.SetByteValue( "2.0.0", 5);
     Insert( xde );
     }
   // Source Application Entity Title (0002,0016) -> ??
   if( !FindDataElement( Tag(0x0002, 0x0016) ) )
     {
-    xde.SetByteValue( "GDCM", 4);
     xde.SetTag( Tag(0x0002, 0x0016) );
     xde.SetVR( VR::AE );
+    xde.SetByteValue( "GDCM", 4);
     Insert( xde );
     }
   // Do this one last !
@@ -143,11 +144,7 @@ bool ReadExplicitDataElement(std::istream &is, ExplicitDataElement &de)
   //std::cout << "VR : " << vr << std::endl;
   // Read Value Length
   VL vl;
-  if( vr == VR::OB
-   || vr == VR::OW
-   || vr == VR::OF
-   || vr == VR::SQ
-   || vr == VR::UN )
+  if( vr & VR::VL32 )
     {
     if( !vl.template Read<TSwap>(is) )
       {
@@ -413,32 +410,28 @@ TS::MSType FileMetaInformation::GetMediaStorageType() const
   // D 0002|0002 [UI] [Media Storage SOP Class UID]
   // [1.2.840.10008.5.1.4.1.1.12.1]
   // ==>       [X-Ray Angiographic Image Storage]
+  const Tag t(0x0002,0x0002);
+  if( !FindDataElement( t ) )
     {
-    const Tag t(0x0002,0x0002);
-    if( !FindDataElement( t ) )
-      {
-      gdcmDebugMacro( "File Meta information is present but does not"
-        " contains " << t );
-      return TS::MS_END;
-      }
-    const DataElement &de = GetDataElement(t);
-    std::string ts;
-      {
-      const Value &v = de.GetValue();
-      const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
-      // Pad string with a \0
-      ts = std::string(bv.GetPointer(), bv.GetLength());
-      }
-    gdcmDebugMacro( "TS: " << ts );
-    TS::MSType ms = TS::GetMSType(ts.c_str());
-    if( ms == TS::MS_END )
-      {
-      gdcmWarningMacro( "Media Storage Class UID: " << ts << " is unknow" );
-      }
-    return ms;
+    gdcmDebugMacro( "File Meta information is present but does not"
+      " contains " << t );
+    return TS::MS_END;
     }
-
-  return TS::MS_END;
+  const DataElement &de = GetDataElement(t);
+  std::string ts;
+    {
+    const Value &v = de.GetValue();
+    const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
+    // Pad string with a \0
+    ts = std::string(bv.GetPointer(), bv.GetLength());
+    }
+  gdcmDebugMacro( "TS: " << ts );
+  TS::MSType ms = TS::GetMSType(ts.c_str());
+  if( ms == TS::MS_END )
+    {
+    gdcmWarningMacro( "Media Storage Class UID: " << ts << " is unknow" );
+    }
+  return ms;
 }
 
 void FileMetaInformation::Default()
