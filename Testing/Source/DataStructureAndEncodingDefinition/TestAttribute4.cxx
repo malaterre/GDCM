@@ -13,22 +13,17 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include <iostream>
+#include "gdcmAttribute.h"
+#include "gdcmReader.h"
 
-struct A
+int main(int argc, char *argv[])
 {
-  float Internal;
-};
+  gdcm::Reader r;
+  r.SetFileName( argv[1] );
+  r.Read();
 
-struct B
-{
-  float Internal[1];
-};
-
-int TestElement4(int, char *[])
-{
-  std::cout << sizeof( A ) << std::endl;
-  std::cout << sizeof( B ) << std::endl;
+  r.Print( std::cout );
 
   return 0;
 }
+

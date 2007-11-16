@@ -33,6 +33,7 @@ SET(DSED_TEST_SRCS
   TestStructuredSet
   TestElement2
   TestElement4
+  TestPersonName
   )
 
 OPTION(SHARED_PTR "shared_ptr" OFF)
