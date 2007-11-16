@@ -14,7 +14,6 @@
 
 =========================================================================*/
 #include "gdcmSequenceOfItems.h"
-#include "gdcmExplicitDataElement.h"
 
 int TestSequenceOfItems(int, char *[])
 {

@@ -29,12 +29,12 @@ int TestDataSet(int , char *[])
 	  ds.GetDataElement( gdcm::Tag(0,0) );
   std::cout << r << std::endl;
 
-  const gdcm::Tag t = gdcm::Tag(0x1234, 0x5678);
-  gdcm::DataElement d2(t);
+  const gdcm::Tag t2 = gdcm::Tag(0x1234, 0x5678);
+  gdcm::DataElement d2(t2);
   std::cout << d2 << std::endl;
   ds.InsertDataElement(d2);
   const gdcm::DataElement& r2 =
-	  ds.GetDataElement( t );
+	  ds.GetDataElement( t2 );
   std::cout << r2 << std::endl;
 
   const gdcm::Tag t3 = gdcm::Tag(0x1234, 0x5679);
