@@ -18,7 +18,7 @@
 
 int TestSequenceOfItems(int, char *[])
 {
-  gdcm::SequenceOfItems<gdcm::ExplicitDataElement> si;
+  gdcm::SequenceOfItems si;
   std::cout << si << std::endl;
 
   return 0;

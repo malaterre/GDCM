@@ -17,6 +17,6 @@
 
 int TestStructuredSet(int, char *[])
 {
-  gdcm::StructuredSet<gdcm::ExplicitDataElement> ss;
+  gdcm::StructuredSet ss;
   return 0;
 }

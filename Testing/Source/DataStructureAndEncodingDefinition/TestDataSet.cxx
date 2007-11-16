@@ -21,16 +21,16 @@
 
 int TestDataSet(int , char *[])
 {
-  gdcm::DataSet ds; // ( gdcm::TS::Implicit );
+  gdcm::DataSet ds;
   std::cout << sizeof ds << std::endl;
-  gdcm::ImplicitDataElement d;
+  gdcm::DataElement d;
   ds.InsertDataElement(d);
   const gdcm::DataElement& r =
 	  ds.GetDataElement( gdcm::Tag(0,0) );
   std::cout << r << std::endl;
 
   const gdcm::Tag t = gdcm::Tag(0x1234, 0x5678);
-  gdcm::ImplicitDataElement d2(t);
+  gdcm::DataElement d2(t);
   std::cout << d2 << std::endl;
   ds.InsertDataElement(d2);
   const gdcm::DataElement& r2 =
@@ -38,7 +38,7 @@ int TestDataSet(int , char *[])
   std::cout << r2 << std::endl;
 
   const gdcm::Tag t3 = gdcm::Tag(0x1234, 0x5679);
-  gdcm::ExplicitDataElement d3(t3);
+  gdcm::DataElement d3(t3);
   d3.SetVR( gdcm::VR::UL );
   std::cout << d3 << std::endl;
   ds.InsertDataElement(d3);

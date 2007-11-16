@@ -14,7 +14,6 @@
 
 =========================================================================*/
 #include "gdcmElement.h"
-#include "gdcmStringStream.h"
 
 #define TPI 3.1415926535897931
 
@@ -149,7 +148,7 @@ int TestUSVM3()
     {
     return 1;
     }
-  StringStream ss;
+  std::stringstream ss;
   a.Write( ss );
 
   Element<VR::US, VM::VM3> b;
