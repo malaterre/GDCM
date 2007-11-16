@@ -99,7 +99,9 @@ public:
         if( SequenceLengthField == 778 && l == 774 )
           {
           gdcmWarningMacro( "PMS: Super bad hack" );
-          l = SequenceLengthField;
+          SequenceLengthField = l;
+          throw Exception( "Wrong Length" );
+          //l = SequenceLengthField;
           }
         // Bug_Philips_ItemTag_3F3F
         // (0x2005, 0x1080): Because we do not handle fully the bug at the item

@@ -171,16 +171,16 @@ int main (int argc, char *argv[])
 //  //of.write( line, strlen(line) );
 //  of << line;
 //  of.close();
+#endif
   gdcm::Writer writer;
   writer.SetFileName( "vali2.dcm" );
   writer.SetFile( reader.GetFile() );
   //writer.SetFile( vali.GetValidatedFile() );
-//  if( !writer.Write() )
-//    {
-//    std::cerr << "Failed to write: "  << std::endl;
-//    return 1;
-//    }
-#endif
+  if( !writer.Write() )
+    {
+    std::cerr << "Failed to write: "  << std::endl;
+    return 1;
+    }
 
   gdcm::Dumper dumper;
   dumper.SetFile( reader.GetFile() );
