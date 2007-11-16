@@ -17,15 +17,11 @@
 #ifndef __gdcmItem_h
 #define __gdcmItem_h
 
-//#include "gdcmTS.h"
 #include "gdcmDataElement.h"
 #include "gdcmStructuredSet.h"
 
 namespace gdcm
 {
-// This is needed in order to declare a friend of template class
-class Item;
-std::ostream& operator<<(std::ostream& os, const Item &val);
 
 /**
  * \brief Class to represent an Item
@@ -109,17 +105,15 @@ std::istream &Read(std::istream &is)
     assert(0 && "Should not happen");
     return is;
     }
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
   assert ( TagField == Tag(0xfffe, 0xe000)
         || TagField == Tag(0xfffe, 0xe0dd) 
-        || TagField == Tag(0x3f3f, 0x3f00) );
-//  if( TagField == Tag(0x3f3f, 0x3f00) )
-//    {
-//    TagField = Tag(0xfffe, 0xe000);
-//    }
-#else
-  assert ( TagField == Tag(0xfffe, 0xe000)
-        || TagField == Tag(0xfffe, 0xe0dd) );
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+        || TagField == Tag(0xfeff, 0x00e0)
+        || TagField == Tag(0x3f3f, 0x3f00)
+#endif
+  );
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+  if( TagField == Tag(0xfeff, 0x00e0) ) TagField = Tag(0xfffe, 0xe000);
 #endif
   if( !ValueLengthField.Read<TSwap>(is) )
     {
@@ -127,8 +121,6 @@ std::istream &Read(std::istream &is)
     return is;
     }
   // Self
-  //NestedDataSet = new DataSet; //StructuredSet;
-  //std::cerr << "NestedDataSet Length=" << ValueLengthField << std::endl;
 //  NestedDataSet.SetLength( ValueLengthField ); // FIXME
   // BUG: This test is required because DataSet::Read with a Length
   // of 0 is actually thinking it is reading a root DataSet

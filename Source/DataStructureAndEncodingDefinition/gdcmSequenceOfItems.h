@@ -71,11 +71,9 @@ public:
   template <typename TDE, typename TSwap>
   std::istream &Read(std::istream &is)
     {
-    //std::cerr << "SequenceLengthField: " << SequenceLengthField << std::endl;
     if( SequenceLengthField.IsUndefined() )
       {
       Item item;
-      //    item.SetType( GetType() );
       const Tag seqDelItem(0xfffe,0xe0dd);
       do
         {
@@ -88,17 +86,12 @@ public:
     else
       {
       Item item;
-      //    item.SetType( GetType() );
       VL l = 0;
-      //std::cout << "l: " << l << std::endl;
       while( l != SequenceLengthField )
         {
         item.Read<TDE,TSwap>(is);
-        //std::cout << "Item: " << item << std::endl;
         Items.push_back( item );
         l += item.template GetLength<TDE>();
-        //std::cerr << "l=" << l << std::endl;
-        //assert( !item.GetVL().IsUndefined() );
         assert( l <= SequenceLengthField );
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
         // MR_Philips_Intera_No_PrivateSequenceImplicitVR.dcm
@@ -132,13 +125,6 @@ public:
       {
       it->Write<TDE,TSwap>(os);
       }
-    //if( SequenceLengthField.IsUndefined() )
-    //  {
-    //  const Tag seqDelItem(0xfffe,0xe0dd);
-    //  const ImplicitDataElement ide(seqDelItem);
-    //  assert( ide.GetVL() == 0 );
-    //  ide.Write(os);
-    //  }
     return os;
     }
 

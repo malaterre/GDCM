@@ -134,7 +134,8 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     //SwapCode oldsw = is.GetSwapCode();
     //assert( oldsw == SwapCode::LittleEndian );
     //is.SetSwapCode( SwapCode::BigEndian );
-    if( !ValueField->Read<TSwap>(is) )
+    //if( !ValueField->Read<TSwap>(is) )
+    if( !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField) )
       {
       assert(0 && "Should not happen");
       }
@@ -147,7 +148,8 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     //SwapCode oldsw = is.GetSwapCode();
     //assert( oldsw == SwapCode::LittleEndian );
     //is.SetSwapCode( SwapCode::BigEndian );
-    if( !ValueField->Read<TSwap>(is) )
+    //if( !ValueField->Read<TSwap>(is) )
+    if( !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField) )
       {
       assert(0 && "Should not happen");
       }

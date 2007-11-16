@@ -19,6 +19,7 @@
 #include "gdcmSequenceOfItems.h"
 
 #include "gdcmValueIO.h"
+#include "gdcmSwapper.h"
 
 namespace gdcm
 {
@@ -53,7 +54,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
     // FIXME what if I am reading the pixel data...
     assert( TagField != Tag(0x7fe0,0x0010) );
     ValueField = new SequenceOfItems;
-    VRField = VR::SQ;
+    //VRField = VR::SQ;
     }
   else
     {
@@ -83,35 +84,30 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
         {
         assert( TagField != Tag(0x7fe0,0x0010) );
         ValueField = new SequenceOfItems;
-        VRField = VR::SQ;
         }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
       else if ( item == itemPMSStart )
         {
+        // MR_Philips_Intera_No_PrivateSequenceImplicitVR.dcm
         gdcmWarningMacro( "Illegal: Explicit SQ found in a file with "
           "TransferSyntax=Implicit for tag: " << TagField );
-	// TODO: We READ Explicit ok...but we store Implicit !
-	// Indeed when copynig the VR will be saved... pretty cool eh ?
-        ValueField = new SequenceOfItems<DataElement>;
-        VRField = VR::SQ;
-        //SwapCode oldsw = is.GetSwapCode();
-        //assert( oldsw == SwapCode::LittleEndian );
-        //is.SetSwapCode( SwapCode::BigEndian );
+        // TODO: We READ Explicit ok...but we store Implicit !
+        // Indeed when copying the VR will be saved... pretty cool eh ?
+        ValueField = new SequenceOfItems;
         ValueField->SetLength(ValueLengthField); // perform realloc
-        if( !ValueField->Read<TSwap>(is) )
+        if( !ValueIO<ExplicitDataElement,SwapperDoOp>::Read(is,*ValueField) )
           {
           assert(0 && "Should not happen");
           }
-        //is.SetSwapCode( oldsw );
         return is;
         }
       else if ( item == itemPMSStart2 )
         {
         gdcmWarningMacro( "Illegal: SQ start with " << itemPMSStart2
           << " instead of " << itemStart << " for tag: " << TagField );
-        ValueField = new SequenceOfItems<DataElement>;
+        ValueField = new SequenceOfItems;
         ValueField->SetLength(ValueLengthField); // perform realloc
-        if( !ValueField->Read<TSwap>(is) )
+        if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) )
           {
           assert(0 && "Should not happen");
           }
@@ -185,7 +181,6 @@ const std::ostream &ImplicitDataElement::Write(std::ostream &os) const
     assert( ValueField );
     assert( TagField != Tag(0xfffe, 0xe00d)
          && TagField != Tag(0xfffe, 0xe0dd) );
-    //if( !ValueField->Write<TSwap>(os) )
     if( !ValueIO<ImplicitDataElement,TSwap>::Write(os,*ValueField) )
       {
       assert(0 && "Should not happen");
