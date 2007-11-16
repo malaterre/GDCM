@@ -30,74 +30,6 @@ namespace gdcm
 {
 
 struct void_;
-template<uint16_t Group, uint16_t Element, 
-	 int TVR = TagToType<Group, Element>::VRType, 
-	 int TVM = TagToType<Group, Element>::VMType,
-	 typename SQAttribute = void_ >
-class ImplicitAttribute
-{
-public:
-  typedef typename VRToType<TVR>::Type VRType;
-  enum { VMType = VMToLength<TVM>::Length };
-  VRType Internal[VMToLength<TVM>::Length];
-
-  unsigned long GetLength() const {
-    return VMToLength<TVM>::Length;
-  }
-  // Implementation of Print is common to all Mode (ASCII/Binary)
-  // TODO: Can we print a \ when in ASCII...well I don't think so
-  // it would mean we used a bad VM then, right ?
-  void Print(std::ostream &_os) const {
-    _os << Tag(Group, Element) << " ";
-    //_os << VR((VR::VRType)TVR) << " ";
-    _os << Internal[0]; // VM is at least garantee to be one
-    for(int i=1; i<VMToLength<TVM>::Length; ++i)
-      _os << "," << Internal[i];
-    }
-
-  // copy:
-  VRType GetValue(int idx = 0) {
-    assert( idx < VMToLength<TVM>::Length );
-    return Internal[idx];
-  }
-  // const reference
-  VRType const &GetValue(int idx = 0) const {
-    assert( idx < VMToLength<TVM>::Length );
-    return Internal[idx];
-  }
-  void SetValue(VRType v, unsigned int idx = 0) {
-    assert( idx < VMToLength<TVM>::Length );
-    Internal[idx] = v;
-  }
-  void SetBytes(const VRType* array, unsigned long numel = VMType ) {
-    assert( array && numel && numel <= GetLength() );
-    memcpy(Internal, array, numel * sizeof(VRType) );
-    // should I fill with 0 the remaining
-    assert( numel == GetLength() ); // for now disable array smaller ...
-  }
-  const VRType* GetBytes() const {
-    return Internal;
-  }
-  void Read(std::istream &_is) {
-    uint16_t cref[] = { Group, Element };
-    uint16_t c[2];
-    _is.read((char*)&c, 4);
-    const uint32_t lref = GetLength() * sizeof( typename VRToType<TVR>::Type );
-    uint32_t l;
-    _is.read((char*)&l, 4);
-    l /= sizeof( typename VRToType<TVR>::Type );
-     return EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
-      l,_is);
-    }
-  void Write(std::ostream &_os) const {
-    uint16_t c[] = { Group, Element };
-    _os.write((char*)&c, 4);
-    uint32_t l = GetLength() * sizeof( typename VRToType<TVR>::Type );
-    _os.write((char*)&l, 4);
-    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
-      GetLength(),_os);
-    }
-};
 
 // Declaration, also serve as forward declaration
 template<int T> class VRVLSize;
@@ -134,7 +66,7 @@ template<uint16_t Group, uint16_t Element,
 	 int TVR = TagToType<Group, Element>::VRType, 
 	 int TVM = TagToType<Group, Element>::VMType,
 	 typename SQAttribute = void_ >
-class ExplicitAttribute
+class Attribute
 {
 public:
   typedef typename VRToType<TVR>::Type VRType;
@@ -198,6 +130,28 @@ public:
     return EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
       GetLength(),_os);
     }
+#if 0 // TODO  FIXME
+  void Read(std::istream &_is) {
+    uint16_t cref[] = { Group, Element };
+    uint16_t c[2];
+    _is.read((char*)&c, 4);
+    const uint32_t lref = GetLength() * sizeof( typename VRToType<TVR>::Type );
+    uint32_t l;
+    _is.read((char*)&l, 4);
+    l /= sizeof( typename VRToType<TVR>::Type );
+     return EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+      l,_is);
+    }
+  void Write(std::ostream &_os) const {
+    uint16_t c[] = { Group, Element };
+    _os.write((char*)&c, 4);
+    uint32_t l = GetLength() * sizeof( typename VRToType<TVR>::Type );
+    _os.write((char*)&l, 4);
+    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
+      GetLength(),_os);
+    }
+#endif
+
 };
 
 
@@ -417,7 +371,7 @@ template <int TVM> class Attribute<VR::OW, TVM>;
 #endif
 
 template<>
-class ImplicitAttribute<0x7fe0,0x0010, VR::OW, VM::VM1>
+class Attribute<0x7fe0,0x0010, VR::OW, VM::VM1>
 {
 public:
   char *Internal;
@@ -447,7 +401,7 @@ public:
 };
 
 template<uint16_t Group, uint16_t Element, typename SQA>
-class ImplicitAttribute<Group,Element, VR::SQ, VM::VM1, SQA>
+class Attribute<Group,Element, VR::SQ, VM::VM1, SQA>
 {
 public:
   SQA sqa;

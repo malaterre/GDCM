@@ -24,7 +24,7 @@ namespace gdcm
 {
 /**
  * \brief ImageReader
- * \note it's role is to convert the DICOM DataSet into a gdcm::Image
+ * \note its role is to convert the DICOM DataSet into a gdcm::Image
  * representation
  */
 class ByteValue;
