@@ -158,10 +158,9 @@ protected:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const DataElement &val)
 {
-  os << "Tag: " << val.TagField;
-  if( val.VRField != VR::INVALID ) // FIXME
-    os << "\tVR=" << val.VRField;
-  os << "\tVL: " << val.ValueLengthField;
+  os << val.TagField;
+  os << "\t" << val.VRField;
+  os << "\t" << val.ValueLengthField;
   if( val.ValueField )
     {
     val.ValueField->Print( os << "\t" );

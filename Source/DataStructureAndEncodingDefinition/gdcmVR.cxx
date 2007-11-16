@@ -22,7 +22,7 @@ namespace gdcm
 {
 
 static const char *VRStrings[] = {
-  "INVALID",        // 0
+  "??",        // 0
   "AE",        // 1 
   "AS",        // 2
   "AT",        // 3
@@ -57,6 +57,7 @@ static const char *VRStrings[] = {
 };
 
 static VR::VRType VRValue[] = {
+    VR::INVALID ,
     VR::AE ,
     VR::AS ,
     VR::AT ,
@@ -128,14 +129,14 @@ const char *VR::GetVRStringFromFile(VRType vr)
 {
 #if 1
   static const int N = sizeof(VRValue) / sizeof(VRType);
-  assert( N == 27 );
+  assert( N == 28 );
   static VRType *start = VRValue;
   static VRType *end   = VRValue+N;
   const VRType *p =
     std::lower_bound(start, end, vr);
   assert( *p == vr );
-  assert( ( p - start + 1) == GetIndex(vr) );
-  return VRStrings[p-start+1];
+  assert( ( p - start) == GetIndex(vr) );
+  return VRStrings[p-start];
 #else
   int idx = GetIndex(vr);
   return VRStrings[idx];
@@ -163,7 +164,7 @@ VR::VRType VR::GetVRTypeFromFile(const char *vr)
  */
 #if 1
   static const int N = sizeof(VRValue) / sizeof(VRType);
-  assert( N == 27 );
+  assert( N == 28 );
   static const char **start = VRStrings+1;
   static const char **end   = VRStrings+N+1;
   //std::cerr << "VR=" << vr << std::endl;

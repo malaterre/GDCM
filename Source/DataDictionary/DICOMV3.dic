@@ -2410,6 +2410,6 @@
 7fe0 0010 OB or OW 1 Pixel Data
 fffa fffa SQ 1 Digital Signatures Sequence
 fffc fffc OB 1 Data Set Trailing Padding
-fffe e000 INVALID 1 Item
-fffe e00d INVALID 1 Item Delimitation Item
-fffe e0dd INVALID 1 Sequence Delimitation Item
+fffe e000 ?? 1 Item
+fffe e00d ?? 1 Item Delimitation Item
+fffe e0dd ?? 1 Sequence Delimitation Item

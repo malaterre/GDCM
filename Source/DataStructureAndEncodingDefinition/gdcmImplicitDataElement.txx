@@ -73,6 +73,8 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
       const Tag itemPMSStart2(0x3f3f, 0x3f00);
 #endif
       Tag item;
+      // TODO FIXME
+      // This is pretty dumb to actually read to later on seekg back, why not `peek` directly ?
       item.Read<TSwap>(is);
       // Maybe this code can later be rewritten as I believe that seek back
       // is very slow...
