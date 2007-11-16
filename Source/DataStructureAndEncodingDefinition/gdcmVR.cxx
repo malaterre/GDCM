@@ -135,7 +135,7 @@ const char *VR::GetVRStringFromFile(VRType vr)
   const VRType *p =
     std::lower_bound(start, end, vr);
   assert( *p == vr );
-  assert( ( p - start) == GetIndex(vr) );
+  assert( (p - start) == GetIndex(vr) );
   return VRStrings[p-start];
 #else
   int idx = GetIndex(vr);
@@ -175,7 +175,7 @@ VR::VRType VR::GetVRTypeFromFile(const char *vr)
     return VR::INVALID;
     }
   assert( (*p)[0] == vr[0] && (*p)[1] == vr[1] );
-  VRType r = VRValue[p-start];
+  VRType r = VRValue[p-start+1];
   assert( r == (VR::VRType)(1 << (p-start)) );
 #else // old version not optimized
   VRType r = VR::VR_END;

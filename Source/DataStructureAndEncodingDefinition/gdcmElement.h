@@ -20,6 +20,7 @@
 #include "gdcmVR.h"
 #include "gdcmTag.h"
 #include "gdcmVM.h"
+#include "gdcmByteValue.h"
 
 #include <string>
 #include <vector>
@@ -53,9 +54,23 @@ public:
     assert( idx < VMToLength<TVM>::Length );
     return Internal[idx];
   }
+  typename VRToType<TVR>::Type operator[] (int idx) {
+    return GetValue(idx);
+  }
   void SetValue(typename VRToType<TVR>::Type v, unsigned int idx = 0) {
     assert( idx < VMToLength<TVM>::Length );
     Internal[idx] = v;
+  }
+  void Set(Value const &v) {
+    const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
+    assert( bv ); // That would be bad...
+    //memcpy(Internal, bv->GetPointer(), bv->GetLength());
+    std::stringstream ss;
+    std::string s = std::string( bv->GetPointer(), bv->GetLength() );
+    ss.str( s );
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+      GetLength(),ss);
+
   }
 
   void Read(std::istream &_is) {

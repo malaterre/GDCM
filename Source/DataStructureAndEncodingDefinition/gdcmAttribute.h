@@ -101,6 +101,16 @@ public:
     assert( idx < VMToLength<TVM>::Length );
     Internal[idx] = v;
   }
+  void Set(Value const &v) {
+    const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
+    assert( bv ); // That would be bad...
+    //memcpy(Internal, bv->GetPointer(), bv->GetLength());
+    std::stringstream ss;
+    std::string s = std::string( bv->GetPointer(), bv->GetLength() );
+    ss.str( s );
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+      GetLength(),ss);
+  }
   void SetBytes(const VRType* array, unsigned long numel = VMType ) {
     assert( array && numel && numel <= GetLength() );
     memcpy(Internal, array, numel * sizeof(VRType) );

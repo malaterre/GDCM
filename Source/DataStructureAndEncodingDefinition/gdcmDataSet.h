@@ -72,6 +72,7 @@ public:
 
   void InsertDataElement(DataElement const &de);
   const DataElement& GetDataElement(const Tag &t) const;
+  const DataElement& operator[] (const Tag &t) const { return GetDataElement(t); }
   bool FindDataElement(const Tag &t) const;
 
   DataSet &operator = (DataSet const &r);

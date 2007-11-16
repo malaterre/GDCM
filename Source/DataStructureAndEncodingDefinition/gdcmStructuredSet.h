@@ -105,6 +105,8 @@ public:
     DES.insert(de);
     }
 
+  // WARNING:
+  // This only search at the same level as the StructuredSet is !
   const DataElement& GetDataElement(const Tag &t) const {
     const DataElement r(t);
     ConstIterator it = DES.find(r);
@@ -112,6 +114,7 @@ public:
     return *it;
     }
 
+  // DUMB: this only search within the level of the current StructuredSet
   bool FindDataElement(const Tag &t) const {
     const DataElement r(t);
     ConstIterator it = DES.find(r);

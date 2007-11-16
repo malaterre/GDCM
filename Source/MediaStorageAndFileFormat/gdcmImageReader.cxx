@@ -46,33 +46,10 @@ const Image& ImageReader::GetImage() const
 const ByteValue* ImageReader::GetPointerFromElement(Tag const &tag) const
 {
   const DataSet &ds = F->GetDataSet();
-  TS::NegociatedType type; // = ds.GetNegociatedType();
-
-#if 1
   const DataElement &de = ds.GetDataElement( tag );
-//  if( type == TS::Explicit )
-    {
-    const Value &v = de.GetValue();
-    const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
-    return bv;
-    }
-//  else if( type == TS::Implicit )
-//    {
-//    const ImplicitDataElement &ide =
-//      dynamic_cast<const ImplicitDataElement&>(rde);
-//    const Value &v = ide.GetValue();
-//    //const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
-//    // C++ would throw an exception when dynamic_cast to a reference
-//    // since you could not construct a ref from NULL
-//    // Using good ol' pointer instead
-//    const Value *pv = &v;
-//    const ByteValue *bv = dynamic_cast<const ByteValue*>(pv);
-//    return bv;
-//    }
-//  // ooops ?
-#endif
-    gdcmErrorMacro( "Not sure how you are supposed to reach here" );
-  return 0;
+  const Value &v = de.GetValue();
+  const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
+  return bv;
 }
 
 bool ImageReader::Read()
@@ -352,17 +329,20 @@ bool ImageReader::ReadImage()
       // (0028,1102) US 0\0\16
       // (0028,1103) US 0\0\16
       const Tag tdescriptor(0x0028, (0x1101 + i));
-      const ByteValue *descriptor = GetPointerFromElement( tdescriptor );
+      //const ByteValue &descriptor = GetPointerFromElement( tdescriptor );
+      // Element<VR::US,VM::VM3> el_us3;
+      // assert( descriptor->GetLength() == 6 );
+      // std::string descriptor_str(
+      //   descriptor->GetPointer(),
+      //   descriptor->GetLength() );
+      // ss.clear();
+      // ss.str( descriptor_str );
+      // el_us3.Read( ss );
       Element<VR::US,VM::VM3> el_us3;
-      assert( descriptor->GetLength() == 6 );
-      std::string descriptor_str(
-        descriptor->GetPointer(),
-        descriptor->GetLength() );
-      ss.clear();
-      ss.str( descriptor_str );
-      el_us3.Read( ss );
+      // Now pass the byte array to a DICOMizer:
+      el_us3.Set( ds[tdescriptor].GetValue() );
       lut->InitializeLUT( LookupTable::LookupTableType(i),
-        el_us3.GetValue(0), el_us3.GetValue(1), el_us3.GetValue(2) );
+        el_us3[0], el_us3[1], el_us3[2] );
       //el_us3.Print( std::cerr << std::endl );
 
       // (0028,1201) OW 
