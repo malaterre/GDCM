@@ -26,6 +26,8 @@
 #include "gdcmItem.h"
 #include "gdcmSequenceOfItems.h"
 
+#include "gdcmDeflateStream.h"
+
 namespace gdcm
 {
 
@@ -58,6 +60,22 @@ std::istream &File::Read(std::istream &is)
 
   const TS &ts = Header.GetDataSetTransferSyntax();
   //std::cerr << ts.GetNegociatedType() << std::endl;
+  std::cerr << TS::GetTSString(ts) << std::endl;
+  if( ts == TS::DeflatedExplicitVRLittleEndian )
+  {
+	  /*
+	  std::ofstream of("deflat.gz");
+	  char one_char;
+while (is.get(one_char)) {
+      of.put(one_char);
+   }
+of.close();
+      */
+  gzistream gzis(is.rdbuf());
+    IOSerialize<SwapperNoOp>::Read(gzis,DS);
+
+	  return is;
+  }
   if( ts.GetNegociatedType() == TS::Implicit )
     {
     DS.SetType( TS::Implicit );

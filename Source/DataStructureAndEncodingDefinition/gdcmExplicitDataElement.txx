@@ -17,7 +17,6 @@
 #ifndef __gdcmExplicitDataElement_txx
 #define __gdcmExplicitDataElement_txx
 
-#include "gdcmExplicitDataElement.h"
 #include "gdcmSequenceOfItems.h"
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmVL.h"
@@ -41,7 +40,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       }
     return is;
     }
-  std::cerr << "cur tag=" << TagField << std::endl;
+  //std::cerr << "cur tag=" << TagField << std::endl;
   const Tag itemDelItem(0xfffe,0xe00d);
   if( TagField == itemDelItem )
     {
@@ -133,15 +132,17 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-  if( TagField == Tag(0x2001, 0xe05f)
-|| TagField == Tag(0x2001, 0xe100)
+  if( TagField == Tag(0x2001,0xe05f)
+|| TagField == Tag(0x2001,0xe100)
 || TagField == Tag(0x2005,0xe080)
 || TagField == Tag(0x2005,0xe083)
 || TagField == Tag(0x2005,0xe084)
 //TagField.IsPrivate() && VRField == VR::SQ
+//-> Does not work for 0029
+//we really need to read item marker
 )
     {
-gdcmWarningMacro( "ByteSwpaing Private SQ: " << TagField );
+gdcmWarningMacro( "ByteSwaping Private SQ: " << TagField );
     assert( VRField == VR::SQ );
     try
       {

@@ -40,7 +40,7 @@ namespace gdcm
     DataElement de;
     while( !is.eof() && de.Read<TDE,TSwap>(is) )
       {
-      std::cerr << "DEBUG:" << de << std::endl;
+      //std::cerr << "DEBUG:" << de << std::endl;
       assert( de.GetTag() != Tag(0,0) );
       DES.insert( de );
       }
