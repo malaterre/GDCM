@@ -73,6 +73,8 @@ of.close();
       */
   gzistream gzis(is.rdbuf());
     IOSerialize<SwapperNoOp>::Read(gzis,DS);
+    is.seekg(0, std::ios::end);
+    is.peek();
 
 	  return is;
   }
