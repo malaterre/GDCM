@@ -39,7 +39,8 @@ SET(Common_SRCS
   gdcmSystem.cxx
   gdcmTrace.cxx
   gdcmException.cxx
+  gdcmDeflateStream.cxx
   )
 
 ADD_LIBRARY(gdcmCommon ${Common_SRCS})
-TARGET_LINK_LIBRARIES(gdcmCommon gdcmmd5)
+TARGET_LINK_LIBRARIES(gdcmCommon gdcmmd5 gdcmzlib)
