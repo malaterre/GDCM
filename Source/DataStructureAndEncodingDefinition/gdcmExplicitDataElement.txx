@@ -23,6 +23,7 @@
 #include "gdcmVL.h"
 
 #include "gdcmValueIO.h"
+#include "gdcmSwapper.h"
 
 namespace gdcm
 {
@@ -40,7 +41,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       }
     return is;
     }
-  //std::cerr << "cur tag=" << TagField << std::endl;
+  std::cerr << "cur tag=" << TagField << std::endl;
   const Tag itemDelItem(0xfffe,0xe00d);
   if( TagField == itemDelItem )
     {
@@ -102,6 +103,10 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       }
 #endif
     }
+  if( TagField == Tag(0x2005,0xe080) )
+{
+  std::cerr << "debug" << std::endl;
+}
   // Read the Value
   //assert( ValueField == 0 );
   if( VRField == VR::SQ )
@@ -128,32 +133,27 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-  if( TagField == Tag(0x2001, 0xe05f) )
+  if( TagField == Tag(0x2001, 0xe05f)
+|| TagField == Tag(0x2001, 0xe100)
+|| TagField == Tag(0x2005,0xe080)
+|| TagField == Tag(0x2005,0xe083)
+|| TagField == Tag(0x2005,0xe084)
+//TagField.IsPrivate() && VRField == VR::SQ
+)
     {
+gdcmWarningMacro( "ByteSwpaing Private SQ: " << TagField );
     assert( VRField == VR::SQ );
-    //SwapCode oldsw = is.GetSwapCode();
-    //assert( oldsw == SwapCode::LittleEndian );
-    //is.SetSwapCode( SwapCode::BigEndian );
-    //if( !ValueField->Read<TSwap>(is) )
-    if( !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField) )
+    try
       {
-      assert(0 && "Should not happen");
+      if( !ValueIO<ExplicitDataElement,SwapperDoOp>::Read(is,*ValueField) )
+        {
+        assert(0 && "Should not happen");
+        }
       }
-    //is.SetSwapCode( oldsw );
-    return is;
-    }
-  else if( TagField == Tag(0x2001, 0xe100) )
-    {
-    assert( VRField == VR::SQ );
-    //SwapCode oldsw = is.GetSwapCode();
-    //assert( oldsw == SwapCode::LittleEndian );
-    //is.SetSwapCode( SwapCode::BigEndian );
-    //if( !ValueField->Read<TSwap>(is) )
-    if( !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField) )
+    catch( std::exception &ex )
       {
-      assert(0 && "Should not happen");
+      ValueLengthField = ValueField->GetLength();
       }
-    //is.SetSwapCode( oldsw );
     return is;
     }
 #endif
