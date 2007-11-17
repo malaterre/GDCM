@@ -13,12 +13,13 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmTS.h"
+#include "gdcmMediaStorage.h"
 
-int TestTS(int argc, char *argv[])
+int TestMediaStorage(int argc, char *argv[])
 {
   (void)argc;
   (void)argv;
 
   return 0;
 }
+

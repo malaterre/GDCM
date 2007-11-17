@@ -24,7 +24,8 @@ SET(DSED_TEST_SRCS
   TestSequenceOfFragments
   TestSequenceOfItems
   #TestTag
-  TestTS
+  TestTransferSyntax
+  TestMediaStorage
   TestVL
   TestVM
   TestVR
