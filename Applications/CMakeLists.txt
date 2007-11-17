@@ -19,6 +19,8 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
+
+  "${GDCM_SOURCE_DIR}/Utilities"
   )
 
 ADD_EXECUTABLE(gdcmdump ${GDCMDUMP_APPS_SRCS})
@@ -30,6 +32,9 @@ ENDIF(WIN32 AND NOT CYGWIN)
 # gdcmraw
 ADD_EXECUTABLE(gdcmraw gdcmraw.cxx)
 TARGET_LINK_LIBRARIES(gdcmraw gdcmMSFF) # gdcmgetopt)
+
+ADD_EXECUTABLE(deflate deflate.cxx)
+TARGET_LINK_LIBRARIES(deflate gdcmzlib)
 
 # gdcmrewrite
 ADD_EXECUTABLE(gdcmrewrite gdcmrewrite.cxx)
