@@ -27,7 +27,7 @@ class JPEG2000Codec : public ImageCodec
 public:
   JPEG2000Codec();
   ~JPEG2000Codec();
-  bool CanDecode(TS const &ts);
+  bool CanDecode(TransferSyntax const &ts);
   bool Decode(std::istream &is, std::ostream &os);
 private:
   JPEG2000Internals *Internals;

@@ -14,7 +14,7 @@
 
 =========================================================================*/
 #include "gdcmRLECodec.h"
-#include "gdcmTS.h"
+#include "gdcmTransferSyntax.h"
 #include "gdcmTrace.h"
 #include "gdcmByteSwap.txx"
 
@@ -83,11 +83,9 @@ RLECodec::~RLECodec()
   delete Internals;
 }
 
-bool RLECodec::CanDecode(TS const &ts)
+bool RLECodec::CanDecode(TransferSyntax const &ts)
 {
-  (void)ts;
-  abort();
-  return true;
+  return ts == TransferSyntax::RLELossless;
 }
 
 // G.3.2 The RLE decoder

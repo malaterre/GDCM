@@ -20,7 +20,7 @@
 #include "gdcmFileMetaInformation.h"
 #include "gdcmElement.h"
 #include "gdcmPhotometricInterpretation.h"
-#include "gdcmTS.h"
+#include "gdcmTransferSyntax.h"
 #include "gdcmLookupTable.h"
 
 namespace gdcm
@@ -60,7 +60,7 @@ bool ImageReader::Read()
     }
 
   const FileMetaInformation &header = F->GetHeader();
-  const TS &ts = header.GetDataSetTransferSyntax();
+  const TransferSyntax &ts = header.GetDataSetTransferSyntax();
 
   bool res = false;
   /* Does it really make sense to check for Media Storage SOP Class UID?
@@ -69,22 +69,22 @@ bool ImageReader::Read()
    * I'd rather go the old way check a bunch of tags (From Image Plane
    * Module).
    */
-  TS::MSType ms = header.GetMediaStorageType();
-  bool isImage = TS::IsImage( ms );
+  MediaStorage::MSType ms = header.GetMediaStorageType();
+  bool isImage = MediaStorage::IsImage( ms );
   if( isImage )
     {
-    assert( ts != TS::TS_END && ms != TS::MS_END );
+    assert( ts != TransferSyntax::TS_END && ms != MediaStorage::MS_END );
     // Good it's the easy case. It's declared as an Image:
     gdcmDebugMacro( "Sweet ! Finally a good DICOM file !" );
-    PixelData.SetCompressionFromTransferSyntax( ts );
+    //PixelData.SetCompressionFromTransferSyntax( ts );
     res = ReadImage();
     }
   else
     {
-    if( ms != TS::MS_END )
+    if( ms != MediaStorage::MS_END )
       {
       gdcmDebugMacro( "DICOM file is not an Image file but a : " <<
-        TS::GetMSString(ms) << " SOP Class UID" );
+        MediaStorage::GetMSString(ms) << " SOP Class UID" );
       res = false;
       }
     else
@@ -102,31 +102,31 @@ bool ImageReader::Read()
         std::string sopclassuid_str(
           sopclassuid->GetPointer(),
           sopclassuid->GetLength() );
-        TS::MSType ms2 = TS::GetMSType(sopclassuid_str.c_str());
-        bool isImage2 = TS::IsImage( ms2 );
+        MediaStorage::MSType ms2 = MediaStorage::GetMSType(sopclassuid_str.c_str());
+        bool isImage2 = MediaStorage::IsImage( ms2 );
         if( isImage2 )
           {
           gdcmDebugMacro( "After all it might be a DICOM file "
             "(Mallinckrodt-like)" );
           
     abort(); // FIXME
-    PixelData.SetCompressionFromTransferSyntax( ts );
+    //PixelData.SetCompressionFromTransferSyntax( ts );
           //PixelData.SetCompressionType( Compression::RAW );
           res = ReadImage();
           }
         else
           {
           gdcmDebugMacro( "DICOM file is not an Image file but a : " <<
-            TS::GetMSString(ms2) << " SOP Class UID" );
+            MediaStorage::GetMSString(ms2) << " SOP Class UID" );
           res = false;
           }
         }
-      else if( ts == TS::ImplicitVRBigEndianACRNEMA || header.IsEmpty() )
+      else if( ts == TransferSyntax::ImplicitVRBigEndianACRNEMA || header.IsEmpty() )
         {
         // Those transfer syntax have a high probability of being ACR NEMA
         gdcmDebugMacro( "Looks like an ACR-NEMA file" );
         // Hopefully all ACR-NEMA are RAW:
-        PixelData.SetCompressionType( Compression::RAW );
+        //PixelData.SetCompressionType( Compression::RAW );
         res = ReadACRNEMAImage();
         }
       else // there is a Unknown TransferSyntax
@@ -141,7 +141,7 @@ bool ImageReader::Read()
           // Someone defined the Transfer Syntax but I have no clue what
           // it is. Since there is Pixel Data element, let's try to read
           // that as a buggy DICOM Image file...
-          PixelData.SetCompressionType( Compression::RAW );
+          //PixelData.SetCompressionType( Compression::RAW );
           res = ReadImage();
           }
         else
@@ -203,7 +203,7 @@ int ImageReader::ReadISFromTag( Tag const &t, std::stringstream &ss,
 bool ImageReader::ReadImage()
 {
   const DataSet &ds = F->GetDataSet();
-  TS::NegociatedType type; // = ds.GetNegociatedType();
+  TransferSyntax::NegociatedType type; // = ds.GetNegociatedType();
   std::stringstream ss;
   std::string conversion;
   // Construct a stringstream to mimic the reading from the file
@@ -404,7 +404,7 @@ bool ImageReader::ReadImage()
       {
       // Need to byte swap
       assert( F->GetHeader().GetDataSetTransferSyntax() 
-        != TS::ImplicitVRBigEndianPrivateGE );
+        != TransferSyntax::ImplicitVRBigEndianPrivateGE );
       bool need = false;
 //      = 
 //        ByteSwap<int>::SystemIsLittleEndian() &&
@@ -455,7 +455,7 @@ bool ImageReader::ReadImage()
 bool ImageReader::ReadACRNEMAImage()
 {
   const DataSet &ds = F->GetDataSet();
-  TS::NegociatedType type; // = ds.GetNegociatedType();
+  TransferSyntax::NegociatedType type; // = ds.GetNegociatedType();
   std::stringstream ss;
   std::string conversion;
   // Construct a stringstream to mimic the reading from the file

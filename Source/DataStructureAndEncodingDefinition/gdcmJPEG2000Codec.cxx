@@ -14,7 +14,7 @@
 
 =========================================================================*/
 #include "gdcmJPEG2000Codec.h"
-#include "gdcmTS.h"
+#include "gdcmTransferSyntax.h"
 #include "gdcmTrace.h"
 
 #include "gdcm_openjpeg.h"
@@ -74,9 +74,10 @@ JPEG2000Codec::~JPEG2000Codec()
   delete Internals;
 }
 
-bool JPEG2000Codec::CanDecode(TS const &ts)
+bool JPEG2000Codec::CanDecode(TransferSyntax const &ts)
 {
-  return ts.GetCompressionType() == Compression::JPEG2000;
+  return ts == TransferSyntax::JPEG2000Lossless 
+	  || ts == TransferSyntax::JPEG2000;
 }
 
 bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)

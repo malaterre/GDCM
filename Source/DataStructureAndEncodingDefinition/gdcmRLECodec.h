@@ -27,7 +27,7 @@ class RLECodec : public ImageCodec
 public:
   RLECodec();
   ~RLECodec();
-  bool CanDecode(TS const &ts);
+  bool CanDecode(TransferSyntax const &ts);
   bool Decode(std::istream &is, std::ostream &os);
 
   void SetLength(unsigned long l)

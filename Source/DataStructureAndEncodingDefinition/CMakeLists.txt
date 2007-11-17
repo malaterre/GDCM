@@ -20,7 +20,9 @@ SET(DSED_SRCS
   gdcmRLECodec.cxx
   gdcmSequenceOfFragments.cxx
   gdcmSequenceOfItems.cxx
-  gdcmTS.cxx
+  #gdcmTS.cxx
+  gdcmTransferSyntax.cxx
+  gdcmMediaStorage.cxx
   gdcmVM.cxx
   gdcmVR.cxx
   gdcmFile.cxx

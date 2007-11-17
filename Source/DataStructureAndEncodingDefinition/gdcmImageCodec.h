@@ -30,7 +30,7 @@ class ImageCodec : public Codec
 public:
   ImageCodec();
   ~ImageCodec();
-  bool CanDecode(TS const &) { return false; }
+  bool CanDecode(TransferSyntax const &) { return false; }
   bool Decode(std::istream &is, std::ostream &os);
 
   unsigned int GetPlanarConfiguration() const

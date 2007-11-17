@@ -14,7 +14,7 @@
 
 =========================================================================*/
 #include "gdcmJPEGCodec.h"
-#include "gdcmTS.h"
+#include "gdcmTransferSyntax.h"
 #include "gdcmTrace.h"
 
 #include "gdcmJPEG8Codec.h"
@@ -34,9 +34,15 @@ JPEGCodec::~JPEGCodec()
   delete Internal;
 }
 
-bool JPEGCodec::CanDecode(TS const &ts)
+bool JPEGCodec::CanDecode(TransferSyntax const &ts)
 {
-  return ts.GetCompressionType() == Compression::JPEG;
+  return ts == TransferSyntax::JPEGBaselineProcess1
+    || ts == TransferSyntax::JPEGExtendedProcess2_4
+    || ts == TransferSyntax::JPEGExtendedProcess3_5
+    || ts == TransferSyntax::JPEGSpectralSelectionProcess6_8
+    || ts == TransferSyntax::JPEGFullProgressionProcess10_12
+    || ts == TransferSyntax::JPEGLosslessProcess14
+    || ts == TransferSyntax::JPEGLosslessProcess14_1;
 }
 
 void JPEGCodec::SetPixelType(PixelType const &pt)

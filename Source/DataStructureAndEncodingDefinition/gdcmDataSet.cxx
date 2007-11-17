@@ -30,10 +30,10 @@ void DataSet::Print(std::ostream &os) const
 
 
 //-----------------------------------------------------------------------------
-DataSet::DataSet(TS::NegociatedType type):NegociatedTS(type),Length(0)
+DataSet::DataSet(TransferSyntax::NegociatedType type):NegociatedTS(type),Length(0)
 {
-  assert( NegociatedTS == TS::Implicit ||
-          NegociatedTS == TS::Explicit );
+  assert( NegociatedTS == TransferSyntax::Implicit ||
+          NegociatedTS == TransferSyntax::Explicit );
 }
 
 //-----------------------------------------------------------------------------
@@ -96,11 +96,11 @@ VL DataSet::GetLength() const
   //return Length;
   //assert( NegociatedTS != TS::Implicit ); // TODO: when copying an internal DataSet GetLength
   // will take into account the VR... sigh
-  if( NegociatedTS == TS::Implicit )
+  if( NegociatedTS == TransferSyntax::Implicit )
     {
     return Internal.GetLength<ImplicitDataElement>();
     }
-  else if ( NegociatedTS == TS::Explicit )
+  else if ( NegociatedTS == TransferSyntax::Explicit )
     {
     return Internal.GetLength<ExplicitDataElement>();
     }

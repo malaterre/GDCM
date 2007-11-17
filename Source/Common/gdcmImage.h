@@ -21,7 +21,7 @@
 #include "gdcmPhotometricInterpretation.h"
 #include "gdcmLookupTable.h"
 #include "gdcmSmartPointer.h"
-#include "gdcmCompression.h"
+//#include "gdcmCompression.h"
 
 #include <vector>
 
@@ -48,7 +48,7 @@ namespace gdcm
 class GDCM_EXPORT Image
 {
 public:
-  Image ():NumberOfDimensions(0),PlanarConfiguration(0),Dimensions(),SC(),CompressionType(Compression::UNKNOWN),NeedByteSwap(false),LUT(0) {}
+  Image ():NumberOfDimensions(0),PlanarConfiguration(0),Dimensions(),SC(),NeedByteSwap(false),LUT(0) {}
   virtual ~Image() {}
 
   unsigned int GetNumberOfDimensions() const;
@@ -96,14 +96,6 @@ public:
     SC = sc;
     }
 
-  Compression::Types GetCompressionType() const
-    {
-    return CompressionType;
-    }
-  void SetCompressionType(Compression::Types ct)
-    {
-    CompressionType = ct;
-    }
   bool GetNeedByteSwap() const
     {
     return NeedByteSwap;
@@ -142,7 +134,6 @@ private:
   PhotometricInterpretation PI;
 
   SwapCode SC;
-  Compression::Types CompressionType;
   bool NeedByteSwap;
 
   typedef SmartPointer<LookupTable> LUTPtr;

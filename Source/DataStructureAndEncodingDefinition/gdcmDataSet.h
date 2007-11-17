@@ -16,7 +16,7 @@
 #ifndef __gdcmDataSet_h
 #define __gdcmDataSet_h
 
-#include "gdcmTS.h"
+#include "gdcmTransferSyntax.h"
 #include "gdcmValue.h"
 #include "gdcmDataElement.h"
 #include "gdcmStructuredSet.h"
@@ -44,26 +44,21 @@ namespace gdcm
  * DataSet. Other value are undefined (nested dataset with undefined length)
  * or defined length (different from 0) means nested dataset with defined
  * length.
+ *
+ * TODO:
+ * a DataSet DOES NOT have a TS type... a file does !
  */
 class GDCM_EXPORT DataSet : public Value
 {
   template <typename TSwap> friend class IOSerialize;
 public:
-  DataSet(TS::NegociatedType type = TS::Explicit);
+  DataSet(TransferSyntax::NegociatedType type = TransferSyntax::Explicit);
   ~DataSet();
 
   // Clear
   void Clear();
 
   bool IsValid() { return true; }
-
-  // Read
-//  template <typename TSwap>
-//  IStream &Read(IStream &is);
-//
-//  // Write
-//  template <typename TSwap>
-//  OStream const &Write(OStream &os) const;
 
   VL GetLength() const;
   void SetLength(VL l) { 
@@ -84,10 +79,10 @@ public:
 
   // TODO
   // This function should not be in the public API:
-  void SetType(TS::NegociatedType type) { NegociatedTS = type; }
+  void SetType(TransferSyntax::NegociatedType type) { NegociatedTS = type; }
 
 private:
-  TS::NegociatedType NegociatedTS;
+  TransferSyntax::NegociatedType NegociatedTS;
   StructuredSet Internal;
 
   VL Length;

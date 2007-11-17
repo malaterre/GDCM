@@ -22,12 +22,12 @@
 namespace gdcm
 {
 
-class TS;
+class TransferSyntax;
 class Decoder
 {
 public:
   virtual ~Decoder() {}
-  virtual bool CanDecode(TS const &) { return false; }
+  virtual bool CanDecode(TransferSyntax const &) { return false; }
   virtual bool Decode(std::istream &is, std::ostream &os) { return false; }
 };
 

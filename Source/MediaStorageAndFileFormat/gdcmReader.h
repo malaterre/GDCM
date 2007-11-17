@@ -74,7 +74,7 @@ protected:
 
   File *F;
 private:
-  TS GuessTransferSyntax();
+  TransferSyntax GuessTransferSyntax();
   std::ifstream Stream;
 
 };

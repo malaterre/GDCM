@@ -86,15 +86,14 @@ bool Reader::ReadDataSet()
   return true;
 }
 
-TS Reader::GuessTransferSyntax()
+TransferSyntax Reader::GuessTransferSyntax()
 {
   // Don't call this function if you have a meta file info
-  //assert( Header->GetTransferSyntaxType() == TS::TS_END );
-  //assert( Stream.GetSwapCode() == SwapCode::Unknown );
+  //assert( Header->GetTransferSyntaxType() == TransferSyntax::TS_END );
   std::streampos start = Stream.tellg();
   SwapCode sc = SwapCode::Unknown;
-  TS::NegociatedType nts = TS::Unknown;
-  TS ts (TS::TS_END);
+  TransferSyntax::NegociatedType nts = TransferSyntax::Unknown;
+  TransferSyntax ts (TransferSyntax::TS_END);
   Tag t;
   t.Read<SwapperNoOp>(Stream);
   if( ! (t.GetGroup() % 2) )
@@ -118,7 +117,7 @@ TS Reader::GuessTransferSyntax()
     VR::VRType vr = VR::GetVRType(vr_str);
     if( vr != VR::VR_END )
       {
-      nts = TS::Explicit;
+      nts = TransferSyntax::Explicit;
       }
     else
       {
@@ -148,7 +147,7 @@ TS Reader::GuessTransferSyntax()
           abort();
           }
         }
-      nts = TS::Implicit;
+      nts = TransferSyntax::Implicit;
       }
     }
   else
@@ -171,28 +170,28 @@ TS Reader::GuessTransferSyntax()
     VR::VRType vr = VR::GetVRType(vr_str);
     if( vr != VR::VR_END )
       {
-      nts = TS::Explicit;
+      nts = TransferSyntax::Explicit;
       }
     else
       {
-      nts = TS::Implicit;
+      nts = TransferSyntax::Implicit;
       // We are reading a private creator (0x0010) so it's LO, it's
       // difficult to come up with someting to check, maybe that
       // VL < 256 ...
       gdcmWarningMacro( "Very dangerous assertion needs some work" );
       }
     }
-  assert( nts != TS::Unknown );
+  assert( nts != TransferSyntax::Unknown );
   assert( sc != SwapCode::Unknown );
-  if( nts == TS::Implicit )
+  if( nts == TransferSyntax::Implicit )
     {
     if( sc == SwapCode::BigEndian )
       {
-      ts = TS::ImplicitVRBigEndianACRNEMA;
+      ts = TransferSyntax::ImplicitVRBigEndianACRNEMA;
       }
     else if ( sc == SwapCode::LittleEndian )
       {
-      ts = TS::ImplicitVRLittleEndian;
+      ts = TransferSyntax::ImplicitVRLittleEndian;
       }
     else
       {
@@ -204,7 +203,7 @@ TS Reader::GuessTransferSyntax()
     abort();
     }
   Stream.seekg( start, std::ios::beg );
-  assert( ts != TS::TS_END );
+  assert( ts != TransferSyntax::TS_END );
   return ts;
 }
 

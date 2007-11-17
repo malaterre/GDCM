@@ -19,7 +19,6 @@
 
 #include "gdcmValue.h"
 #include "gdcmItem.h"
-#include "gdcmTS.h"
 
 #include <vector>
 

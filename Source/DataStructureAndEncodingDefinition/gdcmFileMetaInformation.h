@@ -18,8 +18,9 @@
 #define __gdcmFileMetaInformation_h
 
 #include "gdcmDataSet.h"
-#include "gdcmTS.h"
 #include "gdcmDataElement.h"
+#include "gdcmMediaStorage.h"
+#include "gdcmTransferSyntax.h"
 
 namespace gdcm
 {
@@ -35,16 +36,16 @@ namespace gdcm
 class GDCM_EXPORT FileMetaInformation : public StructuredSet
 {
 public:
-  FileMetaInformation():DataSetTS(),MetaInformationTS(TS::Unknown),DataSetMS(TS::MS_END) {}
+  FileMetaInformation():DataSetTS(),MetaInformationTS(TransferSyntax::Unknown),DataSetMS(MediaStorage::MS_END) {}
  ~FileMetaInformation() { };
 
   friend std::ostream &operator<<(std::ostream &_os, const FileMetaInformation &_val);
 
   bool IsValid() const { return true; }
 
-  TS::NegociatedType GetMetaInformationTS() const { return MetaInformationTS; }
-  const TS &GetDataSetTransferSyntax() const { return DataSetTS; }
-  TS::MSType GetMediaStorageType() const;
+  TransferSyntax::NegociatedType GetMetaInformationTS() const { return MetaInformationTS; }
+  const TransferSyntax &GetDataSetTransferSyntax() const { return DataSetTS; }
+  MediaStorage::MSType GetMediaStorageType() const;
 
   // Read
   std::istream &Read(std::istream &is);
@@ -65,9 +66,9 @@ protected:
   void Default();
   void ComputeDataSetMediaStorageSOPClass();
 
-  TS DataSetTS;
-  TS::NegociatedType MetaInformationTS;
-  TS::MSType DataSetMS;
+  TransferSyntax DataSetTS;
+  TransferSyntax::NegociatedType MetaInformationTS;
+  MediaStorage::MSType DataSetMS;
 
 private:
 };

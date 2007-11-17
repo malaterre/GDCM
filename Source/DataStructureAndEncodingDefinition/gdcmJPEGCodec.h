@@ -30,7 +30,7 @@ class JPEGCodec : public ImageCodec
 public:
   JPEGCodec();
   ~JPEGCodec();
-  bool CanDecode(TS const &ts);
+  bool CanDecode(TransferSyntax const &ts);
   bool Decode(std::istream &is, std::ostream &os);
   void SetPixelType(PixelType const &pt);
 

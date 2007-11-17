@@ -322,7 +322,7 @@ std::istream &FileMetaInformation::ReadCompatInternal(std::istream &is)
     is.read(vr_str, 2);
     if( VR::IsValid(vr_str) )
       {
-      MetaInformationTS = TS::Explicit;
+      MetaInformationTS = TransferSyntax::Explicit;
       // Hourah !
       // Looks like an Explicit File Meta Information Header.
       is.seekg(-6, std::ios::cur); // Seek back
@@ -339,7 +339,7 @@ std::istream &FileMetaInformation::ReadCompatInternal(std::istream &is)
       }
     else
       {
-      MetaInformationTS = TS::Implicit;
+      MetaInformationTS = TransferSyntax::Implicit;
       gdcmDebugMacro( "Not Explicit" );
       // Ok this might be an implicit encoded Meta File Information header...
       // GE_DLX-8-MONO2-PrivateSyntax.dcm
@@ -376,7 +376,7 @@ void FileMetaInformation::ComputeDataSetTransferSyntax()
 {
   const Tag t(0x0002,0x0010);
   const DataElement &de = GetDataElement(t);
-  //TS::NegociatedType nt = GetNegociatedType();
+  //TransferSyntax::NegociatedType nt = GetNegociatedType();
   std::string ts;
 //  if( const ExplicitDataElement *xde = dynamic_cast<const ExplicitDataElement*>(&de) )
     {
@@ -397,15 +397,15 @@ void FileMetaInformation::ComputeDataSetTransferSyntax()
 //    assert( 0 && "Cannot happen" );
 //    }
   gdcmDebugMacro( "TS: " << ts );
-  TS tst(TS::GetTSType(ts.c_str()));
-  assert( tst != TS::TS_END );
+  TransferSyntax tst(TransferSyntax::GetTSType(ts.c_str()));
+  assert( tst != TransferSyntax::TS_END );
   DataSetTS = tst;
 
   // postcondition
   DataSetTS.IsValid();
 }
 
-TS::MSType FileMetaInformation::GetMediaStorageType() const
+MediaStorage::MSType FileMetaInformation::GetMediaStorageType() const
 {
   // D 0002|0002 [UI] [Media Storage SOP Class UID]
   // [1.2.840.10008.5.1.4.1.1.12.1]
@@ -415,7 +415,7 @@ TS::MSType FileMetaInformation::GetMediaStorageType() const
     {
     gdcmDebugMacro( "File Meta information is present but does not"
       " contains " << t );
-    return TS::MS_END;
+    return MediaStorage::MS_END;
     }
   const DataElement &de = GetDataElement(t);
   std::string ts;
@@ -426,8 +426,8 @@ TS::MSType FileMetaInformation::GetMediaStorageType() const
     ts = std::string(bv.GetPointer(), bv.GetLength());
     }
   gdcmDebugMacro( "TS: " << ts );
-  TS::MSType ms = TS::GetMSType(ts.c_str());
-  if( ms == TS::MS_END )
+  MediaStorage::MSType ms = MediaStorage::GetMSType(ts.c_str());
+  if( ms == MediaStorage::MS_END )
     {
     gdcmWarningMacro( "Media Storage Class UID: " << ts << " is unknow" );
     }
@@ -460,7 +460,7 @@ std::ostream &FileMetaInformation::Write(std::ostream &os) const
     // At least make sure to have group length
     //if( !DS->FindDataElement( Tag(0x0002, 0x0000) ) )
       {
-      //if( DS->GetNegociatedType() == TS::Explicit )
+      //if( DS->GetNegociatedType() == TransferSyntax::Explicit )
         {
         ExplicitDataElement xde( Tag(0x0002, 0x0000), 4, VR::UL );
         SmartPointer<ByteValue> bv = new ByteValue;

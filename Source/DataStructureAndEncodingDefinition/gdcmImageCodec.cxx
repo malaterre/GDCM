@@ -14,7 +14,6 @@
 
 =========================================================================*/
 #include "gdcmImageCodec.h"
-#include "gdcmTS.h"
 #include "gdcmByteSwap.txx"
 #include "gdcmTrace.h"
 

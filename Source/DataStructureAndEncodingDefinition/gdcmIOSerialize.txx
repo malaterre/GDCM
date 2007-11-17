@@ -42,11 +42,11 @@ std::istream &IOSerialize<TSwap>::Read(std::istream &is,DataSet &ds)
   if( ds.Length == 0)
     {
     // Ok we are reading a root DataSet
-    if(ds.NegociatedTS == TS::Implicit)
+    if(ds.NegociatedTS == TransferSyntax::Implicit)
       {
       ds.Internal.template Read<ImplicitDataElement,TSwap>(is);
       }
-    else if ( ds.NegociatedTS == TS::Explicit )
+    else if ( ds.NegociatedTS == TransferSyntax::Explicit )
       {
       ds.Internal.template Read<ExplicitDataElement,TSwap>(is);
       //Internal.ReadSwap(is);
@@ -54,11 +54,11 @@ std::istream &IOSerialize<TSwap>::Read(std::istream &is,DataSet &ds)
     }
   else if( ds.Length.IsUndefined() )
     {
-    if(ds.NegociatedTS == TS::Implicit)
+    if(ds.NegociatedTS == TransferSyntax::Implicit)
       {
       ds.Internal.template ReadNested<ImplicitDataElement,TSwap>(is);
       }
-    else if ( ds.NegociatedTS == TS::Explicit )
+    else if ( ds.NegociatedTS == TransferSyntax::Explicit )
     {
     // Nested DataSet with undefined length 
     ds.Internal.template ReadNested<ExplicitDataElement,TSwap>(is);
@@ -66,11 +66,11 @@ std::istream &IOSerialize<TSwap>::Read(std::istream &is,DataSet &ds)
     }
   else
     {
-    if(ds.NegociatedTS == TS::Implicit)
+    if(ds.NegociatedTS == TransferSyntax::Implicit)
      {
       ds.Internal.template ReadWithLength<ImplicitDataElement,TSwap>(is,ds.Length);
      }
-    else if ( ds.NegociatedTS == TS::Explicit )
+    else if ( ds.NegociatedTS == TransferSyntax::Explicit )
     {
      // Nested DataSet with defined length
     ds.Internal.template ReadWithLength<ExplicitDataElement,TSwap>(is, ds.Length);
@@ -84,11 +84,11 @@ std::istream &IOSerialize<TSwap>::Read(std::istream &is,DataSet &ds)
 template <typename TSwap>
 std::ostream const &IOSerialize<TSwap>::Write(std::ostream &os,DataSet const &ds)
 {
-    if(ds.NegociatedTS == TS::Implicit)
+    if(ds.NegociatedTS == TransferSyntax::Implicit)
       {
       ds.Internal.template Write<ImplicitDataElement,TSwap>(os);
       }
-    else if ( ds.NegociatedTS == TS::Explicit )
+    else if ( ds.NegociatedTS == TransferSyntax::Explicit )
     {
    ds.Internal.template Write<ExplicitDataElement,TSwap>(os);
     }

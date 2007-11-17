@@ -58,10 +58,10 @@ std::istream &File::Read(std::istream &is)
   // Now is a good time to find out the dataset transfer syntax
   //Header.ComputeDataSetTransferSyntax(); // FIXME !
 
-  const TS &ts = Header.GetDataSetTransferSyntax();
+  const TransferSyntax &ts = Header.GetDataSetTransferSyntax();
   //std::cerr << ts.GetNegociatedType() << std::endl;
-  std::cerr << TS::GetTSString(ts) << std::endl;
-  if( ts == TS::DeflatedExplicitVRLittleEndian )
+  std::cerr << TransferSyntax::GetTSString(ts) << std::endl;
+  if( ts == TransferSyntax::DeflatedExplicitVRLittleEndian )
   {
 	  /*
 	  std::ofstream of("deflat.gz");
@@ -78,9 +78,9 @@ of.close();
 
 	  return is;
   }
-  if( ts.GetNegociatedType() == TS::Implicit )
+  if( ts.GetNegociatedType() == TransferSyntax::Implicit )
     {
-    DS.SetType( TS::Implicit );
+    DS.SetType( TransferSyntax::Implicit );
     }
   if( ts.GetSwapCode() == SwapCode::BigEndian )
     {

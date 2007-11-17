@@ -14,7 +14,7 @@
 
 =========================================================================*/
 #include "gdcmRAWCodec.h"
-#include "gdcmTS.h"
+#include "gdcmTransferSyntax.h"
 #include "gdcmByteSwap.txx"
 
 
@@ -36,9 +36,12 @@ RAWCodec::~RAWCodec()
   delete Internals;
 }
 
-bool RAWCodec::CanDecode(TS const &ts)
+bool RAWCodec::CanDecode(TransferSyntax const &ts)
 {
-  return ts.GetCompressionType() == Compression::RAW;
+  return ts == TransferSyntax::ImplicitVRLittleEndian
+   || ts == TransferSyntax::ExplicitVRLittleEndian
+   || ts == TransferSyntax::ExplicitVRBigEndian
+   || ts == TransferSyntax::ImplicitVRBigEndianPrivateGE;
 }
 
 bool RAWCodec::Decode(std::istream &is, std::ostream &os)

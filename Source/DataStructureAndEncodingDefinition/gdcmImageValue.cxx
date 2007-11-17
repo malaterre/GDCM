@@ -29,7 +29,6 @@ namespace gdcm
 
 bool ImageValue::GetBuffer(char *buffer) const
 {
-  assert( GetCompressionType() != Compression::UNKNOWN );
   unsigned long len = GetBufferLength();
   Value *p = PixelData;
   const ByteValue *bv = dynamic_cast<ByteValue*>(p);
@@ -80,7 +79,7 @@ bool ImageValue::GetBuffer(char *buffer) const
     f.write(buffer, totalLen);
     f.close();
 #endif
-    if( GetCompressionType() == Compression::JPEG )
+    //if( GetCompressionType() == Compression::JPEG )
       {
       JPEGCodec codec;
       codec.SetPlanarConfiguration( GetPlanarConfiguration() );
@@ -108,7 +107,7 @@ bool ImageValue::GetBuffer(char *buffer) const
       assert( pos == len );
       return true;
       }
-    else if ( GetCompressionType() == Compression::JPEG2000 )
+    //else if ( GetCompressionType() == Compression::JPEG2000 )
       {
       JPEG2000Codec codec;
       codec.SetPlanarConfiguration( GetPlanarConfiguration() );
@@ -122,7 +121,7 @@ bool ImageValue::GetBuffer(char *buffer) const
       memcpy(buffer, os.str().c_str(), len);
       return r;
       }
-    else if ( GetCompressionType() == Compression::RLE )
+    //else if ( GetCompressionType() == Compression::RLE )
       {
       //assert( sf->GetNumberOfFragments() == 1 );
       //assert( sf->GetNumberOfFragments() == GetDimensions(2) );
@@ -173,7 +172,7 @@ bool ImageValue::GetBuffer(char *buffer) const
       assert( pos == len || pos == 3*len );
       return true;
       }
-    else
+    //else
       {
       abort();
       }
