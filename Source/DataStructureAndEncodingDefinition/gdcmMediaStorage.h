@@ -76,6 +76,17 @@ public:
     MS_END
   } MSType; // Media Storage Type
 
+typedef enum {
+	  NoObject = 0, // DICOMDIR
+	  Video, // Most common, include image, video and volume
+	  Waveform, // Isn't it simply a 1D video ?
+	  Audio, // ???
+	  PDF,
+	  URI, // URL...
+	  Segmentation, // TODO
+	  ObjectEnd
+  } ObjectType;
+
   static const char* GetMSString(const MSType &ts);
   static const MSType GetMSType(const char *str);
 

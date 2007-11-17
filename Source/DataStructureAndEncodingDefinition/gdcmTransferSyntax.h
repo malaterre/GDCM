@@ -57,7 +57,7 @@ public:
   } ImageSpacingType;
   ImageSpacingType GetImageSpacing();
 #endif
-
+  
   typedef enum {
     ImplicitVRLittleEndian = 0,
     ImplicitVRBigEndianPrivateGE,
