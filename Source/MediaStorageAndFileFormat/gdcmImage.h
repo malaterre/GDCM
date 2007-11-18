@@ -21,7 +21,7 @@
 #include "gdcmPhotometricInterpretation.h"
 #include "gdcmLookupTable.h"
 #include "gdcmSmartPointer.h"
-//#include "gdcmCompression.h"
+#include "gdcmTransferSyntax.h"
 
 #include <vector>
 

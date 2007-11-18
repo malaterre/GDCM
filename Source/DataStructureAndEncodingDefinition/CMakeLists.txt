@@ -5,22 +5,11 @@ SET(DSED_SRCS
   gdcmExplicitDataElement.cxx
   gdcmFileMetaInformation.cxx
   gdcmFragment.cxx
-  gdcmImageCodec.cxx
-  gdcmImageConverter.cxx
-  gdcmImageValue.cxx
   gdcmImplicitDataElement.cxx
   gdcmItem.cxx
-  gdcmJPEG12Codec.cxx
-  gdcmJPEG16Codec.cxx
-  gdcmJPEG2000Codec.cxx
-  gdcmJPEG8Codec.cxx
-  gdcmJPEGCodec.cxx
   gdcmParser.cxx
-  gdcmRAWCodec.cxx
-  gdcmRLECodec.cxx
   gdcmSequenceOfFragments.cxx
   gdcmSequenceOfItems.cxx
-  #gdcmTS.cxx
   gdcmTransferSyntax.cxx
   gdcmMediaStorage.cxx
   gdcmVM.cxx
@@ -28,15 +17,6 @@ SET(DSED_SRCS
   gdcmFile.cxx
   gdcmPreamble.cxx
   )
-
-# Do the proper thing when building static...if only there was configured
-# headers or def files instead
-IF(NOT BUILD_SHARED_LIBS)
-  SET_SOURCE_FILES_PROPERTIES(gdcmJPEG2000Codec.cxx
-                              PROPERTIES 
-                              COMPILE_FLAGS -DOPJ_STATIC
-                              )
-ENDIF(NOT BUILD_SHARED_LIBS)
 
 # Add the include paths
 INCLUDE_DIRECTORIES(
@@ -48,16 +28,8 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition/"
 
-  # FIXME:
-  "${GDCM_SOURCE_DIR}/Utilities"
-  "${GDCM_BINARY_DIR}/Utilities"
-  #"${GDCM_BINARY_DIR}/Utilities/jpeg/8"
-  #"${GDCM_SOURCE_DIR}/Utilities/jpeg"
-  #"${GDCM_SOURCE_DIR}/Utilities/openjpeg/libopenjpeg"
-  "${GDCM_BINARY_DIR}/Utilities/openjpeg"
-  )
+ )
 
 ADD_LIBRARY(gdcmDSED ${DSED_SRCS})
-TARGET_LINK_LIBRARIES(gdcmDSED gdcmCommon
-  gdcmjpeg8 gdcmjpeg12 gdcmjpeg16 gdcmopenjpeg)
+TARGET_LINK_LIBRARIES(gdcmDSED gdcmCommon)
 

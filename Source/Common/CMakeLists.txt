@@ -31,7 +31,6 @@ SET(Common_SRCS
   gdcmDirectory.cxx
   gdcmFilename.cxx
   gdcmFilenameGenerator.cxx
-  gdcmImage.cxx
   gdcmLookupTable.cxx
   gdcmPhotometricInterpretation.cxx
   gdcmPixelType.cxx
