@@ -52,4 +52,3 @@ done by openjpeg
 You should be able to say: this file is a ACR NEMA read it ! So the wizard 
 should be bypass and the discovery step can be skipped.
 -----------------------------------------------------------------------
-Remove all extra template from struct since template para was moved at member function level
