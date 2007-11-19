@@ -330,13 +330,18 @@ namespace gdcm
         case Z_OK:
           break;
         case Z_STREAM_END:
+          // Z_STREAM_END if the end of the compressed data has been reached
+          // and all uncompressed output has been produced
           if (&*buffer.end() - putback_end == (int) dstream.avail_out)
             return traits_type::eof();
-          break;            
+          break;
         case Z_DATA_ERROR:
+          abort();
           //case BZ_DATA_ERROR_MAGIC:
         case Z_MEM_ERROR:
+          abort();
         default:
+          abort();
           // TODO: handle these errors separately
           return traits_type::eof();
         }
