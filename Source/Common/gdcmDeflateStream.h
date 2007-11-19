@@ -17,16 +17,14 @@
 #ifndef __gdcmDeflateStream_h
 #define __gdcmDeflateStream_h
 
-#include <algorithm>
-#include <cstdlib>
+//#include <algorithm>
 #include <istream>
 #include <ostream>
-#include <stdexcept>
+//#include <stdexcept>
 #include <streambuf>
 #include <vector>
 
-#include <zlib.h>
-#include <iostream>
+#include <zlib/zlib.h>
 
 /*
  * Implementation found at:
