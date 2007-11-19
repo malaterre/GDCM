@@ -25,6 +25,8 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Utilities/md5"
   "${GDCM_BINARY_DIR}/Utilities/md5"
+
+  "${GDCM_SOURCE_DIR}/Utilities"
   )
 
 SET(Common_SRCS
