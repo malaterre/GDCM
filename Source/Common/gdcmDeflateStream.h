@@ -193,7 +193,11 @@ namespace gdcm
       cstream.opaque = opaque;
 
       // create a gzip compressor stream
-      int ret = deflateInit(&cstream,Z_BEST_SPEED);
+      //int ret = deflateInit(&cstream,Z_BEST_SPEED);
+      // Same comment a inflateInit2, we should not write any zlib here:
+      int ret = deflateInit2(&cstream, Z_BEST_SPEED,
+        Z_DEFLATED, -MAX_WBITS, MAX_MEM_LEVEL, Z_DEFAULT_STRATEGY);
+
       switch (ret) {
       case Z_OK:
         break;
@@ -301,6 +305,7 @@ namespace gdcm
           // and all uncompressed output has been produced
           if (&*buffer.end() - putback_end == (int) dstream.avail_out)
             return traits_type::eof();
+          // assert( it should be 1024 - 64 ...)
           break;
         case Z_DATA_ERROR:
           abort();
@@ -361,7 +366,11 @@ namespace gdcm
       dstream.avail_in = 0;
       dstream.next_in = Z_NULL;
 
-      // call inflateInit2 since we do not have a header in DICOM
+      // call inflateInit2 since we do not have a zlib header in DICOM
+      // See RFC1950 which describe the format
+      // http://www.ietf.org/rfc/rfc1950.txt
+      // In DICOM we are only interested in the RFC1951:
+      // http://www.ietf.org/rfc/rfc1951.txt
       // well hopefully if private implementation do respect standard.
       // I think it should not be too hard to support
       // but right now I haven't seen any so let's keep it that way

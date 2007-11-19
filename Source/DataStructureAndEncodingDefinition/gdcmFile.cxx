@@ -60,24 +60,27 @@ std::istream &File::Read(std::istream &is)
 
   const TransferSyntax &ts = Header.GetDataSetTransferSyntax();
   //std::cerr << ts.GetNegociatedType() << std::endl;
-  std::cerr << TransferSyntax::GetTSString(ts) << std::endl;
+  //std::cerr << TransferSyntax::GetTSString(ts) << std::endl;
+  // Special case where the dataset was compressed using the deflate
+  // algorithm
   if( ts == TransferSyntax::DeflatedExplicitVRLittleEndian )
-  {
-	  /*
-	  std::ofstream of("deflat.gz");
-	  char one_char;
-while (is.get(one_char)) {
-      of.put(one_char);
-   }
-of.close();
-      */
-  gzistream gzis(is.rdbuf());
+    {
+    /*
+    std::ofstream of("deflat.gz");
+    char one_char;
+    while (is.get(one_char))
+    of.put(one_char);
+    of.close();
+    */
+    gzistream gzis(is.rdbuf());
+    // FIXME: we also know in this case that we are dealing with Explicit:
+    assert( ts.GetNegociatedType() == TransferSyntax::Explicit );
     IOSerialize<SwapperNoOp>::Read(gzis,DS);
     is.seekg(0, std::ios::end);
     is.peek();
 
-	  return is;
-  }
+    return is;
+    }
   if( ts.GetNegociatedType() == TransferSyntax::Implicit )
     {
     DS.SetType( TransferSyntax::Implicit );
@@ -102,8 +105,20 @@ std::ostream const &File::Write(std::ostream &os) const
 
   Header.Write(os);
 
-	//std::cerr << "Write dataset: " << DS.GetNegociatedType() << std::endl;
-  IOSerialize<SwapperNoOp>::Write(os,DS);
+  const TransferSyntax &ts = Header.GetDataSetTransferSyntax();
+  if( ts == TransferSyntax::DeflatedExplicitVRLittleEndian )
+    {
+    gzostream gzos(os.rdbuf());
+    assert( ts.GetNegociatedType() == TransferSyntax::Explicit );
+    IOSerialize<SwapperNoOp>::Write(gzos,DS);
+
+    return os;
+    }
+  else
+    {
+    //std::cerr << "Write dataset: " << DS.GetNegociatedType() << std::endl;
+    IOSerialize<SwapperNoOp>::Write(os,DS);
+    }
 
   return os;
 }
