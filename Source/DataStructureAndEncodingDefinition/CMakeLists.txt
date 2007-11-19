@@ -28,6 +28,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition/"
 
+  "${GDCM_SOURCE_DIR}/Utilities"
  )
 
 ADD_LIBRARY(gdcmDSED ${DSED_SRCS})
