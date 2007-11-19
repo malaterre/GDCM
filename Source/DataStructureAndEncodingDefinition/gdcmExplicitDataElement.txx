@@ -102,10 +102,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       }
 #endif
     }
-  if( TagField == Tag(0x2005,0xe080) )
-{
-  std::cerr << "debug" << std::endl;
-}
+
   // Read the Value
   //assert( ValueField == 0 );
   if( VRField == VR::SQ )

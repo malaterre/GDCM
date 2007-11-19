@@ -166,7 +166,7 @@ VR::VRType VR::GetVRTypeFromFile(const char *vr)
   static const int N = sizeof(VRValue) / sizeof(VRType);
   assert( N == 28 );
   static const char **start = VRStrings+1;
-  static const char **end   = VRStrings+N+1;
+  static const char **end   = VRStrings+N;
   //std::cerr << "VR=" << vr << std::endl;
   const char **p =
     std::lower_bound(start, end, vr, MySort());
