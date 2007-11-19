@@ -59,9 +59,8 @@ namespace gdcm
         cstream.next_out = (Bytef*)&out_buffer[0];
         cstream.avail_out = out_buffer.size();
 
-        // compress the data; we don't need to check for errors
-        // here because there is no possibility that they can
-        // happen here; it is explained in the libbzip2 docs.
+        // compress the data;
+        // TODO: check Z_NO_FLUSH is the right thing to do...
         deflate(&cstream, Z_NO_FLUSH);
 
         // write the data to the underlying stream buffer
@@ -146,6 +145,7 @@ namespace gdcm
         int block_size = std::min(num - done, epptr() - pptr() + 1);
 
         // write them
+        // memcpy vs std::copy ??
         std::memcpy(pptr(), p + done, block_size);
 
         // update the write pointer
@@ -164,20 +164,13 @@ namespace gdcm
       return done;
     }
   public:
-    gzoutbuf(std::streambuf* _dest, unsigned int block_size_100K = 9,
-      unsigned int verbosity = 0, unsigned int work_factor = 0,
+    gzoutbuf(std::streambuf* _dest, 
       zalloc_ptr zalloc = NULL, zfree_ptr zfree = NULL,
       void* opaque = NULL, size_t stream_buffer_size = 2048,
       size_t out_buffer_size = 2048)
       : dest(_dest)
       {
       // check the parameters
-      if (block_size_100K > 9)
-        throw std::range_error("Block size out of range.");
-      if (verbosity > 4)
-        throw std::range_error("Verbosity level out of range.");
-      if (work_factor > 250)
-        throw std::range_error("Work factor out of range.");
       if (stream_buffer_size < 1)
         throw std::range_error("Stream buffer size must be positive.");
       if (out_buffer_size < 1)
@@ -201,27 +194,19 @@ namespace gdcm
       cstream.zfree = zfree;
       cstream.opaque = opaque;
 
-      // create a bz2 compressor stream
+      // create a gzip compressor stream
       int ret = deflateInit(&cstream,Z_BEST_SPEED);
-      // BZ_PARAM_ERROR won't happen here because we checked before
       switch (ret) {
       case Z_OK:
         break;
-        //case BZ_CONFIG_ERROR:
-        //  throw std::runtime_error("libbz2 was not compiled correctly.");
       case Z_MEM_ERROR:
         throw std::bad_alloc();
       default:
-        throw std::runtime_error("Unknown error creating bz2 compressor "
+        throw std::runtime_error("Unknown error creating gzip compressor "
           "stream buffer.");
       }
       }
 
-    /// Flush the buffer and destroy the object.  Notice that there is
-    /// no way for the destructor to report a failure to write to the
-    /// underlying stream buffer.  Thus you might want to check the
-    /// underlying stream buffer for errors \em after the bz2outbuf
-    /// object has been destroyed.
     virtual ~gzoutbuf() {
       // finish compression
       process_block();
@@ -232,60 +217,44 @@ namespace gdcm
     }
   };
 
-  /// \brief An output stream compressing all data with the bz2
-  /// algorithm.
-  ///
-  /// As the actual compression is achieved in the underlying
-  /// ::bz2outbuf stream buffer, you should read its documentation
-  /// before using this class.
-  ///
-  /// A bz2ostream object writes the output data to a stream buffer you
-  /// specify in the constructor; it can thus be used to write to any
-  /// stream buffer you want.
   class gzostream : public std::ostream {
   protected:
     gzoutbuf buf;
   public:
-    /// \brief Creates a new bz2ostream object.  See
-    /// bz2outbuf::bz2outbuf for an explanation of the parameters.
-    gzostream(std::streambuf* dest, unsigned int block_size_100K = 9,
-      unsigned int verbosity = 0, unsigned int work_factor = 0,
+    gzostream(std::streambuf* dest, 
       zalloc_ptr zalloc = NULL, zfree_ptr zfree = NULL,
       void* opaque = NULL, size_t buffer_size = 1024,
       size_t out_buffer_size = 1024)
       : std::ostream(&buf),
-      buf(dest, block_size_100K, verbosity, work_factor, zalloc, zfree,
+      buf(dest, zalloc, zfree,
         opaque, buffer_size, out_buffer_size)
     {}
   };
+
   void zerr(int ret)
     {
     fputs("zpipe: ", stderr);
     switch (ret) {
-    case Z_ERRNO:
-      if (ferror(stdin))
-        fputs("error reading stdin\n", stderr);
-      if (ferror(stdout))
-        fputs("error writing stdout\n", stderr);
-      break;
-    case Z_STREAM_ERROR:
-      fputs("invalid compression level\n", stderr);
-      break;
-    case Z_DATA_ERROR:
-      fputs("invalid or incomplete deflate data\n", stderr);
-      break;
-    case Z_MEM_ERROR:
-      fputs("out of memory\n", stderr);
-      break;
-    case Z_VERSION_ERROR:
-      fputs("zlib version mismatch!\n", stderr);
+      case Z_ERRNO:
+        if (ferror(stdin))
+          fputs("error reading stdin\n", stderr);
+        if (ferror(stdout))
+          fputs("error writing stdout\n", stderr);
+        break;
+      case Z_STREAM_ERROR:
+        fputs("invalid compression level\n", stderr);
+        break;
+      case Z_DATA_ERROR:
+        fputs("invalid or incomplete deflate data\n", stderr);
+        break;
+      case Z_MEM_ERROR:
+        fputs("out of memory\n", stderr);
+        break;
+      case Z_VERSION_ERROR:
+        fputs("zlib version mismatch!\n", stderr);
+      }
     }
-    }
-  /// \brief A stream buffer reading from another stream buffer and
-  /// decompressing the read data using the bz2 algorithm.
-  ///
-  /// You specify the underlying "source" stream buffer in the
-  /// constructor.
+
   class gzinbuf : public std::streambuf {
   protected:
     std::streambuf* source;
@@ -305,7 +274,7 @@ namespace gdcm
       std::memcpy(putback_end - new_putback_num,
         gptr() - new_putback_num, new_putback_num);
 
-      // shovel data into the bzip stream until there is something
+      // shovel data into the gzip stream until there is something
       // in the output buffer
       do {
         // refill the input buffer if necessary
@@ -337,7 +306,6 @@ namespace gdcm
           break;
         case Z_DATA_ERROR:
           abort();
-          //case BZ_DATA_ERROR_MAGIC:
         case Z_MEM_ERROR:
           abort();
         default:
@@ -361,68 +329,14 @@ namespace gdcm
     }
 
   public:
-    /// \brief Creates a new bz2inbuf object, using _source as
-    /// underlying stream buffer.
-    ///
-    /// @param _source The stream buffer this object should read
-    /// from.  Notice that this stream buffer must be in binary and
-    /// not in text mode, because transformation of newlines and/or
-    /// other characters would invariably lead to data corruption.
-    ///
-    /// @param verbosity The verbosity of the libbzip2.  Ranges from 0
-    /// (quiet) to 4 (very verbose).  Messages are printed to stderr.
-    ///
-    /// @param small_but_slow If false, use default algorithm.  If
-    /// true, use a less memory intensive but slower algorithm.  Not
-    /// recommended.
-    ///
-    /// @param bzalloc A pointer to a custom memory allocation
-    /// function.  If NULL, malloc() is used. See also ::bzalloc_ptr.
-    ///
-    /// @param bzfree A pointer to a custom memory deallocation
-    /// function.  If NULL, free() is used.  See also ::bzfree_ptr.
-    ///
-    /// @param opaque A pointer to be passed to the custom memory
-    /// allocation and deallocation functions.  See also ::bzalloc_ptr
-    /// and ::bzfree_ptr.
-    ///
-    /// @param stream_buffer_size The size of the buffer of this
-    /// stream buffer.  Leave it alone if you don't know what you're
-    /// doing.  Must be greater than zero.  Bigger buffers are not
-    /// always faster.
-    ///
-    /// @param in_buffer_size The size of the input buffer.
-    /// Definitely leave it alone if you don't know what you're
-    /// doing.  Must be greater than zero, and \e should not be
-    /// greater than stream_buffer_size.
-    ///
-    /// @param max_putback_size The maximum size of the stream's
-    /// putback area.  Ranges from 0 to stream_buffer_size - 1. Leave
-    /// it alone if you don't know what you're doing.
-    ///
-    /// Currently, this constructor throws any of the following
-    /// exceptions:
-    ///
-    /// - std::range_error if one of the arguments is out of range.
-    /// - std::bad_alloc if it runs out of memory.
-    /// - std::runtime_error for any other error.
-    ///
-    /// All thrown exceptions except std::bad_alloc include a
-    /// description of the encountered problem which you can access
-    /// using the what() member function.
-    ///
-    /// For future compatibility, expect this constructor to throw any
-    /// std::exception derived exception.
-    gzinbuf(std::streambuf* _source, unsigned int verbosity = 0,
-      bool small_but_slow = false, zalloc_ptr zalloc = NULL,
+    gzinbuf(std::streambuf* _source, 
+      zalloc_ptr zalloc = NULL,
       zfree_ptr zfree = NULL, void* opaque = NULL,
       size_t stream_buffer_size = 1024, size_t in_buffer_size = 1024,
       size_t max_putback_size = 64)
       : source(_source)
       {
       // check the parameters
-      if (verbosity > 4)
-        throw std::range_error("Verbosity level out of range.");
       if (stream_buffer_size < 1)
         throw std::range_error("Stream buffer size must be positive.");
       if (in_buffer_size < 1)
@@ -449,57 +363,45 @@ namespace gdcm
       dstream.avail_in = 0;
       dstream.next_in = Z_NULL;
 
-      // init a decompressor stream
+      // call inflateInit2 since we do not have a header in DICOM
+      // well hopefully if private implementation do respect standard.
+      // I think it should not be too hard to support
+      // but right now I haven't seen any so let's keep it that way
+      //
       //int ret = inflateInit(&dstream);
       int ret = inflateInit2(&dstream, -MAX_WBITS);
-      // we don't need to handle BZ_PARAM_ERROR because we've
-      // already checked the parameters
-      switch (ret) {
-      case Z_OK:
-        break;
-        //case BZ_CONFIG_ERROR:
-        //  throw std::runtime_error("libbz2 was not compiled correctly.");
-      case Z_MEM_ERROR:
-        throw std::bad_alloc();
-      default:
-        throw std::runtime_error("Unknow error creating bz2 decompressor "
-          "stream buffer.");
-      }
+      switch (ret) 
+        {
+        case Z_OK:
+          break;
+        case Z_MEM_ERROR:
+          throw std::bad_alloc();
+        default:
+          throw std::runtime_error("Unknow error");
+        }
       }
 
-    /// \brief Destroys the bz2inbuf object.
     ~gzinbuf() {
-      // uninit the bz2 stream
       inflateEnd(&dstream);
     }
   };
 
-  /// \brief An input stream decompressing data compressed with the bz2
-  /// algorithm.
-  ///
-  /// The actual decompression is achieved in the underlying ::bz2inbuf
-  /// stream buffer; you should read its documentation before using this
-  /// class.
-  ///
-  /// The data is read from a supplied stream buffer.
   class gzistream : public std::istream {
   protected:
     gzinbuf buf;
   public:
-    /// \brief Creates a new bz2istream, using source as the stream
-    /// buffer to read data from.
-    ///
-    /// See bz2inbuf::bz2inbuf for an explanation of the parameters.
-    gzistream(std::streambuf* source, unsigned int verbosity = 0,
-      bool small_but_slow = false, zalloc_ptr zalloc = NULL,
+    gzistream(std::streambuf* source,
+      zalloc_ptr zalloc = NULL,
       zfree_ptr zfree = NULL, void* opaque = NULL,
       size_t buffer_size = 1024, size_t in_buffer_size = 1024,
       size_t max_putback_size = 64)
       : std::istream(&buf),
-      buf(source, verbosity, small_but_slow, zalloc, zfree, opaque,
+      buf(source, zalloc, zfree, opaque,
         buffer_size, in_buffer_size, max_putback_size)
     {}
   };
+
 } // end namespace gdcm
+
 #endif  // __gdcmDeflateStream_h
 
