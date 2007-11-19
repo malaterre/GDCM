@@ -189,7 +189,7 @@ namespace gdcm
       setp(&buffer[0], &*--buffer.end());
 
       // initialize the compressor stream
-      memset(&cstream, 0, sizeof(cstream));
+      memset(&cstream, 0, sizeof(cstream)); // FIXME ??
       cstream.zalloc = zalloc;
       cstream.zfree = zfree;
       cstream.opaque = opaque;
@@ -356,7 +356,7 @@ namespace gdcm
       setg(putback_end, putback_end, putback_end);
 
       // set up a decompressor stream
-      std::memset(&dstream, 0, sizeof(dstream));
+      std::memset(&dstream, 0, sizeof(dstream)); // FIXME ??
       dstream.zalloc = zalloc;
       dstream.zfree = zfree;
       dstream.opaque = opaque;
