@@ -33,30 +33,52 @@ namespace gdcm
 
 std::istream &File::Read(std::istream &is) 
 {
-  P.Read( is );
-
+  bool haspreamble = true;
   try
     {
-    Header.Read( is );
+    P.Read( is );
     }
   catch( std::exception &ex )
     {
-    //std::cerr << ex.what() << std::endl;
+    // return to beginning of file, hopefully this file is simply missing preamble
+    is.seekg(0, std::ios::beg);
+    haspreamble = false;
+    }
+  catch( ... )
+    {
+    abort();
+    }
+
+  bool hasmetaheader = true;
+  try
+    {
+    if( haspreamble )
+      {
+      try
+        {
+        Header.Read( is );
+        }
+      catch( std::exception &ex )
+        {
+        // Weird implicit meta header:
+        is.seekg(128+4, std::ios::beg );
+        Header.ReadCompat(is);
+        }
+      }
+    else
+      Header.ReadCompat(is);
+    }
+  catch( std::exception &ex )
+    {
+    // Same player play again:
     is.seekg(0, std::ios::beg );
-    P.Read( is ); // FIXME: leak
-    Header.ReadCompat(is);
-    //throw ex; // re throw for now but we are loosing it's real type...
-    //return is;
+    hasmetaheader = false;
     }
   catch( ... )
     {
     // Ooops..
-    // Same player play again:
-    Header.ReadCompat( is );
+    abort();
     }
-
-  // Now is a good time to find out the dataset transfer syntax
-  //Header.ComputeDataSetTransferSyntax(); // FIXME !
 
   const TransferSyntax &ts = Header.GetDataSetTransferSyntax();
   //std::cerr << ts.GetNegociatedType() << std::endl;

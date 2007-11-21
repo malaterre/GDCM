@@ -26,8 +26,7 @@ Preamble::~Preamble()
 std::istream &Preamble::Read(std::istream &is)
 {
   // \precondition: we are at beg of Preamble
-  bool r = false;
-  //assert ( IsEmpty() /*&& is.tellg() == 0*/ );
+  assert ( IsEmpty() /*&& is.tellg() == 0*/ );
   Internal = new char[128+4];
   is.read(Internal, 128+4);
   if( Internal[128+0] == 'D'
@@ -35,16 +34,13 @@ std::istream &Preamble::Read(std::istream &is)
    && Internal[128+2] == 'C'
    && Internal[128+3] == 'M')
     {
-    r = true;
+    return is;
     }
-  if(!r)
-    {
-    gdcmDebugMacro( "Not a DICOM V3 file (No Preamble)" );
-    delete[] Internal;
-    Internal = 0;
-    // Seek back
-    is.seekg(0, std::ios::beg);
-    }
+
+  // else reset everything !
+  delete[] Internal;
+  Internal = 0;
+  throw Exception( "Not a DICOM V3 file (No Preamble)" );
 
   // \postcondition we are after the Preamble (or at beg of file if none)
   return is;
@@ -56,12 +52,13 @@ std::ostream const &Preamble::Write(std::ostream &os) const
 //  assert ( os.tellg()+0 == 0 );
   if( IsEmpty() )
     {
-//    char dicm[128];
-//    memset( dicm, 0, 128 );
-//    os.write( dicm, 128);
-//    os.write( "DICM" , 4);
+    // Set it to default 0x0 bytes followed by magic "DICM":
+    char dicm[128];
+    memset( dicm, 0, 128 );
+    os.write( dicm, 128);
+    os.write( "DICM" , 4);
     }
-  else if( IsValid() )
+  else if( IsValid() ) // User suplied one
   {
     os.write( Internal, 128+4);
   }

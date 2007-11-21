@@ -36,6 +36,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
       assert(0 && "Should not happen");
     return is;
     }
+  //std::cerr << "cur tag=" << TagField << std::endl;
   // Read Value Length
   if( !ValueLengthField.Read<TSwap>(is) )
     {
@@ -158,7 +159,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
   //if( !ValueField->Read<TSwap>(is) )
   if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) )
     {
-    assert(0 && "Should not happen");
+    throw("Should not happen");
     return is;
     }
 

@@ -119,10 +119,17 @@ int main (int argc, char *argv[])
 //{
   gdcm::Reader reader;
   reader.SetFileName( filename.c_str() );
-  if( !reader.Read() )
+  try
+    {
+    if( !reader.Read() )
+      {
+      std::cerr << "Failed to read: " << filename << std::endl;
+      return 1;
+      }
+    }
+  catch( ... )
     {
     std::cerr << "Failed to read: " << filename << std::endl;
-    return 1;
     }
 //}
 

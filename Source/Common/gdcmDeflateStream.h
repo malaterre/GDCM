@@ -32,6 +32,10 @@
  * Apparently comments seems to be coming from:
  * http://www.isotton.com/devel/libs/bz2stream/
  */
+/*
+ * TODO:
+ * http://oopse.org/cgi-bin/viewvc.cgi/OOPSE-3.0/src/openbabel/zipstreamimpl.hpp?view=markup
+ */
 
 extern "C" {
    typedef void* (*zalloc_ptr)(void* opaque, uint n,uint m);
@@ -59,7 +63,7 @@ namespace gdcm
 
         // compress the data;
         // TODO: check Z_NO_FLUSH is the right thing to do...
-        deflate(&cstream, Z_NO_FLUSH);
+        deflate(&cstream, 0); // Z_NO_FLUSH);
 
         // write the data to the underlying stream buffer
         int out_size = out_buffer.size() - cstream.avail_out;
@@ -229,8 +233,7 @@ namespace gdcm
       size_t out_buffer_size = 1024)
       : std::ostream(&buf),
       buf(dest, zalloc, zfree,
-        opaque, buffer_size, out_buffer_size)
-    {}
+        opaque, buffer_size, out_buffer_size) {}
   };
 
   void zerr(int ret)

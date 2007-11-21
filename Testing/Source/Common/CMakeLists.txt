@@ -2,14 +2,9 @@
 # Common
 SET(Common_TEST_SRCS
   TestByteSwap
-  TestCodec
   TestDirectory
   TestFilename
-  TestImage
-  TestLookupTable
   TestObject
-  TestPhotometricInterpretation
-  TestPixelType
   TestSmartPointer
   TestSwapCode
   TestSystem

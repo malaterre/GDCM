@@ -8,6 +8,12 @@ SET(MSFF_TEST_SRCS
   TestCopyDataSet
   #TestImageWriter
   TestWriter
+  TestCodec
+  TestImage
+  TestPhotometricInterpretation
+  TestLookupTable
+  TestPixelType
+  TestPersonName
   )
 
 # Add the include paths

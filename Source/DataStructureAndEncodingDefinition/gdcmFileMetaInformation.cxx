@@ -271,7 +271,9 @@ std::istream &FileMetaInformation::Read(std::istream &is)
 
   ExplicitDataElement xde;
   xde.Read<SwapperNoOp>(is);
-        Insert( xde );
+  if( xde.GetTag().GetGroup() != 0x2 ) throw Exception( "INVALID" );
+  if( xde.GetVR() == VR::INVALID ) throw Exception( "INVALID" );
+  Insert( xde );
   //if( xde.GetTag() != Tag(0x0002,0x0000) 
   // First off save position in case we fail (no File Meta Information)
   // See PS 3.5, Data Element Structure With Explicit VR
@@ -300,14 +302,21 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
     // GE_DLX-8-MONO2-PrivateSyntax.dcm is in Implicit...
     return ReadCompatInternal<SwapperNoOp>(is);
     }
-  else if( t.GetGroup() == 0x0012 )
+  else if( t.GetGroup() == 0x0200 ) // 
     {
-	    abort();
+    abort();
     return ReadCompatInternal<SwapperDoOp>(is);
+    }
+  else if( t.GetGroup() == 0x0800 ) // Good ol' ACR NEMA
+    {
+    is.seekg(-4, std::ios::cur); // Seek back
+    //MetaInformationTS = TransferSyntax::Explicit;
+    DataSetTS = TransferSyntax::ImplicitVRBigEndianACRNEMA;
     }
   else
     {
-  abort();
+    //assert( t.GetElement() == 0x0 );
+    throw Exception( "INVALID" ); // Does not start with a 0x0002 group element
     }
 }
 
