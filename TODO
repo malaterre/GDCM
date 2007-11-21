@@ -52,3 +52,6 @@ done by openjpeg
 You should be able to say: this file is a ACR NEMA read it ! So the wizard 
 should be bypass and the discovery step can be skipped.
 -----------------------------------------------------------------------
+Are we actually storing item start/end in the dataset. This is pretty dangerous
+as we will have a hard time rewritting with explicit length if we
+wanted to
