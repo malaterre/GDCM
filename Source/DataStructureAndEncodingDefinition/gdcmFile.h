@@ -62,7 +62,8 @@ inline std::ostream& operator<<(std::ostream &os, const File &val)
 {
   os << val.GetPreamble() << std::endl;
   os << val.GetHeader() << std::endl;
-  os << val.GetDataSet() << std::endl;
+  //os << val.GetDataSet() << std::endl; // FIXME
+  abort();
   return os;
 }
 

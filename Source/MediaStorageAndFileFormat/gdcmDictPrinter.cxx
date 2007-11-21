@@ -379,7 +379,7 @@ std::string GetVersion(std::string const &owner)
 }
 
 // TODO: make it protected:
-std::string GetOwner(StructuredSet const &ds, DataElement const &de)
+std::string GetOwner(DataSet const &ds, DataElement const &de)
 {
   const Tag &t = de.GetTag();
   Tag towner(t);
@@ -413,10 +413,9 @@ void DictPrinter::Print(std::ostream& os)
 {
   static const Dict d;
   const DataSet &ds = F->GetDataSet();
-  const StructuredSet &exds = ds.GetInternal();
-  StructuredSet::ConstIterator it = exds.Begin();
+  DataSet::ConstIterator it = ds.Begin();
   //os << "<dict>\n";
-  for( ; it != exds.End(); ++it )
+  for( ; it != ds.End(); ++it )
     {
     const DataElement &de = *it;
     const DictEntry &entry = d.GetDictEntry(de.GetTag());
@@ -426,7 +425,7 @@ void DictPrinter::Print(std::ostream& os)
 
     if( de.GetTag().IsPrivate() )
       {
-      owner = GetOwner(exds,de);
+      owner = GetOwner(ds,de);
       version = GetVersion(owner);
 
       const Tag &t = de.GetTag();

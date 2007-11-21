@@ -16,11 +16,13 @@
 #ifndef __gdcmDataSet_h
 #define __gdcmDataSet_h
 
-#include "gdcmTransferSyntax.h"
-#include "gdcmValue.h"
 #include "gdcmDataElement.h"
-#include "gdcmStructuredSet.h"
+#include "gdcmTag.h"
+#include "gdcmVR.h"
+#include "gdcmElement.h"
 
+#include <set>
+#include <iterator>
 
 namespace gdcm
 {
@@ -48,48 +50,135 @@ namespace gdcm
  * TODO:
  * a DataSet DOES NOT have a TS type... a file does !
  */
-class GDCM_EXPORT DataSet : public Value
+
+//-----------------------------------------------------------------------------
+struct lttag
 {
-  template <typename TSwap> friend class IOSerialize;
+  bool operator()(const DataElement &s1,
+		  const DataElement &s2) const
+  {
+    return s1.GetTag() < s2.GetTag();
+  }
+};
+
+//-----------------------------------------------------------------------------
+class DataSet
+{
 public:
-  DataSet(TransferSyntax::NegociatedType type = TransferSyntax::Explicit);
-  ~DataSet();
+  typedef std::set<DataElement, lttag> DataElementSet;
+  typedef DataElementSet::iterator Iterator;
+  typedef DataElementSet::const_iterator ConstIterator;
+  Iterator Begin() { return DES.begin(); }
+  Iterator End() { return DES.end(); }
+  ConstIterator Begin() const { return DES.begin(); }
+  ConstIterator End() const { return DES.end(); }
 
-  // Clear
-  void Clear();
 
-  bool IsValid() { return true; }
-
-  VL GetLength() const;
-  void SetLength(VL l) { 
-    Length = l; 
+  //typedef typename DataElementSet::iterator iterator;
+  void Clear() {
+    DES.clear();
   }
 
-  void InsertDataElement(DataElement const &de);
-  const DataElement& GetDataElement(const Tag &t) const;
+  void Print(std::ostream &os) const {
+    // CT_Phillips_JPEG2K_Decompr_Problem.dcm has a SQ of length == 0
+    //int s = DES.size();
+    //assert( s );
+    std::copy(DES.begin(), DES.end(), 
+      std::ostream_iterator<DataElement>(os, "\n"));
+  }
+
+  template <typename TDE>
+ unsigned int ComputeGroupLength(Tag const &tag) const
+    {
+    assert( tag.GetElement() == 0x0 );
+    const DataElement r(tag);
+    ConstIterator it = DES.find(r);
+    unsigned int res = 0;
+    for( ++it; it != DES.end()
+      && it->GetTag().GetGroup() == tag.GetGroup(); ++it)
+      {
+      assert( it->GetTag().GetElement() != 0x0 );
+      assert( it->GetTag().GetGroup() == tag.GetGroup() );
+      res += it->GetLength<TDE>();
+      }
+    return res;
+    }
+
+  template <typename TDE>
+  VL GetLength() const {
+    assert( !DES.empty() );
+    VL ll = 0;
+    assert( ll == 0 );
+    ConstIterator it = DES.begin();
+    for( ; it != DES.end(); ++it)
+      {
+      assert( !(it->GetLength<TDE>().IsUndefined()) );
+      VL len = it->GetLength<TDE>();
+      if ( it->GetTag() != Tag(0xfffe,0xe00d) )
+        {
+        ll += it->GetLength<TDE>();
+        }
+      }
+    return ll;
+  }
+ void Insert(const DataElement& de) {
+    //assert( de.GetTag() != Tag(0,0) );
+    DES.insert(de);
+    }
+
+  // WARNING:
+  // This only search at the same level as the DataSet is !
+  const DataElement& GetDataElement(const Tag &t) const {
+    const DataElement r(t);
+    ConstIterator it = DES.find(r);
+    assert( it != DES.end() );
+    return *it;
+    }
   const DataElement& operator[] (const Tag &t) const { return GetDataElement(t); }
-  bool FindDataElement(const Tag &t) const;
 
-  DataSet &operator = (DataSet const &r);
-  DataSet(DataSet const &ds);
+  // DUMB: this only search within the level of the current DataSet
+  bool FindDataElement(const Tag &t) const {
+    const DataElement r(t);
+    ConstIterator it = DES.find(r);
+    if( DES.find(r) != DES.end() )
+      {
+      return true;
+      }
+    return false;
+    }
+  
+  bool IsEmpty() const { return DES.empty(); };
 
-  void Print(std::ostream &os) const;
+  DataSet& operator=(DataSet const &val)
+  {
+    DES = val.DES;
+    return *this;
+  }
+  //DataSet<DataElement>(DataSet<DataElement> const &ds)
+  //{
+  //        assert( 0 && "TODO" );
+  //}
 
-  const StructuredSet &GetInternal() const { return Internal; }
+  template <typename TDE, typename TSwap>
+  std::istream &ReadNested(std::istream &is);
 
-  // TODO
-  // This function should not be in the public API:
-  void SetType(TransferSyntax::NegociatedType type) { NegociatedTS = type; }
+  template <typename TDE, typename TSwap>
+  std::istream &Read(std::istream &is);
+
+  template <typename TDE, typename TSwap>
+  std::ostream const &Write(std::ostream &os) const;
+
+  template <typename TDE, typename TSwap>
+  std::istream &ReadWithLength(std::istream &is, VL &length);
 
 private:
-  TransferSyntax::NegociatedType NegociatedTS;
-  StructuredSet Internal;
-
-  VL Length;
+  DataElementSet DES;
 };
-//-----------------------------------------------------------------------------
+
 
 } // end namespace gdcm
+
+#include "gdcmDataSet.txx"
 
 #endif //__gdcmDataSet_h
 

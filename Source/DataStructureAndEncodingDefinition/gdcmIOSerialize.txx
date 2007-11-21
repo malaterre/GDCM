@@ -18,7 +18,7 @@
 
 #include "gdcmIOSerialize.h"
 
-#include "gdcmStructuredSet.h"
+#include "gdcmDataSet.h"
 #include "gdcmTag.h"
 #include "gdcmVL.h"
 #include "gdcmExplicitDataElement.h"
@@ -36,8 +36,9 @@ namespace gdcm
 
 //-----------------------------------------------------------------------------
 template <typename TSwap>
-std::istream &IOSerialize<TSwap>::Read(std::istream &is,DataSet &ds)
+std::istream &IOSerialize<TSwap>::Read(std::istream &is, DataSet &ds)
 {
+/*
   //std::cerr << "DataSet::Read Length=" << Length << std::endl;
   if( ds.Length == 0)
     {
@@ -76,6 +77,8 @@ std::istream &IOSerialize<TSwap>::Read(std::istream &is,DataSet &ds)
     ds.Internal.template ReadWithLength<ExplicitDataElement,TSwap>(is, ds.Length);
     }
     }
+*/
+abort();
   //std::cerr << "Finished DataSet::Read" << std::endl;
   return is;
 }
@@ -84,6 +87,7 @@ std::istream &IOSerialize<TSwap>::Read(std::istream &is,DataSet &ds)
 template <typename TSwap>
 std::ostream const &IOSerialize<TSwap>::Write(std::ostream &os,DataSet const &ds)
 {
+/*
     if(ds.NegociatedTS == TransferSyntax::Implicit)
       {
       ds.Internal.template Write<ImplicitDataElement,TSwap>(os);
@@ -92,6 +96,8 @@ std::ostream const &IOSerialize<TSwap>::Write(std::ostream &os,DataSet const &ds
     {
    ds.Internal.template Write<ExplicitDataElement,TSwap>(os);
     }
+*/
+abort();
   return os;
 }
 

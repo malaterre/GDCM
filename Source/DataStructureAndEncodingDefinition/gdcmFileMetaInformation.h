@@ -28,12 +28,12 @@ namespace gdcm
  * \brief Class to represent a File Meta Information
  * \note
  * FileMetaInformation is a Explicit Structured Set.
- * Whenever the file contains an ImplicitDataElement StructuredSet, a conversion
+ * Whenever the file contains an ImplicitDataElement DataSet, a conversion
  * will take place.
  * \todo
  * If user adds an element with group != 0x0002 it will be written...
  */
-class GDCM_EXPORT FileMetaInformation : public StructuredSet
+class GDCM_EXPORT FileMetaInformation : public DataSet
 {
 public:
   FileMetaInformation():DataSetTS(),MetaInformationTS(TransferSyntax::Unknown),DataSetMS(MediaStorage::MS_END) {}

@@ -105,7 +105,8 @@ std::istream &File::Read(std::istream &is)
     }
   if( ts.GetNegociatedType() == TransferSyntax::Implicit )
     {
-    DS.SetType( TransferSyntax::Implicit );
+    //DS.SetType( TransferSyntax::Implicit );
+    abort();
     }
   if( ts.GetSwapCode() == SwapCode::BigEndian )
     {

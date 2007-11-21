@@ -25,7 +25,7 @@
 #include "gdcmVM.h"
 #include "gdcmElement.h"
 
-#include "gdcmStructuredSet.h"
+#include "gdcmDataSet.h"
 
 #include <typeinfo> // for typeid
 
@@ -153,8 +153,8 @@ void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictE
       for(; it != sqi.Items.end(); ++it)
       {
       const Item &item = *it;
-      const StructuredSet &ds = item.GetNestedDataSet();
-      //const StructuredSet &exds = ds.GetInternal();
+      const DataSet &ds = item.GetNestedDataSet();
+      //const DataSet &exds = ds.GetInternal();
       PrintDataSet(os << "  ", ds);
       }
     }
@@ -318,7 +318,7 @@ void PrintValue(VR::VRType const &vr, VM::VMType const &vm, const Value &v)
 
 //-----------------------------------------------------------------------------
 #if 0
-void Printer::PrintDataSet(std::ostream& os, const StructuredSet<ImplicitDataElement> &ds)
+void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> &ds)
 {
   //ImplicitDataElement de;
   Printer::PrintStyles pstyle = is.GetPrintStyle();
@@ -333,7 +333,7 @@ void Printer::PrintDataSet(std::ostream& os, const StructuredSet<ImplicitDataEle
   try
     {
     //while( is.Read(de) )
-    StructuredSet<ImplicitDataElement>::ConstIterator it = ds.Begin();
+    DataSet<ImplicitDataElement>::ConstIterator it = ds.Begin();
     for( ; it != ds.End(); ++it )
       {
       const ImplicitDataElement &de = *it;
@@ -468,13 +468,13 @@ void Printer::PrintDataSet(std::ostream& os, const StructuredSet<ImplicitDataEle
 #endif
 
 //-----------------------------------------------------------------------------
-void Printer::PrintDataSet(std::ostream &os, const StructuredSet &ds)
+void Printer::PrintDataSet(std::ostream &os, const DataSet &ds)
 {
   static const Dict d;
   static const GroupDict gd;
   try
     {
-    StructuredSet::ConstIterator it = ds.Begin();
+    DataSet::ConstIterator it = ds.Begin();
     for( ; it != ds.End(); ++it )
       {
       const DataElement &de = *it;
@@ -614,8 +614,7 @@ void Printer::Print(std::ostream& os)
   std::cout << "\n# Dicom-Data-Set\n";
   std::cout << "# Used TransferSyntax: \n";
   const DataSet &ds = F->GetDataSet();
-  const StructuredSet &exds = ds.GetInternal();
-  PrintDataSet(os, exds);
+  PrintDataSet(os, ds);
 }
 
 }

@@ -24,7 +24,7 @@ int TestDataSet(int , char *[])
   gdcm::DataSet ds;
   std::cout << sizeof ds << std::endl;
   gdcm::DataElement d;
-  ds.InsertDataElement(d);
+  ds.Insert(d);
   const gdcm::DataElement& r =
 	  ds.GetDataElement( gdcm::Tag(0,0) );
   std::cout << r << std::endl;
@@ -32,7 +32,7 @@ int TestDataSet(int , char *[])
   const gdcm::Tag t2 = gdcm::Tag(0x1234, 0x5678);
   gdcm::DataElement d2(t2);
   std::cout << d2 << std::endl;
-  ds.InsertDataElement(d2);
+  ds.Insert(d2);
   const gdcm::DataElement& r2 =
 	  ds.GetDataElement( t2 );
   std::cout << r2 << std::endl;
@@ -41,14 +41,15 @@ int TestDataSet(int , char *[])
   gdcm::DataElement d3(t3);
   d3.SetVR( gdcm::VR::UL );
   std::cout << d3 << std::endl;
-  ds.InsertDataElement(d3);
+  ds.Insert(d3);
   const gdcm::DataElement& r3 =
 	  ds.GetDataElement( t3 );
   std::cout << r3 << std::endl;
 
   std::cout << "Print Dataset:" << std::endl;
-  std::cout << "Length:" << ds.GetLength() << std::endl;
-  std::cout << ds << std::endl;
+  //std::cout << "Length:" << ds.GetLength() << std::endl;
+  //std::cout << ds << std::endl;
+  abort();
 
   return 0;
 }

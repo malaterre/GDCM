@@ -18,7 +18,7 @@
 #define __gdcmItem_h
 
 #include "gdcmDataElement.h"
-#include "gdcmStructuredSet.h"
+#include "gdcmDataSet.h"
 
 namespace gdcm
 {
@@ -36,7 +36,7 @@ namespace gdcm
  * ITEM: A component of the Value of a Data Element that is of Value
  * Representation Sequence of Items. An Item contains a Data Set.
  */
-class StructuredSet;
+class DataSet;
 
 class GDCM_EXPORT Item : public DataElement
 {
@@ -69,12 +69,12 @@ public:
 
   // Completely defines it with the nested dataset
   // destroy anything present
-  void SetNestedDataSet(const StructuredSet& nested)
+  void SetNestedDataSet(const DataSet& nested)
     {
     NestedDataSet = nested;
     }
   // Return a const ref to the Nested Data Set
-  const StructuredSet &GetNestedDataSet() const
+  const DataSet &GetNestedDataSet() const
     {
     return NestedDataSet;
     }
@@ -130,12 +130,12 @@ std::istream &Read(std::istream &is)
     }
   else if( ValueLengthField.IsUndefined() )
     {
-    StructuredSet &nested = NestedDataSet;
+    DataSet &nested = NestedDataSet;
     nested.template ReadNested<TDE,TSwap>(is);
     }
   else /* if( ValueLengthField.IsUndefinedLength() ) */
     {
-    StructuredSet &nested = NestedDataSet;
+    DataSet &nested = NestedDataSet;
     nested.template ReadWithLength<TDE,TSwap>(is, ValueLengthField);
     }
 //#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
@@ -186,7 +186,7 @@ private:
    * May be nested recursively.
    * Only Data Elements with VR = SQ  may, themselves, contain Data Sets
    */
-  StructuredSet NestedDataSet;
+  DataSet NestedDataSet;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& os, const Item &val)

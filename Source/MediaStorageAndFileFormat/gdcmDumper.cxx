@@ -15,7 +15,7 @@
 =========================================================================*/
 #include "gdcmDumper.h"
 
-#include "gdcmStructuredSet.h"
+#include "gdcmDataSet.h"
 #include "gdcmDataElement.h"
 
 namespace gdcm
@@ -31,9 +31,9 @@ Dumper::~Dumper()
 }
 
 //-----------------------------------------------------------------------------
-void DumpDataSet(std::ostream &os, const StructuredSet &ds)
+void DumpDataSet(std::ostream &os, const DataSet &ds)
 {
-  StructuredSet::ConstIterator it = ds.Begin();
+  DataSet::ConstIterator it = ds.Begin();
   for( ; it != ds.End(); ++it )
     {
     const DataElement &de = *it;
@@ -60,8 +60,7 @@ void Dumper::Print(std::ostream& os)
   std::cout << "\n# Dicom-Data-Set\n";
   std::cout << "# Used TransferSyntax: \n";
   const DataSet &ds = F->GetDataSet();
-  const StructuredSet &exds = ds.GetInternal();
-  DumpDataSet(os, exds);
+  DumpDataSet(os, ds);
 }
 
 }

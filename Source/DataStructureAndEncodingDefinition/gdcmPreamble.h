@@ -17,7 +17,7 @@
 #ifndef __gdcmPreamble_h
 #define __gdcmPreamble_h
 
-#include "gdcmStructuredSet.h"
+#include "gdcmTypes.h"
 
 namespace gdcm
 {

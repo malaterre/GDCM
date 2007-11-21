@@ -30,7 +30,6 @@ SET(DSED_TEST_SRCS
   TestVR
   #TestValue
   #TestTorture
-  TestStructuredSet
   TestElement2
   TestElement4
   )

@@ -27,7 +27,8 @@ int TestCopyDataSet(int, char *[])
     }
 
   const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
-  std::cout << ds << std::endl;
+  //std::cout << ds << std::endl;
+  abort();
 
   gdcm::DataSet ds_copy = ds;
 
