@@ -40,7 +40,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       }
     return is;
     }
-  //std::cerr << "cur tag=" << TagField << std::endl;
+  //std::cerr << "exp cur tag=" << TagField << std::endl;
   const Tag itemDelItem(0xfffe,0xe00d);
   if( TagField == itemDelItem )
     {
@@ -117,8 +117,24 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       {
       // Support non cp246 conforming file:
       // Enhanced_MR_Image_Storage_PixelSpacingNotIn_0028_0030.dcm
+      // vs
+      // undefined_length_un_vr.dcm
       assert( TagField != Tag(0x7fe0,0x0010) );
       ValueField = new SequenceOfItems;
+      ValueField->SetLength(ValueLengthField); // perform realloc
+      try
+        {
+        if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) )
+          {
+          abort();
+          }
+        }
+      catch( std::exception &ex)
+        {
+        // Must be one of those non-cp246 file...
+        throw Exception( "CP 246" );
+        }
+      return is;
       }
     else
       {
@@ -137,16 +153,16 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
   ValueField->SetLength(ValueLengthField); // perform realloc
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
   if( TagField == Tag(0x2001,0xe05f)
-|| TagField == Tag(0x2001,0xe100)
-|| TagField == Tag(0x2005,0xe080)
-|| TagField == Tag(0x2005,0xe083)
-|| TagField == Tag(0x2005,0xe084)
-//TagField.IsPrivate() && VRField == VR::SQ
-//-> Does not work for 0029
-//we really need to read item marker
-)
+    || TagField == Tag(0x2001,0xe100)
+    || TagField == Tag(0x2005,0xe080)
+    || TagField == Tag(0x2005,0xe083)
+    || TagField == Tag(0x2005,0xe084)
+    //TagField.IsPrivate() && VRField == VR::SQ
+    //-> Does not work for 0029
+    //we really need to read item marker
+  )
     {
-gdcmWarningMacro( "ByteSwaping Private SQ: " << TagField );
+    gdcmWarningMacro( "ByteSwaping Private SQ: " << TagField );
     assert( VRField == VR::SQ );
     try
       {

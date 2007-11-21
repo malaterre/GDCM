@@ -79,12 +79,6 @@ public:
     return NestedDataSet;
     }
 
-//  template <typename TSwap>
-//  std::istream &Read(std::istream &is);
-//
-//  template <typename TSwap>
-//  const std::ostream &Write(std::ostream &os) const;
-
   //Value const & GetValue() const { return *NestedDataSet; }
 
   Item(Item const &val):DataElement(val)

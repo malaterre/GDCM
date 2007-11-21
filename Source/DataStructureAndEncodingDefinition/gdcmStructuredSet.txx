@@ -59,7 +59,7 @@ namespace gdcm
       //std::cout << "Nested: " << de << std::endl;
       DES.insert( de );
       l += de.GetLength<TDE>();
-      assert( !de.GetVL().IsUndefined() );
+      //assert( !de.GetVL().IsUndefined() );
       //std::cerr << "DEBUG: " << de.GetTag() << " "<< de.GetLength() << 
       //  "," << de.GetVL() << "," << l << std::endl;
       // Bug_Philips_ItemTag_3F3F
