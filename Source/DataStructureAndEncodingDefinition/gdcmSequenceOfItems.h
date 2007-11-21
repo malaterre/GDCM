@@ -66,7 +66,6 @@ public:
     return *this;
     }
 
-
   template <typename TDE, typename TSwap>
   std::istream &Read(std::istream &is)
     {

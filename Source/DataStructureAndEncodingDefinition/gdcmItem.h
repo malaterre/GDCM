@@ -94,7 +94,6 @@ public:
 
   //void SetType(TS::NegociatedType type) { NestedDataSet.SetType(type); }
 
-
 template <typename TDE, typename TSwap>
 std::istream &Read(std::istream &is)
 {
@@ -102,7 +101,8 @@ std::istream &Read(std::istream &is)
   if( !TagField.Read<TSwap>(is) )
     {
 	    //std::cerr << TagField << std::endl;
-    assert(0 && "Should not happen");
+    //assert(0 && "Should not happen");
+    throw Exception("Should not happen");
     return is;
     }
   assert ( TagField == Tag(0xfffe, 0xe000)

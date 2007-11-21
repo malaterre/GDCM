@@ -159,7 +159,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
   //if( !ValueField->Read<TSwap>(is) )
   if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) )
     {
-    throw("Should not happen");
+    throw Exception("Should not happen");
     return is;
     }
 

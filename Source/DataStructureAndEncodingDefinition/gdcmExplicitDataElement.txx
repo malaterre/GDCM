@@ -113,13 +113,20 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     }
   else if( ValueLengthField.IsUndefined() )
     {
-    // Ok this is Pixel Data fragmented...
-    if( VRField != VR::UN )
+    if( VRField == VR::UN )
       {
+      // Support non cp246 conforming file:
+      // Enhanced_MR_Image_Storage_PixelSpacingNotIn_0028_0030.dcm
+      assert( TagField != Tag(0x7fe0,0x0010) );
+      ValueField = new SequenceOfItems;
+      }
+    else
+      {
+      // Ok this is Pixel Data fragmented...
       assert( TagField == Tag(0x7fe0,0x0010) );
       assert( VRField & VR::OB_OW );
+      ValueField = new SequenceOfFragments;
       }
-    ValueField = new SequenceOfFragments;
     }
   else
     {
