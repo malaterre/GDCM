@@ -14,6 +14,7 @@ SET(MSFF_TEST_SRCS
   TestLookupTable
   TestPixelType
   TestPersonName
+  TestImageValue
   )
 
 # Add the include paths

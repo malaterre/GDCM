@@ -18,6 +18,7 @@ SET(BLACK_LIST_READER
   EmptyPixelData.dcm # Emtpy pixel, dcmdump returns 0 ... I do not think this is the right thing to do though
   Siemens-leonardo-bugged.dcm # Nearly impossible, waste of time anyway...
 # TODO (by priority)
+  undefined_length_un_vr.dcm # LEGAL FILE !!! (cp 246)
   dicomdir_Pms_With_heavy_embedded_sequence
   SIEMENS_MAGNETOM-12-MONO2-GDCM12-VRUN.dcm  # tough one !
   gdcm-MR-PHILIPS-16-Multi-Seq.dcm
