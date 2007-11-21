@@ -115,8 +115,8 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     {
     if( VRField == VR::UN )
       {
-      // Support non cp246 conforming file:
-      // Enhanced_MR_Image_Storage_PixelSpacingNotIn_0028_0030.dcm
+      // Support cp246 conforming file:
+      // Enhanced_MR_Image_Storage_PixelSpacingNotIn_0028_0030.dcm (illegal)
       // vs
       // undefined_length_un_vr.dcm
       assert( TagField != Tag(0x7fe0,0x0010) );
@@ -132,6 +132,8 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       catch( std::exception &ex)
         {
         // Must be one of those non-cp246 file...
+        // but for some reason seekg back to previous offset + Read
+        // as Explicit does not work...
         throw Exception( "CP 246" );
         }
       return is;
