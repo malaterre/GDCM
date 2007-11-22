@@ -154,6 +154,7 @@ public:
 
   const std::ostream &Write(std::ostream &os) const
     {
+    assert( VRField != VR::INVALID );
     const char *vr = GetVRString(VRField);
     assert( strlen( vr ) == 2 );
     os.write(vr, 2);

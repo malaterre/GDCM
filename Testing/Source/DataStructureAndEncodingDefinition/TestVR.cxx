@@ -199,5 +199,12 @@ int TestVR(int, char *[])
   if( vr == gdcm::VR::US )
     return 1;
 
+  // Make sure VR::UT is the last valid VR that can be found in a file:
+  //if( gdcm::VR::OB_OW <= gdcm::VR::UT ) return 1;
+  //else if( gdcm::VR::US_SS <= gdcm::VR::UT ) return 1;
+  //else if( gdcm::VR::US_SS_OW <= gdcm::VR::UT ) return 1;
+  //else if( gdcm::VR::VL32 <= gdcm::VR::UT ) return 1;
+
+
   return 0;
 }

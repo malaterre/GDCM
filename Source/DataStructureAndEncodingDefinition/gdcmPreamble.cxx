@@ -53,10 +53,11 @@ std::ostream const &Preamble::Write(std::ostream &os) const
   if( IsEmpty() )
     {
     // Set it to default 0x0 bytes followed by magic "DICM":
-    char dicm[128];
-    memset( dicm, 0, 128 );
-    os.write( dicm, 128);
-    os.write( "DICM" , 4);
+//    FIXME... apparently rewritting an ACR-NEMA file + Preamble is not supported by gdcm
+//    char dicm[128];
+//    memset( dicm, 0, 128 );
+//    os.write( dicm, 128);
+//    os.write( "DICM" , 4);
     }
   else if( IsValid() ) // User suplied one
   {
