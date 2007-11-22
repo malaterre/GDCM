@@ -93,7 +93,7 @@ public:
   }
 
   template <typename TDE>
- unsigned int ComputeGroupLength(Tag const &tag) const
+  unsigned int ComputeGroupLength(Tag const &tag) const
     {
     assert( tag.GetElement() == 0x0 );
     const DataElement r(tag);

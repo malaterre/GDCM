@@ -194,15 +194,6 @@ inline std::ostream& operator<<(std::ostream& os, const Item &val)
   os << val.TagField;
   os << "\t" << val.ValueLengthField << "\n";
   val.NestedDataSet.Print( os, "\t" );
-  // GDCM is NOT storing this value, we need to explicitely print it:
-  // and incidently make sure to write it
-  if( val.ValueLengthField.IsUndefined() )
-    {
-    const Tag itemDelItem(0xfffe,0xe00d);
-    //const ImplicitDataElement ide(itemDelItem);
-    //os << ide << "\n";
-    }
-  //os << "End of Item" << std::endl;
 
   return os;
 }
