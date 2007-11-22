@@ -131,11 +131,13 @@ std::istream &Read(std::istream &is)
   else if( ValueLengthField.IsUndefined() )
     {
     DataSet &nested = NestedDataSet;
+    nested.Clear();
     nested.template ReadNested<TDE,TSwap>(is);
     }
   else /* if( ValueLengthField.IsUndefinedLength() ) */
     {
     DataSet &nested = NestedDataSet;
+    nested.Clear();
     nested.template ReadWithLength<TDE,TSwap>(is, ValueLengthField);
     }
 //#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION

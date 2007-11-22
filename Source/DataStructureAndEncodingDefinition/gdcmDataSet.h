@@ -159,10 +159,6 @@ public:
     DES = val.DES;
     return *this;
   }
-  //DataSet<DataElement>(DataSet<DataElement> const &ds)
-  //{
-  //        assert( 0 && "TODO" );
-  //}
 
   template <typename TDE, typename TSwap>
   std::istream &ReadNested(std::istream &is);
