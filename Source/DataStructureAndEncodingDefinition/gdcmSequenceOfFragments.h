@@ -91,10 +91,7 @@ std::istream& Read(std::istream &is)
       }
     assert( frag.GetTag() == seqDelItem && frag.GetVL() == 0 );
     }
-  //else
-  //  {
-  //  abort();
-  //  }
+
   return is;
 }
 
@@ -111,6 +108,12 @@ std::ostream const &Write(std::ostream &os) const
     {
     it->Write<TSwap>(os);
     }
+  // seq del item is not stored, write it !
+  const Tag itemDelItem(0xfffe,0xe00d);
+  itemDelItem.Write<TSwap>(os);
+  VL zero = 0;
+  zero.Write<TSwap>(os);
+
   return os;
 }
 
