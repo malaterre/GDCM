@@ -18,7 +18,6 @@
 #include "gdcmVR.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmSwapper.h"
-#include "gdcmIOSerialize.txx"
 
 namespace gdcm
 {

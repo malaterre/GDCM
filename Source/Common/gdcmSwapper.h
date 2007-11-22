@@ -48,4 +48,6 @@ public:
 
 } // end namespace gdcm
 
+//#include "gdcmSwapper.txx"
+
 #endif //__gdcmSwapper_h

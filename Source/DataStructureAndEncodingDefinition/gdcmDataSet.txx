@@ -17,6 +17,7 @@
 #define __gdcmDataSet_txx
 
 #include "gdcmByteValue.h"
+//#include "gdcmSwapper.h"
 
 namespace gdcm
 {
@@ -92,7 +93,7 @@ namespace gdcm
           "Those elements will be discarded:" << de.GetTag() );
         }
       // After that we are sure the elements are valid
-      else if( de.GetTag().GetElement() == 0x0 )
+      else if( false && de.GetTag().GetElement() == 0x0 )
         {
 		// FIXME
 		// This is not a good design !
@@ -105,7 +106,7 @@ namespace gdcm
         const Value *pv = &v;
         const ByteValue *bv = dynamic_cast<const ByteValue*>(pv);
 	      bv->Write<TSwap>(sst);
-        el.Read( sst );
+        el.Read( sst ); // FIXME endianness is not used !!
         //std::cerr << "GL=";
         //el.Print( std::cerr );
         //std::cerr << std::endl;

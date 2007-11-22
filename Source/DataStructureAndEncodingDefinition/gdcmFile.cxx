@@ -21,7 +21,6 @@
 #include "gdcmImplicitDataElement.h"
 #include "gdcmValue.h"
 
-#include "gdcmIOSerialize.h"
 #include "gdcmValue.h"
 #include "gdcmItem.h"
 #include "gdcmSequenceOfItems.h"
@@ -97,25 +96,37 @@ std::istream &File::Read(std::istream &is)
     gzistream gzis(is.rdbuf());
     // FIXME: we also know in this case that we are dealing with Explicit:
     assert( ts.GetNegociatedType() == TransferSyntax::Explicit );
-    IOSerialize<SwapperNoOp>::Read(gzis,DS);
+    DS.Read<ExplicitDataElement,SwapperNoOp>(gzis);
     is.seekg(0, std::ios::end);
     is.peek();
 
     return is;
     }
-  if( ts.GetNegociatedType() == TransferSyntax::Implicit )
-    {
-    //DS.SetType( TransferSyntax::Implicit );
-    abort();
-    }
+
   if( ts.GetSwapCode() == SwapCode::BigEndian )
     {
     //US-RGB-8-epicard.dcm is big endian
-    IOSerialize<SwapperDoOp>::Read(is,DS);
+    if( ts.GetNegociatedType() == TransferSyntax::Implicit )
+      {
+      // There is no such thing as Implicit Big Endian... oh well
+      // LIBIDO-16-ACR_NEMA-Volume.dcm 
+      DS.Read<ImplicitDataElement,SwapperDoOp>(is);
+      }
+    else
+      {
+      DS.Read<ExplicitDataElement,SwapperDoOp>(is);
+      }
     }
-  else
+  else // LittleEndian
     {
-    IOSerialize<SwapperNoOp>::Read(is,DS);
+    if( ts.GetNegociatedType() == TransferSyntax::Implicit )
+      {
+      DS.Read<ImplicitDataElement,SwapperNoOp>(is);
+      }
+    else
+      {
+      DS.Read<ExplicitDataElement,SwapperNoOp>(is);
+      }
     }
 
   return is;
@@ -133,15 +144,37 @@ std::ostream const &File::Write(std::ostream &os) const
     {
     gzostream gzos(os.rdbuf());
     assert( ts.GetNegociatedType() == TransferSyntax::Explicit );
-    IOSerialize<SwapperNoOp>::Write(gzos,DS);
+    DS.Write<ExplicitDataElement,SwapperNoOp>(gzos);
 
     return os;
     }
-  else
+
+  if( ts.GetSwapCode() == SwapCode::BigEndian )
     {
-    //std::cerr << "Write dataset: " << DS.GetNegociatedType() << std::endl;
-    IOSerialize<SwapperNoOp>::Write(os,DS);
+    //US-RGB-8-epicard.dcm is big endian
+    if( ts.GetNegociatedType() == TransferSyntax::Implicit )
+      {
+      // There is no such thing as Implicit Big Endian... oh well
+      // LIBIDO-16-ACR_NEMA-Volume.dcm 
+      DS.Write<ImplicitDataElement,SwapperDoOp>(os);
+      }
+    else
+      {
+      DS.Write<ExplicitDataElement,SwapperDoOp>(os);
+      }
     }
+  else // LittleEndian
+    {
+    if( ts.GetNegociatedType() == TransferSyntax::Implicit )
+      {
+      DS.Write<ImplicitDataElement,SwapperNoOp>(os);
+      }
+    else
+      {
+      DS.Write<ExplicitDataElement,SwapperNoOp>(os);
+      }
+    }
+
 
   return os;
 }

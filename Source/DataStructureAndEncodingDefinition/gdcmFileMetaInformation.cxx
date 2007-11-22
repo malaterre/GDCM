@@ -20,9 +20,7 @@
 #include "gdcmImplicitDataElement.h"
 #include "gdcmByteValue.h"
 #include "gdcmSwapper.h"
-#include "gdcmIOSerialize.h"
 
-//#include "gdcmElement.h"
 #include "gdcmTag.h"
 
 namespace gdcm
