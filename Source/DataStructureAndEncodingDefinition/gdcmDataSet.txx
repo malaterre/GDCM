@@ -84,10 +84,10 @@ namespace gdcm
       //std::cerr << "DEBUG:" << *it << std::endl;
       const DataElement & de = *it;
       // If this is a group length make sure this is consistant
-      if( de.GetTag().GetGroup() == 0x0001
+      if( false && ( de.GetTag().GetGroup() == 0x0001
        || de.GetTag().GetGroup() == 0x0003
        || de.GetTag().GetGroup() == 0x0005
-       || de.GetTag().GetGroup() == 0x0007 )
+       || de.GetTag().GetGroup() == 0x0007) )
         {
         gdcmWarningMacro( "DataSet contains illegal Tags. "
           "Those elements will be discarded:" << de.GetTag() );

@@ -147,6 +147,15 @@ std::ostream const &File::Write(std::ostream &os) const
     // we have to do a look up the in the dictionary to find out VR for those element
     // this is too much work, and should be up to the user to convert the meta to something
     // legal ! Write them as implicit for now
+    gdcmWarning( "File written will not be legal" );
+    if( P.IsEmpty() )
+      {
+      os.seekp(0, std::ios::beg);
+      }
+    else
+      {
+      os.seekp(128+4, std::ios::beg);
+      }
     Header.DataSet::Write<ImplicitDataElement,SwapperNoOp>(os);
     }
 

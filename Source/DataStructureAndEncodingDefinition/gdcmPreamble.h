@@ -43,8 +43,8 @@ public:
 
   const char *GetInternal() { return Internal; }
 
-protected:
   bool IsEmpty() const { return !Internal; }
+protected:
   //
   bool IsValid() const { 
     // is (IsValid == true) => Internal was read
