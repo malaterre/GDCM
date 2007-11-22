@@ -169,13 +169,13 @@ const std::ostream &Write(std::ostream &os) const
     }
   // Self
   NestedDataSet.Write<TDE,TSwap>(os);
-  //if( ValueLengthField.IsUndefined() )
-  //  {
-  //  const Tag itemDelItem(0xfffe,0xe00d);
-  //  const ImplicitDataElement ide(itemDelItem);
-  //  assert( ide.GetVL() == 0 );
-  //  ide.Write(os);
-  //  }
+  if( ValueLengthField.IsUndefined() )
+    {
+    const Tag itemDelItem(0xfffe,0xe00d);
+    itemDelItem.Write<TSwap>(os);
+    VL zero = 0;
+    zero.Write<TSwap>(os);
+    }
 
   return os;
 }

@@ -73,13 +73,12 @@ public:
       {
       Item item;
       const Tag seqDelItem(0xfffe,0xe0dd);
-      do
+      while( item.Read<TDE,TSwap>(is) && item.GetTag() != seqDelItem )
         {
-        item.Read<TDE,TSwap>(is);
-        //std::cout << "Item: " << item << std::endl;
+        gdcmDebugMacro( "Item: " << item );
         Items.push_back( item );
         }
-      while( item.GetTag() != seqDelItem );
+      assert( item.GetTag() == seqDelItem && item.GetVL() == 0 );
       }
     else
       {
@@ -125,6 +124,15 @@ public:
       {
       it->Write<TDE,TSwap>(os);
       }
+    if( SequenceLengthField.IsUndefined() )
+      {
+      // seq del item is not stored, write it !
+      const Tag seqDelItem(0xfffe,0xe0dd);
+      seqDelItem.Write<TSwap>(os);
+      VL zero = 0;
+      zero.Write<TSwap>(os);
+      }
+
     return os;
     }
 

@@ -109,8 +109,8 @@ std::ostream const &Write(std::ostream &os) const
     it->Write<TSwap>(os);
     }
   // seq del item is not stored, write it !
-  const Tag itemDelItem(0xfffe,0xe00d);
-  itemDelItem.Write<TSwap>(os);
+  const Tag seqDelItem(0xfffe,0xe0dd);
+  seqDelItem.Write<TSwap>(os);
   VL zero = 0;
   zero.Write<TSwap>(os);
 
