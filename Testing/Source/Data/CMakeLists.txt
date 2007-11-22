@@ -26,11 +26,11 @@ SET(BLACK_LIST_READER
   MR_Philips_Intera_PrivateSequenceImplicitVR.dcm
   ExplicitVRforPublicElementsImplicitVRforShadowElements.dcm # Tough one !
   0019004_Baseline_IMG1.dcm # VR are garbage but dcmtk can read it...
+  PHILIPS_Intera-16-MONO2-Uncompress.dcm # hey we are not reporting failure !
 
 # For now not supported (in ReWrite mode):
  MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.dcm
  undefined_length_un_vr.dcm
- PHILIPS_Intera-16-MONO2-Uncompress.dcm
 )
 
 SET(GDCM_DATA_IMAGES)
