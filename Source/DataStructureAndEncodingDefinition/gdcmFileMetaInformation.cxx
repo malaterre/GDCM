@@ -354,8 +354,7 @@ std::istream &FileMetaInformation::ReadCompatInternal(std::istream &is)
       ImplicitDataElement ide;
       while( ReadImplicitDataElement<SwapperNoOp>(is, ide ) )
         {
-        DataElement xde(ide);
-        Insert(xde);
+        Insert(ide);
         }
       // Now is a good time to find out the dataset transfer syntax
       ComputeDataSetTransferSyntax();

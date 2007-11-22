@@ -134,10 +134,21 @@ std::istream &File::Read(std::istream &is)
 
 std::ostream const &File::Write(std::ostream &os) const
 {
-
   P.Write(os);
 
-  Header.Write(os);
+  try
+    {
+    Header.Write(os);
+    }
+  catch( std::exception &ex)
+    {
+    // File such as PICKER-16-MONO2-No_DicomV3_Preamble.dcm
+    // are a pain to rewrite since the metaheader was declared as implicit
+    // we have to do a look up the in the dictionary to find out VR for those element
+    // this is too much work, and should be up to the user to convert the meta to something
+    // legal ! Write them as implicit for now
+    Header.DataSet::Write<ImplicitDataElement,SwapperNoOp>(os);
+    }
 
   const TransferSyntax &ts = Header.GetDataSetTransferSyntax();
   if( ts == TransferSyntax::DeflatedExplicitVRLittleEndian )
