@@ -15,6 +15,10 @@ SET(MSFF_TEST_SRCS
   TestPixelType
   TestPersonName
   TestImageValue
+  TestImageCodec
+  TestImageConverter
+  TestJPEGCodec
+  TestRAWCodec
   )
 
 # Add the include paths

@@ -12,13 +12,9 @@ SET(DSED_TEST_SRCS
   #TestExplicitDataElement
   TestFileMetaInformation
   TestFragment
-  TestImageCodec
-  TestImageConverter
   #TestImplicitDataElement
   #TestItem
-  TestJPEGCodec
   TestParser
-  TestRAWCodec
   TestRLECodec
   TestSequenceOfFragments
   TestSequenceOfItems
