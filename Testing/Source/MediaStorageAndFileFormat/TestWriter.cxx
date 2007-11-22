@@ -46,6 +46,7 @@ int TestWrite(const char* filename)
     }
 
   gdcm::Filename out(filename);
+  // FIXME: we need to use the temp from the binary build instead...
   std::string tmpdir = "/tmp/debug";
   std::string outfilename = tmpdir;
   outfilename += "/";
