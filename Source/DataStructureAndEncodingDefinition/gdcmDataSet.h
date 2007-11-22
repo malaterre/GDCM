@@ -79,12 +79,17 @@ public:
     DES.clear();
   }
 
-  void Print(std::ostream &os) const {
+  void Print(std::ostream &os, std::string const &indent = "") const {
     // CT_Phillips_JPEG2K_Decompr_Problem.dcm has a SQ of length == 0
     //int s = DES.size();
     //assert( s );
-    std::copy(DES.begin(), DES.end(), 
-      std::ostream_iterator<DataElement>(os, "\n"));
+    //std::copy(DES.begin(), DES.end(), 
+    //  std::ostream_iterator<DataElement>(os, "\n"));
+    ConstIterator it = DES.begin();
+    for( ; it != DES.end(); ++it)
+      {
+      os << indent << *it << "\n";
+      }
   }
 
   template <typename TDE>

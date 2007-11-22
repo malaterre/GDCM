@@ -130,12 +130,12 @@ public:
 
 protected:
   void Print(std::ostream &os) const {
-    os << "\n\tSQ L= " << SequenceLengthField << "\n";
+    os << "\t(" << SequenceLengthField << ")\n";
     ItemVector::const_iterator it =
       Items.begin();
     for(;it != Items.end(); ++it)
       {
-      os << "  " << *it << "\n";
+      os << "  " << *it;
       }
   }
 
