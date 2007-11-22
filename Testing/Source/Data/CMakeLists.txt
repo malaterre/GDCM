@@ -28,12 +28,8 @@ SET(BLACK_LIST_READER
   0019004_Baseline_IMG1.dcm # VR are garbage but dcmtk can read it...
 
 # For now not supported (in ReWrite mode):
- PICKER-16-MONO2-No_DicomV3_Preamble.dcm
  MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.dcm
  undefined_length_un_vr.dcm
- PrivateGEImplicitVRBigEndianTransferSyntax16Bits.dcm
- THERALYS-12-MONO2-Uncompressed-Even_Length_Tag.dcm
- GE_DLX-8-MONO2-PrivateSyntax.dcm
  PHILIPS_Intera-16-MONO2-Uncompress.dcm
 )
 
