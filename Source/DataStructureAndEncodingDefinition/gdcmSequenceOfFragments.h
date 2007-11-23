@@ -97,6 +97,7 @@ std::istream& Read(std::istream &is)
       {
       // that's ok !
       // gdcm-JPEG-LossLess3a.dcm
+      // TODO: should check that whole file was read or that pixel data is complete else rethrow...
       gdcmWarningMacro( "Reading failed at Tag:" << DataElement(frag) << " Use file at own risk." );
       }
     }
