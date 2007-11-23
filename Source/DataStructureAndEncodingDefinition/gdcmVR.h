@@ -105,7 +105,7 @@ public:
     return VR::GetLength(VRField);
   }
   static uint32_t GetLength(VRType vr) { 
-    //assert( vr != VR::INVALID );
+    //if( vr == VR::INVALID ) return 4;
     if( vr & VL32 )
       {
       return 4;
@@ -154,13 +154,16 @@ public:
 
   const std::ostream &Write(std::ostream &os) const
     {
-    // FIXME: what should I do with element with INVALID VR ?
-    if( VRField == VR::INVALID ) throw Exception( "INVALID VR" );
-    const char *vr = GetVRString(VRField);
+    VRType vrfield = VRField;
+    if( vrfield == VR::INVALID )
+      {
+      //vrfield = VR::UN;
+      }
+    const char *vr = GetVRString(vrfield);
     assert( strlen( vr ) == 2 );
     os.write(vr, 2);
     // See PS 3.5, Data Element Structure With Explicit VR
-    if( VRField & VL32 )
+    if( vrfield & VL32 )
       {
       const char dum[2] = {0, 0};
       os.write(dum,2);
@@ -230,7 +233,7 @@ TYPETOENCODING(SQ,BINARY,float)
 TYPETOENCODING(SS,BINARY,int16_t)
 TYPETOENCODING(ST,ASCII ,float)
 TYPETOENCODING(TM,ASCII ,float)
-TYPETOENCODING(UI,ASCII ,UI)
+TYPETOENCODING(UI,ASCII ,UI) // FIXME !
 TYPETOENCODING(UL,BINARY,uint32_t)
 TYPETOENCODING(UN,ASCII,unsigned char) // FIXME ?
 TYPETOENCODING(US,BINARY,uint16_t)
