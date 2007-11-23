@@ -28,6 +28,10 @@ VL SequenceOfItems::ComputeLength() const
     {
     length += it->template GetLength<TDE>();
     }
+  if( SequenceLengthField.IsUndefined() )
+    {
+    length += 8; // item end delimitor (tag + vl)
+    }
   // For defined length SQ, make sure computation is correct (compare
   // to original length)
   assert( SequenceLengthField.IsUndefined()

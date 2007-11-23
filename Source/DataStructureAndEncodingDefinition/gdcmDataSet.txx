@@ -60,6 +60,7 @@ namespace gdcm
       //std::cout << "Nested: " << de << std::endl;
       DES.insert( de );
       l += de.GetLength<TDE>();
+      //std::cout << "l:" << l << std::endl;
       //assert( !de.GetVL().IsUndefined() );
       //std::cerr << "DEBUG: " << de.GetTag() << " "<< de.GetLength() << 
       //  "," << de.GetVL() << "," << l << std::endl;

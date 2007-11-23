@@ -316,6 +316,7 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
     //assert( t.GetElement() == 0x0 );
     throw Exception( "INVALID" ); // Does not start with a 0x0002 group element
     }
+  return is;
 }
 
 template <typename TSwap>

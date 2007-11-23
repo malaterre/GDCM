@@ -36,14 +36,14 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
       assert(0 && "Should not happen");
     return is;
     }
-  //std::cerr << "imp cur tag=" << TagField << std::endl;
-  assert( TagField != Tag(0xfffe,0xe0dd) );
+  //assert( TagField != Tag(0xfffe,0xe0dd) );
   // Read Value Length
   if( !ValueLengthField.Read<TSwap>(is) )
     {
     assert(0 && "Should not happen");
     return is;
     }
+  //std::cerr << "imp cur tag=" << TagField <<  " VL=" << ValueLengthField << std::endl;
   if( ValueLengthField == 0 )
     {
     // Simple fast path

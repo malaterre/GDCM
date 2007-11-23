@@ -37,7 +37,8 @@ VL SequenceOfFragments::ComputeLength() const
     {
     length += it->GetLength();
     }
-  //assert( SequenceLengthField.IsUndefined() );
+  assert( SequenceLengthField.IsUndefined() );
+  length += 8; // seq end delimitor (tag + vl)
   return length;
 }
 

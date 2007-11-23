@@ -78,6 +78,11 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     }
   catch( std::exception &ex )
     {
+    //I don't like the following 3 lines, what if 0000,0000 was indeed -wrongly- sent, we should be able to continue
+    //if( TagField == Tag(0x0000,0x0000) )
+    //  {
+    //  throw Exception( "Dont know what to do" ); // re throw
+    //  }
     // gdcm-MR-PHILIPS-16-Multi-Seq.dcm
     // assert( TagField == Tag(0xfffe, 0xe000) );
     // -> For some reason VR is written as {44,0} well I guess this is a VR...
@@ -142,7 +147,8 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       ValueField->SetLength(ValueLengthField); // perform realloc
       try
         {
-        if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) )
+        //if( !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField) ) // non cp246
+        if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) ) // cp246 compliant
           {
           abort();
           }
@@ -201,7 +207,8 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
   //if( !ValueField->Read<TSwap>(is) )
   if( !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField) )
     {
-    assert(0 && "Should not happen");
+    // Might be the famous UN 16bits
+    throw Exception( "Should not happen" );
     return is;
     }
 
