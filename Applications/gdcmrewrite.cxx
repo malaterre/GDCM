@@ -25,7 +25,13 @@
  * - All buggy files (wrong length: GE, 13 and Siemens Leonardo) are fixed
  * - All size are even (no odd length from gdcm 1.x)
  *
- *
+// \todo:
+// --preamble: clean preamble
+// --meta: clean meta (meta info version...)
+// --dicomV3 (use TS unless not supported)
+// --recompute group-length
+// --undefined sq
+// --explicit sq *
  * \todo in a close future:
  * - Set appropriate VR from DICOM dict
  * - Rewrite PMS SQ into DICOM SQ
