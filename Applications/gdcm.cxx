@@ -13,7 +13,16 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-// provide a dicom2 compatible API
+// gdcm will convert almost anything into dicom
+// - jpg
+// - j2k
+// - pdf
+// - raw..
+// - wav
+// - txt (??)
+//
+
+// provide a dicom2 compatible API...maybe ??
 
 // For pdf:
 /*
