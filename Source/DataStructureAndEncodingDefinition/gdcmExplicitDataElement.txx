@@ -40,7 +40,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       }
     return is;
     }
-  //std::cerr << "exp cur tag=" << TagField << std::endl;
+  assert( TagField != Tag(0xfffe,0xe0dd) );
   const Tag itemDelItem(0xfffe,0xe00d);
   if( TagField == itemDelItem )
     {
@@ -63,15 +63,30 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     {
     assert(0 && "Should not happen" );
     //  char c;
-    //  is.Read(&c, 1);
+    //  is.read(&c, 1);
     //  std::cerr << "Debug: " << c << std::endl;
     }
 #endif
   // Read VR
-  if( !VRField.Read(is) )
+  try
     {
-    assert(0 && "Should not happen" );
-    return is;
+    if( !VRField.Read(is) )
+      {
+      assert(0 && "Should not happen" );
+      return is;
+      }
+    }
+  catch( std::exception &ex )
+    {
+    // gdcm-MR-PHILIPS-16-Multi-Seq.dcm
+    // assert( TagField == Tag(0xfffe, 0xe000) );
+    // -> For some reason VR is written as {44,0} well I guess this is a VR...
+    // 0019004_Baseline_IMG1.dcm
+    // -> VR is garbage also...
+    // assert( TagField == Tag(8348,0339) || TagField == Tag(b5e8,0338))
+    gdcmWarningMacro( "Assuming 16 bits VR for Tag=" <<
+      TagField << " in order to read a buggy DICOM file." );
+    VRField = VR::INVALID;
     }
   // Read Value Length
   if( VR::GetLength(VRField) == 4 )
@@ -103,6 +118,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
 #endif
     }
 
+  //std::cerr << "exp cur tag=" << TagField <<  " VL=" << ValueLengthField << std::endl;
   // Read the Value
   //assert( ValueField == 0 );
   if( VRField == VR::SQ )
@@ -246,8 +262,11 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
       }
     }
   // We have the length we should be able to write the value
-  //if( ! ValueField->Write<TSwap>(os) )
-  if( !ValueIO<ExplicitDataElement,TSwap>::Write(os,*ValueField) )
+  if( VRField == VR::UN && ValueLengthField.IsUndefined() )
+    {
+    ValueIO<ImplicitDataElement,TSwap>::Write(os,*ValueField);
+    }
+  else if( !ValueIO<ExplicitDataElement,TSwap>::Write(os,*ValueField) )
     {
     assert( 0 && "Should not happen" );
     return os;

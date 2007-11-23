@@ -154,6 +154,7 @@ public:
 
   const std::ostream &Write(std::ostream &os) const
     {
+    // FIXME: what should I do with element with INVALID VR ?
     if( VRField == VR::INVALID ) throw Exception( "INVALID VR" );
     const char *vr = GetVRString(VRField);
     assert( strlen( vr ) == 2 );

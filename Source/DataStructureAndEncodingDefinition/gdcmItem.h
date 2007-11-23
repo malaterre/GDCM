@@ -115,10 +115,6 @@ std::istream &Read(std::istream &is)
     return is;
     }
   // Self
-//  NestedDataSet.SetLength( ValueLengthField ); // FIXME
-  // BUG: This test is required because DataSet::Read with a Length
-  // of 0 is actually thinking it is reading a root DataSet
-  // so we need to make sure not to call NestedDataSet.Read here
   if( ValueLengthField == 0 )
     {
     assert( TagField == Tag( 0xfffe, 0xe0dd)
@@ -140,17 +136,7 @@ std::istream &Read(std::istream &is)
     nested.Clear();
     nested.template ReadWithLength<TDE,TSwap>(is, ValueLengthField);
     }
-//#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-//  // Ok we have read the item, sometime the ValueLengthField was wrong
-//  // check that:
-//  if( !ValueLengthField.IsUndefined() && ValueLengthField != 0 )
-//    {
-//    if( ValueLengthField != NestedDataSet->GetLength() )
-//      {
-//      ValueLengthField = NestedDataSet->GetLength();
-//      }
-//    }
-//#endif
+
   return is;
 }
 

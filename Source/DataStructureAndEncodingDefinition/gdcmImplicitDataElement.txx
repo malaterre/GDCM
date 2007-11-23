@@ -37,6 +37,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
     return is;
     }
   //std::cerr << "imp cur tag=" << TagField << std::endl;
+  assert( TagField != Tag(0xfffe,0xe0dd) );
   // Read Value Length
   if( !ValueLengthField.Read<TSwap>(is) )
     {
@@ -156,7 +157,6 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
 #endif
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
-  //if( !ValueField->Read<TSwap>(is) )
   if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) )
     {
     throw Exception("Should not happen");
