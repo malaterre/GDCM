@@ -258,8 +258,6 @@ bool ReadImplicitDataElement(std::istream &is, ImplicitDataElement &de)
 /// For now I do a Seek back of 6 bytes. It would be better to finish reading 
 /// the first element of the FMI so that I can read the group length and 
 /// therefore compare it against the actual value we found...
-// \postcondition NegociatedTS and std::istream::SwapCode are Unknown
-// \postcondition NegociatedTS and std::istream::SwapCode are set
 std::istream &FileMetaInformation::Read(std::istream &is)
 {
   //ExplicitAttribute<0x0002,0x0000> metagl;
@@ -268,20 +266,26 @@ std::istream &FileMetaInformation::Read(std::istream &is)
   // TODO: Can now load data from std::ios::cur to std::ios::cur + metagl.GetValue()
 
   ExplicitDataElement xde;
+  Tag gl;
+  gl.Read<SwapperNoOp>(is);
+  if( gl.GetGroup() != 0x2 ) throw Exception( "INVALID" );
+  if( gl.GetElement() != 0x0 ) throw Exception( "INVALID" );
+  VR vr;
+  vr.Read(is);
+  if( vr == VR::INVALID ) throw Exception( "INVALID" );
+  if( vr != VR::UL ) throw Exception( "INVALID" );
+  // TODO FIXME: I should not do seekg for valid file this is costly
+  is.seekg(-6,std::ios::cur);
   xde.Read<SwapperNoOp>(is);
-  if( xde.GetTag().GetGroup() != 0x2 ) throw Exception( "INVALID" );
-  if( xde.GetVR() == VR::INVALID ) throw Exception( "INVALID" );
   Insert( xde );
-  //if( xde.GetTag() != Tag(0x0002,0x0000) 
-  // First off save position in case we fail (no File Meta Information)
   // See PS 3.5, Data Element Structure With Explicit VR
-      while( ReadExplicitDataElement<SwapperNoOp>(is, xde ) )
-        {
-        //std::cout << xde << std::endl;
-        Insert( xde );
-        }
+  while( ReadExplicitDataElement<SwapperNoOp>(is, xde ) )
+    {
+    Insert( xde );
+    }
 
-    ComputeDataSetTransferSyntax();
+  // Now is a good time to compute the transfer syntax:
+  ComputeDataSetTransferSyntax();
 
   // we are at the end of the meta file information and before the dataset
   return is;
@@ -313,6 +317,7 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
     }
   else
     {
+    is.seekg(-4, std::ios::cur); // Seek back
     //assert( t.GetElement() == 0x0 );
     throw Exception( "INVALID" ); // Does not start with a 0x0002 group element
     }

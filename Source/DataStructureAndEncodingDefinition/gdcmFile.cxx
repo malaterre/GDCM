@@ -61,7 +61,15 @@ std::istream &File::Read(std::istream &is)
         {
         // Weird implicit meta header:
         is.seekg(128+4, std::ios::beg );
-        Header.ReadCompat(is);
+        try
+          {
+          Header.ReadCompat(is);
+          }
+        catch( std::exception &ex )
+          {
+          // Ok I get it now... there is absolutely no meta header, giving up
+          hasmetaheader = false;
+          }
         }
       }
     else
