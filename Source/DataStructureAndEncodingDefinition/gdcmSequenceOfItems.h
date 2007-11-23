@@ -145,6 +145,13 @@ protected:
       {
       os << "  " << *it;
       }
+    if( SequenceLengthField.IsUndefined() )
+      {
+      const Tag seqDelItem(0xfffe,0xe0dd);
+      VL zero = 0;
+      os << seqDelItem;
+      os << "\t" << zero;
+      }
   }
 
 private:

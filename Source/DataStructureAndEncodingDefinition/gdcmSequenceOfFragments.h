@@ -84,12 +84,21 @@ std::istream& Read(std::istream &is)
     gdcmDebugMacro( "Table: " << Table );
     // not used for now...
     Fragment frag;
-    while( frag.Read<TSwap>(is) && frag.GetTag() != seqDelItem )
+    try
       {
-      gdcmDebugMacro( "Frag: " << frag );
-      Fragments.push_back( frag );
+      while( frag.Read<TSwap>(is) && frag.GetTag() != seqDelItem )
+        {
+        gdcmDebugMacro( "Frag: " << frag );
+        Fragments.push_back( frag );
+        }
+      assert( frag.GetTag() == seqDelItem && frag.GetVL() == 0 );
       }
-    assert( frag.GetTag() == seqDelItem && frag.GetVL() == 0 );
+    catch(std::exception &ex)
+      {
+      // that's ok !
+      // gdcm-JPEG-LossLess3a.dcm
+      gdcmWarningMacro( "Reading failed at Tag:" << DataElement(frag) << " Use file at own risk." );
+      }
     }
 
   return is;
@@ -126,6 +135,13 @@ protected:
     for(;it != Fragments.end(); ++it)
       {
       os << "  " << *it << "\n";
+      }
+    assert( SequenceLengthField.IsUndefined() );
+      {
+      const Tag seqDelItem(0xfffe,0xe0dd);
+      VL zero = 0;
+      os << seqDelItem;
+      os << "\t" << zero;
       }
   }
 

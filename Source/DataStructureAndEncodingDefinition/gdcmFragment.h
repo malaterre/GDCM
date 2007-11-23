@@ -68,30 +68,17 @@ public:
       assert(0 && "Should not happen");
       return is;
       }
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-    if( TagField != itemStart && TagField != seqDelItem )
-      {
-      // gdcm-JPEG-LossLess3a.dcm
-      std::streampos pos = is.tellg();
-      is.seekg( 0, std::ios::end );
-      std::streampos end = is.tellg();
-      assert( (long)(end-pos) == 4 );
-      gdcmWarningMacro( "Broken file: " << (long)(end-pos)
-        << " bytes were skipped at the end of file. Use at own risk." );
-      // Pretend to end properly...
-      TagField = Tag(0xfffe,0xe0dd);
-      ValueLengthField = 0;
-      // Make sure to clear the FragmentValue
-      FragmentValue = new ByteValue;
-      FragmentValue->SetLength( ValueLengthField );
-      return is;
-      }
-#endif
     if( !ValueLengthField.Read<TSwap>(is) )
       {
       assert(0 && "Should not happen");
       return is;
       }
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+    if( TagField != itemStart && TagField != seqDelItem )
+      {
+      throw Exception( "Problem" );
+      }
+#endif
     // Self
     ByteValue *bv = new ByteValue;
     bv->SetLength(ValueLengthField);
