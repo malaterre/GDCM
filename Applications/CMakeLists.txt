@@ -33,8 +33,8 @@ ENDIF(WIN32 AND NOT CYGWIN)
 ADD_EXECUTABLE(gdcmraw gdcmraw.cxx)
 TARGET_LINK_LIBRARIES(gdcmraw gdcmMSFF) # gdcmgetopt)
 
-ADD_EXECUTABLE(deflate deflate.cxx)
-TARGET_LINK_LIBRARIES(deflate gdcmzlib)
+#ADD_EXECUTABLE(deflate deflate.cxx)
+#TARGET_LINK_LIBRARIES(deflate gdcmzlib)
 
 # gdcmrewrite
 ADD_EXECUTABLE(gdcmrewrite gdcmrewrite.cxx)

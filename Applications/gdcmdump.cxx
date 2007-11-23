@@ -130,6 +130,7 @@ int main (int argc, char *argv[])
   catch( ... )
     {
     std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
     }
 //}
 
@@ -178,7 +179,6 @@ int main (int argc, char *argv[])
 //  //of.write( line, strlen(line) );
 //  of << line;
 //  of.close();
-#endif
   gdcm::Writer writer;
   writer.SetFileName( "vali2.dcm" );
   writer.SetFile( reader.GetFile() );
@@ -189,6 +189,7 @@ int main (int argc, char *argv[])
     return 1;
     }
 
+#endif
   gdcm::Dumper dumper;
   dumper.SetFile( reader.GetFile() );
   dumper.Print( std::cout );
