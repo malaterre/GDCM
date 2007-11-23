@@ -20,7 +20,8 @@
 // - raw..
 // - wav
 // - txt (??)
-//
+// - 2D stuff -> RT
+// - new segmentation !
 
 // provide a dicom2 compatible API...maybe ??
 
