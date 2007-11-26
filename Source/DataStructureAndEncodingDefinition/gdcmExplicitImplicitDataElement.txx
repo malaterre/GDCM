@@ -14,8 +14,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmExplicitDataElement_txx
-#define __gdcmExplicitDataElement_txx
+#ifndef __gdcmExplicitImplicitDataElement_txx
+#define __gdcmExplicitImplicitDataElement_txx
 
 #include "gdcmSequenceOfItems.h"
 #include "gdcmSequenceOfFragments.h"
@@ -27,10 +27,14 @@
 namespace gdcm
 {
 //-----------------------------------------------------------------------------
+// Depending whether the tag is private or not we switch to implicit or explicit
+// A lot of bug support were removed, we only keep the handling of philips bugs:
+// Byte Swap inversion, Fake SQ ...
+// Note: When reading implicit we are marking SQ with a VR of SQ, when rewritting element
+// this is nicer
 template <typename TSwap>
-std::istream &ExplicitDataElement::Read(std::istream &is)
+std::istream &ExplicitImplicitDataElement::Read(std::istream &is)
 {
-  // See PS 3.5, Data Element Structure With Explicit VR
   // Read Tag
   if( !TagField.Read<TSwap>(is) )
     {
@@ -58,16 +62,8 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     ValueField = 0;
     return is;
     }
-
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-  if( TagField == Tag(0x00ff, 0x4aa5) )
+  if( !TagField.IsPrivate() )
     {
-    assert(0 && "Should not happen" );
-    //  char c;
-    //  is.read(&c, 1);
-    //  std::cerr << "Debug: " << c << std::endl;
-    }
-#endif
   // Read VR
   try
     {
@@ -108,24 +104,6 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       assert(0 && "Should not happen");
       return is;
       }
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-    // HACK for SIEMENS Leonardo
-    if( ValueLengthField == 0x0006
-     && VRField == VR::UL
-     && TagField.GetGroup() == 0x0009 )
-      {
-      gdcmWarningMacro( "Replacing VL=0x0006 with VL=0x0004, for Tag=" <<
-        TagField << " in order to read a buggy DICOM file." );
-      ValueLengthField = 0x0004;
-      }
-#endif
-    }
-  // 
-  // I don't like the following 3 lines, what if 0000,0000 was indeed -wrongly- sent, we should be able to continue
-  // chances is that 99% of times there is now way we can reach here, so safely throw an exception
-  if( TagField == Tag(0x0000,0x0000) && ValueLengthField == 0 && VRField == VR::INVALID )
-    {
-    throw Exception( "Something went very wrong" ); // throw
     }
 
   //std::cerr << "exp cur tag=" << TagField << " VR=" << VRField << " VL=" << ValueLengthField << std::endl;
@@ -215,12 +193,132 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     return is;
     }
 
+    }
+  else
+    {
+  // First thing, clears the VR:
+  VRField = VR::INVALID;
+  //VRField = VR::UN; // TODO FIXME
+  bool issequence = false;
+  //assert( TagField != Tag(0xfffe,0xe0dd) );
+  // Read Value Length
+  if( !ValueLengthField.Read<TSwap>(is) )
+    {
+    assert(0 && "Should not happen");
+    return is;
+    }
+  assert( ValueLengthField < 65535 );
+  //std::cerr << "imp cur tag=" << TagField <<  " VL=" << ValueLengthField << std::endl;
+  if( ValueLengthField == 0 )
+    {
+    // Simple fast path
+    ValueField = 0;
+    return is;
+    }
+  else if( ValueLengthField.IsUndefined() )
+    {
+    //assert( de.GetVR() == VR::SQ );
+    // FIXME what if I am reading the pixel data...
+    assert( TagField != Tag(0x7fe0,0x0010) );
+    ValueField = new SequenceOfItems;
+  issequence = true;
+    }
+  else
+    {
+    if( ValueLengthField < 8 )
+      {
+      ValueField = new ByteValue;
+      }
+    else
+      {
+      // In the following we read 4 more bytes in the Value field
+      // to find out if this is a SQ or not
+      // there is still work to do to handle the PMS featured SQ
+      // where item Start is in fact 0xfeff, 0x00e0 ... sigh
+      const Tag itemStart(0xfffe, 0xe000);
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+      const Tag itemPMSStart(0xfeff, 0x00e0);
+      const Tag itemPMSStart2(0x3f3f, 0x3f00);
+#endif
+      Tag item;
+      // TODO FIXME
+      // This is pretty dumb to actually read to later on seekg back, why not `peek` directly ?
+      item.Read<TSwap>(is);
+      // Maybe this code can later be rewritten as I believe that seek back
+      // is very slow...
+      is.seekg(-4, std::ios::cur );
+      if( item == itemStart )
+        {
+        assert( TagField != Tag(0x7fe0,0x0010) );
+        ValueField = new SequenceOfItems;
+  issequence = true;
+        }
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+      else if ( item == itemPMSStart )
+        {
+        // MR_Philips_Intera_No_PrivateSequenceImplicitVR.dcm
+        gdcmWarningMacro( "Illegal: Explicit SQ found in a file with "
+          "TransferSyntax=Implicit for tag: " << TagField );
+        // TODO: We READ Explicit ok...but we store Implicit !
+        // Indeed when copying the VR will be saved... pretty cool eh ?
+        ValueField = new SequenceOfItems;
+  issequence = true;
+        ValueField->SetLength(ValueLengthField); // perform realloc
+        try
+          {
+          if( !ValueIO<ExplicitDataElement,SwapperDoOp>::Read(is,*ValueField) )
+            {
+            assert(0 && "Should not happen");
+            }
+          }
+        catch( std::exception &ex )
+          {
+          ValueLengthField = ValueField->GetLength();
+          }
+        return is;
+        }
+      else if ( item == itemPMSStart2 )
+        {
+        gdcmWarningMacro( "Illegal: SQ start with " << itemPMSStart2
+          << " instead of " << itemStart << " for tag: " << TagField );
+        ValueField = new SequenceOfItems;
+  issequence = true;
+        ValueField->SetLength(ValueLengthField); // perform realloc
+        if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) )
+          {
+          assert(0 && "Should not happen");
+          }
+        return is;
+        }
+#endif
+      else
+        {
+        ValueField = new ByteValue;
+        }
+      }
+    }
+  // We have the length we should be able to read the value
+  ValueField->SetLength(ValueLengthField); // perform realloc
+  if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) )
+    {
+    throw Exception("Should not happen");
+    return is;
+    }
+  if( issequence )
+    {
+    //VRField = VR::SQ
+    //ValueLengthField = 0xFFFFFFFF;
+    }
+
+    }
+
   return is;
 }
 
 //-----------------------------------------------------------------------------
+// This file is technically an Explicit, so copy implementation from ExplicitElement
 template <typename TSwap>
-const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
+const std::ostream &ExplicitImplicitDataElement::Write(std::ostream &os) const
 {
   if( !TagField.Write<TSwap>(os) )
     {
@@ -273,18 +371,15 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
       return os;
       }
     }
-  if( ValueLengthField )
+  // We have the length we should be able to write the value
+  if( VRField == VR::UN && ValueLengthField.IsUndefined() )
     {
-    // We have the length we should be able to write the value
-    if( VRField == VR::UN && ValueLengthField.IsUndefined() )
-      {
-      ValueIO<ImplicitDataElement,TSwap>::Write(os,*ValueField);
-      }
-    else if( !ValueIO<ExplicitDataElement,TSwap>::Write(os,*ValueField) )
-      {
-      assert( 0 && "Should not happen" );
-      return os;
-      }
+    ValueIO<ImplicitDataElement,TSwap>::Write(os,*ValueField);
+    }
+  else if( !ValueIO<ExplicitImplicitDataElement,TSwap>::Write(os,*ValueField) )
+    {
+    assert( 0 && "Should not happen" );
+    return os;
     }
 
   return os;
@@ -294,4 +389,4 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
 
 } // end namespace gdcm
 
-#endif // __gdcmExplicitDataElement_txx
+#endif // __gdcmExplicitImplicitDataElement_txx

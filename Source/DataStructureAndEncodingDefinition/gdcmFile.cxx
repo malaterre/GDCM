@@ -18,6 +18,7 @@
 #include "gdcmSwapper.txx"
 #include "gdcmDataSet.h"
 #include "gdcmExplicitDataElement.h"
+#include "gdcmExplicitImplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
 #include "gdcmValue.h"
 
@@ -111,29 +112,62 @@ std::istream &File::Read(std::istream &is)
     return is;
     }
 
-  if( ts.GetSwapCode() == SwapCode::BigEndian )
+  try
     {
-    //US-RGB-8-epicard.dcm is big endian
-    if( ts.GetNegociatedType() == TransferSyntax::Implicit )
+    if( ts.GetSwapCode() == SwapCode::BigEndian )
       {
-      // There is no such thing as Implicit Big Endian... oh well
-      // LIBIDO-16-ACR_NEMA-Volume.dcm 
-      DS.Read<ImplicitDataElement,SwapperDoOp>(is);
+      //US-RGB-8-epicard.dcm is big endian
+      if( ts.GetNegociatedType() == TransferSyntax::Implicit )
+        {
+        // There is no such thing as Implicit Big Endian... oh well
+        // LIBIDO-16-ACR_NEMA-Volume.dcm 
+        DS.Read<ImplicitDataElement,SwapperDoOp>(is);
+        }
+      else
+        {
+        DS.Read<ExplicitDataElement,SwapperDoOp>(is);
+        }
       }
-    else
+    else // LittleEndian
       {
-      DS.Read<ExplicitDataElement,SwapperDoOp>(is);
+      if( ts.GetNegociatedType() == TransferSyntax::Implicit )
+        {
+        DS.Read<ImplicitDataElement,SwapperNoOp>(is);
+        }
+      else
+        {
+        DS.Read<ExplicitDataElement,SwapperNoOp>(is);
+        }
       }
     }
-  else // LittleEndian
+  catch( std::exception &ex )
     {
-    if( ts.GetNegociatedType() == TransferSyntax::Implicit )
+    // Let's try again with an ExplicitImplicitDataElement:
+    if( ts.GetSwapCode() == SwapCode::LittleEndian &&
+      ts.GetNegociatedType() == TransferSyntax::Explicit )
       {
-      DS.Read<ImplicitDataElement,SwapperNoOp>(is);
-      }
-    else
-      {
-      DS.Read<ExplicitDataElement,SwapperNoOp>(is);
+      // P.Read( is );
+      if( haspreamble )
+        {
+        is.seekg(128+4, std::ios::beg);
+        }
+      else
+        {
+        is.seekg(0, std::ios::beg);
+        }
+      if( hasmetaheader )
+        {
+        // FIXME: we are reading twice the same meta-header, we succedeed the first time...
+        // We should be able to seek to proper place instead of re-reading
+        FileMetaInformation header;
+        header.ReadCompat(is);
+        }
+
+      // Philips
+      gdcmWarningMacro( "Attempt to read the file as mixture of explicit/implicit");
+      DS.Clear(); // remove garbage from 1st attempt...
+      DS.Read<ExplicitImplicitDataElement,SwapperNoOp>(is);
+      // This file can only be rewritten as implicit...
       }
     }
 
@@ -188,6 +222,7 @@ std::ostream const &File::Write(std::ostream &os) const
       }
     else
       {
+      assert( ts.GetNegociatedType() == TransferSyntax::Explicit );
       DS.Write<ExplicitDataElement,SwapperDoOp>(os);
       }
     }
@@ -199,6 +234,7 @@ std::ostream const &File::Write(std::ostream &os) const
       }
     else
       {
+      assert( ts.GetNegociatedType() == TransferSyntax::Explicit );
       DS.Write<ExplicitDataElement,SwapperNoOp>(os);
       }
     }

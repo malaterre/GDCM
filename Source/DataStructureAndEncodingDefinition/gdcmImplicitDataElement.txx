@@ -36,6 +36,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
       assert(0 && "Should not happen");
     return is;
     }
+
   //assert( TagField != Tag(0xfffe,0xe0dd) );
   // Read Value Length
   if( !ValueLengthField.Read<TSwap>(is) )
@@ -163,6 +164,10 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
     return is;
     }
 
+#ifndef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+  assert( VRField == VR::INVALID );
+#endif
+
   return is;
 }
 
@@ -170,6 +175,9 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
 template <typename TSwap>
 const std::ostream &ImplicitDataElement::Write(std::ostream &os) const
 {
+#ifndef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+  assert( VRField == VR::INVALID );
+#endif
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   // Write Tag
   if( !TagField.Write<TSwap>(os) )

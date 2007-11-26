@@ -13,32 +13,34 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmImplicitDataElement_h
-#define __gdcmImplicitDataElement_h
+#ifndef __gdcmExplicitImplicitDataElement_h
+#define __gdcmExplicitImplicitDataElement_h
 
 #include "gdcmDataElement.h"
 
 namespace gdcm
 {
+// Data Element (ExplicitImplicit)
 /**
- * \brief Class to represent an *Implicit VR* Data Element
- * \note bla
+ * \brief Class to read/write a DataElement as ExplicitImplicit Data Element
+ * \note This only happen for some Philips images
+ * Should I derive from ExplicitDataElement instead ?
  */
-class ExplicitImplicitDataElement;
-class GDCM_EXPORT ImplicitDataElement : public DataElement
+class GDCM_EXPORT ExplicitImplicitDataElement : public DataElement
 {
 public:
   VL GetLength() const;
 
   template <typename TSwap>
-  std::istream &Read(std::istream& is);
+  std::istream &Read(std::istream &is);
 
   template <typename TSwap>
-  const std::ostream &Write(std::ostream& os) const;
+  const std::ostream &Write(std::ostream &os) const;
 };
 
 } // end namespace gdcm
 
-#include "gdcmImplicitDataElement.txx"
+#include "gdcmExplicitImplicitDataElement.txx"
 
-#endif //__gdcmImplicitDataElement_h
+#endif //__gdcmExplicitImplicitDataElement_h
+
