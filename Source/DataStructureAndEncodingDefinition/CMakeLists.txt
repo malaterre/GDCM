@@ -16,6 +16,9 @@ SET(DSED_SRCS
   gdcmVR.cxx
   gdcmFile.cxx
   gdcmPreamble.cxx
+  gdcmParseException.cxx
+  gdcmUNExplicitDataElement.cxx
+  gdcmExplicitImplicitDataElement.cxx
   )
 
 # Add the include paths

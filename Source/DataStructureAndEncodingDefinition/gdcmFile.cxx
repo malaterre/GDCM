@@ -18,15 +18,20 @@
 #include "gdcmSwapper.txx"
 #include "gdcmDataSet.h"
 #include "gdcmExplicitDataElement.h"
-#include "gdcmExplicitImplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
 #include "gdcmValue.h"
 
 #include "gdcmValue.h"
 #include "gdcmItem.h"
 #include "gdcmSequenceOfItems.h"
+#include "gdcmParseException.h"
 
 #include "gdcmDeflateStream.h"
+
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+#include "gdcmUNExplicitDataElement.h"
+#include "gdcmExplicitImplicitDataElement.h"
+#endif
 
 namespace gdcm
 {
@@ -140,34 +145,65 @@ std::istream &File::Read(std::istream &is)
         }
       }
     }
-  catch( std::exception &ex )
+  // Only catch parse exception at this point
+  catch( ParseException &ex )
     {
-    // Let's try again with an ExplicitImplicitDataElement:
-    if( ts.GetSwapCode() == SwapCode::LittleEndian &&
-      ts.GetNegociatedType() == TransferSyntax::Explicit )
+    if( ex.GetLastElement().GetVR() == VR::UN )
       {
-      // P.Read( is );
-      if( haspreamble )
-        {
-        is.seekg(128+4, std::ios::beg);
-        }
-      else
-        {
-        is.seekg(0, std::ios::beg);
-        }
-      if( hasmetaheader )
-        {
-        // FIXME: we are reading twice the same meta-header, we succedeed the first time...
-        // We should be able to seek to proper place instead of re-reading
-        FileMetaInformation header;
-        header.ReadCompat(is);
-        }
+        // P.Read( is );
+        is.clear();
+        if( haspreamble )
+          {
+          is.seekg(128+4, std::ios::beg);
+          }
+        else
+          {
+          is.seekg(0, std::ios::beg);
+          }
+        if( hasmetaheader )
+          {
+          int pos = is.tellg();
+          // FIXME: we are reading twice the same meta-header, we succedeed the first time...
+          // We should be able to seek to proper place instead of re-reading
+          FileMetaInformation header;
+          header.Read(is);
+          }
 
-      // Philips
-      gdcmWarningMacro( "Attempt to read the file as mixture of explicit/implicit");
-      DS.Clear(); // remove garbage from 1st attempt...
-      DS.Read<ExplicitImplicitDataElement,SwapperNoOp>(is);
-      // This file can only be rewritten as implicit...
+        // GDCM 1.X
+        gdcmWarningMacro( "Attempt to read GDCM 1.X wrongly encoded");
+        DS.Clear(); // remove garbage from 1st attempt...
+        DS.Read<UNExplicitDataElement,SwapperNoOp>(is);
+        // This file can only be rewritten as implicit...
+      }
+    else
+      {
+      // Let's try again with an ExplicitImplicitDataElement:
+      if( ts.GetSwapCode() == SwapCode::LittleEndian &&
+        ts.GetNegociatedType() == TransferSyntax::Explicit )
+        {
+        // P.Read( is );
+        if( haspreamble )
+          {
+          is.seekg(128+4, std::ios::beg);
+          }
+        else
+          {
+          is.seekg(0, std::ios::beg);
+          }
+        if( hasmetaheader )
+          {
+          // FIXME: we are reading twice the same meta-header, we succedeed the first time...
+          // We should be able to seek to proper place instead of re-reading
+          FileMetaInformation header;
+          header.ReadCompat(is);
+          }
+
+        // Philips
+        gdcmWarningMacro( "Attempt to read the file as mixture of explicit/implicit");
+        DS.Clear(); // remove garbage from 1st attempt...
+        DS.Read<ExplicitImplicitDataElement,SwapperNoOp>(is);
+        // This file can only be rewritten as implicit...
+        }
       }
     }
 

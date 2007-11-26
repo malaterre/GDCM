@@ -14,14 +14,13 @@
 
 =========================================================================*/
 
-#ifndef __gdcmExplicitDataElement_txx
-#define __gdcmExplicitDataElement_txx
+#ifndef __gdcmUNExplicitDataElement_txx
+#define __gdcmUNExplicitDataElement_txx
 
 #include "gdcmSequenceOfItems.h"
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmVL.h"
 #include "gdcmParseException.h"
-#include "gdcmImplicitDataElement.h"
 
 #include "gdcmValueIO.h"
 #include "gdcmSwapper.h"
@@ -30,9 +29,9 @@ namespace gdcm
 {
 //-----------------------------------------------------------------------------
 template <typename TSwap>
-std::istream &ExplicitDataElement::Read(std::istream &is)
+std::istream &UNExplicitDataElement::Read(std::istream &is)
 {
-  // See PS 3.5, Data Element Structure With Explicit VR
+  // See PS 3.5, Data Element Structure With UNExplicit VR
   // Read Tag
   if( !TagField.Read<TSwap>(is) )
     {
@@ -61,40 +60,19 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     return is;
     }
 
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-  if( TagField == Tag(0x00ff, 0x4aa5) )
+  // Read VR
+  if( !VRField.Read(is) )
     {
     assert(0 && "Should not happen" );
-    //  char c;
-    //  is.read(&c, 1);
-    //  std::cerr << "Debug: " << c << std::endl;
+    return is;
     }
-#endif
-  // Read VR
-  try
+  if( VRField == VR::UN )
     {
-    if( !VRField.Read(is) )
-      {
-      assert(0 && "Should not happen" );
-      return is;
-      }
-    }
-  catch( std::exception &ex )
-    {
-    // gdcm-MR-PHILIPS-16-Multi-Seq.dcm
-    // assert( TagField == Tag(0xfffe, 0xe000) );
-    // -> For some reason VR is written as {44,0} well I guess this is a VR...
-    // Technically there is a second bug, dcmtk assume other things when reading this tag, 
-    // so I need to change this tag too, if I ever want dcmtk to read this file. oh well
-    // 0019004_Baseline_IMG1.dcm
-    // -> VR is garbage also...
-    // assert( TagField == Tag(8348,0339) || TagField == Tag(b5e8,0338))
-    gdcmWarningMacro( "Assuming 16 bits VR for Tag=" <<
-      TagField << " in order to read a buggy DICOM file." );
-    VRField = VR::INVALID;
+    // backtrack ...
+    is.seekg(-2, std::ios::cur);
     }
   // Read Value Length
-  if( VR::GetLength(VRField) == 4 )
+  if( VR::GetLength(VRField) == 4 && VRField != VR::UN )
     {
     if( !ValueLengthField.Read<TSwap>(is) )
       {
@@ -110,29 +88,9 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       assert(0 && "Should not happen");
       return is;
       }
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-    // HACK for SIEMENS Leonardo
-    if( ValueLengthField == 0x0006
-     && VRField == VR::UL
-     && TagField.GetGroup() == 0x0009 )
-      {
-      gdcmWarningMacro( "Replacing VL=0x0006 with VL=0x0004, for Tag=" <<
-        TagField << " in order to read a buggy DICOM file." );
-      ValueLengthField = 0x0004;
-      }
-#endif
-    }
-  // 
-  // I don't like the following 3 lines, what if 0000,0000 was indeed -wrongly- sent, we should be able to continue
-  // chances is that 99% of times there is now way we can reach here, so safely throw an exception
-  if( TagField == Tag(0x0000,0x0000) && ValueLengthField == 0 && VRField == VR::INVALID )
-    {
-    ParseException pe;
-    pe.SetLastElement( *this );
-    throw pe;
     }
 
-  //std::cerr << "exp cur tag=" << TagField << " VR=" << VRField << " VL=" << ValueLengthField << std::endl;
+  std::cerr << "exp cur tag=" << TagField << " VR=" << VRField << " VL=" << ValueLengthField << std::endl;
   // Read the Value
   //assert( ValueField == 0 );
   if( VRField == VR::SQ )
@@ -154,7 +112,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       ValueField->SetLength(ValueLengthField); // perform realloc
       try
         {
-        //if( !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField) ) // non cp246
+        //if( !ValueIO<UNExplicitDataElement,TSwap>::Read(is,*ValueField) ) // non cp246
         if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) ) // cp246 compliant
           {
           abort();
@@ -164,7 +122,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
         {
         // Must be one of those non-cp246 file...
         // but for some reason seekg back to previous offset + Read
-        // as Explicit does not work...
+        // as UNExplicit does not work...
         throw Exception( "CP 246" );
         }
       return is;
@@ -184,35 +142,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     }
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-  if( TagField == Tag(0x2001,0xe05f)
-    || TagField == Tag(0x2001,0xe100)
-    || TagField == Tag(0x2005,0xe080)
-    || TagField == Tag(0x2005,0xe083)
-    || TagField == Tag(0x2005,0xe084)
-    //TagField.IsPrivate() && VRField == VR::SQ
-    //-> Does not work for 0029
-    //we really need to read item marker
-  )
-    {
-    gdcmWarningMacro( "ByteSwaping Private SQ: " << TagField );
-    assert( VRField == VR::SQ );
-    try
-      {
-      if( !ValueIO<ExplicitDataElement,SwapperDoOp>::Read(is,*ValueField) )
-        {
-        assert(0 && "Should not happen");
-        }
-      }
-    catch( std::exception &ex )
-      {
-      ValueLengthField = ValueField->GetLength();
-      }
-    return is;
-    }
-#endif
-  //if( !ValueField->Read<TSwap>(is) )
-  if( !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField) )
+  if( !ValueIO<UNExplicitDataElement,TSwap>::Read(is,*ValueField) )
     {
     // Might be the famous UN 16bits
     ParseException pe;
@@ -226,7 +156,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
 
 //-----------------------------------------------------------------------------
 template <typename TSwap>
-const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
+const std::ostream &UNExplicitDataElement::Write(std::ostream &os) const
 {
   if( !TagField.Write<TSwap>(os) )
     {
@@ -286,7 +216,7 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
       {
       ValueIO<ImplicitDataElement,TSwap>::Write(os,*ValueField);
       }
-    else if( !ValueIO<ExplicitDataElement,TSwap>::Write(os,*ValueField) )
+    else if( !ValueIO<UNExplicitDataElement,TSwap>::Write(os,*ValueField) )
       {
       assert( 0 && "Should not happen" );
       return os;
@@ -300,4 +230,4 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
 
 } // end namespace gdcm
 
-#endif // __gdcmExplicitDataElement_txx
+#endif // __gdcmUNExplicitDataElement_txx
