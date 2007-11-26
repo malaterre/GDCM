@@ -21,12 +21,12 @@ SET(BLACK_LIST_READER
   Enhanced_MR_Image_Storage_PixelSpacingNotIn_0028_0030.dcm # non cp246 correct
   SIEMENS_MAGNETOM-12-MONO2-GDCM12-VRUN.dcm  # tough one !
   MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm
-  ExplicitVRforPublicElementsImplicitVRforShadowElements.dcm # Tough one !
 
 # For now not supported (in ReWrite mode):
 # We are rewritting image with invalid VR what should we do ?
   gdcm-MR-PHILIPS-16-Multi-Seq.dcm
   0019004_Baseline_IMG1.dcm # VR are garbage but dcmtk can read it...
+  ExplicitVRforPublicElementsImplicitVRforShadowElements.dcm #  Most elements do not have a VR and are private... can only be writen safely as Implicit...
 )
 
 SET(GDCM_DATA_IMAGES)
