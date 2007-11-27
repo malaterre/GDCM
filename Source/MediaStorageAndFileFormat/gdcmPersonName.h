@@ -4,7 +4,6 @@
   Module:  $URL$
 
   Copyright (c) 2006-2007 Mathieu Malaterre
-  Copyright (c) 1993-2005 CREATIS
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -18,6 +17,7 @@
 #define __gdcmPersonName_h
 
 #include "gdcmTypes.h"
+#include <vector>
 
 namespace gdcm
 {
@@ -27,12 +27,13 @@ namespace gdcm
 class GDCM_EXPORT PersonName
 {
 public:
-  static const unsigned int NumberOfComponents = 5;
+  static const unsigned int MaxNumberOfComponents = 5;
   static const unsigned int MaxLength = 64;
-	char Component[NumberOfComponents][MaxLength+1];
+	char Component[MaxNumberOfComponents][MaxLength+1];
   static const char Separator = '^';
   static const char Padding   = ' ';
-  unsigned int GetNumberOfValidComponents() const {
+
+  unsigned int GetNumberOfComponents() const {
     unsigned int r = 0; 
     for(unsigned int i = 0; i < 5; ++i) {
       if( *Component[i] != '\0' ) r = i;
@@ -40,6 +41,9 @@ public:
     return r+1;
   }
   unsigned int GetMaxLength() const { return MaxLength; };
+  void SetBlob(const std::vector<char>& v) {
+    abort(); //TODO
+  }
   void SetComponents(const char *comp1 = "", 
     const char *comp2 = "",
     const char *comp3 = "",
@@ -53,7 +57,7 @@ public:
       strncpy(Component[i], components[i], std::min( strlen(components[i]), GetMaxLength() ) );
       }
   }
-	void Print(std::ostream &os)
+	void Print(std::ostream &os) const
 	{
 		//os << "Family Name Complex: " << Component[0] << std::endl;
 		//os << "Given  Name Complex: " << Component[1] << std::endl;

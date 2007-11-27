@@ -1,0 +1,60 @@
+/*=========================================================================
+
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006-2007 Mathieu Malaterre
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+
+=========================================================================*/
+
+#ifndef __gdcmApplicationEntity_h
+#define __gdcmApplicationEntity_h
+
+#include "gdcmTypes.h"
+#include <vector>
+
+namespace gdcm
+{
+
+/**
+ * - AE Application Entity
+ * - A string of characters that identifies an Application Entity with leading 
+ *   and trailing spaces (20H) being non-significant. A value consisting solely 
+ *   of spaces shall not be used.
+ * - Default Character Repertoire excluding character code 5CH (the BACKSLASH ¿\¿ in 
+ *   ISO-IR 6), and control characters LF, FF, CR and ESC.
+ * - 16 bytes maximum
+ */
+class GDCM_EXPORT ApplicationEntity
+{
+public:
+  static const unsigned int MaxNumberOfComponents = 1;
+  static const unsigned int MaxLength = 16;
+  std::string Internal;
+  static const char Separator = '';
+  static const char Padding   = ' ';
+  static const char Excluded[] = { '\\' /* 5CH */, '\n' /* LF */, '\f', /* FF */, '\r' /* CR */, 0x1b /* ESC */}
+
+  bool IsValid() const {
+    return true;
+  }
+  void Squeeze() {
+    // trim leading and trailing white spaces
+  }
+  void SetBlob(const std::vector<char>& v) {
+    abort(); //TODO
+  }
+  void Print(std::ostream &os) const {
+  }
+};
+
+} // end namespace gdcm
+
+#endif //__gdcmApplicationEntity_h
+
