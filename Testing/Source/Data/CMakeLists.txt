@@ -18,15 +18,17 @@ SET(BLACK_LIST_READER
   EmptyPixelData.dcm # Emtpy pixel, dcmdump returns 0 ... I do not think this is the right thing to do though
   Siemens-leonardo-bugged.dcm # Nearly impossible, waste of time anyway...
 # TODO (by priority)
-  Enhanced_MR_Image_Storage_PixelSpacingNotIn_0028_0030.dcm # non cp246 correct
-  SIEMENS_MAGNETOM-12-MONO2-GDCM12-VRUN.dcm  # tough one !
   MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm
 
 # For now not supported (in ReWrite mode):
 # We are rewritting image with invalid VR what should we do ?
   gdcm-MR-PHILIPS-16-Multi-Seq.dcm
-  0019004_Baseline_IMG1.dcm # VR are garbage but dcmtk can read it...
-  ExplicitVRforPublicElementsImplicitVRforShadowElements.dcm #  Most elements do not have a VR and are private... can only be writen safely as Implicit...
+  PHILIPS_Intera-16-MONO2-Uncompress.dcm
+  MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.dcm
+# TODO: One cannot write VR::UN in the meta header !
+# oh well ... dicom3tools support them
+#  THERALYS-12-MONO2-Uncompressed-Even_Length_Tag.dcm
+#  GE_DLX-8-MONO2-PrivateSyntax.dcm
 )
 
 SET(GDCM_DATA_IMAGES)

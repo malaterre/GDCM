@@ -40,20 +40,20 @@ struct dummy {
   char v[5];
 };
 
-int main(int argc, char *argv[])
+int TestAttribute(int argc, char *argv[])
 {
   
   dummy du = { 2, "date" };
 
   const char *filename;
   if( argc < 2 )
-  {
-  filename = "/tmp/dummy.dcm";
-  }
+    {
+    filename = "/tmp/dummy.dcm";
+    }
   else
-  {
-  filename = argv[1];
-  }
+    {
+    filename = argv[1];
+    }
   std::ofstream os(filename);
 
   //gdcm::Attribute<0x0008,0x0000, gdcm::VR::UL, gdcm::VM::VM1> a = { 38 };
@@ -63,13 +63,13 @@ int main(int argc, char *argv[])
   gdcm::Attribute<0x0008,0x0001, gdcm::VR::UL, gdcm::VM::VM1> b = { 262302 };
   b.Print( std::cout << std::endl );
   b.Write(os);
-  gdcm::Attribute<0x0008,0x0010, gdcm::VR::LO, gdcm::VM::VM24> c = { "ACRNEMA_LIBIDO_1.1" };
+  gdcm::Attribute<0x0008,0x0010, gdcm::VR::LO, gdcm::VM::VM1> c = { "ACRNEMA_LIBIDO_1.1" };
   c.Print( std::cout << std::endl );
   c.Write(os);
 
 // 0008 0082 SQ 1 Institution Code Sequence
-  gdcm::Attribute<0x0008,0x0083, gdcm::VR::SQ, gdcm::VM::VM1,
-    gdcm::Attribute<0x0008,0x0080, gdcm::VR::LO, gdcm::VM::VM24>
+  gdcm::Attribute<0x0008,0x0082, gdcm::VR::SQ, gdcm::VM::VM1,
+    gdcm::Attribute<0x0008,0x0080, gdcm::VR::LO>
 	  > sq = {
   "Institution Name"
 	  };
