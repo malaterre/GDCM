@@ -18,6 +18,7 @@ SET(DSED_SRCS
   gdcmPreamble.cxx
   gdcmParseException.cxx
   gdcmUNExplicitDataElement.cxx
+  gdcmCP246ExplicitDataElement.cxx
   gdcmExplicitImplicitDataElement.cxx
   )
 

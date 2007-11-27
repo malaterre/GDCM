@@ -74,6 +74,8 @@ public:
     US_SS = US | SS,
     US_SS_OW = US | SS | OW,
     VL32 = OB | OW | OF | SQ | UN | UT, // if( VR & VR_VL32 ) => VR has its VL coded over 32bits
+    VRASCII = AE | AS | CS | DA | DS | DT | IS | LO | LT | PN | SH | ST | TM | UI,
+    VRBINARY = AT | FL | FD | OB | OF | OW | SL | SQ | SS | UL | UN | US | UT, // FIXME: UN ?
     VR_END = UT+1  // Invalid VR, need to be max(VRType)+1
   } VRType;
 
@@ -208,6 +210,15 @@ inline std::ostream& operator<<(std::ostream &_os, const UI &_val)
   return _os;
 }
 
+struct LO { char Internal[64+1]; 
+  friend std::ostream& operator<<(std::ostream &_os, const LO &_val);
+};
+inline std::ostream& operator<<(std::ostream &_os, const LO &_val)
+{
+  _os << _val.Internal;
+  return _os;
+}
+
 
 
 // TODO: Could be generated from XML file
@@ -221,7 +232,7 @@ TYPETOENCODING(DT,ASCII ,float)
 TYPETOENCODING(FL,BINARY,float)
 TYPETOENCODING(FD,BINARY,double)
 TYPETOENCODING(IS,ASCII ,int)
-TYPETOENCODING(LO,ASCII ,char)
+TYPETOENCODING(LO,ASCII ,std::string)
 TYPETOENCODING(LT,ASCII ,float)
 TYPETOENCODING(OB,BINARY,unsigned char)
 TYPETOENCODING(OF,BINARY,float)

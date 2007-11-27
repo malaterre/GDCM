@@ -40,6 +40,7 @@ public:
         Internal.resize(vl+1);
         }
   }
+  ByteValue(std::vector<char> &v):Internal(v),Length(v.size()) {}
   ByteValue(std::ostringstream const &os) {
 	   abort(); // TODO
   }
@@ -77,6 +78,8 @@ public:
     // Keep the exact length
     Length = vl;
   }
+
+  operator const std::vector<char>& () const { return Internal; }
 
   ByteValue &operator=(const ByteValue &val) {
     Internal = val.Internal;

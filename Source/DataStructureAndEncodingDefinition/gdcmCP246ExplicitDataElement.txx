@@ -14,8 +14,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmExplicitDataElement_txx
-#define __gdcmExplicitDataElement_txx
+#ifndef __gdcmCP246ExplicitDataElement_txx
+#define __gdcmCP246ExplicitDataElement_txx
 
 #include "gdcmSequenceOfItems.h"
 #include "gdcmSequenceOfFragments.h"
@@ -30,9 +30,9 @@ namespace gdcm
 {
 //-----------------------------------------------------------------------------
 template <typename TSwap>
-std::istream &ExplicitDataElement::Read(std::istream &is)
+std::istream &CP246ExplicitDataElement::Read(std::istream &is)
 {
-  // See PS 3.5, Data Element Structure With Explicit VR
+  // See PS 3.5, Data Element Structure With CP246Explicit VR
   // Read Tag
   if( !TagField.Read<TSwap>(is) )
     {
@@ -61,15 +61,6 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     return is;
     }
 
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-  if( TagField == Tag(0x00ff, 0x4aa5) )
-    {
-    assert(0 && "Should not happen" );
-    //  char c;
-    //  is.read(&c, 1);
-    //  std::cerr << "Debug: " << c << std::endl;
-    }
-#endif
   // Read VR
   try
     {
@@ -110,26 +101,6 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       assert(0 && "Should not happen");
       return is;
       }
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-    // HACK for SIEMENS Leonardo
-    if( ValueLengthField == 0x0006
-     && VRField == VR::UL
-     && TagField.GetGroup() == 0x0009 )
-      {
-      gdcmWarningMacro( "Replacing VL=0x0006 with VL=0x0004, for Tag=" <<
-        TagField << " in order to read a buggy DICOM file." );
-      ValueLengthField = 0x0004;
-      }
-#endif
-    }
-  // 
-  // I don't like the following 3 lines, what if 0000,0000 was indeed -wrongly- sent, we should be able to continue
-  // chances is that 99% of times there is now way we can reach here, so safely throw an exception
-  if( TagField == Tag(0x0000,0x0000) && ValueLengthField == 0 && VRField == VR::INVALID )
-    {
-    ParseException pe;
-    pe.SetLastElement( *this );
-    throw pe;
     }
 
   //std::cerr << "exp cur tag=" << TagField << " VR=" << VRField << " VL=" << ValueLengthField << std::endl;
@@ -154,8 +125,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       ValueField->SetLength(ValueLengthField); // perform realloc
       try
         {
-        //if( !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField) ) // non cp246
-        if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) ) // cp246 compliant
+        if( !ValueIO<CP246ExplicitDataElement,TSwap>::Read(is,*ValueField) ) // non cp246
           {
           abort();
           }
@@ -164,7 +134,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
         {
         // Must be one of those non-cp246 file...
         // but for some reason seekg back to previous offset + Read
-        // as Explicit does not work...
+        // as CP246Explicit does not work...
         ParseException pe;
         pe.SetLastElement(*this);
         throw pe;
@@ -201,7 +171,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     assert( VRField == VR::SQ );
     try
       {
-      if( !ValueIO<ExplicitDataElement,SwapperDoOp>::Read(is,*ValueField) )
+      if( !ValueIO<CP246ExplicitDataElement,SwapperDoOp>::Read(is,*ValueField) )
         {
         assert(0 && "Should not happen");
         }
@@ -213,7 +183,8 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     return is;
     }
 #endif
-  if( !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField) )
+  //if( !ValueField->Read<TSwap>(is) )
+  if( !ValueIO<CP246ExplicitDataElement,TSwap>::Read(is,*ValueField) )
     {
     // Might be the famous UN 16bits
     ParseException pe;
@@ -225,115 +196,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
   return is;
 }
 
-//-----------------------------------------------------------------------------
-template <typename TSwap>
-const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
-{
-  if( !TagField.Write<TSwap>(os) )
-    {
-    assert( 0 && "Should not happen" );
-    return os;
-    }
-  assert( TagField != Tag(0xfffe,0xe0dd) );
-  const Tag itemDelItem(0xfffe,0xe00d);
-  if( TagField == itemDelItem )
-    {
-    assert( ValueField == 0 );
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-    if( ValueLengthField != 0 )
-      {
-      gdcmWarningMacro(
-        "Item Delimitation Item had a length different from 0." );
-      VL zero = 0;
-      zero.Write<TSwap>(os);
-      return os;
-      }
-#endif
-    // else
-    assert( ValueLengthField == 0 );
-    if( !ValueLengthField.Write<TSwap>(os) )
-      {
-      assert( 0 && "Should not happen" );
-      return os;
-      }
-    return os;
-    }
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-  if( VRField == VR::INVALID )
-    {
-    VR un = VR::UN;
-    un.Write(os);
-    Value* v = &*ValueField;
-    if( dynamic_cast<const SequenceOfItems*>(v) )
-      {
-      VL vl = 0xFFFFFFFF;
-      assert( vl.IsUndefined() );
-      vl.Write<TSwap>(os);
-      }
-    else
-      ValueLengthField.Write<TSwap>(os);
-    }
-  else
-#endif
-    {
-    if( !VRField.Write(os) )
-      {
-      assert( 0 && "Should not happen" );
-      return os;
-      }
-    if( VRField & VR::VL32 )
-      {
-      if( !ValueLengthField.Write<TSwap>(os) )
-        {
-        assert( 0 && "Should not happen" );
-        return os;
-        }
-      }
-    else
-      {
-      // 16bits only
-      if( !ValueLengthField.template Write16<TSwap>(os) )
-        {
-        assert( 0 && "Should not happen" );
-        return os;
-        }
-      }
-    }
-  if( ValueLengthField )
-    {
-    // We have the length we should be able to write the value
-    if( VRField == VR::UN && ValueLengthField.IsUndefined() )
-      {
-      //assert( dynamic_cast<const SequenceOfItems*>(ValueField) );
-      ValueIO<ImplicitDataElement,TSwap>::Write(os,*ValueField);
-      }
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-    else if( VRField == VR::INVALID && dynamic_cast<const SequenceOfItems*>(&*ValueField) )
-      {
-      // We have pretended so far that the Sequence was encoded as UN. Well the real
-      // troubles is that we cannot store the length as explicit length, otherwise
-      // we will loose the SQ, therefore change the length into undefined length
-      // and add a seq del item:
-      ValueIO<ImplicitDataElement,TSwap>::Write(os,*ValueField);
-      // seq del item is not stored, write it !
-      const Tag seqDelItem(0xfffe,0xe0dd);
-      seqDelItem.Write<TSwap>(os);
-      VL zero = 0;
-      zero.Write<TSwap>(os);
-      }
-#endif
-    else if( !ValueIO<ExplicitDataElement,TSwap>::Write(os,*ValueField) )
-      {
-      assert( 0 && "Should not happen" );
-      return os;
-      }
-    }
-
-  return os;
-}
-
-
 
 } // end namespace gdcm
 
-#endif // __gdcmExplicitDataElement_txx
+#endif // __gdcmCP246ExplicitDataElement_txx

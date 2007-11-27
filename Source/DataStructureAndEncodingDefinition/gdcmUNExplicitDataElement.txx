@@ -90,7 +90,7 @@ std::istream &UNExplicitDataElement::Read(std::istream &is)
       }
     }
 
-  std::cerr << "exp cur tag=" << TagField << " VR=" << VRField << " VL=" << ValueLengthField << std::endl;
+  //std::cerr << "exp cur tag=" << TagField << " VR=" << VRField << " VL=" << ValueLengthField << std::endl;
   // Read the Value
   //assert( ValueField == 0 );
   if( VRField == VR::SQ )
@@ -152,78 +152,6 @@ std::istream &UNExplicitDataElement::Read(std::istream &is)
     }
 
   return is;
-}
-
-//-----------------------------------------------------------------------------
-template <typename TSwap>
-const std::ostream &UNExplicitDataElement::Write(std::ostream &os) const
-{
-  if( !TagField.Write<TSwap>(os) )
-    {
-    assert( 0 && "Should not happen" );
-    return os;
-    }
-  assert( TagField != Tag(0xfffe,0xe0dd) );
-  const Tag itemDelItem(0xfffe,0xe00d);
-  if( TagField == itemDelItem )
-    {
-    assert( ValueField == 0 );
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-    if( ValueLengthField != 0 )
-      {
-      gdcmWarningMacro(
-        "Item Delimitation Item had a length different from 0." );
-      VL zero = 0;
-      zero.Write<TSwap>(os);
-      return os;
-      }
-#endif
-    // else
-    assert( ValueLengthField == 0 );
-    if( !ValueLengthField.Write<TSwap>(os) )
-      {
-      assert( 0 && "Should not happen" );
-      return os;
-      }
-    return os;
-    }
-  if( !VRField.Write(os) )
-    {
-    assert( 0 && "Should not happen" );
-    return os;
-    }
-  if( VRField & VR::VL32 )
-    {
-    if( !ValueLengthField.Write<TSwap>(os) )
-      {
-      assert( 0 && "Should not happen" );
-      return os;
-      }
-    }
-  else
-    {
-    // 16bits only
-    if( !ValueLengthField.template Write16<TSwap>(os) )
-      {
-      assert( 0 && "Should not happen" );
-      return os;
-      }
-    }
-  if( ValueLengthField )
-    {
-    // We have the length we should be able to write the value
-    if( VRField == VR::UN && ValueLengthField.IsUndefined() )
-      {
-      ValueIO<ImplicitDataElement,TSwap>::Write(os,*ValueField);
-      }
-    else if( !ValueIO<UNExplicitDataElement,TSwap>::Write(os,*ValueField) )
-      {
-      assert( 0 && "Should not happen" );
-      return os;
-      }
-    }
-
-  return os;
 }
 
 

@@ -30,6 +30,7 @@
 
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
 #include "gdcmUNExplicitDataElement.h"
+#include "gdcmCP246ExplicitDataElement.h"
 #include "gdcmExplicitImplicitDataElement.h"
 #endif
 
@@ -148,32 +149,57 @@ std::istream &File::Read(std::istream &is)
   // Only catch parse exception at this point
   catch( ParseException &ex )
     {
-    if( ex.GetLastElement().GetVR() == VR::UN )
+    if( ex.GetLastElement().GetVR() == VR::UN && ex.GetLastElement().IsUndefinedLength() )
       {
-        // P.Read( is );
-        is.clear();
-        if( haspreamble )
-          {
-          is.seekg(128+4, std::ios::beg);
-          }
-        else
-          {
-          is.seekg(0, std::ios::beg);
-          }
-        if( hasmetaheader )
-          {
-          int pos = is.tellg();
-          // FIXME: we are reading twice the same meta-header, we succedeed the first time...
-          // We should be able to seek to proper place instead of re-reading
-          FileMetaInformation header;
-          header.Read(is);
-          }
+      // non CP 246
+      // P.Read( is );
+      is.clear();
+      if( haspreamble )
+        {
+        is.seekg(128+4, std::ios::beg);
+        }
+      else
+        {
+        is.seekg(0, std::ios::beg);
+        }
+      if( hasmetaheader )
+        {
+        // FIXME: we are reading twice the same meta-header, we succedeed the first time...
+        // We should be able to seek to proper place instead of re-reading
+        FileMetaInformation header;
+        header.Read(is);
+        }
 
-        // GDCM 1.X
-        gdcmWarningMacro( "Attempt to read GDCM 1.X wrongly encoded");
-        DS.Clear(); // remove garbage from 1st attempt...
-        DS.Read<UNExplicitDataElement,SwapperNoOp>(is);
-        // This file can only be rewritten as implicit...
+      // GDCM 1.X
+      gdcmWarningMacro( "Attempt to read non CP 246" );
+      DS.Clear(); // remove garbage from 1st attempt...
+      DS.Read<CP246ExplicitDataElement,SwapperNoOp>(is);
+      }
+    else if( ex.GetLastElement().GetVR() == VR::UN )
+      {
+      // P.Read( is );
+      is.clear();
+      if( haspreamble )
+        {
+        is.seekg(128+4, std::ios::beg);
+        }
+      else
+        {
+        is.seekg(0, std::ios::beg);
+        }
+      if( hasmetaheader )
+        {
+        // FIXME: we are reading twice the same meta-header, we succedeed the first time...
+        // We should be able to seek to proper place instead of re-reading
+        FileMetaInformation header;
+        header.Read(is);
+        }
+
+      // GDCM 1.X
+      gdcmWarningMacro( "Attempt to read GDCM 1.X wrongly encoded");
+      DS.Clear(); // remove garbage from 1st attempt...
+      DS.Read<UNExplicitDataElement,SwapperNoOp>(is);
+      // This file can only be rewritten as implicit...
       }
     else
       {

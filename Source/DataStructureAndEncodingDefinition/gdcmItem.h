@@ -107,7 +107,11 @@ std::istream &Read(std::istream &is)
 #endif
   );
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-  if( TagField == Tag(0xfeff, 0x00e0) ) TagField = Tag(0xfffe, 0xe000);
+  // TODO FIXME: should not change value on the fly, only at write time
+  if( TagField == Tag(0xfeff, 0x00e0) ) 
+    {
+    TagField = Tag(0xfffe, 0xe000);
+    }
 #endif
   if( !ValueLengthField.Read<TSwap>(is) )
     {

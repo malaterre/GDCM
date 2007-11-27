@@ -13,20 +13,20 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmExplicitImplicitDataElement_h
-#define __gdcmExplicitImplicitDataElement_h
+#ifndef __gdcmCP246ExplicitDataElement_h
+#define __gdcmCP246ExplicitDataElement_h
 
 #include "gdcmDataElement.h"
 
 namespace gdcm
 {
-// Data Element (ExplicitImplicit)
+// Data Element (CP246Explicit)
 /**
- * \brief Class to read/write a DataElement as ExplicitImplicit Data Element
- * \note This only happen for some Philips images
- * Should I derive from ExplicitDataElement instead ?
+ * \brief Class to read/write a DataElement as CP246Explicit Data Element
+ * \note Some system are producing SQ, declare them as UN, but encode the SQ as 'Explicit'
+ * instead of Implicit
  */
-class GDCM_EXPORT ExplicitImplicitDataElement : public DataElement
+class GDCM_EXPORT CP246ExplicitDataElement : public DataElement
 {
 public:
   VL GetLength() const;
@@ -41,7 +41,7 @@ public:
 
 } // end namespace gdcm
 
-#include "gdcmExplicitImplicitDataElement.txx"
+#include "gdcmCP246ExplicitDataElement.txx"
 
-#endif //__gdcmExplicitImplicitDataElement_h
+#endif //__gdcmCP246ExplicitDataElement_h
 

@@ -114,8 +114,7 @@ public:
     _os << data[0];
     for(unsigned long i=1; i<length; ++i) {
       assert( _os );
-      //_os << "\\" << data[i];
-      abort();
+      _os << "\\" << data[i];
       }
     }
 };
