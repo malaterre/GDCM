@@ -69,6 +69,7 @@ public:
       //assert( 0 && "Impossible" );
       return GetDictEntry(Tag(0,0));
       }
+    assert( DictInternal.count(tag) == 1 );
     return it->second;
     }
 
@@ -125,9 +126,9 @@ public:
       }
     const char *tag_owner = it->second.GetOwner();
     if( strcmp(tag_owner, owner) == 0)
-    {
-    return it->second;
-    }
+      {
+      return it->second;
+      }
     //else
     abort();
     return it->second;
