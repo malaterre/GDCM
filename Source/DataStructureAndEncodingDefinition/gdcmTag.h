@@ -170,7 +170,14 @@ public:
     return os.write((char*)(&copy), 4);
     }
 
-
+  // Private Creator Data Element
+  uint16_t GetPrivateCreator() const
+    {
+    // See PS 3.5 - 7.8.1 PRIVATE DATA ELEMENT TAGS
+    // eg: 0x1425 -> 0x0014
+    assert( IsPrivate() );
+    return GetElement() >> 8;
+    }
 
 
 private:
