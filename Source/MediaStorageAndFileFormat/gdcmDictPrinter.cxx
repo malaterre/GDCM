@@ -41,7 +41,7 @@ VM::VMType GuessVMType(DataElement const &de)
       {
       vm = VM::VM1; // ??
       }
-    else if( vr & ( VR::OB | VR::OW ) )
+    else if( vr & VR::OB_OW )
       {
       vm = VM::VM1;
       }
@@ -55,14 +55,20 @@ VM::VMType GuessVMType(DataElement const &de)
     assert( VR::IsASCII( vr ) );
     switch(vr)
       {
+    case VR::INVALID:
+      vm = VM::VM1;
+      break;
     case VR::UN: // TODO need to do some magic guessing
       vm = VM::VM1;
       break;
-    case VR::DA: case VR::TM:
+    case VR::DA: case VR::TM: case VR::LT:
     case VR::SH: case VR::UI: case VR::LO: case VR::ST:
       vm = VM::VM1;
       break;
-    case VR::IS: case VR::DS: case VR::DT: case VR::PN: case VR::CS:
+    case VR::PN:
+      vm = VM::VM1; // I think it is ok
+      break;
+    case VR::IS: case VR::DS: case VR::DT: case VR::CS:
         {
         // Need to count \\ character
         const ByteValue *bv = dynamic_cast<const ByteValue*>(&value);
@@ -374,8 +380,7 @@ std::string GetVersion(std::string const &owner)
     ++p;
     }
   std::cerr << "OWNER= \"" << owner << "\"" << std::endl;
-  abort();
-  return "";
+  return "GDCM:UNKNOWN";
 }
 
 // TODO: make it protected:
@@ -383,29 +388,35 @@ std::string GetOwner(DataSet const &ds, DataElement const &de)
 {
   const Tag &t = de.GetTag();
   Tag towner(t);
-  uint16_t end = 0x001f; // Start by the end
-  towner.SetElement( end );
-  while( end >= 0x0010 && !ds.FindDataElement(towner) )
+  if( de.GetTag().GetPrivateCreator() )
     {
-    end--;
-    towner.SetElement( end );
+    // implementor reserving element
+    towner.SetElement( de.GetTag().GetPrivateCreator() );
     }
-  // Nothing found...
-  if( end == 0x0009 ) return "";
+  else if ( de.GetTag().GetElement() )
+    {
+    // Ok this is one Private Creator Data Element
+    towner.SetElement( de.GetTag().GetElement() );
+    }
+  else
+    {
+    // 0x0000 UL VM1 ...
+    return "";
+    }
 
-  //std::cout << "REF: " << towner << std::endl;
-  const DataElement& xde = ds.GetDataElement(towner);
-  const Value &value = xde.GetValue();
-  const ByteValue *bv = dynamic_cast<const ByteValue*>(&value);
-  assert( bv && "not bv" );
-  const char *array = bv->GetPointer();
-  // 2 case:
-  // LO is padded with a \0 bad
-  // LO simply ends with its last character
-  // we need to handle both cases:
-  std::string s = std::string(array, bv->GetLength());
+    //std::cout << "REF: " << towner << std::endl;
+    const DataElement& xde = ds.GetDataElement(towner);
+    const Value &value = xde.GetValue();
+    const ByteValue *bv = dynamic_cast<const ByteValue*>(&value);
+    assert( bv && "not bv" );
+    const char *array = bv->GetPointer();
+    // 2 case:
+    // LO is padded with a \0 bad
+    // LO simply ends with its last character
+    // we need to handle both cases:
+    std::string s = std::string(array, bv->GetLength());
+    return s.c_str(); // 
 
-  return s.c_str(); // 
 }
 
 //-----------------------------------------------------------------------------
@@ -436,14 +447,16 @@ void DictPrinter::Print(std::ostream& os)
         "<entry group=\"" << std::hex << std::setw(4) << std::setfill('0') << 
         t.GetGroup() << "\" element=\"" << std::setw(4) << t.GetElement() << "\" ";
 
-      os <<  " vr=\"" << vr << "\" vm=\"" << vm << "\" ";
+      os <<  "vr=\"" << vr << "\" vm=\"" << vm << "\" ";
       //os <<  "\" retired=\"false\";
       if( de.GetTag().IsPrivate() )
         {
         os << "owner=\"" << owner
-          << "\" version=\"" << version << "\"";
+          << "\" version=\"" << version << "\">\n";
         }
-      os << "/>\n";
+      //os << "\n  <description>?</description>\n";
+      //os << "</entry>\n";
+      //os << "/>\n";
       //os << "  <description>Unknown ";
       //os << (t.IsPrivate() ? "Private" : "Public");
       //os << " Tag & Data</description>\n";
