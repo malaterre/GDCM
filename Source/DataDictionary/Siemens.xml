@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="priv2html.xsl"?>
+<!-- The whole file was generated using :
+
+ $ find /path/to/dicom/files -type f -exec gdcmdump {} -d \; > dict.xml
+
+-->
+<!--
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006-2007 Mathieu Malaterre
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+-->
+<dict edition="2007" ref="http://www.medical.siemens.com/siemens/sv_SE/rg_marcom_FBAs/files/brochures/DICOM/ct/C2-028.610.04.01.02_DICOM_VA11.pdf">
+Network ­ Extensions/Specializations/Privatizations                 DICOM Conf. Statement
+
+
+
+
+                                 Privatizations                                                      A.4
+
+
+
+
+                                 Private Elements for Storage SOP Classes                            A.4
+
+
+
+
+                                 The following private attributes are defined for all Siemens
+                                 syngo based applicarions :                                          A.4
+
+
+
+
+                                 Registr y of DICOM Data Elements                                    A.4
+
+                                                                                                     A.4
+
+
+
+Tag                 Private Owner Code                     Name                      VR         VM
+              A.4                          A.4                                 A.4        A.4        A.4
+
+
+
+(0029,xx08)         SIEMENS CSA HEADER             CSA Image Header Type             CS         1
+(0029,xx09)         SIEMENS CSA HEADER            CSA Image Header Version           LO         1
+(0029,xx10)         SIEMENS CSA HEADER              CSA Image Header Info            OB         1
+(0029,xx18)         SIEMENS CSA HEADER             CSA Series Header Type            CS         1
+(0029,xx19)         SIEMENS CSA HEADER            CSA Series Header Version          LO         1
+(0029,xx20)         SIEMENS CSA HEADER              CSA Series Header Info           OB         1
+(0029,xx08)         SIEMENS CSA NON-                    CSA Data Type                CS         1
+                    IMAGE
+(0029,xx09)         SIEMENS CSA NON-                  CSA Data Version               LO         1
+                    IMAGE
+(0029,xx10)         SIEMENS CSA NON-                    CSA Data Info                OB         1
+                    IMAGE
+(0029,xx08)         SIEMENS CSA REPORT                syngo Report Type              CS         1
+(0029,xx09)         SIEMENS CSA REPORT                   syngo Report                LO         1
+(0029,xx15)         SIEMENS CSA REPORT                    SR Variant                 US         1
+(0029,xx17)         SIEMENS CSA REPORT              SC SOP Instance UID              UI         1
+(0029,xx10)         SIEMENS CSA ENVELOPE              syngo Report Data              OB         1
+(0029,xx11)         SIEMENS CSA ENVELOPE          syngo Report Presentation          OB         1
+
+
+
+                                                                                                     0.0
+
+
+
+A.4­42                                                 DICOM Conformance Statement syngo
+DICOM Conf. Statement                     Network ­ Extensions/Specializations/Privatizations
+
+
+
+
+Tag                  Private Owner Code                      Name                      VR         VM
+               A.4                           A.4                                 A.4        A.4        A.4
+
+
+
+ (0029,xx08)         SIEMENS MEDCOM                   MedCom Header Type               CS         1
+                     HEADER
+ (0029,xx09)         SIEMENS MEDCOM                  MedCom Header Version             LO         1
+                     HEADER
+ (0029,xx10)         SIEMENS MEDCOM                    MedCom Header Info              OB         1
+                     HEADER
+ (0029,xx20)         SIEMENS MEDCOM                MedCom History Information          OB         1
+                     HEADER
+ (0029,xx31)         SIEMENS MEDCOM                    PMTF Information 1              LO         1
+                     HEADER
+ (0029,xx32)         SIEMENS MEDCOM                    PMTF Information 2              UL         1
+                     HEADER
+ (0029,xx33)         SIEMENS MEDCOM                    PMTF Information 3              UL         1
+                     HEADER
+ (0029,xx34)         SIEMENS MEDCOM                    PMTF Information 4              CS         1
+                     HEADER
+ (0029,xx35)         SIEMENS MEDCOM                    PMTF Information 5              UL         1
+                     HEADER
+ (0029,xx40)         SIEMENS MEDCOM                Application Header Sequence         SQ         1
+                     HEADER
+ (0029,xx41)         SIEMENS MEDCOM                  Application Header Type           CS         1
+                     HEADER
+ (0029,xx42)         SIEMENS MEDCOM                   Application Header ID            LO         1
+                     HEADER
+ (0029,xx43)         SIEMENS MEDCOM                 Application Header Version         LO         1
+                     HEADER
+ (0029,xx44)         SIEMENS MEDCOM                   Application Header Info          OB         1
+                     HEADER
+
+
+
+                                                                                                       0.0
+
+
+
+Version syngo CT 2007C                                                                      A.4­43
+April 2007
+Network ­ Extensions/Specializations/Privatizations                DICOM Conf. Statement
+
+
+
+
+Tag                 Private Owner Code                    Name                        VR         VM
+              A.4                        A.4                                    A.4        A.4        A.4
+
+
+
+(0029,xx50)         SIEMENS MEDCOM                 Workflow Control Flags             LO         8
+                    HEADER
+(0029,xx51)         SIEMENS MEDCOM             Archive Management Flag Keep           CS         1
+                                                          Online
+                    HEADER
+(0029,xx52)         SIEMENS MEDCOM HEAD        Archive Management Flag Do Not         CS         1
+                                                           Archive
+(0029,xx53)         SIEMENS MEDCOM                  Image Location Status             CS         1
+                    HEADER
+(0029,xx54)         SIEMENS MEDCOM                 Estimated Retrieve Time            DS         1
+                    HEADER
+(0029,xx55)         SIEMENS MEDCOM              Data Size of Retrieved Images         DS         1
+                    HEADER
+(0029,xx70)         SIEMENS MEDCOM                 Siemens Link Sequence              SQ         1
+                    HEADER
+(0029,xx71)         SIEMENS MEDCOM                     Referenced Tag                 AT         1
+                    HEADER
+(0029,xx72)         SIEMENS MEDCOM                  Referenced Tag Type               CS         1
+                    HEADER
+
+
+
+
+                                                                                                      0.0
+
+
+
+A.4­44                                                DICOM Conformance Statement syngo
+DICOM Conf. Statement                     Network ­ Extensions/Specializations/Privatizations
+
+
+
+
+Tag                  Private Owner Code                        Name                       VR         VM
+               A.4                           A.4                                    A.4        A.4        A.4
+
+
+
+ (0029,xx73)         SIEMENS MEDCOM                    Referenced Value Length            UL         1
+                     HEADER
+ (0029,xx74)         SIEMENS MEDCOM                 Referenced Object Device Type         CS         1
+                     HEADER
+ (0029,xx75)         SIEMENS MEDCOM                Referenced Object Device Location      OB         1
+                     HEADER
+ (0029,xx76)         SIEMENS MEDCOM                      Referenced Object ID             OB         1
+                     HEADER
+ (0029,xx60)         SIEMENS MEDCOM                    Series Work Flow Status            LO         1
+                     HEADER2
+ (0029,xx08)         SIEMENS MEDCOM OOG                  MEDCOM OOG Type                  CS         1
+ (0029,xx09)         SIEMENS MEDCOM OOG                 MEDCOM OOG Version                LO         1
+ (0029,xx10)         SIEMENS MEDCOM OOG                  MEDCOM OOG Info                  OB         1
+ (7FE1,xx10)         SIEMENS CSA NON-                         CSA Data                    OB         1
+                     IMAGE
+
+                                  The next subsections will explain in which IODs these private
+                                  data elements are used.                                                 A.4
+
+
+
+
+                                                                                                          0.0
+
+
+
+Version syngo CT 2007C                                                                         A.4­45
+April 2007
+</dict>
