@@ -1305,7 +1305,7 @@ Exceptions:
     <description>Exposure Time</description>
   </entry>
   <entry group="0018" element="1151" vr="IS" vm="1" retired="false" version="3">
-    <description>X-ray Tube Current</description>
+    <description>X-Ray Tube Current</description>
   </entry>
   <entry group="0018" element="1152" vr="IS" vm="1" retired="false" version="3">
     <description>Exposure</description>
@@ -1449,7 +1449,7 @@ Exceptions:
     <description>Exposures on Plate</description>
   </entry>
   <entry group="0018" element="1405" vr="IS" vm="1" retired="false" version="3">
-    <description>Relative X-ray Exposure</description>
+    <description>Relative X-Ray Exposure</description>
   </entry>
   <entry group="0018" element="1450" vr="DS" vm="1" retired="false" version="3">
     <description>Column Angulation</description>
@@ -2427,7 +2427,7 @@ Exceptions:
     <description>Estimated Dose Saving</description>
   </entry>
   <entry group="0018" element="9325" vr="SQ" vm="1" retired="false" version="3">
-    <description>CT X-ray Details Sequence</description>
+    <description>CT X-Ray Details Sequence</description>
   </entry>
   <entry group="0018" element="9326" vr="SQ" vm="1" retired="false" version="3">
     <description>CT Position Sequence</description>
