@@ -13,26 +13,24 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmDICOMDIR_h
-#define __gdcmDICOMDIR_h
+#ifndef __gdcmPatient_h
+#define __gdcmPatient_h
 
-#include "gdcmFileSet.h"
+#include "gdcmFile.h"
 
 namespace gdcm
 {
 /**
  * \brief
  */
-class GDCM_EXPORT DICOMDIR
+class GDCM_EXPORT Patient
 {
 public:
-  DICOMDIR() {}
-  DICOMDIR(const FileSet& fs):FS(fs) {}
+  Patient() {}
 
 private:
-  FileSet FS;
 };
 
 } // end namespace gdcm
 
-#endif //__gdcmDICOMDIR_h
+#endif //__gdcmPatient_h
