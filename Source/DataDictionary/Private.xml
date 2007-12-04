@@ -401,6 +401,7 @@
   <entry group="0019" element="00fe" vr="LO" vm="1" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
   <entry group="0019" element="00fe" vr="LO" vm="1" owner="PHILIPS-MR-1" version="PDIC"/>
   <entry group="0019" element="1000" vr="CS" vm="1" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
+  <entry group="0019" element="1000" vr="CS" vm="2" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
   <entry group="0019" element="1000" vr="DS" vm="2" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1000" vr="SH" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
   <entry group="0019" element="1000" vr="UN" vm="1" owner="AEGIS_DICOM_2.00" version="AEG"/>
@@ -489,6 +490,7 @@
   <entry group="0019" element="100f" vr="UN" vm="1" owner="SIEMENS MR HEADER" version="SSPI"/>
   <entry group="0019" element="1010" vr="DS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1010" vr="IS" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
+  <entry group="0019" element="1010" vr="IS" vm="2" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
   <entry group="0019" element="1010" vr="UN" vm="1" owner="AGFA" version="AGFA"/>
   <entry group="0019" element="1010" vr="UN" vm="1" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
   <entry group="0019" element="1010" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
@@ -500,6 +502,7 @@
   <entry group="0019" element="1011" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
   <entry group="0019" element="1011" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1011" vr="UN" vm="1" owner="SIEMENS MR HEADER" version="SSPI"/>
+  <entry group="0019" element="1012" vr="IS" vm="1" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
   <entry group="0019" element="1012" vr="SL" vm="3" owner="SIEMENS MR HEADER " version="GDCM:UNKNOWN"/>
   <entry group="0019" element="1012" vr="SS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1012" vr="UN" vm="1" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
@@ -2775,6 +2778,7 @@
   <entry group="0043" element="1062" vr="SH" vm="1" owner="GEMS_PARM_01" version="GEM"/>
   <entry group="0043" element="1062" vr="UN" vm="1" owner="GEMS_PARM_01" version="GEM"/>
   <entry group="0043" element="1063" vr="UN" vm="1" owner="GEMS_PARM_01" version="GEM"/>
+  <entry group="0043" element="1064" vr="CS" vm="1" owner="GEMS_PARM_01" version="GEM"/>
   <entry group="0043" element="1064" vr="UN" vm="1" owner="GEMS_PARM_01" version="GEM"/>
   <entry group="0043" element="1065" vr="UN" vm="1" owner="GEMS_PARM_01" version="GEM"/>
   <entry group="0043" element="1066" vr="UN" vm="1" owner="GEMS_PARM_01" version="GEM"/>
@@ -2878,9 +2882,23 @@
   <entry group="0045" element="1021" vr="UN" vm="1" owner="GEMS_HELIOS_01" version="GEM"/>
   <entry group="0045" element="1022" vr="SS" vm="1" owner="GEMS_HELIOS_01" version="GEM"/>
   <entry group="0045" element="1022" vr="UN" vm="1" owner="GEMS_HELIOS_01" version="GEM"/>
+  <entry group="0045" element="1030" vr="CS" vm="1" owner="GEMS_HELIOS_01" version="GEM"/>
+  <entry group="0045" element="1031" vr="CS" vm="1" owner="GEMS_HELIOS_01" version="GEM"/>
   <entry group="0045" element="1032" vr="FL" vm="1" owner="GEMS_HELIOS_01" version="GEM"/>
+  <entry group="0045" element="1033" vr="CS" vm="1" owner="GEMS_HELIOS_01" version="GEM"/>
+  <entry group="0045" element="1036" vr="CS" vm="1" owner="GEMS_HELIOS_01" version="GEM"/>
+  <entry group="0045" element="1037" vr="CS" vm="1" owner="GEMS_HELIOS_01" version="GEM"/>
+  <entry group="0045" element="1038" vr="CS" vm="1" owner="GEMS_HELIOS_01" version="GEM"/>
+  <entry group="0045" element="1039" vr="CS" vm="1" owner="GEMS_HELIOS_01" version="GEM"/>
+  <entry group="0045" element="103b" vr="LO" vm="1" owner="GEMS_HELIOS_01" version="GEM"/>
   <entry group="0047" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
+  <entry group="0047" element="0010" vr="LO" vm="1" owner="GEMS_3DSTATE_001" version="GEM"/>
   <entry group="0047" element="0020" vr="LO" vm="1" owner="GEMS_ADWSoft_3D1" version="GEM"/>
+  <entry group="0047" element="10e9" vr="FL" vm="3" owner="GEMS_3DSTATE_001" version="GEM"/>
+  <entry group="0047" element="10ea" vr="DS" vm="3" owner="GEMS_3DSTATE_001" version="GEM"/>
+  <entry group="0047" element="10eb" vr="DS" vm="3" owner="GEMS_3DSTATE_001" version="GEM"/>
+  <entry group="0047" element="10ec" vr="FL" vm="1" owner="GEMS_3DSTATE_001" version="GEM"/>
+  <entry group="0047" element="10ed" vr="CS" vm="1" owner="GEMS_3DSTATE_001" version="GEM"/>
   <entry group="0047" element="2001" vr="SQ" vm="1" owner="GEMS_ADWSoft_3D1" version="GEM"/>
   <entry group="0047" element="2049" vr="UL" vm="3" owner="GEMS_ADWSoft_3D1" version="GEM"/>
   <entry group="0047" element="2050" vr="UL" vm="1" owner="GEMS_ADWSoft_3D1" version="GEM"/>
@@ -2909,6 +2927,10 @@
   <entry group="0047" element="20f6" vr="DS" vm="1" owner="GEMS_ADWSoft_3D1" version="GEM"/>
   <entry group="0047" element="20f7" vr="DS" vm="1" owner="GEMS_ADWSoft_3D1" version="GEM"/>
   <entry group="0047" element="20f8" vr="DS" vm="1" owner="GEMS_ADWSoft_3D1" version="GEM"/>
+  <entry group="0049" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
+  <entry group="0049" element="0010" vr="LO" vm="1" owner="GEMS_CT_CARDIAC_001 " version="GEM"/>
+  <entry group="0049" element="1001" vr="SQ" vm="1" owner="GEMS_CT_CARDIAC_001 " version="GEM"/>
+  <entry group="0049" element="100c" vr="FL" vm="1-n" owner="GEMS_CT_CARDIAC_001 " version="GEM"/>
   <entry group="004b" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="004b" element="0010" vr="LO" vm="1" owner="GEMS_CT_HINO_01 " version="GEM"/>
   <entry group="004b" element="1001" vr="UN" vm="1" owner="GEMS_CT_HINO_01 " version="GEM"/>
