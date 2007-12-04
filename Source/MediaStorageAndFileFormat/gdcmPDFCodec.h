@@ -26,8 +26,8 @@ class PDFCodec : public Codec
 public:
   PDFCodec();
   ~PDFCodec();
-  bool CanDecode(TS const &) { return false; }
-  bool Decode(IStream &is, OStream &os);
+  bool CanDecode(TransferSyntax const &) { return false; }
+  bool Decode(std::istream &is, std::ostream &os);
 
 private:
 };

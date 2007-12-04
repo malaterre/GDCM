@@ -15,6 +15,8 @@ SET(MSFF_SRCS
   gdcmImageValue.cxx
   gdcmJPEG12Codec.cxx
   gdcmRLECodec.cxx
+  gdcmPDFCodec.cxx
+  gdcmAudioCodec.cxx
   gdcmJPEG16Codec.cxx
   gdcmJPEG2000Codec.cxx
   gdcmJPEG8Codec.cxx
