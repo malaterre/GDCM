@@ -21,6 +21,7 @@ SET(MSFF_TEST_SRCS
   TestImageConverter
   TestJPEGCodec
   TestRAWCodec
+  TestDICOMDIR
   )
 
 # Add the include paths
