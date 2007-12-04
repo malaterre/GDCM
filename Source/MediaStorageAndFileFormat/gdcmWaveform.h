@@ -13,8 +13,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmSeries_h
-#define __gdcmSeries_h
+#ifndef __gdcmWaveform_h
+#define __gdcmWaveform_h
 
 #include "gdcmFile.h"
 
@@ -23,14 +23,14 @@ namespace gdcm
 /**
  * \brief
  */
-class GDCM_EXPORT Series
+class GDCM_EXPORT Waveform
 {
 public:
-  Series() {}
+  Waveform() {}
 
 private:
 };
 
 } // end namespace gdcm
 
-#endif //__gdcmSeries_h
+#endif //__gdcmWaveform_h
