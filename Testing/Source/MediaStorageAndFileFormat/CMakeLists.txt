@@ -9,6 +9,8 @@ SET(MSFF_TEST_SRCS
   #TestImageWriter
   TestWriter
   TestCodec
+  TestPDFCodec
+  TestAudioCodec
   TestImage
   TestPhotometricInterpretation
   TestLookupTable
