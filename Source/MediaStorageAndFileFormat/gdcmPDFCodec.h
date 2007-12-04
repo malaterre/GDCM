@@ -13,19 +13,19 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmAudioCodec_h
-#define __gdcmAudioCodec_h
+#ifndef __gdcmPDFCodec_h
+#define __gdcmPDFCodec_h
 
 #include "gdcmCodec.h"
 
 namespace gdcm
 {
   
-class AudioCodec : public Codec
+class PDFCodec : public Codec
 {
 public:
-  AudioCodec();
-  ~AudioCodec();
+  PDFCodec();
+  ~PDFCodec();
   bool CanDecode(TS const &) { return false; }
   bool Decode(IStream &is, OStream &os);
 
@@ -34,4 +34,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmAudioCodec_h
+#endif //__gdcmPDFCodec_h
