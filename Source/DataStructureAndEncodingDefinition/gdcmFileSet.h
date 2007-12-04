@@ -17,6 +17,7 @@
 #define __gdcmFileSet_h
 
 #include "gdcmFile.h"
+#include <vector>
 
 namespace gdcm
 {
@@ -28,12 +29,14 @@ namespace gdcm
 class GDCM_EXPORT FileSet
 {
 public:
-  FileSet() { 
-  }
-  void AddFile(File *file);
+  FileSet() {}
+  void AddFile(const File &file)
+    {
+    Files.push_back( &file );
+    }
 
 private:
-  File *Files;
+  std::vector<const File*> Files;
 };
 
 } // end namespace gdcm
