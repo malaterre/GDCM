@@ -11,6 +11,8 @@ SET(DSED_TEST_SRCS
   TestElement
   #TestExplicitDataElement
   TestFileMetaInformation
+  TestFile
+  TestFileSet
   TestFragment
   #TestImplicitDataElement
   #TestItem
