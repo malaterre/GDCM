@@ -17,8 +17,6 @@ SET(DSED_TEST_SRCS
   #TestImplicitDataElement
   #TestItem
   TestParser
-  TestStudy
-  TestSeries
   TestRLECodec
   TestSequenceOfFragments
   TestSequenceOfItems
