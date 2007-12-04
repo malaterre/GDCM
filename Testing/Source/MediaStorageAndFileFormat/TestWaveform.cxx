@@ -13,13 +13,13 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmStudy.h"
+#include "gdcmWaveform.h"
 
-int TestStudy(int argc, char *argv[])
+int TestWaveform(int argc, char *argv[])
 {
   (void)argc;
   (void)argv;
-  gdcm::Study s;
+  gdcm::Waveform w;
 
   return 0;
 }

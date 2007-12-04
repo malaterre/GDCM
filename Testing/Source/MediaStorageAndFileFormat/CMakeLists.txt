@@ -25,6 +25,7 @@ SET(MSFF_TEST_SRCS
   TestPatient
   TestStudy
   TestSeries
+  TestWaveform
   )
 
 # Add the include paths
