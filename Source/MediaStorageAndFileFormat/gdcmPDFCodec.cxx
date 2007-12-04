@@ -28,6 +28,8 @@ PDFCodec::~PDFCodec()
 
 bool PDFCodec::Decode(std::istream &is, std::ostream &os)
 {
+  os << is.rdbuf();
+  return true;
 }
 
 }
