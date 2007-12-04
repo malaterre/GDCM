@@ -13,19 +13,12 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmFileSet.h"
-#include "gdcmFile.h"
+#include "gdcmStudy.h"
 
-int TestFileSet(int argc, char *argv[])
+int TestStudy(int argc, char *argv[])
 {
   (void)argc;
   (void)argv;
-  gdcm::FileSet fs;
-  gdcm::File f1;
-  gdcm::File f2;
-  fs.AddFile( f1 );
-  fs.AddFile( f2 );
 
   return 0;
 }
-
