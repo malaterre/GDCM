@@ -2599,6 +2599,11 @@
   <entry group="0031" element="0012" vr="LO" vm="1" owner="SIEMENS ISI " version="SSPI"/>
   <entry group="0031" element="1001" vr="UN" vm="1" owner="        MED NM" version="ANO"/>
   <entry group="0031" element="100c" vr="UN" vm="1" owner="        MED NM" version="ANO"/>
+  <entry group="0033" element="0000" vr="UN" vm="1" owner="" version="EMPTY!"/>
+  <entry group="0033" element="0010" vr="UN" vm="1" owner="MITRA OBJECT UTF8 ATTRIBUTES 1.0" version="MIT"/>
+  <entry group="0033" element="1002" vr="UN" vm="1" owner="MITRA OBJECT UTF8 ATTRIBUTES 1.0" version="MIT"/>
+  <entry group="0033" element="1004" vr="UN" vm="1" owner="MITRA OBJECT UTF8 ATTRIBUTES 1.0" version="MIT"/>
+  <entry group="0033" element="1008" vr="UN" vm="1" owner="MITRA OBJECT UTF8 ATTRIBUTES 1.0" version="MIT"/>
   <entry group="0039" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0039" element="0010" vr="LO" vm="1" owner="SIEMENS MED OCS SITE NAME " version="SSPI"/>
   <entry group="0039" element="0011" vr="LO" vm="1" owner="SIEMENS MED OCS FIELD NAME" version="GDCM:UNKNOWN"/>
@@ -3261,8 +3266,10 @@
   <entry group="160d" element="0001" vr="LO" vm="1" owner="CLUT" version="GDCM:UNKNOWN"/>
   <entry group="170d" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="2001" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
+  <entry group="2001" element="0000" vr="UN" vm="1" owner="" version="EMPTY!"/>
   <entry group="2001" element="0010" vr="LO" vm="1" owner="PHILIPS IMAGING DD 001" version="PMFE"/>
   <entry group="2001" element="0010" vr="LO" vm="1" owner="Philips Imaging DD 001" version="PMFE"/>
+  <entry group="2001" element="0010" vr="UN" vm="1" owner="Philips Imaging DD 001" version="PMFE"/>
   <entry group="2001" element="0011" vr="LO" vm="1" owner="Philips Imaging DD 129" version="PMFE"/>
   <entry group="2001" element="0090" vr="LO" vm="1" owner="Philips Imaging DD 129" version="PMFE"/>
   <entry group="2001" element="00e0" vr="LO" vm="1" owner="PHILIPS IMAGING DD 001" version="PMFE"/>
@@ -3563,12 +3570,18 @@
   <entry group="2001" element="fc5f" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001" version="PMFE"/>
   <entry group="2001" element="fc60" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001" version="PMFE"/>
   <entry group="2005" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
+  <entry group="2005" element="0000" vr="UN" vm="1" owner="" version="EMPTY!"/>
   <entry group="2005" element="0010" vr="LO" vm="1" owner="PHILIPS MR IMAGING DD 001 " version="PMFE"/>
   <entry group="2005" element="0010" vr="LO" vm="1" owner="Philips MR Imaging DD 001 " version="PMFE"/>
+  <entry group="2005" element="0010" vr="UN" vm="1" owner="Philips MR Imaging DD 001 " version="PMFE"/>
   <entry group="2005" element="0011" vr="LO" vm="1" owner="Philips MR Imaging DD 002 " version="PMFE"/>
+  <entry group="2005" element="0011" vr="UN" vm="1" owner="Philips MR Imaging DD 002 " version="PMFE"/>
   <entry group="2005" element="0012" vr="LO" vm="1" owner="Philips MR Imaging DD 003 " version="PMFE"/>
+  <entry group="2005" element="0012" vr="UN" vm="1" owner="Philips MR Imaging DD 003 " version="PMFE"/>
   <entry group="2005" element="0013" vr="LO" vm="1" owner="Philips MR Imaging DD 004 " version="PMFE"/>
+  <entry group="2005" element="0013" vr="UN" vm="1" owner="Philips MR Imaging DD 004 " version="PMFE"/>
   <entry group="2005" element="0014" vr="LO" vm="1" owner="Philips MR Imaging DD 005 " version="PMFE"/>
+  <entry group="2005" element="0014" vr="UN" vm="1" owner="Philips MR Imaging DD 005 " version="PMFE"/>
   <entry group="2005" element="00e0" vr="LO" vm="1" owner="PHILIPS MR IMAGING DD 001 " version="PMFE"/>
   <entry group="2005" element="00e0" vr="LO" vm="1" owner="Philips MR Imaging DD 001 " version="PMFE"/>
   <entry group="2005" element="00e0" vr="LO" vm="1" owner="Philips MR Imaging DD 002 " version="PMFE"/>
