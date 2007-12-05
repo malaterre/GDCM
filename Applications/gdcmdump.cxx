@@ -188,11 +188,21 @@ int main (int argc, char *argv[])
     std::cerr << "Failed to write: "  << std::endl;
     return 1;
     }
-
 #endif
-  gdcm::Dumper dumper;
-  dumper.SetFile( reader.GetFile() );
-  dumper.Print( std::cout );
+
+  if( printdict )
+    {
+    gdcm::DictPrinter dictprinter;
+    dictprinter.SetFile ( reader.GetFile() );
+    dictprinter.Print( std::cout );
+    }
+  else
+    {
+    gdcm::Dumper dumper;
+    dumper.SetFile( reader.GetFile() );
+    dumper.Print( std::cout );
+    }
+
 
   return 0;
 }
