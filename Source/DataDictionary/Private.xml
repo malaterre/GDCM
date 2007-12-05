@@ -4457,16 +4457,27 @@
   <entry group="7005" element="1009" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
   <entry group="7005" element="100a" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
   <entry group="7005" element="100b" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
+  <entry group="7005" element="100d" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
   <entry group="7005" element="100e" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
   <entry group="7005" element="100f" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
   <entry group="7005" element="1010" vr="UN" vm="1" owner="SIEMENS MED " version="SSPI"/>
+  <entry group="7005" element="1011" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
   <entry group="7005" element="1012" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
   <entry group="7005" element="1013" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
+  <entry group="7005" element="1016" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
   <entry group="7005" element="1017" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
   <entry group="7005" element="1018" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
   <entry group="7005" element="1019" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
   <entry group="7005" element="101a" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
   <entry group="7005" element="101b" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
+  <entry group="7005" element="101d" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
+  <entry group="7005" element="101e" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
+  <entry group="7005" element="101f" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
+  <entry group="7005" element="1020" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
+  <entry group="7005" element="1022" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
+  <entry group="7005" element="1023" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
+  <entry group="7005" element="1024" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
+  <entry group="7005" element="1030" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
   <entry group="7079" element="0010" vr="LO" vm="1" owner="TOSHIBA_MEC_XA3 " version="TSH"/>
   <entry group="7079" element="1021" vr="SH" vm="1" owner="TOSHIBA_MEC_XA3 " version="TSH"/>
   <entry group="7079" element="1022" vr="IS" vm="2" owner="TOSHIBA_MEC_XA3 " version="TSH"/>
