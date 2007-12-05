@@ -23,7 +23,7 @@
 /* \brief Value Length
  * \warning this is a 4bytes value ! Do not try to use it for 2bytes value
  * length
-*/
+ */
 namespace gdcm
 {
 
@@ -57,12 +57,14 @@ public:
   operator uint32_t () const { return ValueLength; }
 
   VL GetLength() const {
-	  //abort(); // VL cannot know it's length...well in implicit yes...
+	  // VL cannot know it's length...well in implicit yes...
+	  // TODO: need to check we cannot call this function from an Explicit element
     return 4;
   }
 
   friend std::ostream& operator<<(std::ostream& os, const VL& vl);
-  //TODO
+
+  // PURPOSELY not implemented (could not differenciate 16bits vs 32bits VL)
   //friend std::istream& operator>>(std::istream& is, VL& n);
 
   template <typename TSwap>
