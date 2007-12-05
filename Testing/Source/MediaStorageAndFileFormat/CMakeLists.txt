@@ -26,6 +26,9 @@ SET(MSFF_TEST_SRCS
   TestStudy
   TestSeries
   TestWaveform
+  TestFiducials
+  TestEncapsulatedDocument
+  TestSpectroscopy
   )
 
 # Add the include paths
