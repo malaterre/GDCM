@@ -37,6 +37,8 @@ public:
   const char *GetName();
   const char *ToUnixSlashes();
 
+  operator const char * () const { return GetFileName(); }
+
   // FIXME: I don't like this function
   // It hides the realpath call (maybe usefull)
   // and it forces file to exist on the disk whereas Filename
