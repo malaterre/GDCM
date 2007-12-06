@@ -22,6 +22,8 @@
 #include "gdcmValidate.h"
 #include "gdcmWriter.h"
 #include "gdcmDumper.h"
+#include "gdcmSystem.h"
+#include "gdcmDirectory.h"
 
 #include <string>
 #include <iostream>
@@ -31,6 +33,35 @@
 #include <getopt.h>
 #include <string.h>
 
+
+template <typename TPrinter>
+int DoOperation(const std::string & filename)
+{
+  gdcm::Reader reader;
+  reader.SetFileName( filename.c_str() );
+  try
+    {
+    if( !reader.Read() )
+      {
+      std::cerr << "Failed to read: " << filename << std::endl;
+      return 1;
+      }
+    }
+  catch( ... )
+    {
+    std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
+    }
+
+  TPrinter dictprinter;
+  dictprinter.SetFile ( reader.GetFile() );
+  dictprinter.Print( std::cout );
+
+  return 0;
+}
+
+
+
 int main (int argc, char *argv[])
 {
   int c;
@@ -38,6 +69,7 @@ int main (int argc, char *argv[])
 
   std::string filename;
   bool printdict = false;
+  bool verbose = false;
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -45,10 +77,11 @@ int main (int argc, char *argv[])
         {"input", 1, 0, 0},
         {"output", 1, 0, 0},
         {"dict", 1, 0, 0},
+        {"verbose", 1, 0, 0},
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:d:",
+    c = getopt_long (argc, argv, "i:o:dv",
       long_options, &option_index);
     if (c == -1)
       {
@@ -90,6 +123,11 @@ int main (int argc, char *argv[])
       printdict = true;
       break;
 
+    case 'v':
+      //printf ("option d with value '%s'\n", optarg);
+      verbose = true;
+      break;
+
     case '?':
       break;
 
@@ -115,95 +153,40 @@ int main (int argc, char *argv[])
     }
   // else
   std::cerr << "Filename: " << filename << std::endl;
-//  for(int i=0; i <100; i++)
-//{
+  int res = 0;
   gdcm::Reader reader;
-  reader.SetFileName( filename.c_str() );
-  try
+  if( gdcm::System::FileIsDirectory( filename.c_str() ) )
     {
-    if( !reader.Read() )
+    gdcm::Directory d;
+    d.Load(filename);
+    gdcm::Directory::FilenamesType const &filenames = d.GetFilenames();
+    for( gdcm::Directory::FilenamesType::const_iterator it = filenames.begin(); it != filenames.end(); ++it )
       {
-      std::cerr << "Failed to read: " << filename << std::endl;
-      return 1;
+      if( printdict )
+        {
+        res += DoOperation<gdcm::DictPrinter>(*it);
+        }
+      else
+        {
+        res += DoOperation<gdcm::Dumper>(*it);
+        }
+      if( verbose ) std::cerr << *it << std::endl;
+      }
+    if( verbose ) std::cerr << "Total: " << filenames.size() << " files were processed" << std::endl;
+    }
+  else
+    {
+    assert( gdcm::System::FileExists(filename.c_str()) );
+    if( printdict )
+      {
+      res += DoOperation<gdcm::DictPrinter>(filename);
+      }
+    else
+      {
+      res += DoOperation<gdcm::Dumper>(filename);
       }
     }
-  catch( ... )
-    {
-    std::cerr << "Failed to read: " << filename << std::endl;
-    return 1;
-    }
-//}
 
-#if 0
-  gdcm::Validate vali;
-  vali.SetFile( reader.GetFile() );
-  //vali.Validation();
-
-  gdcm::Printer *p = 0;
-  gdcm::Printer     printer;
-  //std::cerr << "PRINTDICT:" << printdict << std::endl;
-  if( printdict )
-  {
-	  //	  FIXME: need virtual mechanism
-//	  p = &dictprinter;
-  gdcm::DictPrinter dictprinter;
-  dictprinter.SetFile ( reader.GetFile() );
-  dictprinter.Print( std::cout );
-  return 0;
-  }
-  else
-  {
-	  p = &printer;
-  }
-  // TODO:
-
-  p->SetFile( reader.GetFile() );
-  //p->SetFile( vali.GetValidatedFile() );
-  //const gdcm::FileMetaInformation &h = reader.GetHeader();
-  ////std::cout << h << std::endl;
-  //if(!h.IsEmpty())
-  //{
-  ////printer.SetDataSet( h );
-  ////printer.Print( std::cout );
-  //}
-
- //const gdcm::DataSet &ds = reader.GetDataSet();
-  ////std::cout << ds << std::endl;
-  //printer.SetDataSet( reader.GetDataSet() );
-  p->Print( std::cout );
-  //std::cout << reader.GetFile() << std::endl;
-
-//  std::ofstream of;
-//  of.open( "/tmp/valii.dcm", std::ios::out | std::ios::binary );
-//  const char line[] = "coucou mathieu";
-//  //of.write( line, strlen(line) );
-//  of << line;
-//  of.close();
-  gdcm::Writer writer;
-  writer.SetFileName( "vali2.dcm" );
-  writer.SetFile( reader.GetFile() );
-  //writer.SetFile( vali.GetValidatedFile() );
-  if( !writer.Write() )
-    {
-    std::cerr << "Failed to write: "  << std::endl;
-    return 1;
-    }
-#endif
-
-  if( printdict )
-    {
-    gdcm::DictPrinter dictprinter;
-    dictprinter.SetFile ( reader.GetFile() );
-    dictprinter.Print( std::cout );
-    }
-  else
-    {
-    gdcm::Dumper dumper;
-    dumper.SetFile( reader.GetFile() );
-    dumper.Print( std::cout );
-    }
-
-
-  return 0;
+  return res;
 }
 

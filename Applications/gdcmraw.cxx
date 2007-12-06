@@ -152,7 +152,6 @@ int main(int argc, char *argv[])
 
   const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
   //std::cout << ds << std::endl;
-  abort();
 
   if( !ds.FindDataElement( rawTag ) )
     {
