@@ -386,37 +386,7 @@ std::string GetVersion(std::string const &owner)
 // TODO: make it protected:
 std::string GetOwner(DataSet const &ds, DataElement const &de)
 {
-  const Tag &t = de.GetTag();
-  Tag towner(t);
-  if( de.GetTag().GetPrivateCreator() )
-    {
-    // implementor reserving element
-    towner.SetElement( de.GetTag().GetPrivateCreator() );
-    }
-  else if ( de.GetTag().GetElement() )
-    {
-    // Ok this is one Private Creator Data Element
-    towner.SetElement( de.GetTag().GetElement() );
-    }
-  else
-    {
-    // 0x0000 UL VM1 ...
-    return "";
-    }
-
-    //std::cout << "REF: " << towner << std::endl;
-    const DataElement& xde = ds.GetDataElement(towner);
-    const Value &value = xde.GetValue();
-    const ByteValue *bv = dynamic_cast<const ByteValue*>(&value);
-    assert( bv && "not bv" );
-    const char *array = bv->GetPointer();
-    // 2 case:
-    // LO is padded with a \0 bad
-    // LO simply ends with its last character
-    // we need to handle both cases:
-    std::string s = std::string(array, bv->GetLength());
-    return s.c_str(); // 
-
+   return ds.GetPrivateCreator(de.GetTag());
 }
 
 //-----------------------------------------------------------------------------
