@@ -19,6 +19,23 @@
 namespace gdcm
 {
 
+std::string DataSet::GetPrivateCreator(const Tag &t) const
+{
+  Tag pc = t.GetPrivateCreator();
+  if( pc.GetElement() )
+    {
+    const DataElement r(pc);
+    ConstIterator it = DES.find(r);
+    assert( it != DES.end() );
+    const DataElement &de = *it;
+    const Value &v = de.GetValue();
+    const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
+    std::ostringstream os;
+    bv.WriteBuffer( os );
+    return os.str();
+    }
+  return "";
+}
 
 } // end namespace gdcm
 

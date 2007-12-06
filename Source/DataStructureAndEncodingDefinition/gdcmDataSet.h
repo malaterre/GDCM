@@ -141,6 +141,8 @@ public:
     }
   const DataElement& operator[] (const Tag &t) const { return GetDataElement(t); }
 
+  std::string GetPrivateCreator(const Tag &t) const;
+
   // DUMB: this only search within the level of the current DataSet
   bool FindDataElement(const Tag &t) const {
     const DataElement r(t);
