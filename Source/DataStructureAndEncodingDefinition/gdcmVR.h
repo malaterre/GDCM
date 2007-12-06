@@ -43,7 +43,7 @@ class GDCM_EXPORT VR
 public:
   typedef enum {
     INVALID = 0, // For Item/(Seq) Item Delimitation Item
-    AE = 1, // Should I really work in base 10 ??? instead of 2
+    AE = 1,
     AS = 2,
     AT = 4,
     CS = 8,
