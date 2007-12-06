@@ -186,9 +186,15 @@ int main (int argc, char *argv[])
     return 1;
     }
 
+  // if preamble create:
+  gdcm::File f(reader.GetFile());
+  gdcm::Preamble p;
+  p.Create();
+  f.SetPreamble(p);
+
   gdcm::Writer writer;
   writer.SetFileName( outfilename.c_str() );
-  writer.SetFile( reader.GetFile() );
+  writer.SetFile( f );
   if( !writer.Write() )
     {
     std::cerr << "Failed to write: " << outfilename << std::endl;
