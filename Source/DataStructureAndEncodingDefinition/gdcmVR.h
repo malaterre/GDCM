@@ -73,6 +73,7 @@ public:
     OB_OW = OB | OW,
     US_SS = US | SS,
     US_SS_OW = US | SS | OW,
+    // The following do not have a VRString equivalent (ie cannot be found in PS 3.6)
     VL32 = OB | OW | OF | SQ | UN | UT, // if( VR & VR_VL32 ) => VR has its VL coded over 32bits
     VRASCII = AE | AS | CS | DA | DS | DT | IS | LO | LT | PN | SH | ST | TM | UI,
     VRBINARY = AT | FL | FD | OB | OF | OW | SL | SQ | SS | UL | UN | US | UT, // FIXME: UN ?
@@ -140,7 +141,7 @@ public:
       {
 #if 0
       // For some reason this seems slower on my linux box...
-      is.Seekg(2, std::ios::cur );
+      is.seekg(2, std::ios::cur );
 #else
       char dum[2];
       is.read(dum, 2);
