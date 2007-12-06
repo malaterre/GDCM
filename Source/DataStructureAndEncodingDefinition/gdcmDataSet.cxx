@@ -26,7 +26,10 @@ std::string DataSet::GetPrivateCreator(const Tag &t) const
     {
     const DataElement r(pc);
     ConstIterator it = DES.find(r);
-    assert( it != DES.end() );
+    if( it == DES.end() )
+      {
+      return "NO PRIVATE CREATOR";
+      }
     const DataElement &de = *it;
     const Value &v = de.GetValue();
     const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
