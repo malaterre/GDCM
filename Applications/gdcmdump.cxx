@@ -152,7 +152,6 @@ int main (int argc, char *argv[])
     return 1;
     }
   // else
-  std::cerr << "Filename: " << filename << std::endl;
   int res = 0;
   gdcm::Reader reader;
   if( gdcm::System::FileIsDirectory( filename.c_str() ) )
@@ -185,6 +184,9 @@ int main (int argc, char *argv[])
       {
       res += DoOperation<gdcm::Dumper>(filename);
       }
+    // ...
+    if ( verbose )
+      std::cerr << "Filename: " << filename << std::endl;
     }
 
   return res;

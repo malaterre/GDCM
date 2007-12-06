@@ -2,15 +2,16 @@
 # Namely:
 # gdcmdump
 # gdcminfo
+# gdcmconv
 
 SET(GDCMDUMP_APPS_SRCS
   gdcmdump.cxx
   )
 
 IF(WIN32 AND NOT CYGWIN)
-INCLUDE_DIRECTORIES(
-  "${GDCM_SOURCE_DIR}/Utilities/getopt"
-)
+  INCLUDE_DIRECTORIES(
+    "${GDCM_SOURCE_DIR}/Utilities/getopt"
+  )
 ENDIF(WIN32 AND NOT CYGWIN)
 
 # Add the include paths
@@ -36,10 +37,10 @@ TARGET_LINK_LIBRARIES(gdcmraw gdcmMSFF) # gdcmgetopt)
 #ADD_EXECUTABLE(deflate deflate.cxx)
 #TARGET_LINK_LIBRARIES(deflate gdcmzlib)
 
-# gdcmrewrite
-ADD_EXECUTABLE(gdcmrewrite gdcmrewrite.cxx)
-TARGET_LINK_LIBRARIES(gdcmrewrite gdcmMSFF)
+# gdcmconv
+ADD_EXECUTABLE(gdcmconv gdcmconv.cxx)
+TARGET_LINK_LIBRARIES(gdcmconv gdcmMSFF)
 IF(WIN32 AND NOT CYGWIN)
-  TARGET_LINK_LIBRARIES(gdcmrewrite gdcmgetopt)
+  TARGET_LINK_LIBRARIES(gdcmconv gdcmgetopt)
 ENDIF(WIN32 AND NOT CYGWIN)
 

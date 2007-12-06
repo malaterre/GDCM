@@ -14,7 +14,13 @@
 
 =========================================================================*/
 /*
- * Tools to rewrite. Goals being to 'purify' a DICOM file.
+ * HISTORY:
+ * In GDCM 1.X the prefered terms was 'ReWrite', however one author of GDCM dislike
+ * the term ReWrite since it is associated with the highly associated with the Rewrite
+ * notion in software programming where using reinvent the wheel and rewrite from scratch code
+ * the term convert was prefered
+ *
+ * Tools to conv. Goals being to 'purify' a DICOM file.
  * For now it will do the minimum:
  * - If Group Length is present, the length is garantee to be correct
  * - If Element with Group Tag 0x1, 0x3, 0x5 or 0x7 are present they are
@@ -25,13 +31,13 @@
  * - All buggy files (wrong length: GE, 13 and Siemens Leonardo) are fixed
  * - All size are even (no odd length from gdcm 1.x)
  *
-// \todo:
-// --preamble: clean preamble
-// --meta: clean meta (meta info version...)
-// --dicomV3 (use TS unless not supported)
-// --recompute group-length
-// --undefined sq
-// --explicit sq *
+ * // \todo:
+ * // --preamble: clean preamble
+ * // --meta: clean meta (meta info version...)
+ * // --dicomV3 (use TS unless not supported)
+ * // --recompute group-length
+ * // --undefined sq
+ * // --explicit sq *
  * \todo in a close future:
  * - Set appropriate VR from DICOM dict
  * - Rewrite PMS SQ into DICOM SQ
@@ -80,6 +86,18 @@ int main (int argc, char *argv[])
     static struct option long_options[] = {
         {"input", 1, 0, 0},
         {"output", 1, 0, 0},
+        {"group-length", 1, 0, 0}, // recalc / create / remove
+        {"sequence", 1, 0, 0}, // defined / undefined 
+        {"padding", 1, 0, 0}, // correct (\0 -> space) / optimize (at most 1 byte of padding)
+        {"raw", 1, 0, 0}, // default (implicit VR, LE) / Explicit LE / Explicit BE
+        {"jpeg", 1, 0, 0}, // JPEG lossy
+        {"jpegll", 1, 0, 0}, // JPEG lossless
+        {"jpegls", 1, 0, 0}, // JPEG-LS: lossy / lossless
+        {"j2k", 1, 0, 0}, // J2K: lossy / lossless
+        {"deflate", 1, 0, 0}, // 1 - 9 / best = 9 / fast = 1
+        {"rle", 1, 0, 0}, // lossless !
+        {"mpeg2", 1, 0, 0}, // lossless !
+        {"jpip", 1, 0, 0}, // ??
         {0, 0, 0, 0}
     };
 
@@ -130,6 +148,7 @@ int main (int argc, char *argv[])
       }
   }
 
+  // For now only support one input / one output
   if (optind < argc)
     {
     printf ("non-option ARGV-elements: ");
@@ -138,6 +157,7 @@ int main (int argc, char *argv[])
       printf ("%s ", argv[optind++]);
       }
     printf ("\n");
+    return 1;
     }
 
   if( filename.empty() )
@@ -145,25 +165,17 @@ int main (int argc, char *argv[])
     std::cerr << "Need input file (-i)\n";
     return 1;
     }
-  // else
-  //std::cout << "Filename: " << filename << std::endl;
+  if( outfilename.empty() )
+    {
+    std::cerr << "Need output file (-o)\n";
+    return 1;
+    }
+
   gdcm::Reader reader;
   reader.SetFileName( filename.c_str() );
   if( !reader.Read() )
     {
     std::cerr << "Failed to read: " << filename << std::endl;
-    return 1;
-    }
-
-  //const gdcm::FileMetaInformation &h = reader.GetHeader();
-  //std::cout << h << std::endl;
-
-  //const gdcm::DataSet &ds = reader.GetDataSet();
-  //std::cout << ds << std::endl;
-
-  if( outfilename.empty() )
-    {
-    std::cerr << "Need output file (-o)\n";
     return 1;
     }
 
