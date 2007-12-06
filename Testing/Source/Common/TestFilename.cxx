@@ -24,6 +24,7 @@ int TestFilename(int argc, char *argv[])
   gdcm::Filename f("/tmp/debug.dcm");
   std::cout << f.GetPath() << std::endl;
   std::cout << f.GetName() << std::endl;
+  std::cout << f << std::endl;
   
   const char current[] = "/home/mathieu/Creatis/gdcmData/test.acr";
   if( !gdcm::System::FileExists( current ) )
@@ -49,3 +50,4 @@ int TestFilename(int argc, char *argv[])
 
   return 0;
 }
+
