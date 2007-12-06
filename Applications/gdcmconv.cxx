@@ -86,9 +86,16 @@ int main (int argc, char *argv[])
     static struct option long_options[] = {
         {"input", 1, 0, 0},
         {"output", 1, 0, 0},
-        {"group-length", 1, 0, 0}, // recalc / create / remove
+        {"group-length", 1, 0, 0}, // valid / create / remove
+        {"preamble", 1, 0, 0}, // valid / create / remove
+        {"padding", 1, 0, 0}, // valid (\0 -> space) / optimize (at most 1 byte of padding)
+        {"vr", 1, 0, 0}, // valid
+        {"sop", 1, 0, 0}, // default to SC...
+        {"iod", 1, 0, 0}, // valid
+        {"pixeldata", 1, 0, 0}, // valid
+        {"meta", 1, 0, 0}, // valid / create / remove
+        {"dataset", 1, 0, 0}, // valid / create / remove?
         {"sequence", 1, 0, 0}, // defined / undefined 
-        {"padding", 1, 0, 0}, // correct (\0 -> space) / optimize (at most 1 byte of padding)
         {"raw", 1, 0, 0}, // default (implicit VR, LE) / Explicit LE / Explicit BE
         {"jpeg", 1, 0, 0}, // JPEG lossy
         {"jpegll", 1, 0, 0}, // JPEG lossless
