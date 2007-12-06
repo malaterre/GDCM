@@ -350,8 +350,51 @@ static const OWNER_VERSION OwnerVersionTable[] ={
 { "INTEGRIS 1.0", "INT1" },
 { "SYNARC_1.0", "SYN" },
 { "MeVis eatDicom", "MVD" },
+{ "PHILIPS MR/PART 6 ", "PMFE" },
+{ "PHILIPS MR/PART 7 ", "PMFE" },
+{ "PHILIPS MR/PART 12", "PMFE" },
+{ "HMC - CT - ID ", "HMC" },
+{ "SPI-P-Private_ICS Release 1;8 ", "SPI" },
+{ "ACUSON:1.2.840.113680.1.0:7ffe", "ACU" },
+{ "SIEMENS MED OCS FIELD NAME", "SSPI" },
+{ "SIEMENS MED OCS FIELD ID", "SSPI" },
+{ "SIEMENS MED OCS CALIBRATION DATE", "SSPI" },
+{ "SIEMENS MED OCS NUMBER OF SUB FRAMES", "SSPI" },
+{ "SIEMENS MED OCS AE TITLE", "SSPI" },
+{ "GEMS_ADWSoft_DPO1 ", "GEM" },
+{ "SPI-P-Private_ICS Release 1;6 ", "SSPI" },
+{ "SIEMENS MR HEADER ", "SSPI" },
+{ "NO PRIVATE CREATOR", "BLA" },
+{ "SFS1.00 ", "SFS" },
+{ "ATL PRIVATE TAGS", "ATL" },
+{ "Philips EV Imaging DD 022 ", "PMFE" },
+{ "Harmony R1.0 C2 ", "HRMY" },
+{ "Harmony R1.0", "HRMY" },
+{ "Harmony R2.0", "HRMY" },
+{ "Harmony R1.0 C3 ", "HRMY" },
+{ "Philips US Imaging DD 017 ", "PMFE" },
+{ "Philips US Imaging DD 023 ", "PMFE" },
+{ "Philips US Imaging DD 033 ", "PMFE" },
+{ "Philips US Imaging DD 034 ", "PMFE" },
+{ "Philips US Imaging DD 035 ", "PMFE" },
+{ "Philips US Imaging DD 036 ", "PMFE" },
+{ "Philips US Imaging DD 038 ", "PMFE" },
+{ "Philips US Imaging DD 039 ", "PMFE" },
+{ "Philips US Imaging DD 040 ", "PMFE" },
+{ "Philips US Imaging DD 042 ", "PMFE" },
+{ "Philips US Imaging DD 043 ", "PMFE" },
+{ "Philips US Imaging DD 081 ", "PMFE" },
+
+{ "Array DICOM private elements version1.0 ", "ARRAY" },
+{ "PI Private Block (0781:3000 - 0781:30FF)", "PIP" },
+
+
+
+
+
 
 { "XXXXXXXXXXXXXXXX", "ANO" }, // FIXME !
+{ "XXXXXXXXXXXXXX", "ANO"},
 { "XXXXXXXXX_xx", "ANO" }, // FIXME
 { "        MED NM", "ANO" }, // Clearly should be SIEMENS
 
@@ -411,18 +454,29 @@ void DictPrinter::Print(std::ostream& os)
 
       const Tag &t = de.GetTag();
       const VR &vr = de.GetVR();
+      VR pvr = vr;
+      if( vr == VR::INVALID ) pvr = VR::UN;
+      if( de.GetTag().GetElement() == 0x0 )
+        {
+        pvr = VR::UL;
+        }
+      else if( de.GetTag().GetElement() <= 0xFF  )
+        {
+        pvr = VR::LO;
+        owner = "Private Creator";
+        }
       VM::VMType vm = GuessVMType(de);
 
       os << 
         "<entry group=\"" << std::hex << std::setw(4) << std::setfill('0') << 
         t.GetGroup() << "\" element=\"" << std::setw(4) << t.GetElement() << "\" ";
 
-      os <<  "vr=\"" << vr << "\" vm=\"" << vm << "\" ";
+      os <<  "vr=\"" << pvr << "\" vm=\"" << vm << "\" ";
       //os <<  "\" retired=\"false\";
       if( de.GetTag().IsPrivate() )
         {
         os << "owner=\"" << owner
-          << "\" version=\"" << version << "\">\n";
+          << "\" version=\"" << version << "\"/>\n";
         }
       //os << "\n  <description>?</description>\n";
       //os << "</entry>\n";
