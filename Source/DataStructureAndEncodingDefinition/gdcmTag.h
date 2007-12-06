@@ -171,12 +171,14 @@ public:
     }
 
   // Private Creator Data Element
-  uint16_t GetPrivateCreator() const
+  Tag GetPrivateCreator() const
     {
     // See PS 3.5 - 7.8.1 PRIVATE DATA ELEMENT TAGS
-    // eg: 0x1425 -> 0x0014
+    // eg: 0x1234,0x1425 -> 0x1234,0x0014
     assert( IsPrivate() );
-    return GetElement() >> 8;
+    Tag r = *this;
+    r.SetElement( GetElement() >> 8 );
+    return r;
     }
 
 
