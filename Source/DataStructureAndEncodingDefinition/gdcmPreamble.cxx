@@ -46,29 +46,36 @@ std::istream &Preamble::Read(std::istream &is)
   return is;
 }
 
+void Preamble::Valid()
+{
+  if( !Internal ) Internal = new char[128+4];
+  memset( Internal, 0, 128 );
+  strncpy( Internal+128, "DICM", 4);
+}
+
+void Preamble::Create()
+{
+  if( !Internal ) Internal = new char[128+4];
+  memset( Internal, 0, 128 );
+  strncpy( Internal+128, "DICM", 4);
+}
+
+void Preamble::Remove()
+{
+  delete[] Internal;
+  Internal = 0; // important
+}
+
 // \precondition we are at the beginning of file
 std::ostream const &Preamble::Write(std::ostream &os) const
 {
 //  assert ( os.tellg()+0 == 0 );
-  if( IsEmpty() )
+  if( Internal )
     {
-    // Set it to default 0x0 bytes followed by magic "DICM":
-//    FIXME... apparently rewritting an ACR-NEMA file + Preamble is not supported by gdcm
-//    char dicm[128];
-//    memset( dicm, 0, 128 );
-//    os.write( dicm, 128);
-//    os.write( "DICM" , 4);
-    }
-  else if( IsValid() ) // User suplied one
-  {
     os.write( Internal, 128+4);
-  }
-  else
-  {
-	  abort();
-  }
+    }
 
-  // \postcondition a valid Preamble has been written to stream
+  // \postcondition a valid Preamble has been writen to stream
   return os;
 }
 

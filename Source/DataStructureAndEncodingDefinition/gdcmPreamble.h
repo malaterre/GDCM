@@ -33,6 +33,11 @@ public:
   // Clear
   void Clear();
 
+  // Set Preamble to the default one
+  void Valid();
+  void Create();
+  void Remove();
+
  // Read
   std::istream &Read(std::istream &is);
 
