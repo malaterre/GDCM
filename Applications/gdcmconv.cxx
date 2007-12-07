@@ -64,6 +64,7 @@
 #include "gdcmWriter.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmDataSet.h"
+#include "gdcmSequenceOfItems.h"
 
 #include <string>
 #include <iostream>
@@ -72,6 +73,13 @@
 #include <stdlib.h>    /* for exit */
 #include <getopt.h>
 #include <string.h>
+
+struct SetSQToUndefined
+{
+  void operator() (gdcm::DataElement &de) {
+    de.SetVLToUndefined();
+  }
+};
 
 int main (int argc, char *argv[])
 {
@@ -189,15 +197,24 @@ int main (int argc, char *argv[])
     return 1;
     }
 
+#if 0
   // if preamble create:
   gdcm::File f(reader.GetFile());
   gdcm::Preamble p;
   p.Create();
   f.SetPreamble(p);
+#endif
+  gdcm::DataSet ds = reader.GetFile().GetDataSet();
+  SetSQToUndefined undef;
+  ds.ExecuteOperation(undef);
+
+  gdcm::File f(reader.GetFile());
+  f.SetDataSet(ds);
 
   gdcm::Writer writer;
   writer.SetFileName( outfilename.c_str() );
   writer.SetFile( f );
+  //writer.SetFile( reader.GetFile() );
   if( !writer.Write() )
     {
     std::cerr << "Failed to write: " << outfilename << std::endl;

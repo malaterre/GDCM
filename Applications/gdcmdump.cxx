@@ -153,7 +153,6 @@ int main (int argc, char *argv[])
     }
   // else
   int res = 0;
-  gdcm::Reader reader;
   if( gdcm::System::FileIsDirectory( filename.c_str() ) )
     {
     gdcm::Directory d;
