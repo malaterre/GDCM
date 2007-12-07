@@ -162,6 +162,17 @@ public:
     return *this;
   }
 
+  template <typename TOperation>
+  void ExecuteOperation(TOperation & operation) {
+    assert( !DES.empty() );
+    DataElementSet::iterator it = Begin();
+    for( ; it != End(); ++it)
+      {
+      gdcm::DataElement &de = (gdcm::DataElement&)*it;
+      operation( de );
+      }
+  }
+
   template <typename TDE, typename TSwap>
   std::istream &ReadNested(std::istream &is);
 

@@ -53,6 +53,10 @@ public:
   void SetLength(VL length) {
     SequenceLengthField = length;
   }
+  void SetLengthToUndefined() {
+    SequenceLengthField = 0xFFFFFFFF;
+  }
+
   template <typename TDE>
   VL ComputeLength() const;
   void Clear() {}

@@ -35,6 +35,9 @@ public:
   bool IsUndefined() const {
     return ValueLength == 0xFFFFFFFF;
   }
+  void SetToUndefined() {
+    ValueLength = 0xFFFFFFFF;
+  }
 
   bool IsOdd() const {
     return !IsUndefined() && ValueLength % 2;

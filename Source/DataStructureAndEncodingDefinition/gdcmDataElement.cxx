@@ -20,6 +20,16 @@
 
 namespace gdcm
 {
+  void DataElement::SetVLToUndefined() { 
+    gdcm::Value &v = GetValue();
+    gdcm::SequenceOfItems *sq = dynamic_cast<gdcm::SequenceOfItems*>(&v);
+    if( sq )
+      {
+std::cerr << "Found:" << TagField << std::endl;
+      sq->SetLengthToUndefined();
+      ValueLengthField.SetToUndefined();
+      }
+  }
 
 
 } // end namespace gdcm

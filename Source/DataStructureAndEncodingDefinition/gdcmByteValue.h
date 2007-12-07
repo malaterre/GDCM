@@ -73,7 +73,18 @@ public:
     // I cannot use reserve for now. I need to implement:
     // STL - vector<> and istream
     // http://groups.google.com/group/comp.lang.c++/msg/37ec052ed8283e74
-    Internal.resize(l);
+//#define SHORT_READ_HACK
+    try
+      {
+#ifdef SHORT_READ_HACK
+    if( l <= 0xff )
+#endif
+      Internal.resize(l);
+      }
+    catch(...)
+      {
+      exit(1);
+      }
     //Internal.reserve(l);
     // Keep the exact length
     Length = vl;
@@ -127,7 +138,7 @@ public:
     // initialize values to 0 so we are sure to have a \0 at the end
     // even in this case
 #ifdef SHORT_READ_HACK
-    if( Length > 0xfff )
+    if( Length > 0xff )
       {
       is.seekg(Length, std::ios::cur);
       }

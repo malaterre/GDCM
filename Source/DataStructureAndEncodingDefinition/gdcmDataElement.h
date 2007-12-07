@@ -67,6 +67,7 @@ public:
   // Set/Get VL
   const VL& GetVL() const { return ValueLengthField; }
   void SetVL(const VL &vl) { ValueLengthField = vl; }
+  void SetVLToUndefined();
 
   // Set/Get VR
   VR const &GetVR() const { return VRField; }
@@ -74,6 +75,7 @@ public:
 
   // Set/Get Value (bytes array, SQ of items, SQ of fragments):
   Value const &GetValue() const { return *ValueField; }
+  Value &GetValue() { return *ValueField; }
   void SetValue(Value const & vl) {
     //assert( ValueField == 0 );
     ValueField = &vl;
