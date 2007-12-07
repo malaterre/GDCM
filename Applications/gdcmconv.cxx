@@ -92,18 +92,21 @@ int main (int argc, char *argv[])
         {"vr", 1, 0, 0}, // valid
         {"sop", 1, 0, 0}, // default to SC...
         {"iod", 1, 0, 0}, // valid
-        {"pixeldata", 1, 0, 0}, // valid
         {"meta", 1, 0, 0}, // valid / create / remove
         {"dataset", 1, 0, 0}, // valid / create / remove?
         {"sequence", 1, 0, 0}, // defined / undefined 
+        {"deflate", 1, 0, 0}, // 1 - 9 / best = 9 / fast = 1
+        {"tag", 1, 0, 0}, // need to specify a tag xxxx,yyyy = value to override default
+        {"name", 1, 0, 0}, // same as tag but explicit use of name
+// Image specific options:
+        {"pixeldata", 1, 0, 0}, // valid
         {"raw", 1, 0, 0}, // default (implicit VR, LE) / Explicit LE / Explicit BE
         {"jpeg", 1, 0, 0}, // JPEG lossy
         {"jpegll", 1, 0, 0}, // JPEG lossless
         {"jpegls", 1, 0, 0}, // JPEG-LS: lossy / lossless
         {"j2k", 1, 0, 0}, // J2K: lossy / lossless
-        {"deflate", 1, 0, 0}, // 1 - 9 / best = 9 / fast = 1
         {"rle", 1, 0, 0}, // lossless !
-        {"mpeg2", 1, 0, 0}, // lossless !
+        {"mpeg2", 1, 0, 0}, // lossy !
         {"jpip", 1, 0, 0}, // ??
         {0, 0, 0, 0}
     };
