@@ -15,8 +15,10 @@
 =========================================================================*/
 #include "gdcmDirectory.h"
 
-int TestDirectory(int , char *[])
+int TestDirectory(int argc, char *argv[])
 {
   gdcm::Directory d;
+  d.Load( argv[1] );
+  d.Print( std::cout );
   return 0;
 }
