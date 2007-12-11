@@ -59,3 +59,5 @@ wanted to
 Need to handle image rotation/flip
 (0070,0041) CS [Y]                                      #   2, 1 ImageHorizontalFlip
 (0070,0042) US 270                                      #   2, 1 ImageRotation
+-----------------------------------------------------------------------
+FIX !! the gdcm::VM it is a pain to use. make it more gdcm::VR like !
