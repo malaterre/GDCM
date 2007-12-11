@@ -113,7 +113,19 @@ inline std::ostream& operator<<(std::ostream& _os, const Dict &_val)
 class GDCM_EXPORT PrivateDict
 {
   typedef std::map<Tag, PrivateDictEntry> MapDictEntry;
+  friend std::ostream& operator<<(std::ostream& _os, const PrivateDict &_val);
 public:
+  PrivateDict() {}
+  ~PrivateDict() {}
+  void AddDictEntry(const Tag &tag, const PrivateDictEntry &de)
+    {
+#ifndef NDEBUG
+    MapDictEntry::size_type s = DictInternal.size();
+#endif
+    DictInternal.insert(
+      MapDictEntry::value_type(tag, de));
+    assert( s < DictInternal.size() );
+    }
   const DictEntry &GetDictEntry(const Tag &tag, const char *owner = NULL) const
     {
     // if 0x10 -> return Private Creator
@@ -144,6 +156,19 @@ private:
 
   MapDictEntry DictInternal;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream& operator<<(std::ostream& _os, const PrivateDict &_val)
+{
+  PrivateDict::MapDictEntry::const_iterator it = _val.DictInternal.begin();
+  for(;it != _val.DictInternal.end(); ++it)
+    {
+    const Tag &t = it->first;
+    const PrivateDictEntry &de = it->second;
+    _os << t << " " << de << '\n';
+    }
+
+  return _os;
+}
 
 } // end namespace gdcm
 
