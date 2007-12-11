@@ -26,6 +26,7 @@ namespace gdcm
 /**
  * \brief Class for representing a XMLDictReader
  * \note bla
+ * Will read the DICOMV3.xml file
  */
 class GDCM_EXPORT XMLDictReader : public TableReader
 {

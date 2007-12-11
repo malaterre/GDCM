@@ -40,7 +40,7 @@ namespace gdcm
  * from this DOM implementation. In GDCM 1.x user used to be able to
  * control the size of the Value to be read. By default it was 0xfff.
  * The main author of GDCM2 thought this was too dangerous and harmful and
- * therefore this feaure did not make it into GDCM2
+ * therefore this feature did not make it into GDCM2
  *
  * WARNING:
  * GDCM will not produce warning for unorder (non-alphabetical order). 

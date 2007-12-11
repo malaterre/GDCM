@@ -21,7 +21,7 @@
 namespace gdcm
 {
 
-XMLDictReader::XMLDictReader():ParsingDescription(false)
+XMLDictReader::XMLDictReader():ParsingDescription(false),Description()
 {
 }
 

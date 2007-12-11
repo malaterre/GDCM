@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="gdcm2html.xsl"?>
-<!-- to produce output use:
-$ xsltproc gdcm2html.xsl GDCM2.xml
- -->
 <!--
 Most of this file was automatically generated. Using the following:
 
- $ xsltproc oo.xsl 07_06_oowriter.xml > 2
- $ xmllint - -format 2 > GDCM2.xml
+ $ xsltproc oo.xsl 07_06_oowriter.xml > bla
+ $ xmllint - -format bla > GDCM2.xml
 
 Exceptions:
 * version attribute was done using dicom3tools dictionary
 * uAs and KVP were manually modified
+
+Description:
+* This is now the default dictionary for GDCM.
+* DICOMV3.dic is now directly derived from it using a XSLT script
 -->
 <!--
   Program: GDCM (Grass Root DICOM). A DICOM library
