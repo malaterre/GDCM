@@ -18,5 +18,6 @@
 int TestDictEntry(int, char *[])
 {
   gdcm::DictEntry de(0,0,0);
+  std::cout << sizeof(de) << std::endl;
   return 0;
 }
