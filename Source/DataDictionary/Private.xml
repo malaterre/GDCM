@@ -18,23 +18,19 @@
      PURPOSE.  See the above copyright notice for more information.
 -->
 <dict edition="2007">
-  <entry group="0001" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0001" element="0002" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0001" element="000e" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
-  <entry group="0003" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0003" element="0002" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0003" element="0003" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0003" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0003" element="1000" vr="UN" vm="1" owner="AEGIS_DICOM_2.00" version="AEG"/>
-  <entry group="0003" element="3000" vr="UI" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0005" element="0008" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0005" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0005" element="0011" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0005" element="1000" vr="UN" vm="1" owner="AEGIS_DICOM_2.00" version="AEG"/>
   <entry group="0007" element="0008" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0007" element="000a" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
-  <entry group="0009" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0009" element="0009" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0009" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0009" element="0011" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
@@ -168,7 +164,6 @@
   <entry group="0009" element="1210" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0009" element="1212" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0009" element="1213" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
-  <entry group="0009" element="1214" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0009" element="1214" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0009" element="1215" vr="LO" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
   <entry group="0009" element="1215" vr="UN" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
@@ -179,10 +174,8 @@
   <entry group="0009" element="1218" vr="UN" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
   <entry group="0009" element="1220" vr="SH" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
   <entry group="0009" element="1226" vr="DA" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
-  <entry group="0009" element="1226" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0009" element="1226" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0009" element="1227" vr="TM" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
-  <entry group="0009" element="1227" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0009" element="1227" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0009" element="1261" vr="LO" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
   <entry group="0009" element="12a0" vr="LT" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
@@ -201,10 +194,8 @@
   <entry group="0009" element="1315" vr="LO" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
   <entry group="0009" element="1315" vr="UN" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
   <entry group="0009" element="1316" vr="LO" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
-  <entry group="0009" element="1316" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0009" element="1316" vr="UN" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
   <entry group="0009" element="1320" vr="SH" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
-  <entry group="0009" element="1320" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0009" element="1320" vr="UN" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
   <entry group="0009" element="1415" vr="UN" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
   <entry group="0009" element="1416" vr="UN" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
@@ -241,8 +232,6 @@
   <entry group="0009" element="3172" vr="UN" vm="1" owner="SIENET" version="SSPI"/>
   <entry group="0009" element="3175" vr="UN" vm="1" owner="SIENET" version="SSPI"/>
   <entry group="000d" element="001b" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
-  <entry group="000f" element="ffff" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0011" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0011" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0011" element="0011" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0011" element="0012" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
@@ -425,7 +414,6 @@
   <entry group="0011" element="1123" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0011" element="1140" vr="IS" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0011" element="1140" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
-  <entry group="0013" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0013" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0013" element="0018" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0013" element="1010" vr="FD" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
@@ -450,7 +438,6 @@
   <entry group="0013" element="1022" vr="FD" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0013" element="1023" vr="LO" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0013" element="1026" vr="LT" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0015" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0015" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0015" element="005a" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0015" element="1001" vr="UN" vm="1" owner="DLX_EXAMS_01" version="DLX"/>
@@ -470,10 +457,6 @@
   <entry group="0015" element="1084" vr="DS" vm="1" owner="XXXXXXXXXXXXXXXX" version="ANO"/>
   <entry group="0015" element="108f" vr="IS" vm="1" owner="GEMS_DL_STUDY_01" version="GEM"/>
   <entry group="0015" element="108f" vr="IS" vm="1" owner="XXXXXXXXXXXXXXXX" version="ANO"/>
-  <entry group="0015" element="6467" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0015" element="6d69" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0015" element="7661" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0017" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0017" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0017" element="0018" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0017" element="1000" vr="UN" vm="1" owner="        MED NM" version="ANO"/>
@@ -482,7 +465,6 @@
   <entry group="0017" element="1020" vr="UN" vm="1" owner="        MED NM" version="ANO"/>
   <entry group="0017" element="1070" vr="UN" vm="1" owner="        MED NM" version="ANO"/>
   <entry group="0017" element="1080" vr="UN" vm="1" owner="        MED NM" version="ANO"/>
-  <entry group="0019" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0019" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0019" element="0011" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0019" element="0012" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
@@ -500,7 +482,6 @@
   <entry group="0019" element="00fe" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0019" element="1000" vr="CS" vm="1" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
   <entry group="0019" element="1000" vr="CS" vm="2" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
-  <entry group="0019" element="1000" vr="DS" vm="2" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0019" element="1000" vr="DS" vm="2" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1000" vr="SH" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
   <entry group="0019" element="1000" vr="UN" vm="1" owner="AEGIS_DICOM_2.00" version="AEG"/>
@@ -590,14 +571,12 @@
   <entry group="0019" element="1010" vr="DS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1010" vr="IS" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0019" element="1010" vr="IS" vm="2" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
-  <entry group="0019" element="1010" vr="LT" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0019" element="1010" vr="UN" vm="1" owner="AGFA" version="AGFA"/>
   <entry group="0019" element="1010" vr="UN" vm="1" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
   <entry group="0019" element="1010" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
   <entry group="0019" element="1010" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1010" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0019" element="1010" vr="UN" vm="1" owner="SPI-P-GV-CT Release 1 " version="PSPI"/>
-  <entry group="0019" element="1011" vr="LT" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0019" element="1011" vr="SH" vm="1" owner="SIEMENS MR HEADER " version="SSPI"/>
   <entry group="0019" element="1011" vr="SS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1011" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
@@ -680,7 +659,6 @@
   <entry group="0019" element="101e" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="101f" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
   <entry group="0019" element="1020" vr="CS" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
-  <entry group="0019" element="1020" vr="LT" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0019" element="1020" vr="SH" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
   <entry group="0019" element="1020" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0019" element="1020" vr="UN" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
@@ -689,7 +667,6 @@
   <entry group="0019" element="1021" vr="DS" vm="1" owner="DLX_SERIE_01" version="DLX"/>
   <entry group="0019" element="1021" vr="DS" vm="1" owner="XXXXXXXXX_xx" version="ANO"/>
   <entry group="0019" element="1021" vr="FD" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
-  <entry group="0019" element="1021" vr="LT" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0019" element="1021" vr="UN" vm="1" owner="ADAC_IMG" version="ADAC"/>
   <entry group="0019" element="1021" vr="UN" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
   <entry group="0019" element="1022" vr="DS" vm="1" owner="DLX_SERIE_01" version="DLX"/>
@@ -753,10 +730,8 @@
   <entry group="0019" element="102f" vr="DS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="102f" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1030" vr="CS" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
-  <entry group="0019" element="1030" vr="LT" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0019" element="1030" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0019" element="1030" vr="UN" vm="1" owner="SIEMENS RA PLANE A" version="SSPI"/>
-  <entry group="0019" element="1031" vr="LT" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0019" element="1032" vr="UN" vm="1" owner="FDMS 1.0" version="FUJ"/>
   <entry group="0019" element="1032" vr="UN" vm="1" owner="SIEMENS RA PLANE A" version="SSPI"/>
   <entry group="0019" element="1034" vr="UN" vm="1" owner="SIEMENS RA PLANE A" version="SSPI"/>
@@ -767,7 +742,6 @@
   <entry group="0019" element="103a" vr="UN" vm="1" owner="SIEMENS RA PLANE A" version="SSPI"/>
   <entry group="0019" element="103c" vr="UN" vm="1" owner="SIEMENS RA PLANE A" version="SSPI"/>
   <entry group="0019" element="103e" vr="UN" vm="1" owner="SIEMENS RA PLANE A" version="SSPI"/>
-  <entry group="0019" element="1040" vr="LT" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0019" element="1040" vr="SS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1040" vr="UN" vm="1" owner="FDMS 1.0" version="FUJ"/>
   <entry group="0019" element="1040" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
@@ -790,7 +764,6 @@
   <entry group="0019" element="1044" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1044" vr="UN" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
   <entry group="0019" element="1044" vr="UN" vm="1" owner="SIEMENS RA PLANE A" version="SSPI"/>
-  <entry group="0019" element="1045" vr="LT" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0019" element="1046" vr="UN" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
   <entry group="0019" element="1046" vr="UN" vm="1" owner="SIEMENS RA PLANE A" version="SSPI"/>
   <entry group="0019" element="1047" vr="SS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
@@ -810,7 +783,6 @@
   <entry group="0019" element="1050" vr="IS" vm="1" owner="GEMS_DL_IMG_01" version="GEM"/>
   <entry group="0019" element="1050" vr="IS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1050" vr="IS" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
-  <entry group="0019" element="1050" vr="LT" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0019" element="1050" vr="UN" vm="1" owner="FDMS 1.0" version="FUJ"/>
   <entry group="0019" element="1050" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1050" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
@@ -1257,7 +1229,6 @@
   <entry group="0019" element="110d" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="110e" vr="IS" vm="1" owner="PHILIPS MR/LAST " version="PSPI"/>
   <entry group="0019" element="1110" vr="DS" vm="1" owner="SIEMENS MR VA0  GEN " version="SSPI"/>
-  <entry group="0019" element="1110" vr="LT" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0019" element="1111" vr="DS" vm="1" owner="SIEMENS MR VA0  GEN " version="SSPI"/>
   <entry group="0019" element="1112" vr="DS" vm="1" owner="SIEMENS MR VA0  GEN " version="SSPI"/>
   <entry group="0019" element="1113" vr="DS" vm="1" owner="SIEMENS MR VA0  GEN " version="SSPI"/>
@@ -1266,7 +1237,6 @@
   <entry group="0019" element="1118" vr="UL" vm="1" owner="SIEMENS MR VA0  GEN " version="SSPI"/>
   <entry group="0019" element="1120" vr="IS" vm="1" owner="SIEMENS CT VA0  GEN " version="SSPI"/>
   <entry group="0019" element="1120" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN " version="SSPI"/>
-  <entry group="0019" element="1120" vr="LT" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0019" element="1120" vr="UN" vm="1" owner="SIEMENS CT VA0  GEN " version="SSPI"/>
   <entry group="0019" element="1120" vr="UN" vm="1" owner="SIEMENS RA PLANE B" version="SSPI"/>
   <entry group="0019" element="1121" vr="DS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
@@ -1299,7 +1269,6 @@
   <entry group="0019" element="112e" vr="UN" vm="1" owner="SIEMENS RA PLANE B" version="SSPI"/>
   <entry group="0019" element="1130" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN " version="SSPI"/>
   <entry group="0019" element="1130" vr="LO" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1130" vr="LT" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0019" element="1130" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1130" vr="UN" vm="1" owner="SIEMENS RA PLANE B" version="SSPI"/>
   <entry group="0019" element="1131" vr="DS" vm="3" owner="PHILIPS MR/PART " version="PSPI"/>
@@ -2023,7 +1992,6 @@
   <entry group="001b" element="0018" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="001d" element="0019" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="001d" element="001d" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
-  <entry group="0021" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0021" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0021" element="0011" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0021" element="0012" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
@@ -2099,7 +2067,6 @@
   <entry group="0021" element="1018" vr="UN" vm="1" owner="GEMS_RELA_01" version="GEM"/>
   <entry group="0021" element="1019" vr="UL" vm="1" owner="GEMS_RELA_01" version="GEM"/>
   <entry group="0021" element="1019" vr="UN" vm="1" owner="GEMS_RELA_01" version="GEM"/>
-  <entry group="0021" element="1020" vr="IS" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0021" element="1020" vr="IS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0021" element="1020" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0021" element="1020" vr="UN" vm="1" owner="SIEMENS MED " version="SSPI"/>
@@ -2122,7 +2089,6 @@
   <entry group="0021" element="1036" vr="UN" vm="1" owner="GEMS_RELA_01" version="GEM"/>
   <entry group="0021" element="1037" vr="SS" vm="1" owner="GEMS_RELA_01" version="GEM"/>
   <entry group="0021" element="1037" vr="UN" vm="1" owner="GEMS_RELA_01" version="GEM"/>
-  <entry group="0021" element="1040" vr="IS" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0021" element="1040" vr="IS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0021" element="1040" vr="UN" vm="1" owner="FDMS 1.0" version="FUJ"/>
   <entry group="0021" element="1040" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
@@ -2320,7 +2286,6 @@
   <entry group="0021" element="2352" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW " version="SSPI"/>
   <entry group="0021" element="2353" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW " version="SSPI"/>
   <entry group="0021" element="2354" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW " version="SSPI"/>
-  <entry group="0023" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0023" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0023" element="1070" vr="FD" vm="1" owner="GEMS_STDY_01" version="GEM"/>
   <entry group="0023" element="1070" vr="UN" vm="1" owner="GEMS_STDY_01" version="GEM"/>
@@ -2328,7 +2293,6 @@
   <entry group="0023" element="1074" vr="UN" vm="1" owner="GEMS_STDY_01" version="GEM"/>
   <entry group="0023" element="107d" vr="SS" vm="1" owner="GEMS_STDY_01" version="GEM"/>
   <entry group="0023" element="107d" vr="UN" vm="1" owner="GEMS_STDY_01" version="GEM"/>
-  <entry group="0025" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0025" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0025" element="0020" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0025" element="1000" vr="UN" vm="1" owner="Siemens: Thorax/Multix FD Raw Image Settings" version="SSPI"/>
@@ -2382,7 +2346,6 @@
   <entry group="0025" element="101a" vr="UN" vm="1" owner="GEMS_SERS_01" version="GEM"/>
   <entry group="0025" element="101b" vr="OB" vm="1" owner="GEMS_SERS_01" version="GEM"/>
   <entry group="0025" element="101b" vr="UN" vm="1" owner="GEMS_SERS_01" version="GEM"/>
-  <entry group="0027" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0027" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0027" element="0029" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0027" element="1006" vr="SL" vm="1" owner="GEMS_IMAG_01" version="GEM"/>
@@ -2458,7 +2421,6 @@
   <entry group="0027" element="1061" vr="UN" vm="1" owner="GEMS_IMAG_01" version="GEM"/>
   <entry group="0027" element="1062" vr="FL" vm="1" owner="GEMS_IMAG_01" version="GEM"/>
   <entry group="0027" element="1062" vr="UN" vm="1" owner="GEMS_IMAG_01" version="GEM"/>
-  <entry group="0029" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0029" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0029" element="0011" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0029" element="0012" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
@@ -2769,18 +2731,15 @@
   <entry group="0029" element="6035" vr="LO" vm="1" owner="ATL PRIVATE TAGS" version="GDCM:UNKNOWN"/>
   <entry group="0029" element="fd00" vr="SQ" vm="1" owner="INTEGRIS 1.0" version="INT1"/>
   <entry group="002f" element="0038" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
-  <entry group="0031" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0031" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0031" element="0012" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0031" element="1001" vr="UN" vm="1" owner="        MED NM" version="ANO"/>
   <entry group="0031" element="100c" vr="UN" vm="1" owner="        MED NM" version="ANO"/>
-  <entry group="0033" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0033" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0033" element="1002" vr="UN" vm="1" owner="MITRA OBJECT UTF8 ATTRIBUTES 1.0" version="MIT"/>
   <entry group="0033" element="1004" vr="UN" vm="1" owner="MITRA OBJECT UTF8 ATTRIBUTES 1.0" version="MIT"/>
   <entry group="0033" element="1007" vr="LO" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0033" element="1008" vr="UN" vm="1" owner="MITRA OBJECT UTF8 ATTRIBUTES 1.0" version="MIT"/>
-  <entry group="0039" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0039" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0039" element="0011" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0039" element="0012" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
@@ -2799,7 +2758,6 @@
   <entry group="0039" element="5090" vr="TM" vm="1" owner="GEMS_ADWSoft_DPO1 " version="GEM"/>
   <entry group="0039" element="5095" vr="LO" vm="1" owner="GEMS_ADWSoft_DPO1 " version="GEM"/>
   <entry group="0039" element="50aa" vr="CS" vm="1" owner="GEMS_ADWSoft_DPO1 " version="GEM"/>
-  <entry group="0041" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0041" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0041" element="0080" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0041" element="1009" vr="UN" vm="1" owner="PHILIPS MR/LAST " version="PSPI"/>
@@ -2811,7 +2769,6 @@
   <entry group="0041" element="8010" vr="UN" vm="1" owner="PAPYRUS 3.0 " version="PA3"/>
   <entry group="0041" element="8015" vr="UN" vm="1" owner="PAPYRUS 3.0 " version="PA3"/>
   <entry group="0041" element="8050" vr="UN" vm="1" owner="PAPYRUS 3.0 " version="PA3"/>
-  <entry group="0043" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0043" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0043" element="1001" vr="SS" vm="1" owner="GEMS_PARM_01" version="GEM"/>
   <entry group="0043" element="1001" vr="UN" vm="1" owner="GEMS_PARM_01" version="GEM"/>
@@ -3009,7 +2966,6 @@
   <entry group="0043" element="1098" vr="UI" vm="1" owner="GEMS_PARM_01" version="GEM"/>
   <entry group="0043" element="1098" vr="UN" vm="1" owner="GEMS_PARM_01" version="GEM"/>
   <entry group="0043" element="109a" vr="IS" vm="1" owner="GEMS_PARM_01" version="GEM"/>
-  <entry group="0045" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0045" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0045" element="004f" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0045" element="1001" vr="SS" vm="1" owner="GEMS_HELIOS_01" version="GEM"/>
@@ -3071,7 +3027,6 @@
   <entry group="0045" element="1038" vr="CS" vm="1" owner="GEMS_HELIOS_01" version="GEM"/>
   <entry group="0045" element="1039" vr="CS" vm="1" owner="GEMS_HELIOS_01" version="GEM"/>
   <entry group="0045" element="103b" vr="LO" vm="1" owner="GEMS_HELIOS_01" version="GEM"/>
-  <entry group="0047" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0047" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0047" element="0020" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0047" element="10e9" vr="FL" vm="3" owner="GEMS_3DSTATE_001" version="GEM"/>
@@ -3107,14 +3062,11 @@
   <entry group="0047" element="20f6" vr="DS" vm="1" owner="GEMS_ADWSoft_3D1" version="GEM"/>
   <entry group="0047" element="20f7" vr="DS" vm="1" owner="GEMS_ADWSoft_3D1" version="GEM"/>
   <entry group="0047" element="20f8" vr="DS" vm="1" owner="GEMS_ADWSoft_3D1" version="GEM"/>
-  <entry group="0049" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0049" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0049" element="1001" vr="SQ" vm="1" owner="GEMS_CT_CARDIAC_001 " version="GEM"/>
   <entry group="0049" element="100c" vr="FL" vm="1-n" owner="GEMS_CT_CARDIAC_001 " version="GEM"/>
-  <entry group="004b" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="004b" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="004b" element="1001" vr="UN" vm="1" owner="GEMS_CT_HINO_01 " version="GEM"/>
-  <entry group="0051" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0051" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0051" element="1008" vr="CS" vm="1" owner="SIEMENS MR HEADER " version="SSPI"/>
   <entry group="0051" element="1008" vr="UN" vm="1" owner="SIEMENS MR HEADER " version="SSPI"/>
@@ -3149,7 +3101,6 @@
   <entry group="0051" element="1019" vr="LO" vm="1" owner="SIEMENS MR HEADER " version="SSPI"/>
   <entry group="0051" element="1019" vr="UN" vm="1" owner="SIEMENS MR HEADER " version="SSPI"/>
   <entry group="0053" element="0054" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
-  <entry group="0055" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0055" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0055" element="1012" vr="SQ" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0055" element="1020" vr="OB" vm="1" owner="VEPRO VIF 3.0 DATA" version="VV3D"/>
@@ -3191,7 +3142,6 @@
   <entry group="0055" element="10c2" vr="UN" vm="1" owner="        MED NM" version="ANO"/>
   <entry group="0055" element="10c3" vr="UN" vm="1" owner="        MED NM" version="ANO"/>
   <entry group="0055" element="10c4" vr="UN" vm="1" owner="        MED NM" version="ANO"/>
-  <entry group="0059" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0059" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0059" element="1010" vr="SQ" vm="1" owner="VEPRO DICOM TRANSFER 1.0" version="VDT1"/>
   <entry group="005b" element="0036" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
@@ -3207,7 +3157,6 @@
   <entry group="0091" element="1020" vr="PN" vm="1" owner="SIENET" version="SSPI"/>
   <entry group="0093" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0093" element="1002" vr="UN" vm="1" owner="SIENET" version="SSPI"/>
-  <entry group="0095" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="0095" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0095" element="1004" vr="UL" vm="1" owner="SIENET" version="SSPI"/>
   <entry group="0095" element="100c" vr="UL" vm="1" owner="SIENET" version="SSPI"/>
@@ -3215,10 +3164,7 @@
   <entry group="0099" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0099" element="1002" vr="UL" vm="1" owner="SIENET" version="SSPI"/>
   <entry group="0099" element="1005" vr="SL" vm="1" owner="SIENET" version="SSPI"/>
-  <entry group="00a1" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="00b5" element="00f3" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
-  <entry group="00cb" element="0168" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="00e1" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="00e1" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="00e1" element="1001" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="00e1" element="1001" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
@@ -3250,24 +3196,16 @@
   <entry group="00e1" element="1061" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="00e1" element="1063" vr="SH" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="00e1" element="1063" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
-  <entry group="00e3" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="00e3" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="00e3" element="1000" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="00e3" element="101a" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/>
-  <entry group="00ff" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="00ff" element="0030" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="00ff" element="30ff" vr="UN" vm="1" owner="Array DICOM private elements version1.0 " version="GDCM:UNKNOWN"/>
-  <entry group="00ff" element="4aa5" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0101" element="0101" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0103" element="0001" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
-  <entry group="0137" element="0139" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="015d" element="015c" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="01e1" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="01e1" element="1017" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="01e1" element="101f" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="01e1" element="1023" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
-  <entry group="01e7" element="01e6" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="01f1" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="01f1" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="01f1" element="1001" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="01f1" element="1001" vr="CS" vm="2" owner="ELSCINT1" version="EL1"/>
@@ -3346,7 +3284,6 @@
   <entry group="01f3" element="1018" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="01f3" element="1019" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="01f3" element="1023" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
-  <entry group="01f7" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="01f7" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="01f7" element="1010" vr="OB" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="01f7" element="1010" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
@@ -3408,32 +3345,13 @@
   <entry group="01f7" element="1075" vr="OW" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="01f7" element="1075" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="01f7" element="1077" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
-  <entry group="01fd" element="01fd" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0207" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0207" element="101f" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
-  <entry group="020d" element="0202" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0269" element="0267" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="026b" element="026a" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0343" element="034b" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0369" element="036f" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0373" element="c094" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="038d" element="0380" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="03e7" element="03ea" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="040b" element="0404" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="040d" element="0404" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="046d" element="044d" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="050f" element="0505" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="056d" element="0d94" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="05c1" element="0564" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0601" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0601" element="1000" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
-  <entry group="0607" element="0606" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0707" element="0707" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0711" element="0707" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0781" element="0030" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0781" element="3001" vr="US" vm="1" owner="PI Private Block (0781:3000 - 0781:30FF)" version="GDCM:UNKNOWN"/>
   <entry group="0781" element="3002" vr="US" vm="1" owner="PI Private Block (0781:3000 - 0781:30FF)" version="GDCM:UNKNOWN"/>
-  <entry group="07a1" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="07a1" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="07a1" element="100a" vr="OB" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="07a1" element="100a" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
@@ -3468,57 +3386,11 @@
   <entry group="07a3" element="1055" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="07a3" element="1062" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="07a3" element="1065" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
-  <entry group="0807" element="0809" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="080b" element="0808" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0845" element="4688" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0851" element="45c6" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="0905" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0905" element="1030" vr="LO" vm="1" owner="GEIIS " version="GEM"/>
-  <entry group="0907" element="0909" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="090b" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
-  <entry group="0a01" element="0a0a" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0a0d" element="213c" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0a0d" element="2d2d" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0a0d" element="535b" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0a0d" element="6156" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0a0d" element="783c" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0a23" element="2023" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0b05" element="0b0b" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0b09" element="0b0b" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0c7d" element="468d" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0d03" element="0d0d" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0d0b" element="0d16" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0d0d" element="0d0d" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0d23" element="230a" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0d79" element="0c85" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0dff" element="0dfe" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0dff" element="ffe0" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0f03" element="0f0f" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0f0f" element="0f0f" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="0f39" element="46c2" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="130d" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="1369" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="1369" element="1000" vr="UN" vm="1" owner="AEGIS_DICOM_2.00" version="AEG"/>
-  <entry group="140b" element="1414" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="140d" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
-  <entry group="140d" element="1000" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="150d" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
-  <entry group="160d" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="160d" element="0001" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
-  <entry group="160d" element="1000" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="160d" element="1001" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="170d" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
-  <entry group="170d" element="1000" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="1907" element="1919" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="1917" element="1919" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="1917" element="9d04" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="191b" element="191b" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="1a19" element="1a1a" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="1a71" element="30c6" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="1b17" element="1b1b" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="1c09" element="1c1c" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="1e31" element="9253" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="2001" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="2001" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="2001" element="0011" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="2001" element="0090" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
@@ -3818,7 +3690,6 @@
   <entry group="2001" element="fc53" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001" version="PMFE"/>
   <entry group="2001" element="fc5f" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001" version="PMFE"/>
   <entry group="2001" element="fc60" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001" version="PMFE"/>
-  <entry group="2005" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="2005" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="2005" element="0011" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="2005" element="0012" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
@@ -4583,7 +4454,6 @@
   <entry group="2005" element="fba0" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 " version="PMFE"/>
   <entry group="2005" element="fba1" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 " version="PMFE"/>
   <entry group="2005" element="fba2" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 " version="PMFE"/>
-  <entry group="2007" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="2007" element="0025" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="2007" element="2535" vr="SQ" vm="1" owner="Philips EV Imaging DD 022 " version="GDCM:UNKNOWN"/>
   <entry group="200d" element="0020" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
@@ -4691,48 +4561,13 @@
   <entry group="200d" element="3977" vr="UN" vm="1" owner="Philips US Imaging DD 042 " version="GDCM:UNKNOWN"/>
   <entry group="200d" element="3a05" vr="UN" vm="1" owner="Philips US Imaging DD 043 " version="GDCM:UNKNOWN"/>
   <entry group="200d" element="6000" vr="UN" vm="1" owner="Philips US Imaging DD 081 " version="GDCM:UNKNOWN"/>
-  <entry group="2011" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="2011" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="2011" element="1011" vr="UN" vm="1" owner="FDMS 1.0" version="FUJ"/>
-  <entry group="2023" element="3d3d" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="2023" element="6552" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="2023" element="6554" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="2023" element="6953" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="2023" element="6f72" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="2023" element="7476" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="2025" element="6353" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="2025" element="6e49" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="2025" element="6f6c" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="2025" element="7845" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="202d" element="6148" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="2123" element="622f" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="2123" element="752f" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="21f5" element="ff7c" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="2323" element="2323" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="2a2f" element="0a0d" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="2a2f" element="3d3d" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="2d23" element="2d2d" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="2e2b" element="362f" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="2e2f" element="7663" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="2f2f" element="0a0d" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="2f2f" element="2d20" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="2f2f" element="2d2d" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="2f2f" element="6964" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="3001" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="3001" element="1001" vr="UL" vm="1" owner="Philips3D " version="PM3D"/>
   <entry group="3001" element="1002" vr="US" vm="1" owner="Philips3D " version="PM3D"/>
   <entry group="3001" element="1003" vr="FD" vm="1" owner="Philips3D " version="PM3D"/>
   <entry group="3001" element="1004" vr="UI" vm="1" owner="Philips3D " version="PM3D"/>
-  <entry group="3023" element="3030" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="3023" element="3031" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="3023" element="3034" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="3023" element="3131" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="3023" element="4630" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="302f" element="3130" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="3031" element="2e30" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="3031" element="3031" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="3031" element="3636" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="3109" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="3109" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="3109" element="0011" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="3109" element="1002" vr="SH" vm="1" owner="Applicare/RadWorks/Version 5.0" version="APL"/>
@@ -4745,137 +4580,31 @@
   <entry group="3109" element="100b" vr="UN" vm="1" owner="Applicare/RadWorks/Version 5.0" version="APL"/>
   <entry group="3109" element="1112" vr="ST" vm="1" owner="Applicare/RadWorks/Version 6.0/Summary" version="APL"/>
   <entry group="3109" element="1112" vr="UN" vm="1" owner="Applicare/RadWorks/Version 6.0/Summary" version="APL"/>
-  <entry group="3123" element="3030" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="31fb" element="a7e3" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="3241" element="1001" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="3241" element="1003" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="3297" element="9732" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="34c5" element="6f89" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="351b" element="eaf4" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="3531" element="3632" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="3531" element="3938" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="3815" element="b111" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="3831" element="3930" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="391f" element="1f02" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="3ca7" element="001e" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
-  <entry group="3d23" element="3d3d" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="3d3d" element="203e" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="3d3d" element="3d3d" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="3e03" element="31bf" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="3ebf" element="fcf5" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="3eff" element="e3e6" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="3f01" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="3f01" element="1001" vr="UN" vm="1" owner="INTELERAD MEDICAL SYSTEMS " version="IMS"/>
   <entry group="3f01" element="1003" vr="UN" vm="1" owner="INTELERAD MEDICAL SYSTEMS " version="IMS"/>
   <entry group="3f01" element="1004" vr="UN" vm="1" owner="INTELERAD MEDICAL SYSTEMS " version="IMS"/>
   <entry group="3f01" element="1005" vr="UN" vm="1" owner="INTELERAD MEDICAL SYSTEMS " version="IMS"/>
-  <entry group="4023" element="5e7e" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="4301" element="3044" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="4305" element="dbb1" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="435b" element="4944" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="435b" element="4e4f" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="435b" element="6d6f" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="4443" element="0146" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="4449" element="5f44" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="445b" element="5349" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="454d" element="2032" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="4623" element="3046" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="4623" element="3846" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="4623" element="4646" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="465b" element="4c49" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="4947" element="3846" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="4949" element="002a" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
-  <entry group="494d" element="3a53" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="4953" element="4d45" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="495f" element="2052" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="4c5b" element="7961" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="4d49" element="4647" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="4d49" element="4741" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="4d5b" element="646f" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="4f23" element="6c6e" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="4f4f" element="7bf1" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="5025" element="4644" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="505b" element="6573" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="505b" element="6c61" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="5089" element="474e" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="508b" element="0310" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="50f1" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="50f1" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="50f1" element="1006" vr="UN" vm="1" owner="FDMS 1.0" version="FUJ"/>
   <entry group="50f1" element="1007" vr="UN" vm="1" owner="FDMS 1.0" version="FUJ"/>
   <entry group="50f1" element="1010" vr="UN" vm="1" owner="FDMS 1.0" version="FUJ"/>
   <entry group="50f1" element="1020" vr="UN" vm="1" owner="FDMS 1.0" version="FUJ"/>
-  <entry group="524d" element="3149" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="524d" element="4249" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="524d" element="505f" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="5345" element="2443" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="5345" element="2843" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="5345" element="2943" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="5345" element="2d43" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="5349" element="5f4f" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="534d" element="4643" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="5355" element="412d" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="5357" element="458b" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="535b" element="524f" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="535b" element="7465" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="5443" element="505f" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="5449" element="4653" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="5641" element="5053" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="5653" element="3031" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="565b" element="4d49" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="57bb" element="e142" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="5955" element="556c" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="5a4d" element="0050" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="5a4d" element="0080" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="5a4d" element="0090" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
-  <entry group="5a4d" element="0110" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="5c7b" element="7472" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="5d51" element="4d6b" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="5e97" element="b59e" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="5f3f" element="0003" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
-  <entry group="5f3f" element="cf97" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="5f99" element="5db4" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="6003" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="6003" element="1010" vr="SQ" vm="1" owner="GEMS_Ultrasound_ImageGroup_001" version="GEM"/>
   <entry group="6021" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="6021" element="1000" vr="CS" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="6021" element="1010" vr="OB" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
-  <entry group="6097" element="2856" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6157" element="6576" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="615b" element="7475" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="616d" element="2d74" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6177" element="6576" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6433" element="6544" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6463" element="7320" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6467" element="6d63" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6527" element="7c7a" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6547" element="656e" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6553" element="7474" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6557" element="6320" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6557" element="6c6c" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6623" element="6665" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6623" element="6666" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6923" element="6e66" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6953" element="6574" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6b03" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="6b03" element="0021" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="6b03" element="2100" vr="OB" vm="1" owner="SFS1.00 " version="SFS"/>
   <entry group="6b03" element="2101" vr="OB" vm="1" owner="SFS1.00 " version="SFS"/>
-  <entry group="6c41" element="206c" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6c63" element="6165" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6d6f" element="6570" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6e41" element="6520" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6e49" element="6973" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6e49" element="7420" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6e55" element="6f63" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6e55" element="6f64" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6e69" element="6f66" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6f15" element="4e4d" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6f4d" element="7473" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6f59" element="2075" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="6f63" element="6f6c" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="6fc7" element="0003" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
-  <entry group="7001" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="7001" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="7001" element="1001" vr="OB" vm="1" owner="PATRIOT_PRIVATE_IMAGE_DATA" version="PPID"/>
   <entry group="7001" element="1001" vr="UI" vm="1" owner="Picker NM Private Group " version="PCK"/>
@@ -4887,10 +4616,8 @@
   <entry group="7001" element="1010" vr="UN" vm="1" owner="SIEMENS MED " version="SSPI"/>
   <entry group="7001" element="1017" vr="LO" vm="1" owner="Picker NM Private Group " version="PCK"/>
   <entry group="7001" element="1017" vr="UN" vm="1" owner="Picker NM Private Group " version="PCK"/>
-  <entry group="7003" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="7003" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="7003" element="1010" vr="UN" vm="1" owner="SIEMENS MED " version="SSPI"/>
-  <entry group="7005" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="7005" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="7005" element="1007" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
   <entry group="7005" element="1008" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
@@ -4918,8 +4645,6 @@
   <entry group="7005" element="1023" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
   <entry group="7005" element="1024" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
   <entry group="7005" element="1030" vr="UN" vm="1" owner="TOSHIBA_MEC_CT3 " version="TSH"/>
-  <entry group="7029" element="b58a" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="7063" element="5320" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="7079" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="7079" element="1021" vr="SH" vm="1" owner="TOSHIBA_MEC_XA3 " version="TSH"/>
   <entry group="7079" element="1022" vr="IS" vm="2" owner="TOSHIBA_MEC_XA3 " version="TSH"/>
@@ -4985,30 +4710,9 @@
   <entry group="7101" element="1004" vr="UN" vm="1" owner="Picker MR Private Group " version="PCK"/>
   <entry group="7101" element="1005" vr="UN" vm="1" owner="Picker MR Private Group " version="PCK"/>
   <entry group="7101" element="1006" vr="UN" vm="1" owner="Picker MR Private Group " version="PCK"/>
-  <entry group="7189" element="8b10" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="7247" element="756f" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="7263" element="002f" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
-  <entry group="7265" element="616c" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="7341" element="7520" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="734d" element="7667" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="7355" element="2065" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="7355" element="7265" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="7453" element="6e61" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="7465" element="616d" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="7489" element="2c24" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="752f" element="f07d" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="7543" element="7272" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="75ff" element="5614" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="764f" element="7265" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="7707" element="7777" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="7777" element="7777" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="7777" element="ffff" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="7b83" element="03e7" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="7f7f" element="7fc9" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="7fd1" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="7fd1" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="7fd1" element="1010" vr="UL" vm="1" owner="GEIIS " version="GEM"/>
-  <entry group="7fdf" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
   <entry group="7fdf" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="7fdf" element="00fe" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="7fdf" element="1000" vr="IS" vm="1" owner="ACUSON:1.2.840.113680.1.0 " version="ACU"/>
@@ -5024,80 +4728,12 @@
   <entry group="7fdf" element="10ff" vr="SH" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="7fdf" element="10ff" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="7fdf" element="fe00" vr="OB" vm="1" owner="ACUSON:1.2.840.113680.1.0:7ffe" version="ACU"/>
-  <entry group="7fdf" element="fe00" vr="OB" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="7fe1" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="7fe1" element="1001" vr="SQ" vm="1" owner="GEMS_Ultrasound_MovieGroup_001" version="GEM"/>
   <entry group="7fe1" element="1010" vr="OB" vm="1" owner="SIEMENS CSA NON-IMAGE " version="SSPI"/>
   <entry group="7fe1" element="1010" vr="OB" vm="1" owner="TOSHIBA MDW NON-IMAGE " version="TSH"/>
-  <entry group="80a5" element="b038" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="835b" element="0cc4" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="858d" element="ffec" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="85d7" element="89d2" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="85ff" element="7cc0" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="868b" element="04e0" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="8b1f" element="0008" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
-  <entry group="8b1f" element="0808" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="8b53" element="245c" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="8bc9" element="0679" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="8bf7" element="8dfb" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="8bff" element="3c80" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="91fb" element="e55d" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="9401" element="ab01" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="95df" element="ab7a" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="98e7" element="e48c" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="9d1f" element="0590" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="9d1f" element="0890" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="9d5b" element="158e" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="a2a3" element="a1a1" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="a2a3" element="a2a1" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="a4a9" element="6aac" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="aa47" element="91e8" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="abfd" element="24e7" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="aded" element="76cb" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="af91" element="03ee" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="b695" element="4396" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="b8b7" element="9571" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="b8c3" element="f29c" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="ba7f" element="f320" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="bbbb" element="bbbb" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="bbe1" element="fcf1" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="bbef" element="3cbf" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="be31" element="3f3f" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="bf8b" element="8c9c" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="c483" element="5d1c" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="c657" element="b317" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="c67b" element="94a5" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="c8e1" element="dfc2" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="cb3f" element="9ad2" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="cc8b" element="6489" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="d0e9" element="e046" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="d3bf" element="f7f0" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="d3eb" element="0025" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
-  <entry group="d403" element="7503" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="d569" element="0009" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
-  <entry group="d8ff" element="e0ff" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="d8ff" element="e1ff" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="d9c5" element="e39e" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="db33" element="c483" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="de23" element="31be" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="de8f" element="9611" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="dfdf" element="e7e7" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="e27f" element="8b6f" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="e779" element="6d78" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="e88f" element="0000" vr="UL" vm="1" owner="" version="EMPTY!"/>
-  <entry group="e9e9" element="e9e9" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="f031" element="c4b7" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="f053" element="e764" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="f1cf" element="feae" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="f2e9" element="b7eb" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="f303" element="fe03" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="f37d" element="ca15" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
   <entry group="f67d" element="00ff" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
-  <entry group="f86b" element="8f52" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="fbb9" element="b932" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="fc2d" element="fc34" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="fca1" element="02b0" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="fd6f" element="2a3d" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="fe31" element="3563" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
-  <entry group="ff85" element="850f" vr="UN" vm="1" owner="NO PRIVATE CREATOR" version="BLA"/>
 </dict>
