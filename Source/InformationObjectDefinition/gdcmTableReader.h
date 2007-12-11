@@ -17,7 +17,6 @@
 #define __gdcmTableReader_h
 
 #include "gdcmTypes.h"
-#include "gdcmTable.h"
 
 #include <string>
 #include <vector>
@@ -26,7 +25,7 @@ namespace gdcm
 {
 /**
  * \brief Class for representing a TableReader
- * \note bla
+ * \note This class is an empty shell meant to be derived
  */
 class GDCM_EXPORT TableReader
 {
@@ -40,9 +39,14 @@ public:
 
   int Read();
 
+//protected:
+  // You need to override those function in your subclasses:
+  virtual void StartElement(const char *name, const char **atts);
+  virtual void EndElement(const char *name);
+  virtual void CharacterDataHandler(const char *data, int length);
+
 private:
   std::string Filename;
-  std::vector<Table> Tables;
 };
 
 } // end namespace gdcm

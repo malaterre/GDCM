@@ -40,24 +40,48 @@ namespace gdcm
 
 static void XMLCALL startElement(void *userData, const char *name, const char **atts)
 {
+  TableReader *tr = reinterpret_cast<TableReader*>(userData);
+  tr->StartElement(name, atts);
+}
+
+static void XMLCALL endElement(void *userData, const char *name)
+{
+  TableReader *tr = reinterpret_cast<TableReader*>(userData);
+  tr->EndElement(name);
+}
+
+static void XMLCALL characterDataHandler(void* userData, const char* data,
+  int length)
+{
+  TableReader *tr = reinterpret_cast<TableReader*>(userData);
+  tr->CharacterDataHandler(data,length);
+}
+
+
+void TableReader::StartElement(const char *name, const char **atts)
+{
   int i;
-  int *depthPtr = (int *)userData;
+  //int *depthPtr = (int *)userData;
 //  for (i = 0; i < *depthPtr; i++)
 //    putchar('\t');
   std::cout << name << " : " << atts[0] << "=" << atts[1] << std::endl;
   if( strcmp(name, "Table" ) == 0 )
     {
-    *depthPtr += 1;
+    //*depthPtr += 1;
     }
   else
     {
     }
 }
 
-static void XMLCALL endElement(void *userData, const char *name)
+void TableReader::EndElement(const char *name)
 {
-  int *depthPtr = (int *)userData;
-  *depthPtr -= 1;
+//  int *depthPtr = (int *)userData;
+//  *depthPtr -= 1;
+}
+
+void TableReader::CharacterDataHandler(const char *data, int length)
+{
 }
 
 int TableReader::Read()
@@ -67,9 +91,11 @@ int TableReader::Read()
   char buf[BUFSIZ];
   XML_Parser parser = XML_ParserCreate(NULL);
   int done;
-  int depth = 0;
-  XML_SetUserData(parser, &depth);
+  //int depth = 0;
+  XML_SetUserData(parser, this);
   XML_SetElementHandler(parser, startElement, endElement);
+  XML_SetCharacterDataHandler(parser, characterDataHandler);
+  int ret = 0;
   do {
     is.read(buf, sizeof(buf));
     size_t len = is.gcount();
@@ -79,12 +105,13 @@ int TableReader::Read()
         "%s at line %" XML_FMT_INT_MOD "u\n",
         XML_ErrorString(XML_GetErrorCode(parser)),
         XML_GetCurrentLineNumber(parser));
-      return 1;
+      ret = 1; // Mark as error
+      done = 1; // exit while
     }
   } while (!done);
   XML_ParserFree(parser);
   is.close();
-  return 0;
+  return ret;
 }
 
 } // end namespace gdcm

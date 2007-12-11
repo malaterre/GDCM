@@ -4,6 +4,7 @@ SET(IOD_SRCS
   gdcmTableReader.cxx
   gdcmTable.cxx
   gdcmType.cxx
+  gdcmXMLDictReader.cxx
   )
 
 # expat stuff
@@ -19,11 +20,13 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
+  "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Utilities"
   )
 
 ADD_LIBRARY(gdcmIOD ${IOD_SRCS})
-TARGET_LINK_LIBRARIES(gdcmIOD gdcmCommon gdcmexpat)
+#TARGET_LINK_LIBRARIES(gdcmIOD gdcmCommon gdcmexpat)
+TARGET_LINK_LIBRARIES(gdcmIOD gdcmDSED gdcmCommon gdcmexpat)
 
 #-----------------------------------------------------------------------------
 FILE(GLOB GDCM_XML_TABLES_GLOB
