@@ -6,6 +6,7 @@ SET(IOD_TEST_SRCS
   TestTableEntry
   TestType
   TestModule
+  TestXMLDictReader
   )
 
 # Add the include paths
@@ -13,6 +14,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
+  "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   "${GDCM_BINARY_DIR}/Source/InformationObjectDefinition" # gdcmTables.h
   )
