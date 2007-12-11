@@ -40,18 +40,18 @@ public:
     if(name) Name = name;
     ValueRepresentation = vr;
     ValueMultiplicity = vm;
-    RGE.SetB<0>( ret ); // Retired
-    RGE.SetB<1>( false ); // GroupXX
-    RGE.SetB<2>( false ); // ElementXX
+    Retired = ret;
+    GroupXX = false;
+    ElementXX = false;
   }
   // FIXME
   DictEntry(const char *name, const char *vr, const char *vm) {
     if(name) Name = name;
     ValueRepresentation = VR::GetVRType(vr);
     ValueMultiplicity = VM::GetVMType(vm);
-    RGE.SetB<0>( false ); // Retired
-    RGE.SetB<1>( false ); // GroupXX
-    RGE.SetB<2>( false ); // ElementXX
+    Retired = false;
+    GroupXX = false;
+    ElementXX = false;
   }
 
   friend std::ostream& operator<<(std::ostream& _os, const DictEntry &_val);
@@ -68,43 +68,21 @@ public:
   // same as GetName but without spaces
   const char *GetKeyword() const { return ""; }
 
-  const bool GetRetired() const { return RGE.GetB<0>(); }
+  const bool GetRetired() const { return Retired; }
 
   // <entry group="50xx" element="0005" vr="US" vm="1" retired="true" version="3">
-  void SetGroupXX(bool v) { RGE.SetB<1>( v ); }
+  void SetGroupXX(bool v) { GroupXX = v; }
 
   // <entry group="0020" element="31xx" vr="CS" vm="1-n" retired="true" version="2">
-  void SetElementXX(bool v) { RGE.SetB<2>( v ); }
+  void SetElementXX(bool v) { ElementXX = v; }
 
 private:
   std::string Name;
   VR ValueRepresentation;
   VM::VMType ValueMultiplicity;
-  // FIXME: need a union !!!
-  //bool Retired;
-  //bool GroupXX;
-  //bool ElementXX;
-
-  // Compact struct to store 3 booleans:
-  struct B3
-  {
-    template <unsigned int TPos>
-    void SetB(bool v) {
-      if( v ) b.b |= (0x80 >> TPos%8);
-      else b.b &= (~(0x80 >> TPos%8));
-    }
-    template <unsigned int TPos>
-    bool GetB() const {
-      return b.b & (0x80 >> (TPos%8));
-    }
-  private:
-    union { unsigned char b; } b;
-  };
-  // Map:
-  // Retired : 0
-  // GroupXX : 1
-  // ElementXX : 2
-  B3 RGE; // Retired / GroupXX / ElementXX
+  bool Retired : 1;
+  bool GroupXX : 1 ;
+  bool ElementXX : 1;
 };
 
 class GDCM_EXPORT PrivateDictEntry : public DictEntry
