@@ -68,7 +68,7 @@ public:
   // same as GetName but without spaces
   const char *GetKeyword() const { return ""; }
 
-  const bool GetRetired() const { return Retired; }
+  bool GetRetired() const { return Retired; }
 
   // <entry group="50xx" element="0005" vr="US" vm="1" retired="true" version="3">
   void SetGroupXX(bool v) { GroupXX = v; }
