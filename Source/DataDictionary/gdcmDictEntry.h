@@ -89,8 +89,10 @@ class GDCM_EXPORT PrivateDictEntry : public DictEntry
 {
 public:
   PrivateDictEntry(const char *name, VR::VRType const &vr, VM::VMType const &vm , bool ret = false, const char *owner = 0):DictEntry(name,vr,vm,ret),Owner(owner) {}
+  PrivateDictEntry(const char *name, const char *vr, const char *vm):DictEntry(name,vr,vm) {}
 
   const char *GetOwner() const { return Owner.c_str(); }
+  void SetOwner(const char *owner) { Owner = owner; }
 
 private:
   // SIEMENS MED, GEMS_PETD_01 ...
