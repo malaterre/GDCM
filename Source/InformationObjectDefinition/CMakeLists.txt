@@ -5,6 +5,7 @@ SET(IOD_SRCS
   gdcmTable.cxx
   gdcmType.cxx
   gdcmXMLDictReader.cxx
+  gdcmXMLPrivateDictReader.cxx
   )
 
 # expat stuff
