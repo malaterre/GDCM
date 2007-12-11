@@ -41,12 +41,12 @@ public:
   static DictEntry GroupLengthDictEntry; // = DictEntry("Group Length",VR::UL,VM::VM1);
 
   Dict() {
-    FillDICOMV3DataDict();
-    FillNIHDataDict();
-//  FillSPIDataDict();
-   Tag t(0, 0);
-   DictEntry e( "", (VR::VRType)0, (VM::VMType)0);
-   AddDictEntry( t, e );
+//    FillDICOMV3DataDict();
+//    FillNIHDataDict();
+////  FillSPIDataDict();
+//   Tag t(0, 0);
+//   DictEntry e( "", (VR::VRType)0, (VM::VMType)0);
+//   AddDictEntry( t, e );
   }
 
   friend std::ostream& operator<<(std::ostream& _os, const Dict &_val);

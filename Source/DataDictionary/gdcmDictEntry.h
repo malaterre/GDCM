@@ -36,17 +36,22 @@ namespace gdcm
 class GDCM_EXPORT DictEntry
 {
 public:
-  DictEntry(const char *name, VR::VRType const &vr, VM::VMType const &vm , bool ret = false) {
+  DictEntry(const char *name = "", VR::VRType const &vr = VR::INVALID, VM::VMType const &vm = VM::VM0, bool ret = false) {
     if(name) Name = name;
     ValueRepresentation = vr;
     ValueMultiplicity = vm;
     Retired = ret;
+    GroupXX = false;
+    ElementXX = false;
   }
   // FIXME
   DictEntry(const char *name, const char *vr, const char *vm) {
     if(name) Name = name;
     ValueRepresentation = VR::GetVRType(vr);
     ValueMultiplicity = VM::GetVMType(vm);
+    Retired = false;
+    GroupXX = false;
+    ElementXX = false;
   }
 
   friend std::ostream& operator<<(std::ostream& _os, const DictEntry &_val);
@@ -58,17 +63,27 @@ public:
   VM::VMType GetVM() const { return ValueMultiplicity; }
 
   const char *GetName() const { return Name.c_str(); }
+  void SetName(const char* name) { Name = name; }
 
   // same as GetName but without spaces
   const char *GetKeyword() const { return ""; }
 
   const bool GetRetired() const { return Retired; }
 
+  // <entry group="50xx" element="0005" vr="US" vm="1" retired="true" version="3">
+  void SetGroupXX(bool v) { GroupXX = v; }
+
+  // <entry group="0020" element="31xx" vr="CS" vm="1-n" retired="true" version="2">
+  void SetElementXX(bool v) { ElementXX = v; }
+
 private:
   std::string Name;
   VR ValueRepresentation;
   VM::VMType ValueMultiplicity;
+  // FIXME: need a union !!!
   bool Retired;
+  bool GroupXX;
+  bool ElementXX;
 };
 
 class GDCM_EXPORT PrivateDictEntry : public DictEntry
