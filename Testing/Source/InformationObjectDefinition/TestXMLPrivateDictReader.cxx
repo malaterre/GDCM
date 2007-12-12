@@ -22,7 +22,8 @@ int TestXMLPrivateDictReader(int argc, char *argv[])
   tr.SetFilename(filename);
   tr.Read();
 
-  std::cout << tr.GetPrivateDict() << std::endl;
+  //std::cout << tr.GetPrivateDict() << std::endl;
+  tr.GetPrivateDict().PrintXML();
 
   return 0;
 }
