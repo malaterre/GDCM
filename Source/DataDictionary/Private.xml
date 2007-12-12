@@ -47,17 +47,13 @@
   <entry group="0009" element="1000" vr="UN" vm="1" owner="SPI-P-GV-CT Release 1 " version="PSPI"/>
   <entry group="0009" element="1001" vr="LO" vm="1" owner="GEMS_IDEN_01" version="GEM"/>
   <entry group="0009" element="1001" vr="SH" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0009" element="1001" vr="UN" vm="1" owner="GEMS_IDEN_01" version="GEM"/>
   <entry group="0009" element="1002" vr="SH" vm="1" owner="GEMS_IDEN_01" version="GEM"/>
-  <entry group="0009" element="1002" vr="UN" vm="1" owner="GEMS_IDEN_01" version="GEM"/>
   <entry group="0009" element="1004" vr="SH" vm="1" owner="GEMS_IDEN_01" version="GEM"/>
   <entry group="0009" element="1004" vr="UN" vm="1" owner="FDMS 1.0" version="FUJ"/>
-  <entry group="0009" element="1004" vr="UN" vm="1" owner="GEMS_IDEN_01" version="GEM"/>
   <entry group="0009" element="1005" vr="UN" vm="1" owner="FDMS 1.0" version="FUJ"/>
   <entry group="0009" element="1006" vr="UN" vm="1" owner="FDMS 1.0" version="FUJ"/>
   <entry group="0009" element="1008" vr="LO" vm="1" owner="SPI Release 1 " version="SPI"/>
   <entry group="0009" element="1008" vr="UN" vm="1" owner="FDMS 1.0" version="FUJ"/>
-  <entry group="0009" element="1008" vr="UN" vm="1" owner="SPI Release 1 " version="SPI"/>
   <entry group="0009" element="1009" vr="UN" vm="1" owner="FDMS 1.0" version="FUJ"/>
   <entry group="0009" element="100c" vr="UN" vm="1" owner="FDMS 1.0" version="FUJ"/>
   <entry group="0009" element="1010" vr="LO" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
@@ -66,7 +62,6 @@
   <entry group="0009" element="1010" vr="SQ" vm="1" owner="GEIIS " version="GEM"/>
   <entry group="0009" element="1010" vr="UN" vm="1" owner="FDMS 1.0" version="FUJ"/>
   <entry group="0009" element="1010" vr="UN" vm="1" owner="SIEMENS MED " version="SSPI"/>
-  <entry group="0009" element="1010" vr="UN" vm="1" owner="SPI RELEASE 1 " version="SPI"/>
   <entry group="0009" element="1010" vr="UN" vm="1" owner="SPI-P-GV-CT Release 1 " version="PSPI"/>
   <entry group="0009" element="1011" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0009" element="1011" vr="ST" vm="1" owner="MeVis eatDicom" version="MVD"/>
@@ -74,8 +69,6 @@
   <entry group="0009" element="1015" vr="LO" vm="1" owner="SPI RELEASE 1 " version="SPI"/>
   <entry group="0009" element="1015" vr="LO" vm="1" owner="SPI Release 1 " version="SPI"/>
   <entry group="0009" element="1015" vr="LO" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
-  <entry group="0009" element="1015" vr="UN" vm="1" owner="SPI RELEASE 1 " version="SPI"/>
-  <entry group="0009" element="1015" vr="UN" vm="1" owner="SPI Release 1 " version="SPI"/>
   <entry group="0009" element="1016" vr="LO" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
   <entry group="0009" element="1018" vr="LO" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
   <entry group="0009" element="101e" vr="UI" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
@@ -89,7 +82,6 @@
   <entry group="0009" element="1026" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0009" element="1027" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0009" element="1027" vr="SL" vm="1" owner="GEMS_IDEN_01" version="GEM"/>
-  <entry group="0009" element="1027" vr="UN" vm="1" owner="GEMS_IDEN_01" version="GEM"/>
   <entry group="0009" element="1028" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0009" element="1029" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0009" element="102a" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
@@ -99,10 +91,8 @@
   <entry group="0009" element="102f" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0009" element="1030" vr="LO" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0009" element="1030" vr="SH" vm="1" owner="GEMS_IDEN_01" version="GEM"/>
-  <entry group="0009" element="1030" vr="UN" vm="1" owner="GEMS_IDEN_01" version="GEM"/>
   <entry group="0009" element="1030" vr="UN" vm="1" owner="SPI-P-GV-CT Release 1 " version="PSPI"/>
   <entry group="0009" element="1031" vr="SH" vm="1" owner="GEMS_IDEN_01" version="GEM"/>
-  <entry group="0009" element="1031" vr="UN" vm="1" owner="GEMS_IDEN_01" version="GEM"/>
   <entry group="0009" element="1033" vr="FD" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0009" element="1035" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0009" element="1038" vr="UN" vm="1" owner="GEMS_PETD_01" version="GEM"/>
@@ -110,13 +100,11 @@
   <entry group="0009" element="103b" vr="UN" vm="1" owner="GEMS_PETD_01" version="GEM"/>
   <entry group="0009" element="103c" vr="UN" vm="1" owner="GEMS_PETD_01" version="GEM"/>
   <entry group="0009" element="103d" vr="UN" vm="1" owner="GEMS_PETD_01" version="GEM"/>
-  <entry group="0009" element="1040" vr="LO" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
+  <!--entry group="0009" element="1040" vr="LO" vm="1" owner="GEMS_GENIE_1" version="GEM"/-->
   <entry group="0009" element="1040" vr="PN" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0009" element="1040" vr="UN" vm="1" owner="SPI RELEASE 1 " version="SPI"/>
   <entry group="0009" element="1040" vr="US" vm="1" owner="SPI RELEASE 1 " version="SPI"/>
   <entry group="0009" element="1041" vr="SH" vm="1" owner="SPI RELEASE 1 " version="SPI"/>
   <entry group="0009" element="1041" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0009" element="1041" vr="UN" vm="1" owner="SPI RELEASE 1 " version="SPI"/>
   <entry group="0009" element="1042" vr="DA" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0009" element="1043" vr="TM" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0009" element="1045" vr="LT" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
@@ -130,25 +118,19 @@
   <entry group="0009" element="1090" vr="UN" vm="1" owner="SPI-P-GV-CT Release 1 " version="PSPI"/>
   <entry group="0009" element="1092" vr="UN" vm="1" owner="FDMS 1.0" version="FUJ"/>
   <entry group="0009" element="10e3" vr="UI" vm="1" owner="GEMS_IDEN_01" version="GEM"/>
-  <entry group="0009" element="10e3" vr="UN" vm="1" owner="GEMS_IDEN_01" version="GEM"/>
   <entry group="0009" element="10e6" vr="SH" vm="1" owner="GEMS_IDEN_01" version="GEM"/>
-  <entry group="0009" element="10e6" vr="UN" vm="1" owner="GEMS_IDEN_01" version="GEM"/>
   <entry group="0009" element="10e7" vr="UL" vm="1" owner="GEMS_IDEN_01" version="GEM"/>
-  <entry group="0009" element="10e7" vr="UN" vm="1" owner="GEMS_IDEN_01" version="GEM"/>
   <entry group="0009" element="10e9" vr="SL" vm="1" owner="GEMS_IDEN_01" version="GEM"/>
-  <entry group="0009" element="10e9" vr="UN" vm="1" owner="GEMS_IDEN_01" version="GEM"/>
   <entry group="0009" element="10f0" vr="UN" vm="1" owner="FDMS 1.0" version="FUJ"/>
   <entry group="0009" element="10f1" vr="UN" vm="1" owner="FDMS 1.0" version="FUJ"/>
   <entry group="0009" element="1100" vr="UN" vm="1" owner="HMC - CT - ID " version="HMC"/>
   <entry group="0009" element="1110" vr="CS" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0009" element="1110" vr="LO" vm="1" owner="PHILIPS MR" version="PSPI"/>
   <entry group="0009" element="1110" vr="SQ" vm="1" owner="GEIIS " version="GEM"/>
-  <entry group="0009" element="1110" vr="UN" vm="1" owner="PHILIPS MR" version="PSPI"/>
   <entry group="0009" element="1110" vr="UN" vm="1" owner="SIEMENS MED " version="SSPI"/>
   <entry group="0009" element="1110" vr="UN" vm="1" owner="SIENET" version="SSPI"/>
   <entry group="0009" element="1112" vr="LO" vm="1" owner="PHILIPS MR" version="PSPI"/>
   <entry group="0009" element="1112" vr="UL" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
-  <entry group="0009" element="1112" vr="UN" vm="1" owner="PHILIPS MR" version="PSPI"/>
   <entry group="0009" element="1113" vr="UL" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0009" element="1114" vr="UL" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0009" element="1115" vr="UN" vm="1" owner="SPI RELEASE 1 " version="SPI"/>
@@ -161,64 +143,41 @@
   <entry group="0009" element="1141" vr="UN" vm="1" owner="SIEMENS MED " version="SSPI"/>
   <entry group="0009" element="1200" vr="UN" vm="1" owner="MERGE TECHNOLOGIES, INC." version="MRG"/>
   <entry group="0009" element="1210" vr="CS" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
-  <entry group="0009" element="1210" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0009" element="1212" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0009" element="1213" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0009" element="1214" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0009" element="1215" vr="LO" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
-  <entry group="0009" element="1215" vr="UN" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
   <entry group="0009" element="1216" vr="LO" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
   <entry group="0009" element="1216" vr="LO" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
-  <entry group="0009" element="1216" vr="UN" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
   <entry group="0009" element="1218" vr="LO" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
-  <entry group="0009" element="1218" vr="UN" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
   <entry group="0009" element="1220" vr="SH" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
   <entry group="0009" element="1226" vr="DA" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
-  <entry group="0009" element="1226" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0009" element="1227" vr="TM" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
-  <entry group="0009" element="1227" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0009" element="1261" vr="LO" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
   <entry group="0009" element="12a0" vr="LT" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
   <entry group="0009" element="12f2" vr="LT" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
   <entry group="0009" element="1310" vr="LO" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
-  <entry group="0009" element="1310" vr="UN" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
   <entry group="0009" element="1310" vr="US" vm="1" owner="PHILIPS MR/PART 12" version="PMFE"/>
   <entry group="0009" element="1311" vr="LO" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
-  <entry group="0009" element="1311" vr="UN" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
   <entry group="0009" element="1312" vr="LO" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
-  <entry group="0009" element="1312" vr="UN" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
   <entry group="0009" element="1313" vr="LO" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
-  <entry group="0009" element="1313" vr="UN" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
   <entry group="0009" element="1314" vr="LO" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
-  <entry group="0009" element="1314" vr="UN" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
   <entry group="0009" element="1315" vr="LO" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
-  <entry group="0009" element="1315" vr="UN" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
   <entry group="0009" element="1316" vr="LO" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
-  <entry group="0009" element="1316" vr="UN" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
   <entry group="0009" element="1320" vr="SH" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
-  <entry group="0009" element="1320" vr="UN" vm="1" owner="SIEMENS CM VA0  LAB " version="SSPI"/>
   <entry group="0009" element="1415" vr="UN" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
   <entry group="0009" element="1416" vr="UN" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
   <entry group="0009" element="1418" vr="UN" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
   <entry group="0009" element="14f2" vr="UN" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
   <entry group="0009" element="14f7" vr="UN" vm="1" owner="SPI-P Release 1 " version="PSPI"/>
   <entry group="0009" element="2010" vr="LO" vm="1" owner="SIEMENS CT VA0  IDE " version="SSPI"/>
-  <entry group="0009" element="2010" vr="UN" vm="1" owner="SIEMENS CT VA0  IDE " version="SSPI"/>
   <entry group="0009" element="2030" vr="CS" vm="1" owner="SIEMENS CT VA0  IDE " version="SSPI"/>
-  <entry group="0009" element="2030" vr="UN" vm="1" owner="SIEMENS CT VA0  IDE " version="SSPI"/>
   <entry group="0009" element="2031" vr="SH" vm="1" owner="SIEMENS CT VA0  IDE " version="SSPI"/>
-  <entry group="0009" element="2031" vr="UN" vm="1" owner="SIEMENS CT VA0  IDE " version="SSPI"/>
   <entry group="0009" element="2032" vr="SH" vm="1" owner="SIEMENS CT VA0  IDE " version="SSPI"/>
-  <entry group="0009" element="2032" vr="UN" vm="1" owner="SIEMENS CT VA0  IDE " version="SSPI"/>
   <entry group="0009" element="2040" vr="LO" vm="1" owner="SIEMENS CT VA0  IDE " version="SSPI"/>
-  <entry group="0009" element="2040" vr="UN" vm="1" owner="SIEMENS CT VA0  IDE " version="SSPI"/>
   <entry group="0009" element="2042" vr="LO" vm="1" owner="SIEMENS CT VA0  IDE " version="SSPI"/>
-  <entry group="0009" element="2042" vr="UN" vm="1" owner="SIEMENS CT VA0  IDE " version="SSPI"/>
   <entry group="0009" element="2050" vr="DA" vm="1" owner="SIEMENS CT VA0  IDE " version="SSPI"/>
-  <entry group="0009" element="2050" vr="UN" vm="1" owner="SIEMENS CT VA0  IDE " version="SSPI"/>
   <entry group="0009" element="2051" vr="TM" vm="1" owner="SIEMENS CT VA0  IDE " version="SSPI"/>
-  <entry group="0009" element="2051" vr="UN" vm="1" owner="SIEMENS CT VA0  IDE " version="SSPI"/>
-  <entry group="0009" element="2110" vr="UN" vm="1" owner="PHILIPS MR/PART 12" version="PMFE"/>
   <entry group="0009" element="2110" vr="US" vm="1" owner="PHILIPS MR/PART 12" version="PMFE"/>
   <entry group="0009" element="2111" vr="UN" vm="1" owner="PHILIPS MR/PART 12" version="PMFE"/>
   <entry group="0009" element="2112" vr="UN" vm="1" owner="PHILIPS MR/PART 12" version="PMFE"/>
@@ -238,7 +197,6 @@
   <entry group="0011" element="0019" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0011" element="001e" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0011" element="1001" vr="ST" vm="1" owner="DLX_PATNT_01" version="DLX"/>
-  <entry group="0011" element="1001" vr="UN" vm="1" owner="DLX_PATNT_01" version="DLX"/>
   <entry group="0011" element="100a" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0011" element="100b" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0011" element="100c" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
@@ -247,62 +205,29 @@
   <entry group="0011" element="1010" vr="LO" vm="1" owner="SPI RELEASE 1 " version="SPI"/>
   <entry group="0011" element="1010" vr="SS" vm="1" owner="GEMS_PATI_01" version="GEM"/>
   <entry group="0011" element="1010" vr="UN" vm="1" owner="        MED NM" version="ANO"/>
-  <entry group="0011" element="1010" vr="UN" vm="1" owner="GEMS_PATI_01" version="GEM"/>
-  <entry group="0011" element="1010" vr="UN" vm="1" owner="SPI RELEASE 1 " version="SPI"/>
-  <entry group="0011" element="1011" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1011" vr="SL" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1011" vr="SL" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="1011" vr="SL" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0011" element="1012" vr="LO" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1012" vr="UN" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0011" element="1013" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0011" element="1014" vr="LO" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1015" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1015" vr="SL" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1015" vr="SL" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1016" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1016" vr="SL" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1016" vr="SL" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1017" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1017" vr="SL" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1017" vr="SL" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1018" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1018" vr="SL" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1018" vr="SL" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1019" vr="FD" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1019" vr="FD" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1019" vr="FD" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="101a" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="101a" vr="SL" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="101a" vr="SL" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="1015" vr="SL" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="1016" vr="SL" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="1017" vr="SL" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="1018" vr="SL" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="1019" vr="FD" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="101a" vr="SL" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0011" element="101b" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0011" element="101c" vr="SL" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="101f" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="101f" vr="SL" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="101f" vr="SL" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="101f" vr="SL" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0011" element="1020" vr="UN" vm="1" owner="SIEMENS RA GEN" version="SSPI"/>
   <entry group="0011" element="1023" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0011" element="1025" vr="UN" vm="1" owner="SIEMENS RA GEN" version="SSPI"/>
-  <entry group="0011" element="1026" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1026" vr="SL" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1026" vr="SL" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1027" vr="SL" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1027" vr="SL" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1027" vr="SL" vm="8" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1028" vr="SL" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1028" vr="SL" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1028" vr="SL" vm="8" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="102c" vr="FD" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="102c" vr="FD" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="102c" vr="FD" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="102d" vr="FD" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="102d" vr="FD" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="102d" vr="FD" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="102e" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="102e" vr="SL" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="102e" vr="SL" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="102f" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="102f" vr="SL" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="102f" vr="SL" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="1026" vr="SL" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="1027" vr="SL" vm="2-2n" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="1028" vr="SL" vm="2-2n" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="102c" vr="FD" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="102d" vr="FD" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="102e" vr="SL" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="102f" vr="SL" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0011" element="1030" vr="LO" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0011" element="1030" vr="UN" vm="1" owner="SIEMENS RA GEN" version="SSPI"/>
   <entry group="0011" element="1031" vr="LO" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
@@ -313,55 +238,25 @@
   <entry group="0011" element="1035" vr="UN" vm="1" owner="SIEMENS RA GEN" version="SSPI"/>
   <entry group="0011" element="1036" vr="LO" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0011" element="1037" vr="LT" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1038" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1038" vr="SL" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1038" vr="SL" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1039" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1039" vr="SL" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1039" vr="SL" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="103a" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="103a" vr="SL" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="103a" vr="SL" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="103b" vr="FD" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="103b" vr="FD" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="103b" vr="FD" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="103c" vr="FD" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="103c" vr="FD" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="103c" vr="FD" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="1038" vr="SL" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="1039" vr="SL" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="103a" vr="SL" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="103b" vr="FD" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="103c" vr="FD" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0011" element="103e" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="103f" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="103f" vr="SL" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="103f" vr="SL" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="103f" vr="SL" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0011" element="1040" vr="LO" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0011" element="1040" vr="UN" vm="1" owner="SIEMENS RA GEN" version="SSPI"/>
-  <entry group="0011" element="1041" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1041" vr="SL" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1041" vr="SL" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1042" vr="FD" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1042" vr="FD" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1042" vr="FD" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1043" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1043" vr="SL" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1043" vr="SL" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1044" vr="FD" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1044" vr="FD" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1044" vr="FD" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1045" vr="FD" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1045" vr="FD" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1045" vr="FD" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1046" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1046" vr="SL" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1046" vr="SL" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="1041" vr="SL" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="1042" vr="FD" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="1043" vr="SL" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="1044" vr="FD" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="1045" vr="FD" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="1046" vr="SL" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0011" element="1050" vr="LO" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1055" vr="FD" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1055" vr="FD" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1055" vr="FD" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1056" vr="FD" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1056" vr="FD" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1056" vr="FD" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1057" vr="FD" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1057" vr="FD" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0011" element="1057" vr="FD" vm="8" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="1055" vr="FD" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="1056" vr="FD" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0011" element="1057" vr="FD" vm="2-2n" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0011" element="1061" vr="SL" vm="3" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0011" element="1062" vr="FD" vm="3" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0011" element="1063" vr="FD" vm="3" owner="GEMS_GENIE_1" version="GEM"/>
@@ -406,26 +301,16 @@
   <entry group="0011" element="108c" vr="SL" vm="3" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0011" element="108d" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0011" element="1110" vr="DA" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
-  <entry group="0011" element="1110" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0011" element="1110" vr="UN" vm="1" owner="SPI RELEASE 1 " version="SPI"/>
   <entry group="0011" element="1111" vr="TM" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
-  <entry group="0011" element="1111" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0011" element="1123" vr="DS" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
-  <entry group="0011" element="1123" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0011" element="1140" vr="IS" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
-  <entry group="0011" element="1140" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0013" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0013" element="0018" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
-  <entry group="0013" element="1010" vr="FD" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0013" element="1010" vr="FD" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0013" element="1010" vr="FD" vm="8" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0013" element="1010" vr="FD" vm="2-2n" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0013" element="1011" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0013" element="1012" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0013" element="1012" vr="SL" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0013" element="1012" vr="SL" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0013" element="1015" vr="FD" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0013" element="1015" vr="FD" vm="2" owner="GEMS_GENIE_1" version="GEM"/>
-  <entry group="0013" element="1015" vr="FD" vm="4" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0013" element="1012" vr="SL" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
+  <entry group="0013" element="1015" vr="FD" vm="1-n" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0013" element="1016" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0013" element="1017" vr="SL" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
   <entry group="0013" element="1018" vr="FD" vm="1" owner="GEMS_GENIE_1" version="GEM"/>
@@ -480,204 +365,139 @@
   <entry group="0019" element="0040" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0019" element="0099" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0019" element="00fe" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
-  <entry group="0019" element="1000" vr="CS" vm="1" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
-  <entry group="0019" element="1000" vr="CS" vm="2" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
+  <entry group="0019" element="1000" vr="CS" vm="1-2" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
   <entry group="0019" element="1000" vr="DS" vm="2" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1000" vr="SH" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
   <entry group="0019" element="1000" vr="UN" vm="1" owner="AEGIS_DICOM_2.00" version="AEG"/>
-  <entry group="0019" element="1000" vr="UN" vm="1" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
-  <entry group="0019" element="1000" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1000" vr="UN" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
   <entry group="0019" element="1000" vr="UN" vm="1" owner="Siemens: Thorax/Multix FD Lab Settings" version="SSPI"/>
   <entry group="0019" element="1001" vr="DS" vm="1" owner="DLX_SERIE_01" version="DLX"/>
   <entry group="0019" element="1001" vr="DS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1001" vr="DS" vm="1" owner="XXXXXXXXX_xx" version="ANO"/>
-  <entry group="0019" element="1001" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
-  <entry group="0019" element="1001" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1002" vr="DS" vm="1" owner="DLX_SERIE_01" version="DLX"/>
   <entry group="0019" element="1002" vr="DS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1002" vr="DS" vm="1" owner="XXXXXXXXX_xx" version="ANO"/>
   <entry group="0019" element="1002" vr="IS" vm="1" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
   <entry group="0019" element="1002" vr="SL" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
-  <entry group="0019" element="1002" vr="UN" vm="1" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
-  <entry group="0019" element="1002" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
-  <entry group="0019" element="1002" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
-  <entry group="0019" element="1002" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1002" vr="UN" vm="1" owner="Siemens: Thorax/Multix FD Lab Settings" version="SSPI"/>
   <entry group="0019" element="1003" vr="DS" vm="1" owner="DLX_SERIE_01" version="DLX"/>
   <entry group="0019" element="1003" vr="DS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1003" vr="DS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1003" vr="DS" vm="1" owner="XXXXXXXXX_xx" version="ANO"/>
   <entry group="0019" element="1003" vr="FD" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
-  <entry group="0019" element="1003" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
-  <entry group="0019" element="1003" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
-  <entry group="0019" element="1003" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1003" vr="UN" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
   <entry group="0019" element="1004" vr="DS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1004" vr="IS" vm="1" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
-  <entry group="0019" element="1004" vr="UN" vm="1" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
   <entry group="0019" element="1004" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
-  <entry group="0019" element="1004" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1005" vr="DS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1005" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
-  <entry group="0019" element="1005" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1005" vr="UN" vm="1" owner="Siemens: Thorax/Multix FD Lab Settings" version="SSPI"/>
   <entry group="0019" element="1006" vr="DS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1006" vr="IS" vm="1" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
-  <entry group="0019" element="1006" vr="UN" vm="1" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
   <entry group="0019" element="1006" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
-  <entry group="0019" element="1006" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1006" vr="UN" vm="1" owner="Siemens: Thorax/Multix FD Lab Settings" version="SSPI"/>
   <entry group="0019" element="1007" vr="DS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1007" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
-  <entry group="0019" element="1007" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1007" vr="UN" vm="1" owner="Siemens: Thorax/Multix FD Lab Settings" version="SSPI"/>
   <entry group="0019" element="1008" vr="CS" vm="1" owner="SIEMENS MR HEADER " version="SSPI"/>
   <entry group="0019" element="1008" vr="IS" vm="1" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
   <entry group="0019" element="1008" vr="IS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1008" vr="UN" vm="1" owner="        MED NM" version="ANO"/>
-  <entry group="0019" element="1008" vr="UN" vm="1" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
   <entry group="0019" element="1008" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
-  <entry group="0019" element="1008" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1008" vr="UN" vm="1" owner="SPI-P-GV-CT Release 1 " version="PSPI"/>
   <entry group="0019" element="1008" vr="UN" vm="1" owner="Siemens: Thorax/Multix FD Lab Settings" version="SSPI"/>
   <entry group="0019" element="1009" vr="IS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1009" vr="LO" vm="1" owner="SIEMENS MR HEADER " version="SSPI"/>
   <entry group="0019" element="1009" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
-  <entry group="0019" element="1009" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1009" vr="UN" vm="1" owner="SPI-P-GV-CT Release 1 " version="PSPI"/>
   <entry group="0019" element="100a" vr="IS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="100a" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
-  <entry group="0019" element="100a" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="100a" vr="UN" vm="1" owner="SPI-P-GV-CT Release 1 " version="PSPI"/>
   <entry group="0019" element="100b" vr="DS" vm="1" owner="SIEMENS MR HEADER " version="SSPI"/>
   <entry group="0019" element="100c" vr="IS" vm="1" owner="SIEMENS MR HEADER " version="SSPI"/>
-  <entry group="0019" element="100c" vr="UN" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
   <entry group="0019" element="100c" vr="US" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
   <entry group="0019" element="100d" vr="CS" vm="1" owner="SIEMENS MR HEADER " version="SSPI"/>
   <entry group="0019" element="100d" vr="SH" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
-  <entry group="0019" element="100d" vr="UN" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
   <entry group="0019" element="100e" vr="FD" vm="3" owner="SIEMENS MR HEADER " version="SSPI"/>
   <entry group="0019" element="100f" vr="DS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="100f" vr="IS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="100f" vr="SH" vm="1" owner="SIEMENS MR HEADER " version="SSPI"/>
   <entry group="0019" element="100f" vr="UN" vm="1" owner="        MED NM" version="ANO"/>
-  <entry group="0019" element="100f" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
-  <entry group="0019" element="100f" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1010" vr="DS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1010" vr="IS" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0019" element="1010" vr="IS" vm="2" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
   <entry group="0019" element="1010" vr="UN" vm="1" owner="AGFA" version="AGFA"/>
-  <entry group="0019" element="1010" vr="UN" vm="1" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
   <entry group="0019" element="1010" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
-  <entry group="0019" element="1010" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1010" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0019" element="1010" vr="UN" vm="1" owner="SPI-P-GV-CT Release 1 " version="PSPI"/>
   <entry group="0019" element="1011" vr="SH" vm="1" owner="SIEMENS MR HEADER " version="SSPI"/>
   <entry group="0019" element="1011" vr="SS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1011" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
-  <entry group="0019" element="1011" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1012" vr="IS" vm="1" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
   <entry group="0019" element="1012" vr="SL" vm="3" owner="SIEMENS MR HEADER " version="SSPI"/>
   <entry group="0019" element="1012" vr="SS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
-  <entry group="0019" element="1012" vr="UN" vm="1" owner="CARDIO-D.R. 1.0 " version="PDIC"/>
-  <entry group="0019" element="1012" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1013" vr="SL" vm="3" owner="SIEMENS MR HEADER " version="SSPI"/>
   <entry group="0019" element="1013" vr="SS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1013" vr="UN" vm="1" owner="AGFA" version="AGFA"/>
-  <entry group="0019" element="1013" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1014" vr="CS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1014" vr="IS" vm="3" owner="SIEMENS MR HEADER " version="SSPI"/>
   <entry group="0019" element="1014" vr="SS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1014" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
-  <entry group="0019" element="1014" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
-  <entry group="0019" element="1014" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1015" vr="FD" vm="3" owner="SIEMENS MR HEADER " version="SSPI"/>
   <entry group="0019" element="1015" vr="IS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1015" vr="SS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1015" vr="UN" vm="1" owner="AGFA" version="AGFA"/>
   <entry group="0019" element="1015" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
   <entry group="0019" element="1015" vr="UN" vm="1" owner="FDMS 1.0" version="FUJ"/>
-  <entry group="0019" element="1015" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
-  <entry group="0019" element="1015" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1016" vr="DS" vm="1" owner="SIEMENS MR HEADER " version="SSPI"/>
   <entry group="0019" element="1016" vr="SS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1016" vr="UN" vm="1" owner="        MED NM" version="ANO"/>
   <entry group="0019" element="1016" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
-  <entry group="0019" element="1016" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1017" vr="DS" vm="1" owner="SIEMENS MR HEADER " version="SSPI"/>
   <entry group="0019" element="1017" vr="IS" vm="1" owner="DLX_SERIE_01" version="DLX"/>
   <entry group="0019" element="1017" vr="IS" vm="1" owner="XXXXXXXXX_xx" version="ANO"/>
   <entry group="0019" element="1017" vr="SS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
-  <entry group="0019" element="1017" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
-  <entry group="0019" element="1017" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1018" vr="IS" vm="1" owner="DLX_SERIE_01" version="DLX"/>
   <entry group="0019" element="1018" vr="IS" vm="1" owner="SIEMENS MR HEADER " version="SSPI"/>
   <entry group="0019" element="1018" vr="IS" vm="1" owner="XXXXXXXXX_xx" version="ANO"/>
   <entry group="0019" element="1018" vr="LO" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
-  <entry group="0019" element="1018" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
-  <entry group="0019" element="1018" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1019" vr="DS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1019" vr="IS" vm="1" owner="DLX_SERIE_01" version="DLX"/>
   <entry group="0019" element="1019" vr="IS" vm="1" owner="XXXXXXXXX_xx" version="ANO"/>
-  <entry group="0019" element="1019" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
-  <entry group="0019" element="1019" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="101a" vr="DS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="101a" vr="IS" vm="1" owner="DLX_SERIE_01" version="DLX"/>
   <entry group="0019" element="101a" vr="IS" vm="1" owner="XXXXXXXXX_xx" version="ANO"/>
   <entry group="0019" element="101a" vr="LO" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
-  <entry group="0019" element="101a" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
-  <entry group="0019" element="101a" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
-  <entry group="0019" element="101a" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="101b" vr="DS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="101b" vr="IS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="101b" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
-  <entry group="0019" element="101b" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
-  <entry group="0019" element="101b" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="101c" vr="LO" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="101c" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
-  <entry group="0019" element="101c" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="101d" vr="LO" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="101d" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
-  <entry group="0019" element="101d" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="101e" vr="DS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="101e" vr="LO" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="101e" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
-  <entry group="0019" element="101e" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
-  <entry group="0019" element="101e" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="101f" vr="UN" vm="1" owner="DLX_SERIE_01" version="DLX"/>
   <entry group="0019" element="1020" vr="CS" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
   <entry group="0019" element="1020" vr="SH" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
-  <entry group="0019" element="1020" vr="UN" vm="1" owner="SIEMENS CM VA0  CMS " version="SSPI"/>
-  <entry group="0019" element="1020" vr="UN" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
   <entry group="0019" element="1020" vr="UN" vm="1" owner="SIEMENS RA PLANE A" version="SSPI"/>
   <entry group="0019" element="1020" vr="UN" vm="1" owner="SPI-P-GV-CT Release 1 " version="PSPI"/>
   <entry group="0019" element="1021" vr="DS" vm="1" owner="DLX_SERIE_01" version="DLX"/>
   <entry group="0019" element="1021" vr="DS" vm="1" owner="XXXXXXXXX_xx" version="ANO"/>
   <entry group="0019" element="1021" vr="FD" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
   <entry group="0019" element="1021" vr="UN" vm="1" owner="ADAC_IMG" version="ADAC"/>
-  <entry group="0019" element="1021" vr="UN" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
   <entry group="0019" element="1022" vr="DS" vm="1" owner="DLX_SERIE_01" version="DLX"/>
   <entry group="0019" element="1022" vr="DS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1022" vr="DS" vm="1" owner="XXXXXXXXX_xx" version="ANO"/>
   <entry group="0019" element="1022" vr="FD" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
-  <entry group="0019" element="1022" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1022" vr="UN" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
   <entry group="0019" element="1022" vr="UN" vm="1" owner="SIEMENS RA PLANE A" version="SSPI"/>
   <entry group="0019" element="1023" vr="DS" vm="1" owner="DLX_SERIE_01" version="DLX"/>
   <entry group="0019" element="1023" vr="DS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1023" vr="DS" vm="1" owner="XXXXXXXXX_xx" version="ANO"/>
   <entry group="0019" element="1023" vr="IS" vm="1" owner="SIEMENS MR HEADER " version="SSPI"/>
-  <entry group="0019" element="1023" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
-  <entry group="0019" element="1023" vr="UN" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
   <entry group="0019" element="1023" vr="US" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
   <entry group="0019" element="1024" vr="DS" vm="1" owner="DLX_SERIE_01" version="DLX"/>
   <entry group="0019" element="1024" vr="DS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1024" vr="DS" vm="1" owner="XXXXXXXXX_xx" version="ANO"/>
   <entry group="0019" element="1024" vr="IS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1024" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
-  <entry group="0019" element="1024" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1024" vr="UN" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
   <entry group="0019" element="1024" vr="UN" vm="1" owner="SIEMENS RA PLANE A" version="SSPI"/>
   <entry group="0019" element="1024" vr="US" vm="1" owner="SIEMENS MED SMS USG ANTARES " version="SSPI"/>
   <entry group="0019" element="1025" vr="DS" vm="1" owner="DLX_SERIE_01" version="DLX"/>
@@ -930,7 +750,7 @@
   <entry group="0019" element="108f" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="108f" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1090" vr="DS" vm="1" owner="SIEMENS CT VA0  COAD" version="SSPI"/>
-  <entry group="0019" element="1090" vr="OB" vm="1" owner="SIEMENS CT VA0  COAD" version="SSPI"/>
+  <!--entry group="0019" element="1090" vr="OB" vm="1" owner="SIEMENS CT VA0  COAD" version="SSPI"/-->
   <entry group="0019" element="1090" vr="SS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1090" vr="UN" vm="1" owner="FDMS 1.0" version="FUJ"/>
   <entry group="0019" element="1090" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
@@ -940,13 +760,13 @@
   <entry group="0019" element="1091" vr="UN" vm="1" owner="FDMS 1.0" version="FUJ"/>
   <entry group="0019" element="1091" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1092" vr="DS" vm="1" owner="SIEMENS CT VA0  COAD" version="SSPI"/>
-  <entry group="0019" element="1092" vr="OB" vm="1" owner="SIEMENS CT VA0  COAD" version="SSPI"/>
+  <!--entry group="0019" element="1092" vr="OB" vm="1" owner="SIEMENS CT VA0  COAD" version="SSPI"/-->
   <entry group="0019" element="1092" vr="SL" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1092" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1092" vr="UN" vm="1" owner="SIEMENS RA PLANE A" version="SSPI"/>
   <entry group="0019" element="1093" vr="DS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1093" vr="DS" vm="1" owner="SIEMENS CT VA0  COAD" version="SSPI"/>
-  <entry group="0019" element="1093" vr="OB" vm="1" owner="SIEMENS CT VA0  COAD" version="SSPI"/>
+  <!--entry group="0019" element="1093" vr="OB" vm="1" owner="SIEMENS CT VA0  COAD" version="SSPI"/-->
   <entry group="0019" element="1093" vr="UN" vm="1" owner="AGFA" version="AGFA"/>
   <entry group="0019" element="1093" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1094" vr="LO" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
@@ -960,7 +780,7 @@
   <entry group="0019" element="1095" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1096" vr="IS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1096" vr="IS" vm="1" owner="SIEMENS CT VA0  COAD" version="SSPI"/>
-  <entry group="0019" element="1096" vr="OB" vm="1" owner="SIEMENS CT VA0  COAD" version="SSPI"/>
+  <!--entry group="0019" element="1096" vr="OB" vm="1" owner="SIEMENS CT VA0  COAD" version="SSPI"/-->
   <entry group="0019" element="1096" vr="SS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1096" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="1096" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
@@ -1037,7 +857,7 @@
   <entry group="0019" element="10af" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="10b0" vr="DS" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="10b0" vr="DS" vm="1" owner="SIEMENS CT VA0  COAD" version="SSPI"/>
-  <entry group="0019" element="10b0" vr="OB" vm="1" owner="SIEMENS CT VA0  COAD" version="SSPI"/>
+  <!--entry group="0019" element="10b0" vr="OB" vm="1" owner="SIEMENS CT VA0  COAD" version="SSPI"/-->
   <entry group="0019" element="10b0" vr="UN" vm="1" owner="GEMS_ACQU_01" version="GEM"/>
   <entry group="0019" element="10b0" vr="UN" vm="1" owner="SIEMENS CT VA0  COAD" version="SSPI"/>
   <entry group="0019" element="10b0" vr="UN" vm="1" owner="SPI-P-GV-CT Release 1 " version="PSPI"/>
@@ -1196,9 +1016,7 @@
   <entry group="0019" element="1100" vr="IS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1100" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1101" vr="DS" vm="1" owner="DLX_SERIE_01" version="DLX"/>
-  <entry group="0019" element="1101" vr="IS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1101" vr="IS" vm="3" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1101" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
+  <entry group="0019" element="1101" vr="IS" vm="1-3" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1102" vr="DS" vm="1" owner="DLX_SERIE_01" version="DLX"/>
   <entry group="0019" element="1102" vr="IS" vm="1-n" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1102" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
@@ -1295,70 +1113,53 @@
   <entry group="0019" element="114e" vr="UN" vm="1" owner="SIEMENS RA PLANE B" version="SSPI"/>
   <entry group="0019" element="114f" vr="DS" vm="2" owner="GEMS_DL_IMG_01" version="GEM"/>
   <entry group="0019" element="114f" vr="DS" vm="2" owner="XXXXXXXXXXXXXX" version="GDCM:UNKNOWN"/>
-  <entry group="0019" element="1150" vr="DS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1150" vr="DS" vm="3" owner="PHILIPS MR/PART " version="PSPI"/>
+  <entry group="0019" element="1150" vr="DS" vm="1-3" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1150" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN " version="SSPI"/>
   <entry group="0019" element="1150" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1150" vr="UN" vm="1" owner="SIEMENS RA PLANE B" version="SSPI"/>
-  <entry group="0019" element="1151" vr="DS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1151" vr="DS" vm="3" owner="PHILIPS MR/PART " version="PSPI"/>
+  <entry group="0019" element="1151" vr="DS" vm="1-3" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1151" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1152" vr="DS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1152" vr="DS" vm="3" owner="PHILIPS MR/PART " version="PSPI"/>
+  <entry group="0019" element="1152" vr="DS" vm="1-3" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1152" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1152" vr="UN" vm="1" owner="SIEMENS RA PLANE B" version="SSPI"/>
-  <entry group="0019" element="1153" vr="IS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1153" vr="IS" vm="3" owner="PHILIPS MR/PART " version="PSPI"/>
+  <entry group="0019" element="1153" vr="IS" vm="1-3" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1153" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1154" vr="DS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1154" vr="DS" vm="3" owner="PHILIPS MR/PART " version="PSPI"/>
+  <entry group="0019" element="1154" vr="DS" vm="1-3" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1154" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1154" vr="UN" vm="1" owner="SIEMENS RA PLANE B" version="SSPI"/>
-  <entry group="0019" element="1155" vr="DS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1155" vr="DS" vm="3" owner="PHILIPS MR/PART " version="PSPI"/>
+  <entry group="0019" element="1155" vr="DS" vm="1-3" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1155" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1156" vr="DS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1156" vr="DS" vm="3" owner="PHILIPS MR/PART " version="PSPI"/>
+  <entry group="0019" element="1156" vr="DS" vm="1-3" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1156" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1156" vr="UN" vm="1" owner="SIEMENS RA PLANE B" version="SSPI"/>
   <entry group="0019" element="1157" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1157" vr="US" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1157" vr="US" vm="3" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1158" vr="DS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1158" vr="DS" vm="3" owner="PHILIPS MR/PART " version="PSPI"/>
+  <entry group="0019" element="1157" vr="US" vm="1-3" owner="PHILIPS MR/PART " version="PSPI"/>
+  <entry group="0019" element="1158" vr="DS" vm="1-3" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1158" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1158" vr="UN" vm="1" owner="SIEMENS RA PLANE B" version="SSPI"/>
   <entry group="0019" element="1159" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1159" vr="US" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1159" vr="US" vm="3" owner="PHILIPS MR/PART " version="PSPI"/>
+  <entry group="0019" element="1159" vr="US" vm="1-3" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="115a" vr="UN" vm="1" owner="SIEMENS RA PLANE B" version="SSPI"/>
   <entry group="0019" element="115c" vr="UN" vm="1" owner="SIEMENS RA PLANE B" version="SSPI"/>
   <entry group="0019" element="115e" vr="UN" vm="1" owner="SIEMENS RA PLANE B" version="SSPI"/>
-  <entry group="0019" element="1160" vr="DS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
+  <entry group="0019" element="1160" vr="DS" vm="1-3" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1160" vr="DS" vm="1" owner="SIEMENS MR VA0  GEN " version="SSPI"/>
-  <entry group="0019" element="1160" vr="DS" vm="3" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1160" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1160" vr="UN" vm="1" owner="SIEMENS RA PLANE B" version="SSPI"/>
-  <entry group="0019" element="1161" vr="DS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1161" vr="DS" vm="3" owner="PHILIPS MR/PART " version="PSPI"/>
+  <entry group="0019" element="1161" vr="DS" vm="1-3" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1161" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1162" vr="DS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1162" vr="DS" vm="3" owner="PHILIPS MR/PART " version="PSPI"/>
+  <entry group="0019" element="1162" vr="DS" vm="1-3" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1162" vr="IS" vm="1" owner="SIEMENS CT VA0  GEN " version="SSPI"/>
   <entry group="0019" element="1162" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1162" vr="UN" vm="1" owner="SIEMENS CT VA0  GEN " version="SSPI"/>
   <entry group="0019" element="1162" vr="UN" vm="1" owner="SIEMENS RA PLANE B" version="SSPI"/>
-  <entry group="0019" element="1163" vr="DS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1163" vr="DS" vm="3" owner="PHILIPS MR/PART " version="PSPI"/>
+  <entry group="0019" element="1163" vr="DS" vm="1-3" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1163" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1164" vr="IS" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1164" vr="IS" vm="3" owner="PHILIPS MR/PART " version="PSPI"/>
+  <entry group="0019" element="1164" vr="IS" vm="1-3" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1164" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1164" vr="UN" vm="1" owner="SIEMENS RA PLANE B" version="SSPI"/>
-  <entry group="0019" element="1166" vr="UN" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1166" vr="UN" vm="1" owner="SIEMENS RA PLANE B" version="SSPI"/>
-  <entry group="0019" element="1166" vr="US" vm="1" owner="PHILIPS MR/PART " version="PSPI"/>
-  <entry group="0019" element="1166" vr="US" vm="3" owner="PHILIPS MR/PART " version="PSPI"/>
+  <entry group="0019" element="1166" vr="US" vm="1-3" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0019" element="1168" vr="UN" vm="1" owner="SIEMENS RA PLANE B" version="SSPI"/>
   <entry group="0019" element="116a" vr="UN" vm="1" owner="SIEMENS RA PLANE B" version="SSPI"/>
   <entry group="0019" element="116c" vr="UN" vm="1" owner="SIEMENS RA PLANE B" version="SSPI"/>
@@ -2034,7 +1835,7 @@
   <entry group="0021" element="1010" vr="UN" vm="1" owner="SIEMENS MED " version="SSPI"/>
   <entry group="0021" element="1010" vr="UN" vm="1" owner="Siemens: Thorax/Multix FD Post Processing " version="SSPI"/>
   <entry group="0021" element="1011" vr="DS" vm="2" owner="SIEMENS MED " version="SSPI"/>
-  <entry group="0021" element="1011" vr="OB" vm="1" owner="SIEMENS MED " version="SSPI"/>
+  <!--entry group="0021" element="1011" vr="OB" vm="1" owner="SIEMENS MED " version="SSPI"/-->
   <entry group="0021" element="1011" vr="UN" vm="1" owner="SIEMENS MED " version="SSPI"/>
   <entry group="0021" element="1011" vr="UN" vm="1" owner="Siemens: Thorax/Multix FD Post Processing " version="SSPI"/>
   <entry group="0021" element="1012" vr="UN" vm="1" owner="Siemens: Thorax/Multix FD Post Processing " version="SSPI"/>
@@ -2357,7 +2158,7 @@
   <entry group="0027" element="1032" vr="SS" vm="1" owner="GEMS_IMAG_01" version="GEM"/>
   <entry group="0027" element="1032" vr="UN" vm="1" owner="GEMS_IMAG_01" version="GEM"/>
   <entry group="0027" element="1033" vr="SL" vm="1" owner="GEMS_IMAG_01" version="GEM"/>
-  <entry group="0027" element="1033" vr="UL" vm="1" owner="GEMS_IMAG_01" version="GEM"/>
+  <!--entry group="0027" element="1033" vr="UL" vm="1" owner="GEMS_IMAG_01" version="GEM"/-->
   <entry group="0027" element="1033" vr="UN" vm="1" owner="GEMS_IMAG_01" version="GEM"/>
   <entry group="0027" element="1035" vr="SS" vm="1" owner="GEMS_IMAG_01" version="GEM"/>
   <entry group="0027" element="1035" vr="UN" vm="1" owner="GEMS_IMAG_01" version="GEM"/>
@@ -2443,14 +2244,14 @@
   <entry group="0029" element="1008" vr="CS" vm="1" owner="SIEMENS CSA HEADER" version="SSPI"/>
   <entry group="0029" element="1008" vr="CS" vm="1" owner="SIEMENS CSA NON-IMAGE " version="SSPI"/>
   <entry group="0029" element="1008" vr="CS" vm="1" owner="TOSHIBA MDW NON-IMAGE " version="TSH"/>
-  <entry group="0029" element="1008" vr="OB" vm="1" owner="SIEMENS CSA HEADER" version="SSPI"/>
+  <!--entry group="0029" element="1008" vr="OB" vm="1" owner="SIEMENS CSA HEADER" version="SSPI"/-->
   <entry group="0029" element="1008" vr="SH" vm="1" owner="GEMS_IMPS_01" version="GEM"/>
   <entry group="0029" element="1008" vr="UN" vm="1" owner="GEMS_IMPS_01" version="GEM"/>
   <entry group="0029" element="1008" vr="UN" vm="1" owner="SIEMENS CSA HEADER" version="SSPI"/>
   <entry group="0029" element="1009" vr="LO" vm="1" owner="SIEMENS CSA HEADER" version="SSPI"/>
   <entry group="0029" element="1009" vr="LO" vm="1" owner="SIEMENS CSA NON-IMAGE " version="SSPI"/>
   <entry group="0029" element="1009" vr="LO" vm="1" owner="TOSHIBA MDW NON-IMAGE " version="TSH"/>
-  <entry group="0029" element="1009" vr="OB" vm="1" owner="SIEMENS CSA HEADER" version="SSPI"/>
+  <!--entry group="0029" element="1009" vr="OB" vm="1" owner="SIEMENS CSA HEADER" version="SSPI"/-->
   <entry group="0029" element="1009" vr="SH" vm="1" owner="GEMS_IMPS_01" version="GEM"/>
   <entry group="0029" element="1009" vr="UN" vm="1" owner="GEMS_IMPS_01" version="GEM"/>
   <entry group="0029" element="1009" vr="UN" vm="1" owner="SIEMENS CSA HEADER" version="SSPI"/>
@@ -2568,7 +2369,7 @@
   <entry group="0029" element="1131" vr="DS" vm="2" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0029" element="1131" vr="LO" vm="1" owner="PMTF INFORMATION DATA " version="TSH"/>
   <entry group="0029" element="1131" vr="LO" vm="1" owner="SIEMENS MEDCOM HEADER " version="SSPI"/>
-  <entry group="0029" element="1131" vr="OB" vm="1" owner="SIEMENS MEDCOM HEADER " version="SSPI"/>
+  <!--entry group="0029" element="1131" vr="OB" vm="1" owner="SIEMENS MEDCOM HEADER " version="SSPI"/-->
   <entry group="0029" element="1131" vr="UN" vm="1" owner="SIEMENS MEDCOM HEADER " version="SSPI"/>
   <entry group="0029" element="1132" vr="DS" vm="2" owner="PHILIPS MR/PART " version="PSPI"/>
   <entry group="0029" element="1132" vr="UL" vm="1" owner="PMTF INFORMATION DATA " version="TSH"/>
@@ -2579,7 +2380,7 @@
   <entry group="0029" element="1133" vr="UN" vm="1" owner="SIEMENS MEDCOM HEADER " version="SSPI"/>
   <entry group="0029" element="1134" vr="CS" vm="1" owner="PMTF INFORMATION DATA " version="TSH"/>
   <entry group="0029" element="1134" vr="CS" vm="1" owner="SIEMENS MEDCOM HEADER " version="SSPI"/>
-  <entry group="0029" element="1134" vr="OB" vm="1" owner="SIEMENS MEDCOM HEADER " version="SSPI"/>
+  <!--entry group="0029" element="1134" vr="OB" vm="1" owner="SIEMENS MEDCOM HEADER " version="SSPI"/-->
   <entry group="0029" element="1134" vr="UN" vm="1" owner="SIEMENS MEDCOM HEADER " version="SSPI"/>
   <entry group="0029" element="1140" vr="SQ" vm="1" owner="SIEMENS MEDCOM HEADER " version="SSPI"/>
   <entry group="0029" element="1140" vr="UN" vm="1" owner="SIEMENS MED MG" version="SSPI"/>
@@ -2702,21 +2503,11 @@
   <entry group="0029" element="3111" vr="UN" vm="1" owner="SIEMENS MED DISPLAY " version="SSPI"/>
   <entry group="0029" element="3150" vr="UN" vm="1" owner="SIEMENS MED DISPLAY " version="SSPI"/>
   <entry group="0029" element="6030" vr="UL" vm="1" owner="ATL PRIVATE TAGS" version="ATL"/>
-  <entry group="0029" element="6030" vr="UL" vm="1" owner="ATL PRIVATE TAGS" version="GDCM:UNKNOWN"/>
   <entry group="0029" element="6031" vr="UL" vm="1" owner="ATL PRIVATE TAGS" version="ATL"/>
-  <entry group="0029" element="6031" vr="UL" vm="1" owner="ATL PRIVATE TAGS" version="GDCM:UNKNOWN"/>
   <entry group="0029" element="6032" vr="UL" vm="1" owner="ATL PRIVATE TAGS" version="ATL"/>
-  <entry group="0029" element="6032" vr="UL" vm="1" owner="ATL PRIVATE TAGS" version="GDCM:UNKNOWN"/>
-  <entry group="0029" element="6033" vr="DS" vm="1" owner="ATL PRIVATE TAGS" version="ATL"/>
-  <entry group="0029" element="6033" vr="DS" vm="1" owner="ATL PRIVATE TAGS" version="GDCM:UNKNOWN"/>
-  <entry group="0029" element="6033" vr="DS" vm="2" owner="ATL PRIVATE TAGS" version="ATL"/>
-  <entry group="0029" element="6033" vr="DS" vm="2" owner="ATL PRIVATE TAGS" version="GDCM:UNKNOWN"/>
-  <entry group="0029" element="6034" vr="DS" vm="1" owner="ATL PRIVATE TAGS" version="ATL"/>
-  <entry group="0029" element="6034" vr="DS" vm="1" owner="ATL PRIVATE TAGS" version="GDCM:UNKNOWN"/>
-  <entry group="0029" element="6034" vr="DS" vm="2" owner="ATL PRIVATE TAGS" version="ATL"/>
-  <entry group="0029" element="6034" vr="DS" vm="2" owner="ATL PRIVATE TAGS" version="GDCM:UNKNOWN"/>
+  <entry group="0029" element="6033" vr="DS" vm="1-2" owner="ATL PRIVATE TAGS" version="ATL"/>
+  <entry group="0029" element="6034" vr="DS" vm="1-2" owner="ATL PRIVATE TAGS" version="ATL"/>
   <entry group="0029" element="6035" vr="LO" vm="1" owner="ATL PRIVATE TAGS" version="ATL"/>
-  <entry group="0029" element="6035" vr="LO" vm="1" owner="ATL PRIVATE TAGS" version="GDCM:UNKNOWN"/>
   <entry group="0029" element="fd00" vr="SQ" vm="1" owner="INTEGRIS 1.0" version="INT1"/>
   <entry group="002f" element="0038" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="0031" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
@@ -2825,8 +2616,7 @@
   <entry group="0043" element="1025" vr="SS" vm="6" owner="GEMS_PARM_01" version="GEM"/>
   <entry group="0043" element="1025" vr="UN" vm="1" owner="GEMS_PARM_01" version="GEM"/>
   <entry group="0043" element="1026" vr="UN" vm="1" owner="GEMS_PARM_01" version="GEM"/>
-  <entry group="0043" element="1026" vr="US" vm="6" owner="GEMS_PARM_01" version="GEM"/>
-  <entry group="0043" element="1026" vr="US" vm="8" owner="GEMS_PARM_01" version="GEM"/>
+  <entry group="0043" element="1026" vr="US" vm="2-2n" owner="GEMS_PARM_01" version="GEM"/>
   <entry group="0043" element="1027" vr="SH" vm="1" owner="GEMS_PARM_01" version="GEM"/>
   <entry group="0043" element="1027" vr="UN" vm="1" owner="GEMS_PARM_01" version="GEM"/>
   <entry group="0043" element="1028" vr="OB" vm="1" owner="GEMS_PARM_01" version="GEM"/>
@@ -2914,8 +2704,7 @@
   <entry group="0043" element="106c" vr="UN" vm="1" owner="GEMS_PARM_01" version="GEM"/>
   <entry group="0043" element="106d" vr="UN" vm="1" owner="GEMS_PARM_01" version="GEM"/>
   <entry group="0043" element="106e" vr="UN" vm="1" owner="GEMS_PARM_01" version="GEM"/>
-  <entry group="0043" element="106f" vr="DS" vm="3" owner="GEMS_PARM_01" version="GEM"/>
-  <entry group="0043" element="106f" vr="DS" vm="4" owner="GEMS_PARM_01" version="GEM"/>
+  <entry group="0043" element="106f" vr="DS" vm="1-n" owner="GEMS_PARM_01" version="GEM"/>
   <entry group="0043" element="106f" vr="UN" vm="1" owner="GEMS_PARM_01" version="GEM"/>
   <entry group="0043" element="1073" vr="US" vm="1" owner="GEMS_PARM_01" version="GEM"/>
   <entry group="0043" element="1074" vr="US" vm="1" owner="GEMS_PARM_01" version="GEM"/>
@@ -2943,8 +2732,7 @@
   <entry group="0043" element="108a" vr="UN" vm="1" owner="GEMS_PARM_01" version="GEM"/>
   <entry group="0043" element="1090" vr="LO" vm="1" owner="GEMS_PARM_01" version="GEM"/>
   <entry group="0043" element="1090" vr="UN" vm="1" owner="GEMS_PARM_01" version="GEM"/>
-  <entry group="0043" element="1091" vr="DS" vm="3" owner="GEMS_PARM_01" version="GEM"/>
-  <entry group="0043" element="1091" vr="DS" vm="4" owner="GEMS_PARM_01" version="GEM"/>
+  <entry group="0043" element="1091" vr="DS" vm="1-n" owner="GEMS_PARM_01" version="GEM"/>
   <entry group="0043" element="1091" vr="UN" vm="1" owner="GEMS_PARM_01" version="GEM"/>
   <entry group="0043" element="1095" vr="LO" vm="1" owner="GEMS_PARM_01" version="GEM"/>
   <entry group="0043" element="1096" vr="CS" vm="1" owner="GEMS_PARM_01" version="GEM"/>
@@ -3140,15 +2928,15 @@
   <entry group="0099" element="1005" vr="SL" vm="1" owner="SIENET" version="SSPI"/>
   <entry group="00b5" element="00f3" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="00e1" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
-  <entry group="00e1" element="1001" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/>
+  <!--entry group="00e1" element="1001" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/-->
   <entry group="00e1" element="1001" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="00e1" element="1001" vr="US" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="00e1" element="1014" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="00e1" element="1014" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
-  <entry group="00e1" element="1022" vr="CS" vm="2" owner="ELSCINT1" version="EL1"/>
+  <!--entry group="00e1" element="1022" vr="CS" vm="2" owner="ELSCINT1" version="EL1"/-->
   <entry group="00e1" element="1022" vr="DS" vm="2" owner="ELSCINT1" version="EL1"/>
   <entry group="00e1" element="1022" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
-  <entry group="00e1" element="1023" vr="CS" vm="2" owner="ELSCINT1" version="EL1"/>
+  <!--entry group="00e1" element="1023" vr="CS" vm="2" owner="ELSCINT1" version="EL1"/-->
   <entry group="00e1" element="1023" vr="DS" vm="2" owner="ELSCINT1" version="EL1"/>
   <entry group="00e1" element="1023" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="00e1" element="1024" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/>
@@ -3157,12 +2945,12 @@
   <entry group="00e1" element="1025" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="00e1" element="102a" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="00e1" element="1039" vr="SQ" vm="1" owner="ELSCINT1" version="EL1"/>
-  <entry group="00e1" element="1040" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/>
+  <!--entry group="00e1" element="1040" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/-->
   <entry group="00e1" element="1040" vr="SH" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="00e1" element="1040" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="00e1" element="1041" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="00e1" element="1042" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
-  <entry group="00e1" element="1050" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/>
+  <!--entry group="00e1" element="1050" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/-->
   <entry group="00e1" element="1050" vr="DS" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="00e1" element="1050" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="00e1" element="1051" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
@@ -3181,8 +2969,7 @@
   <entry group="01e1" element="101f" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="01e1" element="1023" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="01f1" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
-  <entry group="01f1" element="1001" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/>
-  <entry group="01f1" element="1001" vr="CS" vm="2" owner="ELSCINT1" version="EL1"/>
+  <entry group="01f1" element="1001" vr="CS" vm="1-2" owner="ELSCINT1" version="EL1"/>
   <entry group="01f1" element="1001" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="01f1" element="1002" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="01f1" element="1002" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
@@ -3190,24 +2977,24 @@
   <entry group="01f1" element="1003" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="01f1" element="1004" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="01f1" element="1004" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
-  <entry group="01f1" element="1005" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/>
+  <!--entry group="01f1" element="1005" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/-->
   <entry group="01f1" element="1005" vr="DS" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="01f1" element="1005" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="01f1" element="1006" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/>
-  <entry group="01f1" element="1007" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/>
+  <!--entry group="01f1" element="1007" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/-->
   <entry group="01f1" element="1007" vr="DS" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="01f1" element="1007" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
-  <entry group="01f1" element="1008" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/>
+  <!--entry group="01f1" element="1008" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/-->
   <entry group="01f1" element="1008" vr="DS" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="01f1" element="1008" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
-  <entry group="01f1" element="100a" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/>
+  <!--entry group="01f1" element="100a" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/-->
   <entry group="01f1" element="100a" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="01f1" element="100a" vr="US" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="01f1" element="100b" vr="CS" vm="2" owner="ELSCINT1" version="EL1"/>
-  <entry group="01f1" element="100c" vr="CS" vm="2" owner="ELSCINT1" version="EL1"/>
+  <!--entry group="01f1" element="100c" vr="CS" vm="2" owner="ELSCINT1" version="EL1"/-->
   <entry group="01f1" element="100c" vr="DS" vm="2" owner="ELSCINT1" version="EL1"/>
   <entry group="01f1" element="100c" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
-  <entry group="01f1" element="100d" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/>
+  <!--entry group="01f1" element="100d" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/-->
   <entry group="01f1" element="100d" vr="DS" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="01f1" element="100d" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="01f1" element="100e" vr="FL" vm="1" owner="ELSCINT1" version="EL1"/>
@@ -3329,12 +3116,12 @@
   <entry group="07a1" element="0010" vr="LO" vm="1" owner="Private Creator" version="EMPTY!"/>
   <entry group="07a1" element="100a" vr="OB" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="07a1" element="100a" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
-  <entry group="07a1" element="1010" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/>
+  <!--entry group="07a1" element="1010" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/-->
   <entry group="07a1" element="1010" vr="LO" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="07a1" element="1010" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="07a1" element="1011" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="07a1" element="1011" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
-  <entry group="07a1" element="1013" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/>
+  <!--entry group="07a1" element="1013" vr="CS" vm="1" owner="ELSCINT1" version="EL1"/-->
   <entry group="07a1" element="1013" vr="UL" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="07a1" element="1013" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
   <entry group="07a1" element="102a" vr="UN" vm="1" owner="ELSCINT1" version="EL1"/>
@@ -3807,8 +3594,7 @@
   <entry group="2005" element="102f" vr="CS" vm="1" owner="Philips MR Imaging DD 001 " version="PMFE"/>
   <entry group="2005" element="102f" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 " version="PMFE"/>
   <entry group="2005" element="102f" vr="UN" vm="1" owner="Philips MR Imaging DD 001 " version="PMFE"/>
-  <entry group="2005" element="1030" vr="FL" vm="1" owner="Philips MR Imaging DD 001 " version="PMFE"/>
-  <entry group="2005" element="1030" vr="FL" vm="2" owner="Philips MR Imaging DD 001 " version="PMFE"/>
+  <entry group="2005" element="1030" vr="FL" vm="1-2" owner="Philips MR Imaging DD 001 " version="PMFE"/>
   <entry group="2005" element="1030" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 " version="PMFE"/>
   <entry group="2005" element="1030" vr="UN" vm="1" owner="Philips MR Imaging DD 001 " version="PMFE"/>
   <entry group="2005" element="1031" vr="CS" vm="1" owner="Philips MR Imaging DD 001 " version="PMFE"/>
