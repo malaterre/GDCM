@@ -104,6 +104,37 @@ inline std::ostream& operator<<(std::ostream& _os, const Dict &_val)
   return _os;
 }
 
+class GDCM_EXPORT PrivateTag : public Tag
+{
+  friend std::ostream& operator<<(std::ostream &_os, const PrivateTag &_val);
+public:
+  PrivateTag(uint16_t group = 0, uint16_t element = 0, const char *owner = ""):Tag(group,element),Owner(owner) {}
+
+  const char *GetOwner() const { return Owner.c_str(); }
+  void SetOwner(const char *owner) { Owner = owner; }
+
+  bool operator<(const PrivateTag &_val) const
+    {
+    const Tag & t1 = *this;
+    const Tag & t2 = _val;
+    if( t1 == t2 ) return strcmp(Owner.c_str(), _val.GetOwner() ) < 0;
+    else return t1 < t2;
+    }
+
+private:
+  // SIEMENS MED, GEMS_PETD_01 ...
+  std::string Owner;
+};
+inline std::ostream& operator<<(std::ostream &_os, const PrivateTag &_val)
+{
+  _os.setf( std::ios::right);
+  _os << std::hex << '(' << std::setw( 4 ) << std::setfill( '0' )
+    << _val[0] << ',' << std::setw( 4 ) << std::setfill( '0' )
+    << _val[1] << ')' << std::setfill( ' ' ) << std::dec;
+  _os << _val.Owner;
+  return _os;
+}
+
 // TODO
 // For privat dict, element < 0x10 should automatically defined:
 // Name = "Private Creator"
@@ -112,21 +143,42 @@ inline std::ostream& operator<<(std::ostream& _os, const Dict &_val)
 // Owner = ""
 class GDCM_EXPORT PrivateDict
 {
-  typedef std::map<Tag, PrivateDictEntry> MapDictEntry;
+  typedef std::map<PrivateTag, DictEntry> MapDictEntry;
   friend std::ostream& operator<<(std::ostream& _os, const PrivateDict &_val);
 public:
   PrivateDict() {}
   ~PrivateDict() {}
-  void AddDictEntry(const Tag &tag, const PrivateDictEntry &de)
+  void AddDictEntry(const PrivateTag &tag, const DictEntry &de)
     {
 #ifndef NDEBUG
     MapDictEntry::size_type s = DictInternal.size();
 #endif
     DictInternal.insert(
       MapDictEntry::value_type(tag, de));
-    assert( s < DictInternal.size() );
+#if defined(NDEBUG) && 0
+    if( s == DictInternal.size() )
+      {
+      MapDictEntry::iterator it = 
+        DictInternal.find(tag);
+      assert( it != DictInternal.end() );
+      DictEntry &duplicate = it->second;
+      assert( de.GetVR() == VR::UN || duplicate.GetVR() == VR::UN );
+      assert( de.GetVR() != duplicate.GetVR() );
+      if( duplicate.GetVR() == VR::UN )
+        {
+        assert( de.GetVR() != VR::UN );
+        duplicate.SetVR( de.GetVR() );
+        duplicate.SetVM( de.GetVM() );
+        assert( GetDictEntry(tag).GetVR() != VR::UN );
+        assert( GetDictEntry(tag).GetVR() == de.GetVR() );
+        assert( GetDictEntry(tag).GetVM() == de.GetVM() );
+        }
+      return;
+      }
+#endif
+    assert( s < DictInternal.size() /*&& std::cout << tag << std::endl*/ );
     }
-  const DictEntry &GetDictEntry(const Tag &tag, const char *owner = NULL) const
+  const DictEntry &GetDictEntry(const PrivateTag &tag) const
     {
     // if 0x10 -> return Private Creator
     MapDictEntry::const_iterator it = 
@@ -134,23 +186,31 @@ public:
     if (it == DictInternal.end())
       {
       //assert( 0 && "Impossible" );
-      return GetDictEntry(Tag(0,0));
+      return GetDictEntry(PrivateTag(0,0));
       }
-    const char *tag_owner = it->second.GetOwner();
-    if( strcmp(tag_owner, owner) == 0)
-      {
-      return it->second;
-      }
-    //else
-    abort();
+    assert( DictInternal.count(tag) == 1 );
     return it->second;
     }
 
 
-private:
-  // Philips, GEMS, SIEMENS...
-  std::string Constructor;
+  void PrintXML() const
+    {
+    MapDictEntry::const_iterator it = DictInternal.begin();
+    std::cout << "<dict edition=\"2007\">\n";
+    for(;it != DictInternal.end(); ++it)
+      {
+      const PrivateTag &t = it->first;
+      const DictEntry &de = it->second;
+      std::cout << "  <entry group=\"" << std::hex << std::setw(4)
+          << std::setfill('0') << t.GetGroup() << "\"" << 
+                   " element=\"" << std::setw(4) << std::setfill('0')<< t.GetElement() << "\"" << " vr=\"" 
+                    << de.GetVR() << "\" vm=\"" << de.GetVM() << "\" owner=\""
+                    << t.GetOwner() << "\"/>\n";
+      }
+      std::cout << "</dict>\n";
+    }
 
+private:
   PrivateDict &operator=(const PrivateDict &_val); // purposely not implemented
   PrivateDict(const PrivateDict &_val); // purposely not implemented
 
@@ -162,8 +222,8 @@ inline std::ostream& operator<<(std::ostream& _os, const PrivateDict &_val)
   PrivateDict::MapDictEntry::const_iterator it = _val.DictInternal.begin();
   for(;it != _val.DictInternal.end(); ++it)
     {
-    const Tag &t = it->first;
-    const PrivateDictEntry &de = it->second;
+    const PrivateTag &t = it->first;
+    const DictEntry &de = it->second;
     _os << t << " " << de << '\n';
     }
 

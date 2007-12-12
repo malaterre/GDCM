@@ -57,10 +57,12 @@ public:
   friend std::ostream& operator<<(std::ostream& _os, const DictEntry &_val);
 
   const VR &GetVR() const { return ValueRepresentation; }
+  void SetVR(const VR & vr) { ValueRepresentation = vr; }
 //  bool IsValid() const { return ValueRepresentation != VR::VR_END; }
 //	  !Name.empty() /*&& ValueRepresentation && ValueMultiplicity*/; }
 
   VM::VMType GetVM() const { return ValueMultiplicity; }
+  void SetVM(VM::VMType vm) { ValueMultiplicity = vm; }
 
   const char *GetName() const { return Name.c_str(); }
   void SetName(const char* name) { Name = name; }
@@ -85,6 +87,7 @@ private:
   bool ElementXX : 1;
 };
 
+#if 0
 class GDCM_EXPORT PrivateDictEntry : public DictEntry
 {
 public:
@@ -98,6 +101,7 @@ private:
   // SIEMENS MED, GEMS_PETD_01 ...
   std::string Owner;
 };
+#endif
 
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const DictEntry &_val)

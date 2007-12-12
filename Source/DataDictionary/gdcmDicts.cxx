@@ -48,7 +48,8 @@ const DictEntry &Dicts::GetDictEntry(const Tag& tag, const char *owner)
   else
   {
     // Test is tag.GetElement() < 0x10... return LO somehow
-    return PrivateDicts[0].GetDictEntry(tag,owner);
+    PrivateTag ptag(tag.GetGroup(), tag.GetElement(),owner);
+    return PrivateDicts[0].GetDictEntry(ptag);
   }
 }
 
