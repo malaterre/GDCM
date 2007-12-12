@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="priv2html.xsl"?>
 <!--
   Program: GDCM (Grass Root DICOM). A DICOM library
   Module:  $URL$
@@ -15,8 +16,8 @@
   Those are all GEMS dictionaries:
 -->
 <!DOCTYPE doc [
-<!ENTITY 5168972_100r2 SYSTEM "5168972_100r2.xml">
+<!ENTITY cs5168972_100r2 SYSTEM "5168972_100r2.xml">
 ]>
 <root>
-  &5168972_100r2;
+  &cs5168972_100r2;
 </root>
