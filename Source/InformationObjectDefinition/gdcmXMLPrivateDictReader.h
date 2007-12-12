@@ -46,8 +46,8 @@ protected:
 
 private:
   PrivateDict PDict;
-  Tag CurrentTag;
-  PrivateDictEntry CurrentDE;
+  PrivateTag CurrentTag;
+  DictEntry CurrentDE;
   bool ParsingDescription;
   std::string Description;
 };

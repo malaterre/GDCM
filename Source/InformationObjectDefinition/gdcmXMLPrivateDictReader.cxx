@@ -34,7 +34,7 @@ void XMLPrivateDictReader::HandleEntry(const char **atts)
   VM::VMType vm;
   bool ret;
 
-  Tag &tag = CurrentTag;
+  PrivateTag &tag = CurrentTag;
   DictEntry &de = CurrentDE;
   
   int i = 0;
@@ -142,7 +142,8 @@ void XMLPrivateDictReader::HandleEntry(const char **atts)
     ++current;
     }
   // Done !
-  de = PrivateDictEntry("", vr, vm, ret, owner.c_str() );
+  de = DictEntry("", vr, vm, ret );
+  tag.SetOwner( owner.c_str() );
 }
 
 void XMLPrivateDictReader::HandleDescription(const char **atts)
