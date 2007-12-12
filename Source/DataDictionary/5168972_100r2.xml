@@ -3,9 +3,15 @@
 <!-- The whole file was generated using :
 
  $ wget http://www.gehealthcare.com/usen/interoperability/dicom/docs/5168972_100r2.pdf 
- $ pdftotext -nopgbrk -layout -f 165 -l 172 5168972_100r2.pdf 5168972_100r2.txt 
+ $ pdftotext -nopgbrk -layout -f 165 -l 175 5168972_100r2.pdf 5168972_100r2.txt 
  <some minor manual cleaning>
  $ python txt2xml.py 5168972_100r2.txt 5168972_100r2.xml
+
+Note:
+  Is there actually anyone reading those documents ? look at page 89:
+...
+  Table 3-38. Private Creator Identification - Xeleris (GEHC_GENIE_1)
+...
 
 -->
 <!--
