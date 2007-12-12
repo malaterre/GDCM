@@ -1,380 +1,305 @@
-GE Healthcare                                        Xeleris Rel. 2.0 ­ CONFORMANCE STATEMENT FOR DICOM V3.0
-REV 2, May 31, 2006                                                                    DIRECTION 5168972-100
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="priv2html.xsl"?>
+<!-- The whole file was generated using :
 
+ $ pdftotext -nopgbrk -layout -f 165 -l 172 5168972_100r2.pdf 5168972_100r2.txt 
+ <some manual cleaning>
+ $ python txt2xml.py 5168972_100r2.txt 5168972_100r2.xml
 
-.
+-->
+<!--
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
 
-                      Table A-16. Private Creator Identification - Xeleris (GEMS_GENIE_1)
-                          Attribute Name                    Tag             VR                  VM
-    Private Creator Identification                   (0009,0010)            LO                   1
-    Study Name                                       (0009,xx10)            LO                   1
-    Study Flags                                      (0009,xx11)            SL                   1
-    Study Type                                       (0009,xx12)            SL                   1
-    Dataset UID                                      (0009,xx1E)            UI                   1
-    Series Object Name                               (0009,xx20)            LO                   1
-    Series Flags                                     (0009,xx21)            SL                   1
-    User Orientation                                 (0009,xx22)            SH                   1
-    Initiation Type                                  (0009,xx23)            SL                   1
-    Initiation Delay                                 (0009,xx24)            SL                   1
-    Initiation Count Rate                            (0009,xx25)            SL                   1
-    Number Energy Sets                               (0009,xx26)            SL                   1
-    Number Detectors                                 (0009,xx27)            SL                   1
-    Number RR Windows                                (0009,xx28)            SL                   1
-    Number MG Time Slots                             (0009,xx29)            SL                   1
-    Number View Sets                                 (0009,xx2A)            SL                   1
-    Trigger History UID                              (0009,xx2B)            LO                   1
-    Series Comments                                  (0009,xx2C)            LO                   1
-    Track Beat Average                               (0009,xx2D)            SL                   1
-    Distance Prescribed                              (0009,xx2E)            FD                   1
-    Table Direction                                  (0009,xx2F)            SL                   1
-    Rotational Continuous Speed                      (0009,xx33)            FD                   1
-    Gantry Motion Type (retired)                     (0009,xx34)            SL                   1
-    Gantry Locus Type                                (0009,xx35)            SL                   1
-    Starting Heart Rate                              (0009,xx37)            SL                   1
-    RR Window Width                                  (0009,xx38)            SL                   1
-    RR Window Offset                                 (0009,xx39)            SL                   1
-    Percent Cycle Imaged                             (0009,xx3A)            SL                   1
-    Patient Object Name                              (0009,xx40)            PN                   1
-    Num Views Acquired (retired)                     (0009,xx44)            SL                   1
-    Patient Flags                                    (0009,xx41)            SL                   1
-    Patient Creation Date                            (0009,xx42)            DA                   1
-    Patient Creation Time                            (0009,xx43)            TM                   1
-    Private Creator Identification                   (0011,0010)            LO                   1
+  Copyright (c) 2006-2007 Mathieu Malaterre
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
-
-
-
-                                                      ­16
-DHF000952
-GE Healthcare                               Xeleris Rel. 2.0 ­ CONFORMANCE STATEMENT FOR DICOM V3.0
-REV 2, May 31, 2006                                                           DIRECTION 5168972-100
-
-
-       Table A-16. Private Creator Identification - Xeleris (GEMS_GENIE_1) (Continued)
-                      Attribute Name               Tag             VR                  VM
- Series Type                               (0011,xx0A)             SL                   1
- Effective Series Duration                 (0011,xx0B)             SL                   1
- Num Beats                                  (0011,xx0C)            SL                   1
- Radio Nuclide Name                         (0011,xx0D)            LO                   1
- Dataset Object Name                        (0011,xx10)            LO                   1
- Dataset Modified                          (0011,xx11)             IS                   1
- Dataset Name                               (0011,xx12)            LO                  1-n
- Dataset Type                               (0011,xx13)            SL                   1
- Completion Time                            (0011,xx14)            SH                   1
- Detector Number                           (0011,xx15)             SL                   1
- Energy Number                             (0011,xx16)             SL                   1
- RR Interval Window Number                  (0011,xx17)            SL                   1
- MG Bin Number                              (0011,xx18)            SL                   1
- Radius Of Rotation                         (0011,xx19)            FD                   1
- Detector Count Zone                        (0011,xx1A)            SL                   1
- Num Energy Windows                         (0011,xx1B)            SL                   1
- Energy Offset                              (0011,xx1C)            SL                   4
- Energy Range                              (0011,xx1D)             SL                   1
- Energy Width (retired)                     (0011,xx1E)            SL                   4
- Image Orientation                         (0011,xx1F)             SL                   1
- Acq Zoom (retired)                        (0011,xx21)             DS                   1
- Acq Pan (retired)                         (0011,xx22)             DS                   1
- Use FOV Mask                              (0011,xx23)             SL                   1
- FOV Mask Y Cutoff Distance                 (0011,xx24)            SL                   1
- FOV Mask Cutoff Angle                     (0011,xx25)             SL                   1
- Table Orientation                         (0011,xx26)             SL                   1
- ROI Top Left                              (0011,xx27)             SL                   2
- ROI Bottom Right                          (0011,xx28)             SL                   2
- Uniformity Mean                           (0011,xx29)             SL                   1
- Phase Duration (retired)                  (0011,xx2A)             FD                   1
- View X Adjustment                          (0011,xx2C)            FD                   1
- View Y Adjustment                          (0011,xx2D)            FD                   1
- Pixel Overflow Flag                        (0011,xx2E)            SL                   1
- Overflow Level                            (0011,xx2F)             SL                   1
- Picture Object Name                        (0011,xx30)            LO                   1
- Acquisition Parent UID                     (0011,xx31)            LO                   1
-
-
-
-
-                                             ­17
-DHF000952
-GE Healthcare                               Xeleris Rel. 2.0 ­ CONFORMANCE STATEMENT FOR DICOM V3.0
-REV 2, May 31, 2006                                                           DIRECTION 5168972-100
-
-
-       Table A-16. Private Creator Identification - Xeleris (GEMS_GENIE_1) (Continued)
-                       Attribute Name              Tag             VR                  VM
- Processing Parent UID                     (0011,xx32)             LO                   1
- Energy Correct Name                        (0011,xx33)            LO                   1
- Spatial Correct Name                       (0011,xx34)            LO                   1
- Tuning Calib Name                          (0011,xx35)            LO                   1
- Uniformity Correct Name                   (0011,xx36)             LO                   1
- Acquisition Specific Correction Name       (0011,xx37)            LT                   1
- Byte Order                                (0011,xx38)             SL                   1
- Compression Type                           (0011,xx39)            SL                   1
- Picture Format                             (0011,xx3A)            SL                   1
- Pixel Scale                                (0011,xx3B)            FD                   1
- Pixel Offset                               (0011,xx3C)            FD                   1
- Energy Peak (retired)                      (0011,xx3D)            SL                   4
- FOV Shape                                  (0011,xx3E)            SL                   1
- Dataset Flags                             (0011,xx3F)             SL                   1
- Viewing Object Name                        (0011,xx40)            LO                   1
- Orientation Angle                          (0011,xx41)            SL                   1
- Rotation Angle                             (0011,xx42)            FD                   1
- Window Inverse Flag                        (0011,xx43)            SL                   1
- Threshold Center                           (0011,xx44)            FD                   1
- Threshold Width                            (0011,xx45)            FD                   1
- Interpolation Type                        (0011,xx46)             SL                   1
- Where Object Name                          (0011,xx50)            LO                   1
- Period                                    (0011,xx55)             FD                   1
- Elapsed Time                               (0011,xx56)            FD                   1
- FOV                                        (0011,xx57)            FD                   2
- Image Size                                 (0011,xx61)            SL                   1
- Linear FOV                                (0011,xx62)             FD                   1
- Spatial Offset                             (0011,xx63)            FD                   1
- Spatial Orientation                        (0011,xx64)            FD                   1
- Reference Dataset UID                     (0011,xx65)             LO                   1
- Starcam Reference Dataset                  (0011,xx66)            SH                   1
- Reference Frame Number                     (0011,xx67)            SL                   1
- Cursor Length                             (0011,xx68)             SL                   1
- Number of Cursors                         (0011,xx69)             SL                   1
- Cursor Coordinates                        (0011,xx6A)             SL                   1
- Recon Options Flag                         (0011,xx6B)            SL                   1
-
-
-
-
-                                             ­18
-DHF000952
-GE Healthcare                               Xeleris Rel. 2.0 ­ CONFORMANCE STATEMENT FOR DICOM V3.0
-REV 2, May 31, 2006                                                           DIRECTION 5168972-100
-
-
-       Table A-16. Private Creator Identification - Xeleris (GEMS_GENIE_1) (Continued)
-                      Attribute Name               Tag             VR                  VM
- Motion Threshold                          (0011,xx6C)             FD                   1
- Motion Curve UID                          (0011,xx6D)             UI                   1
- Recon Type                                (0011,xx6E)             SL                   1
- Pre Filter Type                           (0011,xx6F)             SL                   1
- Back Proj Filter Type                     (0011,xx71)             SL                   1
- Recon Arc                                 (0011,xx72)             SL                   1
- Recon Pan AP Offset                       (0011,xx73)             FD                   1
- Recon Pan LR Offset                       (0011,xx74)             FD                   1
- Recon Area                                 (0011,xx75)            FD                   1
- Start View                                (0011,xx76)             SL                   1
- Attenuation Type                          (0011,xx77)             SL                   1
- Dual Energy Processing                    (0011,xx78)             SL                   1
- Pre Filter Param                           (0011,xx79)            SH                   1
- Pre Filter Param 2                        (0011,xx7A)             SH                   1
- Back Proj Filter Param                    (0011,xx7B)             SH                   1
- Back Proj Filter Param 2                  (0011,xx7C)             SH                   1
- Attenuation Coef                           (0011,xx7D)            SH                   1
- Ref Slice Width                            (0011,xx7E)            SL                   1
- Ref Trans Pixel Volume                     (0011,xx7F)            FD                   1
- Attenuation Threshold                      (0011,xx81)            SH                   1
- Interpolation Distance                     (0011,xx82)            FD                   1
- Interpolation Center X                     (0011,xx83)            FD                   1
- Interpolation Center Y                     (0011,xx84)            FD                   1
- Quant Filter Flag                         (0011,xx85)             SL                   1
- Head Conversion                           (0011,xx86)             SL                   1
- Slice Width Pixels                         (0011,xx87)            SL                   1
- Rfmtr Trans Ref                           (0011,xx88)             SL                   1
- Rfmtr Trans Ref mm                        (0011,xx89)             FD                   1
- Two Line Trans Ref                        (0011,xx8A)             SL                   1
- Three-D Zero                               (0011,xx8B)            SL                   1
- Three-D Zero Length                        (0011,xx8C)            SL                   1
- Three-D Zero In                            (0011,xx8D)            SL                   1
- Private Creator Identification             (0013,0010)            LO                   1
- Digital FOV                               (0013,xx10)             FD                   2
- Source Translator                         (0013,xx11)             SL                   1
- RAL Flags                                  (0013,xx12)            UL                   1
-
-
-
-
-                                             ­19
-DHF000952
-GE Healthcare                                 Xeleris Rel. 2.0 ­ CONFORMANCE STATEMENT FOR DICOM V3.0
-REV 2, May 31, 2006                                                             DIRECTION 5168972-100
-
-
-       Table A-16. Private Creator Identification - Xeleris (GEMS_GENIE_1) (Continued)
-                      Attribute Name                 Tag             VR                  VM
- Xeleris Frame Sequence                       (0013,xx13)            SQ                   1
- Original Image Num                           (0013,xx14)            SL                   1
- Fscalar                                      (0013,xx15)            FD                   1
- AutoTrack Peak                               (0013,xx16)            SL                   1
- AutoTrack Width                              (0013,xx17)            SL                   1
- Transmission Scan Time                       (0013,xx18)            FD                   1
- Transmission Mask Width                      (0013,xx19)            FD                   1
- Copper Attenuator Thickness                  (0013,xx1A)            FD                   1
- Det Ang Separation                           (0013,xx1B)            FD                   1
- Axial Acceptance Angle                       (0013,xx1C)            SL                   1
- Theta Acceptance Value                       (0013,xx1D)            SL                   1
- Tomo View Offset                             (0013,xx1E)            FD                  1-n
- Accepted Beats Time                          (0013,xx20)            FD                   1
- Threshold                                    (0013,xx21)            FD                   2
- Linear Depth                                 (0013,xx22)            FD                   2
- Unif Date Time                               (0013,xx23)            LO                   1
- Series Accepted Beats                        (0013,xx24)            SL                   1
- Series Rejected Beats                        (0013,xx25)            SL                   1
- Study Comments                               (0013,xx26)            LT                   1
- Private Creator Data Element                 (0015,0010)            SH                   1
- Xeleris Frame Sequence                       (0013,xx13)            SQ                   1
- Frame Termination Condition                  (0015,xx10)            SL                   1
- Frame Termination Value                      (0015,xx11)            SL                   1
- Original Image Number                        (0013,xx14)            SL                   1
- Num ECT Phases                               (0015,xx12)            SL                   1
- Num WB Scans                                 (0015,xx13)            SL                   1
- ECT Phase Num                                (0015,xx14)            SL                   1
- WB Scan Num                                  (0015,xx15)            SL                   1
- Comb Head Number                             (0015,xx16)            SL                   1
- Preceding Beat                               (0015,xx17)            UL                   1
- Orig SOP Instance UID                        (0033,xx07)            SQ                  1-n
- Start Angle                                  (0035,xx01)            FD                   N
- Xeleris Energy Window Information Sequence   (0055,xx12)            SQ                   1
- Xeleris Energy Window Range Sequence         (0055,xx13)            SQ                   1
- Xeleris Detector Information Sequence        (0055,xx22)            SQ                   1
- Xeleris Rotation Information Sequence        (0055,xx52)            SQ                   1
-
-
-
-
-                                               ­20
-DHF000952
-GE Healthcare                                Xeleris Rel. 2.0 ­ CONFORMANCE STATEMENT FOR DICOM V3.0
-REV 2, May 31, 2006                                                            DIRECTION 5168972-100
-
-
-        Table A-16. Private Creator Identification - Xeleris (GEMS_GENIE_1) (Continued)
-                     Attribute Name                 Tag             VR                  VM
- Xeleris Gated Information Sequence          (0055,xx62)            SQ                   1
- Xeleris Data Information Sequence           (0055,xx63)            SQ                   1
- Xeleris Data Object Type                    (0033,xx08)            CS                   1
- Modified                                    (0033,xx10)            SL                   1
- Name                                        (0033,xx11)            LO                   1
- ProtocolDataUID                             (0033,xx16)            LO                   1
- Date                                        (0033,xx17)            SH                   1
- Time                                        (0033,xx18)            SH                   1
- ProtocoldataFlags                           (0033,xx19)            UL                   1
- ProtocolName                                (0033,xx1A)            UL                   1
- RelevantDataUID                             (0033,xx1B)            LO                   1
- BulkData                                    (0033,xx1C)            LO                   1
- IntData                                     (0033,xx1D)            SL                  1-n
- DoubleData                                  (0033,xx1E)            FD                  1-n
- StringData                                 (0033,xx1F)             OB                   1
- BulkDataFormat                              (0033,xx20)            LT                  1-n
- IntDataFormat                               (0033,xx21)            LT                  1-n
- DoubleDataFormat                            (0033,xx22)            LT                  1-n
- StringDataFormat                            (0033,xx23)            LT                  1-n
- Description                                 (0033,xx24)            LT                   1
- SDODoubleData SQ                            (0055,xx64)            SQ                   1
- DoubleData                                  (0033,xx1E)            FD                   1
- Modified                                    (5001,xx01)            SL                   1
- Name                                        (5001,xx02)            LO                   1
- Cid                                         (5001,xx03)            SL                   1
- Srid                                        (5001,xx04)            SL                   1
- SOPClassUID                                 (5001,xx05)            LO                   1
- SOPInstanceUID                              (5001,xx06)            LO                   1
- CurveType                                   (5001,xx07)            SL                   1
- GraphType                                   (5001,xx08)            SL                   1
- Legend                                      (5001,xx09)            LO                   1
- XUnits                                      (5001,xx0A)            LO                   1
- YUnits                                      (5001,xx0B)            LO                   1
- Edit                                        (5001,xx0C)            SL                   1
- Suspend                                     (5001,xx0D)            SL                   1
- StyleLine                                   (5001,xx0E)            SL                   1
-
-
-
-
-                                              ­21
-DHF000952
-GE Healthcare                                Xeleris Rel. 2.0 ­ CONFORMANCE STATEMENT FOR DICOM V3.0
-REV 2, May 31, 2006                                                            DIRECTION 5168972-100
-
-
-        Table A-16. Private Creator Identification - Xeleris (GEMS_GENIE_1) (Continued)
-                    Attribute Name                  Tag             VR                  VM
- StyleFill                                   (5001,xx0F)            SL                   1
- StyleColour                                 (5001,xx10)            LO                   1
- StyleWidth                                  (5001,xx11)            SL                   1
- StylePoint                                  (5001,xx12)            SL                   1
- StylePColour                                (5001,xx13)            LO                   1
- StylePSize                                  (5001,xx14)            SL                   1
- Segments                                    (5001,xx15)            SL                   1
- SegType                                     (5001,xx16)            SL                   1
- SegStart                                    (5001,xx17)            FD                  1-n
- SegEnd                                      (5001,xx18)            FD                  1-n
- SegStyleLine                                (5001,xx19)            SL                  1-n
- SegStyleFill                                (5001,xx1A)            SL                  1-n
- SegStyleColour                              (5001,xx1B)            LO                   1
- SegStyleWidth                               (5001,xx1C)            SL                  1-n
- SegStylePoint                               (5001,xx1D)            SL                  1-n
- SegStylePColour                             (5001,xx1E)            SL                   1
- SegStylePSize                               (5001,xx1F)            SL                   1
- SegName                                     (5001,xx20)            LO                   1
- SegAllowDirInt                              (5001,xx21)            SL                  1-n
- TextAnnots                                  (5001,xx22)            SL                   1
- TxtX                                        (5001,xx23)            FD                  1-n
- TxtY                                        (5001,xx24)            FD                  1-n
- TxtText                                     (5001,xx25)            LO                   1
- TxtName                                     (5001,xx26)            LO                   1
- ROIName                                     (5001,xx30)            LO                   1
- DerivedFromImageUID                         (5001,xx31)            LO                   1
- DerivedFromImages                           (5001,xx32)            SL                  1-n
- CurveFlags                                  (5001,xx33)            UL                   1
- CurveName                                   (5001,xx34)            LO                   1
- DatasetName                                 (5001,xx35)            LO                   1
- CurveUID                                    (5001,xx36)            LO                   1
- ROIArea                                     (5001,xx37)            FD                   1
- Modified                                    (5001,xx38)            SL                   1
- Name                                        (5001,xx39)            LO                   1
- Software version                            (5001,xx3A)            LO                   1
- StartDate                                   (5001,xx3B)            SH                   1
-
-
-
-
-                                              ­22
-DHF000952
-GE Healthcare                                 Xeleris Rel. 2.0 ­ CONFORMANCE STATEMENT FOR DICOM V3.0
-REV 2, May 31, 2006                                                             DIRECTION 5168972-100
-
-
-         Table A-16. Private Creator Identification - Xeleris (GEMS_GENIE_1) (Continued)
-                      Attribute Name                 Tag             VR                  VM
- CompletionDate                               (5001,xx3C)            SH                   1
- DetectorName                                 (5001,xx3D)            LO                   1
- Modified                                     (5001,xx41)            SL                   1
- Name                                         (5001,xx42)            LO                   1
- Name                                         (5001,xx43)            SL                   1
- Name                                         (5001,xx44)            SL                   1
- SOPClassUID                                  (5001,xx45)            LO                   1
- SOPInstanceUID                               (5001,xx46)            LO                   1
- NormalColor                                  (5001,xx47)            LO                   1
- NameFont                                     (5001,xx48)            LT                   1
- FillPattern                                  (5001,xx49)            SL                   1
- LineStyle                                    (5001,xx4A)            SL                   1
- LineDashLength                               (5001,xx4B)            SL                   1
- LineThickness                                (5001,xx4C)            SL                   1
- Interactivity                                (5001,xx4D)            SL                   1
- NamePos                                      (5001,xx4E)            SL                   1
- NameDisplay                                  (5001,xx4F)            SL                   1
- Label                                        (5001,xx50)            LO                   1
- BpSeg                                        (5001,xx51)            SL                  1-n
- BpSegPairs                                   (5001,xx52)            US                  1-n
- SeedSpace                                    (5001,xx53)            SL                   1
- Seeds                                        (5001,xx54)            FD                  1-n
- Shape                                        (5001,xx55)            SL                  1-n
- ShapeTilt                                    (5001,xx56)            FD                  1-n
- ShapePtsSpace                                (5001,xx59)            SL                  1-n
- ShapeCtrlPtsCounts                           (5001,xx5A)            SL                  1-n
- ShapeCtrlPts                                 (5001,xx5B)            FD                  1-n
- ShapeCPSpace                                 (5001,xx5C)            SL                   1
- ROIFlags                                     (5001,xx5D)            SL                   1
- FrameNumber                                  (5001,xx5E)            SL                   1
- Id                                          (5001,xx5F)             SL                   1
- DatasetROIMapping                            (5001,xx60)            LO                  1-n
-
-
-
-
-                                               ­23
-DHF000952
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+-->
+<dict edition="2007">
+  <entry group="0009" element="0010" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx10" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx11" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx12" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx1E" vr="UI" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx20" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx21" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx22" vr="SH" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx23" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx24" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx25" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx26" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx27" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx28" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx29" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx2A" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx2B" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx2C" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx2D" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx2E" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx2F" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx33" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx34" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx35" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx37" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx38" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx39" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx3A" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx40" vr="PN" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx44" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx41" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx42" vr="DA" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0009" element="xx43" vr="TM" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="0010" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx0A" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx0B" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx0C" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx0D" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx10" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx11" vr="IS" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx12" vr="LO" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx13" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx14" vr="SH" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx15" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx16" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx17" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx18" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx19" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx1A" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx1B" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx1C" vr="SL" vm="4" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx1D" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx1E" vr="SL" vm="4" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx1F" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx21" vr="DS" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx22" vr="DS" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx23" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx24" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx25" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx26" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx27" vr="SL" vm="2" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx28" vr="SL" vm="2" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx29" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx2A" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx2C" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx2D" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx2E" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx2F" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx30" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx31" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx32" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx33" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx34" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx35" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx36" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx37" vr="LT" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx38" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx39" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx3A" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx3B" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx3C" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx3D" vr="SL" vm="4" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx3E" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx3F" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx40" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx41" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx42" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx43" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx44" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx45" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx46" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx50" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx55" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx56" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx57" vr="FD" vm="2" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx61" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx62" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx63" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx64" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx65" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx66" vr="SH" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx67" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx68" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx69" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx6A" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx6B" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx6C" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx6D" vr="UI" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx6E" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx6F" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx71" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx72" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx73" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx74" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx75" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx76" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx77" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx78" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx79" vr="SH" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx7A" vr="SH" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx7B" vr="SH" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx7C" vr="SH" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx7D" vr="SH" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx7E" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx7F" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx81" vr="SH" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx82" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx83" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx84" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx85" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx86" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx87" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx88" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx89" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx8A" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx8B" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx8C" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0011" element="xx8D" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="0010" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx10" vr="FD" vm="2" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx11" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx12" vr="UL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx13" vr="SQ" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx14" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx15" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx16" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx17" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx18" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx19" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx1A" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx1B" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx1C" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx1D" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx1E" vr="FD" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx20" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx21" vr="FD" vm="2" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx22" vr="FD" vm="2" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx23" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx24" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx25" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx26" vr="LT" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0015" element="0010" vr="SH" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx13" vr="SQ" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0015" element="xx10" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0015" element="xx11" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0013" element="xx14" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0015" element="xx12" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0015" element="xx13" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0015" element="xx14" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0015" element="xx15" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0015" element="xx16" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0015" element="xx17" vr="UL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0033" element="xx07" vr="SQ" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="0035" element="xx01" vr="FD" vm="N" owner="GEMS_GENIE_1"/>
+  <entry group="0055" element="xx12" vr="SQ" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0055" element="xx13" vr="SQ" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0055" element="xx22" vr="SQ" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0055" element="xx52" vr="SQ" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0055" element="xx62" vr="SQ" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0055" element="xx63" vr="SQ" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0033" element="xx08" vr="CS" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0033" element="xx10" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0033" element="xx11" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0033" element="xx16" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0033" element="xx17" vr="SH" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0033" element="xx18" vr="SH" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0033" element="xx19" vr="UL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0033" element="xx1A" vr="UL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0033" element="xx1B" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0033" element="xx1C" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0033" element="xx1D" vr="SL" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="0033" element="xx1E" vr="FD" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="0033" element="xx1F" vr="OB" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0033" element="xx20" vr="LT" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="0033" element="xx21" vr="LT" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="0033" element="xx22" vr="LT" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="0033" element="xx23" vr="LT" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="0033" element="xx24" vr="LT" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0055" element="xx64" vr="SQ" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="0033" element="xx1E" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx01" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx02" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx03" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx04" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx05" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx06" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx07" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx08" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx09" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx0A" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx0B" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx0C" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx0D" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx0E" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx0F" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx10" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx11" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx12" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx13" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx14" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx15" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx16" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx17" vr="FD" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx18" vr="FD" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx19" vr="SL" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx1A" vr="SL" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx1B" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx1C" vr="SL" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx1D" vr="SL" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx1E" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx1F" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx20" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx21" vr="SL" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx22" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx23" vr="FD" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx24" vr="FD" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx25" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx26" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx30" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx31" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx32" vr="SL" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx33" vr="UL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx34" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx35" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx36" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx37" vr="FD" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx38" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx39" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx3A" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx3B" vr="SH" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx3C" vr="SH" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx3D" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx41" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx42" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx43" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx44" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx45" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx46" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx47" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx48" vr="LT" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx49" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx4A" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx4B" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx4C" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx4D" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx4E" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx4F" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx50" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx51" vr="SL" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx52" vr="US" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx53" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx54" vr="FD" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx55" vr="SL" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx56" vr="FD" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx59" vr="SL" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx5A" vr="SL" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx5B" vr="FD" vm="1-n" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx5C" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx5D" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx5E" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx5F" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
+  <entry group="5001" element="xx60" vr="LO" vm="1-n" owner="GEMS_GENIE_1"/>
+</dict>
