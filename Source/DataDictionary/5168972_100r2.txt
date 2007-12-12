@@ -35,7 +35,7 @@ REV 2, May 31, 2006                                                             
     RR Window Offset                                 (0009,xx39)            SL                   1
     Percent Cycle Imaged                             (0009,xx3A)            SL                   1
     Patient Object Name                              (0009,xx40)            PN                   1
-    Num Views Acquired (retired)                     (0009,xx44)            SL
+    Num Views Acquired (retired)                     (0009,xx44)            SL                   1
     Patient Flags                                    (0009,xx41)            SL                   1
     Patient Creation Date                            (0009,xx42)            DA                   1
     Patient Creation Time                            (0009,xx43)            TM                   1
@@ -177,9 +177,9 @@ REV 2, May 31, 2006                                                           DI
  Rfmtr Trans Ref                           (0011,xx88)             SL                   1
  Rfmtr Trans Ref mm                        (0011,xx89)             FD                   1
  Two Line Trans Ref                        (0011,xx8A)             SL                   1
- Three­D Zero                               (0011,xx8B)            SL                   1
- Three­D Zero Length                        (0011,xx8C)            SL                   1
- Three­D Zero In                            (0011,xx8D)            SL                   1
+ Three-D Zero                               (0011,xx8B)            SL                   1
+ Three-D Zero Length                        (0011,xx8C)            SL                   1
+ Three-D Zero In                            (0011,xx8D)            SL                   1
  Private Creator Identification             (0013,0010)            LO                   1
  Digital FOV                               (0013,xx10)             FD                   2
  Source Translator                         (0013,xx11)             SL                   1
@@ -272,7 +272,7 @@ REV 2, May 31, 2006                                                            D
  Srid                                        (5001,xx04)            SL                   1
  SOPClassUID                                 (5001,xx05)            LO                   1
  SOPInstanceUID                              (5001,xx06)            LO                   1
- CurveType                                   (5001,xx07)            Sl                   1
+ CurveType                                   (5001,xx07)            SL                   1
  GraphType                                   (5001,xx08)            SL                   1
  Legend                                      (5001,xx09)            LO                   1
  XUnits                                      (5001,xx0A)            LO                   1
@@ -298,7 +298,7 @@ REV 2, May 31, 2006                                                            D
  StylePoint                                  (5001,xx12)            SL                   1
  StylePColour                                (5001,xx13)            LO                   1
  StylePSize                                  (5001,xx14)            SL                   1
- Segments                                    (5001,xx15)            Sl                   1
+ Segments                                    (5001,xx15)            SL                   1
  SegType                                     (5001,xx16)            SL                   1
  SegStart                                    (5001,xx17)            FD                  1-n
  SegEnd                                      (5001,xx18)            FD                  1-n
