@@ -2,8 +2,9 @@
 <?xml-stylesheet type="text/xsl" href="priv2html.xsl"?>
 <!-- The whole file was generated using :
 
+ $ wget http://www.gehealthcare.com/usen/interoperability/dicom/docs/5168972_100r2.pdf 
  $ pdftotext -nopgbrk -layout -f 165 -l 172 5168972_100r2.pdf 5168972_100r2.txt 
- <some manual cleaning>
+ <some minor manual cleaning>
  $ python txt2xml.py 5168972_100r2.txt 5168972_100r2.xml
 
 -->
@@ -19,7 +20,7 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 -->
-<dict edition="2007">
+<dict edition="2007" url="http://www.gehealthcare.com/usen/interoperability/dicom/docs/5168972_100r2.pdf" ref="Table A-16" name="Private Creator Identification - Xeleris" owner="GEMS_GENIE_1">
   <entry group="0009" element="0010" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
   <entry group="0009" element="xx10" vr="LO" vm="1" owner="GEMS_GENIE_1"/>
   <entry group="0009" element="xx11" vr="SL" vm="1" owner="GEMS_GENIE_1"/>
