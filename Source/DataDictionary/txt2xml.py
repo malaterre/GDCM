@@ -101,6 +101,44 @@ class TextParser2:
     outfile.writelines( outLines )
     outfile.close()
 
+"""
+This parser parse a table formatted like this:
+Tag Private Owner Code Name VR VM
+"""
+class TextParser3:
+  def __init__(self, inputfilename, outputfilename):
+    self._InputFilename = ''
+    self._OutputFilename = ''
+  def Parse(self):
+    infile = file(inputfilename, 'r')
+    outLines = []
+    for line in infile.readlines():
+      patt = re.compile("^\s*\(([0-9A-Z]+),([0-9A-Zx]+)\)\s+([A-Z0-9. -]+)\s\s+([A-Za-z0-9 ()._,/#>-]+)\s+([A-Z][A-Z])\s+([0-9n-]+)\s*$")
+      patt2 = re.compile( "^\s*([A-Z1-9.-]+)\s*([A-Za-z -]+)\s*$")
+      m = patt.match(line)
+      m2 = patt2.match(line)
+      #print line
+      if m:
+        # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
+        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" owner=\"%s\">"%(m.group(1),m.group(2),m.group(5),m.group(6),m.group(3).rstrip())
+        #dicom = m.group(1) + ' ' + m.group(2) + ' ' + m.group(3) + ' ' + m.group(4)
+        #print dicom
+        dicom += '\n'
+        dicom += "<description>%s</description>\n</entry>\n"%m.group(4).rstrip()
+        outLines.append( dicom )
+      elif m2:
+        # <dict edition="2007" url="http://??" ref="Table A-16" name="Private Creator Identification - Xeleris" owner="GEMS_GENIE_1">
+        s = "<dict ref=\"%s\" name=\"%s\" owner=\"%s\">"%(m2.group(1),m2.group(2).rstrip(),"")
+        s += '\n'
+        outLines.append( s )
+      else:
+        print line
+      #print self.Reformat(line)
+      #outLines.append( self.Reformat(line) + '\n' )
+    outfile = file(outputfilename, 'w')
+    outfile.writelines( outLines )
+    outfile.close()
+
 if __name__ == "__main__":
   argc = len(os.sys.argv )
   if ( argc < 3 ):
@@ -109,7 +147,7 @@ if __name__ == "__main__":
 
   inputfilename = os.sys.argv[1]
   outputfilename = os.sys.argv[2]
-  tp = TextParser(inputfilename,outputfilename);
+  tp = TextParser3(inputfilename,outputfilename);
   tp.Parse()
 
 
