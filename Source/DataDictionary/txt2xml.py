@@ -3,6 +3,7 @@
 import re,os
 
 """
+GEMS
 This parser parse a table formatted like this:
 Attribute Name Tag VR VM
 """
@@ -64,6 +65,7 @@ class TextParser:
     outfile.close()
 
 """
+GEMS
 This parser parse a table formatted like this:
 Grp Elm VR VM Type Definition
 """
@@ -102,6 +104,7 @@ class TextParser2:
     outfile.close()
 
 """
+SIEMENS:
 This parser parse a table formatted like this:
 Tag Private Owner Code Name VR VM
 """
