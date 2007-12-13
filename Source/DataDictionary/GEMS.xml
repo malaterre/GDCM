@@ -14,6 +14,9 @@
 -->
 <!--
   Those are all GEMS dictionaries:
+  ENTITY have to start with a letter, so I took cs for Conformance Statement + filename
+  hopefully each private vendor have there electronic (GED) to store file and filename
+  are unique...
 -->
 <!DOCTYPE doc [
 <!ENTITY cs5168972_100r2 SYSTEM "5168972_100r2.xml">
