@@ -156,13 +156,110 @@ class TextParser4:
     outLines = []
     for line in infile.readlines():
       patt = re.compile("^\s*([A-Za-z0-9> -]+)\s+([0-9]+),([0-9A-Fx]+)\s+VR = ([A-Z][A-Z]), VM = ([0-9n-]+)\s+(.*)\s*$")
+      patt1 = re.compile("^\s*([A-Za-z0-9()> -]+)\s+([0-9]+),([0-9A-Fx]+)\s+Value Representation = ([A-Z][A-Z]), Multiplicity = ([0-9n-]+)(.*)\s*$")
       m = patt.match(line)
+      m1 = patt1.match(line)
       if m:
         # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
         dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" >"%(m.group(2),m.group(3),m.group(4),m.group(5))
         #print dicom
         dicom += '\n'
         dicom += "<description>%s</description>\n</entry>\n"%m.group(1).rstrip()
+        outLines.append( dicom )
+      if m1:
+        # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
+        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" >"%(m1.group(2),m1.group(3),m1.group(4),m1.group(5))
+        #print dicom
+        dicom += '\n'
+        dicom += "<description>%s</description>\n</entry>\n"%m1.group(1).rstrip()
+        outLines.append( dicom )
+      else:
+        print line
+      #print self.Reformat(line)
+      #outLines.append( self.Reformat(line) + '\n' )
+    outfile = file(outputfilename, 'w')
+    outfile.writelines( outLines )
+    outfile.close()
+
+"""
+PHILIPS: (see 453567994381_B.pdf)
+                  7053,0010       LO     Private Creator Data element                                                       1
+"""
+class TextParser5:
+  def __init__(self, inputfilename, outputfilename):
+    self._InputFilename = ''
+    self._OutputFilename = ''
+  def Parse(self):
+    infile = file(inputfilename, 'r')
+    outLines = []
+    for line in infile.readlines():
+      patt = re.compile("^([\s>]*)([0-9]+),([0-9A-Fx]+)\s+([A-Z][A-Z])\s+([A-Za-z0-9.?(,)> -]+)\s+([0-9n-]+)\s*$")
+      m = patt.match(line)
+      if m:
+        # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
+        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" >"%(m.group(2),m.group(3),m.group(4),m.group(6))
+        #print dicom
+        dicom += '\n'
+        dicom += "<description>%s%s</description>\n</entry>\n"%(m.group(1).lstrip(),m.group(5).rstrip())
+        outLines.append( dicom )
+      else:
+        print line
+      #print self.Reformat(line)
+      #outLines.append( self.Reformat(line) + '\n' )
+    outfile = file(outputfilename, 'w')
+    outfile.writelines( outLines )
+    outfile.close()
+
+"""
+PHILIPS: (see 9605_0132RevC.pdf)
+                                     Attribute                           Tag          Type       VR        VM
+                              ADAC Header Signature                   0019, 0010        3        LO         2
+"""
+class TextParser6:
+  def __init__(self, inputfilename, outputfilename):
+    self._InputFilename = ''
+    self._OutputFilename = ''
+  def Parse(self):
+    infile = file(inputfilename, 'r')
+    outLines = []
+    for line in infile.readlines():
+      patt = re.compile("^\s*([A-Za-z0-9 #()./,_:>-]+)\s+([0-9A-Z]+),\s?([0-9A-ZxX]+)\s+([1-3C]+)\s+([A-Z][A-Z])\s+([0-9Nn-]+)\s*$")
+      m = patt.match(line)
+      if m:
+        # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
+        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" type=\"%s\" >"%(m.group(2),m.group(3),m.group(5),m.group(6),m.group(4))
+        #print dicom
+        dicom += '\n'
+        dicom += "<description>%s</description>\n</entry>\n"%(m.group(1).rstrip())
+        outLines.append( dicom )
+      else:
+        print line
+      #print self.Reformat(line)
+      #outLines.append( self.Reformat(line) + '\n' )
+    outfile = file(outputfilename, 'w')
+    outfile.writelines( outLines )
+    outfile.close()
+
+"""
+PHILIPS: (see MR_System_R1_5_dcs.pdf
+                 Number of PC Directions                    2001,1016      SS       2, USER      -
+"""
+class TextParser7:
+  def __init__(self, inputfilename, outputfilename):
+    self._InputFilename = ''
+    self._OutputFilename = ''
+  def Parse(self):
+    infile = file(inputfilename, 'r')
+    outLines = []
+    for line in infile.readlines():
+      patt = re.compile("^\s*([A-Za-z0-9> -]+)\s+([0-9]+),([0-9A-F]+)\s+([A-Z][A-Z])\s+([1-3C]+),.*\s*$")
+      m = patt.match(line)
+      if m:
+        # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
+        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" type=\"%s\" >"%(m.group(2),m.group(3),m.group(4),m.group(5))
+        #print dicom
+        dicom += '\n'
+        dicom += "<description>%s</description>\n</entry>\n"%(m.group(1).rstrip())
         outLines.append( dicom )
       else:
         print line
@@ -180,7 +277,7 @@ if __name__ == "__main__":
 
   inputfilename = os.sys.argv[1]
   outputfilename = os.sys.argv[2]
-  tp = TextParser4(inputfilename,outputfilename);
+  tp = TextParser7(inputfilename,outputfilename);
   tp.Parse()
 
 
