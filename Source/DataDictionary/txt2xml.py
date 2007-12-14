@@ -157,8 +157,10 @@ class TextParser4:
     for line in infile.readlines():
       patt = re.compile("^\s*([A-Za-z0-9> -]+)\s+([0-9]+),([0-9A-Fx]+)\s+VR = ([A-Z][A-Z]), VM = ([0-9n-]+)\s+(.*)\s*$")
       patt1 = re.compile("^\s*([A-Za-z0-9()> -]+)\s+([0-9]+),([0-9A-Fx]+)\s+Value Representation = ([A-Z][A-Z]), Multiplicity = ([0-9n-]+)(.*)\s*$")
+      patt2 = re.compile("^\s*[STUDYSERIES]+\s+\(([0-9]+),([0-9]+)\)\s+([A-Za-z ]+)\s*$")
       m = patt.match(line)
       m1 = patt1.match(line)
+      m2 = patt2.match(line)
       if m:
         # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
         dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" >"%(m.group(2),m.group(3),m.group(4),m.group(5))
@@ -166,12 +168,19 @@ class TextParser4:
         dicom += '\n'
         dicom += "<description>%s</description>\n</entry>\n"%m.group(1).rstrip()
         outLines.append( dicom )
-      if m1:
+      elif m1:
         # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
         dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" >"%(m1.group(2),m1.group(3),m1.group(4),m1.group(5))
         #print dicom
         dicom += '\n'
         dicom += "<description>%s</description>\n</entry>\n"%m1.group(1).rstrip()
+        outLines.append( dicom )
+      elif m2:
+        # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
+        dicom = "<entry group=\"%s\" element=\"%s\" >"%(m2.group(1),m2.group(2))
+        #print dicom
+        dicom += '\n'
+        dicom += "<description>%s</description>\n</entry>\n"%m2.group(3).rstrip()
         outLines.append( dicom )
       else:
         print line
@@ -277,7 +286,7 @@ if __name__ == "__main__":
 
   inputfilename = os.sys.argv[1]
   outputfilename = os.sys.argv[2]
-  tp = TextParser7(inputfilename,outputfilename);
+  tp = TextParser4(inputfilename,outputfilename);
   tp.Parse()
 
 
