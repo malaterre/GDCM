@@ -142,6 +142,36 @@ class TextParser3:
     outfile.writelines( outLines )
     outfile.close()
 
+"""
+PHILIPS: (see mr91.pdf)
+  Diffusion B-Factor                            2001,xx03   VR = FL, VM = 1 Dimension: s/mm2
+                                                            Indicates the Diffusion coefficient.
+"""
+class TextParser4:
+  def __init__(self, inputfilename, outputfilename):
+    self._InputFilename = ''
+    self._OutputFilename = ''
+  def Parse(self):
+    infile = file(inputfilename, 'r')
+    outLines = []
+    for line in infile.readlines():
+      patt = re.compile("^\s*([A-Za-z0-9> -]+)\s+([0-9]+),([0-9A-Fx]+)\s+VR = ([A-Z][A-Z]), VM = ([0-9n-]+)\s+(.*)\s*$")
+      m = patt.match(line)
+      if m:
+        # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
+        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" >"%(m.group(2),m.group(3),m.group(4),m.group(5))
+        #print dicom
+        dicom += '\n'
+        dicom += "<description>%s</description>\n</entry>\n"%m.group(1).rstrip()
+        outLines.append( dicom )
+      else:
+        print line
+      #print self.Reformat(line)
+      #outLines.append( self.Reformat(line) + '\n' )
+    outfile = file(outputfilename, 'w')
+    outfile.writelines( outLines )
+    outfile.close()
+
 if __name__ == "__main__":
   argc = len(os.sys.argv )
   if ( argc < 3 ):
@@ -150,7 +180,7 @@ if __name__ == "__main__":
 
   inputfilename = os.sys.argv[1]
   outputfilename = os.sys.argv[2]
-  tp = TextParser3(inputfilename,outputfilename);
+  tp = TextParser4(inputfilename,outputfilename);
   tp.Parse()
 
 
