@@ -15,7 +15,7 @@ class TextParser:
     infile = file(inputfilename, 'r')
     outLines = []
     for line in infile.readlines():
-      patt = re.compile("^\s*([A-Za-z0-9 #()./,_:>-]+)\s+\(([0-9A-Z]+),\s?([0-9A-ZxX]+)\)\s+([A-Z][A-Z])\s+([0-9Nn-]+)\s*$")
+      patt = re.compile("^\s*([A-Za-z0-9 #()./,_«»:>-]+)\s+\(([0-9A-Z]+),\s?([0-9A-ZxX]+)\)\s+([A-Z][A-Z])\s+([0-9Nn-]+)\s*$")
       patt1 = re.compile("^\s*([A-Za-z0-9 #()./,_:>-]+)\s+\(([0-9A-Z]+),\s?([0-9A-ZxX]+)\)\s+([1-3C]+)\s+([A-Z][A-Z])\s+([0-9Nn-]+)\s*$")
       patt2 = re.compile( "^\s*([Table ]*[A-Z1-9.-]+).?\s*([A-Za-z -]+)\s*\(([A-Z0-9_]+)\)$")
       #patt3 = re.compile( '^\s*Private Creator Identification\s*\((["A-Za-z0-9() ./])\)\s*$' )
@@ -116,7 +116,7 @@ class TextParser3:
     infile = file(inputfilename, 'r')
     outLines = []
     for line in infile.readlines():
-      patt = re.compile("^\s*\(([0-9A-Z]+),([0-9A-Zx]+)\)\s+([A-Z0-9. -]+)\s\s+([A-Za-z0-9 ()._,/#>-]+)\s+([A-Z][A-Z])\s+([0-9n-]+)\s*$")
+      patt = re.compile("^\s*\(([0-9A-Z]+),([0-9A-Zx]+)\)\s+([A-Z0-9._ -]+)\s\s+([A-Za-z0-9 ()._,/#>-]+)\s+([A-Z][A-Z]_?O?W?)\s+([0-9n-]+)\s*$")
       patt2 = re.compile( "^\s*([A-Z1-9.-]+)\s*([A-Za-z -]+)\s*$")
       m = patt.match(line)
       m2 = patt2.match(line)
@@ -261,11 +261,40 @@ class TextParser7:
     infile = file(inputfilename, 'r')
     outLines = []
     for line in infile.readlines():
-      patt = re.compile("^\s*([A-Za-z0-9> -]+)\s+([0-9]+),([0-9A-F]+)\s+([A-Z][A-Z])\s+([1-3C]+),.*\s*$")
+      patt = re.compile("^\s*([A-Za-z0-9> -]+)\s+([0-9]+),([0-9A-F]+)\s+([A-Z][A-Z])\s+([1-3C]+)?,?.*\s*$")
       m = patt.match(line)
       if m:
         # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
         dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" type=\"%s\" >"%(m.group(2),m.group(3),m.group(4),m.group(5))
+        #print dicom
+        dicom += '\n'
+        dicom += "<description>%s</description>\n</entry>\n"%(m.group(1).rstrip())
+        outLines.append( dicom )
+      else:
+        print line
+      #print self.Reformat(line)
+      #outLines.append( self.Reformat(line) + '\n' )
+    outfile = file(outputfilename, 'w')
+    outfile.writelines( outLines )
+    outfile.close()
+
+"""
+AGFA
+IMPAX object document         (0029,xx00)          OB               1                  Mitra Object Document 1.0
+"""
+class TextParser8:
+  def __init__(self, inputfilename, outputfilename):
+    self._InputFilename = ''
+    self._OutputFilename = ''
+  def Parse(self):
+    infile = file(inputfilename, 'r')
+    outLines = []
+    for line in infile.readlines():
+      patt = re.compile("^\s*([A-Za-z0-9> -]+)\s+\(([0-9]+),([0-9A-Fx]+)\)\s+([A-Z][A-Z])\s+([1-9n-]+)\s+([A-Za-z0-9. ]+)\s*$")
+      m = patt.match(line)
+      if m:
+        # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
+        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" owner=\"%s\" >"%(m.group(2),m.group(3),m.group(4),m.group(5),m.group(6))
         #print dicom
         dicom += '\n'
         dicom += "<description>%s</description>\n</entry>\n"%(m.group(1).rstrip())
@@ -286,7 +315,7 @@ if __name__ == "__main__":
 
   inputfilename = os.sys.argv[1]
   outputfilename = os.sys.argv[2]
-  tp = TextParser4(inputfilename,outputfilename);
+  tp = TextParser(inputfilename,outputfilename);
   tp.Parse()
 
 
