@@ -19,7 +19,7 @@ class TextParser:
       patt1 = re.compile("^\s*([A-Za-z0-9 #()./,_:>-]+)\s+\(([0-9A-Z]+),\s?([0-9A-ZxX]+)\)\s+([1-3C]+)\s+([A-Z][A-Z])\s+([0-9Nn-]+)\s*$")
       patt2 = re.compile( "^\s*([Table ]*[A-Z1-9.-]+).?\s*([A-Za-z -]+)\s*\(([A-Z0-9_]+)\)$")
       #patt3 = re.compile( '^\s*Private Creator Identification\s*\((["A-Za-z0-9() ./])\)\s*$' )
-      patt3 = re.compile( '^\s*Private Creator Identification\s*\("(.*)"\)\)?\s*$' )
+      patt3 = re.compile( '^\s*Private Creator Identification\s*\("?(.*)"?\)\)?\s*$' )
       patt4 = re.compile( '^\s*Private Creator Identification\s*([A-Z0-9_]+)\s*$' )
       m = patt.match(line)
       m1 = patt1.match(line)
