@@ -38,6 +38,7 @@ SET(Common_SRCS
   gdcmTrace.cxx
   gdcmException.cxx
   gdcmDeflateStream.cxx
+  gdcmSwapper.cxx
   )
 
 ADD_LIBRARY(gdcmCommon ${Common_SRCS})

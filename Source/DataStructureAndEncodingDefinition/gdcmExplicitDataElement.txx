@@ -13,7 +13,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #ifndef __gdcmExplicitDataElement_txx
 #define __gdcmExplicitDataElement_txx
 
@@ -201,6 +200,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     assert( VRField == VR::SQ );
     try
       {
+abort(); // When are we doing the byte swapping !!!
       if( !ValueIO<ExplicitDataElement,SwapperDoOp>::Read(is,*ValueField) )
         {
         assert(0 && "Should not happen");

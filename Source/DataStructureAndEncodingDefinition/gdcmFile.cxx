@@ -15,7 +15,7 @@
 =========================================================================*/
 #include "gdcmFile.h"
 
-#include "gdcmSwapper.txx"
+#include "gdcmSwapper.h"
 #include "gdcmDataSet.h"
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"

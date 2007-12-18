@@ -13,40 +13,46 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmSwapper_h
-#define __gdcmSwapper_h
+#include "gdcmSwapper.h"
 
-#include "gdcmSwapCode.h"
+#ifdef _WIN32
+#else
+#define HAVE_BYTESWAP_H
+#endif
+
+#ifdef HAVE_BYTESWAP_H
+// TODO: not cross plateform...
+#include <byteswap.h>
+#endif
+
 
 namespace gdcm
 {
 
-
-class SwapperNoOp
-{
-public:
-  template <typename T> static T Swap(T val) {}
-  template <typename T> static void SwapArray(T *array, unsigned int n) {}
-};
-
-class SwapperDoOp
-{
-public:
-  template <typename T> static T Swap(T val);
-  template <typename T>
-  static void SwapArray(T *array, unsigned int n)
-  {
-    // TODO: need to unroll loop:
-    for(unsigned int i = 0; i < n; ++i)
+  template <> uint16_t SwapperDoOp::Swap<uint16_t>(uint16_t val)
     {
-      array[i] = Swap<T>(array[i]);
+#ifdef HAVE_BYTESWAP_H
+    return bswap_16(val);
+#else
+    return val;
+#endif
     }
-  }
-};
-
+  template <> uint32_t SwapperDoOp::Swap<uint32_t>(uint32_t val)
+    {
+#ifdef HAVE_BYTESWAP_H
+    return bswap_32(val);
+#else
+    return val;
+#endif
+    }
+  template <> uint64_t SwapperDoOp::Swap<uint64_t>(uint64_t val)
+    {
+#ifdef HAVE_BYTESWAP_H
+    return bswap_64(val);
+#else
+    return val;
+#endif
+    }
 
 } // end namespace gdcm
 
-#include "gdcmSwapper.txx"
-
-#endif //__gdcmSwapper_h

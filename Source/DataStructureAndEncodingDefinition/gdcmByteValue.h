@@ -148,7 +148,9 @@ public:
       }
     return is;
 #else
-    return is.read(&Internal[0], Length);
+    is.read(&Internal[0], Length);
+    //TSwap::SwapArray(&Internal[0], Internal.size());
+    return is;
 #endif
   }
 
