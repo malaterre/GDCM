@@ -307,6 +307,43 @@ class TextParser8:
     outfile.writelines( outLines )
     outfile.close()
 
+"""
+SIEMENS
+Parse a diction.pfl file
+Pixel Overflow Flag 1 Pixel Overflow,7FE3,SIEMENS MED NM,1B,SS,1
+"""
+class TextParser9:
+  def __init__(self, inputfilename, outputfilename):
+    self._InputFilename = ''
+    self._OutputFilename = ''
+  def Parse(self):
+    infile = file(inputfilename, 'r')
+    outLines = []
+    for line in infile.readlines():
+      patt = re.compile("^([A-Z0-9a-z()=/:%. -]+),([0-9A-F]+),([A-Za-z0-9. -]+),([0-9A-F][0-9A-F]),([A-Z][A-Z]),([1-9N-]+)$")
+      patt1 = re.compile("^[^,]+,([0-9A-F]+),.*$")
+      m = patt.match(line)
+      m1 = patt1.match(line)
+      if m:
+        # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
+        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" owner=\"%s\" >"%(m.group(2),m.group(4),m.group(5),m.group(6),m.group(3))
+        #print dicom
+        dicom += '\n'
+        dicom += "<description>%s</description>\n</entry>\n"%(m.group(1).rstrip())
+        outLines.append( dicom )
+      else:
+        #print line
+        n = eval( '0x' + m1.group(1) )
+        #print m1.group(1)
+        if( not (n % 2 == 0) ):
+          print n
+          print line
+      #print self.Reformat(line)
+      #outLines.append( self.Reformat(line) + '\n' )
+    outfile = file(outputfilename, 'w')
+    outfile.writelines( outLines )
+    outfile.close()
+
 if __name__ == "__main__":
   argc = len(os.sys.argv )
   if ( argc < 3 ):
@@ -315,7 +352,7 @@ if __name__ == "__main__":
 
   inputfilename = os.sys.argv[1]
   outputfilename = os.sys.argv[2]
-  tp = TextParser(inputfilename,outputfilename);
+  tp = TextParser9(inputfilename,outputfilename);
   tp.Parse()
 
 
