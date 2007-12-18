@@ -15,8 +15,8 @@ class TextParser:
     infile = file(inputfilename, 'r')
     outLines = []
     for line in infile.readlines():
-      patt = re.compile("^\s*([A-Za-z0-9 #()./,_«»:>-]+)\s+\(([0-9A-Z]+),\s?([0-9A-ZxX]+)\)\s+([A-Z][A-Z])\s+([0-9Nn-]+)\s*$")
-      patt1 = re.compile("^\s*([A-Za-z0-9 #()./,_:>-]+)\s+\(([0-9A-Z]+),\s?([0-9A-ZxX]+)\)\s+([1-3C]+)\s+([A-Z][A-Z])\s+([0-9Nn-]+)\s*$")
+      patt = re.compile("^\s*([A-Za-z0-9 #()./,_«»:>-]+)\s+\(([0-9A-F]+),\s?([0-9A-FxX]+)\)\s+([A-Z][A-Z])\s+([0-9Nn-]+)\s*$")
+      patt1 = re.compile("^\s*([A-Za-z0-9 #()./,_:>-]+)\s+\(([0-9A-F]+),\s?([0-9A-FxX]+)\)\s+([1-3C]+)\s+([A-Z][A-Z])\s+([0-9Nn-]+)\s*$")
       patt2 = re.compile( "^\s*([Table ]*[A-Z1-9.-]+).?\s*([A-Za-z -]+)\s*\(([A-Z0-9_]+)\)$")
       #patt3 = re.compile( '^\s*Private Creator Identification\s*\((["A-Za-z0-9() ./])\)\s*$' )
       patt3 = re.compile( '^\s*Private Creator Identification\s*\("?(.*)"?\)\)?\s*$' )
