@@ -261,7 +261,7 @@ class TextParser7:
     infile = file(inputfilename, 'r')
     outLines = []
     for line in infile.readlines():
-      patt = re.compile("^\s*([A-Za-z0-9> -]+)\s+([0-9]+),([0-9A-F]+)\s+([A-Z][A-Z])\s+([1-3C]+)?,?.*\s*$")
+      patt = re.compile("^\s*([A-Za-z0-9> -]+)\s+([0-9]+),([0-9A-F]+)\s+([A-Z][A-Z])\s+([1-3C]+),?.*\s*$")
       m = patt.match(line)
       if m:
         # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
@@ -352,7 +352,7 @@ if __name__ == "__main__":
 
   inputfilename = os.sys.argv[1]
   outputfilename = os.sys.argv[2]
-  tp = TextParser9(inputfilename,outputfilename);
+  tp = TextParser7(inputfilename,outputfilename);
   tp.Parse()
 
 
