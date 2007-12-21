@@ -179,6 +179,7 @@ bool ImageCodec::DoPlanarConfiguration(std::istream &is, std::ostream &os)
 
 bool ImageCodec::DoSimpleCopy(std::istream &is, std::ostream &os)
 {
+#if 0
   std::streampos start = is.tellg();
   assert( 0 - start == 0 );
   is.seekg( 0, std::ios::end);
@@ -189,6 +190,9 @@ bool ImageCodec::DoSimpleCopy(std::istream &is, std::ostream &os)
   is.seekg(start, std::ios::beg); // reset
   os.write( dummy_buffer, buf_size);
   delete[] dummy_buffer ;
+#else
+  os.rdbuf( is.rdbuf() );
+#endif
 
   return true;
 }
