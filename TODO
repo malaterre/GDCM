@@ -61,3 +61,6 @@ Need to handle image rotation/flip
 (0070,0042) US 270                                      #   2, 1 ImageRotation
 -----------------------------------------------------------------------
 FIX !! the gdcm::VM it is a pain to use. make it more gdcm::VR like !
+-----------------------------------------------------------------------
+Parsing SQ can actually double the time to read a file
+/images/test_DCEMRI/04-004-4/MR-20070129/Perfusion/Perfusion_205_
