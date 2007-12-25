@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import re,os
 
@@ -15,9 +16,9 @@ class TextParser:
     infile = file(inputfilename, 'r')
     outLines = []
     for line in infile.readlines():
-      patt = re.compile("^\s*([A-Za-z0-9 #()./,_«»:>-]+)\s+\(([0-9A-F]+),\s?([0-9A-FxX]+)\)\s+([A-Z][A-Z])\s+([0-9Nn-]+)\s*$")
-      patt1 = re.compile("^\s*([A-Za-z0-9 #()./,_:>-]+)\s+\(([0-9A-F]+),\s?([0-9A-FxX]+)\)\s+([1-3C]+)\s+([A-Z][A-Z])\s+([0-9Nn-]+)\s*$")
-      patt2 = re.compile( "^\s*([Table ]*[A-Z1-9.-]+).?\s*([A-Za-z -]+)\s*\(([A-Z0-9_]+)\)$")
+      patt = re.compile("^\s*([A-Za-z0-9 «»%;#()./,_:>-]+)\s+\(?([0-9A-Fn]+),\s?([0-9A-FxX]+)\)?\s+([A-Z][A-Z])\s+([0-9Nn-]+)\s*$")
+      patt1 = re.compile("^\s*([A-Za-z0-9 %#()./,_:>-]+)\s+\(([0-9A-F]+),\s?([0-9A-FxX]+)\)\s+([1-3C]+)\s+([A-Z][A-Z])\s+([0-9Nn-]+)\s*$")
+      patt2 = re.compile( "^\s*([Table ]*[A-Z1-9.-]+)\s+([A-Za-z -]+)\s+\(([A-Z0-9_]+)\)\s*$")
       #patt3 = re.compile( '^\s*Private Creator Identification\s*\((["A-Za-z0-9() ./])\)\s*$' )
       patt3 = re.compile( '^\s*Private Creator Identification\s*\("?(.*)"?\)\)?\s*$' )
       patt4 = re.compile( '^\s*Private Creator Identification\s*([A-Z0-9_]+)\s*$' )
@@ -29,19 +30,15 @@ class TextParser:
       #print line
       if m:
         # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
-        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\">"%(m.group(2),m.group(3),m.group(4),m.group(5))
+        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" name=\"%s\"/>"%(m.group(2),m.group(3),m.group(4),m.group(5),m.group(1).rstrip())
         #dicom = m.group(1) + ' ' + m.group(2) + ' ' + m.group(3) + ' ' + m.group(4)
         #print dicom
-        dicom += '\n'
-        dicom += "<description>%s</description>\n</entry>\n"%m.group(1).rstrip()
         outLines.append( dicom )
       elif m1:
         # <entry group="0001" element="0001" vr="LO" vm="1" type="1C"/>
-        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" type=\"%s\">"%(m1.group(2),m1.group(3),m1.group(5),m1.group(6),m1.group(4))
+        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" type=\"%s\"/>"%(m1.group(2),m1.group(3),m1.group(5),m1.group(6),m1.group(4),m1.group(1).rstrip())
         #dicom = m.group(1) + ' ' + m.group(2) + ' ' + m.group(3) + ' ' + m.group(4)
         #print dicom
-        dicom += '\n'
-        dicom += "<description>%s</description>\n</entry>\n"%m1.group(1).rstrip()
         outLines.append( dicom )
       elif m2:
         # <dict edition="2007" url="http://??" ref="Table A-16" name="Private Creator Identification - Xeleris" owner="GEMS_GENIE_1">
@@ -84,11 +81,9 @@ class TextParser2:
       #print line
       if m:
         # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
-        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" type=\"%s\">"%(m.group(1),m.group(2),m.group(3),m.group(4),m.group(5))
+        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" type=\"%s\" name=\"%s\"/>"%(m.group(1),m.group(2),m.group(3),m.group(4),m.group(5),m.group(6).rstrip())
         #dicom = m.group(1) + ' ' + m.group(2) + ' ' + m.group(3) + ' ' + m.group(4)
         #print dicom
-        dicom += '\n'
-        dicom += "<description>%s</description>\n</entry>\n"%m.group(6).rstrip()
         outLines.append( dicom )
       elif m2:
         # <dict edition="2007" url="http://??" ref="Table A-16" name="Private Creator Identification - Xeleris" owner="GEMS_GENIE_1">
@@ -123,11 +118,9 @@ class TextParser3:
       #print line
       if m:
         # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
-        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" owner=\"%s\">"%(m.group(1),m.group(2),m.group(5),m.group(6),m.group(3).rstrip())
+        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" owner=\"%s\" name=\"%s\"/>"%(m.group(1),m.group(2),m.group(5),m.group(6),m.group(3).rstrip(),m.group(4).rstrip())
         #dicom = m.group(1) + ' ' + m.group(2) + ' ' + m.group(3) + ' ' + m.group(4)
         #print dicom
-        dicom += '\n'
-        dicom += "<description>%s</description>\n</entry>\n"%m.group(4).rstrip()
         outLines.append( dicom )
       elif m2:
         # <dict edition="2007" url="http://??" ref="Table A-16" name="Private Creator Identification - Xeleris" owner="GEMS_GENIE_1">
@@ -163,24 +156,18 @@ class TextParser4:
       m2 = patt2.match(line)
       if m:
         # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
-        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" >"%(m.group(2),m.group(3),m.group(4),m.group(5))
+        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" name=\"%s\"/>"%(m.group(2),m.group(3),m.group(4),m.group(5),m.group(1).rstrip())
         #print dicom
-        dicom += '\n'
-        dicom += "<description>%s</description>\n</entry>\n"%m.group(1).rstrip()
         outLines.append( dicom )
       elif m1:
         # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
-        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" >"%(m1.group(2),m1.group(3),m1.group(4),m1.group(5))
+        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" name=\"%s\"/>"%(m1.group(2),m1.group(3),m1.group(4),m1.group(5),m1.group(1).rstrip())
         #print dicom
-        dicom += '\n'
-        dicom += "<description>%s</description>\n</entry>\n"%m1.group(1).rstrip()
         outLines.append( dicom )
       elif m2:
         # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
-        dicom = "<entry group=\"%s\" element=\"%s\" >"%(m2.group(1),m2.group(2))
+        dicom = "<entry group=\"%s\" element=\"%s\" name=\"%s\" />"%(m2.group(1),m2.group(2),m2.group(3).rstrip())
         #print dicom
-        dicom += '\n'
-        dicom += "<description>%s</description>\n</entry>\n"%m2.group(3).rstrip()
         outLines.append( dicom )
       else:
         print line
@@ -206,10 +193,8 @@ class TextParser5:
       m = patt.match(line)
       if m:
         # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
-        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" >"%(m.group(2),m.group(3),m.group(4),m.group(6))
+        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" name=\"%s%s\"/>"%(m.group(2),m.group(3),m.group(4),m.group(6),m.group(1).lstrip(),m.group(5).rstrip())
         #print dicom
-        dicom += '\n'
-        dicom += "<description>%s%s</description>\n</entry>\n"%(m.group(1).lstrip(),m.group(5).rstrip())
         outLines.append( dicom )
       else:
         print line
@@ -236,10 +221,8 @@ class TextParser6:
       m = patt.match(line)
       if m:
         # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
-        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" type=\"%s\" >"%(m.group(2),m.group(3),m.group(5),m.group(6),m.group(4))
+        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" type=\"%s\" name=\"%s\" />"%(m.group(2),m.group(3),m.group(5),m.group(6),m.group(4),m.group(1).rstrip())
         #print dicom
-        dicom += '\n'
-        dicom += "<description>%s</description>\n</entry>\n"%(m.group(1).rstrip())
         outLines.append( dicom )
       else:
         print line
@@ -265,10 +248,8 @@ class TextParser7:
       m = patt.match(line)
       if m:
         # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
-        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" type=\"%s\" >"%(m.group(2),m.group(3),m.group(4),m.group(5))
+        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" type=\"%s\" name=\"%s\" />"%(m.group(2),m.group(3),m.group(4),m.group(5),m.group(1).rstrip())
         #print dicom
-        dicom += '\n'
-        dicom += "<description>%s</description>\n</entry>\n"%(m.group(1).rstrip())
         outLines.append( dicom )
       else:
         print line
@@ -294,10 +275,8 @@ class TextParser8:
       m = patt.match(line)
       if m:
         # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
-        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" owner=\"%s\" >"%(m.group(2),m.group(3),m.group(4),m.group(5),m.group(6))
+        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" owner=\"%s\" name=\"%s\" />"%(m.group(2),m.group(3),m.group(4),m.group(5),m.group(6),m.group(1).rstrip())
         #print dicom
-        dicom += '\n'
-        dicom += "<description>%s</description>\n</entry>\n"%(m.group(1).rstrip())
         outLines.append( dicom )
       else:
         print line
@@ -326,10 +305,8 @@ class TextParser9:
       m1 = patt1.match(line)
       if m:
         # <entry group="0001" element="0001" vr="LO" vm="1" owner="Private Creator"/>
-        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" owner=\"%s\" >"%(m.group(2),m.group(4),m.group(5),m.group(6),m.group(3))
+        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" owner=\"%s\" name=\"%s\" />"%(m.group(2),m.group(4),m.group(5),m.group(6),m.group(3),m.group(1).rstrip())
         #print dicom
-        dicom += '\n'
-        dicom += "<description>%s</description>\n</entry>\n"%(m.group(1).rstrip())
         outLines.append( dicom )
       else:
         #print line
@@ -352,7 +329,7 @@ if __name__ == "__main__":
 
   inputfilename = os.sys.argv[1]
   outputfilename = os.sys.argv[2]
-  tp = TextParser7(inputfilename,outputfilename);
+  tp = TextParser(inputfilename,outputfilename);
   tp.Parse()
 
 
