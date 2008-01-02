@@ -512,7 +512,7 @@ bool ImageReader::ReadACRNEMAImage()
     const ByteValue *libido = GetPointerFromElement( trecognitioncode );
     std::string libido_str( libido->GetPointer(), libido->GetLength() );
     assert( libido_str != "CANRME_AILIBOD1_1." );
-    if( libido_str == "ACRNEMA_LIBIDO_1.1" )
+    if( libido_str == "ACRNEMA_LIBIDO_1.1" || libido_str == "ACRNEMA_LIBIDO_1.0" )
       {
       // Swap Columns & Rows
       // assert( PixelData.GetNumberOfDimensions() == 2 );
