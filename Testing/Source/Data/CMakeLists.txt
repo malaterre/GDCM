@@ -38,6 +38,8 @@ SET(BLACK_LIST_READER
   LIBIDO-16-ACR_NEMA-Volume.dcm
 # TODO add seg lut support
   gdcm-US-ALOKA-16.dcm
+# Add YBR_FULL_422
+  US-GE-4AICL142.dcm
 )
 
 SET(GDCM_DATA_IMAGES)
