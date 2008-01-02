@@ -424,6 +424,7 @@ const char * const gdcmMD5DataImages[][2] = {
 { "f1436c1800ccbba8da82acb7f2dff29d" , "SignedShortLosslessBug.dcm" },
 { "eb87ca4a01e55dc7a7f1c92f0aa31017" , "ATTMA002_DS.dcm" },
 { "f17cf873a3c07f3d91dc88f34664bf0d" , "libido1.0-vol.acr" },
+{ "d2fab61e0fff8869e448d69951f1084d" , "SIEMENS_MAGNETOM-12-MONO2-GDCM12-VRUN.dcm" },
 
 
 
