@@ -20,8 +20,13 @@
 #include "vtkInformation.h"
 #include "vtkDemandDrivenPipeline.h"
 #include "vtkStreamingDemandDrivenPipeline.h"
+#include "vtkMedicalImageProperties.h"
 
 #include "gdcmImageReader.h"
+#include "gdcmDataElement.h"
+#include "gdcmByteValue.h"
+#include "gdcmSwapper.h"
+
 #include <sstream>
 
 vtkCxxRevisionMacro(vtkGDCMReader, "$Revision: 1.1 $");
@@ -52,10 +57,12 @@ void vtkGDCMReader::ExecuteInformation()
 {
   std::cerr << "ExecuteInformation" << std::endl;
 }
+
 void vtkGDCMReader::ExecuteData(vtkDataObject *output)
 {
   std::cerr << "ExecuteData" << std::endl;
 }
+
 int vtkGDCMReader::CanReadFile(const char* fname)
 {
   this->Internals->DICOMReader.SetFileName( fname );
@@ -94,14 +101,22 @@ void vtkGDCMReader::FillMedicalImageInformation()
   // PatientName, PatientID, PatientAge, PatientSex, PatientBirthDate,
   // StudyID
   std::ostringstream str;
-/*
-  const gdcm::DataSet &ds = this->Internals->DICOMReader.GetDataSet();
+  const gdcm::File &file = this->Internals->DICOMReader.GetFile();
+  const gdcm::DataSet &ds = file.GetDataSet();
+
   const gdcm::Tag patname(0x0010, 0x0010);
   if( ds.FindDataElement( patname ) )
     {
     const gdcm::DataElement& de = ds.GetDataElement( patname );
+    const gdcm::ByteValue *bv = de.GetByteValue();
+    bv->Write<gdcm::SwapperNoOp>(str);
+    assert( str.str().size() == bv->GetLength() );
+    //std::string patname_str( bv->GetPointer(), bv->GetLength() );
+    this->MedicalImageProperties->SetPatientName( str.str().c_str() );
     }
+  str.str( "" );
 
+/*
     {
     if (medprop->GetPatientName())
       {
@@ -144,7 +159,7 @@ void vtkGDCMReader::FillMedicalImageInformation()
       str << medprop->GetStudyID();
       file->InsertValEntry(str.str(),0x0020,0x0010); // SH 1 Study ID
       }
-    }*/
+*/
 }
 
 //----------------------------------------------------------------------------
@@ -238,6 +253,8 @@ int vtkGDCMReader::RequestInformation(vtkInformation *request,
     outInfo->Set(vtkDataObject::ORIGIN(), origin, 3);
     }
 
+  // Ok let's fill in the 'extra' info:
+  FillMedicalImageInformation();
 
 //  return this->Superclass::RequestInformation(
 //    request, inputVector, outputVector);

@@ -15,10 +15,9 @@
 =========================================================================*/
 #include "gdcmImageReader.h"
 #include "gdcmFileMetaInformation.h"
-#include "gdcmTS.h"
 #include "gdcmSystem.h"
 #include "gdcmFilename.h"
-#include "gdcmByteSwap.txx"
+#include "gdcmByteSwap.h"
 
 #include "gdcmDataImages.h"
 #include "gdcmMD5DataImages.h"
@@ -80,6 +79,7 @@ int TestImageRead(const char* filename)
     if( !ref )
       {
       // new regression image needs a md5 sum
+      std::cerr << "Missing md5 " << digest << " for: " << filename <<  std::endl;
       abort();
       }
     if( strcmp(digest, ref) )
@@ -98,9 +98,9 @@ int TestImageRead(const char* filename)
     return res;
     }
 
-  const gdcm::FileMetaInformation &header = reader.GetHeader();
-  gdcm::TS::MSType ms = header.GetMediaStorageType();
-  bool isImage = gdcm::TS::IsImage( ms );
+  const gdcm::FileMetaInformation &header = reader.GetFile().GetHeader();
+  gdcm::MediaStorage::MSType ms = header.GetMediaStorageType();
+  bool isImage = gdcm::MediaStorage::IsImage( ms );
   if( isImage )
     {
     std::cerr << "Failed to read image from file: " << filename << std::endl;
@@ -108,7 +108,7 @@ int TestImageRead(const char* filename)
     }
   // else
   // well this is not an image, so thankfully we fail to read it
-  assert( ms != gdcm::TS::MS_END );
+  assert( ms != gdcm::MediaStorage::MS_END );
   return 0;
 }
 

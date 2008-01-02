@@ -419,6 +419,12 @@ const char * const gdcmMD5DataImages[][2] = {
 { "343e27f0867b55af74b21a5ba55bd9cc" , "rattag.dcm" },
 { "0038402afc09d44d3c75ed207171976b" , "i0002.dcm" },
 
+{ "0ad4eca25cc0f783bd60c07b2d73f8b0" , "fudd_post.dcm" },
+{ "b85ca0e38d91ba0ee3a97f9c709415ac" , "brain_001.dcm" },
+{ "f1436c1800ccbba8da82acb7f2dff29d" , "SignedShortLosslessBug.dcm" },
+{ "eb87ca4a01e55dc7a7f1c92f0aa31017" , "ATTMA002_DS.dcm" },
+
+
 
 
 /* Stopping condition */

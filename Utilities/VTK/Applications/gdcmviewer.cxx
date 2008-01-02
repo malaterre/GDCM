@@ -83,6 +83,7 @@ void ExecuteViewer(TViewer *viewer, const char *filename)
   // but gdcmviewer doesn't know about them :-(
 
   reader->Update();
+  reader->Print( cout );
   //reader->GetOutput()->Print( cout );
   double *range = reader->GetOutput()->GetScalarRange();
   std::cerr << "Range: " << range[0] << " " << range[1] << std::endl;

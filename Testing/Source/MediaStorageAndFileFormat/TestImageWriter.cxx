@@ -27,19 +27,19 @@ int TestImageWrite(const char* filename)
   reader.SetFileName( filename );
   if ( !reader.Read() )
     {
-  const gdcm::FileMetaInformation &header = reader.GetHeader();
-  gdcm::TS::MSType ms = header.GetMediaStorageType();
-  bool isImage = gdcm::TS::IsImage( ms );
-  if( isImage )
-  {
-     std::cerr << "Failed to read: " << filename << std::endl;
-    return 1;
-  }
-  else
-  {
-	  // not an image give up...
-	  return 0;
-  }
+    const gdcm::FileMetaInformation &header = reader.GetFile().GetHeader();
+    gdcm::MediaStorage::MSType ms = header.GetMediaStorageType();
+    bool isImage = gdcm::MediaStorage::IsImage( ms );
+    if( isImage )
+      {
+      std::cerr << "Failed to read: " << filename << std::endl;
+      return 1;
+      }
+    else
+      {
+      // not an image give up...
+      return 0;
+      }
     }
 
   gdcm::Filename out(filename);
@@ -60,9 +60,7 @@ int TestImageWrite(const char* filename)
 
   gdcm::ImageWriter writer;
   writer.SetFileName( outfilename.c_str() );
-  writer.SetPreamble( reader.GetPreamble() );
-  writer.SetHeader( reader.GetHeader() );
-  writer.SetDataSet( reader.GetDataSet() );
+  writer.SetFile( reader.GetFile() );
   if( !writer.Write() )
     {
     std::cerr << "Failed to write: " << outfilename << std::endl;

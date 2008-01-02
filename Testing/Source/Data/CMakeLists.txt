@@ -29,6 +29,10 @@ SET(BLACK_LIST_READER
 # oh well ... dicom3tools support them
 #  THERALYS-12-MONO2-Uncompressed-Even_Length_Tag.dcm
 #  GE_DLX-8-MONO2-PrivateSyntax.dcm
+  image.acr
+
+# grrrrrr do not handle swapping correctly:
+  GE_CT_With_Private_compressed-icon.dcm
 )
 
 SET(GDCM_DATA_IMAGES)
