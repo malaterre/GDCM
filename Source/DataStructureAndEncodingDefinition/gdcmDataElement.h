@@ -89,6 +89,11 @@ public:
     SetVL( length );
     SetValue( *bv );
     }
+  const ByteValue* GetByteValue() const {
+    const Value &v = GetValue();
+    const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
+    return bv; // Will return NULL if not ByteValue
+  }
 
   // Helper:
   bool IsUndefinedLength() const {

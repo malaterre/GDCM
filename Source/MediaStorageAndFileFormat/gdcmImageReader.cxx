@@ -62,6 +62,9 @@ bool ImageReader::Read()
   const FileMetaInformation &header = F->GetHeader();
   const TransferSyntax &ts = header.GetDataSetTransferSyntax();
 
+  // Need to set the type of image we are dealing with:
+  PixelData.SetTransferSyntax( ts );
+
   bool res = false;
   /* Does it really make sense to check for Media Storage SOP Class UID?
    * I need then to check consistency with 0008 0016 Instance SOP Class UID

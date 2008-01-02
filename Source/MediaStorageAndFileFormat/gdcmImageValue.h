@@ -44,6 +44,12 @@ public:
     PixelData = SmartPointer<Value>( const_cast<Value*>(&v) );
   }
 
+protected:
+  bool TryRAWCodec(char *buffer) const;
+  bool TryJPEGCodec(char *buffer) const;
+  bool TryJPEG2000Codec(char *buffer) const;
+  bool TryRLECodec(char *buffer) const;
+
 private:
   typedef SmartPointer<Value> ValuePtr;
   ValuePtr PixelData; //copied from 7fe0,0010

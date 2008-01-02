@@ -27,10 +27,12 @@
 namespace gdcm
 {
 
-bool ImageValue::GetBuffer(char *buffer) const
+bool ImageValue::TryRAWCodec(char *buffer) const
 {
   unsigned long len = GetBufferLength();
+  const TransferSyntax &ts = GetTransferSyntax();
   Value *p = PixelData;
+
   const ByteValue *bv = dynamic_cast<ByteValue*>(p);
   if( bv )
     {
@@ -66,8 +68,15 @@ bool ImageValue::GetBuffer(char *buffer) const
     memcpy(buffer, os.str().c_str(), check);  // FIXME
     return r;
     }
-  else
+  return false;
+}
+
+bool ImageValue::TryJPEGCodec(char *buffer) const
     {
+  unsigned long len = GetBufferLength();
+  const TransferSyntax &ts = GetTransferSyntax();
+  Value *p = PixelData;
+
     // Fragments...
     const SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(p);
     assert( sf );
@@ -79,9 +88,9 @@ bool ImageValue::GetBuffer(char *buffer) const
     f.write(buffer, totalLen);
     f.close();
 #endif
-    //if( GetCompressionType() == Compression::JPEG )
+    JPEGCodec codec;
+    if( codec.CanDecode( ts ) )
       {
-      JPEGCodec codec;
       codec.SetPlanarConfiguration( GetPlanarConfiguration() );
       codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
       codec.SetPixelType( GetPixelType() );
@@ -107,9 +116,19 @@ bool ImageValue::GetBuffer(char *buffer) const
       assert( pos == len );
       return true;
       }
-    //else if ( GetCompressionType() == Compression::JPEG2000 )
-      {
+return false;
+}
+   
+bool ImageValue::TryJPEG2000Codec(char *buffer) const
+{
+  unsigned long len = GetBufferLength();
+  const TransferSyntax &ts = GetTransferSyntax();
+  Value *p = PixelData;
+    const SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(p);
+
       JPEG2000Codec codec;
+    if( codec.CanDecode( ts ) )
+      {
       codec.SetPlanarConfiguration( GetPlanarConfiguration() );
       codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
       std::stringstream is;
@@ -121,11 +140,21 @@ bool ImageValue::GetBuffer(char *buffer) const
       memcpy(buffer, os.str().c_str(), len);
       return r;
       }
-    //else if ( GetCompressionType() == Compression::RLE )
+  return false;
+}
+
+bool ImageValue::TryRLECodec(char *buffer) const
+{
+  unsigned long len = GetBufferLength();
+  const TransferSyntax &ts = GetTransferSyntax();
+  Value *p = PixelData;
+    const SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(p);
+
+      RLECodec codec;
+    if( codec.CanDecode( ts ) )
       {
       //assert( sf->GetNumberOfFragments() == 1 );
       //assert( sf->GetNumberOfFragments() == GetDimensions(2) );
-      RLECodec codec;
       codec.SetPlanarConfiguration( GetPlanarConfiguration() );
       codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
       codec.SetPixelType( GetPixelType() );
@@ -172,14 +201,23 @@ bool ImageValue::GetBuffer(char *buffer) const
       assert( pos == len || pos == 3*len );
       return true;
       }
-    //else
-      {
-      abort();
-      }
+  return false;
+}
+
+bool ImageValue::GetBuffer(char *buffer) const
+{
+  bool success = false;
+  if( !success ) success = TryRAWCodec(buffer);
+  if( !success ) success = TryJPEGCodec(buffer);
+  if( !success ) success = TryJPEG2000Codec(buffer);
+  if( !success ) success = TryRLECodec(buffer);
+  if( !success )
+    {
+    buffer = 0;
+    abort();
     }
 
-  buffer = 0;
-  return false;
+  return success;
 }
 
 } // end namespace gdcm

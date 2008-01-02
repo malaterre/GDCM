@@ -179,7 +179,7 @@ bool ImageCodec::DoPlanarConfiguration(std::istream &is, std::ostream &os)
 
 bool ImageCodec::DoSimpleCopy(std::istream &is, std::ostream &os)
 {
-#if 0
+#if 1
   std::streampos start = is.tellg();
   assert( 0 - start == 0 );
   is.seekg( 0, std::ios::end);

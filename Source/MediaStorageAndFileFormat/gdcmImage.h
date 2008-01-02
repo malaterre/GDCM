@@ -121,7 +121,14 @@ public:
   unsigned long GetBufferLength() const;
 
   // Same as above but takes into account Palette Color
-  unsigned long GetBufferPaletteLength() const;
+  //unsigned long GetBufferPaletteLength() const;
+
+  void SetTransferSyntax(TransferSyntax const &ts) {
+    TS = ts;
+  }
+  const TransferSyntax &GetTransferSyntax() const {
+    return TS;
+  }
 
 private:
   unsigned int PlanarConfiguration;
