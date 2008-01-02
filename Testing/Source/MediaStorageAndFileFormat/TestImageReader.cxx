@@ -18,6 +18,7 @@
 #include "gdcmSystem.h"
 #include "gdcmFilename.h"
 #include "gdcmByteSwap.h"
+#include "gdcmTrace.h"
 
 #include "gdcmDataImages.h"
 #include "gdcmMD5DataImages.h"
@@ -121,6 +122,9 @@ int TestImageReader(int argc, char *argv[])
     }
 
   // else
+  // First of get rid of warning/debug message
+  gdcm::Trace::DebugOff();
+  gdcm::Trace::WarningOff();
   int r = 0, i = 0;
   const char *filename;
   while( (filename = gdcmDataImages[i]) )

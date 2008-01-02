@@ -40,11 +40,15 @@ Trace::~Trace()
     }
 }
 
+void Trace::DebugOn()  { DebugFlag = true; }
+void Trace::DebugOff() { DebugFlag = false; }
 bool Trace::GetDebugFlag()
 {
   return DebugFlag;
 }
 
+void Trace::WarningOn()  { WarningFlag = true; }
+void Trace::WarningOff() { WarningFlag = false; }
 bool Trace::GetWarningFlag()
 {
   return WarningFlag;
