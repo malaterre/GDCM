@@ -428,6 +428,7 @@ const char * const gdcmMD5DataImages[][2] = {
 { "e0221ddcc9febdc3c266bb8cd0fcf14f" , "undefined_length_un_vr.dcm" },
 { "a136e501bcd1b8ee0835981d2bc8dd87" , "fffc0000UN.dcm" },
 { "33aa469ec024188d692262d03e7108a0" , "JDDICOM_Sample2-dcmdjpeg.dcm" }, // mismatch DICOM / JPEG
+{ "d2fab61e0fff8869e448d69951f1084d" , "SIEMENS_MAGNETOM-12-MONO2-VRUN.dcm" },
 
 
 
