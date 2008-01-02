@@ -38,6 +38,7 @@ SET(Common_SRCS
   gdcmTrace.cxx
   gdcmException.cxx
   gdcmDeflateStream.cxx
+  gdcmByteSwap.cxx
   #gdcmSwapper.cxx
   )
 

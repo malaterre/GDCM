@@ -52,4 +52,7 @@ private:
 
 } // end namespace gdcm
 
+#include "gdcmByteSwap.txx"
+
 #endif //__gdcmByteSwap_h
+
