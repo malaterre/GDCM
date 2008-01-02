@@ -36,10 +36,17 @@ SET(BLACK_LIST_READER
   MR_GE_with_Private_Compressed_Icon_0009_1110.dcm
   US-RGB-8-epicard.dcm
   LIBIDO-16-ACR_NEMA-Volume.dcm
+  PrivateGEImplicitVRBigEndianTransferSyntax16Bits.dcm
 # TODO add seg lut support
   gdcm-US-ALOKA-16.dcm
 # Add YBR_FULL_422
   US-GE-4AICL142.dcm
+# Add 12 bits support:
+  MR-MONO2-12-angio-an1.acr
+# Papyrus:
+  PET-cardio-Multiframe-Papyrus.dcm
+# No way to read this image:
+  ELSCINT1_LOSSLESS_RICE.dcm
 )
 
 SET(GDCM_DATA_IMAGES)
