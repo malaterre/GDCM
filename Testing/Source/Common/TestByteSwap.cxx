@@ -15,7 +15,7 @@
 =========================================================================*/
 #include "gdcmTypes.h"
 #include "gdcmSwapCode.h"
-#include "gdcmByteSwap.txx"
+#include "gdcmByteSwap.h"
 
 int myfunc()
 {
