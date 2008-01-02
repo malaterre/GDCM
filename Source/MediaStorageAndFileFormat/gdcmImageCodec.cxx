@@ -384,6 +384,7 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
   else if ( PI == PhotometricInterpretation::YBR_FULL_422 )
     {
     // TODO
+    // US-GE-4AICL142.dcm
     abort();
     }
   else
