@@ -4,7 +4,6 @@
   Module:  $URL$
 
   Copyright (c) 2006-2007 Mathieu Malaterre
-  Copyright (c) 1993-2005 CREATIS
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -25,6 +24,10 @@
 namespace gdcm
 {
   
+/*
+ * \brief ImageCodec
+ * \note Main codec, this is a central place for all implementation
+ */
 class ImageCodec : public Codec
 {
 public:
