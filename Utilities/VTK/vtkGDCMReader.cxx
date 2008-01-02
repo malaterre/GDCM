@@ -21,6 +21,7 @@
 #include "vtkDemandDrivenPipeline.h"
 #include "vtkStreamingDemandDrivenPipeline.h"
 #include "vtkMedicalImageProperties.h"
+#include "vtkStringArray.h"
 
 #include "gdcmImageReader.h"
 #include "gdcmDataElement.h"
@@ -32,14 +33,14 @@
 vtkCxxRevisionMacro(vtkGDCMReader, "$Revision: 1.1 $");
 vtkStandardNewMacro(vtkGDCMReader);
 
-struct vtkGDCMReaderInternals
-{
-  gdcm::ImageReader DICOMReader;
-};
+//struct vtkGDCMReaderInternals
+//{
+//  gdcm::ImageReader DICOMReader;
+//};
 
 vtkGDCMReader::vtkGDCMReader()
 {
-  this->Internals = new vtkGDCMReaderInternals;
+  //this->Internals = new vtkGDCMReaderInternals;
   //this->ScalarArrayName = NULL;
   //this->SetScalarArrayName( "GDCM" );
 
@@ -50,7 +51,7 @@ vtkGDCMReader::vtkGDCMReader()
 
 vtkGDCMReader::~vtkGDCMReader()
 {
-  delete this->Internals;
+  //delete this->Internals;
 }
 
 void vtkGDCMReader::ExecuteInformation()
@@ -65,8 +66,9 @@ void vtkGDCMReader::ExecuteData(vtkDataObject *output)
 
 int vtkGDCMReader::CanReadFile(const char* fname)
 {
-  this->Internals->DICOMReader.SetFileName( fname );
-  if( this->Internals->DICOMReader.Read() )
+  gdcm::ImageReader reader;
+  reader.SetFileName( fname );
+  if( reader.Read() )
     {
     return 0;
     }
@@ -95,13 +97,13 @@ int vtkGDCMReader::ProcessRequest(vtkInformation* request,
 
 
 //
-void vtkGDCMReader::FillMedicalImageInformation()
+void vtkGDCMReader::FillMedicalImageInformation(const gdcm::ImageReader &reader)
 {
   // For now only do:
   // PatientName, PatientID, PatientAge, PatientSex, PatientBirthDate,
   // StudyID
   std::ostringstream str;
-  const gdcm::File &file = this->Internals->DICOMReader.GetFile();
+  const gdcm::File &file = reader.GetFile();
   const gdcm::DataSet &ds = file.GetDataSet();
 
   const gdcm::Tag patname(0x0010, 0x0010);
@@ -167,12 +169,24 @@ int vtkGDCMReader::RequestInformation(vtkInformation *request,
                                       vtkInformationVector **inputVector,
                                       vtkInformationVector *outputVector)
 {
-  this->Internals->DICOMReader.SetFileName( this->FileName );
-  if( !this->Internals->DICOMReader.Read() )
+  // Let's read the first file :
+  const char *filename;
+  if( this->FileName )
+    {
+    filename = this->FileName;
+    }
+  else
+    {
+    assert( this->FileNames && this->FileNames->GetSize() >= 1 );
+    filename = this->FileNames->GetValue( 0 ).c_str();
+    }
+  gdcm::ImageReader reader;
+  reader.SetFileName( filename );
+  if( !reader.Read() )
     {
     return 0;
     }
-  const gdcm::Image &image = this->Internals->DICOMReader.GetImage();
+  const gdcm::Image &image = reader.GetImage();
   const unsigned int *dims = image.GetDimensions();
 
   // Set the Extents.
@@ -183,11 +197,24 @@ int vtkGDCMReader::RequestInformation(vtkInformation *request,
   this->DataExtent[3] = dims[1] - 1;
   if( image.GetNumberOfDimensions() == 2 )
     {
-    this->DataExtent[4] = 0;
-    this->DataExtent[5] = 0;
+    // This is just so much painfull to deal with DICOM / VTK
+    // they simply assume that number of file is equal to the dimension
+    // of the last axe (see vtkImageReader2::SetFileNames )
+    if ( this->FileNames && this->FileNames->GetSize() > 1 )
+      {
+      this->DataExtent[4] = 0;
+      //this->DataExtent[5] = this->FileNames->GetSize() - 1;
+      }
+    else
+      {
+      this->DataExtent[4] = 0;
+      this->DataExtent[5] = 0;
+      }
     }
   else
     {
+    assert( image.GetNumberOfDimensions() == 3 );
+    this->FileDimensionality = 3;
     this->DataExtent[4] = 0;
     this->DataExtent[5] = dims[2] - 1;
     }
@@ -254,11 +281,49 @@ int vtkGDCMReader::RequestInformation(vtkInformation *request,
     }
 
   // Ok let's fill in the 'extra' info:
-  FillMedicalImageInformation();
+  FillMedicalImageInformation(reader);
 
 //  return this->Superclass::RequestInformation(
 //    request, inputVector, outputVector);
   return 1;
+}
+
+int LoadSingleFile(const char *filename, int *dext, char *pointer)
+{
+  gdcm::ImageReader reader;
+  reader.SetFileName( filename );
+  if( !reader.Read() )
+    {
+    return 0;
+    }
+
+  const gdcm::Image &image = reader.GetImage();
+  unsigned long len = image.GetBufferLength();
+  char *tempimage = new char[len];
+  image.GetBuffer(tempimage);
+
+  const unsigned int *dims = image.GetDimensions();
+  gdcm::PixelType pixeltype = image.GetPixelType();
+  long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
+  //std::cerr << "dext: " << dext[2] << " " << dext[3] << std::endl;
+  //std::cerr << "dext: " << dext[4] << " " << dext[5] << std::endl;
+  //memcpy(pointer, tempimage, len);
+  for(int j = dext[4]; j <= dext[5]; ++j)
+  {
+    //std::cerr << j << std::endl;
+    for(int i = dext[2]; i <= dext[3]; ++i)
+      {
+      //memcpy(pointer, tempimage+i*outsize, outsize);
+      //memcpy(pointer, tempimage+(this->DataExtent[3] - i)*outsize, outsize);
+      //memcpy(pointer, tempimage+(i+j*(dext[3]+1))*outsize, outsize);
+      memcpy(pointer,
+        tempimage+((dext[3] - i)+j*(dext[3]+1))*outsize, outsize);
+      pointer += outsize;
+      }
+  }
+  delete[] tempimage;
+
+  return 1; // success
 }
 
 //----------------------------------------------------------------------------
@@ -266,7 +331,6 @@ int vtkGDCMReader::RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector **vtkNotUsed(inputVector),
                                 vtkInformationVector *outputVector)
 {
-  const gdcm::Image &image = this->Internals->DICOMReader.GetImage();
 
   //this->UpdateProgress(0.2);
 
@@ -297,30 +361,58 @@ int vtkGDCMReader::RequestData(vtkInformation *vtkNotUsed(request),
 
   vtkImageData *output = this->GetOutput(0);
   char * pointer = static_cast<char*>(output->GetScalarPointer());
-  unsigned long len = image.GetBufferLength();
-  char *tempimage = new char[len];
-  image.GetBuffer(tempimage);
+  if( this->FileName )
+    {
+    const char *filename = this->FileName;
+    LoadSingleFile( filename, dext, pointer );
+    return 1;
+    }
+  else
+    {
+    assert( this->FileNames && this->FileNames->GetSize() >= 1 );
+    }
 
-  const unsigned int *dims = image.GetDimensions();
-  gdcm::PixelType pixeltype = image.GetPixelType();
-  long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
-  //std::cerr << "dext: " << dext[2] << " " << dext[3] << std::endl;
-  //std::cerr << "dext: " << dext[4] << " " << dext[5] << std::endl;
-  //memcpy(pointer, tempimage, len);
+  // Load each 2D files
   for(int j = dext[4]; j <= dext[5]; ++j)
-  {
-  //std::cerr << j << std::endl;
+    {
+    gdcm::ImageReader reader;
+    const char *filename;
+    filename = this->FileNames->GetValue( j ).c_str();
+    std::cerr << "Reader:" << j << " -> " << filename << std::endl;
+    reader.SetFileName( filename );
+    if( !reader.Read() )
+      {
+      // TODO need to do some cleanup...
+      return 0;
+      }
+
+    const gdcm::Image &image = reader.GetImage();
+    unsigned long len = image.GetBufferLength();
+    char *tempimage = new char[len];
+    image.GetBuffer(tempimage);
+
+    const unsigned int *dims = image.GetDimensions();
+    gdcm::PixelType pixeltype = image.GetPixelType();
+    long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
+    //std::cerr << "dext: " << dext[2] << " " << dext[3] << std::endl;
+    //std::cerr << "dext: " << dext[4] << " " << dext[5] << std::endl;
+#if 1
+    memcpy(pointer, tempimage, len);
+    pointer += len;
+#else
+    //std::cerr << j << std::endl;
     for(int i = dext[2]; i <= dext[3]; ++i)
       {
       //memcpy(pointer, tempimage+i*outsize, outsize);
       //memcpy(pointer, tempimage+(this->DataExtent[3] - i)*outsize, outsize);
       //memcpy(pointer, tempimage+(i+j*(dext[3]+1))*outsize, outsize);
       memcpy(pointer,
-        tempimage+((this->DataExtent[3] - i)+j*(dext[3]+1))*outsize, outsize);
+        tempimage+((dext[3] - i)+j*(dext[3]+1))*outsize, outsize);
       pointer += outsize;
       }
-  }
-  delete[] tempimage;
+#endif
+    delete[] tempimage;
+    }
 
   return 1;
 }
@@ -329,6 +421,5 @@ int vtkGDCMReader::RequestData(vtkInformation *vtkNotUsed(request),
 void vtkGDCMReader::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os,indent);
-  //this->Internals->DICOMReader.Print(os);
 }
 

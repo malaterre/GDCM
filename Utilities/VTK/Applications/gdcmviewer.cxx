@@ -22,6 +22,7 @@
 #include "vtkImageData.h"
 #include "vtkCommand.h"
 #include "vtkRenderer.h"
+#include "vtkStringArray.h"
 
 #include "gdcmFilename.h"
 
@@ -69,12 +70,19 @@ public:
 // that do not contain the template parameter in the function
 // signature. Thus always pass parameter in the function:
 template <typename TViewer>
-void ExecuteViewer(TViewer *viewer, const char *filename)
+void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 {
   vtkGDCMReader *reader = vtkGDCMReader::New();
-  reader->SetFileName( filename );
-	//reader->Update();
-	//reader->GetOutput()->Print( std::cout );
+  if( filenames->GetSize() == 1 ) // Backward compatible...
+    {
+    reader->SetFileName( filenames->GetValue(0) );
+    }
+  else
+    {
+    reader->SetFileNames( filenames );
+    }
+  //reader->Update();
+  //reader->GetOutput()->Print( std::cout );
 
   vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::New();
   // For a single medical image, it would be more efficient to use
@@ -135,19 +143,21 @@ void ExecuteViewer(TViewer *viewer, const char *filename)
 
 int main(int argc, char *argv[])
 {
+  vtkStringArray *filenames = vtkStringArray::New();
   if( argc < 2 )
     {
-    std::cerr << argv[0] << " filename.dcm\n";
+    std::cerr << argv[0] << " filename.dcm...\n";
     return 1;
     }
-	// Later on I will allow multiple files on the command line
-	if( argc > 2 )
+  else
     {
-    std::cerr << argv[0] << " filename.dcm\n";
-    return 1;
+    for(int i=1; i < argc; ++i)
+      {
+      filenames->InsertNextValue( argv[i] );
+      }
+    //names->Print( std::cout );
     }
 
-  const char *filename = argv[1];
 
   gdcm::Filename viewer_type(argv[0]);
   //assert( strcmp(viewer_type, "gdcmviewer"  ) == 0
@@ -156,19 +166,21 @@ int main(int argc, char *argv[])
   if( strcmp(viewer_type.GetName(), "gdcmviewer" ) == 0 )
     {
     vtkImageViewer *viewer = vtkImageViewer::New();
-    ExecuteViewer<vtkImageViewer>(viewer, filename);
+    ExecuteViewer<vtkImageViewer>(viewer, filenames);
     }
   else if( strcmp(viewer_type.GetName(), "gdcmviewer2" ) == 0 )
     {
     vtkImageViewer2 *viewer = vtkImageViewer2::New();
-    ExecuteViewer<vtkImageViewer2>(viewer, filename);
+    ExecuteViewer<vtkImageViewer2>(viewer, filenames);
     }
   else
     {
     std::cerr << "Unhandled : " << viewer_type.GetName() << std::endl;
+    filenames->Delete();
     return 1;
     }
 
+  filenames->Delete();
   return 0;
 }
 

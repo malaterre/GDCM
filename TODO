@@ -64,3 +64,17 @@ FIX !! the gdcm::VM it is a pain to use. make it more gdcm::VR like !
 -----------------------------------------------------------------------
 Parsing SQ can actually double the time to read a file
 /images/test_DCEMRI/04-004-4/MR-20070129/Perfusion/Perfusion_205_
+-----------------------------------------------------------------------
+The NEMA Enhanced CT and MR multi-frame test sets contain a couple of
+images that have Supplemental Palette Color LUTs. See:
+
+"ftp://medical.nema.org/medical/dicom/Multiframe/"
+
+and in particular:
+
+CT0012
+CT0013
+CT0014
+
+GFUNCST2
+MRVPWCB2 

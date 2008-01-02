@@ -25,7 +25,8 @@
 
 #include "vtkMedicalImageReader2.h"
 
-struct vtkGDCMReaderInternals;
+//struct vtkGDCMReaderInternals;
+namespace gdcm { class ImageReader; }
 class VTK_EXPORT vtkGDCMReader : public vtkMedicalImageReader2
 {
 public:
@@ -55,7 +56,7 @@ protected:
   vtkGDCMReader();
   ~vtkGDCMReader();
 
-  void FillMedicalImageInformation();
+  void FillMedicalImageInformation(const gdcm::ImageReader &reader);
   int ProcessRequest(vtkInformation* request,
                                  vtkInformationVector** inputVector,
                                  vtkInformationVector* outputVector);
@@ -74,7 +75,7 @@ private:
   void operator=(const vtkGDCMReader&);  // Not implemented.
 
   //PIMPL
-  vtkGDCMReaderInternals *Internals;
+  //vtkGDCMReaderInternals *Internals;
 };
 #endif
 
