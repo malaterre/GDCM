@@ -35,6 +35,7 @@ SET(BLACK_LIST_READER
   GE_CT_With_Private_compressed-icon.dcm
   MR_GE_with_Private_Compressed_Icon_0009_1110.dcm
   US-RGB-8-epicard.dcm
+  LIBIDO-16-ACR_NEMA-Volume.dcm
 )
 
 SET(GDCM_DATA_IMAGES)
