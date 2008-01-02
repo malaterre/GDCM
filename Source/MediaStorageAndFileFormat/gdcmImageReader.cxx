@@ -112,7 +112,6 @@ bool ImageReader::Read()
           gdcmDebugMacro( "After all it might be a DICOM file "
             "(Mallinckrodt-like)" );
           
-    abort(); // FIXME
     //PixelData.SetCompressionFromTransferSyntax( ts );
           //PixelData.SetCompressionType( Compression::RAW );
           res = ReadImage();

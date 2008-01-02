@@ -368,6 +368,13 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
         }
       }
     // Let's check the color space:
+    // JCS_UNKNOWN    -> 0
+    // JCS_GRAYSCALE
+    // JCS_RGB
+    // JCS_YCbCr
+    // JCS_CMYK
+    // JCS_YCCK
+
     switch ( cinfo.jpeg_color_space )
       {
     case JCS_GRAYSCALE:
