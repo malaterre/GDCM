@@ -36,6 +36,7 @@ namespace gdcm
  * and thus we would not be able to read a DataSet if the IOD was not found
  * Instead we separate the reading from the validation.
  *
+ * NOTE:
  * From GDCM1.x. Users will realize that one feature is missing
  * from this DOM implementation. In GDCM 1.x user used to be able to
  * control the size of the Value to be read. By default it was 0xfff.
@@ -59,24 +60,16 @@ public:
 
   const File &GetFile() const { return *F; }
 
-  // Some fine notes
-  // ACUSON-24-YBR_FULL-RLE-b.dcm cannot be completely rewritten
-  // indeed they use the 'extension' of DICOM where you can write almost
-  // anything in the preamble for instance they write something like: C.mdat
-  // which of course is difficult to reproduce
-  //const char *GetPreamble() const { return Preamble; }
-
 protected:
   bool ReadPreamble();
   bool ReadMetaInformation();
   bool ReadDataSet();
 
-
   File *F;
+
 private:
   TransferSyntax GuessTransferSyntax();
   std::ifstream Stream;
-
 };
 
 } // end namespace gdcm

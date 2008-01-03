@@ -13,190 +13,77 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmLookupTable.h"
+#include "gdcmOverlay.h"
 #include <vector>
 
 namespace gdcm
 {
 
-class LookupTableInternal
+class OverlayInternal
 {
 public:
-  LookupTableInternal():RGB()
-  {
-    Length[0] = Length[1] = Length[2] = 0;
-    Subscript[0] = Subscript[1] = Subscript[2] = 0;
-    BitSize[0] = BitSize[1] = BitSize[2] = 0;
-  }
-  unsigned int Length[3]; // In DICOM the length is specified on a short
-  // but 65536 is expressed as 0 ... 
-  unsigned short Subscript[3];
-  unsigned short BitSize[3];
-  std::vector<unsigned char> RGB;
+  OverlayInternal():Data() { }
+  /*
+  (6000,0010) US 484                                      #   2, 1 OverlayRows
+  (6000,0011) US 484                                      #   2, 1 OverlayColumns
+  (6000,0015) IS [1]                                      #   2, 1 NumberOfFramesInOverlay
+  (6000,0022) LO [Siemens MedCom Object Graphics]         #  30, 1 OverlayDescription
+  (6000,0040) CS [G]                                      #   2, 1 OverlayType
+  (6000,0050) SS 1\1                                      #   4, 2 OverlayOrigin
+  (6000,0051) US 1                                        #   2, 1 ImageFrameOrigin
+  (6000,0100) US 1                                        #   2, 1 OverlayBitsAllocated
+  (6000,0102) US 0                                        #   2, 1 OverlayBitPosition
+  (6000,3000) OW 0000\0000\0000\0000\0000\0000\0000\0000\0000\0000\0000\0000\0000... # 29282, 1 OverlayData
+  */
+
+  unsigned short Rows;           // (6000,0010) US 484                                      #   2, 1 OverlayRows
+  unsigned short Columns;        // (6000,0011) US 484                                      #   2, 1 OverlayColumns
+  unsigned int   NumberOfFrames; // (6000,0015) IS [1]                                      #   2, 1 NumberOfFramesInOverlay
+  std::string    Description;    // (6000,0022) LO [Siemens MedCom Object Graphics]         #  30, 1 OverlayDescription
+  std::string    Type;           // (6000,0040) CS [G]                                      #   2, 1 OverlayType
+  signed short   Origin;         // (6000,0050) SS 1\1                                      #   4, 2 OverlayOrigin
+  unsigned short FrameOrigin;    // (6000,0051) US 1                                        #   2, 1 ImageFrameOrigin
+  unsigned short BitsAllocated;  // (6000,0100) US 1                                        #   2, 1 OverlayBitsAllocated
+  unsigned short BitPosition;    // (6000,0102) US 0                                        #   2, 1 OverlayBitPosition
+  std::vector<bool> Data;
 };
 
-LookupTable::LookupTable()
+Overlay::Overlay()
 {
-  Internal = new LookupTableInternal;
-  IncompleteLUT = false;
+  Internal = new OverlayInternal;
 }
 
-LookupTable::~LookupTable()
+Overlay::~Overlay()
 {
   delete Internal;
 }
 
-void LookupTable::Allocate( int bitsample )
+void Overlay::SetOverlay(const unsigned char *array, unsigned int length)
 {
-  if( bitsample == 8 )
-    {
-    Internal->RGB.resize( 256 * 3 );
-    }
-  else if ( bitsample == 16 )
-    {
-    Internal->RGB.resize( 65536 * 2 * 3 );
-    }
-  else
-    {
-    abort();
-    }
-  BitSample = bitsample;
+  unsigned char * p = (unsigned char*)&Internal->Data[0];
+  std::copy(array, array+length, p);
 }
 
-void LookupTable::InitializeLUT(LookupTableType type, unsigned short length,
-  unsigned short subscript, unsigned short bitsize)
+void Overlay::Decode(std::istream &is, std::ostream &os)
 {
-  assert( type >= RED && type <= BLUE );
-  assert( subscript == 0 );
-  assert( bitsize == 8 || bitsize == 16 );
-  if( length == 0 )
+  unsigned char packedbytes;
+  unsigned char unpackedbytes[8];
+  while( is.read((char*)&packedbytes,1) )
     {
-    Internal->Length[type] = 65536;
-    }
-  else
-    {
-    if( length != 256 )
+    unsigned char mask = 1;
+    for (unsigned int i = 0; i < 8; ++i)
       {
-      IncompleteLUT = true;
-      }
-    Internal->Length[type] = length;
-    }
-  Internal->Subscript[type] = subscript;
-  Internal->BitSize[type] = bitsize;
-}
-
-void LookupTable::SetLUT(LookupTableType type, const unsigned char *array,
-  unsigned int length)
-{
-  if( !IncompleteLUT )
-    {
-    assert( Internal->RGB.size() == 3*Internal->Length[type]*(BitSample/8) );
-    }
-  if( BitSample == 8 )
-    {
-    const unsigned int mult = Internal->BitSize[type]/8;
-    assert( Internal->Length[type]*mult == length );
-    for( unsigned int i = 0; i < Internal->Length[type]; ++i)
-      {
-      assert( i*mult+1 < length );
-      assert( 3*i+type < Internal->RGB.size() );
-      Internal->RGB[3*i+type] = array[i*mult+1];
-      }
-    }
-  else
-    {
-    assert( Internal->Length[type]*(BitSample/8) == length );
-    uint16_t *uchar16 = (uint16_t*)&Internal->RGB[0];
-    const uint16_t *array16 = (uint16_t*)array;
-    for( unsigned int i = 0; i < Internal->Length[type]; ++i)
-      {
-      assert( 2*i < length );
-      assert( 2*(3*i+type) < Internal->RGB.size() );
-      uchar16[3*i+type] = array16[i];
-      }
-    }
-}
-
-void LookupTable::InitializeRedLUT(unsigned short length,
-unsigned short subscript,
-unsigned short bitsize)
-  {
-  InitializeLUT(RED, length, subscript, bitsize);
-  }
-void LookupTable::InitializeGreenLUT(unsigned short length,
-unsigned short subscript,
-unsigned short bitsize)
-  {
-  InitializeLUT(GREEN, length, subscript, bitsize);
-  }
-void LookupTable::InitializeBlueLUT(unsigned short length,
-unsigned short subscript,
-unsigned short bitsize)
-  {
-  InitializeLUT(BLUE, length, subscript, bitsize);
-  }
-
-void LookupTable::SetRedLUT(const unsigned char *red, unsigned int length)
-{
-  SetLUT(RED, red, length);
-}
-
-void LookupTable::SetGreenLUT(const unsigned char *green, unsigned int length)
-{
-  SetLUT(GREEN, green, length);
-}
-
-void LookupTable::SetBlueLUT(const unsigned char *blue, unsigned int length)
-{
-  SetLUT(BLUE, blue, length);
-}
-
-void LookupTable::Decode(std::istream &is, std::ostream &os)
-{
-  if ( BitSample == 8 )
-    {
-    unsigned char idx;
-    unsigned char rgb[3];
-    while( !is.eof() )
-      {
-      //is.Get(c);
-      is.read( (char*)(&idx), 1);
-      // FIXME
-      if( is.eof() ) break;
-      if( IncompleteLUT )
+      if ( (packedbytes & mask) == 0)
         {
-        assert( idx < Internal->Length[RED] );
-        assert( idx < Internal->Length[GREEN] );
-        assert( idx < Internal->Length[BLUE] );
+        unpackedbytes[i] = 0;
         }
-      rgb[RED]   = Internal->RGB[3*idx+RED];
-      rgb[GREEN] = Internal->RGB[3*idx+GREEN];
-      rgb[BLUE]  = Internal->RGB[3*idx+BLUE];
-      os.write((char*)rgb, 3 );
-      }
-    }
-  else
-    {
-    const uint16_t *rgb16 = (uint16_t*)&Internal->RGB[0];
-    while( !is.eof() )
-      {
-      unsigned short idx;
-      unsigned short rgb[3];
-      is.read( (char*)(&idx), 2);
-      //is.Get(c);
-      // FIXME
-      if( is.eof() ) break;
-      if( IncompleteLUT )
+      else
         {
-        assert( idx < Internal->Length[RED] );
-        assert( idx < Internal->Length[GREEN] );
-        assert( idx < Internal->Length[BLUE] );
+        unpackedbytes[i] = 1;
         }
-      rgb[RED]   = rgb16[3*idx+RED];
-      rgb[GREEN] = rgb16[3*idx+GREEN];
-      rgb[BLUE]  = rgb16[3*idx+BLUE];
-      os.write((char*)rgb, 3*2);
+      mask <<= 1;
       }
+    os.write((char*)unpackedbytes, 8);
     }
 }
 

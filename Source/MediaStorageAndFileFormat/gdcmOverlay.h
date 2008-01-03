@@ -31,6 +31,17 @@ public:
   ~Overlay();
   void Print(std::ostream &) const {}
 
+  void SetRows(unsigned short Rows) {}
+  void SetColumns(unsigned short Columns) {}
+  void SetNumberOfFrames(unsigned int NumberOfFrames) {}
+  void SetDescription(std::string Description) {}
+  void SetType(std::string Type) {}
+  void SetOrigin(signed short Origin) {}
+  void SetFrameOrigin(unsigned short FrameOrigin) {}
+  void SetBitsAllocated(unsigned short BitsAllocated) {}
+  void SetBitPosition(unsigned short BitPosition) {}
+  void SetOverlay(const unsigned char *array, unsigned int length);
+
   void Decode(std::istream &is, std::ostream &os);
 
   Overlay(Overlay const &lut):Object(lut)

@@ -95,7 +95,7 @@ bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
         {
         //abort(); // Outside buffer will be too small
         }
-      this->BitSample = Internal->BitSample;
+      this->BitSample = Internal->BitSample; // Store the value before destroying Internal
       delete Internal;
       Internal = 0; // Do not attempt to reuse the pointer
       is.seekg(0, std::ios::beg);

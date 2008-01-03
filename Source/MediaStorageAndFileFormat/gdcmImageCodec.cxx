@@ -17,6 +17,9 @@
 #include "gdcmByteSwap.txx"
 #include "gdcmTrace.h"
 
+#include <iostream>
+#include <iomanip>
+#include <iterator>
 
 namespace gdcm
 {
@@ -153,25 +156,25 @@ bool ImageCodec::DoPlanarConfiguration(std::istream &is, std::ostream &os)
   is.seekg(start, std::ios::beg); // reset
   //SwapCode sc = is.GetSwapCode();
 
-    // US-RGB-8-epicard.dcm
-    //assert( image.GetNumberOfDimensions() == 3 );
-    assert( !(buf_size % 3) );
-    unsigned long size = buf_size/3;
-    char *copy = new char[ buf_size ];
-    memmove( copy, dummy_buffer, buf_size);
+  // US-RGB-8-epicard.dcm
+  //assert( image.GetNumberOfDimensions() == 3 );
+  assert( !(buf_size % 3) );
+  unsigned long size = buf_size/3;
+  char *copy = new char[ buf_size ];
+  memmove( copy, dummy_buffer, buf_size);
 
-    const char *r = copy;
-    const char *g = copy + size;
-    const char *b = copy + size + size;
+  const char *r = copy;
+  const char *g = copy + size;
+  const char *b = copy + size + size;
 
-    char *p = dummy_buffer;
-    for (unsigned long j = 0; j < size; ++j)
-      {
-      *(p++) = *(r++);
-      *(p++) = *(g++);
-      *(p++) = *(b++);
-      }
-    delete[] copy;
+  char *p = dummy_buffer;
+  for (unsigned long j = 0; j < size; ++j)
+    {
+    *(p++) = *(r++);
+    *(p++) = *(g++);
+    *(p++) = *(b++);
+    }
+  delete[] copy;
 
   os.write(dummy_buffer, buf_size);
   return true;
@@ -191,6 +194,8 @@ bool ImageCodec::DoSimpleCopy(std::istream &is, std::ostream &os)
   os.write( dummy_buffer, buf_size);
   delete[] dummy_buffer ;
 #else
+  // This code is ideal but is failing on an RLE image...need to figure out
+  // what is wrong to reactive this code.
   os.rdbuf( is.rdbuf() );
 #endif
 
@@ -281,6 +286,16 @@ bool ImageCodec::DoInvertMonochrome(std::istream &is, std::ostream &os)
   return true;
 }
 
+struct ApplyMask
+{
+  uint16_t operator()(uint16_t c) const {
+    return (c >> (BitsStored - HighBit - 1)) & pmask;
+  }
+  unsigned short BitsStored;
+  unsigned short HighBit;
+  uint16_t pmask;
+};
+
 bool ImageCodec::DoPixelType(std::istream &is, std::ostream &os)
 {
   assert( PT.GetBitsAllocated() > 8 );
@@ -317,6 +332,7 @@ bool ImageCodec::DoPixelType(std::istream &is, std::ostream &os)
       }
     else // Pixel are unsigned
       {
+#if 1
       uint16_t c;
       while( is.read((char*)&c,2) )
         {
@@ -324,6 +340,25 @@ bool ImageCodec::DoPixelType(std::istream &is, std::ostream &os)
           (c >> (PT.GetBitsStored() - PT.GetHighBit() - 1)) & pmask;
         os.write((char*)&c, 2 );
         }
+#else
+      //os.rdbuf( is.rdbuf() );
+      //std::ostreambuf_iterator<char> end_of_stream_iterator;
+      //std::ostreambuf_iterator<char> out_iter(os.rdbuf());
+      //while( out_iter != end_of_stream_iterator )
+      //  {
+      //  *out_iter =
+      //    (*out_iter >> (PT.GetBitsStored() - PT.GetHighBit() - 1)) & pmask;
+      //  }
+      std::istreambuf_iterator<int> it_in(is);
+      std::istreambuf_iterator<int> eos;
+      std::ostreambuf_iterator<int> it_out(os);
+      ApplyMask am;
+      am.BitsStored = PT.GetBitsStored();
+      am.HighBit = PT.GetHighBit();
+      am.pmask = pmask;
+
+      std::transform(it_in, eos, it_out, am);
+#endif
       }
     }
   else
@@ -338,7 +373,7 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
   assert( PlanarConfiguration == 0 || PlanarConfiguration == 1);
   assert( PI != PhotometricInterpretation::UNKNOW );
   std::stringstream bs_os; // ByteSwap
-  std::stringstream pcpc_os; // Padeed Composite Pixel Code
+  std::stringstream pcpc_os; // Padded Composite Pixel Code
   std::stringstream pi_os; // PhotometricInterpretation
   std::stringstream pl_os; // PlanarConf
   std::istream *cur_is = &is;

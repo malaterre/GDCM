@@ -23,6 +23,7 @@ SET(MSFF_SRCS
   gdcmJPEGCodec.cxx
   gdcmRAWCodec.cxx
   gdcmLookupTable.cxx
+  gdcmOverlay.cxx
   gdcmPhotometricInterpretation.cxx
   gdcmPixelType.cxx
 
