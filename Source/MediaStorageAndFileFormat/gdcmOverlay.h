@@ -31,15 +31,15 @@ public:
   ~Overlay();
   void Print(std::ostream &) const {}
 
-  void SetRows(unsigned short Rows) {}
-  void SetColumns(unsigned short Columns) {}
-  void SetNumberOfFrames(unsigned int NumberOfFrames) {}
-  void SetDescription(std::string Description) {}
-  void SetType(std::string Type) {}
-  void SetOrigin(signed short Origin) {}
-  void SetFrameOrigin(unsigned short FrameOrigin) {}
-  void SetBitsAllocated(unsigned short BitsAllocated) {}
-  void SetBitPosition(unsigned short BitPosition) {}
+  void SetRows(unsigned short rows) {}
+  void SetColumns(unsigned short columns) {}
+  void SetNumberOfFrames(unsigned int numberofframes) {}
+  void SetDescription(const char* description) {}
+  void SetType(const char* type) {}
+  void SetOrigin(signed short origin) {}
+  void SetFrameOrigin(unsigned short frameorigin) {}
+  void SetBitsAllocated(unsigned short bitsallocated) {}
+  void SetBitPosition(unsigned short bitposition) {}
   void SetOverlay(const unsigned char *array, unsigned int length);
 
   void Decode(std::istream &is, std::ostream &os);
