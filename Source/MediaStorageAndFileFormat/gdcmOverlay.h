@@ -24,6 +24,11 @@ namespace gdcm
   
 class OverlayInternal;
 class ByteValue;
+/*
+ *  TODO:
+ *  Is there actually any way to recognize an overlay ? On images with multiple overlay I do not see
+ *  any way to differenciate them (other than the group tag).
+ */
 class Overlay : public Object
 {
 public:
@@ -31,15 +36,15 @@ public:
   ~Overlay();
   void Print(std::ostream &) const {}
 
-  void SetRows(unsigned short rows) {}
-  void SetColumns(unsigned short columns) {}
-  void SetNumberOfFrames(unsigned int numberofframes) {}
-  void SetDescription(const char* description) {}
-  void SetType(const char* type) {}
-  void SetOrigin(signed short *origin) {}
-  void SetFrameOrigin(unsigned short frameorigin) {}
-  void SetBitsAllocated(unsigned short bitsallocated) {}
-  void SetBitPosition(unsigned short bitposition) {}
+  void SetRows(unsigned short rows);
+  void SetColumns(unsigned short columns);
+  void SetNumberOfFrames(unsigned int numberofframes);
+  void SetDescription(const char* description);
+  void SetType(const char* type);
+  void SetOrigin(signed short *origin);
+  void SetFrameOrigin(unsigned short frameorigin);
+  void SetBitsAllocated(unsigned short bitsallocated);
+  void SetBitPosition(unsigned short bitposition);
   void SetOverlay(const unsigned char *array, unsigned int length);
 
   void Decode(std::istream &is, std::ostream &os);

@@ -58,6 +58,16 @@ Overlay::~Overlay()
   delete Internal;
 }
 
+  void Overlay::SetRows(unsigned short rows) { Internal->Rows = rows; }
+  void Overlay::SetColumns(unsigned short columns) { Internal->Columns = columns; }
+  void Overlay::SetNumberOfFrames(unsigned int numberofframes) { Internal->NumberOfFrames = numberofframes; }
+  void Overlay::SetDescription(const char* description) { Internal->Description = description; }
+  void Overlay::SetType(const char* type) { Internal->Type = type; }
+  void Overlay::SetOrigin(signed short *origin) { /*Internal->Origin = origin;*/ abort(); }
+  void Overlay::SetFrameOrigin(unsigned short frameorigin) { Internal->FrameOrigin = frameorigin; }
+  void Overlay::SetBitsAllocated(unsigned short bitsallocated) { Internal->BitsAllocated = bitsallocated; }
+  void Overlay::SetBitPosition(unsigned short bitposition) { Internal->BitPosition = bitposition; }
+
 void Overlay::SetOverlay(const unsigned char *array, unsigned int length)
 {
   unsigned char * p = (unsigned char*)&Internal->Data[0];
