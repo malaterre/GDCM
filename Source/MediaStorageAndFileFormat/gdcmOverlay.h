@@ -36,7 +36,7 @@ public:
   void SetNumberOfFrames(unsigned int numberofframes) {}
   void SetDescription(const char* description) {}
   void SetType(const char* type) {}
-  void SetOrigin(signed short origin) {}
+  void SetOrigin(signed short *origin) {}
   void SetFrameOrigin(unsigned short frameorigin) {}
   void SetBitsAllocated(unsigned short bitsallocated) {}
   void SetBitPosition(unsigned short bitposition) {}
