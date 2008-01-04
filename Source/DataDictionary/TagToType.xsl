@@ -9,7 +9,6 @@
   Module:  $URL$
 
   Copyright (c) 2006-2007 Mathieu Malaterre
-  Copyright (c) 1993-2005 CREATIS
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -94,7 +93,6 @@
   Module:  $URL$
 
   Copyright (c) 2006-2007 Mathieu Malaterre
-  Copyright (c) 1993-2005 CREATIS
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -117,11 +115,13 @@ template &lt;uint16_t,uint16_t&gt; struct TagToType;
 template &lt;uint16_t group&gt; struct TagToType&lt;group,0x0000&gt; { typedef VRToType&lt;VR::UL&gt;::Type Type; enum { VRType = VR::UL }; enum { VMType = VM::VM1 }; };
 </xsl:text>
     <xsl:for-each select="dict/entry">
-      <xsl:if test="substring(@group,3) != 'xx' and substring(@element,3) != 'xx' and @vr">
+      <xsl:variable name="group" select="translate(@group,'x','0')"/>
+      <xsl:variable name="element" select="translate(@element,'x','0')"/>
+      <xsl:if test="substring($group,3) != 'xx' and substring($element,3) != 'xx' and @vr != ''">
         <xsl:text>template &lt;&gt; struct TagToType&lt;0x</xsl:text>
-        <xsl:value-of select="@group"/>
+        <xsl:value-of select="$group"/>
         <xsl:text>,0x</xsl:text>
-        <xsl:value-of select="@element"/>
+        <xsl:value-of select="$element"/>
         <xsl:text>&gt; {</xsl:text>
         <xsl:text>
 </xsl:text>
