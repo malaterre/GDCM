@@ -36,6 +36,15 @@
 
 void UpdateOverlay(gdcm::Overlay & ov, gdcm::DataElement const & de)
 {
+/*
+  8.1.2 Overlay data encoding of related data elements
+    Encoded Overlay Planes always have a bit depth of 1, and are encoded separately from the Pixel Data in Overlay Data (60xx,3000). The following two Data Elements shall define the Overlay Plane structure:
+    ¿ Overlay Bits Allocated (60xx,0100)
+    ¿ Overlay Bit Position (60xx,0102)
+    Notes: 1. There is no Data Element analogous to Bits Stored (0028,0101) since Overlay Planes always have a bit depth of 1.
+    2. Restrictions on the allowed values for these Data Elements are defined in PS 3.3. Formerly overlay data stored in unused bits of Pixel Data (7FE0,0010) was described, and these attributes had meaningful values but this usage has been retired. See PS 3.5 2004. For overlays encoded in Overlay Data Element (60xx,3000), Overlay Bits Allocated (60xx,0100) is always 1 and Overlay Bit Position (60xx,0102) is always 0.
+*/
+
   assert( de.GetTag().IsPublic() );
   const gdcm::ByteValue* bv = de.GetByteValue();
   assert( bv );
@@ -44,7 +53,11 @@ void UpdateOverlay(gdcm::Overlay & ov, gdcm::DataElement const & de)
   //assert( strlen( s.c_str() ) == s.size() );
 
   //std::cerr << "Tag: " << de.GetTag() << std::endl;
-  if( de.GetTag().GetElement() == 0x0010 ) // OverlayRows
+  if( de.GetTag().GetElement() == 0x0000 ) // OverlayGroupLength
+    {
+    // ??
+    }
+  else if( de.GetTag().GetElement() == 0x0010 ) // OverlayRows
     {
     gdcm::Attribute<0x6000,0x0010> at;
     at.Set( de.GetValue() );
@@ -86,12 +99,14 @@ void UpdateOverlay(gdcm::Overlay & ov, gdcm::DataElement const & de)
     {
     gdcm::Attribute<0x6000,0x0100> at;
     at.Set( de.GetValue() );
+    assert( at.GetValue() == 1 );
     ov.SetBitsAllocated( at.GetValue() );
     }
   else if( de.GetTag().GetElement() == 0x0102 ) // OverlayBitPosition
     {
     gdcm::Attribute<0x6000,0x0102> at;
     at.Set( de.GetValue() );
+    //assert( at.GetValue() == 0 ); // For old ACR when using unused bits...
     ov.SetBitPosition( at.GetValue() );
     }
   else if( de.GetTag().GetElement() == 0x3000 ) // OverlayData
@@ -162,7 +177,19 @@ int DoOperation(const std::string & filename)
       ov.Decompress( unpack );
       std::string s = unpack.str();
       size_t l = s.size();
-      assert( unpack.str().size() == ov.GetRows() * ov.GetColumns() );
+      // The following line will fail with images like XA_GE_JPEG_02_with_Overlays.dcm
+      // since the overlays are stored in the unused bit of the PixelData
+      if( !ov.IsEmpty() )
+        {
+        assert( unpack.str().size() == ov.GetRows() * ov.GetColumns() );
+        }
+      else
+        {
+        std::cerr << "This image does not contains Overlay in the 0x60xx tags. "
+                  << "Instead the overlay is stored in the unused bit of the Pixel Data. "
+                  << "This is not supported right now"
+                  << std::endl;
+        }
       }
     }
   std::cout << "Num of Overlays: " << numoverlays << std::endl;
