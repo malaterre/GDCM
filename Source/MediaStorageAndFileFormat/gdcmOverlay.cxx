@@ -4,7 +4,6 @@
   Module:  $URL$
 
   Copyright (c) 2006-2007 Mathieu Malaterre
-  Copyright (c) 1993-2005 CREATIS
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -22,7 +21,17 @@ namespace gdcm
 class OverlayInternal
 {
 public:
-  OverlayInternal():Data() { }
+  OverlayInternal():
+  Rows(0),
+  Columns(0),
+  NumberOfFrames(0),
+  Description(),
+  Type(),
+  //Origin[2],
+  FrameOrigin(0),
+  BitsAllocated(0),
+  BitPosition(0),
+  Data() { Origin[0] = Origin[1] = 0; }
   /*
   (6000,0010) US 484                                      #   2, 1 OverlayRows
   (6000,0011) US 484                                      #   2, 1 OverlayColumns
@@ -41,11 +50,24 @@ public:
   unsigned int   NumberOfFrames; // (6000,0015) IS [1]                                      #   2, 1 NumberOfFramesInOverlay
   std::string    Description;    // (6000,0022) LO [Siemens MedCom Object Graphics]         #  30, 1 OverlayDescription
   std::string    Type;           // (6000,0040) CS [G]                                      #   2, 1 OverlayType
-  signed short   Origin[2];         // (6000,0050) SS 1\1                                      #   4, 2 OverlayOrigin
+  signed short   Origin[2];      // (6000,0050) SS 1\1                                      #   4, 2 OverlayOrigin
   unsigned short FrameOrigin;    // (6000,0051) US 1                                        #   2, 1 ImageFrameOrigin
   unsigned short BitsAllocated;  // (6000,0100) US 1                                        #   2, 1 OverlayBitsAllocated
   unsigned short BitPosition;    // (6000,0102) US 0                                        #   2, 1 OverlayBitPosition
-  std::vector<bool> Data;
+  //std::vector<bool> Data;
+  std::vector<char> Data;
+  void Print(std::ostream &os) const {
+    os << "Rows            " <<  Rows << std::endl;
+    os << "Columns         " <<  Columns << std::endl;
+    os << "NumberOfFrames  " <<  NumberOfFrames << std::endl;
+    os << "Description     " <<  Description << std::endl;
+    os << "Type            " <<  Type << std::endl;
+    os << "Origin[2]       " <<  Origin[0] << "," << Origin[1] << std::endl;
+    os << "FrameOrigin     " <<  FrameOrigin << std::endl;
+    os << "BitsAllocated   " <<  BitsAllocated << std::endl;
+    os << "BitPosition     " <<  BitPosition << std::endl;
+    //std::vector<bool> Data;
+  }
 };
 
 Overlay::Overlay()
@@ -58,20 +80,28 @@ Overlay::~Overlay()
   delete Internal;
 }
 
-  void Overlay::SetRows(unsigned short rows) { Internal->Rows = rows; }
-  void Overlay::SetColumns(unsigned short columns) { Internal->Columns = columns; }
-  void Overlay::SetNumberOfFrames(unsigned int numberofframes) { Internal->NumberOfFrames = numberofframes; }
-  void Overlay::SetDescription(const char* description) { Internal->Description = description; }
-  void Overlay::SetType(const char* type) { Internal->Type = type; }
-  void Overlay::SetOrigin(signed short *origin) { /*Internal->Origin = origin;*/ abort(); }
-  void Overlay::SetFrameOrigin(unsigned short frameorigin) { Internal->FrameOrigin = frameorigin; }
-  void Overlay::SetBitsAllocated(unsigned short bitsallocated) { Internal->BitsAllocated = bitsallocated; }
-  void Overlay::SetBitPosition(unsigned short bitposition) { Internal->BitPosition = bitposition; }
+void Overlay::SetRows(unsigned short rows) { Internal->Rows = rows; }
+  unsigned short Overlay::GetRows() const { return Internal->Rows; }
+void Overlay::SetColumns(unsigned short columns) { Internal->Columns = columns; }
+  unsigned short Overlay::GetColumns() const { return Internal->Columns; }
+void Overlay::SetNumberOfFrames(unsigned int numberofframes) { Internal->NumberOfFrames = numberofframes; }
+void Overlay::SetDescription(const char* description) { Internal->Description = description; }
+void Overlay::SetType(const char* type) { Internal->Type = type; }
+void Overlay::SetOrigin(const signed short *origin) {
+  Internal->Origin[0] = origin[0];
+  Internal->Origin[1] = origin[1];
+}
+void Overlay::SetFrameOrigin(unsigned short frameorigin) { Internal->FrameOrigin = frameorigin; }
+void Overlay::SetBitsAllocated(unsigned short bitsallocated) { Internal->BitsAllocated = bitsallocated; }
+void Overlay::SetBitPosition(unsigned short bitposition) { Internal->BitPosition = bitposition; }
 
-void Overlay::SetOverlay(const unsigned char *array, unsigned int length)
+void Overlay::SetOverlay(const char *array, unsigned int length)
 {
-  unsigned char * p = (unsigned char*)&Internal->Data[0];
-  std::copy(array, array+length, p);
+  //char * p = (char*)&Internal->Data[0];
+  Internal->Data.resize( length ); // ??
+  std::copy(array, array+length, Internal->Data.begin());
+  assert( length * 8 == Internal->Rows * Internal->Columns );
+  assert( Internal->Data.size() == length );
 }
 
 void Overlay::Decode(std::istream &is, std::ostream &os)
@@ -93,8 +123,36 @@ void Overlay::Decode(std::istream &is, std::ostream &os)
         }
       mask <<= 1;
       }
-    os.write((char*)unpackedbytes, 8);
+    os.write(reinterpret_cast<char*>(unpackedbytes), 8);
     }
+}
+
+void Overlay::Decompress(std::ostream &os)
+{
+  unsigned char unpackedbytes[8];
+  for( std::vector<char>::const_iterator it = Internal->Data.begin(); it != Internal->Data.end(); ++it )
+    {
+    unsigned char packedbytes = *it;
+    unsigned char mask = 1;
+    for (unsigned int i = 0; i < 8; ++i)
+      {
+      if ( (packedbytes & mask) == 0)
+        {
+        unpackedbytes[i] = 0;
+        }
+      else
+        {
+        unpackedbytes[i] = 1;
+        }
+      mask <<= 1;
+      }
+    os.write(reinterpret_cast<char*>(unpackedbytes), 8);
+    }
+}
+
+void Overlay::Print(std::ostream &os) const
+{
+  Internal->Print( os );
 }
 
 } // end namespace gdcm

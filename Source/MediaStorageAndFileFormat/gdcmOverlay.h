@@ -4,7 +4,6 @@
   Module:  $URL$
 
   Copyright (c) 2006-2007 Mathieu Malaterre
-  Copyright (c) 1993-2005 CREATIS
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -34,20 +33,25 @@ class Overlay : public Object
 public:
   Overlay();
   ~Overlay();
-  void Print(std::ostream &) const {}
+  void Print(std::ostream &) const;
 
   void SetRows(unsigned short rows);
+  unsigned short GetRows() const;
   void SetColumns(unsigned short columns);
+  unsigned short GetColumns() const;
   void SetNumberOfFrames(unsigned int numberofframes);
   void SetDescription(const char* description);
   void SetType(const char* type);
-  void SetOrigin(signed short *origin);
+  void SetOrigin(const signed short *origin);
   void SetFrameOrigin(unsigned short frameorigin);
   void SetBitsAllocated(unsigned short bitsallocated);
   void SetBitPosition(unsigned short bitposition);
-  void SetOverlay(const unsigned char *array, unsigned int length);
+  void SetOverlay(const char *array, unsigned int length);
+  //const char *GetOverlay() const;
 
   void Decode(std::istream &is, std::ostream &os);
+
+  void Decompress(std::ostream &os);
 
   Overlay(Overlay const &lut):Object(lut)
     {
