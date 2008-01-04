@@ -6,8 +6,7 @@
   Program: GDCM (Grass Root DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2007 Mathieu Malaterre
-  Copyright (c) 1993-2005 CREATIS
+  Copyright (c) 2006-2008 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -50,7 +49,7 @@ $ xsltproc gdcm2html.xsl GDCM2.xml
   Program: GDCM (Grass Root DICOM). A DICOM library
   Module:  $URL$
 
-  Copyright (c) 2006-2007 Mathieu Malaterre
+  Copyright (c) 2006-2008 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
