@@ -117,7 +117,7 @@ template &lt;uint16_t group&gt; struct TagToType&lt;group,0x0000&gt; { typedef V
     <xsl:for-each select="dict/entry">
       <xsl:variable name="group" select="translate(@group,'x','0')"/>
       <xsl:variable name="element" select="translate(@element,'x','0')"/>
-      <xsl:if test="substring($group,3) != 'xx' and substring($element,3) != 'xx' and @vr != ''">
+      <xsl:if test="substring($group,3) != 'xx' and substring($element,3) != 'xx' and @vr != '' and @vr != 'US_SS' and @vr != 'US_SS_OW' and @vr != 'OB_OW'">
         <xsl:text>template &lt;&gt; struct TagToType&lt;0x</xsl:text>
         <xsl:value-of select="$group"/>
         <xsl:text>,0x</xsl:text>

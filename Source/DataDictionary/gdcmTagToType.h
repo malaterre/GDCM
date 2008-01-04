@@ -5098,51 +5098,6 @@ typedef VRToType<VR::US>::Type Type;
 enum { VRType = VR::US };
 enum { VMType = VM::VM1 };
 };
-template <> struct TagToType<0x0028,0x0104> {
-typedef VRToType<VR::US_SS>::Type Type;
-enum { VRType = VR::US_SS };
-enum { VMType = VM::VM1 };
-};
-template <> struct TagToType<0x0028,0x0105> {
-typedef VRToType<VR::US_SS>::Type Type;
-enum { VRType = VR::US_SS };
-enum { VMType = VM::VM1 };
-};
-template <> struct TagToType<0x0028,0x0106> {
-typedef VRToType<VR::US_SS>::Type Type;
-enum { VRType = VR::US_SS };
-enum { VMType = VM::VM1 };
-};
-template <> struct TagToType<0x0028,0x0107> {
-typedef VRToType<VR::US_SS>::Type Type;
-enum { VRType = VR::US_SS };
-enum { VMType = VM::VM1 };
-};
-template <> struct TagToType<0x0028,0x0108> {
-typedef VRToType<VR::US_SS>::Type Type;
-enum { VRType = VR::US_SS };
-enum { VMType = VM::VM1 };
-};
-template <> struct TagToType<0x0028,0x0109> {
-typedef VRToType<VR::US_SS>::Type Type;
-enum { VRType = VR::US_SS };
-enum { VMType = VM::VM1 };
-};
-template <> struct TagToType<0x0028,0x0110> {
-typedef VRToType<VR::US_SS>::Type Type;
-enum { VRType = VR::US_SS };
-enum { VMType = VM::VM1 };
-};
-template <> struct TagToType<0x0028,0x0111> {
-typedef VRToType<VR::US_SS>::Type Type;
-enum { VRType = VR::US_SS };
-enum { VMType = VM::VM1 };
-};
-template <> struct TagToType<0x0028,0x0120> {
-typedef VRToType<VR::US_SS>::Type Type;
-enum { VRType = VR::US_SS };
-enum { VMType = VM::VM1 };
-};
 template <> struct TagToType<0x0028,0x0200> {
 typedef VRToType<VR::US>::Type Type;
 enum { VRType = VR::US };
@@ -5223,35 +5178,10 @@ typedef VRToType<VR::CS>::Type Type;
 enum { VRType = VR::CS };
 enum { VMType = VM::VM1 };
 };
-template <> struct TagToType<0x0028,0x1100> {
-typedef VRToType<VR::US_SS>::Type Type;
-enum { VRType = VR::US_SS };
-enum { VMType = VM::VM3 };
-};
-template <> struct TagToType<0x0028,0x1101> {
-typedef VRToType<VR::US_SS>::Type Type;
-enum { VRType = VR::US_SS };
-enum { VMType = VM::VM3 };
-};
-template <> struct TagToType<0x0028,0x1102> {
-typedef VRToType<VR::US_SS>::Type Type;
-enum { VRType = VR::US_SS };
-enum { VMType = VM::VM3 };
-};
-template <> struct TagToType<0x0028,0x1103> {
-typedef VRToType<VR::US_SS>::Type Type;
-enum { VRType = VR::US_SS };
-enum { VMType = VM::VM3 };
-};
 template <> struct TagToType<0x0028,0x1199> {
 typedef VRToType<VR::UI>::Type Type;
 enum { VRType = VR::UI };
 enum { VMType = VM::VM1 };
-};
-template <> struct TagToType<0x0028,0x1200> {
-typedef VRToType<VR::US_SS_OW>::Type Type;
-enum { VRType = VR::US_SS_OW };
-enum { VMType = VM::VM1_n };
 };
 template <> struct TagToType<0x0028,0x1201> {
 typedef VRToType<VR::OW>::Type Type;
@@ -5333,11 +5263,6 @@ typedef VRToType<VR::SQ>::Type Type;
 enum { VRType = VR::SQ };
 enum { VMType = VM::VM1 };
 };
-template <> struct TagToType<0x0028,0x3002> {
-typedef VRToType<VR::US_SS>::Type Type;
-enum { VRType = VR::US_SS };
-enum { VMType = VM::VM3 };
-};
 template <> struct TagToType<0x0028,0x3003> {
 typedef VRToType<VR::LO>::Type Type;
 enum { VRType = VR::LO };
@@ -5347,11 +5272,6 @@ template <> struct TagToType<0x0028,0x3004> {
 typedef VRToType<VR::LO>::Type Type;
 enum { VRType = VR::LO };
 enum { VMType = VM::VM1 };
-};
-template <> struct TagToType<0x0028,0x3006> {
-typedef VRToType<VR::US_SS_OW>::Type Type;
-enum { VRType = VR::US_SS_OW };
-enum { VMType = VM::VM1_n };
 };
 template <> struct TagToType<0x0028,0x3010> {
 typedef VRToType<VR::SQ>::Type Type;
@@ -6603,20 +6523,10 @@ typedef VRToType<VR::SH>::Type Type;
 enum { VRType = VR::SH };
 enum { VMType = VM::VM1 };
 };
-template <> struct TagToType<0x0040,0x9211> {
-typedef VRToType<VR::US_SS>::Type Type;
-enum { VRType = VR::US_SS };
-enum { VMType = VM::VM1 };
-};
 template <> struct TagToType<0x0040,0x9212> {
 typedef VRToType<VR::FD>::Type Type;
 enum { VRType = VR::FD };
 enum { VMType = VM::VM1_n };
-};
-template <> struct TagToType<0x0040,0x9216> {
-typedef VRToType<VR::US_SS>::Type Type;
-enum { VRType = VR::US_SS };
-enum { VMType = VM::VM1 };
 };
 template <> struct TagToType<0x0040,0x9224> {
 typedef VRToType<VR::FD>::Type Type;
@@ -7391,16 +7301,6 @@ enum { VMType = VM::VM1 };
 template <> struct TagToType<0x0060,0x3002> {
 typedef VRToType<VR::US>::Type Type;
 enum { VRType = VR::US };
-enum { VMType = VM::VM1 };
-};
-template <> struct TagToType<0x0060,0x3004> {
-typedef VRToType<VR::US_SS>::Type Type;
-enum { VRType = VR::US_SS };
-enum { VMType = VM::VM1 };
-};
-template <> struct TagToType<0x0060,0x3006> {
-typedef VRToType<VR::US_SS>::Type Type;
-enum { VRType = VR::US_SS };
 enum { VMType = VM::VM1 };
 };
 template <> struct TagToType<0x0060,0x3008> {
@@ -12063,11 +11963,6 @@ typedef VRToType<VR::UL>::Type Type;
 enum { VRType = VR::UL };
 enum { VMType = VM::VM1 };
 };
-template <> struct TagToType<0x5000,0x200c> {
-typedef VRToType<VR::OB_OW>::Type Type;
-enum { VRType = VR::OB_OW };
-enum { VMType = VM::VM1 };
-};
 template <> struct TagToType<0x5000,0x200e> {
 typedef VRToType<VR::LT>::Type Type;
 enum { VRType = VR::LT };
@@ -12088,11 +11983,6 @@ typedef VRToType<VR::US>::Type Type;
 enum { VRType = VR::US };
 enum { VMType = VM::VM1 };
 };
-template <> struct TagToType<0x5000,0x3000> {
-typedef VRToType<VR::OB_OW>::Type Type;
-enum { VRType = VR::OB_OW };
-enum { VMType = VM::VM1 };
-};
 template <> struct TagToType<0x5200,0x9229> {
 typedef VRToType<VR::SQ>::Type Type;
 enum { VRType = VR::SQ };
@@ -12108,16 +11998,6 @@ typedef VRToType<VR::SQ>::Type Type;
 enum { VRType = VR::SQ };
 enum { VMType = VM::VM1 };
 };
-template <> struct TagToType<0x5400,0x0110> {
-typedef VRToType<VR::OB_OW>::Type Type;
-enum { VRType = VR::OB_OW };
-enum { VMType = VM::VM1 };
-};
-template <> struct TagToType<0x5400,0x0112> {
-typedef VRToType<VR::OB_OW>::Type Type;
-enum { VRType = VR::OB_OW };
-enum { VMType = VM::VM1 };
-};
 template <> struct TagToType<0x5400,0x1004> {
 typedef VRToType<VR::US>::Type Type;
 enum { VRType = VR::US };
@@ -12126,16 +12006,6 @@ enum { VMType = VM::VM1 };
 template <> struct TagToType<0x5400,0x1006> {
 typedef VRToType<VR::CS>::Type Type;
 enum { VRType = VR::CS };
-enum { VMType = VM::VM1 };
-};
-template <> struct TagToType<0x5400,0x100a> {
-typedef VRToType<VR::OB_OW>::Type Type;
-enum { VRType = VR::OB_OW };
-enum { VMType = VM::VM1 };
-};
-template <> struct TagToType<0x5400,0x1010> {
-typedef VRToType<VR::OB_OW>::Type Type;
-enum { VRType = VR::OB_OW };
 enum { VMType = VM::VM1 };
 };
 template <> struct TagToType<0x5600,0x0010> {
@@ -12288,19 +12158,9 @@ typedef VRToType<VR::LO>::Type Type;
 enum { VRType = VR::LO };
 enum { VMType = VM::VM1 };
 };
-template <> struct TagToType<0x6000,0x3000> {
-typedef VRToType<VR::OB_OW>::Type Type;
-enum { VRType = VR::OB_OW };
-enum { VMType = VM::VM1 };
-};
 template <> struct TagToType<0x6000,0x4000> {
 typedef VRToType<VR::LT>::Type Type;
 enum { VRType = VR::LT };
-enum { VMType = VM::VM1 };
-};
-template <> struct TagToType<0x7fe0,0x0010> {
-typedef VRToType<VR::OB_OW>::Type Type;
-enum { VRType = VR::OB_OW };
 enum { VMType = VM::VM1 };
 };
 template <> struct TagToType<0xfffa,0xfffa> {
