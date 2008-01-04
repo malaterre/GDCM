@@ -95,6 +95,11 @@ void Overlay::SetFrameOrigin(unsigned short frameorigin) { Internal->FrameOrigin
 void Overlay::SetBitsAllocated(unsigned short bitsallocated) { Internal->BitsAllocated = bitsallocated; }
 void Overlay::SetBitPosition(unsigned short bitposition) { Internal->BitPosition = bitposition; }
 
+bool Overlay::IsEmpty() const
+{
+  return Internal->Data.empty();
+}
+
 void Overlay::SetOverlay(const char *array, unsigned int length)
 {
   //char * p = (char*)&Internal->Data[0];

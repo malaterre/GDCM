@@ -378,7 +378,7 @@ int vtkGDCMReader::RequestData(vtkInformation *vtkNotUsed(request),
     gdcm::ImageReader reader;
     const char *filename;
     filename = this->FileNames->GetValue( j ).c_str();
-    std::cerr << "Reader:" << j << " -> " << filename << std::endl;
+    //std::cerr << "Reader:" << j << " -> " << filename << std::endl;
     reader.SetFileName( filename );
     if( !reader.Read() )
       {

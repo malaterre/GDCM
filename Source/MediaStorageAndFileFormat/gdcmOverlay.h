@@ -47,7 +47,8 @@ public:
   void SetBitsAllocated(unsigned short bitsallocated);
   void SetBitPosition(unsigned short bitposition);
   void SetOverlay(const char *array, unsigned int length);
-  //const char *GetOverlay() const;
+
+  bool IsEmpty() const;
 
   void Decode(std::istream &is, std::ostream &os);
 

@@ -14,6 +14,7 @@
 =========================================================================*/
 #include "gdcmReader.h"
 #include "gdcmImageReader.h"
+#include "gdcmDirectory.h"
 
 #include "vtkImageData.h"
 #include "vtkStructuredPointsWriter.h"
@@ -25,6 +26,7 @@ struct threadparams
   const char **filenames;
   unsigned int nfiles;
   char *scalarpointer;
+// TODO I should also pass in the dim of the reference image just in case
 };
 
 void *ReadFilesThread(void *voidparams)
@@ -136,11 +138,15 @@ void ReadFiles(unsigned int nfiles, const char *filenames[])
   // There is nfiles, and nThreads
   assert( nfiles > nthreads );
   const unsigned int partition = nfiles / nthreads;
-  //const unsigned int len = 2 * dims[0] * dims[1];
   for (unsigned int thread=0; thread < nthreads; ++thread)
     {
     params[thread].filenames = filenames + thread * partition;
     params[thread].nfiles = partition;
+    if( thread == nthreads - 1 )
+      {
+      // There is slightly more files to process in this thread:
+      params[thread].nfiles += nfiles % nthreads;
+      }
     assert( thread * partition < nfiles );
     params[thread].scalarpointer = scalarpointer + thread * partition * len;
     //assert( params[thread].scalarpointer < scalarpointer + 2 * dims[0] * dims[1] * dims[2] );
@@ -153,6 +159,14 @@ void ReadFiles(unsigned int nfiles, const char *filenames[])
       }
     //ShowFilenames(params[thread]);
     }
+// DEBUG
+  unsigned int total = 0;
+  for (unsigned int thread=0; thread < nthreads; ++thread)
+    {
+    total += params[thread].nfiles;
+    }
+  assert( total == nfiles );
+// END DEBUG
 
   for (unsigned int thread=0;thread<nthreads;thread++)
     {
@@ -167,7 +181,7 @@ void ReadFiles(unsigned int nfiles, const char *filenames[])
   writer->SetInput( output );
   writer->SetFileName( "/tmp/threadgdcm.vtk" );
   writer->SetFileTypeToBinary();
-  writer->Write();
+  //writer->Write();
   writer->Delete();
 
   output->Print( std::cout );
@@ -178,12 +192,33 @@ int main(int argc, char *argv[])
 {
   if( argc < 2 )
     {
+    std::cerr << argv[0] << " [directory|list of filenames]\n";
     return 1;
     }
 
-  const char **filenames = const_cast<const char**>(argv+1);
-  const unsigned int nfiles = argc - 1;
-  ReadFiles(nfiles, filenames);
+  // Check if user pass in a single directory
+  if( argc == 2 && gdcm::Directory::IsDirectory( argv[1] ) )
+    {
+    gdcm::Directory d;
+    d.Load( argv[1] );
+    gdcm::Directory::FilenamesType l = d.GetFilenames();
+    const unsigned int nfiles = l.size();
+    const char **filenames = new const char* [ nfiles ];
+    for(unsigned int i = 0; i < nfiles; ++i)
+      {
+      filenames[i] = l[i].c_str();
+      }
+    ReadFiles(nfiles, filenames);
+    delete[] filenames;
+    }
+  else
+    {
+    // Simply copy all filenames into the vector:
+    const char **filenames = const_cast<const char**>(argv+1);
+    const unsigned int nfiles = argc - 1;
+    ReadFiles(nfiles, filenames);
+    }
+
 
   return 0;
 }

@@ -296,6 +296,7 @@ struct ApplyMask
   uint16_t pmask;
 };
 
+// Cleanup the unused bits
 bool ImageCodec::DoPixelType(std::istream &is, std::ostream &os)
 {
   assert( PT.GetBitsAllocated() > 8 );
@@ -447,7 +448,14 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
   if ( PT.GetBitsAllocated() != PT.GetBitsStored()
     && PT.GetBitsAllocated() != 8 )
     {
+    // Technically we should only run this operation if the image declares it has overlay AND
+    // there is no (0x60xx,0x3000) element, for example:
+    // - XA_GE_JPEG_02_with_Overlays.dcm
+    // - SIEMENS_GBS_III-16-ACR_NEMA_1.acr
     DoPixelType(*cur_is,os);
+    // Once the issue with IMAGES/JPLY/RG3_JPLY aka gdcmData/D_CLUNIE_RG3_JPLY.dcm is solved the previous
+    // code will be replace with a simple call to:
+    //DoSimpleCopy(*cur_is,os);
     }
   else
     {

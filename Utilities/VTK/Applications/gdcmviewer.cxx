@@ -91,7 +91,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   // but gdcmviewer doesn't know about them :-(
 
   reader->Update();
-  reader->Print( cout );
+  //reader->Print( cout );
   //reader->GetOutput()->Print( cout );
   double *range = reader->GetOutput()->GetScalarRange();
   std::cerr << "Range: " << range[0] << " " << range[1] << std::endl;
@@ -106,7 +106,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   // Make sure to display on most screen
   dims[0] = (dims[0] < 600 ) ? dims[0] : 600;
   dims[1] = (dims[1] < 600 ) ? dims[1] : 600;
-  viewer->Render(); // EXTREMELY IMPORTANT
+  viewer->Render(); // EXTREMELY IMPORTANT for vtkImageViewer2
   viewer->SetSize( dims );
 
   // Here is where we setup the observer, 

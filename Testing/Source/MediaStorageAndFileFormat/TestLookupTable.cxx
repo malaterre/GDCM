@@ -17,5 +17,6 @@
 
 int TestLookupTable(int, char *[])
 {
+  gdcm::LookupTable lut;
   return 0;
 }
