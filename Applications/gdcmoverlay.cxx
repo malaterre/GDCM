@@ -23,6 +23,8 @@
 #include "gdcmDumper.h"
 #include "gdcmSystem.h"
 #include "gdcmDirectory.h"
+#include "gdcmOverlay.h"
+#include "gdcmAttribute.h"
 
 #include <string>
 #include <iostream>
@@ -31,6 +33,76 @@
 #include <stdlib.h>    /* for exit */
 #include <getopt.h>
 #include <string.h>
+
+void UpdateOverlay(gdcm::Overlay & ov, gdcm::DataElement const & de)
+{
+  assert( de.GetTag().IsPublic() );
+  const gdcm::ByteValue* bv = de.GetByteValue();
+  assert( bv );
+  std::string s( bv->GetPointer(), bv->GetLength() );
+  // What if a \0 can be found before the end of string...
+  //assert( strlen( s.c_str() ) == s.size() );
+
+  //std::cerr << "Tag: " << de.GetTag() << std::endl;
+  if( de.GetTag().GetElement() == 0x0010 ) // OverlayRows
+    {
+    gdcm::Attribute<0x6000,0x0010> at;
+    at.Set( de.GetValue() );
+    ov.SetRows( at.GetValue() );
+    }
+  else if( de.GetTag().GetElement() == 0x0011 ) // OverlayColumns
+    {
+    gdcm::Attribute<0x6000,0x0011> at;
+    at.Set( de.GetValue() );
+    ov.SetColumns( at.GetValue() );
+    }
+  else if( de.GetTag().GetElement() == 0x0015 ) // NumberOfFramesInOverlay
+    {
+    gdcm::Attribute<0x6000,0x0015> at;
+    at.Set( de.GetValue() );
+    ov.SetNumberOfFrames( at.GetValue() );
+    }
+  else if( de.GetTag().GetElement() == 0x0022 ) // OverlayDescription
+    {
+    ov.SetDescription( s.c_str() );
+    }
+  else if( de.GetTag().GetElement() == 0x0040 ) // OverlayType
+    {
+    ov.SetType( s.c_str() );
+    }
+  else if( de.GetTag().GetElement() == 0x0050 ) // OverlayOrigin
+    {
+    gdcm::Attribute<0x6000,0x0050> at;
+    at.Set( de.GetValue() );
+    ov.SetOrigin( at.GetBytes() );
+    }
+  else if( de.GetTag().GetElement() == 0x0051 ) // ImageFrameOrigin
+    {
+    gdcm::Attribute<0x6000,0x0051> at;
+    at.Set( de.GetValue() );
+    ov.SetFrameOrigin( at.GetValue() );
+    }
+  else if( de.GetTag().GetElement() == 0x0100 ) // OverlayBitsAllocated
+    {
+    gdcm::Attribute<0x6000,0x0100> at;
+    at.Set( de.GetValue() );
+    ov.SetBitsAllocated( at.GetValue() );
+    }
+  else if( de.GetTag().GetElement() == 0x0102 ) // OverlayBitPosition
+    {
+    gdcm::Attribute<0x6000,0x0102> at;
+    at.Set( de.GetValue() );
+    ov.SetBitPosition( at.GetValue() );
+    }
+  else if( de.GetTag().GetElement() == 0x3000 ) // OverlayData
+    {
+    ov.SetOverlay(bv->GetPointer(), bv->GetLength());
+    }
+  else
+    {
+    abort();
+    }
+}
 
 template <typename TPrinter>
 int DoOperation(const std::string & filename)
@@ -51,9 +123,49 @@ int DoOperation(const std::string & filename)
     return 1;
     }
 
-  TPrinter dictprinter;
-  dictprinter.SetFile ( reader.GetFile() );
-  dictprinter.Print( std::cout );
+  gdcm::Tag overlay(0x6000,0x0000);
+  const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
+  bool finished = false;
+  unsigned int numoverlays = 0;
+  while( !finished )
+    {
+    const gdcm::DataElement &de = ds.GetNextDataElement( overlay );
+    if( de.GetTag().GetGroup() > 0x60FF ) // last possible curve
+      {
+      finished = true;
+      }
+    else
+      {
+      // Yeah this is an overlay element
+      ++numoverlays;
+      gdcm::Overlay ov;
+      overlay = de.GetTag();
+      uint16_t currentoverlay = overlay.GetGroup();
+      assert( !(currentoverlay % 2) ); // 0x6001 is not an overlay...
+      // Store the current datalement
+      //UpdateOverlay(ov, de);
+      gdcm::DataElement de2 = de;
+      while( de2.GetTag().GetGroup() == currentoverlay )
+        {
+        UpdateOverlay(ov, de2);
+        overlay.SetElement( de2.GetTag().GetElement() + 1 );
+        de2 = ds.GetNextDataElement( overlay );
+        // Next element:
+        //overlay.SetElement( overlay.GetElement() + 1 );
+        }
+      // If we exit the loop we have pass the current overlay and potentially point to the next one:
+      //overlay.SetElement( overlay.GetElement() + 1 );
+      ov.Print( std::cout );
+
+      // Let's decode it:
+      std::ostringstream unpack;
+      ov.Decompress( unpack );
+      std::string s = unpack.str();
+      size_t l = s.size();
+      assert( unpack.str().size() == ov.GetRows() * ov.GetColumns() );
+      }
+    }
+  std::cout << "Num of Overlays: " << numoverlays << std::endl;
 
   return 0;
 }

@@ -20,7 +20,8 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
-
+# FIXME:
+  "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Utilities"
   )
 
@@ -33,6 +34,10 @@ ENDIF(WIN32 AND NOT CYGWIN)
 # gdcmraw
 ADD_EXECUTABLE(gdcmraw gdcmraw.cxx)
 TARGET_LINK_LIBRARIES(gdcmraw gdcmMSFF) # gdcmgetopt)
+
+# gdcmoverlay
+ADD_EXECUTABLE(gdcmoverlay gdcmoverlay.cxx)
+TARGET_LINK_LIBRARIES(gdcmoverlay gdcmMSFF) # gdcmgetopt)
 
 #ADD_EXECUTABLE(deflate deflate.cxx)
 #TARGET_LINK_LIBRARIES(deflate gdcmzlib)
