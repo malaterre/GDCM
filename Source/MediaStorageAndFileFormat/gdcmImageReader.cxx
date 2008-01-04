@@ -207,9 +207,6 @@ bool ImageReader::ReadImage()
   TransferSyntax::NegociatedType type; // = ds.GetNegociatedType();
   std::stringstream ss;
   std::string conversion;
-  // Construct a stringstream to mimic the reading from the file
-  //ss.SetSwapCode( Stream.GetSwapCode() );
-  //PixelData.SetSwapCode( Stream.GetSwapCode() );
 
   const Tag trecognitioncode(0x0008,0x0010);
   if( ds.FindDataElement( trecognitioncode ) )
@@ -390,7 +387,14 @@ bool ImageReader::ReadImage()
   // TODO
   //assert( pi.GetSamplesPerPixel() == pt.GetSamplesPerPixel() );
 
-  // 6. Do the PixelData
+  // 6. Do the Overlays if any
+  unsigned int numoverlays;
+  if( (numoverlays = Overlay::GetNumberOfOverlays( ds )) )
+    {
+    Overlays.resize( numoverlays );
+    }
+
+  // 7. Do the PixelData
   const Tag pixeldata = Tag(0x7fe0, 0x0010);
   if( !ds.FindDataElement( pixeldata ) )
     {

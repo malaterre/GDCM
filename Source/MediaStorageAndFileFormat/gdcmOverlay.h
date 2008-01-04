@@ -23,6 +23,7 @@ namespace gdcm
   
 class OverlayInternal;
 class ByteValue;
+class DataSet;
 /*
  *  TODO:
  *  Is there actually any way to recognize an overlay ? On images with multiple overlay I do not see
@@ -34,6 +35,10 @@ public:
   Overlay();
   ~Overlay();
   void Print(std::ostream &) const;
+
+  // Will traverse the dataset in search for overlay elements
+  // this is an hybrid method I don't like having it attach to an Overlay object
+  static unsigned int GetNumberOfOverlays(DataSet const & ds);
 
   void SetRows(unsigned short rows);
   unsigned short GetRows() const;

@@ -39,6 +39,10 @@ TARGET_LINK_LIBRARIES(gdcmraw gdcmMSFF) # gdcmgetopt)
 ADD_EXECUTABLE(gdcmoverlay gdcmoverlay.cxx)
 TARGET_LINK_LIBRARIES(gdcmoverlay gdcmMSFF) # gdcmgetopt)
 
+# gdcmimg
+ADD_EXECUTABLE(gdcmimg gdcmimg.cxx)
+TARGET_LINK_LIBRARIES(gdcmimg gdcmMSFF) # gdcmgetopt)
+
 #ADD_EXECUTABLE(deflate deflate.cxx)
 #TARGET_LINK_LIBRARIES(deflate gdcmzlib)
 

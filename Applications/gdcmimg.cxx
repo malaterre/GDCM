@@ -19,7 +19,7 @@
  * - j2k(s)
  */
 #include "gdcmReader.h"
-#include "gdcmWriter.h"
+#include "gdcmImageWriter.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmDataSet.h"
 
@@ -123,7 +123,7 @@ int main (int argc, char *argv[])
 
   gdcm::ImageWriter writer;
   writer.SetFileName( outfilename.c_str() );
-  if( !writer.Read() )
+  if( !writer.Write() )
     {
     std::cerr << "Failed to write: " << outfilename << std::endl;
     return 1;

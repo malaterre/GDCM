@@ -12,12 +12,12 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #ifndef __gdcmImageReader_h
 #define __gdcmImageReader_h
 
 #include "gdcmReader.h"
 #include "gdcmImageValue.h"
+#include "gdcmOverlay.h"
 
 namespace gdcm
 {
@@ -25,6 +25,7 @@ namespace gdcm
  * \brief ImageReader
  * \note its role is to convert the DICOM DataSet into a gdcm::Image
  * representation
+ * By default it is also loading the lookup table and overlay when found as they impact the rendering or the image
  */
 class ByteValue;
 class GDCM_EXPORT ImageReader : public Reader
@@ -35,6 +36,10 @@ public:
 
   const Image& GetImage() const;
   //void SetImage(Image const &img);
+  const Overlay& GetOverlay(unsigned int i = 0) const { 
+    assert( i < Overlays.size() );
+    return Overlays[i]; 
+  }
 
   bool Read();
 
@@ -53,6 +58,7 @@ protected:
 
 private:
   ImageValue PixelData;
+  std::vector<Overlay>  Overlays;
 };
 
 } // end namespace gdcm

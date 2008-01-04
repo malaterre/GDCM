@@ -13,6 +13,10 @@
 
 =========================================================================*/
 #include "gdcmOverlay.h"
+#include "gdcmTag.h"
+#include "gdcmDataElement.h"
+#include "gdcmDataSet.h"
+
 #include <vector>
 
 namespace gdcm
@@ -80,14 +84,39 @@ Overlay::~Overlay()
   delete Internal;
 }
 
+unsigned int Overlay::GetNumberOfOverlays(DataSet const & ds)
+{
+  Tag overlay(0x6000,0x0000); // First possible overlay
+  bool finished = false;
+  unsigned int numoverlays = 0;
+  while( !finished )
+    {
+    const DataElement &de = ds.GetNextDataElement( overlay );
+    if( de.GetTag().GetGroup() > 0x60FF ) // last possible curve
+      {
+      finished = true;
+      }
+    else
+      {
+      // Yeah this is an overlay element
+      ++numoverlays;
+      // Move on to the next possible one:
+      overlay.SetGroup( overlay.GetGroup() + 2 );
+      }
+    }
+
+  return numoverlays;
+}
+
 void Overlay::SetRows(unsigned short rows) { Internal->Rows = rows; }
-  unsigned short Overlay::GetRows() const { return Internal->Rows; }
+unsigned short Overlay::GetRows() const { return Internal->Rows; }
 void Overlay::SetColumns(unsigned short columns) { Internal->Columns = columns; }
-  unsigned short Overlay::GetColumns() const { return Internal->Columns; }
+unsigned short Overlay::GetColumns() const { return Internal->Columns; }
 void Overlay::SetNumberOfFrames(unsigned int numberofframes) { Internal->NumberOfFrames = numberofframes; }
 void Overlay::SetDescription(const char* description) { Internal->Description = description; }
 void Overlay::SetType(const char* type) { Internal->Type = type; }
-void Overlay::SetOrigin(const signed short *origin) {
+void Overlay::SetOrigin(const signed short *origin)
+{
   Internal->Origin[0] = origin[0];
   Internal->Origin[1] = origin[1];
 }

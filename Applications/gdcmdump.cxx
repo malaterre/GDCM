@@ -51,9 +51,9 @@ int DoOperation(const std::string & filename)
     return 1;
     }
 
-  TPrinter dictprinter;
-  dictprinter.SetFile ( reader.GetFile() );
-  dictprinter.Print( std::cout );
+  TPrinter printer;
+  printer.SetFile ( reader.GetFile() );
+  printer.Print( std::cout );
 
   return 0;
 }
