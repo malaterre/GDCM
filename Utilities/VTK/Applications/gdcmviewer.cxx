@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
   vtkStringArray *filenames = vtkStringArray::New();
   if( argc < 2 )
     {
-    std::cerr << argv[0] << " filename.dcm...\n";
+    std::cerr << argv[0] << " filename1.dcm [filename2.dcm ...]\n";
     return 1;
     }
   else
