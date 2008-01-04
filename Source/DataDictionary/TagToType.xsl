@@ -87,7 +87,7 @@
   <xsl:template match="/">
     <xsl:text>
 // GENERATED FILE DO NOT EDIT
-// $ xsltproc TagToType.xsl GDCM2.xml > gdcmTagToType.h
+// $ xsltproc TagToType.xsl DICOMV3.xml > gdcmTagToType.h
 
 /*=========================================================================
 
