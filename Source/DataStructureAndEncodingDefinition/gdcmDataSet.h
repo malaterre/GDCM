@@ -153,7 +153,16 @@ public:
       }
     return false;
     }
-  
+
+  // WARNING:
+  // This only search at the same level as the DataSet is !
+  const DataElement& GetNextDataElement(const Tag &t) const {
+    const DataElement r(t);
+    ConstIterator it = DES.lower_bound(r);
+    assert( it != DES.end() );
+    return *it;
+    }
+
   bool IsEmpty() const { return DES.empty(); };
 
   DataSet& operator=(DataSet const &val)
