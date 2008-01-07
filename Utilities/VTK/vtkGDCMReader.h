@@ -25,8 +25,9 @@
 
 #include "vtkMedicalImageReader2.h"
 
-//struct vtkGDCMReaderInternals;
+//BTX
 namespace gdcm { class ImageReader; }
+//ETX
 class VTK_EXPORT vtkGDCMReader : public vtkMedicalImageReader2
 {
 public:
@@ -56,7 +57,9 @@ protected:
   vtkGDCMReader();
   ~vtkGDCMReader();
 
+//BTX
   void FillMedicalImageInformation(const gdcm::ImageReader &reader);
+//ETX
   int ProcessRequest(vtkInformation* request,
                                  vtkInformationVector** inputVector,
                                  vtkInformationVector* outputVector);
