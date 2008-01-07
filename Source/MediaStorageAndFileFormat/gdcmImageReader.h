@@ -34,14 +34,16 @@ public:
   ImageReader();
   ~ImageReader();
 
+  bool Read();
+
+  // Following methods are valid only after a call to 'Read'
   const Image& GetImage() const;
   //void SetImage(Image const &img);
   const Overlay& GetOverlay(unsigned int i = 0) const { 
     assert( i < Overlays.size() );
     return Overlays[i]; 
   }
-
-  bool Read();
+  unsigned int GetNumberOfOverlays() const { return Overlays.size(); }
 
 protected:
   const ByteValue* GetPointerFromElement(Tag const &tag) const;

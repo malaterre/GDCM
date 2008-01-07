@@ -392,6 +392,62 @@ bool ImageReader::ReadImage()
   if( (numoverlays = Overlay::GetNumberOfOverlays( ds )) )
     {
     Overlays.resize( numoverlays );
+
+    gdcm::Tag overlay(0x6000,0x0000);
+    bool finished = false;
+    unsigned int idxoverlays = 0;
+    while( !finished )
+      {
+      const gdcm::DataElement &de = ds.GetNextDataElement( overlay );
+      if( de.GetTag().GetGroup() > 0x60FF ) // last possible curve
+        {
+        finished = true;
+        }
+      else
+        {
+        // Yeah this is an overlay element
+        gdcm::Overlay &ov = Overlays[idxoverlays];
+        ++idxoverlays; // move on to the next one
+        overlay = de.GetTag();
+        uint16_t currentoverlay = overlay.GetGroup();
+        assert( !(currentoverlay % 2) ); // 0x6001 is not an overlay...
+        // Now loop on all element from this current group:
+        gdcm::DataElement de2 = de;
+        while( de2.GetTag().GetGroup() == currentoverlay )
+          {
+          ov.Update(de2);
+          overlay.SetElement( de2.GetTag().GetElement() + 1 );
+          de2 = ds.GetNextDataElement( overlay );
+          // Next element:
+          //overlay.SetElement( overlay.GetElement() + 1 );
+          }
+        // If we exit the loop we have pass the current overlay and potentially point to the next one:
+        //overlay.SetElement( overlay.GetElement() + 1 );
+        //ov.Print( std::cout );
+
+        // Let's decode it:
+        std::ostringstream unpack;
+        ov.Decompress( unpack );
+        std::string s = unpack.str();
+        size_t l = s.size();
+        // The following line will fail with images like XA_GE_JPEG_02_with_Overlays.dcm
+        // since the overlays are stored in the unused bit of the PixelData
+        if( !ov.IsEmpty() )
+          {
+          assert( unpack.str().size() == ov.GetRows() * ov.GetColumns() );
+          }
+        else
+          {
+          std::cerr << "This image does not contains Overlay in the 0x60xx tags. "
+            << "Instead the overlay is stored in the unused bit of the Pixel Data. "
+            << "This is not supported right now"
+            << std::endl;
+          }
+        }
+      }
+    //std::cout << "Num of Overlays: " << numoverlays << std::endl;
+    assert( idxoverlays == numoverlays );
+
     }
 
   // 7. Do the PixelData

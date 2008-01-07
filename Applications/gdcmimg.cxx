@@ -35,6 +35,7 @@
  */
 #include "gdcmReader.h"
 #include "gdcmImageWriter.h"
+#include "gdcmImageReader.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmDataSet.h"
 
@@ -130,18 +131,34 @@ int main (int argc, char *argv[])
     std::cerr << "Need input file (-i)\n";
     return 1;
     }
-  if( outfilename.empty() )
-    {
-    std::cerr << "Need output file (-o)\n";
-    return 1;
-    }
+  //if( outfilename.empty() )
+  //  {
+  //  std::cerr << "Need output file (-o)\n";
+  //  return 1;
+  //  }
 
+/*
   gdcm::ImageWriter writer;
   writer.SetFileName( outfilename.c_str() );
   if( !writer.Write() )
     {
     std::cerr << "Failed to write: " << outfilename << std::endl;
     return 1;
+    }
+*/
+  gdcm::ImageReader reader;
+  reader.SetFileName( filename.c_str() );
+  if( !reader.Read() )
+    {
+    std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
+    }
+
+  unsigned int n = reader.GetNumberOfOverlays();
+  for(unsigned int i = 0; i < n; ++i )
+    {
+    const gdcm::Overlay& o = reader.GetOverlay(i);
+    o.Print( std::cout );
     }
 
   return 0;
