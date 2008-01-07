@@ -100,13 +100,6 @@ std::istream &File::Read(std::istream &is)
   // algorithm
   if( ts == TransferSyntax::DeflatedExplicitVRLittleEndian )
     {
-    /*
-    std::ofstream of("deflat.gz");
-    char one_char;
-    while (is.get(one_char))
-    of.put(one_char);
-    of.close();
-    */
     gzistream gzis(is.rdbuf());
     // FIXME: we also know in this case that we are dealing with Explicit:
     assert( ts.GetNegociatedType() == TransferSyntax::Explicit );

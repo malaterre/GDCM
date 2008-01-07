@@ -31,7 +31,9 @@ MACRO(ADD_PYTHON_TEST TESTNAME FILENAME)
   )
   
   # Pass the output back to ctest
-  MESSAGE("\${import_output}")
+  IF(import_output)
+    MESSAGE("\${import_output}")
+  ENDIF(import_output)
   IF(import_res)
     MESSAGE(SEND_ERROR "\${import_res}")
   ENDIF(import_res)

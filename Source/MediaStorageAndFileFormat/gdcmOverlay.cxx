@@ -108,6 +108,11 @@ unsigned int Overlay::GetNumberOfOverlays(DataSet const & ds)
       {
       finished = true;
       }
+    else if( de.GetTag().IsPrivate() )
+      {
+      // Move on to the next public one:
+      overlay.SetGroup( de.GetTag().GetGroup() + 1 );
+      }
     else
       {
       // Yeah this is an overlay element
@@ -134,6 +139,7 @@ void Overlay::Update(const DataElement & de)
   assert( de.GetTag().IsPublic() );
   const gdcm::ByteValue* bv = de.GetByteValue();
   assert( bv );
+  if( !bv->GetLength() ) return; // Discard any empty element (will default to another value)
   std::string s( bv->GetPointer(), bv->GetLength() );
   // What if a \0 can be found before the end of string...
   //assert( strlen( s.c_str() ) == s.size() );
@@ -179,6 +185,10 @@ void Overlay::Update(const DataElement & de)
     {
     SetType( s.c_str() );
     }
+  else if( de.GetTag().GetElement() == 0x0045 ) // OverlaySubtype
+    {
+    gdcmWarningMacro( "FIXME" );
+    }
   else if( de.GetTag().GetElement() == 0x0050 ) // OverlayOrigin
     {
     gdcm::Attribute<0x6000,0x0050> at;
@@ -191,19 +201,53 @@ void Overlay::Update(const DataElement & de)
     at.Set( de.GetValue() );
     SetFrameOrigin( at.GetValue() );
     }
+  else if( de.GetTag().GetElement() == 0x0060 ) // OverlayCompressionCode (RET)
+    {
+    assert( s == "NONE" ); // FIXME ??
+    }
   else if( de.GetTag().GetElement() == 0x0100 ) // OverlayBitsAllocated
     {
     gdcm::Attribute<0x6000,0x0100> at;
     at.Set( de.GetValue() );
-    assert( at.GetValue() == 1 );
+    if( at.GetValue() != 1 )
+      {
+      gdcmWarningMacro( "Unsuported OverlayBitsAllocated: " << at.GetValue() );
+      }
     SetBitsAllocated( at.GetValue() );
     }
   else if( de.GetTag().GetElement() == 0x0102 ) // OverlayBitPosition
     {
     gdcm::Attribute<0x6000,0x0102> at;
     at.Set( de.GetValue() );
-    //assert( at.GetValue() == 0 ); // For old ACR when using unused bits...
+    if( at.GetValue() != 0 ) // For old ACR when using unused bits...
+      {
+      gdcmWarningMacro( "Unsuported OverlayBitPosition: " << at.GetValue() );
+      }
     SetBitPosition( at.GetValue() );
+    }
+  else if( de.GetTag().GetElement() == 0x0110 ) // OverlayFormat (RET)
+    {
+    assert( s == "RECT" );
+    }
+  else if( de.GetTag().GetElement() == 0x0200 ) // OverlayLocation (RET)
+    {
+    gdcmWarningMacro( "FIXME" );
+    }
+  else if( de.GetTag().GetElement() == 0x1301 ) // ROIArea
+    {
+    gdcmWarningMacro( "FIXME" );
+    }
+  else if( de.GetTag().GetElement() == 0x1302 ) // ROIMean
+    {
+    gdcmWarningMacro( "FIXME" );
+    }
+  else if( de.GetTag().GetElement() == 0x1303 ) // ROIStandardDeviation
+    {
+    gdcmWarningMacro( "FIXME" );
+    }
+  else if( de.GetTag().GetElement() == 0x1500 ) // OverlayLabel
+    {
+    gdcmWarningMacro( "FIXME" );
     }
   else if( de.GetTag().GetElement() == 0x3000 ) // OverlayData
     {
@@ -211,6 +255,7 @@ void Overlay::Update(const DataElement & de)
     }
   else
     {
+    gdcmErrorMacro( "Tag is not supported: " << de.GetTag() << std::endl );
     abort();
     }
 }
@@ -241,6 +286,7 @@ bool Overlay::IsEmpty() const
 
 void Overlay::SetOverlay(const char *array, unsigned int length)
 {
+  if( !array || length == 0 ) return;
   //char * p = (char*)&Internal->Data[0];
   Internal->Data.resize( length ); // ??
   std::copy(array, array+length, Internal->Data.begin());

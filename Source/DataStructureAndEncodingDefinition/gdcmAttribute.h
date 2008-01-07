@@ -103,6 +103,7 @@ public:
   void Set(Value const &v) {
     const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
     assert( bv ); // That would be bad...
+    assert( bv->GetPointer() && bv->GetLength() ); // [123]C element can be empty
     //memcpy(Internal, bv->GetPointer(), bv->GetLength());
     std::stringstream ss;
     std::string s = std::string( bv->GetPointer(), bv->GetLength() );

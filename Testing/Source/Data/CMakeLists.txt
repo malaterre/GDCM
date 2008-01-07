@@ -39,6 +39,7 @@ SET(BLACK_LIST_READER
   PrivateGEImplicitVRBigEndianTransferSyntax16Bits.dcm
 # TODO add seg lut support
   gdcm-US-ALOKA-16.dcm
+  SegmentedPalette.dcm
 # Add YBR_FULL_422
   US-GE-4AICL142.dcm
 # Add 12 bits support:
@@ -47,6 +48,10 @@ SET(BLACK_LIST_READER
   PET-cardio-Multiframe-Papyrus.dcm
 # No way to read this image:
   ELSCINT1_LOSSLESS_RICE.dcm
+# Toshiba US Private Data Storage 1.2.392.200036.9116.7.8.1.1.1
+  TOSHIBA_MDW_HEADER.dcm
+# TODO, nasty:
+  PhilipsLosslessRice.dcm
 )
 
 SET(GDCM_DATA_IMAGES)

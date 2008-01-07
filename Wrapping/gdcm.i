@@ -12,6 +12,9 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+// See docs:
+// http://www.geocities.com/foetsch/python/extending_python.htm
+
 %module gdcm
 #pragma SWIG nowarn=504,510
 %{

@@ -430,6 +430,50 @@ const char * const gdcmMD5DataImages[][2] = {
 { "d2fab61e0fff8869e448d69951f1084d" , "SIEMENS_MAGNETOM-12-MONO2-VRUN.dcm" },
 { "fc5db4e2e7fca8445342b83799ff16d8" , "simpleImageWithIcon.dcm" },
 
+// Following need to be proof checked:
+{ "0b4dff77726ccf037fa83c42cc186a98" , "imp.dcm" },
+{ "eb5fc6c9e86a69c27b7208d72370a92d" , "Renal_Clearance.dcm" },
+{ "1b130fa646f8d6b3c14b9443b35c80b4" , "IM0046A0.dcm" },
+{ "8c00e7f797d8bb4a629ae1e4b08084b9" , "rvg_analysis.dcm" },
+{ "0d7c2f8714ed3c7dec8194c6e4b359c3" , "BRTUM001.dcm" },
+{ "e5dbfc8673ea25dd73c95f4df3353b10" , "3DDCM011.dcm" },
+{ "12150f9067ea72bc56c75d83c42c8108" , "MIRA.dcm" },
+{ "ae9a191c716dfda2651a147728910a89" , "NM.dcm" },
+{ "d4444bcca0ee13919f867e486a8f3553" , "QCpatternC-v1.dcm" },
+{ "ad85be428c08ab4166347ef04bda9637" , "gdcm-MR-PHILIPS-16-Multi-Seq-Correct.dcm" },
+{ "9c390fc010105325427e3ff29a9b186c" , "SIEMENS_ORIGINAL.dcm" },
+{ "0b4dff77726ccf037fa83c42cc186a98" , "venticles32004-11-09-08-55-57-6750000000.dcm" },
+{ "bfff320d1b058e91b4819aa4560c16f7" , "test.dcm" },
+{ "8c9666cef26a0cc76491a7a8a5239b85" , "Renal_Flow.dcm" },
+{ "f3a3d0e739e5f4fbeddd1452b81f4d89" , "dclunie.dcm" },
+{ "78dae0e2d9b7a124fe63300b6356ded4" , "Toshiba7005.dcm" },
+{ "8240955d1e4b72989f8f49549f1617b2" , "PhilipsWith15Overlays.dcm" },
+{ "3cd8bd92db17bff54e376885dfefdd8d" , "toto.dcm" },
+{ "635e947fc156c89a8d10ced8317ace82" , "ÂËÏßÕ¤3_2mAs.dcm" },
+{ "14ad8ae28cc5e5e5dc4c4d010c291a7f" , "test20.dcm" },
+{ "e7408198028983cd6643a00fd7668c00" , "testacr-jpll.dcm" },
+{ "6633fb8bce0a648763e7ed2b7de1db5c" , "1_172.dcm" },
+{ "29cfe7038fae548abd4af4551b2a37cb" , "example.dcm" },
+{ "6b18e445fbc917e7d6f55b616f17d3e1" , "WrongVRFor00271033.dcm" },
+{ "0b4dff77726ccf037fa83c42cc186a98" , "ExplicitVRforPublicElementsImplicitVRforShadowElementsCorrected.dcm" },
+{ "9570a06da59988ff3a7271cdde14abf5" , "3DT1_5138_0077.dcm" },
+{ "20c5f63d65732703e3fffeb8d67c62ed" , "FluroWithDisplayShutter.dcm" },
+{ "92b62f22fc44b8563c19f5536d9e499f" , "fudd_ant.dcm" },
+{ "b92a22ef55d6a1fbd24a6a24a7a84a7f" , "yazhi.dcm" },
+{ "2b69286289543afc3be7df0400abb8fc" , "IM_0001.dcm" },
+{ "67d86e26740882586b6bf3fe7e09c831" , "PMMA-Treppe.dcm" },
+{ "82a8d3398c98d23e1b34f5364f967287" , "PERFORM_T1_Symphony_VA25.dcm" },
+{ "00b4b3282855c96744355892caf9d310" , "Al-Treppe.dcm" },
+{ "1db40fc52b962c8b6823980fe9dad6d8" , "ÂËÏßÕ¤2_5mAs.dcm" },
+{ "1b130fa646f8d6b3c14b9443b35c80b4" , "IM0046A0(2).dcm" },
+{ "f891eae2cdfecd578b2204ebbb93f606" , "ImplicitDeclaredAsExplicit.dcm" },
+{ "7ceb7886f9fbcb7ae979fdb6f1305414" , "CR-Preamble-NoMeta.dcm" },
+{ "d2fab61e0fff8869e448d69951f1084d" , "db318_MR_STN_stimulator_T2_TSE_TRA__20071005161618048_4.dcm" },
+{ "2b4d7fb6b039b43145f2766b2339c460" , "0019004_Baseline_IMG1.dcm" },
+
+
+
+
 
 
 

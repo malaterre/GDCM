@@ -42,6 +42,7 @@ const char *GetMD5Ref(const char *filepath)
 
 int TestImageRead(const char* filename)
 {
+  std::cerr << "Reading: " << filename << std::endl;
   gdcm::ImageReader reader;
 
   reader.SetFileName( filename );
@@ -79,10 +80,11 @@ int TestImageRead(const char* filename)
     if( !ref )
       {
       // new regression image needs a md5 sum
-      std::cerr << "Missing md5 " << digest << " for: " << filename <<  std::endl;
-      abort();
+      std::cout << "Missing md5 " << digest << " for: " << filename <<  std::endl;
+      //abort();
+      res = 1;
       }
-    if( strcmp(digest, ref) )
+    else if( strcmp(digest, ref) )
       {
       std::cerr << "Problem reading image from: " << filename << std::endl;
       std::cerr << "Found " << digest << " instead of " << ref << std::endl;

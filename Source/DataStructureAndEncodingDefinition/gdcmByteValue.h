@@ -79,12 +79,12 @@ public:
     if( l <= 0xff )
 #endif
       Internal.resize(l);
+      //Internal.reserve(l);
       }
     catch(...)
       {
       exit(1);
       }
-    //Internal.reserve(l);
     // Keep the exact length
     Length = vl;
   }
@@ -142,12 +142,16 @@ public:
       is.seekg(Length, std::ios::cur);
       }
     else
-      {
-      is.read(&Internal[0], Length);
-      }
-    return is;
 #else
-    is.read(&Internal[0], Length);
+      {
+      //is.unsetf(std::ios_base::skipws); 
+      //std::copy( std::istream_iterator<char>(is), std::istream_iterator<char>(),
+      //  std::back_inserter(Internal)) ; 
+      //std::istream_iterator<char> isi( is ), isiEOF;
+      //Internal.assign(isi, isiEOF);
+      is.read(&Internal[0], Length);
+      assert( Internal.size() == Length || Internal.size() == Length + 1 );
+      }
     //TSwap::SwapArray(&Internal[0], Internal.size());
     return is;
 #endif
