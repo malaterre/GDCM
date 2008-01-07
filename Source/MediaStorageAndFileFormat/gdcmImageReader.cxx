@@ -263,10 +263,10 @@ void DoOverlays(const DataSet& ds, ImageValue& pixeldata)
           }
         else
           {
-          std::cerr << "This image does not contains Overlay in the 0x60xx tags. "
+          gdcmDebugMacro( "This image does not contains Overlay in the 0x60xx tags. "
             << "Instead the overlay is stored in the unused bit of the Pixel Data. "
             << "This is not supported right now"
-            << std::endl;
+            << std::endl );
           }
         }
       }
