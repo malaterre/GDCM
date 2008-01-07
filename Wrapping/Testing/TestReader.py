@@ -14,8 +14,20 @@
 ############################################################################
 
 import gdcm
+import os,sys
+
+try:
+  filename = os.sys.argv[1]
+except:
+  # failure
+  print "Need a filename"
+  sys.exit(1)
+
 
 r = gdcm.Reader()
-r.SetFileName("")
-r.Read()
+r.SetFileName( filename )
+sucess = r.Read()
+
+# Test succeed ?
+sys.exit(sucess != 1)
 
