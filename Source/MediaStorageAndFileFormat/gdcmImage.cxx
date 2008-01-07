@@ -91,6 +91,7 @@ void Image::SetDimensions(unsigned int idx, unsigned int dim)
   assert( NumberOfDimensions );
   assert( idx < NumberOfDimensions );
   Dimensions.resize( NumberOfDimensions );
+  // Can dim be 0 ??
   Dimensions[idx] = dim;
 }
 

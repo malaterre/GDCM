@@ -309,7 +309,7 @@ bool ImageReader::ReadImage()
     }
   else
     {
-    gdcmDebugMacro( "Attempting a guess for the number of dimensions" );
+    gdcmDebugMacro( "Attempting a guess for the number of dimensions" ); // FIXME
     PixelData.SetNumberOfDimensions(2);
     }
 
