@@ -60,6 +60,7 @@ bool ImageReader::Read()
     }
 
   const FileMetaInformation &header = F->GetHeader();
+  const DataSet &ds = F->GetDataSet();
   const TransferSyntax &ts = header.GetDataSetTransferSyntax();
 
   // Need to set the type of image we are dealing with:
@@ -98,13 +99,14 @@ bool ImageReader::Read()
       // D 0008|0016 [UI] [SOP Class UID] [1.2.840.10008.5.1.4.1.1.7 ]
       // ==> [Secondary Capture Image Storage]
       const Tag tsopclassuid(0x0008, 0x0016);
-      if( F->GetDataSet().FindDataElement( tsopclassuid) )
+      if( ds.FindDataElement( tsopclassuid) )
         {
         const ByteValue *sopclassuid
           = GetPointerFromElement( tsopclassuid );
         std::string sopclassuid_str(
           sopclassuid->GetPointer(),
           sopclassuid->GetLength() );
+        assert( sopclassuid_str.find( ' ' ) == std::string::npos );
         MediaStorage::MSType ms2 = MediaStorage::GetMSType(sopclassuid_str.c_str());
         bool isImage2 = MediaStorage::IsImage( ms2 );
         if( isImage2 )
@@ -133,11 +135,12 @@ bool ImageReader::Read()
         }
       else // there is a Unknown TransferSyntax
         {
+        assert( ts == TransferSyntax::TS_END /*&& ms != MediaStorage::MS_END*/ );
         // god damit I don't know what to do...
-        gdcmDebugMacro( "Attempting to read this file as a DICOM file"
+        gdcmWarningMacro( "Attempting to read this file as a DICOM file"
           "\nDesperate attempt" );
         const Tag tpixeldata(0x7fe0, 0x0010);
-        if( F->GetDataSet().FindDataElement( tpixeldata) )
+        if( ds.FindDataElement( tpixeldata) )
           {
           // gdcm-CR-DCMTK-16-NonSamplePerPix.dcm
           // Someone defined the Transfer Syntax but I have no clue what
