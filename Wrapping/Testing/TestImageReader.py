@@ -27,6 +27,8 @@ r = gdcm.ImageReader()
 r.SetFileName( filename )
 sucess = r.Read()
 
+print r.GetImage().Print()
+
 # Test succeed ?
 sys.exit(sucess != 1)
 

@@ -30,6 +30,7 @@
 using namespace gdcm;
 %}
 
+%include "std_string.i"
 
 %include "gdcmWin32.h" // define GDCM_EXPORT so need to be the first one...
 %include "gdcmSwapCode.h"
@@ -50,6 +51,15 @@ using namespace gdcm;
 %include "gdcmFileMetaInformation.h"
 %include "gdcmFile.h"
 %include "gdcmImage.h"
+%extend gdcm::Image
+{
+  std::string Print() const
+    {
+    std::stringstream s;
+    self->Print(s);
+    return s.str();
+    }
+};
 %include "gdcmReader.h"
 %include "gdcmImageReader.h"
 
