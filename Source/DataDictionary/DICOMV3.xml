@@ -4,7 +4,7 @@
 Most of this file was automatically generated. Using the following:
 
  $ xsltproc oo.xsl 07_06_oowriter.xml > bla
- $ xmllint - -format bla > GDCM2.xml
+ $ xmllint - -format bla > DICOMV3.xml
 
 Exceptions:
 * version attribute was done using dicom3tools dictionary

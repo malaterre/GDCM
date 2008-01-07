@@ -78,3 +78,6 @@ CT0014
 
 GFUNCST2
 MRVPWCB2 
+-----------------------------------------------------------------------
+When gdcmimg will be ready the RLE format will still be missing need
+to check if RLE DICOM is compatible with Utah RLE

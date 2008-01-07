@@ -13,10 +13,25 @@
 
 =========================================================================*/
 /*
- * Create a DICOM file from a 'raw' input:
+ * 1. Create a DICOM file from a 'raw' input:
+ * 2. Create a blob (jpeg,pgm/pnm,j2k,rle) from input
  * - binary blob(s) (grayscale / RGB) input
  * - jpeg(s)
  * - j2k(s)
+ *
+ *   Mapping is:
+ *
+ *   DICOM RAW  <->  pnm/pgm
+ *   DICOM jpg  <->  jpg
+ *   DICOM jpgl <->  jpgl
+ *   DICOM jpls <->  jpls
+ *   DICOM j2k  <->  j2k
+ *   DICOM rle  <->  Utah RLE ??
+ *
+ * ??:
+ *   DICOM avi  <->  avi
+ *   DICOM wav  <->  wav
+ *   DICOM pdf  <->  pdf
  */
 #include "gdcmReader.h"
 #include "gdcmImageWriter.h"
