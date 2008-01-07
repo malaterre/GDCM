@@ -78,5 +78,13 @@ std::ostream const &Preamble::Write(std::ostream &os) const
   return os;
 }
 
+void Preamble::Clear()
+{
+}
+
+void Preamble::Print(std::ostream &os) const
+{
+}
+
 } // end namespace gdcm 
 
