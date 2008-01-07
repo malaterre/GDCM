@@ -14,6 +14,7 @@
 =========================================================================*/
 
 #include "gdcmReader.h"
+#include "gdcmImageReader.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmDataSet.h"
 #include "gdcmPrinter.h"
@@ -36,7 +37,7 @@
 template <typename TPrinter>
 int DoOperation(const std::string & filename)
 {
-  gdcm::Reader reader;
+  gdcm::ImageReader reader;
   reader.SetFileName( filename.c_str() );
   try
     {
@@ -52,60 +53,18 @@ int DoOperation(const std::string & filename)
     return 1;
     }
 
-  gdcm::Tag overlay(0x6000,0x0000);
-  const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
-  bool finished = false;
-  unsigned int numoverlays = 0;
-  while( !finished )
-    {
-    const gdcm::DataElement &de = ds.GetNextDataElement( overlay );
-    if( de.GetTag().GetGroup() > 0x60FF ) // last possible curve
-      {
-      finished = true;
-      }
-    else
-      {
-      // Yeah this is an overlay element
-      ++numoverlays;
-      gdcm::Overlay ov;
-      overlay = de.GetTag();
-      uint16_t currentoverlay = overlay.GetGroup();
-      assert( !(currentoverlay % 2) ); // 0x6001 is not an overlay...
-      // Now loop on all element from this current group:
-      gdcm::DataElement de2 = de;
-      while( de2.GetTag().GetGroup() == currentoverlay )
-        {
-        ov.Update(de2);
-        overlay.SetElement( de2.GetTag().GetElement() + 1 );
-        de2 = ds.GetNextDataElement( overlay );
-        // Next element:
-        //overlay.SetElement( overlay.GetElement() + 1 );
-        }
-      // If we exit the loop we have pass the current overlay and potentially point to the next one:
-      //overlay.SetElement( overlay.GetElement() + 1 );
-      ov.Print( std::cout );
+  // Image part:
+  const gdcm::Image& img = reader.GetImage();
+  img.Print( std::cout );
 
-      // Let's decode it:
-      std::ostringstream unpack;
-      ov.Decompress( unpack );
-      std::string s = unpack.str();
-      size_t l = s.size();
-      // The following line will fail with images like XA_GE_JPEG_02_with_Overlays.dcm
-      // since the overlays are stored in the unused bit of the PixelData
-      if( !ov.IsEmpty() )
-        {
-        assert( unpack.str().size() == ov.GetRows() * ov.GetColumns() );
-        }
-      else
-        {
-        std::cerr << "This image does not contains Overlay in the 0x60xx tags. "
-                  << "Instead the overlay is stored in the unused bit of the Pixel Data. "
-                  << "This is not supported right now"
-                  << std::endl;
-        }
-      }
+  // Overlay part:
+  unsigned int n = reader.GetNumberOfOverlays();
+  std::cout << "Num of Overlays: " << n << std::endl;
+  for(unsigned int i = 0; i < n; ++i )
+    {
+    const gdcm::Overlay& o = reader.GetOverlay(i);
+    o.Print( std::cout );
     }
-  std::cout << "Num of Overlays: " << numoverlays << std::endl;
 
   return 0;
 }

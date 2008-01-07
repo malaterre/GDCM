@@ -164,7 +164,7 @@ bool Image::GetBuffer(char *buffer) const
 void Image::Print(std::ostream &os) const
 {
   assert( NumberOfDimensions );
-  os << "NumberOfDimensions" << NumberOfDimensions << "\n";
+  os << "NumberOfDimensions: " << NumberOfDimensions << "\n";
   assert( Dimensions.size() );
   os << "Dimensions: (";
   std::vector<unsigned int>::const_iterator it = Dimensions.begin();
