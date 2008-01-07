@@ -133,9 +133,9 @@ bool ImageReader::Read()
         //PixelData.SetCompressionType( Compression::RAW );
         res = ReadACRNEMAImage();
         }
-      else // there is a Unknown TransferSyntax
+      else // there is a Unknown Media Storage Syntax
         {
-        assert( ts == TransferSyntax::TS_END /*&& ms != MediaStorage::MS_END*/ );
+        assert( ts != TransferSyntax::TS_END && ms == MediaStorage::MS_END );
         // god damit I don't know what to do...
         gdcmWarningMacro( "Attempting to read this file as a DICOM file"
           "\nDesperate attempt" );
