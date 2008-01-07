@@ -17,7 +17,6 @@
 
 #include "gdcmReader.h"
 #include "gdcmImageValue.h"
-#include "gdcmOverlay.h"
 
 namespace gdcm
 {
@@ -39,11 +38,6 @@ public:
   // Following methods are valid only after a call to 'Read'
   const Image& GetImage() const;
   //void SetImage(Image const &img);
-  const Overlay& GetOverlay(unsigned int i = 0) const { 
-    assert( i < Overlays.size() );
-    return Overlays[i]; 
-  }
-  unsigned int GetNumberOfOverlays() const { return Overlays.size(); }
 
 protected:
   const ByteValue* GetPointerFromElement(Tag const &tag) const;
@@ -60,7 +54,6 @@ protected:
 
 private:
   ImageValue PixelData;
-  std::vector<Overlay>  Overlays;
 };
 
 } // end namespace gdcm

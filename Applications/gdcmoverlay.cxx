@@ -58,11 +58,11 @@ int DoOperation(const std::string & filename)
   img.Print( std::cout );
 
   // Overlay part:
-  unsigned int n = reader.GetNumberOfOverlays();
+  unsigned int n = reader.GetImage().GetNumberOfOverlays();
   std::cout << "Num of Overlays: " << n << std::endl;
   for(unsigned int i = 0; i < n; ++i )
     {
-    const gdcm::Overlay& o = reader.GetOverlay(i);
+    const gdcm::Overlay& o = reader.GetImage().GetOverlay(i);
     o.Print( std::cout );
     }
 

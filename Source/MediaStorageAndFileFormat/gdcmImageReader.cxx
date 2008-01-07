@@ -391,14 +391,14 @@ bool ImageReader::ReadImage()
   unsigned int numoverlays;
   if( (numoverlays = Overlay::GetNumberOfOverlays( ds )) )
     {
-    Overlays.resize( numoverlays );
+    PixelData.SetNumberOfOverlays( numoverlays );
 
-    gdcm::Tag overlay(0x6000,0x0000);
+    Tag overlay(0x6000,0x0000);
     bool finished = false;
     unsigned int idxoverlays = 0;
     while( !finished )
       {
-      const gdcm::DataElement &de = ds.GetNextDataElement( overlay );
+      const DataElement &de = ds.GetNextDataElement( overlay );
       if( de.GetTag().GetGroup() > 0x60FF ) // last possible curve
         {
         finished = true;
@@ -406,13 +406,13 @@ bool ImageReader::ReadImage()
       else
         {
         // Yeah this is an overlay element
-        gdcm::Overlay &ov = Overlays[idxoverlays];
+        Overlay &ov = PixelData.GetOverlay(idxoverlays);
         ++idxoverlays; // move on to the next one
         overlay = de.GetTag();
         uint16_t currentoverlay = overlay.GetGroup();
         assert( !(currentoverlay % 2) ); // 0x6001 is not an overlay...
         // Now loop on all element from this current group:
-        gdcm::DataElement de2 = de;
+        DataElement de2 = de;
         while( de2.GetTag().GetGroup() == currentoverlay )
           {
           ov.Update(de2);

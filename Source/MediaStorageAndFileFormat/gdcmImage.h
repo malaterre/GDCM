@@ -21,6 +21,7 @@
 #include "gdcmLookupTable.h"
 #include "gdcmSmartPointer.h"
 #include "gdcmTransferSyntax.h"
+#include "gdcmOverlay.h"
 
 #include <vector>
 
@@ -112,6 +113,19 @@ public:
     {
     return *LUT;
     }
+
+  Overlay& GetOverlay(unsigned int i = 0) { 
+    assert( i < Overlays.size() );
+    return Overlays[i]; 
+  }
+  const Overlay& GetOverlay(unsigned int i = 0) const { 
+    assert( i < Overlays.size() );
+    return Overlays[i]; 
+  }
+  unsigned int GetNumberOfOverlays() const { return Overlays.size(); }
+  void SetNumberOfOverlays(unsigned int n) { Overlays.resize(n); }
+
+
 //  Image(Image const&);
 //  Image &operator= (Image const&);
 
@@ -146,6 +160,7 @@ private:
 
   typedef SmartPointer<LookupTable> LUTPtr;
   LUTPtr LUT;
+  std::vector<Overlay>  Overlays;
 };
 
 } // end namespace gdcm
