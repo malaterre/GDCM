@@ -30,6 +30,8 @@
 using namespace gdcm;
 %}
 
+// gdcm does not use std::string in its interface, but we do need it for the 
+// %extend (see below)
 %include "std_string.i"
 
 %include "gdcmWin32.h" // define GDCM_EXPORT so need to be the first one...
