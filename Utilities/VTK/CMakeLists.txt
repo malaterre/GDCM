@@ -32,7 +32,7 @@ IF(BUILD_WRAPPING)
       ${CMAKE_CURRENT_SOURCE_DIR}
     )
     ADD_LIBRARY(vtkgdcmPython MODULE ${WRAP_VTK_GDCM_PYTHON_SRCS})
-    TARGET_LINK_LIBRARIES(vtkgdcmPython vtkgdcm vtkCommonPythonD vtkIOPythonD)
+    TARGET_LINK_LIBRARIES(vtkgdcmPython vtkgdcm vtkCommonPythonD vtkIOPythonD) # ${PYTHON_LIBRARIES})
   ENDIF(VTK_WRAP_PYTHON)
 ENDIF(BUILD_WRAPPING)
 

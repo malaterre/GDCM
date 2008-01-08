@@ -22,7 +22,6 @@
 #include "vtkStreamingDemandDrivenPipeline.h"
 #include "vtkMedicalImageProperties.h"
 #include "vtkStringArray.h"
-#include "vtkMultiThreader.h"
 
 #include "gdcmImageReader.h"
 #include "gdcmDataElement.h"
@@ -32,6 +31,7 @@
 #include <sstream>
 
 #include <pthread.h>
+#include <unistd.h> // sysconf
 
 vtkCxxRevisionMacro(vtkGDCMThreadedReader, "$Revision: 1.1 $");
 vtkStandardNewMacro(vtkGDCMThreadedReader);
@@ -206,6 +206,12 @@ int vtkGDCMThreadedReader::RequestInformation(vtkInformation *request,
   // Ok let's fill in the 'extra' info:
   //FillMedicalImageInformation(reader);
 
+  // For now only handles series:
+  if( !this->FileNames )
+    {
+    return 0;
+    }
+
   return 1;
 }
 
@@ -214,7 +220,7 @@ struct threadparams
   const char **filenames;
   unsigned int nfiles;
   char *scalarpointer;
-  unsigned long len;
+  unsigned long len; // This is not required
 // TODO I should also pass in the dim of the reference image just in case
 };
 
@@ -273,7 +279,7 @@ void ReadFiles(vtkImageData *output, unsigned int nfiles, const char *filenames[
   const unsigned long len = output->GetNumberOfPoints() * output->GetScalarSize() / nfiles;
   char * scalarpointer = static_cast<char*>(output->GetScalarPointer());
 
-  const unsigned int nthreads = vtkMultiThreader::GetGlobalDefaultNumberOfThreads();
+  const unsigned int nthreads = sysconf( _SC_NPROCESSORS_ONLN );
   threadparams params[nthreads];
 
   //pthread_mutex_t lock;
@@ -361,6 +367,7 @@ int vtkGDCMThreadedReader::RequestData(vtkInformation *vtkNotUsed(request),
   }
 
   int *dext = this->GetDataExtent();
+  assert( this->FileNames );
   assert( dext[5] - dext[4] == this->FileNames->GetNumberOfValues() - 1 );
   const unsigned int nfiles = this->FileNames->GetNumberOfValues();
   const char **filenames = new const char* [ nfiles ];
