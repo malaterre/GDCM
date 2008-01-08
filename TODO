@@ -81,3 +81,10 @@ MRVPWCB2
 -----------------------------------------------------------------------
 When gdcmimg will be ready the RLE format will still be missing need
 to check if RLE DICOM is compatible with Utah RLE
+-----------------------------------------------------------------------
+Wrong Private element in dcmtk:
+(0009,1227) TM [210959.000000]                          #  14, 1 LastMoveTime
+I found:
+diction.pfl:Table Zero Time,0009,SIEMENS CM VA0  CMS,27,TM,1
+
+
