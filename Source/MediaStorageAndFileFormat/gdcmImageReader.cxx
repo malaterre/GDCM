@@ -223,7 +223,7 @@ void DoOverlays(const DataSet& ds, ImageValue& pixeldata)
         {
         finished = true;
         }
-      else if( de.GetTag().IsPrivate() )
+      else if( de.GetTag().IsPrivate() ) // GEMS owns some 0x6003
         {
         // Move on to the next public one:
         overlay.SetGroup( de.GetTag().GetGroup() + 1 );
