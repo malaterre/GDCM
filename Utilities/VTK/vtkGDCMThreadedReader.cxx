@@ -22,6 +22,7 @@
 #include "vtkStreamingDemandDrivenPipeline.h"
 #include "vtkMedicalImageProperties.h"
 #include "vtkStringArray.h"
+#include "vtkMultiThreader.h"
 
 #include "gdcmImageReader.h"
 #include "gdcmDataElement.h"
@@ -222,7 +223,6 @@ void *ReadFilesThread(void *voidparams)
   threadparams *params = static_cast<threadparams *> (voidparams);
 
   const unsigned int nfiles = params->nfiles;
-  char *tempimage = NULL;
   for(unsigned int file = 0; file < nfiles; ++file)
     {
     /*
@@ -244,14 +244,13 @@ void *ReadFilesThread(void *voidparams)
 
     const gdcm::Image &image = reader.GetImage();
     unsigned long len = image.GetBufferLength();
-    if( !tempimage ) tempimage = new char[len];
-    assert( len == params->len );
-    image.GetBuffer(tempimage);
+    assert( len == params->len ); // that would be very bad 
 
     char * pointer = params->scalarpointer;
-    memcpy(pointer + file*len, tempimage, len);
+    //memcpy(pointer + file*len, tempimage, len);
+    char *tempimage = pointer + file*len;
+    image.GetBuffer(tempimage);
     }
-  delete[] tempimage;
 
   return voidparams;
 }
@@ -274,7 +273,7 @@ void ReadFiles(vtkImageData *output, unsigned int nfiles, const char *filenames[
   const unsigned long len = output->GetNumberOfPoints() * output->GetScalarSize() / nfiles;
   char * scalarpointer = static_cast<char*>(output->GetScalarPointer());
 
-  const unsigned int nthreads = 1;
+  const unsigned int nthreads = vtkMultiThreader::GetGlobalDefaultNumberOfThreads();
   threadparams params[nthreads];
 
   //pthread_mutex_t lock;
@@ -368,7 +367,7 @@ int vtkGDCMThreadedReader::RequestData(vtkInformation *vtkNotUsed(request),
   for(unsigned int i = 0; i < nfiles; ++i)
     {
     filenames[i] = this->FileNames->GetValue( i ).c_str();
-    std::cerr << filenames[i] << std::endl;
+    //std::cerr << filenames[i] << std::endl;
     }
   vtkImageData *output = this->GetOutput(0);
   ReadFiles(output, nfiles, filenames);

@@ -55,12 +55,17 @@ void *ReadFilesThread(void *voidparams)
 
     const gdcm::Image &image = reader.GetImage();
     unsigned long len = image.GetBufferLength();
+    char * pointer = params->scalarpointer;
+#if 0
     char *tempimage = new char[len];
     image.GetBuffer(tempimage);
 
-    char * pointer = params->scalarpointer;
     memcpy(pointer + file*len, tempimage, len);
     delete[] tempimage;
+#else
+    char *tempimage = pointer + file * len;
+    image.GetBuffer(tempimage);
+#endif
     }
 
   return voidparams;
@@ -181,7 +186,7 @@ void ReadFiles(unsigned int nfiles, const char *filenames[])
   writer->SetInput( output );
   writer->SetFileName( "/tmp/threadgdcm.vtk" );
   writer->SetFileTypeToBinary();
-  writer->Write();
+  //writer->Write();
   writer->Delete();
 
   output->Print( std::cout );
