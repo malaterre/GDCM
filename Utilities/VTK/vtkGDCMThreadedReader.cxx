@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "vtkGDCMReader.h"
+#include "vtkGDCMThreadedReader.h"
 
 #include "vtkObjectFactory.h"
 #include "vtkImageData.h"
@@ -30,41 +30,30 @@
 
 #include <sstream>
 
-vtkCxxRevisionMacro(vtkGDCMReader, "$Revision: 1.1 $");
-vtkStandardNewMacro(vtkGDCMReader);
+#include <pthread.h>
 
-//struct vtkGDCMReaderInternals
-//{
-//  gdcm::ImageReader DICOMReader;
-//};
+vtkCxxRevisionMacro(vtkGDCMThreadedReader, "$Revision: 1.1 $");
+vtkStandardNewMacro(vtkGDCMThreadedReader);
 
-vtkGDCMReader::vtkGDCMReader()
+vtkGDCMThreadedReader::vtkGDCMThreadedReader()
 {
-  //this->Internals = new vtkGDCMReaderInternals;
-  //this->ScalarArrayName = NULL;
-  //this->SetScalarArrayName( "GDCM" );
-
-  // vtkDataArray has an internal vtkLookupTable why not used it ?
-  // vtkMedicalImageProperties is in the parent class
-  //this->FileLowerLeft = 1;
 }
 
-vtkGDCMReader::~vtkGDCMReader()
+vtkGDCMThreadedReader::~vtkGDCMThreadedReader()
 {
-  //delete this->Internals;
 }
 
-void vtkGDCMReader::ExecuteInformation()
+void vtkGDCMThreadedReader::ExecuteInformation()
 {
   std::cerr << "ExecuteInformation" << std::endl;
 }
 
-void vtkGDCMReader::ExecuteData(vtkDataObject *output)
+void vtkGDCMThreadedReader::ExecuteData(vtkDataObject *output)
 {
   std::cerr << "ExecuteData" << std::endl;
 }
 
-int vtkGDCMReader::CanReadFile(const char* fname)
+int vtkGDCMThreadedReader::CanReadFile(const char* fname)
 {
   gdcm::ImageReader reader;
   reader.SetFileName( fname );
@@ -76,7 +65,7 @@ int vtkGDCMReader::CanReadFile(const char* fname)
 }
 
 //----------------------------------------------------------------------------
-int vtkGDCMReader::ProcessRequest(vtkInformation* request,
+int vtkGDCMThreadedReader::ProcessRequest(vtkInformation* request,
                                  vtkInformationVector** inputVector,
                                  vtkInformationVector* outputVector)
 {
@@ -95,80 +84,12 @@ int vtkGDCMReader::ProcessRequest(vtkInformation* request,
   return this->Superclass::ProcessRequest(request, inputVector, outputVector);
 }
 
-
-//
-void vtkGDCMReader::FillMedicalImageInformation(const gdcm::ImageReader &reader)
-{
-  // For now only do:
-  // PatientName, PatientID, PatientAge, PatientSex, PatientBirthDate,
-  // StudyID
-  std::ostringstream str;
-  const gdcm::File &file = reader.GetFile();
-  const gdcm::DataSet &ds = file.GetDataSet();
-
-  const gdcm::Tag patname(0x0010, 0x0010);
-  if( ds.FindDataElement( patname ) )
-    {
-    const gdcm::DataElement& de = ds.GetDataElement( patname );
-    const gdcm::ByteValue *bv = de.GetByteValue();
-    bv->Write<gdcm::SwapperNoOp>(str);
-    assert( str.str().size() == bv->GetLength() );
-    //std::string patname_str( bv->GetPointer(), bv->GetLength() );
-    this->MedicalImageProperties->SetPatientName( str.str().c_str() );
-    }
-  str.str( "" );
-
-/*
-    {
-    if (medprop->GetPatientName())
-      {
-      str.str("");
-      str << medprop->GetPatientName();
-      file->InsertValEntry(str.str(),0x0010,0x0010); // PN 1 Patient's Name
-      }
-
-    if (medprop->GetPatientID())
-      {
-      str.str("");
-      str << medprop->GetPatientID();
-      file->InsertValEntry(str.str(),0x0010,0x0020); // LO 1 Patient ID
-      }
-
-    if (medprop->GetPatientAge())
-      {
-      str.str("");
-      str << medprop->GetPatientAge();
-      file->InsertValEntry(str.str(),0x0010,0x1010); // AS 1 Patient's Age
-      }
-
-    if (medprop->GetPatientSex())
-      {
-      str.str("");
-      str << medprop->GetPatientSex();
-      file->InsertValEntry(str.str(),0x0010,0x0040); // CS 1 Patient's Sex
-      }
-
-    if (medprop->GetPatientBirthDate())
-      {
-      str.str("");
-      str << medprop->GetPatientBirthDate();
-      file->InsertValEntry(str.str(),0x0010,0x0030); // DA 1 Patient's Birth Date
-      }
-
-    if (medprop->GetStudyID())
-      {
-      str.str("");
-      str << medprop->GetStudyID();
-      file->InsertValEntry(str.str(),0x0020,0x0010); // SH 1 Study ID
-      }
-*/
-}
-
 //----------------------------------------------------------------------------
-int vtkGDCMReader::RequestInformation(vtkInformation *request,
+int vtkGDCMThreadedReader::RequestInformation(vtkInformation *request,
                                       vtkInformationVector **inputVector,
                                       vtkInformationVector *outputVector)
 {
+#if 0
   // Let's read the first file :
   const char *filename;
   if( this->FileName )
@@ -257,6 +178,7 @@ int vtkGDCMReader::RequestInformation(vtkInformation *request,
     this->NumberOfScalarComponents = 3;
     }
 
+#endif
   int numvol = 1;
   this->SetNumberOfOutputPorts(numvol);
   // For each output:
@@ -271,7 +193,7 @@ int vtkGDCMReader::RequestInformation(vtkInformation *request,
       }
     vtkInformation *outInfo = outputVector->GetInformationObject(i);
     outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(),
-      0, DataExtent[1], 0, DataExtent[3], 0, DataExtent[5]);
+      DataExtent[0], DataExtent[1], DataExtent[2], DataExtent[3], DataExtent[4], DataExtent[5]);
 
     vtkDataObject::SetPointDataActiveScalarInfo(outInfo, this->DataScalarType, this->NumberOfScalarComponents);
     //outInfo->Set(vtkDataObject::SPACING(), spcs, 3);
@@ -281,53 +203,142 @@ int vtkGDCMReader::RequestInformation(vtkInformation *request,
     }
 
   // Ok let's fill in the 'extra' info:
-  FillMedicalImageInformation(reader);
+  //FillMedicalImageInformation(reader);
 
-//  return this->Superclass::RequestInformation(
-//    request, inputVector, outputVector);
   return 1;
 }
 
-int LoadSingleFile(const char *filename, int *dext, char *pointer)
+struct threadparams
 {
-  gdcm::ImageReader reader;
-  reader.SetFileName( filename );
-  if( !reader.Read() )
+  const char **filenames;
+  unsigned int nfiles;
+  char *scalarpointer;
+  unsigned long len;
+// TODO I should also pass in the dim of the reference image just in case
+};
+
+void *ReadFilesThread(void *voidparams)
+{
+  threadparams *params = static_cast<threadparams *> (voidparams);
+
+  const unsigned int nfiles = params->nfiles;
+  char *tempimage = NULL;
+  for(unsigned int file = 0; file < nfiles; ++file)
     {
-    return 0;
-    }
+    /*
+    // TODO: update progress
+    pthread_mutex_lock(&params->lock);
+    //section critique
+    ReadingProgress+=params->stepProgress;
+    pthread_mutex_unlock(&params->lock);
+    */
+    const char *filename = params->filenames[file];
+    //std::cerr << filename << std::endl;
 
-  const gdcm::Image &image = reader.GetImage();
-  unsigned long len = image.GetBufferLength();
-  char *tempimage = new char[len];
-  image.GetBuffer(tempimage);
-
-  const unsigned int *dims = image.GetDimensions();
-  gdcm::PixelType pixeltype = image.GetPixelType();
-  long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
-  //std::cerr << "dext: " << dext[2] << " " << dext[3] << std::endl;
-  //std::cerr << "dext: " << dext[4] << " " << dext[5] << std::endl;
-  //memcpy(pointer, tempimage, len);
-  for(int j = dext[4]; j <= dext[5]; ++j)
-  {
-    //std::cerr << j << std::endl;
-    for(int i = dext[2]; i <= dext[3]; ++i)
+    gdcm::ImageReader reader;
+    reader.SetFileName( filename );
+    if( !reader.Read() )
       {
-      //memcpy(pointer, tempimage+i*outsize, outsize);
-      //memcpy(pointer, tempimage+(this->DataExtent[3] - i)*outsize, outsize);
-      //memcpy(pointer, tempimage+(i+j*(dext[3]+1))*outsize, outsize);
-      memcpy(pointer,
-        tempimage+((dext[3] - i)+j*(dext[3]+1))*outsize, outsize);
-      pointer += outsize;
+      return 0;
       }
-  }
+
+    const gdcm::Image &image = reader.GetImage();
+    unsigned long len = image.GetBufferLength();
+    if( !tempimage ) tempimage = new char[len];
+    assert( len == params->len );
+    image.GetBuffer(tempimage);
+
+    char * pointer = params->scalarpointer;
+    memcpy(pointer + file*len, tempimage, len);
+    }
   delete[] tempimage;
 
-  return 1; // success
+  return voidparams;
+}
+
+void ShowFilenames(const threadparams &params)
+{
+  std::cout << "start" << std::endl;
+  for(unsigned int i = 0; i < params.nfiles; ++i)
+    {
+    const char *filename = params.filenames[i];
+    std::cout << filename << std::endl;
+    }
+  std::cout << "end" << std::endl;
 }
 
 //----------------------------------------------------------------------------
-int vtkGDCMReader::RequestData(vtkInformation *vtkNotUsed(request),
+void ReadFiles(vtkImageData *output, unsigned int nfiles, const char *filenames[])
+{
+  assert( output->GetNumberOfPoints() % nfiles == 0 );
+  const unsigned long len = output->GetNumberOfPoints() * output->GetScalarSize() / nfiles;
+  char * scalarpointer = static_cast<char*>(output->GetScalarPointer());
+
+  const unsigned int nthreads = 1;
+  threadparams params[nthreads];
+
+  //pthread_mutex_t lock;
+  //pthread_mutex_init(&lock, NULL);
+
+  pthread_t *pthread = new pthread_t[nthreads];
+
+  // There is nfiles, and nThreads
+  assert( nfiles > nthreads );
+  const unsigned int partition = nfiles / nthreads;
+  for (unsigned int thread=0; thread < nthreads; ++thread)
+    {
+    params[thread].filenames = filenames + thread * partition;
+    params[thread].nfiles = partition;
+    if( thread == nthreads - 1 )
+      {
+      // There is slightly more files to process in this thread:
+      params[thread].nfiles += nfiles % nthreads;
+      }
+    assert( thread * partition < nfiles );
+    //ShowFilenames(params[thread]);
+    params[thread].scalarpointer = scalarpointer + thread * partition * len;
+    params[thread].len = len;
+    //assert( params[thread].scalarpointer < scalarpointer + 2 * dims[0] * dims[1] * dims[2] );
+    // start thread:
+    int res = pthread_create( &pthread[thread], NULL, ReadFilesThread, &params[thread]);
+    if( res )
+      {
+      std::cerr << "Unable to start a new thread, pthread returned: " << res << std::endl;
+      abort();
+      }
+    }
+// DEBUG
+  unsigned int total = 0;
+  for (unsigned int thread=0; thread < nthreads; ++thread)
+    {
+    total += params[thread].nfiles;
+    }
+  assert( total == nfiles );
+// END DEBUG
+
+  for (unsigned int thread=0;thread<nthreads;thread++)
+    {
+    pthread_join( pthread[thread], NULL);
+    }
+  delete[] pthread;
+
+  //pthread_mutex_destroy(&lock);
+ 
+#if 0
+  // For some reason writing down the file is painfully slow...
+  vtkStructuredPointsWriter *writer = vtkStructuredPointsWriter::New();
+  writer->SetInput( output );
+  writer->SetFileName( "/tmp/threadgdcm.vtk" );
+  writer->SetFileTypeToBinary();
+  //writer->Write();
+  writer->Delete();
+#endif
+
+  //output->Print( std::cout );
+}
+
+//----------------------------------------------------------------------------
+int vtkGDCMThreadedReader::RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector **vtkNotUsed(inputVector),
                                 vtkInformationVector *outputVector)
 {
@@ -350,75 +361,24 @@ int vtkGDCMReader::RequestData(vtkInformation *vtkNotUsed(request),
     this->GetOutput(i)->AllocateScalars();
   }
 
-
-//  vtkInformation *outInfo = outputVector->GetInformationObject(0);
-//  vtkImageData *output = vtkImageData::SafeDownCast(
-//    outInfo->Get(vtkDataObject::DATA_OBJECT()));
   int *dext = this->GetDataExtent();
-//  output->SetDimensions(
-//    dext[1] - dext[0] + 1, dext[3] - dext[2] + 1, dext[5] - dext[4] + 1);
-//  output->AllocateScalars();
-
+  assert( dext[5] - dext[4] == this->FileNames->GetNumberOfValues() - 1 );
+  const unsigned int nfiles = this->FileNames->GetNumberOfValues();
+  const char **filenames = new const char* [ nfiles ];
+  for(unsigned int i = 0; i < nfiles; ++i)
+    {
+    filenames[i] = this->FileNames->GetValue( i ).c_str();
+    std::cerr << filenames[i] << std::endl;
+    }
   vtkImageData *output = this->GetOutput(0);
-  char * pointer = static_cast<char*>(output->GetScalarPointer());
-  if( this->FileName )
-    {
-    const char *filename = this->FileName;
-    LoadSingleFile( filename, dext, pointer );
-    return 1;
-    }
-  else
-    {
-    assert( this->FileNames && this->FileNames->GetNumberOfValues() >= 1 );
-    }
-
-  // Load each 2D files
-  for(int j = dext[4]; j <= dext[5]; ++j)
-    {
-    gdcm::ImageReader reader;
-    const char *filename;
-    filename = this->FileNames->GetValue( j ).c_str();
-    //std::cerr << "Reader:" << j << " -> " << filename << std::endl;
-    reader.SetFileName( filename );
-    if( !reader.Read() )
-      {
-      // TODO need to do some cleanup...
-      return 0;
-      }
-
-    const gdcm::Image &image = reader.GetImage();
-    unsigned long len = image.GetBufferLength();
-    char *tempimage = new char[len];
-    image.GetBuffer(tempimage);
-
-    const unsigned int *dims = image.GetDimensions();
-    gdcm::PixelType pixeltype = image.GetPixelType();
-    long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
-    //std::cerr << "dext: " << dext[2] << " " << dext[3] << std::endl;
-    //std::cerr << "dext: " << dext[4] << " " << dext[5] << std::endl;
-#if 1
-    memcpy(pointer, tempimage, len);
-    pointer += len;
-#else
-    //std::cerr << j << std::endl;
-    for(int i = dext[2]; i <= dext[3]; ++i)
-      {
-      //memcpy(pointer, tempimage+i*outsize, outsize);
-      //memcpy(pointer, tempimage+(this->DataExtent[3] - i)*outsize, outsize);
-      //memcpy(pointer, tempimage+(i+j*(dext[3]+1))*outsize, outsize);
-      memcpy(pointer,
-        tempimage+((dext[3] - i)+j*(dext[3]+1))*outsize, outsize);
-      pointer += outsize;
-      }
-#endif
-    delete[] tempimage;
-    }
+  ReadFiles(output, nfiles, filenames);
+  delete[] filenames;
 
   return 1;
 }
 
 //----------------------------------------------------------------------------
-void vtkGDCMReader::PrintSelf(ostream& os, vtkIndent indent)
+void vtkGDCMThreadedReader::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os,indent);
 }

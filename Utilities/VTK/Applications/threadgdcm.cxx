@@ -130,8 +130,8 @@ void ReadFiles(unsigned int nfiles, const char *filenames[])
   const unsigned int nthreads = 4;
   threadparams params[nthreads];
 
-  pthread_mutex_t lock;
-  pthread_mutex_init(&lock, NULL);
+  //pthread_mutex_t lock;
+  //pthread_mutex_init(&lock, NULL);
 
   pthread_t *pthread = new pthread_t[nthreads];
 
@@ -174,14 +174,14 @@ void ReadFiles(unsigned int nfiles, const char *filenames[])
     }
   delete[] pthread;
 
-  pthread_mutex_destroy(&lock);
+  //pthread_mutex_destroy(&lock);
  
   // For some reason writing down the file is painfully slow...
   vtkStructuredPointsWriter *writer = vtkStructuredPointsWriter::New();
   writer->SetInput( output );
   writer->SetFileName( "/tmp/threadgdcm.vtk" );
   writer->SetFileTypeToBinary();
-  //writer->Write();
+  writer->Write();
   writer->Delete();
 
   output->Print( std::cout );
