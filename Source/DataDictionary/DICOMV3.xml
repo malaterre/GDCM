@@ -74,38 +74,6 @@ Description:
   <entry group="0000" element="5190" vr="CS" vm="1" retired="true" version="2" name="Erase"/>
   <entry group="0000" element="51a0" vr="CS" vm="1" retired="true" version="2" name="Print"/>
   <entry group="0000" element="51b0" vr="US" vm="1-n" retired="true" version="2" name="Overlays"/>
-<!-- Registry of DICOM File Meta Elements -->
-  <entry group="0002" element="0000" vr="UL" vm="1" version="3" name="Group Length"/>
-  <entry group="0002" element="0001" vr="OB" vm="1" version="3" name="File Meta Information Version"/>
-  <entry group="0002" element="0002" vr="UI" vm="1" version="3" name="Media Storage SOP Class UID"/>
-  <entry group="0002" element="0003" vr="UI" vm="1" version="3" name="Media Storage SOP Instance UID"/>
-  <entry group="0002" element="0010" vr="UI" vm="1" version="3" name="Transfer Syntax UID"/>
-  <entry group="0002" element="0012" vr="UI" vm="1" version="3" name="Implementation Class UID"/>
-  <entry group="0002" element="0013" vr="SH" vm="1" version="3" name="Implementation Version Name"/>
-  <entry group="0002" element="0016" vr="AE" vm="1" version="3" name="Source Application Entity Title"/>
-  <entry group="0002" element="0100" vr="UI" vm="1" version="3" name="Private Information Creator UID"/>
-  <entry group="0002" element="0102" vr="OB" vm="1" version="3" name="Private Information"/>
-<!-- Registry of DICOM data elements -->
-  <entry group="0004" element="0000" vr="UL" vm="1" version="3" name="Group Length"/>
-  <entry group="0004" element="1130" vr="CS" vm="1" version="3" name="File-set ID"/>
-  <entry group="0004" element="1141" vr="CS" vm="1-8" version="3" name="File-set Descriptor File ID"/>
-  <entry group="0004" element="1142" vr="CS" vm="1" version="3" name="Specific Character Set of File-set Descriptor File"/>
-  <entry group="0004" element="1200" vr="UL" vm="1" version="3" name="Offset of the First Directory Record of the Root Directory Entity"/>
-  <entry group="0004" element="1202" vr="UL" vm="1" version="3" name="Offset of the Last Directory Record of the Root Directory Entity"/>
-  <entry group="0004" element="1212" vr="US" vm="1" version="3" name="File-set Consistency Flag"/>
-  <entry group="0004" element="1220" vr="SQ" vm="1" version="3" name="Directory Record Sequence"/>
-  <entry group="0004" element="1400" vr="UL" vm="1" version="3" name="Offset of the Next Directory Record"/>
-  <entry group="0004" element="1410" vr="US" vm="1" version="3" name="Record In-use Flag"/>
-  <entry group="0004" element="1420" vr="UL" vm="1" version="3" name="Offset of Referenced Lower-Level Directory Entity"/>
-  <entry group="0004" element="1430" vr="CS" vm="1" version="3" name="Directory Record Type"/>
-  <entry group="0004" element="1432" vr="UI" vm="1" version="3" name="Private Record UID"/>
-  <entry group="0004" element="1500" vr="CS" vm="1-8" version="3" name="Referenced File ID"/>
-  <entry group="0004" element="1504" vr="UL" vm="1" retired="true" version="3" name="MRDR Directory Record Offset"/>
-  <entry group="0004" element="1510" vr="UI" vm="1" version="3" name="Referenced SOP Class UID in File"/>
-  <entry group="0004" element="1511" vr="UI" vm="1" version="3" name="Referenced SOP Instance UID in File"/>
-  <entry group="0004" element="1512" vr="UI" vm="1" version="3" name="Referenced Transfer Syntax UID in File"/>
-  <entry group="0004" element="151a" vr="UI" vm="1-n" version="3" name="Referenced Related General SOP Class UID in File"/>
-  <entry group="0004" element="1600" vr="UL" vm="1" retired="true" version="3" name="Number of References"/>
   <entry group="0008" element="0001" vr="UL" vm="1" retired="true" version="2" name="Length to End"/>
   <entry group="0008" element="0005" vr="CS" vm="1-n" version="3" name="Specific Character Set"/>
   <entry group="0008" element="0008" vr="CS" vm="1-n" version="3" name="Image Type"/>
@@ -2493,4 +2461,36 @@ Description:
   <entry group="fffe" element="e000" version="3" name="Item"/>
   <entry group="fffe" element="e00d" version="3" name="Item Delimitation Item"/>
   <entry group="fffe" element="e0dd" version="3" name="Sequence Delimitation Item"/>
+<!-- Registry of DICOM File Meta Elements -->
+  <entry group="0002" element="0000" vr="UL" vm="1" version="3" name="Group Length"/>
+  <entry group="0002" element="0001" vr="OB" vm="1" version="3" name="File Meta Information Version"/>
+  <entry group="0002" element="0002" vr="UI" vm="1" version="3" name="Media Storage SOP Class UID"/>
+  <entry group="0002" element="0003" vr="UI" vm="1" version="3" name="Media Storage SOP Instance UID"/>
+  <entry group="0002" element="0010" vr="UI" vm="1" version="3" name="Transfer Syntax UID"/>
+  <entry group="0002" element="0012" vr="UI" vm="1" version="3" name="Implementation Class UID"/>
+  <entry group="0002" element="0013" vr="SH" vm="1" version="3" name="Implementation Version Name"/>
+  <entry group="0002" element="0016" vr="AE" vm="1" version="3" name="Source Application Entity Title"/>
+  <entry group="0002" element="0100" vr="UI" vm="1" version="3" name="Private Information Creator UID"/>
+  <entry group="0002" element="0102" vr="OB" vm="1" version="3" name="Private Information"/>
+<!-- Registry of DICOM data elements -->
+  <entry group="0004" element="0000" vr="UL" vm="1" version="3" name="Group Length"/>
+  <entry group="0004" element="1130" vr="CS" vm="1" version="3" name="File-set ID"/>
+  <entry group="0004" element="1141" vr="CS" vm="1-8" version="3" name="File-set Descriptor File ID"/>
+  <entry group="0004" element="1142" vr="CS" vm="1" version="3" name="Specific Character Set of File-set Descriptor File"/>
+  <entry group="0004" element="1200" vr="UL" vm="1" version="3" name="Offset of the First Directory Record of the Root Directory Entity"/>
+  <entry group="0004" element="1202" vr="UL" vm="1" version="3" name="Offset of the Last Directory Record of the Root Directory Entity"/>
+  <entry group="0004" element="1212" vr="US" vm="1" version="3" name="File-set Consistency Flag"/>
+  <entry group="0004" element="1220" vr="SQ" vm="1" version="3" name="Directory Record Sequence"/>
+  <entry group="0004" element="1400" vr="UL" vm="1" version="3" name="Offset of the Next Directory Record"/>
+  <entry group="0004" element="1410" vr="US" vm="1" version="3" name="Record In-use Flag"/>
+  <entry group="0004" element="1420" vr="UL" vm="1" version="3" name="Offset of Referenced Lower-Level Directory Entity"/>
+  <entry group="0004" element="1430" vr="CS" vm="1" version="3" name="Directory Record Type"/>
+  <entry group="0004" element="1432" vr="UI" vm="1" version="3" name="Private Record UID"/>
+  <entry group="0004" element="1500" vr="CS" vm="1-8" version="3" name="Referenced File ID"/>
+  <entry group="0004" element="1504" vr="UL" vm="1" retired="true" version="3" name="MRDR Directory Record Offset"/>
+  <entry group="0004" element="1510" vr="UI" vm="1" version="3" name="Referenced SOP Class UID in File"/>
+  <entry group="0004" element="1511" vr="UI" vm="1" version="3" name="Referenced SOP Instance UID in File"/>
+  <entry group="0004" element="1512" vr="UI" vm="1" version="3" name="Referenced Transfer Syntax UID in File"/>
+  <entry group="0004" element="151a" vr="UI" vm="1-n" version="3" name="Referenced Related General SOP Class UID in File"/>
+  <entry group="0004" element="1600" vr="UL" vm="1" retired="true" version="3" name="Number of References"/>
 </dict>

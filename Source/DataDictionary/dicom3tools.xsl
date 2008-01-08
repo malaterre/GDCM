@@ -4,7 +4,13 @@
 <!-- XSL to convert XML GDCM2 data dictionay into
      David Clunie's dicom3tools data dictionary 
 Checked against:
-     dicom3tools_1.00.snapshot.20061120/libsrc/standard/elmdict/dicom3.tpl
+     dicom3tools_1.00.snapshot.20071112/libsrc/standard/elmdict/dicom3.tpl
+
+TODO:
+* vr should be reformat
+* group length should be added
+* need to add a xsl:sort
+
 -->
 <!--
   Program: GDCM (Grass Root DICOM). A DICOM library
@@ -76,12 +82,12 @@ http://www.thescripts.com/forum/thread86881.html
         <xsl:value-of select="@vr"/>
       <xsl:text>" VM="</xsl:text>
         <xsl:value-of select="@vm"/>
-      </xsl:for-each>
+      <!--/xsl:for-each-->
       <xsl:text>" Keyword="</xsl:text>
       <xsl:variable name="apos">'</xsl:variable>
       <!--translating an apostrophe is a pain ... better solution ? -->
       <xsl:variable name="description_apos">
-        <xsl:value-of select="translate(description, $apos, '')"/>
+        <xsl:value-of select="translate(@name, $apos, '')"/>
       </xsl:variable>
       <xsl:variable name="description_dash">
         <!-- the dicom3tools is not always consistant with capitalization. 
@@ -96,7 +102,7 @@ http://www.thescripts.com/forum/thread86881.html
       <!-- remove remaining extra character -->
       <xsl:value-of select="translate($description_cap,'/(),','')"/>
       <xsl:text>" Name="</xsl:text>
-      <xsl:value-of select="description"/>
+      <xsl:value-of select="@name"/>
       <xsl:text>"</xsl:text>
       <xsl:text>
 </xsl:text>
