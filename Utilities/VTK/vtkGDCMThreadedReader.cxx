@@ -221,23 +221,24 @@ int vtkGDCMThreadedReader::RequestInformation(vtkInformation *request,
 
 struct threadparams
 {
-  const char **filenames;
-  unsigned int nfiles;
-  char *scalarpointer;
-  unsigned long len; // This is not required
-  unsigned long totalfiles;
-  double progress; // what is the progress to add after reading one file
-  pthread_mutex_t lock;
-  vtkGDCMThreadedReader *reader;
-// TODO I should also pass in the dim of the reference image just in case
+  const char **filenames; // array of filenames thread will process
+  unsigned int nfiles; // number of files the thread will process
+  char *scalarpointer; // start of the image buffer affected to the thread
+  unsigned long len; // This is not required but useful to check if files are consistant
+  unsigned long totalfiles; // total number of files being processed (needed to compute progress)
+  pthread_mutex_t lock; // critial section for updating progress
+  vtkGDCMThreadedReader *reader; // needed for calling updateprogress
 };
 
 void *ReadFilesThread(void *voidparams)
 {
   threadparams *params = static_cast<threadparams *> (voidparams);
+  assert( params );
 
   const unsigned int nfiles = params->nfiles;
+  assert( nfiles ); //
   // pre compute progress delta for one file:
+  assert( params->totalfiles );
   const double progressdelta = 1. / params->totalfiles;
   for(unsigned int file = 0; file < nfiles; ++file)
     {
@@ -302,6 +303,7 @@ void vtkGDCMThreadedReader::ReadFiles(unsigned int nfiles, const char *filenames
   // There is nfiles, and nThreads
   assert( nfiles > nthreads );
   const unsigned int partition = nfiles / nthreads;
+  assert( partition );
   for (unsigned int thread=0; thread < nthreads; ++thread)
     {
     params[thread].filenames = filenames + thread * partition;
@@ -318,7 +320,6 @@ void vtkGDCMThreadedReader::ReadFiles(unsigned int nfiles, const char *filenames
     params[thread].totalfiles = nfiles;
     params[thread].lock = lock;
     params[thread].reader = this;
-    //assert( params[thread].scalarpointer < scalarpointer + 2 * dims[0] * dims[1] * dims[2] );
     // start thread:
     int res = pthread_create( &pthread[thread], NULL, ReadFilesThread, &params[thread]);
     if( res )
