@@ -13,22 +13,84 @@
 #
 ############################################################################
 
+from vtk import vtkStringArray
+from vtk import vtkDirectory
+from vtk import vtkStructuredPointsWriter
+from vtk.util import vtkConstants as vtkType
 import libvtkgdcmPython as vtkgdcm
 import os,sys
 
-try:
-  filename = os.sys.argv[1]
-except:
-  # failure
-  print "Need a filename"
-  sys.exit(1)
+def ExecuteInformation(reader, filenames):
+  import gdcm
+  reffile = filenames.GetValue(0) # Take first image as reference
+  #print reader
+  r = gdcm.ImageReader()
+  r.SetFileName( reffile )
+  sucess = r.Read()
+  assert sucess
+  #print r.GetImage().Print()
+  image = r.GetImage()
+  assert image.GetNumberOfDimensions() == 2
+  dims = [0,0,0]
+  dims[0] = image.GetDimensions(0)
+  dims[1] = image.GetDimensions(1)
+  dims[2] = filenames.GetNumberOfValues()
+  #print dims
+  #print image.GetPixelType().GetTPixelType()
+  pixeltype = image.GetPixelType().GetTPixelType()
+  datascalartype = vtkType.VTK_VOID # dummy should not happen
+  if pixeltype == gdcm.PixelType.INT8:
+    datascalartype = vtkType.VTK_SIGNED_CHAR
+  elif pixeltype == gdcm.PixelType.UINT8:
+    datascalartype = vtkType.VTK_UNSIGNED_CHAR
+  elif pixeltype == gdcm.PixelType.INT16:
+    datascalartype = vtkType.VTK_SHORT
+  elif pixeltype == gdcm.PixelType.UINT16:
+    datascalartype = vtkType.VTK_UNSIGNED_SHORT
+  else:
+    print "Unhandled PixelType: ", pixeltype
+    sys.exit(1)
+  #print datascalartype
+  numberOfScalarComponents = image.GetPixelType().GetSamplesPerPixel()
+  #print numberOfScalarComponents
+  #print gdcm.PhotometricInterpretation.GetPIString( image.GetPhotometricInterpretation().PIType() )
+  #reader.SetDataExtent( dataextent );
+  reader.SetDataExtent( 0, dims[0] - 1, 0, dims[1] - 1, 0, dims[2] - 1 )
+  reader.SetDataScalarType ( datascalartype )
 
-r = vtkgdcm.vtkGDCMThreadedReader()
-r.SetFileName( filename )
-r.Update()
-
-#print r.GetImage().Print()
-
-# Test succeed ?
-#sys.exit(sucess != 1)
+if __name__ == "__main__":
+  try:
+    filename = os.sys.argv[1]
+  except:
+    # failure
+    print "Need a filename"
+    sys.exit(1)
+  
+  r = vtkgdcm.vtkGDCMThreadedReader()
+  dir = vtkDirectory()
+  
+  if dir.FileIsDirectory( filename ):
+    dir.Open( filename )
+    files = dir.GetFiles()
+    fullpath = vtkStringArray()
+    for i in range(0, files.GetNumberOfValues()):
+      if files.GetValue(i) != '.' and files.GetValue(i) != '..':
+        fullpath.InsertNextValue( os.path.join(filename, files.GetValue(i) ))
+    r.SetFileNames( fullpath )
+    ExecuteInformation(r, fullpath)
+    r.Update()
+    print r.GetOutput()
+    # Write output
+    writer = vtkStructuredPointsWriter()
+    writer.SetInput( r.GetOutput() )
+    writer.SetFileName( "bla.vtk" )
+    writer.SetFileTypeToBinary()
+    writer.Write()
+  else:
+    # TODO
+    sys.exit(1)
+  
+  
+  # Test succeed ?
+  #sys.exit(sucess != 1)
 

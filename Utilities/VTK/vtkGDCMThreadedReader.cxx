@@ -180,6 +180,9 @@ int vtkGDCMThreadedReader::RequestInformation(vtkInformation *request,
     }
 
 #endif
+  // Some information need to have been set outside (user specified)
+  //assert( this->GetOutput(0)->GetNumberOfPoints() != 0 );
+
   int numvol = 1;
   this->SetNumberOfOutputPorts(numvol);
   // For each output:
