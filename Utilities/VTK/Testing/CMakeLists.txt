@@ -17,7 +17,7 @@ CREATE_TEST_SOURCELIST(vtkGDCMTests gdcmvtkGDCMTests.cxx ${VTK_GDCM_TEST_SRCS})
 ADD_EXECUTABLE(gdcmvtkGDCMTests ${vtkGDCMTests})
 TARGET_LINK_LIBRARIES(gdcmvtkGDCMTests vtkgdcm)
 
-#Don't understand why I need that ??
+# Need full path to executable:
 SET(GDCM_VTK_GDCM_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmvtkGDCMTests")
 
 # Loop over files and create executables
