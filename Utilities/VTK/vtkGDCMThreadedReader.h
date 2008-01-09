@@ -71,6 +71,8 @@ protected:
   virtual void ExecuteInformation();
   virtual void ExecuteData(vtkDataObject *out);
 
+  void ReadFiles(unsigned int nfiles, const char *filenames[]);
+
 private:
   vtkGDCMThreadedReader(const vtkGDCMThreadedReader&);  // Not implemented.
   void operator=(const vtkGDCMThreadedReader&);  // Not implemented.

@@ -14,6 +14,7 @@
 =========================================================================*/
 #include "vtkGDCMThreadedReader.h"
 #include "vtkGDCMReader.h"
+#include "vtkCommand.h"
 
 #include "gdcmDirectory.h"
 #include "gdcmImageReader.h"
@@ -25,6 +26,23 @@
 #include "vtkStructuredPointsWriter.h"
 #include "vtkImageData.h"
 #include <vtksys/SystemTools.hxx>
+
+class ProgressObserver : public vtkCommand
+{
+public:
+  static ProgressObserver* New() {
+    return new ProgressObserver;
+  }
+
+  virtual void Execute(vtkObject* caller, unsigned long event, void *callData)
+    {
+    if( event == vtkCommand::ProgressEvent )
+      {
+      std::cout << ((vtkGDCMThreadedReader*)caller)->GetProgress() << std::endl;
+      }
+    }
+};
+
 
 template <typename TReader>
 void ExecuteInformation(const char *filename, TReader *vtkreader)
@@ -136,7 +154,10 @@ int TestvtkGDCMThreadedRead(const char *filename)
   ExecuteInformation<TReader>(refimage, reader);
 
 
+  ProgressObserver *obs = ProgressObserver::New();
+  reader->AddObserver( vtkCommand::ProgressEvent, obs);
   reader->Update();
+  obs->Delete();
 
   //reader->GetOutput()->Print( cout );
 

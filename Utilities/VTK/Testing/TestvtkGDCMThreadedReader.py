@@ -20,6 +20,10 @@ from vtk.util import vtkConstants as vtkType
 import libvtkgdcmPython as vtkgdcm
 import os,sys
 
+def PrintProgress(object, event):
+  assert event == "ProgressEvent"
+  print "Progress:", object.GetProgress()
+
 def ExecuteInformation(reader, filenames):
   import gdcm
   reffile = filenames.GetValue(0) # Take first image as reference
@@ -66,24 +70,28 @@ if __name__ == "__main__":
     print "Need a filename"
     sys.exit(1)
   
+  # setup reader
   r = vtkgdcm.vtkGDCMThreadedReader()
   dir = vtkDirectory()
   
+  # Did user pass in a directory:
   if dir.FileIsDirectory( filename ):
     dir.Open( filename )
     files = dir.GetFiles()
+    # Need to construct full path out of the simple filename
     fullpath = vtkStringArray()
     for i in range(0, files.GetNumberOfValues()):
-      if files.GetValue(i) != '.' and files.GetValue(i) != '..':
+      if files.GetValue(i) != '.' and files.GetValue(i) != '..': # sigh !
         fullpath.InsertNextValue( os.path.join(filename, files.GetValue(i) ))
     r.SetFileNames( fullpath )
     ExecuteInformation(r, fullpath)
+    r.AddObserver("ProgressEvent", PrintProgress)
     r.Update()
     print r.GetOutput()
     # Write output
     writer = vtkStructuredPointsWriter()
     writer.SetInput( r.GetOutput() )
-    writer.SetFileName( "bla.vtk" )
+    writer.SetFileName( "TestvtkGDCMThreadedReaderPython.vtk" )
     writer.SetFileTypeToBinary()
     writer.Write()
   else:

@@ -62,6 +62,7 @@ int vtkGDCMThreadedReader::CanReadFile(const char* fname)
     {
     return 0;
     }
+  // Problem reading:
   return 3;
 }
 
@@ -224,6 +225,10 @@ struct threadparams
   unsigned int nfiles;
   char *scalarpointer;
   unsigned long len; // This is not required
+  unsigned long totalfiles;
+  double progress; // what is the progress to add after reading one file
+  pthread_mutex_t lock;
+  vtkGDCMThreadedReader *reader;
 // TODO I should also pass in the dim of the reference image just in case
 };
 
@@ -232,15 +237,10 @@ void *ReadFilesThread(void *voidparams)
   threadparams *params = static_cast<threadparams *> (voidparams);
 
   const unsigned int nfiles = params->nfiles;
+  // pre compute progress delta for one file:
+  const double progressdelta = 1. / params->totalfiles;
   for(unsigned int file = 0; file < nfiles; ++file)
     {
-    /*
-    // TODO: update progress
-    pthread_mutex_lock(&params->lock);
-    //section critique
-    ReadingProgress+=params->stepProgress;
-    pthread_mutex_unlock(&params->lock);
-    */
     const char *filename = params->filenames[file];
     //std::cerr << filename << std::endl;
 
@@ -250,6 +250,14 @@ void *ReadFilesThread(void *voidparams)
       {
       return 0;
       }
+
+    // Update progress
+    // We are done reading one file, let's shout it loud:
+    pthread_mutex_lock(&params->lock);
+    // critical section
+    const double progress = params->reader->GetProgress(); // other thread might have updated it also...
+    params->reader->UpdateProgress( progress + progressdelta );
+    pthread_mutex_unlock(&params->lock);
 
     const gdcm::Image &image = reader.GetImage();
     unsigned long len = image.GetBufferLength();
@@ -276,8 +284,9 @@ void ShowFilenames(const threadparams &params)
 }
 
 //----------------------------------------------------------------------------
-void ReadFiles(vtkImageData *output, unsigned int nfiles, const char *filenames[])
+void vtkGDCMThreadedReader::ReadFiles(unsigned int nfiles, const char *filenames[])
 {
+  vtkImageData *output = this->GetOutput(0);
   assert( output->GetNumberOfPoints() % nfiles == 0 );
   const unsigned long len = output->GetNumberOfPoints() * output->GetScalarSize() / nfiles;
   char * scalarpointer = static_cast<char*>(output->GetScalarPointer());
@@ -285,8 +294,8 @@ void ReadFiles(vtkImageData *output, unsigned int nfiles, const char *filenames[
   const unsigned int nthreads = sysconf( _SC_NPROCESSORS_ONLN );
   threadparams params[nthreads];
 
-  //pthread_mutex_t lock;
-  //pthread_mutex_init(&lock, NULL);
+  pthread_mutex_t lock;
+  pthread_mutex_init(&lock, NULL);
 
   pthread_t *pthread = new pthread_t[nthreads];
 
@@ -306,6 +315,9 @@ void ReadFiles(vtkImageData *output, unsigned int nfiles, const char *filenames[
     //ShowFilenames(params[thread]);
     params[thread].scalarpointer = scalarpointer + thread * partition * len;
     params[thread].len = len;
+    params[thread].totalfiles = nfiles;
+    params[thread].lock = lock;
+    params[thread].reader = this;
     //assert( params[thread].scalarpointer < scalarpointer + 2 * dims[0] * dims[1] * dims[2] );
     // start thread:
     int res = pthread_create( &pthread[thread], NULL, ReadFilesThread, &params[thread]);
@@ -330,7 +342,7 @@ void ReadFiles(vtkImageData *output, unsigned int nfiles, const char *filenames[
     }
   delete[] pthread;
 
-  //pthread_mutex_destroy(&lock);
+  pthread_mutex_destroy(&lock);
  
 #if 0
   // For some reason writing down the file is painfully slow...
@@ -379,8 +391,7 @@ int vtkGDCMThreadedReader::RequestData(vtkInformation *vtkNotUsed(request),
     filenames[i] = this->FileNames->GetValue( i ).c_str();
     //std::cerr << filenames[i] << std::endl;
     }
-  vtkImageData *output = this->GetOutput(0);
-  ReadFiles(output, nfiles, filenames);
+  ReadFiles(nfiles, filenames);
   delete[] filenames;
 
   return 1;
