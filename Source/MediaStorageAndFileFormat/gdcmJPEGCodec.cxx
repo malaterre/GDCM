@@ -44,11 +44,11 @@ bool JPEGCodec::CanDecode(TransferSyntax const &ts)
     || ts == TransferSyntax::JPEGLosslessProcess14_1;
 }
 
-void JPEGCodec::SetPixelType(PixelType const &pt)
+void JPEGCodec::SetPixelFormat(PixelFormat const &pt)
 {
   //SetBitSample( pt.GetBitsAllocated() );
   SetBitSample( pt.GetBitsStored() );
-  ImageCodec::SetPixelType(pt);
+  ImageCodec::SetPixelFormat(pt);
 }
 
 void JPEGCodec::SetBitSample(int bit)

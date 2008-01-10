@@ -131,7 +131,7 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
 
   unsigned long length = Length;
   // Special case:
-  if( GetPixelType().GetBitsAllocated() == 16 )
+  if( GetPixelFormat().GetBitsAllocated() == 16 )
     {
     RequestPaddedCompositePixelCode = true;
     }

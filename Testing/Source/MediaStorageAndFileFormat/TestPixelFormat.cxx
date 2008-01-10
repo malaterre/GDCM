@@ -12,10 +12,10 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmPixelType.h"
+#include "gdcmPixelFormat.h"
 
-int TestPixelType(int , char *[])
+int TestPixelFormat(int , char *[])
 {
-  gdcm::PixelType pt;
+  gdcm::PixelFormat pf;
   return 0;
 }

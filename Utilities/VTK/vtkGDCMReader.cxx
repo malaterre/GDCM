@@ -222,27 +222,27 @@ int vtkGDCMReader::RequestInformation(vtkInformation *request,
   //this->DataSpacing[1] = -1.;
   //this->DataSpacing[2] = 1.;
 
-  gdcm::PixelType pixeltype = image.GetPixelType();
+  gdcm::PixelFormat pixeltype = image.GetPixelFormat();
   switch( pixeltype )
     {
-  case gdcm::PixelType::INT8:
+  case gdcm::PixelFormat::INT8:
     this->DataScalarType = VTK_SIGNED_CHAR;
     break;
-  case gdcm::PixelType::UINT8:
+  case gdcm::PixelFormat::UINT8:
     this->DataScalarType = VTK_UNSIGNED_CHAR;
     break;
-  case gdcm::PixelType::INT12:
+  case gdcm::PixelFormat::INT12:
     abort();
     this->DataScalarType = VTK_SHORT;
     break;
-  case gdcm::PixelType::UINT12:
+  case gdcm::PixelFormat::UINT12:
     abort();
     this->DataScalarType = VTK_UNSIGNED_SHORT;
     break;
-  case gdcm::PixelType::INT16:
+  case gdcm::PixelFormat::INT16:
     this->DataScalarType = VTK_SHORT;
     break;
-  case gdcm::PixelType::UINT16:
+  case gdcm::PixelFormat::UINT16:
     this->DataScalarType = VTK_UNSIGNED_SHORT;
     break;
   default:
@@ -303,7 +303,7 @@ int LoadSingleFile(const char *filename, int *dext, char *pointer)
   image.GetBuffer(tempimage);
 
   const unsigned int *dims = image.GetDimensions();
-  gdcm::PixelType pixeltype = image.GetPixelType();
+  gdcm::PixelFormat pixeltype = image.GetPixelFormat();
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
   //std::cerr << "dext: " << dext[2] << " " << dext[3] << std::endl;
   //std::cerr << "dext: " << dext[4] << " " << dext[5] << std::endl;
@@ -392,7 +392,7 @@ int vtkGDCMReader::RequestData(vtkInformation *vtkNotUsed(request),
     image.GetBuffer(tempimage);
 
     const unsigned int *dims = image.GetDimensions();
-    gdcm::PixelType pixeltype = image.GetPixelType();
+    gdcm::PixelFormat pixeltype = image.GetPixelFormat();
     long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
     //std::cerr << "dext: " << dext[2] << " " << dext[3] << std::endl;
     //std::cerr << "dext: " << dext[4] << " " << dext[5] << std::endl;

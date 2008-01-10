@@ -15,7 +15,7 @@
 #ifndef __gdcmImage_h
 #define __gdcmImage_h
 
-#include "gdcmPixelType.h"
+#include "gdcmPixelFormat.h"
 #include "gdcmSwapCode.h"
 #include "gdcmPhotometricInterpretation.h"
 #include "gdcmLookupTable.h"
@@ -35,7 +35,7 @@ namespace gdcm
  * From this container you should be able to request information like:
  * - Origin
  * - Dimension
- * - PixelType
+ * - PixelFormat
  * ...
  * But also to retrieve the image as a raw buffer (char *)
  * Since we have to deal with both RAW data and JPEG stream (which
@@ -59,14 +59,14 @@ public:
   void SetDimensions(unsigned int *dims);
   void SetDimensions(unsigned int idx, unsigned int dim);
 
-  // Get/Set PixelType
-  const PixelType &GetPixelType() const
+  // Get/Set PixelFormat
+  const PixelFormat &GetPixelFormat() const
     {
-    return PT;
+    return PF;
     }
-  void SetPixelType(PixelType const &pt)
+  void SetPixelFormat(PixelFormat const &pf)
     {
-    PT = pt;
+    PF = pf;
     }
 
   // Acces the raw data
@@ -74,6 +74,7 @@ public:
 
   // TODO does this really belong here ?
   const double *GetSpacing() const;
+  double GetSpacing(unsigned int idx) const;
   void SetSpacing(double *spacing);
 
   const double *GetOrigin() const;
@@ -149,7 +150,7 @@ private:
   std::vector<double> Spacing;
   std::vector<double> Origin;
 
-  PixelType PT;
+  PixelFormat PF;
   PhotometricInterpretation PI;
 
   TransferSyntax TS;

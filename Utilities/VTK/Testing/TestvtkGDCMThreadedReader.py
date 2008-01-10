@@ -40,22 +40,22 @@ def ExecuteInformation(reader, filenames):
   dims[1] = image.GetDimensions(1)
   dims[2] = filenames.GetNumberOfValues()
   #print dims
-  #print image.GetPixelType().GetTPixelType()
-  pixeltype = image.GetPixelType().GetTPixelType()
+  #print image.GetPixelFormat().GetTPixelFormat()
+  pixelformat = image.GetPixelFormat().GetScalarType()
   datascalartype = vtkType.VTK_VOID # dummy should not happen
-  if pixeltype == gdcm.PixelType.INT8:
+  if pixelformat == gdcm.PixelFormat.INT8:
     datascalartype = vtkType.VTK_SIGNED_CHAR
-  elif pixeltype == gdcm.PixelType.UINT8:
+  elif pixelformat == gdcm.PixelFormat.UINT8:
     datascalartype = vtkType.VTK_UNSIGNED_CHAR
-  elif pixeltype == gdcm.PixelType.INT16:
+  elif pixelformat == gdcm.PixelFormat.INT16:
     datascalartype = vtkType.VTK_SHORT
-  elif pixeltype == gdcm.PixelType.UINT16:
+  elif pixelformat == gdcm.PixelFormat.UINT16:
     datascalartype = vtkType.VTK_UNSIGNED_SHORT
   else:
-    print "Unhandled PixelType: ", pixeltype
+    print "Unhandled PixelFormat: ", pixelformat
     sys.exit(1)
   #print datascalartype
-  numberOfScalarComponents = image.GetPixelType().GetSamplesPerPixel()
+  numberOfScalarComponents = image.GetPixelFormat().GetSamplesPerPixel()
   #print numberOfScalarComponents
   #print gdcm.PhotometricInterpretation.GetPIString( image.GetPhotometricInterpretation().PIType() )
   #reader.SetDataExtent( dataextent );
@@ -85,7 +85,7 @@ if __name__ == "__main__":
         fullpath.InsertNextValue( os.path.join(filename, files.GetValue(i) ))
     r.SetFileNames( fullpath )
     ExecuteInformation(r, fullpath)
-    r.AddObserver("ProgressEvent", PrintProgress)
+    #r.AddObserver("ProgressEvent", PrintProgress)
     r.Update()
     print r.GetOutput()
     # Write output
@@ -93,7 +93,7 @@ if __name__ == "__main__":
     writer.SetInput( r.GetOutput() )
     writer.SetFileName( "TestvtkGDCMThreadedReaderPython.vtk" )
     writer.SetFileTypeToBinary()
-    writer.Write()
+    #writer.Write()
   else:
     # TODO
     sys.exit(1)

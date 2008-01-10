@@ -39,7 +39,7 @@ using namespace gdcm;
 
 %include "gdcmWin32.h" // define GDCM_EXPORT so need to be the first one...
 %include "gdcmSwapCode.h"
-%include "gdcmPixelType.h"
+%include "gdcmPixelFormat.h"
 %include "gdcmMediaStorage.h"
 %include "gdcmTag.h"
 %include "gdcmTransferSyntax.h"

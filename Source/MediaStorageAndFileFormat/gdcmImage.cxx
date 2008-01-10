@@ -36,10 +36,10 @@ void Image::SetNumberOfDimensions(unsigned int dim)
 }
 
 // TODO does it make sense to PlanarConfiguration in Image
-// and SamplesPerPixel in PixelType when those two are linked...
+// and SamplesPerPixel in PixelFormat when those two are linked...
 unsigned int Image::GetPlanarConfiguration() const
 {
-  if( PlanarConfiguration && PT.GetSamplesPerPixel() != 3 )
+  if( PlanarConfiguration && PF.GetSamplesPerPixel() != 3 )
     {
     // LEADTOOLS_FLOWERS-8-PAL-RLE.dcm
     // User specify PlanarConfiguration whereas SamplesPerPixel != 3
@@ -97,7 +97,13 @@ void Image::SetDimensions(unsigned int idx, unsigned int dim)
 
 const double *Image::GetSpacing() const
 {
+  assert( NumberOfDimensions );
   return &Spacing[0];
+}
+
+double Image::GetSpacing(unsigned int idx) const
+{
+  return Spacing[idx];
 }
 
 void Image::SetSpacing(double *spacing)
@@ -132,9 +138,10 @@ unsigned long Image::GetBufferLength() const
     mul *= *it;
     }
   // Multiply by the pixel size:
-  if( PT == PixelType::UINT12 )
+  // Special handling of packed format:
+  if( PF == PixelFormat::UINT12 )
     {
-    assert( PT.GetSamplesPerPixel() == 1 );
+    assert( PF.GetSamplesPerPixel() == 1 );
     unsigned int save = mul;
     save *= 12;
     save /= 8;
@@ -143,7 +150,7 @@ unsigned long Image::GetBufferLength() const
     }
   else
     {
-    mul *= PT.GetPixelSize();
+    mul *= PF.GetPixelSize();
     }
   len = mul;
   // if Palette Color:
@@ -179,7 +186,7 @@ void Image::Print(std::ostream &os) const
   //std::vector<double> Spacing;
   //std::vector<double> Origin;
 
-  PT.Print(os);
+  PF.Print(os);
 }
 
 } // end namespace gdcm

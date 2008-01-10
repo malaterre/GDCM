@@ -31,10 +31,10 @@ public:
   ~JPEGCodec();
   bool CanDecode(TransferSyntax const &ts);
   bool Decode(std::istream &is, std::ostream &os);
-  void SetPixelType(PixelType const &pt);
+  void SetPixelFormat(PixelFormat const &pf);
 
 protected:
-  // Internal method called by SetPixelType
+  // Internal method called by SetPixelFormat
   // Instanciate the right jpeg codec (8, 12 or 16)
   void SetBitSample(int bit);
 

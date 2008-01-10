@@ -88,20 +88,20 @@ void ExecuteInformation(const char *filename, TReader *vtkreader)
   //this->DataSpacing[1] = -1.;
   //this->DataSpacing[2] = 1.;
 
-  gdcm::PixelType pixeltype = image.GetPixelType();
+  gdcm::PixelFormat pixeltype = image.GetPixelFormat();
   int datascalartype = VTK_VOID;
   switch( pixeltype )
     {
-  case gdcm::PixelType::INT8:
+  case gdcm::PixelFormat::INT8:
     datascalartype = VTK_SIGNED_CHAR;
     break;
-  case gdcm::PixelType::UINT8:
+  case gdcm::PixelFormat::UINT8:
     datascalartype = VTK_UNSIGNED_CHAR;
     break;
-  case gdcm::PixelType::INT16:
+  case gdcm::PixelFormat::INT16:
     datascalartype = VTK_SHORT;
     break;
-  case gdcm::PixelType::UINT16:
+  case gdcm::PixelFormat::UINT16:
     datascalartype = VTK_UNSIGNED_SHORT;
     break;
   default:
@@ -155,7 +155,7 @@ int TestvtkGDCMThreadedRead(const char *filename)
 
 
   ProgressObserver *obs = ProgressObserver::New();
-  reader->AddObserver( vtkCommand::ProgressEvent, obs);
+  //reader->AddObserver( vtkCommand::ProgressEvent, obs);
   reader->Update();
   obs->Delete();
 

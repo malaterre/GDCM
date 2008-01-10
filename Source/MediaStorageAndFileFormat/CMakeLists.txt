@@ -25,7 +25,7 @@ SET(MSFF_SRCS
   gdcmLookupTable.cxx
   gdcmOverlay.cxx
   gdcmPhotometricInterpretation.cxx
-  gdcmPixelType.cxx
+  gdcmPixelFormat.cxx
 
   )
 

@@ -346,34 +346,34 @@ bool ImageReader::ReadImage()
     return false;
     }
 
-  // 3. Pixel Type ?
-  PixelType pt;
+  // 3. Pixel Format ?
+  PixelFormat pf;
   // D 0028|0002 [US] [Samples per Pixel] [1]
   const Tag samplesperpixel = Tag(0x0028, 0x0002);
   if( ds.FindDataElement( samplesperpixel ) )
     {
-    pt.SetSamplesPerPixel(
+    pf.SetSamplesPerPixel(
       ReadUSFromTag( samplesperpixel, ss, conversion ) );
     }
 
   // D 0028|0100 [US] [Bits Allocated] [16]
-  pt.SetBitsAllocated(
+  pf.SetBitsAllocated(
     ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
 
   // D 0028|0101 [US] [Bits Stored] [12]
-  pt.SetBitsStored(
+  pf.SetBitsStored(
     ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
 
   // D 0028|0102 [US] [High Bit] [11]
-  pt.SetHighBit(
+  pf.SetHighBit(
     ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
 
   // D 0028|0103 [US] [Pixel Representation] [0]
-  pt.SetPixelRepresentation(
+  pf.SetPixelRepresentation(
     ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
 
-  // Very important to set the PixelType here before PlanarConfiguration
-  PixelData.SetPixelType( pt );
+  // Very important to set the PixelFormat here before PlanarConfiguration
+  PixelData.SetPixelFormat( pf );
 
   // 4. Planar Configuration
   // D 0028|0006 [US] [Planar Configuration] [1]
@@ -402,7 +402,7 @@ bool ImageReader::ReadImage()
   if ( pi == PhotometricInterpretation::PALETTE_COLOR )
     {
     SmartPointer<LookupTable> lut = new LookupTable;
-    lut->Allocate( pt.GetBitsAllocated() );
+    lut->Allocate( pf.GetBitsAllocated() );
     // for each red, green, blue:
     for(int i=0; i<3; ++i)
       {
@@ -446,7 +446,7 @@ bool ImageReader::ReadImage()
         // LookupTableType::RED == 0
         lut->SetLUT( LookupTable::LookupTableType(i),
           (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
-        //assert( pt.GetBitsAllocated() == el_us3.GetValue(2) );
+        //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
 
         unsigned long check =
           (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
@@ -468,7 +468,7 @@ bool ImageReader::ReadImage()
     PixelData.SetLUT(*lut);
     }
   // TODO
-  //assert( pi.GetSamplesPerPixel() == pt.GetSamplesPerPixel() );
+  //assert( pi.GetSamplesPerPixel() == pf.GetSamplesPerPixel() );
 
   // 6. Do the Overlays if any
   DoOverlays(ds, PixelData);
@@ -512,10 +512,10 @@ bool ImageReader::ReadImage()
 //    TS ts = GetHeader().GetTransferSyntaxType();
 //#ifdef GDCM_WORDS_BIGENDIAN
 //    if( ts != TS::ImplicitVRBigEndianPrivateGE
-//      && pt.GetBitsAllocated() == 16 )
+//      && pf.GetBitsAllocated() == 16 )
 //#else
 //    if( ts == TS::ImplicitVRBigEndianPrivateGE
-//      && pt.GetBitsAllocated() == 16 )
+//      && pf.GetBitsAllocated() == 16 )
 //#endif
 //      {
 //      // TS::ImplicitVRBigEndianPrivateGE is written in BigEndian except the
@@ -638,14 +638,14 @@ bool ImageReader::ReadACRNEMAImage()
     // abort();
     }
 
-  // 3. Pixel Type ?
-  PixelType pt;
+  // 3. Pixel Format ?
+  PixelFormat pf;
   // D 0028|0100 [US] [Bits Allocated] [16]
     {
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
     Attribute<0x0028,0x0100> at;
     at.Set( de.GetValue() );
-    pt.SetBitsAllocated( at.GetValue() );
+    pf.SetBitsAllocated( at.GetValue() );
     assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
     }
 
@@ -654,7 +654,7 @@ bool ImageReader::ReadACRNEMAImage()
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
     Attribute<0x0028,0x0101> at;
     at.Set( de.GetValue() );
-    pt.SetBitsStored( at.GetValue() );
+    pf.SetBitsStored( at.GetValue() );
     assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
     }
 
@@ -663,7 +663,7 @@ bool ImageReader::ReadACRNEMAImage()
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
     Attribute<0x0028,0x0102> at;
     at.Set( de.GetValue() );
-    pt.SetHighBit( at.GetValue() );
+    pf.SetHighBit( at.GetValue() );
     assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
     }
 
@@ -672,11 +672,11 @@ bool ImageReader::ReadACRNEMAImage()
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
     Attribute<0x0028,0x0103> at;
     at.Set( de.GetValue() );
-    pt.SetPixelRepresentation( at.GetValue() );
+    pf.SetPixelRepresentation( at.GetValue() );
     assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
     }
 
-  PixelData.SetPixelType( pt );
+  PixelData.SetPixelFormat( pf );
 
   // 4. Do the Overlays if any
   DoOverlays(ds, PixelData);
@@ -704,10 +704,10 @@ bool ImageReader::ReadACRNEMAImage()
 //    TS ts = GetHeader().GetTransferSyntaxType();
 //#ifdef GDCM_WORDS_BIGENDIAN
 //    if( ts != TS::ImplicitVRBigEndianACRNEMA
-//      && pt.GetBitsAllocated() == 16 )
+//      && pf.GetBitsAllocated() == 16 )
 //#else
 //    if( ts == TS::ImplicitVRBigEndianACRNEMA
-//      && pt.GetBitsAllocated() == 16 )
+//      && pf.GetBitsAllocated() == 16 )
 //#endif
 //      {
 //#ifdef GDCM_WORDS_BIGENDIAN

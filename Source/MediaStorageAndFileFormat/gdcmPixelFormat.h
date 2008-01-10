@@ -13,8 +13,8 @@
 
 =========================================================================*/
 
-#ifndef __gdcmPixelType_h
-#define __gdcmPixelType_h
+#ifndef __gdcmPixelFormat_h
+#define __gdcmPixelFormat_h
 
 #include "gdcmTypes.h"
 #include <iostream>
@@ -24,7 +24,7 @@ namespace gdcm
 {
 
 /**
- * \brief PixelType
+ * \brief PixelFormat
  * \note
  * By default the Pixel Type will be instanciated with the following
  * parameters:
@@ -34,7 +34,7 @@ namespace gdcm
  * - HighBit : 7
  * - PixelRepresentation : 0
  */
-class GDCM_EXPORT PixelType
+class GDCM_EXPORT PixelFormat
 {
 public:
   // When adding a type please add its dual type (its unsigned conterpart)
@@ -48,9 +48,9 @@ public:
     UINT32,  // For some DICOM files (RT or SC)
     INT32,   //                        "   "
     UNKNOWN
-  } TPixelType;
+  } ScalarType;
 
-  PixelType (
+  PixelFormat (
     unsigned short samplesperpixel = 1,
     unsigned short bitsallocated = 8,
     unsigned short bitsstored = 8,
@@ -61,10 +61,10 @@ public:
   BitsStored(bitsstored),
   HighBit(highbit),
   PixelRepresentation(pixelrepresentation) {}
-  ~PixelType() {}
+  ~PixelFormat() {}
 
   // For transparence of use
-  operator TPixelType () const { return GetTPixelType(); }
+  operator ScalarType() const { return GetScalarType(); }
 
   // Samples Per Pixel
   unsigned short GetSamplesPerPixel() const;
@@ -115,8 +115,8 @@ public:
     PixelRepresentation = pr;
     }
 
-  TPixelType GetTPixelType() const;
-  const char *GetPixelTypeAsString(PixelType const &pt) const;
+  ScalarType GetScalarType() const;
+  const char *GetScalarTypeAsString() const;
 
   uint8_t GetPixelSize() const;
 
@@ -137,5 +137,5 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmPixelType_h
+#endif //__gdcmPixelFormat_h
 

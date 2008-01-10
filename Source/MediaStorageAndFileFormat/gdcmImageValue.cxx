@@ -46,7 +46,7 @@ bool ImageValue::TryRAWCodec(char *buffer) const
     codec.SetPlanarConfiguration( GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
     codec.SetLUT( GetLUT() );
-    codec.SetPixelType( GetPixelType() );
+    codec.SetPixelFormat( GetPixelFormat() );
     codec.SetNeedByteSwap( GetNeedByteSwap() );
     std::stringstream is;
     //is.SetSwapCode( GetSwapCode() );
@@ -92,7 +92,7 @@ bool ImageValue::TryJPEGCodec(char *buffer) const
       {
       codec.SetPlanarConfiguration( GetPlanarConfiguration() );
       codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
-      codec.SetPixelType( GetPixelType() );
+      codec.SetPixelFormat( GetPixelFormat() );
       unsigned long pos = 0;
       for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
         {
@@ -156,7 +156,7 @@ bool ImageValue::TryRLECodec(char *buffer) const
       //assert( sf->GetNumberOfFragments() == GetDimensions(2) );
       codec.SetPlanarConfiguration( GetPlanarConfiguration() );
       codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
-      codec.SetPixelType( GetPixelType() );
+      codec.SetPixelFormat( GetPixelFormat() );
       codec.SetLUT( GetLUT() );
       unsigned long pos = 0;
       // Each RLE Frame store a 2D frame. len is the 3d length

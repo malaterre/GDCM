@@ -95,7 +95,7 @@ void ReadFiles(unsigned int nfiles, const char *filenames[])
     }
 
   const gdcm::Image &image = reader.GetImage();
-  gdcm::PixelType pixeltype = image.GetPixelType();
+  gdcm::PixelFormat pixeltype = image.GetPixelFormat();
   unsigned long len = image.GetBufferLength();
   const unsigned int *dims = image.GetDimensions();
   unsigned short pixelsize = pixeltype.GetPixelSize();
@@ -105,16 +105,16 @@ void ReadFiles(unsigned int nfiles, const char *filenames[])
 
   switch( pixeltype )
     {
-  case gdcm::PixelType::INT8:
+  case gdcm::PixelFormat::INT8:
     output->SetScalarType ( VTK_SIGNED_CHAR );
     break;
-  case gdcm::PixelType::UINT8:
+  case gdcm::PixelFormat::UINT8:
     output->SetScalarType ( VTK_UNSIGNED_CHAR );
     break;
-  case gdcm::PixelType::INT16:
+  case gdcm::PixelFormat::INT16:
     output->SetScalarType ( VTK_SHORT );
     break;
-  case gdcm::PixelType::UINT16:
+  case gdcm::PixelFormat::UINT16:
     output->SetScalarType ( VTK_UNSIGNED_SHORT );
     break;
   default:

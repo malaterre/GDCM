@@ -35,7 +35,7 @@ public:
     PALETTE_COLOR,
     RGB,
     HSV,
-    ARGB,
+    ARGB, // retired
     CMYK,
     YBR_FULL,
     YBR_FULL_422,

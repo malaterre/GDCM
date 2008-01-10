@@ -19,7 +19,7 @@
 #include "gdcmPhotometricInterpretation.h"
 #include "gdcmLookupTable.h"
 #include "gdcmSmartPointer.h"
-#include "gdcmPixelType.h"
+#include "gdcmPixelFormat.h"
 
 namespace gdcm
 {
@@ -45,13 +45,13 @@ public:
     PlanarConfiguration = pc;
     }
 
-  const PixelType &GetPixelType() const
+  const PixelFormat &GetPixelFormat() const
     {
-    return PT;
+    return PF;
     }
-  virtual void SetPixelType(PixelType const &pt)
+  virtual void SetPixelFormat(PixelFormat const &pf)
     {
-    PT = pt;
+    PF = pf;
     }
   const PhotometricInterpretation &GetPhotometricInterpretation() const;
   void SetPhotometricInterpretation(PhotometricInterpretation const &pi);
@@ -79,7 +79,7 @@ protected:
 private:
   unsigned int PlanarConfiguration;
   PhotometricInterpretation PI;
-  PixelType PT;
+  PixelFormat PF;
   bool NeedByteSwap;
 
   typedef SmartPointer<LookupTable> LUTPtr;

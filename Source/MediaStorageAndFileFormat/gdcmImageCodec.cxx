@@ -68,7 +68,7 @@ bool ImageCodec::DoByteSwap(std::istream &is, std::ostream &os)
 
   assert( !(buf_size % 2) );
 #ifdef GDCM_WORDS_BIGENDIAN
-  if( PT.GetBitsAllocated() == 16 )
+  if( PF.GetBitsAllocated() == 16 )
     {
     ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)
       dummy_buffer, SwapCode::LittleEndian, buf_size/2);
@@ -78,7 +78,7 @@ bool ImageCodec::DoByteSwap(std::istream &is, std::ostream &os)
     gdcmDebugMacro( "Why would I byte swap ?" );
     }
 #else
-  assert( PT.GetBitsAllocated() == 16 );
+  assert( PF.GetBitsAllocated() == 16 );
   ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)
     dummy_buffer, SwapCode::BigEndian, buf_size/2);
 #endif
@@ -230,9 +230,9 @@ bool ImageCodec::DoPaddedCompositePixelCode(std::istream &is, std::ostream &os)
 
 bool ImageCodec::DoInvertMonochrome(std::istream &is, std::ostream &os)
 {
-  if ( PT.GetPixelRepresentation() )
+  if ( PF.GetPixelRepresentation() )
     {
-    if ( PT.GetBitsAllocated() == 8 )
+    if ( PF.GetBitsAllocated() == 8 )
       {
       uint8_t c;
       while( is.read((char*)&c,1) )
@@ -241,7 +241,7 @@ bool ImageCodec::DoInvertMonochrome(std::istream &is, std::ostream &os)
         os.write((char*)&c, 1 );
         }
       }
-    else if ( PT.GetBitsAllocated() == 16 )
+    else if ( PF.GetBitsAllocated() == 16 )
       {
       uint16_t smask16 = 65535;
       uint16_t c;
@@ -254,7 +254,7 @@ bool ImageCodec::DoInvertMonochrome(std::istream &is, std::ostream &os)
     }
   else
     {
-    if ( PT.GetBitsAllocated() == 8 )
+    if ( PF.GetBitsAllocated() == 8 )
       {
       uint8_t c;
       while( is.read((char*)&c,1) )
@@ -263,10 +263,10 @@ bool ImageCodec::DoInvertMonochrome(std::istream &is, std::ostream &os)
         os.write((char*)&c, 1);
         }
       }
-    else if ( PT.GetBitsAllocated() == 16 )
+    else if ( PF.GetBitsAllocated() == 16 )
       {
       uint16_t mask = 1;
-      for (int j=0; j<PT.GetBitsStored()-1; ++j)
+      for (int j=0; j<PF.GetBitsStored()-1; ++j)
         {
         mask = (mask << 1) + 1; // will be 0x0fff when BitsStored = 12
         }
@@ -298,27 +298,27 @@ struct ApplyMask
 // Cleanup the unused bits
 bool ImageCodec::DoPixelType(std::istream &is, std::ostream &os)
 {
-  assert( PT.GetBitsAllocated() > 8 );
-  if( PT.GetBitsAllocated() == 16 )
+  assert( PF.GetBitsAllocated() > 8 );
+  if( PF.GetBitsAllocated() == 16 )
     {
     // pmask : to mask the 'unused bits' (may contain overlays)
     uint16_t pmask = 0xffff;
-    pmask = pmask >> ( PT.GetBitsAllocated() - PT.GetBitsStored() );
+    pmask = pmask >> ( PF.GetBitsAllocated() - PF.GetBitsStored() );
 
-    if( PT.GetPixelRepresentation() )
+    if( PF.GetPixelRepresentation() )
       {
       // smask : to check the 'sign' when BitsStored != BitsAllocated
       uint16_t smask = 0x0001;
       smask =
-        smask << ( 16 - (PT.GetBitsAllocated() - PT.GetBitsStored() + 1) );
+        smask << ( 16 - (PF.GetBitsAllocated() - PF.GetBitsStored() + 1) );
       // nmask : to propagate sign bit on negative values
       int16_t nmask = 0x8000;  
-      nmask = nmask >> ( PT.GetBitsAllocated() - PT.GetBitsStored() - 1 );
+      nmask = nmask >> ( PF.GetBitsAllocated() - PF.GetBitsStored() - 1 );
 
       uint16_t c;
       while( is.read((char*)&c,2) )
         {
-        c = c >> (PT.GetBitsStored() - PT.GetHighBit() - 1);
+        c = c >> (PF.GetBitsStored() - PF.GetHighBit() - 1);
         if ( c & smask )
           {
           c = c | nmask;
@@ -337,7 +337,7 @@ bool ImageCodec::DoPixelType(std::istream &is, std::ostream &os)
       while( is.read((char*)&c,2) )
         {
         c =
-          (c >> (PT.GetBitsStored() - PT.GetHighBit() - 1)) & pmask;
+          (c >> (PF.GetBitsStored() - PF.GetHighBit() - 1)) & pmask;
         os.write((char*)&c, 2 );
         }
 #else
@@ -347,14 +347,14 @@ bool ImageCodec::DoPixelType(std::istream &is, std::ostream &os)
       //while( out_iter != end_of_stream_iterator )
       //  {
       //  *out_iter =
-      //    (*out_iter >> (PT.GetBitsStored() - PT.GetHighBit() - 1)) & pmask;
+      //    (*out_iter >> (PF.GetBitsStored() - PF.GetHighBit() - 1)) & pmask;
       //  }
       std::istreambuf_iterator<int> it_in(is);
       std::istreambuf_iterator<int> eos;
       std::ostreambuf_iterator<int> it_out(os);
       ApplyMask am;
-      am.BitsStored = PT.GetBitsStored();
-      am.HighBit = PT.GetHighBit();
+      am.BitsStored = PF.GetBitsStored();
+      am.HighBit = PF.GetHighBit();
       am.pmask = pmask;
 
       std::transform(it_in, eos, it_out, am);
@@ -444,8 +444,8 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
 
   // Do the pixel type (cleanup the unused bits)
   // must be the last operation (duh!)
-  if ( PT.GetBitsAllocated() != PT.GetBitsStored()
-    && PT.GetBitsAllocated() != 8 )
+  if ( PF.GetBitsAllocated() != PF.GetBitsStored()
+    && PF.GetBitsAllocated() != 8 )
     {
     // Technically we should only run this operation if the image declares it has overlay AND
     // there is no (0x60xx,0x3000) element, for example:

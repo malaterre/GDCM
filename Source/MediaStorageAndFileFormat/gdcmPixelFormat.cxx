@@ -12,12 +12,12 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmPixelType.h"
+#include "gdcmPixelFormat.h"
 #include "gdcmTrace.h"
 
 namespace gdcm
 {
-static const char *PixelTypeStrings[] = {
+static const char *ScalarTypeStrings[] = {
   "INT8",
   "UINT8",
   "INT12",
@@ -29,7 +29,7 @@ static const char *PixelTypeStrings[] = {
   NULL,
 };
 
-unsigned short PixelType::GetSamplesPerPixel() const
+unsigned short PixelFormat::GetSamplesPerPixel() const
 {
   if ( BitsAllocated == 24 )
     {
@@ -39,26 +39,26 @@ unsigned short PixelType::GetSamplesPerPixel() const
   return SamplesPerPixel;
 }
 
-PixelType::TPixelType PixelType::GetTPixelType() const
+PixelFormat::ScalarType PixelFormat::GetScalarType() const
 {
-  TPixelType type = PixelType::UNKNOWN;
+  ScalarType type = PixelFormat::UNKNOWN;
   switch( BitsAllocated )
     {
   case 8:
-    type = PixelType::UINT8;
+    type = PixelFormat::UINT8;
     break;
   case 12:
-    type = PixelType::UINT12;
+    type = PixelFormat::UINT12;
     break;
   case 16:
-    type = PixelType::UINT16;
+    type = PixelFormat::UINT16;
     break;
   case 32:
-    type = PixelType::UINT32;
+    type = PixelFormat::UINT32;
     break;    
   case 24:
     gdcmWarningMacro( "This is illegal in DICOM, assuming a RGB image" );
-    type = PixelType::UINT8;
+    type = PixelFormat::UINT8;
     break;
     
   default:
@@ -69,19 +69,18 @@ PixelType::TPixelType PixelType::GetTPixelType() const
   if( PixelRepresentation )
     {
     assert( type <= INT32 );
-    // That's why you need to order properly type in TPixelType
-    type = TPixelType(int(type)+1);
+    // That's why you need to order properly type in ScalarType
+    type = ScalarType(int(type)+1);
     }
   return type;
 }
 
-const char *PixelType::GetPixelTypeAsString(PixelType const &pt) const
+const char *PixelFormat::GetScalarTypeAsString() const
 {
-  TPixelType type = pt.GetTPixelType();
-  return PixelTypeStrings[type];
+  return ScalarTypeStrings[GetScalarType()];
 }
 
-uint8_t PixelType::GetPixelSize() const
+uint8_t PixelFormat::GetPixelSize() const
 {
   assert( !(BitsAllocated % 8 ) );
   uint8_t pixelsize = BitsAllocated / 8;
@@ -90,7 +89,7 @@ uint8_t PixelType::GetPixelSize() const
   return pixelsize;
 }
 
-void PixelType::Print(std::ostream &os) const
+void PixelFormat::Print(std::ostream &os) const
 {
   os << "SamplesPerPixel    :" << SamplesPerPixel     << "\n"; 
   os << "BitsAllocated      :" << BitsAllocated       << "\n";
