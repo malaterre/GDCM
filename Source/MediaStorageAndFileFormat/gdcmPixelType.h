@@ -37,7 +37,7 @@ namespace gdcm
 class GDCM_EXPORT PixelType
 {
 public:
-  // When adding a type please add its dual type (his unsigned conterpart)
+  // When adding a type please add its dual type (its unsigned conterpart)
   typedef enum {
     UINT8,
     INT8,
@@ -45,8 +45,8 @@ public:
     INT12,
     UINT16,
     INT16,
-    UINT32,  // For some Dicom files (RT)
-    INT32,
+    UINT32,  // For some DICOM files (RT or SC)
+    INT32,   //                        "   "
     UNKNOWN
   } TPixelType;
 
