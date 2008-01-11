@@ -53,6 +53,7 @@ typedef struct
   VR::VRType vr;
   VM::VMType vm;
   const char *name;
+  bool ret;
 } DICT_ENTRY;
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
@@ -81,7 +82,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
             <xsl:with-param name="vm" select="@vm"/>
           </xsl:call-template>
         </xsl:when>
-        <xsl:when test="substring(@group,3) != 'xx' or substring(@element,3) != 'xx' ">
+        <xsl:when test="substring(@group,3) != 'xx' and substring(@element,3) != 'xx' ">
           <xsl:call-template name="do-one-entry">
             <xsl:with-param name="count" select="255"/>
             <xsl:with-param name="group" select="@group"/>
@@ -97,7 +98,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
       </xsl:choose>
     </xsl:for-each>
     <xsl:text>
-  {0x0000,0x0000,VR::INVALID,VM::VM0,0 } // Gard
+  {0x0000,0x0000,VR::INVALID,VM::VM0,0,true } // Gard
 };
 
 void Dict::LoadDefault()
@@ -107,7 +108,7 @@ void Dict::LoadDefault()
    while( n.name != 0 )
    {
       Tag t(n.group, n.element);
-      DictEntry e( n.name, n.vr, n.vm );
+      DictEntry e( n.name, n.vr, n.vm, n.ret );
       AddDictEntry( t, e );
       n = DICOMV3DataDict[++i];
    }
@@ -135,45 +136,47 @@ void PrivateDict::LoadDefault()
     <xsl:param name="vm"/>
     <xsl:param name="name"/>
     <xsl:if test="$count &lt; 256">
-    <xsl:text>  {0x</xsl:text>
-    <xsl:value-of select="$group"/>
-    <xsl:text>,0x</xsl:text>
-    <xsl:value-of select="$element"/>
+      <xsl:text>  {0x</xsl:text>
+      <xsl:value-of select="$group"/>
+      <xsl:text>,0x</xsl:text>
+      <xsl:value-of select="$element"/>
 <!--xsl:value-of select="$temp"/-->
-    <xsl:text>,VR::</xsl:text>
-    <xsl:if test="not (@vr != '')">
+      <xsl:text>,VR::</xsl:text>
+      <xsl:if test="not (@vr != '')">
 <!-- FIXME -->
-      <xsl:text>INVALID</xsl:text>
-    </xsl:if>
-    <xsl:if test="@vr != ''">
-      <xsl:value-of select="@vr"/>
-    </xsl:if>
-    <xsl:text>,VM::</xsl:text>
-    <xsl:call-template name="VMStringToVMType">
-      <xsl:with-param name="vmstring" select="@vm"/>
-    </xsl:call-template>
-    <xsl:text>,"</xsl:text>
-    <xsl:value-of select="@name"/>
-    <xsl:text>" },</xsl:text>
-    <xsl:text>
+        <xsl:text>INVALID</xsl:text>
+      </xsl:if>
+      <xsl:if test="@vr != ''">
+        <xsl:value-of select="@vr"/>
+      </xsl:if>
+      <xsl:text>,VM::</xsl:text>
+      <xsl:call-template name="VMStringToVMType">
+        <xsl:with-param name="vmstring" select="@vm"/>
+      </xsl:call-template>
+      <xsl:text>,"</xsl:text>
+      <xsl:value-of select="@name"/>
+      <xsl:text>",</xsl:text>
+      <xsl:value-of select="@retired = 'true'"/>
+      <xsl:text> },</xsl:text>
+      <xsl:text>
 </xsl:text>
     </xsl:if>
     <xsl:if test="$count &lt; 255">
 <!--xsl:message><xsl:value-of select="$do-group"/></xsl:message-->
       <xsl:if test="$do-group != '0'">
-      <xsl:variable name="temp">
-        <xsl:call-template name="printHex">
-          <xsl:with-param name="number" select="$count + 2"/>
-        </xsl:call-template>
-      </xsl:variable>
-      <xsl:variable name="tail">
-        <xsl:if test="string-length($temp) != 1">
-          <xsl:value-of select="$temp"/>
-        </xsl:if>
-        <xsl:if test="string-length($temp) = 1">
-          <xsl:value-of select="concat('0',$temp)"/>
-        </xsl:if>
-      </xsl:variable>
+        <xsl:variable name="temp">
+          <xsl:call-template name="printHex">
+            <xsl:with-param name="number" select="$count + 2"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="tail">
+          <xsl:if test="string-length($temp) != 1">
+            <xsl:value-of select="$temp"/>
+          </xsl:if>
+          <xsl:if test="string-length($temp) = 1">
+            <xsl:value-of select="concat('0',$temp)"/>
+          </xsl:if>
+        </xsl:variable>
         <xsl:variable name="group_xx" select="concat(substring($group,1,2),$tail)"/>
         <xsl:call-template name="do-one-entry">
           <xsl:with-param name="count" select="$count + 2"/>
@@ -186,20 +189,19 @@ void PrivateDict::LoadDefault()
         </xsl:call-template>
       </xsl:if>
       <xsl:if test="$do-element != '0'">
-      <xsl:variable name="temp">
-        <xsl:call-template name="printHex">
-          <xsl:with-param name="number" select="$count + 1"/>
-        </xsl:call-template>
-      </xsl:variable>
-      <xsl:variable name="tail">
-        <xsl:if test="string-length($temp) != 1">
-          <xsl:value-of select="$temp"/>
-        </xsl:if>
-        <xsl:if test="string-length($temp) = 1">
-          <xsl:value-of select="concat('0',$temp)"/>
-        </xsl:if>
-      </xsl:variable>
-
+        <xsl:variable name="temp">
+          <xsl:call-template name="printHex">
+            <xsl:with-param name="number" select="$count + 1"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="tail">
+          <xsl:if test="string-length($temp) != 1">
+            <xsl:value-of select="$temp"/>
+          </xsl:if>
+          <xsl:if test="string-length($temp) = 1">
+            <xsl:value-of select="concat('0',$temp)"/>
+          </xsl:if>
+        </xsl:variable>
         <xsl:variable name="element_xx" select="concat(substring($element,1,2),$tail)"/>
         <xsl:call-template name="do-one-entry">
           <xsl:with-param name="count" select="$count + 1"/>
