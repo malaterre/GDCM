@@ -20,7 +20,7 @@
   <xsl:template match="/">
     <xsl:text>
 // GENERATED FILE DO NOT EDIT
-// $ xsltproc DefaultDict.xsl DICOMV3.xml > gdcmDefaultDicts.cxx
+// $ xsltproc DefaultDict.xsl DICOMV3.xml &gt; gdcmDefaultDicts.cxx
 
 /*=========================================================================
 
@@ -61,32 +61,32 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
       <xsl:variable name="group" select="translate(@group,'x','0')"/>
       <xsl:variable name="element" select="translate(@element,'x','0')"/>
       <xsl:choose>
-      <xsl:when test="substring($group,3) != 'xx' and substring($element,3) != 'xx' ">
-        <xsl:text>  {0x</xsl:text>
-        <xsl:value-of select="$group"/>
-        <xsl:text>,0x</xsl:text>
-        <xsl:value-of select="$element"/>
-        <xsl:text>,VR::</xsl:text>
-        <xsl:if test="@vr = ''">
-        <xsl:text>INVALID</xsl:text>
-</xsl:if>
-        <xsl:if test="@vr != ''">
-        <xsl:value-of select="@vr"/>
-</xsl:if>
-        <xsl:text>,VM::</xsl:text>
-        <xsl:call-template name="VMStringToVMType">
-          <xsl:with-param name="vmstring" select="@vm"/>
-        </xsl:call-template>
-        <xsl:text>,"</xsl:text>
-        <xsl:value-of select="@name"/>
-        <xsl:text>" },</xsl:text>
-        <xsl:text>
+        <xsl:when test="substring($group,3) != 'xx' and substring($element,3) != 'xx' ">
+          <xsl:text>  {0x</xsl:text>
+          <xsl:value-of select="$group"/>
+          <xsl:text>,0x</xsl:text>
+          <xsl:value-of select="$element"/>
+          <xsl:text>,VR::</xsl:text>
+          <xsl:if test="@vr = ''">
+            <xsl:text>INVALID</xsl:text>
+          </xsl:if>
+          <xsl:if test="@vr != ''">
+            <xsl:value-of select="@vr"/>
+          </xsl:if>
+          <xsl:text>,VM::</xsl:text>
+          <xsl:call-template name="VMStringToVMType">
+            <xsl:with-param name="vmstring" select="@vm"/>
+          </xsl:call-template>
+          <xsl:text>,"</xsl:text>
+          <xsl:value-of select="@name"/>
+          <xsl:text>" },</xsl:text>
+          <xsl:text>
 </xsl:text>
-</xsl:when>
-<xsl:otherwise>
-<xsl:message>PROBLEM:(<xsl:value-of select="$group"/>,<xsl:value-of select="$element"/>)
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:message>PROBLEM:(<xsl:value-of select="$group"/>,<xsl:value-of select="$element"/>)
 </xsl:message>
-</xsl:otherwise>
+        </xsl:otherwise>
       </xsl:choose>
     </xsl:for-each>
     <xsl:text>
