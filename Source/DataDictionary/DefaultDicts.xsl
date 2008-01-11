@@ -75,8 +75,8 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
           <xsl:call-template name="do-one-entry">
             <xsl:with-param name="count" select="0"/>
             <xsl:with-param name="do-group" select="1"/>
-            <xsl:with-param name="group" select="@group"/>
-            <xsl:with-param name="element" select="$element"/>
+            <xsl:with-param name="group" select="$group"/>
+            <xsl:with-param name="element" select="@element"/>
             <xsl:with-param name="vr" select="@vr"/>
             <xsl:with-param name="vm" select="@vm"/>
           </xsl:call-template>
@@ -134,6 +134,7 @@ void PrivateDict::LoadDefault()
     <xsl:param name="vr"/>
     <xsl:param name="vm"/>
     <xsl:param name="name"/>
+    <xsl:if test="$count &lt; 256">
     <xsl:text>  {0x</xsl:text>
     <xsl:value-of select="$group"/>
     <xsl:text>,0x</xsl:text>
@@ -156,26 +157,54 @@ void PrivateDict::LoadDefault()
     <xsl:text>" },</xsl:text>
     <xsl:text>
 </xsl:text>
-    <xsl:if test="$count != 255">
+    </xsl:if>
+    <xsl:if test="$count &lt; 255">
+<!--xsl:message><xsl:value-of select="$do-group"/></xsl:message-->
+      <xsl:if test="$do-group != '0'">
       <xsl:variable name="temp">
         <xsl:call-template name="printHex">
-          <xsl:with-param name="number" select="$count + 1"/>
+          <xsl:with-param name="number" select="$count + 2"/>
         </xsl:call-template>
       </xsl:variable>
-      <xsl:if test="$do-group = '1'">
-        <xsl:variable name="group_xx" select="concat(substring($group,1,2),$temp)"/>
+      <xsl:variable name="tail">
+        <xsl:if test="string-length($temp) != 1">
+          <xsl:value-of select="$temp"/>
+        </xsl:if>
+        <xsl:if test="string-length($temp) = 1">
+          <xsl:value-of select="concat('0',$temp)"/>
+        </xsl:if>
+      </xsl:variable>
+        <xsl:variable name="group_xx" select="concat(substring($group,1,2),$tail)"/>
         <xsl:call-template name="do-one-entry">
-          <xsl:with-param name="count" select="$count + 1"/>
+          <xsl:with-param name="count" select="$count + 2"/>
+          <xsl:with-param name="do-group" select="$do-group"/>
+          <xsl:with-param name="do-element" select="$do-element"/>
           <xsl:with-param name="group" select="$group_xx"/>
           <xsl:with-param name="element" select="$element"/>
           <xsl:with-param name="vr" select="$vr"/>
           <xsl:with-param name="vm" select="$vm"/>
         </xsl:call-template>
       </xsl:if>
-      <xsl:if test="$do-element = '1'">
-        <xsl:variable name="element_xx" select="concat(substring($element,1,2),$temp)"/>
+      <xsl:if test="$do-element != '0'">
+      <xsl:variable name="temp">
+        <xsl:call-template name="printHex">
+          <xsl:with-param name="number" select="$count + 1"/>
+        </xsl:call-template>
+      </xsl:variable>
+      <xsl:variable name="tail">
+        <xsl:if test="string-length($temp) != 1">
+          <xsl:value-of select="$temp"/>
+        </xsl:if>
+        <xsl:if test="string-length($temp) = 1">
+          <xsl:value-of select="concat('0',$temp)"/>
+        </xsl:if>
+      </xsl:variable>
+
+        <xsl:variable name="element_xx" select="concat(substring($element,1,2),$tail)"/>
         <xsl:call-template name="do-one-entry">
           <xsl:with-param name="count" select="$count + 1"/>
+          <xsl:with-param name="do-group" select="$do-group"/>
+          <xsl:with-param name="do-element" select="$do-element"/>
           <xsl:with-param name="group" select="$group"/>
           <xsl:with-param name="element" select="$element_xx"/>
           <xsl:with-param name="vr" select="$vr"/>
