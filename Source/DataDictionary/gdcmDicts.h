@@ -17,7 +17,6 @@
 
 #include "gdcmDict.h"
 
-#include <vector>
 #include <string>
 
 namespace gdcm
@@ -34,7 +33,7 @@ public:
 
   // works for both public and private dicts:
   // owner is null for public dict
-  const DictEntry &GetDictEntry(const Tag& tag, const char *owner = NULL);
+  const DictEntry &GetDictEntry(const Tag& tag, const char *owner = NULL) const;
 
   //enum PublicTypes {
   //  DICOMV3_DICT,
@@ -42,6 +41,8 @@ public:
   //  NIH_DICT
   //};
   const Dict &GetPublicDict() const;
+
+  const PrivateDict &GetPrivateDict() const;
 
 protected:
   typedef enum {
@@ -53,20 +54,19 @@ protected:
   static const char *GetConstructorString(ConstructorType type);
 
 
-  // TODO define the private dict API
-  const PrivateDict &GetPrivateDict(unsigned int constructor = 0) const;
-
-  void AddPrivateDict(const PrivateDict& dict);
+  friend class Global;
+  static void ClassInitialize();
+  static void ClassFinalize();
 
 private:
   // Generated implementation, see gdcmDataDicts
-  void FillDataDicts();
+  //void FillDataDicts();
 
   // Public dict:
   Dict PublicDict;
 
   // Private Dicts:
-  std::vector<PrivateDict> PrivateDicts;
+  PrivateDict ShadowDict;
 };
 
 

@@ -83,6 +83,7 @@ CONFIGURE_FILE(
 SET(DICT_SRCS
   ${DICT_SRCS} # All the dicts cxx resources
   gdcmDicts.cxx
+  gdcmGlobal.cxx
   gdcmGroupDict.cxx
   ${GDCM_BINARY_DIR}/Source/DataDictionary/gdcmDefaultGroupNames.cxx
   )

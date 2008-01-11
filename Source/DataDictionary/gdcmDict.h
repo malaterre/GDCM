@@ -37,15 +37,10 @@ class GDCM_EXPORT Dict
 {
 public:
   typedef std::map<Tag, DictEntry> MapDictEntry;
-  static DictEntry GroupLengthDictEntry; // = DictEntry("Group Length",VR::UL,VM::VM1);
+  //static DictEntry GroupLengthDictEntry; // = DictEntry("Group Length",VR::UL,VM::VM1);
 
-  Dict() {
-//    FillDICOMV3DataDict();
-//    FillNIHDataDict();
-////  FillSPIDataDict();
-//   Tag t(0, 0);
-//   DictEntry e( "", (VR::VRType)0, (VM::VMType)0);
-//   AddDictEntry( t, e );
+  Dict():DictInternal() {
+    assert( DictInternal.empty() );
   }
 
   friend std::ostream& operator<<(std::ostream& _os, const Dict &_val);
@@ -72,13 +67,6 @@ public:
     return it->second;
     }
 
-protected:
-//  void AddDictEntry(uint16_t group, uint16_t element, const char *name, 
-//    const char *vr, const char *vm)
-//    {
-//    Tag t(group, element);
-//    AddDictEntry(t, d);
-//    }
 private:
   void FillDICOMV3DataDict();
   void FillNIHDataDict();
@@ -90,17 +78,18 @@ private:
   MapDictEntry DictInternal;
 };
 //-----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream& _os, const Dict &_val)
+inline std::ostream& operator<<(std::ostream& os, const Dict &val)
 {
-  Dict::MapDictEntry::const_iterator it = _val.DictInternal.begin();
-  for(;it != _val.DictInternal.end(); ++it)
+  assert( val.DictInternal.empty() );
+  Dict::MapDictEntry::const_iterator it = val.DictInternal.begin();
+  for(;it != val.DictInternal.end(); ++it)
     {
     const Tag &t = it->first;
     const DictEntry &de = it->second;
-    _os << t << " " << de << '\n';
+    os << t << " " << de << '\n';
     }
 
-  return _os;
+  return os;
 }
 
 class GDCM_EXPORT PrivateTag : public Tag
