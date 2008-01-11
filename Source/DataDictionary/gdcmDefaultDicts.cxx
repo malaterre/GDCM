@@ -9866,7 +9866,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0004,0x151a,VR::UI,VM::VM1_n,"Referenced Related General SOP Class UID in File",false },
   {0x0004,0x1600,VR::UL,VM::VM1,"Number of References",true },
 
-  {0x0000,0x0000,VR::INVALID,VM::VM0,0 } // Gard
+  {0x0000,0x0000,VR::INVALID,VM::VM0,0,true } // Gard
 };
 
 void Dict::LoadDefault()

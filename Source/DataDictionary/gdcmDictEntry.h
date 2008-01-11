@@ -106,6 +106,10 @@ private:
 inline std::ostream& operator<<(std::ostream& _os, const DictEntry &_val)
 {
   _os << _val.Name << "\t" << _val.ValueRepresentation << "\t" << _val.ValueMultiplicity;
+  if( _val.Retired )
+    {
+    _os << "\t(RET)";
+    }
   return _os;
 }
 

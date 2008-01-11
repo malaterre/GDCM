@@ -16,6 +16,7 @@
      PURPOSE.  See the above copyright notice for more information.
 -->
   <xsl:template name="VMStringToVMType">
+<!-- FIXME: Supid function I could simple translate('-','_') + concat ... -->
     <xsl:param name="vmstring"/>
     <xsl:choose>
       <xsl:when test="$vmstring = 1">

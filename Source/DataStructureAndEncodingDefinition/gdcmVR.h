@@ -186,7 +186,8 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream &operator<<(std::ostream &_os, const VR &val)
 {
-  _os << VR::GetVRStringFromFile(val.VRField);
+  //_os << VR::GetVRStringFromFile(val.VRField);
+  _os << VR::GetVRString(val.VRField);
   return _os;
 }
 

@@ -6,6 +6,7 @@ SET(MSFF_SRCS
   gdcmReader.cxx
   gdcmImageReader.cxx
   gdcmImageWriter.cxx
+  gdcmStringFilter.cxx
   gdcmWriter.cxx
   gdcmValidate.cxx
   gdcmDumper.cxx
