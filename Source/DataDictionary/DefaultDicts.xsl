@@ -60,13 +60,19 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
     <xsl:for-each select="dict/entry">
       <xsl:variable name="group" select="translate(@group,'x','0')"/>
       <xsl:variable name="element" select="translate(@element,'x','0')"/>
-      <xsl:if test="substring($group,3) != 'xx' and substring($element,3) != 'xx' and @vr != '' and @vr != 'US_SS' and @vr != 'US_SS_OW' and @vr != 'OB_OW'">
+      <xsl:choose>
+      <xsl:when test="substring($group,3) != 'xx' and substring($element,3) != 'xx' ">
         <xsl:text>  {0x</xsl:text>
         <xsl:value-of select="$group"/>
         <xsl:text>,0x</xsl:text>
         <xsl:value-of select="$element"/>
         <xsl:text>,VR::</xsl:text>
+        <xsl:if test="@vr = ''">
+        <xsl:text>INVALID</xsl:text>
+</xsl:if>
+        <xsl:if test="@vr != ''">
         <xsl:value-of select="@vr"/>
+</xsl:if>
         <xsl:text>,VM::</xsl:text>
         <xsl:call-template name="VMStringToVMType">
           <xsl:with-param name="vmstring" select="@vm"/>
@@ -76,7 +82,12 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
         <xsl:text>" },</xsl:text>
         <xsl:text>
 </xsl:text>
-      </xsl:if>
+</xsl:when>
+<xsl:otherwise>
+<xsl:message>PROBLEM:(<xsl:value-of select="$group"/>,<xsl:value-of select="$element"/>)
+</xsl:message>
+</xsl:otherwise>
+      </xsl:choose>
     </xsl:for-each>
     <xsl:text>
   {0x0000,0x0000,VR::INVALID,VM::VM0,0 } // Gard
@@ -87,7 +98,7 @@ void Dict::LoadDefault()
    unsigned int i = 0;
    DICT_ENTRY n = DICOMV3DataDict[i];
    while( n.name != 0 )
-   {  
+   {
       Tag t(n.group, n.element);
       DictEntry e( n.name, n.vr, n.vm );
       AddDictEntry( t, e );
@@ -100,6 +111,7 @@ void Dict::LoadDefault()
 
 void PrivateDict::LoadDefault()
 {
+  // TODO
 }
 
 } // end namespace gdcm

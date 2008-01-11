@@ -2466,7 +2466,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0004,0x151a,VR::UI,VM::VM1_n,"Referenced Related General SOP Class UID in File" },
   {0x0004,0x1600,VR::UL,VM::VM1,"Number of References" },
 
-  {0x0000,0x0000,VR::INVALID,VM::VM0,0 }, // Gard
+  {0x0000,0x0000,VR::INVALID,VM::VM0,0 } // Gard
 };
 
 void Dict::LoadDefault()
@@ -2474,7 +2474,7 @@ void Dict::LoadDefault()
    unsigned int i = 0;
    DICT_ENTRY n = DICOMV3DataDict[i];
    while( n.name != 0 )
-   {  
+   {
       Tag t(n.group, n.element);
       DictEntry e( n.name, n.vr, n.vm );
       AddDictEntry( t, e );
@@ -2487,6 +2487,7 @@ void Dict::LoadDefault()
 
 void PrivateDict::LoadDefault()
 {
+  // TODO
 }
 
 } // end namespace gdcm

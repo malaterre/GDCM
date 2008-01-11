@@ -22,6 +22,12 @@
 #include <iomanip>
 #include <map>
 
+/*
+ * FIXME / TODO
+ * I need to seriously rewrite this mess. a class template should work for both a public
+ * and a private dict
+ */
+
 namespace gdcm
 {
 // Data Element Tag
