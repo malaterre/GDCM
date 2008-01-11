@@ -193,6 +193,8 @@ public:
   template <typename TDE, typename TSwap>
   std::istream &ReadWithLength(std::istream &is, VL &length);
 
+  const DataElementSet & GetDES() const { return DES; }
+
 private:
   DataElementSet DES;
 };

@@ -27,9 +27,9 @@ XMLDictReader::XMLDictReader():ParsingDescription(false),Description()
 void XMLDictReader::HandleEntry(const char **atts)
 {
   assert( !ParsingDescription );
-  std::string name;
   VR vr;
-  VM::VMType vm;
+  VM::VMType vm = VM::VM0;
+  std::string name;
   bool ret;
 
   Tag &tag = CurrentTag;
@@ -46,6 +46,7 @@ void XMLDictReader::HandleEntry(const char **atts)
   std::string retiredtrue = "true";
   std::string retiredfalse = "false";
   std::string version = "version";
+  std::string strname = "name";
 
   while(*current /*&& current+1*/)
     {
@@ -126,6 +127,10 @@ void XMLDictReader::HandleEntry(const char **atts)
       {
       // ??
       }
+    else if( strname == *current )
+      {
+      name = *(current+1);
+      }
     else
       {
       abort();
@@ -135,7 +140,7 @@ void XMLDictReader::HandleEntry(const char **atts)
     ++current;
     }
   // Done !
-  de = DictEntry("", vr, vm, ret );
+  de = DictEntry(name.c_str(), vr, vm, ret );
 }
 
 void XMLDictReader::HandleDescription(const char **atts)
@@ -188,16 +193,28 @@ void XMLDictReader::StartElement(const char *name, const char **atts)
 
 void XMLDictReader::EndElement(const char *name)
 {
-  std::string description = "description"; // aka name
-  if( description == name )
+  std::string entry = "entry";
+  std::string dict = "dict";
+  std::string description = "description"; // free form text usually the raw description of tag
+  if( entry == name )
+    {
+    // Ok currentde is now valid let's insert it into the Dict:
+    DICOMDict.AddDictEntry( CurrentTag, CurrentDE);
+    }
+  else if( description == name )
     {
     assert( ParsingDescription );
     ParsingDescription = false;
 
-    // Ok currentde is now valid let's insert it into the Dict:
-    CurrentDE.SetName( Description.c_str() );
-    DICOMDict.AddDictEntry( CurrentTag, CurrentDE);
+    // TODO: do something with description ??
     Description = "";
+    }
+  else if ( dict == name )
+    {
+    }
+  else
+    {
+    abort();
     }
 }
 

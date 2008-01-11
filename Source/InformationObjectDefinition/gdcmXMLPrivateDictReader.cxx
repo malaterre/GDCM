@@ -30,7 +30,7 @@ void XMLPrivateDictReader::HandleEntry(const char **atts)
   std::string name;
   std::string owner;
   VR vr;
-  VM::VMType vm;
+  VM::VMType vm = VM::VM0;
   bool ret;
 
   PrivateTag &tag = CurrentTag;
@@ -48,6 +48,7 @@ void XMLPrivateDictReader::HandleEntry(const char **atts)
   std::string retiredfalse = "false";
   std::string version = "version";
   std::string strowner = "owner";
+  std::string strname = "name";
 
   while(*current /*&& current+1*/)
     {
@@ -71,7 +72,8 @@ void XMLPrivateDictReader::HandleEntry(const char **atts)
         {
         assert( (raw[0] == '5' && raw[1] == '0') || (raw[0] == '6' && raw[1] == '0') );
         if( raw[0] == '5' ) tag.SetGroup( 0x5000 );
-        if( raw[0] == '6' ) tag.SetGroup( 0x6000 );
+        else if( raw[0] == '6' ) tag.SetGroup( 0x6000 );
+        else abort();
         CurrentDE.SetGroupXX( true );
         }
       }
@@ -79,12 +81,13 @@ void XMLPrivateDictReader::HandleEntry(const char **atts)
       {
       unsigned int v;
       const char *raw = *(current+1);
-      int r = sscanf(raw, "%04x", &v);
+      assert( raw[0] == 'x' && raw[1] == 'x' );
+      int r = sscanf(raw+2, "%02x", &v);
       assert( r == 1 );
-      assert( v <= 0xFFFF );
+      assert( v <= 0xFF );
 
       char sv[4+1];
-      r = sprintf(sv, "%04x", v);
+      r = sprintf(sv, "xx%02x", v);
       assert( r == 4 );
       if( strncmp(raw, sv, 4) == 0 )
         {
@@ -92,9 +95,7 @@ void XMLPrivateDictReader::HandleEntry(const char **atts)
         }
       else
         {
-        assert( raw[0] == '3' && raw[1] == '1' );
-        tag.SetElement( 0x3100 );
-        CurrentDE.SetElementXX( true );
+        abort();
         }
       }
     else if( strvr == *current )
@@ -132,6 +133,10 @@ void XMLPrivateDictReader::HandleEntry(const char **atts)
       {
       owner = *(current+1);
       }
+    else if( strname == *current )
+      {
+      name = *(current+1);
+      }
     else
       {
       abort();
@@ -141,7 +146,7 @@ void XMLPrivateDictReader::HandleEntry(const char **atts)
     ++current;
     }
   // Done !
-  de = DictEntry("", vr, vm, ret );
+  de = DictEntry(name.c_str(), vr, vm, ret );
   tag.SetOwner( owner.c_str() );
 }
 
@@ -196,21 +201,29 @@ void XMLPrivateDictReader::StartElement(const char *name, const char **atts)
 void XMLPrivateDictReader::EndElement(const char *name)
 {
   std::string entry = "entry";
-  std::string description = "description"; // aka name
+  std::string dict = "dict";
+  std::string description = "description"; // free form text usually the raw description of tag
   if( entry == name )
     {
     // Ok currentde is now valid let's insert it into the Dict:
-    // and we are done processing both description AND entry, even if description was missing
-    // we should be ok
     PDict.AddDictEntry( CurrentTag, CurrentDE);
     }
   else if( description == name )
     {
     assert( ParsingDescription );
     ParsingDescription = false;
-    CurrentDE.SetName( Description.c_str() );
+
+    // TODO: do something with description ??
+    //
     // Invalidate Description ?
     Description = "";
+    }
+  else if ( dict == name )
+    {
+    }
+  else
+    {
+    abort();
     }
 }
 

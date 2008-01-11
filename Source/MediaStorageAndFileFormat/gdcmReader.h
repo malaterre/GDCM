@@ -59,6 +59,13 @@ public:
 
   const File &GetFile() const { return *F; }
 
+//#warning FIXME API for backward compatibility
+  typedef enum {
+    LD_ALL,
+  } LoadModeType;
+  void SetLoadMode(LoadModeType lmtype) {}
+  void Load() { Read(); }
+
 protected:
   bool ReadPreamble();
   bool ReadMetaInformation();

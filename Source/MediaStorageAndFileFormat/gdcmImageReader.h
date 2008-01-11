@@ -25,6 +25,16 @@ namespace gdcm
  * \note its role is to convert the DICOM DataSet into a gdcm::Image
  * representation
  * By default it is also loading the lookup table and overlay when found as they impact the rendering or the image
+ * \todo
+ * old gdcm 1.X used to have in its dictionary:
+ *
+ * 0028 0015 US 1 UsedNbX ACR Special (RET)
+ * 0028 0016 US 1 UsedNbY ACR Special (RET)
+ * 0028 0017 US 1 UsedNbZ ACR Special (RET)
+ * 0028 0018 US 1 UsedNbT ACR Special (RET)
+ *
+ * since I cannot find them *anywhere* I'll have to hard code them directly in a specific libido image reader
+ * 
  */
 class ByteValue;
 class GDCM_EXPORT ImageReader : public Reader

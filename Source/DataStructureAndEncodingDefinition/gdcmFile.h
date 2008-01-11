@@ -23,7 +23,7 @@
 namespace gdcm
 {
 /**
- * a DICOM File
+ * \brief a DICOM File
  * See PS 3.10
  * File: A File is an ordered string of zero or more bytes, where the first byte is 
  * at the beginning of the file and the last byte at the end of the File. Files are 
@@ -44,6 +44,7 @@ public:
   // Write
   std::ostream const &Write(std::ostream &os) const;
 
+  /// Get Preamble
   const Preamble &GetPreamble() const { return P; }
   void SetPreamble(const Preamble &p) { P = p; }
   const FileMetaInformation &GetHeader() const { return Header; }

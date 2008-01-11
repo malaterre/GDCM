@@ -208,7 +208,16 @@ public:
         << std::setfill('0') << t.GetGroup() << "\"" << 
         " element=\"" << std::setw(4) << std::setfill('0')<< t.GetElement() << "\"" << " vr=\"" 
         << de.GetVR() << "\" vm=\"" << de.GetVM() << "\" owner=\""
-        << t.GetOwner() << "\"/>\n";
+        << t.GetOwner();
+      const char *name = de.GetName();
+      if( *name == 0 )
+        {
+        std::cout << "\"/>\n";
+        }
+      else
+        {
+        std::cout << "\" name=\"" << de.GetName() << "\"/>\n";
+        }
       }
     std::cout << "</dict>\n";
     }
