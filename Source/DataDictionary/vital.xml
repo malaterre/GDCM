@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="gdcm2html.xsl"
-?>
-<!--
+?><!--
   Program: GDCM (Grass Root DICOM). A DICOM library
   Module:  $URL$
 
@@ -14,34 +13,14 @@
      PURPOSE.  See the above copyright notice for more information.
 -->
 <dict edition="2007" ref="http://www.vitalimages.com/Resources/Documents/dicomconformance.pdf">
-  <entry group="5653" element="00xx" vr="LO" vm="1">
-    <description>Private Creator</description>
-  </entry>
-  <entry group="5653" element="xx10" vr="OB" vm="1">
-    <description>Saved Workflow</description>
-  </entry>
-  <entry group="5653" element="xx11" vr="LO" vm="1">
-    <description>Saved Workflow File Name</description>
-  </entry>
-  <entry group="5653" element="xx12" vr="OB" vm="1">
-    <description>Saved Workflow File Data</description>
-  </entry>
-  <entry group="5653" element="xx13" vr="SL" vm="1">
-    <description>Saved Workflow File Length</description>
-  </entry>
-  <entry group="5653" element="xx14" vr="SQ" vm="1">
-    <description>Saved Workflow File Sequence</description>
-  </entry>
-  <entry group="5653" element="xx15" vr="SQ" vm="1">
-    <description>Image Sequence</description>
-  </entry>
-  <entry group="5653" element="xx16" vr="SL" vm="1">
-    <description>Volume Interpolated Slices</description>
-  </entry>
-  <entry group="5653" element="xx17" vr="UI" vm="1">
-    <description>Volume SOP Instance UID</description>
-  </entry>
-  <entry group="5653" element="xx18" vr="SH" vm="1">
-    <description>Saved Workflow Mark</description>
-  </entry>
+  <entry group="5653" element="00xx" vr="LO" vm="1" name="Private Creator"/>
+  <entry group="5653" element="xx10" vr="OB" vm="1" name="Saved Workflow"/>
+  <entry group="5653" element="xx11" vr="LO" vm="1" name="Saved Workflow File Name"/>
+  <entry group="5653" element="xx12" vr="OB" vm="1" name="Saved Workflow File Data"/>
+  <entry group="5653" element="xx13" vr="SL" vm="1" name="Saved Workflow File Length"/>
+  <entry group="5653" element="xx14" vr="SQ" vm="1" name="Saved Workflow File Sequence"/>
+  <entry group="5653" element="xx15" vr="SQ" vm="1" name="Image Sequence"/>
+  <entry group="5653" element="xx16" vr="SL" vm="1" name="Volume Interpolated Slices"/>
+  <entry group="5653" element="xx17" vr="UI" vm="1" name="Volume SOP Instance UID"/>
+  <entry group="5653" element="xx18" vr="SH" vm="1" name="Saved Workflow Mark"/>
 </dict>

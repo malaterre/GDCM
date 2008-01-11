@@ -124,14 +124,16 @@ private:
   // SIEMENS MED, GEMS_PETD_01 ...
   std::string Owner;
 };
-inline std::ostream& operator<<(std::ostream &_os, const PrivateTag &_val)
+
+inline std::ostream& operator<<(std::ostream &os, const PrivateTag &val)
 {
-  _os.setf( std::ios::right);
-  _os << std::hex << '(' << std::setw( 4 ) << std::setfill( '0' )
-    << _val[0] << ',' << std::setw( 4 ) << std::setfill( '0' )
-    << _val[1] << ')' << std::setfill( ' ' ) << std::dec;
-  _os << _val.Owner;
-  return _os;
+  assert( !val.Owner.empty() );
+  os.setf( std::ios::right);
+  os << std::hex << '(' << std::setw( 4 ) << std::setfill( '0' )
+    << val[0] << ',' << std::setw( 4 ) << std::setfill( '0' )
+    << val[1] << ')' << std::setfill( ' ' ) << std::dec;
+  os << val.Owner;
+  return os;
 }
 
 // TODO
@@ -143,7 +145,7 @@ inline std::ostream& operator<<(std::ostream &_os, const PrivateTag &_val)
 class GDCM_EXPORT PrivateDict
 {
   typedef std::map<PrivateTag, DictEntry> MapDictEntry;
-  friend std::ostream& operator<<(std::ostream& _os, const PrivateDict &_val);
+  friend std::ostream& operator<<(std::ostream& os, const PrivateDict &val);
 public:
   PrivateDict() {}
   ~PrivateDict() {}
@@ -154,6 +156,8 @@ public:
 #endif
     DictInternal.insert(
       MapDictEntry::value_type(tag, de));
+// The following code should only be used when manually constructing a Private.xml file by hand
+// it will get rid of VR::UN duplicate (ie. if a VR != VR::Un can be found)
 #if defined(NDEBUG) && 0
     if( s == DictInternal.size() )
       {
@@ -201,12 +205,12 @@ public:
       const PrivateTag &t = it->first;
       const DictEntry &de = it->second;
       std::cout << "  <entry group=\"" << std::hex << std::setw(4)
-          << std::setfill('0') << t.GetGroup() << "\"" << 
-                   " element=\"" << std::setw(4) << std::setfill('0')<< t.GetElement() << "\"" << " vr=\"" 
-                    << de.GetVR() << "\" vm=\"" << de.GetVM() << "\" owner=\""
-                    << t.GetOwner() << "\"/>\n";
+        << std::setfill('0') << t.GetGroup() << "\"" << 
+        " element=\"" << std::setw(4) << std::setfill('0')<< t.GetElement() << "\"" << " vr=\"" 
+        << de.GetVR() << "\" vm=\"" << de.GetVM() << "\" owner=\""
+        << t.GetOwner() << "\"/>\n";
       }
-      std::cout << "</dict>\n";
+    std::cout << "</dict>\n";
     }
 
 private:
@@ -216,17 +220,17 @@ private:
   MapDictEntry DictInternal;
 };
 //-----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream& _os, const PrivateDict &_val)
+inline std::ostream& operator<<(std::ostream& os, const PrivateDict &val)
 {
-  PrivateDict::MapDictEntry::const_iterator it = _val.DictInternal.begin();
-  for(;it != _val.DictInternal.end(); ++it)
+  PrivateDict::MapDictEntry::const_iterator it = val.DictInternal.begin();
+  for(;it != val.DictInternal.end(); ++it)
     {
     const PrivateTag &t = it->first;
     const DictEntry &de = it->second;
-    _os << t << " " << de << '\n';
+    os << t << " " << de << '\n';
     }
 
-  return _os;
+  return os;
 }
 
 } // end namespace gdcm
