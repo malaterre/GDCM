@@ -37,7 +37,7 @@ Global::Global()
     assert( Internals == NULL ); // paranoid
     Internals = new GlobalInternal;
     // Fill in with default values:
-    Internals->GlobalDicts.Initialize();
+    Internals->GlobalDicts.LoadDefaults();
     }
 }
 
@@ -45,7 +45,7 @@ Global::~Global()
 {
   if(--GlobalCount == 0)
     {
-    Internals->GlobalDicts.Finalize();
+    //Internals->GlobalDicts.Unload();
     delete Internals;
     Internals = NULL; // paranoid
     }

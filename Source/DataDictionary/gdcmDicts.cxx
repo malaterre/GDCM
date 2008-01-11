@@ -71,12 +71,11 @@ const PrivateDict &Dicts::GetPrivateDict() const
   return ShadowDict;
 }
 
-void Dicts::ClassInitialize()
+void Dicts::LoadDefaults()
 {
-}
-
-void Dicts::ClassFinalize()
-{
+  // TODO: should the user be able to control which dict to load ?
+  PublicDict.LoadDefault();
+  ShadowDict.LoadDefault();
 }
 
 } // end namespace gdcm

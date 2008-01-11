@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   <xsl:output method="text" indent="yes"/>
-<!-- XSL to convert XML GDCM2 data dictionay into
-     C++ template code
+<!-- share common code to transform a VM Part 6 string into a gdcm::VM type
 -->
 <!--
   Program: GDCM (Grass Root DICOM). A DICOM library
@@ -16,13 +15,12 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 -->
-
   <xsl:include href="VM.xsl"/>
 <!-- The main template that loop over all dict/entry -->
   <xsl:template match="/">
     <xsl:text>
 // GENERATED FILE DO NOT EDIT
-// $ xsltproc TagToType.xsl DICOMV3.xml > gdcmTagToType.h
+// $ xsltproc DefaultDict.xsl DICOMV3.xml > gdcmDefaultDicts.cxx
 
 /*=========================================================================
 
@@ -39,54 +37,73 @@
 
 =========================================================================*/
 
-#ifndef __gdcmTagToType_h
-#define __gdcmTagToType_h
+#ifndef __gdcmDefaultDicts_cxx
+#define __gdcmDefaultDicts_cxx
 
+#include "gdcmDicts.h"
 #include "gdcmVR.h"
-#include "gdcmVM.h"
+#include "gdcmDict.h"
+#include "gdcmDictEntry.h"
 
 namespace gdcm {
-// default template:
-template &lt;uint16_t,uint16_t&gt; struct TagToType;
-// template for group length:
-template &lt;uint16_t group&gt; struct TagToType&lt;group,0x0000&gt; { typedef VRToType&lt;VR::UL&gt;::Type Type; enum { VRType = VR::UL }; enum { VMType = VM::VM1 }; };
+typedef struct
+{
+  uint16_t group;
+  uint16_t element;
+  VR::VRType vr;
+  VM::VMType vm;
+  const char *name;
+} DICT_ENTRY;
+
+static const DICT_ENTRY DICOMV3DataDict [] = {
 </xsl:text>
     <xsl:for-each select="dict/entry">
       <xsl:variable name="group" select="translate(@group,'x','0')"/>
       <xsl:variable name="element" select="translate(@element,'x','0')"/>
       <xsl:if test="substring($group,3) != 'xx' and substring($element,3) != 'xx' and @vr != '' and @vr != 'US_SS' and @vr != 'US_SS_OW' and @vr != 'OB_OW'">
-        <xsl:text>template &lt;&gt; struct TagToType&lt;0x</xsl:text>
+        <xsl:text>  {0x</xsl:text>
         <xsl:value-of select="$group"/>
         <xsl:text>,0x</xsl:text>
         <xsl:value-of select="$element"/>
-        <xsl:text>&gt; {</xsl:text>
-        <xsl:text>
-</xsl:text>
-        <xsl:text>typedef VRToType&lt;VR::</xsl:text>
+        <xsl:text>,VR::</xsl:text>
         <xsl:value-of select="@vr"/>
-        <xsl:text>&gt;::Type Type;</xsl:text>
-        <xsl:text>
-</xsl:text>
-        <xsl:text>enum { VRType = VR::</xsl:text>
-        <xsl:value-of select="@vr"/>
-        <xsl:text> };</xsl:text>
-        <xsl:text>
-</xsl:text>
-        <xsl:text>enum { VMType = VM::</xsl:text>
+        <xsl:text>,VM::</xsl:text>
         <xsl:call-template name="VMStringToVMType">
           <xsl:with-param name="vmstring" select="@vm"/>
         </xsl:call-template>
-        <xsl:text> };</xsl:text>
-        <xsl:text>
-</xsl:text>
-        <xsl:text>};</xsl:text>
+        <xsl:text>,"</xsl:text>
+        <xsl:value-of select="@name"/>
+        <xsl:text>" },</xsl:text>
         <xsl:text>
 </xsl:text>
       </xsl:if>
     </xsl:for-each>
     <xsl:text>
+  {0x0000,0x0000,VR::INVALID,VM::VM0,0 } // Gard
+};
+
+void Dict::LoadDefault()
+{
+   unsigned int i = 0;
+   DICT_ENTRY n = DICOMV3DataDict[i];
+   while( n.name != 0 )
+   {  
+      Tag t(n.group, n.element);
+      DictEntry e( n.name, n.vr, n.vm );
+      AddDictEntry( t, e );
+      n = DICOMV3DataDict[++i];
+   }
+   //Tag t(0, 0);
+   //DictEntry e("", VR::INVALID, VM::VM0);
+   //AddDictEntry( t, e );
+}
+
+void PrivateDict::LoadDefault()
+{
+}
+
 } // end namespace gdcm
-#endif // __gdcmTagToType_h
+#endif // __gdcmDefaultDicts_cxx
 </xsl:text>
   </xsl:template>
 </xsl:stylesheet>

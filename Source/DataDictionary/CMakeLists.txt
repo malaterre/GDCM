@@ -74,15 +74,16 @@ ADD_CUSTOM_COMMAND(
 #SET_SOURCE_FILES_PROPERTIES(
 #  "${GDCM_BINARY_DIR}/Source/gdcmDefaultDicts.cxx" GENERATED)
 
-CONFIGURE_FILE(
-  ${GDCM_SOURCE_DIR}/Source/DataDictionary/gdcmDefaultDicts.cxx
-  ${GDCM_BINARY_DIR}/Source/DataDictionary/gdcmDefaultDicts.cxx
-  @ONLY
-  )
+#CONFIGURE_FILE(
+#  ${GDCM_SOURCE_DIR}/Source/DataDictionary/gdcmDefaultDicts.cxx
+#  ${GDCM_BINARY_DIR}/Source/DataDictionary/gdcmDefaultDicts.cxx
+#  @ONLY
+#  )
 
 SET(DICT_SRCS
-  ${DICT_SRCS} # All the dicts cxx resources
+  #${DICT_SRCS} # All the dicts cxx resources
   gdcmDicts.cxx
+  gdcmDefaultDicts.cxx # pseudo generated file
   gdcmGlobal.cxx
   gdcmGroupDict.cxx
   ${GDCM_BINARY_DIR}/Source/DataDictionary/gdcmDefaultGroupNames.cxx

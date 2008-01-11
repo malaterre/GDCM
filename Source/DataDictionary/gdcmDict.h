@@ -45,6 +45,7 @@ public:
 
   friend std::ostream& operator<<(std::ostream& _os, const Dict &_val);
 
+  bool IsEmpty() const { return DictInternal.empty(); }
   void AddDictEntry(const Tag &tag, const DictEntry &de)
     {
 #ifndef NDEBUG
@@ -67,11 +68,11 @@ public:
     return it->second;
     }
 
-private:
-  void FillDICOMV3DataDict();
-  void FillNIHDataDict();
-  void FillSPIDataDict();
+protected:
+  friend class Dicts;
+  void LoadDefault();
 
+private:
   Dict &operator=(const Dict &_val); // purposely not implemented
   Dict(const Dict &_val); // purposely not implemented
 
@@ -80,7 +81,6 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& os, const Dict &val)
 {
-  assert( val.DictInternal.empty() );
   Dict::MapDictEntry::const_iterator it = val.DictInternal.begin();
   for(;it != val.DictInternal.end(); ++it)
     {
@@ -214,6 +214,10 @@ public:
       }
     std::cout << "</dict>\n";
     }
+
+protected:
+  friend class Dicts;
+  void LoadDefault();
 
 private:
   PrivateDict &operator=(const PrivateDict &_val); // purposely not implemented

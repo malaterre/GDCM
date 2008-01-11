@@ -53,15 +53,10 @@ protected:
   } ConstructorType;
   static const char *GetConstructorString(ConstructorType type);
 
-
   friend class Global;
-  static void ClassInitialize();
-  static void ClassFinalize();
+  void LoadDefaults();
 
 private:
-  // Generated implementation, see gdcmDataDicts
-  //void FillDataDicts();
-
   // Public dict:
   Dict PublicDict;
 
