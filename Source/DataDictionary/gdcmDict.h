@@ -116,7 +116,11 @@ public:
     {
     const Tag & t1 = *this;
     const Tag & t2 = _val;
-    if( t1 == t2 ) return strcmp(Owner.c_str(), _val.GetOwner() ) < 0;
+    if( t1 == t2 )
+      {
+      assert( strcmp(Owner.c_str(), _val.GetOwner()) != 0 ); // prevent adding duplicate element
+      return strcmp(Owner.c_str(), _val.GetOwner() ) < 0;
+      }
     else return t1 < t2;
     }
 
@@ -128,7 +132,7 @@ private:
 inline std::ostream& operator<<(std::ostream &os, const PrivateTag &val)
 {
   assert( !val.Owner.empty() );
-  os.setf( std::ios::right);
+  os.setf( std::ios::right );
   os << std::hex << '(' << std::setw( 4 ) << std::setfill( '0' )
     << val[0] << ',' << std::setw( 4 ) << std::setfill( '0' )
     << val[1] << ')' << std::setfill( ' ' ) << std::dec;
@@ -137,7 +141,7 @@ inline std::ostream& operator<<(std::ostream &os, const PrivateTag &val)
 }
 
 // TODO
-// For privat dict, element < 0x10 should automatically defined:
+// For private dict, element < 0x10 should automatically defined:
 // Name = "Private Creator"
 // ValueRepresentation = LO
 // ValueMultiplicity = 1
@@ -206,7 +210,7 @@ public:
       const DictEntry &de = it->second;
       std::cout << "  <entry group=\"" << std::hex << std::setw(4)
         << std::setfill('0') << t.GetGroup() << "\"" << 
-        " element=\"" << std::setw(4) << std::setfill('0')<< t.GetElement() << "\"" << " vr=\"" 
+        " element=\"xx" << std::setw(2) << std::setfill('0')<< t.GetElement() << "\"" << " vr=\"" 
         << de.GetVR() << "\" vm=\"" << de.GetVM() << "\" owner=\""
         << t.GetOwner();
       const char *name = de.GetName();

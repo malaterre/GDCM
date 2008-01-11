@@ -79,23 +79,33 @@ void XMLPrivateDictReader::HandleEntry(const char **atts)
       }
     else if( element == *current )
       {
-      unsigned int v;
       const char *raw = *(current+1);
-      assert( raw[0] == 'x' && raw[1] == 'x' );
-      int r = sscanf(raw+2, "%02x", &v);
-      assert( r == 1 );
-      assert( v <= 0xFF );
-
-      char sv[4+1];
-      r = sprintf(sv, "xx%02x", v);
-      assert( r == 4 );
-      if( strncmp(raw, sv, 4) == 0 )
+      assert( (raw[0] == 'x' && raw[1] == 'x' )
+           || (raw[2] == 'x' && raw[3] == 'x') );
+      if (raw[2] == 'x' && raw[3] == 'x') 
         {
-        tag.SetElement( v );
+        assert( raw[0] == '0' && raw[1] == '0' );
+        tag.SetElement( 0x0000 );
+        CurrentDE.SetElementXX( true );
         }
       else
         {
-        abort();
+        unsigned int v;
+        int r = sscanf(raw+2, "%02x", &v);
+        assert( r == 1 );
+        assert( v <= 0xFF );
+
+        char sv[4+1];
+        r = sprintf(sv, "xx%02x", v);
+        assert( r == 4 );
+        if( strncmp(raw, sv, 4) == 0 )
+          {
+          tag.SetElement( v );
+          }
+        else
+          {
+          abort();
+          }
         }
       }
     else if( strvr == *current )

@@ -65,5 +65,5 @@
 <entry group="0029" element="xx08" owner="SIEMENS MEDCOM OOG" vr="CS" vm="1" name="MEDCOM OOG Type"/>
 <entry group="0029" element="xx09" owner="SIEMENS MEDCOM OOG" vr="LO" vm="1" name="MEDCOM OOG Version"/>
 <entry group="0029" element="xx10" owner="SIEMENS MEDCOM OOG" vr="OB" vm="1" name="MEDCOM OOG Info"/>
-<entry group="7FE1" element="xx10" owner="SIEMENS CSA NON-IMAGE" vr="OB" vm="1" name="CSA Data"/>
+<entry group="7fe1" element="xx10" owner="SIEMENS CSA NON-IMAGE" vr="OB" vm="1" name="CSA Data"/>
 </dict>
