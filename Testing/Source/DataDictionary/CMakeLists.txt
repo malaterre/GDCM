@@ -3,6 +3,7 @@
 SET(DICT_TEST_SRCS
   TestDictEntry
   TestDict
+  TestGlobal
   TestDicts
   TestGroupDict
   TestTagToType

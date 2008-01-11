@@ -85,7 +85,7 @@ if __name__ == "__main__":
         fullpath.InsertNextValue( os.path.join(filename, files.GetValue(i) ))
     r.SetFileNames( fullpath )
     ExecuteInformation(r, fullpath)
-    #r.AddObserver("ProgressEvent", PrintProgress)
+    r.AddObserver("ProgressEvent", PrintProgress)
     r.Update()
     print r.GetOutput()
     # Write output
