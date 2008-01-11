@@ -13,9 +13,11 @@
 
 =========================================================================*/
 // See docs:
+// http://www.swig.org/Doc1.3/Python.html
+// http://www.swig.org/Doc1.3/Python.html
 // http://www.geocities.com/foetsch/python/extending_python.htm
 
-%module gdcm
+%module(docstring="A DICOM library") gdcm
 #pragma SWIG nowarn=504,510
 %{
 #include "gdcmTypes.h"
@@ -42,6 +44,7 @@ using namespace gdcm;
 %include "std_string.i"
 %include "std_set.i"
 
+//%feature("autodoc", "1")
 %include "gdcmWin32.h" // define GDCM_EXPORT so need to be the first one...
 %include "gdcmSwapCode.h"
 %include "gdcmPixelFormat.h"
@@ -56,31 +59,34 @@ using namespace gdcm;
 %include "gdcmValue.h"
 %include "gdcmByteValue.h"
 %include "gdcmDataElement.h"
+%rename(DataElementSetPython) std::set<DataElement, lttag>;
+%rename(DataElementSetPython2) DataSet::DataElementSet;
 %include "gdcmDataSet.h"
-namespace std {
-  //struct lttag
-  //  {
-  //  bool operator()(const gdcm::DataElement &s1,
-  //    const gdcm::DataElement &s2) const
-  //    {
-  //    return s1.GetTag() < s2.GetTag();
-  //    }
-  //  };
-
-  //%template(DataElementSet) gdcm::DataSet::DataElementSet;
-  %template(DataElementSet) set<DataElement, lttag>;
-}
+//namespace std {
+//  //struct lttag
+//  //  {
+//  //  bool operator()(const gdcm::DataElement &s1,
+//  //    const gdcm::DataElement &s2) const
+//  //    {
+//  //    return s1.GetTag() < s2.GetTag();
+//  //    }
+//  //  };
+//
+//  //%template(DataElementSet) gdcm::DataSet::DataElementSet;
+//  %template(DataElementSet) set<DataElement, lttag>;
+//}
 %extend gdcm::DataSet
 {
   const DataElementSet & GetSet() const
     {
     return self->GetDES();
     }
-  std::string Print() const
-    {
+  const char *__str__() {
+    static std::string buffer;
     std::stringstream s;
     self->Print(s);
-    return s.str();
+    buffer = s.str();
+    return buffer.c_str();
     }
 };
 %include "gdcmPreamble.h"
@@ -89,12 +95,13 @@ namespace std {
 %include "gdcmImage.h"
 %extend gdcm::Image
 {
-  std::string Print() const
-    {
+  const char *__str__() {
+    static std::string buffer;
     std::stringstream s;
     self->Print(s);
-    return s.str();
-    }
+    buffer = s.str();
+    return buffer.c_str();
+  }
 };
 %include "gdcmReader.h"
 %include "gdcmImageReader.h"
