@@ -217,7 +217,7 @@ void DoOverlays(const DataSet& ds, ImageValue& pixeldata)
     unsigned int idxoverlays = 0;
     while( !finished )
       {
-      const DataElement &de = ds.GetNextDataElement( overlay );
+      const DataElement &de = ds.FindNextDataElement( overlay );
       // Are we done:
       if( de.GetTag().GetGroup() > 0x60FF ) // last possible overlay curve
         {
@@ -242,7 +242,7 @@ void DoOverlays(const DataSet& ds, ImageValue& pixeldata)
           {
           ov.Update(de2);
           overlay.SetElement( de2.GetTag().GetElement() + 1 );
-          de2 = ds.GetNextDataElement( overlay );
+          de2 = ds.FindNextDataElement( overlay );
           // Next element:
           //overlay.SetElement( overlay.GetElement() + 1 );
           }

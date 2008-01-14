@@ -51,20 +51,20 @@ namespace gdcm
  */
 
 //-----------------------------------------------------------------------------
-struct lttag
+/*struct lttag
 {
   bool operator()(const DataElement &s1,
 		  const DataElement &s2) const
   {
     return s1.GetTag() < s2.GetTag();
   }
-};
+};*/
 
 //-----------------------------------------------------------------------------
 class DataSet
 {
 public:
-  typedef std::set<DataElement, lttag> DataElementSet;
+  typedef std::set<DataElement /*, lttag*/> DataElementSet;
   typedef DataElementSet::iterator Iterator;
   typedef DataElementSet::const_iterator ConstIterator;
   Iterator Begin() { return DES.begin(); }
@@ -155,7 +155,7 @@ public:
 
   // WARNING:
   // This only search at the same level as the DataSet is !
-  const DataElement& GetNextDataElement(const Tag &t) const {
+  const DataElement& FindNextDataElement(const Tag &t) const {
     const DataElement r(t);
     ConstIterator it = DES.lower_bound(r);
     assert( it != DES.end() );
@@ -193,11 +193,28 @@ public:
   template <typename TDE, typename TSwap>
   std::istream &ReadWithLength(std::istream &is, VL &length);
 
-  const DataElementSet & GetDES() const { return DES; }
+  //const DataElementSet & GetDES() const { return DES; }
+  std::set<DataElement /*, lttag*/> & GetDES() { return DES; }
 
 private:
   DataElementSet DES;
 };
+
+/*
+ * HACK: I need this temp class to be able to manipulate a std::set from python,
+ * swig does not support wrapping of simple class like std::set...
+ */
+class PythonDataSet
+{
+public:
+  PythonDataSet(DataSet &des):Internal(des),it(des.Begin()) {}
+  const DataElement& GetCurrent() { return *it; }
+  void Next() { ++it; }
+private:
+  DataSet & Internal;
+  DataSet::Iterator it;
+};
+
 
 
 } // end namespace gdcm

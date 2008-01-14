@@ -103,7 +103,7 @@ unsigned int Overlay::GetNumberOfOverlays(DataSet const & ds)
   unsigned int numoverlays = 0;
   while( !finished )
     {
-    const DataElement &de = ds.GetNextDataElement( overlay );
+    const DataElement &de = ds.FindNextDataElement( overlay );
     if( de.GetTag().GetGroup() > 0x60FF ) // last possible curve
       {
       finished = true;

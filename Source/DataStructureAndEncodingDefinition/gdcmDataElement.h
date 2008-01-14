@@ -107,6 +107,10 @@ public:
       }
     }
 
+  bool operator<(const DataElement &de) const
+    {
+    return GetTag() < de.GetTag();
+    }
   DataElement &operator=(const DataElement &de)
     {
     TagField = de.TagField;
