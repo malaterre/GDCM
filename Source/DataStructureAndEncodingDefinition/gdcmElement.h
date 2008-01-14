@@ -69,7 +69,6 @@ public:
     ss.str( s );
     EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
       GetLength(),ss);
-
   }
 
   void Read(std::istream &_is) {
@@ -117,6 +116,7 @@ public:
       }
     }
 };
+
 
 // Implementation to perform binary read and write
 // TODO rewrite operation so that either:
@@ -221,7 +221,9 @@ public:
   // This the way to prevent default initialization
   explicit Element() { Internal=0; Length=0; }
   ~Element() {
-    delete[] Internal;
+    if( Save ) {
+      delete[] Internal;
+    }
     Internal = 0;
   }
 
@@ -237,7 +239,7 @@ public:
         // perform realloc
         assert( (len / size) * size == len );
         ArrayType *internal = new ArrayType[len / size];
-        memcpy(internal, Internal, Length * size);
+        memcpy(internal, Internal, len);
         delete[] Internal;
         Internal = internal;
         }
@@ -255,11 +257,34 @@ public:
       }
     else {
       // TODO rewrite this stupid code:
-      Length = len;
-      //Internal = array;
-      abort();
+      assert( Length == 0 );
+      assert( Internal == 0 );
+      Length = len / sizeof(ArrayType);
+      Internal = const_cast<ArrayType*>(array);
+      //abort();
       }
+      Save = save;
   }
+  typename VRToType<TVR>::Type GetValue(int idx = 0) {
+    assert( idx < Length );
+    return Internal[idx];
+  }
+  typename VRToType<TVR>::Type operator[] (int idx) {
+    return GetValue(idx);
+  }
+  void Set(Value const &v) {
+    const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
+    assert( bv ); // That would be bad...
+    const ArrayType* array = (ArrayType*)bv->GetPointer();
+    assert( array ); // That would be bad...
+    SetArray(array, bv->GetLength() );
+  }
+
+  // Need to be placed after definition of EncodingImplementation<VR::ASCII>
+  void WriteASCII(std::ostream &os) const {
+    return EncodingImplementation<VR::ASCII>::Write(Internal, GetLength(), os);
+    }
+
   // Implementation of Print is common to all Mode (ASCII/Binary)
   void Print(std::ostream &_os) const {
     assert( Length );
@@ -294,6 +319,7 @@ public:
 private:
   typename VRToType<TVR>::Type *Internal;
   unsigned long Length; // unsigned int ??
+  bool Save;
 };
 
 //template <int TVM = VM::VM1_n>

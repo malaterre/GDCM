@@ -208,7 +208,9 @@ class PythonDataSet
 {
 public:
   PythonDataSet(DataSet &des):Internal(des),it(des.Begin()) {}
-  const DataElement& GetCurrent() { return *it; }
+  const DataElement& GetCurrent() const { return *it; }
+  void Start() { it = Internal.Begin(); }
+  bool IsAtEnd() const { return it == Internal.End(); }
   void Next() { ++it; }
 private:
   DataSet & Internal;

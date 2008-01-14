@@ -34,29 +34,49 @@ void StringFilter::SetDicts(const Dicts &dicts)
   abort(); // FIXME
 }
 
-const char* StringFilter::ToString(const DataElement& de)
+#define StringFilterCase(type) \
+  case VR::type: \
+    { \
+      gdcm::Element<VR::type,VM::VM1_n> el; \
+      el.Set( de.GetValue() ); \
+      os << el.GetValue(); \
+      for(unsigned long i = 1; i < el.GetLength(); ++i) os << "\\" << el.GetValue(i); \
+      ret.second = os.str(); \
+    } break
+
+std::pair<std::string, std::string> StringFilter::ToStringPair(const DataElement& de) const
 {
+  std::pair<std::string, std::string> ret;
   const gdcm::Global &g = gdcm::GlobalInstance;
   const Dicts &dicts = g.GetDicts();
   if( de.GetTag().IsPrivate() )
     {
-    return NULL;
+    return ret;
     }
   assert( de.GetTag().IsPublic() );
   const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
+  if( entry.GetVR() == VR::INVALID )
+    {
+    // FIXME This is a public element we do not support...
+    //throw Exception();
+    return ret;
+    }
 
-  static std::string s;
   VR vr = entry.GetVR();
-  if( de.GetVR() != VR::UN )
+  if( de.GetVR() != VR::INVALID && de.GetVR() != VR::UN )
     {
     vr = de.GetVR();
     }
+  assert( vr != VR::UN && vr != VR::INVALID );
+  //std::cerr << "Found " << vr << " for " << de.GetTag() << std::endl;
+  ret.first = entry.GetName();
   if( VR::IsASCII( vr ) )
     {
     const ByteValue *bv = de.GetByteValue();
     assert( bv /*|| bv->IsEmpty()*/ );
-    s = std::string( bv->GetPointer(), bv->GetLength() );
-    return s.c_str();
+    ret.second = std::string( bv->GetPointer(), bv->GetLength() );
+    // Let's remove any trailing \0 :
+    ret.second.resize( std::min( ret.second.size(), strlen( ret.second.c_str() ) ) ); // strlen is garantee to be lower or equal to ::size()
     }
   else
     {
@@ -65,32 +85,19 @@ const char* StringFilter::ToString(const DataElement& de)
     if( bv )
       {
       VM::VMType vm = entry.GetVM();
-      assert( vm == VM::VM1 );
+      //assert( vm == VM::VM1 );
       std::ostringstream os;
       switch(vr)
         {
-      case VR::SS:
-          {
-          gdcm::Element<VR::SS,VM::VM1> el;
-          el.Set( de.GetValue() );
-          os << el.GetValue();
-          s = os.str();
-          return s.c_str();
-          }
-      case VR::US:
-          {
-          gdcm::Element<VR::US,VM::VM1> el;
-          el.Set( de.GetValue() );
-          os << el.GetValue();
-          s = os.str();
-          return s.c_str();
-          }
+        StringFilterCase(SS);
+        StringFilterCase(US);
+        StringFilterCase(UL);
       default:
         break;
         }
       }
     }
-  return NULL;
+  return ret;
 }
 
 }

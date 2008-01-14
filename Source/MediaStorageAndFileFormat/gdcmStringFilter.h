@@ -32,7 +32,8 @@ public:
   // Allow user to pass in there own dicts
   void SetDicts(const Dicts &dicts);
 
-  const char *ToString(const DataElement& de);
+  //const char *ToString(const DataElement& de) const;
+  std::pair<std::string, std::string> ToStringPair(const DataElement& de) const;
 
 private:
   
