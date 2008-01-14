@@ -59,6 +59,7 @@ public:
     (void)os;
   }
 
+  bool IsEmpty() const { assert( Length == 0 ); return Internal.empty(); }
   VL GetLength() const { return Length; }
   // Does a reallocation
   void SetLength(VL vl) {

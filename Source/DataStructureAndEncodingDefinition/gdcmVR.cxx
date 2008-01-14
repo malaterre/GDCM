@@ -308,7 +308,7 @@ bool VR::IsASCII(VRType const &vr)
   default:
       // 1.3.12.2.1107.5.1.4.54035.30000005100516290423400005768-no-phi.dcm has a VR=RT
       //abort();
-      return true;
+      return false;
     }
 }
 
