@@ -59,7 +59,7 @@ typedef struct
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
 </xsl:text>
-    <!--xsl:for-each select="dict/entry">
+    <xsl:for-each select="dict/entry">
       <xsl:variable name="group" select="translate(@group,'x','0')"/>
       <xsl:variable name="element" select="translate(@element,'x','0')"/>
       <xsl:choose>
@@ -71,6 +71,8 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
             <xsl:with-param name="element" select="$element"/>
             <xsl:with-param name="vr" select="@vr"/>
             <xsl:with-param name="vm" select="@vm"/>
+            <xsl:with-param name="retired" select="@retired"/>
+            <xsl:with-param name="name" select="@name"/>
           </xsl:call-template>
         </xsl:when>
         <xsl:when test="substring(@group,3) = 'xx' and substring(@element,3) != 'xx' ">
@@ -81,6 +83,8 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
             <xsl:with-param name="element" select="@element"/>
             <xsl:with-param name="vr" select="@vr"/>
             <xsl:with-param name="vm" select="@vm"/>
+            <xsl:with-param name="retired" select="@retired"/>
+            <xsl:with-param name="name" select="@name"/>
           </xsl:call-template>
         </xsl:when>
         <xsl:when test="substring(@group,3) != 'xx' and substring(@element,3) != 'xx' ">
@@ -90,6 +94,8 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
             <xsl:with-param name="element" select="@element"/>
             <xsl:with-param name="vr" select="@vr"/>
             <xsl:with-param name="vm" select="@vm"/>
+            <xsl:with-param name="retired" select="@retired"/>
+            <xsl:with-param name="name" select="@name"/>
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
@@ -97,11 +103,13 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
 </xsl:message>
         </xsl:otherwise>
       </xsl:choose>
-    </xsl:for-each-->
-    <!--xsl:call-template name="do-group-length"/-->
-<!--xsl:template match="/"-->
+    </xsl:for-each>
+<!--
+FIXME:
+Need to handle special group length for 0000,0002,0004
+And for 50xx / 60xx
+-->
 <xsl:for-each select="//entry[generate-id() = generate-id(key('entries',@group)[1])]">
-<!--xsl:value-of select="@group"/-->
       <xsl:call-template name="do-one-entry">
         <xsl:with-param name="count" select="0"/>
         <xsl:with-param name="group" select="@group"/>
@@ -113,14 +121,6 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
       </xsl:call-template>
 
 </xsl:for-each>
-<!--/xsl:template-->
-<!--
-    <xsl:variable name="unique-list" select="//entry/@group[not(.=following::state)]" />
-
-    <xsl:for-each select="dict/entry/@group">
-    <xsl:value-of select="."/>
-    </xsl:for-each>
--->
     <xsl:text>
   {0xffff,0xffff,VR::INVALID,VM::VM0,0,true } // Gard
 };
@@ -228,6 +228,8 @@ void PrivateDict::LoadDefault()
           <xsl:with-param name="element" select="$element"/>
           <xsl:with-param name="vr" select="$vr"/>
           <xsl:with-param name="vm" select="$vm"/>
+          <xsl:with-param name="retired" select="$retired"/>
+          <xsl:with-param name="name" select="$name"/>
         </xsl:call-template>
       </xsl:if>
       <xsl:if test="$do-element != '0'">
@@ -253,6 +255,8 @@ void PrivateDict::LoadDefault()
           <xsl:with-param name="element" select="$element_xx"/>
           <xsl:with-param name="vr" select="$vr"/>
           <xsl:with-param name="vm" select="$vm"/>
+          <xsl:with-param name="retired" select="$retired"/>
+          <xsl:with-param name="name" select="$name"/>
         </xsl:call-template>
       </xsl:if>
     </xsl:if>

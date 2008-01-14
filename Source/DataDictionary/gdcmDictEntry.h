@@ -35,14 +35,15 @@ namespace gdcm
 class GDCM_EXPORT DictEntry
 {
 public:
-  DictEntry(const char *name = "", VR::VRType const &vr = VR::INVALID, VM::VMType const &vm = VM::VM0, bool ret = false) {
-    if(name) Name = name;
-    ValueRepresentation = vr;
-    ValueMultiplicity = vm;
-    Retired = ret;
-    GroupXX = false;
-    ElementXX = false;
+  DictEntry(const char *name = "", VR::VRType const &vr = VR::INVALID, VM::VMType const &vm = VM::VM0, bool ret = false):Name(name),ValueRepresentation(vr),ValueMultiplicity(vm),Retired(ret),GroupXX(false),ElementXX(false) {
+    //if(name && *name) Name = name;
+    //ValueRepresentation = vr;
+    //ValueMultiplicity = vm;
+    //Retired = ret;
+    //GroupXX = false;
+    //ElementXX = false;
   }
+#if 0
   // FIXME
   DictEntry(const char *name, const char *vr, const char *vm) {
     if(name) Name = name;
@@ -52,6 +53,7 @@ public:
     GroupXX = false;
     ElementXX = false;
   }
+#endif
 
   friend std::ostream& operator<<(std::ostream& _os, const DictEntry &_val);
 
@@ -103,14 +105,22 @@ private:
 #endif
 
 //-----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream& _os, const DictEntry &_val)
+inline std::ostream& operator<<(std::ostream& os, const DictEntry &val)
 {
-  _os << _val.Name << "\t" << _val.ValueRepresentation << "\t" << _val.ValueMultiplicity;
-  if( _val.Retired )
+  if( val.Name.empty() )
     {
-    _os << "\t(RET)";
+    os << "[No name]";
     }
-  return _os;
+  else
+    {
+    os << val.Name;
+    }
+  os << "\t" << val.ValueRepresentation << "\t" << val.ValueMultiplicity;
+  if( val.Retired )
+    {
+    os << "\t(RET)";
+    }
+  return os;
 }
 
 } // end namespace gdcm
