@@ -101,7 +101,7 @@ int TestImageRead(const char* filename)
     }
 
   const gdcm::FileMetaInformation &header = reader.GetFile().GetHeader();
-  gdcm::MediaStorage::MSType ms = header.GetMediaStorageType();
+  gdcm::MediaStorage ms = header.GetMediaStorage();
   bool isImage = gdcm::MediaStorage::IsImage( ms );
   if( isImage )
     {
