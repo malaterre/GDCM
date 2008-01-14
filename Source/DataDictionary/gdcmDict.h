@@ -68,7 +68,7 @@ public:
     if (it == DictInternal.end())
       {
       //assert( 0 && "Impossible" );
-      return GetDictEntry(Tag(0,0));
+      it = DictInternal.find( Tag(0xffff,0xffff) );
       }
     assert( DictInternal.count(tag) == 1 );
     return it->second;

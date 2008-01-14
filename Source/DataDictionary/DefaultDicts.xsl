@@ -20,7 +20,7 @@
   <xsl:template match="/">
     <xsl:text>
 // GENERATED FILE DO NOT EDIT
-// $ xsltproc DefaultDict.xsl DICOMV3.xml &gt; gdcmDefaultDicts.cxx
+// $ xsltproc DefaultDicts.xsl DICOMV3.xml &gt; gdcmDefaultDicts.cxx
 
 /*=========================================================================
 
@@ -98,7 +98,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
       </xsl:choose>
     </xsl:for-each>
     <xsl:text>
-  {0x0000,0x0000,VR::INVALID,VM::VM0,0,true } // Gard
+  {0xffff,0xffff,VR::INVALID,VM::VM0,0,true } // Gard
 };
 
 void Dict::LoadDefault()
@@ -112,9 +112,6 @@ void Dict::LoadDefault()
       AddDictEntry( t, e );
       n = DICOMV3DataDict[++i];
    }
-   //Tag t(0, 0);
-   //DictEntry e("", VR::INVALID, VM::VM0);
-   //AddDictEntry( t, e );
 }
 
 void PrivateDict::LoadDefault()

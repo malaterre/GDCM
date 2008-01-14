@@ -27,7 +27,7 @@ Description:
      PURPOSE.  See the above copyright notice for more information.
 -->
 <dict edition="2007">
-<!-- Table E.1-1 COMMAND FIELDS / Table E.2-1 RETIRED COMMAND FIELDS -->
+<!-- PS 3.7 : Table E.1-1 COMMAND FIELDS / Table E.2-1 RETIRED COMMAND FIELDS -->
   <entry group="0000" element="0000" vr="UL" vm="1" version="3" name="Group Length"/>
   <entry group="0000" element="0001" vr="UL" vm="1" retired="true" version="2" name="Length to End"/>
   <entry group="0000" element="0002" vr="UI" vm="1" version="3" name="Affected SOP Class UID"/>
