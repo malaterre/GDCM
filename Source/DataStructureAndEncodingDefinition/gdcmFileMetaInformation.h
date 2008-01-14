@@ -44,7 +44,7 @@ public:
 
   TransferSyntax::NegociatedType GetMetaInformationTS() const { return MetaInformationTS; }
   const TransferSyntax &GetDataSetTransferSyntax() const { return DataSetTS; }
-  MediaStorage::MSType GetMediaStorageType() const;
+  MediaStorage GetMediaStorage() const;
 
   // Read
   std::istream &Read(std::istream &is);

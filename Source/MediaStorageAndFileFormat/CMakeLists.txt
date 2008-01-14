@@ -7,6 +7,7 @@ SET(MSFF_SRCS
   gdcmImageReader.cxx
   gdcmImageWriter.cxx
   gdcmStringFilter.cxx
+  gdcmSpacingHelper.cxx
   gdcmWriter.cxx
   gdcmValidate.cxx
   gdcmDumper.cxx

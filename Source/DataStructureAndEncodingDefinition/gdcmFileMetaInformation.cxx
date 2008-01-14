@@ -416,7 +416,7 @@ void FileMetaInformation::ComputeDataSetTransferSyntax()
   DataSetTS.IsValid();
 }
 
-MediaStorage::MSType FileMetaInformation::GetMediaStorageType() const
+MediaStorage FileMetaInformation::GetMediaStorage() const
 {
   // D 0002|0002 [UI] [Media Storage SOP Class UID]
   // [1.2.840.10008.5.1.4.1.1.12.1]
@@ -444,7 +444,7 @@ MediaStorage::MSType FileMetaInformation::GetMediaStorageType() const
     last = '\0';
     }
   gdcmDebugMacro( "TS: " << ts );
-  MediaStorage::MSType ms = MediaStorage::GetMSType(ts.c_str());
+  MediaStorage ms = MediaStorage::GetMSType(ts.c_str());
   if( ms == MediaStorage::MS_END )
     {
     gdcmWarningMacro( "Media Storage Class UID: " << ts << " is unknow" );

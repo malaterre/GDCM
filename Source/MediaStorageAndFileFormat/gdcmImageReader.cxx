@@ -22,6 +22,7 @@
 #include "gdcmTransferSyntax.h"
 #include "gdcmLookupTable.h"
 #include "gdcmAttribute.h"
+#include "gdcmSpacingHelper.h"
 
 namespace gdcm
 {
@@ -73,7 +74,7 @@ bool ImageReader::Read()
    * I'd rather go the old way check a bunch of tags (From Image Plane
    * Module).
    */
-  MediaStorage::MSType ms = header.GetMediaStorageType();
+  MediaStorage ms = header.GetMediaStorage();
   bool isImage = MediaStorage::IsImage( ms );
   if( isImage )
     {
@@ -107,7 +108,7 @@ bool ImageReader::Read()
           sopclassuid->GetPointer(),
           sopclassuid->GetLength() );
         assert( sopclassuid_str.find( ' ' ) == std::string::npos );
-        MediaStorage::MSType ms2 = MediaStorage::GetMSType(sopclassuid_str.c_str());
+        MediaStorage ms2 = MediaStorage::GetMSType(sopclassuid_str.c_str());
         bool isImage2 = MediaStorage::IsImage( ms2 );
         if( isImage2 )
           {
@@ -383,6 +384,11 @@ bool ImageReader::ReadImage()
     PixelData.SetPlanarConfiguration(
       ReadUSFromTag( planarconfiguration, ss, conversion ) );
     }
+
+  // 4 1/2 Let's do Pixel Spacing
+  std::vector<double> spacing = SpacingHelper::GetSpacingValue(ds);
+  assert( spacing.size() == PixelData.GetNumberOfDimensions() );
+  PixelData.SetSpacing( &spacing[0] );
 
   // 5. Photometric Interpretation
   // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]

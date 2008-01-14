@@ -39,7 +39,7 @@ Printer::~Printer()
 {
 }
 
-void PrintValue(VR::VRType const &vr, VM::VMType const &vm, const Value &v);
+void PrintValue(VR::VRType const &vr, VM const &vm, const Value &v);
 
 //-----------------------------------------------------------------------------
 void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictEntry& entry) 
@@ -79,7 +79,7 @@ void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictE
   //if( lvr == VR::UN ) lvr = VR::LO; // why not ?
    }
 
-  /*const*/ VM::VMType vm = entry.GetVM();
+  VM vm = entry.GetVM();
   if( vm == VM::VM0 )
   {
     assert( lvr != VR::UN );
@@ -295,7 +295,7 @@ PrinterTemplateCase(US) \
 PrinterTemplateCase(UT) \
 default: abort(); }
 
-void PrintValue(VR::VRType const &vr, VM::VMType const &vm, const Value &v)
+void PrintValue(VR::VRType const &vr, VM const &vm, const Value &v)
 {
   try
     {
@@ -479,8 +479,8 @@ void Printer::PrintDataSet(std::ostream &os, const DataSet &ds)
       const DataElement &de = *it;
       const DictEntry &entry = d.GetDictEntry(de.GetTag());
       // Use VR from dictionary
-      VR::VRType vr = entry.GetVR();
-      VM::VMType vm = entry.GetVM();
+      VR vr = entry.GetVR();
+      VM vm = entry.GetVM();
       // TODO: FIXME FIXME FIXME
       const Tag& t = de.GetTag();
       //std::cerr << t << std::endl;
@@ -526,7 +526,7 @@ void Printer::PrintDataSet(std::ostream &os, const DataSet &ds)
       //assert( vr != VR::INVALID );
       /*if( vr == VR::INVALID )
         {
-        const VM::VMType vm = entry.GetVM();
+        const VM vm = entry.GetVM();
         const Value& val = de.GetValue();
         os << de.GetTag();
         }
@@ -539,7 +539,7 @@ void Printer::PrintDataSet(std::ostream &os, const DataSet &ds)
       else // INVALID case
         {
         abort();
-        const VM::VMType vm = entry.GetVM();
+        const VM& vm = entry.GetVM();
         const Value& val = de.GetValue();
         os << de.GetTag();
         //if( pstyle == Printer::CONDENSED_STYLE )

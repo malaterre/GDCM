@@ -35,7 +35,7 @@ namespace gdcm
 class GDCM_EXPORT DictEntry
 {
 public:
-  DictEntry(const char *name = "", VR::VRType const &vr = VR::INVALID, VM::VMType const &vm = VM::VM0, bool ret = false):Name(name),ValueRepresentation(vr),ValueMultiplicity(vm),Retired(ret),GroupXX(false),ElementXX(false) {
+  DictEntry(const char *name = "", VR const &vr = VR::INVALID, VM const &vm = VM::VM0, bool ret = false):Name(name),ValueRepresentation(vr),ValueMultiplicity(vm),Retired(ret),GroupXX(false),ElementXX(false) {
     //if(name && *name) Name = name;
     //ValueRepresentation = vr;
     //ValueMultiplicity = vm;
@@ -62,8 +62,8 @@ public:
 //  bool IsValid() const { return ValueRepresentation != VR::VR_END; }
 //	  !Name.empty() /*&& ValueRepresentation && ValueMultiplicity*/; }
 
-  VM::VMType GetVM() const { return ValueMultiplicity; }
-  void SetVM(VM::VMType vm) { ValueMultiplicity = vm; }
+  const VM &GetVM() const { return ValueMultiplicity; }
+  void SetVM(VM const & vm) { ValueMultiplicity = vm; }
 
   const char *GetName() const { return Name.c_str(); }
   void SetName(const char* name) { Name = name; }
@@ -82,7 +82,7 @@ public:
 private:
   std::string Name;
   VR ValueRepresentation;
-  VM::VMType ValueMultiplicity;
+  VM ValueMultiplicity;
   bool Retired : 1;
   bool GroupXX : 1 ;
   bool ElementXX : 1;

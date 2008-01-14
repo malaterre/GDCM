@@ -28,7 +28,8 @@ void XMLDictReader::HandleEntry(const char **atts)
 {
   assert( !ParsingDescription );
   VR vr;
-  VM::VMType vm = VM::VM0;
+  VM vm;
+  assert( vm == VM::VM0 );
   std::string name;
   bool ret;
 

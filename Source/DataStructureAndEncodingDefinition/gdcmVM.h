@@ -82,9 +82,16 @@ public:
   //bool IsValid() { return VMField != VM0 && VMField < VM_END; }
 
   static VMType GetVMTypeFromLength(unsigned int length, unsigned int size);
+
+  VM(VMType type = VM0):VMField(type) {}
+  operator VMType () const { return VMField; }
+
+  friend std::ostream &operator<<(std::ostream &os, const VM &vm);
+private:
+  VMType VMField;
 };
 //-----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream& _os, const VM::VMType&_val)
+inline std::ostream& operator<<(std::ostream& _os, const VM &_val)
 {
   _os << VM::GetVMString(_val);
   return _os;

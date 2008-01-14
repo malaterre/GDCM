@@ -28,12 +28,12 @@ DictPrinter::~DictPrinter()
 {
 }
 
-VM::VMType GuessVMType(DataElement const &de)
+VM GuessVMType(DataElement const &de)
 {
   const VR &vr = de.GetVR();
   const VL &vl = de.GetVL();
   const Value& value = de.GetValue();
-  VM::VMType vm;
+  VM vm;
   if( VR::IsBinary( vr ) )
     {
     if( vr == VR::SQ  )

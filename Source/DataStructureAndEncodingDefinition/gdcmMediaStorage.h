@@ -30,7 +30,7 @@ class MediaStorage
 {
 public:
   typedef enum {
-    MediaStorageDirectoryStorage = 0,
+    MediaStorageDirectoryStorage,
     ComputedRadiographyImageStorage,
     DigitalXRayImageStorageForPresentation,
     DigitalXRayImageStorageForProcessing,
@@ -92,10 +92,14 @@ typedef enum {
 	  ObjectEnd
   } ObjectType;
 
-  static const char* GetMSString(const MSType &ts);
+  static const char* GetMSString(MSType ts);
   static const MSType GetMSType(const char *str);
 
+  MediaStorage(MSType type = MS_END):MSField(type) {}
+
   static bool IsImage(const MSType &ts);
+
+  operator MSType () const { return MSField; }
 
 private:
   MSType MSField;

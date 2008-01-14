@@ -90,7 +90,7 @@ const MediaStorage::MSType MediaStorage::GetMSType(const char *str)
   return MS_END;
 }
 
-const char* MediaStorage::GetMSString(const MSType &ms)
+const char* MediaStorage::GetMSString(MSType ms)
 {
   assert( ms <= MS_END );
   return MSStrings[(int)ms];
