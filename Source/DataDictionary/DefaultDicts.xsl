@@ -17,6 +17,7 @@
 -->
   <xsl:include href="VM.xsl"/>
 <!-- The main template that loop over all dict/entry -->
+  <xsl:key name="entries" match="entry" use="@group"/>
   <xsl:template match="/">
     <xsl:text>
 // GENERATED FILE DO NOT EDIT
@@ -58,7 +59,7 @@ typedef struct
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
 </xsl:text>
-    <xsl:for-each select="dict/entry">
+    <!--xsl:for-each select="dict/entry">
       <xsl:variable name="group" select="translate(@group,'x','0')"/>
       <xsl:variable name="element" select="translate(@element,'x','0')"/>
       <xsl:choose>
@@ -96,7 +97,30 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
 </xsl:message>
         </xsl:otherwise>
       </xsl:choose>
+    </xsl:for-each-->
+    <!--xsl:call-template name="do-group-length"/-->
+<!--xsl:template match="/"-->
+<xsl:for-each select="//entry[generate-id() = generate-id(key('entries',@group)[1])]">
+<!--xsl:value-of select="@group"/-->
+      <xsl:call-template name="do-one-entry">
+        <xsl:with-param name="count" select="0"/>
+        <xsl:with-param name="group" select="@group"/>
+        <xsl:with-param name="element" select="'0000'"/>
+        <xsl:with-param name="vr" select="'UL'"/>
+        <xsl:with-param name="vm" select="'1'"/>
+        <xsl:with-param name="retired" select="'true'"/> <!-- FIXME ?? -->
+        <xsl:with-param name="name" select="'Generic Group Length'"/>
+      </xsl:call-template>
+
+</xsl:for-each>
+<!--/xsl:template-->
+<!--
+    <xsl:variable name="unique-list" select="//entry/@group[not(.=following::state)]" />
+
+    <xsl:for-each select="dict/entry/@group">
+    <xsl:value-of select="."/>
     </xsl:for-each>
+-->
     <xsl:text>
   {0xffff,0xffff,VR::INVALID,VM::VM0,0,true } // Gard
 };
@@ -123,6 +147,26 @@ void PrivateDict::LoadDefault()
 #endif // __gdcmDefaultDicts_cxx
 </xsl:text>
   </xsl:template>
+  <xsl:template name="do-group-length">
+    <xsl:param name="count" select="0"/>
+    <xsl:if test="$count &lt; 65535"> <!-- 0xffff -->
+      <xsl:variable name="group-length">
+        <xsl:call-template name="printHex">
+          <xsl:with-param name="number" select="$count"/>
+        </xsl:call-template>
+      </xsl:variable>
+      <!--xsl:call-template name="do-one-entry">
+        <xsl:with-param name="count" select="0"/>
+        <xsl:with-param name="group" select="$group-length"/>
+        <xsl:with-param name="element" select="'0000'"/>
+        <xsl:with-param name="vr" select="'UL'"/>
+        <xsl:with-param name="vm" select="'1'"/>
+      </xsl:call-template-->
+      <xsl:call-template name="do-group-length">
+        <xsl:with-param name="count" select="$count + 2"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
   <xsl:template name="do-one-entry">
     <xsl:param name="count" select="0"/>
     <xsl:param name="do-group" select="0"/>
@@ -131,6 +175,7 @@ void PrivateDict::LoadDefault()
     <xsl:param name="element"/>
     <xsl:param name="vr"/>
     <xsl:param name="vm"/>
+    <xsl:param name="retired"/>
     <xsl:param name="name"/>
     <xsl:if test="$count &lt; 256">
       <xsl:text>  {0x</xsl:text>
@@ -139,21 +184,21 @@ void PrivateDict::LoadDefault()
       <xsl:value-of select="$element"/>
 <!--xsl:value-of select="$temp"/-->
       <xsl:text>,VR::</xsl:text>
-      <xsl:if test="not (@vr != '')">
+      <xsl:if test="not ($vr != '')">
 <!-- FIXME -->
         <xsl:text>INVALID</xsl:text>
       </xsl:if>
-      <xsl:if test="@vr != ''">
-        <xsl:value-of select="@vr"/>
+      <xsl:if test="$vr != ''">
+        <xsl:value-of select="$vr"/>
       </xsl:if>
       <xsl:text>,VM::</xsl:text>
       <xsl:call-template name="VMStringToVMType">
-        <xsl:with-param name="vmstring" select="@vm"/>
+        <xsl:with-param name="vmstring" select="$vm"/>
       </xsl:call-template>
       <xsl:text>,"</xsl:text>
-      <xsl:value-of select="@name"/>
+      <xsl:value-of select="$name"/>
       <xsl:text>",</xsl:text>
-      <xsl:value-of select="@retired = 'true'"/>
+      <xsl:value-of select="$retired = 'true'"/>
       <xsl:text> },</xsl:text>
       <xsl:text>
 </xsl:text>
