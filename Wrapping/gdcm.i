@@ -14,7 +14,7 @@
 =========================================================================*/
 // See docs:
 // http://www.swig.org/Doc1.3/Python.html
-// http://www.swig.org/Doc1.3/Python.html
+// http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus
 // http://www.geocities.com/foetsch/python/extending_python.htm
 
 %module(docstring="A DICOM library") gdcm
@@ -43,6 +43,7 @@ using namespace gdcm;
 // %extend (see below)
 %include "std_string.i"
 %include "std_set.i"
+%include "std_pair.i"
 
 //%feature("autodoc", "1")
 %include "gdcmWin32.h" // define GDCM_EXPORT so need to be the first one...
@@ -59,8 +60,20 @@ using namespace gdcm;
 %include "gdcmValue.h"
 %include "gdcmByteValue.h"
 %include "gdcmDataElement.h"
-%rename(DataElementSetPython) std::set<DataElement, lttag>;
-%rename(DataElementSetPython2) DataSet::DataElementSet;
+%extend gdcm::DataElement
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
+//%rename(DataElementSetPython) std::set<DataElement, lttag>;
+//%rename(DataElementSetPython2) DataSet::DataElementSet;
+%template (DESet) std::set<DataElement>;
+//%rename (SetString2) gdcm::DataElementSet;
 %include "gdcmDataSet.h"
 //namespace std {
 //  //struct lttag
@@ -77,10 +90,6 @@ using namespace gdcm;
 //}
 %extend gdcm::DataSet
 {
-  const DataElementSet & GetSet() const
-    {
-    return self->GetDES();
-    }
   const char *__str__() {
     static std::string buffer;
     std::stringstream s;
@@ -105,6 +114,7 @@ using namespace gdcm;
 };
 %include "gdcmReader.h"
 %include "gdcmImageReader.h"
+%template (PairString) std::pair<std::string,std::string>;
 %include "gdcmStringFilter.h"
 
 //#error TODO: gdcm::ByteValueToStringFilter

@@ -54,5 +54,15 @@ int TestGlobal(int, char *[])
     return 1;
     }
 
+#if 0
+  const char *empty = "";
+  std::string s = empty;
+  std::cout << s.empty() << std::endl;
+  const gdcm::DictEntry& de = pub.GetDictEntry( gdcm::Tag(0x0028,0x0015) );
+  const char *v = de.GetName();
+  //assert( v );
+  std::cout << "TOTO:" << de << std::endl;
+#endif
+
   return 0;
 }

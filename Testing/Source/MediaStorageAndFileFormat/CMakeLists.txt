@@ -1,6 +1,7 @@
 # Define the tests for Media Storage and File Format
 # MSFF
 SET(MSFF_TEST_SRCS
+  TestStringFilter
   TestPrinter
   TestReader
   TestReader2
