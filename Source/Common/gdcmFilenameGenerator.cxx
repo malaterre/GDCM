@@ -43,21 +43,31 @@ bool FilenameGenerator::Generate()
     {
     return false;
     }
-  std::string::size_type len = Pattern.size();
-  char *internal = new char[len + 10]; // FIXME: 10 ??
+  std::string::size_type pat_len = Pattern.size();
+  const unsigned int padding = 10; // FIXME is this large enough for all cases ?
+  const unsigned int internal_len = pat_len + padding;
   const unsigned int numfiles = Filenames.size();
   if( numfiles == 0 )
     {
     // I am pretty sure this is an error:
     return false;
     }
-  for( unsigned int i = 0; i < numfiles; ++i)
+  bool success = true;
+  char *internal = new char[internal_len];
+  for( unsigned int i = 0; i < numfiles && success; ++i)
     {
-    sprintf( internal, Pattern.c_str(), i );
+    int res = snprintf( internal, internal_len, Pattern.c_str(), i );
+    success = res < internal_len;
     Filenames[i] = internal;
+    //assert( Filenames[i].size() == res ); // upon success only
     }
   delete[] internal;
-  return true;
+  if( !success )
+    {
+    Filenames.clear();
+    // invalidate size too ??
+    }
+  return success;
 }
 
 } // namespace gdcm

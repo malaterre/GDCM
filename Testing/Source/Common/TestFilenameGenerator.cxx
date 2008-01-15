@@ -19,12 +19,13 @@
 int TestFilenameGenerator(int argc, char *argv[])
 {
   gdcm::FilenameGenerator fg;
-  const char pattern[] = "/tmp/bla%03d";
-  const unsigned int nfiles = 10;
+  const char pattern[] = "/tmp/bla%01d";
+  const unsigned int nfiles = 11;
   fg.SetPattern( pattern );
   fg.SetNumberOfFilenames( nfiles );
   if( !fg.Generate() )
     {
+    std::cerr << "Could not generate" << std::endl;
     return 1;
     }
   for( unsigned int i = 0; i < nfiles; ++i )
