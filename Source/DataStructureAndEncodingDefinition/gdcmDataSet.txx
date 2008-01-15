@@ -27,7 +27,7 @@ namespace gdcm
     assert( de.GetTag() != itemDelItem ); // precondition before while loop
     while( de.Read<TDE,TSwap>(is) && de.GetTag() != itemDelItem  ) // Keep that order please !
       {
-      //std::cout << "DEBUG Nested: " << de << std::endl;
+      //std::cerr << "DEBUG Nested: " << de << std::endl;
       DES.insert( de );
       }
     assert( de.GetTag() == itemDelItem );

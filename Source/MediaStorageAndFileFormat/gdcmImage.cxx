@@ -33,6 +33,8 @@ void Image::SetNumberOfDimensions(unsigned int dim)
 {
   NumberOfDimensions = dim;
   assert( NumberOfDimensions );
+  Dimensions.resize( NumberOfDimensions ); // fill with 0
+  Spacing.resize( NumberOfDimensions, 1 ); // fill with 1
 }
 
 // TODO does it make sense to PlanarConfiguration in Image

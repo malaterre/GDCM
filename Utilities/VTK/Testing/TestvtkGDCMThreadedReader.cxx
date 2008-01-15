@@ -27,6 +27,16 @@
 #include "vtkImageData.h"
 #include <vtksys/SystemTools.hxx>
 
+#include "vtkPiecewiseFunction.h"
+#include "vtkColorTransferFunction.h"
+#include "vtkVolumeProperty.h"
+#include "vtkVolumeTextureMapper3D.h"
+#include "vtkVolume.h"
+#include "vtkRenderer.h"
+#include "vtkRenderWindow.h"
+#include "vtkRenderWindowInteractor.h"
+
+
 class ProgressObserver : public vtkCommand
 {
 public:
@@ -179,6 +189,59 @@ int TestvtkGDCMThreadedRead(const char *filename)
   writer->SetFileTypeToBinary();
   //writer->Write();
   writer->Delete();
+
+  double *s = reader->GetOutput()->GetScalarRange();
+  std::cout << s[0] << " " << s[1] << std::endl;
+
+  // Create transfer functions for opacity and color
+  vtkPiecewiseFunction *opacityTransferFunction = vtkPiecewiseFunction::New();
+  opacityTransferFunction->AddPoint(  600 , 0.0);
+  opacityTransferFunction->AddPoint( 2000 , 1.0);
+
+  vtkColorTransferFunction *colorTransferFunction = vtkColorTransferFunction::New();
+  //colorTransferFunction ->ClampingOff();
+  //colorTransferFunction ->AddHSVPoint(      0.0, 0.01, 1.0, 1.0);
+  //colorTransferFunction ->AddHSVPoint(   1000.0, 0.50, 1.0, 1.0);
+  //colorTransferFunction ->AddHSVPoint(   2000.0, 0.99, 1.0, 1.0);
+  //colorTransferFunction ->SetColorSpaceToHSV();
+  colorTransferFunction ->AddRGBPoint  (    s[0], 0.0, 0.0, 0.0);
+  colorTransferFunction ->AddRGBPoint  (    (s[0] + s[1]) / 8., 0.25, 0.25, 0.25);
+  colorTransferFunction ->AddRGBPoint  (    (s[0] + s[1]) / 4., 0.5, 0.25, 0.25);
+  colorTransferFunction ->AddRGBPoint  (    s[1], 1.0, 1.0, 1.0);
+  //colorTransferFunction ->AddRGBPoint  ( 3.* (s[0] + s[1]) / 4 , 1.0, 0.0, 0.0);
+  //colorTransferFunction ->AddRGBPoint  (  (s[0] + s[1]) / 2, 0.0, 0.0, 1.0);
+  //colorTransferFunction ->AddRGBPoint  ( 1.*(s[0] + s[1]) / 4 , 0.0, 1.0, 0.0);
+  //colorTransferFunction ->AddRGBPoint  (  s[0], 0.0, 0.2, 0.0);
+
+  // Create properties, mappers, volume actors, and ray cast function
+  vtkVolumeProperty *volumeProperty = vtkVolumeProperty::New();
+  volumeProperty ->SetColor( colorTransferFunction);
+  volumeProperty ->SetScalarOpacity (opacityTransferFunction);
+
+  vtkVolumeTextureMapper3D *volumeMapper = vtkVolumeTextureMapper3D::New();
+  volumeMapper ->SetInputConnection (reader->GetOutputPort());
+  volumeMapper ->SetSampleDistance (0.25);
+
+  vtkVolume *volume = vtkVolume::New();
+  volume ->SetMapper (volumeMapper);
+  volume ->SetProperty (volumeProperty);
+
+  // Okay now the graphics stuff
+  vtkRenderer *ren1 = vtkRenderer::New();
+  vtkRenderWindow *renWin = vtkRenderWindow::New();
+  renWin ->ReportGraphicErrorsOn();
+  renWin ->AddRenderer (ren1);
+  renWin ->SetSize (256, 256);
+  vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::New();
+  iren ->SetRenderWindow (renWin);
+
+  //ren1 ->SetBackground (0.1, 0.2, 0.4);
+  ren1-> AddViewProp (volume);
+  renWin->Render();
+  ren1 ->ResetCameraClippingRange();
+
+  iren->Initialize();
+  iren->Start();
 
   reader->Delete();
 

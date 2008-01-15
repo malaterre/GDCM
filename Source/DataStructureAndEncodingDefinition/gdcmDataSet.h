@@ -76,6 +76,7 @@ public:
   //typedef typename DataElementSet::iterator iterator;
   void Clear() {
     DES.clear();
+    assert( DES.empty() );
   }
 
   void Print(std::ostream &os, std::string const &indent = "") const {

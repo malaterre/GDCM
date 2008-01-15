@@ -51,7 +51,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       }
     if( ValueLengthField != 0 )
       {
-      gdcmDebugMacro(
+      gdcmErrorMacro(
         "Item Delimitation Item has a length different from 0" );
       }
     // Set pointer to NULL to avoid user error
@@ -190,6 +190,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     || TagField == Tag(0x2005,0xe080)
     || TagField == Tag(0x2005,0xe083)
     || TagField == Tag(0x2005,0xe084)
+    || TagField == Tag(0x2005,0xe402)
     //TagField.IsPrivate() && VRField == VR::SQ
     //-> Does not work for 0029
     //we really need to read item marker
@@ -199,7 +200,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     assert( VRField == VR::SQ );
     try
       {
-abort(); // When are we doing the byte swapping !!!
+//abort(); // When are we doing the byte swapping !!!
       if( !ValueIO<ExplicitDataElement,SwapperDoOp>::Read(is,*ValueField) )
         {
         assert(0 && "Should not happen");
@@ -212,6 +213,7 @@ abort(); // When are we doing the byte swapping !!!
     return is;
     }
 #endif
+
   if( !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField) )
     {
     // Might be the famous UN 16bits

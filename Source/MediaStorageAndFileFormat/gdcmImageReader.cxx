@@ -387,8 +387,12 @@ bool ImageReader::ReadImage()
 
   // 4 1/2 Let's do Pixel Spacing
   std::vector<double> spacing = SpacingHelper::GetSpacingValue(ds);
-  assert( spacing.size() == PixelData.GetNumberOfDimensions() );
-  PixelData.SetSpacing( &spacing[0] );
+  // FIXME: Only SC is allowed not to have spacing:
+  if( !spacing.empty() )
+    {
+    assert( spacing.size() == PixelData.GetNumberOfDimensions() );
+    PixelData.SetSpacing( &spacing[0] );
+    }
 
   // 5. Photometric Interpretation
   // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]

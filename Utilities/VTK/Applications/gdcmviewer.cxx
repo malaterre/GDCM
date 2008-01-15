@@ -13,7 +13,7 @@
 
 =========================================================================*/
 #include "vtkGDCMReader.h"
-#include "vtkGDCMThreadedReader.h"
+//#include "vtkGDCMThreadedReader.h"
 
 #include "vtkXMLImageDataWriter.h"
 #include "vtkPNGWriter.h"
@@ -73,7 +73,7 @@ public:
 template <typename TViewer>
 void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 {
-  vtkGDCMThreadedReader *reader = vtkGDCMThreadedReader::New();
+  vtkGDCMReader *reader = vtkGDCMReader::New();
   if( filenames->GetSize() == 1 ) // Backward compatible...
     {
     reader->SetFileName( filenames->GetValue(0) );

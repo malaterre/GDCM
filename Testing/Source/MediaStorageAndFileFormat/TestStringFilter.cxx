@@ -18,8 +18,7 @@
 
 int TestStringFilter(int argc, char *argv[])
 {
-  (void)argc;
-  (void)argv;
+  if( argc < 2 ) return 1;
   gdcm::StringFilter sf;
   gdcm::Reader r;
   r.SetFileName( argv[1] );

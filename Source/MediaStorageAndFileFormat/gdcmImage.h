@@ -44,6 +44,8 @@ namespace gdcm
  * with gdcm::JPEGImage which would from the stream extract the header info
  * and fill it to please gdcm::Image...well except origin for instance
  * 
+ * FIXME:
+ * Still missing the Orientation !
  */
 class GDCM_EXPORT Image
 {

@@ -109,6 +109,7 @@ std::istream &Read(std::istream &is)
   // TODO FIXME: should not change value on the fly, only at write time
   if( TagField == Tag(0xfeff, 0x00e0) ) 
     {
+    gdcmDebugMacro( "FIXME" );
     TagField = Tag(0xfffe, 0xe000);
     }
 #endif
@@ -118,7 +119,17 @@ std::istream &Read(std::istream &is)
     return is;
     }
   // Self
-  if( ValueLengthField == 0 )
+  // Some file written by GDCM 1.0 we writting 0xFFFFFFFF instead of 0x0
+  if( TagField == Tag(0xfffe,0xe0dd) )
+    {
+    if( ValueLengthField )
+      {
+      gdcmErrorMacro( "ValueLengthField is not 0" );
+      gdcmDebugMacro( "FIXME" ); // should not change the value at read time
+      ValueLengthField = 0; // FIXME should not set value inplace
+      }
+    }
+  else if( ValueLengthField == 0 )
     {
     assert( TagField == Tag( 0xfffe, 0xe0dd)
          || TagField == Tag( 0xfffe, 0xe000) );
@@ -131,6 +142,7 @@ std::istream &Read(std::istream &is)
     {
     DataSet &nested = NestedDataSet;
     nested.Clear();
+    assert( nested.IsEmpty() );
     nested.template ReadNested<TDE,TSwap>(is);
     }
   else /* if( ValueLengthField.IsUndefinedLength() ) */

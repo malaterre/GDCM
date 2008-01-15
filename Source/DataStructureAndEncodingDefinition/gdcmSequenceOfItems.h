@@ -78,10 +78,11 @@ public:
       const Tag seqDelItem(0xfffe,0xe0dd);
       while( item.Read<TDE,TSwap>(is) && item.GetTag() != seqDelItem )
         {
-        gdcmDebugMacro( "Item: " << item );
+        //gdcmDebugMacro( "Item: " << item );
         Items.push_back( item );
         }
       assert( item.GetTag() == seqDelItem && item.GetVL() == 0 );
+      std::cerr << "Done reading SQ" << std::endl;
       }
     else
       {

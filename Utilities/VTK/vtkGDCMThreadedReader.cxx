@@ -292,7 +292,8 @@ void vtkGDCMThreadedReader::ReadFiles(unsigned int nfiles, const char *filenames
   const unsigned long len = output->GetNumberOfPoints() * output->GetScalarSize() / nfiles;
   char * scalarpointer = static_cast<char*>(output->GetScalarPointer());
 
-  const unsigned int nthreads = sysconf( _SC_NPROCESSORS_ONLN );
+  const unsigned int nprocs = sysconf( _SC_NPROCESSORS_ONLN );
+  const unsigned int nthreads = std::min( nprocs, nfiles );
   threadparams params[nthreads];
 
   pthread_mutex_t lock;
@@ -301,7 +302,7 @@ void vtkGDCMThreadedReader::ReadFiles(unsigned int nfiles, const char *filenames
   pthread_t *pthread = new pthread_t[nthreads];
 
   // There is nfiles, and nThreads
-  assert( nfiles > nthreads );
+  assert( nfiles >= nthreads );
   const unsigned int partition = nfiles / nthreads;
   assert( partition );
   for (unsigned int thread=0; thread < nthreads; ++thread)
@@ -363,7 +364,7 @@ int vtkGDCMThreadedReader::RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector **vtkNotUsed(inputVector),
                                 vtkInformationVector *outputVector)
 {
-
+  //std::cerr << "vtkGDCMThreadedReader::RequestData Start" << std::endl;
   //this->UpdateProgress(0.2);
 
   // Make sure the output dimension is OK, and allocate its scalars
@@ -395,6 +396,7 @@ int vtkGDCMThreadedReader::RequestData(vtkInformation *vtkNotUsed(request),
   ReadFiles(nfiles, filenames);
   delete[] filenames;
 
+  //std::cerr << "vtkGDCMThreadedReader::RequestData End" << std::endl;
   return 1;
 }
 

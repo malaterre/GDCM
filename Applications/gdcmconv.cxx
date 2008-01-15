@@ -202,18 +202,18 @@ int main (int argc, char *argv[])
   gdcm::Preamble p;
   p.Create();
   f.SetPreamble(p);
-#endif
   gdcm::DataSet ds = reader.GetFile().GetDataSet();
   SetSQToUndefined undef;
   ds.ExecuteOperation(undef);
 
   gdcm::File f(reader.GetFile());
   f.SetDataSet(ds);
+#endif
 
   gdcm::Writer writer;
   writer.SetFileName( outfilename.c_str() );
-  writer.SetFile( f );
-  //writer.SetFile( reader.GetFile() );
+  //writer.SetFile( f );
+  writer.SetFile( reader.GetFile() );
   if( !writer.Write() )
     {
     std::cerr << "Failed to write: " << outfilename << std::endl;

@@ -73,10 +73,18 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const DataElement
   if( VR::IsASCII( vr ) )
     {
     const ByteValue *bv = de.GetByteValue();
-    assert( bv /*|| bv->IsEmpty()*/ );
-    ret.second = std::string( bv->GetPointer(), bv->GetLength() );
-    // Let's remove any trailing \0 :
-    ret.second.resize( std::min( ret.second.size(), strlen( ret.second.c_str() ) ) ); // strlen is garantee to be lower or equal to ::size()
+    if( de.GetVL() )
+      {
+      assert( bv /*|| bv->IsEmpty()*/ );
+      ret.second = std::string( bv->GetPointer(), bv->GetLength() );
+      // Let's remove any trailing \0 :
+      ret.second.resize( std::min( ret.second.size(), strlen( ret.second.c_str() ) ) ); // strlen is garantee to be lower or equal to ::size()
+      }
+    else
+      {
+      //assert( bv == NULL );
+      ret.second = ""; // ??
+      }
     }
   else
     {

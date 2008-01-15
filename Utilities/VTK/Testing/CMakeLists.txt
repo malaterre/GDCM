@@ -15,7 +15,7 @@ INCLUDE_DIRECTORIES(
 
 CREATE_TEST_SOURCELIST(vtkGDCMTests gdcmvtkGDCMTests.cxx ${VTK_GDCM_TEST_SRCS})
 ADD_EXECUTABLE(gdcmvtkGDCMTests ${vtkGDCMTests})
-TARGET_LINK_LIBRARIES(gdcmvtkGDCMTests vtkgdcm)
+TARGET_LINK_LIBRARIES(gdcmvtkGDCMTests vtkgdcm vtkVolumeRendering)
 
 # Need full path to executable:
 SET(GDCM_VTK_GDCM_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmvtkGDCMTests")
