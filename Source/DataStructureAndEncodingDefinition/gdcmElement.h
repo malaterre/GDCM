@@ -239,8 +239,11 @@ public:
         // perform realloc
         assert( (len / size) * size == len );
         ArrayType *internal = new ArrayType[len / size];
-        memcpy(internal, Internal, len);
-        delete[] Internal;
+        if( Internal )
+          {
+          memcpy(internal, Internal, len);
+          delete[] Internal;
+          }
         Internal = internal;
         }
       }
@@ -277,6 +280,8 @@ public:
     assert( bv ); // That would be bad...
     const ArrayType* array = (ArrayType*)bv->GetPointer();
     assert( array ); // That would be bad...
+    assert( Internal == 0 );
+    //assert( VR::IsBinary( VR(TVR) ) );
     SetArray(array, bv->GetLength() );
   }
 
@@ -295,6 +300,7 @@ public:
       _os << "," << Internal[i];
     }
   void Read(std::istream &_is) {
+    assert( Internal ); // FIXME
     EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
       GetLength(),_is);
     }

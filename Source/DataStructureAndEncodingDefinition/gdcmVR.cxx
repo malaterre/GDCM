@@ -86,6 +86,21 @@ static VR::VRType VRValue[] = {
     VR::UT
 };
 
+unsigned int VR::GetSizeof() const
+{
+  unsigned int size;
+  switch(VRField)
+    {
+  case VR::DS:
+    size = sizeof(VRToType<VR::DS>::Type);
+    break;
+  default:
+    size = 0;
+    }
+  assert( size );
+  return size;
+}
+
 int VR::GetIndex(VRType vr)
 {
   assert( vr <= VR_END );

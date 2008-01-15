@@ -42,6 +42,21 @@ static const char *VMStrings[] = {
   0
 };
 
+unsigned int VM::GetLength() const
+{
+  unsigned int len;
+  switch(VMField)
+    {
+  case VM::VM2:
+    len = VMToLength<VM::VM2>::Length;
+    break;
+  default:
+    len = 0;
+    }
+  assert( len );
+  return len;
+}
+
 const char *VM::GetVMString(const VMType &vm)
 {
   assert( vm <= VM_END );

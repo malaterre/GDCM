@@ -85,6 +85,7 @@ public:
 
   VM(VMType type = VM0):VMField(type) {}
   operator VMType () const { return VMField; }
+  unsigned int GetLength() const;
 
   friend std::ostream &operator<<(std::ostream &os, const VM &vm);
 private:

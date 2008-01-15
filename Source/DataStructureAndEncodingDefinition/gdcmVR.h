@@ -106,6 +106,7 @@ public:
   int GetLength() const {
     return VR::GetLength(VRField);
   }
+  unsigned int GetSizeof() const;
   static uint32_t GetLength(VRType vr) { 
     //if( vr == VR::INVALID ) return 4;
     if( vr & VL32 )

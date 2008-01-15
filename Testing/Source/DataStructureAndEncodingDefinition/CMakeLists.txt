@@ -30,6 +30,7 @@ SET(DSED_TEST_SRCS
   #TestTorture
   TestElement2
   TestElement4
+  TestElement5
   TestAttribute
   )
 
