@@ -18,9 +18,8 @@
 // doc
 
 #include "gdcmTypes.h"
-//#include <string>
-//#include <vector>
-#include "gdcmDirectory.h"
+#include <string>
+#include <vector>
 
 
 namespace gdcm
@@ -30,18 +29,26 @@ namespace gdcm
 class GDCM_EXPORT FilenameGenerator
 {
 public:
-  FilenameGenerator();
-  ~FilenameGenerator();
+  FilenameGenerator() {}
+  ~FilenameGenerator() {}
+  // FIXME: already defines in gdcm::Directory
+  typedef std::string FilenameType;
+  typedef std::vector<FilenameType> FilenamesType;
 
-  void SetDirectory(const char *dirname);
-  void Order();
+  void SetPattern(const char *pattern) { Pattern = pattern; }
+  const char *GetPattern() const { return Pattern.c_str(); }
 
+  bool Generate();
+
+  void SetNumberOfFilenames(unsigned int nfiles);
   unsigned int GetNumberOfFilenames() const;
   const char * GetFilename(unsigned int n) const;
 
+  FilenamesType const & GetFilenames() const { assert( !Pattern.empty() ); return Filenames; }
+
 private:
-  //std::vector<std::string> Filenames;
-  Directory D;
+  FilenameType Pattern;
+  FilenamesType Filenames;
 };
 
 } // end namespace gdcm

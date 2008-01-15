@@ -16,31 +16,48 @@
 
 namespace gdcm
 {
-//-----------------------------------------------------------------------------
-void FilenameGenerator::SetDirectory(const char *dirname)
-{
-  //
-  D.Load(dirname, false);
-}
 
 //-----------------------------------------------------------------------------
 unsigned int FilenameGenerator::GetNumberOfFilenames() const
 {
-  //return Filenames.size();
-  return D.GetFilenames().size();
+  return Filenames.size();
+}
+
+//-----------------------------------------------------------------------------
+void FilenameGenerator::SetNumberOfFilenames(unsigned int nfiles)
+{
+  Filenames.resize( nfiles );
 }
 
 //-----------------------------------------------------------------------------
 const char * FilenameGenerator::GetFilename(unsigned int n) const
 {
-  //return Filenames[n].c_str();
-  return D.GetFilenames()[n].c_str();
+  assert( n < Filenames.size() );
+  return Filenames[n].c_str();
 }
 
 //-----------------------------------------------------------------------------
-void FilenameGenerator::Order()
+bool FilenameGenerator::Generate()
 {
-  // TODO
+  if( Pattern.empty() )
+    {
+    return false;
+    }
+  std::string::size_type len = Pattern.size();
+  char *internal = new char[len + 10]; // FIXME: 10 ??
+  const unsigned int numfiles = Filenames.size();
+  if( numfiles == 0 )
+    {
+    // I am pretty sure this is an error:
+    return false;
+    }
+  for( unsigned int i = 0; i < numfiles; ++i)
+    {
+    sprintf( internal, Pattern.c_str(), i );
+    Filenames[i] = internal;
+    }
+  delete[] internal;
+  return true;
 }
 
 } // namespace gdcm
