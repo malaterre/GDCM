@@ -51,20 +51,18 @@ public:
 
   friend std::ostream& operator<<(std::ostream &_os, const Tag &_val);
 
-/// \brief Returns the 'Group number' of the given Tag
+  /// \brief Returns the 'Group number' of the given Tag
   uint16_t GetGroup() const { return ElementTag.tags[0]; }
-/// \brief Returns the 'Element number' of the given Tag  
+  /// \brief Returns the 'Element number' of the given Tag  
   uint16_t GetElement() const { return ElementTag.tags[1]; }
-/// \brief Sets the 'Group number' of the given Tag  
+  /// \brief Sets the 'Group number' of the given Tag  
   void SetGroup(uint16_t group) { ElementTag.tags[0] = group; }
-/// \brief Sets the 'Element number' of the given Tag
+  /// \brief Sets the 'Element number' of the given Tag
   void SetElement(uint16_t element) { ElementTag.tags[1] = element; }
-/// \brief Sets the 'Group number' & 'Element number' of the given Tag
+  /// \brief Sets the 'Group number' & 'Element number' of the given Tag
   void SetElementTag(uint16_t group, uint16_t element) {
     ElementTag.tags[0] = group; ElementTag.tags[1] = element;
   }
-
-
 
   /// \brief Returns the full tag value of the given Tag
   uint32_t GetElementTag() const { 
@@ -75,7 +73,7 @@ public:
 #endif
   }
  
-/// \brief Sets the full tag value of the given Tag
+  /// \brief Sets the full tag value of the given Tag
   void SetElementTag(uint32_t tag) {
 #ifndef GDCM_WORDS_BIGENDIAN
     tag = ( (tag<<16) | (tag>>16) );
@@ -83,13 +81,13 @@ public:
     ElementTag.tag = tag;
   }
 
-// \brief Returns the Group or Element of the given Tag, depending on id (0/1)
+  // \brief Returns the Group or Element of the given Tag, depending on id (0/1)
   const uint16_t &operator[](const unsigned int &_id) const
     {
     assert(_id<2);
     return ElementTag.tags[_id];
     }
-// \brief Returns the Group or Element of the given Tag, depending on id (0/1)    
+  // \brief Returns the Group or Element of the given Tag, depending on id (0/1)    
   const uint16_t &operator[](const unsigned int &_id)
     {
     assert(_id<2);
@@ -150,7 +148,8 @@ public:
   // implementor, to communicate information that is not contained in 
   // Standard Data Elements. Private Data elements have odd Group Numbers.
   bool IsPrivate() const { return !IsPublic(); }
-//-----------------------------------------------------------------------------
+
+  //-----------------------------------------------------------------------------
   template <typename TSwap>
   std::istream &Read(std::istream &is)
     {
@@ -179,7 +178,6 @@ public:
     r.SetElement( GetElement() >> 8 );
     return r;
     }
-
 
 private:
   union { uint32_t tag; uint16_t tags[2]; char bytes[4]; } ElementTag;

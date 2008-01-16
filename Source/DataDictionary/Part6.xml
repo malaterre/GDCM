@@ -293,7 +293,7 @@ The following do not need to changed, since group 0000 cannot be present in a da
     <entry group="0018" element="0040" vr="IS" vm="1" name="Cine Rate"/>
     <entry group="0018" element="0050" vr="DS" vm="1" name="Slice Thickness"/>
     <entry group="0018" element="0060" vr="DS" vm="1" name="KVP">
-      <description>kVp</description>
+      <correction>kVp</correction>
     </entry>
     <entry group="0018" element="0070" vr="IS" vm="1" name="Counts Accumulated"/>
     <entry group="0018" element="0071" vr="CS" vm="1" name="Acquisition Termination Condition"/>

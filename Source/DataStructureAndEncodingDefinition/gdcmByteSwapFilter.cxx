@@ -48,7 +48,7 @@ bool ByteSwapFilter::ByteSwap()
     if( const ByteValue *bv = dynamic_cast<const ByteValue*>(v) )
       {
       // ASCII do not need byte swap
-      if( vr & VR::VRBINARY && de.GetTag().IsPrivate() )
+      if( vr & VR::VRBINARY /*&& de.GetTag().IsPrivate()*/ )
         {
         //assert( de.GetTag().IsPrivate() );
         switch(vr)
@@ -58,7 +58,7 @@ bool ByteSwapFilter::ByteSwap()
           break;
         case VR::FL: 
           // FIXME: Technically FL should not be byte-swapped...
-          std::cerr << "ByteSwap FL:" << de.GetTag() << std::endl;
+          //std::cerr << "ByteSwap FL:" << de.GetTag() << std::endl;
           //SwapperDoOp::SwapArray((uint32_t*)bv->GetPointer(), bv->GetLength() / sizeof(uint32_t) );
           break;
         case VR::FD: 
@@ -101,9 +101,9 @@ bool ByteSwapFilter::ByteSwap()
       }
     else if( const SequenceOfItems *si = dynamic_cast<const SequenceOfItems*>(v) )
       {
-      if( de.GetTag().IsPrivate() )
+      //if( de.GetTag().IsPrivate() )
         {
-        std::cerr << "ByteSwap SQ:" << de.GetTag() << std::endl;
+        //std::cerr << "ByteSwap SQ:" << de.GetTag() << std::endl;
         SequenceOfItems::ConstIterator it = si->Begin();
         for( ; it != si->End(); ++it)
           {
