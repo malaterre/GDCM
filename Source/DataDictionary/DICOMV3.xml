@@ -5,7 +5,10 @@ This file was generated using the following commands:
 
   $ xsltproc PartToGDCM.xsl Part6.xml > tmp.xml
   $ xsltproc order.xsl tmp.xml > DICOMV3.xml
-    -->
+
+NOTE:
+  If anyone knows how to merge order.xsl and PartToGDCM.xsl together please drop me a note
+-->
 <!--
   Program: GDCM (Grass Root DICOM). A DICOM library
   Module:  $URL$

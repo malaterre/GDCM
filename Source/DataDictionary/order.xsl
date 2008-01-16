@@ -16,22 +16,22 @@
      PURPOSE.  See the above copyright notice for more information.
 -->
 <!-- The main template that loop over all dict/entry -->
-<xsl:template match="text()|comment()|processing-instruction()"><xsl:copy/></xsl:template>
-  <xsl:template match="/">
-<xsl:element name="dict">
-<xsl:copy-of select="dict/@*" /> 
-<xsl:apply-templates/>
-</xsl:element>
+  <xsl:template match="text()|comment()|processing-instruction()">
+    <xsl:copy/>
   </xsl:template>
-
+  <xsl:template match="/">
+    <xsl:element name="dict">
+      <xsl:copy-of select="dict/@*"/>
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
   <xsl:template match="dict">
     <xsl:for-each select="entry">
       <xsl:sort select="@group"/>
       <xsl:sort select="@element"/>
-<xsl:element name="entry">
-<xsl:copy-of select="@*" /> 
-</xsl:element>
-
+      <xsl:element name="entry">
+        <xsl:copy-of select="@*"/>
+      </xsl:element>
     </xsl:for-each>
   </xsl:template>
 </xsl:stylesheet>
