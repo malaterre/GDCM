@@ -109,19 +109,20 @@ FIXME:
 Need to handle special group length for 0000,0002,0004
 And for 50xx / 60xx
 -->
-<xsl:for-each select="//entry[generate-id() = generate-id(key('entries',@group)[1])]">
-  <xsl:if test="contains(@group,'x') = false">
-      <xsl:call-template name="do-one-entry">
-        <xsl:with-param name="count" select="0"/>
-        <xsl:with-param name="group" select="@group"/>
-        <xsl:with-param name="element" select="'0000'"/>
-        <xsl:with-param name="vr" select="'UL'"/>
-        <xsl:with-param name="vm" select="'1'"/>
-        <xsl:with-param name="retired" select="'true'"/> <!-- FIXME ?? -->
-        <xsl:with-param name="name" select="'Generic Group Length'"/>
-      </xsl:call-template>
-</xsl:if>
-</xsl:for-each>
+    <xsl:for-each select="//entry[generate-id() = generate-id(key('entries',@group)[1])]">
+      <xsl:if test="contains(@group,'x') = false">
+        <xsl:call-template name="do-one-entry">
+          <xsl:with-param name="count" select="0"/>
+          <xsl:with-param name="group" select="@group"/>
+          <xsl:with-param name="element" select="'0000'"/>
+          <xsl:with-param name="vr" select="'UL'"/>
+          <xsl:with-param name="vm" select="'1'"/>
+          <xsl:with-param name="retired" select="'true'"/>
+<!-- FIXME ?? -->
+          <xsl:with-param name="name" select="'Generic Group Length'"/>
+        </xsl:call-template>
+      </xsl:if>
+    </xsl:for-each>
     <xsl:text>
   {0xffff,0xffff,VR::INVALID,VM::VM0,0,true } // Gard
 };
@@ -150,13 +151,14 @@ void PrivateDict::LoadDefault()
   </xsl:template>
   <xsl:template name="do-group-length">
     <xsl:param name="count" select="0"/>
-    <xsl:if test="$count &lt; 65535"> <!-- 0xffff -->
+    <xsl:if test="$count &lt; 65535">
+<!-- 0xffff -->
       <xsl:variable name="group-length">
         <xsl:call-template name="printHex">
           <xsl:with-param name="number" select="$count"/>
         </xsl:call-template>
       </xsl:variable>
-      <!--xsl:call-template name="do-one-entry">
+<!--xsl:call-template name="do-one-entry">
         <xsl:with-param name="count" select="0"/>
         <xsl:with-param name="group" select="$group-length"/>
         <xsl:with-param name="element" select="'0000'"/>

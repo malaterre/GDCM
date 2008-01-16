@@ -16,13 +16,12 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 -->
-
   <xsl:include href="VM.xsl"/>
 <!-- The main template that loop over all dict/entry -->
   <xsl:template match="/">
     <xsl:text>
 // GENERATED FILE DO NOT EDIT
-// $ xsltproc TagToType.xsl DICOMV3.xml > gdcmTagToType.h
+// $ xsltproc TagToType.xsl DICOMV3.xml &gt; gdcmTagToType.h
 
 /*=========================================================================
 
