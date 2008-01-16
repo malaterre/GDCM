@@ -11,7 +11,6 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 -->
-<dicts edition="2008">
   <dict name="E.1 Registry of DICOM command elements">
     <entry group="0000" element="0000" vr="UL" vm="1" name="Command Group Length"/>
     <entry group="0000" element="0002" vr="UI" vm="1" name="Affected SOP Class UID"/>
@@ -62,4 +61,3 @@
     <entry group="0000" element="51a0" vr="CS" vm="1" name="Print" retired="true"/>
     <entry group="0000" element="51b0" vr="US" vm="1-n" name="Overlays" retired="true"/>
   </dict>
-</dicts>

@@ -12,11 +12,30 @@
      PURPOSE.  See the above copyright notice for more information.
 -->
 <!--
-Manual change:
+This file was automatically created from a docbook version of PS 3.6, which was then process by Part67.xsl
+
+Manual changes:
+1.
     (0070,0040) "Image Rotation" was declared as "Image Rotation (Retired)"
 
+2.
+    <entry group="0022" element="0032" vr="FL" vm="2-2N" name="Reference Coordinates"/>
+->
+    <entry group="0022" element="0032" vr="FL" vm="2-2n" name="Reference Coordinates"/>
+
+3.
+    <entry group="60xx" element="1200" vr="US" vm="1-n" retired="true" name="Overlays- Gray"/>
+    <entry group="60xx" element="1203" vr="US" vm="1-n" retired="true" name="Overlays- Blue"/>
+->
+    <entry group="60xx" element="1200" vr="US" vm="1-n" retired="true" name="Overlays - Gray"/>
+    <entry group="60xx" element="1203" vr="US" vm="1-n" retired="true" name="Overlays - Blue"/>
+
 -->
+<!DOCTYPE doc [
+	 <!ENTITY part7 SYSTEM "Part7.xml">
+	 ]>
 <dicts edition="2008">
+  &part7;
   <dict name="6 Registry of DICOM data elements">
     <entry group="0008" element="0001" vr="UL" vm="1" retired="true" name="Length to End"/>
     <entry group="0008" element="0005" vr="CS" vm="1-n" name="Specific Character Set"/>
@@ -997,7 +1016,7 @@ Manual change:
     <entry group="0022" element="0022" vr="SQ" vm="1" name="Right Image Sequence"/>
     <entry group="0022" element="0030" vr="FL" vm="1" name="Axial Length of the Eye"/>
     <entry group="0022" element="0031" vr="SQ" vm="1" name="Ophthalmic Frame Location Sequence"/>
-    <entry group="0022" element="0032" vr="FL" vm="2-2N" name="Reference Coordinates"/>
+    <entry group="0022" element="0032" vr="FL" vm="2-2n" name="Reference Coordinates"/>
     <entry group="0022" element="0035" vr="FL" vm="1" name="Depth Spatial Resolution"/>
     <entry group="0022" element="0036" vr="FL" vm="1" name="Maximum Depth Distortion"/>
     <entry group="0022" element="0037" vr="FL" vm="1" name="Along-scan Spatial Resolution"/>
@@ -2634,10 +2653,10 @@ Manual change:
     <entry group="60xx" element="1101" vr="US" vm="1" retired="true" name="Overlay Descriptor - Red"/>
     <entry group="60xx" element="1102" vr="US" vm="1" retired="true" name="Overlay Descriptor - Green"/>
     <entry group="60xx" element="1103" vr="US" vm="1" retired="true" name="Overlay Descriptor - Blue"/>
-    <entry group="60xx" element="1200" vr="US" vm="1-n" retired="true" name="Overlays- Gray"/>
+    <entry group="60xx" element="1200" vr="US" vm="1-n" retired="true" name="Overlays - Gray"/>
     <entry group="60xx" element="1201" vr="US" vm="1-n" retired="true" name="Overlays - Red"/>
     <entry group="60xx" element="1202" vr="US" vm="1-n" retired="true" name="Overlays - Green"/>
-    <entry group="60xx" element="1203" vr="US" vm="1-n" retired="true" name="Overlays- Blue"/>
+    <entry group="60xx" element="1203" vr="US" vm="1-n" retired="true" name="Overlays - Blue"/>
     <entry group="60xx" element="1301" vr="IS" vm="1" name="ROI Area"/>
     <entry group="60xx" element="1302" vr="DS" vm="1" name="ROI Mean"/>
     <entry group="60xx" element="1303" vr="DS" vm="1" name="ROI Standard Deviation"/>
