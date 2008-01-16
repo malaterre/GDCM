@@ -16,7 +16,7 @@ Manual change:
     (0070,0040) "Image Rotation" was declared as "Image Rotation (Retired)"
 
 -->
-<dicts edition="2007">
+<dicts edition="2008">
   <dict name="6 Registry of DICOM data elements">
     <entry group="0008" element="0001" vr="UL" vm="1" retired="true" name="Length to End"/>
     <entry group="0008" element="0005" vr="CS" vm="1-n" name="Specific Character Set"/>
