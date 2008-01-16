@@ -11,6 +11,11 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 -->
+<!--
+Manual change:
+    (0070,0040) "Image Rotation" was declared as "Image Rotation (Retired)"
+
+-->
 <dicts edition="2007">
   <dict name="6 Registry of DICOM data elements">
     <entry group="0008" element="0001" vr="UL" vm="1" retired="true" name="Length to End"/>
@@ -1626,7 +1631,7 @@
     <entry group="0070" element="0022" vr="FL" vm="2-n" name="Graphic Data"/>
     <entry group="0070" element="0023" vr="CS" vm="1" name="Graphic Type"/>
     <entry group="0070" element="0024" vr="CS" vm="1" name="Graphic Filled"/>
-    <entry group="0070" element="0040" vr="IS" vm="1" retired="true" name="Image Rotation"/>
+    <entry group="0070" element="0040" vr="IS" vm="1" retired="true" name="Image Rotation (Retired)"/>
     <entry group="0070" element="0041" vr="CS" vm="1" name="Image Horizontal Flip"/>
     <entry group="0070" element="0042" vr="US" vm="1" name="Image Rotation"/>
     <entry group="0070" element="0050" vr="US" vm="2" retired="true" name="Displayed Area Top Left Hand Corner (Trial)"/>
