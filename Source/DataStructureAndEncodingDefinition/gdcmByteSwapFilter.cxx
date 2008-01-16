@@ -48,7 +48,7 @@ bool ByteSwapFilter::ByteSwap()
     if( const ByteValue *bv = dynamic_cast<const ByteValue*>(v) )
       {
       // ASCII do not need byte swap
-      if( vr & VR::VRBINARY /*&& de.GetTag().IsPrivate()*/ )
+      if( vr & VR::VRBINARY && de.GetTag().IsPrivate() )
         {
         //assert( de.GetTag().IsPrivate() );
         switch(vr)

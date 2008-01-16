@@ -18,6 +18,12 @@
 
 #include "gdcmDataElement.h"
 #include "gdcmDataSet.h"
+#include "gdcmParseException.h"
+#include "gdcmSwapper.h"
+
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+#include "gdcmByteSwapFilter.h"
+#endif
 
 namespace gdcm
 {
@@ -102,20 +108,71 @@ std::istream &Read(std::istream &is)
     throw Exception("Should not happen");
     return is;
     }
-  assert ( TagField == Tag(0xfffe, 0xe000)
-        || TagField == Tag(0xfffe, 0xe0dd) 
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-        || TagField == Tag(0xfeff, 0x00e0)
-        || TagField == Tag(0x3f3f, 0x3f00)
-#endif
-  );
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-  // TODO FIXME: should not change value on the fly, only at write time
-  if( TagField == Tag(0xfeff, 0x00e0) ) 
+  if( TagField == Tag(0xfeff, 0x00e0)
+   || TagField == Tag(0xfeff, 0xdde0) )
     {
-    gdcmDebugMacro( "FIXME" );
-    TagField = Tag(0xfffe, 0xe000);
+    gdcmWarningMacro( "ByteSwaping Private SQ: " << TagField );
+    if( TagField == Tag(0xfeff, 0x00e0) )
+      {
+      TagField = Tag(0xfffe, 0xe000);
+      }
+    if( TagField == Tag(0xfeff, 0xdde0) )
+      {
+      TagField = Tag(0xfffe, 0xe0dd);
+      }
+    assert ( TagField == Tag(0xfffe, 0xe000)
+      || TagField == Tag(0xfffe, 0xe0dd) );
+
+    if( !ValueLengthField.Read<SwapperDoOp>(is) )
+      {
+      assert(0 && "Should not happen");
+      return is;
+      }
+    // Self
+    // Some file written by GDCM 1.0 we writting 0xFFFFFFFF instead of 0x0
+    if( TagField == Tag(0xfffe,0xe0dd) )
+      {
+      if( ValueLengthField )
+        {
+        gdcmErrorMacro( "ValueLengthField is not 0" );
+        gdcmDebugMacro( "FIXME" ); // should not change the value at read time
+        ValueLengthField = 0; // FIXME should not set value inplace
+        }
+      }
+    else if( ValueLengthField == 0 )
+      {
+      assert( TagField == Tag( 0xfffe, 0xe0dd)
+        /* || TagField == Tag( 0xfffe, 0xe000)*/ );
+      if( TagField != Tag( 0xfffe, 0xe0dd) )
+        {
+        gdcmErrorMacro( "SQ: " << TagField << " has a length of 0" );
+        }
+      }
+    else if( ValueLengthField.IsUndefined() )
+      {
+      DataSet &nested = NestedDataSet;
+      nested.Clear();
+      assert( nested.IsEmpty() );
+      nested.template ReadNested<TDE,SwapperDoOp>(is);
+        ByteSwapFilter bsf(nested);
+        bsf.ByteSwap();
+
+      }
+    else /* if( ValueLengthField.IsUndefinedLength() ) */
+      {
+      DataSet &nested = NestedDataSet;
+      nested.Clear();
+      nested.template ReadWithLength<TDE,SwapperDoOp>(is, ValueLengthField);
+        ByteSwapFilter bsf(nested);
+        bsf.ByteSwap();
+
+      }
+    return is;
     }
+#else
+  assert ( TagField == Tag(0xfffe, 0xe000)
+        || TagField == Tag(0xfffe, 0xe0dd) );
 #endif
   if( !ValueLengthField.Read<TSwap>(is) )
     {

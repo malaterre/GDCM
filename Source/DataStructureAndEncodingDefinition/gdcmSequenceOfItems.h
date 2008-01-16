@@ -90,7 +90,6 @@ public:
         item.Clear();
         }
       assert( item.GetTag() == seqDelItem && item.GetVL() == 0 );
-      std::cerr << "Done reading SQ" << std::endl;
       }
     else
       {

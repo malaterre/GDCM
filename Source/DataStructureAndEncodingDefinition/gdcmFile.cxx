@@ -193,6 +193,33 @@ std::istream &File::Read(std::istream &is)
       DS.Read<UNExplicitDataElement,SwapperNoOp>(is);
       // This file can only be rewritten as implicit...
       }
+    else if ( ex.GetLastElement().GetTag() == Tag(0xfeff,0x00e0) )
+      {
+      // Famous philips where some private sequence were byteswapped !
+      // eg. PHILIPS_Intera-16-MONO2-Uncompress.dcm
+      // P.Read( is );
+      is.clear();
+      if( haspreamble )
+        {
+        is.seekg(128+4, std::ios::beg);
+        }
+      else
+        {
+        is.seekg(0, std::ios::beg);
+        }
+      if( hasmetaheader )
+        {
+        // FIXME: we are reading twice the same meta-header, we succedeed the first time...
+        // We should be able to seek to proper place instead of re-reading
+        FileMetaInformation header;
+        header.Read(is);
+        }
+
+      // 
+      gdcmWarningMacro( "Attempt to read Philips with ByteSwap private sequence wrongly encoded");
+      DS.Clear(); // remove garbage from 1st attempt...
+      abort();  // TODO FIXME
+      }
     else
       {
       // Let's try again with an ExplicitImplicitDataElement:

@@ -24,10 +24,6 @@
 #include "gdcmValueIO.h"
 #include "gdcmSwapper.h"
 
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-#include "gdcmByteSwapFilter.h"
-#endif
-
 namespace gdcm
 {
 //-----------------------------------------------------------------------------
@@ -188,7 +184,8 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     }
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+#if defined(GDCM_SUPPORT_BROKEN_IMPLEMENTATION) && 0
+  // PHILIPS_Intera-16-MONO2-Uncompress.dcm
   if( TagField == Tag(0x2001,0xe05f)
     || TagField == Tag(0x2001,0xe100)
     || TagField == Tag(0x2005,0xe080)
