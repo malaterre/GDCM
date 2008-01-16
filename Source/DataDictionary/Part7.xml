@@ -11,51 +11,55 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 -->
-<dict edition="PS 3.7">
-  <entry group="0000" element="0000" vr="UL" vm="1" retired="false" version="3" name="Group Length"/>
-  <entry group="0000" element="0002" vr="UI" vm="1" retired="false" version="3" name="Affected SOP Class UID"/>
-  <entry group="0000" element="0003" vr="UI" vm="1" retired="false" version="3" name="Requested SOP Class UID"/>
-  <entry group="0000" element="0100" vr="US" vm="1" retired="false" version="3" name="Command Field"/>
-  <entry group="0000" element="0110" vr="US" vm="1" retired="false" version="3" name="Message ID"/>
-  <entry group="0000" element="0120" vr="US" vm="1" retired="false" version="3" name="Message ID Being Responded To"/>
-  <entry group="0000" element="0600" vr="AE" vm="1" retired="false" version="3" name="Move Destination"/>
-  <entry group="0000" element="0700" vr="US" vm="1" retired="false" version="3" name="Priority"/>
-  <entry group="0000" element="0800" vr="US" vm="1" retired="false" version="3" name="Data Set Type"/>
-  <entry group="0000" element="0900" vr="US" vm="1" retired="false" version="3" name="Status"/>
-  <entry group="0000" element="0901" vr="AT" vm="1-n" retired="false" version="3" name="Offending Element"/>
-  <entry group="0000" element="0902" vr="LO" vm="1" retired="false" version="3" name="Error Comment"/>
-  <entry group="0000" element="0903" vr="US" vm="1" retired="false" version="3" name="Error ID"/>
-  <entry group="0000" element="1000" vr="UI" vm="1" retired="false" version="3" name="Affected SOP Instance UID"/>
-  <entry group="0000" element="1001" vr="UI" vm="1" retired="false" version="3" name="Requested SOP Instance UID"/>
-  <entry group="0000" element="1002" vr="US" vm="1" retired="false" version="3" name="Event Type ID"/>
-  <entry group="0000" element="1005" vr="AT" vm="1-n" retired="false" version="3" name="Attribute Identifier List"/>
-  <entry group="0000" element="1008" vr="US" vm="1" retired="false" version="3" name="Action Type ID"/>
-  <entry group="0000" element="1020" vr="US" vm="1" retired="false" version="3" name="Number of Remaining Sub-operations"/>
-  <entry group="0000" element="1021" vr="US" vm="1" retired="false" version="3" name="Number of Completed Sub-operations"/>
-  <entry group="0000" element="1022" vr="US" vm="1" retired="false" version="3" name="Number of Failed Sub-operations"/>
-  <entry group="0000" element="1023" vr="US" vm="1" retired="false" version="3" name="Number of Warning Sub-operations"/>
-  <entry group="0000" element="1030" vr="AE" vm="1" retired="false" version="3" name="Move Originator Application Entity Title"/>
-  <entry group="0000" element="1031" vr="US" vm="1" retired="false" version="3" name="Move Originator Message ID"/>
-  <entry group="0000" element="0001" vr="UL" vm="1" retired="true" version="2" name="Length to End"/>
-  <entry group="0000" element="0010" vr="CS" vm="1" retired="true" version="2" name="Recognition Code"/>
-  <entry group="0000" element="0200" vr="AE" vm="1" retired="true" version="2" name="Initiator"/>
-  <entry group="0000" element="0300" vr="AE" vm="1" retired="true" version="2" name="Receiver"/>
-  <entry group="0000" element="0400" vr="AE" vm="1" retired="true" version="2" name="Find Location"/>
-  <entry group="0000" element="0850" vr="US" vm="1" retired="true" version="2" name="Number of Matches"/>
-  <entry group="0000" element="0860" vr="US" vm="1" retired="true" version="2" name="Response Sequence Number"/>
-  <entry group="0000" element="4000" vr="AT" vm="1" retired="true" version="2" name="DIALOG Receiver"/>
-  <entry group="0000" element="4010" vr="AT" vm="1" retired="true" version="2" name="Terminal Type"/>
-  <entry group="0000" element="5010" vr="SH" vm="1" retired="true" version="3" name="Message Set ID"/>
-  <entry group="0000" element="5020" vr="SH" vm="1" retired="true" version="3" name="End Message ID"/>
-  <entry group="0000" element="5110" vr="AT" vm="1" retired="true" version="2" name="Display Format"/>
-  <entry group="0000" element="5120" vr="AT" vm="1" retired="true" version="2" name="Page Position ID"/>
-  <entry group="0000" element="5130" vr="CS" vm="1" retired="true" version="2" name="Text Format ID"/>
-  <entry group="0000" element="5140" vr="CS" vm="1" retired="true" version="2" name="Nor/Rev"/>
-  <entry group="0000" element="5150" vr="CS" vm="1" retired="true" version="2" name="Add Gray Scale"/>
-  <entry group="0000" element="5160" vr="CS" vm="1" retired="true" version="2" name="Borders"/>
-  <entry group="0000" element="5170" vr="IS" vm="1" retired="true" version="2" name="Copies"/>
-  <entry group="0000" element="5180" vr="CS" vm="1" retired="true" version="2" name="Magnification Type"/>
-  <entry group="0000" element="5190" vr="CS" vm="1" retired="true" version="2" name="Erase"/>
-  <entry group="0000" element="51a0" vr="CS" vm="1" retired="true" version="2" name="Print"/>
-  <entry group="0000" element="51b0" vr="US" vm="1-n" retired="true" version="2" name="Overlays"/>
-</dict>
+<dicts edition="2007">
+  <dict name="E.1 Registry of DICOM command elements">
+    <entry group="0000" element="0000" vr="UL" vm="1" name="Command Group Length"/>
+    <entry group="0000" element="0002" vr="UI" vm="1" name="Affected SOP Class UID"/>
+    <entry group="0000" element="0003" vr="UI" vm="1" name="Requested SOP Class UID"/>
+    <entry group="0000" element="0100" vr="US" vm="1" name="Command Field"/>
+    <entry group="0000" element="0110" vr="US" vm="1" name="Message ID"/>
+    <entry group="0000" element="0120" vr="US" vm="1" name="Message ID Being Responded To"/>
+    <entry group="0000" element="0600" vr="AE" vm="1" name="Move Destination"/>
+    <entry group="0000" element="0700" vr="US" vm="1" name="Priority"/>
+    <entry group="0000" element="0800" vr="US" vm="1" name="Data Set Type"/>
+    <entry group="0000" element="0900" vr="US" vm="1" name="Status"/>
+    <entry group="0000" element="0901" vr="AT" vm="1-n" name="Offending Element"/>
+    <entry group="0000" element="0902" vr="LO" vm="1" name="Error Comment"/>
+    <entry group="0000" element="0903" vr="US" vm="1" name="Error ID"/>
+    <entry group="0000" element="1000" vr="UI" vm="1" name="Affected SOP Instance UID"/>
+    <entry group="0000" element="1001" vr="UI" vm="1" name="Requested SOP Instance UID"/>
+    <entry group="0000" element="1002" vr="US" vm="1" name="Event Type ID"/>
+    <entry group="0000" element="1005" vr="AT" vm="1-n" name="Attribute Identifier List"/>
+    <entry group="0000" element="1008" vr="US" vm="1" name="Action Type ID"/>
+    <entry group="0000" element="1020" vr="US" vm="1" name="Number of Remaining Sub-operations"/>
+    <entry group="0000" element="1021" vr="US" vm="1" name="Number of Completed Sub-operations"/>
+    <entry group="0000" element="1022" vr="US" vm="1" name="Number of Failed Sub-operations"/>
+    <entry group="0000" element="1023" vr="US" vm="1" name="Number of Warning Sub-operations"/>
+    <entry group="0000" element="1030" vr="AE" vm="1" name="Move Originator Application Entity Title"/>
+    <entry group="0000" element="1031" vr="US" vm="1" name="Move Originator Message ID"/>
+  </dict>
+  <dict name="E.2 Retired command fields">
+    <entry group="0000" element="0001" vr="UL" vm="1" name="Length to End" retired="true"/>
+    <entry group="0000" element="0010" vr="CS" vm="1" name="Recognition Code" retired="true"/>
+    <entry group="0000" element="0200" vr="AE" vm="1" name="Initiator" retired="true"/>
+    <entry group="0000" element="0300" vr="AE" vm="1" name="Receiver" retired="true"/>
+    <entry group="0000" element="0400" vr="AE" vm="1" name="Find Location" retired="true"/>
+    <entry group="0000" element="0850" vr="US" vm="1" name="Number of Matches" retired="true"/>
+    <entry group="0000" element="0860" vr="US" vm="1" name="Response Sequence Number" retired="true"/>
+    <entry group="0000" element="4000" vr="AT" vm="1" name="DIALOG Receiver" retired="true"/>
+    <entry group="0000" element="4010" vr="AT" vm="1" name="Terminal Type" retired="true"/>
+    <entry group="0000" element="5010" vr="SH" vm="1" name="Message Set ID" retired="true"/>
+    <entry group="0000" element="5020" vr="SH" vm="1" name="End Message ID" retired="true"/>
+    <entry group="0000" element="5110" vr="AT" vm="1" name="Display Format" retired="true"/>
+    <entry group="0000" element="5120" vr="AT" vm="1" name="Page Position ID" retired="true"/>
+    <entry group="0000" element="5130" vr="CS" vm="1" name="Text Format ID" retired="true"/>
+    <entry group="0000" element="5140" vr="CS" vm="1" name="Nor/Rev" retired="true"/>
+    <entry group="0000" element="5150" vr="CS" vm="1" name="Add Gray Scale" retired="true"/>
+    <entry group="0000" element="5160" vr="CS" vm="1" name="Borders" retired="true"/>
+    <entry group="0000" element="5170" vr="IS" vm="1" name="Copies" retired="true"/>
+    <entry group="0000" element="5180" vr="CS" vm="1" name="Magnification Type" retired="true"/>
+    <entry group="0000" element="5190" vr="CS" vm="1" name="Erase" retired="true"/>
+    <entry group="0000" element="51a0" vr="CS" vm="1" name="Print" retired="true"/>
+    <entry group="0000" element="51b0" vr="US" vm="1-n" name="Overlays" retired="true"/>
+  </dict>
+</dicts>
