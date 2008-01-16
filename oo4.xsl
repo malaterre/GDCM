@@ -30,23 +30,36 @@
      PURPOSE.  See the above copyright notice for more information.
 </xsl:comment>
     <dicts edition="2007">
-      <xsl:for-each select="article/sect1/informaltable">
+      <xsl:apply-templates select="article/sect1/informaltable"/>
+      <xsl:apply-templates select="article/sect1/sect2/informaltable"/>
+    </dicts>
+  </xsl:template>
+  <xsl:template match="article/sect1/sect2/informaltable">
+    <!--xsl:message>coucou</xsl:message-->
+        <xsl:if test="tgroup/tbody/row/entry[1]/para = 'Message Field'">
+          <xsl:apply-templates select="." mode="data-elements">
+            <xsl:with-param name="title" select="preceding::title[1]"/>
+<!-- Get the table name -->
+          </xsl:apply-templates>
+        </xsl:if>
+  </xsl:template>
+  <xsl:template match="article/sect1/informaltable">
+      <!--xsl:for-each select="article/sect1/informaltable"-->
         <xsl:if test="tgroup/tbody/row/entry[1]/para = 'Tag'">
 <!-- Does the table header contains ... -->
           <xsl:apply-templates select="." mode="data-elements">
-            <xsl:with-param name="name" select="preceding::title[1]"/>
+            <xsl:with-param name="title" select="preceding::title[1]"/>
 <!-- Get the table name -->
           </xsl:apply-templates>
         </xsl:if>
         <xsl:if test="tgroup/tbody/row/entry[1]/para = 'UID Value'">
 <!-- Does the table header contains ... -->
           <xsl:apply-templates select="." mode="uid">
-            <xsl:with-param name="name" select="preceding::para[1]"/>
+            <xsl:with-param name="title" select="preceding::para[1]"/>
 <!-- Get the table name -->
           </xsl:apply-templates>
         </xsl:if>
-      </xsl:for-each>
-    </dicts>
+      <!--/xsl:for-each-->
   </xsl:template>
 <!--
 
@@ -55,6 +68,27 @@ template for a row in data-elements mode. Should be:
   Tag | Name | VR | VM | (RET)?
 
 -->
+  <xsl:template match="row" mode="data-elements-part7">
+    <xsl:param name="retired" select="0"/>
+    <xsl:if test="entry[1]/para != 'Message Field'">
+          <xsl:variable name="tag_value" select="translate(entry[2]/para,'ABCDEF','abcdef')"/>
+          <xsl:variable name="group_value" select="substring-after(substring-before($tag_value,','), '(')"/>
+          <xsl:variable name="element_value" select="substring-after(substring-before($tag_value,')'), ',')"/>
+<xsl:variable name="vr">
+        <xsl:call-template name="process-vr">
+          <xsl:with-param name="text" select="normalize-space(entry[3]/para)"/>
+        </xsl:call-template>
+</xsl:variable>
+          <xsl:variable name="vm" select="normalize-space(entry[4]/para)"/>
+          <xsl:variable name="name" select="normalize-space(entry[1]/para)"/>
+            <entry group="{$group_value}" element="{$element_value}" vr="{$vr}" vm="{$vm}" name="{$name}">
+              <xsl:if test="$retired = 1">
+              <xsl:attribute name="retired">true</xsl:attribute>
+</xsl:if>
+            </entry>
+    </xsl:if>
+  </xsl:template>
+
   <xsl:template match="row" mode="data-elements">
     <xsl:if test="entry[1]/para != 'Tag'">
 <!-- skip the table header -->
@@ -68,7 +102,7 @@ template for a row in data-elements mode. Should be:
         </xsl:call-template>
 </xsl:variable>
           <xsl:if test="$group_value != '' and $element_value != ''">
-            <entry group="{ $group_value }" element="{ $element_value }" vr="{ $vr }" vm="{normalize-space(entry[4]/para)}" retired="{ entry[5]/para = 'RET' }" version="3">
+            <xsl:variable name="name">
               <xsl:variable name="desc_value" select="normalize-space(entry[2]/para)"/>
               <xsl:if test="$desc_value != ''">
                 <description>
@@ -78,6 +112,8 @@ template for a row in data-elements mode. Should be:
                   <xsl:value-of select="translate($desc_value,$single_quote1,$single_quote2)"/>
                 </description>
               </xsl:if>
+            </xsl:variable>
+            <entry group="{ $group_value }" element="{ $element_value }" vr="{ $vr }" vm="{normalize-space(entry[4]/para)}" retired="{ entry[5]/para = 'RET' }" name="{$name}">
 <!--
               <xsl:if test="entry[3]/para != '' and entry[4]/para != ''">
                 <representations>
@@ -133,19 +169,29 @@ template for a row in Frame of Reference mode. Should be:
 template to split table into two cases: UIDs or Normative Reference:
 -->
   <xsl:template match="informaltable" mode="data-elements">
-    <xsl:param name="name"/>
-    <dict name="{$name}">
+    <xsl:param name="title"/>
+    <dict name="{$title}">
       <xsl:choose>
       <xsl:when test="tgroup/tbody/row/entry[3]/para = 'VR'">
-        <xsl:apply-templates select="tgroup/tbody/row" mode="data-elements"/>
+        <xsl:choose>
+        <xsl:when test="tgroup/tbody/row/entry[1]/para = 'Message Field'">
+          <xsl:variable name="retval" select="contains($title,'Retired')"/>
+          <xsl:apply-templates select="tgroup/tbody/row" mode="data-elements-part7">
+            <xsl:with-param name="retired" select="$retval"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="tgroup/tbody/row" mode="data-elements"/>
+        </xsl:otherwise>
+        </xsl:choose>
       </xsl:when>
       </xsl:choose>
     </dict>
   </xsl:template>
 
   <xsl:template match="informaltable" mode="uid">
-    <xsl:param name="name"/>
-    <table name="{$name}">
+    <xsl:param name="title"/>
+    <table name="{$title}">
       <xsl:choose>
       <xsl:when test="tgroup/tbody/row/entry[3]/para = 'Normative Reference'">
         <xsl:apply-templates select="tgroup/tbody/row" mode="frameref"/>
@@ -154,7 +200,7 @@ template to split table into two cases: UIDs or Normative Reference:
         <xsl:apply-templates select="tgroup/tbody/row" mode="uid"/>
       </xsl:when>
         <xsl:otherwise>
-          <xsl:message>Unhandled <xsl:value-of select="$name"/></xsl:message>
+          <xsl:message>Unhandled <xsl:value-of select="$title"/></xsl:message>
         </xsl:otherwise>
       </xsl:choose>
     </table>
