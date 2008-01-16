@@ -43,6 +43,8 @@ class GDCM_EXPORT Dict
 {
 public:
   typedef std::map<Tag, DictEntry> MapDictEntry;
+  typedef MapDictEntry::iterator Iterator;
+  typedef MapDictEntry::const_iterator ConstIterator;
   //static DictEntry GroupLengthDictEntry; // = DictEntry("Group Length",VR::UL,VM::VM1);
 
   Dict():DictInternal() {
@@ -50,6 +52,9 @@ public:
   }
 
   friend std::ostream& operator<<(std::ostream& _os, const Dict &_val);
+
+  ConstIterator Begin() const { return DictInternal.begin(); }
+  ConstIterator End() const { return DictInternal.end(); }
 
   bool IsEmpty() const { return DictInternal.empty(); }
   void AddDictEntry(const Tag &tag, const DictEntry &de)
