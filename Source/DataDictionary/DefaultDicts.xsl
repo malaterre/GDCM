@@ -99,7 +99,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:message>Problem with element:(<xsl:value-of select="$group"/>,<xsl:value-of select="$element"/>)
+          <xsl:message>Problem with element:(<xsl:value-of select="@group"/>,<xsl:value-of select="@element"/>)
 </xsl:message>
         </xsl:otherwise>
       </xsl:choose>

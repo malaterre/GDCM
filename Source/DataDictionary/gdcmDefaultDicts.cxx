@@ -12248,8 +12248,6 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0xfffe,0xe000,VR::INVALID,VM::VM1,"Item",false },
   {0xfffe,0xe00d,VR::INVALID,VM::VM1,"Item Delimitation Item",false },
   {0xfffe,0xe0dd,VR::INVALID,VM::VM1,"Sequence Delimitation Item",false },
-  {0x0000,0x0000,VR::UL,VM::VM1,"Generic Group Length",true },
-  {0x0002,0x0000,VR::UL,VM::VM1,"Generic Group Length",true },
   {0x0004,0x0000,VR::UL,VM::VM1,"Generic Group Length",true },
   {0x0008,0x0000,VR::UL,VM::VM1,"Generic Group Length",true },
   {0x0010,0x0000,VR::UL,VM::VM1,"Generic Group Length",true },
