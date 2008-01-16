@@ -5,10 +5,7 @@ This file was generated using the following commands:
 
   $ xsltproc PartToGDCM.xsl Part6.xml > tmp.xml
   $ xsltproc order.xsl tmp.xml > DICOMV3.xml
-
-NOTE:
-  If anyone knows how to merge order.xsl and PartToGDCM.xsl together please drop me a note
--->
+    -->
 <!--
   Program: GDCM (Grass Root DICOM). A DICOM library
   Module:  $URL$
@@ -63,7 +60,7 @@ NOTE:
   <entry group="0000" element="5150" vr="CS" vm="1" name="Add Gray Scale" retired="true"/>
   <entry group="0000" element="5160" vr="CS" vm="1" name="Borders" retired="true"/>
   <entry group="0000" element="5170" vr="IS" vm="1" name="Copies" retired="true"/>
-  <entry group="0000" element="5180" vr="CS" vm="1" name="Magnification Type" retired="true"/>
+  <entry group="0000" element="5180" vr="CS" vm="1" name="Magnification Type (Retired)" retired="true"/>
   <entry group="0000" element="5190" vr="CS" vm="1" name="Erase" retired="true"/>
   <entry group="0000" element="51a0" vr="CS" vm="1" name="Print" retired="true"/>
   <entry group="0000" element="51b0" vr="US" vm="1-n" name="Overlays" retired="true"/>
@@ -96,7 +93,7 @@ NOTE:
   <entry group="0004" element="1512" vr="UI" vm="1" name="Referenced Transfer Syntax UID in File"/>
   <entry group="0004" element="151a" vr="UI" vm="1-n" name="Referenced Related General SOP Class UID in File"/>
   <entry group="0004" element="1600" vr="UL" vm="1" retired="true" name="Number of References"/>
-  <entry group="0008" element="0001" vr="UL" vm="1" retired="true" name="Length to End"/>
+  <entry group="0008" element="0001" vr="UL" vm="1" retired="true" name="Length to End 0008"/>
   <entry group="0008" element="0005" vr="CS" vm="1-n" name="Specific Character Set"/>
   <entry group="0008" element="0008" vr="CS" vm="2-n" name="Image Type"/>
   <entry group="0008" element="0010" vr="CS" vm="1" retired="true" name="Recognition Code"/>
@@ -120,7 +117,7 @@ NOTE:
   <entry group="0008" element="0033" vr="TM" vm="1" name="Content Time"/>
   <entry group="0008" element="0034" vr="TM" vm="1" retired="true" name="Overlay Time"/>
   <entry group="0008" element="0035" vr="TM" vm="1" retired="true" name="Curve Time"/>
-  <entry group="0008" element="0040" vr="US" vm="1" retired="true" name="Data Set Type"/>
+  <entry group="0008" element="0040" vr="US" vm="1" retired="true" name="Data Set Type (Retired)"/>
   <entry group="0008" element="0041" vr="LO" vm="1" retired="true" name="Data Set Subtype"/>
   <entry group="0008" element="0042" vr="CS" vm="1" retired="true" name="Nuclear Medicine Series Type"/>
   <entry group="0008" element="0050" vr="SH" vm="1" name="Accession Number"/>
