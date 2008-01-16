@@ -121,7 +121,7 @@ generating group length for arbitrary even group number seems to get my xsltproc
           <xsl:with-param name="vm" select="'1'"/>
           <xsl:with-param name="retired" select="'true'"/>
 <!-- FIXME ?? -->
-          <xsl:with-param name="name" select="'Generic Group Length'"/>
+          <xsl:with-param name="name" select="concat('Group Length ',@group)"/>
         </xsl:call-template>
       </xsl:if>
     </xsl:for-each>
