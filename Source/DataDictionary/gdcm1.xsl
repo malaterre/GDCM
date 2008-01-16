@@ -17,7 +17,8 @@
 -->
 <!-- The main template that loop over all dict/entry -->
   <xsl:template match="/">
-    <xsl:for-each select="dict/entry">
+    <xsl:for-each select="dicts/dict/entry">
+      <xsl:sort select="@group"/>
       <xsl:value-of select="translate(@group,'x','0')"/>
       <xsl:text> </xsl:text>
       <xsl:value-of select="translate(@element,'x','0')"/>
@@ -26,7 +27,7 @@
       <xsl:text> </xsl:text>
       <xsl:value-of select="@vm"/>
       <xsl:text> </xsl:text>
-      <xsl:value-of select="description"/>
+      <xsl:value-of select="@name"/>
       <!--<xsl:if test="@retired = &quot;true&quot;">-->
       <xsl:if test="@retired != &quot;false&quot;">
         <xsl:text> (RET)</xsl:text>
