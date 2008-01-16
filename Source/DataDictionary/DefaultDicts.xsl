@@ -104,13 +104,15 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
         </xsl:otherwise>
       </xsl:choose>
     </xsl:for-each>
-<!--
-FIXME:
-Need to handle special group length for 0000,0002,0004
-And for 50xx / 60xx
--->
     <xsl:for-each select="//entry[generate-id() = generate-id(key('entries',@group)[1])]">
-      <xsl:if test="contains(@group,'x') = false">
+<!--
+Note: We need to produce generic group length for all known groups but 0000 and 0002 since they have there own
+already
+
+Implementation note:
+generating group length for arbitrary even group number seems to get my xsltproc on its knees
+-->
+      <xsl:if test="contains(@group,'x') = false and @group!='0000' and @group!='0002'">
         <xsl:call-template name="do-one-entry">
           <xsl:with-param name="count" select="0"/>
           <xsl:with-param name="group" select="@group"/>
