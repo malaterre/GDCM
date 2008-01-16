@@ -222,12 +222,14 @@ template to split table into two cases: UIDs or Normative Reference:
       <xsl:choose>
         <xsl:when test="tgroup/tbody/row/entry[3]/para = 'VR'">
           <xsl:choose>
+            <!-- PS 3.7 -->
             <xsl:when test="tgroup/tbody/row/entry[1]/para = 'Message Field'">
               <xsl:variable name="retval" select="contains($title,'Retired')"/>
               <xsl:apply-templates select="tgroup/tbody/row" mode="data-elements-part7">
                 <xsl:with-param name="retired" select="$retval"/>
               </xsl:apply-templates>
             </xsl:when>
+            <!-- PS 3.6 -->
             <xsl:otherwise>
               <xsl:apply-templates select="tgroup/tbody/row" mode="data-elements"/>
             </xsl:otherwise>

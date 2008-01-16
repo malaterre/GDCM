@@ -87,7 +87,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
             <xsl:with-param name="name" select="@name"/>
           </xsl:call-template>
         </xsl:when>
-        <xsl:when test="substring(@group,3) != 'xx' and substring(@element,3) != 'xx' ">
+        <xsl:when test="contains(@group,'x') = false and contains(@element,'x') = false">
           <xsl:call-template name="do-one-entry">
             <xsl:with-param name="count" select="255"/>
             <xsl:with-param name="group" select="@group"/>
@@ -99,7 +99,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:message>PROBLEM:(<xsl:value-of select="$group"/>,<xsl:value-of select="$element"/>)
+          <xsl:message>Problem with element:(<xsl:value-of select="$group"/>,<xsl:value-of select="$element"/>)
 </xsl:message>
         </xsl:otherwise>
       </xsl:choose>
@@ -110,6 +110,7 @@ Need to handle special group length for 0000,0002,0004
 And for 50xx / 60xx
 -->
 <xsl:for-each select="//entry[generate-id() = generate-id(key('entries',@group)[1])]">
+  <xsl:if test="contains(@group,'x') = false">
       <xsl:call-template name="do-one-entry">
         <xsl:with-param name="count" select="0"/>
         <xsl:with-param name="group" select="@group"/>
@@ -119,7 +120,7 @@ And for 50xx / 60xx
         <xsl:with-param name="retired" select="'true'"/> <!-- FIXME ?? -->
         <xsl:with-param name="name" select="'Generic Group Length'"/>
       </xsl:call-template>
-
+</xsl:if>
 </xsl:for-each>
     <xsl:text>
   {0xffff,0xffff,VR::INVALID,VM::VM0,0,true } // Gard
