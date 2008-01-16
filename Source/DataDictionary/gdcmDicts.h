@@ -44,6 +44,8 @@ public:
 
   const PrivateDict &GetPrivateDict() const;
 
+  bool IsEmpty() const { return GetPublicDict().IsEmpty(); }
+
 protected:
   typedef enum {
     PHILIPS,

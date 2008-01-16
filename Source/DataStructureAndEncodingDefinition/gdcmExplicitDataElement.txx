@@ -24,6 +24,10 @@
 #include "gdcmValueIO.h"
 #include "gdcmSwapper.h"
 
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+#include "gdcmByteSwapFilter.h"
+#endif
+
 namespace gdcm
 {
 //-----------------------------------------------------------------------------
@@ -198,12 +202,23 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     {
     gdcmWarningMacro( "ByteSwaping Private SQ: " << TagField );
     assert( VRField == VR::SQ );
+    assert( TagField.IsPrivate() );
     try
       {
-//abort(); // When are we doing the byte swapping !!!
       if( !ValueIO<ExplicitDataElement,SwapperDoOp>::Read(is,*ValueField) )
         {
         assert(0 && "Should not happen");
+        }
+      Value* v = &*ValueField;
+      SequenceOfItems *sq = dynamic_cast<SequenceOfItems*>(v);
+      assert( sq );
+      SequenceOfItems::Iterator it = sq->Begin();
+      for( ; it != sq->End(); ++it)
+        {
+        Item &item = *it;
+        DataSet &ds = item.GetNestedDataSet();
+        ByteSwapFilter bsf(ds);
+        bsf.ByteSwap();
         }
       }
     catch( std::exception &ex )

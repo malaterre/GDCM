@@ -36,8 +36,6 @@ Global::Global()
     {
     assert( Internals == NULL ); // paranoid
     Internals = new GlobalInternal;
-    // Fill in with default values:
-    Internals->GlobalDicts.LoadDefaults();
     }
 }
 
@@ -53,6 +51,11 @@ Global::~Global()
 
 Dicts const &Global::GetDicts() const
 {
+  if( Internals->GlobalDicts.IsEmpty() )
+    {
+    // Fill in with default values:
+    Internals->GlobalDicts.LoadDefaults();
+    }
   return Internals->GlobalDicts;
 }
 

@@ -2,6 +2,7 @@
 # DSED
 SET(DSED_SRCS
   gdcmDataSet.cxx
+  gdcmByteSwapFilter.cxx
   gdcmExplicitDataElement.cxx
   gdcmFileMetaInformation.cxx
   gdcmFragment.cxx

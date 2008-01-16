@@ -41,6 +41,12 @@ class GDCM_EXPORT SequenceOfItems : public Value
 public:
   // Typdefs:
   typedef std::vector< Item > ItemVector;
+  typedef ItemVector::iterator Iterator;
+  typedef ItemVector::const_iterator ConstIterator;
+  Iterator Begin() { return Items.begin(); }
+  Iterator End() { return Items.end(); }
+  ConstIterator Begin() const { return Items.begin(); }
+  ConstIterator End() const { return Items.end(); }
 
 /// \brief constructor (UndefinedLength by default)
   //SequenceOfItems(VL const &vl = 0xFFFFFFFF):SequenceLengthField(vl),NType(type) { }
@@ -79,7 +85,9 @@ public:
       while( item.Read<TDE,TSwap>(is) && item.GetTag() != seqDelItem )
         {
         //gdcmDebugMacro( "Item: " << item );
+        assert( item.GetTag() != seqDelItem );
         Items.push_back( item );
+        item.Clear();
         }
       assert( item.GetTag() == seqDelItem && item.GetVL() == 0 );
       std::cerr << "Done reading SQ" << std::endl;

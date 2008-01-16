@@ -46,7 +46,7 @@ namespace gdcm
  */
 class GlobalInternal;
 class Dicts;
-class GDCM_EXPORT Global // why expose the symbol ??
+class GDCM_EXPORT Global // why expose the symbol I think I only need to expose the instance...
 {
 public:
   Global();
