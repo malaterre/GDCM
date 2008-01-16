@@ -17,9 +17,12 @@ This file was automatically created from a docbook version of PS 3.6, which was 
 Manual changes:
 1.
     (0070,0040) "Image Rotation" was declared as "Image Rotation (Retired)"
-    (0000,5180) "Magnification Type" -> "Magnification Type (Retired)"
-    (0008,0001) "Length to End" -> "Length to End 0008"
-    (0008,0040) "Data Set Type" -> "Data Set Type (Retired)"
+
+The following do not need to changed, since group 0000 cannot be present in a dataset
+    (0008,0040) "Data Set Type" -> (0000,0800) "Data Set Type"
+    (0000,5180) "Magnification Type" -> (2010,0060) "Magnification Type"
+    (0008,0001) "Length to End" <-> (0000,0001) "Length to End"
+    (0008,0010) "Recognition Code" <-> (0000,0010) "Recognition Code"
 
 
 2.
@@ -41,7 +44,7 @@ Manual changes:
 <dicts edition="2008">
   &part7;
   <dict name="6 Registry of DICOM data elements">
-    <entry group="0008" element="0001" vr="UL" vm="1" retired="true" name="Length to End 0008"/>
+    <entry group="0008" element="0001" vr="UL" vm="1" retired="true" name="Length to End"/>
     <entry group="0008" element="0005" vr="CS" vm="1-n" name="Specific Character Set"/>
     <entry group="0008" element="0008" vr="CS" vm="2-n" name="Image Type"/>
     <entry group="0008" element="0010" vr="CS" vm="1" retired="true" name="Recognition Code"/>
@@ -65,7 +68,7 @@ Manual changes:
     <entry group="0008" element="0033" vr="TM" vm="1" name="Content Time"/>
     <entry group="0008" element="0034" vr="TM" vm="1" retired="true" name="Overlay Time"/>
     <entry group="0008" element="0035" vr="TM" vm="1" retired="true" name="Curve Time"/>
-    <entry group="0008" element="0040" vr="US" vm="1" retired="true" name="Data Set Type (Retired)"/>
+    <entry group="0008" element="0040" vr="US" vm="1" retired="true" name="Data Set Type"/>
     <entry group="0008" element="0041" vr="LO" vm="1" retired="true" name="Data Set Subtype"/>
     <entry group="0008" element="0042" vr="CS" vm="1" retired="true" name="Nuclear Medicine Series Type"/>
     <entry group="0008" element="0050" vr="SH" vm="1" name="Accession Number"/>

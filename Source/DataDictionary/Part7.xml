@@ -56,7 +56,7 @@
     <entry group="0000" element="5150" vr="CS" vm="1" name="Add Gray Scale" retired="true"/>
     <entry group="0000" element="5160" vr="CS" vm="1" name="Borders" retired="true"/>
     <entry group="0000" element="5170" vr="IS" vm="1" name="Copies" retired="true"/>
-    <entry group="0000" element="5180" vr="CS" vm="1" name="Magnification Type (Retired)" retired="true"/>
+    <entry group="0000" element="5180" vr="CS" vm="1" name="Magnification Type" retired="true"/>
     <entry group="0000" element="5190" vr="CS" vm="1" name="Erase" retired="true"/>
     <entry group="0000" element="51a0" vr="CS" vm="1" name="Print" retired="true"/>
     <entry group="0000" element="51b0" vr="US" vm="1-n" name="Overlays" retired="true"/>

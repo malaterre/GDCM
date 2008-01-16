@@ -96,7 +96,7 @@ This file was generated using the following commands:
   <entry group="0008" element="0001" vr="UL" vm="1" retired="true" name="Length to End 0008"/>
   <entry group="0008" element="0005" vr="CS" vm="1-n" name="Specific Character Set"/>
   <entry group="0008" element="0008" vr="CS" vm="2-n" name="Image Type"/>
-  <entry group="0008" element="0010" vr="CS" vm="1" retired="true" name="Recognition Code"/>
+  <entry group="0008" element="0010" vr="CS" vm="1" retired="true" name="Recognition Code 0008"/>
   <entry group="0008" element="0012" vr="DA" vm="1" name="Instance Creation Date"/>
   <entry group="0008" element="0013" vr="TM" vm="1" name="Instance Creation Time"/>
   <entry group="0008" element="0014" vr="UI" vm="1" name="Instance Creator UID"/>
