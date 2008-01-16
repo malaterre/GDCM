@@ -80,9 +80,15 @@ template for a row in data-elements mode. Should be:
       </xsl:variable>
       <xsl:variable name="vm" select="normalize-space(entry[4]/para)"/>
       <xsl:variable name="name" select="normalize-space(entry[1]/para)"/>
+      <xsl:variable name="description" select="entry[5]"/>
       <entry group="{$group_value}" element="{$element_value}" vr="{$vr}" vm="{$vm}" name="{$name}">
         <xsl:if test="$retired = 1">
           <xsl:attribute name="retired">true</xsl:attribute>
+        </xsl:if>
+        <xsl:if test="$description">
+          <xsl:element name="description">
+            <xsl:value-of select="$description"/>
+          </xsl:element>
         </xsl:if>
       </entry>
     </xsl:if>
