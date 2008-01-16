@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<dict edition="2008">
 <!--
 This file was generated using the following commands:
 
   $ xsltproc PartToGDCM.xsl Part6.xml > tmp.xml
   $ xsltproc order.xsl tmp.xml > DICOMV3.xml
--->
+    -->
 <!--
   Program: GDCM (Grass Root DICOM). A DICOM library
   Module:  $URL$
@@ -17,16 +18,22 @@ This file was generated using the following commands:
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 -->
-<dict edition="2008">
   <entry group="0000" element="0000" vr="UL" vm="1" name="Command Group Length"/>
+  <entry group="0000" element="0001" vr="UL" vm="1" name="Length to End" retired="true"/>
   <entry group="0000" element="0002" vr="UI" vm="1" name="Affected SOP Class UID"/>
   <entry group="0000" element="0003" vr="UI" vm="1" name="Requested SOP Class UID"/>
+  <entry group="0000" element="0010" vr="CS" vm="1" name="Recognition Code" retired="true"/>
   <entry group="0000" element="0100" vr="US" vm="1" name="Command Field"/>
   <entry group="0000" element="0110" vr="US" vm="1" name="Message ID"/>
   <entry group="0000" element="0120" vr="US" vm="1" name="Message ID Being Responded To"/>
+  <entry group="0000" element="0200" vr="AE" vm="1" name="Initiator" retired="true"/>
+  <entry group="0000" element="0300" vr="AE" vm="1" name="Receiver" retired="true"/>
+  <entry group="0000" element="0400" vr="AE" vm="1" name="Find Location" retired="true"/>
   <entry group="0000" element="0600" vr="AE" vm="1" name="Move Destination"/>
   <entry group="0000" element="0700" vr="US" vm="1" name="Priority"/>
   <entry group="0000" element="0800" vr="US" vm="1" name="Data Set Type"/>
+  <entry group="0000" element="0850" vr="US" vm="1" name="Number of Matches" retired="true"/>
+  <entry group="0000" element="0860" vr="US" vm="1" name="Response Sequence Number" retired="true"/>
   <entry group="0000" element="0900" vr="US" vm="1" name="Status"/>
   <entry group="0000" element="0901" vr="AT" vm="1-n" name="Offending Element"/>
   <entry group="0000" element="0902" vr="LO" vm="1" name="Error Comment"/>
@@ -42,13 +49,6 @@ This file was generated using the following commands:
   <entry group="0000" element="1023" vr="US" vm="1" name="Number of Warning Sub-operations"/>
   <entry group="0000" element="1030" vr="AE" vm="1" name="Move Originator Application Entity Title"/>
   <entry group="0000" element="1031" vr="US" vm="1" name="Move Originator Message ID"/>
-  <entry group="0000" element="0001" vr="UL" vm="1" name="Length to End" retired="true"/>
-  <entry group="0000" element="0010" vr="CS" vm="1" name="Recognition Code" retired="true"/>
-  <entry group="0000" element="0200" vr="AE" vm="1" name="Initiator" retired="true"/>
-  <entry group="0000" element="0300" vr="AE" vm="1" name="Receiver" retired="true"/>
-  <entry group="0000" element="0400" vr="AE" vm="1" name="Find Location" retired="true"/>
-  <entry group="0000" element="0850" vr="US" vm="1" name="Number of Matches" retired="true"/>
-  <entry group="0000" element="0860" vr="US" vm="1" name="Response Sequence Number" retired="true"/>
   <entry group="0000" element="4000" vr="AT" vm="1" name="DIALOG Receiver" retired="true"/>
   <entry group="0000" element="4010" vr="AT" vm="1" name="Terminal Type" retired="true"/>
   <entry group="0000" element="5010" vr="SH" vm="1" name="Message Set ID" retired="true"/>
