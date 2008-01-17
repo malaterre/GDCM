@@ -1149,241 +1149,126 @@
   <entry group="7001" element="xx01" vr="OB" vm="1" owner="PATRIOT_PRIVATE_IMAGE_DATA"/>
   <entry group="7001" element="xx03" vr="UL" vm="1" owner="PATRIOT_PRIVATE_IMAGE_DATA"/>
   <entry group="2001" element="xx01" vr="FL" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx01" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx02" vr="IS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx02" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx03" vr="FL" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx03" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx04" vr="CS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx04" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx06" vr="CS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx06" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx07" vr="CS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx07" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx08" vr="IS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx08" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx09" vr="FL" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx09" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx0a" vr="IS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx0a" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx0b" vr="CS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx0b" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx0c" vr="CS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx0c" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx0e" vr="CS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx0e" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx0f" vr="SS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx0f" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx10" vr="CS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx10" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx11" vr="FL" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx11" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx12" vr="CS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx12" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx13" vr="SL" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx13" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx14" vr="SL" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx14" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx15" vr="SS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx15" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx16" vr="SS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx16" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx17" vr="SL" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx17" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx18" vr="SL" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx18" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx19" vr="CS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx19" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx1a" vr="FL" vm="3" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx1a" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx1b" vr="FL" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx1b" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx1c" vr="CS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx1c" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx1d" vr="IS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx1d" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx1e" vr="CS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx1e" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx1f" vr="CS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx1f" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx20" vr="LO" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx20" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx21" vr="CS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx21" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx22" vr="FL" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx22" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx23" vr="DS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx23" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx24" vr="CS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx24" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx25" vr="SH" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx25" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx3f" vr="CS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx3f" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx53" vr="CS" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx53" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx5f" vr="SQ" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx5f" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx60" vr="SL" vm="1" owner="PHILIPS IMAGING DD 001"/>
-  <entry group="2001" element="xx60" vr="UN" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx63" vr="CS" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="2001" element="xx6e" vr="SH" vm="1" owner="PHILIPS IMAGING DD 001"/>
   <entry group="0009" element="xx10" vr="LO" vm="1" owner="PHILIPS MR"/>
   <entry group="0009" element="xx12" vr="LO" vm="1" owner="PHILIPS MR"/>
   <entry group="2005" element="xx00" vr="FL" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx00" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx01" vr="FL" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx01" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx02" vr="FL" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx02" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx03" vr="IS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx03" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx04" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx04" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx05" vr="DS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx05" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx06" vr="UI" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx06" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx07" vr="IS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx07" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx08" vr="FL" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx08" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx09" vr="FL" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx09" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx0a" vr="FL" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx0a" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx0b" vr="FL" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx0b" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx0c" vr="FL" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx0c" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx0d" vr="FL" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx0d" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx0e" vr="FL" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx0e" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx0f" vr="DS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx0f" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx10" vr="DS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx10" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx11" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx11" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx12" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx12" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx13" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx13" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx14" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx14" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx15" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx15" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx16" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx16" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx17" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx17" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx18" vr="LO" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx18" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx19" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx19" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx1a" vr="SS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx1a" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx1b" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx1b" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx1c" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx1c" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx1d" vr="SS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx1d" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx1e" vr="SH" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx1e" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx1f" vr="SH" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx1f" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx20" vr="SL" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx20" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx21" vr="SS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx21" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx22" vr="IS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx22" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx23" vr="SS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx23" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx25" vr="SS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx25" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx26" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx26" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx27" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx27" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx28" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx28" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx29" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx29" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx2a" vr="IS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx2a" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx2b" vr="SS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx2b" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx2c" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx2c" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx2d" vr="IS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx2d" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx2e" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx2e" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx2f" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx2f" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx30" vr="FL" vm="2" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx30" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx31" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx31" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx32" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx32" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx33" vr="FL" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx33" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx34" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx34" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx35" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx35" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx36" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx36" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx37" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx37" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx38" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx38" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx39" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx39" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx3a" vr="SH" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx3a" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx3b" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx3b" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx3c" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx3c" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx3d" vr="SS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx3d" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx3e" vr="SL" vm="1-n" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx3e" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx5f" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx5f" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx60" vr="IS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx60" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx61" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx61" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx63" vr="SS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx63" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx6e" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx6e" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx6f" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx6f" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx70" vr="LO" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx70" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx80" vr="SQ" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx80" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx83" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx84" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx86" vr="SS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx86" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xx9f" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xx9f" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xxa0" vr="FL" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xxa0" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xxa1" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xxa1" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xxa2" vr="CS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xxa2" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="2005" element="xxa8" vr="DS" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
-  <entry group="2005" element="xxa8" vr="UN" vm="1" owner="PHILIPS MR IMAGING DD 001 "/>
   <entry group="0019" element="xx32" vr="US" vm="1" owner="PHILIPS MR SPECTRO;1"/>
   <entry group="0019" element="xx09" vr="DS" vm="1" owner="PHILIPS MR/LAST "/>
   <entry group="0019" element="xx0e" vr="IS" vm="1" owner="PHILIPS MR/LAST "/>
@@ -1414,11 +1299,8 @@
   <entry group="0029" element="xx83" vr="IS" vm="1" owner="PHILIPS MR/LAST "/>
   <entry group="0041" element="xx09" vr="UN" vm="1" owner="PHILIPS MR/LAST "/>
   <entry group="0019" element="xx00" vr="DS" vm="2" owner="PHILIPS MR/PART "/>
-  <entry group="0019" element="xx00" vr="IS" vm="1" owner="PHILIPS MR/PART "/>
   <entry group="0019" element="xx01" vr="DS" vm="1" owner="PHILIPS MR/PART "/>
-  <entry group="0019" element="xx01" vr="IS" vm="1-3" owner="PHILIPS MR/PART "/>
   <entry group="0019" element="xx02" vr="DS" vm="1" owner="PHILIPS MR/PART "/>
-  <entry group="0019" element="xx02" vr="IS" vm="1-n" owner="PHILIPS MR/PART "/>
   <entry group="0019" element="xx03" vr="DS" vm="1" owner="PHILIPS MR/PART "/>
   <entry group="0019" element="xx05" vr="DS" vm="1" owner="PHILIPS MR/PART "/>
   <entry group="0019" element="xx06" vr="DS" vm="1" owner="PHILIPS MR/PART "/>
@@ -1442,7 +1324,6 @@
   <entry group="0019" element="xx22" vr="DS" vm="1" owner="PHILIPS MR/PART "/>
   <entry group="0019" element="xx23" vr="DS" vm="3" owner="PHILIPS MR/PART "/>
   <entry group="0019" element="xx24" vr="DS" vm="3" owner="PHILIPS MR/PART "/>
-  <entry group="0019" element="xx24" vr="IS" vm="1" owner="PHILIPS MR/PART "/>
   <entry group="0019" element="xx25" vr="DS" vm="3" owner="PHILIPS MR/PART "/>
   <entry group="0019" element="xx26" vr="DS" vm="3" owner="PHILIPS MR/PART "/>
   <entry group="0019" element="xx27" vr="DS" vm="3" owner="PHILIPS MR/PART "/>
@@ -1452,7 +1333,6 @@
   <entry group="0019" element="xx31" vr="DS" vm="3" owner="PHILIPS MR/PART "/>
   <entry group="0019" element="xx40" vr="US" vm="1" owner="PHILIPS MR/PART "/>
   <entry group="0019" element="xx50" vr="DS" vm="1-3" owner="PHILIPS MR/PART "/>
-  <entry group="0019" element="xx50" vr="IS" vm="1" owner="PHILIPS MR/PART "/>
   <entry group="0019" element="xx51" vr="DS" vm="1-3" owner="PHILIPS MR/PART "/>
   <entry group="0019" element="xx52" vr="DS" vm="1-3" owner="PHILIPS MR/PART "/>
   <entry group="0019" element="xx53" vr="IS" vm="1-3" owner="PHILIPS MR/PART "/>
@@ -1486,7 +1366,6 @@
   <entry group="0019" element="xx92" vr="UN" vm="1" owner="PHILIPS MR/PART "/>
   <entry group="0019" element="xx93" vr="UN" vm="1" owner="PHILIPS MR/PART "/>
   <entry group="0019" element="xx94" vr="LO" vm="1" owner="PHILIPS MR/PART "/>
-  <entry group="0019" element="xx94" vr="UN" vm="1" owner="PHILIPS MR/PART "/>
   <entry group="0019" element="xx95" vr="LO" vm="1" owner="PHILIPS MR/PART "/>
   <entry group="0019" element="xx96" vr="IS" vm="1" owner="PHILIPS MR/PART "/>
   <entry group="0019" element="xx97" vr="LO" vm="1" owner="PHILIPS MR/PART "/>
@@ -1525,7 +1404,6 @@
   <entry group="0019" element="xxfc" vr="LO" vm="1" owner="PHILIPS MR/PART "/>
   <entry group="0019" element="xxfe" vr="UN" vm="1" owner="PHILIPS MR/PART "/>
   <entry group="0021" element="xx00" vr="DA" vm="1" owner="PHILIPS MR/PART "/>
-  <entry group="0021" element="xx00" vr="IS" vm="1" owner="PHILIPS MR/PART "/>
   <entry group="0021" element="xx06" vr="UI" vm="1" owner="PHILIPS MR/PART "/>
   <entry group="0021" element="xx07" vr="DT" vm="1" owner="PHILIPS MR/PART "/>
   <entry group="0021" element="xx08" vr="LO" vm="1" owner="PHILIPS MR/PART "/>
@@ -1533,7 +1411,6 @@
   <entry group="0021" element="xx0a" vr="LO" vm="1" owner="PHILIPS MR/PART "/>
   <entry group="0021" element="xx0f" vr="CS" vm="1" owner="PHILIPS MR/PART "/>
   <entry group="0021" element="xx10" vr="IS" vm="1" owner="PHILIPS MR/PART "/>
-  <entry group="0021" element="xx10" vr="TM" vm="1" owner="PHILIPS MR/PART "/>
   <entry group="0021" element="xx13" vr="LO" vm="1" owner="PHILIPS MR/PART "/>
   <entry group="0021" element="xx14" vr="LO" vm="1" owner="PHILIPS MR/PART "/>
   <entry group="0021" element="xx15" vr="US" vm="1" owner="PHILIPS MR/PART "/>
@@ -1676,7 +1553,6 @@
   <entry group="2005" element="xx2e" vr="CS" vm="1" owner="Philips MR Imaging DD 001 "/>
   <entry group="2005" element="xx2f" vr="CS" vm="1" owner="Philips MR Imaging DD 001 "/>
   <entry group="2005" element="xx30" vr="FL" vm="1" owner="Philips MR Imaging DD 001 "/>
-  <entry group="2005" element="xx30" vr="FL" vm="1-2" owner="Philips MR Imaging DD 001 "/>
   <entry group="2005" element="xx31" vr="CS" vm="1" owner="Philips MR Imaging DD 001 "/>
   <entry group="2005" element="xx32" vr="CS" vm="1" owner="Philips MR Imaging DD 001 "/>
   <entry group="2005" element="xx33" vr="FL" vm="1" owner="Philips MR Imaging DD 001 "/>
@@ -1715,129 +1591,70 @@
   <entry group="2005" element="xxb2" vr="FL" vm="1" owner="Philips MR Imaging DD 001 "/>
   <entry group="2005" element="xxc0" vr="CS" vm="1" owner="Philips MR Imaging DD 001 "/>
   <entry group="2005" element="xx34" vr="LT" vm="1" owner="Philips MR Imaging DD 002 "/>
-  <entry group="2005" element="xx34" vr="UN" vm="1" owner="Philips MR Imaging DD 002 "/>
   <entry group="2005" element="xx99" vr="UL" vm="1" owner="Philips MR Imaging DD 002 "/>
-  <entry group="2005" element="xx99" vr="UN" vm="1" owner="Philips MR Imaging DD 002 "/>
   <entry group="2005" element="xx00" vr="UL" vm="1" owner="Philips MR Imaging DD 003 "/>
-  <entry group="2005" element="xx00" vr="UN" vm="1" owner="Philips MR Imaging DD 003 "/>
   <entry group="2005" element="xx01" vr="UL" vm="1" owner="Philips MR Imaging DD 003 "/>
-  <entry group="2005" element="xx01" vr="UN" vm="1" owner="Philips MR Imaging DD 003 "/>
   <entry group="2005" element="xx13" vr="UL" vm="1" owner="Philips MR Imaging DD 003 "/>
   <entry group="2005" element="xx34" vr="SL" vm="1" owner="Philips MR Imaging DD 003 "/>
   <entry group="2005" element="xx43" vr="SS" vm="1" owner="Philips MR Imaging DD 003 "/>
-  <entry group="2005" element="xx43" vr="UN" vm="1" owner="Philips MR Imaging DD 003 "/>
   <entry group="2005" element="xx44" vr="SS" vm="1" owner="Philips MR Imaging DD 003 "/>
-  <entry group="2005" element="xx44" vr="UN" vm="1" owner="Philips MR Imaging DD 003 "/>
   <entry group="2005" element="xx45" vr="SS" vm="1" owner="Philips MR Imaging DD 003 "/>
-  <entry group="2005" element="xx45" vr="UN" vm="1" owner="Philips MR Imaging DD 003 "/>
   <entry group="2005" element="xx46" vr="SS" vm="1" owner="Philips MR Imaging DD 003 "/>
-  <entry group="2005" element="xx46" vr="UN" vm="1" owner="Philips MR Imaging DD 003 "/>
   <entry group="2005" element="xx47" vr="SS" vm="1" owner="Philips MR Imaging DD 003 "/>
-  <entry group="2005" element="xx47" vr="UN" vm="1" owner="Philips MR Imaging DD 003 "/>
   <entry group="2005" element="xx48" vr="SS" vm="1" owner="Philips MR Imaging DD 003 "/>
-  <entry group="2005" element="xx48" vr="UN" vm="1" owner="Philips MR Imaging DD 003 "/>
   <entry group="2005" element="xx49" vr="SS" vm="1" owner="Philips MR Imaging DD 003 "/>
-  <entry group="2005" element="xx49" vr="UN" vm="1" owner="Philips MR Imaging DD 003 "/>
   <entry group="2005" element="xx50" vr="SS" vm="1" owner="Philips MR Imaging DD 003 "/>
-  <entry group="2005" element="xx50" vr="UN" vm="1" owner="Philips MR Imaging DD 003 "/>
   <entry group="2005" element="xx51" vr="SS" vm="1" owner="Philips MR Imaging DD 003 "/>
-  <entry group="2005" element="xx51" vr="UN" vm="1" owner="Philips MR Imaging DD 003 "/>
   <entry group="2005" element="xx52" vr="SS" vm="1" owner="Philips MR Imaging DD 003 "/>
-  <entry group="2005" element="xx52" vr="UN" vm="1" owner="Philips MR Imaging DD 003 "/>
   <entry group="2005" element="xx53" vr="SS" vm="1" owner="Philips MR Imaging DD 003 "/>
-  <entry group="2005" element="xx53" vr="UN" vm="1" owner="Philips MR Imaging DD 003 "/>
   <entry group="2005" element="xx54" vr="SS" vm="1" owner="Philips MR Imaging DD 003 "/>
-  <entry group="2005" element="xx54" vr="UN" vm="1" owner="Philips MR Imaging DD 003 "/>
   <entry group="2005" element="xx55" vr="SS" vm="1" owner="Philips MR Imaging DD 003 "/>
-  <entry group="2005" element="xx55" vr="UN" vm="1" owner="Philips MR Imaging DD 003 "/>
   <entry group="2005" element="xx56" vr="SS" vm="1" owner="Philips MR Imaging DD 003 "/>
   <entry group="2005" element="xx57" vr="SS" vm="1" owner="Philips MR Imaging DD 003 "/>
   <entry group="2005" element="xx81" vr="UI" vm="1" owner="Philips MR Imaging DD 003 "/>
   <entry group="2005" element="xx82" vr="CS" vm="1" owner="Philips MR Imaging DD 003 "/>
   <entry group="2005" element="xx25" vr="CS" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx25" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx26" vr="FL" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx26" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx27" vr="CS" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx27" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx28" vr="CS" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx28" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx29" vr="FL" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx29" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx30" vr="CS" vm="4" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx30" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx31" vr="SS" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx31" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx33" vr="FL" vm="3" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx33" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx34" vr="CS" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx34" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx35" vr="CS" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx35" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx36" vr="FL" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx36" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx37" vr="FL" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx37" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx38" vr="FL" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx38" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx39" vr="SS" vm="2" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx39" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx40" vr="CS" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx40" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx41" vr="CS" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx41" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx42" vr="CS" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx42" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx43" vr="CS" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx43" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx44" vr="SS" vm="1-n" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx44" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx45" vr="CS" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx45" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx46" vr="CS" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx46" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx47" vr="FL" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx47" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx48" vr="CS" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx48" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx49" vr="FL" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx49" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx50" vr="FL" vm="2" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx50" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx51" vr="SS" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx51" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx52" vr="SS" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx52" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx53" vr="LO" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx53" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx54" vr="CS" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx54" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx55" vr="FL" vm="1-n" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx55" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx56" vr="CS" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx56" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx57" vr="SS" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx57" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx58" vr="LO" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx58" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx59" vr="FL" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx59" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx60" vr="FL" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx60" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx61" vr="FL" vm="2" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx61" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx62" vr="FL" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx62" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx63" vr="FL" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx63" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx64" vr="CS" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx64" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx70" vr="SS" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx70" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx71" vr="SQ" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx71" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx81" vr="IS" vm="1" owner="Philips MR Imaging DD 004 "/>
-  <entry group="2005" element="xx81" vr="UN" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx82" vr="UL" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx89" vr="SQ" vm="1" owner="Philips MR Imaging DD 004 "/>
   <entry group="2005" element="xx91" vr="PN" vm="1" owner="Philips MR Imaging DD 004 "/>
@@ -2182,13 +1999,9 @@
   <entry group="6b03" element="xx00" vr="OB" vm="1" owner="SFS1.00 "/>
   <entry group="6b03" element="xx01" vr="OB" vm="1" owner="SFS1.00 "/>
   <entry group="0019" element="xx10" vr="LO" vm="1" owner="SIEMENS CM VA0  ACQU"/>
-  <entry group="0019" element="xx10" vr="UN" vm="1" owner="SIEMENS CM VA0  ACQU"/>
   <entry group="0019" element="xx11" vr="LO" vm="1" owner="SIEMENS CM VA0  ACQU"/>
-  <entry group="0019" element="xx11" vr="UN" vm="1" owner="SIEMENS CM VA0  ACQU"/>
   <entry group="0019" element="xx12" vr="LO" vm="1" owner="SIEMENS CM VA0  ACQU"/>
-  <entry group="0019" element="xx12" vr="UN" vm="1" owner="SIEMENS CM VA0  ACQU"/>
   <entry group="0019" element="xx13" vr="LO" vm="1" owner="SIEMENS CM VA0  ACQU"/>
-  <entry group="0019" element="xx13" vr="UN" vm="1" owner="SIEMENS CM VA0  ACQU"/>
   <entry group="0019" element="xx14" vr="UN" vm="1" owner="SIEMENS CM VA0  ACQU"/>
   <entry group="0009" element="xx10" vr="CS" vm="1" owner="SIEMENS CM VA0  CMS "/>
   <entry group="0009" element="xx12" vr="UL" vm="1" owner="SIEMENS CM VA0  CMS "/>
@@ -2444,210 +2257,117 @@
   <entry group="0051" element="xx18" vr="SH" vm="1" owner="SIEMENS MR HEADER "/>
   <entry group="0051" element="xx19" vr="LO" vm="1" owner="SIEMENS MR HEADER "/>
   <entry group="0019" element="xx12" vr="DS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xx12" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx14" vr="DS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xx14" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx16" vr="DS" vm="2" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xx16" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx20" vr="DS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xx20" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx21" vr="IS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xx21" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx22" vr="DS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xx22" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx24" vr="DS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xx24" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx26" vr="DS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xx26" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx50" vr="DS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xx50" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx51" vr="DS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xx51" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx52" vr="DS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xx52" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx54" vr="DS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xx54" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx55" vr="DS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xx55" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx56" vr="IS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xx56" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx60" vr="DS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xx60" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx62" vr="DS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xx62" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx70" vr="DS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xx70" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx71" vr="DS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xx71" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx72" vr="DS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xx72" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx80" vr="DS" vm="3" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xx80" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx82" vr="DS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xx82" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx90" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx91" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx92" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xxa0" vr="IS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xxa0" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xxa2" vr="DS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xxa2" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xxa5" vr="DS" vm="3" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xxa5" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xxa6" vr="DS" vm="3" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xxa6" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xxb0" vr="UL" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xxb0" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xxc1" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xxc2" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xxc3" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xxc4" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xxc5" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xxd1" vr="DS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xxd1" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xxd2" vr="CS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xxd2" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xxd3" vr="DS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xxd3" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xxd4" vr="IS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xxd4" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xxd5" vr="IS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xxd5" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xxd6" vr="IS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xxd6" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xxd7" vr="IS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xxd7" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xxd8" vr="IS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xxd8" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xxd9" vr="IS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xxd9" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xxda" vr="CS" vm="1" owner="SIEMENS MR VA0  COAD"/>
-  <entry group="0019" element="xxda" vr="UN" vm="1" owner="SIEMENS MR VA0  COAD"/>
   <entry group="0019" element="xx10" vr="DS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx10" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx11" vr="DS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx11" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx12" vr="DS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx12" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx13" vr="DS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx13" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx14" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx14" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx16" vr="UL" vm="2" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx16" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx18" vr="UL" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx18" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx20" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx20" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx21" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx21" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx26" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx26" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx28" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx28" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx30" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx30" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx31" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx31" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx40" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx40" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx41" vr="UL" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx41" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx42" vr="UL" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx42" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx43" vr="IS" vm="16" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx43" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx44" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx45" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx45" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx46" vr="UL" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx46" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx50" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx50" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx60" vr="DS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx60" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx70" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx70" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx81" vr="CS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx81" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx82" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx83" vr="CS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx83" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx85" vr="CS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx85" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx87" vr="CS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx87" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx88" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx90" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx90" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx91" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx92" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx93" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx94" vr="DS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx94" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx96" vr="UL" vm="3" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx96" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx97" vr="UL" vm="2" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx97" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xx98" vr="DS" vm="3" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0019" element="xx98" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xxa0" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0019" element="xxa1" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0021" element="xx22" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0021" element="xx22" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0021" element="xx24" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0021" element="xx24" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0021" element="xx30" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0021" element="xx30" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0021" element="xx31" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0021" element="xx31" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0021" element="xx34" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0021" element="xx34" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0021" element="xx36" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0021" element="xx36" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0021" element="xx39" vr="DS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0021" element="xx39" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0021" element="xx40" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0021" element="xx40" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0021" element="xx41" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0021" element="xx41" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0021" element="xx42" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0021" element="xx42" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0021" element="xx43" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0021" element="xx43" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0021" element="xx44" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0021" element="xx4f" vr="CS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0021" element="xx4f" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0021" element="xx50" vr="UL" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0021" element="xx50" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0021" element="xx56" vr="DS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0021" element="xx56" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0021" element="xx70" vr="IS" vm="1" owner="SIEMENS MR VA0  GEN "/>
-  <entry group="0021" element="xx70" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0021" element="xx91" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0021" element="xx92" vr="UN" vm="1" owner="SIEMENS MR VA0  GEN "/>
   <entry group="0021" element="xx00" vr="CS" vm="1" owner="SIEMENS MR VA0  RAW "/>
-  <entry group="0021" element="xx00" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW "/>
   <entry group="0021" element="xx01" vr="IS" vm="1" owner="SIEMENS MR VA0  RAW "/>
-  <entry group="0021" element="xx01" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW "/>
   <entry group="0021" element="xx02" vr="IS" vm="1" owner="SIEMENS MR VA0  RAW "/>
-  <entry group="0021" element="xx02" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW "/>
   <entry group="0021" element="xx03" vr="DS" vm="1" owner="SIEMENS MR VA0  RAW "/>
-  <entry group="0021" element="xx03" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW "/>
   <entry group="0021" element="xx04" vr="DS" vm="3" owner="SIEMENS MR VA0  RAW "/>
-  <entry group="0021" element="xx04" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW "/>
   <entry group="0021" element="xx05" vr="DS" vm="3" owner="SIEMENS MR VA0  RAW "/>
-  <entry group="0021" element="xx05" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW "/>
   <entry group="0021" element="xx06" vr="IS" vm="3" owner="SIEMENS MR VA0  RAW "/>
-  <entry group="0021" element="xx06" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW "/>
   <entry group="0021" element="xx07" vr="IS" vm="3" owner="SIEMENS MR VA0  RAW "/>
-  <entry group="0021" element="xx07" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW "/>
   <entry group="0021" element="xx08" vr="DS" vm="3" owner="SIEMENS MR VA0  RAW "/>
-  <entry group="0021" element="xx08" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW "/>
   <entry group="0021" element="xx09" vr="DS" vm="1" owner="SIEMENS MR VA0  RAW "/>
-  <entry group="0021" element="xx09" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW "/>
   <entry group="0021" element="xx10" vr="DS" vm="1" owner="SIEMENS MR VA0  RAW "/>
-  <entry group="0021" element="xx10" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW "/>
   <entry group="0021" element="xx11" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW "/>
   <entry group="0021" element="xx12" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW "/>
   <entry group="0021" element="xx13" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW "/>
@@ -2657,9 +2377,7 @@
   <entry group="0021" element="xx17" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW "/>
   <entry group="0021" element="xx18" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW "/>
   <entry group="0021" element="xx30" vr="DS" vm="1-n" owner="SIEMENS MR VA0  RAW "/>
-  <entry group="0021" element="xx30" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW "/>
   <entry group="0021" element="xx31" vr="DS" vm="16" owner="SIEMENS MR VA0  RAW "/>
-  <entry group="0021" element="xx31" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW "/>
   <entry group="0021" element="xx50" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW "/>
   <entry group="0021" element="xx51" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW "/>
   <entry group="0021" element="xx52" vr="UN" vm="1" owner="SIEMENS MR VA0  RAW "/>
@@ -2890,24 +2608,17 @@
   <entry group="0099" element="xx05" vr="SL" vm="1" owner="SIENET"/>
   <entry group="0009" element="xx10" vr="LO" vm="1" owner="SPI RELEASE 1 "/>
   <entry group="0009" element="xx15" vr="LO" vm="1" owner="SPI RELEASE 1 "/>
-  <entry group="0009" element="xx15" vr="UN" vm="1" owner="SPI RELEASE 1 "/>
   <entry group="0009" element="xx40" vr="UN" vm="1" owner="SPI RELEASE 1 "/>
-  <entry group="0009" element="xx40" vr="US" vm="1" owner="SPI RELEASE 1 "/>
   <entry group="0009" element="xx41" vr="SH" vm="1" owner="SPI RELEASE 1 "/>
   <entry group="0011" element="xx10" vr="LO" vm="1" owner="SPI RELEASE 1 "/>
-  <entry group="0011" element="xx10" vr="UN" vm="1" owner="SPI RELEASE 1 "/>
   <entry group="0009" element="xx08" vr="LO" vm="1" owner="SPI Release 1 "/>
   <entry group="0009" element="xx15" vr="LO" vm="1" owner="SPI Release 1 "/>
   <entry group="0009" element="xx15" vr="LO" vm="1" owner="SPI-P Release 1 "/>
-  <entry group="0009" element="xx15" vr="UN" vm="1" owner="SPI-P Release 1 "/>
   <entry group="0009" element="xx16" vr="LO" vm="1" owner="SPI-P Release 1 "/>
-  <entry group="0009" element="xx16" vr="UN" vm="1" owner="SPI-P Release 1 "/>
   <entry group="0009" element="xx18" vr="LO" vm="1" owner="SPI-P Release 1 "/>
-  <entry group="0009" element="xx18" vr="UN" vm="1" owner="SPI-P Release 1 "/>
   <entry group="0009" element="xx61" vr="LO" vm="1" owner="SPI-P Release 1 "/>
   <entry group="0009" element="xxa0" vr="LT" vm="1" owner="SPI-P Release 1 "/>
   <entry group="0009" element="xxf2" vr="LT" vm="1" owner="SPI-P Release 1 "/>
-  <entry group="0009" element="xxf2" vr="UN" vm="1" owner="SPI-P Release 1 "/>
   <entry group="0009" element="xxf7" vr="UN" vm="1" owner="SPI-P Release 1 "/>
   <entry group="0019" element="xx25" vr="LO" vm="1" owner="SPI-P Release 1 "/>
   <entry group="0029" element="xx20" vr="DS" vm="1" owner="SPI-P Release 1 "/>
