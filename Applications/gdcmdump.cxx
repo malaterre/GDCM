@@ -67,6 +67,7 @@ int main (int argc, char *argv[])
 
   std::string filename;
   bool printdict = false;
+  bool print = false;
   bool verbose = false;
   while (1) {
     //int this_option_optind = optind ? optind : 1;
@@ -75,11 +76,12 @@ int main (int argc, char *argv[])
         {"input", 1, 0, 0},
         {"output", 1, 0, 0},
         {"dict", 1, 0, 0},
+        {"print", 1, 0, 0},
         {"verbose", 1, 0, 0},
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:dv",
+    c = getopt_long (argc, argv, "i:o:dpv",
       long_options, &option_index);
     if (c == -1)
       {
@@ -121,6 +123,11 @@ int main (int argc, char *argv[])
       printdict = true;
       break;
 
+    case 'p':
+      //printf ("option p with value '%s'\n", optarg);
+      print = true;
+      break;
+
     case 'v':
       //printf ("option d with value '%s'\n", optarg);
       verbose = true;
@@ -144,6 +151,15 @@ int main (int argc, char *argv[])
     printf ("\n");
     }
 
+  // check if d or p are passed, only one at a time
+  if( print || printdict )
+    {
+    if ( print && printdict )
+      {
+      std::cerr << "d or p" << std::endl;
+      return 1;
+      }
+    }
   if( filename.empty() )
     {
     std::cerr << "Need input file (-i)\n";
@@ -162,8 +178,13 @@ int main (int argc, char *argv[])
         {
         res += DoOperation<gdcm::DictPrinter>(*it);
         }
+      else if( print )
+        {
+        res += DoOperation<gdcm::Printer>(*it);
+        }
       else
         {
+        assert( print == false && printdict == false );
         res += DoOperation<gdcm::Dumper>(*it);
         }
       if( verbose ) std::cerr << *it << std::endl;
@@ -176,6 +197,10 @@ int main (int argc, char *argv[])
     if( printdict )
       {
       res += DoOperation<gdcm::DictPrinter>(filename);
+      }
+    else if( print )
+      {
+      res += DoOperation<gdcm::Printer>(filename);
       }
     else
       {

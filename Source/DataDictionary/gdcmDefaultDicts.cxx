@@ -12304,6 +12304,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0xfffc,0x0000,VR::UL,VM::VM1,"Group Length fffc",true },
   {0xfffe,0x0000,VR::UL,VM::VM1,"Group Length fffe",true },
 
+ // FIXME: need a dummy element
   {0xffff,0xffff,VR::INVALID,VM::VM0,0,true } // Gard
 };
 
@@ -12320,10 +12321,12 @@ void Dict::LoadDefault()
    }
 }
 
+/*
 void PrivateDict::LoadDefault()
 {
   // TODO
 }
+*/
 
 } // end namespace gdcm
 #endif // __gdcmDefaultDicts_cxx

@@ -27,10 +27,15 @@ static const char *VMStrings[] = {
   "5",
   "6",
   "8",
+  "9",
+  "11",
   "16",
   "24",
+  "256",
   "1-2",
   "1-3",
+  "1-4",
+  "1-5",
   "1-8",
   "1-32",
   "1-99",
@@ -39,6 +44,7 @@ static const char *VMStrings[] = {
   "2-n",
   "3-3n",
   "3-n",
+  "4-4n",
   0
 };
 
@@ -79,6 +85,7 @@ VM::VMType VM::GetVMType(const char *vm)
   return VM::VM_END;
 }
 
+// FIXME IsValid will only work for VM defined in public dict...
 bool VM::IsValid(const int &vm1, const VMType &vm2)
 {
   bool r = false;

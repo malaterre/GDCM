@@ -84,6 +84,7 @@ SET(DICT_SRCS
   #${DICT_SRCS} # All the dicts cxx resources
   gdcmDicts.cxx
   gdcmDefaultDicts.cxx # pseudo generated file
+  gdcmPrivateDefaultDicts.cxx # pseudo generated file
   gdcmGlobal.cxx
   gdcmGroupDict.cxx
   ${GDCM_BINARY_DIR}/Source/DataDictionary/gdcmDefaultGroupNames.cxx

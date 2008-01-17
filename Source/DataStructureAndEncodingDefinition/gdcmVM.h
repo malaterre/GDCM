@@ -38,6 +38,14 @@
  * 2-n
  * 3-3n
  * 3-n
+ *
+ * Some private dict define some more:
+ * 4-4n
+ * 1-4
+ * 1-5
+ * 256
+ * 11
+ * 9
  */
 namespace gdcm
 {
@@ -54,10 +62,15 @@ public:
     VM5,
     VM6,
     VM8,
+    VM9,
+    VM11,
     VM16,
     VM24,
+    VM256,
     VM1_2,
     VM1_3,
+    VM1_4,
+    VM1_5,
     VM1_8,
     VM1_32,
     VM1_99,
@@ -66,6 +79,7 @@ public:
     VM2_n,
     VM3_3n,
     VM3_n,
+    VM4_4n,
     VM_END  // Custom tag to count number of entry
   } VMType;
 
@@ -94,6 +108,7 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const VM &_val)
 {
+  assert( VM::GetVMString(_val) );
   _os << VM::GetVMString(_val);
   return _os;
 }

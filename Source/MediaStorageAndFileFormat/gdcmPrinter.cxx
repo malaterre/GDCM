@@ -23,6 +23,7 @@
 #include "gdcmVR.h"
 #include "gdcmVM.h"
 #include "gdcmElement.h"
+#include "gdcmGlobal.h"
 
 #include "gdcmDataSet.h"
 
@@ -85,7 +86,7 @@ void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictE
     assert( lvr != VR::UN );
     //assert( lvr != VR::INVALID );
     assert( t.IsPrivate() || t.GetElement() == 0x0 );
-    if ( lvr & (VR::OB | VR::OW))
+    if ( lvr & VR::OB_OW )
     {
       vm = VM::VM1;
     }
@@ -469,15 +470,41 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
 //-----------------------------------------------------------------------------
 void Printer::PrintDataSet(std::ostream &os, const DataSet &ds)
 {
-  static const Dict d;
-  static const GroupDict gd;
-  try
+  const gdcm::Global& g = gdcm::GlobalInstance;
+  const gdcm::Dicts &dicts = g.GetDicts();
+  const gdcm::Dict &d = dicts.GetPublicDict();
+ 
+  static const GroupDict gd; // FIXME
+//  try
     {
     DataSet::ConstIterator it = ds.Begin();
     for( ; it != ds.End(); ++it )
       {
       const DataElement &de = *it;
-      const DictEntry &entry = d.GetDictEntry(de.GetTag());
+      //const DictEntry &entry = d.GetDictEntry(de.GetTag());
+      std::string owner;
+      const char *strowner = 0;
+      if( de.GetTag().IsPrivate() /*&& de.GetTag().GetElement()*/ )
+        {
+        Tag t = de.GetTag().GetPrivateCreator();
+        const ByteValue * bv = de.GetByteValue();
+        if( t.GetElement() )
+          {
+          const DataElement & de = ds.GetDataElement( t );
+          bv = de.GetByteValue();
+          }
+        else
+          {
+          //assert( vr == VR::LO );
+          //assert( vm == VM::VM1 );
+          }
+        assert( bv );
+        owner = std::string(bv->GetPointer(),bv->GetLength());
+        assert(  owner.size() );
+        assert( owner[owner.size()-1] != ' ' );
+        strowner = owner.c_str();
+        }
+      const DictEntry &entry = dicts.GetDictEntry(de.GetTag(),strowner);
       // Use VR from dictionary
       VR vr = entry.GetVR();
       VM vm = entry.GetVM();
@@ -500,26 +527,20 @@ void Printer::PrintDataSet(std::ostream &os, const DataSet &ds)
         }
       else if( de.GetTag().IsPrivate() )
         {
-        assert( !de.GetTag().GetElement() || vr == VR::INVALID );
-        assert( !de.GetTag().GetElement() || vm == VM::VM0 );
-        vr = vr_read; // we have no choice for now but trust it
-        /*if( vr & VR::OB_OW 
-         || vr & VR::FL )
+        //assert( !de.GetTag().GetElement() || vr == VR::INVALID );
+        //assert( !de.GetTag().GetElement() || vm == VM::VM0 );
+        if ( vr == VR::INVALID )
           {
-          //vm = VM::VM1_n;
-          }
-        else
-          {
-          vm = VM::VM1;
-          }*/
-        assert( vm == VM::VM0 );
-        if( vr & VR::OB_OW )
-          {
-          vm = VM::VM1;
-          }
-        else
-          {
-          vm = VM::VM1_n; // FIXME: Is this always correct ?
+          vr = vr_read; // we have no choice for now but trust it
+          assert( vm == VM::VM0 );
+          if( vr & VR::OB_OW )
+            {
+            vm = VM::VM1;
+            }
+          else
+            {
+            vm = VM::VM1_n; // FIXME: Is this always correct ?
+            }
           }
         }
       assert( vm != VM::VM0 );
@@ -589,14 +610,23 @@ void Printer::PrintDataSet(std::ostream &os, const DataSet &ds)
         }
       else
         {
-        os << " " << entry.GetName() << std::endl;
+        const char *name = entry.GetName();
+        if( name && *name )
+          {
+          os << " " << name << std::endl;
+          }
+        else
+          {
+          assert( strowner );
+          os << " FIXME: " << owner << std::endl;
+          }
         }
       }
     }
-  catch(std::exception &e)
-    {
-    std::cerr << "Exception:" << typeid(e).name() << std::endl;
-    }
+  //catch(std::exception &e)
+  //  {
+  //  std::cerr << "Exception:" << typeid(e).name() << std::endl;
+  //  }
 }
 
 //-----------------------------------------------------------------------------

@@ -51,6 +51,7 @@ typedef struct
 {
   uint16_t group;
   uint16_t element;
+  const char *owner;
   VR::VRType vr;
   VM::VMType vm;
   const char *name;
@@ -63,24 +64,26 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
       <xsl:variable name="group" select="translate(@group,'x','0')"/>
       <xsl:variable name="element" select="translate(@element,'x','0')"/>
       <xsl:choose>
-        <xsl:when test="substring(@group,3) != 'xx' and substring(@element,3) = 'xx' ">
+        <xsl:when test="substring(@group,3) != 'xx' and substring(@element,3) = 'xx' and substring(@element,1,2) != '00' and substring(@element,1,2) != '10'">
           <xsl:call-template name="do-one-entry">
             <xsl:with-param name="count" select="0"/>
             <xsl:with-param name="do-element" select="1"/>
             <xsl:with-param name="group" select="@group"/>
             <xsl:with-param name="element" select="$element"/>
+            <!--xsl:with-param name="owner" select="@owner"/-->
             <xsl:with-param name="vr" select="@vr"/>
             <xsl:with-param name="vm" select="@vm"/>
             <xsl:with-param name="retired" select="@retired"/>
             <xsl:with-param name="name" select="@name"/>
           </xsl:call-template>
         </xsl:when>
-        <xsl:when test="substring(@group,3) = 'xx' and substring(@element,3) != 'xx' ">
+        <xsl:when test="substring(@group,3) = 'xx' and contains(@element,'x') = false ">
           <xsl:call-template name="do-one-entry">
             <xsl:with-param name="count" select="0"/>
             <xsl:with-param name="do-group" select="1"/>
             <xsl:with-param name="group" select="$group"/>
             <xsl:with-param name="element" select="@element"/>
+            <!--xsl:with-param name="owner" select="@owner"/-->
             <xsl:with-param name="vr" select="@vr"/>
             <xsl:with-param name="vm" select="@vm"/>
             <xsl:with-param name="retired" select="@retired"/>
@@ -92,6 +95,32 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
             <xsl:with-param name="count" select="255"/>
             <xsl:with-param name="group" select="@group"/>
             <xsl:with-param name="element" select="@element"/>
+            <!--xsl:with-param name="owner" select="@owner"/-->
+            <xsl:with-param name="vr" select="@vr"/>
+            <xsl:with-param name="vm" select="@vm"/>
+            <xsl:with-param name="retired" select="@retired"/>
+            <xsl:with-param name="name" select="@name"/>
+          </xsl:call-template>
+        </xsl:when>
+        <!-- Private element e.g (0019,xx26) -->
+        <xsl:when test="contains(@group,'x') = false and substring(@element,1,2) = 'xx' and not(contains(substring(@element,3,4),'x'))">
+          <xsl:call-template name="do-one-entry">
+            <xsl:with-param name="count" select="255"/>
+            <xsl:with-param name="group" select="@group"/>
+            <xsl:with-param name="element" select="$element"/> <!-- replaced xx with 00 which is what we want -->
+            <xsl:with-param name="owner" select="@owner"/>
+            <xsl:with-param name="vr" select="@vr"/>
+            <xsl:with-param name="vm" select="@vm"/>
+            <xsl:with-param name="retired" select="@retired"/>
+            <xsl:with-param name="name" select="@name"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="contains(@group,'x') = false and @element = '00xx'">
+          <xsl:call-template name="do-one-entry">
+            <xsl:with-param name="count" select="255"/>
+            <xsl:with-param name="group" select="@group"/>
+            <xsl:with-param name="element" select="$element"/>
+            <xsl:with-param name="owner" select="@owner"/>
             <xsl:with-param name="vr" select="@vr"/>
             <xsl:with-param name="vm" select="@vm"/>
             <xsl:with-param name="retired" select="@retired"/>
@@ -126,7 +155,7 @@ generating group length for arbitrary even group number seems to get my xsltproc
       </xsl:if>
     </xsl:for-each>
     <xsl:text>
-  {0xffff,0xffff,VR::INVALID,VM::VM0,0,true } // Gard
+  {0xffff,0xffff,0,VR::INVALID,VM::VM0,0,true } // Gard
 };
 
 void Dict::LoadDefault()
@@ -135,16 +164,32 @@ void Dict::LoadDefault()
    DICT_ENTRY n = DICOMV3DataDict[i];
    while( n.name != 0 )
    {
-      Tag t(n.group, n.element);
-      DictEntry e( n.name, n.vr, n.vm, n.ret );
-      AddDictEntry( t, e );
-      n = DICOMV3DataDict[++i];
+   if( n.group % 2 == 0 )
+     {
+     assert( n.owner == 0 );
+     Tag t(n.group, n.element);
+     DictEntry e( n.name, n.vr, n.vm, n.ret );
+     AddDictEntry( t, e );
+     }
+     n = DICOMV3DataDict[++i];
    }
 }
 
 void PrivateDict::LoadDefault()
 {
-  // TODO
+   unsigned int i = 0;
+   DICT_ENTRY n = DICOMV3DataDict[i];
+   while( n.name != 0 )
+   {
+   if( n.group % 2 != 0 )
+     {
+     assert( n.owner != 0 );
+     PrivateTag t(n.group, n.element,n.owner);
+     DictEntry e( n.name, n.vr, n.vm, n.ret );
+     AddDictEntry( t, e );
+     }
+     n = DICOMV3DataDict[++i];
+   }
 }
 
 } // end namespace gdcm
@@ -178,6 +223,7 @@ void PrivateDict::LoadDefault()
     <xsl:param name="do-element" select="0"/>
     <xsl:param name="group"/>
     <xsl:param name="element"/>
+    <xsl:param name="owner" select="''"/>
     <xsl:param name="vr"/>
     <xsl:param name="vm"/>
     <xsl:param name="retired"/>
@@ -187,6 +233,9 @@ void PrivateDict::LoadDefault()
       <xsl:value-of select="$group"/>
       <xsl:text>,0x</xsl:text>
       <xsl:value-of select="$element"/>
+      <xsl:text>,"</xsl:text>
+      <xsl:value-of select="$owner"/>
+      <xsl:text>"</xsl:text>
 <!--xsl:value-of select="$temp"/-->
       <xsl:text>,VR::</xsl:text>
       <xsl:if test="not ($vr != '')">

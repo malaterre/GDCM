@@ -48,9 +48,18 @@ const DictEntry &Dicts::GetDictEntry(const Tag& tag, const char *owner) const
   else
   {
     assert( owner != NULL );
-    // Test is tag.GetElement() < 0x10... return LO somehow
-    PrivateTag ptag(tag.GetGroup(), tag.GetElement(),owner);
-    return GetPrivateDict().GetDictEntry(ptag);
+    // Test if tag.GetElement() < 0x10... return LO somehow
+    PrivateTag ptag(tag.GetGroup(), ((uint16_t)(tag.GetElement() << 8)) >> 8,owner);
+    if( tag.GetElement() <= 0x10 )
+      {
+      ptag.SetElement( 0x0 );
+      }
+    if( strcmp(owner, "GEMS_SERS_01" ) == 0 )
+      {
+      std::cout << std::endl;
+      }
+    const DictEntry &de = GetPrivateDict().GetDictEntry(ptag);
+    return de;
   }
 }
 

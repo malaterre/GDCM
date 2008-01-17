@@ -25,6 +25,7 @@
   </xsl:template>
   <xsl:template match="dict">
     <xsl:for-each select="entry">
+      <xsl:sort select="@owner"/>
       <xsl:sort select="@group"/>
       <xsl:sort select="@element"/>
       <xsl:element name="entry">

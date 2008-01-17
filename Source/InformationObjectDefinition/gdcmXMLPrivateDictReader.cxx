@@ -31,7 +31,7 @@ void XMLPrivateDictReader::HandleEntry(const char **atts)
   std::string owner;
   VR vr;
   VM::VMType vm = VM::VM0;
-  bool ret;
+  bool ret = false;
 
   PrivateTag &tag = CurrentTag;
   DictEntry &de = CurrentDE;
@@ -70,9 +70,11 @@ void XMLPrivateDictReader::HandleEntry(const char **atts)
         }
       else
         {
-        assert( (raw[0] == '5' && raw[1] == '0') || (raw[0] == '6' && raw[1] == '0') );
+        assert( (raw[0] == '5' && raw[1] == '0') || (raw[0] == '6' && raw[1] == '0') ||
+          (raw[0] == '7' && raw[1] == '0') );
         if( raw[0] == '5' ) tag.SetGroup( 0x5000 );
         else if( raw[0] == '6' ) tag.SetGroup( 0x6000 );
+        else if( raw[0] == '7' ) tag.SetGroup( 0x7000 );
         else abort();
         CurrentDE.SetGroupXX( true );
         }
@@ -84,9 +86,20 @@ void XMLPrivateDictReader::HandleEntry(const char **atts)
            || (raw[2] == 'x' && raw[3] == 'x') );
       if (raw[2] == 'x' && raw[3] == 'x') 
         {
-        assert( raw[0] == '0' && raw[1] == '0' );
-        tag.SetElement( 0x0000 );
-        CurrentDE.SetElementXX( true );
+        if( raw[0] == '0' && raw[1] == '0' )
+          {
+          tag.SetElement( 0x0000 );
+          CurrentDE.SetElementXX( true );
+          }
+        else if( raw[0] == '1' && raw[1] == '0' )
+          {
+          tag.SetElement( 0x1000 );
+          CurrentDE.SetElementXX( true );
+          }
+        else
+          {
+          abort(); // FIXME
+          }
         }
       else
         {

@@ -16,13 +16,17 @@
 
 int TestXMLPrivateDictReader(int argc, char *argv[])
 {
+  if( argc < 2 )
+    {
+    return 1;
+    }
   const char *filename = argv[1];
   gdcm::XMLPrivateDictReader tr;
   tr.SetFilename(filename);
   tr.Read();
 
-  //std::cout << tr.GetPrivateDict() << std::endl;
-  tr.GetPrivateDict().PrintXML();
+  std::cout << tr.GetPrivateDict() << std::endl;
+  //tr.GetPrivateDict().PrintXML();
 
   return 0;
 }

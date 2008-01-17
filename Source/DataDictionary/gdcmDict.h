@@ -119,7 +119,7 @@ public:
     const Tag & t2 = _val;
     if( t1 == t2 )
       {
-      assert( strcmp(Owner.c_str(), _val.GetOwner()) != 0 ); // prevent adding duplicate element
+      //assert( strcmp(Owner.c_str(), _val.GetOwner()) != 0 ); // prevent adding duplicate element
       return strcmp(Owner.c_str(), _val.GetOwner() ) < 0;
       }
     else return t1 < t2;
@@ -132,7 +132,7 @@ private:
 
 inline std::ostream& operator<<(std::ostream &os, const PrivateTag &val)
 {
-  assert( !val.Owner.empty() );
+  //assert( !val.Owner.empty() );
   os.setf( std::ios::right );
   os << std::hex << '(' << std::setw( 4 ) << std::setfill( '0' )
     << val[0] << ',' << std::setw( 4 ) << std::setfill( '0' )
@@ -194,7 +194,9 @@ public:
     if (it == DictInternal.end())
       {
       //assert( 0 && "Impossible" );
-      return GetDictEntry(PrivateTag(0,0));
+      it = DictInternal.find( PrivateTag(0xffff,0xffff) );
+      assert (it != DictInternal.end());
+      return it->second;
       }
     assert( DictInternal.count(tag) == 1 );
     return it->second;
@@ -227,6 +229,7 @@ public:
     std::cout << "</dict>\n";
     }
 
+  bool IsEmpty() const { return DictInternal.empty(); }
 protected:
   friend class Dicts;
   void LoadDefault();

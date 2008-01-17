@@ -24,6 +24,7 @@ int TestGlobal(int, char *[])
   // get the Part 6 dicts from it:
   const gdcm::Dicts &ds = g.GetDicts();
   const gdcm::Dict &pub = ds.GetPublicDict();
+  const gdcm::PrivateDict &priv = ds.GetPrivateDict();
 
   // case 2
   gdcm::Dicts dicts;
@@ -47,12 +48,21 @@ int TestGlobal(int, char *[])
     return 1;
     }
   // This should should be filled in:
-  std::cout << "Global dict:" << std::endl;
+  std::cout << "Global pub dict:" << std::endl;
   std::cout << pub << std::endl;
   if( pub.IsEmpty() )
     {
     return 1;
     }
+  // This should should be filled in:
+  std::cout << "Global priv dict:" << std::endl;
+  std::cout << priv << std::endl;
+  if( priv.IsEmpty() )
+    {
+    return 1;
+    }
+  //const gdcm::DictEntry& de = priv.GetDictEntry( gdcm::PrivateTag(0x0009,0x0016,"GEMS_IDEN_01") ); 
+  //std::cout << de << std::endl;
 
 #if 0
   const char *empty = "";
