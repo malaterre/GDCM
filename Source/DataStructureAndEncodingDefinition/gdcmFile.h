@@ -50,6 +50,7 @@ public:
   const FileMetaInformation &GetHeader() const { return Header; }
   void SetHeader( const FileMetaInformation &fmi ) { Header = fmi; }
   const DataSet &GetDataSet() const { return DS; }
+  DataSet &GetDataSet() { return DS; }
   void SetDataSet( const DataSet &ds) { DS = ds; }
 
 private:

@@ -27,7 +27,8 @@ std::string DataSet::GetPrivateCreator(const Tag &t) const
     ConstIterator it = DES.find(r);
     if( it == DES.end() )
       {
-      return "NO PRIVATE CREATOR";
+      // FIXME, could this happen ?
+      return "";
       }
     const DataElement &de = *it;
     const Value &v = de.GetValue();

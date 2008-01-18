@@ -63,6 +63,7 @@
 #include "gdcmWriter.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmDataSet.h"
+#include "gdcmAttribute.h"
 #include "gdcmSequenceOfItems.h"
 
 #include <string>
@@ -209,6 +210,16 @@ int main (int argc, char *argv[])
   gdcm::File f(reader.GetFile());
   f.SetDataSet(ds);
 #endif
+
+  gdcm::DataSet& ds = reader.GetFile().GetDataSet();
+  gdcm::DataElement de = ds.GetDataElement( gdcm::Tag(0x0010,0x0010) );
+  const char patname[] = "John^Doe";
+  de.SetByteValue(patname, strlen(patname));
+  std::cout << de << std::endl;
+
+  ds.Replace( de );
+
+  std::cout << ds.GetDataElement( gdcm::Tag(0x0010,0x0010) ) << std::endl;
 
   gdcm::Writer writer;
   writer.SetFileName( outfilename.c_str() );

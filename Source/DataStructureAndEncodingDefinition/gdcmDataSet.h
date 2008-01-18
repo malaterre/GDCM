@@ -51,24 +51,11 @@ namespace gdcm
  */
 
 //-----------------------------------------------------------------------------
-/*struct lttag
-{
-  bool operator()(const DataElement &s1,
-		  const DataElement &s2) const
-  {
-    return s1.GetTag() < s2.GetTag();
-  }
-};*/
-
-//-----------------------------------------------------------------------------
 class DataSet
 {
 public:
-  typedef std::set<DataElement /*, lttag*/> DataElementSet;
-  typedef DataElementSet::iterator Iterator;
+  typedef std::set<DataElement> DataElementSet;
   typedef DataElementSet::const_iterator ConstIterator;
-  Iterator Begin() { return DES.begin(); }
-  Iterator End() { return DES.end(); }
   ConstIterator Begin() const { return DES.begin(); }
   ConstIterator End() const { return DES.end(); }
 
@@ -128,6 +115,11 @@ public:
   }
  void Insert(const DataElement& de) {
     //assert( de.GetTag() != Tag(0,0) );
+    DES.insert(de);
+    }
+ void Replace(const DataElement& de) {
+    //assert( de.GetTag() != Tag(0,0) );
+    DES.erase(de);
     DES.insert(de);
     }
 
@@ -194,9 +186,6 @@ public:
   template <typename TDE, typename TSwap>
   std::istream &ReadWithLength(std::istream &is, VL &length);
 
-  //const DataElementSet & GetDES() const { return DES; }
-  std::set<DataElement /*, lttag*/> & GetDES() { return DES; }
-
 private:
   DataElementSet DES;
 };
@@ -215,10 +204,8 @@ public:
   void Next() { ++it; }
 private:
   DataSet & Internal;
-  DataSet::Iterator it;
+  DataSet::ConstIterator it;
 };
-
-
 
 } // end namespace gdcm
 

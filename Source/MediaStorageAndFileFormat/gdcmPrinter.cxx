@@ -501,6 +501,10 @@ void Printer::PrintDataSet(std::ostream &os, const DataSet &ds)
         assert( bv );
         owner = std::string(bv->GetPointer(),bv->GetLength());
         assert(  owner.size() );
+        if( owner[owner.size()-1] == ' ' )
+          {
+          owner.erase(owner.size()-1,1);
+          }
         assert( owner[owner.size()-1] != ' ' );
         strowner = owner.c_str();
         }
@@ -559,7 +563,6 @@ void Printer::PrintDataSet(std::ostream &os, const DataSet &ds)
         }
       else // INVALID case
         {
-        abort();
         const VM& vm = entry.GetVM();
         const Value& val = de.GetValue();
         os << de.GetTag();
@@ -571,7 +574,7 @@ void Printer::PrintDataSet(std::ostream &os, const DataSet &ds)
           //os << " VR=" << VR::GetVRString(vr_read);
           os << " " << VR::GetVRString(vr_read);
           }
-        if( vr != VR::INVALID && !(vr_read & vr) )
+        if( vr != VR::INVALID && vr_read != VR::INVALID && !(vr_read & vr) )
           {
           gdcmErrorMacro( "Wrong VR should be " << vr );
           // PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm

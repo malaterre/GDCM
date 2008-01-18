@@ -88,6 +88,7 @@ public:
     SetVL( length );
     SetValue( *bv );
     }
+  // WARNING: You need to check for NULL return value
   const ByteValue* GetByteValue() const {
     const Value &v = GetValue();
     const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);

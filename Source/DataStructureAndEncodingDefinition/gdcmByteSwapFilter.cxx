@@ -38,7 +38,7 @@ void ByteSwapFilter::SetDicts(const Dicts &dicts)
 
 bool ByteSwapFilter::ByteSwap()
 {
-  DataSet::Iterator it = DS.Begin();
+  DataSet::ConstIterator it = DS.Begin();
   for( ; it != DS.End(); ++it)
     {
     const DataElement& de = *it; // FIXME !!!
