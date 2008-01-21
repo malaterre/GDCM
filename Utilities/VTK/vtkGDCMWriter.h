@@ -49,7 +49,7 @@ private:
   void operator=(const vtkGDCMWriter&);  // Not implemented.
 
   //PIMPL
-  vtkGDCMWriterInternals *Internals;
+  //vtkGDCMWriterInternals *Internals;
 
   // VTK structs:
   vtkLookupTable *LookupTable;

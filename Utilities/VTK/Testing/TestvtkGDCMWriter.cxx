@@ -14,8 +14,8 @@
 =========================================================================*/
 #include "gdcmConfigure.h" // for GDCM_DATA_ROOT
 #include "vtkGDCMReader.h"
+#include "vtkGDCMWriter.h"
 
-#include "vtkPNGWriter.h"
 #include "vtkImageData.h"
 #include <vtksys/SystemTools.hxx>
 
@@ -31,18 +31,19 @@ int TestvtkGDCMWrite(const char *filename)
 
   reader->GetOutput()->Print( cout );
 
-  vtkPNGWriter *writer = vtkPNGWriter::New();
+  vtkGDCMWriter *writer = vtkGDCMWriter::New();
   writer->SetInputConnection( reader->GetOutputPort() );
-  std::string pngfile = vtksys::SystemTools::GetFilenamePath( filename );
-  pngfile = "/tmp/png";
-  pngfile += '/';
-  pngfile += vtksys::SystemTools::GetFilenameWithoutExtension( filename );
-  pngfile += ".png";
-  writer->SetFileName( pngfile.c_str() );
+  std::string gdcmfile = vtksys::SystemTools::GetFilenamePath( filename );
+  gdcmfile = "/tmp/vtkdcm";
+  gdcmfile += '/';
+  gdcmfile += vtksys::SystemTools::GetFilenameWithoutExtension( filename );
+  gdcmfile += ".dcm";
+  writer->SetFileName( gdcmfile.c_str() );
   writer->Write();
 
   reader->Delete();
   writer->Delete();
+
   return 0; 
 }
 

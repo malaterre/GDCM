@@ -16,6 +16,8 @@
 // .SECTION Description
 // vtkGDCMThreadedReader is a source object that reads some DICOM files
 // bla bla
+// .FIXME
+// For now I am doing a memcpy, without doing the Y-flip to please VTK !
 
 // .SECTION See Also
 // vtkMedicalImageReader2 vtkMedicalImageProperties

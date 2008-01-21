@@ -25,10 +25,10 @@
 
 #include "gdcmImageWriter.h"
 
-struct vtkGDCMWriterInternals
-{
-  gdcm::ImageWriter DICOMWriter;
-};
+//struct vtkGDCMWriterInternals
+//{
+//  gdcm::ImageWriter DICOMWriter;
+//};
 
 vtkCxxRevisionMacro(vtkGDCMWriter, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMWriter)
@@ -38,7 +38,7 @@ vtkCxxSetObjectMacro(vtkGDCMWriter,MedicalImageProperties,vtkMedicalImagePropert
 
 vtkGDCMWriter::vtkGDCMWriter()
 {
-  this->Internals = new vtkGDCMWriterInternals;
+  //this->Internals = new vtkGDCMWriterInternals;
   //this->ScalarArrayName = NULL;
   //this->SetScalarArrayName( "GDCM" );
 
@@ -48,11 +48,121 @@ vtkGDCMWriter::vtkGDCMWriter()
 
 vtkGDCMWriter::~vtkGDCMWriter()
 {
-  delete this->Internals;
+  //delete this->Internals;
   this->LookupTable->Delete();
   this->MedicalImageProperties->Delete();
 }
+//----------------------------------------------------------------------------
+int vtkGDCMImageWriter::FillInputPortInformation(
+  int port, vtkInformation *info)
+{
+  if (!this->Superclass::FillInputPortInformation(port, info))
+    {
+    return 0;
+    }
+  info->Set(vtkAlgorithm::INPUT_IS_REPEATABLE(), 1);
+  return 1;
+}
+//---------------------------------------------------------------------------
+int vtkGDCMImageWriter::RequestInformation(
+  vtkInformation *vtkNotUsed(request),
+  vtkInformationVector **inputVector,
+  vtkInformationVector *vtkNotUsed(outputVector))
+{
+  // Check to make sure that all input information agrees
+  int mismatchedInputs = 0;
 
+  double spacing[3];
+  double origin[3];
+  int extent[6];
+  int components = 0;
+  int dataType = 0;
+
+  // For each connection on port 0, check agains the first connection
+  for (int i = 0; i < this->GetNumberOfInputConnections(0); i++)
+    {
+    vtkInformation *inInfo = inputVector[0]->GetInformationObject(i);
+    if (i == 0)
+      {
+      inInfo->Get(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), extent);
+      inInfo->Get(vtkDataObject::SPACING(), spacing);
+      inInfo->Get(vtkDataObject::ORIGIN(), origin);
+      components = inInfo->Get(vtkDataObject::FIELD_NUMBER_OF_COMPONENTS());
+      dataType = inInfo->Get(vtkDataObject::FIELD_ARRAY_TYPE());
+      continue;
+      }
+
+    if (memcmp(inInfo->Get(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT()),
+               extent, sizeof(extent)) ||
+        memcmp(inInfo->Get(vtkDataObject::SPACING()), spacing,
+               sizeof(spacing)) ||
+        memcmp(inInfo->Get(vtkDataObject::ORIGIN()), origin,
+               sizeof(origin)) ||
+        inInfo->Get(vtkDataObject::FIELD_NUMBER_OF_COMPONENTS())
+          != components ||
+        inInfo->Get(vtkDataObject::FIELD_ARRAY_TYPE()) != dataType)
+      {
+      mismatchedInputs = 1;
+      return 0;
+      }
+    }
+
+  return 1;
+}
+
+//--------------------------------------------------------------------------
+int vtkGDCMImageWriter::RequestUpdateExtent(
+  vtkInformation *vtkNotUsed(request),
+  vtkInformationVector **inputVector,
+  vtkInformationVector *vtkNotUsed(outputVector))
+{
+  // Set the UpdateExtent from the DataUpdateExtent for the current slice
+  int n = inputVector[0]->GetNumberOfInformationObjects();
+  for (int i = 0; i < n; i++)
+    {
+    vtkInformation *inInfo = inputVector[0]->GetInformationObject(i);
+    inInfo->Set(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(),
+                this->DataUpdateExtent, 6);
+    }
+
+  return 1;
+}
+
+//--------------------------------------------------------------------------
+int vtkGDCMImageWriter::RequestData(
+  vtkInformation* vtkNotUsed(request),
+  vtkInformationVector** inputVector,
+  vtkInformationVector* vtkNotUsed(outputVector))
+{
+  // Go through the inputs and write the data for each
+  int numTimeSteps = inputVector[0]->GetNumberOfInformationObjects();
+
+  for (int timeStep = 0; timeStep < numTimeSteps; timeStep++)
+    {
+    vtkInformation *inInfo =
+      inputVector[0]->GetInformationObject(timeStep);
+    vtkImageData *input =
+      vtkImageData::SafeDownCast(inInfo->Get(vtkDataObject::DATA_OBJECT()));
+
+    // Error checking
+    if (input == NULL)
+      {
+      // Close file, set GDCMFileID to zero
+      //this->CloseFile(this->GDCMFileId);
+      //this->GDCMFileId = 0;
+      vtkErrorMacro(<<"Write: Please specify an input!");
+      return 0;
+      }
+
+    // Call WriteGDCMData for each input
+    if (this->WriteGDCMData(input, timeStep) == 0)
+      {
+      return 0;
+      }
+    }
+
+  return 1;
+}
 //----------------------------------------------------------------------------
 void vtkGDCMWriter::PrintSelf(ostream& os, vtkIndent indent)
 {
