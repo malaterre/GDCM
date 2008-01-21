@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "vtkGDCMThreadedReader.h"
+#include "vtkGDCMThreadedImageReader.h"
 
 #include "vtkObjectFactory.h"
 #include "vtkImageData.h"
@@ -33,28 +33,28 @@
 #include <pthread.h>
 #include <unistd.h> // sysconf
 
-vtkCxxRevisionMacro(vtkGDCMThreadedReader, "$Revision: 1.1 $");
-vtkStandardNewMacro(vtkGDCMThreadedReader);
+vtkCxxRevisionMacro(vtkGDCMThreadedImageReader, "$Revision: 1.1 $");
+vtkStandardNewMacro(vtkGDCMThreadedImageReader);
 
-vtkGDCMThreadedReader::vtkGDCMThreadedReader()
+vtkGDCMThreadedImageReader::vtkGDCMThreadedImageReader()
 {
 }
 
-vtkGDCMThreadedReader::~vtkGDCMThreadedReader()
+vtkGDCMThreadedImageReader::~vtkGDCMThreadedImageReader()
 {
 }
 
-void vtkGDCMThreadedReader::ExecuteInformation()
+void vtkGDCMThreadedImageReader::ExecuteInformation()
 {
   std::cerr << "ExecuteInformation" << std::endl;
 }
 
-void vtkGDCMThreadedReader::ExecuteData(vtkDataObject *output)
+void vtkGDCMThreadedImageReader::ExecuteData(vtkDataObject *output)
 {
   std::cerr << "ExecuteData" << std::endl;
 }
 
-int vtkGDCMThreadedReader::CanReadFile(const char* fname)
+int vtkGDCMThreadedImageReader::CanReadFile(const char* fname)
 {
   gdcm::ImageReader reader;
   reader.SetFileName( fname );
@@ -67,7 +67,7 @@ int vtkGDCMThreadedReader::CanReadFile(const char* fname)
 }
 
 //----------------------------------------------------------------------------
-int vtkGDCMThreadedReader::ProcessRequest(vtkInformation* request,
+int vtkGDCMThreadedImageReader::ProcessRequest(vtkInformation* request,
                                  vtkInformationVector** inputVector,
                                  vtkInformationVector* outputVector)
 {
@@ -87,7 +87,7 @@ int vtkGDCMThreadedReader::ProcessRequest(vtkInformation* request,
 }
 
 //----------------------------------------------------------------------------
-int vtkGDCMThreadedReader::RequestInformation(vtkInformation *request,
+int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
                                       vtkInformationVector **inputVector,
                                       vtkInformationVector *outputVector)
 {
@@ -227,7 +227,7 @@ struct threadparams
   unsigned long len; // This is not required but useful to check if files are consistant
   unsigned long totalfiles; // total number of files being processed (needed to compute progress)
   pthread_mutex_t lock; // critial section for updating progress
-  vtkGDCMThreadedReader *reader; // needed for calling updateprogress
+  vtkGDCMThreadedImageReader *reader; // needed for calling updateprogress
 };
 
 void *ReadFilesThread(void *voidparams)
@@ -285,7 +285,7 @@ void ShowFilenames(const threadparams &params)
 }
 
 //----------------------------------------------------------------------------
-void vtkGDCMThreadedReader::ReadFiles(unsigned int nfiles, const char *filenames[])
+void vtkGDCMThreadedImageReader::ReadFiles(unsigned int nfiles, const char *filenames[])
 {
   vtkImageData *output = this->GetOutput(0);
   assert( output->GetNumberOfPoints() % nfiles == 0 );
@@ -360,11 +360,11 @@ void vtkGDCMThreadedReader::ReadFiles(unsigned int nfiles, const char *filenames
 }
 
 //----------------------------------------------------------------------------
-int vtkGDCMThreadedReader::RequestData(vtkInformation *vtkNotUsed(request),
+int vtkGDCMThreadedImageReader::RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector **vtkNotUsed(inputVector),
                                 vtkInformationVector *outputVector)
 {
-  //std::cerr << "vtkGDCMThreadedReader::RequestData Start" << std::endl;
+  //std::cerr << "vtkGDCMThreadedImageReader::RequestData Start" << std::endl;
   //this->UpdateProgress(0.2);
 
   // Make sure the output dimension is OK, and allocate its scalars
@@ -396,12 +396,12 @@ int vtkGDCMThreadedReader::RequestData(vtkInformation *vtkNotUsed(request),
   ReadFiles(nfiles, filenames);
   delete[] filenames;
 
-  //std::cerr << "vtkGDCMThreadedReader::RequestData End" << std::endl;
+  //std::cerr << "vtkGDCMThreadedImageReader::RequestData End" << std::endl;
   return 1;
 }
 
 //----------------------------------------------------------------------------
-void vtkGDCMThreadedReader::PrintSelf(ostream& os, vtkIndent indent)
+void vtkGDCMThreadedImageReader::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os,indent);
 }

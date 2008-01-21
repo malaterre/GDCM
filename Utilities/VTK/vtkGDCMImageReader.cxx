@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "vtkGDCMReader.h"
+#include "vtkGDCMImageReader.h"
 
 #include "vtkObjectFactory.h"
 #include "vtkImageData.h"
@@ -30,17 +30,17 @@
 
 #include <sstream>
 
-vtkCxxRevisionMacro(vtkGDCMReader, "$Revision: 1.1 $");
-vtkStandardNewMacro(vtkGDCMReader);
+vtkCxxRevisionMacro(vtkGDCMImageReader, "$Revision: 1.1 $");
+vtkStandardNewMacro(vtkGDCMImageReader);
 
-//struct vtkGDCMReaderInternals
+//struct vtkGDCMImageReaderInternals
 //{
 //  gdcm::ImageReader DICOMReader;
 //};
 
-vtkGDCMReader::vtkGDCMReader()
+vtkGDCMImageReader::vtkGDCMImageReader()
 {
-  //this->Internals = new vtkGDCMReaderInternals;
+  //this->Internals = new vtkGDCMImageReaderInternals;
   //this->ScalarArrayName = NULL;
   //this->SetScalarArrayName( "GDCM" );
 
@@ -49,22 +49,22 @@ vtkGDCMReader::vtkGDCMReader()
   //this->FileLowerLeft = 1;
 }
 
-vtkGDCMReader::~vtkGDCMReader()
+vtkGDCMImageReader::~vtkGDCMImageReader()
 {
   //delete this->Internals;
 }
 
-void vtkGDCMReader::ExecuteInformation()
+void vtkGDCMImageReader::ExecuteInformation()
 {
   std::cerr << "ExecuteInformation" << std::endl;
 }
 
-void vtkGDCMReader::ExecuteData(vtkDataObject *output)
+void vtkGDCMImageReader::ExecuteData(vtkDataObject *output)
 {
   std::cerr << "ExecuteData" << std::endl;
 }
 
-int vtkGDCMReader::CanReadFile(const char* fname)
+int vtkGDCMImageReader::CanReadFile(const char* fname)
 {
   gdcm::ImageReader reader;
   reader.SetFileName( fname );
@@ -76,7 +76,7 @@ int vtkGDCMReader::CanReadFile(const char* fname)
 }
 
 //----------------------------------------------------------------------------
-int vtkGDCMReader::ProcessRequest(vtkInformation* request,
+int vtkGDCMImageReader::ProcessRequest(vtkInformation* request,
                                  vtkInformationVector** inputVector,
                                  vtkInformationVector* outputVector)
 {
@@ -97,7 +97,7 @@ int vtkGDCMReader::ProcessRequest(vtkInformation* request,
 
 
 //
-void vtkGDCMReader::FillMedicalImageInformation(const gdcm::ImageReader &reader)
+void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &reader)
 {
   // For now only do:
   // PatientName, PatientID, PatientAge, PatientSex, PatientBirthDate,
@@ -165,7 +165,7 @@ void vtkGDCMReader::FillMedicalImageInformation(const gdcm::ImageReader &reader)
 }
 
 //----------------------------------------------------------------------------
-int vtkGDCMReader::RequestInformation(vtkInformation *request,
+int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
                                       vtkInformationVector **inputVector,
                                       vtkInformationVector *outputVector)
 {
@@ -327,7 +327,7 @@ int LoadSingleFile(const char *filename, int *dext, char *pointer)
 }
 
 //----------------------------------------------------------------------------
-int vtkGDCMReader::RequestData(vtkInformation *vtkNotUsed(request),
+int vtkGDCMImageReader::RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector **vtkNotUsed(inputVector),
                                 vtkInformationVector *outputVector)
 {
@@ -418,7 +418,7 @@ int vtkGDCMReader::RequestData(vtkInformation *vtkNotUsed(request),
 }
 
 //----------------------------------------------------------------------------
-void vtkGDCMReader::PrintSelf(ostream& os, vtkIndent indent)
+void vtkGDCMImageReader::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os,indent);
 }

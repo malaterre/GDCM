@@ -71,7 +71,7 @@ if __name__ == "__main__":
     sys.exit(1)
   
   # setup reader
-  r = vtkgdcm.vtkGDCMThreadedReader()
+  r = vtkgdcm.vtkGDCMThreadedImageReader()
   dir = vtkDirectory()
   
   # Did user pass in a directory:
@@ -91,7 +91,7 @@ if __name__ == "__main__":
     # Write output
     writer = vtkStructuredPointsWriter()
     writer.SetInput( r.GetOutput() )
-    writer.SetFileName( "TestvtkGDCMThreadedReaderPython.vtk" )
+    writer.SetFileName( "TestvtkGDCMThreadedImageReaderPython.vtk" )
     writer.SetFileTypeToBinary()
     #writer.Write()
   else:

@@ -13,17 +13,17 @@
 
 =========================================================================*/
 #include "gdcmConfigure.h" // for GDCM_DATA_ROOT
-#include "vtkGDCMReader.h"
-#include "vtkGDCMWriter.h"
+#include "vtkGDCMImageReader.h"
+#include "vtkGDCMImageWriter.h"
 
 #include "vtkImageData.h"
 #include <vtksys/SystemTools.hxx>
 
 #include "gdcmDataImages.h"
 
-int TestvtkGDCMWrite(const char *filename)
+int TestvtkGDCMImageWrite(const char *filename)
 {
-  vtkGDCMReader *reader = vtkGDCMReader::New();
+  vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
   //reader->CanReadFile( filename );
   std::cerr << "Reading : " << filename << std::endl;
   reader->SetFileName( filename );
@@ -31,7 +31,7 @@ int TestvtkGDCMWrite(const char *filename)
 
   reader->GetOutput()->Print( cout );
 
-  vtkGDCMWriter *writer = vtkGDCMWriter::New();
+  vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
   writer->SetInputConnection( reader->GetOutputPort() );
   std::string gdcmfile = vtksys::SystemTools::GetFilenamePath( filename );
   gdcmfile = "/tmp/vtkdcm";
@@ -47,12 +47,12 @@ int TestvtkGDCMWrite(const char *filename)
   return 0; 
 }
 
-int TestvtkGDCMWriter(int argc, char *argv[])
+int TestvtkGDCMImageWriter(int argc, char *argv[])
 {
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestvtkGDCMWrite(filename);
+    return TestvtkGDCMImageWrite(filename);
     }
 
   // else
@@ -60,7 +60,7 @@ int TestvtkGDCMWriter(int argc, char *argv[])
   const char *filename;
   while( (filename = gdcmDataImages[i]) )
     {
-    r += TestvtkGDCMWrite( filename );
+    r += TestvtkGDCMImageWrite( filename );
     ++i;
     }
 

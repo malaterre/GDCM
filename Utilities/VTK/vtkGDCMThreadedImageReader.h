@@ -12,27 +12,29 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-// .NAME vtkGDCMReader - read DICOM files
+// .NAME vtkGDCMThreadedImageReader - read DICOM files
 // .SECTION Description
-// vtkGDCMReader is a source object that reads some DICOM files
+// vtkGDCMThreadedImageReader is a source object that reads some DICOM files
 // bla bla
+// .SECTION FIXME
+// For now I am doing a memcpy, without doing the Y-flip to please VTK !
 
 // .SECTION See Also
 // vtkMedicalImageReader2 vtkMedicalImageProperties
 
-#ifndef __vtkGDCMReader_h
-#define __vtkGDCMReader_h
+#ifndef __vtkGDCMThreadedImageReader_h
+#define __vtkGDCMThreadedImageReader_h
 
 #include "vtkMedicalImageReader2.h"
 
 //BTX
 namespace gdcm { class ImageReader; }
 //ETX
-class VTK_EXPORT vtkGDCMReader : public vtkMedicalImageReader2
+class VTK_EXPORT vtkGDCMThreadedImageReader : public vtkMedicalImageReader2
 {
 public:
-  static vtkGDCMReader *New();
-  vtkTypeRevisionMacro(vtkGDCMReader,vtkMedicalImageReader2);
+  static vtkGDCMThreadedImageReader *New();
+  vtkTypeRevisionMacro(vtkGDCMThreadedImageReader,vtkMedicalImageReader2);
   virtual void PrintSelf(ostream& os, vtkIndent indent);
 
   // Description: is the given file name a DICOM file?
@@ -54,12 +56,9 @@ public:
     }
 
 protected:
-  vtkGDCMReader();
-  ~vtkGDCMReader();
+  vtkGDCMThreadedImageReader();
+  ~vtkGDCMThreadedImageReader();
 
-//BTX
-  void FillMedicalImageInformation(const gdcm::ImageReader &reader);
-//ETX
   int ProcessRequest(vtkInformation* request,
                                  vtkInformationVector** inputVector,
                                  vtkInformationVector* outputVector);
@@ -70,15 +69,15 @@ protected:
                   vtkInformationVector **inputVector,
                   vtkInformationVector *outputVector);
 
+  // FIXME: remove those:
   virtual void ExecuteInformation();
   virtual void ExecuteData(vtkDataObject *out);
 
-private:
-  vtkGDCMReader(const vtkGDCMReader&);  // Not implemented.
-  void operator=(const vtkGDCMReader&);  // Not implemented.
+  void ReadFiles(unsigned int nfiles, const char *filenames[]);
 
-  //PIMPL
-  //vtkGDCMReaderInternals *Internals;
+private:
+  vtkGDCMThreadedImageReader(const vtkGDCMThreadedImageReader&);  // Not implemented.
+  void operator=(const vtkGDCMThreadedImageReader&);  // Not implemented.
 };
 #endif
 

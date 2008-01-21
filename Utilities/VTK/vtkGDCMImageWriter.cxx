@@ -12,9 +12,13 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "vtkGDCMWriter.h"
+#include "vtkGDCMImageWriter.h"
 
 #include "vtkObjectFactory.h"
+#include "vtkInformationVector.h"
+#include "vtkImageData.h"
+#include "vtkStreamingDemandDrivenPipeline.h"
+#include "vtkInformation.h"
 #include "vtkLookupTable.h"
 
 #if (VTK_MAJOR_VERSION < 5)
@@ -25,20 +29,20 @@
 
 #include "gdcmImageWriter.h"
 
-//struct vtkGDCMWriterInternals
+//struct vtkGDCMImageWriterInternals
 //{
 //  gdcm::ImageWriter DICOMWriter;
 //};
 
-vtkCxxRevisionMacro(vtkGDCMWriter, "$Revision: 1.1 $")
-vtkStandardNewMacro(vtkGDCMWriter)
+vtkCxxRevisionMacro(vtkGDCMImageWriter, "$Revision: 1.1 $")
+vtkStandardNewMacro(vtkGDCMImageWriter)
 
-vtkCxxSetObjectMacro(vtkGDCMWriter,LookupTable,vtkLookupTable);
-vtkCxxSetObjectMacro(vtkGDCMWriter,MedicalImageProperties,vtkMedicalImageProperties);
+vtkCxxSetObjectMacro(vtkGDCMImageWriter,LookupTable,vtkLookupTable);
+vtkCxxSetObjectMacro(vtkGDCMImageWriter,MedicalImageProperties,vtkMedicalImageProperties);
 
-vtkGDCMWriter::vtkGDCMWriter()
+vtkGDCMImageWriter::vtkGDCMImageWriter()
 {
-  //this->Internals = new vtkGDCMWriterInternals;
+  //this->Internals = new vtkGDCMImageWriterInternals;
   //this->ScalarArrayName = NULL;
   //this->SetScalarArrayName( "GDCM" );
 
@@ -46,7 +50,7 @@ vtkGDCMWriter::vtkGDCMWriter()
   this->MedicalImageProperties = vtkMedicalImageProperties::New();
 }
 
-vtkGDCMWriter::~vtkGDCMWriter()
+vtkGDCMImageWriter::~vtkGDCMImageWriter()
 {
   //delete this->Internals;
   this->LookupTable->Delete();
@@ -163,8 +167,15 @@ int vtkGDCMImageWriter::RequestData(
 
   return 1;
 }
+
 //----------------------------------------------------------------------------
-void vtkGDCMWriter::PrintSelf(ostream& os, vtkIndent indent)
+int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
+{
+  assert( timeStep >= 0 );
+}
+
+//----------------------------------------------------------------------------
+void vtkGDCMImageWriter::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os,indent);
   //this->Internals->DICOMWriter.Print(os);

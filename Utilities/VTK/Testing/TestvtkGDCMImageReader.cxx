@@ -13,7 +13,7 @@
 
 =========================================================================*/
 #include "gdcmConfigure.h" // for GDCM_DATA_ROOT
-#include "vtkGDCMReader.h"
+#include "vtkGDCMImageReader.h"
 
 #include "vtkPNGWriter.h"
 #include "vtkImageData.h"
@@ -21,9 +21,9 @@
 
 #include "gdcmDataImages.h"
 
-int TestvtkGDCMRead(const char *filename)
+int TestvtkGDCMImageRead(const char *filename)
 {
-  vtkGDCMReader *reader = vtkGDCMReader::New();
+  vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
   //reader->CanReadFile( filename );
   std::cerr << "Reading : " << filename << std::endl;
   reader->SetFileName( filename );
@@ -46,12 +46,12 @@ int TestvtkGDCMRead(const char *filename)
   return 0; 
 }
 
-int TestvtkGDCMReader(int argc, char *argv[])
+int TestvtkGDCMImageReader(int argc, char *argv[])
 {
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestvtkGDCMRead(filename);
+    return TestvtkGDCMImageRead(filename);
     }
 
   // else
@@ -59,7 +59,7 @@ int TestvtkGDCMReader(int argc, char *argv[])
   const char *filename;
   while( (filename = gdcmDataImages[i]) )
     {
-    r += TestvtkGDCMRead( filename );
+    r += TestvtkGDCMImageRead( filename );
     ++i;
     }
 

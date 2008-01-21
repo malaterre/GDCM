@@ -12,27 +12,27 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-// .NAME vtkGDCMWriter - write DICOM files
+// .NAME vtkGDCMImageWriter - write DICOM files
 // .SECTION Description
-// vtkGDCMWriter is
+// vtkGDCMImageWriter is
 // bla bla
 
 // .SECTION See Also
 // vtkImageWriter vtkMedicalImageProperties
 
-#ifndef __vtkGDCMWriter_h
-#define __vtkGDCMWriter_h
+#ifndef __vtkGDCMImageWriter_h
+#define __vtkGDCMImageWriter_h
 
 #include "vtkImageWriter.h"
 
-struct vtkGDCMWriterInternals;
+struct vtkGDCMImageWriterInternals;
 class vtkLookupTable;
 class vtkMedicalImageProperties;
-class VTK_EXPORT vtkGDCMWriter : public vtkImageWriter
+class VTK_EXPORT vtkGDCMImageWriter : public vtkImageWriter
 {
 public:
-  static vtkGDCMWriter *New();
-  vtkTypeRevisionMacro(vtkGDCMWriter,vtkImageWriter);
+  static vtkGDCMImageWriter *New();
+  vtkTypeRevisionMacro(vtkGDCMImageWriter,vtkImageWriter);
   virtual void PrintSelf(ostream& os, vtkIndent indent);
 
   virtual void SetLookupTable(vtkLookupTable*);
@@ -41,19 +41,36 @@ public:
   virtual void SetMedicalImageProperties(vtkMedicalImageProperties*);
 
 protected:
-  vtkGDCMWriter();
-  ~vtkGDCMWriter();
+  vtkGDCMImageWriter();
+  ~vtkGDCMImageWriter();
+
+  int FillInputPortInformation(int port, vtkInformation *info);
+  int RequestInformation(
+    vtkInformation *request,
+    vtkInformationVector **inputVector,
+    vtkInformationVector *outputVector);
+  int RequestUpdateExtent(
+    vtkInformation *request,
+    vtkInformationVector **inputVector,
+    vtkInformationVector *outputVector);
+  int RequestData(
+    vtkInformation *request,
+    vtkInformationVector **inputVector,
+    vtkInformationVector *outputVector);
+  int WriteGDCMData(vtkImageData *data, int timeStep);
 
 private:
-  vtkGDCMWriter(const vtkGDCMWriter&);  // Not implemented.
-  void operator=(const vtkGDCMWriter&);  // Not implemented.
+  vtkGDCMImageWriter(const vtkGDCMImageWriter&);  // Not implemented.
+  void operator=(const vtkGDCMImageWriter&);  // Not implemented.
 
   //PIMPL
-  //vtkGDCMWriterInternals *Internals;
+  //vtkGDCMImageWriterInternals *Internals;
 
   // VTK structs:
   vtkLookupTable *LookupTable;
   vtkMedicalImageProperties *MedicalImageProperties;
+
+  int DataUpdateExtent[6];
 };
 
 #endif

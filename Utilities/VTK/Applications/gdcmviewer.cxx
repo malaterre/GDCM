@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "vtkGDCMReader.h"
-//#include "vtkGDCMThreadedReader.h"
+#include "vtkGDCMImageReader.h"
+//#include "vtkGDCMThreadedImageReader.h"
 
 #include "vtkXMLImageDataWriter.h"
 #include "vtkPNGWriter.h"
@@ -73,7 +73,7 @@ public:
 template <typename TViewer>
 void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 {
-  vtkGDCMReader *reader = vtkGDCMReader::New();
+  vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
   if( filenames->GetSize() == 1 ) // Backward compatible...
     {
     reader->SetFileName( filenames->GetValue(0) );

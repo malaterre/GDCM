@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "vtkGDCMThreadedReader.h"
-#include "vtkGDCMReader.h"
+#include "vtkGDCMThreadedImageReader.h"
+#include "vtkGDCMImageReader.h"
 #include "vtkCommand.h"
 
 #include "gdcmDirectory.h"
@@ -48,7 +48,7 @@ public:
     {
     if( event == vtkCommand::ProgressEvent )
       {
-      std::cout << ((vtkGDCMThreadedReader*)caller)->GetProgress() << std::endl;
+      std::cout << ((vtkGDCMThreadedImageReader*)caller)->GetProgress() << std::endl;
       }
     }
 };
@@ -131,7 +131,7 @@ void ExecuteInformation(const char *filename, TReader *vtkreader)
 }
 
 template <typename TReader>
-int TestvtkGDCMThreadedRead(const char *filename)
+int TestvtkGDCMThreadedImageRead(const char *filename)
 {
   TReader *reader = TReader::New();
   //reader->CanReadFile( filename );
@@ -185,7 +185,7 @@ int TestvtkGDCMThreadedRead(const char *filename)
 */
   vtkStructuredPointsWriter *writer = vtkStructuredPointsWriter::New();
   writer->SetInput( reader->GetOutput() );
-  writer->SetFileName( "TestvtkGDCMThreadedReader.vtk" );
+  writer->SetFileName( "TestvtkGDCMThreadedImageReader.vtk" );
   writer->SetFileTypeToBinary();
   //writer->Write();
   writer->Delete();
@@ -248,12 +248,12 @@ int TestvtkGDCMThreadedRead(const char *filename)
   return 0; 
 }
 
-int TestvtkGDCMThreadedReader(int argc, char *argv[])
+int TestvtkGDCMThreadedImageReader(int argc, char *argv[])
 {
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestvtkGDCMThreadedRead<vtkGDCMThreadedReader>(filename);
+    return TestvtkGDCMThreadedImageRead<vtkGDCMThreadedImageReader>(filename);
     }
 
   // else
@@ -261,7 +261,7 @@ int TestvtkGDCMThreadedReader(int argc, char *argv[])
   const char *filename;
   while( (filename = gdcmDataImages[i]) )
     {
-    r += TestvtkGDCMThreadedRead<vtkGDCMThreadedReader>( filename );
+    r += TestvtkGDCMThreadedImageRead<vtkGDCMThreadedImageReader>( filename );
     ++i;
     }
 

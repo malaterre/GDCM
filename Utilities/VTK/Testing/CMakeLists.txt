@@ -1,10 +1,10 @@
 # Define the tests for vtk-gdcm
 # vtkGDCM
 SET(VTK_GDCM_TEST_SRCS
-  TestvtkGDCMReader
-  TestvtkGDCMThreadedReader
+  TestvtkGDCMImageReader
+  TestvtkGDCMThreadedImageReader
   #TestvtkGDCMImageActor
-  TestvtkGDCMWriter
+  TestvtkGDCMImageWriter
   )
 
 # Add the include paths
@@ -32,9 +32,9 @@ IF(BUILD_WRAPPING)
   #MESSAGE(${VTK_LIBRARY_DIRS})
   #MESSAGE(${VTK_PYTHONPATH_DIRS})
   STRING(REGEX REPLACE ";" ":" UNIX_VTK_PYTHONPATH_DIRS "${VTK_PYTHONPATH_DIRS}")
-  SET_SOURCE_FILES_PROPERTIES(TestvtkGDCMThreadedReader.py PROPERTIES PYTHONPATH
+  SET_SOURCE_FILES_PROPERTIES(TestvtkGDCMThreadedImageReader.py PROPERTIES PYTHONPATH
     "${UNIX_VTK_PYTHONPATH_DIRS}:${LIBRARY_OUTPUT_PATH}")
-  ADD_PYTHON_TEST(TestvtkGDCMThreadedReaderPython TestvtkGDCMThreadedReader.py ${GDCM_DATA_ROOT}/test.acr)
+  ADD_PYTHON_TEST(TestvtkGDCMThreadedImageReaderPython TestvtkGDCMThreadedImageReader.py ${GDCM_DATA_ROOT}/test.acr)
 
 ENDIF(BUILD_WRAPPING)
 
