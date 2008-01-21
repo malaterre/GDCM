@@ -28,6 +28,7 @@
 #endif
 
 #include "gdcmImageWriter.h"
+#include "gdcmByteValue.h"
 
 //struct vtkGDCMImageWriterInternals
 //{
@@ -172,6 +173,69 @@ int vtkGDCMImageWriter::RequestData(
 int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 {
   assert( timeStep >= 0 );
+  data->Update();
+  data->Print( std::cout );
+  const char * filename = this->GetFileName();
+  std::cerr << data->GetDataDimension() <<std::endl;
+  gdcm::ImageValue image;
+  image.SetNumberOfDimensions( 2 ); // good default
+  const int *dims = data->GetDimensions();
+  assert( dims[0] >= 0 && dims[1] >= 0 && dims[2] >= 0 );
+  image.SetDimension(0, dims[0] );
+  image.SetDimension(1, dims[1] );
+  if( dims[2] > 1 )
+    {
+    // resize num of dim to 3:
+    image.SetNumberOfDimensions( 3 );
+    image.SetDimension(2, dims[2] );
+    }
+  // For now FileDimensionality should match File Dimension
+  //this->FileDimensionality
+  int scalarType = data->GetScalarType();
+  gdcm::PixelFormat pixeltype = gdcm::PixelFormat::UNKNOWN;
+  switch( scalarType )
+    {
+  case VTK_CHAR:
+    pixeltype = gdcm::PixelFormat::INT8; // FIXME ??
+    break;
+  case VTK_SIGNED_CHAR:
+    pixeltype = gdcm::PixelFormat::INT8;
+    break;
+  case VTK_UNSIGNED_CHAR:
+    pixeltype = gdcm::PixelFormat::UINT8;
+    break;
+  case VTK_SHORT:
+    pixeltype = gdcm::PixelFormat::INT16;
+    break;
+  case VTK_UNSIGNED_SHORT:
+    pixeltype = gdcm::PixelFormat::UINT16;
+    break;
+  default:
+    ;
+    }
+
+  pixeltype.SetSamplesPerPixel( data->GetNumberOfScalarComponents() );
+//  if( image.GetPhotometricInterpretation() == 
+//    gdcm::PhotometricInterpretation::PALETTE_COLOR )
+//    {
+//    assert( this->NumberOfScalarComponents == 1 );
+//    this->NumberOfScalarComponents = 3;
+//    }
+  image.SetPixelFormat( pixeltype );
+  unsigned long len = image.GetBufferLength();
+
+  gdcm::ByteValue *bv = new gdcm::ByteValue( (char*)data->GetScalarPointer(), len );
+  image.SetValue( *bv );
+  
+  gdcm::ImageWriter writer;
+  writer.SetFileName( filename );
+  writer.SetImage( image );
+  if( !writer.Write() )
+    {
+    return 0;
+    }
+
+  return 1;
 }
 
 //----------------------------------------------------------------------------

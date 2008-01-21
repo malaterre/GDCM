@@ -29,10 +29,13 @@ int TestvtkGDCMImageWrite(const char *filename)
   reader->SetFileName( filename );
   reader->Update();
 
-  reader->GetOutput()->Print( cout );
+  vtkImageData *copy = vtkImageData::New();
+  copy->DeepCopy( reader->GetOutput() );
+  //reader->GetOutput()->Print( cout );
 
   vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
-  writer->SetInputConnection( reader->GetOutputPort() );
+  //writer->SetInput( reader->GetOutput() );
+  writer->SetInput( copy );
   std::string gdcmfile = vtksys::SystemTools::GetFilenamePath( filename );
   gdcmfile = "/tmp/vtkdcm";
   gdcmfile += '/';
@@ -42,6 +45,7 @@ int TestvtkGDCMImageWrite(const char *filename)
   writer->Write();
 
   reader->Delete();
+  copy->Delete();
   writer->Delete();
 
   return 0; 
