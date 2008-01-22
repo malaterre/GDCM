@@ -19,6 +19,7 @@
 #include "gdcmImplicitDataElement.h"
 #include "gdcmByteValue.h"
 #include "gdcmSwapper.h"
+#include "gdcmException.h"
 
 #include "gdcmTag.h"
 
@@ -85,6 +86,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
   else
     {
     // Very bad !!
+    throw gdcm::Exception();
     }
   // Implementation Class UID (0002,0012) -> ??
   if( !FindDataElement( Tag(0x0002, 0x0012) ) )
