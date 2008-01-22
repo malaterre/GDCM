@@ -226,6 +226,8 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
   gdcm::ByteValue *bv = new gdcm::ByteValue( (char*)data->GetScalarPointer(), len );
   image.SetValue( *bv );
+  gdcm::PhotometricInterpretation pi = gdcm::PhotometricInterpretation::MONOCHROME2;
+  image.SetPhotometricInterpretation( pi );
   
   gdcm::ImageWriter writer;
   writer.SetFileName( filename );

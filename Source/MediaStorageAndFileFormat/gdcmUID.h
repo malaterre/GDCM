@@ -32,6 +32,8 @@ public:
   void SetRoot(const char * root) { Root = root; }
   const char *GetRoot() const { return Root.c_str(); }
 
+  // Internally uses a std::string, so two calls have the same pointer !
+  // save into a std::string
   const char* GenerateUniqueUID();
 
   static bool IsUIDValid(const char *uid);

@@ -16,6 +16,7 @@
 #include "gdcmTrace.h"
 #include "gdcmDataSet.h"
 #include "gdcmAttribute.h"
+#include "gdcmUID.h"
 
 namespace gdcm
 {
@@ -77,6 +78,16 @@ bool ImageWriter::Write()
   de.SetVL( bv->GetLength() );
   //assert( bv ); // For now...
   ds.Replace( de );
+  // PhotometricInterpretation
+  // const Tag tphotometricinterpretation(0x0028, 0x0004);
+  const PhotometricInterpretation &pi = PixelData.GetPhotometricInterpretation();
+  if( !ds.FindDataElement( Tag(0x0028, 0x0004) ) )
+    {
+    const char *pistr = PhotometricInterpretation::GetPIString(pi);
+    DataElement de( Tag(0x0028, 0x0004 ) );
+    de.SetByteValue( pistr, strlen(pistr) );
+    ds.Insert( de );
+    }
 
   if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )
     {
@@ -87,7 +98,42 @@ bool ImageWriter::Write()
     ds.Insert( de );
     }
 
+  // UIDs:
+  // (0008,0018) UI [1.3.6.1.4.1.5962.1.1.1.1.3.20040826185059.5457] #  46, 1 SOPInstanceUID
+  // (0020,000d) UI [1.3.6.1.4.1.5962.1.2.1.20040826185059.5457] #  42, 1 StudyInstanceUID
+  // (0020,000e) UI [1.3.6.1.4.1.5962.1.3.1.1.20040826185059.5457] #  44, 1 SeriesInstanceUID
+  UID uid;
+    {
+    const char *sop = uid.GenerateUniqueUID();
+    DataElement de( Tag(0x0008,0x0018) );
+    de.SetByteValue( sop, strlen(sop) );
+    ds.Insert( de );
+    }
+
+    {
+    const char *study = uid.GenerateUniqueUID();
+    DataElement de( Tag(0x0020,0x000d) );
+    de.SetByteValue( study, strlen(study) );
+    ds.Insert( de );
+    }
+
+    {
+    const char *series = uid.GenerateUniqueUID();
+    DataElement de( Tag(0x0020,0x000e) );
+    de.SetByteValue( series, strlen(series) );
+    ds.Insert( de );
+    }
+
   FileMetaInformation &fmi = file.GetHeader();
+
+  // Set Transfer Syntax UID to default:
+  TransferSyntax ts;
+    {
+    const char *tsuid = TransferSyntax::GetTSString( ts );
+    DataElement de( Tag(0x0002,0x0010) );
+    de.SetByteValue( tsuid, strlen(tsuid) );
+    fmi.Insert( de );
+    }
   fmi.FillFromDataSet( ds );
 
   if( !Writer::Write() )

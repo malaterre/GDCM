@@ -64,7 +64,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
       const DataElement& msinst = ds.GetDataElement( Tag(0x0008, 0x0018) );
       xde = msinst;
       xde.SetTag( Tag(0x0002, 0x0003) );
-      if( msinst.GetVR() == VR::UN )
+      if( msinst.GetVR() == VR::UN || msinst.GetVR() == VR::INVALID )
         {
         xde.SetVR( VR::UI );
         }
@@ -72,6 +72,16 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
       }
     }
   // Transfer Syntax UID (0002,0010) -> ??? (computed at write time at most)
+  if( FindDataElement( Tag(0x0002, 0x0010) ) )
+    {
+    const DataElement& tsuid = GetDataElement( Tag(0x0002, 0x0010) );
+    if( tsuid.GetVR() != VR::UI )
+      {
+      xde = tsuid;
+      xde.SetVR( VR::UI );
+      Replace( xde );
+      }
+    }
   // Implementation Class UID (0002,0012) -> ??
   // Implementation Version Name (0002,0013) -> ??
   if( !FindDataElement( Tag(0x0002, 0x0013) ) )
