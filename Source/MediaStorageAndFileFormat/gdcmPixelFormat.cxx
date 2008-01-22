@@ -29,6 +29,11 @@ static const char *ScalarTypeStrings[] = {
   NULL,
 };
 
+PixelFormat::PixelFormat(ScalarType st)
+{
+  SetScalarType( st );
+}
+
 unsigned short PixelFormat::GetSamplesPerPixel() const
 {
   if ( BitsAllocated == 24 )
@@ -39,11 +44,63 @@ unsigned short PixelFormat::GetSamplesPerPixel() const
   return SamplesPerPixel;
 }
 
+void PixelFormat::SetScalarType(ScalarType st)
+{
+  SamplesPerPixel = 1;
+  switch(st)
+    {
+  case PixelFormat::UINT8:
+    BitsAllocated = 8;
+    PixelRepresentation = 0;
+    break;
+  case PixelFormat::INT8:
+    BitsAllocated = 8;
+    PixelRepresentation = 1;
+    break;
+  case PixelFormat::UINT12:
+    BitsAllocated = 12;
+    PixelRepresentation = 0;
+    break;
+  case PixelFormat::INT12:
+    BitsAllocated = 12;
+    PixelRepresentation = 1;
+    break;
+  case PixelFormat::UINT16:
+    BitsAllocated = 16;
+    PixelRepresentation = 0;
+    break;
+  case PixelFormat::INT16:
+    BitsAllocated = 16;
+    PixelRepresentation = 1;
+    break;
+  case PixelFormat::UINT32:
+    BitsAllocated = 32;
+    PixelRepresentation = 0;
+    break;
+  case PixelFormat::INT32:
+    BitsAllocated = 32;
+    PixelRepresentation = 1;
+    break;
+  case PixelFormat::UNKNOWN:
+    BitsAllocated = 0;
+    PixelRepresentation = 0;
+    break;
+  default:
+    abort();
+    break;
+    }
+  BitsStored = BitsAllocated;
+  HighBit = BitsStored - 1;
+}
+
 PixelFormat::ScalarType PixelFormat::GetScalarType() const
 {
   ScalarType type = PixelFormat::UNKNOWN;
   switch( BitsAllocated )
     {
+  case 0:
+    type = PixelFormat::UNKNOWN;
+    break;
   case 8:
     type = PixelFormat::UINT8;
     break;

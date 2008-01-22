@@ -211,7 +211,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     pixeltype = gdcm::PixelFormat::UINT16;
     break;
   default:
-    ;
+    abort();
     }
 
   pixeltype.SetSamplesPerPixel( data->GetNumberOfScalarComponents() );

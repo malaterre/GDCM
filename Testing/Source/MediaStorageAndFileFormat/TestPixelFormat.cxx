@@ -17,5 +17,11 @@
 int TestPixelFormat(int , char *[])
 {
   gdcm::PixelFormat pf;
+  pf.SetScalarType( gdcm::PixelFormat::UNKNOWN );
+  if( pf.GetScalarType() != gdcm::PixelFormat::UNKNOWN )
+    {
+    return 1;
+    }
+  
   return 0;
 }

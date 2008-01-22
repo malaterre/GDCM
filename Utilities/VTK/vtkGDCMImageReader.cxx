@@ -111,10 +111,13 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
     {
     const gdcm::DataElement& de = ds.GetDataElement( patname );
     const gdcm::ByteValue *bv = de.GetByteValue();
-    bv->Write<gdcm::SwapperNoOp>(str);
-    assert( str.str().size() == bv->GetLength() );
-    //std::string patname_str( bv->GetPointer(), bv->GetLength() );
-    this->MedicalImageProperties->SetPatientName( str.str().c_str() );
+    if( bv ) // Type 2
+      {
+      bv->Write<gdcm::SwapperNoOp>(str);
+      assert( str.str().size() == bv->GetLength() );
+      //std::string patname_str( bv->GetPointer(), bv->GetLength() );
+      this->MedicalImageProperties->SetPatientName( str.str().c_str() );
+      }
     }
   str.str( "" );
 

@@ -47,10 +47,11 @@ public:
     INT16,
     UINT32,  // For some DICOM files (RT or SC)
     INT32,   //                        "   "
-    UNKNOWN
+    UNKNOWN // aka BitsAllocated == 0 && PixelRepresentation == 0
   } ScalarType;
 
-  PixelFormat (
+  // default cstor:
+  explicit PixelFormat (
     unsigned short samplesperpixel = 1,
     unsigned short bitsallocated = 8,
     unsigned short bitsstored = 8,
@@ -61,6 +62,8 @@ public:
   BitsStored(bitsstored),
   HighBit(highbit),
   PixelRepresentation(pixelrepresentation) {}
+  // helper, for the common case
+  PixelFormat(ScalarType st);
   ~PixelFormat() {}
 
   // For transparence of use
@@ -116,6 +119,7 @@ public:
     }
 
   ScalarType GetScalarType() const;
+  void SetScalarType(ScalarType st);
   const char *GetScalarTypeAsString() const;
 
   uint8_t GetPixelSize() const;
