@@ -32,8 +32,8 @@ bool Writer::Write()
     return false;
     }
 
-  assert( F );
-  F->Write( Stream );
+  //assert( F );
+  F.Write( Stream );
 
   // FIXME : call this function twice...
   Stream.close();

@@ -57,9 +57,9 @@ public:
   void SetNumberOfDimensions(unsigned int dim);
 
   const unsigned int *GetDimensions() const;
-  unsigned int GetDimensions(unsigned int idx) const;
+  unsigned int GetDimension(unsigned int idx) const;
   void SetDimensions(unsigned int *dims);
-  void SetDimensions(unsigned int idx, unsigned int dim);
+  void SetDimension(unsigned int idx, unsigned int dim);
 
   // Get/Set PixelFormat
   const PixelFormat &GetPixelFormat() const

@@ -42,14 +42,14 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     {
     if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )
       {
-abort();
+      abort();
       }
     else
       {
       const DataElement& msclass = ds.GetDataElement( Tag(0x0008, 0x0016) );
       xde = msclass;
       xde.SetTag( Tag(0x0002, 0x0002) );
-      if( msclass.GetVR() == VR::UN )
+      if( msclass.GetVR() == VR::UN || msclass.GetVR() == VR::INVALID )
         {
         xde.SetVR( VR::UI );
         }

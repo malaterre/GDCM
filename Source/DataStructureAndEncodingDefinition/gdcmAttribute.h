@@ -20,6 +20,7 @@
 #include "gdcmTagToType.h"
 #include "gdcmVM.h"
 #include "gdcmElement.h"
+#include "gdcmDataElement.h"
 
 #include <string>
 #include <vector>
@@ -85,6 +86,19 @@ public:
     for(int i=1; i<VMToLength<TVM>::Length; ++i)
       _os << "," << Internal[i];
     }
+
+  //uint16_t GetGroup() const { return Group; }
+  //uint16_t GetElement() const { return Element; }
+  Tag GetTag() const { return Tag(Group,Element); }
+
+  DataElement GetAsDataElement() const {
+    DataElement ret( Tag(Group,Element) );
+    std::ostringstream os;
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
+      GetLength(),os);
+    ret.SetByteValue( os.str().c_str(), os.str().size() );
+    return ret;
+  }
 
   // copy:
   VRType GetValue(int idx = 0) {

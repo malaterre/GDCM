@@ -34,6 +34,7 @@
  *   DICOM wav  <->  wav
  *   DICOM pdf  <->  pdf
  */
+#include "gdcmFilename.h"
 #include "gdcmReader.h"
 #include "gdcmImageWriter.h"
 #include "gdcmImageReader.h"
@@ -53,14 +54,17 @@ int main (int argc, char *argv[])
   int c;
   //int digit_optind = 0;
 
-  std::string filename;
-  std::string outfilename;
+  gdcm::Filename filename;
+  gdcm::Filename outfilename;
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
     static struct option long_options[] = {
         {"input", 1, 0, 0},
         {"output", 1, 0, 0},
+        // provide convert-like command line args:
+        {"depth", 1, 0, 0},
+        {"size", 1, 0, 0},
         {0, 0, 0, 0}
     };
 
@@ -68,7 +72,7 @@ int main (int argc, char *argv[])
     // I -> input directory
     // o -> output file
     // O -> output directory
-    c = getopt_long (argc, argv, "i:o:I:O:",
+    c = getopt_long (argc, argv, "i:o:I:O:d:s:",
       long_options, &option_index);
     if (c == -1)
       {
@@ -86,7 +90,7 @@ int main (int argc, char *argv[])
           if( option_index == 0 ) /* input */
             {
             assert( strcmp(s, "input") == 0 );
-            assert( filename.empty() );
+            assert( filename.IsEmpty() );
             filename = optarg;
             }
           printf (" with arg %s", optarg);
@@ -97,13 +101,23 @@ int main (int argc, char *argv[])
 
     case 'i':
       printf ("option i with value '%s'\n", optarg);
-      assert( filename.empty() );
+      assert( filename.IsEmpty() );
       filename = optarg;
       break;
 
     case 'o':
       printf ("option o with value '%s'\n", optarg);
-      assert( outfilename.empty() );
+      assert( outfilename.IsEmpty() );
+      outfilename = optarg;
+      break;
+
+    case 'd': // depth
+      printf ("option d with value '%s'\n", optarg);
+      outfilename = optarg;
+      break;
+
+    case 's': // size
+      printf ("option d with value '%s'\n", optarg);
       outfilename = optarg;
       break;
 
@@ -127,19 +141,22 @@ int main (int argc, char *argv[])
     return 1;
     }
 
-  if( filename.empty() )
+  if( filename.IsEmpty() )
     {
     std::cerr << "Need input file (-i)\n";
     return 1;
     }
-  if( outfilename.empty() )
+  if( outfilename.IsEmpty() )
     {
     std::cerr << "Need output file (-o)\n";
     return 1;
     }
 
+  const char *inputextension = filename.GetExtension();
+  const char *outputextension = outfilename.GetExtension();
+
   gdcm::ImageWriter writer;
-  writer.SetFileName( outfilename.c_str() );
+  writer.SetFileName( outfilename );
   if( !writer.Write() )
     {
     std::cerr << "Failed to write: " << outfilename << std::endl;

@@ -16,6 +16,7 @@
 
 #include "gdcmByteValue.h"
 #include "gdcmSequenceOfItems.h"
+#include "gdcmAttribute.h"
 
 namespace gdcm
 {
@@ -28,7 +29,6 @@ namespace gdcm
       ValueLengthField.SetToUndefined();
       }
   }
-
 
 } // end namespace gdcm
 

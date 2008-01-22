@@ -40,8 +40,9 @@ public:
   bool GetBuffer(char *buffer) const;
 
   void SetValue(Value const &v) {
-    PixelData = SmartPointer<Value>( const_cast<Value*>(&v) );
+    PixelData = &v;
   }
+  const Value& GetValue() const { return *PixelData; }
 
 protected:
   bool TryRAWCodec(char *buffer) const;

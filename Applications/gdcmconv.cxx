@@ -212,14 +212,24 @@ int main (int argc, char *argv[])
 #endif
 
   gdcm::DataSet& ds = reader.GetFile().GetDataSet();
+#if 0
   gdcm::DataElement de = ds.GetDataElement( gdcm::Tag(0x0010,0x0010) );
   const char patname[] = "John^Doe";
   de.SetByteValue(patname, strlen(patname));
   std::cout << de << std::endl;
 
   ds.Replace( de );
-
   std::cout << ds.GetDataElement( gdcm::Tag(0x0010,0x0010) ) << std::endl;
+#endif
+
+  //(0020,0032) DS [-158.135803\-179.035797\-75.699997]     #  34, 3 ImagePositionPatient
+  //(0020,0037) DS [1.000000\0.000000\0.000000\0.000000\1.000000\0.000000] #  54, 6 ImageOrientationPatient
+  gdcm::Attribute<0x0020,0x0032> at = { -158.135803, -179.035797, -75.699997 };
+  gdcm::DataElement ipp = at.GetAsDataElement();
+  ds.Remove( at.GetTag() );
+  ds.Remove( ipp.GetTag() );
+  ds.Replace( ipp );
+
 
   gdcm::Writer writer;
   writer.SetFileName( outfilename.c_str() );

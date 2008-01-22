@@ -302,7 +302,7 @@ bool ImageReader::ReadImage()
     if( numberofframes > 1 )
       {
       PixelData.SetNumberOfDimensions(3);
-      PixelData.SetDimensions(2, numberofframes );
+      PixelData.SetDimension(2, numberofframes );
       }
     else
       {
@@ -323,7 +323,7 @@ bool ImageReader::ReadImage()
   const Tag tcolumns(0x0028, 0x0011);
   if( ds.FindDataElement( tcolumns ) )
     {
-    PixelData.SetDimensions(0,
+    PixelData.SetDimension(0,
       ReadUSFromTag( tcolumns, ss, conversion ) );
     }
   else
@@ -335,7 +335,7 @@ bool ImageReader::ReadImage()
     }
 
   // D 0028|0010 [US] [Rows] [512]
-  PixelData.SetDimensions(1,
+  PixelData.SetDimension(1,
     ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
 
   // Dummy check
@@ -577,7 +577,7 @@ bool ImageReader::ReadACRNEMAImage()
       const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0012) );
       Attribute<0x0028,0x0012> at;
       at.Set( de.GetValue() );
-      PixelData.SetDimensions(2, at.GetValue() );
+      PixelData.SetDimension(2, at.GetValue() );
       assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0012), ss, conversion ) );
       }
     else if ( imagedimensions == 2 )
@@ -601,7 +601,7 @@ bool ImageReader::ReadACRNEMAImage()
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
     Attribute<0x0028,0x0011> at;
     at.Set( de.GetValue() );
-    PixelData.SetDimensions(0, at.GetValue() );
+    PixelData.SetDimension(0, at.GetValue() );
     assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0011), ss, conversion ) );
     }
 
@@ -610,7 +610,7 @@ bool ImageReader::ReadACRNEMAImage()
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
     Attribute<0x0028,0x0010> at;
     at.Set( de.GetValue() );
-    PixelData.SetDimensions(1, at.GetValue() );
+    PixelData.SetDimension(1, at.GetValue() );
     assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
     }
 
@@ -631,8 +631,8 @@ bool ImageReader::ReadACRNEMAImage()
       // assert( PixelData.GetNumberOfDimensions() == 2 );
       const unsigned int *dims = PixelData.GetDimensions();
       unsigned int tmp = dims[0];
-      PixelData.SetDimensions(0, dims[1] );
-      PixelData.SetDimensions(1, tmp );
+      PixelData.SetDimension(0, dims[1] );
+      PixelData.SetDimension(1, tmp );
       }
     else
       {

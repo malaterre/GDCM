@@ -48,6 +48,7 @@ public:
   const Preamble &GetPreamble() const { return P; }
   void SetPreamble(const Preamble &p) { P = p; }
   const FileMetaInformation &GetHeader() const { return Header; }
+  FileMetaInformation &GetHeader() { return Header; }
   void SetHeader( const FileMetaInformation &fmi ) { Header = fmi; }
   const DataSet &GetDataSet() const { return DS; }
   DataSet &GetDataSet() { return DS; }

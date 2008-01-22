@@ -56,6 +56,7 @@ class GDCM_EXPORT DataElement
 {
 public:
   DataElement(const Tag& t = Tag(0), const VL& vl = 0, const VR &vr = VR::INVALID):TagField(t),ValueLengthField(vl),VRField(vr),ValueField(0) {}
+  //DataElement( Attribute const &att );
 
   friend std::ostream& operator<<(std::ostream &_os, const DataElement &_val);
 
@@ -82,6 +83,12 @@ public:
   bool IsValueEmpty() const { return ValueField == 0; }
 
   // Helper:
+//  void SetByteValue(ByteValue const &bv )
+//    {
+//    ByteValue *bv = new ByteValue(array,length);
+//    SetVL( bv.GetLength() );
+//    SetValue( *bv );
+//    }
   void SetByteValue(const char *array, VL length)
     {
     ByteValue *bv = new ByteValue(array,length);

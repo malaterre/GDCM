@@ -190,7 +190,7 @@ protected:
 
   void Print(std::ostream &os) const {
   // This is perfectly valid to have a Length = 0 , so we cannot check
-  // the lenght for printing
+  // the length for printing
   if( !Internal.empty() )
     {
     if( IsPrintable() )

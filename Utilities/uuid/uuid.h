@@ -78,6 +78,8 @@ int uuid_compare(const uuid_t uu1, const uuid_t uu2);
 /* gen_uuid.c */
 void uuid_generate(uuid_t out);
 void uuid_generate_random(uuid_t out);
+void get_random_bytes(void *buf, int nbytes);
+int get_node_id(unsigned char *node_id);
 void uuid_generate_time(uuid_t out);
 
 /* isnull.c */

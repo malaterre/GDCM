@@ -46,6 +46,10 @@ public:
   // Chdir
   // copy a file
 
+  // somewhat UID specific:
+  static std::string EncodeHardwareAddress();
+  static std::string GetCurrentDateTime();
+
 protected:
   static bool GetPermissions(const char* file, unsigned short& mode);
   static bool SetPermissions(const char* file, unsigned short mode);

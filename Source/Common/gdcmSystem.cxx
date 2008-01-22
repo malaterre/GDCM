@@ -13,9 +13,11 @@
 
 =========================================================================*/
 #include "gdcmSystem.h"
+#include "gdcmTrace.h"
 #include "gdcmFilename.h"
 
-#include "md5.h"
+#include "md5/md5.h"
+#include "uuid/uuid.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,6 +25,11 @@
 #include <assert.h>
 #include <errno.h>
 #include <sys/stat.h>
+
+// gettimeofday
+#include <sys/time.h>
+#include <time.h>
+
 
 #include <iostream>
 
@@ -283,4 +290,91 @@ unsigned long System::FileSize(const char* filename)
     }
 }
 
+/**
+ * \brief Encode the mac address on a fixed length string of 15 characters.
+ * we save space this way.
+ */
+template <int N>
+inline int getlastdigit(unsigned char *data)
+{
+  int extended, carry = 0;
+  for(int i=0;i<N;i++)
+    {
+    extended = (carry << 8) + data[i];
+    data[i] = extended / 10;
+    carry = extended % 10;
+    }
+  return carry;
 }
+
+std::string System::EncodeHardwareAddress()
+{
+  unsigned char addr[6];
+  int stat = get_node_id(addr);
+  /*
+  // For debugging you need to consider the worse case where hardware addres is max number:
+  addr[0] = 255;
+  addr[1] = 255;
+  addr[2] = 255;
+  addr[3] = 255;
+  addr[4] = 255;
+  addr[5] = 255;
+  */
+  if (stat != 0)
+    {
+    // We need to convert a 6 digit number from base 256 to base 10, using integer
+    // would requires a 48bits one. To avoid this we have to reimplement the div + modulo 
+    // with string only
+    bool zero = false;
+    int res;
+    std::string sres;
+    while(!zero)
+      {
+      res = getlastdigit<6>(addr);
+      sres.insert(sres.begin(), '0' + res);
+      zero = (addr[0] == 0) && (addr[1] == 0) && (addr[2] == 0) 
+        && (addr[3] == 0) && (addr[4] == 0) && (addr[5] == 0);
+      }
+
+    return sres;
+    }
+  // else
+  gdcmWarningMacro("Problem in finding the MAC Address");
+  return "";
+}
+
+std::string System::GetCurrentDateTime()
+{
+  const size_t maxsize = 40;
+  char tmp[maxsize];
+  long milliseconds;
+  time_t timep;
+
+  struct timeval tv;
+  gettimeofday (&tv, NULL);
+  timep = tv.tv_sec;
+  // Compute milliseconds from microseconds.
+  milliseconds = tv.tv_usec / 1000;
+  // Obtain the time of day, and convert it to a tm struct.
+  struct tm *ptm = localtime (&timep);
+  // Format the date and time, down to a single second.
+  size_t ret = strftime (tmp, sizeof (tmp), "%Y%m%d%H%M%S", ptm);
+  if( ret == 0 || ret >= maxsize )
+    {
+    return "";
+    }
+
+  // Add milliseconds
+  const size_t maxsizall = 40 * 2;
+  char tmpAll[maxsizall];
+  int ret2 = snprintf(tmpAll,maxsizall,"%s%03ld",tmp,milliseconds);
+  if( ret2 >= maxsizall )
+    {
+    return "";
+    }
+
+  // Ok !
+  return tmpAll;
+}
+
+} // end namespace gdcm

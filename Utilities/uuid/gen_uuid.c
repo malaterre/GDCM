@@ -66,7 +66,7 @@
 #define rand()		random()
 #endif
 
-static int get_random_fd(void)
+/*static*/ int get_random_fd(void)
 {
 	struct timeval	tv;
 	static int	fd = -2;
@@ -91,7 +91,7 @@ static int get_random_fd(void)
  * Generate a series of random bytes.  Use /dev/urandom if possible,
  * and if not, use srandom/random.
  */
-static void get_random_bytes(void *buf, int nbytes)
+/*static*/ void get_random_bytes(void *buf, int nbytes)
 {
 	int i, n = nbytes, fd = get_random_fd();
 	int lose_counter = 0;
@@ -122,7 +122,7 @@ static void get_random_bytes(void *buf, int nbytes)
 /*
  * Get the ethernet hardware address, if we can find it...
  */
-static int get_node_id(unsigned char *node_id)
+/*static*/ int get_node_id(unsigned char *node_id)
 {
 #ifdef HAVE_NET_IF_H
 	int		sd;

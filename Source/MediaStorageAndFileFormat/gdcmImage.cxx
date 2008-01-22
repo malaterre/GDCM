@@ -75,7 +75,7 @@ const unsigned int *Image::GetDimensions() const
   return &Dimensions[0];
 }
 
-unsigned int Image::GetDimensions(unsigned int idx) const
+unsigned int Image::GetDimension(unsigned int idx) const
 {
   return Dimensions[idx];
 }
@@ -88,7 +88,7 @@ void Image::SetDimensions(unsigned int *dims)
     dims+NumberOfDimensions);
 }
 
-void Image::SetDimensions(unsigned int idx, unsigned int dim)
+void Image::SetDimension(unsigned int idx, unsigned int dim)
 {
   assert( NumberOfDimensions );
   assert( idx < NumberOfDimensions );

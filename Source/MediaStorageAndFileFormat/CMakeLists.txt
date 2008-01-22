@@ -1,6 +1,7 @@
 # Define the srcs for Media Storage And FileFormat
 # MSFF
 SET(MSFF_SRCS
+  gdcmUID.cxx
   gdcmPrinter.cxx
   gdcmDictPrinter.cxx
   gdcmReader.cxx

@@ -28,12 +28,14 @@ namespace gdcm
 class Filename
 {
 public:
-  Filename(const char* filename):FileName(filename) {}
+  Filename(const char* filename = ""):FileName(filename) {}
 
   const char *GetFileName() const { return FileName.c_str(); }
   const char *GetPath();
   const char *GetName();
+  const char *GetExtension();
   const char *ToUnixSlashes();
+  bool IsEmpty() const { return FileName.empty(); }
 
   operator const char * () const { return GetFileName(); }
 
@@ -46,7 +48,6 @@ public:
 private:
   std::string FileName;
   std::string Path;
-  std::string Name;
   std::string Conversion;
 };
 

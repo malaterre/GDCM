@@ -12,38 +12,40 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+#ifndef __gdcmUID_h
+#define __gdcmUID_h
 
-#ifndef __gdcmImageWriter_h
-#define __gdcmImageWriter_h
-
-#include "gdcmWriter.h"
-#include "gdcmImageValue.h"
+#include "gdcmTypes.h"
 
 namespace gdcm
 {
+
 /**
- * \brief ImageWriter
+ * \brief Class 
+ * \note bla
  */
-class Image;
-class GDCM_EXPORT ImageWriter : public Writer
+class UID
 {
 public:
-  ImageWriter();
-  ~ImageWriter();
+  UID(const char *root = GetGDCMUID() )/*:Root(root)*/ {}
 
-  //const Image& GetImage() const;
-  void SetImage(Image const &img);
+  void SetRoot(const char * root) { Root = root; }
+  const char *GetRoot() const { return Root.c_str(); }
 
-  bool Write(); // Execute()
+  const char* GenerateUniqueUID();
 
-protected:
-  bool WriteImage();
-  //bool WriteACRNEMAImage();
+  static bool IsUIDValid(const char *uid);
+
+  static const char *GetGDCMUID(); // who would want that in the public API ??
 
 private:
-  ImageValue PixelData;
+  static const char GDCM_UID[];
+  static std::string Root;
+  static std::string HardwareAddress;
+  std::string Unique; // Buffer
 };
+
 
 } // end namespace gdcm
 
-#endif //__gdcmImageWriter_h
+#endif //__gdcmUID_h

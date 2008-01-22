@@ -162,7 +162,7 @@ bool ImageValue::TryRLECodec(char *buffer) const
       // Each RLE Frame store a 2D frame. len is the 3d length
       unsigned long llen = len / sf->GetNumberOfFragments();
       assert( GetNumberOfDimensions() == 2
-           || GetDimensions(2) == sf->GetNumberOfFragments() );
+           || GetDimension(2) == sf->GetNumberOfFragments() );
       for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
         {
         std::stringstream is;

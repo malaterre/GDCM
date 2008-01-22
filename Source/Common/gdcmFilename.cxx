@@ -53,14 +53,10 @@ const char *Filename::GetName()
 #endif
   if(slash_pos != std::string::npos)
     {
-    Name = filename.substr(slash_pos + 1);
-    }
-  else
-    {
-    Name = filename;
+    return &FileName[0] + slash_pos + 1;
     }
 
-  return Name.c_str();
+  return &FileName[0];
 }
 
 // convert windows slashes to unix slashes 
@@ -105,6 +101,19 @@ inline void Realpath(const char *path, std::string & resolved_path)
   resolved_path = resolved_name;
 }
 #endif
+
+const char *Filename::GetExtension()
+{
+  std::string name = GetName();
+  std::string::size_type dot_pos = name.find(".");
+  if(dot_pos != std::string::npos)
+    {
+    return GetName() + dot_pos;
+    }
+
+  return 0;
+}
+
 
 bool Filename::IsIdentical(Filename const &fn) const
 {

@@ -122,6 +122,11 @@ public:
     DES.erase(de);
     DES.insert(de);
     }
+ void Remove(const Tag& tag) {
+    //assert( de.GetTag() != Tag(0,0) );
+    const DataElement r(tag);
+    DES.erase(r);
+    }
 
   // WARNING:
   // This only search at the same level as the DataSet is !

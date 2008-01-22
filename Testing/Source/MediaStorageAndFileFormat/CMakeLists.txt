@@ -2,6 +2,7 @@
 # MSFF
 SET(MSFF_TEST_SRCS
   TestStringFilter
+  TestUID
   TestPrinter
   TestReader
   TestReader2
