@@ -117,8 +117,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
   glen += 2; // ???
   Attribute<0x0002, 0x0000> filemetagrouplength;
   filemetagrouplength.SetValue( glen );
-  xde = filemetagrouplength.GetAsDataElement();
-  Replace( xde );
+  Insert( filemetagrouplength.GetAsDataElement() );
 
   assert( !IsEmpty() );
 }
