@@ -96,6 +96,7 @@ public:
     std::ostringstream os;
     EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
       GetLength(),os);
+    ret.SetVR( (VR::VRType)TVR );
     ret.SetByteValue( os.str().c_str(), os.str().size() );
     return ret;
   }

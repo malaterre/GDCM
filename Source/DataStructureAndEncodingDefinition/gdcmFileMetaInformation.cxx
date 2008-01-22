@@ -113,18 +113,12 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     }
   // Do this one last !
   // (Meta) Group Length (0002,0000) -> computed
-  //unsigned int glen = ComputeGroupLength( Tag(0x0002, 0x0000) );
   unsigned int glen = GetLength<ExplicitDataElement>();
-  DataElement xgl( Tag(0x0002, 0x0000), 4, VR::UL );
-  Element<VR::UL, VM::VM1> el = 
-    reinterpret_cast< Element<VR::UL, VM::VM1>& > ( glen );
-  std::stringstream ss;
-  el.Write( ss );
-  SmartPointer<ByteValue> bv = new ByteValue;
-  bv->SetLength( 4 );
-  bv->Read<SwapperNoOp>( ss );
-  xgl.SetValue( *bv );
-  Insert( xgl );
+  glen += 2; // ???
+  Attribute<0x0002, 0x0000> filemetagrouplength;
+  filemetagrouplength.SetValue( glen );
+  xde = filemetagrouplength.GetAsDataElement();
+  Replace( xde );
 
   assert( !IsEmpty() );
 }
