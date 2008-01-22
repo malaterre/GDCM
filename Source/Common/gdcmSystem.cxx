@@ -294,11 +294,10 @@ unsigned long System::FileSize(const char* filename)
  * \brief Encode the mac address on a fixed length string of 15 characters.
  * we save space this way.
  */
-template <int N>
-inline int getlastdigit(unsigned char *data)
+inline int getlastdigit(unsigned char *data, unsigned long size)
 {
   int extended, carry = 0;
-  for(int i=0;i<N;i++)
+  for(int i=0;i<size;i++)
     {
     extended = (carry << 8) + data[i];
     data[i] = extended / 10;
@@ -307,10 +306,32 @@ inline int getlastdigit(unsigned char *data)
   return carry;
 }
 
+std::string System::EncodeBytes(unsigned char *data, unsigned long size)
+{
+  bool zero = false;
+  int res;
+  std::string sres;
+  unsigned char buffer[32];
+  unsigned char *addr = buffer;
+  memcpy(addr, data, size);
+  while(!zero)
+    {
+    res = getlastdigit(addr, size);
+    sres.insert(sres.begin(), '0' + res);
+    zero = true;
+    for(int i = 0; i < size; ++i)
+      {
+      zero = zero && (addr[i] == 0);
+      }
+    }
+
+  return sres;
+}
+
 std::string System::EncodeHardwareAddress()
 {
   unsigned char addr[6];
-  int stat = get_node_id(addr);
+  int stat = uuid_get_node_id(addr);
   /*
   // For debugging you need to consider the worse case where hardware addres is max number:
   addr[0] = 255;
@@ -325,6 +346,9 @@ std::string System::EncodeHardwareAddress()
     // We need to convert a 6 digit number from base 256 to base 10, using integer
     // would requires a 48bits one. To avoid this we have to reimplement the div + modulo 
     // with string only
+    std::string s = EncodeBytes(addr, sizeof(addr));
+    assert( sizeof(addr) == 6 );
+/*
     bool zero = false;
     int res;
     std::string sres;
@@ -337,6 +361,8 @@ std::string System::EncodeHardwareAddress()
       }
 
     return sres;
+*/
+    return s;
     }
   // else
   gdcmWarningMacro("Problem in finding the MAC Address");

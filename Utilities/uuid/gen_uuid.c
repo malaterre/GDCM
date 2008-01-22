@@ -66,7 +66,7 @@
 #define rand()		random()
 #endif
 
-/*static*/ int get_random_fd(void)
+static int get_random_fd(void)
 {
 	struct timeval	tv;
 	static int	fd = -2;
@@ -91,7 +91,7 @@
  * Generate a series of random bytes.  Use /dev/urandom if possible,
  * and if not, use srandom/random.
  */
-/*static*/ void get_random_bytes(void *buf, int nbytes)
+static void get_random_bytes(void *buf, int nbytes)
 {
 	int i, n = nbytes, fd = get_random_fd();
 	int lose_counter = 0;
@@ -122,7 +122,7 @@
 /*
  * Get the ethernet hardware address, if we can find it...
  */
-/*static*/ int get_node_id(unsigned char *node_id)
+static int get_node_id(unsigned char *node_id)
 {
 #ifdef HAVE_NET_IF_H
 	int		sd;
@@ -203,6 +203,13 @@
 #endif
 	return 0;
 }
+
+/* Exposte get_node_id to API */
+int uuid_get_node_id(unsigned char *node_id)
+{
+  return get_node_id(node_id);
+}
+
 
 /* Assume that the gettimeofday() has microsecond granularity */
 #define MAX_ADJUSTMENT 10

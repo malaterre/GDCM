@@ -49,6 +49,7 @@ public:
   // somewhat UID specific:
   static std::string EncodeHardwareAddress();
   static std::string GetCurrentDateTime();
+  static std::string EncodeBytes(unsigned char *data, unsigned long size);
 
 protected:
   static bool GetPermissions(const char* file, unsigned short& mode);

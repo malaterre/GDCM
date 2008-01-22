@@ -30,19 +30,6 @@ const char *UID::GetGDCMUID()
   return GDCM_UID;
 }
 
-template <int N>
-inline int getlastdigit(unsigned char *data)
-{
-  int extended, carry = 0;
-  for(int i=0;i<N;i++)
-    {
-    extended = (carry << 8) + data[i];
-    data[i] = extended / 10;
-    carry = extended % 10;
-    }
-  return carry;
-}
-
 const char* UID::GenerateUniqueUID()
 {
   Unique = GetRoot();
@@ -77,42 +64,18 @@ const char* UID::GenerateUniqueUID()
   // FIXME: I choose 2 bytes for the random number, since GDCM Root UID is so long, and harware address can take up
   // to 15 bytes, case 255.255.255.255.255.255 <-> 281474976710655
   // But a better approach to dynamically calculate the max size for random bits...
-  unsigned char tmp[2+1];
-  //int r = (int) (100.0*rand()/RAND_MAX);
-  get_random_bytes(tmp, 2);
-  bool zero = false;
-  int res;
-  std::string sres;
-  while(!zero)
-    {
-    res = getlastdigit<2>(tmp);
-    sres.insert(sres.begin(), '0' + res);
-    zero = (tmp[0] == 0) && (tmp[1] == 0) /*&& (addr[2] == 0) 
-      && (addr[3] == 0) && (addr[4] == 0) && (addr[5] == 0)*/;
-    }
+  uuid_t out;
+  uuid_generate(out);
+  std::string randbytes = System::EncodeBytes(out, sizeof(out));
 
-
-  //int n = snprintf(tmp,3,"%02d", r);
-//  if( n > 2 ) 
-//    {
-//    abort();
-//    return "";
-//    }
   Unique += ".";
-  Unique += sres;
-//  if( strcmp(tmp, "00") == 0 )
-//    {
-//    Unique += '0'; // special rule for '0'
-//    }
-//  else if( tmp[0] == '0' )
-//    {
-//    // Remove the starting '0'
-//    Unique += tmp+1;
-//    }
-//  else // add all bytes
-//    {
-//    Unique += tmp;
-//    }
+  std::string::size_type len = Unique.size();
+  std::string::size_type rb_len = randbytes.size();
+  assert( len < 64 );
+  // randbytes might be a little too long, let's check
+  // if too long: take the lower bits
+  Unique += randbytes.substr( rb_len - (64 - len) , 64 - len );
+
   assert( IsUIDValid( Unique.c_str() ) );
 
   return Unique.c_str();
