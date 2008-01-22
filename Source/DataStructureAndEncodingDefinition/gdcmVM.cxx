@@ -53,11 +53,15 @@ unsigned int VM::GetLength() const
   unsigned int len;
   switch(VMField)
     {
+  case VM::VM1:
+    len = VMToLength<VM::VM1>::Length;
+    break;
   case VM::VM2:
     len = VMToLength<VM::VM2>::Length;
     break;
   default:
     len = 0;
+    abort();
     }
   assert( len );
   return len;

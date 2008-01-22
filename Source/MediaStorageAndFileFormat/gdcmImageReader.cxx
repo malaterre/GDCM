@@ -390,8 +390,12 @@ bool ImageReader::ReadImage()
   // FIXME: Only SC is allowed not to have spacing:
   if( !spacing.empty() )
     {
-    assert( spacing.size() == PixelData.GetNumberOfDimensions() );
+    assert( spacing.size() >= PixelData.GetNumberOfDimensions() ); // In MR, you can have a Z spacing, but store a 2D image
     PixelData.SetSpacing( &spacing[0] );
+    if( spacing.size() > PixelData.GetNumberOfDimensions() ) // FIXME HACK
+      {
+      PixelData.SetSpacing(PixelData.GetNumberOfDimensions(), spacing[PixelData.GetNumberOfDimensions()] );
+      }
     }
 
   // 5. Photometric Interpretation

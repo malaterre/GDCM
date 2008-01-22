@@ -201,7 +201,7 @@ int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
       DataExtent[0], DataExtent[1], DataExtent[2], DataExtent[3], DataExtent[4], DataExtent[5]);
 
     vtkDataObject::SetPointDataActiveScalarInfo(outInfo, this->DataScalarType, this->NumberOfScalarComponents);
-    //outInfo->Set(vtkDataObject::SPACING(), spcs, 3);
+    outInfo->Set(vtkDataObject::SPACING(), this->DataSpacing, 3);
 
     double origin[3] = {};
     outInfo->Set(vtkDataObject::ORIGIN(), origin, 3);

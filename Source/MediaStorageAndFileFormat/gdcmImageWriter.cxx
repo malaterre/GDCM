@@ -171,6 +171,7 @@ bool ImageWriter::Write()
 
   // Set Transfer Syntax UID to default:
   TransferSyntax ts;
+  assert( ts == TransferSyntax::ImplicitVRLittleEndian );
     {
     const char *tsuid = TransferSyntax::GetTSString( ts );
     DataElement de( Tag(0x0002,0x0010) );

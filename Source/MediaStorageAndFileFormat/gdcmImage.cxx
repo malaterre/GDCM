@@ -117,6 +117,12 @@ void Image::SetSpacing(double *spacing)
     spacing+NumberOfDimensions);
 }
 
+void Image::SetSpacing(unsigned int idx, double spacing)
+{
+  Spacing.resize( idx + 1 );
+  Spacing[idx] = spacing;
+}
+
 const double *Image::GetOrigin() const
 {
   return &Origin[0];

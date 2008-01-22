@@ -41,6 +41,24 @@ Tag SpacingHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
   return t;
 }
 
+Tag SpacingHelper::GetZSpacingTagFromMediaStorage(MediaStorage const &ms)
+{
+  Tag t;
+
+  switch(ms)
+    {
+  case MediaStorage::MRImageStorage:
+    // (0018,0088) DS [3]                                      #   2, 1 SpacingBetweenSlices
+    t = Tag(0x0018,0x0088);
+    break;
+  default:
+    gdcmDebugMacro( "Do not handle: " << ms );
+    t = Tag(0xffff,0xffff);
+    break;
+    }
+  return t;
+}
+
 std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
 {
   std::vector<double> sp;
@@ -49,7 +67,7 @@ std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
   assert( MediaStorage::IsImage( ms ) );
 
   Tag spacingtag = GetSpacingTagFromMediaStorage(ms);
-  if( ds.FindDataElement( spacingtag ) )
+  if( spacingtag != Tag(0xffff,0xffff) && ds.FindDataElement( spacingtag ) )
     {
     const DataElement& de = ds.GetDataElement( spacingtag );
     const Global &g = gdcm::GlobalInstance;
@@ -75,6 +93,40 @@ std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
         }
       break;
     default:
+      abort();
+      break;
+      }
+    }
+  // Do Z:
+  Tag zspacingtag = SpacingHelper::GetZSpacingTagFromMediaStorage(ms);
+  if( zspacingtag != Tag(0xffff,0xffff) && ds.FindDataElement( zspacingtag ) )
+    {
+    const DataElement& de = ds.GetDataElement( zspacingtag );
+    const Global &g = gdcm::GlobalInstance;
+    const Dicts &dicts = g.GetDicts();
+    const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
+    const VR & vr = entry.GetVR();
+    assert( de.GetVR() == vr || de.GetVR() == VR::INVALID );
+    assert( entry.GetVM() == VM::VM1 );
+    switch(vr)
+      {
+    case VR::DS:
+        {
+        gdcm::Element<VR::DS,VM::VM1_n> el;
+        std::stringstream ss;
+        const ByteValue *bv = de.GetByteValue();
+        assert( bv );
+        std::string s = std::string( bv->GetPointer(), bv->GetLength() );
+        ss.str( s );
+        el.SetLength( entry.GetVM().GetLength() * entry.GetVR().GetSizeof() );
+        el.Read( ss );
+        for(unsigned long i = 0; i < el.GetLength(); ++i) 
+          sp.push_back( el.GetValue(i) );
+        //assert( sp.size() == entry.GetVM() );
+        }
+      break;
+    default:
+      abort();
       break;
       }
     }

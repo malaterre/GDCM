@@ -35,6 +35,7 @@ public:
 
 protected:
   static Tag GetSpacingTagFromMediaStorage(MediaStorage const &ms);
+  static Tag GetZSpacingTagFromMediaStorage(MediaStorage const &ms);
 };
 
 } // end namespace gdcm

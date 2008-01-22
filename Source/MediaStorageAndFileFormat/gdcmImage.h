@@ -78,6 +78,7 @@ public:
   const double *GetSpacing() const;
   double GetSpacing(unsigned int idx) const;
   void SetSpacing(double *spacing);
+  void SetSpacing(unsigned int idx, double spacing);
 
   const double *GetOrigin() const;
   void SetOrigin(double *ori);
