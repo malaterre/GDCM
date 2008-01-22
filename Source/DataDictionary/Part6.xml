@@ -16,21 +16,6 @@ This file was automatically created from a docbook version of PS 3.6, which was 
 
 Manual changes:
 1.
-    (0070,0040) "Image Rotation" was declared as "Image Rotation (Retired)"
-
-The following do not need to changed, since group 0000 cannot be present in a dataset
-    (0008,0040) "Data Set Type" -> (0000,0800) "Data Set Type"
-    (0000,5180) "Magnification Type" -> (2010,0060) "Magnification Type"
-    (0008,0001) "Length to End" <-> (0000,0001) "Length to End"
-    (0008,0010) "Recognition Code" <-> (0000,0010) "Recognition Code"
-
-
-2.
-    <entry group="0022" element="0032" vr="FL" vm="2-2N" name="Reference Coordinates"/>
-->
-    <entry group="0022" element="0032" vr="FL" vm="2-2n" name="Reference Coordinates"/>
-
-3.
     <entry group="60xx" element="1200" vr="US" vm="1-n" retired="true" name="Overlays- Gray"/>
     <entry group="60xx" element="1203" vr="US" vm="1-n" retired="true" name="Overlays- Blue"/>
 ->
@@ -43,7 +28,7 @@ The following do not need to changed, since group 0000 cannot be present in a da
 	 ]>
 <dicts edition="2008">
   &part7;
-  <dict name="6 Registry of DICOM data elements">
+  <dict ref="6" name="Registry of DICOM data elements">
     <entry group="0008" element="0001" vr="UL" vm="1" retired="true" name="Length to End"/>
     <entry group="0008" element="0005" vr="CS" vm="1-n" name="Specific Character Set"/>
     <entry group="0008" element="0008" vr="CS" vm="2-n" name="Image Type"/>
@@ -888,7 +873,7 @@ The following do not need to changed, since group 0000 cannot be present in a da
     <entry group="0018" element="a002" vr="DT" vm="1" name="Contribution Date Time"/>
     <entry group="0018" element="a003" vr="ST" vm="1" name="Contribution Description"/>
   </dict>
-  <dict name="6 Registry of DICOM data elements">
+  <dict ref="6" name="Registry of DICOM data elements">
     <entry group="0020" element="000d" vr="UI" vm="1" name="Study Instance UID"/>
     <entry group="0020" element="000e" vr="UI" vm="1" name="Series Instance UID"/>
     <entry group="0020" element="0010" vr="SH" vm="1" name="Study ID"/>
@@ -989,7 +974,7 @@ The following do not need to changed, since group 0000 cannot be present in a da
     <entry group="0020" element="9529" vr="SQ" vm="1" name="Contributing SOP Instances Reference Sequence"/>
     <entry group="0020" element="9536" vr="US" vm="1" name="Reconstruction Index"/>
   </dict>
-  <dict name="6 Registry of DICOM data elements">
+  <dict ref="6" name="Registry of DICOM data elements">
     <entry group="0022" element="0001" vr="US" vm="1" name="Light Path Filter Pass-Through Wavelength"/>
     <entry group="0022" element="0002" vr="US" vm="2" name="Light Path Filter Pass Band"/>
     <entry group="0022" element="0003" vr="US" vm="1" name="Image Path Filter Pass-Through Wavelength"/>
@@ -1206,7 +1191,7 @@ The following do not need to changed, since group 0000 cannot be present in a da
     <entry group="0028" element="9520" vr="DS" vm="16" name="Image to Equipment Mapping Matrix"/>
     <entry group="0028" element="9537" vr="CS" vm="1" name="Equipment Coordinate System Identification"/>
   </dict>
-  <dict name="6 Registry of DICOM data elements">
+  <dict ref="6" name="Registry of DICOM data elements">
     <entry group="0032" element="000a" vr="CS" vm="1" retired="true" name="Study Status ID"/>
     <entry group="0032" element="000c" vr="CS" vm="1" retired="true" name="Study Priority ID"/>
     <entry group="0032" element="0012" vr="LO" vm="1" retired="true" name="Study ID Issuer"/>
@@ -2096,7 +2081,7 @@ The following do not need to changed, since group 0000 cannot be present in a da
     <entry group="3006" element="00c6" vr="DS" vm="16" name="Frame of Reference Transformation Matrix"/>
     <entry group="3006" element="00c8" vr="LO" vm="1" name="Frame of Reference Transformation Comment"/>
   </dict>
-  <dict name="6 Registry of DICOM data elements">
+  <dict ref="6" name="Registry of DICOM data elements">
     <entry group="3008" element="0010" vr="SQ" vm="1" name="Measured Dose Reference Sequence"/>
     <entry group="3008" element="0012" vr="ST" vm="1" name="Measured Dose Description"/>
     <entry group="3008" element="0014" vr="CS" vm="1" name="Measured Dose Type"/>
@@ -2189,7 +2174,7 @@ The following do not need to changed, since group 0000 cannot be present in a da
     <entry group="3008" element="0250" vr="DA" vm="1" name="Treatment Date"/>
     <entry group="3008" element="0251" vr="TM" vm="1" name="Treatment Time"/>
   </dict>
-  <dict name="6 Registry of DICOM data elements">
+  <dict ref="6" name="Registry of DICOM data elements">
     <entry group="300a" element="0002" vr="SH" vm="1" name="RT Plan Label"/>
     <entry group="300a" element="0003" vr="LO" vm="1" name="RT Plan Name"/>
     <entry group="300a" element="0004" vr="ST" vm="1" name="RT Plan Description"/>
@@ -2685,7 +2670,7 @@ The following do not need to changed, since group 0000 cannot be present in a da
     <entry group="fffe" element="e00d" vm="1" name="Item Delimitation Item"/>
     <entry group="fffe" element="e0dd" vm="1" name="Sequence Delimitation Item"/>
   </dict>
-  <dict name="7 Registry of DICOM File Meta Elements">
+  <dict ref="7" name="Registry of DICOM File Meta Elements">
     <entry group="0002" element="0000" vr="UL" vm="1" name="File Meta Information Group Length"/>
     <entry group="0002" element="0001" vr="OB" vm="1" name="File Meta Information Version"/>
     <entry group="0002" element="0002" vr="UI" vm="1" name="Media Storage SOP Class UID"/>
@@ -2697,7 +2682,7 @@ The following do not need to changed, since group 0000 cannot be present in a da
     <entry group="0002" element="0100" vr="UI" vm="1" name="Private Information Creator UID"/>
     <entry group="0002" element="0102" vr="OB" vm="1" name="Private Information"/>
   </dict>
-  <dict name="8 Registry of DICOM directory structuring elements">
+  <dict ref="8" name="Registry of DICOM directory structuring elements">
     <entry group="0004" element="1130" vr="CS" vm="1" name="File-set ID"/>
     <entry group="0004" element="1141" vr="CS" vm="1-8" name="File-set Descriptor File ID"/>
     <entry group="0004" element="1142" vr="CS" vm="1" name="Specific Character Set of File-set Descriptor File"/>
@@ -2752,8 +2737,8 @@ The following do not need to changed, since group 0000 cannot be present in a da
     <uid value="1.2.840.10008.1.2.4.95" name="JPIP Referenced Deflate" type="Transfer Syntax" part="PS 3.5" retired="false"/>
     <uid value="1.2.840.10008.1.2.4.100" name="MPEG2 Main Profile @ Main Level" type="Transfer Syntax" part="PS 3.5" retired="false"/>
     <uid value="1.2.840.10008.1.2.5" name="RLE Lossless" type="Transfer Syntax" part="PS 3.5" retired="false"/>
-    <uid value="1.2.840.10008.1.2.6.1 " name="RFC 2557 MIME encapsulation " type="Transfer Syntax " part="PS 3.10" retired="false"/>
-    <uid value="1.2.840.10008.1.2.6.2" name="XML Encoding" type="Transfer Syntax " part="PS 3.10" retired="false"/>
+    <uid value="1.2.840.10008.1.2.6.1" name="RFC 2557 MIME encapsulation" type="Transfer Syntax" part="PS 3.10" retired="false"/>
+    <uid value="1.2.840.10008.1.2.6.2" name="XML Encoding" type="Transfer Syntax" part="PS 3.10" retired="false"/>
     <uid value="1.2.840.10008.1.3.10" name="Media Storage Directory Storage" type="SOP Class" part="PS 3.4" retired="false"/>
     <uid value="1.2.840.10008.1.4.1.1" name="Talairach Brain Atlas Frame of Reference" type="Well-known frame of reference" part="" retired="false"/>
     <uid value="1.2.840.10008.1.4.1.2" name="SPM2 T1 Frame of Reference" type="Well-known frame of reference" part="" retired="false"/>

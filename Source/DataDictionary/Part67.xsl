@@ -160,7 +160,7 @@ template for a row in data-elements mode. Should be:
             </xsl:attribute>
           </xsl:if>
           <xsl:if test="$name = 'KVP'">
-            <xsl:element name="description">
+            <xsl:element name="correction">
 <!-- vendor misuse of tags -->
               <xsl:value-of select="'kVp'"/>
             </xsl:element>
@@ -191,18 +191,18 @@ template for a row in UID mode. Should be:
   <xsl:template match="row" mode="uid">
     <xsl:if test="entry[1]/para != 'UID Value'">
 <!-- skip the table header -->
+      <xsl:variable name="value" select="translate(entry[1]/para,'&#9;','')"/>
+      <xsl:variable name="name" select="translate(entry[2]/para,'&#9;','')"/>
+      <xsl:variable name="type" select="translate(entry[3]/para,'&#9;','')"/>
       <xsl:choose>
         <xsl:when test="contains(entry[2]/para,'(Retired)')">
-          <xsl:variable name="name">
-            <xsl:value-of select="normalize-space(substring-before(entry[2]/para,'(Retired)'))"/>
+          <xsl:variable name="name-retired">
+            <xsl:value-of select="normalize-space(substring-before($name,'(Retired)'))"/>
           </xsl:variable>
-          <uid value="{entry[1]/para}" name="{$name}" type="{entry[3]/para}" part="{entry[4]/para}" retired="true"/>
+          <uid value="{$value}" name="{$name-retired}" type="{$type}" part="{entry[4]/para}" retired="true"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:variable name="name">
-            <xsl:value-of select="entry[2]/para"/>
-          </xsl:variable>
-          <uid value="{entry[1]/para}" name="{$name}" type="{entry[3]/para}" part="{entry[4]/para}" retired="false"/>
+          <uid value="{$value}" name="{$name}" type="{$type}" part="{entry[4]/para}" retired="false"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:if>
@@ -224,7 +224,9 @@ template to split table into two cases: UIDs or Normative Reference:
 -->
   <xsl:template match="informaltable" mode="data-elements">
     <xsl:param name="title"/>
-    <dict name="{$title}">
+    <xsl:variable name="ref" select="substring-before($title,'&#9;')"/>
+    <xsl:variable name="name" select="substring-after($title,'&#9;')"/>
+    <dict ref="{$ref}" name="{$name}">
       <xsl:choose>
         <xsl:when test="tgroup/tbody/row/entry[3]/para = 'VR'">
           <xsl:choose>
