@@ -41,23 +41,12 @@ Tag SpacingHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
   return t;
 }
 
-MediaStorage GetMediaStorage(DataSet const &ds)
-{
-  const Tag tsopclassuid(0x0008, 0x0016);
-  const ByteValue *sopclassuid = ds.GetDataElement( tsopclassuid ).GetByteValue();
-  std::string sopclassuid_str(
-    sopclassuid->GetPointer(),
-    sopclassuid->GetLength() );
-  assert( sopclassuid_str.find( ' ' ) == std::string::npos );
-  MediaStorage ms = MediaStorage::GetMSType(sopclassuid_str.c_str());
-  assert( MediaStorage::IsImage( ms ) );
-  return ms;
-}
-
 std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
 {
   std::vector<double> sp;
-  MediaStorage ms = GetMediaStorage(ds);
+  MediaStorage ms;
+  ms.SetFromDataSet(ds);
+  assert( MediaStorage::IsImage( ms ) );
 
   Tag spacingtag = GetSpacingTagFromMediaStorage(ms);
   if( ds.FindDataElement( spacingtag ) )
@@ -95,7 +84,10 @@ std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
 
 void SpacingHelper::SetSpacingValue(DataSet & ds, const double * spacing)
 {
-  MediaStorage ms = GetMediaStorage(ds);
+  MediaStorage ms;
+  ms.SetFromDataSet(ds);
+  assert( MediaStorage::IsImage( ms ) );
+
   Tag spacingtag = GetSpacingTagFromMediaStorage(ms);
   if( spacingtag != Tag(0xffff,0xffff) )
     {

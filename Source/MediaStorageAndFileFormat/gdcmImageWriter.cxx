@@ -116,26 +116,36 @@ bool ImageWriter::Write()
     DataElement de( Tag(0x0008, 0x0016 ) );
     de.SetByteValue( msstr, strlen(msstr) );
     ds.Insert( de );
+    }
 
+  if( !ds.FindDataElement( Tag(0x0008, 0x0060) ) )
+    {
+    // Compute MediaStorage:
+    MediaStorage ms;
+    ms.SetFromDataSet( ds );
     const char *modality = ms.GetModality();
-    DataElement de2( Tag(0x0008, 0x0060 ) );
-    de2.SetByteValue( modality, strlen(modality) );
-    ds.Insert( de2 );
+    DataElement de( Tag(0x0008, 0x0060 ) );
+    de.SetByteValue( modality, strlen(modality) );
+    ds.Insert( de );
+    }
+  if( !ds.FindDataElement( Tag(0x0008, 0x0064) ) )
+    {
     // (0008,0064) CS [SI]                                     #   2, 1 ConversionType
     const char conversion[] = "SI"; // FIXME
-    DataElement de3( Tag(0x0008, 0x0064 ) );
-    de3.SetByteValue( conversion, strlen(conversion) );
-    ds.Insert( de3 );
-
-    // Spacing:
-    SpacingHelper::SetSpacingValue(ds, PixelData.GetSpacing());
+    DataElement de( Tag(0x0008, 0x0064 ) );
+    de.SetByteValue( conversion, strlen(conversion) );
+    ds.Insert( de );
     }
+
+  // Spacing:
+  SpacingHelper::SetSpacingValue(ds, PixelData.GetSpacing());
 
   // UIDs:
   // (0008,0018) UI [1.3.6.1.4.1.5962.1.1.1.1.3.20040826185059.5457] #  46, 1 SOPInstanceUID
   // (0020,000d) UI [1.3.6.1.4.1.5962.1.2.1.20040826185059.5457] #  42, 1 StudyInstanceUID
   // (0020,000e) UI [1.3.6.1.4.1.5962.1.3.1.1.20040826185059.5457] #  44, 1 SeriesInstanceUID
   UID uid;
+  // FIXME: Should I always overwrite the UIDs ???
     {
     const char *sop = uid.GenerateUniqueUID();
     DataElement de( Tag(0x0008,0x0018) );

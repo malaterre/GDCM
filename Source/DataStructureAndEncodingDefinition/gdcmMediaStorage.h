@@ -26,6 +26,7 @@ namespace gdcm
  * For instance an ImageCodec will answer yes to most of them
  * while a PDFCodec will answer only for the Encaplusated PDF
  */
+class DataSet;
 class MediaStorage
 {
 public:
@@ -102,6 +103,8 @@ typedef enum {
   operator MSType () const { return MSField; }
 
   const char *GetModality() const;
+
+  void SetFromDataSet(DataSet const &ds);
 
   friend std::ostream &operator<<(std::ostream &os, const MediaStorage &ms);
 private:

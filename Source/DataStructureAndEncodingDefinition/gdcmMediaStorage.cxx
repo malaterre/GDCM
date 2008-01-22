@@ -13,6 +13,9 @@
 
 =========================================================================*/
 #include "gdcmMediaStorage.h"
+#include "gdcmTag.h"
+#include "gdcmByteValue.h"
+#include "gdcmDataSet.h"
 
 namespace gdcm
 {
@@ -118,23 +121,23 @@ bool MediaStorage::IsImage(const MSType &ms)
 
 static const char *MSModalityStrings[] = {
   "", //MediaStorageDirectoryStorage,
-  "", //ComputedRadiographyImageStorage,
+  "CR", //ComputedRadiographyImageStorage,
   "", //DigitalXRayImageStorageForPresentation,
   "", //DigitalXRayImageStorageForProcessing,
   "", //DigitalMammographyImageStorageForPresentation,
   "", //DigitalMammographyImageStorageForProcessing,
   "", //DigitalIntraoralXrayImageStorageForPresentation,
   "", //DigitalIntraoralXRayImageStorageForProcessing,
-  "", //CTImageStorage,
+  "CT", //CTImageStorage,
   "", //EnhancedCTImageStorage,
   "", //UltrasoundMultiFrameImageStorageRetired,
   "", //UltrasoundMultiFrameImageStorage,
-  "", //MRImageStorage,
-  "", //EnhancedMRImageStorage,
+  "MR", //MRImageStorage,
+  "MR", //EnhancedMRImageStorage,
   "", //MRSpectroscopyStorage,
-  "", //NuclearMedicineImageStorageRetired,
-  "", //UltrasoundImageStorageRetired,
-  "", //UltrasoundImageStorage,
+  "NM", //NuclearMedicineImageStorageRetired,
+  "US", //UltrasoundImageStorageRetired,
+  "US", //UltrasoundImageStorage,
   "OT", //SecondaryCaptureImageStorage,
   "", //MultiframeSingleBitSecondaryCaptureImageStorage,
   "", //MultiframeGrayscaleByteSecondaryCaptureImageStorage,
@@ -171,6 +174,19 @@ static const char *MSModalityStrings[] = {
 const char *MediaStorage::GetModality() const
 {
   return MSModalityStrings[MSField];
+}
+
+void MediaStorage::SetFromDataSet(DataSet const &ds)
+{
+  const Tag tsopclassuid(0x0008, 0x0016);
+  const ByteValue *sopclassuid = ds.GetDataElement( tsopclassuid ).GetByteValue();
+  std::string sopclassuid_str(
+    sopclassuid->GetPointer(),
+    sopclassuid->GetLength() );
+  assert( sopclassuid_str.find( ' ' ) == std::string::npos );
+  MediaStorage ms = MediaStorage::GetMSType(sopclassuid_str.c_str());
+  assert( ms != MS_END );
+  MSField = ms;
 }
 
 } // end namespace gdcm
