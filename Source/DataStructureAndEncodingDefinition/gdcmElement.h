@@ -219,7 +219,7 @@ class Element<TVR, VM::VM1_n>
 {
 public:
   // This the way to prevent default initialization
-  explicit Element() { Internal=0; Length=0; }
+  explicit Element() { Internal=0; Length=0; Save = false; }
   ~Element() {
     if( Save ) {
       delete[] Internal;
