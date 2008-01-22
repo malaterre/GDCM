@@ -101,6 +101,8 @@ typedef enum {
 
   operator MSType () const { return MSField; }
 
+  const char *GetModality() const;
+
 private:
   MSType MSField;
 };

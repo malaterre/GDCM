@@ -70,6 +70,10 @@ bool ImageWriter::Write()
   pixelrepresentation.SetValue( PixelData.GetPixelFormat().GetPixelRepresentation() );
   ds.Replace( pixelrepresentation.GetAsDataElement() );
 
+  Attribute<0x0028, 0x0002> samplesperpixel;
+  samplesperpixel.SetValue( PixelData.GetPixelFormat().GetSamplesPerPixel() );
+  ds.Replace( samplesperpixel.GetAsDataElement() );
+
   // Pixel Data
   DataElement de( Tag(0x7fe0,0x0010) );
   const Value &v = PixelData.GetValue();
@@ -96,6 +100,16 @@ bool ImageWriter::Write()
     DataElement de( Tag(0x0008, 0x0016 ) );
     de.SetByteValue( msstr, strlen(msstr) );
     ds.Insert( de );
+
+    const char *modality = ms.GetModality();
+    DataElement de2( Tag(0x0008, 0x0060 ) );
+    de2.SetByteValue( modality, strlen(modality) );
+    ds.Insert( de2 );
+    // (0008,0064) CS [SI]                                     #   2, 1 ConversionType
+    const char conversion[] = "SI"; // FIXME
+    DataElement de3( Tag(0x0008, 0x0064 ) );
+    de3.SetByteValue( conversion, strlen(conversion) );
+    ds.Insert( de3 );
     }
 
   // UIDs:
@@ -135,6 +149,81 @@ bool ImageWriter::Write()
     fmi.Insert( de );
     }
   fmi.FillFromDataSet( ds );
+
+  // Some Type 2 Element:
+  // PatientName
+  if( !ds.FindDataElement( Tag(0x0010,0x0010) ) )
+    {
+    DataElement de( Tag(0x0010,0x0010) );
+    ds.Insert( de );
+    }
+  // PatientID
+  if( !ds.FindDataElement( Tag(0x0010,0x0020) ) )
+    {
+    DataElement de( Tag(0x0010,0x0020) );
+    ds.Insert( de );
+    }
+  // PatientBirthDate
+  if( !ds.FindDataElement( Tag(0x0010,0x0030) ) )
+    {
+    DataElement de( Tag(0x0010,0x0030) );
+    ds.Insert( de );
+    }
+  // PatientSex
+  if( !ds.FindDataElement( Tag(0x0010,0x0040) ) )
+    {
+    DataElement de( Tag(0x0010,0x0040) );
+    ds.Insert( de );
+    }
+  // StudyDate
+  if( !ds.FindDataElement( Tag(0x0008,0x0020) ) )
+    {
+    DataElement de( Tag(0x0008,0x0020) );
+    ds.Insert( de );
+    }
+  // StudyTime
+  if( !ds.FindDataElement( Tag(0x0008,0x0030) ) )
+    {
+    DataElement de( Tag(0x0008,0x0030) );
+    ds.Insert( de );
+    }
+  // ReferringPhysicianName
+  if( !ds.FindDataElement( Tag(0x0008,0x0090) ) )
+    {
+    DataElement de( Tag(0x0008,0x0090) );
+    ds.Insert( de );
+    }
+  // StudyID
+  if( !ds.FindDataElement( Tag(0x0020,0x0010) ) )
+    {
+    DataElement de( Tag(0x0020,0x0010) );
+    ds.Insert( de );
+    }
+  // AccessionNumber
+  if( !ds.FindDataElement( Tag(0x0008,0x0050) ) )
+    {
+    DataElement de( Tag(0x0008,0x0050) );
+    ds.Insert( de );
+    }
+  // SeriesNumber
+  if( !ds.FindDataElement( Tag(0x0020,0x0011) ) )
+    {
+    DataElement de( Tag(0x0020,0x0011) );
+    ds.Insert( de );
+    }
+  // InstanceNumber
+  if( !ds.FindDataElement( Tag(0x0020,0x0013) ) )
+    {
+    DataElement de( Tag(0x0020,0x0013) );
+    ds.Insert( de );
+    }
+  // Patient Orientation
+  if( !ds.FindDataElement( Tag(0x0020,0x0020) ) )
+    {
+    DataElement de( Tag(0x0020,0x0020) );
+    ds.Insert( de );
+    }
+
 
   if( !Writer::Write() )
     {

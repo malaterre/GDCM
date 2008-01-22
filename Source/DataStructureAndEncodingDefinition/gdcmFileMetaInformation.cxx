@@ -82,13 +82,25 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
       Replace( xde );
       }
     }
+  else
+    {
+    // Very bad !!
+    }
   // Implementation Class UID (0002,0012) -> ??
+  if( !FindDataElement( Tag(0x0002, 0x0012) ) )
+    {
+    xde.SetTag( Tag(0x0002, 0x0012) );
+    xde.SetVR( VR::UI );
+    const char implementation[] = "147.144.143.155"; // echo "gdcm" | od -b
+    xde.SetByteValue( implementation, sizeof(implementation) );
+    Insert( xde );
+    }
   // Implementation Version Name (0002,0013) -> ??
   if( !FindDataElement( Tag(0x0002, 0x0013) ) )
     {
     xde.SetTag( Tag(0x0002, 0x0013) );
     xde.SetVR( VR::SH );
-    xde.SetByteValue( "2.0.0", 5);
+    xde.SetByteValue( GDCM_VERSION, sizeof( GDCM_VERSION ) );
     Insert( xde );
     }
   // Source Application Entity Title (0002,0016) -> ??
@@ -96,7 +108,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     {
     xde.SetTag( Tag(0x0002, 0x0016) );
     xde.SetVR( VR::AE );
-    xde.SetByteValue( "GDCM", 4);
+    xde.SetByteValue("GDCM", 4);
     Insert( xde );
     }
   // Do this one last !

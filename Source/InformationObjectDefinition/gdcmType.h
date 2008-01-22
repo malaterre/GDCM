@@ -23,6 +23,19 @@
 namespace gdcm
 {
 
+/*
+ * PS 3.5
+ * 7.4 DATA ELEMENT TYPE
+ * 7.4.1 TYPE 1 REQUIRED DATA ELEMENTS
+ * 7.4.2 TYPE 1C CONDITIONAL DATA ELEMENTS
+ * 7.4.3 TYPE 2 REQUIRED DATA ELEMENTS
+ * 7.4.4 TYPE 2C CONDITIONAL DATA ELEMENTS
+ * 7.4.5 TYPE 3 OPTIONAL DATA ELEMENTS
+ *
+ * The intent of Type 2 Data Elements is to allow a zero length to be conveyed when the operator or
+ * application does not know its value or has a specific reason for not specifying its value. It is the intent
+ * that the device should support these Data Elements.
+ */
 class GDCM_EXPORT Type
 {
 public:

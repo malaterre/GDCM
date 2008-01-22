@@ -116,4 +116,61 @@ bool MediaStorage::IsImage(const MSType &ms)
   return true;
 }
 
+static const char *MSModalityStrings[] = {
+  "", //MediaStorageDirectoryStorage,
+  "", //ComputedRadiographyImageStorage,
+  "", //DigitalXRayImageStorageForPresentation,
+  "", //DigitalXRayImageStorageForProcessing,
+  "", //DigitalMammographyImageStorageForPresentation,
+  "", //DigitalMammographyImageStorageForProcessing,
+  "", //DigitalIntraoralXrayImageStorageForPresentation,
+  "", //DigitalIntraoralXRayImageStorageForProcessing,
+  "", //CTImageStorage,
+  "", //EnhancedCTImageStorage,
+  "", //UltrasoundMultiFrameImageStorageRetired,
+  "", //UltrasoundMultiFrameImageStorage,
+  "", //MRImageStorage,
+  "", //EnhancedMRImageStorage,
+  "", //MRSpectroscopyStorage,
+  "", //NuclearMedicineImageStorageRetired,
+  "", //UltrasoundImageStorageRetired,
+  "", //UltrasoundImageStorage,
+  "OT", //SecondaryCaptureImageStorage,
+  "", //MultiframeSingleBitSecondaryCaptureImageStorage,
+  "", //MultiframeGrayscaleByteSecondaryCaptureImageStorage,
+  "", //MultiframeGrayscaleWordSecondaryCaptureImageStorage,
+  "", //MultiframeTrueColorSecondaryCaptureImageStorage,
+  "", //StandaloneOverlayStorage,
+  "", //StandaloneCurveStorage,
+  "", //LeadECGWaveformStorage, // 12-
+  "", //GeneralECGWaveformStorage,
+  "", //AmbulatoryECGWaveformStorage,
+  "", //HemodynamicWaveformStorage,
+  "", //CardiacElectrophysiologyWaveformStorage,
+  "", //BasicVoiceAudioWaveformStorage,
+  "", //StandaloneModalityLUTStorage,
+  "", //StandaloneVOILUTStorage,
+  "", //GrayscaleSoftcopyPresentationStateStorageSOPClass,
+  "", //XRayAngiographicImageStorage,
+  "", //XRayRadiofluoroscopingImageStorage,
+  "", //XRayAngiographicBiPlaneImageStorageRetired,
+  "", //NuclearMedicineImageStorage,
+  "", //RawDataStorage,
+  "", //SpacialRegistrationStorage,
+  "", //SpacialFiducialsStorage,
+  "", //PETImageStorage,
+  "", //RTImageStorage,
+  "", //RTDoseStorage,
+  "", //RTStructureSetStorage,
+  "", //RTPlanStorage,
+  "", //CSANonImageStorage,
+  "", //Philips3D,
+  "", //MS_END
+};
+
+const char *MediaStorage::GetModality() const
+{
+  return MSModalityStrings[MSField];
+}
+
 } // end namespace gdcm

@@ -10,7 +10,7 @@ IF(INSOURCE)
 ENDIF(INSOURCE)
 
 #-----------------------------------------------------------------------------
-SET(GDCM_MAJOR_VERSION 3)
+SET(GDCM_MAJOR_VERSION 2)
 SET(GDCM_MINOR_VERSION 0)
 SET(GDCM_BUILD_VERSION 0)
 SET(GDCM_VERSION
