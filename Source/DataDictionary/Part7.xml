@@ -11,7 +11,7 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 -->
-  <dict name="E.1 Registry of DICOM command elements">
+  <dict ref="E.1" name="Registry of DICOM command elements">
     <entry group="0000" element="0000" vr="UL" vm="1" name="Command Group Length">
       <description>
 The even number of bytes from the end of the value field to the beginning of the next group.
@@ -160,7 +160,7 @@ Contains the Message ID (0000,0110) of the C-MOVE-RQ Message from which this C-S
 </description>
     </entry>
   </dict>
-  <dict name="E.2 Retired command fields">
+  <dict ref="E.2" name="Retired command fields">
     <entry group="0000" element="0001" vr="UL" vm="1" name="Length to End" retired="true"/>
     <entry group="0000" element="0010" vr="CS" vm="1" name="Recognition Code" retired="true"/>
     <entry group="0000" element="0200" vr="AE" vm="1" name="Initiator" retired="true"/>
