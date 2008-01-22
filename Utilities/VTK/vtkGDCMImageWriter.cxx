@@ -228,6 +228,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   image.SetValue( *bv );
   gdcm::PhotometricInterpretation pi = gdcm::PhotometricInterpretation::MONOCHROME2;
   image.SetPhotometricInterpretation( pi );
+  //image.Print( std::cerr );
   
   gdcm::ImageWriter writer;
   writer.SetFileName( filename );

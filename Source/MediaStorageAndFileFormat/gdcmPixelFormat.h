@@ -66,7 +66,7 @@ public:
   PixelFormat(ScalarType st);
   ~PixelFormat() {}
 
-  // For transparence of use
+  // For transparency of use
   operator ScalarType() const { return GetScalarType(); }
 
   // Samples Per Pixel
@@ -119,6 +119,7 @@ public:
     }
 
   ScalarType GetScalarType() const;
+  // BUG: You need to call SetScalarType *before* SetSamplesPerPixel
   void SetScalarType(ScalarType st);
   const char *GetScalarTypeAsString() const;
 
