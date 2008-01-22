@@ -23,7 +23,7 @@ namespace gdcm
 
 const char UID::GDCM_UID[] = "1.2.826.0.1.3680043.2.1143";
 std::string UID::Root = GetGDCMUID();
-std::string UID::HardwareAddress = System::EncodeHardwareAddress();
+std::string UID::EncodedHardwareAddress; // = System::GetHardwareAddress();
 
 const char *UID::GetGDCMUID()
 {
@@ -39,22 +39,29 @@ const char* UID::GenerateUniqueUID()
     // Seriously...
     return NULL;
     }
-//  if( HardwareAddress.empty() )
-//    {
-//    HardwareAddress = System::EncodeHardwareAddress(); // called once, too system intensive
-//    if( HardwareAddress.empty() )
-//      {
-//      // ethernet cable is not plugged, do not allow creating UIDs
-//      return NULL;
-//      }
-//    //srand( time(NULL) );
-//    }
-  assert( !HardwareAddress.empty() ); // programmer error
+  // We need to convert a 6 digit number from base 256 to base 10, using integer
+  // would requires a 48bits one. To avoid this we have to reimplement the div + modulo 
+  // with string only
+  if( EncodedHardwareAddress.empty() )
+    {
+    unsigned char node[6];
+    int res = System::GetHardwareAddress(node);
+    char buffer[15]; // 15 is max possible when all node[i] == 255
+    int len = System::EncodeBytes(buffer, node, sizeof(node));
+    EncodedHardwareAddress = buffer;
+    if( EncodedHardwareAddress.empty() )
+      {
+      // ethernet cable is not plugged, do not allow creating UIDs
+      return NULL;
+      }
+    }
+  assert( !EncodedHardwareAddress.empty() ); // programmer error
   Unique += ".";
-  Unique += HardwareAddress;
+  Unique += EncodedHardwareAddress;
   Unique += ".";
-  std::string datetime = System::GetCurrentDateTime();
-  if( datetime.empty() )
+  char datetime[18];
+  int res = System::GetCurrentDateTime(datetime);
+  if( !res )
     {
     // Not sure how this is supposed to happen...
     return NULL;
@@ -66,7 +73,9 @@ const char* UID::GenerateUniqueUID()
   // But a better approach to dynamically calculate the max size for random bits...
   uuid_t out;
   uuid_generate(out);
-  std::string randbytes = System::EncodeBytes(out, sizeof(out));
+  char randbytesbuf[40];
+  res = System::EncodeBytes(randbytesbuf, out, sizeof(out));
+  std::string randbytes = randbytesbuf;
 
   Unique += ".";
   std::string::size_type len = Unique.size();
@@ -74,7 +83,18 @@ const char* UID::GenerateUniqueUID()
   assert( len < 64 );
   // randbytes might be a little too long, let's check
   // if too long: take the lower bits
-  Unique += randbytes.substr( rb_len - (64 - len) , 64 - len );
+  randbytes = randbytes.substr( rb_len - (64 - len) , 64 - len );
+
+  std::string::size_type zeropos = randbytes.find_first_not_of('0');
+  if( zeropos == std::string::npos )
+    {
+    // All 0 ...
+    Unique += "0";
+    }
+  else
+    {
+    Unique += randbytes.c_str() + zeropos;
+    }
 
   assert( IsUIDValid( Unique.c_str() ) );
 

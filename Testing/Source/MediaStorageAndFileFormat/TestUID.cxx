@@ -33,6 +33,18 @@ int TestUID(int argc, char *argv[])
     return 1;
     }
 
+/*
+  std::string s0 = "123456";
+  std::cout << (s0.c_str() + s0.find_first_not_of('0')) << std::endl;
+  std::string s1 = "0123456";
+  std::cout << (s1.c_str() + s1.find_first_not_of('0')) << std::endl;
+  std::string s2 = "00123456";
+  std::cout << (s2.c_str() + s2.find_first_not_of('0')) << std::endl;
+  std::string s3 = "000";
+  if( s3.find_first_not_of('0') != std::string::npos )
+    std::cout << (s3.c_str() + s3.find_first_not_of('0')) << std::endl;
+*/
+
   // Threading issue, make sure that two different UIDs cannot generate same UID
   gdcm::UID uid1;
   gdcm::UID uid2;

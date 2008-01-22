@@ -41,7 +41,7 @@ public:
 private:
   static const char GDCM_UID[];
   static std::string Root;
-  static std::string HardwareAddress;
+  static std::string EncodedHardwareAddress;
   std::string Unique; // Buffer
 };
 

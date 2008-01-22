@@ -47,9 +47,9 @@ public:
   // copy a file
 
   // somewhat UID specific:
-  static std::string EncodeHardwareAddress();
-  static std::string GetCurrentDateTime();
-  static std::string EncodeBytes(unsigned char *data, unsigned long size);
+  static int GetHardwareAddress(unsigned char addr[6]);
+  static int GetCurrentDateTime(char date[18]);
+  static int EncodeBytes(char *out, unsigned char *data, int size);
 
 protected:
   static bool GetPermissions(const char* file, unsigned short& mode);

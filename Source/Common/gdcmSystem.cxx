@@ -306,7 +306,7 @@ inline int getlastdigit(unsigned char *data, unsigned long size)
   return carry;
 }
 
-std::string System::EncodeBytes(unsigned char *data, unsigned long size)
+int System::EncodeBytes(char *out, unsigned char *data, int size)
 {
   bool zero = false;
   int res;
@@ -325,12 +325,13 @@ std::string System::EncodeBytes(unsigned char *data, unsigned long size)
       }
     }
 
-  return sres;
+  //return sres;
+  strcpy(out, sres.c_str()); //, sres.size() );
+  return sres.size();
 }
 
-std::string System::EncodeHardwareAddress()
+int System::GetHardwareAddress(unsigned char addr[6])
 {
-  unsigned char addr[6];
   int stat = uuid_get_node_id(addr);
   /*
   // For debugging you need to consider the worse case where hardware addres is max number:
@@ -343,33 +344,14 @@ std::string System::EncodeHardwareAddress()
   */
   if (stat != 0)
     {
-    // We need to convert a 6 digit number from base 256 to base 10, using integer
-    // would requires a 48bits one. To avoid this we have to reimplement the div + modulo 
-    // with string only
-    std::string s = EncodeBytes(addr, sizeof(addr));
-    assert( sizeof(addr) == 6 );
-/*
-    bool zero = false;
-    int res;
-    std::string sres;
-    while(!zero)
-      {
-      res = getlastdigit<6>(addr);
-      sres.insert(sres.begin(), '0' + res);
-      zero = (addr[0] == 0) && (addr[1] == 0) && (addr[2] == 0) 
-        && (addr[3] == 0) && (addr[4] == 0) && (addr[5] == 0);
-      }
-
-    return sres;
-*/
-    return s;
+    return stat;
     }
   // else
   gdcmWarningMacro("Problem in finding the MAC Address");
-  return "";
+  return stat;
 }
 
-std::string System::GetCurrentDateTime()
+int System::GetCurrentDateTime(char date[18])
 {
   const size_t maxsize = 40;
   char tmp[maxsize];
@@ -387,20 +369,22 @@ std::string System::GetCurrentDateTime()
   size_t ret = strftime (tmp, sizeof (tmp), "%Y%m%d%H%M%S", ptm);
   if( ret == 0 || ret >= maxsize )
     {
-    return "";
+    //return "";
+    return 0;
     }
 
   // Add milliseconds
-  const size_t maxsizall = 40 * 2;
-  char tmpAll[maxsizall];
-  int ret2 = snprintf(tmpAll,maxsizall,"%s%03ld",tmp,milliseconds);
+  const size_t maxsizall = 18;
+  //char tmpAll[maxsizall];
+  int ret2 = snprintf(date,maxsizall,"%s%03ld",tmp,milliseconds);
   if( ret2 >= maxsizall )
     {
-    return "";
+    //return "";
+    return 0;
     }
 
   // Ok !
-  return tmpAll;
+  return 1;
 }
 
 } // end namespace gdcm
