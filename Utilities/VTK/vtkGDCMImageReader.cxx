@@ -221,8 +221,9 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
     this->DataExtent[4] = 0;
     this->DataExtent[5] = dims[2] - 1;
     }
-  //this->DataSpacing[0] = 1.;
-  //this->DataSpacing[1] = -1.;
+  const double *spacing = image.GetSpacing();
+  this->DataSpacing[0] = spacing[0];
+  this->DataSpacing[1] = spacing[1];
   //this->DataSpacing[2] = 1.;
 
   gdcm::PixelFormat pixeltype = image.GetPixelFormat();
@@ -277,7 +278,7 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
       0, DataExtent[1], 0, DataExtent[3], 0, DataExtent[5]);
 
     vtkDataObject::SetPointDataActiveScalarInfo(outInfo, this->DataScalarType, this->NumberOfScalarComponents);
-    //outInfo->Set(vtkDataObject::SPACING(), spcs, 3);
+    outInfo->Set(vtkDataObject::SPACING(), this->DataSpacing, 3);
 
     double origin[3] = {};
     outInfo->Set(vtkDataObject::ORIGIN(), origin, 3);
@@ -399,7 +400,7 @@ int vtkGDCMImageReader::RequestData(vtkInformation *vtkNotUsed(request),
     long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
     //std::cerr << "dext: " << dext[2] << " " << dext[3] << std::endl;
     //std::cerr << "dext: " << dext[4] << " " << dext[5] << std::endl;
-#if 1
+#if 0
     memcpy(pointer, tempimage, len);
     pointer += len;
 #else

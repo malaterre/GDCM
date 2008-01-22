@@ -17,6 +17,7 @@
 #include "gdcmDataSet.h"
 #include "gdcmAttribute.h"
 #include "gdcmUID.h"
+#include "gdcmSpacingHelper.h"
 
 namespace gdcm
 {
@@ -42,11 +43,11 @@ bool ImageWriter::Write()
 
   // col & rows:
   Attribute<0x0028, 0x0011> columns;
-  columns.SetValue( PixelData.GetDimension(1) );
+  columns.SetValue( PixelData.GetDimension(0) );
   ds.Replace( columns.GetAsDataElement() );
 
   Attribute<0x0028, 0x0010> rows;
-  rows.SetValue( PixelData.GetDimension(0) );
+  rows.SetValue( PixelData.GetDimension(1) );
   ds.Replace( rows.GetAsDataElement() );
 
   // (0028,0008) IS [12]                                     #   2, 1 NumberOfFrames
@@ -100,6 +101,12 @@ bool ImageWriter::Write()
     DataElement de( Tag(0x0028, 0x0004 ) );
     de.SetByteValue( pistr, strlen(pistr) );
     ds.Insert( de );
+    if( pi == PhotometricInterpretation::RGB ) // FIXME
+      {
+      Attribute<0x0028, 0x0006> planarconfiguration;
+      planarconfiguration.SetValue( PixelData.GetPlanarConfiguration() );
+      ds.Replace( planarconfiguration.GetAsDataElement() );
+      }
     }
 
   if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )
@@ -119,6 +126,9 @@ bool ImageWriter::Write()
     DataElement de3( Tag(0x0008, 0x0064 ) );
     de3.SetByteValue( conversion, strlen(conversion) );
     ds.Insert( de3 );
+
+    // Spacing:
+    SpacingHelper::SetSpacingValue(ds, PixelData.GetSpacing());
     }
 
   // UIDs:

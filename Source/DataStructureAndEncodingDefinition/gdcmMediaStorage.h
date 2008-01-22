@@ -103,9 +103,17 @@ typedef enum {
 
   const char *GetModality() const;
 
+  friend std::ostream &operator<<(std::ostream &os, const MediaStorage &ms);
 private:
   MSType MSField;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream &operator<<(std::ostream &_os, const MediaStorage &ms)
+{
+  _os << MediaStorage::GetMSString(ms);
+  return _os;
+
+}
 
 } // end namespace gdcm
 

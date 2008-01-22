@@ -28,20 +28,21 @@ Tag SpacingHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
 
   switch(ms)
     {
+  case MediaStorage::CTImageStorage:
   case MediaStorage::MRImageStorage:
     // (0028,0030) DS [2.0\2.0]                                #   8, 2 PixelSpacing
     t = Tag(0x0028,0x0030);
     break;
   default:
+    gdcmErrorMacro( "Do not handle: " << ms );
     t = Tag(0xffff,0xffff);
     break;
     }
   return t;
 }
 
-std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
+MediaStorage GetMediaStorage(DataSet const &ds)
 {
-  std::vector<double> sp;
   const Tag tsopclassuid(0x0008, 0x0016);
   const ByteValue *sopclassuid = ds.GetDataElement( tsopclassuid ).GetByteValue();
   std::string sopclassuid_str(
@@ -50,6 +51,13 @@ std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
   assert( sopclassuid_str.find( ' ' ) == std::string::npos );
   MediaStorage ms = MediaStorage::GetMSType(sopclassuid_str.c_str());
   assert( MediaStorage::IsImage( ms ) );
+  return ms;
+}
+
+std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
+{
+  std::vector<double> sp;
+  MediaStorage ms = GetMediaStorage(ds);
 
   Tag spacingtag = GetSpacingTagFromMediaStorage(ms);
   if( ds.FindDataElement( spacingtag ) )
@@ -84,5 +92,43 @@ std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
 
   return sp;
 }
+
+void SpacingHelper::SetSpacingValue(DataSet & ds, const double * spacing)
+{
+  MediaStorage ms = GetMediaStorage(ds);
+  Tag spacingtag = GetSpacingTagFromMediaStorage(ms);
+  if( spacingtag != Tag(0xffff,0xffff) )
+    {
+    DataElement de( spacingtag );
+    const Global &g = gdcm::GlobalInstance;
+    const Dicts &dicts = g.GetDicts();
+    const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
+    const VR & vr = entry.GetVR();
+    const VM & vm = entry.GetVM();
+    assert( de.GetVR() == vr || de.GetVR() == VR::INVALID );
+    switch(vr)
+      {
+    case VR::DS:
+        {
+        gdcm::Element<VR::DS,VM::VM1_n> el;
+        el.SetLength( entry.GetVM().GetLength() );
+        for( int i = 0; i < entry.GetVM().GetLength(); ++i)
+          {
+          el.SetValue( spacing[i], i );
+          }
+        assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
+        std::stringstream os;
+        el.Write( os );
+        de.SetByteValue( os.str().c_str(), os.str().size() );
+        ds.Insert( de );
+        }
+      break;
+    default:
+      abort();
+      }
+    }
+
+}
+
 
 }

@@ -31,6 +31,7 @@ class GDCM_EXPORT SpacingHelper
 {
 public:
   static std::vector<double> GetSpacingValue(DataSet const & ds);
+  static void SetSpacingValue(DataSet & ds, const double * spacing);
 
 protected:
   static Tag GetSpacingTagFromMediaStorage(MediaStorage const &ms);

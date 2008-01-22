@@ -28,10 +28,10 @@ int TestvtkGDCMImageWrite(const char *filename)
   std::cerr << "Reading : " << filename << std::endl;
   reader->SetFileName( filename );
   reader->Update();
+  reader->GetOutput()->Print( cout );
 
   vtkImageData *copy = vtkImageData::New();
   copy->DeepCopy( reader->GetOutput() );
-  //reader->GetOutput()->Print( cout );
 
   vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
   //writer->SetInput( reader->GetOutput() );

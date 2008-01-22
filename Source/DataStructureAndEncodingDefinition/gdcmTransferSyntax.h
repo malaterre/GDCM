@@ -107,6 +107,7 @@ public:
   // return if dataset is encoded or not (Deflate Explicit VR)
   bool IsEncoded() const;
 
+  friend std::ostream &operator<<(std::ostream &os, const TransferSyntax &ts);
 private:
   // DO NOT EXPOSE the following. Internal details of TransferSyntax
 bool IsImplicit(const TSType &ts) const;
@@ -116,6 +117,13 @@ bool IsBigEndian(const TSType &ts) const;
 
   TSType TSField;
 };
+//-----------------------------------------------------------------------------
+inline std::ostream &operator<<(std::ostream &_os, const TransferSyntax &ts)
+{
+  _os << TransferSyntax::GetTSString(ts);
+  return _os;
+
+}
 
 } // end namespace gdcm
 

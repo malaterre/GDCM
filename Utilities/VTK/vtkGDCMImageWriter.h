@@ -25,7 +25,6 @@
 
 #include "vtkImageWriter.h"
 
-struct vtkGDCMImageWriterInternals;
 class vtkLookupTable;
 class vtkMedicalImageProperties;
 class VTK_EXPORT vtkGDCMImageWriter : public vtkImageWriter
@@ -62,9 +61,6 @@ protected:
 private:
   vtkGDCMImageWriter(const vtkGDCMImageWriter&);  // Not implemented.
   void operator=(const vtkGDCMImageWriter&);  // Not implemented.
-
-  //PIMPL
-  //vtkGDCMImageWriterInternals *Internals;
 
   // VTK structs:
   vtkLookupTable *LookupTable;

@@ -49,11 +49,11 @@ public:
       _os << "," << Internal[i];
     }
 
-  typename VRToType<TVR>::Type GetValue(int idx = 0) {
+  typename VRToType<TVR>::Type GetValue(unsigned int idx = 0) const {
     assert( idx < VMToLength<TVM>::Length );
     return Internal[idx];
   }
-  typename VRToType<TVR>::Type operator[] (int idx) {
+  typename VRToType<TVR>::Type operator[] (unsigned int idx) const {
     return GetValue(idx);
   }
   void SetValue(typename VRToType<TVR>::Type v, unsigned int idx = 0) {
@@ -268,11 +268,15 @@ public:
       }
       Save = save;
   }
-  typename VRToType<TVR>::Type GetValue(int idx = 0) {
+  void SetValue(typename VRToType<TVR>::Type v, unsigned int idx = 0) {
+    assert( idx < Length );
+    Internal[idx] = v;
+  }
+  typename VRToType<TVR>::Type GetValue(unsigned int idx = 0) const {
     assert( idx < Length );
     return Internal[idx];
   }
-  typename VRToType<TVR>::Type operator[] (int idx) {
+  typename VRToType<TVR>::Type operator[] (unsigned int idx) const {
     return GetValue(idx);
   }
   void Set(Value const &v) {

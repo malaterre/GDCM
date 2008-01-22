@@ -30,11 +30,6 @@
 #include "gdcmImageWriter.h"
 #include "gdcmByteValue.h"
 
-//struct vtkGDCMImageWriterInternals
-//{
-//  gdcm::ImageWriter DICOMWriter;
-//};
-
 vtkCxxRevisionMacro(vtkGDCMImageWriter, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMImageWriter)
 
@@ -43,7 +38,6 @@ vtkCxxSetObjectMacro(vtkGDCMImageWriter,MedicalImageProperties,vtkMedicalImagePr
 
 vtkGDCMImageWriter::vtkGDCMImageWriter()
 {
-  //this->Internals = new vtkGDCMImageWriterInternals;
   //this->ScalarArrayName = NULL;
   //this->SetScalarArrayName( "GDCM" );
 
@@ -53,7 +47,6 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
 
 vtkGDCMImageWriter::~vtkGDCMImageWriter()
 {
-  //delete this->Internals;
   this->LookupTable->Delete();
   this->MedicalImageProperties->Delete();
 }
@@ -214,20 +207,43 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     abort();
     }
 
+  gdcm::PhotometricInterpretation pi;
+  if( data->GetNumberOfScalarComponents() == 1 )
+    {
+    pi = gdcm::PhotometricInterpretation::MONOCHROME2;
+    }
+  else if( data->GetNumberOfScalarComponents() == 3 )
+    {
+    pi = gdcm::PhotometricInterpretation::RGB;
+    // (0028,0006) US 0                                        #   2, 1 PlanarConfiguration
+    }
+  else
+    {
+    return 0;
+    }
   pixeltype.SetSamplesPerPixel( data->GetNumberOfScalarComponents() );
-//  if( image.GetPhotometricInterpretation() == 
-//    gdcm::PhotometricInterpretation::PALETTE_COLOR )
-//    {
-//    assert( this->NumberOfScalarComponents == 1 );
-//    this->NumberOfScalarComponents = 3;
-//    }
+  image.SetPhotometricInterpretation( pi );
   image.SetPixelFormat( pixeltype );
   unsigned long len = image.GetBufferLength();
 
   gdcm::ByteValue *bv = new gdcm::ByteValue( (char*)data->GetScalarPointer(), len );
+  // re shuffle the line within ByteValue:
+  //
+  char *pointer = (char*)bv->GetPointer();
+  const char *tempimage = (char*)data->GetScalarPointer();
+  int *dext = data->GetExtent();
+  long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
+  for(int j = dext[4]; j <= dext[5]; ++j)
+    {
+    for(int i = dext[2]; i <= dext[3]; ++i)
+      {
+      memcpy(pointer,
+        tempimage+((dext[3] - i)+j*(dext[3]+1))*outsize, outsize);
+      pointer += outsize;
+      }
+    }
+
   image.SetValue( *bv );
-  gdcm::PhotometricInterpretation pi = gdcm::PhotometricInterpretation::MONOCHROME2;
-  image.SetPhotometricInterpretation( pi );
   //image.Print( std::cerr );
   
   gdcm::ImageWriter writer;
