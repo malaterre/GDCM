@@ -19,19 +19,20 @@ TODO:
 
 Usage: (you need a XSLT 2.0 processor)
 
-$ java -jar ~/Software/saxon/saxon8.jar  07_03pu.xml oo2.xsl > tmp.xml
+$ java -jar ~/Software/saxon/saxon8.jar  08_03pu.xml Part3.xsl > ModuleAttributes.xml
 -->
   <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
   <xsl:variable name="apos">'</xsl:variable>
-  <xsl:variable name="apos2">''</xsl:variable>
+  <xsl:variable name="linebreak">
+    <xsl:text>
+</xsl:text>
+  </xsl:variable>
 <!--
 
 Function to parse a row from an informaltable specifically for a Macro/Module table:
 
 -->
   <xsl:template match="row" mode="macro">
-<!--found p="{ row[1]/entry[2]/para }"/-->
-<!--xsl:for-each select="row"-->
     <xsl:variable name="name">
       <xsl:for-each select="entry[1]/para">
         <xsl:value-of select="normalize-space(.)"/>
@@ -45,11 +46,6 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
       <xsl:when test="substring($tag,1,1) = '(' and substring($tag,11,1) = ')'">
         <xsl:variable name="group" select="substring-after(substring-before($tag,','), '(')"/>
         <xsl:variable name="element" select="substring-after(substring-before($tag,')'), ',')"/>
-<!--xsl:message><xsl:value-of select="$third_column"/><xsl:text> : </xsl:text><xsl:value-of select="$type_position"/></xsl:message-->
-        <xsl:variable name="linebreak">
-          <xsl:text>
-</xsl:text>
-        </xsl:variable>
 <!--used internally to find out if type is indeed type of if column type was missing ... not full proof -->
         <xsl:variable name="internal_type" select="normalize-space(string-join(entry[3]/para,' '))"/>
         <xsl:variable name="type">
@@ -84,13 +80,6 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
             </entry>
           </xsl:otherwise>
         </xsl:choose>
-<!-- DEBUGGING -->
-<!-- It would be nice if I could generate a warning instead -->
-<!--xsl:for-each select="entry">
-                          <xsl:if test="(position() &gt; 4)">
-                            <xsl:value-of select="normalize-space(.)"/>
-                          </xsl:if>
-                        </xsl:for-each-->
       </xsl:when>
       <xsl:when test="$name = 'Attribute Name' or $name = 'Attribute name' or $name = 'Key'">
 <!-- This is supposed to be the very first line of each table -->
@@ -98,17 +87,10 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
       </xsl:when>
       <xsl:otherwise>
 <!-- I should check if this is indeed a Include line or not... -->
-<!--xsl:variable name="text">
-                      <xsl:for-each select="entry">
-                        <xsl:value-of select="normalize-space(.)"/>
-                        <xsl:text> </xsl:text>
-                      </xsl:for-each>
-                    </xsl:variable-->
         <xsl:variable name="include" select="normalize-space(translate(translate(string-join(entry,' '),'‘',$apos),'’',$apos))"/>
         <include ref="{$include}"/>
       </xsl:otherwise>
     </xsl:choose>
-<!--/xsl:for-each-->
   </xsl:template>
 <!--
 
@@ -148,7 +130,6 @@ Some tables have a specific layout, when namest='c2' and nameend='c4', deals wit
 as they do not repeat the ie name each time:
 -->
       <xsl:when test="entry[2]/@namest = 'c2'">
-<!--xsl:value-of select="entry/@namest"/-->
         <xsl:apply-templates select="entry" mode="iod">
           <xsl:with-param name="ie_name" select="entry[1]/para"/>
         </xsl:apply-templates>
@@ -172,7 +153,8 @@ over and over. We need to get the last ie name we found to fill in the blank:
           <xsl:value-of select="entry[4]/para" separator=" "/>
         </xsl:variable>
         <xsl:variable name="usage" select="translate($usage_joined,'–','-')"/>
-        <entry ie="{normalize-space((entry[1]/para[. != ''] , reverse(preceding-sibling::row/entry[1]/para[. != ''])[1])[1])}" name="{normalize-space(entry[2]/para)}" ref="{normalize-space($ref_joined)}" usage="{normalize-space($usage)}"/>
+        <xsl:variable name="ie" select="normalize-space((entry[1]/para[. != ''] , reverse(preceding-sibling::row/entry[1]/para[. != ''])[1])[1])"/>
+        <entry ie="{$ie}" name="{normalize-space(entry[2]/para)}" ref="{normalize-space($ref_joined)}" usage="{normalize-space($usage)}"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -185,12 +167,9 @@ over and over. We need to get the last ie name we found to fill in the blank:
   <xsl:template name="get-table-reference">
     <xsl:param name="reference"/>
     <xsl:param name="table_name"/>
-<!--xsl:value-of select="$reference"/-->
-<!--regex="(Table\s+C.[1-9a-b]+)\s+([A-Z/ ]+)"-->
     <xsl:variable name="title">
       <xsl:choose>
-<!-- need to do it first, since most of the time $reference 
-             is busted and contains garbage misleading us... -->
+<!-- need to do it first, since most of the time $reference is busted and contains garbage misleading us... -->
         <xsl:when test="substring($table_name,1,5) = 'Table'">
           <xsl:value-of select="$table_name"/>
         </xsl:when>
@@ -199,20 +178,15 @@ over and over. We need to get the last ie name we found to fill in the blank:
         </xsl:when>
         <xsl:otherwise>
           <xsl:text>NO TABLE REF</xsl:text>
-<!--xsl:value-of select="$reference"/>
-          <xsl:value-of select="$table_name"/-->
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
     <xsl:analyze-string select="$title" regex="(Table [ABFC.]*[0-9a-z\.\-]+)\s*(.*)">
       <xsl:matching-substring>
-<!--xsl:text>MATCH:</xsl:text-->
         <xsl:value-of select="regex-group(1)"/>
       </xsl:matching-substring>
       <xsl:non-matching-substring>
         <xsl:text>ERROR: </xsl:text>
-<!--xsl:value-of select="regex-group(1)"/>
-      <xsl:value-of select="regex-group(2)"/-->
         <xsl:value-of select="$title"/>
       </xsl:non-matching-substring>
     </xsl:analyze-string>
@@ -225,25 +199,16 @@ over and over. We need to get the last ie name we found to fill in the blank:
   <xsl:template name="get-table-name">
     <xsl:param name="reference"/>
     <xsl:param name="table_name"/>
-<!--xsl:value-of select="$table_name"/-->
     <xsl:variable name="ret">
       <xsl:analyze-string select="$table_name" regex="(Table [ABFC.]*[0-9a-z\.\-]+)\s*(.+)">
         <xsl:matching-substring>
-<!--xsl:text>MATCH:</xsl:text-->
           <xsl:value-of select="regex-group(2)"/>
         </xsl:matching-substring>
         <xsl:non-matching-substring>
-<!--xsl:text>ERROR: </xsl:text-->
-<!--xsl:value-of select="regex-group(1)"/>
-      <xsl:value-of select="regex-group(2)"/-->
           <xsl:value-of select="$table_name"/>
         </xsl:non-matching-substring>
       </xsl:analyze-string>
     </xsl:variable>
-<!-- http://www.topxml.com/xsl/articles/caseconvert/ -->
-    <xsl:variable name="lcletters">abcdefghijklmnopqrstuvwxyz</xsl:variable>
-    <xsl:variable name="ucletters">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
-<!-- <para>Table C.7-1 PATIENT MODULE ATTRIBUTES</para> -->
     <xsl:variable name="garbage">—</xsl:variable>
     <xsl:variable name="clean">
       <xsl:value-of select="translate($ret,$garbage,' ')"/>
@@ -293,7 +258,6 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
 </xsl:comment>
     <tables edition="2008">
       <xsl:for-each select="//informaltable">
-<!--xsl:variable name="table_name" select="preceding-sibling::node()[last()]"/-->
         <xsl:variable name="table_ref_raw" select="preceding::para[2]"/>
 <!-- might contain the Table ref or not ... -->
         <xsl:variable name="table_name_raw" select="preceding::para[1]"/>
