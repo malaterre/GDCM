@@ -22,8 +22,8 @@ Usage: (you need a XSLT 2.0 processor)
 $ java -jar ~/Software/saxon/saxon8.jar  07_03pu.xml oo2.xsl > tmp.xml
 -->
   <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
-<xsl:variable name="apos">'</xsl:variable>
-<xsl:variable name="apos2">''</xsl:variable>
+  <xsl:variable name="apos">'</xsl:variable>
+  <xsl:variable name="apos2">''</xsl:variable>
 <!--
 
 Function to parse a row from an informaltable specifically for a Macro/Module table:
@@ -74,9 +74,11 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
             </entry>
           </xsl:when>
           <xsl:otherwise>
-            <entry group="{$group}" element="{$element}" name="{$name_translate}" > <!-- type ?? -->
+            <entry group="{$group}" element="{$element}" name="{$name_translate}">
+<!-- type ?? -->
               <description>
-                <xsl:variable name="desc" select="translate($type,'–­','=')"/><!-- very specific -->
+                <xsl:variable name="desc" select="translate($type,'–­','=')"/>
+<!-- very specific -->
                 <xsl:value-of select="translate($desc,'’',$apos)"/>
               </description>
             </entry>
@@ -129,8 +131,8 @@ Take the ie name as input
 -->
   <xsl:template match="entry" mode="iod2">
     <xsl:for-each select="entry">
-        <xsl:variable name="usage" select="translate(entry[3]/para,'–','-')"/>
-        <entry ie="{normalize-space(para)}" name="{normalize-space(following-sibling::entry[1]/para)}" ref="{normalize-space(following-sibling::entry[2]/para)}" usage="{$usage}"/>
+      <xsl:variable name="usage" select="translate(entry[3]/para,'–','-')"/>
+      <entry ie="{normalize-space(para)}" name="{normalize-space(following-sibling::entry[1]/para)}" ref="{normalize-space(following-sibling::entry[2]/para)}" usage="{$usage}"/>
     </xsl:for-each>
   </xsl:template>
 <!--
