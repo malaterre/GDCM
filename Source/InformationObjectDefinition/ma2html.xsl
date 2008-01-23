@@ -31,7 +31,7 @@
         <xsl:value-of select="@type"/>
       </td>
       <td>
-        <xsl:value-of select="@name"/>
+        <xsl:value-of select="description"/>
       </td>
     </tr>
   </xsl:template>
