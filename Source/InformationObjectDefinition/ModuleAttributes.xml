@@ -16,7 +16,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 -->
-<tables edition="2007">
+<tables edition="2008">
   <macro ref="Table 5.4-1" name="EXAMPLE MODULE TABLE">
     <entry group="aaaa" element="aaaa" name="Attribute A" type="1">
       <description>This is an example.</description>
