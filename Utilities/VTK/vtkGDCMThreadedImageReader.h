@@ -54,10 +54,13 @@ public:
     {
     return "DICOM";
     }
+
   // Description:
-  vtkBooleanMacro(Shift2048,int);
-  vtkGetMacro(Shift2048,int);
-  vtkSetMacro(Shift2048,int);
+  vtkGetMacro(Shift,double);
+  vtkSetMacro(Shift,double);
+
+  vtkGetMacro(Scale,double);
+  vtkSetMacro(Scale,double);
 
 
 protected:
@@ -84,7 +87,8 @@ protected:
 private:
   vtkGDCMThreadedImageReader(const vtkGDCMThreadedImageReader&);  // Not implemented.
   void operator=(const vtkGDCMThreadedImageReader&);  // Not implemented.
-  int Shift2048;
+  double Shift;
+  double Scale;
 };
 #endif
 

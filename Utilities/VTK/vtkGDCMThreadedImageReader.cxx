@@ -38,7 +38,8 @@ vtkStandardNewMacro(vtkGDCMThreadedImageReader);
 
 vtkGDCMThreadedImageReader::vtkGDCMThreadedImageReader()
 {
-  this->Shift2048 = 0;
+  this->Shift = 0.;
+  this->Scale = 1.;
 }
 
 vtkGDCMThreadedImageReader::~vtkGDCMThreadedImageReader()
@@ -263,19 +264,49 @@ void *ReadFilesThread(void *voidparams)
 
     const gdcm::Image &image = reader.GetImage();
     unsigned long len = image.GetBufferLength();
-    assert( len == params->len ); // that would be very bad 
+    // When not applying a transform:
+    if( params->reader->GetShift() == 1 && params->reader->GetScale() == 0 )
+      assert( len == params->len ); // that would be very bad 
 
     char * pointer = params->scalarpointer;
     //memcpy(pointer + file*len, tempimage, len);
-    char *tempimage = pointer + file*len;
+    char *tempimage = pointer + file*params->len;
     image.GetBuffer(tempimage);
-    if( params->reader->GetShift2048() )
+    if( params->reader->GetShift() != 1 || params->reader->GetScale() != 0 )
       {
-      unsigned short *out = (unsigned short*)(pointer + file * len);
-      unsigned short *pout = out;
-      for( ; pout != out + len / 2; ++pout )
+      const double shift = params->reader->GetShift();
+      const int shift_int = (int)shift;
+      const double scale = params->reader->GetScale();
+      const int scale_int = (int)scale;
+      if( scale == 1 && shift == (double)shift_int )
         {
-        *pout = *pout + (short)2048;
+        unsigned short *out = (unsigned short*)(pointer + file * params->len);
+        unsigned short *pout = out;
+        for( ; pout != out + params->len / sizeof(unsigned short); ++pout )
+          {
+          *pout = *pout + (short)shift;
+          }
+        }
+      else if ( shift == 0 && scale != (double)scale_int )
+        {
+        // scale is a float !!
+        char * duplicate = new char[len];
+        memcpy(duplicate,tempimage,len);
+        unsigned short *in = (unsigned short*)duplicate;
+        unsigned short *pin = in;
+        float *out = (float*)(pointer + file * params->len);
+        float *pout = out;
+        for( ; pout != out + params->len / sizeof(float); ++pout )
+          {
+          *pout = *pin * (float)scale;
+          ++pin;
+          }
+        assert( pin == in + len / sizeof(unsigned short) );
+        delete[] duplicate;
+        }
+      else
+        {
+        assert( 0 && "Not Implemented" );
         }
       }
     }
