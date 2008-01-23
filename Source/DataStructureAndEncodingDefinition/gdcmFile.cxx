@@ -257,6 +257,12 @@ std::istream &File::Read(std::istream &is)
 
 std::ostream const &File::Write(std::ostream &os) const
 {
+  // Should I check that 0002,0002 / 0008,0016 and 0002,0003 / 0008,0018 match ?
+//  if( !IsValid() )
+//    {
+//    gdcmErrorMacro( "File is not valid" );
+//    return os;
+//    }
   P.Write(os);
 
   try

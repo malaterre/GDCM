@@ -51,14 +51,14 @@ public:
     //std::cerr << Stream.is_open() << std::endl;
   }
 
-  void SetFile(const File& f) { F = f; }
+  void SetFile(const File& f) { F = (File*)&f; }
 
 protected:
   std::ofstream Stream;
-  File &GetFile() { return F; }
+  File &GetFile() { return *F; }
 
 private:
-  File F;
+  File *F;
 };
 
 } // end namespace gdcm

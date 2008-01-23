@@ -16,6 +16,7 @@
 #include "gdcmTag.h"
 #include "gdcmByteValue.h"
 #include "gdcmDataSet.h"
+#include "gdcmFileMetaInformation.h"
 
 namespace gdcm
 {
@@ -174,6 +175,19 @@ static const char *MSModalityStrings[] = {
 const char *MediaStorage::GetModality() const
 {
   return MSModalityStrings[MSField];
+}
+
+void MediaStorage::SetFromHeader(FileMetaInformation const &fmi)
+{
+  const Tag mediastoragesopclassuid(0x0002, 0x0002);
+  const ByteValue *sopclassuid = fmi.GetDataElement( mediastoragesopclassuid ).GetByteValue();
+  std::string sopclassuid_str(
+    sopclassuid->GetPointer(),
+    sopclassuid->GetLength() );
+  assert( sopclassuid_str.find( ' ' ) == std::string::npos );
+  MediaStorage ms = MediaStorage::GetMSType(sopclassuid_str.c_str());
+  assert( ms != MS_END );
+  MSField = ms;
 }
 
 void MediaStorage::SetFromDataSet(DataSet const &ds)

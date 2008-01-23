@@ -27,6 +27,7 @@ namespace gdcm
  * while a PDFCodec will answer only for the Encaplusated PDF
  */
 class DataSet;
+class FileMetaInformation;
 class MediaStorage
 {
 public:
@@ -104,6 +105,7 @@ typedef enum {
 
   const char *GetModality() const;
 
+  void SetFromHeader(FileMetaInformation const &fmi);
   void SetFromDataSet(DataSet const &ds);
 
   friend std::ostream &operator<<(std::ostream &os, const MediaStorage &ms);
