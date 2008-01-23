@@ -446,7 +446,7 @@ void DictPrinter::Print(std::ostream& os)
       std::string owner;
       std::string version;
 
-    if( de.GetTag().IsPrivate() )
+    if( de.GetTag().IsPrivate() && de.GetTag().GetElement() >= 0x0100 )
       {
       owner = GetOwner(ds,de);
       version = GetVersion(owner);
@@ -464,7 +464,7 @@ void DictPrinter::Print(std::ostream& os)
         pvr = VR::LO;
         owner = "Private Creator";
         }
-      VM::VMType vm = GuessVMType(de);
+      VM vm = GuessVMType(de);
 
       os << 
         "<entry group=\"" << std::hex << std::setw(4) << std::setfill('0') << 
@@ -475,7 +475,7 @@ void DictPrinter::Print(std::ostream& os)
       if( de.GetTag().IsPrivate() )
         {
         os << "owner=\"" << owner
-          << "\" version=\"" << version << "\"/>\n";
+          << /*"\"  version=\"" << version << */ "\"/>\n";
         }
       //os << "\n  <description>?</description>\n";
       //os << "</entry>\n";

@@ -106,8 +106,11 @@ const double *Image::GetSpacing() const
 double Image::GetSpacing(unsigned int idx) const
 {
   assert( NumberOfDimensions );
-  assert( idx < Spacing.size() );
-  return Spacing[idx];
+  if( idx < Spacing.size() )
+    {
+    return Spacing[idx];
+    }
+  return 1; // FIXME ???
 }
 
 void Image::SetSpacing(double *spacing)

@@ -46,6 +46,7 @@
  * 256
  * 11
  * 9
+ * 3-4
  */
 namespace gdcm
 {
@@ -77,6 +78,7 @@ public:
     VM1_n,
     VM2_2n,
     VM2_n,
+    VM3_4,
     VM3_3n,
     VM3_n,
     VM4_4n,

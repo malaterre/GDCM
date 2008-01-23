@@ -38,6 +38,7 @@ vtkStandardNewMacro(vtkGDCMThreadedImageReader);
 
 vtkGDCMThreadedImageReader::vtkGDCMThreadedImageReader()
 {
+  this->Shift2048 = 0;
 }
 
 vtkGDCMThreadedImageReader::~vtkGDCMThreadedImageReader()
@@ -268,6 +269,15 @@ void *ReadFilesThread(void *voidparams)
     //memcpy(pointer + file*len, tempimage, len);
     char *tempimage = pointer + file*len;
     image.GetBuffer(tempimage);
+    if( params->reader->GetShift2048() )
+      {
+      unsigned short *out = (unsigned short*)(pointer + file * len);
+      unsigned short *pout = out;
+      for( ; pout != out + len / 2; ++pout )
+        {
+        *pout = *pout + (short)2048;
+        }
+      }
     }
 
   return voidparams;
