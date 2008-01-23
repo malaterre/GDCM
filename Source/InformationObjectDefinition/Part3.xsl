@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+xmlns:xs = "http://www.w3.org/2001/XMLSchema"
+xmlns:my="urn:my" version="2.0" exclude-result-prefixes="#all">
 <!--
   Program: GDCM (Grass Root DICOM). A DICOM library
   Module:  $URL$
@@ -22,6 +24,7 @@ Usage: (you need a XSLT 2.0 processor)
 $ java -jar ~/Software/saxon/saxon8.jar  08_03pu.xml Part3.xsl > ModuleAttributes.xml
 -->
   <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
+  <xsl:strip-space elements="*"/>
   <xsl:variable name="apos">'</xsl:variable>
   <xsl:variable name="linebreak">
     <xsl:text>
@@ -32,6 +35,25 @@ $ java -jar ~/Software/saxon/saxon8.jar  08_03pu.xml Part3.xsl > ModuleAttribute
 Function to parse a row from an informaltable specifically for a Macro/Module table:
 
 -->
+ <xsl:function name="my:camel-case" as="xs:string*">
+<xsl:param name="string" as="xs:string*"/>
+<xsl:variable name="tmp0">
+<xsl:sequence select="for $s in $string return string-join( for $word in tokenize($s, '-| ') return concat( upper-case(substring($word, 1, 1)), lower-case(substring($word, 2))) , ' ')" />
+</xsl:variable>
+<xsl:variable name="tmp1">
+<xsl:sequence select="for $s in $tmp0 return string-join( for $word in tokenize($s, '-| ') return if (string-length($word) = 2) then upper-case($word) else $word , ' ')" />
+</xsl:variable>
+<xsl:variable name="tmp2" select="replace($tmp1,' Iod ',' IOD ')"/>
+<xsl:variable name="tmp3" select="replace($tmp2,' Pdf ',' PDF ')"/>
+<xsl:variable name="tmp4" select="replace($tmp3,' Cda ',' CDA ')"/>
+<xsl:variable name="tmp5" select="replace($tmp4,'Sop ','SOP ')"/>
+<xsl:variable name="tmp6" select="replace($tmp5,'Xrf ','XRF ')"/>
+<xsl:variable name="tmp6" select="replace($tmp5,'Pet ','PET ')"/>
+<xsl:variable name="tmp7" select="replace($tmp6,' Ecg ',' ECG ')"/>
+<xsl:variable name="tmp8" select="replace($tmp7,' Cad ',' CAD ')"/>
+<xsl:value-of select="$tmp8"/>
+</xsl:function>
+
   <xsl:template match="row" mode="macro">
     <xsl:variable name="name">
       <xsl:for-each select="entry[1]/para">
@@ -102,7 +124,7 @@ Take the ie name as input
     <xsl:param name="ie_name"/>
     <xsl:for-each select="entry">
       <xsl:if test="(position() mod 3 = 1)">
-        <xsl:variable name="usage" select="translate(normalize-space(following-sibling::entry[2]/para),'–','-')"/>
+        <xsl:variable name="usage" select="translate(normalize-space(following-sibling::entry[2]/para),'– ','- ')"/>
         <entry ie="{$ie_name}" name="{normalize-space(para)}" ref="{normalize-space(following-sibling::entry[1]/para)}" usage="{$usage}"/>
       </xsl:if>
     </xsl:for-each>
@@ -113,7 +135,7 @@ Take the ie name as input
 -->
   <xsl:template match="entry" mode="iod2">
     <xsl:for-each select="entry">
-      <xsl:variable name="usage" select="translate(entry[3]/para,'–','-')"/>
+      <xsl:variable name="usage" select="translate(entry[3]/para,'– ','- ')"/>
       <entry ie="{normalize-space(para)}" name="{normalize-space(following-sibling::entry[1]/para)}" ref="{normalize-space(following-sibling::entry[2]/para)}" usage="{$usage}"/>
     </xsl:for-each>
   </xsl:template>
@@ -279,21 +301,21 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
         <xsl:for-each select="tgroup/tbody">
           <xsl:variable name="attribute_name" select="normalize-space(string-join(row[1]/entry[1]/para,' '))"/>
           <xsl:choose>
-            <xsl:when test="$attribute_name = 'Attribute Name' or $attribute_name = 'Attribute name' or (starts-with($table_ref,'Table') and ends-with($table_name,'ATTRIBUTES') )">
-              <macro ref="{$table_ref}" name="{$table_name}">
-                <xsl:apply-templates select="row" mode="macro"/>
-              </macro>
-            </xsl:when>
-            <xsl:when test="$attribute_name = 'Key'">
-              <module ref="{$table_ref}" name="{$table_name}">
+            <xsl:when test="$attribute_name = 'Key' or ends-with(my:camel-case($table_name),'Module Attributes')">
+              <module ref="{$table_ref}" name="{my:camel-case($table_name)}">
                 <xsl:apply-templates select="row" mode="macro"/>
               </module>
+            </xsl:when>
+            <xsl:when test="$attribute_name = 'Attribute Name' or $attribute_name = 'Attribute name' or (starts-with($table_ref,'Table') and ends-with($table_name,'ATTRIBUTES') and not(contains($table_name,'Module')) )">
+              <macro ref="{$table_ref}" name="{my:camel-case($table_name)}">
+                <xsl:apply-templates select="row" mode="macro"/>
+              </macro>
             </xsl:when>
 <!--
 Table A.2-1 (CR Image IOD Modules) to A.51-1 (Segmentation IOD Modules).
 -->
             <xsl:when test="$attribute_name = 'IE' or $attribute_name = 'Module'">
-              <iod ref="{$table_ref}" name="{$table_name}">
+              <iod ref="{$table_ref}" name="{my:camel-case($table_name)}">
                 <xsl:apply-templates select="row" mode="iod"/>
               </iod>
             </xsl:when>
