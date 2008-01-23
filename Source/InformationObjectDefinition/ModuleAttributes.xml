@@ -14471,7 +14471,7 @@ TRANSVERSE</description>
       <description>Source equipment that produced the Stereometric Series. Enumerated Value: SMR</description>
     </entry>
   </module>
-  <module ref="Table C.8.18.2" name="1 Stereometric Relationship Module Attributes">
+  <module ref="Table C.8.18.2-1" name="Stereometric Relationship Module Attributes">
     <entry group="0022" element="0020" name="Stereo Pairs Sequence" type="1">
       <description>Sequence of items identifying pairs of images. There shall be one or more items in this sequence.</description>
     </entry>
