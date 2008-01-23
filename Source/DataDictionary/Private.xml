@@ -18,6 +18,11 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 -->
+  <entry group="0099" element="1001" vr="OB" vm="1" owner="SYNARC_1.0"/>
+  <entry group="0099" element="1002" vr="OB" vm="1" owner="SYNARC_1.0"/>
+  <entry group="0099" element="1003" vr="LO" vm="1" owner="SYNARC_1.0"/>
+  <entry group="0099" element="1004" vr="US" vm="12" owner="SYNARC_1.0"/>
+  <entry group="0099" element="1005" vr="LO" vm="1" owner="SYNARC_1.0"/>
   <entry group="0011" element="xx10" vr="UN" vm="1" owner="        MED NM"/>
   <entry group="0017" element="xx00" vr="UN" vm="1" owner="        MED NM"/>
   <entry group="0017" element="xx20" vr="UN" vm="1" owner="        MED NM"/>
