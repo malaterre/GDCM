@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dict edition="2007">
+<dict edition="2008">
 <?xml-stylesheet type="text/xsl" href="priv2html.xsl"?>
 <!-- The whole file was generated using :
 
@@ -18,11 +18,6 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 -->
-  <entry group="0099" element="xx01" vr="OB" vm="1" owner="SYNARC_1.0"/>
-  <entry group="0099" element="xx02" vr="OB" vm="1" owner="SYNARC_1.0"/>
-  <entry group="0099" element="xx03" vr="LO" vm="1" owner="SYNARC_1.0"/>
-  <entry group="0099" element="xx04" vr="US" vm="1-n" owner="SYNARC_1.0"/>
-  <entry group="0099" element="xx05" vr="LO" vm="1" owner="SYNARC_1.0"/>
   <entry group="0011" element="xx10" vr="UN" vm="1" owner="        MED NM"/>
   <entry group="0017" element="xx00" vr="UN" vm="1" owner="        MED NM"/>
   <entry group="0017" element="xx20" vr="UN" vm="1" owner="        MED NM"/>
@@ -850,7 +845,7 @@
   <entry group="0043" element="xx6c" vr="UN" vm="1" owner="GEMS_PARM_01"/>
   <entry group="0043" element="xx6d" vr="UN" vm="1" owner="GEMS_PARM_01"/>
   <entry group="0043" element="xx6e" vr="UN" vm="1" owner="GEMS_PARM_01"/>
-  <entry group="0043" element="xx6f" vr="DS" vm="1-n" owner="GEMS_PARM_01"/>
+  <entry group="0043" element="xx6f" vr="DS" vm="3-4" owner="GEMS_PARM_01"/>
   <entry group="0043" element="xx73" vr="US" vm="1" owner="GEMS_PARM_01"/>
   <entry group="0043" element="xx74" vr="US" vm="1" owner="GEMS_PARM_01"/>
   <entry group="0043" element="xx75" vr="US" vm="1" owner="GEMS_PARM_01"/>
@@ -2700,6 +2695,11 @@
   <entry group="0029" element="xx04" vr="LO" vm="1" owner="SPI-P-Private_ICS Release 1;6 "/>
   <entry group="0029" element="xx3d" vr="SQ" vm="1" owner="SPI-P-Private_ICS Release 1;6 "/>
   <entry group="0029" element="xx11" vr="SQ" vm="1" owner="SPI-P-Private_ICS Release 1;8 "/>
+  <entry group="0099" element="xx01" vr="OB" vm="1" owner="SYNARC_1.0"/>
+  <entry group="0099" element="xx02" vr="OB" vm="1" owner="SYNARC_1.0"/>
+  <entry group="0099" element="xx03" vr="LO" vm="1" owner="SYNARC_1.0"/>
+  <entry group="0099" element="xx04" vr="US" vm="1-n" owner="SYNARC_1.0"/>
+  <entry group="0099" element="xx05" vr="LO" vm="1" owner="SYNARC_1.0"/>
   <entry group="0019" element="xx00" vr="UN" vm="1" owner="Siemens: Thorax/Multix FD Lab Settings"/>
   <entry group="0019" element="xx02" vr="UN" vm="1" owner="Siemens: Thorax/Multix FD Lab Settings"/>
   <entry group="0019" element="xx05" vr="UN" vm="1" owner="Siemens: Thorax/Multix FD Lab Settings"/>
