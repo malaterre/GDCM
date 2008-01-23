@@ -17,8 +17,13 @@
 -->
 <!-- The main template that loop over all dict/entry -->
   <xsl:template match="/">
-    <xsl:for-each select="dicts/dict/entry">
+    <xsl:for-each select="dict/entry">
       <xsl:sort select="@group"/>
+      <xsl:sort select="@element"/>
+      <xsl:if test="@element = '0000'">
+      <xsl:text>
+</xsl:text>
+</xsl:if>
       <xsl:value-of select="translate(@group,'x','0')"/>
       <xsl:text> </xsl:text>
       <xsl:value-of select="translate(@element,'x','0')"/>
