@@ -24,7 +24,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="bbbb" element="bbbb" name="Attribute B Sequence" type="1">
       <description>This is an example of a Sequence Attribute</description>
     </entry>
-    <include ref="&gt;Include 'Example Macro' Table 5.4-2 In this Module, Attribute D (dddd,dddd) is Type 1"/>
+    <include ref="&gt;Include 'Example Macro' Table 5.4-2" description="In this Module, Attribute D (dddd,dddd) is Type 1"/>
   </macro>
   <macro ref="Table 5.4-2" name="Example Macro">
     <entry group="cccc" element="cccc" name="Attribute C" type="1">
@@ -92,7 +92,7 @@ Required if the value of Context Group Extension Flag (0008,010B) is "Y".</descr
 The Code Meaning attribute, though it will be encoded with a VR of LO, may be encoded according to the rules of the PN VR (e.g. caret ‘^' delimiters shall separate name components), except that a single component (i.e. the whole name unseparated by caret delimiters) is not permitted. Name component groups for use with multi-byte character sets are permitted, as long as they fit within the 64 characters (the length of the LO VR).
 One or more Items may be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="1102" name="Person's Address" type="3">
       <description>Person's mailing address</description>
     </entry>
@@ -109,7 +109,7 @@ One or more Items may be permitted in this Sequence.</description>
       <description>Institution or organization to which the identified individual is responsible or accountable. Required if Institution Name (0008,0080) is not present.
 Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
   </macro>
   <macro ref="Table 10-2" name="Content Item Macro Attributes Description">
     <entry group="0040" element="A040" name="Value Type" type="1">
@@ -127,7 +127,7 @@ Defined Terms:
     <entry group="0040" element="A043" name="Concept Name Code Sequence" type="1">
       <description>Coded concept name of this name-value Item. Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="A120" name="DateTime" type="1C">
       <description>DateTime value for this name-value Item.
 Required if Value Type (0040,A040) is DATETIME.</description>
@@ -156,7 +156,7 @@ Required if Value Type (0040,A040) is TEXT.</description>
       <description>Coded concept value of this name-value Item. Only a single Item shall be permitted in this Sequence.
 Required if Value Type (0040,A040) is CODE.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="A30A" name="Numeric Value" type="1C">
       <description>Numeric value for this name-value Item. 
 Required if Value Type (0040,A040) is NUMERIC.</description>
@@ -165,7 +165,7 @@ Required if Value Type (0040,A040) is NUMERIC.</description>
       <description>Units of measurement for a numeric value in this name-value Item. Only a single Item shall be permitted in this Sequence.
 Required if Value Type (0040,A040) is NUMERIC.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID 82"/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID 82"/>
   </macro>
   <macro ref="Table 10-3" name="Image SOP Instance Reference Macro Attributes">
     <include ref="Include 'SOP Instance Reference Macro' Table 10-11"/>
@@ -195,51 +195,51 @@ Required if the Referenced SOP Instance is a multi-frame image and the reference
       <description>Sequence that identifies the anatomic region of interest in this Instance (i.e. external anatomy, surface anatomy, or general region of the body). 
 Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Context ID may be defined in the macro invocation."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Context ID may be defined in the macro invocation."/>
     <entry group="0008" element="2220" name="&gt;Anatomic Region Modifier Sequence" type="3">
       <description>Sequence of Items that modifies the anatomic region of interest of this Instance
 One or more Items may be included in this Sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID is 2, unless otherwise defined in the macro invocation."/>
-    <include ref="Include 'Primary Anatomic Structure Macro' Table 10-8 Context ID may be defined in the macro invocation."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is 2, unless otherwise defined in the macro invocation."/>
+    <include ref="Include 'Primary Anatomic Structure Macro' Table 10-8" description="Context ID may be defined in the macro invocation."/>
   </macro>
   <macro ref="Table 10-6" name="General Anatomy Required Macro Attributes">
     <entry group="0008" element="2218" name="Anatomic Region Sequence" type="2">
       <description>Sequence that identifies the anatomic region of interest in this Instance (i.e. external anatomy, surface anatomy, or general region of the body). 
 Zero or one Item may be present in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Context ID may be defined in the macro invocation."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Context ID may be defined in the macro invocation."/>
     <entry group="0008" element="2220" name="&gt;Anatomic Region Modifier Sequence" type="3">
       <description>Sequence of Items that modifies the anatomic region of interest of this Instance
 One or more Items may be included in this Sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID is 2, unless otherwise defined in the macro invocation."/>
-    <include ref="Include 'Primary Anatomic Structure Macro' Table 10-8 Context ID may be defined in the macro invocation."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is 2, unless otherwise defined in the macro invocation."/>
+    <include ref="Include 'Primary Anatomic Structure Macro' Table 10-8" description="Context ID may be defined in the macro invocation."/>
   </macro>
   <macro ref="Table 10-7" name="General Anatomy Optional Macro Attributes">
     <entry group="0008" element="2218" name="Anatomic Region Sequence" type="3">
       <description>Sequence that identifies the anatomic region of interest in this Instance (i.e. external anatomy, surface anatomy, or general region of the body). 
 Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Context ID may be defined in the macro invocation."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Context ID may be defined in the macro invocation."/>
     <entry group="0008" element="2220" name="&gt;Anatomic Region Modifier Sequence" type="3">
       <description>Sequence of Items that modifies the anatomic region of interest of this Instance
 One or more Items may be included in this Sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID is 2, unless otherwise defined in the macro invocation."/>
-    <include ref="Include 'Primary Anatomic Structure Macro' Table 10-8 Context ID may be defined in the macro invocation."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is 2, unless otherwise defined in the macro invocation."/>
+    <include ref="Include 'Primary Anatomic Structure Macro' Table 10-8" description="Context ID may be defined in the macro invocation."/>
   </macro>
   <macro ref="Table 10-8" name="Primary Anatomic Structure Macro Attributes">
     <entry group="0008" element="2228" name="Primary Anatomic Structure Sequence" type="3">
       <description>Sequence of Items that identifies the primary anatomic structure(s) of interest in this Instance.
 One or more Items may be included in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Context ID may be defined in the macro invocation."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Context ID may be defined in the macro invocation."/>
     <entry group="0008" element="2230" name="&gt;Primary Anatomic Structure Modifier Sequence" type="3">
       <description>Sequence of Items that modifies the primary anatomic structure of interest in this Instance. 
 One or more Items may be included in this Sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID is 2."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is 2."/>
   </macro>
   <macro ref="Table 10-9" name="Request Attributes Macro Attributes">
     <entry group="0040" element="1001" name="Requested Procedure ID" type="1C">
@@ -263,7 +263,7 @@ Note:	The condition is to allow the contents of this macro to be present (e.g., 
     <entry group="0032" element="1064" name="Requested Procedure Code Sequence" type="3">
       <description>A sequence that conveys the Procedure Type of the requested procedure. The Requested Procedure Code Sequence shall contain only a single item.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="1002" name="Reason for the Requested Procedure" type="3">
       <description>Reason for requesting this procedure.</description>
     </entry>
@@ -271,7 +271,7 @@ Note:	The condition is to allow the contents of this macro to be present (e.g., 
       <description>Coded Reason for requesting this procedure.
 One or more sequence items may be present.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Context ID may be defined in the macro invocation."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Context ID may be defined in the macro invocation."/>
     <entry group="0040" element="0009" name="Scheduled Procedure Step ID" type="1C">
       <description>Identifier that identifies the Scheduled Procedure Step.
 Required if procedure was scheduled.
@@ -283,15 +283,15 @@ Note:	The condition is to allow the contents of this macro to be present (e.g., 
     <entry group="0040" element="0008" name="Scheduled Protocol Code Sequence" type="3">
       <description>Sequence describing the Scheduled Protocol following a specific coding scheme. This sequence contains one or more Items.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Context ID may be defined in the macro invocation."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Context ID may be defined in the macro invocation."/>
     <entry group="0040" element="0440" name="&gt;Protocol Context Sequence" type="3">
       <description>Sequence that specifies the context for the Scheduled Protocol Code Sequence Item. One or more items may be included in this sequence. </description>
     </entry>
-    <include ref="&gt;&gt;Include 'Content Item Macro' Table 10-2 Context ID may be defined in the macro invocation."/>
+    <include ref="&gt;&gt;Include 'Content Item Macro' Table 10-2" description="Context ID may be defined in the macro invocation."/>
     <entry group="0040" element="0441" name="&gt;&gt; Content Item Modifier Sequence" type="3">
       <description>Sequence that specifies modifiers for a Protocol Context Content Item. One or more items may be included in this sequence. See Section C.4.10.1.</description>
     </entry>
-    <include ref="&gt;&gt;&gt;Include 'Content Item Macro' Table 10-2 Context ID may be defined in the macro invocation."/>
+    <include ref="&gt;&gt;&gt;Include 'Content Item Macro' Table 10-2" description="Context ID may be defined in the macro invocation."/>
   </macro>
   <macro ref="Table 10-10" name="Basic Pixel Spacing Calibration Macro Attributes">
     <entry group="0028" element="0030" name="Pixel Spacing" type="1C">
@@ -405,7 +405,7 @@ Note:	This attribute conveys series-specific protocol identification and may or 
       <description>Sequence describing the Protocol performed for the Procedure Step creating the sources. One or more Items may be included in this Sequence.
 Required if present and consistent in the contributing SOP Instances.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0018" element="9423" name="Acquisition Protocol Name" type="1C">
       <description>User defined name of the protocol used to acquire this image.
 Required if present and consistent in the contributing SOP Instances.</description>
@@ -447,18 +447,18 @@ Required if Lossy Image Compression (0028,2110) equals 01.</description>
 See C.8.11.5.1.2 for further explanation.
 Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1. Baseline Context ID 19"/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1." description="Baseline Context ID 19"/>
     <entry group="0054" element="0412" name="&gt; Patient Orientation Modifier Code Sequence" type="1C">
       <description>Patient orientation modifier.
 Required if needed to fully specify the orientation of the patient with respect to gravity. 
 Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1. Baseline Context ID 20"/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1." description="Baseline Context ID 20"/>
     <entry group="0054" element="0414" name="Patient Gantry Relationship Code Sequence" type="3">
       <description>Sequence that describes the orientation of the patient with respect to the head of the table. See Section C.8.4.6.1.3 for further explanation.
 Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1. Baseline Context ID 21"/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1." description="Baseline Context ID 21"/>
   </macro>
   <macro ref="Table 10-16" name="Performed Procedure Step Summary Macro Attributes">
     <entry group="0040" element="0253" name="Performed Procedure Step ID" type="3">
@@ -476,15 +476,15 @@ Only a single Item shall be permitted in this Sequence.</description>
     <entry group="0040" element="0260" name="Performed Protocol Code Sequence" type="3">
       <description>Sequence describing the Protocol performed for this Procedure Step. One or more Items may be included in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Context ID may be defined in the macro invocation."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Context ID may be defined in the macro invocation."/>
     <entry group="0040" element="0440" name="&gt;Protocol Context Sequence" type="3">
       <description>Sequence that specifies the context for the Performed Protocol Code Sequence Item. One or more items may be included in this sequence. </description>
     </entry>
-    <include ref="&gt;&gt;Include 'Content Item Macro' Table 10-2 Context ID may be defined in the macro invocation."/>
+    <include ref="&gt;&gt;Include 'Content Item Macro' Table 10-2" description="Context ID may be defined in the macro invocation."/>
     <entry group="0040" element="0441" name="&gt;&gt; Content Item Modifier Sequence" type="3">
       <description>Sequence that specifies modifiers for a Protocol Context Content Item. One or more items may be included in this sequence. See Section C.4.10.1.</description>
     </entry>
-    <include ref="&gt;&gt;&gt;Include 'Content Item Macro' Table 10-2 Context ID may be defined in the macro invocation."/>
+    <include ref="&gt;&gt;&gt;Include 'Content Item Macro' Table 10-2" description="Context ID may be defined in the macro invocation."/>
     <entry group="0040" element="0280" name="Comments on the Performed Procedure Step" type="3">
       <description>User-defined comments on the Performed Procedure Step.</description>
     </entry>
@@ -2115,17 +2115,17 @@ Note:	The identifier is coded as a string regardless of the type, not as a binar
     <entry group="0010" element="0050" name="Patient's Insurance Plan Code Sequence">
       <description>A sequence that conveys the patient's insurance plan. Zero or more Items may be included in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0010" element="0101" name="Patient's Primary Language Code Sequence">
       <description>The languages that can be used to communicate with the patient. 
 Zero or more Items may be included in the sequence. The sequence items are ordered by preference (most preferred language to least preferred language). </description>
     </entry>
-    <include ref="&gt; Include Code Sequence Macro Table 8.8-1 Baseline Context ID is CID 5000 - Languages."/>
+    <include ref="&gt; Include Code Sequence Macro Table 8.8-1" description="Baseline Context ID is CID 5000 - Languages."/>
     <entry group="0010" element="0102" name="&gt; Patient's Primary Language Code Modifier Sequence">
       <description>A modifer for a Patient's Primary Language. Can be used to specify a national language variant.
 Exactly one Item may be included in the sequence. </description>
     </entry>
-    <include ref="&gt;&gt; Include Code Sequence Macro Table 8.8-1 Baseline Context ID is CID 5001 - Countries."/>
+    <include ref="&gt;&gt; Include Code Sequence Macro Table 8.8-1" description="Baseline Context ID is CID 5001 - Countries."/>
     <entry group="0010" element="1020" name="Patient's Size">
       <description>Patient's height or length in meters</description>
     </entry>
@@ -2176,14 +2176,14 @@ Defined Terms:
     <entry group="0010" element="2202" name="Patient Species Code Sequence">
       <description>The species of the patient.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-2 Defined Context ID is 7454."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-2" description="Defined Context ID is 7454."/>
     <entry group="0010" element="2292" name="Patient Breed Description">
       <description>The breed of the patient.</description>
     </entry>
     <entry group="0010" element="2293" name="Patient Breed Code Sequence">
       <description>The breed of the patient.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-2 Defined Context ID is 7480."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-2" description="Defined Context ID is 7480."/>
     <entry group="0010" element="2294" name="Breed Registration Sequence">
       <description>Information identifying an animal within a breed registry.</description>
     </entry>
@@ -2193,7 +2193,7 @@ Defined Terms:
     <entry group="0010" element="2296" name="&gt;Breed Registry Code Sequence">
       <description>Identification of the organization with which an animal is registered.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID is 7481."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is 7481."/>
   </module>
   <module ref="Table C.2-4" name="Patient Medical Module Attributes">
     <entry group="0010" element="2000" name="Medical Alerts">
@@ -2243,7 +2243,7 @@ Zero or more Items may be included in this sequence.</description>
     <entry group="0040" element="A170" name="&gt;Purpose of Reference Code Sequence">
       <description>Describes the purpose for which the document reference is made. Zero or more Items may be present.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context Group ID defined"/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context Group ID defined"/>
     <entry group="0042" element="0010" name="&gt;Document Title">
       <description>Title of the referenced document.</description>
     </entry>
@@ -2293,7 +2293,7 @@ Zero or more Items may be included in this sequence.</description>
     <entry group="0008" element="0082" name="Institution Code Sequence">
       <description>A sequence that conveys the healthcare facility identification. Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0038" element="0010" name="Admission ID">
       <description>Identification number of the visit as assigned by the healthcare provider</description>
     </entry>
@@ -2348,7 +2348,7 @@ DISCHARGED = Patient Discharged</description>
     <entry group="0008" element="1084" name="Admitting Diagnoses Code Sequence">
       <description>A sequence that conveys the admitting diagnosis (diagnoses). One or more Items may be included in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0038" element="0016" name="Route of Admissions">
       <description>Mode of admission: emergency, normal</description>
     </entry>
@@ -2398,15 +2398,15 @@ Note:	The purpose of this attribute is to store a description or classification 
     <entry group="0040" element="0008" name="&gt;Scheduled Protocol Code Sequence">
       <description>Sequence describing the Scheduled Protocol following a specified coding scheme. This sequence contains one or more Items.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="0440" name="&gt;&gt;Protocol Context Sequence">
       <description>Sequence that specifies the context for the Scheduled Protocol Code Sequence Item. One or more items may be included in this sequence. See Section C.4.10.1.</description>
     </entry>
-    <include ref="&gt;&gt;&gt;Include 'Content Item Macro' Table 10-2 No Baseline Template is defined."/>
+    <include ref="&gt;&gt;&gt;Include 'Content Item Macro' Table 10-2" description="No Baseline Template is defined."/>
     <entry group="0040" element="0441" name="&gt;&gt;&gt; Content Item Modifier Sequence">
       <description>Sequence that specifies modifiers for a Protocol Context Content Item. One or more items may be included in this sequence. See Section C.4.10.1.</description>
     </entry>
-    <include ref="&gt;&gt;&gt;&gt;Include 'Content Item Macro' Table 10-2 No Baseline Template is defined."/>
+    <include ref="&gt;&gt;&gt;&gt;Include 'Content Item Macro' Table 10-2" description="No Baseline Template is defined."/>
     <entry group="0040" element="0009" name="&gt;Scheduled Procedure Step ID">
       <description>Identifier that identifies the Scheduled Procedure Step.</description>
     </entry>
@@ -2446,11 +2446,11 @@ Note:	This reason is more specific to the requested procedure than the reason me
       <description>Coded Reason for requesting this procedure.
 One or more sequence items may be present.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0032" element="1064" name="Requested Procedure Code Sequence">
       <description>A sequence that conveys the Requested Procedure of one Procedure Type.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0020" element="000D" name="Study Instance UID">
       <description>Unique identifier to be used to identify the Study</description>
     </entry>
@@ -2605,7 +2605,7 @@ Note:	The Comments attribute is intended to transmit non-structured information,
     <entry group="0032" element="1064" name="&gt;Requested Procedure Code Sequence">
       <description>A sequence that conveys the Procedure Type of the requested procedure. The Requested Procedure Code Sequence shall contain only a single item.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="0009" name="&gt;Scheduled Procedure Step ID">
       <description>Identifier of the related Scheduled Procedure Step.</description>
     </entry>
@@ -2615,15 +2615,15 @@ Note:	The Comments attribute is intended to transmit non-structured information,
     <entry group="0040" element="0008" name="&gt;Scheduled Protocol Code Sequence">
       <description>Sequence describing the Scheduled Protocol following a specific coding scheme. This sequence contains one or more Items.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="0440" name="&gt;&gt;Protocol Context Sequence">
       <description>Sequence that specifies the context for the Scheduled Protocol Code Sequence Item. One or more items may be included in this sequence. See Section C.4.10.1.</description>
     </entry>
-    <include ref="&gt;&gt;&gt;Include 'Content Item Macro' Table 10-2 No Baseline Template is defined."/>
+    <include ref="&gt;&gt;&gt;Include 'Content Item Macro' Table 10-2" description="No Baseline Template is defined."/>
     <entry group="0040" element="0441" name="&gt;&gt;&gt; Content Item Modifier Sequence">
       <description>Sequence that specifies modifiers for a Protocol Context Content Item. One or more items may be included in this sequence. See Section C.4.10.1.</description>
     </entry>
-    <include ref="&gt;&gt;&gt;&gt;Include 'Content Item Macro' Table 10-2 No Baseline Template is defined."/>
+    <include ref="&gt;&gt;&gt;&gt;Include 'Content Item Macro' Table 10-2" description="No Baseline Template is defined."/>
   </module>
   <module ref="Table C.4-14" name="Performed Procedure Step Information Module Attributes">
     <entry group="0040" element="0241" name="Performed Station AE Title">
@@ -2670,11 +2670,11 @@ COMPLETED = Successfully completed</description>
     <entry group="0008" element="1032" name="Procedure Code Sequence">
       <description>A sequence that conveys the (single) type of procedure performed.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="0281" name="Performed Procedure Step Discontinuation Reason Code Sequence">
       <description>The reason the Performed Procedure Step Status (0040,0252) was set to DISCONTINUED.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID is 9300."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is 9300."/>
   </module>
   <module ref="Table C.4-15" name="Image Acquisition Results Module Attributes">
     <entry group="0008" element="0060" name="Modality">
@@ -2687,15 +2687,15 @@ Note: 	A Modality value in the created SOP Instances may be different from the M
     <entry group="0040" element="0260" name="Performed Protocol Code Sequence">
       <description>Sequence describing the Protocol performed for this Procedure Step. This sequence may have zero or more Items.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="0440" name="&gt;Protocol Context Sequence">
       <description>Sequence that specifies the context for the Performed Protocol Code Sequence Item. One or more items may be included in this sequence. See Section C.4.10.1.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Content Item Macro' Table 10-2 No Baseline Template is defined."/>
+    <include ref="&gt;&gt;Include 'Content Item Macro' Table 10-2" description="No Baseline Template is defined."/>
     <entry group="0040" element="0441" name="&gt;&gt; Content Item Modifier Sequence">
       <description>Sequence that specifies modifiers for a Protocol Context Content Item. One or more items may be included in this sequence. See Section C.4.10.1.</description>
     </entry>
-    <include ref="&gt;&gt;&gt;Include 'Content Item Macro' Table 10-2 No Baseline Template is defined."/>
+    <include ref="&gt;&gt;&gt;Include 'Content Item Macro' Table 10-2" description="No Baseline Template is defined."/>
     <entry group="0040" element="0340" name="Performed Series Sequence">
       <description>Attributes of the Series that comprise this Modality Performed Procedure Step. The Sequence may have zero or more Items.</description>
     </entry>
@@ -2746,7 +2746,7 @@ Note:	The use of Referenced Image Sequence is historical, and in this context it
     <entry group="0008" element="2229" name="Anatomic Structure, Space or Region Sequence">
       <description>Anatomic structure, space or region that has been exposed to ionizing radiation. The sequence may have zero or one Items.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="0300" name="Total Time of Fluoroscopy">
       <description>Total duration of X-Ray exposure during fluoroscopy in seconds (pedal time) during this Performed Procedure Step.</description>
     </entry>
@@ -2813,7 +2813,7 @@ Notes:	1. The sum of the area dose product of all images of a Series or a Study 
     <entry group="0040" element="0320" name="Billing Procedure Step Sequence">
       <description>Contains billing codes for the Procedure Type performed within the Procedure Step. The sequence may have zero or more Items.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="0321" name="Film Consumption Sequence">
       <description>Information about the film consumption for this Performed Procedure Step. The sequence may have zero or more Items.</description>
     </entry>
@@ -2832,7 +2832,7 @@ Notes:	1. The sum of the area dose product of all images of a Series or a Study 
     <entry group="0040" element="0296" name="&gt;Billing Item Sequence">
       <description>Code values of chemicals, supplies or devices required for billing. The sequence may have zero or one Items.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="0293" name="&gt;Quantity Sequence">
       <description>Sequence containing the quantity of used chemicals or devices. The sequence may have zero or one Items.</description>
     </entry>
@@ -2842,7 +2842,7 @@ Notes:	1. The sum of the area dose product of all images of a Series or a Study 
     <entry group="0040" element="0295" name="&gt;&gt;Measuring Units Sequence">
       <description>Unit of measurement. The sequence may have zero or one Items.</description>
     </entry>
-    <include ref="&gt;&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 82."/>
+    <include ref="&gt;&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 82."/>
   </module>
   <module ref="Table C.4-18" name="General Purpose Scheduled Procedure Step Relationship Module Attributes">
     <entry group="0010" element="0010" name="Patient's Name">
@@ -2888,7 +2888,7 @@ Zero or one Item may be included in this sequence.</description>
       <description>A sequence that conveys the Procedure Type of the Requested Procedure.
 Zero or one Item may be included in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="2016" name="&gt;Placer Order Number / Imaging Service Request">
       <description>The order number assigned to the Imaging Service Request by the party placing the order.</description>
     </entry>
@@ -2907,7 +2907,7 @@ Zero or one Item may be included in this sequence.</description>
     <entry group="0040" element="100A" name="&gt; Reason for Requested Procedure Code Sequence">
       <description>Coded reason for requesting this procedure.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="1400" name="&gt;Requested Procedure Comments">
       <description>User-defined comments on the Requested Procedure.</description>
     </entry>
@@ -2961,22 +2961,22 @@ Note:	This attribute should be implicitly updated by the worklist management sys
       <description>The list of processing application instances and/or application types on which the General Purpose Procedure Step is scheduled.
 Zero or more Items may be included in this sequence.</description>
     </entry>
-    <include ref="&gt;Include Code Sequence Macro Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="4025" name="Scheduled Station Name Code Sequence">
       <description>Identifying name within the enterprise of the equipment for which the General Purpose Scheduled Procedure Step is scheduled. The name conveyed in the Code Value (0008,0100) may be the same as the AE Title, but does not have to be. 
 Zero or more Items may be included in this sequence.</description>
     </entry>
-    <include ref="&gt;Include Code Sequence Macro Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="4026" name="Scheduled Station Class Code Sequence">
       <description>Class of the equipment for which the General Purpose Scheduled Procedure Step is scheduled.
 Zero or more Items may be included in this sequence.</description>
     </entry>
-    <include ref="&gt;Include Code Sequence Macro Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="4027" name="Scheduled Station Geographic Location Code Sequence">
       <description>Geographic location of the equipment for which the General Purpose Scheduled Procedure Step is scheduled.
 Zero or more Items may be included in this sequence.</description>
     </entry>
-    <include ref="&gt;Include Code Sequence Macro Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="4034" name="Scheduled Human Performers Sequence">
       <description>The list of human performers that are scheduled to be involved or responsible for performing the Workitem in the General Purpose Scheduled Procedure Step. 
 Zero or more Items may be included in this sequence.</description>
@@ -2985,7 +2985,7 @@ Zero or more Items may be included in this sequence.</description>
       <description>Human performer that is involved or responsible for performing the Workitem. 
 Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="4037" name="&gt;Human Performer's Name">
       <description>Name of the human performer.</description>
     </entry>
@@ -3002,7 +3002,7 @@ Only a single Item shall be permitted in this sequence.</description>
       <description>A sequence that conveys the code for the Workitem.
 Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;Include Code Sequence Macro Table 8.8-1 Baseline Context ID is CID 9231."/>
+    <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="Baseline Context ID is CID 9231."/>
     <entry group="0040" element="0400" name="Comments on the Scheduled Procedure Step">
       <description>User-defined comments on the Scheduled Procedure Step.</description>
     </entry>
@@ -3064,7 +3064,7 @@ Note:	Initially this list will be empty. A list of entries may be created at the
       <description>Human performer that is involved or responsible for performing the Workitem. 
 Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="4037" name="&gt;Human Performer's Name">
       <description>Name of the human performer.</description>
     </entry>
@@ -3111,7 +3111,7 @@ Only a single Item shall be permitted in this sequence.</description>
       <description>A sequence that conveys the Procedure Type of the Requested Procedure.
 Zero or one Item may be included in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="2016" name="&gt;Placer Order Number/Imaging Service Request">
       <description>The order number assigned to the Imaging Service Request by the party placing the order.</description>
     </entry>
@@ -3157,7 +3157,7 @@ Zero or more Items may be included in this sequence.</description>
       <description>Human performer that is actually involved or responsible for performing the General Purpose Performed Procedure Step. 
 Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="4037" name="&gt;Human Performer's Name">
       <description>Name of the human performer.</description>
     </entry>
@@ -3168,21 +3168,21 @@ Only a single Item shall be permitted in this sequence.</description>
       <description>Name within the enterprise of the equipment that created the General Purpose Performed Procedure Step. This name may be the same as the AE Title, but does not have to be. 
 Zero or one Item may be included in this sequence.</description>
     </entry>
-    <include ref="&gt;Include Code Sequence Macro Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="4029" name="Performed Station Class Code Sequence">
       <description>Class of the equipment that created the General Purpose Performed Procedure Step.
 Zero or one Item may be included in this sequence.</description>
     </entry>
-    <include ref="&gt;Include Code Sequence Macro Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="4030" name="Performed Station Geographic Location Code Sequence">
       <description>Geographic location of the equipment that created General Purpose Performed Procedure Step. Zero or one Item may be included in this sequence.</description>
     </entry>
-    <include ref="&gt;Include Code Sequence Macro Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="4007" name="Performed Processing Applications Code Sequence">
       <description>The list of processing application instances and/or application types on which the General Purpose Performed Procedure Step is executed.
 Zero or more Items may be included in this sequence.</description>
     </entry>
-    <include ref="&gt;Include Code Sequence Macro Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="0244" name="Performed Procedure Step Start Date">
       <description>Date on which the General Purpose Performed Procedure Step started.
 Note: 	This value may be used to determine the earliest date to use as the Study Date (0008,0020) in composite instances and in updated General Purpose Scheduled Procedure Steps in order to allow Study level attributes to have consistent values if additional Procedure Steps are performed.</description>
@@ -3216,7 +3216,7 @@ COMPLETED = Successfully completed</description>
       <description>A sequence that conveys the (single) type of procedure performed.
 Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;Include Code Sequence Macro Table 8.8-1 Baseline Context ID is CID 9231."/>
+    <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="Baseline Context ID is CID 9231."/>
   </module>
   <module ref="Table C.4.22-1" name="General Purpose Results Module Attributes">
     <entry group="0040" element="4033" name="Output Information Sequence">
@@ -3240,12 +3240,12 @@ Defined Terms:
 Note:	This Attribute may also be used in case a step has been done incorrectly and should be redone.
 Zero or more Items may be included in this sequence</description>
     </entry>
-    <include ref="&gt;Include Code Sequence Macro Table 8.8-1 Baseline Context ID is CID 9231."/>
+    <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="Baseline Context ID is CID 9231."/>
     <entry group="0040" element="4032" name="Non-DICOM Output Code Sequence">
       <description>A Sequence that describes any non-DICOM output produced as results.
 Zero or more Items may be included in this sequence.</description>
     </entry>
-    <include ref="&gt;Include Code Sequence Macro Table 8.8-1 Baseline Context ID is CID 9232."/>
+    <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="Baseline Context ID is CID 9232."/>
   </module>
   <module ref="Table C.4.23-1" name="Instance Availability Notification Module Attributes">
     <entry group="0008" element="1111" name="Referenced Performed Procedure Step Sequence">
@@ -3258,7 +3258,7 @@ Notes:	1. This may refer to a different PPS than that encoded in the composite i
       <description>A sequence that conveys the (single) type of procedure performed.
 Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1 Baseline Context ID is CID 9231."/>
+    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1" description="Baseline Context ID is CID 9231."/>
     <entry group="0020" element="000D" name="Study Instance UID">
       <description>Unique identifier for the Study of which all the Instances referenced in this notification are part.</description>
     </entry>
@@ -3351,7 +3351,7 @@ Required if the patient is an animal and if Patient Species Code Sequence (0010,
 One Item shall be present. 
 Required if the patient is an animal and if Patient Species Description (0010,2201) is not present. May be present otherwise.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID is 7454."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is 7454."/>
     <entry group="0010" element="2292" name="Patient Breed Description" type="2C">
       <description>The breed of the patient.
 Required if the patient is an animal and if Patient Breed Code Sequence (0010,2293) is empty. May be present otherwise.</description>
@@ -3361,7 +3361,7 @@ Required if the patient is an animal and if Patient Breed Code Sequence (0010,22
 Zero or more Items shall be present. 
 Required if the patient is an animal.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID is 7480."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is 7480."/>
     <entry group="0010" element="2294" name="Breed Registration Sequence" type="2C">
       <description>Information identifying an animal within a breed registry.
 Zero or more Items shall be present. 
@@ -3374,7 +3374,7 @@ Required if the patient is an animal.</description>
       <description>Identification of the organization with which an animal is registered.
 One Item shall be present.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID is 7481."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is 7481."/>
     <entry group="0010" element="2297" name="Responsible Person" type="2C">
       <description>Name of person with medical decision making authority for the patient.
 Required if the patient is an animal. May be present otherwise.</description>
@@ -3404,7 +3404,7 @@ Required if Patient Identity Removed (0012,0062) is present and has a value of Y
       <description>A code describing the mechanism or method use to remove the patient's identity. One or more Items shall be present. Multiple items are used if successive de-identification steps have been performed
 Required if Patient Identity Removed (0012,0062) is present and has a value of YES and De-identification Method (0012,0063) is not present.</description>
     </entry>
-    <include ref="&gt;Include Code Sequence Macro Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined."/>
   </module>
   <module ref="Table C.7-2a" name="Specimen Identification Module Attributes">
     <entry group="0040" element="050A" name="Specimen Accession Number" type="1">
@@ -3419,7 +3419,7 @@ Required if Patient Identity Removed (0012,0062) is present and has a value of Y
     <entry group="0040" element="059A" name="&gt;Specimen Type Code Sequence" type="2C">
       <description>Specimen Type. Only a single Item shall be permitted in this Sequence. Required if Specimen Identifier (0040,0551) is sent with a value.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context IDs are defined"/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context IDs are defined"/>
     <entry group="0040" element="06FA" name="&gt;Slide Identifier" type="2C">
       <description>Identifier of the Slide.
 Required if the Specimen is a Slide.</description>
@@ -3495,7 +3495,7 @@ Required if the Specimen is a Slide.</description>
     <entry group="0008" element="1032" name="Procedure Code Sequence" type="3">
       <description>A Sequence that conveys the type of procedure performed. One or more Items may be included in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
   </module>
   <module ref="Table C.7-4a" name="Patient Study Module Attributes">
     <entry group="0008" element="1080" name="Admitting Diagnoses Description" type="3">
@@ -3504,7 +3504,7 @@ Required if the Specimen is a Slide.</description>
     <entry group="0008" element="1084" name="Admitting Diagnoses Code Sequence" type="3">
       <description>A sequence that conveys the admitting diagnosis (diagnoses). One or more Items may be included in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0010" element="1010" name="Patient's Age" type="3">
       <description>Age of the Patient.</description>
     </entry>
@@ -3615,7 +3615,7 @@ Notes:	1. For example, for a combined CT and PET acquisition, the CT images and 
       <description>Describes the purpose for which the reference is made. Zero or more Items may be present.
 When absent, implies that the reason for the reference is unknown.</description>
     </entry>
-    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1 DCID 7210"/>
+    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1" description="DCID 7210"/>
     <entry group="0018" element="0015" name="Body Part Examined" type="3">
       <description>Text description of the part of the body examined. See PS 3.16 Annex on Correspondence of Anatomic Region Codes and Body Part Examined for Defined Terms
 Note:	Some IODs support the Anatomic Region Sequence (0008,2218), which can provide a more comprehensive mechanism for specifying the body part being examined.</description>
@@ -3633,8 +3633,8 @@ Note:	Some IODs support the Anatomic Region Sequence (0008,2218), which can prov
       <description>Sequence that contains attributes from the Imaging Service Request.
 The sequence may have one or more Items.</description>
     </entry>
-    <include ref="&gt;Include Request Attributes Macro Table 10-9 No Baseline Context IDs defined"/>
-    <include ref="Include Performed Procedure Step Summary Macro Table 10-16 No Baseline Context IDs defined"/>
+    <include ref="&gt;Include Request Attributes Macro Table 10-9" description="No Baseline Context IDs defined"/>
+    <include ref="Include Performed Procedure Step Summary Macro Table 10-16" description="No Baseline Context IDs defined"/>
   </module>
   <module ref="Table C.7-5b" name="Clinical Trial Series Module Attributes">
     <entry group="0012" element="0060" name="Clinical Trial Coordinating Center Name" type="2">
@@ -3804,14 +3804,14 @@ Note:	The synchronization of this time with an external clock is specified in th
     <entry group="0040" element="A170" name="&gt;Purpose of Reference Code Sequence" type="3">
       <description>Describes the purpose for which the reference is made. Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID is 7201."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is 7201."/>
     <entry group="0008" element="2111" name="Derivation Description" type="3">
       <description>A text description of how this image was derived. See C.7.6.1.1.3 for further explanation. </description>
     </entry>
     <entry group="0008" element="9215" name="Derivation Code Sequence" type="3">
       <description>A coded description of how this image was derived. See C.7.6.1.1.3 for further explanation. One or more Items may be included in this Sequence. More than one Item indicates that successive derivation steps have been applied.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID is 7203."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is 7203."/>
     <entry group="0008" element="2112" name="Source Image Sequence" type="3">
       <description>A Sequence that identifies the set of Image SOP Class/Instance pairs of the Images that were used to derive this Image. Zero or more Items may be included in this Sequence.
 See C.7.6.1.1.4 for further explanation.</description>
@@ -3820,7 +3820,7 @@ See C.7.6.1.1.4 for further explanation.</description>
     <entry group="0040" element="A170" name="&gt;Purpose of Reference Code Sequence" type="3">
       <description>Describes the purpose for which the reference is made, that is what role the source image or frame(s) played in the derivation of this image. Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID is 7202."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is 7202."/>
     <entry group="0028" element="135A" name="&gt;Spatial Locations Preserved" type="3">
       <description>The extent to which the spatial locations of all pixels are preserved during the processing of the source image that resulted in the current image
 Enumerated Values:
@@ -3843,7 +3843,7 @@ One or more Items may be included in this sequence.</description>
     <entry group="0040" element="A170" name="&gt;Purpose of Reference Code Sequence" type="1">
       <description>Code describing the purpose of the reference to the Instance(s). Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID is CID 7004 for referenced waveforms."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is CID 7004 for referenced waveforms."/>
     <entry group="0020" element="1002" name="Images in Acquisition" type="3">
       <description>Number of images that resulted from this acquisition of data</description>
     </entry>
@@ -3886,7 +3886,7 @@ Note:	For historical reasons, the lossy compression method may also be described
     <entry group="0088" element="0200" name="Icon Image Sequence" type="3">
       <description>This icon image is representative of the Image. Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt; Include 'Image Pixel Macro' Table C.7-11b See C.7.6.1.1.6 for further explanation."/>
+    <include ref="&gt; Include 'Image Pixel Macro' Table C.7-11b" description="See C.7.6.1.1.6 for further explanation."/>
     <entry group="2050" element="0020" name="Presentation LUT Shape" type="3">
       <description>When present, specifies an identity transformation for the Presentation LUT such that the output of all grayscale transformations, if any, are defined to be in P-Values.
 Enumerated Values are: 
@@ -4006,18 +4006,18 @@ Note:	The profile applies only to the Pixel Data (7FE0,0010) attribute at the sa
     <entry group="0018" element="0012" name="Contrast/Bolus Agent Sequence" type="3">
       <description>Sequence that identifies the contrast agent. One or more Items may be present.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 12."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 12."/>
     <entry group="0018" element="1040" name="Contrast/Bolus Route" type="3">
       <description>Administration route of contrast agent</description>
     </entry>
     <entry group="0018" element="0014" name="Contrast/Bolus Administration Route Sequence" type="3">
       <description>Sequence that identifies the route of administration of contrast agent. Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 11."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 11."/>
     <entry group="0018" element="002A" name="&gt;Additional Drug Sequence" type="3">
       <description>Sequence that identifies any additional drug that is administered with the contrast agent bolus. One or more Items may be present.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0018" element="1041" name="Contrast/Bolus Volume" type="3">
       <description>Volume injected in milliliters of diluted contrast agent</description>
     </entry>
@@ -4051,18 +4051,18 @@ Note:	The profile applies only to the Pixel Data (7FE0,0010) attribute at the sa
     <entry group="0018" element="0012" name="Contrast/Bolus Agent Sequence" type="1">
       <description>Sequence that identifies one or more contrast agents administered prior to or during the acquisition. Shall contain one or more Items.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 12."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 12."/>
     <entry group="0018" element="9337" name="&gt;Contrast/Bolus Agent Number" type="1">
       <description>Identifying number, unique within this SOP Instance, of the agent administered. Used to reference this particular agent from the Contrast/Bolus Functional Group Macro. The number shall be 1 for the first Item and increase by 1 for each subsequent Item.</description>
     </entry>
     <entry group="0018" element="0014" name="&gt;Contrast/Bolus Administration Route Sequence" type="1">
       <description>Sequence that identifies the route of administration of contrast agent. Shall contain exactly one Item.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 11."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 11."/>
     <entry group="0018" element="9338" name="&gt;Contrast/Bolus Ingredient Code Sequence" type="2">
       <description>Active ingredient of agent. Zero or more Items may be included in the Sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 13."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 13."/>
     <entry group="0018" element="1041" name="&gt;Contrast/Bolus Volume" type="2">
       <description>Total volume administered in milliliters of diluted contrast agent. </description>
     </entry>
@@ -4149,7 +4149,7 @@ STEREO = 2 simultaneously acquired (left and right) signals</description>
     <entry group="003A" element="0208" name="&gt;Channel Source Sequence" type="1">
       <description>A coded descriptor of the audio channel source. Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1. Defined Context ID Audio Channel Source 3000."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1." description="Defined Context ID Audio Channel Source 3000."/>
   </module>
   <module ref="Table C.7-14" name="Multi Frame Module Attributes">
     <entry group="0028" element="0008" name="Number of Frames" type="1">
@@ -4275,7 +4275,7 @@ Note:	The maximum P-Value for this Attribute may be different from the maximum P
       <description>Introduces sequence of items describing devices used that may be visible in the image.
 One or more Items may be included in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 4051."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 4051."/>
     <entry group="0008" element="0070" name="&gt;Manufacturer" type="3">
       <description>Manufacturer of the device</description>
     </entry>
@@ -4316,7 +4316,7 @@ MM = Millimeter</description>
       <description>Introduces sequence of items describing interventional therapies or procedures.
 One or more Items may be included in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 9."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 9."/>
     <entry group="0018" element="0038" name="&gt;Intervention Status" type="2">
       <description>Temporal relation of SOP Instance to intervention
 Enumerated Values:
@@ -4330,7 +4330,7 @@ Enumerated Values:
       <description>Sequence that identifies the interventional drug. 
 Only one item shall be included in this Sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 10."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 10."/>
     <entry group="0018" element="0035" name="&gt;Intervention Drug Start Time" type="3">
       <description>Time of administration of the interventional drug. </description>
     </entry>
@@ -4340,7 +4340,7 @@ Only one item shall be included in this Sequence.</description>
     <entry group="0054" element="0302" name="&gt; Administration Route Code Sequence" type="3">
       <description>Sequence that identifies the Administration Route. This sequence shall contain exactly one item.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 11."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 11."/>
     <entry group="0018" element="003A" name="&gt;Intervention Description" type="3">
       <description>Further description in free form text describing the therapy or other intervention. </description>
     </entry>
@@ -4363,7 +4363,7 @@ See Section 10.2.</description>
     <entry group="0040" element="A043" name="&gt;Concept Name Code Sequence" type="1">
       <description>A concept that constrains the meaning of (i.e. defines the role of) the Observation Value. The “Name” component of a Name/Value pair. This sequence shall contain exactly one item.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context is defined."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context is defined."/>
     <entry group="0040" element="A136" name="&gt;Referenced Frame Numbers" type="1C">
       <description>References one or more frames in a Multi-frame SOP Instance. The first frame shall be denoted as frame number one.
 Required if this SOP Instance is a Multi-frame SOP Instance and the values in this sequence item do not apply to all frames.</description>
@@ -4376,7 +4376,7 @@ Required if the value that Concept Name Code Sequence (0040,A043) requires (impl
       <description>Units of measurement. Only a single Item shall be permitted in this Sequence.
 Required if Numeric Value (0040,A30A) is sent. Shall not be present otherwise.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 82."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 82."/>
     <entry group="0040" element="A121" name="&gt;Date" type="1C">
       <description>This is the Value component of a Name/Value pair when the Concept implied by Concept Name Code Sequence (0040,A043) is a date.
 Note: The purpose or role of the date value could be specified in Concept Name Code Sequence (0040,A043).
@@ -4403,7 +4403,7 @@ Required if Date (0040,A121), Time (0040,A122), and Person Name (0040,A123) do n
       <description>This is the Value component of a Name/Value pair when the Concept implied by Concept Name Code Sequence (0040,A043) is a Coded Value. This sequence shall contain exactly one item.
 Required if Date (0040,A121), Time (0040,A122), Person Name (0040,A123), Text Value (0040,A160), and the pair of Numeric Value (0040,A30A) and Measurement Units Code Sequence (0040,08EA) are not present.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context is defined."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context is defined."/>
     <entry group="0040" element="0556" name="Acquisition Context Description" type="3">
       <description>Free-text description of the image-acquisition context.</description>
     </entry>
@@ -4432,13 +4432,13 @@ Note:	The contents of this sequence are the same in all SOP Instances that compr
 Zero or one Item may be included in this sequence.
 See section C.7.6.16.1.1 for further explanation.</description>
     </entry>
-    <include ref="&gt;Include one or more Functional Group Macros that are shared by all frames. The selected Functional Group Macros shall not be present in the Per-frame Functional Groups Sequence (5200,9230). See section C.7.6.16.1.1 for further explanation.For each IOD that includes this module, a table is defined in which the permitted Functional Group Macros and their usage is specified."/>
+    <include ref="&gt;Include one or more Functional Group Macros that are shared by all frames. The selected Functional Group Macros shall not be present in the Per-frame Functional Groups Sequence (5200,9230)."/>
     <entry group="5200" element="9230" name="Per-frame Functional Groups Sequence" type="1">
       <description>Sequence that contains the Functional Group Macros corresponding to each frame of the Multi-frame Image. The first Item corresponds with the first frame, and so on.
 Each Item shall contain the same set of Functional Group Macros.
 This Sequence shall contain the same number of Items as the number of frames in the Multi-frame image. See Section C.7.6.16.1.2 for further explanation.</description>
     </entry>
-    <include ref="&gt;Include one or more Functional Group Macros. For each IOD that includes this module, a table is defined in which the permitted Functional Group Macros and their usage is specified."/>
+    <include ref="&gt;Include one or more Functional Group Macros."/>
     <entry group="0020" element="0013" name="Instance Number" type="1">
       <description>A number that identifies this instance. The value shall be the same for all SOP Instances of a Concatenation, and different for each separate Concatenation and for each SOP Instance not within a Concatenation in a series.</description>
     </entry>
@@ -4575,7 +4575,7 @@ Required if Frame Type (0008,9007) Value 1 of this frame is ORIGINAL and Volumet
       <description>Describes the purpose for which the reference is made. Only a single Item shall be permitted in this sequence.
 See C.7.6.16.2.5.1 for further explanation.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID is 7201."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is 7201."/>
   </macro>
   <macro ref="Table C.7.6.16-7" name="Derivation Image Macro Attributes">
     <entry group="0008" element="9124" name="Derivation Image Sequence" type="2">
@@ -4587,7 +4587,7 @@ See C.7.6.16.2.5.1 for further explanation.</description>
     <entry group="0008" element="9215" name="&gt;Derivation Code Sequence" type="1">
       <description>A coded description of how this frame was derived. See C.7.6.1.1.3 for further explanation. One or more Items may be included in this Sequence. More than one Item indicates that successive derivation steps have been applied.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID is 7203."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is 7203."/>
     <entry group="0008" element="2112" name="&gt;Source Image Sequence" type="2">
       <description>A Sequence which identifies the set of Image or other SOP Class/Instance pairs of the Instances which were used to derive this frame. Zero or more Items may be included in this Sequence. See C.7.6.1.1.4 for further explanation.</description>
     </entry>
@@ -4595,7 +4595,7 @@ See C.7.6.16.2.5.1 for further explanation.</description>
     <entry group="0040" element="A170" name="&gt;&gt;Purpose of Reference Code Sequence" type="1">
       <description>Describes the purpose for which the reference is made, that is what role the source image or frame played in the derivation of this image or frame. Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID is 7202."/>
+    <include ref="&gt;&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is 7202."/>
   </macro>
   <macro ref="Table C.7.6.16-8" name="Cardiac Synchronization Macro Attributes">
     <entry group="0018" element="9118" name="Cardiac Synchronization Sequence" type="1">
@@ -4648,7 +4648,7 @@ B = both left and right
 Note:	This Attribute is mandatory, in order to ensure that frames may be positioned correctly relative to one another for display.
 Shall be consistent with any laterality information contained in Primary Anatomic Structure Modifier Sequence (0008,2230), if present.</description>
     </entry>
-    <include ref="&gt;Include 'General Anatomy Mandatory Macro' Table 10-5 Defined Context ID for the Anatomic Region Sequence (0008,2218) is 4030.Defined Context ID for Anatomic Region Modifier Sequence (0008,2220) and Primary Anatomic Structure Modifier Sequence (0008,2230) is 2."/>
+    <include ref="&gt;Include 'General Anatomy Mandatory Macro' Table 10-5" description="Defined Context ID for the Anatomic Region Sequence (0008,2218) is 4030.Defined Context ID for Anatomic Region Modifier Sequence (0008,2220) and Primary Anatomic Structure Modifier Sequence (0008,2230) is 2."/>
   </macro>
   <macro ref="Table C.7.6.16-10" name="Pixel Value Transformation Macro Attributes">
     <entry group="0028" element="9145" name="Pixel Value Transformation Sequence" type="1">
@@ -4730,7 +4730,7 @@ Required if Real World Value Intercept (0040,9224) is not present.</description>
     <entry group="0040" element="08EA" name="&gt;Measurement Units Code Sequence" type="1">
       <description>Units of measurement. Only a single value shall be present. See C.7.6.16.2.11.1 for further explanation.</description>
     </entry>
-    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1 Defined Context ID is 82"/>
+    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1" description="Defined Context ID is 82"/>
   </macro>
   <macro ref="Table C.7.16-13" name="Contrast/bolus Usage Functional Group Macro Attributes">
     <entry group="0018" element="9341" name="Contrast/Bolus Usage Sequence" type="1">
@@ -5228,7 +5228,7 @@ Enumerated Values:
     <entry group="0018" element="6000" name="Sensitivity" type="3">
       <description>Read out sensitivity.</description>
     </entry>
-    <include ref="Include 'General Anatomy Optional Macro' Table 10-7 Defined Context ID for the Anatomic Region Sequence is 4009."/>
+    <include ref="Include 'General Anatomy Optional Macro' Table 10-7" description="Defined Context ID for the Anatomic Region Sequence is 4009."/>
   </module>
   <module ref="Table C.8-3" name="CT Image Module Attributes">
     <entry group="0008" element="0008" name="Image Type" type="1">
@@ -5355,8 +5355,8 @@ Defined Terms:
     <entry group="0018" element="9346" name="CTDI Phantom Type Code Sequence" type="3">
       <description>The type of phantom used for CTDI measurement according to IEC 60601-2-44. Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include Code Sequence Macro Table 8.8-1 DCID 4052"/>
-    <include ref="Include 'General Anatomy Optional Macro' Table 10-7 Defined Context ID for the Anatomic Region Sequence is 4030."/>
+    <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="DCID 4052"/>
+    <include ref="Include 'General Anatomy Optional Macro' Table 10-7" description="Defined Context ID for the Anatomic Region Sequence is 4030."/>
     <entry group="0018" element="9351" name="Calcium Scoring Mass Factor Patient" type="3">
       <description>The calibration factor for the calcium mass score. These factors incorporate the effects of
 See C.8.2.1.1.7.</description>
@@ -5575,21 +5575,21 @@ Multi-valued: frequency rows\frequency columns\phase rows\phase columns.</descri
     <entry group="0020" element="0110" name="Temporal Resolution" type="3">
       <description>Time delta between Images in a dynamic or functional set of Images.</description>
     </entry>
-    <include ref="Include 'General Anatomy Optional Macro' Table 10-7 Defined Context ID for the Anatomic Region Sequence is 4030."/>
+    <include ref="Include 'General Anatomy Optional Macro' Table 10-7" description="Defined Context ID for the Anatomic Region Sequence is 4030."/>
   </module>
   <module ref="Table C.8-5" name="Nm/pet Patient Orientation Module Attributes">
     <entry group="0054" element="0410" name="Patient Orientation Code Sequence" type="2">
       <description>Sequence that describes the orientation of the patient with respect to gravity. See C.8.4.6.1.1 for further explanation. Zero or one item shall be present in the sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 19. The Coding Scheme Designator (0008,0102) shall have an Enumerated Value of “99SDM” for historical reasons.Code Meaning (0008,0104) shall be Type 3 for historical reasons."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 19. The Coding Scheme Designator (0008,0102) shall have an Enumerated Value of “99SDM” for historical reasons.Code Meaning (0008,0104) shall be Type 3 for historical reasons."/>
     <entry group="0054" element="0412" name="&gt; Patient Orientation Modifier Code Sequence" type="2C">
       <description>Patient Orientation Modifier. Required if needed to fully specify the orientation of the patient with respect to gravity. See C.8.4.6.1.2 for further explanation. Zero or one item shall be present in the sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 20. The Coding Scheme Designator (0008,0102) shall have an Enumerated Value of “99SDM” for historical reasons. Code Meaning (0008,0104) shall be Type 3 for historical reasons."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 20. The Coding Scheme Designator (0008,0102) shall have an Enumerated Value of “99SDM” for historical reasons. Code Meaning (0008,0104) shall be Type 3 for historical reasons."/>
     <entry group="0054" element="0414" name="Patient Gantry Relationship Code Sequence" type="2">
       <description>Sequence which describes the orientation of the patient with respect to the gantry. See Section C.8.4.6.1.3 for further explanation. Zero or one item shall be present in the sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 21. The Coding Scheme Designator (0008,0102) shall have an Enumerated Value of “99SDM” for historical reasons. Code Meaning (0008,0104) shall be Type 3 for historical reasons."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 21. The Coding Scheme Designator (0008,0102) shall have an Enumerated Value of “99SDM” for historical reasons. Code Meaning (0008,0104) shall be Type 3 for historical reasons."/>
   </module>
   <module ref="Table C.8-6" name="NM Image Pixel Module Attributes">
     <entry group="0028" element="0002" name="Samples per Pixel" type="1">
@@ -5760,7 +5760,7 @@ Required if Image Type (0008,0008) Value 3 contains the value WHOLE BODY.</descr
       <description>Text indicating trigger source. Defined Term:
 	EKG</description>
     </entry>
-    <include ref="Include 'General Anatomy Optional Macro' Table 10-7 No Context ID for the Anatomic Region Sequence is defined."/>
+    <include ref="Include 'General Anatomy Optional Macro' Table 10-7" description="No Context ID for the Anatomic Region Sequence is defined."/>
   </module>
   <module ref="Table C.8-10" name="NM Isotope Module Attributes">
     <entry group="0054" element="0012" name="Energy Window Information Sequence" type="2">
@@ -5785,14 +5785,14 @@ The number of items shall be equal to Number of Energy Windows (0054,0011). The 
     <entry group="0054" element="0300" name="&gt;Radionuclide Code Sequence" type="2">
       <description>Sequence that identifies the radionuclide. Zero or one item shall be present in the sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 18.The Coding Scheme Designator (0008,0102) shall have an Enumerated Value of “99SDM” for historical reasons. Code Meaning (0008,0104) shall be Type 3 for historical reasons."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 18.The Coding Scheme Designator (0008,0102) shall have an Enumerated Value of “99SDM” for historical reasons. Code Meaning (0008,0104) shall be Type 3 for historical reasons."/>
     <entry group="0018" element="1070" name="&gt;Radiopharmaceutical Route" type="3">
       <description>Route of injection.</description>
     </entry>
     <entry group="0054" element="0302" name="&gt;Administration Route Code Sequence" type="3">
       <description>Sequence that identifies the administration route for the radiopharmaceutical. This sequence shall contain exactly one item. </description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 11. Code Meaning (0008,0104) shall be Type 3 for historical reasons."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 11. Code Meaning (0008,0104) shall be Type 3 for historical reasons."/>
     <entry group="0018" element="1071" name="&gt;Radiopharmaceutical Volume" type="3">
       <description>Volume of injection in cubic cm. </description>
     </entry>
@@ -5823,7 +5823,7 @@ The number of items shall be equal to Number of Energy Windows (0054,0011). The 
     <entry group="0054" element="0304" name="&gt;Radiopharmaceutical Code Sequence" type="3">
       <description>Sequence that identifies the radiopharmaceutical. This sequence shall contain exactly one item. </description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 25. Code Meaning (0008,0104) shall be Type 3 for historical reasons."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 25. Code Meaning (0008,0104) shall be Type 3 for historical reasons."/>
     <entry group="0018" element="0026" name="Intervention Drug Information Sequence" type="3">
       <description>Sequence of Items that describes the intervention drugs used. Zero or more Items may be included in this sequence.</description>
     </entry>
@@ -5833,11 +5833,11 @@ The number of items shall be equal to Number of Energy Windows (0054,0011). The 
     <entry group="0018" element="0029" name="&gt;Intervention Drug Code Sequence" type="3">
       <description>Sequence that identifies the intervention drug name. Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 10. Code Meaning (0008,0104) shall be Type 3 for historical reasons."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 10. Code Meaning (0008,0104) shall be Type 3 for historical reasons."/>
     <entry group="0054" element="0302" name="&gt;Administration Route Code Sequence" type="3">
       <description>Sequence that identifies the administration route for the intervention drug. This sequence shall contain exactly one item. </description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 11. Code Meaning (0008,0104) shall be Type 3 for historical reasons."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 11. Code Meaning (0008,0104) shall be Type 3 for historical reasons."/>
     <entry group="0018" element="0035" name="&gt;Intervention Drug Start Time" type="3">
       <description>Time of administration of the intervention drug, using the same time base as for the Acquisition Start Time (0008,0032).</description>
     </entry>
@@ -5928,11 +5928,11 @@ HEXAGONAL: diameter of a circumscribed circle.</description>
     <entry group="0054" element="0220" name="&gt;View Code Sequence" type="3">
       <description>Sequence that describes the projection of the anatomic region of interest on the image receptor. Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 26 . Code Meaning (0008,0104) shall be Type 3 for historical reasons."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 26 . Code Meaning (0008,0104) shall be Type 3 for historical reasons."/>
     <entry group="0054" element="0222" name="&gt;&gt;View Modifier Code Sequence" type="2C">
       <description>View Modifier. Required if needed to fully specify the View. Zero or one Items shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 23. Code Meaning (0008,0104) shall be Type 3 for historical reasons."/>
+    <include ref="&gt;&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 23. Code Meaning (0008,0104) shall be Type 3 for historical reasons."/>
   </module>
   <module ref="Table C.8-12" name="NM Tomo Acquisition Module Attributes">
     <entry group="0054" element="0052" name="Rotation Information Sequence" type="2">
@@ -6216,7 +6216,7 @@ Otherwise not used. See C.8.5.5.1.13 for further explanation</description>
 Required if the value of Pixel Component Organization (0018,6044) is 3 (Code Sequence look up).
 See Sections C.8.5.6.1.18 for further explanation.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID for IVUS is 3497; no Context ID is otherwise defined."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID for IVUS is 3497; no Context ID is otherwise defined."/>
     <entry group="0018" element="6030" name="&gt;Tranducer Frequency" type="3">
       <description>The manufacturer defined description of center frequency of the interrogating ultrasound energy. The units are kilohertz.</description>
     </entry>
@@ -6325,7 +6325,7 @@ See C.8.5.6.10</description>
     <entry group="0040" element="000A" name="Stage Code Sequence" type="3">
       <description>Sequence of items describing the performed Ultrasound Protocol Stage(s). One or more Items may be included in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include “Code Sequence Macro” Table 8.8-1. Baseline Context ID is 12002."/>
+    <include ref="&gt;Include “Code Sequence Macro” Table 8.8-1." description="Baseline Context ID is 12002."/>
     <entry group="0008" element="2122" name="Stage Number" type="3">
       <description>A number that identifies the Stage. Stage Number starts at one.</description>
     </entry>
@@ -6344,19 +6344,19 @@ See C.8.5.6.10</description>
     <entry group="0008" element="2132" name="Event Timer Name(s)" type="3">
       <description>Name that identifies the event timer.</description>
     </entry>
-    <include ref="Include 'General Anatomy Optional Macro' Table 10-7 For intravascular ultrasound, DCIDs 3010 and 3015 are specified for the Anatomic Region Sequence and DCID 3019 is specified for the Anatomic Region Modifier Sequence. No other Context IDs are specified."/>
+    <include ref="Include 'General Anatomy Optional Macro' Table 10-7" description="For intravascular ultrasound, DCIDs 3010 and 3015 are specified for the Anatomic Region Sequence and DCID 3019 is specified for the Anatomic Region Modifier Sequence. No other Context IDs are specified."/>
     <entry group="0054" element="0220" name="View Code Sequence" type="3">
       <description>Sequence that describes the view of the patient anatomy in this image.
 Only a single Item shall be permitted in this Sequence.
 See Section C.8.5.6.1.19.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 See Section C.8.5.6.1.19 for Context Group IDs."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="See Section C.8.5.6.1.19 for Context Group IDs."/>
     <entry group="0054" element="0222" name="&gt;View Modifier Code Sequence" type="3">
       <description>Sequence that provides modifiers for the view of the patient anatomy.
 Zero or more Items shall be permitted in this Sequence.
 See Section C.8.5.6.1.19.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 See Section C.8.5.6.1.19 for Context Group IDs."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="See Section C.8.5.6.1.19 for Context Group IDs."/>
     <entry group="0008" element="002A" name="Acquisition DateTime" type="1C">
       <description>The date and time that the acquisition of data that resulted in this image started.
 Required if Modality (0008,0060) = IVUS
@@ -6658,7 +6658,7 @@ Shall have the value:
       <description>Parameters of scanning sequence.
 See Section C. 8.7.1.1.4.</description>
     </entry>
-    <include ref="Include 'General Anatomy Optional Macro' Table 10-7 No Context ID for the Anatomic Region Sequence is defined."/>
+    <include ref="Include 'General Anatomy Optional Macro' Table 10-7" description="No Context ID for the Anatomic Region Sequence is defined."/>
     <entry group="0028" element="6040" name="R Wave Pointer" type="3">
       <description>Marks the location(s) of the R Wave in the cardiac cycles by referencing frame numbers; frame numbers begin with 1.</description>
     </entry>
@@ -6670,7 +6670,7 @@ See Section C.8.7.1.1.13.</description>
     <entry group="0040" element="A170" name="&gt;Purpose of Reference Code Sequence" type="3">
       <description>Describes the purpose for which the reference is made. Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1 Defined Context ID 7201"/>
+    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1" description="Defined Context ID 7201"/>
     <entry group="0008" element="2111" name="Derivation Description" type="3">
       <description>A text description of how this image was derived.
 See C.8.7.1.1.5 for further explanation. </description>
@@ -7181,8 +7181,8 @@ See C.8.8.1.1.</description>
       <description>Sequence that contains attributes from the Imaging Service Request.
 The sequence may have one or more Items.</description>
     </entry>
-    <include ref="&gt;Include Request Attributes Macro Table 10-9 No Baseline Context IDs defined"/>
-    <include ref="Include Performed Procedure Step Summary Macro Table 10-16 No Baseline Context IDs defined"/>
+    <include ref="&gt;Include Request Attributes Macro Table 10-9" description="No Baseline Context IDs defined"/>
+    <include ref="Include Performed Procedure Step Summary Macro Table 10-16" description="No Baseline Context IDs defined"/>
   </module>
   <module ref="Table C.8-38" name="RT Image Module Attributes">
     <entry group="0028" element="0002" name="Samples per Pixel" type="1">
@@ -7832,7 +7832,7 @@ ENCLOSING = referencing ROI completely encloses referenced ROI</description>
     <entry group="3006" element="0086" name="&gt;RT ROI Identification Code Sequence" type="3">
       <description>Introduces sequence containing Code used to identify ROI. If this sequence is included, only one item shall be present. Baseline Context ID Number = 96. See Section 5.3 for further explanation.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 96 ."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 96 ."/>
     <entry group="3006" element="00A0" name="&gt;Related RT ROI Observations Sequence" type="3">
       <description>Introduces sequence of related ROI Observations. One or more items may be included in this sequence.</description>
     </entry>
@@ -10353,7 +10353,7 @@ SETUP = no treatment beam is applied for this RT Beam. To be used for specifying
     <entry group="300C" element="0080" name="&gt;Referenced Dose Sequence" type="3">
       <description>Introduces sequence of related SOP Class/Instance pairs describing related instances of RT Dose (for grids, isodose curves, and named/unnamed point doses). One or more items may be included in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include SOP Instance Reference Macro Table 10-11 The Referenced Class SOP UID shall be that of the RT Dose SOP Class (1.2.840.10008.5.1.4.1.1.481.2)"/>
+    <include ref="&gt;&gt;Include SOP Instance Reference Macro Table 10-11" description="The Referenced Class SOP UID shall be that of the RT Dose SOP Class (1.2.840.10008.5.1.4.1.1.481.2)"/>
     <entry group="300A" element="00D0" name="&gt;Number of Wedges" type="1">
       <description>Number of wedges associated with current beam.</description>
     </entry>
@@ -11648,14 +11648,14 @@ See C.8.4.9.1.3 for explanation.</description>
     <entry group="0054" element="0300" name="&gt;Radionuclide Code Sequence" type="2">
       <description>Sequence that identifies the radionuclide. Zero or one item shall be present in the sequence. </description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 4020 ."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 4020 ."/>
     <entry group="0018" element="1070" name="&gt;Radiopharmaceutical Route" type="3">
       <description>Route of administration.</description>
     </entry>
     <entry group="0054" element="0302" name="&gt;Administration Route Code Sequence" type="3">
       <description>Sequence that identifies the administration route of the radiopharmaceutical. This sequence shall contain exactly one item. </description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 11 ."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 11 ."/>
     <entry group="0018" element="1071" name="&gt;Radiopharmaceutical Volume" type="3">
       <description>Volume of administered radiopharmaceutical in cubic cm.</description>
     </entry>
@@ -11694,7 +11694,7 @@ Note:	In other IODs, such as the NM IOD, this same attribute is specified in Meg
     <entry group="0054" element="0304" name="&gt;Radiopharmaceutical Code Sequence" type="3">
       <description>Sequence that identifies the radiopharmaceutical. This sequence shall contain exactly one item.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 4021 ."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 4021 ."/>
     <entry group="0018" element="0026" name="Intervention Drug Information Sequence" type="3">
       <description>Sequence of Items that describes the intervention drugs used. One or more items may be included in this sequence.</description>
     </entry>
@@ -11704,7 +11704,7 @@ Note:	In other IODs, such as the NM IOD, this same attribute is specified in Meg
     <entry group="0018" element="0029" name="&gt;Intervention Drug Code Sequence" type="3">
       <description>Sequence that identifies the intervention drug name. Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 10 ."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 10 ."/>
     <entry group="0018" element="0035" name="&gt;Intervention Drug Start Time" type="3">
       <description>Time of administration of the intervention drug, using the same time base as for the Series Time (0008,0031).</description>
     </entry>
@@ -11832,7 +11832,7 @@ Required if Lossy Compression has been performed on the image.</description>
     <entry group="0054" element="1324" name="Dead Time Factor" type="3">
       <description>The average dead time correction factor that was applied to this image. The value shall be one if no dead time correction was applied.</description>
     </entry>
-    <include ref="Include 'General Anatomy Optional Macro' Table 10-7 No Context ID for the Anatomic Region Sequence is defined."/>
+    <include ref="Include 'General Anatomy Optional Macro' Table 10-7" description="No Context ID for the Anatomic Region Sequence is defined."/>
     <entry group="0054" element="0500" name="Slice Progression Direction" type="3">
       <description>Describes the anatomical direction that slices are progressing as the slices are considered in order (as defined by the Slice Index. See section C.8.9.4.1.9 for a definition of Slice Index). Meaningful only for cardiac images.
 When View Code Sequence (0054,0220) indicates a short axis view, then Enumerated Values are:
@@ -11843,13 +11843,13 @@ When View Code Sequence (0054,0220) indicates a short axis view, then Enumerated
       <description>Sequence that describes the projection of the anatomic region of interest. 
 Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt; Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 26."/>
+    <include ref="&gt; Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 26."/>
     <entry group="0054" element="0222" name="&gt; View Modifier Code Sequence" type="2C">
       <description>View Modifier.
 Required if needed to fully specify the View.
 Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt; Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 23."/>
+    <include ref="&gt;&gt; Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 23."/>
   </module>
   <module ref="Table C.8-68" name="DX Series Module Attributes">
     <entry group="0008" element="0060" name="Modality" type="1">
@@ -11887,7 +11887,7 @@ Note:	This Attribute is mandatory, in order to ensure that images may be positio
 Shall be consistent with any laterality information contained in Primary Anatomic Structure Modifier Sequence (0008,2230), if present.
 Note:	Laterality (0020,0060) is a Series level Attribute and must be the same for all Images in the Series, hence it must be absent.</description>
     </entry>
-    <include ref="Include 'General Anatomy Required Macro' Table 10-6 Defined Context ID for the Anatomic Region Sequence is 4009. This is the anatomic region that is placed on the table or bucky for examination.Note: It is strongly recommended that Anatomic Region Sequence (0008,2218) be sent with a value, in order to ensure that images may be positioned correctly relative to one another for display."/>
+    <include ref="Include 'General Anatomy Required Macro' Table 10-6" description="Defined Context ID for the Anatomic Region Sequence is 4009. This is the anatomic region that is placed on the table or bucky for examination.Note: It is strongly recommended that Anatomic Region Sequence (0008,2218) be sent with a value, in order to ensure that images may be positioned correctly relative to one another for display."/>
   </module>
   <module ref="Table C.8-70" name="DX Image Module Attributes">
     <entry group="0008" element="0008" name="Image Type" type="1">
@@ -12180,7 +12180,7 @@ Only a single Item shall be permitted in this Sequence.
 Shall be consistent with the other Attributes in this Module, if present, but may more specifically describe the image acquisition.
 </description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1. Baseline Context ID 4012"/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1." description="Baseline Context ID 4012"/>
     <entry group="0018" element="5100" name="Patient Position" type="3">
       <description>Description of imaging subject's position relative to the equipment.
 See C.7.3.1.1.2 for Defined Terms and further explanation.
@@ -12196,31 +12196,31 @@ Note:	It is strongly recommended that this Attribute be present, in order to ens
 Shall be consistent with View Position (0018,5101). See C.8.11.5.1.1 for further explanation. 
 Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1. Baseline Context ID 4010"/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1." description="Baseline Context ID 4010"/>
     <entry group="0054" element="0222" name="&gt;View Modifier Code Sequence" type="3">
       <description>View modifier.
 
 Zero or more Items may be included in this Sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1. Baseline Context ID 4011"/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1." description="Baseline Context ID 4011"/>
     <entry group="0054" element="0410" name="Patient Orientation Code Sequence" type="3">
       <description>Sequence that describes the orientation of the patient with respect to gravity. 
 See C.8.11.5.1.2 for further explanation.
 Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1. Baseline Context ID 19"/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1." description="Baseline Context ID 19"/>
     <entry group="0054" element="0412" name="&gt; Patient Orientation Modifier Code Sequence" type="3">
       <description>Patient Orientation Modifier.
 Required if needed to fully specify the orientation of the patient with respect to gravity. 
 Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1. Baseline Context ID 20"/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1." description="Baseline Context ID 20"/>
     <entry group="0054" element="0414" name="Patient Gantry Relationship Code Sequence" type="3">
       <description>Sequence which describes the orientation of the patient with respect to the gantry.
 
 Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1. Baseline Context ID 21"/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1." description="Baseline Context ID 21"/>
     <entry group="0018" element="1111" name="Distance Source to Patient" type="3">
       <description>Distance in mm from source to the table, support or bucky side that is closest to the Imaging Subject, as measured along the central ray of the X-Ray beam.
 Note:	1. This definition is less useful in terms of estimating geometric magnification than a measurement to a defined point within the Imaging Subject, but accounts for what is realistically measurable in an automated fashion in a clinical setting.
@@ -12302,7 +12302,7 @@ See section C.7.3.1.1.1 for further explanation. </description>
       <description>Sequence that contains attributes from the Imaging Service Request.
 The sequence may have one or more Items.</description>
     </entry>
-    <include ref="&gt;Include Request Attributes Macro Table 10-9 For Reason for Requested Procedure Code Sequence (0040,100A) the Baseline Context IDs are 6051 and 6055. No Baseline Context IDs are defined for other Attributes.Note: For example, Requested Procedure Code Sequence (0040,100A) may be used to convey whether the images in the Series were taken for screening or diagnostic purposes."/>
+    <include ref="&gt;Include Request Attributes Macro Table 10-9" description="For Reason for Requested Procedure Code Sequence (0040,100A) the Baseline Context IDs are 6051 and 6055. No Baseline Context IDs are defined for other Attributes.Note: For example, Requested Procedure Code Sequence (0040,100A) may be used to convey whether the images in the Series were taken for screening or diagnostic purposes."/>
   </module>
   <module ref="Table C.8-74" name="Mammography Image Module Attributes">
     <entry group="0018" element="1508" name="Positioner Type" type="1">
@@ -12361,18 +12361,18 @@ This Attribute shall not be present if there is a View Modifier Code Sequence (0
 If this Attribute is absent, then the image may or may not be a partial view.
 This Attribute shall not be present if there is a View Modifier Code Sequence (0054,0222) Item of value (R-102D6, SNM3, “Magnification”) or (R-102D7, SNM3, “Spot Compression”).</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' (Table 8.8-1). Defined Context ID is 4005."/>
-    <include ref="Include 'General Anatomy Mandatory Macro' Table 10-5 Defined Context ID for the Anatomic Region Sequence is 4013."/>
+    <include ref="&gt;Include 'Code Sequence Macro' (Table 8.8-1)." description="Defined Context ID is 4005."/>
+    <include ref="Include 'General Anatomy Mandatory Macro' Table 10-5" description="Defined Context ID for the Anatomic Region Sequence is 4013."/>
     <entry group="0054" element="0220" name="View Code Sequence" type="1">
       <description>Sequence that describes the projection of the anatomic region of interest on the image receptor.
 Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1. Enumerated Value for Context ID is 4014."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1." description="Enumerated Value for Context ID is 4014."/>
     <entry group="0054" element="0222" name="&gt;View Modifier Code Sequence" type="2">
       <description>View modifier.
 Zero or more Items may be included in this Sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1. Enumerated Value for Context ID is 4015."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1." description="Enumerated Value for Context ID is 4015."/>
   </module>
   <module ref="Table C.8-75" name="Intra Oral Series Module Attributes">
     <entry group="0008" element="0060" name="Modality" type="1">
@@ -12400,20 +12400,20 @@ Enumerated Values:
       <description>Sequence that identifies the anatomic region of interest in this image.
 Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1. DefinedContext ID 4016."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1." description="DefinedContext ID 4016."/>
     <entry group="0008" element="2220" name="&gt;Anatomic Region Modifier Sequence" type="1C">
       <description>Sequence that refines the anatomic region of interest in this image.
 Required if Primary Anatomic Structure Sequence (0008,2228) is not sent. 
 Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1. DefinedContext ID 4017."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1." description="DefinedContext ID 4017."/>
     <entry group="0008" element="2228" name="Primary Anatomic Structure Sequence" type="1C">
       <description>Sequence that describes the primary anatomic structures of interest in this image.
 See C.8.11.9.1.1 for further explanation.
 Required if Anatomic Region Modifier Sequence (0008,2220) is not sent.
 One or more Items may be included in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1. DefinedContext ID 4018 or 4019. See C.8.11.9.1.1 for further explanation."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1." description="DefinedContext ID 4018 or 4019. See C.8.11.9.1.1 for further explanation."/>
   </module>
   <module ref="Table C.8-77" name="VL Image Module Attributes">
     <entry group="0008" element="0008" name="Image Type" type="1">
@@ -12466,7 +12466,7 @@ Required if Image Type (0008,0008) Value 3 is present and has a value of "STEREO
     <entry group="0040" element="A170" name="&gt;Purpose of Reference Code Sequence" type="2">
       <description>Describes the purpose for which the reference is made. Zero or one item shall be present in the sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1 Defined Context ID 7201"/>
+    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1" description="Defined Context ID 7201"/>
     <entry group="0028" element="1050" name="Window Center" type="3">
       <description>Window Center for display. See C.11.2.1.2 for further explanation.
 Meaningful only if Photometric Interpretation (0028,0004) is MONOCHROME2.</description>
@@ -12480,20 +12480,20 @@ Required if Window Center (0028,1050) is present.</description>
 Only a single Item shall be permitted in this sequence.
 Required if Number of Frames (0028,0008) is present and Specimen Accession Number (0040,050A) is absent. May be present otherwise.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 DCID 4040 is defined for the Video Endoscopic IOD.For other IODs, no Context ID is defined."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="DCID 4040 is defined for the Video Endoscopic IOD.For other IODs, no Context ID is defined."/>
     <entry group="0008" element="2220" name="&gt;Anatomic Region Modifier Sequence" type="3">
       <description>Sequence of Items that modifies the anatomic region of interest of this image 
 One or more Items may be included in this Sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 2."/>
-    <include ref="Include 'Primary Anatomic Structure Macro' Table 10.x-4 No Context ID is defined."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 2."/>
+    <include ref="Include 'Primary Anatomic Structure Macro' Table 10.x-4" description="No Context ID is defined."/>
     <entry group="0022" element="001A" name="Channel Description Code Sequence" type="3">
       <description>Describes the light color used for each channel to generate the image. 
 If Photometric Interpretation (0028,0004) has one of the YBR values, the meaning is for pixel data in an equivalent RGB encoding. 
 Note:	Interpretation and representation of RGB images rely on the assumption that the red channel really contains the red wavelength range of illumination light, the blue channel the blue wavelength range, etc. Some modalities use the RGB Photometric Interpretation as a container representing 3 channels of any illumination wavelength. 
 Shall have the same number of items as the value of Samples per Pixel (0028,0002). The channels shall be described in the order in which the channels are encoded.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 4206."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 4206."/>
   </module>
   <module ref="Table C.8-78" name="Slide Coordinates Module Attributes">
     <entry group="0040" element="071A" name="Image Center Point Coordinates Sequence" type="2">
@@ -12514,14 +12514,14 @@ Shall have the same number of items as the value of Samples per Pixel (0028,0002
     <entry group="0040" element="08DA" name="&gt;Coordinate System Axis Code Sequence" type="1">
       <description>Axis of a coordinate system. This sequence shall contain exactly one item.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 95."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 95."/>
     <entry group="0040" element="A30A" name="&gt;Numeric Value" type="1">
       <description>The distance between the center-points of adjacent pixels along the axis specified by Coordinate System Axis Code Sequence (0040,08DA). </description>
     </entry>
     <entry group="0040" element="08EA" name="&gt;Measurement Units Code Sequence" type="1">
       <description>Units of the measurement. This sequence shall contain exactly one item. </description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 82."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 82."/>
   </module>
   <module ref="Table C.8-79" name="Enhanced MR Image Module Attributes">
     <include ref="Include ' MR Image and Spectroscopy Instance Macro' Table C.8-81"/>
@@ -12582,7 +12582,7 @@ IDENTITY - output is in P-Values.</description>
     <entry group="0088" element="0200" name="Icon Image Sequence" type="3">
       <description>This icon image is representative of the Image. Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt; Include 'Image Pixel Macro' Table C.7-11b See Section F.7."/>
+    <include ref="&gt; Include 'Image Pixel Macro' Table C.7-11b"/>
   </module>
   <macro ref="Table C.8-81" name="MR Image And Spectroscopy Instance Macro">
     <entry group="0020" element="0012" name="Acquisition Number" type="3">
@@ -13293,7 +13293,7 @@ Required if Frame Type (0008,9007) Value 1 of this frame is ORIGINAL. May be pre
       <description>When the measured peaks or their ratios can be related to metabolite substances, this sequence may be used to describe the metabolite substance whose resonant peaks are mapped in the Metabolite Map, or the ratio of substance resonant peaks that is mapped. 
 Only one item shall be present in this Sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1. Defined Context ID = 4032"/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1." description="Defined Context ID = 4032"/>
     <entry group="0018" element="9084" name="&gt;Chemical Shift Sequence" type="3">
       <description>The list of frequencies that were used to create the Metabolite Map. One or more Items may be included in this sequence.</description>
     </entry>
@@ -13795,7 +13795,7 @@ IDENTITY - output is in P-Values.</description>
     <entry group="0088" element="0200" name="Icon Image Sequence" type="3">
       <description>This icon image is representative of the Image. Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt; Include 'Image Pixel Macro' Table C.7-11b See Section F.7."/>
+    <include ref="&gt; Include 'Image Pixel Macro' Table C.7-11b" description="See Section F.7."/>
   </module>
   <macro ref="Table C.8-117" name="CT Image Frame Type Macro Attributes">
     <entry group="0018" element="9329" name="CT Image Frame Type Sequence" type="1">
@@ -14016,7 +14016,7 @@ Required if Frame Type (0008,9007) Value 1 of this frame is ORIGINAL. May be pre
     <entry group="0018" element="9346" name="&gt;CTDI Phantom Type Code Sequence" type="3">
       <description>The type of phantom used for CTDI measurement according to IEC 60601-2-44. Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1 DCID 4052"/>
+    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1" description="DCID 4052"/>
   </macro>
   <macro ref="Table C.8-125" name="CT X Ray Details Sequence Macro Attributes">
     <entry group="0018" element="9325" name="CT X-Ray Details Sequence" type="1">
@@ -14175,7 +14175,7 @@ See C.7.6.1.1.4 for further explanation.</description>
     <entry group="0040" element="A170" name="&gt;Purpose of Reference Code Sequence" type="1">
       <description>Describes the purpose for which the reference is made, that is what role the source image or frame(s) played in the derivation of this image. Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID is 7202."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is 7202."/>
     <entry group="0028" element="2110" name="Lossy Image Compression" type="1">
       <description>Specifies whether an Image has undergone lossy compression. Enumerated Values:
 00 = Image has NOT been subjected to lossy compression.
@@ -14225,7 +14225,7 @@ NO</description>
 Required if the value of Patient Eye Movement Commanded (0022,0005) is YES.
 A single item shall be present in this sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8.1 Baseline Context ID is 4201"/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8.1" description="Baseline Context ID is 4201"/>
     <include ref="Include 'Ophthalmic Acquisition Parameters Macro' Table C.8.17.8-2"/>
   </module>
   <module ref="Table C.8.17.5-1" name="Ocular Region Imaged Module Attributes">
@@ -14241,8 +14241,8 @@ Note:	Laterality (0020,0060) is a Series level Attribute and must be the same fo
     <entry group="0022" element="001D" name="Relative Image Position Code Sequence" type="3">
       <description>The position of this image on the retina (as defined by a specified nomenclature; the nomenclature is implicit in the code used). Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8.1 Baseline Context ID 4207"/>
-    <include ref="Include 'General Anatomy Mandatory Macro' Table 10-5 Defined Context ID 4209 for Anatomic Region Sequence"/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8.1" description="Baseline Context ID 4207"/>
+    <include ref="Include 'General Anatomy Mandatory Macro' Table 10-5" description="Defined Context ID 4209 for Anatomic Region Sequence"/>
   </module>
   <module ref="Table C.8.17.6-1" name="Ophthalmic Tomography Series Module Attributes">
     <entry group="0008" element="0060" name="Modality" type="1">
@@ -14384,14 +14384,14 @@ Note:	An empty sequence indicates that an agent was used for dilation, but the n
     <entry group="0022" element="001C" name="&gt;Mydriatic Agent Code Sequence" type="1">
       <description>The actual agent administered to dilate the pupil. One item shall be present.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 4208."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 4208."/>
     <entry group="0022" element="004E" name="&gt;Mydriatic Agent Concentration" type="3">
       <description>The concentration of the agent.</description>
     </entry>
     <entry group="0022" element="0042" name="&gt;Mydriatic Agent Concentration Units Sequence" type="1C">
       <description>Units of measure for the Mydriatic Agent Concentration. Required if Mydriatic Agent Concentration (0022,004E) is present. One item shall be present.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1. Defined Context ID is 3082"/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1." description="Defined Context ID is 3082"/>
     <entry group="0022" element="000E" name="Degree of Dilation" type="2C">
       <description>The degree of the dilation in mm.
 Required if the value of Pupil Dilated (0022,000D) is YES.</description>
@@ -14401,11 +14401,11 @@ Required if the value of Pupil Dilated (0022,000D) is YES.</description>
     <entry group="0022" element="0015" name="Acquisition Device Type Code Sequence" type="1">
       <description>Describes the type of acquisition device. A single item shall be present in the sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 4210"/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 4210"/>
     <entry group="0022" element="0017" name="Light Path Filter Type Stack Code Sequence" type="2">
       <description>Filters used in the light source path. Zero or more items may be present in the sequence. </description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 4204"/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 4204"/>
     <entry group="0022" element="0001" name="&gt;Light Path Filter Pass-Through Wavelength" type="3">
       <description>Nominal pass-through wavelength of light path filter in nm</description>
     </entry>
@@ -14452,7 +14452,7 @@ INT = Interferometer</description>
     <entry group="0022" element="0031" name="Ophthalmic Frame Location Sequence" type="1">
       <description>Specifies the column locations for this frame in terms of locations on a referenced image. One or more items shall be present.</description>
     </entry>
-    <include ref="&gt;Include 'Image SOP Instance Reference Macro' Table 10-3 Defined Term for Purpose of Reference is (121311, DCM, ”Localizer”)"/>
+    <include ref="&gt;Include 'Image SOP Instance Reference Macro' Table 10-3" description="Defined Term for Purpose of Reference is (121311, DCM, ”Localizer”)"/>
     <entry group="0022" element="0032" name="&gt;Reference Coordinates" type="1">
       <description>Image coordinates for the points on the referenced image that correspond to the points on this frame. See section C.8.17.10.1.1.</description>
     </entry>
@@ -14493,11 +14493,11 @@ TRANSVERSE</description>
     <entry group="0022" element="0021" name="&gt;Left Image Sequence" type="1">
       <description>Left Image of the Pair. Only one Item shall be present in this Sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include Image SOP Instance Reference Macro, Table 10-3 The Referenced SOP Instance UID (0008,1155) shall not be the same as the Referenced SOP Instance UID (0008,1155) of the Right Image Sequence (0022,0022)."/>
+    <include ref="&gt;&gt;Include Image SOP Instance Reference Macro, Table 10-3" description="The Referenced SOP Instance UID (0008,1155) shall not be the same as the Referenced SOP Instance UID (0008,1155) of the Right Image Sequence (0022,0022)."/>
     <entry group="0022" element="0022" name="&gt;Right Image Sequence" type="1">
       <description>Right Image of the Pair. Only one Item shall be present in this Sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include Image SOP Instance Reference Macro, Table 10-3 The Referenced SOP Instance UID (0008,1155) shall not be the same as the Referenced SOP Instance UID (0008,1155) of the Left Image Sequence (0022,0021)."/>
+    <include ref="&gt;&gt;Include Image SOP Instance Reference Macro, Table 10-3" description="The Referenced SOP Instance UID (0008,1155) shall not be the same as the Referenced SOP Instance UID (0008,1155) of the Left Image Sequence (0022,0021)."/>
   </module>
   <module ref="Table C.8.19.1-1" name="Xa/xrf Series Module Attributes">
     <entry group="0008" element="0060" name="Modality" type="1">
@@ -14590,19 +14590,19 @@ See C.8.11.5.1.2 for further explanation.
 Only a single Item shall be permitted in this Sequence.
 Required if Positioner Type (0018,1508) equals CARM and C-arm Positioner Tabletop Relationship (0018,9474) equals YES. May be present otherwise.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1. Baseline Context ID 19"/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1." description="Baseline Context ID 19"/>
     <entry group="0054" element="0412" name="&gt; Patient Orientation Modifier Code Sequence" type="1C">
       <description>Patient Orientation Modifier.
 Required if needed to fully specify the orientation of the patient with respect to gravity. 
 Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1. Baseline Context ID 20"/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1." description="Baseline Context ID 20"/>
     <entry group="0054" element="0414" name="Patient Gantry Relationship Code Sequence" type="2C">
       <description>Sequence that describes the orientation of the patient with respect to the head of the table. See Section C.8.4.6.1.3 for further explanation.
 Zero or one item shall be present in the sequence.
 Required if Positioner Type (0018,1508) equals CARM and C-arm Positioner Tabletop Relationship (0018,9474) equals YES. May be present otherwise.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1. Baseline Context ID 21"/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1." description="Baseline Context ID 21"/>
     <entry group="0010" element="9431" name="Examined Body Thickness" type="3">
       <description>Body thickness in mm at examination location perpendicular to the table top for this series.
 Notes:	1. This is intended for estimation of the thickness of the patient at the tabletop, not for precise calculation of the size of the object in the X-Ray beam (see Calculated Anatomy Thickness (0018,9452) attribute).
@@ -14657,7 +14657,7 @@ One or more Items may be included in this sequence.</description>
       <description>Code describing the purpose of the reference to the SOP Instances. 
 Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID is CID 7004 for referenced waveforms."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is CID 7004 for referenced waveforms."/>
     <entry group="0020" element="4000" name="Image Comments" type="3">
       <description>User-defined comments about the image.</description>
     </entry>
@@ -14671,7 +14671,7 @@ If this Attribute is absent, then the image may or may not be a quality control 
     <entry group="0088" element="0200" name="Icon Image Sequence" type="3">
       <description>This icon image is representative of the Image. Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt; Include 'Image Pixel Macro' Table C.7-11b See C.7.6.1.1.6 for further explanation."/>
+    <include ref="&gt; Include 'Image Pixel Macro' Table C.7-11b" description="See C.7.6.1.1.6 for further explanation."/>
     <entry group="2050" element="0020" name="Presentation LUT Shape" type="1">
       <description>Specifies a predefined identity transformation for the Presentation LUT such that the output of all grayscale transformations, if any, are defined to be in P-Values.
 Enumerated Values: 
@@ -14809,7 +14809,7 @@ See C.8.7.1.1.5 for further explanation. </description>
     <entry group="0008" element="9215" name="&gt;Derivation Code Sequence" type="3">
       <description>A coded description of how this frame was derived. See C.7.6.1.1.3 for further explanation. One or more Items may be included in this Sequence. More than one Item indicates that successive derivation steps have been applied.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID is 7203."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is 7203."/>
     <entry group="0018" element="1400" name="&gt;Acquisition Device Processing Description" type="3">
       <description>Indicates any visual processing performed on the frame prior to exchange.
 See Section C.8.7.1.1.3.</description>
@@ -15285,11 +15285,11 @@ MANUAL: user-entered segment</description>
     <entry group="0062" element="0003" name="&gt;Segmented Property Category Code Sequence" type="1">
       <description>Sequence defining the general category of this segment. This sequence shall contain a single item.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 7150."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 7150."/>
     <entry group="0062" element="000F" name="&gt;Segmented Property Type Code Sequence" type="1">
       <description>Sequence defining the specific property type of this segment. This sequence shall contain a single item.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 7151."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 7151."/>
     <entry group="0062" element="000C" name="&gt;Recommended Display Grayscale Value" type="3">
       <description>A default single gray unsigned value in which it is recommended that the maximum pixel value in this segment be rendered on a monochrome display. The units are specified in P-Values from a minimum of 0000H (black) up to a maximum of FFFFH (white).
 Note:	The maximum P-Value for this Attribute may be different from the maximum P-Value from the output of the Presentation LUT, which may be less than 16 bits in depth.</description>
@@ -15378,7 +15378,7 @@ If this Attribute is absent, then the image may or may not be a quality control 
     <entry group="0088" element="0200" name="Icon Image Sequence" type="3">
       <description>This icon image is representative of the Image.</description>
     </entry>
-    <include ref="&gt; Include 'Image Pixel Macro' Table C.7-11b See C.7.6.1.1.6 for further explanation."/>
+    <include ref="&gt; Include 'Image Pixel Macro' Table C.7-11b" description="See C.7.6.1.1.6 for further explanation."/>
     <entry group="2050" element="0020" name="Presentation LUT Shape" type="1">
       <description>Specifies a predefined identity transformation for the Presentation LUT such that the output of all grayscale transformations, if any, are defined to be in P-Values.
 Enumerated Values: 
@@ -15520,7 +15520,7 @@ Required if present and consistent in the contributing SOP Instances.</descripti
       <description>Sequence that identifies the contrast agent. One or more Items may be present. 
 Required if present and consistent in the contributing SOP Instances.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 12."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 12."/>
     <entry group="0018" element="9516" name="Start Acquisition DateTime" type="1C">
       <description>Start date and time of that part of an acquisition used for this acquisition context. 
 Required if present and consistent in the contributing SOP Instances.</description>
@@ -16010,7 +16010,7 @@ Note:	The synchronization of this time with an external clock is specified in th
     <entry group="0040" element="A170" name="&gt;Purpose of Reference Code Sequence" type="3">
       <description>Code describing the purpose of the reference to the Instance(s). Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID is CID 7004 for referenced waveforms."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is CID 7004 for referenced waveforms."/>
   </module>
   <module ref="Table C.10-9" name="Waveform Module Attributes">
     <entry group="5400" element="0100" name="Waveform Sequence" type="1">
@@ -16066,16 +16066,14 @@ Precise location of a change in status may be noted in an Annotation.</descripti
     <entry group="003A" element="0208" name="&gt;&gt; Channel Source Sequence" type="1">
       <description>A coded descriptor of the waveform channel source (metric, anatomical position, function, and technique). Only a single Item shall be permitted in this sequence. (See C.10.9.1.4.1)</description>
     </entry>
-    <include ref="&gt;&gt;&gt; Include 'Code Sequence Macro' Table 8.8-1. Baseline Context ID determined by IOD specialization"/>
+    <include ref="&gt;&gt;&gt; Include 'Code Sequence Macro' Table 8.8-1." description="Baseline Context ID determined by IOD specialization"/>
     <entry group="003A" element="0209" name="&gt;&gt; Channel Source Modifiers Sequence" type="1C">
       <description>Sequence of one or more Items which further qualify the Waveform Source. Required if Channel Source Sequence (003A,0208) does not fully specify the semantics of the source. Ordering of Items in this Sequence may be semantically significant.</description>
     </entry>
-    <include ref="&gt;&gt;&gt; Include 'Code Sequence Macro' Table 8.8-1. Baseline Context ID determined by IOD specialization"/>
+    <include ref="&gt;&gt;&gt; Include 'Code Sequence Macro' Table 8.8-1." description="Baseline Context ID determined by IOD specialization"/>
     <entry group="003A" element="020A" name="&gt;&gt; Source Waveform Sequence" type="3">
       <description>A sequence which provides reference to a DICOM waveform from which this channel was derived. One or more Items may be included in this Sequence.</description>
     </entry>
-    <include ref=""/>
-    <include ref=""/>
     <include ref="&gt;&gt;&gt;Include 'SOP Instance Reference Macro' Table 10-11"/>
     <entry group="0040" element="A0B0" name="&gt;&gt;&gt; Referenced Waveform Channels" type="1">
       <description>Identifies the waveform multiplex group and channel within the referenced SOP Instance. Pair of values (M,C). </description>
@@ -16089,7 +16087,7 @@ Precise location of a change in status may be noted in an Annotation.</descripti
     <entry group="003A" element="0211" name="&gt;&gt; Channel Sensitivity Units Sequence" type="1C">
       <description>A coded descriptor of the Units of measure for the Channel Sensitivity. Only a single Item shall be permitted in this sequence. (see C.10.9.1.4.2) Required if Channel Sensitivity (003A,0210) is present.</description>
     </entry>
-    <include ref="&gt;&gt;&gt; Include 'Code Sequence Macro' Table 8.8-1. Defined Context ID = 3082"/>
+    <include ref="&gt;&gt;&gt; Include 'Code Sequence Macro' Table 8.8-1." description="Defined Context ID = 3082"/>
     <entry group="003A" element="0212" name="&gt;&gt; Channel Sensitivity Correction Factor" type="1C">
       <description>Multiplier to be applied to encoded sample values to match units specified in Channel Sensitivity (003A,0210) (e.g., based on calibration data) (see C.10.9.1.4.2) Required if Channel Sensitivity (003A,0210) is present.</description>
     </entry>
@@ -16199,28 +16197,28 @@ Mutually exclusive with Concept Name Code Sequence (0040,A043)</description>
       <description>Code representing the fully specified name of the NUMERIC measurement or CODED concept. This sequence shall contain exactly one item.
 Mutually exclusive with Text Value (0070,0006).</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID may be defined in IOD definition."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID may be defined in IOD definition."/>
     <entry group="0040" element="A195" name="&gt;&gt; Modifier Code Sequence" type="1C">
       <description>A sequence of items modifying or specializing the Concept Name. One or more Items may be included in this Sequence.
 Required if Concept Name Code Sequence (0040,A043) is sent and the value does not fully describe the semantics of the measurement or concept.</description>
     </entry>
-    <include ref="&gt;&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID may be defined in IOD definition."/>
+    <include ref="&gt;&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID may be defined in IOD definition."/>
     <entry group="0040" element="A168" name="&gt; Concept Code Sequence" type="3">
       <description>A sequence that conveys the categorical coded nominal value. This sequence shall contain exactly one item.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID may be defined in IOD definition."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID may be defined in IOD definition."/>
     <entry group="0040" element="A195" name="&gt;&gt; Modifier Code Sequence" type="1C">
       <description>A sequence of items modifying or specializing the Concept. One or more Items may be included in this Sequence.
 Required if Concept Code Sequence (0040,A168) is sent and the value does not fully describe the semantics of the concept value.</description>
     </entry>
-    <include ref="&gt;&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID may be defined in IOD definition."/>
+    <include ref="&gt;&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID may be defined in IOD definition."/>
     <entry group="0040" element="A30A" name="&gt; Numeric Value" type="3">
       <description>Numeric measurement value or values.</description>
     </entry>
     <entry group="0040" element="08EA" name="&gt; Measurement Units Code Sequence" type="3">
       <description>Units of measurement. Coded entry sequence with one item only.</description>
     </entry>
-    <include ref="&gt;&gt; Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID 82"/>
+    <include ref="&gt;&gt; Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID 82"/>
     <entry group="0040" element="A0B0" name="&gt; Referenced Waveform Channels" type="1">
       <description>List of channels in waveform to which annotation applies. See C.10.10.1.1</description>
     </entry>
@@ -16427,7 +16425,7 @@ Note:	This date may be different from the date that the DICOM SOP Instance was c
       <description>Time at which this presentation was created. 
 Note:	This time may be different from the time that the DICOM SOP Instance was created, since the presentation state information contained may have been recorded earlier.</description>
     </entry>
-    <include ref="Include Content Identification Macro Table 10-12 Note: The Content Label value may be used by an application as a Defined Term in order to imply some grouping of different presentation states, i.e. it may have the same value for different presentation state instances that share some common concept."/>
+    <include ref="Include Content Identification Macro Table 10-12" description="Note: The Content Label value may be used by an application as a Defined Term in order to imply some grouping of different presentation states, i.e. it may have the same value for different presentation state instances that share some common concept."/>
   </module>
   <module ref="Table C.11.11-1" name="Presentation State Relationship Module Attributes">
     <include ref="Include Presentation State Relationship Macro Table C.11.11-1b"/>
@@ -16608,7 +16606,7 @@ See C.12.1.1.5 for further explanation.</description>
       <description>Describes the purpose for which the related equipment is being reference. Only a single Item shall be permitted in this sequence.
 See C.12.1.1.5 for further explanation.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID 7005."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID 7005."/>
     <entry group="0008" element="0070" name="&gt;Manufacturer" type="1">
       <description>Manufacturer of the equipment that contributed to the composite instance.</description>
     </entry>
@@ -16775,7 +16773,7 @@ Note:	Digital Signature Security Profiles (see PS 3.15) may require the use of a
     <entry group="0400" element="0401" name="&gt;Digital Signature Purpose Code Sequence" type="3">
       <description>The purpose of this Digital Signature. Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 7007"/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 7007"/>
   </macro>
   <macro ref="Table C.12-7" name="Encrypted Attributes Data Set Attributes">
     <entry group="0400" element="0550" name="Modified Attributes Sequence" type="1">
@@ -16784,7 +16782,7 @@ Note:	Digital Signature Security Profiles (see PS 3.15) may require the use of a
     <include ref="&gt; Any Attribute from the main dataset that was modified or removed during the de-identification process. 3"/>
   </macro>
   <module ref="Table C.12-8" name="Common Instance Reference Module Attributes">
-    <include ref="Include Series and Instance Reference Macro, Table 10-4. Identifies all Series within the Study of which this Instance is a part, which Series contain Instances that are referenced elsewhere in this Instance."/>
+    <include ref="Include Series and Instance Reference Macro, Table 10-4." description="Identifies all Series within the Study of which this Instance is a part, which Series contain Instances that are referenced elsewhere in this Instance."/>
     <entry group="0008" element="1200" name="Studies Containing Other Referenced Instances Sequence" type="1C">
       <description>Sequence of items each identifying a Study other than the Study of which this Instance is a part, which Studies contain Instances that are referenced elsewhere in this Instance. One or more Items shall be present. Required if this Instance references Instances in other Studies.</description>
     </entry>
@@ -17361,7 +17359,7 @@ Note:	In HL7 Structured Documents, the comparable attribute is the “legalAuthe
     <entry group="0040" element="A088" name="&gt;Verifying Observer Identification Code Sequence" type="2">
       <description>Coded identifier of Verifying Observer. Zero or one Items shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID defined."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID defined."/>
     <entry group="0040" element="A027" name="&gt;Verifying Organization" type="1">
       <description>Organization to which the Verifying Observer Name (0040,A075) is accountable in the current interpretation procedure. </description>
     </entry>
@@ -17401,7 +17399,7 @@ Only a single item shall be present in this sequence.</description>
       <description>Coded identifier of Custodial Institution or Organization. 
 Zero or one Items may be included in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID defined."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID defined."/>
     <entry group="0040" element="A360" name="Predecessor Documents Sequence" type="1C">
       <description>Shall refer to SR SOP Instances (e.g. prior or provisional reports) whose content has been wholly or partially included in this document with or without modification. One or more Items may be included in this sequence.
 Required if this document includes content from other documents.
@@ -17444,7 +17442,7 @@ Only a single Item shall be permitted in this sequence.</description>
     <entry group="0032" element="1064" name="&gt;Requested Procedure Code Sequence" type="2">
       <description>A sequence that conveys the requested procedure. Zero or one Item may be included in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID Number is specified."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID Number is specified."/>
     <entry group="0040" element="1002" name="&gt;Reason for the Requested Procedure" type="3">
       <description>Reason for requesting this procedure.</description>
     </entry>
@@ -17452,11 +17450,11 @@ Only a single Item shall be permitted in this sequence.</description>
       <description>Coded Reason for requesting this procedure.
 One or more sequence items may be present.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID Number is specified."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID Number is specified."/>
     <entry group="0040" element="A372" name="Performed Procedure Code Sequence" type="2">
       <description>A Sequence that conveys the codes of the performed procedures pertaining to this SOP Instance. Zero or more Items may be included in this sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID Number is specified."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID Number is specified."/>
     <entry group="0040" element="A375" name="Current Requested Procedure Evidence Sequence" type="1C">
       <description>Full set of Composite SOP Instances, of which the creator is aware, which were created to satisfy the current Requested Procedure(s) for which this SR Document is generated or that are referenced in the content tree. One or more Items may be included in this sequence.
 Required if the creator is aware of Composite Objects acquired in order to satisfy the Requested Procedure(s) for which the SR Document is or if instances are referenced in the content tree. May be present otherwise. 
@@ -17478,7 +17476,7 @@ Required if the identity of a CDA Document equivalent to the current SOP Instanc
     <entry group="0040" element="A170" name="&gt;Purpose of Reference Code Sequence" type="1">
       <description>Code describing the purpose of the reference to the Instance(s). Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID is CID 7006."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is CID 7006."/>
   </module>
   <macro ref="Table C.17-3" name="Hierarchical SOP Instance Reference Macro Attributes">
     <entry group="0020" element="000D" name="Study Instance UID" type="1">
@@ -17503,7 +17501,7 @@ Required if Observer Type value is PSN.</description>
       <description>Coded identifier of person observer. Zero or one Items shall be permitted in this sequence. 
 Required if Observer Type value is PSN.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID defined"/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID defined"/>
     <entry group="0008" element="1010" name="Station Name" type="2C">
       <description>Name of the device observer for this document instance.
 Required if Observer Type value is DEV.</description>
@@ -17527,7 +17525,7 @@ Required if Observer Type value is DEV.</description>
       <description>Institution or organization to which the identified person is responsible or accountable, or which manages the identified device. 
 Zero or one Items shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID defined"/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID defined"/>
   </macro>
   <module ref="Table C.17-4" name="SR Document Content Module Attributes">
     <include ref="Include Document Content Macro Table C.17-5. with a Value Type (0040,A040) of CONTAINER"/>
@@ -17561,7 +17559,7 @@ Note:	That is, containers without headings do not require Concept Name Code Sequ
 Required if Value Type (0040,A040) is COMPOSITE, IMAGE, WAVEFORM, SCOORD or TCOORD, and the Purpose of Reference is conveyed in the Concept Name.
 See C.17.3.2.2 for further explanation.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID."/>
     <entry group="0040" element="A160" name="Text Value" type="1C">
       <description>This is the value of the Content Item.
 Required if Value Type (0040,A040) is TEXT.
@@ -17706,7 +17704,7 @@ Only a single Item shall be permitted in this sequence.</description>
     <entry group="0032" element="1064" name="&gt;Requested Procedure Code Sequence" type="2">
       <description>A sequence that conveys the requested procedure. Zero or one Item may be included in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID Number is specified."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID Number is specified."/>
     <entry group="0040" element="A375" name="Current Requested Procedure Evidence Sequence" type="1">
       <description>List of all Composite SOP Instances referenced in the Content Sequence (0040,A730) , including all presentation states, real world value maps and other accompanying composite instances that are referenced from the content items. One or more Items shall be included in this sequence.
 Note: 	In the context of the Key Object Selection, the current evidence is considered to be only the set of instances referenced within the Key Object Selection.</description>
@@ -17730,17 +17728,17 @@ Shall consist of a Sequence of Items conveying the measured value(s), which repr
     <entry group="0040" element="08EA" name="&gt;Measurement Units Code Sequence" type="1">
       <description>Units of measurement. Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID is 82."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is 82."/>
     <entry group="0040" element="A301" name="Numeric Value Qualifier Code Sequence" type="3">
       <description>Qualification of Numeric Value in Measured Value Sequence, or reason for absence of Measured Value Sequence Item. Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Defined Context ID is 42."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is 42."/>
   </macro>
   <macro ref="Table C.18.2-1" name="Code Macro Attributes">
     <entry group="0040" element="A168" name="Concept Code Sequence" type="1">
       <description>This is the value of the Content Item. Only a single Item shall be permitted in this sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is specified."/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is specified."/>
   </macro>
   <macro ref="Table C.18.3-1" name="Composite Object Reference Macro Attributes">
     <entry group="0008" element="1199" name="Referenced SOP Sequence" type="1">
@@ -17771,7 +17769,7 @@ Required if the Referenced SOP Instance is a multi-frame image and the reference
       <description>This Icon Image is representative of the Image. Only a single Item shall be permitted in this Sequence.
 The Icon Image may be no greater than 128 rows by 128 columns.</description>
     </entry>
-    <include ref="&gt;&gt; Include 'Image Pixel Macro' Table C.7-11b See Section F.7."/>
+    <include ref="&gt;&gt; Include 'Image Pixel Macro' Table C.7-11b" description="See Section F.7."/>
   </macro>
   <macro ref="Table C.18.5-1" name="Waveform Reference Macro Attributes">
     <include ref="Include 'Composite Object Reference Macro' Table C.18.3-1"/>
@@ -17853,7 +17851,7 @@ Note:	The synchronization of this time with an external clock is specified in th
       <description>Describes the purpose for which the reference is made. Only a single Item shall be permitted in this sequence.
 See C.7.6.16.2.5.1.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 No Baseline Context ID is defined."/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
     <include ref="Include any private attributes that contain Raw Data information. See section C.19.1.1 for further explanation."/>
   </module>
   <module ref="Table C.20.1-1" name="Spatial Registration Series Module Attributes">
@@ -17890,7 +17888,7 @@ Enumerated Value:
     <entry group="0070" element="030D" name="&gt;&gt;Registration Type Code Sequence" type="2">
       <description>Describes the information input into the registration process. Zero or one Items may be present in this Sequence.</description>
     </entry>
-    <include ref="&gt;&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 7100"/>
+    <include ref="&gt;&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 7100"/>
     <entry group="0070" element="030A" name="&gt;&gt;Matrix Sequence" type="1">
       <description>One or more items shall be present. Each item specifies a transformation. The item order is significant and corresponds to matrix multiplication order. See C.20.2.1.1.</description>
     </entry>
@@ -17907,7 +17905,7 @@ See C.20.2.1.2</description>
     <entry group="0070" element="0314" name="&gt;Used Fiducials Sequence" type="3">
       <description>The fiducials used to determine the Frame of Reference Transformation Matrix. One or more Items may be present.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'SOP Instance Reference Macro' Table 10-11 Reference to the Spatial Fiducial SOP Instance identifying the Used Fiducial(s)"/>
+    <include ref="&gt;&gt;Include 'SOP Instance Reference Macro' Table 10-11" description="Reference to the Spatial Fiducial SOP Instance identifying the Used Fiducial(s)"/>
     <entry group="0070" element="031A" name="&gt;&gt;Fiducial UID" type="1">
       <description>The UID that identifies the fiducial used as registration input.</description>
     </entry>
@@ -17936,7 +17934,7 @@ See C.20.2.1.2</description>
     <entry group="0070" element="030D" name="&gt;Registration Type Code Sequence" type="2">
       <description>Describes the method used for the registration process. Zero or one item shall be present.</description>
     </entry>
-    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context ID is 7100"/>
+    <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 7100"/>
     <entry group="0064" element="000F" name="&gt;Pre Deformation Matrix Registration Sequence" type="1C">
       <description>A sequence that specifies one spatial registration to be applied prior to the deformation. Exactly one item shall be present. Required if a matrix transformation is to be applied prior to deformation.</description>
     </entry>
@@ -17984,7 +17982,7 @@ See C.20.2.1.2</description>
     <entry group="0070" element="0314" name="&gt;Used Fiducials Sequence" type="3">
       <description>The fiducials used to determine the registration. One or more Items may be present.</description>
     </entry>
-    <include ref="&gt;&gt; Include 'Image SOP Instance Reference Macro' Table 10-3 Reference to the Spatial Fiducial SOP Instance identifying the Used Fiducial(s)"/>
+    <include ref="&gt;&gt; Include 'Image SOP Instance Reference Macro' Table 10-3" description="Reference to the Spatial Fiducial SOP Instance identifying the Used Fiducial(s)"/>
     <entry group="0070" element="031A" name="&gt;&gt;Fiducial UID" type="1">
       <description>The UID that identifies the fiducial used as registration input.</description>
     </entry>
@@ -18024,7 +18022,7 @@ All referenced images shall have the same Frame of Reference UID if present in t
     <entry group="0070" element="0311" name="&gt;&gt;Fiducial Identifier Code Sequence" type="1C">
       <description>A code sequence for a term that identifies a well-known fiducial type (potentially including methodology, anatomy, tools, etc.). Only one item shall be present. Required if Identifier (0070,0310) is absent. May be present otherwise. </description>
     </entry>
-    <include ref="&gt;&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1 DCID 7101"/>
+    <include ref="&gt;&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="DCID 7101"/>
     <entry group="0070" element="031A" name="&gt;&gt;Fiducial UID" type="3">
       <description>Globally unique identifier for the fiducial instance of this fiducial assignment.</description>
     </entry>
@@ -18218,7 +18216,7 @@ Required if Anatomic Region Sequence (0008,2218) is not present. May be present 
       <description>Sequence that identifies the anatomic region of interest to which this Hanging Protocol applies. One or more sequence items may be present.
 Required if Modality (0008,0060) is not present. May be present otherwise.</description>
     </entry>
-    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1 Defined Context ID 4"/>
+    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1" description="Defined Context ID 4"/>
     <entry group="0020" element="0060" name="&gt;Laterality" type="2C">
       <description>Laterality of the body part to which this Hanging Protocol applies.
 Enumerated Values:
@@ -18232,11 +18230,11 @@ Required if Anatomic Region Sequence (0008,2218) is present.</description>
     <entry group="0008" element="1032" name="&gt;Procedure Code Sequence" type="2">
       <description>Sequence that identifies a procedure to which this Hanging Protocol applies. Zero or more sequence items may be present.</description>
     </entry>
-    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1 No Baseline Context ID is defined"/>
+    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined"/>
     <entry group="0040" element="100A" name="&gt;Reason for Requested Procedure Code Sequence" type="2">
       <description>Sequence that identifies a reason for procedure to which this Hanging Protocol applies. Zero or more sequence items may be present.</description>
     </entry>
-    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1 No Baseline Context ID is defined"/>
+    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined"/>
     <entry group="0072" element="0014" name="Number of Priors Referenced" type="1">
       <description>Identifies the number of prior image sets used in this Hanging Protocol.</description>
     </entry>
@@ -18303,7 +18301,7 @@ Required if Image Set Selector Category (0072,0034) is ABSTRACT_PRIOR and Abstra
       <description>Identifies a prior image set using coded terminology. Only one sequence item shall be present.
 Required if Image Set Selector Category (0072,0034) is ABSTRACT_PRIOR and Abstract Prior Value (0072,003C) is not present.</description>
     </entry>
-    <include ref="&gt;&gt;&gt;Include Code Sequence Macro Table 8.8-1 Defined Context ID 31"/>
+    <include ref="&gt;&gt;&gt;Include Code Sequence Macro Table 8.8-1" description="Defined Context ID 31"/>
     <entry group="0072" element="0040" name="&gt;&gt;Image Set Label" type="3">
       <description>Description of the objective of the image set defined by this sequence item.</description>
     </entry>
@@ -18311,7 +18309,7 @@ Required if Image Set Selector Category (0072,0034) is ABSTRACT_PRIOR and Abstra
       <description>Sequence that provides a coded identifier for the person, group, or site for which this Hanging Protocol was defined. Zero or one item shall be present in the sequence.
 Note: If a standardized naming schema becomes available, it should be used. Meanwhile, local coding schemes such as employee numbers and department numbers are likely to be used.</description>
     </entry>
-    <include ref="&gt;Include Code Sequence Macro Table 8.8-1 No baseline context ID is defined."/>
+    <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="No baseline context ID is defined."/>
     <entry group="0072" element="0010" name="Hanging Protocol User Group Name" type="3">
       <description>Group or site for which this Hanging Protocol was defined.</description>
     </entry>
@@ -18670,8 +18668,8 @@ Note:	The Performed Procedure Step referred to by this Attribute is the Step dur
       <description>Sequence that contains attributes from the Imaging Service Request.
 The sequence may have one or more Items.</description>
     </entry>
-    <include ref="&gt;Include Request Attributes Macro Table 10-9 No Baseline Context IDs defined"/>
-    <include ref="Include Performed Procedure Step Summary Macro Table 10-16 No Baseline Context IDs defined"/>
+    <include ref="&gt;Include Request Attributes Macro Table 10-9" description="No Baseline Context IDs defined"/>
+    <include ref="Include Performed Procedure Step Summary Macro Table 10-16" description="No Baseline Context IDs defined"/>
   </module>
   <module ref="Table C.24-2" name="Encapsulated Document Module Attributes">
     <entry group="0020" element="0013" name="Instance Number" type="1">
@@ -18705,7 +18703,7 @@ Note: 	In the case of a PDF encapsulated document, this may be the value of the 
     <entry group="0040" element="A043" name="Concept Name Code Sequence" type="2">
       <description>A coded representation of the document title. Zero or one item may be present.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 Baseline Context Group 7020"/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context Group 7020"/>
     <entry group="0040" element="A493" name="Verification Flag" type="3">
       <description>Indicates whether the Encapsulated Document is Verified. Enumerated Values:
 UNVERIFIED = Not attested by a legally accountable person.
@@ -18761,7 +18759,7 @@ Enumerated Value:
     <entry group="0044" element="0007" name="Product Type Code Sequence">
       <description>Coded type of product. One Item shall be included in the Sequence.</description>
     </entry>
-    <include ref="&gt;Include Code Sequence Macro Table 8.8-1 For drugs, a coded terminology in the US is RxNormFor devices, a coded terminology in the US is the FDA CDRH Product Code Classification"/>
+    <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="For drugs, a coded terminology in the US is RxNormFor devices, a coded terminology in the US is the FDA CDRH Product Code Classification"/>
     <entry group="0044" element="0008" name="Product Name">
       <description>Trade or generic name of product. 
 Note:	May be multi-valued.</description>
@@ -18779,7 +18777,7 @@ Note:	This attribute is limited by the LT Value Representation to 10240 characte
     <entry group="0044" element="0013" name="Product Parameter Sequence">
       <description>Parameters of the product. Zero or more Items may be included in the Sequence.</description>
     </entry>
-    <include ref="&gt;Include Content Item Macro Table 10.2-1 For drugs or contrast agents, Baseline Context Group for Concept Name Code Sequence is 4050 For devices, Baseline Context Group for Concept Name Code Sequence is 3423"/>
+    <include ref="&gt;Include Content Item Macro Table 10.2-1" description="For drugs or contrast agents, Baseline Context Group for Concept Name Code Sequence is 4050 For devices, Baseline Context Group for Concept Name Code Sequence is 3423"/>
     <entry group="0038" element="0100" name="Pertinent Documents Sequence">
       <description>Reference to a Product Label document for the product. Zero or more Items may be included in this sequence.</description>
     </entry>
@@ -18814,7 +18812,7 @@ CONTRA_INDICATED = The substance should not be used for the patient for the reas
     <entry group="0054" element="0302" name="Administration Route Code Sequence">
       <description>Route of administration for drug or contrast. One Item may be present in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include Code Sequence Macro Table 8.8-1 Baseline Context Group 11."/>
+    <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="Baseline Context Group 11."/>
   </module>
   <module ref="Table C.26-4" name="Substance Administration Log Module Attributes">
     <entry group="0010" element="0010" name="Patient's Name">
@@ -18854,11 +18852,11 @@ Note:	May be multi-valued.</description>
     <entry group="0054" element="0302" name="Administration Route Code Sequence">
       <description>Route of administration for drug or contrast. One Item may be present in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include Code Sequence Macro Table 8.8-1 Baseline Context Group 11."/>
+    <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="Baseline Context Group 11."/>
     <entry group="0044" element="0019" name="Substance Administration Parameter Sequence">
       <description>Parameters of the substance as administered to the patient, e.g., volume, quantity. Zero or more Items may be included in the Sequence.</description>
     </entry>
-    <include ref="&gt;Include Content Item Macro Table 10.2-1 For administration of drugs or contrast agents, Baseline Context Group for Concept Name Code Sequence is 3410."/>
+    <include ref="&gt;Include Content Item Macro Table 10.2-1" description="For administration of drugs or contrast agents, Baseline Context Group for Concept Name Code Sequence is 3410."/>
     <entry group="0008" element="1072" name="Operator Identification Sequence">
       <description>Person administering the substance to the patient, or legally responsible for the administration, and authorized to add an entry to the Medication Administration Record. One or more Items may be present in this Sequence.</description>
     </entry>
@@ -18866,7 +18864,7 @@ Note:	May be multi-valued.</description>
       <description>Coded identifier of the person administering the contrast agent, drug, or device. 
 One Item may be present in this Sequence.</description>
     </entry>
-    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1 No baseline context ID. The Coding Scheme Designator attribute may indicate a local coding scheme (e.g., with value “L”) when it is implicitly that of the institution's employee identifier system.The Code Meaning attribute, though it is encoded with a VR of LO, may be encoded according to the rules of the PN VR (see Section 10.1)."/>
+    <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1" description="No baseline context ID. The Coding Scheme Designator attribute may indicate a local coding scheme (e.g., with value “L”) when it is implicitly that of the institution’s employee identifier system.The Code Meaning attribute, though it is encoded with a VR of LO, may be encoded according to the rules of the PN VR (see Section 10.1)."/>
   </module>
   <iod ref="Table F.3-1" name="Basic Directory IOD Modules">
     <entry ie="File-set Identification" name="F.3.2.1" ref="M" usage="File-set identification information"/>
@@ -19022,7 +19020,7 @@ Note: 	This may be useful to an FSR that does not support the SOP Class of the r
     <entry group="0088" element="0200" name="Icon Image Sequence" type="3">
       <description>This Icon Image is representative of the Series. It may or may not correspond to one of the images of the Series. Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt; Include 'Image Pixel Macro' Table C.7-11b See Section F.7 of this Part."/>
+    <include ref="&gt; Include 'Image Pixel Macro' Table C.7-11b" description="See Section F.7 of this Part."/>
     <include ref="Any other Attribute of the Series IE Modules 3"/>
   </module>
   <module ref="Table F.5-4" name="Image Keys">
@@ -19035,7 +19033,7 @@ Note: 	This may be useful to an FSR that does not support the SOP Class of the r
     <entry group="0088" element="0200" name="Icon Image Sequence" type="3">
       <description>This Icon Image is representative of the Image. Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt; Include 'Image Pixel Macro' Table C.7-11b See Section F.7 of this Part."/>
+    <include ref="&gt; Include 'Image Pixel Macro' Table C.7-11b" description="See Section F.7 of this Part."/>
     <include ref="Any other Attribute of the Image IE Modules 3"/>
   </module>
   <module ref="Table F.5-19" name="RT Dose Keys">
@@ -19054,7 +19052,7 @@ Note: 	This may be useful to an FSR that does not support the SOP Class of the r
     <entry group="0088" element="0200" name="Icon Image Sequence" type="3">
       <description>This Icon Image is representative of the RT Dose. Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt; Include 'Image Pixel Macro' Table C.7-11b See Section F.7 of this part."/>
+    <include ref="&gt; Include 'Image Pixel Macro' Table C.7-11b" description="See Section F.7 of this part."/>
     <include ref="Any other Attribute of the Dose IE Modules 3"/>
   </module>
   <module ref="Table F.5-20" name="RT Structure Set Keys">
@@ -19273,7 +19271,7 @@ HAS CONCEPT MOD</description>
     <entry group="0088" element="0200" name="Icon Image Sequence" type="3">
       <description>This Icon Image is representative of the Spectroscopy instance. Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include Image Pixel Macro Table C.7-11b See Section F.7 of this Part."/>
+    <include ref="&gt;Include Image Pixel Macro Table C.7-11b" description="See Section F.7 of this Part."/>
     <include ref="Any other Attribute of the Spectroscopy IE Modules 3"/>
   </module>
   <module ref="Table F.5-28" name="Raw Data Keys">
@@ -19292,7 +19290,7 @@ HAS CONCEPT MOD</description>
     <entry group="0088" element="0200" name="Icon Image Sequence" type="3">
       <description>This Icon Image is representative of the Raw Data instance. Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include Image Pixel Macro Table C.7-11b See Section F.7 of this Part."/>
+    <include ref="&gt;Include Image Pixel Macro Table C.7-11b" description="See Section F.7 of this Part."/>
     <include ref="Any other Attribute of the Raw Data IE Modules 3"/>
   </module>
   <module ref="Table F.5-29" name="Registration Keys">
@@ -19393,7 +19391,7 @@ Required if encapsulated document is an HL7 Structured Document.</description>
     <entry group="0040" element="A043" name="Concept Name Code Sequence" type="2">
       <description>A coded representation of the document title. Zero or one item may be present.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 1 Baseline Context Group 7020"/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" type="1" description="Baseline Context Group 7020"/>
     <entry group="0042" element="0012" name="MIME Type of Encapsulated Document" type="1">
       <description>The type of the encapsulated document stream described using the MIME Media Type (see RFC 2046).</description>
     </entry>
@@ -19412,7 +19410,7 @@ Required if encapsulated document is an HL7 Structured Document.</description>
     <entry group="0040" element="E006" name="HL7 Document Type Code Sequence" type="1C">
       <description>Document Type Code from the referenced HL7 Structured Document. Required if the HL7 Structured Document contains a Document Type Code. Only a single Item shall be permitted in this Sequence.</description>
     </entry>
-    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1 No BCID defined"/>
+    <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No BCID defined"/>
     <entry group="0042" element="0010" name="Document Title" type="1C">
       <description>Document Title from the referenced HL7 Structured Document. Required if the HL7 Structured Document contains a Document Title.</description>
     </entry>
