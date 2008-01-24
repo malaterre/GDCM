@@ -4229,7 +4229,7 @@ Note:	If an implementation does not recognize the defined term for Recommended V
   <module ref="Table C.7-17" name="Display Shutter Module Attributes">
     <include ref="Include 'Display Shutter Macro' Table C.7-17A."/>
   </module>
-  <macro ref="Table C.7-17" name="A Display Shutter Macro Attributes">
+  <macro ref="Table C.7-17a" name="Display Shutter Macro Attributes">
     <entry group="0018" element="1600" name="Shutter Shape" type="1">
       <description>Shape(s) of the shutter defined for display. Enumerated Values:
 	RECTANGULAR
