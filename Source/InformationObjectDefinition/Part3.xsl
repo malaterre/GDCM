@@ -36,7 +36,7 @@ Special normalize-space
 -->
   <xsl:function name="my:normalize-paragraph" as="xs:string*">
     <xsl:param name="string" as="xs:string*"/>
-      <xsl:sequence select="for $s in $string return string-join( for $word in tokenize($s, $linebreak) return normalize-space($word), $linebreak)"/>
+    <xsl:sequence select="for $s in $string return string-join( for $word in tokenize($s, $linebreak) return normalize-space($word), $linebreak)"/>
   </xsl:function>
 <!--
 
@@ -106,7 +106,7 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
               </xsl:when>
               <xsl:otherwise>
                 <xsl:message>SHOULD NOT HAPPEN</xsl:message>
-                <!--include ref="{translate($name_translate,'','µ')}" type="{normalize-space($type)}"/-->
+<!--include ref="{translate($name_translate,'','µ')}" type="{normalize-space($type)}"/-->
               </xsl:otherwise>
             </xsl:choose>
           </xsl:when>
@@ -192,20 +192,20 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
             <xsl:variable name="include" select="normalize-space(string-join(entry,' '))"/>
 <!-- Table Table C.10-9 Waveform Module Attributes has two empty lines ... -->
             <xsl:if test="$include != ''">
-              <!--include ref="{$include}"/-->
-                    <xsl:variable name="include" select="normalize-space(translate(translate(entry[1],'‘',$apos),'’',$apos))"/>
-        <!-- nothing in entry[2] --><!-- FIXME I should check that -->
-                    <xsl:variable name="type" select="normalize-space(entry[3])"/>
-                    <xsl:variable name="description" select="normalize-space(entry[4])"/>
-                    <include ref="{$include}">
-                      <xsl:if test="$type!= ''">
-                        <xsl:attribute name="type" select="$type"/>
-                      </xsl:if>
-                      <xsl:if test="$description != ''">
-                        <xsl:attribute name="description" select="$description"/>
-                      </xsl:if>
-                    </include>
-
+<!--include ref="{$include}"/-->
+              <xsl:variable name="include" select="normalize-space(translate(translate(entry[1],'‘',$apos),'’',$apos))"/>
+<!-- nothing in entry[2] -->
+<!-- FIXME I should check that -->
+              <xsl:variable name="type" select="normalize-space(entry[3])"/>
+              <xsl:variable name="description" select="normalize-space(entry[4])"/>
+              <include ref="{$include}">
+                <xsl:if test="$type!= ''">
+                  <xsl:attribute name="type" select="$type"/>
+                </xsl:if>
+                <xsl:if test="$description != ''">
+                  <xsl:attribute name="description" select="$description"/>
+                </xsl:if>
+              </include>
             </xsl:if>
           </xsl:otherwise>
         </xsl:choose>
@@ -224,7 +224,7 @@ Take the ie name as input
       <xsl:if test="(position() mod 3 = 1)">
         <xsl:variable name="usage" select="translate(normalize-space(following-sibling::entry[2]/para),'– ','- ')"/>
         <xsl:variable name="usage_required" select="replace($usage,'required','Required')"/>
-        <entry ie="{$ie_name}" name="{normalize-space(para)}" ref="{normalize-space(following-sibling::entry[1]/para)}" usage="{$usage_required}" />
+        <entry ie="{$ie_name}" name="{normalize-space(para)}" ref="{normalize-space(following-sibling::entry[1]/para)}" usage="{$usage_required}"/>
       </xsl:if>
     </xsl:for-each>
   </xsl:template>
@@ -236,7 +236,7 @@ Take the ie name as input
     <xsl:for-each select="entry">
       <xsl:variable name="usage" select="translate(entry[3]/para,'– ','- ')"/>
       <xsl:variable name="usage_required" select="replace($usage,'required','Required')"/>
-      <entry ie="{normalize-space(para)}" name="{normalize-space(following-sibling::entry[1]/para)}" ref="{normalize-space(following-sibling::entry[2]/para)}" usage="{$usage_required}" />
+      <entry ie="{normalize-space(para)}" name="{normalize-space(following-sibling::entry[1]/para)}" ref="{normalize-space(following-sibling::entry[2]/para)}" usage="{$usage_required}"/>
     </xsl:for-each>
   </xsl:template>
 <!--
@@ -278,21 +278,21 @@ over and over. We need to get the last ie name we found to fill in the blank:
         <xsl:variable name="usage_required" select="replace($usage,'required','Required')"/>
         <xsl:variable name="ie" select="normalize-space((entry[1]/para[. != ''] , reverse(preceding-sibling::row/entry[1]/para[. != ''])[1])[1])"/>
         <xsl:choose>
-        <xsl:when test="count(entry) = 4">
-        <entry ie="{$ie}" name="{normalize-space(entry[2]/para)}" ref="{normalize-space($ref_joined)}" usage="{$usage_required}" />
-        </xsl:when>
-        <xsl:when test="count(entry) = 3">
-        <xsl:if test="entry[2]/para != ''">
-        <entry name="{$ie}" ref="{normalize-space(entry[2]/para)}" usage="{normalize-space($ref_joined)}"/>
-        </xsl:if>
-        </xsl:when>
-        <!-- Table B.18.2 IOD Modules -->
-        <xsl:when test="count(entry) = 2">
-        <entry name="{$ie}" ref="{normalize-space(entry[2]/para)}" />
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:message>UNHANDLED</xsl:message>
-        </xsl:otherwise>
+          <xsl:when test="count(entry) = 4">
+            <entry ie="{$ie}" name="{normalize-space(entry[2]/para)}" ref="{normalize-space($ref_joined)}" usage="{$usage_required}"/>
+          </xsl:when>
+          <xsl:when test="count(entry) = 3">
+            <xsl:if test="entry[2]/para != ''">
+              <entry name="{$ie}" ref="{normalize-space(entry[2]/para)}" usage="{normalize-space($ref_joined)}"/>
+            </xsl:if>
+          </xsl:when>
+<!-- Table B.18.2 IOD Modules -->
+          <xsl:when test="count(entry) = 2">
+            <entry name="{$ie}" ref="{normalize-space(entry[2]/para)}"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:message>UNHANDLED</xsl:message>
+          </xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>
     </xsl:choose>
