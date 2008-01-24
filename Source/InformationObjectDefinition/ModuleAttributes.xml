@@ -1967,70 +1967,70 @@ Only a single Item shall be permitted in this Sequence.</description>
     <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
   </iod>
   <iod ref="Table B.7-1" name="Film Session IOD Modules">
-    <entry name="SOP Common" ref="C.12.1" usage="Contains SOP Common information"/>
-    <entry name="Basic Film Session Presentation" ref="C.13.1" usage="Contains Film Session presentations information"/>
-    <entry name="Basic Film Session Relationship" ref="C.13.2" usage="References to related SOPs"/>
+    <entry name="SOP Common" ref="C.12.1" description="Contains SOP Common information"/>
+    <entry name="Basic Film Session Presentation" ref="C.13.1" description="Contains Film Session presentations information"/>
+    <entry name="Basic Film Session Relationship" ref="C.13.2" description="References to related SOPs"/>
   </iod>
   <iod ref="Table B.8-1" name="Basic Film Box IOD Modules">
-    <entry name="SOP Common" ref="C.12.1" usage="Contains SOP Common information"/>
-    <entry name="Basic Film Box Presentation Module" ref="C.13.3" usage="Contains Film Box presentation information"/>
-    <entry name="Basic Film Box Relationship" ref="C.13.4" usage="References to related SOPs"/>
+    <entry name="SOP Common" ref="C.12.1" description="Contains SOP Common information"/>
+    <entry name="Basic Film Box Presentation Module" ref="C.13.3" description="Contains Film Box presentation information"/>
+    <entry name="Basic Film Box Relationship" ref="C.13.4" description="References to related SOPs"/>
   </iod>
   <iod ref="Table B.9-1" name="Basic Image Box IOD Modules">
-    <entry name="SOP Common" ref="C.12.1" usage="Contains SOP Common information"/>
-    <entry name="Image Box Presentation Module" ref="C.13.5" usage="Contains Image Box presentation information"/>
+    <entry name="SOP Common" ref="C.12.1" description="Contains SOP Common information"/>
+    <entry name="Image Box Presentation Module" ref="C.13.5" description="Contains Image Box presentation information"/>
   </iod>
   <iod ref="Table B.10-1" name="Basic Annotation Box IOD Modules">
-    <entry name="SOP Common" ref="C.12.1" usage="Contains SOP Common information"/>
-    <entry name="Basic Annotation Presentation Module" ref="C.13.7" usage="Contains annotation presentation information"/>
+    <entry name="SOP Common" ref="C.12.1" description="Contains SOP Common information"/>
+    <entry name="Basic Annotation Presentation Module" ref="C.13.7" description="Contains annotation presentation information"/>
   </iod>
   <iod ref="Table B.11-1" name="Print Job IOD Modules">
-    <entry name="SOP Common" ref="C.12.1" usage="Contains SOP Common information"/>
-    <entry name="Print Job Module" ref="C.13.8" usage="Contains print job transaction information"/>
+    <entry name="SOP Common" ref="C.12.1" description="Contains SOP Common information"/>
+    <entry name="Print Job Module" ref="C.13.8" description="Contains print job transaction information"/>
   </iod>
   <iod ref="Table B.12-1" name="Printer IOD Modules">
-    <entry name="SOP Common" ref="C.12.1" usage="Contains SOP Common information"/>
-    <entry name="Printer Module" ref="C.13.9" usage="Contains status information to monitor the printer"/>
+    <entry name="SOP Common" ref="C.12.1" description="Contains SOP Common information"/>
+    <entry name="Printer Module" ref="C.13.9" description="Contains status information to monitor the printer"/>
   </iod>
   <iod ref="Table B.15-1" name="Storage Commitment IOD Modules">
-    <entry name="SOP Common" ref="C.12.1" usage="Contains SOP common information"/>
-    <entry name="Storage Commitment" ref="C.14" usage="Contains references to the SOP Instances and associated information that are contained in Storage Commitment."/>
+    <entry name="SOP Common" ref="C.12.1" description="Contains SOP common information"/>
+    <entry name="Storage Commitment" ref="C.14" description="Contains references to the SOP Instances and associated information that are contained in Storage Commitment."/>
   </iod>
   <iod ref="Table B.17.2-1" name="Modality Performed Procedure Step IOD Modules">
-    <entry name="SOP Common" ref="C.12.1" usage="Contains SOP common information"/>
-    <entry name="Performed Procedure Step Rela­tionship" ref="C.4.13" usage="References the related SOPs and IEs."/>
-    <entry name="Performed Procedure Step Information" ref="C.4.14" usage="Includes identifying and status information as well as place and time"/>
-    <entry name="Image Acquisition Results" ref="C.4.15" usage="Identifies Series and Images related to this PPS and specific image acquisition conditions."/>
-    <entry name="Radiation Dose" ref="C.4.16" usage="Contains radiation dose information related to this Per­formed Procedure Step."/>
-    <entry name="Billing and Material Management Codes" ref="C.4.17" usage="Contains codes for billing and mate­rial management."/>
+    <entry name="SOP Common" ref="C.12.1" description="Contains SOP common information"/>
+    <entry name="Performed Procedure Step Relationship" ref="C.4.13" description="References the related SOPs and IEs."/>
+    <entry name="Performed Procedure Step Information" ref="C.4.14" description="Includes identifying and status information as well as place and time"/>
+    <entry name="Image Acquisition Results" ref="C.4.15" description="Identifies Series and Images related to this PPS and specific image acquisition conditions."/>
+    <entry name="Radiation Dose" ref="C.4.16" description="Contains radiation dose information related to this Performed Procedure Step."/>
+    <entry name="Billing and Material Management Codes" ref="C.4.17" description="Contains codes for billing and material management."/>
   </iod>
   <iod ref="Table B.18.2" name="IOD Modules">
     <entry name="SOP Common Information" ref="C.12.1"/>
     <entry name="Presentation LUT Module" ref="C.11.4"/>
   </iod>
   <iod ref="Table B.20-1" name="Printer Configuration IOD Modules">
-    <entry name="SOP Common" ref="C.12.1" usage="Contains SOP Common Information"/>
-    <entry name="Printer" ref="C13.9" usage="Contains information about the printer"/>
-    <entry name="Printer Configuration" ref="C.13.13" usage="Contains Printer Configuration Information"/>
+    <entry name="SOP Common" ref="C.12.1" description="Contains SOP Common Information"/>
+    <entry name="Printer" ref="C13.9" description="Contains information about the printer"/>
+    <entry name="Printer Configuration" ref="C.13.13" description="Contains Printer Configuration Information"/>
   </iod>
   <iod ref="Table B.22.2-1" name="General Purpose Scheduled Procedure Step IOD Modules">
-    <entry name="SOP Common" ref="C.12.1" usage="Contains SOP common information"/>
-    <entry name="General Purpose Scheduled Procedure Step Rela­tionship" ref="C.4.18" usage="References the related SOPs and IEs."/>
-    <entry name="General Purpose Scheduled Procedure Step Information" ref="C.4.19" usage="Includes identifying and status information as well as place and time"/>
+    <entry name="SOP Common" ref="C.12.1" description="Contains SOP common information"/>
+    <entry name="General Purpose Scheduled Procedure Step Relationship" ref="C.4.18" description="References the related SOPs and IEs."/>
+    <entry name="General Purpose Scheduled Procedure Step Information" ref="C.4.19" description="Includes identifying and status information as well as place and time"/>
   </iod>
   <iod ref="Table B.23.2-1" name="General Purpose Performed Procedure Step IOD Modules">
-    <entry name="SOP Common" ref="C.12.1" usage="Contains SOP common information"/>
-    <entry name="General Purpose Performed Procedure Step Rela­tionship" ref="C.4.20" usage="References the related SOPs and IEs."/>
-    <entry name="General Purpose Performed Procedure Step Information" ref="C.4.21" usage="Includes identifying and status information as well as place and time"/>
-    <entry name="General Purpose Results" ref="C.4.22" usage="Identifies Results related to this GP-PPS."/>
+    <entry name="SOP Common" ref="C.12.1" description="Contains SOP common information"/>
+    <entry name="General Purpose Performed Procedure Step Relationship" ref="C.4.20" description="References the related SOPs and IEs."/>
+    <entry name="General Purpose Performed Procedure Step Information" ref="C.4.21" description="Includes identifying and status information as well as place and time"/>
+    <entry name="General Purpose Results" ref="C.4.22" description="Identifies Results related to this GP-PPS."/>
   </iod>
   <iod ref="Table B.24.2-1" name="Instance Availability Notification IOD Modules">
-    <entry name="SOP Common" ref="C.12.1" usage="Contains SOP common information"/>
-    <entry name="Instance Availability Notification" ref="C.4.23" usage="References the related SOPs and IEs."/>
+    <entry name="SOP Common" ref="C.12.1" description="Contains SOP common information"/>
+    <entry name="Instance Availability Notification" ref="C.4.23" description="References the related SOPs and IEs."/>
   </iod>
   <iod ref="Table B.25.2-1" name="Media Creation Management IOD Modules">
-    <entry name="SOP Common" ref="C.12.1" usage="Contains SOP common information"/>
-    <entry name="Media Creation Management" ref="C.22.1" usage="Contains references to the SOP instances to be used for this media creation request, and the information about its status."/>
+    <entry name="SOP Common" ref="C.12.1" description="Contains SOP common information"/>
+    <entry name="Media Creation Management" ref="C.22.1" description="Contains references to the SOP instances to be used for this media creation request, and the information about its status."/>
   </iod>
   <module ref="Table C.2-1" name="Patient Relationship Module Attributes">
     <entry group="0008" element="1110" name="Referenced Study Sequence">

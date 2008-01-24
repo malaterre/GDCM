@@ -291,11 +291,11 @@ over and over. We need to get the last ie name we found to fill in the blank:
         <xsl:variable name="ie" select="normalize-space((entry[1]/para[. != ''] , reverse(preceding-sibling::row/entry[1]/para[. != ''])[1])[1])"/>
         <xsl:choose>
           <xsl:when test="count(entry) = 4">
-            <entry ie="{$ie}" name="{normalize-space(entry[2]/para)}" ref="{normalize-space($ref_joined)}" usage="{$usage_required}"/>
+            <entry ie="{$ie}" name="{normalize-space(translate(entry[2]/para,'­',''))}" ref="{normalize-space($ref_joined)}" usage="{$usage_required}"/>
           </xsl:when>
           <xsl:when test="count(entry) = 3">
             <xsl:if test="entry[2]/para != ''">
-              <entry name="{$ie}" ref="{normalize-space(entry[2]/para)}" usage="{normalize-space($ref_joined)}"/>
+              <entry name="{translate($ie,'­','')}" ref="{normalize-space(entry[2]/para)}" description="{normalize-space(translate($ref_joined,'­',''))}"/>
             </xsl:if>
           </xsl:when>
 <!-- Table B.18.2 IOD Modules -->
