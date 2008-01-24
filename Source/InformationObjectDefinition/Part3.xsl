@@ -41,7 +41,7 @@ Weird camel case function to get closer to docbook version
     <xsl:variable name="tmp1">
       <xsl:sequence select="for $s in $tmp0 return string-join( for $word in tokenize($s, '-| ') return if (string-length($word) = 2) then upper-case($word) else $word , ' ')"/>
     </xsl:variable>
-    <xsl:variable name="tmp2" select="replace($tmp1,' Iod ',' IOD ')"/>
+    <xsl:variable name="tmp2" select="replace($tmp1,'Iod ','IOD ')"/>
     <xsl:variable name="tmp3" select="replace($tmp2,' Pdf ',' PDF ')"/>
     <xsl:variable name="tmp4" select="replace($tmp3,' Cda ',' CDA ')"/>
     <xsl:variable name="tmp5" select="replace($tmp4,'Sop ','SOP ')"/>

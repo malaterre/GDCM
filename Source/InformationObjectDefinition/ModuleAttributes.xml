@@ -2005,7 +2005,7 @@ Only a single Item shall be permitted in this Sequence.</description>
     <entry ie="Radiation Dose" name="C.4.16" ref="Contains radiation dose information related to this Per­formed Procedure Step." usage=""/>
     <entry ie="Billing and Material Management Codes" name="C.4.17" ref="Contains codes for billing and mate­rial management." usage=""/>
   </iod>
-  <iod ref="Table B.18.2" name="Iod Modules">
+  <iod ref="Table B.18.2" name="IOD Modules">
     <entry ie="SOP Common Information" name="C.12.1" ref="" usage=""/>
     <entry ie="Presentation LUT Module" name="C.11.4" ref="" usage=""/>
   </iod>
