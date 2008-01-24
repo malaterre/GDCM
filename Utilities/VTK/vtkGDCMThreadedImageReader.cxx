@@ -204,9 +204,7 @@ int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
 
     vtkDataObject::SetPointDataActiveScalarInfo(outInfo, this->DataScalarType, this->NumberOfScalarComponents);
     outInfo->Set(vtkDataObject::SPACING(), this->DataSpacing, 3);
-
-    double origin[3] = {};
-    outInfo->Set(vtkDataObject::ORIGIN(), origin, 3);
+    outInfo->Set(vtkDataObject::ORIGIN(), this->DataOrigin, 3);
     }
 
   // Ok let's fill in the 'extra' info:
@@ -265,6 +263,8 @@ void *ReadFilesThread(void *voidparams)
     const gdcm::Image &image = reader.GetImage();
     unsigned long len = image.GetBufferLength();
     // When not applying a transform:
+    // len -> sizeof stored image
+    // params->len sizeof world value image (after transform)
     if( params->reader->GetShift() == 1 && params->reader->GetScale() == 0 )
       assert( len == params->len ); // that would be very bad 
 
@@ -289,6 +289,9 @@ void *ReadFilesThread(void *voidparams)
         }
       else if ( shift == 0 && scale != (double)scale_int )
         {
+        // FIXME TODO tempimage stored the DICOM image at the beginning of the buffer,
+        // we could avoid duplicating the memory by iterating over the buffer starting
+        // from the end and filling out the target buffer by the end...
         // scale is a float !!
         char * duplicate = new char[len];
         memcpy(duplicate,tempimage,len);
@@ -298,7 +301,7 @@ void *ReadFilesThread(void *voidparams)
         float *pout = out;
         for( ; pout != out + params->len / sizeof(float); ++pout )
           {
-          *pout = *pin * (float)scale;
+          *pout = *pin * (float)scale; // scale is a double, but DICOM specify 32bits for floating point value
           ++pin;
           }
         assert( pin == in + len / sizeof(unsigned short) );
