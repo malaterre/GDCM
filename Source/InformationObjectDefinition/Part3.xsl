@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-xmlns:xs = "http://www.w3.org/2001/XMLSchema"
-xmlns:my="urn:my" version="2.0" exclude-result-prefixes="#all">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:my="urn:my" version="2.0" exclude-result-prefixes="#all">
 <!--
   Program: GDCM (Grass Root DICOM). A DICOM library
   Module:  $URL$
@@ -32,28 +30,30 @@ $ java -jar ~/Software/saxon/saxon8.jar  08_03pu.xml Part3.xsl > ModuleAttribute
   </xsl:variable>
 <!--
 
-Function to parse a row from an informaltable specifically for a Macro/Module table:
+Weird camel case function to get closer to docbook version
 
 -->
- <xsl:function name="my:camel-case" as="xs:string*">
-<xsl:param name="string" as="xs:string*"/>
-<xsl:variable name="tmp0">
-<xsl:sequence select="for $s in $string return string-join( for $word in tokenize($s, '-| ') return concat( upper-case(substring($word, 1, 1)), lower-case(substring($word, 2))) , ' ')" />
-</xsl:variable>
-<xsl:variable name="tmp1">
-<xsl:sequence select="for $s in $tmp0 return string-join( for $word in tokenize($s, '-| ') return if (string-length($word) = 2) then upper-case($word) else $word , ' ')" />
-</xsl:variable>
-<xsl:variable name="tmp2" select="replace($tmp1,' Iod ',' IOD ')"/>
-<xsl:variable name="tmp3" select="replace($tmp2,' Pdf ',' PDF ')"/>
-<xsl:variable name="tmp4" select="replace($tmp3,' Cda ',' CDA ')"/>
-<xsl:variable name="tmp5" select="replace($tmp4,'Sop ','SOP ')"/>
-<xsl:variable name="tmp6" select="replace($tmp5,'Xrf ','XRF ')"/>
-<xsl:variable name="tmp6" select="replace($tmp5,'Pet ','PET ')"/>
-<xsl:variable name="tmp7" select="replace($tmp6,' Ecg ',' ECG ')"/>
-<xsl:variable name="tmp8" select="replace($tmp7,' Cad ',' CAD ')"/>
-<xsl:value-of select="$tmp8"/>
-</xsl:function>
-
+  <xsl:function name="my:camel-case" as="xs:string*">
+    <xsl:param name="string" as="xs:string*"/>
+    <xsl:variable name="tmp0">
+      <xsl:sequence select="for $s in $string return string-join( for $word in tokenize($s, '-| ') return concat( upper-case(substring($word, 1, 1)), lower-case(substring($word, 2))) , ' ')"/>
+    </xsl:variable>
+    <xsl:variable name="tmp1">
+      <xsl:sequence select="for $s in $tmp0 return string-join( for $word in tokenize($s, '-| ') return if (string-length($word) = 2) then upper-case($word) else $word , ' ')"/>
+    </xsl:variable>
+    <xsl:variable name="tmp2" select="replace($tmp1,' Iod ',' IOD ')"/>
+    <xsl:variable name="tmp3" select="replace($tmp2,' Pdf ',' PDF ')"/>
+    <xsl:variable name="tmp4" select="replace($tmp3,' Cda ',' CDA ')"/>
+    <xsl:variable name="tmp5" select="replace($tmp4,'Sop ','SOP ')"/>
+    <xsl:variable name="tmp6" select="replace($tmp5,'Xrf ','XRF ')"/>
+    <xsl:variable name="tmp6" select="replace($tmp5,'Pet ','PET ')"/>
+    <xsl:variable name="tmp7" select="replace($tmp6,' Ecg ',' ECG ')"/>
+    <xsl:variable name="tmp8" select="replace($tmp7,' Cad ',' CAD ')"/>
+    <xsl:value-of select="$tmp8"/>
+  </xsl:function>
+<!--
+Function to parse a row from an informaltable specifically for a Macro/Module table:
+-->
   <xsl:template match="row" mode="macro">
     <xsl:variable name="name">
       <xsl:for-each select="entry[1]/para">
@@ -109,8 +109,74 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
       </xsl:when>
       <xsl:otherwise>
 <!-- I should check if this is indeed a Include line or not... -->
-        <xsl:variable name="include" select="normalize-space(translate(translate(string-join(entry,' '),'‘',$apos),'’',$apos))"/>
-        <include ref="{$include}"/>
+        <xsl:choose>
+          <xsl:when test="entry[1]/@namest = 'c1' and entry[1]/@nameend = 'c2'">
+            <xsl:choose>
+              <xsl:when test="entry[2]/@namest = 'c3' and entry[2]/@nameend = 'c4'">
+                <xsl:variable name="include" select="normalize-space(translate(translate(entry[1],'‘',$apos),'’',$apos))"/>
+                <xsl:variable name="description" select="normalize-space(entry[2])"/>
+                <include ref="{$include}">
+                  <xsl:if test="$description != ''">
+                    <xsl:attribute name="description" select="$description"/>
+                  </xsl:if>
+                </include>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:choose>
+                  <xsl:when test="count(entry) = 3">
+                    <xsl:variable name="include" select="normalize-space(translate(translate(entry[1],'‘',$apos),'’',$apos))"/>
+                    <xsl:variable name="type" select="normalize-space(entry[2])"/>
+                    <xsl:variable name="description" select="normalize-space(entry[3])"/>
+                    <include ref="{$include}">
+                      <xsl:if test="$type!= ''">
+                        <xsl:attribute name="type" select="$type"/>
+                      </xsl:if>
+                      <xsl:if test="$description != ''">
+                        <xsl:attribute name="description" select="$description"/>
+                      </xsl:if>
+                    </include>
+                  </xsl:when>
+                  <xsl:when test="count(entry) = 2">
+                    <xsl:variable name="include" select="normalize-space(translate(translate(entry[1],'‘',$apos),'’',$apos))"/>
+                    <xsl:variable name="description" select="normalize-space(entry[2])"/>
+                    <include ref="{$include}">
+                      <xsl:if test="$description != ''">
+                        <xsl:attribute name="description" select="$description"/>
+                      </xsl:if>
+                    </include>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <include ref="UNHANDLED"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:when>
+          <xsl:when test="entry[1]/@namest = 'c1' and entry[1]/@nameend = 'c3'">
+            <xsl:variable name="include" select="normalize-space(translate(translate(entry[1],'‘',$apos),'’',$apos))"/>
+            <xsl:variable name="description" select="normalize-space(entry[2])"/>
+            <include ref="{$include}">
+              <xsl:if test="$description != ''">
+                <xsl:attribute name="description" select="$description"/>
+              </xsl:if>
+            </include>
+          </xsl:when>
+          <xsl:when test="entry[1]/@namest = 'c1' and entry[1]/@nameend = 'c4'">
+            <xsl:variable name="include" select="normalize-space(translate(translate(entry[1],'‘',$apos),'’',$apos))"/>
+            <include ref="{$include}"/>
+          </xsl:when>
+          <xsl:when test="entry[1]/@namest = 'c1' and entry[1]/@nameend = 'c5'">
+            <xsl:variable name="include" select="normalize-space(translate(translate(entry[1],'‘',$apos),'’',$apos))"/>
+            <include ref="{$include}"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:variable name="include" select="normalize-space(string-join(entry,' '))"/>
+<!-- Table Table C.10-9 Waveform Module Attributes has two empty lines ... -->
+            <xsl:if test="$include != ''">
+              <include ref="{$include}"/>
+            </xsl:if>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
