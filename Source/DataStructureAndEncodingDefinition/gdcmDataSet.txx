@@ -16,7 +16,6 @@
 #define __gdcmDataSet_txx
 
 #include "gdcmByteValue.h"
-//#include "gdcmSwapper.h"
 
 namespace gdcm
 {

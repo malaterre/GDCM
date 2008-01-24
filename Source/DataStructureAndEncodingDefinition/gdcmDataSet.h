@@ -66,6 +66,10 @@ public:
     assert( DES.empty() );
   }
 
+  unsigned int Size() const {
+    return DES.size();
+  }
+
   void Print(std::ostream &os, std::string const &indent = "") const {
     // CT_Phillips_JPEG2K_Decompr_Problem.dcm has a SQ of length == 0
     //int s = DES.size();
@@ -193,7 +197,15 @@ public:
 
 private:
   DataElementSet DES;
+  friend std::ostream& operator<<(std::ostream &_os, const DataSet &val);
 };
+//-----------------------------------------------------------------------------
+inline std::ostream& operator<<(std::ostream &os, const DataSet &val)
+{
+  val.Print(os);
+  return os;
+}
+
 
 /*
  * HACK: I need this temp class to be able to manipulate a std::set from python,

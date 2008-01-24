@@ -89,7 +89,7 @@ public:
         Items.push_back( item );
         item.Clear();
         }
-      assert( item.GetTag() == seqDelItem && item.GetVL() == 0 );
+      //assert( item.GetTag() == seqDelItem && item.GetVL() == 0 );
       }
     else
       {

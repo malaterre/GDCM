@@ -127,7 +127,10 @@ inline std::ostream &operator<<(std::ostream &os, const Fragment &val)
 {
   os << "Tag: " << val.TagField;
   os << "\tVL: " << val.ValueLengthField;
-  os << "\t" << *(val.FragmentValue);
+  if( val.FragmentValue )
+    {
+    os << "\t" << *(val.FragmentValue);
+    }
 
   return os;
 }

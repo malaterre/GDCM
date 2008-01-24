@@ -36,7 +36,7 @@ public:
   typedef std::vector<Fragment> FragmentVector;
 
 /// \brief constructor (UndefinedLength by default)
-  SequenceOfFragments():Table(),SequenceLengthField(0) { }
+  SequenceOfFragments():Table(),SequenceLengthField(0xFFFFFFFF) { }
 
   /// \brief Returns the SQ length, as read from disk
   VL GetLength() const { 

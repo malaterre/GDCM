@@ -130,37 +130,32 @@ std::istream &Read(std::istream &is)
       if( ValueLengthField )
         {
         gdcmErrorMacro( "ValueLengthField is not 0" );
-        gdcmDebugMacro( "FIXME" ); // should not change the value at read time
-        ValueLengthField = 0; // FIXME should not set value inplace
         }
       }
-    else if( ValueLengthField == 0 )
-      {
-      assert( TagField == Tag( 0xfffe, 0xe0dd)
-        /* || TagField == Tag( 0xfffe, 0xe000)*/ );
-      if( TagField != Tag( 0xfffe, 0xe0dd) )
-        {
-        gdcmErrorMacro( "SQ: " << TagField << " has a length of 0" );
-        }
-      }
+    //else if( ValueLengthField == 0 )
+    //  {
+    //  //assert( TagField == Tag( 0xfffe, 0xe0dd) );
+    //  if( TagField != Tag( 0xfffe, 0xe0dd) )
+    //    {
+    //    gdcmErrorMacro( "SQ: " << TagField << " has a length of 0" );
+    //    }
+    //  }
     else if( ValueLengthField.IsUndefined() )
       {
       DataSet &nested = NestedDataSet;
       nested.Clear();
       assert( nested.IsEmpty() );
       nested.template ReadNested<TDE,SwapperDoOp>(is);
-        ByteSwapFilter bsf(nested);
-        bsf.ByteSwap();
-
+      ByteSwapFilter bsf(nested);
+      bsf.ByteSwap();
       }
     else /* if( ValueLengthField.IsUndefinedLength() ) */
       {
       DataSet &nested = NestedDataSet;
       nested.Clear();
       nested.template ReadWithLength<TDE,SwapperDoOp>(is, ValueLengthField);
-        ByteSwapFilter bsf(nested);
-        bsf.ByteSwap();
-
+      ByteSwapFilter bsf(nested);
+      bsf.ByteSwap();
       }
     return is;
     }
@@ -174,25 +169,23 @@ std::istream &Read(std::istream &is)
     return is;
     }
   // Self
-  // Some file written by GDCM 1.0 we writting 0xFFFFFFFF instead of 0x0
+  // Some file written by GDCM 1.0 were written with 0xFFFFFFFF instead of 0x0
   if( TagField == Tag(0xfffe,0xe0dd) )
     {
     if( ValueLengthField )
       {
-      gdcmErrorMacro( "ValueLengthField is not 0" );
-      gdcmDebugMacro( "FIXME" ); // should not change the value at read time
-      ValueLengthField = 0; // FIXME should not set value inplace
+      gdcmWarningMacro( "ValueLengthField is not 0" );
       }
     }
-  else if( ValueLengthField == 0 )
-    {
-    assert( TagField == Tag( 0xfffe, 0xe0dd)
-        /* || TagField == Tag( 0xfffe, 0xe000)*/ );
-    if( TagField != Tag( 0xfffe, 0xe0dd) )
-      {
-      gdcmErrorMacro( "SQ: " << TagField << " has a length of 0" );
-      }
-    }
+//  else if( ValueLengthField == 0 )
+//    {
+//    // ATTMA002_DS.dcm
+//    //assert( TagField == Tag( 0xfffe, 0xe0dd) );
+//    if( TagField != Tag( 0xfffe, 0xe0dd) )
+//      {
+//      gdcmWarningMacro( "Item: " << TagField << " has a length of 0" );
+//      }
+//    }
   else if( ValueLengthField.IsUndefined() )
     {
     DataSet &nested = NestedDataSet;
