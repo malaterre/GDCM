@@ -16779,7 +16779,7 @@ Note:	Digital Signature Security Profiles (see PS 3.15) may require the use of a
     <entry group="0400" element="0550" name="Modified Attributes Sequence" type="1">
       <description>Sequence of Items containing all Attributes that were removed or replaced by “dummy values” in the main dataset during de-identification of the SOP instance. Upon reversal of the de-identification process, the Attributes are copied back into the main dataset, replacing any dummy values that might have been created. Only a single Item shall be present.</description>
     </entry>
-    <include ref="&gt; Any Attribute from the main dataset that was modified or removed during the de-identification process. 3"/>
+    <include ref="&gt; Any Attribute from the main dataset that was modified or removed during the de-identification process." type="3"/>
   </macro>
   <module ref="Table C.12-8" name="Common Instance Reference Module Attributes">
     <include ref="Include Series and Instance Reference Macro, Table 10-4." description="Identifies all Series within the Study of which this Instance is a part, which Series contain Instances that are referenced elsewhere in this Instance."/>
@@ -18965,7 +18965,7 @@ Required if the Directory Record references a SOP Instance. </description>
 Required if the Directory Record references a SOP Instance that encodes the Related General SOP Class UID (0008,001A). 
 Note: 	This may be useful to an FSR that does not support the SOP Class of the referenced Instance, but which does support one of the Related General SOP Classes.</description>
     </entry>
-    <include ref="&gt;Record Selection Keys See F.5 SeeF.5 A number of DICOM Data Elements which contain specific keys defined for each type of Directory Record (0004,1430) defined in Section F.5."/>
+    <include ref="&gt;Record Selection Keys" type="SeeF.5" description="A number of DICOM Data Elements which contain specific keys defined for each type of Directory Record (0004,1430) defined in Section F.5."/>
   </macro>
   <module ref="Table F.5-1" name="Patient Keys">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
@@ -18977,7 +18977,7 @@ Note: 	This may be useful to an FSR that does not support the SOP Class of the r
     <entry group="0010" element="0020" name="Patient ID" type="1">
       <description/>
     </entry>
-    <include ref="Any other Attribute of the Patient IOD or Patient IE Modules 3"/>
+    <include ref="Any other Attribute of the Patient IOD or Patient IE Modules" type="3"/>
   </module>
   <module ref="Table F.5-2" name="Study Keys">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
@@ -19002,7 +19002,7 @@ Note: 	This may be useful to an FSR that does not support the SOP Class of the r
     <entry group="0008" element="0050" name="Accession Number" type="2">
       <description/>
     </entry>
-    <include ref="Any other Attribute of the Study IOD or Study IE Modules 3"/>
+    <include ref="Any other Attribute of the Study IOD or Study IE Modules" type="3"/>
   </module>
   <module ref="Table F.5-3" name="Series Keys">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
@@ -19021,7 +19021,7 @@ Note: 	This may be useful to an FSR that does not support the SOP Class of the r
       <description>This Icon Image is representative of the Series. It may or may not correspond to one of the images of the Series. Only a single Item shall be permitted in this Sequence.</description>
     </entry>
     <include ref="&gt; Include 'Image Pixel Macro' Table C.7-11b" description="See Section F.7 of this Part."/>
-    <include ref="Any other Attribute of the Series IE Modules 3"/>
+    <include ref="Any other Attribute of the Series IE Modules" type="3"/>
   </module>
   <module ref="Table F.5-4" name="Image Keys">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
@@ -19034,7 +19034,7 @@ Note: 	This may be useful to an FSR that does not support the SOP Class of the r
       <description>This Icon Image is representative of the Image. Only a single Item shall be permitted in this Sequence.</description>
     </entry>
     <include ref="&gt; Include 'Image Pixel Macro' Table C.7-11b" description="See Section F.7 of this Part."/>
-    <include ref="Any other Attribute of the Image IE Modules 3"/>
+    <include ref="Any other Attribute of the Image IE Modules" type="3"/>
   </module>
   <module ref="Table F.5-19" name="RT Dose Keys">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
@@ -19053,7 +19053,7 @@ Note: 	This may be useful to an FSR that does not support the SOP Class of the r
       <description>This Icon Image is representative of the RT Dose. Only a single Item shall be permitted in this Sequence.</description>
     </entry>
     <include ref="&gt; Include 'Image Pixel Macro' Table C.7-11b" description="See Section F.7 of this part."/>
-    <include ref="Any other Attribute of the Dose IE Modules 3"/>
+    <include ref="Any other Attribute of the Dose IE Modules" type="3"/>
   </module>
   <module ref="Table F.5-20" name="RT Structure Set Keys">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
@@ -19071,7 +19071,7 @@ Note: 	This may be useful to an FSR that does not support the SOP Class of the r
     <entry group="3006" element="0009" name="Structure Set Time" type="2">
       <description/>
     </entry>
-    <include ref="Any other Attribute of the Structure Set IE Modules 3"/>
+    <include ref="Any other Attribute of the Structure Set IE Modules" type="3"/>
   </module>
   <module ref="Table F.5-21" name="RT Plan Keys">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
@@ -19089,7 +19089,7 @@ Note: 	This may be useful to an FSR that does not support the SOP Class of the r
     <entry group="300A" element="0007" name="RT Plan Time" type="2">
       <description/>
     </entry>
-    <include ref="Any other Attribute of the Plan IE Modules 3"/>
+    <include ref="Any other Attribute of the Plan IE Modules" type="3"/>
   </module>
   <module ref="Table F.5-22" name="RT Treatment Record Keys">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
@@ -19104,7 +19104,7 @@ Note: 	This may be useful to an FSR that does not support the SOP Class of the r
     <entry group="3008" element="0251" name="Treatment Time" type="2">
       <description/>
     </entry>
-    <include ref="Any other Attribute of the Treatment Record IE Modules 3"/>
+    <include ref="Any other Attribute of the Treatment Record IE Modules" type="3"/>
   </module>
   <module ref="Table F.5-23" name="Presentation Keys">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
@@ -19148,7 +19148,7 @@ Only a single item shall be permitted in this Sequence. </description>
       <description>Sequence of Items where each Item provides reference to an Image SOP Instance to which the Presentation applies</description>
     </entry>
     <include ref="&gt;&gt;&gt;Include 'SOP Instance Reference Macro' Table 10-11"/>
-    <include ref="Any other Attribute of the Presentation IE Modules 3"/>
+    <include ref="Any other Attribute of the Presentation IE Modules" type="3"/>
   </module>
   <module ref="Table F.5-24" name="Waveform Keys">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
@@ -19163,7 +19163,7 @@ Only a single item shall be permitted in this Sequence. </description>
     <entry group="0008" element="0033" name="Content Time" type="1">
       <description/>
     </entry>
-    <include ref="Any other Attribute of the Waveform IE Modules 3"/>
+    <include ref="Any other Attribute of the Waveform IE Modules" type="3"/>
   </module>
   <module ref="Table F.5-25" name="SR Document Keys">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
@@ -19202,7 +19202,7 @@ One or more Items shall be included in this Sequence. All, and only, Content Ite
 HAS CONCEPT MOD</description>
     </entry>
     <include ref="&gt;Include Document Content Macro Table C.17-5"/>
-    <include ref="Any Attribute of the Document IE Modules 3"/>
+    <include ref="Any Attribute of the Document IE Modules" type="3"/>
   </module>
   <module ref="Table F.5-26" name="Key Object Document Keys">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
@@ -19231,7 +19231,7 @@ One or more Items shall be included in this Sequence. All, and only, Content Ite
 HAS CONCEPT MOD</description>
     </entry>
     <include ref="&gt;Include Document Content Macro Table C.17-5"/>
-    <include ref="Any Attribute of the Document IE Modules 3"/>
+    <include ref="Any Attribute of the Document IE Modules" type="3"/>
   </module>
   <module ref="Table F.5-27" name="Spectroscopy Keys">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
@@ -19272,7 +19272,7 @@ HAS CONCEPT MOD</description>
       <description>This Icon Image is representative of the Spectroscopy instance. Only a single Item shall be permitted in this Sequence.</description>
     </entry>
     <include ref="&gt;Include Image Pixel Macro Table C.7-11b" description="See Section F.7 of this Part."/>
-    <include ref="Any other Attribute of the Spectroscopy IE Modules 3"/>
+    <include ref="Any other Attribute of the Spectroscopy IE Modules" type="3"/>
   </module>
   <module ref="Table F.5-28" name="Raw Data Keys">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
@@ -19291,7 +19291,7 @@ HAS CONCEPT MOD</description>
       <description>This Icon Image is representative of the Raw Data instance. Only a single Item shall be permitted in this Sequence.</description>
     </entry>
     <include ref="&gt;Include Image Pixel Macro Table C.7-11b" description="See Section F.7 of this Part."/>
-    <include ref="Any other Attribute of the Raw Data IE Modules 3"/>
+    <include ref="Any other Attribute of the Raw Data IE Modules" type="3"/>
   </module>
   <module ref="Table F.5-29" name="Registration Keys">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
@@ -19304,7 +19304,7 @@ HAS CONCEPT MOD</description>
       <description>The time the content creation started.</description>
     </entry>
     <include ref="Include Content Identification Macro Table 10-12"/>
-    <include ref="Any other Attribute of the Spatial Registration IE Modules 3"/>
+    <include ref="Any other Attribute of the Spatial Registration IE Modules" type="3"/>
   </module>
   <module ref="Table F.5-30" name="Fiducial Keys">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
@@ -19317,7 +19317,7 @@ HAS CONCEPT MOD</description>
       <description>The time the content creation started.</description>
     </entry>
     <include ref="Include Content Identification Macro Table 10-12"/>
-    <include ref="Any other Attribute of the Spatial Fiducials IE Modules 3"/>
+    <include ref="Any other Attribute of the Spatial Fiducials IE Modules" type="3"/>
   </module>
   <macro ref="Table F.5-31" name="Hanging Protocol Keys">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
@@ -19366,7 +19366,7 @@ HAS CONCEPT MOD</description>
       <description>Sequence that provides a coded identifier for the person, group, or site for which this Hanging Protocol was defined. Zero or one Items may be included in this Sequence.</description>
     </entry>
     <include ref="&gt;Include Code Sequence Macro Table 8.8-1"/>
-    <include ref="Any other Attribute of the Hanging Protocol IOD 3"/>
+    <include ref="Any other Attribute of the Hanging Protocol IOD" type="3"/>
   </macro>
   <module ref="Table F.5-32" name="Encapsulated Document Keys">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
@@ -19395,7 +19395,7 @@ Required if encapsulated document is an HL7 Structured Document.</description>
     <entry group="0042" element="0012" name="MIME Type of Encapsulated Document" type="1">
       <description>The type of the encapsulated document stream described using the MIME Media Type (see RFC 2046).</description>
     </entry>
-    <include ref="Any other Attribute of the Encapsulated Document Module except Encapsulated Document (0042,0011) 3"/>
+    <include ref="Any other Attribute of the Encapsulated Document Module except Encapsulated Document (0042,0011)" type="3"/>
   </module>
   <module ref="Table F.5-33" name="Hl7 Structured Document Keys">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
@@ -19426,12 +19426,12 @@ Required if encapsulated document is an HL7 Structured Document.</description>
       <description>The time the content creation started.</description>
     </entry>
     <include ref="Include Content Identification Macro Table 10-12"/>
-    <include ref="Any other Attribute of the Real World Value Mapping IE Modules 3"/>
+    <include ref="Any other Attribute of the Real World Value Mapping IE Modules" type="3"/>
   </module>
   <module ref="Table F.5-35" name="Stereometric Relationship Keys">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
       <description>Required if an extended or replacement character set is used in one of the keys.</description>
     </entry>
-    <include ref="Any other Attribute of the Stereometric relationship IE Modules 3"/>
+    <include ref="Any other Attribute of the Stereometric relationship IE Modules" type="3"/>
   </module>
 </tables>

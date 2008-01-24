@@ -66,8 +66,8 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
     <xsl:variable name="tag" select="normalize-space(string-join(entry[2]/para,' '))"/>
     <xsl:choose>
       <xsl:when test="substring($tag,1,1) = '(' and substring($tag,11,1) = ')'">
-        <xsl:variable name="group" select="substring-after(substring-before($tag,','), '(')"/>
-        <xsl:variable name="element" select="substring-after(substring-before($tag,')'), ',')"/>
+        <xsl:variable name="group" select="normalize-space(substring-after(substring-before($tag,','), '('))"/>
+        <xsl:variable name="element" select="normalize-space(substring-after(substring-before($tag,')'), ','))"/>
 <!--used internally to find out if type is indeed type of if column type was missing ... not full proof -->
         <xsl:variable name="internal_type" select="normalize-space(string-join(entry[3]/para,' '))"/>
         <xsl:variable name="type">
@@ -84,12 +84,20 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
 <!-- Attribute Name  Tag  Type  Attribute Description -->
         <xsl:choose>
 <!-- Try to figure if this table is busted (missing Type column -->
-          <xsl:when test="string-length($internal_type) &gt;= 0 and string-length($internal_type) &lt;= 2">
-            <entry group="{$group}" element="{$element}" name="{translate($name_translate,'','µ')}" type="{normalize-space($type)}">
-              <description>
-                <xsl:value-of select="translate($description,' ­',' µ')"/>
-              </description>
-            </entry>
+          <xsl:when test="string-length($internal_type) &gt; 0 and string-length($internal_type) &lt;= 2">
+            <xsl:choose>
+              <xsl:when test="$group != '' and $element != ''">
+                <entry group="{$group}" element="{$element}" name="{translate($name_translate,'','µ')}" type="{normalize-space($type)}">
+                  <description>
+                    <xsl:value-of select="translate($description,' ­',' µ')"/>
+                  </description>
+                </entry>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:message>SHOULD NOT HAPPEN</xsl:message>
+                <!--include ref="{translate($name_translate,'','µ')}" type="{normalize-space($type)}"/-->
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:when>
           <xsl:otherwise>
             <entry group="{$group}" element="{$element}" name="{$name_translate}">
@@ -173,7 +181,20 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
             <xsl:variable name="include" select="normalize-space(string-join(entry,' '))"/>
 <!-- Table Table C.10-9 Waveform Module Attributes has two empty lines ... -->
             <xsl:if test="$include != ''">
-              <include ref="{$include}"/>
+              <!--include ref="{$include}"/-->
+                    <xsl:variable name="include" select="normalize-space(translate(translate(entry[1],'‘',$apos),'’',$apos))"/>
+        <!-- nothing in entry[2] --><!-- FIXME I should check that -->
+                    <xsl:variable name="type" select="normalize-space(entry[3])"/>
+                    <xsl:variable name="description" select="normalize-space(entry[4])"/>
+                    <include ref="{$include}">
+                      <xsl:if test="$type!= ''">
+                        <xsl:attribute name="type" select="$type"/>
+                      </xsl:if>
+                      <xsl:if test="$description != ''">
+                        <xsl:attribute name="description" select="$description"/>
+                      </xsl:if>
+                    </include>
+
             </xsl:if>
           </xsl:otherwise>
         </xsl:choose>
@@ -203,7 +224,7 @@ Take the ie name as input
   <xsl:template match="entry" mode="iod2">
     <xsl:for-each select="entry">
       <xsl:variable name="usage" select="translate(entry[3]/para,'– ','- ')"/>
-        <xsl:variable name="usage_required" select="replace($usage,'required','Required')"/>
+      <xsl:variable name="usage_required" select="replace($usage,'required','Required')"/>
       <entry ie="{normalize-space(para)}" name="{normalize-space(following-sibling::entry[1]/para)}" ref="{normalize-space(following-sibling::entry[2]/para)}" usage="{$usage_required}"/>
     </xsl:for-each>
   </xsl:template>
