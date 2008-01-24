@@ -32,6 +32,12 @@
 #include "gdcmReader.h"
 #include "gdcmImageReader.h"
 #include "gdcmStringFilter.h"
+#include "gdcmGlobal.h"
+#include "gdcmVR.h"
+#include "gdcmVM.h"
+#include "gdcmDicts.h"
+#include "gdcmDict.h"
+#include "gdcmDictEntry.h"
 
 using namespace gdcm;
 %}
@@ -112,6 +118,12 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
+%include "gdcmGlobal.h"
+//%include "gdcmVR.h"
+//%include "gdcmVM.h"
+%include "gdcmDictEntry.h"
+%include "gdcmDict.h"
+%include "gdcmDicts.h"
 %include "gdcmReader.h"
 %include "gdcmImageReader.h"
 %template (PairString) std::pair<std::string,std::string>;
