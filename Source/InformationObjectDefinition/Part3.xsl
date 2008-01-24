@@ -191,7 +191,8 @@ Take the ie name as input
     <xsl:for-each select="entry">
       <xsl:if test="(position() mod 3 = 1)">
         <xsl:variable name="usage" select="translate(normalize-space(following-sibling::entry[2]/para),'– ','- ')"/>
-        <entry ie="{$ie_name}" name="{normalize-space(para)}" ref="{normalize-space(following-sibling::entry[1]/para)}" usage="{$usage}"/>
+        <xsl:variable name="usage_required" select="replace($usage,'required','Required')"/>
+        <entry ie="{$ie_name}" name="{normalize-space(para)}" ref="{normalize-space(following-sibling::entry[1]/para)}" usage="{$usage_required}"/>
       </xsl:if>
     </xsl:for-each>
   </xsl:template>
@@ -202,7 +203,8 @@ Take the ie name as input
   <xsl:template match="entry" mode="iod2">
     <xsl:for-each select="entry">
       <xsl:variable name="usage" select="translate(entry[3]/para,'– ','- ')"/>
-      <entry ie="{normalize-space(para)}" name="{normalize-space(following-sibling::entry[1]/para)}" ref="{normalize-space(following-sibling::entry[2]/para)}" usage="{$usage}"/>
+        <xsl:variable name="usage_required" select="replace($usage,'required','Required')"/>
+      <entry ie="{normalize-space(para)}" name="{normalize-space(following-sibling::entry[1]/para)}" ref="{normalize-space(following-sibling::entry[2]/para)}" usage="{$usage_required}"/>
     </xsl:for-each>
   </xsl:template>
 <!--
@@ -240,9 +242,10 @@ over and over. We need to get the last ie name we found to fill in the blank:
         <xsl:variable name="usage_joined">
           <xsl:value-of select="entry[4]/para" separator=" "/>
         </xsl:variable>
-        <xsl:variable name="usage" select="translate($usage_joined,'–','-')"/>
+        <xsl:variable name="usage" select="normalize-space(translate($usage_joined,'–','-'))"/>
+        <xsl:variable name="usage_required" select="replace($usage,'required','Required')"/>
         <xsl:variable name="ie" select="normalize-space((entry[1]/para[. != ''] , reverse(preceding-sibling::row/entry[1]/para[. != ''])[1])[1])"/>
-        <entry ie="{$ie}" name="{normalize-space(entry[2]/para)}" ref="{normalize-space($ref_joined)}" usage="{normalize-space($usage)}"/>
+        <entry ie="{$ie}" name="{normalize-space(entry[2]/para)}" ref="{normalize-space($ref_joined)}" usage="{$usage_required}"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>

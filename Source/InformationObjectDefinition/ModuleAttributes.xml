@@ -1327,7 +1327,7 @@ Only a single Item shall be permitted in this Sequence.</description>
     <entry ie="Waveform" name="Waveform Identification" ref="C.10.8" usage="M"/>
     <entry ie="Waveform" name="Waveform" ref="C.10.9" usage="M"/>
     <entry ie="Waveform" name="Acquisition Context" ref="C.7.6.14" usage="M"/>
-    <entry ie="Waveform" name="Waveform Annotation" ref="C.10.10" usage="C - required if annotation is present"/>
+    <entry ie="Waveform" name="Waveform Annotation" ref="C.10.10" usage="C - Required if annotation is present"/>
     <entry ie="Waveform" name="SOP Common" ref="C.12.1" usage="M"/>
   </iod>
   <iod ref="Table A.34.4-1" name="General ECG IOD Modules">
@@ -1343,7 +1343,7 @@ Only a single Item shall be permitted in this Sequence.</description>
     <entry ie="Waveform" name="Waveform Identification" ref="C.10.8" usage="M"/>
     <entry ie="Waveform" name="Waveform" ref="C.10.9" usage="M"/>
     <entry ie="Waveform" name="Acquisition Context" ref="C.7.6.14" usage="M"/>
-    <entry ie="Waveform" name="Waveform Annotation" ref="C.10.10" usage="C - required if annotation is present"/>
+    <entry ie="Waveform" name="Waveform Annotation" ref="C.10.10" usage="C - Required if annotation is present"/>
     <entry ie="Waveform" name="SOP Common" ref="C.12.1" usage="M"/>
   </iod>
   <iod ref="Table A.34.5-1" name="Ambulatory ECG IOD Modules">
@@ -1359,7 +1359,7 @@ Only a single Item shall be permitted in this Sequence.</description>
     <entry ie="Waveform" name="Waveform Identification" ref="C.10.8" usage="M"/>
     <entry ie="Waveform" name="Waveform" ref="C.10.9" usage="M"/>
     <entry ie="Waveform" name="Acquisition Context" ref="C.7.6.14" usage="U"/>
-    <entry ie="Waveform" name="Waveform Annotation" ref="C.10.10" usage="C - required if annotation is present"/>
+    <entry ie="Waveform" name="Waveform Annotation" ref="C.10.10" usage="C - Required if annotation is present"/>
     <entry ie="Waveform" name="SOP Common" ref="C.12.1" usage="M"/>
   </iod>
   <iod ref="Table A.34.6-1" name="Hemodynamic IOD Modules">
@@ -1375,7 +1375,7 @@ Only a single Item shall be permitted in this Sequence.</description>
     <entry ie="Waveform" name="Waveform Identification" ref="C.10.8" usage="M"/>
     <entry ie="Waveform" name="Waveform" ref="C.10.9" usage="M"/>
     <entry ie="Waveform" name="Acquisition Context" ref="C.7.6.14" usage="M"/>
-    <entry ie="Waveform" name="Waveform Annotation" ref="C.10.10" usage="C - required if annotation is present"/>
+    <entry ie="Waveform" name="Waveform Annotation" ref="C.10.10" usage="C - Required if annotation is present"/>
     <entry ie="Waveform" name="SOP Common" ref="C.12.1" usage="M"/>
   </iod>
   <iod ref="Table A.34.7-1" name="Basic Cardiac EP IOD Modules">
@@ -1391,7 +1391,7 @@ Only a single Item shall be permitted in this Sequence.</description>
     <entry ie="Waveform" name="Waveform Identification" ref="C.10.8" usage="M"/>
     <entry ie="Waveform" name="Waveform" ref="C.10.9" usage="M"/>
     <entry ie="Waveform" name="Acquisition Context" ref="C.7.6.14" usage="M"/>
-    <entry ie="Waveform" name="Waveform Annotation" ref="C.10.10" usage="C - required if annotation is present"/>
+    <entry ie="Waveform" name="Waveform Annotation" ref="C.10.10" usage="C - Required if annotation is present"/>
     <entry ie="Waveform" name="SOP Common" ref="C.12.1" usage="M"/>
   </iod>
   <iod ref="Table A.35.1-1" name="Basic Text SR IOD Modules">
