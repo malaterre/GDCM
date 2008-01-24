@@ -19396,7 +19396,7 @@ Required if encapsulated document is an HL7 Structured Document.</description>
     </entry>
     <include ref="Any other Attribute of the Encapsulated Document Module except Encapsulated Document (0042,0011)" type="3"/>
   </module>
-  <module ref="Table F.5-33" name="Hl7 Structured Document Keys">
+  <module ref="Table F.5-33" name="HL7 Structured Document Keys">
     <entry group="0008" element="0005" name="Specific Character Set" type="1C">
       <description>Required if an extended or replacement character set is used in one of the keys.</description>
     </entry>

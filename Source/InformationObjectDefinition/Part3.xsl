@@ -60,7 +60,8 @@ Weird camel case function to get closer to docbook version
     <xsl:variable name="tmp7" select="replace($tmp6,' Ecg ',' ECG ')"/>
     <xsl:variable name="tmp8" select="replace($tmp7,' Cad ',' CAD ')"/>
     <xsl:variable name="tmp9" select="replace($tmp8,'Xa/xrf ','XA/XRF ')"/>
-    <xsl:value-of select="$tmp9"/>
+    <xsl:variable name="tmp10" select="replace($tmp9,'Hl7 ','HL7 ')"/>
+    <xsl:value-of select="$tmp10"/>
   </xsl:function>
 <!--
 Function to parse a row from an informaltable specifically for a Macro/Module table:
