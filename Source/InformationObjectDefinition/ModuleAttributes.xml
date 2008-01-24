@@ -3700,7 +3700,7 @@ Defined Terms:
 NTP - Network Time Protocol
 IRIG - InterRange Instrumentation Group
 GPS - Global Positioning System
-SNTP – Simple Network Time Protocol</description>
+SNTP - Simple Network Time Protocol</description>
     </entry>
     <entry group="0018" element="1803" name="NTP Source Address" type="3">
       <description>IP Address of NTP time source. IPv4 addresses shall be in dotted decimal (e.g. 192.168.1.1). The IPv6 addresses shall be in colon separated hexadecimal (e.g. 12:34:56:78:9a:bc:de:f0).
@@ -4624,7 +4624,7 @@ Required if Intervals Acquired (0018,1083) is present and has a value of 1. May 
 Note: During prolonged acquisitions the average heart rate may differ from the reciprocal of the nominal R-R interval.</description>
     </entry>
     <entry group="0020" element="9251" name="&gt;R – R Interval Time Nominal" type="1C">
-      <description>Nominal R-peak – R-peak interval time in ms for the cardiac cycle used for the acquisition of this frame. See C.7.6.16.2.7.1 for further explanation.
+      <description>Nominal R-peak - R-peak interval time in ms for the cardiac cycle used for the acquisition of this frame. See C.7.6.16.2.7.1 for further explanation.
 Required if Cardiac Synchronization Technique (0018,9037) equals other than NONE or REALTIME. May be present otherwise.</description>
     </entry>
     <entry group="0018" element="1081" name="&gt;Low R-R Value" type="3">
@@ -6462,7 +6462,7 @@ VECTOR_PHASED</description>
       <description>See C.8.5.6.1.8 for Description.</description>
     </entry>
     <entry group="0018" element="5050" name="Depth of Scan Field" type="3">
-      <description>The depth, in mm, from the transducer face to the deepest point included in the displayed image– the field of view.</description>
+      <description>The depth, in mm, from the transducer face to the deepest point included in the displayed image- the field of view.</description>
     </entry>
     <entry group="60xx" element="0045" name="Overlay Subtype" type="3">
       <description>Defined term which identifies the intended purpose of the ROI Overlay Type.
@@ -13968,7 +13968,7 @@ Required if Frame Type (0008,9007) Value 1 of this frame is ORIGINAL and Reconst
 Otherwise may be present if Frame Type (0008,9007) Value 1 of this frame is DERIVED and Reconstruction Diameter (0018,1100) is not present.</description>
     </entry>
     <entry group="0018" element="9322" name="&gt;Reconstruction Pixel Spacing" type="1C">
-      <description>Physical distance in the patient between the center of each reconstructed pixel, specified by a numeric pair – adjacent row spacing (delimiter) adjacent column spacing in mm. See 10.7.1.3 for further explanation of the value order.
+      <description>Physical distance in the patient between the center of each reconstructed pixel, specified by a numeric pair - adjacent row spacing (delimiter) adjacent column spacing in mm. See 10.7.1.3 for further explanation of the value order.
 Required if Frame Type (0008,9007) Value 1 of this frame is ORIGINAL. May be present otherwise.</description>
     </entry>
     <entry group="0018" element="9319" name="&gt;Reconstruction Angle" type="1C">
@@ -14410,7 +14410,7 @@ Required if the value of Pupil Dilated (0022,000D) is YES.</description>
       <description>Nominal pass-through wavelength of light path filter in nm</description>
     </entry>
     <entry group="0022" element="0002" name="&gt;Light Path Filter Pass Band" type="3">
-      <description>Pass band of light path filter in nm. This Attribute has two Values. The first is the shorter and the second the longer wavelength relative to the peak. The values are for the – 3dB nominal (1/2 of peak) pass through intensity.
+      <description>Pass band of light path filter in nm. This Attribute has two Values. The first is the shorter and the second the longer wavelength relative to the peak. The values are for the - 3dB nominal (1/2 of peak) pass through intensity.
 One of the two Values may be zero length, in which case it is a cutoff filter.</description>
     </entry>
     <entry group="0018" element="7004" name="Detector Type" type="1">
@@ -14736,7 +14736,7 @@ IMG_INTENSIFIER
 DIGITAL_DETECTOR</description>
     </entry>
     <entry group="0018" element="1164" name="Imager Pixel Spacing" type="1">
-      <description>Physical distance measured at the receptor plane of the detector between the centers of each pixel specified by a numeric pair – row spacing value (delimiter) column spacing value in mm. See 10.7.1.3 for further explanation of the value order.
+      <description>Physical distance measured at the receptor plane of the detector between the centers of each pixel specified by a numeric pair - row spacing value (delimiter) column spacing value in mm. See 10.7.1.3 for further explanation of the value order.
 Note: These values are the actual pixel spacing distances of the stored pixel values of an image.</description>
     </entry>
     <entry group="0018" element="9426" name="Distance Receptor Plane to Detector Housing" type="2">
@@ -14965,7 +14965,7 @@ Only a single Item shall be permitted in this sequence.</description>
     </entry>
     <entry group="0018" element="9452" name="&gt;Calculated Anatomy Thickness" type="1">
       <description>The physical thickness in mm of the anatomic region of interest as specified in the Anatomic Region Sequence (0008,2218) in the direction of the center of the beam.
-Note: The value takes in account the position relative to object and the X-Ray source – detector axis.</description>
+Note: The value takes in account the position relative to object and the X-Ray source - detector axis.</description>
     </entry>
   </macro>
   <macro ref="Table C.8.19.6-8" name="X Ray Frame Acquisition Macro Attributes">
@@ -15410,7 +15410,7 @@ PLANE B
 Required if present and consistent in the contributing SOP Instances.</description>
     </entry>
     <entry group="0018" element="1164" name="&gt;Imager Pixel Spacing" type="1C">
-      <description>Physical distance measured at the receptor plane of the detector between the centers of each pixel specified by a numeric pair – row spacing value (delimiter) column spacing value in mm.
+      <description>Physical distance measured at the receptor plane of the detector between the centers of each pixel specified by a numeric pair - row spacing value (delimiter) column spacing value in mm.
 Required if present and consistent in the contributing SOP Instances.</description>
     </entry>
   </module>
@@ -15431,7 +15431,7 @@ Required if present and consistent in the contributing SOP Instances.</descripti
 Required if present and have an equal value in the contributing SOP Instances.</description>
     </entry>
     <entry group="0018" element="1164" name="&gt;Imager Pixel Spacing" type="1C">
-      <description>Physical distance measured at the receptor plane of the detector between the centers of each pixel specified by a numeric pair – row spacing value (delimiter) column spacing value in mm.
+      <description>Physical distance measured at the receptor plane of the detector between the centers of each pixel specified by a numeric pair - row spacing value (delimiter) column spacing value in mm.
 Required if present and consistent in the contributing SOP Instances.</description>
     </entry>
   </module>
@@ -15832,7 +15832,7 @@ MAGNIFY
 See C.10.4 for further explanation.</description>
     </entry>
     <entry group="0070" element="0101" name="&gt;Presentation Pixel Spacing" type="1C">
-      <description>Physical distance between the center of each pixel in the referenced image (before spatial transformation), specified by a numeric pair – adjacent row spacing (delimiter) adjacent column spacing in mm. See 10.7.1.3 for further explanation of the value order.
+      <description>Physical distance between the center of each pixel in the referenced image (before spatial transformation), specified by a numeric pair - adjacent row spacing (delimiter) adjacent column spacing in mm. See 10.7.1.3 for further explanation of the value order.
 Notes: 1. This value may be different from Pixel Spacing (0028,0030) or Imager Pixel Spacing (0018,1164) specified in the referenced image, which are ignored, since some form of calibration may have been performed (for example by reference to an object of known size in the image).
 2. If the row and column spacing are different, then the pixel aspect ratio of the image is not 1:1.
 Required if Presentation Size Mode (0070,0100) is TRUE SIZE, in which case the values will correspond to the physical distance between the center of each pixel on the display device.
@@ -16173,10 +16173,10 @@ Note: In the context of a Channel Display Sequence (003A,0242) Item, only a sing
     <entry group="003A" element="0246" name="&gt;&gt;Display Shading Flag" type="3">
       <description>Specifies display area shading between the displayed waveform channel and another line. The nature of the shading (e.g., solid, or cross-hatching) is implementation dependent.
 Enumerated Values:
-NONE – no shading
-BASELINE– shading between the waveform and the channel display baseline (sample value 0 equivalent location)
-ABSOLUTE – shading between the waveform and the channel real world actual value 0 (i.e., taking into account the Channel Baseline (003A,0213) value)
-DIFFERENCE – shading between the waveform and a second waveform in the Presentation Group at the same Channel Position that also has Display Shading Flag (003A,0246) value DIFFERENCE.</description>
+NONE - no shading
+BASELINE- shading between the waveform and the channel display baseline (sample value 0 equivalent location)
+ABSOLUTE - shading between the waveform and the channel real world actual value 0 (i.e., taking into account the Channel Baseline (003A,0213) value)
+DIFFERENCE - shading between the waveform and a second waveform in the Presentation Group at the same Channel Position that also has Display Shading Flag (003A,0246) value DIFFERENCE.</description>
     </entry>
     <entry group="003A" element="0247" name="&gt;&gt;Fractional Channel Display Scale" type="1C">
       <description>Fraction of the Presentation Group vertical display dimension assigned to the unit quantity (least significant bit) of the Channel samples (see C.10.9.1.10). Required if Absolute Channel Display Scale (003A,0248) is not present, may be present otherwise.</description>
@@ -16764,7 +16764,7 @@ Notes: 1. As technology advances, additional encryption algorithms may be allowe
     </entry>
     <entry group="0400" element="0305" name="&gt;Certified Timestamp Type" type="1C">
       <description>The type of certified timestamp used in the Certified Timestamp (0400,0310) Attribute. Required if Certified Timestamp (0400,0310) is present.
-Defined Terms: CMS_TSP – Internet X.509 Public Key Infrastructure Time Stamp Protocol
+Defined Terms: CMS_TSP - Internet X.509 Public Key Infrastructure Time Stamp Protocol
 Note: Digital Signature Security Profiles (see PS 3.15) may require the use of a restricted subset of these terms.</description>
     </entry>
     <entry group="0400" element="0310" name="&gt;Certified Timestamp" type="3">
@@ -17378,9 +17378,9 @@ One or more Items may be included in this sequence.</description>
     <entry group="0040" element="A080" name="&gt;Participation Type" type="1">
       <description>Participant's role with respect to the clinical content of this document. See C.17.2.5.
 Defined Terms:
-SOURCE – Equipment that contributed to the content
-ENT – Data enterer (e.g., transcriptionist)
-ATTEST – Attestor
+SOURCE - Equipment that contributed to the content
+ENT - Data enterer (e.g., transcriptionist)
+ATTEST - Attestor
 Note: In HL7 Structured Documents, the participation comparable to Attestor is the “Authenticator”.</description>
     </entry>
     <entry group="0040" element="A082" name="&gt;Participation DateTime" type="2">
@@ -17490,8 +17490,8 @@ Required if the identity of a CDA Document equivalent to the current SOP Instanc
   <macro ref="Table C.17-3b" name="Identified Person OR Device Macro Attributes">
     <entry group="0040" element="A084" name="Observer Type" type="1">
       <description>Enumerated Values:
-PSN – Person
-DEV – Device</description>
+PSN - Person
+DEV - Device</description>
     </entry>
     <entry group="0040" element="A123" name="Person Name" type="1C">
       <description>Name of the person observer for this document Instance.
@@ -18220,10 +18220,10 @@ Required if Modality (0008,0060) is not present. May be present otherwise.</desc
     <entry group="0020" element="0060" name="&gt;Laterality" type="2C">
       <description>Laterality of the body part to which this Hanging Protocol applies.
 Enumerated Values:
-R – Right
-L – Left
-B – Both
-U – Unpaired
+R - Right
+L - Left
+B - Both
+U - Unpaired
 Zero length means not applicable.
 Required if Anatomic Region Sequence (0008,2218) is present.</description>
     </entry>
@@ -18247,8 +18247,8 @@ Required if Anatomic Region Sequence (0008,2218) is present.</description>
     <entry group="0072" element="0024" name="&gt;&gt;Image Set Selector Usage Flag" type="1">
       <description>Indicates the behavior of matching against an image object when the Selector Attribute (0072,0026) is not available in the image object.
 Enumerated Values:
-MATCH – if the attribute is not in the image object, consider the image to be a match anyway.
-NO_MATCH – if the attribute is not in the image object, then do not consider the image to be a match.</description>
+MATCH - if the attribute is not in the image object, consider the image to be a match anyway.
+NO_MATCH - if the attribute is not in the image object, then do not consider the image to be a match.</description>
     </entry>
     <entry group="0072" element="0026" name="&gt;&gt;Selector Attribute" type="1">
       <description>Data Element Tag of an Attribute from an Image or other IOD to use for Image Set selection.</description>
@@ -18289,7 +18289,7 @@ Required if Relative Time (0072,0038) is present.</description>
     </entry>
     <entry group="0072" element="003C" name="&gt;&gt;Abstract Prior Value" type="1C">
       <description>Identifies a prior image set in abstract terms.
-Exactly two integer values, indicating the range of prior studies to include. Each value shall be greater than zero, where 1 indicates the most recent prior and higher values indicate successively older priors. The special value –1 shall indicate the oldest prior.
+Exactly two integer values, indicating the range of prior studies to include. Each value shall be greater than zero, where 1 indicates the most recent prior and higher values indicate successively older priors. The special value -1 shall indicate the oldest prior.
 Notes: 1. The value pair n\n indicates the nth prior.
 2. The value pair -1\-1 indicates the oldest prior.
 3. The value pair m\n indicates the mth through nth priors, where m is the more recent prior.
@@ -18517,7 +18517,7 @@ Enumerated Values: INCREASING, DECREASING</description>
     <entry group="0072" element="0500" name="&gt;Blending Operation Type" type="3">
       <description>Type of blending of superimposed and underlying images from the image set, performed before reformatting. See C.23.3.1.3.
 Defined Terms:
-COLOR – apply a pseudo-color to the superimposed image while blending</description>
+COLOR - apply a pseudo-color to the superimposed image while blending</description>
     </entry>
     <entry group="0072" element="0510" name="&gt;Reformatting Operation Type" type="3">
       <description>Reformatting operation to be applied to the Image Set.

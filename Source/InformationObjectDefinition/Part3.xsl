@@ -98,7 +98,7 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
               <xsl:when test="$group != '' and $element != ''">
                 <entry group="{$group}" element="{$element}" name="{translate($name_translate,'','µ')}" type="{normalize-space($type)}">
                   <description>
-                    <xsl:value-of select="my:normalize-paragraph(translate($description,' ­',' µ'))"/>
+                    <xsl:value-of select="my:normalize-paragraph(translate($description,'– ­','- µ'))"/>
                   </description>
                 </entry>
               </xsl:when>
