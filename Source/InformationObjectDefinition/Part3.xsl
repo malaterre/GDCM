@@ -30,6 +30,15 @@ $ java -jar ~/Software/saxon/saxon8.jar  08_03pu.xml Part3.xsl > ModuleAttribute
   </xsl:variable>
 <!--
 
+Special normalize-space
+
+-->
+  <xsl:function name="my:normalize-paragraph" as="xs:string*">
+    <xsl:param name="string" as="xs:string*"/>
+      <xsl:sequence select="for $s in $string return string-join( for $word in tokenize($s, $linebreak) return normalize-space($word), $linebreak)"/>
+  </xsl:function>
+<!--
+
 Weird camel case function to get closer to docbook version
 
 -->
@@ -89,7 +98,7 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
               <xsl:when test="$group != '' and $element != ''">
                 <entry group="{$group}" element="{$element}" name="{translate($name_translate,'','µ')}" type="{normalize-space($type)}">
                   <description>
-                    <xsl:value-of select="translate($description,' ­',' µ')"/>
+                    <xsl:value-of select="my:normalize-paragraph(translate($description,' ­',' µ'))"/>
                   </description>
                 </entry>
               </xsl:when>
