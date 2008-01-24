@@ -74,7 +74,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     </entry>
     <entry group="0008" element="010B" name="Context Group Extension Flag" type="3">
       <description>Indicates whether the Code Value/Coding Scheme/Code Meaning is selected from a private extension of the Context Group identified in Context Identifier (0008,010F). See Section 8.7 of this Part.
-Enumerated Values: “Y”, ”N”
+Enumerated Values: "Y", "N"
 </description>
     </entry>
     <entry group="0008" element="0107" name="Context Group Local Version" type="1C">
@@ -303,7 +303,7 @@ Note: The condition is to allow the contents of this macro to be present (e.g., 
     <entry group="0028" element="0A04" name="Pixel Spacing Calibration Description" type="1C">
       <description>A free text description of the type of correction or calibration performed.
 Notes: 1. In the case of correction, the text might include description of the assumptions made about the body part and geometry and depth within the patient.
-2. in the case of calibration, the text might include a description of the fiducial and where it is located (e.g., “XYZ device applied to the skin over the greater trochanter”).
+2. in the case of calibration, the text might include a description of the fiducial and where it is located (e.g., "XYZ device applied to the skin over the greater trochanter").
 3. Though it is not required, the Device Module may be used to describe the specific characteristics and size of the calibration device.
 Required if Pixel Spacing Calibration Type (0028,0A02) is present.</description>
     </entry>
@@ -3397,7 +3397,7 @@ NO</description>
     </entry>
     <entry group="0012" element="0063" name="De-identification Method" type="1C">
       <description>A description or label of the mechanism or method use to remove the patient's identity. May be multi-valued if successive de-identification steps have been performed.
-Note: This may be used to describe the extent or thoroughness of the de-identification, for example whether or not the de-identification is for a “Limited Data Set” (as per HIPAA Privacy Rule).
+Note: This may be used to describe the extent or thoroughness of the de-identification, for example whether or not the de-identification is for a "Limited Data Set" (as per HIPAA Privacy Rule).
 Required if Patient Identity Removed (0012,0062) is present and has a value of YES and De-identification Method Code Sequence (0012,0064) is not present.</description>
     </entry>
     <entry group="0012" element="0064" name="De-identification Method Code Sequence" type="1C">
@@ -4188,7 +4188,7 @@ ENDSYSTOLE = the frame closest to end of systole, at the end of the T-wave</desc
     <entry group="0028" element="9416" name="&gt;Subtraction Item ID" type="1C">
       <description>Identification of the Subtraction Item used to associate a certain Mask Sub-Pixel Shift (0028,6114) in the Frame Pixel Shift Functional Group.
 See C.7.6.16.2.14.1.
-Required if SOP Class UID (0008,0016) equals “1.2.840.10008.5.1.4.1.1.12.1.1” or “1.2.840.10008.5.1.4.1.1.12.2.1”. May be present otherwise.</description>
+Required if SOP Class UID (0008,0016) equals "1.2.840.10008.5.1.4.1.1.12.1.1" or "1.2.840.10008.5.1.4.1.1.12.2.1". May be present otherwise.</description>
     </entry>
     <entry group="0028" element="6102" name="&gt;Applicable Frame Range" type="1C">
       <description>Each pair of numbers in this multi-valued attribute specify a beginning and ending frame number inclusive of a range where this particular mask operation is valid. Discontinuous ranges are represented by multiple pairs of numbers. Frames in a Multi-frame Image are specified by sequentially increasing number values beginning with 1. If this Attribute is missing in this particular sequence item, then the mask operation is applicable throughout the entire Multi-frame Image, subject to certain limits as described in C.7.6.10.1.1.
@@ -4361,7 +4361,7 @@ PNAME
 See Section 10.2.</description>
     </entry>
     <entry group="0040" element="A043" name="&gt;Concept Name Code Sequence" type="1">
-      <description>A concept that constrains the meaning of (i.e. defines the role of) the Observation Value. The “Name” component of a Name/Value pair. This sequence shall contain exactly one item.</description>
+      <description>A concept that constrains the meaning of (i.e. defines the role of) the Observation Value. The "Name" component of a Name/Value pair. This sequence shall contain exactly one item.</description>
     </entry>
     <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context is defined."/>
     <entry group="0040" element="A136" name="&gt;Referenced Frame Numbers" type="1C">
@@ -4765,7 +4765,7 @@ ARTERIAL
 CAPILLARY
 VENOUS
 PORTAL_VENOUS
-Required if Contrast/Bolus Administration Route Sequence (0018,0014) for the Contrast/Bolus Agent Number (0018,9337) defined in the Contrast/Bolus Agent Sequence (0018,0012) is (G-D101, SRT, “Intravenous route”) or (G-D101, SNM3, “Intravenous route”); may be present otherwise.
+Required if Contrast/Bolus Administration Route Sequence (0018,0014) for the Contrast/Bolus Agent Number (0018,9337) defined in the Contrast/Bolus Agent Sequence (0018,0012) is (G-D101, SRT, "Intravenous route") or (G-D101, SNM3, "Intravenous route"); may be present otherwise.
 Note: SRT is the preferred designator for SNOMED, but SNM3 is allowed for backward compatibility. See PS3.16.</description>
     </entry>
   </macro>
@@ -6593,11 +6593,11 @@ Required if Frame Increment Pointer (0028,0009) points to Page Number Vector (00
 Required if Frame Increment Pointer (0028,0009) points to Frame Label Vector (0018,2002).</description>
     </entry>
     <entry group="0018" element="2003" name="Frame Primary Angle Vector" type="1C">
-      <description>An array which contains, for each of the image frames, the primary angle of rotation about an undefined axis, in degrees. May be used for annotative purposes for “cine loops” of 3D reprojected images
+      <description>An array which contains, for each of the image frames, the primary angle of rotation about an undefined axis, in degrees. May be used for annotative purposes for "cine loops" of 3D reprojected images
 Required if Frame Increment Pointer (0028,0009) points to Frame Primary Angle Vector (0018,2003).</description>
     </entry>
     <entry group="0018" element="2004" name="Frame Secondary Angle Vector" type="1C">
-      <description>An array which contains, for each of the image frames, the secondary angle of rotation about an undefined axis that is orthogonal to that used for Frame Primary Angle Vector (0018,2003), in degrees. May be used for annotative purposes for “cine loops” of 3D reprojected images
+      <description>An array which contains, for each of the image frames, the secondary angle of rotation about an undefined axis that is orthogonal to that used for Frame Primary Angle Vector (0018,2003), in degrees. May be used for annotative purposes for "cine loops" of 3D reprojected images
 Required if Frame Increment Pointer (0028,0009) points to Frame Secondary Angle Vector (0018,2004).</description>
     </entry>
     <entry group="0018" element="2005" name="Slice Location Vector" type="1C">
@@ -6935,7 +6935,7 @@ Note: This value is traditionally referred to as Source Image Receptor Distance 
     <entry group="0018" element="1111" name="Distance Source to Patient" type="3">
       <description>Distance in mm from source to the table, support or bucky side that is closest to the Imaging Subject, as measured along the central ray of the X-Ray beam.
 Note: 1. This definition is less useful in terms of estimating geometric magnification than a measurement to a defined point within the Imaging Subject, but accounts for what is realistically measurable in an automated fashion in a clinical setting.
-2. This measurement does not take into account any air gap between the Imaging Subject and the “front” of the table or bucky.
+2. This measurement does not take into account any air gap between the Imaging Subject and the "front" of the table or bucky.
 3. If the detector is not mounted in a table or bucky, then the actual position relative to the patient is implementation or operator defined.
 4. This value is traditionally referred to as Source Object Distance (SOD).</description>
     </entry>
@@ -9303,7 +9303,7 @@ EPID = electronic portal imaging device
 FILM = dose sensitive film</description>
     </entry>
     <entry group="3008" element="0012" name="&gt;Measured Dose Description" type="3">
-      <description>User-defined description of Dose Reference (e.g. “Exit dose”, “Point A”).</description>
+      <description>User-defined description of Dose Reference (e.g. "Exit dose", "Point A").</description>
     </entry>
   </module>
   <module ref="Table C.8-56" name="Calculated Dose Reference Record Module Attributes">
@@ -12224,7 +12224,7 @@ Only a single Item shall be permitted in this Sequence.</description>
     <entry group="0018" element="1111" name="Distance Source to Patient" type="3">
       <description>Distance in mm from source to the table, support or bucky side that is closest to the Imaging Subject, as measured along the central ray of the X-Ray beam.
 Note: 1. This definition is less useful in terms of estimating geometric magnification than a measurement to a defined point within the Imaging Subject, but accounts for what is realistically measurable in an automated fashion in a clinical setting.
-2. This measurement does not take into account any air gap between the Imaging Subject and the “front” of the table or bucky.
+2. This measurement does not take into account any air gap between the Imaging Subject and the "front" of the table or bucky.
 3. If the detector is not mounted in a table or bucky, then the actual position relative to the patient is implementation or operator defined.
 4. This value is traditionally referred to as Source Object Distance (SOD).
 See C.8.11.7 Mammography Image Module for explanation if Positioner Type (0018,1508) is MAMMOGRAPHIC.</description>
@@ -12350,16 +12350,16 @@ NO</description>
 Enumerated Values: YES, NO
 If this Attribute is absent, then the image may or may not be a partial view.
 Note: This may occur when a breast is larger than the active area of the detector.
-If this Attribute is present, its value shall be NO if there is a View Modifier Code Sequence (0054,0222) Item of value (R-102D6, SNM3, “Magnification”) or (R-102D7, SNM3, “Spot Compression”).</description>
+If this Attribute is present, its value shall be NO if there is a View Modifier Code Sequence (0054,0222) Item of value (R-102D6, SNM3, "Magnification") or (R-102D7, SNM3, "Spot Compression").</description>
     </entry>
     <entry group="0028" element="1351" name="Partial View Description" type="3">
       <description>Free text description of the portion of the breast captured in a partial view image.
-This Attribute shall not be present if there is a View Modifier Code Sequence (0054,0222) Item of value (R-102D6, SNM3, “Magnification”) or (R-102D7, SNM3, “Spot Compression”).</description>
+This Attribute shall not be present if there is a View Modifier Code Sequence (0054,0222) Item of value (R-102D6, SNM3, "Magnification") or (R-102D7, SNM3, "Spot Compression").</description>
     </entry>
     <entry group="0028" element="1352" name="Partial View Code Sequence" type="3">
       <description>Sequence that describes the portion or section of the breast captured in a partial view image. One or two Items may be present. See C.8.11.7.1.3.
 If this Attribute is absent, then the image may or may not be a partial view.
-This Attribute shall not be present if there is a View Modifier Code Sequence (0054,0222) Item of value (R-102D6, SNM3, “Magnification”) or (R-102D7, SNM3, “Spot Compression”).</description>
+This Attribute shall not be present if there is a View Modifier Code Sequence (0054,0222) Item of value (R-102D6, SNM3, "Magnification") or (R-102D7, SNM3, "Spot Compression").</description>
     </entry>
     <include ref="&gt;Include 'Code Sequence Macro' (Table 8.8-1)." description="Defined Context ID is 4005."/>
     <include ref="Include 'General Anatomy Mandatory Macro' Table 10-5" description="Defined Context ID for the Anatomic Region Sequence is 4013."/>
@@ -12566,13 +12566,13 @@ See C.7.6.1.1.5 for further explanation.</description>
 See C.7.6.1.1.5 for further explanation.
 May be multivalued if successive lossy compression steps have been applied.
 Note: For example, a compression ratio of 30:1 would be described in this Attribute with a single value of 30.
-Required if Lossy Images Compression (0028,2110) is “01”.</description>
+Required if Lossy Images Compression (0028,2110) is "01".</description>
     </entry>
     <entry group="0028" element="2114" name="Lossy Image Compression Method" type="1C">
       <description>A label for the lossy compression method(s) that have been applied to this image.
 See C.7.6.1.1.5 for further explanation.
 May be multivalued if successive lossy compression steps have been applied; the value order shall correspond to the values of Lossy Image Compression Ratio (0028,2112).
-Required if Lossy Image Compression (0028,2110) is “01”.</description>
+Required if Lossy Image Compression (0028,2110) is "01".</description>
     </entry>
     <entry group="2050" element="0020" name="Presentation LUT Shape" type="1">
       <description>Specifies an identity transformation for the Presentation LUT, such that the output of all grayscale transformations defined in the IOD containing this Module are defined to be P-Values.
@@ -13083,7 +13083,7 @@ NONE
 Required if Frame Type (0008,9007) Value 1 is ORIGINAL. May be present otherwise.</description>
     </entry>
     <entry group="0018" element="9022" name="&gt;Blood Signal Nulling" type="1C">
-      <description>Blood Signal Nulling (“Black Blood”) preparatory pulse sequence.
+      <description>Blood Signal Nulling ("Black Blood") preparatory pulse sequence.
 Enumerated Values:
 YES
 NO
@@ -13356,7 +13356,7 @@ See section C.8.14.1.1 for further explanation of the ordering.
 Required if Image Type (0008,0008) Value 1 is ORIGINAL or MIXED. May be present otherwise.</description>
     </entry>
     <entry group="0018" element="9054" name="Volume Localization Technique" type="1C">
-      <description>Name of volume localization technique used. Shall be “NONE” if no spatial localization was performed.
+      <description>Name of volume localization technique used. Shall be "NONE" if no spatial localization was performed.
 Defined Terms:
 ILOPS
 ISIS
@@ -13779,13 +13779,13 @@ See C.7.6.1.1.5 for further explanation.</description>
 See C.7.6.1.1.5 for further explanation.
 May be multivalued if successive lossy compression steps have been applied.
 Note: For example, a compression ratio of 30:1 would be described in this Attribute with a single value of 30.
-Required if Lossy Images Compression (0028,2110) is “01”.</description>
+Required if Lossy Images Compression (0028,2110) is "01".</description>
     </entry>
     <entry group="0028" element="2114" name="Lossy Image Compression Method" type="1C">
       <description>A label for the lossy compression method(s) that have been applied to this image.
 See C.7.6.1.1.5 for further explanation.
 May be multivalued if successive lossy compression steps have been applied; the value order shall correspond to the values of Lossy Image Compression Ratio (0028,2112).
-Required if Lossy Image Compression (0028,2110) is “01”.</description>
+Required if Lossy Image Compression (0028,2110) is "01".</description>
     </entry>
     <entry group="2050" element="0020" name="Presentation LUT Shape" type="1">
       <description>Specifies an identity transformation for the Presentation LUT, such that the output of all grayscale transformations defined in the IOD containing this Module are defined to be P-Values.
@@ -14052,7 +14052,7 @@ NIOBIUM
 EUROPIUM
 LEAD
 MIXED
-Note: MIXED may be used to indicate a filter type of complex composition for which listing the individual materials would be excessive or undesirable; it is not intended to mean “unknown”.
+Note: MIXED may be used to indicate a filter type of complex composition for which listing the individual materials would be excessive or undesirable; it is not intended to mean "unknown".
 Required if Frame Type (0008,9007) Value 1 of this frame is ORIGINAL and the value of Filter Type (0018,1160) is other than NONE. May be present otherwise.</description>
     </entry>
     <entry group="0018" element="9351" name="&gt;Calcium Scoring Mass Factor Patient" type="3">
@@ -14154,7 +14154,7 @@ Enumerated value shall be 0 (color-by-pixel).</description>
     <entry group="0028" element="0030" name="Pixel Spacing" type="1C">
       <description>Nominal physical distance at the focal plane (in the retina) between the center of each pixel, specified by a numeric pair - adjacent row spacing (delimiter) adjacent column spacing in mm. See 10.7.1.3 for further explanation of the value order.
 Note: These values are specified as nominal because the physical distance may vary across the field of the images and the lens correction is likely to be imperfect.
-Required when Acquisition Device Type Code Sequence (0022,0015) contains an item with the value (SRT, R-1021A,”Fundus Camera”). May be present otherwise.</description>
+Required when Acquisition Device Type Code Sequence (0022,0015) contains an item with the value (SRT, R-1021A,"Fundus Camera"). May be present otherwise.</description>
     </entry>
     <entry group="0008" element="0033" name="Content Time" type="1">
       <description>The time the image pixel data creation started.</description>
@@ -14187,13 +14187,13 @@ See C.7.6.1.1.5</description>
 May be multivalued if successive lossy compression steps have been applied.
 Notes: 1. For example, a compression ratio of 30:1 would be described in this Attribute with a single value of 30.
 2. For historical reasons, the lossy compression ratio should also be described in Derivation Description (0008,2111)
-Required if Lossy Image Compression (0028,2110) has a value of “01”.</description>
+Required if Lossy Image Compression (0028,2110) has a value of "01".</description>
     </entry>
     <entry group="0028" element="2114" name="Lossy Image Compression Method" type="1C">
       <description>A label for the lossy compression method(s) that have been applied to this image.
 See C.7.6.1.1.5 for further explanation.
 May be multivalued if successive lossy compression steps have been applied; the value order shall correspond to the values of Lossy Image Compression Ratio (0028,2112).
-Required if Lossy Image Compression (0028,2110) has a value of “01”.
+Required if Lossy Image Compression (0028,2110) has a value of "01".
 Note: For historical reasons, the lossy compression method should also be described in Derivation Description (0008,2111).</description>
     </entry>
     <entry group="2050" element="0020" name="Presentation LUT Shape" type="1C">
@@ -14322,7 +14322,7 @@ Notes: 1. For example, a compression ratio of 30:1 would be described in this At
       <description>A label for the lossy compression method(s) that have been applied to this image.
 See C.7.6.1.1.5 for further explanation.
 May be multi-valued if successive lossy compression steps have been applied; the value order shall correspond to the values of Lossy Image Compression Ratio (0028,2112).
-Required if Lossy Image Compression (0028,2110) has a value of “01”.
+Required if Lossy Image Compression (0028,2110) has a value of "01".
 Note: For historical reasons, the lossy compression method should also be described in Derivation Description (0008,2111).</description>
     </entry>
     <entry group="0028" element="0301" name="Burned In Annotation" type="1">
@@ -14421,31 +14421,31 @@ PHOTO = Photodetector
 INT = Interferometer</description>
     </entry>
     <entry group="0022" element="0055" name="Illumination Wave Length" type="1C">
-      <description>Wavelength of the illuminator in nm. Required if Acquisition Device Type Code Sequence (0022,0015) contains an item with the value (A-00FBE, SRT, ”Optical Coherence Tomography Scanner”). May be present otherwise.</description>
+      <description>Wavelength of the illuminator in nm. Required if Acquisition Device Type Code Sequence (0022,0015) contains an item with the value (A-00FBE, SRT, "Optical Coherence Tomography Scanner"). May be present otherwise.</description>
     </entry>
     <entry group="0022" element="0056" name="Illumination Power" type="1C">
-      <description>Power of the illuminator in microwatts at corneal plane. Required if Acquisition Device Type Code Sequence (0022,0015) contains an item with the value (SRT, A-00FBE,”Optical Coherence Tomography Scanner”). May be present otherwise.</description>
+      <description>Power of the illuminator in microwatts at corneal plane. Required if Acquisition Device Type Code Sequence (0022,0015) contains an item with the value (SRT, A-00FBE,"Optical Coherence Tomography Scanner"). May be present otherwise.</description>
     </entry>
     <entry group="0022" element="0057" name="Illumination Bandwidth" type="1C">
-      <description>Bandwidth of the illuminator in nm. Required if Acquisition Device Type Code Sequence (0022,0015) contains an item with the value (A-00FBE, SRT, ”Optical Coherence Tomography Scanner”). May be present otherwise.</description>
+      <description>Bandwidth of the illuminator in nm. Required if Acquisition Device Type Code Sequence (0022,0015) contains an item with the value (A-00FBE, SRT, "Optical Coherence Tomography Scanner"). May be present otherwise.</description>
     </entry>
     <entry group="0022" element="0035" name="Depth Spatial Resolution" type="1C">
-      <description>The inherent limiting resolution in microns for depth of the acquisition equipment for high contrast objects for the data gathering and reconstruction technique chosen. If variable, the value at the center of the scanning volume. Required if Acquisition Device Type Code Sequence (0022,0015) contains an item with the value (A-00FBE, SRT, ”Optical Coherence Tomography Scanner”). May be present otherwise.</description>
+      <description>The inherent limiting resolution in microns for depth of the acquisition equipment for high contrast objects for the data gathering and reconstruction technique chosen. If variable, the value at the center of the scanning volume. Required if Acquisition Device Type Code Sequence (0022,0015) contains an item with the value (A-00FBE, SRT, "Optical Coherence Tomography Scanner"). May be present otherwise.</description>
     </entry>
     <entry group="0022" element="0036" name="Maximum Depth Distortion" type="1C">
-      <description>Maximum distortion in depth direction in % of Depth Spatial Resolution. Required if Acquisition Device Type Code Sequence (0022,0015) contains an item with the value (SRT, A-00FBE,”Optical Coherence Tomography Scanner”). May be present otherwise.</description>
+      <description>Maximum distortion in depth direction in % of Depth Spatial Resolution. Required if Acquisition Device Type Code Sequence (0022,0015) contains an item with the value (SRT, A-00FBE,"Optical Coherence Tomography Scanner"). May be present otherwise.</description>
     </entry>
     <entry group="0022" element="0037" name="Along-scan Spatial Resolution" type="1C">
-      <description>The inherent limiting resolution in microns of the acquisition equipment in the direction of a row. Required if Acquisition Device Type Code Sequence (0022,0015) contains an item with the value (A-00FBE, SRT, ”Optical Coherence Tomography Scanner”). May be present otherwise.</description>
+      <description>The inherent limiting resolution in microns of the acquisition equipment in the direction of a row. Required if Acquisition Device Type Code Sequence (0022,0015) contains an item with the value (A-00FBE, SRT, "Optical Coherence Tomography Scanner"). May be present otherwise.</description>
     </entry>
     <entry group="0022" element="0038" name="Maximum Along-scan Distortion" type="1C">
-      <description>Maximum distortion in along-scan direction in % of Along-scan Spatial Resolution. Required if Acquisition Device Type Code Sequence (0022,0015) contains an item with the value (A-00FBE, SRT, ”Optical Coherence Tomography Scanner”). May be present otherwise.</description>
+      <description>Maximum distortion in along-scan direction in % of Along-scan Spatial Resolution. Required if Acquisition Device Type Code Sequence (0022,0015) contains an item with the value (A-00FBE, SRT, "Optical Coherence Tomography Scanner"). May be present otherwise.</description>
     </entry>
     <entry group="0022" element="0048" name="Across-scan Spatial Resolution" type="1C">
-      <description>The inherent limiting resolution in microns of the acquisition equipment perpendicular to the slice. Required if Acquisition Device Type Code Sequence (0022,0015) contains an item with the value (A-00FBE, SRT, ”Optical Coherence Tomography Scanner”). May be present otherwise.</description>
+      <description>The inherent limiting resolution in microns of the acquisition equipment perpendicular to the slice. Required if Acquisition Device Type Code Sequence (0022,0015) contains an item with the value (A-00FBE, SRT, "Optical Coherence Tomography Scanner"). May be present otherwise.</description>
     </entry>
     <entry group="0022" element="0049" name="Maximum Across-scan Distortion" type="1C">
-      <description>Maximum distortion in across-scan direction in % of cross-scan Spatial Resolution. Required if Acquisition Device Type Code Sequence (0022,0015) contains an item with the value (A-00FBE, SRT, ”Optical Coherence Tomography Scanner”). May be present otherwise.</description>
+      <description>Maximum distortion in across-scan direction in % of cross-scan Spatial Resolution. Required if Acquisition Device Type Code Sequence (0022,0015) contains an item with the value (A-00FBE, SRT, "Optical Coherence Tomography Scanner"). May be present otherwise.</description>
     </entry>
   </module>
   <macro ref="Table C.8.17.10-1" name="Ophthalmic Frame Location Macro Attributes">
@@ -15948,7 +15948,7 @@ ELLIPSE</description>
 Enumerated Values:
 Y = yes
 N = no
-Required if Graphic Data (0070,0022) is “closed”, that is Graphic Type (0070,0023) is CIRCLE or ELLIPSE, or Graphic Type (0070,0023) is POLYLINE or INTERPOLATED and the first data point is the same as the last data point.</description>
+Required if Graphic Data (0070,0022) is "closed", that is Graphic Type (0070,0023) is CIRCLE or ELLIPSE, or Graphic Type (0070,0023) is POLYLINE or INTERPOLATED and the first data point is the same as the last data point.</description>
     </entry>
   </module>
   <module ref="Table C.10-6" name="Spatial Transformation Module Attributes">
@@ -16147,7 +16147,7 @@ See section C.10.9.1.7</description>
     </entry>
     <entry group="003A" element="0240" name="Waveform Presentation Group Sequence" type="3">
       <description>Sequence of Items, each Item describing a Presentation Group of one or more waveform channels to be displayed together.
-Note: A Presentation Group is conventionally denoted a “display page”, and a waveform object may be rendered using several Presentation Groups under user display control.
+Note: A Presentation Group is conventionally denoted a "display page", and a waveform object may be rendered using several Presentation Groups under user display control.
 One or more Items may be present.</description>
     </entry>
     <entry group="003A" element="0241" name="&gt;Presentation Group Number" type="1">
@@ -16348,7 +16348,7 @@ Note:	LIN OD is only defined for hardcopy devices and is not applicable to softc
 One or more Items may be included in this Sequence.</description>
     </entry>
     <entry group="0060" element="3002" name="&gt;Histogram Number of Bins" type="1">
-      <description>The number of “bins” (entries) in the histogram.</description>
+      <description>The number of "bins" (entries) in the histogram.</description>
     </entry>
     <entry group="0060" element="3004" name="&gt;Histogram First Bin Value" type="1">
       <description>The stored pixel value corresponding to the lowest pixel value counted in the first bin. All image pixel values less than this value are not included in the histogram.
@@ -16583,12 +16583,12 @@ Defined term: HL7</description>
     </entry>
     <entry group="0008" element="0201" name="Timezone Offset From UTC" type="3">
       <description>Contains the offset from UTC to the timezone for all DA and TM Attributes present in this SOP Instance, and for all DT Attributes present in this SOP Instance that do not contain an explicitly encoded timezone offset.
-Encoded as an ASCII string in the format “&amp;ZZXX”. The components of this string, from left to right, are &amp; = “+” or “-”, and ZZ = Hours and XX = Minutes of offset. Leading space characters shall not be present.
+Encoded as an ASCII string in the format "&amp;ZZXX". The components of this string, from left to right, are &amp; = "+" or "-", and ZZ = Hours and XX = Minutes of offset. Leading space characters shall not be present.
 The offset for UTC shall be +0000; -0000 shall not be used.
 Notes: 1. This encoding is the same as described in PS 3.5 for the offset component of the DT Value Representation.
 2. This Attribute does not apply to values with a DT Value Representation, that contains an explicitly encoded timezone offset.
 3. The corrected time may cross a 24 hour boundary. For example, if Local Time = 1.00 a.m. and Offset = +0200, then UTC = 11.00 p.m. (23.00) the day before.
-4. The “+” sign may not be omitted.
+4. The "+" sign may not be omitted.
 Time earlier than UTC is expressed as a negative offset.
 Note: For example:
 UTC = 5.00 a.m.
@@ -16708,7 +16708,7 @@ Required if HL7 Structured Documents are referenced within the Instance.</descri
       <description>Unique identifier for the HL7 Structured Document as used in DICOM instance references.</description>
     </entry>
     <entry group="0040" element="E001" name="&gt;HL7 Instance Identifier" type="1">
-      <description>Instance Identifier of the referenced HL7 Structured Document, encoded as a UID (OID or UUID), concatenated with a caret (“^”) and Extension value (if Extension is present in Instance Identifier).</description>
+      <description>Instance Identifier of the referenced HL7 Structured Document, encoded as a UID (OID or UUID), concatenated with a caret ("^") and Extension value (if Extension is present in Instance Identifier).</description>
     </entry>
     <entry group="0040" element="E010" name="&gt;Retrieve URI" type="3">
       <description>Retrieval access path to HL7 Structured Document. Includes fully specified scheme, authority, path, and query in accordance with RFC 2396</description>
@@ -16777,7 +16777,7 @@ Note: Digital Signature Security Profiles (see PS 3.15) may require the use of a
   </macro>
   <macro ref="Table C.12-7" name="Encrypted Attributes Data Set Attributes">
     <entry group="0400" element="0550" name="Modified Attributes Sequence" type="1">
-      <description>Sequence of Items containing all Attributes that were removed or replaced by “dummy values” in the main dataset during de-identification of the SOP instance. Upon reversal of the de-identification process, the Attributes are copied back into the main dataset, replacing any dummy values that might have been created. Only a single Item shall be present.</description>
+      <description>Sequence of Items containing all Attributes that were removed or replaced by "dummy values" in the main dataset during de-identification of the SOP instance. Upon reversal of the de-identification process, the Attributes are copied back into the main dataset, replacing any dummy values that might have been created. Only a single Item shall be present.</description>
     </entry>
     <include ref="&gt; Any Attribute from the main dataset that was modified or removed during the de-identification process." type="3"/>
   </macro>
@@ -17351,7 +17351,7 @@ Note: The intent of this specification is that the "prevailing final version" of
     <entry group="0040" element="A073" name="Verifying Observer Sequence" type="1C">
       <description>The person or persons authorized to verify documents of this type and accept responsibility for the content of this document. One or more Items may be included in this sequence.
 Required if Verification Flag (0040,A493) is VERIFIED.
-Note: In HL7 Structured Documents, the comparable attribute is the “legalAuthenticator”.</description>
+Note: In HL7 Structured Documents, the comparable attribute is the "legalAuthenticator".</description>
     </entry>
     <entry group="0040" element="A075" name="&gt;Verifying Observer Name" type="1">
       <description>The person authorized by the Verifying Organization (0040,A027) to verify documents of this type and who accepts responsibility for the content of this document.</description>
@@ -17381,7 +17381,7 @@ Defined Terms:
 SOURCE - Equipment that contributed to the content
 ENT - Data enterer (e.g., transcriptionist)
 ATTEST - Attestor
-Note: In HL7 Structured Documents, the participation comparable to Attestor is the “Authenticator”.</description>
+Note: In HL7 Structured Documents, the participation comparable to Attestor is the "Authenticator".</description>
     </entry>
     <entry group="0040" element="A082" name="&gt;Participation DateTime" type="2">
       <description>DateTime of participation with respect to the clinical content of this document.</description>
@@ -18276,9 +18276,9 @@ ABSTRACT_PRIOR</description>
     </entry>
     <entry group="0072" element="0038" name="&gt;&gt;Relative Time" type="1C">
       <description>Exactly two numeric values, indicating the start and end values of a prior range of instance acquisition times relative to the date and time of a current image set. The units shall be specified in Relative Time Units (0072,003A).
-The value pair 0\0 shall indicate a current image set. The value pair n\n shall indicate “prior from the instance acquisition time of a current image set by n units”.
+The value pair 0\0 shall indicate a current image set. The value pair n\n shall indicate "prior from the instance acquisition time of a current image set by n units".
 Required if the value of Image Set Selector Category (0072,0034) is RELATIVE_TIME.
-Note: 1. A value pair “1\7” with Relative Time Units (0072,003A) of DAYS would indicate the range “prior by 1 to 7 days before a current image set”.
+Note: 1. A value pair "1\7" with Relative Time Units (0072,003A) of DAYS would indicate the range "prior by 1 to 7 days before a current image set".
 2. The VR of this attribute is unsigned, hence future time cannot be represented.</description>
     </entry>
     <entry group="0072" element="003A" name="&gt;&gt;Relative Time Units" type="1C">
@@ -18479,7 +18479,7 @@ Required if Selector Attribute (0072,0026) or Filter-by Category (0072,0402), an
 Required if Selector Attribute (0072,0026) and Filter-by Operator (0072,0406) are present.</description>
     </entry>
     <entry group="0072" element="0406" name="&gt;&gt;Filter-by Operator" type="1C">
-      <description>Operation to be applied between the value(s) in the Hanging Protocol Selector Attribute Value Macro (“selector”), and the value(s) of the attribute identified by Selector Attribute (0072,0026) in each image of the Image Set. See C.23.3.1.1.
+      <description>Operation to be applied between the value(s) in the Hanging Protocol Selector Attribute Value Macro ("selector"), and the value(s) of the attribute identified by Selector Attribute (0072,0026) in each image of the Image Set. See C.23.3.1.1.
 Required if Filter-by Category (0072,0402) is present, or if Selector Attribute (0072,0026) is present and Filter-by Attribute Presence (0072,0404) is not present.
 Enumerated Values:
 RANGE_INCL: the values lie within the specified range, or are equal to the endpoints; applies only to numeric, date or time Selector Attribute (0072,0026); two values shall be present in the selector, the first of which is less than or equal to the second
@@ -18488,8 +18488,8 @@ GREATER_OR_EQUAL: applies only to numeric Selector Attribute (0072,0026)
 LESS_OR_EQUAL: applies only to numeric Selector Attribute (0072,0026)
 GREATER_THAN: applies only to numeric Selector Attribute (0072,0026)
 LESS_THAN: applies only to numeric Selector Attribute (0072,0026)
-MEMBER_OF: one of the values in the image is present in the values of the selector; if one value is present in each, this is an “equal to” operator
-NOT_MEMBER_OF: none of the values in the image is present in the values of the selector; if one value is present in each, this is a “not equal to” operator</description>
+MEMBER_OF: one of the values in the image is present in the values of the selector; if one value is present in each, this is an "equal to" operator
+NOT_MEMBER_OF: none of the values in the image is present in the values of the selector; if one value is present in each, this is a "not equal to" operator</description>
     </entry>
     <entry group="0072" element="0600" name="&gt;Sorting Operations Sequence" type="2">
       <description>Sequence that defines sorting criteria to be applied to the result of filter and reformat operations, to define the order in which to present the images in the Image Boxes. Zero or more items shall be included in this sequence. See C.23.3.1.2.</description>
@@ -18552,7 +18552,7 @@ Enumerated Values:
 LEFT
 CENTER
 RIGHT
-Note: Typically used in mammography display applications in which images from the patient's left and right are displayed “back to back”, rather than centered.</description>
+Note: Typically used in mammography display applications in which images from the patient's left and right are displayed "back to back", rather than centered.</description>
     </entry>
     <entry group="0072" element="0718" name="&gt;Display Set Vertical Justification" type="3">
       <description>Indicates direction in which to vertically justify the image within a viewport that is not the same shape (aspect ratio) as the image.
@@ -18689,7 +18689,7 @@ The sequence may have one or more Items.</description>
 Enumerated Values:
 YES
 NO
-Identification of patient and date as text in an encapsulated document (e.g., in an XML attribute or element) is equivalent to “burned in annotation”. A de-identified document may use the value NO.</description>
+Identification of patient and date as text in an encapsulated document (e.g., in an XML attribute or element) is equivalent to "burned in annotation". A de-identified document may use the value NO.</description>
     </entry>
     <entry group="0042" element="0013" name="Source Instance Sequence" type="1C">
       <description>A sequence that identifies the set of Instances that were used to derive the encapsulated document. One or more Items may be included in this Sequence.
@@ -18698,7 +18698,7 @@ Required if derived from one or more DICOM Instances. May be present otherwise.<
     <include ref="&gt;Include 'SOP Instance Reference Macro' Table 10-11"/>
     <entry group="0042" element="0010" name="Document Title" type="2">
       <description>The title of the document.
-Note: In the case of a PDF encapsulated document, this may be the value of the “Title” entry in the “Document Information Directory” as encoded in the PDF data.</description>
+Note: In the case of a PDF encapsulated document, this may be the value of the "Title" entry in the "Document Information Directory" as encoded in the PDF data.</description>
     </entry>
     <entry group="0040" element="A043" name="Concept Name Code Sequence" type="2">
       <description>A coded representation of the document title. Zero or one item may be present.</description>
@@ -18710,7 +18710,7 @@ UNVERIFIED = Not attested by a legally accountable person.
 VERIFIED = Attested to (signed) by a Verifying Observer or Legal Authenticator named in the document, who is accountable for its content.</description>
     </entry>
     <entry group="0040" element="E001" name="HL7 Instance Identifier" type="1C">
-      <description>Instance Identifier of the encapsulated HL7 Structured Document, encoded as a UID (OID or UUID), concatenated with a caret (“^”) and Extension value (if Extension is present in Instance Identifier).
+      <description>Instance Identifier of the encapsulated HL7 Structured Document, encoded as a UID (OID or UUID), concatenated with a caret ("^") and Extension value (if Extension is present in Instance Identifier).
 Required if encapsulated document is a CDA document.</description>
     </entry>
     <entry group="0042" element="0012" name="MIME Type of Encapsulated Document" type="1">
@@ -18719,7 +18719,7 @@ Required if encapsulated document is a CDA document.</description>
     <entry group="0042" element="0014" name="List of MIME Types" type="1C">
       <description>MIME Types of subcomponents of the encapsulated document.
 Required if the encapsulated document incorporates subcomponents with MIME types different than the primary MIME Type of the encapsulated document.
-Note: An Encapsulated CDA that includes an embedded JPEG image and an embedded PDF would list “image/jpeg\application/pdf”.</description>
+Note: An Encapsulated CDA that includes an embedded JPEG image and an embedded PDF would list "image/jpeg\application/pdf".</description>
     </entry>
     <entry group="0042" element="0011" name="Encapsulated Document" type="1">
       <description>Encapsulated Document stream, containing a document encoded according to the MIME Type.</description>
@@ -19385,7 +19385,7 @@ HAS CONCEPT MOD</description>
       <description>The title of the document.</description>
     </entry>
     <entry group="0040" element="E001" name="HL7 Instance Identifier" type="1C">
-      <description>Instance Identifier from the referenced HL7 Structured Document, encoded as a UID (OID or UUID), concatenated with a caret (“^”) and Extension value (if Extension is present in Instance Identifier).
+      <description>Instance Identifier from the referenced HL7 Structured Document, encoded as a UID (OID or UUID), concatenated with a caret ("^") and Extension value (if Extension is present in Instance Identifier).
 Required if encapsulated document is an HL7 Structured Document.</description>
     </entry>
     <entry group="0040" element="A043" name="Concept Name Code Sequence" type="2">
@@ -19402,7 +19402,7 @@ Required if encapsulated document is an HL7 Structured Document.</description>
       <description>Required if an extended or replacement character set is used in one of the keys.</description>
     </entry>
     <entry group="0040" element="E001" name="HL7 Instance Identifier" type="1">
-      <description>Instance Identifier from the referenced HL7 Structured Document, encoded as a UID (OID or UUID), concatenated with a caret (“^”) and Extension value (if Extension is present in Instance Identifier).</description>
+      <description>Instance Identifier from the referenced HL7 Structured Document, encoded as a UID (OID or UUID), concatenated with a caret ("^") and Extension value (if Extension is present in Instance Identifier).</description>
     </entry>
     <entry group="0040" element="E004" name="HL7 Document Effective Time" type="1">
       <description>Effective Time from the referenced HL7 Structured Document</description>
