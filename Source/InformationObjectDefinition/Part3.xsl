@@ -56,12 +56,23 @@ Weird camel case function to get closer to docbook version
     <xsl:variable name="tmp4" select="replace($tmp3,' Cda ',' CDA ')"/>
     <xsl:variable name="tmp5" select="replace($tmp4,'Sop ','SOP ')"/>
     <xsl:variable name="tmp6" select="replace($tmp5,'Xrf ','XRF ')"/>
-    <xsl:variable name="tmp6" select="replace($tmp5,'Pet ','PET ')"/>
     <xsl:variable name="tmp7" select="replace($tmp6,' Ecg ',' ECG ')"/>
     <xsl:variable name="tmp8" select="replace($tmp7,' Cad ',' CAD ')"/>
     <xsl:variable name="tmp9" select="replace($tmp8,'Xa/xrf ','XA/XRF ')"/>
     <xsl:variable name="tmp10" select="replace($tmp9,'Hl7 ','HL7 ')"/>
-    <xsl:value-of select="$tmp10"/>
+    <xsl:variable name="tmp11" select="replace($tmp10,'Icc ','ICC ')"/>
+    <xsl:variable name="tmp12" select="replace($tmp11,' And ',' and ')"/>
+    <xsl:variable name="tmp13" select="replace($tmp12,' OF ',' of ')"/>
+    <xsl:variable name="tmp14" select="replace($tmp13,'Nm/pet ','NM/PET ')"/>
+    <xsl:variable name="tmp15" select="replace($tmp14,'Pet ','PET ')"/>
+    <xsl:variable name="tmp16" select="replace($tmp15,'Roi ','ROI ')"/>
+    <xsl:variable name="tmp17" select="replace($tmp16,'Voi ','VOI ')"/>
+    <xsl:variable name="tmp18" select="replace($tmp17,'Lut ','LUT ')"/>
+    <xsl:variable name="tmp19" select="replace($tmp18,' AN ',' an ')"/>
+    <xsl:variable name="tmp20" select="replace($tmp19,' IN ',' in ')"/>
+    <xsl:variable name="tmp21" select="replace($tmp20,' Fov ',' FOV ')"/>
+    <xsl:variable name="tmp22" select="replace($tmp21,' OR ',' or ')"/>
+    <xsl:value-of select="$tmp22"/>
   </xsl:function>
 <!--
 Function to parse a row from an informaltable specifically for a Macro/Module table:

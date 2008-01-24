@@ -34,7 +34,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
       <description>This Attribute is generally a Type 3.</description>
     </entry>
   </macro>
-  <macro ref="Table 5.4-3" name="Example Module Table Without The Use OF AN Attribute Macro">
+  <macro ref="Table 5.4-3" name="Example Module Table Without The Use of an Attribute Macro">
     <entry group="aaaa" element="aaaa" name="Attribute A" type="1">
       <description>This is an example.</description>
     </entry>
@@ -178,7 +178,7 @@ Required if the Referenced SOP Instance is a multi-frame image and the reference
       <description>Identifies the Segment Number to which the reference applies. Required if the Referenced SOP Instance is a Segmentation and the reference does not apply to all segments and Referenced Frame Number (0008,1160) is not present.</description>
     </entry>
   </macro>
-  <macro ref="Table 10-4" name="Series And Instance Reference Macro Attributes">
+  <macro ref="Table 10-4" name="Series and Instance Reference Macro Attributes">
     <entry group="0008" element="1115" name="Referenced Series Sequence" type="1">
       <description>Sequence of Items each of which includes the Attributes of one Series. One or more Items shall be present.</description>
     </entry>
@@ -775,7 +775,7 @@ Only a single Item shall be permitted in this Sequence.</description>
     <entry ie="Image" name="VOI LUT" ref="C.11.2" usage="U"/>
     <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
   </iod>
-  <iod ref="Table A.16-1" name="Xrf Image IOD Modules">
+  <iod ref="Table A.16-1" name="XRF Image IOD Modules">
     <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
     <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
     <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
@@ -2808,7 +2808,7 @@ PULSED</description>
       <description>User-defined comments on any special conditions related to radiation dose encountered during during the episode described by this Exposure Dose Sequence Item.</description>
     </entry>
   </module>
-  <module ref="Table C.4-17" name="Billing And Material Management Code Module Attributes">
+  <module ref="Table C.4-17" name="Billing and Material Management Code Module Attributes">
     <entry group="0040" element="0320" name="Billing Procedure Step Sequence">
       <description>Contains billing codes for the Procedure Type performed within the Procedure Step. The sequence may have zero or more Items.</description>
     </entry>
@@ -3658,7 +3658,7 @@ Required if the Modality Performed Procedure Step SOP Class or General Purpose P
     </entry>
     <include ref="&gt;Include SOP Instance Reference Macro Table 10-11"/>
   </module>
-  <module ref="Table C.7-6" name="Frame OF Reference Module Attributes">
+  <module ref="Table C.7-6" name="Frame of Reference Module Attributes">
     <entry group="0020" element="0052" name="Frame of Reference UID" type="1">
       <description>Uniquely identifies the frame of reference for a Series. See C.7.4.1.1.1 for further explanation.</description>
     </entry>
@@ -4667,7 +4667,7 @@ Enumerated Value:
 US = Unspecified if Modality (0008,0060) equals MR.</description>
     </entry>
   </macro>
-  <macro ref="Table C.7.6.16-11" name="Frame Voi Lut Macro Attributes">
+  <macro ref="Table C.7.6.16-11" name="Frame VOI LUT Macro Attributes">
     <entry group="0028" element="9132" name="Frame VOI LUT Sequence" type="1">
       <description>Window Center and Width values applied to the frame. Only one item is permitted in this sequence.</description>
     </entry>
@@ -4768,7 +4768,7 @@ Required if Contrast/Bolus Administration Route Sequence (0018,0014) for the Con
 Note: SRT is the preferred designator for SNOMED, but SNM3 is allowed for backward compatibility. See PS3.16.</description>
     </entry>
   </macro>
-  <macro ref="Table C.7.6.16-14" name="Pixel Intensity Relationship Lut Macro Attributes">
+  <macro ref="Table C.7.6.16-14" name="Pixel Intensity Relationship LUT Macro Attributes">
     <entry group="0028" element="9422" name="Pixel Intensity Relationship LUT Sequence" type="1">
       <description>Defines a sequence of Pixel Intensity Relationship LUTs.
 One or more items shall be present in this sequence.
@@ -4804,7 +4804,7 @@ Note: If no pixel shift has to be applied a pair of zero values should be specif
 See Section C.7.6.10.1.2.</description>
     </entry>
   </macro>
-  <macro ref="Table C.7.6.16-16" name="Patient Orientation IN Frame Macro Attributes">
+  <macro ref="Table C.7.6.16-16" name="Patient Orientation in Frame Macro Attributes">
     <entry group="0020" element="9450" name="Patient Orientation in Frame Sequence" type="1">
       <description>Sequence containing the row and column directions for this frame in the patient.
 Only a single Item shall be permitted in this sequence.</description>
@@ -5576,7 +5576,7 @@ N = no</description>
     </entry>
     <include ref="Include 'General Anatomy Optional Macro' Table 10-7" description="Defined Context ID for the Anatomic Region Sequence is 4030."/>
   </module>
-  <module ref="Table C.8-5" name="Nm/pet Patient Orientation Module Attributes">
+  <module ref="Table C.8-5" name="NM/PET Patient Orientation Module Attributes">
     <entry group="0054" element="0410" name="Patient Orientation Code Sequence" type="2">
       <description>Sequence that describes the orientation of the patient with respect to gravity. See C.8.4.6.1.1 for further explanation. Zero or one item shall be present in the sequence.</description>
     </entry>
@@ -6860,7 +6860,7 @@ See C.8.7.5.1.4.</description>
 See C.8.7.5.1.4.</description>
     </entry>
   </module>
-  <module ref="Table C.8-31" name="Xrf Positioner Module Attributes">
+  <module ref="Table C.8-31" name="XRF Positioner Module Attributes">
     <entry group="0018" element="1110" name="Distance Source to Detector" type="3">
       <description>Distance in mm from source to detector center.
 Note: This value is traditionally referred to as Source Image Receptor Distance (SID).</description>
@@ -7737,7 +7737,7 @@ MANUAL = user-entered ROI</description>
       <description>User-defined description of technique used to generate ROI.</description>
     </entry>
   </module>
-  <module ref="Table C.8-42" name="Roi Contour Module Attributes">
+  <module ref="Table C.8-42" name="ROI Contour Module Attributes">
     <entry group="3006" element="0039" name="ROI Contour Sequence" type="1">
       <description>Introduces sequence of Contour Sequences defining ROIs. One or more items may be included in this sequence.</description>
     </entry>
@@ -7782,7 +7782,7 @@ CLOSED_PLANAR = closed contour (polygon) containing coplanar points</description
 Note: Contour Data may not be properly encoded if Explicit-VR transfer syntax is used and the VL of this attribute exceeds 65534 bytes.</description>
     </entry>
   </module>
-  <module ref="Table C.8-43" name="RT Dose Roi Module Attributes">
+  <module ref="Table C.8-43" name="RT Dose ROI Module Attributes">
     <entry group="3004" element="0010" name="RT Dose ROI Sequence" type="1">
       <description>Introduces sequence of items specifying dose levels for isodose curves or dose points described in the ROI module. One or more items may be included in this sequence. See C.8.8.7.1.</description>
     </entry>
@@ -7799,7 +7799,7 @@ RELATIVE = dose relative to implicit reference value</description>
       <description>Dose value for ROI, in units defined by Dose Units (3004,0002). See C.8.8.7.3.</description>
     </entry>
   </module>
-  <module ref="Table C.8-44" name="RT Roi Observations Module Attributes">
+  <module ref="Table C.8-44" name="RT ROI Observations Module Attributes">
     <entry group="3006" element="0080" name="RT ROI Observations Sequence" type="1">
       <description>Introduces sequence of observations related to ROIs defined in the ROI Module. One or more items may be included in this sequence.</description>
     </entry>
@@ -12583,7 +12583,7 @@ IDENTITY - output is in P-Values.</description>
     </entry>
     <include ref="&gt; Include 'Image Pixel Macro' Table C.7-11b"/>
   </module>
-  <macro ref="Table C.8-81" name="MR Image And Spectroscopy Instance Macro">
+  <macro ref="Table C.8-81" name="MR Image and Spectroscopy Instance Macro">
     <entry group="0020" element="0012" name="Acquisition Number" type="3">
       <description>A number identifying the single continuous gathering of data over a period of time that resulted in this image.
 Note: This number is not required to be unique across SOP Instances in a series. See also the description of the Referenced Raw Data Sequence (0008,9121).</description>
@@ -12836,7 +12836,7 @@ Enumerated Values and Defined Terms are the same as those for the four values of
     <include ref="&gt;Include Common CT/MR Image Description Macro' Table C.8-131"/>
     <include ref="&gt;Include 'MR Image Description Macro' Table C.8-82"/>
   </macro>
-  <macro ref="Table C.8-89" name="MR Timing And Related Parameters Macro Attributes">
+  <macro ref="Table C.8-89" name="MR Timing and Related Parameters Macro Attributes">
     <entry group="0018" element="9112" name="MR Timing and Related Parameters Sequence" type="1">
       <description>Identifies the timing and safety information of this frame. Only a single Item shall be permitted in this sequence.</description>
     </entry>
@@ -14818,7 +14818,7 @@ See Section C.8.7.1.1.3.</description>
 Note: This Code is manufacturer specific but provides useful annotation information to the knowledgeable observer.</description>
     </entry>
   </macro>
-  <macro ref="Table C.8.19.6-2" name="X Ray Field OF View Macro Attributes">
+  <macro ref="Table C.8.19.6-2" name="X Ray Field of View Macro Attributes">
     <entry group="0018" element="9432" name="Field of View Sequence" type="1">
       <description>Sequence containing the field of view for this frame.
 One or more items may be included in this sequence.</description>
@@ -16238,10 +16238,10 @@ Required if Annotation does not apply to entire Referenced Waveform Channels; sh
       <description>Number identifying associated annotations (see C.10.10.1.4).</description>
     </entry>
   </module>
-  <module ref="Table C.11-1" name="Modality Lut Module Attributes">
+  <module ref="Table C.11-1" name="Modality LUT Module Attributes">
     <include ref="Include Modality LUT Macro Table C.11-1b"/>
   </module>
-  <macro ref="Table C.11-1b" name="Modality Lut Macro Attributes">
+  <macro ref="Table C.11-1b" name="Modality LUT Macro Attributes">
     <entry group="0028" element="3000" name="Modality LUT Sequence" type="1C">
       <description>Defines a sequence of Modality LUTs.
 Only one Item may be present. Shall not be present if Rescale Intercept (0028,1052) is present.</description>
@@ -16278,10 +16278,10 @@ See C.11.1.1.2 for further explanation.
 Required if Rescale Intercept is present.</description>
     </entry>
   </macro>
-  <module ref="Table C.11-2" name="Voi Lut Module Attributes">
+  <module ref="Table C.11-2" name="VOI LUT Module Attributes">
     <include ref="Include VOI LUT Macro Table C.11-2b"/>
   </module>
-  <macro ref="Table C.11-2b" name="Voi Lut Macro Attributes">
+  <macro ref="Table C.11-2b" name="VOI LUT Macro Attributes">
     <entry group="0028" element="3010" name="VOI LUT Sequence" type="1C">
       <description>Defines a sequence of VOI LUTs. One or more Items shall be present.
 Required if Window Center (0028,1050) is not present. May be present otherwise.</description>
@@ -16317,7 +16317,7 @@ SIGMOID
 When this attribute is not present, the interpretation of the values of Window Center (0028,1050) and Window Width (0028,1051) is linear as in C.11.2.1.2.</description>
     </entry>
   </macro>
-  <macro ref="Table C.11-4" name="Presentation Lut Module">
+  <macro ref="Table C.11-4" name="Presentation LUT Module">
     <entry group="2050" element="0010" name="Presentation LUT Sequence">
       <description>Defines a sequence of Presentation LUTs. Only a single item shall be included in this sequence.</description>
     </entry>
@@ -16367,7 +16367,7 @@ Note: The Value Representation of this Attribute is determined by the value of P
       <description>Histogram Data encoded as 32 bit unsigned counts of the number of pixel values in each bin.</description>
     </entry>
   </module>
-  <module ref="Table C.11.6-1" name="Softcopy Presentation Lut Module Attributes">
+  <module ref="Table C.11.6-1" name="Softcopy Presentation LUT Module Attributes">
     <entry group="2050" element="0010" name="Presentation LUT Sequence" type="1C">
       <description>Defines a sequence of Presentation LUTs. Only a single item shall be included in this sequence. Required if Presentation LUT Shape (2050,0020) is absent.</description>
     </entry>
@@ -16395,7 +16395,7 @@ See C.11.6.1.2.</description>
 Required if Group 60xx is present in the referenced image(s) or the Presentation State instance containing this Module.</description>
     </entry>
   </module>
-  <module ref="Table C.11.8-1" name="Softcopy Voi Lut Module Attributes">
+  <module ref="Table C.11.8-1" name="Softcopy VOI LUT Module Attributes">
     <entry group="0028" element="3110" name="Softcopy VOI LUT Sequence" type="1">
       <description>Defines a sequence of VOI LUTs or Window Centers and Widths and to which images and frames they apply.
 No more than one VOI LUT Sequence containing a single Item or one pair of Window Center/Width values shall be specified for each image or frame.
@@ -16523,7 +16523,7 @@ Note: A Spatial Registration Instance may identify registration between frames o
     </entry>
     <include ref="&gt;Include Hierarchical SOP Instance Reference Macro Table C.17-3"/>
   </module>
-  <module ref="Table C.11.15-1" name="Icc Profile Module Attributes">
+  <module ref="Table C.11.15-1" name="ICC Profile Module Attributes">
     <entry group="0028" element="2000" name="ICC Profile" type="1">
       <description>An ICC Profile encoding the transformation of device-dependent color stored pixel values into PCS-Values.</description>
     </entry>
@@ -17486,7 +17486,7 @@ Required if the identity of a CDA Document equivalent to the current SOP Instanc
     </entry>
     <include ref="&gt;Include 'Hierarchical Series Reference Macro' Table C.17-3a"/>
   </macro>
-  <macro ref="Table C.17-3b" name="Identified Person OR Device Macro Attributes">
+  <macro ref="Table C.17-3b" name="Identified Person or Device Macro Attributes">
     <entry group="0040" element="A084" name="Observer Type" type="1">
       <description>Enumerated Values:
 PSN - Person
