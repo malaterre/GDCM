@@ -18,6 +18,7 @@
 
 #include "gdcmTypes.h"
 #include <vector>
+#include <algorithm> // std::min
 
 namespace gdcm
 {
@@ -54,7 +55,7 @@ public:
   }
   void SetComponents(const char *components[]) {
     for(unsigned int i = 0; i < 5; ++i) {
-      strncpy(Component[i], components[i], std::min( strlen(components[i]), GetMaxLength() ) );
+      strncpy(Component[i], components[i], std::min( (unsigned int)strlen(components[i]), GetMaxLength() ) );
       }
   }
 	void Print(std::ostream &os) const
