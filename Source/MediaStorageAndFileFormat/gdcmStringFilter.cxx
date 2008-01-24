@@ -63,6 +63,7 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const DataElement
     }
 
   VR vr = entry.GetVR();
+  // If Explicit override with coded VR:
   if( de.GetVR() != VR::INVALID && de.GetVR() != VR::UN )
     {
     vr = de.GetVR();
