@@ -4623,7 +4623,7 @@ Required if Intervals Acquired (0018,1083) is present and has a value of 1. May 
       <description>Average number of heart beats per minute for the collection period for this frame. This shall include all accepted beats as well as rejected beats.
 Note: During prolonged acquisitions the average heart rate may differ from the reciprocal of the nominal R-R interval.</description>
     </entry>
-    <entry group="0020" element="9251" name="&gt;R – R Interval Time Nominal" type="1C">
+    <entry group="0020" element="9251" name="&gt;R - R Interval Time Nominal" type="1C">
       <description>Nominal R-peak - R-peak interval time in ms for the cardiac cycle used for the acquisition of this frame. See C.7.6.16.2.7.1 for further explanation.
 Required if Cardiac Synchronization Technique (0018,9037) equals other than NONE or REALTIME. May be present otherwise.</description>
     </entry>

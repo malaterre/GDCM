@@ -84,8 +84,8 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
           <xsl:value-of select="entry[3]/para" separator="{$linebreak}"/>
         </xsl:variable>
 <!-- some funny quote is in the way, replace it: -->
-        <xsl:variable name="single_quote1">’“”</xsl:variable>
-        <xsl:variable name="single_quote2" select="concat(concat($apos, $doublequote),$doublequote)"/>
+        <xsl:variable name="single_quote1">’“”– ­</xsl:variable>
+        <xsl:variable name="single_quote2" select="concat(concat(concat($apos, $doublequote),$doublequote),'- µ')"/>
         <xsl:variable name="description_tmp">
           <xsl:value-of select="entry[4]/para" separator="{$linebreak}"/>
         </xsl:variable>
@@ -97,9 +97,9 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
           <xsl:when test="string-length($internal_type) &gt; 0 and string-length($internal_type) &lt;= 2">
             <xsl:choose>
               <xsl:when test="$group != '' and $element != ''">
-                <entry group="{$group}" element="{$element}" name="{translate($name_translate,'','µ')}" type="{normalize-space($type)}">
+                <entry group="{$group}" element="{$element}" name="{$name_translate}" type="{normalize-space($type)}">
                   <description>
-                    <xsl:value-of select="my:normalize-paragraph(translate($description,'– ­','- µ'))"/>
+                    <xsl:value-of select="my:normalize-paragraph($description)"/>
                   </description>
                 </entry>
               </xsl:when>
