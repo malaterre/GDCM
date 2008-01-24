@@ -2056,7 +2056,7 @@ Only a single Item shall be permitted in this Sequence.</description>
     </entry>
     <entry group="0010" element="0021" name="Issuer of Patient ID">
       <description>Identifier of the Assigning Authority (system, organization, agency, or department) that issued the Patient ID.
-Note:	Issuer of Patient ID (0010,0021) is equivalent to HL7 v2 PID-3 component 4. </description>
+Note: Issuer of Patient ID (0010,0021) is equivalent to HL7 v2 PID-3 component 4.</description>
     </entry>
     <entry group="0010" element="1000" name="Other Patient IDs">
       <description>Other identification numbers or codes used to identify the patient.</description>
@@ -2072,10 +2072,10 @@ Note:	Issuer of Patient ID (0010,0021) is equivalent to HL7 v2 PID-3 component 4
     </entry>
     <entry group="0010" element="0022" name="&gt;Type of Patient ID">
       <description>The type of identifier in this item. Defined Terms:
-	TEXT
-	RFID
-	BARCODE
-Note:	The identifier is coded as a string regardless of the type, not as a binary value.</description>
+TEXT
+RFID
+BARCODE
+Note: The identifier is coded as a string regardless of the type, not as a binary value.</description>
     </entry>
     <entry group="0010" element="1001" name="Other Patient Names">
       <description>Other names used to identify the patient.</description>
@@ -2108,22 +2108,22 @@ Note:	The identifier is coded as a string regardless of the type, not as a binar
     </entry>
     <entry group="0010" element="0040" name="Patient's Sex">
       <description>Sex of the named patient. Enumerated Values:
-	M = male
-	F = female
-	O = other</description>
+M = male
+F = female
+O = other</description>
     </entry>
     <entry group="0010" element="0050" name="Patient's Insurance Plan Code Sequence">
       <description>A sequence that conveys the patient's insurance plan. Zero or more Items may be included in this Sequence.</description>
     </entry>
     <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0010" element="0101" name="Patient's Primary Language Code Sequence">
-      <description>The languages that can be used to communicate with the patient. 
-Zero or more Items may be included in the sequence. The sequence items are ordered by preference (most preferred language to least preferred language). </description>
+      <description>The languages that can be used to communicate with the patient.
+Zero or more Items may be included in the sequence. The sequence items are ordered by preference (most preferred language to least preferred language).</description>
     </entry>
     <include ref="&gt; Include Code Sequence Macro Table 8.8-1" description="Baseline Context ID is CID 5000 - Languages."/>
     <entry group="0010" element="0102" name="&gt; Patient's Primary Language Code Modifier Sequence">
       <description>A modifer for a Patient's Primary Language. Can be used to specify a national language variant.
-Exactly one Item may be included in the sequence. </description>
+Exactly one Item may be included in the sequence.</description>
     </entry>
     <include ref="&gt;&gt; Include Code Sequence Macro Table 8.8-1" description="Baseline Context ID is CID 5001 - Countries."/>
     <entry group="0010" element="1020" name="Patient's Size">
@@ -2165,7 +2165,7 @@ Exactly one Item may be included in the sequence. </description>
     <entry group="0010" element="2298" name="Responsible Person Role">
       <description>Relationship of Responsible Person to the patient.
 Defined Terms:
-	OWNER</description>
+OWNER</description>
     </entry>
     <entry group="0010" element="2299" name="Responsible Organization">
       <description>Name of organization with medical decision making authority for the patient.</description>
@@ -2203,11 +2203,11 @@ Defined Terms:
       <description>Description of prior reaction to contrast agents, or other patient allergies or adverse reactions.</description>
     </entry>
     <entry group="0010" element="21A0" name="Smoking Status">
-      <description>Indicates whether patient smokes. 
+      <description>Indicates whether patient smokes.
 Enumerated Values:
-	YES
-	NO
-	UNKNOWN</description>
+YES
+NO
+UNKNOWN</description>
     </entry>
     <entry group="0010" element="21B0" name="Additional Patient History">
       <description>Additional information about the patient's medical history</description>
@@ -2215,10 +2215,10 @@ Enumerated Values:
     <entry group="0010" element="21C0" name="Pregnancy Status">
       <description>Describes pregnancy state of patient.
 Enumerated Values:
-	0001 = not pregnant
-	0002 = possibly pregnant
-	0003 = definitely pregnant
-	0004 = unknown</description>
+0001 = not pregnant
+0002 = possibly pregnant
+0003 = definitely pregnant
+0004 = unknown</description>
     </entry>
     <entry group="0010" element="21D0" name="Last Menstrual Date">
       <description>Date of onset of last menstrual period</description>
@@ -2226,17 +2226,17 @@ Enumerated Values:
     <entry group="0010" element="2203" name="Patient's Sex Neutered">
       <description>Whether or not a procedure has been performed in an effort to render the patient sterile.
 Enumerated value:
-	ALTERED = Altered/Neutered
-	UNALTERED = Unaltered/intact </description>
+ALTERED = Altered/Neutered
+UNALTERED = Unaltered/intact</description>
     </entry>
     <entry group="0038" element="0050" name="Special Needs">
       <description>Medical and social needs (e.g. wheelchair, oxygen, translator, etc.)</description>
     </entry>
     <entry group="0038" element="0500" name="Patient State">
-      <description>Description of patient state (comatose, disoriented, vision impaired, etc.) </description>
+      <description>Description of patient state (comatose, disoriented, vision impaired, etc.)</description>
     </entry>
     <entry group="0038" element="0100" name="Pertinent Documents Sequence">
-      <description>List of Documents (e.g., SR, or CDA) that contain information considered pertinent for the patient medical condition. 
+      <description>List of Documents (e.g., SR, or CDA) that contain information considered pertinent for the patient medical condition.
 Zero or more Items may be included in this sequence.</description>
     </entry>
     <include ref="&gt;Include SOP Instance Reference Macro Table 10-11"/>
@@ -2248,7 +2248,7 @@ Zero or more Items may be included in this sequence.</description>
       <description>Title of the referenced document.</description>
     </entry>
     <entry group="0038" element="0502" name="Patient Clinical Trial Participation Sequence">
-      <description>Sequence of identifiers for clinical trials in which the patient participates. 
+      <description>Sequence of identifiers for clinical trials in which the patient participates.
 Zero or more Items may be included in this sequence.</description>
     </entry>
     <entry group="0012" element="0010" name="&gt;Clinical Trial Sponsor Name">
@@ -2325,7 +2325,7 @@ DISCHARGED = Patient Discharged</description>
       <description>Primary location where patient resides (ward, floor, room, etc. or outpatient)</description>
     </entry>
     <entry group="0038" element="4000" name="Visit Comments">
-      <description>User-defined comments about the visit </description>
+      <description>User-defined comments about the visit</description>
     </entry>
   </module>
   <module ref="Table C.3-4" name="Visit Admission Module Attributes">
@@ -2393,7 +2393,7 @@ DISCHARGED = Patient Discharged</description>
     <include ref="&gt;&gt;Include 'Person Identification Macro' Table 10-1"/>
     <entry group="0040" element="0007" name="&gt;Scheduled Procedure Step Description">
       <description>Institution-generated description or classification of the Scheduled Procedure Step to be performed.
-Note:	The purpose of this attribute is to store a description or classification that is used at a local level (e.g., a hospital or a managed care network), and this description need not comply to an accepted standard.</description>
+Note: The purpose of this attribute is to store a description or classification that is used at a local level (e.g., a hospital or a managed care network), and this description need not comply to an accepted standard.</description>
     </entry>
     <entry group="0040" element="0008" name="&gt;Scheduled Protocol Code Sequence">
       <description>Sequence describing the Scheduled Protocol following a specified coding scheme. This sequence contains one or more Items.</description>
@@ -2412,14 +2412,14 @@ Note:	The purpose of this attribute is to store a description or classification 
     </entry>
     <entry group="0040" element="0020" name="&gt;Scheduled Procedure Step Status">
       <description>A real world condition that may affect the selection of of the Scheduled Procedure Step. Defined Terms:
-SCHEDULED = Procedure Step scheduled
-ARRIVED = patient is available for the Scheduled Procedure Step
-READY = all patient and other necessary preparation for this step has been completed 
-STARTED = at least one Performed Procedure Step has been created that references this Scheduled Procedure Step</description>
+SCHEDULED - Procedure Step scheduled
+ARRIVED - patient is available for the Scheduled Procedure Step
+READY - all patient and other necessary preparation for this step has been completed
+STARTED - at least one Performed Procedure Step has been created that references this Scheduled Procedure Step</description>
     </entry>
     <entry group="0040" element="0400" name="&gt;Comments on the Scheduled Procedure Step">
       <description>User-defined comments on the Scheduled Procedure Step.
-Note:	The Comments attribute is intended to transmit non-structured information, which can be displayed to the operator of the Modality.</description>
+Note: The Comments attribute is intended to transmit non-structured information, which can be displayed to the operator of the Modality.</description>
     </entry>
     <entry group="0008" element="0060" name="&gt;Modality">
       <description>Source equipment for the image. See Section C.7.3.1.1.1 for Defined Terms.</description>
@@ -2437,7 +2437,7 @@ Note:	The Comments attribute is intended to transmit non-structured information,
     </entry>
     <entry group="0040" element="1002" name="Reason for the Requested Procedure">
       <description>Reason for requesting this imaging procedure.
-Note:	This reason is more specific to the requested procedure than the reason mentioned in the imaging service request (0040,2001).</description>
+Note: This reason is more specific to the requested procedure than the reason mentioned in the imaging service request (0040,2001).</description>
     </entry>
     <entry group="0040" element="1400" name="Requested Procedure Comments">
       <description>User-defined comments on the Requested Procedure.</description>
@@ -2494,8 +2494,8 @@ HIGH, ROUTINE, MEDIUM, LOW</description>
   </module>
   <module ref="Table C.4-12" name="Imaging Service Request Module Attributes">
     <entry group="0040" element="2400" name="Imaging Service Request Comments">
-      <description>User-defined comments on the Imaging Service Request. 
-Note:	The Comments attribute is intended to transmit non-structured information, which can be displayed to the operator of the equipment (e.g. Modality).</description>
+      <description>User-defined comments on the Imaging Service Request.
+Note: The Comments attribute is intended to transmit non-structured information, which can be displayed to the operator of the equipment (e.g. Modality).</description>
     </entry>
     <entry group="0032" element="1032" name="Requesting Physician">
       <description>Name of the physician who requested the Imaging Service Request.</description>
@@ -2560,9 +2560,9 @@ Note:	The Comments attribute is intended to transmit non-structured information,
     </entry>
     <entry group="0010" element="0040" name="Patient's Sex">
       <description>Sex of the named Patient. Enumerated Values:
-	M = male
-	F = female
-	O = other</description>
+M = male
+F = female
+O = other</description>
     </entry>
     <entry group="0008" element="1120" name="Referenced Patient Sequence">
       <description>Uniquely identifies the Patient SOP Instance.</description>
@@ -2637,11 +2637,11 @@ Note:	The Comments attribute is intended to transmit non-structured information,
     </entry>
     <entry group="0040" element="0244" name="Performed Procedure Step Start Date">
       <description>Date on which the Performed Procedure Step started.
-Note: 	This value may be used to determine the earliest date to use as the Study Date (0008,0020) in composite instances and in updated Modality Scheduled Procedure Steps in order to allow Study level attributes to have consistent values if additional Procedure Steps are performed.</description>
+Note: This value may be used to determine the earliest date to use as the Study Date (0008,0020) in composite instances and in updated Modality Scheduled Procedure Steps in order to allow Study level attributes to have consistent values if additional Procedure Steps are performed.</description>
     </entry>
     <entry group="0040" element="0245" name="Performed Procedure Step Start Time">
       <description>Time at which the Performed Procedure Step started.
-Note: 	This value may be used to determine the earliest time to use as the Study Time (0008,0030) in composite instances and in updated Modality Scheduled Procedure Steps in order to allow Study level attributes to have consistent values if additional Procedure Steps are performed.</description>
+Note: This value may be used to determine the earliest time to use as the Study Time (0008,0030) in composite instances and in updated Modality Scheduled Procedure Steps in order to allow Study level attributes to have consistent values if additional Procedure Steps are performed.</description>
     </entry>
     <entry group="0040" element="0253" name="Performed Procedure Step ID">
       <description>User or equipment generated identifier of that part of a Procedure that has been carried out within this step.</description>
@@ -2679,7 +2679,7 @@ COMPLETED = Successfully completed</description>
   <module ref="Table C.4-15" name="Image Acquisition Results Module Attributes">
     <entry group="0008" element="0060" name="Modality">
       <description>Type of equipment that originally acquired the data used to create the images associated with this Modality Performed Procedure Step. See C.7.3.1.1.1 for Defined Terms.
-Note: 	A Modality value in the created SOP Instances may be different from the MPPS Modality value. For example, multiple series may have been created during the MPPS (images, waveforms, softcopy presentation states and/or structured reports) with SOP Instances in different series having different modality values.</description>
+Note: A Modality value in the created SOP Instances may be different from the MPPS Modality value. For example, multiple series may have been created during the MPPS (images, waveforms, softcopy presentation states and/or structured reports) with SOP Instances in different series having different modality values.</description>
     </entry>
     <entry group="0020" element="0010" name="Study ID">
       <description>User or equipment generated Study Identifier.</description>
@@ -2715,7 +2715,7 @@ Note: 	A Modality value in the created SOP Instances may be different from the M
     <include ref="&gt;&gt;Include 'Person Identification Macro' Table 10-1"/>
     <entry group="0018" element="1030" name="&gt;Protocol Name">
       <description>User-defined description of the conditions under which the Series was performed.
-Note:	This attribute conveys series-specific protocol identification and may or may not be identical to the one presented in the Performed Protocol Code Sequence (0040,0260).</description>
+Note: This attribute conveys series-specific protocol identification and may or may not be identical to the one presented in the Performed Protocol Code Sequence (0040,0260).</description>
     </entry>
     <entry group="0020" element="000E" name="&gt;Series Instance UID">
       <description>Unique Identifier of the Series.</description>
@@ -2725,16 +2725,16 @@ Note:	This attribute conveys series-specific protocol identification and may or 
     </entry>
     <entry group="0008" element="0054" name="&gt;Retrieve AE Title">
       <description>Title of the DICOM Application Entity where the Images and other Composite SOP Instances in this Series may be retrieved on the network.
-Note:	The duration for which this location remains valid is unspecified. </description>
+Note: The duration for which this location remains valid is unspecified.</description>
     </entry>
     <entry group="0040" element="A494" name="&gt;Archive Requested">
       <description>The instances in this series are expected to be archived in the long term archive.
 Defined Terms:
-	NO, YES</description>
+NO, YES</description>
     </entry>
     <entry group="0008" element="1140" name="&gt;Referenced Image Sequence">
       <description>A Sequence that provides reference to Composite SOP Instances created during the acquisition of the procedure step. The sequence may have zero or more Items.
-Note:	The use of Referenced Image Sequence is historical, and in this context it allows the reference of any Composite SOP Instance.</description>
+Note: The use of Referenced Image Sequence is historical, and in this context it allows the reference of any Composite SOP Instance.</description>
     </entry>
     <include ref="&gt;&gt;Include 'SOP Instance Reference Macro' Table 10-11"/>
     <entry group="0040" element="0220" name="&gt;Referenced Non-Image Composite SOP Instance Sequence">
@@ -2755,29 +2755,29 @@ Note:	The use of Referenced Image Sequence is historical, and in this context it
     </entry>
     <entry group="0018" element="1110" name="Distance Source to Detector">
       <description>Distance in mm from the source to detector center.
-Note:	This value is traditionally referred to as Source Image Receptor Distance (SID).</description>
+Note: This value is traditionally referred to as Source Image Receptor Distance (SID).</description>
     </entry>
     <entry group="0040" element="0306" name="Distance Source to Entrance">
       <description>Distance in mm from the source to the surface of the patient closest to the source during this Performed Procedure Step.
-Note:	This may be an estimated value based on assumptions about the patient's body size and habitus.</description>
+Note: This may be an estimated value based on assumptions about the patient's body size and habitus.</description>
     </entry>
     <entry group="0040" element="0302" name="Entrance Dose">
       <description>Average entrance dose value measured in dGy at the surface of the patient during this Performed Procedure Step.
-Note:	This may be an estimated value based on assumptions about the patient's body size and habitus.</description>
+Note: This may be an estimated value based on assumptions about the patient's body size and habitus.</description>
     </entry>
     <entry group="0040" element="8302" name="Entrance Dose in mGy">
       <description>Average entrance dose value measured in mGy at the surface of the patient during this Performed Procedure Step.
-Note:	This may be an estimated value based on assumptions about the patient's body size and habitus.</description>
+Note: This may be an estimated value based on assumptions about the patient's body size and habitus.</description>
     </entry>
     <entry group="0040" element="0303" name="Exposed Area">
       <description>Typical dimension of the exposed area at the detector plane. If Rectangular: row dimension followed by column; if Round: diameter. Measured in mm.
-Notes:	1. This may be an estimated value based on assumptions about the patient's body size and habitus.
-	2. This attribute is used in the X-Ray Acquisition Dose Module with units in cm (see Section C 8.7.8 Table C.8-33).</description>
+Notes: 1. This may be an estimated value based on assumptions about the patient's body size and habitus.
+2. This attribute is used in the X-Ray Acquisition Dose Module with units in cm (see Section C 8.7.8 Table C.8-33).</description>
     </entry>
     <entry group="0018" element="115E" name="Image and Fluoroscopy Area Dose Product">
       <description>Total area-dose-product to which the patient was exposed, accumulated over the complete Performed Procedure Step and measured in dGy*cm*cm, including fluoroscopy.
-Notes:	1. The sum of the area dose product of all images of a Series or a Study may not result in the total area dose product to which the patient was exposed.
-	2. This may be an estimated value based on assumptions about the patient's body size and habitus.</description>
+Notes: 1. The sum of the area dose product of all images of a Series or a Study may not result in the total area dose product to which the patient was exposed.
+2. This may be an estimated value based on assumptions about the patient's body size and habitus.</description>
     </entry>
     <entry group="0040" element="0310" name="Comments on Radiation Dose">
       <description>User-defined comments on any special conditions related to radiation dose encountered during this Performed Procedure Step.</description>
@@ -2787,8 +2787,8 @@ Notes:	1. The sum of the area dose product of all images of a Series or a Study 
     </entry>
     <entry group="0018" element="115A" name="&gt;Radiation Mode">
       <description>Specifies X-Ray radiation mode. Enumerated Values:
-	CONTINUOUS
-	PULSED</description>
+CONTINUOUS
+PULSED</description>
     </entry>
     <entry group="0018" element="0060" name="&gt;KVp">
       <description>Peak kilo voltage output of the x-ray generator used. An average in the case of fluoroscopy (continuous radiation mode).</description>
@@ -2860,9 +2860,9 @@ Notes:	1. The sum of the area dose product of all images of a Series or a Study 
     <entry group="0010" element="0040" name="Patient's Sex">
       <description>Sex of the named Patient.
 Enumerated Values:
-	M = male
-	F = female
-	O = other</description>
+M = male
+F = female
+O = other</description>
     </entry>
     <entry group="0040" element="A370" name="Referenced Request Sequence">
       <description>The list of Requested Procedures the Procedure Step shall contribute to.
@@ -2876,7 +2876,7 @@ One or more Items may be included in the sequence.</description>
 Zero or one Item may be included in this sequence.</description>
     </entry>
     <entry group="0008" element="1150" name="&gt;&gt;Referenced SOP Class UID">
-      <description>Uniquely identifies the SOP Class. </description>
+      <description>Uniquely identifies the SOP Class.</description>
     </entry>
     <entry group="0008" element="1155" name="&gt;&gt;Referenced SOP Instance UID">
       <description>Uniquely identifies the SOP Instance.</description>
@@ -2918,7 +2918,7 @@ Zero or one Item may be included in this sequence.</description>
       <description>Names of the physicians, who are intended recipients of results.</description>
     </entry>
     <entry group="0040" element="2400" name="&gt;Imaging Service Request Comments">
-      <description>User-defined comments on the Imaging Service Request. </description>
+      <description>User-defined comments on the Imaging Service Request.</description>
     </entry>
     <entry group="0032" element="1032" name="&gt;Requesting Physician">
       <description>Physician who requested the Imaging Service Request.</description>
@@ -2939,23 +2939,23 @@ Zero or one Item may be included in this sequence.</description>
   <module ref="Table C.4-19" name="General Purpose Scheduled Procedure Step Information Module Attributes">
     <entry group="0040" element="4001" name="General Purpose Scheduled Procedure Step Status">
       <description>A status that informs the operator and the worklist management system about the progress of the scheduled General Purpose procedure step.
-Enumerated Values are: 
+Enumerated Values are:
 SCHEDULED, IN PROGRESS, SUSPENDED, COMPLETED, DISCONTINUED.
 See PS 3.4 for a detailed description of the meaning and usage of these values.</description>
     </entry>
     <entry group="0040" element="4003" name="General Purpose Scheduled Procedure Step Priority">
-      <description>Scheduled Procedure Step priority. 
+      <description>Scheduled Procedure Step priority.
 Enumerated Values are:
 HIGH: used to indicate an urgent or emergent work item, equivalent to a STAT request.
-MEDIUM: used to indicate a work item that has a priority less than HIGH and higher than LOW. It can be used to further stratify work items. 
-LOW: used to indicate a routine or non-urgent work item. </description>
+MEDIUM: used to indicate a work item that has a priority less than HIGH and higher than LOW. It can be used to further stratify work items.
+LOW: used to indicate a routine or non-urgent work item.</description>
     </entry>
     <entry group="0040" element="0009" name="Scheduled Procedure Step ID">
       <description>Identifier that identifies the Scheduled General Purpose Procedure Step.</description>
     </entry>
     <entry group="0040" element="4010" name="Scheduled Procedure Step Modification Date and Time">
       <description>Date and time when the General Purpose Scheduled Procedure Step was last modified or first created (whichever is most recent).
-Note:	This attribute should be implicitly updated by the worklist management system whenever any modification is made to attributes of a General Purpose Scheduled Procedure Step. In particular, note that creation of General Purpose Performed Procedure Steps by a performing device can modify attributes of a related General Purpose Scheduled Procedure Step (e.g. the contents of Resulting General Purpose Performed Procedure Steps Sequence (0040,4015)).</description>
+Note: This attribute should be implicitly updated by the worklist management system whenever any modification is made to attributes of a General Purpose Scheduled Procedure Step. In particular, note that creation of General Purpose Performed Procedure Steps by a performing device can modify attributes of a related General Purpose Scheduled Procedure Step (e.g. the contents of Resulting General Purpose Performed Procedure Steps Sequence (0040,4015)).</description>
     </entry>
     <entry group="0040" element="4004" name="Scheduled Processing Applications Code Sequence">
       <description>The list of processing application instances and/or application types on which the General Purpose Procedure Step is scheduled.
@@ -2963,7 +2963,7 @@ Zero or more Items may be included in this sequence.</description>
     </entry>
     <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="4025" name="Scheduled Station Name Code Sequence">
-      <description>Identifying name within the enterprise of the equipment for which the General Purpose Scheduled Procedure Step is scheduled. The name conveyed in the Code Value (0008,0100) may be the same as the AE Title, but does not have to be. 
+      <description>Identifying name within the enterprise of the equipment for which the General Purpose Scheduled Procedure Step is scheduled. The name conveyed in the Code Value (0008,0100) may be the same as the AE Title, but does not have to be.
 Zero or more Items may be included in this sequence.</description>
     </entry>
     <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined."/>
@@ -2978,11 +2978,11 @@ Zero or more Items may be included in this sequence.</description>
     </entry>
     <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="4034" name="Scheduled Human Performers Sequence">
-      <description>The list of human performers that are scheduled to be involved or responsible for performing the Workitem in the General Purpose Scheduled Procedure Step. 
+      <description>The list of human performers that are scheduled to be involved or responsible for performing the Workitem in the General Purpose Scheduled Procedure Step.
 Zero or more Items may be included in this sequence.</description>
     </entry>
     <entry group="0040" element="4009" name="&gt;Human Performer Code Sequence">
-      <description>Human performer that is involved or responsible for performing the Workitem. 
+      <description>Human performer that is involved or responsible for performing the Workitem.
 Only a single Item shall be permitted in this sequence.</description>
     </entry>
     <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined."/>
@@ -3013,16 +3013,16 @@ Zero or more Items may be included in this sequence.</description>
     </entry>
     <include ref="&gt;Include SOP Instance Reference Macro Table 10-11"/>
     <entry group="0040" element="4020" name="Input Availability Flag">
-      <description>Flag that indicates the availability of Composite SOP Instances in the Attribute “Input Information Sequence” (0040,4021) of the General Purpose Scheduled Procedure Step.
+      <description>Flag that indicates the availability of Composite SOP Instances in the Attribute "Input Information Sequence" (0040,4021) of the General Purpose Scheduled Procedure Step.
 Enumerated values are:
-	PARTIAL
-	COMPLETE
+PARTIAL
+COMPLETE
 The value PARTIAL denotes that the list of Composite SOP Instances may not yet be complete, and additional ones may be added at a later time.
 The value COMPLETE denotes that all Composite SOP Instances are available and listed.
-Note:	It may happen that the list of Composite SOP Instances is empty when the value of the Input Availability Flag is COMPLETE. In such a case a Workitem has been scheduled that does not require input information. </description>
+Note: It may happen that the list of Composite SOP Instances is empty when the value of the Input Availability Flag is COMPLETE. In such a case a Workitem has been scheduled that does not require input information.</description>
     </entry>
     <entry group="0040" element="4021" name="Input Information Sequence">
-      <description>List of Composite SOP Instances that forms the input information needed to perform the scheduled procedure step. See also Input Availability Flag (0040,4020). The same Composite SOP Instance shall not be included in both the Input Information Sequence (0040,4021) and the Relevant Information Sequence (0040,4022). 
+      <description>List of Composite SOP Instances that forms the input information needed to perform the scheduled procedure step. See also Input Availability Flag (0040,4020). The same Composite SOP Instance shall not be included in both the Input Information Sequence (0040,4021) and the Relevant Information Sequence (0040,4022).
 Zero or more Items may be included in this sequence.</description>
     </entry>
     <include ref="&gt;Include ''Hierarchical SOP Instance Reference Macro' Table C.17-3"/>
@@ -3032,36 +3032,36 @@ Zero or more Items may be included in this sequence.</description>
     </entry>
     <include ref="&gt;Include ''Hierarchical SOP Instance Reference Macro' Table C.17-3"/>
     <entry group="0020" element="000D" name="Study Instance UID">
-      <description>Unique Study identification that shall be used for the created Composite SOP Instances resulting from this General Purpose Scheduled Procedure Step. 
-Note:	In most cases this will be the same Study Instance UID as for the instances in the Input Information Sequence (0040,4021).</description>
+      <description>Unique Study identification that shall be used for the created Composite SOP Instances resulting from this General Purpose Scheduled Procedure Step.
+Note: In most cases this will be the same Study Instance UID as for the instances in the Input Information Sequence (0040,4021).</description>
     </entry>
     <entry group="0008" element="0020" name="Study Date">
       <description>Date the Study started, if any previous procedure steps within the same study have already been performed.
-Note: 	This value should be the same as that in the instances in the Input Information Sequence (0040,4021).</description>
+Note: This value should be the same as that in the instances in the Input Information Sequence (0040,4021).</description>
     </entry>
     <entry group="0008" element="0030" name="Study Time">
-      <description>Time the Study started, if any previous procedure steps within the same study have already been performed. 
-Note: 	This value should be the same as that in the instances in the Input Information Sequence (0040,4021).</description>
+      <description>Time the Study started, if any previous procedure steps within the same study have already been performed.
+Note: This value should be the same as that in the instances in the Input Information Sequence (0040,4021).</description>
     </entry>
     <entry group="0040" element="4006" name="Multiple Copies Flag">
       <description>This flag indicates that multiple copies have to be made of a Composite SOP Instance that supports the notion of multiple copies. This includes the SR SOP Class. If set the Study Instance UIDs in the Referenced Request Sequence (0040,A370) shall be used for the created multiple copies.
 Enumerated Values:
-	Y = Yes
-	N = No</description>
+Y = Yes
+N = No</description>
     </entry>
     <entry group="0040" element="4015" name="Resulting General Purpose Performed Procedure Steps Sequence">
-      <description>List of all General Purpose Performed Procedure Steps that result from the performance of the procedure step. 
+      <description>List of all General Purpose Performed Procedure Steps that result from the performance of the procedure step.
 Zero or more Items may be included in this sequence.
-Note: 	Initially this list will be empty. New entries will be added when General Purpose Performed Procedure Steps are created by performing devices that are related to this Scheduled Procedure Step. E.g, this sequence may contain the partial results in case a General Purpose Scheduled Procedure Step is discontinued.</description>
+Note: Initially this list will be empty. New entries will be added when General Purpose Performed Procedure Steps are created by performing devices that are related to this Scheduled Procedure Step. E.g, this sequence may contain the partial results in case a General Purpose Scheduled Procedure Step is discontinued.</description>
     </entry>
     <include ref="&gt;Include SOP Instance Reference Macro Table 10-11"/>
     <entry group="0040" element="4035" name="Actual Human Performers Sequence">
-      <description>The list of current human performers that are actually involved or responsible for performing the Workitem. 
+      <description>The list of current human performers that are actually involved or responsible for performing the Workitem.
 Zero or more Items may be included in this sequence.
-Note:	Initially this list will be empty. A list of entries may be created at the status transition of the General Purpose Scheduled Procedure Step Status (0040,4001) to "IN PROGRESS" </description>
+Note: Initially this list will be empty. A list of entries may be created at the status transition of the General Purpose Scheduled Procedure Step Status (0040,4001) to "IN PROGRESS"</description>
     </entry>
     <entry group="0040" element="4009" name="&gt;Human Performer Code Sequence">
-      <description>Human performer that is involved or responsible for performing the Workitem. 
+      <description>Human performer that is involved or responsible for performing the Workitem.
 Only a single Item shall be permitted in this sequence.</description>
     </entry>
     <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined."/>
@@ -3088,9 +3088,9 @@ Only a single Item shall be permitted in this sequence.</description>
     <entry group="0010" element="0040" name="Patient's Sex">
       <description>Sex of the named Patient.
 Enumerated Values:
-	M = male
-	F = female
-	O = other</description>
+M = male
+F = female
+O = other</description>
     </entry>
     <entry group="0040" element="A370" name="Referenced Request Sequence">
       <description>The list of Requested Procedures the Procedure Step shall contribute to.
@@ -3100,7 +3100,7 @@ Zero or more Items may be included in the sequence.</description>
       <description>Unique identifier for the Study.</description>
     </entry>
     <entry group="0008" element="1110" name="&gt;Referenced Study Sequence">
-      <description>Uniquely identifies the Study SOP Instance associated with this Scheduled Procedure Step. 
+      <description>Uniquely identifies the Study SOP Instance associated with this Scheduled Procedure Step.
 Only a single Item shall be permitted in this sequence.</description>
     </entry>
     <include ref="&gt;&gt;Include SOP Instance Reference Macro Table 10-11"/>
@@ -3130,7 +3130,7 @@ Zero or more Items may be included in this sequence.</description>
     </entry>
     <include ref="&gt;Include SOP Instance Reference Macro Table 10-11"/>
     <entry group="0040" element="4023" name="&gt;Referenced General Purpose Scheduled Procedure Step Transaction UID">
-      <description>Transaction UID (0008,1195) used in the N-ACTION transaction that requested the transition to the IN PROGRESS state for the referenced General Purpose Scheduled Procedure Step. </description>
+      <description>Transaction UID (0008,1195) used in the N-ACTION transaction that requested the transition to the IN PROGRESS state for the referenced General Purpose Scheduled Procedure Step.</description>
     </entry>
     <entry group="0038" element="0010" name="Admission ID">
       <description>Identification number of the visit as assigned by the healthcare provider</description>
@@ -3150,11 +3150,11 @@ Zero or more Items may be included in this sequence.</description>
   </module>
   <module ref="Table C.4.21-1" name="General Purpose Performed Procedure Step Information Module Attributes">
     <entry group="0040" element="4035" name="Actual Human Performers Sequence">
-      <description>The list of human performers that were actually involved in or responsible for performing this General Purpose Performed Procedure Step. 
+      <description>The list of human performers that were actually involved in or responsible for performing this General Purpose Performed Procedure Step.
 Zero or more Items may be included in this sequence.</description>
     </entry>
     <entry group="0040" element="4009" name="&gt;Human Performer Code Sequence">
-      <description>Human performer that is actually involved or responsible for performing the General Purpose Performed Procedure Step. 
+      <description>Human performer that is actually involved or responsible for performing the General Purpose Performed Procedure Step.
 Only a single Item shall be permitted in this sequence.</description>
     </entry>
     <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined."/>
@@ -3165,7 +3165,7 @@ Only a single Item shall be permitted in this sequence.</description>
       <description>Organization to which the human performer is accountable for the activities in the General Purpose Performed Procedure Step.</description>
     </entry>
     <entry group="0040" element="4028" name="Performed Station Name Code Sequence">
-      <description>Name within the enterprise of the equipment that created the General Purpose Performed Procedure Step. This name may be the same as the AE Title, but does not have to be. 
+      <description>Name within the enterprise of the equipment that created the General Purpose Performed Procedure Step. This name may be the same as the AE Title, but does not have to be.
 Zero or one Item may be included in this sequence.</description>
     </entry>
     <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined."/>
@@ -3185,11 +3185,11 @@ Zero or more Items may be included in this sequence.</description>
     <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="No Baseline Context ID is defined."/>
     <entry group="0040" element="0244" name="Performed Procedure Step Start Date">
       <description>Date on which the General Purpose Performed Procedure Step started.
-Note: 	This value may be used to determine the earliest date to use as the Study Date (0008,0020) in composite instances and in updated General Purpose Scheduled Procedure Steps in order to allow Study level attributes to have consistent values if additional Procedure Steps are performed.</description>
+Note: This value may be used to determine the earliest date to use as the Study Date (0008,0020) in composite instances and in updated General Purpose Scheduled Procedure Steps in order to allow Study level attributes to have consistent values if additional Procedure Steps are performed.</description>
     </entry>
     <entry group="0040" element="0245" name="Performed Procedure Step Start Time">
       <description>Time at which the General Purpose Performed Procedure Step started.
-Note: 	This value may be used to determine the earliest time to use as the Study Time (0008,0030) in composite instances and in updated General Purpose Scheduled Procedure Steps in order to allow Study level attributes to have consistent values if additional Procedure Steps are performed.</description>
+Note: This value may be used to determine the earliest time to use as the Study Time (0008,0030) in composite instances and in updated General Purpose Scheduled Procedure Steps in order to allow Study level attributes to have consistent values if additional Procedure Steps are performed.</description>
     </entry>
     <entry group="0040" element="0253" name="Performed Procedure Step ID">
       <description>User or equipment generated identifier of that part of a Procedure that has been carried out within this procedure step.</description>
@@ -3220,7 +3220,7 @@ Only a single Item shall be permitted in this sequence.</description>
   </module>
   <module ref="Table C.4.22-1" name="General Purpose Results Module Attributes">
     <entry group="0040" element="4033" name="Output Information Sequence">
-      <description>A Sequence that provides reference to one or more Composite SOP instances, that identify the Structured Reports or other results created. 
+      <description>A Sequence that provides reference to one or more Composite SOP instances, that identify the Structured Reports or other results created.
 Zero or more Items may be included in this sequence.</description>
     </entry>
     <entry group="0020" element="000D" name="&gt;Study Instance UID">
@@ -3232,12 +3232,12 @@ Zero or more Items may be included in this sequence.</description>
     <entry group="0040" element="A494" name="&gt;&gt;Archive Requested">
       <description>The instances in this series are expected to be archived in the long term archive.
 Defined Terms:
-	NO, YES</description>
+NO, YES</description>
     </entry>
     <include ref="&gt;&gt;Include 'Hierarchical Series Reference Macro' Table C.17-3a"/>
     <entry group="0040" element="4031" name="Requested Subsequent Workitem Code Sequence">
       <description>A Sequence that provides suggested next Workitems, based on the produced results.
-Note:	This Attribute may also be used in case a step has been done incorrectly and should be redone.
+Note: This Attribute may also be used in case a step has been done incorrectly and should be redone.
 Zero or more Items may be included in this sequence</description>
     </entry>
     <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="Baseline Context ID is CID 9231."/>
@@ -3250,8 +3250,8 @@ Zero or more Items may be included in this sequence.</description>
   <module ref="Table C.4.23-1" name="Instance Availability Notification Module Attributes">
     <entry group="0008" element="1111" name="Referenced Performed Procedure Step Sequence">
       <description>Uniquely identifies the Performed Procedure Step SOP Instance to which this availability notification instance is related, if any. The Sequence shall have zero or one Item.
-Notes:	1. This may refer to a different PPS than that encoded in the composite instances themselves.
-	2. It is typically used for notification about instances created as a consequence of some scheduled activity.</description>
+Notes: 1. This may refer to a different PPS than that encoded in the composite instances themselves.
+2. It is typically used for notification about instances created as a consequence of some scheduled activity.</description>
     </entry>
     <include ref="&gt;Include SOP Instance Reference Macro Table 10-11"/>
     <entry group="0040" element="4019" name="&gt;Performed Workitem Code Sequence">
@@ -14499,7 +14499,7 @@ TRANSVERSE</description>
     </entry>
     <include ref="&gt;&gt;Include Image SOP Instance Reference Macro, Table 10-3" description="The Referenced SOP Instance UID (0008,1155) shall not be the same as the Referenced SOP Instance UID (0008,1155) of the Left Image Sequence (0022,0021)."/>
   </module>
-  <module ref="Table C.8.19.1-1" name="Xa/xrf Series Module Attributes">
+  <module ref="Table C.8.19.1-1" name="XA/XRF Series Module Attributes">
     <entry group="0008" element="0060" name="Modality" type="1">
       <description>Type of equipment that originally acquired the data used to create the images in this Series.
 Enumerated Values:
@@ -14516,7 +14516,7 @@ Required if the Modality Performed Procedure Step SOP Class, General Purpose Per
     </entry>
     <include ref="&gt;Include 'SOP Instance Reference Macro' Table 10-11"/>
   </module>
-  <macro ref="Table C.8.19.2-1" name="Enhanced Xa/xrf Image Module Table">
+  <macro ref="Table C.8.19.2-1" name="Enhanced XA/XRF Image Module Table">
     <entry group="0008" element="0008" name="Image Type" type="1">
       <description>Image identification characteristics.
 See C.8.19.2.1.1 for specialization.</description>
@@ -14679,7 +14679,7 @@ IDENTITY - output is in P-Values - shall be used if Photometric Interpretation (
 INVERSE - output after inversion is in P-Values - shall be used if Photometric Interpretation (0028,0004) is MONOCHROME1.</description>
     </entry>
   </macro>
-  <module ref="Table C.8.19.3-1" name="Xa/xrf Acquisition Module Attributes">
+  <module ref="Table C.8.19.3-1" name="XA/XRF Acquisition Module Attributes">
     <entry group="0018" element="0060" name="KVP" type="1">
       <description>Average of the peak kilo voltage outputs of the X-Ray generator used for all frames.</description>
     </entry>
@@ -14797,7 +14797,7 @@ Note: This may be different from the Field of View Dimension(s) in Float (0018,9
 Required if Isocenter Reference System Sequence (0018,9462) is present.</description>
     </entry>
   </module>
-  <macro ref="Table C.8.19.6-1" name="Xa/xrf Frame Characteristics Macro Attributes">
+  <macro ref="Table C.8.19.6-1" name="XA/XRF Frame Characteristics Macro Attributes">
     <entry group="0018" element="9412" name="XA/XRF Frame Characteristics Sequence" type="1">
       <description>A sequence that describes general characteristics of this frame.
 Only a single Item shall be permitted in this sequence.</description>
@@ -14896,7 +14896,7 @@ column of the origin vertex.
 Two or more pairs of values follow and are the effective pixel row and column coordinates of the other vertices of the polygon Exposure Control Sensing Region. Polygon Exposure Control Sensing Regions are implicitly closed from the last vertex to the origin vertex and all edges shall be non-intersecting except at the vertices. See C.8.19.6.3.1.</description>
     </entry>
   </macro>
-  <macro ref="Table C.8.19.6-4" name="Xa/xrf Frame Pixel Data Properties Macro Attributes">
+  <macro ref="Table C.8.19.6-4" name="XA/XRF Frame Pixel Data Properties Macro Attributes">
     <entry group="0028" element="9443" name="Frame Pixel Data Properties Sequence" type="1">
       <description>Sequence containing the pixel data properties for this frame.
 Only a single Item shall be permitted in this sequence.</description>
@@ -15145,7 +15145,7 @@ Only a single Item shall be permitted in this sequence.</description>
 Note: This value is traditionally referred to as Source Image Receptor Distance (SID).</description>
     </entry>
   </macro>
-  <module ref="Table C.8.19.7-1" name="Xa/xrf Multi Frame Presentation Module Attributes">
+  <module ref="Table C.8.19.7-1" name="XA/XRF Multi Frame Presentation Module Attributes">
     <entry group="0018" element="1244" name="Preferred Playback Sequencing" type="3">
       <description>Describes the preferred playback sequencing for a multi-frame image.
 Enumerated Values:
@@ -16324,7 +16324,7 @@ When this attribute is not present, the interpretation of the values of Window C
     </entry>
     <entry group="0028" element="3002" name="&gt;LUT Descriptor">
       <description>Specifies the format of the LUT Data in this Sequence.
-Required if Presentation LUT Sequence (2050,0010) 
+Required if Presentation LUT Sequence (2050,0010)
 is sent.
 See C.11.4.1 for further explanation.</description>
     </entry>
@@ -16335,11 +16335,11 @@ See C.11.4.1 for further explanation.</description>
       <description>LUT Data in this Sequence.</description>
     </entry>
     <entry group="2050" element="0020" name="Presentation LUT Shape">
-      <description>Specifies pre-defined Presentation LUT shapes. 
+      <description>Specifies pre-defined Presentation LUT shapes.
 Enumerated Values :
 IDENTITY = input to the Presentation LUT is in P-Values, no further translation is necessary.
 LIN OD = input to Presentation LUT is in linear optical density over the range of Min Density (2010,0120) and Max Density (2010,1030).
-Note:	LIN OD is only defined for hardcopy devices and is not applicable to softcopy devices.</description>
+Note: LIN OD is only defined for hardcopy devices and is not applicable to softcopy devices.</description>
     </entry>
   </macro>
   <module ref="Table C.11.5-1" name="Image Histogram Module Attributes">
@@ -16796,25 +16796,25 @@ Note: Digital Signature Security Profiles (see PS 3.15) may require the use of a
       <description>Number of copies to be printed for each film of the film session.</description>
     </entry>
     <entry group="2000" element="0020" name="Print Priority">
-      <description>Specifies the priority of the print job. 
+      <description>Specifies the priority of the print job.
 Enumerated Values:
-	HIGH
-	MED
-	LOW</description>
+HIGH
+MED
+LOW</description>
     </entry>
     <entry group="2000" element="0030" name="Medium Type">
-      <description>Type of medium on which the print job will be printed. Defined Terms: 
-	PAPER
-	CLEAR FILM
-	BLUE FILM
-	MAMMO CLEAR FILM
-	MAMMO BLUE FILM</description>
+      <description>Type of medium on which the print job will be printed. Defined Terms:
+PAPER
+CLEAR FILM
+BLUE FILM
+MAMMO CLEAR FILM
+MAMMO BLUE FILM</description>
     </entry>
     <entry group="2000" element="0040" name="Film Destination">
-      <description>Film destination. Defined Terms: 
+      <description>Film destination. Defined Terms:
 MAGAZINE = the exposed film is stored in film magazine
 PROCESSOR = the exposed film is developed in film processor
-BIN_i = the exposed film is deposited in a sorter bin where “I” represents the bin number. Film sorter BINs shall be numbered sequentially starting from one and no maxiumu is placed on the number of BINs. The encoding of the BIN number shall not contain leading zeros.</description>
+BIN_i = the exposed film is deposited in a sorter bin where "I" represents the bin number. Film sorter BINs shall be numbered sequentially starting from one and no maxiumu is placed on the number of BINs. The encoding of the BIN number shall not contain leading zeros.</description>
     </entry>
     <entry group="2000" element="0050" name="Film Session Label">
       <description>Human readable label that identifies the film session</description>
@@ -16828,14 +16828,14 @@ BIN_i = the exposed film is deposited in a sorter bin where “I” represents t
   </module>
   <module ref="Table C.13-2" name="Basic Film Session Relationship Module Attributes">
     <entry group="2000" element="0500" name="Referenced Film Box Sequence">
-      <description>A Sequence which provides references to a set of Film Box SOP Class/Instance pairs. Zero or more Items may be included in this Sequence. </description>
+      <description>A Sequence which provides references to a set of Film Box SOP Class/Instance pairs. Zero or more Items may be included in this Sequence.</description>
     </entry>
     <include ref="&gt;Include 'SOP Instance Reference Macro' Table 10-11"/>
   </module>
   <module ref="Table C.13-3" name="Basic Film Box Presentation Module Attributes">
     <entry group="2010" element="0010" name="Image Display Format">
-      <description>Type of image display format. Enumerated Values: 
-STANDARD\C,R : film contains equal size rectangular image boxes with R rows of image boxes and C columns of image boxes; C and R are integers. 
+      <description>Type of image display format. Enumerated Values:
+STANDARD\C,R : film contains equal size rectangular image boxes with R rows of image boxes and C columns of image boxes; C and R are integers.
 ROW\R1,R2,R3, etc. : film contains rows with equal size rectangular image boxes with R1 image boxes in the first row, R2 image boxes in second row, R3 image boxes in third row, etc.; R1, R2, R3, etc. are integers.
 COL\C1,C2,C3, etc.: film contains columns with equal size rectangular image boxes with C1 image boxes in the first column, C2 image boxes in second column, C3 image boxes in third column, etc.; C1, C2, C3, etc. are integers.
 SLIDE : film contains 35mm slides; the number of slides for a particular film size is configuration dependent.
@@ -16851,44 +16851,44 @@ PORTRAIT = vertical film position
 LANDSCAPE = horizontal film position</description>
     </entry>
     <entry group="2010" element="0050" name="Film Size ID">
-      <description>Film size identification. Defined Terms: 
-	8INX10IN
-	8_5INX11IN
-	10INX12IN
-	10INX14IN
-	11INX14IN
-	11INX17IN
-	14INX14IN
-	14INX17IN
-	24CMX24CM
-	24CMX30CM
-	A4
-	A3
-Note:	10INX14IN corresponds with 25.7CMX36.4CM
+      <description>Film size identification. Defined Terms:
+8INX10IN
+8_5INX11IN
+10INX12IN
+10INX14IN
+11INX14IN
+11INX17IN
+14INX14IN
+14INX17IN
+24CMX24CM
+24CMX30CM
+A4
+A3
+Note: 10INX14IN corresponds with 25.7CMX36.4CM
 A4 corresponds with 210 x 297 millimeters
 A3 corresponds with 297 x 420 millimeters</description>
     </entry>
     <entry group="2010" element="0060" name="Magnification Type">
-      <description>Interpolation type by which the printer magnifies or decimates the image in order to fit the image in the image box on film. Defined Terms: 
-	REPLICATE
-	BILINEAR
-	CUBIC
-	NONE</description>
+      <description>Interpolation type by which the printer magnifies or decimates the image in order to fit the image in the image box on film. Defined Terms:
+REPLICATE
+BILINEAR
+CUBIC
+NONE</description>
     </entry>
     <entry group="2010" element="0080" name="Smoothing Type">
       <description>Further specifies the type of the interpolation function. Values are defined in Conformance Statement. Only valid for Magnification Type (2010,0060) = CUBIC</description>
     </entry>
     <entry group="2010" element="0100" name="Border Density">
-      <description>Density of the film areas surrounding and between images on the film. Defined Terms: 
+      <description>Density of the film areas surrounding and between images on the film. Defined Terms:
 BLACK
 WHITE
-i		where i represents the desired density in hundredths of OD (e.g. 150 corresponds with 1.5 OD)</description>
+i where i represents the desired density in hundredths of OD (e.g. 150 corresponds with 1.5 OD)</description>
     </entry>
     <entry group="2010" element="0110" name="Empty Image Density">
-      <description>Density of the image box area on the film that contains no image. Defined Terms: 
+      <description>Density of the image box area on the film that contains no image. Defined Terms:
 BLACK
 WHITE
-i		where i represents the desired density in hundredths of OD (e.g. 150 corresponds with 1.5 OD)</description>
+i where i represents the desired density in hundredths of OD (e.g. 150 corresponds with 1.5 OD)</description>
     </entry>
     <entry group="2010" element="0120" name="Min Density">
       <description>Minimum density of the images on the film, expressed in hundredths of OD. If Min Density is lower than minimum printer density than Min Density is set to minimum printer density.</description>
@@ -16905,7 +16905,7 @@ NO</description>
       <description>Character string that contains either the ID of the printer configuration table that contains a set of values for implementation specific print parameters (e.g. perception LUT related parameters) or one or more configuration data values, encoded as characters. If there are multiple configuration data values encoded in the string, they shall be separated by backslashes. The definition of values shall be contained in the SCP's Conformance Statement.
 Defined Terms:
 CS000-CS999: Implementation specific curve type.
-Note:	It is recommended that for SCPs, CS000 represent the lowest contrast and CS999 the highest contrast levels available.</description>
+Note: It is recommended that for SCPs, CS000 represent the lowest contrast and CS999 the highest contrast levels available.</description>
     </entry>
     <entry group="2010" element="015E" name="Illumination">
       <description>Luminance of lightbox illuminating a piece of transmissive film, or for the case of reflective media, luminance obtainable from diffuse reflection of the illumination present. Expressed as L0, in candelas per square meter (cd/m2).</description>
@@ -16921,24 +16921,24 @@ HIGH = Approximately twice the resolution of STANDARD.</description>
     </entry>
     <entry group="0028" element="2000" name="ICC Profile">
       <description>An ICC Profile encoding the transformation of device-dependent color stored pixel values into PCS-Values. See C.11.15.
-Note.	This is an Input Device Profile that describes the characteristics of the pixel data in the film box, not an Output Device Profile that might describe the characteristics of the Print SCP.</description>
+Note. This is an Input Device Profile that describes the characteristics of the pixel data in the film box, not an Output Device Profile that might describe the characteristics of the Print SCP.</description>
     </entry>
   </module>
   <module ref="Table C.13-4" name="Basic Film Box Relationship Module Attributes">
     <entry group="2010" element="0500" name="Referenced Film Session Sequence">
-      <description>A sequence which provides references to a Film Session SOP Class/Instance pairs. Only a single Item shall be permitted in this Sequence. </description>
+      <description>A sequence which provides references to a Film Session SOP Class/Instance pairs. Only a single Item shall be permitted in this Sequence.</description>
     </entry>
     <include ref="&gt;Include 'SOP Instance Reference Macro' Table 10-11"/>
     <entry group="2010" element="0510" name="Referenced Image Box Sequence">
-      <description>A sequence which provides references to a set of Image Box SOP Class/Instance pairs. One or more Items may be included in this Sequence. </description>
+      <description>A sequence which provides references to a set of Image Box SOP Class/Instance pairs. One or more Items may be included in this Sequence.</description>
     </entry>
     <include ref="&gt;Include 'SOP Instance Reference Macro' Table 10-11"/>
     <entry group="2010" element="0520" name="Referenced Basic Annotation Box Sequence">
-      <description>A Sequence which provides references to a set of Basic Annotation Box SOP Class/Instance pairs. Zero or more Items may be included in this Sequence. </description>
+      <description>A Sequence which provides references to a set of Basic Annotation Box SOP Class/Instance pairs. Zero or more Items may be included in this Sequence.</description>
     </entry>
     <include ref="&gt;Include 'SOP Instance Reference Macro' Table 10-11"/>
     <entry group="2050" element="0500" name="Referenced Presentation LUT Sequence">
-      <description>A sequence which provides references to a Presentation LUT related SOP Class/Instance pairs. Only a single Item shall be included in this sequence. </description>
+      <description>A sequence which provides references to a Presentation LUT related SOP Class/Instance pairs. Only a single Item shall be included in this sequence.</description>
     </entry>
     <include ref="&gt;Include 'SOP Instance Reference Macro' Table 10-11"/>
   </module>
@@ -16959,7 +16959,7 @@ If Polarity (2020,0020) is not specified by the SCU, the SCP shall print with NO
       <description>Description is the same as in Table C.13-3. Overrides the Smoothing Type specified for the Film Box</description>
     </entry>
     <entry group="2010" element="0150" name="Configuration Information">
-      <description>See Table C.13-3 for description of Configuration Information. </description>
+      <description>See Table C.13-3 for description of Configuration Information.</description>
     </entry>
     <entry group="2020" element="0030" name="Requested Image Size">
       <description>Width (x-dimension) in mm of the image to be printed. This value overrides the size that corresponds with optimal filling of the Image Box.</description>
@@ -16982,8 +16982,8 @@ See PS 3.4 for further description.</description>
     </entry>
     <entry group="0028" element="0004" name="&gt;Photometric Interpretation">
       <description>See C.7.6.3 for description of Image Pixel Module. Enumerated Values:
-	MONOCHROME1
-	MONOCHROME2</description>
+MONOCHROME1
+MONOCHROME2</description>
     </entry>
     <entry group="0028" element="0010" name="&gt;Rows">
       <description>See C.7.6.3 for description of Image Pixel Module</description>
@@ -16996,22 +16996,22 @@ See PS 3.4 for further description.</description>
     </entry>
     <entry group="0028" element="0100" name="&gt;Bits Allocated">
       <description>See C.7.6.3 for description of Image Pixel Module. Enumerated Values:
-	8 (if Bits Stored = 8)
-	16 (if Bits Stored = 12)</description>
+8 (if Bits Stored = 8)
+16 (if Bits Stored = 12)</description>
     </entry>
     <entry group="0028" element="0101" name="&gt;Bits Stored">
       <description>See C.7.6.3 for description of Image Pixel Module. Enumerated Values:
-	8
-	12</description>
+8
+12</description>
     </entry>
     <entry group="0028" element="0102" name="&gt;High Bit">
       <description>See C.7.6.3 for description of Image Pixel Module. Enumerated Values:
-	7 (if BITS STORED = 8)
-	11 (if BITS STORED = 12)</description>
+7 (if BITS STORED = 8)
+11 (if BITS STORED = 12)</description>
     </entry>
     <entry group="0028" element="0103" name="&gt;Pixel Representation">
       <description>See C.7.6.3 for description of Image Pixel Module. Enumerated Value:
-	0 (unsigned integer)</description>
+0 (unsigned integer)</description>
     </entry>
     <entry group="7FE0" element="0010" name="&gt;Pixel Data">
       <description>See C.7.6.3 for description of Image Pixel Module</description>
@@ -17022,15 +17022,15 @@ See PS 3.4 for further description.</description>
     </entry>
     <entry group="0028" element="0002" name="&gt;Samples Per Pixel">
       <description>See C.7.6.3 for description of Image Pixel Module. Enumerated Value:
-	3</description>
+3</description>
     </entry>
     <entry group="0028" element="0004" name="&gt;Photometric Interpretation">
       <description>See C.7.6.3 for description of Image Pixel Module. Enumerated Value:
-	RGB</description>
+RGB</description>
     </entry>
     <entry group="0028" element="0006" name="&gt;Planar Configuration">
       <description>See C.7.6.3 for description of Image Pixel Module. Enumerated Value:
-	1 (frame interleave)</description>
+1 (frame interleave)</description>
     </entry>
     <entry group="0028" element="0010" name="&gt;Rows">
       <description>See C.7.6.3 for description of Image Pixel Module.</description>
@@ -17046,15 +17046,15 @@ See PS 3.4 for further description.</description>
     </entry>
     <entry group="0028" element="0101" name="&gt;Bits Stored">
       <description>See C.7.6.3 for description of Image Pixel Module. Enumerated Value:
-	8</description>
+8</description>
     </entry>
     <entry group="0028" element="0102" name="&gt;High Bit">
       <description>See C.7.6.3 for description of Image Pixel Module. Enumerated Value:
-	7</description>
+7</description>
     </entry>
     <entry group="0028" element="0103" name="&gt;Pixel Representation">
       <description>See C.7.6.3 for description of Image Pixel Module. Enumerated Value:
-	0000H (unsigned integer)</description>
+0000H (unsigned integer)</description>
     </entry>
     <entry group="7FE0" element="0010" name="&gt;Pixel Data">
       <description>See C.7.6.3 for description of Image Pixel Module</description>
@@ -17065,7 +17065,7 @@ See PS 3.4 for further description.</description>
       <description>The position of the annotation box in the parent film box. Annotation position sequence depends on the selected Annotation Display Format ID (2010,0030)</description>
     </entry>
     <entry group="2030" element="0020" name="Text String">
-      <description>Text string </description>
+      <description>Text string</description>
     </entry>
   </module>
   <module ref="Table C.13-8" name="Print Job Module Attributes">
@@ -17081,8 +17081,8 @@ FAILURE</description>
 Defined Terms when the Execution Status is DONE or PRINTING:
 NORMAL
 Defined Terms when the Execution Status is FAILURE:
-	INVALID PAGE DES = The specified page layout cannot be printed or other page description errors have been detected.
-	INSUFFIC MEMORY = There is not enough memory available to complete this job.
+INVALID PAGE DES = The specified page layout cannot be printed or other page description errors have been detected.
+INSUFFIC MEMORY = There is not enough memory available to complete this job.
 See Section C.13.9.1 for additional Defined Terms when the Execution Status is PENDING or FAILURE.</description>
     </entry>
     <entry group="2100" element="0040" name="Creation Date">
@@ -17109,7 +17109,7 @@ WARNING
 FAILURE</description>
     </entry>
     <entry group="2110" element="0020" name="Printer Status Info">
-      <description>Additional information about Printer Status (2110,0010). 
+      <description>Additional information about Printer Status (2110,0010).
 Defined Terms when the Printer Status is equal to NORMAL:
 NORMAL
 See Section C.13.9.1 for Defined Terms when the Printer Status is equal to WARNING or FAILURE.</description>
@@ -17244,20 +17244,20 @@ YES = supported</description>
       <description>Indicates whether the printer will decimate or crop image pixels if the image rows or columns is greater than the available printable pixels in an Image Box.
 See C.13.5.
 Enumerated Values when the printer does not support Requested Decimate/Crop Behavior (2020,0040):
- DECIMATE = image will be decimated to fit.
+DECIMATE = image will be decimated to fit.
 CROP = image will be cropped to fit.
 FAIL = N-SET of the Image Box will fail
-Enumerated Values when the printer supports Requested Decimate/Crop Behavior (2020,0040): 
- 
+Enumerated Values when the printer supports Requested Decimate/Crop Behavior (2020,0040):
+
 DEF DECIMATE = image will be decimated to fit.
 DEF CROP = image will be cropped to fit
-DEF FAIL = N-SET of the Image Box will fail 
+DEF FAIL = N-SET of the Image Box will fail
 This value indicates the printer default if the SCU does not create or set Requested Decimate/Crop Behavior for the Image Box.</description>
     </entry>
   </macro>
   <module ref="Table C.14-1" name="Storage Commitment Module Attributes">
     <entry group="0008" element="1195" name="Transaction UID">
-      <description>Uniquely identifies this Storage Commitment transaction. </description>
+      <description>Uniquely identifies this Storage Commitment transaction.</description>
     </entry>
     <entry group="0008" element="0054" name="Retrieve AE Title">
       <description>Application Entity Title where the SOP Instance(s) may be retrieved via a network based retrieve service.</description>
@@ -18063,20 +18063,20 @@ See C.10.5.1.2 for further explanation.</description>
     </entry>
     <entry group="2000" element="0010" name="Number of Copies">
       <description>Number of copies of set of media to be created for storing this file-set.
-Note:	If the entire request fits on a single piece of media per copy, then this value corresponds to the actual number of pieces of media to be created.</description>
+Note: If the entire request fits on a single piece of media per copy, then this value corresponds to the actual number of pieces of media to be created.</description>
     </entry>
     <entry group="2200" element="0020" name="Request Priority">
-      <description>Specifies the priority of the request. 
+      <description>Specifies the priority of the request.
 Enumerated Values:
-	HIGH
-	MED
-	LOW</description>
+HIGH
+MED
+LOW</description>
     </entry>
     <entry group="2200" element="0001" name="Label Using Information Extracted From Instances">
-      <description>Specifies whether or not to extract label information from the instances. 
+      <description>Specifies whether or not to extract label information from the instances.
 Enumerated Values:
-	YES
-	NO</description>
+YES
+NO</description>
     </entry>
     <entry group="2200" element="0002" name="Label Text">
       <description>Unformatted free text to include in the label instead of or in addition to information extracted from the instances.</description>
@@ -18089,7 +18089,7 @@ Enumerated Values:
     </entry>
     <entry group="2200" element="0005" name="Barcode Value">
       <description>String that describes the bar code value to be printed on the media label.
-Note	It is SCU responsibility to convey a value for this attribute coherent in length and content with the requested Barcode Symbology (2200,0006).</description>
+Note It is SCU responsibility to convey a value for this attribute coherent in length and content with the requested Barcode Symbology (2200,0006).</description>
     </entry>
     <entry group="2200" element="0006" name="Barcode Symbology">
       <description>Code string that describes the bar code symbology that shall be used for printing the Barcode Value (2200,0005).
@@ -18098,38 +18098,38 @@ See Section C.22.1.1 for Defined Terms.</description>
     <entry group="2200" element="0007" name="Allow Media Splitting">
       <description>A flag indicating if the SCP is allowed to split this request over more than one piece of media.
 Enumerated Values:
-	YES
-	NO
+YES
+NO
 
-Note:	1. The SCP is not required to support the split of a media creation request across more than one piece of media.
-	2. If the size of the set of SOP instances is greater than the media storage capacity, and this flag has been set to NO, the SCP shall refuse to process the request.</description>
+Note: 1. The SCP is not required to support the split of a media creation request across more than one piece of media.
+2. If the size of the set of SOP instances is greater than the media storage capacity, and this flag has been set to NO, the SCP shall refuse to process the request.</description>
     </entry>
     <entry group="2200" element="000F" name="Allow Lossy Compression">
-      <description>A flag indicating if the SCP is allowed to perform lossy compression. 
+      <description>A flag indicating if the SCP is allowed to perform lossy compression.
 Enumerated Values:
-	YES
-	NO</description>
+YES
+NO</description>
     </entry>
     <entry group="2200" element="0008" name="Include Non-DICOM Objects">
       <description>A flag indicating if the SCP should include in the media additional Non-DICOM information/objects
 Defined Terms:
-	NO
-	FOR_PHYSICIAN
-	FOR_PATIENT
-	FOR_TEACHING
-	FOR_RESEARCH</description>
+NO
+FOR_PHYSICIAN
+FOR_PATIENT
+FOR_TEACHING
+FOR_RESEARCH</description>
     </entry>
     <entry group="2200" element="0009" name="Include Display Application">
       <description>A flag indicating if the SCP should include on the media a DICOM Instance Display Application.
 Enumerated Values:
-	NO
-	YES</description>
+NO
+YES</description>
     </entry>
     <entry group="2200" element="000A" name="Preserve Composite Instances After Media Creation">
-      <description>A flag to indicate whether or not the SCU intends to issue a subsequent media creation request referencing some or all of the instances contained in Referenced SOP Sequence (0008,1199). 
+      <description>A flag to indicate whether or not the SCU intends to issue a subsequent media creation request referencing some or all of the instances contained in Referenced SOP Sequence (0008,1199).
 Enumerated Values:
-	YES
-	NO</description>
+YES
+NO</description>
     </entry>
     <entry group="0008" element="1199" name="Referenced SOP Sequence">
       <description>A sequence of Items where each Item references a single SOP Instance, the Media Application Profile to be used, and, where applicable, the icon representing the referenced image</description>
@@ -18137,7 +18137,7 @@ Enumerated Values:
     <include ref="&gt;Include 'SOP Instance Reference Macro' Table 10-11"/>
     <entry group="2200" element="000C" name="&gt;Requested Media Application Profile">
       <description>The Media Application Profile to be used for this SOP Instance.
-Note:	This is the label of the profile as defined in PS 3.11, e.g. “STD-XABC-CD”.</description>
+Note: This is the label of the profile as defined in PS 3.11, e.g. "STD-XABC-CD".</description>
     </entry>
     <entry group="0088" element="0200" name="&gt;Icon Image Sequence">
       <description>This Icon Image is representative of the Image.</description>
@@ -18155,7 +18155,7 @@ See Section C.22.1.3 for Defined Terms when the Execution Status is PENDING or F
     </entry>
     <entry group="2200" element="000B" name="Total Number of Pieces of Media Created">
       <description>Number of pieces of media that have been successfully created, in order to store all copies of the requested file-set.
-Note:	If the entire request fits on a single piece of media per copy, then this value corresponds to the number of copies of media created. </description>
+Note: If the entire request fits on a single piece of media per copy, then this value corresponds to the number of copies of media created.</description>
     </entry>
     <entry group="0008" element="1198" name="Failed SOP Sequence">
       <description>A sequence of Items describing SOP Instances for which media creation failed.</description>
@@ -18163,19 +18163,19 @@ Note:	If the entire request fits on a single piece of media per copy, then this 
     <include ref="&gt;Include 'SOP Instance Reference Macro' Table 10-11"/>
     <entry group="2200" element="000C" name="&gt;Requested Media Application Profile">
       <description>The Media Application Profile used for this SOP Instance.
-Note:	This is the label of the profile as defined in PS 3.11, e.g. “STD-XABC-CD”.</description>
+Note: This is the label of the profile as defined in PS 3.11, e.g. "STD-XABC-CD".</description>
     </entry>
     <entry group="0008" element="1197" name="&gt;Failure Reason">
       <description>The reason that media creation failed for this SOP Instance.
 See Section C.22.1.4.</description>
     </entry>
     <entry group="2200" element="000E" name="&gt;Failure Attributes">
-      <description>Attributes associated with the Failure Reason (0008,1197). 
+      <description>Attributes associated with the Failure Reason (0008,1197).
 See Section C.22.1.4.</description>
     </entry>
     <entry group="2200" element="000D" name="Referenced Storage Media Sequence">
       <description>A Sequence describing the identifiers of all pieces of media created to satisfy the request. One or more items are allowed.
-Note:	If the SCP splits a media creation request across more than one piece of media (e.g. if it doesn't fit on one), then all the created pieces of media will be included in this Sequence.</description>
+Note: If the SCP splits a media creation request across more than one piece of media (e.g. if it doesn't fit on one), then all the created pieces of media will be included in this Sequence.</description>
     </entry>
     <entry group="0088" element="0130" name="&gt; Storage Media File-Set ID">
       <description>User or implementation specific human readable identification of the Storage Media that has been created.</description>
@@ -18751,7 +18751,7 @@ RWV</description>
   </module>
   <module ref="Table C.26-1" name="Product Characteristics Module Attributes">
     <entry group="0044" element="0001" name="Product Package Identifier">
-      <description>Identifier of the contrast agent, drug, or device being characterized, typically from a package bar code, RFID, or other materials management ID. This ID might not be globally unique and might conflict with other IDs used within the scope of the institution. </description>
+      <description>Identifier of the contrast agent, drug, or device being characterized, typically from a package bar code, RFID, or other materials management ID. This ID might not be globally unique and might conflict with other IDs used within the scope of the institution.</description>
     </entry>
     <entry group="0008" element="0070" name="Manufacturer">
       <description>Manufacturer of product.</description>
@@ -18761,12 +18761,12 @@ RWV</description>
     </entry>
     <include ref="&gt;Include Code Sequence Macro Table 8.8-1" description="For drugs, a coded terminology in the US is RxNormFor devices, a coded terminology in the US is the FDA CDRH Product Code Classification"/>
     <entry group="0044" element="0008" name="Product Name">
-      <description>Trade or generic name of product. 
-Note:	May be multi-valued.</description>
+      <description>Trade or generic name of product.
+Note: May be multi-valued.</description>
     </entry>
     <entry group="0044" element="0009" name="Product Description">
-      <description>Further description in free form text describing the drug or device. 
-Note:	This attribute is limited by the LT Value Representation to 10240 characters. Larger text descriptions, or graphical descriptions, may be referenced in the Pertinent Documents Sequence (0038,0100).</description>
+      <description>Further description in free form text describing the drug or device.
+Note: This attribute is limited by the LT Value Representation to 10240 characters. Larger text descriptions, or graphical descriptions, may be referenced in the Pertinent Documents Sequence (0038,0100).</description>
     </entry>
     <entry group="0044" element="000A" name="Product Lot Identifier">
       <description>Identifier of the manufacturing batch of which this product is part.</description>
@@ -18788,7 +18788,7 @@ Note:	This attribute is limited by the LT Value Representation to 10240 characte
       <description>Unique identifier for the HL7 Structured Product Label Document as used in DICOM instance references (see C.12.1.1.6)</description>
     </entry>
     <entry group="0040" element="E001" name="&gt;HL7 Instance Identifier">
-      <description>Instance Identifier of the referenced HL7 Structured Document, encoded as a UID (OID or UUID), concatenated with a caret (“^”) and Extension value (if Extension is present in Instance Identifier).</description>
+      <description>Instance Identifier of the referenced HL7 Structured Document, encoded as a UID (OID or UUID), concatenated with a caret ("^") and Extension value (if Extension is present in Instance Identifier).</description>
     </entry>
     <entry group="0040" element="E010" name="&gt;Retrieve URI">
       <description>Retrieval access path to Product Label Document. Includes fully specified scheme, authority, path, and query in accordance with RFC 2396</description>
@@ -18797,9 +18797,9 @@ Note:	This attribute is limited by the LT Value Representation to 10240 characte
   <module ref="Table C.26-2" name="Substance Approval Module Attributes">
     <entry group="0044" element="0002" name="Substance Administration Approval">
       <description>Status of request for substance administration. Enumerated Values:
-APPROVED = Use of the substance for the patient is approved, with related notes (e.g., appropriate dose for age/weight) in Approval Status Further Description (0044,0003)
-WARNING = The substance may be used for the patient subject to warnings described in Approval Status Further Description (0044,0003)
-CONTRA_INDICATED = The substance should not be used for the patient for the reasons described in Approval Status Further Description (0044,0003)</description>
+APPROVED - Use of the substance for the patient is approved, with related notes (e.g., appropriate dose for age/weight) in Approval Status Further Description (0044,0003)
+WARNING - The substance may be used for the patient subject to warnings described in Approval Status Further Description (0044,0003)
+CONTRA_INDICATED - The substance should not be used for the patient for the reasons described in Approval Status Further Description (0044,0003)</description>
     </entry>
     <entry group="0044" element="0003" name="Approval Status Further Description">
       <description>Description of warning or contra-indication, or notes on approval.</description>
@@ -18831,20 +18831,20 @@ CONTRA_INDICATED = The substance should not be used for the patient for the reas
       <description>Name of healthcare provider that issued the Admission ID</description>
     </entry>
     <entry group="0044" element="0001" name="Product Package Identifier">
-      <description>Identifier of the contrast agent, drug, or device administered, typically from a package bar code, RFID, or other materials management ID. This ID might not be globally unique and might conflict with other IDs used within the scope of the institution. </description>
+      <description>Identifier of the contrast agent, drug, or device administered, typically from a package bar code, RFID, or other materials management ID. This ID might not be globally unique and might conflict with other IDs used within the scope of the institution.</description>
     </entry>
     <entry group="0044" element="0008" name="Product Name">
-      <description>Trade or generic name of product. 
-Note:	May be multi-valued.</description>
+      <description>Trade or generic name of product.
+Note: May be multi-valued.</description>
     </entry>
     <entry group="0044" element="0009" name="Product Description">
-      <description>Text description of the contrast agent, drug, or device administered. </description>
+      <description>Text description of the contrast agent, drug, or device administered.</description>
     </entry>
     <entry group="0044" element="0010" name="Substance Administration DateTime">
       <description>Date and Time of Substance Administration</description>
     </entry>
     <entry group="0044" element="0011" name="Substance Administration Notes">
-      <description>Comments provided by the operator responsible for the substance administration. </description>
+      <description>Comments provided by the operator responsible for the substance administration.</description>
     </entry>
     <entry group="0044" element="0012" name="Substance Administration Device ID">
       <description>Identifier for a device that controls substance administration, e.g., injector, infusion pump, etc.</description>
@@ -18861,7 +18861,7 @@ Note:	May be multi-valued.</description>
       <description>Person administering the substance to the patient, or legally responsible for the administration, and authorized to add an entry to the Medication Administration Record. One or more Items may be present in this Sequence.</description>
     </entry>
     <entry group="0040" element="1101" name="&gt;Person Identification Code Sequence">
-      <description>Coded identifier of the person administering the contrast agent, drug, or device. 
+      <description>Coded identifier of the person administering the contrast agent, drug, or device.
 One Item may be present in this Sequence.</description>
     </entry>
     <include ref="&gt;&gt;Include Code Sequence Macro Table 8.8-1" description="No baseline context ID. The Coding Scheme Designator attribute may indicate a local coding scheme (e.g., with value “L”) when it is implicitly that of the institution’s employee identifier system.The Code Meaning attribute, though it is encoded with a VR of LO, may be encoded according to the rules of the PN VR (see Section 10.1)."/>

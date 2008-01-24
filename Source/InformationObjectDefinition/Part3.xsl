@@ -59,7 +59,8 @@ Weird camel case function to get closer to docbook version
     <xsl:variable name="tmp6" select="replace($tmp5,'Pet ','PET ')"/>
     <xsl:variable name="tmp7" select="replace($tmp6,' Ecg ',' ECG ')"/>
     <xsl:variable name="tmp8" select="replace($tmp7,' Cad ',' CAD ')"/>
-    <xsl:value-of select="$tmp8"/>
+    <xsl:variable name="tmp9" select="replace($tmp8,'Xa/xrf ','XA/XRF ')"/>
+    <xsl:value-of select="$tmp9"/>
   </xsl:function>
 <!--
 Function to parse a row from an informaltable specifically for a Macro/Module table:
@@ -113,9 +114,9 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
             <entry group="{$group}" element="{$element}" name="{$name_translate}">
 <!-- type ?? -->
               <description>
-                <xsl:variable name="desc" select="translate($type,'–­','=')"/>
+                <xsl:variable name="desc" select="translate($type,$single_quote1,$single_quote2)"/>
 <!-- very specific -->
-                <xsl:value-of select="translate($desc,'’',$apos)"/>
+                <xsl:value-of select="my:normalize-paragraph($desc)"/>
               </description>
             </entry>
           </xsl:otherwise>
