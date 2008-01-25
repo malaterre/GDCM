@@ -43,6 +43,7 @@ int TestvtkGDCMImageWrite(const char *filename)
   gdcmfile += ".dcm";
   writer->SetFileName( gdcmfile.c_str() );
   writer->Write();
+  std::cerr << "Write out: " << gdcmfile << std::endl;
 
   reader->Delete();
   copy->Delete();

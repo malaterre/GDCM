@@ -79,9 +79,23 @@ int TestUIDGenerator(int argc, char *argv[])
     {
     return 1;
     }
-  uid.SetRoot( "1" );
-  if( strcmp( gdcm::UIDGenerator::GetGDCMUID(), uid.GetRoot() ) == 0 )
+  const char myroot[] = "987654321"; // hopefully no one has this yet...
+  uid.SetRoot( myroot );
+  const char *s = uid.Generate();
+  std::cout << "s:" << s << std::endl;
+  if( strcmp( myroot, uid.GetRoot() ) != 0 )
     {
+    std::cerr << "1 failed" << std::endl;
+    return 1;
+    }
+  if( strcmp( gdcm::UIDGenerator::GetGDCMUID(), myroot ) == 0 )
+    {
+    std::cerr << "2 failed" << std::endl;
+    return 1;
+    }
+  if( strncmp( s, uid.GetRoot(), strlen( uid.GetRoot() ) ) != 0 )
+    {
+    std::cerr << "3 failed" << std::endl;
     return 1;
     }
 

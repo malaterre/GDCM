@@ -43,6 +43,7 @@ public:
   bool IsValid() const { return true; }
 
   TransferSyntax::NegociatedType GetMetaInformationTS() const { return MetaInformationTS; }
+  void SetDataSetTransferSyntax(const TransferSyntax &ts) { DataSetTS = ts; }
   const TransferSyntax &GetDataSetTransferSyntax() const { return DataSetTS; }
   MediaStorage GetMediaStorage() const;
 

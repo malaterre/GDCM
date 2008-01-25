@@ -179,6 +179,7 @@ bool ImageWriter::Write()
     DataElement de( Tag(0x0002,0x0010) );
     de.SetByteValue( tsuid, strlen(tsuid) );
     fmi.Insert( de );
+    fmi.SetDataSetTransferSyntax(ts);
     }
   fmi.FillFromDataSet( ds );
 

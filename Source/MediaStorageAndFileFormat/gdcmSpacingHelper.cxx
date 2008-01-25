@@ -34,7 +34,7 @@ Tag SpacingHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
     t = Tag(0x0028,0x0030);
     break;
   default:
-    gdcmWarningMacro( "Do not handle: " << ms );
+    gdcmDebugMacro( "Do not handle: " << ms );
     t = Tag(0xffff,0xffff);
     break;
     }

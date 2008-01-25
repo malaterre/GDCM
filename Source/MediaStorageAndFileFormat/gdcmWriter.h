@@ -42,7 +42,7 @@ class FileMetaInformation;
 class GDCM_EXPORT Writer
 {
 public:
-  Writer():Stream(),F() {}
+  Writer():Stream(),F(new File) {}
   virtual ~Writer();
 
   virtual bool Write(); // Execute()
@@ -51,7 +51,7 @@ public:
     //std::cerr << Stream.is_open() << std::endl;
   }
 
-  void SetFile(const File& f) { F = (File*)&f; }
+  void SetFile(const File& f) { delete F; F = (File*)&f; }
 
 protected:
   std::ofstream Stream;

@@ -23,17 +23,26 @@ namespace gdcm
 /**
  * \brief Class 
  * \note bla
+ * Usage:
+ * When constructing a Series or Study UID, user *has* to keep around the UID,
+ * otherwise the UID Generator will simply forget the value and create a new UID.
  */
 class UIDGenerator
 {
 public:
+  // By default the root of a UID is a GDCM Root...
   UIDGenerator(const char *root = GetGDCMUID() )/*:Root(root)*/ {}
 
+  // Override the GDCM root with a user one:
   void SetRoot(const char * root) { Root = root; }
   const char *GetRoot() const { return Root.c_str(); }
 
   // Internally uses a std::string, so two calls have the same pointer !
   // save into a std::string
+  // In summary do not write code like that:
+  // const char *uid1 = uid.Generate();
+  // const char *uid2 = uid.Generate();
+  // since uid1 == uid2 
   const char* Generate();
 
   // Find out if the string is a valid UID or not

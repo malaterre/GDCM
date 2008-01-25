@@ -294,6 +294,8 @@ std::ostream const &File::Write(std::ostream &os) const
     }
 
   const TransferSyntax &ts = Header.GetDataSetTransferSyntax();
+  assert( ts.IsValid() );
+
   if( ts == TransferSyntax::DeflatedExplicitVRLittleEndian )
     {
     gzostream gzos(os.rdbuf());

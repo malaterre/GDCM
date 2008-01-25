@@ -33,7 +33,6 @@ const char *UIDGenerator::GetGDCMUID()
 const char* UIDGenerator::Generate()
 {
   Unique = GetRoot();
-  Unique = GetGDCMUID(); // FIXME !!!
   if( Unique.empty() )
     {
     // Seriously...
@@ -48,6 +47,7 @@ const char* UIDGenerator::Generate()
     int res = System::GetHardwareAddress(node);
     char buffer[15]; // 15 is max possible when all node[i] == 255
     int len = System::EncodeBytes(buffer, node, sizeof(node));
+    assert( strlen(buffer) < 15 );
     EncodedHardwareAddress = buffer;
     if( EncodedHardwareAddress.empty() )
       {
@@ -66,6 +66,7 @@ const char* UIDGenerator::Generate()
     // Not sure how this is supposed to happen...
     return NULL;
     }
+  assert( strlen(datetime) < 18 );
   Unique += datetime;
   // Also add a mini random number just in case:
   // FIXME: I choose 2 bytes for the random number, since GDCM Root UID is so long, and harware address can take up
@@ -75,11 +76,17 @@ const char* UIDGenerator::Generate()
   uuid_generate(out);
   char randbytesbuf[40];
   res = System::EncodeBytes(randbytesbuf, out, sizeof(out));
+  assert( strlen(randbytesbuf) < 40 );
   std::string randbytes = randbytesbuf;
 
   Unique += ".";
   std::string::size_type len = Unique.size();
   std::string::size_type rb_len = randbytes.size();
+  if( randbytes.empty() )
+    {
+    // That's bad...
+    return NULL;
+    }
   assert( len < 64 );
   // randbytes might be a little too long, let's check
   // if too long: take the lower bits
@@ -132,14 +139,14 @@ bool UIDGenerator::IsValid(const char *uid_)
     {
     return false;
     }
-  if( uid[uid.size()-1] == '.' )
+  if( uid[uid.size()-1] == '.' ) // important to do that first
     {
     return false;
     }
   std::string::size_type i = 0;
   for(; i < uid.size(); ++i)
     {
-    if( uid[i] == '.' )
+    if( uid[i] == '.' ) // if test is true we are garantee that next char is valid (see previous check)
       {
       // check that next character is neither '0' (except single number) not '.'
       if( uid[i+1] == '.' )
