@@ -22,6 +22,7 @@
 %{
 #include "gdcmTypes.h"
 #include "gdcmSwapCode.h"
+#include "gdcmObject.h"
 #include "gdcmTag.h"
 #include "gdcmVL.h"
 #include "gdcmVR.h"
@@ -38,6 +39,7 @@
 #include "gdcmDicts.h"
 #include "gdcmDict.h"
 #include "gdcmDictEntry.h"
+#include "gdcmDirectory.h"
 
 using namespace gdcm;
 %}
@@ -49,6 +51,7 @@ using namespace gdcm;
 // %extend (see below)
 %include "std_string.i"
 %include "std_set.i"
+%include "std_vector.i"
 %include "std_pair.i"
 
 //%feature("autodoc", "1")
@@ -59,6 +62,7 @@ using namespace gdcm;
 %include "gdcmTag.h"
 //%include "gdcmTransferSyntax.h"
 %include "gdcmPhotometricInterpretation.h"
+%include "gdcmObject.h"
 %include "gdcmLookupTable.h"
 %include "gdcmOverlay.h"
 %include "gdcmVL.h"
@@ -128,6 +132,9 @@ using namespace gdcm;
 %include "gdcmImageReader.h"
 %template (PairString) std::pair<std::string,std::string>;
 %include "gdcmStringFilter.h"
+//%template (FilenameType) std::string;
+%template (FilenamesType) std::vector<std::string>;
+%include "gdcmDirectory.h"
 
 //#error TODO: gdcm::ByteValueToStringFilter
 
