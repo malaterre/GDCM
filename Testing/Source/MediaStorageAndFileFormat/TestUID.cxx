@@ -18,6 +18,13 @@
 #include <string>
 #include <set>
 
+int TestUIDValid()
+{
+  gdcm::UID uid( "" );
+  uid.SetRoot( "1.2.3.4.0.0.1" );
+  const char *s = uid.
+}
+
 int TestUID(int argc, char *argv[])
 {
   gdcm::UID uid;
