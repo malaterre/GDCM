@@ -66,6 +66,7 @@ ENDFOREACH(name)
 # FIXME
 #ADD_EXECUTABLE(TestAttribute TestAttribute.cxx)
 #ADD_EXECUTABLE(TestAttribute2 TestAttribute2.cxx)
-#ADD_EXECUTABLE(TestAttribute3 TestAttribute3.cxx)
+ADD_EXECUTABLE(TestAttribute3 TestAttribute3.cxx)
+TARGET_LINK_LIBRARIES(TestAttribute3 gdcmDSED)
 #ADD_EXECUTABLE(TestElement3 TestElement3.cxx)
 

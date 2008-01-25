@@ -5,6 +5,7 @@ SET(MSFF_SRCS
   gdcmPrinter.cxx
   gdcmDictPrinter.cxx
   gdcmReader.cxx
+  gdcmScanner.cxx
   gdcmImageReader.cxx
   gdcmImageWriter.cxx
   gdcmStringFilter.cxx

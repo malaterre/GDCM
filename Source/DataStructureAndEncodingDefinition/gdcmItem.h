@@ -206,13 +206,21 @@ std::istream &Read(std::istream &is)
 template <typename TDE, typename TSwap>
 const std::ostream &Write(std::ostream &os) const
 {
-  if( !TagField.Write<TSwap>(os) )
+  if( TagField == Tag(0x3f3f,0x3f00) )
     {
-    assert(0 && "Should not happen");
-    return os;
+    Tag t(0xfffe, 0xe000);
+    t.Write<TSwap>(os);
     }
-  assert ( TagField == Tag(0xfffe, 0xe000)
-        || TagField == Tag(0xfffe, 0xe0dd) );
+  else
+    {
+    if( !TagField.Write<TSwap>(os) )
+      {
+      assert(0 && "Should not happen");
+      return os;
+      }
+    assert ( TagField == Tag(0xfffe, 0xe000)
+      /*|| TagField == Tag(0xfffe, 0xe0dd)*/ );
+    }
   if( !ValueLengthField.Write<TSwap>(os) )
     {
     assert(0 && "Should not happen");

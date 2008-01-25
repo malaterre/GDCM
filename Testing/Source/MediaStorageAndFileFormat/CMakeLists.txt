@@ -5,6 +5,7 @@ SET(MSFF_TEST_SRCS
   TestUID
   TestPrinter
   TestReader
+  TestScanner
   TestReader2
   TestImageReader
   TestCopyDataSet

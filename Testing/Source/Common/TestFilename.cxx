@@ -20,17 +20,22 @@
 int TestFilename(int argc, char *argv[])
 {
   (void)argc;(void)argv;
-  gdcm::Filename f("/tmp/debug.dcm");
+  std::string path = "/gdcm/is/a/dicom/";
+  std::string name = "library.dcm";
+  std::string fullpath = path;
+  fullpath += '/';
+  fullpath += name;
+  gdcm::Filename f( fullpath.c_str() );
   std::cout << f.GetPath() << std::endl;
   std::cout << f.GetName() << std::endl;
   std::cout << f.GetExtension() << std::endl;
   std::cout << f << std::endl;
 
-  if( f.GetPath() != std::string( "/tmp" ) )
+  if( f.GetPath() != path )
     {
     return 1;
     }
-  if( f.GetName() != std::string( "debug.dcm" ) )
+  if( f.GetName() != name)
     {
     return 1;
     }
@@ -43,7 +48,7 @@ int TestFilename(int argc, char *argv[])
 //    return 1;
 //    }
   
-  const char current[] = "/home/mathieu/Creatis/gdcmData/test.acr";
+  const char current[] = GDCM_DATA_ROOT "/test.acr";
   if( !gdcm::System::FileExists( current ) )
     {
     return 1;

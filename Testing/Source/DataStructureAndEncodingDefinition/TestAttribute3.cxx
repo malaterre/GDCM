@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
   gdcm::Attribute<0x0072,0x0108> d = { 1.2, 3.4, 5.6, 7.8 };
   d.Print( std::cout << std::endl );
 
-  gdcm::Attribute<0x3002,0x0010> e = { 1.2, 3.4, 5.6, 7.8, 9.0 };
+  gdcm::Attribute<0x3002,0x0010> e = { 1.2, 3.4, 5.6, 7.8, 9.0, 10. };
   e.Print( std::cout << std::endl );
 
   gdcm::Attribute<0x0018,0x1149> f = { 12, 13 };

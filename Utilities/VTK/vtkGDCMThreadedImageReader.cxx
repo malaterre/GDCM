@@ -295,8 +295,8 @@ void *ReadFilesThread(void *voidparams)
         // scale is a float !!
         char * duplicate = new char[len];
         memcpy(duplicate,tempimage,len);
-        unsigned short *in = (unsigned short*)duplicate;
-        unsigned short *pin = in;
+        const unsigned short *in = (unsigned short*)duplicate;
+        const unsigned short *pin = in;
         float *out = (float*)(pointer + file * params->len);
         float *pout = out;
         for( ; pout != out + params->len / sizeof(float); ++pout )

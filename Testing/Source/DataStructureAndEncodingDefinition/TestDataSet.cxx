@@ -45,10 +45,14 @@ int TestDataSet(int , char *[])
 	  ds.GetDataElement( t3 );
   std::cout << r3 << std::endl;
 
+  std::cout << "Size:" << ds.Size() << std::endl;
+  if( ds.Size() != 3 )
+    {
+    return 1;
+    }
+
   std::cout << "Print Dataset:" << std::endl;
-  //std::cout << "Length:" << ds.GetLength() << std::endl;
-  //std::cout << ds << std::endl;
-  abort();
+  std::cout << ds << std::endl;
 
   return 0;
 }
