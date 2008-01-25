@@ -320,16 +320,23 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
     // GE_DLX-8-MONO2-PrivateSyntax.dcm is in Implicit...
     return ReadCompatInternal<SwapperNoOp>(is);
     }
-  else if( t.GetGroup() == 0x0200 ) // 
+  else if( t.GetGroup() == 0x0008 ) // 
     {
-    abort();
-    return ReadCompatInternal<SwapperDoOp>(is);
+    is.seekg(-4, std::ios::cur); // Seek back
+    //MetaInformationTS = TransferSyntax::Explicit;
+    DataSetTS = TransferSyntax::ImplicitVRLittleEndian;
     }
   else if( t.GetGroup() == 0x0800 ) // Good ol' ACR NEMA
     {
     is.seekg(-4, std::ios::cur); // Seek back
     //MetaInformationTS = TransferSyntax::Explicit;
     DataSetTS = TransferSyntax::ImplicitVRBigEndianACRNEMA;
+    }
+  else if( t.GetElement() == 0x0010 ) // Hum, is it a private creator ?
+    {
+    is.seekg(-4, std::ios::cur); // Seek back
+    //MetaInformationTS = TransferSyntax::Explicit;
+    DataSetTS = TransferSyntax::ImplicitVRLittleEndian;
     }
   else
     {

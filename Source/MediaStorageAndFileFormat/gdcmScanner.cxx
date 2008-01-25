@@ -36,24 +36,39 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
     Reader reader;
     const char *filename = it->c_str();
     reader.SetFileName( filename );
-    reader.Read();
-    const DataSet & ds = reader.GetFile().GetDataSet();
-    TagsType::const_iterator tag = Tags.begin();
-    for( ; tag != Tags.end(); ++tag )
+    bool read = false;
+    try
       {
-      DataElement const & de = ds.GetDataElement( *tag );
-      const ByteValue *bv = de.GetByteValue();
-      //assert( VR::IsASCII( vr ) );
-      assert( bv );
-      std::string s( bv->GetPointer(), bv->GetLength() );
-      s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
-      // Store the potentially new value:
-      Values.insert( s );
-      const char *value = Values.find( s )->c_str();
-      // Keep the mapping:
-      FilenameToValue &mapping = Mappings[*tag];
-      mapping.insert(
-        FilenameToValue::value_type(filename, value));
+      read = reader.Read();
+      }
+    catch(std::exception & ex)
+      {
+      gdcmWarningMacro( "Failed to read:" << filename << " with ex:" << ex.what() );
+      }
+    catch(...)
+      {
+      gdcmWarningMacro( "Failed to read:" << filename  << " with unknown error" );
+      }
+    if( read )
+      {
+      const DataSet & ds = reader.GetFile().GetDataSet();
+      TagsType::const_iterator tag = Tags.begin();
+      for( ; tag != Tags.end(); ++tag )
+        {
+        DataElement const & de = ds.GetDataElement( *tag );
+        const ByteValue *bv = de.GetByteValue();
+        //assert( VR::IsASCII( vr ) );
+        assert( bv );
+        std::string s( bv->GetPointer(), bv->GetLength() );
+        s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
+        // Store the potentially new value:
+        Values.insert( s );
+        const char *value = Values.find( s )->c_str();
+        // Keep the mapping:
+        FilenameToValue &mapping = Mappings[*tag];
+        mapping.insert(
+          FilenameToValue::value_type(filename, value));
+        }
       }
     }
   return true;

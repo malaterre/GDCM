@@ -51,7 +51,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       }
     if( ValueLengthField != 0 )
       {
-      gdcmErrorMacro(
+      gdcmWarningMacro(
         "Item Delimitation Item has a length different from 0" );
       }
     // Set pointer to NULL to avoid user error

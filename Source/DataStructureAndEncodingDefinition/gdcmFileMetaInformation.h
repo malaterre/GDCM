@@ -35,7 +35,7 @@ namespace gdcm
 class GDCM_EXPORT FileMetaInformation : public DataSet
 {
 public:
-  FileMetaInformation():DataSetTS(),MetaInformationTS(TransferSyntax::Unknown),DataSetMS(MediaStorage::MS_END) {}
+  FileMetaInformation():DataSetTS(TransferSyntax::TS_END),MetaInformationTS(TransferSyntax::Unknown),DataSetMS(MediaStorage::MS_END) {}
  ~FileMetaInformation() { };
 
   friend std::ostream &operator<<(std::ostream &_os, const FileMetaInformation &_val);
