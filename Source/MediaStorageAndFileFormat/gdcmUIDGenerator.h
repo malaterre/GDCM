@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmUID_h
-#define __gdcmUID_h
+#ifndef __gdcmUIDGenerator_h
+#define __gdcmUIDGenerator_h
 
 #include "gdcmTypes.h"
 
@@ -24,19 +24,20 @@ namespace gdcm
  * \brief Class 
  * \note bla
  */
-class UID
+class UIDGenerator
 {
 public:
-  UID(const char *root = GetGDCMUID() )/*:Root(root)*/ {}
+  UIDGenerator(const char *root = GetGDCMUID() )/*:Root(root)*/ {}
 
   void SetRoot(const char * root) { Root = root; }
   const char *GetRoot() const { return Root.c_str(); }
 
   // Internally uses a std::string, so two calls have the same pointer !
   // save into a std::string
-  const char* GenerateUniqueUID();
+  const char* Generate();
 
-  static bool IsUIDValid(const char *uid);
+  // Find out if the string is a valid UID or not
+  static bool IsValid(const char *uid);
 
   static const char *GetGDCMUID(); // who would want that in the public API ??
 
@@ -50,4 +51,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmUID_h
+#endif //__gdcmUIDGenerator_h

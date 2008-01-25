@@ -12,30 +12,75 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmUID.h"
+#include "gdcmUIDGenerator.h"
 
 #include <iostream>
 #include <string>
 #include <set>
 
-int TestUIDValid()
+int TestUIDGeneratorValid()
 {
-  gdcm::UID uid( "" );
+  gdcm::UIDGenerator uid( "" );
   uid.SetRoot( "1.2.3.4.0.0.1" );
-  const char *s = uid.
+  const char *s = uid.Generate();
+  if( !gdcm::UIDGenerator::IsValid( s ) )
+    {
+    return 1;
+    }
+  const char invalid1[] = "abcd";
+  if( gdcm::UIDGenerator::IsValid( invalid1 ) )
+    {
+    return 1;
+    }
+  const char invalid2[] = "1.2.3.4.0.0.123.a";
+  if( gdcm::UIDGenerator::IsValid( invalid2 ) )
+    {
+    return 1;
+    }
+  const char invalid3[] = "1.2.3.4.0.0.123..";
+  if( gdcm::UIDGenerator::IsValid( invalid3 ) )
+    {
+    return 1;
+    }
+  const char invalid4[] = "1.2.3.4.0.0..123";
+  if( gdcm::UIDGenerator::IsValid( invalid4 ) )
+    {
+    return 1;
+    }
+  const char invalid5[] = "1.2.3.4.00.123";
+  if( gdcm::UIDGenerator::IsValid( invalid5 ) )
+    {
+    return 1;
+    }
+  const char invalid6[] = "1.2.3.4.00.123.";
+  if( gdcm::UIDGenerator::IsValid( invalid6 ) )
+    {
+    return 1;
+    }
+  const char invalid7[] = "1234567890.1234567890.1234567890.1234567890.1234567890.1234567890";
+  if( gdcm::UIDGenerator::IsValid( invalid7 ) )
+    {
+    return 1;
+    }
+  const char invalid8[] = "1234567890.1234567890.1234567890.1234567890.1234567890/123456789";
+  if( gdcm::UIDGenerator::IsValid( invalid8 ) )
+    {
+    return 1;
+    }
+  return 0; // no error
 }
 
-int TestUID(int argc, char *argv[])
+int TestUIDGenerator(int argc, char *argv[])
 {
-  gdcm::UID uid;
-  std::cout << gdcm::UID::GetGDCMUID() << std::endl;
+  gdcm::UIDGenerator uid;
+  std::cout << gdcm::UIDGenerator::GetGDCMUID() << std::endl;
   std::cout << uid.GetRoot() << std::endl;
-  if( strcmp( gdcm::UID::GetGDCMUID(), uid.GetRoot() ) != 0 )
+  if( strcmp( gdcm::UIDGenerator::GetGDCMUID(), uid.GetRoot() ) != 0 )
     {
     return 1;
     }
   uid.SetRoot( "1" );
-  if( strcmp( gdcm::UID::GetGDCMUID(), uid.GetRoot() ) == 0 )
+  if( strcmp( gdcm::UIDGenerator::GetGDCMUID(), uid.GetRoot() ) == 0 )
     {
     return 1;
     }
@@ -53,14 +98,14 @@ int TestUID(int argc, char *argv[])
 */
 
   // Threading issue, make sure that two different UIDs cannot generate same UID
-  gdcm::UID uid1;
-  gdcm::UID uid2;
+  gdcm::UIDGenerator uid1;
+  gdcm::UIDGenerator uid2;
   const unsigned int n = 100;
   std::set<std::string> uids;
   for(unsigned int i = 0; i < n; ++i)
     {
-    const char *unique1 = uid1.GenerateUniqueUID();
-    const char *unique2 = uid2.GenerateUniqueUID();
+    const char *unique1 = uid1.Generate();
+    const char *unique2 = uid2.Generate();
     if( !unique1 || !unique2 ) return 1;
     std::cout << unique1 << std::endl;
     std::cout << unique2 << std::endl;
@@ -82,6 +127,8 @@ int TestUID(int argc, char *argv[])
       return 1;
       }
     }
+  int ret = 0;
+  ret += TestUIDGeneratorValid();
 
-  return 0;
+  return ret;
 }

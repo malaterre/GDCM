@@ -16,7 +16,7 @@
 #include "gdcmTrace.h"
 #include "gdcmDataSet.h"
 #include "gdcmAttribute.h"
-#include "gdcmUID.h"
+#include "gdcmUIDGenerator.h"
 #include "gdcmSpacingHelper.h"
 
 namespace gdcm
@@ -144,24 +144,26 @@ bool ImageWriter::Write()
   // (0008,0018) UI [1.3.6.1.4.1.5962.1.1.1.1.3.20040826185059.5457] #  46, 1 SOPInstanceUID
   // (0020,000d) UI [1.3.6.1.4.1.5962.1.2.1.20040826185059.5457] #  42, 1 StudyInstanceUID
   // (0020,000e) UI [1.3.6.1.4.1.5962.1.3.1.1.20040826185059.5457] #  44, 1 SeriesInstanceUID
-  UID uid;
+  UIDGenerator uid;
   // FIXME: Should I always overwrite the UIDs ???
+  // Answer: no ! Otherwise I'll always overwrite Series / Study UIDs
+  // -> lead to next question should I always overwrite the Image UID...
     {
-    const char *sop = uid.GenerateUniqueUID();
+    const char *sop = uid.Generate();
     DataElement de( Tag(0x0008,0x0018) );
     de.SetByteValue( sop, strlen(sop) );
     ds.Insert( de );
     }
 
     {
-    const char *study = uid.GenerateUniqueUID();
+    const char *study = uid.Generate();
     DataElement de( Tag(0x0020,0x000d) );
     de.SetByteValue( study, strlen(study) );
     ds.Insert( de );
     }
 
     {
-    const char *series = uid.GenerateUniqueUID();
+    const char *series = uid.Generate();
     DataElement de( Tag(0x0020,0x000e) );
     de.SetByteValue( series, strlen(series) );
     ds.Insert( de );

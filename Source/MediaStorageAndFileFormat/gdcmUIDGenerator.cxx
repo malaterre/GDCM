@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmUID.h"
+#include "gdcmUIDGenerator.h"
 #include "gdcmTrace.h"
 #include "gdcmSystem.h"
 
@@ -21,16 +21,16 @@
 namespace gdcm
 {
 
-const char UID::GDCM_UID[] = "1.2.826.0.1.3680043.2.1143";
-std::string UID::Root = GetGDCMUID();
-std::string UID::EncodedHardwareAddress; // = System::GetHardwareAddress();
+const char UIDGenerator::GDCM_UID[] = "1.2.826.0.1.3680043.2.1143";
+std::string UIDGenerator::Root = GetGDCMUID();
+std::string UIDGenerator::EncodedHardwareAddress; // = System::GetHardwareAddress();
 
-const char *UID::GetGDCMUID()
+const char *UIDGenerator::GetGDCMUID()
 {
   return GDCM_UID;
 }
 
-const char* UID::GenerateUniqueUID()
+const char* UIDGenerator::Generate()
 {
   Unique = GetRoot();
   Unique = GetGDCMUID(); // FIXME !!!
@@ -96,12 +96,12 @@ const char* UID::GenerateUniqueUID()
     Unique += randbytes.c_str() + zeropos;
     }
 
-  assert( IsUIDValid( Unique.c_str() ) );
+  assert( IsValid( Unique.c_str() ) );
 
   return Unique.c_str();
 }
 
-bool UID::IsUIDValid(const char *uid_)
+bool UIDGenerator::IsValid(const char *uid_)
 {
   /*
   9.1 UID ENCODING RULES
@@ -153,6 +153,10 @@ bool UID::IsUIDValid(const char *uid_)
           return false;
           }
         }
+      }
+    else if ( !isdigit( (unsigned char)uid[i] ) )
+      {
+      return false;
       }
     }
   // no error found !
