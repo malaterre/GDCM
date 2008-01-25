@@ -93,6 +93,7 @@ const char* UIDGenerator::Generate()
     }
   else
     {
+    // Takes everything after the 0
     Unique += randbytes.c_str() + zeropos;
     }
 

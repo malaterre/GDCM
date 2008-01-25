@@ -314,6 +314,12 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
     }
   if( ValueLengthField )
     {
+#ifdef NDEBUG
+    if( dynamic_cast<const ByteValue*>(&*ValueField) )
+      {
+      assert( ValueField->GetLength() == ValueLengthField );
+      }
+#endif
     // We have the length we should be able to write the value
     if( VRField == VR::UN && ValueLengthField.IsUndefined() )
       {

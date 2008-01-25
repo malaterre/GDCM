@@ -193,6 +193,12 @@ const std::ostream &ImplicitDataElement::Write(std::ostream &os) const
   // Write Value
   if( ValueLengthField )
     {
+#ifdef NDEBUG
+    if( dynamic_cast<const ByteValue*>(&*ValueField) )
+      {
+      assert( ValueField->GetLength() == ValueLengthField );
+      }
+#endif
     assert( ValueField );
     assert( TagField != Tag(0xfffe, 0xe00d)
          && TagField != Tag(0xfffe, 0xe0dd) );

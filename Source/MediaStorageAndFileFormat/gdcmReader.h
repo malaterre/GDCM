@@ -59,6 +59,7 @@ public:
 
   const File &GetFile() const { return *F; }
   File &GetFile() { return *F; }
+  void SetFile(File& file) { F = &file; }
 
 //#warning FIXME API for backward compatibility
   typedef enum {

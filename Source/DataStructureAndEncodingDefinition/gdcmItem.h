@@ -213,13 +213,19 @@ const std::ostream &Write(std::ostream &os) const
     }
   else
     {
+    // Not sure how this happen
+    if( TagField == Tag(0xfffe, 0xe0dd) )
+      {
+      gdcmWarningMacro( "SegDelItem found in defined length Sequence" );
+      assert( ValueLengthField == 0 );
+      }
     if( !TagField.Write<TSwap>(os) )
       {
       assert(0 && "Should not happen");
       return os;
       }
     assert ( TagField == Tag(0xfffe, 0xe000)
-      /*|| TagField == Tag(0xfffe, 0xe0dd)*/ );
+      || TagField == Tag(0xfffe, 0xe0dd) );
     }
   if( !ValueLengthField.Write<TSwap>(os) )
     {

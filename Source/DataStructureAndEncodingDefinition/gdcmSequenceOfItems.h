@@ -78,10 +78,10 @@ public:
   template <typename TDE, typename TSwap>
   std::istream &Read(std::istream &is)
     {
+      const Tag seqDelItem(0xfffe,0xe0dd);
     if( SequenceLengthField.IsUndefined() )
       {
       Item item;
-      const Tag seqDelItem(0xfffe,0xe0dd);
       while( item.Read<TDE,TSwap>(is) && item.GetTag() != seqDelItem )
         {
         //gdcmDebugMacro( "Item: " << item );
@@ -98,6 +98,10 @@ public:
       while( l != SequenceLengthField )
         {
         item.Read<TDE,TSwap>(is);
+        if( item.GetTag() == seqDelItem )
+          {
+          gdcmWarningMacro( "SegDelItem found in defined length Sequence" );
+          }
         Items.push_back( item );
         l += item.template GetLength<TDE>();
         assert( l <= SequenceLengthField );
