@@ -17,6 +17,9 @@
 // vtkGDCMImageWriter is
 // bla bla
 // TODO: vtkLookupTable is not taken into account...
+//
+// NOTE:
+// We are not using the usual API SetFilePrefix / SetFilePattern, but instead a list of filenames...
 
 // .SECTION See Also
 // vtkImageWriter vtkMedicalImageProperties
@@ -28,6 +31,7 @@
 
 class vtkLookupTable;
 class vtkMedicalImageProperties;
+class vtkStringArray;
 class VTK_EXPORT vtkGDCMImageWriter : public vtkImageWriter
 {
 public:
@@ -40,6 +44,9 @@ public:
 
   vtkGetObjectMacro(MedicalImageProperties, vtkMedicalImageProperties);
   virtual void SetMedicalImageProperties(vtkMedicalImageProperties*);
+
+  virtual void SetFilenames(vtkStringArray*);
+  vtkGetObjectMacro(Filenames, vtkStringArray);
 
   // I need that...
   virtual void Write();
@@ -82,6 +89,9 @@ protected:
     vtkInformationVector *outputVector);
   int WriteGDCMData(vtkImageData *data, int timeStep);
 
+protected:
+  virtual /*const*/ char *GetFileName();
+
 private:
   vtkGDCMImageWriter(const vtkGDCMImageWriter&);  // Not implemented.
   void operator=(const vtkGDCMImageWriter&);  // Not implemented.
@@ -91,6 +101,8 @@ private:
   vtkMedicalImageProperties *MedicalImageProperties;
 
   int DataUpdateExtent[6];
+
+  vtkStringArray *Filenames;
 };
 
 #endif

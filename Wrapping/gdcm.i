@@ -40,6 +40,7 @@
 #include "gdcmDict.h"
 #include "gdcmDictEntry.h"
 #include "gdcmDirectory.h"
+#include "gdcmUIDGenerator.h"
 
 using namespace gdcm;
 %}
@@ -135,6 +136,7 @@ using namespace gdcm;
 //%template (FilenameType) std::string;
 %template (FilenamesType) std::vector<std::string>;
 %include "gdcmDirectory.h"
+%include "gdcmUIDGenerator.h"
 
 //#error TODO: gdcm::ByteValueToStringFilter
 

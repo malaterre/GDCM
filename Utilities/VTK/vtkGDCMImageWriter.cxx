@@ -20,6 +20,7 @@
 #include "vtkStreamingDemandDrivenPipeline.h"
 #include "vtkInformation.h"
 #include "vtkLookupTable.h"
+#include "vtkStringArray.h"
 
 #if (VTK_MAJOR_VERSION < 5)
 #error Your VTK version is too old
@@ -35,6 +36,7 @@ vtkStandardNewMacro(vtkGDCMImageWriter)
 
 vtkCxxSetObjectMacro(vtkGDCMImageWriter,LookupTable,vtkLookupTable);
 vtkCxxSetObjectMacro(vtkGDCMImageWriter,MedicalImageProperties,vtkMedicalImageProperties);
+vtkCxxSetObjectMacro(vtkGDCMImageWriter,Filenames,vtkStringArray);
 
 vtkGDCMImageWriter::vtkGDCMImageWriter()
 {
@@ -49,12 +51,14 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
 
   this->LookupTable = vtkLookupTable::New();
   this->MedicalImageProperties = vtkMedicalImageProperties::New();
+  this->Filenames = vtkStringArray::New();
 }
 
 vtkGDCMImageWriter::~vtkGDCMImageWriter()
 {
   this->LookupTable->Delete();
   this->MedicalImageProperties->Delete();
+  this->Filenames->Delete();
 }
 //----------------------------------------------------------------------------
 int vtkGDCMImageWriter::FillInputPortInformation(
@@ -166,6 +170,11 @@ int vtkGDCMImageWriter::RequestData(
     }
 
   return 1;
+}
+
+/*const*/ char *vtkGDCMImageWriter::GetFileName()
+{
+  return (char*)this->Filenames->GetValue(0).c_str();
 }
 
 void vtkGDCMImageWriter::Write()
