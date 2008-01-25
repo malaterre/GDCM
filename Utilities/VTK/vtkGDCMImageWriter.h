@@ -37,7 +37,12 @@ public:
   virtual void SetLookupTable(vtkLookupTable*);
   vtkGetObjectMacro(LookupTable, vtkLookupTable);
 
+  vtkGetObjectMacro(MedicalImageProperties, vtkMedicalImageProperties);
   virtual void SetMedicalImageProperties(vtkMedicalImageProperties*);
+
+  // I need that...
+  virtual void Write();
+
 
 protected:
   vtkGDCMImageWriter();

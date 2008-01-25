@@ -40,6 +40,12 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
 {
   //this->ScalarArrayName = NULL;
   //this->SetScalarArrayName( "GDCM" );
+  this->DataUpdateExtent[0] = 0;
+  this->DataUpdateExtent[1] = 0;
+  this->DataUpdateExtent[2] = 0;
+  this->DataUpdateExtent[3] = 0;
+  this->DataUpdateExtent[4] = 0;
+  this->DataUpdateExtent[5] = 0;
 
   this->LookupTable = vtkLookupTable::New();
   this->MedicalImageProperties = vtkMedicalImageProperties::New();
@@ -162,11 +168,73 @@ int vtkGDCMImageWriter::RequestData(
   return 1;
 }
 
+void vtkGDCMImageWriter::Write()
+{
+  if (this->GetFileName() == 0)
+    {
+    vtkErrorMacro("Write: You must supply a file name.");
+    return;
+    }
+
+  // Get the first input and update its information.
+  vtkImageData *input = this->GetImageDataInput(0);
+
+  if (input == 0)
+    {
+    vtkErrorMacro("Write: No input supplied.");
+    return;
+    }
+
+  input->UpdateInformation();
+
+  // Update the rest.
+  this->UpdateInformation();
+
+  // Get the whole extent of the input
+  input->GetWholeExtent(this->DataUpdateExtent);
+
+  int dimIndex = 2;
+  int firstSlice = this->DataUpdateExtent[2*dimIndex];
+  int lastSlice = this->DataUpdateExtent[2*dimIndex+1];
+
+  // Go through data slice-by-slice using file-order slices
+  for (int slice = firstSlice; slice <= lastSlice; slice++)
+    {
+    // Set the DataUpdateExtent to the slice extent we want to write
+    this->DataUpdateExtent[2*dimIndex] = slice;
+    this->DataUpdateExtent[2*dimIndex+1] = slice;
+    this->Modified();
+
+    // Call Update to execute pipeline and write slice to disk.
+    this->Update();
+
+    }
+
+}
+
+void SetStringValueFromTag(const char *s, const gdcm::Tag& t, gdcm::DataSet& ds)
+{
+  if( s && *s )
+    {
+    gdcm::DataElement de( t );
+    de.SetByteValue( s, strlen( s ) );
+    ds.Insert( de );
+    }
+}
+
+
 //----------------------------------------------------------------------------
 int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 {
   assert( timeStep >= 0 );
-  data->Update();
+  int inWholeExt[6];
+  data->GetWholeExtent(inWholeExt);
+  int inExt[6];
+  data->GetUpdateExtent(inExt);
+  vtkIdType inInc[3];
+  data->GetIncrements(inInc);
+
+  //data->Update();
   data->Print( std::cout );
   const char * filename = this->GetFileName();
   std::cerr << data->GetDataDimension() <<std::endl;
@@ -176,12 +244,17 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   assert( dims[0] >= 0 && dims[1] >= 0 && dims[2] >= 0 );
   image.SetDimension(0, dims[0] );
   image.SetDimension(1, dims[1] );
+  const double *spacing = data->GetSpacing();
+  image.SetSpacing(0, spacing[0] );
+  image.SetSpacing(1, spacing[1] );
   if( dims[2] > 1 )
     {
     // resize num of dim to 3:
     image.SetNumberOfDimensions( 3 );
     image.SetDimension(2, dims[2] );
+    image.SetSpacing(2, spacing[2] );
     }
+  // TODO: need to do Origin / Image Position (Patient)
   // For now FileDimensionality should match File Dimension
   //this->FileDimensionality
   int scalarType = data->GetScalarType();
@@ -245,10 +318,87 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
   image.SetValue( *bv );
   //image.Print( std::cerr );
-  
+
   gdcm::ImageWriter writer;
   writer.SetFileName( filename );
   writer.SetImage( image );
+
+  gdcm::File& file = writer.GetFile();
+  gdcm::DataSet& ds = file.GetDataSet();
+  // For ex: DICOM (0010,0010) = DOE,JOHN
+  SetStringValueFromTag(this->MedicalImageProperties->GetPatientName(), gdcm::Tag(0x0010,0x0010), ds);
+  // For ex: DICOM (0010,0020) = 1933197
+  SetStringValueFromTag( this->MedicalImageProperties->GetPatientID(), gdcm::Tag(0x0010,0x0020), ds);
+  // For ex: DICOM (0010,1010) = 031Y
+  SetStringValueFromTag( this->MedicalImageProperties->GetPatientAge(), gdcm::Tag(0x0010,0x1010), ds);
+  // For ex: DICOM (0010,0040) = M
+  SetStringValueFromTag( this->MedicalImageProperties->GetPatientSex(), gdcm::Tag(0x0010,0x0040), ds);
+  // For ex: DICOM (0010,0030) = 19680427
+  SetStringValueFromTag( this->MedicalImageProperties->GetPatientBirthDate(), gdcm::Tag(0x0010,0x0030), ds);
+  // For ex: DICOM (0008,0022) = 20030617
+  SetStringValueFromTag( this->MedicalImageProperties->GetAcquisitionDate(), gdcm::Tag(0x0008,0x0022), ds);
+  // For ex: DICOM (0008,0032) = 162552.0705 or 230012, or 0012
+  SetStringValueFromTag( this->MedicalImageProperties->GetAcquisitionTime(), gdcm::Tag(0x0008,0x0032), ds);
+  // For ex: DICOM (0008,0023) = 20030617
+  SetStringValueFromTag( this->MedicalImageProperties->GetImageDate(), gdcm::Tag(0x0008,0x0023), ds);
+  // For ex: DICOM (0008,0033) = 162552.0705 or 230012, or 0012
+  SetStringValueFromTag( this->MedicalImageProperties->GetImageTime(), gdcm::Tag(0x0008,0x0033), ds);
+  // For ex: DICOM (0020,0013) = 1
+  SetStringValueFromTag( this->MedicalImageProperties->GetImageNumber(), gdcm::Tag(0x0020,0x0013), ds);
+  // For ex: DICOM (0020,0011) = 902
+  SetStringValueFromTag( this->MedicalImageProperties->GetSeriesNumber(), gdcm::Tag(0x0020,0x0011), ds);
+  // For ex: DICOM (0008,103e) = SCOUT
+  SetStringValueFromTag( this->MedicalImageProperties->GetSeriesDescription(), gdcm::Tag(0x0008,0x103e), ds);
+  // For ex: DICOM (0020,0010) = 37481
+  SetStringValueFromTag( this->MedicalImageProperties->GetStudyID(), gdcm::Tag(0x0020,0x0010), ds);
+  // For ex: DICOM (0008,1030) = BRAIN/C-SP/FACIAL
+  SetStringValueFromTag( this->MedicalImageProperties->GetStudyDescription(), gdcm::Tag(0x0008,0x1030), ds);
+  // For ex: DICOM (0008,0060)= CT
+  SetStringValueFromTag( this->MedicalImageProperties->GetModality(), gdcm::Tag(0x0008,0x0060), ds);
+  // For ex: DICOM (0008,0070) = Siemens
+  SetStringValueFromTag( this->MedicalImageProperties->GetManufacturer(), gdcm::Tag(0x0008,0x0070), ds);
+  // For ex: DICOM (0008,1090) = LightSpeed QX/i
+  SetStringValueFromTag( this->MedicalImageProperties->GetManufacturerModelName(), gdcm::Tag(0x0008,0x1090), ds);
+  // For ex: DICOM (0008,1010) = LSPD_OC8
+  SetStringValueFromTag( this->MedicalImageProperties->GetStationName(), gdcm::Tag(0x0008,0x1010), ds);
+  // For ex: DICOM (0008,0080) = FooCity Medical Center
+  SetStringValueFromTag( this->MedicalImageProperties->GetInstitutionName(), gdcm::Tag(0x0008,0x0080), ds);
+  // For ex: DICOM (0018,1210) = Bone
+  SetStringValueFromTag( this->MedicalImageProperties->GetConvolutionKernel(), gdcm::Tag(0x0018,0x1210), ds);
+  // For ex: DICOM (0018,0050) = 0.273438
+  SetStringValueFromTag( this->MedicalImageProperties->GetSliceThickness(), gdcm::Tag(0x0018,0x0050), ds);
+  // For ex: DICOM (0018,0060) = 120
+  SetStringValueFromTag( this->MedicalImageProperties->GetKVP(), gdcm::Tag(0x0018,0x0060), ds);
+  // For ex: DICOM (0018,1120) = 15
+  SetStringValueFromTag( this->MedicalImageProperties->GetGantryTilt(), gdcm::Tag(0x0018,0x1120), ds);
+  // For ex: DICOM (0018,0081) = 105
+  SetStringValueFromTag( this->MedicalImageProperties->GetEchoTime(), gdcm::Tag(0x0018,0x0081), ds);
+  // For ex: DICOM (0018,0091) = 35
+  SetStringValueFromTag( this->MedicalImageProperties->GetEchoTrainLength(), gdcm::Tag(0x0018,0x0091), ds);
+  // For ex: DICOM (0018,0080) = 2040
+  SetStringValueFromTag( this->MedicalImageProperties->GetRepetitionTime(), gdcm::Tag(0x0018,0x0080), ds);
+  // For ex: DICOM (0018,1150) = 5
+  SetStringValueFromTag( this->MedicalImageProperties->GetExposureTime(), gdcm::Tag(0x0018,0x1150), ds);
+  // For ex: DICOM (0018,1151) = 400
+  SetStringValueFromTag( this->MedicalImageProperties->GetXRayTubeCurrent(), gdcm::Tag(0x0018,0x1151), ds);
+  // For ex: DICOM (0018,1152) = 114
+  SetStringValueFromTag( this->MedicalImageProperties->GetExposure(), gdcm::Tag(0x0018,0x1152), ds);
+
+  // TODO / FIXME Window Level / Window Center
+  // ...
+  //
+  //
+  //
+  //
+  // Let's try to fake out the SOP Class UID here:
+  gdcm::MediaStorage ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
+  ms.GuessFromModality( this->MedicalImageProperties->GetModality() ); // Will override SC only if something is found...
+  assert( gdcm::MediaStorage::IsImage( ms ) );
+  gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016 ) );
+  const char* msstr = gdcm::MediaStorage::GetMSString(ms);
+  de.SetByteValue( msstr, strlen(msstr) );
+  ds.Insert( de );
+
   if( !writer.Write() )
     {
     return 0;

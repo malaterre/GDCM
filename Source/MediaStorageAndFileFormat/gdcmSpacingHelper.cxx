@@ -155,7 +155,7 @@ void SpacingHelper::SetSpacingValue(DataSet & ds, const double * spacing)
     case VR::DS:
         {
         gdcm::Element<VR::DS,VM::VM1_n> el;
-        el.SetLength( entry.GetVM().GetLength() );
+        el.SetLength( entry.GetVM().GetLength() * vr.GetSizeof() );
         for( int i = 0; i < entry.GetVM().GetLength(); ++i)
           {
           el.SetValue( spacing[i], i );

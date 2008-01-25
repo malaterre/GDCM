@@ -52,10 +52,10 @@ public:
   }
 
   void SetFile(const File& f) { delete F; F = (File*)&f; }
+  File &GetFile() { return *F; }
 
 protected:
   std::ofstream Stream;
-  File &GetFile() { return *F; }
 
 private:
   File *F;

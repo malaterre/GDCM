@@ -170,6 +170,7 @@ static const char *MSModalityStrings[] = {
   "", //CSANonImageStorage,
   "", //Philips3D,
   "", //MS_END
+  NULL
 };
 
 const char *MediaStorage::GetModality() const
@@ -188,6 +189,21 @@ void MediaStorage::SetFromHeader(FileMetaInformation const &fmi)
   MediaStorage ms = MediaStorage::GetMSType(sopclassuid_str.c_str());
   assert( ms != MS_END );
   MSField = ms;
+}
+
+void MediaStorage::GuessFromModality(const char *modality)
+{
+  assert( strlen(modality) == 2 );
+  int i = 0;
+  while( MSModalityStrings[i] && strcmp(modality, MSModalityStrings[i]) != 0 )
+    {
+    ++i;
+    }
+  if( MSModalityStrings[i] )
+    {
+    // Ok we found something...
+    MSField = (MSType)i;
+    }
 }
 
 void MediaStorage::SetFromDataSet(DataSet const &ds)

@@ -17,6 +17,7 @@
 #include "vtkGDCMImageWriter.h"
 
 #include "vtkImageData.h"
+#include "vtkMedicalImageProperties.h"
 #include <vtksys/SystemTools.hxx>
 
 #include "gdcmDataImages.h"
@@ -29,13 +30,11 @@ int TestvtkGDCMImageWrite(const char *filename)
   reader->SetFileName( filename );
   reader->Update();
   reader->GetOutput()->Print( cout );
-
-  vtkImageData *copy = vtkImageData::New();
-  copy->DeepCopy( reader->GetOutput() );
+  reader->GetMedicalImageProperties()->Print( cout );
 
   vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
-  //writer->SetInput( reader->GetOutput() );
-  writer->SetInput( copy );
+  writer->SetInput( reader->GetOutput() );
+  writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
   std::string gdcmfile = vtksys::SystemTools::GetFilenamePath( filename );
   gdcmfile = "/tmp/vtkdcm";
   gdcmfile += '/';
@@ -46,7 +45,6 @@ int TestvtkGDCMImageWrite(const char *filename)
   std::cerr << "Write out: " << gdcmfile << std::endl;
 
   reader->Delete();
-  copy->Delete();
   writer->Delete();
 
   return 0; 

@@ -15,6 +15,7 @@
 #include "gdcmConfigure.h" // for GDCM_DATA_ROOT
 #include "vtkGDCMImageReader.h"
 
+#include "vtkMedicalImageProperties.h"
 #include "vtkPNGWriter.h"
 #include "vtkImageData.h"
 #include <vtksys/SystemTools.hxx>
@@ -30,6 +31,7 @@ int TestvtkGDCMImageRead(const char *filename)
   reader->Update();
 
   reader->GetOutput()->Print( cout );
+  reader->GetMedicalImageProperties()->Print( cout );
 
   vtkPNGWriter *writer = vtkPNGWriter::New();
   writer->SetInputConnection( reader->GetOutputPort() );
