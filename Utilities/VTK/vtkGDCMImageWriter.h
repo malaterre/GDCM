@@ -16,6 +16,7 @@
 // .SECTION Description
 // vtkGDCMImageWriter is
 // bla bla
+// TODO: vtkLookupTable is not taken into account...
 
 // .SECTION See Also
 // vtkImageWriter vtkMedicalImageProperties
@@ -42,6 +43,24 @@ public:
 
   // I need that...
   virtual void Write();
+
+  // Description:
+  // Get the entension for this file format. 
+  virtual const char* GetFileExtensions() {
+    return ".dcm .DCM"; }
+
+  // Description:
+  // Get the name of this file format.
+  virtual const char* GetDescriptiveName() {
+    return "DICOM"; }
+
+  //virtual void SetDirectionCosines(vtkMatrix4x4 *matrix);
+  //vtkGetObjectMacro(DirectionCosines, vtkMatrix4x4);
+
+  //vtkSetMacro(RescaleSlope, double);
+  //vtkGetMacro(RescaleSlope, double);
+  //vtkSetMacro(RescaleIntercept, double);
+  //vtkGetMacro(RescaleIntercept, double);
 
 
 protected:
