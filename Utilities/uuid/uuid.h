@@ -38,6 +38,7 @@
 
 #include <sys/types.h>
 #include <time.h>
+#include <sys/time.h> /* timeval CYGWIN */
 
 typedef unsigned char uuid_t[16];
 
