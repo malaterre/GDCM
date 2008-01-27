@@ -64,6 +64,9 @@ public:
 //#warning FIXME API for backward compatibility
   typedef enum {
     LD_ALL,
+    LD_NOSEQ,
+    LD_NOSHADOW,
+    LD_NOSHADOWSEQ
   } LoadModeType;
   void SetLoadMode(LoadModeType lmtype) {}
   void Load() { Read(); }
