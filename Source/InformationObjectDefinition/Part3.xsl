@@ -72,7 +72,8 @@ Weird camel case function to get closer to docbook version
     <xsl:variable name="tmp20" select="replace($tmp19,' IN ',' in ')"/>
     <xsl:variable name="tmp21" select="replace($tmp20,' Fov ',' FOV ')"/>
     <xsl:variable name="tmp22" select="replace($tmp21,' OR ',' or ')"/>
-    <xsl:value-of select="$tmp22"/>
+    <xsl:variable name="tmp23" select="replace($tmp22,' Ct/mr ',' CT/MR ')"/>
+    <xsl:value-of select="$tmp23"/>
   </xsl:function>
 <!--
 Function to parse a row from an informaltable specifically for a Macro/Module table:
