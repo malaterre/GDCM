@@ -22,6 +22,9 @@ namespace gdcm
 
 Writer::~Writer()
 {
+  //FIXME leak:
+  //delete F;
+  //F = 0;
 }
 
 bool Writer::Write()

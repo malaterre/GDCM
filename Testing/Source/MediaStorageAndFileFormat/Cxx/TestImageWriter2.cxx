@@ -13,23 +13,32 @@
 
 =========================================================================*/
 #include "gdcmImageWriter.h"
+#include "gdcmImageReader.h"
 #include "gdcmImageValue.h"
 
 int TestImageWriter2(int argc, char *argv[])
 {
+  gdcm::ImageReader reader;
+  reader.SetFileName( argv[1] );
+  reader.Read();
+
+  const gdcm::Image &ir = reader.GetImage();
+
   gdcm::ImageValue image;
-  image.SetNumberOfDimensions( 2 );
-  const int dims[2] = { 256 , 256 };
+  image.SetNumberOfDimensions( ir.GetNumberOfDimensions() );
+
+  const unsigned int *dims = ir.GetDimensions();
   image.SetDimension(0, dims[0] );
   image.SetDimension(1, dims[1] );
-  gdcm::PixelFormat pixeltype = gdcm::PixelFormat::INT8;
 
-  gdcm::PhotometricInterpretation pi = gdcm::PhotometricInterpretation::MONOCHROME2;
-  pixeltype.SetSamplesPerPixel( 1 );
-  image.SetPhotometricInterpretation( pi );
+  const gdcm::PixelFormat &pixeltype = ir.GetPixelFormat();
   image.SetPixelFormat( pixeltype );
 
+  const gdcm::PhotometricInterpretation &pi = ir.GetPhotometricInterpretation();
+  image.SetPhotometricInterpretation( pi );
+
   unsigned long len = image.GetBufferLength();
+  assert( len = ir.GetBufferLength() );
   std::vector<char> buffer;
   buffer.resize(len); // black image
 
@@ -38,8 +47,17 @@ int TestImageWriter2(int argc, char *argv[])
 
   const char filename[] = "toto.dcm";
   gdcm::ImageWriter writer;
-  writer.SetFileName( filename );
   writer.SetImage( image );
+  writer.SetFileName( filename );
+
+  gdcm::File& file = writer.GetFile();
+  gdcm::DataSet& ds = file.GetDataSet();
+
+    gdcm::DataElement de( gdcm::Tag(0x0010,0x0010) );
+    const char s[] = "GDCM^Rocks";
+    de.SetByteValue( s, strlen( s ) );
+    ds.Insert( de );
+
   if( !writer.Write() )
     {
     return 1;

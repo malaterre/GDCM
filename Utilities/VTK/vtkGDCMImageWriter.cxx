@@ -36,7 +36,7 @@ vtkStandardNewMacro(vtkGDCMImageWriter)
 
 vtkCxxSetObjectMacro(vtkGDCMImageWriter,LookupTable,vtkLookupTable);
 vtkCxxSetObjectMacro(vtkGDCMImageWriter,MedicalImageProperties,vtkMedicalImageProperties);
-vtkCxxSetObjectMacro(vtkGDCMImageWriter,Filenames,vtkStringArray);
+vtkCxxSetObjectMacro(vtkGDCMImageWriter,FileNames,vtkStringArray);
 
 vtkGDCMImageWriter::vtkGDCMImageWriter()
 {
@@ -51,14 +51,14 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
 
   this->LookupTable = vtkLookupTable::New();
   this->MedicalImageProperties = vtkMedicalImageProperties::New();
-  this->Filenames = vtkStringArray::New();
+  this->FileNames = vtkStringArray::New();
 }
 
 vtkGDCMImageWriter::~vtkGDCMImageWriter()
 {
   this->LookupTable->Delete();
   this->MedicalImageProperties->Delete();
-  this->Filenames->Delete();
+  this->FileNames->Delete();
 }
 //----------------------------------------------------------------------------
 int vtkGDCMImageWriter::FillInputPortInformation(
@@ -174,7 +174,11 @@ int vtkGDCMImageWriter::RequestData(
 
 /*const*/ char *vtkGDCMImageWriter::GetFileName()
 {
-  return (char*)this->Filenames->GetValue(0).c_str();
+  if( this->FileNames->GetNumberOfValues() )
+    {
+    return (char*)this->FileNames->GetValue(0).c_str();
+    }
+  return this->Superclass::GetFileName();
 }
 
 void vtkGDCMImageWriter::Write()
@@ -235,6 +239,7 @@ void SetStringValueFromTag(const char *s, const gdcm::Tag& t, gdcm::DataSet& ds)
 //----------------------------------------------------------------------------
 int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 {
+  std::cerr << "Calling WriteGDCMData" << std::endl;
   assert( timeStep >= 0 );
   int inWholeExt[6];
   data->GetWholeExtent(inWholeExt);
@@ -246,8 +251,12 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   //data->Update();
   data->Print( std::cout );
   const char * filename = this->GetFileName();
-  std::cerr << data->GetDataDimension() <<std::endl;
-  gdcm::ImageValue image;
+  std::cerr << data->GetDataDimension() << std::endl;
+
+  gdcm::ImageWriter writer;
+  //writer.SetImage( image );
+
+  gdcm::ImageValue &image = dynamic_cast<gdcm::ImageValue&>(writer.GetImage());
   image.SetNumberOfDimensions( 2 ); // good default
   const int *dims = data->GetDimensions();
   assert( dims[0] >= 0 && dims[1] >= 0 && dims[2] >= 0 );
@@ -308,7 +317,12 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   image.SetPixelFormat( pixeltype );
   unsigned long len = image.GetBufferLength();
 
-  gdcm::ByteValue *bv = new gdcm::ByteValue( (char*)data->GetScalarPointer(), len );
+  gdcm::ByteValue *bv = new gdcm::ByteValue(); // (char*)data->GetScalarPointer(), len );
+  bv->SetLength( len );
+  
+//  std::ofstream of( "/tmp/bla.raw" );
+//  of.write( (char*)data->GetScalarPointer(), len);
+//  of.close();
   // re shuffle the line within ByteValue:
   //
   char *pointer = (char*)bv->GetPointer();
@@ -326,11 +340,13 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     }
 
   image.SetValue( *bv );
-  //image.Print( std::cerr );
 
-  gdcm::ImageWriter writer;
+  const gdcm::Value &v = image.GetValue();
+  const gdcm::ByteValue *bv1 = dynamic_cast<const gdcm::ByteValue*>(&v);
+  assert( bv1 && bv1 == bv );
+  image.Print( std::cerr );
+
   writer.SetFileName( filename );
-  writer.SetImage( image );
 
   gdcm::File& file = writer.GetFile();
   gdcm::DataSet& ds = file.GetDataSet();

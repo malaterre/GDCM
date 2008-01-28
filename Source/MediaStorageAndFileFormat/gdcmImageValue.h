@@ -43,6 +43,19 @@ public:
     PixelData = &v;
   }
   const Value& GetValue() const { return *PixelData; }
+//  ImageValue &operator=(const ImageValue &iv)
+//    {
+//    PixelData = iv.PixelData;
+//    return *this;
+//    }
+//  ImageValue(const ImageValue&_val)
+//    {
+//    if( this != &_val)
+//      {
+//      *this = _val;
+//      }
+//    }
+
 
 protected:
   bool TryRAWCodec(char *buffer) const;

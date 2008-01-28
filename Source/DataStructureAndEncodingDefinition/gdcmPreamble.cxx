@@ -17,6 +17,11 @@
 namespace gdcm
 {
 
+Preamble::Preamble():Internal(0)
+{
+  Create();
+}
+
 Preamble::~Preamble()
 {
   delete[] Internal;
@@ -25,8 +30,7 @@ Preamble::~Preamble()
 std::istream &Preamble::Read(std::istream &is)
 {
   // \precondition: we are at beg of Preamble
-  assert ( IsEmpty() /*&& is.tellg() == 0*/ );
-  Internal = new char[128+4];
+  assert ( !IsEmpty() /*&& is.tellg() == 0*/ );
   is.read(Internal, 128+4);
   if( Internal[128+0] == 'D'
    && Internal[128+1] == 'I'

@@ -22,7 +22,7 @@
 namespace gdcm
 {
 
-ImageWriter::ImageWriter()
+ImageWriter::ImageWriter():PixelData()
 {
 }
 
@@ -32,12 +32,15 @@ ImageWriter::~ImageWriter()
 
 void ImageWriter::SetImage(Image const &img)
 {
+  //assert( Stream.is_open() );
   const ImageValue &iv = dynamic_cast<const ImageValue&>( img );
   PixelData = iv;
+  //assert( Stream.is_open() );
 }
 
 bool ImageWriter::Write()
 {
+  //assert( Stream.is_open() );
   File& file = GetFile();
   DataSet& ds = file.GetDataSet();
 
@@ -87,8 +90,10 @@ bool ImageWriter::Write()
   // Pixel Data
   DataElement de( Tag(0x7fe0,0x0010) );
   const Value &v = PixelData.GetValue();
-  de.SetValue( v );
   const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
+  de.SetValue( v );
+  //const ByteValue *bv = (const ByteValue*)(&v);
+  assert( bv );
   de.SetVL( bv->GetLength() );
   //assert( bv ); // For now...
   ds.Replace( de );
@@ -256,8 +261,12 @@ bool ImageWriter::Write()
     DataElement de( Tag(0x0020,0x0020) );
     ds.Insert( de );
     }
+  //const char dummy[] = "dummy";
+  //assert( Stream.is_open() );
+  //Stream << dummy;
 
 
+  assert( Stream.is_open() );
   if( !Writer::Write() )
     {
     return false;

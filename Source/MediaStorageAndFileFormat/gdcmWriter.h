@@ -47,7 +47,10 @@ public:
 
   virtual bool Write(); // Execute()
   void SetFileName(const char *filename) {
+    std::cerr << "Stream:" << filename << std::endl;
     Stream.open(filename, std::ios::out | std::ios::binary );
+    assert( Stream.is_open() );
+    assert( !Stream.fail() );
     //std::cerr << Stream.is_open() << std::endl;
   }
 

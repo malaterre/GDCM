@@ -24,6 +24,23 @@ SET_SOURCE_FILES_PROPERTIES(gdcm.i PROPERTIES CPLUSPLUS ON)
 SWIG_ADD_MODULE(gdcm python gdcm.i)
 SWIG_LINK_LIBRARIES(gdcm gdcmMSFF ${PYTHON_LIBRARIES})
 
+#  MESSAGE(${SWIG_MODULE_gdcm_REAL_NAME})
+#  MESSAGE( "${swig_extra_generated_files}" )
+#  MESSAGE( "${swig_generated_file_fullname}" )
+#  MESSAGE( "${swig_extra_clean_files}" )
+# swig generates a _gdcm.so and a gdcm.py, we need to copy gdcm.py to the proper place:
+    ADD_CUSTOM_COMMAND(
+      TARGET    ${SWIG_MODULE_gdcm_REAL_NAME}
+      POST_BUILD
+      COMMAND   cmake -E copy ${CMAKE_CURRENT_BINARY_DIR}/gdcm.py ${LIBRARY_OUTPUT_PATH}
+      DEPENDS "${swig_generated_file_fullname}"
+      COMMENT   "Copy gdcm.py into ${LIBRARY_OUTPUT_PATH}"
+    )
+
+#MESSAGE(${SWIG_MODULE_name_REAL_NAME})
+#SWIG_GET_EXTRA_OUTPUT_FILES(
+
+
 #IF(BUILD_TESTING)
 #  SUBDIRS(Testing)
 #ENDIF(BUILD_TESTING)

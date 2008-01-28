@@ -24,7 +24,7 @@ namespace gdcm
 class GDCM_EXPORT Preamble
 {
 public:
-  Preamble():Internal(0) {}
+  Preamble();
   ~Preamble();
 
   friend std::ostream &operator<<(std::ostream &_os, const Preamble &_val);

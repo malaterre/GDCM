@@ -17,6 +17,7 @@
 #include "vtkGDCMImageWriter.h"
 
 #include "vtkImageData.h"
+#include "vtkMultiThreader.h"
 #include "vtkMedicalImageProperties.h"
 #include <vtksys/SystemTools.hxx>
 
@@ -52,6 +53,7 @@ int TestvtkGDCMImageWrite(const char *filename)
 
 int TestvtkGDCMImageWriter(int argc, char *argv[])
 {
+  //vtkMultiThreader::SetGlobalMaximumNumberOfThreads(1);
   if( argc == 2 )
     {
     const char *filename = argv[1];

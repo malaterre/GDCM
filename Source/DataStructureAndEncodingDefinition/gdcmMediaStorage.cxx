@@ -193,7 +193,8 @@ void MediaStorage::SetFromHeader(FileMetaInformation const &fmi)
 
 void MediaStorage::GuessFromModality(const char *modality)
 {
-  assert( strlen(modality) == 2 );
+  if( !modality ) return;
+  if( strlen(modality) != 2 ) return;
   int i = 0;
   while( MSModalityStrings[i] && strcmp(modality, MSModalityStrings[i]) != 0 )
     {

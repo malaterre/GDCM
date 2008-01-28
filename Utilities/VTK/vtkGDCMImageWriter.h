@@ -45,8 +45,8 @@ public:
   vtkGetObjectMacro(MedicalImageProperties, vtkMedicalImageProperties);
   virtual void SetMedicalImageProperties(vtkMedicalImageProperties*);
 
-  virtual void SetFilenames(vtkStringArray*);
-  vtkGetObjectMacro(Filenames, vtkStringArray);
+  virtual void SetFileNames(vtkStringArray*);
+  vtkGetObjectMacro(FileNames, vtkStringArray);
 
   // I need that...
   virtual void Write();
@@ -102,7 +102,7 @@ private:
 
   int DataUpdateExtent[6];
 
-  vtkStringArray *Filenames;
+  vtkStringArray *FileNames;
 };
 
 #endif
