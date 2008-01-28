@@ -42,7 +42,7 @@ if __name__ == "__main__":
   # Write output
   writer = vtkgdcm.vtkGDCMImageWriter()
   writer.SetInput( r.GetOutput() )
-  writer.SetFileName( "TestvtkGDCMImageWriterPython.vtk" )
+  writer.SetFileName( "TestvtkGDCMImageWriterPython.dcm" )
   writer.Write()
   
   # Test succeed ?
