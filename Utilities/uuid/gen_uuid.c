@@ -182,6 +182,10 @@ static void get_random_bytes(void *buf, int nbytes)
 #include <windows.h> // very important
 
 #include <iphlpapi.h>              // remember to link w/ iphlpapi.lib 
+#if defined(uuid_t)
+#undef uuid_t
+#endif
+
 
 #define IP_LOCALHOST    0x0100007F
 
