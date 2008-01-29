@@ -169,7 +169,7 @@ int TestvtkGDCMThreadedImageRead(const char *filename)
   reader->Update();
   obs->Delete();
 
-  //reader->GetOutput()->Print( cout );
+  reader->GetOutput()->Print( cout );
 
 /*
   vtkPNGWriter *writer = vtkPNGWriter::New();

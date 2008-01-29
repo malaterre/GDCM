@@ -211,7 +211,7 @@ int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
   //FillMedicalImageInformation(reader);
 
   // For now only handles series:
-  if( !this->FileNames )
+  if( !this->FileNames && !this->FileName )
     {
     return 0;
     }
@@ -428,17 +428,29 @@ int vtkGDCMThreadedImageReader::RequestData(vtkInformation *vtkNotUsed(request),
   }
 
   int *dext = this->GetDataExtent();
-  assert( this->FileNames );
-  assert( dext[5] - dext[4] == this->FileNames->GetNumberOfValues() - 1 );
-  const unsigned int nfiles = this->FileNames->GetNumberOfValues();
-  const char **filenames = new const char* [ nfiles ];
-  for(unsigned int i = 0; i < nfiles; ++i)
+  if( this->FileNames )
     {
-    filenames[i] = this->FileNames->GetValue( i ).c_str();
-    //std::cerr << filenames[i] << std::endl;
+    assert( dext[5] - dext[4] == this->FileNames->GetNumberOfValues() - 1 );
+    const unsigned int nfiles = this->FileNames->GetNumberOfValues();
+    const char **filenames = new const char* [ nfiles ];
+    for(unsigned int i = 0; i < nfiles; ++i)
+      {
+      filenames[i] = this->FileNames->GetValue( i ).c_str();
+      //std::cerr << filenames[i] << std::endl;
+      }
+    ReadFiles(nfiles, filenames);
+    delete[] filenames;
     }
-  ReadFiles(nfiles, filenames);
-  delete[] filenames;
+  else if( this->FileName )
+    {
+    const char *filename = this->FileName;
+    ReadFiles(1, &filename);
+    }
+  else
+    {
+    // Impossible case since ExecuteInformation would have failed earlier...
+    assert( 0 && "Impossible happen" );
+    }
 
   //std::cerr << "vtkGDCMThreadedImageReader::RequestData End" << std::endl;
   return 1;
