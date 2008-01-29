@@ -123,11 +123,11 @@ bool ImageWriter::Write()
     ds.Insert( de );
     }
 
+  // (re)Compute MediaStorage:
+  MediaStorage ms;
+  ms.SetFromDataSet( ds );
   if( !ds.FindDataElement( Tag(0x0008, 0x0060) ) )
     {
-    // Compute MediaStorage:
-    MediaStorage ms;
-    ms.SetFromDataSet( ds );
     const char *modality = ms.GetModality();
     DataElement de( Tag(0x0008, 0x0060 ) );
     de.SetByteValue( modality, strlen(modality) );
@@ -135,11 +135,14 @@ bool ImageWriter::Write()
     }
   if( !ds.FindDataElement( Tag(0x0008, 0x0064) ) )
     {
-    // (0008,0064) CS [SI]                                     #   2, 1 ConversionType
-    const char conversion[] = "SI"; // FIXME
-    DataElement de( Tag(0x0008, 0x0064 ) );
-    de.SetByteValue( conversion, strlen(conversion) );
-    ds.Insert( de );
+    if( ms == MediaStorage::SecondaryCaptureImageStorage )
+      {
+      // (0008,0064) CS [SI]                                     #   2, 1 ConversionType
+      const char conversion[] = "SI"; // FIXME
+      DataElement de( Tag(0x0008, 0x0064 ) );
+      de.SetByteValue( conversion, strlen(conversion) );
+      ds.Insert( de );
+      }
     }
 
   // Spacing:

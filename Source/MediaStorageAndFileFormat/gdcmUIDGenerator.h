@@ -31,11 +31,11 @@ class UIDGenerator
 {
 public:
   // By default the root of a UID is a GDCM Root...
-  UIDGenerator(const char *root = GetGDCMUID() )/*:Root(root)*/ {}
+  UIDGenerator() {}
 
   // Override the GDCM root with a user one:
-  void SetRoot(const char * root) { Root = root; }
-  const char *GetRoot() const { return Root.c_str(); }
+  static void SetRoot(const char * root) { Root = root; }
+  static const char *GetRoot() { return Root.c_str(); }
 
   // Internally uses a std::string, so two calls have the same pointer !
   // save into a std::string

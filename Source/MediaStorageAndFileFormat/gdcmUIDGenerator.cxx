@@ -23,6 +23,7 @@ namespace gdcm
 
 const char UIDGenerator::GDCM_UID[] = "1.2.826.0.1.3680043.2.1143";
 std::string UIDGenerator::Root = GetGDCMUID();
+// The following contains the *encoded* hardware address (not the raw as in ipconfig/ifconfig)
 std::string UIDGenerator::EncodedHardwareAddress; // = System::GetHardwareAddress();
 
 const char *UIDGenerator::GetGDCMUID()
