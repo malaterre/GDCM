@@ -206,21 +206,40 @@ void vtkGDCMImageWriter::Write()
   // Get the whole extent of the input
   input->GetWholeExtent(this->DataUpdateExtent);
 
-  int dimIndex = 2;
-  int firstSlice = this->DataUpdateExtent[2*dimIndex];
-  int lastSlice = this->DataUpdateExtent[2*dimIndex+1];
-
-  // Go through data slice-by-slice using file-order slices
-  for (int slice = firstSlice; slice <= lastSlice; slice++)
+  // Did the user specified dim of output file to be 2 ?
+  if( this->FileDimensionality == 2 )
     {
-    // Set the DataUpdateExtent to the slice extent we want to write
-    this->DataUpdateExtent[2*dimIndex] = slice;
-    this->DataUpdateExtent[2*dimIndex+1] = slice;
-    this->Modified();
+    int dimIndex = 2;
+    int firstSlice = this->DataUpdateExtent[2*dimIndex];
+    int lastSlice = this->DataUpdateExtent[2*dimIndex+1];
+    if( lastSlice - firstSlice + 1 != this->FileNames->GetNumberOfValues() )
+      {
+      vtkErrorMacro("Wrong number of filenames: " << this->FileNames->GetNumberOfValues() 
+        << " should be " << lastSlice - firstSlice + 1);
+      return;
+      }
 
+    // Go through data slice-by-slice using file-order slices
+    for (int slice = firstSlice; slice <= lastSlice; slice++)
+      {
+      std::cerr << "Slice:" << slice << std::endl;
+      // Set the DataUpdateExtent to the slice extent we want to write
+      this->DataUpdateExtent[2*dimIndex] = slice;
+      this->DataUpdateExtent[2*dimIndex+1] = slice;
+      this->Modified();
+
+      // Call Update to execute pipeline and write slice to disk.
+      this->Update();
+      }
+    }
+  else if( this->FileDimensionality == 3 )
+    {
     // Call Update to execute pipeline and write slice to disk.
     this->Update();
-
+    }
+  else
+    {
+    vtkErrorMacro( "Unhandled: " << this->FileDimensionality );
     }
 
 }
@@ -249,8 +268,8 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   data->GetIncrements(inInc);
 
   //data->Update();
-  data->Print( std::cout );
-  const char * filename = this->GetFileName();
+  //data->Print( std::cout );
+  //const char * filename = this->GetFileName();
   std::cerr << data->GetDataDimension() << std::endl;
 
   gdcm::ImageWriter writer;
@@ -265,13 +284,13 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   const double *spacing = data->GetSpacing();
   image.SetSpacing(0, spacing[0] );
   image.SetSpacing(1, spacing[1] );
-  if( dims[2] > 1 )
+  if( dims[2] > 1 && this->FileDimensionality == 3 )
     {
     // resize num of dim to 3:
     image.SetNumberOfDimensions( 3 );
     image.SetDimension(2, dims[2] );
-    image.SetSpacing(2, spacing[2] );
     }
+  image.SetSpacing(2, spacing[2] ); // should always valid...
   // TODO: need to do Origin / Image Position (Patient)
   // For now FileDimensionality should match File Dimension
   //this->FileDimensionality
@@ -318,7 +337,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   unsigned long len = image.GetBufferLength();
 
   gdcm::ByteValue *bv = new gdcm::ByteValue(); // (char*)data->GetScalarPointer(), len );
-  bv->SetLength( len );
+  bv->SetLength( len ); // allocate !
   
 //  std::ofstream of( "/tmp/bla.raw" );
 //  of.write( (char*)data->GetScalarPointer(), len);
@@ -326,27 +345,48 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   // re shuffle the line within ByteValue:
   //
   char *pointer = (char*)bv->GetPointer();
-  const char *tempimage = (char*)data->GetScalarPointer();
+  //const char *tempimage = (char*)data->GetScalarPointer();
+  const char *tempimage = (char*)data->GetScalarPointerForExtent(inExt);
+  std::cerr << "Pointer:" << (unsigned int)tempimage << std::endl;
   int *dext = data->GetExtent();
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
-  for(int j = dext[4]; j <= dext[5]; ++j)
+  int j = dext[4];
+  std::cerr << "dext[4]:" << j << std::endl;
+  std::cerr << "inExt[4]:" << inExt[4] << std::endl;
+  if( dims[2] > 1 && this->FileDimensionality == 3 )
     {
-    for(int i = dext[2]; i <= dext[3]; ++i)
+    for(int j = dext[4]; j <= dext[5]; ++j)
       {
-      memcpy(pointer,
-        tempimage+((dext[3] - i)+j*(dext[3]+1))*outsize, outsize);
-      pointer += outsize;
+      for(int i = dext[2]; i <= dext[3]; ++i)
+        {
+        memcpy(pointer,
+          tempimage+((dext[3] - i)+j*(dext[3]+1))*outsize, outsize);
+        pointer += outsize;
+        }
+      }
+    }
+  else
+    {
+    //for(int j = dext[4]; j <= dext[5]; ++j)
+      {
+      for(int i = dext[2]; i <= dext[3]; ++i)
+        {
+        memcpy(pointer,
+          tempimage+((dext[3] - i)+j*(dext[3]+1))*outsize, outsize);
+        pointer += outsize;
+        }
       }
     }
 
   image.SetValue( *bv );
 
+// DEBUG
   const gdcm::Value &v = image.GetValue();
   const gdcm::ByteValue *bv1 = dynamic_cast<const gdcm::ByteValue*>(&v);
   assert( bv1 && bv1 == bv );
   image.Print( std::cerr );
+// END DEBUG
 
-  writer.SetFileName( filename );
 
   gdcm::File& file = writer.GetFile();
   gdcm::DataSet& ds = file.GetDataSet();
@@ -417,13 +457,21 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   //
   // Let's try to fake out the SOP Class UID here:
   gdcm::MediaStorage ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
-  ms.GuessFromModality( this->MedicalImageProperties->GetModality() ); // Will override SC only if something is found...
+  ms.GuessFromModality( this->MedicalImageProperties->GetModality(), this->FileDimensionality ); // Will override SC only if something is found...
   assert( gdcm::MediaStorage::IsImage( ms ) );
   gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016 ) );
   const char* msstr = gdcm::MediaStorage::GetMSString(ms);
   de.SetByteValue( msstr, strlen(msstr) );
   ds.Insert( de );
 
+  int n = this->FileNames->GetNumberOfValues();
+  int i = inExt[4];
+  const char *filename = this->FileNames->GetValue(i).c_str();
+  // Let's add an Instance Number just for fun:
+  std::ostringstream os;
+  os << i;
+  SetStringValueFromTag(os.str().c_str(), gdcm::Tag(0x0020,0x0013), ds);
+  writer.SetFileName( filename );
   if( !writer.Write() )
     {
     return 0;

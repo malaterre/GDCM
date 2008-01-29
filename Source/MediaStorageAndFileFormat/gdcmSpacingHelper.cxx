@@ -30,6 +30,7 @@ Tag SpacingHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
     {
   case MediaStorage::CTImageStorage:
   case MediaStorage::MRImageStorage:
+  case MediaStorage::EnhancedMRImageStorage:
     // (0028,0030) DS [2.0\2.0]                                #   8, 2 PixelSpacing
     t = Tag(0x0028,0x0030);
     break;
@@ -141,34 +142,76 @@ void SpacingHelper::SetSpacingValue(DataSet & ds, const double * spacing)
   assert( MediaStorage::IsImage( ms ) );
 
   Tag spacingtag = GetSpacingTagFromMediaStorage(ms);
-  if( spacingtag != Tag(0xffff,0xffff) )
+  Tag zspacingtag = GetZSpacingTagFromMediaStorage(ms);
+  //std::vector<Tag> spacingtags;
+  //spacingtags.push_back( spacingtag );
+  //spacingtags.push_back( zspacingtag );
     {
-    DataElement de( spacingtag );
-    const Global &g = gdcm::GlobalInstance;
-    const Dicts &dicts = g.GetDicts();
-    const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
-    const VR & vr = entry.GetVR();
-    const VM & vm = entry.GetVM();
-    assert( de.GetVR() == vr || de.GetVR() == VR::INVALID );
-    switch(vr)
+    const Tag &currentspacing = spacingtag;
+    if( currentspacing != Tag(0xffff,0xffff) )
       {
-    case VR::DS:
+      DataElement de( currentspacing );
+      const Global &g = gdcm::GlobalInstance;
+      const Dicts &dicts = g.GetDicts();
+      const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
+      const VR & vr = entry.GetVR();
+      const VM & vm = entry.GetVM();
+      assert( de.GetVR() == vr || de.GetVR() == VR::INVALID );
+      switch(vr)
         {
-        gdcm::Element<VR::DS,VM::VM1_n> el;
-        el.SetLength( entry.GetVM().GetLength() * vr.GetSizeof() );
-        for( int i = 0; i < entry.GetVM().GetLength(); ++i)
+      case VR::DS:
           {
-          el.SetValue( spacing[i], i );
+          gdcm::Element<VR::DS,VM::VM1_n> el;
+          el.SetLength( entry.GetVM().GetLength() * vr.GetSizeof() );
+          assert( entry.GetVM() == VM::VM2 );
+          for( int i = 0; i < entry.GetVM().GetLength(); ++i)
+            {
+            el.SetValue( spacing[i], i );
+            }
+          //assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
+          std::stringstream os;
+          el.Write( os );
+          de.SetByteValue( os.str().c_str(), os.str().size() );
+          ds.Insert( de );
           }
-        assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
-        std::stringstream os;
-        el.Write( os );
-        de.SetByteValue( os.str().c_str(), os.str().size() );
-        ds.Insert( de );
+        break;
+      default:
+        abort();
         }
-      break;
-    default:
-      abort();
+      }
+    }
+    {
+    const Tag &currentspacing = zspacingtag;
+    if( currentspacing != Tag(0xffff,0xffff) )
+      {
+      DataElement de( currentspacing );
+      const Global &g = gdcm::GlobalInstance;
+      const Dicts &dicts = g.GetDicts();
+      const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
+      const VR & vr = entry.GetVR();
+      const VM & vm = entry.GetVM();
+      assert( de.GetVR() == vr || de.GetVR() == VR::INVALID );
+      switch(vr)
+        {
+      case VR::DS:
+          {
+          gdcm::Element<VR::DS,VM::VM1_n> el;
+          el.SetLength( entry.GetVM().GetLength() * vr.GetSizeof() );
+          assert( entry.GetVM() == VM::VM1 );
+          for( int i = 0; i < entry.GetVM().GetLength(); ++i)
+            {
+            el.SetValue( spacing[i+2], i );
+            }
+          //assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
+          std::stringstream os;
+          el.Write( os );
+          de.SetByteValue( os.str().c_str(), os.str().size() );
+          ds.Insert( de );
+          }
+        break;
+      default:
+        abort();
+        }
       }
     }
 

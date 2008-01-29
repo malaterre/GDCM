@@ -18,6 +18,26 @@ int TestMediaStorage(int argc, char *argv[])
 {
   (void)argc;
   (void)argv;
+  gdcm::MediaStorage ms;
+  if( ms != gdcm::MediaStorage::MS_END )
+    {
+    return 1;
+    }
+  ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
+  if( ms != gdcm::MediaStorage::SecondaryCaptureImageStorage )
+    {
+    return 1;
+    }
+  ms.GuessFromModality( "MR" );
+  if( ms != gdcm::MediaStorage::MRImageStorage )
+    {
+    return 1;
+    }
+  ms.GuessFromModality( "MR" , 3 );
+  if( ms != gdcm::MediaStorage::EnhancedMRImageStorage )
+    {
+    return 1;
+    }
 
   return 0;
 }

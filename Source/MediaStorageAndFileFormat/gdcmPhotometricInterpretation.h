@@ -59,7 +59,7 @@ public:
   // TODO
   // not all PhotometricInterpretation are allowed for compressed Transfer 
   // syntax
-  // static bool IsAllowwedForCompressedTS(PIType pi);
+  // static bool IsAllowedForCompressedTS(PIType pi);
 
   friend std::ostream& operator<<(std::ostream& os, const PhotometricInterpretation& pi);
 

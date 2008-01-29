@@ -120,62 +120,68 @@ bool MediaStorage::IsImage(const MSType &ms)
   return true;
 }
 
-static const char *MSModalityStrings[] = {
-  "", //MediaStorageDirectoryStorage,
-  "CR", //ComputedRadiographyImageStorage,
-  "", //DigitalXRayImageStorageForPresentation,
-  "", //DigitalXRayImageStorageForProcessing,
-  "", //DigitalMammographyImageStorageForPresentation,
-  "", //DigitalMammographyImageStorageForProcessing,
-  "", //DigitalIntraoralXrayImageStorageForPresentation,
-  "", //DigitalIntraoralXRayImageStorageForProcessing,
-  "CT", //CTImageStorage,
-  "", //EnhancedCTImageStorage,
-  "", //UltrasoundMultiFrameImageStorageRetired,
-  "", //UltrasoundMultiFrameImageStorage,
-  "MR", //MRImageStorage,
-  "MR", //EnhancedMRImageStorage,
-  "", //MRSpectroscopyStorage,
-  "NM", //NuclearMedicineImageStorageRetired,
-  "US", //UltrasoundImageStorageRetired,
-  "US", //UltrasoundImageStorage,
-  "OT", //SecondaryCaptureImageStorage,
-  "", //MultiframeSingleBitSecondaryCaptureImageStorage,
-  "", //MultiframeGrayscaleByteSecondaryCaptureImageStorage,
-  "", //MultiframeGrayscaleWordSecondaryCaptureImageStorage,
-  "", //MultiframeTrueColorSecondaryCaptureImageStorage,
-  "", //StandaloneOverlayStorage,
-  "", //StandaloneCurveStorage,
-  "", //LeadECGWaveformStorage, // 12-
-  "", //GeneralECGWaveformStorage,
-  "", //AmbulatoryECGWaveformStorage,
-  "", //HemodynamicWaveformStorage,
-  "", //CardiacElectrophysiologyWaveformStorage,
-  "", //BasicVoiceAudioWaveformStorage,
-  "", //StandaloneModalityLUTStorage,
-  "", //StandaloneVOILUTStorage,
-  "", //GrayscaleSoftcopyPresentationStateStorageSOPClass,
-  "", //XRayAngiographicImageStorage,
-  "", //XRayRadiofluoroscopingImageStorage,
-  "", //XRayAngiographicBiPlaneImageStorageRetired,
-  "", //NuclearMedicineImageStorage,
-  "", //RawDataStorage,
-  "", //SpacialRegistrationStorage,
-  "", //SpacialFiducialsStorage,
-  "", //PETImageStorage,
-  "", //RTImageStorage,
-  "", //RTDoseStorage,
-  "", //RTStructureSetStorage,
-  "", //RTPlanStorage,
-  "", //CSANonImageStorage,
-  "", //Philips3D,
-  "", //MS_END
-  NULL
+struct MSModalityType
+{
+  const char *Modality;
+  const unsigned int Dimension;
+};
+
+static MSModalityType MSModalityTypes[] = {
+  {"  ", 2},//MediaStorageDirectoryStorage,
+  {"CR", 2},//ComputedRadiographyImageStorage,
+  {"  ", 2},//DigitalXRayImageStorageForPresentation,
+  {"  ", 2},//DigitalXRayImageStorageForProcessing,
+  {"  ", 2},//DigitalMammographyImageStorageForPresentation,
+  {"  ", 2},//DigitalMammographyImageStorageForProcessing,
+  {"  ", 2},//DigitalIntraoralXrayImageStorageForPresentation,
+  {"  ", 2},//DigitalIntraoralXRayImageStorageForProcessing,
+  {"CT", 2},//CTImageStorage,
+  {"  ", 2},//EnhancedCTImageStorage,
+  {"  ", 2},//UltrasoundMultiFrameImageStorageRetired,
+  {"  ", 2},//UltrasoundMultiFrameImageStorage,
+  {"MR", 2},//MRImageStorage,
+  {"MR", 3},//EnhancedMRImageStorage,
+  {"  ", 2},//MRSpectroscopyStorage,
+  {"NM", 2},//NuclearMedicineImageStorageRetired,
+  {"US", 2},//UltrasoundImageStorageRetired,
+  {"US", 2},//UltrasoundImageStorage,
+  {"OT", 2},//SecondaryCaptureImageStorage,
+  {"  ", 2},//MultiframeSingleBitSecondaryCaptureImageStorage,
+  {"  ", 2},//MultiframeGrayscaleByteSecondaryCaptureImageStorage,
+  {"  ", 2},//MultiframeGrayscaleWordSecondaryCaptureImageStorage,
+  {"  ", 2},//MultiframeTrueColorSecondaryCaptureImageStorage,
+  {"  ", 2},//StandaloneOverlayStorage,
+  {"  ", 2},//StandaloneCurveStorage,
+  {"  ", 2},//LeadECGWaveformStorage, // 12-
+  {"  ", 2},//GeneralECGWaveformStorage,
+  {"  ", 2},//AmbulatoryECGWaveformStorage,
+  {"  ", 2},//HemodynamicWaveformStorage,
+  {"  ", 2},//CardiacElectrophysiologyWaveformStorage,
+  {"  ", 2},//BasicVoiceAudioWaveformStorage,
+  {"  ", 2},//StandaloneModalityLUTStorage,
+  {"  ", 2},//StandaloneVOILUTStorage,
+  {"  ", 2},//GrayscaleSoftcopyPresentationStateStorageSOPClass,
+  {"  ", 2},//XRayAngiographicImageStorage,
+  {"  ", 2},//XRayRadiofluoroscopingImageStorage,
+  {"  ", 2},//XRayAngiographicBiPlaneImageStorageRetired,
+  {"  ", 2},//NuclearMedicineImageStorage,
+  {"  ", 2},//RawDataStorage,
+  {"  ", 2},//SpacialRegistrationStorage,
+  {"  ", 2},//SpacialFiducialsStorage,
+  {"  ", 2},//PETImageStorage,
+  {"  ", 2},//RTImageStorage,
+  {"  ", 2},//RTDoseStorage,
+  {"  ", 2},//RTStructureSetStorage,
+  {"  ", 2},//RTPlanStorage,
+  {"  ", 2},//CSANonImageStorage,
+  {"  ", 2},//Philips3D,
+  {"  ", 2},//MS_END
+  {NULL, 0}
 };
 
 const char *MediaStorage::GetModality() const
 {
-  return MSModalityStrings[MSField];
+  return MSModalityTypes[MSField].Modality;
 }
 
 void MediaStorage::SetFromHeader(FileMetaInformation const &fmi)
@@ -191,16 +197,17 @@ void MediaStorage::SetFromHeader(FileMetaInformation const &fmi)
   MSField = ms;
 }
 
-void MediaStorage::GuessFromModality(const char *modality)
+void MediaStorage::GuessFromModality(const char *modality, unsigned int dim)
 {
   if( !modality ) return;
   if( strlen(modality) != 2 ) return;
   int i = 0;
-  while( MSModalityStrings[i] && strcmp(modality, MSModalityStrings[i]) != 0 )
+  while( MSModalityTypes[i].Modality && 
+    (strcmp(modality, MSModalityTypes[i].Modality) != 0 || MSModalityTypes[i].Dimension < dim ))
     {
     ++i;
     }
-  if( MSModalityStrings[i] )
+  if( MSModalityTypes[i].Modality )
     {
     // Ok we found something...
     MSField = (MSType)i;

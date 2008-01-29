@@ -105,7 +105,7 @@ typedef enum {
 
   const char *GetModality() const;
 
-  void GuessFromModality(const char *modality);
+  void GuessFromModality(const char *modality, unsigned int dimension = 2);
   void SetFromHeader(FileMetaInformation const &fmi); // Will get the Media Storage SOP Class UID
   void SetFromDataSet(DataSet const &ds); // Will get the SOP Class UID
 

@@ -33,8 +33,12 @@ int TestvtkGDCMImageWrite(const char *filename)
   reader->GetOutput()->Print( cout );
   reader->GetMedicalImageProperties()->Print( cout );
 
+  vtkImageData *copy = vtkImageData::New();
+  copy->DeepCopy( reader->GetOutput() );
+
   vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
-  writer->SetInput( reader->GetOutput() );
+  //writer->SetInput( reader->GetOutput() );
+  writer->SetInput( copy );
   writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
   std::string gdcmfile = vtksys::SystemTools::GetFilenamePath( filename );
   gdcmfile = "/tmp/vtkdcm";

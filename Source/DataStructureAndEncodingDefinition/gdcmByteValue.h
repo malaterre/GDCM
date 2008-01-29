@@ -35,7 +35,7 @@ public:
     Internal(array, array+vl),Length(vl) {
       if( vl.IsOdd() )
         {
-        gdcmWarningMacro( "Odd length" );
+        gdcmDebugMacro( "Odd length" );
         Internal.resize(vl+1);
         }
   }

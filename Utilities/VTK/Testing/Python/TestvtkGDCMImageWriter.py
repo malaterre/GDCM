@@ -13,10 +13,6 @@
 #
 ############################################################################
 
-from vtk import vtkStringArray
-from vtk import vtkDirectory
-from vtk import vtkStructuredPointsWriter
-from vtk.util import vtkConstants as vtkType
 import libvtkgdcmPython as vtkgdcm
 import os,sys
 
@@ -42,6 +38,7 @@ if __name__ == "__main__":
   # Write output
   writer = vtkgdcm.vtkGDCMImageWriter()
   writer.SetInput( r.GetOutput() )
+  writer.SetMedicalImageProperties( r.GetMedicalImageProperties() )
   writer.SetFileName( "TestvtkGDCMImageWriterPython.dcm" )
   writer.Write()
   
