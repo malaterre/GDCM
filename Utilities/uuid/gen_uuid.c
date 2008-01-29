@@ -66,12 +66,11 @@
 #ifdef HAVE_NET_IF_DL_H
 #include <net/if_dl.h>
 #endif
+#ifdef HAVE_WINSOCK_H
+#include <winsock.h> /* timeval */
+#endif
 
 #include "uuidP.h"
-
-#if defined(uuid_t)
-#undef uuid_t
-#endif
 
 #ifdef HAVE_SRANDOM
 #define srand(x)	srandom(x)
@@ -80,7 +79,6 @@
 
 #if defined(_WIN32)
 /* offer a limited gettimeofday on Win32 system */
-#include <winsock.h>
 #include <stdio.h>
 int gettimeofday(struct timeval *tv, int n)
 {

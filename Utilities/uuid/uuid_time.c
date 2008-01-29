@@ -42,6 +42,9 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <time.h>
+#ifdef HAVE_WINSOCK_H
+#include <winsock.h> /* timeval */
+#endif
 
 #include "uuidP.h"
 
