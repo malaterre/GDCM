@@ -78,6 +78,7 @@
 /* offer a limited gettimeofday on Win32 system */
 int gettimeofday(struct timeval *tv, int n)
 {
+  typedef  unsigned __int64    uint64_t;
   FILETIME ft;
   GetSystemTimeAsFileTime(&ft);
   uint64_t c1 = 27111902;
