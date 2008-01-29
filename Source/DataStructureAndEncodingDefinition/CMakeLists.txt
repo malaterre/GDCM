@@ -28,6 +28,7 @@ SET(DSED_SRCS
 INCLUDE_DIRECTORIES(
   # Bin:
   "${GDCM_BINARY_DIR}/Source/Common"
+  "${GDCM_BINARY_DIR}/Utilities/zlib"
 
   # src:
   "${GDCM_SOURCE_DIR}/Source/Common"
