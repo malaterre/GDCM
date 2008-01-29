@@ -29,6 +29,7 @@ SET(ZLIB_SRCS
   zutil.c
   )
 
+
 # for windows add the .def and .rc files to the source list if building shared libs
 IF(WIN32)
   IF(BUILD_SHARED_LIBS)
@@ -42,6 +43,12 @@ IF(WIN32)
     ENDIF(NOT UNIX)   
   ENDIF(BUILD_SHARED_LIBS)
 ENDIF(WIN32)
+
+  CONFIGURE_FILE(
+    ${CMAKE_CURRENT_SOURCE_DIR}/zconf.in.h
+    ${CMAKE_CURRENT_BINARY_DIR}/zconf.h
+  )
+
 
 ADD_LIBRARY(${ZLIB_LIBRARY_NAME} ${ZLIB_SRCS})
 
