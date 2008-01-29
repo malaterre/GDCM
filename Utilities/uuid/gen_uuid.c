@@ -193,13 +193,13 @@ static void get_random_bytes(void *buf, int nbytes)
 #define IP_LOCALHOST    0x0100007F
 
 //int GetActiveMAC(BYTE byMAC[6])
-static int get_node_id(unsigned char *node_id)
+static int get_node_id(unsigned char *byMAC)
 {
     DWORD               i, dwSize;
     PMIB_IPADDRTABLE    pAddr = NULL;
     MIB_IFROW           iInfo;
     PFIXED_INFO         pFI = NULL;
-    BYTE                byMAC[6] = { 0, 0, 0, 0, 0, 0 };
+    //BYTE                byMAC[6] = { 0, 0, 0, 0, 0, 0 };
 
     // Get all IP addresses held by this machine; if it's connected to a network, there's at least one
     // that's not localhost
