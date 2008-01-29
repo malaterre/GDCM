@@ -255,6 +255,7 @@ bool ImageWriter::Write()
   // StudyID
   if( !ds.FindDataElement( Tag(0x0020,0x0010) ) )
     {
+    // FIXME: this one is actually bad since the value is needed for DICOMDIR construction
     DataElement de( Tag(0x0020,0x0010) );
     ds.Insert( de );
     }
