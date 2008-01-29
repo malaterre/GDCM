@@ -13,6 +13,10 @@
 
 =========================================================================*/
 #include "gdcmFilenameGenerator.h"
+#include <stdio.h> // snprintf
+#ifdef _WIN32
+#define snprintf _snprintf
+#endif
 
 namespace gdcm
 {
