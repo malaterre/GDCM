@@ -36,12 +36,17 @@
 #ifndef _UUID_UUID_H
 #define _UUID_UUID_H
 
+
 #include <sys/types.h>
 #include <time.h>
 #if HAVE_SYS_TIME_H
 #include <sys/time.h> /* timeval CYGWIN */
 #endif //defined(__CYGWIN__)
 
+/* apparently types.h or time.h is polluting our namespace on Win32... */
+#if defined(uuid_t)
+#undef uuid_t
+#endif
 typedef unsigned char uuid_t[16];
 
 /* UUID Variant definitions */

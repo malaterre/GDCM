@@ -66,6 +66,7 @@
 #ifdef HAVE_NET_IF_DL_H
 #include <net/if_dl.h>
 #endif
+#include <winsock.h>
 
 #include "uuidP.h"
 
@@ -76,25 +77,47 @@
 
 #if defined(_WIN32)
 /* offer a limited gettimeofday on Win32 system */
+#include <stdio.h>
 int gettimeofday(struct timeval *tv, int n)
 {
-  typedef  unsigned __int64    uint64_t;
   FILETIME ft;
-  GetSystemTimeAsFileTime(&ft);
-  uint64_t c1 = 27111902;
-  uint64_t c2 = 3577643008UL;
+  const uint64_t c1 = 27111902;
+  const uint64_t c2 = 3577643008UL;
   const uint64_t OFFSET = (c1 << 32) + c2;
+  uint64_t filetime;
+  GetSystemTimeAsFileTime(&ft);
 
-  uint64_t filetime = ft.dwHighDateTime;
+  filetime = ft.dwHighDateTime;
   filetime = filetime << 32;
   filetime += ft.dwLowDateTime;
   filetime -= OFFSET;
 
   memset(&tv,0, sizeof(tv));
-  tv.tv_sec = filetime / 10000000; // seconds since epoch
-  tv.tv_usec = (filetime % 10000000) / 10;
+  tv->tv_sec = (time_t)(filetime / 10000000); // seconds since epoch
+  tv->tv_usec = (uint32_t)((filetime % 10000000) / 10);
 
   return 0;
+}
+/* provide unimplemented open call */
+#define O_NONBLOCK 0
+int open(const char *pathname, int flags)
+{
+  return -1;
+}
+typedef int pid_t;
+pid_t getpid(void)
+{
+  return 0;
+}
+typedef int uid_t;
+uid_t getuid(void)
+{
+  return 0;
+}
+typedef int ssize_t;
+ssize_t read(int fd, void *buf, size_t count)
+{
+  return -1;
 }
 #endif
 
@@ -116,7 +139,6 @@ static int get_random_fd(void)
 	for (i = (tv.tv_sec ^ tv.tv_usec) & 0x1F; i > 0; i--)
 		rand();
 	return fd;
-#endif
 }
 
 
@@ -166,7 +188,7 @@ static int get_node_id(unsigned char *node_id)
     PMIB_IPADDRTABLE    pAddr = NULL;
     MIB_IFROW           iInfo;
     PFIXED_INFO         pFI = NULL;
-    //BYTE                byMAC[6] = { 0, 0, 0, 0, 0, 0 };
+    BYTE                byMAC[6] = { 0, 0, 0, 0, 0, 0 };
 
     // Get all IP addresses held by this machine; if it's connected to a network, there's at least one
     // that's not localhost
