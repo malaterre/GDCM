@@ -63,6 +63,8 @@
 
 /* Special time structure support */
 #cmakedefine HAVE_SYS_TIME_H
+#cmakedefine HAVE_WINSOCK_H
+
 #cmakedefine CMAKE_HAVE_SYS_TIMES_H
 #cmakedefine CMAKE_HAVE_SYS_TIMEB_H
 
