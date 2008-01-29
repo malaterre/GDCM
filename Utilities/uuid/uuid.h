@@ -38,7 +38,7 @@
 
 #include <sys/types.h>
 #include <time.h>
-#if defined(__CYGWIN__)
+#if HAVE_SYS_TIME_H
 #include <sys/time.h> /* timeval CYGWIN */
 #endif //defined(__CYGWIN__)
 

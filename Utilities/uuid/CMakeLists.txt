@@ -6,6 +6,8 @@ parse.c
 unpack.c
 unparse.c
 uuid_time.c
+uuid.h
+uuidP.h
 )
 
 #INCLUDE (${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)
@@ -21,7 +23,10 @@ ENDMACRO(CHECK_INCLUDE_FILE_CONCAT)
 
 
 IF(UNIX) #Avoid polluting Win32 cmakecache
+  CHECK_INCLUDE_FILE_CONCAT("unistd.h"       HAVE_UNISTD_H)
+  CHECK_INCLUDE_FILE_CONCAT("inttypes.h"     HAVE_INTTYPES_H)
   CHECK_INCLUDE_FILE_CONCAT("sys/ioctl.h"    HAVE_SYS_IOCTL_H)
+  CHECK_INCLUDE_FILE_CONCAT("sys/time.h"     HAVE_SYS_TIME_H)
   CHECK_INCLUDE_FILE_CONCAT("sys/socket.h"   HAVE_SYS_SOCKET_H)
   CHECK_INCLUDE_FILE_CONCAT("sys/sockio.h"   HAVE_SYS_SOCKIO_H)
   CHECK_INCLUDE_FILE_CONCAT("net/if.h"       HAVE_NET_IF_H)
@@ -31,7 +36,10 @@ IF(UNIX) #Avoid polluting Win32 cmakecache
 ENDIF(UNIX)
 
 SET(UUID_HAVES_ALL
+  HAVE_UNISTD_H
+  HAVE_INTTYPES_H
   HAVE_SYS_IOCTL_H
+  HAVE_SYS_TIME_H
   HAVE_SYS_SOCKET_H
   HAVE_SYS_SOCKIO_H
   HAVE_NET_IF_H
