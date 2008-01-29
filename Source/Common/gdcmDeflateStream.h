@@ -37,7 +37,7 @@
  */
 
 extern "C" {
-   typedef void* (*zalloc_ptr)(void* opaque, uint n,uint m);
+   typedef void* (*zalloc_ptr)(void* opaque, uInt n,uInt m);
    typedef void (*zfree_ptr)(void* opaque, void* p);
 }
 
