@@ -99,6 +99,8 @@ private:
   // VTK structs:
   vtkLookupTable *LookupTable;
   vtkMedicalImageProperties *MedicalImageProperties;
+  vtkSetStringMacro(UID);
+  char *UID;
 
   int DataUpdateExtent[6];
 

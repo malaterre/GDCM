@@ -20,7 +20,7 @@
 
 int TestUIDGeneratorValid()
 {
-  gdcm::UIDGenerator uid( "" );
+  gdcm::UIDGenerator uid;
   uid.SetRoot( "1.2.3.4.0.0.1" );
   const char *s = uid.Generate();
   if( !gdcm::UIDGenerator::IsValid( s ) )

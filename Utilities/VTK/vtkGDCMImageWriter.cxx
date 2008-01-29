@@ -30,6 +30,7 @@
 
 #include "gdcmImageWriter.h"
 #include "gdcmByteValue.h"
+#include "gdcmUIDGenerator.h"
 
 vtkCxxRevisionMacro(vtkGDCMImageWriter, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMImageWriter)
@@ -52,6 +53,7 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
   this->LookupTable = vtkLookupTable::New();
   this->MedicalImageProperties = vtkMedicalImageProperties::New();
   this->FileNames = vtkStringArray::New();
+  this->UID = 0;
 }
 
 vtkGDCMImageWriter::~vtkGDCMImageWriter()
@@ -59,6 +61,7 @@ vtkGDCMImageWriter::~vtkGDCMImageWriter()
   this->LookupTable->Delete();
   this->MedicalImageProperties->Delete();
   this->FileNames->Delete();
+  this->SetUID(NULL);
 }
 //----------------------------------------------------------------------------
 int vtkGDCMImageWriter::FillInputPortInformation(
@@ -161,7 +164,6 @@ int vtkGDCMImageWriter::RequestData(
       vtkErrorMacro(<<"Write: Please specify an input!");
       return 0;
       }
-
     // Call WriteGDCMData for each input
     if (this->WriteGDCMData(input, timeStep) == 0)
       {
@@ -205,6 +207,12 @@ void vtkGDCMImageWriter::Write()
 
   // Get the whole extent of the input
   input->GetWholeExtent(this->DataUpdateExtent);
+
+  // For both case (2d file or 3d file) we need a common uid for the Series/Study:
+  
+  gdcm::UIDGenerator uidgen;
+  const char *uid = uidgen.Generate();
+  this->SetUID(uid);
 
   // Did the user specified dim of output file to be 2 ?
   if( this->FileDimensionality == 2 )
@@ -459,10 +467,25 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   gdcm::MediaStorage ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
   ms.GuessFromModality( this->MedicalImageProperties->GetModality(), this->FileDimensionality ); // Will override SC only if something is found...
   assert( gdcm::MediaStorage::IsImage( ms ) );
+{
   gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016 ) );
   const char* msstr = gdcm::MediaStorage::GetMSString(ms);
   de.SetByteValue( msstr, strlen(msstr) );
   ds.Insert( de );
+}
+
+  // Here come the important part: generate proper UID for Series/Study so that people knows this is the same Study/Series
+  const char *uid = this->UID;
+{
+  gdcm::DataElement de( gdcm::Tag(0x0020,0x000d) );
+  de.SetByteValue( uid, strlen(uid) );
+  ds.Insert( de );
+}
+{
+  gdcm::DataElement de( gdcm::Tag(0x0020,0x000e) );
+  de.SetByteValue( uid, strlen(uid) );
+  ds.Insert( de );
+}
 
   int n = this->FileNames->GetNumberOfValues();
   int i = inExt[4];

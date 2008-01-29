@@ -17,6 +17,7 @@
 #include "gdcmDataSet.h"
 #include "gdcmAttribute.h"
 #include "gdcmUIDGenerator.h"
+#include "gdcmSystem.h"
 #include "gdcmSpacingHelper.h"
 
 namespace gdcm
@@ -153,9 +154,13 @@ bool ImageWriter::Write()
   // (0020,000d) UI [1.3.6.1.4.1.5962.1.2.1.20040826185059.5457] #  42, 1 StudyInstanceUID
   // (0020,000e) UI [1.3.6.1.4.1.5962.1.3.1.1.20040826185059.5457] #  44, 1 SeriesInstanceUID
   UIDGenerator uid;
-  // FIXME: Should I always overwrite the UIDs ???
-  // Answer: no ! Otherwise I'll always overwrite Series / Study UIDs
-  // -> lead to next question should I always overwrite the Image UID...
+
+  // Be careful with the SOP Instance UID:
+  if( ds.FindDataElement( Tag(0x0008, 0x0018) ) )
+    {
+    // We are comming from a real DICOM image, we need to reference it...
+    assert( 0 && "TODO FIXME" );
+    }
     {
     const char *sop = uid.Generate();
     DataElement de( Tag(0x0008,0x0018) );
@@ -163,6 +168,8 @@ bool ImageWriter::Write()
     ds.Insert( de );
     }
 
+  // Are we on a particular Study ? If not create a new UID
+  if( !ds.FindDataElement( Tag(0x0020, 0x000d) ) )
     {
     const char *study = uid.Generate();
     DataElement de( Tag(0x0020,0x000d) );
@@ -170,6 +177,8 @@ bool ImageWriter::Write()
     ds.Insert( de );
     }
 
+  // Are we on a particular Series ? If not create a new UID
+  if( !ds.FindDataElement( Tag(0x0020, 0x000e) ) )
     {
     const char *series = uid.Generate();
     DataElement de( Tag(0x0020,0x000e) );
@@ -217,15 +226,24 @@ bool ImageWriter::Write()
     ds.Insert( de );
     }
   // StudyDate
+  char date[18];
+  const size_t datelen = 8;
+  int res = System::GetCurrentDateTime(date);
+  assert( res );
   if( !ds.FindDataElement( Tag(0x0008,0x0020) ) )
     {
     DataElement de( Tag(0x0008,0x0020) );
+    // Do not copy the whole cstring:
+    de.SetByteValue( date, datelen );
     ds.Insert( de );
     }
   // StudyTime
+  const size_t timelen = 6; // get rid of milliseconds
   if( !ds.FindDataElement( Tag(0x0008,0x0030) ) )
     {
     DataElement de( Tag(0x0008,0x0030) );
+    // Do not copy the whole cstring:
+    de.SetByteValue( date+datelen, timelen );
     ds.Insert( de );
     }
   // ReferringPhysicianName
