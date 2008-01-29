@@ -39,7 +39,8 @@
 
 #include <sys/types.h>
 #include <time.h>
-#if HAVE_SYS_TIME_H
+//#if HAVE_SYS_TIME_H
+#if __CYGWIN__
 #include <sys/time.h> /* timeval CYGWIN */
 #endif //defined(__CYGWIN__)
 
@@ -88,7 +89,7 @@ void uuid_generate(uuid_t out);
 void uuid_generate_random(uuid_t out);
 int uuid_get_node_id(unsigned char *node_id);
 void uuid_generate_time(uuid_t out);
-int uuid_gettimeofday(struct timeval *tv, int n);
+int uuid_gettimeofday(struct timeval *tv, struct timezone *tz);
 
 /* isnull.c */
 /*int uuid_is_null(const uuid_t uu);*/

@@ -177,7 +177,8 @@ bool ImageValue::TryRLECodec(char *buffer) const
         bool r = codec.Decode(is, os);
         assert( r == true );
         std::streampos p = is.tellg();
-        if( is )
+        // http://groups.google.com/group/microsoft.public.vc.stl/browse_thread/thread/96740930d0e4e6b8
+        if( !!is )
           {
           // Indeed the length of the RLE stream has been padded with a \0
           // which is discarded
