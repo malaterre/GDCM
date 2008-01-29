@@ -66,7 +66,6 @@
 #ifdef HAVE_NET_IF_DL_H
 #include <net/if_dl.h>
 #endif
-#include <winsock.h>
 
 #include "uuidP.h"
 
@@ -77,6 +76,7 @@
 
 #if defined(_WIN32)
 /* offer a limited gettimeofday on Win32 system */
+#include <winsock.h>
 #include <stdio.h>
 int gettimeofday(struct timeval *tv, int n)
 {

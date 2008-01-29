@@ -36,7 +36,9 @@
  */
 
 #include <stdio.h>
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 #include <stdlib.h>
 #include <sys/types.h>
 #include <time.h>
