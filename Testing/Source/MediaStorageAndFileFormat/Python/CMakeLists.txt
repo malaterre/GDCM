@@ -3,6 +3,7 @@
 SET(GDCM_PYTHON_TEST_SRCS
   TestReader
   TestImageReader
+  TestUIDGenerator
   )
 
 #FIND_PACKAGE(PythonInterp REQUIRED)
