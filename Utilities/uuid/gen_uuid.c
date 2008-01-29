@@ -69,6 +69,10 @@
 
 #include "uuidP.h"
 
+#if defined(uuid_t)
+#undef uuid_t
+#endif
+
 #ifdef HAVE_SRANDOM
 #define srand(x)	srandom(x)
 #define rand()		random()
