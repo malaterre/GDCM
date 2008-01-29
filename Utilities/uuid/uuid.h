@@ -88,6 +88,7 @@ void uuid_generate(uuid_t out);
 void uuid_generate_random(uuid_t out);
 int uuid_get_node_id(unsigned char *node_id);
 void uuid_generate_time(uuid_t out);
+int uuid_gettimeofday(struct timeval *tv, int n);
 
 /* isnull.c */
 /*int uuid_is_null(const uuid_t uu);*/

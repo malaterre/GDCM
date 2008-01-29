@@ -80,7 +80,7 @@
 #if defined(_WIN32)
 /* offer a limited gettimeofday on Win32 system */
 #include <stdio.h>
-int gettimeofday(struct timeval *tv, int n)
+static int gettimeofday(struct timeval *tv, int n)
 {
   FILETIME ft;
   const uint64_t c1 = 27111902;
@@ -122,6 +122,11 @@ ssize_t read(int fd, void *buf, size_t count)
   return -1;
 }
 #endif
+
+int uuid_gettimeofday(struct timeval *tv, int n)
+{
+  return gettimeofday(tv,n);
+}
 
 static int get_random_fd(void)
 {
