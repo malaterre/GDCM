@@ -49,6 +49,7 @@ Tag SpacingHelper::GetZSpacingTagFromMediaStorage(MediaStorage const &ms)
   switch(ms)
     {
   case MediaStorage::MRImageStorage:
+  case MediaStorage::EnhancedMRImageStorage: // FIXME ERROR
     // (0018,0088) DS [3]                                      #   2, 1 SpacingBetweenSlices
     t = Tag(0x0018,0x0088);
     break;
