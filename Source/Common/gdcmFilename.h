@@ -25,7 +25,7 @@ namespace gdcm
  * \brief Class to manipulate file name's
  * \note bla
  */
-class Filename
+class GDCM_EXPORT Filename
 {
 public:
   Filename(const char* filename = ""):FileName(filename) {}

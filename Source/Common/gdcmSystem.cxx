@@ -27,7 +27,7 @@
 #include <sys/stat.h>
 
 // gettimeofday
-#include <sys/time.h>
+//#include <sys/time.h>
 #include <time.h>
 
 
@@ -359,7 +359,7 @@ int System::GetCurrentDateTime(char date[18])
   time_t timep;
 
   struct timeval tv;
-  gettimeofday (&tv, NULL);
+  uuid_gettimeofday (&tv, NULL);
   timep = tv.tv_sec;
   // Compute milliseconds from microseconds.
   milliseconds = tv.tv_usec / 1000;
