@@ -68,3 +68,7 @@ ENDIF( UUID_HAVES )
 
 
 ADD_LIBRARY(gdcmuuid ${UUID_SRCS})
+IF(WIN32)
+  TARGET_LINK_LIBRARIES(gdcmuuid iphlpapi)
+ENDIF(WIN32)
+
