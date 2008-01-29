@@ -45,6 +45,7 @@ const char* UIDGenerator::Generate()
     {
     unsigned char node[6];
     int res = System::GetHardwareAddress(node);
+    assert( res );
     char buffer[15]; // 15 is max possible when all node[i] == 255
     int len = System::EncodeBytes(buffer, node, sizeof(node));
     assert( strlen(buffer) < 15 );
