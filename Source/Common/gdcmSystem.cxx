@@ -27,8 +27,13 @@
 #include <sys/stat.h>
 
 // gettimeofday
-//#include <sys/time.h>
+#ifdef HAVE_SYS_TIME_H)
+#include <sys/time.h>
+#endif
 #include <time.h>
+#ifdef HAVE_WINSOCK_H
+#include <winsock.h>
+#endif
 
 
 #include <iostream>
