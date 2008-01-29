@@ -42,7 +42,9 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifdef HAVE_SYS_FILE_H
 #include <sys/file.h>
+#endif
 #include <sys/time.h>
 #ifdef HAVE_SYS_IOCTL_H
 #include <sys/ioctl.h>
