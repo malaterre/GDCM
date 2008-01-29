@@ -74,6 +74,29 @@
 #define rand()		random()
 #endif
 
+#if defined(_WIN32)
+/* offer a limited gettimeofday on Win32 system */
+int gettimeofday(struct timeval *tv, int n)
+{
+  FILETIME ft;
+  GetSystemTimeAsFileTime(&ft);
+  uint64_t c1 = 27111902;
+  uint64_t c2 = 3577643008UL;
+  const uint64_t OFFSET = (c1 << 32) + c2;
+
+  uint64_t filetime = ft.dwHighDateTime;
+  filetime = filetime << 32;
+  filetime += ft.dwLowDateTime;
+  filetime -= OFFSET;
+
+  memset(&tv,0, sizeof(tv));
+  tv.tv_sec = filetime / 10000000; // seconds since epoch
+  tv.tv_usec = (filetime % 10000000) / 10;
+
+  return 0;
+}
+#endif
+
 static int get_random_fd(void)
 {
 	struct timeval	tv;
@@ -92,6 +115,7 @@ static int get_random_fd(void)
 	for (i = (tv.tv_sec ^ tv.tv_usec) & 0x1F; i > 0; i--)
 		rand();
 	return fd;
+#endif
 }
 
 
