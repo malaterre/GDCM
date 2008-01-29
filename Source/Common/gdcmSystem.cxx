@@ -34,6 +34,10 @@
 #ifdef HAVE_WINSOCK_H
 #include <winsock.h>
 #endif
+#include <stdio.h> // snprintf
+#ifdef _WIN32
+#define snprintf _snprintf
+#endif
 
 
 #include <iostream>
