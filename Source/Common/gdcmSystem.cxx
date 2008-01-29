@@ -342,13 +342,13 @@ int System::GetHardwareAddress(unsigned char addr[6])
   addr[4] = 255;
   addr[5] = 255;
   */
-  if (stat != 0)
+  if (stat == 1) // success
     {
     return stat;
     }
   // else
   gdcmWarningMacro("Problem in finding the MAC Address");
-  return stat;
+  return 0;
 }
 
 int System::GetCurrentDateTime(char date[18])
