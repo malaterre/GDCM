@@ -55,6 +55,14 @@ IF(BUILD_WRAPPING)
       TARGET_LINK_LIBRARIES(${PROJECT_NAME}PythonD ${c}PythonD)
     ENDFOREACH(c)
     TARGET_LINK_LIBRARIES(${PROJECT_NAME}Python ${PROJECT_NAME}PythonD)
+    ADD_CUSTOM_COMMAND(
+      TARGET    ${PROJECT_NAME}Python
+      POST_BUILD
+      COMMAND   cmake -E copy ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm.py ${LIBRARY_OUTPUT_PATH}
+      #DEPENDS "${swig_generated_file_fullname}"
+      COMMENT   "Copy vtkgdcm.py into ${LIBRARY_OUTPUT_PATH}"
+    )
+
   ENDIF(VTK_WRAP_PYTHON)
 ENDIF(BUILD_WRAPPING)
 

@@ -24,8 +24,11 @@ def PrintProgress(object, event):
   assert event == "ProgressEvent"
   print "Progress:", object.GetProgress()
 
+# Helper function to extract image dimension and type
+# this info could also be coming from a database for example instead of read from a particular file
 def ExecuteInformation(reader, filenames):
   import gdcm
+  assert filenames.GetNumberOfValues() # Need at least one file
   reffile = filenames.GetValue(0) # Take first image as reference
   #print reader
   r = gdcm.ImageReader()
@@ -34,10 +37,10 @@ def ExecuteInformation(reader, filenames):
   assert sucess
   #print r.GetImage().Print()
   image = r.GetImage()
-  assert image.GetNumberOfDimensions() == 2
+  assert image.GetNumberOfDimensions() == 2 or image.GetNumberOfDimensions() == 3
   dims = [0,0,0]
-  dims[0] = image.GetDimensions(0)
-  dims[1] = image.GetDimensions(1)
+  dims[0] = image.GetDimension(0)
+  dims[1] = image.GetDimension(1)
   dims[2] = filenames.GetNumberOfValues()
   #print dims
   #print image.GetPixelFormat().GetTPixelFormat()
@@ -85,7 +88,7 @@ if __name__ == "__main__":
         fullpath.InsertNextValue( os.path.join(filename, files.GetValue(i) ))
     r.SetFileNames( fullpath )
     ExecuteInformation(r, fullpath)
-    r.AddObserver("ProgressEvent", PrintProgress)
+    #r.AddObserver("ProgressEvent", PrintProgress)
     r.Update()
     print r.GetOutput()
     # Write output
