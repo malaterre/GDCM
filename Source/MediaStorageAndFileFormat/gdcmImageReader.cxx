@@ -408,6 +408,10 @@ bool ImageReader::ReadImage()
     PixelData.SetOrigin( 1, at.GetValue(1));
     PixelData.SetOrigin( 2, at.GetValue(2));
     }
+  else
+    {
+    assert( 0 && "TODO" ); // technically should only happen in SC
+    }
   const Tag timageorientationpatient(0x0020, 0x0037);
   if( ds.FindDataElement( timageorientationpatient ) )
     {
@@ -420,6 +424,10 @@ bool ImageReader::ReadImage()
     PixelData.SetDirectionCosines( 3, at.GetValue(3));
     PixelData.SetDirectionCosines( 4, at.GetValue(4));
     PixelData.SetDirectionCosines( 5, at.GetValue(5));
+    }
+  else
+    {
+    assert( 0 && "TODO" ); // technically should only happen in SC
     }
 
   // 5. Photometric Interpretation
@@ -718,6 +726,41 @@ bool ImageReader::ReadACRNEMAImage()
 
   // 4. Do the Overlays if any
   DoOverlays(ds, PixelData);
+
+  // 4 1/2 Let's do Pixel Spacing
+  const Tag tpixelspacing(0x0028, 0x0030);
+  if( ds.FindDataElement( tpixelspacing ) )
+    {
+    const DataElement& de = ds.GetDataElement( tpixelspacing );
+    Attribute<0x0028,0x0030> at;
+    at.Set( de.GetValue() );
+    PixelData.SetSpacing( 0, at.GetValue(0));
+    PixelData.SetSpacing( 1, at.GetValue(1));
+    }
+  // 4 2/3 Let's do Origin
+  const Tag timageposition(0x0020, 0x0030);
+  if( ds.FindDataElement( timageposition) )
+    {
+    const DataElement& de = ds.GetDataElement( timageposition);
+    Attribute<0x0020,0x0030> at;
+    at.Set( de.GetValue() );
+    PixelData.SetOrigin( 0, at.GetValue(0));
+    PixelData.SetOrigin( 1, at.GetValue(1));
+    PixelData.SetOrigin( 2, at.GetValue(2));
+    }
+  const Tag timageorientation(0x0020, 0x0035);
+  if( ds.FindDataElement( timageorientation) )
+    {
+    const DataElement& de = ds.GetDataElement( timageorientation);
+    Attribute<0x0020,0x0035> at;
+    at.Set( de.GetValue() );
+    PixelData.SetDirectionCosines( 0, at.GetValue(0));
+    PixelData.SetDirectionCosines( 1, at.GetValue(1));
+    PixelData.SetDirectionCosines( 2, at.GetValue(2));
+    PixelData.SetDirectionCosines( 3, at.GetValue(3));
+    PixelData.SetDirectionCosines( 4, at.GetValue(4));
+    PixelData.SetDirectionCosines( 5, at.GetValue(5));
+    }
 
   // 5. Do the PixelData
   const Tag pixeldata = Tag(0x7fe0, 0x0010);

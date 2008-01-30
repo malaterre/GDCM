@@ -2,6 +2,7 @@
 # Common
 SET(Common_TEST_SRCS
   TestByteSwap
+  TestString
   TestDirectory
   TestFilename
   TestFilenameGenerator

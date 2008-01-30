@@ -1,0 +1,60 @@
+/*=========================================================================
+
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006-2008 Mathieu Malaterre
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+
+=========================================================================*/
+#ifndef __gdcmString_h
+#define __gdcmString_h
+
+#include "gdcmTypes.h"
+
+namespace gdcm
+{
+
+class GDCM_EXPORT String : public std::string
+{
+  friend std::istream& operator>>(std::istream &is, String& ms);
+public:
+  // typedef are not inherited:
+  typedef std::string::value_type             value_type;
+  typedef std::string::pointer                pointer;
+  typedef std::string::reference              reference;
+  typedef std::string::const_reference        const_reference;
+  typedef std::string::size_type              size_type;
+  typedef std::string::difference_type        difference_type;
+  typedef std::string::iterator               iterator;
+  typedef std::string::const_iterator         const_iterator;
+  typedef std::string::reverse_iterator       reverse_iterator;
+  typedef std::string::const_reverse_iterator const_reverse_iterator;
+
+  // String constructors.
+  String(): std::string() {}
+  String(const value_type* s): std::string(s) {}
+  String(const value_type* s, size_type n): std::string(s, n) {}
+  String(const std::string& s, size_type pos=0, size_type n=npos):
+    std::string(s, pos, n) {}
+
+};
+inline std::istream& operator>>(std::istream &is, String &ms)
+{
+  std::getline(is, ms, '\\');
+  // no such thing as std::get where the delim char would be left, so I need to manually add it back...
+  // hopefully this is the right thing to do (no over head)
+  is.putback( '\\' );
+  return is;
+}
+
+
+} // end namespace gdcm
+
+#endif //__gdcmString_h
+

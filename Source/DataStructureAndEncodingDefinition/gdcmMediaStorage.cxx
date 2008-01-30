@@ -187,14 +187,17 @@ const char *MediaStorage::GetModality() const
 void MediaStorage::SetFromHeader(FileMetaInformation const &fmi)
 {
   const Tag mediastoragesopclassuid(0x0002, 0x0002);
-  const ByteValue *sopclassuid = fmi.GetDataElement( mediastoragesopclassuid ).GetByteValue();
-  std::string sopclassuid_str(
-    sopclassuid->GetPointer(),
-    sopclassuid->GetLength() );
-  assert( sopclassuid_str.find( ' ' ) == std::string::npos );
-  MediaStorage ms = MediaStorage::GetMSType(sopclassuid_str.c_str());
-  assert( ms != MS_END );
-  MSField = ms;
+  if( fmi.FindDataElement( mediastoragesopclassuid ) )
+    {
+    const ByteValue *sopclassuid = fmi.GetDataElement( mediastoragesopclassuid ).GetByteValue();
+    std::string sopclassuid_str(
+      sopclassuid->GetPointer(),
+      sopclassuid->GetLength() );
+    assert( sopclassuid_str.find( ' ' ) == std::string::npos );
+    MediaStorage ms = MediaStorage::GetMSType(sopclassuid_str.c_str());
+    assert( ms != MS_END );
+    MSField = ms;
+    }
 }
 
 void MediaStorage::GuessFromModality(const char *modality, unsigned int dim)
@@ -217,14 +220,17 @@ void MediaStorage::GuessFromModality(const char *modality, unsigned int dim)
 void MediaStorage::SetFromDataSet(DataSet const &ds)
 {
   const Tag tsopclassuid(0x0008, 0x0016);
-  const ByteValue *sopclassuid = ds.GetDataElement( tsopclassuid ).GetByteValue();
-  std::string sopclassuid_str(
-    sopclassuid->GetPointer(),
-    sopclassuid->GetLength() );
-  assert( sopclassuid_str.find( ' ' ) == std::string::npos );
-  MediaStorage ms = MediaStorage::GetMSType(sopclassuid_str.c_str());
-  assert( ms != MS_END );
-  MSField = ms;
+  if( ds.FindDataElement( tsopclassuid ) )
+    {
+    const ByteValue *sopclassuid = ds.GetDataElement( tsopclassuid ).GetByteValue();
+    std::string sopclassuid_str(
+      sopclassuid->GetPointer(),
+      sopclassuid->GetLength() );
+    assert( sopclassuid_str.find( ' ' ) == std::string::npos );
+    MediaStorage ms = MediaStorage::GetMSType(sopclassuid_str.c_str());
+    assert( ms != MS_END );
+    MSField = ms;
+    }
 }
 
 } // end namespace gdcm

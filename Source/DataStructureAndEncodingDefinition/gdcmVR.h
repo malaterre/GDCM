@@ -17,6 +17,7 @@
 
 #include "gdcmTag.h"
 #include "gdcmTrace.h"
+#include "gdcmString.h"
 
 #include <iostream>
 #include <fstream>
@@ -234,7 +235,7 @@ TYPETOENCODING(DT,ASCII ,float)
 TYPETOENCODING(FL,BINARY,float)
 TYPETOENCODING(FD,BINARY,double)
 TYPETOENCODING(IS,ASCII ,int)
-TYPETOENCODING(LO,ASCII ,std::string)
+TYPETOENCODING(LO,ASCII ,String)
 TYPETOENCODING(LT,ASCII ,float)
 TYPETOENCODING(OB,BINARY,unsigned char)
 TYPETOENCODING(OF,BINARY,float)

@@ -58,6 +58,12 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
   this->FileNames = vtkStringArray::New();
   this->UID = 0;
   this->DirectionCosines = vtkMatrix4x4::New();
+  this->DirectionCosines->SetElement(0,0,1);
+  this->DirectionCosines->SetElement(1,0,0);
+  this->DirectionCosines->SetElement(2,0,0);
+  this->DirectionCosines->SetElement(0,1,0);
+  this->DirectionCosines->SetElement(1,1,1);
+  this->DirectionCosines->SetElement(2,1,0);
 }
 
 vtkGDCMImageWriter::~vtkGDCMImageWriter()
@@ -416,8 +422,12 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   SetStringValueFromTag( this->MedicalImageProperties->GetPatientSex(), gdcm::Tag(0x0010,0x0040), ds);
   // For ex: DICOM (0010,0030) = 19680427
   SetStringValueFromTag( this->MedicalImageProperties->GetPatientBirthDate(), gdcm::Tag(0x0010,0x0030), ds);
+  // For ex: DICOM (0008,0020) = 20030617
+  SetStringValueFromTag( this->MedicalImageProperties->GetStudyDate(), gdcm::Tag(0x0008,0x0020), ds);
   // For ex: DICOM (0008,0022) = 20030617
   SetStringValueFromTag( this->MedicalImageProperties->GetAcquisitionDate(), gdcm::Tag(0x0008,0x0022), ds);
+  // For ex: DICOM (0008,0030) = 162552.0705 or 230012, or 0012
+  SetStringValueFromTag( this->MedicalImageProperties->GetStudyTime(), gdcm::Tag(0x0008,0x0030), ds);
   // For ex: DICOM (0008,0032) = 162552.0705 or 230012, or 0012
   SetStringValueFromTag( this->MedicalImageProperties->GetAcquisitionTime(), gdcm::Tag(0x0008,0x0032), ds);
   // For ex: DICOM (0008,0023) = 20030617
@@ -466,11 +476,40 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   SetStringValueFromTag( this->MedicalImageProperties->GetExposure(), gdcm::Tag(0x0018,0x1152), ds);
 
   // TODO / FIXME Window Level / Window Center
-  // ...
-  //
-  //
-  //
-  //
+  int numwl = this->MedicalImageProperties->GetNumberOfWindowLevelPresets();
+  gdcm::VR vr = gdcm::VR::DS;
+  gdcm::Element<gdcm::VR::DS,gdcm::VM::VM1_n> elwc;
+  elwc.SetLength( numwl * vr.GetSizeof() );
+  gdcm::Element<gdcm::VR::DS,gdcm::VM::VM1_n> elww;
+  elww.SetLength( numwl * vr.GetSizeof() );
+  vr = gdcm::VR::LO;
+  gdcm::Element<gdcm::VR::LO,gdcm::VM::VM1_n> elwe;
+  elwe.SetLength( numwl * vr.GetSizeof() );
+  for(int i = 0; i < numwl; ++i)
+    {
+    const double *wl = this->MedicalImageProperties->GetNthWindowLevelPreset(i);
+    elwc.SetValue( wl[0], i );
+    elww.SetValue( wl[1], i );
+    const char* we = this->MedicalImageProperties->GetNthWindowLevelPresetComment(i);
+    elwe.SetValue( we, i );
+    }
+{
+  gdcm::DataElement de = elwc.GetAsDataElement();
+  de.SetTag( gdcm::Tag(0x0028,0x1050) );
+  ds.Insert( de );
+}
+{
+  gdcm::DataElement de = elww.GetAsDataElement();
+  de.SetTag( gdcm::Tag(0x0028,0x1051) );
+  ds.Insert( de );
+}
+{
+  gdcm::DataElement de = elwe.GetAsDataElement();
+  de.SetTag( gdcm::Tag(0x0028,0x1055) );
+  ds.Insert( de );
+}
+
+
   // Let's try to fake out the SOP Class UID here:
   gdcm::MediaStorage ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
   ms.GuessFromModality( this->MedicalImageProperties->GetModality(), this->FileDimensionality ); // Will override SC only if something is found...

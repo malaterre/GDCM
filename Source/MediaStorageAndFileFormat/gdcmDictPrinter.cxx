@@ -73,17 +73,7 @@ VM GuessVMType(DataElement const &de)
         const ByteValue *bv = dynamic_cast<const ByteValue*>(&value);
         assert( bv && "not bv" );
         const char *array = bv->GetPointer();
-        unsigned int c=0;
-        if ( array ) // hum attribute could be empty. Thus cannot deduce VM, this time
-          {
-          const char *p = array;
-          const char *end = array + vl;
-          c = 1;
-          while(p != end)
-            {
-            if( *p++ == '\\' ) ++c;
-            }
-          }
+        unsigned int c = VM::GetNumberOfElementsFromArray(array, vl);
         vm = VM::GetVMTypeFromLength( c, 1 );
         }
       break;

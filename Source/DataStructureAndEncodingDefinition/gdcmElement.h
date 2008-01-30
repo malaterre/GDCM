@@ -20,6 +20,7 @@
 #include "gdcmTag.h"
 #include "gdcmVM.h"
 #include "gdcmByteValue.h"
+#include "gdcmDataElement.h"
 
 #include <string>
 #include <vector>
@@ -312,6 +313,16 @@ public:
     EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
       GetLength(),_os);
     }
+
+  DataElement GetAsDataElement() const {
+    DataElement ret;
+    std::ostringstream os;
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
+      GetLength(),os);
+    ret.SetVR( (VR::VRType)TVR );
+    ret.SetByteValue( os.str().c_str(), os.str().size() );
+    return ret;
+  }
 
   Element(const Element&_val) {
     if( this != &_val) {

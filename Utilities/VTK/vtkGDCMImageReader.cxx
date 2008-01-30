@@ -45,6 +45,12 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   // vtkMedicalImageProperties is in the parent class
   //this->FileLowerLeft = 1;
   this->DirectionCosines = vtkMatrix4x4::New();
+  this->DirectionCosines->SetElement(0,0,1);
+  this->DirectionCosines->SetElement(1,0,0);
+  this->DirectionCosines->SetElement(2,0,0);
+  this->DirectionCosines->SetElement(0,1,0);
+  this->DirectionCosines->SetElement(1,1,1);
+  this->DirectionCosines->SetElement(2,1,0);
 }
 
 vtkGDCMImageReader::~vtkGDCMImageReader()
@@ -132,8 +138,12 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
   this->MedicalImageProperties->SetPatientSex( GetStringValueFromTag( gdcm::Tag(0x0010,0x0040), ds) );
   // For ex: DICOM (0010,0030) = 19680427
   this->MedicalImageProperties->SetPatientBirthDate( GetStringValueFromTag( gdcm::Tag(0x0010,0x0030), ds) );
+  // For ex: DICOM (0008,0020) = 20030617
+  this->MedicalImageProperties->SetStudyDate( GetStringValueFromTag( gdcm::Tag(0x0008,0x0020), ds) );
   // For ex: DICOM (0008,0022) = 20030617
   this->MedicalImageProperties->SetAcquisitionDate( GetStringValueFromTag( gdcm::Tag(0x0008,0x0022), ds) );
+  // For ex: DICOM (0008,0030) = 162552.0705 or 230012, or 0012
+  this->MedicalImageProperties->SetStudyTime( GetStringValueFromTag( gdcm::Tag(0x0008,0x0030), ds) );
   // For ex: DICOM (0008,0032) = 162552.0705 or 230012, or 0012
   this->MedicalImageProperties->SetAcquisitionTime( GetStringValueFromTag( gdcm::Tag(0x0008,0x0032), ds) );
   // For ex: DICOM (0008,0023) = 20030617
@@ -187,27 +197,45 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
   // (0028,1051) DS [  1063\ 1063]                           #  12, 2 WindowWidth
   gdcm::Tag twindowcenter(0x0028,0x1050);
   gdcm::Tag twindowwidth(0x0028,0x1051);
+  gdcm::Tag twindowexplanation(0x0028,0x1055);
   if( ds.FindDataElement( twindowcenter ) && ds.FindDataElement( twindowwidth) )
     {
     const gdcm::DataElement& windowcenter = ds.GetDataElement( twindowcenter );
     const gdcm::DataElement& windowwidth = ds.GetDataElement( twindowwidth );
+    const gdcm::DataElement& windowexplanation = ds.GetDataElement( twindowexplanation );
     const gdcm::ByteValue *bvwc = windowcenter.GetByteValue();
     const gdcm::ByteValue *bvww = windowwidth.GetByteValue();
+    const gdcm::ByteValue *bvwe = windowexplanation.GetByteValue();
     if( bvwc && bvww ) // Can be Type 2
       {
       //gdcm::Attributes<0x0028,0x1050> at;
       gdcm::Element<gdcm::VR::DS,gdcm::VM::VM1_n> elwc;
       std::stringstream ss;
-      bvwc->Write<gdcm::SwapperNoOp>( ss );
-      //elwc.Read( ss );
+      std::string swc = std::string( bvwc->GetPointer(), bvwc->GetLength() );
+      ss.str( swc );
+      gdcm::VR vr = gdcm::VR::DS;
+      unsigned int vrsize = vr.GetSizeof();
+      unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swc.c_str(), swc.size());
+      elwc.SetLength( count * vrsize );
+      elwc.Read( ss );
       ss.str( "" );
+      std::string sww = std::string( bvww->GetPointer(), bvww->GetLength() );
+      ss.str( sww );
       gdcm::Element<gdcm::VR::DS,gdcm::VM::VM1_n> elww;
-      bvww->Write<gdcm::SwapperNoOp>( ss );
-      //elww.Read( ss );
-      // assert( elww.GetLength() == elwc.GetLength() );
+      elww.SetLength( count * vrsize );
+      elww.Read( ss );
+      //assert( elww.GetLength() == elwc.GetLength() );
+      gdcm::Element<gdcm::VR::LO,gdcm::VM::VM1_n> elwe; // window explanation
+      vr = gdcm::VR::LO;
+      elwe.SetLength( count * vr.GetSizeof() );
+      ss.str( "" );
+      std::string swe = std::string( bvwe->GetPointer(), bvwe->GetLength() );
+      ss.str( swe );
+      elwe.Read( ss );
       for(unsigned int i = 0; i < elwc.GetLength(); ++i)
         {
         this->MedicalImageProperties->AddWindowLevelPreset( elww.GetValue(i), elwc.GetValue(i) );
+        this->MedicalImageProperties->SetNthWindowLevelPresetComment(i, elwe.GetValue(i).c_str() );
         }
       }
     }
@@ -237,6 +265,7 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
     return 0;
     }
   const gdcm::Image &image = reader.GetImage();
+  const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
   const unsigned int *dims = image.GetDimensions();
 
   // Set the Extents.
@@ -268,24 +297,48 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
     this->DataExtent[4] = 0;
     this->DataExtent[5] = dims[2] - 1;
     }
-  const double *spacing = image.GetSpacing();
-  this->DataSpacing[0] = spacing[0];
-  this->DataSpacing[1] = spacing[1];
-  //this->DataSpacing[2] = 1.;
+  gdcm::MediaStorage ms;
+  ms.SetFromDataSet( reader.GetFile().GetDataSet() );
+  if( ms == gdcm::MediaStorage::MS_END ) // Nothing found...
+    {
+    const gdcm::ByteValue *bv = ds.GetDataElement( gdcm::Tag(0x0008,0x0060) ).GetByteValue();
+    if( bv )
+      {
+      std::string modality = std::string( bv->GetPointer(), bv->GetLength() );
+      ms.GuessFromModality( modality.c_str(), image.GetNumberOfDimensions() );
+      if( ms == gdcm::MediaStorage::MS_END )
+        {
+        // Ok giving up, you won
+        ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
+        }
+      }
+    }
+  assert( gdcm::MediaStorage::IsImage( ms ) );
+  // There is no point in adding world info to a SC object since noone but GDCM can use this info...
+  if( ms != gdcm::MediaStorage::SecondaryCaptureImageStorage )
+    {
+    const double *spacing = image.GetSpacing();
+    assert( spacing );
+    this->DataSpacing[0] = spacing[0];
+    this->DataSpacing[1] = spacing[1];
+    //this->DataSpacing[2] = 1.;
 
-  const double *origin = image.GetOrigin();
-  this->DataOrigin[0] = origin[0];
-  this->DataOrigin[1] = origin[1];
-  this->DataOrigin[2] = origin[2];
+    const double *origin = image.GetOrigin();
+    assert( origin );
+    this->DataOrigin[0] = origin[0];
+    this->DataOrigin[1] = origin[1];
+    this->DataOrigin[2] = origin[2];
 
-  const double *dircos = image.GetDirectionCosines();
-  this->DirectionCosines->SetElement(0,0, dircos[0]);
-  this->DirectionCosines->SetElement(1,0, dircos[1]);
-  this->DirectionCosines->SetElement(2,0, dircos[2]);
-  this->DirectionCosines->SetElement(0,1, dircos[3]);
-  this->DirectionCosines->SetElement(1,1, dircos[4]);
-  this->DirectionCosines->SetElement(2,1, dircos[5]);
-  // Need to set the rest to 0 ???
+    const double *dircos = image.GetDirectionCosines();
+    assert( dircos );
+    this->DirectionCosines->SetElement(0,0, dircos[0]);
+    this->DirectionCosines->SetElement(1,0, dircos[1]);
+    this->DirectionCosines->SetElement(2,0, dircos[2]);
+    this->DirectionCosines->SetElement(0,1, dircos[3]);
+    this->DirectionCosines->SetElement(1,1, dircos[4]);
+    this->DirectionCosines->SetElement(2,1, dircos[5]);
+    // Need to set the rest to 0 ???
+    }
 
   gdcm::PixelFormat pixeltype = image.GetPixelFormat();
   switch( pixeltype )
