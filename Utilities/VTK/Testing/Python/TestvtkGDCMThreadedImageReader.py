@@ -75,6 +75,7 @@ if __name__ == "__main__":
   
   # setup reader
   r = vtkgdcm.vtkGDCMThreadedImageReader()
+  r.FileLowerLeftOn()
   dir = vtkDirectory()
   
   # Did user pass in a directory:

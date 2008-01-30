@@ -15,7 +15,9 @@
 // .NAME vtkGDCMImageReader - read DICOM files
 // .SECTION Description
 // vtkGDCMImageReader is a source object that reads some DICOM files
-// bla bla
+// this reader is single threaded.
+// .SECTION Implementation note: when FileLowerLeft is set to on the image is not flipped
+// upside down as VTK would expect, use this option only if you know what you are doing
 
 // .SECTION See Also
 // vtkMedicalImageReader2 vtkMedicalImageProperties
@@ -28,6 +30,7 @@
 //BTX
 namespace gdcm { class ImageReader; }
 //ETX
+class vtkMatrix4x4;
 class VTK_EXPORT vtkGDCMImageReader : public vtkMedicalImageReader2
 {
 public:
@@ -53,6 +56,11 @@ public:
     return "DICOM";
     }
 
+  // You need to manually specify the direction the image is in to write a valid DICOM file
+  // since vtkImageData do not contains one
+  virtual void SetDirectionCosines(vtkMatrix4x4 *matrix);
+  vtkGetObjectMacro(DirectionCosines, vtkMatrix4x4);
+
 protected:
   vtkGDCMImageReader();
   ~vtkGDCMImageReader();
@@ -77,8 +85,7 @@ private:
   vtkGDCMImageReader(const vtkGDCMImageReader&);  // Not implemented.
   void operator=(const vtkGDCMImageReader&);  // Not implemented.
 
-  //PIMPL
-  //vtkGDCMImageReaderInternals *Internals;
+  vtkMatrix4x4 *DirectionCosines;
 };
 #endif
 

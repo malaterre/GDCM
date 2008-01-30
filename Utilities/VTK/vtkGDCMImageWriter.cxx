@@ -21,6 +21,7 @@
 #include "vtkInformation.h"
 #include "vtkLookupTable.h"
 #include "vtkStringArray.h"
+#include "vtkMatrix4x4.h"
 
 #if (VTK_MAJOR_VERSION < 5)
 #error Your VTK version is too old
@@ -31,6 +32,7 @@
 #include "gdcmImageWriter.h"
 #include "gdcmByteValue.h"
 #include "gdcmUIDGenerator.h"
+#include "gdcmAttribute.h"
 
 vtkCxxRevisionMacro(vtkGDCMImageWriter, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMImageWriter)
@@ -38,6 +40,7 @@ vtkStandardNewMacro(vtkGDCMImageWriter)
 vtkCxxSetObjectMacro(vtkGDCMImageWriter,LookupTable,vtkLookupTable);
 vtkCxxSetObjectMacro(vtkGDCMImageWriter,MedicalImageProperties,vtkMedicalImageProperties);
 vtkCxxSetObjectMacro(vtkGDCMImageWriter,FileNames,vtkStringArray);
+vtkCxxSetObjectMacro(vtkGDCMImageWriter,DirectionCosines,vtkMatrix4x4);
 
 vtkGDCMImageWriter::vtkGDCMImageWriter()
 {
@@ -54,6 +57,7 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
   this->MedicalImageProperties = vtkMedicalImageProperties::New();
   this->FileNames = vtkStringArray::New();
   this->UID = 0;
+  this->DirectionCosines = vtkMatrix4x4::New();
 }
 
 vtkGDCMImageWriter::~vtkGDCMImageWriter()
@@ -62,6 +66,7 @@ vtkGDCMImageWriter::~vtkGDCMImageWriter()
   this->MedicalImageProperties->Delete();
   this->FileNames->Delete();
   this->SetUID(NULL);
+  this->DirectionCosines->Delete();
 }
 //----------------------------------------------------------------------------
 int vtkGDCMImageWriter::FillInputPortInformation(
@@ -220,17 +225,20 @@ void vtkGDCMImageWriter::Write()
     int dimIndex = 2;
     int firstSlice = this->DataUpdateExtent[2*dimIndex];
     int lastSlice = this->DataUpdateExtent[2*dimIndex+1];
-    if( lastSlice - firstSlice + 1 != this->FileNames->GetNumberOfValues() )
+    if( this->FileNames->GetNumberOfValues() )
       {
-      vtkErrorMacro("Wrong number of filenames: " << this->FileNames->GetNumberOfValues() 
-        << " should be " << lastSlice - firstSlice + 1);
-      return;
+      if( lastSlice - firstSlice + 1 != this->FileNames->GetNumberOfValues() )
+        {
+        vtkErrorMacro("Wrong number of filenames: " << this->FileNames->GetNumberOfValues() 
+          << " should be " << lastSlice - firstSlice + 1);
+        return;
+        }
       }
 
     // Go through data slice-by-slice using file-order slices
     for (int slice = firstSlice; slice <= lastSlice; slice++)
       {
-      std::cerr << "Slice:" << slice << std::endl;
+      //std::cerr << "Slice:" << slice << std::endl;
       // Set the DataUpdateExtent to the slice extent we want to write
       this->DataUpdateExtent[2*dimIndex] = slice;
       this->DataUpdateExtent[2*dimIndex+1] = slice;
@@ -474,6 +482,27 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   ds.Insert( de );
 }
 
+  // I am pretty sure that for all other images it is valid to add an Image Position (Patient)
+  // and an Image Orientation (Patient)
+  if ( ms != gdcm::MediaStorage::SecondaryCaptureImageStorage )
+    {
+    // Image Position (Patient)
+    gdcm::Attribute<0x0020,0x0032> ipp = {0,0,0}; // default value
+    const double *origin = data->GetOrigin();
+    for(int i = 0; i < 3; ++i)
+      ipp.SetValue( origin[i], i );
+    ds.Insert( ipp.GetAsDataElement() );
+
+    // Image Orientation (Patient)
+    gdcm::Attribute<0x0020,0x0037> iop = {1,0,0,0,1,0}; // default value
+    const vtkMatrix4x4 *dircos = this->DirectionCosines;
+    for(int i = 0; i < 3; ++i)
+      iop.SetValue( dircos->GetElement(i,0), i );
+    for(int i = 0; i < 3; ++i)
+      iop.SetValue( dircos->GetElement(i,1), i+3 );
+    ds.Insert( iop.GetAsDataElement() );
+    }
+
   // Here come the important part: generate proper UID for Series/Study so that people knows this is the same Study/Series
   const char *uid = this->UID;
 {
@@ -487,9 +516,19 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   ds.Insert( de );
 }
 
-  int n = this->FileNames->GetNumberOfValues();
+  const char *filename = NULL;
   int i = inExt[4];
-  const char *filename = this->FileNames->GetValue(i).c_str();
+  if( this->FileNames->GetNumberOfValues() )
+  {
+    //int n = this->FileNames->GetNumberOfValues();
+    filename = this->FileNames->GetValue(i).c_str();
+  }
+  else
+  {
+    filename = this->GetFileName();
+  }
+  assert( filename );
+  
   // Let's add an Instance Number just for fun:
   std::ostringstream os;
   os << i;

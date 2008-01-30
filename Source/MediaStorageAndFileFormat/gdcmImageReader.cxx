@@ -397,6 +397,30 @@ bool ImageReader::ReadImage()
       PixelData.SetSpacing(PixelData.GetNumberOfDimensions(), spacing[PixelData.GetNumberOfDimensions()] );
       }
     }
+  // 4 2/3 Let's do Origin
+  const Tag timagepositionpatient(0x0020, 0x0032);
+  if( ds.FindDataElement( timagepositionpatient ) )
+    {
+    const DataElement& de = ds.GetDataElement( timagepositionpatient );
+    Attribute<0x0020,0x0032> at;
+    at.Set( de.GetValue() );
+    PixelData.SetOrigin( 0, at.GetValue(0));
+    PixelData.SetOrigin( 1, at.GetValue(1));
+    PixelData.SetOrigin( 2, at.GetValue(2));
+    }
+  const Tag timageorientationpatient(0x0020, 0x0037);
+  if( ds.FindDataElement( timageorientationpatient ) )
+    {
+    const DataElement& de = ds.GetDataElement( timageorientationpatient );
+    Attribute<0x0020,0x0037> at;
+    at.Set( de.GetValue() );
+    PixelData.SetDirectionCosines( 0, at.GetValue(0));
+    PixelData.SetDirectionCosines( 1, at.GetValue(1));
+    PixelData.SetDirectionCosines( 2, at.GetValue(2));
+    PixelData.SetDirectionCosines( 3, at.GetValue(3));
+    PixelData.SetDirectionCosines( 4, at.GetValue(4));
+    PixelData.SetDirectionCosines( 5, at.GetValue(5));
+    }
 
   // 5. Photometric Interpretation
   // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]

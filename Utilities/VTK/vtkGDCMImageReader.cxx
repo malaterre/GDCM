@@ -22,6 +22,7 @@
 #include "vtkStreamingDemandDrivenPipeline.h"
 #include "vtkMedicalImageProperties.h"
 #include "vtkStringArray.h"
+#include "vtkMatrix4x4.h"
 
 #include "gdcmImageReader.h"
 #include "gdcmDataElement.h"
@@ -32,11 +33,7 @@
 
 vtkCxxRevisionMacro(vtkGDCMImageReader, "$Revision: 1.1 $");
 vtkStandardNewMacro(vtkGDCMImageReader);
-
-//struct vtkGDCMImageReaderInternals
-//{
-//  gdcm::ImageReader DICOMReader;
-//};
+vtkCxxSetObjectMacro(vtkGDCMImageReader,DirectionCosines,vtkMatrix4x4);
 
 vtkGDCMImageReader::vtkGDCMImageReader()
 {
@@ -47,11 +44,13 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   // vtkDataArray has an internal vtkLookupTable why not used it ?
   // vtkMedicalImageProperties is in the parent class
   //this->FileLowerLeft = 1;
+  this->DirectionCosines = vtkMatrix4x4::New();
 }
 
 vtkGDCMImageReader::~vtkGDCMImageReader()
 {
   //delete this->Internals;
+  this->DirectionCosines->Delete();
 }
 
 void vtkGDCMImageReader::ExecuteInformation()
@@ -274,6 +273,20 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
   this->DataSpacing[1] = spacing[1];
   //this->DataSpacing[2] = 1.;
 
+  const double *origin = image.GetOrigin();
+  this->DataOrigin[0] = origin[0];
+  this->DataOrigin[1] = origin[1];
+  this->DataOrigin[2] = origin[2];
+
+  const double *dircos = image.GetDirectionCosines();
+  this->DirectionCosines->SetElement(0,0, dircos[0]);
+  this->DirectionCosines->SetElement(1,0, dircos[1]);
+  this->DirectionCosines->SetElement(2,0, dircos[2]);
+  this->DirectionCosines->SetElement(0,1, dircos[3]);
+  this->DirectionCosines->SetElement(1,1, dircos[4]);
+  this->DirectionCosines->SetElement(2,1, dircos[5]);
+  // Need to set the rest to 0 ???
+
   gdcm::PixelFormat pixeltype = image.GetPixelFormat();
   switch( pixeltype )
     {
@@ -338,7 +351,7 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
   return 1;
 }
 
-int LoadSingleFile(const char *filename, int *dext, char *pointer)
+int LoadSingleFile(const char *filename, int *dext, char *pointer, bool filelowerleft)
 {
   gdcm::ImageReader reader;
   reader.SetFileName( filename );
@@ -357,20 +370,28 @@ int LoadSingleFile(const char *filename, int *dext, char *pointer)
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
   //std::cerr << "dext: " << dext[2] << " " << dext[3] << std::endl;
   //std::cerr << "dext: " << dext[4] << " " << dext[5] << std::endl;
-  //memcpy(pointer, tempimage, len);
-  for(int j = dext[4]; j <= dext[5]; ++j)
-  {
-    //std::cerr << j << std::endl;
-    for(int i = dext[2]; i <= dext[3]; ++i)
+
+  // If user overrides this flag, he/she wants image upside down
+  if (filelowerleft)
+    {
+    memcpy(pointer, tempimage, len);
+    }
+  else
+    {
+    for(int j = dext[4]; j <= dext[5]; ++j)
       {
-      //memcpy(pointer, tempimage+i*outsize, outsize);
-      //memcpy(pointer, tempimage+(this->DataExtent[3] - i)*outsize, outsize);
-      //memcpy(pointer, tempimage+(i+j*(dext[3]+1))*outsize, outsize);
-      memcpy(pointer,
-        tempimage+((dext[3] - i)+j*(dext[3]+1))*outsize, outsize);
-      pointer += outsize;
+      //std::cerr << j << std::endl;
+      for(int i = dext[2]; i <= dext[3]; ++i)
+        {
+        //memcpy(pointer, tempimage+i*outsize, outsize);
+        //memcpy(pointer, tempimage+(this->DataExtent[3] - i)*outsize, outsize);
+        //memcpy(pointer, tempimage+(i+j*(dext[3]+1))*outsize, outsize);
+        memcpy(pointer,
+          tempimage+((dext[3] - i)+j*(dext[3]+1))*outsize, outsize);
+        pointer += outsize;
+        }
       }
-  }
+    }
   delete[] tempimage;
 
   return 1; // success
@@ -414,7 +435,7 @@ int vtkGDCMImageReader::RequestData(vtkInformation *vtkNotUsed(request),
   if( this->FileName )
     {
     const char *filename = this->FileName;
-    LoadSingleFile( filename, dext, pointer );
+    LoadSingleFile( filename, dext, pointer, this->FileLowerLeft );
     return 1;
     }
   else
@@ -446,21 +467,26 @@ int vtkGDCMImageReader::RequestData(vtkInformation *vtkNotUsed(request),
     long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
     //std::cerr << "dext: " << dext[2] << " " << dext[3] << std::endl;
     //std::cerr << "dext: " << dext[4] << " " << dext[5] << std::endl;
-#if 0
-    memcpy(pointer, tempimage, len);
-    pointer += len;
-#else
-    //std::cerr << j << std::endl;
-    for(int i = dext[2]; i <= dext[3]; ++i)
+
+    // If user overrides this flag, he/she wants image upside down
+    if (this->FileLowerLeft)
       {
-      //memcpy(pointer, tempimage+i*outsize, outsize);
-      //memcpy(pointer, tempimage+(this->DataExtent[3] - i)*outsize, outsize);
-      //memcpy(pointer, tempimage+(i+j*(dext[3]+1))*outsize, outsize);
-      memcpy(pointer,
-        tempimage+((dext[3] - i)+j*(dext[3]+1))*outsize, outsize);
-      pointer += outsize;
+      memcpy(pointer, tempimage, len);
+      pointer += len;
       }
-#endif
+    else
+      {
+      //std::cerr << j << std::endl;
+      for(int i = dext[2]; i <= dext[3]; ++i)
+        {
+        //memcpy(pointer, tempimage+i*outsize, outsize);
+        //memcpy(pointer, tempimage+(this->DataExtent[3] - i)*outsize, outsize);
+        //memcpy(pointer, tempimage+(i+j*(dext[3]+1))*outsize, outsize);
+        memcpy(pointer,
+          tempimage+((dext[3] - i)+j*(dext[3]+1))*outsize, outsize);
+        pointer += outsize;
+        }
+      }
     delete[] tempimage;
     }
 

@@ -16,6 +16,7 @@ INCLUDE_DIRECTORIES(
   ${GDCM_SOURCE_DIR}/Source/Common
   ${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition
   ${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat
+  ${GDCM_SOURCE_DIR}/Source/DataDictionary
   )
 
 # List the kits from VTK that are needed by this project.

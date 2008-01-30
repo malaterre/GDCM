@@ -81,7 +81,14 @@ public:
   void SetSpacing(unsigned int idx, double spacing);
 
   const double *GetOrigin() const;
+  double GetOrigin(unsigned int idx) const;
   void SetOrigin(double *ori);
+  void SetOrigin(unsigned int idx, double ori);
+
+  const double *GetDirectionCosines() const;
+  double GetDirectionCosines(unsigned int idx) const;
+  void SetDirectionCosines(double *dircos);
+  void SetDirectionCosines(unsigned int idx, double dircos);
 
   void Print(std::ostream &os) const;
 
@@ -152,6 +159,7 @@ private:
   std::vector<unsigned int> Dimensions;
   std::vector<double> Spacing;
   std::vector<double> Origin;
+  std::vector<double> DirectionCosines;
 
   PixelFormat PF;
   PhotometricInterpretation PI;

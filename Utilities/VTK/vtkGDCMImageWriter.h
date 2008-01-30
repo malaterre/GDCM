@@ -14,13 +14,14 @@
 =========================================================================*/
 // .NAME vtkGDCMImageWriter - write DICOM files
 // .SECTION Description
-// vtkGDCMImageWriter is
-// bla bla
-// TODO: vtkLookupTable is not taken into account...
+// vtkGDCMImageWriter is a sink object that write DICOM files
+// this writer is single threaded
 //
-// NOTE:
-// We are not using the usual API SetFilePrefix / SetFilePattern, but instead a list of filenames...
-
+// .SECTION FIXME vtkLookupTable is not taken into account...
+//
+// .SECTION NOTE We are not using the usual API SetFilePrefix / SetFilePattern, 
+// but instead a list of filenames: see SetFileNames
+//
 // .SECTION See Also
 // vtkImageWriter vtkMedicalImageProperties
 
@@ -32,6 +33,7 @@
 class vtkLookupTable;
 class vtkMedicalImageProperties;
 class vtkStringArray;
+class vtkMatrix4x4;
 class VTK_EXPORT vtkGDCMImageWriter : public vtkImageWriter
 {
 public:
@@ -61,8 +63,10 @@ public:
   virtual const char* GetDescriptiveName() {
     return "DICOM"; }
 
-  //virtual void SetDirectionCosines(vtkMatrix4x4 *matrix);
-  //vtkGetObjectMacro(DirectionCosines, vtkMatrix4x4);
+  // You need to manually specify the direction the image is in to write a valid DICOM file
+  // since vtkImageData do not contains one
+  virtual void SetDirectionCosines(vtkMatrix4x4 *matrix);
+  vtkGetObjectMacro(DirectionCosines, vtkMatrix4x4);
 
   //vtkSetMacro(RescaleSlope, double);
   //vtkGetMacro(RescaleSlope, double);
@@ -105,6 +109,7 @@ private:
   int DataUpdateExtent[6];
 
   vtkStringArray *FileNames;
+  vtkMatrix4x4 *DirectionCosines;
 };
 
 #endif

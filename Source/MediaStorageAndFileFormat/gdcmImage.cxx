@@ -128,7 +128,18 @@ void Image::SetSpacing(unsigned int idx, double spacing)
 
 const double *Image::GetOrigin() const
 {
+  assert( NumberOfDimensions );
   return &Origin[0];
+}
+
+double Image::GetOrigin(unsigned int idx) const
+{
+  assert( NumberOfDimensions );
+  if( idx < Origin.size() )
+    {
+    return Origin[idx];
+    }
+  return 0; // FIXME ???
 }
 
 void Image::SetOrigin(double *ori)
@@ -136,6 +147,38 @@ void Image::SetOrigin(double *ori)
   assert( NumberOfDimensions );
   Origin = std::vector<double>(ori, 
     ori+NumberOfDimensions);
+}
+
+void Image::SetOrigin(unsigned int idx, double ori)
+{
+  Origin.resize( idx + 1 );
+  Origin[idx] = ori;
+}
+
+const double *Image::GetDirectionCosines() const
+{
+  assert( NumberOfDimensions );
+  return &DirectionCosines[0];
+}
+double Image::GetDirectionCosines(unsigned int idx) const
+{
+  assert( NumberOfDimensions );
+  if( idx < DirectionCosines.size() )
+    {
+    return DirectionCosines[idx];
+    }
+  return 0; // FIXME !!
+}
+void Image::SetDirectionCosines(double *dircos)
+{
+  assert( NumberOfDimensions );
+  Origin = std::vector<double>(dircos, 
+    dircos+6);
+}
+void Image::SetDirectionCosines(unsigned int idx, double dircos)
+{
+  DirectionCosines.resize( idx + 1 );
+  DirectionCosines[idx] = dircos;
 }
 
 unsigned long Image::GetBufferLength() const

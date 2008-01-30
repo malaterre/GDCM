@@ -12,12 +12,19 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-// .NAME vtkGDCMThreadedImageReader - read DICOM files
+// .NAME vtkGDCMThreadedImageReader - read DICOM files with multiple threads
 // .SECTION Description
 // vtkGDCMThreadedImageReader is a source object that reads some DICOM files
-// bla bla
-// .SECTION FIXME
-// For now I am doing a memcpy, without doing the Y-flip to please VTK !
+// This reader is threaded. Meaning that on a multiple core CPU with N cpu, it will
+// read approx N times faster than when reading in a single thread.
+//
+// .SECTION Implementation note: when FileLowerLeft is set to on the image is not flipped
+// upside down as VTK would expect, use this option only if you know what you are doing
+//
+// .SECTION FIXME: need to implement the other mode where FileLowerLeft is set to OFF
+//
+// .SECTION FIXME: you need to call SetFileName when reading a volume file (multiple slices DICOM)
+// since SetFileNames expect each single file to be single slice (see parent class)
 
 // .SECTION See Also
 // vtkMedicalImageReader2 vtkMedicalImageProperties

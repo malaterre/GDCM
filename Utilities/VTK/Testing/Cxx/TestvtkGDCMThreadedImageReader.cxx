@@ -134,6 +134,7 @@ template <typename TReader>
 int TestvtkGDCMThreadedImageRead(const char *filename)
 {
   TReader *reader = TReader::New();
+  reader->FileLowerLeftOn();
   //reader->CanReadFile( filename );
   std::cerr << "Reading : " << filename << std::endl;
 

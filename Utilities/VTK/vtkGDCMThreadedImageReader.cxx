@@ -211,6 +211,13 @@ int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
   // Ok let's fill in the 'extra' info:
   //FillMedicalImageInformation(reader);
 
+  // This reader only implement case where image is flipped upside down
+  if( !this->FileLowerLeft )
+    {
+    vtkErrorMacro( "You need to set the FileLowerLeft flag to On" );
+    return 0;
+    }
+
   // For now only handles series:
   if( !this->FileNames && !this->FileName )
     {
