@@ -199,12 +199,13 @@ int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
       img->Delete();
       }
     vtkInformation *outInfo = outputVector->GetInformationObject(i);
-    outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(),
-      DataExtent[0], DataExtent[1], DataExtent[2], DataExtent[3], DataExtent[4], DataExtent[5]);
+    outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), DataExtent, 6);
+    //outInfo->Set(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), DataExtent, 6);
 
-    vtkDataObject::SetPointDataActiveScalarInfo(outInfo, this->DataScalarType, this->NumberOfScalarComponents);
     outInfo->Set(vtkDataObject::SPACING(), this->DataSpacing, 3);
     outInfo->Set(vtkDataObject::ORIGIN(), this->DataOrigin, 3);
+
+    vtkDataObject::SetPointDataActiveScalarInfo(outInfo, this->DataScalarType, this->NumberOfScalarComponents);
     }
 
   // Ok let's fill in the 'extra' info:
@@ -221,12 +222,12 @@ int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
 
 struct threadparams
 {
-  const char **filenames; // array of filenames thread will process
-  unsigned int nfiles; // number of files the thread will process
-  char *scalarpointer; // start of the image buffer affected to the thread
-  unsigned long len; // This is not required but useful to check if files are consistant
-  unsigned long totalfiles; // total number of files being processed (needed to compute progress)
-  pthread_mutex_t lock; // critial section for updating progress
+  const char **filenames;             // array of filenames thread will process (order is important!)
+  unsigned int nfiles;                // number of files the thread will process
+  char *scalarpointer;                // start of the image buffer affected to the thread
+  unsigned long len;                  // This is not required but useful to check if files are consistant
+  unsigned long totalfiles;           // total number of files being processed (needed to compute progress)
+  pthread_mutex_t lock;               // critial section for updating progress
   vtkGDCMThreadedImageReader *reader; // needed for calling updateprogress
 };
 
@@ -430,6 +431,7 @@ int vtkGDCMThreadedImageReader::RequestData(vtkInformation *vtkNotUsed(request),
   int *dext = this->GetDataExtent();
   if( this->FileNames )
     {
+    // Make sure that each file is single slice
     assert( dext[5] - dext[4] == this->FileNames->GetNumberOfValues() - 1 );
     const unsigned int nfiles = this->FileNames->GetNumberOfValues();
     const char **filenames = new const char* [ nfiles ];
@@ -443,6 +445,7 @@ int vtkGDCMThreadedImageReader::RequestData(vtkInformation *vtkNotUsed(request),
     }
   else if( this->FileName )
     {
+    // File can be a volume
     const char *filename = this->FileName;
     ReadFiles(1, &filename);
     }

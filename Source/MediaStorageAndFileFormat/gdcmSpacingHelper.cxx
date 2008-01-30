@@ -99,6 +99,12 @@ std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
       break;
       }
     }
+  else
+    {
+    sp.push_back( 1.0 );
+    sp.push_back( 1.0 );
+    }
+  assert( sp.size() == 2 );
   // Do Z:
   Tag zspacingtag = SpacingHelper::GetZSpacingTagFromMediaStorage(ms);
   if( zspacingtag != Tag(0xffff,0xffff) && ds.FindDataElement( zspacingtag ) )
@@ -132,7 +138,12 @@ std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
       break;
       }
     }
+  else
+    {
+    sp.push_back( 1.0 );
+    }
 
+  assert( sp.size() == 3 );
   return sp;
 }
 
