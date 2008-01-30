@@ -17,7 +17,7 @@ from vtk import vtkStringArray
 from vtk import vtkDirectory
 from vtk import vtkStructuredPointsWriter
 from vtk.util import vtkConstants as vtkType
-import libvtkgdcmPython as vtkgdcm
+import vtkgdcm
 import os,sys
 
 def PrintProgress(object, event):

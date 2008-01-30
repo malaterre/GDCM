@@ -13,7 +13,7 @@
 #
 ############################################################################
 
-import libvtkgdcmPython as vtkgdcm
+import vtkgdcm
 import os,sys
 
 def PrintProgress(object, event):
