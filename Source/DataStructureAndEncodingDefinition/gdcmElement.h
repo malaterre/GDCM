@@ -316,11 +316,14 @@ public:
 
   DataElement GetAsDataElement() const {
     DataElement ret;
-    std::ostringstream os;
-    EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
-      GetLength(),os);
     ret.SetVR( (VR::VRType)TVR );
-    ret.SetByteValue( os.str().c_str(), os.str().size() );
+    if( Internal )
+      {
+      std::ostringstream os;
+      EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
+        GetLength(),os);
+      ret.SetByteValue( os.str().c_str(), os.str().size() );
+      }
     return ret;
   }
 

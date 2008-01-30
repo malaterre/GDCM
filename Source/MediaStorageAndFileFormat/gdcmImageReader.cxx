@@ -82,7 +82,7 @@ bool ImageReader::Read()
     // Good it's the easy case. It's declared as an Image:
     gdcmDebugMacro( "Sweet ! Finally a good DICOM file !" );
     //PixelData.SetCompressionFromTransferSyntax( ts );
-    res = ReadImage();
+    res = ReadImage(ms);
     }
   else
     {
@@ -117,7 +117,7 @@ bool ImageReader::Read()
           
     //PixelData.SetCompressionFromTransferSyntax( ts );
           //PixelData.SetCompressionType( Compression::RAW );
-          res = ReadImage();
+          res = ReadImage(ms2);
           }
         else
           {
@@ -148,7 +148,14 @@ bool ImageReader::Read()
           // it is. Since there is Pixel Data element, let's try to read
           // that as a buggy DICOM Image file...
           //PixelData.SetCompressionType( Compression::RAW );
-          res = ReadImage();
+          MediaStorage ms3 = MediaStorage::SecondaryCaptureImageStorage;
+          const gdcm::ByteValue *bv = ds.GetDataElement( gdcm::Tag(0x0008,0x0060) ).GetByteValue();
+          if( bv ) 
+            {
+            std::string modality = std::string( bv->GetPointer(), bv->GetLength() );
+            ms3.GuessFromModality( modality.c_str() );
+            }
+          res = ReadImage(ms3);
           }
         else
           {
@@ -276,7 +283,7 @@ void DoOverlays(const DataSet& ds, ImageValue& pixeldata)
     }
 }
 
-bool ImageReader::ReadImage()
+bool ImageReader::ReadImage(MediaStorage const &ms)
 {
   const DataSet &ds = F->GetDataSet();
   TransferSyntax::NegociatedType type; // = ds.GetNegociatedType();
@@ -403,21 +410,21 @@ bool ImageReader::ReadImage()
     {
     const DataElement& de = ds.GetDataElement( timagepositionpatient );
     Attribute<0x0020,0x0032> at;
-    at.Set( de.GetValue() );
+    at.SetByteValue( de.GetByteValue() );
     PixelData.SetOrigin( 0, at.GetValue(0));
     PixelData.SetOrigin( 1, at.GetValue(1));
     PixelData.SetOrigin( 2, at.GetValue(2));
     }
   else
     {
-    assert( 0 && "TODO" ); // technically should only happen in SC
+    gdcmDebugMacro( "No Image Position (Patient) for ms=" << ms );
     }
   const Tag timageorientationpatient(0x0020, 0x0037);
   if( ds.FindDataElement( timageorientationpatient ) )
     {
     const DataElement& de = ds.GetDataElement( timageorientationpatient );
     Attribute<0x0020,0x0037> at;
-    at.Set( de.GetValue() );
+    at.SetByteValue( de.GetByteValue() );
     PixelData.SetDirectionCosines( 0, at.GetValue(0));
     PixelData.SetDirectionCosines( 1, at.GetValue(1));
     PixelData.SetDirectionCosines( 2, at.GetValue(2));
@@ -427,7 +434,7 @@ bool ImageReader::ReadImage()
     }
   else
     {
-    assert( 0 && "TODO" ); // technically should only happen in SC
+    gdcmDebugMacro( "No Image Orientation (Patient) for ms=" << ms );
     }
 
   // 5. Photometric Interpretation
@@ -603,7 +610,7 @@ bool ImageReader::ReadACRNEMAImage()
     {
     const DataElement& de = ds.GetDataElement( timagedimensions );
     Attribute<0x0028,0x0005> at;
-    at.Set( de.GetValue() );
+    at.SetByteValue( de.GetByteValue() );
     unsigned short imagedimensions = at.GetValue();
     assert( imagedimensions == ReadSSFromTag( timagedimensions, ss, conversion ) );
     if ( imagedimensions == 3 )
@@ -612,7 +619,7 @@ bool ImageReader::ReadACRNEMAImage()
       // D 0028|0012 [US] [Planes] [262]
       const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0012) );
       Attribute<0x0028,0x0012> at;
-      at.Set( de.GetValue() );
+      at.SetByteValue( de.GetByteValue() );
       PixelData.SetDimension(2, at.GetValue() );
       assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0012), ss, conversion ) );
       }
@@ -636,7 +643,7 @@ bool ImageReader::ReadACRNEMAImage()
     {
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
     Attribute<0x0028,0x0011> at;
-    at.Set( de.GetValue() );
+    at.SetByteValue( de.GetByteValue() );
     PixelData.SetDimension(0, at.GetValue() );
     assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0011), ss, conversion ) );
     }
@@ -645,7 +652,7 @@ bool ImageReader::ReadACRNEMAImage()
     {
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
     Attribute<0x0028,0x0010> at;
-    at.Set( de.GetValue() );
+    at.SetByteValue( de.GetByteValue() );
     PixelData.SetDimension(1, at.GetValue() );
     assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
     }
@@ -690,7 +697,7 @@ bool ImageReader::ReadACRNEMAImage()
     {
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
     Attribute<0x0028,0x0100> at;
-    at.Set( de.GetValue() );
+    at.SetByteValue( de.GetByteValue() );
     pf.SetBitsAllocated( at.GetValue() );
     assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
     }
@@ -699,7 +706,7 @@ bool ImageReader::ReadACRNEMAImage()
     {
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
     Attribute<0x0028,0x0101> at;
-    at.Set( de.GetValue() );
+    at.SetByteValue( de.GetByteValue() );
     pf.SetBitsStored( at.GetValue() );
     assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
     }
@@ -708,7 +715,7 @@ bool ImageReader::ReadACRNEMAImage()
     {
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
     Attribute<0x0028,0x0102> at;
-    at.Set( de.GetValue() );
+    at.SetByteValue( de.GetByteValue() );
     pf.SetHighBit( at.GetValue() );
     assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
     }
@@ -717,7 +724,7 @@ bool ImageReader::ReadACRNEMAImage()
     {
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
     Attribute<0x0028,0x0103> at;
-    at.Set( de.GetValue() );
+    at.SetByteValue( de.GetByteValue() );
     pf.SetPixelRepresentation( at.GetValue() );
     assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
     }
@@ -733,7 +740,7 @@ bool ImageReader::ReadACRNEMAImage()
     {
     const DataElement& de = ds.GetDataElement( tpixelspacing );
     Attribute<0x0028,0x0030> at;
-    at.Set( de.GetValue() );
+    at.SetByteValue( de.GetByteValue() );
     PixelData.SetSpacing( 0, at.GetValue(0));
     PixelData.SetSpacing( 1, at.GetValue(1));
     }
@@ -742,24 +749,17 @@ bool ImageReader::ReadACRNEMAImage()
   if( ds.FindDataElement( timageposition) )
     {
     const DataElement& de = ds.GetDataElement( timageposition);
-    Attribute<0x0020,0x0030> at;
-    at.Set( de.GetValue() );
-    PixelData.SetOrigin( 0, at.GetValue(0));
-    PixelData.SetOrigin( 1, at.GetValue(1));
-    PixelData.SetOrigin( 2, at.GetValue(2));
+    Attribute<0x0020,0x0030> at = {};
+    at.SetByteValue( de.GetByteValue() );
+    PixelData.SetOrigin( at.GetBytes() );
     }
   const Tag timageorientation(0x0020, 0x0035);
   if( ds.FindDataElement( timageorientation) )
     {
     const DataElement& de = ds.GetDataElement( timageorientation);
-    Attribute<0x0020,0x0035> at;
-    at.Set( de.GetValue() );
-    PixelData.SetDirectionCosines( 0, at.GetValue(0));
-    PixelData.SetDirectionCosines( 1, at.GetValue(1));
-    PixelData.SetDirectionCosines( 2, at.GetValue(2));
-    PixelData.SetDirectionCosines( 3, at.GetValue(3));
-    PixelData.SetDirectionCosines( 4, at.GetValue(4));
-    PixelData.SetDirectionCosines( 5, at.GetValue(5));
+    Attribute<0x0020,0x0035> at = {1,0,0,0,1,0};
+    at.SetByteValue( de.GetByteValue() );
+    PixelData.SetDirectionCosines( at.GetBytes() );
     }
 
   // 5. Do the PixelData

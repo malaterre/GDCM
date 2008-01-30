@@ -37,6 +37,7 @@ namespace gdcm
  * 
  */
 class ByteValue;
+class MediaStorage;
 class GDCM_EXPORT ImageReader : public Reader
 {
 public:
@@ -51,7 +52,7 @@ public:
 
 protected:
   const ByteValue* GetPointerFromElement(Tag const &tag) const;
-  bool ReadImage();
+  bool ReadImage(MediaStorage const &ms);
   bool ReadACRNEMAImage();
   
   // ugliest thing ever:

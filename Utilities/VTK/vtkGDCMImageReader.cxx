@@ -197,44 +197,57 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
   // (0028,1051) DS [  1063\ 1063]                           #  12, 2 WindowWidth
   gdcm::Tag twindowcenter(0x0028,0x1050);
   gdcm::Tag twindowwidth(0x0028,0x1051);
-  gdcm::Tag twindowexplanation(0x0028,0x1055);
   if( ds.FindDataElement( twindowcenter ) && ds.FindDataElement( twindowwidth) )
     {
     const gdcm::DataElement& windowcenter = ds.GetDataElement( twindowcenter );
     const gdcm::DataElement& windowwidth = ds.GetDataElement( twindowwidth );
-    const gdcm::DataElement& windowexplanation = ds.GetDataElement( twindowexplanation );
     const gdcm::ByteValue *bvwc = windowcenter.GetByteValue();
     const gdcm::ByteValue *bvww = windowwidth.GetByteValue();
-    const gdcm::ByteValue *bvwe = windowexplanation.GetByteValue();
     if( bvwc && bvww ) // Can be Type 2
       {
       //gdcm::Attributes<0x0028,0x1050> at;
       gdcm::Element<gdcm::VR::DS,gdcm::VM::VM1_n> elwc;
-      std::stringstream ss;
+      std::stringstream ss1;
       std::string swc = std::string( bvwc->GetPointer(), bvwc->GetLength() );
-      ss.str( swc );
+      ss1.str( swc );
       gdcm::VR vr = gdcm::VR::DS;
       unsigned int vrsize = vr.GetSizeof();
       unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swc.c_str(), swc.size());
       elwc.SetLength( count * vrsize );
-      elwc.Read( ss );
-      ss.str( "" );
+      elwc.Read( ss1 );
+      std::stringstream ss2;
       std::string sww = std::string( bvww->GetPointer(), bvww->GetLength() );
-      ss.str( sww );
+      ss2.str( sww );
       gdcm::Element<gdcm::VR::DS,gdcm::VM::VM1_n> elww;
       elww.SetLength( count * vrsize );
-      elww.Read( ss );
+      elww.Read( ss2 );
       //assert( elww.GetLength() == elwc.GetLength() );
-      gdcm::Element<gdcm::VR::LO,gdcm::VM::VM1_n> elwe; // window explanation
-      vr = gdcm::VR::LO;
-      elwe.SetLength( count * vr.GetSizeof() );
-      ss.str( "" );
-      std::string swe = std::string( bvwe->GetPointer(), bvwe->GetLength() );
-      ss.str( swe );
-      elwe.Read( ss );
       for(unsigned int i = 0; i < elwc.GetLength(); ++i)
         {
         this->MedicalImageProperties->AddWindowLevelPreset( elww.GetValue(i), elwc.GetValue(i) );
+        }
+      }
+    }
+  gdcm::Tag twindowexplanation(0x0028,0x1055);
+  if( ds.FindDataElement( twindowexplanation ) )
+    {
+    const gdcm::DataElement& windowexplanation = ds.GetDataElement( twindowexplanation );
+    const gdcm::ByteValue *bvwe = windowexplanation.GetByteValue();
+    if( bvwe ) // Can be Type 2
+      {
+      int n = this->MedicalImageProperties->GetNumberOfWindowLevelPresets();
+      gdcm::Element<gdcm::VR::LO,gdcm::VM::VM1_n> elwe; // window explanation
+      gdcm::VR vr = gdcm::VR::LO;
+      std::stringstream ss;
+      ss.str( "" );
+      std::string swe = std::string( bvwe->GetPointer(), bvwe->GetLength() );
+      unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swe.c_str(), swe.size());
+      assert( count == n );
+      elwe.SetLength( count * vr.GetSizeof() );
+      ss.str( swe );
+      elwe.Read( ss );
+      for(int i = 0; i < n; ++i)
+        {
         this->MedicalImageProperties->SetNthWindowLevelPresetComment(i, elwe.GetValue(i).c_str() );
         }
       }

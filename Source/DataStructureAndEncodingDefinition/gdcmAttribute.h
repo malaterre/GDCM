@@ -34,7 +34,7 @@ struct void_;
 // Declaration, also serve as forward declaration
 template<int T> class VRVLSize;
 
-// Implementation when VL is codec on 16 bits:
+// Implementation when VL is coded on 16 bits:
 template<> class VRVLSize<0> {
 public:
   static inline uint16_t Read(std::istream &_is) {
@@ -46,7 +46,7 @@ public:
   static inline void Write(std::ostream &_os)  {
     }
 };
-// Implementation when VL is codec on 32 bits:
+// Implementation when VL is coded on 32 bits:
 template<> class VRVLSize<1> {
 public:
   static inline uint32_t Read(std::istream &_is) {
@@ -63,9 +63,9 @@ public:
 };
 
 template<uint16_t Group, uint16_t Element, 
-	 int TVR = TagToType<Group, Element>::VRType, 
-	 int TVM = TagToType<Group, Element>::VMType,
-	 typename SQAttribute = void_ >
+	 int TVR = TagToType<Group, Element>::VRType, // can the user override this value ? 
+	 int TVM = TagToType<Group, Element>::VMType, // can the user override this value ?
+	 typename SQAttribute = void_ > // if only I had variadic template...
 class Attribute
 {
 public:
@@ -73,51 +73,56 @@ public:
   enum { VMType = VMToLength<TVM>::Length };
   VRType Internal[VMToLength<TVM>::Length];
 
-  unsigned long GetLength() const {
+  unsigned int GetNumberOfValues() const {
+    return VMToLength<TVM>::Length;
+  }
+  unsigned int GetLength() const {
     return VMToLength<TVM>::Length;
   }
   // Implementation of Print is common to all Mode (ASCII/Binary)
   // TODO: Can we print a \ when in ASCII...well I don't think so
   // it would mean we used a bad VM then, right ?
-  void Print(std::ostream &_os) const {
-    _os << Tag(Group, Element) << " ";
-    _os << VR((VR::VRType)TVR) << " ";
-    _os << Internal[0]; // VM is at least garantee to be one
-    for(int i=1; i<VMToLength<TVM>::Length; ++i)
-      _os << "," << Internal[i];
+  void Print(std::ostream &os) const {
+    os << GetTag() << " ";
+    os << GetVR() << " ";
+    os << Internal[0]; // VM is at least garantee to be one
+    for(unsigned int i=1; i<GetNumberOfValues(); ++i)
+      os << "," << Internal[i];
     }
 
   //uint16_t GetGroup() const { return Group; }
   //uint16_t GetElement() const { return Element; }
   Tag GetTag() const { return Tag(Group,Element); }
+  VR  GetVR() const { return (VR::VRType)TVR; }
 
   DataElement GetAsDataElement() const {
-    DataElement ret( Tag(Group,Element) );
+    DataElement ret( GetTag() );
     std::ostringstream os;
     EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
-      GetLength(),os);
-    ret.SetVR( (VR::VRType)TVR );
+      GetNumberOfValues(),os);
+    ret.SetVR( GetVR() );
+    assert( ret.GetVR() != VR::SQ );
     ret.SetByteValue( os.str().c_str(), os.str().size() );
     return ret;
   }
 
   // copy:
-  VRType GetValue(int idx = 0) {
-    assert( idx < VMToLength<TVM>::Length );
+  VRType GetValue(unsigned int idx = 0) {
+    assert( idx < GetNumberOfValues() );
     return Internal[idx];
   }
   // const reference
-  VRType const &GetValue(int idx = 0) const {
-    assert( idx < VMToLength<TVM>::Length );
+  VRType const &GetValue(unsigned int idx = 0) const {
+    assert( idx < GetNumberOfValues() );
     return Internal[idx];
   }
   void SetValue(VRType v, unsigned int idx = 0) {
-    assert( idx < VMToLength<TVM>::Length );
+    assert( idx < GetNumberOfValues() );
     Internal[idx] = v;
   }
-  void Set(Value const &v) {
-    const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
-    assert( bv ); // That would be bad...
+  //void Set(const Value &bv) { abort(); }
+  void SetByteValue(const ByteValue *bv) {
+    if( !bv ) return; // That would be bad...
     assert( bv->GetPointer() && bv->GetLength() ); // [123]C element can be empty
     //memcpy(Internal, bv->GetPointer(), bv->GetLength());
     std::stringstream ss;
@@ -126,27 +131,28 @@ public:
     EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
       GetLength(),ss);
   }
-  void SetBytes(const VRType* array, unsigned long numel = VMType ) {
-    assert( array && numel && numel <= GetLength() );
+  void SetBytes(const VRType* array, unsigned int numel = VMType ) {
+    assert( array && numel && numel == GetNumberOfValues() );
     memcpy(Internal, array, numel * sizeof(VRType) );
-    // should I fill with 0 the remaining
-    assert( numel == GetLength() ); // for now disable array smaller ...
   }
   const VRType* GetBytes() const {
     return Internal;
   }
+#if 0 // TODO  FIXME the implicit way:
+  // explicit:
   void Read(std::istream &_is) {
-    uint16_t cref[] = { Group, Element };
+    const uint16_t cref[] = { Group, Element };
     uint16_t c[2];
-    _is.read((char*)&c, 4);
+    _is.read((char*)&c, sizeof(c));
+    assert( c[0] == cref[0] && c[1] == cref[1] );
     char vr[2];
     _is.read(vr, 2); // Check consistency ?
     const uint32_t lref = GetLength() * sizeof( typename VRToType<TVR>::Type );
     uint32_t l = VRVLSize< (TVR & VR::VL32) >::Read(_is);
     l /= sizeof( typename VRToType<TVR>::Type );
-     return EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+    return EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
       l,_is);
-    }
+  }
   void Write(std::ostream &_os) const {
     uint16_t c[] = { Group, Element };
     _os.write((char*)&c, 4);
@@ -155,7 +161,6 @@ public:
     return EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
       GetLength(),_os);
     }
-#if 0 // TODO  FIXME
   void Read(std::istream &_is) {
     uint16_t cref[] = { Group, Element };
     uint16_t c[2];

@@ -66,6 +66,20 @@ std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
   std::vector<double> sp;
   MediaStorage ms;
   ms.SetFromDataSet(ds);
+  if( ms == gdcm::MediaStorage::MS_END ) // Nothing found...
+    {
+    const gdcm::ByteValue *bv = ds.GetDataElement( gdcm::Tag(0x0008,0x0060) ).GetByteValue();
+    if( bv )
+      {
+      std::string modality = std::string( bv->GetPointer(), bv->GetLength() );
+      ms.GuessFromModality( modality.c_str() );
+      if( ms == gdcm::MediaStorage::MS_END )
+        {
+        // Ok giving up, you won
+        ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
+        }
+      }
+    }
   assert( MediaStorage::IsImage( ms ) );
 
   Tag spacingtag = GetSpacingTagFromMediaStorage(ms);

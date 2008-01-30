@@ -31,7 +31,6 @@ SET(DSED_TEST_SRCS
   TestElement2
   TestElement4
   TestElement5
-  TestAttribute
   )
 
 OPTION(SHARED_PTR "shared_ptr" OFF)

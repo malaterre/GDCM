@@ -37,7 +37,7 @@ int TestReader2(int argc, char *argv[])
   //a1.Print( std::cout );
 
   gdcm::Attribute<0x0020,0x0037> a2;
-  a2.Set( ds[ gdcm::Tag(0x0020,0x0037) ].GetValue() );
+  a2.SetByteValue( ds[ gdcm::Tag(0x0020,0x0037) ].GetByteValue() );
   a2.Print( std::cout );
   std::cout << std::endl;
 

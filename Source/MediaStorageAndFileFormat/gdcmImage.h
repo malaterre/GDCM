@@ -77,17 +77,19 @@ public:
   // TODO does this really belong here ?
   const double *GetSpacing() const;
   double GetSpacing(unsigned int idx) const;
-  void SetSpacing(double *spacing);
+  void SetSpacing(const double *spacing);
   void SetSpacing(unsigned int idx, double spacing);
 
   const double *GetOrigin() const;
   double GetOrigin(unsigned int idx) const;
-  void SetOrigin(double *ori);
+  void SetOrigin(const float *ori);
+  void SetOrigin(const double *ori);
   void SetOrigin(unsigned int idx, double ori);
 
   const double *GetDirectionCosines() const;
   double GetDirectionCosines(unsigned int idx) const;
-  void SetDirectionCosines(double *dircos);
+  void SetDirectionCosines(const float *dircos);
+  void SetDirectionCosines(const double *dircos);
   void SetDirectionCosines(unsigned int idx, double dircos);
 
   void Print(std::ostream &os) const;

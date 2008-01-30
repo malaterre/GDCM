@@ -134,6 +134,17 @@ bool ImageWriter::Write()
     de.SetByteValue( modality, strlen(modality) );
     ds.Insert( de );
     }
+  else
+    {
+    const ByteValue *bv = ds.GetDataElement( Tag(0x0008, 0x0060 ) ).GetByteValue();
+    std::string modality2 = std::string( bv->GetPointer(), bv->GetLength() );
+    if( modality2 != ms.GetModality() )
+      {
+      DataElement de( Tag(0x0008, 0x0060 ) );
+      de.SetByteValue( ms.GetModality(), strlen(ms.GetModality()) );
+      ds.Replace( de );
+      }
+    }
   if( !ds.FindDataElement( Tag(0x0008, 0x0064) ) )
     {
     if( ms == MediaStorage::SecondaryCaptureImageStorage )
