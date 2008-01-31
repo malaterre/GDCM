@@ -1856,11 +1856,11 @@ This file was generated using the following commands:
   <entry group="0074" element="1042" vr="SQ" vm="1" name="General Machine Verification Sequence"/>
   <entry group="0074" element="1044" vr="SQ" vm="1" name="Conventional Machine Verification Sequence"/>
   <entry group="0074" element="1046" vr="SQ" vm="1" name="Ion Machine Verification Sequence"/>
-  <entry group="0074" element="1048" vr="SQ" vm="1-n" name="Failed Attributes Sequence"/>
-  <entry group="0074" element="104a" vr="SQ" vm="1-n" name="Overridden Attributes Sequence"/>
+  <entry group="0074" element="1048" vr="SQ" vm="1" name="Failed Attributes Sequence"/>
+  <entry group="0074" element="104a" vr="SQ" vm="1" name="Overridden Attributes Sequence"/>
   <entry group="0074" element="104c" vr="SQ" vm="1" name="Conventional Control Point Verification Sequence"/>
   <entry group="0074" element="104e" vr="SQ" vm="1" name="Ion Control Point Verification Sequence"/>
-  <entry group="0074" element="1050" vr="SQ" vm="1-n" name="Attribute Occurrence Sequence"/>
+  <entry group="0074" element="1050" vr="SQ" vm="1" name="Attribute Occurrence Sequence"/>
   <entry group="0074" element="1052" vr="AT" vm="1" name="Attribute Occurrence Pointer"/>
   <entry group="0074" element="1054" vr="UL" vm="1" name="Attribute Item Selector"/>
   <entry group="0074" element="1056" vr="LO" vm="1" name="Attribute Occurrence Private Creator"/>
