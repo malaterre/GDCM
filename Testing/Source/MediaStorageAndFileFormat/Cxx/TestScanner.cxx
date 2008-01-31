@@ -19,12 +19,15 @@
 
 int TestScanner(int argc, char *argv[])
 {
-  (void)argc;
-  (void)argv;
-  
+  if( argc < 2 )
+    {
+    std::cerr << "Need a directory" << std::endl;
+    return 1;
+    }
   gdcm::Directory d;
   unsigned int nfiles = d.Load( argv[1] );
   d.Print( std::cout );
+  std::cout << "done retrieving file list" << std::endl;
 
   gdcm::Scanner s;
   gdcm::Tag t1(0x0020,0x000d);
@@ -32,6 +35,11 @@ int TestScanner(int argc, char *argv[])
   s.AddTag( t1 );
   s.AddTag( t2 );
   bool b = s.Scan( d.GetFilenames() );
+  if( !b )
+    {
+    std::cerr << "Scanner failed" << std::endl;
+    return 1;
+    }
   s.Print( std::cout );
 
   return 0;
