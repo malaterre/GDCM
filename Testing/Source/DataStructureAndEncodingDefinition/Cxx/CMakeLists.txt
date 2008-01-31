@@ -1,7 +1,8 @@
 # Define the tests for Data Structure and Encoding Definitions
 # DSED
 SET(DSED_TEST_SRCS
-	#TestAttribute
+	TestAttribute
+	#TestAttributeWriteFile
   #TestReadPatientName
   TestByteBuffer
   #TestByteValue

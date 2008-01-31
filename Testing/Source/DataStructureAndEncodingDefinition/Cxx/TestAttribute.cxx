@@ -14,117 +14,109 @@
 =========================================================================*/
 #include "gdcmAttribute.h"
 
-/*
-  (0008,0000) UL 38                        
-  (0008,0001) UL 262302                    
-  (0008,0010) LO [ACRNEMA_LIBIDO_1.1]      
-  (0028,0000) UL 100                       
-  (0028,0005) US 2                         
-  (0028,0010) US 512                       
-  (0028,0011) US 512                       
-  (0028,0015) ?? 00\00                     
-  (0028,0016) ?? 00\00                     
-  (0028,0100) US 8                         
-  (0028,0101) US 8                         
-  (0028,0102) US 7                         
-  (0028,0103) US 0                         
-  (0028,0199) ?? 70\00                     
-  (7fe0,0000) UL 262152                    
-  (7fe0,0010) OW ea00\eaea\e9e9\e9e9\e9e9\e
-*/
+#include <limits>
+#include <math.h> // fabs
 
+int TestAttributeAE() { return 0; }
+int TestAttributeAS() { return 0; }
+int TestAttributeAT() { return 0; }
+int TestAttributeCS() { return 0; }
+int TestAttributeDA() { return 0; }
 
-struct dummy {
-  int  u;
-  char v[5];
-};
+int TestAttributeDS()
+{
+  // (0008,0008) CS [DERIVED\PRIMARY\AXIAL]                  #  22, 3 ImageType
+  // (0020,0032) DS [-158.135803\-179.035797\-75.699997]     #  34, 3 ImagePositionPatient
+  const float values[] = {-158.135803,-179.035797,-75.699997};
+  const float newvalues[] = {12.34,56.78,90.0};
+  const unsigned int numvalues = sizeof(values) / sizeof(values[0]);
+
+  gdcm::Attribute<0x0020,0x0032> ipp = {-158.135803,-179.035797,-75.699997};
+  // FIXME HARDCODED:
+  if( ipp.GetVM() != gdcm::VM::VM3 ) return 1;
+  if( ipp.GetVR() != gdcm::VR::DS ) return 1;
+  // END FIXME
+  if( ipp.GetNumberOfValues() != numvalues ) return 1;
+
+  for(unsigned int i = 0; i < numvalues; ++i)
+    if( fabs(ipp.GetValue(i) - values[i]) > std::numeric_limits<float>::epsilon() ) return 1;
+
+  ipp.Print( std::cout );
+  std::cout << std::endl;
+
+  gdcm::DataElement de = ipp.GetAsDataElement();
+  std::cout << de << std::endl;
+
+  // new values:
+  ipp.SetValues( newvalues );
+  if( ipp.GetNumberOfValues() != numvalues ) return 1;
+    
+  for(unsigned int i = 0; i < numvalues; ++i)
+    if( fabs(ipp.GetValue(i) - newvalues[i]) > std::numeric_limits<float>::epsilon() ) return 1;
+
+  ipp.Print( std::cout );
+  std::cout << std::endl;
+
+  de = ipp.GetAsDataElement();
+  std::cout << de << std::endl;
+
+  return 0;
+}
+
+int TestAttributeDT() { return 0; }
+int TestAttributeFL() { return 0; }
+int TestAttributeFD() { return 0; }
+int TestAttributeIS() { return 0; }
+int TestAttributeLO() { return 0; }
+int TestAttributeLT() { return 0; }
+int TestAttributeOB() { return 0; }
+int TestAttributeOF() { return 0; }
+int TestAttributeOW() { return 0; }
+int TestAttributePN() { return 0; }
+int TestAttributeSH() { return 0; }
+int TestAttributeSL() { return 0; }
+int TestAttributeSQ() { return 0; }
+int TestAttributeSS() { return 0; }
+int TestAttributeST() { return 0; }
+int TestAttributeTM() { return 0; }
+int TestAttributeUI() { return 0; }
+int TestAttributeUL() { return 0; }
+int TestAttributeUN() { return 0; }
+int TestAttributeUS() { return 0; }
+int TestAttributeUT() { return 0; }
+ 
 
 int TestAttribute(int argc, char *argv[])
 {
-  
-  dummy du = { 2, "date" };
+  int numerrors = 0;
+  numerrors += TestAttributeAE();
+  numerrors += TestAttributeAS();
+  numerrors += TestAttributeAT();
+  numerrors += TestAttributeCS();
+  numerrors += TestAttributeDA();
+  numerrors += TestAttributeDS();
+  numerrors += TestAttributeDT();
+  numerrors += TestAttributeFL();
+  numerrors += TestAttributeFD();
+  numerrors += TestAttributeIS();
+  numerrors += TestAttributeLO();
+  numerrors += TestAttributeLT();
+  numerrors += TestAttributeOB();
+  numerrors += TestAttributeOF();
+  numerrors += TestAttributeOW();
+  numerrors += TestAttributePN();
+  numerrors += TestAttributeSH();
+  numerrors += TestAttributeSL();
+  numerrors += TestAttributeSQ();
+  numerrors += TestAttributeSS();
+  numerrors += TestAttributeST();
+  numerrors += TestAttributeTM();
+  numerrors += TestAttributeUI();
+  numerrors += TestAttributeUL();
+  numerrors += TestAttributeUN();
+  numerrors += TestAttributeUS();
+  numerrors += TestAttributeUT();
 
-  const char *filename;
-  if( argc < 2 )
-    {
-    filename = "/tmp/dummy.dcm";
-    }
-  else
-    {
-    filename = argv[1];
-    }
-  std::ofstream os(filename);
-
-  //gdcm::Attribute<0x0008,0x0000, gdcm::VR::UL, gdcm::VM::VM1> a = { 38 };
-  gdcm::Attribute<0x0008,0x0000> a = { 38 };
-  a.Print( std::cout << std::endl );
-  a.Write(os);
-  gdcm::Attribute<0x0008,0x0001, gdcm::VR::UL, gdcm::VM::VM1> b = { 262302 };
-  b.Print( std::cout << std::endl );
-  b.Write(os);
-  gdcm::Attribute<0x0008,0x0010, gdcm::VR::LO, gdcm::VM::VM1> c = { "ACRNEMA_LIBIDO_1.1" };
-  c.Print( std::cout << std::endl );
-  c.Write(os);
-
-// 0008 0082 SQ 1 Institution Code Sequence
-  gdcm::Attribute<0x0008,0x0082, gdcm::VR::SQ, gdcm::VM::VM1,
-    gdcm::Attribute<0x0008,0x0080, gdcm::VR::LO>
-	  > sq = {
-  "Institution Name"
-	  };
-  sq.Print( std::cout << std::endl );
-  sq.Write(os);
-
-  gdcm::Attribute<0x0028,0x0000, gdcm::VR::UL, gdcm::VM::VM1> d = { 100 };
-  d.Print( std::cout << std::endl );
-  d.Write(os);
-  gdcm::Attribute<0x0028,0x0005, gdcm::VR::US, gdcm::VM::VM1> e = { 2 };
-  e.Print( std::cout << std::endl );
-  e.Write(os);
-  gdcm::Attribute<0x0028,0x0010, gdcm::VR::US, gdcm::VM::VM1> f = { 512 };
-  f.Print( std::cout << std::endl );
-  f.Write(os);
-  gdcm::Attribute<0x0028,0x0011, gdcm::VR::US, gdcm::VM::VM1> g = { 512 };
-  g.Print( std::cout << std::endl );
-  g.Write(os);
- 
-// 0028 0015 US 1 UsedNbX ACR Special (RET)
-// 0028 0016 US 1 UsedNbY ACR Special (RET)
-
-  gdcm::Attribute<0x0028,0x0015, gdcm::VR::US, gdcm::VM::VM1> h = { 0 };
-  h.Print( std::cout << std::endl );
-  h.Write(os);
-  gdcm::Attribute<0x0028,0x0016, gdcm::VR::US, gdcm::VM::VM1> i = { 0 };
-  i.Print( std::cout << std::endl );
-  i.Write(os);
-  gdcm::Attribute<0x0028,0x0100, gdcm::VR::US, gdcm::VM::VM1> j = { 8 };
-  j.Print( std::cout << std::endl );
-  j.Write(os);
-  gdcm::Attribute<0x0028,0x0101, gdcm::VR::US, gdcm::VM::VM1> k = { 8 };
-  k.Print( std::cout << std::endl );
-  k.Write(os);
-  gdcm::Attribute<0x0028,0x0102, gdcm::VR::US, gdcm::VM::VM1> l = { 7 };
-  l.Print( std::cout << std::endl );
-  l.Write(os);
-  gdcm::Attribute<0x0028,0x0103, gdcm::VR::US, gdcm::VM::VM1> m = { 0 };
-  m.Print( std::cout << std::endl );
-  m.Write(os);
-// 0028 0199 US 1 Special Code (RET)
-  gdcm::Attribute<0x0028,0x0199, gdcm::VR::US, gdcm::VM::VM1> n = { 112 };
-  n.Print( std::cout << std::endl );
-  n.Write(os);
-  gdcm::Attribute<0x7fe0,0x0000, gdcm::VR::UL, gdcm::VM::VM1> o = { 262152 };
-  o.Print( std::cout << std::endl );
-  o.Write(os);
-  gdcm::Attribute<0x7fe0,0x0010, gdcm::VR::OW, gdcm::VM::VM1> p;
-  //
-  char bytes[512*512] = {};
-  p.SetBytes(bytes, 512*512);
-  p.Print( std::cout << std::endl );
-  p.Write(os);
-
-  os.close();
-
-  return 0;
+  return numerrors;
 }
 
