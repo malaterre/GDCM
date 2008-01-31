@@ -71,6 +71,8 @@ public:
   void SetLoadMode(LoadModeType lmtype) {}
   void Load() { Read(); }
 
+  bool ReadUpToTag(const Tag & tag);
+
 protected:
   bool ReadPreamble();
   bool ReadMetaInformation();

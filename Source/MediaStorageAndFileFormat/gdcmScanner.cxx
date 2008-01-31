@@ -30,6 +30,10 @@ void Scanner::AddTag( Tag const & t )
 
 bool Scanner::Scan( Directory::FilenamesType const & filenames )
 {
+  TagsType::const_reverse_iterator it1 = Tags.rbegin();
+  const Tag & last = *it1;
+  assert( last == Tag(0x0020,0x000e) );
+
   Directory::FilenamesType::const_iterator it = filenames.begin();
   for(; it != filenames.end(); ++it)
     {
@@ -39,7 +43,7 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
     bool read = false;
     try
       {
-      read = reader.Read();
+      read = reader.ReadUpToTag(last);
       }
     catch(std::exception & ex)
       {
