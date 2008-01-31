@@ -162,19 +162,19 @@ void Overlay::Update(const DataElement & de)
   else if( de.GetTag().GetElement() == 0x0010 ) // OverlayRows
     {
     Attribute<0x6000,0x0010> at;
-    at.SetByteValue( de.GetByteValue() );
+    at.SetFromDataElement( de );
     SetRows( at.GetValue() );
     }
   else if( de.GetTag().GetElement() == 0x0011 ) // OverlayColumns
     {
     Attribute<0x6000,0x0011> at;
-    at.SetByteValue( de.GetByteValue() );
+    at.SetFromDataElement( de );
     SetColumns( at.GetValue() );
     }
   else if( de.GetTag().GetElement() == 0x0015 ) // NumberOfFramesInOverlay
     {
     Attribute<0x6000,0x0015> at;
-    at.SetByteValue( de.GetByteValue() );
+    at.SetFromDataElement( de );
     SetNumberOfFrames( at.GetValue() );
     }
   else if( de.GetTag().GetElement() == 0x0022 ) // OverlayDescription
@@ -192,13 +192,13 @@ void Overlay::Update(const DataElement & de)
   else if( de.GetTag().GetElement() == 0x0050 ) // OverlayOrigin
     {
     Attribute<0x6000,0x0050> at;
-    at.SetByteValue( de.GetByteValue() );
+    at.SetFromDataElement( de );
     SetOrigin( at.GetValues() );
     }
   else if( de.GetTag().GetElement() == 0x0051 ) // ImageFrameOrigin
     {
     Attribute<0x6000,0x0051> at;
-    at.SetByteValue( de.GetByteValue() );
+    at.SetFromDataElement( de );
     SetFrameOrigin( at.GetValue() );
     }
   else if( de.GetTag().GetElement() == 0x0060 ) // OverlayCompressionCode (RET)
@@ -208,7 +208,7 @@ void Overlay::Update(const DataElement & de)
   else if( de.GetTag().GetElement() == 0x0100 ) // OverlayBitsAllocated
     {
     Attribute<0x6000,0x0100> at;
-    at.SetByteValue( de.GetByteValue() );
+    at.SetFromDataElement( de );
     if( at.GetValue() != 1 )
       {
       gdcmWarningMacro( "Unsuported OverlayBitsAllocated: " << at.GetValue() );
@@ -218,7 +218,7 @@ void Overlay::Update(const DataElement & de)
   else if( de.GetTag().GetElement() == 0x0102 ) // OverlayBitPosition
     {
     Attribute<0x6000,0x0102> at;
-    at.SetByteValue( de.GetByteValue() );
+    at.SetFromDataElement( de );
     if( at.GetValue() != 0 ) // For old ACR when using unused bits...
       {
       gdcmWarningMacro( "Unsuported OverlayBitPosition: " << at.GetValue() );

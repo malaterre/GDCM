@@ -180,6 +180,8 @@ public:
 
   unsigned int GetSize() const;
 
+  bool Compatible(VR const &vr) const;
+
 private:
   // Internal function that map a VRType to an index in the VRStrings table
   static int GetIndex(VRType vr);

@@ -92,17 +92,6 @@ public:
   VR  GetVR() const { return (VR::VRType)TVR; }
   VM  GetVM() const { return (VM::VMType)TVM; }
 
-  DataElement GetAsDataElement() const {
-    DataElement ret( GetTag() );
-    std::ostringstream os;
-    EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
-      GetNumberOfValues(),os);
-    ret.SetVR( GetVR() );
-    assert( ret.GetVR() != VR::SQ );
-    ret.SetByteValue( os.str().c_str(), os.str().size() );
-    return ret;
-  }
-
   // copy:
   ArrayType GetValue(unsigned int idx = 0) {
     assert( idx < GetNumberOfValues() );
@@ -117,17 +106,6 @@ public:
     assert( idx < GetNumberOfValues() );
     Internal[idx] = v;
   }
-  //void Set(const Value &bv) { abort(); }
-  void SetByteValue(const ByteValue *bv) {
-    if( !bv ) return; // That would be bad...
-    assert( bv->GetPointer() && bv->GetLength() ); // [123]C element can be empty
-    //memcpy(Internal, bv->GetPointer(), bv->GetLength());
-    std::stringstream ss;
-    std::string s = std::string( bv->GetPointer(), bv->GetLength() );
-    ss.str( s );
-    EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
-      GetNumberOfValues(),ss);
-  }
   void SetValues(const ArrayType* array, unsigned int numel = VMType ) {
     assert( array && numel && numel == GetNumberOfValues() );
     // std::copy is smarted than a memcpy, and will call memcpy when POD type
@@ -135,6 +113,44 @@ public:
   }
   const ArrayType* GetValues() const {
     return Internal;
+  }
+
+  // API to talk to the run-time layer: gdcm::DataElement
+  DataElement GetAsDataElement() const {
+    DataElement ret( GetTag() );
+    std::ostringstream os;
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
+      GetNumberOfValues(),os);
+    ret.SetVR( GetVR() );
+    assert( ret.GetVR() != VR::SQ );
+    ret.SetByteValue( os.str().c_str(), os.str().size() );
+    return ret;
+  }
+
+  void SetFromDataElement(DataElement const &de) {
+    // This is kind of hackish but since I do not generate other element than the first one: 0x6000 I should be ok:
+    assert( GetTag() == de.GetTag() || GetTag().GetGroup() == 0x6000 );
+    assert( GetVR().Compatible( de.GetVR() ) ); // In case of VR::INVALID cannot use the & operator
+    const ByteValue *bv = de.GetByteValue();
+    SetByteValue(bv);
+  }
+protected:
+  void SetByteValue(const ByteValue *bv) {
+    if( !bv ) return; // That would be bad...
+    assert( bv->GetPointer() && bv->GetLength() ); // [123]C element can be empty
+    //if( VRToEncoding<TVR>::Mode == VR::BINARY )
+    //  {
+    //  // always do a copy !
+    //  SetValues(bv->GetPointer(), bv->GetLength());
+    //  }
+    //else
+      {
+      std::stringstream ss;
+      std::string s = std::string( bv->GetPointer(), bv->GetLength() );
+      ss.str( s );
+      EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+        GetNumberOfValues(),ss);
+      }
   }
 #if 0 // TODO  FIXME the implicit way:
   // explicit:
@@ -263,12 +279,13 @@ public:
     assert( idx < GetNumberOfValues() );
     return Internal[idx];
   }
-  void SetValue(ArrayType v, unsigned int idx = 0) {
+  void SetValue(unsigned int idx, ArrayType v) {
     assert( idx < GetNumberOfValues() );
     Internal[idx] = v;
   }
-  void SetByteValue(const ByteValue *bv) { abort(); }
+  void SetValue(ArrayType v) { SetValue(0, v); }
 
+  void SetByteValue(const ByteValue *bv) { abort(); }
 
 private:
   ArrayType *Internal;

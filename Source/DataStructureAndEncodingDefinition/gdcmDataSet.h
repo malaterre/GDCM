@@ -141,6 +141,7 @@ public:
     return *it;
     }
   const DataElement& operator[] (const Tag &t) const { return GetDataElement(t); }
+  const DataElement& operator() (uint16_t group, uint16_t element) const { return GetDataElement( Tag(group,element) ); }
 
   std::string GetPrivateCreator(const Tag &t) const;
 

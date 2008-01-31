@@ -22,7 +22,7 @@ int verify()
   // avoid INVALID = 0
   for(int i = 1; i < 27; ++i)
     {
-    gdcm::VR::VRType t = (gdcm::VR::VRType)(1 << i);
+    gdcm::VR t = (gdcm::VR::VRType)(1 << i);
     if( gdcm::VR::IsASCII( t ) != gdcm::VR::IsASCII2( t ) )
       {
       std::cerr << t << std::endl;
@@ -40,7 +40,7 @@ int verify()
 int TestValue()
 {
   int k = 0;
-  gdcm::VR::VRType vr;
+  gdcm::VR vr;
   vr = gdcm::VR::INVALID; // = 0,
   if( (int)vr != 0 )
     return 1;
@@ -65,10 +65,10 @@ int TestValue()
   vr = gdcm::VR::DT; // = 64,
   if( (int)vr != (1 << k++) )
     return 1;
-  vr = gdcm::VR::FL; // = 128,
+  vr = gdcm::VR::FD; // = 256,
   if( (int)vr != (1 << k++) )
     return 1;
-  vr = gdcm::VR::FD; // = 256,
+  vr = gdcm::VR::FL; // = 128,
   if( (int)vr != (1 << k++) )
     return 1;
   vr = gdcm::VR::IS; // = 512,
@@ -134,7 +134,7 @@ int TestVR(int, char *[])
   if( TestValue() )
     return 1;
 
-  gdcm::VR::VRType vr = gdcm::VR::INVALID;
+  gdcm::VR vr = gdcm::VR::INVALID;
   const char *inv = gdcm::VR::GetVRString(vr);
   std::cout << 0 << "," << inv << std::endl;
   int i;
@@ -164,7 +164,7 @@ int TestVR(int, char *[])
   if( s != gdcm::VR::GetVRString(vr))
     return 1;
   std::string s2 = "OB or OW";
-  gdcm::VR::VRType ob_ow = gdcm::VR::OB_OW;
+  gdcm::VR ob_ow = gdcm::VR::OB_OW;
   vr = gdcm::VR::GetVRType(s2.c_str());
   if( vr != ob_ow )
     return 1;
@@ -187,7 +187,7 @@ int TestVR(int, char *[])
   if( t != 0 )
     return 1;
 
-  s = "INVALID"; //invalid
+  s = "??"; //invalid
   vr = gdcm::VR::GetVRType(s.c_str());
   if( vr != gdcm::VR::INVALID)
     return 1;
@@ -197,6 +197,21 @@ int TestVR(int, char *[])
   vr = gdcm::VR::GetVRType(s.c_str());
   if( vr == gdcm::VR::US )
     return 1;
+
+
+  // Let's check the & operator
+{
+  gdcm::VR vr;
+  vr = gdcm::VR::OB;
+  if( !( vr.Compatible( gdcm::VR::OB_OW ) ) )
+    {
+    return 1;
+    }
+  if( !( vr.Compatible( gdcm::VR::INVALID) ) )
+    {
+    return 1;
+    }
+}
 
   // Make sure VR::UT is the last valid VR that can be found in a file:
   //if( gdcm::VR::OB_OW <= gdcm::VR::UT ) return 1;

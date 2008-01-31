@@ -54,6 +54,10 @@ int TestDataSet(int , char *[])
   std::cout << "Print Dataset:" << std::endl;
   std::cout << ds << std::endl;
 
+  const gdcm::DataElement &de1 =  ds[ gdcm::Tag(0x0020,0x0037) ];
+  const gdcm::DataElement &de2 =  ds(0x0020,0x0037);
+  if( &de1 != &de2 ) return 1;
+
   return 0;
 }
 
