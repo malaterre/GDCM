@@ -149,7 +149,11 @@ bool ImageReader::Read()
           // that as a buggy DICOM Image file...
           //PixelData.SetCompressionType( Compression::RAW );
           MediaStorage ms3 = MediaStorage::SecondaryCaptureImageStorage;
-          const gdcm::ByteValue *bv = ds.GetDataElement( gdcm::Tag(0x0008,0x0060) ).GetByteValue();
+          const gdcm::ByteValue *bv = NULL;
+          if( ds.FindDataElement( Tag(0x0008,0x0060) ) )
+            {
+            bv = ds.GetDataElement( Tag(0x0008,0x0060) ).GetByteValue();
+            }
           if( bv ) 
             {
             std::string modality = std::string( bv->GetPointer(), bv->GetLength() );

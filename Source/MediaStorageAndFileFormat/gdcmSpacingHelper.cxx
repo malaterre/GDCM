@@ -68,7 +68,11 @@ std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
   ms.SetFromDataSet(ds);
   if( ms == gdcm::MediaStorage::MS_END ) // Nothing found...
     {
-    const gdcm::ByteValue *bv = ds.GetDataElement( gdcm::Tag(0x0008,0x0060) ).GetByteValue();
+    const gdcm::ByteValue *bv = NULL;
+    if( ds.FindDataElement( gdcm::Tag(0x0008,0x0060) ) )
+      {
+      bv = ds.GetDataElement( gdcm::Tag(0x0008,0x0060) ).GetByteValue();
+      }
     if( bv )
       {
       std::string modality = std::string( bv->GetPointer(), bv->GetLength() );
@@ -78,6 +82,10 @@ std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
         // Ok giving up, you won
         ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
         }
+      }
+    else
+      {
+        ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
       }
     }
   assert( MediaStorage::IsImage( ms ) );

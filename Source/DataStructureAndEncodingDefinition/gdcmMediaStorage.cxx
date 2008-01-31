@@ -226,7 +226,12 @@ void MediaStorage::SetFromDataSet(DataSet const &ds)
     std::string sopclassuid_str(
       sopclassuid->GetPointer(),
       sopclassuid->GetLength() );
-    assert( sopclassuid_str.find( ' ' ) == std::string::npos );
+    if( sopclassuid_str.find( ' ' ) != std::string::npos )
+      {
+      gdcmWarningMacro( "UI contains a space character discarding" );
+      std::string::size_type pos = sopclassuid_str.find_last_of(' ');
+      sopclassuid_str = sopclassuid_str.substr(0,pos);
+      }
     MediaStorage ms = MediaStorage::GetMSType(sopclassuid_str.c_str());
     assert( ms != MS_END );
     MSField = ms;
