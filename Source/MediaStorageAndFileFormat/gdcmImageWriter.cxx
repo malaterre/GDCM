@@ -158,7 +158,11 @@ bool ImageWriter::Write()
     }
 
   // Spacing:
-  SpacingHelper::SetSpacingValue(ds, PixelData.GetSpacing());
+  std::vector<double> sp;
+  sp[0] = PixelData.GetSpacing()[0];
+  sp[1] = PixelData.GetSpacing()[1];
+  sp[2] = PixelData.GetSpacing()[2]; // might be a dummy value...
+  SpacingHelper::SetSpacingValue(ds, sp);
 
   // UIDs:
   // (0008,0018) UI [1.3.6.1.4.1.5962.1.1.1.1.3.20040826185059.5457] #  46, 1 SOPInstanceUID

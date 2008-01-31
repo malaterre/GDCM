@@ -755,7 +755,7 @@ bool ImageReader::ReadACRNEMAImage()
     const DataElement& de = ds.GetDataElement( timageposition);
     Attribute<0x0020,0x0030> at = {};
     at.SetByteValue( de.GetByteValue() );
-    PixelData.SetOrigin( at.GetBytes() );
+    PixelData.SetOrigin( at.GetValues() );
     }
   const Tag timageorientation(0x0020, 0x0035);
   if( ds.FindDataElement( timageorientation) )
@@ -763,7 +763,7 @@ bool ImageReader::ReadACRNEMAImage()
     const DataElement& de = ds.GetDataElement( timageorientation);
     Attribute<0x0020,0x0035> at = {1,0,0,0,1,0};
     at.SetByteValue( de.GetByteValue() );
-    PixelData.SetDirectionCosines( at.GetBytes() );
+    PixelData.SetDirectionCosines( at.GetValues() );
     }
 
   // 5. Do the PixelData

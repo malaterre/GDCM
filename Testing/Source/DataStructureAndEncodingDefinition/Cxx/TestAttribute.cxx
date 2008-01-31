@@ -20,12 +20,83 @@
 int TestAttributeAE() { return 0; }
 int TestAttributeAS() { return 0; }
 int TestAttributeAT() { return 0; }
-int TestAttributeCS() { return 0; }
+
+int TestAttributeCS()
+{ 
+  // (0008,9007) CS [ORIGINAL\PRIMARY\T1\NONE]               #  24, 4 FrameType
+  static const char* values[] = {"ORIGINAL","PRIMARY","T1","NONE"};
+  static const char* newvalues[] = {"DERIVED","SECONDARY","T2","ALL"}; 
+  const unsigned int numvalues = sizeof(values) / sizeof(values[0]);
+  if( numvalues != 4 ) return 1;
+
+  gdcm::Attribute<0x0008,0x9007> it = {"ORIGINAL","PRIMARY","T1","NONE"};
+  // FIXME HARDCODED:
+  if( it.GetVM() != gdcm::VM::VM4 ) return 1;
+  if( it.GetVR() != gdcm::VR::CS ) return 1;
+  // END FIXME
+
+  if( it.GetNumberOfValues() != numvalues ) return 1;
+
+  for(unsigned int i = 0; i < numvalues; ++i)
+    if( it.GetValue(i) != values[i] ) return 1;
+
+  it.Print( std::cout );
+  std::cout << std::endl;
+
+  gdcm::DataElement de = it.GetAsDataElement();
+  std::cout << de << std::endl;
+
+  // new values:
+  // Using implicit cstor of gdcm::String from const char *
+  for(unsigned int i = 0; i < numvalues; ++i)
+    it.SetValue( newvalues[i], i );
+  if( it.GetNumberOfValues() != numvalues ) return 1;
+    
+  for(unsigned int i = 0; i < numvalues; ++i)
+    if( it.GetValue(i) != newvalues[i] ) return 1;
+
+  // const char * is not a gdcm::String, need an array of gdcm::String
+  static const gdcm::String newvalues2[] = {"DERIVED","SECONDARY","T2","ALL"}; 
+  const unsigned int numnewvalues2 = sizeof(newvalues2) / sizeof(newvalues2[0]);
+  it.SetValues( newvalues2 );
+
+  it.Print( std::cout );
+  std::cout << std::endl;
+
+  de = it.GetAsDataElement();
+  std::cout << de << std::endl;
+ 
+  // (0008,0008) CS [DERIVED\PRIMARY\AXIAL]                  #  22, 3 ImageType
+  gdcm::Attribute<0x0008,0x0008> it1;
+  if( it1.GetVM() != gdcm::VM::VM2_n )
+    {
+    std::cerr << "Wrong VM:" << it1.GetVM() << std::endl;
+    return 1;
+    }
+  it1.SetValues( newvalues2, numnewvalues2 );
+
+  it1.Print( std::cout );
+  std::cout << std::endl;
+
+  de = it1.GetAsDataElement();
+  std::cout << de << std::endl;
+
+  // redo the same but this time copy the values:
+  it1.SetValues( newvalues2, numnewvalues2, true );
+
+  it1.Print( std::cout );
+  std::cout << std::endl;
+
+  de = it1.GetAsDataElement();
+  std::cout << de << std::endl;
+
+  return 0; 
+}
+
 int TestAttributeDA() { return 0; }
 
 int TestAttributeDS()
 {
-  // (0008,0008) CS [DERIVED\PRIMARY\AXIAL]                  #  22, 3 ImageType
   // (0020,0032) DS [-158.135803\-179.035797\-75.699997]     #  34, 3 ImagePositionPatient
   const float values[] = {-158.135803,-179.035797,-75.699997};
   const float newvalues[] = {12.34,56.78,90.0};
@@ -66,7 +137,23 @@ int TestAttributeDS()
 int TestAttributeDT() { return 0; }
 int TestAttributeFL() { return 0; }
 int TestAttributeFD() { return 0; }
-int TestAttributeIS() { return 0; }
+int TestAttributeIS()
+{ 
+  // <entry group="0018" element="1182" vr="IS" vm="1-2" name="Focal Distance"/>
+  // This case is slightly more complex it is up to the user to say what is the VM:
+  gdcm::Attribute<0x0018,0x1182, gdcm::VR::IS, gdcm::VM::VM1> fd1 = {0};
+  if( fd1.GetVM() != gdcm::VM::VM1 ) return 1;
+
+  gdcm::Attribute<0x0018,0x1182, gdcm::VR::IS, gdcm::VM::VM2> fd2 = {0,1};
+  if( fd2.GetVM() != gdcm::VM::VM2 ) return 1;
+
+  // FIXME: this one should not be allowed:
+  gdcm::Attribute<0x0018,0x1182, gdcm::VR::IS, gdcm::VM::VM3> fd3 = {0,1};
+  return 1;
+
+  return 0; 
+}
+
 int TestAttributeLO() { return 0; }
 int TestAttributeLT() { return 0; }
 int TestAttributeOB() { return 0; }

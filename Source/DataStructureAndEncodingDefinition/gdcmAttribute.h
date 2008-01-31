@@ -64,19 +64,16 @@ public:
 
 template<uint16_t Group, uint16_t Element, 
 	 int TVR = TagToType<Group, Element>::VRType, // can the user override this value ? 
-	 int TVM = TagToType<Group, Element>::VMType, // can the user override this value ?
-	 typename SQAttribute = void_ > // if only I had variadic template...
+	 int TVM = TagToType<Group, Element>::VMType // can the user override this value ?
+	 /*typename SQAttribute = void_*/ > // if only I had variadic template...
 class Attribute
 {
 public:
-  typedef typename VRToType<TVR>::Type VRType;
+  typedef typename VRToType<TVR>::Type ArrayType;
   enum { VMType = VMToLength<TVM>::Length };
-  VRType Internal[VMToLength<TVM>::Length];
+  ArrayType Internal[VMToLength<TVM>::Length];
 
   unsigned int GetNumberOfValues() const {
-    return VMToLength<TVM>::Length;
-  }
-  unsigned int GetLength() const {
     return VMToLength<TVM>::Length;
   }
   // Implementation of Print is common to all Mode (ASCII/Binary)
@@ -84,16 +81,16 @@ public:
   // it would mean we used a bad VM then, right ?
   void Print(std::ostream &os) const {
     os << GetTag() << " ";
-    os << GetVR() << " ";
+    os << GetVR()  << " ";
+    os << GetVM()  << " ";
     os << Internal[0]; // VM is at least garantee to be one
     for(unsigned int i=1; i<GetNumberOfValues(); ++i)
       os << "," << Internal[i];
     }
 
-  //uint16_t GetGroup() const { return Group; }
-  //uint16_t GetElement() const { return Element; }
   Tag GetTag() const { return Tag(Group,Element); }
   VR  GetVR() const { return (VR::VRType)TVR; }
+  VM  GetVM() const { return (VM::VMType)TVM; }
 
   DataElement GetAsDataElement() const {
     DataElement ret( GetTag() );
@@ -107,16 +104,16 @@ public:
   }
 
   // copy:
-  VRType GetValue(unsigned int idx = 0) {
+  ArrayType GetValue(unsigned int idx = 0) {
     assert( idx < GetNumberOfValues() );
     return Internal[idx];
   }
   // const reference
-  VRType const &GetValue(unsigned int idx = 0) const {
+  ArrayType const &GetValue(unsigned int idx = 0) const {
     assert( idx < GetNumberOfValues() );
     return Internal[idx];
   }
-  void SetValue(VRType v, unsigned int idx = 0) {
+  void SetValue(ArrayType v, unsigned int idx = 0) {
     assert( idx < GetNumberOfValues() );
     Internal[idx] = v;
   }
@@ -129,13 +126,14 @@ public:
     std::string s = std::string( bv->GetPointer(), bv->GetLength() );
     ss.str( s );
     EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
-      GetLength(),ss);
+      GetNumberOfValues(),ss);
   }
-  void SetBytes(const VRType* array, unsigned int numel = VMType ) {
+  void SetValues(const ArrayType* array, unsigned int numel = VMType ) {
     assert( array && numel && numel == GetNumberOfValues() );
-    memcpy(Internal, array, numel * sizeof(VRType) );
+    // std::copy is smarted than a memcpy, and will call memcpy when POD type
+    std::copy(array, array+numel, Internal);
   }
-  const VRType* GetBytes() const {
+  const ArrayType* GetValues() const {
     return Internal;
   }
 #if 0 // TODO  FIXME the implicit way:
@@ -184,6 +182,106 @@ public:
 
 };
 
+
+// No need to repeat default template arg, since primary template
+// will be used to generate the default arguments
+template<uint16_t Group, uint16_t Element, int TVR > 
+class Attribute<Group,Element,TVR,VM::VM1_n>
+{
+public:
+  Tag GetTag() const { return Tag(Group,Element); }
+  VR  GetVR() const { return (VR::VRType)TVR; }
+  VM  GetVM() const { return VM::VM1_n; }
+
+  // This the way to prevent default initialization
+  explicit Attribute() { Internal=0; Length=0; Own = true; }
+  ~Attribute() {
+    if( Own ) {
+      delete[] Internal;
+    }
+    Internal = 0; // paranoid
+  }
+
+  // typedef's
+  typedef typename VRToType<TVR>::Type ArrayType;
+
+  unsigned int GetNumberOfValues() const { return Length; }
+  void SetNumberOfValues(unsigned int numvalues) {
+  }
+
+  void SetValues(const ArrayType *array, unsigned int numel, bool own = false)
+    {
+    if( Internal ) // were we used before ?
+      {
+      // yes !
+      if( Own ) delete[] Internal;
+      Internal = 0;
+      }
+    Own = own;
+    Length = numel;
+    assert( Internal == 0 );
+    if( own ) // make a copy:
+      {
+      assert( array && numel );
+      Internal = new ArrayType[numel];
+      std::copy(array, array+numel, Internal);
+      }
+    else // pass pointer
+      {
+      Internal = const_cast<ArrayType*>(array);
+      }
+    // postcondition
+    assert( numel == GetNumberOfValues() );
+    }
+  const ArrayType* GetValues() const {
+    return Internal;
+  }
+  void Print(std::ostream &os) const {
+    os << GetTag() << " ";
+    os << GetVR()  << " ";
+    os << GetVM()  << " ";
+    os << Internal[0]; // VM is at least garantee to be one
+    for(unsigned int i=1; i<GetNumberOfValues(); ++i)
+      os << "," << Internal[i];
+    }
+  DataElement GetAsDataElement() const {
+    DataElement ret( GetTag() );
+    std::ostringstream os;
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
+      GetNumberOfValues(),os);
+    ret.SetVR( GetVR() );
+    assert( ret.GetVR() != VR::SQ );
+    ret.SetByteValue( os.str().c_str(), os.str().size() );
+    return ret;
+  }
+  ArrayType GetValue(unsigned int idx = 0) {
+    assert( idx < GetNumberOfValues() );
+    return Internal[idx];
+  }
+  // const reference
+  ArrayType const &GetValue(unsigned int idx = 0) const {
+    assert( idx < GetNumberOfValues() );
+    return Internal[idx];
+  }
+  void SetValue(ArrayType v, unsigned int idx = 0) {
+    assert( idx < GetNumberOfValues() );
+    Internal[idx] = v;
+  }
+  void SetByteValue(const ByteValue *bv) { abort(); }
+
+
+private:
+  ArrayType *Internal;
+  unsigned int Length;
+  bool Own : 1;
+};
+
+template<uint16_t Group, uint16_t Element, int TVR> 
+class Attribute<Group,Element,TVR,VM::VM2_n> : public Attribute<Group,Element,TVR,VM::VM1_n>
+{
+public:
+  VM  GetVM() const { return VM::VM2_n; }
+};
 
 
 // For particular case for ASCII string
@@ -430,6 +528,8 @@ public:
     }
 };
 
+/*
+// Removing Attribute for SQ for now...
 template<uint16_t Group, uint16_t Element, typename SQA>
 class Attribute<Group,Element, VR::SQ, VM::VM1, SQA>
 {
@@ -457,6 +557,7 @@ public:
     _os.write((char*)&zero, 4);
     }
 };
+*/
 
 
 } // namespace gdcm

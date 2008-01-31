@@ -169,7 +169,7 @@ std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
   return sp;
 }
 
-void SpacingHelper::SetSpacingValue(DataSet & ds, const double * spacing)
+void SpacingHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spacing)
 {
   MediaStorage ms;
   ms.SetFromDataSet(ds);

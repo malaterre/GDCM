@@ -193,7 +193,7 @@ void Overlay::Update(const DataElement & de)
     {
     Attribute<0x6000,0x0050> at;
     at.SetByteValue( de.GetByteValue() );
-    SetOrigin( at.GetBytes() );
+    SetOrigin( at.GetValues() );
     }
   else if( de.GetTag().GetElement() == 0x0051 ) // ImageFrameOrigin
     {

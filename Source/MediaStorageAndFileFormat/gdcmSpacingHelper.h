@@ -24,6 +24,8 @@ namespace gdcm
 /**
  * \brief Spacing
  * \note
+ * This is one of the most complex class in the toolkit since it needs to knows exactly where
+ * the spacing is stored for each DICOM object (MR, CT, PET, US ... )
  */
 class MediaStorage;
 class DataSet;
@@ -31,7 +33,7 @@ class GDCM_EXPORT SpacingHelper
 {
 public:
   static std::vector<double> GetSpacingValue(DataSet const & ds);
-  static void SetSpacingValue(DataSet & ds, const double * spacing);
+  static void SetSpacingValue(DataSet & ds, const std::vector<double> & spacing);
 
 protected:
   static Tag GetSpacingTagFromMediaStorage(MediaStorage const &ms);
