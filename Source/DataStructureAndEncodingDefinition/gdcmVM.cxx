@@ -194,7 +194,8 @@ VM::VMType VM::GetVMTypeFromLength(unsigned int length, unsigned int size)
 unsigned int VM::GetNumberOfElementsFromArray(const char *array, unsigned int length)
 {
   unsigned int c=0;
-  if ( array ) // hum attribute could be empty. Thus cannot deduce VM, this time
+  // FIXME: we should make sure there is at least one value (space should not count)
+  if ( array && *array ) // hum attribute could be empty. Thus cannot deduce VM, this time
     {
     const char *p = array;
     const char *end = array + length;

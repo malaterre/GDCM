@@ -305,7 +305,7 @@ public:
       _os << "," << Internal[i];
     }
   void Read(std::istream &_is) {
-    assert( Internal ); // FIXME
+    if( !Internal ) return;
     EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
       GetLength(),_is);
     }
