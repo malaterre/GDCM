@@ -86,7 +86,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
   else
     {
     // Very bad !!
-    throw gdcm::Exception();
+    throw Exception();
     }
   // Implementation Class UID (0002,0012) -> ??
   if( !FindDataElement( Tag(0x0002, 0x0012) ) )

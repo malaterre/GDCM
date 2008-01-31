@@ -470,9 +470,9 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
 //-----------------------------------------------------------------------------
 void Printer::PrintDataSet(std::ostream &os, const DataSet &ds)
 {
-  const gdcm::Global& g = gdcm::GlobalInstance;
-  const gdcm::Dicts &dicts = g.GetDicts();
-  const gdcm::Dict &d = dicts.GetPublicDict();
+  const Global& g = GlobalInstance;
+  const Dicts &dicts = g.GetDicts();
+  const Dict &d = dicts.GetPublicDict();
  
   static const GroupDict gd; // FIXME
 //  try

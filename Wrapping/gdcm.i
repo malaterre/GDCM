@@ -138,5 +138,3 @@ using namespace gdcm;
 %include "gdcmDirectory.h"
 %include "gdcmUIDGenerator.h"
 
-//#error TODO: gdcm::ByteValueToStringFilter
-

@@ -66,26 +66,26 @@ std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
   std::vector<double> sp;
   MediaStorage ms;
   ms.SetFromDataSet(ds);
-  if( ms == gdcm::MediaStorage::MS_END ) // Nothing found...
+  if( ms == MediaStorage::MS_END ) // Nothing found...
     {
-    const gdcm::ByteValue *bv = NULL;
-    if( ds.FindDataElement( gdcm::Tag(0x0008,0x0060) ) )
+    const ByteValue *bv = NULL;
+    if( ds.FindDataElement( Tag(0x0008,0x0060) ) )
       {
-      bv = ds.GetDataElement( gdcm::Tag(0x0008,0x0060) ).GetByteValue();
+      bv = ds.GetDataElement( Tag(0x0008,0x0060) ).GetByteValue();
       }
     if( bv )
       {
       std::string modality = std::string( bv->GetPointer(), bv->GetLength() );
       ms.GuessFromModality( modality.c_str() );
-      if( ms == gdcm::MediaStorage::MS_END )
+      if( ms == MediaStorage::MS_END )
         {
         // Ok giving up, you won
-        ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
+        ms = MediaStorage::SecondaryCaptureImageStorage;
         }
       }
     else
       {
-        ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
+      ms = MediaStorage::SecondaryCaptureImageStorage;
       }
     }
   assert( MediaStorage::IsImage( ms ) );
@@ -94,7 +94,7 @@ std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
   if( spacingtag != Tag(0xffff,0xffff) && ds.FindDataElement( spacingtag ) )
     {
     const DataElement& de = ds.GetDataElement( spacingtag );
-    const Global &g = gdcm::GlobalInstance;
+    const Global &g = GlobalInstance;
     const Dicts &dicts = g.GetDicts();
     const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
     const VR & vr = entry.GetVR();
@@ -103,7 +103,7 @@ std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
       {
     case VR::DS:
         {
-        gdcm::Element<VR::DS,VM::VM1_n> el;
+        Element<VR::DS,VM::VM1_n> el;
         std::stringstream ss;
         const ByteValue *bv = de.GetByteValue();
         assert( bv );
@@ -132,7 +132,7 @@ std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
   if( zspacingtag != Tag(0xffff,0xffff) && ds.FindDataElement( zspacingtag ) )
     {
     const DataElement& de = ds.GetDataElement( zspacingtag );
-    const Global &g = gdcm::GlobalInstance;
+    const Global &g = GlobalInstance;
     const Dicts &dicts = g.GetDicts();
     const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
     const VR & vr = entry.GetVR();
@@ -142,7 +142,7 @@ std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
       {
     case VR::DS:
         {
-        gdcm::Element<VR::DS,VM::VM1_n> el;
+        Element<VR::DS,VM::VM1_n> el;
         std::stringstream ss;
         const ByteValue *bv = de.GetByteValue();
         assert( bv );
@@ -185,7 +185,7 @@ void SpacingHelper::SetSpacingValue(DataSet & ds, const double * spacing)
     if( currentspacing != Tag(0xffff,0xffff) )
       {
       DataElement de( currentspacing );
-      const Global &g = gdcm::GlobalInstance;
+      const Global &g = GlobalInstance;
       const Dicts &dicts = g.GetDicts();
       const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
       const VR & vr = entry.GetVR();
@@ -195,7 +195,7 @@ void SpacingHelper::SetSpacingValue(DataSet & ds, const double * spacing)
         {
       case VR::DS:
           {
-          gdcm::Element<VR::DS,VM::VM1_n> el;
+          Element<VR::DS,VM::VM1_n> el;
           el.SetLength( entry.GetVM().GetLength() * vr.GetSizeof() );
           assert( entry.GetVM() == VM::VM2 );
           for( int i = 0; i < entry.GetVM().GetLength(); ++i)
@@ -219,7 +219,7 @@ void SpacingHelper::SetSpacingValue(DataSet & ds, const double * spacing)
     if( currentspacing != Tag(0xffff,0xffff) )
       {
       DataElement de( currentspacing );
-      const Global &g = gdcm::GlobalInstance;
+      const Global &g = GlobalInstance;
       const Dicts &dicts = g.GetDicts();
       const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
       const VR & vr = entry.GetVR();
@@ -229,7 +229,7 @@ void SpacingHelper::SetSpacingValue(DataSet & ds, const double * spacing)
         {
       case VR::DS:
           {
-          gdcm::Element<VR::DS,VM::VM1_n> el;
+          Element<VR::DS,VM::VM1_n> el;
           el.SetLength( entry.GetVM().GetLength() * vr.GetSizeof() );
           assert( entry.GetVM() == VM::VM1 );
           for( int i = 0; i < entry.GetVM().GetLength(); ++i)

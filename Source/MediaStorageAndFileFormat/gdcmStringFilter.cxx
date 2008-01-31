@@ -37,7 +37,7 @@ void StringFilter::SetDicts(const Dicts &dicts)
 #define StringFilterCase(type) \
   case VR::type: \
     { \
-      gdcm::Element<VR::type,VM::VM1_n> el; \
+      Element<VR::type,VM::VM1_n> el; \
       el.Set( de.GetValue() ); \
       os << el.GetValue(); \
       for(unsigned long i = 1; i < el.GetLength(); ++i) os << "\\" << el.GetValue(i); \
@@ -47,7 +47,7 @@ void StringFilter::SetDicts(const Dicts &dicts)
 std::pair<std::string, std::string> StringFilter::ToStringPair(const DataElement& de) const
 {
   std::pair<std::string, std::string> ret;
-  const gdcm::Global &g = gdcm::GlobalInstance;
+  const Global &g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
   if( de.GetTag().IsPrivate() )
     {

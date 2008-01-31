@@ -149,7 +149,7 @@ bool ImageReader::Read()
           // that as a buggy DICOM Image file...
           //PixelData.SetCompressionType( Compression::RAW );
           MediaStorage ms3 = MediaStorage::SecondaryCaptureImageStorage;
-          const gdcm::ByteValue *bv = NULL;
+          const ByteValue *bv = NULL;
           if( ds.FindDataElement( Tag(0x0008,0x0060) ) )
             {
             bv = ds.GetDataElement( Tag(0x0008,0x0060) ).GetByteValue();

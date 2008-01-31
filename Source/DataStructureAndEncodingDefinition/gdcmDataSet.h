@@ -178,7 +178,7 @@ public:
     DataElementSet::iterator it = Begin();
     for( ; it != End(); ++it)
       {
-      gdcm::DataElement &de = (gdcm::DataElement&)*it;
+      DataElement &de = (DataElement&)*it;
       operation( de );
       }
   }

@@ -21,8 +21,8 @@
 namespace gdcm
 {
   void DataElement::SetVLToUndefined() { 
-    gdcm::Value &v = GetValue();
-    gdcm::SequenceOfItems *sq = dynamic_cast<gdcm::SequenceOfItems*>(&v);
+    Value &v = GetValue();
+    SequenceOfItems *sq = dynamic_cast<SequenceOfItems*>(&v);
     if( sq )
       {
       sq->SetLengthToUndefined();

@@ -137,7 +137,7 @@ void Overlay::Update(const DataElement & de)
 */
 
   assert( de.GetTag().IsPublic() );
-  const gdcm::ByteValue* bv = de.GetByteValue();
+  const ByteValue* bv = de.GetByteValue();
   assert( bv );
   if( !bv->GetLength() ) return; // Discard any empty element (will default to another value)
   std::string s( bv->GetPointer(), bv->GetLength() );
@@ -161,19 +161,19 @@ void Overlay::Update(const DataElement & de)
     }
   else if( de.GetTag().GetElement() == 0x0010 ) // OverlayRows
     {
-    gdcm::Attribute<0x6000,0x0010> at;
+    Attribute<0x6000,0x0010> at;
     at.SetByteValue( de.GetByteValue() );
     SetRows( at.GetValue() );
     }
   else if( de.GetTag().GetElement() == 0x0011 ) // OverlayColumns
     {
-    gdcm::Attribute<0x6000,0x0011> at;
+    Attribute<0x6000,0x0011> at;
     at.SetByteValue( de.GetByteValue() );
     SetColumns( at.GetValue() );
     }
   else if( de.GetTag().GetElement() == 0x0015 ) // NumberOfFramesInOverlay
     {
-    gdcm::Attribute<0x6000,0x0015> at;
+    Attribute<0x6000,0x0015> at;
     at.SetByteValue( de.GetByteValue() );
     SetNumberOfFrames( at.GetValue() );
     }
@@ -191,13 +191,13 @@ void Overlay::Update(const DataElement & de)
     }
   else if( de.GetTag().GetElement() == 0x0050 ) // OverlayOrigin
     {
-    gdcm::Attribute<0x6000,0x0050> at;
+    Attribute<0x6000,0x0050> at;
     at.SetByteValue( de.GetByteValue() );
     SetOrigin( at.GetBytes() );
     }
   else if( de.GetTag().GetElement() == 0x0051 ) // ImageFrameOrigin
     {
-    gdcm::Attribute<0x6000,0x0051> at;
+    Attribute<0x6000,0x0051> at;
     at.SetByteValue( de.GetByteValue() );
     SetFrameOrigin( at.GetValue() );
     }
@@ -207,7 +207,7 @@ void Overlay::Update(const DataElement & de)
     }
   else if( de.GetTag().GetElement() == 0x0100 ) // OverlayBitsAllocated
     {
-    gdcm::Attribute<0x6000,0x0100> at;
+    Attribute<0x6000,0x0100> at;
     at.SetByteValue( de.GetByteValue() );
     if( at.GetValue() != 1 )
       {
@@ -217,7 +217,7 @@ void Overlay::Update(const DataElement & de)
     }
   else if( de.GetTag().GetElement() == 0x0102 ) // OverlayBitPosition
     {
-    gdcm::Attribute<0x6000,0x0102> at;
+    Attribute<0x6000,0x0102> at;
     at.SetByteValue( de.GetByteValue() );
     if( at.GetValue() != 0 ) // For old ACR when using unused bits...
       {

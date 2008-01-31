@@ -96,7 +96,7 @@ std::istream &File::Read(std::istream &is)
   const TransferSyntax &ts = Header.GetDataSetTransferSyntax();
   if( !ts.IsValid() )
     {
-    throw gdcm::Exception( "Meta Header issue" );
+    throw Exception( "Meta Header issue" );
     }
 
   //std::cerr << ts.GetNegociatedType() << std::endl;
