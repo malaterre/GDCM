@@ -40,13 +40,13 @@ public:
 
   bool Scan( Directory::FilenamesType const & filenames );
 
-  void Print( std::ostream & os );
+  void Print( std::ostream & os ) const;
 
   typedef std::set< std::string > ValuesType;
-  ValuesType const & GetValues() { return Values; }
+  ValuesType const & GetValues() const { return Values; }
 
   typedef std::map<Tag,FilenameToValue> MappingType;
-  MappingType const & GetMappings() { return Mappings; }
+  MappingType const & GetMappings() const { return Mappings; }
 
 private:
   // Will store all the value found:

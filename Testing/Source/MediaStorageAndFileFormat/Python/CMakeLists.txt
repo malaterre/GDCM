@@ -2,6 +2,7 @@
 # gdcm-python
 SET(GDCM_PYTHON_TEST_SRCS
   TestReader
+  TestScanner
   TestImageReader
   TestUIDGenerator
   )

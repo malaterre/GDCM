@@ -74,7 +74,7 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
   return true;
 }
 
-void Scanner::Print( std::ostream & os )
+void Scanner::Print( std::ostream & os ) const
 {
   os << "Values:\n";
   ValuesType::const_iterator it = Values.begin();
@@ -87,7 +87,8 @@ void Scanner::Print( std::ostream & os )
   for( ; tag != Tags.end(); ++tag )
     {
     os << "Tag: " << *tag << "\n";
-    FilenameToValue &mapping = Mappings[*tag];
+    //const FilenameToValue &mapping = Mappings[*tag];
+    const FilenameToValue &mapping = Mappings.find(*tag)->second;
     FilenameToValue::const_iterator it = mapping.begin();
     for( ; it != mapping.end(); ++it)
       {

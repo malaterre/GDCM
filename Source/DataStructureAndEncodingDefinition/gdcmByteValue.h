@@ -143,6 +143,10 @@ public:
       is.seekg(Length, std::ios::cur);
       }
     else
+      {
+      is.read(&Internal[0], Length);
+      }
+    return is;
 #else
       {
       //is.unsetf(std::ios_base::skipws); 

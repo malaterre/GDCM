@@ -42,13 +42,28 @@ namespace gdcm
       //std::cerr << "DEBUG:" << de << std::endl;
       assert( de.GetTag() != Tag(0,0) );
       DES.insert( de );
+      //if ( de.GetTag() == Tag(0x0020,0x000e) ) break;
       }
       //std::cerr << "finsih"  << std::endl;
     return is;
   }
 
   template <typename TDE, typename TSwap>
+  std::istream &DataSet::ReadUpToTag(std::istream &is, const Tag &t) {
+    DataElement de;
+    while( !is.eof() && de.Read<TDE,TSwap>(is) )
+      {
+      assert( de.GetTag() != Tag(0,0) );
+      DES.insert( de );
+      // tag was found, we can exit the loop:
+      if ( de.GetTag() == t ) break;
+      }
+    return is;
+  }
+
+  template <typename TDE, typename TSwap>
   std::istream &DataSet::ReadWithLength(std::istream &is, VL &length) {
+    return is.seekg(length, std::ios::cur);
     DataElement de;
     VL l = 0;
     //std::cout << "ReadWithLength Length: " << length << std::endl;

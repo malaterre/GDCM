@@ -27,248 +27,17 @@
 
 #include "gdcmDeflateStream.h"
 
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-#include "gdcmUNExplicitDataElement.h"
-#include "gdcmCP246ExplicitDataElement.h"
-#include "gdcmExplicitImplicitDataElement.h"
-#endif
-
 namespace gdcm
 {
 
 std::istream &File::Read(std::istream &is) 
 {
-  bool haspreamble = true;
-  try
-    {
-    P.Read( is );
-    }
-  catch( std::exception &ex )
-    {
-    // return to beginning of file, hopefully this file is simply missing preamble
-    is.seekg(0, std::ios::beg);
-    haspreamble = false;
-    }
-  catch( ... )
-    {
-    abort();
-    }
-
-  bool hasmetaheader = true;
-  try
-    {
-    if( haspreamble )
-      {
-      try
-        {
-        Header.Read( is );
-        }
-      catch( std::exception &ex )
-        {
-        // Weird implicit meta header:
-        is.seekg(128+4, std::ios::beg );
-        try
-          {
-          Header.ReadCompat(is);
-          }
-        catch( std::exception &ex )
-          {
-          // Ok I get it now... there is absolutely no meta header, giving up
-          hasmetaheader = false;
-          }
-        }
-      }
-    else
-      Header.ReadCompat(is);
-    }
-  catch( std::exception &ex )
-    {
-    // Same player play again:
-    is.seekg(0, std::ios::beg );
-    hasmetaheader = false;
-    }
-  catch( ... )
-    {
-    // Ooops..
-    abort();
-    }
-
-  const TransferSyntax &ts = Header.GetDataSetTransferSyntax();
-  if( !ts.IsValid() )
-    {
-    throw Exception( "Meta Header issue" );
-    }
-
-  //std::cerr << ts.GetNegociatedType() << std::endl;
-  //std::cerr << TransferSyntax::GetTSString(ts) << std::endl;
-  // Special case where the dataset was compressed using the deflate
-  // algorithm
-  if( ts == TransferSyntax::DeflatedExplicitVRLittleEndian )
-    {
-    gzistream gzis(is.rdbuf());
-    // FIXME: we also know in this case that we are dealing with Explicit:
-    assert( ts.GetNegociatedType() == TransferSyntax::Explicit );
-    DS.Read<ExplicitDataElement,SwapperNoOp>(gzis);
-    is.seekg(0, std::ios::end);
-    is.peek();
-
-    return is;
-    }
-
-  try
-    {
-    if( ts.GetSwapCode() == SwapCode::BigEndian )
-      {
-      //US-RGB-8-epicard.dcm is big endian
-      if( ts.GetNegociatedType() == TransferSyntax::Implicit )
-        {
-        // There is no such thing as Implicit Big Endian... oh well
-        // LIBIDO-16-ACR_NEMA-Volume.dcm 
-        DS.Read<ImplicitDataElement,SwapperDoOp>(is);
-        }
-      else
-        {
-        DS.Read<ExplicitDataElement,SwapperDoOp>(is);
-        }
-      }
-    else // LittleEndian
-      {
-      if( ts.GetNegociatedType() == TransferSyntax::Implicit )
-        {
-        DS.Read<ImplicitDataElement,SwapperNoOp>(is);
-        }
-      else
-        {
-        DS.Read<ExplicitDataElement,SwapperNoOp>(is);
-        }
-      }
-    }
-  // Only catch parse exception at this point
-  catch( ParseException &ex )
-    {
-    if( ex.GetLastElement().GetVR() == VR::UN && ex.GetLastElement().IsUndefinedLength() )
-      {
-      // non CP 246
-      // P.Read( is );
-      is.clear();
-      if( haspreamble )
-        {
-        is.seekg(128+4, std::ios::beg);
-        }
-      else
-        {
-        is.seekg(0, std::ios::beg);
-        }
-      if( hasmetaheader )
-        {
-        // FIXME: we are reading twice the same meta-header, we succedeed the first time...
-        // We should be able to seek to proper place instead of re-reading
-        FileMetaInformation header;
-        header.Read(is);
-        }
-
-      // GDCM 1.X
-      gdcmWarningMacro( "Attempt to read non CP 246" );
-      DS.Clear(); // remove garbage from 1st attempt...
-      DS.Read<CP246ExplicitDataElement,SwapperNoOp>(is);
-      }
-    else if( ex.GetLastElement().GetVR() == VR::UN )
-      {
-      // P.Read( is );
-      is.clear();
-      if( haspreamble )
-        {
-        is.seekg(128+4, std::ios::beg);
-        }
-      else
-        {
-        is.seekg(0, std::ios::beg);
-        }
-      if( hasmetaheader )
-        {
-        // FIXME: we are reading twice the same meta-header, we succedeed the first time...
-        // We should be able to seek to proper place instead of re-reading
-        FileMetaInformation header;
-        header.Read(is);
-        }
-
-      // GDCM 1.X
-      gdcmWarningMacro( "Attempt to read GDCM 1.X wrongly encoded");
-      DS.Clear(); // remove garbage from 1st attempt...
-      DS.Read<UNExplicitDataElement,SwapperNoOp>(is);
-      // This file can only be rewritten as implicit...
-      }
-    else if ( ex.GetLastElement().GetTag() == Tag(0xfeff,0x00e0) )
-      {
-      // Famous philips where some private sequence were byteswapped !
-      // eg. PHILIPS_Intera-16-MONO2-Uncompress.dcm
-      // P.Read( is );
-      is.clear();
-      if( haspreamble )
-        {
-        is.seekg(128+4, std::ios::beg);
-        }
-      else
-        {
-        is.seekg(0, std::ios::beg);
-        }
-      if( hasmetaheader )
-        {
-        // FIXME: we are reading twice the same meta-header, we succedeed the first time...
-        // We should be able to seek to proper place instead of re-reading
-        FileMetaInformation header;
-        header.Read(is);
-        }
-
-      // 
-      gdcmWarningMacro( "Attempt to read Philips with ByteSwap private sequence wrongly encoded");
-      DS.Clear(); // remove garbage from 1st attempt...
-      abort();  // TODO FIXME
-      }
-    else
-      {
-      // Let's try again with an ExplicitImplicitDataElement:
-      if( ts.GetSwapCode() == SwapCode::LittleEndian &&
-        ts.GetNegociatedType() == TransferSyntax::Explicit )
-        {
-        // P.Read( is );
-        if( haspreamble )
-          {
-          is.seekg(128+4, std::ios::beg);
-          }
-        else
-          {
-          is.seekg(0, std::ios::beg);
-          }
-        if( hasmetaheader )
-          {
-          // FIXME: we are reading twice the same meta-header, we succedeed the first time...
-          // We should be able to seek to proper place instead of re-reading
-          FileMetaInformation header;
-          header.ReadCompat(is);
-          }
-
-        // Philips
-        gdcmWarningMacro( "Attempt to read the file as mixture of explicit/implicit");
-        DS.Clear(); // remove garbage from 1st attempt...
-        DS.Read<ExplicitImplicitDataElement,SwapperNoOp>(is);
-        // This file can only be rewritten as implicit...
-        }
-      }
-    }
-
-  return is;
+  abort();
 }
 
 std::ostream const &File::Write(std::ostream &os) const
 {
   // Should I check that 0002,0002 / 0008,0016 and 0002,0003 / 0008,0018 match ?
-//  if( !IsValid() )
-//    {
-//    gdcmErrorMacro( "File is not valid" );
-//    return os;
-//    }
-  P.Write(os);
 
   try
     {
@@ -282,7 +51,7 @@ std::ostream const &File::Write(std::ostream &os) const
     // this is too much work, and should be up to the user to convert the meta to something
     // legal ! Write them as implicit for now
     gdcmWarningMacro( "File written will not be legal" );
-    if( P.IsEmpty() )
+    if( Header.GetPreamble().IsEmpty() )
       {
       os.seekp(0, std::ios::beg);
       }

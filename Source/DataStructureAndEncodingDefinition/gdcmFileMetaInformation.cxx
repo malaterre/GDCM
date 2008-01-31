@@ -482,6 +482,13 @@ void FileMetaInformation::Default()
 
 std::ostream &FileMetaInformation::Write(std::ostream &os) const
 {
+//  if( !IsValid() )
+//    {
+//    gdcmErrorMacro( "File is not valid" );
+//    return os;
+//    }
+  P.Write(os);
+
 //  if( IsEmpty() )
 //  {
 //    std::cerr << "IsEmpty" << std::endl;

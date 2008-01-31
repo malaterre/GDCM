@@ -41,6 +41,7 @@
 #include "gdcmDictEntry.h"
 #include "gdcmDirectory.h"
 #include "gdcmUIDGenerator.h"
+#include "gdcmScanner.h"
 
 using namespace gdcm;
 %}
@@ -54,6 +55,7 @@ using namespace gdcm;
 %include "std_set.i"
 %include "std_vector.i"
 %include "std_pair.i"
+%include "std_map.i"
 
 //%feature("autodoc", "1")
 %include "gdcmWin32.h" // define GDCM_EXPORT so need to be the first one...
@@ -136,5 +138,34 @@ using namespace gdcm;
 //%template (FilenameType) std::string;
 %template (FilenamesType) std::vector<std::string>;
 %include "gdcmDirectory.h"
+%extend gdcm::Directory
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmUIDGenerator.h"
+//%{
+//  typedef char * PString;   // copied to wrapper code
+//%}
+//%template (FilenameToValue) std::map<const char*,const char*>;
+//%template (FilenameToValue) std::map<PString,PString>;
+//%template (FilenameToValue) std::map<std::string,std::string>;
+//%template (MappingType)     std::map<gdcm::Tag,FilenameToValue>;
+%template (ValuesType)      std::set<std::string>;
+%include "gdcmScanner.h"
+%extend gdcm::Scanner
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+};
 

@@ -17,7 +17,6 @@
 #define __gdcmFile_h
 
 #include "gdcmDataSet.h"
-#include "gdcmPreamble.h"
 #include "gdcmFileMetaInformation.h"
 
 namespace gdcm
@@ -44,9 +43,6 @@ public:
   // Write
   std::ostream const &Write(std::ostream &os) const;
 
-  /// Get Preamble
-  const Preamble &GetPreamble() const { return P; }
-  void SetPreamble(const Preamble &p) { P = p; }
   const FileMetaInformation &GetHeader() const { return Header; }
   FileMetaInformation &GetHeader() { return Header; }
   void SetHeader( const FileMetaInformation &fmi ) { Header = fmi; }
@@ -55,14 +51,12 @@ public:
   void SetDataSet( const DataSet &ds) { DS = ds; }
 
 private:
-  Preamble P;
   FileMetaInformation Header;
   DataSet DS;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const File &val)
 {
-  os << val.GetPreamble() << std::endl;
   os << val.GetHeader() << std::endl;
   //os << val.GetDataSet() << std::endl; // FIXME
   abort();

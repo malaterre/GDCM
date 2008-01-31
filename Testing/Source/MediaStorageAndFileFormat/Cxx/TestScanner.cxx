@@ -26,12 +26,12 @@ int TestScanner(int argc, char *argv[])
     }
   gdcm::Directory d;
   unsigned int nfiles = d.Load( argv[1] );
-  d.Print( std::cout );
+  //d.Print( std::cout );
   std::cout << "done retrieving file list" << std::endl;
 
   gdcm::Scanner s;
-  gdcm::Tag t1(0x0020,0x000d);
-  gdcm::Tag t2(0x0020,0x000e);
+  const gdcm::Tag t1(0x0020,0x000d);
+  const gdcm::Tag t2(0x0020,0x000e);
   s.AddTag( t1 );
   s.AddTag( t2 );
   bool b = s.Scan( d.GetFilenames() );
@@ -40,7 +40,20 @@ int TestScanner(int argc, char *argv[])
     std::cerr << "Scanner failed" << std::endl;
     return 1;
     }
-  s.Print( std::cout );
+  //s.Print( std::cout );
+
+  // Let's get the value for tag t1 in first file:
+  gdcm::Scanner::MappingType const &mt = s.GetMappings();
+  std::cout << "Mapping for " << t1 << " is :" << std::endl;
+  gdcm::Scanner::MappingType::const_iterator it = mt.find(t1);
+  if( it == mt.end() )
+    {
+    return 1;
+    }
+  const gdcm::Scanner::FilenameToValue &tv = it->second;
+  const std::string &filename = d.GetFilenames()[0];
+  gdcm::Scanner::FilenameToValue::const_iterator it2 = tv.find( filename.c_str() );
+  std::cout << it2->first << " -> " << t1 << " = " << it2->second << std::endl;
 
   return 0;
 }

@@ -191,6 +191,9 @@ public:
   std::istream &Read(std::istream &is);
 
   template <typename TDE, typename TSwap>
+  std::istream &ReadUpToTag(std::istream &is, const Tag &t);
+
+  template <typename TDE, typename TSwap>
   std::ostream const &Write(std::ostream &os) const;
 
   template <typename TDE, typename TSwap>

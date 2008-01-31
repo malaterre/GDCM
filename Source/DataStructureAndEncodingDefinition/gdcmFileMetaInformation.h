@@ -16,6 +16,7 @@
 #ifndef __gdcmFileMetaInformation_h
 #define __gdcmFileMetaInformation_h
 
+#include "gdcmPreamble.h"
 #include "gdcmDataSet.h"
 #include "gdcmDataElement.h"
 #include "gdcmMediaStorage.h"
@@ -31,6 +32,11 @@ namespace gdcm
  * will take place.
  * \todo
  * If user adds an element with group != 0x0002 it will be written...
+ * Definition:
+ *
+ * The File Meta Information includes identifying information on the encapsulated Data Set. This header
+ * consists of a 128 byte File Preamble, followed by a 4 byte DICOM prefix, followed by the File Meta
+ * Elements shown in Table 7.1-1. This header shall be present in every DICOM file.
  */
 class GDCM_EXPORT FileMetaInformation : public DataSet
 {
@@ -56,6 +62,11 @@ public:
 
   // Construct a FileMetaInformation from an already existing DataSet:
   void FillFromDataSet(DataSet const &ds);
+
+  /// Get Preamble
+  const Preamble &GetPreamble() const { return P; }
+  Preamble &GetPreamble() { return P; }
+  void SetPreamble(const Preamble &p) { P = p; }
  
 protected:
   void ComputeDataSetTransferSyntax(); // FIXME
@@ -71,10 +82,12 @@ protected:
   MediaStorage::MSType DataSetMS;
 
 private:
+  Preamble P;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const FileMetaInformation &val)
 {
+  os << val.GetPreamble() << std::endl;
   val.Print( os );
   return os;
 }

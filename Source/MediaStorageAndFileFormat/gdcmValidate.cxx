@@ -28,7 +28,7 @@ Validate::~Validate()
 //-----------------------------------------------------------------------------
 void Validate::Validation()
 {
-  V.SetPreamble( F->GetPreamble() );
+  V.GetHeader().SetPreamble( F->GetHeader().GetPreamble() );
   //FileMetaInformation &fmi = F.GetHeader();
   FileMetaInformation fmi( F->GetHeader() );
   fmi.FillFromDataSet( F->GetDataSet() );
