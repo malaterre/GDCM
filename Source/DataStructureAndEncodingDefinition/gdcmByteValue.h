@@ -49,8 +49,28 @@ public:
 
   // When 'dumping' dicom file we still have some information from
   // Either the VR: eg LO (private tag)
-  void PrintASCII(std::ostream &os) {
-    (void)os;
+  void PrintASCII(std::ostream &os, VL maxlength ) const {
+    VL length = std::min(maxlength, Length);
+    if( IsPrintable(length) )
+      {
+      // WARNING: Internal.end() != Internal.begin()+Length
+      std::copy(Internal.begin(), Internal.begin()+length,
+        std::ostream_iterator<char>(os));
+      }
+  }
+
+  void PrintHex(std::ostream &os, VL maxlength ) const {
+    VL length = std::min(maxlength, Length);
+    if( IsPrintable(length) )
+      {
+      // WARNING: Internal.end() != Internal.begin()+Length
+      std::vector<char>::const_iterator it = Internal.begin();
+      for(; it != Internal.begin()+length; ++it)
+        {
+        const char &c = *it;
+        os << (int)c;
+        }
+      }
   }
 
   // Either from Element Number (== 0x0000)
@@ -179,10 +199,10 @@ protected:
    *         I dont think this function is working since it does not handle
    *         UNICODE or character set...
    */
-  bool IsPrintable() const {
-    for(unsigned int i=0; i<Length; i++)
+  bool IsPrintable(VL length) const {
+    for(unsigned int i=0; i<length; i++)
       {
-      if ( i == (Length-1) && Internal[i] == '\0') continue;
+      if ( i == (length-1) && Internal[i] == '\0') continue;
       if (!isprint((int)Internal[i]) )
         {
         //gdcmWarningMacro( "Cannot print :" << i );
@@ -197,7 +217,7 @@ protected:
   // the length for printing
   if( !Internal.empty() )
     {
-    if( IsPrintable() )
+    if( IsPrintable(Length) )
       {
       // WARNING: Internal.end() != Internal.begin()+Length
       std::copy(Internal.begin(), Internal.begin()+Length,

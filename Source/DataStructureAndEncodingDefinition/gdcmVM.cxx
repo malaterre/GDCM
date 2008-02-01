@@ -208,4 +208,9 @@ unsigned int VM::GetNumberOfElementsFromArray(const char *array, unsigned int le
   return c;
 }
 
+bool VM::Compatible(VM const &vm) const
+{
+  return VMField == vm.VMField;
+}
+
 } // end namespace gdcm

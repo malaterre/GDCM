@@ -96,6 +96,7 @@ public:
   // vm1 is typically deduct from counting in a ValueField
   static bool IsValid(const int &vm1, const VMType &vm2);
   //bool IsValid() { return VMField != VM0 && VMField < VM_END; }
+  bool Compatible(VM const &vm) const;
 
   static VMType GetVMTypeFromLength(unsigned int length, unsigned int size);
   static unsigned int GetNumberOfElementsFromArray(const char *array, unsigned int length);

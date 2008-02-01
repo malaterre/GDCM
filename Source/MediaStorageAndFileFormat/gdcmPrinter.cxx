@@ -13,8 +13,6 @@
 
 =========================================================================*/
 #include "gdcmPrinter.h"
-#include "gdcmExplicitDataElement.h"
-#include "gdcmImplicitDataElement.h"
 #include "gdcmSequenceOfItems.h"
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmDict.h"
@@ -34,6 +32,7 @@ namespace gdcm
 //-----------------------------------------------------------------------------
 Printer::Printer():/*PrintStyle(Printer::VERBOSE_STYLE),*/F(0)
 {
+  MaxPrintLength = 0xFF;
 }
 //-----------------------------------------------------------------------------
 Printer::~Printer()
@@ -471,8 +470,161 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
 }
 #endif
 
-//-----------------------------------------------------------------------------
+#define StringFilterCase(type) \
+  case VR::type: \
+    { \
+      Element<VR::type,VM::VM1_n> el; \
+      el.Set( de.GetValue() ); \
+      os << "[" << el.GetValue(); \
+      for(unsigned long i = 1; i < el.GetLength(); ++i) os << "\\" << el.GetValue(i); \
+      os << "]"; \
+    } break
+
 void Printer::PrintDataSet(std::ostream &os, const DataSet &ds)
+{
+  const Global& g = GlobalInstance;
+  const Dicts &dicts = g.GetDicts();
+  const Dict &d = dicts.GetPublicDict();
+ 
+  DataSet::ConstIterator it = ds.Begin();
+  for( ; it != ds.End(); ++it )
+    {
+    const DataElement &de = *it;
+    std::string strowner;
+    const char *owner = 0;
+    const Tag& t = de.GetTag();
+    if( t.IsPrivate() )
+      { 
+      strowner = ds.GetPrivateCreator(t);
+      owner = strowner.c_str();
+      }
+    const DictEntry &entry = dicts.GetDictEntry(t,owner);
+    const VR &vr = entry.GetVR();
+    const VM &vm = entry.GetVM();
+    const char *name = entry.GetName();
+    bool retired = entry.GetRetired();
+
+    const VR &vr_read = de.GetVR();
+    os << t << " ";
+    os << vr_read << " ";
+    if( !vr.Compatible( vr_read ) )
+      {
+      // FIXME : if terminal supports it: print in red !
+      os << "(" << vr << ") ";
+      }
+    VR refvr;
+    // always prefer the vr from the file:
+    if( vr_read == VR::INVALID )
+      {
+      refvr = vr;
+      }
+    else // cool the file is Explicit !
+      {
+      refvr = vr_read;
+      }
+    if( refvr == VR::SQ )
+      {
+      os << "TODO";
+      }
+    else if( refvr == VR::UN )
+      {
+      os << "TODO";
+      }
+    else if( refvr & VR::VRASCII )
+      {
+      const ByteValue *bv = de.GetByteValue();
+      if( bv )
+        {
+        VL l = std::min( bv->GetLength(), MaxPrintLength );
+        bv->PrintASCII(os,l);
+        }
+      else
+        {
+        os << "(no value)";
+        }
+      }
+    else
+      {
+      //std::ostringstream os;
+      std::string s;
+      switch(refvr)
+        {
+        StringFilterCase(SS);
+        StringFilterCase(US);
+        StringFilterCase(UL);
+      case VR::OB:
+      case VR::OW:
+      case VR::OB_OW:
+          {
+          const ByteValue *bv = de.GetByteValue();
+          if ( bv )
+            {
+            VL l = std::min( bv->GetLength(), MaxPrintLength );
+            bv->PrintHex(os, l);
+            }
+          else
+            {
+            os << "(no value)";
+            }
+          }
+        break;
+      case VR::INVALID:
+        os << "TODO";
+        break;
+      default:
+        abort();
+        break;
+        }
+      os << s;
+      }
+    // Extra info (not in the file)
+    os << " # ";
+    // Append the VM
+    if( vm != VM::VM0 )
+      {
+      os << vm;
+      }
+    else
+      {
+      os << "?";
+      }
+    const ByteValue* bv = de.GetByteValue();
+    VM guessvm = VM::VM0;
+    if( refvr & VR::VRASCII )
+      {
+      if( bv )
+        {
+        unsigned int count = VM::GetNumberOfElementsFromArray(bv->GetPointer(), bv->GetLength());
+        guessvm = VM::GetVMTypeFromLength(count, 1); // hackish...
+        }
+      }
+    else
+      {
+      assert( refvr & VR::VRBINARY );
+      if( bv )
+        {
+        guessvm = VM::GetVMTypeFromLength(bv->GetLength(), refvr.GetSize() );
+        }
+      }
+    if( !vm.Compatible( guessvm ) )
+      {
+      os << " (" << guessvm << ") ";
+      }
+    // Append the name now:
+    if( name && *name )
+      {
+      os << " " << name;
+      }
+    else
+      {
+      os << " UNKNOWN";
+      }
+    os << "\n";
+    }
+}
+
+//-----------------------------------------------------------------------------
+void Printer::PrintDataSetOld(std::ostream &os, const DataSet &ds)
 {
   const Global& g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();

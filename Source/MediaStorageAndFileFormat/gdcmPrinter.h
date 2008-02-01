@@ -56,11 +56,13 @@ public:
   void Print(std::ostream& os);
 
 protected:
+  void PrintDataSetOld(std::ostream &os, const DataSet &ds);
   void PrintElement(std::ostream& os, const DataElement &xde, const DictEntry &entry);
   void PrintDataSet(std::ostream& os, const DataSet &ds);
 
 //  PrintStyles PrintStyle;
   const File *F;
+  VL MaxPrintLength;
 };
 
 } // end namespace gdcm

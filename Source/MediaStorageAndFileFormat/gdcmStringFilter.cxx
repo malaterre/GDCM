@@ -102,6 +102,7 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const DataElement
         StringFilterCase(US);
         StringFilterCase(UL);
       default:
+        abort();
         break;
         }
       }

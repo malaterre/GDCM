@@ -198,6 +198,19 @@ int TestVR(int, char *[])
   if( vr == gdcm::VR::US )
     return 1;
 
+{
+  gdcm::VR vr = gdcm::VR::AE;
+  if( vr & gdcm::VR::VRASCII )
+    {
+    std::cout << vr << "is ASCII\n";
+    }
+  vr = gdcm::VR::UI;
+  if( vr & gdcm::VR::VRASCII )
+    {
+    std::cout << vr << "is ASCII\n";
+    }
+}
+
 
   // Let's check the & operator
 {
@@ -212,7 +225,6 @@ int TestVR(int, char *[])
     return 1;
     }
 }
-
   // Make sure VR::UT is the last valid VR that can be found in a file:
   //if( gdcm::VR::OB_OW <= gdcm::VR::UT ) return 1;
   //else if( gdcm::VR::US_SS <= gdcm::VR::UT ) return 1;
