@@ -369,7 +369,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   char *pointer = (char*)bv->GetPointer();
   //const char *tempimage = (char*)data->GetScalarPointer();
   const char *tempimage = (char*)data->GetScalarPointerForExtent(inExt);
-  std::cerr << "Pointer:" << (unsigned int)tempimage << std::endl;
+  //std::cerr << "Pointer:" << (unsigned int)tempimage << std::endl;
   int *dext = data->GetExtent();
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
   int j = dext[4];
