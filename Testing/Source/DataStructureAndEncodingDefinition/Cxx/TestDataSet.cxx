@@ -58,6 +58,17 @@ int TestDataSet(int , char *[])
   const gdcm::DataElement &de2 =  ds(0x0020,0x0037);
   if( &de1 != &de2 ) return 1;
 
+  std::cout << ds << std::endl;
+
+  gdcm::DataElement de3;
+  std::cout << de3 << std::endl;
+  const gdcm::DataElement &de4 = ds(0x0,0x0);
+  std::cout << de4 << std::endl;
+  const gdcm::DataElement &de5 = ds(0x0,0x1);
+  std::cout << de5 << std::endl;
+  const gdcm::DataElement &de6 = ds(0x1,0x1);
+  std::cout << de6 << std::endl;
+
   return 0;
 }
 

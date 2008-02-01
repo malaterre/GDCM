@@ -57,21 +57,27 @@ using namespace gdcm;
 %include "std_pair.i"
 %include "std_map.i"
 
+// operator= is not needed in python AFAIK
+%ignore operator=;                      // Ignore = everywhere.
+%ignore operator++;                     // Ignore
+
 //%feature("autodoc", "1")
 %include "gdcmWin32.h" // define GDCM_EXPORT so need to be the first one...
 %include "gdcmSwapCode.h"
 %include "gdcmPixelFormat.h"
 //%include "gdcmMediaStorage.h"
+%rename(__getitem__) gdcm::Tag::operator[];
 %include "gdcmTag.h"
-//%include "gdcmTransferSyntax.h"
-%include "gdcmPhotometricInterpretation.h"
-%include "gdcmObject.h"
-%include "gdcmLookupTable.h"
-%include "gdcmOverlay.h"
-%include "gdcmVL.h"
-//%include "gdcmVR.h"
-%include "gdcmValue.h"
-%include "gdcmByteValue.h"
+%extend gdcm::Tag
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmDataElement.h"
 %extend gdcm::DataElement
 {
@@ -83,10 +89,6 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
-//%rename(DataElementSetPython) std::set<DataElement, lttag>;
-//%rename(DataElementSetPython2) DataSet::DataElementSet;
-%template (DESet) std::set<DataElement>;
-//%rename (SetString2) gdcm::DataElementSet;
 %include "gdcmDataSet.h"
 //namespace std {
 //  //struct lttag
@@ -111,9 +113,42 @@ using namespace gdcm;
     return buffer.c_str();
     }
 };
+//%include "gdcmTransferSyntax.h"
+%include "gdcmPhotometricInterpretation.h"
+%include "gdcmObject.h"
+%include "gdcmLookupTable.h"
+%include "gdcmOverlay.h"
+%include "gdcmVL.h"
+//%include "gdcmVR.h"
+%include "gdcmValue.h"
+%include "gdcmByteValue.h"
+//%rename(DataElementSetPython) std::set<DataElement, lttag>;
+//%rename(DataElementSetPython2) DataSet::DataElementSet;
+%template (DataElementSet) std::set<gdcm::DataElement>;
+//%rename (SetString2) gdcm::DataElementSet;
 %include "gdcmPreamble.h"
 %include "gdcmFileMetaInformation.h"
+%extend gdcm::FileMetaInformation
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmFile.h"
+%extend gdcm::File
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmImage.h"
 %extend gdcm::Image
 {

@@ -59,7 +59,6 @@ public:
   ConstIterator Begin() const { return DES.begin(); }
   ConstIterator End() const { return DES.end(); }
 
-
   //typedef typename DataElementSet::iterator iterator;
   void Clear() {
     DES.clear();
@@ -137,7 +136,7 @@ public:
   const DataElement& GetDataElement(const Tag &t) const {
     const DataElement r(t);
     ConstIterator it = DES.find(r);
-    assert( it != DES.end() );
+    //assert( it != DES.end() );
     return *it;
     }
   const DataElement& operator[] (const Tag &t) const { return GetDataElement(t); }
