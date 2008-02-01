@@ -56,9 +56,8 @@ public:
     return "DICOM";
     }
 
-  // You need to manually specify the direction the image is in to write a valid DICOM file
-  // since vtkImageData do not contains one
-  virtual void SetDirectionCosines(vtkMatrix4x4 *matrix);
+  // Get the Image Position (Patient) as stored in the DICOM file
+  // This is a read-only data member
   vtkGetObjectMacro(DirectionCosines, vtkMatrix4x4);
 
 protected:

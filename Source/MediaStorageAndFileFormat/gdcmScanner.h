@@ -48,6 +48,10 @@ public:
   typedef std::map<Tag,FilenameToValue> MappingType;
   MappingType const & GetMappings() const { return Mappings; }
 
+  FilenameToValue const & GetMapping(Tag const &t) const;
+
+  const char* GetValue(Tag const &t, const char *filename) const;
+
 private:
   // Will store all the value found:
   typedef std::set< Tag > TagsType;
@@ -56,6 +60,32 @@ private:
   Directory::FilenamesType Filenames;
   std::map<Tag,FilenameToValue> Mappings;
 };
+
+#if 0
+class FilenameToValueExtractor
+{
+public:
+  FilenameToValueExtractor(Scanner::FilenameToValue &ftv):FTV(ftv) {}
+  const char *GetValue(const char *filename) {
+    Scanner::FilenameToValue &mapping = FTV;
+    std::ostream &os = std::cout;
+    Scanner::FilenameToValue::const_iterator it = mapping.begin();
+    for( ; it != mapping.end(); ++it)
+      {
+      const char *filename = it->first;
+      const char *value = it->second;
+      os << filename << " -> " << value << "\n";
+      }
+
+    /*Scanner::FilenameToValue::const_iterator*/ it = FTV.find(filename);
+    //assert( it != FTV.end() );
+    //assert( strcmp(it->first, filename) == 0 );
+    return it->second;
+  }
+private:
+  Scanner::FilenameToValue & FTV;
+};
+#endif
 
 } // end namespace gdcm
 

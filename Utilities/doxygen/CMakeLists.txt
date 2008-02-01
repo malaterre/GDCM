@@ -1,4 +1,6 @@
 # Documentation
+# http://www.stack.nl/~dimitri/doxygen
+# http://www.stack.nl/~dimitri/doxygen/commands.html#cmdsa
 IF(GDCM_DOCUMENTATION)
 
   FIND_PACKAGE(Doxygen REQUIRED)

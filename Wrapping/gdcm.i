@@ -203,4 +203,11 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
-
+//%template (stdFilenameToValue) std::map<const char*,const char*>;
+//namespace gdcm
+//{
+//  class FilenameToValue : public std::map<const char*, const char*>
+//  {
+//    void foo();
+//  };
+//}

@@ -42,6 +42,19 @@ values  = s.GetValues()
 print values
 mappings = s.GetMappings()
 print mappings
+print dir(mappings)
+
+mapping = s.GetMapping(t1)
+print mapping
+print dir(mapping)
+
+for f in d.GetFilenames():
+  #print f
+  print s.GetValue(t1, f)
+
+#ex = gdcm.FilenameToValueExtractor(mapping)
+#ex.GetValue( "/tmp/Perfusion/Perfusion_205_0087" )
+#print ex.GetValue( "/tmp/Perfusion/Perfusion_205_1809" )
 
 sys.exit(0)
 

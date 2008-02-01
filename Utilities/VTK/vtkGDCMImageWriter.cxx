@@ -475,7 +475,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   // For ex: DICOM (0018,1152) = 114
   SetStringValueFromTag( this->MedicalImageProperties->GetExposure(), gdcm::Tag(0x0018,0x1152), ds);
 
-  // TODO / FIXME Window Level / Window Center
+  // Window Level / Window Center
   int numwl = this->MedicalImageProperties->GetNumberOfWindowLevelPresets();
   gdcm::VR vr = gdcm::VR::DS;
   gdcm::Element<gdcm::VR::DS,gdcm::VM::VM1_n> elwc;

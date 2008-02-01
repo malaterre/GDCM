@@ -68,11 +68,11 @@ public:
   virtual void SetDirectionCosines(vtkMatrix4x4 *matrix);
   vtkGetObjectMacro(DirectionCosines, vtkMatrix4x4);
 
+  //TODO
   //vtkSetMacro(RescaleSlope, double);
   //vtkGetMacro(RescaleSlope, double);
   //vtkSetMacro(RescaleIntercept, double);
   //vtkGetMacro(RescaleIntercept, double);
-
 
 protected:
   vtkGDCMImageWriter();

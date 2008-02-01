@@ -33,7 +33,6 @@
 
 vtkCxxRevisionMacro(vtkGDCMImageReader, "$Revision: 1.1 $");
 vtkStandardNewMacro(vtkGDCMImageReader);
-vtkCxxSetObjectMacro(vtkGDCMImageReader,DirectionCosines,vtkMatrix4x4);
 
 vtkGDCMImageReader::vtkGDCMImageReader()
 {
@@ -191,7 +190,6 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
   // For ex: DICOM (0018,1152) = 114
   this->MedicalImageProperties->SetExposure( GetStringValueFromTag( gdcm::Tag(0x0018,0x1152), ds) );
 
-  // TODO
   // virtual void AddWindowLevelPreset(double w, double l);
   // (0028,1050) DS [   498\  498]                           #  12, 2 WindowCenter
   // (0028,1051) DS [  1063\ 1063]                           #  12, 2 WindowWidth

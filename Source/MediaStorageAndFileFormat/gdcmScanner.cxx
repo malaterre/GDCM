@@ -103,4 +103,16 @@ void Scanner::Print( std::ostream & os ) const
     }
 }
 
+Scanner::FilenameToValue const & Scanner::GetMapping(Tag const &t) const
+{
+  assert( Mappings.find(t) != Mappings.end() );
+  return Mappings.find(t)->second;
+}
+
+const char* Scanner::GetValue(Tag const &t, const char *filename) const
+{
+  FilenameToValue const &ftv = GetMapping(t);
+  return ftv.find(filename)->second;
+}
+
 } // end namespace gdcm

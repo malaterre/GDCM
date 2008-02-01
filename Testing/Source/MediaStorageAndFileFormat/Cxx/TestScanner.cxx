@@ -55,6 +55,17 @@ int TestScanner(int argc, char *argv[])
   gdcm::Scanner::FilenameToValue::const_iterator it2 = tv.find( filename.c_str() );
   std::cout << it2->first << " -> " << t1 << " = " << it2->second << std::endl;
 
+{
+  const gdcm::Directory::FilenamesType &filenames = d.GetFilenames();
+  gdcm::Directory::FilenamesType::const_iterator it = filenames.begin();
+  for(; it != filenames.end(); ++it)
+    {
+    const char *filename = it->c_str();
+    const char *value =  s.GetValue( t1, filename );
+    std::cout << filename << " has " << t1 << " = " << value << std::endl;
+    }
+}
+
   return 0;
 }
 
