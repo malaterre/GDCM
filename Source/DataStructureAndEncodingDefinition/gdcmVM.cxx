@@ -197,6 +197,7 @@ unsigned int VM::GetNumberOfElementsFromArray(const char *array, unsigned int le
 {
   unsigned int c=0;
   // FIXME: we should make sure there is at least one value (space should not count)
+  if( !length ) return c;
   if ( array && *array ) // hum attribute could be empty. Thus cannot deduce VM, this time
     {
     const char *p = array;

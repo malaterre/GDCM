@@ -58,7 +58,7 @@ public:
 protected:
   void PrintDataSetOld(std::ostream &os, const DataSet &ds);
   void PrintElement(std::ostream& os, const DataElement &xde, const DictEntry &entry);
-  void PrintDataSet(std::ostream& os, const DataSet &ds);
+  void PrintDataSet(std::ostream& os, const std::string &s, const DataSet &ds);
 
 //  PrintStyles PrintStyle;
   const File *F;

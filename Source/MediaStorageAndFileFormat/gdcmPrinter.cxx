@@ -158,7 +158,7 @@ void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictE
       const Item &item = *it;
       const DataSet &ds = item.GetNestedDataSet();
       //const DataSet &exds = ds.GetInternal();
-      PrintDataSet(os << "  ", ds);
+      PrintDataSetOld(os << "  ", ds);
       }
     }
   else if ( vl.IsUndefined() )
@@ -480,7 +480,7 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
       os << "]"; \
     } break
 
-void Printer::PrintDataSet(std::ostream &os, const DataSet &ds)
+void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const DataSet &ds)
 {
   const Global& g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
@@ -505,6 +505,7 @@ void Printer::PrintDataSet(std::ostream &os, const DataSet &ds)
     bool retired = entry.GetRetired();
 
     const VR &vr_read = de.GetVR();
+    os << indent; // first thing do the shift !
     os << t << " ";
     os << vr_read << " ";
     if( !vr.Compatible( vr_read ) )
@@ -524,11 +525,11 @@ void Printer::PrintDataSet(std::ostream &os, const DataSet &ds)
       }
     if( refvr == VR::SQ )
       {
-      os << "TODO";
+      //os << "TODO";
       }
     else if( refvr == VR::UN )
       {
-      os << "TODO";
+      //os << "TODO";
       }
     else if( refvr & VR::VRASCII )
       {
@@ -605,7 +606,7 @@ void Printer::PrintDataSet(std::ostream &os, const DataSet &ds)
         {
         guessvm = VM::GetVMTypeFromLength(bv->GetLength(), refvr.GetSize() );
         }
-      if( refvr & VR::OB_OW )
+      if( refvr & VR::OB_OW || refvr == VR::SQ )
         {
         guessvm = VM::VM1;
         }
@@ -624,6 +625,22 @@ void Printer::PrintDataSet(std::ostream &os, const DataSet &ds)
       os << " UNKNOWN";
       }
     os << "\n";
+    if( refvr == VR::SQ )
+      {
+      const Value& value = de.GetValue();
+      const SequenceOfItems &sqi = dynamic_cast<const SequenceOfItems&>(value);
+      SequenceOfItems::ItemVector::const_iterator it = sqi.Items.begin();
+      for(; it != sqi.Items.end(); ++it)
+        {
+        const Item &item = *it;
+        const DataSet &ds = item.GetNestedDataSet();
+        //const DataSet &exds = ds.GetInternal();
+        std::string nextindent = indent + " ";
+        //PrintDataSet(os, nextindent, ds);
+        os << ds;
+        abort(); // FIXME there is a bug !
+        }
+      }
     }
 }
 
@@ -802,12 +819,12 @@ void Printer::Print(std::ostream& os)
   std::cout << "# Used TransferSyntax: \n";
 
   const FileMetaInformation &meta = F->GetHeader();
-  PrintDataSet(os, meta);
+  PrintDataSet(os, "", meta);
 
   std::cout << "\n# Dicom-Data-Set\n";
   std::cout << "# Used TransferSyntax: \n";
   const DataSet &ds = F->GetDataSet();
-  PrintDataSet(os, ds);
+  PrintDataSet(os, "", ds);
 }
 
 }

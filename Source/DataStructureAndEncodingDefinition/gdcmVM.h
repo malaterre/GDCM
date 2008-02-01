@@ -98,6 +98,10 @@ public:
   // vm1 is typically deduct from counting in a ValueField
   static bool IsValid(const int &vm1, const VMType &vm2);
   //bool IsValid() { return VMField != VM0 && VMField < VM_END; }
+
+  // WARNING: Implementation deficiency
+  // The Compatible function is poorly implemented, the reference vm should be coming from
+  // the dictionary, while the passed in value is the value guess from the file.
   bool Compatible(VM const &vm) const;
 
   static VMType GetVMTypeFromLength(unsigned int length, unsigned int size);
