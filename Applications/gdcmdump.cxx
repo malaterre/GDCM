@@ -165,6 +165,12 @@ int main (int argc, char *argv[])
     std::cerr << "Need input file (-i)\n";
     return 1;
     }
+  // Debug is a little too verbose
+  //gdcm::Trace::SetDebug( verbose );
+  gdcm::Trace::SetWarning( verbose );
+  gdcm::Trace::SetError( verbose );
+   
+
   // else
   int res = 0;
   if( gdcm::System::FileIsDirectory( filename.c_str() ) )

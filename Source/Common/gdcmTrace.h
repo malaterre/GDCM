@@ -34,14 +34,17 @@ public :
   Trace();
   ~Trace();
 
+  static void SetDebug(bool debug); //  { DebugFlag = true; };
   static void DebugOn(); //  { DebugFlag = true; };
   static void DebugOff(); // { DebugFlag = false; };
   static bool GetDebugFlag(); // { DebugFlag = false; };
   
+  static void SetWarning(bool debug); //  { DebugFlag = true; };
   static void WarningOn(); //  { WarningFlag = true; };
   static void WarningOff(); // { WarningFlag = false; };
   static bool GetWarningFlag();
 
+  static void SetError(bool debug); //  { DebugFlag = true; };
   static void ErrorOn(); //  { ErrorFlag = true; };
   static void ErrorOff(); // { ErrorFlag = false; };
   static bool GetErrorFlag();

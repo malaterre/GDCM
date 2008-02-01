@@ -60,97 +60,101 @@ void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictE
     }
   // first of' do the VR:
   if( lvr == VR::UN )
-  {
-	  if( t.GetElement() == 0x0 || t.GetElement() == 0x1 ) // is 0x1 actually UN ?
-	  {
-		  lvr = VR::UL;
-	  }
-	  else
-	  {
-    //assert( t.IsPublic() );
-    lvr = entry.GetVR();
-	  }
-  // Data Element (7FE0,0010) Pixel Data has the Value Representation 
-  // OW and shall be encoded in Little Endian.
-  if( t == Tag(0x7fe0,0x0010) )
     {
-    assert( lvr == VR::OB_OW );
-    lvr = VR::OW;
+    if( t.GetElement() == 0x0 || t.GetElement() == 0x1 ) // is 0x1 actually UN ?
+      {
+      lvr = VR::UL;
+      }
+    else
+      {
+      //assert( t.IsPublic() );
+      lvr = entry.GetVR();
+      }
+    // Data Element (7FE0,0010) Pixel Data has the Value Representation 
+    // OW and shall be encoded in Little Endian.
+    if( t == Tag(0x7fe0,0x0010) )
+      {
+      assert( lvr == VR::OB_OW );
+      lvr = VR::OW;
+      }
+    //if( lvr == VR::UN ) lvr = VR::LO; // why not ?
     }
-  //if( lvr == VR::UN ) lvr = VR::LO; // why not ?
-   }
 
   VM vm = entry.GetVM();
   if( vm == VM::VM0 )
-  {
+    {
     assert( lvr != VR::UN );
     //assert( lvr != VR::INVALID );
     assert( t.IsPrivate() || t.GetElement() == 0x0 );
     if ( lvr & VR::OB_OW )
-    {
+      {
       vm = VM::VM1;
-    }
+      }
     else
-    {
+      {
       vm = VM::GetVMTypeFromLength( value.GetLength(), lvr.GetSize() );
       //gdcmWarningMacro( "VM for " << vm );
       if( t.GetElement() == 0x0 )
-      {
+        {
         //gdcmWarningMacro( "Lgt= " << value.GetLength() << " size= " << vr.GetSize() );
         //assert( vm == VM::VM1 && lvr == VR::UL );
         if( vm != VM::VM1 )  gdcmWarningMacro( "Problem with " << t << " VM would be " << vm );
+        }
       }
     }
-  }
   // Print Tag and VR:
   os << t << " " << VR::GetVRString(lvr);
   //os << " " << VM::GetVMString( vm ) ;
-//  if( dictVR != VR::INVALID && !(vr & dictVR) )
-//    {
-//    gdcmErrorMacro( "Wrong VR should be " << dictVR );
-//    // LEADTOOLS_FLOWERS-8-PAL-RLE.dcm has (0040,0253) : CS instead of SH
-//    //abort();
-//    }
-//  if( pstyle == Printer::CONDENSED_STYLE )
-//    {
-//    (void)vl;
-//    _os /*<< "\t " << std::dec << vl  */
-//      << " [" << value << "]";
-//    }
+  //  if( dictVR != VR::INVALID && !(vr & dictVR) )
+  //    {
+  //    gdcmErrorMacro( "Wrong VR should be " << dictVR );
+  //    // LEADTOOLS_FLOWERS-8-PAL-RLE.dcm has (0040,0253) : CS instead of SH
+  //    //abort();
+  //    }
+  //  if( pstyle == Printer::CONDENSED_STYLE )
+  //    {
+  //    (void)vl;
+  //    _os /*<< "\t " << std::dec << vl  */
+  //      << " [" << value << "]";
+  //    }
 
-    if( VR::IsASCII(lvr) )
-      {
-      // TODO FIXME (value is a null object)
-      if( vl ) os << " [" << value << "] ";
-      }
-    else if ( lvr == VR::SQ || vl.IsUndefined() )
+  if( !entry.GetVR().Compatible( lvr ) )
     {
-//	    os << "DEBUG";
-//	    value.Print( _os );
+          gdcmErrorMacro( "Wrong VR should be " << entry.GetVR() );
     }
-    else if ( VR::IsBinary(lvr) )
-      {
-      //os << "\t ValueField=[";
-      os << " ";
-      if( vl ) PrintValue(lvr, vm, value );
-      //os << "]";
-      os << " ";
-      }
-    else 
+  if( VR::IsASCII(lvr) )
     {
-      std::cerr << "Should not happen: " << lvr << std::endl;
+    // TODO FIXME (value is a null object)
+    if( vl ) os << " [" << value << "] ";
     }
-    //
-    os << "\t\t# " << std::dec << vl;
-    os << ", 1";
+  else if ( lvr == VR::SQ || vl.IsUndefined() )
+    {
+    //	    os << "DEBUG";
+    //	    value.Print( _os );
+    }
+  else if ( VR::IsBinary(lvr) )
+    {
+    //os << "\t ValueField=[";
+    os << " ";
+    if( vl ) PrintValue(lvr, vm, value );
+    //os << "]";
+    os << " ";
+    }
+  else 
+    {
+    std::cerr << "Should not happen: " << lvr << std::endl;
+    }
+  //
+  os << "\t\t# " << std::dec << vl;
+  os << ", 1";
 
-    if( vl.IsUndefined() ) { assert ( t == Tag(0x7fe0, 0x0010) || lvr == VR::SQ ) ; }
-    if ( lvr == VR::SQ )
+  if( vl.IsUndefined() ) { assert ( t == Tag(0x7fe0, 0x0010) || lvr == VR::SQ ) ; }
+  if ( lvr == VR::SQ )
     {
-      os << std::endl;
-      const SequenceOfItems &sqi = static_cast<const SequenceOfItems&>(value);
-      SequenceOfItems::ItemVector::const_iterator it = sqi.Items.begin();
-      for(; it != sqi.Items.end(); ++it)
+    os << std::endl;
+    const SequenceOfItems &sqi = static_cast<const SequenceOfItems&>(value);
+    SequenceOfItems::ItemVector::const_iterator it = sqi.Items.begin();
+    for(; it != sqi.Items.end(); ++it)
       {
       const Item &item = *it;
       const DataSet &ds = item.GetNestedDataSet();
@@ -158,13 +162,13 @@ void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictE
       PrintDataSet(os << "  ", ds);
       }
     }
-    else if ( vl.IsUndefined() )
+  else if ( vl.IsUndefined() )
     {
-      os << std::endl;
-      const SequenceOfFragments &sqf = static_cast<const SequenceOfFragments&>(value);
-      os << sqf.GetTable() << std::endl;
-      SequenceOfFragments::FragmentVector::const_iterator it = sqf.Fragments.begin();
-      for(; it != sqf.Fragments.end(); ++it)
+    os << std::endl;
+    const SequenceOfFragments &sqf = static_cast<const SequenceOfFragments&>(value);
+    os << sqf.GetTable() << std::endl;
+    SequenceOfFragments::FragmentVector::const_iterator it = sqf.Fragments.begin();
+    for(; it != sqf.Fragments.end(); ++it)
       {
       const Fragment &frag = *it;
       const Value &val = frag.GetValue();
@@ -172,7 +176,7 @@ void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictE
       os << "  " << frag << std::endl;
       }
     }
-  }
+}
 
 template <typename T>
 inline char *bswap(char *out, const char *in, size_t length)
@@ -573,8 +577,9 @@ void Printer::PrintDataSet(std::ostream &os, const DataSet &ds)
           {
           //os << " VR=" << VR::GetVRString(vr_read);
           os << " " << VR::GetVRString(vr_read);
+          os << "(" << vr << ")";
           }
-        if( vr != VR::INVALID && vr_read != VR::INVALID && !(vr_read & vr) )
+        if( !vr.Compatible( vr_read ) )
           {
           gdcmErrorMacro( "Wrong VR should be " << vr );
           // PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
@@ -620,7 +625,7 @@ void Printer::PrintDataSet(std::ostream &os, const DataSet &ds)
           }
         else
           {
-          assert( strowner );
+          //assert( strowner );
           os << " FIXME: " << owner << std::endl;
           }
         }

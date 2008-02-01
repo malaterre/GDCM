@@ -39,6 +39,7 @@ Trace::~Trace()
     }
 }
 
+void Trace::SetDebug(bool debug)  { DebugFlag = debug; }
 void Trace::DebugOn()  { DebugFlag = true; }
 void Trace::DebugOff() { DebugFlag = false; }
 bool Trace::GetDebugFlag()
@@ -46,6 +47,7 @@ bool Trace::GetDebugFlag()
   return DebugFlag;
 }
 
+void Trace::SetWarning(bool warning)  { WarningFlag = warning; }
 void Trace::WarningOn()  { WarningFlag = true; }
 void Trace::WarningOff() { WarningFlag = false; }
 bool Trace::GetWarningFlag()
@@ -53,9 +55,12 @@ bool Trace::GetWarningFlag()
   return WarningFlag;
 }
 
+void Trace::SetError(bool error)  { ErrorFlag = error; }
+void Trace::ErrorOn()  { ErrorFlag = true; }
+void Trace::ErrorOff() { ErrorFlag = false; }
 bool Trace::GetErrorFlag()
 {
-  return WarningFlag;
+  return ErrorFlag;
 }
 
 bool Trace::GetDebugToFile()
