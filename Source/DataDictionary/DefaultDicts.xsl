@@ -148,8 +148,8 @@ generating group length for arbitrary even group number seems to get my xsltproc
           <xsl:with-param name="element" select="'0000'"/>
           <xsl:with-param name="vr" select="'UL'"/>
           <xsl:with-param name="vm" select="'1'"/>
+          <xsl:with-param name="owner" select="@owner"/>
           <xsl:with-param name="retired" select="'true'"/>
-<!-- FIXME ?? -->
           <xsl:with-param name="name" select="concat('Group Length ',@group)"/>
         </xsl:call-template>
       </xsl:if>
@@ -282,6 +282,7 @@ void PrivateDict::LoadDefault()
           <xsl:with-param name="element" select="$element"/>
           <xsl:with-param name="vr" select="$vr"/>
           <xsl:with-param name="vm" select="$vm"/>
+          <xsl:with-param name="owner" select="$owner"/>
           <xsl:with-param name="retired" select="$retired"/>
           <xsl:with-param name="name" select="$name"/>
         </xsl:call-template>
@@ -309,6 +310,7 @@ void PrivateDict::LoadDefault()
           <xsl:with-param name="element" select="$element_xx"/>
           <xsl:with-param name="vr" select="$vr"/>
           <xsl:with-param name="vm" select="$vm"/>
+          <xsl:with-param name="owner" select="$owner"/>
           <xsl:with-param name="retired" select="$retired"/>
           <xsl:with-param name="name" select="$name"/>
         </xsl:call-template>
