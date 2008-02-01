@@ -605,6 +605,10 @@ void Printer::PrintDataSet(std::ostream &os, const DataSet &ds)
         {
         guessvm = VM::GetVMTypeFromLength(bv->GetLength(), refvr.GetSize() );
         }
+      if( refvr & VR::OB_OW )
+        {
+        guessvm = VM::VM1;
+        }
       }
     if( !vm.Compatible( guessvm ) )
       {

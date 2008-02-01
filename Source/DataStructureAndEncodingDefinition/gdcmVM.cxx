@@ -31,6 +31,8 @@ static const char *VMStrings[] = {
   "11",
   "16",
   "24",
+  "32",
+  "99",
   "256",
   "1-2",
   "1-3",
@@ -210,7 +212,47 @@ unsigned int VM::GetNumberOfElementsFromArray(const char *array, unsigned int le
 
 bool VM::Compatible(VM const &vm) const
 {
-  return VMField == vm.VMField;
+  // make sure that vm is a numeric value
+  //assert( vm.VMField <= VM256 );
+  if ( VMField == VM::VM0 ) return false; // nothing was found in the dict
+  if ( vm == VM::VM0 ) return true; // the user was not able to compute the vm from the empty bytevalue
+  // let's start with the easy case:
+  if ( VMField == vm.VMField ) return true;
+  switch(VMField)
+    {
+  case VM1_2:
+    return vm.VMField >= VM::VM1 || vm.VMField <= VM::VM2;
+    break;
+  case VM1_3:
+    return vm.VMField >= VM::VM1 || vm.VMField <= VM::VM3;
+    break;
+  case VM1_8:
+    return vm.VMField >= VM::VM1 || vm.VMField <= VM::VM8;
+    break;
+  case VM1_32:
+    return vm.VMField >= VM::VM1 || vm.VMField <= VM::VM32;
+    break;
+  case VM1_99:
+    return vm.VMField >= VM::VM1 || vm.VMField <= VM::VM99;
+    break;
+  case VM1_n:
+    return vm.VMField >= VM::VM1;
+    break;
+  case VM2_2n:
+    return vm.VMField >= VM::VM2 && !(vm.GetLength() % 2);
+    break;
+  case VM2_n:
+    return vm.VMField >= VM::VM2;
+    break;
+  case VM3_3n:
+    return vm.VMField >= VM::VM3 && !(vm.GetLength() % 3);
+    break;
+  case VM3_n:
+    return vm.VMField >= VM::VM3;
+    break;
+  default:
+    abort();
+    }
 }
 
 } // end namespace gdcm

@@ -67,6 +67,8 @@ public:
     VM11,
     VM16,
     VM24,
+    VM32,
+    VM99,
     VM256,
     VM1_2,
     VM1_3,
