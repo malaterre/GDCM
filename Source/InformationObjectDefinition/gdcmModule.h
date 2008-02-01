@@ -28,7 +28,7 @@ namespace gdcm
  * \note bla
  * Module: A set of Attributes within an Information Entity or Normalized IOD which
  * are logically related to each other.
- * \sea Dict
+ * \sa Dict
  */
 class GDCM_EXPORT Module
 {

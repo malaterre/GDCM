@@ -25,7 +25,7 @@ namespace gdcm
 /**
  * \brief Class for representing a ModuleEntry
  * \note bla
- * \sea DictEntry
+ * \sa DictEntry
  */
 class GDCM_EXPORT ModuleEntry
 {
