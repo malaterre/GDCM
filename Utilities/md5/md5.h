@@ -21,7 +21,18 @@
   ghost@aladdin.com
 
  */
+
 #include "md5_mangle.h"
+
+#if defined(WIN32)
+  #if defined(md5_EXPORTS)
+    #define MD5_EXPORT __declspec( dllexport )
+  #else
+    #define MD5_EXPORT __declspec( dllimport )
+  #endif
+#else
+  #define MD5_EXPORT
+#endif /*defined(WIN32)*/
 
 /* $Id: md5.h,v 1.4 2002/04/13 19:20:28 lpd Exp $ */
 /*
@@ -78,13 +89,13 @@ extern "C"
 #endif
 
 /* Initialize the algorithm. */
-void md5_init(md5_state_t *pms);
+void MD5_EXPORT md5_init(md5_state_t *pms);
 
 /* Append a string to the message. */
-void md5_append(md5_state_t *pms, const md5_byte_t *data, int nbytes);
+void MD5_EXPORT md5_append(md5_state_t *pms, const md5_byte_t *data, int nbytes);
 
 /* Finish the message and return the digest. */
-void md5_finish(md5_state_t *pms, md5_byte_t digest[16]);
+void MD5_EXPORT md5_finish(md5_state_t *pms, md5_byte_t digest[16]);
 
 #ifdef __cplusplus
 }  /* end extern "C" */

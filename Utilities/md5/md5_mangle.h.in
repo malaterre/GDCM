@@ -18,4 +18,6 @@
 #define md5_finish @MANGLE_PREFIX@_finish
 #define md5_init   @MANGLE_PREFIX@_init
 
+#define md5_EXPORTS @MANGLE_PREFIX@md5_EXPORTS
+
 #endif
