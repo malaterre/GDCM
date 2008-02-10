@@ -46,11 +46,11 @@ private:
   SwapCodeType SwapCodeValue;
 };
 //-----------------------------------------------------------------------------
-//inline std::ostream& operator<<(std::ostream& os, const SwapCode& sc)
-//{
-//  os << SwapCode::GetSwapCodeString(sc);
-//  return os;
-//}
+inline std::ostream& operator<<(std::ostream& os, const SwapCode& sc)
+{
+  os << SwapCode::GetSwapCodeString(sc);
+  return os;
+}
 
 } // end namespace gdcm
 

@@ -24,7 +24,7 @@ namespace gdcm
  * \brief Class to do system operation
  * \note bla
  */
-class System
+class GDCM_EXPORT System
 {
 public:
   // system operation 

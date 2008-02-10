@@ -60,10 +60,11 @@ const char* SwapCode::GetSwapCodeString(SwapCode const & sc)
   return SwapCodeStrings[idx];
 }
 
+/*
 std::ostream& operator<<(std::ostream& os, const SwapCode& sc)
 {
   os << SwapCode::GetSwapCodeString(sc);
   return os;
 }
-
+*/
 } // namespace gdcm

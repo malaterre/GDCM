@@ -17,8 +17,8 @@
 #define __gdcmWin32_h
 
 //-----------------------------------------------------------------------------
-#if defined(_WIN32) && defined(BUILD_SHARED_LIBS)
-  #ifdef gdcm_EXPORTS
+#if defined(WIN32) && defined(GDCM_BUILD_SHARED_LIBS)
+  #if (defined(gdcmCommon_EXPORTS) || defined(gdcmDICT_EXPORTS) || defined(gdcmDSED_EXPORTS) || defined(gdcmIOD_EXPORTS) || defined(gdcmMSFF_EXPORTS))
     #define GDCM_EXPORT __declspec( dllexport )
   #else
     #define GDCM_EXPORT __declspec( dllimport )
@@ -51,8 +51,6 @@
 // 'type' : forcing value to bool 'true' or 'false' (performance warning)
 // //#pragma warning ( disable : 4800 )
 #endif //_MSC_VER
-
-#include <assert.h>
 
 //-----------------------------------------------------------------------------
 #endif //__gdcmWin32_h

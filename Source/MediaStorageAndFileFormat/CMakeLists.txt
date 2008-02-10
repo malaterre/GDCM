@@ -57,6 +57,7 @@ INCLUDE_DIRECTORIES(
   #"${GDCM_SOURCE_DIR}/Utilities/jpeg"
   #"${GDCM_SOURCE_DIR}/Utilities/openjpeg/libopenjpeg"
   "${GDCM_BINARY_DIR}/Utilities/openjpeg"
+  "${GDCM_BINARY_DIR}/Utilities/zlib"
  
   )
 

@@ -15,6 +15,7 @@
 #ifndef __gdcmSpacingHelper_h
 #define __gdcmSpacingHelper_h
 
+#include "gdcmTypes.h"
 #include "gdcmTag.h"
 #include <vector>
 

@@ -64,6 +64,8 @@ private:
 
   // Private Dicts:
   PrivateDict ShadowDict;
+  Dicts &operator=(const Dicts &_val); // purposely not implemented
+  Dicts(const Dicts &_val); // purposely not implemented
 };
 
 

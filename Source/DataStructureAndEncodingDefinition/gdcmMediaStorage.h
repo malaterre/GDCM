@@ -28,7 +28,7 @@ namespace gdcm
  */
 class DataSet;
 class FileMetaInformation;
-class MediaStorage
+class GDCM_EXPORT MediaStorage
 {
 public:
   typedef enum {

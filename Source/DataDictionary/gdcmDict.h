@@ -15,6 +15,7 @@
 #ifndef __gdcmDict_h
 #define __gdcmDict_h
 
+#include "gdcmTypes.h"
 #include "gdcmTag.h"
 #include "gdcmDictEntry.h"
 

@@ -16,6 +16,7 @@
 #ifndef __gdcmDictConverter_h
 #define __gdcmDictConverter_h
 
+#include "gdcmTypes.h"
 #include "gdcmVR.h"
 #include "gdcmVM.h"
 

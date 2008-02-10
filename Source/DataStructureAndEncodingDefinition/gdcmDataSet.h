@@ -51,7 +51,7 @@ namespace gdcm
  */
 
 //-----------------------------------------------------------------------------
-class DataSet
+class GDCM_EXPORT DataSet
 {
 public:
   typedef std::set<DataElement> DataElementSet;

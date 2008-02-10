@@ -22,7 +22,7 @@
 //namespace std { class ostream; }
 namespace gdcm
 {
-class Object
+class GDCM_EXPORT Object
 {
 public:
   friend std::ostream& operator<<(std::ostream &os, const Object &obj);

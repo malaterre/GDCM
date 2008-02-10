@@ -21,6 +21,8 @@
 
 #include "gdcmWin32.h"
 
+#include <assert.h> // FIXME
+
 
 namespace gdcm
 {
