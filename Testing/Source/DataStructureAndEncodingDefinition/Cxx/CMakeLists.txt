@@ -2,7 +2,6 @@
 # DSED
 SET(DSED_TEST_SRCS
 	TestAttribute
-	#TestAttributeWriteFile
   #TestReadPatientName
   TestByteBuffer
   #TestByteValue
@@ -66,5 +65,6 @@ ENDFOREACH(name)
 # FIXME
 ADD_EXECUTABLE(TestAttribute2 TestAttribute2.cxx)
 #ADD_EXECUTABLE(TestAttribute3 TestAttribute3.cxx)
+ADD_EXECUTABLE(TestAttribute4 TestAttribute4.cxx)
 ADD_EXECUTABLE(TestAttribute5 TestAttribute5.cxx)
 
