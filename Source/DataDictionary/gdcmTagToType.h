@@ -9041,12 +9041,12 @@ enum { VMType = VM::VM1 };
 template <> struct TagToType<0x0074,0x1048> {
 typedef VRToType<VR::SQ>::Type Type;
 enum { VRType = VR::SQ };
-enum { VMType = VM::VM1_n };
+enum { VMType = VM::VM1 };
 };
 template <> struct TagToType<0x0074,0x104a> {
 typedef VRToType<VR::SQ>::Type Type;
 enum { VRType = VR::SQ };
-enum { VMType = VM::VM1_n };
+enum { VMType = VM::VM1 };
 };
 template <> struct TagToType<0x0074,0x104c> {
 typedef VRToType<VR::SQ>::Type Type;
@@ -9061,7 +9061,7 @@ enum { VMType = VM::VM1 };
 template <> struct TagToType<0x0074,0x1050> {
 typedef VRToType<VR::SQ>::Type Type;
 enum { VRType = VR::SQ };
-enum { VMType = VM::VM1_n };
+enum { VMType = VM::VM1 };
 };
 template <> struct TagToType<0x0074,0x1052> {
 typedef VRToType<VR::AT>::Type Type;
