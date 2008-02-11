@@ -36,16 +36,15 @@
 
 int main(int argc, char *argv[])
 {
-  
   const char *filename;
   if( argc < 2 )
-  {
-  filename = "/tmp/dummy.dcm";
-  }
+    {
+    filename = "/tmp/dummy.dcm";
+    }
   else
-  {
-  filename = argv[1];
-  }
+    {
+    filename = argv[1];
+    }
   //std::cout << "Reading: " << filename << std::endl;
   std::ifstream is(filename);
 
