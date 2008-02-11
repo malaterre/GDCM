@@ -40,15 +40,6 @@
 #include <getopt.h>
 #include <string.h>
 
-gdcm::Tag ReadTagFromString(const char *str)
-{
-  unsigned int group = 0, element = 0;
-  if( sscanf(str, "%04x,%04x", &group , &element) != 2 )
-    {
-    std::cerr << "Problem reading the Tag\n";
-    }
-  return gdcm::Tag(group, element);
-}
 
 int main(int argc, char *argv[])
 {
@@ -109,7 +100,7 @@ int main(int argc, char *argv[])
 
     case 't':
       printf ("option t with value '%s'\n", optarg);
-      rawTag = ReadTagFromString(optarg);
+      rawTag.ReadFromString(optarg);
       //std::cerr << rawTag << std::endl;
       break;
 

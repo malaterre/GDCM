@@ -179,6 +179,17 @@ public:
     return r;
     }
 
+  void ReadFromString(const char *str)
+    {
+    unsigned int group = 0, element = 0;
+    if( sscanf(str, "%04x,%04x", &group , &element) != 2 )
+      {
+      throw Exception( "Problem reading the Tag" );
+      }
+    SetGroup( group );
+    SetElement( element );
+    }
+
 private:
   union { uint32_t tag; uint16_t tags[2]; char bytes[4]; } ElementTag;
 };
