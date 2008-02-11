@@ -88,8 +88,14 @@ public:
   enum { VMType = VMToLength<TVM>::Length };
   ArrayType Internal[VMToLength<TVM>::Length];
 
+  // Make sure that user specified VR/VM are compatible with the public dictionary:
   GDCM_STATIC_ASSERT( ((VR::VRType)TVR & (VR::VRType)(TagToType<Group, Element>::VRType)) );
   GDCM_STATIC_ASSERT( ((VM::VMType)TVM & (VM::VMType)(TagToType<Group, Element>::VMType)) );
+  GDCM_STATIC_ASSERT( ((((VR::VRType)TVR & VR::VR_VM1) && ((VM::VMType)TVM == VM::VM1) )
+                    || !((VR::VRType)TVR & VR::VR_VM1) ) );
+
+  // Some extra dummy checks:
+  // Data Elements with a VR of SQ, OF, OW, OB or UN shall always have a Value Multiplicity of one.
 
   unsigned int GetNumberOfValues() const {
     return VMToLength<TVM>::Length;
@@ -233,6 +239,15 @@ public:
   VR  GetVR() const { return (VR::VRType)TVR; }
   VM  GetVM() const { return VM::VM1_n; }
 
+  VR  GetDictVR() const { return (VR::VRType)(TagToType<Group, Element>::VRType); }
+  VM  GetDictVM() const { return GetVM(); }
+
+  // Make sure that user specified VR/VM are compatible with the public dictionary:
+  GDCM_STATIC_ASSERT( ((VR::VRType)TVR & (VR::VRType)(TagToType<Group, Element>::VRType)) );
+  GDCM_STATIC_ASSERT( (VM::VM1_n & (VM::VMType)(TagToType<Group, Element>::VMType)) );
+  GDCM_STATIC_ASSERT( ((((VR::VRType)TVR & VR::VR_VM1) && ((VM::VMType)TagToType<Group,Element>::VMType == VM::VM1) )
+                    || !((VR::VRType)TVR & VR::VR_VM1) ) );
+
   // This the way to prevent default initialization
   explicit Attribute() { Internal=0; Length=0; Own = true; }
   ~Attribute() {
@@ -322,6 +337,27 @@ class Attribute<Group,Element,TVR,VM::VM2_n> : public Attribute<Group,Element,TV
 {
 public:
   VM  GetVM() const { return VM::VM2_n; }
+};
+
+template<uint16_t Group, uint16_t Element, int TVR> 
+class Attribute<Group,Element,TVR,VM::VM2_2n> : public Attribute<Group,Element,TVR,VM::VM2_n>
+{
+public:
+  VM  GetVM() const { return VM::VM2_2n; }
+};
+
+template<uint16_t Group, uint16_t Element, int TVR> 
+class Attribute<Group,Element,TVR,VM::VM3_n> : public Attribute<Group,Element,TVR,VM::VM1_n>
+{
+public:
+  VM  GetVM() const { return VM::VM3_n; }
+};
+
+template<uint16_t Group, uint16_t Element, int TVR> 
+class Attribute<Group,Element,TVR,VM::VM3_3n> : public Attribute<Group,Element,TVR,VM::VM3_n>
+{
+public:
+  VM  GetVM() const { return VM::VM3_3n; }
 };
 
 
@@ -539,6 +575,7 @@ class Attribute<VR::OW, VM::VM1> : public Attribute<VR::OW, VM::VM1_n> {};
 template <int TVM> class Attribute<VR::OW, TVM>;
 #endif
 
+#if 0
 template<>
 class Attribute<0x7fe0,0x0010, VR::OW, VM::VM1>
 {
@@ -568,6 +605,7 @@ public:
     _os.write( Internal, Length );
     }
 };
+#endif
 
 /*
 // Removing Attribute for SQ for now...

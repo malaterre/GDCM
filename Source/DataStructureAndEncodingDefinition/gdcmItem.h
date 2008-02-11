@@ -169,23 +169,14 @@ std::istream &Read(std::istream &is)
     return is;
     }
   // Self
-  // Some file written by GDCM 1.0 were written with 0xFFFFFFFF instead of 0x0
   if( TagField == Tag(0xfffe,0xe0dd) )
     {
+    // Some file written by GDCM 1.0 were written with 0xFFFFFFFF instead of 0x0
     if( ValueLengthField )
       {
-      gdcmWarningMacro( "ValueLengthField is not 0" );
+      gdcmWarningMacro( "ValueLengthField is not 0 but " << ValueLengthField );
       }
     }
-//  else if( ValueLengthField == 0 )
-//    {
-//    // ATTMA002_DS.dcm
-//    //assert( TagField == Tag( 0xfffe, 0xe0dd) );
-//    if( TagField != Tag( 0xfffe, 0xe0dd) )
-//      {
-//      gdcmWarningMacro( "Item: " << TagField << " has a length of 0" );
-//      }
-//    }
   else if( ValueLengthField.IsUndefined() )
     {
     DataSet &nested = NestedDataSet;

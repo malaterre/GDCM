@@ -77,6 +77,10 @@ public:
     VL32 = OB | OW | OF | SQ | UN | UT, // if( VR & VR_VL32 ) => VR has its VL coded over 32bits
     VRASCII = AE | AS | CS | DA | DS | DT | IS | LO | LT | PN | SH | ST | TM | UI,
     VRBINARY = AT | FL | FD | OB | OF | OW | SL | SQ | SS | UL | UN | US | UT, // FIXME: UN ?
+    // PS 3.5:
+    // Data Elements with a VR of SQ, OF, OW, OB or UN shall always have a Value Multiplicity of one.
+    // GDCM is adding a couple more: AS, LT, ST, UT
+    VR_VM1 = AS | LT | ST | UT | SQ | OF | OW | OB | UN, // All those VR have a VM1
     VRALL = VRASCII | VRBINARY,
     VR_END = UT+1  // Invalid VR, need to be max(VRType)+1
   } VRType;
