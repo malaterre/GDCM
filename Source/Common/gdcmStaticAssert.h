@@ -15,44 +15,38 @@
 #ifndef __gdcmStaticAssert_h
 #define __gdcmStaticAssert_h
 
-/*
- Lifted direct from:
- Modern C++ Design: Generic Programming and Design Patterns Applied
- Section 2.1
- by Andrei Alexandrescu
-*/
-namespace ww
-{
-    template<bool> class compile_time_check
-    {
-    public:
-        compile_time_check(...) {}
-    };
 
-    template<> class compile_time_check<false>
-    {
-    };
+// the following was shamelessly borowed from BOOST static assert:
+namespace gdcm 
+{
+  template <bool x> struct STATIC_ASSERTION_FAILURE;
+
+  template <> struct STATIC_ASSERTION_FAILURE<true> { enum { value = 1 }; };
+
+  template <int x> struct static_assert_test {};
 }
 
-    /*
-    Similiar to assert, StaticAssert is only in operation when NDEBUG
-    is not defined. It will test its first argument at compile time 
-    and on failure report the error message of the second argument,
-    which must be a valid c++ classname. i.e. no spaces, punctuation 
-    or reserved keywords.
-    */
-#ifndef NDEBUG
-#   define StaticAssert(test, errormsg)                         \
-    do {                                                        \
-        struct ERROR_##errormsg {};                             \
-        typedef ww::compile_time_check< (test) != 0 > tmplimpl; \
-        tmplimpl aTemp = tmplimpl(ERROR_##errormsg());          \
-        sizeof(aTemp);                                          \
-    } while (0)
-#else
-#   define StaticAssert(test, errormsg)                         \
-    do {} while (0)
-#endif
+#define GDCM_JOIN( X, Y ) GDCM_DO_JOIN( X, Y )
+#define GDCM_DO_JOIN( X, Y ) GDCM_DO_JOIN2(X,Y)
+#define GDCM_DO_JOIN2( X, Y ) X##Y
 
+
+// The GDCM_JOIN  + __LINE__ is needed to create a uniq identifier
+#define GDCM_STATIC_ASSERT( B ) \
+   typedef ::gdcm::static_assert_test<\
+      sizeof(::gdcm::STATIC_ASSERTION_FAILURE< (bool)( B ) >)>\
+         GDCM_JOIN(gdcm_static_assert_typedef_, __LINE__)
+
+
+/* Example of use:
+ *
+ * template <class T>
+ * struct must_not_be_instantiated
+ * {   
+ * // this will be triggered if this type is instantiated
+ * GDCM_STATIC_ASSERT(sizeof(T) == 0); 
+ * };
+ * 
+ */
 #endif // __gdcmStaticAssert_h
 

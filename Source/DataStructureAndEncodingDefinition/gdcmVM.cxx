@@ -196,18 +196,30 @@ VM::VMType VM::GetVMTypeFromLength(unsigned int length, unsigned int size)
 unsigned int VM::GetNumberOfElementsFromArray(const char *array, unsigned int length)
 {
   unsigned int c=0;
-  // FIXME: we should make sure there is at least one value (space should not count)
-  if( !length ) return c;
-  if ( array && *array ) // hum attribute could be empty. Thus cannot deduce VM, this time
+  if( !length || !array ) return 0;
+  const char *parray = array;
+  const char *end = array + length;
+  bool valuefound = false;
+  for(; parray != end; ++parray)
     {
-    const char *p = array;
-    const char *end = array + length;
-    c = 1;
-    while(p != end)
+    if( *parray == ' ' )
       {
-      if( *p++ == '\\' ) ++c;
+      // space char do not count
+      }
+    else if( *parray == '\\' )
+      {
+      if( valuefound )
+        {
+        ++c;
+        valuefound = false; // reset counter
+        }
+      }
+    else
+      {
+      valuefound = true;
       }
     }
+  if( valuefound ) ++c;
   return c;
 }
 

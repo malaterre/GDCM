@@ -21,6 +21,7 @@
 #include "gdcmVM.h"
 #include "gdcmElement.h"
 #include "gdcmDataElement.h"
+#include "gdcmStaticAssert.h"
 
 #include <string>
 #include <vector>
@@ -73,6 +74,9 @@ public:
   enum { VMType = VMToLength<TVM>::Length };
   ArrayType Internal[VMToLength<TVM>::Length];
 
+  GDCM_STATIC_ASSERT( ((VR::VRType)TVR & (VR::VRType)(TagToType<Group, Element>::VRType)) );
+  GDCM_STATIC_ASSERT( ((VM::VMType)TVM & (VM::VMType)(TagToType<Group, Element>::VMType)) );
+
   unsigned int GetNumberOfValues() const {
     return VMToLength<TVM>::Length;
   }
@@ -90,7 +94,9 @@ public:
 
   Tag GetTag() const { return Tag(Group,Element); }
   VR  GetVR() const { return (VR::VRType)TVR; }
+  VR  GetDictVR() const { return (VR::VRType)(TagToType<Group, Element>::VRType); }
   VM  GetVM() const { return (VM::VMType)TVM; }
+  VM  GetDictVM() const { return (VM::VMType)(TagToType<Group, Element>::VMType); }
 
   // copy:
   ArrayType GetValue(unsigned int idx = 0) {
