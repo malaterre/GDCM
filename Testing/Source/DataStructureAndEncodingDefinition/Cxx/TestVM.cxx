@@ -18,15 +18,15 @@ int TestVM(int, char *[])
 {
   //gdcm::VM::VMType vm = gdcm::LengthToVM<1>::TVM;
 
-  const char str1[] = "1\\2";
+  const char str1[] = " 1\\2";
   unsigned int count1 = gdcm::VM::GetNumberOfElementsFromArray(str1, strlen(str1) );
   if( count1 != 2 ) return 1;
 
-  const char str2[] = "1\\2\\3";
+  const char str2[] = "  1\\2\\3";
   unsigned int count2 = gdcm::VM::GetNumberOfElementsFromArray(str2, strlen(str2) );
   if( count2 != 3 ) return 1;
 
-  const char str3[] = "1";
+  const char str3[] = "   1";
   unsigned int count3 = gdcm::VM::GetNumberOfElementsFromArray(str3, strlen(str3) );
   if( count3 != 1 ) return 1;
 
@@ -48,7 +48,48 @@ int TestVM(int, char *[])
 
   const char str8[] = "   ";
   unsigned int count8 = gdcm::VM::GetNumberOfElementsFromArray(str8, strlen(str8) );
-  if( count8 != 0 ) return 1;
+  if( count8 != 0 ) 
+    {
+    std::cerr << "count8 failed" << std::endl;
+    return 1;
+    }
+
+  const char str9[] = "     \\      ";
+  unsigned int count9 = gdcm::VM::GetNumberOfElementsFromArray(str9, strlen(str9) );
+  if( count9 != 0 ) return 1;
+
+  const char str10[] = "   3  \\      ";
+  unsigned int count10 = gdcm::VM::GetNumberOfElementsFromArray(str10, strlen(str10) );
+  if( count10 != 1 ) return 1;
+
+  if( gdcm::VM::VM1 & gdcm::VM::VM2 ) return 1;
+  if( gdcm::VM::VM1 & gdcm::VM::VM3 ) return 1;
+  if( gdcm::VM::VM1 & gdcm::VM::VM32 ) return 1;
+
+  if( !(gdcm::VM::VM1 & gdcm::VM::VM1_2) ) return 1;
+  if( !(gdcm::VM::VM2 & gdcm::VM::VM1_2) ) return 1;
+
+  if( !(gdcm::VM::VM1 & gdcm::VM::VM1_3) ) return 1;
+  if( !(gdcm::VM::VM2 & gdcm::VM::VM1_3) ) return 1;
+  if( !(gdcm::VM::VM3 & gdcm::VM::VM1_3) ) return 1;
+
+  if( !(gdcm::VM::VM1 & gdcm::VM::VM1_n) ) return 1;
+
+  if( gdcm::VM::VM1 & gdcm::VM::VM2_n ) return 1;
+  if( !(gdcm::VM::VM2 & gdcm::VM::VM2_n) ) return 1;
+
+  if( gdcm::VM::VM1 & gdcm::VM::VM3_4 ) return 1;
+  if( !(gdcm::VM::VM3 & gdcm::VM::VM3_4) ) return 1;
+  if( !(gdcm::VM::VM4 & gdcm::VM::VM3_4) ) return 1;
+
+  if( gdcm::VM::VM1 & gdcm::VM::VM3_3n ) return 1;
+  if( !(gdcm::VM::VM3 & gdcm::VM::VM3_3n) ) return 1;
+  if( !(gdcm::VM::VM9 & gdcm::VM::VM3_3n) ) return 1;
+  if( !(gdcm::VM::VM99 & gdcm::VM::VM3_3n) ) return 1;
+
+  if( gdcm::VM::VM1 & gdcm::VM::VM4_4n ) return 1;
+  if( !(gdcm::VM::VM4 & gdcm::VM::VM4_4n) ) return 1;
 
   return 0;
 }
+

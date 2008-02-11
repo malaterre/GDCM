@@ -70,3 +70,6 @@ ADD_EXECUTABLE(TestAttribute3 TestAttribute3.cxx)
 TARGET_LINK_LIBRARIES(TestAttribute3 gdcmDSED)
 #ADD_EXECUTABLE(TestElement3 TestElement3.cxx)
 
+ADD_EXECUTABLE(TestAttribute5 TestAttribute5.cxx)
+TARGET_LINK_LIBRARIES(TestAttribute5 gdcmDSED)
+

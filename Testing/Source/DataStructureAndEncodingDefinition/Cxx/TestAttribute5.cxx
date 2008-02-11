@@ -1,0 +1,24 @@
+#include "gdcmAttribute.h"
+
+int main()
+{
+  gdcm::Attribute<0x0018,0x1182, gdcm::VR::IS, gdcm::VM::VM1> fd = {0};
+
+  bool b = gdcm::VR::OB & gdcm::VR::UL;
+  std::cout << b << std::endl;
+
+  gdcm::VR vr = fd.GetVR();
+  gdcm::VR dictvr = fd.GetDictVR();
+  b = vr & dictvr;
+  std::cout << vr << " " << dictvr << std::endl;
+  std::cout << b << std::endl;
+
+  gdcm::VM vm = fd.GetVM();
+  gdcm::VM dictvm = fd.GetDictVM();
+  b = vm & dictvm;
+  std::cout << vm << " " << dictvm << std::endl;
+  std::cout << b << std::endl;
+
+  
+  return 0;
+}
