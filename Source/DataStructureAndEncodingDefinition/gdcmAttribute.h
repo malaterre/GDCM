@@ -63,6 +63,20 @@ public:
     }
 };
 
+/* \brief Attribute class
+ * This class use template metaprograming tricks to let the user know when the template
+ * instanciation does not match the public dictionary. 
+ *
+ * Typical example that compile is:
+ * Attribute<0x0008,0x9007> a = {"ORIGINAL","PRIMARY","T1","NONE"};
+ *
+ * Examples that will NOT compile are:
+ *
+ * Attribute<0x0018,0x1182, VR::IS, VM::VM1> fd1 = {}; // not enough parameters
+ * Attribute<0x0018,0x1182, VR::IS, VM::VM2> fd2 = {0,1,2}; // too many initializers
+ * Attribute<0x0018,0x1182, VR::IS, VM::VM3> fd3 = {0,1,2}; // VM3 is not valid
+ * Attribute<0x0018,0x1182, VR::UL, VM::VM2> fd3 = {0,1}; // UL is not valid VR
+ */
 template<uint16_t Group, uint16_t Element, 
 	 int TVR = TagToType<Group, Element>::VRType, // can the user override this value ? 
 	 int TVM = TagToType<Group, Element>::VMType // can the user override this value ?
