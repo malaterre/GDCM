@@ -43,10 +43,15 @@
 
 #include "gdcmVR.h"
 #include "gdcmVM.h"
+#include "gdcmStaticAssert.h"
 
 namespace gdcm {
-// default template:
-template &lt;uint16_t,uint16_t&gt; struct TagToType;
+// default template: the compiler should only pick it up when the element is private:
+template &lt;uint16_t group,uint16_t element&gt; struct TagToType {
+GDCM_STATIC_ASSERT( group % 2 );
+enum { VRType = VR::VRALL };
+enum { VMType = VM::VM1_n };
+};
 // template for group length:
 template &lt;uint16_t group&gt; struct TagToType&lt;group,0x0000&gt; { typedef VRToType&lt;VR::UL&gt;::Type Type; enum { VRType = VR::UL }; enum { VMType = VM::VM1 }; };
 </xsl:text>
@@ -59,6 +64,11 @@ template &lt;uint16_t group&gt; struct TagToType&lt;group,0x0000&gt; { typedef V
         <xsl:text>,0x</xsl:text>
         <xsl:value-of select="$element"/>
         <xsl:text>&gt; {</xsl:text>
+        <xsl:text>
+</xsl:text>
+        <xsl:text>static const char VRString[] = "</xsl:text>
+        <xsl:value-of select="@vr"/>
+        <xsl:text>";</xsl:text>
         <xsl:text>
 </xsl:text>
         <xsl:text>typedef VRToType&lt;VR::</xsl:text>
@@ -76,6 +86,11 @@ template &lt;uint16_t group&gt; struct TagToType&lt;group,0x0000&gt; { typedef V
           <xsl:with-param name="vmstring" select="@vm"/>
         </xsl:call-template>
         <xsl:text> };</xsl:text>
+        <xsl:text>
+</xsl:text>
+        <xsl:text>static const char VMString[] = "</xsl:text>
+        <xsl:value-of select="@vm"/>
+        <xsl:text>";</xsl:text>
         <xsl:text>
 </xsl:text>
         <xsl:text>};</xsl:text>
