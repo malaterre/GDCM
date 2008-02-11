@@ -11,6 +11,12 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
 )
+# Provide some C99 compatilities for all win system...hopefully there won't be no collision
+IF(WIN32)
+  INCLUDE_DIRECTORIES(
+    "${GDCM_SOURCE_DIR}/Utilities/C99"
+  )
+ENDIF(WIN32)
 
 FIND_PACKAGE(PythonLibs REQUIRED)
 INCLUDE_DIRECTORIES(
