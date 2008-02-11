@@ -59,16 +59,18 @@ template &lt;uint16_t group&gt; struct TagToType&lt;group,0x0000&gt; { typedef V
       <xsl:variable name="group" select="translate(@group,'x','0')"/>
       <xsl:variable name="element" select="translate(@element,'x','0')"/>
       <xsl:if test="contains(@element,'x') = true and contains(@element,'xx') = false and @vr != '' and @vr != 'US_SS' and @vr != 'US_SS_OW' and @vr != 'OB_OW'">
-        <xsl:text>template &lt;&gt; struct TagToType&lt;0x</xsl:text>
+<xsl:variable name="classname">
+        <xsl:text>TagToType&lt;0x</xsl:text>
         <xsl:value-of select="$group"/>
         <xsl:text>,0x</xsl:text>
         <xsl:value-of select="$element"/>
-        <xsl:text>&gt; {</xsl:text>
-        <xsl:text>
+        <xsl:text>&gt;</xsl:text>
+</xsl:variable>
+        <xsl:text>template &lt;&gt; struct </xsl:text>
+        <xsl:value-of select="$classname"/>
+        <xsl:text> {
 </xsl:text>
-        <xsl:text>static const char VRString[] = "</xsl:text>
-        <xsl:value-of select="@vr"/>
-        <xsl:text>";</xsl:text>
+        <xsl:text>static const char VRString[];</xsl:text>
         <xsl:text>
 </xsl:text>
         <xsl:text>typedef VRToType&lt;VR::</xsl:text>
@@ -88,13 +90,19 @@ template &lt;uint16_t group&gt; struct TagToType&lt;group,0x0000&gt; { typedef V
         <xsl:text> };</xsl:text>
         <xsl:text>
 </xsl:text>
-        <xsl:text>static const char VMString[] = "</xsl:text>
-        <xsl:value-of select="@vm"/>
-        <xsl:text>";</xsl:text>
+        <xsl:text>static const char VMString[];</xsl:text>
         <xsl:text>
 </xsl:text>
         <xsl:text>};</xsl:text>
         <xsl:text>
+</xsl:text>
+        <xsl:text>const char </xsl:text><xsl:value-of select="$classname"/><xsl:text>::VRString[] = "</xsl:text>
+        <xsl:value-of select="@vr"/>
+        <xsl:text>";
+</xsl:text>
+        <xsl:text>const char </xsl:text><xsl:value-of select="$classname"/><xsl:text>::VMString[] = "</xsl:text>
+        <xsl:value-of select="@vm"/>
+        <xsl:text>";
 </xsl:text>
       </xsl:if>
     </xsl:for-each>
