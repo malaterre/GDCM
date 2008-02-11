@@ -21,20 +21,16 @@
 
 int TestScanner(int argc, char *argv[])
 {
-  if( argc < 2 )
-    {
-    std::cerr << "Need a directory" << std::endl;
-    return 1;
-    }
+  const char *directory = GDCM_DATA_ROOT;
   gdcm::Directory d;
-  unsigned int nfiles = d.Load( argv[1], true );
+  unsigned int nfiles = d.Load( directory ); // no recursion
   d.Print( std::cout );
   std::cout << "done retrieving file list" << std::endl;
 
   gdcm::Scanner s;
-  const gdcm::Tag t1(0x0020,0x000d);
-  const gdcm::Tag t2(0x0020,0x000e);
-  const gdcm::Tag t3(0x0010,0x0010);
+  const gdcm::Tag t1(0x0020,0x000d); // Study Instance UID
+  const gdcm::Tag t2(0x0020,0x000e); // Series Instance UID
+  const gdcm::Tag t3(0x0010,0x0010); // Patient's Name
   const gdcm::Tag t4(0x0004,0x5678); // DUMMY element
   s.AddTag( t1 );
   s.AddTag( t2 );
@@ -46,7 +42,7 @@ int TestScanner(int argc, char *argv[])
     std::cerr << "Scanner failed" << std::endl;
     return 1;
     }
-  //s.Print( std::cout );
+  s.Print( std::cout );
 
   // Let's get the value for tag t1 in first file:
   gdcm::Scanner::MappingType const &mt = s.GetMappings();

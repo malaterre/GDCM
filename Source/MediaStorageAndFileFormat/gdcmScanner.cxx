@@ -32,13 +32,13 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
 {
   TagsType::const_reverse_iterator it1 = Tags.rbegin();
   const Tag & last = *it1;
-  assert( last == Tag(0x0020,0x000e) );
 
   Directory::FilenamesType::const_iterator it = filenames.begin();
   for(; it != filenames.end(); ++it)
     {
     Reader reader;
     const char *filename = it->c_str();
+    assert( filename );
     reader.SetFileName( filename );
     bool read = false;
     try
@@ -64,16 +64,20 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
           DataElement const & de = ds.GetDataElement( *tag );
           const ByteValue *bv = de.GetByteValue();
           //assert( VR::IsASCII( vr ) );
-          assert( bv );
-          std::string s( bv->GetPointer(), bv->GetLength() );
-          s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
-          // Store the potentially new value:
-          Values.insert( s );
-          const char *value = Values.find( s )->c_str();
-          // Keep the mapping:
-          FilenameToValue &mapping = Mappings[*tag];
-          mapping.insert(
-            FilenameToValue::value_type(filename, value));
+          if( bv ) // Hum, should I store an empty string or what ?
+            {
+            std::string s( bv->GetPointer(), bv->GetLength() );
+            s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
+            // Store the potentially new value:
+            Values.insert( s );
+            assert( Values.find( s ) != Values.end() );
+            const char *value = Values.find( s )->c_str();
+            assert( value );
+            // Keep the mapping:
+            FilenameToValue &mapping = Mappings[*tag];
+            mapping.insert(
+              FilenameToValue::value_type(filename, value));
+            }
           }
         }
       }
@@ -95,7 +99,7 @@ void Scanner::Print( std::ostream & os ) const
     {
     os << "Tag: " << *tag << "\n";
     //const FilenameToValue &mapping = Mappings[*tag];
-    const FilenameToValue &mapping = Mappings.find(*tag)->second;
+    const FilenameToValue &mapping = GetMapping(*tag);
     FilenameToValue::const_iterator it = mapping.begin();
     for( ; it != mapping.end(); ++it)
       {
