@@ -108,8 +108,12 @@ public:
 
   Tag GetTag() const { return Tag(Group,Element); }
   VR  GetVR() const { return (VR::VRType)TVR; }
-  VR  GetDictVR() const { return (VR::VRType)(TagToType<Group, Element>::VRType); }
   VM  GetVM() const { return (VM::VMType)TVM; }
+
+  // The following two methods do make sense only in case of public element,
+  // when the template is intanciated with private element the VR/VM are simply
+  // defaulted to allow everything (see gdcmTagToType.h default template for TagToType)
+  VR  GetDictVR() const { return (VR::VRType)(TagToType<Group, Element>::VRType); }
   VM  GetDictVM() const { return (VM::VMType)(TagToType<Group, Element>::VMType); }
 
   // copy:
