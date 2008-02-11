@@ -59,19 +59,22 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
       TagsType::const_iterator tag = Tags.begin();
       for( ; tag != Tags.end(); ++tag )
         {
-        DataElement const & de = ds.GetDataElement( *tag );
-        const ByteValue *bv = de.GetByteValue();
-        //assert( VR::IsASCII( vr ) );
-        assert( bv );
-        std::string s( bv->GetPointer(), bv->GetLength() );
-        s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
-        // Store the potentially new value:
-        Values.insert( s );
-        const char *value = Values.find( s )->c_str();
-        // Keep the mapping:
-        FilenameToValue &mapping = Mappings[*tag];
-        mapping.insert(
-          FilenameToValue::value_type(filename, value));
+        if( ds.FindDataElement( *tag ) )
+          {
+          DataElement const & de = ds.GetDataElement( *tag );
+          const ByteValue *bv = de.GetByteValue();
+          //assert( VR::IsASCII( vr ) );
+          assert( bv );
+          std::string s( bv->GetPointer(), bv->GetLength() );
+          s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
+          // Store the potentially new value:
+          Values.insert( s );
+          const char *value = Values.find( s )->c_str();
+          // Keep the mapping:
+          FilenameToValue &mapping = Mappings[*tag];
+          mapping.insert(
+            FilenameToValue::value_type(filename, value));
+          }
         }
       }
     }
@@ -112,7 +115,11 @@ Scanner::FilenameToValue const & Scanner::GetMapping(Tag const &t) const
 const char* Scanner::GetValue(Tag const &t, const char *filename) const
 {
   FilenameToValue const &ftv = GetMapping(t);
-  return ftv.find(filename)->second;
+  if( ftv.find(filename) != ftv.end() )
+    {
+    return ftv.find(filename)->second;
+    }
+  return NULL;
 }
 
 } // end namespace gdcm
