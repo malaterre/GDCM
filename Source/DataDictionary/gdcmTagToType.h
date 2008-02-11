@@ -22,10 +22,15 @@
 
 #include "gdcmVR.h"
 #include "gdcmVM.h"
+#include "gdcmStaticAssert.h"
 
 namespace gdcm {
-// default template:
-template <uint16_t,uint16_t> struct TagToType;
+// default template: the compiler should only pick it up when the element is private:
+template <uint16_t group,uint16_t element> struct TagToType {
+GDCM_STATIC_ASSERT( group % 2 );
+enum { VRType = VR::VRALL };
+enum { VMType = VM::VM1_n };
+};
 // template for group length:
 template <uint16_t group> struct TagToType<group,0x0000> { typedef VRToType<VR::UL>::Type Type; enum { VRType = VR::UL }; enum { VMType = VM::VM1 }; };
 template <> struct TagToType<0x0000,0x0000> {

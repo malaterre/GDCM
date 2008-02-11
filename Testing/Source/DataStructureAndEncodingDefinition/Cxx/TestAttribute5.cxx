@@ -19,6 +19,8 @@ int main()
   std::cout << vm << " " << dictvm << std::endl;
   std::cout << b << std::endl;
 
-  
+  // Let's if we can construct a private element:
+  gdcm::Attribute<0x1233,0x5678, gdcm::VR::IS, gdcm::VM::VM1> fd2 = {0};
+
   return 0;
 }

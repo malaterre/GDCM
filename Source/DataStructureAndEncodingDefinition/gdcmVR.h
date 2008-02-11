@@ -77,6 +77,7 @@ public:
     VL32 = OB | OW | OF | SQ | UN | UT, // if( VR & VR_VL32 ) => VR has its VL coded over 32bits
     VRASCII = AE | AS | CS | DA | DS | DT | IS | LO | LT | PN | SH | ST | TM | UI,
     VRBINARY = AT | FL | FD | OB | OF | OW | SL | SQ | SS | UL | UN | US | UT, // FIXME: UN ?
+    VRALL = VRASCII | VRBINARY,
     VR_END = UT+1  // Invalid VR, need to be max(VRType)+1
   } VRType;
 
