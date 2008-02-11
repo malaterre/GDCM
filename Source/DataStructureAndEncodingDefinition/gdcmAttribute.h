@@ -105,8 +105,8 @@ public:
   // it would mean we used a bad VM then, right ?
   void Print(std::ostream &os) const {
     os << GetTag() << " ";
-    os << GetVR()  << " ";
-    os << GetVM()  << " ";
+    os << TagToType<Group,Element>::GetVRString()  << " ";
+    os << TagToType<Group,Element>::GetVMString()  << " ";
     os << Internal[0]; // VM is at least garantee to be one
     for(unsigned int i=1; i<GetNumberOfValues(); ++i)
       os << "," << Internal[i];

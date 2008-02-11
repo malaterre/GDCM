@@ -53,7 +53,13 @@ enum { VRType = VR::VRALL };
 enum { VMType = VM::VM1_n };
 };
 // template for group length:
-template &lt;uint16_t group&gt; struct TagToType&lt;group,0x0000&gt; { typedef VRToType&lt;VR::UL&gt;::Type Type; enum { VRType = VR::UL }; enum { VMType = VM::VM1 }; };
+template &lt;uint16_t group&gt; struct TagToType&lt;group,0x0000&gt; {
+static const char* GetVRString() { return "UL"; }
+typedef VRToType&lt;VR::UL&gt;::Type Type;
+enum { VRType = VR::UL };
+enum { VMType = VM::VM1 };
+static const char* GetVMString() { return "1"; }
+};
 </xsl:text>
     <xsl:for-each select="dict/entry">
       <xsl:variable name="group" select="translate(@group,'x','0')"/>
@@ -70,8 +76,9 @@ template &lt;uint16_t group&gt; struct TagToType&lt;group,0x0000&gt; { typedef V
         <xsl:value-of select="$classname"/>
         <xsl:text> {
 </xsl:text>
-        <xsl:text>static const char VRString[];</xsl:text>
-        <xsl:text>
+        <xsl:text>static const char* GetVRString() { return "</xsl:text>
+        <xsl:value-of select="@vr"/>
+        <xsl:text>"; }
 </xsl:text>
         <xsl:text>typedef VRToType&lt;VR::</xsl:text>
         <xsl:value-of select="@vr"/>
@@ -90,20 +97,20 @@ template &lt;uint16_t group&gt; struct TagToType&lt;group,0x0000&gt; { typedef V
         <xsl:text> };</xsl:text>
         <xsl:text>
 </xsl:text>
-        <xsl:text>static const char VMString[];</xsl:text>
-        <xsl:text>
+        <xsl:text>static const char* GetVMString() { return "</xsl:text>
+        <xsl:value-of select="@vm"/>
+        <xsl:text>"; }
 </xsl:text>
         <xsl:text>};</xsl:text>
         <xsl:text>
 </xsl:text>
-        <xsl:text>const char </xsl:text><xsl:value-of select="$classname"/><xsl:text>::VRString[] = "</xsl:text>
-        <xsl:value-of select="@vr"/>
+        <!--xsl:text>const char </xsl:text><xsl:value-of select="$classname"/><xsl:text>::VRString[] = "</xsl:text>
         <xsl:text>";
 </xsl:text>
         <xsl:text>const char </xsl:text><xsl:value-of select="$classname"/><xsl:text>::VMString[] = "</xsl:text>
         <xsl:value-of select="@vm"/>
         <xsl:text>";
-</xsl:text>
+</xsl:text-->
       </xsl:if>
     </xsl:for-each>
     <xsl:text>

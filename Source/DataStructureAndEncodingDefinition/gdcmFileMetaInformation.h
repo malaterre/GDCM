@@ -12,7 +12,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #ifndef __gdcmFileMetaInformation_h
 #define __gdcmFileMetaInformation_h
 
