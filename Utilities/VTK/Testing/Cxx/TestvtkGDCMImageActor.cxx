@@ -13,7 +13,7 @@
 
 =========================================================================*/
 #include "gdcmConfigure.h" // for GDCM_DATA_ROOT
-#include "vtkGDCMReader.h"
+#include "vtkGDCMImageReader.h"
 
 #include "vtkPNGWriter.h"
 #include "vtkImageData.h"
@@ -28,7 +28,7 @@
 
 int TestvtkGDCMReadImageActor(const char *filename)
 {
-  vtkGDCMReader *reader = vtkGDCMReader::New();
+  vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
   //reader->CanReadFile( filename );
   std::cerr << "Reading : " << filename << std::endl;
   reader->SetFileName( filename );
