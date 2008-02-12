@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
 
     case 't':
       printf ("option t with value '%s'\n", optarg);
-      rawTag.ReadFromString(optarg);
+      rawTag.ReadFromCommaSeparatedString(optarg);
       //std::cerr << rawTag << std::endl;
       break;
 

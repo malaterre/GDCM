@@ -35,6 +35,10 @@ ENDIF(WIN32 AND NOT CYGWIN)
 ADD_EXECUTABLE(gdcmraw gdcmraw.cxx)
 TARGET_LINK_LIBRARIES(gdcmraw gdcmMSFF) # gdcmgetopt)
 
+# gdcmscanner
+ADD_EXECUTABLE(gdcmscanner gdcmscanner.cxx)
+TARGET_LINK_LIBRARIES(gdcmscanner gdcmMSFF) # gdcmgetopt)
+
 # gdcmoverlay
 ADD_EXECUTABLE(gdcmoverlay gdcmoverlay.cxx)
 TARGET_LINK_LIBRARIES(gdcmoverlay gdcmMSFF) # gdcmgetopt)

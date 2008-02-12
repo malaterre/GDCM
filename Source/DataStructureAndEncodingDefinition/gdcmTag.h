@@ -179,12 +179,19 @@ public:
     return r;
     }
 
-  void ReadFromString(const char *str)
+  // This is a highly user oriented function, the string should be formated as:
+  // 1234,5678 to specify the tag (0x1234,0x5678)
+  // The notation comes from the DICOM standard, and is handy to use from a command line
+  // program
+  void ReadFromCommaSeparatedString(const char *str)
     {
     unsigned int group = 0, element = 0;
     if( sscanf(str, "%04x,%04x", &group , &element) != 2 )
       {
-      throw Exception( "Problem reading the Tag" );
+      std::ostringstream os;
+      os << "Problem reading the Tag: ";
+      os << str;
+      throw Exception( os.str().c_str() ); // Is the pointer valid ??
       }
     SetGroup( group );
     SetElement( element );

@@ -99,13 +99,16 @@ void Scanner::Print( std::ostream & os ) const
     {
     os << "Tag: " << *tag << "\n";
     //const FilenameToValue &mapping = Mappings[*tag];
-    const FilenameToValue &mapping = GetMapping(*tag);
-    FilenameToValue::const_iterator it = mapping.begin();
-    for( ; it != mapping.end(); ++it)
+    if( Mappings.find(*tag) != Mappings.end() )
       {
-      const char *filename = it->first;
-      const char *value = it->second;
-      os << filename << " -> " << value << "\n";
+      const FilenameToValue &mapping = GetMapping(*tag);
+      FilenameToValue::const_iterator it = mapping.begin();
+      for( ; it != mapping.end(); ++it)
+        {
+        const char *filename = it->first;
+        const char *value = it->second;
+        os << filename << " -> " << value << "\n";
+        }
       }
     }
 }
