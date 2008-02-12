@@ -29,21 +29,31 @@ Scanner::~Scanner()
 
 void Scanner::AddTag( Tag const & t )
 {
-  const Global &g = GlobalInstance;
-  const Dicts &dicts = g.GetDicts();
+  static const Global &g = GlobalInstance;
+  static const Dicts &dicts = g.GetDicts();
   const DictEntry &entry = dicts.GetDictEntry( t );
+  // Is this tag an ASCII on ?
   if( entry.GetVR() & VR::VRASCII )
     {
     Tags.insert( t );
     }
+  else if( entry.GetVR() == VR::INVALID )
+    {
+    gdcmWarningMacro( "Only tag with known VR are allowed. Tag " << t << " will be discarded" );
+    }
   else
     {
+    assert( entry.GetVR() & VR::VRBINARY );
     gdcmWarningMacro( "Only ASCII VR are supported for now. Tag " << t << " will be discarded" );
     }
 }
 
 bool Scanner::Scan( Directory::FilenamesType const & filenames )
 {
+  // Is there at least one tag ?
+  if( Tags.empty() ) return true;
+
+  // Find the tag with the highest value (get the one from the end of the std::set)
   TagsType::const_reverse_iterator it1 = Tags.rbegin();
   const Tag & last = *it1;
 
@@ -57,6 +67,7 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
     bool read = false;
     try
       {
+      // Start reading all tags, including the 'last' one:
       read = reader.ReadUpToTag(last);
       }
     catch(std::exception & ex)
