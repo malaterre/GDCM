@@ -1,6 +1,7 @@
 # Define the srcs for Data Structure and Encoding Definitions
 # DSED
 SET(DSED_SRCS
+  gdcmTag.cxx
   gdcmDataSet.cxx
   gdcmByteSwapFilter.cxx
   gdcmExplicitDataElement.cxx

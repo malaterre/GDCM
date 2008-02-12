@@ -14,6 +14,10 @@
 =========================================================================*/
 #include "gdcmScanner.h"
 #include "gdcmReader.h"
+#include "gdcmGlobal.h"
+#include "gdcmDicts.h"
+#include "gdcmDict.h"
+#include "gdcmDictEntry.h"
 
 namespace gdcm
 {
@@ -25,7 +29,17 @@ Scanner::~Scanner()
 
 void Scanner::AddTag( Tag const & t )
 {
-  Tags.insert( t );
+  const Global &g = GlobalInstance;
+  const Dicts &dicts = g.GetDicts();
+  const DictEntry &entry = dicts.GetDictEntry( t );
+  if( entry.GetVR() & VR::VRASCII )
+    {
+    Tags.insert( t );
+    }
+  else
+    {
+    gdcmWarningMacro( "Only ASCII VR are supported for now. Tag " << t << " will be discarded" );
+    }
 }
 
 bool Scanner::Scan( Directory::FilenamesType const & filenames )

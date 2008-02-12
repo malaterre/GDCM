@@ -26,6 +26,9 @@ namespace gdcm
 {
 /**
  * \brief Scanner
+ * \todo
+ * For now I am only dealing with VRASCII elements, this would seriously slow down to do
+ * interpretation of other stuff (double check that)
  */
 class GDCM_EXPORT Scanner
 {
