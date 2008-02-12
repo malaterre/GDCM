@@ -261,8 +261,6 @@ public:
   typedef typename VRToType<TVR>::Type ArrayType;
 
   unsigned int GetNumberOfValues() const { return Length; }
-  void SetNumberOfValues(unsigned int numvalues) {
-  }
 
   void SetValues(const ArrayType *array, unsigned int numel, bool own = false)
     {
@@ -324,6 +322,14 @@ public:
   }
   void SetValue(ArrayType v) { SetValue(0, v); }
 
+  void SetFromDataElement(DataElement const &de) {
+    // This is kind of hackish but since I do not generate other element than the first one: 0x6000 I should be ok:
+    assert( GetTag() == de.GetTag() || GetTag().GetGroup() == 0x6000 );
+    assert( GetVR().Compatible( de.GetVR() ) ); // In case of VR::INVALID cannot use the & operator
+    const ByteValue *bv = de.GetByteValue();
+    SetByteValue(bv);
+  }
+protected:
   void SetByteValue(const ByteValue *bv) { abort(); }
 
 private:
