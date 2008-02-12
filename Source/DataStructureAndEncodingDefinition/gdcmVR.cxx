@@ -286,7 +286,7 @@ bool VR::IsSwap(const char *vr)
 
 #define VRTemplateCase(type, rep) \
   case VR::type: \
-    return (VR::VREncoding)VRToEncoding<VR::type>::Mode  \
+    return (VR::VRType)VRToEncoding<VR::type>::Mode  \
        == VR::rep;
 #define VRTemplate(rep) \
 VRTemplateCase(AE,rep) \
@@ -322,7 +322,7 @@ bool VR::IsASCII(VRType const &vr)
   //assert( vr != VR::INVALID );
   switch(vr)
     {
-    VRTemplate(ASCII)
+    VRTemplate(VRASCII)
   default:
       // 1.3.12.2.1107.5.1.4.54035.30000005100516290423400005768-no-phi.dcm has a VR=RT
       //abort();
@@ -355,7 +355,7 @@ bool VR::IsBinary(VRType const &vr)
   //assert( vr != VR::INVALID );
   switch(vr)
     {
-    VRTemplate(BINARY)
+    VRTemplate(VRBINARY)
 // TODO FIXME FIXME:
   case US_SS_OW:
     return true;

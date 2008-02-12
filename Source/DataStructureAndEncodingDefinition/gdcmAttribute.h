@@ -168,7 +168,7 @@ protected:
   void SetByteValue(const ByteValue *bv) {
     if( !bv ) return; // That would be bad...
     assert( bv->GetPointer() && bv->GetLength() ); // [123]C element can be empty
-    //if( VRToEncoding<TVR>::Mode == VR::BINARY )
+    //if( VRToEncoding<TVR>::Mode == VR::VRBINARY )
     //  {
     //  // always do a copy !
     //  SetValues(bv->GetPointer(), bv->GetLength());
@@ -400,10 +400,10 @@ public:
     }
 
   void Read(std::istream &_is) {
-    EncodingImplementation<VR::ASCII>::Read(Internal, GetLength(),_is);
+    EncodingImplementation<VR::VRASCII>::Read(Internal, GetLength(),_is);
     }
   void Write(std::ostream &_os) const {
-    EncodingImplementation<VR::ASCII>::Write(Internal, GetLength(),_os);
+    EncodingImplementation<VR::VRASCII>::Write(Internal, GetLength(),_os);
     }
 private:
   typename String Internal[VMToLength<TVM>::Length];

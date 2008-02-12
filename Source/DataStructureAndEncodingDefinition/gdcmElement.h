@@ -84,7 +84,7 @@ public:
 
 
 // Implementation to perform formatted read and write
-template<> class EncodingImplementation<VR::ASCII> {
+template<> class EncodingImplementation<VR::VRASCII> {
 public:
   template<typename T> // FIXME this should be VRToType<TVR>::Type
   static inline void Read(T* data, unsigned long length,
@@ -124,7 +124,7 @@ public:
 // #1. dummy implementation use a pointer to Internal and do ++p (faster)
 // #2. Actually do some meta programming to unroll the loop 
 // (no notion of order in VM ...)
-template<> class EncodingImplementation<VR::BINARY> {
+template<> class EncodingImplementation<VR::VRBINARY> {
 public:
   template<typename T>
   static inline void Read(T* data, unsigned long length,
@@ -199,10 +199,10 @@ public:
     }
 
   void Read(std::istream &_is) {
-    EncodingImplementation<VR::ASCII>::Read(Internal, GetLength(),_is);
+    EncodingImplementation<VR::VRASCII>::Read(Internal, GetLength(),_is);
     }
   void Write(std::ostream &_os) const {
-    EncodingImplementation<VR::ASCII>::Write(Internal, GetLength(),_os);
+    EncodingImplementation<VR::VRASCII>::Write(Internal, GetLength(),_os);
     }
 private:
   typename String Internal[VMToLength<TVM>::Length];
@@ -290,9 +290,9 @@ public:
     SetArray(array, bv->GetLength() );
   }
 
-  // Need to be placed after definition of EncodingImplementation<VR::ASCII>
+  // Need to be placed after definition of EncodingImplementation<VR::VRASCII>
   void WriteASCII(std::ostream &os) const {
-    return EncodingImplementation<VR::ASCII>::Write(Internal, GetLength(), os);
+    return EncodingImplementation<VR::VRASCII>::Write(Internal, GetLength(), os);
     }
 
   // Implementation of Print is common to all Mode (ASCII/Binary)
