@@ -18,6 +18,11 @@
  *
  * $ gdcmscanner -d /images/ -t 0020,000d -t 0020,000e
  *
+ * Options:
+ * -d : directory
+ * -t : tag (can be specified multiple times)
+ * -v : verbose
+ * -r : recursive (enter subdir of main directory)
  */
 
 #include "gdcmScanner.h"
@@ -140,7 +145,7 @@ int main(int argc, char *argv[])
   gdcm::Directory d;
   unsigned int nfiles = d.Load( dirname.c_str(), recursive );
   if( verbose ) d.Print( std::cout );
-  std::cout << "done retrieving file list" << std::endl;
+  std::cout << "done retrieving file list " << nfiles << " files found." <<  std::endl;
 
   gdcm::Scanner s;
   for( VectorTags::const_iterator it = tags.begin(); it != tags.end(); ++it)

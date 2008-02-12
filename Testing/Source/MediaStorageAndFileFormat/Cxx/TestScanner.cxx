@@ -25,7 +25,7 @@ int TestScanner(int argc, char *argv[])
   gdcm::Directory d;
   unsigned int nfiles = d.Load( directory ); // no recursion
   d.Print( std::cout );
-  std::cout << "done retrieving file list" << std::endl;
+  std::cout << "done retrieving file list. " << nfiles << " files found." <<  std::endl;
 
   gdcm::Scanner s;
   const gdcm::Tag t1(0x0020,0x000d); // Study Instance UID
