@@ -53,12 +53,15 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
   // Is there at least one tag ?
   if( Tags.empty() ) return true;
 
+  // Make our own copy:
+  Filenames = filenames;
+
   // Find the tag with the highest value (get the one from the end of the std::set)
   TagsType::const_reverse_iterator it1 = Tags.rbegin();
   const Tag & last = *it1;
 
-  Directory::FilenamesType::const_iterator it = filenames.begin();
-  for(; it != filenames.end(); ++it)
+  Directory::FilenamesType::const_iterator it = Filenames.begin();
+  for(; it != Filenames.end(); ++it)
     {
     Reader reader;
     const char *filename = it->c_str();
@@ -147,6 +150,11 @@ Scanner::FilenameToValue const & Scanner::GetMapping(Tag const &t) const
 const char* Scanner::GetValue(Tag const &t, const char *filename) const
 {
   FilenameToValue const &ftv = GetMapping(t);
+  FilenameToValue::const_iterator it = ftv.begin();
+  bool empty = ftv.empty();
+        const char *file= it->first;
+        const char *value = it->second;
+
   if( ftv.find(filename) != ftv.end() )
     {
     return ftv.find(filename)->second;

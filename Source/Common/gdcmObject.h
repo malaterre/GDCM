@@ -43,7 +43,7 @@ public:
     {
     // If your debugger reach here it means you are doing something silly
     // like using SmartPointer on object allocated on the stack (vs heap)
-    assert(ReferenceCount == 0 );
+    assert(ReferenceCount == 0);
     }
 
   // For the purpose of the invasive SmartPointer implementation
@@ -62,7 +62,7 @@ public:
 
 //protected:
   // For dealing with printing of object and polymorphism
-  virtual void Print(std::ostream &) const {};
+  virtual void Print(std::ostream &) const {}
 
 private:
   long ReferenceCount;

@@ -78,7 +78,7 @@ public:
   template <typename TDE, typename TSwap>
   std::istream &Read(std::istream &is)
     {
-      const Tag seqDelItem(0xfffe,0xe0dd);
+    const Tag seqDelItem(0xfffe,0xe0dd);
     if( SequenceLengthField.IsUndefined() )
       {
       Item item;

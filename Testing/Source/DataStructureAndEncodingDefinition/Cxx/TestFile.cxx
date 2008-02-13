@@ -13,12 +13,19 @@
 
 =========================================================================*/
 #include "gdcmFile.h"
+#include "gdcmSmartPointer.h"
 
 int TestFile(int argc, char *argv[])
 {
   (void)argc;
   (void)argv;
   gdcm::File f;
+
+  gdcm::SmartPointer<gdcm::File> pf = new gdcm::File;
+  {
+  gdcm::SmartPointer<gdcm::File> other = pf;
+  }
+  
 
   return 0;
 }

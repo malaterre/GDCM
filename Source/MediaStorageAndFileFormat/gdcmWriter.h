@@ -42,26 +42,26 @@ class FileMetaInformation;
 class GDCM_EXPORT Writer
 {
 public:
-  Writer():Stream(),F(new File) {}
+  Writer():Stream(),F(0) {}
   virtual ~Writer();
 
   virtual bool Write(); // Execute()
   void SetFileName(const char *filename) {
-    std::cerr << "Stream: " << filename << std::endl;
+    //std::cerr << "Stream: " << filename << std::endl;
     Stream.open(filename, std::ios::out | std::ios::binary );
     assert( Stream.is_open() );
     assert( !Stream.fail() );
     //std::cerr << Stream.is_open() << std::endl;
   }
 
-  void SetFile(const File& f) { delete F; F = (File*)&f; }
+  void SetFile(const File& f) { F = &f; }
   File &GetFile() { return *F; }
 
 protected:
   std::ofstream Stream;
 
 private:
-  File *F;
+  SmartPointer<File> F;
 };
 
 } // end namespace gdcm

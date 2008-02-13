@@ -61,16 +61,7 @@ public:
   File &GetFile() { return *F; }
   void SetFile(File& file) { F = &file; }
 
-//#warning FIXME API for backward compatibility
-  typedef enum {
-    LD_ALL,
-    LD_NOSEQ,
-    LD_NOSHADOW,
-    LD_NOSHADOWSEQ
-  } LoadModeType;
-  void SetLoadMode(LoadModeType lmtype) {}
-  void Load() { Read(); }
-
+  // Will read only up to Tag 'tag'
   bool ReadUpToTag(const Tag & tag);
 
 protected:
@@ -78,7 +69,7 @@ protected:
   bool ReadMetaInformation();
   bool ReadDataSet();
 
-  File *F;
+  SmartPointer<File> F;
 
 private:
   TransferSyntax GuessTransferSyntax();

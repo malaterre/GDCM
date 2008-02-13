@@ -32,13 +32,6 @@ namespace gdcm
 
 Reader::~Reader()
 {
-  delete F;
-#if 0
-  if( Preamble )
-    {
-    delete[] Preamble;
-    }
-#endif
 }
 
 /// \brief tells us if "DICM" is found as position 128
@@ -196,6 +189,7 @@ bool Reader::Read()
     return false;
     }
 
+  assert( F == 0 );
   F = new File;
 //  try
     {

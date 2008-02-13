@@ -16,6 +16,7 @@
 #ifndef __gdcmFile_h
 #define __gdcmFile_h
 
+#include "gdcmObject.h"
 #include "gdcmDataSet.h"
 #include "gdcmFileMetaInformation.h"
 
@@ -29,7 +30,7 @@ namespace gdcm
  * identified by a unique File ID and may by written, read and/or deleted.
  */
 class FileInternal;
-class GDCM_EXPORT File
+class GDCM_EXPORT File : public Object
 {
 public:
   File() {};
