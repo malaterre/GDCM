@@ -1,13 +1,6 @@
 XML Stuff:
 * Part 3: Exctract section that are referenced in informaltable
 -----------------------------------------------------------------------
-Implementation:
-RLE is still not fully operational
------------------------------------------------------------------------
-TransferSyntax needs some rework
------------------------------------------------------------------------
-JPEG YCbrCr in jpeg header vs DICOM header need to produce a warning for: http://www.jddi.com/Download/JDDICOM_Sample2.dcm
------------------------------------------------------------------------
 PrepGroupName.cxx does not handle Pixel Data group name since it has a space in the name...
 
 -----------------------------------------------------------------------
@@ -44,23 +37,15 @@ Provide an alternative to SIEMENS dcmInfo.exe and dump shadow elements
 0029,xxxx using there formats:
 67 - 'SlicePosition_PCS'        VM 3, VR FD, SyngoDT 4, NoOfItems 6, Data '-185.77913332'\'-163.80459213'\'72.73944092'
 -----------------------------------------------------------------------
-http://www.carestreamhealth.com/en/global/plugins/acrobat/en/health/pdf/prod/dicom/1F9242.pdf
------------------------------------------------------------------------
-Add a FindKAKADU to find kakadu and thus be able to check compressiong
+Add a FindKAKADU to find kakadu and thus be able to check compression
 done by openjpeg
 -----------------------------------------------------------------------
 You should be able to say: this file is a ACR NEMA read it ! So the wizard 
 should be bypass and the discovery step can be skipped.
 -----------------------------------------------------------------------
-Are we actually storing item start/end in the dataset. This is pretty dangerous
-as we will have a hard time rewritting with explicit length if we
-wanted to
------------------------------------------------------------------------
 Need to handle image rotation/flip
 (0070,0041) CS [Y]                                      #   2, 1 ImageHorizontalFlip
 (0070,0042) US 270                                      #   2, 1 ImageRotation
------------------------------------------------------------------------
-FIX !! the gdcm::VM it is a pain to use. make it more gdcm::VR like !
 -----------------------------------------------------------------------
 Parsing SQ can actually double the time to read a file
 /images/test_DCEMRI/04-004-4/MR-20070129/Perfusion/Perfusion_205_
@@ -86,5 +71,7 @@ Wrong Private element in dcmtk:
 (0009,1227) TM [210959.000000]                          #  14, 1 LastMoveTime
 I found:
 diction.pfl:Table Zero Time,0009,SIEMENS CM VA0  CMS,27,TM,1
+-----------------------------------------------------------------------
+Make File Meta Information configurable from CMake
 
 

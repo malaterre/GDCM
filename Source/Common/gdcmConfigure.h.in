@@ -100,6 +100,13 @@
 #define GDCM_BUILD_VERSION @GDCM_BUILD_VERSION@
 #define GDCM_VERSION "@GDCM_VERSION@"
 
+#define GDCM_FILE_META_INFORMATION_VERSION "\0\1"
+// echo "gdcm" | od -b
+#define GDCM_IMPLEMENTATION_CLASS_UID "147.144.143.155"
+#define GDCM_IMPLEMENTATION_VERSION_NAME "GDCM " GDCM_VERSION
+#define GDCM_SOURCE_APPLICATION_ENTITY_TITLE "GDCM"
+
+
 /*--------------------------------------------------------------------------*/
 /* GDCM deprecation mechanism                                               */
 #cmakedefine GDCM_LEGACY_REMOVE

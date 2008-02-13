@@ -35,7 +35,8 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     {
     xde.SetTag( Tag(0x0002, 0x0001) );
     xde.SetVR( VR::OB );
-    xde.SetByteValue( "\0\1", 2);
+    const char version[] = GDCM_FILE_META_INFORMATION_VERSION;
+    xde.SetByteValue( version, sizeof(version) );
     Insert( xde );
     }
   // Media Storage SOP Class UID (0002,0002) -> see (0008,0016)
@@ -93,7 +94,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     {
     xde.SetTag( Tag(0x0002, 0x0012) );
     xde.SetVR( VR::UI );
-    const char implementation[] = "147.144.143.155"; // echo "gdcm" | od -b
+    const char implementation[] = GDCM_IMPLEMENTATION_CLASS_UID;
     xde.SetByteValue( implementation, sizeof(implementation) );
     Insert( xde );
     }
@@ -102,7 +103,8 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     {
     xde.SetTag( Tag(0x0002, 0x0013) );
     xde.SetVR( VR::SH );
-    xde.SetByteValue( GDCM_VERSION, sizeof( GDCM_VERSION ) );
+    const char version[] = GDCM_IMPLEMENTATION_VERSION_NAME;
+    xde.SetByteValue( version, sizeof(version) );
     Insert( xde );
     }
   // Source Application Entity Title (0002,0016) -> ??
@@ -110,7 +112,8 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     {
     xde.SetTag( Tag(0x0002, 0x0016) );
     xde.SetVR( VR::AE );
-    xde.SetByteValue("GDCM", 4);
+    const char title[] = GDCM_SOURCE_APPLICATION_ENTITY_TITLE;
+    xde.SetByteValue(title, sizeof(title) );
     Insert( xde );
     }
   // Do this one last !
@@ -455,10 +458,9 @@ MediaStorage FileMetaInformation::GetMediaStorage() const
   const DataElement &de = GetDataElement(t);
   std::string ts;
     {
-    const Value &v = de.GetValue();
-    const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
+    const ByteValue *bv = de.GetByteValue();
     // Pad string with a \0
-    ts = std::string(bv.GetPointer(), bv.GetLength());
+    ts = std::string(bv->GetPointer(), bv->GetLength());
     }
   // Paranoid check: if last character of a VR=UI is space let's pretend this is a \0
   char &last = ts[ts.size()-1];
