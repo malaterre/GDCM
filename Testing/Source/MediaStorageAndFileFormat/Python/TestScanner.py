@@ -49,9 +49,8 @@ print mapping
 print dir(mapping)
 
 for f in d.GetFilenames():
-  #print f
   #print t2
-  print s.GetValue(t2, f)
+  print "%s -> %s"%(f, s.GetValue(t2, f))
 
 #ex = gdcm.FilenameToValueExtractor(mapping)
 #ex.GetValue( "/tmp/Perfusion/Perfusion_205_0087" )

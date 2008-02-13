@@ -40,8 +40,16 @@ class GDCM_EXPORT Scanner
 public:
   Scanner():Values(),Filenames(),Mappings() {}
   ~Scanner();
+  /* ltstr is CRITICAL, otherwise pointers value are used to do the key comparison */
+  struct ltstr
+    {
+    bool operator()(const char* s1, const char* s2) const
+      {
+      return strcmp(s1, s2) < 0;
+      }
+    };
   // struct to map a filename to a value
-  typedef std::map<const char*, const char*> StringToStringMap;
+  typedef std::map<const char*, const char*, ltstr> StringToStringMap;
   typedef StringToStringMap FilenameToValue;
 
   // Add a tag that will need to be read
