@@ -22,6 +22,10 @@
 int TestScanner(int argc, char *argv[])
 {
   const char *directory = GDCM_DATA_ROOT;
+  if( argc == 2 )
+    {
+    directory = argv[1];
+    }
   gdcm::Directory d;
   unsigned int nfiles = d.Load( directory ); // no recursion
   d.Print( std::cout );
