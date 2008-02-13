@@ -111,7 +111,7 @@ class TextParser3:
     infile = file(inputfilename, 'r')
     outLines = []
     for line in infile.readlines():
-      patt = re.compile("^\s*\(([0-9A-Z]+),([0-9A-Zx]+)\)\s+([A-Za-z0-9./:_ -]+)\s\s+([A-Za-z0-9 ()._,/#>-]+)\s+([A-Z][A-Z]_?O?W?)\s+([0-9n-]+)\s*$")
+      patt = re.compile("^\s*\(([0-9A-Z]+),([0-9A-Zx]+)\)\s+([A-Za-z0-9./:_ -]+)\s+\|\s+([A-Za-z0-9 ()._,/#>-]+)\s+([A-Z][A-Z]_?O?W?)\s+([0-9n-]+)\s*$")
       patt2 = re.compile( "^\s*([A-Z1-9.-]+)\s*([A-Za-z -]+)\s*$")
       m = patt.match(line)
       m2 = patt2.match(line)
@@ -329,7 +329,7 @@ if __name__ == "__main__":
 
   inputfilename = os.sys.argv[1]
   outputfilename = os.sys.argv[2]
-  tp = TextParser(inputfilename,outputfilename);
+  tp = TextParser3(inputfilename,outputfilename);
   tp.Parse()
 
 
