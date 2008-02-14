@@ -290,6 +290,8 @@ inline unsigned int VR::GetSize() const
                 VRTypeTemplateCase(UN)
                 VRTypeTemplateCase(US)
                 VRTypeTemplateCase(UT)
+    case VR::US_SS:
+      return 2;
 		default:
 			 assert( 0 && "should not" );
 	}

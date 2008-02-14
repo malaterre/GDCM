@@ -58,7 +58,7 @@ const DictEntry &Dicts::GetDictEntry(const Tag& tag, const char *owner) const
       static DictEntry Dummy;
       if( tag.GetElement() == 0x0 )
         {
-abort();
+//abort();
         // Technically this should be generated...
         Dummy.SetName( "Generic Group Length" );
         Dummy.SetVR( VR::UL );

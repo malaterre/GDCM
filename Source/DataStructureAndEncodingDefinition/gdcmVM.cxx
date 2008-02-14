@@ -70,10 +70,34 @@ unsigned int VM::GetLength() const
   return len;
 }
 
-const char *VM::GetVMString(const VMType &vm)
+int VM::GetIndex(VMType vm)
 {
   assert( vm <= VM_END );
-  return VMStrings[(int)vm];
+  int l;
+  switch(vm)
+    {
+  case VM0:
+    l = 0;
+    break;
+  case VM_END:
+    l = 31;
+    break;
+  default:
+      {
+      int a = (int)vm;
+      for (l = 0; a > 1; ++l)
+        a >>= 1;
+      l++;
+      }
+    }
+  return l;
+}
+
+const char *VM::GetVMString(const VMType &vm)
+{
+  int idx = GetIndex(vm);
+  assert( idx < sizeof(VMStrings) / sizeof(VMStrings[0]) );
+  return VMStrings[idx];
 }
 
 VM::VMType VM::GetVMType(const char *vm)

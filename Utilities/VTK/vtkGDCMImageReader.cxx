@@ -100,6 +100,7 @@ int vtkGDCMImageReader::ProcessRequest(vtkInformation* request,
 }
 
 
+//----------------------------------------------------------------------------
 const char *GetStringValueFromTag(const gdcm::Tag& t, const gdcm::DataSet& ds)
 {
   static std::string buffer;
@@ -120,7 +121,7 @@ const char *GetStringValueFromTag(const gdcm::Tag& t, const gdcm::DataSet& ds)
   return buffer.c_str();
 }
 
-//
+//----------------------------------------------------------------------------
 void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &reader)
 {
   const gdcm::File &file = reader.GetFile();

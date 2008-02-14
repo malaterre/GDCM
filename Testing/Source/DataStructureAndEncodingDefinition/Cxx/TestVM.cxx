@@ -90,6 +90,21 @@ int TestVM(int, char *[])
   if( gdcm::VM::VM1 & gdcm::VM::VM4_4n ) return 1;
   if( !(gdcm::VM::VM4 & gdcm::VM::VM4_4n) ) return 1;
 
+  const char *vm1 = gdcm::VM::GetVMString( gdcm::VM::VM1 );
+  if( strcmp(vm1, "1" ) != 0 )
+    {
+    std::cerr << "Error:" << vm1 << std::endl;
+    return 1;
+    }
+
+  const char *vm8 = gdcm::VM::GetVMString( gdcm::VM::VM8 );
+  if( strcmp(vm8, "8" ) != 0 )
+    {
+    std::cerr << "Error:" << vm8 << std::endl;
+    return 1;
+    }
+
+
   return 0;
 }
 

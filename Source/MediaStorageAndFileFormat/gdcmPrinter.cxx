@@ -102,7 +102,11 @@ void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictE
       }
     }
   // Print Tag and VR:
-  os << t << " " << VR::GetVRString(lvr);
+  os << t << " " << lvr;
+  if( lvr == VR::INVALID )
+    {
+    os << "(" << entry.GetVR() << ")";
+    }
   //os << " " << VM::GetVMString( vm ) ;
   //  if( dictVR != VR::INVALID && !(vr & dictVR) )
   //    {
@@ -119,7 +123,7 @@ void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictE
 
   if( !entry.GetVR().Compatible( lvr ) )
     {
-          gdcmErrorMacro( "Wrong VR should be " << entry.GetVR() );
+    gdcmErrorMacro( "Wrong VR should be " << entry.GetVR() );
     }
   if( VR::IsASCII(lvr) )
     {
@@ -552,7 +556,9 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
         {
         StringFilterCase(SS);
         StringFilterCase(US);
+        StringFilterCase(SL);
         StringFilterCase(UL);
+        StringFilterCase(FL);
       case VR::OB:
       case VR::OW:
       case VR::OB_OW:
@@ -570,6 +576,7 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
           }
         break;
       case VR::INVALID:
+      case VR::US_SS:
         os << "TODO";
         break;
       default:
@@ -593,23 +600,40 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
     VM guessvm = VM::VM0;
     if( refvr & VR::VRASCII )
       {
+      assert( refvr != VR::INVALID );
+      assert( refvr & VR::VRASCII );
       if( bv )
         {
         unsigned int count = VM::GetNumberOfElementsFromArray(bv->GetPointer(), bv->GetLength());
         guessvm = VM::GetVMTypeFromLength(count, 1); // hackish...
         }
       }
-    else
+    else if( refvr & VR::VRBINARY )
       {
+      assert( refvr != VR::INVALID );
       assert( refvr & VR::VRBINARY );
-      if( bv )
-        {
-        guessvm = VM::GetVMTypeFromLength(bv->GetLength(), refvr.GetSize() );
-        }
       if( refvr & VR::OB_OW || refvr == VR::SQ )
         {
         guessvm = VM::VM1;
         }
+      else if( bv )
+        {
+        guessvm = VM::GetVMTypeFromLength(bv->GetLength(), refvr.GetSize() );
+        }
+      else
+        {
+        assert( 0 && "Impossible" );
+        }
+      }
+    else if( refvr == VR::INVALID )
+      {
+      refvr = VR::UN;
+      guessvm = VM::VM1;
+      }
+    else
+      {
+      // Burst into flames !
+      assert( 0 && "Impossible happen" );
       }
     if( !vm.Compatible( guessvm ) )
       {

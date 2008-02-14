@@ -85,7 +85,7 @@ public:
     VM3_3n =             VM3 |             VM6       | VM9                             | VM99 | VM256,
     VM3_n  =             VM3 | VM4 | VM5 | VM6 | VM8 | VM9 | VM11 | VM16 | VM24 | VM32 | VM99 | VM256,
     VM4_4n =                   VM4                                | VM16 | VM24 | VM32        | VM256,
-    VM_END  // Custom tag to count number of entry
+    VM_END = VM1_n + 1  // Custom tag to count number of entry
   } VMType;
 
   // Return the string as written in the official DICOM dict from 
@@ -111,6 +111,9 @@ public:
   unsigned int GetLength() const;
 
   friend std::ostream &operator<<(std::ostream &os, const VM &vm);
+protected:
+  static int GetIndex(VMType vm);
+
 private:
   VMType VMField;
 };

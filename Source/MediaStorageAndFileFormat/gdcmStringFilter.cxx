@@ -100,7 +100,9 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const DataElement
         {
         StringFilterCase(SS);
         StringFilterCase(US);
+        StringFilterCase(SL);
         StringFilterCase(UL);
+        StringFilterCase(FL);
       default:
         abort();
         break;

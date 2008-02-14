@@ -409,7 +409,7 @@ bool VR::CanDisplay(VRType const &vr)
 
 bool VR::Compatible(VR const &vr) const
 {
-  if( VRField == VR::INVALID || vr.VRField == VR::INVALID ) return true;
+  if( VRField == VR::INVALID && vr.VRField == VR::INVALID ) return true;
   else return VRField & vr.VRField;
 }
 
