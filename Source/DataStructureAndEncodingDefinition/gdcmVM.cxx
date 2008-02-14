@@ -289,7 +289,7 @@ bool VM::Compatible(VM const &vm) const
     r = vm.VMField >= VM::VM3;
     break;
   default:
-    abort();
+    r = VMField & vm.VMField;
     }
   if( r ) assert( VMField & vm.VMField );
   return r;

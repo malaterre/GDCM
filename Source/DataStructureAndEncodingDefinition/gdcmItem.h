@@ -149,10 +149,11 @@ std::istream &Read(std::istream &is)
       ByteSwapFilter bsf(nested);
       bsf.ByteSwap();
       }
-    else /* if( ValueLengthField.IsUndefinedLength() ) */
+    else /* if( ValueLengthField.IsUndefined() ) */
       {
       DataSet &nested = NestedDataSet;
       nested.Clear();
+      assert( nested.IsEmpty() );
       nested.template ReadWithLength<TDE,SwapperDoOp>(is, ValueLengthField);
       ByteSwapFilter bsf(nested);
       bsf.ByteSwap();
@@ -184,10 +185,12 @@ std::istream &Read(std::istream &is)
     assert( nested.IsEmpty() );
     nested.template ReadNested<TDE,TSwap>(is);
     }
-  else /* if( ValueLengthField.IsUndefinedLength() ) */
+  else /* if( ValueLengthField.IsUndefined() ) */
     {
+    assert( !ValueLengthField.IsUndefined() );
     DataSet &nested = NestedDataSet;
     nested.Clear();
+    assert( nested.IsEmpty() );
     nested.template ReadWithLength<TDE,TSwap>(is, ValueLengthField);
     }
 

@@ -89,6 +89,7 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const DataElement
     }
   else
     {
+    assert( vr & VR::VRBINARY );
     const ByteValue *bv = de.GetByteValue();
     std::ostringstream os;
     if( bv )
@@ -98,11 +99,19 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const DataElement
       std::ostringstream os;
       switch(vr)
         {
-        StringFilterCase(SS);
-        StringFilterCase(US);
-        StringFilterCase(SL);
-        StringFilterCase(UL);
+        StringFilterCase(AT);
         StringFilterCase(FL);
+        StringFilterCase(FD);
+        //StringFilterCase(OB);
+        StringFilterCase(OF);
+        //StringFilterCase(OW);
+        StringFilterCase(SL);
+        //StringFilterCase(SQ);
+        StringFilterCase(SS);
+        StringFilterCase(UL);
+        //StringFilterCase(UN);
+        StringFilterCase(US);
+        StringFilterCase(UT);
       default:
         abort();
         break;

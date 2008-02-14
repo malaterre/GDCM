@@ -527,15 +527,7 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
       {
       refvr = vr_read;
       }
-    if( refvr == VR::SQ )
-      {
-      //os << "TODO";
-      }
-    else if( refvr == VR::UN )
-      {
-      //os << "TODO";
-      }
-    else if( refvr & VR::VRASCII )
+    if( refvr & VR::VRASCII )
       {
       const ByteValue *bv = de.GetByteValue();
       if( bv )
@@ -550,15 +542,24 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
       }
     else
       {
+      assert( refvr & VR::VRBINARY );
       //std::ostringstream os;
       std::string s;
       switch(refvr)
         {
-        StringFilterCase(SS);
-        StringFilterCase(US);
-        StringFilterCase(SL);
-        StringFilterCase(UL);
+        StringFilterCase(AT);
         StringFilterCase(FL);
+        StringFilterCase(FD);
+        //StringFilterCase(OB);
+        StringFilterCase(OF);
+        //StringFilterCase(OW);
+        StringFilterCase(SL);
+        //StringFilterCase(SQ);
+        StringFilterCase(SS);
+        StringFilterCase(UL);
+        //StringFilterCase(UN);
+        StringFilterCase(US);
+        StringFilterCase(UT);
       case VR::OB:
       case VR::OW:
       case VR::OB_OW:
@@ -577,6 +578,8 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
         break;
       case VR::INVALID:
       case VR::US_SS:
+      case VR::SQ:
+      case VR::UN:
         os << "TODO";
         break;
       default:
@@ -658,11 +661,10 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
         {
         const Item &item = *it;
         const DataSet &ds = item.GetNestedDataSet();
-        //const DataSet &exds = ds.GetInternal();
-        std::string nextindent = indent + " ";
-        //PrintDataSet(os, nextindent, ds);
-        os << ds;
-        abort(); // FIXME there is a bug !
+        std::string nextindent = indent + "  ";
+        PrintDataSet(os, nextindent, ds);
+        //os << ds;
+        //abort(); // FIXME there is a bug !
         }
       }
     }
