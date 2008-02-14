@@ -5,7 +5,7 @@
 /*=========================================================================
 
   Program: GDCM (Grass Root DICOM). A DICOM library
-  Module:  $URL$
+  Module:  $URL: https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk/Source/DataDictionary/DefaultDicts.xsl $
 
   Copyright (c) 2006-2008 Mathieu Malaterre
   All rights reserved.
@@ -79,7 +79,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0000,0x5150,VR::CS,VM::VM1,"Add Gray Scale",true },
   {0x0000,0x5160,VR::CS,VM::VM1,"Borders",true },
   {0x0000,0x5170,VR::IS,VM::VM1,"Copies",true },
-  {0x0000,0x5180,VR::CS,VM::VM1,"Magnification Type (Retired)",true },
+  {0x0000,0x5180,VR::CS,VM::VM1,"Magnification Type",true },
   {0x0000,0x5190,VR::CS,VM::VM1,"Erase",true },
   {0x0000,0x51a0,VR::CS,VM::VM1,"Print",true },
   {0x0000,0x51b0,VR::US,VM::VM1_n,"Overlays",true },
@@ -112,10 +112,10 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0004,0x1512,VR::UI,VM::VM1,"Referenced Transfer Syntax UID in File",false },
   {0x0004,0x151a,VR::UI,VM::VM1_n,"Referenced Related General SOP Class UID in File",false },
   {0x0004,0x1600,VR::UL,VM::VM1,"Number of References",true },
-  {0x0008,0x0001,VR::UL,VM::VM1,"Length to End 0008",true },
+  {0x0008,0x0001,VR::UL,VM::VM1,"Length to End",true },
   {0x0008,0x0005,VR::CS,VM::VM1_n,"Specific Character Set",false },
   {0x0008,0x0008,VR::CS,VM::VM2_n,"Image Type",false },
-  {0x0008,0x0010,VR::CS,VM::VM1,"Recognition Code 0008",true },
+  {0x0008,0x0010,VR::CS,VM::VM1,"Recognition Code",true },
   {0x0008,0x0012,VR::DA,VM::VM1,"Instance Creation Date",false },
   {0x0008,0x0013,VR::TM,VM::VM1,"Instance Creation Time",false },
   {0x0008,0x0014,VR::UI,VM::VM1,"Instance Creator UID",false },
@@ -136,7 +136,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0008,0x0033,VR::TM,VM::VM1,"Content Time",false },
   {0x0008,0x0034,VR::TM,VM::VM1,"Overlay Time",true },
   {0x0008,0x0035,VR::TM,VM::VM1,"Curve Time",true },
-  {0x0008,0x0040,VR::US,VM::VM1,"Data Set Type (Retired)",true },
+  {0x0008,0x0040,VR::US,VM::VM1,"Data Set Type",true },
   {0x0008,0x0041,VR::LO,VM::VM1,"Data Set Subtype",true },
   {0x0008,0x0042,VR::CS,VM::VM1,"Nuclear Medicine Series Type",true },
   {0x0008,0x0050,VR::SH,VM::VM1,"Accession Number",false },
@@ -2121,11 +2121,11 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0074,0x1042,VR::SQ,VM::VM1,"General Machine Verification Sequence",false },
   {0x0074,0x1044,VR::SQ,VM::VM1,"Conventional Machine Verification Sequence",false },
   {0x0074,0x1046,VR::SQ,VM::VM1,"Ion Machine Verification Sequence",false },
-  {0x0074,0x1048,VR::SQ,VM::VM1_n,"Failed Attributes Sequence",false },
-  {0x0074,0x104a,VR::SQ,VM::VM1_n,"Overridden Attributes Sequence",false },
+  {0x0074,0x1048,VR::SQ,VM::VM1,"Failed Attributes Sequence",false },
+  {0x0074,0x104a,VR::SQ,VM::VM1,"Overridden Attributes Sequence",false },
   {0x0074,0x104c,VR::SQ,VM::VM1,"Conventional Control Point Verification Sequence",false },
   {0x0074,0x104e,VR::SQ,VM::VM1,"Ion Control Point Verification Sequence",false },
-  {0x0074,0x1050,VR::SQ,VM::VM1_n,"Attribute Occurrence Sequence",false },
+  {0x0074,0x1050,VR::SQ,VM::VM1,"Attribute Occurrence Sequence",false },
   {0x0074,0x1052,VR::AT,VM::VM1,"Attribute Occurrence Pointer",false },
   {0x0074,0x1054,VR::UL,VM::VM1,"Attribute Item Selector",false },
   {0x0074,0x1056,VR::LO,VM::VM1,"Attribute Occurrence Private Creator",false },
