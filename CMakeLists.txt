@@ -17,8 +17,16 @@ SET(GDCM_VERSION
   "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}.${GDCM_BUILD_VERSION}")
 
 #-----------------------------------------------------------------------------
+# VS 2005 declared that some C functions were deprecated...
+IF(CMAKE_COMPILER_2005)
+  ADD_DEFINITIONS(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE)
+  ADD_DEFINITIONS(-D_SCL_SECURE_NO_DEPRECATE)
+ENDIF(CMAKE_COMPILER_2005) 
+
+
+#-----------------------------------------------------------------------------
 # Build shared lib by default
-OPTION(GDCM_BUILD_SHARED_LIBS "Build GDCM with shared libraries." ON)
+OPTION(GDCM_BUILD_SHARED_LIBS "Build GDCM with shared libraries." OFF)
 SET(BUILD_SHARED_LIBS ${GDCM_BUILD_SHARED_LIBS})
 
 #-----------------------------------------------------------------------------
