@@ -51,17 +51,14 @@ public:
   // Either the VR: eg LO (private tag)
   void PrintASCII(std::ostream &os, VL maxlength ) const {
     VL length = std::min(maxlength, Length);
-    if( IsPrintable(length) )
-      {
-      // WARNING: Internal.end() != Internal.begin()+Length
-      std::copy(Internal.begin(), Internal.begin()+length,
-        std::ostream_iterator<char>(os));
-      }
+    assert( IsPrintable(length) );
+    // WARNING: Internal.end() != Internal.begin()+Length
+    std::copy(Internal.begin(), Internal.begin()+length,
+      std::ostream_iterator<char>(os));
   }
 
   void PrintHex(std::ostream &os, VL maxlength ) const {
     VL length = std::min(maxlength, Length);
-    //if( IsPrintable(length) )
       {
       // WARNING: Internal.end() != Internal.begin()+Length
       std::vector<char>::const_iterator it = Internal.begin();
@@ -192,7 +189,6 @@ public:
 #endif
     }
 
-protected:
   /**
    * \brief  Checks whether a 'ByteValue' is printable or not (in order
    *         to avoid corrupting the terminal of invocation when printing)
@@ -200,6 +196,7 @@ protected:
    *         UNICODE or character set...
    */
   bool IsPrintable(VL length) const {
+    assert( length <= Length );
     for(unsigned int i=0; i<length; i++)
       {
       if ( i == (length-1) && Internal[i] == '\0') continue;
@@ -212,6 +209,7 @@ protected:
     return true;
     }
 
+protected:
   void Print(std::ostream &os) const {
   // This is perfectly valid to have a Length = 0 , so we cannot check
   // the length for printing

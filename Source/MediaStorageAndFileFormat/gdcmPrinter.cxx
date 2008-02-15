@@ -542,7 +542,8 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
         {
         VL l = std::min( bv->GetLength(), MaxPrintLength );
         os << "[";
-        bv->PrintASCII(os,l);
+        if( bv->IsPrintable(l) ) bv->PrintASCII(os,l);
+        else os << "(non-printable character found)";
         os << "]";
         }
       else

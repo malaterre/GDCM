@@ -120,8 +120,17 @@ public:
     const Tag & t2 = _val;
     if( t1 == t2 )
       {
-      //assert( strcmp(Owner.c_str(), _val.GetOwner()) != 0 ); // prevent adding duplicate element
-      return strcmp(Owner.c_str(), _val.GetOwner() ) < 0;
+      int res = strcmp(Owner.c_str(), _val.GetOwner() ) < 0;
+#ifndef NDEBUG
+      if( strcasecmp(Owner.c_str(), _val.GetOwner() ) == 0 )
+        {
+        // FIXME:
+        // Typically this should only happen with the "Philips MR Imaging DD 001" vs "PHILIPS MR IMAGING DD 001"
+        // or "Philips Imaging DD 001" vr "PHILIPS IMAGING DD 001"
+        assert( strcmp(Owner.c_str(), _val.GetOwner()) == 0 );
+        }
+#endif
+      return res;
       }
     else return t1 < t2;
     }
