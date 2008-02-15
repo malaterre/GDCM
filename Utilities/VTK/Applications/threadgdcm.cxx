@@ -48,9 +48,18 @@ void *ReadFilesThread(void *voidparams)
 
     gdcm::ImageReader reader;
     reader.SetFileName( filename );
-    if( !reader.Read() )
+    try
       {
-      return 0;
+      if( !reader.Read() )
+        {
+        std::cerr << "Failed to read: " << filename << std::endl;
+        break;
+        }
+      }
+    catch( ... )
+      {
+      std::cerr << "Failed to read: " << filename << std::endl;
+      break;
       }
 
     const gdcm::Image &image = reader.GetImage();

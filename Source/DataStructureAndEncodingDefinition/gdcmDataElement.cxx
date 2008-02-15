@@ -17,6 +17,7 @@
 #include "gdcmByteValue.h"
 #include "gdcmSequenceOfItems.h"
 #include "gdcmAttribute.h"
+#include "gdcmSequenceOfItems.h"
 
 namespace gdcm
 {
@@ -28,6 +29,12 @@ namespace gdcm
       sq->SetLengthToUndefined();
       ValueLengthField.SetToUndefined();
       }
+  }
+
+  const SequenceOfItems* DataElement::GetSequenceOfItems() const {
+    const Value &v = GetValue();
+    const SequenceOfItems *sqi = dynamic_cast<const SequenceOfItems*>(&v);
+    return sqi; // Will return NULL if not ByteValue
   }
 
 } // end namespace gdcm

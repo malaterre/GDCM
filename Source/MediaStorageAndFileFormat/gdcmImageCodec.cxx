@@ -181,7 +181,7 @@ bool ImageCodec::DoPlanarConfiguration(std::istream &is, std::ostream &os)
 
 bool ImageCodec::DoSimpleCopy(std::istream &is, std::ostream &os)
 {
-#if 1
+#if 0
   std::streampos start = is.tellg();
   assert( 0 - start == 0 );
   is.seekg( 0, std::ios::end);
@@ -194,7 +194,7 @@ bool ImageCodec::DoSimpleCopy(std::istream &is, std::ostream &os)
   delete[] dummy_buffer ;
 #else
   // This code is ideal but is failing on an RLE image...need to figure out
-  // what is wrong to reactive this code.
+  // what is wrong to reactivate this code.
   os.rdbuf( is.rdbuf() );
 #endif
 

@@ -61,14 +61,14 @@ public:
 
   void PrintHex(std::ostream &os, VL maxlength ) const {
     VL length = std::min(maxlength, Length);
-    if( IsPrintable(length) )
+    //if( IsPrintable(length) )
       {
       // WARNING: Internal.end() != Internal.begin()+Length
       std::vector<char>::const_iterator it = Internal.begin();
       for(; it != Internal.begin()+length; ++it)
         {
         const char &c = *it;
-        os << (int)c;
+        os << "\\" << (int)c;
         }
       }
   }

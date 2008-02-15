@@ -31,11 +31,15 @@ std::string DataSet::GetPrivateCreator(const Tag &t) const
       return "";
       }
     const DataElement &de = *it;
-    const Value &v = de.GetValue();
-    const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
-    std::ostringstream os;
-    bv.WriteBuffer( os );
-    return os.str();
+    const ByteValue *bv = de.GetByteValue();
+    assert( bv );
+    std::string owner = std::string(bv->GetPointer(),bv->GetLength());
+    if( owner[owner.size()-1] == ' ' )
+      {
+      owner.erase(owner.size()-1,1);
+      }
+    assert( owner[owner.size()-1] != ' ' );
+    return owner;
     }
   return "";
 }

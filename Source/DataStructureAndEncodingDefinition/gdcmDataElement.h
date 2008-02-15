@@ -52,6 +52,7 @@ namespace gdcm
  * \see ExplicitDataElement ImplicitDataElement
  */
 
+class SequenceOfItems;
 class GDCM_EXPORT DataElement
 {
 public:
@@ -101,6 +102,8 @@ public:
     const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
     return bv; // Will return NULL if not ByteValue
   }
+  // WARNING: You need to check for NULL return value
+  const SequenceOfItems* GetSequenceOfItems() const;
 
   // Helper:
   bool IsUndefinedLength() const {

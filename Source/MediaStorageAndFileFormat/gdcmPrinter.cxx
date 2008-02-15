@@ -479,9 +479,9 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
     { \
       Element<VR::type,VM::VM1_n> el; \
       el.Set( de.GetValue() ); \
-      os << "[" << el.GetValue(); \
+      os << "" << el.GetValue(); \
       for(unsigned long i = 1; i < el.GetLength(); ++i) os << "\\" << el.GetValue(i); \
-      os << "]"; \
+      os << ""; \
     } break
 
 void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const DataSet &ds)
@@ -512,11 +512,6 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
     os << indent; // first thing do the shift !
     os << t << " ";
     os << vr_read << " ";
-    if( !vr.Compatible( vr_read ) )
-      {
-      // FIXME : if terminal supports it: print in red !
-      os << "(" << vr << ") ";
-      }
     VR refvr;
     // always prefer the vr from the file:
     if( vr_read == VR::INVALID )
@@ -527,13 +522,28 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
       {
       refvr = vr_read;
       }
+    if( !vr.Compatible( vr_read ) )
+      {
+      // FIXME : if terminal supports it: print in red !
+      os << "(" << vr << ") ";
+      }
+    else if( de.GetSequenceOfItems() )
+      {
+      // when vr == VR::INVALID and vr_read is also VR::INVALID, we have a seldom case where we can guess
+      // the vr
+      os << "(SQ) ";
+      assert( refvr == VR::INVALID );
+      refvr = VR::SQ;
+      }
     if( refvr & VR::VRASCII )
       {
       const ByteValue *bv = de.GetByteValue();
       if( bv )
         {
         VL l = std::min( bv->GetLength(), MaxPrintLength );
+        os << "[";
         bv->PrintASCII(os,l);
+        os << "]";
         }
       else
         {
@@ -542,7 +552,7 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
       }
     else
       {
-      assert( refvr & VR::VRBINARY );
+      assert( refvr & VR::VRBINARY || (vr == VR::INVALID && refvr == VR::INVALID) );
       //std::ostringstream os;
       std::string s;
       switch(refvr)
@@ -567,7 +577,8 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
           const ByteValue *bv = de.GetByteValue();
           if ( bv )
             {
-            VL l = std::min( bv->GetLength(), MaxPrintLength );
+            //VL l = std::min( bv->GetLength(), MaxPrintLength );
+            VL l = std::min( (int)bv->GetLength(), 0xF );
             bv->PrintHex(os, l);
             }
           else
@@ -654,17 +665,19 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
     os << "\n";
     if( refvr == VR::SQ )
       {
-      const Value& value = de.GetValue();
-      const SequenceOfItems &sqi = dynamic_cast<const SequenceOfItems&>(value);
-      SequenceOfItems::ItemVector::const_iterator it = sqi.Items.begin();
-      for(; it != sqi.Items.end(); ++it)
+      const SequenceOfItems *sqi = de.GetSequenceOfItems();
+      if( sqi )
         {
-        const Item &item = *it;
-        const DataSet &ds = item.GetNestedDataSet();
-        std::string nextindent = indent + "  ";
-        PrintDataSet(os, nextindent, ds);
-        //os << ds;
-        //abort(); // FIXME there is a bug !
+        SequenceOfItems::ItemVector::const_iterator it = sqi->Items.begin();
+        for(; it != sqi->Items.end(); ++it)
+          {
+          const Item &item = *it;
+          const DataSet &ds = item.GetNestedDataSet();
+          std::string nextindent = indent + "  ";
+          PrintDataSet(os, nextindent, ds);
+          //os << ds;
+          //abort(); // FIXME there is a bug !
+          }
         }
       }
     }

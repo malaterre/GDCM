@@ -240,6 +240,8 @@ public:
         // perform realloc
         assert( (len / size) * size == len );
         ArrayType *internal = new ArrayType[len / size];
+        assert( Save == false );
+        Save = true; // ???? 
         if( Internal )
           {
           memcpy(internal, Internal, len);
@@ -258,14 +260,15 @@ public:
     if( save ) {
       SetLength(len); // realloc
       memcpy(Internal, array, len/*/sizeof(ArrayType)*/);
+      assert( Save == false );
       }
     else {
       // TODO rewrite this stupid code:
       assert( Length == 0 );
       assert( Internal == 0 );
+      assert( Save == false );
       Length = len / sizeof(ArrayType);
       Internal = const_cast<ArrayType*>(array);
-      //abort();
       }
       Save = save;
   }

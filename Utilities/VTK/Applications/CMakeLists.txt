@@ -20,3 +20,6 @@ TARGET_LINK_LIBRARIES(gdcmviewer2 vtkgdcm vtkRendering)
 ADD_EXECUTABLE(threadgdcm threadgdcm.cxx)
 TARGET_LINK_LIBRARIES(threadgdcm gdcmMSFF pthread vtkIO)
 
+#ADD_EXECUTABLE(gdcm2vtk gdcm2vtk.cxx)
+#TARGET_LINK_LIBRARIES(gdcm2vtk gdcmMSFF pthread)
+
