@@ -588,11 +588,28 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
             }
           }
         break;
-      case VR::INVALID:
+      case VR::UN:
       case VR::US_SS:
       case VR::SQ:
-      case VR::UN:
         os << "TODO";
+        break;
+      // Let's be a little more helpful and try to print anyway when possible:
+      case VR::INVALID:
+          {
+          const ByteValue *bv = de.GetByteValue();
+          if( bv )
+            {
+            VL l = std::min( bv->GetLength(), MaxPrintLength );
+            os << "[";
+            if( bv->IsPrintable(l) ) bv->PrintASCII(os,l);
+            else os << "(non-printable character found)";
+            os << "]";
+            }
+          else
+            {
+            os << "(no value)";
+            }
+          }
         break;
       default:
         abort();
@@ -675,9 +692,9 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
           const Item &item = *it;
           const DataSet &ds = item.GetNestedDataSet();
           std::string nextindent = indent + "  ";
-          PrintDataSet(os, nextindent, ds);
-          //os << ds;
-          //abort(); // FIXME there is a bug !
+          const DataElement &deitem = item;
+          os << nextindent << deitem << "\n";
+          PrintDataSet(os, nextindent + "  ", ds);
           }
         }
       }

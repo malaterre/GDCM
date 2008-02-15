@@ -200,7 +200,7 @@ public:
     for(unsigned int i=0; i<length; i++)
       {
       if ( i == (length-1) && Internal[i] == '\0') continue;
-      if (!isprint((int)Internal[i]) )
+      if ( !( isprint((int)Internal[i]) || isspace((int)Internal[i]) ) )
         {
         //gdcmWarningMacro( "Cannot print :" << i );
         return false;
