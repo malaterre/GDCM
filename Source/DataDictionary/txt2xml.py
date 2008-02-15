@@ -17,7 +17,7 @@ class TextParser:
     outLines = []
     for line in infile.readlines():
       patt  = re.compile("^\s*([A-Za-z0-9&{}=+ «»%;#()./,_:>-]+)\s+\(?([0-9A-Fn]+),\s?([0-9A-FxX]+)\)?\s+([A-Z][A-Z])\s+([0-9Nn-]+)\s*$")
-      patt1 = re.compile("^\s*([A-Za-z0-9&{}=+ ;%#()./,_:>-]+)\s+\(([0-9A-F]+),\s?([0-9A-FxX]+)\)\s+([1-3C]+)\s+([A-Z][A-Z])\s+([0-9Nn-]+)\s*$")
+      patt1 = re.compile("^\s*([A-Za-z0-9&{}=+ ;%#\[\]()./,_:>-]+)\s+\(?([0-9A-F]+),\s?([0-9A-FxX]+)\)?\s+([1-3C]+)\s+([A-Z][A-Z])\s+([0-9Nn-]+)\s*$")
       patt2 = re.compile( "^\s*([Table ]*[A-Z1-9.:-]+)\s+([A-Za-z -]+)\s+\(([A-Z0-9_]+)\)\s*$")
       #patt3 = re.compile( '^\s*Private Creator Identification\s*\((["A-Za-z0-9() ./])\)\s*$' )
       patt3 = re.compile( '^\s*Private Creator Identification\s*\("?(.*)"?\)\)?\s*$' )
@@ -36,7 +36,7 @@ class TextParser:
         outLines.append( dicom )
       elif m1:
         # <entry group="0001" element="0001" vr="LO" vm="1" type="1C"/>
-        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" type=\"%s\"/>"%(m1.group(2),m1.group(3),m1.group(5),m1.group(6),m1.group(4),m1.group(1).rstrip())
+        dicom = "<entry group=\"%s\" element=\"%s\" vr=\"%s\" vm=\"%s\" type=\"%s\" name=\"%s\"/>"%(m1.group(2),m1.group(3),m1.group(5),m1.group(6),m1.group(4),m1.group(1).rstrip())
         #dicom = m.group(1) + ' ' + m.group(2) + ' ' + m.group(3) + ' ' + m.group(4)
         #print dicom
         outLines.append( dicom )

@@ -14,6 +14,7 @@
 =========================================================================*/
 /*
  * TODO: Merging (burnin) of overlay would be nice (merge 0x60xx overlay into PixelData)
+ * TODO: --add-thumbnail / --remove-thumbnail
  * 1. Create a DICOM file from a 'raw' input:
  * 2. Create a blob (jpeg,pgm/pnm,j2k,rle) from input
  * - binary blob(s) (grayscale / RGB) input
