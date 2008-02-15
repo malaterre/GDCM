@@ -396,4 +396,15 @@ int System::GetCurrentDateTime(char date[18])
   return 1;
 }
 
+int System::StrCaseCmp(const char *s1, const char *s2)
+{
+  while (*s1 && (tolower(*s1) == tolower(*s2)))
+   {
+     s1++;
+     s2++;
+   }
+
+ return tolower(*s1) - tolower(*s2);
+}
+
 } // end namespace gdcm

@@ -16,6 +16,7 @@
 #define __gdcmObject_h
 
 #include "gdcmTypes.h"
+
 #include <assert.h>
 #include <iostream> // grrrr
 

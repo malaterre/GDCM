@@ -51,6 +51,8 @@ public:
   static int GetCurrentDateTime(char date[18]);
   static int EncodeBytes(char *out, unsigned char *data, int size);
 
+  static int StrCaseCmp(const char *s1, const char *s2);
+
 protected:
   static bool GetPermissions(const char* file, unsigned short& mode);
   static bool SetPermissions(const char* file, unsigned short mode);

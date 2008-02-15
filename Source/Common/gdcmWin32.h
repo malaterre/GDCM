@@ -16,6 +16,9 @@
 #ifndef __gdcmWin32_h
 #define __gdcmWin32_h
 
+#if !defined(__gdcmTypes_h)
+#error you need to include gdcmType.h instead
+#endif
 //-----------------------------------------------------------------------------
 #if defined(WIN32) && defined(GDCM_BUILD_SHARED_LIBS)
   #if (defined(gdcmCommon_EXPORTS) || defined(gdcmDICT_EXPORTS) || defined(gdcmDSED_EXPORTS) || defined(gdcmIOD_EXPORTS) || defined(gdcmMSFF_EXPORTS))

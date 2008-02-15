@@ -19,7 +19,7 @@
 #include <stdexcept>
 #include <sstream> // ostringstream
 
-#include "gdcmWin32.h"
+#include "gdcmTypes.h"
 
 #include <assert.h> // FIXME
 

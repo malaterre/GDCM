@@ -32,6 +32,7 @@ INCLUDE_DIRECTORIES(
   )
 
 SET(Common_SRCS
+  gdcmObject.cxx
   gdcmDirectory.cxx
   gdcmString.cxx
   gdcmFilename.cxx
