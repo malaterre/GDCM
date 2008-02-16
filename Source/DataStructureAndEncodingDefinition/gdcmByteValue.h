@@ -127,7 +127,8 @@ public:
   }
   // Use that only if you understand what you are doing
   const char *GetPointer() const {
-    return &Internal[0];
+    if(!Internal.empty()) return &Internal[0];
+	return 0;
   }
   bool GetBuffer(char *buffer, unsigned long length) const {
     // SIEMENS_GBS_III-16-ACR_NEMA_1.acr has a weird pixel length
@@ -171,7 +172,7 @@ public:
       //  std::back_inserter(Internal)) ; 
       //std::istream_iterator<char> isi( is ), isiEOF;
       //Internal.assign(isi, isiEOF);
-      is.read(&Internal[0], Length);
+      if(Length) is.read(&Internal[0], Length);
       assert( Internal.size() == Length || Internal.size() == Length + 1 );
       }
     //TSwap::SwapArray(&Internal[0], Internal.size());

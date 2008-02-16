@@ -33,6 +33,7 @@
 //-----------------------------------------------------------------------------
 //This is needed when compiling in debug mode
 #ifdef _MSC_VER
+# pragma warning ( default : 4263 ) /* no override, call convention differs */
 // 'identifier' : class 'type' needs to have dll-interface to be used by
 // clients of class 'type2'
 #pragma warning ( disable : 4251 )
@@ -45,12 +46,12 @@
 #pragma warning ( disable : 4503 )
 // C++ exception specification ignored except to indicate a 
 // function is not __declspec(nothrow)
-#pragma warning ( disable : 4290 )
+//#pragma warning ( disable : 4290 )
 // signed/unsigned mismatch
 #pragma warning ( disable : 4018 )
 // return type for 'identifier' is '' (ie; not a UDT or reference to UDT. Will
 // produce errors if applied using infix notation
-#pragma warning ( disable : 4284 )
+//#pragma warning ( disable : 4284 )
 // 'type' : forcing value to bool 'true' or 'false' (performance warning)
 // //#pragma warning ( disable : 4800 )
 #endif //_MSC_VER

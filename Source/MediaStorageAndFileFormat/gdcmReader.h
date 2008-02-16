@@ -54,7 +54,7 @@ public:
 
   virtual bool Read(); // Execute()
   void SetFileName(const char *filename) {
-    Stream.open(filename);
+	  Stream.open(filename, std::ios::binary);
   }
 
   const File &GetFile() const { return *F; }
