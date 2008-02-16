@@ -12305,6 +12305,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0xfffe,0x0000,VR::UL,VM::VM1,"Group Length fffe",true },
 
  // FIXME: need a dummy element
+  {0xffff,0xffff,VR::INVALID,VM::VM0,"",true }, // dummy
   {0xffff,0xffff,VR::INVALID,VM::VM0,0,true } // Gard
 };
 
