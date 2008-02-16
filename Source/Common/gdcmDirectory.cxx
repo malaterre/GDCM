@@ -53,14 +53,14 @@ unsigned int Directory::Explore(FilenameType const &name, bool recursive)
 {
   unsigned int nFiles = 0;
   std::string fileName;
-  //std::string dirName = Util::NormalizePath(Toplevel);
   std::string dirName = name;
-  // FIXME: IsDirectory( dirName )
+  //assert( IsDirectory( dirName ) );
   Directories.push_back( dirName );
 #ifdef _MSC_VER
   WIN32_FIND_DATA fileData;
-  assert( Toplevel[Toplevel.size()-1] == '/' );
-  const FilenameType firstfile = Toplevel+"*";
+  dirName.append("/");
+  assert( dirName[dirName.size()-1] == '/' );
+  const FilenameType firstfile = dirName+"*";
   HANDLE hFile = FindFirstFile(firstfile.c_str(), &fileData);
 
   for(BOOL b = (hFile != INVALID_HANDLE_VALUE); b;
