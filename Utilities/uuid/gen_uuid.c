@@ -39,6 +39,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
+#include <assert.h>
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -94,7 +95,8 @@ static int gettimeofday(struct timeval *tv, int n)
   filetime += ft.dwLowDateTime;
   filetime -= OFFSET;
 
-  memset(&tv,0, sizeof(tv));
+  memset(tv,0, sizeof(*tv));
+  assert( sizeof(*tv) == sizeof(struct timeval));
   tv->tv_sec = (time_t)(filetime / 10000000); // seconds since epoch
   tv->tv_usec = (uint32_t)((filetime % 10000000) / 10);
 

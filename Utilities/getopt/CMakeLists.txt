@@ -14,7 +14,11 @@ SET(GETOPT_SRCS
   getopt.c
   getopt_long.c
   )
-#ADD_DEFINITIONS(-DGETOPT_API)
+IF(WIN32)
+  IF (BUILD_SHARED_LIBS)
+    ADD_DEFINITIONS(-DGETOPT_DLL)
+  ENDIF (BUILD_SHARED_LIBS)
+ENDIF(WIN32)
 
 #INCLUDE_DIRECTORIES(BEFORE
 #  ${CMAKE_CURRENT_SOURCE_DIR}
@@ -24,8 +28,7 @@ SET(GETOPT_SRCS
 # we will be using the standart getopt
 # so this lib will be for the poor Win32 user (those
 # guys really need help)
-ADD_LIBRARY(${GETOPT_LIBRARY_NAME} 
-       	${GETOPT_SRCS})
+ADD_LIBRARY(${GETOPT_LIBRARY_NAME} ${GETOPT_SRCS})
 
 ADD_EXECUTABLE(ex_getopt ex_getopt.c)
 TARGET_LINK_LIBRARIES(ex_getopt ${GETOPT_LIBRARY_NAME})

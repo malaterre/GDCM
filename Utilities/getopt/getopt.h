@@ -57,7 +57,7 @@
 //#include <unistd.h>
 #endif*/
 
-#if defined(_WIN32)
+#if defined(_WIN32) && defined(GETOPT_DLL)
   #if defined(gdcmgetopt_EXPORTS)
     #define GETOPT_EXPORT __declspec( dllexport )
   #else
@@ -67,7 +67,7 @@
   #define GETOPT_EXPORT
 #endif /*defined(WIN32)*/
 
-#if defined(_WIN32)
+#if defined(_WIN32) && defined(GETOPT_DLL)
   #if defined(gdcmgetopt_EXPORTS)
     #define GETOPT_EXTERN __declspec( dllexport )
   #else

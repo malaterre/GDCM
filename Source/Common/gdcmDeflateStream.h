@@ -235,6 +235,7 @@ namespace gdcm
         opaque, buffer_size, out_buffer_size) {}
   };
 
+  /*
   void zerr(int ret)
     {
     fputs("zpipe: ", stderr);
@@ -258,6 +259,7 @@ namespace gdcm
         fputs("zlib version mismatch!\n", stderr);
       }
     }
+*/
 
   class gzinbuf : public std::streambuf {
   protected:
