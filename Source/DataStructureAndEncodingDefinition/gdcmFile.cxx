@@ -33,6 +33,7 @@ namespace gdcm
 std::istream &File::Read(std::istream &is) 
 {
   abort();
+  return is;
 }
 
 std::ostream const &File::Write(std::ostream &os) const

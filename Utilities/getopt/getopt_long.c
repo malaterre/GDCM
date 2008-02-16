@@ -54,7 +54,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-GETOPT_API extern char opterrmsg[128];
+GETOPT_EXTERN char opterrmsg[128];
 char opterrmsg[128]; /* last error message is stored here */
 
 static void warnx(int print_error, const char *fmt, ...)

@@ -20,7 +20,7 @@
 namespace gdcm
 {
   
-class PDFCodec : public Codec
+class GDCM_EXPORT PDFCodec : public Codec
 {
 public:
   PDFCodec();

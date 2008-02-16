@@ -27,7 +27,7 @@ namespace gdcm
  * or more of these components.
  */
 template <typename TDE, typename TSwap>
-class GDCM_EXPORT ValueIO
+class /*GDCM_EXPORT*/ ValueIO
 {
 public:
   static std::istream &Read(std::istream &is, Value& v);

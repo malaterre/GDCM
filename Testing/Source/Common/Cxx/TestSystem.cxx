@@ -16,5 +16,11 @@
 
 int TestSystem(int, char *[])
 {
+	const char s1[] = "HELLO, wORLD !";
+	const char s2[] = "Hello, World !";
+	if( gdcm::System::StrCaseCmp(s1,s2) != 0 )
+	{
+		 return 1;
+	}
   return 0;
 }

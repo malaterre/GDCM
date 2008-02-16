@@ -27,7 +27,7 @@ namespace gdcm
  * When constructing a Series or Study UID, user *has* to keep around the UID,
  * otherwise the UID Generator will simply forget the value and create a new UID.
  */
-class UIDGenerator
+class GDCM_EXPORT UIDGenerator
 {
 public:
   // By default the root of a UID is a GDCM Root...

@@ -2,6 +2,7 @@
 # DSED
 SET(DSED_SRCS
   gdcmTag.cxx
+  gdcmFileSet.cxx
   gdcmDataSet.cxx
   gdcmByteSwapFilter.cxx
   gdcmExplicitDataElement.cxx

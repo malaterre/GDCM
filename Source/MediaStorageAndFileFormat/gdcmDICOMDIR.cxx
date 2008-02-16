@@ -12,24 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
-#ifndef __gdcmDecoder_h
-#define __gdcmDecoder_h
-
-#include "gdcmTypes.h"
+#include "gdcmDICOMDIR.h"
 
 namespace gdcm
-{
-
-class TransferSyntax;
-class GDCM_EXPORT Decoder
-{
-public:
-  virtual ~Decoder() {}
-  virtual bool CanDecode(TransferSyntax const &) { return false; }
-  virtual bool Decode(std::istream &is, std::ostream &os) { return false; }
-};
-
-} // end namespace gdcm
-
-#endif //__gdcmDecoder_h
+{}

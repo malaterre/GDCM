@@ -25,7 +25,6 @@ SET(GETOPT_SRCS
 # so this lib will be for the poor Win32 user (those
 # guys really need help)
 ADD_LIBRARY(${GETOPT_LIBRARY_NAME} 
-		STATIC
        	${GETOPT_SRCS})
 
 ADD_EXECUTABLE(ex_getopt ex_getopt.c)

@@ -57,11 +57,27 @@
 //#include <unistd.h>
 #endif*/
 
-#ifdef _WIN32
-# if !defined(GETOPT_API)
-#  define GETOPT_API __declspec(dllexport)
-# endif
-#endif
+#if defined(_WIN32)
+  #if defined(gdcmgetopt_EXPORTS)
+    #define GETOPT_EXPORT __declspec( dllexport )
+  #else
+    #define GETOPT_EXPORT __declspec( dllimport )
+  #endif
+#else
+  #define GETOPT_EXPORT
+#endif /*defined(WIN32)*/
+
+#if defined(_WIN32)
+  #if defined(gdcmgetopt_EXPORTS)
+    #define GETOPT_EXTERN __declspec( dllexport )
+  #else
+    #define GETOPT_EXTERN __declspec( dllimport )
+  #endif
+#else
+  #define GETOPT_EXTERN extern
+#endif /*defined(WIN32)*/
+
+
 
 /*
  * Gnu like getopt_long() and BSD4.4 getsubopt()/optreset extensions
@@ -86,7 +102,7 @@ struct option {
 };
 
 __BEGIN_DECLS
-GETOPT_API int getopt_long __P((int, char * const *, const char *,
+GETOPT_EXPORT int getopt_long __P((int, char * const *, const char *,
     const struct option *, int *));
 __END_DECLS
 #endif
@@ -95,14 +111,14 @@ __END_DECLS
 /* These are global getopt variables */
 __BEGIN_DECLS
 
-GETOPT_API extern int   opterr,   /* if error message should be printed */
+GETOPT_EXTERN int   opterr,   /* if error message should be printed */
                         optind,   /* index into parent argv vector */
                         optopt,   /* character checked for validity */
                         optreset; /* reset getopt */
-GETOPT_API extern char* optarg;   /* argument associated with option */
+GETOPT_EXTERN char* optarg;   /* argument associated with option */
 
 /* Original getopt */
-GETOPT_API int getopt __P((int, char * const *, const char *));
+GETOPT_EXPORT int getopt __P((int, char * const *, const char *));
 
 __END_DECLS
 #endif

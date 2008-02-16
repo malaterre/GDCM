@@ -58,7 +58,7 @@ int TestParser(int argc, char *argv[])
             << std::endl;
   char buf[BUFSIZ];
   gdcm::Parser parser;
-  int done;
+  bool done;
   int depth = 0;
   parser.SetUserData(&depth);
   parser.SetElementHandler(gdcm::startElement, gdcm::endElement);

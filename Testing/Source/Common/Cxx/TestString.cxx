@@ -40,7 +40,7 @@ int TestString(int argc, char *argv[])
   if( ms3 != "WINDOW3" ) return 1;
 
   // we are at the end:
-  if( ss ) return 1;
+  if( !!ss ) return 1;
 
   return 0;
 }

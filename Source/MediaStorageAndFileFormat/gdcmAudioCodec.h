@@ -20,7 +20,7 @@
 namespace gdcm
 {
   
-class AudioCodec : public Codec
+class GDCM_EXPORT AudioCodec : public Codec
 {
 public:
   AudioCodec();

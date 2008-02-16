@@ -1,6 +1,7 @@
 # Define the srcs for the Information Object Definition
 # IOD
 SET(IOD_SRCS
+  gdcmModule.cxx
   gdcmTableReader.cxx
   gdcmTable.cxx
   gdcmType.cxx

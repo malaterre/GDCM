@@ -18,6 +18,7 @@
 #include "gdcmTypes.h"
 #include "gdcmTag.h"
 #include "gdcmDictEntry.h"
+#include "gdcmSystem.h"
 
 #include <iostream>
 #include <iomanip>
@@ -120,9 +121,9 @@ public:
     const Tag & t2 = _val;
     if( t1 == t2 )
       {
-      int res = strcmp(Owner.c_str(), _val.GetOwner() ) < 0;
+      bool res = strcmp(Owner.c_str(), _val.GetOwner() ) < 0;
 #ifndef NDEBUG
-      if( strcasecmp(Owner.c_str(), _val.GetOwner() ) == 0 )
+	  if( gdcm::System::StrCaseCmp(Owner.c_str(), _val.GetOwner() ) == 0 )
         {
         // FIXME:
         // Typically this should only happen with the "Philips MR Imaging DD 001" vs "PHILIPS MR IMAGING DD 001"

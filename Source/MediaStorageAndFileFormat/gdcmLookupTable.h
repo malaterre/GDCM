@@ -26,7 +26,7 @@ class LookupTableInternal;
 class ByteValue;
 //class IStream;
 //class OStream;
-class LookupTable : public Object
+class GDCM_EXPORT LookupTable : public Object
 {
 public:
   typedef enum {

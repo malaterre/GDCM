@@ -21,7 +21,7 @@ namespace gdcm
 {
 
 class TransferSyntax;
-class Coder
+class GDCM_EXPORT Coder
 {
 public:
   virtual ~Coder() {}

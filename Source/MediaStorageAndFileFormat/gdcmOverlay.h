@@ -30,7 +30,7 @@ class DataElement;
  *  Is there actually any way to recognize an overlay ? On images with multiple overlay I do not see
  *  any way to differenciate them (other than the group tag).
  */
-class Overlay : public Object
+class GDCM_EXPORT Overlay : public Object
 {
 public:
   Overlay();

@@ -25,35 +25,25 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Utilities"
   )
 
-ADD_EXECUTABLE(gdcmdump ${GDCMDUMP_APPS_SRCS})
-TARGET_LINK_LIBRARIES(gdcmdump gdcmMSFF)
-IF(WIN32 AND NOT CYGWIN)
-  TARGET_LINK_LIBRARIES(gdcmdump gdcmgetopt)
-ENDIF(WIN32 AND NOT CYGWIN)
+SET(GDCM_EXECUTABLE_NAME
+  gdcmdump
+  gdcmraw
+  gdcmscanner
+  gdcmoverlay
+  gdcmimg
+  #deflate
+  gdcmconv
+  )
 
-# gdcmraw
-ADD_EXECUTABLE(gdcmraw gdcmraw.cxx)
-TARGET_LINK_LIBRARIES(gdcmraw gdcmMSFF) # gdcmgetopt)
-
-# gdcmscanner
-ADD_EXECUTABLE(gdcmscanner gdcmscanner.cxx)
-TARGET_LINK_LIBRARIES(gdcmscanner gdcmMSFF) # gdcmgetopt)
-
-# gdcmoverlay
-ADD_EXECUTABLE(gdcmoverlay gdcmoverlay.cxx)
-TARGET_LINK_LIBRARIES(gdcmoverlay gdcmMSFF) # gdcmgetopt)
-
-# gdcmimg
-ADD_EXECUTABLE(gdcmimg gdcmimg.cxx)
-TARGET_LINK_LIBRARIES(gdcmimg gdcmMSFF) # gdcmgetopt)
+FOREACH(exename ${GDCM_EXECUTABLE_NAME})
+  ADD_EXECUTABLE(${exename} ${exename}.cxx)
+  TARGET_LINK_LIBRARIES(${exename} gdcmMSFF)
+  IF(WIN32 AND NOT CYGWIN)
+    TARGET_LINK_LIBRARIES(${exename} gdcmgetopt)
+  ENDIF(WIN32 AND NOT CYGWIN)
+ENDFOREACH(exename)
 
 #ADD_EXECUTABLE(deflate deflate.cxx)
 #TARGET_LINK_LIBRARIES(deflate gdcmzlib)
 
-# gdcmconv
-ADD_EXECUTABLE(gdcmconv gdcmconv.cxx)
-TARGET_LINK_LIBRARIES(gdcmconv gdcmMSFF)
-IF(WIN32 AND NOT CYGWIN)
-  TARGET_LINK_LIBRARIES(gdcmconv gdcmgetopt)
-ENDIF(WIN32 AND NOT CYGWIN)
 

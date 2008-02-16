@@ -1,6 +1,15 @@
 # Define the srcs for Media Storage And FileFormat
 # MSFF
 SET(MSFF_SRCS
+  gdcmDICOMDIR.cxx
+  gdcmSpectroscopy.cxx
+  gdcmEncapsulatedDocument.cxx
+  gdcmFiducials.cxx
+  gdcmWaveform.cxx
+  gdcmPatient.cxx
+  gdcmStudy.cxx
+  gdcmSeries.cxx
+  gdcmPersonName.cxx
   gdcmUIDGenerator.cxx
   gdcmPrinter.cxx
   gdcmDictPrinter.cxx
