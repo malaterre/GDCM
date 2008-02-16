@@ -38,7 +38,7 @@ SWIG_LINK_LIBRARIES(gdcm gdcmMSFF ${PYTHON_LIBRARIES})
     ADD_CUSTOM_COMMAND(
       TARGET    ${SWIG_MODULE_gdcm_REAL_NAME}
       POST_BUILD
-      COMMAND   cmake -E copy ${CMAKE_CURRENT_BINARY_DIR}/gdcm.py ${LIBRARY_OUTPUT_PATH}
+      COMMAND   ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/gdcm.py ${LIBRARY_OUTPUT_PATH}
       DEPENDS "${swig_generated_file_fullname}"
       COMMENT   "Copy gdcm.py into ${LIBRARY_OUTPUT_PATH}"
     )
