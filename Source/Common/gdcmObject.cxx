@@ -23,3 +23,4 @@ namespace gdcm
 	// of the gdcm::Object class
 
 }
+
