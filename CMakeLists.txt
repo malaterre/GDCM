@@ -57,6 +57,13 @@ ENDIF(UNIX)
 
 #-----------------------------------------------------------------------------
 # Build the main lib...
+IF(WIN32)
+  INCLUDE_DIRECTORIES(
+    "${GDCM_SOURCE_DIR}/Utilities/C99"
+  )
+ENDIF(WIN32)
+
+
 SUBDIRS(
   Utilities
   Source

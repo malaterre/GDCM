@@ -62,7 +62,8 @@ using namespace gdcm;
 %ignore operator++;                     // Ignore
 
 //%feature("autodoc", "1")
-%include "gdcmWin32.h" // define GDCM_EXPORT so need to be the first one...
+//%include "gdcmTypes.h" // define GDCM_EXPORT so need to be the first one...
+#define GDCM_EXPORT
 %include "gdcmSwapCode.h"
 %include "gdcmPixelFormat.h"
 //%include "gdcmMediaStorage.h"

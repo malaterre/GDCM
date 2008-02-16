@@ -36,8 +36,7 @@
 #else
 // Broken plateforms do not respect C99 and do not provide those typedef
 // Special case for recent Borland compiler, comes with stdint.h
-#if defined(_MSC_VER) || defined(__BORLANDC__) && (__BORLANDC__ < 0x0560)  \
-  || defined(__MINGW32__)
+#if defined(__BORLANDC__) && (__BORLANDC__ < 0x0560) || defined(__MINGW32__)
 typedef  signed char         int8_t;
 typedef  signed short        int16_t;
 typedef  signed int          int32_t;
@@ -45,6 +44,8 @@ typedef  unsigned char       uint8_t;
 typedef  unsigned short      uint16_t;
 typedef  unsigned int        uint32_t;
 typedef  unsigned __int64    uint64_t;
+#elif defined(_MSC_VER)
+#include "stdint.h"
 #else
 #error "Sorry your plateform is not supported"
 #endif // defined(_MSC_VER) || defined(__BORLANDC__) && (__BORLANDC__ < 0x0560)  || defined(__MINGW32__)
