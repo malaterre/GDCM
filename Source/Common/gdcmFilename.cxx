@@ -46,6 +46,7 @@ const char *Filename::GetPath()
 const char *Filename::GetName()
 {
   std::string filename = FileName;
+  assert( !filename.empty() );
 #if defined(_WIN32)
   std::string::size_type slash_pos = filename.find_last_of("/\\");
 #else
@@ -63,9 +64,17 @@ const char *Filename::GetName()
 const char *Filename::ToUnixSlashes()
 {
   Conversion = FileName;
-  std::string::size_type s = Conversion.find("\\");
-  assert( s == std::string::npos );
+  //std::string::size_type s = Conversion.find("\\");
+  //assert( s == std::string::npos );
   assert( !Conversion.empty() );
+  for (std::string::iterator it = Conversion.begin(); it != Conversion.end(); ++it )
+  {
+	  if( *it == '\\' )
+	  {
+		  assert( it+1 != Conversion.end() && *(it+1) != ' ' ); // is it an escaped space ?
+		  *it = '/';
+	  }
+  }
 
   return Conversion.c_str();
 }
