@@ -19,66 +19,12 @@
 <!-- FIXME: Supid function I could simple translate('-','_') + concat ... -->
     <xsl:param name="vmstring"/>
     <xsl:choose>
-      <xsl:when test="$vmstring = 1">
-        <xsl:text>VM1</xsl:text>
-      </xsl:when>
-      <xsl:when test="$vmstring = 2">
-        <xsl:text>VM2</xsl:text>
-      </xsl:when>
-      <xsl:when test="$vmstring = 3">
-        <xsl:text>VM3</xsl:text>
-      </xsl:when>
-      <xsl:when test="$vmstring = 4">
-        <xsl:text>VM4</xsl:text>
-      </xsl:when>
-      <xsl:when test="$vmstring = 5">
-        <xsl:text>VM5</xsl:text>
-      </xsl:when>
-      <xsl:when test="$vmstring = 6">
-        <xsl:text>VM6</xsl:text>
-      </xsl:when>
-      <xsl:when test="$vmstring = 8">
-        <xsl:text>VM8</xsl:text>
-      </xsl:when>
-      <xsl:when test="$vmstring = 16">
-        <xsl:text>VM16</xsl:text>
-      </xsl:when>
-      <xsl:when test="$vmstring = 24">
-        <xsl:text>VM24</xsl:text>
-      </xsl:when>
-      <xsl:when test="$vmstring = '1-2'">
-        <xsl:text>VM1_2</xsl:text>
-      </xsl:when>
-      <xsl:when test="$vmstring = '1-3'">
-        <xsl:text>VM1_3</xsl:text>
-      </xsl:when>
-      <xsl:when test="$vmstring = '1-8'">
-        <xsl:text>VM1_8</xsl:text>
-      </xsl:when>
-      <xsl:when test="$vmstring = '1-32'">
-        <xsl:text>VM1_32</xsl:text>
-      </xsl:when>
-      <xsl:when test="$vmstring = '1-99'">
-        <xsl:text>VM1_99</xsl:text>
-      </xsl:when>
-      <xsl:when test="$vmstring = '1-n'">
-        <xsl:text>VM1_n</xsl:text>
-      </xsl:when>
-      <xsl:when test="$vmstring = '2-2n'">
-        <xsl:text>VM2_2n</xsl:text>
-      </xsl:when>
-      <xsl:when test="$vmstring = '2-n'">
-        <xsl:text>VM2_n</xsl:text>
-      </xsl:when>
-      <xsl:when test="$vmstring = '3-3n'">
-        <xsl:text>VM3_3n</xsl:text>
-      </xsl:when>
-      <xsl:when test="$vmstring = '3-n'">
-        <xsl:text>VM3_n</xsl:text>
+      <xsl:when test="$vmstring = ''">
+        <xsl:value-of select="'VM0'"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:text>VM0</xsl:text>
+        <xsl:value-of select="concat('VM',translate($vmstring,'-','_'))"/>
       </xsl:otherwise>
     </xsl:choose>
-  </xsl:template>
+ </xsl:template>
 </xsl:stylesheet>
