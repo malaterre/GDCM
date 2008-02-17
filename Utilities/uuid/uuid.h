@@ -44,6 +44,16 @@
 #include <sys/time.h> /* timeval CYGWIN */
 #endif //defined(__CYGWIN__)
 
+#if defined(_WIN32) && defined(UUID_DLL)
+  #if defined(gdcmuuid_EXPORTS)
+    #define UUID_EXPORT __declspec( dllexport )
+  #else
+    #define UUID_EXPORT __declspec( dllimport )
+  #endif
+#else
+  #define UUID_EXPORT
+#endif /*defined(WIN32)*/
+
 /* apparently types.h or time.h is polluting our namespace on Win32... */
 #if defined(uuid_t)
 #undef uuid_t
@@ -85,11 +95,11 @@ int uuid_compare(const uuid_t uu1, const uuid_t uu2);
 #define uuid_copy(dst,src) memcpy(dst, src, sizeof(dst))
 
 /* gen_uuid.c */
-void uuid_generate(uuid_t out);
+UUID_EXPORT void uuid_generate(uuid_t out);
 void uuid_generate_random(uuid_t out);
-int uuid_get_node_id(unsigned char *node_id);
+UUID_EXPORT int uuid_get_node_id(unsigned char *node_id);
 void uuid_generate_time(uuid_t out);
-int uuid_gettimeofday(struct timeval *tv, struct timezone *tz);
+UUID_EXPORT int uuid_gettimeofday(struct timeval *tv, struct timezone *tz);
 
 /* isnull.c */
 /*int uuid_is_null(const uuid_t uu);*/
