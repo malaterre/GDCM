@@ -78,3 +78,8 @@ INSTALL(TARGETS gdcmMSFF
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib/static
 	)
+FILE(GLOB header_files "*.h")
+INSTALL(FILES ${header_files}
+	DESTINATION include
+	COMPONENT Development
+	)

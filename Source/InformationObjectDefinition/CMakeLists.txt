@@ -34,6 +34,11 @@ INSTALL(TARGETS gdcmIOD
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib/static
 	)
+FILE(GLOB header_files "*.h")
+INSTALL(FILES ${header_files}
+	DESTINATION include
+	COMPONENT Development
+	)
 #-----------------------------------------------------------------------------
 FILE(GLOB GDCM_XML_TABLES_GLOB
   "${CMAKE_CURRENT_SOURCE_DIR}/*.xml"

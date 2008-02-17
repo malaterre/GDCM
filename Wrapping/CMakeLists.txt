@@ -43,10 +43,21 @@ SWIG_LINK_LIBRARIES(gdcm gdcmMSFF ${PYTHON_LIBRARIES})
       COMMENT   "Copy gdcm.py into ${LIBRARY_OUTPUT_PATH}"
     )
 
-#MESSAGE(${SWIG_MODULE_name_REAL_NAME})
+#MESSAGE(${SWIG_MODULE_gdcm_REAL_NAME})
 #SWIG_GET_EXTRA_OUTPUT_FILES(
 
-
+#Module are always place in the library destination
+#but for poot win32 user I decided to place them
+# right next to the other dlls
+INSTALL(TARGETS ${SWIG_MODULE_gdcm_REAL_NAME}
+	RUNTIME DESTINATION bin
+	#LIBRARY DESTINATION lib
+	LIBRARY DESTINATION bin
+	ARCHIVE DESTINATION lib/static
+	)
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gdcm.py 
+	DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+	)
 #IF(BUILD_TESTING)
 #  SUBDIRS(Testing)
 #ENDIF(BUILD_TESTING)
