@@ -73,3 +73,4 @@ INCLUDE_DIRECTORIES(
 ADD_LIBRARY(gdcmMSFF ${MSFF_SRCS})
 TARGET_LINK_LIBRARIES(gdcmMSFF gdcmDSED gdcmDICT
   gdcmjpeg8 gdcmjpeg12 gdcmjpeg16 gdcmopenjpeg)
+

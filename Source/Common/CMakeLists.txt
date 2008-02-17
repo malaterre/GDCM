@@ -48,4 +48,4 @@ SET(Common_SRCS
   )
 
 ADD_LIBRARY(gdcmCommon ${Common_SRCS})
-TARGET_LINK_LIBRARIES(gdcmCommon gdcmmd5 gdcmzlib gdcmuuid)
+TARGET_LINK_LIBRARIES(gdcmCommon gdcmmd5 gdcmuuid)

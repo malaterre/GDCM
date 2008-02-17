@@ -20,7 +20,7 @@
 namespace gdcm
 {
 
-class GDCM_EXPORT String : public std::string
+class /*GDCM_EXPORT*/ String : public std::string /* PLEASE do not export me */
 {
   friend std::istream& operator>>(std::istream &is, String& ms);
 public:
