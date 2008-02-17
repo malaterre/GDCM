@@ -44,6 +44,11 @@ FOREACH(exe j2k_to_image image_to_j2k)
   IF(UNIX)
     TARGET_LINK_LIBRARIES(${exe} -lm)
   ENDIF(UNIX)
+  INSTALL(TARGETS ${exe}
+	RUNTIME DESTINATION bin
+	LIBRARY DESTINATION lib
+	ARCHIVE DESTINATION lib/static
+	)
 ENDFOREACH(exe)
 
 

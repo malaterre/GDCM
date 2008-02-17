@@ -49,3 +49,8 @@ INCLUDE_DIRECTORIES(${GDCM_SOURCE_DIR}/Utilities/VTK)
 
 ADD_EXECUTABLE(wxGDCM main.cpp wxGDCMFrame.cpp wxGDCMFrameBase.cpp wxVTKRenderWindowInteractor.cxx)
 TARGET_LINK_LIBRARIES(wxGDCM vtkRendering ${wxWidgets_LIBRARIES} vtkgdcm)
+INSTALL(TARGETS wxGDCM
+	RUNTIME DESTINATION bin
+	LIBRARY DESTINATION lib
+	ARCHIVE DESTINATION lib/static
+	)

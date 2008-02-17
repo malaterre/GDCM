@@ -29,7 +29,11 @@ INCLUDE_DIRECTORIES(
 ADD_LIBRARY(gdcmIOD ${IOD_SRCS})
 #TARGET_LINK_LIBRARIES(gdcmIOD gdcmCommon gdcmexpat)
 TARGET_LINK_LIBRARIES(gdcmIOD gdcmDSED gdcmCommon gdcmexpat)
-
+INSTALL(TARGETS gdcmIOD
+	RUNTIME DESTINATION bin
+	LIBRARY DESTINATION lib
+	ARCHIVE DESTINATION lib/static
+	)
 #-----------------------------------------------------------------------------
 FILE(GLOB GDCM_XML_TABLES_GLOB
   "${CMAKE_CURRENT_SOURCE_DIR}/*.xml"
