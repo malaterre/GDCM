@@ -50,13 +50,15 @@ SET(Common_SRCS
 
 ADD_LIBRARY(gdcmCommon ${Common_SRCS})
 TARGET_LINK_LIBRARIES(gdcmCommon gdcmmd5 gdcmuuid)
-INSTALL(TARGETS gdcmCommon
-	RUNTIME DESTINATION bin
-	LIBRARY DESTINATION lib
-	ARCHIVE DESTINATION lib/static
-	)
-FILE(GLOB header_files "*.h")
-INSTALL(FILES ${header_files}
-	DESTINATION include
-	COMPONENT Development
-	)
+IF(NOT GDCM_INSTALL_NO_LIBRARIES)
+  INSTALL(TARGETS gdcmCommon
+    RUNTIME DESTINATION bin        COMPONENT Runtime
+    LIBRARY DESTINATION lib        COMPONENT Runtime
+    ARCHIVE DESTINATION lib/static COMPONENT Development
+  )
+
+  FILE(GLOB header_files "*.h" "*.txx")
+  INSTALL(FILES ${header_files}
+    DESTINATION include COMPONENT Development
+  )
+ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)

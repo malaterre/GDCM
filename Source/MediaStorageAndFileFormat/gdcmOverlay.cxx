@@ -94,6 +94,7 @@ Overlay::Overlay(Overlay const &ov):Object(ov)
 {
   Internal = new OverlayInternal;
   // TODO: copy OverlayInternal into other...
+  abort();
 }
 
 unsigned int Overlay::GetNumberOfOverlays(DataSet const & ds)

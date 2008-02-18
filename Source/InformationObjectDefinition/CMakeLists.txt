@@ -29,16 +29,17 @@ INCLUDE_DIRECTORIES(
 ADD_LIBRARY(gdcmIOD ${IOD_SRCS})
 #TARGET_LINK_LIBRARIES(gdcmIOD gdcmCommon gdcmexpat)
 TARGET_LINK_LIBRARIES(gdcmIOD gdcmDSED gdcmCommon gdcmexpat)
-INSTALL(TARGETS gdcmIOD
-	RUNTIME DESTINATION bin
-	LIBRARY DESTINATION lib
-	ARCHIVE DESTINATION lib/static
-	)
-FILE(GLOB header_files "*.h")
-INSTALL(FILES ${header_files}
-	DESTINATION include
-	COMPONENT Development
-	)
+IF(NOT GDCM_INSTALL_NO_LIBRARIES)
+  INSTALL(TARGETS gdcmIOD
+    RUNTIME DESTINATION bin        COMPONENT Runtime
+    LIBRARY DESTINATION lib        COMPONENT Runtime
+    ARCHIVE DESTINATION lib/static COMPONENT Development
+  )
+  FILE(GLOB header_files "*.h" "*.txx")
+  INSTALL(FILES ${header_files}
+    DESTINATION include COMPONENT Development
+  )
+ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 #-----------------------------------------------------------------------------
 FILE(GLOB GDCM_XML_TABLES_GLOB
   "${CMAKE_CURRENT_SOURCE_DIR}/*.xml"
