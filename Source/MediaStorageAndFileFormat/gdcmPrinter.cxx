@@ -27,6 +27,28 @@
 
 #include <typeinfo> // for typeid
 
+#define GDCM_TERMINAL_VT100_NORMAL              "\33[0m"
+#define GDCM_TERMINAL_VT100_BOLD                "\33[1m"
+#define GDCM_TERMINAL_VT100_UNDERLINE           "\33[4m"
+#define GDCM_TERMINAL_VT100_BLINK               "\33[5m"
+#define GDCM_TERMINAL_VT100_INVERSE             "\33[7m"
+#define GDCM_TERMINAL_VT100_FOREGROUND_BLACK    "\33[30m"
+#define GDCM_TERMINAL_VT100_FOREGROUND_RED      "\33[31m"
+#define GDCM_TERMINAL_VT100_FOREGROUND_GREEN    "\33[32m"
+#define GDCM_TERMINAL_VT100_FOREGROUND_YELLOW   "\33[33m"
+#define GDCM_TERMINAL_VT100_FOREGROUND_BLUE     "\33[34m"
+#define GDCM_TERMINAL_VT100_FOREGROUND_MAGENTA  "\33[35m"
+#define GDCM_TERMINAL_VT100_FOREGROUND_CYAN     "\33[36m"
+#define GDCM_TERMINAL_VT100_FOREGROUND_WHITE    "\33[37m"
+#define GDCM_TERMINAL_VT100_BACKGROUND_BLACK    "\33[40m"
+#define GDCM_TERMINAL_VT100_BACKGROUND_RED      "\33[41m"
+#define GDCM_TERMINAL_VT100_BACKGROUND_GREEN    "\33[42m"
+#define GDCM_TERMINAL_VT100_BACKGROUND_YELLOW   "\33[43m"
+#define GDCM_TERMINAL_VT100_BACKGROUND_BLUE     "\33[44m"
+#define GDCM_TERMINAL_VT100_BACKGROUND_MAGENTA  "\33[45m"
+#define GDCM_TERMINAL_VT100_BACKGROUND_CYAN     "\33[46m"
+#define GDCM_TERMINAL_VT100_BACKGROUND_WHITE    "\33[47m"
+
 namespace gdcm
 {
 //-----------------------------------------------------------------------------
@@ -524,15 +546,19 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
       }
     if( !vr.Compatible( vr_read ) )
       {
-      // FIXME : if terminal supports it: print in red !
+      // FIXME : if terminal supports it: print in red/green !
+      os << GDCM_TERMINAL_VT100_FOREGROUND_GREEN;
       os << "(" << vr << ") ";
+      os << GDCM_TERMINAL_VT100_NORMAL;
       }
     else if( de.GetSequenceOfItems() && refvr == VR::INVALID )
       {
       // when vr == VR::INVALID and vr_read is also VR::INVALID, we have a seldom case where we can guess
       // the vr
       // eg. CD1/647662/647663/6471066 has a SQ at (2001,9000)
+      os << GDCM_TERMINAL_VT100_FOREGROUND_GREEN;
       os << "(SQ) ";
+      os << GDCM_TERMINAL_VT100_NORMAL;
       assert( refvr == VR::INVALID );
       refvr = VR::SQ;
       }
@@ -544,12 +570,14 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
         VL l = std::min( bv->GetLength(), MaxPrintLength );
         os << "[";
         if( bv->IsPrintable(l) ) bv->PrintASCII(os,l);
-        else os << "(non-printable character found)";
+        else os << GDCM_TERMINAL_VT100_INVERSE << "(non-printable character found)" << GDCM_TERMINAL_VT100_NORMAL;
         os << "]";
         }
       else
         {
+        os << GDCM_TERMINAL_VT100_INVERSE;
         os << "(no value)";
+        os << GDCM_TERMINAL_VT100_NORMAL;
         }
       }
     else
@@ -585,7 +613,7 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
             }
           else
             {
-            os << "(no value)";
+            os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL;
             }
           }
         break;
@@ -603,12 +631,12 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
             VL l = std::min( bv->GetLength(), MaxPrintLength );
             os << "[";
             if( bv->IsPrintable(l) ) bv->PrintASCII(os,l);
-            else os << "(non-printable character found)";
+            else os << GDCM_TERMINAL_VT100_INVERSE << "(non-printable character found)" << GDCM_TERMINAL_VT100_NORMAL;
             os << "]";
             }
           else
             {
-            os << "(no value)";
+            os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL;
             }
           }
         break;
@@ -625,7 +653,9 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
     os << std::dec << vl_read;
     if( vl_read.IsOdd() )
       {
+      os << GDCM_TERMINAL_VT100_FOREGROUND_GREEN;
       os << " (" << (vl_read + 1) << ")";
+      os << GDCM_TERMINAL_VT100_NORMAL;
       }
     os << ",";
     // Append the VM
@@ -635,7 +665,9 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
       }
     else
       {
+      os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
       os << "?";
+      os << GDCM_TERMINAL_VT100_NORMAL;
       }
     const ByteValue* bv = de.GetByteValue();
     VM guessvm = VM::VM0;
@@ -678,16 +710,22 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
       }
     if( !vm.Compatible( guessvm ) )
       {
+      os << GDCM_TERMINAL_VT100_FOREGROUND_GREEN;
       os << " (" << guessvm << ") ";
+      os << GDCM_TERMINAL_VT100_NORMAL;
       }
     // Append the name now:
     if( name && *name )
       {
+      os << GDCM_TERMINAL_VT100_BOLD;
       os << " " << name;
+      os << GDCM_TERMINAL_VT100_NORMAL;
       }
     else
       {
+      os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
       os << " UNKNOWN";
+      os << GDCM_TERMINAL_VT100_NORMAL;
       }
     os << "\n";
     if( refvr == VR::SQ )
