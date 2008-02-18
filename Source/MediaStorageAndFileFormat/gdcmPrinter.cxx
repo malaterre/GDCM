@@ -527,10 +527,11 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
       // FIXME : if terminal supports it: print in red !
       os << "(" << vr << ") ";
       }
-    else if( de.GetSequenceOfItems() )
+    else if( de.GetSequenceOfItems() && refvr == VR::INVALID )
       {
       // when vr == VR::INVALID and vr_read is also VR::INVALID, we have a seldom case where we can guess
       // the vr
+      // eg. CD1/647662/647663/6471066 has a SQ at (2001,9000)
       os << "(SQ) ";
       assert( refvr == VR::INVALID );
       refvr = VR::SQ;

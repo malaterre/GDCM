@@ -47,6 +47,17 @@
  * 11
  * 9
  * 3-4
+ *
+ * even more:
+ *
+ * 7-7n
+ * 10
+ * 18
+ * 12
+ * 35
+ * 47_47n
+ * 30_30n
+ * 28
  */
 namespace gdcm
 {
@@ -64,12 +75,17 @@ public:
     VM6 = 32,
     VM8 = 64,
     VM9 = 128,
-    VM11 = 256,
-    VM16 = 512,
-    VM24 = 1024,
-    VM32 = 2048,
-    VM99 = 4096,
-    VM256 = 8192,
+    VM10 = 256,
+    VM11 = 512,
+    VM12 = 1024,
+    VM16 = 2048,
+    VM18 = 4096,
+    VM24 = 8192,
+    VM28 = 16384,
+    VM32 = 32768,
+    VM35 = 65536,
+    VM99 = 131072,
+    VM256 = 262144,
     VM1_2  = VM1 | VM2,
     VM1_3  = VM1 | VM2 | VM3,
     VM1_4  = VM1 | VM2 | VM3 | VM4,
@@ -85,6 +101,9 @@ public:
     VM3_3n =             VM3 |             VM6       | VM9                             | VM99 | VM256,
     VM3_n  =             VM3 | VM4 | VM5 | VM6 | VM8 | VM9 | VM11 | VM16 | VM24 | VM32 | VM99 | VM256,
     VM4_4n =                   VM4                                | VM16 | VM24 | VM32        | VM256,
+    VM7_7n,
+    VM30_30n,
+    VM47_47n,
     VM_END = VM1_n + 1  // Custom tag to count number of entry
   } VMType;
 

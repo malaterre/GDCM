@@ -1346,7 +1346,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0043,0x008a,"GEMS_PARM_01",VR::CS,VM::VM1,"Private In-Plane Phase Encoding Direction",false },
   {0x0043,0x008b,"GEMS_PARM_01",VR::OB,VM::VM1,"FMRI Binary Data Block",false },
   {0x0043,0x008c,"GEMS_PARM_01",VR::DS,VM::VM6,"Voxel Location",false },
-  {0x0043,0x008d,"GEMS_PARM_01",VR::DS,VM::VM7n,"SAT Band Locations",false },
+  {0x0043,0x008d,"GEMS_PARM_01",VR::DS,VM::VM7_7n,"SAT Band Locations",false },
   {0x0043,0x008e,"GEMS_PARM_01",VR::DS,VM::VM3,"Spectro Prescan Values",false },
   {0x0043,0x008f,"GEMS_PARM_01",VR::DS,VM::VM3,"Spectro Parameters",false },
   {0x0043,0x0090,"GEMS_PARM_01",VR::LO,VM::VM1_n,"SAR Definition",false },
