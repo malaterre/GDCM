@@ -32,35 +32,14 @@
 #ifndef __vtkGDCMThreadedImageReader_h
 #define __vtkGDCMThreadedImageReader_h
 
-#include "vtkMedicalImageReader2.h"
+#include "vtkGDCMImageReader.h"
 
-//BTX
-namespace gdcm { class ImageReader; }
-//ETX
-class VTK_EXPORT vtkGDCMThreadedImageReader : public vtkMedicalImageReader2
+class VTK_EXPORT vtkGDCMThreadedImageReader : public vtkGDCMImageReader
 {
 public:
   static vtkGDCMThreadedImageReader *New();
-  vtkTypeRevisionMacro(vtkGDCMThreadedImageReader,vtkMedicalImageReader2);
+  vtkTypeRevisionMacro(vtkGDCMThreadedImageReader,vtkGDCMImageReader);
   virtual void PrintSelf(ostream& os, vtkIndent indent);
-
-  // Description: is the given file name a DICOM file?
-  virtual int CanReadFile(const char* fname);
-
-  // Description:
-  // Valid extentsions
-  virtual const char* GetFileExtensions()
-    {
-    // I would like to get rid of ACR so only allow dcm extension for now
-    return ".dcm .DCM";
-    }
-
-  // Description: 
-  // A descriptive name for this format
-  virtual const char* GetDescriptiveName()
-    {
-    return "DICOM";
-    }
 
   // Description:
   vtkGetMacro(Shift,double);
@@ -69,27 +48,23 @@ public:
   vtkGetMacro(Scale,double);
   vtkSetMacro(Scale,double);
 
-
 protected:
   vtkGDCMThreadedImageReader();
   ~vtkGDCMThreadedImageReader();
 
-  int ProcessRequest(vtkInformation* request,
-                                 vtkInformationVector** inputVector,
-                                 vtkInformationVector* outputVector);
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   int RequestInformation(vtkInformation *request,
                          vtkInformationVector **inputVector,
                          vtkInformationVector *outputVector);
   int RequestData(vtkInformation *request,
                   vtkInformationVector **inputVector,
                   vtkInformationVector *outputVector);
-
-  // FIXME: remove those:
-  virtual void ExecuteInformation();
-  virtual void ExecuteData(vtkDataObject *out);
+#else /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
+  void ExecuteInformation();
+  void ExecuteData(vtkDataObject *out);
+#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
   void ReadFiles(unsigned int nfiles, const char *filenames[]);
-
 
 private:
   vtkGDCMThreadedImageReader(const vtkGDCMThreadedImageReader&);  // Not implemented.

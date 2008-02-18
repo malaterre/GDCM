@@ -189,8 +189,6 @@ bool Reader::Read()
     return false;
     }
 
-  assert( F == 0 );
-  F = new File;
 //  try
     {
 std::istream &is = Stream;

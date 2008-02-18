@@ -16,12 +16,14 @@
 
 #include "vtkObjectFactory.h"
 #include "vtkImageData.h"
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #include "vtkInformationVector.h"
 #include "vtkInformation.h"
 #include "vtkDemandDrivenPipeline.h"
 #include "vtkStreamingDemandDrivenPipeline.h"
 #include "vtkMedicalImageProperties.h"
 #include "vtkStringArray.h"
+#endif /* (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 ) */
 
 #include "gdcmImageReader.h"
 #include "gdcmDataElement.h"
@@ -46,6 +48,8 @@ vtkGDCMThreadedImageReader::~vtkGDCMThreadedImageReader()
 {
 }
 
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+#else /* (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 ) */
 void vtkGDCMThreadedImageReader::ExecuteInformation()
 {
   std::cerr << "ExecuteInformation" << std::endl;
@@ -55,40 +59,10 @@ void vtkGDCMThreadedImageReader::ExecuteData(vtkDataObject *output)
 {
   std::cerr << "ExecuteData" << std::endl;
 }
-
-int vtkGDCMThreadedImageReader::CanReadFile(const char* fname)
-{
-  gdcm::ImageReader reader;
-  reader.SetFileName( fname );
-  if( reader.Read() )
-    {
-    return 0;
-    }
-  // Problem reading:
-  return 3;
-}
+#endif /* (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 ) */
 
 //----------------------------------------------------------------------------
-int vtkGDCMThreadedImageReader::ProcessRequest(vtkInformation* request,
-                                 vtkInformationVector** inputVector,
-                                 vtkInformationVector* outputVector)
-{
-  // generate the data
-  if(request->Has(vtkDemandDrivenPipeline::REQUEST_DATA()))
-    {
-    return this->RequestData(request, inputVector, outputVector);
-    }
-
-  // execute information
-  if(request->Has(vtkDemandDrivenPipeline::REQUEST_INFORMATION()))
-    {
-    return this->RequestInformation(request, inputVector, outputVector);
-    }
-
-  return this->Superclass::ProcessRequest(request, inputVector, outputVector);
-}
-
-//----------------------------------------------------------------------------
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
                                       vtkInformationVector **inputVector,
                                       vtkInformationVector *outputVector)
@@ -226,6 +200,7 @@ int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
 
   return 1;
 }
+#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
 struct threadparams
 {
@@ -412,6 +387,7 @@ void vtkGDCMThreadedImageReader::ReadFiles(unsigned int nfiles, const char *file
 }
 
 //----------------------------------------------------------------------------
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 int vtkGDCMThreadedImageReader::RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector **vtkNotUsed(inputVector),
                                 vtkInformationVector *outputVector)
@@ -465,6 +441,7 @@ int vtkGDCMThreadedImageReader::RequestData(vtkInformation *vtkNotUsed(request),
   //std::cerr << "vtkGDCMThreadedImageReader::RequestData End" << std::endl;
   return 1;
 }
+#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
 //----------------------------------------------------------------------------
 void vtkGDCMThreadedImageReader::PrintSelf(ostream& os, vtkIndent indent)

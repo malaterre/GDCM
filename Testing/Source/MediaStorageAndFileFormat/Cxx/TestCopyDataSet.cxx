@@ -28,7 +28,15 @@ int TestCopyDataSet(int, char *[])
   const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
 
   gdcm::DataSet ds_copy = ds;
+
+  gdcm::DataElement n( gdcm::Tag(0x0028,0x0005) );
+  n.SetByteValue( "3", 1 );
+  std::cout << n << std::endl;
+
+  ds_copy.Replace( n );
+
   std::cout << ds_copy << std::endl;
 
   return 0;
 }
+

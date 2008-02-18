@@ -23,11 +23,33 @@
 #include "vtkImageData.h"
 #include "vtkCommand.h"
 #include "vtkRenderer.h"
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #include "vtkStringArray.h"
+#else
+#include <vector>
+#include <string>
+#endif
 
 #include "gdcmFilename.h"
 
 #include <assert.h>
+//----------------------------------------------------------------------------
+// vtkImageViewer2 new interface wants SetSlice, but vtkImageViewer does not have
+// this new interface (what a pain), so let's fake a new interface to
+// vtkImageViewer without patching VTK 
+class vtkGDCMImageViewer : public vtkImageViewer
+{
+public:
+  static vtkGDCMImageViewer *New() 
+    { 
+    return new vtkGDCMImageViewer; 
+    }
+  int GetSlice() { return this->GetZSlice(); }
+  void SetSlice(int s) { this->SetZSlice(s); }
+
+  int GetSliceMin() { return this->GetWholeZMin(); }
+  int GetSliceMax() { return this->GetWholeZMax(); }
+};
 
 //----------------------------------------------------------------------------
 // Callback for the interaction
@@ -49,15 +71,15 @@ public:
       {
       if ( event == vtkCommand::CharEvent )
         {
-#if !(VTK_MAJOR_VERSION < 5) 
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+        int max = ImageViewer->GetSliceMax();
+        int slice = (ImageViewer->GetSlice() + 1) % ++max;
+        ImageViewer->SetSlice( slice );
+#else
         int max = ImageViewer->GetWholeZMax();
         int slice = (ImageViewer->GetZSlice() + 1 ) % ++max;
         ImageViewer->SetZSlice( slice );
         ImageViewer->GetRenderer()->ResetCameraClippingRange();
-#else
-        int max = ImageViewer->GetSliceMax();
-        int slice = (ImageViewer->GetSlice() + 1) % ++max;
-        ImageViewer->SetSlice( slice );
 #endif
         ImageViewer->Render();
         }
@@ -71,9 +93,14 @@ public:
 // that do not contain the template parameter in the function
 // signature. Thus always pass parameter in the function:
 template <typename TViewer>
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
+#else
+void ExecuteViewer(TViewer *viewer, std::vector< std::string > const & filenames)
+#endif
 {
   vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   if( filenames->GetSize() == 1 ) // Backward compatible...
     {
     reader->SetFileName( filenames->GetValue(0) );
@@ -82,6 +109,9 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     {
     reader->SetFileNames( filenames );
     }
+#else
+  
+#endif
   //reader->Update();
   //reader->GetOutput()->Print( std::cout );
 
@@ -94,13 +124,20 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   reader->Update();
   //reader->Print( cout );
   //reader->GetOutput()->Print( cout );
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   double *range = reader->GetOutput()->GetScalarRange();
+#else
+  float *range = reader->GetOutput()->GetScalarRange();
+#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
   std::cerr << "Range: " << range[0] << " " << range[1] << std::endl;
   viewer->SetColorLevel (0.5 * (range[1] + range[0]));
   viewer->SetColorWindow (range[1] - range[0]);
 
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   viewer->SetInputConnection ( reader->GetOutputPort() );
-  //viewer->SetInput( reader->GetOutput() );
+#else
+  viewer->SetInput( reader->GetOutput() );
+#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
   viewer->SetupInteractor (iren);
   int dims[3];
   reader->GetOutput()->GetDimensions(dims);
@@ -144,7 +181,11 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 
 int main(int argc, char *argv[])
 {
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   vtkStringArray *filenames = vtkStringArray::New();
+#else
+  std::vector< std::string > filenames;
+#endif
   if( argc < 2 )
     {
     std::cerr << argv[0] << " filename1.dcm [filename2.dcm ...]\n";
@@ -154,7 +195,11 @@ int main(int argc, char *argv[])
     {
     for(int i=1; i < argc; ++i)
       {
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
       filenames->InsertNextValue( argv[i] );
+#else
+      filenames.push_back( argv[i] );
+#endif
       }
     //names->Print( std::cout );
     }
@@ -166,8 +211,8 @@ int main(int argc, char *argv[])
   
   if( strcmp(viewer_type.GetName(), "gdcmviewer" ) == 0 )
     {
-    vtkImageViewer *viewer = vtkImageViewer::New();
-    ExecuteViewer<vtkImageViewer>(viewer, filenames);
+    vtkGDCMImageViewer *viewer = vtkGDCMImageViewer::New();
+    ExecuteViewer<vtkGDCMImageViewer>(viewer, filenames);
     }
   else if( strcmp(viewer_type.GetName(), "gdcmviewer2" ) == 0 )
     {
@@ -177,11 +222,15 @@ int main(int argc, char *argv[])
   else
     {
     std::cerr << "Unhandled : " << viewer_type.GetName() << std::endl;
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
     filenames->Delete();
+#endif
     return 1;
     }
 
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   filenames->Delete();
+#endif
   return 0;
 }
 

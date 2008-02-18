@@ -44,11 +44,13 @@ public:
   virtual void SetLookupTable(vtkLookupTable*);
   vtkGetObjectMacro(LookupTable, vtkLookupTable);
 
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   vtkGetObjectMacro(MedicalImageProperties, vtkMedicalImageProperties);
   virtual void SetMedicalImageProperties(vtkMedicalImageProperties*);
 
   virtual void SetFileNames(vtkStringArray*);
   vtkGetObjectMacro(FileNames, vtkStringArray);
+#endif
 
   // I need that...
   virtual void Write();
@@ -78,6 +80,7 @@ protected:
   vtkGDCMImageWriter();
   ~vtkGDCMImageWriter();
 
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   int FillInputPortInformation(int port, vtkInformation *info);
   int RequestInformation(
     vtkInformation *request,
@@ -91,6 +94,7 @@ protected:
     vtkInformation *request,
     vtkInformationVector **inputVector,
     vtkInformationVector *outputVector);
+#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
   int WriteGDCMData(vtkImageData *data, int timeStep);
 
 protected:

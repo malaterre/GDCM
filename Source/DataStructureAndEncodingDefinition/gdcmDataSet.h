@@ -122,7 +122,7 @@ public:
     }
  void Replace(const DataElement& de) {
     //assert( de.GetTag() != Tag(0,0) );
-    DES.erase(de);
+    if( DES.find(de) != DES.end() ) DES.erase(de);
     DES.insert(de);
     }
  void Remove(const Tag& tag) {

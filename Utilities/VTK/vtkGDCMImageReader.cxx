@@ -16,12 +16,14 @@
 
 #include "vtkObjectFactory.h"
 #include "vtkImageData.h"
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #include "vtkInformationVector.h"
 #include "vtkInformation.h"
 #include "vtkDemandDrivenPipeline.h"
 #include "vtkStreamingDemandDrivenPipeline.h"
 #include "vtkMedicalImageProperties.h"
 #include "vtkStringArray.h"
+#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 #include "vtkMatrix4x4.h"
 
 #include "gdcmImageReader.h"
@@ -58,6 +60,8 @@ vtkGDCMImageReader::~vtkGDCMImageReader()
   this->DirectionCosines->Delete();
 }
 
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+#else
 void vtkGDCMImageReader::ExecuteInformation()
 {
   std::cerr << "ExecuteInformation" << std::endl;
@@ -67,6 +71,7 @@ void vtkGDCMImageReader::ExecuteData(vtkDataObject *output)
 {
   std::cerr << "ExecuteData" << std::endl;
 }
+#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
 int vtkGDCMImageReader::CanReadFile(const char* fname)
 {
@@ -80,6 +85,7 @@ int vtkGDCMImageReader::CanReadFile(const char* fname)
 }
 
 //----------------------------------------------------------------------------
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 int vtkGDCMImageReader::ProcessRequest(vtkInformation* request,
                                  vtkInformationVector** inputVector,
                                  vtkInformationVector* outputVector)
@@ -98,6 +104,7 @@ int vtkGDCMImageReader::ProcessRequest(vtkInformation* request,
 
   return this->Superclass::ProcessRequest(request, inputVector, outputVector);
 }
+#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
 
 //----------------------------------------------------------------------------
@@ -122,6 +129,7 @@ const char *GetStringValueFromTag(const gdcm::Tag& t, const gdcm::DataSet& ds)
 }
 
 //----------------------------------------------------------------------------
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &reader)
 {
   const gdcm::File &file = reader.GetFile();
@@ -313,16 +321,23 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
   ms.SetFromDataSet( reader.GetFile().GetDataSet() );
   if( ms == gdcm::MediaStorage::MS_END ) // Nothing found...
     {
-    const gdcm::ByteValue *bv = ds.GetDataElement( gdcm::Tag(0x0008,0x0060) ).GetByteValue();
-    if( bv )
+    if( ds.FindDataElement( gdcm::Tag(0x0008,0x0060) ) )
       {
-      std::string modality = std::string( bv->GetPointer(), bv->GetLength() );
-      ms.GuessFromModality( modality.c_str(), image.GetNumberOfDimensions() );
-      if( ms == gdcm::MediaStorage::MS_END )
+      const gdcm::ByteValue *bv = ds.GetDataElement( gdcm::Tag(0x0008,0x0060) ).GetByteValue();
+      if( bv )
         {
-        // Ok giving up, you won
-        ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
+        std::string modality = std::string( bv->GetPointer(), bv->GetLength() );
+        ms.GuessFromModality( modality.c_str(), image.GetNumberOfDimensions() );
+        if( ms == gdcm::MediaStorage::MS_END )
+          {
+          // Ok giving up, you won
+          ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
+          }
         }
+      }
+    else
+      {
+      ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
       }
     }
   assert( gdcm::MediaStorage::IsImage( ms ) );
@@ -415,6 +430,7 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
 //    request, inputVector, outputVector);
   return 1;
 }
+#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
 int LoadSingleFile(const char *filename, int *dext, char *pointer, bool filelowerleft)
 {
@@ -463,6 +479,7 @@ int LoadSingleFile(const char *filename, int *dext, char *pointer, bool filelowe
 }
 
 //----------------------------------------------------------------------------
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 int vtkGDCMImageReader::RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector **vtkNotUsed(inputVector),
                                 vtkInformationVector *outputVector)
@@ -557,6 +574,7 @@ int vtkGDCMImageReader::RequestData(vtkInformation *vtkNotUsed(request),
 
   return 1;
 }
+#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
 //----------------------------------------------------------------------------
 void vtkGDCMImageReader::PrintSelf(ostream& os, vtkIndent indent)

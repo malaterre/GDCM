@@ -42,7 +42,7 @@ class FileMetaInformation;
 class GDCM_EXPORT Writer
 {
 public:
-  Writer():Stream(),F(0) {}
+  Writer():Stream(),F(new File) {}
   virtual ~Writer();
 
   virtual bool Write(); // Execute()

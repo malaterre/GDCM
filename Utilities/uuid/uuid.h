@@ -36,16 +36,10 @@
 #ifndef _UUID_UUID_H
 #define _UUID_UUID_H
 
-
-#include <sys/types.h>
-#include <time.h>
-//#if HAVE_SYS_TIME_H
-#if __CYGWIN__
-#include <sys/time.h> /* timeval CYGWIN */
-#endif //defined(__CYGWIN__)
+#include "uuid_mangle.h"
 
 #if defined(_WIN32) && defined(UUID_DLL)
-  #if defined(gdcmuuid_EXPORTS)
+  #if defined(uuid_EXPORTS)
     #define UUID_EXPORT __declspec( dllexport )
   #else
     #define UUID_EXPORT __declspec( dllimport )
@@ -53,6 +47,13 @@
 #else
   #define UUID_EXPORT
 #endif /*defined(WIN32)*/
+
+
+#include <sys/types.h>
+#include <time.h>
+#ifdef HAVE_SYS_TIME_H
+#include <sys/time.h> /* timeval CYGWIN is important */
+#endif
 
 /* apparently types.h or time.h is polluting our namespace on Win32... */
 #if defined(uuid_t)

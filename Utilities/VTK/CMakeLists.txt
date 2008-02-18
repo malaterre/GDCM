@@ -30,14 +30,28 @@ SET(vtkgdcm_LIBS
 
 # Create the instantiator for these classes.
 # FIXME: Are instantiator really needed when only doing python wrapping ?
-SET(VTK_USE_INSTANTIATOR_NEW 1)
-VTK_MAKE_INSTANTIATOR3("${PROJECT_NAME}Instantiator"
-  vtkgdcmInstantiator_SRCS
-  "${vtkgdcm_SRCS}"
-  "" #"VTK_${PROJECT_NAME}_EXPORT"
-  ${PROJECT_BINARY_DIR}
-  "" #"${PROJECT_NAME}Configure.h"
-)
+IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+  # Setup vtkInstantiator registration for this library's classes.
+    INCLUDE_DIRECTORIES(
+      ${GDCM_BINARY_DIR}
+    )
+  VTK_MAKE_INSTANTIATOR2(
+    "${PROJECT_NAME}Instantiator"
+    vtkgdcmInstantiator_SRCS
+    "${vtkgdcm_SRCS}"
+                       EXPORT_MACRO "" #GDCM_EXPORT
+                       HEADER_LOCATION ${GDCM_BINARY_DIR})
+ELSE( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+  SET(VTK_USE_INSTANTIATOR_NEW 1)
+  VTK_MAKE_INSTANTIATOR3(
+    "${PROJECT_NAME}Instantiator"
+    vtkgdcmInstantiator_SRCS
+    "${vtkgdcm_SRCS}"
+    "" #"VTK_${PROJECT_NAME}_EXPORT"
+    ${PROJECT_BINARY_DIR}
+    "" #"${PROJECT_NAME}Configure.h"
+  )
+ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
 
 ADD_LIBRARY(vtkgdcm ${vtkgdcm_SRCS} ${vtkgdcmInstantiator_SRCS})
 TARGET_LINK_LIBRARIES(vtkgdcm gdcmMSFF ${vtkgdcm_LIBS})
@@ -50,10 +64,14 @@ INSTALL(TARGETS vtkgdcm
 IF(BUILD_WRAPPING)
   IF(VTK_WRAP_PYTHON)
     INCLUDE(${VTK_CMAKE_DIR}/vtkWrapPython.cmake)
-    VTK_WRAP_PYTHON3(${PROJECT_NAME}Python vtkgdcmPYTHON_SRCS "${vtkgdcm_SRCS}")
+IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+    VTK_WRAP_PYTHON2(${PROJECT_NAME}Python vtkgdcmPYTHON_SRCS ${vtkgdcm_SRCS})
+ELSE( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
     INCLUDE_DIRECTORIES(
       ${CMAKE_CURRENT_SOURCE_DIR}
     )
+    VTK_WRAP_PYTHON3(${PROJECT_NAME}Python vtkgdcmPYTHON_SRCS "${vtkgdcm_SRCS}")
+ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
     ADD_LIBRARY(${PROJECT_NAME}PythonD ${vtkgdcmPYTHON_SRCS})
     ADD_LIBRARY(${PROJECT_NAME}Python MODULE ${PROJECT_NAME}PythonInit.cxx)
     TARGET_LINK_LIBRARIES(${PROJECT_NAME}PythonD ${PROJECT_NAME})

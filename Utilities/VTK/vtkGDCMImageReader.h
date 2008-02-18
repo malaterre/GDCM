@@ -64,6 +64,7 @@ protected:
   vtkGDCMImageReader();
   ~vtkGDCMImageReader();
 
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 //BTX
   void FillMedicalImageInformation(const gdcm::ImageReader &reader);
 //ETX
@@ -76,9 +77,10 @@ protected:
   int RequestData(vtkInformation *request,
                   vtkInformationVector **inputVector,
                   vtkInformationVector *outputVector);
-
-  virtual void ExecuteInformation();
-  virtual void ExecuteData(vtkDataObject *out);
+#else /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
+  void ExecuteInformation();
+  void ExecuteData(vtkDataObject *out);
+#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
 private:
   vtkGDCMImageReader(const vtkGDCMImageReader&);  // Not implemented.

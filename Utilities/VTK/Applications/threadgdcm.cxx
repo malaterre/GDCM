@@ -115,7 +115,11 @@ void ReadFiles(unsigned int nfiles, const char *filenames[])
   switch( pixeltype )
     {
   case gdcm::PixelFormat::INT8:
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
     output->SetScalarType ( VTK_SIGNED_CHAR );
+#else
+    output->SetScalarType ( VTK_CHAR );
+#endif
     break;
   case gdcm::PixelFormat::UINT8:
     output->SetScalarType ( VTK_UNSIGNED_CHAR );

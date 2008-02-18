@@ -2,10 +2,17 @@
 # vtkGDCM
 SET(VTK_GDCM_TEST_SRCS
   TestvtkGDCMImageReader
-  TestvtkGDCMThreadedImageReader
   #TestvtkGDCMImageActor
-  TestvtkGDCMImageWriter
   )
+IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+  SET(VTK_GDCM_TEST_SRCS ${VTK_GDCM_TEST_SRCS}
+  )
+ELSE( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+  SET(VTK_GDCM_TEST_SRCS ${VTK_GDCM_TEST_SRCS}
+    TestvtkGDCMThreadedImageReader
+    TestvtkGDCMImageWriter
+  )
+ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
 
 # Add the include paths
 INCLUDE_DIRECTORIES(
@@ -15,7 +22,11 @@ INCLUDE_DIRECTORIES(
 
 CREATE_TEST_SOURCELIST(vtkGDCMTests gdcmvtkGDCMTests.cxx ${VTK_GDCM_TEST_SRCS})
 ADD_EXECUTABLE(gdcmvtkGDCMTests ${vtkGDCMTests})
-TARGET_LINK_LIBRARIES(gdcmvtkGDCMTests vtkgdcm vtkVolumeRendering)
+IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+  TARGET_LINK_LIBRARIES(gdcmvtkGDCMTests vtkgdcm vtkRendering)
+ELSE( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+  TARGET_LINK_LIBRARIES(gdcmvtkGDCMTests vtkgdcm vtkVolumeRendering)
+ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
 
 # Need full path to executable:
 SET(GDCM_VTK_GDCM_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmvtkGDCMTests")

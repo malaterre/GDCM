@@ -14,12 +14,15 @@
 =========================================================================*/
 #include "gdcmConfigure.h" // for GDCM_DATA_ROOT
 #include "vtkGDCMImageReader.h"
-
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #include "vtkMedicalImageProperties.h"
+#endif
+
 #include "vtkPNGWriter.h"
 #include "vtkImageData.h"
-#include <vtksys/SystemTools.hxx>
+//#include <vtksys/SystemTools.hxx>
 
+#include "gdcmFilename.h"
 #include "gdcmDataImages.h"
 
 int TestvtkGDCMImageRead(const char *filename)
@@ -31,14 +34,22 @@ int TestvtkGDCMImageRead(const char *filename)
   reader->Update();
 
   reader->GetOutput()->Print( cout );
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   reader->GetMedicalImageProperties()->Print( cout );
+#endif
 
   vtkPNGWriter *writer = vtkPNGWriter::New();
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   writer->SetInputConnection( reader->GetOutputPort() );
-  std::string pngfile = vtksys::SystemTools::GetFilenamePath( filename );
+#else
+  writer->SetInput( reader->GetOutput() );
+#endif
+  gdcm::Filename fn = filename;
+  std::string pngfile; // = vtksys::SystemTools::GetFilenamePath( filename );
   pngfile = "/tmp/png";
   pngfile += '/';
-  pngfile += vtksys::SystemTools::GetFilenameWithoutExtension( filename );
+  //pngfile += vtksys::SystemTools::GetFilenameWithoutExtension( filename );
+  pngfile += fn.GetName();
   pngfile += ".png";
   writer->SetFileName( pngfile.c_str() );
   writer->Write();
