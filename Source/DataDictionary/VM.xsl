@@ -19,7 +19,7 @@
 <!-- FIXME: Supid function I could simple translate('-','_') + concat ... -->
     <xsl:param name="vmstring"/>
     <xsl:choose>
-      <xsl:when test="$vmstring = ''">
+      <xsl:when test="string-length($vmstring) = 0">
         <xsl:value-of select="'VM0'"/>
       </xsl:when>
       <xsl:otherwise>
