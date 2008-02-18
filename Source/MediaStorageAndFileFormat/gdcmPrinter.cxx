@@ -620,6 +620,14 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
       }
     // Extra info (not in the file)
     os << " # ";
+    // Append the VL
+    const VL &vl_read = de.GetVL();
+    os << std::dec << vl_read;
+    if( vl_read.IsOdd() )
+      {
+      os << " (" << (vl_read + 1) << ")";
+      }
+    os << ",";
     // Append the VM
     if( vm != VM::VM0 )
       {
@@ -685,8 +693,9 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
     if( refvr == VR::SQ )
       {
       const SequenceOfItems *sqi = de.GetSequenceOfItems();
-      if( sqi )
+      if( sqi ) // empty SQ ?
         {
+        assert( sqi );
         SequenceOfItems::ItemVector::const_iterator it = sqi->Items.begin();
         for(; it != sqi->Items.end(); ++it)
           {

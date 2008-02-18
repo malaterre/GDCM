@@ -125,7 +125,7 @@ private:
 //----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& os, const VL& val)
 {
-  os << std::hex << val.ValueLength;
+  os << /*std::hex <<*/ val.ValueLength;
   return os;
 }
 
