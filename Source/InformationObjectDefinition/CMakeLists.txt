@@ -35,11 +35,14 @@ IF(NOT GDCM_INSTALL_NO_LIBRARIES)
     LIBRARY DESTINATION lib        COMPONENT Runtime
     ARCHIVE DESTINATION lib/static COMPONENT Development
   )
+ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
+
+IF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
   FILE(GLOB header_files "*.h" "*.txx")
   INSTALL(FILES ${header_files}
     DESTINATION include COMPONENT Development
   )
-ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
+ENDIF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
 #-----------------------------------------------------------------------------
 FILE(GLOB GDCM_XML_TABLES_GLOB
   "${CMAKE_CURRENT_SOURCE_DIR}/*.xml"
