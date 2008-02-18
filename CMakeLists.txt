@@ -197,15 +197,16 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     SET(CPACK_NSIS_URL_INFO_ABOUT "http://gdcm.sourceforge.net")
     SET(CPACK_NSIS_MODIFY_PATH ON)
   ELSE(WIN32 AND NOT UNIX)
-    #SET(CPACK_STRIP_FILES "bin/MyExecutable")
-    #SET(CPACK_SOURCE_STRIP_FILES "")
+    SET(CPACK_STRIP_FILES "bin/gdcmdump;bin/gdcmconv;bin/gdcmimg;bin/gdcmscanner;bin/gdcmoverlay")
+    SET(CPACK_SOURCE_STRIP_FILES "")
+    SET(CPACK_PACKAGE_EXECUTABLES "gdcmviewer" "VIEWER")
+
   ENDIF(WIN32 AND NOT UNIX)
 
-#TODO FIXME
-    SET(CPACK_NSIS_CONTACT "gdcm-developers@lists.sourceforge.net")
+    SET(CPACK_PACKAGE_CONTACT "gdcm-developers@lists.sourceforge.net")
 
   # List executables
-  SET(CPACK_PACKAGE_EXECUTABLES "gdcmviewer" "VIEWER")
+  #SET(CPACK_PACKAGE_EXECUTABLES "gdcmviewer" "VIEWER")
   INCLUDE(CPack)
 
 ENDIF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
