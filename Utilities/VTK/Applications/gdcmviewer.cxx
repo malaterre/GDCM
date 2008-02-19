@@ -24,6 +24,7 @@
 #include "vtkCommand.h"
 #include "vtkRenderer.h"
 #include "vtkStringArray.h"
+#include "vtkDebugLeaks.h"
 
 #include "gdcmFilename.h"
 
@@ -35,8 +36,13 @@
 class vtkGDCMImageViewer : public vtkImageViewer
 {
 public:
-  static vtkGDCMImageViewer *New() 
+  vtkTypeRevisionMacro(vtkGDCMImageViewer,vtkImageViewer);
+
+  static vtkGDCMImageViewer *New()
     { 
+#ifdef VTK_DEBUG_LEAKS
+    vtkDebugLeaks::ConstructClass("vtkGDCMImageViewer");
+#endif
     return new vtkGDCMImageViewer; 
     }
   int GetSlice() { return this->GetZSlice(); }
@@ -45,6 +51,8 @@ public:
   int GetSliceMin() { return this->GetWholeZMin(); }
   int GetSliceMax() { return this->GetWholeZMax(); }
 };
+vtkCxxRevisionMacro(vtkGDCMImageViewer, "$Revision: 1.30 $");
+vtkInstantiatorNewMacro(vtkGDCMImageViewer);
 
 //----------------------------------------------------------------------------
 // Callback for the interaction
