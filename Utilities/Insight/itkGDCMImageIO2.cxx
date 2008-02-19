@@ -1,0 +1,323 @@
+/*=========================================================================
+
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006-2008 Mathieu Malaterre
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+
+=========================================================================*/
+#include "itkGDCMImageIO2.h"
+
+// GDCM
+#include "gdcmImageReader.h"
+
+// KWSYS
+#include <itksys/SystemTools.hxx>
+
+// VNL
+#include <vnl/vnl_vector.h>
+#include <vnl/vnl_cross.h>
+
+namespace itk
+{
+
+GDCMImageIO2::GDCMImageIO2()
+{
+  this->SetNumberOfDimensions(3);
+}
+
+GDCMImageIO2::~GDCMImageIO2()
+{
+}
+
+bool GDCMImageIO2::OpenGDCMFileForReading(std::ifstream& os,
+                                         const char* filename)
+{
+  // Make sure that we have a file to
+  if ( *filename == 0 )
+    {
+    itkExceptionMacro(<<"A FileName must be specified.");
+    return false;
+    }
+
+  // Close file from any previous image
+  if ( os.is_open() )
+    {
+    os.close();
+    }
+
+  // Open the new file for reading
+  itkDebugMacro(<< "Initialize: opening file " << filename);
+
+  // Actually open the file
+  os.open( filename, std::ios::in | std::ios::binary );
+
+  if ( os.fail() )
+    {
+    return false;
+    }
+
+  return true;
+}
+
+
+bool GDCMImageIO2::OpenGDCMFileForWriting(std::ofstream& os,
+                                         const char* filename)
+{
+  // Make sure that we have a file to
+  if ( *filename == 0 )
+    {
+    itkExceptionMacro(<<"A FileName must be specified.");
+    return false;
+    }
+
+  // Close file from any previous image
+  if ( os.is_open() )
+    {
+    os.close();
+    }
+
+  // Open the new file for writing
+  itkDebugMacro(<< "Initialize: opening file " << filename);
+
+#ifdef __sgi
+  // Create the file. This is required on some older sgi's
+  std::ofstream tFile(filename,std::ios::out);
+  tFile.close();
+#endif
+
+  // Actually open the file
+  os.open( filename, std::ios::out | std::ios::binary );
+
+  if( os.fail() )
+    {
+    itkExceptionMacro(<< "Could not open file: "
+                      << filename << " for writing."
+                      << std::endl
+                      << "Reason: "
+                      << itksys::SystemTools::GetLastSystemError());
+    return false;
+    }
+
+
+  return true;
+}
+
+// This method will only test if the header looks like a
+// GDCM image file.
+bool GDCMImageIO2::CanReadFile(const char* filename)
+{
+  std::ifstream file;
+  std::string fname(filename);
+
+  if(  fname == "" )
+    {
+    itkDebugMacro(<<"No filename specified.");
+    return false;
+    }
+
+  //Check for file existence:
+  if ( ! this->OpenGDCMFileForReading(file, filename))
+    {
+    return false;
+    }
+
+  // Check to see if its a valid dicom file gdcm is able to read:
+  // We are parsing the header one time here:
+  gdcm::ImageReader reader;
+  reader.SetFileName( filename );
+  if( reader.Read() )
+    {
+    return true;
+    }
+  return false;
+}
+
+void GDCMImageIO2::Read(void* buffer)
+{
+  const char *filename = m_FileName.c_str();
+  gdcm::ImageReader reader;
+  reader.SetFileName( filename );
+  if( !reader.Read() )
+    {
+    itkExceptionMacro(<< "Cannot read requested file");
+    }
+
+  const gdcm::Image &image = reader.GetImage();
+  unsigned long len = image.GetBufferLength();
+
+  const unsigned long numberOfBytesToBeRead = 
+    static_cast< unsigned long>( this->GetImageSizeInBytes() );
+  assert( numberOfBytesToBeRead == len );
+
+  image.GetBuffer((char*)buffer);
+}
+
+
+void GDCMImageIO2::InternalReadImageInformation(std::ifstream& file)
+{
+  //read header
+  if ( ! this->OpenGDCMFileForReading(file, m_FileName.c_str()) )
+    {
+    itkExceptionMacro(<< "Cannot read requested file");
+    }
+
+  const char *filename = m_FileName.c_str();
+  gdcm::ImageReader reader;
+  reader.SetFileName( filename );
+  if( !reader.Read() )
+    {
+    itkExceptionMacro(<< "Cannot read requested file");
+    }
+  const gdcm::Image &image = reader.GetImage();
+  const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
+  const unsigned int *dims = image.GetDimensions();
+
+  const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
+  m_ComponentType = UNKNOWNCOMPONENTTYPE;
+  switch( pixeltype )
+    {
+  case gdcm::PixelFormat::INT8:
+    m_ComponentType = ImageIOBase::CHAR;
+    break;
+  case gdcm::PixelFormat::UINT8:
+    m_ComponentType = ImageIOBase::UCHAR;
+    break;
+  case gdcm::PixelFormat::INT12:
+    abort();
+    m_ComponentType = ImageIOBase::SHORT;
+    break;
+  case gdcm::PixelFormat::UINT12:
+    abort();
+    m_ComponentType = ImageIOBase::USHORT;
+    break;
+  case gdcm::PixelFormat::INT16:
+    m_ComponentType = ImageIOBase::SHORT;
+    break;
+  case gdcm::PixelFormat::UINT16:
+    m_ComponentType = ImageIOBase::USHORT;
+    break;
+  default:
+    ;
+    }
+
+  m_NumberOfComponents = pixeltype.GetSamplesPerPixel();
+  if( image.GetPhotometricInterpretation() == 
+    gdcm::PhotometricInterpretation::PALETTE_COLOR )
+    {
+    assert( m_NumberOfComponents == 1 );
+    m_NumberOfComponents = 3;
+    }
+  if (m_NumberOfComponents == 1)
+    {
+    this->SetPixelType(SCALAR);
+    }
+  else
+    {
+    this->SetPixelType(RGB);
+    }
+
+  // set values in case we don't find them
+  this->SetNumberOfDimensions(  image.GetNumberOfDimensions() );
+  m_Dimensions[0] = dims[0];
+  m_Dimensions[1] = dims[1];
+
+  const double *spacing = image.GetSpacing();
+  m_Spacing[0] = spacing[0];
+  m_Spacing[1] = spacing[1];
+
+  const double *origin = image.GetOrigin();
+  m_Origin[0] = origin[0];
+  m_Origin[1] = origin[1];
+
+  if( image.GetNumberOfDimensions() == 3 )
+    {
+    m_Dimensions[2] = dims[2];
+    m_Spacing[2] = spacing[2];
+    m_Origin[2] = origin[2];
+    }
+  else
+    {
+    m_Dimensions[2] = 1;
+    m_Spacing[2] = 1.;
+    m_Origin[2] = 0;
+    }
+
+  const double *dircos = image.GetDirectionCosines();
+
+  vnl_vector<double> rowDirection(3), columnDirection(3);
+  rowDirection[0] = dircos[0];
+  rowDirection[1] = dircos[1];
+  rowDirection[2] = dircos[2];
+  columnDirection[0] = dircos[3];
+  columnDirection[1] = dircos[4];
+  columnDirection[2] = dircos[5];
+
+  vnl_vector<double> sliceDirection = vnl_cross_3d(rowDirection, columnDirection);
+  this->SetDirection(0, rowDirection);
+  this->SetDirection(1, columnDirection);
+  this->SetDirection(2, sliceDirection);
+
+}
+
+void GDCMImageIO2::ReadImageInformation()
+{
+  std::ifstream file;
+  this->InternalReadImageInformation(file);
+}
+
+
+bool GDCMImageIO2::CanWriteFile(const char* name)
+{
+  std::string filename = name;
+
+  if(  filename == "" )
+    {
+    itkDebugMacro(<<"No filename specified.");
+    return false;
+    }
+
+  std::string::size_type dcmPos = filename.rfind(".dcm");
+  if ( (dcmPos != std::string::npos)
+       && (dcmPos == filename.length() - 4) )
+    {
+    return true;
+    }
+
+  dcmPos = filename.rfind(".DCM");
+  if ( (dcmPos != std::string::npos)
+       && (dcmPos == filename.length() - 4) )
+    {
+    return true;
+    }
+
+  return false;
+}
+
+void GDCMImageIO2::WriteImageInformation()
+{
+}
+
+void GDCMImageIO2::Write(const void* buffer)
+{
+  std::ofstream file;
+  if ( !this->OpenGDCMFileForWriting(file, m_FileName.c_str()) )
+    {
+    return;
+    }
+  file.close();
+
+}
+
+void GDCMImageIO2::PrintSelf(std::ostream& os, Indent indent) const
+{
+  Superclass::PrintSelf(os, indent);
+}
+
+} // end namespace itk
