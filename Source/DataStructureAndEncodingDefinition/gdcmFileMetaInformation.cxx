@@ -26,6 +26,66 @@
 namespace gdcm
 {
 
+const char FileMetaInformation::GDCM_FILE_META_INFORMATION_VERSION[] = "\0\1";
+const char FileMetaInformation::GDCM_IMPLEMENTATION_CLASS_UID[] = "147.144.143.155";
+const char FileMetaInformation::GDCM_IMPLEMENTATION_VERSION_NAME[] = "GDCM " GDCM_VERSION;
+const char FileMetaInformation::GDCM_SOURCE_APPLICATION_ENTITY_TITLE[] = "GDCM";
+// Default initialize those static std::string, with GDCM values:
+std::string FileMetaInformation::ImplementationClassUID = GetGDCMImplementationClassUID();
+std::string FileMetaInformation::ImplementationVersionName = GetGDCMImplementationVersionName();
+std::string FileMetaInformation::SourceApplicationEntityTitle = GetGDCMSourceApplicationEntityTitle();
+
+const char * FileMetaInformation::GetFileMetaInformationVersion()
+{
+  return GDCM_FILE_META_INFORMATION_VERSION;
+}
+const char * FileMetaInformation::GetGDCMImplementationClassUID()
+{
+  return GDCM_IMPLEMENTATION_CLASS_UID;
+}
+const char * FileMetaInformation::GetGDCMImplementationVersionName()
+{
+  return GDCM_IMPLEMENTATION_VERSION_NAME;
+}
+const char * FileMetaInformation::GetGDCMSourceApplicationEntityTitle()
+{
+  return GDCM_SOURCE_APPLICATION_ENTITY_TITLE;
+}
+
+void FileMetaInformation::SetImplementationClassUID(const char * imp)
+{
+  ImplementationClassUID = GetGDCMImplementationClassUID();
+  ImplementationClassUID += ".";
+  ImplementationClassUID += imp;
+}
+void FileMetaInformation::SetImplementationVersionName(const char * version)
+{
+  // Simply override the value since we cannot have more than 16bytes...
+  assert( strlen(version) <= 16 );
+  //ImplementationVersionName = GetGDCMImplementationVersionName();
+  //ImplementationVersionName += "-";
+  //ImplementationVersionName += version;
+  ImplementationVersionName = version;
+}
+void FileMetaInformation::SetSourceApplicationEntityTitle(const char * title)
+{
+  SourceApplicationEntityTitle = GetGDCMSourceApplicationEntityTitle();
+  SourceApplicationEntityTitle += "/";
+  SourceApplicationEntityTitle += title;
+}
+const char *FileMetaInformation::GetImplementationClassUID()
+{
+  return ImplementationClassUID.c_str();
+}
+const char *FileMetaInformation::GetImplementationVersionName()
+{
+  return ImplementationVersionName.c_str();
+}
+const char *FileMetaInformation::GetSourceApplicationEntityTitle()
+{
+  return SourceApplicationEntityTitle.c_str();
+}
+
 void FileMetaInformation::FillFromDataSet(DataSet const &ds)
 {
   // Example: CR-MONO1-10-chest.dcm is missing a file meta header:
@@ -35,8 +95,8 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     {
     xde.SetTag( Tag(0x0002, 0x0001) );
     xde.SetVR( VR::OB );
-    const char version[] = GDCM_FILE_META_INFORMATION_VERSION;
-    xde.SetByteValue( version, sizeof(version) );
+    const char *version = FileMetaInformation::GetFileMetaInformationVersion();
+    xde.SetByteValue( version, 2 /*strlen(version)*/ );
     Insert( xde );
     }
   // Media Storage SOP Class UID (0002,0002) -> see (0008,0016)
@@ -94,8 +154,9 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     {
     xde.SetTag( Tag(0x0002, 0x0012) );
     xde.SetVR( VR::UI );
-    const char implementation[] = GDCM_IMPLEMENTATION_CLASS_UID;
-    xde.SetByteValue( implementation, sizeof(implementation) );
+    //const char implementation[] = GDCM_IMPLEMENTATION_CLASS_UID;
+    const char *implementation = FileMetaInformation::GetImplementationClassUID();
+    xde.SetByteValue( implementation, strlen(implementation) );
     Insert( xde );
     }
   // Implementation Version Name (0002,0013) -> ??
@@ -103,8 +164,9 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     {
     xde.SetTag( Tag(0x0002, 0x0013) );
     xde.SetVR( VR::SH );
-    const char version[] = GDCM_IMPLEMENTATION_VERSION_NAME;
-    xde.SetByteValue( version, sizeof(version) );
+    //const char version[] = GDCM_IMPLEMENTATION_VERSION_NAME;
+    const char *version = FileMetaInformation::GetImplementationVersionName();
+    xde.SetByteValue( version, strlen(version) );
     Insert( xde );
     }
   // Source Application Entity Title (0002,0016) -> ??
@@ -112,8 +174,9 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     {
     xde.SetTag( Tag(0x0002, 0x0016) );
     xde.SetVR( VR::AE );
-    const char title[] = GDCM_SOURCE_APPLICATION_ENTITY_TITLE;
-    xde.SetByteValue(title, sizeof(title) );
+    //const char title[] = GDCM_SOURCE_APPLICATION_ENTITY_TITLE;
+    const char *title = FileMetaInformation::GetSourceApplicationEntityTitle();
+    xde.SetByteValue(title, strlen(title) );
     Insert( xde );
     }
   // Do this one last !

@@ -67,6 +67,14 @@ public:
   Preamble &GetPreamble() { return P; }
   void SetPreamble(const Preamble &p) { P = p; }
  
+  // Override the GDCM 
+  static void SetImplementationClassUID(const char * imp);
+  static const char *GetImplementationClassUID();
+  static void SetImplementationVersionName(const char * version);
+  static const char *GetImplementationVersionName();
+  static void SetSourceApplicationEntityTitle(const char * title);
+  static const char *GetSourceApplicationEntityTitle();
+
 protected:
   void ComputeDataSetTransferSyntax(); // FIXME
 
@@ -80,8 +88,23 @@ protected:
   TransferSyntax::NegociatedType MetaInformationTS;
   MediaStorage::MSType DataSetMS;
 
+protected:
+  static const char * GetFileMetaInformationVersion();
+  static const char * GetGDCMImplementationClassUID();
+  static const char * GetGDCMImplementationVersionName();
+  static const char * GetGDCMSourceApplicationEntityTitle();
+
 private:
   Preamble P;
+
+//static stuff:
+  static const char GDCM_FILE_META_INFORMATION_VERSION[];
+  static const char GDCM_IMPLEMENTATION_CLASS_UID[];
+  static const char GDCM_IMPLEMENTATION_VERSION_NAME[];
+  static const char GDCM_SOURCE_APPLICATION_ENTITY_TITLE[];
+  static std::string ImplementationClassUID;
+  static std::string ImplementationVersionName;
+  static std::string SourceApplicationEntityTitle;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const FileMetaInformation &val)

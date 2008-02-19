@@ -13,9 +13,13 @@
 
 =========================================================================*/
 #include "itkGDCMImageIO2.h"
+#include "itkVersion.h"
 
 // GDCM
+#include "gdcmFileMetaInformation.h"
 #include "gdcmImageReader.h"
+#include "gdcmImageWriter.h"
+#include "gdcmUIDGenerator.h"
 
 // KWSYS
 #include <itksys/SystemTools.hxx>
@@ -30,6 +34,15 @@ namespace itk
 GDCMImageIO2::GDCMImageIO2()
 {
   this->SetNumberOfDimensions(3);
+  // UIDPrefix is the ITK root id tacked with a ".1"
+  // allowing to designate a subspace of the id space for ITK generated DICOM
+  gdcm::UIDGenerator::SetRoot( "1.2.826.0.1.3680043.2.1125.1" );
+
+  // Set some file info ITK specific stuff:
+  // echo "ITK" | od -b
+  gdcm::FileMetaInformation::SetImplementationClassUID( "111.124.113" );
+  const std::string project_name = std::string("ITK ") + Version::GetITKVersion();
+  gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( project_name.c_str() );
 }
 
 GDCMImageIO2::~GDCMImageIO2()
@@ -224,7 +237,7 @@ void GDCMImageIO2::InternalReadImageInformation(std::ifstream& file)
     }
 
   // set values in case we don't find them
-  this->SetNumberOfDimensions(  image.GetNumberOfDimensions() );
+  //this->SetNumberOfDimensions(  image.GetNumberOfDimensions() );
   m_Dimensions[0] = dims[0];
   m_Dimensions[1] = dims[1];
 
@@ -313,6 +326,83 @@ void GDCMImageIO2::Write(const void* buffer)
     }
   file.close();
 
+  gdcm::ImageWriter writer;
+  //this->SetNumberOfDimensions(3);
+  gdcm::ImageValue &image = dynamic_cast<gdcm::ImageValue&>(writer.GetImage());
+  image.SetNumberOfDimensions( 2 ); // good default
+  image.SetDimension(0, m_Dimensions[0] );
+  image.SetDimension(1, m_Dimensions[1] );
+  //image.SetDimension(2, m_Dimensions[2] );
+  image.SetSpacing(0, m_Spacing[0] );
+  image.SetSpacing(1, m_Spacing[1] );
+  if( m_NumberOfDimensions > 2 && m_Dimensions[2] != 1 )
+    {
+    // resize num of dim to 3:
+    image.SetNumberOfDimensions( 3 );
+    image.SetDimension(2, m_Dimensions[2] );
+    }
+  image.SetSpacing(2, m_Spacing[2] ); // should always valid...
+  gdcm::PixelFormat pixeltype = gdcm::PixelFormat::UNKNOWN;
+  switch (this->GetComponentType())
+    {
+  case ImageIOBase::CHAR:
+    pixeltype = gdcm::PixelFormat::INT8;
+    break;
+  case ImageIOBase::UCHAR:
+    pixeltype = gdcm::PixelFormat::UINT8;
+    break;
+  case ImageIOBase::SHORT:
+    pixeltype = gdcm::PixelFormat::INT16;
+    break;
+  case ImageIOBase::USHORT:
+    pixeltype = gdcm::PixelFormat::UINT16;
+    break;
+    //Disabling INT and UINT for now...
+    //case ImageIOBase::INT:
+    //case ImageIOBase::UINT:
+    //case ImageIOBase::FLOAT:
+    //case ImageIOBase::DOUBLE:
+  default:
+    itkExceptionMacro(<<"DICOM does not support this component type");
+    }
+  gdcm::PhotometricInterpretation pi;
+  if( this->GetNumberOfComponents() == 1 )
+    {
+    pi = gdcm::PhotometricInterpretation::MONOCHROME2;
+    }
+  else if( this->GetNumberOfComponents() == 3 )
+    {
+    pi = gdcm::PhotometricInterpretation::RGB;
+    // (0028,0006) US 0                                        #   2, 1 PlanarConfiguration
+    }
+  else
+    {
+    itkExceptionMacro(<<"DICOM does not support this component type");
+    }
+  pixeltype.SetSamplesPerPixel( this->GetNumberOfComponents() );
+
+  image.SetPhotometricInterpretation( pi );
+  image.SetPixelFormat( pixeltype );
+  unsigned long len = image.GetBufferLength();
+
+  gdcm::ByteValue *bv = new gdcm::ByteValue(); // (char*)data->GetScalarPointer(), len );
+  bv->SetLength( len ); // allocate !
+
+  size_t numberOfBytes = this->GetImageSizeInBytes();
+  assert( len == numberOfBytes );
+
+  // only do a straight copy:
+  char *pointer = (char*)bv->GetPointer();
+  memcpy(pointer, buffer, numberOfBytes);
+
+  image.SetValue( *bv );
+
+  const char *filename = m_FileName.c_str();
+  writer.SetFileName( filename );
+  if( !writer.Write() )
+    {
+    itkExceptionMacro(<<"DICOM does not support this component type");
+    }
 }
 
 void GDCMImageIO2::PrintSelf(std::ostream& os, Indent indent) const

@@ -14,6 +14,7 @@
 =========================================================================*/
 #include "vtkGDCMImageWriter.h"
 
+#include "vtkVersion.h"
 #include "vtkObjectFactory.h"
 #include "vtkImageData.h"
 #include "vtkLookupTable.h"
@@ -65,6 +66,15 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
   this->DirectionCosines->SetElement(0,1,0);
   this->DirectionCosines->SetElement(1,1,1);
   this->DirectionCosines->SetElement(2,1,0);
+
+  // This is the same root as ITK, but implementation version will be different...
+  gdcm::UIDGenerator::SetRoot( "1.2.826.0.1.3680043.2.1125.1" );
+
+  // echo "VTK" | od -b
+  gdcm::FileMetaInformation::SetImplementationClassUID( "126.124.113" );
+  const std::string project_name = std::string("VTK ") + vtkVersion::GetVTKVersion();
+  gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( project_name.c_str() );
+
 }
 
 vtkGDCMImageWriter::~vtkGDCMImageWriter()

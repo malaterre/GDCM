@@ -367,7 +367,7 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
     // Need to set the rest to 0 ???
     }
 
-  gdcm::PixelFormat pixeltype = image.GetPixelFormat();
+  const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
   switch( pixeltype )
     {
   case gdcm::PixelFormat::INT8:
