@@ -25,12 +25,12 @@
 #include "vtkStringArray.h"
 #include "vtkStructuredPointsWriter.h"
 #include "vtkImageData.h"
-#include <vtksys/SystemTools.hxx>
+//#include <vtksys/SystemTools.hxx>
 
 #include "vtkPiecewiseFunction.h"
 #include "vtkColorTransferFunction.h"
 #include "vtkVolumeProperty.h"
-#include "vtkVolumeTextureMapper3D.h"
+//#include "vtkVolumeTextureMapper3D.h"
 #include "vtkVolume.h"
 #include "vtkRenderer.h"
 #include "vtkRenderWindow.h"
@@ -103,7 +103,7 @@ void ExecuteInformation(const char *filename, TReader *vtkreader)
   switch( pixeltype )
     {
   case gdcm::PixelFormat::INT8:
-    datascalartype = VTK_SIGNED_CHAR;
+    datascalartype = VTK_CHAR;
     break;
   case gdcm::PixelFormat::UINT8:
     datascalartype = VTK_UNSIGNED_CHAR;
@@ -153,7 +153,7 @@ int TestvtkGDCMThreadedImageRead(const char *filename)
     assert( sarray->GetNumberOfValues() == (int)nfiles );
     reader->SetFileNames( sarray );
     sarray->Delete();
-    refimage = sarray->GetValue( 0 ); // Ok since sarray is ref count
+    refimage = sarray->GetValue( 0 ).c_str(); // Ok since sarray is ref count
     }
   else
     {
@@ -191,9 +191,14 @@ int TestvtkGDCMThreadedImageRead(const char *filename)
   //writer->Write();
   writer->Delete();
 
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   double *s = reader->GetOutput()->GetScalarRange();
+#else
+  float *s = reader->GetOutput()->GetScalarRange();
+#endif
   std::cout << s[0] << " " << s[1] << std::endl;
 
+/*
   // Create transfer functions for opacity and color
   vtkPiecewiseFunction *opacityTransferFunction = vtkPiecewiseFunction::New();
   opacityTransferFunction->AddPoint(  600 , 0.0);
@@ -243,7 +248,7 @@ int TestvtkGDCMThreadedImageRead(const char *filename)
 
   iren->Initialize();
   iren->Start();
-
+*/
   reader->Delete();
 
   return 0; 

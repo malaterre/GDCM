@@ -3,16 +3,9 @@
 SET(VTK_GDCM_TEST_SRCS
   TestvtkGDCMImageReader
   #TestvtkGDCMImageActor
+  TestvtkGDCMThreadedImageReader
+  TestvtkGDCMImageWriter
   )
-IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
-  SET(VTK_GDCM_TEST_SRCS ${VTK_GDCM_TEST_SRCS}
-  )
-ELSE( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
-  SET(VTK_GDCM_TEST_SRCS ${VTK_GDCM_TEST_SRCS}
-    TestvtkGDCMThreadedImageReader
-    TestvtkGDCMImageWriter
-  )
-ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
 
 # Add the include paths
 INCLUDE_DIRECTORIES(

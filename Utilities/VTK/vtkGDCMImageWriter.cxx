@@ -42,8 +42,6 @@ vtkCxxSetObjectMacro(vtkGDCMImageWriter,DirectionCosines,vtkMatrix4x4);
 
 vtkGDCMImageWriter::vtkGDCMImageWriter()
 {
-  //this->ScalarArrayName = NULL;
-  //this->SetScalarArrayName( "GDCM" );
   this->DataUpdateExtent[0] = 0;
   this->DataUpdateExtent[1] = 0;
   this->DataUpdateExtent[2] = 0;
@@ -73,6 +71,7 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
 
 }
 
+//----------------------------------------------------------------------------
 vtkGDCMImageWriter::~vtkGDCMImageWriter()
 {
   this->LookupTable->Delete();
@@ -81,6 +80,7 @@ vtkGDCMImageWriter::~vtkGDCMImageWriter()
   this->SetUID(NULL);
   this->DirectionCosines->Delete();
 }
+
 //----------------------------------------------------------------------------
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 int vtkGDCMImageWriter::FillInputPortInformation(
@@ -203,6 +203,7 @@ int vtkGDCMImageWriter::RequestData(
   return this->Superclass::GetFileName();
 }
 
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 void vtkGDCMImageWriter::Write()
 {
   if (this->GetFileName() == 0)
@@ -212,11 +213,7 @@ void vtkGDCMImageWriter::Write()
     }
 
   // Get the first input and update its information.
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   vtkImageData *input = this->GetImageDataInput(0);
-#else
-  vtkImageData *input = this->GetInput();
-#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
   if (input == 0)
     {
@@ -226,10 +223,8 @@ void vtkGDCMImageWriter::Write()
 
   input->UpdateInformation();
 
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   // Update the rest.
   this->UpdateInformation();
-#endif
 
   // Get the whole extent of the input
   input->GetWholeExtent(this->DataUpdateExtent);
@@ -246,7 +241,6 @@ void vtkGDCMImageWriter::Write()
     int dimIndex = 2;
     int firstSlice = this->DataUpdateExtent[2*dimIndex];
     int lastSlice = this->DataUpdateExtent[2*dimIndex+1];
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
     if( this->FileNames->GetNumberOfValues() )
       {
       if( lastSlice - firstSlice + 1 != this->FileNames->GetNumberOfValues() )
@@ -256,7 +250,6 @@ void vtkGDCMImageWriter::Write()
         return;
         }
       }
-#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
     // Go through data slice-by-slice using file-order slices
     for (int slice = firstSlice; slice <= lastSlice; slice++)
@@ -268,17 +261,13 @@ void vtkGDCMImageWriter::Write()
       this->Modified();
 
       // Call Update to execute pipeline and write slice to disk.
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
       this->Update();
-#endif
       }
     }
   else if( this->FileDimensionality == 3 )
     {
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
     // Call Update to execute pipeline and write slice to disk.
     this->Update();
-#endif
     }
   else
     {
@@ -286,6 +275,77 @@ void vtkGDCMImageWriter::Write()
     }
 
 }
+#else
+//----------------------------------------------------------------------------
+// Writes all the data from the input.
+void vtkGDCMImageWriter::Write()
+{
+  // Error checking
+  if ( this->GetInput() == NULL )
+    {
+    vtkErrorMacro(<<"Write:Please specify an input!");
+    return;
+    }
+//  if (!this->WriteToMemory && !this->FileName && !this->FilePattern)
+//    {
+//    vtkErrorMacro(<<"Write:Please specify either a FileName or a file prefix and pattern");
+//    return;
+//    }
+  
+  // Make sure the file name is allocated
+  this->InternalFileName =  0;
+//    new char[(this->FileName ? strlen(this->FileName) : 1) +
+//            (this->FilePrefix ? strlen(this->FilePrefix) : 1) +
+//            (this->FilePattern ? strlen(this->FilePattern) : 1) + 10];
+  
+  // Fill in image information.
+  this->GetInput()->UpdateInformation();
+  int *wExtent;
+  wExtent = this->GetInput()->GetWholeExtent();
+  this->FileNumber = this->GetInput()->GetWholeExtent()[4];
+  this->UpdateProgress(0.0);
+  // loop over the z axis and write the slices
+  for (this->FileNumber = wExtent[4]; this->FileNumber <= wExtent[5]; 
+       ++this->FileNumber)
+    {
+    this->GetInput()->SetUpdateExtent(wExtent[0], wExtent[1],
+                                      wExtent[2], wExtent[3],
+                                      this->FileNumber, 
+                                      this->FileNumber);
+    // determine the name
+/*
+    if (this->FileName)
+      {
+      sprintf(this->InternalFileName,"%s",this->FileName);
+      }
+    else 
+      {
+      if (this->FilePrefix)
+        {
+        sprintf(this->InternalFileName, this->FilePattern, 
+                this->FilePrefix, this->FileNumber);
+        }
+      else
+        {
+        sprintf(this->InternalFileName, this->FilePattern,this->FileNumber);
+        }
+      }
+*/
+    this->GetInput()->UpdateData();
+    this->WriteSlice(this->GetInput());
+    this->UpdateProgress((this->FileNumber - wExtent[4])/
+                         (wExtent[5] - wExtent[4] + 1.0));
+    }
+  //delete [] this->InternalFileName;
+  //this->InternalFileName = NULL;
+}
+
+void vtkGDCMImageWriter::WriteSlice(vtkImageData *data)
+{
+  this->WriteGDCMData(data, 0);
+}
+
+#endif
 
 void SetStringValueFromTag(const char *s, const gdcm::Tag& t, gdcm::DataSet& ds)
 {

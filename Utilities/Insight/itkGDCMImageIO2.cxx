@@ -246,14 +246,18 @@ void GDCMImageIO2::InternalReadImageInformation(std::ifstream& file)
   m_Spacing[1] = spacing[1];
 
   const double *origin = image.GetOrigin();
-  m_Origin[0] = origin[0];
-  m_Origin[1] = origin[1];
+  if( origin )
+    {
+    m_Origin[0] = origin[0];
+    m_Origin[1] = origin[1];
+    }
 
   if( image.GetNumberOfDimensions() == 3 )
     {
     m_Dimensions[2] = dims[2];
     m_Spacing[2] = spacing[2];
-    m_Origin[2] = origin[2];
+    if( origin )
+      m_Origin[2] = origin[2];
     }
   else
     {
@@ -263,19 +267,21 @@ void GDCMImageIO2::InternalReadImageInformation(std::ifstream& file)
     }
 
   const double *dircos = image.GetDirectionCosines();
+  if( dircos )
+    {
+    vnl_vector<double> rowDirection(3), columnDirection(3);
+    rowDirection[0] = dircos[0];
+    rowDirection[1] = dircos[1];
+    rowDirection[2] = dircos[2];
+    columnDirection[0] = dircos[3];
+    columnDirection[1] = dircos[4];
+    columnDirection[2] = dircos[5];
 
-  vnl_vector<double> rowDirection(3), columnDirection(3);
-  rowDirection[0] = dircos[0];
-  rowDirection[1] = dircos[1];
-  rowDirection[2] = dircos[2];
-  columnDirection[0] = dircos[3];
-  columnDirection[1] = dircos[4];
-  columnDirection[2] = dircos[5];
-
-  vnl_vector<double> sliceDirection = vnl_cross_3d(rowDirection, columnDirection);
-  this->SetDirection(0, rowDirection);
-  this->SetDirection(1, columnDirection);
-  this->SetDirection(2, sliceDirection);
+    vnl_vector<double> sliceDirection = vnl_cross_3d(rowDirection, columnDirection);
+    this->SetDirection(0, rowDirection);
+    this->SetDirection(1, columnDirection);
+    this->SetDirection(2, sliceDirection);
+    }
 
 }
 
@@ -365,6 +371,7 @@ void GDCMImageIO2::Write(const void* buffer)
   default:
     itkExceptionMacro(<<"DICOM does not support this component type");
     }
+  assert( pixeltype != gdcm::PixelFormat::UNKNOWN );
   gdcm::PhotometricInterpretation pi;
   if( this->GetNumberOfComponents() == 1 )
     {

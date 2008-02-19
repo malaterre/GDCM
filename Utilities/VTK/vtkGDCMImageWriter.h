@@ -93,6 +93,8 @@ protected:
     vtkInformation *request,
     vtkInformationVector **inputVector,
     vtkInformationVector *outputVector);
+#else
+  void WriteSlice(vtkImageData *data);
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
   int WriteGDCMData(vtkImageData *data, int timeStep);
 

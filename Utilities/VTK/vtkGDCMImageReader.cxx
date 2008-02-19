@@ -396,19 +396,23 @@ int vtkGDCMImageReader::RequestInformationCompat()
     //this->DataSpacing[2] = 1.;
 
     const double *origin = image.GetOrigin();
-    assert( origin );
-    this->DataOrigin[0] = origin[0];
-    this->DataOrigin[1] = origin[1];
-    this->DataOrigin[2] = origin[2];
+    if( origin )
+      {
+      this->DataOrigin[0] = origin[0];
+      this->DataOrigin[1] = origin[1];
+      this->DataOrigin[2] = origin[2];
+      }
 
     const double *dircos = image.GetDirectionCosines();
-    assert( dircos );
-    this->DirectionCosines->SetElement(0,0, dircos[0]);
-    this->DirectionCosines->SetElement(1,0, dircos[1]);
-    this->DirectionCosines->SetElement(2,0, dircos[2]);
-    this->DirectionCosines->SetElement(0,1, dircos[3]);
-    this->DirectionCosines->SetElement(1,1, dircos[4]);
-    this->DirectionCosines->SetElement(2,1, dircos[5]);
+    if( dircos )
+      {
+      this->DirectionCosines->SetElement(0,0, dircos[0]);
+      this->DirectionCosines->SetElement(1,0, dircos[1]);
+      this->DirectionCosines->SetElement(2,0, dircos[2]);
+      this->DirectionCosines->SetElement(0,1, dircos[3]);
+      this->DirectionCosines->SetElement(1,1, dircos[4]);
+      this->DirectionCosines->SetElement(2,1, dircos[5]);
+      }
     // Need to set the rest to 0 ???
     }
 

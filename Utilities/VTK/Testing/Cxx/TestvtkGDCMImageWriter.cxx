@@ -19,9 +19,10 @@
 #include "vtkImageData.h"
 #include "vtkMultiThreader.h"
 #include "vtkMedicalImageProperties.h"
-#include <vtksys/SystemTools.hxx>
+//#include <vtksys/SystemTools.hxx>
 
 #include "gdcmDataImages.h"
+#include "gdcmFilename.h"
 
 int TestvtkGDCMImageWrite(const char *filename)
 {
@@ -41,10 +42,12 @@ int TestvtkGDCMImageWrite(const char *filename)
   //writer->SetInput( copy );
   writer->SetDirectionCosines( reader->GetDirectionCosines() );
   writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
-  std::string gdcmfile = vtksys::SystemTools::GetFilenamePath( filename );
+  gdcm::Filename fn = filename;
+  std::string gdcmfile; //= vtksys::SystemTools::GetFilenamePath( filename );
   gdcmfile = "/tmp/vtkdcm";
   gdcmfile += '/';
-  gdcmfile += vtksys::SystemTools::GetFilenameWithoutExtension( filename );
+  //gdcmfile += vtksys::SystemTools::GetFilenameWithoutExtension( filename );
+  gdcmfile += fn.GetName();
   gdcmfile += ".dcm";
   writer->SetFileName( gdcmfile.c_str() );
   writer->Write();
