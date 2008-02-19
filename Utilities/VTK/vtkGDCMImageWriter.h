@@ -34,6 +34,7 @@ class vtkLookupTable;
 class vtkMedicalImageProperties;
 class vtkStringArray;
 class vtkMatrix4x4;
+class vtkStringArray;
 class VTK_EXPORT vtkGDCMImageWriter : public vtkImageWriter
 {
 public:
@@ -44,13 +45,11 @@ public:
   virtual void SetLookupTable(vtkLookupTable*);
   vtkGetObjectMacro(LookupTable, vtkLookupTable);
 
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   vtkGetObjectMacro(MedicalImageProperties, vtkMedicalImageProperties);
   virtual void SetMedicalImageProperties(vtkMedicalImageProperties*);
 
   virtual void SetFileNames(vtkStringArray*);
   vtkGetObjectMacro(FileNames, vtkStringArray);
-#endif
 
   // I need that...
   virtual void Write();

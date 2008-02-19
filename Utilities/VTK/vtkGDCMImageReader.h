@@ -26,6 +26,11 @@
 #define __vtkGDCMImageReader_h
 
 #include "vtkMedicalImageReader2.h"
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+#else
+class vtkMedicalImageProperties;
+class vtkStringArray;
+#endif
 
 //BTX
 namespace gdcm { class ImageReader; }
@@ -60,14 +65,27 @@ public:
   // This is a read-only data member
   vtkGetObjectMacro(DirectionCosines, vtkMatrix4x4);
 
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+#else
+  // Description:
+  // Get the medical image properties object
+  vtkGetObjectMacro(MedicalImageProperties, vtkMedicalImageProperties);
+
+  virtual void SetFileNames(vtkStringArray*);
+  vtkGetObjectMacro(FileNames, vtkStringArray);
+#endif
+
 protected:
   vtkGDCMImageReader();
   ~vtkGDCMImageReader();
 
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 //BTX
   void FillMedicalImageInformation(const gdcm::ImageReader &reader);
 //ETX
+  int RequestInformationCompat();
+  int RequestDataCompat();
+
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   int ProcessRequest(vtkInformation* request,
                                  vtkInformationVector** inputVector,
                                  vtkInformationVector* outputVector);
@@ -85,6 +103,14 @@ protected:
 private:
   vtkGDCMImageReader(const vtkGDCMImageReader&);  // Not implemented.
   void operator=(const vtkGDCMImageReader&);  // Not implemented.
+
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+#else
+  // Description:
+  // Medical Image properties
+  vtkMedicalImageProperties *MedicalImageProperties;
+  vtkStringArray *FileNames;
+#endif
 
   vtkMatrix4x4 *DirectionCosines;
 };

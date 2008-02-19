@@ -23,12 +23,7 @@
 #include "vtkImageData.h"
 #include "vtkCommand.h"
 #include "vtkRenderer.h"
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #include "vtkStringArray.h"
-#else
-#include <vector>
-#include <string>
-#endif
 
 #include "gdcmFilename.h"
 
@@ -93,25 +88,17 @@ public:
 // that do not contain the template parameter in the function
 // signature. Thus always pass parameter in the function:
 template <typename TViewer>
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
-#else
-void ExecuteViewer(TViewer *viewer, std::vector< std::string > const & filenames)
-#endif
 {
   vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   if( filenames->GetSize() == 1 ) // Backward compatible...
     {
-    reader->SetFileName( filenames->GetValue(0) );
+    reader->SetFileName( filenames->GetValue(0).c_str() );
     }
   else
     {
     reader->SetFileNames( filenames );
     }
-#else
-  
-#endif
   //reader->Update();
   //reader->GetOutput()->Print( std::cout );
 
@@ -181,11 +168,7 @@ void ExecuteViewer(TViewer *viewer, std::vector< std::string > const & filenames
 
 int main(int argc, char *argv[])
 {
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   vtkStringArray *filenames = vtkStringArray::New();
-#else
-  std::vector< std::string > filenames;
-#endif
   if( argc < 2 )
     {
     std::cerr << argv[0] << " filename1.dcm [filename2.dcm ...]\n";
@@ -195,11 +178,7 @@ int main(int argc, char *argv[])
     {
     for(int i=1; i < argc; ++i)
       {
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
       filenames->InsertNextValue( argv[i] );
-#else
-      filenames.push_back( argv[i] );
-#endif
       }
     //names->Print( std::cout );
     }
@@ -222,15 +201,11 @@ int main(int argc, char *argv[])
   else
     {
     std::cerr << "Unhandled : " << viewer_type.GetName() << std::endl;
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
     filenames->Delete();
-#endif
     return 1;
     }
 
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   filenames->Delete();
-#endif
   return 0;
 }
 

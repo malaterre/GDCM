@@ -19,12 +19,12 @@
 #include "vtkImageData.h"
 #include "vtkLookupTable.h"
 #include "vtkMatrix4x4.h"
+#include "vtkMedicalImageProperties.h"
+#include "vtkStringArray.h"
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #include "vtkInformationVector.h"
 #include "vtkStreamingDemandDrivenPipeline.h"
 #include "vtkInformation.h"
-#include "vtkStringArray.h"
-#include "vtkMedicalImageProperties.h"
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
 #include "gdcmImageWriter.h"
@@ -36,10 +36,8 @@ vtkCxxRevisionMacro(vtkGDCMImageWriter, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMImageWriter)
 
 vtkCxxSetObjectMacro(vtkGDCMImageWriter,LookupTable,vtkLookupTable);
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 vtkCxxSetObjectMacro(vtkGDCMImageWriter,MedicalImageProperties,vtkMedicalImageProperties);
 vtkCxxSetObjectMacro(vtkGDCMImageWriter,FileNames,vtkStringArray);
-#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 vtkCxxSetObjectMacro(vtkGDCMImageWriter,DirectionCosines,vtkMatrix4x4);
 
 vtkGDCMImageWriter::vtkGDCMImageWriter()
@@ -54,10 +52,8 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
   this->DataUpdateExtent[5] = 0;
 
   this->LookupTable = vtkLookupTable::New();
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   this->MedicalImageProperties = vtkMedicalImageProperties::New();
   this->FileNames = vtkStringArray::New();
-#endif
   this->UID = 0;
   this->DirectionCosines = vtkMatrix4x4::New();
   this->DirectionCosines->SetElement(0,0,1);
@@ -80,10 +76,8 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
 vtkGDCMImageWriter::~vtkGDCMImageWriter()
 {
   this->LookupTable->Delete();
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   this->MedicalImageProperties->Delete();
   this->FileNames->Delete();
-#endif
   this->SetUID(NULL);
   this->DirectionCosines->Delete();
 }
@@ -202,12 +196,10 @@ int vtkGDCMImageWriter::RequestData(
 
 /*const*/ char *vtkGDCMImageWriter::GetFileName()
 {
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   if( this->FileNames->GetNumberOfValues() )
     {
     return (char*)this->FileNames->GetValue(0).c_str();
     }
-#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
   return this->Superclass::GetFileName();
 }
 
@@ -447,7 +439,6 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
   gdcm::File& file = writer.GetFile();
   gdcm::DataSet& ds = file.GetDataSet();
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   // For ex: DICOM (0010,0010) = DOE,JOHN
   SetStringValueFromTag(this->MedicalImageProperties->GetPatientName(), gdcm::Tag(0x0010,0x0010), ds);
   // For ex: DICOM (0010,0020) = 1933197
@@ -549,9 +540,6 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   // Let's try to fake out the SOP Class UID here:
   gdcm::MediaStorage ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
   ms.GuessFromModality( this->MedicalImageProperties->GetModality(), this->FileDimensionality ); // Will override SC only if something is found...
-#else
-  gdcm::MediaStorage ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
-#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
   assert( gdcm::MediaStorage::IsImage( ms ) );
 {
   gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016 ) );
@@ -600,14 +588,12 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
   const char *filename = NULL;
   int i = inExt[4];
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   if( this->FileNames->GetNumberOfValues() )
   {
     //int n = this->FileNames->GetNumberOfValues();
     filename = this->FileNames->GetValue(i).c_str();
   }
   else
-#endif
   {
     filename = this->GetFileName();
   }
