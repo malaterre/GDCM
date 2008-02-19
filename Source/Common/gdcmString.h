@@ -19,10 +19,13 @@
 
 namespace gdcm
 {
+template <char TDelimiter> class String;
+template <char TDelimiter> std::istream& operator>>(std::istream &is, String<TDelimiter>& ms);
 
+template <char TDelimiter = EOF>
 class /*GDCM_EXPORT*/ String : public std::string /* PLEASE do not export me */
 {
-  friend std::istream& operator>>(std::istream &is, String& ms);
+  friend std::istream& operator>> <TDelimiter>(std::istream &is, String<TDelimiter>& ms);
 public:
   // typedef are not inherited:
   typedef std::string::value_type             value_type;
@@ -43,16 +46,17 @@ public:
   String(const std::string& s, size_type pos=0, size_type n=npos):
     std::string(s, pos, n) {}
 
+  operator const char *() { return this->c_str(); }
 };
-inline std::istream& operator>>(std::istream &is, String &ms)
+template <char TDelimiter>
+inline std::istream& operator>>(std::istream &is, String<TDelimiter> &ms)
 {
-  std::getline(is, ms, '\\');
+  std::getline(is, ms, TDelimiter);
   // no such thing as std::get where the delim char would be left, so I need to manually add it back...
-  // hopefully this is the right thing to do (no over head)
-  is.putback( '\\' );
+  // hopefully this is the right thing to do (no overhead)
+  is.putback( TDelimiter );
   return is;
 }
-
 
 } // end namespace gdcm
 

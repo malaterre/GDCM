@@ -3,6 +3,7 @@
 SET(DSED_TEST_SRCS
 	TestAttribute
   #TestReadPatientName
+  TestLO
   TestByteBuffer
   #TestByteValue
   TestComposite
