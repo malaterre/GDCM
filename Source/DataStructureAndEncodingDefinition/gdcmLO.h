@@ -20,11 +20,11 @@
 namespace gdcm
 {
 
-class /*GDCM_EXPORT*/ LO : public String<'\\'> /* PLEASE do not export me */
+class /*GDCM_EXPORT*/ LO : public String<'\\',64> /* PLEASE do not export me */
 {
 public:
   // typedef are not inherited:
-  typedef String<'\\'> Superclass;
+  typedef String<'\\',64> Superclass;
   typedef Superclass::value_type             value_type;
   typedef Superclass::pointer                pointer;
   typedef Superclass::reference              reference;
@@ -44,9 +44,8 @@ public:
     Superclass(s, pos, n) {}
 
   bool IsValid() const {
-    // Check Length:
-    size_type length = size();
-    if( length > 64 ) return false;
+    if( !Superclass::IsValid() ) return false;
+    // Implementation specific:
     return true;
   }
 };

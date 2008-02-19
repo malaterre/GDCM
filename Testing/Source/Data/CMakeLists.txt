@@ -52,6 +52,10 @@ SET(BLACK_LIST_READER
   TOSHIBA_MDW_HEADER.dcm
 # TODO, nasty:
   PhilipsLosslessRice.dcm
+
+
+# Temp fix
+  rle16loo.dcm
 )
 
 SET(GDCM_DATA_IMAGES)

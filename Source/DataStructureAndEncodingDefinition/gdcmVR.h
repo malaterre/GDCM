@@ -215,45 +215,49 @@ inline std::ostream& operator<<(std::ostream &_os, const UI &_val)
   return _os;
 }
 
-struct LO { char Internal[64+1]; 
-  friend std::ostream& operator<<(std::ostream &_os, const LO &_val);
-};
-inline std::ostream& operator<<(std::ostream &_os, const LO &_val)
-{
-  _os << _val.Internal;
-  return _os;
-}
-
+typedef String<'\\',64> AEComp;
+typedef String<'\\',64> ASComp;
+typedef String<'\\',64> CSComp;
+typedef String<'\\',64> DAComp;
+typedef String<'\\',64> DTComp;
+typedef String<'\\',64> LOComp;
+typedef String<'\\',64> LTComp;
+typedef String<'\\',64> PNComp;
+typedef String<'\\',64> SHComp;
+typedef String<'\\',64> STComp;
+typedef String<'\\',64> TMComp;
+typedef String<'\\',64> UIComp;
+typedef String<'\\',64> UTComp;
 
 
 // TODO: Could be generated from XML file
-TYPETOENCODING(AE,VRASCII ,String<>)
-TYPETOENCODING(AS,VRASCII ,String<>)
+TYPETOENCODING(AE,VRASCII ,AEComp)
+TYPETOENCODING(AS,VRASCII ,ASComp)
 TYPETOENCODING(AT,VRBINARY,Tag)
-TYPETOENCODING(CS,VRASCII ,String<>)
-TYPETOENCODING(DA,VRASCII ,String<>)
+TYPETOENCODING(CS,VRASCII ,CSComp)
+TYPETOENCODING(DA,VRASCII ,DAComp)
 TYPETOENCODING(DS,VRASCII ,float)
-TYPETOENCODING(DT,VRASCII ,String<>)
+TYPETOENCODING(DT,VRASCII ,DTComp)
 TYPETOENCODING(FL,VRBINARY,float)
 TYPETOENCODING(FD,VRBINARY,double)
 TYPETOENCODING(IS,VRASCII ,int)
-TYPETOENCODING(LO,VRASCII ,String<'\\'>)
-TYPETOENCODING(LT,VRASCII ,String<>)
+TYPETOENCODING(LO,VRASCII ,LOComp)
+TYPETOENCODING(LT,VRASCII ,LTComp)
 TYPETOENCODING(OB,VRBINARY,unsigned char)
 TYPETOENCODING(OF,VRBINARY,float)
 TYPETOENCODING(OW,VRBINARY,unsigned short)
-TYPETOENCODING(PN,VRASCII ,String<'^'>)
-TYPETOENCODING(SH,VRASCII ,String<'\\'>)
+TYPETOENCODING(PN,VRASCII ,PNComp)
+TYPETOENCODING(SH,VRASCII ,SHComp)
 TYPETOENCODING(SL,VRBINARY,int32_t)
 TYPETOENCODING(SQ,VRBINARY,unsigned char) // FIXME
 TYPETOENCODING(SS,VRBINARY,int16_t)
-TYPETOENCODING(ST,VRASCII ,String<>)
-TYPETOENCODING(TM,VRASCII ,String<>)
-TYPETOENCODING(UI,VRASCII ,String<>)
+TYPETOENCODING(ST,VRASCII ,STComp)
+TYPETOENCODING(TM,VRASCII ,TMComp)
+TYPETOENCODING(UI,VRASCII ,UIComp)
 TYPETOENCODING(UL,VRBINARY,uint32_t)
 TYPETOENCODING(UN,VRASCII,unsigned char) // FIXME ?
 TYPETOENCODING(US,VRBINARY,uint16_t)
-TYPETOENCODING(UT,VRBINARY,String<>)
+TYPETOENCODING(UT,VRBINARY,UTComp)
 
 #define VRTypeTemplateCase(type) \
   case VR::type: \

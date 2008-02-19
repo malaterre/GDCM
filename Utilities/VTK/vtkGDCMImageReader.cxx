@@ -472,6 +472,10 @@ int LoadSingleFile(const char *filename, int *dext, char *pointer, bool filelowe
 
   const gdcm::Image &image = reader.GetImage();
   unsigned long len = image.GetBufferLength();
+  if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::PALETTE_COLOR )
+    {
+    len *= 3;
+    }
   char *tempimage = new char[len];
   image.GetBuffer(tempimage);
 

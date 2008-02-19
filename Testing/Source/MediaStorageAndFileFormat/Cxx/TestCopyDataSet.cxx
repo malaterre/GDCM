@@ -14,6 +14,7 @@
 =========================================================================*/
 #include "gdcmReader.h"
 #include "gdcmDataSet.h"
+#include "gdcmWriter.h"
 
 int TestCopyDataSet(int, char *[])
 {
@@ -36,6 +37,18 @@ int TestCopyDataSet(int, char *[])
   ds_copy.Replace( n );
 
   std::cout << ds_copy << std::endl;
+  // roup="0018" element="1020" vr="LO" vm="1-n" na
+  gdcm::DataElement n2( gdcm::Tag(0x0018,0x1020) );
+  //const char versions[] = "1234567890\\1234567890\\1234567890\\1234567890\\1234567890\\1234567890";
+  const char versions[] = "12345678901234567890123456789012345678901234567890123\\45678901234567890";
+  n2.SetByteValue( versions, strlen(versions) );
+  ds_copy.Replace( n2 );
+
+  gdcm::Writer writer;
+  writer.SetFile( reader.GetFile() );
+  writer.GetFile().GetDataSet().Replace( n2 );
+  writer.SetFileName( "totu.dcm" );
+  writer.Write();
 
   return 0;
 }

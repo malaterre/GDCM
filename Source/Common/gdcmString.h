@@ -19,10 +19,10 @@
 
 namespace gdcm
 {
-template <char TDelimiter> class String;
-template <char TDelimiter> std::istream& operator>>(std::istream &is, String<TDelimiter>& ms);
+template <char TDelimiter, unsigned int TMaxLength> class String;
+template <char TDelimiter, unsigned int TMaxLength> std::istream& operator>>(std::istream &is, String<TDelimiter,TMaxLength>& ms);
 
-template <char TDelimiter = EOF>
+template <char TDelimiter = EOF, unsigned int TMaxLength = 64>
 class /*GDCM_EXPORT*/ String : public std::string /* PLEASE do not export me */
 {
   friend std::istream& operator>> <TDelimiter>(std::istream &is, String<TDelimiter>& ms);
@@ -47,9 +47,17 @@ public:
     std::string(s, pos, n) {}
 
   operator const char *() { return this->c_str(); }
+
+  bool IsValid() const {
+    // Check Length:
+    size_type length = size();
+    if( length > TMaxLength ) return false;
+    return true;
+  }
+
 };
-template <char TDelimiter>
-inline std::istream& operator>>(std::istream &is, String<TDelimiter> &ms)
+template <char TDelimiter, unsigned int TMaxLength>
+inline std::istream& operator>>(std::istream &is, String<TDelimiter,TMaxLength> &ms)
 {
   std::getline(is, ms, TDelimiter);
   // no such thing as std::get where the delim char would be left, so I need to manually add it back...

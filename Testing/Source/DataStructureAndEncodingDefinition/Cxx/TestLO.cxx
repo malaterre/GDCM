@@ -34,6 +34,11 @@ int TestLO(int argc, char *argv[])
   ss.get();
   std::cout << lo3 << std::endl;
 
+  std::string toolong(65, ' ');
+  gdcm::LO lo4 = gdcm::LO(toolong);
+  std::cout << lo4.size() << std::endl;
+  if ( lo4.IsValid() ) return 1;
+
   return 0;
 }
 
