@@ -35,9 +35,10 @@ public:
   virtual void PrintSelf(ostream& os, vtkIndent indent);
 
 //BTX
-  std::string &GetValue(unsigned int i);
+  //std::string &GetValue(unsigned int i);
   vtkIdType InsertNextValue(std::string const & f);
 //ETX
+  const char *GetValue(unsigned int i);
   int GetNumberOfValues();
   vtkIdType InsertNextValue(const char *f);
 

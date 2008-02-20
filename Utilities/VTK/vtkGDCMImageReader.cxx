@@ -321,7 +321,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
   else
     {
     assert( this->FileNames && this->FileNames->GetNumberOfValues() >= 1 );
-    filename = this->FileNames->GetValue( 0 ).c_str();
+    filename = this->FileNames->GetValue( 0 );
     }
   gdcm::ImageReader reader;
   reader.SetFileName( filename );
@@ -570,7 +570,7 @@ int vtkGDCMImageReader::RequestDataCompat()
     {
     gdcm::ImageReader reader;
     const char *filename;
-    filename = this->FileNames->GetValue( j ).c_str();
+    filename = this->FileNames->GetValue( j );
     //std::cerr << "Reader:" << j << " -> " << filename << std::endl;
     reader.SetFileName( filename );
     if( !reader.Read() )

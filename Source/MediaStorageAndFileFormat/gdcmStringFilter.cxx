@@ -114,8 +114,10 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const DataElement
         StringFilterCase(UT);
       case VR::OB:
       case VR::OW:
+      case VR::OB_OW:
       case VR::SQ:
       case VR::UN:
+        gdcmWarningMacro( "Unhandled: " << vr << " for tag " << de.GetTag() );
         ret.second = "";
         break;
       default:

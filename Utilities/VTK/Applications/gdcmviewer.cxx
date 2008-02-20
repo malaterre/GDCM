@@ -101,7 +101,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
   if( filenames->GetSize() == 1 ) // Backward compatible...
     {
-    reader->SetFileName( filenames->GetValue(0).c_str() );
+    reader->SetFileName( filenames->GetValue(0) );
     }
   else
     {

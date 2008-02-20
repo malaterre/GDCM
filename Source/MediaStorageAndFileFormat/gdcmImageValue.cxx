@@ -49,7 +49,6 @@ bool ImageValue::TryRAWCodec(char *buffer) const
     codec.SetPixelFormat( GetPixelFormat() );
     codec.SetNeedByteSwap( GetNeedByteSwap() );
     std::stringstream is;
-    //is.SetSwapCode( GetSwapCode() );
     is.write(buffer, len);
     std::stringstream os;
     bool r = codec.Decode(is, os);

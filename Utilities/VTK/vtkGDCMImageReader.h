@@ -100,10 +100,7 @@ protected:
   void ExecuteData(vtkDataObject *out);
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
-private:
-  vtkGDCMImageReader(const vtkGDCMImageReader&);  // Not implemented.
-  void operator=(const vtkGDCMImageReader&);  // Not implemented.
-
+protected:
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #else
   // Description:
@@ -113,6 +110,10 @@ private:
 #endif
 
   vtkMatrix4x4 *DirectionCosines;
+
+private:
+  vtkGDCMImageReader(const vtkGDCMImageReader&);  // Not implemented.
+  void operator=(const vtkGDCMImageReader&);  // Not implemented.
 };
 #endif
 

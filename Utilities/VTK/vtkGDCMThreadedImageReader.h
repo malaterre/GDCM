@@ -65,6 +65,7 @@ protected:
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
   void ReadFiles(unsigned int nfiles, const char *filenames[]);
+  void RequestDataCompat();
 
 private:
   vtkGDCMThreadedImageReader(const vtkGDCMThreadedImageReader&);  // Not implemented.

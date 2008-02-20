@@ -16,13 +16,13 @@
 
 #include "vtkObjectFactory.h"
 #include "vtkImageData.h"
+#include "vtkMedicalImageProperties.h"
+#include "vtkStringArray.h"
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #include "vtkInformationVector.h"
 #include "vtkInformation.h"
 #include "vtkDemandDrivenPipeline.h"
 #include "vtkStreamingDemandDrivenPipeline.h"
-#include "vtkMedicalImageProperties.h"
-#include "vtkStringArray.h"
 #endif /* (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 ) */
 
 #include "gdcmImageReader.h"
@@ -53,11 +53,25 @@ vtkGDCMThreadedImageReader::~vtkGDCMThreadedImageReader()
 void vtkGDCMThreadedImageReader::ExecuteInformation()
 {
   std::cerr << "ExecuteInformation" << std::endl;
+  if (this->FileNames->GetNumberOfValues() > 0)
+    {
+    this->DataExtent[4] = 0;
+    this->DataExtent[5] = this->FileNames->GetNumberOfValues() - 1; 
+    }
+
+  // This reader only implement case where image is flipped upside down
+  if( !this->FileLowerLeft )
+    {
+    vtkErrorMacro( "You need to set the FileLowerLeft flag to On" );
+    }
 }
 
 void vtkGDCMThreadedImageReader::ExecuteData(vtkDataObject *output)
 {
   std::cerr << "ExecuteData" << std::endl;
+  vtkImageData *data = this->AllocateOutputData(output);
+  //data->GetPointData()->GetScalars()->SetName("GDCM");
+  RequestDataCompat();
 }
 #endif /* (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 ) */
 
@@ -67,98 +81,20 @@ int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
                                       vtkInformationVector **inputVector,
                                       vtkInformationVector *outputVector)
 {
-#if 0
-  // Let's read the first file :
-  const char *filename;
-  if( this->FileName )
-    {
-    filename = this->FileName;
-    }
-  else
-    {
-    assert( this->FileNames && this->FileNames->GetNumberOfValues() >= 1 );
-    filename = this->FileNames->GetValue( 0 ).c_str();
-    }
-  gdcm::ImageReader reader;
-  reader.SetFileName( filename );
-  if( !reader.Read() )
+  // Some information need to have been set outside (user specified)
+  //assert( this->GetOutput(0)->GetNumberOfPoints() != 0 );
+  // For now only handles series:
+  if( !this->FileNames && !this->FileName )
     {
     return 0;
     }
-  const gdcm::Image &image = reader.GetImage();
-  const unsigned int *dims = image.GetDimensions();
 
-  // Set the Extents.
-  assert( image.GetNumberOfDimensions() >= 2 );
-  this->DataExtent[0] = 0;
-  this->DataExtent[1] = dims[0] - 1;
-  this->DataExtent[2] = 0;
-  this->DataExtent[3] = dims[1] - 1;
-  if( image.GetNumberOfDimensions() == 2 )
+  if( this->DataExtent[4] != 0 
+   || this->DataExtent[5] != this->FileNames->GetNumberOfValues() - 1 )
     {
-    // This is just so much painfull to deal with DICOM / VTK
-    // they simply assume that number of file is equal to the dimension
-    // of the last axe (see vtkImageReader2::SetFileNames )
-    if ( this->FileNames && this->FileNames->GetNumberOfValues() > 1 )
-      {
-      this->DataExtent[4] = 0;
-      //this->DataExtent[5] = this->FileNames->GetNumberOfValues() - 1;
-      }
-    else
-      {
-      this->DataExtent[4] = 0;
-      this->DataExtent[5] = 0;
-      }
+    vtkErrorMacro( "Problem with extent" );
+    return 0;
     }
-  else
-    {
-    assert( image.GetNumberOfDimensions() == 3 );
-    this->FileDimensionality = 3;
-    this->DataExtent[4] = 0;
-    this->DataExtent[5] = dims[2] - 1;
-    }
-  //this->DataSpacing[0] = 1.;
-  //this->DataSpacing[1] = -1.;
-  //this->DataSpacing[2] = 1.;
-
-  gdcm::PixelType pixeltype = image.GetPixelType();
-  switch( pixeltype )
-    {
-  case gdcm::PixelType::INT8:
-    this->DataScalarType = VTK_SIGNED_CHAR;
-    break;
-  case gdcm::PixelType::UINT8:
-    this->DataScalarType = VTK_UNSIGNED_CHAR;
-    break;
-  case gdcm::PixelType::INT12:
-    abort();
-    this->DataScalarType = VTK_SHORT;
-    break;
-  case gdcm::PixelType::UINT12:
-    abort();
-    this->DataScalarType = VTK_UNSIGNED_SHORT;
-    break;
-  case gdcm::PixelType::INT16:
-    this->DataScalarType = VTK_SHORT;
-    break;
-  case gdcm::PixelType::UINT16:
-    this->DataScalarType = VTK_UNSIGNED_SHORT;
-    break;
-  default:
-    ;
-    }
-
-  this->NumberOfScalarComponents = pixeltype.GetSamplesPerPixel();
-  if( image.GetPhotometricInterpretation() == 
-    gdcm::PhotometricInterpretation::PALETTE_COLOR )
-    {
-    assert( this->NumberOfScalarComponents == 1 );
-    this->NumberOfScalarComponents = 3;
-    }
-
-#endif
-  // Some information need to have been set outside (user specified)
-  //assert( this->GetOutput(0)->GetNumberOfPoints() != 0 );
 
   int numvol = 1;
   this->SetNumberOfOutputPorts(numvol);
@@ -189,12 +125,6 @@ int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
   if( !this->FileLowerLeft )
     {
     vtkErrorMacro( "You need to set the FileLowerLeft flag to On" );
-    return 0;
-    }
-
-  // For now only handles series:
-  if( !this->FileNames && !this->FileName )
-    {
     return 0;
     }
 
@@ -411,6 +341,15 @@ int vtkGDCMThreadedImageReader::RequestData(vtkInformation *vtkNotUsed(request),
     this->GetOutput(i)->AllocateScalars();
   }
 
+  RequestDataCompat();
+
+  //std::cerr << "vtkGDCMThreadedImageReader::RequestData End" << std::endl;
+  return 1;
+}
+#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
+
+void vtkGDCMThreadedImageReader::RequestDataCompat()
+{
   int *dext = this->GetDataExtent();
   if( this->FileNames )
     {
@@ -420,7 +359,7 @@ int vtkGDCMThreadedImageReader::RequestData(vtkInformation *vtkNotUsed(request),
     const char **filenames = new const char* [ nfiles ];
     for(unsigned int i = 0; i < nfiles; ++i)
       {
-      filenames[i] = this->FileNames->GetValue( i ).c_str();
+      filenames[i] = this->FileNames->GetValue( i );
       //std::cerr << filenames[i] << std::endl;
       }
     ReadFiles(nfiles, filenames);
@@ -438,10 +377,7 @@ int vtkGDCMThreadedImageReader::RequestData(vtkInformation *vtkNotUsed(request),
     assert( 0 && "Impossible happen" );
     }
 
-  //std::cerr << "vtkGDCMThreadedImageReader::RequestData End" << std::endl;
-  return 1;
 }
-#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
 //----------------------------------------------------------------------------
 void vtkGDCMThreadedImageReader::PrintSelf(ostream& os, vtkIndent indent)

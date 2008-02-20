@@ -37,9 +37,10 @@ vtkStringArray::~vtkStringArray()
   delete Internal;
 }
 
-std::string &vtkStringArray::GetValue(unsigned int i)
+//std::string &vtkStringArray::GetValue(unsigned int i)
+const char *vtkStringArray::GetValue(unsigned int i)
 {
-  return Internal->Internal[i];
+  return Internal->Internal[i].c_str();
 }
 
 int vtkStringArray::GetNumberOfValues()
