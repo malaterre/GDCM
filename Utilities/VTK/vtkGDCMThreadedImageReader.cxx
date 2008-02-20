@@ -53,10 +53,15 @@ vtkGDCMThreadedImageReader::~vtkGDCMThreadedImageReader()
 void vtkGDCMThreadedImageReader::ExecuteInformation()
 {
   std::cerr << "ExecuteInformation" << std::endl;
-  if (this->FileNames->GetNumberOfValues() > 0)
+  if (this->FileNames && this->FileNames->GetNumberOfValues() > 0)
     {
     this->DataExtent[4] = 0;
     this->DataExtent[5] = this->FileNames->GetNumberOfValues() - 1; 
+    }
+  else if ( this->FileName )
+    {
+    this->DataExtent[4] = 0;
+    this->DataExtent[5] = 1; 
     }
 
   // This reader only implement case where image is flipped upside down

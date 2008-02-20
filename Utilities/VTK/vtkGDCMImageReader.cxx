@@ -55,7 +55,7 @@ vtkGDCMImageReader::vtkGDCMImageReader()
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #else
   this->MedicalImageProperties = vtkMedicalImageProperties::New();
-  this->FileNames = vtkStringArray::New();
+  this->FileNames = NULL; //vtkStringArray::New();
 #endif
 }
 
@@ -66,7 +66,10 @@ vtkGDCMImageReader::~vtkGDCMImageReader()
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #else
   this->MedicalImageProperties->Delete();
-  this->FileNames->Delete();
+  if( this->FileNames )
+    {
+    this->FileNames->Delete();
+    }
 #endif
 }
 
