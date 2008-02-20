@@ -64,6 +64,7 @@ void vtkGDCMThreadedImageReader::ExecuteInformation()
     {
     vtkErrorMacro( "You need to set the FileLowerLeft flag to On" );
     }
+  this->vtkImageReader2::ExecuteInformation();
 }
 
 void vtkGDCMThreadedImageReader::ExecuteData(vtkDataObject *output)

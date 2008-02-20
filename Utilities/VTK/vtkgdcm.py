@@ -7,3 +7,7 @@ if os.name == 'posix':
     from libvtkgdcmPython import *
 else:
     from vtkgdcmPython import *
+try:
+  from vtk import vtkStringArray
+except:
+  print "Import error"
