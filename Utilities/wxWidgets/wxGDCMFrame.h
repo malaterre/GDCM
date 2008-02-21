@@ -3,7 +3,7 @@
 
 #include "wxGDCMFrameBase.h"
 class vtkImageViewer;
-class vtkGDCMReader;
+class vtkGDCMImageReader;
 class wxGDCMFrame: public wxGDCMFrameBase
 {
 public:
@@ -20,7 +20,7 @@ private:
     wxString	      directory;
     wxString        filename;
     vtkImageViewer *imageViewer;
-    vtkGDCMReader  *Reader;
+    vtkGDCMImageReader  *Reader;
 
     DECLARE_EVENT_TABLE( );
 }; // wxGlade: end class
