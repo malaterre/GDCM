@@ -15,8 +15,7 @@
 #include "gdcmReader.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmFile.h"
-
-#include "gdcmDataImages.h"
+#include "gdcmTesting.h"
 
 int TestRead(const char* filename)
 {
@@ -50,7 +49,8 @@ int TestReader(int argc, char *argv[])
   // else
   int r = 0, i = 0;
   const char *filename;
-  while( (filename = gdcmDataImages[i]) )
+  const char * const *filenames = gdcm::Testing::GetFileNames();
+  while( (filename = filenames[i]) )
     {
     r += TestRead( filename );
     ++i;

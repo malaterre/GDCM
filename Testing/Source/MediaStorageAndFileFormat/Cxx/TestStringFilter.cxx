@@ -15,8 +15,8 @@
 #include "gdcmStringFilter.h"
 #include "gdcmReader.h"
 #include "gdcmSequenceOfItems.h"
+#include "gdcmTesting.h"
 
-#include "gdcmDataImages.h"
 
 int TestStringFilt(const char *filename)
 {
@@ -68,7 +68,8 @@ int TestStringFilter(int argc, char *argv[])
   // else
   int r = 0, i = 0;
   const char *filename;
-  while( (filename = gdcmDataImages[i]) )
+  const char * const *filenames = gdcm::Testing::GetFileNames();
+  while( (filename = filenames[i]) )
     {
     r += TestStringFilt( filename );
     ++i;

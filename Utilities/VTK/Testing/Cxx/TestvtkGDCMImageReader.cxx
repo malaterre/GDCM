@@ -23,7 +23,7 @@
 //#include <vtksys/SystemTools.hxx>
 
 #include "gdcmFilename.h"
-#include "gdcmDataImages.h"
+#include "gdcmTesting.h"
 
 int TestvtkGDCMImageRead(const char *filename)
 {
@@ -70,7 +70,8 @@ int TestvtkGDCMImageReader(int argc, char *argv[])
   // else
   int r = 0, i = 0;
   const char *filename;
-  while( (filename = gdcmDataImages[i]) )
+  const char * const *filenames = gdcm::Testing::GetFileNames();
+  while( (filename = filenames[i]) )
     {
     r += TestvtkGDCMImageRead( filename );
     ++i;

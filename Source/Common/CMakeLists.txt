@@ -29,12 +29,15 @@ INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Utilities/md5"
   "${GDCM_BINARY_DIR}/Utilities/uuid"
 
+  "${GDCM_BINARY_DIR}/Testing/Source/Data"
+
   "${GDCM_SOURCE_DIR}/Utilities"
   )
 
 
 SET(Common_SRCS
   gdcmObject.cxx
+  gdcmTesting.cxx
   gdcmDirectory.cxx
   gdcmString.cxx
   gdcmFilename.cxx

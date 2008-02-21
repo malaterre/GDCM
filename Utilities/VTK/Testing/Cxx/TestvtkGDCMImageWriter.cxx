@@ -21,7 +21,7 @@
 #include "vtkMedicalImageProperties.h"
 //#include <vtksys/SystemTools.hxx>
 
-#include "gdcmDataImages.h"
+#include "gdcmTesting.h"
 #include "gdcmFilename.h"
 
 int TestvtkGDCMImageWrite(const char *filename)
@@ -72,7 +72,8 @@ int TestvtkGDCMImageWriter(int argc, char *argv[])
   // else
   int r = 0, i = 0;
   const char *filename;
-  while( (filename = gdcmDataImages[i]) )
+  const char * const *filenames = gdcm::Testing::GetFileNames();
+  while( (filename = filenames[i]) )
     {
     r += TestvtkGDCMImageWrite( filename );
     ++i;

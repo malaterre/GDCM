@@ -95,7 +95,7 @@ ENDFOREACH(filename)
 
 # Populate GDCM_DATA_IMAGES:
 CONFIGURE_FILE(
-  "${CMAKE_CURRENT_SOURCE_DIR}/gdcmDataImages.h.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/gdcmDataImages.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/gdcmDataImages.cxx.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/gdcmDataImages.cxx"
   )
 

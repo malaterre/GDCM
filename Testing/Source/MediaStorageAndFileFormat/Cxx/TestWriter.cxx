@@ -16,8 +16,7 @@
 #include "gdcmWriter.h"
 #include "gdcmFilename.h"
 #include "gdcmSystem.h"
-
-#include "gdcmDataImages.h"
+#include "gdcmTesting.h"
 
 //bool IsImpossibleToRewrite(const char *filename)
 //{
@@ -110,7 +109,8 @@ int TestWriter(int argc, char *argv[])
   // else
   int r = 0, i = 0;
   const char *filename;
-  while( (filename = gdcmDataImages[i]) )
+  const char * const *filenames = gdcm::Testing::GetFileNames();
+  while( (filename = filenames[i]) )
     {
     r += TestWrite( filename );
     ++i;

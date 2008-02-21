@@ -40,6 +40,7 @@
 #include "gdcmDict.h"
 #include "gdcmDictEntry.h"
 #include "gdcmDirectory.h"
+#include "gdcmTesting.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmScanner.h"
 
@@ -184,6 +185,7 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
+%include "gdcmTesting.h"
 %include "gdcmUIDGenerator.h"
 //%{
 //  typedef char * PString;   // copied to wrapper code

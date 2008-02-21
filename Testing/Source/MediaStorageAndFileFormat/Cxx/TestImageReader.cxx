@@ -19,7 +19,7 @@
 #include "gdcmByteSwap.h"
 #include "gdcmTrace.h"
 
-#include "gdcmDataImages.h"
+#include "gdcmTesting.h"
 #include "gdcmMD5DataImages.h"
 
 const char *GetMD5Ref(const char *filepath)
@@ -128,7 +128,8 @@ int TestImageReader(int argc, char *argv[])
   gdcm::Trace::WarningOff();
   int r = 0, i = 0;
   const char *filename;
-  while( (filename = gdcmDataImages[i]) )
+  const char * const *filenames = gdcm::Testing::GetFileNames();
+  while( (filename = filenames[i]) )
     {
     r += TestImageRead( filename );
     ++i;
