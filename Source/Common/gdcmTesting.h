@@ -32,6 +32,9 @@ public :
   //void Print(std::ostream &_os = std::cout);
 
   static const char * const *GetFileNames();
+
+  typedef const char* const (*MD5DataImagesType)[2];
+  static MD5DataImagesType GetMD5DataImages();
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------

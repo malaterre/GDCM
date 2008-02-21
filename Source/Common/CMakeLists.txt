@@ -30,6 +30,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Utilities/uuid"
 
   "${GDCM_BINARY_DIR}/Testing/Source/Data"
+  "${GDCM_SOURCE_DIR}/Testing/Source/Data"
 
   "${GDCM_SOURCE_DIR}/Utilities"
   )

@@ -20,12 +20,12 @@
 #include "gdcmTrace.h"
 
 #include "gdcmTesting.h"
-#include "gdcmMD5DataImages.h"
 
 const char *GetMD5Ref(const char *filepath)
 {
   int i = 0;
-  const char *p = gdcmMD5DataImages[i][1];
+  gdcm::Testing::MD5DataImagesType md5s = gdcm::Testing::GetMD5DataImages();
+  const char *p = md5s[i][1];
   gdcm::Filename comp(filepath);
   const char *filename = comp.GetName();
   while( p != 0 )
@@ -35,9 +35,9 @@ const char *GetMD5Ref(const char *filepath)
       break;
       }
     ++i;
-    p = gdcmMD5DataImages[i][1];
+    p = md5s[i][1];
     }
-  return gdcmMD5DataImages[i][0];
+  return md5s[i][0];
 }
 
 int TestImageRead(const char* filename)

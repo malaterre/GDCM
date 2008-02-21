@@ -17,7 +17,6 @@
 #include "gdcmSequenceOfItems.h"
 #include "gdcmTesting.h"
 
-
 int TestStringFilt(const char *filename)
 {
   gdcm::StringFilter sf;
