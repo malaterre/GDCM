@@ -9,6 +9,7 @@ IF(LINUX)
 SET(VTK_GDCM_TEST_SRCS
 ${VTK_GDCM_TEST_SRCS}
     TestvtkGDCMThreadedImageReader
+)
 ENDIF(LINUX)
 
 # Add the include paths
