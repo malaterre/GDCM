@@ -24,9 +24,11 @@ ${GDCM_VIEWER_APP_SRCS})
   ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 ENDFOREACH(app)
 
+IF(LINUX)
 # Dev only: I dont need to install that one:
 ADD_EXECUTABLE(threadgdcm threadgdcm.cxx)
 TARGET_LINK_LIBRARIES(threadgdcm gdcmMSFF pthread vtkIO)
+ENDIF(LINUX)
 
 #ADD_EXECUTABLE(gdcm2vtk gdcm2vtk.cxx)
 #TARGET_LINK_LIBRARIES(gdcm2vtk gdcmMSFF pthread)

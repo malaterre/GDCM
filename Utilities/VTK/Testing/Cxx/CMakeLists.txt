@@ -3,9 +3,13 @@
 SET(VTK_GDCM_TEST_SRCS
   TestvtkGDCMImageReader
   #TestvtkGDCMImageActor
-  TestvtkGDCMThreadedImageReader
-  TestvtkGDCMImageWriter
+    TestvtkGDCMImageWriter
   )
+IF(LINUX)
+SET(VTK_GDCM_TEST_SRCS
+${VTK_GDCM_TEST_SRCS}
+    TestvtkGDCMThreadedImageReader
+ENDIF(LINUX)
 
 # Add the include paths
 INCLUDE_DIRECTORIES(

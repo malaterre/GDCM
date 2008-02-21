@@ -6,9 +6,14 @@ FIND_PACKAGE(VTK REQUIRED)
 # Define the src for the vtk-gdcm bridge
 SET(vtkgdcm_SRCS
   vtkGDCMImageReader.cxx
-  vtkGDCMThreadedImageReader.cxx
   vtkGDCMImageWriter.cxx
   )
+
+IF(LINUX)
+  SET(vtkgdcm_SRCS ${vtkgdcm_SRCS}
+  vtkGDCMThreadedImageReader.cxx
+  )
+ENDIF(LINUX)
 
 INCLUDE(${VTK_USE_FILE})
 INCLUDE_DIRECTORIES(
