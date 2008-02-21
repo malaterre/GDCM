@@ -26,8 +26,8 @@ namespace gdcm
 class RLEHeader
 {
 public:
-  unsigned long NumSegments;
-  unsigned long Offset[15];
+  uint32_t NumSegments;
+  uint32_t Offset[15];
 
   void Print(std::ostream &os)
     {
@@ -45,10 +45,10 @@ public:
   void Read(std::istream &is)
     {
     // read Header (64 bytes)
-    is.read((char*)(&Header), sizeof(unsigned long)*16);
-    //ByteSwap<unsigned long>::SwapRangeFromSwapCodeIntoSystem(
-    //  (unsigned long*)&Header, is.GetSwapCode(), 16);
-    unsigned long numSegments = Header.NumSegments;
+    is.read((char*)(&Header), sizeof(uint32_t)*16);
+    //ByteSwap<uint32_t>::SwapRangeFromSwapCodeIntoSystem(
+    //  (uint32_t*)&Header, is.GetSwapCode(), 16);
+    uint32_t numSegments = Header.NumSegments;
     if( numSegments >= 1 )
       {
       assert( Header.Offset[0] == 64 );
@@ -125,11 +125,11 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
   RLEFrame &frame = Internals->Frame;
   frame.Read(is);
   //frame.Print(std::cout);
-  unsigned long numSegments = frame.Header.NumSegments;
+  uint32_t numSegments = frame.Header.NumSegments;
 
-  unsigned long numberOfReadBytes = 0;
+  uint32_t numberOfReadBytes = 0;
 
-  unsigned long length = Length;
+  uint32_t length = Length;
   // Special case:
   if( GetPixelFormat().GetBitsAllocated() == 16 )
     {
@@ -146,7 +146,7 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
     RequestPlanarConfiguration = true;
     }
   length /= numSegments;
-  for(unsigned long i = 0; i<numSegments; ++i)
+  for(uint32_t i = 0; i<numSegments; ++i)
     {
     numberOfReadBytes = 0;
     std::streampos pos = is.tellg();
@@ -161,10 +161,10 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
       is.seekg( frame.Header.Offset[i], std::ios::beg );
       }
 
-    unsigned long numOutBytes = 0;
+    uint32_t numOutBytes = 0;
     char byte;
     //std::cerr << "Length: " << Length << "\n";
-    //assert( (unsigned long)is.Tellg() == frame.Header.Offset[i] );
+    //assert( (uint32_t)is.Tellg() == frame.Header.Offset[i] );
     while( numOutBytes < length )
       {
       //std::cerr << "numOutBytes: " << numOutBytes << "\n";

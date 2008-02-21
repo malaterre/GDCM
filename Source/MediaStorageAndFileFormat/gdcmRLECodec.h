@@ -29,13 +29,13 @@ public:
   bool CanDecode(TransferSyntax const &ts);
   bool Decode(std::istream &is, std::ostream &os);
 
-  void SetLength(unsigned long l)
+  void SetLength(uint32_t l)
     {
     Length = l;
     }
 private:
   RLEInternals *Internals;
-  unsigned long Length;
+  uint32_t Length;
 };
 
 } // end namespace gdcm
