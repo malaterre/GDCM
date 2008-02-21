@@ -416,6 +416,10 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     Attribute<0x0020,0x0032> at;
     at.SetFromDataElement( de );
     PixelData.SetOrigin( at.GetValues() );
+    if( at.GetNumberOfValues() > PixelData.GetNumberOfDimensions() ) // FIXME HACK
+      {
+      PixelData.SetOrigin(PixelData.GetNumberOfDimensions(), at.GetValue(PixelData.GetNumberOfDimensions()) );
+      }
     }
   else
     {
@@ -751,6 +755,10 @@ bool ImageReader::ReadACRNEMAImage()
     Attribute<0x0020,0x0030> at = {};
     at.SetFromDataElement( de );
     PixelData.SetOrigin( at.GetValues() );
+    if( at.GetNumberOfValues() > PixelData.GetNumberOfDimensions() ) // FIXME HACK
+      {
+      PixelData.SetOrigin(PixelData.GetNumberOfDimensions(), at.GetValue(PixelData.GetNumberOfDimensions()) );
+      }
     }
   const Tag timageorientation(0x0020, 0x0035);
   if( ds.FindDataElement( timageorientation) )
