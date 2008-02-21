@@ -648,11 +648,11 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 }
 
   const char *filename = NULL;
-  int i = inExt[4];
+  int k = inExt[4];
   if( this->FileNames->GetNumberOfValues() )
   {
     //int n = this->FileNames->GetNumberOfValues();
-    filename = this->FileNames->GetValue(i);
+    filename = this->FileNames->GetValue(k);
   }
   else
   {
@@ -662,7 +662,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   
   // Let's add an Instance Number just for fun:
   std::ostringstream os;
-  os << i;
+  os << k;
   SetStringValueFromTag(os.str().c_str(), gdcm::Tag(0x0020,0x0013), ds);
   writer.SetFileName( filename );
   if( !writer.Write() )
