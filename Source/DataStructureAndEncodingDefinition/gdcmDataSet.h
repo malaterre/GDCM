@@ -58,7 +58,6 @@ public:
   typedef DataElementSet::const_iterator ConstIterator;
   ConstIterator Begin() const { return DES.begin(); }
   ConstIterator End() const { return DES.end(); }
-
   //typedef typename DataElementSet::iterator iterator;
   void Clear() {
     DES.clear();
@@ -136,8 +135,9 @@ public:
   const DataElement& GetDataElement(const Tag &t) const {
     const DataElement r(t);
     ConstIterator it = DES.find(r);
-    //assert( it != DES.end() );
-    return *it;
+    if( it != DES.end() )
+      return *it;
+    return DEEnd;
     }
   const DataElement& operator[] (const Tag &t) const { return GetDataElement(t); }
   const DataElement& operator() (uint16_t group, uint16_t element) const { return GetDataElement( Tag(group,element) ); }
@@ -200,6 +200,7 @@ public:
 
 private:
   DataElementSet DES;
+  static DataElement DEEnd;
   friend std::ostream& operator<<(std::ostream &_os, const DataSet &val);
 };
 //-----------------------------------------------------------------------------
