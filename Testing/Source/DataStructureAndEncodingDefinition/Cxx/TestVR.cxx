@@ -220,10 +220,10 @@ int TestVR(int, char *[])
     {
     return 1;
     }
-  if( !( vr.Compatible( gdcm::VR::INVALID) ) )
-    {
-    return 1;
-    }
+//  if( !( vr.Compatible( gdcm::VR::INVALID) ) )
+//    {
+//    return 1;
+//    }
 }
   // Make sure VR::UT is the last valid VR that can be found in a file:
   //if( gdcm::VR::OB_OW <= gdcm::VR::UT ) return 1;

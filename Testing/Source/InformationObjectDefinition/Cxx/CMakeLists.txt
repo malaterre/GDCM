@@ -6,8 +6,8 @@ SET(IOD_TEST_SRCS
   TestTableEntry
   TestType
   TestModule
-  TestXMLDictReader
-  TestXMLPrivateDictReader
+  #TestXMLDictReader
+  #TestXMLPrivateDictReader
   )
 
 # Add the include paths

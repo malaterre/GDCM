@@ -268,7 +268,11 @@ public:
       assert( Internal == 0 );
       assert( Save == false );
       Length = len / sizeof(ArrayType);
-      Internal = const_cast<ArrayType*>(array);
+      //assert( (len / sizeof(ArrayType)) * sizeof(ArrayType) == len );
+      // SIEMENS_GBS_III-16-ACR_NEMA_1.acr is a tough kid: 0009,1131 is supposed to be VR::UL, but
+      // there are only two bytes...
+      if( (len / sizeof(ArrayType)) * sizeof(ArrayType) != len ) Internal = 0;
+      else Internal = const_cast<ArrayType*>(array);
       }
       Save = save;
   }
@@ -287,10 +291,11 @@ public:
     const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
     assert( bv ); // That would be bad...
     const ArrayType* array = (ArrayType*)bv->GetPointer();
+    if( array ) {
     assert( array ); // That would be bad...
     assert( Internal == 0 );
     //assert( VR::IsBinary( VR(TVR) ) );
-    SetArray(array, bv->GetLength() );
+    SetArray(array, bv->GetLength() ); }
   }
 
   // Need to be placed after definition of EncodingImplementation<VR::VRASCII>

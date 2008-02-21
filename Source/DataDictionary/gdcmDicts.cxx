@@ -40,26 +40,27 @@ Dicts::~Dicts()
 
 const DictEntry &Dicts::GetDictEntry(const Tag& tag, const char *owner) const
 {
-  if( tag.IsPublic() )
-  {
+  static DictEntry Dummy;
+  if( tag.GetElement() == 0x0 )
+    {
+    Dummy.SetName( "Generic Group Length" );
+    Dummy.SetVR( VR::UL );
+    Dummy.SetVM( VM::VM1 );
+    Dummy.SetRetired( true ); // Since DICOM 2008, all group length are retired
+    return Dummy;
+    }
+  else if( tag.IsPublic() )
+    {
     assert( owner == NULL );
     return PublicDict.GetDictEntry(tag);
-  }
+    }
   else
-  {
+    {
+    assert( tag.IsPrivate() );
     // Check special private element: 0x0000 and [0x1,0xFF] are special cases:
-    static DictEntry Dummy;
-    if( tag.GetElement() == 0x0 )
+    if( tag.GetElement() <= 0xff )
       {
-      assert( owner );
-      Dummy.SetName( "Generic Group Length" );
-      Dummy.SetVR( VR::UL );
-      Dummy.SetVM( VM::VM1 );
-      Dummy.SetRetired( true ); // Since DICOM 2008, all group length are retired
-      return Dummy;
-      }
-    else if( tag.GetElement() <= 0xff )
-      {
+      assert( tag.GetElement() ); // Not a group length !
       assert( owner );
       assert( tag.IsPrivate() );
       std::string pc ( "Private Creator" );
@@ -71,11 +72,20 @@ const DictEntry &Dicts::GetDictEntry(const Tag& tag, const char *owner) const
       }
     else
       {
-      assert( owner && *owner );
-      size_t len = strlen(owner);
-      PrivateTag ptag(tag.GetGroup(), ((uint16_t)(tag.GetElement() << 8)) >> 8, owner);
-      const DictEntry &de = GetPrivateDict().GetDictEntry(ptag);
-      return de;
+      if( owner && *owner )
+        {
+        size_t len = strlen(owner);
+        PrivateTag ptag(tag.GetGroup(), ((uint16_t)(tag.GetElement() << 8)) >> 8, owner);
+        const DictEntry &de = GetPrivateDict().GetDictEntry(ptag);
+        return de;
+        }
+      else
+        {
+        Dummy.SetName( "Private Element without Private Creator" );
+        Dummy.SetVR( VR::INVALID );
+        Dummy.SetVM( VM::VM0 );
+        return Dummy;
+        }
       }
   }
 }

@@ -21,7 +21,8 @@
 //
 int TestReader2(int argc, char *argv[])
 {
-  const char *filename = argv[1];
+  //const char *filename = argv[1];
+  const char filename[] = GDCM_DATA_ROOT "/012345.002.050.dcm";
 
   gdcm::Reader reader;
   reader.SetFileName( filename );
@@ -41,6 +42,7 @@ int TestReader2(int argc, char *argv[])
   a2.Print( std::cout );
   std::cout << std::endl;
 
+/*
   // (0043,1013) SS 107\21\4\2\20                            #  10, 5 ReconKernelParameters
   gdcm::Element<gdcm::VR::SS,gdcm::VM::VM5> el1;
   el1.Set( ds[ gdcm::Tag(0x0043,0x1013) ].GetValue() );
@@ -52,6 +54,7 @@ int TestReader2(int argc, char *argv[])
   el2.Set( ds[ gdcm::Tag(0x0043,0x1031) ].GetValue() );
   el2.Print( std::cout );
   std::cout << std::endl;
+*/
 
   return 0;
 }

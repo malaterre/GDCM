@@ -38,10 +38,12 @@ void StringFilter::SetDicts(const Dicts &dicts)
   case VR::type: \
     { \
       Element<VR::type,VM::VM1_n> el; \
+      if( !de.IsValueEmpty() ) { \
       el.Set( de.GetValue() ); \
+      if( el.GetLength() ) { \
       os << el.GetValue(); \
       for(unsigned long i = 1; i < el.GetLength(); ++i) os << "\\" << el.GetValue(i); \
-      ret.second = os.str(); \
+      ret.second = os.str(); } } \
     } break
 
 std::pair<std::string, std::string> StringFilter::ToStringPair(const DataElement& de) const
@@ -115,6 +117,7 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const DataElement
       case VR::OB:
       case VR::OW:
       case VR::OB_OW:
+      case VR::US_SS:
       case VR::SQ:
       case VR::UN:
         gdcmWarningMacro( "Unhandled: " << vr << " for tag " << de.GetTag() );

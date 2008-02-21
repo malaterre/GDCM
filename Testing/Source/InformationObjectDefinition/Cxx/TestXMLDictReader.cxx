@@ -16,6 +16,10 @@
 
 int TestXMLDictReader(int argc, char *argv[])
 {
+  if( argc < 2 )
+    {
+    return 1;
+    }
   const char *filename = argv[1];
   gdcm::XMLDictReader tr;
   tr.SetFilename(filename);

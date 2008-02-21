@@ -16,12 +16,13 @@
 #include "gdcmReader.h"
 #include "gdcmSequenceOfItems.h"
 
-int TestStringFilter(int argc, char *argv[])
+#include "gdcmDataImages.h"
+
+int TestStringFilt(const char *filename)
 {
-  if( argc < 2 ) return 1;
   gdcm::StringFilter sf;
   gdcm::Reader r;
-  r.SetFileName( argv[1] );
+  r.SetFileName( filename );
   if( !r.Read() )
     {
     return 1;
@@ -49,10 +50,30 @@ int TestStringFilter(int argc, char *argv[])
     else
       {
       std::cerr << "Not supported: " << ref << std::endl;
-      ret += 1;
+      //ret += 1;
       }
     }
 
   return ret;
+}
+
+int TestStringFilter(int argc, char *argv[])
+{
+  if( argc == 2 )
+    {
+    const char *filename = argv[1];
+    return TestStringFilt(filename);
+    }
+
+  // else
+  int r = 0, i = 0;
+  const char *filename;
+  while( (filename = gdcmDataImages[i]) )
+    {
+    r += TestStringFilt( filename );
+    ++i;
+    }
+
+  return r;
 }
 

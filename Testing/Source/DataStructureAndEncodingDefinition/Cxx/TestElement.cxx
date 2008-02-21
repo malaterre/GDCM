@@ -32,7 +32,7 @@ int TestFL()
 
   float f[10] = {};
   Element<VR::FL, VM::VM1_n> c;
-  c.SetArray( f, sizeof(f), true);
+  c.SetArray( f, sizeof(f), false);
   c.Print( std::cout );
   std::cout << std::endl;
 
@@ -98,7 +98,7 @@ int TestAT()
   std::cout << std::endl;
 
   Element<VR::AT, VM::VM1_n> b; 
-  b.SetArray( list, sizeof(list), true);
+  b.SetArray( list, sizeof(list), false);
   b.Print( std::cout );
   std::cout << std::endl;
 
@@ -111,14 +111,14 @@ int TestOB()
     { 0x00,0x00,0x00,0x01,0x42,0x12,0xf9,0x22,0x00,0x31,0x00,0x00,0x00,0xc0,0x00,0x00,0x00,0x00,0x03,0xfe,0x02,0x71 };
   // Bad no such thing as 1-n for OB/OW:
   Element<VR::OB, VM::VM1_n> a;
-  a.SetArray( array, sizeof(array), true );
+  a.SetArray( array, sizeof(array), false);
   // reinterpret_cast< const Element<VR::UL, VM::VM1>& > ( array );
   //memcpy((void*)&a, array, sizeof(array));
   a.Print( std::cout );
   std::cout << std::endl;
 
   Element<VR::OB, VM::VM1> b;
-  b.SetArray( array, sizeof(array), true );
+  b.SetArray( array, sizeof(array), false);
   // reinterpret_cast< const Element<VR::UL, VM::VM1>& > ( array );
   //memcpy((void*)&a, array, sizeof(array));
   b.Print( std::cout );

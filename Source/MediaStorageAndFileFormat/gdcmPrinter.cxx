@@ -496,14 +496,21 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
 }
 #endif
 
+// TODO / FIXME
+// SIEMENS_GBS_III-16-ACR_NEMA_1.acr is a tough kid: 0009,1131 is supposed to be VR::UL, but
+// there are only two bytes...
 #define StringFilterCase(type) \
   case VR::type: \
     { \
       Element<VR::type,VM::VM1_n> el; \
+      if( !de.IsValueEmpty() ) { \
       el.Set( de.GetValue() ); \
+      if( el.GetLength() ) { \
       os << "" << el.GetValue(); \
       for(unsigned long i = 1; i < el.GetLength(); ++i) os << "\\" << el.GetValue(i); \
-      os << ""; \
+      os << ""; } \
+      else { os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL; } } \
+      else { os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL; } \
     } break
 
 void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const DataSet &ds)
@@ -619,6 +626,7 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
         break;
       case VR::UN:
       case VR::US_SS:
+      case VR::US_SS_OW:
       case VR::SQ:
         os << "TODO";
         break;
@@ -683,10 +691,16 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
       }
     else if( refvr & VR::VRBINARY )
       {
+      const SequenceOfItems * sqi = de.GetSequenceOfItems();
       assert( refvr != VR::INVALID );
       assert( refvr & VR::VRBINARY );
       if( refvr & VR::OB_OW || refvr == VR::SQ )
         {
+        guessvm = VM::VM1;
+        }
+      else if ( refvr == VR::UN && sqi )
+        {
+        // This is a SQ / UN
         guessvm = VM::VM1;
         }
       else if( bv )
@@ -695,7 +709,8 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
         }
       else
         {
-        assert( 0 && "Impossible" );
+        if( de.IsValueEmpty() ) guessvm = VM::VM0;
+        else assert( 0 && "Impossible" );
         }
       }
     else if( refvr == VR::INVALID )
@@ -717,9 +732,18 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
     // Append the name now:
     if( name && *name )
       {
-      os << GDCM_TERMINAL_VT100_BOLD;
-      os << " " << name;
+      if( t.IsPrivate() && (owner == 0 || *owner == 0 ) && t.GetElement() > 0xFF )
+        {
+      os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
+        os << " " << name;
       os << GDCM_TERMINAL_VT100_NORMAL;
+        }
+      else
+        {
+        os << GDCM_TERMINAL_VT100_BOLD;
+        os << " " << name;
+        os << GDCM_TERMINAL_VT100_NORMAL;
+        }
       }
     else
       {
