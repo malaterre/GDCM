@@ -196,12 +196,14 @@ int main(int argc, char *argv[])
   //assert( strcmp(viewer_type, "gdcmviewer"  ) == 0
   //     || strcmp(viewer_type, "gdcmviewer2" ) == 0 );
   
-  if( strcmp(viewer_type.GetName(), "gdcmviewer" ) == 0 )
+  const char gdcmviewer[] = "gdcmviewer";
+  const char gdcmviewer2[] = "gdcmviewer2";
+  if( strncmp(viewer_type.GetName(), gdcmviewer, strlen(gdcmviewer) ) == 0 )
     {
     vtkGDCMImageViewer *viewer = vtkGDCMImageViewer::New();
     ExecuteViewer<vtkGDCMImageViewer>(viewer, filenames);
     }
-  else if( strcmp(viewer_type.GetName(), "gdcmviewer2" ) == 0 )
+  else if( strncmp(viewer_type.GetName(), gdcmviewer2, strlen(gdcmviewer2) ) == 0 )
     {
     vtkImageViewer2 *viewer = vtkImageViewer2::New();
     ExecuteViewer<vtkImageViewer2>(viewer, filenames);
