@@ -4,6 +4,7 @@
 #include "wxVTKRenderWindowInteractor.h"
 #include "vtkImageViewer.h"
 #include "vtkGDCMImageReader.h"
+#include "gdcmDirectory.h" // For GDCM_DATA_ROOT
 
 BEGIN_EVENT_TABLE( wxGDCMFrame, wxGDCMFrameBase )
     EVT_MENU(wxID_OPEN, wxGDCMFrame::OnOpen)
@@ -57,7 +58,7 @@ void wxGDCMFrame::OnOpen(wxCommandEvent& event)
     fn += (const char *)filename.fn_str();
     Reader->SetFileName( fn.c_str() );
     //Reader->Update();
-    imageViewer->SetInputConnection( Reader->GetOutputPort() );
+    imageViewer->SetInput( Reader->GetOutput() );
     imageViewer->Render();
   }
   dialog->Close();

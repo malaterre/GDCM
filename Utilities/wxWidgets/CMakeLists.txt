@@ -26,7 +26,10 @@ ELSE(WIN32)
     # FindGTK.cmake update
     # http://www.cmake.org/Bug/bug.php?op=show&bugid=3582
     FIND_PACKAGE(GTK REQUIRED)
-    INCLUDE_DIRECTORIES(${GTK_INCLUDE_DIR} )
+    INCLUDE_DIRECTORIES(${GTK_INCLUDE_DIR} 
+      #/usr/lib/wx/include/gtk-2.4/
+    )
+    ADD_DEFINITIONS(-D__WXGTK__)
     SET(WXWINDOWS_USE_GL 1) # CMake 2.4.2
     # important on GNU/Linux since we need wxGLCanvas
     # adv is for wxGrid::CreateGrid
@@ -45,7 +48,10 @@ IF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" EQUAL 2.4)
   ENDIF(${CMAKE_CACHE_RELEASE_VERSION} STREQUAL "patch 2")
 ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" EQUAL 2.4)
 
-INCLUDE_DIRECTORIES(${GDCM_SOURCE_DIR}/Utilities/VTK)
+INCLUDE_DIRECTORIES(
+  ${GDCM_SOURCE_DIR}/Source/Common
+  ${GDCM_SOURCE_DIR}/Utilities/VTK
+)
 
 ADD_EXECUTABLE(wxGDCM main.cpp wxGDCMFrame.cpp wxGDCMFrameBase.cpp wxVTKRenderWindowInteractor.cxx)
 TARGET_LINK_LIBRARIES(wxGDCM vtkRendering ${wxWidgets_LIBRARIES} vtkgdcm)
