@@ -470,6 +470,10 @@ const char * const gdcmMD5DataImages[][2] = {
 { "7ceb7886f9fbcb7ae979fdb6f1305414" , "CR-Preamble-NoMeta.dcm" },
 { "d2fab61e0fff8869e448d69951f1084d" , "db318_MR_STN_stimulator_T2_TSE_TRA__20071005161618048_4.dcm" },
 { "2b4d7fb6b039b43145f2766b2339c460" , "0019004_Baseline_IMG1.dcm" },
+{ "f02e48f4b7df2ff4855733febc92e4e6" , "SIEMENS_GBS_III-16-ACR_NEMA_1.acr.ovly.6002.dcm" },
+{ "6a34b606135c4cd1c31511164e2cb235" , "SIEMENS_GBS_III-16-ACR_NEMA_1.acr.ovly.6000.dcm" },
+{ "65f961aca90fb61952d723feec6dec89" , "SIEMENS_GBS_III-16-ACR_NEMA_1.acr.ovly.6006.dcm" },
+{ "fc137690ae436bb44a695fb2f1e49d85" , "SIEMENS_GBS_III-16-ACR_NEMA_1.acr.ovly.6004.dcm" },
 
 
 
