@@ -44,6 +44,7 @@ FIND_PATH(GDCM_DATA_ROOT gdcm-ACR-LibIDO.acr
 
 #-----------------------------------------------------------------------------
 INCLUDE (${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)
+INCLUDE (${CMAKE_ROOT}/Modules/CheckIncludeFiles.cmake)
 # Check if header file exists and add it to the list.
 MACRO(CHECK_INCLUDE_FILE_CONCAT FILE VARIABLE)
   CHECK_INCLUDE_FILES("${UUID_INCLUDES};${FILE}" ${VARIABLE})
