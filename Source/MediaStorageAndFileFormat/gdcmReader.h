@@ -55,6 +55,9 @@ public:
   virtual bool Read(); // Execute()
   void SetFileName(const char *filename) {
 	  Stream.open(filename, std::ios::binary);
+#ifndef NDEBUG
+    DebugFileName = filename;
+#endif
   }
 
   const File &GetFile() const { return *F; }
@@ -74,6 +77,9 @@ protected:
 private:
   TransferSyntax GuessTransferSyntax();
   std::ifstream Stream;
+#ifndef NDEBUG
+  std::string DebugFileName;
+#endif
 };
 
 } // end namespace gdcm

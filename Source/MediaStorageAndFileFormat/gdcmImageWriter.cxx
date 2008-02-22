@@ -63,29 +63,40 @@ bool ImageWriter::Write()
     ds.Replace( numberofframes.GetAsDataElement() );
     }
 
+  PixelFormat pf = PixelData.GetPixelFormat();
+  // FIXME HACK !
+  bool buggyacr = false;
+  if( pf.GetBitsAllocated() == 24 )
+    {
+    pf.SetBitsAllocated( 8 );
+    pf.SetBitsStored( 8 );
+    pf.SetHighBit( 7 );
+    pf.SetSamplesPerPixel( 3 );
+    buggyacr = true;
+    }
   // Pixel Format :
   // (0028,0100) US 8                                        #   2, 1 BitsAllocated
   // (0028,0101) US 8                                        #   2, 1 BitsStored
   // (0028,0102) US 7                                        #   2, 1 HighBit
   // (0028,0103) US 0                                        #   2, 1 PixelRepresentation
   Attribute<0x0028, 0x0100> bitsallocated;
-  bitsallocated.SetValue( PixelData.GetPixelFormat().GetBitsAllocated() );
+  bitsallocated.SetValue( pf.GetBitsAllocated() );
   ds.Replace( bitsallocated.GetAsDataElement() );
 
   Attribute<0x0028, 0x0101> bitsstored;
-  bitsstored.SetValue( PixelData.GetPixelFormat().GetBitsStored() );
+  bitsstored.SetValue( pf.GetBitsStored() );
   ds.Replace( bitsstored.GetAsDataElement() );
 
   Attribute<0x0028, 0x0102> highbit;
-  highbit.SetValue( PixelData.GetPixelFormat().GetHighBit() );
+  highbit.SetValue( pf.GetHighBit() );
   ds.Replace( highbit.GetAsDataElement() );
 
   Attribute<0x0028, 0x0103> pixelrepresentation;
-  pixelrepresentation.SetValue( PixelData.GetPixelFormat().GetPixelRepresentation() );
+  pixelrepresentation.SetValue( pf.GetPixelRepresentation() );
   ds.Replace( pixelrepresentation.GetAsDataElement() );
 
   Attribute<0x0028, 0x0002> samplesperpixel;
-  samplesperpixel.SetValue( PixelData.GetPixelFormat().GetSamplesPerPixel() );
+  samplesperpixel.SetValue( pf.GetSamplesPerPixel() );
   ds.Replace( samplesperpixel.GetAsDataElement() );
 
   // Pixel Data
@@ -114,9 +125,13 @@ bool ImageWriter::Write()
   ds.Replace( de );
   // PhotometricInterpretation
   // const Tag tphotometricinterpretation(0x0028, 0x0004);
-  const PhotometricInterpretation &pi = PixelData.GetPhotometricInterpretation();
+  PhotometricInterpretation pi = PixelData.GetPhotometricInterpretation();
   if( !ds.FindDataElement( Tag(0x0028, 0x0004) ) )
     {
+    if( buggyacr )
+      {
+      pi = PhotometricInterpretation::RGB;
+      }
     const char *pistr = PhotometricInterpretation::GetPIString(pi);
     DataElement de( Tag(0x0028, 0x0004 ) );
     de.SetByteValue( pistr, strlen(pistr) );

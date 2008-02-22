@@ -40,7 +40,7 @@ namespace gdcm
     while( !is.eof() && de.Read<TDE,TSwap>(is) )
       {
       //std::cerr << "DEBUG:" << de << std::endl;
-      assert( de.GetTag() != Tag(0,0) );
+      //assert( de.GetTag() != Tag(0,0) );
       DES.insert( de );
       //if ( de.GetTag() == Tag(0x0020,0x000e) ) break;
       }
@@ -53,7 +53,7 @@ namespace gdcm
     DataElement de;
     while( !is.eof() && de.Read<TDE,TSwap>(is) )
       {
-      assert( de.GetTag() != Tag(0,0) );
+      //assert( de.GetTag() != Tag(0,0) );
       DES.insert( de );
       // tag was found, we can exit the loop:
       if ( de.GetTag() == t ) break;

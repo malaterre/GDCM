@@ -22,7 +22,6 @@ int TestPersonName(int, char *[])
   typedef gdcm::PersonName PN;
 
 	PN pn0;
-	std::cout << "NumComp:" << pn0.GetNumberOfComponents() << std::endl;
   pn0.SetComponents();
 	std::cout << "NumComp:" << pn0.GetNumberOfComponents() << std::endl;
 	pn0.Print( std::cout );
