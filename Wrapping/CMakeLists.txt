@@ -1,1 +1,4 @@
-SUBDIRS(Python Java)
+SUBDIRS(
+  Python 
+  #Java
+)
