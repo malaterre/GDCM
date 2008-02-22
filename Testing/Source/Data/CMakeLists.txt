@@ -69,6 +69,12 @@ SET(BLACK_LIST_READER
   SIEMENS_MAGNETOM-12-MONO2-VRUN.dcm
   Compress_16bit_noPVRG.dcm
   db318_MR_STN_stimulator_T2_TSE_TRA__20071005161618048_4.dcm
+
+# RGB is skrewed ...
+  LEADTOOLS_FLOWERS-8-PAL-Uncompressed.dcm
+  rle16sti.dcm
+  OT-PAL-8-face.dcm
+  US-PAL-8-10x-echo.dcm
 )
 
 SET(GDCM_DATA_FILENAMES)

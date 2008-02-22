@@ -64,15 +64,20 @@ bool ImageWriter::Write()
     }
 
   PixelFormat pf = PixelData.GetPixelFormat();
+  PhotometricInterpretation pi = PixelData.GetPhotometricInterpretation();
   // FIXME HACK !
-  bool buggyacr = false;
+  if( pi == PhotometricInterpretation::PALETTE_COLOR )
+    {
+    pi = PhotometricInterpretation::RGB;
+    pf.SetSamplesPerPixel( 3 );
+    }
   if( pf.GetBitsAllocated() == 24 )
     {
+    pi = PhotometricInterpretation::RGB;
     pf.SetBitsAllocated( 8 );
     pf.SetBitsStored( 8 );
     pf.SetHighBit( 7 );
     pf.SetSamplesPerPixel( 3 );
-    buggyacr = true;
     }
   // Pixel Format :
   // (0028,0100) US 8                                        #   2, 1 BitsAllocated
@@ -125,13 +130,8 @@ bool ImageWriter::Write()
   ds.Replace( de );
   // PhotometricInterpretation
   // const Tag tphotometricinterpretation(0x0028, 0x0004);
-  PhotometricInterpretation pi = PixelData.GetPhotometricInterpretation();
   if( !ds.FindDataElement( Tag(0x0028, 0x0004) ) )
     {
-    if( buggyacr )
-      {
-      pi = PhotometricInterpretation::RGB;
-      }
     const char *pistr = PhotometricInterpretation::GetPIString(pi);
     DataElement de( Tag(0x0028, 0x0004 ) );
     de.SetByteValue( pistr, strlen(pistr) );
