@@ -17,18 +17,37 @@
 namespace gdcm
 {
 
-#include "gdcmDataImages.cxx"
+#include "gdcmDataFileNames.cxx"
 #include "gdcmMD5DataImages.cxx"
 
 const char * const *Testing::GetFileNames()
 {
-  return gdcmDataImages;
+  return gdcmDataFileNames;
 }
 
 
 Testing::MD5DataImagesType Testing::GetMD5DataImages()
 {
   return gdcmMD5DataImages;
+}
+
+void Testing::Print(std::ostream &os)
+{
+  os << "DataFileNames:\n";
+  const char * const * filenames = gdcmDataFileNames;
+  while( *filenames )
+    {
+    os << *filenames << "\n";
+    ++filenames;
+    }
+
+  os << "MD5DataImages:\n";
+  MD5DataImagesType md5s = gdcmMD5DataImages;
+  while( (*md5s)[0] )
+    {
+    os << (*md5s)[0] << " -> " << (*md5s)[1] << "\n";
+    ++md5s;
+    }
 }
 
 } // end of namespace gdcm

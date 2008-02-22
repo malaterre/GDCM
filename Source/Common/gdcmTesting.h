@@ -17,6 +17,8 @@
 
 #include "gdcmTypes.h"
 
+#include <iostream>
+
 namespace gdcm
 {
 /*
@@ -29,7 +31,7 @@ public :
   Testing() {};
   ~Testing() {};
 
-  //void Print(std::ostream &_os = std::cout);
+  void Print(std::ostream &_os = std::cout);
 
   static const char * const *GetFileNames();
 

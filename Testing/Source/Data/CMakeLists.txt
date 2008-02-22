@@ -3,7 +3,7 @@
 # We need to test the reading of all dicom images in the gdcmData directory
 # First parse this directory and extract all images
 
-FILE(GLOB GDCM_DATA_IMAGES_GLOB
+FILE(GLOB GDCM_DATA_FILENAMES_GLOB
   "${GDCM_DATA_ROOT}/*.acr"
   "${GDCM_DATA_ROOT}/*.dcm"
   # Those files do not have any extension, special regex:
@@ -69,15 +69,15 @@ SET(BLACK_LIST_READER
   SIEMENS_MAGNETOM-12-MONO2-VRUN.dcm
 )
 
-SET(GDCM_DATA_IMAGES)
-SET(GDCM_BLACK_LIST_READER_DATA_IMAGES)
-FOREACH(filename ${GDCM_DATA_IMAGES_GLOB})
+SET(GDCM_DATA_FILENAMES)
+SET(GDCM_BLACK_LIST_READER_DATA_FILENAMES)
+FOREACH(filename ${GDCM_DATA_FILENAMES_GLOB})
   GET_FILENAME_COMPONENT(filename_name ${filename} NAME)
   #MESSAGE( ${filename_name} )
 
   STRING(REGEX MATCH ${filename_name} bad_dicom ${BLACK_LIST_READER})
   IF(NOT bad_dicom)
-    SET(GDCM_DATA_IMAGES "${GDCM_DATA_IMAGES}\n\"${filename}\",")
+    SET(GDCM_DATA_FILENAMES "${GDCM_DATA_FILENAMES}\n\"${filename}\",")
     #SET(GDCM_TEST_DCMTK 1)
     IF(GDCM_TEST_DCMTK)
       IF(DCMTK_DCMDUMP)
@@ -88,14 +88,14 @@ FOREACH(filename ${GDCM_DATA_IMAGES_GLOB})
       ENDIF(DCMTK_DCMDUMP)
     ENDIF(GDCM_TEST_DCMTK)
   ELSE(NOT bad_dicom)
-    SET(GDCM_BLACK_LIST_READER_DATA_IMAGES "${GDCM_BLACK_LIST_READER_DATA_IMAGES}\n\"${filename}\",")
+    SET(GDCM_BLACK_LIST_READER_DATA_FILENAMES "${GDCM_BLACK_LIST_READER_DATA_FILENAMES}\n\"${filename}\",")
   ENDIF(NOT bad_dicom)
 ENDFOREACH(filename)
 
 
-# Populate GDCM_DATA_IMAGES:
+# Populate GDCM_DATA_FILENAMES:
 CONFIGURE_FILE(
-  "${CMAKE_CURRENT_SOURCE_DIR}/gdcmDataImages.cxx.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/gdcmDataImages.cxx"
+  "${CMAKE_CURRENT_SOURCE_DIR}/gdcmDataFileNames.cxx.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/gdcmDataFileNames.cxx"
   )
 

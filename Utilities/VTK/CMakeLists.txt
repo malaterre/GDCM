@@ -9,11 +9,14 @@ SET(vtkgdcm_SRCS
   vtkGDCMImageWriter.cxx
   )
 
-IF(LINUX)
+# Need pthread for the following class:
+CHECK_INCLUDE_FILE("pthread.h"      CMAKE_HAVE_PTHREAD_H)
+
+IF(CMAKE_HAVE_PTHREAD_H)
   SET(vtkgdcm_SRCS ${vtkgdcm_SRCS}
   vtkGDCMThreadedImageReader.cxx
   )
-ENDIF(LINUX)
+ENDIF(CMAKE_HAVE_PTHREAD_H)
 
 INCLUDE(${VTK_USE_FILE})
 INCLUDE_DIRECTORIES(
