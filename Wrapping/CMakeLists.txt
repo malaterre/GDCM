@@ -1,1 +1,1 @@
-SUBDIRS(Python)
+SUBDIRS(Python Java)
