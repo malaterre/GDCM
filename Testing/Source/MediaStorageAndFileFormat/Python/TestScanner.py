@@ -16,45 +16,47 @@
 import gdcm
 import os,sys
 
+def TestScan(filename, recursive = False):
+  d = gdcm.Directory()
+  nfiles = d.Load( filename, recursive )
+  print d
+  print "done retrieving file list"
+  
+  s = gdcm.Scanner()
+  t1 = gdcm.Tag(0x0020,0x000d)
+  t2 = gdcm.Tag(0x0020,0x000e)
+  s.AddTag( t1 )
+  s.AddTag( t2 )
+  b = s.Scan( d.GetFilenames() )
+  if not b:
+    print "Scanner failed";
+    sys.exit(1)
+  #print s
+  values  = s.GetValues()
+  print values
+  mappings = s.GetMappings()
+  print mappings
+  print dir(mappings)
+  
+  mapping = s.GetMapping(t1)
+  print mapping
+  print dir(mapping)
+  
+  for f in d.GetFilenames():
+    #print t2
+    print "%s -> %s"%(f, s.GetValue(t2, f))
+  
+  #ex = gdcm.FilenameToValueExtractor(mapping)
+  #ex.GetValue( "/tmp/Perfusion/Perfusion_205_0087" )
+  #print ex.GetValue( "/tmp/Perfusion/Perfusion_205_1809" )
+
 try:
   filename = os.sys.argv[1]
+  TestScan( filename, True )
 except:
-  # failure
-  print "Need a filename"
-  sys.exit(1)
-
-d = gdcm.Directory()
-nfiles = d.Load( filename )
-print d
-print "done retrieving file list"
-
-s = gdcm.Scanner()
-t1 = gdcm.Tag(0x0020,0x000d)
-t2 = gdcm.Tag(0x0020,0x000e)
-s.AddTag( t1 )
-s.AddTag( t2 )
-b = s.Scan( d.GetFilenames() )
-if not b:
-  print "Scanner failed";
-  sys.exit(1)
-#print s
-values  = s.GetValues()
-print values
-mappings = s.GetMappings()
-print mappings
-print dir(mappings)
-
-mapping = s.GetMapping(t1)
-print mapping
-print dir(mapping)
-
-for f in d.GetFilenames():
-  #print t2
-  print "%s -> %s"%(f, s.GetValue(t2, f))
-
-#ex = gdcm.FilenameToValueExtractor(mapping)
-#ex.GetValue( "/tmp/Perfusion/Perfusion_205_0087" )
-#print ex.GetValue( "/tmp/Perfusion/Perfusion_205_1809" )
+  t = gdcm.Testing()
+  filename = t.GetDataRoot()
+  TestScan( filename, False )
 
 sys.exit(0)
 

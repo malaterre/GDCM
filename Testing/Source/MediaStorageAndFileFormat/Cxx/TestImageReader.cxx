@@ -18,27 +18,7 @@
 #include "gdcmFilename.h"
 #include "gdcmByteSwap.h"
 #include "gdcmTrace.h"
-
 #include "gdcmTesting.h"
-
-const char *GetMD5Ref(const char *filepath)
-{
-  int i = 0;
-  gdcm::Testing::MD5DataImagesType md5s = gdcm::Testing::GetMD5DataImages();
-  const char *p = md5s[i][1];
-  gdcm::Filename comp(filepath);
-  const char *filename = comp.GetName();
-  while( p != 0 )
-    {
-    if( strcmp( filename, p ) == 0 )
-      {
-      break;
-      }
-    ++i;
-    p = md5s[i][1];
-    }
-  return md5s[i][0];
-}
 
 int TestImageRead(const char* filename)
 {
@@ -74,7 +54,8 @@ int TestImageRead(const char* filename)
         (unsigned short*)buffer, gdcm::SwapCode::LittleEndian, len/2);
       }
 #endif
-    const char *ref = GetMD5Ref(filename);
+    const char *ref = gdcm::Testing::GetMD5FromFile(filename);
+
     char digest[33];
     gdcm::System::ComputeMD5(buffer, len, digest);
     if( !ref )

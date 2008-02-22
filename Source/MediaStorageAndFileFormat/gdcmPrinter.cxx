@@ -73,7 +73,7 @@ void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictE
   VR lvr = vr;
 
   // FIXME:
-  if( xde.IsValueEmpty() // 0xfffe item thingy
+  if( xde.IsEmpty() // 0xfffe item thingy
     || entry.GetVR() == VR::INVALID ) // private element with no known VR
     {
     os << xde; 
@@ -503,7 +503,7 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
   case VR::type: \
     { \
       Element<VR::type,VM::VM1_n> el; \
-      if( !de.IsValueEmpty() ) { \
+      if( !de.IsEmpty() ) { \
       el.Set( de.GetValue() ); \
       if( el.GetLength() ) { \
       os << "" << el.GetValue(); \
@@ -709,7 +709,7 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
         }
       else
         {
-        if( de.IsValueEmpty() ) guessvm = VM::VM0;
+        if( de.IsEmpty() ) guessvm = VM::VM0;
         else assert( 0 && "Impossible" );
         }
       }

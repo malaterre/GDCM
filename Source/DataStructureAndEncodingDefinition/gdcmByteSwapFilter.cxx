@@ -44,8 +44,10 @@ bool ByteSwapFilter::ByteSwap()
     const DataElement& de = *it; // FIXME !!!
     VR const & vr = de.GetVR();
     assert( vr & VR::VRASCII || vr & VR::VRBINARY );
-    const Value* v = &de.GetValue();
-    if( const ByteValue *bv = dynamic_cast<const ByteValue*>(v) )
+    if( de.IsEmpty() )
+      {
+      }
+    else if( const ByteValue *bv = de.GetByteValue() )
       {
       // ASCII do not need byte swap
       if( vr & VR::VRBINARY /*&& de.GetTag().IsPrivate()*/ )
@@ -99,7 +101,7 @@ bool ByteSwapFilter::ByteSwap()
           }
         }
       }
-    else if( const SequenceOfItems *si = dynamic_cast<const SequenceOfItems*>(v) )
+    else if( const SequenceOfItems *si = de.GetSequenceOfItems() )
       {
       //if( de.GetTag().IsPrivate() )
         {
@@ -114,7 +116,7 @@ bool ByteSwapFilter::ByteSwap()
           }
         }
       }
-    else if( const SequenceOfFragments *sf = dynamic_cast<const SequenceOfFragments*>(v) )
+    else if( const SequenceOfFragments *sf = de.GetSequenceOfFragments() )
       {
           assert( 0 && "Should not happen" );
       }

@@ -74,4 +74,5 @@ diction.pfl:Table Zero Time,0009,SIEMENS CM VA0  CMS,27,TM,1
 -----------------------------------------------------------------------
 Make File Meta Information configurable from CMake
 
-
+-----------------------------------------------------------------------
+Add progress to gdcmscanner

@@ -19,7 +19,7 @@
 #include "gdcmDirectory.h"
 #include "gdcmImageReader.h"
 
-#include "gdcmDataImages.h" // generated file
+#include "gdcmTesting.h"
 
 #include "vtkPNGWriter.h"
 #include "vtkStringArray.h"
@@ -265,7 +265,8 @@ int TestvtkGDCMThreadedImageReader(int argc, char *argv[])
   // else
   int r = 0, i = 0;
   const char *filename;
-  while( (filename = gdcmDataImages[i]) )
+  const char * const *filenames = gdcm::Testing::GetFileNames();
+  while( (filename = filenames[i]) )
     {
     r += TestvtkGDCMThreadedImageRead<vtkGDCMThreadedImageReader>( filename );
     ++i;

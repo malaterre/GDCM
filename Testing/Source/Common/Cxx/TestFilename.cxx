@@ -14,6 +14,7 @@
 =========================================================================*/
 #include "gdcmFilename.h"
 #include "gdcmSystem.h"
+#include "gdcmTesting.h"
 
 #include <iostream>
 
@@ -48,13 +49,14 @@ int TestFilename(int argc, char *argv[])
 //    return 1;
 //    }
   
-  const char current[] = GDCM_DATA_ROOT "/test.acr";
-  if( !gdcm::System::FileExists( current ) )
+  std::string dataroot = gdcm::Testing::GetDataRoot();
+  std::string current = dataroot +  "/test.acr";
+  if( !gdcm::System::FileExists( current.c_str() ) )
     {
     return 1;
     }
   std::cerr << "Current:" << current << std::endl;
-  gdcm::Filename fn(current);
+  gdcm::Filename fn(current.c_str());
   std::cerr << fn.GetPath() << std::endl;
   std::string current2 = fn.GetPath();
   current2 += "/./";

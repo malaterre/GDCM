@@ -12,7 +12,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmConfigure.h" // for GDCM_DATA_ROOT
 #include "vtkGDCMImageReader.h"
 
 #include "vtkPNGWriter.h"

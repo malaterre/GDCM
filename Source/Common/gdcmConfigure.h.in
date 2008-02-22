@@ -30,9 +30,6 @@
 /* Hard code the path to the public dictionary */
 #define PUB_DICT_PATH "@GDCM_PUB_DICT_PATH@"
 
-/* Hardcode the path to GDCM_DATA_ROOT */
-#define GDCM_DATA_ROOT "@GDCM_DATA_ROOT@"
-
 /* Usefull in particular for loadshared where the full path
  * to the lib is needed */
 #define GDCM_SOURCE_DIR "@GDCM_SOURCE_DIR@"

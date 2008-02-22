@@ -53,6 +53,7 @@ namespace gdcm
  */
 
 class SequenceOfItems;
+class SequenceOfFragments;
 class GDCM_EXPORT DataElement
 {
 public:
@@ -81,7 +82,7 @@ public:
     //assert( ValueField == 0 );
     ValueField = &vl;
   }
-  bool IsValueEmpty() const { return ValueField == 0; }
+  bool IsEmpty() const { return ValueField == 0; }
 
   // Helper:
 //  void SetByteValue(ByteValue const &bv )
@@ -104,6 +105,7 @@ public:
   }
   // WARNING: You need to check for NULL return value
   const SequenceOfItems* GetSequenceOfItems() const;
+  const SequenceOfFragments* GetSequenceOfFragments() const;
 
   // Helper:
   bool IsUndefinedLength() const {

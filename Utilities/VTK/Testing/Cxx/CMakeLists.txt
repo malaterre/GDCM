@@ -3,14 +3,14 @@
 SET(VTK_GDCM_TEST_SRCS
   TestvtkGDCMImageReader
   #TestvtkGDCMImageActor
-    TestvtkGDCMImageWriter
-  )
-IF(LINUX)
-SET(VTK_GDCM_TEST_SRCS
-${VTK_GDCM_TEST_SRCS}
-    TestvtkGDCMThreadedImageReader
+  TestvtkGDCMImageWriter
 )
-ENDIF(LINUX)
+IF(CMAKE_HAVE_PTHREAD_H)
+  SET(VTK_GDCM_TEST_SRCS
+    ${VTK_GDCM_TEST_SRCS}
+    TestvtkGDCMThreadedImageReader
+  )
+ENDIF(CMAKE_HAVE_PTHREAD_H)
 
 # Add the include paths
 INCLUDE_DIRECTORIES(

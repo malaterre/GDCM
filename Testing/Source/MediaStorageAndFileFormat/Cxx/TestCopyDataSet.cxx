@@ -15,12 +15,14 @@
 #include "gdcmReader.h"
 #include "gdcmDataSet.h"
 #include "gdcmWriter.h"
+#include "gdcmTesting.h"
 
 int TestCopyDataSet(int, char *[])
 {
-  const char filename[] = GDCM_DATA_ROOT "/test.acr";
+  std::string dataroot = gdcm::Testing::GetDataRoot();
+  std::string filename = dataroot + "/test.acr";
   gdcm::Reader reader;
-  reader.SetFileName( filename );
+  reader.SetFileName( filename.c_str() );
   if ( !reader.Read() )
     {
     return 1;

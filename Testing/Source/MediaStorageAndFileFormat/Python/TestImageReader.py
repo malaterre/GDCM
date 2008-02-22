@@ -16,19 +16,26 @@
 import gdcm
 import os,sys
 
+def TestImageRead(filename, verbose = False):
+  r = gdcm.ImageReader()
+  r.SetFileName( filename )
+  success = r.Read()
+  if verbose: print r.GetImage()
+  return success
+
+sucess = 0
 try:
   filename = os.sys.argv[1]
+  sucess += TestImageRead( filename, True )
 except:
-  # failure
-  print "Need a filename"
-  sys.exit(1)
-
-r = gdcm.ImageReader()
-r.SetFileName( filename )
-sucess = r.Read()
-
-print r.GetImage()
+  # loop over all files:
+  t = gdcm.Testing()
+  nfiles = t.GetNumberOfFileNames()
+  for i in range(0,nfiles):
+    #print t.GetFileName(i)
+    filename = t.GetFileName(i)
+    sucess += TestImageRead( filename )
 
 # Test succeed ?
-sys.exit(sucess != 1)
+sys.exit(sucess == 0)
 

@@ -16,13 +16,6 @@
 import gdcm
 import os,sys
 
-try:
-  filename = os.sys.argv[1]
-except:
-  # failure
-  print "Need a filename"
-  sys.exit(1)
-
 uid = gdcm.UIDGenerator()
 for i in range(0,100):
   print uid.Generate()

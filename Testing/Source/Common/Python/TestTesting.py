@@ -16,27 +16,16 @@
 import gdcm
 import os,sys
 
-def TestRead(filename, verbose = False):
-  r = gdcm.Reader()
-  r.SetFileName( filename )
-  sucess = r.Read()
-  #if verbose: print r.GetFile()
-  if verbose: print r.GetFile().GetDataSet()
-  return sucess
+t = gdcm.Testing()
+nfiles = t.GetNumberOfFileNames()
+print nfiles
+for i in range(0,nfiles):
+  print t.GetFileName(i)
 
-sucess = 0
-try:
-  filename = os.sys.argv[1]
-  sucess += TestRead( filename, True )
-except:
-  # loop over all files:
-  t = gdcm.Testing()
-  nfiles = t.GetNumberOfFileNames()
-  for i in range(0,nfiles):
-    filename = t.GetFileName(i)
-    sucess += TestRead( filename )
+print t.GetFileName(10000)
 
+print t.GetDataRoot()
 
 # Test succeed ?
-sys.exit(sucess == 0)
+#sys.exit(sucess != 1)
 

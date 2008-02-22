@@ -16,16 +16,18 @@
 
 #include "gdcmAttribute.h"
 #include "gdcmElement.h"
+#include "gdcmTesting.h"
 
 // D_CLUNIE_CT1_J2KI.dcm
 //
 int TestReader2(int argc, char *argv[])
 {
   //const char *filename = argv[1];
-  const char filename[] = GDCM_DATA_ROOT "/012345.002.050.dcm";
+  std::string dataroot = gdcm::Testing::GetDataRoot();
+  std::string filename = dataroot + "/012345.002.050.dcm";
 
   gdcm::Reader reader;
-  reader.SetFileName( filename );
+  reader.SetFileName( filename.c_str() );
   if ( !reader.Read() )
     {
     std::cerr << "Failed to read: " << filename << std::endl;

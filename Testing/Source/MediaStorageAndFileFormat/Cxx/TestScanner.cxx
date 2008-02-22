@@ -14,6 +14,7 @@
 =========================================================================*/
 #include "gdcmScanner.h"
 #include "gdcmDirectory.h"
+#include "gdcmTesting.h"
 
 // dcmdump /path/to/image/*.dcm 2>&/dev/null| grep 0020 | grep "000e\|000d" | sort | uniq
 //
@@ -21,7 +22,7 @@
 
 int TestScanner(int argc, char *argv[])
 {
-  const char *directory = GDCM_DATA_ROOT;
+  const char *directory = gdcm::Testing::GetDataRoot();
   if( argc == 2 )
     {
     directory = argv[1];

@@ -102,6 +102,13 @@ std::istream &CP246ExplicitDataElement::Read(std::istream &is)
       }
     }
 
+  if( ValueLengthField == 0 )
+    {
+    // Simple fast path
+    ValueField = 0;
+    return is;
+    }
+
   //std::cerr << "exp cur tag=" << TagField << " VR=" << VRField << " VL=" << ValueLengthField << std::endl;
   // Read the Value
   //assert( ValueField == 0 );

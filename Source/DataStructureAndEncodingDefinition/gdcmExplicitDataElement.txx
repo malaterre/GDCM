@@ -41,6 +41,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     return is;
     }
   assert( TagField != Tag(0xfffe,0xe0dd) );
+  //assert( TagField != Tag(0xfeff,0xdde0) );
   const Tag itemDelItem(0xfffe,0xe00d);
   if( TagField == itemDelItem )
     {
@@ -120,6 +121,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       }
 #endif
     }
+  //std::cerr << "exp cur tag=" << TagField << " VR=" << VRField << " VL=" << ValueLengthField << std::endl;
   // 
   // I don't like the following 3 lines, what if 0000,0000 was indeed -wrongly- sent, we should be able to continue
   // chances is that 99% of times there is now way we can reach here, so safely throw an exception
@@ -130,7 +132,13 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     throw pe;
     }
 
-  //std::cerr << "exp cur tag=" << TagField << " VR=" << VRField << " VL=" << ValueLengthField << std::endl;
+  if( ValueLengthField == 0 )
+    {
+    // Simple fast path
+    ValueField = 0;
+    return is;
+    }
+
   // Read the Value
   //assert( ValueField == 0 );
   if( VRField == VR::SQ )

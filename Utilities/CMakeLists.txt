@@ -1,6 +1,6 @@
 # Wrapping and stuff
 
-SUBDIRS(Wrapping)
+#SUBDIRS(Wrapping)
 # Do jpeg (8,12, 16 lossly lossless). From ijg
 SET(JPEG_NAMESPACE "GDCMJPEG")
 SET(JPEG_INSTALL_NO_LIBRARIES ${GDCM_INSTALL_NO_LIBRARIES})

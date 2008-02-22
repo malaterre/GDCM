@@ -12,37 +12,17 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmDirectory.h"
 #include "gdcmTesting.h"
 
-int TestOneDirectory(const char *path, bool recursive = false )
+int TestTesting(int argc, char *argv[])
 {
-  gdcm::Directory d;
-  d.Load( path, recursive );
-  d.Print( std::cout );
+  gdcm::Testing testing;
+  testing.Print( std::cout );
+
+  const char *f = gdcm::Testing::GetFileName( 100000 );
+  if( f ) return 1;
+
+  std::cout << "Num:" << gdcm::Testing::GetNumberOfFileNames() << std::endl;
+
   return 0;
 }
-
-int TestDirectory(int argc, char *argv[])
-{
-  int res = 0;
-  if( argc > 1 )
-    {
-    bool recursive = false;
-    if ( argc > 2 )
-      {
-      recursive = atoi(argv[2]);
-      }
-    res += TestOneDirectory( argv[1], recursive);
-    }
-  else
-    {
-    const char *path = gdcm::Testing::GetDataRoot();
-    res += TestOneDirectory( path );
-    }
-
-  res += TestOneDirectory( "" );
-
-  return res;
-}
-

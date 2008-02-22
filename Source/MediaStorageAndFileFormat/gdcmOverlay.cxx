@@ -139,8 +139,8 @@ void Overlay::Update(const DataElement & de)
 
   assert( de.GetTag().IsPublic() );
   const ByteValue* bv = de.GetByteValue();
-  assert( bv );
-  if( !bv->GetLength() ) return; // Discard any empty element (will default to another value)
+  if( !bv ) return; // Discard any empty element (will default to another value)
+  assert( bv->GetPointer() && bv->GetLength() );
   std::string s( bv->GetPointer(), bv->GetLength() );
   // What if a \0 can be found before the end of string...
   //assert( strlen( s.c_str() ) == s.size() );

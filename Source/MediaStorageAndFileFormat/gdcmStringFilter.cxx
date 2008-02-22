@@ -38,7 +38,7 @@ void StringFilter::SetDicts(const Dicts &dicts)
   case VR::type: \
     { \
       Element<VR::type,VM::VM1_n> el; \
-      if( !de.IsValueEmpty() ) { \
+      if( !de.IsEmpty() ) { \
       el.Set( de.GetValue() ); \
       if( el.GetLength() ) { \
       os << el.GetValue(); \

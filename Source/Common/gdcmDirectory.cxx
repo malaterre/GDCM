@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmDirectory.h"
+#include "gdcmTrace.h"
 
 #include <iterator>
 #include <assert.h>
@@ -96,6 +97,8 @@ unsigned int Directory::Explore(FilenameType const &name, bool recursive)
   DIR* dir = opendir(dirName.c_str());
   if (!dir)
     {
+    const char *str = strerror(errno);
+    gdcmErrorMacro( "Error was: " << str << " when opening directory: " << dirName );
     return 0;
     }
 
@@ -113,9 +116,9 @@ unsigned int Directory::Explore(FilenameType const &name, bool recursive)
     fileName = dirName + d->d_name;
     if( stat(fileName.c_str(), &buf) != 0 )
       {
-      //const char *str = strerror(errno);
-      //gdcmErrorMacro( str );
-      abort();
+      const char *str = strerror(errno);
+      gdcmErrorMacro( "Last Error was: " << str << " for file: " << fileName );
+      break;
       }
     if ( S_ISREG(buf.st_mode) )    //is it a regular file?
       {
@@ -136,15 +139,14 @@ unsigned int Directory::Explore(FilenameType const &name, bool recursive)
       }
     else
       {
-      std::cerr << "Unexpected error" << std::endl;
-      return 0;
+      gdcmErrorMacro( "Unexpected type for file: " << fileName );
+      break;
       }
     }
   if( closedir(dir) != 0 )
     {
-    //const char *str = strerror(errno);
-    //gdcmErrorMacro( str );
-    abort();
+    const char *str = strerror(errno);
+    gdcmErrorMacro( "Last error was: " << str << " when closing directory: " << fileName );
     }
 #endif
 

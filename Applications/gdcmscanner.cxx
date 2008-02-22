@@ -26,6 +26,7 @@
  */
 
 #include "gdcmScanner.h"
+#include "gdcmTrace.h"
 
 #include <string>
 #include <iostream>
@@ -141,6 +142,7 @@ int main(int argc, char *argv[])
   std::copy(tags.begin(), tags.end(), 
     std::ostream_iterator<gdcm::Tag>( std::cout, "\n"));
   //std::cout << std::endl;
+  gdcm::Trace::WarningOff();
 
   gdcm::Directory d;
   unsigned int nfiles = d.Load( dirname.c_str(), recursive );

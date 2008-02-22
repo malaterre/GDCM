@@ -70,6 +70,9 @@ unsigned int VM::GetLength() const
   case VM::VM2:
     len = VMToLength<VM::VM2>::Length;
     break;
+  case VM::VM16:
+    len = VMToLength<VM::VM16>::Length;
+    break;
   default:
     len = 0;
     abort();
@@ -285,7 +288,10 @@ bool VM::Compatible(VM const &vm) const
     r = vm.VMField >= VM::VM1;
     break;
   case VM2_2n:
-    r = vm.VMField >= VM::VM2 && !(vm.GetLength() % 2);
+      {
+      if( vm == VM1_n ) r  = true; // FIXME
+      else r = vm.VMField >= VM::VM2 && !(vm.GetLength() % 2);
+      }
     break;
   case VM2_n:
     r = vm.VMField >= VM::VM2;
