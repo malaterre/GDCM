@@ -66,6 +66,66 @@ int TestImageWrite(const char* filename)
     }
   std::cout << "success: " << outfilename << std::endl;
 
+  // Let's read that file back in !
+  gdcm::ImageReader reader2;
+
+  reader2.SetFileName( outfilename.c_str() );
+  if ( reader2.Read() )
+    {
+    int res = 0;
+    const gdcm::Image &img = reader2.GetImage();
+    //std::cerr << "Success to read image from file: " << filename << std::endl;
+    unsigned long len = img.GetBufferLength();
+    if ( img.GetPhotometricInterpretation() ==
+      gdcm::PhotometricInterpretation::PALETTE_COLOR )
+      {
+      len *= 3;
+      }
+    char* buffer = new char[len];
+    img.GetBuffer(buffer);
+    // On big Endian system we have byteswapped the buffer (duh!)
+    // Since the md5sum is byte based there is now way it would detect
+    // that the file is written in big endian word, so comparing against
+    // a md5sum computed on LittleEndian would fail. Thus we need to
+    // byteswap (again!) here:
+#ifdef GDCM_WORDS_BIGENDIAN
+    if( img.GetPixelType().GetBitsAllocated() == 16 )
+      {
+      assert( !(len % 2) );
+      assert( img.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME1
+        || img.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME2 );
+      gdcm::ByteSwap<unsigned short>::SwapRangeFromSwapCodeIntoSystem(
+        (unsigned short*)buffer, gdcm::SwapCode::LittleEndian, len/2);
+      }
+#endif
+    // reuse the filename, since outfilename is simply the new representation of the old filename
+    const char *ref = gdcm::Testing::GetMD5FromFile(filename);
+
+    char digest[33];
+    gdcm::System::ComputeMD5(buffer, len, digest);
+    if( !ref )
+      {
+      // new regression image needs a md5 sum
+      std::cout << "Missing md5 " << digest << " for: " << outfilename <<  std::endl;
+      //abort();
+      res = 1;
+      }
+    else if( strcmp(digest, ref) )
+      {
+      std::cerr << "Problem reading image from: " << outfilename << std::endl;
+      std::cerr << "Found " << digest << " instead of " << ref << std::endl;
+      res = 1;
+#if 0
+      std::ofstream debug("/tmp/dump.gray");
+      debug.write(buffer, len);
+      debug.close();
+      //abort();
+#endif
+      }
+    delete[] buffer;
+    return res;
+    }
+
 #if 0
   // Ok we have now two files let's compare their md5 sum:
   char digest[33], outdigest[33];

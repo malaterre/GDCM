@@ -91,12 +91,26 @@ bool ImageWriter::Write()
   // Pixel Data
   DataElement de( Tag(0x7fe0,0x0010) );
   const Value &v = PixelData.GetValue();
-  const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
   de.SetValue( v );
-  //const ByteValue *bv = (const ByteValue*)(&v);
-  assert( bv );
-  de.SetVL( bv->GetLength() );
-  //assert( bv ); // For now...
+  const ByteValue *bv = de.GetByteValue();
+  const TransferSyntax &ts = PixelData.GetTransferSyntax();
+  assert( ts.IsExplicit() || ts.IsImplicit() );
+  VL vl;
+  if( bv )
+    {
+    // if ts is explicit -> set VR
+    vl = bv->GetLength();
+    }
+  else
+    {
+    // if ts is explicit -> set VR
+    vl.SetToUndefined();
+    }
+  //if( ts.IsExplicit() )
+    {
+    de.SetVR( VR::OB ); // OW ???
+    }
+  de.SetVL( vl );
   ds.Replace( de );
   // PhotometricInterpretation
   // const Tag tphotometricinterpretation(0x0028, 0x0004);
@@ -204,9 +218,7 @@ bool ImageWriter::Write()
 
   FileMetaInformation &fmi = file.GetHeader();
 
-  // Set Transfer Syntax UID to default:
-  TransferSyntax ts;
-  assert( ts == TransferSyntax::ImplicitVRLittleEndian );
+  //assert( ts == TransferSyntax::ImplicitVRLittleEndian );
     {
     const char *tsuid = TransferSyntax::GetTSString( ts );
     DataElement de( Tag(0x0002,0x0010) );

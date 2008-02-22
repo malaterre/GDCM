@@ -160,8 +160,9 @@ public:
   const DataElement& FindNextDataElement(const Tag &t) const {
     const DataElement r(t);
     ConstIterator it = DES.lower_bound(r);
-    assert( it != DES.end() );
-    return *it;
+    if( it != DES.end() )
+      return *it;
+    return DEEnd;
     }
 
   bool IsEmpty() const { return DES.empty(); };

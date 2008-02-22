@@ -107,6 +107,9 @@ public:
   // return if dataset is encoded or not (Deflate Explicit VR)
   bool IsEncoded() const;
 
+  bool IsImplicit() const;
+  bool IsExplicit() const;
+
   friend std::ostream &operator<<(std::ostream &os, const TransferSyntax &ts);
 private:
   // DO NOT EXPOSE the following. Internal details of TransferSyntax

@@ -113,6 +113,24 @@ bool TransferSyntax::IsImplicit(const TSType &ts) const
     ;
 }
 
+bool TransferSyntax::IsImplicit() const
+{
+  if ( TSField == TS_END ) return false;
+  return TSField == ImplicitVRLittleEndian
+    || TSField == ImplicitVRBigEndianACRNEMA
+    || TSField == ImplicitVRBigEndianPrivateGE
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+    || TSField == WeirdPapryus
+#endif
+    ;
+}
+
+bool TransferSyntax::IsExplicit() const
+{
+  if ( TSField == TS_END ) return false; // important !
+  return !IsImplicit();
+}
+
 // By implementation those two functions form a partition
 bool TransferSyntax::IsExplicit(const TSType &ts) const
 {
