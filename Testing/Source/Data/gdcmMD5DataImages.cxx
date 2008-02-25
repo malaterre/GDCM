@@ -14,7 +14,7 @@
 =========================================================================*/
 
 // See tst2md5 in GDCM/Utilities/md5
-const char * const gdcmMD5DataImages[][2] = { 
+static const char * const gdcmMD5DataImages[][2] = { 
 /* gdcm 512 512 4 8 1 */
 { "bfff320d1b058e91b4819aa4560c16f7" , "00191113.dcm" },
 /* gdcm 256 256 1 16 1 */

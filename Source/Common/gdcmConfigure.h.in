@@ -36,6 +36,8 @@
 #define GDCM_EXECUTABLE_OUTPUT_PATH "@EXECUTABLE_OUTPUT_PATH@"
 #define GDCM_LIBRARY_OUTPUT_PATH    "@LIBRARY_OUTPUT_PATH@"
 
+#cmakedefine GDCM_BUILD_TESTING
+
 /* For older gcc / broken plateform */
 #cmakedefine GDCM_NO_ANSI_STRING_STREAM
 

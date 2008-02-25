@@ -18,8 +18,15 @@
 namespace gdcm
 {
 
+#ifdef GDCM_BUILD_TESTING
 #include "gdcmDataFileNames.cxx"
 #include "gdcmMD5DataImages.cxx"
+#else
+static const char GDCM_DATA_ROOT[] = "";
+static const char GDCM_TEMP_DIRECTORY[] = "";
+static const char * const gdcmDataFileNames[] = { 0 };
+static const char * const gdcmMD5DataImages[][2] = { {0,0} };
+#endif
 
 const char * const *Testing::GetFileNames()
 {
