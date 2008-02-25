@@ -51,12 +51,14 @@ public:
   Exception &operator= ( const Exception &orig )
   {
 //TODO
+(void)orig;
     return *this;
   }
   
   /** Equivalence operator. */
   virtual bool operator==( const Exception &orig )
   {
+(void)orig;
     return true;
   }
           

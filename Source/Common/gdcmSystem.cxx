@@ -15,6 +15,7 @@
 #include "gdcmSystem.h"
 #include "gdcmTrace.h"
 #include "gdcmFilename.h"
+#include "gdcmException.h"
 
 #include "md5/md5.h"
 #include "uuid/uuid.h"
@@ -47,25 +48,33 @@ namespace gdcm
 
 inline void process_file(const char *filename, md5_byte_t *digest)
 {
-  int di;
-  size_t file_size, read;
-  void *buffer;
-  md5_state_t state;
+  if( !filename || !digest ) return;
+
   FILE *file = fopen(filename, "rb");
+  if(!file) 
+    {
+    throw Exception("Could not open");
+    }
 
   /* go to the end */
   /*int*/ fseek(file, 0, SEEK_END);
-  file_size = ftell(file);
+  size_t file_size = ftell(file);
   /*int*/ fseek(file, 0, SEEK_SET);
-  buffer = malloc(file_size);
-  read = fread(buffer, 1, file_size, file);
+  void *buffer = malloc(file_size);
+  if(!buffer) 
+    {
+    fclose(file);
+    throw Exception("could not allocate");
+    }
+  size_t read = fread(buffer, 1, file_size, file);
   assert( read == file_size );
 
+  md5_state_t state;
   md5_init(&state);
   md5_append(&state, (const md5_byte_t *)buffer, file_size);
   md5_finish(&state, digest);
   /*printf("MD5 (\"%s\") = ", test[i]); */
-  for (di = 0; di < 16; ++di)
+  for (int di = 0; di < 16; ++di)
   {
     printf("%02x", digest[di]);
   }
@@ -306,7 +315,7 @@ unsigned long System::FileSize(const char* filename)
 inline int getlastdigit(unsigned char *data, unsigned long size)
 {
   int extended, carry = 0;
-  for(int i=0;i<size;i++)
+  for(unsigned int i=0;i<size;i++)
     {
     extended = (carry << 8) + data[i];
     data[i] = extended / 10;
@@ -386,7 +395,8 @@ int System::GetCurrentDateTime(char date[18])
   const size_t maxsizall = 18;
   //char tmpAll[maxsizall];
   int ret2 = snprintf(date,maxsizall,"%s%03ld",tmp,milliseconds);
-  if( ret2 >= maxsizall )
+  assert( ret2 >= 0 );
+  if( (unsigned int)ret2 >= maxsizall )
     {
     //return "";
     return 0;
