@@ -657,6 +657,12 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
       }
     out.width(57);
     out << std::left << os.str();
+    // There is something wrong going on when doing terminal color stuff
+    // Let's add a couple of space to be nicer...
+    if( os.str().find( GDCM_TERMINAL_VT100_NORMAL ) != std::string::npos )
+      {
+      out << "        ";
+      }
     os.str( "" );
     // Extra info (not in the file)
     os << " # ";

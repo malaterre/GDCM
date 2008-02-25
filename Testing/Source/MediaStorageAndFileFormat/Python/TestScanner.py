@@ -38,13 +38,14 @@ def TestScan(filename, recursive = False):
   print mappings
   print dir(mappings)
   
-  mapping = s.GetMapping(t1)
+  filename = d.GetFilenames()[0]
+  mapping = s.GetMapping(filename)
   print mapping
   print dir(mapping)
   
   for f in d.GetFilenames():
     #print t2
-    print "%s -> %s"%(f, s.GetValue(t2, f))
+    print "%s -> [%s]"%(f, s.GetValue(f,t2))
   
   #ex = gdcm.FilenameToValueExtractor(mapping)
   #ex.GetValue( "/tmp/Perfusion/Perfusion_205_0087" )

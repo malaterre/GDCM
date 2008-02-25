@@ -40,20 +40,19 @@ class GDCM_EXPORT Scanner
 public:
   Scanner():Values(),Filenames(),Mappings() {}
   ~Scanner();
-  /* ltstr is CRITICAL, otherwise pointers value are used to do the key comparison */
-  struct ltstr
-    {
-    bool operator()(const char* s1, const char* s2) const
-      {
-      return strcmp(s1, s2) < 0;
-      }
-    };
+
   // struct to map a filename to a value
-  typedef std::map<const char*, const char*, ltstr> StringToStringMap;
-  typedef StringToStringMap FilenameToValue;
+  // Implementation note:
+  // all std::map in this class will be using const char * and not std::string
+  // since we are pointing to existing std::string (hold in a std::vector)
+  // this avoid an extra copy of the byte array.
+  // Tag are used as Tag class since sizeof(tag) <= sizeof(pointer)
+  typedef std::map<Tag, const char*> TagToStringMap;
+  typedef TagToStringMap TagToValue;
 
   // Add a tag that will need to be read
   void AddTag( Tag const & t );
+  void ClearTags();
 
   // Start the scan !
   bool Scan( Directory::FilenamesType const & filenames );
@@ -67,15 +66,23 @@ public:
   // Get all the values found (in lexicographic order)
   ValuesType const & GetValues() const { return Values; }
 
-  typedef std::map<Tag,FilenameToValue> MappingType;
+  /* ltstr is CRITICAL, otherwise pointers value are used to do the key comparison */
+  struct ltstr
+    {
+    bool operator()(const char* s1, const char* s2) const
+      {
+      return strcmp(s1, s2) < 0;
+      }
+    };
+  typedef std::map<const char *,TagToValue, ltstr> MappingType;
   // Mappings are the mapping from a particular tag to the map, mapping filename to value:
   MappingType const & GetMappings() const { return Mappings; }
 
   // Get the std::map mapping filenames to value for tag 't'
-  FilenameToValue const & GetMapping(Tag const &t) const;
+  TagToValue const & GetMapping(const char *filename) const;
 
   // Retrieve the value found for tag: t associated with file: filename
-  const char* GetValue(Tag const &t, const char *filename) const;
+  const char* GetValue(const char *filename, Tag const &t) const;
 
 private:
   // struct to store all uniq tags in ascending order:
@@ -85,7 +92,7 @@ private:
   Directory::FilenamesType Filenames;
 
   // Main struct that will hold all mapping:
-  std::map<Tag,FilenameToValue> Mappings;
+  MappingType Mappings;
 };
 
 #if 0

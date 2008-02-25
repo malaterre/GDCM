@@ -27,6 +27,11 @@ Scanner::~Scanner()
 {
 }
 
+void Scanner::ClearTags()
+{
+  Tags.clear();
+}
+
 void Scanner::AddTag( Tag const & t )
 {
   static const Global &g = GlobalInstance;
@@ -52,6 +57,7 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
 {
   // Is there at least one tag ?
   if( Tags.empty() ) return true;
+  //if( filenames.empty() ) return true;
 
   // Make our own copy:
   Filenames = filenames;
@@ -81,12 +87,16 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
       {
       gdcmWarningMacro( "Failed to read:" << filename  << " with unknown error" );
       }
+    // Keep the mapping:
+    TagToValue &mapping = Mappings[filename];
+
     if( read )
       {
       const DataSet & ds = reader.GetFile().GetDataSet();
       TagsType::const_iterator tag = Tags.begin();
       for( ; tag != Tags.end(); ++tag )
         {
+        std::string s;
         if( ds.FindDataElement( *tag ) )
           {
           DataElement const & de = ds.GetDataElement( *tag );
@@ -94,19 +104,17 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
           //assert( VR::IsASCII( vr ) );
           if( bv ) // Hum, should I store an empty string or what ?
             {
-            std::string s( bv->GetPointer(), bv->GetLength() );
+            s = std::string( bv->GetPointer(), bv->GetLength() );
             s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
-            // Store the potentially new value:
-            Values.insert( s );
-            assert( Values.find( s ) != Values.end() );
-            const char *value = Values.find( s )->c_str();
-            assert( value );
-            // Keep the mapping:
-            FilenameToValue &mapping = Mappings[*tag];
-            mapping.insert(
-              FilenameToValue::value_type(filename, value));
             }
           }
+        // Store the potentially new value:
+        Values.insert( s );
+        assert( Values.find( s ) != Values.end() );
+        const char *value = Values.find( s )->c_str();
+        assert( value );
+        mapping.insert(
+          TagToValue::value_type(*tag, value));
         }
       }
     }
@@ -122,42 +130,44 @@ void Scanner::Print( std::ostream & os ) const
     os << *it << "\n";
     }
   os << "Mapping:\n";
-  TagsType::const_iterator tag = Tags.begin();
-  for( ; tag != Tags.end(); ++tag )
+  Directory::FilenamesType::const_iterator file = Filenames.begin();
+  for(; file != Filenames.end(); ++file)
     {
-    os << "Tag: " << *tag << "\n";
+    const char *filename = file->c_str();
+    os << "Filename: " << filename << "\n";
     //const FilenameToValue &mapping = Mappings[*tag];
-    if( Mappings.find(*tag) != Mappings.end() )
+    if( Mappings.find(filename) != Mappings.end() )
       {
-      const FilenameToValue &mapping = GetMapping(*tag);
-      FilenameToValue::const_iterator it = mapping.begin();
+      const TagToValue &mapping = GetMapping(filename);
+      TagToValue::const_iterator it = mapping.begin();
       for( ; it != mapping.end(); ++it)
         {
-        const char *filename = it->first;
+        const Tag & tag = it->first;
         const char *value = it->second;
-        os << filename << " -> " << value << "\n";
+        os << tag << " -> " << value << "\n";
         }
       }
     }
 }
 
-Scanner::FilenameToValue const & Scanner::GetMapping(Tag const &t) const
+Scanner::TagToValue const & Scanner::GetMapping(const char *filename) const
 {
-  assert( Mappings.find(t) != Mappings.end() );
-  return Mappings.find(t)->second;
+  assert( Mappings.find(filename) != Mappings.end() );
+//  if( Mappings.find(filename) != Mappings.end() )
+    return Mappings.find(filename)->second;
 }
 
-const char* Scanner::GetValue(Tag const &t, const char *filename) const
+const char* Scanner::GetValue(const char *filename, Tag const &t) const
 {
-  FilenameToValue const &ftv = GetMapping(t);
-  FilenameToValue::const_iterator it = ftv.begin();
-  bool empty = ftv.empty();
-        const char *file= it->first;
-        const char *value = it->second;
+  TagToValue const &ftv = GetMapping(filename);
+//  TagToValue::const_iterator it = ftv.begin();
+//  bool empty = ftv.empty();
+//        const char *file= it->first;
+//        const char *value = it->second;
 
-  if( ftv.find(filename) != ftv.end() )
+  if( ftv.find(t) != ftv.end() )
     {
-    return ftv.find(filename)->second;
+    return ftv.find(t)->second;
     }
   return NULL;
 }

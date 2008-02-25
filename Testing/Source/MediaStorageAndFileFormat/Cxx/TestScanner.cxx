@@ -51,16 +51,18 @@ int TestScanner(int argc, char *argv[])
 
   // Let's get the value for tag t1 in first file:
   gdcm::Scanner::MappingType const &mt = s.GetMappings();
-  std::cout << "Mapping for " << t1 << " is :" << std::endl;
-  gdcm::Scanner::MappingType::const_iterator it = mt.find(t1);
+  const char *filename = d.GetFilenames()[0].c_str();
+  std::cout << "Mapping for " << filename << " is :" << std::endl;
+  gdcm::Scanner::MappingType::const_iterator it = mt.find(filename);
   if( it == mt.end() )
     {
     return 1;
     }
-  const gdcm::Scanner::FilenameToValue &tv = it->second;
-  const std::string &filename = d.GetFilenames()[0];
-  gdcm::Scanner::FilenameToValue::const_iterator it2 = tv.find( filename.c_str() );
-  std::cout << it2->first << " -> " << t1 << " = " << it2->second << std::endl;
+  const gdcm::Scanner::TagToValue &tv = it->second;
+  //const std::string &filename = d.GetFilenames()[0];
+  gdcm::Scanner::TagToValue::const_iterator it2 = tv.find( t1 );
+  if( t1 != it2->first ) return 1;
+  std::cout << filename << " -> " << t1 << " = " << it2->second << std::endl;
 
 {
   const gdcm::Directory::FilenamesType &filenames = d.GetFilenames();
@@ -68,7 +70,7 @@ int TestScanner(int argc, char *argv[])
   for(; it != filenames.end(); ++it)
     {
     const char *filename = it->c_str();
-    const char *value =  s.GetValue( t1, filename );
+    const char *value =  s.GetValue( filename, t1 );
     if( value )
       {
       std::cout << filename << " has " << t1 << " = " << value << std::endl;
