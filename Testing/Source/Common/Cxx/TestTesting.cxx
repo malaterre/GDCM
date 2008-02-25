@@ -25,6 +25,10 @@ int TestTesting(int argc, char *argv[])
 
   std::cout << "Num:" << gdcm::Testing::GetNumberOfFileNames() << std::endl;
 
+  const char * const * md5 = gdcm::Testing::GetMD5DataImage( 100000 );
+  if( !md5 ) return 1;
+  if( md5[0] || md5[1] ) return 1;
+
   const char *tmp = gdcm::Testing::GetTempDirectory();
   if( !gdcm::System::FileExists(tmp) )
     {
@@ -34,5 +38,6 @@ int TestTesting(int argc, char *argv[])
     {
     return 1;
     }
+
   return 0;
 }

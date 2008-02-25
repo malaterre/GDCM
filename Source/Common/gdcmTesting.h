@@ -31,7 +31,7 @@ public :
   Testing() {};
   ~Testing() {};
 
-  void Print(std::ostream &_os = std::cout);
+  void Print(std::ostream &os = std::cout);
 
   static const char * const *GetFileNames();
   static unsigned int GetNumberOfFileNames();
@@ -40,6 +40,7 @@ public :
   typedef const char* const (*MD5DataImagesType)[2];
   static MD5DataImagesType GetMD5DataImages();
   static unsigned int GetNumberOfMD5DataImages();
+  static const char * const * GetMD5DataImage(unsigned int file);
   static const char * GetMD5FromFile(const char *filepath);
 
   static const char *GetDataRoot();

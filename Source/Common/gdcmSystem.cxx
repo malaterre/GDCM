@@ -202,7 +202,7 @@ bool System::FileExists(const char* filename)
     }
   else
     {
-    assert( !FileIsDirectory(filename) );
+    //assert( !FileIsDirectory(filename) );
     return true;
     }
 }

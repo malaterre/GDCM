@@ -51,6 +51,12 @@ unsigned int Testing::GetNumberOfMD5DataImages()
   return size;
 }
 
+const char * const * Testing::GetMD5DataImage(unsigned int file)
+{
+  if( file < Testing::GetNumberOfMD5DataImages() ) return gdcmMD5DataImages[file];
+  return gdcmMD5DataImages[ Testing::GetNumberOfMD5DataImages() ];
+}
+
 const char * Testing::GetMD5FromFile(const char *filepath)
 {
   int i = 0;
