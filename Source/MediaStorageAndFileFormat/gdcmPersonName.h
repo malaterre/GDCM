@@ -55,7 +55,10 @@ public:
   }
   void SetComponents(const char *components[]) {
     for(unsigned int i = 0; i < 5; ++i) {
-      strncpy(Component[i], components[i], std::min( (unsigned int)strlen(components[i]), GetMaxLength() ) );
+      //strncpy(Component[i], components[i], std::min( (unsigned int)strlen(components[i]), GetMaxLength() ) );
+      assert( strlen(components[i]) < GetMaxLength() );
+      strcpy(Component[i], components[i]);
+      assert( strlen(Components[i]) < GetMaxLength() );
       }
   }
 	void Print(std::ostream &os) const
