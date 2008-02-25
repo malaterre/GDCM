@@ -149,7 +149,8 @@ SUBDIRS(
 #-----------------------------------------------------------------------------
 # Add the testing directories
 OPTION(GDCM_BUILD_TESTING "Build testing." ON)
-SET(BUILD_TESTING ${GDCM_BUILD_TESTING})
+SET(BUILD_TESTING ${GDCM_BUILD_TESTING} CACHE BOOL "" FORCE)
+MARK_AS_ADVANCED(BUILD_TESTING)
 
 IF(BUILD_TESTING)
   #CONFIGURE_FILE(${GDCM_SOURCE_DIR}/CMake/CTestCustom.ctest.in

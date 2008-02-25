@@ -61,7 +61,8 @@ bool FilenameGenerator::Generate()
   for( unsigned int i = 0; i < numfiles && success; ++i)
     {
     int res = snprintf( internal, internal_len, Pattern.c_str(), i );
-    success = res < internal_len;
+    assert( res >= 0 );
+    success = (unsigned int)res < internal_len;
     Filenames[i] = internal;
     //assert( Filenames[i].size() == res ); // upon success only
     }
