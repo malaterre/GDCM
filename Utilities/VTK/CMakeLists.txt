@@ -46,6 +46,7 @@ IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
   # Setup vtkInstantiator registration for this library's classes.
   INCLUDE_DIRECTORIES(
     ${GDCM_BINARY_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/VTK4
   )
   VTK_MAKE_INSTANTIATOR2(
