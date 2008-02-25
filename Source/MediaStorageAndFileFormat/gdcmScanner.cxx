@@ -18,6 +18,7 @@
 #include "gdcmDicts.h"
 #include "gdcmDict.h"
 #include "gdcmDictEntry.h"
+#include <algorithm> // std::find
 
 namespace gdcm
 {
@@ -98,6 +99,7 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
       }
     catch(std::exception & ex)
       {
+      (void)ex;
       gdcmWarningMacro( "Failed to read:" << filename << " with ex:" << ex.what() );
       }
     catch(...)

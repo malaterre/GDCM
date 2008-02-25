@@ -137,7 +137,7 @@ public:
     ConstIterator it = DES.find(r);
     if( it != DES.end() )
       return *it;
-    return DEEnd;
+    return GetDEEnd();
     }
   const DataElement& operator[] (const Tag &t) const { return GetDataElement(t); }
   const DataElement& operator() (uint16_t group, uint16_t element) const { return GetDataElement( Tag(group,element) ); }
@@ -162,7 +162,7 @@ public:
     ConstIterator it = DES.lower_bound(r);
     if( it != DES.end() )
       return *it;
-    return DEEnd;
+    return GetDEEnd();
     }
 
   bool IsEmpty() const { return DES.empty(); };
@@ -198,6 +198,13 @@ public:
 
   template <typename TDE, typename TSwap>
   std::istream &ReadWithLength(std::istream &is, VL &length);
+
+protected:
+  /* GetDEEnd is a Win32 only issue, one cannot use a dllexported
+   * static member data in an inline function, otherwise symbol
+   * will get reported as missing in any dll using the inlined function
+   */
+  const DataElement& GetDEEnd() const;
 
 private:
   DataElementSet DES;

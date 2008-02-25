@@ -14,10 +14,14 @@
 =========================================================================*/
 #include "gdcmDataSet.h"
 
-
 namespace gdcm
 {
 DataElement DataSet::DEEnd = DataElement( Tag(0xffff,0xffff) );
+
+const DataElement& DataSet::GetDEEnd() const
+{
+  return DEEnd;
+}
 
 std::string DataSet::GetPrivateCreator(const Tag &t) const
 {
