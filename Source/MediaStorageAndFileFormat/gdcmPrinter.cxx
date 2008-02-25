@@ -52,7 +52,7 @@
 namespace gdcm
 {
 //-----------------------------------------------------------------------------
-Printer::Printer():/*PrintStyle(Printer::VERBOSE_STYLE),*/F(0)
+Printer::Printer():PrintStyle(Printer::VERBOSE_STYLE),F(0)
 {
   MaxPrintLength = 0xFF;
 }
@@ -513,7 +513,7 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
       else { os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL; } \
     } break
 
-void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const DataSet &ds)
+void Printer::PrintDataSet(const DataSet &ds, std::ostream &os, std::string const & indent )
 {
   const Global& g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
@@ -734,9 +734,9 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
       {
       if( t.IsPrivate() && (owner == 0 || *owner == 0 ) && t.GetElement() > 0xFF )
         {
-      os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
+        os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
         os << " " << name;
-      os << GDCM_TERMINAL_VT100_NORMAL;
+        os << GDCM_TERMINAL_VT100_NORMAL;
         }
       else
         {
@@ -766,7 +766,7 @@ void Printer::PrintDataSet(std::ostream &os, std::string const & indent, const D
           std::string nextindent = indent + "  ";
           const DataElement &deitem = item;
           os << nextindent << deitem << "\n";
-          PrintDataSet(os, nextindent + "  ", ds);
+          PrintDataSet(ds, os, nextindent + "  ");
           }
         }
       }
@@ -940,20 +940,45 @@ void Printer::PrintDataSetOld(std::ostream &os, const DataSet &ds)
 }
 
 //-----------------------------------------------------------------------------
+void DumpDataSet(const DataSet &ds, std::ostream &os )
+{
+  DataSet::ConstIterator it = ds.Begin();
+  for( ; it != ds.End(); ++it )
+    {
+    const DataElement &de = *it;
+    const Tag& t = de.GetTag();
+    const VR& vr = de.GetVR();
+    os << de << std::endl;
+    //if( VR::IsASCII( vr ) )
+    //  {
+    //  }
+    }
+}
+
+//-----------------------------------------------------------------------------
 void Printer::Print(std::ostream& os)
 {
-  std::cout << "# Dicom-File-Format\n";
-  std::cout << "\n";
-  std::cout << "# Dicom-Meta-Information-Header\n";
-  std::cout << "# Used TransferSyntax: \n";
+  os << "# Dicom-File-Format\n";
+  os << "\n";
+  os << "# Dicom-Meta-Information-Header\n";
+  os << "# Used TransferSyntax: \n";
 
   const FileMetaInformation &meta = F->GetHeader();
-  PrintDataSet(os, "", meta);
+  if( PrintStyle == VERBOSE_STYLE )
+    PrintDataSet(meta, os);
+  else if (PrintStyle == CONDENSED_STYLE )
+    DumpDataSet(meta, os);
 
-  std::cout << "\n# Dicom-Data-Set\n";
-  std::cout << "# Used TransferSyntax: \n";
+  os << "\n# Dicom-Data-Set\n";
+  os << "# Used TransferSyntax: ";
+  const TransferSyntax &metats = meta.GetDataSetTransferSyntax();
+  os << metats;
+  os << std::endl;
   const DataSet &ds = F->GetDataSet();
-  PrintDataSet(os, "", ds);
+  if( PrintStyle == VERBOSE_STYLE )
+    PrintDataSet(ds, os);
+  else if (PrintStyle == CONDENSED_STYLE )
+    DumpDataSet(ds, os);
 }
 
 }

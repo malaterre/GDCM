@@ -15,7 +15,7 @@
 #ifndef __gdcmDumper_h
 #define __gdcmDumper_h
 
-#include "gdcmFile.h"
+#include "gdcmPrinter.h"
 
 // Use it to simply dump value read from the file. No interpretation is done.
 // But it is real fast ! Almost no overhead
@@ -23,18 +23,11 @@ namespace gdcm
 {
 
 // It's a sink there is no output
-class GDCM_EXPORT Dumper
+class GDCM_EXPORT Dumper : public Printer
 {
 public:
-  Dumper();
-  ~Dumper();
-
-  void SetFile(File const &f) { F = &f; }
-
-  void Print(std::ostream& os);
-
-protected:
-  const File *F;
+  Dumper() { PrintStyle = CONDENSED_STYLE; }
+  ~Dumper() {};
 };
 
 } // end namespace gdcm

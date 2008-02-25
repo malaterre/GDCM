@@ -17,10 +17,10 @@
 #include "gdcmFileMetaInformation.h"
 #include "gdcmDataSet.h"
 #include "gdcmPrinter.h"
+#include "gdcmDumper.h"
 #include "gdcmDictPrinter.h"
 #include "gdcmValidate.h"
 #include "gdcmWriter.h"
-#include "gdcmDumper.h"
 #include "gdcmSystem.h"
 #include "gdcmDirectory.h"
 

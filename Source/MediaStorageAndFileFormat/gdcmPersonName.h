@@ -58,7 +58,7 @@ public:
       //strncpy(Component[i], components[i], std::min( (unsigned int)strlen(components[i]), GetMaxLength() ) );
       assert( strlen(components[i]) < GetMaxLength() );
       strcpy(Component[i], components[i]);
-      assert( strlen(Components[i]) < GetMaxLength() );
+      assert( strlen(Component[i]) < GetMaxLength() );
       }
   }
 	void Print(std::ostream &os) const

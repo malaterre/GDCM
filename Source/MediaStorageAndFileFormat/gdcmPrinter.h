@@ -39,28 +39,28 @@ public:
 
   void SetFile(File const &f) { F = &f; }
 
-//  typedef enum {
-//    VERBOSE_STYLE = 0, // GDCM Legacy VERBOSE one
-//    CONDENSED_STYLE,         //
-//    // Ok I am missing voc here ...better naming would be nice
-//    XML // sure why not
-//  } PrintStyles;
-//
-//  void SetStyle(PrintStyles ps) {
-//    PrintStyle = ps;
-//  }
-//  PrintStyles GetPrintStyle() const {
-//    return PrintStyle;
-//    }
+  typedef enum {
+    VERBOSE_STYLE = 0, // GDCM Legacy VERBOSE one
+    CONDENSED_STYLE, //
+    // Ok I am missing voc here ...better naming would be nice
+    XML // sure why not
+  } PrintStyles;
+
+  void SetStyle(PrintStyles ps) {
+    PrintStyle = ps;
+  }
+  PrintStyles GetPrintStyle() const {
+    return PrintStyle;
+    }
 
   void Print(std::ostream& os);
 
 protected:
   void PrintDataSetOld(std::ostream &os, const DataSet &ds);
   void PrintElement(std::ostream& os, const DataElement &xde, const DictEntry &entry);
-  void PrintDataSet(std::ostream& os, const std::string &s, const DataSet &ds);
+  void PrintDataSet(const DataSet &ds, std::ostream& os, const std::string &s = "");
 
-//  PrintStyles PrintStyle;
+  PrintStyles PrintStyle;
   const File *F;
   VL MaxPrintLength;
 };
