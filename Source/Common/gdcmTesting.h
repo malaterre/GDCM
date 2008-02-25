@@ -31,20 +31,27 @@ public :
   Testing() {};
   ~Testing() {};
 
+  // Print
   void Print(std::ostream &os = std::cout);
 
-  static const char * const *GetFileNames();
+  // return the table of fullpath to gdcmData DICOM files:
+  static const char * const * GetFileNames();
   static unsigned int GetNumberOfFileNames();
   static const char * GetFileName(unsigned int file);
 
+  // return the table that map the md5 (as in md5sum) of the Pixel Data associated
+  // to a filename
   typedef const char* const (*MD5DataImagesType)[2];
   static MD5DataImagesType GetMD5DataImages();
   static unsigned int GetNumberOfMD5DataImages();
   static const char * const * GetMD5DataImage(unsigned int file);
   static const char * GetMD5FromFile(const char *filepath);
 
-  static const char *GetDataRoot();
-  static const char *GetTempDirectory();
+  // Return the GDCM DATA ROOT
+  static const char * GetDataRoot();
+
+  // Returns the temp directory as used in testing needing to output data:
+  static const char * GetTempDirectory();
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
