@@ -75,6 +75,11 @@ const char *Testing::GetDataRoot()
   return GDCM_DATA_ROOT;
 }
 
+const char *Testing::GetTempDirectory()
+{
+  return GDCM_TEMP_DIRECTORY;
+}
+
 void Testing::Print(std::ostream &os)
 {
   os << "DataFileNames:\n";

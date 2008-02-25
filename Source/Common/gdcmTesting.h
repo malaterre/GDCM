@@ -43,6 +43,7 @@ public :
   static const char * GetMD5FromFile(const char *filepath);
 
   static const char *GetDataRoot();
+  static const char *GetTempDirectory();
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------

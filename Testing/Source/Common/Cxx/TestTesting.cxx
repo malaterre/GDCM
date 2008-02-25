@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmTesting.h"
+#include "gdcmSystem.h"
 
 int TestTesting(int argc, char *argv[])
 {
@@ -24,5 +25,14 @@ int TestTesting(int argc, char *argv[])
 
   std::cout << "Num:" << gdcm::Testing::GetNumberOfFileNames() << std::endl;
 
+  const char *tmp = gdcm::Testing::GetTempDirectory();
+  if( !gdcm::System::FileExists(tmp) )
+    {
+    return 1;
+    }
+  if( !gdcm::System::FileIsDirectory(tmp) )
+    {
+    return 1;
+    }
   return 0;
 }

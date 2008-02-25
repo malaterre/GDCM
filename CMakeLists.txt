@@ -42,6 +42,10 @@ FIND_PATH(GDCM_DATA_ROOT gdcm-ACR-LibIDO.acr
   $ENV{PUB_DICT_PATH}/../../gdcmData
   )
 
+# Define a temp directory in which we can output stuff
+SET(GDCM_TEMP_DIRECTORY "${GDCM_BINARY_DIR}/Testing/Temporary" CACHE PATH "Path to a valid temp directory")
+MARK_AS_ADVANCED(GDCM_TEMP_DIRECTORY)
+
 #-----------------------------------------------------------------------------
 INCLUDE (${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)
 INCLUDE (${CMAKE_ROOT}/Modules/CheckIncludeFiles.cmake)

@@ -19,7 +19,7 @@
 #include "gdcmFileMetaInformation.h"
 #include "gdcmTesting.h"
 
-int TestImageWrite(const char* filename)
+int TestImageWrite(const char *subdir, const char* filename)
 {
   gdcm::ImageReader reader;
   reader.SetFileName( filename );
@@ -41,7 +41,10 @@ int TestImageWrite(const char* filename)
     }
 
   gdcm::Filename out(filename);
-  std::string tmpdir = "/tmp/debug";
+  std::string tmpdir; // = "/tmp/debug";
+  tmpdir = gdcm::Testing::GetTempDirectory();
+  tmpdir += "/";
+  tmpdir += subdir;
   std::string outfilename = tmpdir;
   outfilename += "/";
   outfilename += out.GetName();
@@ -163,7 +166,7 @@ int TestImageWriter(int argc, char *argv[])
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestImageWrite(filename);
+    return TestImageWrite(argv[0],filename);
     }
 
   // else
@@ -172,7 +175,7 @@ int TestImageWriter(int argc, char *argv[])
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
     {
-    r += TestImageWrite( filename );
+    r += TestImageWrite(argv[0], filename );
     ++i;
     }
 

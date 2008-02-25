@@ -33,7 +33,7 @@
 //  return false;
 //}
 
-int TestWrite(const char* filename)
+int TestWrite(const char *subdir, const char* filename)
 {
   gdcm::Reader reader;
   reader.SetFileName( filename );
@@ -45,7 +45,11 @@ int TestWrite(const char* filename)
 
   gdcm::Filename out(filename);
   // FIXME: we need to use the temp from the binary build instead...
-  std::string tmpdir = "/tmp/debug";
+  //std::string tmpdir = "/tmp/debug";
+  std::string tmpdir;
+  tmpdir = gdcm::Testing::GetTempDirectory();
+  tmpdir += "/";
+  tmpdir += subdir;
   std::string outfilename = tmpdir;
   outfilename += "/";
   outfilename += out.GetName();
@@ -78,7 +82,10 @@ int TestWrite(const char* filename)
     // too bad the file is not identical, so let's be paranoid and
     // try to reread-rewrite this just-writen file:
     // TODO: Copy file gdcm::System::CopyFile( );
-    if( TestWrite( outfilename.c_str() ) )
+    std::string subsubdir = subdir;
+    subsubdir += "/";
+    subsubdir += subdir;
+    if( TestWrite(subsubdir.c_str(), outfilename.c_str() ) )
       {
       std::cerr << filename << " and "
         << outfilename << " are different\n";
@@ -103,7 +110,7 @@ int TestWriter(int argc, char *argv[])
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestWrite(filename);
+    return TestWrite(argv[0], filename);
     }
 
   // else
@@ -112,7 +119,7 @@ int TestWriter(int argc, char *argv[])
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
     {
-    r += TestWrite( filename );
+    r += TestWrite(argv[0], filename );
     ++i;
     }
 
