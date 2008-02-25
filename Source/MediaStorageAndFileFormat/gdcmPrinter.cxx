@@ -513,7 +513,7 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
       else { os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL; } \
     } break
 
-void Printer::PrintDataSet(const DataSet &ds, std::ostream &os, std::string const & indent )
+void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string const & indent )
 {
   const Global& g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
@@ -538,6 +538,7 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &os, std::string cons
     bool retired = entry.GetRetired();
 
     const VR &vr_read = de.GetVR();
+    std::ostringstream os;
     os << indent; // first thing do the shift !
     os << t << " ";
     os << vr_read << " ";
@@ -654,6 +655,9 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &os, std::string cons
         }
       os << s;
       }
+    out.width(57);
+    out << std::left << os.str();
+    os.str( "" );
     // Extra info (not in the file)
     os << " # ";
     // Append the VL
@@ -770,6 +774,7 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &os, std::string cons
           }
         }
       }
+    out << os.str();
     }
 }
 
