@@ -23,19 +23,20 @@ def TestImageRead(filename, verbose = False):
   if verbose: print r.GetImage()
   return success
 
-sucess = 0
-try:
-  filename = os.sys.argv[1]
-  sucess += TestImageRead( filename, True )
-except:
-  # loop over all files:
-  t = gdcm.Testing()
-  nfiles = t.GetNumberOfFileNames()
-  for i in range(0,nfiles):
-    #print t.GetFileName(i)
-    filename = t.GetFileName(i)
-    sucess += TestImageRead( filename )
-
-# Test succeed ?
-sys.exit(sucess == 0)
+if __name__ == "__main__":
+  sucess = 0
+  try:
+    filename = os.sys.argv[1]
+    sucess += TestImageRead( filename, True )
+  except:
+    # loop over all files:
+    t = gdcm.Testing()
+    nfiles = t.GetNumberOfFileNames()
+    for i in range(0,nfiles):
+      #print t.GetFileName(i)
+      filename = t.GetFileName(i)
+      sucess += TestImageRead( filename )
+  
+  # Test succeed ?
+  sys.exit(sucess == 0)
 

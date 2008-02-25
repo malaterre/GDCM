@@ -53,11 +53,28 @@ void Scanner::AddTag( Tag const & t )
     }
 }
 
+bool Scanner::IsKey( const char * filename ) const
+{
+  Directory::FilenamesType::const_iterator it = std::find(Filenames.begin(), Filenames.end(), filename);
+  if( it == Filenames.end() )
+    {
+    gdcmErrorMacro( "The file: " << filename << " was not scanned" );
+    return false;
+    }
+  // Look for the file in Mappings table:
+  MappingType::const_iterator it2 = Mappings.find(filename);
+  return it2 != Mappings.end();
+}
+
 bool Scanner::Scan( Directory::FilenamesType const & filenames )
 {
   // Is there at least one tag ?
   if( Tags.empty() ) return true;
   //if( filenames.empty() ) return true;
+
+  // Prepare hash table:
+  Mappings.clear();
+  Mappings[""]; // Create a fake table for dummy file
 
   // Make our own copy:
   Filenames = filenames;
@@ -87,18 +104,18 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
       {
       gdcmWarningMacro( "Failed to read:" << filename  << " with unknown error" );
       }
-    // Keep the mapping:
-    TagToValue &mapping = Mappings[filename];
-
     if( read )
       {
+      // Keep the mapping:
+      TagToValue &mapping = Mappings[filename];
+
       const DataSet & ds = reader.GetFile().GetDataSet();
       TagsType::const_iterator tag = Tags.begin();
       for( ; tag != Tags.end(); ++tag )
         {
-        std::string s;
         if( ds.FindDataElement( *tag ) )
           {
+          std::string s;
           DataElement const & de = ds.GetDataElement( *tag );
           const ByteValue *bv = de.GetByteValue();
           //assert( VR::IsASCII( vr ) );
@@ -107,14 +124,14 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
             s = std::string( bv->GetPointer(), bv->GetLength() );
             s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
             }
+          // Store the potentially new value:
+          Values.insert( s );
+          assert( Values.find( s ) != Values.end() );
+          const char *value = Values.find( s )->c_str();
+          assert( value );
+          mapping.insert(
+            TagToValue::value_type(*tag, value));
           }
-        // Store the potentially new value:
-        Values.insert( s );
-        assert( Values.find( s ) != Values.end() );
-        const char *value = Values.find( s )->c_str();
-        assert( value );
-        mapping.insert(
-          TagToValue::value_type(*tag, value));
         }
       }
     }
@@ -134,7 +151,9 @@ void Scanner::Print( std::ostream & os ) const
   for(; file != Filenames.end(); ++file)
     {
     const char *filename = file->c_str();
-    os << "Filename: " << filename << "\n";
+    bool b = IsKey(filename);
+    const char *comment = !b ? "could not be read" : "could be read";
+    os << "Filename: " << filename << " (" << comment << ")\n";
     //const FilenameToValue &mapping = Mappings[*tag];
     if( Mappings.find(filename) != Mappings.end() )
       {
@@ -144,7 +163,7 @@ void Scanner::Print( std::ostream & os ) const
         {
         const Tag & tag = it->first;
         const char *value = it->second;
-        os << tag << " -> " << value << "\n";
+        os << tag << " -> [" << value << "]\n";
         }
       }
     }
@@ -152,19 +171,35 @@ void Scanner::Print( std::ostream & os ) const
 
 Scanner::TagToValue const & Scanner::GetMapping(const char *filename) const
 {
-  assert( Mappings.find(filename) != Mappings.end() );
-//  if( Mappings.find(filename) != Mappings.end() )
+//  assert( Mappings.find(filename) != Mappings.end() );
+  if( Mappings.find(filename) != Mappings.end() )
     return Mappings.find(filename)->second;
+  return Mappings.find("")->second; // dummy file could not be found
 }
+
+/*
+std::vector<const char *> Scanner::GetKeys() const
+{
+  std::vector<const char *> keys;
+
+  Directory::FilenamesType::const_iterator file = Filenames.begin();
+  for(; file != Filenames.end(); ++file)
+    {
+    const char *filename = file->c_str();
+    MappingType::const_iterator it = Mappings.find(filename);
+    if ( it != Mappings.end() )
+      {
+      keys.push_back( filename );
+      }
+    }
+  assert( keys.size() <= Filenames.size() );
+  return keys;
+}
+*/
 
 const char* Scanner::GetValue(const char *filename, Tag const &t) const
 {
   TagToValue const &ftv = GetMapping(filename);
-//  TagToValue::const_iterator it = ftv.begin();
-//  bool empty = ftv.empty();
-//        const char *file= it->first;
-//        const char *value = it->second;
-
   if( ftv.find(t) != ftv.end() )
     {
     return ftv.find(t)->second;

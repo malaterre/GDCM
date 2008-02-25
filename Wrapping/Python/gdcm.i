@@ -194,6 +194,7 @@ using namespace gdcm;
 //%template (FilenameToValue) std::map<PString,PString>;
 //%template (FilenameToValue) std::map<std::string,std::string>;
 //%template (MappingType)     std::map<gdcm::Tag,FilenameToValue>;
+//%template (StringArray)     std::vector<const char*>;
 %template (ValuesType)      std::set<std::string>;
 %include "gdcmScanner.h"
 %extend gdcm::Scanner

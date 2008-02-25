@@ -64,8 +64,8 @@ int TestScanner(int argc, char *argv[])
   if( t1 != it2->first ) return 1;
   std::cout << filename << " -> " << t1 << " = " << it2->second << std::endl;
 
-{
   const gdcm::Directory::FilenamesType &filenames = d.GetFilenames();
+{
   gdcm::Directory::FilenamesType::const_iterator it = filenames.begin();
   for(; it != filenames.end(); ++it)
     {
@@ -81,6 +81,26 @@ int TestScanner(int argc, char *argv[])
       }
     }
 }
+/*
+{
+  std::vector<const char *> keys = s.GetKeys();
+  for( std::vector<const char *>::const_iterator it = keys.begin(); it != keys.end(); ++it)
+    {
+    const char *filename = *it;
+    const gdcm::Directory::FilenamesType::const_iterator it2 
+      = std::find(filenames.begin(), filenames.end(), filename);
+    if( it2 == filenames.end() )
+      {
+      return 1;
+      }
+    if( !s.IsKey( filename ) )
+      {
+      return 1;
+      }
+    }
+}
+*/
+  
 
   return 0;
 }

@@ -24,19 +24,20 @@ def TestRead(filename, verbose = False):
   if verbose: print r.GetFile().GetDataSet()
   return sucess
 
-sucess = 0
-try:
-  filename = os.sys.argv[1]
-  sucess += TestRead( filename, True )
-except:
-  # loop over all files:
-  t = gdcm.Testing()
-  nfiles = t.GetNumberOfFileNames()
-  for i in range(0,nfiles):
-    filename = t.GetFileName(i)
-    sucess += TestRead( filename )
-
-
-# Test succeed ?
-sys.exit(sucess == 0)
+if __name__ == "__main__":
+  sucess = 0
+  try:
+    filename = os.sys.argv[1]
+    sucess += TestRead( filename, True )
+  except:
+    # loop over all files:
+    t = gdcm.Testing()
+    nfiles = t.GetNumberOfFileNames()
+    for i in range(0,nfiles):
+      filename = t.GetFileName(i)
+      sucess += TestRead( filename )
+  
+  
+  # Test succeed ?
+  sys.exit(sucess == 0)
 

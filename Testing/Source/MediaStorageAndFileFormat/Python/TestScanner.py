@@ -44,20 +44,20 @@ def TestScan(filename, recursive = False):
   print dir(mapping)
   
   for f in d.GetFilenames():
-    #print t2
-    print "%s -> [%s]"%(f, s.GetValue(f,t2))
+    # Is the file a DICOM file ?
+    b = s.IsKey(f)
+    # print !
+    print "%s -> [%s] (%s)"%(f, s.GetValue(f,t1),b)
   
-  #ex = gdcm.FilenameToValueExtractor(mapping)
-  #ex.GetValue( "/tmp/Perfusion/Perfusion_205_0087" )
-  #print ex.GetValue( "/tmp/Perfusion/Perfusion_205_1809" )
-
-try:
-  filename = os.sys.argv[1]
-  TestScan( filename, True )
-except:
-  t = gdcm.Testing()
-  filename = t.GetDataRoot()
-  TestScan( filename, False )
-
-sys.exit(0)
+if __name__ == "__main__":
+  try:
+    filename = os.sys.argv[1]
+    recursive = True
+  except:
+    t = gdcm.Testing()
+    filename = t.GetDataRoot()
+    recursive = False
+  TestScan( filename, recursive)
+  
+  sys.exit(0)
 
