@@ -211,7 +211,14 @@ bool ReadExplicitDataElement(std::istream &is, ExplicitDataElement &de)
   if( t.GetGroup() != 0x0002 )
     {
     gdcmDebugMacro( "Done reading File Meta Information" );
-    is.seekg( start, std::ios::beg );
+    std::streampos currentpos = is.tellg();
+    // old code was fseeking from the beginning of file
+    // which seems to be quite different than fseeking in reverse from
+    // the current position... ???
+    //is.seekg( start, std::ios::beg );
+    assert( (start - currentpos) <= 0);
+    assert( (start - currentpos) == -4 );
+    is.seekg( (start - currentpos), std::ios::cur );
     return false;
     }
   // Read VR
