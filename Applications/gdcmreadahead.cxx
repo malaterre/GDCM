@@ -64,6 +64,7 @@ To terminate:	kill `cat /tmp/exampled.lock`
 #define LOG_FILE	"gdcmreadahead.log"
 #define LIST_FILE	"gdcmreadahead.list"
 
+/*
 void log_message(const char *filename,const char *message)
 {
   FILE *logfile;
@@ -72,21 +73,30 @@ void log_message(const char *filename,const char *message)
   fprintf(logfile,"%s\n",message);
   fclose(logfile);
 }
+*/
+
+void shutdown(int ex)
+{
+    syslog(LOG_INFO,"process quitting.");
+    // close the system logging connection
+    closelog();
+    // bye.
+    exit(ex);
+}
 
 void signal_handler(int sig)
 {
   std::ostringstream os;
   switch(sig) {
   case SIGHUP:
-    log_message(LOG_FILE,"hangup signal catched");
+    syslog(LOG_INFO,"hangup signal caught");
     break;
   case SIGTERM:
-    log_message(LOG_FILE,"terminate signal catched");
-    exit(0);
+    syslog(LOG_INFO,"terminate signal caught");
+    shutdown(0);
     break;
   default:
-    os << "Unknown signal caught: " << sig;
-    log_message(LOG_FILE, os.str().c_str() );
+    syslog(LOG_INFO,"%s : %d", "Unknown signal caught", sig);
     break;
   }
 }
@@ -117,6 +127,14 @@ void daemonize()
   signal(SIGTTIN,SIG_IGN);
   signal(SIGHUP,signal_handler); /* catch hangup signal */
   signal(SIGTERM,signal_handler); /* catch kill signal */
+}
+
+void startup()
+{
+    // start up the system logging connection
+    openlog("mydaemon",LOG_PID,LOG_DAEMON);
+    syslog(LOG_INFO,"process starting up.");
+    daemonize();
 }
 
 /*
@@ -190,24 +208,17 @@ void ProcessFiles(const char *path)
     // get rid of easy cases:
     if( file.size() > PATH_MAX )
       {
-      os << "ERROR: garbage string, its length is too long for a UNIX path:";
-      os << file;
-      log_message(LOG_FILE, os.str().c_str() );
+      syslog(LOG_INFO, "string length too long for a UNIX path: %s", file.c_str() );
       }
     else if( file[0] != '/' )
       {
-      os << "ERROR: full path only:";
-      os << file;
-      log_message(LOG_FILE, os.str().c_str() );
+      syslog(LOG_INFO, "full path only: %s", file.c_str() );
       }
     else
       {
       // Ok let's try to readahead this file:
       int ret = ReadAhead(file);
-      os << "DEBUG: processing file:";
-      os << file;
-      os << "\nreturn value was: " << ret;
-      log_message(LOG_FILE, os.str().c_str() );
+      syslog(LOG_INFO, "processing file: %s\n return value was: %d", file.c_str(), ret );
       }
     file.clear();
     }
@@ -222,37 +233,29 @@ void WatchFile(time_t &reference)
   int ret = stat(listfile, &buf);
   if( ret != 0 )
     {
-    log_message(LOG_FILE,"ERROR: the list file do not exist !");
+    syslog(LOG_DEBUG, "the list file does not exist !");
     return;
     }
   time_t lastmodification = buf.st_mtime;
   if( lastmodification > reference )
     {
-    std::ostringstream os;
-    os << "REREAD: file list was modified let's readahead: ";
-    os << lastmodification << " > " << reference;
-    log_message(LOG_FILE, os.str().c_str());
+    syslog(LOG_INFO, "file list was modified let's readahead: %ld > %ld", lastmodification, reference);
     ProcessFiles(listfile);
     // done let's store the new reference time:
     reference = lastmodification;
-    }
-  else
-    {
-    // uncomment me to check if daemon is still running (visual check)
-    //log_message(LOG_FILE, "NOTHING DONE");
     }
 }
 
 int main(int argc, char *argv[])
 {
   (void)argc; (void)argv;
-  daemonize();
+  startup();
   time_t start = 0; // make sure to always read the list file
   while(1) 
     {
-    //log_message(LOG_FILE,"running");
+    //syslog(LOG_DEBUG,"   still running...");
     WatchFile( start );
-    sleep(10); /* run every 10 seconds */
+    sleep(1); /* run every 10 seconds */
     }
 
   return 0;
