@@ -17,9 +17,6 @@
  * gdcmreadahead is a daemon that runs in the background and prepare file
  * stored on disk to be cached by the system (readahead system call)
  */
-#include <fstream>
-#include <sstream>
-#include <iostream>
 #include <assert.h>
 
 #include <sys/types.h>
@@ -49,6 +46,7 @@ To terminate:	kill `cat /tmp/exampled.lock`
 */
 
 #include <stdio.h>
+#include <limits.h> // PATH_MAX
 #include <stdlib.h> /* exit */
 #include <fcntl.h>
 #include <signal.h>
@@ -57,6 +55,7 @@ To terminate:	kill `cat /tmp/exampled.lock`
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <string.h>
+#include <sched.h> // sched_yield
 
 
 #define RUNNING_DIR	"/tmp"
@@ -86,7 +85,6 @@ void shutdown(int ex)
 
 void signal_handler(int sig)
 {
-  std::ostringstream os;
   switch(sig) {
   case SIGHUP:
     syslog(LOG_INFO,"hangup signal caught");
@@ -150,22 +148,22 @@ void startup()
  */
 
 
-int ReadAhead(std::string const & path)
+int ReadAhead(const char * path)
 {
   bool readonly = true;
   int flags = (readonly ? O_RDONLY : O_RDWR);
-  int handle = ::open(path.c_str(), flags, S_IRWXU);
+  int handle = ::open(path, flags, S_IRWXU);
   if( handle == -1 )
     {
-    std::cerr << "Could not open: " << path << std::endl;
-    std::cerr << strerror(errno) << std::endl;
+    syslog(LOG_INFO, "Could not open: %s", path);
+    //std::cerr << strerror(errno) << std::endl;
     return 1;
     }
   struct stat info;
   bool success = ::fstat(handle, &info) != -1;
   if( !success )
     {
-    std::cerr << "Could not fstat: " << path << std::endl;
+    syslog(LOG_INFO, "Could not fstat: %s", path);
     return 1;
     }
   off_t size = info.st_size;
@@ -182,7 +180,7 @@ int ReadAhead(std::string const & path)
   ssize_t ret = ::readahead(handle, 0, size);
   if( ret == -1 )
     {
-    std::cerr << "readahead failed for " << path << std::endl;
+    syslog(LOG_INFO, "readahead failed for %s", path );
     return 1;
     }
 
@@ -199,30 +197,36 @@ int ReadAhead(std::string const & path)
 
 void ProcessFiles(const char *path)
 {
-  std::ifstream is(path);
+  //std::ifstream is(path);
+  FILE *fp = fopen(path, "r");
+  assert( is ); // previous call made sure this file existed on the system...
   //const size_t pathmax = PATH_MAX;
-  std::string file;
-  while( std::getline(is, file) )
+  //std::string file;
+  char file[PATH_MAX];
+  //while( std::getline(is, file) )
+  while (fgets(file, PATH_MAX, fp))  
     {
-    std::ostringstream os;
+    size_t size = strlen(file);
+    assert( size < PATH_MAX );
     // get rid of easy cases:
-    if( file.size() > PATH_MAX )
+    if( file[size] != '\n' )
       {
-      syslog(LOG_INFO, "string length too long for a UNIX path: %s", file.c_str() );
+      syslog(LOG_INFO, "string length too long for a UNIX path: %s", file );
       }
     else if( file[0] != '/' )
       {
-      syslog(LOG_INFO, "full path only: %s", file.c_str() );
+      syslog(LOG_INFO, "full path only: %s", file );
       }
     else
       {
       // Ok let's try to readahead this file:
+      file[size] = 0; // remove the \n
       int ret = ReadAhead(file);
-      syslog(LOG_INFO, "processing file: %s\n return value was: %d", file.c_str(), ret );
+      syslog(LOG_INFO, "processing file: %s\n return value was: %d", file, ret );
       }
-    file.clear();
     }
-  is.close();
+  //is.close();
+  fclose(fp);
 }
 
 // #define LIST_FILE	"gdcmreadahead.list"
