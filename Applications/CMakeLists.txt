@@ -5,6 +5,7 @@
 # gdcmconv
 
 CHECK_INCLUDE_FILE("fcntl.h"      CMAKE_HAVE_FCNTL_H)
+CHECK_INCLUDE_FILE("sched.h"      CMAKE_HAVE_SHED_H)
 CHECK_INCLUDE_FILE("sys/mman.h"   CMAKE_HAVE_SYS_MMAN_H)
 
 SET(GDCMDUMP_APPS_SRCS
@@ -70,12 +71,12 @@ ENDFOREACH(exename)
 # Special daemon
 # C program only, no link to gdcm to make it as lightweight as possible
 # it use the readahead func from linux kernel
-IF(CMAKE_HAVE_FCNTL_H)
+IF(CMAKE_HAVE_FCNTL_H AND CMAKE_HAVE_SHED_H)
   ADD_EXECUTABLE(gdcmreadahead gdcmreadahead.c)
   INSTALL(TARGETS gdcmreadahead
 	RUNTIME DESTINATION bin
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib/static
 	)
-ENDIF(CMAKE_HAVE_FCNTL_H)
+ENDIF(CMAKE_HAVE_FCNTL_H AND CMAKE_HAVE_SHED_H)
 
