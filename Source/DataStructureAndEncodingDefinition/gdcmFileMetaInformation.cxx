@@ -217,7 +217,7 @@ bool ReadExplicitDataElement(std::istream &is, ExplicitDataElement &de)
     // the current position... ???
     //is.seekg( start, std::ios::beg );
     assert( (start - currentpos) <= 0);
-    assert( (start - currentpos) == -4 );
+    assert( (int)(start - currentpos) == -4 );
     is.seekg( (start - currentpos), std::ios::cur );
     return false;
     }
