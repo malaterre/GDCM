@@ -62,6 +62,6 @@ ENDFOREACH(exename)
 
 # Special daemon
 IF(CMAKE_HAVE_FCNTL_H)
-  ADD_EXECUTABLE(gdcmreadahead gdcmreadahead.cxx)
+  ADD_EXECUTABLE(gdcmreadahead gdcmreadahead.c)
 ENDIF(CMAKE_HAVE_FCNTL_H)
 

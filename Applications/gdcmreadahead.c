@@ -26,7 +26,6 @@
 // open
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h>
 
 #include <errno.h>
 
@@ -48,7 +47,6 @@ To terminate:	kill `cat /tmp/exampled.lock`
 #include <stdio.h>
 #include <limits.h> // PATH_MAX
 #include <stdlib.h> /* exit */
-#include <fcntl.h>
 #include <signal.h>
 #include <unistd.h>
 #include <syslog.h>
@@ -56,6 +54,7 @@ To terminate:	kill `cat /tmp/exampled.lock`
 #include <sys/stat.h>
 #include <string.h>
 #include <sched.h> // sched_yield
+#include <fcntl.h> // readahead
 
 
 #define RUNNING_DIR	"/tmp"
@@ -63,24 +62,13 @@ To terminate:	kill `cat /tmp/exampled.lock`
 #define LOG_FILE	"gdcmreadahead.log"
 #define LIST_FILE	"gdcmreadahead.list"
 
-/*
-void log_message(const char *filename,const char *message)
-{
-  FILE *logfile;
-  logfile=fopen(filename,"a");
-  if(!logfile) return;
-  fprintf(logfile,"%s\n",message);
-  fclose(logfile);
-}
-*/
-
 void shutdown(int ex)
 {
-    syslog(LOG_INFO,"process quitting.");
-    // close the system logging connection
-    closelog();
-    // bye.
-    exit(ex);
+  syslog(LOG_DEBUG,"process quitting.");
+  // close the system logging connection
+  closelog();
+  // bye.
+  exit(ex);
 }
 
 void signal_handler(int sig)
@@ -94,7 +82,7 @@ void signal_handler(int sig)
     shutdown(0);
     break;
   default:
-    syslog(LOG_INFO,"%s : %d", "Unknown signal caught", sig);
+    syslog(LOG_DEBUG,"%s : %d", "Unknown signal caught", sig);
     break;
   }
 }
@@ -129,10 +117,10 @@ void daemonize()
 
 void startup()
 {
-    // start up the system logging connection
-    openlog("mydaemon",LOG_PID,LOG_DAEMON);
-    syslog(LOG_INFO,"process starting up.");
-    daemonize();
+  // start up the system logging connection
+  openlog("mydaemon",LOG_PID,LOG_DAEMON);
+  syslog(LOG_DEBUG,"process starting up.");
+  daemonize();
 }
 
 /*
@@ -145,25 +133,38 @@ void startup()
  *
  * The following command clears anything in the disk cache:
  * sync && echo 3 > /proc/sys/vm/drop_caches
+ *
+ * http://kerneltrap.org/node/6642
+ * -> 
+ * That would involve using posix_fadvise(POSIX_FADV_RANDOM) to disable kernel
+ * readahead and then using posix_fadvise(POSIX_FADV_WILLNEED) to launch
+ * application-level readahead.
+ *
+ *  #include <fcntl.h>
+ * 
+ * int posix_fadvise(int fd, off_t offset, off_t len, int advice);
+ * 
  */
 
 
 int ReadAhead(const char * path)
 {
-  bool readonly = true;
-  int flags = (readonly ? O_RDONLY : O_RDWR);
-  int handle = ::open(path, flags, S_IRWXU);
+  int readonly = 1;
+  int flags;
+  int handle;
+  flags = (readonly ? O_RDONLY : O_RDWR);
+  handle = open(path, flags, S_IRWXU);
   if( handle == -1 )
     {
-    syslog(LOG_INFO, "Could not open: %s", path);
+    syslog(LOG_WARNING, "Could not open: %s", path);
     //std::cerr << strerror(errno) << std::endl;
     return 1;
     }
   struct stat info;
-  bool success = ::fstat(handle, &info) != -1;
-  if( !success )
+  int success = fstat(handle, &info);
+  if( success != 0 )
     {
-    syslog(LOG_INFO, "Could not fstat: %s", path);
+    syslog(LOG_WARNING, "Could not fstat: %s", path);
     return 1;
     }
   off_t size = info.st_size;
@@ -177,40 +178,47 @@ int ReadAhead(const char * path)
   // Only deal with file
   assert( S_ISREG(info.st_mode) );
 
-  ssize_t ret = ::readahead(handle, 0, size);
+  ssize_t ret = readahead(handle, 0, size);
   if( ret == -1 )
     {
-    syslog(LOG_INFO, "readahead failed for %s", path );
+    syslog(LOG_ERR, "readahead failed for %s", path );
     return 1;
     }
 
   //std::cout << "done with " << path << "\n";
-  bool error = ::close(handle) != 0;
-  if( error ) return 1;
+  int error = close(handle);
+  if( error != 0 ) 
+    {
+    syslog(LOG_ERR, "close failed for %s", path );
+    return 1;
+    }
 
   // be nice to other processes now 
   int res = sched_yield();
-  if( res != 0 ) return 1;
+  if( res != 0 ) 
+    {
+    syslog(LOG_ERR, "sched_yield failed" );
+    return 1;
+    }
 
   return 0;
 }
 
 void ProcessFiles(const char *path)
 {
-  //std::ifstream is(path);
   FILE *fp = fopen(path, "r");
-  assert( is ); // previous call made sure this file existed on the system...
-  //const size_t pathmax = PATH_MAX;
-  //std::string file;
+  assert( fp ); // previous call made sure this file existed on the system...
   char file[PATH_MAX];
-  //while( std::getline(is, file) )
   while (fgets(file, PATH_MAX, fp))  
     {
     size_t size = strlen(file);
     assert( size < PATH_MAX );
     // get rid of easy cases:
-    if( file[size] != '\n' )
+    if( file[size-1] != '\n' )
       {
+      /* actually this case can also happen when the file was truncated, basically
+       * when we are reading the file while another process overwrite it
+       */
       syslog(LOG_INFO, "string length too long for a UNIX path: %s", file );
       }
     else if( file[0] != '/' )
@@ -220,17 +228,21 @@ void ProcessFiles(const char *path)
     else
       {
       // Ok let's try to readahead this file:
-      file[size] = 0; // remove the \n
+      file[size-1] = 0; // remove the \n
+      syslog(LOG_DEBUG, "processing file: %s", file );
       int ret = ReadAhead(file);
-      syslog(LOG_INFO, "processing file: %s\n return value was: %d", file, ret );
+      (void)ret;
       }
     }
-  //is.close();
-  fclose(fp);
+  int ret = fclose(fp);
+  if( ret != 0 )
+    {
+    syslog(LOG_ERR, "could not close: %s", path );
+    }
 }
 
 // #define LIST_FILE	"gdcmreadahead.list"
-void WatchFile(time_t &reference)
+void WatchFile(time_t *reference)
 {
   const char *listfile = LIST_FILE;
   struct stat buf;
@@ -241,12 +253,12 @@ void WatchFile(time_t &reference)
     return;
     }
   time_t lastmodification = buf.st_mtime;
-  if( lastmodification > reference )
+  if( lastmodification > *reference )
     {
-    syslog(LOG_INFO, "file list was modified let's readahead: %ld > %ld", lastmodification, reference);
+    syslog(LOG_INFO, "file list was modified let's readahead: %ld > %ld", lastmodification, *reference);
     ProcessFiles(listfile);
     // done let's store the new reference time:
-    reference = lastmodification;
+    *reference = lastmodification;
     }
 }
 
@@ -258,7 +270,7 @@ int main(int argc, char *argv[])
   while(1) 
     {
     //syslog(LOG_DEBUG,"   still running...");
-    WatchFile( start );
+    WatchFile( &start );
     sleep(1); /* run every 10 seconds */
     }
 
