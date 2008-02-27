@@ -26,8 +26,8 @@ ENDFOREACH(app)
 
 IF(CMAKE_HAVE_PTHREAD_H)
 # Dev only: I dont need to install that one:
-ADD_EXECUTABLE(threadgdcm threadgdcm.cxx)
-TARGET_LINK_LIBRARIES(threadgdcm gdcmMSFF pthread vtkIO)
+  ADD_EXECUTABLE(threadgdcm threadgdcm.cxx)
+  TARGET_LINK_LIBRARIES(threadgdcm gdcmMSFF pthread vtkIO)
 ENDIF(CMAKE_HAVE_PTHREAD_H)
 
 #ADD_EXECUTABLE(gdcm2vtk gdcm2vtk.cxx)
