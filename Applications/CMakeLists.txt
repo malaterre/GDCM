@@ -44,12 +44,6 @@ SET(GDCM_EXECUTABLE_NAME
   #gdcmmmap
   #gdcmfile
   )
-IF(CMAKE_HAVE_FCNTL_H)
-  SET(GDCM_EXECUTABLE_NAME ${GDCM_EXECUTABLE_NAME}
-    gdcmreadahead
-  )
-ENDIF(CMAKE_HAVE_FCNTL_H)
-
 FOREACH(exename ${GDCM_EXECUTABLE_NAME})
   ADD_EXECUTABLE(${exename} ${exename}.cxx)
   TARGET_LINK_LIBRARIES(${exename} gdcmMSFF)
@@ -66,4 +60,8 @@ ENDFOREACH(exename)
 #ADD_EXECUTABLE(deflate deflate.cxx)
 #TARGET_LINK_LIBRARIES(deflate gdcmzlib)
 
+# Special daemon
+IF(CMAKE_HAVE_FCNTL_H)
+  ADD_EXECUTABLE(gdcmreadahead gdcmreadahead.cxx)
+ENDIF(CMAKE_HAVE_FCNTL_H)
 

@@ -17,9 +17,10 @@
  * gdcmreadahead is a daemon that runs in the background and prepare file
  * stored on disk to be cached by the system (readahead system call)
  */
-#include "gdcmSystem.h"
-#include "gdcmDirectory.h"
 #include <fstream>
+#include <sstream>
+#include <iostream>
+#include <assert.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -33,6 +34,9 @@
 #include <errno.h>
 
 /*
+ * http://www.cca.me.uk/cms.php?act=showarticle&article_id=6
+ * http://www.enderunix.org/documents/eng/daemon.php
+ *
 UNIX Daemon Server Programming Sample Program
 Levent Karakas <levent at mektup dot at> May 2001
 
@@ -49,6 +53,7 @@ To terminate:	kill `cat /tmp/exampled.lock`
 #include <fcntl.h>
 #include <signal.h>
 #include <unistd.h>
+#include <syslog.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <string.h>
@@ -174,33 +179,10 @@ int ReadAhead(std::string const & path)
   return 0;
 }
 
-void ProcessFile(const char *path)
-{
-  std::string filename = path;
-
-  int res = 0;
-  if( gdcm::System::FileIsDirectory( filename.c_str() ) )
-    {
-    gdcm::Directory d;
-    // recursively look for any file
-    d.Load(filename, true);
-    gdcm::Directory::FilenamesType const &filenames = d.GetFilenames();
-    for( gdcm::Directory::FilenamesType::const_iterator it = filenames.begin(); it != filenames.end(); ++it )
-      {
-      res += ReadAhead(*it);
-      }
-    }
-  else
-    {
-    res += ReadAhead(filename);
-    }
-
-}
-
 void ProcessFiles(const char *path)
 {
   std::ifstream is(path);
-  const size_t pathmax = PATH_MAX;
+  //const size_t pathmax = PATH_MAX;
   std::string file;
   while( std::getline(is, file) )
     {
@@ -229,6 +211,7 @@ void ProcessFiles(const char *path)
       }
     file.clear();
     }
+  is.close();
 }
 
 // #define LIST_FILE	"gdcmreadahead.list"
