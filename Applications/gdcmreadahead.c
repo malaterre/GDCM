@@ -16,19 +16,36 @@
  * OS Specific: Linux (>2.4.11)
  * gdcmreadahead is a daemon that runs in the background and prepare file
  * stored on disk to be cached by the system (readahead system call)
+ *
+ * LOG file is: /var/log/daemon.log
+ * LOCK file is: /tmp/gdcmreadahead.lock
+ * LIST file is: /tmp/gdcmreadahead.list
+ *
+ * The list file is typically the output of a `find /path -type f`
+ * no comment are allowed in this file, full path only to file
+ * no check is done to make sure the file is a dicom file
+ *
+ * the working (running) directory of this daemon is /tmp
+ *
  */
 #define _GNU_SOURCE /* This is required to get the declaration of readahead */
+
+#include <fcntl.h> // readahead
 #include <assert.h>
-
-#include <sys/types.h>
-#include <sys/stat.h>
+#include <stdio.h>
+#include <limits.h> // PATH_MAX
+#include <stdlib.h> /* exit */
+#include <signal.h>
 #include <unistd.h>
-
-// open
+#include <syslog.h>
+#include <string.h>
+#include <sched.h> // sched_yield
 #include <sys/types.h>
 #include <sys/stat.h>
-
 #include <errno.h>
+
+#undef _GNU_SOURCE
+
 
 /*
  * http://www.cca.me.uk/cms.php?act=showarticle&article_id=6
@@ -45,23 +62,9 @@ To test signal:	kill -HUP `cat /tmp/exampled.lock`
 To terminate:	kill `cat /tmp/exampled.lock`
 */
 
-#include <stdio.h>
-#include <limits.h> // PATH_MAX
-#include <stdlib.h> /* exit */
-#include <signal.h>
-#include <unistd.h>
-#include <syslog.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <string.h>
-#include <sched.h> // sched_yield
-
-#include <fcntl.h> // readahead
-
 
 #define RUNNING_DIR	"/tmp"
 #define LOCK_FILE	"gdcmreadahead.lock"
-#define LOG_FILE	"gdcmreadahead.log"
 #define LIST_FILE	"gdcmreadahead.list"
 
 void shutdown(int ex)
@@ -193,14 +196,11 @@ void startup()
 int ReadAhead(const char * path)
 {
   int readonly = 1;
-  int flags;
-  int handle;
-  flags = (readonly ? O_RDONLY : O_RDWR);
-  handle = open(path, flags, S_IRWXU);
+  int flags = (readonly ? O_RDONLY : O_RDWR);
+  int handle = open(path, flags, S_IRWXU);
   if( handle == -1 )
     {
     syslog(LOG_WARNING, "Could not open: %s", path);
-    //std::cerr << strerror(errno) << std::endl;
     return 1;
     }
   struct stat info;
@@ -211,11 +211,13 @@ int ReadAhead(const char * path)
     return 1;
     }
   off_t size = info.st_size;
+  /* get rid of any weird non-file thingy */
   if(S_ISDIR(info.st_mode) || S_ISCHR(info.st_mode) || 
     S_ISBLK(info.st_mode) || S_ISFIFO(info.st_mode) ||
     S_ISSOCK(info.st_mode))
     {
     // we are done !
+    close(handle);
     return 0;
     }
   // Only deal with file
@@ -228,7 +230,6 @@ int ReadAhead(const char * path)
     return 1;
     }
 
-  //std::cout << "done with " << path << "\n";
   int error = close(handle);
   if( error != 0 ) 
     {
@@ -272,7 +273,7 @@ void ProcessFiles(const char *path)
       {
       // Ok let's try to readahead this file:
       file[size-1] = 0; // remove the \n
-      syslog(LOG_DEBUG, "processing file: %s", file );
+      /*syslog(LOG_DEBUG, "processing file: %s", file );*/
       int ret = ReadAhead(file);
       (void)ret;
       }
