@@ -64,12 +64,19 @@ To terminate:	kill `cat /tmp/exampled.lock`
 
 
 #define RUNNING_DIR	"/tmp"
-#define LOCK_FILE	"gdcmreadahead.lock"
-#define LIST_FILE	"gdcmreadahead.list"
+#define LOCK_FILE	"/tmp/gdcmreadahead.lock"
+#define LIST_FILE	"/tmp/gdcmreadahead.list"
 
 void shutdown(int ex)
 {
   syslog(LOG_DEBUG,"process quitting.");
+  // now is a good time to remove the lock file, just before we exit:
+  int ret = unlink(LOCK_FILE);
+  if( ret != 0 )
+    {
+    syslog(LOG_ERR,"could not remove lock file: %s",  LOCK_FILE );
+    ex = 1; // mark it as error
+    }
   // close the system logging connection
   closelog();
   // bye.
@@ -118,7 +125,9 @@ void daemonize()
     int c = close(i); /* close all descriptors */
     if( c != 0 )
       {
-      syslog(LOG_ERR,"close failed on descriptor: %d", i);
+      // most of the descriptor are not open anyway, do not print
+      // too much garbage in the syslog then:
+      //syslog(LOG_ERR,"close failed on descriptor: %d", i);
       }
     }
   i=open("/dev/null",O_RDWR); 
@@ -163,6 +172,15 @@ void daemonize()
 
 void startup()
 {
+  // first thing we should check for the obvious: did we cleanly exit last time:
+  struct stat buf;
+  int st = stat(LOCK_FILE, &buf);
+  if( st == 0 )
+    {
+    fprintf( stderr, "Lock file: %s is still present\n", LOCK_FILE);
+    exit(1);
+    }
+
   // start up the system logging connection
   openlog("gdcmreadahead",LOG_PID,LOG_DAEMON);
   syslog(LOG_DEBUG,"process starting up.");
@@ -283,6 +301,7 @@ void ProcessFiles(const char *path)
     {
     syslog(LOG_ERR, "could not close: %s", path );
     }
+  syslog(LOG_INFO, "The whole file was processed: %s", path );
 }
 
 // #define LIST_FILE	"gdcmreadahead.list"
