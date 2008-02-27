@@ -17,6 +17,7 @@
  * gdcmreadahead is a daemon that runs in the background and prepare file
  * stored on disk to be cached by the system (readahead system call)
  */
+#define _GNU_SOURCE /* This is required to get the declaration of readahead */
 #include <assert.h>
 
 #include <sys/types.h>
@@ -54,6 +55,7 @@ To terminate:	kill `cat /tmp/exampled.lock`
 #include <sys/stat.h>
 #include <string.h>
 #include <sched.h> // sched_yield
+
 #include <fcntl.h> // readahead
 
 
@@ -91,19 +93,60 @@ void daemonize()
 {
   int i,lfp;
   char str[10];
-  if(getppid()==1) return; /* already a daemon */
-  i=fork();
-  if (i<0) exit(1); /* fork error */
-  if (i>0) exit(0); /* parent exits */
+  if( getppid() == 1 ) return; /* already a daemon */
+  i = fork();
+  if ( i < 0 )
+    {
+    syslog(LOG_ERR,"Fork error: %s", strerror(errno) );
+    exit(1); /* fork error */
+    }
+  if ( i > 0 )
+    {
+    exit(0); /* parent exits */
+    }
   /* child (daemon) continues */
-  setsid(); /* obtain a new process group */
-  for (i=getdtablesize();i>=0;--i) close(i); /* close all descriptors */
-  i=open("/dev/null",O_RDWR); dup(i); dup(i); /* handle standart I/O */
+  pid_t pg = setsid(); /* obtain a new process group */
+  if( pg == -1 )
+    {
+    syslog(LOG_ERR,"setsid failed");
+    }
+  for (i=getdtablesize();i>=0;--i)
+    {
+    int c = close(i); /* close all descriptors */
+    if( c != 0 )
+      {
+      syslog(LOG_ERR,"close failed on descriptor: %d", i);
+      }
+    }
+  i=open("/dev/null",O_RDWR); 
+  if( i == -1 ) /* stdin */
+    {
+    syslog(LOG_ERR,"open error for stdin: %s", strerror(errno) );
+    }
+  if( dup(i) == -1 ) /* stdout */
+    {
+    syslog(LOG_ERR,"open error for stdout: %s", strerror(errno) );
+    }
+  if( dup(i) == -1 )
+    {
+    syslog(LOG_ERR,"open error for stderr: %s", strerror(errno) );
+    }
   umask(027); /* set newly created file permissions */
-  chdir(RUNNING_DIR); /* change running directory */
+  if( chdir(RUNNING_DIR) != 0 ) /* change running directory */
+    {
+    syslog(LOG_ERR,"could not chdir into: %s", RUNNING_DIR );
+    }
   lfp=open(LOCK_FILE,O_RDWR|O_CREAT,0640);
-  if (lfp<0) exit(1); /* can not open */
-  if (lockf(lfp,F_TLOCK,0)<0) exit(0); /* can not lock */
+  if( lfp < 0 )
+    {
+    syslog(LOG_ERR,"could not open: %s", LOCK_FILE );
+    exit(1);
+    }
+  if (lockf(lfp,F_TLOCK,0)<0) 
+    {
+    syslog(LOG_ERR,"could not lockf: %s, error was: %s ", LOCK_FILE, strerror(errno) );
+    exit(0); /* can not lock */
+    }
   /* first instance continues */
   sprintf(str,"%d\n",getpid());
   write(lfp,str,strlen(str)); /* record pid to lockfile */
@@ -118,7 +161,7 @@ void daemonize()
 void startup()
 {
   // start up the system logging connection
-  openlog("mydaemon",LOG_PID,LOG_DAEMON);
+  openlog("gdcmreadahead",LOG_PID,LOG_DAEMON);
   syslog(LOG_DEBUG,"process starting up.");
   daemonize();
 }
