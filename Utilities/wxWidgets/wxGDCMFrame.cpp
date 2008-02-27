@@ -4,7 +4,6 @@
 #include "wxVTKRenderWindowInteractor.h"
 #include "vtkImageViewer.h"
 #include "vtkGDCMImageReader.h"
-#include "gdcmDirectory.h" // For GDCM_DATA_ROOT
 
 BEGIN_EVENT_TABLE( wxGDCMFrame, wxGDCMFrameBase )
     EVT_MENU(wxID_OPEN, wxGDCMFrame::OnOpen)
@@ -21,7 +20,7 @@ wxGDCMFrame::wxGDCMFrame(wxWindow* parent, int id, const wxString& title, const 
     imageViewer = vtkImageViewer::New();
     imageViewer->SetupInteractor( VTKWindow );
     Reader      = vtkGDCMImageReader::New();
-    directory = wxT( GDCM_DATA_ROOT );
+    directory = wxT( "" );
 }
 
 wxGDCMFrame::~wxGDCMFrame()
