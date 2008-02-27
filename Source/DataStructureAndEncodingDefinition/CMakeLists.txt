@@ -10,7 +10,7 @@ SET(DSED_SRCS
   gdcmFragment.cxx
   gdcmImplicitDataElement.cxx
   gdcmItem.cxx
-  gdcmParser.cxx
+  #gdcmParser.cxx
   gdcmSequenceOfFragments.cxx
   gdcmSequenceOfItems.cxx
   gdcmTransferSyntax.cxx

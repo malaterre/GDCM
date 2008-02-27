@@ -12,13 +12,15 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #ifndef __gdcmByteBuffer_h
 #define __gdcmByteBuffer_h
 
 #include "gdcmTypes.h"
 #include <vector>
 #include <assert.h>
+
+#error should not be used 
+
 namespace gdcm
 {
 /**
