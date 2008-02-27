@@ -4,6 +4,8 @@
 # gdcminfo
 # gdcmconv
 
+CHECK_INCLUDE_FILE("fcntl.h"      CMAKE_HAVE_FCNTL_H)
+
 SET(GDCMDUMP_APPS_SRCS
   gdcmdump.cxx
   )
@@ -39,7 +41,14 @@ SET(GDCM_EXECUTABLE_NAME
   gdcmimg
   #deflate
   gdcmconv
+  #gdcmmmap
+  #gdcmfile
   )
+IF(CMAKE_HAVE_FCNTL_H)
+  SET(GDCM_EXECUTABLE_NAME ${GDCM_EXECUTABLE_NAME}
+    gdcmreadahead
+  )
+ENDIF(CMAKE_HAVE_FCNTL_H)
 
 FOREACH(exename ${GDCM_EXECUTABLE_NAME})
   ADD_EXECUTABLE(${exename} ${exename}.cxx)
