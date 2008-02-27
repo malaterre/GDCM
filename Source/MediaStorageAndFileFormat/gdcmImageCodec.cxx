@@ -333,15 +333,15 @@ bool ImageCodec::DoPixelType(std::istream &is, std::ostream &os)
     else // Pixel are unsigned
       {
 #if 1
-      uint16_t c;
+      /*uint16_t c;
       while( is.read((char*)&c,2) )
         {
         c =
           (c >> (PF.GetBitsStored() - PF.GetHighBit() - 1)) & pmask;
         os.write((char*)&c, 2 );
-        }
+        }*/
+      os.rdbuf( is.rdbuf() );
 #else
-      //os.rdbuf( is.rdbuf() );
       //std::ostreambuf_iterator<char> end_of_stream_iterator;
       //std::ostreambuf_iterator<char> out_iter(os.rdbuf());
       //while( out_iter != end_of_stream_iterator )
@@ -365,6 +365,11 @@ bool ImageCodec::DoPixelType(std::istream &is, std::ostream &os)
     {
     abort(); // TODO
     }
+  return true;
+}
+
+bool ImageCodec::Decode(DataElement const &is, DataElement &os)
+{
   return true;
 }
 

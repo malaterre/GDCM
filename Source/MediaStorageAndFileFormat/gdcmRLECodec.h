@@ -27,15 +27,18 @@ public:
   RLECodec();
   ~RLECodec();
   bool CanDecode(TransferSyntax const &ts);
+  bool Decode(DataElement const &is, DataElement &os);
+protected:
   bool Decode(std::istream &is, std::ostream &os);
+public:
 
-  void SetLength(uint32_t l)
+  void SetLength(unsigned long l)
     {
     Length = l;
     }
 private:
   RLEInternals *Internals;
-  uint32_t Length;
+  unsigned long Length;
 };
 
 } // end namespace gdcm

@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmPDFCodec.h"
+#include "gdcmDataElement.h"
 
 namespace gdcm
 {
@@ -25,9 +26,9 @@ PDFCodec::~PDFCodec()
 {
 }
 
-bool PDFCodec::Decode(std::istream &is, std::ostream &os)
+bool PDFCodec::Decode(DataElement const &is, DataElement &os)
 {
-  os << is.rdbuf();
+  os = is;
   return true;
 }
 

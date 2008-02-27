@@ -15,6 +15,8 @@
 #include "gdcmJPEG2000Codec.h"
 #include "gdcmTransferSyntax.h"
 #include "gdcmTrace.h"
+#include "gdcmDataElement.h"
+#include "gdcmSequenceOfFragments.h"
 
 #include "gdcm_openjpeg.h"
 
@@ -77,6 +79,25 @@ bool JPEG2000Codec::CanDecode(TransferSyntax const &ts)
 {
   return ts == TransferSyntax::JPEG2000Lossless 
 	  || ts == TransferSyntax::JPEG2000;
+}
+
+bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
+{
+    const SequenceOfFragments *sf = in.GetSequenceOfFragments();
+      std::stringstream is;
+      unsigned long totalLen = sf->ComputeByteLength();
+      char *buffer = new char[totalLen];
+      sf->GetBuffer(buffer, totalLen);
+      is.write(buffer, totalLen);
+      delete[] buffer;
+      std::stringstream os;
+    bool r = Decode(is, os);
+    assert( r );
+    out = in;
+    std::string str = os.str();
+    out.SetByteValue( &str[0], str.size() );
+      //memcpy(buffer, os.str().c_str(), len);
+    return r;
 }
 
 bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)

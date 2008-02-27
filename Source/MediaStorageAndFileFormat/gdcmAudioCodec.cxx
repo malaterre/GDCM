@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmAudioCodec.h"
+#include "gdcmDataElement.h"
 
 namespace gdcm
 {
@@ -25,9 +26,9 @@ AudioCodec::~AudioCodec()
 {
 }
 
-bool AudioCodec::Decode(std::istream &is, std::ostream &os)
+bool AudioCodec::Decode(DataElement const &is, DataElement &os)
 {
-  os << is.rdbuf();
+  os = is;
   return true;
 }
 

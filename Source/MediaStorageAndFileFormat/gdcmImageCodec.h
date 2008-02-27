@@ -34,7 +34,10 @@ public:
   ImageCodec();
   ~ImageCodec();
   bool CanDecode(TransferSyntax const &) { return false; }
+  bool Decode(DataElement const &is, DataElement &os);
+protected:
   bool Decode(std::istream &is, std::ostream &os);
+public:
 
   unsigned int GetPlanarConfiguration() const
     {

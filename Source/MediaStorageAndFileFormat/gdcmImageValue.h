@@ -17,11 +17,7 @@
 #define __gdcmImageValue_h
 
 #include "gdcmImage.h"
-#include "gdcmSmartPointer.h"
-#include "gdcmTransferSyntax.h"
-#include "gdcmValue.h"
-
-#include <vector>
+#include "gdcmDataElement.h"
 
 namespace gdcm
 {
@@ -34,28 +30,15 @@ namespace gdcm
 class GDCM_EXPORT ImageValue : public Image
 {
 public:
-  ImageValue():PixelData(0) {}
+  ImageValue():PixelData() {}
   ~ImageValue() {}
 
   bool GetBuffer(char *buffer) const;
 
-  void SetValue(Value const &v) {
-    PixelData = &v;
+  void SetDataElement(DataElement const &de) {
+    PixelData = de;
   }
-  const Value& GetValue() const { return *PixelData; }
-//  ImageValue &operator=(const ImageValue &iv)
-//    {
-//    PixelData = iv.PixelData;
-//    return *this;
-//    }
-//  ImageValue(const ImageValue&_val)
-//    {
-//    if( this != &_val)
-//      {
-//      *this = _val;
-//      }
-//    }
-
+  const DataElement& GetDataElement() const { return PixelData; }
 
 protected:
   bool TryRAWCodec(char *buffer) const;
@@ -64,8 +47,7 @@ protected:
   bool TryRLECodec(char *buffer) const;
 
 private:
-  typedef SmartPointer<Value> ValuePtr;
-  ValuePtr PixelData; //copied from 7fe0,0010
+  DataElement PixelData; //copied from 7fe0,0010
 };
 
 } // end namespace gdcm

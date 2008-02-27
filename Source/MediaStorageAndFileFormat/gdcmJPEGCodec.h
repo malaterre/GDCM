@@ -24,14 +24,18 @@ namespace gdcm
  * \brief Class to do JPEG
  * \note
  */
+class PixelFormat;
 class JPEGCodec : public ImageCodec
 {
 public:
   JPEGCodec();
   ~JPEGCodec();
   bool CanDecode(TransferSyntax const &ts);
-  bool Decode(std::istream &is, std::ostream &os);
+  bool Decode(DataElement const &is, DataElement &os);
   void SetPixelFormat(PixelFormat const &pf);
+
+protected:
+  bool Decode(std::istream &is, std::ostream &os);
 
 protected:
   // Internal method called by SetPixelFormat

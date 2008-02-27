@@ -106,7 +106,7 @@ bool ImageWriter::Write()
 
   // Pixel Data
   DataElement de( Tag(0x7fe0,0x0010) );
-  const Value &v = PixelData.GetValue();
+  const Value &v = PixelData.GetDataElement().GetValue();
   de.SetValue( v );
   const ByteValue *bv = de.GetByteValue();
   const TransferSyntax &ts = PixelData.GetTransferSyntax();

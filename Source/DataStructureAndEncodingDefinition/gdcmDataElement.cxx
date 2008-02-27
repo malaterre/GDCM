@@ -15,9 +15,9 @@
 #include "gdcmDataElement.h"
 
 #include "gdcmByteValue.h"
-#include "gdcmSequenceOfItems.h"
 #include "gdcmAttribute.h"
 #include "gdcmSequenceOfFragments.h"
+#include "gdcmSequenceOfItems.h"
 
 namespace gdcm
 {
@@ -34,7 +34,7 @@ namespace gdcm
   const SequenceOfItems* DataElement::GetSequenceOfItems() const {
     const Value &v = GetValue();
     const SequenceOfItems *sqi = dynamic_cast<const SequenceOfItems*>(&v);
-    return sqi; // Will return NULL if not ByteValue
+    return sqi;
   }
   const SequenceOfFragments* DataElement::GetSequenceOfFragments() const {
     const Value &v = GetValue();

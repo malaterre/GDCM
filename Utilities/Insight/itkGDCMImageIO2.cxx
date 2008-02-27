@@ -402,7 +402,9 @@ void GDCMImageIO2::Write(const void* buffer)
   char *pointer = (char*)bv->GetPointer();
   memcpy(pointer, buffer, numberOfBytes);
 
-  image.SetValue( *bv );
+  gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
+  pixeldata.SetValue( *bv );
+  image.SetDataElement( pixeldata );
 
   const char *filename = m_FileName.c_str();
   writer.SetFileName( filename );

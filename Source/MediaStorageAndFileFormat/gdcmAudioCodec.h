@@ -26,9 +26,7 @@ public:
   AudioCodec();
   ~AudioCodec();
   bool CanDecode(TransferSyntax const &) { return false; }
-  bool Decode(std::istream &is, std::ostream &os);
-
-private:
+  bool Decode(DataElement const &is, DataElement &os);
 };
 
 } // end namespace gdcm

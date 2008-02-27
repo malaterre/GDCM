@@ -43,7 +43,9 @@ int TestImageWriter2(int argc, char *argv[])
   buffer.resize(len); // black image
 
   gdcm::ByteValue *bv = new gdcm::ByteValue(buffer);
-  image.SetValue( *bv );
+  gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
+  pixeldata.SetValue( *bv );
+  image.SetDataElement( pixeldata );
 
   const char filename[] = "toto.dcm";
   gdcm::ImageWriter writer;

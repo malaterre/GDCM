@@ -446,6 +446,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   image.SetPixelFormat( pixeltype );
   unsigned long len = image.GetBufferLength();
 
+  gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
   gdcm::ByteValue *bv = new gdcm::ByteValue(); // (char*)data->GetScalarPointer(), len );
   bv->SetLength( len ); // allocate !
   
@@ -488,11 +489,14 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
       }
     }
 
-  image.SetValue( *bv );
+  pixeldata.SetValue( *bv );
+  image.SetDataElement( pixeldata );
 
 // DEBUG
-  const gdcm::Value &v = image.GetValue();
-  const gdcm::ByteValue *bv1 = dynamic_cast<const gdcm::ByteValue*>(&v);
+  const gdcm::DataElement &pixeldata2 = image.GetDataElement();
+  //const gdcm::Value &v = image.GetValue();
+  //const gdcm::ByteValue *bv1 = dynamic_cast<const gdcm::ByteValue*>(&v);
+  const gdcm::ByteValue *bv1 = pixeldata2.GetByteValue();
   assert( bv1 && bv1 == bv );
   image.Print( std::cerr );
 // END DEBUG

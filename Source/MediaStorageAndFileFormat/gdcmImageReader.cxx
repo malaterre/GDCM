@@ -566,7 +566,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
 //        }
       PixelData.SetNeedByteSwap( need );
       }
-    PixelData.SetValue( xde.GetValue() );
+    PixelData.SetDataElement( xde );
     }
 //  else if( type == TS::Implicit )
 //    {
@@ -792,7 +792,7 @@ bool ImageReader::ReadACRNEMAImage()
       abort();
       PixelData.SetNeedByteSwap(true);
       }
-    PixelData.SetValue( de.GetValue() );
+    PixelData.SetDataElement( de );
     }
 //  else if( type == TS::Implicit )
 //    {
