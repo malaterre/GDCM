@@ -56,10 +56,16 @@ public:
   void SetOrigin(const signed short *origin);
   void SetFrameOrigin(unsigned short frameorigin);
   void SetBitsAllocated(unsigned short bitsallocated);
+  unsigned short GetBitsAllocated() const;
   void SetBitPosition(unsigned short bitposition);
+  unsigned short GetBitPosition() const;
   void SetOverlay(const char *array, unsigned int length);
 
   bool IsEmpty() const;
+
+  // return if the Overlay is stored in the pixel data or not
+  bool IsInPixelData() const;
+  void IsInPixelData(bool b);
 
   void Decode(std::istream &is, std::ostream &os);
 

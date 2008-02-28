@@ -249,7 +249,7 @@ void DoOverlays(const DataSet& ds, ImageValue& pixeldata)
         }
       else
         {
-        // Yeah this is an overlay element
+        // Yay! this is an overlay element
         Overlay &ov = pixeldata.GetOverlay(idxoverlays);
         ++idxoverlays; // move on to the next one
         overlay = de.GetTag();
@@ -279,6 +279,7 @@ void DoOverlays(const DataSet& ds, ImageValue& pixeldata)
         if( !ov.IsEmpty() )
           {
           assert( unpack.str().size() == ov.GetRows() * ov.GetColumns() );
+          assert( ov.IsInPixelData( ) == false );
           }
         else
           {
@@ -286,6 +287,7 @@ void DoOverlays(const DataSet& ds, ImageValue& pixeldata)
             << "Instead the overlay is stored in the unused bit of the Pixel Data. "
             << "This is not supported right now"
             << std::endl );
+          ov.IsInPixelData( true );
           }
         }
       }

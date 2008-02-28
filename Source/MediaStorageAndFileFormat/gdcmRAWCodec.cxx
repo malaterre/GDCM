@@ -50,19 +50,19 @@ bool RAWCodec::Decode(DataElement const &in, DataElement &out)
 {
   const ByteValue *bv = in.GetByteValue();
   assert( bv );
-    std::stringstream is;
-    is.write(bv->GetPointer(), bv->GetLength());
-    std::stringstream os;
-    bool r = Decode(is, os);
-    assert( r );
+  std::stringstream is;
+  is.write(bv->GetPointer(), bv->GetLength());
+  std::stringstream os;
+  bool r = Decode(is, os);
+  assert( r );
 
-    std::string str = os.str();
-    std::string::size_type check = str.size();
- 
-    //memcpy(buffer, os.str().c_str(), check);  // FIXME
-    out = in;
-    out.SetByteValue( &str[0], str.size() );
-    return r;
+  std::string str = os.str();
+  std::string::size_type check = str.size();
+
+  //memcpy(buffer, os.str().c_str(), check);  // FIXME
+  out = in;
+  out.SetByteValue( &str[0], str.size() );
+  return r;
 }
 
 bool RAWCodec::Decode(std::istream &is, std::ostream &os)

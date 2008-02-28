@@ -67,6 +67,10 @@ public:
     {
     NeedByteSwap = b;
     }
+  void SetNeedOverlayCleanup(bool b)
+    {
+    NeedOverlayCleanup = b;
+    }
   void SetLUT(LookupTable const &lut)
     {
     LUT = SmartPointer<LookupTable>( const_cast<LookupTable*>(&lut) );
@@ -84,11 +88,12 @@ private:
   PhotometricInterpretation PI;
   PixelFormat PF;
   bool NeedByteSwap;
+  bool NeedOverlayCleanup;
 
   typedef SmartPointer<LookupTable> LUTPtr;
   LUTPtr LUT;
 
-  bool DoPixelType(std::istream &is, std::ostream &os);
+  bool DoOverlayCleanup(std::istream &is, std::ostream &os);
   bool DoByteSwap(std::istream &is, std::ostream &os);
   bool DoYBR(std::istream &is, std::ostream &os);
   bool DoPlanarConfiguration(std::istream &is, std::ostream &os);

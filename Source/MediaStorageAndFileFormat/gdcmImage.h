@@ -138,6 +138,8 @@ public:
   unsigned int GetNumberOfOverlays() const { return Overlays.size(); }
   void SetNumberOfOverlays(unsigned int n) { Overlays.resize(n); }
 
+  // returns if Overlays are stored in the unused bit of the pixel data:
+  bool AreOverlaysInPixelData() const;
 
 //  Image(Image const&);
 //  Image &operator= (Image const&);

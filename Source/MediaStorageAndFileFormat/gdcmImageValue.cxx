@@ -34,23 +34,24 @@ bool ImageValue::TryRAWCodec(char *buffer) const
   const ByteValue *bv = PixelData.GetByteValue();
   if( bv )
     {
-    if( len != bv->GetLength() )
-      {
-      // SIEMENS_GBS_III-16-ACR_NEMA_1.acr
-      gdcmDebugMacro( "Pixel Length " << bv->GetLength() <<
-        " is different from computed value " << len );
-      }
     RAWCodec codec;
     codec.SetPlanarConfiguration( GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
     codec.SetLUT( GetLUT() );
     codec.SetPixelFormat( GetPixelFormat() );
     codec.SetNeedByteSwap( GetNeedByteSwap() );
+    codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );
     DataElement out;
     bool r = codec.Decode(PixelData, out);
-
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
+    if( len != bv->GetLength() )
+      {
+      // SIEMENS_GBS_III-16-ACR_NEMA_1.acr
+      gdcmDebugMacro( "Pixel Length " << bv->GetLength() <<
+        " is different from computed value " << len );
+      ((ByteValue*)outbv)->SetLength( len );
+      }
     unsigned long check = outbv->GetLength();  // FIXME
     // FIXME
     if ( GetPhotometricInterpretation() == 
@@ -73,23 +74,23 @@ bool ImageValue::TryJPEGCodec(char *buffer) const
   unsigned long len = GetBufferLength();
   const TransferSyntax &ts = GetTransferSyntax();
 
-
-    JPEGCodec codec;
-    if( codec.CanDecode( ts ) )
-      {
-      codec.SetPlanarConfiguration( GetPlanarConfiguration() );
-      codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
-      codec.SetPixelFormat( GetPixelFormat() );
-      DataElement out;
-      bool r = codec.Decode(PixelData, out);
-      assert( r );
+  JPEGCodec codec;
+  if( codec.CanDecode( ts ) )
+    {
+    codec.SetPlanarConfiguration( GetPlanarConfiguration() );
+    codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
+    codec.SetPixelFormat( GetPixelFormat() );
+    codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );
+    DataElement out;
+    bool r = codec.Decode(PixelData, out);
+    assert( r );
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
     memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
 
-      return true;
-      }
+    return true;
+    }
   return false;
 }
    
@@ -98,20 +99,21 @@ bool ImageValue::TryJPEG2000Codec(char *buffer) const
   unsigned long len = GetBufferLength();
   const TransferSyntax &ts = GetTransferSyntax();
 
-      JPEG2000Codec codec;
-    if( codec.CanDecode( ts ) )
-      {
-      codec.SetPlanarConfiguration( GetPlanarConfiguration() );
-      codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
-      DataElement out;
-      bool r = codec.Decode(PixelData, out);
-      assert( r );
+  JPEG2000Codec codec;
+  if( codec.CanDecode( ts ) )
+    {
+    codec.SetPlanarConfiguration( GetPlanarConfiguration() );
+    codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
+    codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );
+    DataElement out;
+    bool r = codec.Decode(PixelData, out);
+    assert( r );
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
     memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
-      return r;
-      }
+    return r;
+    }
   return false;
 }
 
@@ -119,21 +121,21 @@ bool ImageValue::TryRLECodec(char *buffer) const
 {
   const TransferSyntax &ts = GetTransferSyntax();
 
-      RLECodec codec;
-    if( codec.CanDecode( ts ) )
-      {
-      //assert( sf->GetNumberOfFragments() == 1 );
-      //assert( sf->GetNumberOfFragments() == GetDimensions(2) );
-      codec.SetPlanarConfiguration( GetPlanarConfiguration() );
-      codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
-      codec.SetPixelFormat( GetPixelFormat() );
-      codec.SetLUT( GetLUT() );
-      DataElement out;
-      bool r = codec.Decode(PixelData, out);
+  RLECodec codec;
+  if( codec.CanDecode( ts ) )
+    {
+    //assert( sf->GetNumberOfFragments() == 1 );
+    //assert( sf->GetNumberOfFragments() == GetDimensions(2) );
+    codec.SetPlanarConfiguration( GetPlanarConfiguration() );
+    codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
+    codec.SetPixelFormat( GetPixelFormat() );
+    codec.SetLUT( GetLUT() );
+    codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );
+    DataElement out;
+    bool r = codec.Decode(PixelData, out);
 
-      return true;
- 
-      }
+    return true;
+    }
   return false;
 }
 

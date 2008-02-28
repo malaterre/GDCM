@@ -70,7 +70,7 @@ ENDFOREACH(exename)
 
 # Special daemon
 # C program only, no link to gdcm to make it as lightweight as possible
-# it use the readahead func from linux kernel
+# it uses the readahead func from linux kernel
 IF(CMAKE_HAVE_FCNTL_H AND CMAKE_HAVE_SHED_H)
   ADD_EXECUTABLE(gdcmreadahead gdcmreadahead.c)
   INSTALL(TARGETS gdcmreadahead

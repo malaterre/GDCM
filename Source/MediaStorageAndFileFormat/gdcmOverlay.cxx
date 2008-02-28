@@ -27,6 +27,7 @@ class OverlayInternal
 {
 public:
   OverlayInternal():
+  InPixelData(false),
   Group(0), // invalid default
   Rows(0),
   Columns(0),
@@ -51,6 +52,7 @@ public:
   (6000,3000) OW 0000\0000\0000\0000\0000\0000\0000\0000\0000\0000\0000\0000\0000... # 29282, 1 OverlayData
   */
 
+  bool InPixelData;
 // Identifier need to be in the [6000,60FF] range (no odd number):
   unsigned short Group;
 // Descriptor:
@@ -278,12 +280,16 @@ void Overlay::SetOrigin(const signed short *origin)
 }
 void Overlay::SetFrameOrigin(unsigned short frameorigin) { Internal->FrameOrigin = frameorigin; }
 void Overlay::SetBitsAllocated(unsigned short bitsallocated) { Internal->BitsAllocated = bitsallocated; }
+unsigned short Overlay::GetBitsAllocated() const { return Internal->BitsAllocated; }
 void Overlay::SetBitPosition(unsigned short bitposition) { Internal->BitPosition = bitposition; }
+unsigned short Overlay::GetBitPosition() const { return Internal->BitPosition; }
 
 bool Overlay::IsEmpty() const
 {
   return Internal->Data.empty();
 }
+bool Overlay::IsInPixelData() const { return Internal->InPixelData; }
+void Overlay::IsInPixelData(bool b) { Internal->InPixelData = b; }
 
 void Overlay::SetOverlay(const char *array, unsigned int length)
 {

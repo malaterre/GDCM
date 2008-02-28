@@ -244,6 +244,18 @@ bool Image::GetBuffer(char *buffer) const
   return false;
 }
 
+bool Image::AreOverlaysInPixelData() const
+{
+  int total = 0;
+  std::vector<Overlay>::const_iterator it = Overlays.begin();
+  for(; it != Overlays.end(); ++it)
+    {
+    total += (int)it->IsInPixelData();
+    }
+  assert( total == GetNumberOfOverlays() || !total );
+  return total != 0;
+}
+
 void Image::Print(std::ostream &os) const
 {
   //assert( NumberOfDimensions );

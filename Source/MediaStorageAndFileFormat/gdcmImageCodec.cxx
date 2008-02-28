@@ -36,6 +36,7 @@ ImageCodec::ImageCodec()
   PI = PhotometricInterpretation::UNKNOW;
   //LUT = LookupTable(LookupTable::UNKNOWN);
   NeedByteSwap = false;
+  NeedOverlayCleanup = false;
 }
 
 ImageCodec::~ImageCodec()
@@ -296,7 +297,7 @@ struct ApplyMask
 };
 
 // Cleanup the unused bits
-bool ImageCodec::DoPixelType(std::istream &is, std::ostream &os)
+bool ImageCodec::DoOverlayCleanup(std::istream &is, std::ostream &os)
 {
   assert( PF.GetBitsAllocated() > 8 );
   if( PF.GetBitsAllocated() == 16 )
@@ -333,14 +334,14 @@ bool ImageCodec::DoPixelType(std::istream &is, std::ostream &os)
     else // Pixel are unsigned
       {
 #if 1
-      /*uint16_t c;
+      uint16_t c;
       while( is.read((char*)&c,2) )
         {
         c =
           (c >> (PF.GetBitsStored() - PF.GetHighBit() - 1)) & pmask;
         os.write((char*)&c, 2 );
-        }*/
-      os.rdbuf( is.rdbuf() );
+        }
+      //os.rdbuf( is.rdbuf() );
 #else
       //std::ostreambuf_iterator<char> end_of_stream_iterator;
       //std::ostreambuf_iterator<char> out_iter(os.rdbuf());
@@ -386,7 +387,7 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
   // First thing do the byte swap:
   if( NeedByteSwap )
     {
-    //MR_GE_with_Private_Compressed_Icon_0009_1110.dcm
+    // MR_GE_with_Private_Compressed_Icon_0009_1110.dcm
     DoByteSwap(*cur_is,bs_os);
     cur_is = &bs_os;
     }
@@ -447,7 +448,7 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
       }
     }
 
-  // Do the pixel type (cleanup the unused bits)
+  // Do the overlay cleanup (cleanup the unused bits)
   // must be the last operation (duh!)
   if ( PF.GetBitsAllocated() != PF.GetBitsStored()
     && PF.GetBitsAllocated() != 8 )
@@ -456,7 +457,8 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
     // there is no (0x60xx,0x3000) element, for example:
     // - XA_GE_JPEG_02_with_Overlays.dcm
     // - SIEMENS_GBS_III-16-ACR_NEMA_1.acr
-    DoPixelType(*cur_is,os);
+    assert( NeedOverlayCleanup );
+    DoOverlayCleanup(*cur_is,os);
     // Once the issue with IMAGES/JPLY/RG3_JPLY aka gdcmData/D_CLUNIE_RG3_JPLY.dcm is solved the previous
     // code will be replace with a simple call to:
     //DoSimpleCopy(*cur_is,os);
