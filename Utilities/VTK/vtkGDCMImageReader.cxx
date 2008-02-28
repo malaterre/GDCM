@@ -478,18 +478,27 @@ int LoadSingleFile(const char *filename, int *dext, vtkImageData* data, bool fil
     // BUG: the following is volonterarily complex, technically one would want to directly
     // write into vtklut->GetPointer(0), unfortunately this does not produce the correct result
     // instead create the internal vtkUCArray ourself and pass it back to the vtkLUT...
+    // SOLVED: GetPointer(0) is skrew up, need to replace it with WritePointer(0,4) ...
     const gdcm::LookupTable &lut = image.GetLUT();
     vtkLookupTable *vtklut = vtkLookupTable::New();
+//#define USE_LUT_HACK
+#ifdef USE_LUT_HACK
     vtkUnsignedCharArray *uc = vtkUnsignedCharArray::New();
     uc->SetNumberOfComponents( 4 );
     uc->SetNumberOfTuples( 256 );
     if( !lut.GetBufferAsRGBA( uc->GetPointer(0) ) )
+#else
+    vtklut->SetNumberOfTableValues(256);
+    if( !lut.GetBufferAsRGBA( vtklut->WritePointer(0,4) ) )
+#endif
       {
       return 0;
       }
     vtklut->SetRange(0,255);
+#ifdef USE_LUT_HACK
     vtklut->SetTable( uc );
     uc->Delete();
+#endif
     data->GetPointData()->GetScalars()->SetLookupTable( vtklut );
     vtklut->Delete();
     }
