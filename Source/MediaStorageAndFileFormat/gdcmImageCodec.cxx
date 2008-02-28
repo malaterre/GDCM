@@ -457,11 +457,14 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
     // there is no (0x60xx,0x3000) element, for example:
     // - XA_GE_JPEG_02_with_Overlays.dcm
     // - SIEMENS_GBS_III-16-ACR_NEMA_1.acr
-    assert( NeedOverlayCleanup );
-    DoOverlayCleanup(*cur_is,os);
-    // Once the issue with IMAGES/JPLY/RG3_JPLY aka gdcmData/D_CLUNIE_RG3_JPLY.dcm is solved the previous
-    // code will be replace with a simple call to:
-    //DoSimpleCopy(*cur_is,os);
+    if( NeedOverlayCleanup )
+      DoOverlayCleanup(*cur_is,os);
+    else
+      {
+      // Once the issue with IMAGES/JPLY/RG3_JPLY aka gdcmData/D_CLUNIE_RG3_JPLY.dcm is solved the previous
+      // code will be replace with a simple call to:
+      DoSimpleCopy(*cur_is,os);
+      }
     }
   else
     {
