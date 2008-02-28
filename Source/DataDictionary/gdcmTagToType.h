@@ -27,7 +27,7 @@
 namespace gdcm {
 // default template: the compiler should only pick it up when the element is private:
 template <uint16_t group,uint16_t element> struct TagToType {
-GDCM_STATIC_ASSERT( group % 2 );
+//GDCM_STATIC_ASSERT( group % 2 );
 enum { VRType = VR::VRALL };
 enum { VMType = VM::VM1_n };
 };

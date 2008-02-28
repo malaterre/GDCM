@@ -45,7 +45,7 @@ LookupTable::~LookupTable()
   delete Internal;
 }
 
-void LookupTable::Allocate( int bitsample )
+void LookupTable::Allocate( unsigned short bitsample )
 {
   if( bitsample == 8 )
     {
@@ -116,6 +116,53 @@ void LookupTable::SetLUT(LookupTableType type, const unsigned char *array,
     }
 }
 
+void LookupTable::GetLUT(LookupTableType type, unsigned char *array, unsigned int &length) const
+{
+  if( BitSample == 8 )
+    {
+    const unsigned int mult = Internal->BitSize[type]/8;
+    length = Internal->Length[type]*mult;
+    for( unsigned int i = 0; i < Internal->Length[type]; ++i)
+      {
+      assert( i*mult+1 < length );
+      assert( 3*i+type < Internal->RGB.size() );
+      array[i*mult+1] = Internal->RGB[3*i+type];
+      }
+    }
+  else
+    {
+    length = Internal->Length[type]*(BitSample/8);
+    uint16_t *uchar16 = (uint16_t*)&Internal->RGB[0];
+    uint16_t *array16 = (uint16_t*)array;
+    for( unsigned int i = 0; i < Internal->Length[type]; ++i)
+      {
+      assert( 2*i < length );
+      assert( 2*(3*i+type) < Internal->RGB.size() );
+      array16[i] = uchar16[3*i+type];
+      }
+    }
+}
+
+void LookupTable::GetLUTDescriptor(LookupTableType type, unsigned short &length,
+  unsigned short &subscript, unsigned short &bitsize) const
+{
+  assert( type >= RED && type <= BLUE );
+  if( Internal->Length[type] == 65536 )
+    {
+    length == 0;
+    }
+  else
+    {
+    length = Internal->Length[type];
+    }
+  subscript = Internal->Subscript[type];
+  bitsize = Internal->BitSize[type];
+
+  // postcondition
+  assert( subscript == 0 );
+  assert( bitsize == 8 || bitsize == 16 );
+}
+
 void LookupTable::InitializeRedLUT(unsigned short length,
 unsigned short subscript,
 unsigned short bitsize)
@@ -123,17 +170,17 @@ unsigned short bitsize)
   InitializeLUT(RED, length, subscript, bitsize);
   }
 void LookupTable::InitializeGreenLUT(unsigned short length,
-unsigned short subscript,
-unsigned short bitsize)
-  {
+  unsigned short subscript,
+  unsigned short bitsize)
+{
   InitializeLUT(GREEN, length, subscript, bitsize);
-  }
+}
 void LookupTable::InitializeBlueLUT(unsigned short length,
-unsigned short subscript,
-unsigned short bitsize)
-  {
+  unsigned short subscript,
+  unsigned short bitsize)
+{
   InitializeLUT(BLUE, length, subscript, bitsize);
-  }
+}
 
 void LookupTable::SetRedLUT(const unsigned char *red, unsigned int length)
 {

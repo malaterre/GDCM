@@ -79,11 +79,6 @@ int TestImageWrite(const char *subdir, const char* filename)
     const gdcm::Image &img = reader2.GetImage();
     //std::cerr << "Success to read image from file: " << filename << std::endl;
     unsigned long len = img.GetBufferLength();
-    if ( img.GetPhotometricInterpretation() ==
-      gdcm::PhotometricInterpretation::PALETTE_COLOR )
-      {
-      len *= 3;
-      }
     char* buffer = new char[len];
     img.GetBuffer(buffer);
     // On big Endian system we have byteswapped the buffer (duh!)
@@ -104,7 +99,7 @@ int TestImageWrite(const char *subdir, const char* filename)
     // reuse the filename, since outfilename is simply the new representation of the old filename
     const char *ref = gdcm::Testing::GetMD5FromFile(filename);
 
-    char digest[33];
+    char digest[33] = {};
     gdcm::System::ComputeMD5(buffer, len, digest);
     if( !ref )
       {

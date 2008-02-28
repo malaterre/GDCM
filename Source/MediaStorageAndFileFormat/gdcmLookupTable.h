@@ -38,18 +38,24 @@ public:
   ~LookupTable();
   void Print(std::ostream &) const {}
 
-  void Allocate( int bitsample = 8 );
+  void Allocate( unsigned short bitsample = 8 );
+  // Generic interface:
   void InitializeLUT(LookupTableType type, unsigned short length,
     unsigned short subscript, unsigned short bitsize);
   void SetLUT(LookupTableType type, const unsigned char *array,
     unsigned int length);
+  void GetLUT(LookupTableType type, unsigned char *array, unsigned int &length) const;
+  void GetLUTDescriptor(LookupTableType type, unsigned short &length,
+    unsigned short &subscript, unsigned short &bitsize) const;
+
+  // RED / GREEN / BLUE specific:
   void InitializeRedLUT(unsigned short length, unsigned short subscript,
     unsigned short bitsize);
   void SetRedLUT(const unsigned char *red, unsigned int length);
-  void InitializeBlueLUT(unsigned short length, unsigned short subscript,
+  void InitializeGreenLUT(unsigned short length, unsigned short subscript,
     unsigned short bitsize);
   void SetGreenLUT(const unsigned char *green, unsigned int length);
-  void InitializeGreenLUT(unsigned short length, unsigned short subscript,
+  void InitializeBlueLUT(unsigned short length, unsigned short subscript,
     unsigned short bitsize);
   void SetBlueLUT(const unsigned char *blue, unsigned int length);
 
@@ -65,8 +71,8 @@ public:
 
 private:
   LookupTableInternal *Internal;
-  int BitSample; // refer to the pixel type (no the bit size of LUT)
-  bool IncompleteLUT;
+  unsigned short BitSample; // refer to the pixel type (not the bit size of LUT)
+  bool IncompleteLUT:1;
 };
 
 } // end namespace gdcm

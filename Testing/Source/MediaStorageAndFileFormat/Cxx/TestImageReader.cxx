@@ -32,11 +32,6 @@ int TestImageRead(const char* filename)
     const gdcm::Image &img = reader.GetImage();
     //std::cerr << "Success to read image from file: " << filename << std::endl;
     unsigned long len = img.GetBufferLength();
-    if ( img.GetPhotometricInterpretation() ==
-      gdcm::PhotometricInterpretation::PALETTE_COLOR )
-      {
-      len *= 3;
-      }
     char* buffer = new char[len];
     img.GetBuffer(buffer);
     // On big Endian system we have byteswapped the buffer (duh!)
