@@ -234,7 +234,9 @@ void Overlay::Update(const DataElement & de)
     }
   else if( de.GetTag().GetElement() == 0x0200 ) // OverlayLocation (RET)
     {
-    gdcmWarningMacro( "FIXME" );
+    Attribute<0x6000,0x0200> at;
+    at.SetFromDataElement( de );
+    gdcmWarningMacro( "FIXME: " << at.GetValue() );
     }
   else if( de.GetTag().GetElement() == 0x1301 ) // ROIArea
     {

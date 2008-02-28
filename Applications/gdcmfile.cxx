@@ -45,7 +45,8 @@ int DoOperation(std::string const & path)
   //std::cout << path << "\n";
   std::ifstream is( path.c_str(), std::ios::binary );
   is.seekg(0, std::ios::end );
-  std::ifstream::streampos size = is.tellg();
+  // gcc 3.3 does not support streampos !!!
+  /*  std::ifstream::streampos */ long size = is.tellg();
   char *buffer = new char[size];
   is.read(buffer, size );
   char k = buffer[(size_t)size-1];

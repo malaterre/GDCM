@@ -18,6 +18,9 @@
 // this reader is single threaded.
 // .SECTION Implementation note: when FileLowerLeft is set to on the image is not flipped
 // upside down as VTK would expect, use this option only if you know what you are doing
+// .SECTION TODO
+// This reader does not handle a series of 3D images, only a single 3D (multi frame) or a 
+// list of 2D files are supported for now.
 
 // .SECTION See Also
 // vtkMedicalImageReader2 vtkMedicalImageProperties

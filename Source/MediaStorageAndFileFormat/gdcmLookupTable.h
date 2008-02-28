@@ -23,9 +23,6 @@ namespace gdcm
 {
   
 class LookupTableInternal;
-class ByteValue;
-//class IStream;
-//class OStream;
 class GDCM_EXPORT LookupTable : public Object
 {
 public:
@@ -62,6 +59,9 @@ public:
     {
     abort();
     }
+
+  bool GetBufferAsRGBA(unsigned char *rgba) const;
+  const unsigned char *GetPointer() const;
 
 private:
   LookupTableInternal *Internal;

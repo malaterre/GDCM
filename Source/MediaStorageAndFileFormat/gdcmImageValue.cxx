@@ -53,16 +53,7 @@ bool ImageValue::TryRAWCodec(char *buffer) const
       ((ByteValue*)outbv)->SetLength( len );
       }
     unsigned long check = outbv->GetLength();  // FIXME
-    // FIXME
-    if ( GetPhotometricInterpretation() == 
-      PhotometricInterpretation::PALETTE_COLOR )
-      {
-      assert( check == 3*len );
-      }
-    else
-      {
-      assert( check == len );
-      }
+    assert( check == len );
     memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
     return r;
     }

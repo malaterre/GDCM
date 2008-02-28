@@ -161,7 +161,10 @@ void LookupTable::Decode(std::istream &is, std::ostream &os)
       //is.Get(c);
       is.read( (char*)(&idx), 1);
       // FIXME
-      if( is.eof() ) break;
+      if( is.eof() )
+        {
+        break;
+        }
       if( IncompleteLUT )
         {
         assert( idx < Internal->Length[RED] );
@@ -197,6 +200,41 @@ void LookupTable::Decode(std::istream &is, std::ostream &os)
       os.write((char*)rgb, 3*2);
       }
     }
+}
+
+const unsigned char *LookupTable::GetPointer() const
+{
+  if ( BitSample == 8 )
+    {
+    return &Internal->RGB[0];
+    }
+  return 0;
+}
+
+bool LookupTable::GetBufferAsRGBA(unsigned char *rgba) const
+{
+  bool ret;
+  if ( BitSample == 8 )
+    {
+    std::vector<unsigned char>::const_iterator it = Internal->RGB.begin();
+    for(; it != Internal->RGB.end() ;)
+      {
+      // RED
+      *rgba++ = *it++;
+      // GREEN
+      *rgba++ = *it++;
+      // BLUE
+      *rgba++ = *it++;
+      // ALPHA
+      *rgba++ = 255;
+      }
+    ret = true;
+    }
+  else
+    {
+    ret = false;
+    }
+  return ret;
 }
 
 } // end namespace gdcm

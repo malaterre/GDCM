@@ -225,7 +225,8 @@ void GDCMImageIO2::InternalReadImageInformation(std::ifstream& file)
     gdcm::PhotometricInterpretation::PALETTE_COLOR )
     {
     assert( m_NumberOfComponents == 1 );
-    m_NumberOfComponents = 3;
+    // TODO: need to do the LUT ourself...
+    itkExceptionMacro(<< "PALETTE_COLOR is not implemented yet");
     }
   if (m_NumberOfComponents == 1)
     {

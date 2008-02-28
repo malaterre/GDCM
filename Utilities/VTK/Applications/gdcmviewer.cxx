@@ -13,13 +13,19 @@
 
 =========================================================================*/
 #include "vtkGDCMImageReader.h"
-//#include "vtkGDCMThreadedImageReader.h"
 
 #include "vtkXMLImageDataWriter.h"
 #include "vtkPNGWriter.h"
 #include "vtkRenderWindowInteractor.h"
 #include "vtkImageViewer.h"
+#include "vtkPointData.h"
+#include "vtkImageMapToColors.h"
+#include "vtkLookupTable.h"
+#if VTK_MAJOR_VERSION >= 5
+#include "vtkImageColorViewer.h"
+#else
 #include "vtkImageViewer2.h"
+#endif
 #include "vtkImageData.h"
 #include "vtkCommand.h"
 #include "vtkRenderer.h"
@@ -53,6 +59,11 @@ public:
 };
 vtkCxxRevisionMacro(vtkGDCMImageViewer, "$Revision: 1.30 $");
 vtkInstantiatorNewMacro(vtkGDCMImageViewer);
+
+#if VTK_MAJOR_VERSION >= 5
+#else
+typedef vtkImageViewer2 vtkImageColorViewer;
+#endif
 
 //----------------------------------------------------------------------------
 // Callback for the interaction
@@ -107,8 +118,6 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     {
     reader->SetFileNames( filenames );
     }
-  //reader->Update();
-  //reader->GetOutput()->Print( std::cout );
 
   vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::New();
   // For a single medical image, it would be more efficient to use
@@ -118,21 +127,35 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 
   reader->Update();
   //reader->Print( cout );
-  //reader->GetOutput()->Print( cout );
+  reader->GetOutput()->Print( cout );
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   double *range = reader->GetOutput()->GetScalarRange();
 #else
   float *range = reader->GetOutput()->GetScalarRange();
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
   std::cerr << "Range: " << range[0] << " " << range[1] << std::endl;
-  viewer->SetColorLevel (0.5 * (range[1] + range[0]));
-  viewer->SetColorWindow (range[1] - range[0]);
-
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   viewer->SetInputConnection ( reader->GetOutputPort() );
 #else
   viewer->SetInput( reader->GetOutput() );
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
+
+  // In case of palette color, let's tell VTK to map color:
+  if( reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable() )
+    {
+    //convert to color:
+    vtkImageMapToColors *map = vtkImageMapToColors::New ();
+    map->SetInput (reader->GetOutput());
+    map->SetLookupTable (reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable());
+    map->SetOutputFormatToRGB();
+    viewer->SetInput( map->GetOutput() );
+    map->Delete();
+    }
+
+  // Always overwriting default is not always nice looking...
+  viewer->SetColorLevel (0.5 * (range[1] + range[0]));
+  viewer->SetColorWindow (range[1] - range[0]);
+
   viewer->SetupInteractor (iren);
   int dims[3];
   reader->GetOutput()->GetDimensions(dims);
@@ -200,8 +223,8 @@ int main(int argc, char *argv[])
   const char gdcmviewer2[] = "gdcmviewer2";
   if( strncmp(viewer_type.GetName(), gdcmviewer2, strlen(gdcmviewer2) ) == 0 )
     {
-    vtkImageViewer2 *viewer = vtkImageViewer2::New();
-    ExecuteViewer<vtkImageViewer2>(viewer, filenames);
+    vtkImageColorViewer *viewer = vtkImageColorViewer::New();
+    ExecuteViewer<vtkImageColorViewer>(viewer, filenames);
     }
   else if( strncmp(viewer_type.GetName(), gdcmviewer, strlen(gdcmviewer) ) == 0 )
     {

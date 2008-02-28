@@ -66,11 +66,6 @@ bool ImageWriter::Write()
   PixelFormat pf = PixelData.GetPixelFormat();
   PhotometricInterpretation pi = PixelData.GetPhotometricInterpretation();
   // FIXME HACK !
-  if( pi == PhotometricInterpretation::PALETTE_COLOR )
-    {
-    pi = PhotometricInterpretation::RGB;
-    pf.SetSamplesPerPixel( 3 );
-    }
   if( pf.GetBitsAllocated() == 24 )
     {
     pi = PhotometricInterpretation::RGB;

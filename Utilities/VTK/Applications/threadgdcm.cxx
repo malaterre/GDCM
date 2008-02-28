@@ -135,12 +135,6 @@ void ReadFiles(unsigned int nfiles, const char *filenames[])
     }
 
   output->SetNumberOfScalarComponents ( pixeltype.GetSamplesPerPixel() );
-  if( image.GetPhotometricInterpretation() == 
-    gdcm::PhotometricInterpretation::PALETTE_COLOR )
-    {
-    assert( output->GetNumberOfScalarComponents() == 1 );
-    output->SetNumberOfScalarComponents ( 3 );
-    }
 
   output->AllocateScalars();
   char * scalarpointer = static_cast<char*>(output->GetScalarPointer());

@@ -419,8 +419,7 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
   else if ( PI == PhotometricInterpretation::PALETTE_COLOR )
     {
     assert( LUT );
-    LUT->Decode(*cur_is, pi_os);
-    cur_is = &pi_os;
+    // Nothing needs to be done
     }
   else if ( PI == PhotometricInterpretation::YBR_FULL_422 )
     {

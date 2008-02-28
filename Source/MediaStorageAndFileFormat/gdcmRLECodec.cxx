@@ -142,9 +142,7 @@ bool RLECodec::Decode(DataElement const &is, DataElement &os)
           }
         std::string::size_type check = os.str().size();
         // If the following assert fail expect big troubles:
-        assert( check == llen 
-            || (check == 3*llen && GetPhotometricInterpretation() 
-            == PhotometricInterpretation::PALETTE_COLOR) );
+        assert( check == llen );
         //memcpy(buffer+pos, os.str().c_str(), check);
         pos += check;
         }
@@ -187,12 +185,7 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
     {
     RequestPaddedCompositePixelCode = true;
     }
-  if( GetPhotometricInterpretation() == 
-    PhotometricInterpretation::PALETTE_COLOR )
-    {
-    //length /= 3;
-    }
-  else if ( GetPhotometricInterpretation() ==
+  if ( GetPhotometricInterpretation() ==
     PhotometricInterpretation::RGB )
     {
     RequestPlanarConfiguration = true;

@@ -18,6 +18,8 @@
 #include "vtkImageData.h"
 #include "vtkMedicalImageProperties.h"
 #include "vtkStringArray.h"
+#include "vtkPointData.h"
+#include "vtkLookupTable.h"
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #include "vtkInformationVector.h"
 #include "vtkInformation.h"
@@ -38,10 +40,6 @@ vtkStandardNewMacro(vtkGDCMImageReader);
 
 vtkGDCMImageReader::vtkGDCMImageReader()
 {
-  //this->Internals = new vtkGDCMImageReaderInternals;
-  //this->ScalarArrayName = NULL;
-  //this->SetScalarArrayName( "GDCM" );
-
   // vtkDataArray has an internal vtkLookupTable why not used it ?
   // vtkMedicalImageProperties is in the parent class
   //this->FileLowerLeft = 1;
@@ -140,7 +138,7 @@ const char *GetStringValueFromTag(const gdcm::Tag& t, const gdcm::DataSet& ds)
     if( bv ) // Can be Type 2
       {
       buffer = std::string( bv->GetPointer(), bv->GetLength() );
-      // Will be padded with at least on \0
+      // Will be padded with at least one \0
       }
     }
 
@@ -448,13 +446,6 @@ int vtkGDCMImageReader::RequestInformationCompat()
     }
 
   this->NumberOfScalarComponents = pixeltype.GetSamplesPerPixel();
-  if( image.GetPhotometricInterpretation() == 
-    gdcm::PhotometricInterpretation::PALETTE_COLOR )
-    {
-    assert( this->NumberOfScalarComponents == 1 );
-    this->NumberOfScalarComponents = 3;
-    }
-
 
   // Ok let's fill in the 'extra' info:
   FillMedicalImageInformation(reader);
@@ -464,8 +455,10 @@ int vtkGDCMImageReader::RequestInformationCompat()
   return 1;
 }
 
-int LoadSingleFile(const char *filename, int *dext, char *pointer, bool filelowerleft)
+int LoadSingleFile(const char *filename, int *dext, vtkImageData* data, bool filelowerleft)
 {
+  char * pointer = static_cast<char*>(data->GetScalarPointer());
+
   gdcm::ImageReader reader;
   reader.SetFileName( filename );
   if( !reader.Read() )
@@ -474,19 +467,37 @@ int LoadSingleFile(const char *filename, int *dext, char *pointer, bool filelowe
     }
 
   const gdcm::Image &image = reader.GetImage();
+  assert( image.GetNumberOfDimensions() == 2 || image.GetNumberOfDimensions() == 3 );
   unsigned long len = image.GetBufferLength();
-  if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::PALETTE_COLOR )
-    {
-    len *= 3;
-    }
   char *tempimage = new char[len];
   image.GetBuffer(tempimage);
+
+  // Do the LUT
+  if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::PALETTE_COLOR )
+    {
+    // BUG: the following is volonterarily complex, technically one would want to directly
+    // write into vtklut->GetPointer(0), unfortunately this does not produce the correct result
+    // instead create the internal vtkUCArray ourself and pass it back to the vtkLUT...
+    const gdcm::LookupTable &lut = image.GetLUT();
+    vtkLookupTable *vtklut = vtkLookupTable::New();
+    vtkUnsignedCharArray *uc = vtkUnsignedCharArray::New();
+    uc->SetNumberOfComponents( 4 );
+    uc->SetNumberOfTuples( 256 );
+    if( !lut.GetBufferAsRGBA( uc->GetPointer(0) ) )
+      {
+      return 0;
+      }
+    vtklut->SetRange(0,255);
+    vtklut->SetTable( uc );
+    uc->Delete();
+    data->GetPointData()->GetScalars()->SetLookupTable( vtklut );
+    vtklut->Delete();
+    }
 
   const unsigned int *dims = image.GetDimensions();
   gdcm::PixelFormat pixeltype = image.GetPixelFormat();
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
-  //std::cerr << "dext: " << dext[2] << " " << dext[3] << std::endl;
-  //std::cerr << "dext: " << dext[4] << " " << dext[5] << std::endl;
+  assert( outsize * (dext[3] - dext[2]+1) * (dext[5]-dext[4]+1) == len );
 
   // If user overrides this flag, he/she wants image upside down
   if (filelowerleft)
@@ -546,7 +557,6 @@ int vtkGDCMImageReader::RequestData(vtkInformation *vtkNotUsed(request),
 //----------------------------------------------------------------------------
 int vtkGDCMImageReader::RequestDataCompat()
 {
-
 //  vtkInformation *outInfo = outputVector->GetInformationObject(0);
 //  vtkImageData *output = vtkImageData::SafeDownCast(
 //    outInfo->Get(vtkDataObject::DATA_OBJECT()));
@@ -556,11 +566,13 @@ int vtkGDCMImageReader::RequestDataCompat()
 //  output->AllocateScalars();
 
   vtkImageData *output = this->GetOutput(0);
+  output->GetPointData()->GetScalars()->SetName("GDCMImage");
+
   char * pointer = static_cast<char*>(output->GetScalarPointer());
   if( this->FileName )
     {
     const char *filename = this->FileName;
-    LoadSingleFile( filename, dext, pointer, this->FileLowerLeft );
+    LoadSingleFile( filename, dext, output, this->FileLowerLeft);
     return 1;
     }
   else
@@ -569,6 +581,8 @@ int vtkGDCMImageReader::RequestDataCompat()
     }
 
   // Load each 2D files
+  char *tempimage = 0;
+  unsigned long reflen = 0;
   for(int j = dext[4]; j <= dext[5]; ++j)
     {
     gdcm::ImageReader reader;
@@ -584,10 +598,19 @@ int vtkGDCMImageReader::RequestDataCompat()
 
     const gdcm::Image &image = reader.GetImage();
     unsigned long len = image.GetBufferLength();
-    char *tempimage = new char[len];
+    if( !tempimage )
+      {
+      tempimage = new char[len];
+      reflen = len;
+      }
+    else
+      {
+      assert( reflen == len );
+      }
     image.GetBuffer(tempimage);
 
     const unsigned int *dims = image.GetDimensions();
+    assert( image.GetNumberOfDimensions() == 2 );
     gdcm::PixelFormat pixeltype = image.GetPixelFormat();
     long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
     //std::cerr << "dext: " << dext[2] << " " << dext[3] << std::endl;
@@ -601,19 +624,18 @@ int vtkGDCMImageReader::RequestDataCompat()
       }
     else
       {
-      //std::cerr << j << std::endl;
+      // Copy image upside down, to please VTK
+      assert( dext[2] == 0 );
       for(int i = dext[2]; i <= dext[3]; ++i)
         {
-        //memcpy(pointer, tempimage+i*outsize, outsize);
-        //memcpy(pointer, tempimage+(this->DataExtent[3] - i)*outsize, outsize);
-        //memcpy(pointer, tempimage+(i+j*(dext[3]+1))*outsize, outsize);
-        memcpy(pointer,
-          tempimage+((dext[3] - i)+j*(dext[3]+1))*outsize, outsize);
+        int offset = (dext[3] - i)*outsize;
+        assert( offset >= 0 && offset+outsize <= len);
+        memcpy(pointer,tempimage+offset, outsize);
         pointer += outsize;
         }
       }
-    delete[] tempimage;
     }
+  delete[] tempimage;
 
   return 1;
 }

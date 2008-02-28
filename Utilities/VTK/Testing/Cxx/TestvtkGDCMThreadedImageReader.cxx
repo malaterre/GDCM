@@ -119,12 +119,6 @@ void ExecuteInformation(const char *filename, TReader *vtkreader)
     }
 
   unsigned int numberOfScalarComponents = pixeltype.GetSamplesPerPixel();
-  if( image.GetPhotometricInterpretation() == 
-    gdcm::PhotometricInterpretation::PALETTE_COLOR )
-    {
-    assert( numberOfScalarComponents == 1 );
-    numberOfScalarComponents = 3;
-    }
 
   vtkreader->SetDataExtent( dataextent );
   vtkreader->SetDataScalarType ( datascalartype );
