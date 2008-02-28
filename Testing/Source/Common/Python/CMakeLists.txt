@@ -2,6 +2,7 @@
 # gdcm-python
 SET(GDCM_PYTHON_TEST_SRCS
   TestTesting
+  TestDirectory
   )
 
 #FIND_PACKAGE(PythonInterp REQUIRED)

@@ -13,11 +13,12 @@
 #
 ############################################################################
 
-from vtk import vtkStringArray
 from vtk import vtkDirectory
 from vtk import vtkStructuredPointsWriter
 from vtk.util import vtkConstants as vtkType
 import vtkgdcm
+from vtkgdcm import vtkStringArray
+import gdcm # for gdcm.Directory
 import os,sys
 
 def PrintProgress(object, event):
@@ -76,17 +77,17 @@ if __name__ == "__main__":
   # setup reader
   r = vtkgdcm.vtkGDCMThreadedImageReader()
   r.FileLowerLeftOn()
-  dir = vtkDirectory()
+  #dir = vtkDirectory()
+  dir = gdcm.Directory()
   
   # Did user pass in a directory:
-  if dir.FileIsDirectory( filename ):
-    dir.Open( filename )
-    files = dir.GetFiles()
+  if dir.IsDirectory( filename ):
+    nfiles = dir.Load( filename )
+    files = dir.GetFilenames()
     # Need to construct full path out of the simple filename
     fullpath = vtkStringArray()
-    for i in range(0, files.GetNumberOfValues()):
-      if files.GetValue(i) != '.' and files.GetValue(i) != '..': # sigh !
-        fullpath.InsertNextValue( os.path.join(filename, files.GetValue(i) ))
+    for file in files:
+      fullpath.InsertNextValue( file )
     r.SetFileNames( fullpath )
     ExecuteInformation(r, fullpath)
     #r.AddObserver("ProgressEvent", PrintProgress)
