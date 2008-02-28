@@ -141,7 +141,7 @@ bool ImageWriter::Write()
     else if ( pi == PhotometricInterpretation::PALETTE_COLOR )
       {
       const LookupTable &lut = PixelData.GetLUT();
-      assert( pf.GetBitsAllocated() == 8 );
+      assert( pf.GetBitsAllocated() == 8 && pf.GetPixelRepresentation() == 0 );
       // lut descriptor:
       // (0028,1101) US 256\0\16                                 #   6, 3 RedPaletteColorLookupTableDescriptor
       // (0028,1102) US 256\0\16                                 #   6, 3 GreenPaletteColorLookupTableDescriptor
