@@ -65,7 +65,7 @@ class vtkRenderWindow;
 class vtkRenderer;
 class vtkRenderWindowInteractor;
 
-class VTK_RENDERING_EXPORT vtkImageColorViewer : public vtkObject 
+class VTK_EXPORT vtkImageColorViewer : public vtkObject 
 {
 public:
   static vtkImageColorViewer *New();

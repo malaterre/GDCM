@@ -31,7 +31,7 @@
 
 #include "vtkImageMapToColors.h"
 
-class VTK_IMAGING_EXPORT vtkImageMapToWindowLevelColors2 : public vtkImageMapToColors
+class VTK_EXPORT vtkImageMapToWindowLevelColors2 : public vtkImageMapToColors
 {
 public:
   static vtkImageMapToWindowLevelColors2 *New();

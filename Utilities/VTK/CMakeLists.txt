@@ -31,6 +31,8 @@ INCLUDE_DIRECTORIES(
 SET(vtkgdcm_LIBS
   vtkCommon
   vtkIO
+  vtkImaging
+  vtkRendering
 )
 
 # Use wrapping hints for this project.
