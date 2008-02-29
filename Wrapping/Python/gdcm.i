@@ -26,16 +26,17 @@
 #include "gdcmTag.h"
 #include "gdcmVL.h"
 #include "gdcmVR.h"
+#include "gdcmVM.h"
 #include "gdcmDataElement.h"
 #include "gdcmDataSet.h"
 #include "gdcmPreamble.h"
 #include "gdcmFile.h"
 #include "gdcmReader.h"
 #include "gdcmImageReader.h"
+#include "gdcmWriter.h"
+#include "gdcmImageWriter.h"
 #include "gdcmStringFilter.h"
 #include "gdcmGlobal.h"
-#include "gdcmVR.h"
-#include "gdcmVM.h"
 #include "gdcmDicts.h"
 #include "gdcmDict.h"
 #include "gdcmDictEntry.h"
@@ -43,6 +44,7 @@
 #include "gdcmTesting.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmScanner.h"
+#include "gdcmAttribute.h"
 
 using namespace gdcm;
 %}
@@ -71,6 +73,18 @@ using namespace gdcm;
 %rename(__getitem__) gdcm::Tag::operator[];
 %include "gdcmTag.h"
 %extend gdcm::Tag
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
+%include "gdcmVL.h"
+%include "gdcmVR.h"
+%extend gdcm::VR
 {
   const char *__str__() {
     static std::string buffer;
@@ -120,7 +134,6 @@ using namespace gdcm;
 %include "gdcmObject.h"
 %include "gdcmLookupTable.h"
 %include "gdcmOverlay.h"
-%include "gdcmVL.h"
 //%include "gdcmVR.h"
 %include "gdcmValue.h"
 %include "gdcmByteValue.h"
@@ -166,10 +179,22 @@ using namespace gdcm;
 //%include "gdcmVR.h"
 //%include "gdcmVM.h"
 %include "gdcmDictEntry.h"
+%extend gdcm::DictEntry
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmDict.h"
 %include "gdcmDicts.h"
 %include "gdcmReader.h"
 %include "gdcmImageReader.h"
+%include "gdcmWriter.h"
+%include "gdcmImageWriter.h"
 %template (PairString) std::pair<std::string,std::string>;
 %include "gdcmStringFilter.h"
 //%template (FilenameType) std::string;
@@ -215,3 +240,5 @@ using namespace gdcm;
 //    void foo();
 //  };
 //}
+#define GDCM_STATIC_ASSERT(x)
+%include "gdcmAttribute.h"
