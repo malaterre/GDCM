@@ -5,6 +5,7 @@ SET(GDCM_PYTHON_TEST_SRCS
   TestScanner
   TestImageReader
   TestUIDGenerator
+  TestModifyFields
   )
 
 #FIND_PACKAGE(PythonInterp REQUIRED)
