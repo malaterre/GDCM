@@ -88,9 +88,26 @@ const char *Testing::GetDataRoot()
   return GDCM_DATA_ROOT;
 }
 
-const char *Testing::GetTempDirectory()
+const char *Testing::GetTempDirectory(const char * subdir)
 {
-  return GDCM_TEMP_DIRECTORY;
+  if( !subdir ) return GDCM_TEMP_DIRECTORY;
+  // else
+  static std::string tmpdir = GDCM_TEMP_DIRECTORY;
+  tmpdir += "/";
+  tmpdir += subdir;
+  return tmpdir.c_str();
+}
+
+const char * Testing::GetTempFilename(const char *filename, const char * subdir)
+{
+  if( !filename ) return 0;
+
+  static std::string outfilename = GetTempDirectory(subdir);
+  outfilename += "/";
+  gdcm::Filename out(filename);
+  outfilename += out.GetName();
+
+  return outfilename.c_str();
 }
 
 void Testing::Print(std::ostream &os)

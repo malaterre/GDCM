@@ -50,8 +50,12 @@ public :
   // Return the GDCM DATA ROOT
   static const char * GetDataRoot();
 
+  // NOT THREAD SAFE
   // Returns the temp directory as used in testing needing to output data:
-  static const char * GetTempDirectory();
+  static const char * GetTempDirectory(const char * subdir = 0);
+
+  // NOT THREAD SAFE
+  static const char * GetTempFilename(const char *filename, const char * subdir = 0);
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
