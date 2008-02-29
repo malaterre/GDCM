@@ -97,7 +97,9 @@ public:
   static bool IsValid(const char *vr);
   // Check if vr1 is valid against vr2,
   // Typically vr1 is read from the file and vr2 is taken from the dict
+#ifndef SWIG
   static bool IsValid(const char *vr1, const VRType &vr2);
+#endif
   //static bool IsValid(const VRType &vr1, const VRType &vr2);
   // Find out if the string read is byte swapped
   static bool IsSwap(const char *vr);
@@ -118,6 +120,7 @@ public:
       return 2;
   }
   
+#ifndef SWIG
   // Some use of template metaprograming with ugly macro
   static bool IsBinary(VRType const &vr);
   static bool IsASCII(VRType const &vr);
@@ -127,6 +130,7 @@ public:
   static bool IsBinary2(VRType const &vr);
   // TODO: REMOVE ME
   static bool IsASCII2(VRType const &vr);
+#endif
   
   VR(VRType vr = INVALID):VRField(vr) { }
   //VR(VR const &vr):VRField(vr.VRField) { }
@@ -194,6 +198,8 @@ inline std::ostream &operator<<(std::ostream &_os, const VR &val)
   _os << VR::GetVRString(val.VRField);
   return _os;
 }
+
+#ifndef SWIG
 
 // Tells whether VR Type is ASCII or Binary
 template<int T> struct VRToEncoding;
@@ -301,6 +307,7 @@ inline unsigned int VR::GetSize() const
 	}
 	return 0;
 }
+#endif // SWIG
 
 
 } // end namespace gdcm
