@@ -43,26 +43,7 @@ int TestWrite(const char *subdir, const char* filename)
     return 1;
     }
 
-  gdcm::Filename out(filename);
-  // FIXME: we need to use the temp from the binary build instead...
-  //std::string tmpdir = "/tmp/debug";
-  std::string tmpdir;
-  tmpdir = gdcm::Testing::GetTempDirectory();
-  tmpdir += "/";
-  tmpdir += subdir;
-  std::string outfilename = tmpdir;
-  outfilename += "/";
-  outfilename += out.GetName();
-  if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
-    {
-    if( !gdcm::System::MakeDirectory( tmpdir.c_str() ) )
-      {
-      std::cerr << "Error cannot execute test" << std::endl;
-      std::cerr << "Last error was: " << gdcm::System::GetLastSystemError()
-        << std::endl;
-      return 1;
-      }
-    }
+  std::string outfilename = gdcm::Testing::GetTempFilename( filename, subdir );
 
   gdcm::Writer writer;
   writer.SetFileName( outfilename.c_str() );

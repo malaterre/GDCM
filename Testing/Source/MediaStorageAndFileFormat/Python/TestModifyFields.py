@@ -59,7 +59,8 @@ if __name__ == "__main__":
   deid = gdcm.DataElement( deidmethod )
   deid.SetVR( dictel.GetVR() )
   methodstr = "Well known Company"
-  deid.SetByteValue( methodstr, gdcm.VL(len(methodstr)) )
+  #deid.SetByteValue( methodstr, gdcm.VL(len(methodstr)) )
+  deid.SetByteValue( methodstr, len(methodstr) )
   ds.Insert( deid )
 
   w = gdcm.Writer()
