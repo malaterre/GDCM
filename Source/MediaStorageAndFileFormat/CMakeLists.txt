@@ -1,6 +1,7 @@
 # Define the srcs for Media Storage And FileFormat
 # MSFF
 SET(MSFF_SRCS
+  gdcmAnonymizer.cxx
   gdcmDICOMDIR.cxx
   gdcmSpectroscopy.cxx
   gdcmEncapsulatedDocument.cxx
