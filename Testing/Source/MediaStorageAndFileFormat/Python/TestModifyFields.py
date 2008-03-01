@@ -16,10 +16,8 @@
 import gdcm
 import os,sys
 
-if __name__ == "__main__":
-  filename = os.sys.argv[1]
+def TestModifyFields(filename):
   outfilename = filename + ".rewrite"
-
   r = gdcm.Reader()
   r.SetFileName( filename )
   sucess = r.Read()
@@ -63,8 +61,26 @@ if __name__ == "__main__":
   deid.SetByteValue( methodstr, len(methodstr) )
   ds.Insert( deid )
 
-  w = gdcm.Writer()
-  w.SetFileName( outfilename )
-  w.SetFile( r.GetFile() )
-  sucess = w.Write()
+  #w = gdcm.Writer()
+  #w.SetFileName( outfilename )
+  #w.SetFile( r.GetFile() )
+  #sucess = w.Write()
+  return sucess
+
+if __name__ == "__main__":
+  sucess = 0
+  try:
+    filename = os.sys.argv[1]
+    sucess += TestModifyFields( filename, True )
+  except:
+    # loop over all files:
+    t = gdcm.Testing()
+    nfiles = t.GetNumberOfFileNames()
+    for i in range(0,nfiles):
+      filename = t.GetFileName(i)
+      sucess += TestModifyFields( filename )
+  
+  
+  # Test succeed ?
+  sys.exit(sucess == 0)
 
