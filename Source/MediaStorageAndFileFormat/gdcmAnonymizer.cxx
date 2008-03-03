@@ -185,14 +185,14 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
 bool Anonymizer::RemovePrivateTags()
 {
   DataSet &ds = F->GetDataSet();
-  DataSet::ConstIterator it = ds.Begin();
+  DataSet::Iterator it = ds.Begin();
   for( ; it != ds.End(); )
     {
     const DataElement &de = *it;
     if( de.GetTag().IsPrivate() )
       {
       // std::set::erase invalidate iterator, so we need to make a copy first:
-      DataSet::DataElementSet::iterator dup = it;
+      DataSet::Iterator dup = it;
       ++it;
       ds.GetDES().erase(dup);
       }

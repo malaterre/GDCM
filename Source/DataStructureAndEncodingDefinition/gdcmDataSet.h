@@ -56,10 +56,13 @@ class GDCM_EXPORT DataSet
 public:
   typedef std::set<DataElement> DataElementSet;
   typedef DataElementSet::const_iterator ConstIterator;
+  typedef DataElementSet::iterator Iterator;
   typedef DataElementSet::size_type SizeType;
   //typedef typename DataElementSet::iterator iterator;
   ConstIterator Begin() const { return DES.begin(); }
+  Iterator Begin() { return DES.begin(); }
   ConstIterator End() const { return DES.end(); }
+  Iterator End() { return DES.end(); }
   const DataElementSet &GetDES() const { return DES; }
   DataElementSet &GetDES() { return DES; }
   void Clear() {
