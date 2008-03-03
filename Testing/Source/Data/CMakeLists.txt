@@ -97,10 +97,10 @@ FOREACH(filename ${GDCM_DATA_FILENAMES_GLOB})
     #SET(GDCM_TEST_DCMTK 1)
     IF(GDCM_TEST_DCMTK)
       IF(DCMTK_DCMDUMP)
-        ADD_TEST("DCMDUMP-ORI-${filename_name}" "${DCMTK_DCMDUMP}"
-          "${filename}")
-        ADD_TEST("DCMDUMP-${filename_name}" "${DCMTK_DCMDUMP}"
-          "/tmp/debug/${filename_name}")
+        #ADD_TEST("DCMDUMP-ORI-${filename_name}" "${DCMTK_DCMDUMP}" "-M"
+        #  "${filename}")
+        ADD_TEST("DCMDUMP-\"${filename_name}\"" "${DCMTK_DCMDUMP}" "-M"
+          "${GDCM_TEMP_DIRECTORY}/TestWriter/${filename_name}")
       ENDIF(DCMTK_DCMDUMP)
     ENDIF(GDCM_TEST_DCMTK)
   ELSE(NOT bad_dicom)

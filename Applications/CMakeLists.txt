@@ -80,3 +80,4 @@ IF(CMAKE_HAVE_FCNTL_H AND CMAKE_HAVE_SHED_H)
 	)
 ENDIF(CMAKE_HAVE_FCNTL_H AND CMAKE_HAVE_SHED_H)
 
+# At that point Testing subdirectory should have been done in which case datafiles are set:

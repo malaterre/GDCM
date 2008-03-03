@@ -19,15 +19,17 @@
 #include "gdcmFileMetaInformation.h"
 #include "gdcmTesting.h"
 
+namespace gdcm
+{
 int TestImageWrite(const char *subdir, const char* filename)
 {
-  gdcm::ImageReader reader;
+  ImageReader reader;
   reader.SetFileName( filename );
   if ( !reader.Read() )
     {
-    const gdcm::FileMetaInformation &header = reader.GetFile().GetHeader();
-    gdcm::MediaStorage ms = header.GetMediaStorage();
-    bool isImage = gdcm::MediaStorage::IsImage( ms );
+    const FileMetaInformation &header = reader.GetFile().GetHeader();
+    MediaStorage ms = header.GetMediaStorage();
+    bool isImage = MediaStorage::IsImage( ms );
     if( isImage )
       {
       std::cerr << "Failed to read: " << filename << std::endl;
@@ -40,26 +42,16 @@ int TestImageWrite(const char *subdir, const char* filename)
       }
     }
 
-  gdcm::Filename out(filename);
-  std::string tmpdir; // = "/tmp/debug";
-  tmpdir = gdcm::Testing::GetTempDirectory();
-  tmpdir += "/";
-  tmpdir += subdir;
-  std::string outfilename = tmpdir;
-  outfilename += "/";
-  outfilename += out.GetName();
-  if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
+  // Create directory first:
+  std::string tmpdir = Testing::GetTempDirectory( subdir );
+  if( !System::FileIsDirectory( tmpdir.c_str() ) )
     {
-    if( !gdcm::System::MakeDirectory( tmpdir.c_str() ) )
-      {
-      std::cerr << "Error cannot execute test" << std::endl;
-      std::cerr << "Last error was: " << gdcm::System::GetLastSystemError()
-        << std::endl;
-      return 1;
-      }
+    System::MakeDirectory( tmpdir.c_str() );
+    //return 1;
     }
+  std::string outfilename = Testing::GetTempFilename( filename, subdir );
 
-  gdcm::ImageWriter writer;
+  ImageWriter writer;
   writer.SetFileName( outfilename.c_str() );
   writer.SetImage( reader.GetImage() );
   if( !writer.Write() )
@@ -70,13 +62,13 @@ int TestImageWrite(const char *subdir, const char* filename)
   std::cout << "success: " << outfilename << std::endl;
 
   // Let's read that file back in !
-  gdcm::ImageReader reader2;
+  ImageReader reader2;
 
   reader2.SetFileName( outfilename.c_str() );
   if ( reader2.Read() )
     {
     int res = 0;
-    const gdcm::Image &img = reader2.GetImage();
+    const Image &img = reader2.GetImage();
     //std::cerr << "Success to read image from file: " << filename << std::endl;
     unsigned long len = img.GetBufferLength();
     char* buffer = new char[len];
@@ -90,17 +82,17 @@ int TestImageWrite(const char *subdir, const char* filename)
     if( img.GetPixelType().GetBitsAllocated() == 16 )
       {
       assert( !(len % 2) );
-      assert( img.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME1
-        || img.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME2 );
-      gdcm::ByteSwap<unsigned short>::SwapRangeFromSwapCodeIntoSystem(
-        (unsigned short*)buffer, gdcm::SwapCode::LittleEndian, len/2);
+      assert( img.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1
+        || img.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2 );
+      ByteSwap<unsigned short>::SwapRangeFromSwapCodeIntoSystem(
+        (unsigned short*)buffer, SwapCode::LittleEndian, len/2);
       }
 #endif
     // reuse the filename, since outfilename is simply the new representation of the old filename
-    const char *ref = gdcm::Testing::GetMD5FromFile(filename);
+    const char *ref = Testing::GetMD5FromFile(filename);
 
     char digest[33] = {};
-    gdcm::System::ComputeMD5(buffer, len, digest);
+    System::ComputeMD5(buffer, len, digest);
     if( !ref )
       {
       // new regression image needs a md5 sum
@@ -127,13 +119,13 @@ int TestImageWrite(const char *subdir, const char* filename)
 #if 0
   // Ok we have now two files let's compare their md5 sum:
   char digest[33], outdigest[33];
-  gdcm::System::ComputeFileMD5(filename, digest);
-  gdcm::System::ComputeFileMD5(outfilename.c_str(), outdigest);
+  System::ComputeFileMD5(filename, digest);
+  System::ComputeFileMD5(outfilename.c_str(), outdigest);
   if( strcmp(digest, outdigest) )
     {
     // too bad the file is not identical, so let's be paranoid and
     // try to reread-rewrite this just-writen file:
-    // TODO: Copy file gdcm::System::CopyFile( );
+    // TODO: Copy file System::CopyFile( );
     if( TestImageWrite( outfilename.c_str() ) )
       {
       std::cerr << filename << " and "
@@ -155,13 +147,14 @@ int TestImageWrite(const char *subdir, const char* filename)
 #endif
   return 0;
 }
+}
 
 int TestImageWriter(int argc, char *argv[])
 {
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestImageWrite(argv[0],filename);
+    return gdcm::TestImageWrite(argv[0],filename);
     }
 
   // else
@@ -170,7 +163,7 @@ int TestImageWriter(int argc, char *argv[])
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
     {
-    r += TestImageWrite(argv[0], filename );
+    r += gdcm::TestImageWrite(argv[0], filename );
     ++i;
     }
 

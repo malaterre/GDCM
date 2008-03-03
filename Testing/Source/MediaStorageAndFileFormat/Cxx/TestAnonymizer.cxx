@@ -20,7 +20,7 @@
 
 namespace gdcm
 {
-int TestAnonymize(const char* filename)
+int TestAnonymize(const char *subdir, const char* filename)
 {
   Reader reader;
   reader.SetFileName( filename );
@@ -43,15 +43,15 @@ int TestAnonymize(const char* filename)
     }
 
   // Create directory first:
-  std::string tmpdir = Testing::GetTempDirectory( "TestAnonymizer" );
+  std::string tmpdir = Testing::GetTempDirectory( subdir );
   if( !System::FileIsDirectory( tmpdir.c_str() ) )
     {
     System::MakeDirectory( tmpdir.c_str() );
     //return 1;
     }
-  std::string outfilename = gdcm::Testing::GetTempFilename( filename, "TestAnonymizer" );
+  std::string outfilename = Testing::GetTempFilename( filename, subdir );
 
-  gdcm::Writer writer;
+  Writer writer;
   writer.SetFileName( outfilename.c_str() );
   writer.SetFile( reader.GetFile() );
   if( !writer.Write() )
@@ -96,7 +96,7 @@ int TestAnonymizer(int argc, char *argv[])
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return gdcm::TestAnonymize(filename);
+    return gdcm::TestAnonymize(argv[0], filename);
     }
 
   // else
@@ -105,7 +105,7 @@ int TestAnonymizer(int argc, char *argv[])
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
     {
-    r += gdcm::TestAnonymize( filename );
+    r += gdcm::TestAnonymize( argv[0], filename );
     ++i;
     }
 
