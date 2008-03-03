@@ -56,9 +56,11 @@ class GDCM_EXPORT DataSet
 public:
   typedef std::set<DataElement> DataElementSet;
   typedef DataElementSet::const_iterator ConstIterator;
+  //typedef typename DataElementSet::iterator iterator;
   ConstIterator Begin() const { return DES.begin(); }
   ConstIterator End() const { return DES.end(); }
-  //typedef typename DataElementSet::iterator iterator;
+  const DataElementSet &GetDES() const { return DES; }
+  DataElementSet &GetDES() { return DES; }
   void Clear() {
     DES.clear();
     assert( DES.empty() );
@@ -126,8 +128,9 @@ public:
     }
  void Remove(const Tag& tag) {
     //assert( de.GetTag() != Tag(0,0) );
-    const DataElement r(tag);
-    DES.erase(r);
+    //const DataElement r(tag);
+    DataElementSet::size_type count = DES.erase(tag);
+    assert( count == 0 || count == 1 );
     }
 
   // WARNING:
@@ -173,6 +176,7 @@ public:
     return *this;
   }
 
+/*
   template <typename TOperation>
   void ExecuteOperation(TOperation & operation) {
     assert( !DES.empty() );
@@ -183,6 +187,7 @@ public:
       operation( de );
       }
   }
+*/
 
   template <typename TDE, typename TSwap>
   std::istream &ReadNested(std::istream &is);
@@ -217,24 +222,6 @@ inline std::ostream& operator<<(std::ostream &os, const DataSet &val)
   val.Print(os);
   return os;
 }
-
-
-/*
- * HACK: I need this temp class to be able to manipulate a std::set from python,
- * swig does not support wrapping of simple class like std::set...
- */
-class PythonDataSet
-{
-public:
-  PythonDataSet(DataSet &des):Internal(des),it(des.Begin()) {}
-  const DataElement& GetCurrent() const { return *it; }
-  void Start() { it = Internal.Begin(); }
-  bool IsAtEnd() const { return it == Internal.End(); }
-  void Next() { ++it; }
-private:
-  DataSet & Internal;
-  DataSet::ConstIterator it;
-};
 
 } // end namespace gdcm
 
