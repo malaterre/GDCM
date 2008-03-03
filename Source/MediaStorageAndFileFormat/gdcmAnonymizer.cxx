@@ -191,6 +191,7 @@ bool Anonymizer::RemovePrivateTags()
     const DataElement &de = *it;
     if( de.GetTag().IsPrivate() )
       {
+      // std::set::erase invalidate iterator, so we need to make a copy first:
       DataSet::DataElementSet::iterator dup = it;
       ++it;
       ds.GetDES().erase(dup);
