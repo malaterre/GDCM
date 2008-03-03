@@ -182,14 +182,14 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
   return true;
 }
 
-bool Anonymizer::Anonymize()
+bool Anonymizer::RemovePrivateTags()
 {
   DataSet &ds = F->GetDataSet();
   DataSet::DataElementSet::iterator it = ds.Begin();
   for( ; it != ds.End(); )
     {
     const DataElement &de = *it;
-    if( de.GetTag().IsPrivate() && RemovePrivateTags )
+    if( de.GetTag().IsPrivate() )
       {
       DataSet::DataElementSet::iterator dup = it;
       ++it;
@@ -202,6 +202,17 @@ bool Anonymizer::Anonymize()
     }
 
   return true;
+}
+
+bool Anonymizer::BasicApplicationLevelConfidentialityProfile()
+{
+  //static Tag BasicApplicationLevelConfidentialityProfileAttributes[];
+  static const unsigned int deidSize = sizeof(Tag);
+  static const unsigned int numDeIds = sizeof(BasicApplicationLevelConfidentialityProfileAttributes) / deidSize;
+  static const Tag *start = BasicApplicationLevelConfidentialityProfileAttributes;
+  static const Tag *end = start + numDeIds;
+
+  //return std::binary_search(start, end, tag);
 }
 
 } // end namespace gdcm

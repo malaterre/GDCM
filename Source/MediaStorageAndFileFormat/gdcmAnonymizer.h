@@ -27,7 +27,7 @@ namespace gdcm
 class GDCM_EXPORT Anonymizer
 {
 public:
-  Anonymizer():F(new File),RemovePrivateTags(true),BasicApplicationLevelConfidentialityProfile(false) {}
+  Anonymizer():F(new File) {}
   ~Anonymizer();
 
   // Make tag t empty (if not found tag will be created)
@@ -44,29 +44,24 @@ public:
   // is required when dealing with VRBINARY tag
   bool Replace( Tag const &t, const char *value, VL const & vl );
 
-  // Main function that loop over all elements and execute user specified anonymization
-  bool Anonymize();
+  // Main function that loop over all elements and remove private tags
+  bool RemovePrivateTags();
 
   void SetFile(const File& f) { F = &f; }
   //const File &GetFile() const { return *F; }
   File &GetFile() { return *F; }
 
-  // Decide whether or not to remove all private tags
-  void SetRemovePrivateTags(bool b) { RemovePrivateTags = b; }
-
   // PS 3.15 
   // E.1.1 De-Identifier
   // An Application may claim conformance to the Basic Application Level Confidentiality Profile as a deidentifier
   // if it protects all Attributes that might be used by unauthorized entities to identify the patient.
-  //void SetBasicApplicationLevelConfidentialityProfile(bool b) { BasicApplicationLevelConfidentialityProfile = b; }
+  bool BasicApplicationLevelConfidentialityProfile();
 
 protected:
 
 private:
   // I would prefer to have a smart pointer to DataSet but DataSet does not derive from Object...
   SmartPointer<File> F;
-  bool RemovePrivateTags;
-  bool BasicApplicationLevelConfidentialityProfile;
 };
 
 } // end namespace gdcm
