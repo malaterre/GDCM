@@ -185,7 +185,7 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
 bool Anonymizer::RemovePrivateTags()
 {
   DataSet &ds = F->GetDataSet();
-  DataSet::DataElementSet::iterator it = ds.Begin();
+  DataSet::ConstIterator it = ds.Begin();
   for( ; it != ds.End(); )
     {
     const DataElement &de = *it;
@@ -214,6 +214,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile()
   static const Tag *end = start + numDeIds;
 
   //return std::binary_search(start, end, tag);
+  return true;
 }
 
 } // end namespace gdcm
