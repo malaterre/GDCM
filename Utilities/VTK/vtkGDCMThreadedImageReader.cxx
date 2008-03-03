@@ -62,7 +62,7 @@ void vtkGDCMThreadedImageReader::ExecuteInformation()
   //std::cout << "UpdateExtent:" << updateExtent[4] << " " << updateExtent[5] << std::endl;
 
   vtkImageData *output = this->GetOutput();
-  output->SetUpdateExtent(this->DataExtent);
+  output->SetUpdateExtentToWholeExtent(); // pipeline is not reexecuting properly without that...
 
   this->vtkImageReader2::ExecuteInformation();
 }
