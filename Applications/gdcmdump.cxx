@@ -60,28 +60,54 @@ int DoOperation(const std::string & filename)
 
 
 
+void PrintVersion()
+{
+}
+
+void PrintHelp()
+{
+  PrintVersion();
+  std::cout << "Usage: gdcmdump [OPTION]... [FILE]..." << std::endl;
+  std::cout << "Options:" << std::endl;
+  std::cout << "  -v --verbose   more verbose." << std::endl;
+  std::cout << "  -h --help      print help." << std::endl;
+  std::cout << "  -V --version   print version." << std::endl;
+}
+
 int main (int argc, char *argv[])
 {
   int c;
   //int digit_optind = 0;
 
   std::string filename;
-  bool printdict = false;
-  bool print = false;
-  bool verbose = false;
+  int printdict = 0;
+  int print = 0;
+  int verbose = 0;
+  int help = 0;
+  int version = 0;
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
+/*
+   struct option {
+              const char *name;
+              int has_arg;
+              int *flag;
+              int val;
+          };
+*/
     static struct option long_options[] = {
         {"input", 1, 0, 0},
         {"output", 1, 0, 0},
-        {"dict", 1, 0, 0},
-        {"print", 1, 0, 0},
-        {"verbose", 1, 0, 0},
-        {0, 0, 0, 0}
+        {"dict", 0, &printdict, 1},
+        {"print", 0, &print, 1},
+        {"verbose", 0, &verbose, 1},
+        {"help", 0, &help, 1},
+        {"version", 0, &version, 1},
+        {0, 0, 0, 0} // required
     };
-
-    c = getopt_long (argc, argv, "i:o:dpv",
+    static const char short_options[] = "i:o:dpvhV";
+    c = getopt_long (argc, argv, short_options,
       long_options, &option_index);
     if (c == -1)
       {
@@ -91,9 +117,10 @@ int main (int argc, char *argv[])
     switch (c)
       {
     case 0:
+    case '-':
         {
         const char *s = long_options[option_index].name;
-        printf ("option %s", s);
+        //printf ("option %s", s);
         if (optarg)
           {
           if( option_index == 0 ) /* input */
@@ -104,7 +131,7 @@ int main (int argc, char *argv[])
             }
           printf (" with arg %s", optarg);
           }
-        printf ("\n");
+        //printf ("\n");
         }
       break;
 
@@ -120,17 +147,26 @@ int main (int argc, char *argv[])
 
     case 'd':
       //printf ("option d with value '%s'\n", optarg);
-      printdict = true;
+      printdict = 1;
       break;
 
     case 'p':
       //printf ("option p with value '%s'\n", optarg);
-      print = true;
+      print = 1;
       break;
 
     case 'v':
       //printf ("option d with value '%s'\n", optarg);
-      verbose = true;
+      verbose = 1;
+      break;
+
+    case 'V':
+      //printf ("option d with value '%s'\n", optarg);
+      version = 1;
+      break;
+
+    case 'h':
+      help = 1;
       break;
 
     case '?':
@@ -149,6 +185,20 @@ int main (int argc, char *argv[])
       printf ("%s ", argv[optind++]);
       }
     printf ("\n");
+    }
+
+  if( version )
+    {
+    //std::cout << "version" << std::endl;
+    PrintVersion();
+    return 0;
+    }
+
+  if( help )
+    {
+    //std::cout << "help" << std::endl;
+    PrintHelp();
+    return 0;
     }
 
   // check if d or p are passed, only one at a time
