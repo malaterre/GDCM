@@ -224,6 +224,23 @@ inline std::ostream& operator<<(std::ostream &os, const DataSet &val)
   val.Print(os);
   return os;
 }
+  	 
+/*
+ * HACK: I need this temp class to be able to manipulate a std::set from python,
+ * swig does not support wrapping of simple class like std::set...
+ */
+class PythonDataSet
+{
+public:
+  PythonDataSet(DataSet &des):Internal(des),it(des.Begin()) {}
+  const DataElement& GetCurrent() const { return *it; }
+  void Start() { it = Internal.Begin(); }
+  bool IsAtEnd() const { return it == Internal.End(); }
+  void Next() { ++it; }
+private:
+  DataSet & Internal;
+  DataSet::ConstIterator it;
+};
 
 } // end namespace gdcm
 
