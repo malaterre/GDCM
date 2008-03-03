@@ -56,6 +56,7 @@ class GDCM_EXPORT DataSet
 public:
   typedef std::set<DataElement> DataElementSet;
   typedef DataElementSet::const_iterator ConstIterator;
+  typedef DataElementSet::size_type SizeType;
   //typedef typename DataElementSet::iterator iterator;
   ConstIterator Begin() const { return DES.begin(); }
   ConstIterator End() const { return DES.end(); }
@@ -126,11 +127,12 @@ public:
     if( DES.find(de) != DES.end() ) DES.erase(de);
     DES.insert(de);
     }
- void Remove(const Tag& tag) {
+ SizeType Remove(const Tag& tag) {
     //assert( de.GetTag() != Tag(0,0) );
     //const DataElement r(tag);
     DataElementSet::size_type count = DES.erase(tag);
     assert( count == 0 || count == 1 );
+    return count;
     }
 
   // WARNING:
