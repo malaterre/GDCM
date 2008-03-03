@@ -92,22 +92,26 @@ const char *Testing::GetTempDirectory(const char * subdir)
 {
   if( !subdir ) return GDCM_TEMP_DIRECTORY;
   // else
-  static std::string tmpdir = GDCM_TEMP_DIRECTORY;
+  static std::string buffer;
+  std::string tmpdir = GDCM_TEMP_DIRECTORY;
   tmpdir += "/";
   tmpdir += subdir;
-  return tmpdir.c_str();
+  buffer = tmpdir;
+  return buffer.c_str();
 }
 
 const char * Testing::GetTempFilename(const char *filename, const char * subdir)
 {
   if( !filename ) return 0;
 
-  static std::string outfilename = GetTempDirectory(subdir);
+  static std::string buffer;
+  std::string outfilename = GetTempDirectory(subdir);
   outfilename += "/";
   gdcm::Filename out(filename);
   outfilename += out.GetName();
+  buffer = outfilename;
 
-  return outfilename.c_str();
+  return buffer.c_str();
 }
 
 void Testing::Print(std::ostream &os)
