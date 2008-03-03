@@ -45,6 +45,7 @@
 #include "gdcmUIDGenerator.h"
 #include "gdcmScanner.h"
 #include "gdcmAttribute.h"
+#include "gdcmAnonymizer.h"
 
 using namespace gdcm;
 %}
@@ -83,6 +84,10 @@ using namespace gdcm;
   }
 };
 %include "gdcmVL.h"
+//%typemap(out) int
+//{
+//    $result = SWIG_NewPointerObj($1,SWIGTYPE_p_gdcm__VL,0);
+//}
 %include "gdcmVR.h"
 %extend gdcm::VR
 {
@@ -242,3 +247,4 @@ using namespace gdcm;
 //}
 #define GDCM_STATIC_ASSERT(x)
 %include "gdcmAttribute.h"
+%include "gdcmAnonymizer.h"
