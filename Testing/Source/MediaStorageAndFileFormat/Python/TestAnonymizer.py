@@ -25,7 +25,6 @@ def TestAnonymizer(filename, verbose = False):
 
   ano = gdcm.Anonymizer()
   ano.SetFile( r.GetFile() )
-  ano.SetRemovePrivateTags( True )
   # 1. Replace with another value
   ano.Replace( gdcm.Tag(0x0010,0x0010), "Test^Anonymize" )
   # 2. Remove a tag (even a SQ)
@@ -33,7 +32,7 @@ def TestAnonymizer(filename, verbose = False):
   # 3. Make a tag empty
   ano.Empty( gdcm.Tag(0x0008,0x0070) )
   # Call the main function:
-  sucess = ano.Anonymize() # do it !
+  sucess = ano.RemovePrivateTags() # do it !
   if( not sucess ): return 1
 
   if verbose:

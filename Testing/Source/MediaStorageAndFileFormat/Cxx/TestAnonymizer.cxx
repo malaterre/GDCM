@@ -37,7 +37,7 @@ int TestAnonymize(const char* filename)
   anonymizer.Replace( pattag , patname );
   anonymizer.Remove( Tag(0x0008,0x2112) );
   anonymizer.Empty( Tag(0x0008,0x0070) );
-  if( !anonymizer.Anonymize() )
+  if( !anonymizer.RemovePrivateTags() )
     {
     return 1;
     }
