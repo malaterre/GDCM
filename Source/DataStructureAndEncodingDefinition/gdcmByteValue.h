@@ -219,7 +219,9 @@ protected:
     if( IsPrintable(Length) )
       {
       // WARNING: Internal.end() != Internal.begin()+Length
-      std::copy(Internal.begin(), Internal.begin()+Length,
+      std::vector<char>::size_type length = Length;
+      if( Internal.back() == 0 ) --length;
+      std::copy(Internal.begin(), Internal.begin()+length,
         std::ostream_iterator<char>(os));
       }
     else
