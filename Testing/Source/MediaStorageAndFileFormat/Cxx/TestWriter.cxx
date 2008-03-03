@@ -33,9 +33,11 @@
 //  return false;
 //}
 
+namespace gdcm
+{
 int TestWrite(const char *subdir, const char* filename)
 {
-  gdcm::Reader reader;
+  Reader reader;
   reader.SetFileName( filename );
   if ( !reader.Read() )
     {
@@ -43,9 +45,16 @@ int TestWrite(const char *subdir, const char* filename)
     return 1;
     }
 
-  std::string outfilename = gdcm::Testing::GetTempFilename( filename, subdir );
+  // Create directory first:
+  std::string tmpdir = Testing::GetTempDirectory( subdir );
+  if( !System::FileIsDirectory( tmpdir.c_str() ) )
+    {
+    System::MakeDirectory( tmpdir.c_str() );
+    //return 1;
+    }
+  std::string outfilename = Testing::GetTempFilename( filename, subdir );
 
-  gdcm::Writer writer;
+  Writer writer;
   writer.SetFileName( outfilename.c_str() );
   writer.SetFile( reader.GetFile() );
   if( !writer.Write() )
@@ -56,13 +65,13 @@ int TestWrite(const char *subdir, const char* filename)
 
   // Ok we have now two files let's compare their md5 sum:
   char digest[33], outdigest[33];
-  gdcm::System::ComputeFileMD5(filename, digest);
-  gdcm::System::ComputeFileMD5(outfilename.c_str(), outdigest);
+  System::ComputeFileMD5(filename, digest);
+  System::ComputeFileMD5(outfilename.c_str(), outdigest);
   if( strcmp(digest, outdigest) )
     {
     // too bad the file is not identical, so let's be paranoid and
     // try to reread-rewrite this just-writen file:
-    // TODO: Copy file gdcm::System::CopyFile( );
+    // TODO: Copy file System::CopyFile( );
     std::string subsubdir = subdir;
     subsubdir += "/";
     subsubdir += subdir;
@@ -85,13 +94,14 @@ int TestWrite(const char *subdir, const char* filename)
     return 0;
     }
 }
+}
 
 int TestWriter(int argc, char *argv[])
 {
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestWrite(argv[0], filename);
+    return gdcm::TestWrite(argv[0], filename);
     }
 
   // else
@@ -100,7 +110,7 @@ int TestWriter(int argc, char *argv[])
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
     {
-    r += TestWrite(argv[0], filename );
+    r += gdcm::TestWrite(argv[0], filename );
     ++i;
     }
 
