@@ -53,22 +53,17 @@ vtkGDCMThreadedImageReader::~vtkGDCMThreadedImageReader()
 void vtkGDCMThreadedImageReader::ExecuteInformation()
 {
   std::cerr << "ExecuteInformation" << std::endl;
-  if (this->FileNames && this->FileNames->GetNumberOfValues() > 0)
-    {
-    this->DataExtent[4] = 0;
-    this->DataExtent[5] = this->FileNames->GetNumberOfValues() - 1; 
-    }
-  else if ( this->FileName )
-    {
-    this->DataExtent[4] = 0;
-    this->DataExtent[5] = 1; 
-    }
-
   // This reader only implement case where image is flipped upside down
   if( !this->FileLowerLeft )
     {
     vtkErrorMacro( "You need to set the FileLowerLeft flag to On" );
     }
+  //int * updateExtent = this->Outputs[0]->GetUpdateExtent();
+  //std::cout << "UpdateExtent:" << updateExtent[4] << " " << updateExtent[5] << std::endl;
+
+  vtkImageData *output = this->GetOutput();
+  output->SetUpdateExtent(this->DataExtent);
+
   this->vtkImageReader2::ExecuteInformation();
 }
 
@@ -76,7 +71,12 @@ void vtkGDCMThreadedImageReader::ExecuteData(vtkDataObject *output)
 {
   std::cerr << "ExecuteData" << std::endl;
   vtkImageData *data = this->AllocateOutputData(output);
-  //data->GetPointData()->GetScalars()->SetName("GDCM");
+//  if( data->UpdateExtentIsEmpty() )
+//    {
+//    return;
+//    }
+  //int * updateExtent = data->GetUpdateExtent();
+  //std::cout << "UpdateExtent:" << updateExtent[4] << " " << updateExtent[5] << std::endl;
   RequestDataCompat();
 }
 #endif /* (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 ) */

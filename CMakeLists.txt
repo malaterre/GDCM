@@ -238,5 +238,6 @@ IF(BUILD_WRAPPING)
 ENDIF(BUILD_WRAPPING)
 
 
+# Need to be the last operation:
 SUBDIRS(CMake/ExportConfiguration)
 

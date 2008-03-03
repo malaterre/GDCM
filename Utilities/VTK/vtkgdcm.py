@@ -10,4 +10,4 @@ else:
 try:
   from vtk import vtkStringArray
 except:
-  print "Import error"
+  print "Using compatibility layer (VTK 4) for vtkStringArray"

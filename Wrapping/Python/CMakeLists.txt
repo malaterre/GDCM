@@ -1,3 +1,5 @@
+# Try to rebuild wrapping a little more often:
+INCLUDE_REGULAR_EXPRESSION("^(gdcm).*$")
 # TODO:
 # SWIG is really a pain in the neck to use, a better alternative is Py++ which is using
 # gccxml for the C++ parser and allow a full ANSI C++ support
@@ -12,11 +14,11 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
 )
 # Provide some C99 compatilities for all win system...hopefully there won't be no collision
-IF(WIN32)
+IF(WIN32 AND NOT CYGWIN)
   INCLUDE_DIRECTORIES(
     "${GDCM_SOURCE_DIR}/Utilities/C99"
   )
-ENDIF(WIN32)
+ENDIF(WIN32 AND NOT CYGWIN)
 
 FIND_PACKAGE(PythonLibs REQUIRED)
 INCLUDE_DIRECTORIES(

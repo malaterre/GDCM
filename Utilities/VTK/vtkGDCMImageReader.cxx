@@ -73,7 +73,41 @@ vtkGDCMImageReader::~vtkGDCMImageReader()
 
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #else
-vtkCxxSetObjectMacro(vtkGDCMImageReader,FileNames,vtkStringArray);
+//vtkCxxSetObjectMacro(vtkGDCMImageReader,FileNames,vtkStringArray);
+void vtkGDCMImageReader::SetFileNames(vtkStringArray *filenames)
+{
+  if (filenames == this->FileNames)
+    {
+    return;
+    }
+  if (this->FileNames)
+    {
+    this->FileNames->Delete();
+    this->FileNames = 0;
+    }
+  if (filenames)
+    {
+    this->FileNames = filenames;
+    this->FileNames->Register(this);
+    if (this->FileNames->GetNumberOfValues() > 0)
+      {
+      this->DataExtent[4] = 0;
+      this->DataExtent[5] = this->FileNames->GetNumberOfValues() - 1;
+      }
+    if (this->FilePrefix)
+      {
+      delete [] this->FilePrefix;
+      this->FilePrefix = NULL;
+      }
+    if (this->FileName)
+      {
+      delete [] this->FileName;
+      this->FileName = NULL;
+      }
+    }
+
+  this->Modified();
+}
 
 void vtkGDCMImageReader::ExecuteInformation()
 {
@@ -86,7 +120,8 @@ void vtkGDCMImageReader::ExecuteData(vtkDataObject *output)
 {
   std::cerr << "ExecuteData" << std::endl;
   vtkImageData *data = this->AllocateOutputData(output);
-  //data->GetPointData()->GetScalars()->SetName("GDCM");
+  //int * updateExtent = data->GetUpdateExtent();
+  //std::cout << "UpdateExtent:" << updateExtent[4] << " " << updateExtent[5] << std::endl;
   RequestDataCompat();
 }
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
