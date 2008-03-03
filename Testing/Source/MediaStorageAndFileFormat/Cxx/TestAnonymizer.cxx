@@ -76,7 +76,7 @@ int TestAnonymize(const char* filename)
     {
     return 1;
     }
-  if (strcmp( bv->GetPointer(), patname) != 0 )
+  if (strncmp( bv->GetPointer(), patname, strlen(patname) ) != 0 )
     {
     return 1;
     }

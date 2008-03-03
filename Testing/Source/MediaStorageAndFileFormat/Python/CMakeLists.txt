@@ -6,6 +6,7 @@ SET(GDCM_PYTHON_TEST_SRCS
   TestImageReader
   TestUIDGenerator
   TestModifyFields
+  TestAnonymizer
   )
 
 #FIND_PACKAGE(PythonInterp REQUIRED)
