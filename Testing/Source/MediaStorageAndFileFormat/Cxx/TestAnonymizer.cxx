@@ -35,6 +35,8 @@ int TestAnonymize(const char* filename)
   const char patname[] = "test^anonymize";
   const Tag pattag = Tag(0x0010,0x0010);
   anonymizer.Replace( pattag , patname );
+  anonymizer.Remove( Tag(0x0008,0x2112) );
+  anonymizer.Empty( Tag(0x0008,0x0070) );
   if( !anonymizer.Anonymize() )
     {
     return 1;

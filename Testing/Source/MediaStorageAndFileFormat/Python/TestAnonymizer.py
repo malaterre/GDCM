@@ -16,21 +16,28 @@
 import gdcm
 import os,sys
 
-def TestAnonymizer(filename, verbose):
+def TestAnonymizer(filename, verbose = False):
   r = gdcm.Reader()
   r.SetFileName( filename )
   sucess = r.Read()
-  if( !sucess ): return 1
+  if( not sucess ): return 1
   #print r.GetFile().GetDataSet()
 
   ano = gdcm.Anonymizer()
   ano.SetFile( r.GetFile() )
   ano.SetRemovePrivateTags( True )
+  # 1. Replace with another value
   ano.Replace( gdcm.Tag(0x0010,0x0010), "Test^Anonymize" )
+  # 2. Remove a tag (even a SQ)
+  ano.Remove( gdcm.Tag(0x0008,0x2112) )
+  # 3. Make a tag empty
+  ano.Empty( gdcm.Tag(0x0008,0x0070) )
+  # Call the main function:
   sucess = ano.Anonymize() # do it !
-  if( !sucess ): return 1
+  if( not sucess ): return 1
 
-  #print ano.GetFile().GetDataSet()
+  if verbose:
+    print ano.GetFile().GetDataSet()
 
   return sucess
 
