@@ -62,6 +62,7 @@ int DoOperation(const std::string & filename)
 
 void PrintVersion()
 {
+  const char date[] = "$Date$";
 }
 
 void PrintHelp()
