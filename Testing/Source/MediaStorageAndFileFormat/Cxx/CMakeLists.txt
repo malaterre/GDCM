@@ -74,11 +74,25 @@ FOREACH(filename ${gdcm_data_filenames_glob})
   STRING(REGEX MATCH ${filename_name} bad_dicom ${black_list_reader_dcmtk})
   IF(NOT bad_dicom)
     IF(GDCM_TEST_DCMTK)
-      IF(DCMTK_DCMDUMP)
+      IF(DCMTK_DCMDUMP_EXECUTABLE)
         ADD_TEST("DCMDUMP-\"${filename_name}\"" "${DCMTK_DCMDUMP}" "-M"
           "${GDCM_TEMP_DIRECTORY}/TestWriter/${filename_name}")
-      ENDIF(DCMTK_DCMDUMP)
+      ENDIF(DCMTK_DCMDUMP_EXECUTABLE)
     ENDIF(GDCM_TEST_DCMTK)
+  ENDIF(NOT bad_dicom)
+ENDFOREACH(filename)
+
+# Repeat for dcdump
+FOREACH(filename ${gdcm_data_filenames_glob})
+  GET_FILENAME_COMPONENT(filename_name ${filename} NAME)
+  STRING(REGEX MATCH ${filename_name} bad_dicom ${black_list_reader})
+  IF(NOT bad_dicom)
+    IF(GDCM_TEST_DICOM3TOOLS)
+      IF(DCDUMP_EXECUTABLE)
+        ADD_TEST("DCDUMP-\"${filename_name}\"" "${DCDUMP_EXECUTABLE}"
+          "${GDCM_TEMP_DIRECTORY}/TestWriter/${filename_name}")
+      ENDIF(DCDUMP_EXECUTABLE)
+    ENDIF(GDCM_TEST_DICOM3TOOLS)
   ENDIF(NOT bad_dicom)
 ENDFOREACH(filename)
 

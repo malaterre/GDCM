@@ -246,6 +246,7 @@ void DoOverlays(const DataSet& ds, ImageValue& pixeldata)
         {
         // Move on to the next public one:
         overlay.SetGroup( de.GetTag().GetGroup() + 1 );
+        overlay.SetElement( 0 );
         }
       else
         {
