@@ -21,6 +21,11 @@
 namespace gdcm
 {
 
+/**
+ * \brief StringFiler
+ * StringFiler is the class that make gdcm2.x looks more like gdcm1 and transform the binary blob 
+ * contained in a DataElement into a string, typically this is a nice feature to have for wrapped language
+ */
 class GDCM_EXPORT StringFilter
 {
 public:
@@ -32,7 +37,7 @@ public:
   // Allow user to pass in there own dicts
   void SetDicts(const Dicts &dicts);
 
-  //const char *ToString(const DataElement& de) const;
+  // Convert to string the ByteValue contained in a DataElement
   std::pair<std::string, std::string> ToStringPair(const DataElement& de) const;
 
 private:

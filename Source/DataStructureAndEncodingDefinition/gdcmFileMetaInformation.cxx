@@ -119,7 +119,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
       Insert( xde );
       }
     }
-  else
+  else // Ok there is a value in (0002,0002) let see if it match (0008,0016)
     {
     if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )
       {
@@ -146,7 +146,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
       Insert( xde );
       }
     }
-  else
+  else // Ok there is a value in (0002,0003) let see if it match (0008,0018)
     {
     if( !ds.FindDataElement( Tag(0x0008, 0x0018) ) )
       {
