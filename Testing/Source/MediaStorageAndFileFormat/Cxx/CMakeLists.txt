@@ -60,4 +60,18 @@ FOREACH(name ${MSFF_TEST_SRCS})
   ADD_TEST(${name} ${GDCM_MSFF_TESTS} ${name})
 ENDFOREACH(name)
 
+# We can only run the dcmtk cross-checking test *only* after all the tests have run
+# in particular once the TestWriter is done.
+FOREACH(filename ${gdcm_data_filenames_glob})
+  GET_FILENAME_COMPONENT(filename_name ${filename} NAME)
+  STRING(REGEX MATCH ${filename_name} bad_dicom ${black_list_reader})
+  IF(NOT bad_dicom)
+    IF(GDCM_TEST_DCMTK)
+      IF(DCMTK_DCMDUMP)
+        ADD_TEST("DCMDUMP-\"${filename_name}\"" "${DCMTK_DCMDUMP}" "-M"
+          "${GDCM_TEMP_DIRECTORY}/TestWriter/${filename_name}")
+      ENDIF(DCMTK_DCMDUMP)
+    ENDIF(GDCM_TEST_DCMTK)
+  ENDIF(NOT bad_dicom)
+ENDFOREACH(filename)
 
