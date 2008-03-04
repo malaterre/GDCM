@@ -46,6 +46,7 @@
 #include "gdcmScanner.h"
 #include "gdcmAttribute.h"
 #include "gdcmAnonymizer.h"
+#include "gdcmSystem.h"
 
 using namespace gdcm;
 %}
@@ -248,3 +249,4 @@ using namespace gdcm;
 #define GDCM_STATIC_ASSERT(x)
 %include "gdcmAttribute.h"
 %include "gdcmAnonymizer.h"
+%include "gdcmSystem.h"

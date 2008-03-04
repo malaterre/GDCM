@@ -35,8 +35,28 @@ def TestAnonymizer(filename, verbose = False):
   sucess = ano.RemovePrivateTags() # do it !
   if( not sucess ): return 1
 
+  # Let's check if our anonymization worked:
   if verbose:
     print ano.GetFile().GetDataSet()
+
+  # So at that point r.GetFile() was modified, let's simply passed it to the Writer:
+  # First find a place where to write it out:
+  subdir = "TestAnonymizerPython"
+  tmpdir = gdcm.Testing.GetTempDirectory( subdir )
+  if not gdcm.System.FileIsDirectory( tmpdir ):
+    gdcm.System.MakeDirectory( tmpdir )
+  # Ok directory does exist now, extract the name of the input file, and merge it in
+  # our newly created tmpdir:
+  outfilename = gdcm.Testing.GetTempFilename( filename, subdir )
+
+  w = gdcm.Writer()
+  w.SetFileName( outfilename )
+  w.SetFile( r.GetFile() )
+  sucess = w.Write()
+  if( not sucess ): return 1
+
+  if verbose:
+    print "Success to write: %s"%outfilename
 
   return sucess
 
