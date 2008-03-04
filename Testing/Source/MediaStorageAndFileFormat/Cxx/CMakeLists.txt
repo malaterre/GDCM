@@ -11,7 +11,7 @@ SET(MSFF_TEST_SRCS
   TestImageReader
   TestCopyDataSet
   TestImageWriter
-  TestImageWriter2
+  #TestImageWriter2
   TestWriter
   TestCodec
   TestPDFCodec
