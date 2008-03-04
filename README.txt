@@ -1,0 +1,6 @@
+/*
+\mainpage gdcm documentation
+
+This is the developpers documentation.
+
+*/
