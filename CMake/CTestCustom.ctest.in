@@ -17,7 +17,7 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   "\"/.../gdcm/src/gdcmjpeg/jccolor.c\", line 107: warning: integer overflow detected: op \"<<\""
   "Warning W8004.*gdcmjasper[\\]src[\\]libjasper.*"
   "Warning W8004.*gdcmopenjpeg[\\]libopenjpeg.*"
-  "/.../gdcm/Utilities/expat/(.*)"
+  "Utilities/expat/"
   )
 
 # Disable dynamic analysis on some tests:
