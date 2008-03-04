@@ -58,7 +58,7 @@ def TestModifyFields(filename):
   deid.SetVR( dictel.GetVR() )
   methodstr = "Well known Company"
   #deid.SetByteValue( methodstr, gdcm.VL(len(methodstr)) )
-  deid.SetByteValue( methodstr, len(methodstr) )
+  deid.SetByteValue( methodstr, gdcm.VL(len(methodstr)) )
   ds.Insert( deid )
 
   #w = gdcm.Writer()
