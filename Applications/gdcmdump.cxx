@@ -76,9 +76,12 @@ void PrintHelp()
   std::cout << "Parameter:" << std::endl;
   std::cout << "  -i --input     DICOM filename." << std::endl;
   std::cout << "Options:" << std::endl;
-  std::cout << "  -d --dict      generate the XML dict (only private elements for now)." << std::endl;
+  std::cout << "  -x --xml-dict      generate the XML dict (only private elements for now)." << std::endl;
   std::cout << "  -p --print     print value instead of simply dumping." << std::endl;
-  std::cout << "  -v --verbose   more verbose." << std::endl;
+  std::cout << "  -v --verbose   more verbose (warning+error)." << std::endl;
+  std::cout << "  -w --warning   print warning info." << std::endl;
+  std::cout << "  -d --debug     print debug info." << std::endl;
+  std::cout << "  -e --error     print error info." << std::endl;
   std::cout << "  -h --help      print help." << std::endl;
   std::cout << "  -V --version   print version." << std::endl;
 }
@@ -92,6 +95,9 @@ int main (int argc, char *argv[])
   int printdict = 0;
   int print = 0;
   int verbose = 0;
+  int warning = 0;
+  int debug = 0;
+  int error = 0;
   int help = 0;
   int version = 0;
   while (1) {
@@ -110,11 +116,14 @@ int main (int argc, char *argv[])
         {"dict", 0, &printdict, 1},
         {"print", 0, &print, 1},
         {"verbose", 0, &verbose, 1},
+        {"warning", 0, &warning, 1},
+        {"debug", 0, &debug, 1},
+        {"error", 0, &error, 1},
         {"help", 0, &help, 1},
         {"version", 0, &version, 1},
         {0, 0, 0, 0} // required
     };
-    static const char short_options[] = "i:dpvhV";
+    static const char short_options[] = "i:xpvwdehV";
     c = getopt_long (argc, argv, short_options,
       long_options, &option_index);
     if (c == -1)
@@ -149,7 +158,7 @@ int main (int argc, char *argv[])
       filename = optarg;
       break;
 
-    case 'd':
+    case 'x':
       //printf ("option d with value '%s'\n", optarg);
       printdict = 1;
       break;
@@ -157,6 +166,18 @@ int main (int argc, char *argv[])
     case 'p':
       //printf ("option p with value '%s'\n", optarg);
       print = 1;
+      break;
+
+    case 'e':
+      error = 1;
+      break;
+
+    case 'w':
+      warning = 1;
+      break;
+
+    case 'd':
+      debug = 1;
       break;
 
     case 'v':
@@ -220,9 +241,15 @@ int main (int argc, char *argv[])
     return 1;
     }
   // Debug is a little too verbose
-  //gdcm::Trace::SetDebug( verbose );
-  gdcm::Trace::SetWarning( verbose );
-  gdcm::Trace::SetError( verbose );
+  gdcm::Trace::SetDebug( debug );
+  gdcm::Trace::SetWarning( warning );
+  gdcm::Trace::SetError( error );
+  // when verbose is true, make sure warning+error are turned on:
+  if( verbose )
+    {
+    gdcm::Trace::SetWarning( verbose );
+    gdcm::Trace::SetError( verbose);
+    }
    
 
   // else
