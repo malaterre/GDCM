@@ -35,10 +35,10 @@
 vtkCxxRevisionMacro(vtkGDCMImageWriter, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMImageWriter)
 
-vtkCxxSetObjectMacro(vtkGDCMImageWriter,LookupTable,vtkLookupTable);
-vtkCxxSetObjectMacro(vtkGDCMImageWriter,MedicalImageProperties,vtkMedicalImageProperties);
-vtkCxxSetObjectMacro(vtkGDCMImageWriter,FileNames,vtkStringArray);
-vtkCxxSetObjectMacro(vtkGDCMImageWriter,DirectionCosines,vtkMatrix4x4);
+vtkCxxSetObjectMacro(vtkGDCMImageWriter,LookupTable,vtkLookupTable)
+vtkCxxSetObjectMacro(vtkGDCMImageWriter,MedicalImageProperties,vtkMedicalImageProperties)
+vtkCxxSetObjectMacro(vtkGDCMImageWriter,FileNames,vtkStringArray)
+vtkCxxSetObjectMacro(vtkGDCMImageWriter,DirectionCosines,vtkMatrix4x4)
 
 vtkGDCMImageWriter::vtkGDCMImageWriter()
 {

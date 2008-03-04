@@ -35,8 +35,8 @@
 #include <pthread.h>
 #include <unistd.h> // sysconf
 
-vtkCxxRevisionMacro(vtkGDCMThreadedImageReader, "$Revision: 1.1 $");
-vtkStandardNewMacro(vtkGDCMThreadedImageReader);
+vtkCxxRevisionMacro(vtkGDCMThreadedImageReader, "$Revision: 1.1 $")
+vtkStandardNewMacro(vtkGDCMThreadedImageReader)
 
 vtkGDCMThreadedImageReader::vtkGDCMThreadedImageReader()
 {
@@ -257,7 +257,7 @@ void vtkGDCMThreadedImageReader::ReadFiles(unsigned int nfiles, const char *file
 
   const unsigned int nprocs = sysconf( _SC_NPROCESSORS_ONLN );
   const unsigned int nthreads = std::min( nprocs, nfiles );
-  threadparams params[nthreads];
+  threadparams *params = new threadparams[nthreads];
 
   pthread_mutex_t lock;
   pthread_mutex_init(&lock, NULL);
@@ -308,6 +308,7 @@ void vtkGDCMThreadedImageReader::ReadFiles(unsigned int nfiles, const char *file
   delete[] pthread;
 
   pthread_mutex_destroy(&lock);
+  delete[] params;
  
 #if 0
   // For some reason writing down the file is painfully slow...

@@ -62,9 +62,16 @@ ENDFOREACH(name)
 
 # We can only run the dcmtk cross-checking test *only* after all the tests have run
 # in particular once the TestWriter is done.
+# In dcmtk 3.5.4 one cannot have VR=UN for meta elements:
+# So make those files part of the black list too:
+SET(black_list_reader_dcmtk ${black_list_reader}
+  PICKER-16-MONO2-No_DicomV3_Preamble.dcm
+  THERALYS-12-MONO2-Uncompressed-Even_Length_Tag.dcm
+  GE_DLX-8-MONO2-PrivateSyntax.dcm
+)
 FOREACH(filename ${gdcm_data_filenames_glob})
   GET_FILENAME_COMPONENT(filename_name ${filename} NAME)
-  STRING(REGEX MATCH ${filename_name} bad_dicom ${black_list_reader})
+  STRING(REGEX MATCH ${filename_name} bad_dicom ${black_list_reader_dcmtk})
   IF(NOT bad_dicom)
     IF(GDCM_TEST_DCMTK)
       IF(DCMTK_DCMDUMP)

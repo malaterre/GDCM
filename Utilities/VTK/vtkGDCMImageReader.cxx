@@ -35,8 +35,8 @@
 
 #include <sstream>
 
-vtkCxxRevisionMacro(vtkGDCMImageReader, "$Revision: 1.1 $");
-vtkStandardNewMacro(vtkGDCMImageReader);
+vtkCxxRevisionMacro(vtkGDCMImageReader, "$Revision: 1.1 $")
+vtkStandardNewMacro(vtkGDCMImageReader)
 
 vtkGDCMImageReader::vtkGDCMImageReader()
 {

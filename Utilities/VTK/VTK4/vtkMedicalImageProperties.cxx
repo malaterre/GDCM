@@ -24,8 +24,8 @@
 #include <assert.h>
 
 //----------------------------------------------------------------------------
-vtkCxxRevisionMacro(vtkMedicalImageProperties, "1.21");
-vtkStandardNewMacro(vtkMedicalImageProperties);
+vtkCxxRevisionMacro(vtkMedicalImageProperties, "1.21")
+vtkStandardNewMacro(vtkMedicalImageProperties)
 
 static const char *vtkMedicalImagePropertiesOrientationString[] = {
   "AXIAL",
