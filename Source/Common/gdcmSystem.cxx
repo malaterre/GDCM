@@ -295,7 +295,7 @@ bool System::RemoveFile(const char* source)
 }
 
 // return size of file; also returns zero if no file exists
-unsigned long System::FileSize(const char* filename)
+size_t System::FileSize(const char* filename)
 {
   struct stat fs;
   if (stat(filename, &fs) != 0) 

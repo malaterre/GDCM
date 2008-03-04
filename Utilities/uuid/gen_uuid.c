@@ -97,7 +97,7 @@ static int gettimeofday(struct timeval *tv, int n)
 
   memset(tv,0, sizeof(*tv));
   assert( sizeof(*tv) == sizeof(struct timeval));
-  tv->tv_sec = (time_t)(filetime / 10000000); // seconds since epoch
+  tv->tv_sec = (time_t)(filetime / 10000000); /* seconds since epoch */
   tv->tv_usec = (uint32_t)((filetime % 10000000) / 10);
 
   return 0;

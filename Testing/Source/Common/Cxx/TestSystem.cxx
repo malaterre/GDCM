@@ -22,5 +22,14 @@ int TestSystem(int, char *[])
 	{
 		 return 1;
 	}
+
+  // struct stat {
+  // off_t         st_size;     /* total size, in bytes */
+  // }
+
+  unsigned long size1 = sizeof(off_t);
+  unsigned long size2 = sizeof(size_t);
+  if( size1 != size2 ) return 1;
+
   return 0;
 }

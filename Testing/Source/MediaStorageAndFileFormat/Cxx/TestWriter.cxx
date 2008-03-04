@@ -89,6 +89,9 @@ int TestWrite(const char *subdir, const char* filename)
     }
   else
     {
+    size_t size1 = System::FileSize( filename );
+    size_t size2 = System::FileSize( outfilename.c_str() );
+    assert( size1 == size2 );
     std::cerr << filename << " and "
       << outfilename << " are identical\n";
     return 0;

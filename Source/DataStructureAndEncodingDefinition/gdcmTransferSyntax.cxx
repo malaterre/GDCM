@@ -24,6 +24,8 @@
 namespace gdcm
 {
 
+//#include "gdcmUIDs.cxx"
+
 static const char *TSStrings[] = {
     // Implicit VR Little Endian
   "1.2.840.10008.1.2",
@@ -87,8 +89,10 @@ const TransferSyntax::TSType TransferSyntax::GetTSType(const char *cstr)
 
   int i = 0;
   while(TSStrings[i] != 0)
+  //while(TransferSyntaxStrings[i] != 0)
     {
     if( str == TSStrings[i] )
+    //if( str == TransferSyntaxStrings[i] )
       return (TSType)i;
     ++i;
     }
@@ -99,6 +103,7 @@ const char* TransferSyntax::GetTSString(const TSType &ts)
 {
   assert( ts <= TS_END );
   return TSStrings[(int)ts];
+  //return TransferSyntaxStrings[(int)ts];
 }
 
 bool TransferSyntax::IsImplicit(const TSType &ts) const
