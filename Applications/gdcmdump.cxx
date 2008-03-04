@@ -113,7 +113,7 @@ int main (int argc, char *argv[])
 */
     static struct option long_options[] = {
         {"input", 1, 0, 0},
-        {"dict", 0, &printdict, 1},
+        {"xml-dict", 0, &printdict, 1},
         {"print", 0, &print, 1},
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
