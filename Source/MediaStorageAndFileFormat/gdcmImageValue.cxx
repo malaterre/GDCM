@@ -140,7 +140,7 @@ bool ImageValue::GetBuffer(char *buffer) const
   if( !success )
     {
     buffer = 0;
-    abort();
+    throw Exception( "Not codec found for this image");
     }
 
   return success;

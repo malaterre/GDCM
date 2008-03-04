@@ -75,6 +75,10 @@ public:
   static void SetSourceApplicationEntityTitle(const char * title);
   static const char *GetSourceApplicationEntityTitle();
 
+  FileMetaInformation(FileMetaInformation const &fmi):DataSet(fmi)
+    {
+    }
+
 protected:
   void ComputeDataSetTransferSyntax(); // FIXME
 

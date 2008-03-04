@@ -119,6 +119,18 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
       Insert( xde );
       }
     }
+  else
+    {
+    if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )
+      {
+      abort();
+      }
+    const DataElement& sopclass = ds.GetDataElement( Tag(0x0008, 0x0016) );
+    DataElement mssopclass = GetDataElement( Tag(0x0002, 0x0002) );
+    const ByteValue *bv = sopclass.GetByteValue();
+    mssopclass.SetByteValue( bv->GetPointer(), bv->GetLength() );
+    Replace( mssopclass );
+    }
   // Media Storage SOP Instance UID (0002,0003) -> see (0008,0018)
   if( !FindDataElement( Tag(0x0002, 0x0003) ) )
     {
@@ -133,6 +145,18 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
         }
       Insert( xde );
       }
+    }
+  else
+    {
+    if( !ds.FindDataElement( Tag(0x0008, 0x0018) ) )
+      {
+      abort();
+      }
+    const DataElement& sopinst = ds.GetDataElement( Tag(0x0008, 0x0018) );
+    DataElement mssopinst = GetDataElement( Tag(0x0002, 0x0003) );
+    const ByteValue *bv = sopinst.GetByteValue();
+    mssopinst.SetByteValue( bv->GetPointer(), bv->GetLength() );
+    Replace( mssopinst );
     }
   // Transfer Syntax UID (0002,0010) -> ??? (computed at write time at most)
   if( FindDataElement( Tag(0x0002, 0x0010) ) )
@@ -183,7 +207,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
   // Do this one last !
   // (Meta) Group Length (0002,0000) -> computed
   unsigned int glen = GetLength<ExplicitDataElement>();
-  glen += 2; // ???
+  //glen += 2; // ???
   Attribute<0x0002, 0x0000> filemetagrouplength;
   filemetagrouplength.SetValue( glen );
   Insert( filemetagrouplength.GetAsDataElement() );

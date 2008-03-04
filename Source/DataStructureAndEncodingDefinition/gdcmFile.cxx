@@ -42,7 +42,10 @@ std::ostream const &File::Write(std::ostream &os) const
 
   try
     {
-    Header.Write(os);
+    //Header.Write(os);
+    FileMetaInformation duplicate( Header );
+    duplicate.FillFromDataSet( DS );
+    duplicate.Write(os);
     }
   catch( std::exception &ex)
     {

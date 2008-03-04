@@ -17,6 +17,7 @@
 #include "gdcmWriter.h"
 #include "gdcmTesting.h"
 #include "gdcmSystem.h"
+#include "gdcmUIDGenerator.h"
 
 namespace gdcm
 {
@@ -37,6 +38,12 @@ int TestAnonymize(const char *subdir, const char* filename)
   anonymizer.Replace( pattag , patname );
   anonymizer.Remove( Tag(0x0008,0x2112) );
   anonymizer.Empty( Tag(0x0008,0x0070) );
+  UIDGenerator uid;
+  // Those two are very special, since (0008,0016) needs to be propagated to (0002,0002) and
+  // (0008,0018) needs to be propagated to (0002,0003)
+  std::string newuid = uid.Generate();
+  anonymizer.Replace( Tag(0x0008,0x0018), newuid.c_str() );
+  anonymizer.Replace( Tag(0x0008,0x0016), "1.2.840.10008.5.1.4.1.1.1" ); // Make it a CT
   if( !anonymizer.RemovePrivateTags() )
     {
     return 1;

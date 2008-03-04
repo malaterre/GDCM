@@ -45,9 +45,13 @@ public:
 
   void Print(std::ostream &os) const;
 
-  const char *GetInternal() { return Internal; }
+  const char *GetInternal() const { return Internal; }
 
   bool IsEmpty() const { return !Internal; }
+
+  Preamble(Preamble const &preamble)
+    {
+    }
 protected:
   //
   bool IsValid() const { 
