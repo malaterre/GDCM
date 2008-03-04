@@ -43,7 +43,7 @@ int TestAnonymize(const char *subdir, const char* filename)
   // (0008,0018) needs to be propagated to (0002,0003)
   std::string newuid = uid.Generate();
   anonymizer.Replace( Tag(0x0008,0x0018), newuid.c_str() );
-  anonymizer.Replace( Tag(0x0008,0x0016), "1.2.840.10008.5.1.4.1.1.1" ); // Make it a CT
+  //anonymizer.Replace( Tag(0x0008,0x0016), "1.2.840.10008.5.1.4.1.1.1" ); // Make it a CT
   if( !anonymizer.RemovePrivateTags() )
     {
     return 1;

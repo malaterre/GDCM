@@ -206,12 +206,12 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     }
   // Do this one last !
   // (Meta) Group Length (0002,0000) -> computed
+  Attribute<0x0002, 0x0000> filemetagrouplength;
+  Remove( filemetagrouplength.GetTag() );
   unsigned int glen = GetLength<ExplicitDataElement>();
   //glen += 2; // ???
-  Attribute<0x0002, 0x0000> filemetagrouplength;
   filemetagrouplength.SetValue( glen );
-  //Insert( filemetagrouplength.GetAsDataElement() );
-  Remove( filemetagrouplength.GetTag() );
+  Insert( filemetagrouplength.GetAsDataElement() );
 
   assert( !IsEmpty() );
 }
