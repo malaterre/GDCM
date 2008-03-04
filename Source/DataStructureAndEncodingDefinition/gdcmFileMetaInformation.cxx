@@ -20,6 +20,7 @@
 #include "gdcmByteValue.h"
 #include "gdcmSwapper.h"
 #include "gdcmException.h"
+#include "gdcmTagToType.h"
 
 #include "gdcmTag.h"
 
@@ -420,6 +421,31 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
   return is;
 }
 
+#define ADDVRIMPLICIT( element ) \
+    case element: \
+      de.SetVR( (VR::VRType)TagToType<0x0002,element>::VRType ); \
+      break;
+
+bool AddVRToDataElement(DataElement &de)
+{
+  switch(de.GetTag().GetElement())
+    {
+    ADDVRIMPLICIT(0x0000);
+    ADDVRIMPLICIT(0x0001);
+    ADDVRIMPLICIT(0x0002);
+    ADDVRIMPLICIT(0x0003);
+    ADDVRIMPLICIT(0x0010);
+    ADDVRIMPLICIT(0x0012);
+    ADDVRIMPLICIT(0x0013);
+    ADDVRIMPLICIT(0x0016);
+    ADDVRIMPLICIT(0x0100);
+    ADDVRIMPLICIT(0x0102);
+    default:
+      return false;
+    }
+  return true;
+}
+
 template <typename TSwap>
 std::istream &FileMetaInformation::ReadCompatInternal(std::istream &is)
 {
@@ -441,6 +467,12 @@ std::istream &FileMetaInformation::ReadCompatInternal(std::istream &is)
       while( ReadExplicitDataElement<SwapperNoOp>(is, xde ) )
         {
         //std::cout << xde << std::endl;
+        if( xde.GetVR() == VR::UN )
+          {
+          gdcmWarningMacro( "VR::UN found in file Meta header. "
+            "VR::UN will be replaced with proper VR for tag: " << xde.GetTag() );
+          AddVRToDataElement(xde);
+          }
         Insert( xde );
         }
       // Now is a good time to find out the dataset transfer syntax
@@ -449,14 +481,21 @@ std::istream &FileMetaInformation::ReadCompatInternal(std::istream &is)
     else
       {
       MetaInformationTS = TransferSyntax::Implicit;
-      gdcmDebugMacro( "Not Explicit" );
+      gdcmWarningMacro( "File Meta Information is implicit. VR will be explicitely added" );
       // Ok this might be an implicit encoded Meta File Information header...
       // GE_DLX-8-MONO2-PrivateSyntax.dcm
       is.seekg(-6, std::ios::cur); // Seek back
       ImplicitDataElement ide;
       while( ReadImplicitDataElement<SwapperNoOp>(is, ide ) )
         {
-        Insert(ide);
+        if( AddVRToDataElement(ide) )
+          {
+          Insert(ide);
+          }
+        else
+          {
+          gdcmWarningMacro( "Unknown element found in Meta Header: " << ide.GetTag() );
+          }
         }
       // Now is a good time to find out the dataset transfer syntax
       ComputeDataSetTransferSyntax();
