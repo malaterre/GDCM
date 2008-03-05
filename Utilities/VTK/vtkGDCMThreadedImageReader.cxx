@@ -95,10 +95,16 @@ int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
     return 0;
     }
 
-  if( this->DataExtent[4] != 0 
-   || this->DataExtent[5] != this->FileNames->GetNumberOfValues() - 1 )
+  int zmin = 0;
+  int zmax = 0;
+  if( this->FileNames && this->FileNames->GetNumberOfValues() )
+    {
+    zmax = this->FileNames->GetNumberOfValues() - 1;
+    }
+  if( this->DataExtent[4] != zmin || this->DataExtent[5] != zmax )
     {
     vtkErrorMacro( "Problem with extent" );
+    abort();
     return 0;
     }
 

@@ -207,7 +207,7 @@ bool ImageWriter::Write()
     {
     const ByteValue *bv = ds.GetDataElement( Tag(0x0008,0x0016) ).GetByteValue();
     assert( strncmp( bv->GetPointer(), msstr, bv->GetLength() ) == 0 );
-    assert( bv->GetLength() == strlen( msstr ) );
+    assert( bv->GetLength() == strlen( msstr ) || bv->GetLength() == strlen(msstr) + 1 );
     }
 
   // (re)Compute MediaStorage:

@@ -122,6 +122,7 @@ void ExecuteInformation(const char *filename, TReader *vtkreader)
 
   vtkreader->SetDataExtent( dataextent );
   vtkreader->SetDataScalarType ( datascalartype );
+  vtkreader->SetNumberOfScalarComponents( numberOfScalarComponents );
 }
 
 template <typename TReader>
