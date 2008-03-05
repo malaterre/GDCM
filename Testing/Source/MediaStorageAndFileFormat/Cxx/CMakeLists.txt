@@ -72,7 +72,9 @@ FOREACH(filename ${gdcm_data_filenames_glob})
   IF(NOT bad_dicom)
     IF(GDCM_TEST_DCMTK)
       IF(DCMTK_DCMDUMP_EXECUTABLE)
-        ADD_TEST("DCMDUMP-\"${filename_name}\"" "${DCMTK_DCMDUMP}" "-M"
+        #-M : load short tags
+        # -dc: disable correction
+        ADD_TEST("DCMDUMP-\"${filename_name}\"" "${DCMTK_DCMDUMP}" "-M" "-dc"
           "${GDCM_TEMP_DIRECTORY}/TestWriter/${filename_name}")
       ENDIF(DCMTK_DCMDUMP_EXECUTABLE)
     ENDIF(GDCM_TEST_DCMTK)
