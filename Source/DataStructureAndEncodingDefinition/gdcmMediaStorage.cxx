@@ -114,6 +114,7 @@ bool MediaStorage::IsImage(const MSType &ms)
     || ms == HemodynamicWaveformStorage
     || ms == MediaStorageDirectoryStorage
     || ms == RTPlanStorage
+    || ms == GrayscaleSoftcopyPresentationStateStorageSOPClass
     || ms == RTStructureSetStorage )
     {
     return false;
