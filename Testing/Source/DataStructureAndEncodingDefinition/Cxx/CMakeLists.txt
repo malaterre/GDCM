@@ -6,6 +6,9 @@ SET(DSED_TEST_SRCS
   TestLO
   #TestByteBuffer
   #TestByteValue
+  TestPreamble
+  TestByteSwapFilter
+  TestBasicOffsetTable
   TestComposite
   #TestDataElement
   TestDataSet
@@ -18,7 +21,6 @@ SET(DSED_TEST_SRCS
   #TestImplicitDataElement
   #TestItem
   #TestParser
-  TestRLECodec
   TestSequenceOfFragments
   TestSequenceOfItems
   #TestTag

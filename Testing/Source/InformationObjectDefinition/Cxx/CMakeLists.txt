@@ -6,6 +6,12 @@ SET(IOD_TEST_SRCS
   TestTableEntry
   TestType
   TestModule
+  TestModuleEntry
+  TestPatient
+  TestSeries
+  TestStudy
+  TestDefinedTerms
+  TestEnumeratedValues
   #TestXMLDictReader
   #TestXMLPrivateDictReader
   )

@@ -12,28 +12,11 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmStudy_h
-#define __gdcmStudy_h
+#include "gdcmEnumeratedValues.h"
 
-#include "gdcmTypes.h"
-#include "gdcmSeries.h"
-
-#include <vector>
-
-namespace gdcm
+int TestEnumeratedValues(int, char *[])
 {
-/**
- * \brief
- */
-class GDCM_EXPORT Study
-{
-public:
-  Study() { 
-  }
-private:
-  std::vector<Series> SeriesList;
-};
+  gdcm::EnumeratedValues ev;
+  return 0;
+}
 
-} // end namespace gdcm
-
-#endif //__gdcmStudy_h

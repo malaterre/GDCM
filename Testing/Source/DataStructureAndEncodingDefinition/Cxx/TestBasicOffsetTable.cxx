@@ -12,28 +12,11 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmStudy_h
-#define __gdcmStudy_h
+#include "gdcmBasicOffsetTable.h"
 
-#include "gdcmTypes.h"
-#include "gdcmSeries.h"
-
-#include <vector>
-
-namespace gdcm
+int TestBasicOffsetTable(int, char *[])
 {
-/**
- * \brief
- */
-class GDCM_EXPORT Study
-{
-public:
-  Study() { 
-  }
-private:
-  std::vector<Series> SeriesList;
-};
+  gdcm::BasicOffsetTable bot;
+  return 0;
+}
 
-} // end namespace gdcm
-
-#endif //__gdcmStudy_h

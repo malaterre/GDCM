@@ -37,9 +37,9 @@ public:
   static const unsigned int MaxNumberOfComponents = 1;
   static const unsigned int MaxLength = 16;
   std::string Internal;
-  static const char Separator = '';
+  static const char Separator = ' ';
   static const char Padding   = ' ';
-  static const char Excluded[] = { '\\' /* 5CH */, '\n' /* LF */, '\f', /* FF */, '\r' /* CR */, 0x1b /* ESC */}
+  //static const char Excluded[5] = { '\\' /* 5CH */, '\n' /* LF */, '\f', /* FF */, '\r' /* CR */, 0x1b /* ESC */};
 
   bool IsValid() const {
     return true;

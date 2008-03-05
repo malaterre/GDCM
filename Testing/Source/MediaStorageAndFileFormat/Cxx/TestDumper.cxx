@@ -12,28 +12,11 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmStudy_h
-#define __gdcmStudy_h
+#include "gdcmDumper.h"
 
-#include "gdcmTypes.h"
-#include "gdcmSeries.h"
-
-#include <vector>
-
-namespace gdcm
+int TestDumper(int, char *[])
 {
-/**
- * \brief
- */
-class GDCM_EXPORT Study
-{
-public:
-  Study() { 
-  }
-private:
-  std::vector<Series> SeriesList;
-};
+  gdcm::Dumper d;
+  return 0;
+}
 
-} // end namespace gdcm
-
-#endif //__gdcmStudy_h

@@ -2,6 +2,12 @@
 # MSFF
 SET(MSFF_TEST_SRCS
   TestAnonymizer
+  TestSpacingHelper
+  TestCoder
+  TestDecoder
+  TestDumper
+  TestDictPrinter
+  TestApplicationEntity
   TestStringFilter
   TestUIDGenerator
   TestPrinter
@@ -15,6 +21,7 @@ SET(MSFF_TEST_SRCS
   TestWriter
   TestCodec
   TestPDFCodec
+  TestRLECodec
   TestAudioCodec
   TestImage
   TestPhotometricInterpretation
