@@ -46,10 +46,12 @@ int TestCopyDataSet(int, char *[])
   n2.SetByteValue( versions, strlen(versions) );
   ds_copy.Replace( n2 );
 
+  std::string outfilename = gdcm::Testing::GetTempFilename( "TestCopyDataSet.dcm" );
   gdcm::Writer writer;
   writer.SetFile( reader.GetFile() );
   writer.GetFile().GetDataSet().Replace( n2 );
-  writer.SetFileName( "totu.dcm" );
+  writer.SetFileName( outfilename.c_str() );
+  writer.SetCheckFileMetaInformation( false );
   writer.Write();
 
   return 0;
