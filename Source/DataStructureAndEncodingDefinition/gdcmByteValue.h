@@ -37,6 +37,7 @@ public:
         {
         gdcmDebugMacro( "Odd length" );
         Internal.resize(vl+1);
+        Length++;
         }
   }
   ByteValue(std::vector<char> &v):Internal(v),Length(v.size()) {}
