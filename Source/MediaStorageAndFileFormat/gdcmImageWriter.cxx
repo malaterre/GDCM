@@ -193,18 +193,24 @@ bool ImageWriter::Write()
       }
     }
 
+  MediaStorage ms;
+  ms.SetFromFile( GetFile() );
+  assert( ms != MediaStorage::MS_END );
+  const char* msstr = MediaStorage::GetMSString(ms);
   if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )
     {
-    MediaStorage ms = MediaStorage::SecondaryCaptureImageStorage;
-    const char* msstr = MediaStorage::GetMSString(ms);
     DataElement de( Tag(0x0008, 0x0016 ) );
     de.SetByteValue( msstr, strlen(msstr) );
     ds.Insert( de );
     }
+  else
+    {
+    const ByteValue *bv = ds.GetDataElement( Tag(0x0008,0x0016) ).GetByteValue();
+    assert( strncmp( bv->GetPointer(), msstr, bv->GetLength() ) == 0 );
+    assert( bv->GetLength() == strlen( msstr ) );
+    }
 
   // (re)Compute MediaStorage:
-  MediaStorage ms;
-  ms.SetFromDataSet( ds );
   if( !ds.FindDataElement( Tag(0x0008, 0x0060) ) )
     {
     const char *modality = ms.GetModality();

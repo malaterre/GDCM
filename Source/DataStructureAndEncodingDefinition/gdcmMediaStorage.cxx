@@ -17,6 +17,7 @@
 #include "gdcmByteValue.h"
 #include "gdcmDataSet.h"
 #include "gdcmFileMetaInformation.h"
+#include "gdcmFile.h"
 
 namespace gdcm
 {
@@ -195,7 +196,11 @@ void MediaStorage::SetFromHeader(FileMetaInformation const &fmi)
       sopclassuid->GetLength() );
     assert( sopclassuid_str.find( ' ' ) == std::string::npos );
     MediaStorage ms = MediaStorage::GetMSType(sopclassuid_str.c_str());
-    assert( ms != MS_END );
+    if( ms == MS_END )
+      {
+      // weird something was found, but we not find the MS anyway...
+      gdcmWarningMacro( "Does not know what: " << sopclassuid_str << " is..." );
+      }
     MSField = ms;
     }
 }
@@ -217,7 +222,7 @@ void MediaStorage::GuessFromModality(const char *modality, unsigned int dim)
     }
 }
 
-void MediaStorage::SetFromDataSet(DataSet const &ds)
+void MediaStorage::SetFromDataSet(DataSet const &ds, bool guess)
 {
   const Tag tsopclassuid(0x0008, 0x0016);
   if( ds.FindDataElement( tsopclassuid ) )
@@ -235,6 +240,58 @@ void MediaStorage::SetFromDataSet(DataSet const &ds)
     MediaStorage ms = MediaStorage::GetMSType(sopclassuid_str.c_str());
     assert( ms != MS_END );
     MSField = ms;
+    }
+  else if( guess )
+    {
+    // If user ask to guess MediaStorage, let's try again
+    assert( MSField == MediaStorage::MS_END );
+    SetFromModality( ds );
+    }
+}
+
+void MediaStorage::SetFromModality(DataSet const &ds)
+{
+  // Ok let's try againg with little luck it contains a pixel data...
+  if( ds.FindDataElement( Tag(0x7fe0,0x0010) ) )
+    {
+    // Pixel Data found !
+    // Attempt to recover from the modality (0008,0060):
+    if( ds.FindDataElement( Tag(0x0008,0x0060) ) )
+      {
+      // gdcm-CR-DCMTK-16-NonSamplePerPix.dcm
+      // Someone defined the Transfer Syntax but I have no clue what
+      // it is. Since there is Pixel Data element, let's try to read
+      // that as a buggy DICOM Image file...
+      const ByteValue *bv = ds.GetDataElement( Tag(0x0008,0x0060) ).GetByteValue();
+      if( bv )
+        {
+        std::string modality = std::string( bv->GetPointer(), bv->GetLength() );
+        GuessFromModality( modality.c_str() );
+        }
+      }
+    // We know there is a Pixel Data element, so make sure not to return without a default
+    // to SC Object:
+    if( MSField == MediaStorage::MS_END )
+      {
+      MSField = MediaStorage::SecondaryCaptureImageStorage;
+      }
+    }
+}
+
+void MediaStorage::SetFromFile(File const &file)
+{
+  const DataSet &ds = file.GetDataSet();
+  const FileMetaInformation &header = file.GetHeader();
+  SetFromDataSet( ds );
+  if( MSField == MediaStorage::MS_END ) // Nothing found...
+    {
+    // try again but from header this time:
+    SetFromHeader( header );
+    if( MSField == MediaStorage::MS_END ) // Nothing found...
+      {
+      // Attempt to read what's in Modality:
+      SetFromModality( ds );
+      }
     }
 }
 

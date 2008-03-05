@@ -147,25 +147,10 @@ bool ImageReader::Read()
         // god damit I don't know what to do...
         gdcmWarningMacro( "Attempting to read this file as a DICOM file"
           "\nDesperate attempt" );
-        const Tag tpixeldata(0x7fe0, 0x0010);
-        if( ds.FindDataElement( tpixeldata) )
+        MediaStorage ms3;
+        ms3.SetFromFile( GetFile() );
+        if( ms3 != MediaStorage::MS_END )
           {
-          // gdcm-CR-DCMTK-16-NonSamplePerPix.dcm
-          // Someone defined the Transfer Syntax but I have no clue what
-          // it is. Since there is Pixel Data element, let's try to read
-          // that as a buggy DICOM Image file...
-          //PixelData.SetCompressionType( Compression::RAW );
-          MediaStorage ms3 = MediaStorage::SecondaryCaptureImageStorage;
-          const ByteValue *bv = NULL;
-          if( ds.FindDataElement( Tag(0x0008,0x0060) ) )
-            {
-            bv = ds.GetDataElement( Tag(0x0008,0x0060) ).GetByteValue();
-            }
-          if( bv ) 
-            {
-            std::string modality = std::string( bv->GetPointer(), bv->GetLength() );
-            ms3.GuessFromModality( modality.c_str() );
-            }
           res = ReadImage(ms3);
           }
         else

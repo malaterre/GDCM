@@ -399,28 +399,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
     this->DataExtent[5] = dims[2] - 1;
     }
   gdcm::MediaStorage ms;
-  ms.SetFromDataSet( reader.GetFile().GetDataSet() );
-  if( ms == gdcm::MediaStorage::MS_END ) // Nothing found...
-    {
-    if( ds.FindDataElement( gdcm::Tag(0x0008,0x0060) ) )
-      {
-      const gdcm::ByteValue *bv = ds.GetDataElement( gdcm::Tag(0x0008,0x0060) ).GetByteValue();
-      if( bv )
-        {
-        std::string modality = std::string( bv->GetPointer(), bv->GetLength() );
-        ms.GuessFromModality( modality.c_str(), image.GetNumberOfDimensions() );
-        if( ms == gdcm::MediaStorage::MS_END )
-          {
-          // Ok giving up, you won
-          ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
-          }
-        }
-      }
-    else
-      {
-      ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
-      }
-    }
+  ms.SetFromFile( reader.GetFile() );
   assert( gdcm::MediaStorage::IsImage( ms ) );
   // There is no point in adding world info to a SC object since noone but GDCM can use this info...
   if( ms != gdcm::MediaStorage::SecondaryCaptureImageStorage )
