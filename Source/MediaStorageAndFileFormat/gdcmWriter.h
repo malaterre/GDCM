@@ -35,8 +35,6 @@ namespace gdcm
  * - Even length for any elements
  * - Alphabetical order for elements (garanteed by design of internals)
  * - 32bits VR will be rewritten with 00
- * - Any Elements with Tags (0001,xxxx), (0003,xxxx),
- *   (0005,xxxx), (0007,xxxx) will NOT be written.
  */
 class FileMetaInformation;
 class GDCM_EXPORT Writer
