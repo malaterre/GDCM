@@ -35,9 +35,6 @@ SET(MSFF_TEST_SRCS
   TestJPEGCodec
   TestRAWCodec
   TestDICOMDIR
-  TestPatient
-  TestStudy
-  TestSeries
   TestWaveform
   TestFiducials
   TestEncapsulatedDocument

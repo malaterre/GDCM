@@ -12,24 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmSeries_h
-#define __gdcmSeries_h
-
-#include "gdcmFile.h"
+#include "gdcmApplicationEntity.h"
 
 namespace gdcm
-{
-/**
- * \brief
- */
-class GDCM_EXPORT Series
-{
-public:
-  Series() {}
-
-private:
-};
-
-} // end namespace gdcm
-
-#endif //__gdcmSeries_h
+{}
