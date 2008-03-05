@@ -52,7 +52,10 @@ public:
     assert( Stream.is_open() );
     assert( !Stream.fail() );
     //std::cerr << Stream.is_open() << std::endl;
-  }
+#ifndef NDEBUG
+    DebugFileName = filename;
+#endif
+   }
 
   void SetFile(const File& f) { F = &f; }
   File &GetFile() { return *F; }
@@ -62,6 +65,9 @@ protected:
 
 private:
   SmartPointer<File> F;
+#ifndef NDEBUG
+  std::string DebugFileName;
+#endif
 };
 
 } // end namespace gdcm
