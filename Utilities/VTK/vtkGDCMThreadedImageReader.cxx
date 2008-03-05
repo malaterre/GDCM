@@ -95,18 +95,18 @@ int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
     return 0;
     }
 
-  int zmin = 0;
-  int zmax = 0;
-  if( this->FileNames && this->FileNames->GetNumberOfValues() )
+  if( this->FileNames )
     {
+    int zmin = 0;
+    int zmax = 0;
     zmax = this->FileNames->GetNumberOfValues() - 1;
+    if( this->DataExtent[4] != zmin || this->DataExtent[5] != zmax )
+      {
+      vtkErrorMacro( "Problem with extent" );
+      return 0;
+      }
     }
-  if( this->DataExtent[4] != zmin || this->DataExtent[5] != zmax )
-    {
-    vtkErrorMacro( "Problem with extent" );
-    abort();
-    return 0;
-    }
+  // Cannot deduce anything else otherwise...
 
   int numvol = 1;
   this->SetNumberOfOutputPorts(numvol);
