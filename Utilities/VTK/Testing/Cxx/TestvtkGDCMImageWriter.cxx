@@ -22,6 +22,7 @@
 
 #include "gdcmTesting.h"
 #include "gdcmFilename.h"
+#include "gdcmSystem.h"
 
 int TestvtkGDCMImageWrite(const char *filename)
 {
@@ -33,28 +34,30 @@ int TestvtkGDCMImageWrite(const char *filename)
   reader->GetOutput()->Print( cout );
   reader->GetMedicalImageProperties()->Print( cout );
 
-  vtkImageData *copy = vtkImageData::New();
-  copy->DeepCopy( reader->GetOutput() );
+  //vtkImageData *copy = vtkImageData::New();
+  //copy->DeepCopy( reader->GetOutput() );
+  //copy->Delete();
+
+  // Create directory first:
+  const char subdir[] = "TestvtkGDCMImageWriter";
+  std::string tmpdir = gdcm::Testing::GetTempDirectory( subdir );
+  if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
+    {
+    gdcm::System::MakeDirectory( tmpdir.c_str() );
+    //return 1;
+    }
+  std::string gdcmfile = gdcm::Testing::GetTempFilename( filename, subdir );
 
   vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
   writer->SetInput( reader->GetOutput() );
-  //writer->SetInput( copy );
   writer->SetDirectionCosines( reader->GetDirectionCosines() );
   writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
-  gdcm::Filename fn = filename;
-  std::string gdcmfile; //= vtksys::SystemTools::GetFilenamePath( filename );
-  gdcmfile = "/tmp/vtkdcm";
-  gdcmfile += '/';
-  //gdcmfile += vtksys::SystemTools::GetFilenameWithoutExtension( filename );
-  gdcmfile += fn.GetName();
-  gdcmfile += ".dcm";
   writer->SetFileName( gdcmfile.c_str() );
   writer->Write();
   std::cerr << "Write out: " << gdcmfile << std::endl;
 
   reader->Delete();
   writer->Delete();
-  copy->Delete();
 
   return 0; 
 }

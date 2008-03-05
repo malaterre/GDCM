@@ -16,6 +16,7 @@
 #include "gdcmFileMetaInformation.h"
 #include "gdcmFile.h"
 #include "gdcmTesting.h"
+#include "gdcmMediaStorage.h"
 
 int TestRead(const char* filename)
 {
@@ -34,6 +35,15 @@ int TestRead(const char* filename)
 
   const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
   //std::cout << ds << std::endl;
+
+  gdcm::MediaStorage ms;
+  ms.SetFromFile( reader.GetFile() );
+  if( ms == gdcm::MediaStorage::MS_END )
+    {
+    return 1;
+    }
+
+  std::cout << "Found MediaStorage: " << ms << std::endl;
 
   return 0;
 }

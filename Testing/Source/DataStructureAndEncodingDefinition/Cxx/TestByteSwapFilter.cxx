@@ -12,24 +12,12 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmPatient_h
-#define __gdcmPatient_h
+#include "gdcmByteSwapFilter.h"
 
-#include "gdcmFile.h"
-
-namespace gdcm
+int TestByteSwapFilter(int, char *[])
 {
-/**
- * \brief
- */
-class GDCM_EXPORT Patient
-{
-public:
-  Patient() {}
+  gdcm::DataSet ds;
+  gdcm::ByteSwapFilter bsf( ds );
+  return 0;
+}
 
-private:
-};
-
-} // end namespace gdcm
-
-#endif //__gdcmPatient_h

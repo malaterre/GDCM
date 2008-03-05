@@ -12,13 +12,11 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmStudy.h"
+#include "gdcmModuleEntry.h"
 
-int TestStudy(int argc, char *argv[])
+int TestModuleEntry(int, char *[])
 {
-  (void)argc;
-  (void)argv;
-  gdcm::Study s;
-
+  gdcm::ModuleEntry me("","");
   return 0;
 }
+

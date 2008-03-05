@@ -28,6 +28,7 @@ namespace gdcm
  */
 class DataSet;
 class FileMetaInformation;
+class File;
 class GDCM_EXPORT MediaStorage
 {
 public:
@@ -105,9 +106,14 @@ typedef enum {
 
   const char *GetModality() const;
 
-  void GuessFromModality(const char *modality, unsigned int dimension = 2);
+  // Attempt to set the MediaStorage from a file:
+  void SetFromFile(File const &file);
+
+  // Those function are lower level than SetFromFile
+  void SetFromDataSet(DataSet const &ds, bool guess = false); // Will get the SOP Class UID
   void SetFromHeader(FileMetaInformation const &fmi); // Will get the Media Storage SOP Class UID
-  void SetFromDataSet(DataSet const &ds); // Will get the SOP Class UID
+  void SetFromModality(DataSet const &ds);
+  void GuessFromModality(const char *modality, unsigned int dimension = 2);
 
   friend std::ostream &operator<<(std::ostream &os, const MediaStorage &ms);
 private:

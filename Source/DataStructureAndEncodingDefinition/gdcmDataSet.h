@@ -121,22 +121,25 @@ public:
       }
     return ll;
   }
- void Insert(const DataElement& de) {
-    //assert( de.GetTag() != Tag(0,0) );
-    DES.insert(de);
-    }
- void Replace(const DataElement& de) {
-    //assert( de.GetTag() != Tag(0,0) );
+  void Insert(const DataElement& de) {
+    if( de.GetTag().GetGroup() != 0x0002 )
+      {
+      InsertDataElement( de );
+      }
+    else
+      {
+      gdcmErrorMacro( "Cannot add element with group = 0x0002 in the dataset" );
+      }
+  }
+  void Replace(const DataElement& de) {
     if( DES.find(de) != DES.end() ) DES.erase(de);
-    DES.insert(de);
-    }
- SizeType Remove(const Tag& tag) {
-    //assert( de.GetTag() != Tag(0,0) );
-    //const DataElement r(tag);
+    Insert(de);
+  }
+  SizeType Remove(const Tag& tag) {
     DataElementSet::size_type count = DES.erase(tag);
     assert( count == 0 || count == 1 );
     return count;
-    }
+  }
 
   // WARNING:
   // This only search at the same level as the DataSet is !
@@ -215,6 +218,13 @@ protected:
    * will get reported as missing in any dll using the inlined function
    */
   const DataElement& GetDEEnd() const;
+
+  // This function is not safe, it does not check for the value of the tag
+  // so depending whether we are getting called from a dataset or file meta header
+  // the condition is different
+  void InsertDataElement(const DataElement& de) {
+    DES.insert(de);
+    }
 
 private:
   DataElementSet DES;

@@ -52,6 +52,22 @@ public:
   const TransferSyntax &GetDataSetTransferSyntax() const { return DataSetTS; }
   MediaStorage GetMediaStorage() const;
 
+  // FIXME: no virtual function means: duplicate code...
+  void Insert(const DataElement& de) {
+    if( de.GetTag().GetGroup() == 0x0002 )
+      {
+      InsertDataElement( de );
+      }
+    else
+      {
+      gdcmErrorMacro( "Cannot add element with group != 0x0002 in the file meta header" );
+      }
+  }
+  void Replace(const DataElement& de) {
+    Remove(de.GetTag());
+    Insert(de);
+  }
+
   // Read
   std::istream &Read(std::istream &is);
   std::istream &ReadCompat(std::istream &is);
@@ -74,6 +90,10 @@ public:
   static const char *GetImplementationVersionName();
   static void SetSourceApplicationEntityTitle(const char * title);
   static const char *GetSourceApplicationEntityTitle();
+
+  FileMetaInformation(FileMetaInformation const &fmi):DataSet(fmi)
+    {
+    }
 
 protected:
   void ComputeDataSetTransferSyntax(); // FIXME

@@ -34,6 +34,11 @@ void StringFilter::SetDicts(const Dicts &dicts)
   abort(); // FIXME
 }
 
+std::string StringFilter::ToString(const DataElement& de) const
+{
+  return ToStringPair(de).second;
+}
+
 #define StringFilterCase(type) \
   case VR::type: \
     { \

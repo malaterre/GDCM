@@ -55,13 +55,13 @@ public:
 
 
 template <typename TReader>
-void ExecuteInformation(const char *filename, TReader *vtkreader)
+int ExecuteInformation(const char *filename, TReader *vtkreader)
 {
   gdcm::ImageReader reader;
   reader.SetFileName( filename );
   if( !reader.Read() )
     {
-    //return 0;
+    return 0;
     }
   const gdcm::Image &image = reader.GetImage();
   const unsigned int *dims = image.GetDimensions();
@@ -122,6 +122,7 @@ void ExecuteInformation(const char *filename, TReader *vtkreader)
 
   vtkreader->SetDataExtent( dataextent );
   vtkreader->SetDataScalarType ( datascalartype );
+  vtkreader->SetNumberOfScalarComponents( numberOfScalarComponents );
 }
 
 template <typename TReader>
@@ -156,7 +157,12 @@ int TestvtkGDCMThreadedImageRead(const char *filename)
     }
 
   // In all cases we need to explicitely say what the image type is:
-  ExecuteInformation<TReader>(refimage, reader);
+  if( !ExecuteInformation<TReader>(refimage, reader) )
+    {
+    std::cerr << "file: " << refimage << " is not an image. giving up" << std::endl;
+    reader->Delete();
+    return 0;
+    }
 
 
   ProgressObserver *obs = ProgressObserver::New();

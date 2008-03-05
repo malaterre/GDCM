@@ -20,6 +20,7 @@
 #include "gdcmByteValue.h"
 #include "gdcmSwapper.h"
 #include "gdcmException.h"
+#include "gdcmTagToType.h"
 
 #include "gdcmTag.h"
 
@@ -118,6 +119,18 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
       Insert( xde );
       }
     }
+  else // Ok there is a value in (0002,0002) let see if it match (0008,0016)
+    {
+    if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )
+      {
+      abort();
+      }
+    const DataElement& sopclass = ds.GetDataElement( Tag(0x0008, 0x0016) );
+    DataElement mssopclass = GetDataElement( Tag(0x0002, 0x0002) );
+    const ByteValue *bv = sopclass.GetByteValue();
+    mssopclass.SetByteValue( bv->GetPointer(), bv->GetLength() );
+    Replace( mssopclass );
+    }
   // Media Storage SOP Instance UID (0002,0003) -> see (0008,0018)
   if( !FindDataElement( Tag(0x0002, 0x0003) ) )
     {
@@ -133,6 +146,18 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
       Insert( xde );
       }
     }
+  else // Ok there is a value in (0002,0003) let see if it match (0008,0018)
+    {
+    if( !ds.FindDataElement( Tag(0x0008, 0x0018) ) )
+      {
+      abort();
+      }
+    const DataElement& sopinst = ds.GetDataElement( Tag(0x0008, 0x0018) );
+    DataElement mssopinst = GetDataElement( Tag(0x0002, 0x0003) );
+    const ByteValue *bv = sopinst.GetByteValue();
+    mssopinst.SetByteValue( bv->GetPointer(), bv->GetLength() );
+    Replace( mssopinst );
+    }
   // Transfer Syntax UID (0002,0010) -> ??? (computed at write time at most)
   if( FindDataElement( Tag(0x0002, 0x0010) ) )
     {
@@ -147,7 +172,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
   else
     {
     // Very bad !!
-    throw Exception();
+    throw Exception( "No (0002,0010) element found" );
     }
   // Implementation Class UID (0002,0012) -> ??
   if( !FindDataElement( Tag(0x0002, 0x0012) ) )
@@ -181,9 +206,10 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     }
   // Do this one last !
   // (Meta) Group Length (0002,0000) -> computed
-  unsigned int glen = GetLength<ExplicitDataElement>();
-  glen += 2; // ???
   Attribute<0x0002, 0x0000> filemetagrouplength;
+  Remove( filemetagrouplength.GetTag() );
+  unsigned int glen = GetLength<ExplicitDataElement>();
+  assert( (glen % 2) == 0 );
   filemetagrouplength.SetValue( glen );
   Insert( filemetagrouplength.GetAsDataElement() );
 
@@ -420,6 +446,31 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
   return is;
 }
 
+#define ADDVRIMPLICIT( element ) \
+    case element: \
+      de.SetVR( (VR::VRType)TagToType<0x0002,element>::VRType ); \
+      break;
+
+bool AddVRToDataElement(DataElement &de)
+{
+  switch(de.GetTag().GetElement())
+    {
+    ADDVRIMPLICIT(0x0000);
+    ADDVRIMPLICIT(0x0001);
+    ADDVRIMPLICIT(0x0002);
+    ADDVRIMPLICIT(0x0003);
+    ADDVRIMPLICIT(0x0010);
+    ADDVRIMPLICIT(0x0012);
+    ADDVRIMPLICIT(0x0013);
+    ADDVRIMPLICIT(0x0016);
+    ADDVRIMPLICIT(0x0100);
+    ADDVRIMPLICIT(0x0102);
+    default:
+      return false;
+    }
+  return true;
+}
+
 template <typename TSwap>
 std::istream &FileMetaInformation::ReadCompatInternal(std::istream &is)
 {
@@ -441,6 +492,12 @@ std::istream &FileMetaInformation::ReadCompatInternal(std::istream &is)
       while( ReadExplicitDataElement<SwapperNoOp>(is, xde ) )
         {
         //std::cout << xde << std::endl;
+        if( xde.GetVR() == VR::UN )
+          {
+          gdcmWarningMacro( "VR::UN found in file Meta header. "
+            "VR::UN will be replaced with proper VR for tag: " << xde.GetTag() );
+          AddVRToDataElement(xde);
+          }
         Insert( xde );
         }
       // Now is a good time to find out the dataset transfer syntax
@@ -449,14 +506,21 @@ std::istream &FileMetaInformation::ReadCompatInternal(std::istream &is)
     else
       {
       MetaInformationTS = TransferSyntax::Implicit;
-      gdcmDebugMacro( "Not Explicit" );
+      gdcmWarningMacro( "File Meta Information is implicit. VR will be explicitely added" );
       // Ok this might be an implicit encoded Meta File Information header...
       // GE_DLX-8-MONO2-PrivateSyntax.dcm
       is.seekg(-6, std::ios::cur); // Seek back
       ImplicitDataElement ide;
       while( ReadImplicitDataElement<SwapperNoOp>(is, ide ) )
         {
-        Insert(ide);
+        if( AddVRToDataElement(ide) )
+          {
+          Insert(ide);
+          }
+        else
+          {
+          gdcmWarningMacro( "Unknown element found in Meta Header: " << ide.GetTag() );
+          }
         }
       // Now is a good time to find out the dataset transfer syntax
       ComputeDataSetTransferSyntax();

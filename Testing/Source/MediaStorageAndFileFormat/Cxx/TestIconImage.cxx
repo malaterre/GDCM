@@ -12,24 +12,11 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmStudy_h
-#define __gdcmStudy_h
+#include "gdcmIconImage.h"
 
-#include "gdcmFile.h"
-
-namespace gdcm
+int TestIconImage(int, char *[])
 {
-/**
- * \brief
- */
-class GDCM_EXPORT Study
-{
-public:
-  Study() {}
+  gdcm::IconImage icon;
+  return 0;
+}
 
-private:
-};
-
-} // end namespace gdcm
-
-#endif //__gdcmStudy_h

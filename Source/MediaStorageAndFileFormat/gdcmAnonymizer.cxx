@@ -84,6 +84,7 @@ bool Anonymizer::Empty( Tag const &t)
 
 bool Anonymizer::Remove( Tag const &t )
 {
+  if( t.GetGroup() < 0x0008 ) return false;
   DataSet &ds = F->GetDataSet();
   return ds.Remove( t ) == 1;
 }
@@ -100,6 +101,7 @@ bool Anonymizer::Replace( Tag const &t, const char *value )
 
 bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
 {
+  if( t.GetGroup() < 0x0008 ) return false;
   static const Global &g = GlobalInstance;
   static const Dicts &dicts = g.GetDicts();
   DataSet &ds = F->GetDataSet();

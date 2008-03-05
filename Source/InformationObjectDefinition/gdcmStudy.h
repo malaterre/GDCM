@@ -18,6 +18,8 @@
 #include "gdcmTypes.h"
 #include "gdcmSeries.h"
 
+#include <vector>
+
 namespace gdcm
 {
 /**

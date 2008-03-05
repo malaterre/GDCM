@@ -2,6 +2,12 @@
 # MSFF
 SET(MSFF_TEST_SRCS
   TestAnonymizer
+  TestSpacingHelper
+  TestCoder
+  TestDecoder
+  TestDumper
+  TestDictPrinter
+  TestApplicationEntity
   TestStringFilter
   TestUIDGenerator
   TestPrinter
@@ -15,6 +21,7 @@ SET(MSFF_TEST_SRCS
   TestWriter
   TestCodec
   TestPDFCodec
+  TestRLECodec
   TestAudioCodec
   TestImage
   TestPhotometricInterpretation
@@ -28,9 +35,6 @@ SET(MSFF_TEST_SRCS
   TestJPEGCodec
   TestRAWCodec
   TestDICOMDIR
-  TestPatient
-  TestStudy
-  TestSeries
   TestWaveform
   TestFiducials
   TestEncapsulatedDocument
@@ -60,4 +64,32 @@ FOREACH(name ${MSFF_TEST_SRCS})
   ADD_TEST(${name} ${GDCM_MSFF_TESTS} ${name})
 ENDFOREACH(name)
 
+# We can only run the dcmtk cross-checking test *only* after all the tests have run
+# in particular once the TestWriter is done.
+FOREACH(filename ${gdcm_data_filenames_glob})
+  GET_FILENAME_COMPONENT(filename_name ${filename} NAME)
+  STRING(REGEX MATCH ${filename_name} bad_dicom ${black_list_reader})
+  IF(NOT bad_dicom)
+    IF(GDCM_TEST_DCMTK)
+      IF(DCMTK_DCMDUMP_EXECUTABLE)
+        ADD_TEST("DCMDUMP-\"${filename_name}\"" "${DCMTK_DCMDUMP}" "-M"
+          "${GDCM_TEMP_DIRECTORY}/TestWriter/${filename_name}")
+      ENDIF(DCMTK_DCMDUMP_EXECUTABLE)
+    ENDIF(GDCM_TEST_DCMTK)
+  ENDIF(NOT bad_dicom)
+ENDFOREACH(filename)
+
+# Repeat for dcdump
+FOREACH(filename ${gdcm_data_filenames_glob})
+  GET_FILENAME_COMPONENT(filename_name ${filename} NAME)
+  STRING(REGEX MATCH ${filename_name} bad_dicom ${black_list_reader})
+  IF(NOT bad_dicom)
+    IF(GDCM_TEST_DICOM3TOOLS)
+      IF(DCDUMP_EXECUTABLE)
+        ADD_TEST("DCDUMP-\"${filename_name}\"" "${DCDUMP_EXECUTABLE}"
+          "${GDCM_TEMP_DIRECTORY}/TestWriter/${filename_name}")
+      ENDIF(DCDUMP_EXECUTABLE)
+    ENDIF(GDCM_TEST_DICOM3TOOLS)
+  ENDIF(NOT bad_dicom)
+ENDFOREACH(filename)
 

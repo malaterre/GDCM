@@ -23,6 +23,7 @@
 
 #include "gdcmFilename.h"
 #include "gdcmTesting.h"
+#include "gdcmSystem.h"
 
 int TestvtkGDCMImageRead(const char *filename)
 {
@@ -37,18 +38,22 @@ int TestvtkGDCMImageRead(const char *filename)
   reader->GetMedicalImageProperties()->Print( cout );
 #endif
 
+  // Create directory first:
+  const char subdir[] = "TestvtkGDCMImageReader";
+  std::string tmpdir = gdcm::Testing::GetTempDirectory( subdir );
+  if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
+    {
+    gdcm::System::MakeDirectory( tmpdir.c_str() );
+    //return 1;
+    }
+  std::string pngfile = gdcm::Testing::GetTempFilename( filename, subdir );
+
   vtkPNGWriter *writer = vtkPNGWriter::New();
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   writer->SetInputConnection( reader->GetOutputPort() );
 #else
   writer->SetInput( reader->GetOutput() );
 #endif
-  gdcm::Filename fn = filename;
-  std::string pngfile; // = vtksys::SystemTools::GetFilenamePath( filename );
-  pngfile = "/tmp/png";
-  pngfile += '/';
-  //pngfile += vtksys::SystemTools::GetFilenameWithoutExtension( filename );
-  pngfile += fn.GetName();
   pngfile += ".png";
   writer->SetFileName( pngfile.c_str() );
   writer->Write();

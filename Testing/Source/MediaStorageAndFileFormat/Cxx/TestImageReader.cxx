@@ -86,6 +86,7 @@ int TestImageRead(const char* filename)
     }
   // else
   // well this is not an image, so thankfully we fail to read it
+  std::cerr << "Could not read image(" << filename << "), since file is a: " << ms << std::endl;
   assert( ms != gdcm::MediaStorage::MS_END );
   return 0;
 }

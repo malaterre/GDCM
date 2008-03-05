@@ -34,7 +34,7 @@ public:
   static bool RemoveFile(const char* source);
 
   static const char *GetLastSystemError();
-  static unsigned long FileSize(const char* filename);
+  static size_t FileSize(const char* filename);
 
   // MD5 stuff
   // digest_str needs to be at least : strlen = [2*16+1];

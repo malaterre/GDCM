@@ -73,6 +73,8 @@ public:
     return strwhat.c_str();
     }
 
+  const char * GetDescription() const { return Description.c_str(); }
+
 private:
   std::string  Description;
   std::string  File;

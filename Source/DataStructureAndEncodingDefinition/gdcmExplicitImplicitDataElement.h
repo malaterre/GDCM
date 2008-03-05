@@ -24,6 +24,8 @@ namespace gdcm
  * \brief Class to read/write a DataElement as ExplicitImplicit Data Element
  * \note This only happen for some Philips images
  * Should I derive from ExplicitDataElement instead ?
+ * This is the class that is the closest the GDCM1.x parser. At each element we try first
+ * to read it as explicit, if this fails, then we try again as an implicit element.
  */
 class GDCM_EXPORT ExplicitImplicitDataElement : public DataElement
 {

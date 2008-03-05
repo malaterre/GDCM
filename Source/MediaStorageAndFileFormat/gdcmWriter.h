@@ -35,14 +35,12 @@ namespace gdcm
  * - Even length for any elements
  * - Alphabetical order for elements (garanteed by design of internals)
  * - 32bits VR will be rewritten with 00
- * - Any Elements with Tags (0001,xxxx), (0003,xxxx),
- *   (0005,xxxx), (0007,xxxx) will NOT be written.
  */
 class FileMetaInformation;
 class GDCM_EXPORT Writer
 {
 public:
-  Writer():Stream(),F(new File) {}
+  Writer():Stream(),F(new File),CheckFileMetaInformation(true) {}
   virtual ~Writer();
 
   virtual bool Write(); // Execute()
@@ -52,16 +50,25 @@ public:
     assert( Stream.is_open() );
     assert( !Stream.fail() );
     //std::cerr << Stream.is_open() << std::endl;
-  }
+#ifndef NDEBUG
+    DebugFileName = filename;
+#endif
+   }
 
   void SetFile(const File& f) { F = &f; }
   File &GetFile() { return *F; }
+
+  void SetCheckFileMetaInformation(bool b) { CheckFileMetaInformation = b; }
 
 protected:
   std::ofstream Stream;
 
 private:
   SmartPointer<File> F;
+  bool CheckFileMetaInformation;
+#ifndef NDEBUG
+  std::string DebugFileName;
+#endif
 };
 
 } // end namespace gdcm

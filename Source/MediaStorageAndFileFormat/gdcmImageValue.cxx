@@ -78,7 +78,8 @@ bool ImageValue::TryJPEGCodec(char *buffer) const
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
-    memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+    // DermaColorLossLess.dcm has a len of 63531, but DICOM will give us: 63532 ...
+    memcpy(buffer, outbv->GetPointer(), len /*outbv->GetLength()*/ );  // FIXME
 
     return true;
     }
@@ -140,7 +141,7 @@ bool ImageValue::GetBuffer(char *buffer) const
   if( !success )
     {
     buffer = 0;
-    abort();
+    throw Exception( "Not codec found for this image");
     }
 
   return success;

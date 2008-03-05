@@ -29,7 +29,7 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 </xsl:comment>
-    <dicts edition="2007">
+    <dicts edition="2008">
       <xsl:apply-templates select="article/sect1/informaltable"/>
       <xsl:apply-templates select="article/sect1/sect2/informaltable"/>
     </dicts>
@@ -191,8 +191,8 @@ template for a row in UID mode. Should be:
   <xsl:template match="row" mode="uid">
     <xsl:if test="entry[1]/para != 'UID Value'">
 <!-- skip the table header -->
-      <xsl:variable name="value" select="translate(entry[1]/para,'&#9;','')"/>
-      <xsl:variable name="name" select="translate(entry[2]/para,'&#9;','')"/>
+      <xsl:variable name="value" select="translate(entry[1]/para,'&#10;&#9;','')"/>
+      <xsl:variable name="name" select="translate(entry[2]/para,'–&#9;','-')"/>
       <xsl:variable name="type" select="translate(entry[3]/para,'&#9;','')"/>
       <xsl:choose>
         <xsl:when test="contains(entry[2]/para,'(Retired)')">

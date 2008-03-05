@@ -12,13 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmSeries.h"
+#include "gdcmApplicationEntity.h"
 
-int TestSeries(int argc, char *argv[])
-{
-  (void)argc;
-  (void)argv;
-  gdcm::Series ts;
-
-  return 0;
-}
+namespace gdcm
+{}

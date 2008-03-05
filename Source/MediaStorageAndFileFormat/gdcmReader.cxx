@@ -24,6 +24,7 @@
 #include "gdcmUNExplicitDataElement.h"
 #include "gdcmCP246ExplicitDataElement.h"
 #include "gdcmExplicitImplicitDataElement.h"
+#include "gdcmVR16ExplicitDataElement.h"
 #endif
 
 
@@ -379,6 +380,52 @@ std::istream &is = Stream;
       gdcmWarningMacro( "Attempt to read Philips with ByteSwap private sequence wrongly encoded");
       F->GetDataSet().Clear(); // remove garbage from 1st attempt...
       abort();  // TODO FIXME
+      }
+    else if( ex.GetLastElement().GetVR() == VR::INVALID )
+      {
+      if( ts.GetNegociatedType() == TransferSyntax::Explicit )
+        {
+        try
+          {
+          // We could not read the VR in an explicit dataset
+          // seek back tag + vr:
+          is.seekg( -6, std::ios::cur );
+          ImplicitDataElement ide;
+          ide.Read<SwapperNoOp>( is );
+          // If we are here it means we succeeded in reading the implicit data element:
+          F->GetDataSet().Insert( ide );
+          F->GetDataSet().Read<ExplicitImplicitDataElement,SwapperNoOp>(is);
+          // This file can only be rewritten as implicit...
+          }
+        catch ( Exception &ex )
+          {
+          // Ouch ! the file is neither:
+          // 1. An Explicit encoded
+          // 2. I could not reread it using the Explicit/Implicit reader, last option is
+          // that the file contains a buggy VR...
+          is.clear();
+          if( haspreamble )
+            {
+            is.seekg(128+4, std::ios::beg);
+            }
+          else
+            {
+            is.seekg(0, std::ios::beg);
+            }
+          if( hasmetaheader )
+            {
+            // FIXME: we are reading twice the same meta-header, we succedeed the first time...
+            // We should be able to seek to proper place instead of re-reading
+            FileMetaInformation header;
+            header.Read(is);
+            }
+
+          // VR 16bits
+          gdcmWarningMacro( "Attempt to read file with unknown 16 bits" );
+          F->GetDataSet().Clear(); // remove garbage from 1st attempt...
+          F->GetDataSet().Read<VR16ExplicitDataElement,SwapperNoOp>(is);
+          }
+        }
       }
     else
       {

@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmPhotometricInterpretation.h"
+#include "gdcmTrace.h"
 #include <assert.h>
 
 namespace gdcm
@@ -49,6 +50,21 @@ PhotometricInterpretation::PIType PhotometricInterpretation::GetPIType(const cha
     {
     if( strcmp(pi, PIStrings[i]) == 0 )
       {
+      return PIType(i);
+      }
+    ++i;
+    }
+
+  // Ouch ! We did not find anything, that's pretty bad, let's hope that 
+  // the toolkit who wrote the image is buggy and tolerate \0 padded ASCII
+  // string
+  i = 0;
+  while(PIStrings[i] != 0)
+    {
+    if( strncmp(pi, PIStrings[i], strlen(pi) ) == 0 )
+      {
+      gdcmWarningMacro( "PhotometricInterpretation was found: [" << pi 
+        << "], but is invalid. It should be padded with a space" );
       return PIType(i);
       }
     ++i;

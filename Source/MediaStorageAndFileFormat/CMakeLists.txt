@@ -2,14 +2,12 @@
 # MSFF
 SET(MSFF_SRCS
   gdcmAnonymizer.cxx
+  gdcmApplicationEntity.cxx
   gdcmDICOMDIR.cxx
   gdcmSpectroscopy.cxx
   gdcmEncapsulatedDocument.cxx
   gdcmFiducials.cxx
   gdcmWaveform.cxx
-  gdcmPatient.cxx
-  gdcmStudy.cxx
-  gdcmSeries.cxx
   gdcmPersonName.cxx
   gdcmUIDGenerator.cxx
   gdcmPrinter.cxx

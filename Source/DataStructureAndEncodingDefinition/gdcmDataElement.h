@@ -94,7 +94,8 @@ public:
   void SetByteValue(const char *array, VL length)
     {
     ByteValue *bv = new ByteValue(array,length);
-    SetVL( length );
+    // Warning length could have been odd, so retrieve the length as stored in the byte value:
+    SetVL( bv->GetLength() );
     SetValue( *bv );
     }
   // WARNING: You need to check for NULL return value

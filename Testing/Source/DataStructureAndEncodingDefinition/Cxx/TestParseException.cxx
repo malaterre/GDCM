@@ -12,13 +12,11 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmPatient.h"
+#include "gdcmParseException.h"
 
-int TestPatient(int argc, char *argv[])
+int TestParseException(int, char *[])
 {
-  (void)argc;
-  (void)argv;
-  gdcm::Patient pat;
-
+  gdcm::ParseException pe;
   return 0;
 }
+
