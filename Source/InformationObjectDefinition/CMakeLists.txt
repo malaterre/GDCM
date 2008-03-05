@@ -5,6 +5,8 @@ SET(IOD_SRCS
   gdcmTableReader.cxx
   gdcmTable.cxx
   gdcmSeries.cxx
+  gdcmDefinedTerms.cxx
+  gdcmEnumeratedValues.cxx
   gdcmStudy.cxx
   gdcmPatient.cxx
   gdcmType.cxx
