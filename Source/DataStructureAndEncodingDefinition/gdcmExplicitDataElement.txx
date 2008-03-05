@@ -78,7 +78,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       return is;
       }
     }
-  catch( std::exception &ex )
+  catch( Exception &ex )
     {
     // gdcm-MR-PHILIPS-16-Multi-Seq.dcm
     // assert( TagField == Tag(0xfffe, 0xe000) );
@@ -88,9 +88,12 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     // 0019004_Baseline_IMG1.dcm
     // -> VR is garbage also...
     // assert( TagField == Tag(8348,0339) || TagField == Tag(b5e8,0338))
-    gdcmWarningMacro( "Assuming 16 bits VR for Tag=" <<
-      TagField << " in order to read a buggy DICOM file." );
-    VRField = VR::INVALID;
+    //gdcmWarningMacro( "Assuming 16 bits VR for Tag=" <<
+    //  TagField << " in order to read a buggy DICOM file." );
+    //VRField = VR::INVALID;
+    ParseException pe;
+    pe.SetLastElement( *this );
+    throw pe;
     }
   // Read Value Length
   if( VR::GetLength(VRField) == 4 )

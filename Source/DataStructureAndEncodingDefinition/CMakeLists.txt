@@ -24,6 +24,7 @@ SET(DSED_SRCS
   gdcmUNExplicitDataElement.cxx
   gdcmCP246ExplicitDataElement.cxx
   gdcmExplicitImplicitDataElement.cxx
+  gdcmExplicitImplicitDataElement2.cxx
   )
 
 # Add the include paths

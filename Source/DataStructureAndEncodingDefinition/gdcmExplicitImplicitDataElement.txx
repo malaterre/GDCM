@@ -198,7 +198,6 @@ std::istream &ExplicitImplicitDataElement::Read(std::istream &is)
       throw Exception( "Should not happen" );
       return is;
       }
-
     }
   else
     {
