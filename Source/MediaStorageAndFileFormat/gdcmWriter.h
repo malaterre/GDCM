@@ -42,7 +42,7 @@ class FileMetaInformation;
 class GDCM_EXPORT Writer
 {
 public:
-  Writer():Stream(),F(new File) {}
+  Writer():Stream(),F(new File),CheckFileMetaInformation(true) {}
   virtual ~Writer();
 
   virtual bool Write(); // Execute()
@@ -60,11 +60,14 @@ public:
   void SetFile(const File& f) { F = &f; }
   File &GetFile() { return *F; }
 
+  void SetCheckFileMetaInformation(bool b) { CheckFileMetaInformation = b; }
+
 protected:
   std::ofstream Stream;
 
 private:
   SmartPointer<File> F;
+  bool CheckFileMetaInformation;
 #ifndef NDEBUG
   std::string DebugFileName;
 #endif

@@ -64,7 +64,7 @@ public:
       }
   }
   void Replace(const DataElement& de) {
-    if( DES.find(de) != DES.end() ) DES.erase(de);
+    Remove(de.GetTag());
     Insert(de);
   }
 

@@ -36,7 +36,7 @@ public:
   File() {};
   ~File() {};
 
-  friend std::ostream &operator<<(std::ostream &_os, const File &_val);
+  friend std::ostream &operator<<(std::ostream &os, const File &val);
 
   // Read
   std::istream &Read(std::istream &is);

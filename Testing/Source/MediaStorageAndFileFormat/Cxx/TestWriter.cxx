@@ -57,6 +57,7 @@ int TestWrite(const char *subdir, const char* filename)
   Writer writer;
   writer.SetFileName( outfilename.c_str() );
   writer.SetFile( reader.GetFile() );
+  writer.SetCheckFileMetaInformation( false );
   if( !writer.Write() )
     {
     std::cerr << "Failed to write: " << outfilename << std::endl;
