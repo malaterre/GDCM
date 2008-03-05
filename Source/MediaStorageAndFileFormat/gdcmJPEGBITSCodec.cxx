@@ -363,6 +363,7 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
       if ( jerr.pub.msg_code == 128 )
         {
         this->BitSample = jerr.pub.msg_parm.i[0];
+        jpeg_destroy_decompress(&cinfo);
         return false;
         }
       }

@@ -71,7 +71,7 @@ void JPEGCodec::SetBitSample(int bit)
     }
   else
     {
-    gdcmWarningMacro( "bla" );
+    gdcmWarningMacro( "Cannot instanciate JPEG codec for bit sample: " << bit );
     // Clearly make sure Internal will not be used
     delete Internal;
     Internal = NULL;
