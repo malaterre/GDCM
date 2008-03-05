@@ -184,9 +184,9 @@ static void get_random_bytes(void *buf, int nbytes)
 }
 
 #if defined(_WIN32)
-#include <windows.h> // very important
+#include <windows.h> /* very important */
 
-#include <iphlpapi.h>              // remember to link w/ iphlpapi.lib 
+#include <iphlpapi.h>              /* remember to link w/ iphlpapi.lib */
 #if defined(uuid_t)
 #undef uuid_t
 #endif
@@ -194,20 +194,17 @@ static void get_random_bytes(void *buf, int nbytes)
 
 #define IP_LOCALHOST    0x0100007F
 
-//int GetActiveMAC(BYTE byMAC[6])
 static int get_node_id(unsigned char *byMAC)
 {
     DWORD               i, dwSize;
     PMIB_IPADDRTABLE    pAddr = NULL;
     MIB_IFROW           iInfo;
     PFIXED_INFO         pFI = NULL;
-    //BYTE                byMAC[6] = { 0, 0, 0, 0, 0, 0 };
 
-    // Get all IP addresses held by this machine; if it's connected to a network, there's at least one
-    // that's not localhost
+    /* Get all IP addresses held by this machine; if it's connected to a network, there's at least one
+       that's not localhost */
     dwSize = 0;
     GetIpAddrTable(NULL, &dwSize, TRUE);
-    //pAddr = (PMIB_IPADDRTABLE)new BYTE[dwSize];
     pAddr = (PMIB_IPADDRTABLE)malloc(sizeof(BYTE) * dwSize);
     if (!GetIpAddrTable(pAddr, &dwSize, TRUE))
     {
@@ -215,23 +212,21 @@ static int get_node_id(unsigned char *byMAC)
         {
             if (IP_LOCALHOST != pAddr->table[i].dwAddr)
             {
-                // Not localhost, so get the interface
+                /* Not localhost, so get the interface */
                 memset(&iInfo, 0, sizeof(MIB_IFROW));
                 iInfo.dwIndex = pAddr->table[i].dwIndex;
                 GetIfEntry(&iInfo);
 
                 if (MIB_IF_TYPE_ETHERNET == iInfo.dwType)
                 {
-                    //iInfo.bPhysAddr contains the MAC address of this interface
+                    /*iInfo.bPhysAddr contains the MAC address of this interface*/
                     memcpy(byMAC, iInfo.bPhysAddr, iInfo.dwPhysAddrLen);
-                    //delete[] (LPBYTE)pAddr;
                     free(pAddr);
                     return 1;
                 }
             }
         }
     }
-    //delete[] (LPBYTE)pAddr;
     free(pAddr);
     return 0;
 }
