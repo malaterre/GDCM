@@ -27,6 +27,33 @@
 
 #include <typeinfo> // for typeid
 
+#ifdef _WIN32
+#define GDCM_TERMINAL_DISABLE_COLOR
+#endif
+
+#ifdef GDCM_TERMINAL_DISABLE_COLOR
+#define GDCM_TERMINAL_VT100_NORMAL              ""
+#define GDCM_TERMINAL_VT100_BOLD                ""
+#define GDCM_TERMINAL_VT100_UNDERLINE           ""
+#define GDCM_TERMINAL_VT100_BLINK               ""
+#define GDCM_TERMINAL_VT100_INVERSE             ""
+#define GDCM_TERMINAL_VT100_FOREGROUND_BLACK    ""
+#define GDCM_TERMINAL_VT100_FOREGROUND_RED      ""
+#define GDCM_TERMINAL_VT100_FOREGROUND_GREEN    ""
+#define GDCM_TERMINAL_VT100_FOREGROUND_YELLOW   ""
+#define GDCM_TERMINAL_VT100_FOREGROUND_BLUE     ""
+#define GDCM_TERMINAL_VT100_FOREGROUND_MAGENTA  ""
+#define GDCM_TERMINAL_VT100_FOREGROUND_CYAN     ""
+#define GDCM_TERMINAL_VT100_FOREGROUND_WHITE    ""
+#define GDCM_TERMINAL_VT100_BACKGROUND_BLACK    ""
+#define GDCM_TERMINAL_VT100_BACKGROUND_RED      ""
+#define GDCM_TERMINAL_VT100_BACKGROUND_GREEN    ""
+#define GDCM_TERMINAL_VT100_BACKGROUND_YELLOW   ""
+#define GDCM_TERMINAL_VT100_BACKGROUND_BLUE     ""
+#define GDCM_TERMINAL_VT100_BACKGROUND_MAGENTA  ""
+#define GDCM_TERMINAL_VT100_BACKGROUND_CYAN     ""
+#define GDCM_TERMINAL_VT100_BACKGROUND_WHITE    ""
+#else
 #define GDCM_TERMINAL_VT100_NORMAL              "\33[0m"
 #define GDCM_TERMINAL_VT100_BOLD                "\33[1m"
 #define GDCM_TERMINAL_VT100_UNDERLINE           "\33[4m"
@@ -48,6 +75,7 @@
 #define GDCM_TERMINAL_VT100_BACKGROUND_MAGENTA  "\33[45m"
 #define GDCM_TERMINAL_VT100_BACKGROUND_CYAN     "\33[46m"
 #define GDCM_TERMINAL_VT100_BACKGROUND_WHITE    "\33[47m"
+#endif
 
 namespace gdcm
 {
@@ -538,6 +566,7 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
     bool retired = entry.GetRetired();
 
     const VR &vr_read = de.GetVR();
+    const VL &vl_read = de.GetVL();
     std::ostringstream os;
     os << indent; // first thing do the shift !
     os << t << " ";
@@ -545,6 +574,10 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
     VR refvr;
     // always prefer the vr from the file:
     if( vr_read == VR::INVALID )
+      {
+      refvr = vr;
+      }
+    else if ( vr_read == VR::UN && vr != VR::INVALID ) // File is explicit, but still prefer vr from dict when UN
       {
       refvr = vr;
       }
@@ -575,7 +608,9 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
       const ByteValue *bv = de.GetByteValue();
       if( bv )
         {
-        VL l = std::min( bv->GetLength(), MaxPrintLength );
+        std::string dummy( bv->GetPointer(), bv->GetLength() );
+        VL length = std::min( dummy.size(), strlen( dummy.c_str() ) );
+        VL l = std::min( length /*bv->GetLength()*/, MaxPrintLength );
         os << "[";
         if( bv->IsPrintable(l) ) bv->PrintASCII(os,l);
         else os << GDCM_TERMINAL_VT100_INVERSE << "(non-printable character found)" << GDCM_TERMINAL_VT100_NORMAL;
@@ -615,9 +650,12 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
           const ByteValue *bv = de.GetByteValue();
           if ( bv )
             {
-            //VL l = std::min( bv->GetLength(), MaxPrintLength );
-            VL l = std::min( (int)bv->GetLength(), 0xF );
+            VL l = std::min( bv->GetLength(), MaxPrintLength );
+            //VL l = std::min( (int)bv->GetLength(), 0xF );
+            //int width = (vr == VR::OW ? 4 : 2);
+            //os << std::hex << std::setw( width ) << std::setfill('0');
             bv->PrintHex(os, l);
+            //os << std::dec;
             }
           else
             {
@@ -628,8 +666,17 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
       case VR::UN:
       case VR::US_SS:
       case VR::US_SS_OW:
-      case VR::SQ:
         os << "TODO";
+        break;
+      case VR::SQ:
+        if( vl_read.IsUndefined() )
+          {
+          os << "(Sequence with undefined length)";
+          }
+        else
+          {
+          os << "(Sequence with defined length)";
+          }
         break;
       // Let's be a little more helpful and try to print anyway when possible:
       case VR::INVALID:
@@ -667,8 +714,14 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
     // Extra info (not in the file)
     os << " # ";
     // Append the VL
-    const VL &vl_read = de.GetVL();
-    os << std::dec << vl_read;
+    if( vl_read.IsUndefined() )
+      {
+      os << "u/l";
+      }
+    else
+      {
+      os << std::dec << vl_read;
+      }
     if( vl_read.IsOdd() )
       {
       os << GDCM_TERMINAL_VT100_FOREGROUND_GREEN;
@@ -773,10 +826,32 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
           {
           const Item &item = *it;
           const DataSet &ds = item.GetNestedDataSet();
-          std::string nextindent = indent + "  ";
           const DataElement &deitem = item;
-          os << nextindent << deitem << "\n";
+          std::string nextindent = indent + "  ";
+          os << nextindent << deitem.GetTag();
+          os << " ";
+          os << deitem.GetVR();
+          os << " ";
+          if( deitem.GetVL().IsUndefined() )
+            {
+            os << "(Item with undefined length)";
+            }
+          else
+            {
+            os << "(Item with defined length)";
+            }
+          os << "\n";
           PrintDataSet(ds, os, nextindent + "  ");
+          if( deitem.GetVL().IsUndefined() )
+            {
+            const Tag itemDelItem(0xfffe,0xe00d);
+            os << nextindent << itemDelItem << "\n";
+            }
+          }
+        if( sqi->GetLength().IsUndefined() )
+          {
+          const Tag seqDelItem(0xfffe,0xe0dd);
+          os << indent << seqDelItem << "\n";
           }
         }
       }

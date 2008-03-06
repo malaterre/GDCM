@@ -21,6 +21,7 @@
 
 #include <vector>
 #include <iterator>
+#include <iomanip>
 
 namespace gdcm
 {
