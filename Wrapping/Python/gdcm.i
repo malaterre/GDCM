@@ -47,6 +47,7 @@
 #include "gdcmAttribute.h"
 #include "gdcmAnonymizer.h"
 #include "gdcmSystem.h"
+#include "gdcmTrace.h"
 
 using namespace gdcm;
 %}
@@ -250,3 +251,4 @@ using namespace gdcm;
 %include "gdcmAttribute.h"
 %include "gdcmAnonymizer.h"
 %include "gdcmSystem.h"
+%include "gdcmTrace.h"
