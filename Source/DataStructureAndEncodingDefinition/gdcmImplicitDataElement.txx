@@ -159,7 +159,16 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
   ValueField->SetLength(ValueLengthField); // perform realloc
   if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) )
     {
-    throw Exception("Should not happen");
+    // Special handling for PixelData tag:
+    if( TagField == Tag(0x7fe0,0x0010) )
+      {
+      gdcmWarningMacro( "Incomplete Pixel Data found, use file at own risk" );
+      is.clear();
+      }
+    else
+      {
+      throw Exception("Should not happen");
+      }
     return is;
     }
 

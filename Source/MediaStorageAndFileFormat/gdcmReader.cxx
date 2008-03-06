@@ -429,6 +429,7 @@ std::istream &is = Stream;
       }
     else
       {
+        gdcmWarningMacro( "Attempt to read the file as mixture of explicit/implicit");
       // Let's try again with an ExplicitImplicitDataElement:
       if( ts.GetSwapCode() == SwapCode::LittleEndian &&
         ts.GetNegociatedType() == TransferSyntax::Explicit )
@@ -451,7 +452,6 @@ std::istream &is = Stream;
           }
 
         // Philips
-        gdcmWarningMacro( "Attempt to read the file as mixture of explicit/implicit");
         F->GetDataSet().Clear(); // remove garbage from 1st attempt...
         F->GetDataSet().Read<ExplicitImplicitDataElement,SwapperNoOp>(is);
         // This file can only be rewritten as implicit...

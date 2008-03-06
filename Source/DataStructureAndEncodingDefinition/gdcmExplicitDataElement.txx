@@ -239,10 +239,19 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
 
   if( !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField) )
     {
-    // Might be the famous UN 16bits
-    ParseException pe;
-    pe.SetLastElement( *this );
-    throw pe;
+    if( TagField == Tag(0x7fe0,0x0010) )
+      {
+      // PMS-IncompletePixelData.dcm
+      gdcmWarningMacro( "Incomplete Pixel Data found, use file at own risk" );
+      is.clear();
+      }
+    else
+      {
+      // Might be the famous UN 16bits
+      ParseException pe;
+      pe.SetLastElement( *this );
+      throw pe;
+      }
     return is;
     }
 

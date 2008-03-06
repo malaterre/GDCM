@@ -92,12 +92,19 @@ std::istream& Read(std::istream &is)
         }
       assert( frag.GetTag() == seqDelItem && frag.GetVL() == 0 );
       }
-    catch(std::exception &ex)
+    catch(Exception &ex)
       {
-      // that's ok !
-      // gdcm-JPEG-LossLess3a.dcm
-      // TODO: should check that whole file was read or that pixel data is complete else rethrow...
-      gdcmWarningMacro( "Reading failed at Tag:" << DataElement(frag) << " Use file at own risk." );
+      // that's ok ! In both case the whole file was read, because Fragment::Read only fail on eof() reached
+      // 1. gdcm-JPEG-LossLess3a.dcm: easy case, an extra tag was found instead of terminator (eof is the next char)
+      gdcmWarningMacro( "Reading failed at Tag:" << DataElement(frag) << " Use file at own risk." << ex.what() );
+      // 2. SIEMENS-JPEG-CorruptFrag.dcm is more difficult to deal with, we have a partial fragment, read
+      // we decide to add it anyway to the stack of fragments (eof was reached so we need to clear error bit)
+      if( frag.GetTag() == Tag(0xfffe,0xe000) )
+        {
+        gdcmWarningMacro( "Pixel Data Fragment could be corrupted. Use file at own risk" );
+        Fragments.push_back( frag );
+        is.clear(); // clear the error bit
+        }
       }
     }
 
