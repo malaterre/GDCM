@@ -72,12 +72,14 @@ ENDFOREACH(exename)
 # C program only, no link to gdcm to make it as lightweight as possible
 # it uses the readahead func from linux kernel
 IF(CMAKE_HAVE_FCNTL_H AND CMAKE_HAVE_SHED_H)
+  IF(NOT CYGWIN)
   ADD_EXECUTABLE(gdcmreadahead gdcmreadahead.c)
   INSTALL(TARGETS gdcmreadahead
 	RUNTIME DESTINATION bin
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib/static
 	)
+  ENDIF(NOT CYGWIN)
 ENDIF(CMAKE_HAVE_FCNTL_H AND CMAKE_HAVE_SHED_H)
 
 # At that point Testing subdirectory should have been done in which case datafiles are set:
