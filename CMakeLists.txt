@@ -4,10 +4,12 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
 #-----------------------------------------------------------------------------
 # Disallow insource build since I never test that
 STRING(COMPARE EQUAL "${GDCM_SOURCE_DIR}" "${GDCM_BINARY_DIR}" INSOURCE)
-IF(INSOURCE)
+GET_FILENAME_COMPONENT(PARENTDIR ${GDCM_BINARY_DIR} PATH)
+STRING(COMPARE EQUAL "${GDCM_SOURCE_DIR}" "${PARENTDIR}" INSOURCESUBDIR)
+IF(INSOURCE OR INSOURCESUBDIR)
   MESSAGE(FATAL_ERROR "GDCM requires an out of source Build. "
     "Please create a separate binary directory and run CMake there.")
-ENDIF(INSOURCE)
+ENDIF(INSOURCE OR INSOURCESUBDIR)
 
 #-----------------------------------------------------------------------------
 SET(GDCM_MAJOR_VERSION 2)
