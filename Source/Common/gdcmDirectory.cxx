@@ -30,32 +30,13 @@
 
 namespace gdcm
 {
-bool Directory::IsDirectory(FilenameType const &name)
-{
-  struct stat fs;
-  assert( name[name.size()-1] != '/' );
-  if ( stat(name.c_str(), &fs) == 0 )
-    {
-#if _WIN32
-    return ((fs.st_mode & _S_IFDIR) != 0);
-#else
-    return S_ISDIR(fs.st_mode);
-#endif
-    }
-  else
-    {
-    //const char *str = strerror(errno);
-    //gdcmErrorMacro( str );
-    return false;
-    }
-}
 
 unsigned int Directory::Explore(FilenameType const &name, bool recursive)
 {
   unsigned int nFiles = 0;
   std::string fileName;
   std::string dirName = name;
-  //assert( IsDirectory( dirName ) );
+  //assert( System::FileIsDirectory( dirName ) );
   Directories.push_back( dirName );
 #ifdef _MSC_VER
   WIN32_FIND_DATA fileData;

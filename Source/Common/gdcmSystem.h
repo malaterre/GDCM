@@ -32,6 +32,8 @@ public:
   static bool FileExists(const char* filename);
   static bool FileIsDirectory(const char* name);
   static bool RemoveFile(const char* source);
+  //static bool MakeDirectory(FilenameType const &name) { (void)name; return false; }; // TODO
+  //static bool DeleteDirectory(FilenameType const &name) { (void)name; return false; }; // TODO
 
   static const char *GetLastSystemError();
   static size_t FileSize(const char* filename);

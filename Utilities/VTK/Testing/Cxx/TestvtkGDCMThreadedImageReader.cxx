@@ -17,6 +17,7 @@
 #include "vtkCommand.h"
 
 #include "gdcmDirectory.h"
+#include "gdcmSystem.h"
 #include "gdcmImageReader.h"
 
 #include "gdcmTesting.h"
@@ -123,6 +124,8 @@ int ExecuteInformation(const char *filename, TReader *vtkreader)
   vtkreader->SetDataExtent( dataextent );
   vtkreader->SetDataScalarType ( datascalartype );
   vtkreader->SetNumberOfScalarComponents( numberOfScalarComponents );
+
+  return 1;
 }
 
 template <typename TReader>
@@ -134,7 +137,7 @@ int TestvtkGDCMThreadedImageRead(const char *filename)
   std::cerr << "Reading : " << filename << std::endl;
 
   const char *refimage = NULL;
-  if( gdcm::Directory::IsDirectory( filename ) )
+  if( gdcm::System::FileIsDirectory( filename ) )
     {
     gdcm::Directory d;
     d.Load( filename );
