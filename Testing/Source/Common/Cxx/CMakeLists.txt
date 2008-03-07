@@ -2,6 +2,7 @@
 # Common
 SET(Common_TEST_SRCS
   TestTesting
+  TestSwapper
   TestByteSwap
   TestString
   TestDirectory
