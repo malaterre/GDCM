@@ -15,11 +15,6 @@
 #ifndef __gdcmSwapper_txx
 #define __gdcmSwapper_txx
 
-#ifdef _WIN32
-#else
-#define HAVE_BYTESWAP_H
-#endif
-
 #ifdef HAVE_BYTESWAP_H
 // TODO: not cross plateform...
 #include <byteswap.h>

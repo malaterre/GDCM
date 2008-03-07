@@ -20,9 +20,10 @@
 #include "gdcmTrace.h"
 #include "gdcmTesting.h"
 
-int TestImageRead(const char* filename)
+int TestImageRead(const char* filename, bool verbose = false)
 {
-  std::cerr << "Reading: " << filename << std::endl;
+  if( verbose )
+    std::cerr << "Reading: " << filename << std::endl;
   gdcm::ImageReader reader;
 
   reader.SetFileName( filename );
@@ -96,7 +97,7 @@ int TestImageReader(int argc, char *argv[])
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestImageRead(filename);
+    return TestImageRead(filename, true);
     }
 
   // else

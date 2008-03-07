@@ -4,10 +4,12 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
 #-----------------------------------------------------------------------------
 # Disallow insource build since I never test that
 STRING(COMPARE EQUAL "${GDCM_SOURCE_DIR}" "${GDCM_BINARY_DIR}" INSOURCE)
-IF(INSOURCE)
+GET_FILENAME_COMPONENT(PARENTDIR ${GDCM_BINARY_DIR} PATH)
+STRING(COMPARE EQUAL "${GDCM_SOURCE_DIR}" "${PARENTDIR}" INSOURCESUBDIR)
+IF(INSOURCE OR INSOURCESUBDIR)
   MESSAGE(FATAL_ERROR "GDCM requires an out of source Build. "
     "Please create a separate binary directory and run CMake there.")
-ENDIF(INSOURCE)
+ENDIF(INSOURCE OR INSOURCESUBDIR)
 
 #-----------------------------------------------------------------------------
 SET(GDCM_MAJOR_VERSION 2)
@@ -153,8 +155,10 @@ SET(BUILD_TESTING ${GDCM_BUILD_TESTING} CACHE BOOL "" FORCE)
 MARK_AS_ADVANCED(BUILD_TESTING)
 
 IF(BUILD_TESTING)
-  #CONFIGURE_FILE(${GDCM_SOURCE_DIR}/CMake/CTestCustom.ctest.in
-  #    ${GDCM_BINARY_DIR}/CMake/CTestCustom.ctest @ONLY)
+  CONFIGURE_FILE(${GDCM_SOURCE_DIR}/CMake/CTestCustom.ctest.in
+      ${GDCM_BINARY_DIR}/CMake/CTestCustom.ctest @ONLY)
+  FILE(WRITE ${GDCM_BINARY_DIR}/CTestCustom.cmake
+    "INCLUDE(\"${GDCM_BINARY_DIR}/CMake/CTestCustom.ctest\")\n")
   #INCLUDE (${CMAKE_ROOT}/Modules/Dart.cmake)
   #MARK_AS_ADVANCED(DART_ROOT)
   ENABLE_TESTING()

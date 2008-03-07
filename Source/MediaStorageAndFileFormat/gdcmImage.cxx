@@ -110,6 +110,7 @@ double Image::GetSpacing(unsigned int idx) const
     {
     return Spacing[idx];
     }
+  assert( 0 && "Should not happen" );
   return 1; // FIXME ???
 }
 

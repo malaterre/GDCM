@@ -52,6 +52,7 @@ def TestAnonymizer(filename, verbose = False):
   w = gdcm.Writer()
   w.SetFileName( outfilename )
   w.SetFile( r.GetFile() )
+  w.SetCheckFileMetaInformation( False )
   sucess = w.Write()
   if( not sucess ): return 1
 

@@ -18,6 +18,7 @@
 #include "gdcmDataElement.h"
 #include "gdcmByteValue.h"
 #include "gdcmSmartPointer.h"
+#include "gdcmParseException.h"
 
 namespace gdcm
 {
@@ -83,7 +84,11 @@ public:
     bv->SetLength(ValueLengthField);
     if( !bv->Read<TSwap>(is) )
       {
-      assert(0 && "Should not happen");
+      // Fragment is incomplete, but is a itemStart, let's try to push it anyway...
+      FragmentValue = bv;
+      ParseException pe;
+      pe.SetLastElement( *this );
+      throw pe;
       return is;
       }
     FragmentValue = bv;
