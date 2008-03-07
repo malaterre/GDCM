@@ -112,15 +112,15 @@ public:
       os << "," << Internal[i];
     }
 
-  Tag GetTag() const { return Tag(Group,Element); }
-  VR  GetVR() const { return (VR::VRType)TVR; }
-  VM  GetVM() const { return (VM::VMType)TVM; }
+  static Tag GetTag() { return Tag(Group,Element); }
+  static VR  GetVR() { return (VR::VRType)TVR; }
+  static VM  GetVM() { return (VM::VMType)TVM; }
 
   // The following two methods do make sense only in case of public element,
   // when the template is intanciated with private element the VR/VM are simply
   // defaulted to allow everything (see gdcmTagToType.h default template for TagToType)
-  VR  GetDictVR() const { return (VR::VRType)(TagToType<Group, Element>::VRType); }
-  VM  GetDictVM() const { return (VM::VMType)(TagToType<Group, Element>::VMType); }
+  static VR  GetDictVR() { return (VR::VRType)(TagToType<Group, Element>::VRType); }
+  static VM  GetDictVM() { return (VM::VMType)(TagToType<Group, Element>::VMType); }
 
   // copy:
   ArrayType GetValue(unsigned int idx = 0) {
@@ -236,12 +236,12 @@ template<uint16_t Group, uint16_t Element, int TVR >
 class Attribute<Group,Element,TVR,VM::VM1_n>
 {
 public:
-  Tag GetTag() const { return Tag(Group,Element); }
-  VR  GetVR() const { return (VR::VRType)TVR; }
-  VM  GetVM() const { return VM::VM1_n; }
+  static Tag GetTag() { return Tag(Group,Element); }
+  static VR  GetVR() { return (VR::VRType)TVR; }
+  static VM  GetVM() { return VM::VM1_n; }
 
-  VR  GetDictVR() const { return (VR::VRType)(TagToType<Group, Element>::VRType); }
-  VM  GetDictVM() const { return GetVM(); }
+  static VR  GetDictVR() { return (VR::VRType)(TagToType<Group, Element>::VRType); }
+  static VM  GetDictVM() { return GetVM(); }
 
   // Make sure that user specified VR/VM are compatible with the public dictionary:
   GDCM_STATIC_ASSERT( ((VR::VRType)TVR & (VR::VRType)(TagToType<Group, Element>::VRType)) );
@@ -350,21 +350,21 @@ template<uint16_t Group, uint16_t Element, int TVR>
 class Attribute<Group,Element,TVR,VM::VM2_2n> : public Attribute<Group,Element,TVR,VM::VM2_n>
 {
 public:
-  VM  GetVM() const { return VM::VM2_2n; }
+  static VM  GetVM() { return VM::VM2_2n; }
 };
 
 template<uint16_t Group, uint16_t Element, int TVR> 
 class Attribute<Group,Element,TVR,VM::VM3_n> : public Attribute<Group,Element,TVR,VM::VM1_n>
 {
 public:
-  VM  GetVM() const { return VM::VM3_n; }
+  static VM  GetVM() { return VM::VM3_n; }
 };
 
 template<uint16_t Group, uint16_t Element, int TVR> 
 class Attribute<Group,Element,TVR,VM::VM3_3n> : public Attribute<Group,Element,TVR,VM::VM3_n>
 {
 public:
-  VM  GetVM() const { return VM::VM3_3n; }
+  static VM  GetVM() { return VM::VM3_3n; }
 };
 
 

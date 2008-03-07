@@ -201,6 +201,7 @@ bool ImageWriter::Write()
     {
     DataElement de( Tag(0x0008, 0x0016 ) );
     de.SetByteValue( msstr, strlen(msstr) );
+    de.SetVR( Attribute<0x0008, 0x0016>::GetVR() );
     ds.Insert( de );
     }
   else
@@ -216,6 +217,7 @@ bool ImageWriter::Write()
     const char *modality = ms.GetModality();
     DataElement de( Tag(0x0008, 0x0060 ) );
     de.SetByteValue( modality, strlen(modality) );
+    de.SetVR( Attribute<0x0008, 0x0060>::GetVR() );
     ds.Insert( de );
     }
   else
@@ -226,6 +228,7 @@ bool ImageWriter::Write()
       {
       DataElement de( Tag(0x0008, 0x0060 ) );
       de.SetByteValue( ms.GetModality(), strlen(ms.GetModality()) );
+      de.SetVR( Attribute<0x0008, 0x0060>::GetVR() );
       ds.Replace( de );
       }
     }
@@ -237,16 +240,21 @@ bool ImageWriter::Write()
       const char conversion[] = "SI"; // FIXME
       DataElement de( Tag(0x0008, 0x0064 ) );
       de.SetByteValue( conversion, strlen(conversion) );
+      de.SetVR( Attribute<0x0008, 0x0064>::GetVR() );
       ds.Insert( de );
       }
     }
 
   // Spacing:
   std::vector<double> sp;
-  sp.resize(3); // important !
+  sp.resize(2); // important !
   sp[0] = PixelData.GetSpacing(0);
   sp[1] = PixelData.GetSpacing(1);
-  sp[2] = PixelData.GetSpacing(2); // might be a dummy value...
+  if( ms != MediaStorage::SecondaryCaptureImageStorage ) 
+    {
+    sp.resize(3);
+    sp[2] = PixelData.GetSpacing(2); // might be a dummy value...
+    }
   SpacingHelper::SetSpacingValue(ds, sp);
 
   // UIDs:
@@ -265,6 +273,7 @@ bool ImageWriter::Write()
     const char *sop = uid.Generate();
     DataElement de( Tag(0x0008,0x0018) );
     de.SetByteValue( sop, strlen(sop) );
+    de.SetVR( Attribute<0x0008, 0x0018>::GetVR() );
     ds.Insert( de );
     }
 
@@ -274,6 +283,7 @@ bool ImageWriter::Write()
     const char *study = uid.Generate();
     DataElement de( Tag(0x0020,0x000d) );
     de.SetByteValue( study, strlen(study) );
+    de.SetVR( Attribute<0x0020, 0x000d>::GetVR() );
     ds.Insert( de );
     }
 
@@ -283,6 +293,7 @@ bool ImageWriter::Write()
     const char *series = uid.Generate();
     DataElement de( Tag(0x0020,0x000e) );
     de.SetByteValue( series, strlen(series) );
+    de.SetVR( Attribute<0x0020, 0x000e>::GetVR() );
     ds.Insert( de );
     }
 
@@ -293,6 +304,7 @@ bool ImageWriter::Write()
     const char *tsuid = TransferSyntax::GetTSString( ts );
     DataElement de( Tag(0x0002,0x0010) );
     de.SetByteValue( tsuid, strlen(tsuid) );
+    de.SetVR( Attribute<0x0002, 0x0010>::GetVR() );
     fmi.Insert( de );
     fmi.SetDataSetTransferSyntax(ts);
     }
@@ -303,24 +315,28 @@ bool ImageWriter::Write()
   if( !ds.FindDataElement( Tag(0x0010,0x0010) ) )
     {
     DataElement de( Tag(0x0010,0x0010) );
+    de.SetVR( Attribute<0x0010,0x0010>::GetVR() );
     ds.Insert( de );
     }
   // PatientID
   if( !ds.FindDataElement( Tag(0x0010,0x0020) ) )
     {
     DataElement de( Tag(0x0010,0x0020) );
+    de.SetVR( Attribute<0x0010,0x0020>::GetVR() );
     ds.Insert( de );
     }
   // PatientBirthDate
   if( !ds.FindDataElement( Tag(0x0010,0x0030) ) )
     {
     DataElement de( Tag(0x0010,0x0030) );
+    de.SetVR( Attribute<0x0010,0x0030>::GetVR() );
     ds.Insert( de );
     }
   // PatientSex
   if( !ds.FindDataElement( Tag(0x0010,0x0040) ) )
     {
     DataElement de( Tag(0x0010,0x0040) );
+    de.SetVR( Attribute<0x0010,0x0040>::GetVR() );
     ds.Insert( de );
     }
   // StudyDate
@@ -333,6 +349,7 @@ bool ImageWriter::Write()
     DataElement de( Tag(0x0008,0x0020) );
     // Do not copy the whole cstring:
     de.SetByteValue( date, datelen );
+    de.SetVR( Attribute<0x0008,0x0020>::GetVR() );
     ds.Insert( de );
     }
   // StudyTime
@@ -342,12 +359,14 @@ bool ImageWriter::Write()
     DataElement de( Tag(0x0008,0x0030) );
     // Do not copy the whole cstring:
     de.SetByteValue( date+datelen, timelen );
+    de.SetVR( Attribute<0x0008,0x0030>::GetVR() );
     ds.Insert( de );
     }
   // ReferringPhysicianName
   if( !ds.FindDataElement( Tag(0x0008,0x0090) ) )
     {
     DataElement de( Tag(0x0008,0x0090) );
+    de.SetVR( Attribute<0x0008,0x0090>::GetVR() );
     ds.Insert( de );
     }
   // StudyID
@@ -355,30 +374,35 @@ bool ImageWriter::Write()
     {
     // FIXME: this one is actually bad since the value is needed for DICOMDIR construction
     DataElement de( Tag(0x0020,0x0010) );
+    de.SetVR( Attribute<0x0020,0x0010>::GetVR() );
     ds.Insert( de );
     }
   // AccessionNumber
   if( !ds.FindDataElement( Tag(0x0008,0x0050) ) )
     {
     DataElement de( Tag(0x0008,0x0050) );
+    de.SetVR( Attribute<0x0008,0x0050>::GetVR() );
     ds.Insert( de );
     }
   // SeriesNumber
   if( !ds.FindDataElement( Tag(0x0020,0x0011) ) )
     {
     DataElement de( Tag(0x0020,0x0011) );
+    de.SetVR( Attribute<0x0020,0x0011>::GetVR() );
     ds.Insert( de );
     }
   // InstanceNumber
   if( !ds.FindDataElement( Tag(0x0020,0x0013) ) )
     {
     DataElement de( Tag(0x0020,0x0013) );
+    de.SetVR( Attribute<0x0020,0x0013>::GetVR() );
     ds.Insert( de );
     }
   // Patient Orientation
   if( !ds.FindDataElement( Tag(0x0020,0x0020) ) )
     {
     DataElement de( Tag(0x0020,0x0020) );
+    de.SetVR( Attribute<0x0020,0x0020>::GetVR() );
     ds.Insert( de );
     }
   //const char dummy[] = "dummy";
