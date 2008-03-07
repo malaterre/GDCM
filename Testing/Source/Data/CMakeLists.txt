@@ -82,9 +82,6 @@ ALOKA_SSD-8-MONO2-RLE-SQ.dcm  D_CLUNIE_MR1_RLE.dcm  D_CLUNIE_MR4_RLE.dcm  D_CLUN
 
 D_CLUNIE_RG3_JPLY.dcm
 WeirdToshibaTS.dcm
-
-# insane:
-PublicElementsImplicitInExplicitDataSet.dcm
 )
 
 SET(GDCM_DATA_FILENAMES)

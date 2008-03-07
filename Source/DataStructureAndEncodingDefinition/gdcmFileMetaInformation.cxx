@@ -410,7 +410,10 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
 {
   // First off save position in case we fail (no File Meta Information)
   // See PS 3.5, Data Element Structure With Explicit VR
-  assert( IsEmpty() );
+  if( !IsEmpty() )
+    {
+    throw Exception( "Serious bug" );
+    }
   std::streampos start = is.tellg();
   Tag t;
   t.Read<SwapperNoOp>(is);
@@ -570,7 +573,10 @@ void FileMetaInformation::ComputeDataSetTransferSyntax()
 //    }
   gdcmDebugMacro( "TS: " << ts );
   TransferSyntax tst(TransferSyntax::GetTSType(ts.c_str()));
-  assert( tst != TransferSyntax::TS_END );
+  if( tst == TransferSyntax::TS_END )
+    {
+    throw Exception( "Unknown Transfer syntax" );
+    }
   DataSetTS = tst;
 
   // postcondition

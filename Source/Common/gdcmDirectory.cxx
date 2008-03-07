@@ -73,12 +73,12 @@ unsigned int Directory::Explore(FilenameType const &name, bool recursive)
       // Need to check for . and .. to avoid infinite loop
       if ( fileName != "." && fileName != ".." && recursive )
         {
-        nFiles += Explore(name+fileName,recursive);
+        nFiles += Explore(dirName+fileName,recursive);
         }
       }
     else
       {
-      Filenames.push_back(name+fileName);
+      Filenames.push_back(dirName+fileName);
       nFiles++;
       }
     }
