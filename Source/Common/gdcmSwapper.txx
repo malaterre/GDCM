@@ -29,7 +29,7 @@ namespace gdcm
 #ifdef HAVE_BYTESWAP_H
     return bswap_16(val);
 #else
-    return val;
+    return (val>>8) | (val<<8);
 #endif
     }
   template <> inline uint32_t SwapperDoOp::Swap<uint32_t>(uint32_t val)
@@ -37,6 +37,8 @@ namespace gdcm
 #ifdef HAVE_BYTESWAP_H
     return bswap_32(val);
 #else
+    val= ((val<<8)&0xFF00FF00) | ((val>>8)&0x00FF00FF);
+    val= (val>>16) | (val<<16);
     return val;
 #endif
     }
@@ -45,7 +47,9 @@ namespace gdcm
 #ifdef HAVE_BYTESWAP_H
     return bswap_64(val);
 #else
-    return val;
+    val= ((val<< 8)&0xFF00FF00FF00FF00ULL) | ((val>> 8)&0x00FF00FF00FF00FFULL);
+    val= ((val<<16)&0xFFFF0000FFFF0000ULL) | ((val>>16)&0x0000FFFF0000FFFFULL);
+    return (val>>32) | (val<<32);
 #endif
     }
 
