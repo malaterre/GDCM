@@ -34,14 +34,17 @@ int TestFilename(int argc, char *argv[])
 
   if( f.GetPath() != path )
     {
+    std::cerr << "Wrong path" << std::endl;
     return 1;
     }
   if( f.GetName() != name)
     {
+    std::cerr << "Wrong name" << std::endl;
     return 1;
     }
   if( f.GetExtension() != std::string( ".dcm" ) )
     {
+    std::cerr << "Wrong extension" << std::endl;
     return 1;
     }
 //  if( std::string( "/tmp/debug.dcm" ) != f )
@@ -53,6 +56,7 @@ int TestFilename(int argc, char *argv[])
   std::string current = dataroot +  "/test.acr";
   if( !gdcm::System::FileExists( current.c_str() ) )
     {
+    std::cerr << "File does not exist: " << current << std::endl;
     return 1;
     }
   std::cerr << "Current:" << current << std::endl;

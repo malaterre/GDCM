@@ -74,7 +74,7 @@ FOREACH(filename ${gdcm_data_filenames_glob})
       IF(DCMTK_DCMDUMP_EXECUTABLE)
         #-M : load short tags
         # -dc: disable correction
-        ADD_TEST("DCMDUMP-${filename_name}" ${DCMTK_DCMDUMP} -M -dc
+        ADD_TEST("DCMDUMP-${filename_name}" ${DCMTK_DCMDUMP_EXECUTABLE} -M -dc
           "${GDCM_TEMP_DIRECTORY}/TestWriter/${filename_name}")
       ENDIF(DCMTK_DCMDUMP_EXECUTABLE)
     ENDIF(GDCM_TEST_DCMTK)
