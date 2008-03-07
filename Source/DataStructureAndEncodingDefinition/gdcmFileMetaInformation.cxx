@@ -593,15 +593,22 @@ MediaStorage FileMetaInformation::GetMediaStorage() const
   std::string ts;
     {
     const ByteValue *bv = de.GetByteValue();
-    // Pad string with a \0
-    ts = std::string(bv->GetPointer(), bv->GetLength());
+    assert( bv );
+    if( bv->GetPointer() && bv->GetLength() )
+      {
+      // Pad string with a \0
+      ts = std::string(bv->GetPointer(), bv->GetLength());
+      }
     }
   // Paranoid check: if last character of a VR=UI is space let's pretend this is a \0
-  char &last = ts[ts.size()-1];
-  if( last == ' ' )
+  if( ts.size() )
     {
-    gdcmWarningMacro( "Media Storage Class UID: " << ts << " contained a trailing space character" );
-    last = '\0';
+    char &last = ts[ts.size()-1];
+    if( last == ' ' )
+      {
+      gdcmWarningMacro( "Media Storage Class UID: " << ts << " contained a trailing space character" );
+      last = '\0';
+      }
     }
   gdcmDebugMacro( "TS: " << ts );
   MediaStorage ms = MediaStorage::GetMSType(ts.c_str());
