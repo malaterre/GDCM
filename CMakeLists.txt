@@ -230,6 +230,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
 
   # List executables
   #SET(CPACK_PACKAGE_EXECUTABLES "gdcmviewer" "VIEWER")
+  SET(CPACK_CYGWIN_PATCH_NUMBER 1)
   INCLUDE(CPack)
 
 ENDIF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
