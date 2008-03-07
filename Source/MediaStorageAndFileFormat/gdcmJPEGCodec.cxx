@@ -48,9 +48,9 @@ bool JPEGCodec::CanDecode(TransferSyntax const &ts)
 
 void JPEGCodec::SetPixelFormat(PixelFormat const &pt)
 {
+  ImageCodec::SetPixelFormat(pt);
   //SetBitSample( pt.GetBitsAllocated() );
   SetBitSample( pt.GetBitsStored() );
-  ImageCodec::SetPixelFormat(pt);
 }
 
 void JPEGCodec::SetBitSample(int bit)
@@ -71,12 +71,13 @@ void JPEGCodec::SetBitSample(int bit)
     }
   else
     {
-    gdcmWarningMacro( "Cannot instanciate JPEG codec for bit sample: " << bit );
+    gdcmWarningMacro( "Cannot instantiate JPEG codec for bit sample: " << bit );
     // Clearly make sure Internal will not be used
     delete Internal;
     Internal = NULL;
     }
   Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
+  Internal->ImageCodec::SetPixelFormat( this->ImageCodec::GetPixelFormat() );
 }
 
 bool JPEGCodec::Decode(DataElement const &in, DataElement &out)

@@ -127,6 +127,9 @@ public:
 
   void Print(std::ostream &os) const;
 
+  int64_t GetMin() const;
+  int64_t GetMax() const;
+
 private:
   // D 0028|0002 [US] [Samples per Pixel] [1]
   unsigned short SamplesPerPixel;
