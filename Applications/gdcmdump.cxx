@@ -74,9 +74,10 @@ void PrintHelp()
   std::cout << "by default gdcmdump, only dumps a DICOM file, that is the minimal operations required to\n"
    " display information reader need to see the structure of a DICOM file and some value in its fields" << std::endl;
   std::cout << "Parameter:" << std::endl;
-  std::cout << "  -i --input     DICOM filename." << std::endl;
+  std::cout << "  -i --input     DICOM filename or directory" << std::endl;
   std::cout << "Options:" << std::endl;
   std::cout << "  -x --xml-dict      generate the XML dict (only private elements for now)." << std::endl;
+  std::cout << "  -r --recursive recursive." << std::endl;
   std::cout << "  -p --print     print value instead of simply dumping." << std::endl;
   std::cout << "  -v --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -w --warning   print warning info." << std::endl;
@@ -100,6 +101,7 @@ int main (int argc, char *argv[])
   int error = 0;
   int help = 0;
   int version = 0;
+  int recursive = 0;
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -114,6 +116,7 @@ int main (int argc, char *argv[])
     static struct option long_options[] = {
         {"input", 1, 0, 0},
         {"xml-dict", 0, &printdict, 1},
+        {"recursive", 0, &recursive, 1},
         {"print", 0, &print, 1},
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
@@ -123,7 +126,7 @@ int main (int argc, char *argv[])
         {"version", 0, &version, 1},
         {0, 0, 0, 0} // required
     };
-    static const char short_options[] = "i:xpvwdehV";
+    static const char short_options[] = "i:xrpvwdehV";
     c = getopt_long (argc, argv, short_options,
       long_options, &option_index);
     if (c == -1)
@@ -161,6 +164,10 @@ int main (int argc, char *argv[])
     case 'x':
       //printf ("option d with value '%s'\n", optarg);
       printdict = 1;
+      break;
+
+    case 'r':
+      recursive = 1;
       break;
 
     case 'p':
@@ -257,7 +264,7 @@ int main (int argc, char *argv[])
   if( gdcm::System::FileIsDirectory( filename.c_str() ) )
     {
     gdcm::Directory d;
-    d.Load(filename);
+    d.Load(filename, recursive);
     gdcm::Directory::FilenamesType const &filenames = d.GetFilenames();
     for( gdcm::Directory::FilenamesType::const_iterator it = filenames.begin(); it != filenames.end(); ++it )
       {

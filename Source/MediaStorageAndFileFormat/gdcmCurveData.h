@@ -1,0 +1,72 @@
+/*=========================================================================
+
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006-2008 Mathieu Malaterre
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+
+=========================================================================*/
+#ifndef __gdcmCurveData_h
+#define __gdcmCurveData_h
+
+#include "gdcmTypes.h"
+#include "gdcmObject.h"
+
+namespace gdcm
+{
+  
+/*
+ * \class to handle element 50xx,3000 Curve Data
+ *  WARNING: This is deprecated and lastly defined in PS 3.3 - 2004
+ *
+ *  Example:
+ *  - GE_DLX-8-MONO2-Multiframe-Jpeg_Lossless.dcm
+ *  - GE_DLX-8-MONO2-Multiframe.dcm
+ *  - gdcmSampleData/Philips_Medical_Images/integris_HV_5000/xa_integris.dcm
+ */
+class CurveDataInternal;
+class ByteValue;
+class DataSet;
+class DataElement;
+class GDCM_EXPORT CurveData : public Object
+{
+public:
+  CurveData();
+  ~CurveData();
+  void Print(std::ostream &) const;
+
+
+  unsigned int GetNumberOfCurveDatas(DataSet const & ds);
+
+  // Update curve data from dataelmenet de:
+  void Update(const DataElement & de);
+
+  void SetGroup(unsigned short group);
+  unsigned short GetGroup() const;
+  void SetDimensions(unsigned short dimensions);
+  unsigned short GetDimensions() const;
+  void SetNumberOfPoints(unsigned short numberofpoints);
+  unsigned short GetNumberOfPoints() const;
+  void SetTypeOfData(const char *typeofdata);
+  void SetCurveDescription(const char *curvedescription);
+  void SetDataValueRepresentation(unsigned short datavaluerepresentation);
+  unsigned short GetDataValueRepresentation() const;
+
+  bool IsEmpty() const;
+
+  void Decode(std::istream &is, std::ostream &os);
+
+  CurveData(CurveData const &ov);
+private:
+  CurveDataInternal *Internal;
+};
+
+} // end namespace gdcm
+
+#endif //__gdcmCurveData_h

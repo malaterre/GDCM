@@ -94,6 +94,7 @@ Overlay::~Overlay()
 
 Overlay::Overlay(Overlay const &ov):Object(ov)
 {
+  delete Internal;
   Internal = new OverlayInternal;
   // TODO: copy OverlayInternal into other...
   *Internal = *ov.Internal;

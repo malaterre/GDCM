@@ -22,6 +22,7 @@
 #include "gdcmSmartPointer.h"
 #include "gdcmTransferSyntax.h"
 #include "gdcmOverlay.h"
+#include "gdcmCurveData.h"
 
 #include <vector>
 
@@ -177,6 +178,7 @@ private:
   typedef SmartPointer<LookupTable> LUTPtr;
   LUTPtr LUT;
   std::vector<Overlay>  Overlays;
+  std::vector<CurveData>  CurveDatas;
 };
 
 } // end namespace gdcm

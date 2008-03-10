@@ -22,6 +22,7 @@
 #include "gdcmVM.h"
 #include "gdcmElement.h"
 #include "gdcmGlobal.h"
+#include "gdcmAttribute.h"
 
 #include "gdcmDataSet.h"
 
@@ -585,11 +586,66 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
       {
       refvr = vr_read;
       }
+    // Special handling of US or SS vr:
+    if( refvr == VR::US_SS )
+      {
+      // In case of SAX parser, we would have had to process Pixel Representation already:
+      Tag pixelrep(0x0028,0x0103);
+      assert( pixelrep < t );
+      assert( ds.FindDataElement( pixelrep ) );
+      Attribute<0x0028,0x0103> at;
+      at.SetFromDataElement( ds.GetDataElement( pixelrep ) );
+      assert( at.GetValue() == 0 || at.GetValue() == 1 );
+      if( at.GetValue() )
+        {
+        refvr = VR::SS;
+        }
+      else
+        {
+        refvr = VR::US;
+        }
+      }
+    assert( refvr != VR::US_SS );
+    // Special handling of OB or OW vr:
+    if( refvr == VR::OB_OW )
+      {
+      /*
+      For the Value Representations OB and OW, the encoding shall meet the following
+      specification depending on the Data Element Tag:
+      - Data Element (7FE0,0010) Pixel Data has the Value Representation OW and shall
+      be encoded in Little Endian.
+      */
+      Tag pixeldata(0x7fe0,0x0010);
+      Tag bitsallocated(0x0028,0x0100);
+      assert( pixeldata == t );
+      assert( ds.FindDataElement( pixeldata ) );
+      assert( ds.FindDataElement( bitsallocated ) );
+      Attribute<0x0028,0x0100> at;
+      at.SetFromDataElement( ds.GetDataElement( bitsallocated ) );
+      assert( at.GetValue() == 16 || at.GetValue() == 8 );
+      if( at.GetValue() == 16 )
+        {
+        refvr = VR::OW;
+        }
+      else if( at.GetValue() == 8 )
+        {
+        refvr = VR::OB;
+abort();
+        }
+      }
+    assert( refvr != VR::OB_OW );
     if( !vr.Compatible( vr_read ) )
       {
       // FIXME : if terminal supports it: print in red/green !
       os << GDCM_TERMINAL_VT100_FOREGROUND_GREEN;
-      os << "(" << vr << ") ";
+      if( vr == VR::US_SS || vr == VR::OB_OW )
+        {
+        os << "(" << vr << " => " << refvr << ") ";
+        }
+      else
+        {
+        os << "(" << vr << ") ";
+        }
       os << GDCM_TERMINAL_VT100_NORMAL;
       }
     else if( de.GetSequenceOfItems() && refvr == VR::INVALID )
