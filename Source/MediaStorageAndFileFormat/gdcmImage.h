@@ -22,7 +22,7 @@
 #include "gdcmSmartPointer.h"
 #include "gdcmTransferSyntax.h"
 #include "gdcmOverlay.h"
-#include "gdcmCurveData.h"
+#include "gdcmCurve.h"
 
 #include <vector>
 
@@ -51,7 +51,7 @@ namespace gdcm
 class GDCM_EXPORT Image
 {
 public:
-  Image ():NumberOfDimensions(0),PlanarConfiguration(0),Dimensions(),SC(),NeedByteSwap(false),LUT(0) {}
+  Image ():NumberOfDimensions(0),PlanarConfiguration(0),Dimensions(),SC(),NeedByteSwap(false),LUT(0),Overlays(),Curves() {}
   virtual ~Image() {}
 
   unsigned int GetNumberOfDimensions() const;
@@ -128,6 +128,19 @@ public:
     return *LUT;
     }
 
+  // Curve: group 50xx
+  Curve& GetCurve(unsigned int i = 0) { 
+    assert( i < Curves.size() );
+    return Curves[i]; 
+  }
+  const Curve& GetCurve(unsigned int i = 0) const { 
+    assert( i < Curves.size() );
+    return Curves[i]; 
+  }
+  unsigned int GetNumberOfCurves() const { return Curves.size(); }
+  void SetNumberOfCurves(unsigned int n) { Curves.resize(n); }
+
+  // Overlay: group 60xx
   Overlay& GetOverlay(unsigned int i = 0) { 
     assert( i < Overlays.size() );
     return Overlays[i]; 
@@ -178,7 +191,7 @@ private:
   typedef SmartPointer<LookupTable> LUTPtr;
   LUTPtr LUT;
   std::vector<Overlay>  Overlays;
-  std::vector<CurveData>  CurveDatas;
+  std::vector<Curve>  Curves;
 };
 
 } // end namespace gdcm

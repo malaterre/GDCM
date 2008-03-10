@@ -16,6 +16,6 @@
 
 int TestCurve(int, char *[])
 {
-  gdcm::CurveData cd;
+  gdcm::Curve c;
   return 0;
 }

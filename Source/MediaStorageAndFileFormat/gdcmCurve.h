@@ -29,6 +29,7 @@ namespace gdcm
  *  - GE_DLX-8-MONO2-Multiframe-Jpeg_Lossless.dcm
  *  - GE_DLX-8-MONO2-Multiframe.dcm
  *  - gdcmSampleData/Philips_Medical_Images/integris_HV_5000/xa_integris.dcm
+ *  - TOSHIBA-CurveData[1-3].dcm
  */
 class CurveInternal;
 class ByteValue;
@@ -42,7 +43,7 @@ public:
   void Print(std::ostream &) const;
 
 
-  unsigned int GetNumberOfCurves(DataSet const & ds);
+  static unsigned int GetNumberOfCurves(DataSet const & ds);
 
   // Update curve data from dataelmenet de:
   void Update(const DataElement & de);
@@ -57,6 +58,7 @@ public:
   void SetCurveDescription(const char *curvedescription);
   void SetDataValueRepresentation(unsigned short datavaluerepresentation);
   unsigned short GetDataValueRepresentation() const;
+  void SetCurve(const char *array, unsigned int length);
 
   bool IsEmpty() const;
 

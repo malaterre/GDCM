@@ -94,7 +94,7 @@ Overlay::~Overlay()
 
 Overlay::Overlay(Overlay const &ov):Object(ov)
 {
-  delete Internal;
+  //delete Internal;
   Internal = new OverlayInternal;
   // TODO: copy OverlayInternal into other...
   *Internal = *ov.Internal;
@@ -116,13 +116,18 @@ unsigned int Overlay::GetNumberOfOverlays(DataSet const & ds)
       {
       // Move on to the next public one:
       overlay.SetGroup( de.GetTag().GetGroup() + 1 );
+      overlay.SetElement( 0 ); // reset just in case...
       }
     else
       {
       // Yeah this is an overlay element
       ++numoverlays;
+      // Store found tag in overlay:
+      overlay = de.GetTag();
       // Move on to the next possible one:
       overlay.SetGroup( overlay.GetGroup() + 2 );
+      // reset to element 0x0 just in case...
+      overlay.SetElement( 0 );
       }
     }
 

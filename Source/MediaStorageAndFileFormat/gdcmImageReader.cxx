@@ -209,6 +209,58 @@ int ImageReader::ReadISFromTag( Tag const &t, std::stringstream &ss,
   return r;
 }
 
+void DoCurves(const DataSet& ds, ImageValue& pixeldata)
+{
+  unsigned int numcurves;
+  if( (numcurves = Curve::GetNumberOfCurves( ds )) )
+    {
+    pixeldata.SetNumberOfCurves( numcurves );
+
+    Tag curve(0x5000,0x0000);
+    bool finished = false;
+    unsigned int idxcurves = 0;
+    while( !finished )
+      {
+      const DataElement &de = ds.FindNextDataElement( curve );
+      // Are we done:
+      if( de.GetTag().GetGroup() > 0x60FF ) // last possible curve curve
+        {
+        finished = true;
+        }
+      else if( de.GetTag().IsPrivate() ) // GEMS owns some 0x6003
+        {
+        // Move on to the next public one:
+        curve.SetGroup( de.GetTag().GetGroup() + 1 );
+        curve.SetElement( 0 );
+        }
+      else
+        {
+        // Yay! this is an curve element
+        Curve &ov = pixeldata.GetCurve(idxcurves);
+        ++idxcurves; // move on to the next one
+        curve = de.GetTag();
+        uint16_t currentcurve = curve.GetGroup();
+        assert( !(currentcurve % 2) ); // 0x6001 is not an curve...
+        // Now loop on all element from this current group:
+        DataElement de2 = de;
+        while( de2.GetTag().GetGroup() == currentcurve )
+          {
+          ov.Update(de2);
+          curve.SetElement( de2.GetTag().GetElement() + 1 );
+          de2 = ds.FindNextDataElement( curve );
+          // Next element:
+          //curve.SetElement( curve.GetElement() + 1 );
+          }
+        // If we exit the loop we have pass the current curve and potentially point to the next one:
+        //curve.SetElement( curve.GetElement() + 1 );
+        ov.Print( std::cout );
+        }
+      }
+    //std::cout << "Num of curves: " << numcurves << std::endl;
+    assert( idxcurves == numcurves );
+    }
+}
+
 void DoOverlays(const DataSet& ds, ImageValue& pixeldata)
 {
   unsigned int numoverlays;
@@ -519,10 +571,13 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   // TODO
   //assert( pi.GetSamplesPerPixel() == pf.GetSamplesPerPixel() );
 
-  // 6. Do the Overlays if any
+  // 6. Do the Curves if any
+  DoCurves(ds, PixelData);
+
+  // 7. Do the Overlays if any
   DoOverlays(ds, PixelData);
 
-  // 7. Do the PixelData
+  // 8. Do the PixelData
   const Tag pixeldata = Tag(0x7fe0, 0x0010);
   if( !ds.FindDataElement( pixeldata ) )
     {
@@ -729,7 +784,8 @@ bool ImageReader::ReadACRNEMAImage()
 
   PixelData.SetPixelFormat( pf );
 
-  // 4. Do the Overlays if any
+  // 4. Do the Curves/Overlays if any
+  DoCurves(ds, PixelData);
   DoOverlays(ds, PixelData);
 
   // 4 1/2 Let's do Pixel Spacing

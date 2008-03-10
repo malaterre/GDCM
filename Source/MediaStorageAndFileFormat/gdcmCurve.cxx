@@ -82,15 +82,17 @@ public:
 
 Curve::Curve()
 {
+  Internal = new CurveInternal;
 }
 
 Curve::~Curve()
 {
+  delete Internal;
 }
 
 Curve::Curve(Curve const &ov):Object(ov)
 {
-  delete Internal;
+  //delete Internal;
   Internal = new CurveInternal;
   // TODO: copy CurveInternal into other...
   *Internal = *ov.Internal;
@@ -117,13 +119,18 @@ unsigned int Curve::GetNumberOfCurves(DataSet const & ds)
       {
       // Move on to the next public one:
       overlay.SetGroup( de.GetTag().GetGroup() + 1 );
+      overlay.SetElement( 0 ); // reset just in case...
       }
     else
       {
       // Yeah this is an overlay element
       ++numoverlays;
+      // Store found tag in overlay:
+      overlay = de.GetTag();
       // Move on to the next possible one:
       overlay.SetGroup( overlay.GetGroup() + 2 );
+      // reset to element 0x0 just in case...
+      overlay.SetElement( 0 );
       }
     }
 
@@ -177,7 +184,7 @@ void Curve::Update(const DataElement & de)
     }
   else if( de.GetTag().GetElement() == 0x0030 ) // AxisUnits
     {
-      gdcmWarningMacro( "TODO" );
+    gdcmWarningMacro( "TODO" );
     }
   else if( de.GetTag().GetElement() == 0x0103 ) // DataValueRepresentation
     {
@@ -201,6 +208,10 @@ void Curve::Update(const DataElement & de)
     {
       gdcmWarningMacro( "TODO" );
     }
+  else if( de.GetTag().GetElement() == 0x3000 ) // CurveData
+    {
+    SetCurve(bv->GetPointer(), bv->GetLength());
+    }
   else
     {
     assert( 0 && "should not happen" );
@@ -222,6 +233,15 @@ unsigned short Curve::GetDataValueRepresentation() const { return Internal->Data
 bool Curve::IsEmpty() const
 {
   return Internal->Data.empty();
+}
+
+void Curve::SetCurve(const char *array, unsigned int length)
+{
+  if( !array || length == 0 ) return;
+  Internal->Data.resize( length );
+  std::copy(array, array+length, Internal->Data.begin());
+  //assert( 8 * length == (unsigned int)Internal->Rows * Internal->Columns );
+  //assert( Internal->Data.size() == length );
 }
 
 void Curve::Decode(std::istream &is, std::ostream &os)
