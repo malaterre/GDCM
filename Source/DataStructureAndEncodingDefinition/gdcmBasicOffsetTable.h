@@ -48,6 +48,7 @@ public:
 
   BasicOffsetTable(BasicOffsetTable const &val):DataElement(val)
     {
+    abort();
     }
   BasicOffsetTable &operator=(BasicOffsetTable const &val)
     {
@@ -97,11 +98,14 @@ public:
       assert(0 && "Should not happen");
       return os;
       }
-    // Self
-    if( !Offsets->Write<TSwap>(os) )
+    if( ValueLengthField )
       {
-      assert(0 && "Should not happen");
-      return os;
+      // Self
+      if( !Offsets->Write<TSwap>(os) )
+        {
+        assert(0 && "Should not happen");
+        return os;
+        }
       }
     return os;
     }

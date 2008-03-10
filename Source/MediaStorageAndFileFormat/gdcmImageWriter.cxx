@@ -131,6 +131,7 @@ bool ImageWriter::Write()
     const char *pistr = PhotometricInterpretation::GetPIString(pi);
     DataElement de( Tag(0x0028, 0x0004 ) );
     de.SetByteValue( pistr, strlen(pistr) );
+    de.SetVR( Attribute<0x0028,0x0004>::GetVR() );
     ds.Insert( de );
     if( pi == PhotometricInterpretation::RGB ) // FIXME
       {
