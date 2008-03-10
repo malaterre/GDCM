@@ -123,12 +123,13 @@ public:
       {
       bool res = strcmp(Owner.c_str(), _val.GetOwner() ) < 0;
 #ifndef NDEBUG
-	  if( gdcm::System::StrCaseCmp(Owner.c_str(), _val.GetOwner() ) == 0 )
+      if( gdcm::System::StrCaseCmp(Owner.c_str(), _val.GetOwner() ) == 0 )
         {
         // FIXME:
         // Typically this should only happen with the "Philips MR Imaging DD 001" vs "PHILIPS MR IMAGING DD 001"
         // or "Philips Imaging DD 001" vr "PHILIPS IMAGING DD 001"
-        assert( strcmp(Owner.c_str(), _val.GetOwner()) == 0 );
+        //assert( strcmp(Owner.c_str(), _val.GetOwner()) == 0 );
+        return false;
         }
 #endif
       return res;

@@ -52,6 +52,11 @@ SET(BLACK_LIST_READER
   TOSHIBA_MDW_HEADER.dcm
 # TODO, nasty:
   PhilipsLosslessRice.dcm
+# TS is skrewed up, and the whole dataset is a pain to read...
+# I do not even believe there is a pattern
+  WeirdToshibaTS.dcm
+# Pixel Data is not weird it should be :)
+  3DDCM011.dcm 
 
 
 # Temp fix
@@ -68,20 +73,11 @@ SET(BLACK_LIST_READER
   SIEMENS_MAGNETOM-12-MONO2-Uncompressed.dcm
   SIEMENS_MAGNETOM-12-MONO2-VRUN.dcm
   Compress_16bit_noPVRG.dcm
-  db318_MR_STN_stimulator_T2_TSE_TRA__20071005161618048_4.dcm
 
 # RGB is skrewed ...
-  LEADTOOLS_FLOWERS-8-PAL-Uncompressed.dcm
   rle16sti.dcm
-  OT-PAL-8-face.dcm
-  US-PAL-8-10x-echo.dcm
-  3DDCM011.dcm 
-ACUSON-24-YBR_FULL-RLE-b.dcm  D_CLUNIE_CT1_RLE.dcm  D_CLUNIE_MR2_RLE.dcm  D_CLUNIE_NM1_RLE.dcm  D_CLUNIE_RG3_RLE.dcm  D_CLUNIE_VL1_RLE.dcm  D_CLUNIE_VL4_RLE.dcm  LEADTOOLS_FLOWERS-16-MONO2-RLE.dcm
-ACUSON-24-YBR_FULL-RLE.dcm    D_CLUNIE_CT2_RLE.dcm  D_CLUNIE_MR3_RLE.dcm  D_CLUNIE_RG1_RLE.dcm  D_CLUNIE_SC1_RLE.dcm  D_CLUNIE_VL2_RLE.dcm  D_CLUNIE_VL6_RLE.dcm  LEADTOOLS_FLOWERS-8-MONO2-RLE.dcm
-ALOKA_SSD-8-MONO2-RLE-SQ.dcm  D_CLUNIE_MR1_RLE.dcm  D_CLUNIE_MR4_RLE.dcm  D_CLUNIE_RG2_RLE.dcm  D_CLUNIE_US1_RLE.dcm  D_CLUNIE_VL3_RLE.dcm  D_CLUNIE_XA1_RLE.dcm  LEADTOOLS_FLOWERS-8-PAL-RLE.dcm
 
 D_CLUNIE_RG3_JPLY.dcm
-WeirdToshibaTS.dcm
 )
 
 SET(GDCM_DATA_FILENAMES)
