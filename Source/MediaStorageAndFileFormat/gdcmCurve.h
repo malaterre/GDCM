@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmCurveData_h
-#define __gdcmCurveData_h
+#ifndef __gdcmCurve_h
+#define __gdcmCurve_h
 
 #include "gdcmTypes.h"
 #include "gdcmObject.h"
@@ -30,19 +30,19 @@ namespace gdcm
  *  - GE_DLX-8-MONO2-Multiframe.dcm
  *  - gdcmSampleData/Philips_Medical_Images/integris_HV_5000/xa_integris.dcm
  */
-class CurveDataInternal;
+class CurveInternal;
 class ByteValue;
 class DataSet;
 class DataElement;
-class GDCM_EXPORT CurveData : public Object
+class GDCM_EXPORT Curve : public Object
 {
 public:
-  CurveData();
-  ~CurveData();
+  Curve();
+  ~Curve();
   void Print(std::ostream &) const;
 
 
-  unsigned int GetNumberOfCurveDatas(DataSet const & ds);
+  unsigned int GetNumberOfCurves(DataSet const & ds);
 
   // Update curve data from dataelmenet de:
   void Update(const DataElement & de);
@@ -62,11 +62,11 @@ public:
 
   void Decode(std::istream &is, std::ostream &os);
 
-  CurveData(CurveData const &ov);
+  Curve(Curve const &ov);
 private:
-  CurveDataInternal *Internal;
+  CurveInternal *Internal;
 };
 
 } // end namespace gdcm
 
-#endif //__gdcmCurveData_h
+#endif //__gdcmCurve_h

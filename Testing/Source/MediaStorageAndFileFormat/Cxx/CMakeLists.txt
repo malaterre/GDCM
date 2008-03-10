@@ -27,7 +27,7 @@ SET(MSFF_TEST_SRCS
   TestPhotometricInterpretation
   TestLookupTable
   TestOverlay
-  TestCurveData
+  TestCurve
   TestPixelFormat
   TestPersonName
   TestImageValue

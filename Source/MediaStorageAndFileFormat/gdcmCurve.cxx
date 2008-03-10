@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmCurveData.h"
+#include "gdcmCurve.h"
 #include "gdcmDataElement.h"
 #include "gdcmDataSet.h"
 #include "gdcmAttribute.h"
@@ -35,10 +35,10 @@ PRESSURE = pressure data FLOW = flow data
 PHYSIO = physio data RESP = Respiration trace
 */
 
-class CurveDataInternal
+class CurveInternal
 {
 public:
-  CurveDataInternal():
+  CurveInternal():
   Group(0),
   Dimensions(0),
   NumberOfPoints(0),
@@ -80,28 +80,28 @@ public:
   }
 };
 
-CurveData::CurveData()
+Curve::Curve()
 {
 }
 
-CurveData::~CurveData()
+Curve::~Curve()
 {
 }
 
-CurveData::CurveData(CurveData const &ov):Object(ov)
+Curve::Curve(Curve const &ov):Object(ov)
 {
   delete Internal;
-  Internal = new CurveDataInternal;
-  // TODO: copy CurveDataInternal into other...
+  Internal = new CurveInternal;
+  // TODO: copy CurveInternal into other...
   *Internal = *ov.Internal;
 }
 
-void CurveData::Print(std::ostream &os) const
+void Curve::Print(std::ostream &os) const
 {
   Internal->Print( os );
 }
 
-unsigned int CurveData::GetNumberOfCurveDatas(DataSet const & ds)
+unsigned int Curve::GetNumberOfCurves(DataSet const & ds)
 {
   Tag overlay(0x5000,0x0000); // First possible overlay
   bool finished = false;
@@ -130,7 +130,7 @@ unsigned int CurveData::GetNumberOfCurveDatas(DataSet const & ds)
   return numoverlays;
 }
 
-void CurveData::Update(const DataElement & de)
+void Curve::Update(const DataElement & de)
 {
   assert( de.GetTag().IsPublic() );
   const ByteValue* bv = de.GetByteValue();
@@ -151,7 +151,7 @@ void CurveData::Update(const DataElement & de)
     }
 
   //std::cerr << "Tag: " << de.GetTag() << std::endl;
-  if( de.GetTag().GetElement() == 0x0000 ) // CurveDataGroupLength
+  if( de.GetTag().GetElement() == 0x0000 ) // CurveGroupLength
     {
     // ??
     }
@@ -208,23 +208,23 @@ void CurveData::Update(const DataElement & de)
 
 }
 
-void CurveData::SetGroup(unsigned short group) { Internal->Group = group; }
-unsigned short CurveData::GetGroup() const { return Internal->Group; }
-void CurveData::SetDimensions(unsigned short dimensions) { Internal->Dimensions = dimensions; }
-unsigned short CurveData::GetDimensions() const { return Internal->Dimensions; }
-void CurveData::SetNumberOfPoints(unsigned short numberofpoints) { Internal->NumberOfPoints = numberofpoints; }
-unsigned short CurveData::GetNumberOfPoints() const { return Internal->NumberOfPoints; }
-void CurveData::SetTypeOfData(const char *typeofdata) { Internal->TypeOfData = typeofdata; }
-void CurveData::SetCurveDescription(const char *curvedescription) { Internal->CurveDescription = curvedescription; }
-void CurveData::SetDataValueRepresentation(unsigned short datavaluerepresentation) { Internal->DataValueRepresentation = datavaluerepresentation; }
-unsigned short CurveData::GetDataValueRepresentation() const { return Internal->DataValueRepresentation; }
+void Curve::SetGroup(unsigned short group) { Internal->Group = group; }
+unsigned short Curve::GetGroup() const { return Internal->Group; }
+void Curve::SetDimensions(unsigned short dimensions) { Internal->Dimensions = dimensions; }
+unsigned short Curve::GetDimensions() const { return Internal->Dimensions; }
+void Curve::SetNumberOfPoints(unsigned short numberofpoints) { Internal->NumberOfPoints = numberofpoints; }
+unsigned short Curve::GetNumberOfPoints() const { return Internal->NumberOfPoints; }
+void Curve::SetTypeOfData(const char *typeofdata) { Internal->TypeOfData = typeofdata; }
+void Curve::SetCurveDescription(const char *curvedescription) { Internal->CurveDescription = curvedescription; }
+void Curve::SetDataValueRepresentation(unsigned short datavaluerepresentation) { Internal->DataValueRepresentation = datavaluerepresentation; }
+unsigned short Curve::GetDataValueRepresentation() const { return Internal->DataValueRepresentation; }
 
-bool CurveData::IsEmpty() const
+bool Curve::IsEmpty() const
 {
   return Internal->Data.empty();
 }
 
-void CurveData::Decode(std::istream &is, std::ostream &os)
+void Curve::Decode(std::istream &is, std::ostream &os)
 {
 }
 

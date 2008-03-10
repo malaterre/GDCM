@@ -12,9 +12,9 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmCurveData.h"
+#include "gdcmCurve.h"
 
-int TestCurveData(int, char *[])
+int TestCurve(int, char *[])
 {
   gdcm::CurveData cd;
   return 0;
