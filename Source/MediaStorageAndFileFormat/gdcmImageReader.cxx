@@ -223,11 +223,11 @@ void DoCurves(const DataSet& ds, ImageValue& pixeldata)
       {
       const DataElement &de = ds.FindNextDataElement( curve );
       // Are we done:
-      if( de.GetTag().GetGroup() > 0x60FF ) // last possible curve curve
+      if( de.GetTag().GetGroup() > 0x50FF ) // last possible curve curve
         {
         finished = true;
         }
-      else if( de.GetTag().IsPrivate() ) // GEMS owns some 0x6003
+      else if( de.GetTag().IsPrivate() ) // GEMS owns some 0x5003
         {
         // Move on to the next public one:
         curve.SetGroup( de.GetTag().GetGroup() + 1 );
