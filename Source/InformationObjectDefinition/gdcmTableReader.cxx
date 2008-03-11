@@ -17,12 +17,13 @@
 
 #include <iostream>
 #include <fstream>
-#include "expat/lib/expat.h"
+//#include "expat/lib/expat.h"
 
 #include <stdio.h> // for stderr
 
 namespace gdcm
 {
+#if 0
 #ifdef XML_LARGE_SIZE
 #if defined(XML_USE_MSC_EXTENSIONS) && _MSC_VER < 1400
 #define XML_FMT_INT_MOD "I64"
@@ -113,4 +114,10 @@ int TableReader::Read()
   return ret;
 }
 
+#else
+void TableReader::StartElement(const char *name, const char **atts) {}
+void TableReader::EndElement(const char *name) {}
+void TableReader::CharacterDataHandler(const char *data, int length) {}
+int TableReader::Read() { return 0; }
+#endif
 } // end namespace gdcm

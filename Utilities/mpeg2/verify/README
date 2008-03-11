@@ -1,8 +1,0 @@
-The file 'verify' is a simple Unix shell script.  When run, (e.g. "csh
-verify" or "verify" at the command line) it will compare output between
-the encoder's picture sequence reconstruction and the decoder's picture
-sequence reconstruction.
-
-A second test compares the output of the decoder.
-
-The unix tool "cmp" is used to compare two files.
