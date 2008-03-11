@@ -24,6 +24,7 @@
 // .SECTION BUG
 // Overlay are assumed to have the same extent as image. Right now if overlay origin is not
 // 0,0 the overlay will have an offset...
+// Only the very first overlay is loaded for now (even if there are more than one in the file)
 
 // .SECTION See Also
 // vtkMedicalImageReader2 vtkMedicalImageProperties
