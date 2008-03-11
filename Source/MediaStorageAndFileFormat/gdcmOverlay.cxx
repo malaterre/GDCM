@@ -120,8 +120,18 @@ unsigned int Overlay::GetNumberOfOverlays(DataSet const & ds)
       }
     else
       {
-      // Yeah this is an overlay element
+      // Yeah this is a potential overlay element, let's check this is not a broken LEADTOOL image:
       ++numoverlays;
+      if( ds.FindDataElement( Tag(overlay.GetGroup(),0x3000 ) ) )
+        {
+        // ok so far so good...
+        const DataElement& overlaydata = ds.GetDataElement(Tag(overlay.GetGroup(),0x3000));
+        if( overlaydata.IsEmpty() )
+          {
+          gdcmWarningMacro( "Overlay is empty" );
+          --numoverlays;
+          }
+        }
       // Store found tag in overlay:
       overlay = de.GetTag();
       // Move on to the next possible one:
@@ -131,6 +141,8 @@ unsigned int Overlay::GetNumberOfOverlays(DataSet const & ds)
       }
     }
 
+  // at most one out of two :
+  assert( numoverlays < 0x00ff / 2 );
   return numoverlays;
 }
 

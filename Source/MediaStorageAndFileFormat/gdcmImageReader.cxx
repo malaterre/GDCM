@@ -253,7 +253,7 @@ void DoCurves(const DataSet& ds, ImageValue& pixeldata)
           }
         // If we exit the loop we have pass the current curve and potentially point to the next one:
         //curve.SetElement( curve.GetElement() + 1 );
-        ov.Print( std::cout );
+        //ov.Print( std::cout );
         }
       }
     //std::cout << "Num of curves: " << numcurves << std::endl;
