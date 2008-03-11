@@ -64,6 +64,21 @@ void vtkGDCMThreadedImageReader::ExecuteInformation()
   vtkImageData *output = this->GetOutput();
   output->SetUpdateExtentToWholeExtent(); // pipeline is not reexecuting properly without that...
 
+  if( this->LoadOverlays )
+    {
+    this->SetNumberOfOutputs(2);
+    for (int i=1; i<2; i++)
+      {
+      if (!this->Outputs[i])
+        {
+        vtkImageData * img = vtkImageData::New();
+        this->SetNthOutput(i, img);
+        img->Delete();
+        }
+      }
+
+    }
+
   this->vtkImageReader2::ExecuteInformation();
 }
 
@@ -109,6 +124,10 @@ int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
   // Cannot deduce anything else otherwise...
 
   int numvol = 1;
+  if( this->LoadOverlays )
+    {
+    ++numvol;
+    }
   this->SetNumberOfOutputPorts(numvol);
   // For each output:
   for(int i = 0; i < numvol; ++i)
@@ -149,7 +168,9 @@ struct threadparams
   const char **filenames;             // array of filenames thread will process (order is important!)
   unsigned int nfiles;                // number of files the thread will process
   char *scalarpointer;                // start of the image buffer affected to the thread
+  unsigned char *overlayscalarpointer;
   unsigned long len;                  // This is not required but useful to check if files are consistant
+  unsigned long overlaylen;
   unsigned long totalfiles;           // total number of files being processed (needed to compute progress)
   pthread_mutex_t lock;               // critial section for updating progress
   vtkGDCMThreadedImageReader *reader; // needed for calling updateprogress
@@ -195,8 +216,18 @@ void *ReadFilesThread(void *voidparams)
 
     char * pointer = params->scalarpointer;
     //memcpy(pointer + file*len, tempimage, len);
+    // image
     char *tempimage = pointer + file*params->len;
     image.GetBuffer(tempimage);
+    // overlay
+    unsigned int numoverlays = image.GetNumberOfOverlays();
+    if( numoverlays )
+      {
+      const gdcm::Overlay& ov = image.GetOverlay();
+      unsigned char * overlaypointer = params->overlayscalarpointer;
+      unsigned char *tempimage2 = overlaypointer + file*params->overlaylen;
+      ov.GetUnpackBuffer(tempimage2);
+      }
     if( params->reader->GetShift() != 1 || params->reader->GetScale() != 0 )
       {
       const double shift = params->reader->GetShift();
@@ -256,10 +287,17 @@ void ShowFilenames(const threadparams &params)
 //----------------------------------------------------------------------------
 void vtkGDCMThreadedImageReader::ReadFiles(unsigned int nfiles, const char *filenames[])
 {
+  // image data:
   vtkImageData *output = this->GetOutput(0);
   assert( output->GetNumberOfPoints() % nfiles == 0 );
   const unsigned long len = output->GetNumberOfPoints() * output->GetScalarSize() / nfiles;
+  const unsigned long overlaylen = output->GetNumberOfPoints() / nfiles;
   char * scalarpointer = static_cast<char*>(output->GetScalarPointer());
+  // overlay data:
+  vtkImageData *overlayoutput = this->GetOutput(1);
+  overlayoutput->SetScalarTypeToUnsignedChar();
+  overlayoutput->AllocateScalars();
+  unsigned char * overlayscalarpointer = static_cast<unsigned char*>(overlayoutput->GetScalarPointer());
 
   const unsigned int nprocs = sysconf( _SC_NPROCESSORS_ONLN );
   const unsigned int nthreads = std::min( nprocs, nfiles );
@@ -286,7 +324,9 @@ void vtkGDCMThreadedImageReader::ReadFiles(unsigned int nfiles, const char *file
     assert( thread * partition < nfiles );
     //ShowFilenames(params[thread]);
     params[thread].scalarpointer = scalarpointer + thread * partition * len;
+    params[thread].overlayscalarpointer = overlayscalarpointer + thread * partition * len;
     params[thread].len = len;
+    params[thread].overlaylen = overlaylen;
     params[thread].totalfiles = nfiles;
     params[thread].lock = lock;
     params[thread].reader = this;

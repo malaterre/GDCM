@@ -35,6 +35,7 @@ vtkImageColorViewer::vtkImageColorViewer()
   this->RenderWindow    = NULL;
   this->Renderer        = NULL;
   this->ImageActor      = vtkImageActor::New();
+  this->OverlayImageActor      = vtkImageActor::New();
   this->WindowLevel     = vtkImageMapToWindowLevelColors2::New();
   this->Interactor      = NULL;
   this->InteractorStyle = NULL;
@@ -69,6 +70,12 @@ vtkImageColorViewer::~vtkImageColorViewer()
     {
     this->ImageActor->Delete();
     this->ImageActor = NULL;
+    }
+
+  if (this->OverlayImageActor)
+    {
+    this->OverlayImageActor->Delete();
+    this->OverlayImageActor = NULL;
     }
 
   if (this->Renderer)
@@ -722,6 +729,53 @@ void vtkImageColorViewer::SetInputConnection(vtkAlgorithmOutput* input)
 {
   this->WindowLevel->SetInputConnection(input);
   this->UpdateDisplayExtent();
+}
+
+//----------------------------------------------------------------------------
+void vtkImageColorViewer::AddInput(vtkImageData * input)
+{
+  vtkRenderWindow *renwin = this->GetRenderWindow ();
+  renwin->SetNumberOfLayers(2);
+  vtkRenderer *Renderer     = vtkRenderer::New();
+  Renderer->SetLayer(1);
+  OverlayImageActor->SetOpacity(0.5);
+  vtkImageMapToWindowLevelColors2 *WindowLevel     = vtkImageMapToWindowLevelColors2::New();
+  WindowLevel->SetInput(input);
+  OverlayImageActor->SetInput(WindowLevel->GetOutput());
+  Renderer->AddViewProp(OverlayImageActor);
+  OverlayImageActor->SetVisibility(1);
+
+  renwin->AddRenderer(Renderer);
+  Renderer->Delete();
+  WindowLevel->Delete();
+}
+
+void vtkImageColorViewer::AddInputConnection(vtkAlgorithmOutput* input) 
+{
+  vtkRenderWindow *renwin = this->GetRenderWindow ();
+  renwin->SetNumberOfLayers(2);
+  vtkRenderer *Renderer     = vtkRenderer::New();
+  Renderer->SetLayer(1);
+  OverlayImageActor->SetOpacity(0.5);
+  vtkImageMapToWindowLevelColors2 *WindowLevel     = vtkImageMapToWindowLevelColors2::New();
+  WindowLevel->SetInputConnection(input);
+  OverlayImageActor->SetInput(WindowLevel->GetOutput());
+  Renderer->AddViewProp(OverlayImageActor);
+  OverlayImageActor->SetVisibility(1);
+
+  renwin->AddRenderer(Renderer);
+  Renderer->Delete();
+  WindowLevel->Delete();
+}
+
+double vtkImageColorViewer::GetOverlayVisibility()
+{
+  return this->OverlayImageActor->GetVisibility();
+}
+
+void vtkImageColorViewer::SetOverlayVisibility(double vis) 
+{
+  this->OverlayImageActor->SetVisibility(vis);
 }
 
 //----------------------------------------------------------------------------

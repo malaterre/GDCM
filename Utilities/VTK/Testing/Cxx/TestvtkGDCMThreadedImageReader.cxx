@@ -26,7 +26,9 @@
 #include "vtkStringArray.h"
 #include "vtkStructuredPointsWriter.h"
 #include "vtkImageData.h"
-//#include <vtksys/SystemTools.hxx>
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+#include <vtksys/SystemTools.hxx>
+#endif
 
 #include "vtkPiecewiseFunction.h"
 #include "vtkColorTransferFunction.h"
@@ -174,25 +176,28 @@ int TestvtkGDCMThreadedImageRead(const char *filename)
   obs->Delete();
 
   reader->GetOutput()->Print( cout );
+  reader->GetOutput(1)->Print( cout );
 
-/*
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   vtkPNGWriter *writer = vtkPNGWriter::New();
-  writer->SetInputConnection( reader->GetOutputPort() );
-  std::string pngfile = vtksys::SystemTools::GetFilenamePath( filename );
-  pngfile = "/tmp/png";
-  pngfile += '/';
+  writer->SetInputConnection( reader->GetOutputPort(1) );
+  std::string pngfile;
   pngfile += vtksys::SystemTools::GetFilenameWithoutExtension( filename );
   pngfile += ".png";
   writer->SetFileName( pngfile.c_str() );
+  std::cerr << pngfile << std::endl;
   writer->Write();
   writer->Delete();
-*/
+#endif
+
+/*
   vtkStructuredPointsWriter *writer = vtkStructuredPointsWriter::New();
   writer->SetInput( reader->GetOutput() );
   writer->SetFileName( "TestvtkGDCMThreadedImageReader.vtk" );
   writer->SetFileTypeToBinary();
   //writer->Write();
   writer->Delete();
+*/
 
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   double *s = reader->GetOutput()->GetScalarRange();

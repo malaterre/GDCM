@@ -78,7 +78,14 @@ public:
   vtkGetObjectMacro(FileNames, vtkStringArray);
 #endif
 
-  vtkGetObjectMacro(Overlay, vtkImageData);
+  // Specifically request to load the overlay into the VTK layer (gdcm always load them when found).
+  // If no overlay is found in the image, then the vtkImageData for the overlay will be empty.
+  vtkGetMacro(LoadOverlays,int);
+  vtkSetMacro(LoadOverlays,int);
+  vtkBooleanMacro(LoadOverlays,int);
+
+  // Read only: number of overlays as found in this image
+  vtkGetMacro(NumberOfOverlays,int);
 
 protected:
   vtkGDCMImageReader();
@@ -115,7 +122,8 @@ protected:
 #endif
 
   vtkMatrix4x4 *DirectionCosines;
-  vtkImageData *Overlay;
+  int LoadOverlays;
+  int NumberOfOverlays;
 
   int LoadSingleFile(const char *filename, int *dext, vtkImageData* data, bool filelowerleft);
 

@@ -57,7 +57,8 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   this->MedicalImageProperties = vtkMedicalImageProperties::New();
   this->FileNames = NULL; //vtkStringArray::New();
 #endif
-  this->Overlay = vtkImageData::New();
+  this->LoadOverlays = 1;
+  this->NumberOfOverlays = 0;
 }
 
 vtkGDCMImageReader::~vtkGDCMImageReader()
@@ -72,7 +73,6 @@ vtkGDCMImageReader::~vtkGDCMImageReader()
     this->FileNames->Delete();
     }
 #endif
-  this->Overlay->Delete();
 }
 
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
@@ -117,13 +117,45 @@ void vtkGDCMImageReader::ExecuteInformation()
 {
   std::cerr << "ExecuteInformation" << std::endl;
   RequestInformationCompat();
+
+  int numvol = 1;
+  if( this->LoadOverlays )
+    {
+    ++numvol;
+    }
+  this->SetNumberOfOutputs(numvol);
+
+
+  // vtkImageReader2::ExecuteInformation only allocate first output
   this->vtkImageReader2::ExecuteInformation();
+  // Let's do the other ones ourselves:
+  for (int i=1; i<numvol; i++)
+    {
+    if (!this->Outputs[i])
+      {
+      vtkImageData * img = vtkImageData::New();
+      this->SetNthOutput(i, img);
+      img->Delete();
+      }
+  vtkImageData *output = this->GetOutput(i);
+  
+  output->SetWholeExtent(this->DataExtent);
+  output->SetSpacing(this->DataSpacing);
+  output->SetOrigin(this->DataOrigin);
+
+  output->SetScalarType(this->DataScalarType);
+  output->SetNumberOfScalarComponents(this->NumberOfScalarComponents);
+    }
 }
 
 void vtkGDCMImageReader::ExecuteData(vtkDataObject *output)
 {
   std::cerr << "ExecuteData" << std::endl;
   vtkImageData *data = this->AllocateOutputData(output);
+  if( this->LoadOverlays )
+    {
+    vtkImageData *data2 = this->AllocateOutputData( this->GetOutput(1) );
+    }
   //int * updateExtent = data->GetUpdateExtent();
   //std::cout << "UpdateExtent:" << updateExtent[4] << " " << updateExtent[5] << std::endl;
   RequestDataCompat();
@@ -329,6 +361,10 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
   int res = RequestInformationCompat();
 
   int numvol = 1;
+  if( this->LoadOverlays )
+    {
+    ++numvol;
+    }
   this->SetNumberOfOutputPorts(numvol);
   // For each output:
   for(int i = 0; i < numvol; ++i)
@@ -478,6 +514,9 @@ int vtkGDCMImageReader::RequestInformationCompat()
 int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImageData* data, bool filelowerleft)
 {
   char * pointer = static_cast<char*>(data->GetScalarPointer());
+  this->GetOutput(0)->Print(std::cout);
+  this->GetOutput(1)->Print(std::cout);
+  char * overlaypointer = static_cast<char*>(this->GetOutput(1)->GetScalarPointer());
 
   gdcm::ImageReader reader;
   reader.SetFileName( filename );
@@ -490,9 +529,12 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
   assert( image.GetNumberOfDimensions() == 2 || image.GetNumberOfDimensions() == 3 );
   unsigned long len = image.GetBufferLength();
   char *tempimage = new char[len];
+  unsigned char *tempimage2 = 0; //new unsigned char[len];
+  unsigned long overlaylen = 0;
   image.GetBuffer(tempimage);
   // Do the Overlay:
   unsigned int numoverlays = image.GetNumberOfOverlays();
+  this->NumberOfOverlays = numoverlays;
   if( numoverlays )
     {
     // vtkOpenGLImageMapper::RenderData does not support bit array (since OpenGL does not either)
@@ -501,26 +543,29 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
     std::ostringstream os;
     ov1.Decompress( os );
     std::string str = os.str();
-    vtkImageData *image = this->Overlay;
-    image->Initialize();
+    vtkImageData *image = this->GetOutput(1);
+    //image->Initialize();
     //image->SetSpacing( 1.0, 1.0, 1.0  );
     //image->SetOrigin(  0.0, 0.0, 0.0 );
     //image->SetExtent( (int)d1-2, (int)d2+2, (int)d1-2, (int)d2+2, 0, 0 );
-    this->Overlay->SetDimensions(ov1.GetRows(), ov1.GetColumns(), 1);
+    //this->Overlay->SetDimensions(ov1.GetRows(), ov1.GetColumns(), 1);
     image->SetScalarTypeToUnsignedChar();
     //image->SetScalarType( VTK_BIT );
     image->AllocateScalars();
 
-    assert( this->Overlay->GetPointData()->GetScalars() != 0 );
+    assert( image->GetPointData()->GetScalars() != 0 );
     //vtkUnsignedCharArray *chararray = (vtkUnsignedCharArray*)image->GetPointData()->GetScalars();
     vtkUnsignedCharArray *chararray = vtkUnsignedCharArray::New();
     //vtkBitArray *chararray = vtkBitArray::New();
     chararray->SetNumberOfTuples( ov1.GetRows() * ov1.GetColumns() );
     assert( str.size() == ov1.GetRows() * ov1.GetColumns() );
+    overlaylen = ov1.GetRows()*ov1.GetColumns();
+    tempimage2 = new unsigned char[overlaylen];
+    //assert( len == ov1.GetRows() * ov1.GetColumns() );
     //ov1.GetBuffer( (char*)chararray->WritePointer(0,0) );
-    ov1.GetUnpackBuffer( chararray->GetPointer(0) );
+    ov1.GetUnpackBuffer( tempimage2 /* chararray->GetPointer(0)*/ );
     //memcpy( chararray->GetPointer(0), &str[0], str.size() );
-    this->Overlay->GetPointData()->SetScalars( chararray );
+    image->GetPointData()->SetScalars( chararray );
     chararray->Delete();
     }
 
@@ -558,12 +603,20 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
   const unsigned int *dims = image.GetDimensions();
   gdcm::PixelFormat pixeltype = image.GetPixelFormat();
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
+  long overlayoutsize = (dext[1] - dext[0] + 1);
+  assert( overlayoutsize * ( dext[3] - dext[2] + 1 ) == overlaylen );
   assert( outsize * (dext[3] - dext[2]+1) * (dext[5]-dext[4]+1) == len );
 
   // If user overrides this flag, he/she wants image upside down
   if (filelowerleft)
     {
+    // image
     memcpy(pointer, tempimage, len);
+    // overlay
+    if( numoverlays )
+      {
+      memcpy(overlaypointer, tempimage2, overlaylen);
+      }
     }
   else
     {
@@ -572,16 +625,22 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
       //std::cerr << j << std::endl;
       for(int i = dext[2]; i <= dext[3]; ++i)
         {
-        //memcpy(pointer, tempimage+i*outsize, outsize);
-        //memcpy(pointer, tempimage+(this->DataExtent[3] - i)*outsize, outsize);
-        //memcpy(pointer, tempimage+(i+j*(dext[3]+1))*outsize, outsize);
+        // image:
         memcpy(pointer,
           tempimage+((dext[3] - i)+j*(dext[3]+1))*outsize, outsize);
         pointer += outsize;
+        if( numoverlays /*&& false*/ )
+          {
+          // overlay
+          memcpy(overlaypointer,
+            tempimage2+((dext[3] - i)+j*(dext[3]+1))*overlayoutsize, overlayoutsize);
+          overlaypointer += overlayoutsize;
+          }
         }
       }
     }
   delete[] tempimage;
+  delete[] tempimage2;
 
   return 1; // success
 }

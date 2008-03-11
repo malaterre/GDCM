@@ -21,6 +21,10 @@
 #include "vtkPointData.h"
 #include "vtkImageMapToColors.h"
 #include "vtkLookupTable.h"
+#include "vtkActor2D.h"
+#include "vtkImageMapToWindowLevelColors.h"
+#include "vtkImageActor.h"
+#include "vtkWindowToImageFilter.h"
 #if VTK_MAJOR_VERSION >= 5
 #include "vtkImageColorViewer.h"
 #else
@@ -56,13 +60,37 @@ public:
 
   int GetSliceMin() { return this->GetWholeZMin(); }
   int GetSliceMax() { return this->GetWholeZMax(); }
+#if VTK_MAJOR_VERSION >= 5
+  // TODO:
+  void AddInputConnection(vtkAlgorithmOutput* input) {}
+#else
+  void AddInput(vtkImageData * input) {}
+#endif
+  double GetOverlayVisibility() { return 0; }
+  void SetOverlayVisibility(double vis) {}
 };
 vtkCxxRevisionMacro(vtkGDCMImageViewer, "$Revision: 1.30 $");
 vtkInstantiatorNewMacro(vtkGDCMImageViewer);
 
 #if VTK_MAJOR_VERSION >= 5
 #else
-typedef vtkImageViewer2 vtkImageColorViewer;
+class vtkImageColorViewer : public vtkImageViewer2
+{
+public:
+  vtkTypeRevisionMacro(vtkImageColorViewer,vtkImageViewer2);
+
+  static vtkImageColorViewer *New()
+    { 
+#ifdef VTK_DEBUG_LEAKS
+    vtkDebugLeaks::ConstructClass("vtkImageColorViewer");
+#endif
+    return new vtkImageColorViewer; 
+    }
+  double GetOverlayVisibility() { return 0; }
+  void SetOverlayVisibility(double vis) {}
+};
+vtkCxxRevisionMacro(vtkImageColorViewer, "$Revision: 1.30 $");
+vtkInstantiatorNewMacro(vtkImageColorViewer);
 #endif
 
 //----------------------------------------------------------------------------
@@ -79,29 +107,53 @@ public:
     {
     ImageViewer = NULL;
     }
-  virtual void Execute(vtkObject *, unsigned long event, void* )
+  virtual void Execute(vtkObject *caller, unsigned long event, void* /*calldata*/)
     {
     if ( this->ImageViewer )
       {
+      vtkRenderWindowInteractor * rwi = vtkRenderWindowInteractor::SafeDownCast( caller );
       if ( event == vtkCommand::CharEvent )
         {
+        char keycode = 0;
+        if( rwi ) keycode = rwi->GetKeyCode();
+        // 'o' is a special key for overlay visibility
+        if ( keycode == 'o' )
+          {
+          ImageViewer->SetOverlayVisibility( 1 - ImageViewer->GetOverlayVisibility() );
+          ImageViewer->Render();
+          //std::cerr << ImageViewer->GetOverlayVisibility() << std::endl;
+          }
+        else if ( keycode == 's' )
+          {
+          vtkPNGWriter * writer = vtkPNGWriter::New();
+          vtkWindowToImageFilter * w2i = vtkWindowToImageFilter::New();
+          w2i->SetInput( rwi->GetRenderWindow() );
+          writer->SetInput( w2i->GetOutput() );
+          writer->SetFileName( "snapshot.png" );
+          writer->Write();
+          writer->Delete();
+          w2i->Delete();
+          //std::cerr << "Screenshort saved to snapshot.png" << std::endl;
+          }
+        else
+          {
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
-        int max = ImageViewer->GetSliceMax();
-        int slice = (ImageViewer->GetSlice() + 1) % ++max;
-        ImageViewer->SetSlice( slice );
+          int max = ImageViewer->GetSliceMax();
+          int slice = (ImageViewer->GetSlice() + 1) % ++max;
+          ImageViewer->SetSlice( slice );
 #else
-        int max = ImageViewer->GetWholeZMax();
-        int slice = (ImageViewer->GetZSlice() + 1 ) % ++max;
-        ImageViewer->SetZSlice( slice );
-        ImageViewer->GetRenderer()->ResetCameraClippingRange();
+          int max = ImageViewer->GetWholeZMax();
+          int slice = (ImageViewer->GetZSlice() + 1 ) % ++max;
+          ImageViewer->SetZSlice( slice );
+          ImageViewer->GetRenderer()->ResetCameraClippingRange();
 #endif
-        ImageViewer->Render();
+          ImageViewer->Render();
+          }
         }
       }
     }
   TViewer *ImageViewer;
 };
-
 
 // A feature in VS6 make it painfull to write template code
 // that do not contain the template parameter in the function
@@ -135,9 +187,21 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
   std::cerr << "Range: " << range[0] << " " << range[1] << std::endl;
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
-  viewer->SetInputConnection ( reader->GetOutputPort() );
+  viewer->SetInputConnection ( reader->GetOutputPort(0) );
+  // Technically we could just simple always call AddInputConnection on the overlay
+  // but there is something wrong going on, when overlay visibility is set to 0 at startup
+  // thus we need to make it visible by default which is annoying, so activate only
+  // if overlays are found:
+  if( reader->GetNumberOfOverlays() )
+    {
+    viewer->AddInputConnection ( reader->GetOutputPort(1) );
+    }
 #else
-  viewer->SetInput( reader->GetOutput() );
+  viewer->SetInput( reader->GetOutput(1) );
+  //if( reader->GetNumberOfOverlays() )
+  //  {
+  //  viewer->AddInput( reader->GetOutput(1) );
+  //  }
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
   // In case of palette color, let's tell VTK to map color:
@@ -186,7 +250,12 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 
 #if 0
   vtkPNGWriter *writer = vtkPNGWriter::New();
-  writer->SetInputConnection( reader->GetOutputPort() );
+  //writer->SetInputConnection( reader->GetOutputPort() );
+  writer->SetInputConnection( reader->GetOutputPort(1) );
+  //range = overlay->GetScalarRange();
+  //std::cerr << "Range: " << range[0] << " " << range[1] << std::endl;
+  //overlay->Print( std::cout );
+  //writer->SetInput( overlay );
   writer->SetFileName( "debug.png" );
   writer->Write();
   writer->Delete();
