@@ -158,7 +158,7 @@ public:
   // DUMB: this only search within the level of the current DataSet
   bool FindDataElement(const Tag &t) const {
     const DataElement r(t);
-    ConstIterator it = DES.find(r);
+    //ConstIterator it = DES.find(r);
     if( DES.find(r) != DES.end() )
       {
       return true;

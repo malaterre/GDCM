@@ -27,6 +27,8 @@
 #include "vtkStreamingDemandDrivenPipeline.h"
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 #include "vtkMatrix4x4.h"
+#include "vtkUnsignedCharArray.h"
+#include "vtkBitArray.h"
 
 #include "gdcmImageReader.h"
 #include "gdcmDataElement.h"
@@ -53,8 +55,13 @@ vtkGDCMImageReader::vtkGDCMImageReader()
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #else
   this->MedicalImageProperties = vtkMedicalImageProperties::New();
+#endif
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
+#else
   this->FileNames = NULL; //vtkStringArray::New();
 #endif
+  this->LoadOverlays = 1;
+  this->NumberOfOverlays = 0;
 }
 
 vtkGDCMImageReader::~vtkGDCMImageReader()
@@ -64,6 +71,9 @@ vtkGDCMImageReader::~vtkGDCMImageReader()
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #else
   this->MedicalImageProperties->Delete();
+#endif
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
+#else
   if( this->FileNames )
     {
     this->FileNames->Delete();
@@ -71,7 +81,7 @@ vtkGDCMImageReader::~vtkGDCMImageReader()
 #endif
 }
 
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
 #else
 //vtkCxxSetObjectMacro(vtkGDCMImageReader,FileNames,vtkStringArray);
 void vtkGDCMImageReader::SetFileNames(vtkStringArray *filenames)
@@ -108,22 +118,71 @@ void vtkGDCMImageReader::SetFileNames(vtkStringArray *filenames)
 
   this->Modified();
 }
+#endif
 
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+#else
 void vtkGDCMImageReader::ExecuteInformation()
 {
-  std::cerr << "ExecuteInformation" << std::endl;
+  //std::cerr << "ExecuteInformation" << std::endl;
+
+  // FIXME: I think it only apply to VTK 4.2...
+  vtkImageData *output = this->GetOutput();
+  output->SetUpdateExtentToWholeExtent(); // pipeline is not reexecuting properly without that...
+
   RequestInformationCompat();
+
+  int numvol = 1;
+  if( this->LoadOverlays )
+    {
+    ++numvol;
+    this->SetNumberOfOutputs(numvol);
+    }
+
+  // vtkImageReader2::ExecuteInformation only allocate first output
   this->vtkImageReader2::ExecuteInformation();
+  // Let's do the other ones ourselves:
+  for (int i=1; i<numvol; i++)
+    {
+    if (!this->Outputs[i])
+      {
+      vtkImageData * img = vtkImageData::New();
+      this->SetNthOutput(i, img);
+      img->Delete();
+      }
+    vtkImageData *output = this->GetOutput(i);
+
+    output->SetWholeExtent(this->DataExtent);
+    output->SetSpacing(this->DataSpacing);
+    output->SetOrigin(this->DataOrigin);
+
+    output->SetScalarType(this->DataScalarType);
+    output->SetNumberOfScalarComponents(this->NumberOfScalarComponents);
+    }
 }
 
 void vtkGDCMImageReader::ExecuteData(vtkDataObject *output)
 {
-  std::cerr << "ExecuteData" << std::endl;
-  vtkImageData *data = this->AllocateOutputData(output);
+  //std::cerr << "ExecuteData" << std::endl;
+  // In VTK 4.2 AllocateOutputData is reexecuting ExecuteInformation which is bad !
+  //vtkImageData *data = this->AllocateOutputData(output);
+  vtkImageData *res = vtkImageData::SafeDownCast(output);
+  res->SetExtent(res->GetUpdateExtent());
+  res->AllocateScalars();
+
+  if( this->LoadOverlays )
+    {
+    vtkImageData *res = vtkImageData::SafeDownCast(this->Outputs[1]);
+    res->SetUpdateExtentToWholeExtent();
+
+    res->SetExtent(res->GetUpdateExtent());
+    res->AllocateScalars();
+    }
   //int * updateExtent = data->GetUpdateExtent();
   //std::cout << "UpdateExtent:" << updateExtent[4] << " " << updateExtent[5] << std::endl;
   RequestDataCompat();
 }
+
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
 int vtkGDCMImageReader::CanReadFile(const char* fname)
@@ -198,12 +257,16 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
   this->MedicalImageProperties->SetPatientSex( GetStringValueFromTag( gdcm::Tag(0x0010,0x0040), ds) );
   // For ex: DICOM (0010,0030) = 19680427
   this->MedicalImageProperties->SetPatientBirthDate( GetStringValueFromTag( gdcm::Tag(0x0010,0x0030), ds) );
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   // For ex: DICOM (0008,0020) = 20030617
   this->MedicalImageProperties->SetStudyDate( GetStringValueFromTag( gdcm::Tag(0x0008,0x0020), ds) );
+#endif
   // For ex: DICOM (0008,0022) = 20030617
   this->MedicalImageProperties->SetAcquisitionDate( GetStringValueFromTag( gdcm::Tag(0x0008,0x0022), ds) );
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   // For ex: DICOM (0008,0030) = 162552.0705 or 230012, or 0012
   this->MedicalImageProperties->SetStudyTime( GetStringValueFromTag( gdcm::Tag(0x0008,0x0030), ds) );
+#endif
   // For ex: DICOM (0008,0032) = 162552.0705 or 230012, or 0012
   this->MedicalImageProperties->SetAcquisitionTime( GetStringValueFromTag( gdcm::Tag(0x0008,0x0032), ds) );
   // For ex: DICOM (0008,0023) = 20030617
@@ -325,6 +388,10 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
   int res = RequestInformationCompat();
 
   int numvol = 1;
+  if( this->LoadOverlays )
+    {
+    ++numvol;
+    }
   this->SetNumberOfOutputPorts(numvol);
   // For each output:
   for(int i = 0; i < numvol; ++i)
@@ -471,9 +538,11 @@ int vtkGDCMImageReader::RequestInformationCompat()
   return 1;
 }
 
-int LoadSingleFile(const char *filename, int *dext, vtkImageData* data, bool filelowerleft)
+int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImageData* data, bool filelowerleft)
 {
   char * pointer = static_cast<char*>(data->GetScalarPointer());
+  //this->GetOutput(0)->Print(std::cout);
+  //this->GetOutput(1)->Print(std::cout);
 
   gdcm::ImageReader reader;
   reader.SetFileName( filename );
@@ -486,7 +555,49 @@ int LoadSingleFile(const char *filename, int *dext, vtkImageData* data, bool fil
   assert( image.GetNumberOfDimensions() == 2 || image.GetNumberOfDimensions() == 3 );
   unsigned long len = image.GetBufferLength();
   char *tempimage = new char[len];
+  unsigned char *tempimage2 = 0; //new unsigned char[len];
+  unsigned long overlaylen = 0;
   image.GetBuffer(tempimage);
+  // Do the Overlay:
+  unsigned int numoverlays = image.GetNumberOfOverlays();
+  long overlayoutsize = (dext[1] - dext[0] + 1);
+  this->NumberOfOverlays = numoverlays;
+  if( numoverlays )
+    {
+    // vtkOpenGLImageMapper::RenderData does not support bit array (since OpenGL does not either)
+    // we have to decompress the bit overlay into an unsigned char array to please everybody:
+    const gdcm::Overlay& ov1 = image.GetOverlay();
+    vtkImageData *image = this->GetOutput(1);
+    image->SetScalarTypeToUnsignedChar();
+    image->AllocateScalars();
+
+    assert( image->GetPointData()->GetScalars() != 0 );
+    vtkUnsignedCharArray *chararray = vtkUnsignedCharArray::New();
+    chararray->SetNumberOfTuples( overlayoutsize * ( dext[3] - dext[2] + 1 ) );
+    //ov1.GetRows() * ov1.GetColumns() );
+    //image->SetDimensions(ov1.GetRows(), ov1.GetColumns(), 1);
+    //overlaylen = ov1.GetRows()*ov1.GetColumns();
+    overlaylen = overlayoutsize * ( dext[3] - dext[2] + 1 );
+    //overlayoutsize = ov1.GetColumns();
+    assert( ov1.GetRows()*ov1.GetColumns() <= overlaylen );
+    const signed short *origin = ov1.GetOrigin();
+    if( ov1.GetRows()*ov1.GetColumns() != overlaylen )
+      {
+      vtkWarningMacro( "vtkImageData Overlay have an extent that match the one of the image" );
+      }
+    if( origin[0] != 0 || origin[1] != 0 )
+      {
+      vtkWarningMacro( "Overlay with origin are not supported right now" );
+      }
+    tempimage2 = new unsigned char[overlaylen];
+    memset(tempimage2,0,overlaylen);
+    ov1.GetUnpackBuffer( tempimage2 );
+    image->GetPointData()->SetScalars( chararray );
+    image->GetPointData()->GetScalars()->SetName( ov1.GetDescription() );
+    chararray->Delete();
+    }
+  // WARNING: get the scalar pointer AFTER AllocateScalars, not garantee to remain the same (VTK 4.2)
+  char * overlaypointer = static_cast<char*>(this->GetOutput(1)->GetScalarPointer());
 
   // Do the LUT
   if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::PALETTE_COLOR )
@@ -522,12 +633,19 @@ int LoadSingleFile(const char *filename, int *dext, vtkImageData* data, bool fil
   const unsigned int *dims = image.GetDimensions();
   gdcm::PixelFormat pixeltype = image.GetPixelFormat();
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
+  if( numoverlays ) assert( overlayoutsize * ( dext[3] - dext[2] + 1 ) == overlaylen );
   assert( outsize * (dext[3] - dext[2]+1) * (dext[5]-dext[4]+1) == len );
 
   // If user overrides this flag, he/she wants image upside down
   if (filelowerleft)
     {
+    // image
     memcpy(pointer, tempimage, len);
+    // overlay
+    if( numoverlays )
+      {
+      memcpy(overlaypointer, tempimage2, overlaylen);
+      }
     }
   else
     {
@@ -536,16 +654,22 @@ int LoadSingleFile(const char *filename, int *dext, vtkImageData* data, bool fil
       //std::cerr << j << std::endl;
       for(int i = dext[2]; i <= dext[3]; ++i)
         {
-        //memcpy(pointer, tempimage+i*outsize, outsize);
-        //memcpy(pointer, tempimage+(this->DataExtent[3] - i)*outsize, outsize);
-        //memcpy(pointer, tempimage+(i+j*(dext[3]+1))*outsize, outsize);
+        // image:
         memcpy(pointer,
           tempimage+((dext[3] - i)+j*(dext[3]+1))*outsize, outsize);
         pointer += outsize;
+        if( numoverlays /*&& false*/ )
+          {
+          // overlay
+          memcpy(overlaypointer,
+            tempimage2+((dext[3] - i)+j*(dext[3]+1))*overlayoutsize, overlayoutsize);
+          overlaypointer += overlayoutsize;
+          }
         }
       }
     }
   delete[] tempimage;
+  delete[] tempimage2;
 
   return 1; // success
 }
@@ -597,7 +721,7 @@ int vtkGDCMImageReader::RequestDataCompat()
   if( this->FileName )
     {
     const char *filename = this->FileName;
-    LoadSingleFile( filename, dext, output, this->FileLowerLeft);
+    this->LoadSingleFile( filename, dext, output, this->FileLowerLeft);
     return 1;
     }
   else

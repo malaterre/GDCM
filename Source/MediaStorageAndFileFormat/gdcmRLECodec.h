@@ -28,6 +28,9 @@ public:
   ~RLECodec();
   bool CanDecode(TransferSyntax const &ts);
   bool Decode(DataElement const &is, DataElement &os);
+  unsigned long GetBufferLength() const { return BufferLength; }
+  void SetBufferLength(unsigned long l) { BufferLength = l; }
+
 protected:
   bool Decode(std::istream &is, std::ostream &os);
 public:
@@ -39,6 +42,7 @@ public:
 private:
   RLEInternals *Internals;
   unsigned long Length;
+  unsigned long BufferLength;
 };
 
 } // end namespace gdcm

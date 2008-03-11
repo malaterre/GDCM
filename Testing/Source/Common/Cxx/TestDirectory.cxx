@@ -14,12 +14,34 @@
 =========================================================================*/
 #include "gdcmDirectory.h"
 #include "gdcmTesting.h"
+#include "gdcmSystem.h"
 
 int TestOneDirectory(const char *path, bool recursive = false )
 {
+  if( !gdcm::System::FileIsDirectory(path) )
+    {
+    return 1;
+    }
+
   gdcm::Directory d;
   d.Load( path, recursive );
-  d.Print( std::cout );
+  //d.Print( std::cout );
+
+  if( d.GetToplevel() != path )
+    {
+    std::cerr << d.GetToplevel() << " != " << path << std::endl;
+    return 1;
+    }
+  gdcm::Directory::FilenamesType const &files = d.GetFilenames();
+  for(gdcm::Directory::FilenamesType::const_iterator it = files.begin(); it != files.end(); ++it )
+    {
+    const char *filename = it->c_str();
+    if( !gdcm::System::FileExists(filename) )
+      {
+      return 1;
+      }
+    }
+
   return 0;
 }
 
@@ -41,7 +63,7 @@ int TestDirectory(int argc, char *argv[])
     res += TestOneDirectory( path );
     }
 
-  res += TestOneDirectory( "" );
+  //res += TestOneDirectory( "" );
 
   return res;
 }

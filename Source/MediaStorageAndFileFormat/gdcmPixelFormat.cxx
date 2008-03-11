@@ -146,6 +146,34 @@ uint8_t PixelFormat::GetPixelSize() const
   return pixelsize;
 }
 
+int64_t PixelFormat::GetMin() const
+{
+  if( PixelRepresentation )
+    {
+    assert( PixelRepresentation == 1 );
+    return 0;
+    }
+  else
+    {
+    assert( PixelRepresentation == 0 );
+    return 0;
+    }
+}
+
+int64_t PixelFormat::GetMax() const
+{
+  if( PixelRepresentation )
+    {
+    assert( PixelRepresentation == 1 );
+    return 0;
+    }
+  else
+    {
+    assert( PixelRepresentation == 0 );
+    return (1 << BitsStored);
+    }
+}
+
 void PixelFormat::Print(std::ostream &os) const
 {
   os << "SamplesPerPixel    :" << SamplesPerPixel     << "\n"; 

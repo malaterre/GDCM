@@ -188,7 +188,8 @@ public:
     return os.write(&Internal[0], Length);
 #else
     assert( !(Internal.size() % 2) );
-    return os.write(&Internal[0], Internal.size());
+    if( !Internal.empty() )
+	return os.write(&Internal[0], Internal.size());
 #endif
     }
 

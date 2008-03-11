@@ -48,10 +48,6 @@ public :
   // FIXME TODO
   FilenamesType const &GetDirectories() const { return Directories; }
 
-  static bool IsDirectory(FilenameType const &name);
-  static bool MakeDirectory(FilenameType const &name) { (void)name; return false; }; // TODO
-  static bool DeleteDirectory(FilenameType const &name) { (void)name; return false; }; // TODO
-
   // construct a list of filenames and subdirectory beneath directory: name
   unsigned int Load(FilenameType const &name, bool recursive = false) {
     Filenames.clear(); // clear previous

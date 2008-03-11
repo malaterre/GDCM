@@ -85,6 +85,11 @@ public:
   virtual void SetInput(vtkImageData *in);
   virtual vtkImageData *GetInput();
   virtual void SetInputConnection(vtkAlgorithmOutput* input);
+  virtual void AddInputConnection(vtkAlgorithmOutput* input);
+  virtual void AddInput(vtkImageData * input);
+
+  double GetOverlayVisibility();
+  void SetOverlayVisibility(double vis);
   
   // Description:
   // Set/get the slice orientation
@@ -212,6 +217,7 @@ protected:
   vtkRenderWindow                 *RenderWindow;
   vtkRenderer                     *Renderer;
   vtkImageActor                   *ImageActor;
+  vtkImageActor                   *OverlayImageActor;
   vtkRenderWindowInteractor       *Interactor;
   vtkInteractorStyleImage         *InteractorStyle;
 

@@ -49,7 +49,7 @@ namespace gdcm
 class GDCM_EXPORT Reader
 {
 public:
-  Reader():Stream(),F(new File) {}
+  Reader():F(new File),Stream() {}
   virtual ~Reader();
 
   virtual bool Read(); // Execute()

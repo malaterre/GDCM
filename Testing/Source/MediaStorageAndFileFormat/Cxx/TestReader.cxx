@@ -20,6 +20,8 @@
 
 int TestRead(const char* filename)
 {
+  std::cerr << "TestRead: " << filename << std::endl;
+
   gdcm::Reader reader;
   reader.SetFileName( filename );
   if ( !reader.Read() )
@@ -27,8 +29,6 @@ int TestRead(const char* filename)
     std::cerr << "Failed to read: " << filename << std::endl;
     return 1;
     }
-
-  std::cerr << "Success to read: " << filename << std::endl;
 
   const gdcm::FileMetaInformation &h = reader.GetFile().GetHeader();
   //std::cout << h << std::endl;

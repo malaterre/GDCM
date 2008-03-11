@@ -94,6 +94,7 @@ Overlay::~Overlay()
 
 Overlay::Overlay(Overlay const &ov):Object(ov)
 {
+  //delete Internal;
   Internal = new OverlayInternal;
   // TODO: copy OverlayInternal into other...
   *Internal = *ov.Internal;
@@ -115,16 +116,33 @@ unsigned int Overlay::GetNumberOfOverlays(DataSet const & ds)
       {
       // Move on to the next public one:
       overlay.SetGroup( de.GetTag().GetGroup() + 1 );
+      overlay.SetElement( 0 ); // reset just in case...
       }
     else
       {
-      // Yeah this is an overlay element
+      // Yeah this is a potential overlay element, let's check this is not a broken LEADTOOL image:
       ++numoverlays;
+      if( ds.FindDataElement( Tag(overlay.GetGroup(),0x3000 ) ) )
+        {
+        // ok so far so good...
+        const DataElement& overlaydata = ds.GetDataElement(Tag(overlay.GetGroup(),0x3000));
+        if( overlaydata.IsEmpty() )
+          {
+          gdcmWarningMacro( "Overlay is empty" );
+          --numoverlays;
+          }
+        }
+      // Store found tag in overlay:
+      overlay = de.GetTag();
       // Move on to the next possible one:
       overlay.SetGroup( overlay.GetGroup() + 2 );
+      // reset to element 0x0 just in case...
+      overlay.SetElement( 0 );
       }
     }
 
+  // at most one out of two :
+  assert( numoverlays < 0x00ff / 2 );
   return numoverlays;
 }
 
@@ -274,11 +292,16 @@ void Overlay::SetColumns(unsigned short columns) { Internal->Columns = columns; 
 unsigned short Overlay::GetColumns() const { return Internal->Columns; }
 void Overlay::SetNumberOfFrames(unsigned int numberofframes) { Internal->NumberOfFrames = numberofframes; }
 void Overlay::SetDescription(const char* description) { Internal->Description = description; }
+const char *Overlay::GetDescription() const { return Internal->Description.c_str(); }
 void Overlay::SetType(const char* type) { Internal->Type = type; }
 void Overlay::SetOrigin(const signed short *origin)
 {
   Internal->Origin[0] = origin[0];
   Internal->Origin[1] = origin[1];
+}
+const signed short * Overlay::GetOrigin() const
+{
+  return &Internal->Origin[0];
 }
 void Overlay::SetFrameOrigin(unsigned short frameorigin) { Internal->FrameOrigin = frameorigin; }
 void Overlay::SetBitsAllocated(unsigned short bitsallocated) { Internal->BitsAllocated = bitsallocated; }
@@ -326,7 +349,38 @@ void Overlay::Decode(std::istream &is, std::ostream &os)
     }
 }
 
-void Overlay::Decompress(std::ostream &os)
+bool Overlay::GetBuffer(char *buffer) const
+{
+  unsigned long length = Internal->Data.size();
+  std::copy(buffer, buffer+length, Internal->Data.begin());
+  return true;
+}
+
+bool Overlay::GetUnpackBuffer(unsigned char *buffer) const
+{
+  unsigned char *unpackedbytes = buffer;
+  for( std::vector<char>::const_iterator it = Internal->Data.begin(); it != Internal->Data.end(); ++it )
+    {
+    const unsigned char &packedbytes = *it;
+    unsigned char mask = 1;
+    for (unsigned int i = 0; i < 8; ++i)
+      {
+      if ( (packedbytes & mask) == 0)
+        {
+        *unpackedbytes = 0;
+        }
+      else
+        {
+        *unpackedbytes = 255;
+        }
+      ++unpackedbytes;
+      mask <<= 1;
+      }
+    }
+  return true;
+}
+
+void Overlay::Decompress(std::ostream &os) const
 {
   unsigned char unpackedbytes[8];
   for( std::vector<char>::const_iterator it = Internal->Data.begin(); it != Internal->Data.end(); ++it )
@@ -341,7 +395,7 @@ void Overlay::Decompress(std::ostream &os)
         }
       else
         {
-        unpackedbytes[i] = 1;
+        unpackedbytes[i] = 255;
         }
       mask <<= 1;
       }

@@ -410,7 +410,10 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
 {
   // First off save position in case we fail (no File Meta Information)
   // See PS 3.5, Data Element Structure With Explicit VR
-  assert( IsEmpty() );
+  if( !IsEmpty() )
+    {
+    throw Exception( "Serious bug" );
+    }
   std::streampos start = is.tellg();
   Tag t;
   t.Read<SwapperNoOp>(is);
@@ -570,7 +573,10 @@ void FileMetaInformation::ComputeDataSetTransferSyntax()
 //    }
   gdcmDebugMacro( "TS: " << ts );
   TransferSyntax tst(TransferSyntax::GetTSType(ts.c_str()));
-  assert( tst != TransferSyntax::TS_END );
+  if( tst == TransferSyntax::TS_END )
+    {
+    throw Exception( "Unknown Transfer syntax" );
+    }
   DataSetTS = tst;
 
   // postcondition
@@ -593,15 +599,22 @@ MediaStorage FileMetaInformation::GetMediaStorage() const
   std::string ts;
     {
     const ByteValue *bv = de.GetByteValue();
-    // Pad string with a \0
-    ts = std::string(bv->GetPointer(), bv->GetLength());
+    assert( bv );
+    if( bv->GetPointer() && bv->GetLength() )
+      {
+      // Pad string with a \0
+      ts = std::string(bv->GetPointer(), bv->GetLength());
+      }
     }
   // Paranoid check: if last character of a VR=UI is space let's pretend this is a \0
-  char &last = ts[ts.size()-1];
-  if( last == ' ' )
+  if( ts.size() )
     {
-    gdcmWarningMacro( "Media Storage Class UID: " << ts << " contained a trailing space character" );
-    last = '\0';
+    char &last = ts[ts.size()-1];
+    if( last == ' ' )
+      {
+      gdcmWarningMacro( "Media Storage Class UID: " << ts << " contained a trailing space character" );
+      last = '\0';
+      }
     }
   gdcmDebugMacro( "TS: " << ts );
   MediaStorage ms = MediaStorage::GetMSType(ts.c_str());

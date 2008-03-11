@@ -13,7 +13,6 @@
 
 =========================================================================*/
 #include "gdcmTag.h"
-#include "gdcmStringStream.h"
 
 #include "gdcmSwapper.h"
 
@@ -202,5 +201,19 @@ int TestTag(int , char * [])
     ||!(O3 < O4) )
     {std::cout << "31" << std::endl ; return 1; }
 
+  // IsGroupXX:
+    {
+    gdcm::Tag overlaydata(0x6000,0x3000);
+    gdcm::Tag t1(0x6000,0x3000);
+    gdcm::Tag t2(0x6002,0x3000);
+    if( !t1.IsGroupXX( overlaydata ) )
+      {
+      return 1;
+      }
+    if( !t2.IsGroupXX( overlaydata ) )
+      {
+      return 1;
+      }
+    }
   return 0;
 }

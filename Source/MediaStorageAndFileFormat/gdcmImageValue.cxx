@@ -111,6 +111,7 @@ bool ImageValue::TryJPEG2000Codec(char *buffer) const
 
 bool ImageValue::TryRLECodec(char *buffer) const
 {
+  unsigned long len = GetBufferLength();
   const TransferSyntax &ts = GetTransferSyntax();
 
   RLECodec codec;
@@ -123,9 +124,13 @@ bool ImageValue::TryRLECodec(char *buffer) const
     codec.SetPixelFormat( GetPixelFormat() );
     codec.SetLUT( GetLUT() );
     codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );
+    codec.SetBufferLength( len );
     DataElement out;
     bool r = codec.Decode(PixelData, out);
-
+    assert( r );
+    const ByteValue *outbv = out.GetByteValue();
+    unsigned long check = outbv->GetLength();  // FIXME
+    memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
     return true;
     }
   return false;

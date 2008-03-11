@@ -21,6 +21,10 @@
 // .SECTION TODO
 // This reader does not handle a series of 3D images, only a single 3D (multi frame) or a 
 // list of 2D files are supported for now.
+// .SECTION BUG
+// Overlay are assumed to have the same extent as image. Right now if overlay origin is not
+// 0,0 the overlay will have an offset...
+// Only the very first overlay is loaded for now (even if there are more than one in the file)
 
 // .SECTION See Also
 // vtkMedicalImageReader2 vtkMedicalImageProperties
@@ -32,6 +36,9 @@
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #else
 class vtkMedicalImageProperties;
+#endif
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
+#else
 class vtkStringArray;
 #endif
 
@@ -73,10 +80,23 @@ public:
   // Description:
   // Get the medical image properties object
   vtkGetObjectMacro(MedicalImageProperties, vtkMedicalImageProperties);
+#endif
 
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
+#else
   virtual void SetFileNames(vtkStringArray*);
   vtkGetObjectMacro(FileNames, vtkStringArray);
 #endif
+
+  // Specifically request to load the overlay into the VTK layer (gdcm always load them when found).
+  // If no overlay is found in the image, then the vtkImageData for the overlay will be empty.
+  vtkGetMacro(LoadOverlays,int);
+  vtkSetMacro(LoadOverlays,int);
+  vtkBooleanMacro(LoadOverlays,int);
+
+  // Read only: number of overlays as found in this image
+  vtkGetMacro(NumberOfOverlays,int);
+  //vtkSetMacro(NumberOfOverlays,int);
 
 protected:
   vtkGDCMImageReader();
@@ -109,10 +129,17 @@ protected:
   // Description:
   // Medical Image properties
   vtkMedicalImageProperties *MedicalImageProperties;
+#endif
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
+#else
   vtkStringArray *FileNames;
 #endif
 
   vtkMatrix4x4 *DirectionCosines;
+  int LoadOverlays;
+  int NumberOfOverlays;
+
+  int LoadSingleFile(const char *filename, int *dext, vtkImageData* data, bool filelowerleft);
 
 private:
   vtkGDCMImageReader(const vtkGDCMImageReader&);  // Not implemented.

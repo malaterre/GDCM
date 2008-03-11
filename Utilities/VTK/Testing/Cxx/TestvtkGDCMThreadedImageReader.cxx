@@ -17,15 +17,17 @@
 #include "vtkCommand.h"
 
 #include "gdcmDirectory.h"
+#include "gdcmSystem.h"
 #include "gdcmImageReader.h"
-
 #include "gdcmTesting.h"
 
 #include "vtkPNGWriter.h"
 #include "vtkStringArray.h"
 #include "vtkStructuredPointsWriter.h"
 #include "vtkImageData.h"
-//#include <vtksys/SystemTools.hxx>
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+#include <vtksys/SystemTools.hxx>
+#endif
 
 #include "vtkPiecewiseFunction.h"
 #include "vtkColorTransferFunction.h"
@@ -123,6 +125,8 @@ int ExecuteInformation(const char *filename, TReader *vtkreader)
   vtkreader->SetDataExtent( dataextent );
   vtkreader->SetDataScalarType ( datascalartype );
   vtkreader->SetNumberOfScalarComponents( numberOfScalarComponents );
+
+  return 1;
 }
 
 template <typename TReader>
@@ -134,7 +138,7 @@ int TestvtkGDCMThreadedImageRead(const char *filename)
   std::cerr << "Reading : " << filename << std::endl;
 
   const char *refimage = NULL;
-  if( gdcm::Directory::IsDirectory( filename ) )
+  if( gdcm::System::FileIsDirectory( filename ) )
     {
     gdcm::Directory d;
     d.Load( filename );
@@ -170,28 +174,41 @@ int TestvtkGDCMThreadedImageRead(const char *filename)
   reader->Update();
   obs->Delete();
 
-  reader->GetOutput()->Print( cout );
+  //reader->GetOutput()->Print( cout );
+  //reader->GetOutput(1)->Print( cout );
+
+  if( reader->GetNumberOfOverlays() )
+    {
+    vtkPNGWriter *writer = vtkPNGWriter::New();
+    writer->SetInput( reader->GetOutput(1) );
+    const char subdir[] = "TestvtkGDCMThreadedImageReader";
+    // Create directory first:
+    std::string tmpdir = gdcm::Testing::GetTempDirectory( subdir );
+    if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
+      {
+      gdcm::System::MakeDirectory( tmpdir.c_str() );
+      //return 1;
+      }
+    std::string pngfile = gdcm::Testing::GetTempFilename( filename, subdir );
+
+    //pngfile += vtksys::SystemTools::GetFilenameWithoutExtension( filename );
+    pngfile += ".png";
+    writer->SetFileName( pngfile.c_str() );
+    std::cerr << pngfile << std::endl;
+    //writer->Write();
+    writer->Delete();
+    }
 
 /*
-  vtkPNGWriter *writer = vtkPNGWriter::New();
-  writer->SetInputConnection( reader->GetOutputPort() );
-  std::string pngfile = vtksys::SystemTools::GetFilenamePath( filename );
-  pngfile = "/tmp/png";
-  pngfile += '/';
-  pngfile += vtksys::SystemTools::GetFilenameWithoutExtension( filename );
-  pngfile += ".png";
-  writer->SetFileName( pngfile.c_str() );
-  writer->Write();
-  writer->Delete();
-*/
   vtkStructuredPointsWriter *writer = vtkStructuredPointsWriter::New();
   writer->SetInput( reader->GetOutput() );
   writer->SetFileName( "TestvtkGDCMThreadedImageReader.vtk" );
   writer->SetFileTypeToBinary();
   //writer->Write();
   writer->Delete();
+*/
 
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
   double *s = reader->GetOutput()->GetScalarRange();
 #else
   float *s = reader->GetOutput()->GetScalarRange();

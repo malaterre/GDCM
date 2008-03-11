@@ -20,7 +20,8 @@ dir = gdcm.Directory()
 t = gdcm.Testing()
 dataroot = t.GetDataRoot()
 
-if not dir.IsDirectory(dataroot):
+system = gdcm.System()
+if not system.FileIsDirectory(dataroot):
   sys.exit(1)
 
 nfiles = dir.Load(dataroot)

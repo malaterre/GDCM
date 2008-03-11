@@ -22,6 +22,7 @@
 #include "gdcmVM.h"
 #include "gdcmElement.h"
 #include "gdcmGlobal.h"
+#include "gdcmAttribute.h"
 
 #include "gdcmDataSet.h"
 
@@ -585,11 +586,83 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
       {
       refvr = vr_read;
       }
+    // Special handling of US or SS vr:
+    if( refvr == VR::US_SS )
+      {
+      // In case of SAX parser, we would have had to process Pixel Representation already:
+      Tag pixelrep(0x0028,0x0103);
+      assert( pixelrep < t );
+      const DataSet &rootds = F->GetDataSet();
+      // FIXME
+      // PhilipsWith15Overlays.dcm has a Private SQ with public elements such as
+      // 0028,3002, so we cannot look up element in current dataset, but have to get the root dataset
+      // to loop up...
+      assert( rootds.FindDataElement( pixelrep ) );
+      Attribute<0x0028,0x0103> at;
+      at.SetFromDataElement( rootds.GetDataElement( pixelrep ) );
+      assert( at.GetValue() == 0 || at.GetValue() == 1 );
+      if( at.GetValue() )
+        {
+        refvr = VR::SS;
+        }
+      else
+        {
+        refvr = VR::US;
+        }
+      }
+    assert( refvr != VR::US_SS );
+    // Special handling of OB or OW vr:
+    if( refvr == VR::OB_OW )
+      {
+      /*
+      For the Value Representations OB and OW, the encoding shall meet the following
+      specification depending on the Data Element Tag:
+      - Data Element (7FE0,0010) Pixel Data has the Value Representation OW and shall
+      be encoded in Little Endian.
+      - Data Element (60xx,3000) Overlay Data has the Value Representation OW and shall
+      be encoded in Little Endian.
+
+      See PS 3.5 - 2004
+      - Data Element (50xx,3000) Curve Data has the Value Representation OB with its
+      component points (n-tuples) having the Value Representation specified in Data
+      Value Representation (50xx,0103). The component points shall be encoded in Little
+      Endian.
+      */
+      Tag pixeldata(0x7fe0,0x0010);
+      Tag overlaydata(0x6000,0x3000);
+      Tag curvedata(0x5000,0x3000);
+      Tag bitsallocated(0x0028,0x0100);
+      assert( ds.FindDataElement( pixeldata ) );
+      assert( ds.FindDataElement( bitsallocated ) );
+      Attribute<0x0028,0x0100> at;
+      at.SetFromDataElement( ds.GetDataElement( bitsallocated ) );
+      
+      if( pixeldata == t || t.IsGroupXX(overlaydata) )
+        {
+        refvr = VR::OW;
+        }
+      else if ( t.IsGroupXX(curvedata) )
+        {
+        refvr = VR::OB;
+        }
+      else
+        {
+        assert( 0 && "Should not happen" );
+        }
+      }
+    assert( refvr != VR::OB_OW );
     if( !vr.Compatible( vr_read ) )
       {
       // FIXME : if terminal supports it: print in red/green !
       os << GDCM_TERMINAL_VT100_FOREGROUND_GREEN;
-      os << "(" << vr << ") ";
+      if( vr == VR::US_SS || vr == VR::OB_OW )
+        {
+        os << "(" << vr << " => " << refvr << ") ";
+        }
+      else
+        {
+        os << "(" << vr << ") ";
+        }
       os << GDCM_TERMINAL_VT100_NORMAL;
       }
     else if( de.GetSequenceOfItems() && refvr == VR::INVALID )

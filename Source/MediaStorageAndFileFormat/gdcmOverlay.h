@@ -29,6 +29,8 @@ class DataElement;
  *  TODO:
  *  Is there actually any way to recognize an overlay ? On images with multiple overlay I do not see
  *  any way to differenciate them (other than the group tag).
+ *
+ *  Example:
  */
 class GDCM_EXPORT Overlay : public Object
 {
@@ -52,8 +54,10 @@ public:
   unsigned short GetColumns() const;
   void SetNumberOfFrames(unsigned int numberofframes);
   void SetDescription(const char* description);
+  const char *GetDescription() const;
   void SetType(const char* type);
   void SetOrigin(const signed short *origin);
+  const signed short * GetOrigin() const;
   void SetFrameOrigin(unsigned short frameorigin);
   void SetBitsAllocated(unsigned short bitsallocated);
   unsigned short GetBitsAllocated() const;
@@ -69,7 +73,10 @@ public:
 
   void Decode(std::istream &is, std::ostream &os);
 
-  void Decompress(std::ostream &os);
+  void Decompress(std::ostream &os) const;
+
+  bool GetBuffer(char *buffer) const;
+  bool GetUnpackBuffer(unsigned char *buffer) const;
 
   Overlay(Overlay const &ov);
 

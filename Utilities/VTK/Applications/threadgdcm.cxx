@@ -15,6 +15,7 @@
 #include "gdcmReader.h"
 #include "gdcmImageReader.h"
 #include "gdcmDirectory.h"
+#include "gdcmSystem.h"
 
 #include "vtkImageData.h"
 #include "vtkStructuredPointsWriter.h"
@@ -209,7 +210,7 @@ int main(int argc, char *argv[])
     }
 
   // Check if user pass in a single directory
-  if( argc == 2 && gdcm::Directory::IsDirectory( argv[1] ) )
+  if( argc == 2 && gdcm::System::FileIsDirectory( argv[1] ) )
     {
     gdcm::Directory d;
     d.Load( argv[1] );

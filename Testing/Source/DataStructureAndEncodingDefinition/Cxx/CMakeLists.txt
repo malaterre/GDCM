@@ -23,7 +23,7 @@ SET(DSED_TEST_SRCS
   #TestParser
   TestSequenceOfFragments
   TestSequenceOfItems
-  #TestTag
+  TestTag
   TestTransferSyntax
   TestMediaStorage
   TestVL

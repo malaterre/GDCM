@@ -39,7 +39,7 @@ protected:
 
 protected:
   // Internal method called by SetPixelFormat
-  // Instanciate the right jpeg codec (8, 12 or 16)
+  // Instantiate the right jpeg codec (8, 12 or 16)
   void SetBitSample(int bit);
 
 protected:
