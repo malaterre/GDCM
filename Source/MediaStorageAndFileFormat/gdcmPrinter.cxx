@@ -621,17 +621,34 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
       be encoded in Little Endian.
       - Data Element (60xx,3000) Overlay Data has the Value Representation OW and shall
       be encoded in Little Endian.
+
+      See PS 3.5 - 2004
+      - Data Element (50xx,3000) Curve Data has the Value Representation OB with its
+      component points (n-tuples) having the Value Representation specified in Data
+      Value Representation (50xx,0103). The component points shall be encoded in Little
+      Endian.
       */
       Tag pixeldata(0x7fe0,0x0010);
       Tag overlaydata(0x6000,0x3000);
+      Tag curvedata(0x5000,0x3000);
       Tag bitsallocated(0x0028,0x0100);
-      assert( pixeldata == t || t.IsGroupXX(overlaydata) );
       assert( ds.FindDataElement( pixeldata ) );
       assert( ds.FindDataElement( bitsallocated ) );
       Attribute<0x0028,0x0100> at;
       at.SetFromDataElement( ds.GetDataElement( bitsallocated ) );
-      //assert( at.GetValue() == 16 || at.GetValue() == 8 );
-      refvr = VR::OW;
+      
+      if( pixeldata == t || t.IsGroupXX(overlaydata) )
+        {
+        refvr = VR::OW;
+        }
+      else if ( t.IsGroupXX(curvedata) )
+        {
+        refvr = VR::OB;
+        }
+      else
+        {
+        assert( 0 && "Should not happen" );
+        }
       }
     assert( refvr != VR::OB_OW );
     if( !vr.Compatible( vr_read ) )
