@@ -56,6 +56,7 @@ public:
   void SetDescription(const char* description);
   void SetType(const char* type);
   void SetOrigin(const signed short *origin);
+  const signed short * GetOrigin() const;
   void SetFrameOrigin(unsigned short frameorigin);
   void SetBitsAllocated(unsigned short bitsallocated);
   unsigned short GetBitsAllocated() const;

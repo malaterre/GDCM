@@ -560,6 +560,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
   image.GetBuffer(tempimage);
   // Do the Overlay:
   unsigned int numoverlays = image.GetNumberOfOverlays();
+  long overlayoutsize = (dext[1] - dext[0] + 1);
   this->NumberOfOverlays = numoverlays;
   if( numoverlays )
     {
@@ -572,9 +573,24 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
 
     assert( image->GetPointData()->GetScalars() != 0 );
     vtkUnsignedCharArray *chararray = vtkUnsignedCharArray::New();
-    chararray->SetNumberOfTuples( ov1.GetRows() * ov1.GetColumns() );
-    overlaylen = ov1.GetRows()*ov1.GetColumns();
+    chararray->SetNumberOfTuples( overlayoutsize * ( dext[3] - dext[2] + 1 ) );
+    //ov1.GetRows() * ov1.GetColumns() );
+    //image->SetDimensions(ov1.GetRows(), ov1.GetColumns(), 1);
+    //overlaylen = ov1.GetRows()*ov1.GetColumns();
+    overlaylen = overlayoutsize * ( dext[3] - dext[2] + 1 );
+    //overlayoutsize = ov1.GetColumns();
+    assert( ov1.GetRows()*ov1.GetColumns() <= overlaylen );
+    const signed short *origin = ov1.GetOrigin();
+    if( ov1.GetRows()*ov1.GetColumns() != overlaylen )
+      {
+      vtkWarningMacro( "vtkImageData Overlay have an extent that match the one of the image" );
+      }
+    if( origin[0] != 0 || origin[1] != 0 )
+      {
+      vtkWarningMacro( "Overlay with origin are not supported right now" );
+      }
     tempimage2 = new unsigned char[overlaylen];
+    memset(tempimage2,0,overlaylen);
     ov1.GetUnpackBuffer( tempimage2 );
     image->GetPointData()->SetScalars( chararray );
     chararray->Delete();
@@ -616,7 +632,6 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
   const unsigned int *dims = image.GetDimensions();
   gdcm::PixelFormat pixeltype = image.GetPixelFormat();
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
-  long overlayoutsize = (dext[1] - dext[0] + 1);
   if( numoverlays ) assert( overlayoutsize * ( dext[3] - dext[2] + 1 ) == overlaylen );
   assert( outsize * (dext[3] - dext[2]+1) * (dext[5]-dext[4]+1) == len );
 

@@ -298,6 +298,10 @@ void Overlay::SetOrigin(const signed short *origin)
   Internal->Origin[0] = origin[0];
   Internal->Origin[1] = origin[1];
 }
+const signed short * Overlay::GetOrigin() const
+{
+  return &Internal->Origin[0];
+}
 void Overlay::SetFrameOrigin(unsigned short frameorigin) { Internal->FrameOrigin = frameorigin; }
 void Overlay::SetBitsAllocated(unsigned short bitsallocated) { Internal->BitsAllocated = bitsallocated; }
 unsigned short Overlay::GetBitsAllocated() const { return Internal->BitsAllocated; }

@@ -205,7 +205,8 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 
   reader->Update();
   //reader->Print( cout );
-  reader->GetOutput()->Print( cout );
+  //reader->GetOutput()->Print( cout );
+  //reader->GetOutput(1)->Print( cout );
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
   double *range = reader->GetOutput()->GetScalarRange();
 #else

@@ -21,6 +21,9 @@
 // .SECTION TODO
 // This reader does not handle a series of 3D images, only a single 3D (multi frame) or a 
 // list of 2D files are supported for now.
+// .SECTION BUG
+// Overlay are assumed to have the same extent as image. Right now if overlay origin is not
+// 0,0 the overlay will have an offset...
 
 // .SECTION See Also
 // vtkMedicalImageReader2 vtkMedicalImageProperties
