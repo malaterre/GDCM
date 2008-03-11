@@ -212,7 +212,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 800 535 1 8 1 */
 { "3cd8bd92db17bff54e376885dfefdd8d" , "LEADTOOLS_FLOWERS-8-MONO2-Uncompressed.dcm" },
 /* gdcm 800 535 1 8 3 */
-{ "d613050ca0f9c924fb5282d140281fcc" , "LEADTOOLS_FLOWERS-8-PAL-RLE.dcm" },
+//{ "d613050ca0f9c924fb5282d140281fcc" , "LEADTOOLS_FLOWERS-8-PAL-RLE.dcm" },
+{ "16e999d6afc5574bcb075f296c3bcbbc" , "LEADTOOLS_FLOWERS-8-PAL-RLE.dcm" },
 /* gdcm 800 535 1 8 3 */
 { "d613050ca0f9c924fb5282d140281fcc" , "LEADTOOLS_FLOWERS-8-PAL-Uncompressed.dcm" },
 /* duh ! This should be the exact same md5...if only the testing was a little
@@ -259,7 +260,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 512 512 1 8 1 */
 { "a155c3004bb902ed3f2d78f482923b32" , "OT-MONO2-8-a7.dcm" },
 /* gdcm 640 480 1 8 3 */
-{ "47715f0a5d5089268bbef6f83251a8ad" , "OT-PAL-8-face.dcm" },
+//{ "47715f0a5d5089268bbef6f83251a8ad" , "OT-PAL-8-face.dcm" },
+{ "d7c30d57af821b02c67103250a744235" , "OT-PAL-8-face.dcm" },
 /* gdcm 512 512 1 16 1 */
 { "4b0021efe5a675f24c82e1ff28a1e2eb" , "PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm" },
 /* gdcm 256 256 1 16 1 */
@@ -325,7 +327,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 128 120 8 8 1 */
 { "bf63affde325b3fa81cd5a700f30bd5b" , "US-MONO2-8-8x-execho.dcm" },
 /* gdcm 600 430 10 8 3 */
-{ "c70309b66045140b8e08c11aa319c0ab" , "US-PAL-8-10x-echo.dcm" },
+//{ "c70309b66045140b8e08c11aa319c0ab" , "US-PAL-8-10x-echo.dcm" },
+{ "1785f4d8af4717c17bfb78ba74c18ea5" , "US-PAL-8-10x-echo.dcm" },
 /* gdcm 640 480 1 8 3 */
 { "fe2d477d699e327be2d3d65eb76203e9" , "US-RGB-8-epicard.dcm" },
 /* gdcm 256 120 1 8 3 */
