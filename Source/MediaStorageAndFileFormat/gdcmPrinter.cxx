@@ -623,15 +623,7 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
       Attribute<0x0028,0x0100> at;
       at.SetFromDataElement( ds.GetDataElement( bitsallocated ) );
       assert( at.GetValue() == 16 || at.GetValue() == 8 );
-      if( at.GetValue() == 16 )
-        {
-        refvr = VR::OW;
-        }
-      else if( at.GetValue() == 8 )
-        {
-        refvr = VR::OB;
-abort();
-        }
+      refvr = VR::OW;
       }
     assert( refvr != VR::OB_OW );
     if( !vr.Compatible( vr_read ) )

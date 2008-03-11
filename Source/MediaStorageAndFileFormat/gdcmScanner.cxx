@@ -18,6 +18,8 @@
 #include "gdcmDicts.h"
 #include "gdcmDict.h"
 #include "gdcmDictEntry.h"
+#include "gdcmStringFilter.h"
+
 #include <algorithm> // std::find
 
 namespace gdcm
@@ -50,18 +52,22 @@ void Scanner::AddTag( Tag const & t )
   else
     {
     assert( entry.GetVR() & VR::VRBINARY );
-    gdcmWarningMacro( "Only ASCII VR are supported for now. Tag " << t << " will be discarded" );
+    //gdcmWarningMacro( "Only ASCII VR are supported for now. Tag " << t << " will be discarded" );
+    Tags.insert( t );
     }
 }
 
 bool Scanner::IsKey( const char * filename ) const
 {
+/*
+  // std::find on contiguous array will operate in 0(n) which is way too slow, assume user is not too dump...
   Directory::FilenamesType::const_iterator it = std::find(Filenames.begin(), Filenames.end(), filename);
   if( it == Filenames.end() )
     {
     gdcmErrorMacro( "The file: " << filename << " was not scanned" );
     return false;
     }
+*/
   // Look for the file in Mappings table:
   MappingType::const_iterator it2 = Mappings.find(filename);
   return it2 != Mappings.end();
@@ -84,6 +90,7 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
   TagsType::const_reverse_iterator it1 = Tags.rbegin();
   const Tag & last = *it1;
 
+  StringFilter sf;
   Directory::FilenamesType::const_iterator it = Filenames.begin();
   for(; it != Filenames.end(); ++it)
     {
@@ -117,15 +124,17 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
         {
         if( ds.FindDataElement( *tag ) )
           {
-          std::string s;
+          //std::string s;
           DataElement const & de = ds.GetDataElement( *tag );
-          const ByteValue *bv = de.GetByteValue();
-          //assert( VR::IsASCII( vr ) );
-          if( bv ) // Hum, should I store an empty string or what ?
-            {
-            s = std::string( bv->GetPointer(), bv->GetLength() );
-            s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
-            }
+          //const ByteValue *bv = de.GetByteValue();
+          ////assert( VR::IsASCII( vr ) );
+          //if( bv ) // Hum, should I store an empty string or what ?
+          //  {
+          //  s = std::string( bv->GetPointer(), bv->GetLength() );
+          //  s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
+          //  }
+          std::string s = sf.ToString(de);
+
           // Store the potentially new value:
           Values.insert( s );
           assert( Values.find( s ) != Values.end() );

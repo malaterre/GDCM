@@ -27,8 +27,7 @@ namespace gdcm
 /**
  * \brief Scanner
  * \todo
- * For now I am only dealing with VRASCII elements, this would seriously slow down to do
- * interpretation of other stuff (FIXME: need double check that)
+ * This filter is dealing with both VRASCII and VRBINARY element, thanks to the help of gdcm::StringFilter
  * 
  * \warning: IMPORTANT In case of file where tags are not ordered, the output will be garbage
  *

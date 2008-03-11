@@ -37,10 +37,14 @@ int TestScanner(int argc, char *argv[])
   const gdcm::Tag t2(0x0020,0x000e); // Series Instance UID
   const gdcm::Tag t3(0x0010,0x0010); // Patient's Name
   const gdcm::Tag t4(0x0004,0x5678); // DUMMY element
+  const gdcm::Tag t5(0x0028,0x0010); // Rows
+  const gdcm::Tag t6(0x0028,0x0011); // Columns
   s.AddTag( t1 );
   s.AddTag( t2 );
   s.AddTag( t3 );
   s.AddTag( t4 );
+  s.AddTag( t5 );
+  s.AddTag( t6 );
   bool b = s.Scan( d.GetFilenames() );
   if( !b )
     {
@@ -48,6 +52,14 @@ int TestScanner(int argc, char *argv[])
     return 1;
     }
   s.Print( std::cout );
+
+  // Check dummy filename:
+  bool iskey = s.IsKey( "gdcm.rocks.invalid.name" );
+  if( iskey )
+    {
+    std::cout << "IsKey returned: " << iskey << std::endl;
+    return 1;
+    }
 
   // Let's get the value for tag t1 in first file:
   gdcm::Scanner::MappingType const &mt = s.GetMappings();
@@ -70,14 +82,15 @@ int TestScanner(int argc, char *argv[])
   for(; it != filenames.end(); ++it)
     {
     const char *filename = it->c_str();
-    const char *value =  s.GetValue( filename, t1 );
+    const gdcm::Tag &reftag = t6;
+    const char *value =  s.GetValue( filename, reftag );
     if( value )
       {
-      std::cout << filename << " has " << t1 << " = " << value << std::endl;
+      std::cout << filename << " has " << reftag << " = " << value << std::endl;
       }
     else
       {
-      std::cout << filename << " has " << t1 << " = no value !" << std::endl;
+      std::cout << filename << " has " << reftag << " = no value !" << std::endl;
       }
     }
 }
