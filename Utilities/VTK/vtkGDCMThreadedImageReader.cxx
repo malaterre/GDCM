@@ -52,7 +52,7 @@ vtkGDCMThreadedImageReader::~vtkGDCMThreadedImageReader()
 #else /* (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 ) */
 void vtkGDCMThreadedImageReader::ExecuteInformation()
 {
-  std::cerr << "ExecuteInformation" << std::endl;
+  //std::cerr << "ExecuteInformation" << std::endl;
   // This reader only implement case where image is flipped upside down
   if( !this->FileLowerLeft )
     {
@@ -64,28 +64,53 @@ void vtkGDCMThreadedImageReader::ExecuteInformation()
   vtkImageData *output = this->GetOutput();
   output->SetUpdateExtentToWholeExtent(); // pipeline is not reexecuting properly without that...
 
+  int numvol = 1;
   if( this->LoadOverlays )
     {
-    this->SetNumberOfOutputs(2);
-    for (int i=1; i<2; i++)
-      {
-      if (!this->Outputs[i])
-        {
-        vtkImageData * img = vtkImageData::New();
-        this->SetNthOutput(i, img);
-        img->Delete();
-        }
-      }
-
+    ++numvol;
+    this->SetNumberOfOutputs(numvol);
     }
 
+  // vtkImageReader2::ExecuteInformation only allocate first output
   this->vtkImageReader2::ExecuteInformation();
+  // Let's do the other ones ourselves:
+  for (int i=1; i<numvol; i++)
+    {
+    if (!this->Outputs[i])
+      {
+      vtkImageData * img = vtkImageData::New();
+      this->SetNthOutput(i, img);
+      img->Delete();
+      }
+    vtkImageData *output = this->GetOutput(i);
+
+    output->SetWholeExtent(this->DataExtent);
+    output->SetSpacing(this->DataSpacing);
+    output->SetOrigin(this->DataOrigin);
+
+    output->SetScalarType(this->DataScalarType);
+    output->SetNumberOfScalarComponents(this->NumberOfScalarComponents);
+    }
 }
 
 void vtkGDCMThreadedImageReader::ExecuteData(vtkDataObject *output)
 {
-  std::cerr << "ExecuteData" << std::endl;
-  vtkImageData *data = this->AllocateOutputData(output);
+  //std::cerr << "ExecuteData" << std::endl;
+  // In VTK 4.2 AllocateOutputData is reexecuting ExecuteInformation which is bad !
+  //vtkImageData *data = this->AllocateOutputData(output);
+  vtkImageData *res = vtkImageData::SafeDownCast(output);
+  res->SetExtent(res->GetUpdateExtent());
+  res->AllocateScalars();
+
+  if( this->LoadOverlays )
+    {
+    vtkImageData *res = vtkImageData::SafeDownCast(this->Outputs[1]);
+    res->SetUpdateExtentToWholeExtent();
+
+    res->SetExtent(res->GetUpdateExtent());
+    res->AllocateScalars();
+    }
+
 //  if( data->UpdateExtentIsEmpty() )
 //    {
 //    return;

@@ -19,7 +19,6 @@
 #include "gdcmDirectory.h"
 #include "gdcmSystem.h"
 #include "gdcmImageReader.h"
-
 #include "gdcmTesting.h"
 
 #include "vtkPNGWriter.h"
@@ -175,20 +174,30 @@ int TestvtkGDCMThreadedImageRead(const char *filename)
   reader->Update();
   obs->Delete();
 
-  reader->GetOutput()->Print( cout );
-  reader->GetOutput(1)->Print( cout );
+  //reader->GetOutput()->Print( cout );
+  //reader->GetOutput(1)->Print( cout );
 
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
-  vtkPNGWriter *writer = vtkPNGWriter::New();
-  writer->SetInputConnection( reader->GetOutputPort(1) );
-  std::string pngfile;
-  pngfile += vtksys::SystemTools::GetFilenameWithoutExtension( filename );
-  pngfile += ".png";
-  writer->SetFileName( pngfile.c_str() );
-  std::cerr << pngfile << std::endl;
-  writer->Write();
-  writer->Delete();
-#endif
+  if( reader->GetNumberOfOverlays() )
+    {
+    vtkPNGWriter *writer = vtkPNGWriter::New();
+    writer->SetInput( reader->GetOutput(1) );
+    const char subdir[] = "TestvtkGDCMThreadedImageReader";
+    // Create directory first:
+    std::string tmpdir = gdcm::Testing::GetTempDirectory( subdir );
+    if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
+      {
+      gdcm::System::MakeDirectory( tmpdir.c_str() );
+      //return 1;
+      }
+    std::string pngfile = gdcm::Testing::GetTempFilename( filename, subdir );
+
+    //pngfile += vtksys::SystemTools::GetFilenameWithoutExtension( filename );
+    pngfile += ".png";
+    writer->SetFileName( pngfile.c_str() );
+    std::cerr << pngfile << std::endl;
+    //writer->Write();
+    writer->Delete();
+    }
 
 /*
   vtkStructuredPointsWriter *writer = vtkStructuredPointsWriter::New();

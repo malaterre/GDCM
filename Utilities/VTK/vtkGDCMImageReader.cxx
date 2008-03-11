@@ -115,16 +115,20 @@ void vtkGDCMImageReader::SetFileNames(vtkStringArray *filenames)
 
 void vtkGDCMImageReader::ExecuteInformation()
 {
-  std::cerr << "ExecuteInformation" << std::endl;
+  //std::cerr << "ExecuteInformation" << std::endl;
+
+  // FIXME: I think it only apply to VTK 4.2...
+  vtkImageData *output = this->GetOutput();
+  output->SetUpdateExtentToWholeExtent(); // pipeline is not reexecuting properly without that...
+
   RequestInformationCompat();
 
   int numvol = 1;
   if( this->LoadOverlays )
     {
     ++numvol;
+    this->SetNumberOfOutputs(numvol);
     }
-  this->SetNumberOfOutputs(numvol);
-
 
   // vtkImageReader2::ExecuteInformation only allocate first output
   this->vtkImageReader2::ExecuteInformation();
@@ -137,29 +141,39 @@ void vtkGDCMImageReader::ExecuteInformation()
       this->SetNthOutput(i, img);
       img->Delete();
       }
-  vtkImageData *output = this->GetOutput(i);
-  
-  output->SetWholeExtent(this->DataExtent);
-  output->SetSpacing(this->DataSpacing);
-  output->SetOrigin(this->DataOrigin);
+    vtkImageData *output = this->GetOutput(i);
 
-  output->SetScalarType(this->DataScalarType);
-  output->SetNumberOfScalarComponents(this->NumberOfScalarComponents);
+    output->SetWholeExtent(this->DataExtent);
+    output->SetSpacing(this->DataSpacing);
+    output->SetOrigin(this->DataOrigin);
+
+    output->SetScalarType(this->DataScalarType);
+    output->SetNumberOfScalarComponents(this->NumberOfScalarComponents);
     }
 }
 
 void vtkGDCMImageReader::ExecuteData(vtkDataObject *output)
 {
-  std::cerr << "ExecuteData" << std::endl;
-  vtkImageData *data = this->AllocateOutputData(output);
+  //std::cerr << "ExecuteData" << std::endl;
+  // In VTK 4.2 AllocateOutputData is reexecuting ExecuteInformation which is bad !
+  //vtkImageData *data = this->AllocateOutputData(output);
+  vtkImageData *res = vtkImageData::SafeDownCast(output);
+  res->SetExtent(res->GetUpdateExtent());
+  res->AllocateScalars();
+
   if( this->LoadOverlays )
     {
-    vtkImageData *data2 = this->AllocateOutputData( this->GetOutput(1) );
+    vtkImageData *res = vtkImageData::SafeDownCast(this->Outputs[1]);
+    res->SetUpdateExtentToWholeExtent();
+
+    res->SetExtent(res->GetUpdateExtent());
+    res->AllocateScalars();
     }
   //int * updateExtent = data->GetUpdateExtent();
   //std::cout << "UpdateExtent:" << updateExtent[4] << " " << updateExtent[5] << std::endl;
   RequestDataCompat();
 }
+
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
 int vtkGDCMImageReader::CanReadFile(const char* fname)
@@ -514,9 +528,8 @@ int vtkGDCMImageReader::RequestInformationCompat()
 int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImageData* data, bool filelowerleft)
 {
   char * pointer = static_cast<char*>(data->GetScalarPointer());
-  this->GetOutput(0)->Print(std::cout);
-  this->GetOutput(1)->Print(std::cout);
-  char * overlaypointer = static_cast<char*>(this->GetOutput(1)->GetScalarPointer());
+  //this->GetOutput(0)->Print(std::cout);
+  //this->GetOutput(1)->Print(std::cout);
 
   gdcm::ImageReader reader;
   reader.SetFileName( filename );
@@ -540,34 +553,21 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
     // vtkOpenGLImageMapper::RenderData does not support bit array (since OpenGL does not either)
     // we have to decompress the bit overlay into an unsigned char array to please everybody:
     const gdcm::Overlay& ov1 = image.GetOverlay();
-    std::ostringstream os;
-    ov1.Decompress( os );
-    std::string str = os.str();
     vtkImageData *image = this->GetOutput(1);
-    //image->Initialize();
-    //image->SetSpacing( 1.0, 1.0, 1.0  );
-    //image->SetOrigin(  0.0, 0.0, 0.0 );
-    //image->SetExtent( (int)d1-2, (int)d2+2, (int)d1-2, (int)d2+2, 0, 0 );
-    //this->Overlay->SetDimensions(ov1.GetRows(), ov1.GetColumns(), 1);
     image->SetScalarTypeToUnsignedChar();
-    //image->SetScalarType( VTK_BIT );
     image->AllocateScalars();
 
     assert( image->GetPointData()->GetScalars() != 0 );
-    //vtkUnsignedCharArray *chararray = (vtkUnsignedCharArray*)image->GetPointData()->GetScalars();
     vtkUnsignedCharArray *chararray = vtkUnsignedCharArray::New();
-    //vtkBitArray *chararray = vtkBitArray::New();
     chararray->SetNumberOfTuples( ov1.GetRows() * ov1.GetColumns() );
-    assert( str.size() == ov1.GetRows() * ov1.GetColumns() );
     overlaylen = ov1.GetRows()*ov1.GetColumns();
     tempimage2 = new unsigned char[overlaylen];
-    //assert( len == ov1.GetRows() * ov1.GetColumns() );
-    //ov1.GetBuffer( (char*)chararray->WritePointer(0,0) );
-    ov1.GetUnpackBuffer( tempimage2 /* chararray->GetPointer(0)*/ );
-    //memcpy( chararray->GetPointer(0), &str[0], str.size() );
+    ov1.GetUnpackBuffer( tempimage2 );
     image->GetPointData()->SetScalars( chararray );
     chararray->Delete();
     }
+  // WARNING: get the scalar pointer AFTER AllocateScalars, not garantee to remain the same (VTK 4.2)
+  char * overlaypointer = static_cast<char*>(this->GetOutput(1)->GetScalarPointer());
 
   // Do the LUT
   if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::PALETTE_COLOR )
@@ -604,7 +604,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
   gdcm::PixelFormat pixeltype = image.GetPixelFormat();
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
   long overlayoutsize = (dext[1] - dext[0] + 1);
-  assert( overlayoutsize * ( dext[3] - dext[2] + 1 ) == overlaylen );
+  if( numoverlays ) assert( overlayoutsize * ( dext[3] - dext[2] + 1 ) == overlaylen );
   assert( outsize * (dext[3] - dext[2]+1) * (dext[5]-dext[4]+1) == len );
 
   // If user overrides this flag, he/she wants image upside down

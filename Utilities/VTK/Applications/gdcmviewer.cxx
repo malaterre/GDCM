@@ -86,8 +86,34 @@ public:
 #endif
     return new vtkImageColorViewer; 
     }
+  vtkImageColorViewer() {
+    OverlayImageActor = vtkImageActor::New();
+  }
+  ~vtkImageColorViewer() {
+    OverlayImageActor->Delete();
+  }
   double GetOverlayVisibility() { return 0; }
   void SetOverlayVisibility(double vis) {}
+  void AddInput(vtkImageData * input)
+    {
+  vtkRenderWindow *renwin = this->GetRenderWindow ();
+  renwin->SetNumberOfLayers(2);
+  vtkRenderer *Renderer     = vtkRenderer::New();
+  Renderer->SetLayer(0);
+  //OverlayImageActor->SetOpacity(0.5);
+  //OverlayImageActor->GetProperty()->SetOpacity(1.0);
+  vtkImageMapToWindowLevelColors *WindowLevel     = vtkImageMapToWindowLevelColors::New();
+  WindowLevel->SetInput(input);
+  OverlayImageActor->SetInput(WindowLevel->GetOutput());
+  Renderer->AddProp(OverlayImageActor);
+  OverlayImageActor->SetVisibility(1);
+
+  renwin->AddRenderer(Renderer);
+  Renderer->Delete();
+  WindowLevel->Delete();
+    }
+private:
+  vtkImageActor                   *OverlayImageActor;
 };
 vtkCxxRevisionMacro(vtkImageColorViewer, "$Revision: 1.30 $");
 vtkInstantiatorNewMacro(vtkImageColorViewer);
@@ -197,11 +223,12 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     viewer->AddInputConnection ( reader->GetOutputPort(1) );
     }
 #else
-  viewer->SetInput( reader->GetOutput(1) );
-  //if( reader->GetNumberOfOverlays() )
-  //  {
-  //  viewer->AddInput( reader->GetOutput(1) );
-  //  }
+  viewer->SetInput( reader->GetOutput(0) );
+  //viewer->GetRenderer()->SetLayer(1);
+  if( reader->GetNumberOfOverlays() )
+    {
+    viewer->AddInput( reader->GetOutput(1) );
+    }
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
   // In case of palette color, let's tell VTK to map color:
