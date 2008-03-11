@@ -78,6 +78,8 @@ public:
   vtkGetObjectMacro(FileNames, vtkStringArray);
 #endif
 
+  vtkGetObjectMacro(Overlay, vtkImageData);
+
 protected:
   vtkGDCMImageReader();
   ~vtkGDCMImageReader();
@@ -113,6 +115,9 @@ protected:
 #endif
 
   vtkMatrix4x4 *DirectionCosines;
+  vtkImageData *Overlay;
+
+  int LoadSingleFile(const char *filename, int *dext, vtkImageData* data, bool filelowerleft);
 
 private:
   vtkGDCMImageReader(const vtkGDCMImageReader&);  // Not implemented.

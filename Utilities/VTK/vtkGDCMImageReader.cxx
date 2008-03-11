@@ -27,6 +27,8 @@
 #include "vtkStreamingDemandDrivenPipeline.h"
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 #include "vtkMatrix4x4.h"
+#include "vtkUnsignedCharArray.h"
+#include "vtkBitArray.h"
 
 #include "gdcmImageReader.h"
 #include "gdcmDataElement.h"
@@ -55,6 +57,7 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   this->MedicalImageProperties = vtkMedicalImageProperties::New();
   this->FileNames = NULL; //vtkStringArray::New();
 #endif
+  this->Overlay = vtkImageData::New();
 }
 
 vtkGDCMImageReader::~vtkGDCMImageReader()
@@ -69,6 +72,7 @@ vtkGDCMImageReader::~vtkGDCMImageReader()
     this->FileNames->Delete();
     }
 #endif
+  this->Overlay->Delete();
 }
 
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
@@ -471,7 +475,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
   return 1;
 }
 
-int LoadSingleFile(const char *filename, int *dext, vtkImageData* data, bool filelowerleft)
+int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImageData* data, bool filelowerleft)
 {
   char * pointer = static_cast<char*>(data->GetScalarPointer());
 
@@ -487,6 +491,38 @@ int LoadSingleFile(const char *filename, int *dext, vtkImageData* data, bool fil
   unsigned long len = image.GetBufferLength();
   char *tempimage = new char[len];
   image.GetBuffer(tempimage);
+  // Do the Overlay:
+  unsigned int numoverlays = image.GetNumberOfOverlays();
+  if( numoverlays )
+    {
+    // vtkOpenGLImageMapper::RenderData does not support bit array (since OpenGL does not either)
+    // we have to decompress the bit overlay into an unsigned char array to please everybody:
+    const gdcm::Overlay& ov1 = image.GetOverlay();
+    std::ostringstream os;
+    ov1.Decompress( os );
+    std::string str = os.str();
+    vtkImageData *image = this->Overlay;
+    image->Initialize();
+    //image->SetSpacing( 1.0, 1.0, 1.0  );
+    //image->SetOrigin(  0.0, 0.0, 0.0 );
+    //image->SetExtent( (int)d1-2, (int)d2+2, (int)d1-2, (int)d2+2, 0, 0 );
+    this->Overlay->SetDimensions(ov1.GetRows(), ov1.GetColumns(), 1);
+    image->SetScalarTypeToUnsignedChar();
+    //image->SetScalarType( VTK_BIT );
+    image->AllocateScalars();
+
+    assert( this->Overlay->GetPointData()->GetScalars() != 0 );
+    //vtkUnsignedCharArray *chararray = (vtkUnsignedCharArray*)image->GetPointData()->GetScalars();
+    vtkUnsignedCharArray *chararray = vtkUnsignedCharArray::New();
+    //vtkBitArray *chararray = vtkBitArray::New();
+    chararray->SetNumberOfTuples( ov1.GetRows() * ov1.GetColumns() );
+    assert( str.size() == ov1.GetRows() * ov1.GetColumns() );
+    //ov1.GetBuffer( (char*)chararray->WritePointer(0,0) );
+    ov1.GetUnpackBuffer( chararray->GetPointer(0) );
+    //memcpy( chararray->GetPointer(0), &str[0], str.size() );
+    this->Overlay->GetPointData()->SetScalars( chararray );
+    chararray->Delete();
+    }
 
   // Do the LUT
   if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::PALETTE_COLOR )
@@ -597,7 +633,7 @@ int vtkGDCMImageReader::RequestDataCompat()
   if( this->FileName )
     {
     const char *filename = this->FileName;
-    LoadSingleFile( filename, dext, output, this->FileLowerLeft);
+    this->LoadSingleFile( filename, dext, output, this->FileLowerLeft);
     return 1;
     }
   else
