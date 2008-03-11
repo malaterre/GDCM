@@ -215,7 +215,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 //{ "d613050ca0f9c924fb5282d140281fcc" , "LEADTOOLS_FLOWERS-8-PAL-RLE.dcm" },
 { "16e999d6afc5574bcb075f296c3bcbbc" , "LEADTOOLS_FLOWERS-8-PAL-RLE.dcm" },
 /* gdcm 800 535 1 8 3 */
-{ "d613050ca0f9c924fb5282d140281fcc" , "LEADTOOLS_FLOWERS-8-PAL-Uncompressed.dcm" },
+//{ "d613050ca0f9c924fb5282d140281fcc" , "LEADTOOLS_FLOWERS-8-PAL-Uncompressed.dcm" },
+{ "16e999d6afc5574bcb075f296c3bcbbc" , "LEADTOOLS_FLOWERS-8-PAL-Uncompressed.dcm" },
 /* duh ! This should be the exact same md5...if only the testing was a little
  * smarter */
 { "d613050ca0f9c924fb5282d140281fcc" , "LEADTOOLS_FLOWERS-8-PAL-RAW.dcm" },
