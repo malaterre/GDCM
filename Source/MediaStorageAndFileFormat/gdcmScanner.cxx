@@ -92,6 +92,8 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
 
   StringFilter sf;
   Directory::FilenamesType::const_iterator it = Filenames.begin();
+  const double progresstick = 1. / Filenames.size();
+  Progress = 0;
   for(; it != Filenames.end(); ++it)
     {
     Reader reader;
@@ -145,6 +147,7 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
           }
         }
       }
+    Progress += progresstick;
     }
   return true;
 }

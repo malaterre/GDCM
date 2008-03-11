@@ -101,6 +101,8 @@ private:
 
   // Main struct that will hold all mapping:
   MappingType Mappings;
+
+  double Progress;
 };
 
 #if 0

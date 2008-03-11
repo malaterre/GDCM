@@ -179,6 +179,18 @@ public:
     return r;
     }
 
+  // e.g 6002,3000 belong to groupXX: 6000,3000
+  bool IsGroupXX(const Tag &t) const
+    {
+    if( t.GetElement() == GetElement() )
+      {
+      if( t.IsPrivate() ) return false;
+      uint16_t group = (GetGroup() >> 8 ) << 8;
+      return group == t.GetGroup();
+      }
+    return false;
+    }
+
   // This is a highly user oriented function, the string should be formated as:
   // 1234,5678 to specify the tag (0x1234,0x5678)
   // The notation comes from the DICOM standard, and is handy to use from a command line
