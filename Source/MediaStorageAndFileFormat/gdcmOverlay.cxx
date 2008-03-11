@@ -332,7 +332,38 @@ void Overlay::Decode(std::istream &is, std::ostream &os)
     }
 }
 
-void Overlay::Decompress(std::ostream &os)
+bool Overlay::GetBuffer(char *buffer) const
+{
+  unsigned long length = Internal->Data.size();
+  std::copy(buffer, buffer+length, Internal->Data.begin());
+  return true;
+}
+
+bool Overlay::GetUnpackBuffer(unsigned char *buffer) const
+{
+  unsigned char *unpackedbytes = buffer;
+  for( std::vector<char>::const_iterator it = Internal->Data.begin(); it != Internal->Data.end(); ++it )
+    {
+    const unsigned char &packedbytes = *it;
+    unsigned char mask = 1;
+    for (unsigned int i = 0; i < 8; ++i)
+      {
+      if ( (packedbytes & mask) == 0)
+        {
+        *unpackedbytes = 0;
+        }
+      else
+        {
+        *unpackedbytes = 255;
+        }
+      ++unpackedbytes;
+      mask <<= 1;
+      }
+    }
+  return true;
+}
+
+void Overlay::Decompress(std::ostream &os) const
 {
   unsigned char unpackedbytes[8];
   for( std::vector<char>::const_iterator it = Internal->Data.begin(); it != Internal->Data.end(); ++it )
@@ -347,7 +378,7 @@ void Overlay::Decompress(std::ostream &os)
         }
       else
         {
-        unpackedbytes[i] = 1;
+        unpackedbytes[i] = 255;
         }
       mask <<= 1;
       }
