@@ -593,6 +593,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
     memset(tempimage2,0,overlaylen);
     ov1.GetUnpackBuffer( tempimage2 );
     image->GetPointData()->SetScalars( chararray );
+    image->GetPointData()->GetScalars()->SetName( ov1.GetDescription() );
     chararray->Delete();
     }
   // WARNING: get the scalar pointer AFTER AllocateScalars, not garantee to remain the same (VTK 4.2)

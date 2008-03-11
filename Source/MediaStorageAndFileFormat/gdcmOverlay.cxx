@@ -292,6 +292,7 @@ void Overlay::SetColumns(unsigned short columns) { Internal->Columns = columns; 
 unsigned short Overlay::GetColumns() const { return Internal->Columns; }
 void Overlay::SetNumberOfFrames(unsigned int numberofframes) { Internal->NumberOfFrames = numberofframes; }
 void Overlay::SetDescription(const char* description) { Internal->Description = description; }
+const char *Overlay::GetDescription() const { return Internal->Description.c_str(); }
 void Overlay::SetType(const char* type) { Internal->Type = type; }
 void Overlay::SetOrigin(const signed short *origin)
 {

@@ -54,6 +54,7 @@ public:
   unsigned short GetColumns() const;
   void SetNumberOfFrames(unsigned int numberofframes);
   void SetDescription(const char* description);
+  const char *GetDescription() const;
   void SetType(const char* type);
   void SetOrigin(const signed short *origin);
   const signed short * GetOrigin() const;

@@ -95,6 +95,7 @@ public:
 
   // Read only: number of overlays as found in this image
   vtkGetMacro(NumberOfOverlays,int);
+  //vtkSetMacro(NumberOfOverlays,int);
 
 protected:
   vtkGDCMImageReader();

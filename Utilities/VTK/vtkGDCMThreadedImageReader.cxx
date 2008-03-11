@@ -67,6 +67,7 @@ void vtkGDCMThreadedImageReader::ExecuteInformation()
   int numvol = 1;
   if( this->LoadOverlays )
     {
+    this->NumberOfOverlays = 1;
     ++numvol;
     this->SetNumberOfOutputs(numvol);
     }
@@ -151,6 +152,7 @@ int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
   int numvol = 1;
   if( this->LoadOverlays )
     {
+    this->NumberOfOverlays = 1;
     ++numvol;
     }
   this->SetNumberOfOutputPorts(numvol);
@@ -246,11 +248,14 @@ void *ReadFilesThread(void *voidparams)
     image.GetBuffer(tempimage);
     // overlay
     unsigned int numoverlays = image.GetNumberOfOverlays();
+    //params->reader->SetNumberOfOverlays( numoverlays );
     if( numoverlays )
       {
       const gdcm::Overlay& ov = image.GetOverlay();
       unsigned char * overlaypointer = params->overlayscalarpointer;
       unsigned char *tempimage2 = overlaypointer + file*params->overlaylen;
+      memset(tempimage2,0,params->overlaylen);
+      assert( ov.GetRows()*ov.GetColumns() <= params->overlaylen );
       ov.GetUnpackBuffer(tempimage2);
       }
     if( params->reader->GetShift() != 1 || params->reader->GetScale() != 0 )
