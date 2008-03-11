@@ -32,6 +32,13 @@ SET_SOURCE_FILES_PROPERTIES(gdcm.i PROPERTIES CPLUSPLUS ON)
 SWIG_ADD_MODULE(gdcm python gdcm.i)
 SWIG_LINK_LIBRARIES(gdcm gdcmMSFF ${PYTHON_LIBRARIES})
 
+# Python extension modules on Windows must have the extension ".pyd"
+# instead of ".dll" as of Python 2.5.  Older python versions do support
+# this suffix.
+IF(WIN32 AND NOT CYGWIN)
+  SET_TARGET_PROPERTIES(${SWIG_MODULE_gdcm_REAL_NAME} PROPERTIES SUFFIX ".pyd")
+ENDIF(WIN32 AND NOT CYGWIN)
+
 #  MESSAGE(${SWIG_MODULE_gdcm_REAL_NAME})
 #  MESSAGE( "${swig_extra_generated_files}" )
 #  MESSAGE( "${swig_generated_file_fullname}" )
@@ -62,6 +69,3 @@ IF(NOT GDCM_INSTALL_NO_LIBRARIES)
     DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
   )
 ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
-#IF(BUILD_TESTING)
-#  SUBDIRS(Testing)
-#ENDIF(BUILD_TESTING)

@@ -118,6 +118,13 @@ IF(BUILD_WRAPPING)
       TARGET_LINK_LIBRARIES(${PROJECT_NAME}PythonD ${c}Python${DEXTENSION})
     ENDFOREACH(c)
     TARGET_LINK_LIBRARIES(${PROJECT_NAME}Python ${PROJECT_NAME}PythonD)
+# Python extension modules on Windows must have the extension ".pyd"
+# instead of ".dll" as of Python 2.5.  Older python versions do support
+# this suffix.
+IF(WIN32 AND NOT CYGWIN)
+  SET_TARGET_PROPERTIES(${PROJECT_NAME}PythonD PROPERTIES SUFFIX ".pyd")
+ENDIF(WIN32 AND NOT CYGWIN)
+
     ADD_CUSTOM_COMMAND(
       TARGET    ${PROJECT_NAME}Python
       POST_BUILD
