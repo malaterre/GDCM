@@ -208,7 +208,7 @@ int TestvtkGDCMThreadedImageRead(const char *filename)
   writer->Delete();
 */
 
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
   double *s = reader->GetOutput()->GetScalarRange();
 #else
   float *s = reader->GetOutput()->GetScalarRange();

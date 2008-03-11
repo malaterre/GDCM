@@ -32,6 +32,9 @@
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #else
 class vtkMedicalImageProperties;
+#endif
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
+#else
 class vtkStringArray;
 #endif
 
@@ -73,7 +76,10 @@ public:
   // Description:
   // Get the medical image properties object
   vtkGetObjectMacro(MedicalImageProperties, vtkMedicalImageProperties);
+#endif
 
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
+#else
   virtual void SetFileNames(vtkStringArray*);
   vtkGetObjectMacro(FileNames, vtkStringArray);
 #endif
@@ -118,6 +124,9 @@ protected:
   // Description:
   // Medical Image properties
   vtkMedicalImageProperties *MedicalImageProperties;
+#endif
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
+#else
   vtkStringArray *FileNames;
 #endif
 

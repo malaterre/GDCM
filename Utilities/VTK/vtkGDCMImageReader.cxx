@@ -55,6 +55,9 @@ vtkGDCMImageReader::vtkGDCMImageReader()
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #else
   this->MedicalImageProperties = vtkMedicalImageProperties::New();
+#endif
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
+#else
   this->FileNames = NULL; //vtkStringArray::New();
 #endif
   this->LoadOverlays = 1;
@@ -68,6 +71,9 @@ vtkGDCMImageReader::~vtkGDCMImageReader()
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #else
   this->MedicalImageProperties->Delete();
+#endif
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
+#else
   if( this->FileNames )
     {
     this->FileNames->Delete();
@@ -75,7 +81,7 @@ vtkGDCMImageReader::~vtkGDCMImageReader()
 #endif
 }
 
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
 #else
 //vtkCxxSetObjectMacro(vtkGDCMImageReader,FileNames,vtkStringArray);
 void vtkGDCMImageReader::SetFileNames(vtkStringArray *filenames)
@@ -112,7 +118,10 @@ void vtkGDCMImageReader::SetFileNames(vtkStringArray *filenames)
 
   this->Modified();
 }
+#endif
 
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+#else
 void vtkGDCMImageReader::ExecuteInformation()
 {
   //std::cerr << "ExecuteInformation" << std::endl;
@@ -248,12 +257,16 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
   this->MedicalImageProperties->SetPatientSex( GetStringValueFromTag( gdcm::Tag(0x0010,0x0040), ds) );
   // For ex: DICOM (0010,0030) = 19680427
   this->MedicalImageProperties->SetPatientBirthDate( GetStringValueFromTag( gdcm::Tag(0x0010,0x0030), ds) );
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   // For ex: DICOM (0008,0020) = 20030617
   this->MedicalImageProperties->SetStudyDate( GetStringValueFromTag( gdcm::Tag(0x0008,0x0020), ds) );
+#endif
   // For ex: DICOM (0008,0022) = 20030617
   this->MedicalImageProperties->SetAcquisitionDate( GetStringValueFromTag( gdcm::Tag(0x0008,0x0022), ds) );
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   // For ex: DICOM (0008,0030) = 162552.0705 or 230012, or 0012
   this->MedicalImageProperties->SetStudyTime( GetStringValueFromTag( gdcm::Tag(0x0008,0x0030), ds) );
+#endif
   // For ex: DICOM (0008,0032) = 162552.0705 or 230012, or 0012
   this->MedicalImageProperties->SetAcquisitionTime( GetStringValueFromTag( gdcm::Tag(0x0008,0x0032), ds) );
   // For ex: DICOM (0008,0023) = 20030617

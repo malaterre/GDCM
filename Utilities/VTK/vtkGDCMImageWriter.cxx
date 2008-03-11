@@ -385,7 +385,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   assert( dims[0] >= 0 && dims[1] >= 0 && dims[2] >= 0 );
   image.SetDimension(0, dims[0] );
   image.SetDimension(1, dims[1] );
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
   const double *spacing = data->GetSpacing();
 #else
   const float *spacing = data->GetSpacing();
@@ -514,12 +514,16 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   SetStringValueFromTag( this->MedicalImageProperties->GetPatientSex(), gdcm::Tag(0x0010,0x0040), ds);
   // For ex: DICOM (0010,0030) = 19680427
   SetStringValueFromTag( this->MedicalImageProperties->GetPatientBirthDate(), gdcm::Tag(0x0010,0x0030), ds);
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   // For ex: DICOM (0008,0020) = 20030617
   SetStringValueFromTag( this->MedicalImageProperties->GetStudyDate(), gdcm::Tag(0x0008,0x0020), ds);
+#endif
   // For ex: DICOM (0008,0022) = 20030617
   SetStringValueFromTag( this->MedicalImageProperties->GetAcquisitionDate(), gdcm::Tag(0x0008,0x0022), ds);
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   // For ex: DICOM (0008,0030) = 162552.0705 or 230012, or 0012
   SetStringValueFromTag( this->MedicalImageProperties->GetStudyTime(), gdcm::Tag(0x0008,0x0030), ds);
+#endif
   // For ex: DICOM (0008,0032) = 162552.0705 or 230012, or 0012
   SetStringValueFromTag( this->MedicalImageProperties->GetAcquisitionTime(), gdcm::Tag(0x0008,0x0032), ds);
   // For ex: DICOM (0008,0023) = 20030617
@@ -619,7 +623,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     {
     // Image Position (Patient)
     gdcm::Attribute<0x0020,0x0032> ipp = {0,0,0}; // default value
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
     const double *origin = data->GetOrigin();
 #else
     const float *origin = data->GetOrigin();

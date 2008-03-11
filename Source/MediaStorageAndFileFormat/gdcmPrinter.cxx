@@ -622,7 +622,7 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
       assert( ds.FindDataElement( bitsallocated ) );
       Attribute<0x0028,0x0100> at;
       at.SetFromDataElement( ds.GetDataElement( bitsallocated ) );
-      assert( at.GetValue() == 16 || at.GetValue() == 8 );
+      //assert( at.GetValue() == 16 || at.GetValue() == 8 );
       refvr = VR::OW;
       }
     assert( refvr != VR::OB_OW );
