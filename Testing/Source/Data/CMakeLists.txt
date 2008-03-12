@@ -18,15 +18,12 @@ SET(BLACK_LIST_READER
   EmptyPixelData.dcm # Emtpy pixel, dcmdump returns 0 ... I do not think this is the right thing to do though
   Siemens-leonardo-bugged.dcm # Nearly impossible, waste of time anyway...
 # TODO (by priority)
-  MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm
 
 # grrrrrr do not handle swapping correctly (implicit dataset are such a pain)
   LIBIDO-16-ACR_NEMA-Volume.dcm
 # TODO add seg lut support
   gdcm-US-ALOKA-16.dcm
   SegmentedPalette.dcm
-# Add YBR_FULL_422
-  US-GE-4AICL142.dcm
 # Add 12 bits support:
   MR-MONO2-12-angio-an1.acr
   image.acr
@@ -47,17 +44,6 @@ SET(BLACK_LIST_READER
 
 # Temp fix
   rle16loo.dcm
-  SIEMENS_GBS_III-16-ACR_NEMA_1.acr  # private elements are a pain
-  SIEMENS_SOMATOM-12-ACR_NEMA-ZeroLengthUs.acr # private ...
-  gdcm-MR-SIEMENS-16-2.acr # private...
-  SIEMENS_MAGNETOM-12-ACR_NEMA_2-Modern.dcm # private...
-  SIEMENS_MAGNETOM-12-MONO2-FileSeq0.dcm
-  SIEMENS_MAGNETOM-12-MONO2-FileSeq1.dcm
-  SIEMENS_MAGNETOM-12-MONO2-FileSeq2.dcm
-  SIEMENS_MAGNETOM-12-MONO2-FileSeq3.dcm
-  SIEMENS_MAGNETOM-12-MONO2-GDCM12-VRUN.dcm
-  SIEMENS_MAGNETOM-12-MONO2-Uncompressed.dcm
-  SIEMENS_MAGNETOM-12-MONO2-VRUN.dcm
   Compress_16bit_noPVRG.dcm
 
 # RGB is skrewed ...
