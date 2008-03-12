@@ -237,7 +237,37 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     }
 #endif
 
-  if( !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField) )
+  bool failed;
+  //assert( VRField != VR::UN );
+  if( VRField & VR::VRASCII )
+    {
+    //assert( VRField.GetSize() == 1 );
+    failed = !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField);
+    }
+  else
+    {
+    assert( VRField & VR::VRBINARY );
+    unsigned int vrsize = VRField.GetSize();
+    assert( vrsize == 1 || vrsize == 2 || vrsize == 4 || vrsize == 8 );
+    switch(vrsize)
+      {
+    case 1:
+      failed = !ValueIO<ExplicitDataElement,TSwap,uint8_t>::Read(is,*ValueField);
+      break;
+    case 2:
+      failed = !ValueIO<ExplicitDataElement,TSwap,uint16_t>::Read(is,*ValueField);
+      break;
+    case 4:
+      failed = !ValueIO<ExplicitDataElement,TSwap,uint32_t>::Read(is,*ValueField);
+      break;
+    case 8:
+      failed = !ValueIO<ExplicitDataElement,TSwap,uint64_t>::Read(is,*ValueField);
+      break;
+    default:
+      abort();
+      }
+    }
+  if( failed )
     {
     if( TagField == Tag(0x7fe0,0x0010) )
       {
@@ -361,10 +391,40 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
       zero.Write<TSwap>(os);
       }
 #endif
-    else if( !ValueIO<ExplicitDataElement,TSwap>::Write(os,*ValueField) )
+    else 
       {
-      assert( 0 && "Should not happen" );
-      return os;
+      bool failed;
+      if( VRField & VR::VRASCII || VRField == VR::INVALID )
+        {
+        failed = !ValueIO<ExplicitDataElement,TSwap>::Write(os,*ValueField);
+        }
+      else
+        {
+        assert( VRField & VR::VRBINARY );
+        unsigned int vrsize = VRField.GetSize();
+        assert( vrsize == 1 || vrsize == 2 || vrsize == 4 || vrsize == 8 );
+        switch(vrsize)
+          {
+        case 1:
+          failed = !ValueIO<ExplicitDataElement,TSwap,uint8_t >::Write(os,*ValueField);
+          break;
+        case 2:
+          failed = !ValueIO<ExplicitDataElement,TSwap,uint16_t>::Write(os,*ValueField);
+          break;
+        case 4:
+          failed = !ValueIO<ExplicitDataElement,TSwap,uint32_t>::Write(os,*ValueField);
+          break;
+        case 8:
+          failed = !ValueIO<ExplicitDataElement,TSwap,uint64_t>::Write(os,*ValueField);
+          break;
+        default:
+          abort();
+          }
+        }
+      if( failed )
+        {
+        assert( 0 && "Should not happen" );
+        }
       }
     }
 

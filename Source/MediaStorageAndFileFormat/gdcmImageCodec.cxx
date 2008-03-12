@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmImageCodec.h"
+#include "gdcmJPEGCodec.h"
 #include "gdcmByteSwap.txx"
 #include "gdcmTrace.h"
 
@@ -79,9 +80,13 @@ bool ImageCodec::DoByteSwap(std::istream &is, std::ostream &os)
     gdcmDebugMacro( "Why would I byte swap ?" );
     }
 #else
-  assert( PF.GetBitsAllocated() == 16 );
-  ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)
-    dummy_buffer, SwapCode::BigEndian, buf_size/2);
+  // GE_DLX-8-MONO2-PrivateSyntax.dcm is 8bits
+  //  assert( PF.GetBitsAllocated() == 16 );
+  if ( PF.GetBitsAllocated() == 16 )
+    {
+    ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)
+      dummy_buffer, SwapCode::BigEndian, buf_size/2);
+    }
 #endif
   os.write(dummy_buffer, buf_size);
   return true;
@@ -423,9 +428,13 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
     }
   else if ( PI == PhotometricInterpretation::YBR_FULL_422 )
     {
-    // TODO
     // US-GE-4AICL142.dcm
-    abort();
+    // Hopefully it has been done by the JPEG decoder it self...
+    const JPEGCodec *c = dynamic_cast<const JPEGCodec*>(this);
+    if( !c )
+      {
+      gdcmErrorMacro( "YBR_FULL_422 is not implemented in GDCM. Image will be displayed incorrectly" );
+      }
     }
   else
     {

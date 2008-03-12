@@ -26,7 +26,7 @@ namespace gdcm
  * VALUE: A component of a Value Field. A Value Field may consist of one
  * or more of these components.
  */
-template <typename TDE, typename TSwap>
+template <typename TDE, typename TSwap, typename TType=uint8_t>
 class /*GDCM_EXPORT*/ ValueIO
 {
 public:

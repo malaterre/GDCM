@@ -585,57 +585,9 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     return false;
     }
   const DataElement& xde = ds.GetDataElement( pixeldata );
-#if 1
-  //if( type == TS::Explicit )
-    {
-    if( xde.GetVR() == VR::OW )
-      {
-      // Need to byte swap
-      assert( F->GetHeader().GetDataSetTransferSyntax() 
-        != TransferSyntax::ImplicitVRBigEndianPrivateGE );
-      bool need = false;
-//      = 
-//        ByteSwap<int>::SystemIsLittleEndian() &&
-//        (Stream.GetSwapCode() != SwapCode::LittleEndian)
-//     || ByteSwap<int>::SystemIsBigEndian() &&
-//        (Stream.GetSwapCode() != SwapCode::BigEndian );
-//      if( need )
-//        {
-//#ifdef GDCM_WORDS_BIGENDIAN
-//      assert( ts.GetSwapCode() == SwapCode::LittleEndian );
-//#else
-//      assert( ts.GetSwapCode() == SwapCode::BigEndian );
-//#endif
-//        }
-      PixelData.SetNeedByteSwap( need );
-      }
-    PixelData.SetDataElement( xde );
-    }
-//  else if( type == TS::Implicit )
-//    {
-//    TS ts = GetHeader().GetTransferSyntaxType();
-//#ifdef GDCM_WORDS_BIGENDIAN
-//    if( ts != TS::ImplicitVRBigEndianPrivateGE
-//      && pf.GetBitsAllocated() == 16 )
-//#else
-//    if( ts == TS::ImplicitVRBigEndianPrivateGE
-//      && pf.GetBitsAllocated() == 16 )
-//#endif
-//      {
-//      // TS::ImplicitVRBigEndianPrivateGE is written in BigEndian except the
-//      // image which is in LittleEndian
-//      PixelData.SetNeedByteSwap( true );
-//      }
-//    const ImplicitDataElement &ide =
-//      dynamic_cast<const ImplicitDataElement&>(pdde);
-//    PixelData.SetValue( ide.GetValue() );
-//    }
-//  else
-//    {
-//    gdcmErrorMacro( "Not sure how you are supposed to reach here" );
-//    return false;
-//    }
-#endif
+  bool need = PixelData.GetTransferSyntax() == TransferSyntax::ImplicitVRBigEndianPrivateGE;
+  PixelData.SetNeedByteSwap( need );
+  PixelData.SetDataElement( xde );
 
   // FIXME:
   // We should check that when PixelData is RAW that Col * Dim == PixelData.GetLength()

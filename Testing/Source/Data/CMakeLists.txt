@@ -20,23 +20,8 @@ SET(BLACK_LIST_READER
 # TODO (by priority)
   MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm
 
-# For now not supported (in ReWrite mode):
-# We are rewritting image with invalid VR what should we do ?
-  gdcm-MR-PHILIPS-16-Multi-Seq.dcm
-  PHILIPS_Intera-16-MONO2-Uncompress.dcm
-  MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.dcm
-# TODO: One cannot write VR::UN in the meta header !
-# oh well ... dicom3tools support them
-#  THERALYS-12-MONO2-Uncompressed-Even_Length_Tag.dcm
-#  GE_DLX-8-MONO2-PrivateSyntax.dcm
-  image.acr
-
-# grrrrrr do not handle swapping correctly:
-  GE_CT_With_Private_compressed-icon.dcm
-  MR_GE_with_Private_Compressed_Icon_0009_1110.dcm
-  US-RGB-8-epicard.dcm
+# grrrrrr do not handle swapping correctly (implicit dataset are such a pain)
   LIBIDO-16-ACR_NEMA-Volume.dcm
-  PrivateGEImplicitVRBigEndianTransferSyntax16Bits.dcm
 # TODO add seg lut support
   gdcm-US-ALOKA-16.dcm
   SegmentedPalette.dcm
@@ -44,6 +29,7 @@ SET(BLACK_LIST_READER
   US-GE-4AICL142.dcm
 # Add 12 bits support:
   MR-MONO2-12-angio-an1.acr
+  image.acr
 # Papyrus:
   PET-cardio-Multiframe-Papyrus.dcm
 # No way to read this image:
@@ -77,7 +63,8 @@ SET(BLACK_LIST_READER
 # RGB is skrewed ...
   rle16sti.dcm
 
-D_CLUNIE_RG3_JPLY.dcm
+# Famous 12bits with value > 4096 (after jpeg decompression)
+  D_CLUNIE_RG3_JPLY.dcm
 )
 
 SET(GDCM_DATA_FILENAMES)

@@ -378,14 +378,20 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
     switch ( cinfo.jpeg_color_space )
       {
     case JCS_GRAYSCALE:
-      assert( GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1
-           || GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2 );
+      if( GetPhotometricInterpretation() != PhotometricInterpretation::MONOCHROME1
+        && GetPhotometricInterpretation() != PhotometricInterpretation::MONOCHROME2 )
+        {
+        gdcmWarningMacro( "Wrong PhotometricInterpretation. DICOM says: " <<
+          GetPhotometricInterpretation() << " but JPEG says: " 
+          << cinfo.jpeg_color_space );
+        }
       break;
     case JCS_RGB:
       assert( GetPhotometricInterpretation() == PhotometricInterpretation::RGB );
       break;
     case JCS_YCbCr:
-      if( GetPhotometricInterpretation() != PhotometricInterpretation::YBR_FULL )
+      if( GetPhotometricInterpretation() != PhotometricInterpretation::YBR_FULL &&
+          GetPhotometricInterpretation() != PhotometricInterpretation::YBR_FULL_422 )
         {
         // DermaColorLossLess.dcm (lossless)
         // LEADTOOLS_FLOWERS-24-RGB-JpegLossy.dcm (lossy)

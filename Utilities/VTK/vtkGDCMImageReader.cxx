@@ -504,8 +504,11 @@ int vtkGDCMImageReader::RequestInformationCompat()
   switch( pixeltype )
     {
   case gdcm::PixelFormat::INT8:
-    //this->DataScalarType = VTK_SIGNED_CHAR; // FIXME
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+    this->DataScalarType = VTK_SIGNED_CHAR;
+#else
     this->DataScalarType = VTK_CHAR;
+#endif
     break;
   case gdcm::PixelFormat::UINT8:
     this->DataScalarType = VTK_UNSIGNED_CHAR;
