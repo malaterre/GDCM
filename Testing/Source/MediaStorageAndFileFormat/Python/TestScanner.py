@@ -48,6 +48,9 @@ def TestScan(filename, recursive = False):
     pttv.Start()
     # iterate until the end:
     while( not pttv.IsAtEnd() ):
+      # get current value for tag and associated value:
+      # if tag was not found, then it was simply not added to the internal std::map
+      # Warning value can be None
       tag = pttv.GetCurrentTag()
       value = pttv.GetCurrentValue()
       print tag,"->",value
