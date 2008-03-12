@@ -228,6 +228,7 @@ using namespace gdcm;
 //%template (MappingType)     std::map<gdcm::Tag,FilenameToValue>;
 //%template (StringArray)     std::vector<const char*>;
 %template (ValuesType)      std::set<std::string>;
+//%template (TagToValueValueType) std::pair<gdcm::Tag,const char*>;
 %include "gdcmScanner.h"
 %extend gdcm::Scanner
 {
