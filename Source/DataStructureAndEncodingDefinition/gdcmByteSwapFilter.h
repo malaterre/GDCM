@@ -28,7 +28,7 @@ class Dicts;
 class GDCM_EXPORT ByteSwapFilter
 {
 public:
-  ByteSwapFilter(DataSet& ds):DS(ds) {}
+  ByteSwapFilter(DataSet& ds):DS(ds),ByteSwapTag(false) {}
   ~ByteSwapFilter();
 
   void UseDictAlways(bool use) {}
@@ -37,9 +37,11 @@ public:
   void SetDicts(const Dicts &dicts);
 
   bool ByteSwap();
+  void SetByteSwapTag(bool b) { ByteSwapTag = b; }
 
 private:
   DataSet &DS;
+  bool ByteSwapTag;
 };
 
 } // end namespace gdcm

@@ -149,7 +149,7 @@ void LookupTable::GetLUTDescriptor(LookupTableType type, unsigned short &length,
   assert( type >= RED && type <= BLUE );
   if( Internal->Length[type] == 65536 )
     {
-    length == 0;
+    length = 0;
     }
   else
     {
@@ -279,6 +279,20 @@ bool LookupTable::GetBufferAsRGBA(unsigned char *rgba) const
     }
   else
     {
+/*
+    assert( Internal->Length[type]*(BitSample/8) == length );
+    uint16_t *uchar16 = (uint16_t*)&Internal->RGB[0];
+    const uint16_t *array16 = (uint16_t*)array;
+    for( unsigned int i = 0; i < Internal->Length[type]; ++i)
+      {
+      assert( 2*i < length );
+      assert( 2*(3*i+type) < Internal->RGB.size() );
+      uchar16[3*i+type] = array16[i];
+      std::cout << i << " -> " << array16[i] << "\n";
+      }
+
+    ret = true;
+*/
     ret = false;
     }
   return ret;

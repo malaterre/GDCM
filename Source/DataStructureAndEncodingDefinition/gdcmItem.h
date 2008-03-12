@@ -95,8 +95,6 @@ public:
     NestedDataSet = val.NestedDataSet;
     }
 
-  //void SetType(TS::NegociatedType type) { NestedDataSet.SetType(type); }
-
 template <typename TDE, typename TSwap>
 std::istream &Read(std::istream &is)
 {
@@ -145,9 +143,28 @@ std::istream &Read(std::istream &is)
       DataSet &nested = NestedDataSet;
       nested.Clear();
       assert( nested.IsEmpty() );
-      nested.template ReadNested<TDE,SwapperDoOp>(is);
-      ByteSwapFilter bsf(nested);
-      bsf.ByteSwap();
+      std::streampos start = is.tellg();
+      try
+        {
+        nested.template ReadNested<TDE,SwapperDoOp>(is);
+        ByteSwapFilter bsf(nested);
+        bsf.ByteSwap();
+        }
+      catch(...)
+        {
+        // MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm
+        // You have to byteswap the length but not the tag...sigh
+        gdcmWarningMacro( "Attempt to read nested Item without byteswapping the Value Length." );
+        start -= is.tellg();
+        assert( start < 0 );
+        is.seekg( start, std::ios::cur );
+        nested.Clear();
+        nested.template ReadNested<TDE,SwapperNoOp>(is);
+        ByteSwapFilter bsf(nested);
+        // Tag are read in big endian, need to byteswap them back...
+        bsf.SetByteSwapTag(true);
+        bsf.ByteSwap();
+        }
       }
     else /* if( ValueLengthField.IsUndefined() ) */
       {

@@ -43,6 +43,8 @@ std::istream &VR16ExplicitDataElement::Read(std::istream &is)
   assert( TagField != Tag(0xfffe,0xe0dd) );
   //assert( TagField != Tag(0xfeff,0xdde0) );
   const Tag itemDelItem(0xfffe,0xe00d);
+  const Tag itemStartItem(0xfffe,0x0000);
+  assert( TagField != itemStartItem );
   if( TagField == itemDelItem )
     {
     if( !ValueLengthField.Read<TSwap>(is) )
@@ -80,8 +82,15 @@ std::istream &VR16ExplicitDataElement::Read(std::istream &is)
     }
   catch( Exception &ex )
     {
+    VRField = VR::INVALID;
     // gdcm-MR-PHILIPS-16-Multi-Seq.dcm
-    // assert( TagField == Tag(0xfffe, 0xe000) );
+    if( TagField == Tag(0xfffe, 0xe000) )
+      {
+      gdcmWarningMacro( "Found item delimitor in item" );
+      ParseException pe;
+      pe.SetLastElement( *this );
+      throw pe;
+      }
     // -> For some reason VR is written as {44,0} well I guess this is a VR...
     // Technically there is a second bug, dcmtk assume other things when reading this tag, 
     // so I need to change this tag too, if I ever want dcmtk to read this file. oh well
@@ -90,7 +99,6 @@ std::istream &VR16ExplicitDataElement::Read(std::istream &is)
     // assert( TagField == Tag(8348,0339) || TagField == Tag(b5e8,0338))
     gdcmWarningMacro( "Assuming 16 bits VR for Tag=" <<
       TagField << " in order to read a buggy DICOM file." );
-    VRField = VR::INVALID;
     }
   // Read Value Length
   if( VR::GetLength(VRField) == 4 )

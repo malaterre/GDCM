@@ -48,6 +48,7 @@ public:
   // Tag are used as Tag class since sizeof(tag) <= sizeof(pointer)
   typedef std::map<Tag, const char*> TagToStringMap;
   typedef TagToStringMap TagToValue;
+  typedef TagToValue::value_type TagToValueValueType;
 
   // Add a tag that will need to be read
   void AddTag( Tag const & t );
@@ -83,6 +84,10 @@ public:
       }
     };
   typedef std::map<const char *,TagToValue, ltstr> MappingType;
+  typedef MappingType::const_iterator ConstIterator;
+  ConstIterator Begin() const { return Mappings.begin(); }
+  ConstIterator End() const { return Mappings.end(); }
+
   // Mappings are the mapping from a particular tag to the map, mapping filename to value:
   MappingType const & GetMappings() const { return Mappings; }
 
@@ -105,31 +110,25 @@ private:
   double Progress;
 };
 
-#if 0
-class FilenameToValueExtractor
+/*
+ * HACK: I need this temp class to be able to manipulate a std::map from python,
+ * swig does not support wrapping of simple class like std::map...
+ */
+class PythonTagToValue
 {
 public:
-  FilenameToValueExtractor(Scanner::FilenameToValue &ftv):FTV(ftv) {}
-  const char *GetValue(const char *filename) {
-    Scanner::FilenameToValue &mapping = FTV;
-    std::ostream &os = std::cout;
-    Scanner::FilenameToValue::const_iterator it = mapping.begin();
-    for( ; it != mapping.end(); ++it)
-      {
-      const char *filename = it->first;
-      const char *value = it->second;
-      os << filename << " -> " << value << "\n";
-      }
-
-    /*Scanner::FilenameToValue::const_iterator*/ it = FTV.find(filename);
-    //assert( it != FTV.end() );
-    //assert( strcmp(it->first, filename) == 0 );
-    return it->second;
-  }
+  PythonTagToValue(Scanner::TagToValue const &t2v):Internal(t2v),it(t2v.begin()) {}
+  const Scanner::TagToValueValueType& GetCurrent() const { return *it; }
+  const Tag& GetCurrentTag() const { return it->first; }
+  const char *GetCurrentValue() const { return it->second; }
+  void Start() { it = Internal.begin(); }
+  bool IsAtEnd() const { return it == Internal.end(); }
+  void Next() { ++it; }
 private:
-  Scanner::FilenameToValue & FTV;
+  const Scanner::TagToValue& Internal;
+  Scanner::TagToValue::const_iterator it;
 };
-#endif
+
 
 } // end namespace gdcm
 

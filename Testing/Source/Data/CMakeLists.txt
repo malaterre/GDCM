@@ -5,7 +5,10 @@
 
 FILE(GLOB GDCM_DATA_FILENAMES_GLOB
   "${GDCM_DATA_ROOT}/*.acr"
+  "${GDCM_DATA_ROOT}/*.nema"
   "${GDCM_DATA_ROOT}/*.dcm"
+  "${GDCM_DATA_ROOT}/*.DCM"
+  "${GDCM_DATA_ROOT}/001*"
   # Those files do not have any extension, special regex:
   "${GDCM_DATA_ROOT}/DICOMDIR*"
   "${GDCM_DATA_ROOT}/dicomdir*"
@@ -14,36 +17,17 @@ FILE(GLOB GDCM_DATA_FILENAMES_GLOB
 # List of images that are technically difficult to read
 # Hopefully we will soon be able to read them
 SET(BLACK_LIST_READER
-# Brain dead or no interest:
   EmptyPixelData.dcm # Emtpy pixel, dcmdump returns 0 ... I do not think this is the right thing to do though
   Siemens-leonardo-bugged.dcm # Nearly impossible, waste of time anyway...
-# TODO (by priority)
-  MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm
 
-# For now not supported (in ReWrite mode):
-# We are rewritting image with invalid VR what should we do ?
-  gdcm-MR-PHILIPS-16-Multi-Seq.dcm
-  PHILIPS_Intera-16-MONO2-Uncompress.dcm
-  MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.dcm
-# TODO: One cannot write VR::UN in the meta header !
-# oh well ... dicom3tools support them
-#  THERALYS-12-MONO2-Uncompressed-Even_Length_Tag.dcm
-#  GE_DLX-8-MONO2-PrivateSyntax.dcm
-  image.acr
-
-# grrrrrr do not handle swapping correctly:
-  GE_CT_With_Private_compressed-icon.dcm
-  MR_GE_with_Private_Compressed_Icon_0009_1110.dcm
-  US-RGB-8-epicard.dcm
+# grrrrrr do not handle swapping correctly (implicit dataset are such a pain)
   LIBIDO-16-ACR_NEMA-Volume.dcm
-  PrivateGEImplicitVRBigEndianTransferSyntax16Bits.dcm
 # TODO add seg lut support
   gdcm-US-ALOKA-16.dcm
   SegmentedPalette.dcm
-# Add YBR_FULL_422
-  US-GE-4AICL142.dcm
 # Add 12 bits support:
   MR-MONO2-12-angio-an1.acr
+  image.acr
 # Papyrus:
   PET-cardio-Multiframe-Papyrus.dcm
 # No way to read this image:
@@ -58,26 +42,14 @@ SET(BLACK_LIST_READER
 # Pixel Data is not weird it should be :)
   3DDCM011.dcm 
 
-
-# Temp fix
-  rle16loo.dcm
-  SIEMENS_GBS_III-16-ACR_NEMA_1.acr  # private elements are a pain
-  SIEMENS_SOMATOM-12-ACR_NEMA-ZeroLengthUs.acr # private ...
-  gdcm-MR-SIEMENS-16-2.acr # private...
-  SIEMENS_MAGNETOM-12-ACR_NEMA_2-Modern.dcm # private...
-  SIEMENS_MAGNETOM-12-MONO2-FileSeq0.dcm
-  SIEMENS_MAGNETOM-12-MONO2-FileSeq1.dcm
-  SIEMENS_MAGNETOM-12-MONO2-FileSeq2.dcm
-  SIEMENS_MAGNETOM-12-MONO2-FileSeq3.dcm
-  SIEMENS_MAGNETOM-12-MONO2-GDCM12-VRUN.dcm
-  SIEMENS_MAGNETOM-12-MONO2-Uncompressed.dcm
-  SIEMENS_MAGNETOM-12-MONO2-VRUN.dcm
-  Compress_16bit_noPVRG.dcm
-
-# RGB is skrewed ...
+# 16bits LUT...
   rle16sti.dcm
+  rle16loo.dcm
 
-D_CLUNIE_RG3_JPLY.dcm
+# Famous 12bits with value > 4096 (after jpeg decompression)
+  D_CLUNIE_RG3_JPLY.dcm
+# Same as above...
+  Compress_16bit_noPVRG.dcm
 )
 
 SET(GDCM_DATA_FILENAMES)

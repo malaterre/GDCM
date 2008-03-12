@@ -16,6 +16,7 @@
 #define __gdcmDataSet_txx
 
 #include "gdcmByteValue.h"
+#include "gdcmParseException.h"
 
 namespace gdcm
 {
@@ -68,23 +69,37 @@ namespace gdcm
     VL l = 0;
     //std::cout << "ReadWithLength Length: " << length << std::endl;
     VL locallength = length;
-    while( l != locallength && de.Read<TDE,TSwap>(is))
+    try
       {
-      //std::cout << "Nested: " << de << std::endl;
-      DES.insert( de );
-      l += de.GetLength<TDE>();
-      //std::cout << "l:" << l << std::endl;
-      //assert( !de.GetVL().IsUndefined() );
-      //std::cerr << "DEBUG: " << de.GetTag() << " "<< de.GetLength() << 
-      //  "," << de.GetVL() << "," << l << std::endl;
-      // Bug_Philips_ItemTag_3F3F
-      //  (0x2005, 0x1080): for some reason computation of length fails...
-      if( l == 70 && locallength == 63 )
+      while( l != locallength && de.Read<TDE,TSwap>(is))
         {
-        gdcmWarningMacro( "PMS: Super bad hack. Changing length" );
-        length = locallength = 140;
+        //std::cout << "Nested: " << de << std::endl;
+        DES.insert( de );
+        l += de.GetLength<TDE>();
+        //std::cout << "l:" << l << std::endl;
+        //assert( !de.GetVL().IsUndefined() );
+        //std::cerr << "DEBUG: " << de.GetTag() << " "<< de.GetLength() << 
+        //  "," << de.GetVL() << "," << l << std::endl;
+        // Bug_Philips_ItemTag_3F3F
+        //  (0x2005, 0x1080): for some reason computation of length fails...
+        if( l == 70 && locallength == 63 )
+          {
+          gdcmWarningMacro( "PMS: Super bad hack. Changing length" );
+          length = locallength = 140;
+          }
+        assert( l <= locallength );
         }
-      assert( l <= locallength );
+    }
+    catch(ParseException &pe)
+      {
+      if( pe.GetLastElement().GetTag() == Tag(0xfffe,0xe000) )
+        {
+        // gdcm-MR-PHILIPS-16-Multi-Seq.dcm
+        // Long story short, I think Philips engineer inserted 0xfffe,0x0000 instead of an item start element
+        // assert( FindDataElement( Tag(0xfffe,0x0000) ) == false );
+        is.seekg(-6, std::ios::cur );
+        length = locallength = l;
+        }
       }
     assert( l == locallength );
     return is;

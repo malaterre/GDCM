@@ -26,12 +26,12 @@
 namespace gdcm
 {
 
-  template <typename TDE, typename TSwap>
-  std::istream &ValueIO<TDE,TSwap>::Read(std::istream &is, Value& _v) {
+  template <typename TDE, typename TSwap, typename TType>
+  std::istream &ValueIO<TDE,TSwap,TType>::Read(std::istream &is, Value& _v) {
     Value* v = &_v;
     if( ByteValue *bv = dynamic_cast<ByteValue*>(v) )
     {
-      bv->template Read<TSwap>(is);
+      bv->template Read<TSwap,TType>(is);
     }
     else if( SequenceOfItems *si = dynamic_cast<SequenceOfItems*>(v) )
     {
@@ -48,12 +48,12 @@ namespace gdcm
     return is;
   }
 
-  template <typename DE, typename TSwap>
-  const std::ostream &ValueIO<DE,TSwap>::Write(std::ostream &os, const Value& _v) {
+  template <typename DE, typename TSwap, typename TType>
+  const std::ostream &ValueIO<DE,TSwap,TType>::Write(std::ostream &os, const Value& _v) {
     const Value* v = &_v;
     if( const ByteValue *bv = dynamic_cast<const ByteValue*>(v) )
     {
-	    bv->template Write<TSwap>(os);
+	    bv->template Write<TSwap,TType>(os);
     }
     else if( const SequenceOfItems *si = dynamic_cast<const SequenceOfItems*>(v) )
     {

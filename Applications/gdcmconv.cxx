@@ -234,6 +234,7 @@ int main (int argc, char *argv[])
 
   gdcm::Writer writer;
   writer.SetFileName( outfilename.c_str() );
+  writer.SetCheckFileMetaInformation( false );
   //writer.SetFile( f );
   writer.SetFile( reader.GetFile() );
   if( !writer.Write() )

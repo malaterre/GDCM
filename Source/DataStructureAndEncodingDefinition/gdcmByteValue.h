@@ -150,48 +150,40 @@ public:
     return true;
   }
 
-
-  template <typename TSwap>
+  template <typename TSwap, typename TType>
   std::istream &Read(std::istream &is) {
     // If Length is odd we have detected that in SetLength
     // and calling std::vector::resize make sure to allocate *AND* 
     // initialize values to 0 so we are sure to have a \0 at the end
     // even in this case
-#ifdef SHORT_READ_HACK
-    if( Length > 0xff )
-      {
-      is.seekg(Length, std::ios::cur);
-      }
-    else
-      {
-      is.read(&Internal[0], Length);
-      }
+    if(Length) is.read(&Internal[0], Length);
+    assert( Internal.size() == Length || Internal.size() == Length + 1 );
+    TSwap::SwapArray((TType*)&Internal[0], Internal.size() / sizeof(TType) );
     return is;
-#else
-      {
-      //is.unsetf(std::ios_base::skipws); 
-      //std::copy( std::istream_iterator<char>(is), std::istream_iterator<char>(),
-      //  std::back_inserter(Internal)) ; 
-      //std::istream_iterator<char> isi( is ), isiEOF;
-      //Internal.assign(isi, isiEOF);
-      if(Length) is.read(&Internal[0], Length);
-      assert( Internal.size() == Length || Internal.size() == Length + 1 );
+  }
+
+  template <typename TSwap>
+  std::istream &Read(std::istream &is) {
+    return Read<TSwap,uint8_t>(is);
+  }
+
+
+  template <typename TSwap, typename TType>
+  std::ostream const &Write(std::ostream &os) const {
+    assert( !(Internal.size() % 2) );
+    if( !Internal.empty() ) {
+      //os.write(&Internal[0], Internal.size());
+      std::vector<char> copy = Internal;
+      TSwap::SwapArray((TType*)&copy[0], Internal.size() / sizeof(TType) );
+      os.write(&copy[0], copy.size());
       }
-    //TSwap::SwapArray(&Internal[0], Internal.size());
-    return is;
-#endif
+    return os;
   }
 
   template <typename TSwap>
   std::ostream const &Write(std::ostream &os) const {
-#ifdef GDCM_WRITE_ODD_LENGTH
-    return os.write(&Internal[0], Length);
-#else
-    assert( !(Internal.size() % 2) );
-    if( !Internal.empty() )
-	return os.write(&Internal[0], Internal.size());
-#endif
-    }
+    return Write<TSwap,uint8_t>(os);
+  }
 
   /**
    * \brief  Checks whether a 'ByteValue' is printable or not (in order

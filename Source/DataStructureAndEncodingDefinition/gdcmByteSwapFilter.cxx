@@ -41,7 +41,7 @@ bool ByteSwapFilter::ByteSwap()
   DataSet::ConstIterator it = DS.Begin();
   for( ; it != DS.End(); ++it)
     {
-    const DataElement& de = *it; // FIXME !!!
+    const DataElement &de = *it;
     VR const & vr = de.GetVR();
     assert( vr & VR::VRASCII || vr & VR::VRBINARY );
     if( de.IsEmpty() )
@@ -61,7 +61,7 @@ bool ByteSwapFilter::ByteSwap()
         case VR::FL: 
           // FIXME: Technically FL should not be byte-swapped...
           //std::cerr << "ByteSwap FL:" << de.GetTag() << std::endl;
-          //SwapperDoOp::SwapArray((uint32_t*)bv->GetPointer(), bv->GetLength() / sizeof(uint32_t) );
+          SwapperDoOp::SwapArray((uint32_t*)bv->GetPointer(), bv->GetLength() / sizeof(uint32_t) );
           break;
         case VR::FD: 
           assert( 0 && "Should not happen" );
@@ -118,7 +118,7 @@ bool ByteSwapFilter::ByteSwap()
       }
     else if( const SequenceOfFragments *sf = de.GetSequenceOfFragments() )
       {
-          assert( 0 && "Should not happen" );
+      assert( 0 && "Should not happen" );
       }
     else
       {
@@ -126,6 +126,22 @@ bool ByteSwapFilter::ByteSwap()
       }
 
     }
+  if( ByteSwapTag )
+    {
+    DataSet copy;
+    DataSet::ConstIterator it = DS.Begin();
+    for( ; it != DS.End(); ++it)
+      {
+      DataElement de = *it;
+      const Tag& tag = de.GetTag();
+      de.SetTag(
+        Tag( SwapperDoOp::Swap( tag.GetGroup() ), SwapperDoOp::Swap( tag.GetElement() ) ) );
+      copy.Insert( de );
+      DS.Remove( de.GetTag() );
+      }
+    DS = copy;
+    }
+
   return true;
 }
 
