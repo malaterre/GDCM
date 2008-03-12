@@ -600,32 +600,20 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
   char * overlaypointer = static_cast<char*>(this->GetOutput(1)->GetScalarPointer());
 
   // Do the LUT
+  //bool modlut = reader.GetFile().GetDataSet().FindDataElement( gdcm::Tag(0x0028,0x3000) );
+  //assert( modlut );
   if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::PALETTE_COLOR )
     {
-    // BUG: the following is volonterarily complex, technically one would want to directly
-    // write into vtklut->GetPointer(0), unfortunately this does not produce the correct result
-    // instead create the internal vtkUCArray ourself and pass it back to the vtkLUT...
     // SOLVED: GetPointer(0) is skrew up, need to replace it with WritePointer(0,4) ...
     const gdcm::LookupTable &lut = image.GetLUT();
     vtkLookupTable *vtklut = vtkLookupTable::New();
-//#define USE_LUT_HACK
-#ifdef USE_LUT_HACK
-    vtkUnsignedCharArray *uc = vtkUnsignedCharArray::New();
-    uc->SetNumberOfComponents( 4 );
-    uc->SetNumberOfTuples( 256 );
-    if( !lut.GetBufferAsRGBA( uc->GetPointer(0) ) )
-#else
     vtklut->SetNumberOfTableValues(256);
     if( !lut.GetBufferAsRGBA( vtklut->WritePointer(0,4) ) )
-#endif
       {
+      vtkWarningMacro( "Could not get values from LUT" );
       return 0;
       }
     vtklut->SetRange(0,255);
-#ifdef USE_LUT_HACK
-    vtklut->SetTable( uc );
-    uc->Delete();
-#endif
     data->GetPointData()->GetScalars()->SetLookupTable( vtklut );
     vtklut->Delete();
     }

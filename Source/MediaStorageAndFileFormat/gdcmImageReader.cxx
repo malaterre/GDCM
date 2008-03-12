@@ -500,10 +500,21 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   PixelData.SetPhotometricInterpretation( pi );
 
   // Do the Palette Color:
+  bool modlut = ds.FindDataElement(Tag(0x0028,0x3000) );
+  if( modlut )
+    {
+    gdcmWarningMacro( "Modality LUT (0028,3000) are not handled. Image will not be displayed properly" );
+    }
   if ( pi == PhotometricInterpretation::PALETTE_COLOR )
     {
+    //const DataElement& modlutsq = ds.GetDataElement( Tag(0x0028,0x3000) );
+    //const SequenceOfItems* sq = modlutsq.GetSequenceOfItems();
+    //SequenceOfItems::ConstIterator it = sq->Begin();
+    //const DataSet &ds = it->GetNestedDataSet();
+
     SmartPointer<LookupTable> lut = new LookupTable;
     lut->Allocate( pf.GetBitsAllocated() );
+
     // for each red, green, blue:
     for(int i=0; i<3; ++i)
       {
@@ -511,26 +522,18 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
       // (0028,1102) US 0\0\16
       // (0028,1103) US 0\0\16
       const Tag tdescriptor(0x0028, (0x1101 + i));
-      //const ByteValue &descriptor = GetPointerFromElement( tdescriptor );
-      // Element<VR::US,VM::VM3> el_us3;
-      // assert( descriptor->GetLength() == 6 );
-      // std::string descriptor_str(
-      //   descriptor->GetPointer(),
-      //   descriptor->GetLength() );
-      // ss.clear();
-      // ss.str( descriptor_str );
-      // el_us3.Read( ss );
+      //const Tag tdescriptor(0x0028, 0x3002);
       Element<VR::US,VM::VM3> el_us3;
       // Now pass the byte array to a DICOMizer:
       el_us3.Set( ds[tdescriptor].GetValue() );
       lut->InitializeLUT( LookupTable::LookupTableType(i),
         el_us3[0], el_us3[1], el_us3[2] );
-      //el_us3.Print( std::cerr << std::endl );
 
       // (0028,1201) OW 
       // (0028,1202) OW
       // (0028,1203) OW 
       const Tag tlut(0x0028, (0x1201 + i));
+      //const Tag tlut(0x0028, 0x3006);
       
       // Segmented LUT
       // (0028,1221) OW 
@@ -539,11 +542,8 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
       const Tag seglut(0x0028, (0x1221 + i));
       if( ds.FindDataElement( tlut ) )
         {
-        const ByteValue *lut_raw = GetPointerFromElement( tlut );
-        //std::string descriptor_str(
-        //  descriptor_str->GetPointer(),
-        //  descriptor_str->GetLength() );
-        //std::cerr << descriptor_str << std::endl;
+        const ByteValue *lut_raw = ds.GetDataElement( tlut ).GetByteValue();
+        assert( lut_raw );
         // LookupTableType::RED == 0
         lut->SetLUT( LookupTable::LookupTableType(i),
           (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
