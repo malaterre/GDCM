@@ -16,17 +16,25 @@
 import gdcm
 import os,sys
 
-def TestScan(filename, recursive = False):
+def TestScan(dirname, recursive = False):
+  # Check the dirname is indeed a directory
+  system = gdcm.System()
+  if not system.FileIsDirectory(dirname):
+    print "Need a directory"
+    sys.exit(1)
+
+  # Retrieve all the files within that dir (recursively?)
   d = gdcm.Directory()
-  nfiles = d.Load( filename, recursive )
-  print d
-  print "done retrieving file list"
+  nfiles = d.Load( dirname, recursive )
+  print "done retrieving all the",nfiles,"files"
   
   s = gdcm.Scanner()
-  t1 = gdcm.Tag(0x0020,0x000d)
-  t2 = gdcm.Tag(0x0020,0x000e)
+  t1 = gdcm.Tag(0x0020,0x000d) # VR::UI
+  t2 = gdcm.Tag(0x0020,0x000e) # VR::UI
+  t3 = gdcm.Tag(0x0028,0x0011) # VR::US
   s.AddTag( t1 )
   s.AddTag( t2 )
+  s.AddTag( t3 )
   b = s.Scan( d.GetFilenames() )
   if not b:
     print "Scanner failed";
@@ -37,6 +45,7 @@ def TestScan(filename, recursive = False):
   print "Values found for all tags are:"
   print values
 
+  # get the main super-map :
   mappings = s.GetMappings()
   
   # For each file get the value for tag t1:
@@ -59,13 +68,13 @@ def TestScan(filename, recursive = False):
   
 if __name__ == "__main__":
   try:
-    filename = os.sys.argv[1]
+    dirname = os.sys.argv[1]
     recursive = True
   except:
     t = gdcm.Testing()
-    filename = t.GetDataRoot()
+    dirname = t.GetDataRoot()
     recursive = False
-  TestScan( filename, recursive)
+  TestScan( dirname, recursive)
   
   sys.exit(0)
 
