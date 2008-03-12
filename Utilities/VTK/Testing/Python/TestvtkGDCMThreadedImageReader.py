@@ -81,7 +81,8 @@ if __name__ == "__main__":
   dir = gdcm.Directory()
   
   # Did user pass in a directory:
-  if dir.IsDirectory( filename ):
+  system = gdcm.System()
+  if system.FileIsDirectory( filename ):
     nfiles = dir.Load( filename )
     files = dir.GetFilenames()
     # Need to construct full path out of the simple filename
