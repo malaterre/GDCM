@@ -27,10 +27,9 @@ def PrintProgress(object, event):
 
 # Helper function to extract image dimension and type
 # this info could also be coming from a database for example instead of read from a particular file
-def ExecuteInformation(reader, filenames):
+def ExecuteInformation(reader, filename, dimz = 1):
   import gdcm
-  assert filenames.GetNumberOfValues() # Need at least one file
-  reffile = filenames.GetValue(0) # Take first image as reference
+  reffile = filename # filenames.GetValue(0) # Take first image as reference
   #print reader
   r = gdcm.ImageReader()
   r.SetFileName( reffile )
@@ -42,7 +41,7 @@ def ExecuteInformation(reader, filenames):
   dims = [0,0,0]
   dims[0] = image.GetDimension(0)
   dims[1] = image.GetDimension(1)
-  dims[2] = filenames.GetNumberOfValues()
+  dims[2] = dimz # filenames.GetNumberOfValues()
   #print dims
   #print image.GetPixelFormat().GetTPixelFormat()
   pixelformat = image.GetPixelFormat().GetScalarType()
@@ -90,7 +89,8 @@ if __name__ == "__main__":
     for file in files:
       fullpath.InsertNextValue( file )
     r.SetFileNames( fullpath )
-    ExecuteInformation(r, fullpath)
+    assert fullpath.GetNumberOfValues() # Need at least one file
+    ExecuteInformation(r, fullpath.GetValue(0), fullpath.GetNumberOfValues() )
     #r.AddObserver("ProgressEvent", PrintProgress)
     r.Update()
     print r.GetOutput()
@@ -102,7 +102,11 @@ if __name__ == "__main__":
     #writer.Write()
   else:
     # TODO
-    sys.exit(1)
+    r.SetFileName( filename )
+    ExecuteInformation(r, filename )
+    r.Update()
+    print r.GetOutput()
+    #sys.exit(1)
   
   
   # Test succeed ?
