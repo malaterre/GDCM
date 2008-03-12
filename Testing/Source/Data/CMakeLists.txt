@@ -5,7 +5,10 @@
 
 FILE(GLOB GDCM_DATA_FILENAMES_GLOB
   "${GDCM_DATA_ROOT}/*.acr"
+  "${GDCM_DATA_ROOT}/*.nema"
   "${GDCM_DATA_ROOT}/*.dcm"
+  "${GDCM_DATA_ROOT}/*.DCM"
+  "${GDCM_DATA_ROOT}/001*"
   # Those files do not have any extension, special regex:
   "${GDCM_DATA_ROOT}/DICOMDIR*"
   "${GDCM_DATA_ROOT}/dicomdir*"
@@ -14,10 +17,8 @@ FILE(GLOB GDCM_DATA_FILENAMES_GLOB
 # List of images that are technically difficult to read
 # Hopefully we will soon be able to read them
 SET(BLACK_LIST_READER
-# Brain dead or no interest:
   EmptyPixelData.dcm # Emtpy pixel, dcmdump returns 0 ... I do not think this is the right thing to do though
   Siemens-leonardo-bugged.dcm # Nearly impossible, waste of time anyway...
-# TODO (by priority)
 
 # grrrrrr do not handle swapping correctly (implicit dataset are such a pain)
   LIBIDO-16-ACR_NEMA-Volume.dcm
@@ -41,16 +42,14 @@ SET(BLACK_LIST_READER
 # Pixel Data is not weird it should be :)
   3DDCM011.dcm 
 
-
-# Temp fix
-  rle16loo.dcm
-  Compress_16bit_noPVRG.dcm
-
-# RGB is skrewed ...
+# 16bits LUT...
   rle16sti.dcm
+  rle16loo.dcm
 
 # Famous 12bits with value > 4096 (after jpeg decompression)
   D_CLUNIE_RG3_JPLY.dcm
+# Same as above...
+  Compress_16bit_noPVRG.dcm
 )
 
 SET(GDCM_DATA_FILENAMES)
