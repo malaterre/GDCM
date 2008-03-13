@@ -231,7 +231,6 @@ void vtkGDCMImageWriter::Write()
   input->GetWholeExtent(this->DataUpdateExtent);
 
   // For both case (2d file or 3d file) we need a common uid for the Series/Study:
-  
   gdcm::UIDGenerator uidgen;
   const char *uid = uidgen.Generate();
   this->SetUID(uid);
@@ -293,6 +292,11 @@ void vtkGDCMImageWriter::Write()
 //    return;
 //    }
   
+  // For both case (2d file or 3d file) we need a common uid for the Series/Study:
+  gdcm::UIDGenerator uidgen;
+  const char *uid = uidgen.Generate();
+  this->SetUID(uid);
+
   // Make sure the file name is allocated
   this->InternalFileName =  0;
 //    new char[(this->FileName ? strlen(this->FileName) : 1) +

@@ -27,7 +27,7 @@
 int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
 {
   vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
-  //reader->CanReadFile( filename );
+  //int canread = reader->CanReadFile( filename );
   if( verbose )
     std::cerr << "Reading : " << filename << std::endl;
   reader->SetFileName( filename );
