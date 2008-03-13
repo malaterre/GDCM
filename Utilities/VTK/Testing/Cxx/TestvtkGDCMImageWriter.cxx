@@ -22,8 +22,9 @@
 #include "gdcmTesting.h"
 #include "gdcmFilename.h"
 #include "gdcmSystem.h"
+#include "gdcmImageReader.h"
 
-int TestvtkGDCMImageWrite(const char *filename, bool verbose)
+int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
 {
   vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
   //reader->CanReadFile( filename );
@@ -59,9 +60,9 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose)
   writer->Delete();
 
   // Need to check we can still read this image back:
-  gdcm::ImageReader reader;
-  reader.SetFileName( gdcmfile.c_str() );
-  if( !reader.Read() )
+  gdcm::ImageReader r;
+  r.SetFileName( gdcmfile.c_str() );
+  if( !r.Read() )
     {
     return 1;
     }
@@ -74,7 +75,7 @@ int TestvtkGDCMImageWriter(int argc, char *argv[])
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestvtkGDCMImageWrite(filename);
+    return TestvtkGDCMImageWrite(filename, true);
     }
 
   // else
