@@ -54,7 +54,7 @@ public:
   void PrintASCII(std::ostream &os, VL maxlength ) const {
     VL length = std::min(maxlength, Length);
     // Special case for VR::UI, do not print the trailing \0
-    if( length == Length )
+    if( length && length == Length )
       {
       if( *Internal.rbegin() == 0 )
         {
