@@ -64,6 +64,7 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
   r.SetFileName( gdcmfile.c_str() );
   if( !r.Read() )
     {
+    std::cerr << "failed to read back:" << gdcmfile << std::endl;
     return 1;
     }
 

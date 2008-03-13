@@ -362,7 +362,7 @@ void SetStringValueFromTag(const char *s, const gdcm::Tag& t, gdcm::DataSet& ds)
 //----------------------------------------------------------------------------
 int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 {
-  std::cerr << "Calling WriteGDCMData" << std::endl;
+  //std::cerr << "Calling WriteGDCMData" << std::endl;
   assert( timeStep >= 0 );
   int inWholeExt[6];
   data->GetWholeExtent(inWholeExt);
@@ -374,7 +374,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   //data->Update();
   //data->Print( std::cout );
   //const char * filename = this->GetFileName();
-  std::cerr << data->GetDataDimension() << std::endl;
+  //std::cerr << data->GetDataDimension() << std::endl;
 
   gdcm::ImageWriter writer;
   //writer.SetImage( image );
@@ -462,8 +462,8 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   int *dext = data->GetExtent();
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
   int j = dext[4];
-  std::cerr << "dext[4]:" << j << std::endl;
-  std::cerr << "inExt[4]:" << inExt[4] << std::endl;
+  //std::cerr << "dext[4]:" << j << std::endl;
+  //std::cerr << "inExt[4]:" << inExt[4] << std::endl;
   if( dims[2] > 1 && this->FileDimensionality == 3 )
     {
     for(int j = dext[4]; j <= dext[5]; ++j)
@@ -498,7 +498,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   //const gdcm::ByteValue *bv1 = dynamic_cast<const gdcm::ByteValue*>(&v);
   const gdcm::ByteValue *bv1 = pixeldata2.GetByteValue();
   assert( bv1 && bv1 == bv );
-  image.Print( std::cerr );
+  //image.Print( std::cerr );
 // END DEBUG
 
 
