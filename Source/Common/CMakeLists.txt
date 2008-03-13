@@ -38,6 +38,7 @@ INCLUDE_DIRECTORIES(
 
 
 SET(Common_SRCS
+  gdcmVersion.cxx
   gdcmObject.cxx
   gdcmTesting.cxx
   gdcmDirectory.cxx
