@@ -13,9 +13,7 @@
 
 =========================================================================*/
 #include "vtkGDCMImageReader.h"
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #include "vtkMedicalImageProperties.h"
-#endif
 
 #include "vtkPNGWriter.h"
 #include "vtkImageData.h"
@@ -25,7 +23,7 @@
 #include "gdcmTesting.h"
 #include "gdcmSystem.h"
 
-int TestvtkGDCMImageRead(const char *filename)
+int TestvtkGDCMImageRead(const char *filename, bool verbose)
 {
   vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
   //reader->CanReadFile( filename );
@@ -34,32 +32,34 @@ int TestvtkGDCMImageRead(const char *filename)
   reader->Update();
 
   reader->GetOutput()->Print( cout );
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
-  reader->GetMedicalImageProperties()->Print( cout );
-#endif
+  if( verbose ) reader->GetMedicalImageProperties()->Print( cout );
 
-  // Create directory first:
-  const char subdir[] = "TestvtkGDCMImageReader";
-  std::string tmpdir = gdcm::Testing::GetTempDirectory( subdir );
-  if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
+  if( verbose )
     {
-    gdcm::System::MakeDirectory( tmpdir.c_str() );
-    //return 1;
-    }
-  std::string pngfile = gdcm::Testing::GetTempFilename( filename, subdir );
+    // Create directory first:
+    const char subdir[] = "TestvtkGDCMImageReader";
+    std::string tmpdir = gdcm::Testing::GetTempDirectory( subdir );
+    if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
+      {
+      gdcm::System::MakeDirectory( tmpdir.c_str() );
+      //return 1;
+      }
+    std::string pngfile = gdcm::Testing::GetTempFilename( filename, subdir );
 
-  vtkPNGWriter *writer = vtkPNGWriter::New();
+    vtkPNGWriter *writer = vtkPNGWriter::New();
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
-  writer->SetInputConnection( reader->GetOutputPort() );
+    writer->SetInputConnection( reader->GetOutputPort() );
 #else
-  writer->SetInput( reader->GetOutput() );
+    writer->SetInput( reader->GetOutput() );
 #endif
-  pngfile += ".png";
-  writer->SetFileName( pngfile.c_str() );
-  writer->Write();
+    pngfile += ".png";
+    writer->SetFileName( pngfile.c_str() );
+    writer->Write();
+    writer->Delete();
+    cout << "Wrote PNG output into:" << pngfile << std::endl;
+    }
 
   reader->Delete();
-  writer->Delete();
   return 0; 
 }
 
@@ -68,7 +68,7 @@ int TestvtkGDCMImageReader(int argc, char *argv[])
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestvtkGDCMImageRead(filename);
+    return TestvtkGDCMImageRead(filename, true);
     }
 
   // else
@@ -77,7 +77,7 @@ int TestvtkGDCMImageReader(int argc, char *argv[])
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
     {
-    r += TestvtkGDCMImageRead( filename );
+    r += TestvtkGDCMImageRead( filename, false );
     ++i;
     }
 
