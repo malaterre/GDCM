@@ -53,6 +53,9 @@ SET(BLACK_LIST_READER
   D_CLUNIE_RG3_JPLY.dcm
 # Same as above...
   Compress_16bit_noPVRG.dcm
+
+# quick fix:
+  tst_not.dcm
 )
 
 SET(GDCM_DATA_FILENAMES)
