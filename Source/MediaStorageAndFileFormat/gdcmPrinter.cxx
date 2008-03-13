@@ -681,12 +681,9 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
       const ByteValue *bv = de.GetByteValue();
       if( bv )
         {
-        std::string dummy( bv->GetPointer(), bv->GetLength() );
-        VL length = std::min( dummy.size(), strlen( dummy.c_str() ) );
-        VL l = std::min( length /*bv->GetLength()*/, MaxPrintLength );
+        VL l = std::min( bv->GetLength(), MaxPrintLength );
         os << "[";
-        if( bv->IsPrintable(l) ) bv->PrintASCII(os,l);
-        else os << GDCM_TERMINAL_VT100_INVERSE << "(non-printable character found)" << GDCM_TERMINAL_VT100_NORMAL;
+        bv->PrintASCII(os,l);
         os << "]";
         }
       else

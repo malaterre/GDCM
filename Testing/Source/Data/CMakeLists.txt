@@ -39,7 +39,7 @@ SET(BLACK_LIST_READER
 # TS is skrewed up, and the whole dataset is a pain to read...
 # I do not even believe there is a pattern
   WeirdToshibaTS.dcm
-# Pixel Data is not weird it should be :)
+# Pixel Data is not were it should be :)
   3DDCM011.dcm 
 
 # 16bits LUT...
