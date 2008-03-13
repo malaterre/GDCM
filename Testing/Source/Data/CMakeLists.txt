@@ -46,6 +46,9 @@ SET(BLACK_LIST_READER
   rle16sti.dcm
   rle16loo.dcm
 
+# Overlay Data in Unused bit are not passed in TestImageWriter:
+  SIEMENS_GBS_III-16-ACR_NEMA_1.acr
+
 # Famous 12bits with value > 4096 (after jpeg decompression)
   D_CLUNIE_RG3_JPLY.dcm
 # Same as above...
