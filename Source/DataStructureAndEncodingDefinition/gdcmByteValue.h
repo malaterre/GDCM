@@ -53,6 +53,14 @@ public:
   // Either the VR: eg LO (private tag)
   void PrintASCII(std::ostream &os, VL maxlength ) const {
     VL length = std::min(maxlength, Length);
+    // Special case for VR::UI, do not print the trailing \0
+    if( length == Length )
+      {
+      if( *Internal.rbegin() == 0 )
+        {
+        length = length - 1;
+        }
+      }
     // I cannot check IsPrintable some file contains \2 or \0 in a VR::LO element
     // See: acr_image_with_non_printable_in_0051_1010.acr 
     //assert( IsPrintable(length) );
