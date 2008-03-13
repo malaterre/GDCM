@@ -219,6 +219,8 @@ void DoIconImage(const DataSet& rootds, ImageValue& image)
     {
     const DataElement &iconimagesq = rootds.GetDataElement( ticonimage );
     const SequenceOfItems* sq = iconimagesq.GetSequenceOfItems();
+    // Is SQ empty ?
+    if( !sq ) return;
     SequenceOfItems::ConstIterator it = sq->Begin();
     const DataSet &ds = it->GetNestedDataSet();
 
