@@ -221,14 +221,15 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   // if overlays are found:
   if( reader->GetNumberOfOverlays() )
     {
-    viewer->AddInputConnection ( reader->GetOutputPort(1) );
+    // Add first overlay:
+    // WARNING: gdcmviewer2 only !
+    viewer->AddInputConnection ( reader->GetOverlayPort(0) );
     }
 #else
   viewer->SetInput( reader->GetOutput(0) );
-  //viewer->GetRenderer()->SetLayer(1);
   if( reader->GetNumberOfOverlays() )
     {
-    viewer->AddInput( reader->GetOutput(1) );
+    viewer->AddInput( reader->GetOverlay(0) );
     }
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 

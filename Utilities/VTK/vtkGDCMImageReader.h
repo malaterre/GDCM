@@ -100,6 +100,13 @@ public:
   vtkGetMacro(NumberOfOverlays,int);
   //vtkSetMacro(NumberOfOverlays,int);
 
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+//BTX
+  vtkAlgorithmOutput* GetOverlayPort(int index);
+//ETX
+#endif
+  vtkImageData* GetOverlay(int i);
+
 protected:
   vtkGDCMImageReader();
   ~vtkGDCMImageReader();

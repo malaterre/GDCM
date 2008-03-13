@@ -780,6 +780,23 @@ int vtkGDCMImageReader::RequestDataCompat()
   return 1;
 }
 
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+vtkAlgorithmOutput* vtkGDCMImageReader::GetOverlayPort(int index)
+{
+  if( index >= 0 && index < this->NumberOfOverlays)
+    return this->GetOutputPort(index+1);
+  return NULL;
+}
+#endif
+
+//----------------------------------------------------------------------------
+vtkImageData* vtkGDCMImageReader::GetOverlay(int i)
+{
+  if( i >= 0 && i < this->NumberOfOverlays)
+    return this->GetOutput(i+1);
+  return NULL;
+}
+
 //----------------------------------------------------------------------------
 void vtkGDCMImageReader::PrintSelf(ostream& os, vtkIndent indent)
 {
