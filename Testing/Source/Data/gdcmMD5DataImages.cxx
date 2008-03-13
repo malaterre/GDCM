@@ -250,6 +250,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "f69bca6228b0ca07d97ee11c0ab3b989" , "MR_Philips_Intera_PrivateSequenceImplicitVR.dcm" },
 /* gdcm 1024 1024 1 16 1 */
 { "0b4dff77726ccf037fa83c42cc186a98" , "MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.dcm" },
+/* ?? */
+{ "7775ffdd374994b7dd029f45f198844f" , "MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm" },
 /* gdcm 484 484 1 8 1 */
 { "8b636107a6d8e6a6b3d1d7eed966d7a0" , "MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm" },
 /* gdcm 484 484 1 16 1 */
