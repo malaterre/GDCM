@@ -246,7 +246,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     }
 
   // In case of palette color, let's tell VTK to map color:
-  if( reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable() )
+  if( reader->GetOutput()->GetPointData()->GetScalars() && reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable() )
     {
     //convert to color:
     vtkImageMapToColors *map = vtkImageMapToColors::New ();
