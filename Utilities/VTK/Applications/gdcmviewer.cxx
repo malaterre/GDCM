@@ -233,6 +233,18 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     }
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
+  // IconImage:
+  if( reader->GetNumberOfIconImages() )
+    {
+    std::cerr << "NumberOfIconImages:" << reader->GetNumberOfIconImages() << std::endl;
+    reader->GetIconImage()->Print( std::cerr );
+    vtkPNGWriter *writer = vtkPNGWriter::New();
+    writer->SetInput( reader->GetIconImage() );
+    writer->SetFileName( "icon.png" );
+    //writer->Write();
+    writer->Delete();
+    }
+
   // In case of palette color, let's tell VTK to map color:
   if( reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable() )
     {

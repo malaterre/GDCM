@@ -38,10 +38,19 @@
 vtkCxxRevisionMacro(vtkGDCMThreadedImageReader, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMThreadedImageReader)
 
+// Output Ports are as follow:
+// #0: The image/volume (root PixelData element)
+// #1: (if present): the Icon Image (0088,0200)
+// #2-xx: (if present): the Overlay (60xx,3000)
+
+#define IconImagePortNumber 1
+#define OverlayPortNumber   2
+
 vtkGDCMThreadedImageReader::vtkGDCMThreadedImageReader()
 {
   this->Shift = 0.;
   this->Scale = 1.;
+  this->LoadIconImage = 0;
 }
 
 vtkGDCMThreadedImageReader::~vtkGDCMThreadedImageReader()
@@ -58,6 +67,10 @@ void vtkGDCMThreadedImageReader::ExecuteInformation()
     {
     vtkErrorMacro( "You need to set the FileLowerLeft flag to On" );
     }
+  if( this->LoadIconImage )
+    {
+    vtkErrorMacro( "Icon are not supported" );
+    }
   //int * updateExtent = this->Outputs[0]->GetUpdateExtent();
   //std::cout << "UpdateExtent:" << updateExtent[4] << " " << updateExtent[5] << std::endl;
 
@@ -65,12 +78,17 @@ void vtkGDCMThreadedImageReader::ExecuteInformation()
   output->SetUpdateExtentToWholeExtent(); // pipeline is not reexecuting properly without that...
 
   int numvol = 1;
+  if( this->LoadIconImage)
+    {
+    numvol = 2;
+    }
   if( this->LoadOverlays )
     {
     this->NumberOfOverlays = 1;
-    ++numvol;
-    this->SetNumberOfOutputs(numvol);
+    numvol = 3;
     }
+  this->SetNumberOfOutputs(numvol);
+  assert( numvol == 1 || numvol == 3 );
 
   // vtkImageReader2::ExecuteInformation only allocate first output
   this->vtkImageReader2::ExecuteInformation();
@@ -84,13 +102,33 @@ void vtkGDCMThreadedImageReader::ExecuteInformation()
       img->Delete();
       }
     vtkImageData *output = this->GetOutput(i);
+    switch(i)
+      {
+    case 0:
+      output->SetWholeExtent(this->DataExtent);
+      output->SetSpacing(this->DataSpacing);
+      output->SetOrigin(this->DataOrigin);
 
-    output->SetWholeExtent(this->DataExtent);
-    output->SetSpacing(this->DataSpacing);
-    output->SetOrigin(this->DataOrigin);
-
-    output->SetScalarType(this->DataScalarType);
-    output->SetNumberOfScalarComponents(this->NumberOfScalarComponents);
+      output->SetScalarType(this->DataScalarType);
+      output->SetNumberOfScalarComponents(this->NumberOfScalarComponents);
+      break;
+    case IconImagePortNumber:
+      output->SetWholeExtent(this->IconImageDataExtent);
+      output->SetScalarType( VTK_UNSIGNED_CHAR );
+      output->SetNumberOfScalarComponents( 1 );
+      break;
+    //case OverlayPortNumber:
+    default:
+      output->SetWholeExtent(this->DataExtent[0],this->DataExtent[1],
+        this->DataExtent[2],this->DataExtent[3],
+        0,0
+      );
+      //output->SetSpacing(this->DataSpacing);
+      //output->SetOrigin(this->DataOrigin);
+      output->SetScalarType(VTK_UNSIGNED_CHAR);
+      output->SetNumberOfScalarComponents(1);
+      break;
+      }
     }
 }
 
@@ -103,9 +141,20 @@ void vtkGDCMThreadedImageReader::ExecuteData(vtkDataObject *output)
   res->SetExtent(res->GetUpdateExtent());
   res->AllocateScalars();
 
+  if( this->LoadIconImage )
+    {
+/*
+    vtkImageData *res = vtkImageData::SafeDownCast(this->Outputs[IconImagePortNumber]);
+    res->SetUpdateExtentToWholeExtent();
+
+    res->SetExtent(res->GetUpdateExtent());
+    res->AllocateScalars();
+*/
+    vtkErrorMacro( "IconImage are not supported" );
+    }
   if( this->LoadOverlays )
     {
-    vtkImageData *res = vtkImageData::SafeDownCast(this->Outputs[1]);
+    vtkImageData *res = vtkImageData::SafeDownCast(this->Outputs[OverlayPortNumber]);
     res->SetUpdateExtentToWholeExtent();
 
     res->SetExtent(res->GetUpdateExtent());
@@ -136,6 +185,13 @@ int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
     return 0;
     }
 
+  // This reader only implement case where image is flipped upside down
+  if( !this->FileLowerLeft )
+    {
+    vtkErrorMacro( "You need to set the FileLowerLeft flag to On" );
+    return 0;
+    }
+
   if( this->FileNames )
     {
     int zmin = 0;
@@ -150,11 +206,17 @@ int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
   // Cannot deduce anything else otherwise...
 
   int numvol = 1;
+  if( this->LoadIconImage )
+    {
+    numvol = 2;
+    return 0;
+    }
   if( this->LoadOverlays )
     {
     this->NumberOfOverlays = 1;
-    ++numvol;
+    numvol = 3;
     }
+  assert( numvol == 1 || numvol == 3 );
   this->SetNumberOfOutputPorts(numvol);
   // For each output:
   for(int i = 0; i < numvol; ++i)
@@ -167,24 +229,36 @@ int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
       img->Delete();
       }
     vtkInformation *outInfo = outputVector->GetInformationObject(i);
-    outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), DataExtent, 6);
-    //outInfo->Set(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), DataExtent, 6);
+    switch(i)
+      {
+    // root Pixel Data
+    case 0:
+      outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), this->DataExtent, 6);
+      //outInfo->Set(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), this->DataExtent, 6);
+      outInfo->Set(vtkDataObject::SPACING(), this->DataSpacing, 3);
+      outInfo->Set(vtkDataObject::ORIGIN(), this->DataOrigin, 3);
+      vtkDataObject::SetPointDataActiveScalarInfo(outInfo, this->DataScalarType, this->NumberOfScalarComponents);
+      break;
+    // Icon Image
+    case IconImagePortNumber:
+      outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), this->IconImageDataExtent, 6);
+      vtkDataObject::SetPointDataActiveScalarInfo(outInfo, VTK_UNSIGNED_CHAR, 1);
+      break;
+    // Overlays:
+    //case OverlayPortNumber:
+    default:
+      outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), 
+        this->DataExtent[0], this->DataExtent[1], 
+        this->DataExtent[2], this->DataExtent[3],
+        0,0 );
+      vtkDataObject::SetPointDataActiveScalarInfo(outInfo, VTK_UNSIGNED_CHAR, 1);
+      break;
+      }
 
-    outInfo->Set(vtkDataObject::SPACING(), this->DataSpacing, 3);
-    outInfo->Set(vtkDataObject::ORIGIN(), this->DataOrigin, 3);
-
-    vtkDataObject::SetPointDataActiveScalarInfo(outInfo, this->DataScalarType, this->NumberOfScalarComponents);
     }
 
   // Ok let's fill in the 'extra' info:
   //FillMedicalImageInformation(reader);
-
-  // This reader only implement case where image is flipped upside down
-  if( !this->FileLowerLeft )
-    {
-    vtkErrorMacro( "You need to set the FileLowerLeft flag to On" );
-    return 0;
-    }
 
   return 1;
 }
@@ -324,7 +398,7 @@ void vtkGDCMThreadedImageReader::ReadFiles(unsigned int nfiles, const char *file
   const unsigned long overlaylen = output->GetNumberOfPoints() / nfiles;
   char * scalarpointer = static_cast<char*>(output->GetScalarPointer());
   // overlay data:
-  vtkImageData *overlayoutput = this->GetOutput(1);
+  vtkImageData *overlayoutput = this->GetOutput(OverlayPortNumber);
   overlayoutput->SetScalarTypeToUnsignedChar();
   overlayoutput->AllocateScalars();
   unsigned char * overlayscalarpointer = static_cast<unsigned char*>(overlayoutput->GetScalarPointer());
@@ -411,8 +485,8 @@ int vtkGDCMThreadedImageReader::RequestData(vtkInformation *vtkNotUsed(request),
   // Make sure the output dimension is OK, and allocate its scalars
 
   for(int i = 0; i < this->GetNumberOfOutputPorts(); ++i)
-  {
-  // Copy/paste from vtkImageAlgorithm::AllocateScalars. Cf. "this needs to be fixed -Ken"
+    {
+    // Copy/paste from vtkImageAlgorithm::AllocateScalars. Cf. "this needs to be fixed -Ken"
     vtkStreamingDemandDrivenPipeline *sddp = 
       vtkStreamingDemandDrivenPipeline::SafeDownCast(this->GetExecutive());
     if (sddp)
@@ -422,7 +496,7 @@ int vtkGDCMThreadedImageReader::RequestData(vtkInformation *vtkNotUsed(request),
       this->GetOutput(i)->SetExtent(extent);
       }
     this->GetOutput(i)->AllocateScalars();
-  }
+    }
 
   RequestDataCompat();
 

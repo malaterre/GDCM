@@ -40,6 +40,14 @@
 vtkCxxRevisionMacro(vtkGDCMImageReader, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMImageReader)
 
+// Output Ports are as follow:
+// #0: The image/volume (root PixelData element)
+// #1: (if present): the Icon Image (0088,0200)
+// #2-xx: (if present): the Overlay (60xx,3000)
+
+#define IconImagePortNumber 1
+#define OverlayPortNumber   2
+
 vtkGDCMImageReader::vtkGDCMImageReader()
 {
   // vtkDataArray has an internal vtkLookupTable why not used it ?
@@ -61,7 +69,10 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   this->FileNames = NULL; //vtkStringArray::New();
 #endif
   this->LoadOverlays = 1;
+  this->LoadIconImage = 1;
   this->NumberOfOverlays = 0;
+  this->NumberOfIconImages = 0;
+  memset(this->IconImageDataExtent,0,6*sizeof(int));
 }
 
 vtkGDCMImageReader::~vtkGDCMImageReader()
@@ -83,7 +94,6 @@ vtkGDCMImageReader::~vtkGDCMImageReader()
 
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
 #else
-//vtkCxxSetObjectMacro(vtkGDCMImageReader,FileNames,vtkStringArray);
 void vtkGDCMImageReader::SetFileNames(vtkStringArray *filenames)
 {
   if (filenames == this->FileNames)
@@ -133,11 +143,16 @@ void vtkGDCMImageReader::ExecuteInformation()
   RequestInformationCompat();
 
   int numvol = 1;
+  if( this->LoadIconImage )
+    {
+    numvol = 2;
+    }
   if( this->LoadOverlays )
     {
-    ++numvol;
-    this->SetNumberOfOutputs(numvol);
+    // If not icon found, we still need to be associated to port #2:
+    numvol = 3;
     }
+  this->SetNumberOfOutputs(numvol);
 
   // vtkImageReader2::ExecuteInformation only allocate first output
   this->vtkImageReader2::ExecuteInformation();
@@ -151,13 +166,34 @@ void vtkGDCMImageReader::ExecuteInformation()
       img->Delete();
       }
     vtkImageData *output = this->GetOutput(i);
+    switch(i)
+      {
+    case 0:
+      output->SetWholeExtent(this->DataExtent);
+      output->SetSpacing(this->DataSpacing);
+      output->SetOrigin(this->DataOrigin);
 
-    output->SetWholeExtent(this->DataExtent);
-    output->SetSpacing(this->DataSpacing);
-    output->SetOrigin(this->DataOrigin);
+      output->SetScalarType(this->DataScalarType);
+      output->SetNumberOfScalarComponents(this->NumberOfScalarComponents);
+      break;
+    case IconImagePortNumber:
+      output->SetWholeExtent(this->IconImageDataExtent);
+      output->SetScalarType( VTK_UNSIGNED_CHAR );
+      output->SetNumberOfScalarComponents( 1 );
+      break;
+    //case OverlayPortNumber:
+    default:
+      output->SetWholeExtent(this->DataExtent[0],this->DataExtent[1],
+        this->DataExtent[2],this->DataExtent[3],
+        0,0
+      );
+      //output->SetSpacing(this->DataSpacing);
+      //output->SetOrigin(this->DataOrigin);
+      output->SetScalarType(VTK_UNSIGNED_CHAR);
+      output->SetNumberOfScalarComponents(1);
+      break;
+      }
 
-    output->SetScalarType(this->DataScalarType);
-    output->SetNumberOfScalarComponents(this->NumberOfScalarComponents);
     }
 }
 
@@ -170,9 +206,17 @@ void vtkGDCMImageReader::ExecuteData(vtkDataObject *output)
   res->SetExtent(res->GetUpdateExtent());
   res->AllocateScalars();
 
+  if( this->LoadIconImage )
+    {
+    vtkImageData *res = vtkImageData::SafeDownCast(this->Outputs[IconImagePortNumber]);
+    res->SetUpdateExtentToWholeExtent();
+
+    res->SetExtent(res->GetUpdateExtent());
+    res->AllocateScalars();
+    }
   if( this->LoadOverlays )
     {
-    vtkImageData *res = vtkImageData::SafeDownCast(this->Outputs[1]);
+    vtkImageData *res = vtkImageData::SafeDownCast(this->Outputs[OverlayPortNumber]);
     res->SetUpdateExtentToWholeExtent();
 
     res->SetExtent(res->GetUpdateExtent());
@@ -388,9 +432,14 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
   int res = RequestInformationCompat();
 
   int numvol = 1;
+  if( this->LoadIconImage )
+    {
+    numvol = 2;
+    }
   if( this->LoadOverlays )
     {
-    ++numvol;
+    // If no icon found, we still need to be associated to port #2:
+    numvol = 3;
     }
   this->SetNumberOfOutputPorts(numvol);
   // For each output:
@@ -404,12 +453,31 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
       img->Delete();
       }
     vtkInformation *outInfo = outputVector->GetInformationObject(i);
-    outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), this->DataExtent, 6);
-    //outInfo->Set(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), this->DataExtent, 6);
-
-    outInfo->Set(vtkDataObject::SPACING(), this->DataSpacing, 3);
-    outInfo->Set(vtkDataObject::ORIGIN(), this->DataOrigin, 3);
-    vtkDataObject::SetPointDataActiveScalarInfo(outInfo, this->DataScalarType, this->NumberOfScalarComponents);
+    switch(i)
+      {
+    // root Pixel Data
+    case 0:
+      outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), this->DataExtent, 6);
+      //outInfo->Set(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), this->DataExtent, 6);
+      outInfo->Set(vtkDataObject::SPACING(), this->DataSpacing, 3);
+      outInfo->Set(vtkDataObject::ORIGIN(), this->DataOrigin, 3);
+      vtkDataObject::SetPointDataActiveScalarInfo(outInfo, this->DataScalarType, this->NumberOfScalarComponents);
+      break;
+    // Icon Image
+    case IconImagePortNumber:
+      outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), this->IconImageDataExtent, 6);
+      vtkDataObject::SetPointDataActiveScalarInfo(outInfo, VTK_UNSIGNED_CHAR, 1);
+      break;
+    // Overlays:
+    //case OverlayPortNumber:
+    default:
+      outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), 
+        this->DataExtent[0], this->DataExtent[1], 
+        this->DataExtent[2], this->DataExtent[3],
+        0,0 );
+      vtkDataObject::SetPointDataActiveScalarInfo(outInfo, VTK_UNSIGNED_CHAR, 1);
+      break;
+      }
     }
   return res;
 }
@@ -536,6 +604,16 @@ int vtkGDCMImageReader::RequestInformationCompat()
   // Ok let's fill in the 'extra' info:
   FillMedicalImageInformation(reader);
 
+  // Do the IconImage if requested:
+  const gdcm::IconImage& icon = image.GetIconImage();
+  if( this->LoadIconImage && !icon.IsEmpty() )
+    {
+    this->IconImageDataExtent[0] = 0;
+    this->IconImageDataExtent[1] = icon.GetColumns() - 1;
+    this->IconImageDataExtent[2] = 0;
+    this->IconImageDataExtent[3] = icon.GetRows() - 1;
+    }
+
 //  return this->Superclass::RequestInformation(
 //    request, inputVector, outputVector);
   return 1;
@@ -561,6 +639,12 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
   unsigned char *tempimage2 = 0; //new unsigned char[len];
   unsigned long overlaylen = 0;
   image.GetBuffer(tempimage);
+  // Do the Icon Image:
+  this->NumberOfIconImages = image.GetIconImage().IsEmpty() ? 0 : 1;
+  char * iconpointer = static_cast<char*>(this->GetOutput(IconImagePortNumber)->GetScalarPointer());
+  assert( iconpointer );
+  image.GetIconImage().GetBuffer( iconpointer );
+
   // Do the Overlay:
   unsigned int numoverlays = image.GetNumberOfOverlays();
   long overlayoutsize = (dext[1] - dext[0] + 1);
@@ -570,9 +654,8 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
     // vtkOpenGLImageMapper::RenderData does not support bit array (since OpenGL does not either)
     // we have to decompress the bit overlay into an unsigned char array to please everybody:
     const gdcm::Overlay& ov1 = image.GetOverlay();
-    vtkImageData *image = this->GetOutput(1);
-    image->SetScalarTypeToUnsignedChar();
-    image->AllocateScalars();
+    vtkImageData *image = this->GetOutput(OverlayPortNumber);
+    assert( image->GetScalarType() == VTK_UNSIGNED_CHAR );
 
     assert( image->GetPointData()->GetScalars() != 0 );
     vtkUnsignedCharArray *chararray = vtkUnsignedCharArray::New();
@@ -586,7 +669,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
     const signed short *origin = ov1.GetOrigin();
     if( ov1.GetRows()*ov1.GetColumns() != overlaylen )
       {
-      vtkWarningMacro( "vtkImageData Overlay have an extent that match the one of the image" );
+      vtkWarningMacro( "vtkImageData Overlay have an extent that do not match the one of the image" );
       }
     if( origin[0] != 0 || origin[1] != 0 )
       {
@@ -600,7 +683,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
     chararray->Delete();
     }
   // WARNING: get the scalar pointer AFTER AllocateScalars, not garantee to remain the same (VTK 4.2)
-  char * overlaypointer = static_cast<char*>(this->GetOutput(1)->GetScalarPointer());
+  char * overlaypointer = static_cast<char*>(this->GetOutput(OverlayPortNumber)->GetScalarPointer());
 
   // Do the LUT
   //bool modlut = reader.GetFile().GetDataSet().FindDataElement( gdcm::Tag(0x0028,0x3000) );
@@ -784,7 +867,14 @@ int vtkGDCMImageReader::RequestDataCompat()
 vtkAlgorithmOutput* vtkGDCMImageReader::GetOverlayPort(int index)
 {
   if( index >= 0 && index < this->NumberOfOverlays)
-    return this->GetOutputPort(index+1);
+    return this->GetOutputPort(index+OverlayPortNumber);
+  return NULL;
+}
+vtkAlgorithmOutput* vtkGDCMImageReader::GetIconImagePort()
+{
+  int index = 0;
+  if( index >= 0 && index < this->NumberOfIconImages)
+    return this->GetOutputPort(index+IconImagePortNumber);
   return NULL;
 }
 #endif
@@ -793,7 +883,15 @@ vtkAlgorithmOutput* vtkGDCMImageReader::GetOverlayPort(int index)
 vtkImageData* vtkGDCMImageReader::GetOverlay(int i)
 {
   if( i >= 0 && i < this->NumberOfOverlays)
-    return this->GetOutput(i+1);
+    return this->GetOutput(i+OverlayPortNumber);
+  return NULL;
+}
+//----------------------------------------------------------------------------
+vtkImageData* vtkGDCMImageReader::GetIconImage()
+{
+  int i = 0;
+  if( i >= 0 && i < this->NumberOfIconImages)
+    return this->GetOutput(i+IconImagePortNumber);
   return NULL;
 }
 

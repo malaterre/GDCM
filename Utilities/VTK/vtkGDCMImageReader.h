@@ -96,16 +96,26 @@ public:
   vtkSetMacro(LoadOverlays,int);
   vtkBooleanMacro(LoadOverlays,int);
 
+  vtkGetMacro(LoadIconImage,int);
+  vtkSetMacro(LoadIconImage,int);
+  vtkBooleanMacro(LoadIconImage,int);
+
   // Read only: number of overlays as found in this image
   vtkGetMacro(NumberOfOverlays,int);
   //vtkSetMacro(NumberOfOverlays,int);
 
+  // Read only: number of icon image:
+  vtkGetMacro(NumberOfIconImages,int);
+  //vtkSetMacro(NumberOfIconImages,int);
+
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 //BTX
   vtkAlgorithmOutput* GetOverlayPort(int index);
+  vtkAlgorithmOutput* GetIconImagePort();
 //ETX
 #endif
   vtkImageData* GetOverlay(int i);
+  vtkImageData* GetIconImage();
 
 protected:
   vtkGDCMImageReader();
@@ -147,6 +157,9 @@ protected:
   vtkMatrix4x4 *DirectionCosines;
   int LoadOverlays;
   int NumberOfOverlays;
+  int LoadIconImage;
+  int NumberOfIconImages;
+  int IconImageDataExtent[6];
 
   int LoadSingleFile(const char *filename, int *dext, vtkImageData* data, bool filelowerleft);
 
