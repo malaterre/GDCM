@@ -589,25 +589,29 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
     // Special handling of US or SS vr:
     if( refvr == VR::US_SS )
       {
-      // In case of SAX parser, we would have had to process Pixel Representation already:
-      Tag pixelrep(0x0028,0x0103);
-      assert( pixelrep < t );
-      const DataSet &rootds = F->GetDataSet();
-      // FIXME
-      // PhilipsWith15Overlays.dcm has a Private SQ with public elements such as
-      // 0028,3002, so we cannot look up element in current dataset, but have to get the root dataset
-      // to loop up...
-      assert( rootds.FindDataElement( pixelrep ) );
-      Attribute<0x0028,0x0103> at;
-      at.SetFromDataElement( rootds.GetDataElement( pixelrep ) );
-      assert( at.GetValue() == 0 || at.GetValue() == 1 );
-      if( at.GetValue() )
+      // I believe all US_SS VR derived from the value from 0028,0103 ... except 0028,0071
+      if( t != Tag(0x0028,0x0071) )
         {
-        refvr = VR::SS;
-        }
-      else
-        {
-        refvr = VR::US;
+        // In case of SAX parser, we would have had to process Pixel Representation already:
+        Tag pixelrep(0x0028,0x0103);
+        assert( pixelrep < t );
+        const DataSet &rootds = F->GetDataSet();
+        // FIXME
+        // PhilipsWith15Overlays.dcm has a Private SQ with public elements such as
+        // 0028,3002, so we cannot look up element in current dataset, but have to get the root dataset
+        // to loop up...
+        assert( rootds.FindDataElement( pixelrep ) );
+        Attribute<0x0028,0x0103> at;
+        at.SetFromDataElement( rootds.GetDataElement( pixelrep ) );
+        assert( at.GetValue() == 0 || at.GetValue() == 1 );
+        if( at.GetValue() )
+          {
+          refvr = VR::SS;
+          }
+        else
+          {
+          refvr = VR::US;
+          }
         }
       }
     assert( refvr != VR::US_SS );

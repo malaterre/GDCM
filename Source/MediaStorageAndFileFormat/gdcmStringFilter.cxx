@@ -113,10 +113,8 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t) con
       VM::VMType vm = entry.GetVM();
       if( vr == VR::US_SS )
         {
-        if( t.GetGroup() == 0x0028 
-          && t.GetElement() >= 0x0104 // Smallest Valid Pixel Value
-          // FIXME: 010[A-F] ???
-          && t.GetElement() <= 0x0111) // Largest Image Pixel Value in Plane
+        // I believe all US_SS VR derived from the value from 0028,0103 ... except 0028,0071
+        if( t != Tag(0x0028,0x0071) )
           {
           // In case of SAX parser, we would have had to process Pixel Representation already:
           Tag pixelrep(0x0028,0x0103);
