@@ -53,14 +53,14 @@ def TestScan(dirname, recursive = False):
   # get the main super-map :
   mappings = s.GetMappings()
 
-  file1 = d.GetFilenames()[0];
-  print file1
-  m1 = s.GetMapping( file1 )
-  print m1
-  print dir(m1)
+  #file1 = d.GetFilenames()[0];
+  #print file1
+  #m1 = s.GetMapping( file1 )
+  #print m1
+  #print dir(m1)
 
-  for k,v in m1.iteritems():
-    print "item", k,v
+  #for k,v in m1.iteritems():
+  #  print "item", k,v
 
   
   # For each file get the value for tag t1:
