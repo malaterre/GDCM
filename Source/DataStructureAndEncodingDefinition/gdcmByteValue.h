@@ -168,9 +168,12 @@ public:
     // and calling std::vector::resize make sure to allocate *AND* 
     // initialize values to 0 so we are sure to have a \0 at the end
     // even in this case
-    if(Length) is.read(&Internal[0], Length);
-    assert( Internal.size() == Length || Internal.size() == Length + 1 );
-    TSwap::SwapArray((TType*)&Internal[0], Internal.size() / sizeof(TType) );
+    if(Length)
+      {
+      is.read(&Internal[0], Length);
+      assert( Internal.size() == Length || Internal.size() == Length + 1 );
+      TSwap::SwapArray((TType*)&Internal[0], Internal.size() / sizeof(TType) );
+      }
     return is;
   }
 

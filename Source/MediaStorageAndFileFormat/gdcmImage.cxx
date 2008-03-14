@@ -130,7 +130,9 @@ void Image::SetSpacing(unsigned int idx, double spacing)
 const double *Image::GetOrigin() const
 {
   assert( NumberOfDimensions );
-  return &Origin[0];
+  if( !Origin.empty() )
+    return &Origin[0];
+  return 0;
 }
 
 double Image::GetOrigin(unsigned int idx) const
@@ -169,7 +171,9 @@ void Image::SetOrigin(unsigned int idx, double ori)
 const double *Image::GetDirectionCosines() const
 {
   assert( NumberOfDimensions );
-  return &DirectionCosines[0];
+  if( !DirectionCosines.empty() )
+    return &DirectionCosines[0];
+  return 0;
 }
 double Image::GetDirectionCosines(unsigned int idx) const
 {
