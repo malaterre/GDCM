@@ -23,6 +23,7 @@
 #include "gdcmWriter.h"
 #include "gdcmSystem.h"
 #include "gdcmDirectory.h"
+#include "gdcmCSAHeader.h"
 
 #include <string>
 #include <iostream>
@@ -54,6 +55,52 @@ int DoOperation(const std::string & filename)
   TPrinter printer;
   printer.SetFile ( reader.GetFile() );
   printer.Print( std::cout );
+
+  return 0;
+}
+
+int PrintCSA(const std::string & filename)
+{
+  gdcm::Reader reader;
+  reader.SetFileName( filename.c_str() );
+  try
+    {
+    if( !reader.Read() )
+      {
+      std::cerr << "Failed to read: " << filename << std::endl;
+      return 1;
+      }
+    }
+  catch( ... )
+    {
+    std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
+    }
+
+  gdcm::CSAHeader csa;
+  const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
+
+  gdcm::Tag t0(0x0029,0x0010); // LO 
+  if( ds.FindDataElement( t0 ) )
+    {
+    const gdcm::ByteValue *bv = ds.GetDataElement( t0 ).GetByteValue();
+    const char csaheader[] = "SIEMENS CSA HEADER";
+    if( strncmp( bv->GetPointer(), csaheader, strlen(csaheader) ) ==  0 )
+      {
+      gdcm::Tag t1(0x0029,0x1010);
+      gdcm::Tag t2(0x0029,0x1020);
+      //gdcm::Tag t3(0x0029,0x1120); ???
+      std::cerr << "Working on: " << filename << std::endl;
+      if( ds.FindDataElement( t1 ) )
+        {
+        csa.Print( ds.GetDataElement( t1 ) );
+        }
+      if( ds.FindDataElement( t2 ) )
+        {
+        csa.Print( ds.GetDataElement( t2 ) );
+        }
+      }
+    }
 
   return 0;
 }
@@ -95,6 +142,7 @@ int main (int argc, char *argv[])
   std::string filename;
   int printdict = 0;
   int print = 0;
+  int printcsa = 0;
   int verbose = 0;
   int warning = 0;
   int debug = 0;
@@ -115,6 +163,7 @@ int main (int argc, char *argv[])
 */
     static struct option long_options[] = {
         {"input", 1, 0, 0},
+        {"print-csa", 0, &printcsa, 1},
         {"xml-dict", 0, &printdict, 1},
         {"recursive", 0, &recursive, 1},
         {"print", 0, &print, 1},
@@ -272,6 +321,10 @@ int main (int argc, char *argv[])
         {
         res += DoOperation<gdcm::DictPrinter>(*it);
         }
+      else if( printcsa )
+        {
+        res += PrintCSA(*it);
+        }
       else if( print )
         {
         res += DoOperation<gdcm::Printer>(*it);
@@ -291,6 +344,10 @@ int main (int argc, char *argv[])
     if( printdict )
       {
       res += DoOperation<gdcm::DictPrinter>(filename);
+      }
+    else if( printcsa )
+      {
+      res += PrintCSA(filename);
       }
     else if( print )
       {

@@ -119,6 +119,7 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
       {
       // Keep the mapping:
       TagToValue &mapping = Mappings[filename];
+      sf.SetFile( reader.GetFile() );
 
       const DataSet & ds = reader.GetFile().GetDataSet();
       TagsType::const_iterator tag = Tags.begin();
@@ -135,7 +136,7 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
           //  s = std::string( bv->GetPointer(), bv->GetLength() );
           //  s.resize( std::min( s.size(), strlen( s.c_str() ) ) );
           //  }
-          std::string s = sf.ToString(de);
+          std::string s = sf.ToString(de.GetTag());
 
           // Store the potentially new value:
           Values.insert( s );

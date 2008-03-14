@@ -63,10 +63,9 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
   if( TagField == Tag(0x00ff, 0x4aa5) )
     {
-    assert(0 && "Should not happen" );
-    //  char c;
-    //  is.read(&c, 1);
-    //  std::cerr << "Debug: " << c << std::endl;
+    //assert(0 && "Should not happen" );
+    // gdcmDataExtra/gdcmBreakers/DigitexAlpha_no_7FE0.dcm
+    throw Exception( "Unhandled" );
     }
 #endif
   // Read VR

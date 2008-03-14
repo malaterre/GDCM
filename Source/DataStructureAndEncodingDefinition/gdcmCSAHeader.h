@@ -21,8 +21,14 @@ namespace gdcm
 {
 /*
  * \brief Class for CSAHeader
+ *
+ * WARNING: the API of this class is subject to change in the near future. DO NOT USE.
+ *
+ * TODO:
+ * MrEvaProtocol in 29,1020 contains ^M that would be nice to get rid of on UNIX system...
  */
 //-----------------------------------------------------------------------------
+class DataElement;
 class GDCM_EXPORT CSAHeader
 {
 public :
@@ -35,6 +41,7 @@ public :
   template <typename TSwap>
   const std::ostream &Write(std::ostream &os) const;
 
+  void Print(DataElement const &de) const;
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------

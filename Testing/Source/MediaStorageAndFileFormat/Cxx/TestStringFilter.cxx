@@ -27,13 +27,14 @@ int TestStringFilt(const char *filename)
     return 1;
     }
   gdcm::DataSet const& ds = r.GetFile().GetDataSet();
+  sf.SetFile( r.GetFile() );
   
   int ret = 0;
   gdcm::DataSet::ConstIterator it = ds.Begin();
   for( ; it != ds.End(); ++it)
     {
     const gdcm::DataElement &ref = *it;
-    std::pair<std::string, std::string> s = sf.ToStringPair( ref );
+    std::pair<std::string, std::string> s = sf.ToStringPair( ref.GetTag() );
     if( !s.second.empty() || ref.GetVL() == 0 )
       {
       std::cout << s.first << " -> " << s.second << std::endl;

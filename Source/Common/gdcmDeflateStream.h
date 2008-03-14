@@ -299,6 +299,7 @@ namespace gdcm
         dstream.next_in = (Byte*)in_begin;
         dstream.avail_in = in_end - in_begin;
         dstream.next_out = (Byte*)putback_end;
+        // FIXME: cannot derefence end iterator...
         dstream.avail_out = &*buffer.end() - putback_end;
         int ret = inflate(&dstream,Z_NO_FLUSH);
         switch (ret) {

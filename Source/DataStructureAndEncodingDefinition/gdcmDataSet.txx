@@ -100,6 +100,13 @@ namespace gdcm
         is.seekg(-6, std::ios::cur );
         length = locallength = l;
         }
+      else
+        {
+        // Could be the famous :
+        // gdcmDataExtra/gdcmBreakers/BuggedDicomWorksImage_Hopeless.dcm
+        // let's just give up:
+        throw Exception( "Unhandled" );
+        }
       }
     assert( l == locallength );
     return is;

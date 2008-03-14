@@ -43,6 +43,7 @@
 #include "gdcmDirectory.h"
 #include "gdcmTesting.h"
 #include "gdcmUIDGenerator.h"
+//#include "gdcmConstCharWrapper.h"
 #include "gdcmScanner.h"
 #include "gdcmAttribute.h"
 #include "gdcmAnonymizer.h"
@@ -181,6 +182,15 @@ using namespace gdcm;
     buffer = s.str();
     return buffer.c_str();
   }
+//%typemap(python,out) const double * GetOrigin2 {
+//	//float* source=(float*)$source;
+//	float source[3]={0,0,0};
+//	$target = PyTuple_New(3);
+//	for(int i=0;i<3;i++){
+//		PyTuple_SetItem($target,i,Py_BuildValue("f",(source[i])));
+//	}	
+//}
+
 };
 %include "gdcmGlobal.h"
 //%include "gdcmVR.h"
@@ -203,6 +213,7 @@ using namespace gdcm;
 %include "gdcmWriter.h"
 %include "gdcmImageWriter.h"
 %template (PairString) std::pair<std::string,std::string>;
+//%template (MyM) std::map<gdcm::Tag,gdcm::ConstCharWrapper>;
 %include "gdcmStringFilter.h"
 //%template (FilenameType) std::string;
 %template (FilenamesType) std::vector<std::string>;
@@ -219,6 +230,7 @@ using namespace gdcm;
 };
 %include "gdcmTesting.h"
 %include "gdcmUIDGenerator.h"
+//%include "gdcmConstCharWrapper.h"
 //%{
 //  typedef char * PString;   // copied to wrapper code
 //%}
@@ -228,7 +240,8 @@ using namespace gdcm;
 //%template (MappingType)     std::map<gdcm::Tag,FilenameToValue>;
 //%template (StringArray)     std::vector<const char*>;
 %template (ValuesType)      std::set<std::string>;
-//%template (TagToValueValueType) std::pair<gdcm::Tag,const char*>;
+//%template (TagToValue)      std::map<gdcm::Tag,const char*>;
+//%template (TagToValue)      std::map<gdcm::Tag,gdcm::ConstCharWrapper>;
 %include "gdcmScanner.h"
 %extend gdcm::Scanner
 {

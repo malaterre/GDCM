@@ -17,6 +17,7 @@
 
 #include "gdcmDataElement.h"
 #include "gdcmDicts.h"
+#include "gdcmFile.h"
 
 namespace gdcm
 {
@@ -38,16 +39,21 @@ public:
   void SetDicts(const Dicts &dicts);
 
   // Convert to string the ByteValue contained in a DataElement
-  std::string ToString(const DataElement& de) const;
+  std::string ToString(const Tag& t) const;
 
   // Convert to string the ByteValue contained in a DataElement
   // the returned elements are:
   // pair.first : the name as found in the dictionary of DataElement
   // pari.second : the value encoded into a string (US,UL...) are properly converted
-  std::pair<std::string, std::string> ToStringPair(const DataElement& de) const;
+  std::pair<std::string, std::string> ToStringPair(const Tag& t) const;
+
+  //typedef std::map<Tag, gdcm::ConstCharWrapper> StringSet;
+  void SetFile(const File& f) { F = &f; }
+  File &GetFile() { return *F; }
+  const File &GetFile() const { return *F; }
 
 private:
-  
+  SmartPointer<File> F;
 };
 
 } // end namespace gdcm

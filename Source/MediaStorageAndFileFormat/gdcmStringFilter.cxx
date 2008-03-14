@@ -16,12 +16,13 @@
 #include "gdcmGlobal.h"
 #include "gdcmElement.h"
 #include "gdcmByteValue.h"
+#include "gdcmAttribute.h"
 
 namespace gdcm
 {
 
 //-----------------------------------------------------------------------------
-StringFilter::StringFilter()
+StringFilter::StringFilter():F(new File)
 {
 }
 //-----------------------------------------------------------------------------
@@ -34,9 +35,9 @@ void StringFilter::SetDicts(const Dicts &dicts)
   abort(); // FIXME
 }
 
-std::string StringFilter::ToString(const DataElement& de) const
+std::string StringFilter::ToString(const Tag& t) const
 {
-  return ToStringPair(de).second;
+  return ToStringPair(t).second;
 }
 
 #define StringFilterCase(type) \
@@ -51,15 +52,22 @@ std::string StringFilter::ToString(const DataElement& de) const
       ret.second = os.str(); } } \
     } break
 
-std::pair<std::string, std::string> StringFilter::ToStringPair(const DataElement& de) const
+std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t) const
 {
   std::pair<std::string, std::string> ret;
   const Global &g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
-  if( de.GetTag().IsPrivate() )
+  const DataSet &ds = GetFile().GetDataSet();
+  if( ds.IsEmpty() || !ds.FindDataElement(t) )
+    {
+    gdcmWarningMacro( "DataSet is empty or does not contains tag:" );
+    return ret;
+    }
+  if( t.IsPrivate() )
     {
     return ret;
     }
+  const DataElement &de = ds.GetDataElement( t );
   assert( de.GetTag().IsPublic() );
   const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
   if( entry.GetVR() == VR::INVALID )
@@ -80,6 +88,7 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const DataElement
   ret.first = entry.GetName();
   if( VR::IsASCII( vr ) )
     {
+    assert( vr & VR::VRASCII );
     const ByteValue *bv = de.GetByteValue();
     if( de.GetVL() )
       {
@@ -102,6 +111,31 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const DataElement
     if( bv )
       {
       VM::VMType vm = entry.GetVM();
+      if( vr == VR::US_SS )
+        {
+        if( t.GetGroup() == 0x0028 
+          && t.GetElement() >= 0x0104 // Smallest Valid Pixel Value
+          // FIXME: 010[A-F] ???
+          && t.GetElement() <= 0x0111) // Largest Image Pixel Value in Plane
+          {
+          // In case of SAX parser, we would have had to process Pixel Representation already:
+          Tag pixelrep(0x0028,0x0103);
+          assert( pixelrep < t );
+          const DataSet &rootds = F->GetDataSet();
+          assert( ds.FindDataElement( pixelrep ) );
+          Attribute<0x0028,0x0103> at;
+          at.SetFromDataElement( ds.GetDataElement( pixelrep ) );
+          assert( at.GetValue() == 0 || at.GetValue() == 1 );
+          if( at.GetValue() )
+            {
+            vr = VR::SS;
+            }
+          else
+            {
+            vr = VR::US;
+            }
+          }
+        }
       //assert( vm == VM::VM1 );
       std::ostringstream os;
       switch(vr)
@@ -119,12 +153,14 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const DataElement
         //StringFilterCase(UN);
         StringFilterCase(US);
         StringFilterCase(UT);
+      case VR::UN:
+      case VR::US_SS:
+        abort();
+        break;
       case VR::OB:
       case VR::OW:
       case VR::OB_OW:
-      case VR::US_SS:
       case VR::SQ:
-      case VR::UN:
         gdcmWarningMacro( "Unhandled: " << vr << " for tag " << de.GetTag() );
         ret.second = "";
         break;
