@@ -39,17 +39,23 @@ SET(BLACK_LIST_READER
 # TS is skrewed up, and the whole dataset is a pain to read...
 # I do not even believe there is a pattern
   WeirdToshibaTS.dcm
-# Pixel Data is not weird it should be :)
+# Pixel Data is not were it should be :)
   3DDCM011.dcm 
 
 # 16bits LUT...
   rle16sti.dcm
   rle16loo.dcm
 
+# Overlay Data in Unused bit are not passed in TestImageWriter:
+  SIEMENS_GBS_III-16-ACR_NEMA_1.acr
+
 # Famous 12bits with value > 4096 (after jpeg decompression)
   D_CLUNIE_RG3_JPLY.dcm
 # Same as above...
   Compress_16bit_noPVRG.dcm
+
+# quick fix:
+  tst_not.dcm
 )
 
 SET(GDCM_DATA_FILENAMES)

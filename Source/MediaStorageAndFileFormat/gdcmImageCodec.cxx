@@ -145,6 +145,7 @@ bool ImageCodec::DoYBR(std::istream &is, std::ostream &os)
   delete[] copy;
 
   os.write(dummy_buffer, buf_size);
+  delete[] dummy_buffer;
   return true;
 }
 

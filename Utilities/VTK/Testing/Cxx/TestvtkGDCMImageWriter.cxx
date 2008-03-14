@@ -22,20 +22,21 @@
 #include "gdcmTesting.h"
 #include "gdcmFilename.h"
 #include "gdcmSystem.h"
+#include "gdcmImageReader.h"
 
-int TestvtkGDCMImageWrite(const char *filename)
+int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
 {
   vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
-  //reader->CanReadFile( filename );
-  std::cerr << "Reading : " << filename << std::endl;
+  //int canread = reader->CanReadFile( filename );
+  if( verbose )
+    std::cerr << "Reading : " << filename << std::endl;
   reader->SetFileName( filename );
   reader->Update();
-  reader->GetOutput()->Print( cout );
-  reader->GetMedicalImageProperties()->Print( cout );
-
-  //vtkImageData *copy = vtkImageData::New();
-  //copy->DeepCopy( reader->GetOutput() );
-  //copy->Delete();
+  if( verbose )
+    {
+    reader->GetOutput()->Print( cout );
+    reader->GetMedicalImageProperties()->Print( cout );
+    }
 
   // Create directory first:
   const char subdir[] = "TestvtkGDCMImageWriter";
@@ -53,10 +54,19 @@ int TestvtkGDCMImageWrite(const char *filename)
   writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
   writer->SetFileName( gdcmfile.c_str() );
   writer->Write();
-  std::cerr << "Write out: " << gdcmfile << std::endl;
+  if( verbose )  std::cerr << "Write out: " << gdcmfile << std::endl;
 
   reader->Delete();
   writer->Delete();
+
+  // Need to check we can still read this image back:
+  gdcm::ImageReader r;
+  r.SetFileName( gdcmfile.c_str() );
+  if( !r.Read() )
+    {
+    std::cerr << "failed to read back:" << gdcmfile << std::endl;
+    return 1;
+    }
 
   return 0; 
 }
@@ -66,7 +76,7 @@ int TestvtkGDCMImageWriter(int argc, char *argv[])
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestvtkGDCMImageWrite(filename);
+    return TestvtkGDCMImageWrite(filename, true);
     }
 
   // else

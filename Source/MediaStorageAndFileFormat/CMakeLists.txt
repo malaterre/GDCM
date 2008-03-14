@@ -9,6 +9,7 @@ SET(MSFF_SRCS
   gdcmFiducials.cxx
   gdcmWaveform.cxx
   gdcmPersonName.cxx
+  gdcmIconImage.cxx
   gdcmUIDGenerator.cxx
   gdcmPrinter.cxx
   gdcmDictPrinter.cxx

@@ -1,6 +1,7 @@
 # Define the tests for Common
 # Common
 SET(Common_TEST_SRCS
+  TestVersion
   TestTesting
   TestSwapper
   TestByteSwap

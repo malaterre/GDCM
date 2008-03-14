@@ -23,6 +23,7 @@
 #include "gdcmTransferSyntax.h"
 #include "gdcmOverlay.h"
 #include "gdcmCurve.h"
+#include "gdcmIconImage.h"
 
 #include <vector>
 
@@ -51,7 +52,7 @@ namespace gdcm
 class GDCM_EXPORT Image
 {
 public:
-  Image ():NumberOfDimensions(0),PlanarConfiguration(0),Dimensions(),SC(),NeedByteSwap(false),LUT(0),Overlays(),Curves() {}
+  Image ():NumberOfDimensions(0),PlanarConfiguration(0),Dimensions(),SC(),NeedByteSwap(false),LUT(0),Overlays(),Curves(),Icon() {}
   virtual ~Image() {}
 
   unsigned int GetNumberOfDimensions() const;
@@ -155,6 +156,9 @@ public:
   // returns if Overlays are stored in the unused bit of the pixel data:
   bool AreOverlaysInPixelData() const;
 
+  const IconImage &GetIconImage() const { return Icon; }
+  IconImage &GetIconImage() { return Icon; }
+
 //  Image(Image const&);
 //  Image &operator= (Image const&);
 
@@ -192,6 +196,7 @@ private:
   LUTPtr LUT;
   std::vector<Overlay>  Overlays;
   std::vector<Curve>  Curves;
+  IconImage Icon;
 };
 
 } // end namespace gdcm

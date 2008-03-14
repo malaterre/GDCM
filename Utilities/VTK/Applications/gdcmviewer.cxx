@@ -221,19 +221,32 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   // if overlays are found:
   if( reader->GetNumberOfOverlays() )
     {
-    viewer->AddInputConnection ( reader->GetOutputPort(1) );
+    // Add first overlay:
+    // WARNING: gdcmviewer2 only !
+    viewer->AddInputConnection ( reader->GetOverlayPort(0) );
     }
 #else
   viewer->SetInput( reader->GetOutput(0) );
-  //viewer->GetRenderer()->SetLayer(1);
   if( reader->GetNumberOfOverlays() )
     {
-    viewer->AddInput( reader->GetOutput(1) );
+    viewer->AddInput( reader->GetOverlay(0) );
     }
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
+  // IconImage:
+  if( reader->GetNumberOfIconImages() )
+    {
+    std::cerr << "NumberOfIconImages:" << reader->GetNumberOfIconImages() << std::endl;
+    reader->GetIconImage()->Print( std::cerr );
+    vtkPNGWriter *writer = vtkPNGWriter::New();
+    writer->SetInput( reader->GetIconImage() );
+    writer->SetFileName( "icon.png" );
+    //writer->Write();
+    writer->Delete();
+    }
+
   // In case of palette color, let's tell VTK to map color:
-  if( reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable() )
+  if( reader->GetOutput()->GetPointData()->GetScalars() && reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable() )
     {
     //convert to color:
     vtkImageMapToColors *map = vtkImageMapToColors::New ();

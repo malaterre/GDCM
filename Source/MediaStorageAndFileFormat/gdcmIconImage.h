@@ -12,61 +12,60 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #ifndef __gdcmIconImage_h
 #define __gdcmIconImage_h
 
-#include "gdcmTypes.h"
 #include "gdcmObject.h"
+#include "gdcmDataElement.h"
+#include "gdcmPhotometricInterpretation.h"
+#include "gdcmPixelFormat.h"
+
+#include <vector>
 
 namespace gdcm
 {
   
-class IconImageInternal;
-class ByteValue;
-//class IStream;
-//class OStream;
-class IconImage : public Object
+class GDCM_EXPORT IconImage : public Object
 {
 public:
-  typedef enum {
-    RED = 0,  // Keep RED == 0 
-    GREEN,
-    BLUE,
-    GRAY,
-    UNKNOWN
-  } IconImageType;
-
   IconImage();
   ~IconImage();
   void Print(std::ostream &) const {}
 
-  void Allocate( int bitsample = 8 );
-  void InitializeLUT(IconImageType type, unsigned short length,
-    unsigned short subscript, unsigned short bitsize);
-  void SetLUT(IconImageType type, const unsigned char *array,
-    unsigned int length);
-  void InitializeRedLUT(unsigned short length, unsigned short subscript,
-    unsigned short bitsize);
-  void SetRedLUT(const unsigned char *red, unsigned int length);
-  void InitializeBlueLUT(unsigned short length, unsigned short subscript,
-    unsigned short bitsize);
-  void SetGreenLUT(const unsigned char *green, unsigned int length);
-  void InitializeGreenLUT(unsigned short length, unsigned short subscript,
-    unsigned short bitsize);
-  void SetBlueLUT(const unsigned char *blue, unsigned int length);
+  void SetDataElement(DataElement const &de) {
+    PixelData = de;
+  }
+  const DataElement& GetDataElement() const { return PixelData; }
 
-  void Decode(std::istream &is, std::ostream &os);
-
-  IconImage(IconImage const &lut):Object(lut)
+  void SetColumns(double col) { SetDimension(0,col); }
+  void SetRows(double rows) { SetDimension(1,rows); }
+  void SetDimension(unsigned int idx, unsigned int dim);
+  int GetColumns() const { return Dimensions[0]; }
+  int GetRows() const { return Dimensions[1]; }
+  // Get/Set PixelFormat
+  const PixelFormat &GetPixelFormat() const
     {
-    abort();
+    return PF;
+    }
+  void SetPixelFormat(PixelFormat const &pf)
+    {
+    PF = pf;
     }
 
+  const PhotometricInterpretation &GetPhotometricInterpretation() const;
+  void SetPhotometricInterpretation(PhotometricInterpretation const &pi);
+
+  bool IsEmpty() const { return Dimensions.size() == 0; }
+
+  bool GetBuffer(char *buffer) const;
+
 private:
-  IconImageInternal *Internal;
-  int BitSample; // refer to the pixel type (no the bit size of LUT)
-  bool IncompleteLUT;
+  PixelFormat PF; // SamplesPerPixel, BitsAllocated, BitsStored, HighBit, PixelRepresentation
+  PhotometricInterpretation PI;
+  std::vector<unsigned int> Dimensions; // Col/Row
+  std::vector<double> Spacing; // PixelAspectRatio ?
+  DataElement PixelData; // copied from 7fe0,0010
+  static const unsigned int NumberOfDimensions = 2;
 };
 
 } // end namespace gdcm
