@@ -25,14 +25,18 @@
 
 int TestvtkGDCMImageRead(const char *filename, bool verbose)
 {
+  if( verbose )
+    std::cerr << "Reading : " << filename << std::endl;
   vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
-  //reader->CanReadFile( filename );
-  std::cerr << "Reading : " << filename << std::endl;
+  //int canread = reader->CanReadFile( filename );
   reader->SetFileName( filename );
   reader->Update();
 
-  reader->GetOutput()->Print( cout );
-  if( verbose ) reader->GetMedicalImageProperties()->Print( cout );
+  if( verbose )
+    { 
+    reader->GetOutput()->Print( cout );
+    reader->GetMedicalImageProperties()->Print( cout );
+    }
 
   if( verbose )
     {
