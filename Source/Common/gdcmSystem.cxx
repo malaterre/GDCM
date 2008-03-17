@@ -20,6 +20,9 @@
 #include "md5/md5.h"
 #include "uuid/uuid.h"
 
+#include <iostream>
+#include <string>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -40,8 +43,15 @@
 #define snprintf _snprintf
 #endif
 
-
-#include <iostream>
+#if defined(_WIN32) && (defined(_MSC_VER) || defined(__WATCOMC__) ||defined(__BORLANDC__) || defined(__MINGW32__))
+#include <io.h>
+#include <direct.h>
+#define _unlink unlink
+#else
+#include <sys/types.h>
+#include <fcntl.h>
+#include <unistd.h>
+#endif 
 
 namespace gdcm
 {
@@ -124,9 +134,6 @@ bool System::ComputeFileMD5(const char *filename, char *digest_str)
 }
 
 #if defined(_WIN32) && (defined(_MSC_VER) || defined(__WATCOMC__) || defined(__BORLANDC__) || defined(__MINGW32__)) 
-#include <io.h>
-#include <direct.h>
-#define _unlink unlink
 inline int Mkdir(const char* dir)
 {
   return _mkdir(dir);
@@ -136,9 +143,6 @@ inline int Rmdir(const char* dir)
   return _rmdir(dir);
 }
 #else
-#include <sys/types.h>
-#include <fcntl.h>
-#include <unistd.h>
 inline int Mkdir(const char* dir)
 {
   return mkdir(dir, 00777);
