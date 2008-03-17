@@ -34,7 +34,11 @@ int TestImageRead(const char* filename, bool verbose = false)
     //std::cerr << "Success to read image from file: " << filename << std::endl;
     unsigned long len = img.GetBufferLength();
     char* buffer = new char[len];
-    img.GetBuffer(buffer);
+    bool res2 = img.GetBuffer(buffer);
+    if( !res2 )
+      {
+      return 1;
+      }
     // On big Endian system we have byteswapped the buffer (duh!)
     // Since the md5sum is byte based there is now way it would detect
     // that the file is written in big endian word, so comparing against
@@ -88,7 +92,7 @@ int TestImageRead(const char* filename, bool verbose = false)
   // else
   // well this is not an image, so thankfully we fail to read it
   std::cerr << "Could not read image(" << filename << "), since file is a: " << ms << std::endl;
-  assert( ms != gdcm::MediaStorage::MS_END );
+  //assert( ms != gdcm::MediaStorage::MS_END );
   return 0;
 }
 

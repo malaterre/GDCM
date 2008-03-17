@@ -83,40 +83,31 @@ void JPEGCodec::SetBitSample(int bit)
 bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
 {
   out = in;
-      // Fragments...
-    const SequenceOfFragments *sf = in.GetSequenceOfFragments();
-    assert( sf );
-//#define MDEBUG
-#ifdef MDEBUG
-    sf->GetBuffer(buffer, len);
-    unsigned long totalLen = sf->ComputeByteLength();
-    std::ofstream f("/tmp/debug.jpg");
-    f.write(buffer, totalLen);
-    f.close();
-#endif
-        std::stringstream os;
-      unsigned long pos = 0;
-      for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
-        {
-        std::stringstream is;
-        const Fragment &frag = sf->GetFragment(i);
-        const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
-        char *mybuffer = new char[bv.GetLength()];
-        bv.GetBuffer(mybuffer, bv.GetLength());
-        is.write(mybuffer, bv.GetLength());
-        delete[] mybuffer;
-        bool r = Decode(is, os);
-        assert( r == true );
-        //std::streampos p = is.tellg();
-        //assert( (bv.GetLength() - p) == 0 );
-        //std::string::size_type check = os.str().size();
-        //memcpy(buffer+pos, os.str().c_str(), check);
-        //pos += check;
-        }
-      //assert( pos == len );
-    std::string str = os.str();
-    out.SetByteValue( &str[0], str.size() );
-    return true;
+  // Fragments...
+  const SequenceOfFragments *sf = in.GetSequenceOfFragments();
+  assert( sf );
+  std::stringstream os;
+  unsigned long pos = 0;
+  for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
+    {
+    std::stringstream is;
+    const Fragment &frag = sf->GetFragment(i);
+    const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
+    char *mybuffer = new char[bv.GetLength()];
+    bv.GetBuffer(mybuffer, bv.GetLength());
+    is.write(mybuffer, bv.GetLength());
+    delete[] mybuffer;
+    bool r = Decode(is, os);
+    // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm    
+    if( !r )
+      {
+      return false;
+      }
+    }
+  //assert( pos == len );
+  std::string str = os.str();
+  out.SetByteValue( &str[0], str.size() );
+  return true;
 }
 
 bool JPEGCodec::Decode(std::istream &is, std::ostream &os)

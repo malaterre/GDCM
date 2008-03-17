@@ -20,7 +20,10 @@ int TestPrint(const char *filename)
 {
   gdcm::Reader r;
   r.SetFileName( filename );
-  r.Read();
+  if( !r.Read() )
+    {
+    return 1;
+    }
 
   gdcm::Printer p;
   p.SetFile( r.GetFile() );

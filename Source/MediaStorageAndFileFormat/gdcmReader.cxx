@@ -474,6 +474,11 @@ std::istream &is = Stream;
 
     if( success ) assert( Stream.eof() );
     }
+//  if( !success )
+//    {
+//    F->GetHeader().Clear();
+//    F->GetDataSet().Clear();
+//    }
 
   // FIXME : call this function twice...
   Stream.close();

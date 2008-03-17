@@ -185,9 +185,6 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
 template <typename TSwap>
 const std::ostream &ImplicitDataElement::Write(std::ostream &os) const
 {
-#ifndef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-  assert( VRField == VR::INVALID );
-#endif
   // See PS 3.5, 7.1.3 Data Element Structure With Implicit VR
   // Write Tag
   if( !TagField.Write<TSwap>(os) )
