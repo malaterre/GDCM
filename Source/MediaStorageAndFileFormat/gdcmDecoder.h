@@ -21,6 +21,8 @@
 namespace gdcm
 {
 
+/** \class Coder
+ */
 class TransferSyntax;
 class DataElement;
 class GDCM_EXPORT Decoder

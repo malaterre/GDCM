@@ -21,6 +21,8 @@
 namespace gdcm
 {
 
+/** \class Codec
+ */
 class GDCM_EXPORT Codec : public Coder, public Decoder
 {
 };

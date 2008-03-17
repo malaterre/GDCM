@@ -23,15 +23,6 @@
 
 namespace gdcm
 {
-// Data Element
-// Contains multiple fields:
-// -> Tag
-// -> Optional VR (Explicit Transfer Syntax)
-// -> ValueLength
-// -> Value
-// TODO: This class SHOULD be pure virtual. I dont want a user
-// to shoot himself in the foot.
-//class Value;
 /**
  * \brief Class to represent a Data Element
  * Implicit / Explicit
@@ -51,6 +42,15 @@ namespace gdcm
  *
  * \see ExplicitDataElement ImplicitDataElement
  */
+// Data Element
+// Contains multiple fields:
+// -> Tag
+// -> Optional VR (Explicit Transfer Syntax)
+// -> ValueLength
+// -> Value
+// TODO: This class SHOULD be pure virtual. I dont want a user
+// to shoot himself in the foot.
+//class Value;
 
 class SequenceOfItems;
 class SequenceOfFragments;

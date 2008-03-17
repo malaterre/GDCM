@@ -19,6 +19,8 @@
 
 namespace gdcm
 {
+/** \class Coder
+ */
 
 class TransferSyntax;
 class DataElement;

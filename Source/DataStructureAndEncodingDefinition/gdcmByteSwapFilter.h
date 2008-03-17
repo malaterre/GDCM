@@ -21,6 +21,7 @@ namespace gdcm
 {
 
 /*
+ * \brief ByteSwapFilter
  * In place byte-swapping of a dataset
  * FIXME: FL status ??
  */
