@@ -20,7 +20,7 @@
 namespace gdcm
 {
 /**
- * \brief
+ * \brief Fiducials
  */
 class GDCM_EXPORT Fiducials
 {

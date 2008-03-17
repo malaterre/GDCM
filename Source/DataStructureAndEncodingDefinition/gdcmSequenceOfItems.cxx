@@ -17,6 +17,24 @@
 namespace gdcm
 {
 
+void SequenceOfItems::AddItem(Item const &item)
+{
+  Items.push_back( item );
+  if( !SequenceLengthField.IsUndefined() )
+    {
+    abort(); // TODO
+    }
+}
+
+const Item &SequenceOfItems::GetItem(unsigned int position) const
+{
+  if( position < 1 || position > Items.size() )
+    {
+    throw Exception( "Out of Range" );
+    }
+  return Items[position-1];
+}
+
 
 } // end namespace gdcm
 

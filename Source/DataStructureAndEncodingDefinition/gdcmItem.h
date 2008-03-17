@@ -211,48 +211,58 @@ std::istream &Read(std::istream &is)
   return is;
 }
 
-template <typename TDE, typename TSwap>
-const std::ostream &Write(std::ostream &os) const
-{
-  if( TagField == Tag(0x3f3f,0x3f00) )
-    {
-    Tag t(0xfffe, 0xe000);
-    t.Write<TSwap>(os);
-    }
-  else
-    {
-    // Not sure how this happen
-    if( TagField == Tag(0xfffe, 0xe0dd) )
+  template <typename TDE, typename TSwap>
+  const std::ostream &Write(std::ostream &os) const
+  {
+  #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+    if( TagField == Tag(0x3f3f,0x3f00) )
       {
-      gdcmWarningMacro( "SegDelItem found in defined length Sequence" );
-      assert( ValueLengthField == 0 );
+      Tag t(0xfffe, 0xe000);
+      t.Write<TSwap>(os);
+abort();
       }
-    if( !TagField.Write<TSwap>(os) )
+    else
+  #endif
+      {
+      assert ( TagField == Tag(0xfffe, 0xe000)
+        || TagField == Tag(0xfffe, 0xe0dd) );
+      // Not sure how this happen
+      if( TagField == Tag(0xfffe, 0xe0dd) )
+        {
+        gdcmWarningMacro( "SegDelItem found in defined length Sequence" );
+        assert( ValueLengthField == 0 );
+        }
+      if( !TagField.Write<TSwap>(os) )
+        {
+        assert(0 && "Should not happen");
+        return os;
+        }
+      }
+    if( !ValueLengthField.Write<TSwap>(os) )
       {
       assert(0 && "Should not happen");
       return os;
       }
-    assert ( TagField == Tag(0xfffe, 0xe000)
-      || TagField == Tag(0xfffe, 0xe0dd) );
-    }
-  if( !ValueLengthField.Write<TSwap>(os) )
-    {
-    assert(0 && "Should not happen");
+    // Self
+    NestedDataSet.Write<TDE,TSwap>(os);
+    if( ValueLengthField.IsUndefined() )
+      {
+      const Tag itemDelItem(0xfffe,0xe00d);
+      itemDelItem.Write<TSwap>(os);
+      VL zero = 0;
+      zero.Write<TSwap>(os);
+      }
+  
     return os;
-    }
-  // Self
-  NestedDataSet.Write<TDE,TSwap>(os);
-  if( ValueLengthField.IsUndefined() )
-    {
-    const Tag itemDelItem(0xfffe,0xe00d);
-    itemDelItem.Write<TSwap>(os);
-    VL zero = 0;
-    zero.Write<TSwap>(os);
-    }
+  }
 
-  return os;
-}
-
+/*
+There are three special SQ related Data Elements that are not ruled by the VR encoding rules conveyed
+by the Transfer Syntax. They shall be encoded as Implicit VR. These special Data Elements are Item
+(FFFE,E000), Item Delimitation Item (FFFE,E00D), and Sequence Delimitation Item (FFFE,E0DD).
+However, the Data Set within the Value Field of the Data Element Item (FFFE,E000) shall be encoded
+according to the rules conveyed by the Transfer Syntax.
+*/
 
 private:
   /* NESTED DATA SET  a Data Set contained within a Data Element of an other Data Set.
