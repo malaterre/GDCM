@@ -53,14 +53,14 @@ time_t uuid_time(const uuid_t uu, struct timeval *ret_tv)
 	struct uuid		uuid;
 	uint32_t			high;
 	struct timeval		tv;
-	unsigned long long	clock_reg;
+	uint64_t	clock_reg;
 
 	uuid_unpack(uu, &uuid);
 
 	high = uuid.time_mid | ((uuid.time_hi_and_version & 0xFFF) << 16);
-	clock_reg = uuid.time_low | ((unsigned long long) high << 32);
+	clock_reg = uuid.time_low | ((uint64_t) high << 32);
 
-	clock_reg -= (((unsigned long long) 0x01B21DD2) << 32) + 0x13814000;
+	clock_reg -= (((uint64_t) 0x01B21DD2) << 32) + 0x13814000;
 	tv.tv_sec = clock_reg / 10000000;
 	tv.tv_usec = (clock_reg % 10000000) / 10;
 
