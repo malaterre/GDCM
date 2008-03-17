@@ -135,7 +135,7 @@ int TestvtkGDCMThreadedImageRead(const char *filename)
   TReader *reader = TReader::New();
   reader->FileLowerLeftOn();
   //reader->CanReadFile( filename );
-  std::cerr << "Reading : " << filename << std::endl;
+  //std::cerr << "Reading : " << filename << std::endl;
 
   const char *refimage = NULL;
   if( gdcm::System::FileIsDirectory( filename ) )
@@ -194,7 +194,7 @@ int TestvtkGDCMThreadedImageRead(const char *filename)
     //pngfile += vtksys::SystemTools::GetFilenameWithoutExtension( filename );
     pngfile += ".png";
     writer->SetFileName( pngfile.c_str() );
-    std::cerr << pngfile << std::endl;
+    //std::cerr << pngfile << std::endl;
     //writer->Write();
     writer->Delete();
     }
@@ -209,11 +209,11 @@ int TestvtkGDCMThreadedImageRead(const char *filename)
 */
 
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
-  double *s = reader->GetOutput()->GetScalarRange();
+  //double *s = reader->GetOutput()->GetScalarRange();
 #else
-  float *s = reader->GetOutput()->GetScalarRange();
+  //float *s = reader->GetOutput()->GetScalarRange();
 #endif
-  std::cout << s[0] << " " << s[1] << std::endl;
+  //std::cout << s[0] << " " << s[1] << std::endl;
 
 /*
   // Create transfer functions for opacity and color
