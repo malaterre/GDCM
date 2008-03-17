@@ -37,8 +37,8 @@ public:
   }
   const DataElement& GetDataElement() const { return PixelData; }
 
-  void SetColumns(double col) { SetDimension(0,col); }
-  void SetRows(double rows) { SetDimension(1,rows); }
+  void SetColumns(unsigned int col) { SetDimension(0,col); }
+  void SetRows(unsigned int rows) { SetDimension(1,rows); }
   void SetDimension(unsigned int idx, unsigned int dim);
   int GetColumns() const { return Dimensions[0]; }
   int GetRows() const { return Dimensions[1]; }
