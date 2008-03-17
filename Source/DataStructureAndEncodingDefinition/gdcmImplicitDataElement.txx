@@ -160,12 +160,14 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
   if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) )
     {
     // Special handling for PixelData tag:
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     if( TagField == Tag(0x7fe0,0x0010) )
       {
       gdcmWarningMacro( "Incomplete Pixel Data found, use file at own risk" );
       is.clear();
       }
     else
+#endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
       {
       throw Exception("Should not happen");
       }

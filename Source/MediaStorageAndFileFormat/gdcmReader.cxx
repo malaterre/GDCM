@@ -20,6 +20,9 @@
 
 #include "gdcmDeflateStream.h"
 
+#include "gdcmExplicitDataElement.h"
+#include "gdcmImplicitDataElement.h"
+
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
 #include "gdcmUNExplicitDataElement.h"
 #include "gdcmCP246ExplicitDataElement.h"
@@ -189,8 +192,8 @@ bool Reader::Read()
     gdcmErrorMacro( "No File" );
     return false;
     }
+  bool success = true;
 
-//  try
     {
 std::istream &is = Stream;
 
@@ -302,6 +305,7 @@ std::istream &is = Stream;
   // Only catch parse exception at this point
   catch( ParseException &ex )
     {
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     if( ex.GetLastElement().GetVR() == VR::UN && ex.GetLastElement().IsUndefinedLength() )
       {
       // non CP 246
@@ -457,20 +461,24 @@ std::istream &is = Stream;
         // This file can only be rewritten as implicit...
         }
       }
+#else
+    std::cerr << ex.what() << std::endl;
+    success = false;
+#endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
+    }
+  catch( Exception &ex )
+    {
+    std::cerr << ex.what() << std::endl;
+    success = false;
     }
 
-    assert( Stream.eof() );
+    if( success ) assert( Stream.eof() );
     }
-//  catch( std::exception &ex )
-//    {
-//    std::cerr << ex.what() << std::endl;
-//    return false;
-//    }
 
   // FIXME : call this function twice...
   Stream.close();
 
-  return true;
+  return success;
 }
 
 bool Reader::ReadUpToTag(const Tag & tag)
@@ -480,8 +488,8 @@ bool Reader::ReadUpToTag(const Tag & tag)
     gdcmErrorMacro( "No File" );
     return false;
     }
+  bool success = true;
 
-  F = new File;
 //  try
     {
 std::istream &is = Stream;
@@ -594,6 +602,7 @@ std::istream &is = Stream;
   // Only catch parse exception at this point
   catch( ParseException &ex )
     {
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     if( ex.GetLastElement().GetVR() == VR::UN && ex.GetLastElement().IsUndefinedLength() )
       {
       // non CP 246
@@ -703,20 +712,24 @@ std::istream &is = Stream;
         // This file can only be rewritten as implicit...
         }
       }
+#else
+    std::cerr << ex.what() << std::endl;
+    success = false;
+#endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
+    }
+  catch( Exception &ex )
+    {
+    std::cerr << ex.what() << std::endl;
+    success = false;
     }
 
     //assert( Stream.eof() );
     }
-//  catch( std::exception &ex )
-//    {
-//    std::cerr << ex.what() << std::endl;
-//    return false;
-//    }
 
   // FIXME : call this function twice...
   Stream.close();
 
-  return true;
+  return success;
 }
 
 } // end namespace gdcm

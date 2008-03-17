@@ -48,18 +48,18 @@ public:
     return true;
   }
           
+/*
   // Multiple calls to what ??
   const char* what() const throw()
     { 
-//    static std::string strwhat;
-//    std::ostringstream oswhat;
-//    oswhat << File << ":" << Line << ":\n";
-//    oswhat << Description;
-//    strwhat = oswhat.str();
-//    return strwhat.c_str();
-  return 0;
+    static std::string strwhat;
+    std::ostringstream oswhat;
+    oswhat << File << ":" << Line << ":\n";
+    oswhat << Description;
+    strwhat = oswhat.str();
+    return strwhat.c_str();
     }
-
+*/
   void SetLastElement(DataElement& de)
     {
     LastElement = de;

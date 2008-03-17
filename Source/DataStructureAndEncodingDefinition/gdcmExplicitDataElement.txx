@@ -79,6 +79,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     }
   catch( Exception &ex )
     {
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     // gdcm-MR-PHILIPS-16-Multi-Seq.dcm
     // assert( TagField == Tag(0xfffe, 0xe000) );
     // -> For some reason VR is written as {44,0} well I guess this is a VR...
@@ -93,6 +94,9 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     ParseException pe;
     pe.SetLastElement( *this );
     throw pe;
+#else
+  throw ex;
+#endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
     }
   // Read Value Length
   if( VR::GetLength(VRField) == 4 )
@@ -268,6 +272,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     }
   if( failed )
     {
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     if( TagField == Tag(0x7fe0,0x0010) )
       {
       // PMS-IncompletePixelData.dcm
@@ -275,6 +280,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       is.clear();
       }
     else
+#endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
       {
       // Might be the famous UN 16bits
       ParseException pe;

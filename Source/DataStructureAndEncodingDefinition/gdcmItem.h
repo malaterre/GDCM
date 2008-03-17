@@ -177,9 +177,6 @@ std::istream &Read(std::istream &is)
       }
     return is;
     }
-#else
-  assert ( TagField == Tag(0xfffe, 0xe000)
-        || TagField == Tag(0xfffe, 0xe0dd) );
 #endif
   if( !ValueLengthField.Read<TSwap>(is) )
     {

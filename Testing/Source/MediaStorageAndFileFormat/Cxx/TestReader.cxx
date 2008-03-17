@@ -43,7 +43,7 @@ int TestRead(const char* filename)
     return 1;
     }
 
-  std::cout << "Found MediaStorage: " << ms << std::endl;
+  std::cerr << "Found MediaStorage: " << ms << std::endl;
 
   return 0;
 }
