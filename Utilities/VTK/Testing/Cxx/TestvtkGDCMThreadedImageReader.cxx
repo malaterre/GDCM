@@ -116,8 +116,18 @@ int ExecuteInformation(const char *filename, TReader *vtkreader)
   case gdcm::PixelFormat::UINT16:
     datascalartype = VTK_UNSIGNED_SHORT;
     break;
+  case gdcm::PixelFormat::INT32:
+    datascalartype = VTK_INT;
+    break;
+  case gdcm::PixelFormat::UINT32:
+    datascalartype = VTK_UNSIGNED_INT;
+    break;
   default:
     ;
+    }
+  if( datascalartype == VTK_VOID )
+    {
+    return 0;
     }
 
   unsigned int numberOfScalarComponents = pixeltype.GetSamplesPerPixel();

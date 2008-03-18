@@ -218,6 +218,7 @@ int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
     }
   assert( numvol == 1 || numvol == 3 );
   this->SetNumberOfOutputPorts(numvol);
+  assert( this->DataScalarType != VTK_VOID );
   // For each output:
   for(int i = 0; i < numvol; ++i)
     {
