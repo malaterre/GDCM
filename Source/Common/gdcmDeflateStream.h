@@ -187,7 +187,8 @@ namespace gdcm
 
       // set the buffer pointers; use one character less for the
       // stream buffer than the really available one
-      setp(&buffer[0], &*--buffer.end());
+      setp(&buffer[0], &buffer[0]+buffer.size()-1);
+      assert( &buffer[0]+buffer.size()-1 == &*--buffer.end() );
 
       // initialize the compressor stream
       memset(&cstream, 0, sizeof(cstream)); // FIXME ??
@@ -198,7 +199,13 @@ namespace gdcm
       // create a gzip compressor stream
       //int ret = deflateInit(&cstream,Z_BEST_SPEED);
       // Same comment a inflateInit2, we should not write any zlib here:
-      int ret = deflateInit2(&cstream, Z_BEST_SPEED,
+/*
+#define Z_NO_COMPRESSION         0
+#define Z_BEST_SPEED             1
+#define Z_BEST_COMPRESSION       9
+#define Z_DEFAULT_COMPRESSION  (-1)
+*/
+      int ret = deflateInit2(&cstream, Z_BEST_COMPRESSION /*Z_BEST_SPEED*/,
         Z_DEFLATED, -MAX_WBITS, MAX_MEM_LEVEL, Z_DEFAULT_STRATEGY);
 
       switch (ret) {
@@ -300,7 +307,9 @@ namespace gdcm
         dstream.avail_in = in_end - in_begin;
         dstream.next_out = (Byte*)putback_end;
         // FIXME: cannot derefence end iterator...
-        dstream.avail_out = &*buffer.end() - putback_end;
+        dstream.avail_out = &buffer[0] + buffer.size() - putback_end;
+        assert( &buffer[0] + buffer.size() - putback_end == &*buffer.end() - putback_end );
+        //dstream.avail_out = &*buffer.end() - putback_end;
         int ret = inflate(&dstream,Z_NO_FLUSH);
         switch (ret) {
         case Z_OK:
@@ -308,7 +317,7 @@ namespace gdcm
         case Z_STREAM_END:
           // Z_STREAM_END if the end of the compressed data has been reached
           // and all uncompressed output has been produced
-          if (&*buffer.end() - putback_end == (int) dstream.avail_out)
+          if (&buffer[0]+buffer.size() - putback_end == (size_t) dstream.avail_out)
             return traits_type::eof();
           // assert( it should be 1024 - 64 ...)
           break;
@@ -325,12 +334,12 @@ namespace gdcm
         // update the input buffer pointers
         in_begin = in_end - dstream.avail_in;
 
-      } while (dstream.avail_out + putback_end == &*buffer.end());
+      } while (dstream.avail_out + putback_end == &buffer[0]+buffer.size());
 
       // update the stream buffer pointers
       setg(putback_end - new_putback_num,
         putback_end,
-        &*buffer.end() - dstream.avail_out);
+        &buffer[0]+buffer.size() - dstream.avail_out);
 
       // return the next character
       return traits_type::to_int_type(*gptr());
