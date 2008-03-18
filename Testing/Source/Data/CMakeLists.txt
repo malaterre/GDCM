@@ -52,6 +52,7 @@ SET(BLACK_LIST_READER
 # quick fix:
   tst_not.dcm
   MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm
+  BogugsSequenceLengthCorrectItemLength.dcm
 )
 
 SET(GDCM_DATA_FILENAMES)
