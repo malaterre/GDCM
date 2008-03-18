@@ -65,7 +65,8 @@ public:
     const Tag seqDelItem(0xfffe,0xe0dd);
     if( !TagField.Read<TSwap>(is) )
       {
-      assert(0 && "Should not happen");
+      //  BogusItemStartItemEnd.dcm
+      throw Exception( "Problem" );
       return is;
       }
     if( !ValueLengthField.Read<TSwap>(is) )

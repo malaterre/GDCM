@@ -25,10 +25,23 @@ namespace gdcm
     DataElement de;
     const Tag itemDelItem(0xfffe,0xe00d);
     assert( de.GetTag() != itemDelItem ); // precondition before while loop
-    while( de.Read<TDE,TSwap>(is) && de.GetTag() != itemDelItem  ) // Keep that order please !
+    try
       {
-      //std::cerr << "DEBUG Nested: " << de << std::endl;
-      DES.insert( de );
+      while( de.Read<TDE,TSwap>(is) && de.GetTag() != itemDelItem  ) // Keep that order please !
+        {
+        //std::cerr << "DEBUG Nested: " << de << std::endl;
+        DES.insert( de );
+        }
+      }
+    catch(ParseException &pe)
+      {
+      if( pe.GetLastElement().GetTag() == Tag(0xfffe,0xe0dd) )
+        {
+        //  BogusItemStartItemEnd.dcm
+        gdcmWarningMacro( "SQ End found but no no Item end found" );
+        de.SetTag( itemDelItem );
+        is.seekg( -4, std::ios::cur );
+        }
       }
     assert( de.GetTag() == itemDelItem );
     //std::cerr << "Finish nested" << std::endl;

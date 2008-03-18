@@ -40,7 +40,12 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       }
     return is;
     }
-  assert( TagField != Tag(0xfffe,0xe0dd) );
+  if( TagField == Tag(0xfffe,0xe0dd) )
+    {
+    ParseException pe;
+    pe.SetLastElement( *this );
+    throw pe;
+    }
   //assert( TagField != Tag(0xfeff,0xdde0) );
   const Tag itemDelItem(0xfffe,0xe00d);
   if( TagField == itemDelItem )
