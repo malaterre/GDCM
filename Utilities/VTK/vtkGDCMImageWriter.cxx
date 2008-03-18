@@ -427,8 +427,15 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   case VTK_UNSIGNED_SHORT:
     pixeltype = gdcm::PixelFormat::UINT16;
     break;
+  case VTK_INT:
+    pixeltype = gdcm::PixelFormat::INT32;
+    break;
+  case VTK_UNSIGNED_INT:
+    pixeltype = gdcm::PixelFormat::UINT32;
+    break;
   default:
-    abort();
+    vtkErrorMacro( "Do not support this Pixel Type: " << scalarType );
+    return 0;
     }
 
   gdcm::PhotometricInterpretation pi;
