@@ -101,13 +101,31 @@ public:
       {
       Item item;
       VL l = 0;
+      //is.seekg( SequenceLengthField, std::ios::cur ); return is;
       while( l != SequenceLengthField )
         {
-        item.Read<TDE,TSwap>(is);
+        try
+          {
+          item.Read<TDE,TSwap>(is);
+          }
+        catch( Exception &ex )
+          {
+          if( strcmp( ex.GetDescription(), "Changed Length" ) == 0 )
+            {
+            VL newlength = l + item.template GetLength<TDE>();
+            if( newlength > SequenceLengthField )
+              {
+              // BogugsItemAndSequenceLength.dcm
+              gdcmWarningMacro( "SQ length is wrong" );
+              SequenceLengthField = newlength;
+              }
+            }
+          }
         if( item.GetTag() == seqDelItem )
           {
           gdcmWarningMacro( "SegDelItem found in defined length Sequence" );
           }
+        //assert( item.GetTag() == Tag(0xfffe,0xe000) );
         Items.push_back( item );
         l += item.template GetLength<TDE>();
         assert( l <= SequenceLengthField );

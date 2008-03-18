@@ -101,12 +101,12 @@ std::istream &Read(std::istream &is)
   // Superclass
   if( !TagField.Read<TSwap>(is) )
     {
-	    //std::cerr << TagField << std::endl;
-    //assert(0 && "Should not happen");
     throw Exception("Should not happen");
     return is;
     }
+
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+  // MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.dcm
   if( TagField == Tag(0xfeff, 0x00e0)
    || TagField == Tag(0xfeff, 0xdde0) )
     {
@@ -178,6 +178,9 @@ std::istream &Read(std::istream &is)
     return is;
     }
 #endif
+  assert ( TagField == Tag(0xfffe, 0xe000)
+    || TagField == Tag(0xfffe, 0xe0dd) );
+
   if( !ValueLengthField.Read<TSwap>(is) )
     {
     assert(0 && "Should not happen");

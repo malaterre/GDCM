@@ -140,7 +140,12 @@ void vtkGDCMImageReader::ExecuteInformation()
   vtkImageData *output = this->GetOutput();
   output->SetUpdateExtentToWholeExtent(); // pipeline is not reexecuting properly without that...
 
-  RequestInformationCompat();
+  int res = RequestInformationCompat();
+  if( !res )
+    {
+    vtkErrorMacro( "ExecuteInformation failed" );
+    return;
+    }
 
   int numvol = 1;
   if( this->LoadIconImage )
@@ -430,6 +435,10 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
                                       vtkInformationVector *outputVector)
 {
   int res = RequestInformationCompat();
+  if( !res )
+    {
+    return 0;
+    }
 
   int numvol = 1;
   if( this->LoadIconImage )
@@ -581,22 +590,29 @@ int vtkGDCMImageReader::RequestInformationCompat()
   case gdcm::PixelFormat::UINT8:
     this->DataScalarType = VTK_UNSIGNED_CHAR;
     break;
-  case gdcm::PixelFormat::INT12:
-    abort();
-    this->DataScalarType = VTK_SHORT;
-    break;
-  case gdcm::PixelFormat::UINT12:
-    abort();
-    this->DataScalarType = VTK_UNSIGNED_SHORT;
-    break;
   case gdcm::PixelFormat::INT16:
     this->DataScalarType = VTK_SHORT;
     break;
   case gdcm::PixelFormat::UINT16:
     this->DataScalarType = VTK_UNSIGNED_SHORT;
     break;
+  // RT / SC have 32bits
+  case gdcm::PixelFormat::INT32:
+    this->DataScalarType = VTK_INT;
+    break;
+  case gdcm::PixelFormat::UINT32:
+    this->DataScalarType = VTK_UNSIGNED_INT;
+    break;
+  // FIXME 12bits should not be that hard...
+  case gdcm::PixelFormat::INT12:
+    //this->DataScalarType = VTK_SHORT;
+    //break;
+  case gdcm::PixelFormat::UINT12:
+    //this->DataScalarType = VTK_UNSIGNED_SHORT;
+    //break;
   default:
-    ;
+    vtkErrorMacro( "Do not support this Pixel Type: " << pixeltype );
+    return 0;
     }
 
   this->NumberOfScalarComponents = pixeltype.GetSamplesPerPixel();

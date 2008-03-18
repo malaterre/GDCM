@@ -16,6 +16,7 @@
 #define __gdcmCSAHeader_h
 
 #include "gdcmTypes.h"
+#include "gdcmDataSet.h"
 
 namespace gdcm
 {
@@ -32,8 +33,16 @@ class DataElement;
 class GDCM_EXPORT CSAHeader
 {
 public :
-  CSAHeader() {};
+  CSAHeader():InternalDataSet(),InternalType(UNKNOWN) {};
   ~CSAHeader() {};
+
+  typedef enum {
+    UNKNOWN = 0,
+    SV10,
+    NOMAGIC,
+    DATASET_FORMAT,
+    ZEROED_OUT
+  } CSAHeaderType;
 
   template <typename TSwap>
   std::istream &Read(std::istream &is);
@@ -41,7 +50,15 @@ public :
   template <typename TSwap>
   const std::ostream &Write(std::ostream &os) const;
 
-  void Print(DataElement const &de) const;
+  void Print(DataElement const &de);
+
+  const DataSet& GetDataSet() const { return InternalDataSet; }
+
+  CSAHeaderType GetFormat() const;
+
+private:
+  DataSet InternalDataSet;
+  CSAHeaderType InternalType;
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------

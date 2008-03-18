@@ -35,6 +35,8 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
       assert(0 && "Should not happen");
     return is;
     }
+  const Tag itemStartItem(0xfffe,0xe000);
+  if( TagField == itemStartItem ) return is;
 
   //assert( TagField != Tag(0xfffe,0xe0dd) );
   // Read Value Length
@@ -43,7 +45,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
     assert(0 && "Should not happen");
     return is;
     }
-  //std::cerr << "imp cur tag=" << TagField <<  " VL=" << ValueLengthField << std::endl;
+  //std::cout << "imp cur tag=" << TagField <<  " VL=" << ValueLengthField << std::endl;
   if( ValueLengthField == 0 )
     {
     // Simple fast path
@@ -174,7 +176,17 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
     return is;
     }
 
-#ifndef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+  // dcmtk 3.5.4 is resilient to broken explicit SQ length and will properly recompute it 
+  // as long as each of the Item lengths are correct
+  VL dummy = ValueField->GetLength();
+  if( ValueLengthField != dummy )
+    {
+    gdcmWarningMacro( "ValueLengthField was bogus" );
+    ValueLengthField = dummy;
+    }
+#else
+  assert( ValueLengthField == ValueField->GetLength() );
   assert( VRField == VR::INVALID );
 #endif
 
@@ -201,13 +213,8 @@ const std::ostream &ImplicitDataElement::Write(std::ostream &os) const
   // Write Value
   if( ValueLengthField )
     {
-#ifdef NDEBUG
-    if( dynamic_cast<const ByteValue*>(&*ValueField) )
-      {
-      assert( ValueField->GetLength() == ValueLengthField );
-      }
-#endif
     assert( ValueField );
+    assert( ValueLengthField == ValueField->GetLength() );
     assert( TagField != Tag(0xfffe, 0xe00d)
          && TagField != Tag(0xfffe, 0xe0dd) );
     if( !ValueIO<ImplicitDataElement,TSwap>::Write(os,*ValueField) )

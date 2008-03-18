@@ -118,7 +118,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 1760 1760 1 16 1 */
 { "6588b7b8e6e53b2276d919a053316153" , "D_CLUNIE_RG3_JPLL.dcm" },
 /* gdcm 1760 1760 1 16 1 */
-{ "c4c35ed0e4b907bb4f42c638401f1459" , "D_CLUNIE_RG3_JPLY.dcm" },
+{ "cb381c53172242404346b237bf741eb4" , "D_CLUNIE_RG3_JPLY.dcm" },
 /* gdcm 1760 1760 1 16 1 */
 { "6588b7b8e6e53b2276d919a053316153" , "D_CLUNIE_RG3_RLE.dcm" },
 /* gdcm 2048 2487 1 16 1 */

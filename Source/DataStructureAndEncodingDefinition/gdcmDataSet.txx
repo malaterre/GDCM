@@ -74,6 +74,9 @@ namespace gdcm
       while( l != locallength && de.Read<TDE,TSwap>(is))
         {
         //std::cout << "Nested: " << de << std::endl;
+#ifndef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+        assert( de.GetTag() != Tag(0xfffe,0xe000) ); // We should not be reading the next item...
+#endif
         DES.insert( de );
         l += de.GetLength<TDE>();
         //std::cout << "l:" << l << std::endl;
@@ -87,7 +90,10 @@ namespace gdcm
           gdcmWarningMacro( "PMS: Super bad hack. Changing length" );
           length = locallength = 140;
           }
-        assert( l <= locallength );
+        if( l > locallength )
+          {
+          throw Exception( "Out of Range" );
+          }
         }
     }
     catch(ParseException &pe)
@@ -108,6 +114,39 @@ namespace gdcm
         throw Exception( "Unhandled" );
         }
       }
+    catch(Exception &pe)
+      {
+      assert( strcmp( pe.GetDescription(), "Out of Range" ) == 0);
+      // BogugsItemAndSequenceLength.dcm
+      // This is most likely the "Out of Range" one
+      // Cautiously read until we find the next item starter and then stop.
+      //std::cout << "Length read was:" << l << " should be at most:" <<  locallength ;
+      while( de.Read<TDE,TSwap>(is) && de.GetTag() != Tag(0xfffe,0xe000) && de.GetTag().GetElement() != 0x0 )
+        {
+        //std::cout << "Nested2: " << de << std::endl;
+        DES.insert( de );
+        l += de.GetLength<TDE>();
+        //std::cout << l << std::endl;
+        }
+      // seek back since we read the next item starter:
+      int iteml = de.GetLength<TDE>();
+      //assert( de.GetTag().GetElement() );
+      if( !de.GetTag().GetElement() )
+        {
+        assert( iteml == 12 );
+        is.seekg( -12, std::ios::cur );
+        }
+      else
+        {
+        assert( de.GetTag() == Tag(0xfffe,0xe000) );
+        is.seekg( -4, std::ios::cur );
+        }
+      // let's fix the length now:
+      length = locallength = l;
+      gdcmWarningMacro( "Item length is wrong" );
+      throw Exception( "Changed Length" );
+      }
+
     assert( l == locallength );
     return is;
   }

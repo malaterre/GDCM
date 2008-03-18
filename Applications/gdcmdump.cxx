@@ -99,6 +99,14 @@ int PrintCSA(const std::string & filename)
         {
         csa.Print( ds.GetDataElement( t2 ) );
         }
+      if( csa.GetFormat() == gdcm::CSAHeader::DATASET_FORMAT )
+        {
+        gdcm::Printer p;
+        gdcm::File f;
+        f.SetDataSet( csa.GetDataSet() );
+        p.SetFile( f );
+        p.Print( std::cout );
+        }
       }
     }
 
