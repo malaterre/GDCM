@@ -83,7 +83,7 @@ public:
 protected:
   bool RequestPlanarConfiguration;
   bool RequestPaddedCompositePixelCode;
-private:
+//private:
   unsigned int PlanarConfiguration;
   PhotometricInterpretation PI;
   PixelFormat PF;

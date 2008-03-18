@@ -268,12 +268,18 @@ int main (int argc, char *argv[])
 
   if (optind < argc)
     {
-    printf ("non-option ARGV-elements: ");
-    while (optind < argc)
+    //printf ("non-option ARGV-elements: %d", optind );
+    //while (optind < argc)
+    //  {
+    //  printf ("%s\n", argv[optind++]);
+    //  }
+    //printf ("\n");
+    // Ok there is only one arg, easy, it's the filename:
+    int v = argc - optind;
+    if( v == 1 )
       {
-      printf ("%s ", argv[optind++]);
+      filename = argv[optind];
       }
-    printf ("\n");
     }
 
   if( version )
