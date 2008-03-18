@@ -42,6 +42,12 @@ namespace gdcm
         de.SetTag( itemDelItem );
         is.seekg( -4, std::ios::cur );
         }
+      else
+        {
+        // MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm
+        // Need to rethrow the exception...sigh
+        throw pe;
+        }
       }
     assert( de.GetTag() == itemDelItem );
     //std::cerr << "Finish nested" << std::endl;
