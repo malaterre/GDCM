@@ -111,7 +111,10 @@ bool ImageCodec::DoYBR(std::istream &is, std::ostream &os)
   unsigned long size = buf_size/3;
   unsigned char *copy = new unsigned char[ buf_size ];
   memmove( copy, dummy_buffer, buf_size);
-
+abort(); // Do not use this code !
+  // FIXME FIXME FIXME
+  // The following is bogus: we are doing two operation at once:
+  // Planar configuration AND YBR... doh !
   const unsigned char *a = copy + 0;
   const unsigned char *b = copy + size;
   const unsigned char *c = copy + size + size;
@@ -425,13 +428,13 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
   else if (PI == PhotometricInterpretation::MONOCHROME1)
     {
     // CR-MONO1-10-chest.dcm
-    DoInvertMonochrome(*cur_is, pi_os);
-    cur_is = &pi_os;
+    //DoInvertMonochrome(*cur_is, pi_os);
+    //cur_is = &pi_os;
     }
   else if ( PI == PhotometricInterpretation::YBR_FULL )
     {
-    DoYBR(*cur_is,pi_os);
-    cur_is = &pi_os;
+    //DoYBR(*cur_is,pi_os);
+    //cur_is = &pi_os;
     }
   else if ( PI == PhotometricInterpretation::PALETTE_COLOR )
     {
@@ -455,13 +458,13 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
 
   if( PlanarConfiguration || RequestPlanarConfiguration )
     {
-    if ( PI == PhotometricInterpretation::YBR_FULL )
-      {
-      // ACUSON-24-YBR_FULL-RLE.dcm declare PlanarConfiguration=1
-      // but it's only pure YBR...
-      gdcmWarningMacro( "Not sure what to do" );
-      }
-    else
+    //if ( PI == PhotometricInterpretation::YBR_FULL )
+    //  {
+    //  // ACUSON-24-YBR_FULL-RLE.dcm declare PlanarConfiguration=1
+    //  // but it's only pure YBR...
+    //  gdcmWarningMacro( "Not sure what to do" );
+    //  }
+    //else
       {
       DoPlanarConfiguration(*cur_is,pl_os);
       cur_is = &pl_os;

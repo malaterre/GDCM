@@ -26,6 +26,7 @@
 #include "vtkImageActor.h"
 #include "vtkWindowToImageFilter.h"
 #if VTK_MAJOR_VERSION >= 5
+#include "vtkImageYBRToRGB.h"
 #include "vtkImageColorViewer.h"
 #else
 #include "vtkImageViewer2.h"
@@ -208,11 +209,12 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   //reader->GetOutput()->Print( cout );
   //reader->GetOutput(1)->Print( cout );
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
-  double *range = reader->GetOutput()->GetScalarRange();
+  double range[2];
 #else
-  float *range = reader->GetOutput()->GetScalarRange();
+  float range[2];
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
-  std::cerr << "Range: " << range[0] << " " << range[1] << std::endl;
+  reader->GetOutput()->GetScalarRange(range);
+  //std::cerr << "Range: " << range[0] << " " << range[1] << std::endl;
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   viewer->SetInputConnection ( reader->GetOutputPort(0) );
   // Technically we could just simple always call AddInputConnection on the overlay
@@ -246,15 +248,34 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     }
 
   // In case of palette color, let's tell VTK to map color:
-  if( reader->GetOutput()->GetPointData()->GetScalars() && reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable() )
+  // MONOCHROME1 is also implemented with a lookup table
+  if( reader->GetImageFormat() == VTK_LOOKUP_TABLE || reader->GetImageFormat() == VTK_INVERSE_LUMINANCE )
     {
+    assert( reader->GetOutput()->GetPointData()->GetScalars() 
+      && reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable() );
     //convert to color:
     vtkImageMapToColors *map = vtkImageMapToColors::New ();
     map->SetInput (reader->GetOutput());
     map->SetLookupTable (reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable());
-    map->SetOutputFormatToRGB();
+    //map->SetOutputFormatToRGB();
+    map->SetOutputFormatToLuminance();
+    map->Update();
+    map->GetOutput()->GetScalarRange(range);
     viewer->SetInput( map->GetOutput() );
     map->Delete();
+    }
+  else if( reader->GetImageFormat() == VTK_YBR )
+    {
+#if VTK_MAJOR_VERSION >= 5
+    vtkImageYBRToRGB *filter = vtkImageYBRToRGB::New();
+    filter->SetInput( reader->GetOutput() );
+    filter->Update();
+    filter->GetOutput()->GetScalarRange(range);
+    viewer->SetInput( filter->GetOutput() );
+    filter->Delete();
+#else
+    std::cerr << "Not implemented" << std::endl;
+#endif
     }
 
   // Always overwriting default is not always nice looking...

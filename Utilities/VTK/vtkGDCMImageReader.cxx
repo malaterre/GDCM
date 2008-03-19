@@ -20,6 +20,7 @@
 #include "vtkStringArray.h"
 #include "vtkPointData.h"
 #include "vtkLookupTable.h"
+#include "vtkWindowLevelLookupTable.h"
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #include "vtkInformationVector.h"
 #include "vtkInformation.h"
@@ -73,6 +74,11 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   this->NumberOfOverlays = 0;
   this->NumberOfIconImages = 0;
   memset(this->IconImageDataExtent,0,6*sizeof(int));
+  this->ImageFormat = 0; // INVALID
+  this->ApplyInverseVideo = 0;
+  this->ApplyLookupTable = 0;
+  this->ApplyYBRToRGB = 0;
+  this->ApplyPlanarConfiguration = 1;
 }
 
 vtkGDCMImageReader::~vtkGDCMImageReader()
@@ -494,6 +500,17 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
 
 int vtkGDCMImageReader::RequestInformationCompat()
 {
+  // FIXME, need to implement the other modes too:
+  if( this->ApplyLookupTable || this->ApplyYBRToRGB || this->ApplyInverseVideo )
+    {
+    return 0;
+    }
+  // I do not think this one will ever be implemented:
+  if( !this->ApplyPlanarConfiguration )
+    {
+    return 0;
+    }
+
   // Let's read the first file :
   const char *filename;
   if( this->FileName )
@@ -701,11 +718,13 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
   // WARNING: get the scalar pointer AFTER AllocateScalars, not garantee to remain the same (VTK 4.2)
   char * overlaypointer = static_cast<char*>(this->GetOutput(OverlayPortNumber)->GetScalarPointer());
 
+  gdcm::PixelFormat pixeltype = image.GetPixelFormat();
   // Do the LUT
   //bool modlut = reader.GetFile().GetDataSet().FindDataElement( gdcm::Tag(0x0028,0x3000) );
   //assert( modlut );
   if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::PALETTE_COLOR )
     {
+    this->ImageFormat = VTK_LOOKUP_TABLE;
     // SOLVED: GetPointer(0) is skrew up, need to replace it with WritePointer(0,4) ...
     const gdcm::LookupTable &lut = image.GetLUT();
     vtkLookupTable *vtklut = vtkLookupTable::New();
@@ -719,9 +738,37 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
     data->GetPointData()->GetScalars()->SetLookupTable( vtklut );
     vtklut->Delete();
     }
+  else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME1 )
+    {
+    this->ImageFormat = VTK_INVERSE_LUMINANCE;
+    vtkWindowLevelLookupTable *vtklut = vtkWindowLevelLookupTable::New();
+    // Technically we could also use the first of the window width / window center
+    // oh well, if they are missing let's just compute something:
+    int64_t min = pixeltype.GetMin();
+    int64_t max = pixeltype.GetMax(); 
+    vtklut->SetWindow( max - min );
+    vtklut->SetLevel( 0.5 * (max + min) );
+    //vtklut->SetWindow(1024); // WindowWidth
+    //vtklut->SetLevel(550); // WindowCenter
+    vtklut->InverseVideoOn();
+    data->GetPointData()->GetScalars()->SetLookupTable( vtklut );
+    vtklut->Delete();
+    }
+  else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::YBR_FULL )
+    {
+    this->ImageFormat = VTK_YBR;
+    }
+  else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::RGB )
+    {
+    this->ImageFormat = VTK_RGB;
+    }
+  else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME2 )
+    {
+    this->ImageFormat = VTK_LUMINANCE;
+    }
+  assert( this->ImageFormat );
 
   //const unsigned int *dims = image.GetDimensions();
-  gdcm::PixelFormat pixeltype = image.GetPixelFormat();
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
   if( numoverlays ) assert( overlayoutsize * ( dext[3] - dext[2] + 1 ) == overlaylen );
   assert( outsize * (dext[3] - dext[2]+1) * (dext[5]-dext[4]+1) == len );

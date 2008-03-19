@@ -584,11 +584,27 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   PixelData.SetPhotometricInterpretation( pi );
 
   // Do the Palette Color:
+  // 1. Modality LUT Sequence
   bool modlut = ds.FindDataElement(Tag(0x0028,0x3000) );
   if( modlut )
     {
     gdcmWarningMacro( "Modality LUT (0028,3000) are not handled. Image will not be displayed properly" );
     }
+  // 2. LUTData (0028,3006)
+  // technically I do not need to warn about LUTData since either modality lut XOR VOI LUt need to 
+  // be sent to require a LUT Data...
+  bool lutdata = ds.FindDataElement(Tag(0x0028,0x3006) );
+  if( lutdata )
+    {
+    gdcmWarningMacro( "LUT Data (0028,3006) are not handled. Image will not be displayed properly" );
+    }
+  // 3. VOILUTSequence (0028,3010)
+  bool voilut = ds.FindDataElement(Tag(0x0028,0x3010) );
+  if( voilut )
+    {
+    gdcmWarningMacro( "VOI LUT (0028,3010) are not handled. Image will not be displayed properly" );
+    }
+  // 4. Palette Color Lookup Table Descriptor
   if ( pi == PhotometricInterpretation::PALETTE_COLOR )
     {
     //const DataElement& modlutsq = ds.GetDataElement( Tag(0x0028,0x3000) );

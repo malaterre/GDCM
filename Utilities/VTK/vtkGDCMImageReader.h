@@ -44,6 +44,21 @@ class vtkMedicalImageProperties;
 class vtkStringArray;
 #endif
 
+// vtkSystemIncludes.h defines:
+// #define VTK_LUMINANCE       1
+// #define VTK_LUMINANCE_ALPHA 2
+// #define VTK_RGB             3
+// #define VTK_RGBA            4
+#ifndef VTK_INVERSE_LUMINANCE
+#define VTK_INVERSE_LUMINANCE 5
+#endif
+#ifndef VTK_LOOKUP_TABLE
+#define VTK_LOOKUP_TABLE 6
+#endif
+#ifndef VTK_YBR
+#define VTK_YBR 7
+#endif
+
 //BTX
 namespace gdcm { class ImageReader; }
 //ETX
@@ -126,6 +141,22 @@ public:
   vtkImageData* GetOverlay(int i);
   vtkImageData* GetIconImage();
 
+  // Description:
+  // Load image with its associated Lookup Table
+  vtkGetMacro(ApplyLookupTable,int);
+  vtkSetMacro(ApplyLookupTable,int);
+  vtkBooleanMacro(ApplyLookupTable,int);
+
+  // Description:
+  // Load image as YBR
+  vtkGetMacro(ApplyYBRToRGB,int)
+  vtkSetMacro(ApplyYBRToRGB,int)
+  vtkBooleanMacro(ApplyYBRToRGB,int);
+
+  // Description:
+  // Return VTK_LUMINANCE, VTK_RGB, VTK_LOOKUP_TABLE or VTK_YBR
+  vtkGetMacro(ImageFormat,int);
+
 protected:
   vtkGDCMImageReader();
   ~vtkGDCMImageReader();
@@ -169,6 +200,14 @@ protected:
   int LoadIconImage;
   int NumberOfIconImages;
   int IconImageDataExtent[6];
+
+  int ImageFormat;
+  // the following 3, should remain optional
+  int ApplyInverseVideo;
+  int ApplyLookupTable;
+  int ApplyYBRToRGB;
+  // I think that planar configuration need to always be applied as far as VTK is concerned
+  int ApplyPlanarConfiguration;
 
   int LoadSingleFile(const char *filename, int *dext, vtkImageData* data, bool filelowerleft);
 

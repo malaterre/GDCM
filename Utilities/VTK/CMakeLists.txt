@@ -62,6 +62,7 @@ ELSE( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
   SET(vtkgdcm_SRCS ${vtkgdcm_SRCS}
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageColorViewer.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageMapToWindowLevelColors2.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageYBRToRGB.cxx
   )
 
   SET(VTK_USE_INSTANTIATOR_NEW 1)
