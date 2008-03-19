@@ -86,8 +86,16 @@ int TestImageRead(const char* filename, bool verbose = false)
   bool isImage = gdcm::MediaStorage::IsImage( ms );
   if( isImage )
     {
-    std::cerr << "Failed to read image from file: " << filename << std::endl;
-    return 1;
+    if( reader.GetFile().GetDataSet().FindDataElement( gdcm::Tag(0x7fe0,0x0010) ) )
+      {
+      std::cerr << "Failed to read image from file: " << filename << std::endl;
+      return 1;
+      }
+    else
+      {
+      std::cerr << "no Pixel Data Element found in the file:" << filename << std::endl;
+      return 0;
+      }
     }
   // else
   // well this is not an image, so thankfully we fail to read it
