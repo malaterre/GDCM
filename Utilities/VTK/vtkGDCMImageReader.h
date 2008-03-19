@@ -59,10 +59,10 @@ public:
   virtual int CanReadFile(const char* fname);
 
   // Description:
-  // Valid extentsions
+  // Valid extensions
   virtual const char* GetFileExtensions()
     {
-    // I would like to get rid of ACR so only allow dcm extension for now
+    // I would like to get rid of ACR/NEMA/IMA so only allow dcm extension for now
     return ".dcm .DCM";
     }
 
@@ -73,6 +73,7 @@ public:
     return "DICOM";
     }
 
+  // Description:
   // Get the Image Position (Patient) as stored in the DICOM file
   // This is a read-only data member
   vtkGetObjectMacro(DirectionCosines, vtkMatrix4x4);
@@ -90,25 +91,33 @@ public:
   vtkGetObjectMacro(FileNames, vtkStringArray);
 #endif
 
-  // Specifically request to load the overlay into the VTK layer (gdcm always load them when found).
+  // Description:
+  // Specifically request to load the overlay into the gdcm-VTK layer (gdcm always loads them when found).
   // If no overlay is found in the image, then the vtkImageData for the overlay will be empty.
   vtkGetMacro(LoadOverlays,int);
   vtkSetMacro(LoadOverlays,int);
   vtkBooleanMacro(LoadOverlays,int);
 
+  // Description:
+  // Set/Get whether or not to load the Icon as vtkImageData (if found in the DICOM file)
   vtkGetMacro(LoadIconImage,int);
   vtkSetMacro(LoadIconImage,int);
   vtkBooleanMacro(LoadIconImage,int);
 
-  // Read only: number of overlays as found in this image
+  // Description:
+  // Read only: number of overlays as found in this image (multiple overlays per slice is allowed)
   vtkGetMacro(NumberOfOverlays,int);
-  //vtkSetMacro(NumberOfOverlays,int);
 
-  // Read only: number of icon image:
+  // Description:
+  // Read only: number of icon image (there should ony be one)
   vtkGetMacro(NumberOfIconImages,int);
-  //vtkSetMacro(NumberOfIconImages,int);
 
+  // Description:
+  // Get Overlay/IconImage
+  // Remember to ALWAYS use those methods in your code, as the internal number for the output port
+  // is not garantee to remain the same, as features are added to the reader
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+//FIXME: Need to get rid of BTX/ETX if only the Python Wrapper of VTK 4.2 would let me
 //BTX
   vtkAlgorithmOutput* GetOverlayPort(int index);
   vtkAlgorithmOutput* GetIconImagePort();

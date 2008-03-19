@@ -46,9 +46,12 @@ public:
   virtual void PrintSelf(ostream& os, vtkIndent indent);
 
   // Description:
+  // Explicitely get/set the Rescale Intercept (0028,1052)
   vtkGetMacro(Shift,double);
   vtkSetMacro(Shift,double);
 
+  // Description:
+  // Explicitely get/set the Rescale Slope (0028,1053)
   vtkGetMacro(Scale,double);
   vtkSetMacro(Scale,double);
 
@@ -77,5 +80,5 @@ private:
   double Shift;
   double Scale;
 };
-#endif
 
+#endif
