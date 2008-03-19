@@ -29,7 +29,6 @@ static const char *VMStrings[] = {
   "8",
   "9",
   "10",
-  "11",
   "12",
   "16",
   "18",
@@ -81,21 +80,72 @@ unsigned int VM::GetLength() const
   return len;
 }
 
-int VM::GetIndex(VMType vm)
+unsigned int VM::GetIndex(VMType vm)
 {
   assert( vm <= VM_END );
-  int l;
+  unsigned int l;
   switch(vm)
     {
   case VM0:
     l = 0;
     break;
-  case VM_END:
+  case VM1_2:
+    l = 19;
+    break;
+  case VM1_3:
+    l = 20;
+    break;
+  case VM1_4:
+    l = 21;
+    break;
+  case VM1_5:
+    l = 22;
+    break;
+  case VM1_8:
+    l = 23;
+    break;
+  case VM1_32:
+    l = 24;
+    break;
+  case VM1_99:
+    l = 25;
+    break;
+  case VM1_n:
+    l = 26;
+    break;
+  case VM2_2n:
+    l = 27;
+    break;
+  case VM2_n:
+    l = 28;
+    break;
+  case VM3_4:
+    l = 29;
+    break;
+  case VM3_3n:
+    l = 30;
+    break;
+  case VM3_n:
     l = 31;
+    break;
+  case VM4_4n:
+    l = 32;
+    break;
+  case VM7_7n:
+    l = 33;
+    break;
+  case VM30_30n:
+    l = 34;
+    break;
+  case VM47_47n:
+    l = 35;
+    break;
+  case VM_END:
+    l = 36;
     break;
   default:
       {
-      int a = (int)vm;
+      unsigned int a = (unsigned int)vm;
       for (l = 0; a > 1; ++l)
         a >>= 1;
       l++;
@@ -106,7 +156,7 @@ int VM::GetIndex(VMType vm)
 
 const char *VM::GetVMString(const VMType &vm)
 {
-  int idx = GetIndex(vm);
+  unsigned int idx = GetIndex(vm);
   assert( idx < sizeof(VMStrings) / sizeof(VMStrings[0]) );
   return VMStrings[idx];
 }

@@ -179,6 +179,12 @@ public:
     return r;
     }
 
+  // Returns if tag is a Private Creator (xxxx,00yy), where xxxx is odd number
+  bool IsPrivateCreator() const
+    {
+    return IsPrivate() && GetElement() > 0xFF;
+    }
+
   // e.g 6002,3000 belong to groupXX: 6000,3000
   bool IsGroupXX(const Tag &t) const
     {

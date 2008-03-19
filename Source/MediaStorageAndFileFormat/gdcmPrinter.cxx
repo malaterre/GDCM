@@ -566,6 +566,7 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
     const VM &vm = entry.GetVM();
     const char *name = entry.GetName();
     bool retired = entry.GetRetired();
+    //if( t.IsPrivate() ) assert( retired == false );
 
     const VR &vr_read = de.GetVR();
     const VL &vl_read = de.GetVL();
@@ -870,16 +871,20 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
     // Append the name now:
     if( name && *name )
       {
-      if( t.IsPrivate() && (owner == 0 || *owner == 0 ) && t.GetElement() > 0xFF )
+      // No owner case !
+      if( t.IsPrivate() && (owner == 0 || *owner == 0 ) && t.IsPrivateCreator() )
         {
         os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
         os << " " << name;
         os << GDCM_TERMINAL_VT100_NORMAL;
         }
+      // retired element
       else if( retired )
         {
+        assert( t.IsPublic() || t.GetElement() == 0x0 ); // Is there such thing as private and retired element ?
         os << " " << GDCM_TERMINAL_VT100_FOREGROUND_RED << GDCM_TERMINAL_VT100_UNDERLINE;
         os << name;
+        os << GDCM_TERMINAL_VT100_NORMAL;
         os << GDCM_TERMINAL_VT100_NORMAL;
         }
       else

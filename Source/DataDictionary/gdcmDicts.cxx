@@ -67,7 +67,7 @@ const DictEntry &Dicts::GetDictEntry(const Tag& tag, const char *owner) const
       Dummy.SetName( pc.c_str() );
       Dummy.SetVR( VR::LO );
       Dummy.SetVM( VM::VM1 );
-      //Dummy.SetRetired( false );
+      Dummy.SetRetired( false );
       return Dummy;
       }
     else
