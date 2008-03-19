@@ -28,9 +28,11 @@ Tag SpacingHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
 
   switch(ms)
     {
+  case MediaStorage::EnhancedMRImageStorage:
+  case MediaStorage::EnhancedCTImageStorage:
+    gdcmWarningMacro( "Enhanced image are not currently supported. Spacing will be wrong" );
   case MediaStorage::CTImageStorage:
   case MediaStorage::MRImageStorage:
-  case MediaStorage::EnhancedMRImageStorage:
     // (0028,0030) DS [2.0\2.0]                                #   8, 2 PixelSpacing
     t = Tag(0x0028,0x0030);
     break;

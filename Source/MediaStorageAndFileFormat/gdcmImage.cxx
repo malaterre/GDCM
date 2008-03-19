@@ -272,7 +272,16 @@ void Image::Print(std::ostream &os) const
       os << "," << *it;
       }
     os << ")\n";
-    //std::vector<unsigned int> Dimensions;
+{
+    os << "Spacing: (";
+    std::vector<double>::const_iterator it = Spacing.begin();
+    os << *it;
+    for(++it; it != Spacing.end(); ++it)
+      {
+      os << "," << *it;
+      }
+    os << ")\n";
+}
     //std::vector<double> Spacing;
     //std::vector<double> Origin;
 
