@@ -512,7 +512,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
     return 0;
     }
   const gdcm::Image &image = reader.GetImage();
-  const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
+  //const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
   const unsigned int *dims = image.GetDimensions();
 
   // Set the Extents.
@@ -683,7 +683,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
     //overlayoutsize = ov1.GetColumns();
     assert( ov1.GetRows()*ov1.GetColumns() <= overlaylen );
     const signed short *origin = ov1.GetOrigin();
-    if( ov1.GetRows()*ov1.GetColumns() != overlaylen )
+    if( (unsigned long)ov1.GetRows()*ov1.GetColumns() != overlaylen )
       {
       vtkWarningMacro( "vtkImageData Overlay have an extent that do not match the one of the image" );
       }
@@ -720,7 +720,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
     vtklut->Delete();
     }
 
-  const unsigned int *dims = image.GetDimensions();
+  //const unsigned int *dims = image.GetDimensions();
   gdcm::PixelFormat pixeltype = image.GetPixelFormat();
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
   if( numoverlays ) assert( overlayoutsize * ( dext[3] - dext[2] + 1 ) == overlaylen );
@@ -848,7 +848,7 @@ int vtkGDCMImageReader::RequestDataCompat()
       }
     image.GetBuffer(tempimage);
 
-    const unsigned int *dims = image.GetDimensions();
+    //const unsigned int *dims = image.GetDimensions();
     assert( image.GetNumberOfDimensions() == 2 );
     gdcm::PixelFormat pixeltype = image.GetPixelFormat();
     long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);

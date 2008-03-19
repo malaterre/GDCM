@@ -44,7 +44,7 @@ public:
     return l;
     }
 
-  static inline void Write(std::ostream &_os)  {
+  static inline void Write(std::ostream &os)  { (void)os;
     }
 };
 // Implementation when VL is coded on 32 bits:
@@ -59,7 +59,7 @@ public:
     return l;
     }
 
-  static inline void Write(std::ostream &_os)  {
+  static inline void Write(std::ostream &os)  { (void)os;
     }
 };
 

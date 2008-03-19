@@ -52,7 +52,7 @@ public:
     }
   BasicOffsetTable &operator=(BasicOffsetTable const &val)
     {
-    abort();
+    abort(); (void)val;
     return *this;
     }
   template <typename TSwap>

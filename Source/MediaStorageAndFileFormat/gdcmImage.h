@@ -177,6 +177,7 @@ public:
   }
 
 private:
+  unsigned int NumberOfDimensions;
   unsigned int PlanarConfiguration;
   std::vector<unsigned int> Dimensions;
   std::vector<double> Spacing;
@@ -190,7 +191,6 @@ private:
   // I believe the following 3 ivars can be derived from TS ...
   SwapCode SC;
   bool NeedByteSwap;
-  unsigned int NumberOfDimensions;
 
   typedef SmartPointer<LookupTable> LUTPtr;
   LUTPtr LUT;

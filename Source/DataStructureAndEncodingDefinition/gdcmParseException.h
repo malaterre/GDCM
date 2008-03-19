@@ -37,16 +37,17 @@ public:
   
   /** Assignment operator. */
   ParseException &operator= ( const ParseException &orig )
-  {
-//TODO
+    {
+    (void)orig;
+    //TODO
     return *this;
-  }
+    }
   
   /** Equivalence operator. */
-  virtual bool operator==( const ParseException &orig )
+/*  virtual bool operator==( const ParseException &orig )
   {
     return true;
-  }
+  }*/
           
 /*
   // Multiple calls to what ??

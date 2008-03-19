@@ -25,7 +25,7 @@ class SwapperNoOp
 {
 public:
   template <typename T> static T Swap(T val) {}
-  template <typename T> static void SwapArray(T *array, unsigned int n) {}
+  template <typename T> static void SwapArray(T *, unsigned int ) {}
 };
 
 class SwapperDoOp

@@ -636,7 +636,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
         unsigned long check =
           (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
           * el_us3.GetValue(2) / 8;
-        assert( check == lut_raw->GetLength() );
+        assert( check == lut_raw->GetLength() ); (void)check;
         }
       else if( ds.FindDataElement( seglut ) )
         {
@@ -685,12 +685,8 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
 bool ImageReader::ReadACRNEMAImage()
 {
   const DataSet &ds = F->GetDataSet();
-  TransferSyntax::NegociatedType type; // = ds.GetNegociatedType();
   std::stringstream ss;
   std::string conversion;
-  // Construct a stringstream to mimic the reading from the file
-  //ss.SetSwapCode( Stream.GetSwapCode() );
-  //PixelData.SetSwapCode( Stream.GetSwapCode() );
 
   // Ok we have the dataset let's feed the Image (PixelData)
   // 1. First find how many dimensions there is:

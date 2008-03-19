@@ -309,12 +309,12 @@ bool check_mapping(uint32_t syngodt, const char *vr)
 {
   static const unsigned int max = sizeof(mapping) / sizeof(equ);
   const equ *p = mapping;
-  assert( syngodt <= mapping[max-1].syngodt );
+  assert( syngodt <= mapping[max-1].syngodt ); (void)max;
   while(p->syngodt < syngodt )
-  {
+    {
     //std::cout << "mapping:" << p->vr << std::endl;
     ++p;
-  }
+    }
   assert( p->syngodt == syngodt ); // or else need to update mapping
   const char* lvr = p->vr;
   int check = strcmp(vr, lvr) == 0;

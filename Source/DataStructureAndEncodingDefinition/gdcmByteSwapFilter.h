@@ -32,7 +32,7 @@ public:
   ByteSwapFilter(DataSet& ds):DS(ds),ByteSwapTag(false) {}
   ~ByteSwapFilter();
 
-  void UseDictAlways(bool use) {}
+  void UseDictAlways(bool use) { (void)use;}
 
   // Allow user to pass in there own dicts
   void SetDicts(const Dicts &dicts);

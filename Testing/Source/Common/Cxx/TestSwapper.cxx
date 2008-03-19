@@ -17,6 +17,7 @@
 
 int TestSwapper(int argc, char *argv[])
 {
+  (void)argv; (void)argc;
   int res = 0;
 
   typedef union { 

@@ -214,6 +214,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile()
   static const unsigned int numDeIds = sizeof(BasicApplicationLevelConfidentialityProfileAttributes) / deidSize;
   static const Tag *start = BasicApplicationLevelConfidentialityProfileAttributes;
   static const Tag *end = start + numDeIds;
+  (void)end;
 
   //return std::binary_search(start, end, tag);
   return true;

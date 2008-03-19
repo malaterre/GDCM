@@ -133,7 +133,7 @@ bool ImageValue::TryRLECodec(char *buffer) const
     bool r = codec.Decode(PixelData, out);
     assert( r );
     const ByteValue *outbv = out.GetByteValue();
-    unsigned long check = outbv->GetLength();  // FIXME
+    //unsigned long check = outbv->GetLength();  // FIXME
     memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
     return true;
     }
