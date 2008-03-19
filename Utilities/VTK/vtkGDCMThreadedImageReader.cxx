@@ -177,6 +177,7 @@ int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
                                       vtkInformationVector **inputVector,
                                       vtkInformationVector *outputVector)
 {
+  (void)request;(void)inputVector;(void)outputVector;
   // Some information need to have been set outside (user specified)
   //assert( this->GetOutput(0)->GetNumberOfPoints() != 0 );
   // For now only handles series:
@@ -330,7 +331,7 @@ void *ReadFilesThread(void *voidparams)
       unsigned char * overlaypointer = params->overlayscalarpointer;
       unsigned char *tempimage2 = overlaypointer + file*params->overlaylen;
       memset(tempimage2,0,params->overlaylen);
-      assert( ov.GetRows()*ov.GetColumns() <= params->overlaylen );
+      assert( (unsigned long)ov.GetRows()*ov.GetColumns() <= params->overlaylen );
       ov.GetUnpackBuffer(tempimage2);
       }
     if( params->reader->GetShift() != 1 || params->reader->GetScale() != 0 )
@@ -480,6 +481,7 @@ int vtkGDCMThreadedImageReader::RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector **vtkNotUsed(inputVector),
                                 vtkInformationVector *outputVector)
 {
+  (void)outputVector;
   //std::cerr << "vtkGDCMThreadedImageReader::RequestData Start" << std::endl;
   //this->UpdateProgress(0.2);
 

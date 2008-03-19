@@ -62,12 +62,12 @@ public:
   int GetSliceMax() { return this->GetWholeZMax(); }
 #if VTK_MAJOR_VERSION >= 5
   // TODO:
-  void AddInputConnection(vtkAlgorithmOutput* input) {}
+  void AddInputConnection(vtkAlgorithmOutput* input) {(void)input;}
 #else
-  void AddInput(vtkImageData * input) {}
+  void AddInput(vtkImageData * input) {(void)input;}
 #endif
   double GetOverlayVisibility() { return 0; }
-  void SetOverlayVisibility(double vis) {}
+  void SetOverlayVisibility(double vis) {(void)vis;}
 };
 vtkCxxRevisionMacro(vtkGDCMImageViewer, "$Revision: 1.30 $");
 vtkInstantiatorNewMacro(vtkGDCMImageViewer);
