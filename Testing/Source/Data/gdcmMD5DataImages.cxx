@@ -30,15 +30,18 @@ static const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 768 576 40 8 3 */
 { "6a796be399aefebc1479e924f6051d69" , "ACUSON-24-YBR_FULL_422-Jpeg_Baseline_1.dcm" },
 /* gdcm 384 288 1 8 3 */
-{ "2a922d5c606354612bfdbece1421d863" , "ACUSON-24-YBR_FULL-RLE-b.dcm" },
+//{ "2a922d5c606354612bfdbece1421d863" , "ACUSON-24-YBR_FULL-RLE-b.dcm" },
+{ "22b32f23beb118f7b64c13bf04bc2809" , "ACUSON-24-YBR_FULL-RLE-b.dcm" },
 /* gdcm 768 576 1 8 3 */
-{ "f9bb8a37acabdf8b0cfa4fd1b471e6aa" , "ACUSON-24-YBR_FULL-RLE.dcm" },
+//{ "f9bb8a37acabdf8b0cfa4fd1b471e6aa" , "ACUSON-24-YBR_FULL-RLE.dcm" },
+{ "435c66f7e113d11d226d500294aae865" , "ACUSON-24-YBR_FULL-RLE.dcm" },
 /* gdcm 768 576 25 8 3 */
 { "e36350b0711fd34eb86c386164554679" , "ACUSON-8-YBR_FULL-JPEG-TrailingInfo.dcm" },
 /* gdcm 608 420 1 8 1 */
 { "7d8858e3419392b7f39a99fdc8028064" , "ALOKA_SSD-8-MONO2-RLE-SQ.dcm" },
 /* gdcm 440 440 1 16 1 */
-{ "8acaa88edcc2c29d3be3ee373fbaed5e" , "CR-MONO1-10-chest.dcm" },
+//{ "8acaa88edcc2c29d3be3ee373fbaed5e" , "CR-MONO1-10-chest.dcm" },
+{ "1f772b4849727a9750931b60d920436f" , "CR-MONO1-10-chest.dcm" },
 /* gdcm 512 512 1 16 1 */
 { "8c8b9d99ad12fb4d231182d4fc14c042" , "CT_16b_signed-UsedBits13.dcm" },
 /* gdcm 512 512 1 16 1 */
@@ -106,9 +109,11 @@ static const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 256 1024 1 16 1 */
 { "6b5c1eff0ef65e36b0565f96507e96fd" , "D_CLUNIE_NM1_RLE.dcm" },
 /* gdcm 1841 1955 1 16 1 */
-{ "01518af70491372814fb056d536ffb7e" , "D_CLUNIE_RG1_JPLL.dcm" },
+//{ "01518af70491372814fb056d536ffb7e" , "D_CLUNIE_RG1_JPLL.dcm" },
+{ "ae141f6fb91f63769a6adc572a942fb9" , "D_CLUNIE_RG1_JPLL.dcm" },
 /* gdcm 1841 1955 1 16 1 */
-{ "01518af70491372814fb056d536ffb7e" , "D_CLUNIE_RG1_RLE.dcm" },
+//{ "01518af70491372814fb056d536ffb7e" , "D_CLUNIE_RG1_RLE.dcm" },
+{ "ae141f6fb91f63769a6adc572a942fb9" , "D_CLUNIE_RG1_RLE.dcm" },
 /* gdcm 1760 2140 1 16 1 */
 { "06900ee4323a91b7f5ffab8655e3c845" , "D_CLUNIE_RG2_JPLL.dcm" },
 /* gdcm 1760 2140 1 16 1 */
@@ -116,11 +121,14 @@ static const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 1760 2140 1 16 1 */
 { "06900ee4323a91b7f5ffab8655e3c845" , "D_CLUNIE_RG2_RLE.dcm" },
 /* gdcm 1760 1760 1 16 1 */
-{ "6588b7b8e6e53b2276d919a053316153" , "D_CLUNIE_RG3_JPLL.dcm" },
+//{ "6588b7b8e6e53b2276d919a053316153" , "D_CLUNIE_RG3_JPLL.dcm" },
+{ "e7c857ef7e6a2c81498297a072a0332e" , "D_CLUNIE_RG3_JPLL.dcm" },
 /* gdcm 1760 1760 1 16 1 */
-{ "cb381c53172242404346b237bf741eb4" , "D_CLUNIE_RG3_JPLY.dcm" },
+//{ "cb381c53172242404346b237bf741eb4" , "D_CLUNIE_RG3_JPLY.dcm" },
+{ "cc2968949ffbb6548288ffde7e5202e4" , "D_CLUNIE_RG3_JPLY.dcm" },
 /* gdcm 1760 1760 1 16 1 */
-{ "6588b7b8e6e53b2276d919a053316153" , "D_CLUNIE_RG3_RLE.dcm" },
+//{ "6588b7b8e6e53b2276d919a053316153" , "D_CLUNIE_RG3_RLE.dcm" },
+{ "e7c857ef7e6a2c81498297a072a0332e" , "D_CLUNIE_RG3_RLE.dcm" },
 /* gdcm 2048 2487 1 16 1 */
 { "bd0cccbfd8db465c0af306ba0f482d72" , "D_CLUNIE_SC1_JPLL.dcm" },
 /* gdcm 2048 2487 1 16 1 */
@@ -154,7 +162,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 512 512 1 16 1 */
 { "6b92115ec7a394c4aaad74e88d7dbc98" , "FLAIR-wrong-group-length.dcm" },
 /* gdcm 1670 2010 1 16 1 */
-{ "9ca80d44bfb1af2f96495fac4b57fa29" , "FUJI-10-MONO1-ACR_NEMA_2.dcm" },
+//{ "9ca80d44bfb1af2f96495fac4b57fa29" , "FUJI-10-MONO1-ACR_NEMA_2.dcm" },
+{ "da2415a1e58b4ca2e588d0de18274f60" , "FUJI-10-MONO1-ACR_NEMA_2.dcm" },
 /* gdcm 512 301 1 8 1 */
 { "59d9851ca0f214d57fdfd6a8c13bc91c" , "gdcm-ACR-LibIDO.acr" },
 /* gdcm 750 750 1 8 1 */
@@ -192,7 +201,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 512 512 1 16 1 */
 { "f3a3d0e739e5f4fbeddd1452b81f4d89" , "GE_RHAPSODE-16-MONO2-JPEG-Fragments.dcm" },
 /* gdcm 1792 2392 1 16 1 */
-{ "821acfdb5d5ad9dc13275d3ad3827d43" , "KODAK-12-MONO1-Odd_Terminated_Sequence.dcm" },
+//{ "821acfdb5d5ad9dc13275d3ad3827d43" , "KODAK-12-MONO1-Odd_Terminated_Sequence.dcm" },
+{ "c1ed06d39821a5fd65abc397982e2ac1" , "KODAK-12-MONO1-Odd_Terminated_Sequence.dcm" },
 /* gdcm 800 535 1 16 1 */
 { "70166425c4dca767e22d3f25f737922b" , "LEADTOOLS_FLOWERS-16-MONO2-JpegLossless.dcm" },
 /* gdcm 800 535 1 16 1 */
@@ -455,7 +465,6 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "78dae0e2d9b7a124fe63300b6356ded4" , "Toshiba7005.dcm" },
 { "8240955d1e4b72989f8f49549f1617b2" , "PhilipsWith15Overlays.dcm" },
 { "3cd8bd92db17bff54e376885dfefdd8d" , "toto.dcm" },
-{ "635e947fc156c89a8d10ced8317ace82" , "ÂËÏßÕ¤3_2mAs.dcm" },
 { "14ad8ae28cc5e5e5dc4c4d010c291a7f" , "test20.dcm" },
 { "e7408198028983cd6643a00fd7668c00" , "testacr-jpll.dcm" },
 { "6633fb8bce0a648763e7ed2b7de1db5c" , "1_172.dcm" },
@@ -467,11 +476,11 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "92b62f22fc44b8563c19f5536d9e499f" , "fudd_ant.dcm" },
 { "b92a22ef55d6a1fbd24a6a24a7a84a7f" , "yazhi.dcm" },
 { "2b69286289543afc3be7df0400abb8fc" , "IM_0001.dcm" },
-{ "67d86e26740882586b6bf3fe7e09c831" , "PMMA-Treppe.dcm" },
+//{ "67d86e26740882586b6bf3fe7e09c831" , "PMMA-Treppe.dcm" },
+{ "287e002ebf84424fe66558b642c51bce" , "PMMA-Treppe.dcm" },
 { "82a8d3398c98d23e1b34f5364f967287" , "PERFORM_T1_Symphony_VA25.dcm" },
-{ "00b4b3282855c96744355892caf9d310" , "Al-Treppe.dcm" },
-{ "1db40fc52b962c8b6823980fe9dad6d8" , "ÂËÏßÕ¤2_5mAs.dcm" },
-{ "1b130fa646f8d6b3c14b9443b35c80b4" , "IM0046A0(2).dcm" },
+//{ "00b4b3282855c96744355892caf9d310" , "Al-Treppe.dcm" },
+{ "2c0ccfeff0a6d4afd7929a672dec0cc0" , "Al-Treppe.dcm" },
 { "f891eae2cdfecd578b2204ebbb93f606" , "ImplicitDeclaredAsExplicit.dcm" },
 { "7ceb7886f9fbcb7ae979fdb6f1305414" , "CR-Preamble-NoMeta.dcm" },
 { "d2fab61e0fff8869e448d69951f1084d" , "db318_MR_STN_stimulator_T2_TSE_TRA__20071005161618048_4.dcm" },
@@ -481,6 +490,75 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "65f961aca90fb61952d723feec6dec89" , "SIEMENS_GBS_III-16-ACR_NEMA_1.acr.ovly.6006.dcm" },
 { "fc137690ae436bb44a695fb2f1e49d85" , "SIEMENS_GBS_III-16-ACR_NEMA_1.acr.ovly.6004.dcm" },
 
+// No tested:
+
+{ "864e2c5d6acf5a371fe9eaa7ee0dcf5f" , "acr_image_with_non_printable_in_0051_1010.acr" },
+{ "7efed1c332c62ea34d5edad901081c36" , "mr_r_opptak000_20000925_t2.nema" },
+{ "d6995bd1d76eb36913c985c8397ff02d" , "mr_r_opptak000_20000925_t1.nema" },
+{ "dc549f804f1f59bfee245ddf100ee26b" , "SIEMENS-IncompletePixelData.dcm" },
+{ "51b7e83cdc569b8f355662d80bd7036d" , "20061119171007906.dcm" },
+{ "01db0d71100c47013e588082d5f39bab" , "MR0001.dcm" },
+{ "d9df75ff0394bb9a3753b625933d94fc" , "ModalityLUT.dcm" },
+{ "acd3f756192a9f0484c971db2869d70b" , "PublicElementsImplicitInExplicitDataSet.dcm" },
+{ "820575fcc05338f3e95296107d9ddf7a" , "MR3.dcm" },
+{ "3c6984afa2af4257565d8f622f7f5e5b" , "SIEMENS-JPEG-CorruptFragClean.dcm" },
+{ "cc2968949ffbb6548288ffde7e5202e4" , "D_CLUNIE_RG3_JPLY_dcmtk.dcm" },
+{ "83656f4989a2d4be8f9ad56d83a907f5" , "5decf5b5-6695-4557-867e-a1f97321cd80.dcm" },
+{ "92655f77a55eb9c316223b9e73d55800" , "PMS-IncompletePixelData.dcm" },
+{ "6a23c9f150a360381c8fbceb2277efc5" , "TOSHIBA-CurveData2.dcm" },
+{ "6ad75566935554fcc60ca35a003fba6d" , "IM_00003.dcm" },
+{ "ab7cab6e7b5f9043f8fa7c0ae3f1b282" , "19872890.dcm" },
+{ "48eb24e37d41faca8b629b3807c20d92" , "rm6_DICM.dcm" },
+{ "201c9761ed911ad12508248252f4ff16" , "T2*_1484_0009.dcm" },
+{ "90017033c3916259cad63615385a1d02" , "BogugsItemAndSequenceLength.dcm" },
+{ "b09dc714f6d56d29005996b3204eec25" , "TOSHIBA-CurveData1.dcm" },
+{ "5ed3d1de2a086ac7efd31a6f1463f129" , "SCIsMR.dcm" },
+{ "9bbb1d908401299e73e636ad5b19a225" , "Siemens_CT_Sensation64_has_VR_RT.dcm" },
+{ "13e41624a8b86c18ac257e3588f818ce" , "tst_ok.dcm" },
+{ "17f514732d5f7e9484ed33c35bddc930" , "ImplicitVRInExplicitDataSet.dcm" },
+{ "0826b8cc512a8e4d726c1c019af2eaf9" , "29627381.dcm" },
+{ "727383f164107aaa9ee6c2182f94b91d" , "1.2.752.24.6.1820537353.20080220145707750.8.1.dcm" },
+{ "5588652e673e745ad56441f5a26c2305" , "22484474.dcm" },
+{ "cf6fde116c90e4e56512b22004503d96" , "PHILIPS_PrivateSeqWithPublicElems.dcm" },
+{ "098bba76d4e75a3148c9b62aee35f950" , "GEMS-IncompletePixelData.dcm" },
+{ "1fe71a52a211d1a56cc49cdcb71c1dbb" , "IM03.dcm" },
+{ "b857b6cce2afd7033476526b89ed9678" , "TheralysGDCM1.dcm" },
+{ "e998bbfca8b892fd0955c95b6f1584ea" , "Theralys2048Thingy.dcm" },
+{ "0508d28682e209f87d28184ae10060bd" , "Compress_16bit_noPVRG.dcm" },
+{ "90017033c3916259cad63615385a1d02" , "BogugsItemAndSequenceLengthCorrected.dcm" },
+{ "51b7e83cdc569b8f355662d80bd7036d" , "debian_medcon_401529.dcm" },
+{ "51b7e83cdc569b8f355662d80bd7036d" , "BogusItemStartItemEnd.dcm" },
+{ "3c6984afa2af4257565d8f622f7f5e5b" , "SIEMENS-JPEG-CorruptFrag.dcm" },
+{ "192f5ebd4d8f6164a4142421408172b2" , "PhilipsByteSwapping.dcm" },
+{ "2438b8feef6c8f682b2f468aff4475e5" , "MismatchSOPClassUID.dcm" },
+{ "738092e703655b6ae22a907d9f9f0c9c" , "YBRisGray.dcm" },
+{ "635e947fc156c89a8d10ced8317ace82" , "2mAs.dcm" },
+{ "54d648704507de7cd6e4be12061a5fb2" , "OSIRIX_MONOCHROME2_BUG.dcm" },
+{ "1db40fc52b962c8b6823980fe9dad6d8" , "5mAs.dcm" },
+{ "1b130fa646f8d6b3c14b9443b35c80b4" , "IM0046A0_2.dcm" },
+{ "cdfb45de5ddad3e7e2b0053c848d0d2b" , "ImplicitVRInExplicitDataSet2.dcm" },
+{ "ec5c421832df7cc43801d038705cd2cf" , "OverlayPrivateDataInBetween.dcm" },
+{ "9a375c3b2a72a6ccf687250b17f646c9" , "ItemTerminatorVLnot0.dcm" },
+{ "5269176094127c6f106cbcf9dbdf55b0" , "I0000017.dcm" },
+{ "eb87ca4a01e55dc7a7f1c92f0aa31017" , "EmptyItemStarter.dcm" },
+{ "cae8f644373163cb3970999f7ac00fd3" , "169585.dcm" },
+{ "5ea911b29f472f371d21f2da2fd6b016" , "VRUNInMetaHeader.dcm" },
+{ "ad7b664eed26e95f790c24cdb3060fb9" , "IM000450.dcm" },
+{ "4f113f33863067b8ca8d560cb194da09" , "TOSHIBA-CurveData3.dcm" },
+{ "14fa2ae9f63742af6944edd4a61145e8" , "mrbrainR.dcm" },
+{ "ba17ae006314a097fef7a32fa1a624b0" , "c42g57hg64ca02.dcm" },
+{ "10047ec574a6401ad90606e63304de6e" , "0020.DCM" },
+{ "5184839806c9a9583fe192d43cede939" , "001005XA" },
+{ "5291e36a7d54d4c8e00d5765cd0b3d17" , "001007XA" },
+{ "a57df7bc23977977832f98bfb662cdb4" , "001003XA" },
+{ "b36329c27f359daede3205d7c57cccd1" , "001009XA" },
+{ "1d173a6f31e0e4dd1078adf3557774c7" , "001008XA" },
+{ "9b42aa4e5d3b5f889164b5a734b954b3" , "001010XA" },
+{ "87f72a961292c83f8a9230e8eefecc6b" , "001004XA" },
+{ "6c7a303d25b418988ef9a37c4315a746" , "001001XA" },
+{ "9dde002e4e99218891df5f98da56ec9d" , "001002XA" },
+{ "6c7a303d25b418988ef9a37c4315a746" , "001001XA.1" },
+{ "8891d44376bc53c7bd0d36d2b776cd9b" , "001006XA" },
 
 
 
