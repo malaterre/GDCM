@@ -225,7 +225,7 @@ void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictE
     for(; it != sqf.Fragments.end(); ++it)
       {
       const Fragment &frag = *it;
-      const Value &val = frag.GetValue();
+      const Value &val = frag.GetValue(); (void)val;
       //PrintValue(lvr, vm, val );
       os << "  " << frag << std::endl;
       }
@@ -238,11 +238,12 @@ inline char *bswap(char *out, const char *in, size_t length)
   assert( !(length % sizeof(T)) );
   assert( out != in );
   for(size_t i = 0; i < length; i+=2)
-  {
+    {
     //const char copy = in[i];
     out[i] = in[i+1];
     out[i+1] = in[i];
-  }
+    }
+  return out;
 }
 
 //-----------------------------------------------------------------------------
@@ -546,7 +547,7 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
 {
   const Global& g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
-  const Dict &d = dicts.GetPublicDict();
+  const Dict &d = dicts.GetPublicDict(); (void)d;
  
   DataSet::ConstIterator it = ds.Begin();
   for( ; it != ds.End(); ++it )
@@ -875,6 +876,12 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
         os << " " << name;
         os << GDCM_TERMINAL_VT100_NORMAL;
         }
+      else if( retired )
+        {
+        os << " " << GDCM_TERMINAL_VT100_FOREGROUND_RED << GDCM_TERMINAL_VT100_UNDERLINE;
+        os << name;
+        os << GDCM_TERMINAL_VT100_NORMAL;
+        }
       else
         {
         os << GDCM_TERMINAL_VT100_BOLD;
@@ -938,7 +945,7 @@ void Printer::PrintDataSetOld(std::ostream &os, const DataSet &ds)
 {
   const Global& g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
-  const Dict &d = dicts.GetPublicDict();
+  const Dict &d = dicts.GetPublicDict(); (void)d;
  
   static const GroupDict gd; // FIXME
 //  try
@@ -1029,8 +1036,8 @@ void Printer::PrintDataSetOld(std::ostream &os, const DataSet &ds)
         }
       else // INVALID case
         {
-        const VM& vm = entry.GetVM();
-        const Value& val = de.GetValue();
+        const VM& vm = entry.GetVM(); (void)vm;
+        const Value& val = de.GetValue(); (void)val;
         os << de.GetTag();
         //if( pstyle == Printer::CONDENSED_STYLE )
         //  {
@@ -1106,8 +1113,8 @@ void DumpDataSet(const DataSet &ds, std::ostream &os )
   for( ; it != ds.End(); ++it )
     {
     const DataElement &de = *it;
-    const Tag& t = de.GetTag();
-    const VR& vr = de.GetVR();
+    const Tag& t = de.GetTag(); (void)t;
+    const VR& vr = de.GetVR(); (void)vr;
     os << de << std::endl;
     //if( VR::IsASCII( vr ) )
     //  {
