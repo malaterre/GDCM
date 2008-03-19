@@ -317,7 +317,7 @@ namespace gdcm
         case Z_STREAM_END:
           // Z_STREAM_END if the end of the compressed data has been reached
           // and all uncompressed output has been produced
-          if (&buffer[0]+buffer.size() - putback_end == (size_t) dstream.avail_out)
+          if ((size_t)(&buffer[0]+buffer.size()-putback_end) == (size_t) dstream.avail_out)
             return traits_type::eof();
           // assert( it should be 1024 - 64 ...)
           break;

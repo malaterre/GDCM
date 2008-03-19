@@ -77,7 +77,7 @@ inline void process_file(const char *filename, md5_byte_t *digest)
     throw Exception("could not allocate");
     }
   size_t read = fread(buffer, 1, file_size, file);
-  assert( read == file_size );
+  assert( read == file_size ); (void)read;
 
   md5_state_t state;
   md5_init(&state);

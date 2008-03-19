@@ -27,12 +27,12 @@
 #include "vtkImageData.h"
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #include <vtksys/SystemTools.hxx>
+#include "vtkVolumeTextureMapper3D.h"
 #endif
 
 #include "vtkPiecewiseFunction.h"
 #include "vtkColorTransferFunction.h"
 #include "vtkVolumeProperty.h"
-//#include "vtkVolumeTextureMapper3D.h"
 #include "vtkVolume.h"
 #include "vtkRenderer.h"
 #include "vtkRenderWindow.h"
@@ -218,7 +218,8 @@ int TestvtkGDCMThreadedImageRead(const char *filename, bool verbose = false)
   writer->Delete();
 */
 
-  if( verbose )
+  bool compute = false;
+  if( verbose && compute )
     {
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
     double *s = reader->GetOutput()->GetScalarRange();

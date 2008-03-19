@@ -30,9 +30,9 @@ class GDCM_EXPORT Decoder
 public:
   virtual ~Decoder() {}
   virtual bool CanDecode(TransferSyntax const &) { return false; }
-  virtual bool Decode(DataElement const &is, DataElement &os) { return false; }
+  virtual bool Decode(DataElement const &is, DataElement &os) { (void)is;(void)os;return false; }
 protected:
-  virtual bool Decode(std::istream &is, std::ostream &os) { return false; }
+  virtual bool Decode(std::istream &is, std::ostream &os) { (void)is; (void)os;return false; }
 };
 
 } // end namespace gdcm

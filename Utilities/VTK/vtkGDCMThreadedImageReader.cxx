@@ -514,7 +514,7 @@ void vtkGDCMThreadedImageReader::RequestDataCompat()
   if( this->FileNames )
     {
     // Make sure that each file is single slice
-    assert( dext[5] - dext[4] == this->FileNames->GetNumberOfValues() - 1 );
+    assert( dext[5] - dext[4] == this->FileNames->GetNumberOfValues() - 1 ); (void)dext;
     const unsigned int nfiles = this->FileNames->GetNumberOfValues();
     const char **filenames = new const char* [ nfiles ];
     for(unsigned int i = 0; i < nfiles; ++i)

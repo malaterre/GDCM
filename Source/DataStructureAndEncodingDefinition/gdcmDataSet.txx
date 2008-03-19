@@ -152,7 +152,7 @@ namespace gdcm
       //assert( de.GetTag().GetElement() );
       if( !de.GetTag().GetElement() )
         {
-        assert( iteml == 12 );
+        assert( iteml == 12 ); (void)iteml;
         is.seekg( -12, std::ios::cur );
         }
       else
