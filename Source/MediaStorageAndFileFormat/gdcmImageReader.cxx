@@ -604,6 +604,12 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     {
     gdcmWarningMacro( "VOI LUT (0028,3010) are not handled. Image will not be displayed properly" );
     }
+  // (0028,0120) US 32767                                    #   2, 1 PixelPaddingValue
+  bool pixelpaddingvalue = ds.FindDataElement(Tag(0x0028,0x0120));
+  if(pixelpaddingvalue)
+    {
+    gdcmWarningMacro( "Pixel Padding Value (0028,0120) is not handled. Image will not be displayed properly" );
+    }
   // 4. Palette Color Lookup Table Descriptor
   if ( pi == PhotometricInterpretation::PALETTE_COLOR )
     {

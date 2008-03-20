@@ -51,6 +51,7 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
   vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
   writer->SetInput( reader->GetOutput() );
   writer->SetDirectionCosines( reader->GetDirectionCosines() );
+  writer->SetImageFormat( reader->GetImageFormat() );
   writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
   writer->SetFileName( gdcmfile.c_str() );
   writer->Write();
