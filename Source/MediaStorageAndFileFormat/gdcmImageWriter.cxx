@@ -133,7 +133,8 @@ bool ImageWriter::Write()
     de.SetByteValue( pistr, strlen(pistr) );
     de.SetVR( Attribute<0x0028,0x0004>::GetVR() );
     ds.Insert( de );
-    if( pi == PhotometricInterpretation::RGB ) // FIXME
+    if( pi == PhotometricInterpretation::RGB
+      || pi == PhotometricInterpretation::YBR_FULL ) // FIXME
       {
       Attribute<0x0028, 0x0006> planarconfiguration;
       planarconfiguration.SetValue( PixelData.GetPlanarConfiguration() );

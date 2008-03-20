@@ -36,6 +36,8 @@ public:
   static std::vector<double> GetSpacingValue(DataSet const & ds);
   static void SetSpacingValue(DataSet & ds, const std::vector<double> & spacing);
 
+  static bool ComputeSpacingFromImagePositionPatient(const std::vector<double> &imageposition, std::vector<double> & spacing);
+
 protected:
   static Tag GetSpacingTagFromMediaStorage(MediaStorage const &ms);
   static Tag GetZSpacingTagFromMediaStorage(MediaStorage const &ms);
