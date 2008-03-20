@@ -29,33 +29,33 @@ namespace gdcm
 class GDCM_EXPORT Fragment : public DataElement
 {
 public:
-  Fragment(const Tag &t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl) , FragmentValue(0) { }
+  Fragment(const Tag &t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl) /*, FragmentValue(0)*/ { }
   friend std::ostream &operator<<(std::ostream &os, const Fragment &val);
 
-  void Clear() {
-    FragmentValue->Clear();
-    }
-
-  Value const &GetValue() const {
-    return *FragmentValue;
-  }
+//  void Clear() {
+//    FragmentValue->Clear();
+//    }
+//
+//  Value const &GetValue() const {
+//    return *FragmentValue;
+//  }
 
   VL GetLength() const {
     assert( !ValueLengthField.IsUndefined() );
-    assert( !FragmentValue || FragmentValue->GetLength() == ValueLengthField );
+    assert( !ValueField || ValueField->GetLength() == ValueLengthField );
     return TagField.GetLength() + ValueLengthField.GetLength() 
       + ValueLengthField;
   }
 
-  Fragment(const Fragment &val):DataElement(val)
-    {
-    FragmentValue = val.FragmentValue;
-    }
-  Fragment &operator=(Fragment const &val)
-    {
-    FragmentValue = val.FragmentValue;
-    return *this;
-    }
+//  Fragment(const Fragment &val):DataElement(val)
+//    {
+//    FragmentValue = val.FragmentValue;
+//    }
+//  Fragment &operator=(Fragment const &val)
+//    {
+//    FragmentValue = val.FragmentValue;
+//    return *this;
+//    }
 
   template <typename TSwap>
   std::istream &Read(std::istream &is)
@@ -81,18 +81,19 @@ public:
       }
 #endif
     // Self
-    ByteValue *bv = new ByteValue;
+    SmartPointer<ByteValue> bv = new ByteValue;
     bv->SetLength(ValueLengthField);
     if( !bv->Read<TSwap>(is) )
       {
       // Fragment is incomplete, but is a itemStart, let's try to push it anyway...
-      FragmentValue = bv;
+      gdcmWarningMacro( "Fragment could not read" );
+      ValueField = bv;
       ParseException pe;
       pe.SetLastElement( *this );
       throw pe;
       return is;
       }
-    FragmentValue = bv;
+    ValueField = bv;
     return is;
     }
 
@@ -115,7 +116,10 @@ public:
       return os;
       }
     // Self
-    if( !FragmentValue->Write<TSwap>(os) )
+    const ByteValue *bv = dynamic_cast<const ByteValue*>(&*ValueField);
+    assert( bv );
+    //if( !ValueField->Write<TSwap>(os) )
+    if( !bv->Write<TSwap>(os) )
       {
       assert(0 && "Should not happen");
       return os;
@@ -125,17 +129,17 @@ public:
 
  
 private:
-  typedef SmartPointer<ByteValue> ByteValuePtr;
-  ByteValuePtr FragmentValue;
+  //typedef SmartPointer<ByteValue> ByteValuePtr;
+  //ByteValuePtr FragmentValue;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream &operator<<(std::ostream &os, const Fragment &val)
 {
   os << "Tag: " << val.TagField;
   os << "\tVL: " << val.ValueLengthField;
-  if( val.FragmentValue )
+  if( val.ValueField )
     {
-    os << "\t" << *(val.FragmentValue);
+    os << "\t" << *(val.ValueField);
     }
 
   return os;

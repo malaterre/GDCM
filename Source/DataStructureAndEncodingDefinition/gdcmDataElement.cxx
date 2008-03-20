@@ -39,7 +39,7 @@ namespace gdcm
   const SequenceOfFragments* DataElement::GetSequenceOfFragments() const {
     const Value &v = GetValue();
     const SequenceOfFragments *sqf = dynamic_cast<const SequenceOfFragments*>(&v);
-    return sqf; // Will return NULL if not ByteValue
+    return sqf;
   }
 
 } // end namespace gdcm

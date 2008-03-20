@@ -83,7 +83,7 @@ namespace gdcm
 //-----------------------------------------------------------------------------
 Printer::Printer():PrintStyle(Printer::VERBOSE_STYLE),F(0)
 {
-  MaxPrintLength = 0xFF;
+  MaxPrintLength = 0x100; // Need to be %2 
 }
 //-----------------------------------------------------------------------------
 Printer::~Printer()
@@ -543,16 +543,13 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
       else { os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL; } \
     } break
 
-void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string const & indent )
+
+VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const DataSet & ds, const DataElement &de, std::ostream &out, std::string const & indent )
 {
-  const Global& g = GlobalInstance;
-  const Dicts &dicts = g.GetDicts();
-  const Dict &d = dicts.GetPublicDict(); (void)d;
- 
-  DataSet::ConstIterator it = ds.Begin();
-  for( ; it != ds.End(); ++it )
-    {
-    const DataElement &de = *it;
+    const ByteValue *bv = de.GetByteValue();
+    const SequenceOfItems *sqi = de.GetSequenceOfItems();
+    const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
+
     std::string strowner;
     const char *owner = 0;
     const Tag& t = de.GetTag();
@@ -570,10 +567,11 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
 
     const VR &vr_read = de.GetVR();
     const VL &vl_read = de.GetVL();
-    std::ostringstream os;
     os << indent; // first thing do the shift !
     os << t << " ";
     os << vr_read << " ";
+
+    //VR refvr = GetRefVR(dicts, de);
     VR refvr;
     // always prefer the vr from the file:
     if( vr_read == VR::INVALID )
@@ -657,6 +655,7 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
         }
       }
     assert( refvr != VR::OB_OW );
+
     if( !vr.Compatible( vr_read ) )
       {
       // FIXME : if terminal supports it: print in red/green !
@@ -682,9 +681,9 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
       assert( refvr == VR::INVALID );
       refvr = VR::SQ;
       }
+    // Print Value now:
     if( refvr & VR::VRASCII )
       {
-      const ByteValue *bv = de.GetByteValue();
       if( bv )
         {
         VL l = std::min( bv->GetLength(), MaxPrintLength );
@@ -723,18 +722,23 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
       case VR::OW:
       case VR::OB_OW:
           {
-          const ByteValue *bv = de.GetByteValue();
           if ( bv )
             {
-            VL l = std::min( bv->GetLength(), MaxPrintLength );
+            //VL l = std::min( bv->GetLength(), MaxPrintLength );
             //VL l = std::min( (int)bv->GetLength(), 0xF );
             //int width = (vr == VR::OW ? 4 : 2);
             //os << std::hex << std::setw( width ) << std::setfill('0');
-            bv->PrintHex(os, l);
+            bv->PrintHex(os, MaxPrintLength / 4);
             //os << std::dec;
+            }
+          else if ( sqf )
+            {
+            assert( t == Tag(0x7fe0,0x0010) );
+            //os << *sqf;
             }
           else
             {
+            assert( !sqi && !sqf );
             os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL;
             }
           }
@@ -757,17 +761,18 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
       // Let's be a little more helpful and try to print anyway when possible:
       case VR::INVALID:
           {
-          const ByteValue *bv = de.GetByteValue();
           if( bv )
             {
             VL l = std::min( bv->GetLength(), MaxPrintLength );
             os << "[";
             if( bv->IsPrintable(l) ) bv->PrintASCII(os,l);
+            else if( t == Tag(0xfffe,0xe000) ) bv->PrintHex(os, MaxPrintLength / 8);
             else os << GDCM_TERMINAL_VT100_INVERSE << "(non-printable character found)" << GDCM_TERMINAL_VT100_NORMAL;
             os << "]";
             }
           else
             {
+            assert( !sqi && !sqf );
             os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL;
             }
           }
@@ -816,7 +821,6 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
       os << "?";
       os << GDCM_TERMINAL_VT100_NORMAL;
       }
-    const ByteValue* bv = de.GetByteValue();
     VM guessvm = VM::VM0;
     if( refvr & VR::VRASCII )
       {
@@ -830,7 +834,6 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
       }
     else if( refvr & VR::VRBINARY )
       {
-      const SequenceOfItems * sqi = de.GetSequenceOfItems();
       assert( refvr != VR::INVALID );
       assert( refvr & VR::VRBINARY );
       if( refvr & VR::OB_OW || refvr == VR::SQ )
@@ -901,9 +904,29 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
       os << GDCM_TERMINAL_VT100_NORMAL;
       }
     os << "\n";
-    if( refvr == VR::SQ )
+return refvr;
+}
+
+void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string const & indent )
+{
+  const Global& g = GlobalInstance;
+  const Dicts &dicts = g.GetDicts();
+  const Dict &d = dicts.GetPublicDict(); (void)d;
+ 
+  DataSet::ConstIterator it = ds.Begin();
+  for( ; it != ds.End(); ++it )
+    {
+    const DataElement &de = *it;
+    const ByteValue *bv = de.GetByteValue();
+    const SequenceOfItems *sqi = de.GetSequenceOfItems();
+    const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
+
+    std::ostringstream os;
+
+    VR refvr = PrintDataElement(os, dicts, ds, de, out, indent);
+
+    if( refvr == VR::SQ || sqi )
       {
-      const SequenceOfItems *sqi = de.GetSequenceOfItems();
       if( sqi ) // empty SQ ?
         {
         assert( sqi );
@@ -940,6 +963,28 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
           os << indent << seqDelItem << "\n";
           }
         }
+      }
+    else if ( sqf )
+      {
+      std::string nextindent = indent + "  ";
+      const BasicOffsetTable & table = sqf->GetTable();
+      //os << nextindent  << table.GetTag() << "\n";
+      PrintDataElement(os,dicts,ds,table,out,nextindent);
+      unsigned int numfrag = sqf->GetNumberOfFragments();
+      for(unsigned int i = 0; i < numfrag; ++i)
+        {
+        const Fragment& frag = sqf->GetFragment(i);
+        //os << nextindent<< frag << "\n";
+        PrintDataElement(os,dicts,ds,frag,out,nextindent);
+        }
+      const Tag seqDelItem(0xfffe,0xe0dd);
+      VL zero = 0;
+      os << /*nextindent <<*/ seqDelItem;
+      os << " " << zero << "\n";
+      }
+    else
+      {
+      // This is a byte value, so it should have been already treated 
       }
     out << os.str();
     }

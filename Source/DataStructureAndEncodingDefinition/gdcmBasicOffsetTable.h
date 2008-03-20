@@ -29,32 +29,32 @@ namespace gdcm
 class GDCM_EXPORT BasicOffsetTable : public DataElement
 {
 public:
-  BasicOffsetTable(const Tag &t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl), Offsets(0) {}
+  BasicOffsetTable(const Tag &t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl) /*, Offsets(0)*/ {}
   friend std::ostream &operator<<(std::ostream &os, const BasicOffsetTable &val);
 
   void Clear() {
     }
 
- Value const &GetValue() const {
-    return *Offsets;
-  }
+// Value const &GetValue() const {
+//    return *Offsets;
+//  }
 
   VL GetLength() const {
     assert( !ValueLengthField.IsUndefined() );
-    assert( !Offsets || Offsets->GetLength() == ValueLengthField );
+    assert( !ValueField || ValueField->GetLength() == ValueLengthField );
     return TagField.GetLength() + ValueLengthField.GetLength() 
       + ValueLengthField;
   }
 
-  BasicOffsetTable(BasicOffsetTable const &val):DataElement(val)
-    {
-    abort();
-    }
-  BasicOffsetTable &operator=(BasicOffsetTable const &val)
-    {
-    abort(); (void)val;
-    return *this;
-    }
+//  BasicOffsetTable(BasicOffsetTable const &val):DataElement(val)
+//    {
+//    abort();
+//    }
+//  BasicOffsetTable &operator=(BasicOffsetTable const &val)
+//    {
+//    abort(); (void)val;
+//    return *this;
+//    }
   template <typename TSwap>
   std::istream &Read(std::istream &is) {
     // Superclass 
@@ -72,13 +72,15 @@ public:
       return is;
       }
     // Self
-    Offsets = new ByteValue;
-    Offsets->SetLength(ValueLengthField);
-    if( !Offsets->Read<TSwap>(is) )
+    SmartPointer<ByteValue> bv = new ByteValue;
+    //ValueField = new ByteValue;
+    bv->SetLength(ValueLengthField);
+    if( !bv->Read<TSwap>(is) )
       {
       assert(0 && "Should not happen");
       return is;
       }
+    ValueField = bv;
     return is;
     }
 
@@ -101,7 +103,10 @@ public:
     if( ValueLengthField )
       {
       // Self
-      if( !Offsets->Write<TSwap>(os) )
+      const ByteValue *bv = dynamic_cast<const ByteValue*>(&*ValueField);
+      assert( bv );
+      //if( !ValueField->Write<TSwap>(os) )
+      if( !bv->Write<TSwap>(os) )
         {
         assert(0 && "Should not happen");
         return os;
@@ -111,17 +116,18 @@ public:
     }
 
 private:
-  typedef SmartPointer<ByteValue> ByteValuePtr;
-  ByteValuePtr Offsets;
+  //typedef SmartPointer<ByteValue> ByteValuePtr;
+  //ByteValuePtr Offsets;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream &operator<<(std::ostream &os, const BasicOffsetTable &val)
 {
   os << " BasicOffsetTable Length=" << val.ValueLengthField << std::endl;
-  if( val.Offsets )
+  if( val.ValueField )
     {
-    const ByteValue &bv = *(val.Offsets);
-    os << bv;
+    const ByteValue *bv = val.GetByteValue();
+    assert( bv );
+    os << *bv;
     }
 
   return os;

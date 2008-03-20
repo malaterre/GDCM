@@ -46,7 +46,8 @@ const DictEntry &Dicts::GetDictEntry(const Tag& tag, const char *owner) const
     Dummy.SetName( "Generic Group Length" );
     Dummy.SetVR( VR::UL );
     Dummy.SetVM( VM::VM1 );
-    Dummy.SetRetired( true ); // Since DICOM 2008, all group length are retired
+    bool retired = (tag.GetGroup() == 0x2 || tag.GetGroup() == 0x4 ) ? false : true;
+    Dummy.SetRetired( retired ); // Since DICOM 2008, all (but 0002,0004) group length are retired
     return Dummy;
     }
   else if( tag.IsPublic() )
@@ -74,7 +75,7 @@ const DictEntry &Dicts::GetDictEntry(const Tag& tag, const char *owner) const
       {
       if( owner && *owner )
         {
-        size_t len = strlen(owner);
+        size_t len = strlen(owner); (void)len;
         PrivateTag ptag(tag.GetGroup(), ((uint16_t)(tag.GetElement() << 8)) >> 8, owner);
         const DictEntry &de = GetPrivateDict().GetDictEntry(ptag);
         return de;

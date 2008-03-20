@@ -30,6 +30,7 @@ namespace gdcm
 
 class DataSet;
 class DictEntry;
+class Dicts;
 // It's a sink there is no output
 class GDCM_EXPORT Printer
 {
@@ -59,6 +60,7 @@ protected:
   void PrintDataSetOld(std::ostream &os, const DataSet &ds);
   void PrintElement(std::ostream& os, const DataElement &xde, const DictEntry &entry);
   void PrintDataSet(const DataSet &ds, std::ostream& os, const std::string &s = "");
+  VR PrintDataElement(std::ostringstream & os, const Dicts &dicts, const DataSet & ds, const DataElement &de, std::ostream &out, std::string const & indent );
 
   PrintStyles PrintStyle;
   const File *F;
