@@ -74,7 +74,23 @@ public:
       DictInternal.find(tag);
     if (it == DictInternal.end())
       {
-      //assert( 0 && "Impossible" );
+#ifdef UNKNOWNPUBLICTAG
+      // test.acr
+      if( tag != Tag(0x28,0x15)
+        && tag != Tag(0x28,0x16) 
+        && tag != Tag(0x28,0x199)
+        // gdcmData/TheralysGDCM1.dcm
+        && tag != Tag(0x20,0x1)
+        // gdcmData/0019004_Baseline_IMG1.dcm
+        && tag != Tag(0x8348,0x339)
+        && tag != Tag(0xb5e8,0x338)
+        // gdcmData/dicomdir_Acusson_WithPrivate_WithSR
+        && tag != Tag(0x40,0xa125)
+      )
+        {
+        assert( 0 && "Impossible" );
+        }
+#endif
       it = DictInternal.find( Tag(0xffff,0xffff) );
       return it->second;
       }

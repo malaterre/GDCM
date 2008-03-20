@@ -42,7 +42,17 @@ appeared as after docbook conversion
 <para>1.­2.840.10008.3.1.2.3.4</para>
 <para>1.­2.840.10008.3.1.2.3.5</para>
 
+4. Adding yet another tag:
 
+(0040,A125) Ordinal Value IS 1
+  http://medical.nema.org/dicom/cp/cp261_03.pdf
+
+or
+
+(0040,A125) VERS="3STR" VR="CS"   VM="2"        Keyword="ReportStatusID"                Name="Report Status ID"
+  http://svn.sourceforge.jp/svnroot/pgctn/pgctn/trunk/main_tree/dicomviewer/univiewer/dcmdict.txt
+
+Picking the second one since this is the one I found in dicomdir_Acusson_WithPrivate_WithSR
 -->
 <!DOCTYPE doc [
 	 <!ENTITY part7 SYSTEM "Part7.xml">
@@ -1469,6 +1479,7 @@ appeared as after docbook conversion
     <entry group="0040" element="a122" vr="TM" vm="1" name="Time"/>
     <entry group="0040" element="a123" vr="PN" vm="1" name="Person Name"/>
     <entry group="0040" element="a124" vr="UI" vm="1" name="UID"/>
+    <entry group="0040" element="a125" vr="CS" vm="2" retired="true" name="Report Status ID"/>
     <entry group="0040" element="a130" vr="CS" vm="1" name="Temporal Range Type"/>
     <entry group="0040" element="a132" vr="UL" vm="1-n" name="Referenced Sample Positions"/>
     <entry group="0040" element="a136" vr="US" vm="1-n" name="Referenced Frame Numbers"/>

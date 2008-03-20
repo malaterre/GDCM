@@ -1765,6 +1765,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0040,0xa122,VR::TM,VM::VM1,"Time",false },
   {0x0040,0xa123,VR::PN,VM::VM1,"Person Name",false },
   {0x0040,0xa124,VR::UI,VM::VM1,"UID",false },
+  {0x0040,0xa125,VR::CS,VM::VM2,"Report Status ID",true },
   {0x0040,0xa130,VR::CS,VM::VM1,"Temporal Range Type",false },
   {0x0040,0xa132,VR::UL,VM::VM1_n,"Referenced Sample Positions",false },
   {0x0040,0xa136,VR::US,VM::VM1_n,"Referenced Frame Numbers",false },

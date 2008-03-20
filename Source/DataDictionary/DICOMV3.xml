@@ -1500,6 +1500,7 @@ This file was generated using the following commands:
   <entry group="0040" element="a122" vr="TM" vm="1" name="Time"/>
   <entry group="0040" element="a123" vr="PN" vm="1" name="Person Name"/>
   <entry group="0040" element="a124" vr="UI" vm="1" name="UID"/>
+  <entry group="0040" element="a125" vr="CS" vm="2" retired="true" name="Report Status ID"/>
   <entry group="0040" element="a130" vr="CS" vm="1" name="Temporal Range Type"/>
   <entry group="0040" element="a132" vr="UL" vm="1-n" name="Referenced Sample Positions"/>
   <entry group="0040" element="a136" vr="US" vm="1-n" name="Referenced Frame Numbers"/>
