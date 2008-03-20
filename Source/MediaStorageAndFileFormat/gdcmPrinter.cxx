@@ -900,6 +900,11 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
     else
       {
       os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
+      if( t.IsPublic() )
+        {
+        // What ? A public element that we do not know about !!!
+        os << GDCM_TERMINAL_VT100_BLINK;
+        }
       os << " UNKNOWN";
       os << GDCM_TERMINAL_VT100_NORMAL;
       }
@@ -917,7 +922,7 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
   for( ; it != ds.End(); ++it )
     {
     const DataElement &de = *it;
-    const ByteValue *bv = de.GetByteValue();
+    //const ByteValue *bv = de.GetByteValue();
     const SequenceOfItems *sqi = de.GetSequenceOfItems();
     const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
 
