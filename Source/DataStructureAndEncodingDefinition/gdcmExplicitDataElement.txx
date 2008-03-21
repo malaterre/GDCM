@@ -26,6 +26,7 @@
 
 namespace gdcm
 {
+
 //-----------------------------------------------------------------------------
 template <typename TSwap>
 std::istream &ExplicitDataElement::Read(std::istream &is)
@@ -296,6 +297,12 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     }
 
   return is;
+}
+
+template <typename TSwap>
+std::istream &ExplicitDataElement::ReadWithLength(std::istream &is, VL & length)
+{
+  return Read<TSwap>(is); (void)length;
 }
 
 //-----------------------------------------------------------------------------

@@ -254,6 +254,12 @@ std::istream &VR16ExplicitDataElement::Read(std::istream &is)
   return is;
 }
 
+template <typename TSwap>
+std::istream &VR16ExplicitDataElement::ReadWithLength(std::istream &is, VL & length)
+{
+  return Read<TSwap>(is); (void)length;
+}
+
 
 } // end namespace gdcm
 

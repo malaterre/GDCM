@@ -213,7 +213,7 @@ std::istream &is = Stream;
     abort();
     }
 
-  bool hasmetaheader = true;
+  bool hasmetaheader = false;
   try
     {
     if( haspreamble )
@@ -221,6 +221,8 @@ std::istream &is = Stream;
       try
         {
         F->GetHeader().Read( is );
+        hasmetaheader = true;
+        assert( !F->GetHeader().IsEmpty() );
         }
       catch( std::exception &ex )
         {
@@ -233,12 +235,14 @@ std::istream &is = Stream;
         catch( std::exception &ex )
           {
           // Ok I get it now... there is absolutely no meta header, giving up
-          hasmetaheader = false;
+          //hasmetaheader = false;
           }
         }
       }
     else
+      {
       F->GetHeader().ReadCompat(is);
+      }
     }
   catch( std::exception &ex )
     {
@@ -250,6 +254,11 @@ std::istream &is = Stream;
     {
     // Ooops..
     abort();
+    }
+  if( F->GetHeader().IsEmpty() )
+    {
+    hasmetaheader = false;
+    gdcmWarningMacro( "no file meta info found" );
     }
 
   const TransferSyntax &ts = F->GetHeader().GetDataSetTransferSyntax();
@@ -294,7 +303,20 @@ std::istream &is = Stream;
       {
       if( ts.GetNegociatedType() == TransferSyntax::Implicit )
         {
-        F->GetDataSet().Read<ImplicitDataElement,SwapperNoOp>(is);
+        if( hasmetaheader && haspreamble )
+          {
+          F->GetDataSet().Read<ImplicitDataElement,SwapperNoOp>(is);
+          }
+        else
+          {
+          std::streampos start = is.tellg();
+          is.seekg( 0, std::ios::end);
+          std::streampos end = is.tellg();
+          VL l = end - start;
+          is.seekg( start, std::ios::beg );
+          F->GetDataSet().ReadWithLength<ImplicitDataElement,SwapperNoOp>(is, l);
+          is.peek();
+          }
         }
       else
         {
@@ -596,7 +618,20 @@ std::istream &is = Stream;
       {
       if( ts.GetNegociatedType() == TransferSyntax::Implicit )
         {
-        F->GetDataSet().ReadUpToTag<ImplicitDataElement,SwapperNoOp>(is,tag);
+        if( hasmetaheader && haspreamble )
+          {
+          F->GetDataSet().ReadUpToTag<ImplicitDataElement,SwapperNoOp>(is,tag);
+          }
+        else
+          {
+          std::streampos start = is.tellg();
+          is.seekg( 0, std::ios::end);
+          std::streampos end = is.tellg();
+          VL l = end - start;
+          is.seekg( start, std::ios::beg );
+          F->GetDataSet().ReadUpToTagWithLength<ImplicitDataElement,SwapperNoOp>(is, tag, l);
+          is.peek();
+          }
         }
       else
         {

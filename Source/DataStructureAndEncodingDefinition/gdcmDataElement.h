@@ -164,6 +164,11 @@ public:
   }
 
   template <typename TDE, typename TSwap>
+  std::istream &ReadWithLength(std::istream &is, VL &length) {
+    return static_cast<TDE*>(this)->template ReadWithLength<TSwap>(is,length);
+  }
+
+  template <typename TDE, typename TSwap>
   const std::ostream &Write(std::ostream &os) const {
     return static_cast<const TDE*>(this)->template Write<TSwap>(os);
   }

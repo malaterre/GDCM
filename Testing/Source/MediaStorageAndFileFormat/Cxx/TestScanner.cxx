@@ -15,6 +15,7 @@
 #include "gdcmScanner.h"
 #include "gdcmDirectory.h"
 #include "gdcmTesting.h"
+#include "gdcmTrace.h"
 
 // dcmdump /path/to/image/*.dcm 2>&/dev/null| grep 0020 | grep "000e\|000d" | sort | uniq
 //
@@ -22,6 +23,7 @@
 
 int TestScanner(int argc, char *argv[])
 {
+  gdcm::Trace::WarningOff();
   const char *directory = gdcm::Testing::GetDataRoot();
   if( argc == 2 )
     {
@@ -86,6 +88,7 @@ int TestScanner(int argc, char *argv[])
     const char *value =  s.GetValue( filename, reftag );
     if( value )
       {
+      assert( value );
       std::cout << filename << " has " << reftag << " = " << value << std::endl;
       }
     else

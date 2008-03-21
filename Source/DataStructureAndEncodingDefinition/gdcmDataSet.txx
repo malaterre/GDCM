@@ -82,6 +82,19 @@ namespace gdcm
   }
 
   template <typename TDE, typename TSwap>
+  std::istream &DataSet::ReadUpToTagWithLength(std::istream &is, const Tag &t, VL & length) {
+    DataElement de;
+    while( !is.eof() && de.ReadWithLength<TDE,TSwap>(is,length) )
+      {
+      //assert( de.GetTag() != Tag(0,0) );
+      DES.insert( de );
+      // tag was found, we can exit the loop:
+      if ( de.GetTag() == t ) break;
+      }
+    return is;
+  }
+
+  template <typename TDE, typename TSwap>
   std::istream &DataSet::ReadWithLength(std::istream &is, VL &length) {
     //return is.seekg(length, std::ios::cur);
     DataElement de;
@@ -90,7 +103,7 @@ namespace gdcm
     VL locallength = length;
     try
       {
-      while( l != locallength && de.Read<TDE,TSwap>(is))
+      while( l != locallength && de.ReadWithLength<TDE,TSwap>(is, locallength))
         {
         //std::cout << "Nested: " << de << std::endl;
 #ifndef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
@@ -135,35 +148,42 @@ namespace gdcm
       }
     catch(Exception &pe)
       {
-      assert( strcmp( pe.GetDescription(), "Out of Range" ) == 0);
-      // BogugsItemAndSequenceLength.dcm
-      // This is most likely the "Out of Range" one
-      // Cautiously read until we find the next item starter and then stop.
-      //std::cout << "Length read was:" << l << " should be at most:" <<  locallength ;
-      while( de.Read<TDE,TSwap>(is) && de.GetTag() != Tag(0xfffe,0xe000) && de.GetTag().GetElement() != 0x0 )
+      if( strcmp( pe.GetDescription(), "Out of Range" ) == 0 )
         {
-        //std::cout << "Nested2: " << de << std::endl;
-        DES.insert( de );
-        l += de.GetLength<TDE>();
-        //std::cout << l << std::endl;
-        }
-      // seek back since we read the next item starter:
-      int iteml = de.GetLength<TDE>();
-      //assert( de.GetTag().GetElement() );
-      if( !de.GetTag().GetElement() )
-        {
-        assert( iteml == 12 ); (void)iteml;
-        is.seekg( -12, std::ios::cur );
+        // BogugsItemAndSequenceLength.dcm
+        // This is most likely the "Out of Range" one
+        // Cautiously read until we find the next item starter and then stop.
+        //std::cout << "Length read was:" << l << " should be at most:" <<  locallength ;
+        while( de.Read<TDE,TSwap>(is) && de.GetTag() != Tag(0xfffe,0xe000) && de.GetTag().GetElement() != 0x0 )
+          {
+          //std::cout << "Nested2: " << de << std::endl;
+          DES.insert( de );
+          l += de.GetLength<TDE>();
+          //std::cout << l << std::endl;
+          }
+        // seek back since we read the next item starter:
+        int iteml = de.GetLength<TDE>();
+        //assert( de.GetTag().GetElement() );
+        if( !de.GetTag().GetElement() )
+          {
+          assert( iteml == 12 ); (void)iteml;
+          is.seekg( -12, std::ios::cur );
+          }
+        else
+          {
+          assert( de.GetTag() == Tag(0xfffe,0xe000) );
+          is.seekg( -4, std::ios::cur );
+          }
+        // let's fix the length now:
+        length = locallength = l;
+        gdcmWarningMacro( "Item length is wrong" );
+        throw Exception( "Changed Length" );
         }
       else
         {
-        assert( de.GetTag() == Tag(0xfffe,0xe000) );
-        is.seekg( -4, std::ios::cur );
+        // re throw
+        throw pe;
         }
-      // let's fix the length now:
-      length = locallength = l;
-      gdcmWarningMacro( "Item length is wrong" );
-      throw Exception( "Changed Length" );
       }
 
     assert( l == locallength );

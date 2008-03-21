@@ -53,6 +53,7 @@ SET(BLACK_LIST_READER
 # quick fix:
   tst_not.dcm
   BogugsSequenceLengthCorrectItemLength.dcm
+  BogugsItemAndSequenceLength.dcm
 )
 
 SET(GDCM_DATA_FILENAMES)
