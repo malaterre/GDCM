@@ -3146,7 +3146,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x4009,0x00e3,"SIEMENS ISI",VR::PN,VM::VM1,"Reporting Radiologist",false },
   {0x0009,0x0010,"SIEMENS MED",VR::LO,VM::VM1,"Recognition Code",false },
   {0x0009,0x0030,"SIEMENS MED",VR::US,VM::VM1,"Byte Offset of Original Header",false },
-  {0x0009,0x0031,"SIEMENS MED",VR::UL,VM::VM1,"Length of Original Header",false },
+  {0x0009,0x0031,"SIEMENS MED",VR::US,VM::VM1,"Length of Original Header",false },
   {0x0009,0x0040,"SIEMENS MED",VR::US,VM::VM1,"Byte Offset of Pixel Matrix",false },
   {0x0009,0x0041,"SIEMENS MED",VR::UL,VM::VM1,"Length of Pixel Matrix",false },
   {0x0009,0x0080,"SIEMENS MED",VR::ST,VM::VM1,"",false },

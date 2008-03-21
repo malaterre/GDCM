@@ -539,8 +539,9 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
       os << "" << el.GetValue(); \
       for(unsigned long i = 1; i < el.GetLength(); ++i) os << "\\" << el.GetValue(i); \
       os << ""; } \
-      else { os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL; } } \
-      else { os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL; } \
+      else { if( de.IsEmpty() ) os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL; \
+                 else os << GDCM_TERMINAL_VT100_INVERSE << GDCM_TERMINAL_VT100_FOREGROUND_RED << "(VR=" << refvr << " is incompatible with length)" << GDCM_TERMINAL_VT100_NORMAL; } } \
+      else { assert( de.IsEmpty()); os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL; } \
     } break
 
 
@@ -693,6 +694,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
         }
       else
         {
+        assert( de.IsEmpty() );
         os << GDCM_TERMINAL_VT100_INVERSE;
         os << "(no value)";
         os << GDCM_TERMINAL_VT100_NORMAL;
@@ -739,6 +741,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
           else
             {
             assert( !sqi && !sqf );
+            assert( de.IsEmpty() );
             os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL;
             }
           }
@@ -773,6 +776,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
           else
             {
             assert( !sqi && !sqf );
+            assert( de.IsEmpty() );
             os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL;
             }
           }

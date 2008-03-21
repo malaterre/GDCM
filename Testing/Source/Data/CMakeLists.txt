@@ -48,6 +48,7 @@ SET(BLACK_LIST_READER
 
 # Overlay Data in Unused bit are not passed in TestImageWriter:
   SIEMENS_GBS_III-16-ACR_NEMA_1.acr
+  SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm
 
 # quick fix:
   tst_not.dcm
