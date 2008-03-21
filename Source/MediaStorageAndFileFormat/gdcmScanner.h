@@ -97,6 +97,9 @@ public:
   TagToValue const & GetMapping(const char *filename) const;
 
   // Retrieve the value found for tag: t associated with file: filename
+  // This is meant for a single short call. If multiple calls (multiple tags)
+  // should be done, prefer the GetMapping function, and then reuse the TagToValue
+  // hash table.
   const char* GetValue(const char *filename, Tag const &t) const;
 
 private:

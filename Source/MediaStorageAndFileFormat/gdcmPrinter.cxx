@@ -689,7 +689,17 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
         {
         VL l = std::min( bv->GetLength(), MaxPrintLength );
         os << "[";
-        bv->PrintASCII(os,l);
+        if( bv->IsPrintable(l) )
+          {
+          bv->PrintASCII(os,l);
+          }
+        else
+          {
+          os << GDCM_TERMINAL_VT100_INVERSE;
+          os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
+          bv->PrintASCII(os,l);
+          os << GDCM_TERMINAL_VT100_NORMAL;
+          }
         os << "]";
         }
       else
@@ -767,11 +777,20 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
           if( bv )
             {
             VL l = std::min( bv->GetLength(), MaxPrintLength );
-            os << "[";
-            if( bv->IsPrintable(l) ) bv->PrintASCII(os,l);
+            if( bv->IsPrintable(l) ) 
+              {
+              os << "[";
+              bv->PrintASCII(os,l);
+              os << "]";
+              }
             else if( t == Tag(0xfffe,0xe000) ) bv->PrintHex(os, MaxPrintLength / 8);
-            else os << GDCM_TERMINAL_VT100_INVERSE << "(non-printable character found)" << GDCM_TERMINAL_VT100_NORMAL;
-            os << "]";
+            else 
+              {
+              os << GDCM_TERMINAL_VT100_INVERSE;
+              // << "(non-printable character found)"
+              bv->PrintHex(os, MaxPrintLength / 8);
+              os << GDCM_TERMINAL_VT100_NORMAL;
+              }
             }
           else
             {
