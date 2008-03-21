@@ -717,7 +717,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
         StringFilterCase(UL);
         //StringFilterCase(UN);
         StringFilterCase(US);
-        StringFilterCase(UT);
+        //StringFilterCase(UT);
       case VR::OB:
       case VR::OW:
       case VR::OB_OW:

@@ -76,8 +76,8 @@ public:
     US_SS_OW = US | SS | OW,
     // The following do not have a VRString equivalent (ie cannot be found in PS 3.6)
     VL32 = OB | OW | OF | SQ | UN | UT, // if( VR & VR_VL32 ) => VR has its VL coded over 32bits
-    VRASCII = AE | AS | CS | DA | DS | DT | IS | LO | LT | PN | SH | ST | TM | UI,
-    VRBINARY = AT | FL | FD | OB | OF | OW | SL | SQ | SS | UL | UN | US | UT, // FIXME: UN ?
+    VRASCII = AE | AS | CS | DA | DS | DT | IS | LO | LT | PN | SH | ST | TM | UI | UT,
+    VRBINARY = AT | FL | FD | OB | OF | OW | SL | SQ | SS | UL | UN | US, // FIXME: UN ?
     // PS 3.5:
     // Data Elements with a VR of SQ, OF, OW, OB or UN shall always have a Value Multiplicity of one.
     // GDCM is adding a couple more: AS, LT, ST, UT
@@ -262,9 +262,9 @@ TYPETOENCODING(ST,VRASCII ,STComp)
 TYPETOENCODING(TM,VRASCII ,TMComp)
 TYPETOENCODING(UI,VRASCII ,UIComp)
 TYPETOENCODING(UL,VRBINARY,uint32_t)
-TYPETOENCODING(UN,VRASCII,unsigned char) // FIXME ?
+TYPETOENCODING(UN,VRBINARY,unsigned char) // FIXME ?
 TYPETOENCODING(US,VRBINARY,uint16_t)
-TYPETOENCODING(UT,VRBINARY,UTComp)
+TYPETOENCODING(UT,VRASCII,UTComp)
 
 #define VRTypeTemplateCase(type) \
   case VR::type: \

@@ -405,7 +405,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     image.SetNumberOfDimensions( 3 );
     image.SetDimension(2, dims[2] );
     }
-  image.SetSpacing(2, spacing[2] ); // should always valid...
+  image.SetSpacing(2, spacing[2] ); // should always be valid...
   // TODO: need to do Origin / Image Position (Patient)
   // For now FileDimensionality should match File Dimension
   //this->FileDimensionality
