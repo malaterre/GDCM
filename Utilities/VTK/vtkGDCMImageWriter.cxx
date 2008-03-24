@@ -111,7 +111,7 @@ int vtkGDCMImageWriter::RequestInformation(
   int components = 0;
   int dataType = 0;
 
-  // For each connection on port 0, check agains the first connection
+  // For each connection on port 0, check against the first connection
   for (int i = 0; i < this->GetNumberOfInputConnections(0); i++)
     {
     vtkInformation *inInfo = inputVector[0]->GetInformationObject(i);
@@ -654,7 +654,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   ms.GuessFromModality( this->MedicalImageProperties->GetModality(), this->FileDimensionality ); // Will override SC only if something is found...
   assert( gdcm::MediaStorage::IsImage( ms ) );
 {
-  gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016 ) );
+  gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
   const char* msstr = gdcm::MediaStorage::GetMSString(ms);
   de.SetByteValue( msstr, strlen(msstr) );
   ds.Insert( de );
@@ -728,5 +728,4 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 void vtkGDCMImageWriter::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os,indent);
-  //this->Internals->DICOMWriter.Print(os);
 }

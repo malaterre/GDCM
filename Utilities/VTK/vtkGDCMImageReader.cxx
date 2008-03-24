@@ -443,6 +443,7 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
   int res = RequestInformationCompat();
   if( !res )
     {
+    vtkErrorMacro( "RequestInformationCompat failed: " << res );
     return 0;
     }
 
@@ -494,7 +495,9 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
       break;
       }
     }
-  return res;
+
+  //return res;
+  return 1;
 }
 #endif
 
@@ -503,11 +506,13 @@ int vtkGDCMImageReader::RequestInformationCompat()
   // FIXME, need to implement the other modes too:
   if( this->ApplyLookupTable || this->ApplyYBRToRGB || this->ApplyInverseVideo )
     {
+    //cerr << "ApplyLookupTable/ApplyYBRToRGB/ApplyInverseVideo not compatible" << endl;
     return 0;
     }
   // I do not think this one will ever be implemented:
   if( !this->ApplyPlanarConfiguration )
     {
+    //cerr << "ApplyPlanarConfiguration not compatible" << endl;
     return 0;
     }
 
@@ -526,10 +531,10 @@ int vtkGDCMImageReader::RequestInformationCompat()
   reader.SetFileName( filename );
   if( !reader.Read() )
     {
+    //cerr << "ImageReader failed" << endl;
     return 0;
     }
   const gdcm::Image &image = reader.GetImage();
-  //const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
   const unsigned int *dims = image.GetDimensions();
 
   // Set the Extents.
@@ -649,39 +654,48 @@ int vtkGDCMImageReader::RequestInformationCompat()
 
 //  return this->Superclass::RequestInformation(
 //    request, inputVector, outputVector);
+
   return 1;
 }
 
-int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImageData* data, bool filelowerleft)
+//----------------------------------------------------------------------------
+int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer) //, int *dext, vtkImageData* data, bool filelowerleft)
 {
-  char * pointer = static_cast<char*>(data->GetScalarPointer());
-  //this->GetOutput(0)->Print(std::cout);
-  //this->GetOutput(1)->Print(std::cout);
+  int *dext = this->GetDataExtent();
+  vtkImageData *data = this->GetOutput(0);
+  bool filelowerleft = this->FileLowerLeft ? true : false;
+
+  //char * pointer = static_cast<char*>(data->GetScalarPointer());
 
   gdcm::ImageReader reader;
   reader.SetFileName( filename );
   if( !reader.Read() )
     {
+	   // cerr << "ImageReader failed" << endl;
     return 0;
     }
-
   const gdcm::Image &image = reader.GetImage();
   assert( image.GetNumberOfDimensions() == 2 || image.GetNumberOfDimensions() == 3 );
   unsigned long len = image.GetBufferLength();
-  char *tempimage = new char[len];
-  unsigned char *tempimage2 = 0; //new unsigned char[len];
+  //char *tempimage = new char[len];
+  //unsigned char *tempimage2 = 0;
   unsigned long overlaylen = 0;
-  image.GetBuffer(tempimage);
+  //image.GetBuffer(tempimage);
+  image.GetBuffer(pointer);
   // Do the Icon Image:
   this->NumberOfIconImages = image.GetIconImage().IsEmpty() ? 0 : 1;
+  if( this->NumberOfIconImages )
+  {
   char * iconpointer = static_cast<char*>(this->GetOutput(IconImagePortNumber)->GetScalarPointer());
   assert( iconpointer );
   image.GetIconImage().GetBuffer( iconpointer );
+  }
 
   // Do the Overlay:
   unsigned int numoverlays = image.GetNumberOfOverlays();
   long overlayoutsize = (dext[1] - dext[0] + 1);
   this->NumberOfOverlays = numoverlays;
+  unsigned char * overlaypointer = static_cast<unsigned char*>(this->GetOutput(OverlayPortNumber)->GetScalarPointer());
   if( numoverlays )
     {
     // vtkOpenGLImageMapper::RenderData does not support bit array (since OpenGL does not either)
@@ -693,11 +707,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
     assert( image->GetPointData()->GetScalars() != 0 );
     vtkUnsignedCharArray *chararray = vtkUnsignedCharArray::New();
     chararray->SetNumberOfTuples( overlayoutsize * ( dext[3] - dext[2] + 1 ) );
-    //ov1.GetRows() * ov1.GetColumns() );
-    //image->SetDimensions(ov1.GetRows(), ov1.GetColumns(), 1);
-    //overlaylen = ov1.GetRows()*ov1.GetColumns();
     overlaylen = overlayoutsize * ( dext[3] - dext[2] + 1 );
-    //overlayoutsize = ov1.GetColumns();
     assert( ov1.GetRows()*ov1.GetColumns() <= overlaylen );
     const signed short *origin = ov1.GetOrigin();
     if( (unsigned long)ov1.GetRows()*ov1.GetColumns() != overlaylen )
@@ -708,20 +718,18 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
       {
       vtkWarningMacro( "Overlay with origin are not supported right now" );
       }
-    tempimage2 = new unsigned char[overlaylen];
-    memset(tempimage2,0,overlaylen);
-    ov1.GetUnpackBuffer( tempimage2 );
+    //tempimage2 = new unsigned char[overlaylen];
+    //memset(tempimage2,0,overlaylen);
+    memset(overlaypointer,0,overlaylen); // FIXME: can be optimized
+    //ov1.GetUnpackBuffer( tempimage2 );
+    ov1.GetUnpackBuffer( overlaypointer );
     image->GetPointData()->SetScalars( chararray );
     image->GetPointData()->GetScalars()->SetName( ov1.GetDescription() );
     chararray->Delete();
     }
-  // WARNING: get the scalar pointer AFTER AllocateScalars, not garantee to remain the same (VTK 4.2)
-  char * overlaypointer = static_cast<char*>(this->GetOutput(OverlayPortNumber)->GetScalarPointer());
 
-  gdcm::PixelFormat pixeltype = image.GetPixelFormat();
+  const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
   // Do the LUT
-  //bool modlut = reader.GetFile().GetDataSet().FindDataElement( gdcm::Tag(0x0028,0x3000) );
-  //assert( modlut );
   if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::PALETTE_COLOR )
     {
     this->ImageFormat = VTK_LOOKUP_TABLE;
@@ -742,7 +750,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
     {
     this->ImageFormat = VTK_INVERSE_LUMINANCE;
     vtkWindowLevelLookupTable *vtklut = vtkWindowLevelLookupTable::New();
-    // Technically we could also use the first of the window width / window center
+    // Technically we could also use the first of the Window Width / Window Center
     // oh well, if they are missing let's just compute something:
     int64_t min = pixeltype.GetMin();
     int64_t max = pixeltype.GetMax(); 
@@ -768,7 +776,6 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
     }
   assert( this->ImageFormat );
 
-  //const unsigned int *dims = image.GetDimensions();
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
   if( numoverlays ) assert( overlayoutsize * ( dext[3] - dext[2] + 1 ) == overlaylen );
   assert( outsize * (dext[3] - dext[2]+1) * (dext[5]-dext[4]+1) == len );
@@ -777,36 +784,55 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, int *dext, vtkImage
   if (filelowerleft)
     {
     // image
-    memcpy(pointer, tempimage, len);
+    //memcpy(pointer, tempimage, len);
     // overlay
     if( numoverlays )
       {
-      memcpy(overlaypointer, tempimage2, overlaylen);
+      //memcpy(overlaypointer, tempimage2, overlaylen);
       }
     }
   else
     {
-    for(int j = dext[4]; j <= dext[5]; ++j)
-      {
-      //std::cerr << j << std::endl;
-      for(int i = dext[2]; i <= dext[3]; ++i)
+	    int maxz = dext[4];
+	    // FIXME: poor test
+	    // Basically we are syaing if there is only one file, then maybe this is a multi frame volume
+	    // in which case I need to invert frame-by-frame each slice:
+	    if( this->FileName )
+	    {
+		    maxz = dext[5];
+	    }
+	    char *line = new char[outsize];
+	    //cerr << "outsize:" << outsize << endl;
+		//cerr << dext[4] << "," << dext[5] << endl;
+    for(int j = dext[4]; j <= maxz /*dext[5]*/; ++j)
+	    {
+	    char *start = pointer;
+      //int j = 0;
+      for(int i = dext[2]; i <= dext[3] / 2; ++i)
         {
         // image:
-        memcpy(pointer,
-          tempimage+((dext[3] - i)+j*(dext[3]+1))*outsize, outsize);
+        //memcpy(pointer,
+        //  tempimage+((dext[3] - i)+j*(dext[3]+1))*outsize, outsize);
+	char * end = start+(dext[3] - i)*outsize;
+	//char * end = start+((dext[3] - i)+j*(dext[3]+1))*outsize;
+	memcpy(line,end,outsize); // duplicate
+	memcpy(end,pointer,outsize);
+	memcpy(pointer,line,outsize);
         pointer += outsize;
-        if( numoverlays /*&& false*/ )
+        if( numoverlays )
           {
           // overlay
-          memcpy(overlaypointer,
-            tempimage2+((dext[3] - i)+j*(dext[3]+1))*overlayoutsize, overlayoutsize);
-          overlaypointer += overlayoutsize;
+          //memcpy(overlaypointer,
+          //  tempimage2+((dext[3] - i)+j*(dext[3]+1))*overlayoutsize, overlayoutsize);
+          //overlaypointer += overlayoutsize;
           }
         }
+      pointer += (dext[3] - dext[3]/2)*outsize;
       }
+      delete[] line;
     }
-  delete[] tempimage;
-  delete[] tempimage2;
+  //delete[] tempimage;
+  //delete[] tempimage2;
 
   return 1; // success
 }
@@ -817,7 +843,6 @@ int vtkGDCMImageReader::RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector **vtkNotUsed(inputVector),
                                 vtkInformationVector *outputVector)
 {
-
   //this->UpdateProgress(0.2);
 
   // Make sure the output dimension is OK, and allocate its scalars
@@ -843,14 +868,6 @@ int vtkGDCMImageReader::RequestData(vtkInformation *vtkNotUsed(request),
 //----------------------------------------------------------------------------
 int vtkGDCMImageReader::RequestDataCompat()
 {
-//  vtkInformation *outInfo = outputVector->GetInformationObject(0);
-//  vtkImageData *output = vtkImageData::SafeDownCast(
-//    outInfo->Get(vtkDataObject::DATA_OBJECT()));
-  int *dext = this->GetDataExtent();
-//  output->SetDimensions(
-//    dext[1] - dext[0] + 1, dext[3] - dext[2] + 1, dext[5] - dext[4] + 1);
-//  output->AllocateScalars();
-
   vtkImageData *output = this->GetOutput(0);
   output->GetPointData()->GetScalars()->SetName("GDCMImage");
 
@@ -858,7 +875,7 @@ int vtkGDCMImageReader::RequestDataCompat()
   if( this->FileName )
     {
     const char *filename = this->FileName;
-    this->LoadSingleFile( filename, dext, output, this->FileLowerLeft);
+    this->LoadSingleFile( filename, pointer ); //, dext, output, this->FileLowerLeft);
     return 1;
     }
   else
@@ -869,12 +886,14 @@ int vtkGDCMImageReader::RequestDataCompat()
   // Load each 2D files
   char *tempimage = 0;
   unsigned long reflen = 0;
+  int *dext = this->GetDataExtent();
   for(int j = dext[4]; j <= dext[5]; ++j)
     {
+	    //cerr << "j=" << j << endl;
+    const char *filename = this->FileNames->GetValue( j );
+    int load = this->LoadSingleFile( filename, pointer ); //, dext, output, this->FileLowerLeft);
+	    //cerr << "load=" << load << endl;
     gdcm::ImageReader reader;
-    const char *filename;
-    filename = this->FileNames->GetValue( j );
-    //std::cerr << "Reader:" << j << " -> " << filename << std::endl;
     reader.SetFileName( filename );
     if( !reader.Read() )
       {
@@ -883,7 +902,11 @@ int vtkGDCMImageReader::RequestDataCompat()
       }
 
     const gdcm::Image &image = reader.GetImage();
+    assert( image.GetNumberOfDimensions() == 2 || image.GetNumberOfDimensions() == 3 );
     unsigned long len = image.GetBufferLength();
+    //cerr << "len=" << len << endl;
+    pointer += len;
+    /*
     if( !tempimage )
       {
       tempimage = new char[len];
@@ -895,12 +918,9 @@ int vtkGDCMImageReader::RequestDataCompat()
       }
     image.GetBuffer(tempimage);
 
-    //const unsigned int *dims = image.GetDimensions();
     assert( image.GetNumberOfDimensions() == 2 );
     gdcm::PixelFormat pixeltype = image.GetPixelFormat();
     long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
-    //std::cerr << "dext: " << dext[2] << " " << dext[3] << std::endl;
-    //std::cerr << "dext: " << dext[4] << " " << dext[5] << std::endl;
 
     // If user overrides this flag, he/she wants image upside down
     if (this->FileLowerLeft)
@@ -920,8 +940,9 @@ int vtkGDCMImageReader::RequestDataCompat()
         pointer += outsize;
         }
       }
+      */
     }
-  delete[] tempimage;
+  //delete[] tempimage;
 
   return 1;
 }
@@ -935,7 +956,7 @@ vtkAlgorithmOutput* vtkGDCMImageReader::GetOverlayPort(int index)
 }
 vtkAlgorithmOutput* vtkGDCMImageReader::GetIconImagePort()
 {
-  int index = 0;
+  const int index = 0;
   if( index >= 0 && index < this->NumberOfIconImages)
     return this->GetOutputPort(index+IconImagePortNumber);
   return NULL;
@@ -952,7 +973,7 @@ vtkImageData* vtkGDCMImageReader::GetOverlay(int i)
 //----------------------------------------------------------------------------
 vtkImageData* vtkGDCMImageReader::GetIconImage()
 {
-  int i = 0;
+  const int i = 0;
   if( i >= 0 && i < this->NumberOfIconImages)
     return this->GetOutput(i+IconImagePortNumber);
   return NULL;
