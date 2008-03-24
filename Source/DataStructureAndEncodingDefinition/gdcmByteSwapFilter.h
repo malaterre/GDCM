@@ -25,17 +25,11 @@ namespace gdcm
  * In place byte-swapping of a dataset
  * FIXME: FL status ??
  */
-class Dicts;
 class GDCM_EXPORT ByteSwapFilter
 {
 public:
   ByteSwapFilter(DataSet& ds):DS(ds),ByteSwapTag(false) {}
   ~ByteSwapFilter();
-
-  void UseDictAlways(bool use) { (void)use;}
-
-  // Allow user to pass in there own dicts
-  void SetDicts(const Dicts &dicts);
 
   bool ByteSwap();
   void SetByteSwapTag(bool b) { ByteSwapTag = b; }

@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmByteSwapFilter.h"
+
 #include "gdcmElement.h"
 #include "gdcmByteValue.h"
 #include "gdcmSequenceOfFragments.h"
@@ -29,12 +30,6 @@ namespace gdcm
 //-----------------------------------------------------------------------------
 ByteSwapFilter::~ByteSwapFilter()
 {
-}
-
-void ByteSwapFilter::SetDicts(const Dicts &dicts)
-{
-  abort(); // FIXME
-  (void)dicts;
 }
 
 bool ByteSwapFilter::ByteSwap()
