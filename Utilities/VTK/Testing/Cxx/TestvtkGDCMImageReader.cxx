@@ -17,19 +17,42 @@
 
 #include "vtkPNGWriter.h"
 #include "vtkImageData.h"
+#include "vtkStringArray.h"
 //#include <vtksys/SystemTools.hxx>
 
 #include "gdcmFilename.h"
 #include "gdcmTesting.h"
 #include "gdcmSystem.h"
+#include "gdcmDirectory.h"
 
 int TestvtkGDCMImageRead(const char *filename, bool verbose)
 {
   if( verbose )
     std::cerr << "Reading : " << filename << std::endl;
+
   vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
+  if( gdcm::System::FileIsDirectory( filename ) )
+    {
+    verbose = false;
+    gdcm::Directory d;
+    d.Load( filename );
+    gdcm::Directory::FilenamesType l = d.GetFilenames();
+    const unsigned int nfiles = l.size();
+    vtkStringArray *sarray = vtkStringArray::New();
+    for(unsigned int i = 0; i < nfiles; ++i)
+      {
+      sarray->InsertNextValue( l[i] );
+      }
+    assert( sarray->GetNumberOfValues() == (int)nfiles );
+    reader->SetFileNames( sarray );
+    sarray->Delete();
+    }
+  else
+    {
+    reader->SetFileName( filename );
+    }
+
   //int canread = reader->CanReadFile( filename );
-  reader->SetFileName( filename );
   reader->Update();
 
   if( verbose )
@@ -58,7 +81,7 @@ int TestvtkGDCMImageRead(const char *filename, bool verbose)
 #endif
     pngfile += ".png";
     writer->SetFileName( pngfile.c_str() );
-    writer->Write();
+    //writer->Write();
     writer->Delete();
     cout << "Wrote PNG output into:" << pngfile << std::endl;
     }
