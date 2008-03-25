@@ -16,9 +16,11 @@
 #define __gdcmSorter_h
 
 #include "gdcmDirectory.h"
+#include "gdcmTag.h"
 
 #include <vector>
 #include <string>
+#include <map>
 
 namespace gdcm
 {
@@ -32,9 +34,18 @@ public:
   ~Sorter();
 
   // Typically the output of gdcm::Directory::GetFilenames()
-  bool Sort(std::vector<std::string> const & filenames);
+  virtual bool Sort(std::vector<std::string> const & filenames);
 
-private:
+  const std::vector<std::string> &GetFilenames() const { return Filenames; }
+
+  void Print( std::ostream &os);
+
+  bool AddSelect( Tag const &tag, const char *value );
+
+protected:
+  std::vector<std::string> Filenames;
+  typedef std::map<Tag,std::string> SelectionMap;
+  std::map<Tag,std::string> Selection;
 };
 
 

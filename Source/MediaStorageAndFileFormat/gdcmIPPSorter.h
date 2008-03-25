@@ -12,27 +12,39 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmCoder_h
-#define __gdcmCoder_h
+#ifndef __gdcmIPPSorter_h
+#define __gdcmIPPSorter_h
 
-#include "gdcmTypes.h"
+#include "gdcmSorter.h"
+
+#include <vector>
+#include <string>
 
 namespace gdcm
 {
-/** \class Coder
+/**
+ * \brief IPPSorter
  */
-
-class TransferSyntax;
-class DataElement;
-class GDCM_EXPORT Coder
+class GDCM_EXPORT IPPSorter : public Sorter
 {
 public:
-  virtual ~Coder() {}
-  virtual bool CanCode(TransferSyntax const &) { return false; }
-  virtual bool Code(DataElement const &is, DataElement &os) { (void)is; (void)os; return false; }
-  //virtual bool Code(std::istream &is, std::ostream &os) { return false; }
+  IPPSorter();
+  ~IPPSorter();
+
+  // FIXME: I do not like public virtual function...
+  virtual bool Sort(std::vector<std::string> const & filenames);
+
+  void SetComputeZSpacing(bool b);
+
+  // read-only:
+  double GetZSpacing() const { return ZSpacing; }
+
+protected:
+  bool ComputeZSpacing;
+  double ZSpacing;
 };
+
 
 } // end namespace gdcm
 
-#endif //__gdcmCoder_h
+#endif //__gdcmIPPSorter_h

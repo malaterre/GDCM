@@ -347,13 +347,13 @@ CSAHeader::CSAHeaderType CSAHeader::GetFormat() const
 void CSAHeader::Print(DataElement const &de)
 {
   InternalType = UNKNOWN; // reset
-  gdcm::Tag t1(0x0029,0x1010);
-  gdcm::Tag t2(0x0029,0x1020);
-  if( de.GetTag() == t1 )
+  gdcm::Tag t1(0x0029,0x0010);
+  gdcm::Tag t2(0x0029,0x0020);
+  if( uint16_t(de.GetTag().GetElement() << 8 ) >> 8 == t1.GetElement() )
     {
     std::cout << "Image shadow data (0029,xx10)\n\n";
     }
-  else if( de.GetTag() == t2 )
+  else if( uint16_t(de.GetTag().GetElement() << 8 ) >> 8 == t2.GetElement() )
     {
     std::cout << "Series shadow data (0029,xx20)\n\n";
     }

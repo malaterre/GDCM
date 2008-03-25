@@ -17,6 +17,7 @@
 
 #include "gdcmTypes.h"
 #include "gdcmTag.h"
+#include "gdcmPrivateTag.h"
 #include "gdcmDictEntry.h"
 #include "gdcmSystem.h"
 
@@ -119,53 +120,6 @@ inline std::ostream& operator<<(std::ostream& os, const Dict &val)
     os << t << " " << de << '\n';
     }
 
-  return os;
-}
-
-class GDCM_EXPORT PrivateTag : public Tag
-{
-  friend std::ostream& operator<<(std::ostream &_os, const PrivateTag &_val);
-public:
-  PrivateTag(uint16_t group = 0, uint16_t element = 0, const char *owner = ""):Tag(group,element),Owner(owner) {}
-
-  const char *GetOwner() const { return Owner.c_str(); }
-  void SetOwner(const char *owner) { Owner = owner; }
-
-  bool operator<(const PrivateTag &_val) const
-    {
-    const Tag & t1 = *this;
-    const Tag & t2 = _val;
-    if( t1 == t2 )
-      {
-      bool res = strcmp(Owner.c_str(), _val.GetOwner() ) < 0;
-#ifndef NDEBUG
-      if( gdcm::System::StrCaseCmp(Owner.c_str(), _val.GetOwner() ) == 0 )
-        {
-        // FIXME:
-        // Typically this should only happen with the "Philips MR Imaging DD 001" vs "PHILIPS MR IMAGING DD 001"
-        // or "Philips Imaging DD 001" vr "PHILIPS IMAGING DD 001"
-        //assert( strcmp(Owner.c_str(), _val.GetOwner()) == 0 );
-        return false;
-        }
-#endif
-      return res;
-      }
-    else return t1 < t2;
-    }
-
-private:
-  // SIEMENS MED, GEMS_PETD_01 ...
-  std::string Owner;
-};
-
-inline std::ostream& operator<<(std::ostream &os, const PrivateTag &val)
-{
-  //assert( !val.Owner.empty() );
-  os.setf( std::ios::right );
-  os << std::hex << '(' << std::setw( 4 ) << std::setfill( '0' )
-    << val[0] << ',' << std::setw( 4 ) << std::setfill( '0' )
-    << val[1] << ')' << std::setfill( ' ' ) << std::dec;
-  os << val.Owner;
   return os;
 }
 

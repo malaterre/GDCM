@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmDataSet.h"
+#include "gdcmPrivateTag.h"
 
 namespace gdcm
 {
@@ -47,6 +48,47 @@ std::string DataSet::GetPrivateCreator(const Tag &t) const
     return owner;
     }
   return "";
+}
+
+Tag DataSet::ComputeDataElement(const PrivateTag & t) const
+{
+  assert( t.GetElement() <= 0xFF );
+  const Tag start(t.GetGroup(), 0x0 ); // First possible private creator
+  const DataElement r(start);
+  ConstIterator it = DES.lower_bound(r);
+  const char *refowner = t.GetOwner();
+  assert( refowner );
+  bool found = false;
+  while( it != DES.end() && it->GetTag().GetElement() < 0x100 )
+    {
+    //assert( it->GetTag().GetOwner() );
+    const ByteValue * bv = it->GetByteValue();
+    assert( bv );
+    //std::cout << std::string(bv->GetPointer(), bv->GetLength() ) << std::endl;
+    if( strcmp( bv->GetPointer(), refowner ) == 0 )
+      {
+      // found !
+      found = true;
+      break;
+      }
+    ++it;
+    }
+  if (!found) return GetDEEnd().GetTag();
+  // else
+  // ok we found the Private Creator Data Element, let's construct the proper data element
+  Tag copy = t;
+  copy.SetPrivateCreator( it->GetTag() );
+  return copy;
+}
+
+bool DataSet::FindDataElement(const PrivateTag &t) const
+{
+  return FindDataElement( ComputeDataElement(t) );
+}
+
+const DataElement& DataSet::GetDataElement(const PrivateTag &t) const
+{
+  return GetDataElement( ComputeDataElement(t) );
 }
 
 } // end namespace gdcm

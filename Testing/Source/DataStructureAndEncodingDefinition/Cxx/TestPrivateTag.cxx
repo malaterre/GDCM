@@ -12,27 +12,11 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmCoder_h
-#define __gdcmCoder_h
+#include "gdcmPrivateTag.h"
 
-#include "gdcmTypes.h"
-
-namespace gdcm
+int TestPrivateTag(int , char * [])
 {
-/** \class Coder
- */
+  gdcm::PrivateTag pt;
 
-class TransferSyntax;
-class DataElement;
-class GDCM_EXPORT Coder
-{
-public:
-  virtual ~Coder() {}
-  virtual bool CanCode(TransferSyntax const &) { return false; }
-  virtual bool Code(DataElement const &is, DataElement &os) { (void)is; (void)os; return false; }
-  //virtual bool Code(std::istream &is, std::ostream &os) { return false; }
-};
-
-} // end namespace gdcm
-
-#endif //__gdcmCoder_h
+  return 0;
+}

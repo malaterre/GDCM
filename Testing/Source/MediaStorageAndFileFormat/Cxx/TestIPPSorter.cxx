@@ -12,10 +12,11 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmSorter.h"
+#include "gdcmIPPSorter.h"
+#include "gdcmDirectory.h"
 #include "gdcmTesting.h"
 
-int TestSorter(int argc, char *argv[])
+int TestIPPSorter(int argc, char *argv[])
 {
   const char *directory = gdcm::Testing::GetDataRoot();
   if( argc == 2 )
@@ -27,9 +28,8 @@ int TestSorter(int argc, char *argv[])
   d.Print( std::cout );
   std::cout << "done retrieving file list. " << nfiles << " files found." <<  std::endl;
 
-  gdcm::Sorter s;
+  gdcm::IPPSorter s;
   bool b = s.Sort( d.GetFilenames() );
-/*
   if( !b )
     {
     std::cerr << "Failed to sort:" << directory << std::endl;
@@ -38,7 +38,7 @@ int TestSorter(int argc, char *argv[])
 
   std::cout << "Sorting succeeded:" << std::endl;
   s.Print( std::cout );
-*/
+
   return 0;
 }
 

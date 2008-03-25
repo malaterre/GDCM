@@ -14,6 +14,7 @@ SET(MSFF_TEST_SRCS
   TestReader
   TestScanner
   TestSorter
+  TestIPPSorter
   TestReader2
   TestImageReader
   TestCopyDataSet

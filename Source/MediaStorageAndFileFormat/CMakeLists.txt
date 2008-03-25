@@ -3,6 +3,7 @@
 SET(MSFF_SRCS
   gdcmAnonymizer.cxx
   gdcmSorter.cxx
+  gdcmIPPSorter.cxx
   gdcmApplicationEntity.cxx
   gdcmDICOMDIR.cxx
   gdcmSpectroscopy.cxx

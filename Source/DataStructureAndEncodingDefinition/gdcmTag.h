@@ -12,7 +12,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #ifndef __gdcmTag_h
 #define __gdcmTag_h
 
@@ -177,6 +176,14 @@ public:
     Tag r = *this;
     r.SetElement( GetElement() >> 8 );
     return r;
+    }
+  void SetPrivateCreator(Tag const &t)
+    {
+    // See PS 3.5 - 7.8.1 PRIVATE DATA ELEMENT TAGS
+    // eg: 0x1234,0x0056 -> 0x1234,0x5678
+    assert( t.IsPrivate() && t.GetElement() < 0x100 );
+    uint16_t element = t.GetElement() << 8;
+    SetElement( GetElement() + element );
     }
 
   // Returns if tag is a Private Creator (xxxx,00yy), where xxxx is odd number
