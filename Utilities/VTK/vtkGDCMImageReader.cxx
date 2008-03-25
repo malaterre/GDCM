@@ -764,8 +764,15 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer) //, 
     }
   else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::YBR_FULL_422 )
     {
-    assert( image.GetPixelFormat().GetSamplesPerPixel() == 3 );
-    this->ImageFormat = VTK_RGB; // FIXME 
+    if( image.GetPixelFormat().GetSamplesPerPixel() == 3 )
+      {
+      this->ImageFormat = VTK_RGB; // FIXME 
+      }
+    else if( image.GetPixelFormat().GetSamplesPerPixel() == 1 )
+      {
+      vtkWarningMacro( "Image was declared as YBR_FULL_422 but is indeed just grayscale" );
+      this->ImageFormat = VTK_LUMINANCE;
+      }
     }
   else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::YBR_FULL )
     {

@@ -141,7 +141,7 @@ static MSModalityType MSModalityTypes[] = {
   {"CT", 2},//CTImageStorage,
   {"  ", 2},//EnhancedCTImageStorage,
   {"  ", 2},//UltrasoundMultiFrameImageStorageRetired,
-  {"  ", 2},//UltrasoundMultiFrameImageStorage,
+  {"IVUS", 3},//UltrasoundMultiFrameImageStorage,
   {"MR", 2},//MRImageStorage,
   {"MR", 3},//EnhancedMRImageStorage,
   {"  ", 2},//MRSpectroscopyStorage,
@@ -210,7 +210,7 @@ void MediaStorage::SetFromHeader(FileMetaInformation const &fmi)
 void MediaStorage::GuessFromModality(const char *modality, unsigned int dim)
 {
   if( !modality ) return;
-  if( strlen(modality) != 2 ) return;
+  //if( strlen(modality) != 2 ) return;
   int i = 0;
   while( MSModalityTypes[i].Modality && 
     (strcmp(modality, MSModalityTypes[i].Modality) != 0 || MSModalityTypes[i].Dimension < dim ))
