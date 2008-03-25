@@ -298,4 +298,44 @@ bool LookupTable::GetBufferAsRGBA(unsigned char *rgba) const
   return ret;
 }
 
+bool LookupTable::WriteBufferAsRGBA(unsigned char *rgba)
+{
+  bool ret;
+  if ( BitSample == 8 )
+    {
+    std::vector<unsigned char>::iterator it = Internal->RGB.begin();
+    for(; it != Internal->RGB.end() ;)
+      {
+      // RED
+      *it++ = *rgba++;
+      // GREEN
+      *it++ = *rgba++;
+      // BLUE
+      *it++ = *rgba++;
+      // ALPHA
+      *rgba++ = 255;
+      }
+    ret = true;
+    }
+  else
+    {
+/*
+    assert( Internal->Length[type]*(BitSample/8) == length );
+    uint16_t *uchar16 = (uint16_t*)&Internal->RGB[0];
+    const uint16_t *array16 = (uint16_t*)array;
+    for( unsigned int i = 0; i < Internal->Length[type]; ++i)
+      {
+      assert( 2*i < length );
+      assert( 2*(3*i+type) < Internal->RGB.size() );
+      uchar16[3*i+type] = array16[i];
+      std::cout << i << " -> " << array16[i] << "\n";
+      }
+
+    ret = true;
+*/
+    ret = false;
+    }
+  return ret;
+}
+
 } // end namespace gdcm

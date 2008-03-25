@@ -128,6 +128,10 @@ public:
     {
     return *LUT;
     }
+  LookupTable &GetLUT()
+    {
+    return *LUT;
+    }
 
   // Curve: group 50xx
   Curve& GetCurve(unsigned int i = 0) { 

@@ -21,6 +21,7 @@
 #include "vtkMatrix4x4.h"
 #include "vtkMedicalImageProperties.h"
 #include "vtkStringArray.h"
+#include "vtkPointData.h"
 #include "vtkGDCMImageReader.h"
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #include "vtkInformationVector.h"
@@ -484,9 +485,32 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
       return 0;
       }
     }
+
   pixeltype.SetSamplesPerPixel( data->GetNumberOfScalarComponents() );
   image.SetPhotometricInterpretation( pi );
   image.SetPixelFormat( pixeltype );
+
+  // Setup LUt if any:
+  if( pi == gdcm::PhotometricInterpretation::PALETTE_COLOR )
+    {
+    vtkLookupTable * vtklut = data->GetPointData()->GetScalars()->GetLookupTable();
+    assert( vtklut );
+    assert( vtklut->GetNumberOfTableValues() == 256 );
+    gdcm::SmartPointer<gdcm::LookupTable> lut = new gdcm::LookupTable;
+    assert( pixeltype.GetBitsAllocated() == 8 );
+    lut->Allocate( pixeltype.GetBitsAllocated() );
+    lut->InitializeLUT( gdcm::LookupTable::RED, 256, 0, 16 );
+    lut->InitializeLUT( gdcm::LookupTable::GREEN, 256, 0, 16 );
+    lut->InitializeLUT( gdcm::LookupTable::BLUE, 256, 0, 16 );
+    if( !lut->WriteBufferAsRGBA( vtklut->WritePointer(0,4) ) )
+      {
+      vtkWarningMacro( "Could not get values from LUT" );
+      return 0;
+      }
+
+    image.SetLUT( *lut );
+    }
+
   unsigned long len = image.GetBufferLength();
 
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
@@ -616,6 +640,8 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
   // Window Level / Window Center
   int numwl = this->MedicalImageProperties->GetNumberOfWindowLevelPresets();
+  if( numwl )
+{
   gdcm::VR vr = gdcm::VR::DS;
   gdcm::Element<gdcm::VR::DS,gdcm::VM::VM1_n> elwc;
   elwc.SetLength( numwl * vr.GetSizeof() );
@@ -646,6 +672,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   gdcm::DataElement de = elwe.GetAsDataElement();
   de.SetTag( gdcm::Tag(0x0028,0x1055) );
   ds.Insert( de );
+}
 }
 
 

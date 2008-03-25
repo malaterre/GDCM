@@ -627,7 +627,7 @@ std::istream &is = Stream;
           std::streampos start = is.tellg();
           is.seekg( 0, std::ios::end);
           std::streampos end = is.tellg();
-          VL l = end - start;
+          VL l = (VL)(end - start);
           is.seekg( start, std::ios::beg );
           F->GetDataSet().ReadUpToTagWithLength<ImplicitDataElement,SwapperNoOp>(is, tag, l);
           is.peek();

@@ -257,8 +257,14 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     vtkImageMapToColors *map = vtkImageMapToColors::New ();
     map->SetInput (reader->GetOutput());
     map->SetLookupTable (reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable());
-    //map->SetOutputFormatToRGB();
-    map->SetOutputFormatToLuminance();
+    if( reader->GetImageFormat() == VTK_LOOKUP_TABLE )
+      {
+      map->SetOutputFormatToRGB();
+      }
+    else if( reader->GetImageFormat() == VTK_INVERSE_LUMINANCE )
+      {
+      map->SetOutputFormatToLuminance();
+      }
     map->Update();
     map->GetOutput()->GetScalarRange(range);
     viewer->SetInput( map->GetOutput() );
