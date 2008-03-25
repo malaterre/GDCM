@@ -197,7 +197,7 @@ void ReadFiles(unsigned int nfiles, const char *filenames[])
   //writer->Write();
   writer->Delete();
 
-  output->Print( std::cout );
+  //output->Print( std::cout );
   output->Delete();
 }
 
