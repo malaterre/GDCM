@@ -47,11 +47,12 @@ int DoOperation(std::string const & path)
   is.seekg(0, std::ios::end );
   // gcc 3.3 does not support streampos !!!
   /*  std::ifstream::streampos */ long size = is.tellg();
-  char *buffer = new char[size];
-  is.read(buffer, size );
+  is.seekg(0,std::ios::beg);
+  std::vector<char> buffer;
+  buffer.resize(size);
+  is.read(&buffer[0], size );
   char k = buffer[(size_t)size-1];
   //std::cout << k << std::endl;
-  delete[] buffer;
   is.close();
 
   return 0;
