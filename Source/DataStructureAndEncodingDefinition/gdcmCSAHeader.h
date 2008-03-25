@@ -57,8 +57,8 @@ public :
 
   CSAHeaderType GetFormat() const;
 
-  const PrivateTag & GetCSAImageHeaderInfoTag() const;
-  const PrivateTag & GetCSASeriesHeaderInfoTag() const;
+  static const PrivateTag & GetCSAImageHeaderInfoTag();
+  static const PrivateTag & GetCSASeriesHeaderInfoTag();
 
 private:
   DataSet InternalDataSet;

@@ -500,12 +500,12 @@ static const char csaheader[] = "SIEMENS CSA HEADER";
 static const gdcm::PrivateTag t1(0x0029,0x0010,csaheader);
 static const gdcm::PrivateTag t2(0x0029,0x0020,csaheader);
 
-const PrivateTag & CSAHeader::GetCSAImageHeaderInfoTag() const
+const PrivateTag & CSAHeader::GetCSAImageHeaderInfoTag()
 {
   return t1;
 }
 
-const PrivateTag & CSAHeader::GetCSASeriesHeaderInfoTag() const
+const PrivateTag & CSAHeader::GetCSASeriesHeaderInfoTag()
 {
   return t2;
 }
