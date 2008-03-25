@@ -27,6 +27,12 @@ namespace gdcm
  *
  * TODO:
  * MrEvaProtocol in 29,1020 contains ^M that would be nice to get rid of on UNIX system...
+ *
+ * See also
+ * 5.1.3.2.4.1 MEDCOM History Information
+ * and 5.1.4.3 CSA Non-Image Module
+ * in 
+ * http://tamsinfo.toshiba.com/docrequest/pdf/E.Soft_v2.0.pdf
  */
 //-----------------------------------------------------------------------------
 class DataElement;

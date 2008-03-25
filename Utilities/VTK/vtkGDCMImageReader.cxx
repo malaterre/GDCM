@@ -506,13 +506,13 @@ int vtkGDCMImageReader::RequestInformationCompat()
   // FIXME, need to implement the other modes too:
   if( this->ApplyLookupTable || this->ApplyYBRToRGB || this->ApplyInverseVideo )
     {
-    //cerr << "ApplyLookupTable/ApplyYBRToRGB/ApplyInverseVideo not compatible" << endl;
+    vtkErrorMacro( "ApplyLookupTable/ApplyYBRToRGB/ApplyInverseVideo not compatible" );
     return 0;
     }
   // I do not think this one will ever be implemented:
   if( !this->ApplyPlanarConfiguration )
     {
-    //cerr << "ApplyPlanarConfiguration not compatible" << endl;
+    vtkErrorMacro("ApplyPlanarConfiguration not compatible" );
     return 0;
     }
 
@@ -531,7 +531,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
   reader.SetFileName( filename );
   if( !reader.Read() )
     {
-    //cerr << "ImageReader failed" << endl;
+    vtkErrorMacro( "ImageReader failed" );
     return 0;
     }
   const gdcm::Image &image = reader.GetImage();
