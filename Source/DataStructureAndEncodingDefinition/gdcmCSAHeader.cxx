@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmCSAHeader.h"
+#include "gdcmPrivateTag.h"
 #include "gdcmDataElement.h"
 #include "gdcmDataSet.h"
 #include "gdcmExplicitDataElement.h"
@@ -493,6 +494,20 @@ void CSAHeader::Print(DataElement const &de)
     std::cout << std::endl;
     }
  
+}
+
+static const char csaheader[] = "SIEMENS CSA HEADER";
+static const gdcm::PrivateTag t1(0x0029,0x0010,csaheader);
+static const gdcm::PrivateTag t2(0x0029,0x0020,csaheader);
+
+const PrivateTag & CSAHeader::GetCSAImageHeaderInfoTag() const
+{
+  return t1;
+}
+
+const PrivateTag & CSAHeader::GetCSASeriesHeaderInfoTag() const
+{
+  return t2;
 }
 
 } // end namespace gdcm

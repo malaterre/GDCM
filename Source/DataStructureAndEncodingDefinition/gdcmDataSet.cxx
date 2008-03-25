@@ -59,7 +59,7 @@ Tag DataSet::ComputeDataElement(const PrivateTag & t) const
   const char *refowner = t.GetOwner();
   assert( refowner );
   bool found = false;
-  while( it != DES.end() && it->GetTag().GetElement() < 0x100 )
+  while( it != DES.end() && it->GetTag().GetGroup() == t.GetGroup() && it->GetTag().GetElement() < 0x100 )
     {
     //assert( it->GetTag().GetOwner() );
     const ByteValue * bv = it->GetByteValue();

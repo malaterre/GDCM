@@ -81,20 +81,14 @@ int PrintCSA(const std::string & filename)
   gdcm::CSAHeader csa;
   const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
 
-
-  //gdcm::Tag t0(0x0029,0x0010); // LO 
-  const char csaheader[] = "SIEMENS CSA HEADER";
-  //const gdcm::DataElement &pde = ds.GetDataElement( 
-  //  gdcm::PrivateTag(t0.GetGroup(),t0.GetElement(),csaheader) );
-  //std::cout << pde << std::endl;
+  const gdcm::PrivateTag &t1 = csa.GetCSAImageHeaderInfoTag();
+  const gdcm::PrivateTag &t2 = csa.GetCSASeriesHeaderInfoTag();
 
   //if( pde.GetTag().GetElement() != 0xffff /*ds.FindDataElement( t0 )*/ )
     {
     //const gdcm::ByteValue *bv = pde.GetByteValue(); //ds.GetDataElement( t0 ).GetByteValue();
     //if( strncmp( bv->GetPointer(), csaheader, strlen(csaheader) ) ==  0 )
       {
-      gdcm::PrivateTag t1(0x0029,0x0010,csaheader);
-      gdcm::PrivateTag t2(0x0029,0x0020,csaheader);
       //gdcm::Tag t3(0x0029,0x1120); ???
       //std::cerr << "Working on: " << filename << std::endl;
       if( ds.FindDataElement( t1 ) )

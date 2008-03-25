@@ -30,6 +30,7 @@ namespace gdcm
  */
 //-----------------------------------------------------------------------------
 class DataElement;
+class PrivateTag;
 class GDCM_EXPORT CSAHeader
 {
 public :
@@ -55,6 +56,9 @@ public :
   const DataSet& GetDataSet() const { return InternalDataSet; }
 
   CSAHeaderType GetFormat() const;
+
+  const PrivateTag & GetCSAImageHeaderInfoTag() const;
+  const PrivateTag & GetCSASeriesHeaderInfoTag() const;
 
 private:
   DataSet InternalDataSet;

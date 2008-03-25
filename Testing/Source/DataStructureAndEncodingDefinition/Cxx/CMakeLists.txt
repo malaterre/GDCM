@@ -7,6 +7,7 @@ SET(DSED_TEST_SRCS
   #TestByteBuffer
   #TestByteValue
   TestPreamble
+  TestCSAHeader
   TestByteSwapFilter
   TestBasicOffsetTable
   TestComposite
