@@ -324,6 +324,7 @@ void *ReadFilesThread(void *voidparams)
     image.GetBuffer(tempimage);
     // overlay
     unsigned int numoverlays = image.GetNumberOfOverlays();
+    //if( numoverlays && !params->reader->GetLoadOverlays() )
     //params->reader->SetNumberOfOverlays( numoverlays );
     if( numoverlays )
       {
@@ -400,10 +401,14 @@ void vtkGDCMThreadedImageReader::ReadFiles(unsigned int nfiles, const char *file
   const unsigned long overlaylen = output->GetNumberOfPoints() / nfiles;
   char * scalarpointer = static_cast<char*>(output->GetScalarPointer());
   // overlay data:
-  vtkImageData *overlayoutput = this->GetOutput(OverlayPortNumber);
-  overlayoutput->SetScalarTypeToUnsignedChar();
-  overlayoutput->AllocateScalars();
-  unsigned char * overlayscalarpointer = static_cast<unsigned char*>(overlayoutput->GetScalarPointer());
+  unsigned char * overlayscalarpointer = 0;
+  if( this->LoadOverlays )
+    {
+    vtkImageData *overlayoutput = this->GetOutput(OverlayPortNumber);
+    overlayoutput->SetScalarTypeToUnsignedChar();
+    overlayoutput->AllocateScalars();
+    overlayscalarpointer = static_cast<unsigned char*>(overlayoutput->GetScalarPointer());
+    }
 
   const unsigned int nprocs = sysconf( _SC_NPROCESSORS_ONLN );
   const unsigned int nthreads = std::min( nprocs, nfiles );

@@ -55,6 +55,9 @@ public:
   vtkGetMacro(Scale,double);
   vtkSetMacro(Scale,double);
 
+  // Within this class this is allowed to set the Number of Overlays from outside
+  //vtkSetMacro(NumberOfOverlays,int);
+
 protected:
   vtkGDCMThreadedImageReader();
   ~vtkGDCMThreadedImageReader();

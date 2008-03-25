@@ -420,14 +420,4 @@ bool ImageWriter::Write()
   return true;
 }
 
-bool ImageWriter::WriteImage()
-{
-  return true;
-}
-
-//bool ImageWriter::WriteACRNEMAImage()
-//{
-//  return true;
-//}
-
 } // end namespace gdcm
