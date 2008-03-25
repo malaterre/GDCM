@@ -762,6 +762,11 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer) //, 
     data->GetPointData()->GetScalars()->SetLookupTable( vtklut );
     vtklut->Delete();
     }
+  else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::YBR_FULL_422 )
+    {
+    assert( image.GetPixelFormat().GetSamplesPerPixel() == 3 );
+    this->ImageFormat = VTK_RGB; // FIXME 
+    }
   else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::YBR_FULL )
     {
     this->ImageFormat = VTK_YBR;
