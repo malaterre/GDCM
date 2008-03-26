@@ -25,7 +25,7 @@
 namespace gdcm
 {
 
-class UIDs
+class GDCM_EXPORT UIDs
 {
 public:
   typedef enum {
