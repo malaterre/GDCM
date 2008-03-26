@@ -16,6 +16,7 @@
 #define __gdcmCoder_h
 
 #include "gdcmTypes.h"
+#include "gdcmDataElement.h" // FIXME
 
 namespace gdcm
 {
