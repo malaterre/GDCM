@@ -16,304 +16,14 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+#include "gdcmUIDs.h"
 
-#ifndef __gdcmUIDs_h
-#define __gdcmUIDs_h
+//#ifdef __gdcmUIDs_cxx
 
-  typedef enum {
-1_2_840_10008_1_1 = 1, // Verification SOP Class
-1_2_840_10008_1_2 = 2, // Implicit VR Little Endian: Default Transfer Syntax for DICOM
-1_2_840_10008_1_2_1 = 3, // Explicit VR Little Endian
-1_2_840_10008_1_2_1_99 = 4, // Deflated Explicit VR Little Endian
-1_2_840_10008_1_2_2 = 5, // Explicit VR Big Endian
-1_2_840_10008_1_2_4_50 = 6, // JPEG Baseline (Process 1): Default Transfer Syntax for Lossy JPEG 8 Bit Image Compression
-1_2_840_10008_1_2_4_51 = 7, // JPEG Extended (Process 2 & 4): Default Transfer Syntax for Lossy JPEG 12 Bit Image Compression (Process 4 only)
-1_2_840_10008_1_2_4_52 = 8, // JPEG Extended (Process 3 & 5)
-1_2_840_10008_1_2_4_53 = 9, // JPEG Spectral Selection, Non-Hierarchical (Process 6 & 8)
-1_2_840_10008_1_2_4_54 = 10, // JPEG Spectral Selection, Non-Hierarchical (Process 7 & 9)
-1_2_840_10008_1_2_4_55 = 11, // JPEG Full Progression, Non-Hierarchical (Process 10 & 12)
-1_2_840_10008_1_2_4_56 = 12, // JPEG Full Progression, Non-Hierarchical (Process 11 & 13)
-1_2_840_10008_1_2_4_57 = 13, // JPEG Lossless, Non-Hierarchical (Process 14)
-1_2_840_10008_1_2_4_58 = 14, // JPEG Lossless, Non-Hierarchical (Process 15)
-1_2_840_10008_1_2_4_59 = 15, // JPEG Extended, Hierarchical (Process 16 & 18)
-1_2_840_10008_1_2_4_60 = 16, // JPEG Extended, Hierarchical (Process 17 & 19)
-1_2_840_10008_1_2_4_61 = 17, // JPEG Spectral Selection, Hierarchical (Process 20 & 22)
-1_2_840_10008_1_2_4_62 = 18, // JPEG Spectral Selection, Hierarchical (Process 21 & 23)
-1_2_840_10008_1_2_4_63 = 19, // JPEG Full Progression, Hierarchical (Process 24 & 26)
-1_2_840_10008_1_2_4_64 = 20, // JPEG Full Progression, Hierarchical (Process 25 & 27)
-1_2_840_10008_1_2_4_65 = 21, // JPEG Lossless, Hierarchical (Process 28)
-1_2_840_10008_1_2_4_66 = 22, // JPEG Lossless, Hierarchical (Process 29)
-1_2_840_10008_1_2_4_70 = 23, // JPEG Lossless, Non-Hierarchical, First-Order Prediction (Process 14 [Selection Value 1]): Default Transfer Syntax for Lossless JPEG Image Compression
-1_2_840_10008_1_2_4_80 = 24, // JPEG-LS Lossless Image Compression
-1_2_840_10008_1_2_4_81 = 25, // JPEG-LS Lossy (Near-Lossless) Image Compression
-1_2_840_10008_1_2_4_90 = 26, // JPEG 2000 Image Compression (Lossless Only)
-1_2_840_10008_1_2_4_91 = 27, // JPEG 2000 Image Compression
-1_2_840_10008_1_2_4_92 = 28, // JPEG 2000 Part 2 Multi-component Image Compression (Lossless Only)
-1_2_840_10008_1_2_4_93 = 29, // JPEG 2000 Part 2 Multi-component Image Compression
-1_2_840_10008_1_2_4_94 = 30, // JPIP Referenced
-1_2_840_10008_1_2_4_95 = 31, // JPIP Referenced Deflate
-1_2_840_10008_1_2_4_100 = 32, // MPEG2 Main Profile @ Main Level
-1_2_840_10008_1_2_5 = 33, // RLE Lossless
-1_2_840_10008_1_2_6_1 = 34, // RFC 2557 MIME encapsulation
-1_2_840_10008_1_2_6_2 = 35, // XML Encoding
-1_2_840_10008_1_3_10 = 36, // Media Storage Directory Storage
-1_2_840_10008_1_4_1_1 = 37, // Talairach Brain Atlas Frame of Reference
-1_2_840_10008_1_4_1_2 = 38, // SPM2 T1 Frame of Reference
-1_2_840_10008_1_4_1_3 = 39, // SPM2 T2 Frame of Reference
-1_2_840_10008_1_4_1_4 = 40, // SPM2 PD Frame of Reference
-1_2_840_10008_1_4_1_5 = 41, // SPM2 EPI Frame of Reference
-1_2_840_10008_1_4_1_6 = 42, // SPM2 FIL T1 Frame of Reference
-1_2_840_10008_1_4_1_7 = 43, // SPM2 PET Frame of Reference
-1_2_840_10008_1_4_1_8 = 44, // SPM2 TRANSM Frame of Reference
-1_2_840_10008_1_4_1_9 = 45, // SPM2 SPECT Frame of Reference
-1_2_840_10008_1_4_1_10 = 46, // SPM2 GRAY Frame of Reference
-1_2_840_10008_1_4_1_11 = 47, // SPM2 WHITE Frame of Reference
-1_2_840_10008_1_4_1_12 = 48, // SPM2 CSF Frame of Reference
-1_2_840_10008_1_4_1_13 = 49, // SPM2 BRAINMASK Frame of Reference
-1_2_840_10008_1_4_1_14 = 50, // SPM2 AVG305T1 Frame of Reference
-1_2_840_10008_1_4_1_15 = 51, // SPM2 AVG152T1 Frame of Reference
-1_2_840_10008_1_4_1_16 = 52, // SPM2 AVG152T2 Frame of Reference
-1_2_840_10008_1_4_1_17 = 53, // SPM2 AVG152PD Frame of Reference
-1_2_840_10008_1_4_1_18 = 54, // SPM2 SINGLESUBJT1 Frame of Reference
-1_2_840_10008_1_4_2_1 = 55, // ICBM 452 T1 Frame of Reference
-1_2_840_10008_1_4_2_2 = 56, // ICBM Single Subject MRI Frame of Reference
-1_2_840_10008_1_9 = 57, // Basic Study Content Notification SOP Class
-1_2_840_10008_1_20_1 = 58, // Storage Commitment Push Model SOP Class
-1_2_840_10008_1_20_1_1 = 59, // Storage Commitment Push Model SOP Instance
-1_2_840_10008_1_20_2 = 60, // Storage Commitment Pull Model SOP Class
-1_2_840_10008_1_20_2_1 = 61, // Storage Commitment Pull Model SOP Instance
-1_2_840_10008_1_40 = 62, // Procedural Event Logging SOP Class
-1_2_840_10008_1_40_1 = 63, // Procedural Event Logging SOP Instance
-1_2_840_10008_1_42 = 64, // Substance Administration Logging SOP Class
-1_2_840_10008_1_42_1 = 65, // Substance Administration Logging SOP Instance
-1_2_840_10008_2_6_1 = 66, // DICOM UID Registry
-1_2_840_10008_2_16_4 = 67, // DICOM Controlled Terminology
-1_2_840_10008_3_1_1_1 = 68, // DICOM Application Context Name
-1_2_840_10008_3_1_2_1_1 = 69, // Detached Patient Management SOP Class
-1_2_840_10008_3_1_2_1_4 = 70, // Detached Patient Management Meta SOP Class
-1_2_840_10008_3_1_2_2_1 = 71, // Detached Visit Management SOP Class
-1_2_840_10008_3_1_2_3_1 = 72, // Detached Study Management SOP Class
-1_2_840_10008_3_1_2_3_2 = 73, // Study Component Management SOP Class
-1_2_840_10008_3_1_2_3_3 = 74, // Modality Performed Procedure Step SOP Class
-1_2_840_10008_3_1_2_3_4 = 75, // Modality Performed Procedure Step Retrieve SOP Class
-1_2_840_10008_3_1_2_3_5 = 76, // Modality Performed Procedure Step Notification SOP Class
-1_2_840_10008_3_1_2_5_1 = 77, // Detached Results Management SOP Class
-1_2_840_10008_3_1_2_5_4 = 78, // Detached Results Management Meta SOP Class
-1_2_840_10008_3_1_2_5_5 = 79, // Detached Study Management Meta SOP Class
-1_2_840_10008_3_1_2_6_1 = 80, // Detached Interpretation Management SOP Class
-1_2_840_10008_4_2 = 81, // Storage Service Class
-1_2_840_10008_5_1_1_1 = 82, // Basic Film Session SOP Class
-1_2_840_10008_5_1_1_2 = 83, // Basic Film Box SOP Class
-1_2_840_10008_5_1_1_4 = 84, // Basic Grayscale Image Box SOP Class
-1_2_840_10008_5_1_1_4_1 = 85, // Basic Color Image Box SOP Class
-1_2_840_10008_5_1_1_4_2 = 86, // Referenced Image Box SOP Class
-1_2_840_10008_5_1_1_9 = 87, // Basic Grayscale Print Management Meta SOP Class
-1_2_840_10008_5_1_1_9_1 = 88, // Referenced Grayscale Print Management Meta SOP Class
-1_2_840_10008_5_1_1_14 = 89, // Print Job SOP Class
-1_2_840_10008_5_1_1_15 = 90, // Basic Annotation Box SOP Class
-1_2_840_10008_5_1_1_16 = 91, // Printer SOP Class
-1_2_840_10008_5_1_1_16_376 = 92, // Printer Configuration Retrieval SOP Class
-1_2_840_10008_5_1_1_17 = 93, // Printer SOP Instance
-1_2_840_10008_5_1_1_17_376 = 94, // Printer Configuration Retrieval SOP Instance
-1_2_840_10008_5_1_1_18 = 95, // Basic Color Print Management Meta SOP Class
-1_2_840_10008_5_1_1_18_1 = 96, // Referenced Color Print Management Meta SOP Class
-1_2_840_10008_5_1_1_22 = 97, // VOI LUT Box SOP Class
-1_2_840_10008_5_1_1_23 = 98, // Presentation LUT SOP Class
-1_2_840_10008_5_1_1_24 = 99, // Image Overlay Box SOP Class
-1_2_840_10008_5_1_1_24_1 = 100, // Basic Print Image Overlay Box SOP Class
-1_2_840_10008_5_1_1_25 = 101, // Print Queue SOP Instance
-1_2_840_10008_5_1_1_26 = 102, // Print Queue Management SOP Class
-1_2_840_10008_5_1_1_27 = 103, // Stored Print Storage SOP Class
-1_2_840_10008_5_1_1_29 = 104, // Hardcopy Grayscale Image Storage SOP Class
-1_2_840_10008_5_1_1_30 = 105, // Hardcopy Color Image Storage SOP Class
-1_2_840_10008_5_1_1_31 = 106, // Pull Print Request SOP Class
-1_2_840_10008_5_1_1_32 = 107, // Pull Stored Print Management Meta SOP Class
-1_2_840_10008_5_1_1_33 = 108, // Media Creation Management SOP Class UID
-1_2_840_10008_5_1_4_1_1_1 = 109, // Computed Radiography Image Storage
-1_2_840_10008_5_1_4_1_1_1_1 = 110, // Digital X-Ray Image Storage - For Presentation
-1_2_840_10008_5_1_4_1_1_1_1_1 = 111, // Digital X-Ray Image Storage - For Processing
-1_2_840_10008_5_1_4_1_1_1_2 = 112, // Digital Mammography X-Ray Image Storage - For Presentation
-1_2_840_10008_5_1_4_1_1_1_2_1 = 113, // Digital Mammography X-Ray Image Storage - For Processing
-1_2_840_10008_5_1_4_1_1_1_3 = 114, // Digital Intra-oral X-Ray Image Storage - For Presentation
-1_2_840_10008_5_1_4_1_1_1_3_1 = 115, // Digital Intra-oral X-Ray Image Storage - For Processing
-1_2_840_10008_5_1_4_1_1_2 = 116, // CT Image Storage
-1_2_840_10008_5_1_4_1_1_2_1 = 117, // Enhanced CT Image Storage
-1_2_840_10008_5_1_4_1_1_3 = 118, // Ultrasound Multi-frame Image Storage
-1_2_840_10008_5_1_4_1_1_3_1 = 119, // Ultrasound Multi-frame Image Storage
-1_2_840_10008_5_1_4_1_1_4 = 120, // MR Image Storage
-1_2_840_10008_5_1_4_1_1_4_1 = 121, // Enhanced MR Image Storage
-1_2_840_10008_5_1_4_1_1_4_2 = 122, // MR Spectroscopy Storage
-1_2_840_10008_5_1_4_1_1_5 = 123, // Nuclear Medicine Image Storage
-1_2_840_10008_5_1_4_1_1_6 = 124, // Ultrasound Image Storage
-1_2_840_10008_5_1_4_1_1_6_1 = 125, // Ultrasound Image Storage
-1_2_840_10008_5_1_4_1_1_7 = 126, // Secondary Capture Image Storage
-1_2_840_10008_5_1_4_1_1_7_1 = 127, // Multi-frame Single Bit Secondary Capture Image Storage
-1_2_840_10008_5_1_4_1_1_7_2 = 128, // Multi-frame Grayscale Byte Secondary Capture Image Storage
-1_2_840_10008_5_1_4_1_1_7_3 = 129, // Multi-frame Grayscale Word Secondary Capture Image Storage
-1_2_840_10008_5_1_4_1_1_7_4 = 130, // Multi-frame True Color Secondary Capture Image Storage
-1_2_840_10008_5_1_4_1_1_8 = 131, // Standalone Overlay Storage
-1_2_840_10008_5_1_4_1_1_9 = 132, // Standalone Curve Storage
-1_2_840_10008_5_1_4_1_1_9_1 = 133, // Waveform Storage - Trial
-1_2_840_10008_5_1_4_1_1_9_1_1 = 134, // 12-lead ECG Waveform Storage
-1_2_840_10008_5_1_4_1_1_9_1_2 = 135, // General ECG Waveform Storage
-1_2_840_10008_5_1_4_1_1_9_1_3 = 136, // Ambulatory ECG Waveform Storage
-1_2_840_10008_5_1_4_1_1_9_2_1 = 137, // Hemodynamic Waveform Storage
-1_2_840_10008_5_1_4_1_1_9_3_1 = 138, // Cardiac Electrophysiology Waveform Storage
-1_2_840_10008_5_1_4_1_1_9_4_1 = 139, // Basic Voice Audio Waveform Storage
-1_2_840_10008_5_1_4_1_1_10 = 140, // Standalone Modality LUT Storage
-1_2_840_10008_5_1_4_1_1_11 = 141, // Standalone VOI LUT Storage
-1_2_840_10008_5_1_4_1_1_11_1 = 142, // Grayscale Softcopy Presentation State Storage SOP Class
-1_2_840_10008_5_1_4_1_1_11_2 = 143, // Color Softcopy Presentation State Storage SOP Class
-1_2_840_10008_5_1_4_1_1_11_3 = 144, // Pseudo-Color Softcopy Presentation State Storage SOP Class
-1_2_840_10008_5_1_4_1_1_11_4 = 145, // Blending Softcopy Presentation State Storage SOP Class
-1_2_840_10008_5_1_4_1_1_12_1 = 146, // X-Ray Angiographic Image Storage
-1_2_840_10008_5_1_4_1_1_12_1_1 = 147, // Enhanced XA Image Storage
-1_2_840_10008_5_1_4_1_1_12_2 = 148, // X-Ray Radiofluoroscopic Image Storage
-1_2_840_10008_5_1_4_1_1_12_2_1 = 149, // Enhanced XRF Image Storage
-1_2_840_10008_5_1_4_1_1_13_1_1 = 150, // X-Ray 3D Angiographic Image Storage
-1_2_840_10008_5_1_4_1_1_13_1_2 = 151, // X-Ray 3D Craniofacial Image Storage
-1_2_840_10008_5_1_4_1_1_12_3 = 152, // X-Ray Angiographic Bi-Plane Image Storage
-1_2_840_10008_5_1_4_1_1_20 = 153, // Nuclear Medicine Image Storage
-1_2_840_10008_5_1_4_1_1_66 = 154, // Raw Data Storage
-1_2_840_10008_5_1_4_1_1_66_1 = 155, // Spatial Registration Storage
-1_2_840_10008_5_1_4_1_1_66_2 = 156, // Spatial Fiducials Storage
-1_2_840_10008_5_1_4_1_1_66_3 = 157, // Deformable Spatial Registration Storage
-1_2_840_10008_5_1_4_1_1_66_4 = 158, // Segmentation Storage
-1_2_840_10008_5_1_4_1_1_67 = 159, // Real World Value Mapping Storage
-1_2_840_10008_5_1_4_1_1_77_1 = 160, // VL Image Storage - Trial
-1_2_840_10008_5_1_4_1_1_77_2 = 161, // VL Multi-frame Image Storage - Trial
-1_2_840_10008_5_1_4_1_1_77_1_1 = 162, // VL Endoscopic Image Storage
-1_2_840_10008_5_1_4_1_1_77_1_1_1 = 163, // Video Endoscopic Image Storage
-1_2_840_10008_5_1_4_1_1_77_1_2 = 164, // VL Microscopic Image Storage
-1_2_840_10008_5_1_4_1_1_77_1_2_1 = 165, // Video Microscopic Image Storage
-1_2_840_10008_5_1_4_1_1_77_1_3 = 166, // VL Slide-Coordinates Microscopic Image Storage
-1_2_840_10008_5_1_4_1_1_77_1_4 = 167, // VL Photographic Image Storage
-1_2_840_10008_5_1_4_1_1_77_1_4_1 = 168, // Video Photographic Image Storage
-1_2_840_10008_5_1_4_1_1_77_1_5_1 = 169, // Ophthalmic Photography 8 Bit Image Storage
-1_2_840_10008_5_1_4_1_1_77_1_5_2 = 170, // Ophthalmic Photography 16 Bit Image Storage
-1_2_840_10008_5_1_4_1_1_77_1_5_3 = 171, // Stereometric Relationship Storage
-1_2_840_10008_5_1_4_1_1_77_1_5_4 = 172, // Ophthalmic Tomography Image Storage
-1_2_840_10008_5_1_4_1_1_88_1 = 173, // Text SR Storage - Trial
-1_2_840_10008_5_1_4_1_1_88_2 = 174, // Audio SR Storage - Trial
-1_2_840_10008_5_1_4_1_1_88_3 = 175, // Detail SR Storage - Trial
-1_2_840_10008_5_1_4_1_1_88_4 = 176, // Comprehensive SR Storage - Trial
-1_2_840_10008_5_1_4_1_1_88_11 = 177, // Basic Text SR Storage
-1_2_840_10008_5_1_4_1_1_88_22 = 178, // Enhanced SR Storage
-1_2_840_10008_5_1_4_1_1_88_33 = 179, // Comprehensive SR Storage
-1_2_840_10008_5_1_4_1_1_88_40 = 180, // Procedure Log Storage
-1_2_840_10008_5_1_4_1_1_88_50 = 181, // Mammography CAD SR Storage
-1_2_840_10008_5_1_4_1_1_88_59 = 182, // Key Object Selection Document Storage
-1_2_840_10008_5_1_4_1_1_88_65 = 183, // Chest CAD SR Storage
-1_2_840_10008_5_1_4_1_1_88_67 = 184, // X-Ray Radiation Dose SR Storage
-1_2_840_10008_5_1_4_1_1_104_1 = 185, // Encapsulated PDF Storage
-1_2_840_10008_5_1_4_1_1_104_2 = 186, // Encapsulated CDA Storage
-1_2_840_10008_5_1_4_1_1_128 = 187, // Positron Emission Tomography Image Storage
-1_2_840_10008_5_1_4_1_1_129 = 188, // Standalone PET Curve Storage
-1_2_840_10008_5_1_4_1_1_481_1 = 189, // RT Image Storage
-1_2_840_10008_5_1_4_1_1_481_2 = 190, // RT Dose Storage
-1_2_840_10008_5_1_4_1_1_481_3 = 191, // RT Structure Set Storage
-1_2_840_10008_5_1_4_1_1_481_4 = 192, // RT Beams Treatment Record Storage
-1_2_840_10008_5_1_4_1_1_481_5 = 193, // RT Plan Storage
-1_2_840_10008_5_1_4_1_1_481_6 = 194, // RT Brachy Treatment Record Storage
-1_2_840_10008_5_1_4_1_1_481_7 = 195, // RT Treatment Summary Record Storage
-1_2_840_10008_5_1_4_1_1_481_8 = 196, // RT Ion Plan Storage
-1_2_840_10008_5_1_4_1_1_481_9 = 197, // RT Ion Beams Treatment Record Storage
-1_2_840_10008_5_1_4_1_2_1_1 = 198, // Patient Root Query/Retrieve Information Model - FIND
-1_2_840_10008_5_1_4_1_2_1_2 = 199, // Patient Root Query/Retrieve Information Model - MOVE
-1_2_840_10008_5_1_4_1_2_1_3 = 200, // Patient Root Query/Retrieve Information Model - GET
-1_2_840_10008_5_1_4_1_2_2_1 = 201, // Study Root Query/Retrieve Information Model - FIND
-1_2_840_10008_5_1_4_1_2_2_2 = 202, // Study Root Query/Retrieve Information Model - MOVE
-1_2_840_10008_5_1_4_1_2_2_3 = 203, // Study Root Query/Retrieve Information Model - GET
-1_2_840_10008_5_1_4_1_2_3_1 = 204, // Patient/Study Only Query/Retrieve Information Model - FIND
-1_2_840_10008_5_1_4_1_2_3_2 = 205, // Patient/Study Only Query/Retrieve Information Model - MOVE
-1_2_840_10008_5_1_4_1_2_3_3 = 206, // Patient/Study Only Query/Retrieve Information Model - GET
-1_2_840_10008_5_1_4_31 = 207, // Modality Worklist Information Model - FIND
-1_2_840_10008_5_1_4_32_1 = 208, // General Purpose Worklist Information Model - FIND
-1_2_840_10008_5_1_4_32_2 = 209, // General Purpose Scheduled Procedure Step SOP Class
-1_2_840_10008_5_1_4_32_3 = 210, // General Purpose Performed Procedure Step SOP Class
-1_2_840_10008_5_1_4_32 = 211, // General Purpose Worklist Management Meta SOP Class
-1_2_840_10008_5_1_4_33 = 212, // Instance Availability Notification SOP Class
-1_2_840_10008_5_1_4_34_1 = 213, // RT Beams Delivery Instruction Storage (Supplement 74 Frozen Draft)
-1_2_840_10008_5_1_4_34_2 = 214, // RT Conventional Machine Verification (Supplement 74 Frozen Draft)
-1_2_840_10008_5_1_4_34_3 = 215, // RT Ion Machine Verification (Supplement 74 Frozen Draft)
-1_2_840_10008_5_1_4_34_4 = 216, // Unified Worklist and Procedure Step Service Class
-1_2_840_10008_5_1_4_34_4_1 = 217, // Unified Procedure Step - Push SOP Class
-1_2_840_10008_5_1_4_34_4_2 = 218, // Unified Procedure Step - Watch SOP Class
-1_2_840_10008_5_1_4_34_4_3 = 219, // Unified Procedure Step - Pull SOP Class
-1_2_840_10008_5_1_4_34_4_4 = 220, // Unified Procedure Step - Event SOP Class
-1_2_840_10008_5_1_4_34_5 = 221, // Unified Worklist and Procedure Step SOP Instance
-1_2_840_10008_5_1_4_37_1 = 222, // General Relevant Patient Information Query
-1_2_840_10008_5_1_4_37_2 = 223, // Breast Imaging Relevant Patient Information Query
-1_2_840_10008_5_1_4_37_3 = 224, // Cardiac Relevant Patient Information Query
-1_2_840_10008_5_1_4_38_1 = 225, // Hanging Protocol Storage
-1_2_840_10008_5_1_4_38_2 = 226, // Hanging Protocol Information Model - FIND
-1_2_840_10008_5_1_4_38_3 = 227, // Hanging Protocol Information Model - MOVE
-1_2_840_10008_5_1_4_41 = 228, // Product Characteristics Query SOP Class
-1_2_840_10008_5_1_4_42 = 229, // Substance Approval Query SOP Class
-1_2_840_10008_15_0_3_1 = 230, // dicomDeviceName
-1_2_840_10008_15_0_3_2 = 231, // dicomDescription
-1_2_840_10008_15_0_3_3 = 232, // dicomManufacturer
-1_2_840_10008_15_0_3_4 = 233, // dicomManufacturerModelName
-1_2_840_10008_15_0_3_5 = 234, // dicomSoftwareVersion
-1_2_840_10008_15_0_3_6 = 235, // dicomVendorData
-1_2_840_10008_15_0_3_7 = 236, // dicomAETitle
-1_2_840_10008_15_0_3_8 = 237, // dicomNetworkConnectionReference
-1_2_840_10008_15_0_3_9 = 238, // dicomApplicationCluster
-1_2_840_10008_15_0_3_10 = 239, // dicomAssociationInitiator
-1_2_840_10008_15_0_3_11 = 240, // dicomAssociationAcceptor
-1_2_840_10008_15_0_3_12 = 241, // dicomHostname
-1_2_840_10008_15_0_3_13 = 242, // dicomPort
-1_2_840_10008_15_0_3_14 = 243, // dicomSOPClass
-1_2_840_10008_15_0_3_15 = 244, // dicomTransferRole
-1_2_840_10008_15_0_3_16 = 245, // dicomTransferSyntax
-1_2_840_10008_15_0_3_17 = 246, // dicomPrimaryDeviceType
-1_2_840_10008_15_0_3_18 = 247, // dicomRelatedDeviceReference
-1_2_840_10008_15_0_3_19 = 248, // dicomPreferredCalledAETitle
-1_2_840_10008_15_0_3_20 = 249, // dicomTLSCyphersuite
-1_2_840_10008_15_0_3_21 = 250, // dicomAuthorizedNodeCertificateReference
-1_2_840_10008_15_0_3_22 = 251, // dicomThisNodeCertificateReference
-1_2_840_10008_15_0_3_23 = 252, // dicomInstalled
-1_2_840_10008_15_0_3_24 = 253, // dicomStationName
-1_2_840_10008_15_0_3_25 = 254, // dicomDeviceSerialNumber
-1_2_840_10008_15_0_3_26 = 255, // dicomInstitutionName
-1_2_840_10008_15_0_3_27 = 256, // dicomInstitutionAddress
-1_2_840_10008_15_0_3_28 = 257, // dicomInstitutionDepartmentName
-1_2_840_10008_15_0_3_29 = 258, // dicomIssuerOfPatientID
-1_2_840_10008_15_0_3_30 = 259, // dicomPreferredCallingAETitle
-1_2_840_10008_15_0_3_31 = 260, // dicomSupportedCharacterSet
-1_2_840_10008_15_0_4_1 = 261, // dicomConfigurationRoot
-1_2_840_10008_15_0_4_2 = 262, // dicomDevicesRoot
-1_2_840_10008_15_0_4_3 = 263, // dicomUniqueAETitlesRegistryRoot
-1_2_840_10008_15_0_4_4 = 264, // dicomDevice
-1_2_840_10008_15_0_4_5 = 265, // dicomNetworkAE
-1_2_840_10008_15_0_4_6 = 266, // dicomNetworkConnection
-1_2_840_10008_15_0_4_7 = 267, // dicomUniqueAETitle
-1_2_840_10008_15_0_4_8 = 268, // dicomTransferCapability
-1_2_840_10008_1_4_1_1 = 269, // Talairach Brain Atlas Frame of Reference
-1_2_840_10008_1_4_1_2 = 270, // SPM2 T1 Frame of Reference
-1_2_840_10008_1_4_1_3 = 271, // SPM2 T2 Frame of Reference
-1_2_840_10008_1_4_1_4 = 272, // SPM2 PD Frame of Reference
-1_2_840_10008_1_4_1_5 = 273, // SPM2 EPI Frame of Reference
-1_2_840_10008_1_4_1_6 = 274, // SPM2 FIL T1 Frame of Reference
-1_2_840_10008_1_4_1_7 = 275, // SPM2 PET Frame of Reference
-1_2_840_10008_1_4_1_8 = 276, // SPM2 TRANSM Frame of Reference
-1_2_840_10008_1_4_1_9 = 277, // SPM2 SPECT Frame of Reference
-1_2_840_10008_1_4_1_10 = 278, // SPM2 GRAY Frame of Reference
-1_2_840_10008_1_4_1_11 = 279, // SPM2 WHITE Frame of Reference
-1_2_840_10008_1_4_1_12 = 280, // SPM2 CSF Frame of Reference
-1_2_840_10008_1_4_1_13 = 281, // SPM2 BRAINMASK Frame of Reference
-1_2_840_10008_1_4_1_14 = 282, // SPM2 AVG305T1 Frame of Reference
-1_2_840_10008_1_4_1_15 = 283, // SPM2 AVG152T1 Frame of Reference
-1_2_840_10008_1_4_1_16 = 284, // SPM2 AVG152T2 Frame of Reference
-1_2_840_10008_1_4_1_17 = 285, // SPM2 AVG152PD Frame of Reference
-1_2_840_10008_1_4_1_18 = 286, // SPM2 SINGLESUBJT1 Frame of Reference
-1_2_840_10008_1_4_2_1 = 287, // ICBM 452 T1 Frame of Reference
-1_2_840_10008_1_4_2_2 = 288, // ICBM Single Subject MRI Frame of Reference
-} TSType;
-#endif //__gdcmUIDs_h
-
-#ifdef __gdcmUIDs_cxx
+namespace gdcm
+{
         static const char * const TransferSyntaxStrings[][2] = {
+{"",""},
 {"1.2.840.10008.1.1","Verification SOP Class"},
 {"1.2.840.10008.1.2","Implicit VR Little Endian: Default Transfer Syntax for DICOM"},
 {"1.2.840.10008.1.2.1","Explicit VR Little Endian"},
@@ -582,26 +292,40 @@
 {"1.2.840.10008.15.0.4.6","dicomNetworkConnection"},
 {"1.2.840.10008.15.0.4.7","dicomUniqueAETitle"},
 {"1.2.840.10008.15.0.4.8","dicomTransferCapability"},
-{"1.2.840.10008.1.4.1.1","Talairach Brain Atlas Frame of Reference"},
-{"1.2.840.10008.1.4.1.2","SPM2 T1 Frame of Reference"},
-{"1.2.840.10008.1.4.1.3","SPM2 T2 Frame of Reference"},
-{"1.2.840.10008.1.4.1.4","SPM2 PD Frame of Reference"},
-{"1.2.840.10008.1.4.1.5","SPM2 EPI Frame of Reference"},
-{"1.2.840.10008.1.4.1.6","SPM2 FIL T1 Frame of Reference"},
-{"1.2.840.10008.1.4.1.7","SPM2 PET Frame of Reference"},
-{"1.2.840.10008.1.4.1.8","SPM2 TRANSM Frame of Reference"},
-{"1.2.840.10008.1.4.1.9","SPM2 SPECT Frame of Reference"},
-{"1.2.840.10008.1.4.1.10","SPM2 GRAY Frame of Reference"},
-{"1.2.840.10008.1.4.1.11","SPM2 WHITE Frame of Reference"},
-{"1.2.840.10008.1.4.1.12","SPM2 CSF Frame of Reference"},
-{"1.2.840.10008.1.4.1.13","SPM2 BRAINMASK Frame of Reference"},
-{"1.2.840.10008.1.4.1.14","SPM2 AVG305T1 Frame of Reference"},
-{"1.2.840.10008.1.4.1.15","SPM2 AVG152T1 Frame of Reference"},
-{"1.2.840.10008.1.4.1.16","SPM2 AVG152T2 Frame of Reference"},
-{"1.2.840.10008.1.4.1.17","SPM2 AVG152PD Frame of Reference"},
-{"1.2.840.10008.1.4.1.18","SPM2 SINGLESUBJT1 Frame of Reference"},
-{"1.2.840.10008.1.4.2.1","ICBM 452 T1 Frame of Reference"},
-{"1.2.840.10008.1.4.2.2","ICBM Single Subject MRI Frame of Reference"},
+//{"1.2.840.10008.1.4.1.1","Talairach Brain Atlas Frame of Reference"},
+//{"1.2.840.10008.1.4.1.2","SPM2 T1 Frame of Reference"},
+//{"1.2.840.10008.1.4.1.3","SPM2 T2 Frame of Reference"},
+//{"1.2.840.10008.1.4.1.4","SPM2 PD Frame of Reference"},
+//{"1.2.840.10008.1.4.1.5","SPM2 EPI Frame of Reference"},
+//{"1.2.840.10008.1.4.1.6","SPM2 FIL T1 Frame of Reference"},
+//{"1.2.840.10008.1.4.1.7","SPM2 PET Frame of Reference"},
+//{"1.2.840.10008.1.4.1.8","SPM2 TRANSM Frame of Reference"},
+//{"1.2.840.10008.1.4.1.9","SPM2 SPECT Frame of Reference"},
+//{"1.2.840.10008.1.4.1.10","SPM2 GRAY Frame of Reference"},
+//{"1.2.840.10008.1.4.1.11","SPM2 WHITE Frame of Reference"},
+//{"1.2.840.10008.1.4.1.12","SPM2 CSF Frame of Reference"},
+//{"1.2.840.10008.1.4.1.13","SPM2 BRAINMASK Frame of Reference"},
+//{"1.2.840.10008.1.4.1.14","SPM2 AVG305T1 Frame of Reference"},
+//{"1.2.840.10008.1.4.1.15","SPM2 AVG152T1 Frame of Reference"},
+//{"1.2.840.10008.1.4.1.16","SPM2 AVG152T2 Frame of Reference"},
+//{"1.2.840.10008.1.4.1.17","SPM2 AVG152PD Frame of Reference"},
+//{"1.2.840.10008.1.4.1.18","SPM2 SINGLESUBJT1 Frame of Reference"},
+//{"1.2.840.10008.1.4.2.1","ICBM 452 T1 Frame of Reference"},
+//{"1.2.840.10008.1.4.2.2","ICBM Single Subject MRI Frame of Reference"},
 { 0, 0 }
 };
-#endif //__gdcmUIDs_cxx
+
+const char* UIDs::GetUIDString(TSType ts)
+{
+  return TransferSyntaxStrings[(int)ts][0];
+}
+
+const char* UIDs::GetUIDName(TSType ts)
+{
+  return TransferSyntaxStrings[(int)ts][1];
+}
+
+} // end namespace gdcm
+
+//#endif //__gdcmUIDs_cxx
+

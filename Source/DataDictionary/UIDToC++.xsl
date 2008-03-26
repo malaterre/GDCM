@@ -42,6 +42,17 @@
   typedef enum {
 </xsl:text>
     <xsl:for-each select="table/uid">
+        <xsl:choose>
+          <xsl:when test="../@name = 'UID VALUES'">
+            <xsl:text>uid_</xsl:text>
+          </xsl:when>
+          <xsl:when test="../@name = 'Well-known Frames of Reference'">
+            <xsl:text>frameref_</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>unhandled_</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
         <xsl:value-of select="translate(@value,'.','_')"/>
         <xsl:text> = </xsl:text>
         <xsl:number value="position()" format="1" />
