@@ -209,8 +209,7 @@ protected:
   // I think that planar configuration need to always be applied as far as VTK is concerned
   int ApplyPlanarConfiguration;
 
-  //int LoadSingleFile(const char *filename, int *dext, vtkImageData* data, bool filelowerleft);
-  int LoadSingleFile(const char *filename, char *pointer); // int *dext, vtkImageData* data, bool filelowerleft);
+  int LoadSingleFile(const char *filename, char *pointer, unsigned long &outlen);
 
 private:
   vtkGDCMImageReader(const vtkGDCMImageReader&);  // Not implemented.
