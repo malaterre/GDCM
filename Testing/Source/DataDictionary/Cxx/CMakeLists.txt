@@ -4,6 +4,7 @@ SET(DICT_TEST_SRCS
   TestDictEntry
   TestDict
   TestGlobal
+  TestUIDs
   TestDicts
   TestGroupDict
   TestTagToType
