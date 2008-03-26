@@ -7,6 +7,7 @@ SET(DSED_TEST_SRCS
   #TestByteBuffer
   #TestByteValue
   TestPreamble
+  TestCSAHeader
   TestByteSwapFilter
   TestBasicOffsetTable
   TestComposite
@@ -24,6 +25,7 @@ SET(DSED_TEST_SRCS
   TestSequenceOfFragments
   TestSequenceOfItems
   TestTag
+  TestPrivateTag
   TestTransferSyntax
   TestMediaStorage
   TestVL

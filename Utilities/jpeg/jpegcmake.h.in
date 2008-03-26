@@ -29,12 +29,6 @@
  */
 #cmakedefine SUPPORT_DICOMOBJECTS_BUG
 
-/*
- * http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/43e201ccb23fae5d
- * Overlay in DataSet CompressedSamples^RG3 / comp.protocols.dicom
- */
-#cmakedefine SUPPORT_MAXJSAMPLE_BUG
-
 #define BITS_IN_JSAMPLE @CMAKE_BITS_IN_JSAMPLE@
 
 #if BITS_IN_JSAMPLE == 8

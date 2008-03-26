@@ -81,7 +81,7 @@
 #if defined(_WIN32)
 /* offer a limited gettimeofday on Win32 system */
 #include <stdio.h>
-static int gettimeofday(struct timeval *tv, int n)
+static int gettimeofday(struct timeval *tv, struct timezone *tz)
 {
   FILETIME ft;
   const uint64_t c1 = 27111902;
@@ -333,7 +333,7 @@ static int get_clock(uint32_t *clock_high, uint32_t *clock_low, uint16_t *ret_cl
 	static struct timeval		last = {0, 0};
 	static uint16_t			clock_seq;
 	struct timeval			tv;
-	unsigned long long		clock_reg;
+	uint64_t		clock_reg;
 
 try_again:
 	gettimeofday(&tv, 0);
@@ -360,8 +360,8 @@ try_again:
 	}
 
 	clock_reg = tv.tv_usec*10 + adjustment;
-	clock_reg += ((unsigned long long) tv.tv_sec)*10000000;
-	clock_reg += (((unsigned long long) 0x01B21DD2) << 32) + 0x13814000;
+	clock_reg += ((uint64_t) tv.tv_sec)*10000000;
+	clock_reg += (((uint64_t) 0x01B21DD2) << 32) + 0x13814000;
 
 	*clock_high = clock_reg >> 32;
 	*clock_low = clock_reg;

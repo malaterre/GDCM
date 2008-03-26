@@ -28,9 +28,11 @@ Tag SpacingHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
 
   switch(ms)
     {
+  case MediaStorage::EnhancedMRImageStorage:
+  case MediaStorage::EnhancedCTImageStorage:
+    gdcmWarningMacro( "Enhanced image are not currently supported. Spacing will be wrong" );
   case MediaStorage::CTImageStorage:
   case MediaStorage::MRImageStorage:
-  case MediaStorage::EnhancedMRImageStorage:
     // (0028,0030) DS [2.0\2.0]                                #   8, 2 PixelSpacing
     t = Tag(0x0028,0x0030);
     break;
@@ -91,7 +93,7 @@ std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
         el.Read( ss );
         for(unsigned long i = 0; i < el.GetLength(); ++i) 
           sp.push_back( el.GetValue(i) );
-        assert( sp.size() == entry.GetVM() );
+        assert( sp.size() == (unsigned int)entry.GetVM() );
         }
       break;
     default:
@@ -167,7 +169,7 @@ void SpacingHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & sp
       const Dicts &dicts = g.GetDicts();
       const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
       const VR & vr = entry.GetVR();
-      const VM & vm = entry.GetVM();
+      const VM & vm = entry.GetVM(); (void)vm;
       assert( de.GetVR() == vr || de.GetVR() == VR::INVALID );
       switch(vr)
         {
@@ -176,7 +178,7 @@ void SpacingHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & sp
           Element<VR::DS,VM::VM1_n> el;
           el.SetLength( entry.GetVM().GetLength() * vr.GetSizeof() );
           assert( entry.GetVM() == VM::VM2 );
-          for( int i = 0; i < entry.GetVM().GetLength(); ++i)
+          for( unsigned int i = 0; i < entry.GetVM().GetLength(); ++i)
             {
             el.SetValue( spacing[i], i );
             }
@@ -201,7 +203,7 @@ void SpacingHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & sp
       const Dicts &dicts = g.GetDicts();
       const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
       const VR & vr = entry.GetVR();
-      const VM & vm = entry.GetVM();
+      const VM & vm = entry.GetVM(); (void)vm;
       assert( de.GetVR() == vr || de.GetVR() == VR::INVALID );
       switch(vr)
         {
@@ -210,7 +212,7 @@ void SpacingHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & sp
           Element<VR::DS,VM::VM1_n> el;
           el.SetLength( entry.GetVM().GetLength() * vr.GetSizeof() );
           assert( entry.GetVM() == VM::VM1 );
-          for( int i = 0; i < entry.GetVM().GetLength(); ++i)
+          for( unsigned int i = 0; i < entry.GetVM().GetLength(); ++i)
             {
             el.SetValue( spacing[i+2], i );
             }
@@ -227,6 +229,34 @@ void SpacingHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & sp
       }
     }
 
+}
+
+bool SpacingHelper::ComputeSpacingFromImagePositionPatient(const std::vector<double> & imageposition, std::vector<double> & spacing)
+{
+  if( imageposition.size() % 3 != 0 )
+    {
+    return false;
+    }
+  std::vector<double>::const_iterator it = imageposition.begin();
+  //const double x0 = *it++;
+  //const double y0 = *it++;
+  //const double z0 = *it++;
+  spacing[0] = spacing[1] = spacing[2] = 0.;
+  for( ; it != imageposition.end(); ++it)
+    {
+    const double x = *it++;
+    const double y = *it++;
+    const double z = *it;
+    spacing[0] += x;
+    spacing[1] += y;
+    spacing[2] += z;
+    }
+  int n = imageposition.size() / 3;
+  spacing[0] /= n;
+  spacing[1] /= n;
+  spacing[2] /= n;
+
+  return true;
 }
 
 

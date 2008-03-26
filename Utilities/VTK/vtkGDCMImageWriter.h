@@ -75,6 +75,9 @@ public:
   //vtkSetMacro(RescaleIntercept, double);
   //vtkGetMacro(RescaleIntercept, double);
 
+  vtkGetMacro(ImageFormat,int);
+  vtkSetMacro(ImageFormat,int);
+
 protected:
   vtkGDCMImageWriter();
   ~vtkGDCMImageWriter();
@@ -112,6 +115,7 @@ private:
   char *UID;
 
   int DataUpdateExtent[6];
+  int ImageFormat;
 
   vtkStringArray *FileNames;
   vtkMatrix4x4 *DirectionCosines;

@@ -115,6 +115,7 @@ bool MediaStorage::IsImage(const MSType &ms)
     || ms == MediaStorageDirectoryStorage
     || ms == RTPlanStorage
     || ms == GrayscaleSoftcopyPresentationStateStorageSOPClass
+    || ms == CardiacElectrophysiologyWaveformStorage
     || ms == RTStructureSetStorage )
     {
     return false;
@@ -133,14 +134,14 @@ static MSModalityType MSModalityTypes[] = {
   {"CR", 2},//ComputedRadiographyImageStorage,
   {"  ", 2},//DigitalXRayImageStorageForPresentation,
   {"  ", 2},//DigitalXRayImageStorageForProcessing,
-  {"  ", 2},//DigitalMammographyImageStorageForPresentation,
-  {"  ", 2},//DigitalMammographyImageStorageForProcessing,
+  {"MG", 2},//DigitalMammographyImageStorageForPresentation,
+  {"MG", 2},//DigitalMammographyImageStorageForProcessing,
   {"  ", 2},//DigitalIntraoralXrayImageStorageForPresentation,
   {"  ", 2},//DigitalIntraoralXRayImageStorageForProcessing,
   {"CT", 2},//CTImageStorage,
   {"  ", 2},//EnhancedCTImageStorage,
   {"  ", 2},//UltrasoundMultiFrameImageStorageRetired,
-  {"  ", 2},//UltrasoundMultiFrameImageStorage,
+  {"IVUS", 3},//UltrasoundMultiFrameImageStorage,
   {"MR", 2},//MRImageStorage,
   {"MR", 3},//EnhancedMRImageStorage,
   {"  ", 2},//MRSpectroscopyStorage,
@@ -209,7 +210,7 @@ void MediaStorage::SetFromHeader(FileMetaInformation const &fmi)
 void MediaStorage::GuessFromModality(const char *modality, unsigned int dim)
 {
   if( !modality ) return;
-  if( strlen(modality) != 2 ) return;
+  //if( strlen(modality) != 2 ) return;
   int i = 0;
   while( MSModalityTypes[i].Modality && 
     (strcmp(modality, MSModalityTypes[i].Modality) != 0 || MSModalityTypes[i].Dimension < dim ))

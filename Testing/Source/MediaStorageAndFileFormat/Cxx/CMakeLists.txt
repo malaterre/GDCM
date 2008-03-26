@@ -2,6 +2,7 @@
 # MSFF
 SET(MSFF_TEST_SRCS
   TestAnonymizer
+  TestIconImage
   TestSpacingHelper
   TestCoder
   TestDecoder
@@ -13,6 +14,8 @@ SET(MSFF_TEST_SRCS
   TestPrinter
   TestReader
   TestScanner
+  TestSorter
+  TestIPPSorter
   TestReader2
   TestImageReader
   TestCopyDataSet

@@ -27,12 +27,12 @@
 #include "vtkImageData.h"
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #include <vtksys/SystemTools.hxx>
+#include "vtkVolumeTextureMapper3D.h"
 #endif
 
 #include "vtkPiecewiseFunction.h"
 #include "vtkColorTransferFunction.h"
 #include "vtkVolumeProperty.h"
-//#include "vtkVolumeTextureMapper3D.h"
 #include "vtkVolume.h"
 #include "vtkRenderer.h"
 #include "vtkRenderWindow.h"
@@ -48,6 +48,7 @@ public:
 
   virtual void Execute(vtkObject* caller, unsigned long event, void *callData)
     {
+    (void)callData;
     if( event == vtkCommand::ProgressEvent )
       {
       std::cout << ((vtkGDCMThreadedImageReader*)caller)->GetProgress() << std::endl;
@@ -116,8 +117,18 @@ int ExecuteInformation(const char *filename, TReader *vtkreader)
   case gdcm::PixelFormat::UINT16:
     datascalartype = VTK_UNSIGNED_SHORT;
     break;
+  case gdcm::PixelFormat::INT32:
+    datascalartype = VTK_INT;
+    break;
+  case gdcm::PixelFormat::UINT32:
+    datascalartype = VTK_UNSIGNED_INT;
+    break;
   default:
     ;
+    }
+  if( datascalartype == VTK_VOID )
+    {
+    return 0;
     }
 
   unsigned int numberOfScalarComponents = pixeltype.GetSamplesPerPixel();
@@ -125,17 +136,22 @@ int ExecuteInformation(const char *filename, TReader *vtkreader)
   vtkreader->SetDataExtent( dataextent );
   vtkreader->SetDataScalarType ( datascalartype );
   vtkreader->SetNumberOfScalarComponents( numberOfScalarComponents );
+  vtkreader->LoadOverlaysOff();
+  if( image.GetNumberOfOverlays() )
+    {
+    vtkreader->LoadOverlaysOn();
+    }
 
   return 1;
 }
 
 template <typename TReader>
-int TestvtkGDCMThreadedImageRead(const char *filename)
+int TestvtkGDCMThreadedImageRead(const char *filename, bool verbose = false)
 {
   TReader *reader = TReader::New();
   reader->FileLowerLeftOn();
   //reader->CanReadFile( filename );
-  std::cerr << "Reading : " << filename << std::endl;
+  if( verbose) std::cerr << "Reading : " << filename << std::endl;
 
   const char *refimage = NULL;
   if( gdcm::System::FileIsDirectory( filename ) )
@@ -190,11 +206,10 @@ int TestvtkGDCMThreadedImageRead(const char *filename)
       //return 1;
       }
     std::string pngfile = gdcm::Testing::GetTempFilename( filename, subdir );
-
     //pngfile += vtksys::SystemTools::GetFilenameWithoutExtension( filename );
     pngfile += ".png";
     writer->SetFileName( pngfile.c_str() );
-    std::cerr << pngfile << std::endl;
+    if( verbose ) std::cerr << pngfile << std::endl;
     //writer->Write();
     writer->Delete();
     }
@@ -208,12 +223,16 @@ int TestvtkGDCMThreadedImageRead(const char *filename)
   writer->Delete();
 */
 
+  bool compute = false;
+  if( verbose && compute )
+    {
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
-  double *s = reader->GetOutput()->GetScalarRange();
+    double *s = reader->GetOutput()->GetScalarRange();
 #else
-  float *s = reader->GetOutput()->GetScalarRange();
+    float *s = reader->GetOutput()->GetScalarRange();
 #endif
-  std::cout << s[0] << " " << s[1] << std::endl;
+    std::cout << s[0] << " " << s[1] << std::endl;
+    }
 
 /*
   // Create transfer functions for opacity and color
@@ -276,7 +295,7 @@ int TestvtkGDCMThreadedImageReader(int argc, char *argv[])
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestvtkGDCMThreadedImageRead<vtkGDCMThreadedImageReader>(filename);
+    return TestvtkGDCMThreadedImageRead<vtkGDCMThreadedImageReader>(filename, true);
     }
 
   // else

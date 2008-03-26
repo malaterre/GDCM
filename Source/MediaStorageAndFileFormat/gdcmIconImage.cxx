@@ -80,7 +80,7 @@ bool IconImage::GetBuffer(char *buffer) const
   assert( r );
   const ByteValue *outbv = out.GetByteValue();
   assert( outbv );
-  unsigned long check = outbv->GetLength();  // FIXME
+  //unsigned long check = outbv->GetLength();  // FIXME
   memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
   return r;
 }

@@ -76,8 +76,8 @@ public:
     US_SS_OW = US | SS | OW,
     // The following do not have a VRString equivalent (ie cannot be found in PS 3.6)
     VL32 = OB | OW | OF | SQ | UN | UT, // if( VR & VR_VL32 ) => VR has its VL coded over 32bits
-    VRASCII = AE | AS | CS | DA | DS | DT | IS | LO | LT | PN | SH | ST | TM | UI,
-    VRBINARY = AT | FL | FD | OB | OF | OW | SL | SQ | SS | UL | UN | US | UT, // FIXME: UN ?
+    VRASCII = AE | AS | CS | DA | DS | DT | IS | LO | LT | PN | SH | ST | TM | UI | UT,
+    VRBINARY = AT | FL | FD | OB | OF | OW | SL | SQ | SS | UL | UN | US, // FIXME: UN ?
     // PS 3.5:
     // Data Elements with a VR of SQ, OF, OW, OB or UN shall always have a Value Multiplicity of one.
     // GDCM is adding a couple more: AS, LT, ST, UT
@@ -200,6 +200,7 @@ inline std::ostream &operator<<(std::ostream &_os, const VR &val)
   return _os;
 }
 
+// Apparently SWIG is not happy with something, somewhere below...
 #ifndef SWIG
 
 // Tells whether VR Type is ASCII or Binary
@@ -262,9 +263,9 @@ TYPETOENCODING(ST,VRASCII ,STComp)
 TYPETOENCODING(TM,VRASCII ,TMComp)
 TYPETOENCODING(UI,VRASCII ,UIComp)
 TYPETOENCODING(UL,VRBINARY,uint32_t)
-TYPETOENCODING(UN,VRASCII,unsigned char) // FIXME ?
+TYPETOENCODING(UN,VRBINARY,unsigned char) // FIXME ?
 TYPETOENCODING(US,VRBINARY,uint16_t)
-TYPETOENCODING(UT,VRBINARY,UTComp)
+TYPETOENCODING(UT,VRASCII,UTComp)
 
 #define VRTypeTemplateCase(type) \
   case VR::type: \
@@ -275,32 +276,32 @@ inline unsigned int VR::GetSize() const
 	switch(VRField)
 	{
 		VRTypeTemplateCase(AE)
-                VRTypeTemplateCase(AS)
-                VRTypeTemplateCase(AT)
-                VRTypeTemplateCase(CS)
-                VRTypeTemplateCase(DA)
-                VRTypeTemplateCase(DS)
-                VRTypeTemplateCase(DT)
-                VRTypeTemplateCase(FL)
-                VRTypeTemplateCase(FD)
-                VRTypeTemplateCase(IS)
-                VRTypeTemplateCase(LO)
-                VRTypeTemplateCase(LT)
-                VRTypeTemplateCase(OB)
-                VRTypeTemplateCase(OF)
-                VRTypeTemplateCase(OW)
-                VRTypeTemplateCase(PN)
-                VRTypeTemplateCase(SH)
-                VRTypeTemplateCase(SL)
-                VRTypeTemplateCase(SQ)
-                VRTypeTemplateCase(SS)
-                VRTypeTemplateCase(ST)
-                VRTypeTemplateCase(TM)
-                VRTypeTemplateCase(UI)
-                VRTypeTemplateCase(UL)
-                VRTypeTemplateCase(UN)
-                VRTypeTemplateCase(US)
-                VRTypeTemplateCase(UT)
+    VRTypeTemplateCase(AS)
+    VRTypeTemplateCase(AT)
+    VRTypeTemplateCase(CS)
+    VRTypeTemplateCase(DA)
+    VRTypeTemplateCase(DS)
+    VRTypeTemplateCase(DT)
+    VRTypeTemplateCase(FL)
+    VRTypeTemplateCase(FD)
+    VRTypeTemplateCase(IS)
+    VRTypeTemplateCase(LO)
+    VRTypeTemplateCase(LT)
+    VRTypeTemplateCase(OB)
+    VRTypeTemplateCase(OF)
+    VRTypeTemplateCase(OW)
+    VRTypeTemplateCase(PN)
+    VRTypeTemplateCase(SH)
+    VRTypeTemplateCase(SL)
+    VRTypeTemplateCase(SQ)
+    VRTypeTemplateCase(SS)
+    VRTypeTemplateCase(ST)
+    VRTypeTemplateCase(TM)
+    VRTypeTemplateCase(UI)
+    VRTypeTemplateCase(UL)
+    VRTypeTemplateCase(UN)
+    VRTypeTemplateCase(US)
+    VRTypeTemplateCase(UT)
     case VR::US_SS:
       return 2;
 		default:

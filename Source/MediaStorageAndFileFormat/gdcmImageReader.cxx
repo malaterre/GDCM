@@ -584,11 +584,33 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   PixelData.SetPhotometricInterpretation( pi );
 
   // Do the Palette Color:
+  // 1. Modality LUT Sequence
   bool modlut = ds.FindDataElement(Tag(0x0028,0x3000) );
   if( modlut )
     {
     gdcmWarningMacro( "Modality LUT (0028,3000) are not handled. Image will not be displayed properly" );
     }
+  // 2. LUTData (0028,3006)
+  // technically I do not need to warn about LUTData since either modality lut XOR VOI LUt need to 
+  // be sent to require a LUT Data...
+  bool lutdata = ds.FindDataElement(Tag(0x0028,0x3006) );
+  if( lutdata )
+    {
+    gdcmWarningMacro( "LUT Data (0028,3006) are not handled. Image will not be displayed properly" );
+    }
+  // 3. VOILUTSequence (0028,3010)
+  bool voilut = ds.FindDataElement(Tag(0x0028,0x3010) );
+  if( voilut )
+    {
+    gdcmWarningMacro( "VOI LUT (0028,3010) are not handled. Image will not be displayed properly" );
+    }
+  // (0028,0120) US 32767                                    #   2, 1 PixelPaddingValue
+  bool pixelpaddingvalue = ds.FindDataElement(Tag(0x0028,0x0120));
+  if(pixelpaddingvalue)
+    {
+    gdcmWarningMacro( "Pixel Padding Value (0028,0120) is not handled. Image will not be displayed properly" );
+    }
+  // 4. Palette Color Lookup Table Descriptor
   if ( pi == PhotometricInterpretation::PALETTE_COLOR )
     {
     //const DataElement& modlutsq = ds.GetDataElement( Tag(0x0028,0x3000) );
@@ -636,7 +658,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
         unsigned long check =
           (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
           * el_us3.GetValue(2) / 8;
-        assert( check == lut_raw->GetLength() );
+        assert( check == lut_raw->GetLength() ); (void)check;
         }
       else if( ds.FindDataElement( seglut ) )
         {
@@ -685,12 +707,8 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
 bool ImageReader::ReadACRNEMAImage()
 {
   const DataSet &ds = F->GetDataSet();
-  TransferSyntax::NegociatedType type; // = ds.GetNegociatedType();
   std::stringstream ss;
   std::string conversion;
-  // Construct a stringstream to mimic the reading from the file
-  //ss.SetSwapCode( Stream.GetSwapCode() );
-  //PixelData.SetSwapCode( Stream.GetSwapCode() );
 
   // Ok we have the dataset let's feed the Image (PixelData)
   // 1. First find how many dimensions there is:

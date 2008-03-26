@@ -48,14 +48,12 @@ SET(BLACK_LIST_READER
 
 # Overlay Data in Unused bit are not passed in TestImageWriter:
   SIEMENS_GBS_III-16-ACR_NEMA_1.acr
-
-# Famous 12bits with value > 4096 (after jpeg decompression)
-  D_CLUNIE_RG3_JPLY.dcm
-# Same as above...
-  Compress_16bit_noPVRG.dcm
+  SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm
 
 # quick fix:
   tst_not.dcm
+  BogugsSequenceLengthCorrectItemLength.dcm
+  BogugsItemAndSequenceLength.dcm
 )
 
 SET(GDCM_DATA_FILENAMES)

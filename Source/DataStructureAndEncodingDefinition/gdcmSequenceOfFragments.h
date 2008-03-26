@@ -94,6 +94,7 @@ std::istream& Read(std::istream &is)
       }
     catch(Exception &ex)
       {
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
       // that's ok ! In both case the whole file was read, because Fragment::Read only fail on eof() reached
       // 1. gdcm-JPEG-LossLess3a.dcm: easy case, an extra tag was found instead of terminator (eof is the next char)
       gdcmWarningMacro( "Reading failed at Tag:" << DataElement(frag) << " Use file at own risk." << ex.what() );
@@ -105,6 +106,7 @@ std::istream& Read(std::istream &is)
         Fragments.push_back( frag );
         is.clear(); // clear the error bit
         }
+#endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
       }
     }
 

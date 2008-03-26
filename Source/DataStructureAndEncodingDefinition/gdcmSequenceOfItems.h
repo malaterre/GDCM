@@ -69,6 +69,12 @@ public:
   /// \brief Appends an Item to the already added ones
   void AddItem(Item const &item);
 
+  /* Each Item shall be implicitly assigned an ordinal position starting with the value 1 for the
+   * first Item in the Sequence, and incremented by 1 with each subsequent Item. The last Item in the
+   * Sequence shall have an ordinal position equal to the number of Items in the Sequence.
+   */
+  const Item &GetItem(unsigned int position) const;
+
   SequenceOfItems &operator=(const SequenceOfItems &val) {
     SequenceLengthField = val.SequenceLengthField;
     Items = val.Items;
@@ -95,13 +101,31 @@ public:
       {
       Item item;
       VL l = 0;
+      //is.seekg( SequenceLengthField, std::ios::cur ); return is;
       while( l != SequenceLengthField )
         {
-        item.Read<TDE,TSwap>(is);
+        try
+          {
+          item.Read<TDE,TSwap>(is);
+          }
+        catch( Exception &ex )
+          {
+          if( strcmp( ex.GetDescription(), "Changed Length" ) == 0 )
+            {
+            VL newlength = l + item.template GetLength<TDE>();
+            if( newlength > SequenceLengthField )
+              {
+              // BogugsItemAndSequenceLength.dcm
+              gdcmWarningMacro( "SQ length is wrong" );
+              SequenceLengthField = newlength;
+              }
+            }
+          }
         if( item.GetTag() == seqDelItem )
           {
           gdcmWarningMacro( "SegDelItem found in defined length Sequence" );
           }
+        //assert( item.GetTag() == Tag(0xfffe,0xe000) );
         Items.push_back( item );
         l += item.template GetLength<TDE>();
         assert( l <= SequenceLengthField );

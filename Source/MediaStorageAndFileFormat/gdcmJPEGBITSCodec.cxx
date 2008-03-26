@@ -474,27 +474,6 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
       Internals->StateSuspension = 3;
       return true;
       }
-#ifdef SUPPORT_MAXJSAMPLE_BUG
-    JSAMPLE * bufferJSAMPLE = (JSAMPLE*)buffer[0];
-    const JSAMPLE * end = (JSAMPLE*)(buffer[0] + row_stride);
-    const PixelFormat &pf = GetPixelFormat();
-    const int64_t min = pf.GetMin();
-    const int64_t max = pf.GetMax();
-    assert( max <= MAXJSAMPLE );
-    for( ; bufferJSAMPLE != end; ++bufferJSAMPLE)
-      {
-      if( *bufferJSAMPLE > max )
-        {
-        //WARNMS(cinfo, JWRN_SIGNED_ARITH);
-        *bufferJSAMPLE = max;
-        }
-      if( *bufferJSAMPLE < min )
-        {
-        //WARNMS(cinfo, JWRN_SIGNED_ARITH);
-        *bufferJSAMPLE = min;
-        }
-      }
-#endif /* SUPPORT_MAXJSAMPLE_BUG */
     os.write((char*)buffer[0], row_stride);
   }
 

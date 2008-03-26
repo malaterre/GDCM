@@ -36,7 +36,7 @@
 #if HAVE_INTTYPES_H
 #include <inttypes.h>
 #endif 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) || defined(__BORLANDC__)
 typedef  signed __int8       int8_t;
 typedef  signed __int16      int16_t;
 typedef  signed __int32      int32_t;

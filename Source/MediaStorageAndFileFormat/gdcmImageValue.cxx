@@ -74,7 +74,11 @@ bool ImageValue::TryJPEGCodec(char *buffer) const
     codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );
     DataElement out;
     bool r = codec.Decode(PixelData, out);
-    assert( r );
+    // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm    
+    if( !r )
+      {
+      return false;
+      }
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
@@ -129,7 +133,7 @@ bool ImageValue::TryRLECodec(char *buffer) const
     bool r = codec.Decode(PixelData, out);
     assert( r );
     const ByteValue *outbv = out.GetByteValue();
-    unsigned long check = outbv->GetLength();  // FIXME
+    //unsigned long check = outbv->GetLength();  // FIXME
     memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
     return true;
     }
@@ -146,7 +150,7 @@ bool ImageValue::GetBuffer(char *buffer) const
   if( !success )
     {
     buffer = 0;
-    throw Exception( "Not codec found for this image");
+    //throw Exception( "No codec found for this image");
     }
 
   return success;

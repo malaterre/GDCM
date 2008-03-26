@@ -16,6 +16,7 @@
 #include "gdcmReader.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmDataSet.h"
+#include "gdcmPrivateTag.h"
 #include "gdcmPrinter.h"
 #include "gdcmDumper.h"
 #include "gdcmDictPrinter.h"
@@ -23,6 +24,7 @@
 #include "gdcmWriter.h"
 #include "gdcmSystem.h"
 #include "gdcmDirectory.h"
+#include "gdcmCSAHeader.h"
 
 #include <string>
 #include <iostream>
@@ -54,6 +56,59 @@ int DoOperation(const std::string & filename)
   TPrinter printer;
   printer.SetFile ( reader.GetFile() );
   printer.Print( std::cout );
+
+  return 0;
+}
+
+int PrintCSA(const std::string & filename)
+{
+  gdcm::Reader reader;
+  reader.SetFileName( filename.c_str() );
+  try
+    {
+    if( !reader.Read() )
+      {
+      std::cerr << "Failed to read: " << filename << std::endl;
+      return 1;
+      }
+    }
+  catch( ... )
+    {
+    std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
+    }
+
+  gdcm::CSAHeader csa;
+  const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
+
+  const gdcm::PrivateTag &t1 = csa.GetCSAImageHeaderInfoTag();
+  const gdcm::PrivateTag &t2 = csa.GetCSASeriesHeaderInfoTag();
+
+  //if( pde.GetTag().GetElement() != 0xffff /*ds.FindDataElement( t0 )*/ )
+    {
+    //const gdcm::ByteValue *bv = pde.GetByteValue(); //ds.GetDataElement( t0 ).GetByteValue();
+    //if( strncmp( bv->GetPointer(), csaheader, strlen(csaheader) ) ==  0 )
+      {
+      //gdcm::Tag t3(0x0029,0x1120); ???
+      //std::cerr << "Working on: " << filename << std::endl;
+      if( ds.FindDataElement( t1 ) )
+        {
+        csa.Print( ds.GetDataElement( t1 ) );
+        }
+      if( ds.FindDataElement( t2 ) )
+        {
+        csa.Print( ds.GetDataElement( t2 ) );
+        }
+      if( csa.GetFormat() == gdcm::CSAHeader::DATASET_FORMAT )
+        {
+        gdcm::Printer p;
+        gdcm::File f;
+        f.SetDataSet( csa.GetDataSet() );
+        p.SetFile( f );
+        p.Print( std::cout );
+        }
+      }
+    }
 
   return 0;
 }
@@ -95,6 +150,7 @@ int main (int argc, char *argv[])
   std::string filename;
   int printdict = 0;
   int print = 0;
+  int printcsa = 0;
   int verbose = 0;
   int warning = 0;
   int debug = 0;
@@ -115,6 +171,7 @@ int main (int argc, char *argv[])
 */
     static struct option long_options[] = {
         {"input", 1, 0, 0},
+        {"print-csa", 0, &printcsa, 1},
         {"xml-dict", 0, &printdict, 1},
         {"recursive", 0, &recursive, 1},
         {"print", 0, &print, 1},
@@ -211,12 +268,18 @@ int main (int argc, char *argv[])
 
   if (optind < argc)
     {
-    printf ("non-option ARGV-elements: ");
-    while (optind < argc)
+    //printf ("non-option ARGV-elements: %d", optind );
+    //while (optind < argc)
+    //  {
+    //  printf ("%s\n", argv[optind++]);
+    //  }
+    //printf ("\n");
+    // Ok there is only one arg, easy, it's the filename:
+    int v = argc - optind;
+    if( v == 1 )
       {
-      printf ("%s ", argv[optind++]);
+      filename = argv[optind];
       }
-    printf ("\n");
     }
 
   if( version )
@@ -272,6 +335,10 @@ int main (int argc, char *argv[])
         {
         res += DoOperation<gdcm::DictPrinter>(*it);
         }
+      else if( printcsa )
+        {
+        res += PrintCSA(*it);
+        }
       else if( print )
         {
         res += DoOperation<gdcm::Printer>(*it);
@@ -291,6 +358,10 @@ int main (int argc, char *argv[])
     if( printdict )
       {
       res += DoOperation<gdcm::DictPrinter>(filename);
+      }
+    else if( printcsa )
+      {
+      res += PrintCSA(filename);
       }
     else if( print )
       {

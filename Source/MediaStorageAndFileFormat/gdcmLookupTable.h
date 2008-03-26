@@ -68,6 +68,7 @@ public:
 
   bool GetBufferAsRGBA(unsigned char *rgba) const;
   const unsigned char *GetPointer() const;
+  bool WriteBufferAsRGBA(unsigned char *rgba);
 
 private:
   LookupTableInternal *Internal;

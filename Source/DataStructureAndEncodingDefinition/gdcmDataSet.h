@@ -51,6 +51,7 @@ namespace gdcm
  */
 
 //-----------------------------------------------------------------------------
+class PrivateTag;
 class GDCM_EXPORT DataSet
 {
 public:
@@ -155,6 +156,9 @@ public:
 
   std::string GetPrivateCreator(const Tag &t) const;
 
+  bool FindDataElement(const PrivateTag &t) const;
+  const DataElement& GetDataElement(const PrivateTag &t) const;
+
   // DUMB: this only search within the level of the current DataSet
   bool FindDataElement(const Tag &t) const {
     const DataElement r(t);
@@ -207,6 +211,9 @@ public:
   std::istream &ReadUpToTag(std::istream &is, const Tag &t);
 
   template <typename TDE, typename TSwap>
+  std::istream &ReadUpToTagWithLength(std::istream &is, const Tag &t, VL & length);
+
+  template <typename TDE, typename TSwap>
   std::ostream const &Write(std::ostream &os) const;
 
   template <typename TDE, typename TSwap>
@@ -225,6 +232,9 @@ protected:
   void InsertDataElement(const DataElement& de) {
     DES.insert(de);
     }
+
+protected:
+  Tag ComputeDataElement(const PrivateTag & t) const;
 
 private:
   DataElementSet DES;

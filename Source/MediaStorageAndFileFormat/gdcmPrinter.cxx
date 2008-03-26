@@ -83,7 +83,7 @@ namespace gdcm
 //-----------------------------------------------------------------------------
 Printer::Printer():PrintStyle(Printer::VERBOSE_STYLE),F(0)
 {
-  MaxPrintLength = 0xFF;
+  MaxPrintLength = 0x100; // Need to be %2 
 }
 //-----------------------------------------------------------------------------
 Printer::~Printer()
@@ -225,7 +225,7 @@ void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictE
     for(; it != sqf.Fragments.end(); ++it)
       {
       const Fragment &frag = *it;
-      const Value &val = frag.GetValue();
+      const Value &val = frag.GetValue(); (void)val;
       //PrintValue(lvr, vm, val );
       os << "  " << frag << std::endl;
       }
@@ -238,11 +238,12 @@ inline char *bswap(char *out, const char *in, size_t length)
   assert( !(length % sizeof(T)) );
   assert( out != in );
   for(size_t i = 0; i < length; i+=2)
-  {
+    {
     //const char copy = in[i];
     out[i] = in[i+1];
     out[i+1] = in[i];
-  }
+    }
+  return out;
 }
 
 //-----------------------------------------------------------------------------
@@ -538,20 +539,18 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
       os << "" << el.GetValue(); \
       for(unsigned long i = 1; i < el.GetLength(); ++i) os << "\\" << el.GetValue(i); \
       os << ""; } \
-      else { os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL; } } \
-      else { os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL; } \
+      else { if( de.IsEmpty() ) os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL; \
+                 else os << GDCM_TERMINAL_VT100_INVERSE << GDCM_TERMINAL_VT100_FOREGROUND_RED << "(VR=" << refvr << " is incompatible with length)" << GDCM_TERMINAL_VT100_NORMAL; } } \
+      else { assert( de.IsEmpty()); os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL; } \
     } break
 
-void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string const & indent )
+
+VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const DataSet & ds, const DataElement &de, std::ostream &out, std::string const & indent )
 {
-  const Global& g = GlobalInstance;
-  const Dicts &dicts = g.GetDicts();
-  const Dict &d = dicts.GetPublicDict();
- 
-  DataSet::ConstIterator it = ds.Begin();
-  for( ; it != ds.End(); ++it )
-    {
-    const DataElement &de = *it;
+    const ByteValue *bv = de.GetByteValue();
+    const SequenceOfItems *sqi = de.GetSequenceOfItems();
+    const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
+
     std::string strowner;
     const char *owner = 0;
     const Tag& t = de.GetTag();
@@ -565,13 +564,15 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
     const VM &vm = entry.GetVM();
     const char *name = entry.GetName();
     bool retired = entry.GetRetired();
+    //if( t.IsPrivate() ) assert( retired == false );
 
     const VR &vr_read = de.GetVR();
     const VL &vl_read = de.GetVL();
-    std::ostringstream os;
     os << indent; // first thing do the shift !
     os << t << " ";
     os << vr_read << " ";
+
+    //VR refvr = GetRefVR(dicts, de);
     VR refvr;
     // always prefer the vr from the file:
     if( vr_read == VR::INVALID )
@@ -589,25 +590,29 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
     // Special handling of US or SS vr:
     if( refvr == VR::US_SS )
       {
-      // In case of SAX parser, we would have had to process Pixel Representation already:
-      Tag pixelrep(0x0028,0x0103);
-      assert( pixelrep < t );
-      const DataSet &rootds = F->GetDataSet();
-      // FIXME
-      // PhilipsWith15Overlays.dcm has a Private SQ with public elements such as
-      // 0028,3002, so we cannot look up element in current dataset, but have to get the root dataset
-      // to loop up...
-      assert( rootds.FindDataElement( pixelrep ) );
-      Attribute<0x0028,0x0103> at;
-      at.SetFromDataElement( rootds.GetDataElement( pixelrep ) );
-      assert( at.GetValue() == 0 || at.GetValue() == 1 );
-      if( at.GetValue() )
+      // I believe all US_SS VR derived from the value from 0028,0103 ... except 0028,0071
+      if( t != Tag(0x0028,0x0071) )
         {
-        refvr = VR::SS;
-        }
-      else
-        {
-        refvr = VR::US;
+        // In case of SAX parser, we would have had to process Pixel Representation already:
+        Tag pixelrep(0x0028,0x0103);
+        assert( pixelrep < t );
+        const DataSet &rootds = F->GetDataSet();
+        // FIXME
+        // PhilipsWith15Overlays.dcm has a Private SQ with public elements such as
+        // 0028,3002, so we cannot look up element in current dataset, but have to get the root dataset
+        // to loop up...
+        assert( rootds.FindDataElement( pixelrep ) );
+        Attribute<0x0028,0x0103> at;
+        at.SetFromDataElement( rootds.GetDataElement( pixelrep ) );
+        assert( at.GetValue() == 0 || at.GetValue() == 1 );
+        if( at.GetValue() )
+          {
+          refvr = VR::SS;
+          }
+        else
+          {
+          refvr = VR::US;
+          }
         }
       }
     assert( refvr != VR::US_SS );
@@ -651,6 +656,7 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
         }
       }
     assert( refvr != VR::OB_OW );
+
     if( !vr.Compatible( vr_read ) )
       {
       // FIXME : if terminal supports it: print in red/green !
@@ -676,18 +682,29 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
       assert( refvr == VR::INVALID );
       refvr = VR::SQ;
       }
+    // Print Value now:
     if( refvr & VR::VRASCII )
       {
-      const ByteValue *bv = de.GetByteValue();
       if( bv )
         {
         VL l = std::min( bv->GetLength(), MaxPrintLength );
         os << "[";
-        bv->PrintASCII(os,l);
+        if( bv->IsPrintable(l) )
+          {
+          bv->PrintASCII(os,l);
+          }
+        else
+          {
+          os << GDCM_TERMINAL_VT100_INVERSE;
+          os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
+          bv->PrintASCII(os,l);
+          os << GDCM_TERMINAL_VT100_NORMAL;
+          }
         os << "]";
         }
       else
         {
+        assert( de.IsEmpty() );
         os << GDCM_TERMINAL_VT100_INVERSE;
         os << "(no value)";
         os << GDCM_TERMINAL_VT100_NORMAL;
@@ -712,23 +729,29 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
         StringFilterCase(UL);
         //StringFilterCase(UN);
         StringFilterCase(US);
-        StringFilterCase(UT);
+        //StringFilterCase(UT);
       case VR::OB:
       case VR::OW:
       case VR::OB_OW:
           {
-          const ByteValue *bv = de.GetByteValue();
           if ( bv )
             {
-            VL l = std::min( bv->GetLength(), MaxPrintLength );
+            //VL l = std::min( bv->GetLength(), MaxPrintLength );
             //VL l = std::min( (int)bv->GetLength(), 0xF );
             //int width = (vr == VR::OW ? 4 : 2);
             //os << std::hex << std::setw( width ) << std::setfill('0');
-            bv->PrintHex(os, l);
+            bv->PrintHex(os, MaxPrintLength / 4);
             //os << std::dec;
+            }
+          else if ( sqf )
+            {
+            assert( t == Tag(0x7fe0,0x0010) );
+            //os << *sqf;
             }
           else
             {
+            assert( !sqi && !sqf );
+            assert( de.IsEmpty() );
             os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL;
             }
           }
@@ -751,17 +774,28 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
       // Let's be a little more helpful and try to print anyway when possible:
       case VR::INVALID:
           {
-          const ByteValue *bv = de.GetByteValue();
           if( bv )
             {
             VL l = std::min( bv->GetLength(), MaxPrintLength );
-            os << "[";
-            if( bv->IsPrintable(l) ) bv->PrintASCII(os,l);
-            else os << GDCM_TERMINAL_VT100_INVERSE << "(non-printable character found)" << GDCM_TERMINAL_VT100_NORMAL;
-            os << "]";
+            if( bv->IsPrintable(l) ) 
+              {
+              os << "[";
+              bv->PrintASCII(os,l);
+              os << "]";
+              }
+            else if( t == Tag(0xfffe,0xe000) ) bv->PrintHex(os, MaxPrintLength / 8);
+            else 
+              {
+              os << GDCM_TERMINAL_VT100_INVERSE;
+              // << "(non-printable character found)"
+              bv->PrintHex(os, MaxPrintLength / 8);
+              os << GDCM_TERMINAL_VT100_NORMAL;
+              }
             }
           else
             {
+            assert( !sqi && !sqf );
+            assert( de.IsEmpty() );
             os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL;
             }
           }
@@ -810,7 +844,6 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
       os << "?";
       os << GDCM_TERMINAL_VT100_NORMAL;
       }
-    const ByteValue* bv = de.GetByteValue();
     VM guessvm = VM::VM0;
     if( refvr & VR::VRASCII )
       {
@@ -824,7 +857,6 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
       }
     else if( refvr & VR::VRBINARY )
       {
-      const SequenceOfItems * sqi = de.GetSequenceOfItems();
       assert( refvr != VR::INVALID );
       assert( refvr & VR::VRBINARY );
       if( refvr & VR::OB_OW || refvr == VR::SQ )
@@ -865,10 +897,20 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
     // Append the name now:
     if( name && *name )
       {
-      if( t.IsPrivate() && (owner == 0 || *owner == 0 ) && t.GetElement() > 0xFF )
+      // No owner case !
+      if( t.IsPrivate() && (owner == 0 || *owner == 0 ) && t.IsPrivateCreator() )
         {
         os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
         os << " " << name;
+        os << GDCM_TERMINAL_VT100_NORMAL;
+        }
+      // retired element
+      else if( retired )
+        {
+        assert( t.IsPublic() || t.GetElement() == 0x0 ); // Is there such thing as private and retired element ?
+        os << " " << GDCM_TERMINAL_VT100_FOREGROUND_RED << GDCM_TERMINAL_VT100_UNDERLINE;
+        os << name;
+        os << GDCM_TERMINAL_VT100_NORMAL;
         os << GDCM_TERMINAL_VT100_NORMAL;
         }
       else
@@ -881,13 +923,38 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
     else
       {
       os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
+      if( t.IsPublic() )
+        {
+        // What ? A public element that we do not know about !!!
+        os << GDCM_TERMINAL_VT100_BLINK;
+        }
       os << " UNKNOWN";
       os << GDCM_TERMINAL_VT100_NORMAL;
       }
     os << "\n";
-    if( refvr == VR::SQ )
+return refvr;
+}
+
+void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string const & indent )
+{
+  const Global& g = GlobalInstance;
+  const Dicts &dicts = g.GetDicts();
+  const Dict &d = dicts.GetPublicDict(); (void)d;
+ 
+  DataSet::ConstIterator it = ds.Begin();
+  for( ; it != ds.End(); ++it )
+    {
+    const DataElement &de = *it;
+    //const ByteValue *bv = de.GetByteValue();
+    const SequenceOfItems *sqi = de.GetSequenceOfItems();
+    const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
+
+    std::ostringstream os;
+
+    VR refvr = PrintDataElement(os, dicts, ds, de, out, indent);
+
+    if( refvr == VR::SQ || sqi )
       {
-      const SequenceOfItems *sqi = de.GetSequenceOfItems();
       if( sqi ) // empty SQ ?
         {
         assert( sqi );
@@ -925,6 +992,28 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
           }
         }
       }
+    else if ( sqf )
+      {
+      std::string nextindent = indent + "  ";
+      const BasicOffsetTable & table = sqf->GetTable();
+      //os << nextindent  << table.GetTag() << "\n";
+      PrintDataElement(os,dicts,ds,table,out,nextindent);
+      unsigned int numfrag = sqf->GetNumberOfFragments();
+      for(unsigned int i = 0; i < numfrag; ++i)
+        {
+        const Fragment& frag = sqf->GetFragment(i);
+        //os << nextindent<< frag << "\n";
+        PrintDataElement(os,dicts,ds,frag,out,nextindent);
+        }
+      const Tag seqDelItem(0xfffe,0xe0dd);
+      VL zero = 0;
+      os << /*nextindent <<*/ seqDelItem;
+      os << " " << zero << "\n";
+      }
+    else
+      {
+      // This is a byte value, so it should have been already treated 
+      }
     out << os.str();
     }
 }
@@ -934,7 +1023,7 @@ void Printer::PrintDataSetOld(std::ostream &os, const DataSet &ds)
 {
   const Global& g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
-  const Dict &d = dicts.GetPublicDict();
+  const Dict &d = dicts.GetPublicDict(); (void)d;
  
   static const GroupDict gd; // FIXME
 //  try
@@ -1025,8 +1114,8 @@ void Printer::PrintDataSetOld(std::ostream &os, const DataSet &ds)
         }
       else // INVALID case
         {
-        const VM& vm = entry.GetVM();
-        const Value& val = de.GetValue();
+        const VM& vm = entry.GetVM(); (void)vm;
+        const Value& val = de.GetValue(); (void)val;
         os << de.GetTag();
         //if( pstyle == Printer::CONDENSED_STYLE )
         //  {
@@ -1102,8 +1191,8 @@ void DumpDataSet(const DataSet &ds, std::ostream &os )
   for( ; it != ds.End(); ++it )
     {
     const DataElement &de = *it;
-    const Tag& t = de.GetTag();
-    const VR& vr = de.GetVR();
+    const Tag& t = de.GetTag(); (void)t;
+    const VR& vr = de.GetVR(); (void)vr;
     os << de << std::endl;
     //if( VR::IsASCII( vr ) )
     //  {

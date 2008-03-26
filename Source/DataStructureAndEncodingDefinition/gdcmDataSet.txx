@@ -25,10 +25,29 @@ namespace gdcm
     DataElement de;
     const Tag itemDelItem(0xfffe,0xe00d);
     assert( de.GetTag() != itemDelItem ); // precondition before while loop
-    while( de.Read<TDE,TSwap>(is) && de.GetTag() != itemDelItem  ) // Keep that order please !
+    try
       {
-      //std::cerr << "DEBUG Nested: " << de << std::endl;
-      DES.insert( de );
+      while( de.Read<TDE,TSwap>(is) && de.GetTag() != itemDelItem  ) // Keep that order please !
+        {
+        //std::cerr << "DEBUG Nested: " << de << std::endl;
+        DES.insert( de );
+        }
+      }
+    catch(ParseException &pe)
+      {
+      if( pe.GetLastElement().GetTag() == Tag(0xfffe,0xe0dd) )
+        {
+        //  BogusItemStartItemEnd.dcm
+        gdcmWarningMacro( "SQ End found but no no Item end found" );
+        de.SetTag( itemDelItem );
+        is.seekg( -4, std::ios::cur );
+        }
+      else
+        {
+        // MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm
+        // Need to rethrow the exception...sigh
+        throw pe;
+        }
       }
     assert( de.GetTag() == itemDelItem );
     //std::cerr << "Finish nested" << std::endl;
@@ -63,6 +82,19 @@ namespace gdcm
   }
 
   template <typename TDE, typename TSwap>
+  std::istream &DataSet::ReadUpToTagWithLength(std::istream &is, const Tag &t, VL & length) {
+    DataElement de;
+    while( !is.eof() && de.ReadWithLength<TDE,TSwap>(is,length) )
+      {
+      //assert( de.GetTag() != Tag(0,0) );
+      DES.insert( de );
+      // tag was found, we can exit the loop:
+      if ( de.GetTag() == t ) break;
+      }
+    return is;
+  }
+
+  template <typename TDE, typename TSwap>
   std::istream &DataSet::ReadWithLength(std::istream &is, VL &length) {
     //return is.seekg(length, std::ios::cur);
     DataElement de;
@@ -71,9 +103,12 @@ namespace gdcm
     VL locallength = length;
     try
       {
-      while( l != locallength && de.Read<TDE,TSwap>(is))
+      while( l != locallength && de.ReadWithLength<TDE,TSwap>(is, locallength))
         {
         //std::cout << "Nested: " << de << std::endl;
+#ifndef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+        assert( de.GetTag() != Tag(0xfffe,0xe000) ); // We should not be reading the next item...
+#endif
         DES.insert( de );
         l += de.GetLength<TDE>();
         //std::cout << "l:" << l << std::endl;
@@ -87,7 +122,10 @@ namespace gdcm
           gdcmWarningMacro( "PMS: Super bad hack. Changing length" );
           length = locallength = 140;
           }
-        assert( l <= locallength );
+        if( l > locallength )
+          {
+          throw Exception( "Out of Range" );
+          }
         }
     }
     catch(ParseException &pe)
@@ -100,7 +138,54 @@ namespace gdcm
         is.seekg(-6, std::ios::cur );
         length = locallength = l;
         }
+      else
+        {
+        // Could be the famous :
+        // gdcmDataExtra/gdcmBreakers/BuggedDicomWorksImage_Hopeless.dcm
+        // let's just give up:
+        throw Exception( "Unhandled" );
+        }
       }
+    catch(Exception &pe)
+      {
+      if( strcmp( pe.GetDescription(), "Out of Range" ) == 0 )
+        {
+        // BogugsItemAndSequenceLength.dcm
+        // This is most likely the "Out of Range" one
+        // Cautiously read until we find the next item starter and then stop.
+        //std::cout << "Length read was:" << l << " should be at most:" <<  locallength ;
+        while( de.Read<TDE,TSwap>(is) && de.GetTag() != Tag(0xfffe,0xe000) && de.GetTag().GetElement() != 0x0 )
+          {
+          //std::cout << "Nested2: " << de << std::endl;
+          DES.insert( de );
+          l += de.GetLength<TDE>();
+          //std::cout << l << std::endl;
+          }
+        // seek back since we read the next item starter:
+        int iteml = de.GetLength<TDE>();
+        //assert( de.GetTag().GetElement() );
+        if( !de.GetTag().GetElement() )
+          {
+          assert( iteml == 12 ); (void)iteml;
+          is.seekg( -12, std::ios::cur );
+          }
+        else
+          {
+          assert( de.GetTag() == Tag(0xfffe,0xe000) );
+          is.seekg( -4, std::ios::cur );
+          }
+        // let's fix the length now:
+        length = locallength = l;
+        gdcmWarningMacro( "Item length is wrong" );
+        throw Exception( "Changed Length" );
+        }
+      else
+        {
+        // re throw
+        throw pe;
+        }
+      }
+
     assert( l == locallength );
     return is;
   }
@@ -113,8 +198,8 @@ namespace gdcm
       //std::cerr << "DEBUG:" << *it << std::endl;
       const DataElement & de = *it;
       // If this is a group length make sure this is consistant
-      if( false && ( de.GetTag().GetGroup() >= 0x0000
-         && de.GetTag().GetGroup() <  0x0008) )
+      if( false && ( /*de.GetTag().GetGroup() >= 0x0000
+         &&*/ de.GetTag().GetGroup() <  0x0008) )
         {
         gdcmWarningMacro( "DataSet contains illegal Tags. "
           "Those elements will be discarded:" << de.GetTag() );

@@ -32,7 +32,7 @@ struct threadparams
 
 void *ReadFilesThread(void *voidparams)
 {
-  threadparams *params = static_cast<threadparams *> (voidparams);
+  const threadparams *params = static_cast<const threadparams *> (voidparams);
 
   const unsigned int nfiles = params->nfiles;
   for(unsigned int file = 0; file < nfiles; ++file)
@@ -131,6 +131,12 @@ void ReadFiles(unsigned int nfiles, const char *filenames[])
   case gdcm::PixelFormat::UINT16:
     output->SetScalarType ( VTK_UNSIGNED_SHORT );
     break;
+  case gdcm::PixelFormat::INT32:
+    output->SetScalarType ( VTK_INT );
+    break;
+  case gdcm::PixelFormat::UINT32:
+    output->SetScalarType ( VTK_UNSIGNED_INT );
+    break;
   default:
     abort();
     }
@@ -197,7 +203,7 @@ void ReadFiles(unsigned int nfiles, const char *filenames[])
   //writer->Write();
   writer->Delete();
 
-  output->Print( std::cout );
+  //output->Print( std::cout );
   output->Delete();
 }
 

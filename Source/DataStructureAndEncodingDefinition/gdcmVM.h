@@ -44,7 +44,6 @@
  * 1-4
  * 1-5
  * 256
- * 11
  * 9
  * 3-4
  *
@@ -76,31 +75,30 @@ public:
     VM8 = 64,
     VM9 = 128,
     VM10 = 256,
-    VM11 = 512,
-    VM12 = 1024,
-    VM16 = 2048,
-    VM18 = 4096,
-    VM24 = 8192,
-    VM28 = 16384,
-    VM32 = 32768,
-    VM35 = 65536,
-    VM99 = 131072,
-    VM256 = 262144,
+    VM12 = 512, //1024,
+    VM16 = 1024, //2048,
+    VM18 = 2048, //4096,
+    VM24 = 4096, //8192,
+    VM28 = 8192, //16384,
+    VM32 = 16384, //32768,
+    VM35 = 32768, //65536,
+    VM99 = 65536, //131072,
+    VM256 = 131072, //262144,
     VM1_2  = VM1 | VM2,
     VM1_3  = VM1 | VM2 | VM3,
     VM1_4  = VM1 | VM2 | VM3 | VM4,
     VM1_5  = VM1 | VM2 | VM3 | VM4 | VM5,
     VM1_8  = VM1 | VM2 | VM3 | VM4 | VM5 | VM6 | VM8,
 // The following need some work:
-    VM1_32 = VM1 | VM2 | VM3 | VM4 | VM5 | VM6 | VM8 | VM9 | VM11 | VM16 | VM24 | VM32,
-    VM1_99 = VM1 | VM2 | VM3 | VM4 | VM5 | VM6 | VM8 | VM9 | VM11 | VM16 | VM24 | VM32 | VM99,
-    VM1_n  = VM1 | VM2 | VM3 | VM4 | VM5 | VM6 | VM8 | VM9 | VM11 | VM16 | VM24 | VM32 | VM99 | VM256,
-    VM2_2n =       VM2       | VM4       | VM6 | VM8              | VM16 | VM24 | VM32        | VM256,
-    VM2_n  =       VM2 | VM3 | VM4 | VM5 | VM6 | VM8 | VM9 | VM11 | VM16 | VM24 | VM32 | VM99 | VM256,
+    VM1_32 = VM1 | VM2 | VM3 | VM4 | VM5 | VM6 | VM8 | VM9 | VM16 | VM24 | VM32,
+    VM1_99 = VM1 | VM2 | VM3 | VM4 | VM5 | VM6 | VM8 | VM9 | VM16 | VM24 | VM32 | VM99,
+    VM1_n  = VM1 | VM2 | VM3 | VM4 | VM5 | VM6 | VM8 | VM9 | VM16 | VM24 | VM32 | VM99 | VM256,
+    VM2_2n =       VM2       | VM4       | VM6 | VM8       | VM16 | VM24 | VM32        | VM256,
+    VM2_n  =       VM2 | VM3 | VM4 | VM5 | VM6 | VM8 | VM9 | VM16 | VM24 | VM32 | VM99 | VM256,
     VM3_4  =             VM3 | VM4,
-    VM3_3n =             VM3 |             VM6       | VM9                             | VM99 | VM256,
-    VM3_n  =             VM3 | VM4 | VM5 | VM6 | VM8 | VM9 | VM11 | VM16 | VM24 | VM32 | VM99 | VM256,
-    VM4_4n =                   VM4                                | VM16 | VM24 | VM32        | VM256,
+    VM3_3n =             VM3 |             VM6       | VM9                      | VM99 | VM256,
+    VM3_n  =             VM3 | VM4 | VM5 | VM6 | VM8 | VM9 | VM16 | VM24 | VM32 | VM99 | VM256,
+    VM4_4n =                   VM4                         | VM16 | VM24 | VM32        | VM256,
     VM7_7n,
     VM30_30n,
     VM47_47n,
@@ -131,7 +129,7 @@ public:
 
   friend std::ostream &operator<<(std::ostream &os, const VM &vm);
 protected:
-  static int GetIndex(VMType vm);
+  static unsigned int GetIndex(VMType vm);
 
 private:
   VMType VMField;

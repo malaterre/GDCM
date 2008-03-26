@@ -105,10 +105,6 @@ ENDIF (WIN32)
 # By default support DICOMObjects bug, if this is a speed penalty for you
 # you should consider disabling it
 SET(SUPPORT_DICOMOBJECTS_BUG ON)
-# I found at least one image where JPEG 12bits contained a value above 4095...
-# I do not understand how it got here, but anyway here is a work around:
-SET(SUPPORT_MAXJSAMPLE_BUG OFF)
-
 
 # Generate three libraries: jpeg 8bits, 12bits and 16bits
 # using only one source directory

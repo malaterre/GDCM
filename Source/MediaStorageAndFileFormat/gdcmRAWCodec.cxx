@@ -48,6 +48,17 @@ bool RAWCodec::CanDecode(TransferSyntax const &ts)
 
 bool RAWCodec::Decode(DataElement const &in, DataElement &out)
 {
+  // First let's see if we can do a fast-path:
+  if( !NeedByteSwap &&
+    !RequestPaddedCompositePixelCode &&
+    PI == PhotometricInterpretation::MONOCHROME2 &&
+    !PlanarConfiguration && !RequestPlanarConfiguration &&
+    !NeedOverlayCleanup )
+    {
+    out = in;
+    return true;
+    }
+  // else
   const ByteValue *bv = in.GetByteValue();
   assert( bv );
   std::stringstream is;
@@ -59,7 +70,6 @@ bool RAWCodec::Decode(DataElement const &in, DataElement &out)
   std::string str = os.str();
   std::string::size_type check = str.size();
 
-  //memcpy(buffer, os.str().c_str(), check);  // FIXME
   out = in;
   out.SetByteValue( &str[0], str.size() );
   return r;

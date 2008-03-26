@@ -111,7 +111,10 @@ bool ImageCodec::DoYBR(std::istream &is, std::ostream &os)
   unsigned long size = buf_size/3;
   unsigned char *copy = new unsigned char[ buf_size ];
   memmove( copy, dummy_buffer, buf_size);
-
+abort(); // Do not use this code !
+  // FIXME FIXME FIXME
+  // The following is bogus: we are doing two operation at once:
+  // Planar configuration AND YBR... doh !
   const unsigned char *a = copy + 0;
   const unsigned char *b = copy + size;
   const unsigned char *c = copy + size + size;
@@ -250,6 +253,7 @@ bool ImageCodec::DoInvertMonochrome(std::istream &is, std::ostream &os)
       }
     else if ( PF.GetBitsAllocated() == 16 )
       {
+      assert( PF.GetBitsStored() != 12 );
       uint16_t smask16 = 65535;
       uint16_t c;
       while( is.read((char*)&c,2) )
@@ -281,9 +285,19 @@ bool ImageCodec::DoInvertMonochrome(std::istream &is, std::ostream &os)
       uint16_t c;
       while( is.read((char*)&c,2) )
         {
-        //assert( c <= mask );
+        if( c > mask )
+          {
+          // IMAGES/JPLY/RG3_JPLY aka CompressedSamples^RG3/1.3.6.1.4.1.5962.1.1.11.1.5.20040826185059.5457
+          // gdcmData/D_CLUNIE_RG3_JPLY.dcm
+          // stores a 12bits JPEG stream with scalar value [0,1024], however
+          // the DICOM header says the data are stored on 10bits [0,1023], thus this HACK:
+          gdcmWarningMacro( "Bogus max value: "<< c << " max should be at most: " << mask 
+            << " results will be truncated. Use at own risk");
+          c = mask;
+          }
+        assert( c <= mask ); 
         c = mask - c;
-        //assert( c <= mask ); // FIXME does not work for D_CLUNIE_RG3_JPLY.dcm
+        assert( c <= mask ); 
         os.write((char*)&c, 2);
         }
       }
@@ -414,13 +428,13 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
   else if (PI == PhotometricInterpretation::MONOCHROME1)
     {
     // CR-MONO1-10-chest.dcm
-    DoInvertMonochrome(*cur_is, pi_os);
-    cur_is = &pi_os;
+    //DoInvertMonochrome(*cur_is, pi_os);
+    //cur_is = &pi_os;
     }
   else if ( PI == PhotometricInterpretation::YBR_FULL )
     {
-    DoYBR(*cur_is,pi_os);
-    cur_is = &pi_os;
+    //DoYBR(*cur_is,pi_os);
+    //cur_is = &pi_os;
     }
   else if ( PI == PhotometricInterpretation::PALETTE_COLOR )
     {
@@ -444,13 +458,13 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
 
   if( PlanarConfiguration || RequestPlanarConfiguration )
     {
-    if ( PI == PhotometricInterpretation::YBR_FULL )
-      {
-      // ACUSON-24-YBR_FULL-RLE.dcm declare PlanarConfiguration=1
-      // but it's only pure YBR...
-      gdcmWarningMacro( "Not sure what to do" );
-      }
-    else
+    //if ( PI == PhotometricInterpretation::YBR_FULL )
+    //  {
+    //  // ACUSON-24-YBR_FULL-RLE.dcm declare PlanarConfiguration=1
+    //  // but it's only pure YBR...
+    //  gdcmWarningMacro( "Not sure what to do" );
+    //  }
+    //else
       {
       DoPlanarConfiguration(*cur_is,pl_os);
       cur_is = &pl_os;

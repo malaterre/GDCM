@@ -148,28 +148,26 @@ uint8_t PixelFormat::GetPixelSize() const
 
 int64_t PixelFormat::GetMin() const
 {
+  assert( PixelRepresentation == 0 );
   if( PixelRepresentation )
     {
-    assert( PixelRepresentation == 1 );
     return 0;
     }
   else
     {
-    assert( PixelRepresentation == 0 );
     return 0;
     }
 }
 
 int64_t PixelFormat::GetMax() const
 {
+  assert( PixelRepresentation == 0 );
   if( PixelRepresentation )
     {
-    assert( PixelRepresentation == 1 );
     return 0;
     }
   else
     {
-    assert( PixelRepresentation == 0 );
     return (1 << BitsStored);
     }
 }

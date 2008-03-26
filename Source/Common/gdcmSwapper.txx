@@ -53,7 +53,7 @@ namespace gdcm
 #endif
     }
 
-  template <> inline void SwapperDoOp::SwapArray(uint8_t *array, unsigned int n) {}
+  template <> inline void SwapperDoOp::SwapArray(uint8_t *, unsigned int ) {}
 
 } // end namespace gdcm
  

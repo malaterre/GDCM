@@ -21,6 +21,8 @@
 #include "vtkMatrix4x4.h"
 #include "vtkMedicalImageProperties.h"
 #include "vtkStringArray.h"
+#include "vtkPointData.h"
+#include "vtkGDCMImageReader.h"
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #include "vtkInformationVector.h"
 #include "vtkStreamingDemandDrivenPipeline.h"
@@ -69,6 +71,8 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
   const std::string project_name = std::string("VTK ") + vtkVersion::GetVTKVersion();
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( project_name.c_str() );
 
+  this->ImageFormat = 0; // invalid
+
 }
 
 //----------------------------------------------------------------------------
@@ -108,7 +112,7 @@ int vtkGDCMImageWriter::RequestInformation(
   int components = 0;
   int dataType = 0;
 
-  // For each connection on port 0, check agains the first connection
+  // For each connection on port 0, check against the first connection
   for (int i = 0; i < this->GetNumberOfInputConnections(0); i++)
     {
     vtkInformation *inInfo = inputVector[0]->GetInformationObject(i);
@@ -402,7 +406,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     image.SetNumberOfDimensions( 3 );
     image.SetDimension(2, dims[2] );
     }
-  image.SetSpacing(2, spacing[2] ); // should always valid...
+  image.SetSpacing(2, spacing[2] ); // should always be valid...
   // TODO: need to do Origin / Image Position (Patient)
   // For now FileDimensionality should match File Dimension
   //this->FileDimensionality
@@ -427,27 +431,86 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   case VTK_UNSIGNED_SHORT:
     pixeltype = gdcm::PixelFormat::UINT16;
     break;
+  case VTK_INT:
+    pixeltype = gdcm::PixelFormat::INT32;
+    break;
+  case VTK_UNSIGNED_INT:
+    pixeltype = gdcm::PixelFormat::UINT32;
+    break;
   default:
-    abort();
+    vtkErrorMacro( "Do not support this Pixel Type: " << scalarType );
+    return 0;
     }
 
   gdcm::PhotometricInterpretation pi;
-  if( data->GetNumberOfScalarComponents() == 1 )
+  if( this->ImageFormat )
     {
-    pi = gdcm::PhotometricInterpretation::MONOCHROME2;
-    }
-  else if( data->GetNumberOfScalarComponents() == 3 )
-    {
-    pi = gdcm::PhotometricInterpretation::RGB;
-    // (0028,0006) US 0                                        #   2, 1 PlanarConfiguration
+    // We have been passed the proper image format, let's use it !
+    switch( this->ImageFormat )
+      {
+      case VTK_LUMINANCE:
+        pi = gdcm::PhotometricInterpretation::MONOCHROME2;
+        break;
+      case VTK_RGB:
+        pi = gdcm::PhotometricInterpretation::RGB;
+        break;
+      case VTK_INVERSE_LUMINANCE:
+        pi = gdcm::PhotometricInterpretation::MONOCHROME1;
+        break;
+      case VTK_LOOKUP_TABLE:
+        pi = gdcm::PhotometricInterpretation::PALETTE_COLOR;
+        break;
+      case VTK_YBR:
+        pi = gdcm::PhotometricInterpretation::YBR_FULL;
+        break;
+      default:
+        vtkErrorMacro( "Unknown ImageFormat:" << this->ImageFormat );
+        return 0;
+      }
     }
   else
     {
-    return 0;
+    // Attempt a guess
+    if( data->GetNumberOfScalarComponents() == 1 )
+      {
+      pi = gdcm::PhotometricInterpretation::MONOCHROME2;
+      }
+    else if( data->GetNumberOfScalarComponents() == 3 )
+      {
+      pi = gdcm::PhotometricInterpretation::RGB;
+      // (0028,0006) US 0                                        #   2, 1 PlanarConfiguration
+      }
+    else
+      {
+      return 0;
+      }
     }
+
   pixeltype.SetSamplesPerPixel( data->GetNumberOfScalarComponents() );
   image.SetPhotometricInterpretation( pi );
   image.SetPixelFormat( pixeltype );
+
+  // Setup LUt if any:
+  if( pi == gdcm::PhotometricInterpretation::PALETTE_COLOR )
+    {
+    vtkLookupTable * vtklut = data->GetPointData()->GetScalars()->GetLookupTable();
+    assert( vtklut );
+    assert( vtklut->GetNumberOfTableValues() == 256 );
+    gdcm::SmartPointer<gdcm::LookupTable> lut = new gdcm::LookupTable;
+    assert( pixeltype.GetBitsAllocated() == 8 );
+    lut->Allocate( pixeltype.GetBitsAllocated() );
+    lut->InitializeLUT( gdcm::LookupTable::RED, 256, 0, 16 );
+    lut->InitializeLUT( gdcm::LookupTable::GREEN, 256, 0, 16 );
+    lut->InitializeLUT( gdcm::LookupTable::BLUE, 256, 0, 16 );
+    if( !lut->WriteBufferAsRGBA( vtklut->WritePointer(0,4) ) )
+      {
+      vtkWarningMacro( "Could not get values from LUT" );
+      return 0;
+      }
+
+    image.SetLUT( *lut );
+    }
+
   unsigned long len = image.GetBufferLength();
 
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
@@ -577,6 +640,8 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
   // Window Level / Window Center
   int numwl = this->MedicalImageProperties->GetNumberOfWindowLevelPresets();
+  if( numwl )
+{
   gdcm::VR vr = gdcm::VR::DS;
   gdcm::Element<gdcm::VR::DS,gdcm::VM::VM1_n> elwc;
   elwc.SetLength( numwl * vr.GetSizeof() );
@@ -588,8 +653,8 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   for(int i = 0; i < numwl; ++i)
     {
     const double *wl = this->MedicalImageProperties->GetNthWindowLevelPreset(i);
-    elwc.SetValue( wl[0], i );
-    elww.SetValue( wl[1], i );
+    elww.SetValue( wl[0], i );
+    elwc.SetValue( wl[1], i );
     const char* we = this->MedicalImageProperties->GetNthWindowLevelPresetComment(i);
     elwe.SetValue( we, i );
     }
@@ -608,6 +673,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   de.SetTag( gdcm::Tag(0x0028,0x1055) );
   ds.Insert( de );
 }
+}
 
 
   // Let's try to fake out the SOP Class UID here:
@@ -615,7 +681,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   ms.GuessFromModality( this->MedicalImageProperties->GetModality(), this->FileDimensionality ); // Will override SC only if something is found...
   assert( gdcm::MediaStorage::IsImage( ms ) );
 {
-  gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016 ) );
+  gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
   const char* msstr = gdcm::MediaStorage::GetMSString(ms);
   de.SetByteValue( msstr, strlen(msstr) );
   ds.Insert( de );
@@ -626,7 +692,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   if ( ms != gdcm::MediaStorage::SecondaryCaptureImageStorage )
     {
     // Image Position (Patient)
-    gdcm::Attribute<0x0020,0x0032> ipp = {0,0,0}; // default value
+    gdcm::Attribute<0x0020,0x0032> ipp = {{0,0,0}}; // default value
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
     const double *origin = data->GetOrigin();
 #else
@@ -637,7 +703,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     ds.Insert( ipp.GetAsDataElement() );
 
     // Image Orientation (Patient)
-    gdcm::Attribute<0x0020,0x0037> iop = {1,0,0,0,1,0}; // default value
+    gdcm::Attribute<0x0020,0x0037> iop = {{1,0,0,0,1,0}}; // default value
     const vtkMatrix4x4 *dircos = this->DirectionCosines;
     for(int i = 0; i < 3; ++i)
       iop.SetValue( dircos->GetElement(i,0), i );
@@ -689,5 +755,4 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 void vtkGDCMImageWriter::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os,indent);
-  //this->Internals->DICOMWriter.Print(os);
 }

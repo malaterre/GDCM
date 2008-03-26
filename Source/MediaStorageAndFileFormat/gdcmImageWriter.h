@@ -37,10 +37,6 @@ public:
 
   bool Write(); // Execute()
 
-protected:
-  bool WriteImage();
-  //bool WriteACRNEMAImage();
-
 private:
   ImageValue PixelData;
 };

@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmByteSwapFilter.h"
+
 #include "gdcmElement.h"
 #include "gdcmByteValue.h"
 #include "gdcmSequenceOfFragments.h"
@@ -29,11 +30,6 @@ namespace gdcm
 //-----------------------------------------------------------------------------
 ByteSwapFilter::~ByteSwapFilter()
 {
-}
-
-void ByteSwapFilter::SetDicts(const Dicts &dicts)
-{
-  abort(); // FIXME
 }
 
 bool ByteSwapFilter::ByteSwap()
@@ -118,6 +114,7 @@ bool ByteSwapFilter::ByteSwap()
       }
     else if( const SequenceOfFragments *sf = de.GetSequenceOfFragments() )
       {
+      (void)sf;
       assert( 0 && "Should not happen" );
       }
     else

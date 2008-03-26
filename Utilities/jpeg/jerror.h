@@ -198,7 +198,6 @@ JMESSAGE(JWRN_TOO_MUCH_DATA, "Application transferred too many scanlines")
 /* For more information see:
  * http://www.medicalconnections.co.uk/html/lossless_bug.html */
 JMESSAGE(JWRN_SIGNED_ARITH, "Corrupt JPEG data: using signed arithmetic")
-JMESSAGE(JWRN_MAXJSAMPLE, "Corrupt JPEG data: value is bigger than MAXJSAMPLE")
 
 #ifdef JMAKE_ENUM_LIST
 

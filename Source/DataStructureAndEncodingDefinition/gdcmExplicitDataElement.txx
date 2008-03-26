@@ -26,6 +26,7 @@
 
 namespace gdcm
 {
+
 //-----------------------------------------------------------------------------
 template <typename TSwap>
 std::istream &ExplicitDataElement::Read(std::istream &is)
@@ -40,7 +41,12 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       }
     return is;
     }
-  assert( TagField != Tag(0xfffe,0xe0dd) );
+  if( TagField == Tag(0xfffe,0xe0dd) )
+    {
+    ParseException pe;
+    pe.SetLastElement( *this );
+    throw pe;
+    }
   //assert( TagField != Tag(0xfeff,0xdde0) );
   const Tag itemDelItem(0xfffe,0xe00d);
   if( TagField == itemDelItem )
@@ -63,10 +69,9 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
   if( TagField == Tag(0x00ff, 0x4aa5) )
     {
-    assert(0 && "Should not happen" );
-    //  char c;
-    //  is.read(&c, 1);
-    //  std::cerr << "Debug: " << c << std::endl;
+    //assert(0 && "Should not happen" );
+    // gdcmDataExtra/gdcmBreakers/DigitexAlpha_no_7FE0.dcm
+    throw Exception( "Unhandled" );
     }
 #endif
   // Read VR
@@ -80,6 +85,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     }
   catch( Exception &ex )
     {
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     // gdcm-MR-PHILIPS-16-Multi-Seq.dcm
     // assert( TagField == Tag(0xfffe, 0xe000) );
     // -> For some reason VR is written as {44,0} well I guess this is a VR...
@@ -94,6 +100,9 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     ParseException pe;
     pe.SetLastElement( *this );
     throw pe;
+#else
+  throw ex;
+#endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
     }
   // Read Value Length
   if( VR::GetLength(VRField) == 4 )
@@ -269,6 +278,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     }
   if( failed )
     {
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     if( TagField == Tag(0x7fe0,0x0010) )
       {
       // PMS-IncompletePixelData.dcm
@@ -276,6 +286,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       is.clear();
       }
     else
+#endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
       {
       // Might be the famous UN 16bits
       ParseException pe;
@@ -286,6 +297,12 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     }
 
   return is;
+}
+
+template <typename TSwap>
+std::istream &ExplicitDataElement::ReadWithLength(std::istream &is, VL & length)
+{
+  return Read<TSwap>(is); (void)length;
 }
 
 //-----------------------------------------------------------------------------

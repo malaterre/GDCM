@@ -51,6 +51,7 @@ public:
 
   Preamble(Preamble const &preamble)
     {
+    (void)preamble;
     }
 protected:
   //

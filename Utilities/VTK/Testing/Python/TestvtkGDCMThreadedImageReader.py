@@ -93,7 +93,7 @@ if __name__ == "__main__":
     ExecuteInformation(r, fullpath.GetValue(0), fullpath.GetNumberOfValues() )
     #r.AddObserver("ProgressEvent", PrintProgress)
     r.Update()
-    print r.GetOutput()
+    #print r.GetOutput()
     # Write output
     writer = vtkStructuredPointsWriter()
     writer.SetInput( r.GetOutput() )

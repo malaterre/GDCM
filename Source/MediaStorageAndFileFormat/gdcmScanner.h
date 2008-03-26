@@ -17,6 +17,7 @@
 
 #include "gdcmDirectory.h"
 #include "gdcmTag.h"
+//#include "gdcmConstCharWrapper.h"
 
 #include <map>
 #include <set>
@@ -46,8 +47,9 @@ public:
   // since we are pointing to existing std::string (hold in a std::vector)
   // this avoid an extra copy of the byte array.
   // Tag are used as Tag class since sizeof(tag) <= sizeof(pointer)
-  typedef std::map<Tag, const char*> TagToStringMap;
-  typedef TagToStringMap TagToValue;
+  typedef std::map<Tag, const char*> TagToValue;
+  //typedef std::map<Tag, ConstCharWrapper> TagToValue; //StringMap;
+  //typedef TagToStringMap TagToValue;
   typedef TagToValue::value_type TagToValueValueType;
 
   // Add a tag that will need to be read
@@ -95,6 +97,9 @@ public:
   TagToValue const & GetMapping(const char *filename) const;
 
   // Retrieve the value found for tag: t associated with file: filename
+  // This is meant for a single short call. If multiple calls (multiple tags)
+  // should be done, prefer the GetMapping function, and then reuse the TagToValue
+  // hash table.
   const char* GetValue(const char *filename, Tag const &t) const;
 
 private:

@@ -43,6 +43,7 @@ public:
   }
   ByteValue(std::vector<char> &v):Internal(v),Length(v.size()) {}
   ByteValue(std::ostringstream const &os) {
+    (void)os;
 	   abort(); // TODO
   }
   ~ByteValue() {
@@ -73,16 +74,7 @@ public:
       }
   }
 
-  void PrintHex(std::ostream &os, VL maxlength ) const {
-    VL length = std::min(maxlength, Length);
-    // WARNING: Internal.end() != Internal.begin()+Length
-    std::vector<char>::const_iterator it = Internal.begin();
-    for(; it != Internal.begin()+length; ++it)
-      {
-      const char &c = *it;
-      os << "\\" << (int)c;
-      }
-  }
+  void PrintHex(std::ostream &os, VL maxlength) const;
 
   // Either from Element Number (== 0x0000)
   void PrintGroupLength(std::ostream &os) {

@@ -15,6 +15,8 @@
 #include "gdcmTag.h"
 #include "gdcmTrace.h"
 
+#include <stdio.h> // sscanf
+
 namespace gdcm
 {
   void Tag::ReadFromCommaSeparatedString(const char *str)

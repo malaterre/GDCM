@@ -20,6 +20,9 @@
 
 #include "gdcmDeflateStream.h"
 
+#include "gdcmExplicitDataElement.h"
+#include "gdcmImplicitDataElement.h"
+
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
 #include "gdcmUNExplicitDataElement.h"
 #include "gdcmCP246ExplicitDataElement.h"
@@ -189,8 +192,8 @@ bool Reader::Read()
     gdcmErrorMacro( "No File" );
     return false;
     }
+  bool success = true;
 
-//  try
     {
 std::istream &is = Stream;
 
@@ -210,7 +213,7 @@ std::istream &is = Stream;
     abort();
     }
 
-  bool hasmetaheader = true;
+  bool hasmetaheader = false;
   try
     {
     if( haspreamble )
@@ -218,6 +221,8 @@ std::istream &is = Stream;
       try
         {
         F->GetHeader().Read( is );
+        hasmetaheader = true;
+        assert( !F->GetHeader().IsEmpty() );
         }
       catch( std::exception &ex )
         {
@@ -230,12 +235,14 @@ std::istream &is = Stream;
         catch( std::exception &ex )
           {
           // Ok I get it now... there is absolutely no meta header, giving up
-          hasmetaheader = false;
+          //hasmetaheader = false;
           }
         }
       }
     else
+      {
       F->GetHeader().ReadCompat(is);
+      }
     }
   catch( std::exception &ex )
     {
@@ -247,6 +254,11 @@ std::istream &is = Stream;
     {
     // Ooops..
     abort();
+    }
+  if( F->GetHeader().IsEmpty() )
+    {
+    hasmetaheader = false;
+    gdcmWarningMacro( "no file meta info found" );
     }
 
   const TransferSyntax &ts = F->GetHeader().GetDataSetTransferSyntax();
@@ -291,7 +303,20 @@ std::istream &is = Stream;
       {
       if( ts.GetNegociatedType() == TransferSyntax::Implicit )
         {
-        F->GetDataSet().Read<ImplicitDataElement,SwapperNoOp>(is);
+        if( hasmetaheader && haspreamble )
+          {
+          F->GetDataSet().Read<ImplicitDataElement,SwapperNoOp>(is);
+          }
+        else
+          {
+          std::streampos start = is.tellg();
+          is.seekg( 0, std::ios::end);
+          std::streampos end = is.tellg();
+          VL l = (VL)(end - start);
+          is.seekg( start, std::ios::beg );
+          F->GetDataSet().ReadWithLength<ImplicitDataElement,SwapperNoOp>(is, l);
+          is.peek();
+          }
         }
       else
         {
@@ -302,6 +327,7 @@ std::istream &is = Stream;
   // Only catch parse exception at this point
   catch( ParseException &ex )
     {
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     if( ex.GetLastElement().GetVR() == VR::UN && ex.GetLastElement().IsUndefinedLength() )
       {
       // non CP 246
@@ -457,20 +483,29 @@ std::istream &is = Stream;
         // This file can only be rewritten as implicit...
         }
       }
+#else
+    std::cerr << ex.what() << std::endl;
+    success = false;
+#endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
+    }
+  catch( Exception &ex )
+    {
+    std::cerr << ex.what() << std::endl;
+    success = false;
     }
 
-    assert( Stream.eof() );
+    if( success ) assert( Stream.eof() );
     }
-//  catch( std::exception &ex )
+//  if( !success )
 //    {
-//    std::cerr << ex.what() << std::endl;
-//    return false;
+//    F->GetHeader().Clear();
+//    F->GetDataSet().Clear();
 //    }
 
   // FIXME : call this function twice...
   Stream.close();
 
-  return true;
+  return success;
 }
 
 bool Reader::ReadUpToTag(const Tag & tag)
@@ -480,8 +515,8 @@ bool Reader::ReadUpToTag(const Tag & tag)
     gdcmErrorMacro( "No File" );
     return false;
     }
+  bool success = true;
 
-  F = new File;
 //  try
     {
 std::istream &is = Stream;
@@ -583,7 +618,20 @@ std::istream &is = Stream;
       {
       if( ts.GetNegociatedType() == TransferSyntax::Implicit )
         {
-        F->GetDataSet().ReadUpToTag<ImplicitDataElement,SwapperNoOp>(is,tag);
+        if( hasmetaheader && haspreamble )
+          {
+          F->GetDataSet().ReadUpToTag<ImplicitDataElement,SwapperNoOp>(is,tag);
+          }
+        else
+          {
+          std::streampos start = is.tellg();
+          is.seekg( 0, std::ios::end);
+          std::streampos end = is.tellg();
+          VL l = (VL)(end - start);
+          is.seekg( start, std::ios::beg );
+          F->GetDataSet().ReadUpToTagWithLength<ImplicitDataElement,SwapperNoOp>(is, tag, l);
+          is.peek();
+          }
         }
       else
         {
@@ -594,6 +642,7 @@ std::istream &is = Stream;
   // Only catch parse exception at this point
   catch( ParseException &ex )
     {
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     if( ex.GetLastElement().GetVR() == VR::UN && ex.GetLastElement().IsUndefinedLength() )
       {
       // non CP 246
@@ -703,20 +752,24 @@ std::istream &is = Stream;
         // This file can only be rewritten as implicit...
         }
       }
+#else
+    std::cerr << ex.what() << std::endl;
+    success = false;
+#endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
+    }
+  catch( Exception &ex )
+    {
+    std::cerr << ex.what() << std::endl;
+    success = false;
     }
 
     //assert( Stream.eof() );
     }
-//  catch( std::exception &ex )
-//    {
-//    std::cerr << ex.what() << std::endl;
-//    return false;
-//    }
 
   // FIXME : call this function twice...
   Stream.close();
 
-  return true;
+  return success;
 }
 
 } // end namespace gdcm

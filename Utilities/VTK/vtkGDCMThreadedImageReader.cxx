@@ -177,6 +177,7 @@ int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
                                       vtkInformationVector **inputVector,
                                       vtkInformationVector *outputVector)
 {
+  (void)request;(void)inputVector;(void)outputVector;
   // Some information need to have been set outside (user specified)
   //assert( this->GetOutput(0)->GetNumberOfPoints() != 0 );
   // For now only handles series:
@@ -218,6 +219,7 @@ int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
     }
   assert( numvol == 1 || numvol == 3 );
   this->SetNumberOfOutputPorts(numvol);
+  assert( this->DataScalarType != VTK_VOID );
   // For each output:
   for(int i = 0; i < numvol; ++i)
     {
@@ -322,6 +324,7 @@ void *ReadFilesThread(void *voidparams)
     image.GetBuffer(tempimage);
     // overlay
     unsigned int numoverlays = image.GetNumberOfOverlays();
+    //if( numoverlays && !params->reader->GetLoadOverlays() )
     //params->reader->SetNumberOfOverlays( numoverlays );
     if( numoverlays )
       {
@@ -329,7 +332,7 @@ void *ReadFilesThread(void *voidparams)
       unsigned char * overlaypointer = params->overlayscalarpointer;
       unsigned char *tempimage2 = overlaypointer + file*params->overlaylen;
       memset(tempimage2,0,params->overlaylen);
-      assert( ov.GetRows()*ov.GetColumns() <= params->overlaylen );
+      assert( (unsigned long)ov.GetRows()*ov.GetColumns() <= params->overlaylen );
       ov.GetUnpackBuffer(tempimage2);
       }
     if( params->reader->GetShift() != 1 || params->reader->GetScale() != 0 )
@@ -398,10 +401,14 @@ void vtkGDCMThreadedImageReader::ReadFiles(unsigned int nfiles, const char *file
   const unsigned long overlaylen = output->GetNumberOfPoints() / nfiles;
   char * scalarpointer = static_cast<char*>(output->GetScalarPointer());
   // overlay data:
-  vtkImageData *overlayoutput = this->GetOutput(OverlayPortNumber);
-  overlayoutput->SetScalarTypeToUnsignedChar();
-  overlayoutput->AllocateScalars();
-  unsigned char * overlayscalarpointer = static_cast<unsigned char*>(overlayoutput->GetScalarPointer());
+  unsigned char * overlayscalarpointer = 0;
+  if( this->LoadOverlays )
+    {
+    vtkImageData *overlayoutput = this->GetOutput(OverlayPortNumber);
+    overlayoutput->SetScalarTypeToUnsignedChar();
+    overlayoutput->AllocateScalars();
+    overlayscalarpointer = static_cast<unsigned char*>(overlayoutput->GetScalarPointer());
+    }
 
   const unsigned int nprocs = sysconf( _SC_NPROCESSORS_ONLN );
   const unsigned int nthreads = std::min( nprocs, nfiles );
@@ -479,6 +486,7 @@ int vtkGDCMThreadedImageReader::RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector **vtkNotUsed(inputVector),
                                 vtkInformationVector *outputVector)
 {
+  (void)outputVector;
   //std::cerr << "vtkGDCMThreadedImageReader::RequestData Start" << std::endl;
   //this->UpdateProgress(0.2);
 
@@ -511,7 +519,7 @@ void vtkGDCMThreadedImageReader::RequestDataCompat()
   if( this->FileNames )
     {
     // Make sure that each file is single slice
-    assert( dext[5] - dext[4] == this->FileNames->GetNumberOfValues() - 1 );
+    assert( dext[5] - dext[4] == this->FileNames->GetNumberOfValues() - 1 ); (void)dext;
     const unsigned int nfiles = this->FileNames->GetNumberOfValues();
     const char **filenames = new const char* [ nfiles ];
     for(unsigned int i = 0; i < nfiles; ++i)
