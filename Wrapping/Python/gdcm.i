@@ -24,6 +24,7 @@
 #include "gdcmSwapCode.h"
 #include "gdcmObject.h"
 #include "gdcmTag.h"
+#include "gdcmPrivateTag.h"
 #include "gdcmVL.h"
 #include "gdcmVR.h"
 #include "gdcmVM.h"
@@ -76,6 +77,7 @@ using namespace gdcm;
 %include "gdcmPixelFormat.h"
 //%include "gdcmMediaStorage.h"
 %rename(__getitem__) gdcm::Tag::operator[];
+//%rename(__getattr__) gdcm::Tag::operator[];
 %include "gdcmTag.h"
 %extend gdcm::Tag
 {
@@ -87,6 +89,7 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
+%include "gdcmPrivateTag.h"
 %include "gdcmVL.h"
 //%typemap(out) int
 //{
