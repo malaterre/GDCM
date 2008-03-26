@@ -50,8 +50,8 @@ public:
 
   bool IsValid() const {
     // Check Length:
-    size_type length = size();
-    if( length > TMaxLength ) return false;
+    size_type l = size();
+    if( l > TMaxLength ) return false;
     return true;
   }
 
