@@ -315,12 +315,12 @@ namespace gdcm
 { 0, 0 }
 };
 
-const char* UIDs::GetUIDString(TSType ts)
+const char* UIDs::GetUIDString(/*TSType*/ int ts)
 {
   return TransferSyntaxStrings[(int)ts][0];
 }
 
-const char* UIDs::GetUIDName(TSType ts)
+const char* UIDs::GetUIDName(/*TSType*/ int ts)
 {
   return TransferSyntaxStrings[(int)ts][1];
 }

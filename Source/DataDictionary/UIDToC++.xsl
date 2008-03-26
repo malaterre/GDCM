@@ -61,7 +61,37 @@
 <xsl:text>
 </xsl:text>
     </xsl:for-each>
-<xsl:text>} TSType;
+<xsl:text>
+} TSType;
+  typedef enum {
+</xsl:text>
+    <xsl:for-each select="table/uid">
+        <!--xsl:choose>
+          <xsl:when test="../@name = 'UID VALUES'">
+            <xsl:text>uid_</xsl:text>
+          </xsl:when>
+          <xsl:when test="../@name = 'Well-known Frames of Reference'">
+            <xsl:text>frameref_</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>unhandled_</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose-->
+        <xsl:if test="starts-with(@name,'1')">
+          <xsl:text>//</xsl:text>
+        </xsl:if>
+        <xsl:value-of select="translate(@name,'&amp;@[]/(),-: ','')"/>
+        <xsl:if test="@retired = 'true'">
+          <xsl:text>Retired</xsl:text>
+        </xsl:if>
+        <xsl:text> = </xsl:text>
+        <xsl:number value="position()" format="1" />
+        <xsl:text>, // </xsl:text>
+        <xsl:value-of select="@name"/>
+<xsl:text>
+</xsl:text>
+    </xsl:for-each>
+<xsl:text>} TSName;
 #endif //__gdcmUIDs_h
 </xsl:text>
 #ifdef __gdcmUIDs_cxx

@@ -20,10 +20,14 @@ int TestUIDs(int, char *[])
 {
   gdcm::UIDs uids;
   // uid_1_2_840_10008_5_1_4_1_1_2_1 = 117, // Enhanced CT Image Storage
-  static const char* s = gdcm::UIDs::GetUIDString( gdcm::UIDs::uid_1_2_840_10008_5_1_4_1_1_2_1 );
+  const char* s = gdcm::UIDs::GetUIDString( gdcm::UIDs::uid_1_2_840_10008_5_1_4_1_1_2_1 );
   std::cout << s << std::endl;
-  static const char* n = gdcm::UIDs::GetUIDName( gdcm::UIDs::uid_1_2_840_10008_5_1_4_1_1_2_1 );
+  const char* n = gdcm::UIDs::GetUIDName( gdcm::UIDs::uid_1_2_840_10008_5_1_4_1_1_2_1 );
   std::cout << n << std::endl;
+  const char* s1 = gdcm::UIDs::GetUIDString( gdcm::UIDs::EnhancedCTImageStorage );
+  std::cout << s1 << std::endl;
+  const char* n1 = gdcm::UIDs::GetUIDName( gdcm::UIDs::EnhancedCTImageStorage );
+  std::cout << n1 << std::endl;
 
   return 0;
 }
