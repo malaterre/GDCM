@@ -92,7 +92,6 @@ namespace gdcm
 
   template <typename TDE, typename TSwap>
   std::istream &DataSet::ReadWithLength(std::istream &is, VL &length) {
-    //return is.seekg(length, std::ios::cur);
     DataElement de;
     VL l = 0;
     //std::cout << "ReadWithLength Length: " << length << std::endl;

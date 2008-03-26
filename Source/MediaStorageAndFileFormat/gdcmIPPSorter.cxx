@@ -17,6 +17,7 @@
 #include "gdcmElement.h"
 
 #include <map>
+#include <math.h>
 
 namespace gdcm
 {
@@ -25,6 +26,7 @@ IPPSorter::IPPSorter()
 {
   ComputeZSpacing = false;
   ZSpacing = 0;
+  ZTolerance = 1e-6;
 }
 
 
@@ -35,17 +37,13 @@ IPPSorter::~IPPSorter()
 
 bool IPPSorter::Sort(std::vector<std::string> const & filenames)
 {
+  Filenames.clear(); // cleanup !
+  ZSpacing = 0;
   Scanner scanner;
-  //scanner.SetFilenames( Filenames );
-  //const Tag t1(0x0020,0x000d); // Study Instance UID
-  //const Tag t2(0x0020,0x000e); // Series Instance UID
-  //const Tag t3(0x0010,0x0010); // Patient's Name
-  //const Tag t5(0x0028,0x0010); // Rows
-  //const Tag t6(0x0028,0x0011); // Columns
   const Tag ipp(0x0020,0x0032); // Image Position (Patient)
   const Tag iop(0x0020,0x0037); // Image Orientation (Patient)
   // Temporal Position Identifier (0020,0100) 3 Temporal order of a dynamic or functional set of Images.
-  const Tag tpi(0x0020,0x0100);
+  //const Tag tpi(0x0020,0x0100);
   scanner.AddTag( ipp );
   scanner.AddTag( iop );
   bool b = scanner.Scan( filenames );
@@ -83,11 +81,6 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
   normal[1] = cosines[2]*cosines[3] - cosines[0]*cosines[5];
   normal[2] = cosines[0]*cosines[4] - cosines[1]*cosines[3];
 
-  //std::cout << "normal:" << normal[0] << ",";
-  //std::cout << normal[1] << ",";
-  //std::cout << normal[2] << ",";
-  //std::cout << std::endl;
-
   // You only have to do this once for all slices in the volume. Next, for
   // each slice, calculate the distance along the slice normal using the IPP
   // tag ("dist" is initialized to zero before reading the first slice) :
@@ -124,18 +117,38 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
       }
     }
 }
+  assert( !sorted.empty() );
 {
   SortedFilenames::const_iterator it = sorted.begin();
-  Filenames.clear();
-  for( ; it != sorted.end(); ++it)
+  double prev = it->first;
+  Filenames.push_back( it->second );
+  if( sorted.size() > 1 )
     {
-    //std::cout << it->first << " " << it->second << std::endl;
-    Filenames.push_back( it->second );
+    bool spacingisgood = true;
+    ++it;
+    double current = it->first;
+    double zspacing = current - prev;
+    for( ; it != sorted.end(); ++it)
+      {
+      //std::cout << it->first << " " << it->second << std::endl;
+      current = it->first;
+      Filenames.push_back( it->second );
+      if( fabs((current - prev) - zspacing) > ZTolerance )
+        {
+        spacingisgood = false;
+        }
+      // update prev for the next for-loop
+      prev = current;
+      }
+    // is spacing good ?
+    if( spacingisgood )
+      {
+      ZSpacing = zspacing;
+      }
     }
 }
 
   return true;
 }
-
 
 } // end namespace gdcm
