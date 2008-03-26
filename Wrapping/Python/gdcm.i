@@ -49,6 +49,7 @@
 #include "gdcmAnonymizer.h"
 #include "gdcmSystem.h"
 #include "gdcmTrace.h"
+#include "gdcmUIDs.h"
 
 using namespace gdcm;
 %}
@@ -266,3 +267,4 @@ using namespace gdcm;
 %include "gdcmAnonymizer.h"
 %include "gdcmSystem.h"
 %include "gdcmTrace.h"
+%include "gdcmUIDs.h"
