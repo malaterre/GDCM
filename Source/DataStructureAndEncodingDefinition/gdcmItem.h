@@ -95,137 +95,134 @@ public:
     NestedDataSet = val.NestedDataSet;
     }
 
-template <typename TDE, typename TSwap>
-std::istream &Read(std::istream &is)
-{
-  // Superclass
-  if( !TagField.Read<TSwap>(is) )
-    {
-    throw Exception("Should not happen");
-    return is;
-    }
-
+  template <typename TDE, typename TSwap>
+  std::istream &Read(std::istream &is) {
+    // Superclass
+    if( !TagField.Read<TSwap>(is) )
+      {
+      throw Exception("Should not happen");
+      return is;
+      }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-  // MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.dcm
-  if( TagField == Tag(0xfeff, 0x00e0)
-   || TagField == Tag(0xfeff, 0xdde0) )
-    {
-    gdcmWarningMacro( "ByteSwaping Private SQ: " << TagField );
-    // Invert previously read TagField since wrong endianess:
-    TagField = Tag( SwapperDoOp::Swap( TagField.GetGroup() ), SwapperDoOp::Swap( TagField.GetElement() ) );
+    // MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.dcm
+    if( TagField == Tag(0xfeff, 0x00e0)
+      || TagField == Tag(0xfeff, 0xdde0) )
+      {
+      gdcmWarningMacro( "ByteSwaping Private SQ: " << TagField );
+      // Invert previously read TagField since wrong endianess:
+      TagField = Tag( SwapperDoOp::Swap( TagField.GetGroup() ), SwapperDoOp::Swap( TagField.GetElement() ) );
+      assert ( TagField == Tag(0xfffe, 0xe000)
+        || TagField == Tag(0xfffe, 0xe0dd) );
+
+      if( !ValueLengthField.Read<SwapperDoOp>(is) )
+        {
+        assert(0 && "Should not happen");
+        return is;
+        }
+      // Self
+      // Some file written by GDCM 1.0 we writting 0xFFFFFFFF instead of 0x0
+      if( TagField == Tag(0xfffe,0xe0dd) )
+        {
+        if( ValueLengthField )
+          {
+          gdcmErrorMacro( "ValueLengthField is not 0" );
+          }
+        }
+      //else if( ValueLengthField == 0 )
+      //  {
+      //  //assert( TagField == Tag( 0xfffe, 0xe0dd) );
+      //  if( TagField != Tag( 0xfffe, 0xe0dd) )
+      //    {
+      //    gdcmErrorMacro( "SQ: " << TagField << " has a length of 0" );
+      //    }
+      //  }
+      else if( ValueLengthField.IsUndefined() )
+        {
+        DataSet &nested = NestedDataSet;
+        nested.Clear();
+        assert( nested.IsEmpty() );
+        std::streampos start = is.tellg();
+        try
+          {
+          nested.template ReadNested<TDE,SwapperDoOp>(is);
+          ByteSwapFilter bsf(nested);
+          bsf.ByteSwap();
+          }
+        catch(...)
+          {
+          // MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm
+          // You have to byteswap the length but not the tag...sigh
+          gdcmWarningMacro( "Attempt to read nested Item without byteswapping the Value Length." );
+          start -= is.tellg();
+          assert( start < 0 );
+          is.seekg( start, std::ios::cur );
+          nested.Clear();
+          nested.template ReadNested<TDE,SwapperNoOp>(is);
+          ByteSwapFilter bsf(nested);
+          // Tag are read in big endian, need to byteswap them back...
+          bsf.SetByteSwapTag(true);
+          bsf.ByteSwap();
+          }
+        }
+      else /* if( ValueLengthField.IsUndefined() ) */
+        {
+        DataSet &nested = NestedDataSet;
+        nested.Clear();
+        assert( nested.IsEmpty() );
+        nested.template ReadWithLength<TDE,SwapperDoOp>(is, ValueLengthField);
+        ByteSwapFilter bsf(nested);
+        bsf.ByteSwap();
+        }
+      return is;
+      }
+#endif
     assert ( TagField == Tag(0xfffe, 0xe000)
       || TagField == Tag(0xfffe, 0xe0dd) );
 
-    if( !ValueLengthField.Read<SwapperDoOp>(is) )
+    if( !ValueLengthField.Read<TSwap>(is) )
       {
       assert(0 && "Should not happen");
       return is;
       }
     // Self
-    // Some file written by GDCM 1.0 we writting 0xFFFFFFFF instead of 0x0
     if( TagField == Tag(0xfffe,0xe0dd) )
       {
+      // Some file written by GDCM 1.0 were written with 0xFFFFFFFF instead of 0x0
       if( ValueLengthField )
         {
-        gdcmErrorMacro( "ValueLengthField is not 0" );
+        gdcmWarningMacro( "ValueLengthField is not 0 but " << ValueLengthField );
         }
       }
-    //else if( ValueLengthField == 0 )
-    //  {
-    //  //assert( TagField == Tag( 0xfffe, 0xe0dd) );
-    //  if( TagField != Tag( 0xfffe, 0xe0dd) )
-    //    {
-    //    gdcmErrorMacro( "SQ: " << TagField << " has a length of 0" );
-    //    }
-    //  }
     else if( ValueLengthField.IsUndefined() )
       {
       DataSet &nested = NestedDataSet;
       nested.Clear();
       assert( nested.IsEmpty() );
-      std::streampos start = is.tellg();
-      try
-        {
-        nested.template ReadNested<TDE,SwapperDoOp>(is);
-        ByteSwapFilter bsf(nested);
-        bsf.ByteSwap();
-        }
-      catch(...)
-        {
-        // MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm
-        // You have to byteswap the length but not the tag...sigh
-        gdcmWarningMacro( "Attempt to read nested Item without byteswapping the Value Length." );
-        start -= is.tellg();
-        assert( start < 0 );
-        is.seekg( start, std::ios::cur );
-        nested.Clear();
-        nested.template ReadNested<TDE,SwapperNoOp>(is);
-        ByteSwapFilter bsf(nested);
-        // Tag are read in big endian, need to byteswap them back...
-        bsf.SetByteSwapTag(true);
-        bsf.ByteSwap();
-        }
+      nested.template ReadNested<TDE,TSwap>(is);
       }
     else /* if( ValueLengthField.IsUndefined() ) */
       {
+      assert( !ValueLengthField.IsUndefined() );
       DataSet &nested = NestedDataSet;
       nested.Clear();
       assert( nested.IsEmpty() );
-      nested.template ReadWithLength<TDE,SwapperDoOp>(is, ValueLengthField);
-      ByteSwapFilter bsf(nested);
-      bsf.ByteSwap();
+      nested.template ReadWithLength<TDE,TSwap>(is, ValueLengthField);
       }
-    return is;
-    }
-#endif
-  assert ( TagField == Tag(0xfffe, 0xe000)
-    || TagField == Tag(0xfffe, 0xe0dd) );
 
-  if( !ValueLengthField.Read<TSwap>(is) )
-    {
-    assert(0 && "Should not happen");
     return is;
-    }
-  // Self
-  if( TagField == Tag(0xfffe,0xe0dd) )
-    {
-    // Some file written by GDCM 1.0 were written with 0xFFFFFFFF instead of 0x0
-    if( ValueLengthField )
-      {
-      gdcmWarningMacro( "ValueLengthField is not 0 but " << ValueLengthField );
-      }
-    }
-  else if( ValueLengthField.IsUndefined() )
-    {
-    DataSet &nested = NestedDataSet;
-    nested.Clear();
-    assert( nested.IsEmpty() );
-    nested.template ReadNested<TDE,TSwap>(is);
-    }
-  else /* if( ValueLengthField.IsUndefined() ) */
-    {
-    assert( !ValueLengthField.IsUndefined() );
-    DataSet &nested = NestedDataSet;
-    nested.Clear();
-    assert( nested.IsEmpty() );
-    nested.template ReadWithLength<TDE,TSwap>(is, ValueLengthField);
-    }
-
-  return is;
-}
+  }
 
   template <typename TDE, typename TSwap>
-  const std::ostream &Write(std::ostream &os) const
-  {
-  #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+  const std::ostream &Write(std::ostream &os) const {
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     if( TagField == Tag(0x3f3f,0x3f00) )
       {
       Tag t(0xfffe, 0xe000);
       t.Write<TSwap>(os);
-abort();
+      abort();
       }
     else
-  #endif
+#endif
       {
       assert ( TagField == Tag(0xfffe, 0xe000)
         || TagField == Tag(0xfffe, 0xe0dd) );
@@ -255,7 +252,7 @@ abort();
       VL zero = 0;
       zero.Write<TSwap>(os);
       }
-  
+
     return os;
   }
 

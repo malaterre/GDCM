@@ -50,9 +50,8 @@ namespace gdcm
         }
       }
     assert( de.GetTag() == itemDelItem );
-    //std::cerr << "Finish nested" << std::endl;
     return is;
-}
+  }
 
   template <typename TDE, typename TSwap>
   std::istream &DataSet::Read(std::istream &is) {
@@ -60,11 +59,8 @@ namespace gdcm
     while( !is.eof() && de.Read<TDE,TSwap>(is) )
       {
       //std::cerr << "DEBUG:" << de << std::endl;
-      //assert( de.GetTag() != Tag(0,0) );
       DES.insert( de );
-      //if ( de.GetTag() == Tag(0x0020,0x000e) ) break;
       }
-      //std::cerr << "finsih"  << std::endl;
     return is;
   }
 
@@ -195,60 +191,8 @@ namespace gdcm
     typename DataSet::ConstIterator it = DES.begin();
     for( ; it != DES.end(); ++it)
       {
-      //std::cerr << "DEBUG:" << *it << std::endl;
       const DataElement & de = *it;
-      // If this is a group length make sure this is consistant
-      if( false && ( /*de.GetTag().GetGroup() >= 0x0000
-         &&*/ de.GetTag().GetGroup() <  0x0008) )
-        {
-        gdcmWarningMacro( "DataSet contains illegal Tags. "
-          "Those elements will be discarded:" << de.GetTag() );
-        }
-      // After that we are sure the elements are valid
-      else if( false && de.GetTag().GetElement() == 0x0 )
-        {
-		// FIXME
-		// This is not a good design !
-		// A Writer should not have this kind of knowledge.
-		// writting is simply serializing on disk !
-        Element<VR::UL, VM::VM1> el;
-        std::stringstream sst;
-        //sst.SetSwapCode( os.GetSwapCode() );
-        const Value &v = de.GetValue();
-        const Value *pv = &v;
-        const ByteValue *bv = dynamic_cast<const ByteValue*>(pv);
-	      bv->Write<TSwap>(sst);
-        el.Read( sst ); // FIXME endianness is not used !!
-        //std::cerr << "GL=";
-        //el.Print( std::cerr );
-        //std::cerr << std::endl;
-        unsigned int len = ComputeGroupLength<TDE>( de.GetTag() );
-        //std::cerr << len << std::endl;
-        if( len != el.GetValue() )
-          {
-          gdcmWarningMacro( "Wrong group length for " << de.GetTag() << ":"
-            << el.GetValue() << " should be " << len << ". Corrected." );
-          DataElement correct(de);
-          // Set correct value:
-          el.SetValue( len );
-          el.Write( sst );
-          // Pass it to the ByteValue
-          ByteValue *bv2 = new ByteValue;
-          bv2->SetLength(4);
-          bv2->Read<TSwap>(sst);
-          correct.SetValue( *bv2 );
-          correct.Write<TDE,TSwap>(os);
-          }
-        else
-          {
-          // okay good value
-          de.Write<TDE,TSwap>(os);
-          }
-        }
-      else // well simply writes it
-        {
-        de.Write<TDE,TSwap>(os);
-        }
+      de.Write<TDE,TSwap>(os);
       }
     return os;
   }
