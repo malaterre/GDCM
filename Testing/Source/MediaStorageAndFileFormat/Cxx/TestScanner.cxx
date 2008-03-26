@@ -66,17 +66,25 @@ int TestScanner(int argc, char *argv[])
   // Let's get the value for tag t1 in first file:
   gdcm::Scanner::MappingType const &mt = s.GetMappings();
   const char *filename = d.GetFilenames()[0].c_str();
-  std::cout << "Mapping for " << filename << " is :" << std::endl;
+  unsigned int i = 0;
   gdcm::Scanner::MappingType::const_iterator it = mt.find(filename);
-  if( it == mt.end() )
+  while( it == mt.end() )
     {
-    return 1;
+    ++i;
+    if( i == d.GetFilenames().size() )
+      {
+      return 1;
+      }
+    filename = d.GetFilenames()[i].c_str();
+    it = mt.find(filename);
     }
+  std::cout << "Mapping for " << filename << " is :" << std::endl;
   const gdcm::Scanner::TagToValue &tv = it->second;
   //const std::string &filename = d.GetFilenames()[0];
   gdcm::Scanner::TagToValue::const_iterator it2 = tv.find( t1 );
   if( t1 != it2->first ) return 1;
-  std::cout << filename << " -> " << t1 << " = " << it2->second << std::endl;
+  const char * t1value = it2->second;
+  std::cout << filename << " -> " << t1 << " = " << (*t1value ? t1value : "none" ) << std::endl;
 
   const gdcm::Directory::FilenamesType &filenames = d.GetFilenames();
 {

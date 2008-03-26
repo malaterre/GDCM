@@ -559,9 +559,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "9dde002e4e99218891df5f98da56ec9d" , "001002XA" },
 { "6c7a303d25b418988ef9a37c4315a746" , "001001XA.1" },
 { "8891d44376bc53c7bd0d36d2b776cd9b" , "001006XA" },
-
-
-
+{ "a6d10a3de9499d8853c6667b82628e86" , "TOSHIBA-EnhancedCT.dcm" },
 
 
 

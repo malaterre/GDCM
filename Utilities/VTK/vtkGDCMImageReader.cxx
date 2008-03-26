@@ -422,7 +422,7 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
       unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swe.c_str(), swe.size());
       // I found a case with only one W/L but two comments: WINDOW1\WINDOW2
       // SIEMENS-IncompletePixelData.dcm
-      assert( count >= n );
+      assert( count >= (unsigned int)n );
       elwe.SetLength( count * vr.GetSizeof() );
       ss.str( swe );
       elwe.Read( ss );
@@ -441,6 +441,7 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
                                       vtkInformationVector **inputVector,
                                       vtkInformationVector *outputVector)
 {
+  (void)request;(void)inputVector;
   int res = RequestInformationCompat();
   if( !res )
     {
@@ -711,7 +712,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
 {
   int *dext = this->GetDataExtent();
   vtkImageData *data = this->GetOutput(0);
-  bool filelowerleft = this->FileLowerLeft ? true : false;
+  //bool filelowerleft = this->FileLowerLeft ? true : false;
 
   //char * pointer = static_cast<char*>(data->GetScalarPointer());
 
@@ -750,7 +751,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     vtkUnsignedCharArray *chararray = vtkUnsignedCharArray::New();
     chararray->SetNumberOfTuples( overlayoutsize * ( dext[3] - dext[2] + 1 ) );
     overlaylen = overlayoutsize * ( dext[3] - dext[2] + 1 );
-    assert( ov1.GetRows()*ov1.GetColumns() <= overlaylen );
+    assert( (unsigned long)ov1.GetRows()*ov1.GetColumns() <= overlaylen );
     const signed short *origin = ov1.GetOrigin();
     if( (unsigned long)ov1.GetRows()*ov1.GetColumns() != overlaylen )
       {
@@ -834,8 +835,8 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   assert( this->ImageFormat );
 
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
-  if( numoverlays ) assert( overlayoutsize * ( dext[3] - dext[2] + 1 ) == overlaylen );
-  if( this->FileName) assert( outsize * (dext[3] - dext[2]+1) * (dext[5]-dext[4]+1) == len );
+  if( numoverlays ) assert( (unsigned long)overlayoutsize * ( dext[3] - dext[2] + 1 ) == overlaylen );
+  if( this->FileName) assert( (unsigned long)outsize * (dext[3] - dext[2]+1) * (dext[5]-dext[4]+1) == len );
 
   return 1; // success
 }
@@ -847,6 +848,7 @@ int vtkGDCMImageReader::RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector **vtkNotUsed(inputVector),
                                 vtkInformationVector *outputVector)
 {
+  (void)outputVector;
   //this->UpdateProgress(0.2);
 
   // Make sure the output dimension is OK, and allocate its scalars
@@ -887,14 +889,12 @@ int vtkGDCMImageReader::RequestDataCompat()
     assert( this->FileNames && this->FileNames->GetNumberOfValues() >= 1 );
 
     // Load each 2D files
-    char *tempimage = 0;
-    unsigned long reflen = 0;
     int *dext = this->GetDataExtent();
     for(int j = dext[4]; j <= dext[5]; ++j)
       {
       const char *filename = this->FileNames->GetValue( j );
       unsigned long len = 0;
-      int load = this->LoadSingleFile( filename, pointer, len );
+      int load = this->LoadSingleFile( filename, pointer, len ); (void)load;
       assert( len );
       pointer += len;
       }

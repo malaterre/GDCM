@@ -131,15 +131,17 @@ void PrintHelp()
   std::cout << "Parameter:" << std::endl;
   std::cout << "  -i --input     DICOM filename or directory" << std::endl;
   std::cout << "Options:" << std::endl;
-  std::cout << "  -x --xml-dict      generate the XML dict (only private elements for now)." << std::endl;
+  std::cout << "  -x --xml-dict  generate the XML dict (only private elements for now)." << std::endl;
   std::cout << "  -r --recursive recursive." << std::endl;
-  std::cout << "  -p --print     print value instead of simply dumping." << std::endl;
-  std::cout << "  -v --verbose   more verbose (warning+error)." << std::endl;
-  std::cout << "  -w --warning   print warning info." << std::endl;
-  std::cout << "  -d --debug     print debug info." << std::endl;
-  std::cout << "  -e --error     print error info." << std::endl;
+  std::cout << "  -d --dump      dump value (limited use)." << std::endl;
+  std::cout << "  -p --print     print value instead of simply dumping (default)." << std::endl;
+  std::cout << "  -c --csa       print SIEMENS CSA Header typically (0029,xx10)." << std::endl;
+  std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
+  std::cout << "  -W --warning   print warning info." << std::endl;
+  std::cout << "  -D --debug     print debug info." << std::endl;
+  std::cout << "  -E --error     print error info." << std::endl;
   std::cout << "  -h --help      print help." << std::endl;
-  std::cout << "  -V --version   print version." << std::endl;
+  std::cout << "  -v --version   print version." << std::endl;
 }
 
 int main (int argc, char *argv[])
@@ -149,6 +151,7 @@ int main (int argc, char *argv[])
 
   std::string filename;
   int printdict = 0;
+  int dump = 0;
   int print = 0;
   int printcsa = 0;
   int verbose = 0;
@@ -171,10 +174,11 @@ int main (int argc, char *argv[])
 */
     static struct option long_options[] = {
         {"input", 1, 0, 0},
-        {"print-csa", 0, &printcsa, 1},
         {"xml-dict", 0, &printdict, 1},
         {"recursive", 0, &recursive, 1},
         {"print", 0, &print, 1},
+        {"dump", 0, &dump, 1},
+        {"csa", 0, &printcsa, 1},
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
         {"debug", 0, &debug, 1},
@@ -183,7 +187,7 @@ int main (int argc, char *argv[])
         {"version", 0, &version, 1},
         {0, 0, 0, 0} // required
     };
-    static const char short_options[] = "i:xrpvwdehV";
+    static const char short_options[] = "i:xrpdcVWDEhv";
     c = getopt_long (argc, argv, short_options,
       long_options, &option_index);
     if (c == -1)
@@ -232,30 +236,36 @@ int main (int argc, char *argv[])
       print = 1;
       break;
 
-    case 'e':
-      error = 1;
-      break;
-
-    case 'w':
-      warning = 1;
-      break;
-
     case 'd':
-      debug = 1;
+      dump = 1;
       break;
 
-    case 'v':
-      //printf ("option d with value '%s'\n", optarg);
-      verbose = 1;
+    case 'c':
+      printcsa = 1;
       break;
 
     case 'V':
-      //printf ("option d with value '%s'\n", optarg);
-      version = 1;
+      verbose = 1;
+      break;
+
+    case 'W':
+      warning = 1;
+      break;
+
+    case 'D':
+      debug = 1;
+      break;
+
+    case 'E':
+      error = 1;
       break;
 
     case 'h':
       help = 1;
+      break;
+
+    case 'v':
+      version = 1;
       break;
 
     case '?':
@@ -339,14 +349,13 @@ int main (int argc, char *argv[])
         {
         res += PrintCSA(*it);
         }
-      else if( print )
+      else if( dump )
         {
-        res += DoOperation<gdcm::Printer>(*it);
+        res += DoOperation<gdcm::Dumper>(*it);
         }
       else
         {
-        assert( print == false && printdict == false );
-        res += DoOperation<gdcm::Dumper>(*it);
+        res += DoOperation<gdcm::Printer>(*it);
         }
       if( verbose ) std::cerr << *it << std::endl;
       }
@@ -363,13 +372,13 @@ int main (int argc, char *argv[])
       {
       res += PrintCSA(filename);
       }
-    else if( print )
+    else if( dump )
       {
-      res += DoOperation<gdcm::Printer>(filename);
+      res += DoOperation<gdcm::Dumper>(filename);
       }
     else
       {
-      res += DoOperation<gdcm::Dumper>(filename);
+      res += DoOperation<gdcm::Printer>(filename);
       }
     // ...
     if ( verbose )
