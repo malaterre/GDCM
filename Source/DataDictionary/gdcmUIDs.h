@@ -612,6 +612,11 @@ dicomTransferCapability = 268, // dicomTransferCapability
 static const char* GetUIDString(/*TSType*/ int ts);
 static const char* GetUIDName(/*TSType*/ int ts);
 
+  typedef const char* const (*TransferSyntaxStringsType)[2];
+  static TransferSyntaxStringsType GetTransferSyntaxStrings();
+  
+  bool SetFromUID(const char *str);
+  const char *GetName() const;
 private:
   TSType TSField;
 };

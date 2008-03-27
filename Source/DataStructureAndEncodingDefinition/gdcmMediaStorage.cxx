@@ -101,6 +101,11 @@ const char* MediaStorage::GetMSString(MSType ms)
   return MSStrings[(int)ms];
 }
 
+const char* MediaStorage::GetString() const
+{
+  return GetMSString(MSField);
+}
+
 // FIXME
 // Currently the implementation is bogus it only define the TS which
 // are associated with an image so indeed the implementation of IsImage 

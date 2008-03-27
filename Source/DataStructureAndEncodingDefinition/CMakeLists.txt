@@ -11,6 +11,7 @@ SET(DSED_SRCS
   gdcmFragment.cxx
   gdcmImplicitDataElement.cxx
   gdcmItem.cxx
+  gdcmReader.cxx
   #gdcmParser.cxx
   gdcmCSAHeader.cxx
   gdcmSequenceOfFragments.cxx

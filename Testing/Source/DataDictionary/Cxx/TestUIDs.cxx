@@ -18,7 +18,7 @@
 
 int TestUIDs(int, char *[])
 {
-  gdcm::UIDs uids;
+  // {"1.2.840.10008.5.1.4.1.1.2.1","Enhanced CT Image Storage"},
   // uid_1_2_840_10008_5_1_4_1_1_2_1 = 117, // Enhanced CT Image Storage
   const char* s = gdcm::UIDs::GetUIDString( gdcm::UIDs::uid_1_2_840_10008_5_1_4_1_1_2_1 );
   std::cout << s << std::endl;
@@ -28,6 +28,10 @@ int TestUIDs(int, char *[])
   std::cout << s1 << std::endl;
   const char* n1 = gdcm::UIDs::GetUIDName( gdcm::UIDs::EnhancedCTImageStorage );
   std::cout << n1 << std::endl;
+
+  gdcm::UIDs uid;
+  uid.SetFromUID( "1.2.840.10008.5.1.4.1.1.2.1" );
+  std::cout << "This is : " << uid.GetName() << std::endl;
 
   return 0;
 }

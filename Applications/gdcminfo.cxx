@@ -12,7 +12,31 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+#include "gdcmReader.h"
+#include "gdcmMediaStorage.h"
+#include "gdcmFile.h"
+#include "gdcmDataSet.h"
+#include "gdcmUIDs.h"
+
+#include <iostream>
+
 int main(int argc, char *argv[])
 {
+  gdcm::Reader reader;
+  const char *filename = argv[1];
+  reader.SetFileName( filename );
+  if( !reader.Read() )
+    {
+    return 1;
+    }
+  const gdcm::File &file = reader.GetFile();
+  const gdcm::DataSet &ds = file.GetDataSet();
+  gdcm::MediaStorage ms;
+  ms.SetFromFile(file);
+
+  gdcm::UIDs uid;
+  uid.SetFromUID( ms.GetString() );
+  std::cout << "MediaStorage is " << ms << " [" << uid.GetName() << "]" << std::endl;
+
   return 0;
 }

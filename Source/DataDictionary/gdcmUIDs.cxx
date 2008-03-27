@@ -325,6 +325,39 @@ const char* UIDs::GetUIDName(/*TSType*/ int ts)
   return TransferSyntaxStrings[(int)ts][1];
 }
 
+UIDs::TransferSyntaxStringsType UIDs::GetTransferSyntaxStrings()
+{
+  return TransferSyntaxStrings;
+}
+
+bool UIDs::SetFromUID(const char *str)
+{
+  //static const unsigned int size = sizeof(TransferSyntaxStrings) / sizeof(*TransferSyntaxStrings) - 1;
+  TransferSyntaxStringsType uids = GetTransferSyntaxStrings();
+
+  int i = 0;
+  const char *p = uids[i][0];
+  TSField = (TSType)0;
+  while( p != 0 )
+    {
+    if( strcmp( str, p ) == 0 )
+      {
+      break;
+      }
+    ++i;
+    p = uids[i][0];
+    }
+  //const char * found = uids[i][1];
+  if( p ) TSField = TSType(i);
+
+  return true;
+}
+
+const char *UIDs::GetName() const
+{
+  return GetUIDName(TSField);
+}
+
 } // end namespace gdcm
 
 //#endif //__gdcmUIDs_cxx
