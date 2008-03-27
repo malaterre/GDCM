@@ -175,9 +175,14 @@ public:
         }
       return is;
       }
+    // Bug_Philips_ItemTag_3F3F.dcm
+    if( TagField == Tag(0x3f3f, 0x3f00) )
+      {
+      //TagField = Tag(0xfffe, 0xe000);
+      }
 #endif
-    assert ( TagField == Tag(0xfffe, 0xe000)
-      || TagField == Tag(0xfffe, 0xe0dd) );
+    //assert ( TagField == Tag(0xfffe, 0xe000)
+    //  || TagField == Tag(0xfffe, 0xe0dd) );
 
     if( !ValueLengthField.Read<TSwap>(is) )
       {
@@ -215,11 +220,10 @@ public:
   template <typename TDE, typename TSwap>
   const std::ostream &Write(std::ostream &os) const {
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-    if( TagField == Tag(0x3f3f,0x3f00) )
+    if( TagField == Tag(0x3f3f,0x3f00) && false )
       {
       Tag t(0xfffe, 0xe000);
       t.Write<TSwap>(os);
-      abort();
       }
     else
 #endif

@@ -421,54 +421,43 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
   // Second thing do palette color.
   // This way PALETTE COLOR will be applied before we do
   // Planar Configuration
-  if (PI == PhotometricInterpretation::MONOCHROME2
-   || PI == PhotometricInterpretation::RGB )
+  switch(PI)
     {
-    }
-  else if (PI == PhotometricInterpretation::MONOCHROME1)
-    {
+  case PhotometricInterpretation::MONOCHROME2:
+  case PhotometricInterpretation::RGB:
+    break;
+  case PhotometricInterpretation::MONOCHROME1:
     // CR-MONO1-10-chest.dcm
     //DoInvertMonochrome(*cur_is, pi_os);
     //cur_is = &pi_os;
-    }
-  else if ( PI == PhotometricInterpretation::YBR_FULL )
-    {
+    break;
+  case PhotometricInterpretation::YBR_FULL:
     //DoYBR(*cur_is,pi_os);
     //cur_is = &pi_os;
-    }
-  else if ( PI == PhotometricInterpretation::PALETTE_COLOR )
-    {
+    break;
+  case PhotometricInterpretation::PALETTE_COLOR:
     assert( LUT );
     // Nothing needs to be done
-    }
-  else if ( PI == PhotometricInterpretation::YBR_FULL_422 )
-    {
-    // US-GE-4AICL142.dcm
-    // Hopefully it has been done by the JPEG decoder it self...
-    const JPEGCodec *c = dynamic_cast<const JPEGCodec*>(this);
-    if( !c )
+    break;
+  case PhotometricInterpretation::YBR_FULL_422:
       {
-      gdcmErrorMacro( "YBR_FULL_422 is not implemented in GDCM. Image will be displayed incorrectly" );
+      // US-GE-4AICL142.dcm
+      // Hopefully it has been done by the JPEG decoder itself...
+      const JPEGCodec *c = dynamic_cast<const JPEGCodec*>(this);
+      if( !c )
+        {
+        gdcmErrorMacro( "YBR_FULL_422 is not implemented in GDCM. Image will be displayed incorrectly" );
+        }
       }
-    }
-  else
-    {
+    break;
+  default:
     abort();
     }
 
   if( PlanarConfiguration || RequestPlanarConfiguration )
     {
-    //if ( PI == PhotometricInterpretation::YBR_FULL )
-    //  {
-    //  // ACUSON-24-YBR_FULL-RLE.dcm declare PlanarConfiguration=1
-    //  // but it's only pure YBR...
-    //  gdcmWarningMacro( "Not sure what to do" );
-    //  }
-    //else
-      {
-      DoPlanarConfiguration(*cur_is,pl_os);
-      cur_is = &pl_os;
-      }
+    DoPlanarConfiguration(*cur_is,pl_os);
+    cur_is = &pl_os;
     }
 
   // Do the overlay cleanup (cleanup the unused bits)
@@ -491,6 +480,7 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
     }
   else
     {
+    assert( PF.GetBitsAllocated() == PF.GetBitsStored() );
     DoSimpleCopy(*cur_is,os);
     }
 

@@ -560,6 +560,9 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "6c7a303d25b418988ef9a37c4315a746" , "001001XA.1" },
 { "8891d44376bc53c7bd0d36d2b776cd9b" , "001006XA" },
 { "a6d10a3de9499d8853c6667b82628e86" , "TOSHIBA-EnhancedCT.dcm" },
+{ "71b3b19571f5b9e7ec931071bf5157dd" , "CroppedArm.dcm" },
+{ "bab06b7112dbce4f528bab5c1b89abc1" , "Bug_Philips_ItemTag_3F3F.dcm" },
+
 
 
 

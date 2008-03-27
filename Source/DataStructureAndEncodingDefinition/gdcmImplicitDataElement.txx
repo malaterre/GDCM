@@ -112,7 +112,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
           }
         return is;
         }
-      else if ( item == itemPMSStart2 )
+      else if ( item == itemPMSStart2 && false )
         {
         gdcmWarningMacro( "Illegal: SQ start with " << itemPMSStart2
           << " instead of " << itemStart << " for tag: " << TagField );

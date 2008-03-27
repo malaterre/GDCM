@@ -72,7 +72,7 @@ namespace gdcm
       //assert( de.GetTag() != Tag(0,0) );
       DES.insert( de );
       // tag was found, we can exit the loop:
-      if ( de.GetTag() == t ) break;
+      if ( t <= de.GetTag() ) break;
       }
     return is;
   }
@@ -85,7 +85,7 @@ namespace gdcm
       //assert( de.GetTag() != Tag(0,0) );
       DES.insert( de );
       // tag was found, we can exit the loop:
-      if ( de.GetTag() == t ) break;
+      if ( t <= de.GetTag() ) break;
       }
     return is;
   }

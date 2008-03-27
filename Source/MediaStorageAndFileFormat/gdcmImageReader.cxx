@@ -56,14 +56,7 @@ const ByteValue* ImageReader::GetPointerFromElement(Tag const &tag) const
 
 bool ImageReader::Read()
 {
-  try
-    {
-    if( !Reader::Read() )
-      {
-      return false;
-      }
-    }
-  catch(...)
+  if( !Reader::Read() )
     {
     return false;
     }

@@ -39,15 +39,7 @@ int DoOperation(const std::string & filename)
 {
   gdcm::Reader reader;
   reader.SetFileName( filename.c_str() );
-  try
-    {
-    if( !reader.Read() )
-      {
-      std::cerr << "Failed to read: " << filename << std::endl;
-      return 1;
-      }
-    }
-  catch( ... )
+  if( !reader.Read() )
     {
     std::cerr << "Failed to read: " << filename << std::endl;
     return 1;
@@ -64,15 +56,7 @@ int PrintCSA(const std::string & filename)
 {
   gdcm::Reader reader;
   reader.SetFileName( filename.c_str() );
-  try
-    {
-    if( !reader.Read() )
-      {
-      std::cerr << "Failed to read: " << filename << std::endl;
-      return 1;
-      }
-    }
-  catch( ... )
+  if( !reader.Read() )
     {
     std::cerr << "Failed to read: " << filename << std::endl;
     return 1;

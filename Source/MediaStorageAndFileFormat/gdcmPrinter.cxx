@@ -762,13 +762,26 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
         os << "TODO";
         break;
       case VR::SQ:
-        if( vl_read.IsUndefined() )
+        if( !de.GetSequenceOfItems() && de.GetValue().GetLength() )
           {
-          os << "(Sequence with undefined length)";
+          // This case is insane, this is an implicit file, with a defined length SQ.
+          // Since this is a private element there is no way to guess that, and to 
+          // make it even worse the binary blob does not start with item start...
+          // Bug_Philips_ItemTag_3F3F.dcm 
+          os << GDCM_TERMINAL_VT100_BACKGROUND_RED;
+          bv->PrintHex(os, MaxPrintLength / 4);
+          os << GDCM_TERMINAL_VT100_NORMAL;
           }
         else
           {
-          os << "(Sequence with defined length)";
+          if( vl_read.IsUndefined() )
+            {
+            os << "(Sequence with undefined length)";
+            }
+          else
+            {
+            os << "(Sequence with defined length)";
+            }
           }
         break;
       // Let's be a little more helpful and try to print anyway when possible:
@@ -956,6 +969,10 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
 
     if( refvr == VR::SQ || sqi )
       {
+      if( !sqi && de.GetValue().GetLength() )
+        {
+        //abort();
+        }
       if( sqi ) // empty SQ ?
         {
         assert( sqi );

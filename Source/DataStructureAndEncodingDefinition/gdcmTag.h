@@ -129,6 +129,11 @@ public:
      return ( ElementTag.tag < _val.ElementTag.tag );
 #endif
    }      
+  bool operator<=(const Tag &t2) const
+    {
+    const Tag &t1 = *this;
+    return t1 == t2 || t1 < t2;
+    }
 
   Tag(const Tag &_val)
     {

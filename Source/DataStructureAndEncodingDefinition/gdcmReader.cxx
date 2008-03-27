@@ -493,6 +493,11 @@ std::istream &is = Stream;
     std::cerr << ex.what() << std::endl;
     success = false;
     }
+  catch( ... )
+    {
+    std::cerr << "Unknown exception" << std::endl;
+    success = false;
+    }
 
     if( success ) assert( Stream.eof() );
     }
