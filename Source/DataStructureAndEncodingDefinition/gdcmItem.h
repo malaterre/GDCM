@@ -46,7 +46,7 @@ class DataSet;
 class GDCM_EXPORT Item : public DataElement
 {
 public:
-  Item(const Tag& t = Tag(0), uint32_t const &vl = 0) 
+  Item(const Tag& t = Tag(0), VL const &vl = 0) 
 	  : DataElement(t, vl), NestedDataSet() {
   }
   friend std::ostream& operator<< (std::ostream &os, const Item &val);

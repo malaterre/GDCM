@@ -29,15 +29,8 @@ namespace gdcm
 class GDCM_EXPORT BasicOffsetTable : public DataElement
 {
 public:
-  BasicOffsetTable(const Tag &t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl) /*, Offsets(0)*/ {}
+  BasicOffsetTable(const Tag &t = Tag(0), VL const &vl = 0) : DataElement(t, vl) {}
   friend std::ostream &operator<<(std::ostream &os, const BasicOffsetTable &val);
-
-  void Clear() {
-    }
-
-// Value const &GetValue() const {
-//    return *Offsets;
-//  }
 
   VL GetLength() const {
     assert( !ValueLengthField.IsUndefined() );
@@ -46,15 +39,6 @@ public:
       + ValueLengthField;
   }
 
-//  BasicOffsetTable(BasicOffsetTable const &val):DataElement(val)
-//    {
-//    abort();
-//    }
-//  BasicOffsetTable &operator=(BasicOffsetTable const &val)
-//    {
-//    abort(); (void)val;
-//    return *this;
-//    }
   template <typename TSwap>
   std::istream &Read(std::istream &is) {
     // Superclass 
@@ -116,8 +100,6 @@ public:
     }
 
 private:
-  //typedef SmartPointer<ByteValue> ByteValuePtr;
-  //ByteValuePtr Offsets;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream &operator<<(std::ostream &os, const BasicOffsetTable &val)

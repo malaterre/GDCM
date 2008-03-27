@@ -2534,10 +2534,12 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x2005,0x008b,"Philips Imaging DD 001",VR::SH,VM::VM1,"Transmitting Coil",false },
   {0x2005,0x009f,"Philips Imaging DD 001",VR::CS,VM::VM1,"Spectral Selective Excitation Pulse",false },
   {0x2005,0x00a1,"Philips Imaging DD 001",VR::CS,VM::VM1,"Syncra Scan Type",false },
-  {0x2005,0x00b0,"Philips Imaging DD 001",VR::FL,VM::VM1,"Diffusion Direction RL",false },
-  {0x2005,0x00b1,"Philips Imaging DD 001",VR::FL,VM::VM1,"Diffusion Direction AP",false },
-  {0x2005,0x00b2,"Philips Imaging DD 001",VR::FL,VM::VM1,"Diffusion Direction FH",false },
   {0x2005,0x0005,"Philips MR Imaging DD 001",VR::CS,VM::VM1,"Synergy Reconstruction Type",false },
+  {0x2005,0x0020,"Philips MR Imaging DD 001",VR::SL,VM::VM1,"Number of Chemical Shift",false },
+  {0x2005,0x00a1,"Philips MR Imaging DD 001",VR::CS,VM::VM1,"Syncra Scan Type",false },
+  {0x2005,0x00b0,"Philips MR Imaging DD 001",VR::FL,VM::VM1,"Diffusion Direction RL",false },
+  {0x2005,0x00b1,"Philips MR Imaging DD 001",VR::FL,VM::VM1,"Diffusion Direction AP",false },
+  {0x2005,0x00b2,"Philips MR Imaging DD 001",VR::FL,VM::VM1,"Diffusion Direction FH",false },
   {0x0511,0x0000,"Philips PET Private Group",VR::US,VM::VM1,"?",false },
   {0x0511,0x0001,"Philips PET Private Group",VR::US,VM::VM1,"?",false },
   {0x0511,0x0002,"Philips PET Private Group",VR::OB,VM::VM1,"?",false },
@@ -4457,7 +4459,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0025,0x000c,"SIEMENS SMS-AX  ORIGINAL IMAGE INFO 1.0",VR::LO,VM::VM1,"Identifier LOID",false },
   {0x0025,0x000d,"SIEMENS SMS-AX  ORIGINAL IMAGE INFO 1.0",VR::SS,VM::VM1_n,"Original Scene VFR Info",false },
   {0x0025,0x000e,"SIEMENS SMS-AX  ORIGINAL IMAGE INFO 1.0",VR::SS,VM::VM1,"Original Frame ECG Position",false },
-  {0x0025,0x000f,"SIEMENS SMS-AX  ORIGINAL IMAGE INFO 1.0",VR::SS,VM::VM1,"Original ECG 1st Frame Offset(retired)",false },
+  {0x0025,0x000f,"SIEMENS SMS-AX  ORIGINAL IMAGE INFO 1.0",VR::SS,VM::VM1,"Original ECG 1st Frame Offset (retired)",false },
   {0x0025,0x0010,"SIEMENS SMS-AX  ORIGINAL IMAGE INFO 1.0",VR::SS,VM::VM1,"Zoom Flag",false },
   {0x0025,0x0011,"SIEMENS SMS-AX  ORIGINAL IMAGE INFO 1.0",VR::US,VM::VM1,"Flex",false },
   {0x0025,0x0012,"SIEMENS SMS-AX  ORIGINAL IMAGE INFO 1.0",VR::US,VM::VM1,"Number of Mask Frames",false },
@@ -5102,7 +5104,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
 //  {0x1135,0x0000,"Voxar 2.16.124.113543.6003.1999.12.20.12.5.0",VR::UL,VM::VM1,"Group Length 1135",true },
 
   {0xffff,0xffff,"",VR::INVALID,VM::VM0,"",true }, // Dummy invalid element
-  {0xffff,0xffff,"",VR::INVALID,VM::VM0,0,true } // Gard
+  {0xffff,0xffff,"",VR::INVALID,VM::VM0,0,true } // Gard (will NOT be added)
 };
 
 /*
@@ -5133,6 +5135,7 @@ void PrivateDict::LoadDefault()
 //   if( n.group % 2 != 0 )
      {
      assert( n.owner != 0 );
+     assert( n.name );
      assert( n.group % 2 != 0 || n.group == 0xffff );
      assert( n.element <= 0xff || n.element == 0xffff );
      PrivateTag t(n.group, n.element,n.owner);

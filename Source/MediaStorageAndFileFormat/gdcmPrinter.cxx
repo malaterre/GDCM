@@ -945,6 +945,7 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
   for( ; it != ds.End(); ++it )
     {
     const DataElement &de = *it;
+
     //const ByteValue *bv = de.GetByteValue();
     const SequenceOfItems *sqi = de.GetSequenceOfItems();
     const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
