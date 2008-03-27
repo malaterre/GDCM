@@ -120,6 +120,10 @@ public:
               SequenceLengthField = newlength;
               }
             }
+          else
+            {
+            throw ex;
+            }
           }
         if( item.GetTag() == seqDelItem )
           {
