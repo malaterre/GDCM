@@ -31,8 +31,8 @@ namespace gdcm
 class GDCM_EXPORT Directory
 {
 public :
-  Directory() {};
-  ~Directory() {};
+  Directory() {}
+  ~Directory() {}
   typedef std::string FilenameType;
   typedef std::vector<FilenameType> FilenamesType;
 

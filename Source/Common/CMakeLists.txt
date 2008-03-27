@@ -42,6 +42,7 @@ SET(Common_SRCS
   gdcmObject.cxx
   gdcmTesting.cxx
   gdcmDirectory.cxx
+  gdcmTerminal.cxx
   gdcmString.cxx
   gdcmFilename.cxx
   gdcmFilenameGenerator.cxx
