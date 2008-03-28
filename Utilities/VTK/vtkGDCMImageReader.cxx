@@ -663,6 +663,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
 template <class T>
 inline unsigned long vtkImageDataGetTypeSize(T*, int a = 0,int b = 0)
 {
+  (void)a;(void)b;
   return sizeof(T);
 }
 
