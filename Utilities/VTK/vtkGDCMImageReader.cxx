@@ -79,6 +79,8 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   this->ApplyLookupTable = 0;
   this->ApplyYBRToRGB = 0;
   this->ApplyPlanarConfiguration = 1;
+  memset(this->ImagePositionPatient,0,3*sizeof(double));
+  memset(this->ImageOrientationPatient,0,6*sizeof(double));
 }
 
 vtkGDCMImageReader::~vtkGDCMImageReader()
@@ -578,14 +580,22 @@ int vtkGDCMImageReader::RequestInformationCompat()
     assert( spacing );
     this->DataSpacing[0] = spacing[0];
     this->DataSpacing[1] = spacing[1];
-    //this->DataSpacing[2] = 1.;
+    if( image.GetNumberOfDimensions() == 3 )
+      {
+      this->DataSpacing[2] = image.GetSpacing(2);
+      }
+    // Invert spacing
+    if( !this->FileLowerLeft )
+      {
+      this->DataSpacing[1] = -spacing[1];
+      }
 
     const double *origin = image.GetOrigin();
     if( origin )
       {
-      this->DataOrigin[0] = origin[0];
-      this->DataOrigin[1] = origin[1];
-      this->DataOrigin[2] = origin[2];
+      this->ImagePositionPatient[0] = image.GetOrigin(0);
+      this->ImagePositionPatient[1] = image.GetOrigin(1);
+      this->ImagePositionPatient[2] = image.GetOrigin(2);
       }
 
     const double *dircos = image.GetDirectionCosines();
@@ -597,6 +607,44 @@ int vtkGDCMImageReader::RequestInformationCompat()
       this->DirectionCosines->SetElement(0,1, dircos[3]);
       this->DirectionCosines->SetElement(1,1, dircos[4]);
       this->DirectionCosines->SetElement(2,1, dircos[5]);
+      for(int i=0;i<6;++i)
+        this->ImageOrientationPatient[i] = dircos[i];
+      }
+    // Apply transform:
+    if( dircos && origin )
+      {
+      double dcos[9];
+      for(int i=0;i<6;++i)
+        dcos[i] = dircos[i];
+      dcos[6] = dircos[1] * dircos[5] - dircos[2] * dircos[4];
+      dcos[7] = dircos[2] * dircos[3] - dircos[0] * dircos[5];
+      dcos[8] = dircos[0] * dircos[4] - dircos[3] * dircos[1];
+      double rotatedorigin[3];
+#if 0
+      rotatedorigin[0] = dircos[0] * origin[0] + dircos[1] * origin[1] + dircos[2] * origin[2];
+      rotatedorigin[1] = dircos[3] * origin[0] + dircos[4] * origin[1] + dircos[5] * origin[2];
+      rotatedorigin[2] = dircos2[0] * origin[0] + dircos2[1] * origin[1] + dircos2[2] * origin[2];
+      rotatedorigin[0] = dcos[0] * origin[0] + dcos[1] * origin[1] + dcos[2] * origin[2];
+      rotatedorigin[1] = dcos[3] * origin[0] + dcos[4] * origin[1] + dcos[5] * origin[2];
+      rotatedorigin[2] = dcos[6] * origin[0] + dcos[7] * origin[1] + dcos[8] * origin[2];
+#else
+      rotatedorigin[0] = dcos[0] * origin[0] + dcos[3] * origin[1] + dcos[6] * origin[2];
+      rotatedorigin[1] = dcos[1] * origin[0] + dcos[4] * origin[1] + dcos[7] * origin[2];
+      rotatedorigin[2] = dcos[2] * origin[0] + dcos[5] * origin[1] + dcos[8] * origin[2];
+#endif
+
+      if( this->FileLowerLeft )
+        {
+        this->DataOrigin[0] = rotatedorigin[0];
+        this->DataOrigin[1] = rotatedorigin[1];
+        this->DataOrigin[2] = rotatedorigin[2];
+        }
+      else
+        {
+        this->DataOrigin[0] = rotatedorigin[0];
+        this->DataOrigin[1] = rotatedorigin[1] - this->DataSpacing[1]*dims[1];
+        this->DataOrigin[2] = rotatedorigin[2];
+        }
       }
     // Need to set the rest to 0 ???
     }

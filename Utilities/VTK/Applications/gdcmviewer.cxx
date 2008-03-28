@@ -36,6 +36,7 @@
 #include "vtkRenderer.h"
 #include "vtkStringArray.h"
 #include "vtkDebugLeaks.h"
+#include "vtkWorldPointPicker.h"
 
 #include "gdcmFilename.h"
 
@@ -133,6 +134,11 @@ public:
   vtkGDCMObserver()
     {
     ImageViewer = NULL;
+    picker = vtkWorldPointPicker::New();
+    }
+  ~vtkGDCMObserver()
+    {
+    picker->Delete();
     }
   virtual void Execute(vtkObject *caller, unsigned long event, void* /*calldata*/)
     {
@@ -177,9 +183,23 @@ public:
           ImageViewer->Render();
           }
         }
+      else if ( event == vtkCommand::EndPickEvent )
+        {
+        //std::cerr << "EndPickEvent" << std::endl;
+        int *pick = rwi->GetEventPosition();
+        vtkRenderer *ren1 = ImageViewer->GetRenderer();
+        picker->Pick((double)pick[0], (double)pick[1], 0.0, ren1);
+        double *pos = picker->GetPickPosition ();
+        std::cout << pos[0] << "," << pos[1] << "," << pos[2] << std::endl;
+        }
+      else
+        {
+        std::cerr << "Unhandled even:" << event << std::endl;
+        }
       }
     }
   TViewer *ImageViewer;
+  vtkWorldPointPicker *picker;
 };
 
 // A feature in VS6 make it painfull to write template code
@@ -204,6 +224,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   // 0028|1051 [DS] [Window Width]
   // but gdcmviewer doesn't know about them :-(
 
+  //reader->FileLowerLeftOn();
   reader->Update();
   //reader->Print( cout );
   //reader->GetOutput()->Print( cout );
@@ -301,6 +322,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   vtkGDCMObserver<TViewer> *obs = vtkGDCMObserver<TViewer>::New();
   obs->ImageViewer = viewer;
   iren->AddObserver(vtkCommand::CharEvent,obs);
+  iren->AddObserver(vtkCommand::EndPickEvent,obs);
   obs->Delete();
 
   iren->Initialize();

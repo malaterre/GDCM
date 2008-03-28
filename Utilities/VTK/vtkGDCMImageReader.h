@@ -27,6 +27,9 @@
 // Overlay are assumed to have the same extent as image. Right now if overlay origin is not
 // 0,0 the overlay will have an offset...
 // Only the very first overlay is loaded for now (even if there are more than one in the file)
+// .SECTION DataOrigin
+// In the case of a direction cosine (1,0,0,0,1,0) the DataOrigin is properly set. Otherwise user
+// need to use the GetPatientPosition to compute the proper pixel x,y,z position.
 
 // .SECTION See Also
 // vtkMedicalImageReader2 vtkMedicalImageProperties
@@ -157,6 +160,16 @@ public:
   // Return VTK_LUMINANCE, VTK_RGB, VTK_LOOKUP_TABLE or VTK_YBR
   vtkGetMacro(ImageFormat,int);
 
+  // Description:
+  // Return the 'raw' information stored in the DICOM file:
+  // In case of a series of multiple files, only the first file is considered. The Image Orientation (Patient)
+  // is garantee to remain the same, and image Image Position (Patient) in other slice can be computed
+  // using the ZSpacing (3rd dimension)
+  // (0020,0032) DS [87.774866\-182.908510\168.629671]       #  32, 3 ImagePositionPatient
+  // (0020,0037) DS [0.001479\0.999989\-0.004376\-0.002039\-0.004372\-0.999988] #  58, 6 ImageOrientationPatient
+  vtkGetVector3Macro(ImagePositionPatient,double);
+  vtkGetVector6Macro(ImageOrientationPatient,double);
+
 protected:
   vtkGDCMImageReader();
   ~vtkGDCMImageReader();
@@ -200,6 +213,8 @@ protected:
   int LoadIconImage;
   int NumberOfIconImages;
   int IconImageDataExtent[6];
+  double ImagePositionPatient[3];
+  double ImageOrientationPatient[6];
 
   int ImageFormat;
   // the following 3, should remain optional
