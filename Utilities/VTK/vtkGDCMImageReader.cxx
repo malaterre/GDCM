@@ -661,7 +661,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
 }
 
 template <class T>
-unsigned long vtkImageDataGetTypeSize(T*)
+inline unsigned long vtkImageDataGetTypeSize(T*, int a = 0,int b = 0)
 {
   return sizeof(T);
 }
@@ -675,9 +675,15 @@ void InPlaceYFlipImage(vtkImageData* data)
   // Multiply by the number of bytes per scalar
   switch (data->GetScalarType())
     {
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
     vtkTemplateMacro(
       outsize *= vtkImageDataGetTypeSize(static_cast<VTK_TT*>(0))
     );
+#else
+    vtkTemplateMacro3(
+      outsize *= vtkImageDataGetTypeSize, static_cast<VTK_TT*>(0), 0, 0
+    );
+#endif
     default:
       //vtkErrorMacro("do not support scalar type: " << data->GetScalarType() );
       abort();
