@@ -76,7 +76,11 @@ public:
     os << "TypeOfData                         :" << TypeOfData << std::endl;
     os << "CurveDescription                   :" << CurveDescription << std::endl;
     os << "DataValueRepresentation            :" << DataValueRepresentation << std::endl;
-    //std::vector<bool> Data;
+    unsigned short * p = (unsigned short*)&Data[0];
+    for(unsigned short i = 0; i < NumberOfPoints; i+=2)
+      {
+      os << p[i] << "," << p[i+1] << std::endl;
+      }
   }
 };
 
@@ -246,6 +250,17 @@ void Curve::SetCurve(const char *array, unsigned int length)
 
 void Curve::Decode(std::istream &is, std::ostream &os)
 {
+}
+
+void Curve::GetAsPoints(float *array) const
+{
+  unsigned short * p = (unsigned short*)&Internal->Data[0];
+  for(unsigned short i = 0; i < Internal->NumberOfPoints; i+=2 )
+    {
+    array[i+0] = p[i+0];
+    array[i+1] = p[i+1];
+    array[i+2] = 0;
+    }
 }
 
 }

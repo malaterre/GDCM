@@ -42,6 +42,8 @@ public:
   ~Curve();
   void Print(std::ostream &) const;
 
+  void GetAsPoints(float *array) const;
+
 
   static unsigned int GetNumberOfCurves(DataSet const & ds);
 

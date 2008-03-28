@@ -46,6 +46,7 @@ class vtkMedicalImageProperties;
 #else
 class vtkStringArray;
 #endif
+class vtkPolyData;
 
 // vtkSystemIncludes.h defines:
 // #define VTK_LUMINANCE       1
@@ -170,6 +171,10 @@ public:
   vtkGetVector3Macro(ImagePositionPatient,double);
   vtkGetVector6Macro(ImageOrientationPatient,double);
 
+  vtkGetObjectMacro(Curve,vtkPolyData);
+  //vtkSetObjectMacro(Curve,vtkPolyData);
+  virtual void SetCurve(vtkPolyData *pd);
+
 protected:
   vtkGDCMImageReader();
   ~vtkGDCMImageReader();
@@ -215,6 +220,7 @@ protected:
   int IconImageDataExtent[6];
   double ImagePositionPatient[3];
   double ImageOrientationPatient[6];
+  vtkPolyData *Curve;
 
   int ImageFormat;
   // the following 3, should remain optional

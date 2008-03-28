@@ -18,6 +18,7 @@
 #include "vtkPNGWriter.h"
 #include "vtkOutlineFilter.h"
 #include "vtkMath.h"
+#include "vtkPolyDataMapper2D.h"
 #include "vtkImageReslice.h"
 #include "vtkRenderWindowInteractor.h"
 #include "vtkImageViewer.h"
@@ -306,6 +307,18 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 #else
     std::cerr << "Not implemented" << std::endl;
 #endif
+    }
+
+  if( reader->GetCurve() )
+    {
+    vtkPolyDataMapper2D * rectMapper = vtkPolyDataMapper2D::New();
+    rectMapper->SetInput( reader->GetCurve() );
+
+    vtkActor2D * rectActor = vtkActor2D::New();
+    rectActor->SetMapper( rectMapper );
+    viewer->GetRenderer()->AddActor2D( rectActor );
+    rectActor->Delete();
+    rectMapper->Delete();
     }
 
 #if 0

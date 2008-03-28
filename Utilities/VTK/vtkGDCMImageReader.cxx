@@ -16,6 +16,9 @@
 
 #include "vtkObjectFactory.h"
 #include "vtkImageData.h"
+#include "vtkPolyData.h"
+#include "vtkCellArray.h"
+#include "vtkPoints.h"
 #include "vtkMedicalImageProperties.h"
 #include "vtkStringArray.h"
 #include "vtkPointData.h"
@@ -50,6 +53,8 @@ vtkStandardNewMacro(vtkGDCMImageReader)
 #define ICONIMAGEPORTNUMBER 1
 #define OVERLAYPORTNUMBER   2
 
+vtkCxxSetObjectMacro(vtkGDCMImageReader,Curve,vtkPolyData);
+
 vtkGDCMImageReader::vtkGDCMImageReader()
 {
   // vtkDataArray has an internal vtkLookupTable why not used it ?
@@ -82,6 +87,7 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   this->ApplyPlanarConfiguration = 1;
   memset(this->ImagePositionPatient,0,3*sizeof(double));
   memset(this->ImageOrientationPatient,0,6*sizeof(double));
+  this->Curve = 0;
 }
 
 vtkGDCMImageReader::~vtkGDCMImageReader()
@@ -99,6 +105,10 @@ vtkGDCMImageReader::~vtkGDCMImageReader()
     this->FileNames->Delete();
     }
 #endif
+  if( this->Curve )
+    {
+    this->Curve->Delete();
+    }
 }
 
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
@@ -791,6 +801,31 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     char * iconpointer = static_cast<char*>(this->GetOutput(ICONIMAGEPORTNUMBER)->GetScalarPointer());
     assert( iconpointer );
     image.GetIconImage().GetBuffer( iconpointer );
+    }
+
+  // Do the Curve:
+  unsigned int numcurves = image.GetNumberOfCurves();
+  if( numcurves )
+    {
+    const gdcm::Curve& curve = image.GetCurve();
+    //curve.Print( std::cout );
+    vtkPoints * pts = vtkPoints::New();
+    pts->SetNumberOfPoints( curve.GetNumberOfPoints() );
+    curve.GetAsPoints( (float*)pts->GetVoidPointer(0) );
+    vtkCellArray *polys = vtkCellArray::New();
+    for(unsigned int i = 0; i < curve.GetNumberOfPoints(); i+=2 )
+      {
+      polys->InsertNextCell(2);
+      polys->InsertCellPoint(i);
+      polys->InsertCellPoint(i+1);
+      }
+    vtkPolyData *cube = vtkPolyData::New();
+    cube->SetPoints(pts);
+    pts->Delete();
+    cube->SetLines(polys);
+    polys->Delete();
+    SetCurve(cube);
+    cube->Delete();
     }
 
   // Do the Overlay:
