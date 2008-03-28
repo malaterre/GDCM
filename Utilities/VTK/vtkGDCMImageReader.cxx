@@ -35,6 +35,7 @@
 #include "gdcmDataElement.h"
 #include "gdcmByteValue.h"
 #include "gdcmSwapper.h"
+#include "gdcmOrientation.h"
 
 #include <sstream>
 
@@ -584,11 +585,6 @@ int vtkGDCMImageReader::RequestInformationCompat()
       {
       this->DataSpacing[2] = image.GetSpacing(2);
       }
-    // Invert spacing
-    if( !this->FileLowerLeft )
-      {
-      this->DataSpacing[1] = -spacing[1];
-      }
 
     const double *origin = image.GetOrigin();
     if( origin )
@@ -620,10 +616,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
       dcos[7] = dircos[2] * dircos[3] - dircos[0] * dircos[5];
       dcos[8] = dircos[0] * dircos[4] - dircos[3] * dircos[1];
       double rotatedorigin[3];
-#if 0
-      rotatedorigin[0] = dircos[0] * origin[0] + dircos[1] * origin[1] + dircos[2] * origin[2];
-      rotatedorigin[1] = dircos[3] * origin[0] + dircos[4] * origin[1] + dircos[5] * origin[2];
-      rotatedorigin[2] = dircos2[0] * origin[0] + dircos2[1] * origin[1] + dircos2[2] * origin[2];
+#if 1
       rotatedorigin[0] = dcos[0] * origin[0] + dcos[1] * origin[1] + dcos[2] * origin[2];
       rotatedorigin[1] = dcos[3] * origin[0] + dcos[4] * origin[1] + dcos[5] * origin[2];
       rotatedorigin[2] = dcos[6] * origin[0] + dcos[7] * origin[1] + dcos[8] * origin[2];
@@ -632,18 +625,25 @@ int vtkGDCMImageReader::RequestInformationCompat()
       rotatedorigin[1] = dcos[1] * origin[0] + dcos[4] * origin[1] + dcos[7] * origin[2];
       rotatedorigin[2] = dcos[2] * origin[0] + dcos[5] * origin[1] + dcos[8] * origin[2];
 #endif
+      //gdcm::Orientation::OrientationType type = gdcm::Orientation::GetType(dircos);
+      //const char *label = gdcm::Orientation::GetLabel( type );
+      // Invert spacing
+      //if( !this->FileLowerLeft )
+      //  {
+      //  this->DataSpacing[1] = -spacing[1];
+      //  }
 
       if( this->FileLowerLeft )
         {
-        this->DataOrigin[0] = rotatedorigin[0];
-        this->DataOrigin[1] = rotatedorigin[1];
-        this->DataOrigin[2] = rotatedorigin[2];
+        this->DataOrigin[0] = origin[0];
+        this->DataOrigin[1] = origin[1];
+        this->DataOrigin[2] = origin[2];
         }
       else
         {
-        this->DataOrigin[0] = rotatedorigin[0];
-        this->DataOrigin[1] = rotatedorigin[1] - this->DataSpacing[1]*dims[1];
-        this->DataOrigin[2] = rotatedorigin[2];
+        this->DataOrigin[0] = origin[0];
+        this->DataOrigin[1] = origin[1] - this->DataSpacing[1]*dims[1];
+        this->DataOrigin[2] = origin[2];
         }
       }
     // Need to set the rest to 0 ???

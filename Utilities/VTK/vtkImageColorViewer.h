@@ -64,6 +64,7 @@ class vtkInteractorStyleImage;
 class vtkRenderWindow;
 class vtkRenderer;
 class vtkRenderWindowInteractor;
+class vtkPolyData;
 
 class VTK_EXPORT vtkImageColorViewer : public vtkObject 
 {
@@ -87,6 +88,7 @@ public:
   virtual void SetInputConnection(vtkAlgorithmOutput* input);
   virtual void AddInputConnection(vtkAlgorithmOutput* input);
   virtual void AddInput(vtkImageData * input);
+  //virtual void AddInput(vtkPolyData * input);
 
   double GetOverlayVisibility();
   void SetOverlayVisibility(double vis);

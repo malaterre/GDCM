@@ -762,7 +762,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
         os << "TODO";
         break;
       case VR::SQ:
-        if( !de.GetSequenceOfItems() && de.GetValue().GetLength() )
+        if( !de.GetSequenceOfItems() && !de.IsEmpty() && de.GetValue().GetLength() )
           {
           // This case is insane, this is an implicit file, with a defined length SQ.
           // Since this is a private element there is no way to guess that, and to 
@@ -969,10 +969,6 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
 
     if( refvr == VR::SQ || sqi )
       {
-      if( !sqi && de.GetValue().GetLength() )
-        {
-        //abort();
-        }
       if( sqi ) // empty SQ ?
         {
         assert( sqi );

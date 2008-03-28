@@ -16,6 +16,9 @@
 
 #include "vtkXMLImageDataWriter.h"
 #include "vtkPNGWriter.h"
+#include "vtkOutlineFilter.h"
+#include "vtkMath.h"
+#include "vtkImageReslice.h"
 #include "vtkRenderWindowInteractor.h"
 #include "vtkImageViewer.h"
 #include "vtkPointData.h"
@@ -224,7 +227,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   // 0028|1051 [DS] [Window Width]
   // but gdcmviewer doesn't know about them :-(
 
-  //reader->FileLowerLeftOn();
+  reader->FileLowerLeftOn();
   reader->Update();
   //reader->Print( cout );
   //reader->GetOutput()->Print( cout );
@@ -305,6 +308,40 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 #endif
     }
 
+#if 0
+  vtkImageReslice * slicer = vtkImageReslice::New();
+  slicer->SetInput( reader->GetOutput() );
+  slicer->InterpolateOn();
+  //slicer->SetResliceAxesOrigin(0, 0, 0);
+  //slicer->SetResliceAxesOrigin( reader->GetImagePositionPatient() );
+  //slicer->SetResliceAxes( reader->GetDirectionCosines() );
+  const double *dircos = reader->GetImageOrientationPatient();
+  double dcos[9];
+  for(int i=0;i<6;++i)
+    dcos[i] = dircos[i];
+  dcos[6] = dircos[1] * dircos[5] - dircos[2] * dircos[4];
+  dcos[7] = dircos[2] * dircos[3] - dircos[0] * dircos[5];
+  dcos[8] = dircos[0] * dircos[4] - dircos[3] * dircos[1];
+  double dummy[3];
+  double dot = vtkMath::Dot(dircos, dircos+3);
+  std::cout << dot << std::endl;
+  vtkMath::Cross(dircos, dircos+3, dummy);
+  std::cout << dcos[6] << "," << dcos[7] << "," << dcos[8] << std::endl;
+  std::cout << dummy[0] << "," << dummy[1] << "," << dummy[2] << std::endl;
+  dot = vtkMath::Dot(dircos, dummy);
+  std::cout << dot << std::endl;
+  dot = vtkMath::Dot(dircos+3, dummy);
+  std::cout << dot << std::endl;
+  slicer->SetResliceAxesDirectionCosines(dcos);
+  slicer->Update();
+  slicer->GetOutput()->Print( std::cout );
+  //viewer->SetInput( slicer->GetOutput() );
+  vtkOutlineFilter * outline = vtkOutlineFilter::New();
+  outline->SetInput( slicer->GetOutput() );
+  outline->GetOutput()->Print( std::cout );
+  //slicer->AddInput( (vtkPolyData*)outline->GetOutput() );
+#endif
+
   // Always overwriting default is not always nice looking...
   viewer->SetColorLevel (0.5 * (range[1] + range[0]));
   viewer->SetColorWindow (range[1] - range[0]);
@@ -316,6 +353,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   dims[0] = (dims[0] < 600 ) ? dims[0] : 600;
   dims[1] = (dims[1] < 600 ) ? dims[1] : 600;
   viewer->Render(); // EXTREMELY IMPORTANT for vtkImageViewer2
+
   viewer->SetSize( dims );
 
   // Here is where we setup the observer, 

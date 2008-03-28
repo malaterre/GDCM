@@ -25,6 +25,7 @@
 #include "vtkRenderWindow.h"
 #include "vtkRenderWindowInteractor.h"
 #include "vtkRenderer.h"
+#include "vtkPolyDataMapper.h"
 
 vtkCxxRevisionMacro(vtkImageColorViewer, "$Revision: 1.3 $")
 vtkStandardNewMacro(vtkImageColorViewer)
@@ -732,6 +733,24 @@ void vtkImageColorViewer::SetInputConnection(vtkAlgorithmOutput* input)
 }
 
 //----------------------------------------------------------------------------
+/*
+void vtkImageColorViewer::AddInput(vtkPolyData * input)
+{
+  vtkRenderWindow *renwin = this->GetRenderWindow ();
+  vtkRenderer *Renderer     = vtkRenderer::New();
+  vtkPolyDataMapper * mapper = vtkPolyDataMapper::New();
+  mapper->SetInput( input );
+  vtkActor * actor = vtkActor::New();
+  actor->SetMapper( mapper );
+  Renderer->AddViewProp(actor);
+
+  renwin->AddRenderer(Renderer);
+  Renderer->Delete();
+  mapper->Delete();
+  actor->Delete();
+}
+*/
+
 void vtkImageColorViewer::AddInput(vtkImageData * input)
 {
   vtkRenderWindow *renwin = this->GetRenderWindow ();

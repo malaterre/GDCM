@@ -2,6 +2,7 @@
 # MSFF
 SET(MSFF_SRCS
   gdcmAnonymizer.cxx
+  gdcmOrientation.cxx
   gdcmSorter.cxx
   gdcmIPPSorter.cxx
   gdcmApplicationEntity.cxx
