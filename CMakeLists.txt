@@ -1,5 +1,10 @@
 PROJECT(GDCM)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
+#-----------------------------------------------------------------------------
+# New cmake policy thingy
+IF(COMMAND CMAKE_POLICY)
+  CMAKE_POLICY(SET CMP0003 NEW)
+ENDIF(COMMAND CMAKE_POLICY)
 
 #-----------------------------------------------------------------------------
 # Disallow insource build since I never test that

@@ -27,6 +27,11 @@ INCLUDE_DIRECTORIES(
   ${GDCM_SOURCE_DIR}/Source/DataDictionary
   )
 
+# FIXME: temp fix
+IF(UNIX)
+  LINK_DIRECTORIES(/usr/X11R6/lib)
+ENDIF(UNIX)
+
 # List the kits from VTK that are needed by this project.
 SET(vtkgdcm_LIBS
   vtkCommon
