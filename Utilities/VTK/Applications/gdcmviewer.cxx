@@ -193,7 +193,11 @@ public:
         int *pick = rwi->GetEventPosition();
         vtkRenderer *ren1 = ImageViewer->GetRenderer();
         picker->Pick((double)pick[0], (double)pick[1], 0.0, ren1);
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
         double *pos = picker->GetPickPosition ();
+#else
+        float *pos = picker->GetPickPosition ();
+#endif
         std::cout << pos[0] << "," << pos[1] << "," << pos[2] << std::endl;
         }
       else
