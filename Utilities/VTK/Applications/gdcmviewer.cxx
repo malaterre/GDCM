@@ -256,6 +256,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     // WARNING: gdcmviewer2 only !
     viewer->AddInputConnection ( reader->GetOverlayPort(0) );
     }
+  // TODO: Icon can be added using the vtkLogoWidget
 #else
   viewer->SetInput( reader->GetOutput(0) );
   if( reader->GetNumberOfOverlays() )
