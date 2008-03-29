@@ -4,6 +4,7 @@ SET(DSED_TEST_SRCS
 	TestAttribute
   #TestReadPatientName
   TestLO
+  TestCSAElement
   #TestByteBuffer
   #TestByteValue
   TestPreamble
