@@ -15,9 +15,6 @@
 #include "gdcmTerminal.h"
 
 #include <iostream>
-#include <windows.h>
-#include <conio.h>
-#include <stdio.h>
 
 namespace term = gdcm::terminal;
 

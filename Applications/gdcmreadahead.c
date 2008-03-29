@@ -27,6 +27,8 @@
  *
  * the working (running) directory of this daemon is /tmp
  *
+ * NOTE: On WIN32 disk caching is done automatically and can
+ * be made more agressive using FILE_FLAG_SEQUENTIAL
  */
 #define _GNU_SOURCE /* This is required to get the declaration of readahead */
 

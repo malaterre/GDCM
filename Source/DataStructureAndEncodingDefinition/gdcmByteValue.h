@@ -69,7 +69,7 @@ public:
     for(; it != Internal.begin()+length; ++it)
       {
       const char &c = *it;
-      if ( !( isprint((int)c) || isspace((int)c) ) ) os << ".";
+      if ( !( isprint((unsigned char)c) || isspace((unsigned char)c) ) ) os << ".";
       else os << c;
       }
   }
@@ -203,7 +203,7 @@ public:
     for(unsigned int i=0; i<length; i++)
       {
       if ( i == (length-1) && Internal[i] == '\0') continue;
-      if ( !( isprint((int)Internal[i]) || isspace((int)Internal[i]) ) )
+      if ( !( isprint((unsigned char)Internal[i]) || isspace((unsigned char)Internal[i]) ) )
         {
         //gdcmWarningMacro( "Cannot print :" << i );
         return false;

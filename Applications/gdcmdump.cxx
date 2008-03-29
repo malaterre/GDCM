@@ -67,6 +67,7 @@ int PrintCSA(const std::string & filename)
   const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
 
   const gdcm::PrivateTag &t1 = csa.GetCSAImageHeaderInfoTag();
+  std::cout << t1 << std::endl;
   const gdcm::PrivateTag &t2 = csa.GetCSASeriesHeaderInfoTag();
 
   //if( pde.GetTag().GetElement() != 0xffff /*ds.FindDataElement( t0 )*/ )
@@ -76,14 +77,24 @@ int PrintCSA(const std::string & filename)
       {
       //gdcm::Tag t3(0x0029,0x1120); ???
       //std::cerr << "Working on: " << filename << std::endl;
+	      bool found = false;
       if( ds.FindDataElement( t1 ) )
         {
         csa.Print( ds.GetDataElement( t1 ) );
+	found = true;
+	//const gdcm::CSAElement &csael = csa.GetCSAElementByName( "Columns" );
+	//std::cout << "Looking for Columns:" << std::endl;
+	//std::cout << csael << std::endl;
         }
       if( ds.FindDataElement( t2 ) )
         {
         csa.Print( ds.GetDataElement( t2 ) );
+	found = true;
         }
+      if( !found )
+      {
+	      std::cout << "no csa tag found" << std::endl;
+      }
       if( csa.GetFormat() == gdcm::CSAHeader::DATASET_FORMAT )
         {
         gdcm::Printer p;

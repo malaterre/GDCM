@@ -90,7 +90,8 @@ public:
     ValueMultiplicityField = de.ValueMultiplicityField;
     VRField = de.VRField;
     SyngoDTField = de.SyngoDTField;
-    //ValueField = de.ValueField; // Pointer copy
+    NoOfItemsField = de.NoOfItemsField;
+    DataField = de.DataField; // Pointer copy
     return *this;
     }
 
@@ -119,8 +120,11 @@ protected:
 inline std::ostream& operator<<(std::ostream &os, const CSAElement &val)
 {
   os << val.KeyField;
+  os << "\t" << val.NameField;
+  os << "\t" << val.ValueMultiplicityField;
   os << "\t" << val.VRField;
-  //os << "\t" << val.ValueLengthField;
+  os << "\t" << val.SyngoDTField;
+  os << "\t" << val.NoOfItemsField;
   if( val.DataField )
     {
     val.DataField->Print( os << "\t" );

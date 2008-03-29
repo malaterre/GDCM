@@ -52,6 +52,7 @@ std::string DataSet::GetPrivateCreator(const Tag &t) const
 
 Tag DataSet::ComputeDataElement(const PrivateTag & t) const
 {
+  gdcmDebugMacro( "Entering ComputeDataElement" );
   assert( t.GetElement() <= 0xFF );
   const Tag start(t.GetGroup(), 0x0 ); // First possible private creator
   const DataElement r(start);
@@ -65,7 +66,9 @@ Tag DataSet::ComputeDataElement(const PrivateTag & t) const
     const ByteValue * bv = it->GetByteValue();
     assert( bv );
     //std::cout << std::string(bv->GetPointer(), bv->GetLength() ) << std::endl;
-    if( strcmp( bv->GetPointer(), refowner ) == 0 )
+    //if( strcmp( bv->GetPointer(), refowner ) == 0 )
+    std::string tmp(bv->GetPointer(),bv->GetLength());
+    if( System::StrCaseCmp( tmp.c_str(), refowner ) == 0 )
       {
       // found !
       found = true;
@@ -73,11 +76,13 @@ Tag DataSet::ComputeDataElement(const PrivateTag & t) const
       }
     ++it;
     }
+  gdcmDebugMacro( "In compute found is:" << found );
   if (!found) return GetDEEnd().GetTag();
   // else
   // ok we found the Private Creator Data Element, let's construct the proper data element
   Tag copy = t;
   copy.SetPrivateCreator( it->GetTag() );
+  gdcmDebugMacro( "Compute found:" << copy );
   return copy;
 }
 
