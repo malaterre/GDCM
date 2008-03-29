@@ -21,31 +21,8 @@
 
 namespace term = gdcm::terminal;
 
-int TestTerminal(int argc, char *argv[])
+void TestAll()
 {
-#if 0
-  gdcm::Terminal term;
-
-  FILE * file1 = stdout;
-  //term.Setup( file1 );
-  term.ColorPrint( file1, gdcm::Terminal::Black, "this is black\n" );
-
-  std::ostream &file2 = std::cout;
-  //term.Setup( file2 );
-  term.ColorPrint( file2, gdcm::Terminal::Red, "this is red\n" );
-  //term.ColorPrint( file2, gdcm::Terminal::ColorType(38), "this is 38\n" );
-  for(int i =0; i < 60; ++i)
-    {
-    std::ostringstream os;
-    os << "this is " << i << std::endl;
-    std::string s = os.str();
-    term.ColorPrint( file2, gdcm::Terminal::ColorType(i), s.c_str() );
-    }
-
-#endif
-  //std::cout << term::setfgcolor( term::black ) << "coucou black" << std::endl;
-  //std::cout << term::setfgcolor( term::red )   << "coucou red" << std::endl;
-  //std::cout << term::setfgcolor( term::blue ) << term::bold()   << "coucou red" << std::endl;
   std::cout << term::setattribute( term::bright ) << "bright" << std::endl;
   std::cout << term::setattribute( term::dim ) << "dim" << std::endl;
   std::cout << term::setattribute( term::underline ) << "underline" << std::endl;
@@ -70,22 +47,19 @@ int TestTerminal(int argc, char *argv[])
   std::cout << term::setbgcolor( term::cyan ) << "bg:cyan" << std::endl;
   std::cout << term::setbgcolor( term::white ) << "bg:white" << std::endl;
   std::cout << term::setattribute( term::reset ) << "reset" << std::endl;
-  std::cerr << term::setbgcolor( term::blue ) << "cerr:bg:blue" << std::endl;
-  //std::cout << term::resetcolor()   << "after reset" << std::endl;
-#if 0
-  HANDLE hConsoleHandle;
-  CONSOLE_SCREEN_BUFFER_INFO ConsoleInfo;
-  hConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-    GetConsoleScreenBufferInfo(hConsoleHandle, &ConsoleInfo);
-    WORD attributes = 0;
-    attributes = FOREGROUND_RED | FOREGROUND_INTENSITY;
-    SetConsoleTextAttribute(hConsoleHandle, attributes);
-    std::cout << "test again" << std::endl;
-    WORD reset; 
-    reset = (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY);
-    SetConsoleTextAttribute(hConsoleHandle, reset);
-#endif
-    std::cout <<  "\33[31m" "rxvt" << std::endl;
+  //std::cerr << term::setbgcolor( term::blue ) << "cerr:bg:blue" << std::endl;
+}
+
+int TestTerminal(int argc, char *argv[])
+{
+  // Typically for WIN32
+  term::setmode( term::CONSOLE );
+  TestAll();
+  // For all *NIX
+  // rxvt is WIN32 app, but is a VT100 compatible TERM
+  term::setmode( term::VT100 );
+  TestAll();
+
   return 0;
 }
 

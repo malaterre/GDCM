@@ -24,34 +24,14 @@ namespace gdcm
  * \brief Class for Terminal
  */
 //-----------------------------------------------------------------------------
-#if 0
-class GDCM_EXPORT Terminal
-{
-public :
-  Terminal() {}
-  ~Terminal() {}
-
-  typedef enum {
-    Black = 0,
-    Red = 1
-  } ColorType;
-
-  void ColorPrint(FILE * file, ColorType color, const char *str) const;
-  void ColorPrint(std::ostream & file, ColorType color, const char *str) const;
-
-protected:
-  bool Setup(FILE *file);
-  bool Setup(std::ostream &os);
-};
-#endif
 
 namespace terminal
 {
   typedef enum
   {
-    VT100 = 0,
-    CONSOLE
-  } Type;
+    CONSOLE = 0,
+    VT100
+  } Mode;
   typedef enum
   {
     black = 0,
@@ -76,6 +56,7 @@ namespace terminal
   GDCM_EXPORT std::string setattribute( Attribute att );
   GDCM_EXPORT std::string setfgcolor( Color c );
   GDCM_EXPORT std::string setbgcolor( Color c );
+  GDCM_EXPORT void setmode( Mode m);
 }
 
 } // end namespace gdcm
