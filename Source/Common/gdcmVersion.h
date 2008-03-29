@@ -26,10 +26,10 @@ namespace gdcm
 class GDCM_EXPORT Version
 {
 public :
-  static const char *GetGDCMVersion() { return GDCM_VERSION; }
-  static int GetGDCMMajorVersion()    { return GDCM_MAJOR_VERSION; }
-  static int GetGDCMMinorVersion()    { return GDCM_MINOR_VERSION; }
-  static int GetGDCMBuildVersion()    { return GDCM_BUILD_VERSION; }
+  static const char *GetVersion() { return GDCM_VERSION; }
+  static int GetMajorVersion()    { return GDCM_MAJOR_VERSION; }
+  static int GetMinorVersion()    { return GDCM_MINOR_VERSION; }
+  static int GetBuildVersion()    { return GDCM_BUILD_VERSION; }
 
 protected:
   Version() {};

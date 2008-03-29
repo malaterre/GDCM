@@ -24,6 +24,7 @@ namespace gdcm
  * \brief Class for Terminal
  */
 //-----------------------------------------------------------------------------
+#if 0
 class GDCM_EXPORT Terminal
 {
 public :
@@ -42,6 +43,41 @@ protected:
   bool Setup(FILE *file);
   bool Setup(std::ostream &os);
 };
+#endif
+
+namespace terminal
+{
+  typedef enum
+  {
+    VT100 = 0,
+    CONSOLE
+  } Type;
+  typedef enum
+  {
+    black = 0,
+    red,
+    green,
+    yellow, // brown ??
+    blue,
+    magenta,
+    cyan,
+    white
+  } Color;
+  typedef enum
+  {
+  reset = 0,
+  bright, // Bold
+  dim,
+  underline,
+  blink,
+  reverse,
+  hidden,
+  } Attribute;
+  GDCM_EXPORT std::string setattribute( Attribute att );
+  GDCM_EXPORT std::string setfgcolor( Color c );
+  GDCM_EXPORT std::string setbgcolor( Color c );
+}
+
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
 #endif //__gdcmTerminal_h
