@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-// .NAME vtkGDCMImageReader - read DICOM files
+// .NAME vtkGDCMImageReader - read DICOM Image files (Pixel Data)
 // .SECTION Description
 // vtkGDCMImageReader is a source object that reads some DICOM files
 // this reader is single threaded.
@@ -26,7 +26,9 @@
 // .SECTION BUG
 // Overlay are assumed to have the same extent as image. Right now if overlay origin is not
 // 0,0 the overlay will have an offset...
-// Only the very first overlay is loaded for now (even if there are more than one in the file)
+// Only the very first overlay is loaded at the VTK level, for now (even if there are more than one in the file)
+// .SECTION BUG
+// Only the first Curve Data is loaded at the VTK layer, for now.
 // .SECTION DataOrigin
 // In the case of a direction cosine (1,0,0,0,1,0) the DataOrigin is properly set. Otherwise user
 // need to use the GetPatientPosition to compute the proper pixel x,y,z position.
@@ -171,8 +173,8 @@ public:
   vtkGetVector3Macro(ImagePositionPatient,double);
   vtkGetVector6Macro(ImageOrientationPatient,double);
 
+  // Set/Get the first Curve Data:
   vtkGetObjectMacro(Curve,vtkPolyData);
-  //vtkSetObjectMacro(Curve,vtkPolyData);
   virtual void SetCurve(vtkPolyData *pd);
 
 protected:
