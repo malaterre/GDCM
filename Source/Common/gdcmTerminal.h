@@ -51,7 +51,7 @@ namespace terminal
   underline,
   blink,
   reverse,
-  hidden,
+  hidden
   } Attribute;
   GDCM_EXPORT std::string setattribute( Attribute att );
   GDCM_EXPORT std::string setfgcolor( Color c );
