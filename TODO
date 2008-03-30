@@ -75,3 +75,5 @@ Make File Meta Information configurable from CMake
 Add progress to gdcmscanner
 -----------------------------------------------------------------------
 FIX the reading of 3F3F SQ in: Bug_Philips_ItemTag_3F3F
+-----------------------------------------------------------------------
+gdcm does not read the asscoiated data in RT Object file - RTImage and RTDose. For RTImage pixel spacing is in 3002,0011 and position of upper left corner is in 3002,0012.

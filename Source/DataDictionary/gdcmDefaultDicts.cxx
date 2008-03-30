@@ -2810,7 +2810,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x300a,0x00ba,VR::DS,VM::VM1,"Source to Beam Limiting Device Distance",false },
   {0x300a,0x00bb,VR::FL,VM::VM1,"Isocenter to Beam Limiting Device Distance",false },
   {0x300a,0x00bc,VR::IS,VM::VM1,"Number of Leaf/Jaw Pairs",false },
-  {0x300a,0x00be,VR::DS,VM::VM3_n,"Leaf Position Boundaries",false },
+  {0x300a,0x00be,VR::DS,VM::VM2_n,"Leaf Position Boundaries",false },
   {0x300a,0x00c0,VR::IS,VM::VM1,"Beam Number",false },
   {0x300a,0x00c2,VR::LO,VM::VM1,"Beam Name",false },
   {0x300a,0x00c3,VR::ST,VM::VM1,"Beam Description",false },
