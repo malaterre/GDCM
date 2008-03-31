@@ -101,9 +101,7 @@ typedef enum {
 
   MediaStorage(MSType type = MS_END):MSField(type) {}
 
-#ifndef SWIG
-  static bool IsImage(const MSType &ts);
-#endif
+  static bool IsImage(MSType ts);
 
   operator MSType () const { return MSField; }
 

@@ -110,7 +110,7 @@ const char* MediaStorage::GetString() const
 // Currently the implementation is bogus it only define the TS which
 // are associated with an image so indeed the implementation of IsImage 
 // is only the verification of TSType is != TS_END
-bool MediaStorage::IsImage(const MSType &ms)
+bool MediaStorage::IsImage(MSType ms)
 {
   if ( ms == MS_END // most frequent first
     // lexicographical order then...
