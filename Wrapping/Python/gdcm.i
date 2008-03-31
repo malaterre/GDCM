@@ -23,6 +23,8 @@
 #include "gdcmTypes.h"
 #include "gdcmSwapCode.h"
 #include "gdcmObject.h"
+#include "gdcmPixelFormat.h"
+#include "gdcmMediaStorage.h"
 #include "gdcmTag.h"
 #include "gdcmPrivateTag.h"
 #include "gdcmVL.h"
@@ -79,7 +81,7 @@ using namespace gdcm;
 #define GDCM_EXPORT
 %include "gdcmSwapCode.h"
 %include "gdcmPixelFormat.h"
-//%include "gdcmMediaStorage.h"
+%include "gdcmMediaStorage.h"
 %rename(__getitem__) gdcm::Tag::operator[];
 //%rename(__getattr__) gdcm::Tag::operator[];
 %include "gdcmTag.h"
