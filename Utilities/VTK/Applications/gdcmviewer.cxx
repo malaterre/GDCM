@@ -29,6 +29,13 @@
 #include "vtkImageMapToWindowLevelColors.h"
 #include "vtkImageActor.h"
 #include "vtkWindowToImageFilter.h"
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#include "vtkLogoWidget.h"
+#include "vtkLogoRepresentation.h"
+#else
+class vtkLogoWidget;
+class vtkLogoRepresentation;
+#endif
 #if VTK_MAJOR_VERSION >= 5
 #include "vtkImageYBRToRGB.h"
 #include "vtkImageColorViewer.h"
@@ -138,6 +145,7 @@ public:
   vtkGDCMObserver()
     {
     ImageViewer = NULL;
+    IconWidget = NULL;
     picker = vtkWorldPointPicker::New();
     }
   ~vtkGDCMObserver()
@@ -172,6 +180,12 @@ public:
           w2i->Delete();
           //std::cerr << "Screenshort saved to snapshot.png" << std::endl;
           }
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+        else if ( keycode == 'l' )
+          {
+          IconWidget->Off();
+          }
+#endif
         else
           {
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
@@ -208,6 +222,7 @@ public:
     }
   TViewer *ImageViewer;
   vtkWorldPointPicker *picker;
+  vtkLogoWidget *IconWidget;
 };
 
 // A feature in VS6 make it painfull to write template code
@@ -257,6 +272,23 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     viewer->AddInputConnection ( reader->GetOverlayPort(0) );
     }
   // TODO: Icon can be added using the vtkLogoWidget
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+  vtkLogoWidget * iconwidget = 0;
+  if( reader->GetNumberOfIconImages() )
+    {
+    vtkLogoRepresentation *rep = vtkLogoRepresentation::New();
+    rep->SetImage(reader->GetIconImage());
+
+    vtkLogoWidget *widget = vtkLogoWidget::New();
+    widget->SetInteractor(iren);
+    widget->SetRepresentation(rep);
+    iconwidget = widget;
+    //widget->Delete();
+    rep->Delete();
+
+    //viewer->AddInputConnection ( reader->GetIconImagePort() );
+    }
+#endif
 #else
   viewer->SetInput( reader->GetOutput(0) );
   if( reader->GetNumberOfOverlays() )
@@ -266,16 +298,16 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
   // IconImage:
-  if( reader->GetNumberOfIconImages() )
-    {
-    std::cerr << "NumberOfIconImages:" << reader->GetNumberOfIconImages() << std::endl;
-    reader->GetIconImage()->Print( std::cerr );
-    vtkPNGWriter *writer = vtkPNGWriter::New();
-    writer->SetInput( reader->GetIconImage() );
-    writer->SetFileName( "icon.png" );
-    //writer->Write();
-    writer->Delete();
-    }
+  //if( reader->GetNumberOfIconImages() )
+  //  {
+  //  std::cerr << "NumberOfIconImages:" << reader->GetNumberOfIconImages() << std::endl;
+  //  reader->GetIconImage()->Print( std::cerr );
+  //  vtkPNGWriter *writer = vtkPNGWriter::New();
+  //  writer->SetInput( reader->GetIconImage() );
+  //  writer->SetFileName( "icon.png" );
+  //  //writer->Write();
+  //  writer->Delete();
+  //  }
 
   // In case of palette color, let's tell VTK to map color:
   // MONOCHROME1 is also implemented with a lookup table
@@ -377,6 +409,10 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   // Here is where we setup the observer, 
   vtkGDCMObserver<TViewer> *obs = vtkGDCMObserver<TViewer>::New();
   obs->ImageViewer = viewer;
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+  if(iconwidget) iconwidget->On();
+  obs->IconWidget = iconwidget;
+#endif
   iren->AddObserver(vtkCommand::CharEvent,obs);
   iren->AddObserver(vtkCommand::EndPickEvent,obs);
   obs->Delete();
@@ -408,6 +444,10 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 #endif
 
   reader->Delete();
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+  iconwidget->Off();
+  iconwidget->Delete();
+#endif
   iren->Delete();
   viewer->Delete();
 }
@@ -436,6 +476,8 @@ int main(int argc, char *argv[])
   
   const char gdcmviewer[] = "gdcmviewer";
   const char gdcmviewer2[] = "gdcmviewer2";
+  // can't do strcmp on WIN32...
+  // Need to order correctly when doing strncmp
   if( strncmp(viewer_type.GetName(), gdcmviewer2, strlen(gdcmviewer2) ) == 0 )
     {
     vtkImageColorViewer *viewer = vtkImageColorViewer::New();
