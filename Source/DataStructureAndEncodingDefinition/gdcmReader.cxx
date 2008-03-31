@@ -194,6 +194,7 @@ bool Reader::Read()
     }
   bool success = true;
 
+try
     {
 std::istream &is = Stream;
 
@@ -501,6 +502,16 @@ std::istream &is = Stream;
 
     if( success ) assert( Stream.eof() );
     }
+  catch( Exception &ex )
+    {
+    std::cerr << ex.what() << std::endl;
+    success = false;
+    }
+  catch( ... )
+    {
+    std::cerr << "Unknown exception" << std::endl;
+    success = false;
+    }
 //  if( !success )
 //    {
 //    F->GetHeader().Clear();
@@ -522,7 +533,7 @@ bool Reader::ReadUpToTag(const Tag & tag)
     }
   bool success = true;
 
-//  try
+  try
     {
 std::istream &is = Stream;
 
@@ -767,8 +778,23 @@ std::istream &is = Stream;
     std::cerr << ex.what() << std::endl;
     success = false;
     }
+  catch( ... )
+    {
+    std::cerr << "Unknown exception" << std::endl;
+    success = false;
+    }
 
     //assert( Stream.eof() );
+    }
+  catch( Exception &ex )
+    {
+    std::cerr << ex.what() << std::endl;
+    success = false;
+    }
+  catch( ... )
+    {
+    std::cerr << "Unknown exception" << std::endl;
+    success = false;
     }
 
   // FIXME : call this function twice...

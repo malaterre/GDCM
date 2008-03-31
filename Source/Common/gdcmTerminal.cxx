@@ -65,9 +65,15 @@ public:
   void setattribute(int att) { attribute = att; }
   void setfgcolor(int col) { fgcolor = col; }
   void setbgcolor(int col) { bgcolor = col; }
+  //std::string resettextcolor() const {
+  //  char command[13];
+  //  sprintf(command, "%c[%d;%d;%dm", 0x1B, 0, 0, 0);
+  //  return command;
+  //}
   std::string textcolor() const {
-    char command[13];
-    sprintf(command, "%c[%d;%d;%dm", 0x1B, attribute, fgcolor + 30, bgcolor + 40);
+    char command[16];
+    int n = sprintf(command, "%c[%d;%d;%dm", 0x1B, attribute, fgcolor + 30, bgcolor + 40);
+    assert( n < 16 );
     return command;
   }
   void set_attributes(int color) {
@@ -93,7 +99,7 @@ public:
   //http://www.opensource.apple.com/darwinsource/10.4.8.x86/tcsh-46/tcsh/win32/console.c
   //http://msdn2.microsoft.com/en-us/library/ms682088(VS.85).aspx
   //
-  {
+    {
     int n = color;
 
     if      (n == 0)        // Normal (default)
@@ -130,7 +136,7 @@ public:
         | BACKGROUND_INTENSITY;
     else              // (default)
       wAttributes = wNormalAttributes;
-  }
+    }
 
   // Though Windows' console supports COMMON_LVB_REVERSE_VIDEO,
   // it seems to be buggy.  So we must simulate it.
@@ -138,6 +144,8 @@ public:
     wAttributes = (wAttributes & COMMON_LVB_UNDERSCORE)
       | ((wAttributes & 0x00f0) >> 4) | ((wAttributes & 0x000f) << 4);
   SetConsoleTextAttribute(hConsoleHandle, wAttributes);
+#else
+  (void)color;
 #endif //WIN32
 }
 
@@ -155,10 +163,10 @@ void setmode( Mode m)
 std::string setfgcolor( Color c)
 {
   if( mode == VT100 )
-  {
+    {
     cimp.setfgcolor(c);
     return cimp.textcolor();
-  }
+    }
   else if( mode == CONSOLE )
     cimp.set_attributes(30+c);
   return "";
@@ -166,10 +174,10 @@ std::string setfgcolor( Color c)
 std::string setbgcolor( Color c )
 {
   if( mode == VT100 )
-  {
+    {
     cimp.setbgcolor(c);
     return cimp.textcolor();
-}
+    }
   else if( mode == CONSOLE )
     cimp.set_attributes(40+c);
   return "";
@@ -178,10 +186,10 @@ std::string setbgcolor( Color c )
 std::string setattribute( Attribute att )
 {
   if( mode == VT100 )
-  {
+    {
     cimp.setattribute(att);
     return cimp.textcolor();
-}
+    }
   else if( mode == CONSOLE )
     cimp.set_attributes(att);
   return "";
