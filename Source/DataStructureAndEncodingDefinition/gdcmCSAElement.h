@@ -71,6 +71,12 @@ public:
     ByteValue *bv = new ByteValue(array,length);
     SetValue( *bv );
   }
+  const ByteValue* GetByteValue() const {
+    const Value &v = GetValue();
+    const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
+    return bv; // Will return NULL if not ByteValue
+  }
+
   CSAElement(const CSAElement &_val)
     {
     if( this != &_val)

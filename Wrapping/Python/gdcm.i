@@ -28,7 +28,11 @@
 #include "gdcmVL.h"
 #include "gdcmVR.h"
 #include "gdcmVM.h"
+#include "gdcmValue.h"
+#include "gdcmByteValue.h"
 #include "gdcmDataElement.h"
+#include "gdcmItem.h"
+#include "gdcmSequenceOfItems.h"
 #include "gdcmDataSet.h"
 #include "gdcmPreamble.h"
 #include "gdcmFile.h"
@@ -106,8 +110,52 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
+%include "gdcmValue.h"
+%extend gdcm::Value
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
+%include "gdcmByteValue.h"
+%extend gdcm::ByteValue
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmDataElement.h"
 %extend gdcm::DataElement
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
+%include "gdcmItem.h"
+%extend gdcm::Item
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
+%include "gdcmSequenceOfItems.h"
+%extend gdcm::SequenceOfItems
 {
   const char *__str__() {
     static std::string buffer;
@@ -147,8 +195,6 @@ using namespace gdcm;
 %include "gdcmLookupTable.h"
 %include "gdcmOverlay.h"
 //%include "gdcmVR.h"
-%include "gdcmValue.h"
-%include "gdcmByteValue.h"
 //%rename(DataElementSetPython) std::set<DataElement, lttag>;
 //%rename(DataElementSetPython2) DataSet::DataElementSet;
 %template (DataElementSet) std::set<gdcm::DataElement>;

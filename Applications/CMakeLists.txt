@@ -40,6 +40,7 @@ SET(GDCM_EXECUTABLE_NAME
   #deflate
   gdcmconv
   gdcminfo
+  #csa2img
   )
 # Need mmap
 IF(CMAKE_HAVE_SYS_MMAN_H)

@@ -134,7 +134,7 @@ public:
   // Use that only if you understand what you are doing
   const char *GetPointer() const {
     if(!Internal.empty()) return &Internal[0];
-	return 0;
+    return 0;
   }
   bool GetBuffer(char *buffer, unsigned long length) const {
     // SIEMENS_GBS_III-16-ACR_NEMA_1.acr has a weird pixel length

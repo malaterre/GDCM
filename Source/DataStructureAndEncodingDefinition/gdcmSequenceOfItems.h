@@ -69,7 +69,10 @@ public:
   /// \brief Appends an Item to the already added ones
   void AddItem(Item const &item);
 
-  /* Each Item shall be implicitly assigned an ordinal position starting with the value 1 for the
+  unsigned int GetNumberOfItems() const {  return Items.size(); }
+
+  /* WARNING: first item is #1 (see DICOM standard)
+   *  Each Item shall be implicitly assigned an ordinal position starting with the value 1 for the
    * first Item in the Sequence, and incremented by 1 with each subsequent Item. The last Item in the
    * Sequence shall have an ordinal position equal to the number of Items in the Sequence.
    */

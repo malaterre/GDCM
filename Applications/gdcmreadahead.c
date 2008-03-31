@@ -32,16 +32,16 @@
  */
 #define _GNU_SOURCE /* This is required to get the declaration of readahead */
 
-#include <fcntl.h> // readahead
+#include <fcntl.h> /* readahead */
 #include <assert.h>
 #include <stdio.h>
-#include <limits.h> // PATH_MAX
+#include <limits.h> /* PATH_MAX */
 #include <stdlib.h> /* exit */
 #include <signal.h>
 #include <unistd.h>
 #include <syslog.h>
 #include <string.h>
-#include <sched.h> // sched_yield
+#include <sched.h> /* sched_yield */
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
@@ -71,17 +71,18 @@ To terminate:	kill `cat /tmp/exampled.lock`
 
 void shutdown(int ex)
 {
+  int ret;
   syslog(LOG_DEBUG,"process quitting.");
-  // now is a good time to remove the lock file, just before we exit:
-  int ret = unlink(LOCK_FILE);
+  /* now is a good time to remove the lock file, just before we exit: */
+  ret = unlink(LOCK_FILE);
   if( ret != 0 )
     {
     syslog(LOG_ERR,"could not remove lock file: %s",  LOCK_FILE );
-    ex = 1; // mark it as error
+    ex = 1; /* mark it as error */
     }
-  // close the system logging connection
+  /* close the system logging connection */
   closelog();
-  // bye.
+  /* bye. */
   exit(ex);
 }
 
@@ -103,6 +104,7 @@ void signal_handler(int sig)
 
 void daemonize()
 {
+  pid_t pg;
   int i,lfp;
   char str[10];
   if( getppid() == 1 ) return; /* already a daemon */
@@ -117,7 +119,7 @@ void daemonize()
     exit(0); /* parent exits */
     }
   /* child (daemon) continues */
-  pid_t pg = setsid(); /* obtain a new process group */
+  pg = setsid(); /* obtain a new process group */
   if( pg == -1 )
     {
     syslog(LOG_ERR,"setsid failed");
@@ -127,9 +129,9 @@ void daemonize()
     int c = close(i); /* close all descriptors */
     if( c != 0 )
       {
-      // most of the descriptor are not open anyway, do not print
-      // too much garbage in the syslog then:
-      //syslog(LOG_ERR,"close failed on descriptor: %d", i);
+      /* most of the descriptor are not open anyway, do not print
+         too much garbage in the syslog then: */
+      /*syslog(LOG_ERR,"close failed on descriptor: %d", i); */
       }
     }
   i=open("/dev/null",O_RDWR); 
@@ -174,7 +176,7 @@ void daemonize()
 
 void startup()
 {
-  // first thing we should check for the obvious: did we cleanly exit last time:
+  /* first thing we should check for the obvious: did we cleanly exit last time: */
   struct stat buf;
   int st = stat(LOCK_FILE, &buf);
   if( st == 0 )
@@ -183,7 +185,7 @@ void startup()
     exit(1);
     }
 
-  // start up the system logging connection
+  /* start up the system logging connection */
   openlog("gdcmreadahead",LOG_PID,LOG_DAEMON);
   syslog(LOG_DEBUG,"process starting up.");
   daemonize();
@@ -215,50 +217,55 @@ void startup()
 
 int ReadAhead(const char * path)
 {
+  struct stat info;
+  int success;
   int readonly = 1;
   int flags = (readonly ? O_RDONLY : O_RDWR);
   int handle = open(path, flags, S_IRWXU);
+  off_t size;
+  ssize_t ret;
+  int error;
+  int res;
   if( handle == -1 )
     {
     syslog(LOG_WARNING, "Could not open: %s", path);
     return 1;
     }
-  struct stat info;
-  int success = fstat(handle, &info);
+  success = fstat(handle, &info);
   if( success != 0 )
     {
     syslog(LOG_WARNING, "Could not fstat: %s", path);
     return 1;
     }
-  off_t size = info.st_size;
+  size = info.st_size;
   /* get rid of any weird non-file thingy */
   if(S_ISDIR(info.st_mode) || S_ISCHR(info.st_mode) || 
     S_ISBLK(info.st_mode) || S_ISFIFO(info.st_mode) ||
     S_ISSOCK(info.st_mode))
     {
-    // we are done !
+    /* we are done ! */
     close(handle);
     return 0;
     }
-  // Only deal with file
+  /* Only deal with file */
   assert( S_ISREG(info.st_mode) );
 
-  ssize_t ret = readahead(handle, 0, size);
+  ret = readahead(handle, 0, size);
   if( ret == -1 )
     {
     syslog(LOG_ERR, "readahead failed for %s", path );
     return 1;
     }
 
-  int error = close(handle);
+  error = close(handle);
   if( error != 0 ) 
     {
     syslog(LOG_ERR, "close failed for %s", path );
     return 1;
     }
 
-  // be nice to other processes now 
-  int res = sched_yield();
+  /* be nice to other processes now */
+  res = sched_yield();
   if( res != 0 ) 
     {
     syslog(LOG_ERR, "sched_yield failed" );
@@ -270,14 +277,15 @@ int ReadAhead(const char * path)
 
 void ProcessFiles(const char *path)
 {
-  FILE *fp = fopen(path, "r");
-  assert( fp ); // previous call made sure this file existed on the system...
+  int ret;
   char file[PATH_MAX];
+  FILE *fp = fopen(path, "r");
+  assert( fp ); /* previous call made sure this file existed on the system... */
   while (fgets(file, PATH_MAX, fp))  
     {
     size_t size = strlen(file);
     assert( size < PATH_MAX );
-    // get rid of easy cases:
+    /* get rid of easy cases: */
     if( file[size-1] != '\n' )
       {
       /* actually this case can also happen when the file was truncated, basically
@@ -291,14 +299,14 @@ void ProcessFiles(const char *path)
       }
     else
       {
-      // Ok let's try to readahead this file:
-      file[size-1] = 0; // remove the \n
+      /* Ok let's try to readahead this file: */
+      file[size-1] = 0; /* remove the \n */
       /*syslog(LOG_DEBUG, "processing file: %s", file );*/
-      int ret = ReadAhead(file);
+      ret = ReadAhead(file);
       (void)ret;
       }
     }
-  int ret = fclose(fp);
+  ret = fclose(fp);
   if( ret != 0 )
     {
     syslog(LOG_ERR, "could not close: %s", path );
@@ -306,37 +314,39 @@ void ProcessFiles(const char *path)
   syslog(LOG_INFO, "The whole file was processed: %s", path );
 }
 
-// #define LIST_FILE	"gdcmreadahead.list"
+/* #define LIST_FILE	"gdcmreadahead.list" */
 void WatchFile(time_t *reference)
 {
   const char *listfile = LIST_FILE;
   struct stat buf;
   int ret = stat(listfile, &buf);
+  time_t lastmodification;
   if( ret != 0 )
     {
     syslog(LOG_DEBUG, "the list file does not exist !");
     return;
     }
-  time_t lastmodification = buf.st_mtime;
+  lastmodification = buf.st_mtime;
   if( lastmodification > *reference )
     {
     syslog(LOG_INFO, "file list was modified let's readahead: %ld > %ld", lastmodification, *reference);
     ProcessFiles(listfile);
-    // done let's store the new reference time:
+    /* done let's store the new reference time: */
     *reference = lastmodification;
     }
 }
 
 int main(int argc, char *argv[])
 {
+  time_t start;
   (void)argc; (void)argv;
   startup();
-  time_t start = 0; // make sure to always read the list file
+  start = 0; /* make sure to always read the list file at least once */
   while(1) 
     {
-    //syslog(LOG_DEBUG,"   still running...");
+    /*syslog(LOG_DEBUG,"   still running...");*/
     WatchFile( &start );
-    sleep(1); /* run every 10 seconds */
+    sleep(1); /* run every 1 second */
     }
 
   return 0;

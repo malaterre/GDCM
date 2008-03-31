@@ -235,6 +235,7 @@ void MediaStorage::SetFromDataSet(DataSet const &ds, bool guess)
   if( ds.FindDataElement( tsopclassuid ) )
     {
     const ByteValue *sopclassuid = ds.GetDataElement( tsopclassuid ).GetByteValue();
+    assert( sopclassuid );
     std::string sopclassuid_str(
       sopclassuid->GetPointer(),
       sopclassuid->GetLength() );

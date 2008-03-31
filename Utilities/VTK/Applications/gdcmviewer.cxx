@@ -445,8 +445,11 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 
   reader->Delete();
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
-  iconwidget->Off();
-  iconwidget->Delete();
+  if( iconwidget )
+    {
+    iconwidget->Off();
+    iconwidget->Delete();
+    }
 #endif
   iren->Delete();
   viewer->Delete();
