@@ -234,9 +234,6 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     SET(CPACK_SYSTEM_NAME ${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR})
   ENDIF(NOT DEFINED CPACK_SYSTEM_NAME)
   # Need to set the architecture for debian package
-  IF(UNIX)
-    EXEC_PROGRAM(dpkg ARGS --print-architecture OUTPUT_VARIABLE CPACK_DEBIAN_PACKAGE_ARCHITECTURE)
-  ENDIF(UNIX)
 
   SET(CPACK_PACKAGE_CONTACT "gdcm-developers@lists.sourceforge.net")
 
