@@ -16,6 +16,7 @@
  * OS Specific: Linux (>2.4.11)
  * gdcmreadahead is a daemon that runs in the background and prepare file
  * stored on disk to be cached by the system (readahead system call)
+ * \ see also See typical init.d (debian) gdcmreadahead that starts the service
  *
  * LOG file is: /var/log/daemon.log
  * LOCK file is: /tmp/gdcmreadahead.lock
@@ -66,7 +67,7 @@ To terminate:	kill `cat /tmp/exampled.lock`
 
 
 #define RUNNING_DIR	"/tmp"
-#define LOCK_FILE	"/tmp/gdcmreadahead.lock"
+#define LOCK_FILE	"/var/run/gdcmreadahead.pid"
 #define LIST_FILE	"/tmp/gdcmreadahead.list"
 
 void shutdown(int ex)
