@@ -70,22 +70,3 @@ ENDFOREACH(exename)
 #ADD_EXECUTABLE(deflate deflate.cxx)
 #TARGET_LINK_LIBRARIES(deflate gdcmzlib)
 
-# Special daemon
-# C program only, no link to gdcm to make it as lightweight as possible
-# it uses the readahead func from linux kernel
-IF(CMAKE_HAVE_FCNTL_H AND CMAKE_HAVE_SHED_H)
-  IF(NOT CYGWIN)
-    ADD_EXECUTABLE(gdcmreadahead gdcmreadahead.c)
-    INSTALL(TARGETS gdcmreadahead
-      RUNTIME DESTINATION bin
-      LIBRARY DESTINATION lib
-      ARCHIVE DESTINATION lib/static
-    )
-    # package its twin init.d script also:
-    INSTALL(PROGRAMS gdcmreadahead
-      DESTINATION /etc/init.d/
-    )
-  ENDIF(NOT CYGWIN)
-ENDIF(CMAKE_HAVE_FCNTL_H AND CMAKE_HAVE_SHED_H)
-
-# At that point Testing subdirectory should have been done in which case datafiles are set:
