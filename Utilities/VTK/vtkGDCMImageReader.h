@@ -177,6 +177,10 @@ public:
   vtkGetObjectMacro(Curve,vtkPolyData);
   virtual void SetCurve(vtkPolyData *pd);
 
+  // Modality LUT
+  vtkGetMacro(Shift,double);
+  vtkGetMacro(Scale,double);
+
 protected:
   vtkGDCMImageReader();
   ~vtkGDCMImageReader();
@@ -233,6 +237,9 @@ protected:
   int ApplyPlanarConfiguration;
 
   int LoadSingleFile(const char *filename, char *pointer, unsigned long &outlen);
+
+  double Shift;
+  double Scale;
 
 private:
   vtkGDCMImageReader(const vtkGDCMImageReader&);  // Not implemented.

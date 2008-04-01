@@ -88,6 +88,8 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   memset(this->ImagePositionPatient,0,3*sizeof(double));
   memset(this->ImageOrientationPatient,0,6*sizeof(double));
   this->Curve = 0;
+  this->Shift = 0.;
+  this->Scale = 1.;
 }
 
 vtkGDCMImageReader::~vtkGDCMImageReader()

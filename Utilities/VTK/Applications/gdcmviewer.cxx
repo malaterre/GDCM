@@ -247,7 +247,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   // 0028|1051 [DS] [Window Width]
   // but gdcmviewer doesn't know about them :-(
 
-  reader->FileLowerLeftOn();
+  //reader->FileLowerLeftOn();
   reader->Update();
   //reader->Print( cout );
   //reader->GetOutput()->Print( cout );
