@@ -18,6 +18,8 @@
 #include <string>
 #include <set>
 
+#include <string.h>
+
 int TestUIDGeneratorValid()
 {
   gdcm::UIDGenerator uid;

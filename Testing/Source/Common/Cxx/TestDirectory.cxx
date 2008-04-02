@@ -16,6 +16,8 @@
 #include "gdcmTesting.h"
 #include "gdcmSystem.h"
 
+#include <stdlib.h> // atoi
+
 int TestOneDirectory(const char *path, bool recursive = false )
 {
   if( !gdcm::System::FileIsDirectory(path) )

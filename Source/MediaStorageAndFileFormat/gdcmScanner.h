@@ -23,6 +23,8 @@
 #include <set>
 #include <string>
 
+#include <string.h> // strcmp
+
 namespace gdcm
 {
 /**

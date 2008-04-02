@@ -24,6 +24,8 @@
 #include <sstream>
 #include <assert.h>
 #include <errno.h>
+#include <string.h> // strerror
+
 
 namespace gdcm 
 {

@@ -75,7 +75,7 @@ static const char *TSStrings[] = {
   0 // Compilers have no obligation to finish by NULL, do it ourself
 };
 
-const TransferSyntax::TSType TransferSyntax::GetTSType(const char *cstr)
+TransferSyntax::TSType TransferSyntax::GetTSType(const char *cstr)
 {
   // trim trailing whitespace
   std::string str = cstr;

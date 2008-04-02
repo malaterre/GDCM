@@ -15,6 +15,8 @@
 #include "gdcmTesting.h"
 #include "gdcmFilename.h"
 
+#include <string.h> // strcmp
+
 namespace gdcm
 {
 

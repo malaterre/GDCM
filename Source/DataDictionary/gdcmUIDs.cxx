@@ -17,6 +17,7 @@
 
 =========================================================================*/
 #include "gdcmUIDs.h"
+#include <string.h> // strcmp
 
 //#ifdef __gdcmUIDs_cxx
 

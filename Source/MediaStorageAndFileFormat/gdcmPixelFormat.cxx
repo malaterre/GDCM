@@ -14,6 +14,7 @@
 =========================================================================*/
 #include "gdcmPixelFormat.h"
 #include "gdcmTrace.h"
+#include <stdlib.h>
 
 namespace gdcm
 {

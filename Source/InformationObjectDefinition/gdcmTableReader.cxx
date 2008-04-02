@@ -20,6 +20,7 @@
 #include "expat/lib/expat.h"
 
 #include <stdio.h> // for stderr
+#include <string.h>
 
 namespace gdcm
 {

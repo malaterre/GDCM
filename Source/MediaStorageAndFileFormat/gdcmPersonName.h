@@ -19,6 +19,7 @@
 #include "gdcmTypes.h"
 #include <vector>
 #include <algorithm> // std::min
+#include <string.h> // strlen
 
 namespace gdcm
 {
@@ -43,6 +44,7 @@ public:
   }
   unsigned int GetMaxLength() const { return MaxLength; };
   void SetBlob(const std::vector<char>& v) {
+  (void)v;
     //abort(); //TODO
   }
   void SetComponents(const char *comp1 = "", 

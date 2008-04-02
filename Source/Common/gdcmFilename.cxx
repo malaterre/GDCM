@@ -13,7 +13,10 @@
 
 =========================================================================*/
 #include "gdcmFilename.h"
+#include <limits.h>
+#include <stdlib.h> // realpath
 #include <assert.h>
+
 
 namespace gdcm
 {

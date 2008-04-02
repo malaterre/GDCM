@@ -16,7 +16,7 @@
 
 int TestModuleEntry(int, char *[])
 {
-  gdcm::ModuleEntry me("","");
+  gdcm::ModuleEntry me("Image Type","1","Image identification characteristics. See C.8.3.1.1.1 for specialization.");
   return 0;
 }
 

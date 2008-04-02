@@ -82,7 +82,7 @@ static const char *MSStrings[] = {
   0
 };
 
-const MediaStorage::MSType MediaStorage::GetMSType(const char *str)
+MediaStorage::MSType MediaStorage::GetMSType(const char *str)
 {
   assert( std::string(str).find( ' ' ) == std::string::npos ); // no space allowed in UI
   int i = 0;

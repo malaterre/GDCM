@@ -18,6 +18,7 @@
 
 #include "gdcmTypes.h"
 #include "gdcmObject.h"
+#include <stdlib.h>
 
 namespace gdcm
 {

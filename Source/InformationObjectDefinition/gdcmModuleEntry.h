@@ -30,33 +30,34 @@ namespace gdcm
 class GDCM_EXPORT ModuleEntry
 {
 public:
-  ModuleEntry(/*const char *name,*/const char *type, const char *description):Description(description) {
+  ModuleEntry(const char *name, const char *type, const char *description):Name(name)/*,Type(type)*/,DescriptionField(description) {
 	  DataElementType = Type::GetTypeType(type);
   }
   friend std::ostream& operator<<(std::ostream& _os, const ModuleEntry &_val);
 
-  const char *GetName() const { return ""; }
+  const char *GetName() const { return Name.c_str(); }
 
   const Type &GetType() const { return DataElementType; }
 
-  const char *GetDescription() const { return Description.c_str(); }
+  typedef std::string Description;
+  const Description & GetDescription() const { return DescriptionField; }
 
 private:
   // PS 3.3 repeats the name of an attribute, but often contains typos
   // for now we will not use this info, but instead access the DataDict instead
-  //std::string Name;
+  std::string Name;
 
   // An attribute, encoded as a Data Element, may or may not be required in a 
   // Data Set, depending on that Attribute's Data Element Type.
   Type DataElementType;
 
   // TODO: for now contains the raw description (with enumerated values, defined terms...)
-  std::string Description;
+  Description DescriptionField;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const ModuleEntry &_val)
 {
-  _os << _val.DataElementType << "\t" << _val.Description;
+  _os << _val.DataElementType << "\t" << _val.DescriptionField;
   return _os;
 }
 

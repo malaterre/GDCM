@@ -18,6 +18,8 @@
 #include "gdcmByteSwap.h"
 #include <iostream>
 
+#include <stdlib.h> // abort
+
 namespace gdcm
 {
 

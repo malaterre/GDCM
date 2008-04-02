@@ -22,6 +22,8 @@
 #include <iomanip>
 #include <algorithm>
 
+#include <string.h> // strlen
+
 namespace gdcm
 {
 

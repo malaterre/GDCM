@@ -15,6 +15,7 @@
 #include "gdcmPhotometricInterpretation.h"
 #include "gdcmTrace.h"
 #include <assert.h>
+#include <stdlib.h>
 
 namespace gdcm
 {
