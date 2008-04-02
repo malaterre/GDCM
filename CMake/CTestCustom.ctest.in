@@ -8,6 +8,8 @@ SET(CTEST_CUSTOM_MAXIMUM_FAILED_TEST_OUTPUT_SIZE 49152)
 SET(CTEST_CUSTOM_WARNING_EXCEPTION
   ${CTEST_CUSTOM_WARNING_EXCEPTION}
   "Utilities"
+  "Utilities/expat"
+  "expat"
   )
 
 # Disable dynamic analysis on some tests:
