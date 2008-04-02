@@ -53,7 +53,7 @@ vtkStandardNewMacro(vtkGDCMImageReader)
 #define ICONIMAGEPORTNUMBER 1
 #define OVERLAYPORTNUMBER   2
 
-vtkCxxSetObjectMacro(vtkGDCMImageReader,Curve,vtkPolyData);
+vtkCxxSetObjectMacro(vtkGDCMImageReader,Curve,vtkPolyData)
 
 vtkGDCMImageReader::vtkGDCMImageReader()
 {
