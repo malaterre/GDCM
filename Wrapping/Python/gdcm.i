@@ -57,6 +57,7 @@
 #include "gdcmSystem.h"
 #include "gdcmTrace.h"
 #include "gdcmUIDs.h"
+#include "gdcmIPPSorter.h"
 
 using namespace gdcm;
 %}
@@ -319,3 +320,4 @@ using namespace gdcm;
 %include "gdcmSystem.h"
 %include "gdcmTrace.h"
 %include "gdcmUIDs.h"
+%include "gdcmIPPSorter.h"
