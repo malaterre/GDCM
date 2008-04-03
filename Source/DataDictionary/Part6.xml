@@ -54,12 +54,6 @@ or
 
 Picking the second one since this is the one I found in dicomdir_Acusson_WithPrivate_WithSR
 
-5. Changed
-    <entry group="300a" element="00be" vr="DS" vm="3-n" name="Leaf Position Boundaries"/>
-
-    into:
-
-    <entry group="300a" element="00be" vr="DS" vm="2-n" name="Leaf Position Boundaries"/>
 -->
 <!DOCTYPE doc [
 	 <!ENTITY part7 SYSTEM "Part7.xml">
@@ -2286,7 +2280,7 @@ Picking the second one since this is the one I found in dicomdir_Acusson_WithPri
     <entry group="300a" element="00ba" vr="DS" vm="1" name="Source to Beam Limiting Device Distance"/>
     <entry group="300a" element="00bb" vr="FL" vm="1" name="Isocenter to Beam Limiting Device Distance"/>
     <entry group="300a" element="00bc" vr="IS" vm="1" name="Number of Leaf/Jaw Pairs"/>
-    <entry group="300a" element="00be" vr="DS" vm="2-n" name="Leaf Position Boundaries"/>
+    <entry group="300a" element="00be" vr="DS" vm="3-n" name="Leaf Position Boundaries"/>
     <entry group="300a" element="00c0" vr="IS" vm="1" name="Beam Number"/>
     <entry group="300a" element="00c2" vr="LO" vm="1" name="Beam Name"/>
     <entry group="300a" element="00c3" vr="ST" vm="1" name="Beam Description"/>
