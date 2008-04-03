@@ -82,8 +82,8 @@ public:
   double GetOverlayVisibility() { return 0; }
   void SetOverlayVisibility(double vis) {(void)vis;}
 };
-vtkCxxRevisionMacro(vtkGDCMImageViewer, "$Revision: 1.30 $");
-vtkInstantiatorNewMacro(vtkGDCMImageViewer);
+vtkCxxRevisionMacro(vtkGDCMImageViewer, "$Revision: 1.30 $")
+vtkInstantiatorNewMacro(vtkGDCMImageViewer)
 
 #if VTK_MAJOR_VERSION >= 5
 #else
@@ -128,8 +128,8 @@ public:
 private:
   vtkImageActor                   *OverlayImageActor;
 };
-vtkCxxRevisionMacro(vtkImageColorViewer, "$Revision: 1.30 $");
-vtkInstantiatorNewMacro(vtkImageColorViewer);
+vtkCxxRevisionMacro(vtkImageColorViewer, "$Revision: 1.30 $")
+vtkInstantiatorNewMacro(vtkImageColorViewer)
 #endif
 
 //----------------------------------------------------------------------------
