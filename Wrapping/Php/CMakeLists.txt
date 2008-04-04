@@ -1,0 +1,44 @@
+# TODO:
+# SWIG is really a pain in the neck to use, a better alternative is Py++ which is using
+# gccxml for the C++ parser and allow a full ANSI C++ support
+FIND_PACKAGE(SWIG REQUIRED)
+INCLUDE(${SWIG_USE_FILE})
+
+INCLUDE_DIRECTORIES(
+  "${GDCM_BINARY_DIR}/Source/Common"
+  "${GDCM_SOURCE_DIR}/Source/Common"
+  "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
+  "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
+  "${GDCM_SOURCE_DIR}/Source/DataDictionary"
+)
+# Provide some C99 compatilities for all win system...hopefully there won't be no collision
+IF(WIN32)
+  INCLUDE_DIRECTORIES(
+    "${GDCM_SOURCE_DIR}/Utilities/C99"
+  )
+ENDIF(WIN32)
+
+FIND_PACKAGE(PHP4 REQUIRED)
+
+INCLUDE_DIRECTORIES( 
+  ${PHP4_INCLUDE_PATH}
+)
+
+SET_SOURCE_FILES_PROPERTIES(gdcm.i PROPERTIES CPLUSPLUS ON)
+
+# Some old swig 1.3 did not support this option:
+#SET(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_BINARY_DIR}")
+
+SWIG_ADD_MODULE(gdcmphp php gdcm.i)
+SWIG_LINK_LIBRARIES(gdcmphp gdcmMSFF)
+
+#Module are always place in the library destination
+#but for poot win32 user I decided to place them
+# right next to the other dlls
+IF(NOT GDCM_INSTALL_NO_LIBRARIES)
+  INSTALL(TARGETS ${SWIG_MODULE_gdcm_REAL_NAME}
+    RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime
+    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
+    ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
+  )
+ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)

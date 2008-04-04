@@ -148,6 +148,14 @@ ELSE(GDCM_BUILD_SHARED_LIBS)
   ENDIF(GDCM_INSTALL_NO_DEVELOPMENT)
 ENDIF(GDCM_BUILD_SHARED_LIBS)
 
+#-----------------------------------------------------------------------------
+OPTION(GDCM_BUILD_EXAMPLES "Build GDCM examples." OFF)
+SET(BUILD_EXAMPLES ${GDCM_BUILD_EXAMPLES})
+IF(BUILD_EXAMPLES)
+  SUBDIRS(Examples)
+ENDIF(BUILD_EXAMPLES)
+
+#-----------------------------------------------------------------------------
 SUBDIRS(
   Utilities
   Source
@@ -175,23 +183,26 @@ ENDIF(BUILD_TESTING)
 
 #-----------------------------------------------------------------------------
 OPTION(GDCM_DOCUMENTATION "Build source documentation using doxygen." OFF)
-#SET(BUILD_APPLICATIONS ${GDCM_BUILD_APPLICATIONS})
 
+#-----------------------------------------------------------------------------
 OPTION(GDCM_USE_VTK "vtk bridge ?" OFF)
 IF(GDCM_USE_VTK)
   SUBDIRS(Utilities/VTK)
 ENDIF(GDCM_USE_VTK)
 
+#-----------------------------------------------------------------------------
 OPTION(GDCM_USE_ITK "itk bridge ?" OFF)
 IF(GDCM_USE_ITK)
   SUBDIRS(Utilities/Insight)
 ENDIF(GDCM_USE_ITK)
 
+#-----------------------------------------------------------------------------
 OPTION(GDCM_USE_WXWIDGETS "wxWidgets bridge ?" OFF)
 IF(GDCM_USE_WXWIDGETS)
   SUBDIRS(Utilities/wxWidgets)
 ENDIF(GDCM_USE_WXWIDGETS)
 
+#-----------------------------------------------------------------------------
 OPTION(GDCM_BUILD_APPLICATIONS "apps ?" OFF)
 SET(BUILD_APPLICATIONS ${GDCM_BUILD_APPLICATIONS})
 IF(BUILD_APPLICATIONS)
@@ -253,13 +264,13 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
 ENDIF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
 
 #-----------------------------------------------------------------------------
-OPTION(GDCM_BUILD_WRAPPING "wrapping ?" OFF)
-SET(BUILD_WRAPPING ${GDCM_BUILD_WRAPPING})
-IF(BUILD_WRAPPING)
-  SUBDIRS(Wrapping)
-ENDIF(BUILD_WRAPPING)
+# Wrapping
+OPTION(GDCM_WRAP_PYTHON "build python wrapping" OFF)
+OPTION(GDCM_WRAP_PHP "php wrapping (experimental !)" OFF)
+OPTION(GDCM_WRAP_JAVA "build java wrapping (experimental !)" OFF)
+SUBDIRS(Wrapping)
 
-
+#-----------------------------------------------------------------------------
 # Need to be the last operation:
 SUBDIRS(CMake/ExportConfiguration)
 

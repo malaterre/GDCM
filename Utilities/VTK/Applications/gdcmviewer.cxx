@@ -16,6 +16,7 @@
 
 #include "vtkXMLImageDataWriter.h"
 #include "vtkPNGWriter.h"
+#include "vtkImageShiftScale.h"
 #include "vtkOutlineFilter.h"
 #include "vtkMath.h"
 #include "vtkPolyDataMapper2D.h"
@@ -258,7 +259,6 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   float range[2];
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
   reader->GetOutput()->GetScalarRange(range);
-  //std::cerr << "Range: " << range[0] << " " << range[1] << std::endl;
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   viewer->SetInputConnection ( reader->GetOutputPort(0) );
   // Technically we could just simple always call AddInputConnection on the overlay
@@ -345,6 +345,14 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     std::cerr << "Not implemented" << std::endl;
 #endif
     }
+//  vtkImageShiftScale *ss = vtkImageShiftScale::New();
+//  ss->SetInput( reader->GetOutput() );
+//  ss->SetShift( -1024 );
+//  ss->SetOutputScalarTypeToShort();
+//  ss->Update();
+//    ss->GetOutput()->GetScalarRange(range);
+//    viewer->SetInput( ss->GetOutput() );
+//    ss->Delete();
 
   if( reader->GetCurve() )
     {
@@ -395,6 +403,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   // Always overwriting default is not always nice looking...
   viewer->SetColorLevel (0.5 * (range[1] + range[0]));
   viewer->SetColorWindow (range[1] - range[0]);
+  std::cerr << "Range: " << range[0] << " " << range[1] << std::endl;
 
   viewer->SetupInteractor (iren);
   int dims[3];

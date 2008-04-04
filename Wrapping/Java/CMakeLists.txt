@@ -19,6 +19,7 @@ IF(WIN32)
 ENDIF(WIN32)
 
 # $ export JAVA_HOME=/usr/lib/j2sdk1.6-sun/ 
+# $ export JAVA_HOME=/usr/lib/jvm/java-1.5.0-sun/
 FIND_PACKAGE(JNI REQUIRED)
 INCLUDE_DIRECTORIES(
   #${JNI_INCLUDE_PATH}
@@ -31,12 +32,19 @@ SET_SOURCE_FILES_PROPERTIES(gdcm.i PROPERTIES CPLUSPLUS ON)
 # Some old swig 1.3 did not support this option:
 #SET(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_BINARY_DIR}")
 
+#SET(CMAKE_SWIG_FLAGS "-package gdcm")
+#SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
 SWIG_ADD_MODULE(gdcm java gdcm.i)
 SWIG_LINK_LIBRARIES(gdcm gdcmMSFF
   #${JNI_LIBRARIES}
   ${JAVA_AWT_LIB_PATH}
   ${JAVA_JVM_LIB_PATH}
-)
+) 
+# Stupid cmake-swig module is doing that for us, when not needed
+IF(UNIX)
+  SET_TARGET_PROPERTIES(${SWIG_MODULE_gdcm_REAL_NAME} PROPERTIES PREFIX "lib")
+ENDIF(UNIX)
+
 
 #  MESSAGE(${SWIG_MODULE_gdcm_REAL_NAME})
 #  MESSAGE( "${swig_extra_generated_files}" )
