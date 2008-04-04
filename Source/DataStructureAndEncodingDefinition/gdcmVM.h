@@ -107,12 +107,12 @@ public:
 
   // Return the string as written in the official DICOM dict from 
   // a custom enum type
-  static const char* GetVMString(const VMType &vm);
+  static const char* GetVMString(VMType vm);
   static VMType GetVMType(const char *vm);
 
   // Check if vm1 is valid compare to vm2, i.e vm1 is element of vm2
   // vm1 is typically deduce from counting in a ValueField
-  static bool IsValid(const int &vm1, const VMType &vm2);
+  static bool IsValid(int vm1, VMType vm2);
   //bool IsValid() { return VMField != VM0 && VMField < VM_END; }
 
   // WARNING: Implementation deficiency

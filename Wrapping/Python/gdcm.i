@@ -30,14 +30,25 @@
 #include "gdcmVL.h"
 #include "gdcmVR.h"
 #include "gdcmVM.h"
+#include "gdcmObject.h"
 #include "gdcmValue.h"
 #include "gdcmByteValue.h"
 #include "gdcmDataElement.h"
 #include "gdcmItem.h"
 #include "gdcmSequenceOfItems.h"
 #include "gdcmDataSet.h"
+//#include "gdcmString.h"
 #include "gdcmPreamble.h"
 #include "gdcmFile.h"
+#include "gdcmFragment.h"
+#include "gdcmCSAHeader.h"
+#include "gdcmSequenceOfFragments.h"
+#include "gdcmTransferSyntax.h"
+#include "gdcmBasicOffsetTable.h"
+//#include "gdcmLO.h"
+#include "gdcmCSAElement.h"
+#include "gdcmFileSet.h"
+
 #include "gdcmReader.h"
 #include "gdcmImageReader.h"
 #include "gdcmWriter.h"
@@ -58,6 +69,31 @@
 #include "gdcmTrace.h"
 #include "gdcmUIDs.h"
 #include "gdcmIPPSorter.h"
+#include "gdcmSpectroscopy.h"
+#include "gdcmPrinter.h"
+#include "gdcmDumper.h"
+#include "gdcmOrientation.h"
+#include "gdcmFiducials.h"
+#include "gdcmWaveform.h"
+#include "gdcmPersonName.h"
+#include "gdcmIconImage.h"
+#include "gdcmCurve.h"
+#include "gdcmDICOMDIR.h"
+#include "gdcmValidate.h"
+#include "gdcmApplicationEntity.h"
+#include "gdcmDictPrinter.h"
+#include "gdcmSorter.h"
+#include "gdcmFilenameGenerator.h"
+#include "gdcmVersion.h"
+#include "gdcmFilename.h"
+#include "gdcmEnumeratedValues.h"
+#include "gdcmPatient.h"
+#include "gdcmStudy.h"
+#include "gdcmModule.h"
+#include "gdcmTableEntry.h"
+#include "gdcmDefinedTerms.h"
+#include "gdcmSeries.h"
+#include "gdcmModuleEntry.h"
 
 using namespace gdcm;
 %}
@@ -113,6 +149,8 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
+%include "gdcmVM.h"
+%include "gdcmObject.h"
 %include "gdcmValue.h"
 %extend gdcm::Value
 {
@@ -192,6 +230,7 @@ using namespace gdcm;
     return buffer.c_str();
     }
 };
+//%include "gdcmString.h"
 //%include "gdcmTransferSyntax.h"
 %include "gdcmPhotometricInterpretation.h"
 %include "gdcmObject.h"
@@ -245,9 +284,17 @@ using namespace gdcm;
 //}
 
 };
+%include "gdcmFragment.h"
+%include "gdcmCSAHeader.h"
+%include "gdcmSequenceOfFragments.h"
+%include "gdcmTransferSyntax.h"
+%include "gdcmBasicOffsetTable.h"
+//%include "gdcmLO.h"
+%include "gdcmCSAElement.h"
+%include "gdcmFileSet.h"
+
 %include "gdcmGlobal.h"
-//%include "gdcmVR.h"
-//%include "gdcmVM.h"
+
 %include "gdcmDictEntry.h"
 %extend gdcm::DictEntry
 {
@@ -321,3 +368,30 @@ using namespace gdcm;
 %include "gdcmTrace.h"
 %include "gdcmUIDs.h"
 %include "gdcmIPPSorter.h"
+%include "gdcmSpectroscopy.h"
+%include "gdcmPrinter.h"
+%include "gdcmDumper.h"
+%include "gdcmOrientation.h"
+%include "gdcmFiducials.h"
+%include "gdcmWaveform.h"
+%include "gdcmPersonName.h"
+%include "gdcmIconImage.h"
+%include "gdcmCurve.h"
+%include "gdcmDICOMDIR.h"
+%include "gdcmValidate.h"
+%include "gdcmApplicationEntity.h"
+%include "gdcmDictPrinter.h"
+%include "gdcmSorter.h"
+%include "gdcmFilenameGenerator.h"
+%include "gdcmVersion.h"
+%include "gdcmFilename.h"
+%include "gdcmEnumeratedValues.h"
+%include "gdcmPatient.h"
+%include "gdcmStudy.h"
+%include "gdcmModule.h"
+%include "gdcmTableEntry.h"
+%include "gdcmDefinedTerms.h"
+%include "gdcmSeries.h"
+%include "gdcmModuleEntry.h"
+
+

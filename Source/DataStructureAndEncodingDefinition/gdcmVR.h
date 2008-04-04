@@ -98,9 +98,7 @@ public:
   static bool IsValid(const char *vr);
   // Check if vr1 is valid against vr2,
   // Typically vr1 is read from the file and vr2 is taken from the dict
-#ifndef SWIG
-  static bool IsValid(const char *vr1, const VRType &vr2);
-#endif
+  static bool IsValid(const char *vr1, VRType vr2);
   //static bool IsValid(const VRType &vr1, const VRType &vr2);
   // Find out if the string read is byte swapped
   static bool IsSwap(const char *vr);
@@ -121,17 +119,15 @@ public:
       return 2;
   }
   
-#ifndef SWIG
   // Some use of template metaprograming with ugly macro
-  static bool IsBinary(VRType const &vr);
-  static bool IsASCII(VRType const &vr);
+  static bool IsBinary(VRType vr);
+  static bool IsASCII(VRType vr);
   // TODO: REMOVE ME
-  static bool CanDisplay(VRType const &vr);
+  static bool CanDisplay(VRType vr);
   // TODO: REMOVE ME
-  static bool IsBinary2(VRType const &vr);
+  static bool IsBinary2(VRType vr);
   // TODO: REMOVE ME
-  static bool IsASCII2(VRType const &vr);
-#endif
+  static bool IsASCII2(VRType vr);
   
   VR(VRType vr = INVALID):VRField(vr) { }
   //VR(VR const &vr):VRField(vr.VRField) { }
