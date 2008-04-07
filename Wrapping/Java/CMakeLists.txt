@@ -29,9 +29,10 @@ INCLUDE_DIRECTORIES(
   ${JAVA_AWT_INCLUDE_PATH}
   )
 SET_SOURCE_FILES_PROPERTIES(gdcm.i PROPERTIES CPLUSPLUS ON)
+#INCLUDE(${GDCM_SOURCE_DIR}/CMake/UseSWIGExtra.cmake)
 
 # Some old swig 1.3 did not support this option:
-#SET(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_BINARY_DIR}")
+#SET(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_BINARY_DIR}/swig-java")
 
 SET(CMAKE_SWIG_FLAGS "-package gdcm")
 SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
@@ -46,43 +47,73 @@ IF(UNIX)
   SET_TARGET_PROPERTIES(${SWIG_MODULE_gdcm_REAL_NAME} PROPERTIES PREFIX "lib")
 ENDIF(UNIX)
 
-# Ok now let's build the jar file:
-FILE(GLOB javafiles ${CMAKE_CURRENT_BINARY_DIR} "*.java")
-#MESSAGE(FATAL_ERROR ${CMAKE_CURRENT_BINARY_DIR})
-#MESSAGE(FATAL_ERROR ${javafiles})
+# swig-java dummy run:
+# the following execute_process is a dummy run and generate all *.java files in a directory
+# we can then glob all *.java to build rules in case the java wrapper becomes broken
+#EXECUTE_PROCESS(COMMAND ${SWIG_EXECUTABLE} 
+#  -java
+#  -I${GDCM_BINARY_DIR}/Source/Common
+#  -I${GDCM_SOURCE_DIR}/Source/Common
+#  -I${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition
+#  -I${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat
+#  -I${GDCM_SOURCE_DIR}/Source/DataDictionary
+#  -c++ 
+#  -o dummy.o
+#  ${CMAKE_CURRENT_SOURCE_DIR}/gdcm.i
+#  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+#  RESULT_VARIABLE res
+#)
+#MESSAGE("res:${res}")
+#FILE(GLOB javafiles "${CMAKE_CURRENT_BINARY_DIR}/*.java")
+#MESSAGE("javafile:${javafiles}")
 
-ADD_CUSTOM_TARGET(GDCMJavaJar ALL)
-
+# This is kindda hackish:
+# 1. run the custom command only when the gdcmJAVA_wrap.cxx has been generated (which means all *.java should be there)
 ADD_CUSTOM_COMMAND(
-  TARGET GDCMJavaJar
-  PRE_BUILD
-  COMMAND ${JAVA_COMPILE} ARGS ${javafiles}
+  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gdcm.class
+  COMMAND ${JAVA_COMPILE} ARGS "*.java" #${javafiles}
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  DEPENDS "${swig_generated_file_fullname}"
   COMMENT "javac *.java"
 )
 
+# 2. now that the *.class have been generated construct the jar file. We can only rely on the gdcm.java / gdcm.class
+# to build dependencie, I am pretty sure it will break parallel builds... oh well
 ADD_CUSTOM_COMMAND(
   OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gdcm.jar
-  COMMAND ${JAVA_ARCHIVE} ARGS cvf *.class
+  COMMAND ${JAVA_ARCHIVE} ARGS cvf ${CMAKE_CURRENT_BINARY_DIR}/gdcm.jar *.class
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gdcm.class
   COMMENT "jar cvf -> gdcm.jar"
 )
 
-ADD_CUSTOM_COMMAND(
-  TARGET GDCMJavaJar
+# 3. ok now add the target
+ADD_CUSTOM_TARGET(GDCMJavaJar ALL
   DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gdcm.jar
+  COMMENT "building gdcm.jar"
 )
 
+# 4. gdcm.jar has been generated, let's put it right next to libgdcm.so:
+#ADD_CUSTOM_COMMAND(
+#  TARGET   GDCMJavaJar
+#  POST_BUILD
+#  COMMAND   ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/gdcm.jar ${LIBRARY_OUTPUT_PATH}
+#  DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gdcm.jar
+#  COMMENT   "Copy gdcm.jar into ${LIBRARY_OUTPUT_PATH}"
+#)
 
-#Module are always place in the library destination
-#but for poot win32 user I decided to place them
+# Module are always place in the library destination
+# but for poor win32 user I decided to place them
 # right next to the other dlls
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS ${SWIG_MODULE_gdcm_REAL_NAME}
     RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime
     LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
     ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
+  )
+  # because gdcm.jar is constructed with custom commands, it need the INSTALL(FILES signature:
+  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gdcm.jar
+    DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
   )
 ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 

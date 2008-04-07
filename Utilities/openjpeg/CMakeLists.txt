@@ -36,7 +36,9 @@ SET(OPENJPEG_VERSION
 
 #-----------------------------------------------------------------------------
 # For the codec...
-OPTION(BUILD_EXAMPLES "Build the Examples (codec...)." OFF)
+OPTION(OPJ_BUILD_EXAMPLES "Build the Examples (codec...)." OFF)
+SET(BUILD_EXAMPLES ${OPJ_BUILD_EXAMPLES})
+MARK_AS_ADVANCED(OPJ_BUILD_EXAMPLES)
 
 
 # configure name mangling to allow multiple libraries to coexist

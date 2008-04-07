@@ -225,7 +225,7 @@ bool ImageCodec::DoPaddedCompositePixelCode(std::istream &is, std::ostream &os)
   //SwapCode sc = is.GetSwapCode();
 
   assert( !(buf_size % 2) );
-  for(unsigned long i = 0; i < buf_size/2; ++i)
+  for(long i = 0; i < buf_size/2; ++i)
     {
 #ifdef GDCM_WORDS_BIGENDIAN
     os.write( dummy_buffer+i, 1 );

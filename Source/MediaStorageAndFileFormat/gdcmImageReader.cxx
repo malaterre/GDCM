@@ -403,6 +403,7 @@ void DoOverlays(const DataSet& ds, ImageValue& pixeldata)
             << "This is not supported right now"
             << std::endl );
           ov.IsInPixelData( true );
+          ov.GrabOverlayFromPixelData(ds);
           }
         }
       }

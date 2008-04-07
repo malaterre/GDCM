@@ -283,6 +283,49 @@ void Overlay::Update(const DataElement & de)
     }
 }
 
+void Overlay::GrabOverlayFromPixelData(DataSet const &ds)
+{
+  if( Internal->BitsAllocated == 16 )
+    {
+    assert( Internal->BitPosition >= 12 );
+    assert( ds.FindDataElement( Tag(0x7fe0,0x0010) ) );
+    const DataElement &pixeldata = ds.GetDataElement( Tag(0x7fe0,0x0010) );
+    const ByteValue *bv = pixeldata.GetByteValue();
+    assert( bv );
+    const char *array = bv->GetPointer();
+    const unsigned int ovlength = Internal->Rows * Internal->Columns / 8;
+    // SIEMENS_GBS_III-16-ACR_NEMA_1.acr is pain to support,
+    // I cannot simply use the bv->GetLength I have to use the image dim:
+    const unsigned int length = ovlength * 8 * 2; //bv->GetLength();
+    const uint16_t *p = (uint16_t*)array;
+    const uint16_t *end = (uint16_t*)(array + length);
+    //const unsigned int ovlength = length / (8*2);
+    Internal->Data.resize( ovlength ); // set to 0
+    assert( 8 * ovlength == (unsigned int)Internal->Rows * Internal->Columns );
+    unsigned char * overlay = (unsigned char*)&Internal->Data[0];
+    int c = 0;
+    uint16_t pmask = 1 << Internal->BitPosition;
+    assert( length / 2 == ovlength * 8 );
+    while( p != end )
+      {
+      const uint16_t val = *p & pmask;
+      assert( val == 0x0 || val == pmask );
+      // 128 -> 0x80
+      if( val )
+        {
+        overlay[ c / 8 ] |= (0x1 << c%8);
+        }
+      else
+        {
+        // else overlay[ c / 8 ] is already 0
+        }
+      ++p;
+      ++c;
+      }
+    assert( (unsigned)c / 8 == ovlength );
+    }
+}
+
 void Overlay::SetGroup(unsigned short group) { Internal->Group = group; }
 unsigned short Overlay::GetGroup() const { return Internal->Group; }
 

@@ -175,6 +175,7 @@ public:
         }
       return is;
       }
+    // http://groups.google.com/group/comp.protocols.dicom/msg/c07efcf5e759fc83
     // Bug_Philips_ItemTag_3F3F.dcm
     if( TagField == Tag(0x3f3f, 0x3f00) )
       {
