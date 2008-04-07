@@ -22,6 +22,8 @@
 %{
 #include "gdcmTypes.h"
 #include "gdcmSwapCode.h"
+#include "gdcmDirectory.h"
+#include "gdcmTesting.h"
 #include "gdcmObject.h"
 #include "gdcmPixelFormat.h"
 #include "gdcmMediaStorage.h"
@@ -58,8 +60,6 @@
 #include "gdcmDicts.h"
 #include "gdcmDict.h"
 #include "gdcmDictEntry.h"
-#include "gdcmDirectory.h"
-#include "gdcmTesting.h"
 #include "gdcmUIDGenerator.h"
 //#include "gdcmConstCharWrapper.h"
 #include "gdcmScanner.h"
@@ -150,6 +150,20 @@ using namespace gdcm;
   }
 };
 %include "gdcmVM.h"
+//%template (FilenameType) std::string;
+%template (FilenamesType) std::vector<std::string>;
+%include "gdcmDirectory.h"
+%extend gdcm::Directory
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+};
+%include "gdcmTesting.h"
 %include "gdcmObject.h"
 %include "gdcmValue.h"
 %extend gdcm::Value
@@ -315,20 +329,6 @@ using namespace gdcm;
 %template (PairString) std::pair<std::string,std::string>;
 //%template (MyM) std::map<gdcm::Tag,gdcm::ConstCharWrapper>;
 %include "gdcmStringFilter.h"
-//%template (FilenameType) std::string;
-%template (FilenamesType) std::vector<std::string>;
-%include "gdcmDirectory.h"
-%extend gdcm::Directory
-{
-  const char *__str__() {
-    static std::string buffer;
-    std::stringstream s;
-    self->Print(s);
-    buffer = s.str();
-    return buffer.c_str();
-  }
-};
-%include "gdcmTesting.h"
 %include "gdcmUIDGenerator.h"
 //%include "gdcmConstCharWrapper.h"
 //%{
