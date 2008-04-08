@@ -22,6 +22,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
 # FIXME:
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
+  "${GDCM_BINARY_DIR}/Utilities/zlib"
   "${GDCM_SOURCE_DIR}/Utilities"
   )
 
