@@ -369,6 +369,13 @@ void Overlay::SetOverlay(const char *array, unsigned int length)
   assert( Internal->Data.size() == length );
 }
 
+const ByteValue &Overlay::GetOverlayData() const
+{
+  static ByteValue bv;
+  bv = ByteValue( Internal->Data );
+  return bv;
+}
+
 void Overlay::Decode(std::istream &is, std::ostream &os)
 {
   unsigned char packedbytes;

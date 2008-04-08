@@ -65,6 +65,7 @@ public:
   unsigned short GetBitPosition() const;
   void SetOverlay(const char *array, unsigned int length);
   void GrabOverlayFromPixelData(DataSet const &ds);
+  const ByteValue &GetOverlayData() const;
 
   bool IsEmpty() const;
 
