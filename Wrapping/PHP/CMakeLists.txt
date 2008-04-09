@@ -29,8 +29,9 @@ SET_SOURCE_FILES_PROPERTIES(gdcm.i PROPERTIES CPLUSPLUS ON)
 # Some old swig 1.3 did not support this option:
 #SET(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_BINARY_DIR}")
 
-SWIG_ADD_MODULE(gdcmphp php gdcm.i)
-SWIG_LINK_LIBRARIES(gdcmphp gdcmMSFF)
+# swig expect a name like that: php_gdcm.so
+SWIG_ADD_MODULE(php_gdcm php gdcm.i)
+SWIG_LINK_LIBRARIES(php_gdcm gdcmMSFF)
 
 #Module are always place in the library destination
 #but for poot win32 user I decided to place them

@@ -28,12 +28,12 @@ namespace gdcm
 namespace terminal
 {
   typedef enum
-  {
+    {
     CONSOLE = 0,
     VT100
-  } Mode;
+    } Mode;
   typedef enum
-  {
+    {
     black = 0,
     red,
     green,
@@ -42,17 +42,17 @@ namespace terminal
     magenta,
     cyan,
     white
-  } Color;
+    } Color;
   typedef enum
-  {
-  reset = 0,
-  bright, // Bold
-  dim,
-  underline,
-  blink,
-  reverse,
-  hidden
-  } Attribute;
+    {
+    reset     = 0,
+    bright    = 1, // bold
+    dim       = 2,
+    underline = 3,
+    blink     = 5,
+    reverse   = 7,
+    hidden    = 8
+    } Attribute;
   GDCM_EXPORT std::string setattribute( Attribute att );
   GDCM_EXPORT std::string setfgcolor( Color c );
   GDCM_EXPORT std::string setbgcolor( Color c );

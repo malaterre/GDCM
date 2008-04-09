@@ -49,7 +49,7 @@ public:
     GetConsoleScreenBufferInfo(hConsoleHandle, &ConsoleInfo);
     wNormalAttributes = ConsoleInfo.wAttributes;
 #endif
-    attribute = fgcolor = bgcolor = 0;
+    attribute = fgcolor = bgcolor = 9;
   }
   ~ConsoleImp()
   {
