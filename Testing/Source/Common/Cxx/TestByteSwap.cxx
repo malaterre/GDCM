@@ -16,6 +16,8 @@
 #include "gdcmSwapCode.h"
 #include "gdcmByteSwap.h"
 
+#include <string.h> // memset
+
 int myfunc()
 {
   char vl_str[4];

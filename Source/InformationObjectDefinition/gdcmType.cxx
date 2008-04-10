@@ -14,6 +14,8 @@
 =========================================================================*/
 #include "gdcmType.h"
 
+#include <string.h> // strcmp
+
 namespace gdcm
 {
 

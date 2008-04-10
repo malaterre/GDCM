@@ -21,6 +21,8 @@
 #include <iostream>
 #include <iomanip>
 
+#include <string.h> // strcmp
+
 namespace gdcm
 {
 

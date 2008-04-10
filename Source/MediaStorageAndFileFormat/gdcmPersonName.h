@@ -19,6 +19,7 @@
 #include "gdcmTypes.h"
 #include <vector>
 #include <algorithm> // std::min
+#include <string.h> // strcpy
 
 namespace gdcm
 {

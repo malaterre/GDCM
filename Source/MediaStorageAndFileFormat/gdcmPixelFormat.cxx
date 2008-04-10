@@ -15,6 +15,8 @@
 #include "gdcmPixelFormat.h"
 #include "gdcmTrace.h"
 
+#include <stdlib.h> // abort
+
 namespace gdcm
 {
 static const char *ScalarTypeStrings[] = {

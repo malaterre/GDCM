@@ -16,12 +16,12 @@
 #ifndef __gdcmDeflateStream_h
 #define __gdcmDeflateStream_h
 
-//#include <algorithm>
 #include <istream>
 #include <ostream>
-//#include <stdexcept>
 #include <streambuf>
 #include <vector>
+
+#include <cstring> // std::memcpy
 
 #include <zlib/zlib.h>
 

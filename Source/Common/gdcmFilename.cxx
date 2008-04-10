@@ -15,6 +15,10 @@
 #include "gdcmFilename.h"
 #include <assert.h>
 
+#include <limits.h>
+#include <stdlib.h> // realpath
+
+
 namespace gdcm
 {
 

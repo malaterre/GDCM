@@ -86,7 +86,7 @@ public:
   // Return the string as written in the official DICOM dict from
   // a custom enum type
   static const char* GetTSString(const TSType &ts);
-  static const TSType GetTSType(const char *str);
+  static TSType GetTSType(const char *str);
 
   NegociatedType GetNegociatedType() const;
 

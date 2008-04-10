@@ -19,6 +19,7 @@
 #include <assert.h>
 #include <errno.h>
 #include <sys/stat.h>  //stat function
+#include <string.h> // strerror
 
 #ifdef _MSC_VER
   #include <windows.h>

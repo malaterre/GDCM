@@ -96,7 +96,7 @@ typedef enum {
   } ObjectType;
 
   static const char* GetMSString(MSType ts);
-  static const MSType GetMSType(const char *str);
+  static MSType GetMSType(const char *str);
 
   MediaStorage(MSType type = MS_END):MSField(type) {}
 

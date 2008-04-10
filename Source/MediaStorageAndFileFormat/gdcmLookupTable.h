@@ -19,6 +19,8 @@
 #include "gdcmTypes.h"
 #include "gdcmObject.h"
 
+#include <stdlib.h> // abort
+
 namespace gdcm
 {
   

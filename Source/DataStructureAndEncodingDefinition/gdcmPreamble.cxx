@@ -14,6 +14,8 @@
 =========================================================================*/
 #include "gdcmPreamble.h"
 
+#include <string.h> // memset
+
 namespace gdcm
 {
 

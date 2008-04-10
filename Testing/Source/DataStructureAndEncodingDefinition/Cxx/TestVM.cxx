@@ -14,6 +14,8 @@
 =========================================================================*/
 #include "gdcmVM.h"
 
+#include <string.h> // strlen
+
 int TestVM(int, char *[])
 {
   //gdcm::VM::VMType vm = gdcm::LengthToVM<1>::TVM;

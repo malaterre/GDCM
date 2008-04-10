@@ -23,6 +23,8 @@
 #include <iterator>
 #include <iomanip>
 
+#include <stdlib.h> // abort
+
 namespace gdcm
 {
 /**
