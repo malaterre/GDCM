@@ -81,6 +81,7 @@ public:
     RTPlanStorage,
     CSANonImageStorage,
     Philips3D,
+    EnhancedSR,
     MS_END
   } MSType; // Media Storage Type
 

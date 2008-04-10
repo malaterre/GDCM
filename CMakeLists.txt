@@ -266,6 +266,10 @@ ENDIF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
 #-----------------------------------------------------------------------------
 # Wrapping
 OPTION(GDCM_WRAP_PYTHON "build python wrapping" OFF)
+IF(GDCM_BUILD_WRAPPING)
+  MESSAGE(STATUS "GDCM_BUILD_WRAPPING option is deprecate, please specify explicitely which target language to wrap")
+  SET(GDCM_WRAP_PYTHON ON CACHE BOOL "(deprecated) build python wrapping" FORCE)
+ENDIF(GDCM_BUILD_WRAPPING)
 OPTION(GDCM_WRAP_PHP "php wrapping (experimental !)" OFF)
 OPTION(GDCM_WRAP_JAVA "build java wrapping (experimental !)" OFF)
 SUBDIRS(Wrapping)
