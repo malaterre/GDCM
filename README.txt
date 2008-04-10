@@ -1,8 +1,8 @@
-/*
-\mainpage gdcm documentation
+/**
+\mainpage GDCM Documentation
 
 This is the developpers documentation.
 
-GDCM 
+TODO: write short intro
 
 */

@@ -10,11 +10,17 @@ IF(GDCM_DOCUMENTATION)
     ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
     )
 
+  FILE(GLOB_RECURSE headerfiles
+    "${GDCM_SOURCE_DIR}/Source/*.h"
+  )
+  #MESSAGE(${headerfiles})
 	ADD_CUSTOM_COMMAND(
 	  OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/html/index.html
     COMMAND  ${DOXYGEN}
     ARGS     ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
     DEPENDS  ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
+             ${GDCM_SOURCE_DIR}/README.txt
+             ${headerfiles}
     COMMENT  "Creating doxygen doc"
 	  #WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	  )
