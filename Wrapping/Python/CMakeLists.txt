@@ -72,5 +72,8 @@ IF(NOT GDCM_INSTALL_NO_LIBRARIES)
 ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 
 FIND_PACKAGE(PythonInterp REQUIRED)
-ADD_TEST(TestWrapPython ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/TestWrap.py ${GDCM_SOURCE_DIR}/Source)
+# Test that will try to load any class in the target langugage: python
+# it make sure swig was not broken accidentally
+SET_SOURCE_FILES_PROPERTIES(TestWrap.py PROPERTIES PYTHONPATH ${LIBRARY_OUTPUT_PATH})
+ADD_PYTHON_TEST(TestWrapPython TestWrap.py ${GDCM_SOURCE_DIR}/Source)
 

@@ -80,8 +80,8 @@ ADD_CUSTOM_COMMAND(
 # 2. now that the *.class have been generated construct the jar file. We can only rely on the gdcm.java / gdcm.class
 # to build dependencie, I am pretty sure it will break parallel builds... oh well
 ADD_CUSTOM_COMMAND(
-  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gdcm.jar
-  COMMAND ${JAVA_ARCHIVE} ARGS cvf ${CMAKE_CURRENT_BINARY_DIR}/gdcm.jar *.class
+  OUTPUT ${LIBRARY_OUTPUT_PATH}/gdcm.jar
+  COMMAND ${JAVA_ARCHIVE} ARGS cvf ${LIBRARY_OUTPUT_PATH}/gdcm.jar *.class
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gdcm.class
   COMMENT "jar cvf -> gdcm.jar"
@@ -89,7 +89,7 @@ ADD_CUSTOM_COMMAND(
 
 # 3. ok now add the target
 ADD_CUSTOM_TARGET(GDCMJavaJar ALL
-  DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gdcm.jar
+  DEPENDS ${LIBRARY_OUTPUT_PATH}/gdcm.jar
   COMMENT "building gdcm.jar"
 )
 

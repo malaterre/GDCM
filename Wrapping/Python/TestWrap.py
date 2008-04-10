@@ -13,6 +13,9 @@
 #
 ############################################################################
 
+# Loop over all .h file, extract the name since by convention this is the name
+# of the class, and then try to load that name in the python shell
+
 import sys,os,stat
 import gdcm
 
