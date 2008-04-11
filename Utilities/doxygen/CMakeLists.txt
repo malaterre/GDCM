@@ -14,6 +14,8 @@ IF(GDCM_DOCUMENTATION)
     "${GDCM_SOURCE_DIR}/Source/*.h"
   )
   #MESSAGE(${headerfiles})
+  # We are depending only on header files and README.txt but other files
+  # could be needed for complete dependencies
 	ADD_CUSTOM_COMMAND(
 	  OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/html/index.html
     COMMAND  ${DOXYGEN}
@@ -28,6 +30,10 @@ IF(GDCM_DOCUMENTATION)
   SET(GDCM_DOC_TARBALL
     ${CMAKE_CURRENT_BINARY_DIR}/gdcm-${GDCM_VERSION}-doc.tgz
   )
+  # every time doxygen runs, it overwrite index.html so depending only on
+  # one single file is ok
+  # tar command is executed using relative path, so that tar does not contains 
+  # full path
   ADD_CUSTOM_COMMAND(
     OUTPUT   ${GDCM_DOC_TARBALL}
     COMMAND  ${CMAKE_COMMAND}
