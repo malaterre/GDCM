@@ -96,3 +96,6 @@ Fix issue with deflate syntax and srwithgraphdeflated.dcm in TestWriter
 Rewrite IconImage !
 -----------------------------------------------------------------------
 Serisouly fix the gdcm::Orientation code in vtkGDCMImageReader
+-----------------------------------------------------------------------
+Convert the HTML page into c++ code:
+http://www.mmrrcc.upenn.edu/CAMRIS/cfn/dicomhdr.html
