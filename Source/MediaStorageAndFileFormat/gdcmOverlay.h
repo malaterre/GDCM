@@ -56,6 +56,7 @@ public:
   void SetDescription(const char* description);
   const char *GetDescription() const;
   void SetType(const char* type);
+  const char *GetType() const;
   void SetOrigin(const signed short *origin);
   const signed short * GetOrigin() const;
   void SetFrameOrigin(unsigned short frameorigin);
@@ -65,6 +66,7 @@ public:
   unsigned short GetBitPosition() const;
   void SetOverlay(const char *array, unsigned int length);
   void GrabOverlayFromPixelData(DataSet const &ds);
+
   const ByteValue &GetOverlayData() const;
 
   bool IsEmpty() const;

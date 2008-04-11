@@ -687,6 +687,12 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   ds.Insert( de );
 }
 
+  // Image Type is pretty much always required:
+  gdcm::Attribute<0x0008,0x0008> imagetype;
+  const gdcm::CSComp values[] = { "DERIVED", "PRIMARY" };
+  imagetype.SetValues( values, 2 );
+  ds.Insert( imagetype.GetAsDataElement() );
+
   // I am pretty sure that for all other images it is valid to add an Image Position (Patient)
   // and an Image Orientation (Patient)
   if ( ms != gdcm::MediaStorage::SecondaryCaptureImageStorage )

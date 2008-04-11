@@ -587,16 +587,18 @@ int vtkGDCMImageReader::RequestInformationCompat()
   ms.SetFromFile( reader.GetFile() );
   assert( gdcm::MediaStorage::IsImage( ms ) );
   // There is no point in adding world info to a SC object since noone but GDCM can use this info...
-  if( ms != gdcm::MediaStorage::SecondaryCaptureImageStorage )
+  //if( ms != gdcm::MediaStorage::SecondaryCaptureImageStorage )
+
+  const double *spacing = image.GetSpacing();
+  if( spacing )
     {
-    const double *spacing = image.GetSpacing();
-    assert( spacing );
     this->DataSpacing[0] = spacing[0];
     this->DataSpacing[1] = spacing[1];
     if( image.GetNumberOfDimensions() == 3 )
       {
       this->DataSpacing[2] = image.GetSpacing(2);
       }
+    }
 
     const double *origin = image.GetOrigin();
     if( origin )
@@ -659,7 +661,6 @@ int vtkGDCMImageReader::RequestInformationCompat()
         }
       }
     // Need to set the rest to 0 ???
-    }
 
   const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
   switch( pixeltype )

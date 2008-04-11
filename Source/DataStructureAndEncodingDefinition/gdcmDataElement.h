@@ -64,6 +64,7 @@ public:
 
   // Set/Get Tag
   const Tag& GetTag() const { return TagField; }
+  Tag& GetTag() { return TagField; }
   void SetTag(const Tag &t) { TagField = t; }
 
   // Set/Get VL

@@ -101,9 +101,8 @@ bool ImageWriter::Write()
   ds.Replace( samplesperpixel.GetAsDataElement() );
 
   // Overlay Data 60xx
-#if 0
   unsigned int nOv = PixelData.GetNumberOfOverlays();
-  if( nOv )
+  for( unsigned int ovidx = 0; ovidx < nOv; ++ovidx )
     {
     // (6000,0010) US 484                                      #   2, 1 OverlayRows
     // (6000,0011) US 484                                      #   2, 1 OverlayColumns
@@ -115,12 +114,58 @@ bool ImageWriter::Write()
     // (6000,0100) US 1                                        #   2, 1 OverlayBitsAllocated
     // (6000,0102) US 0                                        #   2, 1 OverlayBitPosition
     // (6000,3000) OW 0000\0000\0000\0000\0000\0000\0000\0000\0000\0000\0000\0000\0000... # 29282, 1 OverlayData
-    const ByteValue & overlaydatabv = PixelData.GetOverlay().GetOverlayData();
-    DataElement overlaydata( Tag(0x6000,0x3000) );
-    overlaydata.SetValue( overlaydatabv );
-    ds.Insert( overlaydata );
+    DataElement de;
+    const Overlay &ov = PixelData.GetOverlay(ovidx);
+    Attribute<0x6000,0x0010> overlayrows;
+    overlayrows.SetValue( ov.GetRows() );
+    de = overlayrows.GetAsDataElement();
+    de.GetTag().SetGroup( ov.GetGroup() );
+    ds.Insert( de );
+    Attribute<0x6000,0x0011> overlaycolumns;
+    overlaycolumns.SetValue( ov.GetColumns() );
+    de = overlaycolumns.GetAsDataElement();
+    de.GetTag().SetGroup( ov.GetGroup() );
+    ds.Insert( de );
+    if( ov.GetDescription() ) // Type 3
+      {
+      Attribute<0x6000,0x0022> overlaydescription;
+      overlaydescription.SetValue( ov.GetDescription() );
+      de = overlaydescription.GetAsDataElement();
+      de.GetTag().SetGroup( ov.GetGroup() );
+      ds.Insert( de );
+      }
+    Attribute<0x6000,0x0040> overlaytype; // 'G' or 'R'
+    overlaytype.SetValue( ov.GetType() );
+    de = overlaytype.GetAsDataElement();
+    de.GetTag().SetGroup( ov.GetGroup() );
+    ds.Insert( de );
+    Attribute<0x6000,0x0050> overlayorigin;
+    overlayorigin.SetValues( ov.GetOrigin() );
+    de = overlayorigin.GetAsDataElement();
+    de.GetTag().SetGroup( ov.GetGroup() );
+    ds.Insert( de );
+    Attribute<0x6000,0x0100> overlaybitsallocated;
+    overlaybitsallocated.SetValue( ov.GetBitsAllocated() );
+    de = overlaybitsallocated.GetAsDataElement();
+    de.GetTag().SetGroup( ov.GetGroup() );
+    ds.Insert( de );
+    Attribute<0x6000,0x0102> overlaybitposition;
+    overlaybitposition.SetValue( ov.GetBitPosition() );
+    de = overlaybitposition.GetAsDataElement();
+    de.GetTag().SetGroup( ov.GetGroup() );
+    ds.Insert( de );
+
+    // FIXME: for now rewrite 'Overlay in pixel data' still in the pixel data element...
+    if( !ov.IsInPixelData() )
+      {
+      const ByteValue & overlaydatabv = ov.GetOverlayData();
+      DataElement overlaydata( Tag(0x6000,0x3000) );
+      overlaydata.SetByteValue( overlaydatabv.GetPointer(), overlaydatabv.GetLength() );
+      overlaydata.SetVR( VR::OW ); // FIXME
+      overlaydata.GetTag().SetGroup( ov.GetGroup() );
+      ds.Insert( overlaydata );
+      }
     }
-#endif
 
   // Pixel Data
   DataElement de( Tag(0x7fe0,0x0010) );
@@ -140,9 +185,23 @@ bool ImageWriter::Write()
     // if ts is explicit -> set VR
     vl.SetToUndefined();
     }
-  //if( ts.IsExplicit() )
+  if( ts.IsExplicit() )
     {
-    de.SetVR( VR::OB ); // OW ???
+    switch ( pf.GetBitsAllocated() )
+      {
+      case 8:
+        de.SetVR( VR::OB );
+        break;
+      case 16:
+        de.SetVR( VR::OW );
+        break;
+      default:
+        assert( 0 && "should not happen" );
+      }
+    }
+  else
+    {
+    de.SetVR( VR::OB );
     }
   de.SetVL( vl );
   ds.Replace( de );

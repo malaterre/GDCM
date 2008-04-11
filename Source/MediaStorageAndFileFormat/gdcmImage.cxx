@@ -273,6 +273,19 @@ void Image::Print(std::ostream &os) const
       }
     os << ")\n";
 {
+  os << "Origin: (";
+  if( !Origin.empty() )
+    {
+    std::vector<double>::const_iterator it = Origin.begin();
+    os << *it;
+    for(++it; it != Origin.end(); ++it)
+      {
+      os << "," << *it;
+      }
+    }
+  os << ")\n";
+}
+{
     os << "Spacing: (";
     std::vector<double>::const_iterator it = Spacing.begin();
     os << *it;

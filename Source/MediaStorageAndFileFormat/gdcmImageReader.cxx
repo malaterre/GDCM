@@ -568,13 +568,20 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   const Tag tphotometricinterpretation(0x0028, 0x0004);
   const ByteValue *photometricinterpretation
     = GetPointerFromElement( tphotometricinterpretation );
-  std::string photometricinterpretation_str(
-    photometricinterpretation->GetPointer(),
-    photometricinterpretation->GetLength() );
-  PhotometricInterpretation pi(
-    PhotometricInterpretation::GetPIType(
-      photometricinterpretation_str.c_str()));
-  assert( pi != PhotometricInterpretation::UNKNOW);
+  PhotometricInterpretation pi = PhotometricInterpretation::MONOCHROME2;
+  if( photometricinterpretation )
+    {
+    std::string photometricinterpretation_str(
+      photometricinterpretation->GetPointer(),
+      photometricinterpretation->GetLength() );
+    pi = PhotometricInterpretation::GetPIType( photometricinterpretation_str.c_str() );
+    }
+  else
+    {
+    assert( pf.GetSamplesPerPixel() == 1 );
+    gdcmWarningMacro( "No PhotometricInterpretation found, default to MONOCHROME2" );
+    }
+  assert( pi != PhotometricInterpretation::UNKNOW );
   PixelData.SetPhotometricInterpretation( pi );
 
   // Do the Palette Color:

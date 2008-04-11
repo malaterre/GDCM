@@ -337,6 +337,7 @@ void Overlay::SetNumberOfFrames(unsigned int numberofframes) { Internal->NumberO
 void Overlay::SetDescription(const char* description) { Internal->Description = description; }
 const char *Overlay::GetDescription() const { return Internal->Description.c_str(); }
 void Overlay::SetType(const char* type) { Internal->Type = type; }
+const char *Overlay::GetType() const { return Internal->Type.c_str(); }
 void Overlay::SetOrigin(const signed short *origin)
 {
   Internal->Origin[0] = origin[0];

@@ -73,6 +73,17 @@ std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
   MediaStorage ms;
   ms.SetFromDataSet(ds, true);
   assert( MediaStorage::IsImage( ms ) );
+  if( ms == MediaStorage::SecondaryCaptureImageStorage )
+    {
+    MediaStorage ms2;
+    ms2.SetFromModality(ds);
+    if( ms != ms2 )
+      {
+      gdcmWarningMacro( "Object is declared as SecondaryCaptureImageStorage but has a Modality "
+        "which would make the DICOM object more like: " << ms2 << " using it instead" );
+      ms = ms2;
+      }
+    }
 
   if( ms == MediaStorage::EnhancedCTImageStorage )
     {
@@ -179,6 +190,9 @@ std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
         assert( bv );
         std::string s = std::string( bv->GetPointer(), bv->GetLength() );
         ss.str( s );
+        // Stupid file: ct-mono2-8bit.dcm
+        // The spacing is something like that: [0.2\0\0.200000]
+        // I would need to throw an expection that VM is not compatible
         el.SetLength( entry.GetVM().GetLength() * entry.GetVR().GetSizeof() );
         el.Read( ss );
         for(unsigned long i = 0; i < el.GetLength(); ++i) 
@@ -202,37 +216,44 @@ std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
   if( zspacingtag != Tag(0xffff,0xffff) && ds.FindDataElement( zspacingtag ) )
     {
     const DataElement& de = ds.GetDataElement( zspacingtag );
-    const Global &g = GlobalInstance;
-    const Dicts &dicts = g.GetDicts();
-    const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
-    const VR & vr = entry.GetVR();
-    assert( de.GetVR() == vr || de.GetVR() == VR::INVALID );
-    assert( entry.GetVM() == VM::VM1 );
-    switch(vr)
+    if( de.IsEmpty() )
       {
-    case VR::DS:
+      sp.push_back( 0.0 );
+      }
+    else
+      {
+      const Global &g = GlobalInstance;
+      const Dicts &dicts = g.GetDicts();
+      const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
+      const VR & vr = entry.GetVR();
+      assert( de.GetVR() == vr || de.GetVR() == VR::INVALID );
+      assert( entry.GetVM() == VM::VM1 );
+      switch(vr)
         {
-        Element<VR::DS,VM::VM1_n> el;
-        std::stringstream ss;
-        const ByteValue *bv = de.GetByteValue();
-        assert( bv );
-        std::string s = std::string( bv->GetPointer(), bv->GetLength() );
-        ss.str( s );
-        el.SetLength( entry.GetVM().GetLength() * entry.GetVR().GetSizeof() );
-        el.Read( ss );
-        for(unsigned long i = 0; i < el.GetLength(); ++i) 
-          sp.push_back( el.GetValue(i) );
-        //assert( sp.size() == entry.GetVM() );
+      case VR::DS:
+          {
+          Element<VR::DS,VM::VM1_n> el;
+          std::stringstream ss;
+          const ByteValue *bv = de.GetByteValue();
+          assert( bv );
+          std::string s = std::string( bv->GetPointer(), bv->GetLength() );
+          ss.str( s );
+          el.SetLength( entry.GetVM().GetLength() * entry.GetVR().GetSizeof() );
+          el.Read( ss );
+          for(unsigned long i = 0; i < el.GetLength(); ++i) 
+            sp.push_back( el.GetValue(i) );
+          //assert( sp.size() == entry.GetVM() );
+          }
+        break;
+      default:
+        abort();
+        break;
         }
-      break;
-    default:
-      abort();
-      break;
       }
     }
   else
     {
-    sp.push_back( 1.0 );
+    sp.push_back( 0.0 );
     }
 
   assert( sp.size() == 3 );

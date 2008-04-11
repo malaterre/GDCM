@@ -72,6 +72,10 @@ bool IconImage::GetBuffer(char *buffer) const
   RAWCodec codec;
   //assert( GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2 );
   //codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
+  if( GetPhotometricInterpretation() != PhotometricInterpretation::MONOCHROME2 )
+    {
+    gdcmWarningMacro( "PhotometricInterpretation: " << GetPhotometricInterpretation() << " not handled" );
+    }
   codec.SetPhotometricInterpretation( PhotometricInterpretation::MONOCHROME2 );
   codec.SetPixelFormat( GetPixelFormat() );
   codec.SetPlanarConfiguration( 0 );

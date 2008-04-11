@@ -14,6 +14,8 @@
 =========================================================================*/
 #include "gdcmDictPrinter.h"
 #include "gdcmDict.h"
+#include "gdcmGlobal.h"
+#include "gdcmDicts.h"
 
 namespace gdcm
 {
@@ -71,10 +73,14 @@ VM GuessVMType(DataElement const &de)
         {
         // Need to count \\ character
         const ByteValue *bv = dynamic_cast<const ByteValue*>(&value);
-        assert( bv && "not bv" );
-        const char *array = bv->GetPointer();
-        unsigned int c = VM::GetNumberOfElementsFromArray(array, vl);
-        vm = VM::GetVMTypeFromLength( c, 1 );
+        vm = VM::VM1; // why not ?
+        if(!de.IsEmpty()) 
+          {
+          assert( bv && "not bv" );
+          const char *array = bv->GetPointer();
+          unsigned int c = VM::GetNumberOfElementsFromArray(array, vl);
+          vm = VM::GetVMTypeFromLength( c, 1 );
+          }
         }
       break;
     default:
@@ -424,22 +430,28 @@ std::string GetOwner(DataSet const &ds, DataElement const &de)
 //-----------------------------------------------------------------------------
 void DictPrinter::Print(std::ostream& os)
 {
-  static const Dict d;
+  const Global& g = GlobalInstance;
+  const Dicts &dicts = g.GetDicts();
+
   const DataSet &ds = F->GetDataSet();
   DataSet::ConstIterator it = ds.Begin();
-  //os << "<dict>\n";
   for( ; it != ds.End(); ++it )
     {
     const DataElement &de = *it;
-    const DictEntry &entry = d.GetDictEntry(de.GetTag());
-
-      std::string owner;
-      std::string version;
+    std::string strowner;
+    const char *owner = 0;
+    const Tag& t = de.GetTag();
+    if( t.IsPrivate() )
+      { 
+      strowner = ds.GetPrivateCreator(t);
+      owner = strowner.c_str();
+      }
+    const DictEntry &entry = dicts.GetDictEntry(t,owner);
 
     if( de.GetTag().IsPrivate() && de.GetTag().GetElement() >= 0x0100 )
       {
-      owner = GetOwner(ds,de);
-      version = GetVersion(owner);
+      //owner = GetOwner(ds,de);
+      //version = GetVersion(owner);
 
       const Tag &t = de.GetTag();
       const VR &vr = de.GetVR();

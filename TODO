@@ -1,5 +1,5 @@
 XML Stuff:
-* Part 3: Exctract section that are referenced in informaltable
+* Part 3: Extract section that are referenced in informaltable
 -----------------------------------------------------------------------
 PrepGroupName.cxx does not handle Pixel Data group name since it has a space in the name...
 
@@ -76,10 +76,23 @@ Add progress to gdcmscanner
 -----------------------------------------------------------------------
 FIX the reading of 3F3F SQ in: Bug_Philips_ItemTag_3F3F
 -----------------------------------------------------------------------
-gdcm does not read the asscoiated data in RT Object file - RTImage and RTDose. For RTImage pixel spacing is in 3002,0011 and position of upper left corner is in 3002,0012.
+gdcm does not read the associated data in RT Object file - RTImage and RTDose. For RTImage pixel spacing is in 3002,0011 and position of upper left corner is in 3002,0012.
 -----------------------------------------------------------------------
 Extract Mosaic as 3D volume:
 afni.nimh.nih.gov/pub/dist/doc/misc/DICOM/data/From_TomRoss/20021009-1-Toms_fMri/4-ep2d_bold_moco_ax3x3-192/image-00002-000042.IMA
 -----------------------------------------------------------------------
 Correctly display:
 PHANTOM.MR.CARDIO_COEUR_S_QUENCE_DE_REP_RAGE.9.257.2008.03.20.14.53.25.578125.43151705.IMA
+-----------------------------------------------------------------------
+TODO: need a gdcm::ExtractOverlayFromPixelDataFilter
+to rewrite a gdcm::Image
+-----------------------------------------------------------------------
+Need a gdcm::Pixel12bitsto16bitsFilter
+-----------------------------------------------------------------------
+Do SegmentedLUT !
+-----------------------------------------------------------------------
+Fix issue with deflate syntax and srwithgraphdeflated.dcm in TestWriter 
+-----------------------------------------------------------------------
+Rewrite IconImage !
+-----------------------------------------------------------------------
+Serisouly fix the gdcm::Orientation code in vtkGDCMImageReader
