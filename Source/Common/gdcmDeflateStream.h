@@ -20,6 +20,9 @@
 #include <ostream>
 #include <streambuf>
 #include <vector>
+#include <stdexcept> // std::range_error
+#include <assert.h> // assert
+#include <stdlib.h> // abort
 
 #include <cstring> // std::memcpy
 
@@ -308,7 +311,7 @@ namespace gdcm
         dstream.next_out = (Byte*)putback_end;
         // FIXME: cannot derefence end iterator...
         dstream.avail_out = &buffer[0] + buffer.size() - putback_end;
-        assert( &buffer[0] + buffer.size() - putback_end == &*buffer.end() - putback_end );
+        //assert( &buffer[0] + buffer.size() - putback_end == &*buffer.end() - putback_end );
         //dstream.avail_out = &*buffer.end() - putback_end;
         int ret = inflate(&dstream,Z_NO_FLUSH);
         switch (ret) {

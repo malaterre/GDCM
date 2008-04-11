@@ -2,6 +2,7 @@
 # MSFF
 SET(MSFF_SRCS
   gdcmAnonymizer.cxx
+  gdcmOrientation.cxx
   gdcmSorter.cxx
   gdcmIPPSorter.cxx
   gdcmApplicationEntity.cxx
@@ -15,13 +16,11 @@ SET(MSFF_SRCS
   gdcmUIDGenerator.cxx
   gdcmPrinter.cxx
   gdcmDictPrinter.cxx
-  gdcmReader.cxx
   gdcmScanner.cxx
   gdcmImageReader.cxx
   gdcmImageWriter.cxx
   gdcmStringFilter.cxx
   gdcmSpacingHelper.cxx
-  gdcmWriter.cxx
   gdcmValidate.cxx
   gdcmDumper.cxx
   gdcmImage.cxx

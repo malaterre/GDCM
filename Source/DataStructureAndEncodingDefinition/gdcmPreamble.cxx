@@ -13,7 +13,6 @@
 
 =========================================================================*/
 #include "gdcmPreamble.h"
-
 #include <string.h> // memset
 
 namespace gdcm
@@ -90,6 +89,7 @@ void Preamble::Clear()
 
 void Preamble::Print(std::ostream &os) const
 {
+(void)os;
 }
 
 } // end namespace gdcm 

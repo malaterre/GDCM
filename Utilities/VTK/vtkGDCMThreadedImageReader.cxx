@@ -48,8 +48,6 @@ vtkStandardNewMacro(vtkGDCMThreadedImageReader)
 
 vtkGDCMThreadedImageReader::vtkGDCMThreadedImageReader()
 {
-  this->Shift = 0.;
-  this->Scale = 1.;
   this->LoadIconImage = 0;
 }
 

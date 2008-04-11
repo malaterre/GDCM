@@ -71,7 +71,7 @@ public:
     for(; it != Internal.begin()+length; ++it)
       {
       const char &c = *it;
-      if ( !( isprint((int)c) || isspace((int)c) ) ) os << ".";
+      if ( !( isprint((unsigned char)c) || isspace((unsigned char)c) ) ) os << ".";
       else os << c;
       }
   }
@@ -136,7 +136,7 @@ public:
   // Use that only if you understand what you are doing
   const char *GetPointer() const {
     if(!Internal.empty()) return &Internal[0];
-	return 0;
+    return 0;
   }
   bool GetBuffer(char *buffer, unsigned long length) const {
     // SIEMENS_GBS_III-16-ACR_NEMA_1.acr has a weird pixel length
@@ -205,7 +205,7 @@ public:
     for(unsigned int i=0; i<length; i++)
       {
       if ( i == (length-1) && Internal[i] == '\0') continue;
-      if ( !( isprint((int)Internal[i]) || isspace((int)Internal[i]) ) )
+      if ( !( isprint((unsigned char)Internal[i]) || isspace((unsigned char)Internal[i]) ) )
         {
         //gdcmWarningMacro( "Cannot print :" << i );
         return false;

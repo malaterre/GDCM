@@ -135,7 +135,7 @@ ENDIF(WIN32 AND NOT CYGWIN)
       TARGET    ${PROJECT_NAME}Python
       POST_BUILD
       COMMAND   cmake -E copy ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm.py ${LIBRARY_OUTPUT_PATH}
-      #DEPENDS "${swig_generated_file_fullname}"
+      DEPENDS   "${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm.py"
       COMMENT   "Copy vtkgdcm.py into ${LIBRARY_OUTPUT_PATH}"
     )
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)

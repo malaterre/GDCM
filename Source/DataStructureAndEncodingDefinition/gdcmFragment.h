@@ -29,16 +29,8 @@ namespace gdcm
 class GDCM_EXPORT Fragment : public DataElement
 {
 public:
-  Fragment(const Tag &t = Tag(0), uint32_t const &vl = 0) : DataElement(t, vl) /*, FragmentValue(0)*/ { }
+  Fragment(const Tag &t = Tag(0), VL const &vl = 0) : DataElement(t, vl) {}
   friend std::ostream &operator<<(std::ostream &os, const Fragment &val);
-
-//  void Clear() {
-//    FragmentValue->Clear();
-//    }
-//
-//  Value const &GetValue() const {
-//    return *FragmentValue;
-//  }
 
   VL GetLength() const {
     assert( !ValueLengthField.IsUndefined() );
@@ -46,16 +38,6 @@ public:
     return TagField.GetLength() + ValueLengthField.GetLength() 
       + ValueLengthField;
   }
-
-//  Fragment(const Fragment &val):DataElement(val)
-//    {
-//    FragmentValue = val.FragmentValue;
-//    }
-//  Fragment &operator=(Fragment const &val)
-//    {
-//    FragmentValue = val.FragmentValue;
-//    return *this;
-//    }
 
   template <typename TSwap>
   std::istream &Read(std::istream &is)
@@ -129,8 +111,6 @@ public:
 
  
 private:
-  //typedef SmartPointer<ByteValue> ByteValuePtr;
-  //ByteValuePtr FragmentValue;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream &operator<<(std::ostream &os, const Fragment &val)

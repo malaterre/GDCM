@@ -13,8 +13,7 @@
 
 =========================================================================*/
 #include "gdcmVM.h"
-
-#include <string.h> // strlen
+#include <string.h> // strcmp
 
 int TestVM(int, char *[])
 {

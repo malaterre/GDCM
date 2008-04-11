@@ -18,7 +18,7 @@
 #include <string>
 #include <set>
 
-#include <string.h> // strlen
+#include <string.h>
 
 int TestUIDGeneratorValid()
 {

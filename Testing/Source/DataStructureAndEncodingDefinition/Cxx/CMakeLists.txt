@@ -4,9 +4,13 @@ SET(DSED_TEST_SRCS
 	TestAttribute
   #TestReadPatientName
   TestLO
+  TestCSAElement
   #TestByteBuffer
   #TestByteValue
   TestPreamble
+  TestReader
+  TestReader2
+  TestWriter
   TestCSAHeader
   TestByteSwapFilter
   TestBasicOffsetTable

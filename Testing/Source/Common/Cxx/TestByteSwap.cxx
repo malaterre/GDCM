@@ -16,7 +16,7 @@
 #include "gdcmSwapCode.h"
 #include "gdcmByteSwap.h"
 
-#include <string.h> // memset
+#include <string.h> // memcpy
 
 int myfunc()
 {

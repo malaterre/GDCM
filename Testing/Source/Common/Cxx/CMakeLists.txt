@@ -7,6 +7,7 @@ SET(Common_TEST_SRCS
   TestByteSwap
   TestString
   TestDirectory
+  TestTerminal
   TestFilename
   TestFilenameGenerator
   TestObject

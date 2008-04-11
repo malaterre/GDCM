@@ -54,6 +54,8 @@ int TestIPPSorter(int argc, char *argv[])
     }
 
   gdcm::IPPSorter s;
+  s.SetComputeZSpacing( true );
+  s.SetZSpacingTolerance( 1e-10 );
   bool b = s.Sort( filenames );
   if( !b )
     {
@@ -63,6 +65,9 @@ int TestIPPSorter(int argc, char *argv[])
 
   std::cout << "Sorting succeeded:" << std::endl;
   s.Print( std::cout );
+
+  std::cout << "Found z-spacing:" << std::endl;
+  std::cout << s.GetZSpacing() << std::endl;
 
   return 0;
 }

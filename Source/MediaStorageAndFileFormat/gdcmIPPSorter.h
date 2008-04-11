@@ -34,7 +34,8 @@ public:
   // FIXME: I do not like public virtual function...
   virtual bool Sort(std::vector<std::string> const & filenames);
 
-  void SetComputeZSpacing(bool b);
+  void SetZSpacingTolerance(double tol) { ZTolerance = tol; }
+  void SetComputeZSpacing(bool b) { ComputeZSpacing = b; }
 
   // read-only:
   double GetZSpacing() const { return ZSpacing; }
@@ -42,6 +43,7 @@ public:
 protected:
   bool ComputeZSpacing;
   double ZSpacing;
+  double ZTolerance;
 };
 
 

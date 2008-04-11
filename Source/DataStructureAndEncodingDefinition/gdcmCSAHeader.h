@@ -17,6 +17,7 @@
 
 #include "gdcmTypes.h"
 #include "gdcmDataSet.h"
+#include "gdcmCSAElement.h"
 
 namespace gdcm
 {
@@ -66,7 +67,11 @@ public :
   static const PrivateTag & GetCSAImageHeaderInfoTag();
   static const PrivateTag & GetCSASeriesHeaderInfoTag();
 
+  const CSAElement &GetCSAElementByName(const char *name);
+
 private:
+  CSAElement Dummy;
+  std::set<CSAElement> InternalCSADataSet;
   DataSet InternalDataSet;
   CSAHeaderType InternalType;
 };

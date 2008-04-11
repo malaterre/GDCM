@@ -99,14 +99,14 @@ TransferSyntax::TSType TransferSyntax::GetTSType(const char *cstr)
   return TS_END;
 }
 
-const char* TransferSyntax::GetTSString(const TSType &ts)
+const char* TransferSyntax::GetTSString(TSType ts)
 {
   assert( ts <= TS_END );
   return TSStrings[(int)ts];
   //return TransferSyntaxStrings[(int)ts];
 }
 
-bool TransferSyntax::IsImplicit(const TSType &ts) const
+bool TransferSyntax::IsImplicit(TSType ts) const
 {
   assert( ts != TS_END );
   return ts == ImplicitVRLittleEndian
@@ -137,7 +137,7 @@ bool TransferSyntax::IsExplicit() const
 }
 
 // By implementation those two functions form a partition
-bool TransferSyntax::IsExplicit(const TSType &ts) const
+bool TransferSyntax::IsExplicit(TSType ts) const
 {
   assert( ts != TS_END );
   return !IsImplicit(ts);
@@ -156,13 +156,13 @@ TransferSyntax::NegociatedType TransferSyntax::GetNegociatedType() const
   return TransferSyntax::Explicit;
 }
 
-bool TransferSyntax::IsLittleEndian(const TSType &ts) const
+bool TransferSyntax::IsLittleEndian(TSType ts) const
 {
   assert( ts != TS_END );
   return !IsBigEndian(ts);
 }
 
-bool TransferSyntax::IsBigEndian(const TSType &ts) const
+bool TransferSyntax::IsBigEndian(TSType ts) const
 {
   assert( ts != TS_END );
   return ts == ExplicitVRBigEndian

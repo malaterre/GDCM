@@ -14,6 +14,7 @@
 =========================================================================*/
 
 #include "gdcmReader.h"
+#include "gdcmVersion.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmDataSet.h"
 #include "gdcmPrivateTag.h"
@@ -39,15 +40,7 @@ int DoOperation(const std::string & filename)
 {
   gdcm::Reader reader;
   reader.SetFileName( filename.c_str() );
-  try
-    {
-    if( !reader.Read() )
-      {
-      std::cerr << "Failed to read: " << filename << std::endl;
-      return 1;
-      }
-    }
-  catch( ... )
+  if( !reader.Read() )
     {
     std::cerr << "Failed to read: " << filename << std::endl;
     return 1;
@@ -64,15 +57,7 @@ int PrintCSA(const std::string & filename)
 {
   gdcm::Reader reader;
   reader.SetFileName( filename.c_str() );
-  try
-    {
-    if( !reader.Read() )
-      {
-      std::cerr << "Failed to read: " << filename << std::endl;
-      return 1;
-      }
-    }
-  catch( ... )
+  if( !reader.Read() )
     {
     std::cerr << "Failed to read: " << filename << std::endl;
     return 1;
@@ -82,6 +67,7 @@ int PrintCSA(const std::string & filename)
   const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
 
   const gdcm::PrivateTag &t1 = csa.GetCSAImageHeaderInfoTag();
+  std::cout << t1 << std::endl;
   const gdcm::PrivateTag &t2 = csa.GetCSASeriesHeaderInfoTag();
 
   //if( pde.GetTag().GetElement() != 0xffff /*ds.FindDataElement( t0 )*/ )
@@ -91,14 +77,24 @@ int PrintCSA(const std::string & filename)
       {
       //gdcm::Tag t3(0x0029,0x1120); ???
       //std::cerr << "Working on: " << filename << std::endl;
+	      bool found = false;
       if( ds.FindDataElement( t1 ) )
         {
         csa.Print( ds.GetDataElement( t1 ) );
+	found = true;
+	//const gdcm::CSAElement &csael = csa.GetCSAElementByName( "Columns" );
+	//std::cout << "Looking for Columns:" << std::endl;
+	//std::cout << csael << std::endl;
         }
       if( ds.FindDataElement( t2 ) )
         {
         csa.Print( ds.GetDataElement( t2 ) );
+	found = true;
         }
+      if( !found )
+      {
+	      std::cout << "no csa tag found" << std::endl;
+      }
       if( csa.GetFormat() == gdcm::CSAHeader::DATASET_FORMAT )
         {
         gdcm::Printer p;
@@ -117,7 +113,7 @@ int PrintCSA(const std::string & filename)
 
 void PrintVersion()
 {
-  std::cout << "gdcmdump: gdcm " << GDCM_VERSION << " ";
+  std::cout << "gdcmdump: gdcm " << gdcm::Version::GetVersion() << " ";
   const char date[] = "$Date$";
   std::cout << date << std::endl;
 }
@@ -135,7 +131,8 @@ void PrintHelp()
   std::cout << "  -r --recursive recursive." << std::endl;
   std::cout << "  -d --dump      dump value (limited use)." << std::endl;
   std::cout << "  -p --print     print value instead of simply dumping (default)." << std::endl;
-  std::cout << "  -c --csa       print SIEMENS CSA Header typically (0029,xx10)." << std::endl;
+  std::cout << "  -c --color     print in color." << std::endl;
+  std::cout << "  -C --csa       print SIEMENS CSA Header typically (0029,xx10)." << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning   print warning info." << std::endl;
   std::cout << "  -D --debug     print debug info." << std::endl;
@@ -153,6 +150,7 @@ int main (int argc, char *argv[])
   int printdict = 0;
   int dump = 0;
   int print = 0;
+  int color = 0;
   int printcsa = 0;
   int verbose = 0;
   int warning = 0;
@@ -178,6 +176,7 @@ int main (int argc, char *argv[])
         {"recursive", 0, &recursive, 1},
         {"print", 0, &print, 1},
         {"dump", 0, &dump, 1},
+        {"color", 0, &color, 1},
         {"csa", 0, &printcsa, 1},
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
@@ -241,6 +240,10 @@ int main (int argc, char *argv[])
       break;
 
     case 'c':
+      color = 1;
+      break;
+
+    case 'C':
       printcsa = 1;
       break;
 

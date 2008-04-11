@@ -100,6 +100,28 @@ bool ImageWriter::Write()
   samplesperpixel.SetValue( pf.GetSamplesPerPixel() );
   ds.Replace( samplesperpixel.GetAsDataElement() );
 
+  // Overlay Data 60xx
+#if 0
+  unsigned int nOv = PixelData.GetNumberOfOverlays();
+  if( nOv )
+    {
+    // (6000,0010) US 484                                      #   2, 1 OverlayRows
+    // (6000,0011) US 484                                      #   2, 1 OverlayColumns
+    // (6000,0015) IS [1]                                      #   2, 1 NumberOfFramesInOverlay
+    // (6000,0022) LO [Siemens MedCom Object Graphics]         #  30, 1 OverlayDescription
+    // (6000,0040) CS [G]                                      #   2, 1 OverlayType
+    // (6000,0050) SS 1\1                                      #   4, 2 OverlayOrigin
+    // (6000,0051) US 1                                        #   2, 1 ImageFrameOrigin
+    // (6000,0100) US 1                                        #   2, 1 OverlayBitsAllocated
+    // (6000,0102) US 0                                        #   2, 1 OverlayBitPosition
+    // (6000,3000) OW 0000\0000\0000\0000\0000\0000\0000\0000\0000\0000\0000\0000\0000... # 29282, 1 OverlayData
+    const ByteValue & overlaydatabv = PixelData.GetOverlay().GetOverlayData();
+    DataElement overlaydata( Tag(0x6000,0x3000) );
+    overlaydata.SetValue( overlaydatabv );
+    ds.Insert( overlaydata );
+    }
+#endif
+
   // Pixel Data
   DataElement de( Tag(0x7fe0,0x0010) );
   const Value &v = PixelData.GetDataElement().GetValue();

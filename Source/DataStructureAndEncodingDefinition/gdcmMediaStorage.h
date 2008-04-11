@@ -81,6 +81,7 @@ public:
     RTPlanStorage,
     CSANonImageStorage,
     Philips3D,
+    EnhancedSR,
     MS_END
   } MSType; // Media Storage Type
 
@@ -96,17 +97,20 @@ typedef enum {
   } ObjectType;
 
   static const char* GetMSString(MSType ts);
+  const char* GetString() const;
   static MSType GetMSType(const char *str);
 
   MediaStorage(MSType type = MS_END):MSField(type) {}
 
-  static bool IsImage(const MSType &ts);
+  static bool IsImage(MSType ts);
 
   operator MSType () const { return MSField; }
 
   const char *GetModality() const;
 
   // Attempt to set the MediaStorage from a file:
+  // WARNING: When no MediaStorage & Modality are found BUT a PixelData element is found
+  // then MediaStorage is set to the default SecondaryCaptureImageStorage
   void SetFromFile(File const &file);
 
   // Those function are lower level than SetFromFile

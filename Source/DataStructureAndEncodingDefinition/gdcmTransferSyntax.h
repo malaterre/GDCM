@@ -85,7 +85,7 @@ public:
 
   // Return the string as written in the official DICOM dict from
   // a custom enum type
-  static const char* GetTSString(const TSType &ts);
+  static const char* GetTSString(TSType ts);
   static TSType GetTSType(const char *str);
 
   NegociatedType GetNegociatedType() const;
@@ -113,10 +113,10 @@ public:
   friend std::ostream &operator<<(std::ostream &os, const TransferSyntax &ts);
 private:
   // DO NOT EXPOSE the following. Internal details of TransferSyntax
-bool IsImplicit(const TSType &ts) const;
-bool IsExplicit(const TSType &ts) const;
-bool IsLittleEndian(const TSType &ts) const;
-bool IsBigEndian(const TSType &ts) const;
+bool IsImplicit(TSType ts) const;
+bool IsExplicit(TSType ts) const;
+bool IsLittleEndian(TSType ts) const;
+bool IsBigEndian(TSType ts) const;
 
   TSType TSField;
 };

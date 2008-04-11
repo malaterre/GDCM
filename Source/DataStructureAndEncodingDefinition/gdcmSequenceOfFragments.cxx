@@ -25,6 +25,11 @@ unsigned int SequenceOfFragments::GetNumberOfFragments() const
   return Fragments.size();
 }
 
+void SequenceOfFragments::AddFragment(Fragment const &item)
+{
+  (void)item;
+}
+
 VL SequenceOfFragments::ComputeLength() const
 {
   VL length = 0;

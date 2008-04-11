@@ -46,13 +46,11 @@ public:
   virtual void PrintSelf(ostream& os, vtkIndent indent);
 
   // Description:
-  // Explicitely get/set the Rescale Intercept (0028,1052)
-  vtkGetMacro(Shift,double);
+  // Explicitely set the Rescale Intercept (0028,1052)
   vtkSetMacro(Shift,double);
 
   // Description:
   // Explicitely get/set the Rescale Slope (0028,1053)
-  vtkGetMacro(Scale,double);
   vtkSetMacro(Scale,double);
 
   // Within this class this is allowed to set the Number of Overlays from outside
@@ -80,8 +78,6 @@ protected:
 private:
   vtkGDCMThreadedImageReader(const vtkGDCMThreadedImageReader&);  // Not implemented.
   void operator=(const vtkGDCMThreadedImageReader&);  // Not implemented.
-  double Shift;
-  double Scale;
 };
 
 #endif

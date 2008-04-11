@@ -79,6 +79,8 @@ static const char *MSStrings[] = {
   "1.3.12.2.1107.5.9.1",
   // 3DDCM011.dcm
   "1.2.840.113543.6.6.1.3.10002",
+  // EnhancedSR
+  "1.2.840.10008.5.1.4.1.1.88.22",
   0
 };
 
@@ -101,11 +103,16 @@ const char* MediaStorage::GetMSString(MSType ms)
   return MSStrings[(int)ms];
 }
 
+const char* MediaStorage::GetString() const
+{
+  return GetMSString(MSField);
+}
+
 // FIXME
 // Currently the implementation is bogus it only define the TS which
 // are associated with an image so indeed the implementation of IsImage 
 // is only the verification of TSType is != TS_END
-bool MediaStorage::IsImage(const MSType &ms)
+bool MediaStorage::IsImage(MSType ms)
 {
   if ( ms == MS_END // most frequent first
     // lexicographical order then...
@@ -230,6 +237,7 @@ void MediaStorage::SetFromDataSet(DataSet const &ds, bool guess)
   if( ds.FindDataElement( tsopclassuid ) )
     {
     const ByteValue *sopclassuid = ds.GetDataElement( tsopclassuid ).GetByteValue();
+    assert( sopclassuid );
     std::string sopclassuid_str(
       sopclassuid->GetPointer(),
       sopclassuid->GetLength() );

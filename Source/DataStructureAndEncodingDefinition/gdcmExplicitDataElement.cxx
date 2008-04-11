@@ -38,7 +38,7 @@ VL ExplicitDataElement::GetLength() const
     SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(p);
     if( sf )
       {
-      assert( VRField & (VR::OB | VR::OW) );
+      assert( VRField & VR::OB_OW ); // VR::INVALID is not possible AFAIK...
       return TagField.GetLength() + VRField.GetLength() 
         + ValueLengthField.GetLength() + sf->ComputeLength();
       }

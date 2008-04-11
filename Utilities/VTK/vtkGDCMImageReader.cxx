@@ -16,6 +16,9 @@
 
 #include "vtkObjectFactory.h"
 #include "vtkImageData.h"
+#include "vtkPolyData.h"
+#include "vtkCellArray.h"
+#include "vtkPoints.h"
 #include "vtkMedicalImageProperties.h"
 #include "vtkStringArray.h"
 #include "vtkPointData.h"
@@ -35,6 +38,7 @@
 #include "gdcmDataElement.h"
 #include "gdcmByteValue.h"
 #include "gdcmSwapper.h"
+#include "gdcmOrientation.h"
 
 #include <sstream>
 
@@ -48,6 +52,8 @@ vtkStandardNewMacro(vtkGDCMImageReader)
 
 #define ICONIMAGEPORTNUMBER 1
 #define OVERLAYPORTNUMBER   2
+
+vtkCxxSetObjectMacro(vtkGDCMImageReader,Curve,vtkPolyData)
 
 vtkGDCMImageReader::vtkGDCMImageReader()
 {
@@ -79,6 +85,11 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   this->ApplyLookupTable = 0;
   this->ApplyYBRToRGB = 0;
   this->ApplyPlanarConfiguration = 1;
+  memset(this->ImagePositionPatient,0,3*sizeof(double));
+  memset(this->ImageOrientationPatient,0,6*sizeof(double));
+  this->Curve = 0;
+  this->Shift = 0.;
+  this->Scale = 1.;
 }
 
 vtkGDCMImageReader::~vtkGDCMImageReader()
@@ -96,6 +107,10 @@ vtkGDCMImageReader::~vtkGDCMImageReader()
     this->FileNames->Delete();
     }
 #endif
+  if( this->Curve )
+    {
+    this->Curve->Delete();
+    }
 }
 
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
@@ -578,14 +593,17 @@ int vtkGDCMImageReader::RequestInformationCompat()
     assert( spacing );
     this->DataSpacing[0] = spacing[0];
     this->DataSpacing[1] = spacing[1];
-    //this->DataSpacing[2] = 1.;
+    if( image.GetNumberOfDimensions() == 3 )
+      {
+      this->DataSpacing[2] = image.GetSpacing(2);
+      }
 
     const double *origin = image.GetOrigin();
     if( origin )
       {
-      this->DataOrigin[0] = origin[0];
-      this->DataOrigin[1] = origin[1];
-      this->DataOrigin[2] = origin[2];
+      this->ImagePositionPatient[0] = image.GetOrigin(0);
+      this->ImagePositionPatient[1] = image.GetOrigin(1);
+      this->ImagePositionPatient[2] = image.GetOrigin(2);
       }
 
     const double *dircos = image.GetDirectionCosines();
@@ -597,6 +615,48 @@ int vtkGDCMImageReader::RequestInformationCompat()
       this->DirectionCosines->SetElement(0,1, dircos[3]);
       this->DirectionCosines->SetElement(1,1, dircos[4]);
       this->DirectionCosines->SetElement(2,1, dircos[5]);
+      for(int i=0;i<6;++i)
+        this->ImageOrientationPatient[i] = dircos[i];
+      }
+    // Apply transform:
+    if( dircos && origin )
+      {
+      double dcos[9];
+      for(int i=0;i<6;++i)
+        dcos[i] = dircos[i];
+      dcos[6] = dircos[1] * dircos[5] - dircos[2] * dircos[4];
+      dcos[7] = dircos[2] * dircos[3] - dircos[0] * dircos[5];
+      dcos[8] = dircos[0] * dircos[4] - dircos[3] * dircos[1];
+      double rotatedorigin[3];
+#if 1
+      rotatedorigin[0] = dcos[0] * origin[0] + dcos[1] * origin[1] + dcos[2] * origin[2];
+      rotatedorigin[1] = dcos[3] * origin[0] + dcos[4] * origin[1] + dcos[5] * origin[2];
+      rotatedorigin[2] = dcos[6] * origin[0] + dcos[7] * origin[1] + dcos[8] * origin[2];
+#else
+      rotatedorigin[0] = dcos[0] * origin[0] + dcos[3] * origin[1] + dcos[6] * origin[2];
+      rotatedorigin[1] = dcos[1] * origin[0] + dcos[4] * origin[1] + dcos[7] * origin[2];
+      rotatedorigin[2] = dcos[2] * origin[0] + dcos[5] * origin[1] + dcos[8] * origin[2];
+#endif
+      //gdcm::Orientation::OrientationType type = gdcm::Orientation::GetType(dircos);
+      //const char *label = gdcm::Orientation::GetLabel( type );
+      // Invert spacing
+      //if( !this->FileLowerLeft )
+      //  {
+      //  this->DataSpacing[1] = -spacing[1];
+      //  }
+
+      if( this->FileLowerLeft )
+        {
+        this->DataOrigin[0] = origin[0];
+        this->DataOrigin[1] = origin[1];
+        this->DataOrigin[2] = origin[2];
+        }
+      else
+        {
+        this->DataOrigin[0] = origin[0];
+        this->DataOrigin[1] = origin[1] - this->DataSpacing[1]*dims[1];
+        this->DataOrigin[2] = origin[2];
+        }
       }
     // Need to set the rest to 0 ???
     }
@@ -743,6 +803,31 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     char * iconpointer = static_cast<char*>(this->GetOutput(ICONIMAGEPORTNUMBER)->GetScalarPointer());
     assert( iconpointer );
     image.GetIconImage().GetBuffer( iconpointer );
+    }
+
+  // Do the Curve:
+  unsigned int numcurves = image.GetNumberOfCurves();
+  if( numcurves )
+    {
+    const gdcm::Curve& curve = image.GetCurve();
+    //curve.Print( std::cout );
+    vtkPoints * pts = vtkPoints::New();
+    pts->SetNumberOfPoints( curve.GetNumberOfPoints() );
+    curve.GetAsPoints( (float*)pts->GetVoidPointer(0) );
+    vtkCellArray *polys = vtkCellArray::New();
+    for(unsigned int i = 0; i < curve.GetNumberOfPoints(); i+=2 )
+      {
+      polys->InsertNextCell(2);
+      polys->InsertCellPoint(i);
+      polys->InsertCellPoint(i+1);
+      }
+    vtkPolyData *cube = vtkPolyData::New();
+    cube->SetPoints(pts);
+    pts->Delete();
+    cube->SetLines(polys);
+    polys->Delete();
+    SetCurve(cube);
+    cube->Delete();
     }
 
   // Do the Overlay:

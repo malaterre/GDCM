@@ -19,6 +19,8 @@ IF(WIN32)
 ENDIF(WIN32)
 
 # $ export JAVA_HOME=/usr/lib/j2sdk1.6-sun/ 
+# $ export JAVA_HOME=/usr/lib/jvm/java-1.5.0-sun/
+FIND_PACKAGE(Java REQUIRED) # javac, jar
 FIND_PACKAGE(JNI REQUIRED)
 INCLUDE_DIRECTORIES(
   #${JNI_INCLUDE_PATH}
@@ -27,35 +29,81 @@ INCLUDE_DIRECTORIES(
   ${JAVA_AWT_INCLUDE_PATH}
   )
 SET_SOURCE_FILES_PROPERTIES(gdcm.i PROPERTIES CPLUSPLUS ON)
+#INCLUDE(${GDCM_SOURCE_DIR}/CMake/UseSWIGExtra.cmake)
 
 # Some old swig 1.3 did not support this option:
-#SET(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_BINARY_DIR}")
+#SET(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_BINARY_DIR}/swig-java")
 
+SET(CMAKE_SWIG_FLAGS "-package gdcm")
+SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
 SWIG_ADD_MODULE(gdcm java gdcm.i)
 SWIG_LINK_LIBRARIES(gdcm gdcmMSFF
   #${JNI_LIBRARIES}
   ${JAVA_AWT_LIB_PATH}
   ${JAVA_JVM_LIB_PATH}
+) 
+# Stupid cmake-swig module is doing that for us, when not needed
+IF(UNIX)
+  SET_TARGET_PROPERTIES(${SWIG_MODULE_gdcm_REAL_NAME} PROPERTIES PREFIX "lib")
+ENDIF(UNIX)
+
+# swig-java dummy run:
+# the following execute_process is a dummy run and generate all *.java files in a directory
+# we can then glob all *.java to build rules in case the java wrapper becomes broken
+#EXECUTE_PROCESS(COMMAND ${SWIG_EXECUTABLE} 
+#  -java
+#  -I${GDCM_BINARY_DIR}/Source/Common
+#  -I${GDCM_SOURCE_DIR}/Source/Common
+#  -I${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition
+#  -I${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat
+#  -I${GDCM_SOURCE_DIR}/Source/DataDictionary
+#  -c++ 
+#  -o dummy.o
+#  ${CMAKE_CURRENT_SOURCE_DIR}/gdcm.i
+#  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+#  RESULT_VARIABLE res
+#)
+#MESSAGE("res:${res}")
+#FILE(GLOB javafiles "${CMAKE_CURRENT_BINARY_DIR}/*.java")
+#MESSAGE("javafile:${javafiles}")
+
+# This is kindda hackish:
+# 1. run the custom command only when the gdcmJAVA_wrap.cxx has been generated (which means all *.java should be there)
+ADD_CUSTOM_COMMAND(
+  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gdcm.class
+  COMMAND ${JAVA_COMPILE} ARGS "*.java" #${javafiles}
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  DEPENDS "${swig_generated_file_fullname}"
+  COMMENT "javac *.java"
 )
 
-#  MESSAGE(${SWIG_MODULE_gdcm_REAL_NAME})
-#  MESSAGE( "${swig_extra_generated_files}" )
-#  MESSAGE( "${swig_generated_file_fullname}" )
-#  MESSAGE( "${swig_extra_clean_files}" )
-# swig generates a _gdcm.so and a gdcm.py, we need to copy gdcm.py to the proper place:
-#    ADD_CUSTOM_COMMAND(
-#      TARGET    ${SWIG_MODULE_gdcm_REAL_NAME}
-#      POST_BUILD
-#      COMMAND   ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/gdcm.py ${LIBRARY_OUTPUT_PATH}
-#      DEPENDS "${swig_generated_file_fullname}"
-#      COMMENT   "Copy gdcm.py into ${LIBRARY_OUTPUT_PATH}"
-#    )
+# 2. now that the *.class have been generated construct the jar file. We can only rely on the gdcm.java / gdcm.class
+# to build dependencie, I am pretty sure it will break parallel builds... oh well
+ADD_CUSTOM_COMMAND(
+  OUTPUT ${LIBRARY_OUTPUT_PATH}/gdcm.jar
+  COMMAND ${JAVA_ARCHIVE} ARGS cvf ${LIBRARY_OUTPUT_PATH}/gdcm.jar *.class
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gdcm.class
+  COMMENT "jar cvf -> gdcm.jar"
+)
 
-#MESSAGE(${SWIG_MODULE_gdcm_REAL_NAME})
-#SWIG_GET_EXTRA_OUTPUT_FILES(
+# 3. ok now add the target
+ADD_CUSTOM_TARGET(GDCMJavaJar ALL
+  DEPENDS ${LIBRARY_OUTPUT_PATH}/gdcm.jar
+  COMMENT "building gdcm.jar"
+)
 
-#Module are always place in the library destination
-#but for poot win32 user I decided to place them
+# 4. gdcm.jar has been generated, let's put it right next to libgdcm.so:
+#ADD_CUSTOM_COMMAND(
+#  TARGET   GDCMJavaJar
+#  POST_BUILD
+#  COMMAND   ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/gdcm.jar ${LIBRARY_OUTPUT_PATH}
+#  DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gdcm.jar
+#  COMMENT   "Copy gdcm.jar into ${LIBRARY_OUTPUT_PATH}"
+#)
+
+# Module are always place in the library destination
+# but for poor win32 user I decided to place them
 # right next to the other dlls
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS ${SWIG_MODULE_gdcm_REAL_NAME}
@@ -63,11 +111,9 @@ IF(NOT GDCM_INSTALL_NO_LIBRARIES)
     LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
     ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
   )
-# the python file is not a dev file, but part of the gdcm module...
-#  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gdcm.py 
-#    DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
-#  )
+  # because gdcm.jar is constructed with custom commands, it need the INSTALL(FILES signature:
+  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gdcm.jar
+    DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
+  )
 ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
-#IF(BUILD_TESTING)
-#  SUBDIRS(Testing)
-#ENDIF(BUILD_TESTING)
+

@@ -88,6 +88,7 @@ SET(DICT_SRCS
   gdcmGlobal.cxx
   gdcmGroupDict.cxx
   gdcmDefaultGroupNames.cxx
+  gdcmUIDs.cxx
   )
 
 #MESSAGE( ${DICT_SRCS} )

@@ -31,7 +31,7 @@ class GDCM_EXPORT Sorter
 {
 public:
   Sorter();
-  ~Sorter();
+  virtual ~Sorter();
 
   // Typically the output of gdcm::Directory::GetFilenames()
   virtual bool Sort(std::vector<std::string> const & filenames);

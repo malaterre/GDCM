@@ -56,14 +56,7 @@ const ByteValue* ImageReader::GetPointerFromElement(Tag const &tag) const
 
 bool ImageReader::Read()
 {
-  try
-    {
-    if( !Reader::Read() )
-      {
-      return false;
-      }
-    }
-  catch(...)
+  if( !Reader::Read() )
     {
     return false;
     }
@@ -410,6 +403,7 @@ void DoOverlays(const DataSet& ds, ImageValue& pixeldata)
             << "This is not supported right now"
             << std::endl );
           ov.IsInPixelData( true );
+          ov.GrabOverlayFromPixelData(ds);
           }
         }
       }

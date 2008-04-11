@@ -54,6 +54,7 @@ SET(BLACK_LIST_READER
   tst_not.dcm
   BogugsSequenceLengthCorrectItemLength.dcm
   BogugsItemAndSequenceLength.dcm
+  srwithgraphdeflated.dcm # ???
 )
 
 SET(GDCM_DATA_FILENAMES)

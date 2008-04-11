@@ -22,15 +22,35 @@
 %{
 #include "gdcmTypes.h"
 #include "gdcmSwapCode.h"
+#include "gdcmDirectory.h"
+#include "gdcmTesting.h"
 #include "gdcmObject.h"
+#include "gdcmPixelFormat.h"
+#include "gdcmMediaStorage.h"
 #include "gdcmTag.h"
+#include "gdcmPrivateTag.h"
 #include "gdcmVL.h"
 #include "gdcmVR.h"
 #include "gdcmVM.h"
+#include "gdcmObject.h"
+#include "gdcmValue.h"
+#include "gdcmByteValue.h"
 #include "gdcmDataElement.h"
+#include "gdcmItem.h"
+#include "gdcmSequenceOfItems.h"
 #include "gdcmDataSet.h"
+//#include "gdcmString.h"
 #include "gdcmPreamble.h"
 #include "gdcmFile.h"
+#include "gdcmFragment.h"
+#include "gdcmCSAHeader.h"
+#include "gdcmSequenceOfFragments.h"
+#include "gdcmTransferSyntax.h"
+#include "gdcmBasicOffsetTable.h"
+//#include "gdcmLO.h"
+#include "gdcmCSAElement.h"
+#include "gdcmFileSet.h"
+
 #include "gdcmReader.h"
 #include "gdcmImageReader.h"
 #include "gdcmWriter.h"
@@ -40,8 +60,6 @@
 #include "gdcmDicts.h"
 #include "gdcmDict.h"
 #include "gdcmDictEntry.h"
-#include "gdcmDirectory.h"
-#include "gdcmTesting.h"
 #include "gdcmUIDGenerator.h"
 //#include "gdcmConstCharWrapper.h"
 #include "gdcmScanner.h"
@@ -49,6 +67,33 @@
 #include "gdcmAnonymizer.h"
 #include "gdcmSystem.h"
 #include "gdcmTrace.h"
+#include "gdcmUIDs.h"
+#include "gdcmIPPSorter.h"
+#include "gdcmSpectroscopy.h"
+#include "gdcmPrinter.h"
+#include "gdcmDumper.h"
+#include "gdcmOrientation.h"
+#include "gdcmFiducials.h"
+#include "gdcmWaveform.h"
+#include "gdcmPersonName.h"
+#include "gdcmIconImage.h"
+#include "gdcmCurve.h"
+#include "gdcmDICOMDIR.h"
+#include "gdcmValidate.h"
+#include "gdcmApplicationEntity.h"
+#include "gdcmDictPrinter.h"
+#include "gdcmSorter.h"
+#include "gdcmFilenameGenerator.h"
+#include "gdcmVersion.h"
+#include "gdcmFilename.h"
+#include "gdcmEnumeratedValues.h"
+#include "gdcmPatient.h"
+#include "gdcmStudy.h"
+#include "gdcmModule.h"
+#include "gdcmTableEntry.h"
+#include "gdcmDefinedTerms.h"
+#include "gdcmSeries.h"
+#include "gdcmModuleEntry.h"
 
 using namespace gdcm;
 %}
@@ -73,8 +118,9 @@ using namespace gdcm;
 #define GDCM_EXPORT
 %include "gdcmSwapCode.h"
 %include "gdcmPixelFormat.h"
-//%include "gdcmMediaStorage.h"
+%include "gdcmMediaStorage.h"
 %rename(__getitem__) gdcm::Tag::operator[];
+//%rename(__getattr__) gdcm::Tag::operator[];
 %include "gdcmTag.h"
 %extend gdcm::Tag
 {
@@ -86,6 +132,7 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
+%include "gdcmPrivateTag.h"
 %include "gdcmVL.h"
 //%typemap(out) int
 //{
@@ -102,8 +149,68 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
+%include "gdcmVM.h"
+//%template (FilenameType) std::string;
+%template (FilenamesType) std::vector<std::string>;
+%include "gdcmDirectory.h"
+%extend gdcm::Directory
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+};
+%include "gdcmTesting.h"
+%include "gdcmObject.h"
+%include "gdcmValue.h"
+%extend gdcm::Value
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
+%include "gdcmByteValue.h"
+%extend gdcm::ByteValue
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmDataElement.h"
 %extend gdcm::DataElement
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
+%include "gdcmItem.h"
+%extend gdcm::Item
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
+%include "gdcmSequenceOfItems.h"
+%extend gdcm::SequenceOfItems
 {
   const char *__str__() {
     static std::string buffer;
@@ -137,14 +244,13 @@ using namespace gdcm;
     return buffer.c_str();
     }
 };
+//%include "gdcmString.h"
 //%include "gdcmTransferSyntax.h"
 %include "gdcmPhotometricInterpretation.h"
 %include "gdcmObject.h"
 %include "gdcmLookupTable.h"
 %include "gdcmOverlay.h"
 //%include "gdcmVR.h"
-%include "gdcmValue.h"
-%include "gdcmByteValue.h"
 //%rename(DataElementSetPython) std::set<DataElement, lttag>;
 //%rename(DataElementSetPython2) DataSet::DataElementSet;
 %template (DataElementSet) std::set<gdcm::DataElement>;
@@ -192,9 +298,17 @@ using namespace gdcm;
 //}
 
 };
+%include "gdcmFragment.h"
+%include "gdcmCSAHeader.h"
+%include "gdcmSequenceOfFragments.h"
+%include "gdcmTransferSyntax.h"
+%include "gdcmBasicOffsetTable.h"
+//%include "gdcmLO.h"
+%include "gdcmCSAElement.h"
+%include "gdcmFileSet.h"
+
 %include "gdcmGlobal.h"
-//%include "gdcmVR.h"
-//%include "gdcmVM.h"
+
 %include "gdcmDictEntry.h"
 %extend gdcm::DictEntry
 {
@@ -215,20 +329,6 @@ using namespace gdcm;
 %template (PairString) std::pair<std::string,std::string>;
 //%template (MyM) std::map<gdcm::Tag,gdcm::ConstCharWrapper>;
 %include "gdcmStringFilter.h"
-//%template (FilenameType) std::string;
-%template (FilenamesType) std::vector<std::string>;
-%include "gdcmDirectory.h"
-%extend gdcm::Directory
-{
-  const char *__str__() {
-    static std::string buffer;
-    std::stringstream s;
-    self->Print(s);
-    buffer = s.str();
-    return buffer.c_str();
-  }
-};
-%include "gdcmTesting.h"
 %include "gdcmUIDGenerator.h"
 //%include "gdcmConstCharWrapper.h"
 //%{
@@ -266,3 +366,32 @@ using namespace gdcm;
 %include "gdcmAnonymizer.h"
 %include "gdcmSystem.h"
 %include "gdcmTrace.h"
+%include "gdcmUIDs.h"
+%include "gdcmIPPSorter.h"
+%include "gdcmSpectroscopy.h"
+%include "gdcmPrinter.h"
+%include "gdcmDumper.h"
+%include "gdcmOrientation.h"
+%include "gdcmFiducials.h"
+%include "gdcmWaveform.h"
+%include "gdcmPersonName.h"
+%include "gdcmIconImage.h"
+%include "gdcmCurve.h"
+%include "gdcmDICOMDIR.h"
+%include "gdcmValidate.h"
+%include "gdcmApplicationEntity.h"
+%include "gdcmDictPrinter.h"
+%include "gdcmSorter.h"
+%include "gdcmFilenameGenerator.h"
+%include "gdcmVersion.h"
+%include "gdcmFilename.h"
+%include "gdcmEnumeratedValues.h"
+%include "gdcmPatient.h"
+%include "gdcmStudy.h"
+%include "gdcmModule.h"
+%include "gdcmTableEntry.h"
+%include "gdcmDefinedTerms.h"
+%include "gdcmSeries.h"
+%include "gdcmModuleEntry.h"
+
+

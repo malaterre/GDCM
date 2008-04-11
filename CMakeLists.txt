@@ -148,6 +148,14 @@ ELSE(GDCM_BUILD_SHARED_LIBS)
   ENDIF(GDCM_INSTALL_NO_DEVELOPMENT)
 ENDIF(GDCM_BUILD_SHARED_LIBS)
 
+#-----------------------------------------------------------------------------
+OPTION(GDCM_BUILD_EXAMPLES "Build GDCM examples." OFF)
+SET(BUILD_EXAMPLES ${GDCM_BUILD_EXAMPLES})
+IF(BUILD_EXAMPLES)
+  SUBDIRS(Examples)
+ENDIF(BUILD_EXAMPLES)
+
+#-----------------------------------------------------------------------------
 SUBDIRS(
   Utilities
   Source
@@ -175,23 +183,26 @@ ENDIF(BUILD_TESTING)
 
 #-----------------------------------------------------------------------------
 OPTION(GDCM_DOCUMENTATION "Build source documentation using doxygen." OFF)
-#SET(BUILD_APPLICATIONS ${GDCM_BUILD_APPLICATIONS})
 
+#-----------------------------------------------------------------------------
 OPTION(GDCM_USE_VTK "vtk bridge ?" OFF)
 IF(GDCM_USE_VTK)
   SUBDIRS(Utilities/VTK)
 ENDIF(GDCM_USE_VTK)
 
+#-----------------------------------------------------------------------------
 OPTION(GDCM_USE_ITK "itk bridge ?" OFF)
 IF(GDCM_USE_ITK)
   SUBDIRS(Utilities/Insight)
 ENDIF(GDCM_USE_ITK)
 
+#-----------------------------------------------------------------------------
 OPTION(GDCM_USE_WXWIDGETS "wxWidgets bridge ?" OFF)
 IF(GDCM_USE_WXWIDGETS)
   SUBDIRS(Utilities/wxWidgets)
 ENDIF(GDCM_USE_WXWIDGETS)
 
+#-----------------------------------------------------------------------------
 OPTION(GDCM_BUILD_APPLICATIONS "apps ?" OFF)
 SET(BUILD_APPLICATIONS ${GDCM_BUILD_APPLICATIONS})
 IF(BUILD_APPLICATIONS)
@@ -225,7 +236,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     SET(CPACK_NSIS_URL_INFO_ABOUT "http://gdcm.sourceforge.net")
     SET(CPACK_NSIS_MODIFY_PATH ON)
   ELSE(WIN32 AND NOT UNIX)
-    SET(CPACK_STRIP_FILES "bin/gdcmdump;bin/gdcmconv;bin/gdcmimg;bin/gdcmscanner;bin/gdcmoverlay")
+    SET(CPACK_STRIP_FILES "bin/gdcmdump;bin/gdcmconv;bin/gdcmimg;bin/gdcmscanner")
     SET(CPACK_SOURCE_STRIP_FILES "")
     SET(CPACK_PACKAGE_EXECUTABLES "gdcmviewer" "VIEWER")
 
@@ -234,9 +245,6 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     SET(CPACK_SYSTEM_NAME ${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR})
   ENDIF(NOT DEFINED CPACK_SYSTEM_NAME)
   # Need to set the architecture for debian package
-  IF(UNIX)
-    EXEC_PROGRAM(dpkg ARGS --print-architecture OUTPUT_VARIABLE CPACK_DEBIAN_PACKAGE_ARCHITECTURE)
-  ENDIF(UNIX)
 
   SET(CPACK_PACKAGE_CONTACT "gdcm-developers@lists.sourceforge.net")
 
@@ -256,13 +264,17 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
 ENDIF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
 
 #-----------------------------------------------------------------------------
-OPTION(GDCM_BUILD_WRAPPING "wrapping ?" OFF)
-SET(BUILD_WRAPPING ${GDCM_BUILD_WRAPPING})
-IF(BUILD_WRAPPING)
-  SUBDIRS(Wrapping)
-ENDIF(BUILD_WRAPPING)
+# Wrapping
+OPTION(GDCM_WRAP_PYTHON "build python wrapping" OFF)
+IF(GDCM_BUILD_WRAPPING)
+  MESSAGE(STATUS "GDCM_BUILD_WRAPPING option is deprecate, please specify explicitely which target language to wrap")
+  SET(GDCM_WRAP_PYTHON ON CACHE BOOL "(deprecated) build python wrapping" FORCE)
+ENDIF(GDCM_BUILD_WRAPPING)
+OPTION(GDCM_WRAP_PHP "php wrapping (experimental !)" OFF)
+OPTION(GDCM_WRAP_JAVA "build java wrapping (experimental !)" OFF)
+SUBDIRS(Wrapping)
 
-
+#-----------------------------------------------------------------------------
 # Need to be the last operation:
 SUBDIRS(CMake/ExportConfiguration)
 

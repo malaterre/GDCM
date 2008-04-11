@@ -16,6 +16,6 @@
 
 int TestVersion(int, char *[])
 {
-  const char *version = gdcm::Version::GetGDCMVersion();
+  const char *version = gdcm::Version::GetVersion();
   return 0;
 }

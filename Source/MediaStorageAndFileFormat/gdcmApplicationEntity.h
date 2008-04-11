@@ -18,7 +18,6 @@
 
 #include "gdcmTypes.h"
 #include <vector>
-
 #include <stdlib.h> // abort
 
 namespace gdcm

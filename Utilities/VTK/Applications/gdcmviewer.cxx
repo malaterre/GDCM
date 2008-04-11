@@ -16,6 +16,11 @@
 
 #include "vtkXMLImageDataWriter.h"
 #include "vtkPNGWriter.h"
+#include "vtkImageShiftScale.h"
+#include "vtkOutlineFilter.h"
+#include "vtkMath.h"
+#include "vtkPolyDataMapper2D.h"
+#include "vtkImageReslice.h"
 #include "vtkRenderWindowInteractor.h"
 #include "vtkImageViewer.h"
 #include "vtkPointData.h"
@@ -25,6 +30,13 @@
 #include "vtkImageMapToWindowLevelColors.h"
 #include "vtkImageActor.h"
 #include "vtkWindowToImageFilter.h"
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#include "vtkLogoWidget.h"
+#include "vtkLogoRepresentation.h"
+#else
+class vtkLogoWidget;
+class vtkLogoRepresentation;
+#endif
 #if VTK_MAJOR_VERSION >= 5
 #include "vtkImageYBRToRGB.h"
 #include "vtkImageColorViewer.h"
@@ -36,6 +48,7 @@
 #include "vtkRenderer.h"
 #include "vtkStringArray.h"
 #include "vtkDebugLeaks.h"
+#include "vtkWorldPointPicker.h"
 
 #include "gdcmFilename.h"
 
@@ -70,8 +83,8 @@ public:
   double GetOverlayVisibility() { return 0; }
   void SetOverlayVisibility(double vis) {(void)vis;}
 };
-vtkCxxRevisionMacro(vtkGDCMImageViewer, "$Revision: 1.30 $");
-vtkInstantiatorNewMacro(vtkGDCMImageViewer);
+vtkCxxRevisionMacro(vtkGDCMImageViewer, "$Revision: 1.30 $")
+vtkInstantiatorNewMacro(vtkGDCMImageViewer)
 
 #if VTK_MAJOR_VERSION >= 5
 #else
@@ -116,8 +129,8 @@ public:
 private:
   vtkImageActor                   *OverlayImageActor;
 };
-vtkCxxRevisionMacro(vtkImageColorViewer, "$Revision: 1.30 $");
-vtkInstantiatorNewMacro(vtkImageColorViewer);
+vtkCxxRevisionMacro(vtkImageColorViewer, "$Revision: 1.30 $")
+vtkInstantiatorNewMacro(vtkImageColorViewer)
 #endif
 
 //----------------------------------------------------------------------------
@@ -133,6 +146,12 @@ public:
   vtkGDCMObserver()
     {
     ImageViewer = NULL;
+    IconWidget = NULL;
+    picker = vtkWorldPointPicker::New();
+    }
+  ~vtkGDCMObserver()
+    {
+    picker->Delete();
     }
   virtual void Execute(vtkObject *caller, unsigned long event, void* /*calldata*/)
     {
@@ -162,6 +181,12 @@ public:
           w2i->Delete();
           //std::cerr << "Screenshort saved to snapshot.png" << std::endl;
           }
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+        else if ( keycode == 'l' )
+          {
+          IconWidget->Off();
+          }
+#endif
         else
           {
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
@@ -177,9 +202,28 @@ public:
           ImageViewer->Render();
           }
         }
+      else if ( event == vtkCommand::EndPickEvent )
+        {
+        //std::cerr << "EndPickEvent" << std::endl;
+        int *pick = rwi->GetEventPosition();
+        vtkRenderer *ren1 = ImageViewer->GetRenderer();
+        picker->Pick((double)pick[0], (double)pick[1], 0.0, ren1);
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
+        double *pos = picker->GetPickPosition ();
+#else
+        float *pos = picker->GetPickPosition ();
+#endif
+        std::cout << pos[0] << "," << pos[1] << "," << pos[2] << std::endl;
+        }
+      else
+        {
+        std::cerr << "Unhandled even:" << event << std::endl;
+        }
       }
     }
   TViewer *ImageViewer;
+  vtkWorldPointPicker *picker;
+  vtkLogoWidget *IconWidget;
 };
 
 // A feature in VS6 make it painfull to write template code
@@ -204,6 +248,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   // 0028|1051 [DS] [Window Width]
   // but gdcmviewer doesn't know about them :-(
 
+  //reader->FileLowerLeftOn();
   reader->Update();
   //reader->Print( cout );
   //reader->GetOutput()->Print( cout );
@@ -214,7 +259,6 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   float range[2];
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
   reader->GetOutput()->GetScalarRange(range);
-  //std::cerr << "Range: " << range[0] << " " << range[1] << std::endl;
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   viewer->SetInputConnection ( reader->GetOutputPort(0) );
   // Technically we could just simple always call AddInputConnection on the overlay
@@ -227,6 +271,24 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     // WARNING: gdcmviewer2 only !
     viewer->AddInputConnection ( reader->GetOverlayPort(0) );
     }
+  // TODO: Icon can be added using the vtkLogoWidget
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+  vtkLogoWidget * iconwidget = 0;
+  if( reader->GetNumberOfIconImages() )
+    {
+    vtkLogoRepresentation *rep = vtkLogoRepresentation::New();
+    rep->SetImage(reader->GetIconImage());
+
+    vtkLogoWidget *widget = vtkLogoWidget::New();
+    widget->SetInteractor(iren);
+    widget->SetRepresentation(rep);
+    iconwidget = widget;
+    //widget->Delete();
+    rep->Delete();
+
+    //viewer->AddInputConnection ( reader->GetIconImagePort() );
+    }
+#endif
 #else
   viewer->SetInput( reader->GetOutput(0) );
   if( reader->GetNumberOfOverlays() )
@@ -236,16 +298,16 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
   // IconImage:
-  if( reader->GetNumberOfIconImages() )
-    {
-    std::cerr << "NumberOfIconImages:" << reader->GetNumberOfIconImages() << std::endl;
-    reader->GetIconImage()->Print( std::cerr );
-    vtkPNGWriter *writer = vtkPNGWriter::New();
-    writer->SetInput( reader->GetIconImage() );
-    writer->SetFileName( "icon.png" );
-    //writer->Write();
-    writer->Delete();
-    }
+  //if( reader->GetNumberOfIconImages() )
+  //  {
+  //  std::cerr << "NumberOfIconImages:" << reader->GetNumberOfIconImages() << std::endl;
+  //  reader->GetIconImage()->Print( std::cerr );
+  //  vtkPNGWriter *writer = vtkPNGWriter::New();
+  //  writer->SetInput( reader->GetIconImage() );
+  //  writer->SetFileName( "icon.png" );
+  //  //writer->Write();
+  //  writer->Delete();
+  //  }
 
   // In case of palette color, let's tell VTK to map color:
   // MONOCHROME1 is also implemented with a lookup table
@@ -283,10 +345,65 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     std::cerr << "Not implemented" << std::endl;
 #endif
     }
+//  vtkImageShiftScale *ss = vtkImageShiftScale::New();
+//  ss->SetInput( reader->GetOutput() );
+//  ss->SetShift( -1024 );
+//  ss->SetOutputScalarTypeToShort();
+//  ss->Update();
+//    ss->GetOutput()->GetScalarRange(range);
+//    viewer->SetInput( ss->GetOutput() );
+//    ss->Delete();
+
+  if( reader->GetCurve() )
+    {
+    vtkPolyDataMapper2D * rectMapper = vtkPolyDataMapper2D::New();
+    rectMapper->SetInput( reader->GetCurve() );
+
+    vtkActor2D * rectActor = vtkActor2D::New();
+    rectActor->SetMapper( rectMapper );
+    viewer->GetRenderer()->AddActor2D( rectActor );
+    rectActor->Delete();
+    rectMapper->Delete();
+    }
+
+#if 0
+  vtkImageReslice * slicer = vtkImageReslice::New();
+  slicer->SetInput( reader->GetOutput() );
+  slicer->InterpolateOn();
+  //slicer->SetResliceAxesOrigin(0, 0, 0);
+  //slicer->SetResliceAxesOrigin( reader->GetImagePositionPatient() );
+  //slicer->SetResliceAxes( reader->GetDirectionCosines() );
+  const double *dircos = reader->GetImageOrientationPatient();
+  double dcos[9];
+  for(int i=0;i<6;++i)
+    dcos[i] = dircos[i];
+  dcos[6] = dircos[1] * dircos[5] - dircos[2] * dircos[4];
+  dcos[7] = dircos[2] * dircos[3] - dircos[0] * dircos[5];
+  dcos[8] = dircos[0] * dircos[4] - dircos[3] * dircos[1];
+  double dummy[3];
+  double dot = vtkMath::Dot(dircos, dircos+3);
+  std::cout << dot << std::endl;
+  vtkMath::Cross(dircos, dircos+3, dummy);
+  std::cout << dcos[6] << "," << dcos[7] << "," << dcos[8] << std::endl;
+  std::cout << dummy[0] << "," << dummy[1] << "," << dummy[2] << std::endl;
+  dot = vtkMath::Dot(dircos, dummy);
+  std::cout << dot << std::endl;
+  dot = vtkMath::Dot(dircos+3, dummy);
+  std::cout << dot << std::endl;
+  slicer->SetResliceAxesDirectionCosines(dcos);
+  slicer->Update();
+  slicer->GetOutput()->Print( std::cout );
+  //viewer->SetInput( slicer->GetOutput() );
+  vtkOutlineFilter * outline = vtkOutlineFilter::New();
+  outline->SetInput( slicer->GetOutput() );
+  outline->GetOutput()->Print( std::cout );
+  //slicer->AddInput( (vtkPolyData*)outline->GetOutput() );
+#endif
 
   // Always overwriting default is not always nice looking...
   viewer->SetColorLevel (0.5 * (range[1] + range[0]));
   viewer->SetColorWindow (range[1] - range[0]);
+  std::cerr << "Range: " << range[0] << " " << range[1] << std::endl;
 
   viewer->SetupInteractor (iren);
   int dims[3];
@@ -295,12 +412,18 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   dims[0] = (dims[0] < 600 ) ? dims[0] : 600;
   dims[1] = (dims[1] < 600 ) ? dims[1] : 600;
   viewer->Render(); // EXTREMELY IMPORTANT for vtkImageViewer2
+
   viewer->SetSize( dims );
 
   // Here is where we setup the observer, 
   vtkGDCMObserver<TViewer> *obs = vtkGDCMObserver<TViewer>::New();
   obs->ImageViewer = viewer;
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+  if(iconwidget) iconwidget->On();
+  obs->IconWidget = iconwidget;
+#endif
   iren->AddObserver(vtkCommand::CharEvent,obs);
+  iren->AddObserver(vtkCommand::EndPickEvent,obs);
   obs->Delete();
 
   iren->Initialize();
@@ -330,6 +453,13 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 #endif
 
   reader->Delete();
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+  if( iconwidget )
+    {
+    iconwidget->Off();
+    iconwidget->Delete();
+    }
+#endif
   iren->Delete();
   viewer->Delete();
 }
@@ -358,6 +488,8 @@ int main(int argc, char *argv[])
   
   const char gdcmviewer[] = "gdcmviewer";
   const char gdcmviewer2[] = "gdcmviewer2";
+  // can't do strcmp on WIN32...
+  // Need to order correctly when doing strncmp
   if( strncmp(viewer_type.GetName(), gdcmviewer2, strlen(gdcmviewer2) ) == 0 )
     {
     vtkImageColorViewer *viewer = vtkImageColorViewer::New();

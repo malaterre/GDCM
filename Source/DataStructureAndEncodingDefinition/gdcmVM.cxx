@@ -156,7 +156,7 @@ unsigned int VM::GetIndex(VMType vm)
   return l;
 }
 
-const char *VM::GetVMString(const VMType &vm)
+const char *VM::GetVMString(VMType vm)
 {
   unsigned int idx = GetIndex(vm);
   assert( idx < sizeof(VMStrings) / sizeof(VMStrings[0]) );
@@ -180,7 +180,7 @@ VM::VMType VM::GetVMType(const char *vm)
 }
 
 // FIXME IsValid will only work for VM defined in public dict...
-bool VM::IsValid(const int &vm1, const VMType &vm2)
+bool VM::IsValid(int vm1, VMType vm2)
 {
   bool r = false;
   assert( vm1 >= 0 ); // Still need to check Part 3

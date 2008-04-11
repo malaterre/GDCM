@@ -10,11 +10,43 @@ IF(GDCM_DOCUMENTATION)
     ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
     )
 
-  ADD_CUSTOM_TARGET(doc-developer
+  FILE(GLOB_RECURSE headerfiles
+    "${GDCM_SOURCE_DIR}/Source/*.h"
+  )
+  #MESSAGE(${headerfiles})
+  # We are depending only on header files and README.txt but other files
+  # could be needed for complete dependencies
+	ADD_CUSTOM_COMMAND(
+	  OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/html/index.html
+    COMMAND  ${DOXYGEN}
+    ARGS     ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
+    DEPENDS  ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
+             ${GDCM_SOURCE_DIR}/README.txt
+             ${headerfiles}
+    COMMENT  "Creating doxygen doc"
+	  #WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+	  )
+
+  SET(GDCM_DOC_TARBALL
+    ${CMAKE_CURRENT_BINARY_DIR}/gdcm-${GDCM_VERSION}-doc.tgz
+  )
+  # every time doxygen runs, it overwrite index.html so depending only on
+  # one single file is ok
+  # tar command is executed using relative path, so that tar does not contains 
+  # full path
+  ADD_CUSTOM_COMMAND(
+    OUTPUT   ${GDCM_DOC_TARBALL}
+    COMMAND  ${CMAKE_COMMAND}
+    ARGS     -E tar cfz ${GDCM_DOC_TARBALL} html
+    DEPENDS  ${CMAKE_CURRENT_BINARY_DIR}/html/index.html
+    COMMENT  "Creating tarball of documentation"
+    #WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  )
+  ADD_CUSTOM_TARGET(DoxygenDoc
     ALL
-    ${DOXYGEN}
-    ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
-    )
+    DEPENDS ${GDCM_DOC_TARBALL}
+  )
+
 
 ENDIF(GDCM_DOCUMENTATION)
 

@@ -21,6 +21,13 @@
 //
 // .SECTION NOTE We are not using the usual API SetFilePrefix / SetFilePattern, 
 // but instead a list of filenames: see SetFileNames
+// .SECTION Warning
+// You need to specify the correct ImageFormat (taken from the reader)
+// You need to explicitely specify the DirectionCosines (taken from the reader)
+// .SECTION Bug
+// You need to set the FileDimensionality to match the dim of your 
+// data for now (generating a 2D series out of 3D volume is not 
+// currently supported)
 //
 // .SECTION See Also
 // vtkImageWriter vtkMedicalImageProperties

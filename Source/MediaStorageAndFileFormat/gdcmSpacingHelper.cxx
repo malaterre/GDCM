@@ -15,9 +15,13 @@
 #include "gdcmSpacingHelper.h"
 #include "gdcmMediaStorage.h"
 #include "gdcmDataSet.h"
+#include "gdcmDataElement.h"
+#include "gdcmItem.h"
+#include "gdcmSequenceOfItems.h"
 #include "gdcmGlobal.h"
 #include "gdcmDictEntry.h"
 #include "gdcmDicts.h"
+#include "gdcmAttribute.h"
 
 namespace gdcm
 {
@@ -69,6 +73,92 @@ std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
   MediaStorage ms;
   ms.SetFromDataSet(ds, true);
   assert( MediaStorage::IsImage( ms ) );
+
+  if( ms == MediaStorage::EnhancedCTImageStorage )
+    {
+    //  (0028,9110) SQ (Sequence with undefined length #=1)     # u/l, 1 PixelMeasuresSequence
+    //      (fffe,e000) na (Item with undefined length #=2)         # u/l, 1 Item
+    //        (0018,0050) DS [0.5]                                    #   4, 1 SliceThickness
+    //        (0028,0030) DS [0.322\0.322]                            #  12, 2 PixelSpacing
+    // <entry group="5200" element="9229" vr="SQ" vm="1" name="Shared Functional Groups Sequence"/>
+    const Tag tfgs(0x5200,0x9229);
+    if( !ds.FindDataElement( tfgs ) ) return sp;
+    const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+    assert( sqi );
+    // Get first item:
+    const Item &item = sqi->GetItem(1);
+    const DataSet & subds = item.GetNestedDataSet();
+    // <entry group="0028" element="9110" vr="SQ" vm="1" name="Pixel Measures Sequence"/>
+    const Tag tpms(0x0028,0x9110);
+    if( !subds.FindDataElement(tpms) ) return sp;
+    const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+    assert( sqi2 );
+    const Item &item2 = sqi2->GetItem(1);
+    const DataSet & subds2 = item2.GetNestedDataSet();
+    // <entry group="0028" element="0030" vr="DS" vm="2" name="Pixel Spacing"/>
+    const Tag tps(0x0028,0x0030);
+    if( !subds2.FindDataElement(tps) ) return sp;
+    const DataElement &de = subds2.GetDataElement( tps );
+    //assert( bv );
+    gdcm::Attribute<0x0028,0x0030> at;
+    at.SetFromDataElement( de );
+    //at.Print( std::cout );
+    sp.push_back( at.GetValue(0) );
+    sp.push_back( at.GetValue(1) );
+
+    // Do the 3rd dimension zspacing:
+    // <entry group="0018" element="0050" vr="DS" vm="1" name="Slice Thickness"/>
+    const Tag tst(0x0018,0x0050);
+    if( !subds2.FindDataElement(tst) ) return sp;
+    const DataElement &de2 = subds2.GetDataElement( tst );
+    gdcm::Attribute<0x0018,0x0050> at2;
+    at2.SetFromDataElement( de2 );
+    //at2.Print( std::cout );
+    sp.push_back( at2.GetValue(0) );
+
+    return sp;
+    }
+
+  if( ms == MediaStorage::EnhancedMRImageStorage )
+    {
+    // <entry group="5200" element="9230" vr="SQ" vm="1" name="Per-frame Functional Groups Sequence"/>
+    const Tag tfgs(0x5200,0x9230);
+    if( !ds.FindDataElement( tfgs ) ) return sp;
+    const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+    assert( sqi );
+    // Get first item:
+    const Item &item = sqi->GetItem(1);
+    const DataSet & subds = item.GetNestedDataSet();
+    // <entry group="0028" element="9110" vr="SQ" vm="1" name="Pixel Measures Sequence"/>
+    const Tag tpms(0x0028,0x9110);
+    if( !subds.FindDataElement(tpms) ) return sp;
+    const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+    assert( sqi2 );
+    const Item &item2 = sqi2->GetItem(1);
+    const DataSet & subds2 = item2.GetNestedDataSet();
+    // <entry group="0028" element="0030" vr="DS" vm="2" name="Pixel Spacing"/>
+    const Tag tps(0x0028,0x0030);
+    if( !subds2.FindDataElement(tps) ) return sp;
+    const DataElement &de = subds2.GetDataElement( tps );
+    //assert( bv );
+    gdcm::Attribute<0x0028,0x0030> at;
+    at.SetFromDataElement( de );
+    //at.Print( std::cout );
+    sp.push_back( at.GetValue(0) );
+    sp.push_back( at.GetValue(1) );
+
+    // Do the 3rd dimension zspacing:
+    // <entry group="0018" element="0050" vr="DS" vm="1" name="Slice Thickness"/>
+    const Tag tst(0x0018,0x0050);
+    if( !subds2.FindDataElement(tst) ) return sp;
+    const DataElement &de2 = subds2.GetDataElement( tst );
+    gdcm::Attribute<0x0018,0x0050> at2;
+    at2.SetFromDataElement( de2 );
+    //at2.Print( std::cout );
+    sp.push_back( at2.GetValue(0) );
+
+    return sp;
+    }
 
   Tag spacingtag = GetSpacingTagFromMediaStorage(ms);
   if( spacingtag != Tag(0xffff,0xffff) && ds.FindDataElement( spacingtag ) )

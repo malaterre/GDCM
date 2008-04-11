@@ -16,6 +16,30 @@
 
 #include "gdcmSwapper.h"
 
+int TestOperator()
+{
+  gdcm::Tag t1(0x1234,0x5678);
+  gdcm::Tag t1bis(0x1234,0x5678);
+  gdcm::Tag t2(0x1234,0x5679);
+  if( t2 < t1 )
+    {
+    return 1;
+    }
+  if( !(t1 < t2) )
+    {
+    return 1;
+    }
+  if( !(t1 == t1bis) )
+    {
+    return 1;
+    }
+  if( !(t1 <= t1bis) )
+    {
+    return 1;
+    }
+  return 0;
+}
+
 int TestTag(int , char * [])
 {
   const uint32_t dummy = 0x12345678;
@@ -215,5 +239,9 @@ int TestTag(int , char * [])
       return 1;
       }
     }
+
+  int res = TestOperator();
+  if( res ) return res;
+
   return 0;
 }
