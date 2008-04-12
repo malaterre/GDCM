@@ -34,6 +34,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Testing/Source/Data"
 
   "${GDCM_SOURCE_DIR}/Utilities"
+  "${GDCM_BINARY_DIR}/Utilities/zlib"
   )
 
 
