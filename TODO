@@ -99,3 +99,5 @@ Serisouly fix the gdcm::Orientation code in vtkGDCMImageReader
 -----------------------------------------------------------------------
 Convert the HTML page into c++ code:
 http://www.mmrrcc.upenn.edu/CAMRIS/cfn/dicomhdr.html
+-----------------------------------------------------------------------
+Provide operator() ==  for String<LO> (should discard length, space char...)
