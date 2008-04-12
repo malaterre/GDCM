@@ -5,6 +5,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
 IF(COMMAND CMAKE_POLICY)
   CMAKE_POLICY(SET CMP0003 NEW)
 ENDIF(COMMAND CMAKE_POLICY)
+MARK_AS_ADVANCED(CMAKE_BACKWARDS_COMPATIBILITY CMAKE_BUILD_TYPE CMAKE_INSTALL_PREFIX)
 
 #-----------------------------------------------------------------------------
 # Disallow insource build since I never test that
@@ -48,6 +49,7 @@ FIND_PATH(GDCM_DATA_ROOT gdcm-ACR-LibIDO.acr
   $ENV{GDCM_DATA_ROOT}
   $ENV{PUB_DICT_PATH}/../../gdcmData
   )
+MARK_AS_ADVANCED(GDCM_DATA_ROOT)
 
 # Define a temp directory in which we can output stuff
 SET(GDCM_TEMP_DIRECTORY "${GDCM_BINARY_DIR}/Testing/Temporary" CACHE PATH "Path to a valid temp directory")
@@ -172,8 +174,7 @@ IF(BUILD_TESTING)
       ${GDCM_BINARY_DIR}/CMake/CTestCustom.ctest @ONLY)
   FILE(WRITE ${GDCM_BINARY_DIR}/CTestCustom.cmake
     "INCLUDE(\"${GDCM_BINARY_DIR}/CMake/CTestCustom.ctest\")\n")
-  #INCLUDE (${CMAKE_ROOT}/Modules/Dart.cmake)
-  #MARK_AS_ADVANCED(DART_ROOT)
+  MARK_AS_ADVANCED(DART_TESTING_TIMEOUT)
   ENABLE_TESTING()
   INCLUDE(CTest)
   SUBDIRS(Testing)
@@ -272,6 +273,7 @@ IF(GDCM_BUILD_WRAPPING)
 ENDIF(GDCM_BUILD_WRAPPING)
 OPTION(GDCM_WRAP_PHP "php wrapping (experimental !)" OFF)
 OPTION(GDCM_WRAP_JAVA "build java wrapping (experimental !)" OFF)
+MARK_AS_ADVANCED(GDCM_WRAP_PHP GDCM_WRAP_JAVA)
 SUBDIRS(Wrapping)
 
 #-----------------------------------------------------------------------------
