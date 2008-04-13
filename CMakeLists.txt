@@ -158,16 +158,33 @@ IF(BUILD_EXAMPLES)
 ENDIF(BUILD_EXAMPLES)
 
 #-----------------------------------------------------------------------------
-SUBDIRS(
-  Utilities
-  Source
-  )
-
-#-----------------------------------------------------------------------------
 # Add the testing directories
 OPTION(GDCM_BUILD_TESTING "Build testing." ON)
 SET(BUILD_TESTING ${GDCM_BUILD_TESTING} CACHE BOOL "" FORCE)
 MARK_AS_ADVANCED(BUILD_TESTING)
+
+#-----------------------------------------------------------------------------
+# Wrapping
+OPTION(GDCM_WRAP_PYTHON "build python wrapping" OFF)
+IF(GDCM_BUILD_WRAPPING)
+  MESSAGE(STATUS "GDCM_BUILD_WRAPPING option is deprecate, please specify explicitely which target language to wrap")
+  SET(GDCM_WRAP_PYTHON ON CACHE BOOL "(deprecated) build python wrapping" FORCE)
+ENDIF(GDCM_BUILD_WRAPPING)
+OPTION(GDCM_WRAP_PHP "php wrapping (experimental !)" OFF)
+OPTION(GDCM_WRAP_JAVA "build java wrapping (experimental !)" OFF)
+MARK_AS_ADVANCED(GDCM_WRAP_PHP GDCM_WRAP_JAVA)
+
+#-----------------------------------------------------------------------------
+# Special CMake Module required when doing Python Testing
+IF(BUILD_TESTING AND GDCM_WRAP_PYTHON)
+  INCLUDE(${GDCM_SOURCE_DIR}/CMake/UsePythonTest.cmake)
+ENDIF(BUILD_TESTING AND GDCM_WRAP_PYTHON)
+
+#-----------------------------------------------------------------------------
+SUBDIRS(
+  Utilities
+  Source
+  )
 
 IF(BUILD_TESTING)
   CONFIGURE_FILE(${GDCM_SOURCE_DIR}/CMake/CTestCustom.ctest.in
@@ -179,7 +196,6 @@ IF(BUILD_TESTING)
   INCLUDE(CTest)
   SUBDIRS(Testing)
 ENDIF(BUILD_TESTING)
-
 
 
 #-----------------------------------------------------------------------------
@@ -264,16 +280,6 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
 
 ENDIF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
 
-#-----------------------------------------------------------------------------
-# Wrapping
-OPTION(GDCM_WRAP_PYTHON "build python wrapping" OFF)
-IF(GDCM_BUILD_WRAPPING)
-  MESSAGE(STATUS "GDCM_BUILD_WRAPPING option is deprecate, please specify explicitely which target language to wrap")
-  SET(GDCM_WRAP_PYTHON ON CACHE BOOL "(deprecated) build python wrapping" FORCE)
-ENDIF(GDCM_BUILD_WRAPPING)
-OPTION(GDCM_WRAP_PHP "php wrapping (experimental !)" OFF)
-OPTION(GDCM_WRAP_JAVA "build java wrapping (experimental !)" OFF)
-MARK_AS_ADVANCED(GDCM_WRAP_PHP GDCM_WRAP_JAVA)
 SUBDIRS(Wrapping)
 
 #-----------------------------------------------------------------------------

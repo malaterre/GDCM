@@ -5,8 +5,6 @@ SET(GDCM_PYTHON_TEST_SRCS
   TestDirectory
   )
 
-#FIND_PACKAGE(PythonInterp REQUIRED)
-INCLUDE(${GDCM_SOURCE_DIR}/CMake/UsePythonTest.cmake)
 
 # Loop over files and create executables
 FOREACH(name ${GDCM_PYTHON_TEST_SRCS})
