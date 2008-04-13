@@ -34,7 +34,7 @@ FOREACH(name ${VTK_GDCM_TEST_SRCS})
   ADD_TEST(${name} ${GDCM_VTK_GDCM_TESTS} ${name})
 ENDFOREACH(name)
 
-#IF(BUILD_WRAPPING)
+#IF(GDCM_WRAP_PYTHON)
 #  INCLUDE(${GDCM_SOURCE_DIR}/CMake/UsePythonTest.cmake)
 #
 #  #MESSAGE(${VTK_DIR})
@@ -45,5 +45,5 @@ ENDFOREACH(name)
 #    "${UNIX_VTK_PYTHONPATH_DIRS}:${LIBRARY_OUTPUT_PATH}")
 #  ADD_PYTHON_TEST(TestvtkGDCMThreadedImageReaderPython TestvtkGDCMThreadedImageReader.py ${GDCM_DATA_ROOT}/test.acr)
 #
-#ENDIF(BUILD_WRAPPING)
+#ENDIF(GDCM_WRAP_PYTHON)
 #
