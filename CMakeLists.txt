@@ -5,6 +5,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
 IF(COMMAND CMAKE_POLICY)
   CMAKE_POLICY(SET CMP0003 NEW)
 ENDIF(COMMAND CMAKE_POLICY)
+MARK_AS_ADVANCED(CMAKE_BACKWARDS_COMPATIBILITY CMAKE_BUILD_TYPE CMAKE_INSTALL_PREFIX)
 
 #-----------------------------------------------------------------------------
 # Disallow insource build since I never test that
@@ -48,6 +49,7 @@ FIND_PATH(GDCM_DATA_ROOT gdcm-ACR-LibIDO.acr
   $ENV{GDCM_DATA_ROOT}
   $ENV{PUB_DICT_PATH}/../../gdcmData
   )
+MARK_AS_ADVANCED(GDCM_DATA_ROOT)
 
 # Define a temp directory in which we can output stuff
 SET(GDCM_TEMP_DIRECTORY "${GDCM_BINARY_DIR}/Testing/Temporary" CACHE PATH "Path to a valid temp directory")
@@ -156,29 +158,44 @@ IF(BUILD_EXAMPLES)
 ENDIF(BUILD_EXAMPLES)
 
 #-----------------------------------------------------------------------------
-SUBDIRS(
-  Utilities
-  Source
-  )
-
-#-----------------------------------------------------------------------------
 # Add the testing directories
 OPTION(GDCM_BUILD_TESTING "Build testing." ON)
 SET(BUILD_TESTING ${GDCM_BUILD_TESTING} CACHE BOOL "" FORCE)
 MARK_AS_ADVANCED(BUILD_TESTING)
+
+#-----------------------------------------------------------------------------
+# Wrapping
+OPTION(GDCM_WRAP_PYTHON "build python wrapping" OFF)
+IF(GDCM_BUILD_WRAPPING)
+  MESSAGE(STATUS "GDCM_BUILD_WRAPPING option is deprecate, please specify explicitely which target language to wrap")
+  SET(GDCM_WRAP_PYTHON ON CACHE BOOL "(deprecated) build python wrapping" FORCE)
+ENDIF(GDCM_BUILD_WRAPPING)
+OPTION(GDCM_WRAP_PHP "php wrapping (experimental !)" OFF)
+OPTION(GDCM_WRAP_JAVA "build java wrapping (experimental !)" OFF)
+MARK_AS_ADVANCED(GDCM_WRAP_PHP GDCM_WRAP_JAVA)
+
+#-----------------------------------------------------------------------------
+# Special CMake Module required when doing Python Testing
+IF(BUILD_TESTING AND GDCM_WRAP_PYTHON)
+  INCLUDE(${GDCM_SOURCE_DIR}/CMake/UsePythonTest.cmake)
+ENDIF(BUILD_TESTING AND GDCM_WRAP_PYTHON)
+
+#-----------------------------------------------------------------------------
+SUBDIRS(
+  Utilities
+  Source
+  )
 
 IF(BUILD_TESTING)
   CONFIGURE_FILE(${GDCM_SOURCE_DIR}/CMake/CTestCustom.ctest.in
       ${GDCM_BINARY_DIR}/CMake/CTestCustom.ctest @ONLY)
   FILE(WRITE ${GDCM_BINARY_DIR}/CTestCustom.cmake
     "INCLUDE(\"${GDCM_BINARY_DIR}/CMake/CTestCustom.ctest\")\n")
-  #INCLUDE (${CMAKE_ROOT}/Modules/Dart.cmake)
-  #MARK_AS_ADVANCED(DART_ROOT)
+  MARK_AS_ADVANCED(DART_TESTING_TIMEOUT)
   ENABLE_TESTING()
   INCLUDE(CTest)
   SUBDIRS(Testing)
 ENDIF(BUILD_TESTING)
-
 
 
 #-----------------------------------------------------------------------------
@@ -263,15 +280,6 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
 
 ENDIF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
 
-#-----------------------------------------------------------------------------
-# Wrapping
-OPTION(GDCM_WRAP_PYTHON "build python wrapping" OFF)
-IF(GDCM_BUILD_WRAPPING)
-  MESSAGE(STATUS "GDCM_BUILD_WRAPPING option is deprecate, please specify explicitely which target language to wrap")
-  SET(GDCM_WRAP_PYTHON ON CACHE BOOL "(deprecated) build python wrapping" FORCE)
-ENDIF(GDCM_BUILD_WRAPPING)
-OPTION(GDCM_WRAP_PHP "php wrapping (experimental !)" OFF)
-OPTION(GDCM_WRAP_JAVA "build java wrapping (experimental !)" OFF)
 SUBDIRS(Wrapping)
 
 #-----------------------------------------------------------------------------
