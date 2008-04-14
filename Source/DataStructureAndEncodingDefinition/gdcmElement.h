@@ -269,9 +269,9 @@ public:
       assert( Save == false );
       Length = len / sizeof(ArrayType);
       //assert( (len / sizeof(ArrayType)) * sizeof(ArrayType) == len );
-      // SIEMENS_GBS_III-16-ACR_NEMA_1.acr is a tough kid: 0009,1131 is supposed to be VR::UL, but
-      // there are only two bytes...
-      if( (len / sizeof(ArrayType)) * sizeof(ArrayType) != len ) Internal = 0;
+      // MR00010001.dcm is a tough kid: 0019,105a is supposed to be VR::FL, VM::VM3 but
+      // length is 14 bytes instead of 12 bytes. Simply consider value is total garbage.
+      if( (len / sizeof(ArrayType)) * sizeof(ArrayType) != len ) { Internal = 0; Length = 0; }
       else Internal = const_cast<ArrayType*>(array);
       }
       Save = save;
