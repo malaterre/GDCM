@@ -813,7 +813,9 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     const gdcm::Curve& curve = image.GetCurve();
     //curve.Print( std::cout );
     vtkPoints * pts = vtkPoints::New();
-    pts->SetNumberOfPoints( curve.GetNumberOfPoints() );
+    // Number of points is the total number of x+y points, while VTK need the
+    // number of tuples:
+    pts->SetNumberOfPoints( curve.GetNumberOfPoints() / 2 );
     curve.GetAsPoints( (float*)pts->GetVoidPointer(0) );
     vtkCellArray *polys = vtkCellArray::New();
     for(unsigned int i = 0; i < curve.GetNumberOfPoints(); i+=2 )

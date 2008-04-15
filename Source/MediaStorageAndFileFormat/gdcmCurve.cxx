@@ -255,8 +255,14 @@ void Curve::Decode(std::istream &is, std::ostream &os)
 void Curve::GetAsPoints(float *array) const
 {
   unsigned short * p = (unsigned short*)&Internal->Data[0];
-  for(unsigned short i = 0; i < Internal->NumberOfPoints; i+=2 )
+  assert( Internal->Data.size() == (uint32_t)Internal->NumberOfPoints * 2 );
+  assert( Internal->Dimensions == 1 || Internal->Dimensions == 2 );
+  assert( Internal->DataValueRepresentation == 0 ); // 0 => unsigned short
+  // GE_DLX-8-MONO2-Multiframe.dcm has 969 points ! what in the *** is the last 
+  // point doing here ?
+  for(unsigned short i = 0; i < (Internal->NumberOfPoints / 2) * 2; i+=2 )
     {
+    //std::cout << p[i] << "," << p[i+1] << std::endl;
     array[i+0] = p[i+0];
     array[i+1] = p[i+1];
     array[i+2] = 0;
