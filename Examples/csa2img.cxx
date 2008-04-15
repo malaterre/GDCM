@@ -12,6 +12,12 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+/*
+ * I do not know what the format is, just guessing from info found on the net:
+ *
+ * http://atonal.ucdavis.edu/matlab/fmri/spm5/spm_dicom_convert.m
+ *
+ */
 #include "gdcmReader.h"
 #include "gdcmImageWriter.h"
 #include "gdcmCSAHeader.h"
@@ -96,7 +102,7 @@ int main(int argc, char *argv [])
   image.SetDimension(1, dims[1] );
   image.SetSpacing(0, spacing[0] );
   image.SetSpacing(1, spacing[1] );
-  gdcm::PixelFormat pixeltype = gdcm::PixelFormat::UINT16; // ???
+  gdcm::PixelFormat pixeltype = gdcm::PixelFormat::INT16; // bytepix = spm_type('int16','bits')/8;
 
   image.SetNumberOfDimensions( 3 );
   //image.SetDimension(2, p / pixeltype.GetPixelSize() );

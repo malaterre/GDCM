@@ -81,6 +81,32 @@ static const char *MSStrings[] = {
   "1.2.840.113543.6.6.1.3.10002",
   // EnhancedSR
   "1.2.840.10008.5.1.4.1.1.88.22",
+  // BasicTextSR:
+  "1.2.840.10008.5.1.4.1.1.88.11",
+  // HardcopyGrayscaleImageStorage
+  "1.2.840.10008.5.1.1.29",
+  // ComprehensiveSR
+  "1.2.840.10008.5.1.4.1.1.88.33",
+  // DetachedStudyManagementSOPClass,
+  "1.2.840.10008.3.1.2.3.1",
+  // EncapsulatedPDFStorage
+  "1.2.840.10008.5.1.4.1.1.104.1",
+  // StudyComponentManagementSOPClass
+  "1.2.840.10008.3.1.2.3.2",
+  // DetachedVisitManagementSOPClass
+  "1.2.840.10008.3.1.2.2.1",
+  // DetachedPatientManagementSOPClass
+  "1.2.840.10008.3.1.2.1.1",
+  // VideoEndoscopicImageStorage
+  "1.2.840.10008.5.1.4.1.1.77.1.1.1",
+  // GeneralElectricMagneticResonanceImageStorage
+  "1.2.840.113619.4.2",
+  // GEPrivate3DModelStorage
+  "1.2.840.113619.4.26",
+  // Toshiba Private Data Storage
+  "1.2.392.200036.9116.7.8.1.1.1",
+  // MammographyCADSR,
+  "1.2.840.10008.5.1.4.1.1.88.50",
   0
 };
 
@@ -123,6 +149,9 @@ bool MediaStorage::IsImage(MSType ms)
     || ms == RTPlanStorage
     || ms == GrayscaleSoftcopyPresentationStateStorageSOPClass
     || ms == CardiacElectrophysiologyWaveformStorage
+    || ms == EnhancedSR
+    || ms == BasicTextSR
+    || ms == ComprehensiveSR
     || ms == RTStructureSetStorage )
     {
     return false;

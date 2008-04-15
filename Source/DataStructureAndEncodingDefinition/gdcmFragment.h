@@ -54,6 +54,7 @@ public:
     if( !ValueLengthField.Read<TSwap>(is) )
       {
       assert(0 && "Should not happen");
+      //throw Exception( "Problem" );
       return is;
       }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION

@@ -313,8 +313,18 @@ namespace gdcm
 //{"1.2.840.10008.1.4.1.18","SPM2 SINGLESUBJT1 Frame of Reference"},
 //{"1.2.840.10008.1.4.2.1","ICBM 452 T1 Frame of Reference"},
 //{"1.2.840.10008.1.4.2.2","ICBM Single Subject MRI Frame of Reference"},
+{"1.2.840.113619.4.2","General Electric Magnetic Resonance Image Storage"},
+{"1.2.840.113619.4.3","General Electric Computed Tomography Image Storage"},
+{"1.3.12.2.1107.5.9.1","CSA Non-Image Storage"},
+// iis_fp_10282r2.pdf
+{"1.2.840.113619.4.26"     , "GE Private 3D Model Storage" },
+{"1.2.840.113619.4.30"     , "GE Advance (PET) Raw Data Storage" },
+{"2.16.840.1.113709.1.5.1" , "GEPACS_PRIVATE_IMS_INFO Storage" },
+{"1.2.840.113543.6.6.1.3.10002", "Unregistred (?) Philips3D" },
+{ "1.2.392.200036.9116.7.8.1.1.1", "Toshiba Private Data Storage" },
 { 0, 0 }
 };
+
 
 const char* UIDs::GetUIDString(/*TSType*/ int ts)
 {

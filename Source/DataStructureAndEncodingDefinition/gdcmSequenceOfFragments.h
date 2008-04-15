@@ -100,7 +100,7 @@ std::istream& Read(std::istream &is)
       gdcmWarningMacro( "Reading failed at Tag:" << DataElement(frag) << " Use file at own risk." << ex.what() );
       // 2. SIEMENS-JPEG-CorruptFrag.dcm is more difficult to deal with, we have a partial fragment, read
       // we decide to add it anyway to the stack of fragments (eof was reached so we need to clear error bit)
-      if( frag.GetTag() == Tag(0xfffe,0xe000) )
+      if( frag.GetTag() == Tag(0xfffe,0xe000) /*|| frag.GetTag() == Tag(0xddff,0x00e0)*/ )
         {
         gdcmWarningMacro( "Pixel Data Fragment could be corrupted. Use file at own risk" );
         Fragments.push_back( frag );

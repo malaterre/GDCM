@@ -82,6 +82,19 @@ public:
     CSANonImageStorage,
     Philips3D,
     EnhancedSR,
+    BasicTextSR,
+    HardcopyGrayscaleImageStorage,
+    ComprehensiveSR,
+    DetachedStudyManagementSOPClass,
+    EncapsulatedPDFStorage,
+    StudyComponentManagementSOPClass,
+    DetachedVisitManagementSOPClass,
+    DetachedPatientManagementSOPClass,
+    VideoEndoscopicImageStorage,
+    GeneralElectricMagneticResonanceImageStorage,
+    GEPrivate3DModelStorage,
+    ToshibaPrivateDataStorage,
+    MammographyCADSR,
     MS_END
   } MSType; // Media Storage Type
 
