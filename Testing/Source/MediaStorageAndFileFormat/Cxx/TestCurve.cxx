@@ -17,5 +17,13 @@
 int TestCurve(int, char *[])
 {
   gdcm::Curve c;
+  c.SetTypeOfData( "TAC" );
+  //c.SetTypeOfData( "PROF" );
+  //c.SetTypeOfData( "PRESSURE" );
+  //c.SetTypeOfData( "RESP" );
+  //c.SetTypeOfData( "dummy" );
+  std::cout << c.GetTypeOfData() << std::endl;
+  std::cout << c.GetTypeOfDataDescription() << std::endl;
+
   return 0;
 }

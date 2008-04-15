@@ -230,6 +230,41 @@ unsigned short Curve::GetDimensions() const { return Internal->Dimensions; }
 void Curve::SetNumberOfPoints(unsigned short numberofpoints) { Internal->NumberOfPoints = numberofpoints; }
 unsigned short Curve::GetNumberOfPoints() const { return Internal->NumberOfPoints; }
 void Curve::SetTypeOfData(const char *typeofdata) { Internal->TypeOfData = typeofdata; }
+const char *Curve::GetTypeOfData() const { return Internal->TypeOfData.c_str(); }
+
+static const char * const TypeOfDataDescription[][2] = {
+{ "TAC" , "time activity curve" },
+{ "PROF" , "image profile" },
+{ "HIST" , "histogram" },
+{ "ROI" , "polygraphic region of interest" },
+{ "TABL" , "table of values" },
+{ "FILT" , "filter kernel" },
+{ "POLY" , "poly line" },
+{ "ECG" , "ecg data" },
+{ "PRESSURE" , "pressure data" },
+{ "FLOW" , "flow data" },
+{ "PHYSIO" , "physio data" },
+{ "RESP" , "Respiration trace" },
+{ 0 , 0 }
+};
+const char *Curve::GetTypeOfDataDescription() const
+{
+  typedef const char* const (*TypeOfDataDescriptionType)[2];
+  TypeOfDataDescriptionType t = TypeOfDataDescription;
+  int i = 0;
+  const char *p = t[i][0];
+  while( p )
+    {
+    if( Internal->TypeOfData == p )
+      {
+      break;
+      }
+    ++i;
+    p = t[i][0];
+    }
+  return t[i][1];
+}
+
 void Curve::SetCurveDescription(const char *curvedescription) { Internal->CurveDescription = curvedescription; }
 void Curve::SetDataValueRepresentation(unsigned short datavaluerepresentation) { Internal->DataValueRepresentation = datavaluerepresentation; }
 unsigned short Curve::GetDataValueRepresentation() const { return Internal->DataValueRepresentation; }

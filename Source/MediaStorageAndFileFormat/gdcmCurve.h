@@ -57,6 +57,9 @@ public:
   void SetNumberOfPoints(unsigned short numberofpoints);
   unsigned short GetNumberOfPoints() const;
   void SetTypeOfData(const char *typeofdata);
+  const char *GetTypeOfData() const;
+  // See PS 3.3 - 2004 - C.10.2.1.1 Type of data
+  const char *GetTypeOfDataDescription() const;
   void SetCurveDescription(const char *curvedescription);
   void SetDataValueRepresentation(unsigned short datavaluerepresentation);
   unsigned short GetDataValueRepresentation() const;
