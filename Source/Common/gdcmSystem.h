@@ -54,6 +54,7 @@ public:
   static int EncodeBytes(char *out, unsigned char *data, int size);
 
   static int StrCaseCmp(const char *s1, const char *s2);
+  static int StrNCaseCmp(const char *s1, const char *s2, size_t n);
 
 protected:
   static bool GetPermissions(const char* file, unsigned short& mode);

@@ -81,6 +81,12 @@
 #cmakedefine CMAKE_HAVE_NET_IF_ARP_H
 #cmakedefine HAVE_SA_LEN
 
+#cmakedefine HAVE_STRCASECMP
+#cmakedefine HAVE_STRNCASECMP
+#cmakedefine HAVE__STRICMP
+#cmakedefine HAVE__STRNICMP
+#cmakedefine HAVE__SNPRINTF
+
 #cmakedefine GDCM_FORCE_BIGENDIAN_EMULATION
 
 /* To Remove code that support broken DICOM implementation and therefore

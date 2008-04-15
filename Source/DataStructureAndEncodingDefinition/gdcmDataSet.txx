@@ -181,7 +181,10 @@ namespace gdcm
         }
       }
 
-    assert( l == locallength );
+    // technically we could only do this assert if the dataset did not contains duplicate data elements
+    // so only do a <= instead:
+    //assert( l == locallength );
+    assert( l <= locallength );
     return is;
   }
 

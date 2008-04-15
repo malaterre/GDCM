@@ -53,8 +53,8 @@ std::string DataSet::GetPrivateCreator(const Tag &t) const
 Tag DataSet::ComputeDataElement(const PrivateTag & t) const
 {
   gdcmDebugMacro( "Entering ComputeDataElement" );
-  assert( t.GetElement() <= 0xFF );
-  const Tag start(t.GetGroup(), 0x0 ); // First possible private creator
+  assert( t.GetElement() <= 0xff );
+  const Tag start(t.GetGroup(), 0x0001 ); // First possible private creator (0x0 is the group length)
   const DataElement r(start);
   ConstIterator it = DES.lower_bound(r);
   const char *refowner = t.GetOwner();
@@ -68,6 +68,7 @@ Tag DataSet::ComputeDataElement(const PrivateTag & t) const
     //std::cout << std::string(bv->GetPointer(), bv->GetLength() ) << std::endl;
     //if( strcmp( bv->GetPointer(), refowner ) == 0 )
     std::string tmp(bv->GetPointer(),bv->GetLength());
+    assert( tmp[ tmp.size() - 1 ] != ' ' ); // FIXME
     if( System::StrCaseCmp( tmp.c_str(), refowner ) == 0 )
       {
       // found !

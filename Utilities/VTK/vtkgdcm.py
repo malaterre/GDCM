@@ -5,9 +5,20 @@ import os
 
 if os.name == 'posix':
   # extremely important !
-  import sys,dl
+  import sys
   orig_dlopen_flags = sys.getdlopenflags()
-  sys.setdlopenflags(dl.RTLD_NOW|dl.RTLD_GLOBAL)    
+  try:
+    import dl
+  except ImportError:
+    # are we on AMD64 ?
+    try:
+      import DLFCN as dl
+    except ImportError:
+      print "Could not import dl"
+      dl = None
+  if dl:
+    #print "dl was imported"
+    sys.setdlopenflags(dl.RTLD_NOW|dl.RTLD_GLOBAL)    
   from libvtkgdcmPython import *
   # revert:
   sys.setdlopenflags(orig_dlopen_flags)

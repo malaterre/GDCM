@@ -39,7 +39,7 @@
 #include <winsock.h>
 #endif
 #include <stdio.h> // snprintf
-#ifdef _WIN32
+#ifdef HAVE__SNPRINTF
 #define snprintf _snprintf
 #endif
 
@@ -51,7 +51,16 @@
 #include <sys/types.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <strings.h> // strncasecmp
 #endif 
+
+// TODO: WIN32 replacement for C99 stuff:
+// #if defined(_WIN32) || defined(_WIN64)
+// #define snprintf _snprintf
+// #define vsnprintf _vsnprintf
+// #define strcasecmp _stricmp
+// #define strncasecmp _strnicmp
+// #endif
 
 namespace gdcm
 {
@@ -410,15 +419,41 @@ int System::GetCurrentDateTime(char date[18])
   return 1;
 }
 
-int System::StrCaseCmp(const char *s1, const char *s2)
+int System::StrNCaseCmp(const char *s1, const char *s2, size_t n)
 {
-  while (*s1 && (tolower(*s1) == tolower(*s2)))
-   {
-     s1++;
-     s2++;
-   }
+#if defined(HAVE_STRNCASECMP)
+  return strncasecmp(s1,s2,n);
+#elif defined(HAVE__STRNICMP)
+  return _strnicmp(s1,s2,n);
+#else // default implementation
+#error
+  assert( n ); // TODO
+  while (--n && *s1 && (tolower(*s1) == tolower(*s2)))
+    {
+    s1++;
+    s2++;
+    }
 
  return tolower(*s1) - tolower(*s2);
+#endif
+}
+
+int System::StrCaseCmp(const char *s1, const char *s2)
+{
+#if defined(HAVE_STRCASECMP)
+  return strcasecmp(s1,s2);
+#elif defined(HAVE__STRNICMP)
+  return _stricmp(s1,s2);
+#else // default implementation
+#error
+  while (*s1 && (tolower(*s1) == tolower(*s2)))
+    {
+    s1++;
+    s2++;
+    }
+
+ return tolower(*s1) - tolower(*s2);
+#endif
 }
 
 } // end namespace gdcm

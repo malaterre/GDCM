@@ -137,8 +137,9 @@ bool RLECodec::Decode(DataElement const &in, DataElement &out)
       {
       // Indeed the length of the RLE stream has been padded with a \0
       // which is discarded
-      assert( (bv.GetLength() - p) == 0 
-        || (bv.GetLength() - 1 - p) == 0 );
+      uint32_t check = bv.GetLength() - p;
+      // check == 2 for gdcmDataExtra/gdcmSampleData/US_DataSet/GE_US/2929J686-breaker
+      assert( check == 0 || check == 1 || check == 2 );
       }
     else
       {
@@ -198,7 +199,9 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
       // This should be at most the \0 padding
       //gdcmWarningMacro( "RLE Header says: " << frame.Header.Offset[i] <<
       //   " when it should says: " << pos << std::endl );
-      assert( frame.Header.Offset[i] - pos == 1 );
+      uint32_t check = frame.Header.Offset[i] - pos;
+      // check == 2 for gdcmDataExtra/gdcmSampleData/US_DataSet/GE_US/2929J686-breaker
+      assert( check == 1 || check == 2);
       is.seekg( frame.Header.Offset[i], std::ios::beg );
       }
 

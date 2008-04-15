@@ -747,6 +747,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   // Let's add an Instance Number just for fun:
   std::ostringstream os;
   os << k;
+  // Will only be added if none found
   SetStringValueFromTag(os.str().c_str(), gdcm::Tag(0x0020,0x0013), ds);
   writer.SetFileName( filename );
   if( !writer.Write() )
