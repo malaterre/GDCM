@@ -230,7 +230,14 @@ protected:
   // so depending whether we are getting called from a dataset or file meta header
   // the condition is different
   void InsertDataElement(const DataElement& de) {
-    DES.insert(de);
+    std::pair<Iterator,bool> pr = DES.insert(de);
+#ifndef NDEBUG
+    if( pr.second == false )
+      {
+      gdcmWarningMacro( "DataElement: " << de << " was already found, skipping duplicate entry.\n"
+        "Original entry kept is: " << *pr.first );
+      }
+#endif
     }
 
 protected:

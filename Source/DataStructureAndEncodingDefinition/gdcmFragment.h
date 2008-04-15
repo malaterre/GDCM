@@ -53,8 +53,10 @@ public:
       }
     if( !ValueLengthField.Read<TSwap>(is) )
       {
-      assert(0 && "Should not happen");
-      //throw Exception( "Problem" );
+      // GENESIS_SIGNA-JPEG-CorruptFrag.dcm 
+      // JPEG fragment is declared to have 61902, but infact really is only 61901
+      // so we end up reading 0xddff,0x00e0, and VL = 0x0 (1 byte)
+      throw Exception( "Problem" );
       return is;
       }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION

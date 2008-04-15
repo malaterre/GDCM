@@ -95,16 +95,30 @@ std::istream& Read(std::istream &is)
     catch(Exception &ex)
       {
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-      // that's ok ! In both case the whole file was read, because Fragment::Read only fail on eof() reached
-      // 1. gdcm-JPEG-LossLess3a.dcm: easy case, an extra tag was found instead of terminator (eof is the next char)
-      gdcmWarningMacro( "Reading failed at Tag:" << DataElement(frag) << " Use file at own risk." << ex.what() );
-      // 2. SIEMENS-JPEG-CorruptFrag.dcm is more difficult to deal with, we have a partial fragment, read
+      // that's ok ! In all cases the whole file was read, because Fragment::Read only fail on eof() reached
+      // 1. SIEMENS-JPEG-CorruptFrag.dcm is more difficult to deal with, we have a partial fragment, read
       // we decide to add it anyway to the stack of fragments (eof was reached so we need to clear error bit)
-      if( frag.GetTag() == Tag(0xfffe,0xe000) /*|| frag.GetTag() == Tag(0xddff,0x00e0)*/ )
+      if( frag.GetTag() == Tag(0xfffe,0xe000)  )
         {
         gdcmWarningMacro( "Pixel Data Fragment could be corrupted. Use file at own risk" );
         Fragments.push_back( frag );
         is.clear(); // clear the error bit
+        }
+      // 2. GENESIS_SIGNA-JPEG-CorruptFrag.dcm 
+      else if ( frag.GetTag() == Tag(0xddff,0x00e0) )
+        {
+        assert( Fragments.size() == 1 );
+        const ByteValue *bv = Fragments[0].GetByteValue();
+        assert( (unsigned char)bv->GetPointer()[ bv->GetLength() - 1 ] == 0xfe );
+        // Yes this is an extra copy, this is a bug anyway, go fix YOUR code 
+        Fragments[0].SetByteValue( bv->GetPointer(), bv->GetLength() - 1 );
+        gdcmWarningMacro( "JPEG Fragment length was declared with an extra byte at the end: stripped !" );
+        is.clear(); // clear the error bit
+        }
+      else
+        {
+        // 3. gdcm-JPEG-LossLess3a.dcm: easy case, an extra tag was found instead of terminator (eof is the next char)
+        gdcmWarningMacro( "Reading failed at Tag:" << frag.GetTag() << ". Use file at own risk." << ex.what() );
         }
 #endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
       }

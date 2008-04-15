@@ -266,7 +266,9 @@ void MediaStorage::SetFromDataSet(DataSet const &ds, bool guess)
   if( ds.FindDataElement( tsopclassuid ) )
     {
     const ByteValue *sopclassuid = ds.GetDataElement( tsopclassuid ).GetByteValue();
-    assert( sopclassuid );
+    // Empty SOP Class UID:
+    // lifetechmed/A0038329.DCM
+    if( !sopclassuid ) return;
     std::string sopclassuid_str(
       sopclassuid->GetPointer(),
       sopclassuid->GetLength() );

@@ -72,6 +72,10 @@ std::istream &VR16ExplicitDataElement::Read(std::istream &is)
     }
 #endif
   // Read VR
+  // FIXME
+  // Special hack for KONICA_VROX.dcm where in fact the VR=OX, in Pixel Data element
+  // in which case we need to assume a 32bits VR...for now this is a big phat hack !
+  bool OX_hack = false;
   try
     {
     if( !VRField.Read(is) )
@@ -97,8 +101,21 @@ std::istream &VR16ExplicitDataElement::Read(std::istream &is)
     // 0019004_Baseline_IMG1.dcm
     // -> VR is garbage also...
     // assert( TagField == Tag(8348,0339) || TagField == Tag(b5e8,0338))
-    gdcmWarningMacro( "Assuming 16 bits VR for Tag=" <<
-      TagField << " in order to read a buggy DICOM file." );
+    if( TagField == Tag(0x7fe0,0x0010) )
+      {
+      OX_hack = true;
+      VRField = VR::UN; // make it a fake 32bits for now...
+      char dummy[2];
+      is.read(dummy,2);
+      assert( dummy[0] == 0 && dummy[1] == 0 );
+      gdcmWarningMacro( "Assuming 32 bits VR for Tag=" <<
+        TagField << " in order to read a buggy DICOM file." );
+      }
+    else
+      {
+      gdcmWarningMacro( "Assuming 16 bits VR for Tag=" <<
+        TagField << " in order to read a buggy DICOM file." );
+      }
     }
   // Read Value Length
   if( VR::GetLength(VRField) == 4 )
@@ -108,9 +125,14 @@ std::istream &VR16ExplicitDataElement::Read(std::istream &is)
       assert(0 && "Should not happen");
       return is;
       }
+    if( OX_hack )
+      {
+      VRField = VR::INVALID; // revert to a pseudo unknown VR...
+      }
     }
   else
     {
+    assert( OX_hack == false );
     // 16bits only
     if( !ValueLengthField.template Read16<TSwap>(is) )
       {
