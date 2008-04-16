@@ -87,6 +87,12 @@ int TestString(int argc, char *argv[])
   // we are at the end:
   if( !!ss ) return 1;
 }
+
+  std::string privatecreator = " CREATOR  SMS-AX  ";
+  std::cout << "[" << privatecreator << "]" << std::endl;
+  privatecreator.erase(privatecreator.find_last_not_of(' ') + 1);
+  std::cout << "[" << privatecreator << "]" << std::endl;
+
   return 0;
 }
 

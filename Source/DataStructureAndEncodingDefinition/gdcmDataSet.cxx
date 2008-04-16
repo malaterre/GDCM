@@ -68,6 +68,8 @@ Tag DataSet::ComputeDataElement(const PrivateTag & t) const
     //std::cout << std::string(bv->GetPointer(), bv->GetLength() ) << std::endl;
     //if( strcmp( bv->GetPointer(), refowner ) == 0 )
     std::string tmp(bv->GetPointer(),bv->GetLength());
+    // trim trailing whitespaces:
+    tmp.erase(tmp.find_last_not_of(' ') + 1);
     assert( tmp[ tmp.size() - 1 ] != ' ' ); // FIXME
     if( System::StrCaseCmp( tmp.c_str(), refowner ) == 0 )
       {

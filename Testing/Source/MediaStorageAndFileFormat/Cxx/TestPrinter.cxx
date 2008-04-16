@@ -27,7 +27,9 @@ int TestPrint(const char *filename)
 
   gdcm::Printer p;
   p.SetFile( r.GetFile() );
-  p.Print( std::cout );
+  std::ostringstream out;
+  //p.Print( std::cout );
+  p.Print( out );
 
   return 0;
 }
