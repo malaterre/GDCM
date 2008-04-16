@@ -5,6 +5,7 @@ import os
 
 if os.name == 'posix':
   # extremely important !
+  # http://gcc.gnu.org/faq.html#dso
   import sys
   orig_dlopen_flags = sys.getdlopenflags()
   try:
@@ -18,6 +19,7 @@ if os.name == 'posix':
       dl = None
   if dl:
     #print "dl was imported"
+    #sys.setdlopenflags(dl.RTLD_LAZY|dl.RTLD_GLOBAL)    
     sys.setdlopenflags(dl.RTLD_NOW|dl.RTLD_GLOBAL)    
   from libvtkgdcmPython import *
   # revert:
