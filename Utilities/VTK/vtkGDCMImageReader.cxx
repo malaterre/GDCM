@@ -260,10 +260,11 @@ int vtkGDCMImageReader::CanReadFile(const char* fname)
 {
   gdcm::ImageReader reader;
   reader.SetFileName( fname );
-  if( reader.Read() )
+  if( !reader.Read() )
     {
     return 0;
     }
+  // 3 means: I might be able to read...
   return 3;
 }
 
