@@ -19,6 +19,7 @@ namespace gdcm
 
 bool Rescaler::Rescale(char *out, const char *in, size_t n)
 {
+  // check if we are dealing with floating point type
   return true;
 }
 

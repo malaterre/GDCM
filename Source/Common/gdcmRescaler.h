@@ -16,6 +16,7 @@
 #define __gdcmRescaler_h
 
 #include "gdcmTypes.h"
+//#include "gdcmPixelFormat.h"
 
 namespace gdcm
 {
@@ -24,7 +25,7 @@ namespace gdcm
 class GDCM_EXPORT Rescaler
 {
 public:
-  Rescaler() {}
+  Rescaler():Intercept(0),Slope(0) /*,PF()*/ {}
   ~Rescaler() {}
   bool Rescale(char *out, const char *in, size_t n);
   void SetIntercept(double i) { Intercept = i; }
@@ -33,6 +34,7 @@ public:
 private:
   double Intercept; // 0028,1052
   double Slope;     // 0028,1053
+  //PixelFormat PF;
 };
 
 } // end namespace gdcm

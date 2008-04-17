@@ -13,7 +13,8 @@
 
 =========================================================================*/
 #include "gdcmSegmentedPaletteColorLookupTable.h"
-
+// http://blog.goo.ne.jp/satomi_takeo/e/3643e5249b2a9650f9e10ef1c830e8b8
+//
 namespace gdcm
 {
 
