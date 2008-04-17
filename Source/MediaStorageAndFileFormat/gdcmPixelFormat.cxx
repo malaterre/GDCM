@@ -140,8 +140,13 @@ const char *PixelFormat::GetScalarTypeAsString() const
 
 uint8_t PixelFormat::GetPixelSize() const
 {
-  assert( !(BitsAllocated % 8 ) );
   uint8_t pixelsize = BitsAllocated / 8;
+  if( BitsAllocated == 12 )
+  {
+  pixelsize = 2; // fake a short value
+  }
+  else
+    assert( !(BitsAllocated % 8) );
   pixelsize *= SamplesPerPixel;
 
   return pixelsize;

@@ -38,6 +38,7 @@
 #include "gdcmDataElement.h"
 #include "gdcmByteValue.h"
 #include "gdcmSwapper.h"
+#include "gdcmUnpacker12Bits.h"
 #include "gdcmOrientation.h"
 
 #include <sstream>
@@ -691,11 +692,11 @@ int vtkGDCMImageReader::RequestInformationCompat()
     break;
   // FIXME 12bits should not be that hard...
   case gdcm::PixelFormat::INT12:
-    //this->DataScalarType = VTK_SHORT;
-    //break;
+    this->DataScalarType = VTK_SHORT;
+    break;
   case gdcm::PixelFormat::UINT12:
-    //this->DataScalarType = VTK_UNSIGNED_SHORT;
-    //break;
+    this->DataScalarType = VTK_UNSIGNED_SHORT;
+    break;
   default:
     vtkErrorMacro( "Do not support this Pixel Type: " << pixeltype );
     return 0;
@@ -789,15 +790,27 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   reader.SetFileName( filename );
   if( !reader.Read() )
     {
-	  vtkErrorMacro( "ImageReader failed: " << filename );
+    vtkErrorMacro( "ImageReader failed: " << filename );
     return 0;
     }
   const gdcm::Image &image = reader.GetImage();
+  const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
   assert( image.GetNumberOfDimensions() == 2 || image.GetNumberOfDimensions() == 3 );
   unsigned long len = image.GetBufferLength();
   outlen = len;
   unsigned long overlaylen = 0;
   image.GetBuffer(pointer);
+  if( pixeltype == gdcm::PixelFormat::UINT12 || pixeltype == gdcm::PixelFormat::INT12 )
+  {
+    // FIXME: I could avoid this extra copy:
+    char * copy = new char[len];
+    memcpy(copy, pointer, len);
+    gdcm::Unpacker12Bits u12;
+    u12.Unpack(pointer, copy, len);
+    // update len just in case:
+    len = 16 * len / 12;
+    delete[] copy;
+  }
   // Do the Icon Image:
   this->NumberOfIconImages = image.GetIconImage().IsEmpty() ? 0 : 1;
   if( this->NumberOfIconImages )
@@ -870,7 +883,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     ov1.GetUnpackBuffer( overlaypointer );
     }
 
-  const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
+  //const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
   // Do the LUT
   if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::PALETTE_COLOR )
     {

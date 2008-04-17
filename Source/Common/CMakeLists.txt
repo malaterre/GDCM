@@ -62,6 +62,7 @@ SET(Common_SRCS
   gdcmDeflateStream.cxx
   gdcmByteSwap.cxx
   #gdcmSwapper.cxx
+  gdcmUnpacker12Bits.cxx
   )
 
 ADD_LIBRARY(gdcmCommon ${Common_SRCS})
