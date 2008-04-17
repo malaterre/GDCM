@@ -309,7 +309,6 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0029,0x0080,"CARDIO-SMS 1.0",VR::SQ,VM::VM1,"Private Data",false },
   {0x0031,0x0001,"CARDIO-SMS 1.0",VR::UN,VM::VM1,"Private Data stream",false },
   {0x0019,0x0000,"CEMAX-ICON",VR::LT,VM::VM1,"CR Processing Parameters",false },
-  {0x0019,0x0000,"CEMAX-ICON",VR::LT,VM::VM1,"CR Processing Parameters",false },
   {0x0019,0x0010,"CEMAX-ICON",VR::LO,VM::VM1,"CR Exposure Menu Code",false },
   {0x0019,0x0020,"CEMAX-ICON",VR::LO,VM::VM1,"CR Exposure Menu String",false },
   {0x0019,0x0030,"CEMAX-ICON",VR::LO,VM::VM1,"CR EDR Mode",false },
