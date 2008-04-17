@@ -12,17 +12,29 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmSegmentedPaletteColorLookupTable.h"
+#ifndef __gdcmRescaler_h
+#define __gdcmRescaler_h
+
+#include "gdcmTypes.h"
 
 namespace gdcm
 {
 
-SegmentedPaletteColorLookupTable::SegmentedPaletteColorLookupTable()
-{
-}
 
-SegmentedPaletteColorLookupTable::~SegmentedPaletteColorLookupTable()
+class GDCM_EXPORT Rescaler
 {
-}
+public:
+  Rescaler() {}
+  ~Rescaler() {}
+  bool Rescale(char *out, const char *in, size_t n);
+  void SetIntercept(double i) { Intercept = i; }
+  void SetSlope(double s) { Slope = s; }
+
+private:
+  double Intercept; // 0028,1052
+  double Slope;     // 0028,1053
+};
 
 } // end namespace gdcm
+
+#endif //__gdcmUnpacker12Bits_h

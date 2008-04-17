@@ -12,17 +12,15 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmSegmentedPaletteColorLookupTable.h"
+#include "gdcmRescaler.h"
 
 namespace gdcm
 {
 
-SegmentedPaletteColorLookupTable::SegmentedPaletteColorLookupTable()
+bool Rescaler::Rescale(char *out, const char *in, size_t n)
 {
-}
-
-SegmentedPaletteColorLookupTable::~SegmentedPaletteColorLookupTable()
-{
+  return true;
 }
 
 } // end namespace gdcm
+
