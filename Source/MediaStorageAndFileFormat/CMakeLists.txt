@@ -41,7 +41,7 @@ SET(MSFF_SRCS
   gdcmCurve.cxx
   gdcmPhotometricInterpretation.cxx
   gdcmPixelFormat.cxx
-
+  gdcmSegmentedPaletteColorLookupTable.cxx
   )
 
 # Do the proper thing when building static...if only there was configured
