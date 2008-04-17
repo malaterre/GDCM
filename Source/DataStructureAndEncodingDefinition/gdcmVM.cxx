@@ -54,6 +54,7 @@ static const char *VMStrings[] = {
   "3-3n",
   "3-n",
   "4-4n",
+  "6-6n",
   "7-7n",
   "30-30n",
   "47-47n",
@@ -133,17 +134,20 @@ unsigned int VM::GetIndex(VMType vm)
   case VM4_4n:
     l = 32;
     break;
-  case VM7_7n:
+  case VM6_6n:
     l = 33;
     break;
-  case VM30_30n:
+  case VM7_7n:
     l = 34;
     break;
-  case VM47_47n:
+  case VM30_30n:
     l = 35;
     break;
-  case VM_END:
+  case VM47_47n:
     l = 36;
+    break;
+  case VM_END:
+    l = 37;
     break;
   default:
       {

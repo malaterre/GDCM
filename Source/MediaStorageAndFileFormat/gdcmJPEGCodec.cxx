@@ -158,6 +158,10 @@ bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
 #endif
     return false;
     }
+  if( this->PI != Internal->PI )
+    {
+    this->PI = Internal->PI;
+    }
 
   return ImageCodec::Decode(tmpos,os);
 }

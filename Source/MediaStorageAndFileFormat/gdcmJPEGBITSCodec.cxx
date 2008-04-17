@@ -384,6 +384,8 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
         gdcmWarningMacro( "Wrong PhotometricInterpretation. DICOM says: " <<
           GetPhotometricInterpretation() << " but JPEG says: " 
           << cinfo.jpeg_color_space );
+        //Internals->SetPhotometricInterpretation( PhotometricInterpretation::MONOCHROME2 );
+        this->PI = PhotometricInterpretation::MONOCHROME2;
         }
       break;
     case JCS_RGB:

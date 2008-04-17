@@ -79,6 +79,14 @@ bool ImageValue::TryJPEGCodec(char *buffer) const
       {
       return false;
       }
+    // FIXME ! This should be done all the time for all codec:
+    // Did PI change or not ?
+    if ( GetPhotometricInterpretation() != codec.GetPhotometricInterpretation() )
+      {
+      // HACK
+      //gdcm::Image *i = (gdcm::Image*)this;
+      //i->SetPhotometricInterpretation( codec.GetPhotometricInterpretation() );
+      }
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
