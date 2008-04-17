@@ -415,7 +415,6 @@ void DoOverlays(const DataSet& ds, ImageValue& pixeldata)
 bool ImageReader::ReadImage(MediaStorage const &ms)
 {
   const DataSet &ds = F->GetDataSet();
-  TransferSyntax::NegociatedType type; // = ds.GetNegociatedType();
   std::stringstream ss;
   std::string conversion;
 
@@ -584,6 +583,21 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   assert( pi != PhotometricInterpretation::UNKNOW );
   PixelData.SetPhotometricInterpretation( pi );
 
+  // Do the Rescale Intercept & Slope
+  Attribute<0x0028,0x1052> at1;
+  bool intercept = ds.FindDataElement(at1.GetTag());
+  if( intercept )
+  {
+    at1.SetFromDataElement( ds.GetDataElement(at1.GetTag()) );
+    PixelData.SetIntercept( at1.GetValue() );
+  }
+  Attribute<0x0028,0x1053> at2;
+  bool slope     = ds.FindDataElement(at2.GetTag());
+  if ( slope )
+  {
+    at2.SetFromDataElement( ds.GetDataElement(at2.GetTag()) );
+    PixelData.SetSlope( at2.GetValue() );
+  }
   // Do the Palette Color:
   // 1. Modality LUT Sequence
   bool modlut = ds.FindDataElement(Tag(0x0028,0x3000) );

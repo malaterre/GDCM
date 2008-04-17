@@ -12,16 +12,31 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmRescaler.h"
+#ifndef __gdcmRescaler_h
+#define __gdcmRescaler_h
+
+#include "gdcmTypes.h"
+#include "gdcmPixelFormat.h"
 
 namespace gdcm
 {
 
-bool Rescaler::Rescale(char *out, const char *in, size_t n)
+
+class GDCM_EXPORT Rescaler
 {
-  // check if we are dealing with floating point type
-  return true;
-}
+public:
+  Rescaler():Intercept(0),Slope(1),PF() {}
+  ~Rescaler() {}
+  bool Rescale(char *out, const char *in, size_t n);
+  void SetIntercept(double i) { Intercept = i; }
+  void SetSlope(double s) { Slope = s; }
+
+private:
+  double Intercept; // 0028,1052
+  double Slope;     // 0028,1053
+  PixelFormat PF;
+};
 
 } // end namespace gdcm
 
+#endif //__gdcmUnpacker12Bits_h
