@@ -25,12 +25,11 @@ bool Unpacker12Bits::Unpack(char *out, const char *in, size_t n)
   for(; p != end; )
   {
     uint8_t b0, b1, b2;
-    b0 = p[0];
-    b1 = p[1];
-    b2 = p[2];
+    b0 = *p++;
+    b1 = *p++;
+    b2 = *p++;
     *out16++ =  ((b0 >> 4) << 8) + ((b0 & 0x0f) << 4) + (b1 & 0x0f);
     *out16++ =  ((b2 & 0x0f) << 8) + ((b1 >> 4) << 4) + (b2 >> 4);
-    p += 3;
   }
   return true;
 }
