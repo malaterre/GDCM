@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmRescaler.h"
+#include <stdlib.h> // abort
 
 namespace gdcm
 {
