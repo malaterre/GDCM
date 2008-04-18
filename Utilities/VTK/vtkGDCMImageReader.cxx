@@ -39,6 +39,7 @@
 #include "gdcmByteValue.h"
 #include "gdcmSwapper.h"
 #include "gdcmUnpacker12Bits.h"
+#include "gdcmRescaler.h"
 #include "gdcmOrientation.h"
 
 #include <sstream>
@@ -701,6 +702,9 @@ int vtkGDCMImageReader::RequestInformationCompat()
     vtkErrorMacro( "Do not support this Pixel Type: " << pixeltype );
     return 0;
     }
+  //this->Shift = image.GetIntercept();
+  //this->Scale = image.GetSlope();
+  //this->DataScalarType = VTK_SHORT;
 
   this->NumberOfScalarComponents = pixeltype.GetSamplesPerPixel();
 
@@ -810,6 +814,13 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     // update len just in case:
     len = 16 * len / 12;
     delete[] copy;
+  }
+  if( Scale != 1.0 || Shift != 0.0 )
+  {
+    gdcm::Rescaler r;
+    r.SetIntercept( Shift );
+    r.SetSlope( Scale );
+    r.Rescale(pointer,pointer,len);
   }
   // Do the Icon Image:
   this->NumberOfIconImages = image.GetIconImage().IsEmpty() ? 0 : 1;
