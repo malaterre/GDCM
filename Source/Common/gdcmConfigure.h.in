@@ -83,6 +83,7 @@
 
 #cmakedefine HAVE_STRCASECMP
 #cmakedefine HAVE_STRNCASECMP
+#cmakedefine HAVE_SNPRINTF
 #cmakedefine HAVE__STRICMP
 #cmakedefine HAVE__STRNICMP
 #cmakedefine HAVE__SNPRINTF

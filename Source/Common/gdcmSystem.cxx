@@ -39,7 +39,9 @@
 #include <winsock.h>
 #endif
 #include <stdio.h> // snprintf
-#ifdef HAVE__SNPRINTF
+#if defined(HAVE_SNPRINTF)
+// ok nothing to do
+#elif defined(HAVE__SNPRINTF)
 #define snprintf _snprintf
 #endif
 
