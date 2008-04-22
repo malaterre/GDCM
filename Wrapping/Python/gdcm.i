@@ -68,6 +68,7 @@
 #include "gdcmSystem.h"
 #include "gdcmTrace.h"
 #include "gdcmUIDs.h"
+#include "gdcmSorter.h"
 #include "gdcmIPPSorter.h"
 #include "gdcmSpectroscopy.h"
 #include "gdcmPrinter.h"
@@ -82,7 +83,6 @@
 #include "gdcmValidate.h"
 #include "gdcmApplicationEntity.h"
 #include "gdcmDictPrinter.h"
-#include "gdcmSorter.h"
 #include "gdcmFilenameGenerator.h"
 #include "gdcmVersion.h"
 #include "gdcmFilename.h"
@@ -370,7 +370,8 @@ using namespace gdcm;
 %include "gdcmSystem.h"
 %include "gdcmTrace.h"
 %include "gdcmUIDs.h"
-%feature("director") gdcm::IPPSorter;      
+//%feature("director") gdcm::IPPSorter;      
+%include "gdcmSorter.h"
 %include "gdcmIPPSorter.h"
 %include "gdcmSpectroscopy.h"
 %include "gdcmPrinter.h"
@@ -385,7 +386,6 @@ using namespace gdcm;
 %include "gdcmValidate.h"
 %include "gdcmApplicationEntity.h"
 %include "gdcmDictPrinter.h"
-%include "gdcmSorter.h"
 %include "gdcmFilenameGenerator.h"
 %include "gdcmVersion.h"
 %include "gdcmFilename.h"
