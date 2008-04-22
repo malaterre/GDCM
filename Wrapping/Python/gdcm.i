@@ -17,7 +17,7 @@
 // http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus
 // http://www.geocities.com/foetsch/python/extending_python.htm
 
-%module(docstring="A DICOM library") gdcm
+%module(directors="1",docstring="A DICOM library") gdcm
 #pragma SWIG nowarn=504,510
 %{
 #include "gdcmTypes.h"
@@ -370,6 +370,7 @@ using namespace gdcm;
 %include "gdcmSystem.h"
 %include "gdcmTrace.h"
 %include "gdcmUIDs.h"
+%feature("director") gdcm::IPPSorter;      
 %include "gdcmIPPSorter.h"
 %include "gdcmSpectroscopy.h"
 %include "gdcmPrinter.h"
