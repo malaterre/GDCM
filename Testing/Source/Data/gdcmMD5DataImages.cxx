@@ -245,7 +245,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 256 256 1 16 1 */
 { "f54c7ea520ab3ec32b6303581ecd262f" , "MR-MONO2-12-an2.acr" },
 /* gdcm 256 256 1 16 1 */
-{ "48345bccbd67f57b4c13060b6a9a0d35" , "MR-MONO2-12-angio-an1.acr" },
+//{ "48345bccbd67f57b4c13060b6a9a0d35" , "MR-MONO2-12-angio-an1.acr" },
+{ "19cd553b53c8c35b8f2c20f27ed31d2d" , "MR-MONO2-12-angio-an1.acr" },
 /* gdcm 1024 1024 1 16 1 */
 { "a70676f0e60a58f55a5ac517ff662e7e" , "MR-MONO2-12-shoulder.dcm" },
 /* gdcm 256 256 1 16 1 */
