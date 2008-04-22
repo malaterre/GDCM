@@ -94,6 +94,9 @@
 #include "gdcmDefinedTerms.h"
 #include "gdcmSeries.h"
 #include "gdcmModuleEntry.h"
+#include "gdcmRescaler.h"
+#include "gdcmSegmentedPaletteColorLookupTable.h"
+#include "gdcmUnpacker12Bits.h"
 
 using namespace gdcm;
 %}
@@ -393,5 +396,8 @@ using namespace gdcm;
 %include "gdcmDefinedTerms.h"
 %include "gdcmSeries.h"
 %include "gdcmModuleEntry.h"
+%include "gdcmRescaler.h"
+%include "gdcmSegmentedPaletteColorLookupTable.h"
+%include "gdcmUnpacker12Bits.h"
 
 
