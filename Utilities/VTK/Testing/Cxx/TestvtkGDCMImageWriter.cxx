@@ -22,6 +22,7 @@
 #include "gdcmTesting.h"
 #include "gdcmFilename.h"
 #include "gdcmSystem.h"
+#include "gdcmTrace.h"
 #include "gdcmImageReader.h"
 
 int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
@@ -30,6 +31,7 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
   if( verbose )
     std::cerr << "Reading : " << filename << std::endl;
   vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
+  reader->FileLowerLeftOn();
   int canread = reader->CanReadFile( filename );
   if( canread )
     {
@@ -71,6 +73,25 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
       std::cerr << "failed to read back:" << gdcmfile << std::endl;
       res = 1;
       }
+    else
+    {
+      // ok could read the file, now check origin is ok:
+      const gdcm::Image &image = r.GetImage();
+      const double *origin = image.GetOrigin();
+      if( origin )
+      {
+      vtkImageData * vtkimg = reader->GetOutput();
+      const double *vtkorigin = vtkimg->GetOrigin();
+      if( fabs(vtkorigin[0] - origin[0]) > 1.e-3 
+       || fabs(vtkorigin[1] - origin[1]) > 1.e-3 
+       || fabs(vtkorigin[2] - origin[2]) > 1.e-3 )
+      {
+         std::cerr << "Problem:" << vtkorigin[0] << "," << vtkorigin[1] << "," << vtkorigin[2] ;
+         std::cerr << " should be:" << origin[0] << "," << origin[1] << "," << origin[2] << std::endl ;
+      res = 1;
+      }
+      }
+    }
     }
   else
     {
@@ -91,6 +112,8 @@ int TestvtkGDCMImageWriter(int argc, char *argv[])
     }
 
   // else
+  gdcm::Trace::DebugOff();
+  gdcm::Trace::WarningOff();
   int r = 0, i = 0;
   const char *filename;
   const char * const *filenames = gdcm::Testing::GetFileNames();

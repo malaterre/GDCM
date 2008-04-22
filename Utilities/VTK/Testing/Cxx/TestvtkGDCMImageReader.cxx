@@ -23,6 +23,7 @@
 #include "gdcmFilename.h"
 #include "gdcmTesting.h"
 #include "gdcmSystem.h"
+#include "gdcmTrace.h"
 #include "gdcmDirectory.h"
 
 int TestvtkGDCMImageRead(const char *filename, bool verbose)
@@ -99,6 +100,8 @@ int TestvtkGDCMImageReader(int argc, char *argv[])
     }
 
   // else
+  gdcm::Trace::DebugOff();
+  gdcm::Trace::WarningOff();
   int r = 0, i = 0;
   const char *filename;
   const char * const *filenames = gdcm::Testing::GetFileNames();
