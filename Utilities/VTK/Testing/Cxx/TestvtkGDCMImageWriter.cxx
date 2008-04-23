@@ -25,6 +25,10 @@
 #include "gdcmTrace.h"
 #include "gdcmImageReader.h"
 
+#ifndef vtkFloatingPointType
+#define vtkFloatingPointType float
+#endif
+
 int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
 {
   int res = 0; // no error
@@ -81,7 +85,7 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
       if( origin )
       {
       vtkImageData * vtkimg = reader->GetOutput();
-      const double *vtkorigin = vtkimg->GetOrigin();
+      const vtkFloatingPointType *vtkorigin = vtkimg->GetOrigin();
       if( fabs(vtkorigin[0] - origin[0]) > 1.e-3 
        || fabs(vtkorigin[1] - origin[1]) > 1.e-3 
        || fabs(vtkorigin[2] - origin[2]) > 1.e-3 )
