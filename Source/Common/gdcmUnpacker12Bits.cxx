@@ -19,18 +19,21 @@ namespace gdcm
 
 bool Unpacker12Bits::Unpack(char *out, const char *in, size_t n)
 {
-  uint16_t *out16 = (uint16_t*)out;
-  const uint8_t *p = (const uint8_t*)in;
-  const uint8_t * end = p + n;
-  for(; p != end; )
+  if( n % 3 ) return false;
+  // http://groups.google.com/group/comp.lang.c/msg/572bc9b085c717f3
+  short *q = (short*)out;
+  unsigned char *p = (unsigned char*)in;
+  const unsigned char *end = p+n;
+  unsigned char b0,b1,b2;
+
+  while (p!=end)
   {
-    uint8_t b0, b1, b2;
     b0 = *p++;
     b1 = *p++;
     b2 = *p++;
-    *out16++ =  ((b0 >> 4) << 8) + ((b0 & 0x0f) << 4) + (b1 & 0x0f);
-    *out16++ =  ((b2 & 0x0f) << 8) + ((b1 >> 4) << 4) + (b2 >> 4);
-  }
+    *q++ =  ((b1 & 0xf) << 8) + b0;
+    *q++ =  (b1>>4) + (b2<<4);
+  } 
   return true;
 }
 

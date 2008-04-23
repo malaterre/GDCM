@@ -7,6 +7,7 @@ SET(MSFF_TEST_SRCS
   TestSpacingHelper
   TestCoder
   TestDecoder
+  TestRescaler
   TestDumper
   TestDictPrinter
   TestApplicationEntity

@@ -48,6 +48,7 @@ const Image& ImageReader::GetImage() const
 const ByteValue* ImageReader::GetPointerFromElement(Tag const &tag) const
 {
   const DataSet &ds = F->GetDataSet();
+  assert( ds.FindDataElement( tag ) );
   const DataElement &de = ds.GetDataElement( tag );
   const Value &v = de.GetValue();
   const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);

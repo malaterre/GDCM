@@ -15,6 +15,7 @@ SET(Common_TEST_SRCS
   TestSwapCode
   TestSystem
   TestTrace
+  TestUnpacker12Bits
   )
 
 # Add the include paths
