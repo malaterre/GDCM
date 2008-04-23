@@ -130,6 +130,7 @@ typedef enum {
   void SetFromDataSet(DataSet const &ds, bool guess = false); // Will get the SOP Class UID
   void SetFromHeader(FileMetaInformation const &fmi); // Will get the Media Storage SOP Class UID
   void SetFromModality(DataSet const &ds);
+  void SetFromSourceImageSequence(DataSet const &ds);
   void GuessFromModality(const char *modality, unsigned int dimension = 2);
 
   friend std::ostream &operator<<(std::ostream &os, const MediaStorage &ms);

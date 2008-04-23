@@ -18,6 +18,7 @@
 #include "gdcmDataSet.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmFile.h"
+#include "gdcmSequenceOfItems.h"
 
 namespace gdcm
 {
@@ -282,11 +283,44 @@ void MediaStorage::SetFromDataSet(DataSet const &ds, bool guess)
     assert( ms != MS_END );
     MSField = ms;
     }
-  else if( guess )
+//  else if( guess )
+//    {
+//    // If user ask to guess MediaStorage, let's try again
+//    assert( MSField == MediaStorage::MS_END );
+//    //SetFromModality( ds );
+//    }
+}
+
+void MediaStorage::SetFromSourceImageSequence(DataSet const &ds)
+{
+  const Tag sourceImageSequenceTag(0x0008,0x2112);
+  if( ds.FindDataElement( sourceImageSequenceTag ) )
     {
-    // If user ask to guess MediaStorage, let's try again
-    assert( MSField == MediaStorage::MS_END );
-    SetFromModality( ds );
+    const DataElement &sourceImageSequencesq = ds.GetDataElement( sourceImageSequenceTag );
+    const SequenceOfItems* sq = sourceImageSequencesq.GetSequenceOfItems();
+    if( !sq ) return;
+    SequenceOfItems::ConstIterator it = sq->Begin();
+    const DataSet &subds = it->GetNestedDataSet();
+    // (0008,1150) UI =MRImageStorage                          #  26, 1 ReferencedSOPClassUID
+    const Tag referencedSOPClassUIDTag(0x0008,0x1150);
+    if( subds.FindDataElement( referencedSOPClassUIDTag ) )
+      {
+      const DataElement& de = subds.GetDataElement( referencedSOPClassUIDTag );
+      const ByteValue *sopclassuid = de.GetByteValue();
+      assert( sopclassuid );
+    std::string sopclassuid_str(
+      sopclassuid->GetPointer(),
+      sopclassuid->GetLength() );
+    if( sopclassuid_str.find( ' ' ) != std::string::npos )
+      {
+      gdcmWarningMacro( "UI contains a space character discarding" );
+      std::string::size_type pos = sopclassuid_str.find_last_of(' ');
+      sopclassuid_str = sopclassuid_str.substr(0,pos);
+      }
+    MediaStorage ms = MediaStorage::GetMSType(sopclassuid_str.c_str());
+    assert( ms != MS_END );
+    MSField = ms;
+      }
     }
 }
 

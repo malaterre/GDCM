@@ -85,20 +85,38 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
   out = in;
   // Fragments...
   const SequenceOfFragments *sf = in.GetSequenceOfFragments();
-  assert( sf );
+  const ByteValue *jpegbv = in.GetByteValue();
+  assert( sf || jpegbv );
   std::stringstream os;
-  unsigned long pos = 0;
-  for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
+  if( sf )
     {
+    //unsigned long pos = 0;
+    for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
+      {
+      std::stringstream is;
+      const Fragment &frag = sf->GetFragment(i);
+      const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
+      char *mybuffer = new char[bv.GetLength()];
+      bv.GetBuffer(mybuffer, bv.GetLength());
+      is.write(mybuffer, bv.GetLength());
+      delete[] mybuffer;
+      bool r = Decode(is, os);
+      // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm    
+      if( !r )
+        {
+        return false;
+        }
+      }
+    }
+  else if ( jpegbv )
+    {
+    // GEIIS Icon:
     std::stringstream is;
-    const Fragment &frag = sf->GetFragment(i);
-    const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
-    char *mybuffer = new char[bv.GetLength()];
-    bv.GetBuffer(mybuffer, bv.GetLength());
-    is.write(mybuffer, bv.GetLength());
+    char *mybuffer = new char[jpegbv->GetLength()];
+    jpegbv->GetBuffer(mybuffer, jpegbv->GetLength());
+    is.write(mybuffer, jpegbv->GetLength());
     delete[] mybuffer;
     bool r = Decode(is, os);
-    // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm    
     if( !r )
       {
       return false;

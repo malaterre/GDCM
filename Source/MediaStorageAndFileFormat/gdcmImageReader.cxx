@@ -24,6 +24,8 @@
 #include "gdcmAttribute.h"
 #include "gdcmSpacingHelper.h"
 #include "gdcmIconImage.h"
+#include "gdcmPrivateTag.h"
+#include "gdcmJPEGCodec.h"
 
 namespace gdcm
 {
@@ -208,6 +210,8 @@ int ImageReader::ReadISFromTag( Tag const &t, std::stringstream &ss,
 void DoIconImage(const DataSet& rootds, ImageValue& image)
 {
   const Tag ticonimage(0x0088,0x0200);
+  //const Tag tgeiconimage(0x0009,0x1010);
+  const PrivateTag tgeiconimage(0x0009,0x0010,"GEIIS");
   IconImage &pixeldata = image.GetIconImage();
   if( rootds.FindDataElement( ticonimage ) )
     {
@@ -218,72 +222,154 @@ void DoIconImage(const DataSet& rootds, ImageValue& image)
     SequenceOfItems::ConstIterator it = sq->Begin();
     const DataSet &ds = it->GetNestedDataSet();
 
-  // D 0028|0011 [US] [Columns] [512]
-    {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
-    Attribute<0x0028,0x0011> at;
-    at.SetFromDataElement( de );
-    pixeldata.SetDimension(0, at.GetValue() );
-    }
+    // D 0028|0011 [US] [Columns] [512]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
+      Attribute<0x0028,0x0011> at;
+      at.SetFromDataElement( de );
+      pixeldata.SetDimension(0, at.GetValue() );
+      }
 
-  // D 0028|0010 [US] [Rows] [512]
-    {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
-    Attribute<0x0028,0x0010> at;
-    at.SetFromDataElement( de );
-    pixeldata.SetDimension(1, at.GetValue() );
-    }
+    // D 0028|0010 [US] [Rows] [512]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
+      Attribute<0x0028,0x0010> at;
+      at.SetFromDataElement( de );
+      pixeldata.SetDimension(1, at.GetValue() );
+      }
 
     PixelFormat pf;
-  // D 0028|0100 [US] [Bits Allocated] [16]
-    {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
-    Attribute<0x0028,0x0100> at;
-    at.SetFromDataElement( de );
-    pf.SetBitsAllocated( at.GetValue() );
+    // D 0028|0100 [US] [Bits Allocated] [16]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
+      Attribute<0x0028,0x0100> at;
+      at.SetFromDataElement( de );
+      pf.SetBitsAllocated( at.GetValue() );
+      }
+    // D 0028|0101 [US] [Bits Stored] [12]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
+      Attribute<0x0028,0x0101> at;
+      at.SetFromDataElement( de );
+      pf.SetBitsStored( at.GetValue() );
+      }
+    // D 0028|0102 [US] [High Bit] [11]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
+      Attribute<0x0028,0x0102> at;
+      at.SetFromDataElement( de );
+      pf.SetHighBit( at.GetValue() );
+      }
+    // D 0028|0103 [US] [Pixel Representation] [0]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
+      Attribute<0x0028,0x0103> at;
+      at.SetFromDataElement( de );
+      pf.SetPixelRepresentation( at.GetValue() );
+      }
+    pixeldata.SetPixelFormat( pf );
+    // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]
+    const Tag tphotometricinterpretation(0x0028, 0x0004);
+    assert( ds.FindDataElement( tphotometricinterpretation ) );
+    const ByteValue *photometricinterpretation = ds.GetDataElement( tphotometricinterpretation ).GetByteValue();
+    std::string photometricinterpretation_str(
+      photometricinterpretation->GetPointer(),
+      photometricinterpretation->GetLength() );
+    PhotometricInterpretation pi(
+      PhotometricInterpretation::GetPIType(
+        photometricinterpretation_str.c_str()));
+    assert( pi != PhotometricInterpretation::UNKNOW);
+    pixeldata.SetPhotometricInterpretation( pi );
+    const Tag tpixeldata = Tag(0x7fe0, 0x0010);
+    assert( ds.FindDataElement( tpixeldata ) );
+      {
+      const DataElement& de = ds.GetDataElement( tpixeldata );
+      pixeldata.SetDataElement( de );
+      }
     }
-  // D 0028|0101 [US] [Bits Stored] [12]
+  else if( rootds.FindDataElement( tgeiconimage ) )
     {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
-    Attribute<0x0028,0x0101> at;
-    at.SetFromDataElement( de );
-    pf.SetBitsStored( at.GetValue() );
-    }
-  // D 0028|0102 [US] [High Bit] [11]
-    {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
-    Attribute<0x0028,0x0102> at;
-    at.SetFromDataElement( de );
-    pf.SetHighBit( at.GetValue() );
-    }
-  // D 0028|0103 [US] [Pixel Representation] [0]
-    {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
-    Attribute<0x0028,0x0103> at;
-    at.SetFromDataElement( de );
-    pf.SetPixelRepresentation( at.GetValue() );
-    }
-  pixeldata.SetPixelFormat( pf );
-  // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]
-  const Tag tphotometricinterpretation(0x0028, 0x0004);
-  assert( ds.FindDataElement( tphotometricinterpretation ) );
-  const ByteValue *photometricinterpretation = ds.GetDataElement( tphotometricinterpretation ).GetByteValue();
-  std::string photometricinterpretation_str(
-    photometricinterpretation->GetPointer(),
-    photometricinterpretation->GetLength() );
-  PhotometricInterpretation pi(
-    PhotometricInterpretation::GetPIType(
-      photometricinterpretation_str.c_str()));
-  assert( pi != PhotometricInterpretation::UNKNOW);
-  pixeldata.SetPhotometricInterpretation( pi );
-  const Tag tpixeldata = Tag(0x7fe0, 0x0010);
-  assert( ds.FindDataElement( tpixeldata ) );
-{
-  const DataElement& de = ds.GetDataElement( tpixeldata );
-    pixeldata.SetDataElement( de );
-}
+    const DataElement &iconimagesq = rootds.GetDataElement( tgeiconimage );
+    const SequenceOfItems* sq = iconimagesq.GetSequenceOfItems();
+    // Is SQ empty ?
+    if( !sq ) return;
+    SequenceOfItems::ConstIterator it = sq->Begin();
+    const DataSet &ds = it->GetNestedDataSet();
 
+    // D 0028|0011 [US] [Columns] [512]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
+      Attribute<0x0028,0x0011> at;
+      at.SetFromDataElement( de );
+      pixeldata.SetDimension(0, at.GetValue() );
+      }
 
+    // D 0028|0010 [US] [Rows] [512]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
+      Attribute<0x0028,0x0010> at;
+      at.SetFromDataElement( de );
+      pixeldata.SetDimension(1, at.GetValue() );
+      }
+
+    PixelFormat pf;
+    // D 0028|0100 [US] [Bits Allocated] [16]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
+      Attribute<0x0028,0x0100> at;
+      at.SetFromDataElement( de );
+      pf.SetBitsAllocated( at.GetValue() );
+      }
+    // D 0028|0101 [US] [Bits Stored] [12]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
+      Attribute<0x0028,0x0101> at;
+      at.SetFromDataElement( de );
+      pf.SetBitsStored( at.GetValue() );
+      }
+    // D 0028|0102 [US] [High Bit] [11]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
+      Attribute<0x0028,0x0102> at;
+      at.SetFromDataElement( de );
+      pf.SetHighBit( at.GetValue() );
+      }
+    // D 0028|0103 [US] [Pixel Representation] [0]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
+      Attribute<0x0028,0x0103> at;
+      at.SetFromDataElement( de );
+      pf.SetPixelRepresentation( at.GetValue() );
+      }
+    pixeldata.SetPixelFormat( pf );
+    // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]
+    const Tag tphotometricinterpretation(0x0028, 0x0004);
+    assert( ds.FindDataElement( tphotometricinterpretation ) );
+    const ByteValue *photometricinterpretation = ds.GetDataElement( tphotometricinterpretation ).GetByteValue();
+    std::string photometricinterpretation_str(
+      photometricinterpretation->GetPointer(),
+      photometricinterpretation->GetLength() );
+    PhotometricInterpretation pi(
+      PhotometricInterpretation::GetPIType(
+        photometricinterpretation_str.c_str()));
+    assert( pi != PhotometricInterpretation::UNKNOW);
+    pixeldata.SetPhotometricInterpretation( pi );
+    const Tag tpixeldata = Tag(0x7fe0, 0x0010);
+    assert( ds.FindDataElement( tpixeldata ) );
+      {
+      const DataElement& de = ds.GetDataElement( tpixeldata );
+      JPEGCodec jpeg;
+      jpeg.SetPhotometricInterpretation( pixeldata.GetPhotometricInterpretation() );
+      jpeg.SetPlanarConfiguration( 0 );
+      jpeg.SetPixelFormat( pixeldata.GetPixelFormat() );
+      DataElement de2;
+      jpeg.Decode( de, de2);
+      pixeldata.SetDataElement( de2 );
+      }
+    }
+  else
+    {
+    //gdcmDebugMacro( "No icon found" );
     }
 }
 

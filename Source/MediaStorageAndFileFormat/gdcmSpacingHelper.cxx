@@ -71,16 +71,17 @@ std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
 {
   std::vector<double> sp;
   MediaStorage ms;
-  ms.SetFromDataSet(ds, true);
+  ms.SetFromDataSet(ds); //, true);
   assert( MediaStorage::IsImage( ms ) );
   if( ms == MediaStorage::SecondaryCaptureImageStorage )
     {
     MediaStorage ms2;
-    ms2.SetFromModality(ds);
-    if( ms != ms2 )
+    ms2.SetFromSourceImageSequence(ds);
+    if( ms != ms2 && ms2 != MediaStorage::MS_END )
       {
-      gdcmWarningMacro( "Object is declared as SecondaryCaptureImageStorage but has a Modality "
-        "which would make the DICOM object more like: " << ms2 << " using it instead" );
+      assert( MediaStorage::IsImage( ms2 ) );
+      gdcmWarningMacro( "Object is declared as SecondaryCaptureImageStorage but according"
+        " to Source Image Sequence it was derived from " << ms2 << ". Using it instead" );
       ms = ms2;
       }
     }

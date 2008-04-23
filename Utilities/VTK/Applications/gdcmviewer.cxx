@@ -278,6 +278,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     {
     vtkLogoRepresentation *rep = vtkLogoRepresentation::New();
     rep->SetImage(reader->GetIconImage());
+    //reader->GetIconImage()->Print( std::cout );
 
     vtkLogoWidget *widget = vtkLogoWidget::New();
     widget->SetInteractor(iren);
