@@ -156,7 +156,22 @@ int main (int argc, char *argv[])
   const char *inputextension = filename.GetExtension();
   const char *outputextension = outfilename.GetExtension();
 
+  gdcm::ImageReader reader;
+  reader.SetFileName( filename );
+  if( !reader.Read() )
+    {
+    std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
+    }
+
+  const gdcm::Image &image = reader.GetImage();
+  const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
+  assert( image.GetNumberOfDimensions() == 2 || image.GetNumberOfDimensions() == 3 );
+  unsigned long len = image.GetBufferLength();
+
   gdcm::ImageWriter writer;
+  writer.SetFile( reader.GetFile() );
+  writer.SetImage( image );
   writer.SetFileName( outfilename );
   if( !writer.Write() )
     {

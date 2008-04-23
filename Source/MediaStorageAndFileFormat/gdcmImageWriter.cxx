@@ -15,11 +15,14 @@
 #include "gdcmImageWriter.h"
 #include "gdcmTrace.h"
 #include "gdcmDataSet.h"
+#include "gdcmDataElement.h"
 #include "gdcmAttribute.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmSystem.h"
 #include "gdcmSpacingHelper.h"
 #include "gdcmLookupTable.h"
+#include "gdcmItem.h"
+#include "gdcmSequenceOfItems.h"
 
 namespace gdcm
 {
@@ -350,7 +353,20 @@ bool ImageWriter::Write()
   if( ds.FindDataElement( Tag(0x0008, 0x0018) ) )
     {
     // We are comming from a real DICOM image, we need to reference it...
-    assert( 0 && "TODO FIXME" );
+    //assert( 0 && "TODO FIXME" );
+    const Tag tsourceImageSequence(0x0008,0x2112);
+    assert( ds.FindDataElement( tsourceImageSequence ) == false );
+    SequenceOfItems *sq = new SequenceOfItems;
+    sq->SetLengthToUndefined();
+    Item item;
+    de.SetVLToUndefined();
+    sq->AddItem( item );
+    DataElement de( tsourceImageSequence );
+    de.SetVR( VR::SQ );
+    de.SetValue( *sq );
+    //de.SetVLToUndefined();
+    std::cout << de << std::endl;
+    ds.Insert( de );
     }
     {
     const char *sop = uid.Generate();
