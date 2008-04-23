@@ -9,6 +9,7 @@ SET(itkgdcm_SRCS
 
 INCLUDE(${ITK_USE_FILE})
 INCLUDE_DIRECTORIES(
+  BEFORE
   ${GDCM_BINARY_DIR}/Source/Common
   ${GDCM_SOURCE_DIR}/Source/Common
   ${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition
