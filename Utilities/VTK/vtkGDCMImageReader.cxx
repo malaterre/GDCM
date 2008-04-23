@@ -92,6 +92,7 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   this->Curve = 0;
   this->Shift = 0.;
   this->Scale = 1.;
+  this->DataScalarType = VTK_CHAR;
 }
 
 vtkGDCMImageReader::~vtkGDCMImageReader()
@@ -206,7 +207,7 @@ void vtkGDCMImageReader::ExecuteInformation()
       break;
     case ICONIMAGEPORTNUMBER:
       output->SetWholeExtent(this->IconImageDataExtent);
-      output->SetScalarType( VTK_UNSIGNED_CHAR );
+      output->SetScalarType( this->IconDataScalarType );
       output->SetNumberOfScalarComponents( 1 );
       break;
     //case OVERLAYPORTNUMBER:
@@ -502,7 +503,7 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
     // Icon Image
     case ICONIMAGEPORTNUMBER:
       outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), this->IconImageDataExtent, 6);
-      vtkDataObject::SetPointDataActiveScalarInfo(outInfo, VTK_UNSIGNED_CHAR, 1);
+      vtkDataObject::SetPointDataActiveScalarInfo(outInfo, this->IconDataScalarType, 1);
       break;
     // Overlays:
     //case OVERLAYPORTNUMBER:
@@ -719,6 +720,30 @@ int vtkGDCMImageReader::RequestInformationCompat()
     this->IconImageDataExtent[1] = icon.GetColumns() - 1;
     this->IconImageDataExtent[2] = 0;
     this->IconImageDataExtent[3] = icon.GetRows() - 1;
+    // 
+    const gdcm::PixelFormat &iconpixelformat = icon.GetPixelFormat();
+    switch(iconpixelformat)
+      {
+    case gdcm::PixelFormat::INT8:
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+      this->IconDataScalarType = VTK_SIGNED_CHAR;
+#else
+      this->IconDataScalarType = VTK_CHAR;
+#endif
+      break;
+    case gdcm::PixelFormat::UINT8:
+      this->IconDataScalarType = VTK_UNSIGNED_CHAR;
+      break;
+    case gdcm::PixelFormat::INT16:
+      this->IconDataScalarType = VTK_SHORT;
+      break;
+    case gdcm::PixelFormat::UINT16:
+      this->IconDataScalarType = VTK_UNSIGNED_SHORT;
+      break;
+    default:
+      vtkErrorMacro( "Do not support this Icon Pixel Type: " << iconpixelformat );
+      return 0;
+      }
     }
 
 //  return this->Superclass::RequestInformation(

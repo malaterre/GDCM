@@ -240,6 +240,7 @@ protected:
 
   double Shift;
   double Scale;
+  int IconDataScalarType;
 
 private:
   vtkGDCMImageReader(const vtkGDCMImageReader&);  // Not implemented.
