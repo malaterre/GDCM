@@ -361,7 +361,13 @@ void DoIconImage(const DataSet& rootds, ImageValue& image)
       JPEGCodec jpeg;
       jpeg.SetPhotometricInterpretation( pixeldata.GetPhotometricInterpretation() );
       jpeg.SetPlanarConfiguration( 0 );
-      jpeg.SetPixelFormat( pixeldata.GetPixelFormat() );
+      PixelFormat pf = pixeldata.GetPixelFormat();
+      // Apparently bits stored can only be 8 or 12:
+      if( pf.GetBitsStored() == 16 )
+        {
+        pf.SetBitsStored( 12 );
+        }
+      jpeg.SetPixelFormat( pf );
       DataElement de2;
       jpeg.Decode( de, de2);
       pixeldata.SetDataElement( de2 );
