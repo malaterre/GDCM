@@ -679,6 +679,12 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   // Let's try to fake out the SOP Class UID here:
   gdcm::MediaStorage ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
   ms.GuessFromModality( this->MedicalImageProperties->GetModality(), this->FileDimensionality ); // Will override SC only if something is found...
+  if( this->FileDimensionality != 2 && ms == gdcm::MediaStorage::SecondaryCaptureImageStorage )
+    {
+    vtkErrorMacro( "Cannot handle Multi Frame image in SecondaryCaptureImageStorage" );
+    return 0;
+    }
+  // FIXME: new Secondary object handle multi frames...
   assert( gdcm::MediaStorage::IsImage( ms ) );
 {
   gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
