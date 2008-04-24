@@ -194,8 +194,7 @@ namespace gdcm
     for( ; it != DES.end(); ++it)
       {
       const DataElement & de = *it;
-      //if( de.GetTag().GetElement() )
-        de.Write<TDE,TSwap>(os);
+      de.Write<TDE,TSwap>(os);
       }
     return os;
   }

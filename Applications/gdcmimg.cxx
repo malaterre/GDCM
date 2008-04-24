@@ -200,6 +200,7 @@ int main (int argc, char *argv[])
   writer.SetImage( imageori );
   writer.SetFileName( outfilename );
 
+    gdcm::DataSet &ds = writer.GetFile().GetDataSet();
   if( fill )
     {
     const gdcm::PixelFormat &pixeltype = imageori.GetPixelFormat();
@@ -248,7 +249,6 @@ int main (int argc, char *argv[])
     // <entry group="0028" element="0301" vr="CS" vm="1" name="Burned In Annotation"/>
     gdcm::Attribute<0x0028,0x0301> at;
     at.SetValue( "NO" ); // 'YES'
-    gdcm::DataSet &ds = writer.GetFile().GetDataSet();
     ds.Replace( at.GetAsDataElement() );
     // (0008,2111) ST [MedCom Resample v]                      #  18, 1 DerivationDescriptio
     gdcm::Attribute<0x0008,0x2111> at2;
@@ -272,6 +272,7 @@ int main (int argc, char *argv[])
       }
     ds.Replace( at3.GetAsDataElement() );
     }
+  //  ds.Remove( gdcm::Tag(0x0,0x0) ); // FIXME
 
   if( !writer.Write() )
     {

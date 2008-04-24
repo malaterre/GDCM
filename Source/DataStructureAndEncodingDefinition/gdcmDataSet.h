@@ -123,13 +123,13 @@ public:
     return ll;
   }
   void Insert(const DataElement& de) {
-    if( de.GetTag().GetGroup() != 0x0002 )
+    if( de.GetTag().GetGroup() >= 0x0008 )
       {
       InsertDataElement( de );
       }
     else
       {
-      gdcmErrorMacro( "Cannot add element with group = 0x0002 in the dataset" );
+      gdcmErrorMacro( "Cannot add element with group < 0x0008 in the dataset" );
       }
   }
   void Replace(const DataElement& de) {

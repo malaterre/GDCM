@@ -92,7 +92,7 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   this->Curve = 0;
   this->Shift = 0.;
   this->Scale = 1.;
-  this->DataScalarType = VTK_CHAR;
+  this->IconDataScalarType = VTK_CHAR;
 }
 
 vtkGDCMImageReader::~vtkGDCMImageReader()
