@@ -75,6 +75,13 @@ std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
   assert( MediaStorage::IsImage( ms ) );
   if( ms == MediaStorage::SecondaryCaptureImageStorage )
     {
+    /*
+     * BEGIN HACK:
+     * Technically it should be enough to know that the image is a SecondaryCaptureImageStorage ... BUT GDCM 1.x
+     * used to rewrite everything by default as SecondaryCaptureImageStorage so when you would look carefully
+     * this DataSet would in fact contains *everything* from the MR Image Storage, therefore, we prefer to use 
+     * the Source Image Sequence to detect the *real* IOD...I am pretty sure this will bite us one day...
+     */
     MediaStorage ms2;
     ms2.SetFromSourceImageSequence(ds);
     if( ms != ms2 && ms2 != MediaStorage::MS_END )
