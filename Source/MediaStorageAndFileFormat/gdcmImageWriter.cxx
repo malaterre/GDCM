@@ -376,7 +376,7 @@ bool ImageWriter::Write()
     de.SetVR( VR::SQ );
     de.SetValue( *sq );
     de.SetVLToUndefined();
-    std::cout << de << std::endl;
+    //std::cout << de << std::endl;
     ds.Insert( de );
     }
     {
@@ -415,7 +415,7 @@ bool ImageWriter::Write()
     DataElement de( Tag(0x0002,0x0010) );
     de.SetByteValue( tsuid, strlen(tsuid) );
     de.SetVR( Attribute<0x0002, 0x0010>::GetVR() );
-    fmi.Insert( de );
+    fmi.Replace( de );
     fmi.SetDataSetTransferSyntax(ts);
     }
   fmi.FillFromDataSet( ds );
