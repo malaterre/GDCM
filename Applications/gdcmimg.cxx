@@ -61,6 +61,29 @@ bool readgeometry(const char *geometry, unsigned int * region)
   return true;
 }
 
+template <typename T>
+void FillRegionWithColor(char *cp, const unsigned int *dims, const unsigned int * region, unsigned int color)
+{
+   T * p = (T*)cp;
+    unsigned int xmin = region[0];
+    unsigned int xmax = region[1];
+    unsigned int ymin = region[2];
+    unsigned int ymax = region[3];
+    unsigned int zmin = region[4];
+    unsigned int zmax = region[5];
+
+    for( unsigned int x = xmin; x <= xmax; ++x)
+      {
+      for( unsigned int y = ymin; y <= ymax; ++y)
+        {
+        for( unsigned int z = zmin; z <= zmax; ++z)
+          {
+          p[x+y*dims[0]+z*dims[0]*dims[1]] = color;
+          }
+        }
+      }
+}
+
 int main (int argc, char *argv[])
 {
   int c;
@@ -69,9 +92,10 @@ int main (int argc, char *argv[])
   gdcm::Filename filename;
   gdcm::Filename outfilename;
   unsigned int region[6] = {}; // Rows & Columns are VR=US anyway...
-  unsigned char color = 0;
+  unsigned int color = 0;
   bool b;
-  bool fill = false;
+  int bregion = 0;
+  int fill = 0;
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -81,8 +105,8 @@ int main (int argc, char *argv[])
         // provide convert-like command line args:
         {"depth", 1, 0, 0},
         {"size", 1, 0, 0},
-        {"region", 1, 0, 0},
-        {"fill", 1, 0, 0},
+        {"region", 1, &bregion, 1},
+        {"fill", 1, &fill, 1},
         {0, 0, 0, 0}
     };
 
@@ -110,6 +134,16 @@ int main (int argc, char *argv[])
             assert( strcmp(s, "input") == 0 );
             assert( filename.IsEmpty() );
             filename = optarg;
+            }
+          else if( option_index == 4 ) /* region */
+            {
+            assert( strcmp(s, "region") == 0 );
+            readgeometry(optarg, region);
+            }
+          else if( option_index == 5 ) /* fill */
+            {
+            assert( strcmp(s, "fill") == 0 );
+            color = atoi(optarg);
             }
           printf (" with arg %s", optarg);
           }
@@ -148,7 +182,7 @@ int main (int argc, char *argv[])
     case 'F': // fill
       printf ("option F with value '%s'\n", optarg);
       color = atoi( optarg );
-      fill = true;
+      fill = 1;
       break;
 
     case '?':
@@ -200,15 +234,30 @@ int main (int argc, char *argv[])
   writer.SetImage( imageori );
   writer.SetFileName( outfilename );
 
-    gdcm::DataSet &ds = writer.GetFile().GetDataSet();
+  gdcm::DataSet &ds = writer.GetFile().GetDataSet();
   if( fill )
     {
     const gdcm::PixelFormat &pixeltype = imageori.GetPixelFormat();
+    if( pixeltype.GetSamplesPerPixel() != 1 )
+      {
+      std::cerr << "not implemented" << std::endl;
+      return 1;
+      }
     assert( imageori.GetNumberOfDimensions() == 2 || imageori.GetNumberOfDimensions() == 3 );
     unsigned long len = imageori.GetBufferLength();
     gdcm::ImageValue image;
     image.SetNumberOfDimensions( 2 ); // good default
     const unsigned int *dims = imageori.GetDimensions();
+    if ( region[0] > region[1] 
+      || region[2] > region[3]
+      || region[4] > region[5]
+      || region[1] > dims[0]
+      || region[3] > dims[1]
+      || region[5] > dims[2] )
+      {
+      std::cerr << "bogus region" << std::endl;
+      return 1;
+      }
     image.SetDimension(0, dims[0] );
     image.SetDimension(1, dims[1] );
     image.SetPhotometricInterpretation( imageori.GetPhotometricInterpretation() );
@@ -219,23 +268,26 @@ int main (int argc, char *argv[])
     //memcpy( bv->GetPointer(), imageori
     imageori.GetBuffer( (char*)bv->GetPointer() );
     // Rub out pixels:
-    unsigned int xmin = region[0];
-    unsigned int xmax = region[1];
-    unsigned int ymin = region[2];
-    unsigned int ymax = region[3];
-    unsigned int zmin = region[4];
-    unsigned int zmax = region[5];
     char *p = (char*)bv->GetPointer();
-    for( unsigned int x = xmin; x <= xmax; ++x)
+    switch(pixeltype)
       {
-      for( unsigned int y = ymin; y <= ymax; ++y)
-        {
-        for( unsigned int z = zmin; z <= zmax; ++z)
-          {
-          p[x+y*dims[0]+z*dims[0]*dims[1]] = color;
-          }
-        }
+    case gdcm::PixelFormat::UINT8:
+      FillRegionWithColor<uint8_t>(p, dims, region, color);
+      break;
+    case gdcm::PixelFormat::INT8:
+      FillRegionWithColor<int8_t>(p, dims, region, color);
+      break;
+    case gdcm::PixelFormat::UINT16:
+      FillRegionWithColor<uint16_t>(p, dims, region, color);
+      break;
+    case gdcm::PixelFormat::INT16:
+      FillRegionWithColor<int16_t>(p, dims, region, color);
+      break;
+    default:
+      std::cerr << "not implemented" << std::endl;
+      return 1;
       }
+
     pixeldata.SetValue( *bv );
     image.SetDataElement( pixeldata );
     image.SetSpacing( imageori.GetSpacing() );
