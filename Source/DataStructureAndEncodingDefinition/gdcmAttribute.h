@@ -331,7 +331,14 @@ public:
     SetByteValue(bv);
   }
 protected:
-  void SetByteValue(const ByteValue *bv) { abort(); }
+  void SetByteValue(const ByteValue *bv) {
+    assert( bv ); // FIXME
+    std::stringstream ss;
+    std::string s = std::string( bv->GetPointer(), bv->GetLength() );
+    ss.str( s );
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+      GetNumberOfValues(),ss);
+  }
 
 private:
   ArrayType *Internal;

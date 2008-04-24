@@ -315,7 +315,7 @@ bool ImageWriter::Write()
       DataElement de( Tag(0x0008, 0x0060 ) );
       de.SetByteValue( ms.GetModality(), strlen(ms.GetModality()) );
       de.SetVR( Attribute<0x0008, 0x0060>::GetVR() );
-      ds.Replace( de );
+      ds.Insert( de );
       }
     }
   if( !ds.FindDataElement( Tag(0x0008, 0x0064) ) )
@@ -384,6 +384,7 @@ bool ImageWriter::Write()
     DataElement de( Tag(0x0008,0x0018) );
     de.SetByteValue( sop, strlen(sop) );
     de.SetVR( Attribute<0x0008, 0x0018>::GetVR() );
+    // FIXME: Right now we are not actually 'replacing' the value
     ds.Insert( de );
     }
 
@@ -418,6 +419,7 @@ bool ImageWriter::Write()
     fmi.Replace( de );
     fmi.SetDataSetTransferSyntax(ts);
     }
+  fmi.Remove( Tag(0x0002,0x0012) ); // Set the Implementation Class UID properly
   fmi.FillFromDataSet( ds );
 
   // Some Type 2 Element:

@@ -15,6 +15,13 @@
 #include "gdcmString.h"
 #include <iostream>
 
+typedef gdcm::String<'\\',64> CSComp;
+
+void Print(CSComp v)
+{
+  std::cout << v << std::endl;
+}
+
 int TestString(int argc, char *argv[])
 {
 {
@@ -92,6 +99,11 @@ int TestString(int argc, char *argv[])
   std::cout << "[" << privatecreator << "]" << std::endl;
   privatecreator.erase(privatecreator.find_last_not_of(' ') + 1);
   std::cout << "[" << privatecreator << "]" << std::endl;
+
+  static const CSComp values[] = {"DERIVED","SECONDARY"}; 
+  std::cout << values[0] << std::endl;
+  Print( values[0] );
+  
 
   return 0;
 }
