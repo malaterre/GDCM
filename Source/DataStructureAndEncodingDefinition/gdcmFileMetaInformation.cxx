@@ -429,9 +429,21 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
     }
   else if( t.GetGroup() == 0x0008 ) // 
     {
-    is.seekg(-4, std::ios::cur); // Seek back
-    //MetaInformationTS = TransferSyntax::Explicit;
-    DataSetTS = TransferSyntax::ImplicitVRLittleEndian;
+    char vr_str[3];
+    is.read(vr_str, 2);
+    vr_str[2] = '\0';
+    VR::VRType vr = VR::GetVRType(vr_str);
+    if( vr != VR::VR_END )
+      {
+      // File start with a 0x0008 element but no FileMetaInfo and is Explicit
+      DataSetTS = TransferSyntax::ExplicitVRLittleEndian;
+      }
+    else
+      {
+      // File start with a 0x0008 element but no FileMetaInfo and is Implicit
+      DataSetTS = TransferSyntax::ImplicitVRLittleEndian;
+      }
+    is.seekg(-6, std::ios::cur); // Seek back
     }
   else if( t.GetGroup() == 0x0800 ) // Good ol' ACR NEMA
     {

@@ -994,44 +994,12 @@ bool ImageReader::ReadACRNEMAImage()
     return false;
     }
   const DataElement& de = ds.GetDataElement( pixeldata );
-#if 1
-  //if( type == TS::Explicit )
+  if ( de.GetVR() == VR::OW )
     {
-    if ( de.GetVR() == VR::OW )
-      {
-      abort();
-      PixelData.SetNeedByteSwap(true);
-      }
-    PixelData.SetDataElement( de );
+    //abort();
+    //PixelData.SetNeedByteSwap(true);
     }
-//  else if( type == TS::Implicit )
-//    {
-//    TS ts = GetHeader().GetTransferSyntaxType();
-//#ifdef GDCM_WORDS_BIGENDIAN
-//    if( ts != TS::ImplicitVRBigEndianACRNEMA
-//      && pf.GetBitsAllocated() == 16 )
-//#else
-//    if( ts == TS::ImplicitVRBigEndianACRNEMA
-//      && pf.GetBitsAllocated() == 16 )
-//#endif
-//      {
-//#ifdef GDCM_WORDS_BIGENDIAN
-//      assert( ts.GetSwapCode() == SwapCode::LittleEndian );
-//#else
-//      assert( ts.GetSwapCode() == SwapCode::BigEndian );
-//#endif
-//      PixelData.SetNeedByteSwap( true );
-//      }
-//    const ImplicitDataElement &ide =
-//      dynamic_cast<const ImplicitDataElement&>(pdde);
-//    PixelData.SetValue( ide.GetValue() );
-//    }
-//  else
-//    {
-//    gdcmErrorMacro( "Not sure how you are supposed to reach here" );
-//    return false;
-//    }
-#endif
+  PixelData.SetDataElement( de );
 
   // There is no such thing as Photometric Interpretation and 
   // Planar Configuration in ACR NEMA so let's default to something ...
