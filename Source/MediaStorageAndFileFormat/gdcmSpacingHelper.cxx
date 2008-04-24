@@ -14,6 +14,7 @@
 =========================================================================*/
 #include "gdcmSpacingHelper.h"
 #include "gdcmMediaStorage.h"
+#include "gdcmFile.h"
 #include "gdcmDataSet.h"
 #include "gdcmDataElement.h"
 #include "gdcmItem.h"
@@ -67,31 +68,12 @@ Tag SpacingHelper::GetZSpacingTagFromMediaStorage(MediaStorage const &ms)
   return t;
 }
 
-std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
+std::vector<double> SpacingHelper::GetSpacingValue(File const & f)
 {
   std::vector<double> sp;
   MediaStorage ms;
-  ms.SetFromDataSet(ds); //, true);
-  assert( MediaStorage::IsImage( ms ) );
-  if( ms == MediaStorage::SecondaryCaptureImageStorage )
-    {
-    /*
-     * BEGIN HACK:
-     * Technically it should be enough to know that the image is a SecondaryCaptureImageStorage ... BUT GDCM 1.x
-     * used to rewrite everything by default as SecondaryCaptureImageStorage so when you would look carefully
-     * this DataSet would in fact contains *everything* from the MR Image Storage, therefore, we prefer to use 
-     * the Source Image Sequence to detect the *real* IOD...I am pretty sure this will bite us one day...
-     */
-    MediaStorage ms2;
-    ms2.SetFromSourceImageSequence(ds);
-    if( ms != ms2 && ms2 != MediaStorage::MS_END )
-      {
-      assert( MediaStorage::IsImage( ms2 ) );
-      gdcmWarningMacro( "Object is declared as SecondaryCaptureImageStorage but according"
-        " to Source Image Sequence it was derived from " << ms2 << ". Using it instead" );
-      ms = ms2;
-      }
-    }
+  ms.SetFromFile(f);
+  const DataSet& ds = f.GetDataSet();
 
   if( ms == MediaStorage::EnhancedCTImageStorage )
     {

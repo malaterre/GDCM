@@ -614,7 +614,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     }
 
   // 4 1/2 Let's do Pixel Spacing
-  std::vector<double> spacing = SpacingHelper::GetSpacingValue(ds);
+  std::vector<double> spacing = SpacingHelper::GetSpacingValue(*F);
   // FIXME: Only SC is allowed not to have spacing:
   if( !spacing.empty() )
     {

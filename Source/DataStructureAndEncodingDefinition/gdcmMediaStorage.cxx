@@ -202,7 +202,7 @@ static MSModalityType MSModalityTypes[] = {
   {"  ", 2},//StandaloneVOILUTStorage,
   {"  ", 2},//GrayscaleSoftcopyPresentationStateStorageSOPClass,
   {"  ", 2},//XRayAngiographicImageStorage,
-  {"  ", 2},//XRayRadiofluoroscopingImageStorage,
+  {"RF", 2},//XRayRadiofluoroscopingImageStorage,
   {"  ", 2},//XRayAngiographicBiPlaneImageStorageRetired,
   {"  ", 2},//NuclearMedicineImageStorage,
   {"  ", 2},//RawDataStorage,
@@ -365,11 +365,33 @@ void MediaStorage::SetFromFile(File const &file)
   if( MSField == MediaStorage::MS_END ) // Nothing found...
     {
     // try again but from header this time:
+    gdcmWarningMacro( "No MediaStorage found in DataSet, looking up in FileMetaInformation" );
     SetFromHeader( header );
     if( MSField == MediaStorage::MS_END ) // Nothing found...
       {
+      gdcmWarningMacro( "No MediaStorage found neither in DataSet nor in FileMetaInformation, trying from Modality" );
       // Attempt to read what's in Modality:
       SetFromModality( ds );
+      }
+    }
+  //assert( MediaStorage::IsImage( ms ) );
+  else if( MSField == MediaStorage::SecondaryCaptureImageStorage )
+    {
+    /*
+     * BEGIN HACK:
+     * Technically it should be enough to know that the image is a SecondaryCaptureImageStorage ... BUT GDCM 1.x
+     * used to rewrite everything by default as SecondaryCaptureImageStorage so when you would look carefully
+     * this DataSet would in fact contains *everything* from the MR Image Storage, therefore, we prefer to use 
+     * the Source Image Sequence to detect the *real* IOD...I am pretty sure this will bite us one day...
+     */
+    MediaStorage ms2;
+    ms2.SetFromSourceImageSequence(ds);
+    if( MSField != ms2 && ms2 != MediaStorage::MS_END )
+      {
+      assert( MediaStorage::IsImage( ms2 ) );
+      gdcmWarningMacro( "Object is declared as SecondaryCaptureImageStorage but according"
+        " to Source Image Sequence it was derived from " << ms2 << ". Using it instead" );
+      MSField = ms2;
       }
     }
 }

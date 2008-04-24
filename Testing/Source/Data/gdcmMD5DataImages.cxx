@@ -577,6 +577,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "228e9af71b8ce00cae3066e3fdd3641f" , "SIEMENS_MONOCHROME2_LUT_MOCO.dcm" },
 { "ef8c3435ee7a9b332976f2dc56833d3a" , "GENESIS_SIGNA-JPEG-CorruptFrag.dcm" }, // FIXME !
 { "42a4f33eb34456e3e82f30d707c84870" , "DCMOBJ_IMG57.dcm" },
+{ "3a85617df95abbb63cd84a183515c697" , "image.acr" },
 
 
 /* Stopping condition */

@@ -30,10 +30,11 @@ namespace gdcm
  */
 class MediaStorage;
 class DataSet;
+class File;
 class GDCM_EXPORT SpacingHelper
 {
 public:
-  static std::vector<double> GetSpacingValue(DataSet const & ds);
+  static std::vector<double> GetSpacingValue(File const & f);
   static void SetSpacingValue(DataSet & ds, const std::vector<double> & spacing);
 
   static bool ComputeSpacingFromImagePositionPatient(const std::vector<double> &imageposition, std::vector<double> & spacing);
