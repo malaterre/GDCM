@@ -30,7 +30,7 @@ namespace gdcm
       while( de.Read<TDE,TSwap>(is) && de.GetTag() != itemDelItem  ) // Keep that order please !
         {
         //std::cerr << "DEBUG Nested: " << de << std::endl;
-        DES.insert( de );
+        InsertDataElement( de );
         }
       }
     catch(ParseException &pe)
@@ -59,7 +59,7 @@ namespace gdcm
     while( !is.eof() && de.Read<TDE,TSwap>(is) )
       {
       //std::cerr << "DEBUG:" << de << std::endl;
-      DES.insert( de );
+      InsertDataElement( de );
       }
     return is;
   }
@@ -70,7 +70,7 @@ namespace gdcm
     while( !is.eof() && de.Read<TDE,TSwap>(is) )
       {
       //assert( de.GetTag() != Tag(0,0) );
-      DES.insert( de );
+      InsertDataElement( de );
       // tag was found, we can exit the loop:
       if ( t <= de.GetTag() ) break;
       }
@@ -83,7 +83,7 @@ namespace gdcm
     while( !is.eof() && de.ReadWithLength<TDE,TSwap>(is,length) )
       {
       //assert( de.GetTag() != Tag(0,0) );
-      DES.insert( de );
+      InsertDataElement( de );
       // tag was found, we can exit the loop:
       if ( t <= de.GetTag() ) break;
       }
@@ -104,7 +104,7 @@ namespace gdcm
 #ifndef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
         assert( de.GetTag() != Tag(0xfffe,0xe000) ); // We should not be reading the next item...
 #endif
-        DES.insert( de );
+        InsertDataElement( de );
         l += de.GetLength<TDE>();
         //std::cout << "l:" << l << std::endl;
         //assert( !de.GetVL().IsUndefined() );
@@ -152,7 +152,7 @@ namespace gdcm
         while( de.Read<TDE,TSwap>(is) && de.GetTag() != Tag(0xfffe,0xe000) && de.GetTag().GetElement() != 0x0 )
           {
           //std::cout << "Nested2: " << de << std::endl;
-          DES.insert( de );
+          InsertDataElement( de );
           l += de.GetLength<TDE>();
           //std::cout << l << std::endl;
           }

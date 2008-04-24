@@ -28,9 +28,7 @@
 
 #include <typeinfo> // for typeid
 
-#ifdef _WIN32
 #define GDCM_TERMINAL_DISABLE_COLOR
-#endif
 
 #ifdef GDCM_TERMINAL_DISABLE_COLOR
 #define GDCM_TERMINAL_VT100_NORMAL              ""

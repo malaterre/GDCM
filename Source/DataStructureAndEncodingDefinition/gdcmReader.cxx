@@ -414,22 +414,23 @@ std::istream &is = Stream;
         {
         try
           {
+          gdcmWarningMacro( "Attempt to read file with VR16bits" );
           // We could not read the VR in an explicit dataset
           // seek back tag + vr:
           is.seekg( -6, std::ios::cur );
-          ImplicitDataElement ide;
+          VR16ExplicitDataElement ide;
           ide.Read<SwapperNoOp>( is );
           // If we are here it means we succeeded in reading the implicit data element:
           F->GetDataSet().Insert( ide );
-          F->GetDataSet().Read<ExplicitImplicitDataElement,SwapperNoOp>(is);
+          F->GetDataSet().Read<VR16ExplicitDataElement,SwapperNoOp>(is);
           // This file can only be rewritten as implicit...
           }
         catch ( Exception &ex )
           {
           // Ouch ! the file is neither:
           // 1. An Explicit encoded
-          // 2. I could not reread it using the Explicit/Implicit reader, last option is
-          // that the file contains a buggy VR...
+          // 2. I could not reread it using the VR16Explicit reader, last option is
+          // that the file is explicit/implicit
           is.clear();
           if( haspreamble )
             {
@@ -447,10 +448,10 @@ std::istream &is = Stream;
             header.Read(is);
             }
 
-          // VR 16bits
-          gdcmWarningMacro( "Attempt to read file with unknown 16 bits" );
+          // Explicit/Implicit
+          gdcmWarningMacro( "Attempt to read file with explicit/implicit" );
           F->GetDataSet().Clear(); // remove garbage from 1st attempt...
-          F->GetDataSet().Read<VR16ExplicitDataElement,SwapperNoOp>(is);
+          F->GetDataSet().Read<ExplicitImplicitDataElement,SwapperNoOp>(is);
           }
         }
       }

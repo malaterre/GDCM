@@ -661,13 +661,20 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   const Tag tphotometricinterpretation(0x0028, 0x0004);
   const ByteValue *photometricinterpretation
     = GetPointerFromElement( tphotometricinterpretation );
-  std::string photometricinterpretation_str(
-    photometricinterpretation->GetPointer(),
-    photometricinterpretation->GetLength() );
-  PhotometricInterpretation pi(
-    PhotometricInterpretation::GetPIType(
-      photometricinterpretation_str.c_str()));
-  assert( pi != PhotometricInterpretation::UNKNOW);
+  PhotometricInterpretation pi = PhotometricInterpretation::MONOCHROME2;
+  if( photometricinterpretation )
+    {
+    std::string photometricinterpretation_str(
+      photometricinterpretation->GetPointer(),
+      photometricinterpretation->GetLength() );
+    pi = PhotometricInterpretation::GetPIType( photometricinterpretation_str.c_str() );
+    }
+  else
+    {
+    assert( pf.GetSamplesPerPixel() == 1 );
+    gdcmWarningMacro( "No PhotometricInterpretation found, default to MONOCHROME2" );
+    }
+  assert( pi != PhotometricInterpretation::UNKNOW );
   PixelData.SetPhotometricInterpretation( pi );
 
   // Do the Rescale Intercept & Slope
@@ -880,7 +887,7 @@ bool ImageReader::ReadACRNEMAImage()
     assert( libido );
     std::string libido_str( libido->GetPointer(), libido->GetLength() );
     assert( libido_str != "CANRME_AILIBOD1_1." );
-    if( libido_str == "ACRNEMA_LIBIDO_1.1" || libido_str == "ACRNEMA_LIBIDO_1.0" )
+    if( strcmp(libido_str.c_str() , "ACRNEMA_LIBIDO_1.1") == 0 || strcmp(libido_str.c_str() , "ACRNEMA_LIBIDO_1.0") == 0 )
       {
       // Swap Columns & Rows
       // assert( PixelData.GetNumberOfDimensions() == 2 );

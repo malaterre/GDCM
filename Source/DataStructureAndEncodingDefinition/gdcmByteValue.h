@@ -119,6 +119,7 @@ public:
 
   ByteValue &operator=(const ByteValue &val) {
     Internal = val.Internal;
+    Length = val.Length;
     return *this;
     }
 
