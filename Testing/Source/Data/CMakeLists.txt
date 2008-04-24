@@ -25,9 +25,6 @@ SET(BLACK_LIST_READER
 # TODO add seg lut support
   gdcm-US-ALOKA-16.dcm
   SegmentedPalette.dcm
-# Add 12 bits support:
-  MR-MONO2-12-angio-an1.acr
-  image.acr
 # Papyrus:
   PET-cardio-Multiframe-Papyrus.dcm
 # No way to read this image:
@@ -55,6 +52,7 @@ SET(BLACK_LIST_READER
   BogugsSequenceLengthCorrectItemLength.dcm
   BogugsItemAndSequenceLength.dcm
   srwithgraphdeflated.dcm # ???
+  BogusACRWithFileMeta.dcm
 )
 
 SET(GDCM_DATA_FILENAMES)

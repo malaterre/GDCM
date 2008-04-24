@@ -24,6 +24,8 @@
 #include "gdcmAttribute.h"
 #include "gdcmSpacingHelper.h"
 #include "gdcmIconImage.h"
+#include "gdcmPrivateTag.h"
+#include "gdcmJPEGCodec.h"
 
 namespace gdcm
 {
@@ -48,10 +50,12 @@ const Image& ImageReader::GetImage() const
 const ByteValue* ImageReader::GetPointerFromElement(Tag const &tag) const
 {
   const DataSet &ds = F->GetDataSet();
-  const DataElement &de = ds.GetDataElement( tag );
-  const Value &v = de.GetValue();
-  const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
-  return bv;
+  if( ds.FindDataElement( tag ) )
+    {
+    const DataElement &de = ds.GetDataElement( tag );
+    return de.GetByteValue();
+    }
+  return 0;
 }
 
 bool ImageReader::Read()
@@ -207,6 +211,8 @@ int ImageReader::ReadISFromTag( Tag const &t, std::stringstream &ss,
 void DoIconImage(const DataSet& rootds, ImageValue& image)
 {
   const Tag ticonimage(0x0088,0x0200);
+  //const Tag tgeiconimage(0x0009,0x1010);
+  const PrivateTag tgeiconimage(0x0009,0x0010,"GEIIS");
   IconImage &pixeldata = image.GetIconImage();
   if( rootds.FindDataElement( ticonimage ) )
     {
@@ -217,72 +223,160 @@ void DoIconImage(const DataSet& rootds, ImageValue& image)
     SequenceOfItems::ConstIterator it = sq->Begin();
     const DataSet &ds = it->GetNestedDataSet();
 
-  // D 0028|0011 [US] [Columns] [512]
-    {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
-    Attribute<0x0028,0x0011> at;
-    at.SetFromDataElement( de );
-    pixeldata.SetDimension(0, at.GetValue() );
-    }
+    // D 0028|0011 [US] [Columns] [512]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
+      Attribute<0x0028,0x0011> at;
+      at.SetFromDataElement( de );
+      pixeldata.SetDimension(0, at.GetValue() );
+      }
 
-  // D 0028|0010 [US] [Rows] [512]
-    {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
-    Attribute<0x0028,0x0010> at;
-    at.SetFromDataElement( de );
-    pixeldata.SetDimension(1, at.GetValue() );
-    }
+    // D 0028|0010 [US] [Rows] [512]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
+      Attribute<0x0028,0x0010> at;
+      at.SetFromDataElement( de );
+      pixeldata.SetDimension(1, at.GetValue() );
+      }
 
     PixelFormat pf;
-  // D 0028|0100 [US] [Bits Allocated] [16]
-    {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
-    Attribute<0x0028,0x0100> at;
-    at.SetFromDataElement( de );
-    pf.SetBitsAllocated( at.GetValue() );
+    // D 0028|0100 [US] [Bits Allocated] [16]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
+      Attribute<0x0028,0x0100> at;
+      at.SetFromDataElement( de );
+      pf.SetBitsAllocated( at.GetValue() );
+      }
+    // D 0028|0101 [US] [Bits Stored] [12]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
+      Attribute<0x0028,0x0101> at;
+      at.SetFromDataElement( de );
+      pf.SetBitsStored( at.GetValue() );
+      }
+    // D 0028|0102 [US] [High Bit] [11]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
+      Attribute<0x0028,0x0102> at;
+      at.SetFromDataElement( de );
+      pf.SetHighBit( at.GetValue() );
+      }
+    // D 0028|0103 [US] [Pixel Representation] [0]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
+      Attribute<0x0028,0x0103> at;
+      at.SetFromDataElement( de );
+      pf.SetPixelRepresentation( at.GetValue() );
+      }
+    pixeldata.SetPixelFormat( pf );
+    // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]
+    const Tag tphotometricinterpretation(0x0028, 0x0004);
+    assert( ds.FindDataElement( tphotometricinterpretation ) );
+    const ByteValue *photometricinterpretation = ds.GetDataElement( tphotometricinterpretation ).GetByteValue();
+    std::string photometricinterpretation_str(
+      photometricinterpretation->GetPointer(),
+      photometricinterpretation->GetLength() );
+    PhotometricInterpretation pi(
+      PhotometricInterpretation::GetPIType(
+        photometricinterpretation_str.c_str()));
+    assert( pi != PhotometricInterpretation::UNKNOW);
+    pixeldata.SetPhotometricInterpretation( pi );
+    const Tag tpixeldata = Tag(0x7fe0, 0x0010);
+    assert( ds.FindDataElement( tpixeldata ) );
+      {
+      const DataElement& de = ds.GetDataElement( tpixeldata );
+      pixeldata.SetDataElement( de );
+      }
     }
-  // D 0028|0101 [US] [Bits Stored] [12]
+  else if( rootds.FindDataElement( tgeiconimage ) )
     {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
-    Attribute<0x0028,0x0101> at;
-    at.SetFromDataElement( de );
-    pf.SetBitsStored( at.GetValue() );
-    }
-  // D 0028|0102 [US] [High Bit] [11]
-    {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
-    Attribute<0x0028,0x0102> at;
-    at.SetFromDataElement( de );
-    pf.SetHighBit( at.GetValue() );
-    }
-  // D 0028|0103 [US] [Pixel Representation] [0]
-    {
-    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
-    Attribute<0x0028,0x0103> at;
-    at.SetFromDataElement( de );
-    pf.SetPixelRepresentation( at.GetValue() );
-    }
-  pixeldata.SetPixelFormat( pf );
-  // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]
-  const Tag tphotometricinterpretation(0x0028, 0x0004);
-  assert( ds.FindDataElement( tphotometricinterpretation ) );
-  const ByteValue *photometricinterpretation = ds.GetDataElement( tphotometricinterpretation ).GetByteValue();
-  std::string photometricinterpretation_str(
-    photometricinterpretation->GetPointer(),
-    photometricinterpretation->GetLength() );
-  PhotometricInterpretation pi(
-    PhotometricInterpretation::GetPIType(
-      photometricinterpretation_str.c_str()));
-  assert( pi != PhotometricInterpretation::UNKNOW);
-  pixeldata.SetPhotometricInterpretation( pi );
-  const Tag tpixeldata = Tag(0x7fe0, 0x0010);
-  assert( ds.FindDataElement( tpixeldata ) );
-{
-  const DataElement& de = ds.GetDataElement( tpixeldata );
-    pixeldata.SetDataElement( de );
-}
+    const DataElement &iconimagesq = rootds.GetDataElement( tgeiconimage );
+    const SequenceOfItems* sq = iconimagesq.GetSequenceOfItems();
+    // Is SQ empty ?
+    if( !sq ) return;
+    SequenceOfItems::ConstIterator it = sq->Begin();
+    const DataSet &ds = it->GetNestedDataSet();
 
+    // D 0028|0011 [US] [Columns] [512]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
+      Attribute<0x0028,0x0011> at;
+      at.SetFromDataElement( de );
+      pixeldata.SetDimension(0, at.GetValue() );
+      }
 
+    // D 0028|0010 [US] [Rows] [512]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
+      Attribute<0x0028,0x0010> at;
+      at.SetFromDataElement( de );
+      pixeldata.SetDimension(1, at.GetValue() );
+      }
+
+    PixelFormat pf;
+    // D 0028|0100 [US] [Bits Allocated] [16]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
+      Attribute<0x0028,0x0100> at;
+      at.SetFromDataElement( de );
+      pf.SetBitsAllocated( at.GetValue() );
+      }
+    // D 0028|0101 [US] [Bits Stored] [12]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
+      Attribute<0x0028,0x0101> at;
+      at.SetFromDataElement( de );
+      pf.SetBitsStored( at.GetValue() );
+      }
+    // D 0028|0102 [US] [High Bit] [11]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
+      Attribute<0x0028,0x0102> at;
+      at.SetFromDataElement( de );
+      pf.SetHighBit( at.GetValue() );
+      }
+    // D 0028|0103 [US] [Pixel Representation] [0]
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
+      Attribute<0x0028,0x0103> at;
+      at.SetFromDataElement( de );
+      pf.SetPixelRepresentation( at.GetValue() );
+      }
+    pixeldata.SetPixelFormat( pf );
+    // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]
+    const Tag tphotometricinterpretation(0x0028, 0x0004);
+    assert( ds.FindDataElement( tphotometricinterpretation ) );
+    const ByteValue *photometricinterpretation = ds.GetDataElement( tphotometricinterpretation ).GetByteValue();
+    std::string photometricinterpretation_str(
+      photometricinterpretation->GetPointer(),
+      photometricinterpretation->GetLength() );
+    PhotometricInterpretation pi(
+      PhotometricInterpretation::GetPIType(
+        photometricinterpretation_str.c_str()));
+    assert( pi != PhotometricInterpretation::UNKNOW);
+    pixeldata.SetPhotometricInterpretation( pi );
+    const Tag tpixeldata = Tag(0x7fe0, 0x0010);
+    assert( ds.FindDataElement( tpixeldata ) );
+      {
+      const DataElement& de = ds.GetDataElement( tpixeldata );
+      JPEGCodec jpeg;
+      jpeg.SetPhotometricInterpretation( pixeldata.GetPhotometricInterpretation() );
+      jpeg.SetPlanarConfiguration( 0 );
+      PixelFormat pf = pixeldata.GetPixelFormat();
+      // Apparently bits stored can only be 8 or 12:
+      if( pf.GetBitsStored() == 16 )
+        {
+        pf.SetBitsStored( 12 );
+        }
+      jpeg.SetPixelFormat( pf );
+      DataElement de2;
+      jpeg.Decode( de, de2);
+      pixeldata.SetDataElement( de2 );
+      }
+    }
+  else
+    {
+    //gdcmDebugMacro( "No icon found" );
     }
 }
 
@@ -415,7 +509,6 @@ void DoOverlays(const DataSet& ds, ImageValue& pixeldata)
 bool ImageReader::ReadImage(MediaStorage const &ms)
 {
   const DataSet &ds = F->GetDataSet();
-  TransferSyntax::NegociatedType type; // = ds.GetNegociatedType();
   std::stringstream ss;
   std::string conversion;
 
@@ -522,7 +615,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     }
 
   // 4 1/2 Let's do Pixel Spacing
-  std::vector<double> spacing = SpacingHelper::GetSpacingValue(ds);
+  std::vector<double> spacing = SpacingHelper::GetSpacingValue(*F);
   // FIXME: Only SC is allowed not to have spacing:
   if( !spacing.empty() )
     {
@@ -577,6 +670,21 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   assert( pi != PhotometricInterpretation::UNKNOW);
   PixelData.SetPhotometricInterpretation( pi );
 
+  // Do the Rescale Intercept & Slope
+  Attribute<0x0028,0x1052> at1;
+  bool intercept = ds.FindDataElement(at1.GetTag());
+  if( intercept )
+  {
+    at1.SetFromDataElement( ds.GetDataElement(at1.GetTag()) );
+    PixelData.SetIntercept( at1.GetValue() );
+  }
+  Attribute<0x0028,0x1053> at2;
+  bool slope     = ds.FindDataElement(at2.GetTag());
+  if ( slope )
+  {
+    at2.SetFromDataElement( ds.GetDataElement(at2.GetTag()) );
+    PixelData.SetSlope( at2.GetValue() );
+  }
   // Do the Palette Color:
   // 1. Modality LUT Sequence
   bool modlut = ds.FindDataElement(Tag(0x0028,0x3000) );
@@ -879,44 +987,12 @@ bool ImageReader::ReadACRNEMAImage()
     return false;
     }
   const DataElement& de = ds.GetDataElement( pixeldata );
-#if 1
-  //if( type == TS::Explicit )
+  if ( de.GetVR() == VR::OW )
     {
-    if ( de.GetVR() == VR::OW )
-      {
-      abort();
-      PixelData.SetNeedByteSwap(true);
-      }
-    PixelData.SetDataElement( de );
+    //abort();
+    //PixelData.SetNeedByteSwap(true);
     }
-//  else if( type == TS::Implicit )
-//    {
-//    TS ts = GetHeader().GetTransferSyntaxType();
-//#ifdef GDCM_WORDS_BIGENDIAN
-//    if( ts != TS::ImplicitVRBigEndianACRNEMA
-//      && pf.GetBitsAllocated() == 16 )
-//#else
-//    if( ts == TS::ImplicitVRBigEndianACRNEMA
-//      && pf.GetBitsAllocated() == 16 )
-//#endif
-//      {
-//#ifdef GDCM_WORDS_BIGENDIAN
-//      assert( ts.GetSwapCode() == SwapCode::LittleEndian );
-//#else
-//      assert( ts.GetSwapCode() == SwapCode::BigEndian );
-//#endif
-//      PixelData.SetNeedByteSwap( true );
-//      }
-//    const ImplicitDataElement &ide =
-//      dynamic_cast<const ImplicitDataElement&>(pdde);
-//    PixelData.SetValue( ide.GetValue() );
-//    }
-//  else
-//    {
-//    gdcmErrorMacro( "Not sure how you are supposed to reach here" );
-//    return false;
-//    }
-#endif
+  PixelData.SetDataElement( de );
 
   // There is no such thing as Photometric Interpretation and 
   // Planar Configuration in ACR NEMA so let's default to something ...

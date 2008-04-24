@@ -38,6 +38,8 @@
 #include "gdcmDataElement.h"
 #include "gdcmByteValue.h"
 #include "gdcmSwapper.h"
+#include "gdcmUnpacker12Bits.h"
+#include "gdcmRescaler.h"
 #include "gdcmOrientation.h"
 
 #include <sstream>
@@ -90,6 +92,7 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   this->Curve = 0;
   this->Shift = 0.;
   this->Scale = 1.;
+  this->IconDataScalarType = VTK_CHAR;
 }
 
 vtkGDCMImageReader::~vtkGDCMImageReader()
@@ -204,7 +207,7 @@ void vtkGDCMImageReader::ExecuteInformation()
       break;
     case ICONIMAGEPORTNUMBER:
       output->SetWholeExtent(this->IconImageDataExtent);
-      output->SetScalarType( VTK_UNSIGNED_CHAR );
+      output->SetScalarType( this->IconDataScalarType );
       output->SetNumberOfScalarComponents( 1 );
       break;
     //case OVERLAYPORTNUMBER:
@@ -260,10 +263,11 @@ int vtkGDCMImageReader::CanReadFile(const char* fname)
 {
   gdcm::ImageReader reader;
   reader.SetFileName( fname );
-  if( reader.Read() )
+  if( !reader.Read() )
     {
     return 0;
     }
+  // 3 means: I might be able to read...
   return 3;
 }
 
@@ -499,7 +503,7 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
     // Icon Image
     case ICONIMAGEPORTNUMBER:
       outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), this->IconImageDataExtent, 6);
-      vtkDataObject::SetPointDataActiveScalarInfo(outInfo, VTK_UNSIGNED_CHAR, 1);
+      vtkDataObject::SetPointDataActiveScalarInfo(outInfo, this->IconDataScalarType, 1);
       break;
     // Overlays:
     //case OVERLAYPORTNUMBER:
@@ -689,15 +693,18 @@ int vtkGDCMImageReader::RequestInformationCompat()
     break;
   // FIXME 12bits should not be that hard...
   case gdcm::PixelFormat::INT12:
-    //this->DataScalarType = VTK_SHORT;
-    //break;
+    this->DataScalarType = VTK_SHORT;
+    break;
   case gdcm::PixelFormat::UINT12:
-    //this->DataScalarType = VTK_UNSIGNED_SHORT;
-    //break;
+    this->DataScalarType = VTK_UNSIGNED_SHORT;
+    break;
   default:
     vtkErrorMacro( "Do not support this Pixel Type: " << pixeltype );
     return 0;
     }
+  //this->Shift = image.GetIntercept();
+  //this->Scale = image.GetSlope();
+  //this->DataScalarType = VTK_SHORT;
 
   this->NumberOfScalarComponents = pixeltype.GetSamplesPerPixel();
 
@@ -712,6 +719,30 @@ int vtkGDCMImageReader::RequestInformationCompat()
     this->IconImageDataExtent[1] = icon.GetColumns() - 1;
     this->IconImageDataExtent[2] = 0;
     this->IconImageDataExtent[3] = icon.GetRows() - 1;
+    // 
+    const gdcm::PixelFormat &iconpixelformat = icon.GetPixelFormat();
+    switch(iconpixelformat)
+      {
+    case gdcm::PixelFormat::INT8:
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+      this->IconDataScalarType = VTK_SIGNED_CHAR;
+#else
+      this->IconDataScalarType = VTK_CHAR;
+#endif
+      break;
+    case gdcm::PixelFormat::UINT8:
+      this->IconDataScalarType = VTK_UNSIGNED_CHAR;
+      break;
+    case gdcm::PixelFormat::INT16:
+      this->IconDataScalarType = VTK_SHORT;
+      break;
+    case gdcm::PixelFormat::UINT16:
+      this->IconDataScalarType = VTK_UNSIGNED_SHORT;
+      break;
+    default:
+      vtkErrorMacro( "Do not support this Icon Pixel Type: " << iconpixelformat );
+      return 0;
+      }
     }
 
 //  return this->Superclass::RequestInformation(
@@ -787,15 +818,34 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   reader.SetFileName( filename );
   if( !reader.Read() )
     {
-	  vtkErrorMacro( "ImageReader failed: " << filename );
+    vtkErrorMacro( "ImageReader failed: " << filename );
     return 0;
     }
   const gdcm::Image &image = reader.GetImage();
+  const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
   assert( image.GetNumberOfDimensions() == 2 || image.GetNumberOfDimensions() == 3 );
   unsigned long len = image.GetBufferLength();
   outlen = len;
   unsigned long overlaylen = 0;
   image.GetBuffer(pointer);
+  if( pixeltype == gdcm::PixelFormat::UINT12 || pixeltype == gdcm::PixelFormat::INT12 )
+  {
+    // FIXME: I could avoid this extra copy:
+    char * copy = new char[len];
+    memcpy(copy, pointer, len);
+    gdcm::Unpacker12Bits u12;
+    u12.Unpack(pointer, copy, len);
+    // update len just in case:
+    len = 16 * len / 12;
+    delete[] copy;
+  }
+  if( Scale != 1.0 || Shift != 0.0 )
+  {
+    gdcm::Rescaler r;
+    r.SetIntercept( Shift );
+    r.SetSlope( Scale );
+    r.Rescale(pointer,pointer,len);
+  }
   // Do the Icon Image:
   this->NumberOfIconImages = image.GetIconImage().IsEmpty() ? 0 : 1;
   if( this->NumberOfIconImages )
@@ -812,7 +862,9 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     const gdcm::Curve& curve = image.GetCurve();
     //curve.Print( std::cout );
     vtkPoints * pts = vtkPoints::New();
-    pts->SetNumberOfPoints( curve.GetNumberOfPoints() );
+    // Number of points is the total number of x+y points, while VTK need the
+    // number of tuples:
+    pts->SetNumberOfPoints( curve.GetNumberOfPoints() / 2 );
     curve.GetAsPoints( (float*)pts->GetVoidPointer(0) );
     vtkCellArray *polys = vtkCellArray::New();
     for(unsigned int i = 0; i < curve.GetNumberOfPoints(); i+=2 )
@@ -866,7 +918,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     ov1.GetUnpackBuffer( overlaypointer );
     }
 
-  const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
+  //const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
   // Do the LUT
   if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::PALETTE_COLOR )
     {

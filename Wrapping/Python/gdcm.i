@@ -17,7 +17,7 @@
 // http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus
 // http://www.geocities.com/foetsch/python/extending_python.htm
 
-%module(docstring="A DICOM library") gdcm
+%module(directors="1",docstring="A DICOM library") gdcm
 #pragma SWIG nowarn=504,510
 %{
 #include "gdcmTypes.h"
@@ -68,6 +68,7 @@
 #include "gdcmSystem.h"
 #include "gdcmTrace.h"
 #include "gdcmUIDs.h"
+#include "gdcmSorter.h"
 #include "gdcmIPPSorter.h"
 #include "gdcmSpectroscopy.h"
 #include "gdcmPrinter.h"
@@ -82,7 +83,6 @@
 #include "gdcmValidate.h"
 #include "gdcmApplicationEntity.h"
 #include "gdcmDictPrinter.h"
-#include "gdcmSorter.h"
 #include "gdcmFilenameGenerator.h"
 #include "gdcmVersion.h"
 #include "gdcmFilename.h"
@@ -94,6 +94,9 @@
 #include "gdcmDefinedTerms.h"
 #include "gdcmSeries.h"
 #include "gdcmModuleEntry.h"
+#include "gdcmRescaler.h"
+#include "gdcmSegmentedPaletteColorLookupTable.h"
+#include "gdcmUnpacker12Bits.h"
 
 using namespace gdcm;
 %}
@@ -367,6 +370,8 @@ using namespace gdcm;
 %include "gdcmSystem.h"
 %include "gdcmTrace.h"
 %include "gdcmUIDs.h"
+//%feature("director") gdcm::IPPSorter;      
+%include "gdcmSorter.h"
 %include "gdcmIPPSorter.h"
 %include "gdcmSpectroscopy.h"
 %include "gdcmPrinter.h"
@@ -381,7 +386,6 @@ using namespace gdcm;
 %include "gdcmValidate.h"
 %include "gdcmApplicationEntity.h"
 %include "gdcmDictPrinter.h"
-%include "gdcmSorter.h"
 %include "gdcmFilenameGenerator.h"
 %include "gdcmVersion.h"
 %include "gdcmFilename.h"
@@ -393,5 +397,8 @@ using namespace gdcm;
 %include "gdcmDefinedTerms.h"
 %include "gdcmSeries.h"
 %include "gdcmModuleEntry.h"
+%include "gdcmRescaler.h"
+%include "gdcmSegmentedPaletteColorLookupTable.h"
+%include "gdcmUnpacker12Bits.h"
 
 

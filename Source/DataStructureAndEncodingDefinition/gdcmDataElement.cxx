@@ -27,8 +27,8 @@ namespace gdcm
     if( sq )
       {
       sq->SetLengthToUndefined();
-      ValueLengthField.SetToUndefined();
       }
+    ValueLengthField.SetToUndefined();
   }
 
   const SequenceOfItems* DataElement::GetSequenceOfItems() const {

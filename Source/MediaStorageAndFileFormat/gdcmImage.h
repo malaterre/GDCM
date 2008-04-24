@@ -52,7 +52,7 @@ namespace gdcm
 class GDCM_EXPORT Image
 {
 public:
-  Image ():NumberOfDimensions(0),PlanarConfiguration(0),Dimensions(),SC(),NeedByteSwap(false),LUT(0),Overlays(),Curves(),Icon() {}
+  Image ():NumberOfDimensions(0),PlanarConfiguration(0),Dimensions(),SC(),NeedByteSwap(false),LUT(0),Overlays(),Curves(),Icon(),Intercept(0),Slope(1) {}
   virtual ~Image() {}
 
   unsigned int GetNumberOfDimensions() const;
@@ -180,6 +180,12 @@ public:
     return TS;
   }
 
+  void SetIntercept(double intercept) { Intercept = intercept; }
+  double GetIntercept() const { return Intercept; }
+
+  void SetSlope(double slope) { Slope = slope; }
+  double GetSlope() const { return Slope; }
+
 private:
   unsigned int NumberOfDimensions;
   unsigned int PlanarConfiguration;
@@ -195,12 +201,14 @@ private:
   // I believe the following 3 ivars can be derived from TS ...
   SwapCode SC;
   bool NeedByteSwap;
-
   typedef SmartPointer<LookupTable> LUTPtr;
   LUTPtr LUT;
   std::vector<Overlay>  Overlays;
   std::vector<Curve>  Curves;
   IconImage Icon;
+  double Intercept;
+  double Slope;
+
 };
 
 } // end namespace gdcm

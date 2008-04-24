@@ -12,18 +12,10 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmCurve.h"
+#include "gdcmRescaler.h"
 
-int TestCurve(int, char *[])
+int TestRescaler(int, char *[])
 {
-  gdcm::Curve c;
-  c.SetTypeOfData( "TAC" );
-  //c.SetTypeOfData( "PROF" );
-  //c.SetTypeOfData( "PRESSURE" );
-  //c.SetTypeOfData( "RESP" );
-  //c.SetTypeOfData( "dummy" );
-  std::cout << c.GetTypeOfData() << std::endl;
-  std::cout << c.GetTypeOfDataDescription() << std::endl;
-
+  gdcm::Rescaler r;
   return 0;
 }

@@ -14,6 +14,7 @@
 =========================================================================*/
 #include "gdcmSpacingHelper.h"
 #include "gdcmMediaStorage.h"
+#include "gdcmFile.h"
 #include "gdcmDataSet.h"
 #include "gdcmDataElement.h"
 #include "gdcmItem.h"
@@ -67,12 +68,12 @@ Tag SpacingHelper::GetZSpacingTagFromMediaStorage(MediaStorage const &ms)
   return t;
 }
 
-std::vector<double> SpacingHelper::GetSpacingValue(DataSet const & ds)
+std::vector<double> SpacingHelper::GetSpacingValue(File const & f)
 {
   std::vector<double> sp;
   MediaStorage ms;
-  ms.SetFromDataSet(ds, true);
-  assert( MediaStorage::IsImage( ms ) );
+  ms.SetFromFile(f);
+  const DataSet& ds = f.GetDataSet();
 
   if( ms == MediaStorage::EnhancedCTImageStorage )
     {
@@ -275,6 +276,7 @@ void SpacingHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & sp
           //assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
           std::stringstream os;
           el.Write( os );
+          de.SetVR( VR::DS );
           de.SetByteValue( os.str().c_str(), os.str().size() );
           ds.Insert( de );
           }
@@ -309,6 +311,7 @@ void SpacingHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & sp
           //assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
           std::stringstream os;
           el.Write( os );
+          de.SetVR( VR::DS );
           de.SetByteValue( os.str().c_str(), os.str().size() );
           ds.Insert( de );
           }

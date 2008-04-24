@@ -25,10 +25,16 @@ ELSE(WIN32)
     # See also:
     # FindGTK.cmake update
     # http://www.cmake.org/Bug/bug.php?op=show&bugid=3582
-    FIND_PACKAGE(GTK REQUIRED)
-    INCLUDE_DIRECTORIES(${GTK_INCLUDE_DIR} 
-      #/usr/lib/wx/include/gtk-2.4/
-    )
+    #FIND_PACKAGE(GTK REQUIRED)
+    #INCLUDE_DIRECTORIES(${GTK_INCLUDE_DIR} 
+    #  #/usr/lib/wx/include/gtk-2.4/
+    #)
+    FIND_PACKAGE(PkgConfig)
+    pkg_check_modules (GTK2 gtk+-2.0)
+    MESSAGE("${GTK2_INCLUDE_DIRS}")
+    INCLUDE_DIRECTORIES(${GTK2_INCLUDE_DIRS})
+    LINK_LIBRARIES(${GTK2_LIBRARIES})
+
     ADD_DEFINITIONS(-D__WXGTK__)
     SET(WXWINDOWS_USE_GL 1) # CMake 2.4.2
     # important on GNU/Linux since we need wxGLCanvas

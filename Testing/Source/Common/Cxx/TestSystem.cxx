@@ -14,15 +14,33 @@
 =========================================================================*/
 #include "gdcmSystem.h"
 #include <iostream>
+#include <string.h> // strlen
 
 int TestSystem(int, char *[])
 {
-	const char s1[] = "HELLO, wORLD !";
-	const char s2[] = "Hello, World !";
-	if( gdcm::System::StrCaseCmp(s1,s2) != 0 )
-	{
-		 return 1;
-	}
+  const char s1[] = "HELLO, wORLD !";
+  const char s2[] = "Hello, World !";
+  if( gdcm::System::StrCaseCmp(s1,s2) != 0 )
+    {
+    return 1;
+    }
+  if( gdcm::System::StrNCaseCmp(s1,s2, strlen(s1)) != 0 )
+    {
+    return 1;
+    }
+  const char s3[] = "Hello, World ! ";
+  if( gdcm::System::StrCaseCmp(s1,s3) == 0 )
+    {
+    return 1;
+    }
+  if( gdcm::System::StrNCaseCmp(s1,s3, strlen(s1)) != 0 )
+    {
+    return 1;
+    }
+  if( gdcm::System::StrNCaseCmp(s1,s3, strlen(s3)) == 0 )
+    {
+    return 1;
+    }
 
   // struct stat {
   // off_t         st_size;     /* total size, in bytes */

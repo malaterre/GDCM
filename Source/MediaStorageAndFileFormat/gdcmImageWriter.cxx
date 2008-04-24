@@ -15,11 +15,14 @@
 #include "gdcmImageWriter.h"
 #include "gdcmTrace.h"
 #include "gdcmDataSet.h"
+#include "gdcmDataElement.h"
 #include "gdcmAttribute.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmSystem.h"
 #include "gdcmSpacingHelper.h"
 #include "gdcmLookupTable.h"
+#include "gdcmItem.h"
+#include "gdcmSequenceOfItems.h"
 
 namespace gdcm
 {
@@ -247,13 +250,26 @@ bool ImageWriter::Write()
   else
     {
     const ByteValue *bv = ds.GetDataElement( Tag(0x0008, 0x0060 ) ).GetByteValue();
-    std::string modality2 = std::string( bv->GetPointer(), bv->GetLength() );
+    std::string modality2;
+    if( bv )
+      {
+      modality2 = std::string( bv->GetPointer(), bv->GetLength() );
+      assert( modality2.find( ' ' ) == std::string::npos ); // no space ...
+      }
+    else
+      {
+      // remove empty Modality, and set a new one...
+      ds.Remove( Tag(0x0008, 0x0060 ) ); // Modality is Type 1 !
+      assert( ms != MediaStorage::MS_END );
+      }
     if( modality2 != ms.GetModality() )
       {
+      assert( std::string(ms.GetModality()).find( ' ' ) == std::string::npos ); // no space ...
       DataElement de( Tag(0x0008, 0x0060 ) );
       de.SetByteValue( ms.GetModality(), strlen(ms.GetModality()) );
       de.SetVR( Attribute<0x0008, 0x0060>::GetVR() );
-      ds.Replace( de );
+      ds.Insert( de ); // FIXME: should we always replace ?
+      // Well technically you could have a SecondaryCaptureImageStorage with a modality of NM...
       }
     }
   if( !ds.FindDataElement( Tag(0x0008, 0x0064) ) )
@@ -291,13 +307,38 @@ bool ImageWriter::Write()
   if( ds.FindDataElement( Tag(0x0008, 0x0018) ) )
     {
     // We are comming from a real DICOM image, we need to reference it...
-    assert( 0 && "TODO FIXME" );
+    //assert( 0 && "TODO FIXME" );
+    const Tag tsourceImageSequence(0x0008,0x2112);
+    assert( ds.FindDataElement( tsourceImageSequence ) == false );
+    SequenceOfItems *sq = new SequenceOfItems;
+    sq->SetLengthToUndefined();
+    Item item( Tag(0xfffe,0xe000) );
+    de.SetVLToUndefined();
+    //DataSet sourceimageds;
+    // (0008,1150) UI =MRImageStorage                          #  26, 1 ReferencedSOPClassUID
+    // (0008,1155) UI [1.3.6.1.4.17434.1.1.5.2.1160650698.1160650698.0] #  48, 1 ReferencedSOPInstanceUID
+    DataElement referencedSOPClassUID = ds.GetDataElement( Tag(0x0008,0x0016) );
+    referencedSOPClassUID.SetTag( Tag(0x0008,0x1150 ) );
+    DataElement referencedSOPInstanceUID = ds.GetDataElement( Tag(0x0008,0x0018) );
+    referencedSOPInstanceUID.SetTag( Tag(0x0008,0x1155) );
+    //item.SetNestedDataSet( sourceimageds );
+    item.SetVLToUndefined();
+    item.InsertDataElement( referencedSOPClassUID );
+    item.InsertDataElement( referencedSOPInstanceUID );
+    sq->AddItem( item );
+    DataElement de( tsourceImageSequence );
+    de.SetVR( VR::SQ );
+    de.SetValue( *sq );
+    de.SetVLToUndefined();
+    //std::cout << de << std::endl;
+    ds.Insert( de );
     }
     {
     const char *sop = uid.Generate();
     DataElement de( Tag(0x0008,0x0018) );
     de.SetByteValue( sop, strlen(sop) );
     de.SetVR( Attribute<0x0008, 0x0018>::GetVR() );
+    // FIXME: Right now we are not actually 'replacing' the value
     ds.Insert( de );
     }
 
@@ -329,9 +370,12 @@ bool ImageWriter::Write()
     DataElement de( Tag(0x0002,0x0010) );
     de.SetByteValue( tsuid, strlen(tsuid) );
     de.SetVR( Attribute<0x0002, 0x0010>::GetVR() );
-    fmi.Insert( de );
+    fmi.Replace( de );
     fmi.SetDataSetTransferSyntax(ts);
     }
+  fmi.Remove( Tag(0x0002,0x0012) ); // Set the Implementation Class UID properly
+  fmi.Remove( Tag(0x0002,0x0013) ); // 
+  fmi.Remove( Tag(0x0002,0x0016) ); // 
   fmi.FillFromDataSet( ds );
 
   // Some Type 2 Element:

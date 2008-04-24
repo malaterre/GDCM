@@ -28,7 +28,9 @@ int TestDump(const char *filename)
 
   gdcm::Dumper p;
   p.SetFile( r.GetFile() );
-  p.Print( std::cout );
+  std::ostringstream out;
+  //p.Print( std::cout );
+  p.Print( out );
 
   // Test CSA Header here too
   gdcm::CSAHeader csa;
@@ -50,7 +52,8 @@ int TestDump(const char *filename)
     gdcm::File f;
     f.SetDataSet( csa.GetDataSet() );
     p.SetFile( f );
-    p.Print( std::cout );
+    //p.Print( std::cout );
+    p.Print( out );
     }
 
   return 0;

@@ -17,6 +17,17 @@ TEST_BIG_ENDIAN(GDCM_WORDS_BIGENDIAN)
   CHECK_INCLUDE_FILE_CONCAT("sys/time.h"     HAVE_SYS_TIME_H)
   CHECK_INCLUDE_FILE_CONCAT("winsock.h"       HAVE_WINSOCK_H)
   CHECK_INCLUDE_FILE_CONCAT("byteswap.h"       HAVE_BYTESWAP_H)
+  
+INCLUDE(CheckFunctionExists)
+#C99
+CHECK_FUNCTION_EXISTS(strcasecmp  HAVE_STRCASECMP)
+CHECK_FUNCTION_EXISTS(strncasecmp HAVE_STRNCASECMP)
+CHECK_FUNCTION_EXISTS(snprintf    HAVE_SNPRINTF)
+#M$ extension:
+CHECK_FUNCTION_EXISTS(_stricmp    HAVE__STRICMP)
+CHECK_FUNCTION_EXISTS(_strnicmp   HAVE__STRNICMP)
+CHECK_FUNCTION_EXISTS(_snprintf   HAVE__SNPRINTF)
+
 CONFIGURE_FILE(
   "${GDCM_SOURCE_DIR}/Source/Common/gdcmConfigure.h.in"
   "${GDCM_BINARY_DIR}/Source/Common/gdcmConfigure.h"
@@ -54,6 +65,7 @@ SET(Common_SRCS
   gdcmDeflateStream.cxx
   gdcmByteSwap.cxx
   #gdcmSwapper.cxx
+  gdcmUnpacker12Bits.cxx
   )
 
 ADD_LIBRARY(gdcmCommon ${Common_SRCS})

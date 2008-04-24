@@ -12,18 +12,30 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmCurve.h"
+#include "gdcmUnpacker12Bits.h"
 
-int TestCurve(int, char *[])
+namespace gdcm
 {
-  gdcm::Curve c;
-  c.SetTypeOfData( "TAC" );
-  //c.SetTypeOfData( "PROF" );
-  //c.SetTypeOfData( "PRESSURE" );
-  //c.SetTypeOfData( "RESP" );
-  //c.SetTypeOfData( "dummy" );
-  std::cout << c.GetTypeOfData() << std::endl;
-  std::cout << c.GetTypeOfDataDescription() << std::endl;
 
-  return 0;
+bool Unpacker12Bits::Unpack(char *out, const char *in, size_t n)
+{
+  if( n % 3 ) return false;
+  // http://groups.google.com/group/comp.lang.c/msg/572bc9b085c717f3
+  short *q = (short*)out;
+  unsigned char *p = (unsigned char*)in;
+  const unsigned char *end = p+n;
+  unsigned char b0,b1,b2;
+
+  while (p!=end)
+  {
+    b0 = *p++;
+    b1 = *p++;
+    b2 = *p++;
+    *q++ =  ((b1 & 0xf) << 8) + b0;
+    *q++ =  (b1>>4) + (b2<<4);
+  } 
+  return true;
 }
+
+} // end namespace gdcm
+

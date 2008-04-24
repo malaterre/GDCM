@@ -18,6 +18,7 @@
 #include "gdcmDataSet.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmFile.h"
+#include "gdcmSequenceOfItems.h"
 
 namespace gdcm
 {
@@ -153,8 +154,8 @@ static MSModalityType MSModalityTypes[] = {
   {"MR", 3},//EnhancedMRImageStorage,
   {"  ", 2},//MRSpectroscopyStorage,
   {"NM", 2},//NuclearMedicineImageStorageRetired,
-  {"US", 2},//UltrasoundImageStorageRetired,
-  {"US", 2},//UltrasoundImageStorage,
+  {"  ", 2},//UltrasoundImageStorageRetired,
+  {"US", 3},//UltrasoundImageStorage,
   {"OT", 2},//SecondaryCaptureImageStorage,
   {"  ", 2},//MultiframeSingleBitSecondaryCaptureImageStorage,
   {"  ", 2},//MultiframeGrayscaleByteSecondaryCaptureImageStorage,
@@ -172,7 +173,7 @@ static MSModalityType MSModalityTypes[] = {
   {"  ", 2},//StandaloneVOILUTStorage,
   {"  ", 2},//GrayscaleSoftcopyPresentationStateStorageSOPClass,
   {"  ", 2},//XRayAngiographicImageStorage,
-  {"  ", 2},//XRayRadiofluoroscopingImageStorage,
+  {"RF", 2},//XRayRadiofluoroscopingImageStorage,
   {"  ", 2},//XRayAngiographicBiPlaneImageStorageRetired,
   {"  ", 2},//NuclearMedicineImageStorage,
   {"  ", 2},//RawDataStorage,
@@ -251,11 +252,48 @@ void MediaStorage::SetFromDataSet(DataSet const &ds, bool guess)
     assert( ms != MS_END );
     MSField = ms;
     }
-  else if( guess )
+//  else if( guess )
+//    {
+//    // If user ask to guess MediaStorage, let's try again
+//    assert( MSField == MediaStorage::MS_END );
+//    //SetFromModality( ds );
+//    }
+}
+
+void MediaStorage::SetFromSourceImageSequence(DataSet const &ds)
+{
+  const Tag sourceImageSequenceTag(0x0008,0x2112);
+  if( ds.FindDataElement( sourceImageSequenceTag ) )
     {
-    // If user ask to guess MediaStorage, let's try again
-    assert( MSField == MediaStorage::MS_END );
-    SetFromModality( ds );
+    const DataElement &sourceImageSequencesq = ds.GetDataElement( sourceImageSequenceTag );
+    const SequenceOfItems* sq = sourceImageSequencesq.GetSequenceOfItems();
+    if( !sq ) return;
+    SequenceOfItems::ConstIterator it = sq->Begin();
+    const DataSet &subds = it->GetNestedDataSet();
+    // (0008,1150) UI =MRImageStorage                          #  26, 1 ReferencedSOPClassUID
+    const Tag referencedSOPClassUIDTag(0x0008,0x1150);
+    if( subds.FindDataElement( referencedSOPClassUIDTag ) )
+      {
+      const DataElement& de = subds.GetDataElement( referencedSOPClassUIDTag );
+      const ByteValue *sopclassuid = de.GetByteValue();
+      // LEADTOOLS_FLOWERS-8-PAL-Uncompressed.dcm
+      //assert( sopclassuid );
+      if( sopclassuid )
+        {
+        std::string sopclassuid_str(
+          sopclassuid->GetPointer(),
+          sopclassuid->GetLength() );
+        if( sopclassuid_str.find( ' ' ) != std::string::npos )
+          {
+          gdcmWarningMacro( "UI contains a space character discarding" );
+          std::string::size_type pos = sopclassuid_str.find_last_of(' ');
+          sopclassuid_str = sopclassuid_str.substr(0,pos);
+          }
+        MediaStorage ms = MediaStorage::GetMSType(sopclassuid_str.c_str());
+        assert( ms != MS_END );
+        MSField = ms;
+        }
+      }
     }
 }
 
@@ -296,11 +334,33 @@ void MediaStorage::SetFromFile(File const &file)
   if( MSField == MediaStorage::MS_END ) // Nothing found...
     {
     // try again but from header this time:
+    gdcmWarningMacro( "No MediaStorage found in DataSet, looking up in FileMetaInformation" );
     SetFromHeader( header );
     if( MSField == MediaStorage::MS_END ) // Nothing found...
       {
+      gdcmWarningMacro( "No MediaStorage found neither in DataSet nor in FileMetaInformation, trying from Modality" );
       // Attempt to read what's in Modality:
       SetFromModality( ds );
+      }
+    }
+  //assert( MediaStorage::IsImage( ms ) );
+  else if( MSField == MediaStorage::SecondaryCaptureImageStorage )
+    {
+    /*
+     * BEGIN HACK:
+     * Technically it should be enough to know that the image is a SecondaryCaptureImageStorage ... BUT GDCM 1.x
+     * used to rewrite everything by default as SecondaryCaptureImageStorage so when you would look carefully
+     * this DataSet would in fact contains *everything* from the MR Image Storage, therefore, we prefer to use 
+     * the Source Image Sequence to detect the *real* IOD...I am pretty sure this will bite us one day...
+     */
+    MediaStorage ms2;
+    ms2.SetFromSourceImageSequence(ds);
+    if( MSField != ms2 && ms2 != MediaStorage::MS_END )
+      {
+      assert( MediaStorage::IsImage( ms2 ) );
+      gdcmWarningMacro( "Object is declared as SecondaryCaptureImageStorage but according"
+        " to Source Image Sequence it was derived from " << ms2 << ". Using it instead" );
+      MSField = ms2;
       }
     }
 }

@@ -12,18 +12,18 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmCurve.h"
-
-int TestCurve(int, char *[])
+#include "gdcmSegmentedPaletteColorLookupTable.h"
+// http://blog.goo.ne.jp/satomi_takeo/e/3643e5249b2a9650f9e10ef1c830e8b8
+//
+namespace gdcm
 {
-  gdcm::Curve c;
-  c.SetTypeOfData( "TAC" );
-  //c.SetTypeOfData( "PROF" );
-  //c.SetTypeOfData( "PRESSURE" );
-  //c.SetTypeOfData( "RESP" );
-  //c.SetTypeOfData( "dummy" );
-  std::cout << c.GetTypeOfData() << std::endl;
-  std::cout << c.GetTypeOfDataDescription() << std::endl;
 
-  return 0;
+SegmentedPaletteColorLookupTable::SegmentedPaletteColorLookupTable()
+{
 }
+
+SegmentedPaletteColorLookupTable::~SegmentedPaletteColorLookupTable()
+{
+}
+
+} // end namespace gdcm

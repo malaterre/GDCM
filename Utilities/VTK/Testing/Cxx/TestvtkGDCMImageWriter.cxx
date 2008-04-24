@@ -22,55 +22,89 @@
 #include "gdcmTesting.h"
 #include "gdcmFilename.h"
 #include "gdcmSystem.h"
+#include "gdcmTrace.h"
 #include "gdcmImageReader.h"
+
+#ifndef vtkFloatingPointType
+#define vtkFloatingPointType float
+#endif
 
 int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
 {
-  vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
-  //int canread = reader->CanReadFile( filename );
+  int res = 0; // no error
   if( verbose )
     std::cerr << "Reading : " << filename << std::endl;
-  reader->SetFileName( filename );
-  reader->Update();
-  if( verbose )
+  vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
+  reader->FileLowerLeftOn();
+  int canread = reader->CanReadFile( filename );
+  if( canread )
     {
-    reader->GetOutput()->Print( cout );
-    reader->GetMedicalImageProperties()->Print( cout );
-    }
+    reader->SetFileName( filename );
+    reader->Update();
+    if( verbose )
+      {
+      reader->GetOutput()->Print( cout );
+      reader->GetMedicalImageProperties()->Print( cout );
+      }
 
-  // Create directory first:
-  const char subdir[] = "TestvtkGDCMImageWriter";
-  std::string tmpdir = gdcm::Testing::GetTempDirectory( subdir );
-  if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
+    // Create directory first:
+    const char subdir[] = "TestvtkGDCMImageWriter";
+    std::string tmpdir = gdcm::Testing::GetTempDirectory( subdir );
+    if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
+      {
+      gdcm::System::MakeDirectory( tmpdir.c_str() );
+      //return 1;
+      }
+    std::string gdcmfile = gdcm::Testing::GetTempFilename( filename, subdir );
+
+    vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
+    writer->SetInput( reader->GetOutput() );
+    writer->SetDirectionCosines( reader->GetDirectionCosines() );
+    writer->SetImageFormat( reader->GetImageFormat() );
+    writer->SetFileDimensionality( reader->GetFileDimensionality() ); // FIXME...
+    writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
+    writer->SetFileName( gdcmfile.c_str() );
+    writer->Write();
+    if( verbose )  std::cerr << "Write out: " << gdcmfile << std::endl;
+
+    writer->Delete();
+
+    // Need to check we can still read this image back:
+    gdcm::ImageReader r;
+    r.SetFileName( gdcmfile.c_str() );
+    if( !r.Read() )
+      {
+      std::cerr << "failed to read back:" << gdcmfile << std::endl;
+      res = 1;
+      }
+    else
     {
-    gdcm::System::MakeDirectory( tmpdir.c_str() );
-    //return 1;
+      // ok could read the file, now check origin is ok:
+      const gdcm::Image &image = r.GetImage();
+      const double *origin = image.GetOrigin();
+      if( origin )
+      {
+      vtkImageData * vtkimg = reader->GetOutput();
+      const vtkFloatingPointType *vtkorigin = vtkimg->GetOrigin();
+      if( fabs(vtkorigin[0] - origin[0]) > 1.e-3 
+       || fabs(vtkorigin[1] - origin[1]) > 1.e-3 
+       || fabs(vtkorigin[2] - origin[2]) > 1.e-3 )
+      {
+         std::cerr << "Problem:" << vtkorigin[0] << "," << vtkorigin[1] << "," << vtkorigin[2] ;
+         std::cerr << " should be:" << origin[0] << "," << origin[1] << "," << origin[2] << std::endl ;
+      res = 1;
+      }
+      }
     }
-  std::string gdcmfile = gdcm::Testing::GetTempFilename( filename, subdir );
-
-  vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
-  writer->SetInput( reader->GetOutput() );
-  writer->SetDirectionCosines( reader->GetDirectionCosines() );
-  writer->SetImageFormat( reader->GetImageFormat() );
-  writer->SetFileDimensionality( reader->GetFileDimensionality() ); // FIXME...
-  writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
-  writer->SetFileName( gdcmfile.c_str() );
-  writer->Write();
-  if( verbose )  std::cerr << "Write out: " << gdcmfile << std::endl;
-
+    }
+  else
+    {
+    if( verbose )
+      std::cerr << "vtkGDCMImageReader cannot read: " << filename << std::endl;
+    }
   reader->Delete();
-  writer->Delete();
 
-  // Need to check we can still read this image back:
-  gdcm::ImageReader r;
-  r.SetFileName( gdcmfile.c_str() );
-  if( !r.Read() )
-    {
-    std::cerr << "failed to read back:" << gdcmfile << std::endl;
-    return 1;
-    }
-
-  return 0; 
+  return res;
 }
 
 int TestvtkGDCMImageWriter(int argc, char *argv[])
@@ -82,6 +116,8 @@ int TestvtkGDCMImageWriter(int argc, char *argv[])
     }
 
   // else
+  gdcm::Trace::DebugOff();
+  gdcm::Trace::WarningOff();
   int r = 0, i = 0;
   const char *filename;
   const char * const *filenames = gdcm::Testing::GetFileNames();

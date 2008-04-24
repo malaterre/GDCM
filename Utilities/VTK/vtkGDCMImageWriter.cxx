@@ -67,8 +67,8 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
   gdcm::UIDGenerator::SetRoot( "1.2.826.0.1.3680043.2.1125.1" );
 
   // echo "VTK" | od -b
-  gdcm::FileMetaInformation::SetImplementationClassUID( "126.124.113" );
-  const std::string project_name = std::string("VTK ") + vtkVersion::GetVTKVersion();
+  gdcm::FileMetaInformation::AppendImplementationClassUID( "126.124.113" );
+  const std::string project_name = std::string("GDCM/VTK ") + vtkVersion::GetVTKVersion();
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( project_name.c_str() );
 
   this->ImageFormat = 0; // invalid
@@ -679,6 +679,12 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   // Let's try to fake out the SOP Class UID here:
   gdcm::MediaStorage ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
   ms.GuessFromModality( this->MedicalImageProperties->GetModality(), this->FileDimensionality ); // Will override SC only if something is found...
+  if( this->FileDimensionality != 2 && ms == gdcm::MediaStorage::SecondaryCaptureImageStorage )
+    {
+    vtkErrorMacro( "Cannot handle Multi Frame image in SecondaryCaptureImageStorage" );
+    return 0;
+    }
+  // FIXME: new Secondary object handle multi frames...
   assert( gdcm::MediaStorage::IsImage( ms ) );
 {
   gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
@@ -741,6 +747,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   // Let's add an Instance Number just for fun:
   std::ostringstream os;
   os << k;
+  // Will only be added if none found
   SetStringValueFromTag(os.str().c_str(), gdcm::Tag(0x0020,0x0013), ds);
   writer.SetFileName( filename );
   if( !writer.Write() )

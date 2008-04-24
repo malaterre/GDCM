@@ -245,7 +245,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 256 256 1 16 1 */
 { "f54c7ea520ab3ec32b6303581ecd262f" , "MR-MONO2-12-an2.acr" },
 /* gdcm 256 256 1 16 1 */
-{ "48345bccbd67f57b4c13060b6a9a0d35" , "MR-MONO2-12-angio-an1.acr" },
+//{ "48345bccbd67f57b4c13060b6a9a0d35" , "MR-MONO2-12-angio-an1.acr" },
+{ "19cd553b53c8c35b8f2c20f27ed31d2d" , "MR-MONO2-12-angio-an1.acr" },
 /* gdcm 1024 1024 1 16 1 */
 { "a70676f0e60a58f55a5ac517ff662e7e" , "MR-MONO2-12-shoulder.dcm" },
 /* gdcm 256 256 1 16 1 */
@@ -564,7 +565,19 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "bab06b7112dbce4f528bab5c1b89abc1" , "Bug_Philips_ItemTag_3F3F.dcm" },
 
 
-
+{ "8d3a64a67b4d8d15561fb586fd0706ee" , "Nm.dcm" },
+{ "05392d4f7a0c05223eeb957ee60203a9" , "MergeCOM3_330_IM50.dcm" },
+{ "635c2dbedea549a89f88e959934ed93c" , "ELSCINT1_OW.dcm" },
+{ "594995a6eb12a565247cd98f967a378d" , "KONICA_VROX.dcm" },
+{ "1497b865a4c6ab73cd6797b8834baa9f" , "TheralysNoModalityNoObject.dcm" },
+{ "d1f8cbdb279d038e2674ec0907afffe1" , "gastrolateral.dcm" },
+{ "ea24c09f475a4e9643e27f6d470edc67" , "SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm" },
+{ "ecd26fb1fa914918ff9292c4f7340050" , "MR00010001.dcm" },
+{ "c56567bbb8f1924d6c0c6fd8ca7f239d" , "006872.003.107.dcm" },
+{ "228e9af71b8ce00cae3066e3fdd3641f" , "SIEMENS_MONOCHROME2_LUT_MOCO.dcm" },
+{ "ef8c3435ee7a9b332976f2dc56833d3a" , "GENESIS_SIGNA-JPEG-CorruptFrag.dcm" }, // FIXME !
+{ "42a4f33eb34456e3e82f30d707c84870" , "DCMOBJ_IMG57.dcm" },
+{ "3a85617df95abbb63cd84a183515c697" , "image.acr" },
 
 
 /* Stopping condition */

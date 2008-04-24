@@ -76,7 +76,7 @@ public:
   vtkTypeRevisionMacro(vtkGDCMImageReader,vtkMedicalImageReader2);
   virtual void PrintSelf(ostream& os, vtkIndent indent);
 
-  // Description: is the given file name a DICOM file?
+  // Description: is the given file name a DICOM file containing an image ?
   virtual int CanReadFile(const char* fname);
 
   // Description:
@@ -240,6 +240,7 @@ protected:
 
   double Shift;
   double Scale;
+  int IconDataScalarType;
 
 private:
   vtkGDCMImageReader(const vtkGDCMImageReader&);  // Not implemented.

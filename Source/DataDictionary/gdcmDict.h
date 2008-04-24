@@ -166,7 +166,7 @@ public:
       return;
       }
 #endif
-    assert( s < DictInternal.size() /*&& std::cout << tag << std::endl*/ );
+    assert( s < DictInternal.size() /*&& std::cout << tag << "," << de << std::endl*/ );
     }
   const DictEntry &GetDictEntry(const PrivateTag &tag) const
     {

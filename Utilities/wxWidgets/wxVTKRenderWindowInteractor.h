@@ -3,8 +3,8 @@
   Program:   Visualization Toolkit
   Module:    $RCSfile: wxVTKRenderWindowInteractor.h,v $
   Language:  C++
-  Date:      $Date: 2006/08/04 02:41:40 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2008/04/13 22:06:52 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) 1993-2002 Ken Martin, Will Schroeder, Bill Lorensen 
   All rights reserved.
@@ -55,7 +55,16 @@
 #include "vtkRenderWindowInteractor.h"
 #include "vtkRenderWindow.h"
 
-#ifdef __WXGTK__
+// Apparently since wxGTK 2.8.0 one can finally use wxWindow (just as in any
+// other port):
+// MM: tested on 2008/04/08: experienced some heavy flickering with wx-widget 2.6.0
+// using a wxWindow instead of wxGLCanvas fixed the symptoms
+//#if (!wxCHECK_VERSION(2, 6, 0))
+#if (!wxCHECK_VERSION(2, 8, 0))
+#define USE_WXGLCANVAS
+#endif
+
+#if defined(__WXGTK__) && defined(USE_WXGLCANVAS)
 #  if wxUSE_GLCANVAS
 #    include <wx/glcanvas.h>
 #  else
@@ -75,10 +84,10 @@ class wxTimerEvent;
 class wxKeyEvent;
 class wxSizeEvent;
 
-#ifdef __WXGTK__
-class VTK_RENDERING_EXPORT wxVTKRenderWindowInteractor : public wxGLCanvas, virtual public vtkRenderWindowInteractor
+#if defined(__WXGTK__) && defined(USE_WXGLCANVAS)
+class wxVTKRenderWindowInteractor : public wxGLCanvas, public vtkRenderWindowInteractor
 #else
-class /*VTK_RENDERING_EXPORT*/ wxVTKRenderWindowInteractor : public wxWindow, virtual public vtkRenderWindowInteractor
+class wxVTKRenderWindowInteractor : public wxWindow, public vtkRenderWindowInteractor
 #endif //__WXGTK__
 {
   DECLARE_DYNAMIC_CLASS(wxVTKRenderWindowInteractor)
@@ -93,7 +102,7 @@ class /*VTK_RENDERING_EXPORT*/ wxVTKRenderWindowInteractor : public wxWindow, vi
                                 const wxSize &size = wxDefaultSize,
                                 long style = wxWANTS_CHARS | wxNO_FULL_REPAINT_ON_RESIZE,
                                 const wxString &name = wxPanelNameStr);
-	//vtk ::New()
+    vtkTypeRevisionMacro(wxVTKRenderWindowInteractor,vtkRenderWindowInteractor);
     static wxVTKRenderWindowInteractor * New();
     void PrintSelf(ostream& os, vtkIndent indent);
 
@@ -123,9 +132,11 @@ class /*VTK_RENDERING_EXPORT*/ wxVTKRenderWindowInteractor : public wxWindow, vi
     void OnLeave(wxMouseEvent &event);
     void OnKeyDown(wxKeyEvent &event);
     void OnKeyUp(wxKeyEvent &event);
+    void OnChar(wxKeyEvent &event);
 #endif
     void OnTimer(wxTimerEvent &event);
     void OnSize(wxSizeEvent &event);
+    void OnMouseWheel(wxMouseEvent& event);
 
     void Render();
     void SetRenderWhenDisabled(int newValue);
