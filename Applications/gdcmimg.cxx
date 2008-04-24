@@ -71,7 +71,8 @@ int main (int argc, char *argv[])
   unsigned int region[6] = {}; // Rows & Columns are VR=US anyway...
   unsigned char color = 0;
   bool b;
-  bool fill = false;
+  int bregion = 0;
+  int fill = 0;
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -81,8 +82,8 @@ int main (int argc, char *argv[])
         // provide convert-like command line args:
         {"depth", 1, 0, 0},
         {"size", 1, 0, 0},
-        {"region", 1, 0, 0},
-        {"fill", 1, 0, 0},
+        {"region", 1, &bregion, 1},
+        {"fill", 1, &fill, 1},
         {0, 0, 0, 0}
     };
 
@@ -110,6 +111,10 @@ int main (int argc, char *argv[])
             assert( strcmp(s, "input") == 0 );
             assert( filename.IsEmpty() );
             filename = optarg;
+            }
+          else if( option_index == 4 ) /* region */
+            {
+            readgeometry(optarg, region);
             }
           printf (" with arg %s", optarg);
           }
@@ -148,7 +153,7 @@ int main (int argc, char *argv[])
     case 'F': // fill
       printf ("option F with value '%s'\n", optarg);
       color = atoi( optarg );
-      fill = true;
+      fill = 1;
       break;
 
     case '?':
@@ -200,10 +205,15 @@ int main (int argc, char *argv[])
   writer.SetImage( imageori );
   writer.SetFileName( outfilename );
 
-    gdcm::DataSet &ds = writer.GetFile().GetDataSet();
+  gdcm::DataSet &ds = writer.GetFile().GetDataSet();
   if( fill )
     {
     const gdcm::PixelFormat &pixeltype = imageori.GetPixelFormat();
+    if( pixeltype != gdcm::PixelFormat::UINT8 || pixeltype.GetSamplesPerPixel() != 1 )
+      {
+      std::cerr << "not implemented" << std::endl;
+      return 1;
+      }
     assert( imageori.GetNumberOfDimensions() == 2 || imageori.GetNumberOfDimensions() == 3 );
     unsigned long len = imageori.GetBufferLength();
     gdcm::ImageValue image;
