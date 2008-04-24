@@ -55,6 +55,11 @@ const char * FileMetaInformation::GetGDCMSourceApplicationEntityTitle()
 
 void FileMetaInformation::SetImplementationClassUID(const char * imp)
 {
+abort();
+}
+
+void FileMetaInformation::AppendImplementationClassUID(const char * imp)
+{
   ImplementationClassUID = GetGDCMImplementationClassUID();
   ImplementationClassUID += ".";
   ImplementationClassUID += imp;
@@ -70,9 +75,9 @@ void FileMetaInformation::SetImplementationVersionName(const char * version)
 }
 void FileMetaInformation::SetSourceApplicationEntityTitle(const char * title)
 {
-  SourceApplicationEntityTitle = GetGDCMSourceApplicationEntityTitle();
-  SourceApplicationEntityTitle += "/";
-  SourceApplicationEntityTitle += title;
+  //SourceApplicationEntityTitle = GetGDCMSourceApplicationEntityTitle();
+  //SourceApplicationEntityTitle += "/";
+  SourceApplicationEntityTitle = title;
 }
 const char *FileMetaInformation::GetImplementationClassUID()
 {

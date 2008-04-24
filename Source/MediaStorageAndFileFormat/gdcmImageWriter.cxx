@@ -433,6 +433,8 @@ bool ImageWriter::Write()
     fmi.SetDataSetTransferSyntax(ts);
     }
   fmi.Remove( Tag(0x0002,0x0012) ); // Set the Implementation Class UID properly
+  fmi.Remove( Tag(0x0002,0x0013) ); // 
+  fmi.Remove( Tag(0x0002,0x0016) ); // 
   fmi.FillFromDataSet( ds );
 
   // Some Type 2 Element:

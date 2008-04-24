@@ -50,11 +50,12 @@ const Image& ImageReader::GetImage() const
 const ByteValue* ImageReader::GetPointerFromElement(Tag const &tag) const
 {
   const DataSet &ds = F->GetDataSet();
-  assert( ds.FindDataElement( tag ) );
-  const DataElement &de = ds.GetDataElement( tag );
-  const Value &v = de.GetValue();
-  const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
-  return bv;
+  if( ds.FindDataElement( tag ) )
+    {
+    const DataElement &de = ds.GetDataElement( tag );
+    return de.GetByteValue();
+    }
+  return 0;
 }
 
 bool ImageReader::Read()

@@ -67,8 +67,8 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
   gdcm::UIDGenerator::SetRoot( "1.2.826.0.1.3680043.2.1125.1" );
 
   // echo "VTK" | od -b
-  gdcm::FileMetaInformation::SetImplementationClassUID( "126.124.113" );
-  const std::string project_name = std::string("VTK ") + vtkVersion::GetVTKVersion();
+  gdcm::FileMetaInformation::AppendImplementationClassUID( "126.124.113" );
+  const std::string project_name = std::string("GDCM/VTK ") + vtkVersion::GetVTKVersion();
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( project_name.c_str() );
 
   this->ImageFormat = 0; // invalid

@@ -218,6 +218,7 @@ std::istream &ImplicitDataElement::ReadWithLength(std::istream &is, VL & length)
   if( ValueLengthField > length && !ValueLengthField.IsUndefined() )
     {
     gdcmWarningMacro( "Cannot read more length than what is remaining in the file" );
+abort();
     throw Exception( "Impossible" );
     }
   if( ValueLengthField == 0 )

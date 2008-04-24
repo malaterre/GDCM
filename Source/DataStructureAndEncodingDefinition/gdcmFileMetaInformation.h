@@ -85,6 +85,7 @@ public:
  
   // Override the GDCM 
   static void SetImplementationClassUID(const char * imp);
+  static void AppendImplementationClassUID(const char * imp);
   static const char *GetImplementationClassUID();
   static void SetImplementationVersionName(const char * version);
   static const char *GetImplementationVersionName();

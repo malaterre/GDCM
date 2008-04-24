@@ -52,6 +52,7 @@ SET(BLACK_LIST_READER
   BogugsSequenceLengthCorrectItemLength.dcm
   BogugsItemAndSequenceLength.dcm
   srwithgraphdeflated.dcm # ???
+  BogusACRWithFileMeta.dcm
 )
 
 SET(GDCM_DATA_FILENAMES)

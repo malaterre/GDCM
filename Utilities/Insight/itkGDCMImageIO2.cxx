@@ -40,8 +40,8 @@ GDCMImageIO2::GDCMImageIO2()
 
   // Set some file info ITK specific stuff:
   // echo "ITK" | od -b
-  gdcm::FileMetaInformation::SetImplementationClassUID( "111.124.113" );
-  const std::string project_name = std::string("ITK ") + Version::GetITKVersion();
+  gdcm::FileMetaInformation::AppendImplementationClassUID( "111.124.113" );
+  const std::string project_name = std::string("GDCM/ITK ") + Version::GetITKVersion();
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( project_name.c_str() );
 }
 

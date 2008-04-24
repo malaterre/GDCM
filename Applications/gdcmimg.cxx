@@ -274,6 +274,8 @@ int main (int argc, char *argv[])
     }
   //  ds.Remove( gdcm::Tag(0x0,0x0) ); // FIXME
 
+  // Ok so we are about to write a DICOM file, do not forget to stamp it GDCM !
+  gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmimg" );
   if( !writer.Write() )
     {
     std::cerr << "Failed to write: " << outfilename << std::endl;
