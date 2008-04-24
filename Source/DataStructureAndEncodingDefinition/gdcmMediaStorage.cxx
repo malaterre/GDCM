@@ -308,22 +308,22 @@ void MediaStorage::SetFromSourceImageSequence(DataSet const &ds)
       const DataElement& de = subds.GetDataElement( referencedSOPClassUIDTag );
       const ByteValue *sopclassuid = de.GetByteValue();
       // LEADTOOLS_FLOWERS-8-PAL-Uncompressed.dcm
-      assert( sopclassuid );
+      //assert( sopclassuid );
       if( sopclassuid )
-{
-      std::string sopclassuid_str(
-        sopclassuid->GetPointer(),
-        sopclassuid->GetLength() );
-      if( sopclassuid_str.find( ' ' ) != std::string::npos )
         {
-        gdcmWarningMacro( "UI contains a space character discarding" );
-        std::string::size_type pos = sopclassuid_str.find_last_of(' ');
-        sopclassuid_str = sopclassuid_str.substr(0,pos);
+        std::string sopclassuid_str(
+          sopclassuid->GetPointer(),
+          sopclassuid->GetLength() );
+        if( sopclassuid_str.find( ' ' ) != std::string::npos )
+          {
+          gdcmWarningMacro( "UI contains a space character discarding" );
+          std::string::size_type pos = sopclassuid_str.find_last_of(' ');
+          sopclassuid_str = sopclassuid_str.substr(0,pos);
+          }
+        MediaStorage ms = MediaStorage::GetMSType(sopclassuid_str.c_str());
+        assert( ms != MS_END );
+        MSField = ms;
         }
-      MediaStorage ms = MediaStorage::GetMSType(sopclassuid_str.c_str());
-      assert( ms != MS_END );
-      MSField = ms;
-}
       }
     }
 }
