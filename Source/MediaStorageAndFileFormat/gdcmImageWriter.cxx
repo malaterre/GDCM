@@ -358,13 +358,24 @@ bool ImageWriter::Write()
     assert( ds.FindDataElement( tsourceImageSequence ) == false );
     SequenceOfItems *sq = new SequenceOfItems;
     sq->SetLengthToUndefined();
-    Item item;
+    Item item( Tag(0xfffe,0xe000) );
     de.SetVLToUndefined();
+    //DataSet sourceimageds;
+    // (0008,1150) UI =MRImageStorage                          #  26, 1 ReferencedSOPClassUID
+    // (0008,1155) UI [1.3.6.1.4.17434.1.1.5.2.1160650698.1160650698.0] #  48, 1 ReferencedSOPInstanceUID
+    DataElement referencedSOPClassUID = ds.GetDataElement( Tag(0x0008,0x0016) );
+    referencedSOPClassUID.SetTag( Tag(0x0008,0x1150 ) );
+    DataElement referencedSOPInstanceUID = ds.GetDataElement( Tag(0x0008,0x0018) );
+    referencedSOPInstanceUID.SetTag( Tag(0x0008,0x1155) );
+    //item.SetNestedDataSet( sourceimageds );
+    item.SetVLToUndefined();
+    item.InsertDataElement( referencedSOPClassUID );
+    item.InsertDataElement( referencedSOPInstanceUID );
     sq->AddItem( item );
     DataElement de( tsourceImageSequence );
     de.SetVR( VR::SQ );
     de.SetValue( *sq );
-    //de.SetVLToUndefined();
+    de.SetVLToUndefined();
     std::cout << de << std::endl;
     ds.Insert( de );
     }

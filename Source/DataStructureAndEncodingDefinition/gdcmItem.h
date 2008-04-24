@@ -61,9 +61,9 @@ public:
   void InsertDataElement(const DataElement & de) {
     NestedDataSet.Insert(de);
     // Update the length
-    assert( 0 && "InsertDataElement" );
     if( !IsUndefinedLength() )
       {
+      assert( 0 && "InsertDataElement" );
       //ValueLengthField += de.GetLength();
       }
     }
