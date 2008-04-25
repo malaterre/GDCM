@@ -29,7 +29,7 @@ namespace gdcm
 class GDCM_EXPORT FilenameGenerator
 {
 public:
-  FilenameGenerator() {}
+  FilenameGenerator():Pattern(),Filenames() {}
   ~FilenameGenerator() {}
   // FIXME: already defines in gdcm::Directory
   typedef std::string FilenameType;

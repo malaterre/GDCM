@@ -336,7 +336,7 @@ protected:
     std::stringstream ss;
     std::string s = std::string( bv->GetPointer(), bv->GetLength() );
     ss.str( s );
-    ArrayType internal[10];
+    ArrayType internal[10]; // FIXME 
     EncodingImplementation<VRToEncoding<TVR>::Mode>::ReadComputeLength(internal, Length, ss);
     SetValues( internal, Length, true );
     //EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
