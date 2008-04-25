@@ -268,6 +268,13 @@ void DoIconImage(const DataSet& rootds, ImageValue& image)
       at.SetFromDataElement( de );
       pf.SetPixelRepresentation( at.GetValue() );
       }
+    // (0028,0002) US 1                                        #   2, 1 SamplesPerPixel
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0002) );
+      Attribute<0x0028,0x0002> at;
+      at.SetFromDataElement( de );
+      pf.SetSamplesPerPixel( at.GetValue() );
+      }
     pixeldata.SetPixelFormat( pf );
     // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]
     const Tag tphotometricinterpretation(0x0028, 0x0004);
@@ -341,6 +348,13 @@ void DoIconImage(const DataSet& rootds, ImageValue& image)
       Attribute<0x0028,0x0103> at;
       at.SetFromDataElement( de );
       pf.SetPixelRepresentation( at.GetValue() );
+      }
+    // (0028,0002) US 1                                        #   2, 1 SamplesPerPixel
+      {
+      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0002) );
+      Attribute<0x0028,0x0002> at;
+      at.SetFromDataElement( de );
+      pf.SetSamplesPerPixel( at.GetValue() );
       }
     pixeldata.SetPixelFormat( pf );
     // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]
