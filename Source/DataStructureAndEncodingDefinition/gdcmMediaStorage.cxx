@@ -201,7 +201,7 @@ static MSModalityType MSModalityTypes[] = {
   {"  ", 2},//StandaloneModalityLUTStorage,
   {"  ", 2},//StandaloneVOILUTStorage,
   {"  ", 2},//GrayscaleSoftcopyPresentationStateStorageSOPClass,
-  {"  ", 2},//XRayAngiographicImageStorage,
+  {"XA", 2},//XRayAngiographicImageStorage,
   {"RF", 2},//XRayRadiofluoroscopingImageStorage,
   {"  ", 2},//XRayAngiographicBiPlaneImageStorageRetired,
   {"  ", 2},//NuclearMedicineImageStorage,

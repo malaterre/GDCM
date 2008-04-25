@@ -62,9 +62,9 @@ bool readgeometry(const char *geometry, unsigned int * region)
 }
 
 template <typename T>
-void FillRegionWithColor(char *cp, const unsigned int *dims, const unsigned int * region, unsigned int color)
+void FillRegionWithColor(char *cp, const unsigned int *dims, const unsigned int * region, unsigned int color, unsigned int nsamples)
 {
-   T * p = (T*)cp;
+    T * p = (T*)cp;
     unsigned int xmin = region[0];
     unsigned int xmax = region[1];
     unsigned int ymin = region[2];
@@ -78,7 +78,10 @@ void FillRegionWithColor(char *cp, const unsigned int *dims, const unsigned int 
         {
         for( unsigned int z = zmin; z <= zmax; ++z)
           {
-          p[x+y*dims[0]+z*dims[0]*dims[1]] = color;
+          for( unsigned int sample = 0; sample < nsamples; ++sample)
+            {
+            p[x*nsamples+y*dims[0]*nsamples+z*dims[0]*dims[1]*nsamples+sample] = color;
+            }
           }
         }
       }
@@ -238,11 +241,6 @@ int main (int argc, char *argv[])
   if( fill )
     {
     const gdcm::PixelFormat &pixeltype = imageori.GetPixelFormat();
-    if( pixeltype.GetSamplesPerPixel() != 1 )
-      {
-      std::cerr << "not implemented" << std::endl;
-      return 1;
-      }
     assert( imageori.GetNumberOfDimensions() == 2 || imageori.GetNumberOfDimensions() == 3 );
     unsigned long len = imageori.GetBufferLength();
     gdcm::ImageValue image;
@@ -269,6 +267,11 @@ int main (int argc, char *argv[])
       }
     image.SetDimension(0, dims[0] );
     image.SetDimension(1, dims[1] );
+    if( imageori.GetNumberOfDimensions() == 3 )
+      {
+      image.SetNumberOfDimensions( 3 );
+      image.SetDimension(2, dims[2] );
+      }
     image.SetPhotometricInterpretation( imageori.GetPhotometricInterpretation() );
     image.SetPixelFormat( imageori.GetPixelFormat() );
     gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
@@ -281,16 +284,16 @@ int main (int argc, char *argv[])
     switch(pixeltype)
       {
     case gdcm::PixelFormat::UINT8:
-      FillRegionWithColor<uint8_t>(p, dims, region, color);
+      FillRegionWithColor<uint8_t> (p, dims, region, color, pixeltype.GetSamplesPerPixel());
       break;
     case gdcm::PixelFormat::INT8:
-      FillRegionWithColor<int8_t>(p, dims, region, color);
+      FillRegionWithColor<int8_t>  (p, dims, region, color, pixeltype.GetSamplesPerPixel());
       break;
     case gdcm::PixelFormat::UINT16:
-      FillRegionWithColor<uint16_t>(p, dims, region, color);
+      FillRegionWithColor<uint16_t>(p, dims, region, color, pixeltype.GetSamplesPerPixel());
       break;
     case gdcm::PixelFormat::INT16:
-      FillRegionWithColor<int16_t>(p, dims, region, color);
+      FillRegionWithColor<int16_t> (p, dims, region, color, pixeltype.GetSamplesPerPixel());
       break;
     default:
       std::cerr << "not implemented" << std::endl;
@@ -342,6 +345,8 @@ int main (int argc, char *argv[])
       at3.SetValue( 0, values[0] );
       }
     ds.Replace( at3.GetAsDataElement() );
+    // Make sure to recompute Planar Configuration:
+    ds.Remove( gdcm::Tag(0x0028, 0x0004) );
     }
   //  ds.Remove( gdcm::Tag(0x0,0x0) ); // FIXME
 
