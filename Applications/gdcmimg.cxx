@@ -253,9 +253,18 @@ int main (int argc, char *argv[])
       || region[4] > region[5]
       || region[1] > dims[0]
       || region[3] > dims[1]
-      || region[5] > dims[2] )
+      || (imageori.GetNumberOfDimensions() > 2 && region[5] > dims[2]) )
       {
-      std::cerr << "bogus region" << std::endl;
+      if( imageori.GetNumberOfDimensions() == 2 )
+        {
+        std::cerr << "bogus region. Should be at most: (" << dims[0] << "," << dims[1] << "," 
+          /*<< dims[2]*/ << ")" << std::endl;
+        }
+      else
+        {
+        std::cerr << "bogus region. Should be at most: (" << dims[0] << "," << dims[1] << "," 
+          << dims[2] << ")" << std::endl;
+        }
       return 1;
       }
     image.SetDimension(0, dims[0] );
@@ -292,7 +301,17 @@ int main (int argc, char *argv[])
     image.SetDataElement( pixeldata );
     image.SetSpacing( imageori.GetSpacing() );
     image.SetSpacing(2, imageori.GetSpacing()[2] );
-    image.SetTransferSyntax( imageori.GetTransferSyntax() );
+    const gdcm::TransferSyntax &ts = imageori.GetTransferSyntax();
+    // FIXME: for now we do not know how to recompress the image...
+    if( ts.IsExplicit() )
+      {
+      image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
+      }
+    else 
+      {
+      assert( ts.IsImplicit() );
+      image.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+      }
     //imageori.Print( std::cout );
     //image.Print( std::cout );
 

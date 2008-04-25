@@ -52,7 +52,7 @@ namespace gdcm
 class GDCM_EXPORT Image
 {
 public:
-  Image ():NumberOfDimensions(0),PlanarConfiguration(0),Dimensions(),SC(),NeedByteSwap(false),LUT(0),Overlays(),Curves(),Icon(),Intercept(0),Slope(1) {}
+  Image ():NumberOfDimensions(0),PlanarConfiguration(0),Dimensions(),Spacing(),SC(),NeedByteSwap(false),LUT(0),Overlays(),Curves(),Icon(),Intercept(0),Slope(1) {}
   virtual ~Image() {}
 
   unsigned int GetNumberOfDimensions() const;

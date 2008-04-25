@@ -87,6 +87,23 @@ public:
 template<> class EncodingImplementation<VR::VRASCII> {
 public:
   template<typename T> // FIXME this should be VRToType<TVR>::Type
+  static inline void ReadComputeLength(T* data, unsigned int &length,
+                          std::istream &_is) {
+    assert( data );
+    //assert( length ); // != 0
+    length = 0;
+    assert( _is );
+    char sep;
+    while( _is >> data[length++] )
+      {
+      // Get the separator in between the values
+      assert( _is );
+      _is.get(sep);
+      assert( sep == '\\' ); // FIXME: Bad use of assert
+      }
+    }
+
+  template<typename T> // FIXME this should be VRToType<TVR>::Type
   static inline void Read(T* data, unsigned long length,
                           std::istream &_is) {
     assert( data );
@@ -126,6 +143,11 @@ public:
 // (no notion of order in VM ...)
 template<> class EncodingImplementation<VR::VRBINARY> {
 public:
+  template<typename T> // FIXME this should be VRToType<TVR>::Type
+    static inline void ReadComputeLength(T* data, unsigned int &length,
+      std::istream &_is) {
+      abort();
+    }
   template<typename T>
   static inline void Read(T* data, unsigned long length,
     std::istream &_is) {

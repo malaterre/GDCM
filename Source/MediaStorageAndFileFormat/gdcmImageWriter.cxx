@@ -365,11 +365,26 @@ bool ImageWriter::Write()
   // Be careful with the SOP Instance UID:
   if( ds.FindDataElement( Tag(0x0008, 0x0018) ) )
     {
-    // We are comming from a real DICOM image, we need to reference it...
+    // We are coming from a real DICOM image, we need to reference it...
     //assert( 0 && "TODO FIXME" );
     const Tag tsourceImageSequence(0x0008,0x2112);
-    assert( ds.FindDataElement( tsourceImageSequence ) == false );
-    SequenceOfItems *sq = new SequenceOfItems;
+    //assert( ds.FindDataElement( tsourceImageSequence ) == false );
+    SequenceOfItems *sq;
+    if( ds.FindDataElement( tsourceImageSequence ) )
+      {
+      DataElement &de = (DataElement&)ds.GetDataElement( tsourceImageSequence );
+      //assert( de.IsUndefinedLength() );
+      de.SetVLToUndefined(); // For now
+      if( de.IsEmpty() )
+        {
+        de.SetValue( *sq );
+        }
+      sq = (SequenceOfItems*)de.GetSequenceOfItems();
+      }
+    else
+      {
+      sq = new SequenceOfItems;
+      }
     sq->SetLengthToUndefined();
     Item item( Tag(0xfffe,0xe000) );
     de.SetVLToUndefined();
@@ -385,12 +400,15 @@ bool ImageWriter::Write()
     item.InsertDataElement( referencedSOPClassUID );
     item.InsertDataElement( referencedSOPInstanceUID );
     sq->AddItem( item );
-    DataElement de( tsourceImageSequence );
-    de.SetVR( VR::SQ );
-    de.SetValue( *sq );
-    de.SetVLToUndefined();
-    //std::cout << de << std::endl;
-    ds.Insert( de );
+    if( !ds.FindDataElement( tsourceImageSequence ) )
+      {
+      DataElement de( tsourceImageSequence );
+      de.SetVR( VR::SQ );
+      de.SetValue( *sq );
+      de.SetVLToUndefined();
+      //std::cout << de << std::endl;
+      ds.Insert( de );
+      }
     }
     {
     const char *sop = uid.Generate();
