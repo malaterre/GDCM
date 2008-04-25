@@ -365,10 +365,11 @@ bool ImageWriter::Write()
   // Be careful with the SOP Instance UID:
   if( ds.FindDataElement( Tag(0x0008, 0x0018) ) )
     {
-    // We are comming from a real DICOM image, we need to reference it...
+    // We are coming from a real DICOM image, we need to reference it...
     //assert( 0 && "TODO FIXME" );
     const Tag tsourceImageSequence(0x0008,0x2112);
     //assert( ds.FindDataElement( tsourceImageSequence ) == false );
+    if( ds.FindDataElement( tsourceImageSequence ) ) return false;
     SequenceOfItems *sq = new SequenceOfItems;
     sq->SetLengthToUndefined();
     Item item( Tag(0xfffe,0xe000) );
