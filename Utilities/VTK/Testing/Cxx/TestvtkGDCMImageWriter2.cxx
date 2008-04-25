@@ -18,18 +18,22 @@
 #include "vtkImageData.h"
 #include "vtkMultiThreader.h"
 #include "vtkMedicalImageProperties.h"
+#include "vtkStringArray.h"
 
 #include "gdcmTesting.h"
 #include "gdcmFilename.h"
 #include "gdcmSystem.h"
 #include "gdcmTrace.h"
+#include "gdcmFilenameGenerator.h"
 #include "gdcmImageReader.h"
+
+#include <iostream>
 
 #ifndef vtkFloatingPointType
 #define vtkFloatingPointType float
 #endif
 
-int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
+int TestvtkGDCMImageWrite2(const char *filename, bool verbose = false)
 {
   int res = 0; // no error
   if( verbose )
@@ -48,7 +52,7 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
       }
 
     // Create directory first:
-    const char subdir[] = "TestvtkGDCMImageWriter";
+    const char subdir[] = "TestvtkGDCMImageWriter2";
     std::string tmpdir = gdcm::Testing::GetTempDirectory( subdir );
     if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
       {
@@ -56,14 +60,45 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
       //return 1;
       }
     std::string gdcmfile = gdcm::Testing::GetTempFilename( filename, subdir );
+    //std::cerr << filename << std::endl;
+    //std::cerr << gdcmfile << std::endl;
 
+    std::ostringstream os;
+    os << gdcmfile;
+    os << "%01d";
+    gdcm::FilenameGenerator fg;
+    //fg.SetPattern( gdcmfile.c_str() );
+    fg.SetPattern( os.str().c_str() );
+    unsigned int nfiles = reader->GetOutput()->GetDimensions()[2];
+    fg.SetNumberOfFilenames( nfiles );
+    bool b = fg.Generate();
+    if( !b )
+      {
+      std::cerr << "FilenameGenerator::Generate() failed" << std::endl;
+      return 1;
+      }
+    if( !fg.GetNumberOfFilenames() )
+      {
+      std::cerr << "FilenameGenerator::Generate() failed somehow..." << std::endl;
+      return 1;
+      }
+    
     vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
     writer->SetInput( reader->GetOutput() );
     writer->SetDirectionCosines( reader->GetDirectionCosines() );
     writer->SetImageFormat( reader->GetImageFormat() );
-    writer->SetFileDimensionality( reader->GetFileDimensionality() );
+    writer->SetFileDimensionality( 2 ); // test the 3D to 2D writing mode
     writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
-    writer->SetFileName( gdcmfile.c_str() );
+    //writer->SetFileName( gdcmfile.c_str() );
+    vtkStringArray *filenames = vtkStringArray::New();
+    for(unsigned int i = 0; i < fg.GetNumberOfFilenames(); ++i)
+      {
+      filenames->InsertNextValue( fg.GetFilename(i) );
+      std::cerr << fg.GetFilename(i) << std::endl;
+      }
+    assert( filenames->GetNumberOfValues() == fg.GetNumberOfFilenames() );
+    writer->SetFileNames( filenames );
+    filenames->Delete();
     writer->Write();
     if( verbose )  std::cerr << "Write out: " << gdcmfile << std::endl;
 
@@ -107,12 +142,12 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
   return res;
 }
 
-int TestvtkGDCMImageWriter(int argc, char *argv[])
+int TestvtkGDCMImageWriter2(int argc, char *argv[])
 {
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestvtkGDCMImageWrite(filename, true);
+    return TestvtkGDCMImageWrite2(filename, true);
     }
 
   // else
@@ -123,7 +158,7 @@ int TestvtkGDCMImageWriter(int argc, char *argv[])
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
     {
-    r += TestvtkGDCMImageWrite( filename );
+    r += TestvtkGDCMImageWrite2( filename );
     ++i;
     }
 

@@ -13,6 +13,8 @@
 
 =========================================================================*/
 #include "gdcmFilenameGenerator.h"
+#include "gdcmTrace.h"
+
 #include <stdio.h> // snprintf
 #ifdef _WIN32
 #define snprintf _snprintf
@@ -53,6 +55,7 @@ bool FilenameGenerator::Generate()
   const unsigned int numfiles = Filenames.size();
   if( numfiles == 0 )
     {
+    gdcmDebugMacro( "Need to specify the number of files" );
     // I am pretty sure this is an error:
     return false;
     }

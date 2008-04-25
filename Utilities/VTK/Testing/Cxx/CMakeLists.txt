@@ -4,6 +4,7 @@ SET(VTK_GDCM_TEST_SRCS
   TestvtkGDCMImageReader
   #TestvtkGDCMImageActor
   TestvtkGDCMImageWriter
+  TestvtkGDCMImageWriter2
 )
 IF(CMAKE_HAVE_PTHREAD_H)
   SET(VTK_GDCM_TEST_SRCS

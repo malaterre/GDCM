@@ -93,6 +93,7 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   this->Shift = 0.;
   this->Scale = 1.;
   this->IconDataScalarType = VTK_CHAR;
+  this->IconNumberOfScalarComponents = 1;
 }
 
 vtkGDCMImageReader::~vtkGDCMImageReader()
@@ -208,7 +209,7 @@ void vtkGDCMImageReader::ExecuteInformation()
     case ICONIMAGEPORTNUMBER:
       output->SetWholeExtent(this->IconImageDataExtent);
       output->SetScalarType( this->IconDataScalarType );
-      output->SetNumberOfScalarComponents( 1 );
+      output->SetNumberOfScalarComponents( this->IconNumberOfScalarComponents );
       break;
     //case OVERLAYPORTNUMBER:
     default:
@@ -503,7 +504,7 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
     // Icon Image
     case ICONIMAGEPORTNUMBER:
       outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), this->IconImageDataExtent, 6);
-      vtkDataObject::SetPointDataActiveScalarInfo(outInfo, this->IconDataScalarType, 1);
+      vtkDataObject::SetPointDataActiveScalarInfo(outInfo, this->IconDataScalarType, this->IconNumberOfScalarComponents );
       break;
     // Overlays:
     //case OVERLAYPORTNUMBER:
@@ -744,6 +745,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
       vtkErrorMacro( "Do not support this Icon Pixel Type: " << iconpixelformat );
       return 0;
       }
+    this->IconNumberOfScalarComponents = iconpixelformat.GetSamplesPerPixel();
     }
 
 //  return this->Superclass::RequestInformation(

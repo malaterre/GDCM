@@ -245,7 +245,8 @@ void vtkGDCMImageWriter::Write()
     int dimIndex = 2;
     int firstSlice = this->DataUpdateExtent[2*dimIndex];
     int lastSlice = this->DataUpdateExtent[2*dimIndex+1];
-    if( this->FileNames->GetNumberOfValues() )
+    assert( lastSlice >= firstSlice );
+    if( lastSlice - firstSlice ) // will be == 0 when only a single slice
       {
       if( lastSlice - firstSlice + 1 != this->FileNames->GetNumberOfValues() )
         {
