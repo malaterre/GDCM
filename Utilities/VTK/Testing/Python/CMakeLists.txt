@@ -4,8 +4,10 @@ IF(GDCM_WRAP_PYTHON)
   IF(VTK_PYTHONPATH_DIRS)
     STRING(REGEX REPLACE ";" ":" UNIX_VTK_PYTHONPATH_DIRS "${VTK_PYTHONPATH_DIRS}")
   ELSE(VTK_PYTHONPATH_DIRS)
-  # if VTK_PYTHONPATH_DIRS is not given (very old VTK) then simmply hope the user set his pythonpath properly:
-    SET(UNIX_VTK_PYTHONPATH_DIRS "$ENV{PYTHONPATH}")
+  # if VTK_PYTHONPATH_DIRS is not given (very old VTK) then simply hope the user set his pythonpath properly:
+  #  SET(UNIX_VTK_PYTHONPATH_DIRS "$ENV{PYTHONPATH}")
+  # previous solution was not safe, let's hope the following are set properly:
+    SET(UNIX_VTK_PYTHONPATH_DIRS "${VTK_SOURCE_DIR}/Wrapping/Python:${VTK_LIBRARY_DIRS}")
   ENDIF(VTK_PYTHONPATH_DIRS)
   SET(VTK_PYTHON_TESTS
     TestvtkGDCMImageWriter
