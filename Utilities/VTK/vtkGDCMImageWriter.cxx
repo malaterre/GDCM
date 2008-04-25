@@ -377,7 +377,11 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   data->GetWholeExtent(inWholeExt);
   int inExt[6];
   data->GetUpdateExtent(inExt);
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
   vtkIdType inInc[3];
+#else
+  int inInc[3];
+#endif
   data->GetIncrements(inInc);
 
   //data->Update();
