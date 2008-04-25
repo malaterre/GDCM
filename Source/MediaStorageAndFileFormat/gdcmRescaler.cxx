@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmRescaler.h"
+#include <limits>
 #include <stdlib.h> // abort
 
 namespace gdcm
@@ -26,13 +27,126 @@ void RescaleFunction(TOut *out, const TIn *in, double intercept, double slope, s
   size /= sizeof(TIn);
   for(size_t i = 0; i != size; ++i)
   {
-    out[i] = (TOut)(in[i] + intercept);
+    out[i] = (TOut)(slope * in[i] + intercept);
   }
 }
 
+template <typename T>
+PixelFormat::ScalarType ComputeBestFit(double intercept, double slope)
+{
+	PixelFormat::ScalarType st = PixelFormat::UNKNOWN;
+  double min = slope * std::numeric_limits<T>::min() + intercept;
+  double max = slope * std::numeric_limits<T>::max() + intercept;
+  assert( min <= max );
+  if( min >= 0 ) // unsigned
+  {
+	  if( max <= std::numeric_limits<uint8_t>::max() )
+	  {
+		  st = PixelFormat::UINT8;
+	  }
+	  else if( max <= std::numeric_limits<uint16_t>::max() )
+	  {
+		  st = PixelFormat::UINT16;
+	  }
+	  else if( max <= std::numeric_limits<uint32_t>::max() )
+	  {
+		  st = PixelFormat::UINT32;
+	  }
+	  else
+	  {
+		  abort();
+	  }
+  }
+  else
+  {
+	  if( max <= std::numeric_limits<int8_t>::max() )
+	  {
+		  st = PixelFormat::INT8;
+	  }
+	  else if( max <= std::numeric_limits<int16_t>::max() )
+	  {
+		  st = PixelFormat::INT16;
+	  }
+	  else if( max <= std::numeric_limits<int32_t>::max() )
+	  {
+		  st = PixelFormat::INT32;
+	  }
+	  else
+	  {
+		  abort();
+	  }
+   }
+	assert( st != PixelFormat::UNKNOWN );
+  return st;
+}
+
+PixelFormat Rescaler::ComputeInterceptSlopePixelType()
+{
+  PixelFormat::ScalarType output = PixelFormat::UNKNOWN;
+  double intercept = Intercept;
+  double slope = Slope;
+  switch(PF)
+    {
+  case PixelFormat::UINT8:
+    output = ComputeBestFit<uint8_t> (intercept,slope);
+    break;
+  case PixelFormat::INT8:
+    output = ComputeBestFit<int8_t> (intercept,slope);
+    break;
+  case PixelFormat::UINT16:
+    output = ComputeBestFit<uint16_t> (intercept,slope);
+    break;
+  case PixelFormat::INT16:
+    output = ComputeBestFit<int16_t> (intercept,slope);
+    break;
+  case PixelFormat::UINT32:
+    output = ComputeBestFit<uint32_t> (intercept,slope);
+    break;
+  case PixelFormat::INT32:
+    output = ComputeBestFit<int8_t> (intercept,slope);
+    break;
+  default:
+    abort();
+    break;
+    }
+  assert( output != PixelFormat::UNKNOWN );
+  return output;
+}
+
+
+template <typename TIn>
+void RescaleFunctionIntoBestFit(char *out, const TIn *in, double intercept, double slope, size_t n)
+{
+  PixelFormat::ScalarType output = ComputeBestFit<TIn> (intercept,slope);
+  switch(output)
+    {
+  case PixelFormat::UINT8:
+    RescaleFunction<uint8_t,TIn>((uint8_t*)out,in,intercept,slope,n);
+    break;
+  case PixelFormat::INT8:
+    RescaleFunction<int8_t,TIn>((int8_t*)out,in,intercept,slope,n);
+    break;
+  case PixelFormat::UINT16:
+    RescaleFunction<uint16_t,TIn>((uint16_t*)out,in,intercept,slope,n);
+    break;
+  case PixelFormat::INT16:
+    RescaleFunction<int16_t,TIn>((int16_t*)out,in,intercept,slope,n);
+    break;
+  case PixelFormat::UINT32:
+    RescaleFunction<uint32_t,TIn>((uint32_t*)out,in,intercept,slope,n);
+    break;
+  case PixelFormat::INT32:
+    RescaleFunction<int32_t,TIn>((int32_t*)out,in,intercept,slope,n);
+    break;
+  default:
+    abort();
+    break;
+    }
+ }
+
+
 bool Rescaler::Rescale(char *out, const char *in, size_t n)
 {
-  PixelFormat output;
   // check if we are dealing with floating point type
   if( Slope != (int)Slope || Intercept != (int)Intercept)
   {
@@ -40,8 +154,39 @@ bool Rescaler::Rescale(char *out, const char *in, size_t n)
   abort();
   }
   // else integral type
-  RescaleFunction<short,unsigned short>((short*)out,(const unsigned short*)in,Intercept,Slope,n);
-
+  switch(PF)
+    {
+  case PixelFormat::UINT8:
+    RescaleFunctionIntoBestFit<uint8_t>(out,(uint8_t*)in,Intercept,Slope,n);
+    break;
+  case PixelFormat::INT8:
+    RescaleFunctionIntoBestFit<int8_t>(out,(int8_t*)in,Intercept,Slope,n);
+    break;
+  case PixelFormat::UINT12:
+    //RescaleFunctionIntoBestFit<uint12_t>(out,in,Intercept,Slope,n);
+    abort();
+    break;
+  case PixelFormat::INT12:
+    //RescaleFunctionIntoBestFit<int12_t>(out,in,Intercept,Slope,n);
+    abort();
+    break;
+  case PixelFormat::UINT16:
+    RescaleFunctionIntoBestFit<uint16_t>(out,(uint16_t*)in,Intercept,Slope,n);
+    break;
+  case PixelFormat::INT16:
+    RescaleFunctionIntoBestFit<int16_t>(out,(int16_t*)in,Intercept,Slope,n);
+    break;
+  case PixelFormat::UINT32:
+    RescaleFunctionIntoBestFit<uint32_t>(out,(uint32_t*)in,Intercept,Slope,n);
+    break;
+  case PixelFormat::INT32:
+    RescaleFunctionIntoBestFit<int32_t>(out,(int32_t*)in,Intercept,Slope,n);
+    break;
+  default:
+    abort();
+    break;
+    }
+ 
   return true;
 }
 

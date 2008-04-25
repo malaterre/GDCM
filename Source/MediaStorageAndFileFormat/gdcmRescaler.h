@@ -27,9 +27,13 @@ class GDCM_EXPORT Rescaler
 public:
   Rescaler():Intercept(0),Slope(1),PF() {}
   ~Rescaler() {}
+
   bool Rescale(char *out, const char *in, size_t n);
   void SetIntercept(double i) { Intercept = i; }
   void SetSlope(double s) { Slope = s; }
+  void SetPixelFormat(PixelFormat const & pf) { PF = pf; }
+
+  PixelFormat ComputeInterceptSlopePixelType();
 
 private:
   double Intercept; // 0028,1052

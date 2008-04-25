@@ -668,7 +668,18 @@ int vtkGDCMImageReader::RequestInformationCompat()
     // Need to set the rest to 0 ???
 
   const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
-  switch( pixeltype )
+  this->Shift = image.GetIntercept();
+  this->Scale = image.GetSlope();
+  gdcm::Rescaler r;
+  r.SetIntercept( this->Shift );
+  r.SetSlope( this->Scale );
+  r.SetPixelFormat( pixeltype );
+  gdcm::PixelFormat outputpt = r.ComputeInterceptSlopePixelType();
+  assert( pixeltype <= outputpt );
+  if( pixeltype != outputpt ) assert( Shift != 0. || Scale != 1 );
+  //std::cerr << "PF:" << pixeltype << " -> " << outputpt << std::endl;
+
+  switch( outputpt )
     {
   case gdcm::PixelFormat::INT8:
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
@@ -693,7 +704,6 @@ int vtkGDCMImageReader::RequestInformationCompat()
   case gdcm::PixelFormat::UINT32:
     this->DataScalarType = VTK_UNSIGNED_INT;
     break;
-  // FIXME 12bits should not be that hard...
   case gdcm::PixelFormat::INT12:
     this->DataScalarType = VTK_SHORT;
     break;
@@ -704,10 +714,6 @@ int vtkGDCMImageReader::RequestInformationCompat()
     vtkErrorMacro( "Do not support this Pixel Type: " << pixeltype );
     return 0;
     }
-  //this->Shift = image.GetIntercept();
-  //this->Scale = image.GetSlope();
-  //this->DataScalarType = VTK_SHORT;
-
   this->NumberOfScalarComponents = pixeltype.GetSamplesPerPixel();
 
   // Ok let's fill in the 'extra' info:
@@ -833,6 +839,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   image.GetBuffer(pointer);
   if( pixeltype == gdcm::PixelFormat::UINT12 || pixeltype == gdcm::PixelFormat::INT12 )
   {
+    assert( Scale == 1.0 && Shift == 0.0 );
     // FIXME: I could avoid this extra copy:
     char * copy = new char[len];
     memcpy(copy, pointer, len);
@@ -847,7 +854,11 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     gdcm::Rescaler r;
     r.SetIntercept( Shift );
     r.SetSlope( Scale );
-    r.Rescale(pointer,pointer,len);
+    r.SetPixelFormat( pixeltype );
+    char * copy = new char[len];
+    memcpy(copy, pointer, len);
+    r.Rescale(pointer,copy,len);
+    delete[] copy;
   }
   // Do the Icon Image:
   this->NumberOfIconImages = image.GetIconImage().IsEmpty() ? 0 : 1;
