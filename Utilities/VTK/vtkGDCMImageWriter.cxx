@@ -682,7 +682,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   if( this->FileDimensionality != 2 && ms == gdcm::MediaStorage::SecondaryCaptureImageStorage )
     {
     vtkErrorMacro( "Cannot handle Multi Frame image in SecondaryCaptureImageStorage" );
-    return 0;
+    //return 0;
     }
   // FIXME: new Secondary object handle multi frames...
   assert( gdcm::MediaStorage::IsImage( ms ) );
