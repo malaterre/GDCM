@@ -28,6 +28,7 @@ void RescaleFunction(TOut *out, const TIn *in, double intercept, double slope, s
   for(size_t i = 0; i != size; ++i)
   {
     out[i] = (TOut)(slope * in[i] + intercept);
+    //assert( out[i] == (TOut)(slope * in[i] + intercept) ); // will really slow down stuff...
   }
 }
 

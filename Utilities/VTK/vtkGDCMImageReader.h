@@ -235,6 +235,7 @@ protected:
   int ApplyYBRToRGB;
   // I think that planar configuration need to always be applied as far as VTK is concerned
   int ApplyPlanarConfiguration;
+  int ApplyShiftScale;
 
   int LoadSingleFile(const char *filename, char *pointer, unsigned long &outlen);
 

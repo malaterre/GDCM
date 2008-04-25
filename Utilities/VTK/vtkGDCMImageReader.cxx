@@ -87,6 +87,7 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   this->ApplyLookupTable = 0;
   this->ApplyYBRToRGB = 0;
   this->ApplyPlanarConfiguration = 1;
+  this->ApplyShiftScale = 1;
   memset(this->ImagePositionPatient,0,3*sizeof(double));
   memset(this->ImageOrientationPatient,0,6*sizeof(double));
   this->Curve = 0;
@@ -531,6 +532,13 @@ int vtkGDCMImageReader::RequestInformationCompat()
     vtkErrorMacro( "ApplyLookupTable/ApplyYBRToRGB/ApplyInverseVideo not compatible" );
     return 0;
     }
+  // I do not think this is a good idea anyway to let the user decide
+  // wether or not she wants *not* to apply shift/scale...
+  if( !this->ApplyShiftScale )
+  {
+    vtkErrorMacro("ApplyShiftScale not compatible" );
+    return 0;
+   }
   // I do not think this one will ever be implemented:
   if( !this->ApplyPlanarConfiguration )
     {
