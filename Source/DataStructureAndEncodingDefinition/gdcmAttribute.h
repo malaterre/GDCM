@@ -336,8 +336,11 @@ protected:
     std::stringstream ss;
     std::string s = std::string( bv->GetPointer(), bv->GetLength() );
     ss.str( s );
-    EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
-      GetNumberOfValues(),ss);
+    ArrayType internal[10];
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::ReadComputeLength(internal, Length, ss);
+    SetValues( internal, Length, true );
+    //EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+    //  GetNumberOfValues(),ss);
   }
 
 private:

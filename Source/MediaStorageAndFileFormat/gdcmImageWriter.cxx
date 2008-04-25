@@ -369,8 +369,22 @@ bool ImageWriter::Write()
     //assert( 0 && "TODO FIXME" );
     const Tag tsourceImageSequence(0x0008,0x2112);
     //assert( ds.FindDataElement( tsourceImageSequence ) == false );
-    if( ds.FindDataElement( tsourceImageSequence ) ) return false;
-    SequenceOfItems *sq = new SequenceOfItems;
+    SequenceOfItems *sq;
+    if( ds.FindDataElement( tsourceImageSequence ) )
+      {
+      DataElement &de = (DataElement&)ds.GetDataElement( tsourceImageSequence );
+      //assert( de.IsUndefinedLength() );
+      de.SetVLToUndefined(); // For now
+      if( de.IsEmpty() )
+        {
+        de.SetValue( *sq );
+        }
+      sq = (SequenceOfItems*)de.GetSequenceOfItems();
+      }
+    else
+      {
+      sq = new SequenceOfItems;
+      }
     sq->SetLengthToUndefined();
     Item item( Tag(0xfffe,0xe000) );
     de.SetVLToUndefined();
@@ -386,12 +400,15 @@ bool ImageWriter::Write()
     item.InsertDataElement( referencedSOPClassUID );
     item.InsertDataElement( referencedSOPInstanceUID );
     sq->AddItem( item );
-    DataElement de( tsourceImageSequence );
-    de.SetVR( VR::SQ );
-    de.SetValue( *sq );
-    de.SetVLToUndefined();
-    //std::cout << de << std::endl;
-    ds.Insert( de );
+    if( !ds.FindDataElement( tsourceImageSequence ) )
+      {
+      DataElement de( tsourceImageSequence );
+      de.SetVR( VR::SQ );
+      de.SetValue( *sq );
+      de.SetVLToUndefined();
+      //std::cout << de << std::endl;
+      ds.Insert( de );
+      }
     }
     {
     const char *sop = uid.Generate();
