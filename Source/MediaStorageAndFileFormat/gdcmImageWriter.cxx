@@ -368,7 +368,7 @@ bool ImageWriter::Write()
     // We are comming from a real DICOM image, we need to reference it...
     //assert( 0 && "TODO FIXME" );
     const Tag tsourceImageSequence(0x0008,0x2112);
-    assert( ds.FindDataElement( tsourceImageSequence ) == false );
+    //assert( ds.FindDataElement( tsourceImageSequence ) == false );
     SequenceOfItems *sq = new SequenceOfItems;
     sq->SetLengthToUndefined();
     Item item( Tag(0xfffe,0xe000) );
