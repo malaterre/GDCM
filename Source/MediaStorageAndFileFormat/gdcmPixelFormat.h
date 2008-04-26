@@ -47,6 +47,9 @@ public:
     INT16,
     UINT32,  // For some DICOM files (RT or SC)
     INT32,   //                        "   "
+    FLOAT16, // sure why not...
+    FLOAT32, // good ol' 'float'
+    FLOAT64, // aka 'double'
     UNKNOWN // aka BitsAllocated == 0 && PixelRepresentation == 0
   } ScalarType;
 

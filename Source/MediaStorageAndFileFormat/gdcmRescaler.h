@@ -33,7 +33,7 @@ public:
   void SetSlope(double s) { Slope = s; }
   void SetPixelFormat(PixelFormat const & pf) { PF = pf; }
 
-  PixelFormat ComputeInterceptSlopePixelType();
+  PixelFormat::ScalarType ComputeInterceptSlopePixelType();
 protected:
 template <typename TIn>
 void RescaleFunctionIntoBestFit(char *out, const TIn *in, size_t n);

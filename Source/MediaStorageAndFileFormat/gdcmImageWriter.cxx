@@ -377,6 +377,7 @@ bool ImageWriter::Write()
       de.SetVLToUndefined(); // For now
       if( de.IsEmpty() )
         {
+        sq = new SequenceOfItems;
         de.SetValue( *sq );
         }
       sq = (SequenceOfItems*)de.GetSequenceOfItems();

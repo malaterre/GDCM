@@ -154,7 +154,6 @@ uint8_t PixelFormat::GetPixelSize() const
 
 int64_t PixelFormat::GetMin() const
 {
-  assert( PixelRepresentation == 0 );
   if( PixelRepresentation )
     {
     return ~(((1ull << BitsStored) - 1) >> 1);
@@ -167,7 +166,6 @@ int64_t PixelFormat::GetMin() const
 
 int64_t PixelFormat::GetMax() const
 {
-  assert( PixelRepresentation == 0 );
   if( PixelRepresentation )
     {
     return ((1ull << BitsStored) - 1) >> 1;

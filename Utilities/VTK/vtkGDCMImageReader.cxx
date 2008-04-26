@@ -682,9 +682,9 @@ int vtkGDCMImageReader::RequestInformationCompat()
   r.SetIntercept( this->Shift );
   r.SetSlope( this->Scale );
   r.SetPixelFormat( pixeltype );
-  gdcm::PixelFormat outputpt = r.ComputeInterceptSlopePixelType();
+  gdcm::PixelFormat::ScalarType outputpt = r.ComputeInterceptSlopePixelType();
   assert( pixeltype <= outputpt );
-  if( pixeltype != outputpt ) assert( Shift != 0. || Scale != 1 );
+  //if( pixeltype != outputpt ) assert( Shift != 0. || Scale != 1 );
   std::cerr << "PF:" << pixeltype << " -> " << outputpt << std::endl;
 
   switch( outputpt )
@@ -717,6 +717,10 @@ int vtkGDCMImageReader::RequestInformationCompat()
     break;
   case gdcm::PixelFormat::UINT12:
     this->DataScalarType = VTK_UNSIGNED_SHORT;
+    break;
+  case gdcm::PixelFormat::FLOAT16:
+  case gdcm::PixelFormat::FLOAT32:
+    this->DataScalarType = VTK_FLOAT;
     break;
   default:
     vtkErrorMacro( "Do not support this Pixel Type: " << pixeltype );
