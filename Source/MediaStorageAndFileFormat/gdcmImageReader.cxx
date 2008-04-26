@@ -270,10 +270,14 @@ void DoIconImage(const DataSet& rootds, ImageValue& image)
       }
     // (0028,0002) US 1                                        #   2, 1 SamplesPerPixel
       {
-      const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0002) );
+	  if( ds.FindDataElement( Tag(0x0028, 0x0002) ) )
+	  {
+	  const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0002) );
       Attribute<0x0028,0x0002> at;
       at.SetFromDataElement( de );
       pf.SetSamplesPerPixel( at.GetValue() );
+	  }
+	  // else pf will default to 1...
       }
     pixeldata.SetPixelFormat( pf );
     // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]
