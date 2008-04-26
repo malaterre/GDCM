@@ -157,7 +157,7 @@ int64_t PixelFormat::GetMin() const
   assert( PixelRepresentation == 0 );
   if( PixelRepresentation )
     {
-    return 0;
+    return ~(((1ull << BitsStored) - 1) >> 1);
     }
   else
     {
@@ -170,11 +170,11 @@ int64_t PixelFormat::GetMax() const
   assert( PixelRepresentation == 0 );
   if( PixelRepresentation )
     {
-    return 0;
+    return ((1ull << BitsStored) - 1) >> 1;
     }
   else
     {
-    return (1 << BitsStored);
+    return (1ull << BitsStored) - 1;
     }
 }
 

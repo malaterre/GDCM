@@ -685,7 +685,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
   gdcm::PixelFormat outputpt = r.ComputeInterceptSlopePixelType();
   assert( pixeltype <= outputpt );
   if( pixeltype != outputpt ) assert( Shift != 0. || Scale != 1 );
-  //std::cerr << "PF:" << pixeltype << " -> " << outputpt << std::endl;
+  std::cerr << "PF:" << pixeltype << " -> " << outputpt << std::endl;
 
   switch( outputpt )
     {

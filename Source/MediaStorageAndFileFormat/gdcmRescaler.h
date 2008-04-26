@@ -34,6 +34,9 @@ public:
   void SetPixelFormat(PixelFormat const & pf) { PF = pf; }
 
   PixelFormat ComputeInterceptSlopePixelType();
+protected:
+template <typename TIn>
+void RescaleFunctionIntoBestFit(char *out, const TIn *in, size_t n);
 
 private:
   double Intercept; // 0028,1052

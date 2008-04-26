@@ -22,6 +22,25 @@ int TestPixelFormat(int , char *[])
     {
     return 1;
     }
-  
+  pf.SetBitsStored( 8 );
+  std::cout << pf.GetMin() << "," << pf.GetMax() << std::endl;
+  pf.SetBitsStored( 12 );
+  std::cout << pf.GetMin() << "," << pf.GetMax() << std::endl;
+  pf.SetBitsStored( 16 );
+  std::cout << pf.GetMin() << "," << pf.GetMax() << std::endl;
+  pf.SetBitsStored( 32 );
+  std::cout << pf.GetMin() << "," << pf.GetMax() << std::endl;
+
+  pf.SetPixelRepresentation( 1 );
+
+  pf.SetBitsStored( 8 );
+  std::cout << pf.GetMin() << "," << pf.GetMax() << std::endl;
+  pf.SetBitsStored( 12 );
+  std::cout << pf.GetMin() << "," << pf.GetMax() << std::endl;
+  pf.SetBitsStored( 16 );
+  std::cout << pf.GetMin() << "," << pf.GetMax() << std::endl;
+  pf.SetBitsStored( 32 );
+  std::cout << pf.GetMin() << "," << pf.GetMax() << std::endl;
+   
   return 0;
 }
