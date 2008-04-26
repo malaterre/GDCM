@@ -580,6 +580,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "3a85617df95abbb63cd84a183515c697" , "image.acr" },
 { "8c5a627c461688cfa5dc708a170c5eda" , "IM-0001-0001.dcm" },
 { "ec87a838931d4d5d2e94a04644788a55" , "test_att.acr" },
+{ "0621954acd5815e0b4f7b65fcc6506b1" , "SIEMENS_ImageLocationUN.dcm" },
 
 
 /* Stopping condition */
