@@ -578,6 +578,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "ef8c3435ee7a9b332976f2dc56833d3a" , "GENESIS_SIGNA-JPEG-CorruptFrag.dcm" }, // FIXME !
 { "42a4f33eb34456e3e82f30d707c84870" , "DCMOBJ_IMG57.dcm" },
 { "3a85617df95abbb63cd84a183515c697" , "image.acr" },
+{ "8c5a627c461688cfa5dc708a170c5eda" , "IM-0001-0001.dcm" },
+{ "ec87a838931d4d5d2e94a04644788a55" , "test_att.acr" },
 
 
 /* Stopping condition */
