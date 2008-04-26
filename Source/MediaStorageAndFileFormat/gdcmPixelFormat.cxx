@@ -19,14 +19,14 @@
 namespace gdcm
 {
 static const char *ScalarTypeStrings[] = {
-  "INT8",
   "UINT8",
-  "INT12",
+  "INT8",
   "UINT12",
-  "INT16",
+  "INT12",
   "UINT16",
+  "INT16",
+  "UINT32",
   "INT32",
-  "UINT32",  
   NULL,
 };
 
