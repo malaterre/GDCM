@@ -686,7 +686,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   ms.GuessFromModality( this->MedicalImageProperties->GetModality(), this->FileDimensionality ); // Will override SC only if something is found...
   if( this->FileDimensionality != 2 && ms == gdcm::MediaStorage::SecondaryCaptureImageStorage )
     {
-    vtkErrorMacro( "Cannot handle Multi Frame image in SecondaryCaptureImageStorage" );
+    //vtkErrorMacro( "Cannot handle Multi Frame image in SecondaryCaptureImageStorage" );
     //return 0;
     }
   // FIXME: new Secondary object handle multi frames...
