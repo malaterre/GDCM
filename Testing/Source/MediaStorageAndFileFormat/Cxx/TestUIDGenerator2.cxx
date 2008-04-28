@@ -21,8 +21,12 @@
 void* func (void* argc)
 {
   gdcm::UIDGenerator g;
-  const char *s = g.Generate();
-  std::cout << s << std::endl;
+  //const char *s = g.Generate();
+  std::cout << g.Generate() << std::endl;
+  std::cout << g.Generate() << std::endl;
+  std::cout << g.Generate() << std::endl;
+  std::cout << g.Generate() << std::endl;
+  std::cout << g.Generate() << std::endl;
   return NULL;
 }
 
