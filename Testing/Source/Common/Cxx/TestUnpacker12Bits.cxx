@@ -81,6 +81,7 @@ int TestUnpacker12Bits(int, char *[])
       //assert( outputvalues[i] == output_s[i] );
       }
     }
+  delete[] output;
 }
  
   return res;
