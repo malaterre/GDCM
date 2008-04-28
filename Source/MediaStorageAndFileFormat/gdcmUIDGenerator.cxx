@@ -112,6 +112,7 @@ const char* UIDGenerator::Generate()
   std::ostringstream os;
   os << processid;
   Unique += os.str();
+  Unique += ".";
   os.str("");
   pthread_t threadid = pthread_self();
   os << threadid;
