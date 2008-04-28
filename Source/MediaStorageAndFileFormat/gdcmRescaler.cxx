@@ -86,6 +86,7 @@ PixelFormat::ScalarType Rescaler::ComputeInterceptSlopePixelType()
   PixelFormat::ScalarType output = PixelFormat::UNKNOWN;
   if( Slope != (int)Slope || Intercept != (int)Intercept)
   {
+    //assert( PF != PixelFormat::INT8 && PF != PixelFormat::UINT8 ); // Is there any Object that have Rescale on char ?
 	  return PixelFormat::FLOAT32;
   }
   double intercept = Intercept;

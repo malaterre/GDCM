@@ -324,6 +324,7 @@ int main (int argc, char *argv[])
     gdcm::Attribute<0x0028,0x0301> at;
     at.SetValue( "NO" ); // 'YES'
     ds.Replace( at.GetAsDataElement() );
+#if 1
     // (0008,2111) ST [MedCom Resample v]                      #  18, 1 DerivationDescriptio
     gdcm::Attribute<0x0008,0x2111> at2;
     std::ostringstream os;
@@ -333,6 +334,15 @@ int main (int argc, char *argv[])
       << region[4] << "," << region[5] << "] with color value=" << std::hex << (int)color;
     at2.SetValue( os.str() );
     ds.Replace( at2.GetAsDataElement() );
+#else
+#endif
+/*
+> 1. Replace Value #1 of Image Type by 'DERIVED'
+
+Don't do that ... leave Image Type alone (unless you are changing
+the UID ... vide infra). 
+*/
+#if 1
     // (0008,0008) CS [ORIGINAL\SECONDARY]                     #  18, 2 ImageType
     gdcm::Attribute<0x0008,0x0008> at3;
     static const gdcm::CSComp values[] = {"DERIVED","SECONDARY"}; 
@@ -345,6 +355,7 @@ int main (int argc, char *argv[])
       at3.SetValue( 0, values[0] );
       }
     ds.Replace( at3.GetAsDataElement() );
+#endif
     // Make sure to recompute Planar Configuration:
     ds.Remove( gdcm::Tag(0x0028, 0x0004) );
     }

@@ -153,6 +153,15 @@ int vtkGDCMImageWriter::RequestInformation(
       }
     }
 
+  // Technically we should be much more paranoid with the shift scale (like value bigger
+  // then stored pixel type: does this even make sense ?)
+  // Let's do the easy one here:
+  // do I really need to comment on this one:
+  if( this->Scale == 0 )
+    {
+    return 0;
+    }
+
   return 1;
 }
 
@@ -464,6 +473,10 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
       // could in fact really be only integer type, only print a warning to inform dummy user
       vtkWarningMacro( "Image is floating point type, but rescale type is integer type. Rescaling anyway" );
       }
+    /*
+    Note to myself: should I allow people to squeeze into unsigned char ? Or can I assume most people
+    will be doing unsigned short anyway...
+    */
     pixeltype = gdcm::PixelFormat::UINT32;
     break;
   default:

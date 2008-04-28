@@ -327,6 +327,7 @@ public:
     // This is kind of hackish but since I do not generate other element than the first one: 0x6000 I should be ok:
     assert( GetTag() == de.GetTag() || GetTag().GetGroup() == 0x6000 );
     assert( GetVR().Compatible( de.GetVR() ) ); // In case of VR::INVALID cannot use the & operator
+    assert( !de.IsEmpty() );
     const ByteValue *bv = de.GetByteValue();
     SetByteValue(bv);
   }
