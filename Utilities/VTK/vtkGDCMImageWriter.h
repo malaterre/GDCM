@@ -76,11 +76,11 @@ public:
   virtual void SetDirectionCosines(vtkMatrix4x4 *matrix);
   vtkGetObjectMacro(DirectionCosines, vtkMatrix4x4);
 
-  //TODO
-  //vtkSetMacro(RescaleSlope, double);
-  //vtkGetMacro(RescaleSlope, double);
-  //vtkSetMacro(RescaleIntercept, double);
-  //vtkGetMacro(RescaleIntercept, double);
+  // Modality LUT
+  vtkSetMacro(Shift, double);
+  vtkGetMacro(Shift, double);
+  vtkSetMacro(Scale, double);
+  vtkGetMacro(Scale, double);
 
   vtkGetMacro(ImageFormat,int);
   vtkSetMacro(ImageFormat,int);
@@ -126,6 +126,9 @@ private:
 
   vtkStringArray *FileNames;
   vtkMatrix4x4 *DirectionCosines;
+
+  double Shift;
+  double Scale;
 };
 
 #endif

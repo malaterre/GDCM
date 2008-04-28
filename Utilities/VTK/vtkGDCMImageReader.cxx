@@ -47,6 +47,16 @@
 vtkCxxRevisionMacro(vtkGDCMImageReader, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMImageReader)
 
+inline bool vtkGDCMImageReader_IsCharTypeSigned()
+{
+#ifndef VTK_TYPE_CHAR_IS_SIGNED
+  const unsigned char uc = 255;
+  return (*reinterpret_cast<char*>(&uc) < 0) ? true : false;
+#else
+  return VTK_TYPE_CHAR_IS_SIGNED;
+#endif
+}
+
 // Output Ports are as follow:
 // #0: The image/volume (root PixelData element)
 // #1: (if present): the Icon Image (0088,0200)
@@ -693,6 +703,10 @@ int vtkGDCMImageReader::RequestInformationCompat()
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
     this->DataScalarType = VTK_SIGNED_CHAR;
 #else
+    if( !vtkGDCMImageReader_IsCharTypeSigned() )
+      {
+      vtkErrorMacro( "Output Pixel Type will be incorrect, go get a newer VTK version" );
+      }
     this->DataScalarType = VTK_CHAR;
 #endif
     break;
@@ -718,7 +732,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
   case gdcm::PixelFormat::UINT12:
     this->DataScalarType = VTK_UNSIGNED_SHORT;
     break;
-  case gdcm::PixelFormat::FLOAT16:
+  //case gdcm::PixelFormat::FLOAT16: // TODO
   case gdcm::PixelFormat::FLOAT32:
     this->DataScalarType = VTK_FLOAT;
     break;

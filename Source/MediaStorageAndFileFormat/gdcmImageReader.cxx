@@ -700,15 +700,29 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   bool intercept = ds.FindDataElement(at1.GetTag());
   if( intercept )
   {
+  if( !ds.GetDataElement(at1.GetTag()).IsEmpty() )
+    {
     at1.SetFromDataElement( ds.GetDataElement(at1.GetTag()) );
     PixelData.SetIntercept( at1.GetValue() );
+    }
+  else
+    {
+    PixelData.SetIntercept( 0 );
+    }
   }
   Attribute<0x0028,0x1053> at2;
   bool slope     = ds.FindDataElement(at2.GetTag());
   if ( slope )
   {
+  if( !ds.GetDataElement(at2.GetTag()).IsEmpty() )
+    {
     at2.SetFromDataElement( ds.GetDataElement(at2.GetTag()) );
     PixelData.SetSlope( at2.GetValue() );
+    }
+  else
+    {
+    PixelData.SetSlope( 1 );
+    }
   }
   // Do the Palette Color:
   // 1. Modality LUT Sequence

@@ -42,6 +42,16 @@ vtkCxxSetObjectMacro(vtkGDCMImageWriter,MedicalImageProperties,vtkMedicalImagePr
 vtkCxxSetObjectMacro(vtkGDCMImageWriter,FileNames,vtkStringArray)
 vtkCxxSetObjectMacro(vtkGDCMImageWriter,DirectionCosines,vtkMatrix4x4)
 
+inline bool vtkGDCMImageWriter_IsCharTypeSigned()
+{
+#ifndef VTK_TYPE_CHAR_IS_SIGNED
+  const unsigned char uc = 255;
+  return (*reinterpret_cast<char*>(&uc) < 0) ? true : false;
+#else
+  return VTK_TYPE_CHAR_IS_SIGNED;
+#endif
+}
+
 vtkGDCMImageWriter::vtkGDCMImageWriter()
 {
   this->DataUpdateExtent[0] = 0;
@@ -73,6 +83,8 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
 
   this->ImageFormat = 0; // invalid
 
+  this->Shift = 0.;
+  this->Scale = 1.;
 }
 
 //----------------------------------------------------------------------------
@@ -420,7 +432,10 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   switch( scalarType )
     {
   case VTK_CHAR:
-    pixeltype = gdcm::PixelFormat::INT8; // FIXME ??
+    if( vtkGDCMImageWriter_IsCharTypeSigned() )
+      pixeltype = gdcm::PixelFormat::INT8;
+    else
+      pixeltype = gdcm::PixelFormat::UINT8;
     break;
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   case VTK_SIGNED_CHAR:
@@ -440,6 +455,15 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     pixeltype = gdcm::PixelFormat::INT32;
     break;
   case VTK_UNSIGNED_INT:
+    pixeltype = gdcm::PixelFormat::UINT32;
+    break;
+  case VTK_FLOAT:
+    if( this->Shift == (int)this->Shift && this->Scale == (int)this->Scale )
+      {
+      // I cannot consider that this is a problem, afterall a floating point type image
+      // could in fact really be only integer type, only print a warning to inform dummy user
+      vtkWarningMacro( "Image is floating point type, but rescale type is integer type. Rescaling anyway" );
+      }
     pixeltype = gdcm::PixelFormat::UINT32;
     break;
   default:
@@ -534,6 +558,15 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   int *dext = data->GetExtent();
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
   int j = dext[4];
+
+  //if( this->Shift != 1.0 && this->Scale == (int)this->Scale )
+  if( data->GetScalarType() == VTK_FLOAT )
+    {
+    // TODO
+    vtkWarningMacro( "TODO Need to implement" );
+    //return 0;
+    }
+
   //std::cerr << "dext[4]:" << j << std::endl;
   //std::cerr << "inExt[4]:" << inExt[4] << std::endl;
   if( dims[2] > 1 && this->FileDimensionality == 3 )
