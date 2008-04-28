@@ -95,6 +95,8 @@ const char* UIDGenerator::Generate()
   randbytes = randbytes.substr( rb_len - (64 - len) , 64 - len );
 
   std::string::size_type zeropos = randbytes.find_first_not_of('0');
+#define RAND_VERSION
+#ifdef RAND_VERSION
   if( zeropos == std::string::npos )
     {
     // All 0 ...
@@ -105,6 +107,16 @@ const char* UIDGenerator::Generate()
     // Takes everything after the 0
     Unique += randbytes.c_str() + zeropos;
     }
+#else
+  pid_t processid = getpid();
+  std::ostringstream os;
+  os << processid;
+  Unique += os.str();
+  os.str("");
+  pthread_t threadid = pthread_self();
+  os << threadid;
+  Unique += os.str();
+#endif
 
   assert( IsValid( Unique.c_str() ) );
 
