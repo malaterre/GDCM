@@ -37,7 +37,8 @@ SET(GDCM_EXECUTABLE_NAME
   gdcmraw
   gdcmscanner
   gdcmoverlay
-  gdcmimg
+  # gdcmimg is completely broken to the outside world
+  #gdcmimg
   #deflate
   gdcmconv
   gdcminfo
