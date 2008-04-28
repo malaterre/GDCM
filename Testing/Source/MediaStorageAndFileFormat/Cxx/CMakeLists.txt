@@ -13,7 +13,6 @@ SET(MSFF_TEST_SRCS
   TestApplicationEntity
   TestStringFilter
   TestUIDGenerator
-  TestUIDGenerator2
   TestPrinter
   TestScanner
   TestSorter
@@ -45,6 +44,12 @@ SET(MSFF_TEST_SRCS
   TestSpectroscopy
   )
 
+IF(CMAKE_HAVE_PTHREAD_H)
+SET(MSFF_TEST_SRCS ${MSFF_TEST_SRCS}
+  TestUIDGenerator2
+  )
+ENDIF(CMAKE_HAVE_PTHREAD_H)
+
 # Add the include paths
 INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Source/Common"
@@ -59,6 +64,9 @@ INCLUDE_DIRECTORIES(
 CREATE_TEST_SOURCELIST(MSFFTests gdcmMSFFTests.cxx ${MSFF_TEST_SRCS})
 ADD_EXECUTABLE(gdcmMSFFTests ${MSFFTests})
 TARGET_LINK_LIBRARIES(gdcmMSFFTests gdcmMSFF)
+IF(CMAKE_HAVE_PTHREAD_H)
+TARGET_LINK_LIBRARIES(gdcmMSFFTests pthread)
+ENDIF(CMAKE_HAVE_PTHREAD_H)
 
 #Don't understand why I need that ??
 SET(GDCM_MSFF_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmMSFFTests")

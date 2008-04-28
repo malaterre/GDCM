@@ -83,7 +83,9 @@ int TestUIDGenerator(int argc, char *argv[])
     }
   const char myroot[] = "987654321"; // hopefully no one has this yet...
   uid.SetRoot( myroot );
+  std::cerr << "before generate" << std::endl;
   const char *s = uid.Generate();
+  std::cerr << "after generate" << std::endl;
   std::cout << "s:" << s << std::endl;
   if( strcmp( myroot, uid.GetRoot() ) != 0 )
     {

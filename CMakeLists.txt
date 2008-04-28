@@ -181,6 +181,9 @@ IF(BUILD_TESTING AND GDCM_WRAP_PYTHON)
 ENDIF(BUILD_TESTING AND GDCM_WRAP_PYTHON)
 
 #-----------------------------------------------------------------------------
+# Need pthread for the following class:
+CHECK_INCLUDE_FILE("pthread.h"      CMAKE_HAVE_PTHREAD_H)
+
 SUBDIRS(
   Utilities
   Source
