@@ -12,13 +12,11 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "vtkGDCMImageReader.h"
-
 #include "gdcmTesting.h"
 #include "gdcmImageReader.h"
 #include "gdcmImage.h"
 
-int TestvtkGDCMImageReaderPixelSpacing(int argc, char *argv[])
+int TestImageReaderPixelSpacing(int argc, char *argv[])
 {
   int ret = 0;
   const char *filenames[] = { "CRIMAGE", "DXIMAGE", "MGIMAGE" };
