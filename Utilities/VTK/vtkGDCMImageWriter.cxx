@@ -45,7 +45,7 @@ vtkCxxSetObjectMacro(vtkGDCMImageWriter,DirectionCosines,vtkMatrix4x4)
 inline bool vtkGDCMImageWriter_IsCharTypeSigned()
 {
 #ifndef VTK_TYPE_CHAR_IS_SIGNED
-  const unsigned char uc = 255;
+  unsigned char uc = 255;
   return (*reinterpret_cast<char*>(&uc) < 0) ? true : false;
 #else
   return VTK_TYPE_CHAR_IS_SIGNED;
