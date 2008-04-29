@@ -33,12 +33,15 @@
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
 #include "vtkLogoWidget.h"
 #include "vtkLogoRepresentation.h"
+#include "vtkBiDimensionalWidget.h"
+#include "vtkBiDimensionalRepresentation2D.h"
 #include "vtkDistanceWidget.h"
 #include "vtkPointHandleRepresentation2D.h"
 #include "vtkDistanceRepresentation2D.h"
 #include "vtkProperty2D.h"
 #else
 class vtkLogoWidget;
+class vtkBiDimensionalWidget;
 class vtkDistanceWidget;
 class vtkLogoRepresentation;
 #endif
@@ -153,6 +156,7 @@ public:
     ImageViewer = NULL;
     IconWidget = NULL;
     DistanceWidget = NULL;
+    BiDimWidget = NULL;
     picker = vtkWorldPointPicker::New();
     }
   ~vtkGDCMObserver()
@@ -191,6 +195,10 @@ public:
         else if ( keycode == 'l' )
           {
           IconWidget->Off();
+          }
+        else if ( keycode == 'b' )
+          {
+          BiDimWidget->On();
           }
         else if ( keycode == 'd' )
           {
@@ -235,6 +243,7 @@ public:
   vtkWorldPointPicker *picker;
   vtkLogoWidget *IconWidget;
   vtkDistanceWidget *DistanceWidget;
+  vtkBiDimensionalWidget *BiDimWidget;
 };
 
 // A feature in VS6 make it painfull to write template code
@@ -295,6 +304,13 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   dwidget->CreateDefaultRepresentation();
   dwidget->SetRepresentation(rep);
   rep->Delete();
+
+  vtkBiDimensionalRepresentation2D *brep = vtkBiDimensionalRepresentation2D::New();
+
+  vtkBiDimensionalWidget *bwidget = vtkBiDimensionalWidget::New();
+  bwidget->SetInteractor(iren);
+  bwidget->SetRepresentation(brep);
+  brep->Delete();
 
   vtkLogoWidget * iconwidget = 0;
   if( reader->GetNumberOfIconImages() )
@@ -446,6 +462,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   if(iconwidget) iconwidget->On();
   obs->IconWidget = iconwidget;
   obs->DistanceWidget = dwidget;
+  obs->BiDimWidget = bwidget;
 #endif
   iren->AddObserver(vtkCommand::CharEvent,obs);
   iren->AddObserver(vtkCommand::EndPickEvent,obs);
@@ -481,6 +498,8 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
   dwidget->Off();
   dwidget->Delete();
+  bwidget->Off();
+  bwidget->Delete();
   if( iconwidget )
     {
     iconwidget->Off();
