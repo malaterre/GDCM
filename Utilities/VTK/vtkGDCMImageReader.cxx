@@ -562,10 +562,16 @@ int vtkGDCMImageReader::RequestInformationCompat()
     {
     filename = this->FileName;
     }
-  else
+  else if ( this->FileNames )
     {
     assert( this->FileNames && this->FileNames->GetNumberOfValues() >= 1 );
     filename = this->FileNames->GetValue( 0 );
+    }
+  else
+    {
+    // hey! I need at least one file to schew on !
+    vtkErrorMacro( "You did not specify any filenames" );
+    return 0;
     }
   gdcm::ImageReader reader;
   reader.SetFileName( filename );
