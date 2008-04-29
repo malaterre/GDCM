@@ -33,8 +33,8 @@
 void delta_decode(unsigned short *outbuffer, const char *inbuffer, size_t length, size_t outlength)
 {
   unsigned short t = 0;
-  int i;
-  int j;
+  size_t i;
+  size_t j;
   for (i=0,j=0; i < length; ++i,++j)
     {
     if( inbuffer[i] == (0xa5-256) )
@@ -59,9 +59,9 @@ void delta_decode(unsigned short *outbuffer, const char *inbuffer, size_t length
       }
     else
       {
-	      if( j < outlength )
+	      if( j < outlength / 2 ) // FIXME
 	      {
-      assert( ((int)inbuffer[i] + (int)t) >= 0 );
+      //assert( ((int)inbuffer[i] + (int)t) >= 0 );
       outbuffer[j] = (int)inbuffer[i] + (int)t;
       t = outbuffer[j];
 	      }
@@ -104,6 +104,7 @@ int main(int argc, char *argv [])
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
   pixeldata.SetVR( gdcm::VR::OB );
   pixeldata.SetByteValue( ref, 131072);
+  delete[] ref;
 
   gdcm::ImageWriter writer;
 
