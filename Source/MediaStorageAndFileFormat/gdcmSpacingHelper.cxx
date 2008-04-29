@@ -41,8 +41,18 @@ Tag SpacingHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
     // (0028,0030) DS [2.0\2.0]                                #   8, 2 PixelSpacing
     t = Tag(0x0028,0x0030);
     break;
+  case MediaStorage::ComputedRadiographyImageStorage:
+  case MediaStorage::DigitalXRayImageStorageForPresentation:
+  case MediaStorage::DigitalXRayImageStorageForProcessing:
+  case MediaStorage::DigitalMammographyImageStorageForPresentation:
+  case MediaStorage::DigitalMammographyImageStorageForProcessing:
+  case MediaStorage::DigitalIntraoralXrayImageStorageForPresentation:
+  case MediaStorage::DigitalIntraoralXRayImageStorageForProcessing:
+    // (0018,1164) DS [0.5\0.5]                                #   8, 2 ImagerPixelSpacing
+    t = Tag(0x0018,0x1164);
+    break;
   default:
-    gdcmDebugMacro( "Do not handle: " << ms );
+    gdcmWarningMacro( "Do not handle: " << ms );
     t = Tag(0xffff,0xffff);
     break;
     }
@@ -61,7 +71,7 @@ Tag SpacingHelper::GetZSpacingTagFromMediaStorage(MediaStorage const &ms)
     t = Tag(0x0018,0x0088);
     break;
   default:
-    gdcmDebugMacro( "Do not handle: " << ms );
+    gdcmWarningMacro( "Do not handle Z spacing for: " << ms );
     t = Tag(0xffff,0xffff);
     break;
     }

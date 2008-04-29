@@ -33,8 +33,13 @@
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
 #include "vtkLogoWidget.h"
 #include "vtkLogoRepresentation.h"
+#include "vtkDistanceWidget.h"
+#include "vtkPointHandleRepresentation2D.h"
+#include "vtkDistanceRepresentation2D.h"
+#include "vtkProperty2D.h"
 #else
 class vtkLogoWidget;
+class vtkDistanceWidget;
 class vtkLogoRepresentation;
 #endif
 #if VTK_MAJOR_VERSION >= 5
@@ -147,6 +152,7 @@ public:
     {
     ImageViewer = NULL;
     IconWidget = NULL;
+    DistanceWidget = NULL;
     picker = vtkWorldPointPicker::New();
     }
   ~vtkGDCMObserver()
@@ -186,6 +192,10 @@ public:
           {
           IconWidget->Off();
           }
+        else if ( keycode == 'd' )
+          {
+          DistanceWidget->On();
+          }
 #endif
         else
           {
@@ -224,6 +234,7 @@ public:
   TViewer *ImageViewer;
   vtkWorldPointPicker *picker;
   vtkLogoWidget *IconWidget;
+  vtkDistanceWidget *DistanceWidget;
 };
 
 // A feature in VS6 make it painfull to write template code
@@ -273,6 +284,18 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     }
   // TODO: Icon can be added using the vtkLogoWidget
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+  vtkPointHandleRepresentation2D *handle = vtkPointHandleRepresentation2D::New();
+  handle->GetProperty()->SetColor(1,0,0);
+  vtkDistanceRepresentation2D *rep = vtkDistanceRepresentation2D::New();
+  rep->SetHandleRepresentation(handle);
+  handle->Delete();
+
+  vtkDistanceWidget *dwidget = vtkDistanceWidget::New();
+  dwidget->SetInteractor(iren);
+  dwidget->CreateDefaultRepresentation();
+  dwidget->SetRepresentation(rep);
+  rep->Delete();
+
   vtkLogoWidget * iconwidget = 0;
   if( reader->GetNumberOfIconImages() )
     {
@@ -422,6 +445,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
   if(iconwidget) iconwidget->On();
   obs->IconWidget = iconwidget;
+  obs->DistanceWidget = dwidget;
 #endif
   iren->AddObserver(vtkCommand::CharEvent,obs);
   iren->AddObserver(vtkCommand::EndPickEvent,obs);
@@ -455,6 +479,8 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 
   reader->Delete();
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+  dwidget->Off();
+  dwidget->Delete();
   if( iconwidget )
     {
     iconwidget->Off();

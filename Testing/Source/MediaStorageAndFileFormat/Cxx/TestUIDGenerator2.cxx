@@ -15,31 +15,68 @@
 #include "gdcmUIDGenerator.h"
 
 #include <iostream>
+#include <set>
+#include <vector>
+#include <algorithm>
+#include <iterator>
 
 #include <pthread.h> 
+
+const unsigned int nuids = 100;
 
 void* func (void* argc)
 {
   gdcm::UIDGenerator g;
-  //const char *s = g.Generate();
-  std::cout << g.Generate() << std::endl;
-  std::cout << g.Generate() << std::endl;
-  std::cout << g.Generate() << std::endl;
-  std::cout << g.Generate() << std::endl;
-  std::cout << g.Generate() << std::endl;
+  std::set<std::string> *uids= reinterpret_cast< std::set<std::string>* >(argc);
+  for(unsigned int i = 0; i < nuids; i++)
+    {
+    const char *s = g.Generate();
+    //std::cout << s << std::endl;
+    if ( uids->count(s) == 1 )
+      {
+      std::cerr << "Already found: " << s << std::endl;
+      //pthread_exit(); // How do I say this is an error...
+      }
+    uids->insert( s );
+   }
   return NULL;
 }
 
 int TestUIDGenerator2(int argc, char *argv[])
 {
-pthread_t th[2];
-        int i, ret;
-        //printf("main posix tid: %u\n", pthread_self());
-        //printf("main pid: %u\n", getpid());
-        //printf("main tid: %u\n", gettid());
-        for (i = 0; i < 2; i++)
-                ret = pthread_create (&th[i], NULL, func, (void*)&i);
-        for (i = 0; i < 2; i++)
-                pthread_join (th[i], NULL); 
+  const unsigned int nthreads = 10; // multiple of 2 please
+  pthread_t th[nthreads];
+  std::set<std::string> uids[nthreads];
+  int i, ret;
+  for (i = 0; i < nthreads; i++)
+    ret = pthread_create (&th[i], NULL, func, (void*)(uids+i));
+  for (i = 0; i < nthreads; i++)
+    pthread_join (th[i], NULL); 
+
+  std::vector<std::string> v_one(nuids*nthreads);
+  std::vector<std::string>::iterator it = v_one.begin();
+  for(i = 0; i < nthreads; i+=2)
+    {
+    std::set_union(uids[i].begin(), uids[i].end(), 
+      uids[i+1].begin(), uids[i+1].end(), it);
+    it += nuids*2;
+    }
+  std::cout << v_one.size() << std::endl;
+  assert( v_one.size() == nuids * nthreads ); // programmer error
+  
+  std::copy(v_one.begin(), v_one.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
+
+  std::set<std::string> global;
+  for(it = v_one.begin(); it != v_one.end(); ++it)
+    {
+    global.insert( *it );
+    }
+  std::cout << "set:" << global.size() << std::endl;
+  if( global.size() != nuids * nthreads )
+    {
+    return 1;
+    }
+
   return 0;
 }
+

@@ -117,6 +117,12 @@ const char* UIDGenerator::Generate()
   pthread_t threadid = pthread_self();
   os << threadid;
   Unique += os.str();
+  static unsigned int c = 0;
+  os.str("");
+  os << c;
+  c++;
+  Unique += ".";
+  Unique += os.str();
 #endif
 
   assert( IsValid( Unique.c_str() ) );

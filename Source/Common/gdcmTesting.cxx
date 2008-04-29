@@ -25,6 +25,7 @@ namespace gdcm
 #include "gdcmMD5DataImages.cxx"
 #else
 static const char GDCM_DATA_ROOT[] = "";
+static const char GDCM_PIXEL_SPACING_DATA_ROOT[] = "";
 static const char GDCM_TEMP_DIRECTORY[] = "";
 static const char * const gdcmDataFileNames[] = { 0 };
 static const char * const gdcmMD5DataImages[][2] = { {0,0} };
@@ -88,6 +89,11 @@ const char * Testing::GetMD5FromFile(const char *filepath)
 const char *Testing::GetDataRoot()
 {
   return GDCM_DATA_ROOT;
+}
+
+const char *Testing::GetPixelSpacingDataRoot()
+{
+  return GDCM_PIXEL_SPACING_DATA_ROOT;
 }
 
 const char *Testing::GetTempDirectory(const char * subdir)
