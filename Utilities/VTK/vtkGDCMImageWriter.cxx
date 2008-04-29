@@ -18,6 +18,7 @@
 #include "vtkObjectFactory.h"
 #include "vtkImageData.h"
 #include "vtkLookupTable.h"
+#include "vtkMath.h"
 #include "vtkMatrix4x4.h"
 #include "vtkMedicalImageProperties.h"
 #include "vtkStringArray.h"
@@ -754,25 +755,62 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   // and an Image Orientation (Patient)
   if ( ms != gdcm::MediaStorage::SecondaryCaptureImageStorage )
     {
-    // Image Position (Patient)
-    gdcm::Attribute<0x0020,0x0032> ipp = {{0,0,0}}; // default value
+
+    // we need these iop arrays later when calculating the IPP per
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
-    const double *origin = data->GetOrigin();
+    double iop1[3], iop2[3];
 #else
-    const float *origin = data->GetOrigin();
+    float iop1[3], iop2[3];
 #endif
-    for(int i = 0; i < 3; ++i)
-      ipp.SetValue( origin[i], i );
-    ds.Insert( ipp.GetAsDataElement() );
 
     // Image Orientation (Patient)
     gdcm::Attribute<0x0020,0x0037> iop = {{1,0,0,0,1,0}}; // default value
     const vtkMatrix4x4 *dircos = this->DirectionCosines;
     for(int i = 0; i < 3; ++i)
+    {
       iop.SetValue( dircos->GetElement(i,0), i );
+      iop1[i] = dircos->GetElement(i,0);
+    }
+      
     for(int i = 0; i < 3; ++i)
+    {
       iop.SetValue( dircos->GetElement(i,1), i+3 );
+      iop2[i] = dircos->GetElement(i,1);
+    }
+
     ds.Insert( iop.GetAsDataElement() );
+
+    // Image Position (Patient)
+    gdcm::Attribute<0x0020,0x0032> ipp = {{0,0,0}}; // default value
+#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
+    const double *origin = data->GetOrigin();
+    double new_origin[3];
+    double zaxis[3];
+#else
+    const float *origin = data->GetOrigin();
+    float new_origin[3];
+    float zaxis[3];
+#endif
+
+    // cross product of direction cosines gives the direction along
+    // which the slices are stacked
+    vtkMath::Cross(iop1, iop2, zaxis);
+    // determine the relative index of the current slice
+    // in the case of a single volume, this will be 0
+    // since inExt (UpdateExtent) and WholeExt are the same
+    int n = inExt[4] - inWholeExt[4];
+    for (int i = 0; i < 3; i++)
+    {
+        // the n'th slice is n * z-spacing aloung the IOP-derived
+        // z-axis
+        new_origin[i] = origin[i] + zaxis[i] * n * spacing[2];
+    }
+
+    for(int i = 0; i < 3; ++i)
+      ipp.SetValue( new_origin[i], i );
+
+    ds.Insert( ipp.GetAsDataElement() );
+
     }
 
   // Here come the important part: generate proper UID for Series/Study so that people knows this is the same Study/Series
