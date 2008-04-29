@@ -12,29 +12,40 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmRAWCodec_h
-#define __gdcmRAWCodec_h
+#include "gdcmDeltaEncodingCodec.h"
+#include "gdcmTransferSyntax.h"
+#include "gdcmByteSwap.txx"
+#include "gdcmDataElement.h"
+#include "gdcmSequenceOfFragments.h"
 
-#include "gdcmImageCodec.h"
+#include <sstream>
 
 namespace gdcm
 {
-  
-class RAWInternals;
-class RAWCodec : public ImageCodec
-{
-public:
-  RAWCodec();
-  ~RAWCodec();
-  bool CanDecode(TransferSyntax const &ts);
-  bool Decode(DataElement const &is, DataElement &os);
-protected:
-  bool Decode(std::istream &is, std::ostream &os);
 
-private:
-  RAWInternals *Internals;
-};
+DeltaEncodingCodec::DeltaEncodingCodec()
+{
+}
+
+DeltaEncodingCodec::~DeltaEncodingCodec()
+{
+}
+
+bool DeltaEncodingCodec::CanDecode(TransferSyntax const &ts)
+{
+  return true; // FIXME
+}
+
+bool DeltaEncodingCodec::Decode(DataElement const &in, DataElement &out)
+{
+  out = in;
+  return true;
+}
+
+bool DeltaEncodingCodec::Decode(std::istream &is, std::ostream &os)
+{
+  abort();
+  return true;
+}
 
 } // end namespace gdcm
-
-#endif //__gdcmRAWcodec_h

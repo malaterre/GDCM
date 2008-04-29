@@ -12,27 +12,23 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmRAWCodec_h
-#define __gdcmRAWCodec_h
+#ifndef __gdcmDeltaEncodingodec_h
+#define __gdcmDeltaEncodingodec_h
 
 #include "gdcmImageCodec.h"
 
 namespace gdcm
 {
   
-class RAWInternals;
-class RAWCodec : public ImageCodec
+class DeltaEncodingCodec : public ImageCodec
 {
 public:
-  RAWCodec();
-  ~RAWCodec();
+  DeltaEncodingCodec();
+  ~DeltaEncodingCodec();
   bool CanDecode(TransferSyntax const &ts);
   bool Decode(DataElement const &is, DataElement &os);
 protected:
   bool Decode(std::istream &is, std::ostream &os);
-
-private:
-  RAWInternals *Internals;
 };
 
 } // end namespace gdcm

@@ -148,6 +148,27 @@ bool ImageValue::TryRLECodec(char *buffer) const
   return false;
 }
 
+#if 0
+bool ImageValue::TryDeltaEncodingCodec(char *buffer) const
+{
+  unsigned long len = GetBufferLength();
+  const TransferSyntax &ts = GetTransferSyntax();
+
+  DeltaEncodingCodec codec;
+  if( codec.CanDecode( ts ) )
+    {
+    DataElement out;
+    bool r = codec.Decode(PixelData, out);
+    assert( r );
+    const ByteValue *outbv = out.GetByteValue();
+    //unsigned long check = outbv->GetLength();  // FIXME
+    memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+    return true;
+    }
+  return false;
+}
+#endif
+
 bool ImageValue::GetBuffer(char *buffer) const
 {
   bool success = false;
@@ -155,6 +176,7 @@ bool ImageValue::GetBuffer(char *buffer) const
   if( !success ) success = TryJPEGCodec(buffer);
   if( !success ) success = TryJPEG2000Codec(buffer);
   if( !success ) success = TryRLECodec(buffer);
+  //if( !success ) success = TryDeltaEncodingCodec(buffer);
   if( !success )
     {
     buffer = 0;
