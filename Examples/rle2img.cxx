@@ -18,7 +18,7 @@
 #include "gdcmPrivateTag.h"
 #include "gdcmImageWriter.h"
 
-void delta_decode(unsigned short *outbuffer, const char *inbuffer, int length)
+void delta_decode(unsigned short *outbuffer, const char *inbuffer, size_t length, size_t outlength)
 {
   unsigned short t = 0;
   int i;
@@ -47,9 +47,12 @@ void delta_decode(unsigned short *outbuffer, const char *inbuffer, int length)
       }
     else
       {
+	      if( j < outlength )
+	      {
       assert( ((int)inbuffer[i] + (int)t) >= 0 );
       outbuffer[j] = (int)inbuffer[i] + (int)t;
       t = outbuffer[j];
+	      }
       }
     }
 }
@@ -84,7 +87,7 @@ int main(int argc, char *argv [])
 
   char *ref = new char [131072];
   memset(ref,0,131072);
-  delta_decode((unsigned short *)ref, bv2->GetPointer(), bv2->GetLength());
+  delta_decode((unsigned short *)ref, bv2->GetPointer(), bv2->GetLength(), 131072);
 
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
   pixeldata.SetVR( gdcm::VR::OB );
