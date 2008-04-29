@@ -13,6 +13,18 @@
 
 =========================================================================*/
 /*
+ * Special thanks to:
+ * Mauro Maiorca for bringing to our attention on this new ELSCINT1 
+ * compression algorithm : PMSCT_RLE1 (different from the 'LOSSLESS RICE')
+ * See post at:
+ * http://groups.google.com/group/comp.protocols.dicom/msg/f2b99bf706a7f8ca
+ * 
+ * Thanks to Jesús Spínola, for more datasets,
+ * http://www.itk.org/pipermail/insight-users/2008-April/025571.html
+ *
+ * And last but not least, a very big thank to Ivo van Poorten, without
+ * whom we would still be looking at this compressed byte stream as if
+ * it was RLE compressed.
  */
 #include "gdcmReader.h"
 #include "gdcmPrivateTag.h"
