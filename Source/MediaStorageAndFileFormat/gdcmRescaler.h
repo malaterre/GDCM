@@ -29,6 +29,8 @@ public:
   ~Rescaler() {}
 
   bool Rescale(char *out, const char *in, size_t n);
+  bool InverseRescale(char *out, const char *in, size_t n);
+
   void SetIntercept(double i) { Intercept = i; }
   void SetSlope(double s) { Slope = s; }
   void SetPixelFormat(PixelFormat const & pf) { PF = pf; }

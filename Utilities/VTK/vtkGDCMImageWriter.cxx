@@ -34,6 +34,7 @@
 #include "gdcmByteValue.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmAttribute.h"
+#include "gdcmRescaler.h"
 
 vtkCxxRevisionMacro(vtkGDCMImageWriter, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMImageWriter)
@@ -478,7 +479,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     Note to myself: should I allow people to squeeze into unsigned char ? Or can I assume most people
     will be doing unsigned short anyway...
     */
-    pixeltype = gdcm::PixelFormat::UINT32;
+    pixeltype = gdcm::PixelFormat::UINT16;
     break;
   default:
     vtkErrorMacro( "Do not support this Pixel Type: " << scalarType );
@@ -573,13 +574,21 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
   int j = dext[4];
 
+#if 0
   //if( this->Shift != 1.0 && this->Scale == (int)this->Scale )
   if( data->GetScalarType() == VTK_FLOAT )
     {
-    // TODO
-    vtkWarningMacro( "TODO Need to implement" );
-    //return 0;
+    // rescale from float to unsigned short
+    gdcm::Rescaler ir;
+    ir.SetIntercept( this->Shift );
+    ir.SetSlope( this->Scale );
+    char * copy = new char[len*2];
+    memcpy(copy, tempimage, len*2);
+    ir.InverseRescale(pointer,copy,len*2);
+    delete[] copy;
+    outsize = sizeof(unsigned short)*(dext[1] - dext[0] + 1);
     }
+#endif
 
   //std::cerr << "dext[4]:" << j << std::endl;
   //std::cerr << "inExt[4]:" << inExt[4] << std::endl;

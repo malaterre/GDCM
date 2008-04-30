@@ -67,6 +67,7 @@ blacklist = (
 "JPEG2000Codec"
 # For now remove the codec part:
 "ImageCodec"
+"DeltaEncodingCodec"
 "RLECodec"
 "RAWCodec"
 "AudioCodec"

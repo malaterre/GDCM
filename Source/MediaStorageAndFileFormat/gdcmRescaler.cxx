@@ -25,10 +25,23 @@ void RescaleFunction(TOut *out, const TIn *in, double intercept, double slope, s
 {
   size /= sizeof(TIn);
   for(size_t i = 0; i != size; ++i)
-  {
+    {
     out[i] = (TOut)(slope * in[i] + intercept);
     //assert( out[i] == (TOut)(slope * in[i] + intercept) ); // will really slow down stuff...
-  }
+    }
+}
+
+// parameter 'size' is in bytes
+template <typename TOut, typename TIn>
+void InverseRescaleFunction(TOut *out, const TIn *in, double intercept, double slope, size_t size)
+{
+  size /= sizeof(TIn);
+  for(size_t i = 0; i != size; ++i)
+    {
+    // well known trick of adding 0.5 after a floating point type operation to properly find the
+    // closest integer that will represent the transformation
+    out[i] = (TOut)(((double)in[i] - intercept) / slope + 0.5);
+    }
 }
 
 PixelFormat::ScalarType ComputeBestFit(const PixelFormat &pf, double intercept, double slope)
@@ -132,6 +145,50 @@ void Rescaler::RescaleFunctionIntoBestFit(char *out, const TIn *in, size_t n)
     }
  }
 
+
+bool Rescaler::InverseRescale(char *out, const char *in, size_t n)
+{
+  // check if we are dealing with floating point type
+  if( Slope != (int)Slope || Intercept != (int)Intercept)
+  {
+  // need to rescale as float (32bits) as slope/intercept are 32bits
+  //abort();
+  }
+  // else integral type
+  switch(PF)
+    {
+  //case PixelFormat::UINT8:
+  //  RescaleFunctionIntoBestFit<uint8_t>(out,(uint8_t*)in,n);
+  //  break;
+  //case PixelFormat::INT8:
+  //  RescaleFunctionIntoBestFit<int8_t>(out,(int8_t*)in,n);
+  //  break;
+  //case PixelFormat::UINT12:
+  //  //RescaleFunctionIntoBestFit<uint12_t>(out,in,n);
+  //  abort();
+  //  break;
+  //case PixelFormat::INT12:
+  //  //RescaleFunctionIntoBestFit<int12_t>(out,in,n);
+  //  abort();
+  //  break;
+  //case PixelFormat::UINT16:
+  //  RescaleFunctionIntoBestFit<uint16_t>(out,(uint16_t*)in,n);
+  //  break;
+  //case PixelFormat::INT16:
+  //  RescaleFunctionIntoBestFit<int16_t>(out,(int16_t*)in,n);
+  //  break;
+  //case PixelFormat::UINT32:
+  //  RescaleFunctionIntoBestFit<uint32_t>(out,(uint32_t*)in,n);
+  //  break;
+  //case PixelFormat::INT32:
+  //  RescaleFunctionIntoBestFit<int32_t>(out,(int32_t*)in,n);
+  //  break;
+  default:
+    InverseRescaleFunction<unsigned short, float>((unsigned short*)out,(float*)in,Intercept,Slope,n);
+    break;
+    }
+ 
+  return true;}
 
 bool Rescaler::Rescale(char *out, const char *in, size_t n)
 {
