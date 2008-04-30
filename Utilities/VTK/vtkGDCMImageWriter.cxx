@@ -742,8 +742,33 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   ms.GuessFromModality( this->MedicalImageProperties->GetModality(), this->FileDimensionality ); // Will override SC only if something is found...
   if( this->FileDimensionality != 2 && ms == gdcm::MediaStorage::SecondaryCaptureImageStorage )
     {
-    //vtkErrorMacro( "Cannot handle Multi Frame image in SecondaryCaptureImageStorage" );
-    //return 0;
+    // A.8.3.4 Multi-frame Grayscale Byte SC Image IOD Content Constraints
+/*
+- Samples per Pixel (0028,0002) shall be 1
+- Photometric Interpretation (0028,0004) shall be MONOCHROME2
+- Bits Allocated (0028,0100) shall be 8
+- Bits Stored (0028,0101) shall be 8
+- High Bit (0028,0102) shall be 7
+- Pixel Representation (0028,0103) shall be 0
+- Planar Configuration (0028,0006) shall not be present
+*/
+    if( this->FileDimensionality == 3 &&
+      pixeltype.GetSamplesPerPixel() == 1 &&
+      pi == gdcm::PhotometricInterpretation::MONOCHROME2 &&
+      pixeltype.GetBitsAllocated() == 8 &&
+      pixeltype.GetBitsStored() == 8 &&
+      pixeltype.GetHighBit() == 7 &&
+      pixeltype.GetPixelRepresentation() == 0 
+      // image.GetPlanarConfiguration()
+    )
+      {
+      ms = gdcm::MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage;
+      }
+    else
+      {
+      vtkErrorMacro( "Cannot handle Multi Frame image in SecondaryCaptureImageStorage" );
+      return 0;
+      }
     }
   // FIXME: new Secondary object handle multi frames...
   assert( gdcm::MediaStorage::IsImage( ms ) );
@@ -762,7 +787,8 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
   // I am pretty sure that for all other images it is valid to add an Image Position (Patient)
   // and an Image Orientation (Patient)
-  if ( ms != gdcm::MediaStorage::SecondaryCaptureImageStorage )
+  if ( ms != gdcm::MediaStorage::SecondaryCaptureImageStorage 
+    && ms != gdcm::MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage)
     {
 
     // we need these iop arrays later when calculating the IPP per

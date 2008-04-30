@@ -23,7 +23,7 @@
 int main(int argc, char *argv[])
 {
   const char *filename = argv[1];
-  std::cout << "filename:" << filename << std::endl;
+  std::cout << "filename: " << filename << std::endl;
   gdcm::Reader reader;
   reader.SetFileName( filename );
   if( !reader.Read() )
