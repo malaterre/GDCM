@@ -98,24 +98,27 @@ int TestvtkGDCMImageWrite2(const char *filename, bool verbose = false)
       }
     assert( filenames->GetNumberOfValues() == fg.GetNumberOfFilenames() );
     writer->SetFileNames( filenames );
-    filenames->Delete();
     writer->Write();
-    if( verbose )  std::cerr << "Write out: " << gdcmfile << std::endl;
+    //if( verbose )  std::cerr << "Write out: " << gdcmfile << std::endl;
 
     writer->Delete();
 
-    // Need to check we can still read this image back:
-    if ( reader->GetFileDimensionality() == 2 ) 
+    // Need to check we can still read those files back:
+    for(int file=0; file<filenames->GetNumberOfValues(); ++file)
       {
+      const char *fname = filenames->GetValue(file);
       gdcm::ImageReader r;
-      r.SetFileName( gdcmfile.c_str() );
+      //r.SetFileName( gdcmfile.c_str() );
+      r.SetFileName( fname );
       if( !r.Read() )
         {
-        std::cerr << "failed to read back:" << gdcmfile << std::endl;
+        std::cerr << "failed to read back:" << fname << std::endl;
         res = 1;
         }
       else
         {
+	if( file == 0 )
+	{
         // ok could read the file, now check origin is ok:
         const gdcm::Image &image = r.GetImage();
         const double *origin = image.GetOrigin();
@@ -133,17 +136,16 @@ int TestvtkGDCMImageWrite2(const char *filename, bool verbose = false)
             }
           }
         }
-      }
-    else
-      {
-      // TODO!
+	}
       }
     }
   else
     {
     if( verbose )
       std::cerr << "vtkGDCMImageReader cannot read: " << filename << std::endl;
+    res++;
     }
+  filenames->Delete();
   reader->Delete();
 
   return res;
