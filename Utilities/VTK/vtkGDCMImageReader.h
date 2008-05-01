@@ -18,6 +18,8 @@
 // this reader is single threaded.
 // .SECTION Implementation note: when FileLowerLeft is set to on the image is not flipped
 // upside down as VTK would expect, use this option only if you know what you are doing
+// .SECTION Implementation note: when reading a series of 2D slices, user is expected to provide an ordered list of filenames. No sorting will be applied afterward. 
+// .SECTION Implementation note: Although 99% of the time the Zspacing as read from a tag in a 2D DICOM file should be correct, there has been reports that this value can be missing, or incorrect, in which case users are advised to override this value using the return value from gdcm::IPPSorter::GetZSpacing() and set it via SetDataSpacing on the reader itself.
 // .SECTION TODO
 // This reader does not handle a series of 3D images, only a single 3D (multi frame) or a 
 // list of 2D files are supported for now.
