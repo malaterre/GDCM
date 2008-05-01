@@ -623,7 +623,8 @@ int vtkGDCMImageReader::RequestInformationCompat()
     {
     this->DataSpacing[0] = spacing[0];
     this->DataSpacing[1] = spacing[1];
-    if( image.GetNumberOfDimensions() == 3 )
+    if( image.GetNumberOfDimensions() == 3 
+     || this->FileNames && this->FileNames->GetNumberOfValues() > 1 )
       {
       this->DataSpacing[2] = image.GetSpacing(2);
       }
