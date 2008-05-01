@@ -29,7 +29,12 @@ int TestUIDGeneratorValid()
     {
     return 1;
     }
-  const char invalid1[] = "abcd";
+  const char invalid0[] = ".0.123";
+  if( gdcm::UIDGenerator::IsValid( invalid0 ) )
+    {
+    return 1;
+    }
+   const char invalid1[] = "abcd";
   if( gdcm::UIDGenerator::IsValid( invalid1 ) )
     {
     return 1;
