@@ -138,6 +138,8 @@ int TestvtkGDCMImageWrite2(const char *filename, bool verbose = false)
         }
 	}
       }
+
+  filenames->Delete();
     }
   else
     {
@@ -145,7 +147,6 @@ int TestvtkGDCMImageWrite2(const char *filename, bool verbose = false)
       std::cerr << "vtkGDCMImageReader cannot read: " << filename << std::endl;
     res++;
     }
-  filenames->Delete();
   reader->Delete();
 
   return res;
