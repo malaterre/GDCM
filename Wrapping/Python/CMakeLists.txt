@@ -24,9 +24,29 @@ ENDIF(WIN32 AND NOT CYGWIN)
 
 FIND_PACKAGE(PythonLibs REQUIRED)
 MARK_AS_ADVANCED(PYTHON_LIBRARY PYTHON_INCLUDE_PATH)
-INCLUDE_DIRECTORIES(
-  ${PYTHON_INCLUDE_PATH}
-  )
+        # Lamest excuse ever:
+        # http://mail.python.org/pipermail/python-list/2002-April/141189.html
+        # So here come craziest hack ever, since I cannot control the output of swig,
+        # I need to fake a Python.h file only for MSVC compilers...insane !
+        IF(MSVC)
+        CONFIGURE_FILE( ${CMAKE_CURRENT_SOURCE_DIR}/Python.h.in
+                ${CMAKE_CURRENT_BINARY_DIR}/Python.h @ONLY
+                )
+        INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} )
+# does not work quite as expected...
+#  IF(CMAKE_CONFIGURATION_TYPES)
+#SET_SOURCE_FILES_PROPERTIES(
+#        "${swig_generated_file_fullname}"
+#        PROPERTIES 
+#        COMPILE_FLAGS "/U _DEBUG")
+#  ENDIF(CMAKE_CONFIGURATION_TYPES)
+
+        ELSE(MSVC)
+                # just plain including pyconfig.h is working...until one crazy python dev decide otherwise...
+        INCLUDE_DIRECTORIES(
+                ${PYTHON_INCLUDE_PATH}
+          )
+         ENDIF(MSVC)
 SET_SOURCE_FILES_PROPERTIES(gdcm.i PROPERTIES CPLUSPLUS ON)
 
 # Some old swig 1.3 did not support this option:
@@ -38,7 +58,6 @@ SET(CMAKE_SWIG_FLAGS "-interface _${GDCM_PYTHON_IMPLEMENTATION_NAME}")
 SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
 SWIG_ADD_MODULE(${GDCM_PYTHON_IMPLEMENTATION_NAME} python gdcm.i)
 SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} gdcmMSFF gdcmIOD ${PYTHON_LIBRARIES})
-
 
 # Python extension modules on Windows must have the extension ".pyd"
 # instead of ".dll" as of Python 2.5.  Older python versions do support
@@ -53,7 +72,7 @@ ENDIF(WIN32 AND NOT CYGWIN)
 ADD_CUSTOM_COMMAND(
   TARGET    ${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME}
   POST_BUILD
-  COMMAND   ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/gdcm.py ${LIBRARY_OUTPUT_PATH}
+  COMMAND   ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/gdcm.py ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}
   DEPENDS "${swig_generated_file_fullname}"
   COMMENT   "Copy gdcm.py into ${LIBRARY_OUTPUT_PATH}"
 )
