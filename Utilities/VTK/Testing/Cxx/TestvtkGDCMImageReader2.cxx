@@ -24,6 +24,9 @@
 #include "gdcmDirectory.h"
 #include "gdcmIPPSorter.h"
 
+#ifndef vtkFloatingPointType
+#define vtkFloatingPointType float
+#endif
 /*
  * Test to show the pipeline for 
  * IPPSorter -> vtkGDCMImageReader -> vtkImageChangeInformation
@@ -73,7 +76,7 @@ int TestvtkGDCMImageReader2(int argc, char *argv[])
   reader->SetFileNames( files );
   reader->Update();
 
-  const double *spacing = reader->GetOutput()->GetSpacing();
+  const vtkFloatingPointType *spacing = reader->GetOutput()->GetSpacing();
   std::cout << spacing[0] << "," << spacing[1] << "," << spacing[2] << std::endl;
   int ret = 0;
   if( spacing[2] != 0.5 )
@@ -87,7 +90,7 @@ int TestvtkGDCMImageReader2(int argc, char *argv[])
   reader2->SetDataSpacing( spacing[0], spacing[1], ippzspacing );
   reader2->SetFileNames( files );
   reader2->Update();
-  const double *spacing2 = reader2->GetOutput()->GetSpacing();
+  const vtkFloatingPointType *spacing2 = reader2->GetOutput()->GetSpacing();
   std::cout << spacing2[0] << "," << spacing2[1] << "," << spacing2[2] << std::endl;
   // You need to use this class to preserve spacing
   // across pipeline re-execution
@@ -96,7 +99,7 @@ int TestvtkGDCMImageReader2(int argc, char *argv[])
   change->SetOutputSpacing( spacing2[0], spacing2[1], ippzspacing );
   change->Update();
 
-  const double *spacing3 = change->GetOutput()->GetSpacing();
+  const vtkFloatingPointType *spacing3 = change->GetOutput()->GetSpacing();
   std::cout << spacing3[0] << "," << spacing3[1] << "," << spacing3[2] << std::endl;
   if( spacing3[2] != 5.5 )
   {
