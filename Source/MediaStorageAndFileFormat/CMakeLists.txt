@@ -78,6 +78,11 @@ INCLUDE_DIRECTORIES(
 ADD_LIBRARY(gdcmMSFF ${MSFF_SRCS})
 TARGET_LINK_LIBRARIES(gdcmMSFF gdcmDSED gdcmDICT
   gdcmjpeg8 gdcmjpeg12 gdcmjpeg16 gdcmopenjpeg)
+IF(WIN32)
+  # For UuidCreate
+  # http://msdn.microsoft.com/en-us/library/aa379205(VS.85).aspx
+  TARGET_LINK_LIBRARIES(gdcmMSFF Rpcrt4)
+ENDIF(WIN32)
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS gdcmMSFF
     RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime

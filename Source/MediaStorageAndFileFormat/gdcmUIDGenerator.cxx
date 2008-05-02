@@ -16,7 +16,17 @@
 #include "gdcmTrace.h"
 #include "gdcmSystem.h"
 
+#ifdef _WIN32
+#define HAVE_UUIDCREATE
+#else
+#define HAVE_UUID_GENERATE
+#endif
+
 #include "uuid/uuid.h"
+
+#ifdef HAVE_UUIDCREATE
+#include <Rpc.h>
+#endif
 
 namespace gdcm
 {
@@ -74,6 +84,7 @@ const char* UIDGenerator::Generate()
   // FIXME: I choose 2 bytes for the random number, since GDCM Root UID is so long, and harware address can take up
   // to 15 bytes, case 255.255.255.255.255.255 <-> 281474976710655
   // But a better approach to dynamically calculate the max size for random bits...
+#undef uuid_t
   uuid_t out;
   uuid_generate(out);
   char randbytesbuf[40];
@@ -156,8 +167,6 @@ const char* UIDGenerator::Generate2()
 /* return true on success */
 bool UIDGenerator::GenerateUUID(unsigned char *uuid_data)
 {
-#define HAVE_UUID_GENERATE
-
 #if defined(HAVE_UUID_GENERATE)
   uuid_t g;
   uuid_generate(g);
