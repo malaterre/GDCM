@@ -31,6 +31,20 @@
 namespace gdcm
 {
 
+/*
+ * This is just plain bad luck. GDCM UID root is 26 byte long
+ * And all implementation of the DCE UUID (Theodore Y. Ts'o)
+ * are based on a uint128_t (unsigned char [16]). Which
+ * means that converted to a base 10 number they require at 
+ * least 39 bytes to fit in memory, since the highest possible
+ * number is 256**16 - 1 = 340282366920938463463374607431768211455
+ * Unfortunately root + '.' + suffix should be at most 64 bytes
+ *
+ * So to get a full UUID implementation as per RFC 4122
+ * http://www.ietf.org/rfc/rfc4122.txt we need a shorted
+ * root...
+ *
+ */
 const char UIDGenerator::GDCM_UID[] = "1.2.826.0.1.3680043.2.1143";
 std::string UIDGenerator::Root = GetGDCMUID();
 // The following contains the *encoded* hardware address (not the raw as in ipconfig/ifconfig)
@@ -41,7 +55,30 @@ const char *UIDGenerator::GetGDCMUID()
   return GDCM_UID;
 }
 
-const char* UIDGenerator::Generate()
+#define FNV1_64_INIT ((uint64_t)0xcbf29ce484222325ULL)
+struct fnv_hash
+{
+      static uint64_t
+      hash(const char* pBuffer, size_t nByteLen)
+      {
+  uint64_t nHashVal    = FNV1_64_INIT,
+          nMagicPrime = 0x00000100000001b3ULL;
+ 
+   unsigned char* pFirst = ( unsigned char* )( pBuffer ),
+        * pLast  = pFirst + nByteLen;
+ 
+   while( pFirst < pLast )
+   {
+     nHashVal ^= *pFirst++,
+     nHashVal *= nMagicPrime;
+   }
+ 
+   return nHashVal;
+        
+      }
+};
+
+const char* UIDGenerator::Generate2()
 {
   Unique = GetRoot();
   if( Unique.empty() )
@@ -141,7 +178,7 @@ const char* UIDGenerator::Generate()
   return Unique.c_str();
 }
 
-const char* UIDGenerator::Generate2()
+const char* UIDGenerator::Generate()
 {
   Unique = GetRoot();
   if( Unique.empty() )
@@ -156,7 +193,31 @@ const char* UIDGenerator::Generate2()
   size_t len = System::EncodeBytes(randbytesbuf, uuid, sizeof(uuid));
   if( len > 200 ) return 0;
   Unique += ".";
+  if( Unique.size() + len > 64 )
+  {
+          // re-hash:
+          // 18 bytes:
+  char datetime[18];
+  bool res = System::GetCurrentDateTime(datetime);
+  if( !res )
+  {
+          return NULL;
+  }
+  Unique += datetime;
+  // 256**8 = 20 bytes
+           uint64_t hash = fnv_hash::hash( randbytesbuf, len);
+          std::ostringstream os;
+          os << hash;
+          Unique += os.str();
+          if( Unique.size() > 64 )
+          {
+                  return NULL;
+          }
+  }
+  else
+  {
   Unique += randbytesbuf;
+  }
 
   assert( IsValid( Unique.c_str() ) );
 
