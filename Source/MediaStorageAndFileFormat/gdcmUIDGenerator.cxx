@@ -156,11 +156,11 @@ bool UIDGenerator::IsValid(const char *uid_)
    */
 
   std::string uid = uid_;
-  if( uid.size() > 64 )
+  if( uid.size() > 64 || uid.empty() )
     {
     return false;
     }
-  if( uid[uid.size()-1] == '.' ) // important to do that first
+  if( uid[0] == '.' || uid[uid.size()-1] == '.' ) // important to do that first
     {
     return false;
     }
