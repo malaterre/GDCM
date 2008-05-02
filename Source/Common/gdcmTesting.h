@@ -50,6 +50,8 @@ public :
   // Return the GDCM DATA ROOT
   static const char * GetDataRoot();
 
+  static const char * GetDataExtraRoot();
+
   static const char * GetPixelSpacingDataRoot();
 
   // NOT THREAD SAFE
