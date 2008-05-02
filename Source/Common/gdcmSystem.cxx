@@ -339,7 +339,7 @@ inline int getlastdigit(unsigned char *data, unsigned long size)
   return carry;
 }
 
-int System::EncodeBytes(char *out, unsigned char *data, int size)
+size_t System::EncodeBytes(char *out, const unsigned char *data, int size)
 {
   bool zero = false;
   int res;
@@ -363,7 +363,7 @@ int System::EncodeBytes(char *out, unsigned char *data, int size)
   return sres.size();
 }
 
-int System::GetHardwareAddress(unsigned char addr[6])
+bool System::GetHardwareAddress(unsigned char addr[6])
 {
   int stat = uuid_get_node_id(addr);
   /*
@@ -377,14 +377,14 @@ int System::GetHardwareAddress(unsigned char addr[6])
   */
   if (stat == 1) // success
     {
-    return stat;
+    return true;
     }
   // else
   gdcmWarningMacro("Problem in finding the MAC Address");
-  return 0;
+  return false;
 }
 
-int System::GetCurrentDateTime(char date[18])
+bool System::GetCurrentDateTime(char date[18])
 {
   const size_t maxsize = 40;
   char tmp[maxsize];
@@ -402,8 +402,7 @@ int System::GetCurrentDateTime(char date[18])
   size_t ret = strftime (tmp, sizeof (tmp), "%Y%m%d%H%M%S", ptm);
   if( ret == 0 || ret >= maxsize )
     {
-    //return "";
-    return 0;
+    return false;
     }
 
   // Add milliseconds
@@ -413,12 +412,11 @@ int System::GetCurrentDateTime(char date[18])
   assert( ret2 >= 0 );
   if( (unsigned int)ret2 >= maxsizall )
     {
-    //return "";
-    return 0;
+    return false;
     }
 
   // Ok !
-  return 1;
+  return true;
 }
 
 int System::StrNCaseCmp(const char *s1, const char *s2, size_t n)

@@ -48,7 +48,7 @@ const char* UIDGenerator::Generate()
     int res = System::GetHardwareAddress(node);
     assert( res );
     char buffer[15]; // 15 is max possible when all node[i] == 255
-    int len = System::EncodeBytes(buffer, node, sizeof(node));
+    int len = System::EncodeBytes(buffer, node, sizeof(node)); (void)len;
     assert( strlen(buffer) < 15 );
     EncodedHardwareAddress = buffer;
     if( EncodedHardwareAddress.empty() )
@@ -128,6 +128,54 @@ const char* UIDGenerator::Generate()
   assert( IsValid( Unique.c_str() ) );
 
   return Unique.c_str();
+}
+
+const char* UIDGenerator::Generate2()
+{
+  Unique = GetRoot();
+  if( Unique.empty() )
+    {
+    // Seriously...
+    return NULL;
+    }
+  unsigned char uuid[16];
+  bool r = UIDGenerator::GenerateUUID(uuid);
+  if( !r ) return 0;
+  char randbytesbuf[200];
+  size_t len = System::EncodeBytes(randbytesbuf, uuid, sizeof(uuid));
+  if( len > 200 ) return 0;
+  Unique += ".";
+  Unique += randbytesbuf;
+
+  assert( IsValid( Unique.c_str() ) );
+
+  return Unique.c_str();
+}
+
+
+/* return true on success */
+bool UIDGenerator::GenerateUUID(unsigned char *uuid_data)
+{
+#define HAVE_UUID_GENERATE
+
+#if defined(HAVE_UUID_GENERATE)
+  uuid_t g;
+  uuid_generate(g);
+  memcpy(uuid_data, g, sizeof(uuid_t));
+#elif defined(HAVE_UUID_CREATE)
+  uint32_t rv;
+  uuid_t g;
+  uuid_create(&g, &rv);
+  if (rv != uuid_s_ok)
+    return false;
+  memcpy(uuid_data, &g, sizeof(uuid_t));
+#elif defined(HAVE_UUIDCREATE)
+  if (FAILED(UuidCreate((UUID *)uuid_data)))
+    {
+    return false;
+    }
+#endif
+  return true;
 }
 
 bool UIDGenerator::IsValid(const char *uid_)

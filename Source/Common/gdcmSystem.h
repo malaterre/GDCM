@@ -49,9 +49,9 @@ public:
   // copy a file
 
   // somewhat UID specific:
-  static int GetHardwareAddress(unsigned char addr[6]);
-  static int GetCurrentDateTime(char date[18]);
-  static int EncodeBytes(char *out, unsigned char *data, int size);
+  static bool GetHardwareAddress(unsigned char addr[6]);
+  static bool GetCurrentDateTime(char date[18]);
+  static size_t EncodeBytes(char *out, const unsigned char *data, int size);
 
   static int StrCaseCmp(const char *s1, const char *s2);
   static int StrNCaseCmp(const char *s1, const char *s2, size_t n);
