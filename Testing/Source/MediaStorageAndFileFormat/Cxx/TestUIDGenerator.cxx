@@ -74,6 +74,16 @@ int TestUIDGeneratorValid()
     {
     return 1;
     }
+  const char invalid9[] = "";
+  if( gdcm::UIDGenerator::IsValid( invalid9 ) )
+    {
+    return 1;
+    }
+  const char invalid10[] = ".";
+  if( gdcm::UIDGenerator::IsValid( invalid10 ) )
+    {
+    return 1;
+    }
   return 0; // no error
 }
 

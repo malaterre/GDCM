@@ -51,6 +51,14 @@ FIND_PATH(GDCM_DATA_ROOT gdcm-ACR-LibIDO.acr
   )
 MARK_AS_ADVANCED(GDCM_DATA_ROOT)
 
+#-----------------------------------------------------------------------------
+FIND_PATH(GDCM_DATA_EXTRA_ROOT gdcmData.tar.gz
+  ${GDCM_SOURCE_DIR}/../gdcmDataExtra
+  $ENV{GDCM_DATA_EXTRA_ROOT}
+  $ENV{PUB_DICT_PATH}/../../gdcmDataExtra
+  )
+MARK_AS_ADVANCED(GDCM_DATA_EXTRA_ROOT)
+
 # Define a temp directory in which we can output stuff
 SET(GDCM_TEMP_DIRECTORY "${GDCM_BINARY_DIR}/Testing/Temporary" CACHE PATH "Path to a valid temp directory")
 MARK_AS_ADVANCED(GDCM_TEMP_DIRECTORY)
