@@ -13,10 +13,13 @@
 #
 ############################################################################
 
+# This is important for now to load the vtkgdcm module first
+import vtkgdcm
+from vtk import vtkImageGradient
+from vtk import vtkMultiThreader
 from vtk import vtkDirectory
 from vtk import vtkStructuredPointsWriter
 from vtk.util import vtkConstants as vtkType
-import vtkgdcm
 from vtkgdcm import vtkStringArray
 import gdcm # for gdcm.Directory
 import os,sys
@@ -64,6 +67,7 @@ def ExecuteInformation(reader, filename, dimz = 1):
   #reader.SetDataExtent( dataextent );
   reader.SetDataExtent( 0, dims[0] - 1, 0, dims[1] - 1, 0, dims[2] - 1 )
   reader.SetDataScalarType ( datascalartype )
+  reader.SetNumberOfScalarComponents( numberOfScalarComponents )
 
 if __name__ == "__main__":
   try:
@@ -94,6 +98,11 @@ if __name__ == "__main__":
     #r.AddObserver("ProgressEvent", PrintProgress)
     r.Update()
     #print r.GetOutput()
+    #print vtkMultiThreader.GetGlobalDefaultNumberOfThreads()
+    #g = vtkImageGradient()
+    #g.SetInput( r.GetOutput() )
+    #g.AddObserver("ProgressEvent", PrintProgress)
+    #g.Update()
     # Write output
     writer = vtkStructuredPointsWriter()
     writer.SetInput( r.GetOutput() )

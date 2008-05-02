@@ -186,7 +186,7 @@ int TestvtkGDCMThreadedImageRead(const char *filename, bool verbose = false)
 
 
   ProgressObserver *obs = ProgressObserver::New();
-  //reader->AddObserver( vtkCommand::ProgressEvent, obs);
+  reader->AddObserver( vtkCommand::ProgressEvent, obs);
   reader->Update();
   obs->Delete();
 

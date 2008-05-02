@@ -35,15 +35,15 @@ int TestvtkGDCMImageReader2(int argc, char *argv[])
 {
   const char *directory = gdcm::Testing::GetDataRoot();
   std::vector<std::string> filenames;
-    std::string file0 = std::string(directory) + "/SIEMENS_MAGNETOM-12-MONO2-FileSeq0.dcm";
-    std::string file1 = std::string(directory) + "/SIEMENS_MAGNETOM-12-MONO2-FileSeq1.dcm";
-    std::string file2 = std::string(directory) + "/SIEMENS_MAGNETOM-12-MONO2-FileSeq2.dcm";
-    std::string file3 = std::string(directory) + "/SIEMENS_MAGNETOM-12-MONO2-FileSeq3.dcm";
-    filenames.push_back( file1 );
-    filenames.push_back( file3 );
-    filenames.push_back( file2 );
-    filenames.push_back( file0 );
-      gdcm::IPPSorter s;
+  std::string file0 = std::string(directory) + "/SIEMENS_MAGNETOM-12-MONO2-FileSeq0.dcm";
+  std::string file1 = std::string(directory) + "/SIEMENS_MAGNETOM-12-MONO2-FileSeq1.dcm";
+  std::string file2 = std::string(directory) + "/SIEMENS_MAGNETOM-12-MONO2-FileSeq2.dcm";
+  std::string file3 = std::string(directory) + "/SIEMENS_MAGNETOM-12-MONO2-FileSeq3.dcm";
+  filenames.push_back( file1 );
+  filenames.push_back( file3 );
+  filenames.push_back( file2 );
+  filenames.push_back( file0 );
+  gdcm::IPPSorter s;
   s.SetComputeZSpacing( true );
   s.SetZSpacingTolerance( 1e-10 );
   bool b = s.Sort( filenames );
@@ -59,20 +59,20 @@ int TestvtkGDCMImageReader2(int argc, char *argv[])
   std::cout << s.GetZSpacing() << std::endl;
   double ippzspacing = s.GetZSpacing();
   if( ippzspacing != 5.5 )
-  {
-	  // This should be test in another specific test ...
-	  return 1;
-  }
+    {
+    // This should be test in another specific test ...
+    return 1;
+    }
 
   const std::vector<std::string> & sorted = s.GetFilenames();
   vtkGDCMImageReader * reader = vtkGDCMImageReader::New();
   vtkStringArray *files = vtkStringArray::New();
   std::vector< std::string >::const_iterator it = sorted.begin();
   for( ; it != sorted.end(); ++it)
-  {
-	  const std::string &f = *it;
-  files->InsertNextValue( f.c_str() );
-  }
+    {
+    const std::string &f = *it;
+    files->InsertNextValue( f.c_str() );
+    }
   reader->SetFileNames( files );
   reader->Update();
 
@@ -80,10 +80,10 @@ int TestvtkGDCMImageReader2(int argc, char *argv[])
   std::cout << spacing[0] << "," << spacing[1] << "," << spacing[2] << std::endl;
   int ret = 0;
   if( spacing[2] != 0.5 )
-  {
-	  // Spacing Between Slice is set to 0.5 in those files
-	  ret++;
-  }
+    {
+    // Spacing Between Slice is set to 0.5 in those files
+    ret++;
+    }
 
   // try again but this time we want 5.5 to be the spacing
   vtkGDCMImageReader * reader2 = vtkGDCMImageReader::New();
@@ -102,10 +102,10 @@ int TestvtkGDCMImageReader2(int argc, char *argv[])
   const vtkFloatingPointType *spacing3 = change->GetOutput()->GetSpacing();
   std::cout << spacing3[0] << "," << spacing3[1] << "," << spacing3[2] << std::endl;
   if( spacing3[2] != 5.5 )
-  {
-	  ret++;
-  }
-  
+    {
+    ret++;
+    }
+
   change->Delete();
   reader->Delete();
   files->Delete();
