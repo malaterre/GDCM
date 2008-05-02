@@ -48,6 +48,9 @@ Tag SpacingHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
   case MediaStorage::DigitalMammographyImageStorageForProcessing:
   case MediaStorage::DigitalIntraoralXrayImageStorageForPresentation:
   case MediaStorage::DigitalIntraoralXRayImageStorageForProcessing:
+  case MediaStorage::XRayAngiographicImageStorage:
+  case MediaStorage::XRayRadiofluoroscopingImageStorage:
+  case MediaStorage::XRayAngiographicBiPlaneImageStorageRetired:
     // (0018,1164) DS [0.5\0.5]                                #   8, 2 ImagerPixelSpacing
     t = Tag(0x0018,0x1164);
     break;
@@ -248,6 +251,27 @@ std::vector<double> SpacingHelper::GetSpacingValue(File const & f)
       default:
         abort();
         break;
+        }
+      }
+    }
+  else if( ds.FindDataElement( Tag(0x0028,0x0009) ) ) // Frame Increment Pointer
+    {
+    const DataElement& de = ds.GetDataElement( Tag(0x0028,0x0009) );
+    gdcm::Attribute<0x0028,0x0009> at;
+    at.SetFromDataElement( de );
+    if( ds.FindDataElement( at.GetValue() ) )
+      {
+      const DataElement& de2 = ds.GetDataElement( at.GetValue() );
+      //std::cout << "de=" << de << std::endl;
+      if( at.GetValue() == Tag(0x0018,0x1063) )
+        {
+        Attribute<0x0018,0x1063> at2;
+        at2.SetFromDataElement( de2 );
+        sp.push_back( at2.GetValue() );
+        }
+      else
+        {
+        abort();
         }
       }
     }

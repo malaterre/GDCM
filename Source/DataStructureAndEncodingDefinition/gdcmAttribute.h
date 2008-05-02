@@ -336,6 +336,7 @@ protected:
     assert( bv ); // FIXME
     std::stringstream ss;
     std::string s = std::string( bv->GetPointer(), bv->GetLength() );
+    Length = bv->GetLength(); // HACK FIXME
     ss.str( s );
     ArrayType internal[10]; // FIXME 
     EncodingImplementation<VRToEncoding<TVR>::Mode>::ReadComputeLength(internal, Length, ss);

@@ -146,7 +146,16 @@ public:
   template<typename T> // FIXME this should be VRToType<TVR>::Type
     static inline void ReadComputeLength(T* data, unsigned int &length,
       std::istream &_is) {
-      abort();
+    const unsigned int type_size = sizeof(T);
+    assert( data ); // Can we read from pointer ?
+    //assert( length );
+    length /= type_size;
+    assert( _is ); // Is stream valid ?
+    _is.read( reinterpret_cast<char*>(data+0), type_size);
+    for(unsigned long i=1; i<length; ++i) {
+      assert( _is );
+      _is.read( reinterpret_cast<char*>(data+i), type_size );
+    }
     }
   template<typename T>
   static inline void Read(T* data, unsigned long length,

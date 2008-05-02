@@ -72,7 +72,7 @@ int main(int argc, char *argv [])
   spacing[0] = el3.GetValue(0);
   spacing[1] = el3.GetValue(1);
   std::cout << "PixelSpacing:" << el3.GetValue() << "," << el3.GetValue(1) << std::endl;
-#endif
+#else
 
   int dims[2] = { 448, 448 };
   dims[0] /= 7;
@@ -86,6 +86,7 @@ int main(int argc, char *argv [])
   el4.Set( csael4.GetValue() );
   int numberOfImagesInMosaic = el4.GetValue();
   std::cout << "NumberOfImagesInMosaic:" << numberOfImagesInMosaic << std::endl;
+#endif
 
   //const gdcm::DataElement & pixeldata = ds.GetDataElement( gdcm::Tag(0x7fe1,0x1010) );
   const gdcm::DataElement & pixeldata = ds.GetDataElement( gdcm::Tag(0x7fe0,0x0010) );
