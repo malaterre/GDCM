@@ -115,13 +115,13 @@ namespace gdcm
                 = (*pOffset) | (static_cast<unsigned long>(*(pOffset + 1)) << 16);
             const EntryType* copied_part_head
                 = first_segment + offsetBytes / sizeof(EntryType);
-            SegmentMap::const_iterator ppHeadSeg = instances.find(copied_part_head);
+            typename SegmentMap::const_iterator ppHeadSeg = instances.find(copied_part_head);
             if ( ppHeadSeg == instances.end() ) {
                 // referred segment not found
                 return false;
             }
             EntryType nNumCopies = *(this->_first + 1);
-            SegmentMap::const_iterator ppSeg = ppHeadSeg;
+            typename SegmentMap::const_iterator ppSeg = ppHeadSeg;
             while ( std::distance(ppHeadSeg, ppSeg) <nNumCopies ) {
                 assert( ppSeg != instances.end() );
                 ppSeg->second->Expand(instances, expanded);
@@ -155,11 +155,11 @@ namespace gdcm
                 break;
             }
         }
-        Segment<EntryType>::SegmentMap instances;
+        typename Segment<EntryType>::SegmentMap instances;
         std::transform(segments.begin(), segments.end(),
             std::inserter(instances, instances.end()), Segment<EntryType>::ToMap());
-        SegmentList::iterator ppSeg = segments.begin();
-        SegmentList::iterator endOfSegments = segments.end();
+        typename SegmentList::iterator ppSeg = segments.begin();
+        typename SegmentList::iterator endOfSegments = segments.end();
         for ( ; ppSeg != endOfSegments; ++ppSeg ) {
             (*ppSeg)->Expand(instances, palette);
         }
