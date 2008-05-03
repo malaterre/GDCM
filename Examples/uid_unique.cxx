@@ -21,17 +21,23 @@
 int main()
 {
   gdcm::UIDGenerator uid;
+  uid.SetRoot( "1.2.3.4" );
   std::set<std::string> uids;
+  uint64_t wrap = 0;
   uint64_t c = 0;
   while(1)
   {
     const char *unique = uid.Generate();
     //std::cout << unique << std::endl;
-    if( c % 1000 )
+    if( c % 10000 == 0 )
     {
-            std::cout << "c=" << c << std::endl;
+            std::cout << "wrap=" << wrap << ",c=" << c << std::endl;
     }
     ++c;
+    if( c == 0 )
+{
+  wrap++;
+}
     if ( uids.count(unique) == 1 )
     {
             std::cerr << "Failed with: " << unique << std::endl;
