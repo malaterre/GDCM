@@ -22,10 +22,16 @@ int main()
 {
   gdcm::UIDGenerator uid;
   std::set<std::string> uids;
+  uint64_t c = 0;
   while(1)
   {
     const char *unique = uid.Generate();
-    std::cout << unique << std::endl;
+    //std::cout << unique << std::endl;
+    if( c % 1000 )
+    {
+            std::cout << "c=" << c << std::endl;
+    }
+    ++c;
     if ( uids.count(unique) == 1 )
     {
             std::cerr << "Failed with: " << unique << std::endl;
