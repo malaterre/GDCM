@@ -54,6 +54,7 @@ namespace gdcm
     template <typename EntryType>
     class DiscreteSegment : public Segment<EntryType> {
     public:
+        typedef typename Segment<EntryType>::SegmentMap SegmentMap;
         DiscreteSegment(const EntryType* first)
             : Segment<EntryType>(first, first+2+*(first+1)) {}
         virtual bool Expand(const SegmentMap&,
@@ -68,6 +69,7 @@ namespace gdcm
     template <typename EntryType>
     class LinearSegment : public Segment<EntryType> {
     public:
+        typedef typename Segment<EntryType>::SegmentMap SegmentMap;
         LinearSegment(const EntryType* first)
             : Segment<EntryType>(first, first+3) {}
         virtual bool Expand(const SegmentMap&,
@@ -96,6 +98,7 @@ namespace gdcm
     template <typename EntryType>
     class IndirectSegment : public Segment<EntryType> {
     public:
+        typedef typename Segment<EntryType>::SegmentMap SegmentMap;
         IndirectSegment(const EntryType* first)
             : Segment<EntryType>(first, first+2+4/sizeof(EntryType)) {}
         virtual bool Expand(const SegmentMap& instances,
