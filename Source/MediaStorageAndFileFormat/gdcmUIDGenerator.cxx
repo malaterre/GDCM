@@ -199,14 +199,9 @@ const char* UIDGenerator::Generate()
   if( Unique.size() + len > 64 )
   {
           // re-hash:
-          // 18 bytes:
-  char datetime[18];
-  bool res = System::GetCurrentDateTime(datetime);
-  if( !res )
-  {
-          return NULL;
-  }
-  Unique += datetime;
+ // echo "FNV" | od -b
+  const char fnv[] = "106.116.126."; // 9 + 3 = 12 bytes
+  Unique += fnv;
   // 256**8 = 20 bytes
            uint64_t hash = fnv_hash::hash( randbytesbuf, len);
           std::ostringstream os;
