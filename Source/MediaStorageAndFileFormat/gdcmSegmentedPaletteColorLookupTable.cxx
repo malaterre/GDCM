@@ -60,7 +60,7 @@ namespace gdcm
         virtual bool Expand(const SegmentMap&,
             std::vector<EntryType>& expanded) const
         {
-            std::copy(_first + 2, _last, std::back_inserter(expanded));
+            std::copy(this->_first + 2, this->_last, std::back_inserter(expanded));
             return true;
         }
     };
@@ -79,9 +79,9 @@ namespace gdcm
                 // linear segment can't be the first segment.
                 return false;
             }
-            EntryType length = *(_first + 1);
+            EntryType length = *(this->_first + 1);
             EntryType y0 = expanded.back();
-            EntryType y1 = *(_first + 2);
+            EntryType y1 = *(this->_first + 2);
             double y01 = y1 - y0;
             for ( EntryType i = 0; i <length; ++i ) {
                 double value_float
@@ -110,7 +110,7 @@ namespace gdcm
             }
             const EntryType* first_segment = instances.begin()->first;
             const unsigned short* pOffset
-                = reinterpret_cast<const unsigned short*>(_first + 2);
+                = reinterpret_cast<const unsigned short*>(this->_first + 2);
             unsigned long offsetBytes
                 = (*pOffset) | (static_cast<unsigned long>(*(pOffset + 1)) << 16);
             const EntryType* copied_part_head
@@ -120,7 +120,7 @@ namespace gdcm
                 // referred segment not found
                 return false;
             }
-            EntryType nNumCopies = *(_first + 1);
+            EntryType nNumCopies = *(this->_first + 1);
             SegmentMap::const_iterator ppSeg = ppHeadSeg;
             while ( std::distance(ppHeadSeg, ppSeg) <nNumCopies ) {
                 assert( ppSeg != instances.end() );
