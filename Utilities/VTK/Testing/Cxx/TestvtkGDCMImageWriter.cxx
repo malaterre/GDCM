@@ -100,7 +100,7 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
       // Make sure that md5 is still ok:
       unsigned long len = image.GetBufferLength();
     char* buffer = new char[len];
-    bool res2 = img.GetBuffer(buffer);
+    bool res2 = image.GetBuffer(buffer);
     if( !res2 )
       {
       return 1;
@@ -114,7 +114,6 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
     }
     if( strcmp(digest, ref) != 0 )
     {
-            std::cerr 
       std::cerr << "Problem reading image from: " << filename << std::endl;
       std::cerr << "Found " << digest << " instead of " << ref << std::endl;
       res = 1;
