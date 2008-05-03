@@ -96,7 +96,11 @@ int TestUIDGenerator(int argc, char *argv[])
     {
     return 1;
     }
-  const char myroot[] = "987654321"; // hopefully no one has this yet...
+  /*
+   * Purposely take a very long root, to test the robustness of the generator
+   * since we are left with fewer bytes to still generate uniq UID
+   */
+  const char myroot[] = "9876543210.9876543210.9876543210"; // hopefully no one has this yet...
   uid.SetRoot( myroot );
   std::cerr << "before generate" << std::endl;
   const char *s = uid.Generate();

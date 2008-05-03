@@ -195,23 +195,52 @@ const char* UIDGenerator::Generate()
   char randbytesbuf[200];
   size_t len = System::EncodeBytes(randbytesbuf, uuid, sizeof(uuid));
   if( len > 200 ) return 0;
-  Unique += ".";
+  Unique += "."; // This dot is compulsary to separate root from suffix
   if( Unique.size() + len > 64 )
   {
           // re-hash:
+  char datetime[18];
+  int res = System::GetCurrentDateTime(datetime);
+  assert( strlen( datetime ) == 17 );
+  if( !res )
+    {
+    // Not sure how this is supposed to happen...
+    return NULL;
+    }
+ 
+  /*
  // echo "FNV" | od -b
   const char fnv[] = "106.116.126."; // 9 + 3 = 12 bytes
   Unique += fnv;
+  */
   // 256**8 = 20 bytes
            uint64_t hash = fnv_hash::hash( randbytesbuf, len);
           std::ostringstream os;
+          //os << datetime;
+          //os << ".";
           os << hash;
-          Unique += os.str();
-          if( Unique.size() > 64 )
+          std::string randbytesbuf_hash = os.str();
+          std::string::size_type rb_len = randbytesbuf_hash.size();
+          if( Unique.size() + 17 + 1 + rb_len > 64 )
           {
-                  gdcmWarningMacro( "Impossible happen: " << Unique );
-                  return NULL;
+                  // need to truncate randbytesbuf_hash
+  std::string::size_type len = Unique.size() + 17 + 1;
+            randbytesbuf_hash = randbytesbuf_hash.substr( rb_len - (64 - len) , 64 - len );
+  std::string::size_type zeropos = randbytesbuf_hash.find_first_not_of('0');
+  if( zeropos == std::string::npos )
+    {
+    // All 0 ...
+    randbytesbuf_hash = "0";
+    }
+  else
+    {
+    // Takes everything after the 0
+    randbytesbuf_hash = randbytesbuf_hash.c_str() + zeropos;
+    }
           }
+          Unique += datetime;
+          Unique += ".";
+          Unique += randbytesbuf_hash;
   }
   else
   {
