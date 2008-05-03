@@ -95,7 +95,6 @@ ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 # Test that will try to load any class in the target language: python
 # it make sure swig was not broken accidentally
 IF(BUILD_TESTING)
-  SET_SOURCE_FILES_PROPERTIES(TestWrap.py PROPERTIES PYTHONPATH ${LIBRARY_OUTPUT_PATH})
   ADD_PYTHON_TEST(TestWrapPython TestWrap.py ${GDCM_SOURCE_DIR}/Source)
 ENDIF(BUILD_TESTING)
 
