@@ -13,6 +13,8 @@
 
 =========================================================================*/
 #include "gdcmSegmentedPaletteColorLookupTable.h"
+#include "gdcmDataSet.h"
+
 // http://blog.goo.ne.jp/satomi_takeo/e/3643e5249b2a9650f9e10ef1c830e8b8
 //
 #include <map>
@@ -164,13 +166,18 @@ namespace gdcm
         }
     }
 
-    /*
-    void ReadPalette(DcmDataset* pds, const DcmTagKey& descriptor,
-        const DcmTagKey& segment)
+    void ReadPalette(const DataSet& ds, const Tag& descriptor,
+        const Tag& segment)
     {
-        const Uint16* desc_values= NULL;
+        //const Uint16* desc_values= NULL;
         unsigned long count = 0;
-        if ( pds->findAndGetUint16Array(descriptor, desc_values, &count).good() ) {
+        if ( ds.FindDataElement(descriptor) ) {
+//                , desc_values, &count).good() ) {
+            const DataElement &de = ds.GetDataElement( descriptor );
+            Element<VR::US,VM::VM3> desc_values;
+            desc_values.Set( de.GetValue() );
+            //count = el.GetNumberOfValues();
+            count = desc_values.GetLength();
             assert( count == 3 );
             unsigned int num_entries = desc_values[0];
             if ( num_entries == 0 ) {
@@ -179,28 +186,31 @@ namespace gdcm
             int min_pixel_value = desc_values[1];
             unsigned int entry_size = desc_values[2];
             assert( entry_size == 8 || entry_size == 16 );
-            DcmElement* pe = NULL;
-            if ( pds->findAndGetElement(segment, pe).good() ) {
-                unsigned long length = pe->getLength();
+            //DcmElement* pe = NULL;
+            //if ( pds->findAndGetElement(segment, pe).good() ) {
+            if( ds.FindDataElement( segment ) ) {
+                const DataElement& pe = ds.GetDataElement( segment );
+                const ByteValue *bv = pe.GetByteValue();
+                assert( bv );
+                unsigned long length = bv->GetLength();
                 if ( entry_size == 8 ) {
-                    Uint8* segment_values = NULL;
-                    if ( pe->getUint8Array(segment_values).good() ) {
-                        std::vector<Uint8> palette;
-                        palette.reserve(num_entries);
-                        ExpandPalette(segment_values, length, palette);
-                    }
+                    //Uint8* segment_values = NULL;
+                    //if ( pe->getUint8Array(segment_values).good() ) {
+                    //    std::vector<Uint8> palette;
+                    //    palette.reserve(num_entries);
+                    //    ExpandPalette(segment_values, length, palette);
+                    //}
                 } else if ( entry_size == 16 ) {
-                    Uint16* segment_values = NULL;
-                    if ( pe->getUint16Array(segment_values).good() ) {
-                        std::vector<Uint16> palette;
-                        palette.reserve(num_entries);
-                        ExpandPalette(segment_values, length, palette);
-                    }
+                    //Uint16* segment_values = NULL;
+                    //if ( pe->getUint16Array(segment_values).good() ) {
+                    //    std::vector<Uint16> palette;
+                    //    palette.reserve(num_entries);
+                    //    ExpandPalette(segment_values, length, palette);
+                    //}
                 }
             }
         }
     }
-    */
 
     /*
 int _tmain(int argc, _TCHAR* argv[])
