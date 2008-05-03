@@ -214,6 +214,7 @@ const char* UIDGenerator::Generate()
           Unique += os.str();
           if( Unique.size() > 64 )
           {
+                  gdcmWarningMacro( "Impossible happen: " << Unique );
                   return NULL;
           }
   }
