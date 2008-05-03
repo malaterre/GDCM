@@ -261,9 +261,12 @@ std::vector<double> SpacingHelper::GetSpacingValue(File const & f)
     at.SetFromDataElement( de );
     if( ds.FindDataElement( at.GetValue() ) )
       {
+/*
+$ dcmdump D_CLUNIE_NM1_JPLL.dcm" | grep 0028,0009
+(0028,0009) AT (0054,0010)\(0054,0020)                  #   8, 2 FrameIncrementPointer
+*/
       const DataElement& de2 = ds.GetDataElement( at.GetValue() );
-      //std::cout << "de=" << de << std::endl;
-      if( at.GetValue() == Tag(0x0018,0x1063) )
+      if( at.GetValue() == Tag(0x0018,0x1063) && at.GetNumberOfValues() == 1 )
         {
         Attribute<0x0018,0x1063> at2;
         at2.SetFromDataElement( de2 );
@@ -271,7 +274,8 @@ std::vector<double> SpacingHelper::GetSpacingValue(File const & f)
         }
       else
         {
-        abort();
+        gdcmWarningMacro( "Dont know how to handle spacing for: " << de );
+        sp.push_back( 0.0 );
         }
       }
     }

@@ -55,6 +55,9 @@ const char *UIDGenerator::GetGDCMUID()
   return GDCM_UID;
 }
 
+/*
+ * http://www.isthe.com/chongo/tech/comp/fnv/
+ */
 #define FNV1_64_INIT ((uint64_t)0xcbf29ce484222325ULL)
 struct fnv_hash
 {
