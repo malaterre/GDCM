@@ -677,18 +677,18 @@ int vtkGDCMImageReader::RequestInformationCompat()
       //  this->DataSpacing[1] = -spacing[1];
       //  }
 
-      if( this->FileLowerLeft )
+      //if( this->FileLowerLeft )
         {
         this->DataOrigin[0] = origin[0];
         this->DataOrigin[1] = origin[1];
         this->DataOrigin[2] = origin[2];
         }
-      else
-        {
-        this->DataOrigin[0] = origin[0];
-        this->DataOrigin[1] = origin[1] - this->DataSpacing[1]*dims[1];
-        this->DataOrigin[2] = origin[2];
-        }
+      //else
+      //  {
+      //  this->DataOrigin[0] = origin[0];
+      //  this->DataOrigin[1] = origin[1] - this->DataSpacing[1]*dims[1];
+      //  this->DataOrigin[2] = origin[2];
+      //  }
       }
     // Need to set the rest to 0 ???
 

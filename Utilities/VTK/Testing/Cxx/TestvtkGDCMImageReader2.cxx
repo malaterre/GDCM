@@ -91,6 +91,7 @@ int TestvtkGDCMImageReader2(int argc, char *argv[])
   vtkGDCMImageReader * reader2 = vtkGDCMImageReader::New();
   reader2->SetDataSpacing( spacing[0], spacing[1], ippzspacing );
   reader2->SetFileNames( files );
+  //reader2->FileLowerLeftOn(); // TODO
   reader2->Update();
   const vtkFloatingPointType *spacing2 = reader2->GetOutput()->GetSpacing();
   std::cout << spacing2[0] << "," << spacing2[1] << "," << spacing2[2] << std::endl;
@@ -112,6 +113,10 @@ int TestvtkGDCMImageReader2(int argc, char *argv[])
   vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
   writer->SetInput( change->GetOutput() );
   writer->SetFileDimensionality( 2 );
+  //writer->SetFileLowerLeft( reader2->GetFileLowerLeft() ); // TODO
+    writer->SetMedicalImageProperties( reader2->GetMedicalImageProperties() ); // nasty
+    writer->SetDirectionCosines( reader2->GetDirectionCosines() );
+    writer->SetImageFormat( reader2->GetImageFormat() );
     const char subdir[] = "TestvtkGDCMImageReader2";
     std::string tmpdir = gdcm::Testing::GetTempDirectory(subdir);
     if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
