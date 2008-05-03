@@ -97,6 +97,31 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
       res = 1;
       }
       }
+      // Make sure that md5 is still ok:
+      unsigned long len = image.GetBufferLength();
+    char* buffer = new char[len];
+    bool res2 = img.GetBuffer(buffer);
+    if( !res2 )
+      {
+      return 1;
+      }
+    const char *ref = gdcm::Testing::GetMD5FromFile(filename);
+    char digest[33];
+    gdcm::System::ComputeMD5(buffer, len, digest);
+    if( !ref )
+    {
+            res = 1;
+    }
+    if( strcmp(digest, ref) != 0 )
+    {
+            std::cerr 
+      std::cerr << "Problem reading image from: " << filename << std::endl;
+      std::cerr << "Found " << digest << " instead of " << ref << std::endl;
+      res = 1;
+
+    }
+    delete[] buffer;
+  
     }
     }
   else
