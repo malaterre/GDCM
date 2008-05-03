@@ -89,6 +89,8 @@ int TestvtkGDCMImageWrite2(const char *filename, bool verbose = false)
     writer->SetImageFormat( reader->GetImageFormat() );
     writer->SetFileDimensionality( 2 ); // test the 3D to 2D writing mode
     writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
+    writer->SetShift( reader->GetShift() );
+    writer->SetScale( reader->GetScale() );
     //writer->SetFileName( gdcmfile.c_str() );
     vtkStringArray *filenames = vtkStringArray::New();
     for(unsigned int i = 0; i < fg.GetNumberOfFilenames(); ++i)
