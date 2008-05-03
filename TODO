@@ -87,8 +87,6 @@ PHANTOM.MR.CARDIO_COEUR_S_QUENCE_DE_REP_RAGE.9.257.2008.03.20.14.53.25.578125.43
 TODO: need a gdcm::ExtractOverlayFromPixelDataFilter
 to rewrite a gdcm::Image
 -----------------------------------------------------------------------
-Need a gdcm::Pixel12bitsto16bitsFilter
------------------------------------------------------------------------
 Do SegmentedLUT !
 -----------------------------------------------------------------------
 Fix issue with deflate syntax and srwithgraphdeflated.dcm in TestWriter 
