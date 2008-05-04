@@ -284,6 +284,13 @@ using namespace gdcm;
 %include "gdcmImage.h"
 %extend gdcm::Image
 {
+  %cstring_output_allocate_size(char **buffer, unsigned int *size, free(*$1) );
+  void my_get_data(char **buffer, unsigned int *size) {
+    *size = self->GetBufferLength();
+    *buffer = (char*)malloc(*size);
+    self->GetBuffer(*buffer);
+  }
+
   const char *__str__() {
     static std::string buffer;
     std::stringstream s;
