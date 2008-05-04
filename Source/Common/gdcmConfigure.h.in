@@ -65,6 +65,8 @@
 #endif
 #cmakedefine HAVE_WINSOCK_H
 #cmakedefine HAVE_BYTESWAP_H
+#cmakedefine HAVE_RPC_H
+//#cmakedefine HAVE_UUIDCREATE
 
 #cmakedefine CMAKE_HAVE_SYS_TIMES_H
 #cmakedefine CMAKE_HAVE_SYS_TIMEB_H

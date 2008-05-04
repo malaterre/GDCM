@@ -16,7 +16,8 @@
 #include "gdcmTrace.h"
 #include "gdcmSystem.h"
 
-#ifdef _WIN32
+// FIXME...
+#if _WIN32
 #define HAVE_UUIDCREATE
 #else
 #define HAVE_UUID_GENERATE
@@ -24,7 +25,7 @@
 
 #include "uuid/uuid.h"
 
-#ifdef HAVE_UUIDCREATE
+#ifdef HAVE_RPC_H
 #include <Rpc.h>
 #endif
 
@@ -272,6 +273,8 @@ bool UIDGenerator::GenerateUUID(unsigned char *uuid_data)
     {
     return false;
     }
+#else
+#error should not happen
 #endif
   return true;
 }
