@@ -103,6 +103,7 @@ using namespace gdcm;
 
 // swig need to know what are uint16_t, uint8_t...
 %include "stdint.i"
+//%include "typemaps.i"
 
 // gdcm does not use std::string in its interface, but we do need it for the 
 // %extend (see below)
@@ -281,6 +282,8 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
+//%newobject gdcm::Image::GetBuffer;
+%include "cstring.i"
 %include "gdcmImage.h"
 %extend gdcm::Image
 {
