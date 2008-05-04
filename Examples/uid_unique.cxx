@@ -21,7 +21,7 @@
 int main()
 {
   gdcm::UIDGenerator uid;
-  uid.SetRoot( "1.2.3.4" );
+  //uid.SetRoot( "1.2.3.4" );
   std::set<std::string> uids;
   uint64_t wrap = 0;
   uint64_t c = 0;
