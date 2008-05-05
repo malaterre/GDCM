@@ -738,7 +738,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     gdcmWarningMacro( "Modality LUT (0028,3000) are not handled. Image will not be displayed properly" );
     }
   // 2. LUTData (0028,3006)
-  // technically I do not need to warn about LUTData since either modality lut XOR VOI LUt need to 
+  // technically I do not need to warn about LUTData since either modality lut XOR VOI LUT need to 
   // be sent to require a LUT Data...
   bool lutdata = ds.FindDataElement(Tag(0x0028,0x3006) );
   if( lutdata )
@@ -753,9 +753,30 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     }
   // (0028,0120) US 32767                                    #   2, 1 PixelPaddingValue
   bool pixelpaddingvalue = ds.FindDataElement(Tag(0x0028,0x0120));
+
+  // PS 3.3 - 2008 / C.7.5.1.1.2 Pixel Padding Value and Pixel Padding Range Limit
   if(pixelpaddingvalue)
     {
-    gdcmWarningMacro( "Pixel Padding Value (0028,0120) is not handled. Image will not be displayed properly" );
+    // Technically if Pixel Padding Value is 0 on MONOCHROME2 image, then appearance should be fine...
+    bool vizissue = true;
+    if( pf.GetPixelRepresentation() == 0 )
+      {
+      Element<VR::US,VM::VM1> ppv;
+      ppv.Set( ds.GetDataElement(Tag(0x0028,0x0120)).GetValue() );
+      if( pi == PhotometricInterpretation::MONOCHROME2 && ppv.GetValue() == 0 )
+        {
+        vizissue = false;
+        }
+      }
+    else if( pf.GetPixelRepresentation() == 1 )
+      {
+      gdcmWarningMacro( "TODO" );
+      }
+    // test if there is any viz issue:
+    if( vizissue )
+      {
+      gdcmWarningMacro( "Pixel Padding Value (0028,0120) is not handled. Image will not be displayed properly" );
+      }
     }
   // 4. Palette Color Lookup Table Descriptor
   if ( pi == PhotometricInterpretation::PALETTE_COLOR )
