@@ -135,6 +135,8 @@ int ExecuteInformation(const char *filename, TReader *vtkreader)
 
   vtkreader->SetDataExtent( dataextent );
   vtkreader->SetDataScalarType ( datascalartype );
+  vtkreader->SetShift( image.GetIntercept() );
+  vtkreader->SetScale( image.GetSlope() );
   vtkreader->SetNumberOfScalarComponents( numberOfScalarComponents );
   vtkreader->LoadOverlaysOff();
   if( image.GetNumberOfOverlays() )
@@ -186,7 +188,11 @@ int TestvtkGDCMThreadedImageRead(const char *filename, bool verbose = false)
 
 
   ProgressObserver *obs = ProgressObserver::New();
-  reader->AddObserver( vtkCommand::ProgressEvent, obs);
+  if( verbose )
+    {
+    reader->AddObserver( vtkCommand::ProgressEvent, obs);
+    }
+
   reader->Update();
   obs->Delete();
 
@@ -299,6 +305,8 @@ int TestvtkGDCMThreadedImageReader(int argc, char *argv[])
     }
 
   // else
+  gdcm::Trace::DebugOff();
+  gdcm::Trace::WarningOff();
   int r = 0, i = 0;
   const char *filename;
   const char * const *filenames = gdcm::Testing::GetFileNames();
