@@ -735,17 +735,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   bool pixelpaddingvalue = ds.FindDataElement(Tag(0x0028,0x0120));
   if(pixelpaddingvalue)
     {
-    // Technically if Pixel Padding Value is 0 on MONOCHROME2 image, then appearance should be fine...
-    Attribute<0x0028,0x0120> ppv;
-    ppv.SetFromDataElement( ds.GetDataElement( ppv.GetTag() ) );
-    if( pi == PhotometricInterpretation::MONOCHROME2 && ppv.GetValue() == 0 )
-      {
-      // Yeah, don't need to start a paranoid warning, viz should be fine
-      }
-    else
-      {
-      gdcmWarningMacro( "Pixel Padding Value (0028,0120) is not handled. Image will not be displayed properly" );
-      }
+    gdcmWarningMacro( "Pixel Padding Value (0028,0120) is not handled. Image will not be displayed properly" );
     }
   // 4. Palette Color Lookup Table Descriptor
   if ( pi == PhotometricInterpretation::PALETTE_COLOR )
