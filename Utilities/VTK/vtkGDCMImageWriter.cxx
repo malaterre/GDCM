@@ -855,6 +855,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
   // Here come the important part: generate proper UID for Series/Study so that people knows this is the same Study/Series
   const char *uid = this->UID;
+  assert( uid ); // programmer error
 {
   gdcm::DataElement de( gdcm::Tag(0x0020,0x000d) );
   de.SetByteValue( uid, strlen(uid) );

@@ -98,25 +98,37 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
           res = 1;
           }
         }
+      gdcm::ImageReader r2;
+      r2.SetFileName( filename );
+      if( !r2.Read() )
+        {
+        std::cerr << "failed to re-read initial image...how is that possible ?:" << filename << std::endl;
+        res = 1;
+        }
+      const gdcm::Image &compimage = r2.GetImage();
       // Make sure that md5 is still ok:
       unsigned long len = image.GetBufferLength();
       char* buffer = new char[len];
       bool res2 = image.GetBuffer(buffer);
       if( !res2 )
         {
-        return 1;
+        std::cerr << "Could not get buffer" << std::endl;
+        res = 1;
         }
       const char *ref = gdcm::Testing::GetMD5FromFile(filename);
       char digest[33];
       gdcm::System::ComputeMD5(buffer, len, digest);
       if( !ref )
         {
+        std::cerr << "Could not compute md5" << std::endl;
         res = 1;
         }
       if( strcmp(digest, ref) != 0 )
         {
         std::cerr << "Problem reading image from: " << filename << std::endl;
         std::cerr << "Found " << digest << " instead of " << ref << std::endl;
+        std::cerr << "Original MediaStorage was: " << compimage.GetTransferSyntax() << std::endl;
+        std::cerr << "Output image: " << gdcmfile << std::endl;
         res = 1;
         }
       delete[] buffer;
