@@ -85,6 +85,13 @@ public:
   vtkGetMacro(ImageFormat,int);
   vtkSetMacro(ImageFormat,int);
 
+  // Description:
+  // Set/Get whether the data comes from the file starting in the lower left
+  // corner or upper left corner.
+  vtkBooleanMacro(FileLowerLeft, int);
+  vtkGetMacro(FileLowerLeft, int);
+  vtkSetMacro(FileLowerLeft, int);
+
 protected:
   vtkGDCMImageWriter();
   ~vtkGDCMImageWriter();
@@ -129,6 +136,7 @@ private:
 
   double Shift;
   double Scale;
+  int FileLowerLeft;
 };
 
 #endif

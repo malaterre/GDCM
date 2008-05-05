@@ -101,3 +101,5 @@ http://www.mmrrcc.upenn.edu/CAMRIS/cfn/dicomhdr.html
 Provide operator() ==  for String<LO> (should discard length, space char...)
 -----------------------------------------------------------------------
 Generated UID should use the ProcessID and the threadID to avoid overlap
+-----------------------------------------------------------------------
+Should handle old Date format (with - separator)

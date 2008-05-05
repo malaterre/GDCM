@@ -87,6 +87,7 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
 
   this->Shift = 0.;
   this->Scale = 1.;
+  this->FileLowerLeft = 0; // same default as vtkImageReader2
 }
 
 //----------------------------------------------------------------------------
@@ -592,21 +593,25 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
   //std::cerr << "dext[4]:" << j << std::endl;
   //std::cerr << "inExt[4]:" << inExt[4] << std::endl;
-  if( dims[2] > 1 && this->FileDimensionality == 3 )
+  if( FileLowerLeft )
     {
-    for(int j = dext[4]; j <= dext[5]; ++j)
-      {
-      for(int i = dext[2]; i <= dext[3]; ++i)
-        {
-        memcpy(pointer,
-          tempimage+((dext[3] - i)+j*(dext[3]+1))*outsize, outsize);
-        pointer += outsize;
-        }
-      }
+    memcpy(pointer,tempimage,len);
     }
   else
     {
-    //for(int j = dext[4]; j <= dext[5]; ++j)
+    if( dims[2] > 1 && this->FileDimensionality == 3 )
+      {
+      for(int j = dext[4]; j <= dext[5]; ++j)
+        {
+        for(int i = dext[2]; i <= dext[3]; ++i)
+          {
+          memcpy(pointer,
+            tempimage+((dext[3] - i)+j*(dext[3]+1))*outsize, outsize);
+          pointer += outsize;
+          }
+        }
+      }
+    else
       {
       for(int i = dext[2]; i <= dext[3]; ++i)
         {
