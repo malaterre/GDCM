@@ -95,6 +95,7 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
       {
       std::stringstream is;
       const Fragment &frag = sf->GetFragment(i);
+      if( frag.IsEmpty() ) return false;
       const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
       char *mybuffer = new char[bv.GetLength()];
       bv.GetBuffer(mybuffer, bv.GetLength());

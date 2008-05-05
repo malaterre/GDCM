@@ -89,12 +89,17 @@ public:
   // Does a reallocation
   void SetLength(VL vl) {
     VL l(vl);
-    assert( !l.IsUndefined() );
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+    // CompressedLossy.dcm
+    if( l.IsUndefined() ) throw Exception( "Impossible" );
     if ( l.IsOdd() ) {
       gdcmDebugMacro(
         "BUGGY HEADER: Your dicom contain odd length value field." );
       ++l;
       }
+#else
+    assert( !l.IsUndefined() && !l.IsOdd() );
+#endif
     // I cannot use reserve for now. I need to implement:
     // STL - vector<> and istream
     // http://groups.google.com/group/comp.lang.c++/msg/37ec052ed8283e74
