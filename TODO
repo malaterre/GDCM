@@ -103,3 +103,5 @@ Provide operator() ==  for String<LO> (should discard length, space char...)
 Generated UID should use the ProcessID and the threadID to avoid overlap
 -----------------------------------------------------------------------
 Should handle old Date format (with - separator)
+-----------------------------------------------------------------------
+Provide something for 16bits lut...

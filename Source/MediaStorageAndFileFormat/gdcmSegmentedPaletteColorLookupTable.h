@@ -27,6 +27,10 @@ public:
   SegmentedPaletteColorLookupTable();
   ~SegmentedPaletteColorLookupTable();
   void Print(std::ostream &) const {}
+
+  void SetLUT(LookupTableType type, const unsigned char *array,
+    unsigned int length);
+
 };
 
 } // end namespace gdcm

@@ -19,6 +19,7 @@
 #include "gdcmFileMetaInformation.h"
 #include "gdcmElement.h"
 #include "gdcmPhotometricInterpretation.h"
+#include "gdcmSegmentedPaletteColorLookupTable.h"
 #include "gdcmTransferSyntax.h"
 #include "gdcmLookupTable.h"
 #include "gdcmAttribute.h"
@@ -787,6 +788,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     //const DataSet &ds = it->GetNestedDataSet();
 
     SmartPointer<LookupTable> lut = new LookupTable;
+    //SmartPointer<SegmentedPaletteColorLookupTable> lut = new SegmentedPaletteColorLookupTable;
     lut->Allocate( pf.GetBitsAllocated() );
 
     // for each red, green, blue:
@@ -830,10 +832,16 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
         }
       else if( ds.FindDataElement( seglut ) )
         {
-        gdcmWarningMacro( "TODO" ); abort();
-        const ByteValue *lut_raw = GetPointerFromElement( seglut );
+        const ByteValue *lut_raw = ds.GetDataElement( seglut ).GetByteValue();
+        assert( lut_raw );
         lut->SetLUT( LookupTable::LookupTableType(i),
           (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
+        //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
+
+        unsigned long check =
+          (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
+          * el_us3.GetValue(2) / 8;
+        assert( check == lut_raw->GetLength() ); (void)check;
         }
       else
         {

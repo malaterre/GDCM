@@ -38,14 +38,14 @@ MACRO(PROCESSONEDIR DIRNAME SRCS TESTS)
   ENDFOREACH(file)
 ENDMACRO(PROCESSONEDIR)
 
-SET(gdcm_src)
-SET(gdcm_tests)
-PROCESSONEDIR(
-    ${CMAKE_CURRENT_SOURCE_DIR}/Source
-    "${gdcm_src}"
-    "${gdcm_tests}"
-)
-
-MESSAGE("${gdcm_src}")
-MESSAGE("${gdcm_tests}")
+#SET(gdcm_src)
+#SET(gdcm_tests)
+#PROCESSONEDIR(
+#    ${CMAKE_CURRENT_SOURCE_DIR}/Source
+#    "${gdcm_src}"
+#    "${gdcm_tests}"
+#)
+#
+#MESSAGE("${gdcm_src}")
+#MESSAGE("${gdcm_tests}")
 

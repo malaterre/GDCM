@@ -157,7 +157,7 @@ namespace gdcm
         }
         typename Segment<EntryType>::SegmentMap instances;
         std::transform(segments.begin(), segments.end(),
-            std::inserter(instances, instances.end()), Segment<EntryType>::ToMap());
+            std::inserter(instances, instances.end()), typename Segment<EntryType>::ToMap());
         typename SegmentList::iterator ppSeg = segments.begin();
         typename SegmentList::iterator endOfSegments = segments.end();
         for ( ; ppSeg != endOfSegments; ++ppSeg ) {
@@ -248,6 +248,25 @@ SegmentedPaletteColorLookupTable::SegmentedPaletteColorLookupTable()
 
 SegmentedPaletteColorLookupTable::~SegmentedPaletteColorLookupTable()
 {
+}
+
+void SegmentedPaletteColorLookupTable::SetLUT(LookupTableType type, const unsigned char *array,
+    unsigned int length)
+{
+  if( BitSample == 8 )
+    {
+    abort(); // TODO
+    }
+  else if( BitSample == 16 )
+    {
+    const uint16_t *array16 = (uint16_t*)array;
+    const uint16_t *segment_values = array16;
+    std::vector<uint16_t> palette;
+    unsigned int num_entries = GetLUTLength(type);
+    palette.reserve(num_entries);
+    ExpandPalette(segment_values, length, palette);
+    LookupTable::SetLUT(type, (unsigned char*)&palette[0], palette.size() * 2);
+    }
 }
 
 } // end namespace gdcm

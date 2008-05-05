@@ -43,6 +43,7 @@ public:
   // Generic interface:
   void InitializeLUT(LookupTableType type, unsigned short length,
     unsigned short subscript, unsigned short bitsize);
+  unsigned short GetLUTLength(LookupTableType type) const;
   void SetLUT(LookupTableType type, const unsigned char *array,
     unsigned int length);
   void GetLUT(LookupTableType type, unsigned char *array, unsigned int &length) const;
@@ -72,6 +73,7 @@ public:
   bool WriteBufferAsRGBA(unsigned char *rgba);
 
 private:
+protected:
   LookupTableInternal *Internal;
   unsigned short BitSample; // refer to the pixel type (not the bit size of LUT)
   bool IncompleteLUT:1;
