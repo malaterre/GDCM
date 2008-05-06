@@ -127,6 +127,7 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
         {
         // TODO
         assert( 0 && "TODO" );
+        ret = false;
         }
       }
     }
@@ -181,7 +182,7 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
       ret = true;
       }
     }
-  return true;
+  return ret;
 }
 
 bool Anonymizer::RemovePrivateTags()
