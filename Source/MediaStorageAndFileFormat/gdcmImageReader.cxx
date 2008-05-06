@@ -763,10 +763,13 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     if( pf.GetPixelRepresentation() == 0 )
       {
       Element<VR::US,VM::VM1> ppv;
-      ppv.Set( ds.GetDataElement(Tag(0x0028,0x0120)).GetValue() );
-      if( pi == PhotometricInterpretation::MONOCHROME2 && ppv.GetValue() == 0 )
+      if( !ds.GetDataElement(Tag(0x0028,0x0120) ).IsEmpty() )
         {
-        vizissue = false;
+        ppv.Set( ds.GetDataElement(Tag(0x0028,0x0120)).GetValue() );
+        if( pi == PhotometricInterpretation::MONOCHROME2 && ppv.GetValue() == 0 )
+          {
+          vizissue = false;
+          }
         }
       }
     else if( pf.GetPixelRepresentation() == 1 )
