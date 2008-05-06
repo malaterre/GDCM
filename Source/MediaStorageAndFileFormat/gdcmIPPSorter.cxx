@@ -142,7 +142,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
       prev = current;
       }
     // is spacing good ?
-    if( spacingisgood )
+    if( spacingisgood && ComputeZSpacing )
       {
       ZSpacing = zspacing;
       }
