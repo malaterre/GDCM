@@ -13,6 +13,7 @@ SET(MSFF_TEST_SRCS
   TestApplicationEntity
   TestStringFilter
   TestUIDGenerator
+  TestUIDGenerator3
   TestPrinter
   TestScanner
   TestSorter

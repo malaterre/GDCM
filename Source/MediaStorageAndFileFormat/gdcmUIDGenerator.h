@@ -52,7 +52,7 @@ public:
 
   static const char *GetGDCMUID(); // who would want that in the public API ??
 
-protected:
+//protected:
   static bool GenerateUUID(unsigned char *uuid_data);
 
 private:
