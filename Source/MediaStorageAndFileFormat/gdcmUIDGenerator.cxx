@@ -16,6 +16,8 @@
 #include "gdcmTrace.h"
 #include "gdcmSystem.h"
 
+#include <bitset>
+
 // FIXME...
 #if _WIN32
 #define HAVE_UUIDCREATE
@@ -182,12 +184,19 @@ const char* UIDGenerator::Generate2()
   return Unique.c_str();
 }
 
+/*
+Implementation note: You cannot set a root of more than 26 bytes (which should already 
+enough for most people).
+Since implementation is only playing with the first 8bits of the upper 
+*/
 const char* UIDGenerator::Generate()
 {
   Unique = GetRoot();
-  if( Unique.empty() )
+  // We choose here a value of 26 so that we can still have 37 bytes free to 
+  // set the suffix part which is sufficient to store a 2^(128-8+1)-1 number
+  if( Unique.empty() || Unique.size() > 26 ) // Need to store the '.' too
     {
-    // Seriously...
+    // I cannot go any further...
     return NULL;
     }
   unsigned char uuid[16];
@@ -198,55 +207,26 @@ const char* UIDGenerator::Generate()
   if( len > 200 ) return 0;
   Unique += "."; // This dot is compulsary to separate root from suffix
   if( Unique.size() + len > 64 )
-  {
-          // re-hash:
-  char datetime[18];
-  int res = System::GetCurrentDateTime(datetime);
-  assert( strlen( datetime ) == 17 );
-  if( !res )
     {
-    // Not sure how this is supposed to happen...
-    return NULL;
+    // too bad ! randbytesbuf is too long, let's try to truncate the high bits a little
+    std::bitset<8> x;
+    x = uuid[0];
+    unsigned int i = 0;
+    while( ( Unique.size() + len > 64 ) && i < 8 )
+      {
+      x[7-i] = 0;
+      uuid[0] = x.to_ulong();
+      len = gdcm::System::EncodeBytes(randbytesbuf, uuid, sizeof(uuid));
+      ++i;
+      }
+    if( ( Unique.size() + len > 64 ) && i == 8 ) 
+      {
+      gdcmWarningMacro( "Root is too long for current implementation" );
+      return NULL;
+      }
     }
- 
-  /*
- // echo "FNV" | od -b
-  const char fnv[] = "106.116.126."; // 9 + 3 = 12 bytes
-  Unique += fnv;
-  */
-  // 256**8 = 20 bytes
-           uint64_t hash = fnv_hash::hash( randbytesbuf, len);
-          std::ostringstream os;
-          //os << datetime;
-          //os << ".";
-          os << hash;
-          std::string randbytesbuf_hash = os.str();
-          std::string::size_type rb_len = randbytesbuf_hash.size();
-          if( Unique.size() + 17 + 1 + rb_len > 64 )
-          {
-                  // need to truncate randbytesbuf_hash
-  std::string::size_type len = Unique.size() + 17 + 1;
-            randbytesbuf_hash = randbytesbuf_hash.substr( rb_len - (64 - len) , 64 - len );
-  std::string::size_type zeropos = randbytesbuf_hash.find_first_not_of('0');
-  if( zeropos == std::string::npos )
-    {
-    // All 0 ...
-    randbytesbuf_hash = "0";
-    }
-  else
-    {
-    // Takes everything after the 0
-    randbytesbuf_hash = randbytesbuf_hash.c_str() + zeropos;
-    }
-          }
-          Unique += datetime;
-          Unique += ".";
-          Unique += randbytesbuf_hash;
-  }
-  else
-  {
+  // can now safely use randbytesbuf as is, no need to truncate any more:
   Unique += randbytesbuf;
-  }
 
   assert( IsValid( Unique.c_str() ) );
 

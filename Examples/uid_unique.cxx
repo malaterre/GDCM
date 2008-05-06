@@ -26,25 +26,25 @@ int main()
   uint64_t wrap = 0;
   uint64_t c = 0;
   while(1)
-  {
+    {
     const char *unique = uid.Generate();
     //std::cout << unique << std::endl;
     if( c % 10000 == 0 )
-    {
-            std::cout << "wrap=" << wrap << ",c=" << c << std::endl;
-    }
+      {
+      std::cout << "wrap=" << wrap << ",c=" << c << std::endl;
+      }
     ++c;
     if( c == 0 )
-{
-  wrap++;
-}
+      {
+      wrap++;
+      }
     if ( uids.count(unique) == 1 )
-    {
-            std::cerr << "Failed with: " << unique << std::endl;
-            return 1;
-    }
+      {
+      std::cerr << "Failed with: " << unique << std::endl;
+      return 1;
+      }
     uids.insert( unique );
-  }
+    }
   return 0;
 }
 
