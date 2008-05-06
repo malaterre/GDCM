@@ -24,7 +24,7 @@ namespace gdcm
 
 IPPSorter::IPPSorter()
 {
-  ComputeZSpacing = false;
+  ComputeZSpacing = true;
   ZSpacing = 0;
   ZTolerance = 1e-6;
 }
