@@ -76,7 +76,7 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
   this->DirectionCosines->SetElement(2,1,0);
 
   // This is the same root as ITK, but implementation version will be different...
-  gdcm::UIDGenerator::SetRoot( "1.2.826.0.1.3680043.2.1125.1" );
+  gdcm::UIDGenerator::SetRoot( "1.2.826.0.1.3680043.2.1125" );
 
   // echo "VTK" | od -b
   gdcm::FileMetaInformation::AppendImplementationClassUID( "126.124.113" );

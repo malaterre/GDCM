@@ -64,23 +64,23 @@ const char *UIDGenerator::GetGDCMUID()
 #define FNV1_64_INIT ((uint64_t)0xcbf29ce484222325ULL)
 struct fnv_hash
 {
-      static uint64_t
-      hash(const char* pBuffer, size_t nByteLen)
+  static uint64_t
+    hash(const char* pBuffer, size_t nByteLen)
       {
-  uint64_t nHashVal    = FNV1_64_INIT,
-          nMagicPrime = 0x00000100000001b3ULL;
- 
-   unsigned char* pFirst = ( unsigned char* )( pBuffer ),
-        * pLast  = pFirst + nByteLen;
- 
-   while( pFirst < pLast )
-   {
-     nHashVal ^= *pFirst++,
-     nHashVal *= nMagicPrime;
-   }
- 
-   return nHashVal;
-        
+      uint64_t nHashVal    = FNV1_64_INIT,
+               nMagicPrime = 0x00000100000001b3ULL;
+
+      unsigned char* pFirst = ( unsigned char* )( pBuffer ),
+                   * pLast  = pFirst + nByteLen;
+
+      while( pFirst < pLast )
+        {
+        nHashVal ^= *pFirst++,
+        nHashVal *= nMagicPrime;
+        }
+
+      return nHashVal;
+
       }
 };
 
