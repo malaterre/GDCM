@@ -285,10 +285,11 @@ using namespace gdcm;
 //%newobject gdcm::Image::GetBuffer;
 %include "cstring.i"
 %include "gdcmImage.h"
+%ignore gdcm::Image::GetBuffer(char*) const;
 %extend gdcm::Image
 {
   %cstring_output_allocate_size(char **buffer, unsigned int *size, free(*$1) );
-  void my_get_data(char **buffer, unsigned int *size) {
+  void GetBuffer(char **buffer, unsigned int *size) {
     *size = self->GetBufferLength();
     *buffer = (char*)malloc(*size);
     self->GetBuffer(*buffer);
