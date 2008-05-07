@@ -21,7 +21,9 @@
 int main()
 {
   gdcm::UIDGenerator uid;
-  //uid.SetRoot( "1.2.3.4" );
+  //const char myroot[] = "9876543210.9876543210.9876543210.9876543210.9876543210"; // fails in ~40000 tries
+  const char myroot[] = "9876543210.9876543210.9876543210";
+  uid.SetRoot( myroot );
   std::set<std::string> uids;
   uint64_t wrap = 0;
   uint64_t c = 0;

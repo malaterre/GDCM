@@ -193,7 +193,7 @@ const char* UIDGenerator::Generate()
   Unique = GetRoot();
   // We choose here a value of 26 so that we can still have 37 bytes free to 
   // set the suffix part which is sufficient to store a 2^(128-8+1)-1 number
-  if( Unique.empty() /*|| Unique.size() > 26*/ ) // Need to store the '.' too
+  if( Unique.empty() || Unique.size() > 62 ) // 62 is simply the highest possible limit
     {
     // I cannot go any further...
     return NULL;
@@ -212,10 +212,10 @@ const char* UIDGenerator::Generate()
     {
     int idx = 0;
     bool found = false;
+    std::bitset<8> x;
     while( !found && idx < 16 ) /* 16 is insane ... oh well */
       {
       // too bad ! randbytesbuf is too long, let's try to truncate the high bits a little
-      std::bitset<8> x;
       x = uuid[idx];
       unsigned int i = 0;
       while( ( Unique.size() + len > 64 ) && i < 8 )

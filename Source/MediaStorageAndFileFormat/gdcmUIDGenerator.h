@@ -34,6 +34,7 @@ public:
   UIDGenerator() {}
 
   // Function to override the GDCM root with a user one:
+  // WARNING: This need to be a valid root, otherwise call will fail
   // Implementation note. According to DICOM standard PS 3.5, Section 9 :
   // Unique Identifiers (UIDs), we have:
   /* 
@@ -53,7 +54,14 @@ public:
   // function will return a string), but will truncate the high bits of the 128bits UUID until the 
   // generated string fits on 64 bits. The authors disclaims any 
   // responsabitlity for garanteeing uniqueness of UIDs when the root is longer than 26 bytes.
-  static void SetRoot(const char * root) { Root = root; }
+  static bool SetRoot(const char * root) { 
+    if( IsValid( root ) )
+      {
+      Root = root; 
+      return true;
+      }
+    return false;
+  }
   static const char *GetRoot() { return Root.c_str(); }
 
   // Internally uses a std::string, so two calls have the same pointer !
