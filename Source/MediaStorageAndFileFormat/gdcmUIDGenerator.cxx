@@ -65,23 +65,22 @@ const char *UIDGenerator::GetGDCMUID()
 struct fnv_hash
 {
   static uint64_t
-    hash(const char* pBuffer, size_t nByteLen)
+  hash(const char* pBuffer, size_t nByteLen)
+    {
+    uint64_t nHashVal    = FNV1_64_INIT,
+             nMagicPrime = 0x00000100000001b3ULL;
+
+    unsigned char* pFirst = ( unsigned char* )( pBuffer ),
+                 * pLast  = pFirst + nByteLen;
+
+    while( pFirst < pLast )
       {
-      uint64_t nHashVal    = FNV1_64_INIT,
-               nMagicPrime = 0x00000100000001b3ULL;
-
-      unsigned char* pFirst = ( unsigned char* )( pBuffer ),
-                   * pLast  = pFirst + nByteLen;
-
-      while( pFirst < pLast )
-        {
-        nHashVal ^= *pFirst++,
-        nHashVal *= nMagicPrime;
-        }
-
-      return nHashVal;
-
+      nHashVal ^= *pFirst++,
+      nHashVal *= nMagicPrime;
       }
+
+    return nHashVal;
+    }
 };
 
 const char* UIDGenerator::Generate2()
@@ -194,33 +193,54 @@ const char* UIDGenerator::Generate()
   Unique = GetRoot();
   // We choose here a value of 26 so that we can still have 37 bytes free to 
   // set the suffix part which is sufficient to store a 2^(128-8+1)-1 number
-  if( Unique.empty() || Unique.size() > 26 ) // Need to store the '.' too
+  if( Unique.empty() /*|| Unique.size() > 26*/ ) // Need to store the '.' too
     {
     // I cannot go any further...
     return NULL;
     }
   unsigned char uuid[16];
   bool r = UIDGenerator::GenerateUUID(uuid);
+  // This should only happen in some obscure cases. Since the creation of UUID failed
+  // I should try to go any further and make sure the user's computer crash and burn
+  // right away
   if( !r ) return 0;
-  char randbytesbuf[200];
+  char randbytesbuf[64];
   size_t len = System::EncodeBytes(randbytesbuf, uuid, sizeof(uuid));
-  if( len > 200 ) return 0;
+  assert( len < 64 ); // programmer error
   Unique += "."; // This dot is compulsary to separate root from suffix
   if( Unique.size() + len > 64 )
     {
-    // too bad ! randbytesbuf is too long, let's try to truncate the high bits a little
-    std::bitset<8> x;
-    x = uuid[0];
-    unsigned int i = 0;
-    while( ( Unique.size() + len > 64 ) && i < 8 )
+    int idx = 0;
+    bool found = false;
+    while( !found && idx < 16 ) /* 16 is insane ... oh well */
       {
-      x[7-i] = 0;
-      uuid[0] = x.to_ulong();
-      len = gdcm::System::EncodeBytes(randbytesbuf, uuid, sizeof(uuid));
-      ++i;
+      // too bad ! randbytesbuf is too long, let's try to truncate the high bits a little
+      std::bitset<8> x;
+      x = uuid[idx];
+      unsigned int i = 0;
+      while( ( Unique.size() + len > 64 ) && i < 8 )
+        {
+        x[7-i] = 0;
+        uuid[idx] = x.to_ulong();
+        len = gdcm::System::EncodeBytes(randbytesbuf, uuid, sizeof(uuid));
+        ++i;
+        }
+      if( ( Unique.size() + len > 64 ) && i == 8 ) 
+        {
+        // too bad only reducing the 8 bits from uuid[idx] was not enought,
+        // let's set to zero the following bits...
+        idx++;
+        }
+      else
+        {
+        // cool we found enough to stop
+        found = true;
+        }
       }
-    if( ( Unique.size() + len > 64 ) && i == 8 ) 
+    if( !found )
       {
+      // Technically this could only happen when root has a length >= 64 ... is it
+      // even remotely possible ?
       gdcmWarningMacro( "Root is too long for current implementation" );
       return NULL;
       }

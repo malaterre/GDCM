@@ -127,9 +127,8 @@ bool GDCMImageIO2::OpenGDCMFileForWriting(std::ofstream& os,
 bool GDCMImageIO2::CanReadFile(const char* filename)
 {
   std::ifstream file;
-  std::string fname(filename);
 
-  if(  fname == "" )
+  if( !filename || !*filename )
     {
     itkDebugMacro(<<"No filename specified.");
     return false;

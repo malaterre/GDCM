@@ -100,11 +100,12 @@ int TestUIDGenerator(int argc, char *argv[])
    * Purposely take a very long root, to test the robustness of the generator
    * since we are left with fewer bytes to still generate uniq UID
    */
-  const char myroot[] = "9876543210.9876543210.9876"; // 26 bytes is the length of GDCM root
-  if( strlen(myroot) != 26 )
-    {
-    return 1;
-    }
+  // let's test 27 bytes root:
+  const char myroot[] = "9876543210.9876543210.98765"; // 26 bytes is the length of GDCM root
+  //if( strlen(myroot) != 26 )
+  //  {
+  //  return 1;
+  //  }
   uid.SetRoot( myroot );
   std::cerr << "before generate" << std::endl;
   const char *s = uid.Generate();
