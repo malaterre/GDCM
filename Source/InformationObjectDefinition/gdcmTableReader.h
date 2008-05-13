@@ -30,7 +30,7 @@ class GDCM_EXPORT TableReader
 {
 public:
   TableReader() {}
-  ~TableReader() {}
+  virtual ~TableReader() {}
 
   // Set/Get filename
   void SetFilename(const char *filename) { Filename = filename; }

@@ -107,3 +107,9 @@ Should handle old Date format (with - separator)
 Provide something for 16bits lut...
 -----------------------------------------------------------------------
 BUG: GE PET data have a shift/scale varying along series...
+-----------------------------------------------------------------------
+Do gdcm::Printer::Print
+In a consistant way if possible...
+-----------------------------------------------------------------------
+vtkMedicalImageProp user defined value should be written back to disk
+-> TODO: SQ will be difficult to handle

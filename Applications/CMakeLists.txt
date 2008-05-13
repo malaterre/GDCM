@@ -52,6 +52,7 @@ ENDIF(CMAKE_HAVE_SYS_MMAN_H)
 
 FOREACH(exename ${GDCM_EXECUTABLE_NAME})
   ADD_EXECUTABLE(${exename} ${exename}.cxx)
+  SET_TARGET_PROPERTIES(${exename} PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES})
   IF(${exename} STREQUAL "gdcminfo")
     TARGET_LINK_LIBRARIES(${exename} gdcmDSED gdcmDICT)
   ELSE(${exename} STREQUAL "gdcminfo")

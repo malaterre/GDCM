@@ -28,7 +28,8 @@ namespace gdcm
 {
 
 const char FileMetaInformation::GDCM_FILE_META_INFORMATION_VERSION[] = "\0\1";
-const char FileMetaInformation::GDCM_IMPLEMENTATION_CLASS_UID[] = "147.144.143.155";
+
+const char FileMetaInformation::GDCM_IMPLEMENTATION_CLASS_UID[] = "107.104.103.115";
 const char FileMetaInformation::GDCM_IMPLEMENTATION_VERSION_NAME[] = "GDCM " GDCM_VERSION;
 const char FileMetaInformation::GDCM_SOURCE_APPLICATION_ENTITY_TITLE[] = "GDCM";
 // Default initialize those static std::string, with GDCM values:

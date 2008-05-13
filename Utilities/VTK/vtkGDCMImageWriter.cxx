@@ -597,7 +597,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
   //std::cerr << "dext[4]:" << j << std::endl;
   //std::cerr << "inExt[4]:" << inExt[4] << std::endl;
-  if( FileLowerLeft )
+  if( this->FileLowerLeft )
     {
     memcpy(pointer,tempimage,len);
     }

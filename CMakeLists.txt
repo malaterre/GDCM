@@ -23,6 +23,13 @@ SET(GDCM_MINOR_VERSION 1)
 SET(GDCM_BUILD_VERSION 0)
 SET(GDCM_VERSION
   "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}.${GDCM_BUILD_VERSION}")
+SET(GDCM_LIBRARY_PROPERTIES ${GDCM_LIBRARY_PROPERTIES}
+  VERSION "${GDCM_VERSION}"
+  SOVERSION "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}"
+)
+SET(GDCM_EXECUTABLE_PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES}
+  VERSION "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}"
+)
 
 #-----------------------------------------------------------------------------
 # VS 2005 declared that some C functions were deprecated...
@@ -50,6 +57,18 @@ FIND_PATH(GDCM_DATA_ROOT gdcm-ACR-LibIDO.acr
   $ENV{PUB_DICT_PATH}/../../gdcmData
   )
 MARK_AS_ADVANCED(GDCM_DATA_ROOT)
+# You can define a path where you extra the famous D. Clunie spacing dataset
+# http://www.dclunie.com/images/pixelspacingtestimages.zip
+# for example: 
+# find $HOME/pixelspacingtestimages
+# $HOME/pixelspacingtestimages
+# $HOME/pixelspacingtestimages/DISCIMG
+# $HOME/pixelspacingtestimages/DISCIMG/DICOMDIR
+# $HOME/pixelspacingtestimages/DISCIMG/IMAGES
+# $HOME/pixelspacingtestimages/DISCIMG/IMAGES/DXIMAGE
+# $HOME/pixelspacingtestimages/DISCIMG/IMAGES/MGIMAGE
+# $HOME/pixelspacingtestimages/DISCIMG/IMAGES/CRIMAGE
+MARK_AS_ADVANCED(GDCM_PIXEL_SPACING_DATA_ROOT)
 
 #-----------------------------------------------------------------------------
 FIND_PATH(GDCM_DATA_EXTRA_ROOT gdcmData.tar.gz
