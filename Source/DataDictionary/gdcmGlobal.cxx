@@ -59,6 +59,11 @@ Dicts const &Global::GetDicts() const
   return Internals->GlobalDicts;
 }
 
+const Global& Global::GetInstance()
+{
+  return GlobalInstance;
+}
+
 // Purposely not initialized.  ClassInitialize will handle it.
 GlobalInternal * Global::Internals;
 

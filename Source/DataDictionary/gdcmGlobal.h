@@ -55,6 +55,9 @@ public:
   // retrieve the default/internal dicts 
   Dicts const &GetDicts() const;
 
+  // return the singleton instance
+  static const Global& GetInstance();
+
 private:
   Global &operator=(const Global &_val); // purposely not implemented
   Global(const Global &_val); // purposely not implemented
