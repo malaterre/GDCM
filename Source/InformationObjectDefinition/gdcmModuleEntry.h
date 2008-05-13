@@ -60,7 +60,7 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const ModuleEntry &_val)
 {
-  _os << _val.DataElementType << "\t" << _val.DescriptionField;
+  _os << _val.Name << "\t" << _val.DataElementType << "\t" << _val.DescriptionField;
   return _os;
 }
 

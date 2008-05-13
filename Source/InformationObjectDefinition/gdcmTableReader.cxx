@@ -58,6 +58,14 @@ static void XMLCALL characterDataHandler(void* userData, const char* data,
 }
 
 
+void TableReader::HandleModuleEntryDescription(const char **atts)
+{
+  assert( ParsingModuleEntryDescription == false );
+  ParsingModuleEntryDescription = true;
+  assert( *atts == NULL );
+  assert( Description == "" );
+}
+
 void TableReader::HandleModuleEntry(const char **atts)
 {
   std::string strgrp = "group";
@@ -155,12 +163,16 @@ void TableReader::StartElement(const char *name, const char **atts)
     {
     if( ParsingModule ) 
       {
+      ParsingModuleEntry = true;
       HandleModuleEntry(atts);
-      CurrentModule.AddModuleEntry( CurrentTag, CurrentModuleEntry);
       }
     }
   else if( strcmp(name, "description" ) == 0 )
     {
+    if( ParsingModuleEntry )
+      {
+      HandleModuleEntryDescription(atts);
+      }
     }
   else if( strcmp(name, "iod" ) == 0 )
     {
@@ -196,9 +208,20 @@ void TableReader::EndElement(const char *name)
     }
   else if( strcmp(name, "entry" ) == 0 )
     {
+    if( ParsingModule ) 
+      {
+      ParsingModuleEntry = false;
+      CurrentModule.AddModuleEntry( CurrentTag, CurrentModuleEntry);
+      }
     }
   else if( strcmp(name, "description" ) == 0 )
     {
+    if( ParsingModuleEntry )
+      {
+      ParsingModuleEntryDescription = false;
+      CurrentModuleEntry.SetDescription( Description.c_str() );
+      Description = "";
+      }
     }
   else if( strcmp(name, "iod" ) == 0 )
     {
@@ -214,6 +237,13 @@ void TableReader::EndElement(const char *name)
 
 void TableReader::CharacterDataHandler(const char *data, int length)
 {
+  if( ParsingModuleEntryDescription )
+    {
+    //abort();
+    std::string name( data, length);
+    assert( length == strlen( name.c_str() ) );
+    Description.append( name );
+    }
 }
 
 int TableReader::Read()

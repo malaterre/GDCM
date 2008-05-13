@@ -32,7 +32,9 @@ namespace gdcm
 class GDCM_EXPORT TableReader
 {
 public:
-  TableReader():ParsingModule(false) {}
+  TableReader():ParsingModule(false),ParsingModuleEntry(false),
+  ParsingModuleEntryDescription(false),
+  Description() {}
   virtual ~TableReader() {}
 
   // Set/Get filename
@@ -51,6 +53,7 @@ public:
 
 void HandleModuleEntry(const char **atts);
 void HandleModule(const char **atts);
+void HandleModuleEntryDescription(const char **atts);
 
   const Modules & GetModules() const { return CurrentModules; }
 
@@ -61,7 +64,10 @@ private:
   ModuleEntry CurrentModuleEntry;
   std::string CurrentModuleName;
   bool ParsingModule;
+  bool ParsingModuleEntry;
+  bool ParsingModuleEntryDescription;
   Tag CurrentTag;
+  std::string Description;
 };
 
 } // end namespace gdcm
