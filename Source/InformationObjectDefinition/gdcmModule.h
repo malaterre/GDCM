@@ -38,9 +38,16 @@ public:
   Module() {}
   friend std::ostream& operator<<(std::ostream& _os, const Module &_val);
 
+  void Clear() { ModuleInternal.clear(); }
+
+  void AddModuleEntry(const Tag& tag, const ModuleEntry & module )
+    {
+    ModuleInternal.insert(
+      MapModuleEntry::value_type(tag, module));
+    }
 private:
-  Module &operator=(const Module &_val); // purposely not implemented
-  Module(const Module &_val); // purposely not implemented
+  //Module &operator=(const Module &_val); // purposely not implemented
+  //Module(const Module &_val); // purposely not implemented
 
   MapModuleEntry ModuleInternal;
 };

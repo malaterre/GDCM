@@ -16,9 +16,12 @@
 #define __gdcmTableReader_h
 
 #include "gdcmTypes.h"
+#include "gdcmModule.h"
+#include "gdcmModules.h"
 
 #include <string>
 #include <vector>
+#include <map>
 
 namespace gdcm
 {
@@ -29,7 +32,7 @@ namespace gdcm
 class GDCM_EXPORT TableReader
 {
 public:
-  TableReader() {}
+  TableReader():ParsingModule(false) {}
   virtual ~TableReader() {}
 
   // Set/Get filename
@@ -38,14 +41,27 @@ public:
 
   int Read();
 
+  
+
 //protected:
   // You need to override those function in your subclasses:
   virtual void StartElement(const char *name, const char **atts);
   virtual void EndElement(const char *name);
   virtual void CharacterDataHandler(const char *data, int length);
 
+void HandleModuleEntry(const char **atts);
+void HandleModule(const char **atts);
+
+  const Modules & GetModules() const { return CurrentModules; }
+
 private:
   std::string Filename;
+  Modules CurrentModules;
+  Module CurrentModule;
+  ModuleEntry CurrentModuleEntry;
+  std::string CurrentModuleName;
+  bool ParsingModule;
+  Tag CurrentTag;
 };
 
 } // end namespace gdcm

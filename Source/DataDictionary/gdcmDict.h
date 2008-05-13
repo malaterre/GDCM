@@ -188,7 +188,7 @@ public:
   void PrintXML() const
     {
     MapDictEntry::const_iterator it = DictInternal.begin();
-    std::cout << "<dict edition=\"2007\">\n";
+    std::cout << "<dict edition=\"2008\">\n";
     for(;it != DictInternal.end(); ++it)
       {
       const PrivateTag &t = it->first;

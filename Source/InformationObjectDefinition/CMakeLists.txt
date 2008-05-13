@@ -2,6 +2,7 @@
 # IOD
 SET(IOD_SRCS
   gdcmModule.cxx
+  gdcmModules.cxx
   gdcmTableReader.cxx
   gdcmTable.cxx
   gdcmSeries.cxx
@@ -34,7 +35,7 @@ INCLUDE_DIRECTORIES(
 ADD_LIBRARY(gdcmIOD ${IOD_SRCS})
 SET_TARGET_PROPERTIES(gdcmIOD PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
 #TARGET_LINK_LIBRARIES(gdcmIOD gdcmCommon gdcmexpat)
-TARGET_LINK_LIBRARIES(gdcmIOD gdcmDSED gdcmCommon) # gdcmexpat)
+TARGET_LINK_LIBRARIES(gdcmIOD gdcmDSED gdcmCommon gdcmexpat)
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS gdcmIOD
     RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime

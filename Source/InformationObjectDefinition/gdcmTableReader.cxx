@@ -17,14 +17,13 @@
 
 #include <iostream>
 #include <fstream>
-//#include "expat/lib/expat.h"
+#include "expat/lib/expat.h"
 
 #include <stdio.h> // for stderr
 #include <string.h>
 
 namespace gdcm
 {
-#if 0
 #ifdef XML_LARGE_SIZE
 #if defined(XML_USE_MSC_EXTENSIONS) && _MSC_VER < 1400
 #define XML_FMT_INT_MOD "I64"
@@ -59,19 +58,119 @@ static void XMLCALL characterDataHandler(void* userData, const char* data,
 }
 
 
+void TableReader::HandleModuleEntry(const char **atts)
+{
+  std::string strgrp = "group";
+  std::string strelt = "element";
+  std::string strname = "name";
+  std::string strtype = "type";
+  Tag &tag = CurrentTag;
+  ModuleEntry &moduleentry = CurrentModuleEntry;
+  const char **current = atts;
+  while(*current /*&& current+1*/)
+    {
+    if( strgrp == *current )
+      {
+      unsigned int v;
+      const char *raw = *(current+1);
+      int r = sscanf(raw, "%04x", &v);
+      assert( r == 1 );
+      assert( v <= 0xFFFF );
+      tag.SetGroup( v );
+      }
+    else if( strelt == *current )
+      {
+      unsigned int v;
+      const char *raw = *(current+1);
+      int r = sscanf(raw, "%04x", &v);
+      assert( r == 1 );
+      assert( v <= 0xFFFF );
+      tag.SetElement( v );
+      }
+    else if( strname == *current )
+      {
+      const char *raw = *(current+1);
+      moduleentry.SetName( raw );
+      }
+    else if( strtype == *current )
+      {
+      const char *raw = *(current+1);
+	    moduleentry.SetType( Type::GetTypeType(raw) );
+      }
+    else
+      {
+      abort();
+      }
+    ++current;
+    ++current;
+    }
+}
+
+void TableReader::HandleModule(const char **atts)
+{
+  std::string strref = "ref";
+  std::string strname = "name";
+  const char **current = atts;
+  while(*current /*&& current+1*/)
+    {
+    if( strref == *current )
+      {
+      }
+    else if( strname == *current )
+      {
+      CurrentModuleName = *(current+1);
+      }
+    else
+      {
+      abort();
+      }
+    ++current;
+    ++current;
+    }
+}
+
 void TableReader::StartElement(const char *name, const char **atts)
 {
   int i;
   //int *depthPtr = (int *)userData;
 //  for (i = 0; i < *depthPtr; i++)
 //    putchar('\t');
-  std::cout << name << " : " << atts[0] << "=" << atts[1] << std::endl;
-  if( strcmp(name, "Table" ) == 0 )
+  //std::cout << name << /*" : " << atts[0] << "=" << atts[1] <<*/ std::endl;
+  if( strcmp(name, "tables" ) == 0 )
     {
     //*depthPtr += 1;
     }
+  else if( strcmp(name, "macro" ) == 0 )
+    {
+    //std::cout << "Start Macro" << std::endl;
+    //HandleMacro(atts);
+    }
+  else if( strcmp(name, "module" ) == 0 )
+    {
+    //std::cout << "Start Module" << std::endl;
+    ParsingModule = true;
+    HandleModule(atts);
+    }
+  else if( strcmp(name, "entry" ) == 0 )
+    {
+    if( ParsingModule ) 
+      {
+      HandleModuleEntry(atts);
+      CurrentModule.AddModuleEntry( CurrentTag, CurrentModuleEntry);
+      }
+    }
+  else if( strcmp(name, "description" ) == 0 )
+    {
+    }
+  else if( strcmp(name, "iod" ) == 0 )
+    {
+    }
+  else if( strcmp(name, "include" ) == 0 )
+    {
+    }
   else
     {
+    abort();
     }
 }
 
@@ -79,6 +178,38 @@ void TableReader::EndElement(const char *name)
 {
 //  int *depthPtr = (int *)userData;
 //  *depthPtr -= 1;
+  if( strcmp(name, "tables" ) == 0 )
+    {
+    }
+  else if( strcmp(name, "macro" ) == 0 )
+    {
+    //std::cout << "Start Macro" << std::endl;
+    //HandleMacro(atts);
+    }
+  else if( strcmp( "module", name) == 0 )
+    {
+    CurrentModules.AddModule( CurrentModuleName.c_str(), CurrentModule);
+    //std::cout << "End Module:" << CurrentModuleName << std::endl;
+    CurrentModuleName.clear();
+    CurrentModule.Clear();
+    ParsingModule = false;
+    }
+  else if( strcmp(name, "entry" ) == 0 )
+    {
+    }
+  else if( strcmp(name, "description" ) == 0 )
+    {
+    }
+  else if( strcmp(name, "iod" ) == 0 )
+    {
+    }
+  else if( strcmp(name, "include" ) == 0 )
+    {
+    }
+  else
+    {
+    abort();
+    }
 }
 
 void TableReader::CharacterDataHandler(const char *data, int length)
@@ -115,10 +246,4 @@ int TableReader::Read()
   return ret;
 }
 
-#else
-void TableReader::StartElement(const char *name, const char **atts) {}
-void TableReader::EndElement(const char *name) {}
-void TableReader::CharacterDataHandler(const char *data, int length) {}
-int TableReader::Read() { return 0; }
-#endif
 } // end namespace gdcm

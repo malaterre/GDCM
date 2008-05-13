@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmTableReader.h"
+#include "gdcmModules.h"
 
 // generated file:
 #include "gdcmTables.h"
@@ -22,6 +23,8 @@ void TestReadTable(const char *filename)
   gdcm::TableReader tr;
   tr.SetFilename(filename);
   tr.Read();
+  const gdcm::Modules &m = tr.GetModules();
+  std::cout << m << std::endl;
 }
 
 int TestTableReader(int argc, char *argv[])

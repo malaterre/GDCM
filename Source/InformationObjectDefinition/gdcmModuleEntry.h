@@ -30,16 +30,19 @@ namespace gdcm
 class GDCM_EXPORT ModuleEntry
 {
 public:
-  ModuleEntry(const char *name, const char *type, const char *description):Name(name)/*,Type(type)*/,DescriptionField(description) {
+  ModuleEntry(const char *name = "", const char *type = "3", const char *description = ""):Name(name)/*,Type(type)*/,DescriptionField(description) {
 	  DataElementType = Type::GetTypeType(type);
   }
   friend std::ostream& operator<<(std::ostream& _os, const ModuleEntry &_val);
 
+  void SetName(const char *name) { Name = name; }
   const char *GetName() const { return Name.c_str(); }
 
+  void SetType(const Type &type) { DataElementType = type; }
   const Type &GetType() const { return DataElementType; }
 
   typedef std::string Description;
+  void SetDescription(const char *d) { DescriptionField = d; }
   const Description & GetDescription() const { return DescriptionField; }
 
 private:
