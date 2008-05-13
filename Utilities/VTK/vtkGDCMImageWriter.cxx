@@ -557,6 +557,9 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     }
 
   unsigned long len = image.GetBufferLength();
+  vtkIdType npts = data->GetNumberOfPoints();
+  int ssize = data->GetScalarSize();
+  unsigned long vtklen = npts * ssize;
 
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
   gdcm::ByteValue *bv = new gdcm::ByteValue(); // (char*)data->GetScalarPointer(), len );
@@ -575,7 +578,9 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
   int j = dext[4];
 
-  //if( this->Shift != 1.0 && this->Scale == (int)this->Scale )
+  bool rescaled = false;
+  char * copy = NULL;
+  // For now only float to US is implemented:
   if( data->GetScalarType() == VTK_FLOAT )
     {
     // rescale from float to unsigned short
@@ -584,14 +589,11 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     ir.SetSlope( this->Scale );
     image.SetIntercept( this->Shift );
     image.SetSlope( this->Scale );
-    char * copy = new char[len*2];
-    memcpy(copy, tempimage, len*2);
-    ir.InverseRescale(pointer,copy,len*2);
-    delete[] copy;
-    outsize = sizeof(unsigned short)*(dext[1] - dext[0] + 1);
+    copy = new char[len];
+    ir.InverseRescale(copy,tempimage,vtklen);
+    rescaled = true;
+    tempimage = copy;
     }
-  else
-{
 
   //std::cerr << "dext[4]:" << j << std::endl;
   //std::cerr << "inExt[4]:" << inExt[4] << std::endl;
@@ -623,18 +625,23 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
         }
       }
     }
-}
+  if( rescaled )
+    {
+    delete[] copy;
+    }
 
   pixeldata.SetValue( *bv );
   image.SetDataElement( pixeldata );
 
 // DEBUG
+#ifndef NDEBUG
   const gdcm::DataElement &pixeldata2 = image.GetDataElement();
   //const gdcm::Value &v = image.GetValue();
   //const gdcm::ByteValue *bv1 = dynamic_cast<const gdcm::ByteValue*>(&v);
   const gdcm::ByteValue *bv1 = pixeldata2.GetByteValue();
   assert( bv1 && bv1 == bv );
   //image.Print( std::cerr );
+#endif
 // END DEBUG
 
 
