@@ -575,7 +575,6 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
   int j = dext[4];
 
-#if 0
   //if( this->Shift != 1.0 && this->Scale == (int)this->Scale )
   if( data->GetScalarType() == VTK_FLOAT )
     {
@@ -583,13 +582,16 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     gdcm::Rescaler ir;
     ir.SetIntercept( this->Shift );
     ir.SetSlope( this->Scale );
+    image.SetIntercept( this->Shift );
+    image.SetSlope( this->Scale );
     char * copy = new char[len*2];
     memcpy(copy, tempimage, len*2);
     ir.InverseRescale(pointer,copy,len*2);
     delete[] copy;
     outsize = sizeof(unsigned short)*(dext[1] - dext[0] + 1);
     }
-#endif
+  else
+{
 
   //std::cerr << "dext[4]:" << j << std::endl;
   //std::cerr << "inExt[4]:" << inExt[4] << std::endl;
@@ -621,6 +623,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
         }
       }
     }
+}
 
   pixeldata.SetValue( *bv );
   image.SetDataElement( pixeldata );

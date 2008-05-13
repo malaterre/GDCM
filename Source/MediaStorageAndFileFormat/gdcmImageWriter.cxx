@@ -279,6 +279,14 @@ bool ImageWriter::Write()
       }
     }
 
+  // Do the Rescale Intercept & Slope
+  Attribute<0x0028,0x1052> at1;
+  at1.SetValue( PixelData.GetIntercept() );
+  ds.Insert( at1.GetAsDataElement() );
+  Attribute<0x0028,0x1053> at2;
+  at2.SetValue( PixelData.GetSlope() );
+  ds.Insert( at2.GetAsDataElement() );
+
   MediaStorage ms;
   ms.SetFromFile( GetFile() );
   assert( ms != MediaStorage::MS_END );
