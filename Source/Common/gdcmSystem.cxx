@@ -17,8 +17,8 @@
 #include "gdcmFilename.h"
 #include "gdcmException.h"
 
-#include "md5/md5.h"
-#include "uuid/uuid.h"
+#include "gdcm_md5.h"
+#include "gdcm_uuid.h"
 
 #include <iostream>
 #include <string>

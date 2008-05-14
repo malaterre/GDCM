@@ -66,7 +66,6 @@ INCLUDE_DIRECTORIES(
   # FIXME:
   "${GDCM_SOURCE_DIR}/Utilities"
   "${GDCM_BINARY_DIR}/Utilities"
-  "${GDCM_BINARY_DIR}/Utilities/uuid" # uuid_mangle.h
   #"${GDCM_BINARY_DIR}/Utilities/jpeg/8"
   #"${GDCM_SOURCE_DIR}/Utilities/jpeg"
   #"${GDCM_SOURCE_DIR}/Utilities/openjpeg/libopenjpeg"
@@ -74,6 +73,15 @@ INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Utilities/zlib"
  
   )
+IF(GDCM_USE_SYSTEM_UUID)
+  INCLUDE_DIRECTORIES(
+    ${UUID_INCLUDE_DIR}
+  )
+ELSE(GDCM_USE_SYSTEM_UUID)
+  INCLUDE_DIRECTORIES(
+    "${GDCM_BINARY_DIR}/Utilities/gdcmuuid" # uuid_mangle.h
+  )
+ENDIF(GDCM_USE_SYSTEM_UUID)
 
 ADD_LIBRARY(gdcmMSFF ${MSFF_SRCS})
 SET_TARGET_PROPERTIES(gdcmMSFF PROPERTIES ${GDCM_LIBRARY_PROPERTIES})

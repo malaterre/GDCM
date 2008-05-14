@@ -25,7 +25,7 @@
 #define HAVE_UUID_GENERATE
 #endif
 
-#include "uuid/uuid.h"
+#include "gdcm_uuid.h"
 
 #ifdef HAVE_RPC_H
 #include <Rpc.h>
