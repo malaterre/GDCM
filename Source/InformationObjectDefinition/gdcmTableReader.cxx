@@ -169,6 +169,30 @@ void TableReader::HandleModuleEntry(const char **atts)
     }
 }
 
+void TableReader::HandleIODEntry(const char **atts)
+{
+  std::string strie = "ie";
+  IODEntry &iodentry = CurrentIODEntry;
+  const char **current = atts;
+  while(*current /*&& current+1*/)
+    {
+    if( strie == *current )
+      {
+      }
+    else
+      {
+      abort();
+      }
+    ++current;
+    ++current;
+    }
+}
+
+void TableReader::HandleIOD(const char **atts)
+{
+  HandleModule(atts);
+}
+
 void TableReader::HandleMacro(const char **atts)
 {
   HandleModule(atts);
@@ -219,6 +243,11 @@ void TableReader::StartElement(const char *name, const char **atts)
     ParsingModule = true;
     HandleModule(atts);
     }
+  else if( strcmp(name, "iod" ) == 0 )
+    {
+    ParsingIOD = true;
+    HandleIOD(atts);
+    }
   else if( strcmp(name, "entry" ) == 0 )
     {
     if( ParsingModule ) 
@@ -231,6 +260,11 @@ void TableReader::StartElement(const char *name, const char **atts)
       ParsingMacroEntry = true;
       HandleMacroEntry(atts);
       }
+    else if( ParsingIOD ) 
+      {
+      ParsingIODEntry = true;
+      HandleIODEntry(atts);
+      }
     }
   else if( strcmp(name, "description" ) == 0 )
     {
@@ -242,12 +276,14 @@ void TableReader::StartElement(const char *name, const char **atts)
       {
       HandleMacroEntryDescription(atts);
       }
-    }
-  else if( strcmp(name, "iod" ) == 0 )
-    {
+    else /*if( ParsingIODoEntry )*/
+      {
+      abort();
+      }
     }
   else if( strcmp(name, "include" ) == 0 )
     {
+    // TODO !
     }
   else
     {
@@ -278,6 +314,13 @@ void TableReader::EndElement(const char *name)
     CurrentModule.Clear();
     ParsingModule = false;
     }
+  else if( strcmp(name, "iod" ) == 0 )
+    {
+    CurrentIODs.AddIOD( CurrentModuleName.c_str(), CurrentIOD);
+    CurrentModuleName.clear();
+    CurrentIOD.Clear();
+    ParsingIOD = false;
+    }
   else if( strcmp(name, "entry" ) == 0 )
     {
     if( ParsingModule ) 
@@ -289,6 +332,11 @@ void TableReader::EndElement(const char *name)
       {
       ParsingMacroEntry = false;
       CurrentMacro.AddModuleEntry( CurrentTag, CurrentMacroEntry);
+      }
+    else if( ParsingIOD ) 
+      {
+      ParsingIODEntry = false;
+      //CurrentIOD.AddIODEntry( CurrentTag, CurrentMacroEntry);
       }
     }
   else if( strcmp(name, "description" ) == 0 )
@@ -306,9 +354,10 @@ void TableReader::EndElement(const char *name)
       CurrentMacroEntry.SetDescription( Description.c_str() );
       Description = "";
       }
-    }
-  else if( strcmp(name, "iod" ) == 0 )
-    {
+    else
+      {
+      abort();
+      }
     }
   else if( strcmp(name, "include" ) == 0 )
     {
@@ -317,6 +366,10 @@ void TableReader::EndElement(const char *name)
       }
     else if( ParsingMacro )
       {
+      }
+    else
+      {
+      abort();
       }
     }
   else
@@ -338,6 +391,10 @@ void TableReader::CharacterDataHandler(const char *data, int length)
     std::string name( data, length);
     assert( length == strlen( name.c_str() ) );
     Description.append( name );
+    }
+  else
+    {
+    abort();
     }
 }
 
