@@ -17,7 +17,7 @@
  * 3. The name of the author may not be used to endorse or promote
  *    products derived from this software without specific prior
  *    written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
@@ -33,10 +33,19 @@
  * %End-Header%
  */
 
+/*
+ * Force inclusion of SVID stuff since we need it if we're compiling in
+ * gcc-wall wall mode
+ */
+//#define _SVID_SOURCE
+
+#include <stdio.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
+#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
+#endif
 #include <string.h>
 #include <fcntl.h>
 #include <assert.h>
@@ -250,7 +259,7 @@ static int get_node_id(unsigned char *node_id)
 /*
  * BSD 4.4 defines the size of an ifreq to be
  * max(sizeof(ifreq), sizeof(ifreq.ifr_name)+ifreq.ifr_addr.sa_len
- * However, under earlier systems, sa_len isn't present, so the size is
+ * However, under earlier systems, sa_len isn't present, so the size is 
  * just sizeof(struct ifreq)
  */
 #ifdef HAVE_SA_LEN
@@ -327,7 +336,8 @@ int uuid_get_node_id(unsigned char *node_id)
 /* Assume that the gettimeofday() has microsecond granularity */
 #define MAX_ADJUSTMENT 10
 
-static int get_clock(uint32_t *clock_high, uint32_t *clock_low, uint16_t *ret_clock_seq)
+static int get_clock(uint32_t *clock_high, uint32_t *clock_low,
+      uint16_t *ret_clock_seq)
 {
 	static int			adjustment = 0;
 	static struct timeval		last = {0, 0};
@@ -408,6 +418,7 @@ void uuid_generate_random(uuid_t out)
 	uu.time_hi_and_version = (uu.time_hi_and_version & 0x0FFF) | 0x4000;
 	uuid_pack(&uu, out);
 }
+
 
 /*
  * This is the generic front-end to uuid_generate_random and

@@ -10,6 +10,11 @@ SET(GDCM_CMAKE_DIR "${GDCM_SOURCE_DIR}/CMake" CACHE INTERNAL "")
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${GDCM_CMAKE_DIR}")
 
 FIND_PACKAGE(UUID)
+IF(WIN32)
+  SET(GDCM_USE_SYSTEM_UUID 1)
+ELSE(WIN32)
+  SET(GDCM_USE_SYSTEM_UUID 0)
+ENDIF(WIN32)
 
 #-----------------------------------------------------------------------------
 # Disallow insource build since I never test that

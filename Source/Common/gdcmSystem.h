@@ -48,8 +48,10 @@ public:
   // Chdir
   // copy a file
 
-  // somewhat UID specific:
+  // DO NOT USE: This function might disapear real time soon...
   static bool GetHardwareAddress(unsigned char addr[6]);
+
+  // somewhat UID specific:
   static bool GetCurrentDateTime(char date[18]);
   static size_t EncodeBytes(char *out, const unsigned char *data, int size);
 
@@ -59,6 +61,8 @@ public:
 protected:
   static bool GetPermissions(const char* file, unsigned short& mode);
   static bool SetPermissions(const char* file, unsigned short mode);
+
+private:
 };
 
 } // end namespace gdcm

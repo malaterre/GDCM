@@ -18,7 +18,7 @@
 #include "gdcmException.h"
 
 #include "gdcm_md5.h"
-#include "gdcm_uuid.h"
+//#include "gdcm_uuid.h"
 
 #include <iostream>
 #include <string>
@@ -365,7 +365,7 @@ size_t System::EncodeBytes(char *out, const unsigned char *data, int size)
 
 bool System::GetHardwareAddress(unsigned char addr[6])
 {
-  int stat = uuid_get_node_id(addr);
+  int stat = 0; //uuid_get_node_id(addr);
   /*
   // For debugging you need to consider the worse case where hardware addres is max number:
   addr[0] = 255;
@@ -384,6 +384,31 @@ bool System::GetHardwareAddress(unsigned char addr[6])
   return false;
 }
 
+#if defined(_WIN32)
+#include <stdio.h>
+static int gettimeofday(struct timeval *tv, struct timezone *tz)
+{
+  FILETIME ft;
+  const uint64_t c1 = 27111902;
+  const uint64_t c2 = 3577643008UL;
+  const uint64_t OFFSET = (c1 << 32) + c2;
+  uint64_t filetime;
+  GetSystemTimeAsFileTime(&ft);
+
+  filetime = ft.dwHighDateTime;
+  filetime = filetime << 32;
+  filetime += ft.dwLowDateTime;
+  filetime -= OFFSET;
+
+  memset(tv,0, sizeof(*tv));
+  assert( sizeof(*tv) == sizeof(struct timeval));
+  tv->tv_sec = (time_t)(filetime / 10000000); /* seconds since epoch */
+  tv->tv_usec = (uint32_t)((filetime % 10000000) / 10);
+
+  return 0;
+}
+#endif
+
 bool System::GetCurrentDateTime(char date[18])
 {
   const size_t maxsize = 40;
@@ -392,7 +417,7 @@ bool System::GetCurrentDateTime(char date[18])
   time_t timep;
 
   struct timeval tv;
-  uuid_gettimeofday (&tv, NULL);
+  gettimeofday (&tv, NULL);
   timep = tv.tv_sec;
   // Compute milliseconds from microseconds.
   milliseconds = tv.tv_usec / 1000;

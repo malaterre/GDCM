@@ -25,7 +25,11 @@
 namespace gdcm
 {
 /*
- * \brief Class for Directory
+ * \brief Class for manipulation directories
+ *
+ * \note This implementation provide a cross platform implementation
+ * for manipulating directores: basically traversing directories
+ * and harvesting files
  */
 //-----------------------------------------------------------------------------
 class GDCM_EXPORT Directory
