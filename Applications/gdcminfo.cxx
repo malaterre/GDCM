@@ -12,6 +12,11 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+/*
+ * TODO:
+ * Should implement the gdcmiodvfy here
+ * I need to implement gdcmoverlay here (print info on overlay / img / LUT ...)
+ */
 #include "gdcmReader.h"
 #include "gdcmMediaStorage.h"
 #include "gdcmFile.h"
