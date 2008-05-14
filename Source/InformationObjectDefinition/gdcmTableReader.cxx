@@ -57,6 +57,13 @@ static void XMLCALL characterDataHandler(void* userData, const char* data,
   tr->CharacterDataHandler(data,length);
 }
 
+void TableReader::HandleMacroEntryDescription(const char **atts)
+{
+  assert( ParsingMacroEntryDescription == false );
+  ParsingMacroEntryDescription = true;
+  assert( *atts == NULL );
+  assert( Description == "" );
+}
 
 void TableReader::HandleModuleEntryDescription(const char **atts)
 {
@@ -64,6 +71,54 @@ void TableReader::HandleModuleEntryDescription(const char **atts)
   ParsingModuleEntryDescription = true;
   assert( *atts == NULL );
   assert( Description == "" );
+}
+
+void TableReader::HandleMacroEntry(const char **atts)
+{
+  std::string strgrp = "group";
+  std::string strelt = "element";
+  std::string strname = "name";
+  std::string strtype = "type";
+  Tag &tag = CurrentTag;
+  MacroEntry &moduleentry = CurrentMacroEntry;
+  const char **current = atts;
+  while(*current /*&& current+1*/)
+    {
+    if( strgrp == *current )
+      {
+      unsigned int v;
+      const char *raw = *(current+1);
+      int r = sscanf(raw, "%04x", &v);
+      assert( r == 1 );
+      assert( v <= 0xFFFF );
+      tag.SetGroup( v );
+      }
+    else if( strelt == *current )
+      {
+      unsigned int v;
+      const char *raw = *(current+1);
+      int r = sscanf(raw, "%04x", &v);
+      assert( r == 1 );
+      assert( v <= 0xFFFF );
+      tag.SetElement( v );
+      }
+    else if( strname == *current )
+      {
+      const char *raw = *(current+1);
+      moduleentry.SetName( raw );
+      }
+    else if( strtype == *current )
+      {
+      const char *raw = *(current+1);
+	    moduleentry.SetType( Type::GetTypeType(raw) );
+      }
+    else
+      {
+      abort();
+      }
+    ++current;
+    ++current;
+    }
 }
 
 void TableReader::HandleModuleEntry(const char **atts)
@@ -114,6 +169,11 @@ void TableReader::HandleModuleEntry(const char **atts)
     }
 }
 
+void TableReader::HandleMacro(const char **atts)
+{
+  HandleModule(atts);
+}
+
 void TableReader::HandleModule(const char **atts)
 {
   std::string strref = "ref";
@@ -150,8 +210,8 @@ void TableReader::StartElement(const char *name, const char **atts)
     }
   else if( strcmp(name, "macro" ) == 0 )
     {
-    //std::cout << "Start Macro" << std::endl;
-    //HandleMacro(atts);
+    ParsingMacro = true;
+    HandleMacro(atts);
     }
   else if( strcmp(name, "module" ) == 0 )
     {
@@ -166,12 +226,21 @@ void TableReader::StartElement(const char *name, const char **atts)
       ParsingModuleEntry = true;
       HandleModuleEntry(atts);
       }
+    else if( ParsingMacro ) 
+      {
+      ParsingMacroEntry = true;
+      HandleMacroEntry(atts);
+      }
     }
   else if( strcmp(name, "description" ) == 0 )
     {
     if( ParsingModuleEntry )
       {
       HandleModuleEntryDescription(atts);
+      }
+    else if( ParsingMacroEntry )
+      {
+      HandleMacroEntryDescription(atts);
       }
     }
   else if( strcmp(name, "iod" ) == 0 )
@@ -196,7 +265,10 @@ void TableReader::EndElement(const char *name)
   else if( strcmp(name, "macro" ) == 0 )
     {
     //std::cout << "Start Macro" << std::endl;
-    //HandleMacro(atts);
+    CurrentMacros.AddModule( CurrentModuleName.c_str(), CurrentMacro);
+    CurrentModuleName.clear();
+    CurrentMacro.Clear();
+    ParsingMacro = false;
     }
   else if( strcmp( "module", name) == 0 )
     {
@@ -213,6 +285,11 @@ void TableReader::EndElement(const char *name)
       ParsingModuleEntry = false;
       CurrentModule.AddModuleEntry( CurrentTag, CurrentModuleEntry);
       }
+    else if( ParsingMacro ) 
+      {
+      ParsingMacroEntry = false;
+      CurrentMacro.AddModuleEntry( CurrentTag, CurrentMacroEntry);
+      }
     }
   else if( strcmp(name, "description" ) == 0 )
     {
@@ -222,12 +299,25 @@ void TableReader::EndElement(const char *name)
       CurrentModuleEntry.SetDescription( Description.c_str() );
       Description = "";
       }
+    else if( ParsingMacroEntry )
+      {
+      ParsingMacroEntryDescription = false;
+      //assert( !Description.empty() );
+      CurrentMacroEntry.SetDescription( Description.c_str() );
+      Description = "";
+      }
     }
   else if( strcmp(name, "iod" ) == 0 )
     {
     }
   else if( strcmp(name, "include" ) == 0 )
     {
+    if( ParsingModule )
+      {
+      }
+    else if( ParsingMacro )
+      {
+      }
     }
   else
     {
@@ -239,7 +329,12 @@ void TableReader::CharacterDataHandler(const char *data, int length)
 {
   if( ParsingModuleEntryDescription )
     {
-    //abort();
+    std::string name( data, length);
+    assert( length == strlen( name.c_str() ) );
+    Description.append( name );
+    }
+  else if( ParsingMacroEntryDescription )
+    {
     std::string name( data, length);
     assert( length == strlen( name.c_str() ) );
     Description.append( name );

@@ -25,6 +25,9 @@ void TestReadTable(const char *filename)
   tr.Read();
   const gdcm::Modules &m = tr.GetModules();
   std::cout << m << std::endl;
+
+  const gdcm::Macros &m2 = tr.GetMacros();
+  std::cout << m2 << std::endl;
 }
 
 int TestTableReader(int argc, char *argv[])

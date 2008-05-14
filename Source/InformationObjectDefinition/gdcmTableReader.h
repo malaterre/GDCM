@@ -34,6 +34,9 @@ class GDCM_EXPORT TableReader
 public:
   TableReader():ParsingModule(false),ParsingModuleEntry(false),
   ParsingModuleEntryDescription(false),
+  ParsingMacro(false),
+  ParsingMacroEntry(false),
+  ParsingMacroEntryDescription(false),
   Description() {}
   virtual ~TableReader() {}
 
@@ -54,18 +57,28 @@ public:
 void HandleModuleEntry(const char **atts);
 void HandleModule(const char **atts);
 void HandleModuleEntryDescription(const char **atts);
+void HandleMacroEntry(const char **atts);
+void HandleMacro(const char **atts);
+void HandleMacroEntryDescription(const char **atts);
 
   const Modules & GetModules() const { return CurrentModules; }
+  const Macros & GetMacros() const { return CurrentMacros; }
 
 private:
   std::string Filename;
+  Macros CurrentMacros;
   Modules CurrentModules;
+  Macro CurrentMacro;
   Module CurrentModule;
+  MacroEntry CurrentMacroEntry;
   ModuleEntry CurrentModuleEntry;
   std::string CurrentModuleName;
   bool ParsingModule;
   bool ParsingModuleEntry;
   bool ParsingModuleEntryDescription;
+  bool ParsingMacro;
+  bool ParsingMacroEntry;
+  bool ParsingMacroEntryDescription;
   Tag CurrentTag;
   std::string Description;
 };

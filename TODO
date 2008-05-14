@@ -113,3 +113,5 @@ In a consistant way if possible...
 -----------------------------------------------------------------------
 vtkMedicalImageProp user defined value should be written back to disk
 -> TODO: SQ will be difficult to handle
+-----------------------------------------------------------------------
+Filter should use OpenMP ?

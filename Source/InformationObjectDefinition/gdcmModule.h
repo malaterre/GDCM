@@ -65,6 +65,8 @@ inline std::ostream& operator<<(std::ostream& _os, const Module &_val)
   return _os;
 }
 
+typedef Module Macro;
+
 
 } // end namespace gdcm
 
