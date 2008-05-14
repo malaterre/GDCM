@@ -95,7 +95,7 @@ public:
   // Mappings are the mapping from a particular tag to the map, mapping filename to value:
   MappingType const & GetMappings() const { return Mappings; }
 
-  // Get the std::map mapping filenames to value for tag 't'
+  // Get the std::map mapping filenames to value for file 'filename'
   TagToValue const & GetMapping(const char *filename) const;
 
   // Retrieve the value found for tag: t associated with file: filename

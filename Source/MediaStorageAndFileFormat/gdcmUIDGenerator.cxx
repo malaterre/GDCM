@@ -226,7 +226,7 @@ const char* UIDGenerator::Generate()
         {
         x[7-i] = 0;
         uuid[idx] = x.to_ulong();
-        len = gdcm::System::EncodeBytes(randbytesbuf, uuid, sizeof(uuid));
+        len = System::EncodeBytes(randbytesbuf, uuid, sizeof(uuid));
         ++i;
         }
       if( ( Unique.size() + len > 64 ) && i == 8 ) 
