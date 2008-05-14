@@ -85,6 +85,7 @@ struct fnv_hash
 
 const char* UIDGenerator::Generate2()
 {
+#ifndef _WIN32
   Unique = GetRoot();
   if( Unique.empty() )
     {
@@ -181,6 +182,9 @@ const char* UIDGenerator::Generate2()
   assert( IsValid( Unique.c_str() ) );
 
   return Unique.c_str();
+#else
+  return 0;
+#endif
 }
 
 /*
