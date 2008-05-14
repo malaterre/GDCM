@@ -11,6 +11,7 @@ SET(IOD_TEST_SRCS
   TestIODEntry
   TestIOD
   TestIODs
+  TestDefs
   TestPatient
   TestSeries
   TestStudy
