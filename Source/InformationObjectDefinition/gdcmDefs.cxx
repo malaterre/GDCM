@@ -29,7 +29,8 @@ Defs::~Defs()
 void Defs::LoadDefaults()
 {
   gdcm::TableReader tr(*this);
-  const char filename[] = "/home/mmalaterre/Projects/gdcm/trunk/Source/InformationObjectDefinition/Part3.xml";
+  // FIXME: hardcoded path:
+  const char filename[] = GDCM_SOURCE_DIR "/Source/InformationObjectDefinition/Part3.xml";
   tr.SetFilename(filename);
   tr.Read();
 }

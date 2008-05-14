@@ -42,9 +42,11 @@ public:
     ModulesInternal.insert(
       ModuleMapType::value_type(name, module));
     }
-  const Module &GetModule(const char *name)
+  const Module &GetModule(const char *name) const
     {
-    return ModulesInternal[name];
+    ModuleMapType::const_iterator it = ModulesInternal.find( name );
+    assert( it->first == name );
+    return it->second;
     }
 
   bool IsEmpty() const { return ModulesInternal.empty(); }

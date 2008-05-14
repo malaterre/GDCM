@@ -34,6 +34,12 @@ class GDCM_EXPORT Module
 {
 public:
   typedef std::map<Tag, ModuleEntry> MapModuleEntry;
+  typedef MapModuleEntry::const_iterator ConstIterator;
+  typedef MapModuleEntry::iterator Iterator;
+  ConstIterator Begin() const { return ModuleInternal.begin(); }
+  Iterator Begin() { return ModuleInternal.begin(); }
+  ConstIterator End() const { return ModuleInternal.end(); }
+  Iterator End() { return ModuleInternal.end(); }
 
   Module() {}
   friend std::ostream& operator<<(std::ostream& _os, const Module &_val);
@@ -44,6 +50,12 @@ public:
     {
     ModuleInternal.insert(
       MapModuleEntry::value_type(tag, module));
+    }
+  const ModuleEntry& GetModuleEntry(const Tag &tag) const 
+    {
+    MapModuleEntry::const_iterator it = ModuleInternal.find(tag);
+    assert( it->first == tag );
+    return it->second;
     }
 private:
   //Module &operator=(const Module &_val); // purposely not implemented

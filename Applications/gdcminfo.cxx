@@ -22,6 +22,9 @@
 #include "gdcmFile.h"
 #include "gdcmDataSet.h"
 #include "gdcmUIDs.h"
+#include "gdcmGlobal.h"
+#include "gdcmModules.h"
+#include "gdcmDefs.h"
 
 #include <iostream>
 
@@ -43,6 +46,32 @@ int main(int argc, char *argv[])
   gdcm::UIDs uid;
   uid.SetFromUID( ms.GetString() );
   std::cout << "MediaStorage is " << ms << " [" << uid.GetName() << "]" << std::endl;
+
+  if( ms == gdcm::MediaStorage::MRImageStorage )
+    {
+    const gdcm::Global& g = gdcm::Global::GetInstance();
+    const gdcm::Defs &defs = g.GetDefs();
+    const gdcm::Modules &modules = defs.GetModules();
+    const gdcm::Module module = modules.GetModule( "MR Image Module Attributes" );
+    //std::cout << module << std::endl;
+    gdcm::Module::ConstIterator it = module.Begin();
+    for(; it != module.End(); ++it)
+      {
+      const gdcm::Tag &tag = it->first;
+      const gdcm::ModuleEntry &me = it->second;
+      if( ds.FindDataElement( tag ) )
+        {
+        }
+      else
+        {
+        //if( me.GetType() == )
+          {
+          std::cerr << "DataSet is missing tag: " << tag << std::endl;
+          std::cerr << "ModuleEntry specify: " << me << std::endl;
+          }
+        }
+      }
+    }
 
   return 0;
 }

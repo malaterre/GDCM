@@ -20,6 +20,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
+  "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
 # FIXME:
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_BINARY_DIR}/Utilities/zlib"
@@ -53,11 +54,11 @@ ENDIF(CMAKE_HAVE_SYS_MMAN_H)
 FOREACH(exename ${GDCM_EXECUTABLE_NAME})
   ADD_EXECUTABLE(${exename} ${exename}.cxx)
   SET_TARGET_PROPERTIES(${exename} PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES})
-  IF(${exename} STREQUAL "gdcminfo")
+  IF(${exename} STREQUAL "gdcminfobla")
     TARGET_LINK_LIBRARIES(${exename} gdcmDSED gdcmDICT)
-  ELSE(${exename} STREQUAL "gdcminfo")
+  ELSE(${exename} STREQUAL "gdcminfobla")
     TARGET_LINK_LIBRARIES(${exename} gdcmMSFF)
-  ENDIF(${exename} STREQUAL "gdcminfo")
+  ENDIF(${exename} STREQUAL "gdcminfobla")
   IF(WIN32 AND NOT CYGWIN)
     TARGET_LINK_LIBRARIES(${exename} gdcmgetopt)
   ENDIF(WIN32 AND NOT CYGWIN)
