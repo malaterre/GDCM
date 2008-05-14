@@ -172,12 +172,35 @@ void TableReader::HandleModuleEntry(const char **atts)
 void TableReader::HandleIODEntry(const char **atts)
 {
   std::string strie = "ie";
+  std::string strname  = "name";
+  std::string strref = "ref";
+  std::string strusage = "usage";
+  // <iod ref="Table B.7-1" name="Film Session IOD Modules">
+  std::string strdesc = "description";
   IODEntry &iodentry = CurrentIODEntry;
   const char **current = atts;
   while(*current /*&& current+1*/)
     {
+    const char *raw = *(current+1);
     if( strie == *current )
       {
+      iodentry.SetIE( raw );
+      }
+    else if( strname == *current )
+      {
+      iodentry.SetName( raw );
+      }
+    else if( strref == *current )
+      {
+      iodentry.SetRef( raw );
+      }
+    else if( strusage == *current )
+      {
+      iodentry.SetUsage( raw );
+      }
+    else if( strdesc == *current )
+      {
+      //iodentry.SetDescription( raw );
       }
     else
       {
@@ -336,7 +359,7 @@ void TableReader::EndElement(const char *name)
     else if( ParsingIOD ) 
       {
       ParsingIODEntry = false;
-      //CurrentIOD.AddIODEntry( CurrentTag, CurrentMacroEntry);
+      CurrentIOD.AddIODEntry( CurrentIODEntry);
       }
     }
   else if( strcmp(name, "description" ) == 0 )
@@ -394,7 +417,7 @@ void TableReader::CharacterDataHandler(const char *data, int length)
     }
   else
     {
-    abort();
+    //abort();
     }
 }
 

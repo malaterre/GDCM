@@ -23,11 +23,14 @@ void TestReadTable(const char *filename)
   gdcm::TableReader tr;
   tr.SetFilename(filename);
   tr.Read();
-  const gdcm::Modules &m = tr.GetModules();
-  std::cout << m << std::endl;
+  const gdcm::Modules &modules = tr.GetModules();
+  std::cout << modules << std::endl;
 
-  const gdcm::Macros &m2 = tr.GetMacros();
-  std::cout << m2 << std::endl;
+  const gdcm::Macros &macros = tr.GetMacros();
+  std::cout << macros << std::endl;
+
+  const gdcm::IODs &iods = tr.GetIODs();
+  std::cout << iods << std::endl;
 }
 
 int TestTableReader(int argc, char *argv[])

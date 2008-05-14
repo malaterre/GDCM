@@ -17,6 +17,8 @@
 
 #include "gdcmTypes.h"
 #include "gdcmModule.h"
+#include "gdcmIOD.h"
+#include "gdcmIODs.h"
 #include "gdcmModules.h"
 
 #include <string>
@@ -37,6 +39,8 @@ public:
   ParsingMacro(false),
   ParsingMacroEntry(false),
   ParsingMacroEntryDescription(false),
+  ParsingIOD(false),
+  ParsingIODEntry(false),
   Description() {}
   virtual ~TableReader() {}
 
@@ -45,8 +49,6 @@ public:
   const char *GetFilename() { return Filename.c_str(); }
 
   int Read();
-
-  
 
 //protected:
   // You need to override those function in your subclasses:
@@ -60,18 +62,24 @@ void HandleModuleEntryDescription(const char **atts);
 void HandleMacroEntry(const char **atts);
 void HandleMacro(const char **atts);
 void HandleMacroEntryDescription(const char **atts);
+void HandleIODEntry(const char **atts);
+void HandleIOD(const char **atts);
 
   const Modules & GetModules() const { return CurrentModules; }
   const Macros & GetMacros() const { return CurrentMacros; }
+  const IODs & GetIODs() const { return CurrentIODs; }
 
 private:
   std::string Filename;
   Macros CurrentMacros;
   Modules CurrentModules;
+  IODs CurrentIODs;
   Macro CurrentMacro;
   Module CurrentModule;
+  IOD CurrentIOD;
   MacroEntry CurrentMacroEntry;
   ModuleEntry CurrentModuleEntry;
+  IODEntry CurrentIODEntry;
   std::string CurrentModuleName;
   bool ParsingModule;
   bool ParsingModuleEntry;
@@ -79,6 +87,8 @@ private:
   bool ParsingMacro;
   bool ParsingMacroEntry;
   bool ParsingMacroEntryDescription;
+  bool ParsingIOD;
+  bool ParsingIODEntry;
   Tag CurrentTag;
   std::string Description;
 };

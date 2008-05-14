@@ -12,62 +12,59 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmModules_h
-#define __gdcmModules_h
+#ifndef __gdcmIODs_h
+#define __gdcmIODs_h
 
 #include "gdcmTypes.h"
-#include "gdcmModule.h"
 
 #include <map>
 
 namespace gdcm
 {
 /**
- * \brief Class for representing a Modules
+ * \brief Class for representing a IODs
  * \note bla
- * \sa Module
+ * \sa IOD
  */
-class GDCM_EXPORT Modules
+class GDCM_EXPORT IODs
 {
 public:
-  typedef std::map<std::string, Module> ModuleMapType;
+  typedef std::map<std::string, IOD> IODMapType;
 
-  Modules() {}
-  friend std::ostream& operator<<(std::ostream& _os, const Modules &_val);
+  IODs() {}
+  friend std::ostream& operator<<(std::ostream& _os, const IODs &_val);
 
-  void Clear() { ModulesInternal.clear(); }
+  void Clear() { IODsInternal.clear(); }
 
-  void AddModule(const char *name , const Module & module )
+  void AddIOD(const char *name , const IOD & module )
     {
-    ModulesInternal.insert(
-      ModuleMapType::value_type(name, module));
+    IODsInternal.insert(
+      IODMapType::value_type(name, module));
     }
-  const Module &GetModule(const char *name)
+  const IOD &GetIOD(const char *name)
     {
-    return ModulesInternal[name];
+    return IODsInternal[name];
     }
 
 private:
-  ModuleMapType ModulesInternal;
+  IODMapType IODsInternal;
 };
 //-----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream& _os, const Modules &_val)
+inline std::ostream& operator<<(std::ostream& _os, const IODs &_val)
 {
-  Modules::ModuleMapType::const_iterator it = _val.ModulesInternal.begin();
-  for(;it != _val.ModulesInternal.end(); ++it)
+  IODs::IODMapType::const_iterator it = _val.IODsInternal.begin();
+  for(;it != _val.IODsInternal.end(); ++it)
     {
     const std::string &name = it->first;
-    const Module &m = it->second;
+    const IOD &m = it->second;
     _os << name << " " << m << '\n';
     }
 
   return _os;
 }
 
-typedef Modules Macros;
-
 
 } // end namespace gdcm
 
-#endif //__gdcmModules_h
+#endif //__gdcmIODs_h
 
