@@ -20,16 +20,19 @@
 
 void TestReadTable(const char *filename)
 {
-  gdcm::TableReader tr;
+  gdcm::Defs defs;
+  gdcm::TableReader tr(defs);
   tr.SetFilename(filename);
   tr.Read();
-  const gdcm::Modules &modules = tr.GetModules();
+
+  
+  const gdcm::Modules &modules = defs.GetModules();
   std::cout << modules << std::endl;
 
-  const gdcm::Macros &macros = tr.GetMacros();
+  const gdcm::Macros &macros = defs.GetMacros();
   std::cout << macros << std::endl;
 
-  const gdcm::IODs &iods = tr.GetIODs();
+  const gdcm::IODs &iods = defs.GetIODs();
   std::cout << iods << std::endl;
 }
 

@@ -14,6 +14,7 @@
 =========================================================================*/
 #include "gdcmGlobal.h"
 #include "gdcmDicts.h"
+#include "gdcmDefs.h"
 
 namespace gdcm
 {
@@ -25,9 +26,10 @@ unsigned int GlobalCount;
 class GlobalInternal
 {
 public:
-  GlobalInternal():GlobalDicts() {}
+  GlobalInternal():GlobalDicts(),GlobalDefs() {}
   Dicts GlobalDicts; // Part 6 + Part 4 elements
 // TODO need H table for TransferSyntax / MediaStorage / Part 3 ...
+  Defs GlobalDefs;
 };
 
 Global::Global()
@@ -57,6 +59,16 @@ Dicts const &Global::GetDicts() const
     Internals->GlobalDicts.LoadDefaults();
     }
   return Internals->GlobalDicts;
+}
+
+Defs const &Global::GetDefs() const
+{
+  if( Internals->GlobalDefs.IsEmpty() )
+    {
+    // Fill in with default values:
+    Internals->GlobalDefs.LoadDefaults();
+    }
+  return Internals->GlobalDefs;
 }
 
 const Global& Global::GetInstance()

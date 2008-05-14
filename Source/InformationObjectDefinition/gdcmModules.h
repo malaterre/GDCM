@@ -47,6 +47,8 @@ public:
     return ModulesInternal[name];
     }
 
+  bool IsEmpty() const { return ModulesInternal.empty(); }
+
 private:
   ModuleMapType ModulesInternal;
 };

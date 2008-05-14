@@ -15,6 +15,7 @@
 #include "gdcmGlobal.h"
 #include "gdcmDicts.h"
 #include "gdcmDict.h"
+#include "gdcmDefs.h"
 
 int TestGlobal(int, char *[])
 {
@@ -93,5 +94,18 @@ int TestGlobal(int, char *[])
   std::cout << "TOTO:" << de << std::endl;
 #endif
 
+  const gdcm::Defs &defs = g.GetDefs();
+
+  const gdcm::Modules &modules = defs.GetModules();
+  std::cout << modules << std::endl;
+
+  const gdcm::Macros &macros = defs.GetMacros();
+  std::cout << macros << std::endl;
+
+  const gdcm::IODs &iods = defs.GetIODs();
+  std::cout << iods << std::endl;
+
+  
   return 0;
 }
+

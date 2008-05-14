@@ -324,14 +324,14 @@ void TableReader::EndElement(const char *name)
   else if( strcmp(name, "macro" ) == 0 )
     {
     //std::cout << "Start Macro" << std::endl;
-    CurrentMacros.AddModule( CurrentModuleName.c_str(), CurrentMacro);
+    CurrentDefs.GetMacros().AddModule( CurrentModuleName.c_str(), CurrentMacro);
     CurrentModuleName.clear();
     CurrentMacro.Clear();
     ParsingMacro = false;
     }
   else if( strcmp( "module", name) == 0 )
     {
-    CurrentModules.AddModule( CurrentModuleName.c_str(), CurrentModule);
+    CurrentDefs.GetModules().AddModule( CurrentModuleName.c_str(), CurrentModule);
     //std::cout << "End Module:" << CurrentModuleName << std::endl;
     CurrentModuleName.clear();
     CurrentModule.Clear();
@@ -339,7 +339,7 @@ void TableReader::EndElement(const char *name)
     }
   else if( strcmp(name, "iod" ) == 0 )
     {
-    CurrentIODs.AddIOD( CurrentModuleName.c_str(), CurrentIOD);
+    CurrentDefs.GetIODs().AddIOD( CurrentModuleName.c_str(), CurrentIOD);
     CurrentModuleName.clear();
     CurrentIOD.Clear();
     ParsingIOD = false;

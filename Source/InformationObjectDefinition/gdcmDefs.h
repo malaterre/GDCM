@@ -24,7 +24,7 @@
 namespace gdcm
 {
 /**
- * \brief Class to manipulate the sum of knowledge (all the dict user load)
+ * \brief FIXME I do not like the name 'Defs'
  * \note bla
  */
 class GDCM_EXPORT Defs
@@ -34,12 +34,15 @@ public:
   ~Defs();
 
   const Modules &GetModules() const { return Part3Modules; }
+  Modules &GetModules() { return Part3Modules; }
 
   const Macros &GetMacros() const { return Part3Macros; }
+  Macros &GetMacros() { return Part3Macros; }
 
   const IODs & GetIODs() const { return Part3IODs; }
+  IODs & GetIODs() { return Part3IODs; }
 
-  //bool IsEmpty() const { return GetPublicDict().IsEmpty(); }
+  bool IsEmpty() const { return GetModules().IsEmpty(); }
 
 protected:
   friend class Global;

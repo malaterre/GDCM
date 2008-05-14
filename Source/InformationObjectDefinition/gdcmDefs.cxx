@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmDefs.h"
+#include "gdcmTableReader.h"
 
 namespace gdcm
 {
@@ -23,6 +24,14 @@ Defs::Defs()
 
 Defs::~Defs()
 {
+}
+
+void Defs::LoadDefaults()
+{
+  gdcm::TableReader tr(*this);
+  const char filename[] = "/home/mmalaterre/Projects/gdcm/trunk/Source/InformationObjectDefinition/Part3.xml";
+  tr.SetFilename(filename);
+  tr.Read();
 }
 
 

@@ -12,8 +12,8 @@ SET(IOD_SRCS
   gdcmStudy.cxx
   gdcmPatient.cxx
   gdcmType.cxx
-  gdcmXMLDictReader.cxx
-  gdcmXMLPrivateDictReader.cxx
+  #gdcmXMLDictReader.cxx
+  #gdcmXMLPrivateDictReader.cxx
   )
 
 # expat stuff

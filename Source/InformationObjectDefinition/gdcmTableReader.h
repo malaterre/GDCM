@@ -16,10 +16,11 @@
 #define __gdcmTableReader_h
 
 #include "gdcmTypes.h"
-#include "gdcmModule.h"
-#include "gdcmIOD.h"
-#include "gdcmIODs.h"
-#include "gdcmModules.h"
+#include "gdcmDefs.h"
+//#include "gdcmModule.h"
+//#include "gdcmIOD.h"
+//#include "gdcmIODs.h"
+//#include "gdcmModules.h"
 
 #include <string>
 #include <vector>
@@ -34,7 +35,7 @@ namespace gdcm
 class GDCM_EXPORT TableReader
 {
 public:
-  TableReader():ParsingModule(false),ParsingModuleEntry(false),
+  TableReader(Defs &defs):CurrentDefs(defs),ParsingModule(false),ParsingModuleEntry(false),
   ParsingModuleEntryDescription(false),
   ParsingMacro(false),
   ParsingMacroEntry(false),
@@ -65,15 +66,17 @@ void HandleMacroEntryDescription(const char **atts);
 void HandleIODEntry(const char **atts);
 void HandleIOD(const char **atts);
 
-  const Modules & GetModules() const { return CurrentModules; }
-  const Macros & GetMacros() const { return CurrentMacros; }
-  const IODs & GetIODs() const { return CurrentIODs; }
+  //const Modules & GetModules() const { return CurrentModules; }
+  //const Macros & GetMacros() const { return CurrentMacros; }
+  //const IODs & GetIODs() const { return CurrentIODs; }
+  const Defs & GetDefs() const { return CurrentDefs; }
 
 private:
   std::string Filename;
-  Macros CurrentMacros;
-  Modules CurrentModules;
-  IODs CurrentIODs;
+  Defs &CurrentDefs;
+  //Macros CurrentMacros;
+  //Modules CurrentModules;
+  //IODs CurrentIODs;
   Macro CurrentMacro;
   Module CurrentModule;
   IOD CurrentIOD;

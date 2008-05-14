@@ -46,6 +46,7 @@ namespace gdcm
  */
 class GlobalInternal;
 class Dicts;
+class Defs;
 class GDCM_EXPORT Global // why expose the symbol I think I only need to expose the instance...
 {
 public:
@@ -54,6 +55,8 @@ public:
 
   // retrieve the default/internal dicts 
   Dicts const &GetDicts() const;
+
+  Defs const &GetDefs() const;
 
   // return the singleton instance
   static const Global& GetInstance();
