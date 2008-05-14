@@ -16,6 +16,7 @@
 #define __gdcmIODs_h
 
 #include "gdcmTypes.h"
+#include "gdcmIOD.h"
 
 #include <map>
 
