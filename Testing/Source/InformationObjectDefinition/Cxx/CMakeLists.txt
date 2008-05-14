@@ -6,7 +6,9 @@ SET(IOD_TEST_SRCS
   TestTableEntry
   TestType
   TestModule
+  TestModules
   TestModuleEntry
+  TestIODEntry
   TestPatient
   TestSeries
   TestStudy
