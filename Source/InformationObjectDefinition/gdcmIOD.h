@@ -26,8 +26,7 @@ namespace gdcm
 /**
  * \brief Class for representing a IOD
  * \note bla
- * IOD: A set of Attributes within an Information Entity or Normalized IOD which
- * are logically related to each other.
+ * 
  * \sa Dict
  */
 class GDCM_EXPORT IOD
