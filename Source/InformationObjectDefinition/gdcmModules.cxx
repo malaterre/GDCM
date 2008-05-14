@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmModule.h"
+#include "gdcmModules.h"
 
 namespace gdcm
 {
