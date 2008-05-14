@@ -453,8 +453,8 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
       unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swe.c_str(), swe.size());
       // I found a case with only one W/L but two comments: WINDOW1\WINDOW2
       // SIEMENS-IncompletePixelData.dcm
-      assert( count >= (unsigned int)n );
-      elwe.SetLength( count * vr.GetSizeof() );
+      //assert( count >= (unsigned int)n );
+      elwe.SetLength( /*count*/ n * vr.GetSizeof() );
       ss.str( swe );
       elwe.Read( ss );
       for(int i = 0; i < n; ++i)
