@@ -31,24 +31,12 @@
  * What if the Series we are trying to read contained a changing shift/scale ?
  */
 
-int TestvtkGDCMImageReader3(int argc, char *argv[])
+int TestvtkGDCMImageReade3(const char *dir, const char *studyuid)
 {
+  std::cout << "Working on : " << dir << std::endl;
   int ret = 0;
-  gdcm::Trace::DebugOff();
-  gdcm::Trace::WarningOff();
-  vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
-  const char *root = gdcm::Testing::GetDataExtraRoot();
-  std::string dir1 = root;
-  std::string dir2 = root;
-  std::string dir3 = root;
-  // dir1 & dir2 have changing 'Rescale Slope':
-  dir1 += "/gdcmSampleData/Philips_Medical_Images/mr711-mr712/";
-  dir2 += "/gdcmSampleData/ForSeriesTesting/Perfusion/images/";
-  // dir3 has RescaleSlope == 0 !
-  dir3 += "/gdcmSampleData/ForSeriesTesting/Dentist/images/";
-
   gdcm::Directory d;
-  d.Load( dir1.c_str() );
+  d.Load( dir );
   const gdcm::Directory::FilenamesType &l1 = d.GetFilenames();
   const unsigned int nfiles = l1.size();
 
@@ -91,7 +79,7 @@ int TestvtkGDCMImageReader3(int argc, char *argv[])
     assert( s.IsKey( filename ) );
     const gdcm::Tag &reftag = t1;
     const char *value =  s.GetValue( filename, reftag );
-    if( strcmp( value, "1.3.46.670589.11.30.6.106253130282775287" ) == 0 )
+    if( strcmp( value, studyuid ) == 0 )
       {
       //std::cout << "file: " << filename << std::endl;
       sarray->InsertNextValue( filename );
@@ -109,6 +97,8 @@ int TestvtkGDCMImageReader3(int argc, char *argv[])
       singlereader->Delete();
       }
     }
+  std::cout << "Found " << sarray->GetSize() << " files belonging to StudyUID: " << studyuid << std::endl;
+  vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
   reader->SetFileNames( sarray );
   sarray->Delete();
 
@@ -118,7 +108,7 @@ int TestvtkGDCMImageReader3(int argc, char *argv[])
   int ssize = img->GetScalarSize();
   vtkIdType npts = img->GetNumberOfPoints();
   char * ptr = (char*)img->GetScalarPointer();
-  if( wholebuffer.size() != npts * ssize )
+  if( wholebuffer.size() != npts * ssize || wholebuffer.empty() )
     {
     std::cerr << "Something went terribly wrong" << std::endl;
     ret = 1;
@@ -140,6 +130,35 @@ o2.close();
 #endif
 
   reader->Delete();
+  return ret;
+}
+
+
+int TestvtkGDCMImageReader3(int argc, char *argv[])
+{
+  int ret = 0;
+  gdcm::Trace::DebugOff();
+  gdcm::Trace::WarningOff();
+  const char *root = gdcm::Testing::GetDataExtraRoot();
+  std::string dir1 = root;
+  std::string dir2 = root;
+  std::string dir3 = root;
+  // dir1 & dir2 have changing 'Rescale Slope':
+  dir1 += "/gdcmSampleData/Philips_Medical_Images/mr711-mr712/";
+  dir2 += "/gdcmSampleData/ForSeriesTesting/Perfusion/images/";
+  // dir3 has RescaleSlope == 0 !
+  dir3 += "/gdcmSampleData/ForSeriesTesting/Dentist/images/";
+
+  const char *studyuids[] = {
+    "1.3.46.670589.11.30.6.106253130282775287",
+    "1.2.250.1.38.2.1.12.7118916513228.20041110114508.431746279",
+    "1.76.380.18.1.10713.1.1335"
+  };
+
+  ret += TestvtkGDCMImageReade3(dir1.c_str(), studyuids[0]);
+  ret += TestvtkGDCMImageReade3(dir2.c_str(), studyuids[1]);
+  ret += TestvtkGDCMImageReade3(dir3.c_str(), studyuids[2]);
+
 
   return ret;
 }

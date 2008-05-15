@@ -722,7 +722,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     if( PixelData.GetSlope() == 0 )
       {
       // come' on ! WTF
-      gdcmErrorMacro( "Cannot have slope == 0. Defaulting to 1.0 instead" );
+      gdcmWarningMacro( "Cannot have slope == 0. Defaulting to 1.0 instead" );
       PixelData.SetSlope( 1 );
       }
     }
