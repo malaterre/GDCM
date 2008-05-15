@@ -36,6 +36,8 @@
 #include "gdcmAttribute.h"
 #include "gdcmRescaler.h"
 
+#include <limits>
+
 vtkCxxRevisionMacro(vtkGDCMImageWriter, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMImageWriter)
 
@@ -532,6 +534,11 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
       return 0;
       }
     }
+
+  // Let's try to fake out the SOP Class UID here:
+  gdcm::MediaStorage ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
+  ms.GuessFromModality( this->MedicalImageProperties->GetModality(), this->FileDimensionality ); // Will override SC only if something is found...
+
   // store in a safe place the 'raw' pixeltype from vtk
   gdcm::PixelFormat savepixeltype = pixeltype;
   if( this->Shift == 0 && this->Scale == 1 )
@@ -545,7 +552,15 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     ir2.SetSlope( this->Scale );
     ir2.SetPixelFormat( pixeltype );
     // TODO: Hum...ScalarRange is -I believe- computed on the WholeExtent...
-    double *srange = data->GetScalarRange();
+    double srange[2];
+    data->GetScalarRange(srange);
+    // HACK !!!
+    // MR Image Storage cannot have Shift / Rescale , however it looks like people are doing it 
+    // anyway, so let's make GDCM just as bad as any other library, by providing a fix:
+    if( ms == gdcm::MediaStorage::MRImageStorage /*&& pixeltype.GetBitsAllocated() == 8*/ )
+      {
+      srange[1] = std::numeric_limits<uint16_t>::max() * this->Scale + this->Shift;
+      }
     ir2.SetMinMaxForPixelType( srange[0], srange[1] );
     //gdcm::PixelFormat::ScalarType outputpt = ir2.ComputeInterceptSlopePixelType();
     gdcm::PixelFormat outputpt = ir2.ComputePixelTypeFromMinMax();
@@ -600,6 +615,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
   int j = dext[4];
 
+
   bool rescaled = false;
   char * copy = NULL;
   // Whenever shift / scale is needed... do it !
@@ -610,7 +626,15 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     ir.SetIntercept( this->Shift );
     ir.SetSlope( this->Scale );
     ir.SetPixelFormat( savepixeltype );
-    double *srange = data->GetScalarRange();
+    double srange[2];
+    data->GetScalarRange(srange);
+    // HACK !!!
+    // MR Image Storage cannot have Shift / Rescale , however it looks like people are doing it 
+    // anyway, so let's make GDCM just as bad as any other library, by providing a fix:
+    if( ms == gdcm::MediaStorage::MRImageStorage /*&& pixeltype.GetBitsAllocated() == 8*/ )
+      {
+      srange[1] = std::numeric_limits<uint16_t>::max() * this->Scale + this->Shift;
+      }
     ir.SetMinMaxForPixelType( srange[0], srange[1] );
     image.SetIntercept( this->Shift );
     image.SetSlope( this->Scale );
@@ -777,9 +801,6 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 }
 
 
-  // Let's try to fake out the SOP Class UID here:
-  gdcm::MediaStorage ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
-  ms.GuessFromModality( this->MedicalImageProperties->GetModality(), this->FileDimensionality ); // Will override SC only if something is found...
   if( this->FileDimensionality != 2 && ms == gdcm::MediaStorage::SecondaryCaptureImageStorage )
     {
     // A.8.3.4 Multi-frame Grayscale Byte SC Image IOD Content Constraints
@@ -803,6 +824,11 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     )
       {
       ms = gdcm::MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage;
+      if( this->Shift != 0 || this->Scale != 1 )
+        {
+        vtkErrorMacro( "Cannot have shift/scale" );
+        return 0;
+        }
       }
     else
       {
