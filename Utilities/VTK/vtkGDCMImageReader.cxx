@@ -450,7 +450,7 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
       std::stringstream ss;
       ss.str( "" );
       std::string swe = std::string( bvwe->GetPointer(), bvwe->GetLength() );
-      unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swe.c_str(), swe.size());
+      unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swe.c_str(), swe.size()); (void)count;
       // I found a case with only one W/L but two comments: WINDOW1\WINDOW2
       // SIEMENS-IncompletePixelData.dcm
       //assert( count >= (unsigned int)n );
@@ -882,6 +882,10 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     len = 16 * len / 12;
     delete[] copy;
   }
+  // HACK: Make sure that Shift/Scale are the one from the file:
+  this->Shift = image.GetIntercept();
+  this->Scale = image.GetSlope();
+
   if( Scale != 1.0 || Shift != 0.0 )
   {
     gdcm::Rescaler r;
@@ -892,6 +896,8 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     memcpy(copy, pointer, len);
     r.Rescale(pointer,copy,len);
     delete[] copy;
+    // WARNING: sizeof(Real World Value) != sizeof(Stored Pixel)
+    outlen = data->GetScalarSize() * data->GetNumberOfPoints() / data->GetDimensions()[2];
   }
   // Do the Icon Image:
   this->NumberOfIconImages = image.GetIconImage().IsEmpty() ? 0 : 1;

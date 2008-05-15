@@ -85,7 +85,7 @@ int TestvtkGDCMImageReader3(int argc, char *argv[])
 
   std::vector<char> wholebuffer;
   vtkStringArray *sarray = vtkStringArray::New();
-  for(; it != keys.end(); ++it)
+  for(; it != keys.end() /*&& i < 2*/; ++it)
     {
     const char *filename = it->c_str();
     assert( s.IsKey( filename ) );
@@ -93,7 +93,7 @@ int TestvtkGDCMImageReader3(int argc, char *argv[])
     const char *value =  s.GetValue( filename, reftag );
     if( strcmp( value, "1.3.46.670589.11.30.6.106253130282775287" ) == 0 )
       {
-      std::cout << filename << std::endl;
+      //std::cout << "file: " << filename << std::endl;
       sarray->InsertNextValue( filename );
 
       // Read each file
@@ -129,6 +129,15 @@ int TestvtkGDCMImageReader3(int argc, char *argv[])
     std::cerr << "BUG: (n) Readers are not equivalent to a single reader !" << std::endl;
     ret = 1;
     }
+#if 0
+std::ofstream o1("/tmp/debug1.raw");
+o1.write(&wholebuffer[0], wholebuffer.size());
+o1.close();
+
+std::ofstream o2("/tmp/debug2.raw");
+o2.write(ptr, wholebuffer.size());
+o2.close();
+#endif
 
   reader->Delete();
 

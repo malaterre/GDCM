@@ -42,11 +42,12 @@ public:
     ScalarRangeMax = max;
     }
   PixelFormat ComputePixelTypeFromMinMax();
+
 protected:
-template <typename TIn>
-void RescaleFunctionIntoBestFit(char *out, const TIn *in, size_t n);
-template <typename TIn>
-void InverseRescaleFunctionIntoBestFit(char *out, const TIn *in, size_t n);
+  template <typename TIn>
+    void RescaleFunctionIntoBestFit(char *out, const TIn *in, size_t n);
+  template <typename TIn>
+    void InverseRescaleFunctionIntoBestFit(char *out, const TIn *in, size_t n);
 
 private:
   double Intercept; // 0028,1052
