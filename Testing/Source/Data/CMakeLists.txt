@@ -53,6 +53,12 @@ SET(BLACK_LIST_READER
   BogugsItemAndSequenceLength.dcm
   srwithgraphdeflated.dcm # ???
   BogusACRWithFileMeta.dcm
+
+# vtkGDCMImageWriter + rescale does not work on the following images:
+  LIBIDO-24-ACR_NEMA-Rectangle.dcm
+# Bits Allocated was set to 8, while it should be 16 bits (MR support 16 only)
+  gdcm-MR-PHILIPS-16-NonSquarePixels.dcm
+  PHILIPS_Gyroscan-8-MONO2-Odd_Sequence.dcm
 )
 
 SET(GDCM_DATA_FILENAMES)

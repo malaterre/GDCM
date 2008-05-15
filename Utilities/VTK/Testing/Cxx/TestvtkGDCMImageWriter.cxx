@@ -133,7 +133,7 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
         && comppf != gdcm::PixelFormat::UINT12
       )
         {
-#if 1
+#if 0
 {
 unsigned long len = compimage.GetBufferLength();
 char* buffer = new char[len];
