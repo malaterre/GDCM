@@ -1,0 +1,127 @@
+/*=========================================================================
+
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006-2008 Mathieu Malaterre
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+
+=========================================================================*/
+#include "vtkGDCMImageReader.h"
+#include "vtkMedicalImageProperties.h"
+
+#include "vtkPNGWriter.h"
+#include "vtkImageData.h"
+#include "vtkStringArray.h"
+//#include <vtksys/SystemTools.hxx>
+
+#include "gdcmFilename.h"
+#include "gdcmTesting.h"
+#include "gdcmSystem.h"
+#include "gdcmTrace.h"
+#include "gdcmDirectory.h"
+#include "gdcmScanner.h"
+#include "gdcmGlobal.h"
+#include "gdcmDicts.h"
+
+/*
+ * This test shows how can one extent value stored in the vtkMedicalImageProperties
+ * For instance we will add the following two value in the struct:
+ * (0008,0005) CS [ISO_IR 100]                             #  10, 1 SpecificCharacterSet
+ * (0008,0008) CS [ORIGINAL\PRIMARY\AXIAL]                 #  22, 3 ImageType
+ */
+int TestvtkGDCMImageRead4(const char *filename, bool verbose)
+{
+  if( verbose )
+    std::cerr << "Reading : " << filename << std::endl;
+
+  gdcm::Directory::FilenamesType l;
+  vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
+  if( gdcm::System::FileIsDirectory( filename ) )
+    {
+    verbose = false;
+    gdcm::Directory d;
+    d.Load( filename );
+    l = d.GetFilenames();
+    const unsigned int nfiles = l.size();
+    vtkStringArray *sarray = vtkStringArray::New();
+    for(unsigned int i = 0; i < nfiles; ++i)
+      {
+      sarray->InsertNextValue( l[i] );
+      }
+    assert( sarray->GetNumberOfValues() == (int)nfiles );
+    reader->SetFileNames( sarray );
+    sarray->Delete();
+    }
+  else
+    {
+    reader->SetFileName( filename );
+    l.push_back( filename );
+    }
+
+  //int canread = reader->CanReadFile( filename );
+  reader->Update();
+
+  gdcm::Scanner scanner;
+  // (0008,0005) CS [ISO_IR 100]                             #  10, 1 SpecificCharacterSet
+  // (0008,0008) CS [ORIGINAL\PRIMARY\AXIAL]                 #  22, 3 ImageType
+  const gdcm::Tag t1(0x0008,0x0005);
+  const gdcm::Tag t2(0x0008,0x0008);
+  scanner.AddTag( t1 );
+  scanner.AddTag( t2 );
+  const gdcm::Global& g = gdcm::Global::GetInstance();
+  const gdcm::Dicts &ds = g.GetDicts();
+
+  bool b = scanner.Scan( l );
+  if( !b )
+    {
+    return 1;
+    }
+
+  vtkMedicalImageProperties * medprop = reader->GetMedicalImageProperties();
+
+  const char *value1 =  scanner.GetValue( filename, t1 );
+  const gdcm::DictEntry& de1 = ds.GetDictEntry( t1 );
+  medprop->AddUserDefinedValue(de1.GetName(), value1);
+
+  const char *value2 =  scanner.GetValue( filename, t2 );
+  const gdcm::DictEntry& de2 = ds.GetDictEntry( t2 );
+  medprop->AddUserDefinedValue(de2.GetName(), value2);
+
+  if( verbose )
+    { 
+    reader->GetOutput()->Print( cout );
+    reader->GetMedicalImageProperties()->Print( cout );
+    }
+
+  reader->Delete();
+  return 0; 
+}
+
+int TestvtkGDCMImageReader4(int argc, char *argv[])
+{
+  if( argc == 2 )
+    {
+    const char *filename = argv[1];
+    return TestvtkGDCMImageRead4(filename, true);
+    }
+
+  // else
+  gdcm::Trace::DebugOff();
+  gdcm::Trace::WarningOff();
+  int r = 0, i = 0;
+  const char *filename;
+  const char * const *filenames = gdcm::Testing::GetFileNames();
+  while( (filename = filenames[i]) )
+    {
+    r += TestvtkGDCMImageRead4( filename, false );
+    ++i;
+    }
+
+  return r;
+}

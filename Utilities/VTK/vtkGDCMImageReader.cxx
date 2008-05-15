@@ -464,6 +464,8 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
       }
     }
 
+  // Add more info:
+
 }
 
 //----------------------------------------------------------------------------
