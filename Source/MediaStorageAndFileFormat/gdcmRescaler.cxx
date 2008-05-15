@@ -84,44 +84,44 @@ PixelFormat::ScalarType ComputeBestFit(const PixelFormat &pf, double intercept, 
   double max = slope * pf.GetMax() + intercept;
   assert( min <= max );
   if( min >= 0 ) // unsigned
-  {
-	  if( max <= std::numeric_limits<uint8_t>::max() )
-	  {
-		  st = PixelFormat::UINT8;
-	  }
-	  else if( max <= std::numeric_limits<uint16_t>::max() )
-	  {
-		  st = PixelFormat::UINT16;
-	  }
-	  else if( max <= std::numeric_limits<uint32_t>::max() )
-	  {
-		  st = PixelFormat::UINT32;
-	  }
-	  else
-	  {
-		  abort();
-	  }
-  }
+    {
+    if( max <= std::numeric_limits<uint8_t>::max() )
+      {
+      st = PixelFormat::UINT8;
+      }
+    else if( max <= std::numeric_limits<uint16_t>::max() )
+      {
+      st = PixelFormat::UINT16;
+      }
+    else if( max <= std::numeric_limits<uint32_t>::max() )
+      {
+      st = PixelFormat::UINT32;
+      }
+    else
+      {
+      abort();
+      }
+    }
   else
-  {
-	  if( max <= std::numeric_limits<int8_t>::max() )
-	  {
-		  st = PixelFormat::INT8;
-	  }
-	  else if( max <= std::numeric_limits<int16_t>::max() )
-	  {
-		  st = PixelFormat::INT16;
-	  }
-	  else if( max <= std::numeric_limits<int32_t>::max() )
-	  {
-		  st = PixelFormat::INT32;
-	  }
-	  else
-	  {
-		  abort();
-	  }
-   }
-	assert( st != PixelFormat::UNKNOWN );
+    {
+    if( max <= std::numeric_limits<int8_t>::max() )
+      {
+      st = PixelFormat::INT8;
+      }
+    else if( max <= std::numeric_limits<int16_t>::max() )
+      {
+      st = PixelFormat::INT16;
+      }
+    else if( max <= std::numeric_limits<int32_t>::max() )
+      {
+      st = PixelFormat::INT32;
+      }
+    else
+      {
+      abort();
+      }
+    }
+  assert( st != PixelFormat::UNKNOWN );
   return st;
 }
 
@@ -130,10 +130,10 @@ PixelFormat::ScalarType Rescaler::ComputeInterceptSlopePixelType()
   assert( PF != PixelFormat::UNKNOWN );
   PixelFormat::ScalarType output = PixelFormat::UNKNOWN;
   if( Slope != (int)Slope || Intercept != (int)Intercept)
-  {
+    {
     //assert( PF != PixelFormat::INT8 && PF != PixelFormat::UINT8 ); // Is there any Object that have Rescale on char ?
-	  return PixelFormat::FLOAT32;
-  }
+    return PixelFormat::FLOAT32;
+    }
   double intercept = Intercept;
   double slope = Slope;
   output = ComputeBestFit (PF,intercept,slope);
@@ -321,14 +321,14 @@ PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ double in
   double max = (_max - intercept ) / slope;
   assert( min <= max );
   if( min >= 0 ) // unsigned
-  {
-	  if( max <= std::numeric_limits<uint8_t>::max() )
-	  {
-		  st = PixelFormat::UINT8;
-	  }
-	  else if( max <= std::numeric_limits<uint16_t>::max() )
-	  {
-		  st = PixelFormat::UINT16;
+    {
+    if( max <= std::numeric_limits<uint8_t>::max() )
+      {
+      st = PixelFormat::UINT8;
+      }
+    else if( max <= std::numeric_limits<uint16_t>::max() )
+      {
+      st = PixelFormat::UINT16;
       assert( st.GetBitsAllocated() == 16 );
       // FIXME
       if( max <= 4096 )
@@ -336,35 +336,35 @@ PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ double in
         st.SetBitsStored( 12 );
         st.SetHighBit( 11 );
         }
-	  }
-	  else if( max <= std::numeric_limits<uint32_t>::max() )
-	  {
-		  st = PixelFormat::UINT32;
-	  }
-	  else
-	  {
-		  abort();
-	  }
-  }
+      }
+    else if( max <= std::numeric_limits<uint32_t>::max() )
+      {
+      st = PixelFormat::UINT32;
+      }
+    else
+      {
+      abort();
+      }
+    }
   else
-  {
-	  if( max <= std::numeric_limits<int8_t>::max() )
-	  {
-		  st = PixelFormat::INT8;
-	  }
-	  else if( max <= std::numeric_limits<int16_t>::max() )
-	  {
-		  st = PixelFormat::INT16;
-	  }
-	  else if( max <= std::numeric_limits<int32_t>::max() )
-	  {
-		  st = PixelFormat::INT32;
-	  }
-	  else
-	  {
-		  abort();
-	  }
-   }
+    {
+    if( max <= std::numeric_limits<int8_t>::max() )
+      {
+      st = PixelFormat::INT8;
+      }
+    else if( max <= std::numeric_limits<int16_t>::max() )
+      {
+      st = PixelFormat::INT16;
+      }
+    else if( max <= std::numeric_limits<int32_t>::max() )
+      {
+      st = PixelFormat::INT32;
+      }
+    else
+      {
+      abort();
+      }
+    }
 	assert( st != PixelFormat::UNKNOWN );
 	assert( st != PixelFormat::FLOAT32 && st != PixelFormat::FLOAT16 );
   return st;
