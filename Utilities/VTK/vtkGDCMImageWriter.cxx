@@ -435,6 +435,8 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     image.SetNumberOfDimensions( 3 );
     image.SetDimension(2, dims[2] );
     }
+  // Even in case of 2D image, pass the 3rd dimension spacing, this might
+  // Be needed for exmaple in MR : Spacing Between Slice tag
   image.SetSpacing(2, spacing[2] ); // should always be valid...
   // TODO: need to do Origin / Image Position (Patient)
   // For now FileDimensionality should match File Dimension
@@ -480,7 +482,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     Note to myself: should I allow people to squeeze into unsigned char ? Or can I assume most people
     will be doing unsigned short anyway...
     */
-    pixeltype = gdcm::PixelFormat::UINT16;
+    pixeltype = gdcm::PixelFormat::FLOAT32;
     break;
   default:
     vtkErrorMacro( "Do not support this Pixel Type: " << scalarType );
@@ -530,6 +532,22 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
       return 0;
       }
     }
+  gdcm::Rescaler ir2;
+  ir2.SetIntercept( this->Shift );
+  ir2.SetSlope( this->Scale );
+  ir2.SetPixelFormat( pixeltype );
+  // TODO: Hum...ScalarRange is -I believe- computed on the WholeExtent...
+  double *srange = data->GetScalarRange();
+  ir2.SetMinMaxForPixelType( srange[0], srange[1] );
+  //gdcm::PixelFormat::ScalarType outputpt = ir2.ComputeInterceptSlopePixelType();
+  gdcm::PixelFormat outputpt = ir2.ComputePixelTypeFromMinMax();
+  // override pixeltype with what is found by Rescaler
+  gdcm::PixelFormat savepixeltype = pixeltype;
+  if( this->Shift == 1 && this->Scale == 0 )
+    {
+    assert( pixeltype == outputpt );
+    }
+  pixeltype = outputpt;
 
   pixeltype.SetSamplesPerPixel( data->GetNumberOfScalarComponents() );
   image.SetPhotometricInterpretation( pi );
@@ -581,12 +599,13 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   bool rescaled = false;
   char * copy = NULL;
   // For now only float to US is implemented:
-  if( data->GetScalarType() == VTK_FLOAT )
+  //if( data->GetScalarType() == VTK_FLOAT )
     {
     // rescale from float to unsigned short
     gdcm::Rescaler ir;
     ir.SetIntercept( this->Shift );
     ir.SetSlope( this->Scale );
+    ir.SetPixelFormat( savepixeltype );
     image.SetIntercept( this->Shift );
     image.SetSlope( this->Scale );
     copy = new char[len];
