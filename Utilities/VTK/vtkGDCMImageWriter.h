@@ -28,6 +28,9 @@
 // You need to set the FileDimensionality to match the dim of your 
 // data for now (generating a 2D series out of 3D volume is not 
 // currently supported)
+// .SECTION NOTE Shift/Scale are global to all DICOM files written for example
+// as 2D slice, therefore the shift/scale operation might not be optimized for 
+// all slices.
 //
 // .SECTION See Also
 // vtkImageWriter vtkMedicalImageProperties

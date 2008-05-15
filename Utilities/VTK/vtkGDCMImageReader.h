@@ -180,6 +180,10 @@ public:
   virtual void SetCurve(vtkPolyData *pd);
 
   // Modality LUT
+  // DEPRECATED:
+  // Value returned by GetShift/GetScale might be innacurate since Shift/Scale could be
+  // varying along the Series read. Therefore user are advices not to use those function
+  // anymore
   vtkGetMacro(Shift,double);
   vtkGetMacro(Scale,double);
 
