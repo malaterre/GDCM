@@ -33,31 +33,47 @@ void RescaleFunction(TOut *out, const TIn *in, double intercept, double slope, s
     }
 }
 
-// parameter 'size' is in bytes
-template <typename TOut, typename TIn>
-void InverseRescaleFunction(TOut *out, const TIn *in, double intercept, double slope, size_t size)
-{
-  size /= sizeof(TIn);
-  for(size_t i = 0; i != size; ++i)
-    {
-    // '+ 0.5' trick is needed for instance for : gdcmData/MR-MONO2-12-shoulder.dcm
-    out[i] = (TOut)(((double)in[i] - intercept) / slope );
-    }
-}
-#if 1
 // no such thing as partial specialization of function in c++
-template <> template <typename TOut>
-void InverseRescaleFunction<float>(TOut *out, const float *in, double intercept, double slope, size_t size)
-{
-  size /= sizeof(float);
-  for(size_t i = 0; i != size; ++i)
+// so instead use this trick:
+template<typename TOut, typename TIn> 
+struct FImpl;
+
+template<typename TOut, typename TIn> 
+void InverseRescaleFunction(TOut *out, const TIn *in, double intercept, double slope, size_t size)
+{ FImpl<TOut,TIn>::InverseRescaleFunction(out,in,intercept,slope,size); } // users, don't touch this!
+
+template<typename TOut, typename TIn> 
+struct FImpl 
+{ 
+  // parameter 'size' is in bytes
+  static void InverseRescaleFunction( TOut *out, const TIn *in, 
+    double intercept, double slope, size_t size) // users, go ahead and specialize this 
     {
-    // well known trick of adding 0.5 after a floating point type operation to properly find the
-    // closest integer that will represent the transformation
-    out[i] = (TOut)(((double)in[i] - intercept) / slope + 0.5);
+    size /= sizeof(TIn);
+    for(size_t i = 0; i != size; ++i)
+      {
+      // '+ 0.5' trick is NOT needed for image such as: gdcmData/D_CLUNIE_CT1_J2KI.dcm 
+      out[i] = (TOut)(((double)in[i] - intercept) / slope );
+      }
     }
-}
-#endif
+};
+
+template<typename TOut> 
+struct FImpl<TOut, float>
+{
+  static void InverseRescaleFunction(TOut *out, const float *in,
+    double intercept, double slope, size_t size)
+    {
+    size /= sizeof(float);
+    for(size_t i = 0; i != size; ++i)
+      {
+      // '+ 0.5' trick is needed for instance for : gdcmData/MR-MONO2-12-shoulder.dcm
+      // well known trick of adding 0.5 after a floating point type operation to properly find the
+      // closest integer that will represent the transformation
+      out[i] = (TOut)(((double)in[i] - intercept) / slope + 0.5);
+      }
+    }
+};
 
 PixelFormat::ScalarType ComputeBestFit(const PixelFormat &pf, double intercept, double slope)
 {
