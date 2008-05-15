@@ -3,6 +3,7 @@
 SET(VTK_GDCM_TEST_SRCS
   TestvtkGDCMImageReader
   TestvtkGDCMImageReader2
+  TestvtkGDCMImageReader3
   #TestvtkGDCMImageActor
   TestvtkGDCMImageWriter
   TestvtkGDCMImageWriter2

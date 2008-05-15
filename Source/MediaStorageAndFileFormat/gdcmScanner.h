@@ -71,7 +71,7 @@ public:
 
   // Return the list of filename that are key in the internal map,
   // which means those filename were properly parsed
-  //std::vector<const char *> GetKeys() const;
+  Directory::FilenamesType GetKeys() const;
 
   // struct to store all the values found:
   typedef std::set< std::string > ValuesType;

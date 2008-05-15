@@ -486,18 +486,18 @@ std::istream &is = Stream;
         }
       }
 #else
-    std::cerr << ex.what() << std::endl;
+    gdcmDebugMacro( ex.what() );
     success = false;
 #endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
     }
   catch( Exception &ex )
     {
-    std::cerr << ex.what() << std::endl;
+    gdcmDebugMacro( ex.what() );
     success = false;
     }
   catch( ... )
     {
-    std::cerr << "Unknown exception" << std::endl;
+    gdcmWarningMacro( "Unknown exception" );
     success = false;
     }
 
@@ -505,12 +505,12 @@ std::istream &is = Stream;
     }
   catch( Exception &ex )
     {
-    std::cerr << ex.what() << std::endl;
+    gdcmDebugMacro( ex.what() );
     success = false;
     }
   catch( ... )
     {
-    std::cerr << "Unknown exception" << std::endl;
+    gdcmWarningMacro( "Unknown exception" );
     success = false;
     }
 //  if( !success )
@@ -776,12 +776,12 @@ std::istream &is = Stream;
     }
   catch( Exception &ex )
     {
-    std::cerr << ex.what() << std::endl;
+    gdcmDebugMacro( ex.what() );
     success = false;
     }
   catch( ... )
     {
-    std::cerr << "Unknown exception" << std::endl;
+    gdcmWarningMacro( "Unknown exception" );
     success = false;
     }
 
@@ -789,12 +789,12 @@ std::istream &is = Stream;
     }
   catch( Exception &ex )
     {
-    std::cerr << ex.what() << std::endl;
+    gdcmDebugMacro( ex.what() );
     success = false;
     }
   catch( ... )
     {
-    std::cerr << "Unknown exception" << std::endl;
+    gdcmWarningMacro( "Unknown exception" );
     success = false;
     }
 
