@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "vtkGDCMImageReader.h"
+#include "vtkGDCMImageWriter.h"
 #include "vtkMedicalImageProperties.h"
 
 #include "vtkPNGWriter.h"
@@ -99,7 +100,31 @@ int TestvtkGDCMImageRead4(const char *filename, bool verbose)
     reader->GetMedicalImageProperties()->Print( cout );
     }
 
+  // Create directory first:
+  const char subdir[] = "TestvtkGDCMImageReader4";
+  std::string tmpdir = gdcm::Testing::GetTempDirectory( subdir );
+  if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
+    {
+    gdcm::System::MakeDirectory( tmpdir.c_str() );
+    //return 1;
+    }
+  std::string gdcmfile = gdcm::Testing::GetTempFilename( filename, subdir );
+
+  vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
+  writer->SetInput( reader->GetOutput() );
+  writer->SetFileLowerLeft( reader->GetFileLowerLeft() );
+  writer->SetDirectionCosines( reader->GetDirectionCosines() );
+  writer->SetImageFormat( reader->GetImageFormat() );
+  writer->SetFileDimensionality( reader->GetFileDimensionality() );
+  writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
+  writer->SetShift( reader->GetShift() );
+  writer->SetScale( reader->GetScale() );
+  writer->SetFileName( gdcmfile.c_str() );
+  writer->Write();
+  if( verbose )  std::cerr << "Write out: " << gdcmfile << std::endl;
+
   reader->Delete();
+  writer->Delete();
   return 0; 
 }
 

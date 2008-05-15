@@ -35,6 +35,10 @@
 #include "gdcmUIDGenerator.h"
 #include "gdcmAttribute.h"
 #include "gdcmRescaler.h"
+#include "gdcmGlobal.h"
+#include "gdcmDicts.h"
+#include "gdcmDict.h"
+#include "gdcmTag.h"
 
 #include <limits>
 
@@ -799,6 +803,23 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   ds.Insert( de );
 }
 }
+  // User defined value
+  // Remap any user defined value from the DICOM name to the DICOM tag
+  unsigned int nvalues = this->MedicalImageProperties->GetNumberOfUserDefinedValues();
+  for(unsigned int i = 0; i < nvalues; ++i)
+    {
+    const char *name = this->MedicalImageProperties->GetUserDefinedNameByIndex(i);
+    const char *value = this->MedicalImageProperties->GetUserDefinedValueByIndex(i);
+    assert( name && value && *name && *value );
+    // Only deal with public elements:
+    const gdcm::Global& g = gdcm::Global::GetInstance();
+    const gdcm::Dicts &dicts = g.GetDicts();
+    const gdcm::Dict &pubdict = dicts.GetPublicDict();
+    gdcm::Tag t;
+    // Lookup up tag by name is truly inefficient : 0(n)
+    const gdcm::DictEntry &de = pubdict.GetDictEntryByName(name, t); (void)de;
+    SetStringValueFromTag( value, t, ds);
+    }
 
 
   if( this->FileDimensionality != 2 && ms == gdcm::MediaStorage::SecondaryCaptureImageStorage )

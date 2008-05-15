@@ -69,6 +69,7 @@ public:
       MapDictEntry::value_type(tag, de));
     assert( s < DictInternal.size() );
     }
+
   const DictEntry &GetDictEntry(const Tag &tag) const
     {
     MapDictEntry::const_iterator it = 
@@ -93,6 +94,39 @@ public:
         }
 #endif
       it = DictInternal.find( Tag(0xffff,0xffff) );
+      return it->second;
+      }
+    assert( DictInternal.count(tag) == 1 );
+    return it->second;
+    }
+
+  // Inefficient way of looking up tag by name. Technically DICOM
+  // does not garantee uniqueness (and Curve / Overlay are there to prove it). But
+  // most of the time name is in fact uniq and can be uniquely link to a tag
+  const DictEntry &GetDictEntryByName(const char *name, Tag & tag) const
+    {
+    MapDictEntry::const_iterator it = 
+      DictInternal.begin();
+    if( name )
+      {
+      for(; it != DictInternal.end(); ++it)
+        {
+        if( strcmp( name, it->second.GetName() ) == 0 )
+          {
+          // Found a match !
+          tag = it->first;
+          break;
+          }
+        }
+      }
+    else
+      {
+      it = DictInternal.end();
+      }
+    if (it == DictInternal.end())
+      {
+      tag = Tag(0xffff,0xffff);
+      it = DictInternal.find( tag );
       return it->second;
       }
     assert( DictInternal.count(tag) == 1 );
