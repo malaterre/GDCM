@@ -114,44 +114,44 @@ int TestvtkGDCMImageReader2(int argc, char *argv[])
   writer->SetInput( change->GetOutput() );
   writer->SetFileDimensionality( 2 );
   //writer->SetFileLowerLeft( reader2->GetFileLowerLeft() ); // TODO
-    writer->SetMedicalImageProperties( reader2->GetMedicalImageProperties() ); // nasty
-    writer->SetDirectionCosines( reader2->GetDirectionCosines() );
-    writer->SetImageFormat( reader2->GetImageFormat() );
-    const char subdir[] = "TestvtkGDCMImageReader2";
-    std::string tmpdir = gdcm::Testing::GetTempDirectory(subdir);
-    if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
-      {
-      gdcm::System::MakeDirectory( tmpdir.c_str() );
-      //return 1;
-      }
- 
-    tmpdir += "/";
-    const char tfilename[] = "SIEMENS_MAGNETOM-12-MONO2-FileSeq%01d.dcm";
-    tmpdir += tfilename;
-    gdcm::FilenameGenerator fg;
-    fg.SetPattern( tmpdir.c_str() );
-    fg.SetNumberOfFilenames( files->GetNumberOfValues() );
-    bool bb = fg.Generate();
-    if( !bb )
+  writer->SetMedicalImageProperties( reader2->GetMedicalImageProperties() ); // nasty
+  writer->SetDirectionCosines( reader2->GetDirectionCosines() );
+  writer->SetImageFormat( reader2->GetImageFormat() );
+  const char subdir[] = "TestvtkGDCMImageReader2";
+  std::string tmpdir = gdcm::Testing::GetTempDirectory(subdir);
+  if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
     {
-            std::cerr << "FilenameGenerator::Generate failed" << std::endl;
-            return 1;
+    gdcm::System::MakeDirectory( tmpdir.c_str() );
+    //return 1;
     }
-    if( !fg.GetNumberOfFilenames() ) 
+
+  tmpdir += "/";
+  const char tfilename[] = "SIEMENS_MAGNETOM-12-MONO2-FileSeq%01d.dcm";
+  tmpdir += tfilename;
+  gdcm::FilenameGenerator fg;
+  fg.SetPattern( tmpdir.c_str() );
+  fg.SetNumberOfFilenames( files->GetNumberOfValues() );
+  bool bb = fg.Generate();
+  if( !bb )
     {
-            std::cerr << "No filenames generated" << std::endl;
-            return 1;
+    std::cerr << "FilenameGenerator::Generate failed" << std::endl;
+    return 1;
+    }
+  if( !fg.GetNumberOfFilenames() ) 
+    {
+    std::cerr << "No filenames generated" << std::endl;
+    return 1;
     }
   vtkStringArray *wfilenames = vtkStringArray::New();
   for(unsigned int i = 0; i < fg.GetNumberOfFilenames(); ++i)
-  {
-         wfilenames->InsertNextValue( fg.GetFilename(i) );
-        std::cerr << fg.GetFilename(i) << std::endl;
-  }
-    assert( wfilenames->GetNumberOfValues() == fg.GetNumberOfFilenames() );
+    {
+    wfilenames->InsertNextValue( fg.GetFilename(i) );
+    std::cerr << fg.GetFilename(i) << std::endl;
+    }
+  assert( wfilenames->GetNumberOfValues() == fg.GetNumberOfFilenames() );
   writer->SetFileNames( wfilenames );
   writer->Write();
- 
+
   change->Delete();
   reader->Delete();
   writer->Delete();

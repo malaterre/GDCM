@@ -124,11 +124,25 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
         res = 1;
         }
       const gdcm::PixelFormat &comppf = compimage.GetPixelFormat();
-      if( strcmp(digest, ref) != 0 
+      if( !ref )
+        {
+        std::cerr << "Missing md5: " << digest << std::endl;
+        }
+      else if( strcmp(digest, ref) != 0 
         // I do not support rewritting 12Bits pack image (illegal anyway)
         && comppf != gdcm::PixelFormat::UINT12
       )
         {
+#if 1
+{
+unsigned long len = compimage.GetBufferLength();
+char* buffer = new char[len];
+bool res2 = compimage.GetBuffer(buffer);
+std::ofstream out("/tmp/debug.raw");
+out.write( buffer, len );
+out.close();
+}
+#endif
         std::cerr << "Problem reading image from: " << filename << std::endl;
         std::cerr << "Found " << digest << " instead of " << ref << std::endl;
         std::cerr << "Original MediaStorage was: " << compimage.GetTransferSyntax() << std::endl;

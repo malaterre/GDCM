@@ -532,22 +532,26 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
       return 0;
       }
     }
-  gdcm::Rescaler ir2;
-  ir2.SetIntercept( this->Shift );
-  ir2.SetSlope( this->Scale );
-  ir2.SetPixelFormat( pixeltype );
-  // TODO: Hum...ScalarRange is -I believe- computed on the WholeExtent...
-  double *srange = data->GetScalarRange();
-  ir2.SetMinMaxForPixelType( srange[0], srange[1] );
-  //gdcm::PixelFormat::ScalarType outputpt = ir2.ComputeInterceptSlopePixelType();
-  gdcm::PixelFormat outputpt = ir2.ComputePixelTypeFromMinMax();
-  // override pixeltype with what is found by Rescaler
+  // store in a safe place the 'raw' pixeltype from vtk
   gdcm::PixelFormat savepixeltype = pixeltype;
-  if( this->Shift == 1 && this->Scale == 0 )
+  if( this->Shift == 0 && this->Scale == 1 )
     {
-    assert( pixeltype == outputpt );
+    //assert( pixeltype == outputpt );
     }
-  pixeltype = outputpt;
+  else
+    {
+    gdcm::Rescaler ir2;
+    ir2.SetIntercept( this->Shift );
+    ir2.SetSlope( this->Scale );
+    ir2.SetPixelFormat( pixeltype );
+    // TODO: Hum...ScalarRange is -I believe- computed on the WholeExtent...
+    double *srange = data->GetScalarRange();
+    ir2.SetMinMaxForPixelType( srange[0], srange[1] );
+    //gdcm::PixelFormat::ScalarType outputpt = ir2.ComputeInterceptSlopePixelType();
+    gdcm::PixelFormat outputpt = ir2.ComputePixelTypeFromMinMax();
+    // override pixeltype with what is found by Rescaler
+    pixeltype = outputpt;
+    }
 
   pixeltype.SetSamplesPerPixel( data->GetNumberOfScalarComponents() );
   image.SetPhotometricInterpretation( pi );
@@ -598,14 +602,16 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
   bool rescaled = false;
   char * copy = NULL;
-  // For now only float to US is implemented:
-  //if( data->GetScalarType() == VTK_FLOAT )
+  // Whenever shift / scale is needed... do it !
+  if( this->Shift != 0 || this->Scale != 1 )
     {
     // rescale from float to unsigned short
     gdcm::Rescaler ir;
     ir.SetIntercept( this->Shift );
     ir.SetSlope( this->Scale );
     ir.SetPixelFormat( savepixeltype );
+    double *srange = data->GetScalarRange();
+    ir.SetMinMaxForPixelType( srange[0], srange[1] );
     image.SetIntercept( this->Shift );
     image.SetSlope( this->Scale );
     copy = new char[len];
