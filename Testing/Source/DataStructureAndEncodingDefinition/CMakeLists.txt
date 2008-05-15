@@ -1,1 +1,1 @@
-SUBDIRS(Cxx)
+SUBDIRS(Cxx Python)

@@ -1,11 +1,7 @@
 # Define the tests for gdcm-python
 # gdcm-python
 SET(GDCM_PYTHON_TEST_SRCS
-  TestScanner
-  TestImageReader
-  TestUIDGenerator
-  TestModifyFields
-  TestAnonymizer
+  TestReader
   )
 
 # Loop over files and create executables
