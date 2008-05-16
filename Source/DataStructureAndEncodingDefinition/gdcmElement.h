@@ -268,14 +268,15 @@ public:
   // SetLength should really be protected anyway...all operation
   // should go through SetArray
   unsigned long GetLength() const { return Length; }
-  typedef typename VRToType<TVR>::Type ArrayType;
+  typedef typename VRToType<TVR>::Type Type;
+
   void SetLength(unsigned long len) {
-    const unsigned int size = sizeof(ArrayType);
+    const unsigned int size = sizeof(Type);
     if( len ) {
       if( len > Length ) {
         // perform realloc
         assert( (len / size) * size == len );
-        ArrayType *internal = new ArrayType[len / size];
+        Type *internal = new Type[len / size];
         assert( Save == false );
         Save = true; // ???? 
         if( Internal )
@@ -291,11 +292,11 @@ public:
 
   // If save is set to zero user should not delete the pointer
   //void SetArray(const typename VRToType<TVR>::Type *array, int len, bool save = false) 
-  void SetArray(const ArrayType *array, unsigned long len,
+  void SetArray(const Type *array, unsigned long len,
     bool save = false) {
     if( save ) {
       SetLength(len); // realloc
-      memcpy(Internal, array, len/*/sizeof(ArrayType)*/);
+      memcpy(Internal, array, len/*/sizeof(Type)*/);
       assert( Save == false );
       }
     else {
@@ -303,12 +304,12 @@ public:
       assert( Length == 0 );
       assert( Internal == 0 );
       assert( Save == false );
-      Length = len / sizeof(ArrayType);
-      //assert( (len / sizeof(ArrayType)) * sizeof(ArrayType) == len );
+      Length = len / sizeof(Type);
+      //assert( (len / sizeof(Type)) * sizeof(Type) == len );
       // MR00010001.dcm is a tough kid: 0019,105a is supposed to be VR::FL, VM::VM3 but
       // length is 14 bytes instead of 12 bytes. Simply consider value is total garbage.
-      if( (len / sizeof(ArrayType)) * sizeof(ArrayType) != len ) { Internal = 0; Length = 0; }
-      else Internal = const_cast<ArrayType*>(array);
+      if( (len / sizeof(Type)) * sizeof(Type) != len ) { Internal = 0; Length = 0; }
+      else Internal = const_cast<Type*>(array);
       }
       Save = save;
   }
@@ -316,7 +317,11 @@ public:
     assert( idx < Length );
     Internal[idx] = v;
   }
-  typename VRToType<TVR>::Type GetValue(unsigned int idx = 0) const {
+  const typename VRToType<TVR>::Type &GetValue(unsigned int idx = 0) const {
+    assert( idx < Length );
+    return Internal[idx];
+  }
+  typename VRToType<TVR>::Type &GetValue(unsigned int idx = 0) {
     assert( idx < Length );
     return Internal[idx];
   }
@@ -326,7 +331,7 @@ public:
   void Set(Value const &v) {
     const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
     assert( bv ); // That would be bad...
-    const ArrayType* array = (ArrayType*)bv->GetPointer();
+    const Type* array = (Type*)bv->GetPointer();
     if( array ) {
     assert( array ); // That would be bad...
     assert( Internal == 0 );

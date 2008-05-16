@@ -184,14 +184,24 @@ std::string StringFilter::FromString(const Tag&t, const char * value, VL const &
     }
 
   std::string s(value,value+vl);
-  Element<VR::US,VM::VM1> el;
   std::istringstream is;
   is.str( s );
-  is >> el.GetValue(0);
-  std::cout << el.GetValue(0) << std::endl;
-  std::string ret;
   std::ostringstream os;
-  el.Write(os);
+  switch(vr)
+    {
+  case VR::US:
+      {
+      Element<VR::US,VM::VM1_n> el;
+      el.SetLength( vl );
+      for(unsigned int i = 0; i < vm.GetLength(); ++i)
+        is >> el.GetValue(i);
+      el.Write(os);
+      }
+    break;
+  default:
+    gdcmErrorMacro( "Not implemented" );
+    abort();
+    }
   return os.str();
 }
 
