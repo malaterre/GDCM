@@ -26,6 +26,7 @@
 
 namespace gdcm
 {
+
 //-----------------------------------------------------------------------------
 template <typename TSwap>
 std::istream &UNExplicitDataElement::Read(std::istream &is)
@@ -40,7 +41,14 @@ std::istream &UNExplicitDataElement::Read(std::istream &is)
       }
     return is;
     }
-  assert( TagField != Tag(0xfffe,0xe0dd) );
+  if( TagField == Tag(0xfffe,0xe0dd) )
+    {
+    ParseException pe;
+    pe.SetLastElement( *this );
+    throw pe;
+    }
+  //assert( TagField != Tag(0xfffe,0xe0dd) );
+
   const Tag itemDelItem(0xfffe,0xe00d);
   if( TagField == itemDelItem )
     {
@@ -56,15 +64,41 @@ std::istream &UNExplicitDataElement::Read(std::istream &is)
       }
     // Set pointer to NULL to avoid user error
     ValueField = 0;
+    VRField = VR::INVALID;
     return is;
     }
 
   // Read VR
-  if( !VRField.Read(is) )
+  try
     {
-    assert(0 && "Should not happen" );
-    return is;
+    if( !VRField.Read(is) )
+      {
+      assert(0 && "Should not happen" );
+      return is;
+      }
     }
+  catch( Exception &ex )
+    {
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+    // gdcm-MR-PHILIPS-16-Multi-Seq.dcm
+    // assert( TagField == Tag(0xfffe, 0xe000) );
+    // -> For some reason VR is written as {44,0} well I guess this is a VR...
+    // Technically there is a second bug, dcmtk assume other things when reading this tag, 
+    // so I need to change this tag too, if I ever want dcmtk to read this file. oh well
+    // 0019004_Baseline_IMG1.dcm
+    // -> VR is garbage also...
+    // assert( TagField == Tag(8348,0339) || TagField == Tag(b5e8,0338))
+    //gdcmWarningMacro( "Assuming 16 bits VR for Tag=" <<
+    //  TagField << " in order to read a buggy DICOM file." );
+    //VRField = VR::INVALID;
+    ParseException pe;
+    pe.SetLastElement( *this );
+    throw pe;
+#else
+  throw ex;
+#endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
+    }
+
   if( VRField == VR::UN )
     {
     // backtrack ...
@@ -149,9 +183,24 @@ std::istream &UNExplicitDataElement::Read(std::istream &is)
     }
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
+
+
+  if( TagField == Tag(0x2001,0xe05f)
+    || TagField == Tag(0x2001,0xe100)
+    || TagField == Tag(0x2005,0xe080)
+    || TagField == Tag(0x2005,0xe083)
+    || TagField == Tag(0x2005,0xe084)
+    || TagField == Tag(0x2005,0xe402)
+    //TagField.IsPrivate() && VRField == VR::SQ
+    //-> Does not work for 0029
+    //we really need to read item marker
+  )
+    {
+    abort(); // Could we possibly be so unlucky to have this mixture of bugs...
+    }
+
   if( !ValueIO<UNExplicitDataElement,TSwap>::Read(is,*ValueField) )
     {
-    // Might be the famous UN 16bits
     ParseException pe;
     pe.SetLastElement( *this );
     throw pe;

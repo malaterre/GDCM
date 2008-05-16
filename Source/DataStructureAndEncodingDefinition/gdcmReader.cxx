@@ -27,6 +27,7 @@
 #include "gdcmUNExplicitDataElement.h"
 #include "gdcmCP246ExplicitDataElement.h"
 #include "gdcmExplicitImplicitDataElement.h"
+#include "gdcmUNExplicitImplicitDataElement.h"
 #include "gdcmVR16ExplicitDataElement.h"
 #endif
 
@@ -427,31 +428,58 @@ std::istream &is = Stream;
           }
         catch ( Exception &ex )
           {
-          // Ouch ! the file is neither:
-          // 1. An Explicit encoded
-          // 2. I could not reread it using the VR16Explicit reader, last option is
-          // that the file is explicit/implicit
-          is.clear();
-          if( haspreamble )
+          try
             {
-            is.seekg(128+4, std::ios::beg);
-            }
-          else
-            {
-            is.seekg(0, std::ios::beg);
-            }
-          if( hasmetaheader )
-            {
-            // FIXME: we are reading twice the same meta-header, we succedeed the first time...
-            // We should be able to seek to proper place instead of re-reading
-            FileMetaInformation header;
-            header.Read(is);
-            }
+            // Ouch ! the file is neither:
+            // 1. An Explicit encoded
+            // 2. I could not reread it using the VR16Explicit reader, last option is
+            // that the file is explicit/implicit
+            is.clear();
+            if( haspreamble )
+              {
+              is.seekg(128+4, std::ios::beg);
+              }
+            else
+              {
+              is.seekg(0, std::ios::beg);
+              }
+            if( hasmetaheader )
+              {
+              // FIXME: we are reading twice the same meta-header, we succedeed the first time...
+              // We should be able to seek to proper place instead of re-reading
+              FileMetaInformation header;
+              header.Read(is);
+              }
 
-          // Explicit/Implicit
-          gdcmWarningMacro( "Attempt to read file with explicit/implicit" );
-          F->GetDataSet().Clear(); // remove garbage from 1st attempt...
-          F->GetDataSet().Read<ExplicitImplicitDataElement,SwapperNoOp>(is);
+            // Explicit/Implicit
+            gdcmWarningMacro( "Attempt to read file with explicit/implicit" );
+            F->GetDataSet().Clear(); // remove garbage from 1st attempt...
+            F->GetDataSet().Read<ExplicitImplicitDataElement,SwapperNoOp>(is);
+            }
+          catch ( Exception &ex )
+            {
+            is.clear();
+            if( haspreamble )
+              {
+              is.seekg(128+4, std::ios::beg);
+              }
+            else
+              {
+              is.seekg(0, std::ios::beg);
+              }
+            if( hasmetaheader )
+              {
+              // FIXME: we are reading twice the same meta-header, we succedeed the first time...
+              // We should be able to seek to proper place instead of re-reading
+              FileMetaInformation header;
+              header.Read(is);
+              }
+
+            // Explicit/Implicit
+            gdcmWarningMacro( "Attempt to read file with explicit/implicit" );
+            F->GetDataSet().Clear(); // remove garbage from 1st attempt...
+            F->GetDataSet().Read<UNExplicitImplicitDataElement,SwapperNoOp>(is);
+            }
           }
         }
       }

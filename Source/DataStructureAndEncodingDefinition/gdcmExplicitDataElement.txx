@@ -63,6 +63,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
       }
     // Set pointer to NULL to avoid user error
     ValueField = 0;
+    VRField = VR::INVALID;
     return is;
     }
 

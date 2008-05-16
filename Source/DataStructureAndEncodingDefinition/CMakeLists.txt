@@ -6,6 +6,7 @@ SET(DSED_SRCS
   gdcmFileSet.cxx
   gdcmDataSet.cxx
   gdcmByteSwapFilter.cxx
+  gdcmUNExplicitImplicitDataElement.cxx
   gdcmExplicitDataElement.cxx
   gdcmFileMetaInformation.cxx
   gdcmFragment.cxx
