@@ -37,6 +37,7 @@ class Element
 {
 public:
   typename VRToType<TVR>::Type Internal[VMToLength<TVM>::Length];
+  typedef typename VRToType<TVR>::Type Type;
 
   unsigned long GetLength() const {
     return VMToLength<TVM>::Length;
@@ -50,7 +51,11 @@ public:
       _os << "," << Internal[i];
     }
 
-  typename VRToType<TVR>::Type GetValue(unsigned int idx = 0) const {
+  const typename VRToType<TVR>::Type &GetValue(unsigned int idx = 0) const {
+    assert( idx < VMToLength<TVM>::Length );
+    return Internal[idx];
+  }
+  typename VRToType<TVR>::Type &GetValue(unsigned int idx = 0) {
     assert( idx < VMToLength<TVM>::Length );
     return Internal[idx];
   }

@@ -171,4 +171,28 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t) con
   return ret;
 }
 
+std::string StringFilter::FromString(const Tag&t, const char * value, VL const & vl)
+{
+  const Global &g = GlobalInstance;
+  const Dicts &dicts = g.GetDicts();
+  const DictEntry &entry = dicts.GetDictEntry(t);
+  const VM &vm = entry.GetVM();
+  const VR &vr = entry.GetVR();
+  if( vl != vm.GetLength() * vr.GetSizeof() )
+    {
+    abort();
+    }
+
+  std::string s(value,value+vl);
+  Element<VR::US,VM::VM1> el;
+  std::istringstream is;
+  is.str( s );
+  is >> el.GetValue(0);
+  std::cout << el.GetValue(0) << std::endl;
+  std::string ret;
+  std::ostringstream os;
+  el.Write(os);
+  return os.str();
+}
+
 }

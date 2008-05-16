@@ -47,6 +47,8 @@ public:
   // pari.second : the value encoded into a string (US,UL...) are properly converted
   std::pair<std::string, std::string> ToStringPair(const Tag& t) const;
 
+  std::string FromString(const Tag&t, const char * value, VL const & vl);
+
   //typedef std::map<Tag, gdcm::ConstCharWrapper> StringSet;
   void SetFile(const File& f) { F = &f; }
   File &GetFile() { return *F; }

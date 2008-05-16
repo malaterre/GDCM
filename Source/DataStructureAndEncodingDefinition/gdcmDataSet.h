@@ -241,6 +241,8 @@ protected:
     }
 
 protected:
+  // Internal function, that will compute the actual Tag (if found) of
+  // a requested Private Tag (XXXX,YY,"PRIVATE")
   Tag ComputeDataElement(const PrivateTag & t) const;
 
 private:

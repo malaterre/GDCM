@@ -91,6 +91,9 @@ unsigned int VR::GetSizeof() const
   unsigned int size;
   switch(VRField)
     {
+  case VR::US:
+    size = sizeof(VRToType<VR::US>::Type);
+    break;
   case VR::DS:
     size = sizeof(VRToType<VR::DS>::Type);
     break;

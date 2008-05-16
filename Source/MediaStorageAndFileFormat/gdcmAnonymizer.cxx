@@ -15,6 +15,7 @@
 #include "gdcmAnonymizer.h"
 #include "gdcmDicts.h"
 #include "gdcmGlobal.h"
+#include "gdcmStringFilter.h"
 
 namespace gdcm
 {
@@ -146,7 +147,22 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
       }
     else if ( dictentry.GetVR() & VR::VRBINARY )
       {
-      gdcmWarningMacro( "You need to explicitely specify the length for this type of vr: " << dictentry.GetVR() );
+      //gdcmWarningMacro( "You need to explicitely specify the length for this type of vr: " << dictentry.GetVR() );
+      StringFilter sf;
+      sf.SetFile( *F );
+      std::string s = sf.FromString(t, value, vl);
+      DataElement de( t );
+      if( ds.FindDataElement( t ) )
+        {
+        de.SetVR( ds.GetDataElement(t).GetVR() );
+        }
+      else
+        {
+        de.SetVR( dictentry.GetVR() );
+        }
+      de.SetByteValue( s.c_str(), s.size() );
+      ds.Replace( de );
+      ret = true;
       }
     else
       {
