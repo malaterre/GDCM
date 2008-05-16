@@ -40,6 +40,10 @@ public:
   }
   const DataElement& GetDataElement() const { return PixelData; }
 
+  ImageValue(Image const &img):Image(img)
+    {
+    }
+
 protected:
   bool TryRAWCodec(char *buffer) const;
   bool TryJPEGCodec(char *buffer) const;

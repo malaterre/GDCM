@@ -280,12 +280,15 @@ bool ImageWriter::Write()
     }
 
   // Do the Rescale Intercept & Slope
-  Attribute<0x0028,0x1052> at1;
-  at1.SetValue( PixelData.GetIntercept() );
-  ds.Insert( at1.GetAsDataElement() );
-  Attribute<0x0028,0x1053> at2;
-  at2.SetValue( PixelData.GetSlope() );
-  ds.Insert( at2.GetAsDataElement() );
+  if( PixelData.GetIntercept() != 0 || PixelData.GetSlope() != 1. )
+    {
+    Attribute<0x0028,0x1052> at1;
+    at1.SetValue( PixelData.GetIntercept() );
+    ds.Insert( at1.GetAsDataElement() );
+    Attribute<0x0028,0x1053> at2;
+    at2.SetValue( PixelData.GetSlope() );
+    ds.Insert( at2.GetAsDataElement() );
+    }
 
   MediaStorage ms;
   ms.SetFromFile( GetFile() );
@@ -371,7 +374,7 @@ bool ImageWriter::Write()
   UIDGenerator uid;
 
   // Be careful with the SOP Instance UID:
-  if( ds.FindDataElement( Tag(0x0008, 0x0018) ) )
+  if( ds.FindDataElement( Tag(0x0008, 0x0018) ) && false )
     {
     // We are coming from a real DICOM image, we need to reference it...
     //assert( 0 && "TODO FIXME" );
@@ -553,7 +556,7 @@ bool ImageWriter::Write()
     ds.Insert( de );
     }
   // Patient Orientation
-  if( !ds.FindDataElement( Tag(0x0020,0x0020) ) )
+  if( !ds.FindDataElement( Tag(0x0020,0x0020) ) && false )
     {
     DataElement de( Tag(0x0020,0x0020) );
     de.SetVR( Attribute<0x0020,0x0020>::GetVR() );

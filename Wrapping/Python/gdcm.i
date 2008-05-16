@@ -42,6 +42,8 @@
 //#include "gdcmString.h"
 #include "gdcmPreamble.h"
 #include "gdcmFile.h"
+#include "gdcmImage.h"
+#include "gdcmImageValue.h"
 #include "gdcmFragment.h"
 #include "gdcmCSAHeader.h"
 #include "gdcmSequenceOfFragments.h"
@@ -317,6 +319,7 @@ using namespace gdcm;
 //}
 
 };
+%include "gdcmImageValue.h"
 %include "gdcmFragment.h"
 %include "gdcmCSAHeader.h"
 %include "gdcmSequenceOfFragments.h"
