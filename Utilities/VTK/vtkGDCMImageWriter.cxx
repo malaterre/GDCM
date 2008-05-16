@@ -60,6 +60,10 @@ inline bool vtkGDCMImageWriter_IsCharTypeSigned()
 #endif
 }
 
+#ifndef vtkFloatingPointType
+#define vtkFloatingPointType float
+#endif
+
 vtkGDCMImageWriter::vtkGDCMImageWriter()
 {
   this->DataUpdateExtent[0] = 0;
@@ -556,7 +560,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     ir2.SetSlope( this->Scale );
     ir2.SetPixelFormat( pixeltype );
     // TODO: Hum...ScalarRange is -I believe- computed on the WholeExtent...
-    double srange[2];
+    vtkFloatingPointType srange[2];
     data->GetScalarRange(srange);
     // HACK !!!
     // MR Image Storage cannot have Shift / Rescale , however it looks like people are doing it 
@@ -630,7 +634,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     ir.SetIntercept( this->Shift );
     ir.SetSlope( this->Scale );
     ir.SetPixelFormat( savepixeltype );
-    double srange[2];
+    vtkFloatingPointType srange[2];
     data->GetScalarRange(srange);
     // HACK !!!
     // MR Image Storage cannot have Shift / Rescale , however it looks like people are doing it 
