@@ -650,7 +650,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   if( ds.FindDataElement( timagepositionpatient ) )
     {
     const DataElement& de = ds.GetDataElement( timagepositionpatient );
-    Attribute<0x0020,0x0032> at;
+    Attribute<0x0020,0x0032> at = {0,0,0}; // default value if empty
     at.SetFromDataElement( de );
     PixelData.SetOrigin( at.GetValues() );
     if( at.GetNumberOfValues() > PixelData.GetNumberOfDimensions() ) // FIXME HACK
@@ -666,7 +666,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   if( ds.FindDataElement( timageorientationpatient ) )
     {
     const DataElement& de = ds.GetDataElement( timageorientationpatient );
-    Attribute<0x0020,0x0037> at;
+    Attribute<0x0020,0x0037> at = {1,0,0,0,1,0}; // default value if empty
     at.SetFromDataElement( de );
     PixelData.SetDirectionCosines( at.GetValues() );
     }

@@ -25,6 +25,7 @@ Orientation::~Orientation() {}
 void Orientation::Print(std::ostream &) const {}
 
 static const char *OrientationStrings[] = {
+  "UNKNOWN",
   "AXIAL",
   "CORONAL",
   "SAGITTAL",
@@ -71,6 +72,10 @@ char GetMajorAxisFromPatientRelativeDirectionCosine(double x, double y, double z
 
 Orientation::OrientationType Orientation::GetType(const double *dircos)
 {
+  if( !dircos )
+    {
+    return Orientation::UNKNOWN;
+    }
   OrientationType type;
   char rowAxis = GetMajorAxisFromPatientRelativeDirectionCosine(dircos[0],dircos[1],dircos[2]);
   char colAxis = GetMajorAxisFromPatientRelativeDirectionCosine(dircos[3],dircos[4],dircos[5]);

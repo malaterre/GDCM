@@ -32,6 +32,7 @@ public:
   void Print(std::ostream &) const;
 
   typedef enum {
+    UNKNOWN,
     AXIAL,
     CORONAL,
     SAGITTAL,

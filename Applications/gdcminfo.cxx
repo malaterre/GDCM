@@ -18,6 +18,7 @@
  * I need to implement gdcmoverlay here (print info on overlay / img / LUT ...)
  */
 #include "gdcmReader.h"
+#include "gdcmImageReader.h"
 #include "gdcmMediaStorage.h"
 #include "gdcmFile.h"
 #include "gdcmDataSet.h"
@@ -25,11 +26,14 @@
 #include "gdcmGlobal.h"
 #include "gdcmModules.h"
 #include "gdcmDefs.h"
+#include "gdcmOrientation.h"
 
 #include <iostream>
 
 int main(int argc, char *argv[])
 {
+  gdcm::Trace::DebugOff();
+  gdcm::Trace::WarningOff();
   const char *filename = argv[1];
   std::cout << "filename: " << filename << std::endl;
   gdcm::Reader reader;
@@ -47,7 +51,26 @@ int main(int argc, char *argv[])
   uid.SetFromUID( ms.GetString() );
   std::cout << "MediaStorage is " << ms << " [" << uid.GetName() << "]" << std::endl;
 
-  if( ms == gdcm::MediaStorage::MRImageStorage )
+  if( gdcm::MediaStorage::IsImage( ms ) )
+    {
+    gdcm::ImageReader reader;
+    reader.SetFileName( filename );
+    if( !reader.Read() )
+      {
+      return 1;
+      }
+    const gdcm::File &file = reader.GetFile();
+    const gdcm::DataSet &ds = file.GetDataSet();
+    const gdcm::Image &image = reader.GetImage();
+    const double *dircos = image.GetDirectionCosines();
+    gdcm::Orientation::OrientationType type = gdcm::Orientation::GetType(dircos);
+    const char *label = gdcm::Orientation::GetLabel( type );
+    image.Print( std::cout );
+    std::cout << "Orientation Label: " << label << std::endl;
+
+    }
+
+  if( ms == gdcm::MediaStorage::MRImageStorage && false )
     {
     const gdcm::Global& g = gdcm::Global::GetInstance();
     const gdcm::Defs &defs = g.GetDefs();

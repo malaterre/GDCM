@@ -295,6 +295,19 @@ void Image::Print(std::ostream &os) const
       }
     os << ")\n";
 }
+{
+  os << "DirectionCosines: (";
+  if( !DirectionCosines.empty() )
+    {
+    std::vector<double>::const_iterator it = DirectionCosines.begin();
+    os << *it;
+    for(++it; it != DirectionCosines.end(); ++it)
+      {
+      os << "," << *it;
+      }
+    }
+  os << ")\n";
+}
     //std::vector<double> Spacing;
     //std::vector<double> Origin;
 
