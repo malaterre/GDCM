@@ -102,6 +102,9 @@
 
 /* Undocumented on purpose :-P */
 #cmakedefine GDCM_WRITE_ODD_LENGTH
+#ifdef GDCM_WRITE_ODD_LENGTH
+#error do not use !
+#endif
 
 /*--------------------------------------------------------------------------*/
 /* GDCM Versioning                                                          */
