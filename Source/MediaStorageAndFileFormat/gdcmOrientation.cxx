@@ -34,8 +34,8 @@ static const char *OrientationStrings[] = {
 };
 
 // http://public.kitware.com/pipermail/insight-users/2005-March/012246.html
-static const double obliquityThresholdCosineValue = 0.8;
-char GetMajorAxisFromPatientRelativeDirectionCosine(double x, double y, double z)
+const double Orientation::obliquityThresholdCosineValue = 0.8;
+char Orientation::GetMajorAxisFromPatientRelativeDirectionCosine(double x, double y, double z)
 {
   char axis = 0;
 
