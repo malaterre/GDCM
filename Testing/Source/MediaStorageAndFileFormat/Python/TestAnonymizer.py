@@ -35,6 +35,9 @@ def TestAnonymizer(filename, verbose = False):
   sucess = ano.RemovePrivateTags() # do it !
   if( not sucess ): return 1
 
+  # Check we can also change value from binary field
+  #ano.Replace( gdcm.Tag(0x0010,0x0010), "16", gdcm. )
+
   # Let's check if our anonymization worked:
   if verbose:
     print ano.GetFile().GetDataSet()

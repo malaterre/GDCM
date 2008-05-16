@@ -147,7 +147,9 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
       }
     else if ( dictentry.GetVR() & VR::VRBINARY )
       {
-      //gdcmWarningMacro( "You need to explicitely specify the length for this type of vr: " << dictentry.GetVR() );
+      gdcmWarningMacro( "You need to explicitely specify the length for this type of vr: " << dictentry.GetVR() );
+      ret = false;
+#if 0
       StringFilter sf;
       sf.SetFile( *F );
       std::string s = sf.FromString(t, value, vl);
@@ -163,6 +165,7 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
       de.SetByteValue( s.c_str(), s.size() );
       ds.Replace( de );
       ret = true;
+#endif
       }
     else
       {
