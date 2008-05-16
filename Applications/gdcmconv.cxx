@@ -192,6 +192,7 @@ int main (int argc, char *argv[])
     return 1;
     }
   
+  gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmconv" );
   if( raw )
     {
     gdcm::ImageReader reader;
@@ -205,6 +206,17 @@ int main (int argc, char *argv[])
     const gdcm::Image &ir = reader.GetImage();
 
     gdcm::ImageValue image( ir );
+    const gdcm::TransferSyntax &ts = ir.GetTransferSyntax();
+    if( ts.IsExplicit() )
+      {
+      image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
+      }
+    else
+      {
+      assert( ts.IsImplicit() );
+      image.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+      }
+
 /*
     image.SetNumberOfDimensions( ir.GetNumberOfDimensions() );
 

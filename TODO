@@ -117,3 +117,6 @@ vtkMedicalImageProp user defined value should be written back to disk
 Filter should use OpenMP ?
 -----------------------------------------------------------------------
 need to update uuid to latest version
+-----------------------------------------------------------------------
+GDCMFakeJPEG should be detected (at least a warning
+
