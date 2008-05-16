@@ -60,6 +60,8 @@
  * - Enumerated Value should be correct
  */
 #include "gdcmReader.h"
+#include "gdcmImageReader.h"
+#include "gdcmImageWriter.h"
 #include "gdcmWriter.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmDataSet.h"
@@ -88,6 +90,7 @@ int main (int argc, char *argv[])
 
   std::string filename;
   std::string outfilename;
+  int raw = 0;
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -108,7 +111,7 @@ int main (int argc, char *argv[])
         {"name", 1, 0, 0}, // same as tag but explicit use of name
 // Image specific options:
         {"pixeldata", 1, 0, 0}, // valid
-        {"raw", 1, 0, 0}, // default (implicit VR, LE) / Explicit LE / Explicit BE
+        {"raw", 0, &raw, 1}, // default (implicit VR, LE) / Explicit LE / Explicit BE
         {"jpeg", 1, 0, 0}, // JPEG lossy
         {"jpegll", 1, 0, 0}, // JPEG lossless
         {"jpegls", 1, 0, 0}, // JPEG-LS: lossy / lossless
@@ -188,59 +191,114 @@ int main (int argc, char *argv[])
     std::cerr << "Need output file (-o)\n";
     return 1;
     }
-
-  gdcm::Reader reader;
-  reader.SetFileName( filename.c_str() );
-  if( !reader.Read() )
+  
+  if( raw )
     {
-    std::cerr << "Failed to read: " << filename << std::endl;
-    return 1;
-    }
+    gdcm::ImageReader reader;
+    reader.SetFileName( filename.c_str() );
+    if( !reader.Read() )
+      {
+      std::cerr << "could not read: " << filename << std::endl;
+      return 1;
+      }
 
-#if 0
-  // if preamble create:
-  gdcm::File f(reader.GetFile());
-  gdcm::Preamble p;
-  p.Create();
-  f.SetPreamble(p);
-  gdcm::DataSet ds = reader.GetFile().GetDataSet();
-  SetSQToUndefined undef;
-  ds.ExecuteOperation(undef);
+    const gdcm::Image &ir = reader.GetImage();
 
-  gdcm::File f(reader.GetFile());
-  f.SetDataSet(ds);
-#endif
-
-  gdcm::DataSet& ds = reader.GetFile().GetDataSet();
-#if 0
-  gdcm::DataElement de = ds.GetDataElement( gdcm::Tag(0x0010,0x0010) );
-  const char patname[] = "John^Doe";
-  de.SetByteValue(patname, strlen(patname));
-  std::cout << de << std::endl;
-
-  ds.Replace( de );
-  std::cout << ds.GetDataElement( gdcm::Tag(0x0010,0x0010) ) << std::endl;
-#endif
-
+    gdcm::ImageValue image( ir );
 /*
-  //(0020,0032) DS [-158.135803\-179.035797\-75.699997]     #  34, 3 ImagePositionPatient
-  //(0020,0037) DS [1.000000\0.000000\0.000000\0.000000\1.000000\0.000000] #  54, 6 ImageOrientationPatient
-  gdcm::Attribute<0x0020,0x0032> at = { -158.135803, -179.035797, -75.699997 };
-  gdcm::DataElement ipp = at.GetAsDataElement();
-  ds.Remove( at.GetTag() );
-  ds.Remove( ipp.GetTag() );
-  ds.Replace( ipp );
+    image.SetNumberOfDimensions( ir.GetNumberOfDimensions() );
+
+    const unsigned int *dims = ir.GetDimensions();
+    image.SetDimension(0, dims[0] );
+    image.SetDimension(1, dims[1] );
+
+    const gdcm::PixelFormat &pixeltype = ir.GetPixelFormat();
+    image.SetPixelFormat( pixeltype );
+
+    const gdcm::PhotometricInterpretation &pi = ir.GetPhotometricInterpretation();
+    image.SetPhotometricInterpretation( pi );
 */
 
-  gdcm::Writer writer;
-  writer.SetFileName( outfilename.c_str() );
-  writer.SetCheckFileMetaInformation( false );
-  //writer.SetFile( f );
-  writer.SetFile( reader.GetFile() );
-  if( !writer.Write() )
+    unsigned long len = ir.GetBufferLength();
+    //assert( len = ir.GetBufferLength() );
+    std::vector<char> buffer;
+    buffer.resize(len); // black image
+
+    ir.GetBuffer( &buffer[0] );
+    gdcm::ByteValue *bv = new gdcm::ByteValue(buffer);
+    gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
+    pixeldata.SetValue( *bv );
+    image.SetDataElement( pixeldata );
+
+    gdcm::ImageWriter writer;
+    writer.SetFile( reader.GetFile() );
+    writer.SetImage( image );
+    writer.SetFileName( outfilename.c_str() );
+
+    gdcm::File& file = writer.GetFile();
+    gdcm::DataSet& ds = file.GetDataSet();
+
+    if( !writer.Write() )
+      {
+      std::cerr << "could not write: " << outfilename << std::endl;
+      return 1;
+      }
+    }
+  else
     {
-    std::cerr << "Failed to write: " << outfilename << std::endl;
-    return 1;
+    gdcm::Reader reader;
+    reader.SetFileName( filename.c_str() );
+    if( !reader.Read() )
+      {
+      std::cerr << "Failed to read: " << filename << std::endl;
+      return 1;
+      }
+
+#if 0
+    // if preamble create:
+    gdcm::File f(reader.GetFile());
+    gdcm::Preamble p;
+    p.Create();
+    f.SetPreamble(p);
+    gdcm::DataSet ds = reader.GetFile().GetDataSet();
+    SetSQToUndefined undef;
+    ds.ExecuteOperation(undef);
+
+    gdcm::File f(reader.GetFile());
+    f.SetDataSet(ds);
+#endif
+
+    gdcm::DataSet& ds = reader.GetFile().GetDataSet();
+#if 0
+    gdcm::DataElement de = ds.GetDataElement( gdcm::Tag(0x0010,0x0010) );
+    const char patname[] = "John^Doe";
+    de.SetByteValue(patname, strlen(patname));
+    std::cout << de << std::endl;
+
+    ds.Replace( de );
+    std::cout << ds.GetDataElement( gdcm::Tag(0x0010,0x0010) ) << std::endl;
+#endif
+
+    /*
+    //(0020,0032) DS [-158.135803\-179.035797\-75.699997]     #  34, 3 ImagePositionPatient
+    //(0020,0037) DS [1.000000\0.000000\0.000000\0.000000\1.000000\0.000000] #  54, 6 ImageOrientationPatient
+    gdcm::Attribute<0x0020,0x0032> at = { -158.135803, -179.035797, -75.699997 };
+    gdcm::DataElement ipp = at.GetAsDataElement();
+    ds.Remove( at.GetTag() );
+    ds.Remove( ipp.GetTag() );
+    ds.Replace( ipp );
+     */
+
+    gdcm::Writer writer;
+    writer.SetFileName( outfilename.c_str() );
+    writer.SetCheckFileMetaInformation( false );
+    //writer.SetFile( f );
+    writer.SetFile( reader.GetFile() );
+    if( !writer.Write() )
+      {
+      std::cerr << "Failed to write: " << outfilename << std::endl;
+      return 1;
+      }
     }
 
   return 0;
