@@ -114,7 +114,7 @@ public:
       }
     catch(...)
       {
-      exit(1);
+      throw Exception("Impossible to allocate: " << l " bytes." );
       }
     // Keep the exact length
     Length = vl;
