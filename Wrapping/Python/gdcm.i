@@ -119,6 +119,7 @@ using namespace gdcm;
 %include "std_vector.i"
 %include "std_pair.i"
 %include "std_map.i"
+%include "exception.i"
 
 // operator= is not needed in python AFAIK
 %ignore operator=;                      // Ignore = everywhere.

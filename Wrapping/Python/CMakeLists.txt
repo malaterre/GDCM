@@ -3,6 +3,15 @@ INCLUDE_REGULAR_EXPRESSION("^(gdcm).*$")
 # TODO:
 # SWIG is really a pain in the neck to use, a better alternative is Py++ which is using
 # gccxml for the C++ parser and allow a full ANSI C++ support
+# Note gcc has some issue with RTTI stuff:
+# http://groups.google.com/group/comp.lang.c++.moderated/browse_thread/thread/ac889a7d9eac902f
+# http://gcc.gnu.org/ml/gcc-help/2007-10/msg00239.html
+# http://wiki.python.org/moin/boost.python/CrossExtensionModuleDependencies
+# http://www.boost-consulting.com/writing/bpl.html
+# http://gcc.gnu.org/ml/gcc/2002-05/msg00866.html
+# http://mail.python.org/pipermail/c++-sig/2002-May/001021.html
+# http://mail.python.org/pipermail/python-dev/2002-May/023923.html
+
 FIND_PACKAGE(SWIG REQUIRED)
 MARK_AS_ADVANCED(SWIG_DIR SWIG_EXECUTABLE)
 INCLUDE(${SWIG_USE_FILE})
