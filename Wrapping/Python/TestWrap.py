@@ -31,6 +31,7 @@ blacklist = (
 "ByteSwapFilter"
 "ExplicitImplicitDataElement"
 "UNExplicitDataElement"
+"UNExplicitImplicitDataElement"
 "Attribute"
 "VR16ExplicitDataElement"
 "LO" # stupid swig
