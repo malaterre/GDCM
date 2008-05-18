@@ -30,43 +30,93 @@
 #include "gdcmPrivateTag.h"
 #include "gdcmImageWriter.h"
 
-void delta_decode(unsigned short *outbuffer, const char *inbuffer, size_t length, size_t outlength)
+void delta_decode(unsigned short *outbuffer, const char *inbuffer, size_t length)
 {
-  unsigned short t = 0;
-  size_t i;
-  size_t j;
-  for (i=0,j=0; i < length; ++i,++j)
+  std::vector<unsigned short> output;
+  unsigned short delta = 0;
+  for(size_t i = 0; i < length; ++i)
+  {
+   if( (unsigned char)inbuffer[i] == 0xa5 )
     {
-    if( inbuffer[i] == (0xa5-256) )
+      char repeat = inbuffer[i+1] + 1;
+      char value  = inbuffer[i+2];
+      if( (unsigned char)value == 0x5a /*&& false*/ )
       {
-      int repeat = inbuffer[i+1] + 1;
-      int value = inbuffer[i+2];
-      i+=2;
-      for( int r = 0; r < repeat; ++r, ++j )
-        {
-        outbuffer[j] = value + t;
-        t = outbuffer[j];
-        }
-      --j;
+	assert( repeat == 2 );
+      std::cout << "5a v=" << std::hex << value << " " << (int)repeat << " " << (int)value << " " << (int)inbuffer[i+3] << " " << std::dec << i <<  std::endl;
+	if( inbuffer[i+3] == 1 )
+	{
+        output.push_back( 0x015a );
+	}
+	//i+=1;
+	delta = 0x015a;
+      i+=3; // 3 values treated at once
       }
-    else if( inbuffer[i] == 0x5a )
+      else
       {
+      i+=2; // 2 values treated at once
+      for( int r = 0; r < repeat; ++r )
+        {
+        int ivalue = (int)delta + (int)value;
+        output.push_back( ivalue );
+	delta = ivalue;
+        }
+      }
+     }
+    else if( inbuffer[i] == 0x5a )
+    {
       unsigned char v1 = (unsigned char)inbuffer[i+1];
       unsigned char v2 = (unsigned char)inbuffer[i+2];
-      outbuffer[j] = v2 * 256 + v1;
-      t = outbuffer[j];
-      i+=2;
-      }
-    else
+      i+=2; // 2 values treated at once
+      if( v1 == 0xa5 )
       {
-	      if( j < outlength / 2 ) // FIXME
-	      {
-      //assert( ((int)inbuffer[i] + (int)t) >= 0 );
-      outbuffer[j] = (int)inbuffer[i] + (int)t;
-      t = outbuffer[j];
-	      }
+      int value = v2 * 256 + v1;
+      std::cout << "v=" << std::hex << value << " " << (int)v1 << " " << (int)v2 <<  " " << (int)inbuffer[i+1] <<" " << std::dec << output.size() << std::endl;
+      if( v2 == 1 && inbuffer[i+1] == 1 )
+        {
+	i+=1;
+        //int value = 0xFFFF;
+        output.push_back( 0x0101 );
+        delta = 0x0;
+        }
+      else
+      {
+	      //assert( v2 == 1 );
+	      int value = 0xa5;
+	      output.push_back( value );
+	      delta = value;
+      }
+      }
+      else
+      {
+      int value = v2 * 256 + v1;
+      output.push_back( value );
+      delta = value;
       }
     }
+    else
+    {
+      //std::cout << delta << "," << (int)inbuffer[i] << std::endl;
+      int value = (int)delta + (int)inbuffer[i];
+      //std::cout << "value:" << value << std::endl;
+      //assert( value <= 0xFFFF && value >= 0 );
+      output.push_back( value );
+      //assert( output.size() != 0x8890 / 2);
+     delta = value;
+    }
+    //std::cout << output.size() << " from : " << std::hex << (int)inbuffer[i] << "(" << std::dec << i << ")" << std::endl;
+  }
+
+  if ( output.size() % 2 )
+  {
+	  output.resize( output.size() - 1 );
+  }
+  std::cout << length << " -> " << output.size() << std::endl;
+  //std::ofstream out("decomp.raw");
+  //out.write( (char*)&output[0], output.size() * 2 );
+  //out.close();
+  memcpy( outbuffer, &output[0], output.size() * 2);
+
 }
 
 int main(int argc, char *argv [])
@@ -99,7 +149,7 @@ int main(int argc, char *argv [])
 
   char *ref = new char [131072];
   memset(ref,0,131072);
-  delta_decode((unsigned short *)ref, bv2->GetPointer(), bv2->GetLength(), 131072);
+  delta_decode((unsigned short *)ref, bv2->GetPointer(), bv2->GetLength());
 
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
   pixeldata.SetVR( gdcm::VR::OB );

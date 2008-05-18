@@ -19,13 +19,15 @@
 #include <bitset>
 
 // FIXME...
-#if _WIN32
+#if defined(_WIN32) || defined(__CYGWIN__)
 #define HAVE_UUIDCREATE
 #else
 #define HAVE_UUID_GENERATE
 #endif
 
+#ifdef HAVE_UUID_GENERATE
 #include "gdcm_uuid.h"
+#endif
 
 #ifdef HAVE_RPC_H
 #include <Rpc.h>
