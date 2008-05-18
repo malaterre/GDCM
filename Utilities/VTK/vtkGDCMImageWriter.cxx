@@ -807,6 +807,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   ds.Insert( de );
 }
 }
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   // User defined value
   // Remap any user defined value from the DICOM name to the DICOM tag
   unsigned int nvalues = this->MedicalImageProperties->GetNumberOfUserDefinedValues();
@@ -824,6 +825,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     const gdcm::DictEntry &de = pubdict.GetDictEntryByName(name, t); (void)de;
     SetStringValueFromTag( value, t, ds);
     }
+#endif
 
 
   if( this->FileDimensionality != 2 && ms == gdcm::MediaStorage::SecondaryCaptureImageStorage )
