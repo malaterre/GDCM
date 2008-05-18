@@ -13,10 +13,23 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 -->
+<!--
+cleanup excel HTML:
+$ tidy -asxml dicomhdr.html > toto.html
+Important specify it's html:
+
+$ xsltproc - -html dicomhdr.xsl toto.html
+-->
+
 
   <xsl:template match="/">
-    <xsl:for-each select="html/body/div/table/tr/td">
+	  <output>
+		  <xsl:for-each select="html/body/table/tr/td">
+	    <element>
+          <xsl:value-of select="."/>
+  </element>
     </xsl:for-each>
+	  </output>
   </xsl:template>
 
 </xsl:stylesheet>
