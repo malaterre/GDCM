@@ -19,7 +19,6 @@
 #include "gdcmTypes.h"
 #ifdef GDCM_USE_SYSTEM_UUID
 # include <uuid/uuid.h>
-#error
 #else
 # include <gdcmuuid/uuid.h>
 #endif
