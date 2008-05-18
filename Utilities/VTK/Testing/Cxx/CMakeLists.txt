@@ -3,12 +3,18 @@
 SET(VTK_GDCM_TEST_SRCS
   TestvtkGDCMImageReader
   TestvtkGDCMImageReader2
-  TestvtkGDCMImageReader3
   TestvtkGDCMImageReader4
   #TestvtkGDCMImageActor
   TestvtkGDCMImageWriter
   TestvtkGDCMImageWriter2
 )
+# Need gdcmDataExtra
+IF(GDCM_DATA_EXTRA_ROOT)
+  SET(VTK_GDCM_TEST_SRCS
+    ${VTK_GDCM_TEST_SRCS}
+    TestvtkGDCMImageReader3
+  )
+ENDIF(GDCM_DATA_EXTRA_ROOT)
 IF(CMAKE_HAVE_PTHREAD_H)
   SET(VTK_GDCM_TEST_SRCS
     ${VTK_GDCM_TEST_SRCS}
