@@ -13,7 +13,7 @@ IF(WIN32)
   #SET(GDCM_USE_SYSTEM_UUID 1)
 ELSE(WIN32)
   FIND_PACKAGE(UUID)
-  SET(GDCM_USE_SYSTEM_UUID 0)
+  SET(GDCM_USE_SYSTEM_UUID 1)
 ENDIF(WIN32)
 
 #-----------------------------------------------------------------------------
