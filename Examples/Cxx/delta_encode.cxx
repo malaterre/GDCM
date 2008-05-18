@@ -54,22 +54,14 @@ void delta_encode(unsigned short *inbuffer, size_t length)
        {
        output.push_back( (unsigned char)v1 );
        output.push_back( (unsigned char)v2 );
-	       if( v1 == 0x5a )
-	       {
-		       // everything is fine...
-	       }
-	       else if( v1 == 0xa5 - 256 )
-	       {
-       output.push_back( 'M' );
-	       }
-       }
-       else if( cdiff == 0xd5 - 256  )
+       if( v1 == 0x5a )
        {
-       //output.push_back( 'M' );
+	       // everything is fine...
        }
-       else if( cdiff == 0x0  )
+       else if( v1 == 0xa5 - 256 )
        {
-       //output.push_back( 'M' );
+	       output.push_back( 'M' ); // ???
+       }
        }
     }
     else
@@ -92,19 +84,12 @@ void delta_encode(unsigned short *inbuffer, size_t length)
        else
        {
        output.push_back( 0x5a );
-	       if( v1 == 0x5a )
-	       {
-		       output.push_back( 'N' );
-	       }
-	       else
-	       {
-		       output.push_back( (unsigned char)v1 );
-		       output.push_back( (unsigned char)v2 );
-		       if( v1 == 0xa5 - 256 )
-		       {
-			       output.push_back( 'M' );
-		       }
-	       }
+       output.push_back( (unsigned char)v1 );
+       output.push_back( (unsigned char)v2 );
+       if( v1 == 0xa5 - 256 )
+       {
+	       output.push_back( 'M' );
+       }
        }
     }
     prev = inbuffer[i];
