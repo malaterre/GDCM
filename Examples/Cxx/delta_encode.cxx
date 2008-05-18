@@ -26,26 +26,59 @@ void delta_encode(unsigned short *inbuffer, size_t length)
 {
   std::vector<char> output;
   unsigned short prev = 0;
-  length = 100;
+  //length = 100;
+  // Do delta encoding:
   for(unsigned int i = 0; i < length; ++i)
   {
     //assert( output.size() == i );
     int diff = inbuffer[i] - prev;
     prev = inbuffer[i];
     char cdiff = (char)diff;
-    std::cout << std::hex << i << ":" << std::dec << diff << " - > " << std::hex << std::setfill( '0' ) << /*std::left <<*/ std::setw(2) << (short)cdiff << std::endl;
+    //std::cout << std::hex << i << ":" << std::dec << diff << " - > " << std::hex << std::setfill( '0' ) << /*std::left <<*/ std::setw(2) << (short)cdiff << std::endl;
     //if( diff == (int)cdiff )
-    if( cdiff <= 0x70 && diff >= -0x80 )
+    if( diff <= 0x7f && diff >= -0x80 )
     {
        output.push_back( cdiff );
-       if( i == 0x5d ) std::cout << "Sp:" << std::setfill('0') << (int)output[i] << std::endl;
-       assert( output[i] == cdiff );
+       //if( i == 0x5d ) std::cout << "Sp:" << std::setfill('0') << (int)output[i] << std::endl;
+       //assert( output[i] == cdiff );
     }
     else
     {
-    std::cout << "Pb:     " <<   diff << std::endl;
+    //std::cout << "Pb:     " <<   diff << std::endl;
+       output.push_back( 'M' );
     }
   }
+  // Do Run Length now:
+  char prev0 = output[0];
+  char prev1 = output[1];
+  for(unsigned int i = 1; i < output.size(); ++i)
+  {
+    if( output[i] == prev1 && prev1 == prev0 ) 
+    {
+	    unsigned int j = 0; // nb repetition
+	    while( output[i+j] == prev0 )
+	    {
+		    ++j;
+	    }
+	    ++j; // count cprev too
+	    // in place:
+    std::cout << "I:     " <<   i << std::endl;
+	    output[i-2] = 0xa5;
+	    output[i-2+1] = j;
+	    output[i-2+2] = prev0;
+	    output.erase( output.begin() + i, output.begin() + i - 2 + j);
+	    if( j == 0xd2 )
+	    {
+		    //abort();
+    std::cout << "HACK:     " <<   j << std::endl;
+		    output.insert( output.begin() + i - 2, 2, 0xa5);
+			    output[i-2+1] = 0x0;
+	    }
+    }
+    prev0 = prev1;
+    prev1 = output[i];
+  }
+
   std::cout << output.size() << std::endl;
   std::ofstream out("comp.rle");
   out.write( &output[0], output.size() );
