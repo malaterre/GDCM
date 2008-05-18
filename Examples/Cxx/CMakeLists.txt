@@ -21,3 +21,4 @@ ADD_EXECUTABLE(uid_unique uid_unique.cxx)
 TARGET_LINK_LIBRARIES(uid_unique gdcmMSFF)
 
 ADD_EXECUTABLE(delta_encode delta_encode.cxx)
+ADD_EXECUTABLE(delta_decode delta_decode.cxx)
