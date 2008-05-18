@@ -24,9 +24,13 @@ $ xsltproc - -html dicomhdr.xsl toto.html
 
   <xsl:template match="/">
 	  <output>
-		  <xsl:for-each select="html/body/table/tr/td">
+		  <xsl:for-each select="html/body/table/tr">
 	    <element>
+		  <xsl:for-each select="td">
+	    <value>
           <xsl:value-of select="."/>
+  </value>
+  </xsl:for-each>
   </element>
     </xsl:for-each>
 	  </output>
