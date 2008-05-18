@@ -115,7 +115,7 @@ int main(int argc, char *argv [])
   image.SetDimension(1, 256 );
   //image.SetSpacing(0, spacing[0] );
   //image.SetSpacing(1, spacing[1] );
-  gdcm::PixelFormat pixeltype = gdcm::PixelFormat::INT16; // bytepix = spm_type('int16','bits')/8;
+  gdcm::PixelFormat pixeltype = gdcm::PixelFormat::INT16;
 
   image.SetNumberOfDimensions( 2 );
   //image.SetDimension(2, p / pixeltype.GetPixelSize() );
