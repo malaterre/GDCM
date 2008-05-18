@@ -345,6 +345,18 @@ using namespace gdcm;
 };
 %include "gdcmDict.h"
 %include "gdcmDicts.h"
+
+%exception ReadFooBar {
+   try {
+      $action
+   } catch (std::exception &e) {
+      PyErr_SetString(PyExc_IndexError, const_cast<char*>(e.what()));
+      return false;
+   } catch ( ... ) {
+      PyErr_SetString(PyExc_IndexError, "foobarstuff");
+      return false;
+   }
+}
 %include "gdcmReader.h"
 %include "gdcmImageReader.h"
 %include "gdcmWriter.h"
