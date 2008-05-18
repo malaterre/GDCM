@@ -139,7 +139,7 @@ void delta_encode(unsigned short *inbuffer, size_t length)
     else if( output[i] == prev1 && (prev1 == 0x12 || prev1 == 0x5A || prev1 == 0x8c - 256 /*|| prev1 == 0xd3 - 256*/ ) ) 
     {
 	    /*
-	     * Why would you want to replace 0E 0E with 05 01 0E ???
+	     * Why would you want to replace 0E 0E with A5 01 0E ???
 	     */
 	    std::cerr << "HACK: " << i << std::endl;
 	    //if( i == 14426 )
