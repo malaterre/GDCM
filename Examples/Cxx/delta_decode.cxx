@@ -32,16 +32,28 @@ void delta_decode(char *inbuffer, size_t length)
     {
       char repeat = inbuffer[i+1] + 1;
       char value  = inbuffer[i+2];
-      if( (unsigned char)value == 0x5a /*&& false*/ )
+      if( (unsigned char)value == 0x5a )
       {
-	assert( repeat == 2 );
-      std::cout << "5a v=" << std::hex << value << " " << (int)repeat << " " << (int)value << " " << (int)inbuffer[i+3] << " " << std::dec << i <<  std::endl;
+	//assert( repeat == 2 );
+        std::cout << "5a v=" << std::hex << value << " " << (int)repeat << " " << 
+		(int)value << " " << (int)inbuffer[i+3] << " " << std::dec << i <<  std::endl;
+	//if( inbuffer[i+3] == 1 )
+	//{
+        //output.push_back( 0x015a );
+	//}
+	////i+=1;
+	//delta = 0x015a;
+      unsigned char v1 = (unsigned char)inbuffer[i+1];
+      unsigned char v2 = (unsigned char)inbuffer[i+2];
+      int value = v1 * 256 + v2;
 	if( inbuffer[i+3] == 1 )
 	{
-        output.push_back( 0x015a );
+		std::cerr << value << " != " << 0x15A << std::endl;
+		assert( 0x015A == value );
 	}
-	//i+=1;
-	delta = 0x015a;
+	output.push_back( value );
+	delta = value;
+
       i+=3; // 3 values treated at once
       }
       else
