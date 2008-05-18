@@ -19,6 +19,7 @@
 #include <fstream>
 #include <iostream>
 #include <iomanip>
+#include <assert.h>
 
 
 void delta_encode(unsigned short *inbuffer, size_t length)
@@ -36,6 +37,9 @@ void delta_encode(unsigned short *inbuffer, size_t length)
     //if( diff == (int)cdiff )
        int v1 = inbuffer[i] % 256;
        int v2 = inbuffer[i] / 256;
+       assert( v1 != 0xa5 - 256 );
+       assert( v2 != 0xa5 - 256 );
+       assert( v2 != 0x5a );
      if( diff <= 0x7f && diff >= -0x80 )
     {
        output.push_back( cdiff );
@@ -50,15 +54,65 @@ void delta_encode(unsigned short *inbuffer, size_t length)
        {
        output.push_back( (unsigned char)v1 );
        output.push_back( (unsigned char)v2 );
+	       if( v1 == 0x5a )
+	       {
+		       // everything is fine...
+	       }
+	       else if( v1 == 0xa5 - 256 )
+	       {
+       output.push_back( 'M' );
+	       }
+       }
+       else if( cdiff == 0xd5 - 256  )
+       {
+       //output.push_back( 'M' );
+       }
+       else if( cdiff == 0x0  )
+       {
+       //output.push_back( 'M' );
        }
     }
     else
     {
+       //assert( v1 != 0x5a );
+       if( v1 == 0x5a )
+       {
+       output.push_back( 0xa5 );
+       output.push_back( 0x01 );
        output.push_back( 0x5a );
+       output.push_back( 0x01 );
+        }
+       else if( v1 == 1 && v2 == 1 )
+       {
+       output.push_back( 0x5a );
+       output.push_back( 0xa5 );
        output.push_back( (unsigned char)v1 );
        output.push_back( (unsigned char)v2 );
+       }
+       else
+       {
+       output.push_back( 0x5a );
+	       if( v1 == 0x5a )
+	       {
+		       output.push_back( 'N' );
+	       }
+	       else
+	       {
+		       output.push_back( (unsigned char)v1 );
+		       output.push_back( (unsigned char)v2 );
+		       if( v1 == 0xa5 - 256 )
+		       {
+			       output.push_back( 'M' );
+		       }
+	       }
+       }
     }
     prev = inbuffer[i];
+    //if ( output.size() == 0x6e68 )
+    //{
+    //        output.push_back( 0xa5 );
+    //        output.push_back( 0x0 );
+    //}
   }
   // Do Run Length now:
   char prev0 = output[0];
@@ -76,26 +130,28 @@ void delta_encode(unsigned short *inbuffer, size_t length)
 	    // in place:
     //std::cout << "I:     " <<   i << std::endl;
 	    output[i-2] = 0xa5;
+	    assert( j );
 	    output[i-2+1] = j;
+	    assert( prev0 != 0xa5 - 256 );
 	    output[i-2+2] = prev0;
 	    output.erase( output.begin() + i, output.begin() + i - 2 + j);
     }
-    else if( output[i] == prev1 && prev1 == 0x0E ) 
+    else if( output[i] == prev1 && (prev1 == 0x12 || prev1 == 0x5A || prev1 == 0x8c - 256 /*|| prev1 == 0xd3 - 256*/ ) ) 
     {
 	    /*
 	     * Why would you want to replace 0E 0E with 05 01 0E ???
 	     */
 	    std::cerr << "HACK: " << i << std::endl;
-	    if( i == 14426 )
+	    //if( i == 14426 )
 	    {
 	    output[i-1] = 0xa5;
 	    output[i-1+1] = 0x01;
-	    output.insert( output.begin()+i+1, 1, 0x0E );
+	    output.insert( output.begin()+i+1, 1, prev1 );
 	    }
     }
     prev0 = prev1;
     prev1 = output[i];
-  }
+ }
 
   // DICOM need % 2
   if( output.size() % 2 )
