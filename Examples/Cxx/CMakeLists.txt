@@ -20,3 +20,4 @@ TARGET_LINK_LIBRARIES(rle2img gdcmMSFF)
 ADD_EXECUTABLE(uid_unique uid_unique.cxx)
 TARGET_LINK_LIBRARIES(uid_unique gdcmMSFF)
 
+ADD_EXECUTABLE(delta_encode delta_encode.cxx)

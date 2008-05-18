@@ -18,8 +18,38 @@
 #include "gdcmPrivateTag.h"
 #include "gdcmImageWriter.h"
 
-void delta_encode(unsigned short *outbuffer, const char *inbuffer, size_t length, size_t outlength)
+#include <iostream>
+#include <iomanip>
+
+
+void delta_encode(unsigned short *inbuffer, size_t length)
 {
+  std::vector<char> output;
+  unsigned short prev = 0;
+  length = 100;
+  for(unsigned int i = 0; i < length; ++i)
+  {
+    //assert( output.size() == i );
+    int diff = inbuffer[i] - prev;
+    prev = inbuffer[i];
+    char cdiff = (char)diff;
+    std::cout << std::hex << i << ":" << std::dec << diff << " - > " << std::hex << std::setfill( '0' ) << /*std::left <<*/ std::setw(2) << (short)cdiff << std::endl;
+    //if( diff == (int)cdiff )
+    if( cdiff <= 0x70 && diff >= -0x80 )
+    {
+       output.push_back( cdiff );
+       if( i == 0x5d ) std::cout << "Sp:" << std::setfill('0') << (int)output[i] << std::endl;
+       assert( output[i] == cdiff );
+    }
+    else
+    {
+    std::cout << "Pb:     " <<   diff << std::endl;
+    }
+  }
+  std::cout << output.size() << std::endl;
+  std::ofstream out("comp.rle");
+  out.write( &output[0], output.size() );
+  out.close();
 }
 
 int main(int argc, char *argv [])
@@ -43,7 +73,7 @@ int main(int argc, char *argv [])
   memset(ref,0,size);
   i.read( ref, size);
   i.close();
-  delta_encode(ref, size);
+  delta_encode((unsigned short*)ref, size / 2);
 
 
   /*
