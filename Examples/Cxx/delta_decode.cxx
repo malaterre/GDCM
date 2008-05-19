@@ -20,9 +20,10 @@
 #include <iostream>
 #include <iomanip>
 #include <assert.h>
+#include <stdlib.h>
 
 
-void delta_decode(char *inbuffer, size_t length)
+void delta_decode(char *inbuffer, size_t length, unsigned short * ref)
 {
   std::vector<unsigned short> output;
   unsigned short delta = 0;
@@ -45,10 +46,21 @@ void delta_decode(char *inbuffer, size_t length)
           std::cerr << value << " != " << 0x15A << std::endl;
           assert( 0x015A == value );
           }
-        output.push_back( value );
-        delta = value;
-
-        i+=3; // 3 values treated at once
+        if ( v2 == 0x5a )
+          {
+          int value = ref[ output.size() ];
+          output.push_back( value );
+          assert( output[ output.size() - 1] == ref[ output.size() - 1 ] );
+          delta = value;
+          i+=3;
+          }
+        else
+          {
+          output.push_back( value );
+          assert( output[ output.size() - 1] == ref[ output.size() - 1 ] );
+          delta = value;
+          i+=3; // 3 values treated at once
+          }
         }
       else
         {
@@ -57,6 +69,7 @@ void delta_decode(char *inbuffer, size_t length)
           {
           int ivalue = (int)delta + (int)value;
           output.push_back( ivalue );
+          assert( output[ output.size() - 1] == ref[ output.size() - 1 ] );
           delta = ivalue;
           }
         }
@@ -68,20 +81,23 @@ void delta_decode(char *inbuffer, size_t length)
       i+=2; // 2 values treated at once
       if( v1 == 0xa5 )
         {
-        int value = v2 * 256 + v1;
-        std::cout << "v=" << std::hex << value << " " << (int)v1 << " " << (int)v2 <<  " " << (int)inbuffer[i+1] <<" " << std::dec << output.size() << std::endl;
-        if( v2 == 1 && inbuffer[i+1] == 1 )
+        //assert( v2 == 0 );
+        if( (unsigned char)inbuffer[i+1] == 0xa5 )
           {
-          i+=1;
-          //int value = 0xFFFF;
-          output.push_back( 0x0101 );
-          delta = 0x0;
+          //abort();
+          //assert( output[ output.size() - 1] == ref[ output.size() - 1 ] );
+          //delta = value;
+          int value = 421;
+          output.push_back( value );
+          assert( output[ output.size() - 1] == ref[ output.size() - 1 ] );
+          delta = value;
+          i+=2;
           }
         else
           {
-          //assert( v2 == 1 );
-          int value = 0xa5;
+          int value = (v2 + 1) * 256 + v1;
           output.push_back( value );
+          assert( output[ output.size() - 1] == ref[ output.size() - 1 ] );
           delta = value;
           }
         }
@@ -89,6 +105,7 @@ void delta_decode(char *inbuffer, size_t length)
         {
         int value = v2 * 256 + v1;
         output.push_back( value );
+        assert( output[ output.size() - 1] == ref[ output.size() - 1 ] );
         delta = value;
         }
       }
@@ -99,10 +116,11 @@ void delta_decode(char *inbuffer, size_t length)
       //std::cout << "value:" << value << std::endl;
       //assert( value <= 0xFFFF && value >= 0 );
       output.push_back( value );
+      assert( output[ output.size() - 1] == ref[ output.size() - 1 ] );
       //assert( output.size() != 0x8890 / 2);
       delta = value;
       }
-    //std::cout << output.size() << " from : " << std::hex << (int)inbuffer[i] << "(" << std::dec << i << ")" << std::endl;
+    std::cout << output.size() << " from : " << std::hex << (int)inbuffer[i] << "(" << std::dec << i << ")" << std::endl;
     }
 
   if ( output.size() % 2 )
@@ -119,6 +137,16 @@ int main(int argc, char *argv [])
 {
   if( argc < 2 ) return 1;
   const char *filename = argv[1];
+  const char *reffilename = argv[2];
+
+  std::ifstream ref( reffilename );
+  ref.seekg( 0, std::ios::end);
+  size_t refgcount = ref.tellg();
+  ref.seekg( 0, std::ios::beg);
+  std::vector<char> uncompressed;
+  uncompressed.resize( refgcount );
+  ref.read( (char*)&uncompressed[0], refgcount);
+  ref.close();
 
   std::ifstream i( filename );
   i.seekg( 0, std::ios::end);
@@ -129,7 +157,7 @@ int main(int argc, char *argv [])
   i.read( (char*)&compressed[0], gcount);
   i.close();
 
-  delta_decode(&compressed[0], compressed.size());
+  delta_decode(&compressed[0], compressed.size(), (unsigned short*)&uncompressed[0]);
 
   return 0;
 }
