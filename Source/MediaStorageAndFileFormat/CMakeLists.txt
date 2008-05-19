@@ -70,8 +70,12 @@ INCLUDE_DIRECTORIES(
   #"${GDCM_SOURCE_DIR}/Utilities/jpeg"
   #"${GDCM_SOURCE_DIR}/Utilities/openjpeg/libopenjpeg"
   "${GDCM_BINARY_DIR}/Utilities/openjpeg"
-  "${GDCM_BINARY_DIR}/Utilities/zlib"
   )
+IF(NOT GDCM_USE_SYSTEM_ZLIB)
+INCLUDE_DIRECTORIES(
+  "${GDCM_BINARY_DIR}/Utilities/zlib"
+)
+ENDIF(NOT GDCM_USE_SYSTEM_ZLIB)
 IF(GDCM_USE_SYSTEM_UUID)
   INCLUDE_DIRECTORIES(
     ${UUID_INCLUDE_DIR}
