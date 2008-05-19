@@ -20,6 +20,7 @@
 #include <iostream>
 #include <iomanip>
 #include <assert.h>
+#include <string.h>
 
 
 void delta_encode(unsigned short *inbuffer, size_t length)
