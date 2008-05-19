@@ -13,7 +13,7 @@ IF(WIN32)
   #SET(GDCM_USE_SYSTEM_UUID 1)
 ELSE(WIN32)
   FIND_PACKAGE(UUID)
-  SET(GDCM_USE_SYSTEM_UUID 1)
+  #SET(GDCM_USE_SYSTEM_UUID 1)
 ENDIF(WIN32)
 
 #-----------------------------------------------------------------------------
@@ -45,7 +45,7 @@ SET(GDCM_EXECUTABLE_PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES}
 IF(CMAKE_COMPILER_2005)
   ADD_DEFINITIONS(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE)
   ADD_DEFINITIONS(-D_SCL_SECURE_NO_DEPRECATE)
-ENDIF(CMAKE_COMPILER_2005) 
+ENDIF(CMAKE_COMPILER_2005)
 
 
 #-----------------------------------------------------------------------------
@@ -190,6 +190,15 @@ ELSE(GDCM_BUILD_SHARED_LIBS)
     SET(GDCM_INSTALL_NO_LIBRARIES 1)
   ENDIF(GDCM_INSTALL_NO_DEVELOPMENT)
 ENDIF(GDCM_BUILD_SHARED_LIBS)
+
+#-----------------------------------------------------------------------------
+OPTION(GDCM_USE_SYSTEM_ZLIB "Use system zlib" OFF)
+IF(UNIX)
+  # I think that FreeBSD/MaxOSX do not need that only Linux should...
+  OPTION(GDCM_USE_SYSTEM_UUID "Use system uuid" OFF)
+ENDIF(UNIX)
+#OPTION(GDCM_USE_SYSTEM_EXPAT "Use system expat" OFF)
+MARK_AS_ADVANCED(GDCM_USE_SYSTEM_ZLIB GDCM_USE_SYSTEM_UUID GDCM_USE_SYSTEM_EXPAT)
 
 #-----------------------------------------------------------------------------
 OPTION(GDCM_BUILD_EXAMPLES "Build GDCM examples." OFF)
