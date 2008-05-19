@@ -1,0 +1,61 @@
+############################################################################
+#
+#  Program: GDCM (Grass Root DICOM). A DICOM library
+#  Module:  $URL$
+#
+#  Copyright (c) 2006-2008 Mathieu Malaterre
+#  All rights reserved.
+#  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+#
+#     This software is distributed WITHOUT ANY WARRANTY; without even
+#     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+#     PURPOSE.  See the above copyright notice for more information.
+#
+############################################################################
+
+import gdcm
+import os,sys
+
+def TestStringFilter(filename, verbose = False):
+  r = gdcm.Reader()
+  r.SetFileName( filename )
+  sucess = r.Read()
+  if( not sucess ): return 1
+
+  file = r.GetFile()
+  ds = file.GetDataSet()
+  # Change gdcm struct into something swig can digest:
+  pds = gdcm.PythonDataSet(ds)
+  sf = gdcm.StringFilter()
+  pds.Start() # Make iterator go at begining
+  dic1={}
+  dic2={}
+  sf.SetFile(file) # extremely important
+  while(not pds.IsAtEnd() ):
+    t = str(pds.GetCurrent().GetTag())
+    res = sf.ToStringPair( pds.GetCurrent().GetTag() )
+    dic2[t] = res[1]
+    dic1[res[0]] = res[1]
+    pds.Next()
+  #print dic1
+  #print dic2
+  print dic2[ '(0028,0103)' ]
+  return 0
+
+if __name__ == "__main__":
+  sucess = 0
+  try:
+    filename = os.sys.argv[1]
+    sucess += TestStringFilter( filename, True )
+  except:
+    # loop over all files:
+    t = gdcm.Testing()
+    nfiles = t.GetNumberOfFileNames()
+    for i in range(0,nfiles):
+      filename = t.GetFileName(i)
+      sucess += TestStringFilter( filename )
+  
+  
+  # Test succeed ?
+  sys.exit(sucess == 0)
+
