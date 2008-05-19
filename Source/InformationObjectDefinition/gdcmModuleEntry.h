@@ -41,6 +41,11 @@ public:
   void SetType(const Type &type) { DataElementType = type; }
   const Type &GetType() const { return DataElementType; }
 
+  /*
+   * WARNING: 'Description' is currently a std::string, but it might change in the future
+   * do not expect it to remain the same, and always use the ModuleEntry::Description typedef
+   * instead.
+   */
   typedef std::string Description;
   void SetDescription(const char *d) { DescriptionField = d; }
   const Description & GetDescription() const { return DescriptionField; }
