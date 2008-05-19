@@ -527,33 +527,11 @@ int main(int argc, char *argv[])
     //names->Print( std::cout );
     }
 
-
-  gdcm::Filename viewer_type(argv[0]);
-  //assert( strcmp(viewer_type, "gdcmviewer"  ) == 0
-  //     || strcmp(viewer_type, "gdcmviewer2" ) == 0 );
-  
-  const char gdcmviewer[] = "gdcmviewer";
-  const char gdcmviewer2[] = "gdcmviewer2";
-  // can't do strcmp on WIN32...
-  // Need to order correctly when doing strncmp
-  if( strncmp(viewer_type.GetName(), gdcmviewer2, strlen(gdcmviewer2) ) == 0 )
-    {
-    vtkImageColorViewer *viewer = vtkImageColorViewer::New();
-    ExecuteViewer<vtkImageColorViewer>(viewer, filenames);
-    }
-  else if( strncmp(viewer_type.GetName(), gdcmviewer, strlen(gdcmviewer) ) == 0 )
-    {
-    vtkGDCMImageViewer *viewer = vtkGDCMImageViewer::New();
-    ExecuteViewer<vtkGDCMImageViewer>(viewer, filenames);
-    }
-  else
-    {
-    std::cerr << "Unhandled : " << viewer_type.GetName() << std::endl;
-    filenames->Delete();
-    return 1;
-    }
+  vtkImageColorViewer *viewer = vtkImageColorViewer::New();
+  ExecuteViewer<vtkImageColorViewer>(viewer, filenames);
 
   filenames->Delete();
+
   return 0;
 }
 

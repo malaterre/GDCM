@@ -7,7 +7,7 @@ SET(GDCM_VIEWER_APP_SRCS
   )
 SET(GDCM_VTK_APPS
   gdcmviewer # vtkImageViewer
-  gdcmviewer2 # vtkImageViewer2
+  #gdcmviewer2 # vtkImageViewer2
   )
 
 FOREACH(app ${GDCM_VTK_APPS})
