@@ -63,6 +63,9 @@ bool ImageReader::Read()
 {
   if( !Reader::Read() )
     {
+    // cemra_bug/IM-0001-0066.dcm 
+    // will return from the parser with an error
+    // but a partial Pixel Data can be seen
     return false;
     }
 
