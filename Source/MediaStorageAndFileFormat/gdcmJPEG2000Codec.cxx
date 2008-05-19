@@ -83,21 +83,26 @@ bool JPEG2000Codec::CanDecode(TransferSyntax const &ts)
 
 bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
 {
-    const SequenceOfFragments *sf = in.GetSequenceOfFragments();
-      std::stringstream is;
-      unsigned long totalLen = sf->ComputeByteLength();
-      char *buffer = new char[totalLen];
-      sf->GetBuffer(buffer, totalLen);
-      is.write(buffer, totalLen);
-      delete[] buffer;
-      std::stringstream os;
+  const SequenceOfFragments *sf = in.GetSequenceOfFragments();
+  assert( sf );
+  std::stringstream os;
+  for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
+    {
+    std::stringstream is;
+    const Fragment &frag = sf->GetFragment(i);
+      if( frag.IsEmpty() ) return false;
+    const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
+    char *mybuffer = new char[bv.GetLength()];
+    bv.GetBuffer(mybuffer, bv.GetLength());
+    is.write(mybuffer, bv.GetLength());
+    delete[] mybuffer;
     bool r = Decode(is, os);
-    assert( r );
-    out = in;
-    std::string str = os.str();
-    out.SetByteValue( &str[0], str.size() );
-      //memcpy(buffer, os.str().c_str(), len);
-    return r;
+    assert( r == true );
+    }
+  std::string str = os.str();
+  out.SetByteValue( &str[0], str.size() );
+
+  return true;
 }
 
 bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
@@ -125,94 +130,94 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
 
   /* set decoding parameters to default values */
   opj_set_default_decoder_parameters(&parameters);
- 
-   // default blindly copied
-   parameters.cp_layer=0;
-   parameters.cp_reduce=0;
-//   parameters.decod_format=-1;
-//   parameters.cod_format=-1;
 
-      /* JPEG-2000 codestream */
-    parameters.decod_format = J2K_CFMT;
-    assert(parameters.decod_format == J2K_CFMT);
+  // default blindly copied
+  parameters.cp_layer=0;
+  parameters.cp_reduce=0;
+  //   parameters.decod_format=-1;
+  //   parameters.cod_format=-1;
+
+  /* JPEG-2000 codestream */
+  parameters.decod_format = J2K_CFMT;
+  assert(parameters.decod_format == J2K_CFMT);
   parameters.cod_format = PGX_DFMT;
   assert(parameters.cod_format == PGX_DFMT);
 
-      /* get a decoder handle */
-      dinfo = opj_create_decompress(CODEC_J2K);
-      
-      /* catch events using our callbacks and give a local context */
-      opj_set_event_mgr((opj_common_ptr)dinfo, &event_mgr, NULL);      
+  /* get a decoder handle */
+  dinfo = opj_create_decompress(CODEC_J2K);
 
-      /* setup the decoder decoding parameters using user parameters */
-      opj_setup_decoder(dinfo, &parameters);
+  /* catch events using our callbacks and give a local context */
+  opj_set_event_mgr((opj_common_ptr)dinfo, &event_mgr, NULL);      
 
-      /* open a byte stream */
-      cio = opj_cio_open((opj_common_ptr)dinfo, src, file_length);
+  /* setup the decoder decoding parameters using user parameters */
+  opj_setup_decoder(dinfo, &parameters);
 
-      /* decode the stream and fill the image structure */
-      image = opj_decode(dinfo, cio);
-      if(!image) {
-        opj_destroy_decompress(dinfo);
-        opj_cio_close(cio);
-        return 1;
-      }
-      
-      /* close the byte stream */
-      opj_cio_close(cio);
+  /* open a byte stream */
+  cio = opj_cio_open((opj_common_ptr)dinfo, src, file_length);
 
-   //raw = (char*)src;
-   // Copy buffer
-      for (int compno = 0; compno < image->numcomps; compno++)
+  /* decode the stream and fill the image structure */
+  image = opj_decode(dinfo, cio);
+  if(!image) {
+    opj_destroy_decompress(dinfo);
+    opj_cio_close(cio);
+    return 1;
+  }
+
+  /* close the byte stream */
+  opj_cio_close(cio);
+
+  //raw = (char*)src;
+  // Copy buffer
+  for (int compno = 0; compno < image->numcomps; compno++)
+    {
+    opj_image_comp_t *comp = &image->comps[compno];
+
+    int w = image->comps[compno].w;
+    int wr = int_ceildivpow2(image->comps[compno].w, image->comps[compno].factor);
+
+    //int h = image.comps[compno].h;
+    int hr = int_ceildivpow2(image->comps[compno].h, image->comps[compno].factor);
+
+    if (comp->prec <= 8)
+      {
+      raw = new char[wr * hr];
+      uint8_t *data8 = (uint8_t*)raw;
+      for (int i = 0; i < wr * hr; i++) 
         {
-        opj_image_comp_t *comp = &image->comps[compno];
-
-        int w = image->comps[compno].w;
-        int wr = int_ceildivpow2(image->comps[compno].w, image->comps[compno].factor);
-
-        //int h = image.comps[compno].h;
-        int hr = int_ceildivpow2(image->comps[compno].h, image->comps[compno].factor);
-
-        if (comp->prec <= 8)
-          {
-          raw = new char[wr * hr];
-          uint8_t *data8 = (uint8_t*)raw;
-          for (int i = 0; i < wr * hr; i++) 
-            {
-            int v = image->comps[compno].data[i / wr * w + i % wr];
-            *data8++ = (uint8_t)v;
-            }
-          os.write(raw, wr * hr * 1);
-          }
-        else if (comp->prec <= 16)
-          {
-          raw = new char[wr * hr * 2];
-          uint16_t *data16 = (uint16_t*)raw;
-          for (int i = 0; i < wr * hr; i++) 
-            {
-            int v = image->comps[compno].data[i / wr * w + i % wr];
-            *data16++ = (uint16_t)v;
-            }
-          os.write(raw, wr * hr * 2);
-          }
-        else
-          {
-          raw = new char[wr * hr * 4];
-          uint32_t *data32 = (uint32_t*)raw;
-          for (int i = 0; i < wr * hr; i++) 
-            {
-            int v = image->comps[compno].data[i / wr * w + i % wr];
-            *data32++ = (uint32_t)v;
-            }
-          os.write(raw, wr * hr * 4);
-          }
-        delete[] raw;
-        //free(image.comps[compno].data);
+        int v = image->comps[compno].data[i / wr * w + i % wr];
+        *data8++ = (uint8_t)v;
         }
+      os.write(raw, wr * hr * 1);
+      }
+    else if (comp->prec <= 16)
+      {
+      raw = new char[wr * hr * 2];
+      uint16_t *data16 = (uint16_t*)raw;
+      for (int i = 0; i < wr * hr; i++) 
+        {
+        int v = image->comps[compno].data[i / wr * w + i % wr];
+        *data16++ = (uint16_t)v;
+        }
+      os.write(raw, wr * hr * 2);
+      }
+    else
+      {
+      raw = new char[wr * hr * 4];
+      uint32_t *data32 = (uint32_t*)raw;
+      for (int i = 0; i < wr * hr; i++) 
+        {
+        int v = image->comps[compno].data[i / wr * w + i % wr];
+        *data32++ = (uint32_t)v;
+        }
+      os.write(raw, wr * hr * 4);
+      }
+    delete[] raw;
+    //free(image.comps[compno].data);
+    }
   /* free the memory containing the code-stream */
   delete[] src;  //FIXME
 
- 
+
 
   /* free remaining structures */
   if(dinfo) {
