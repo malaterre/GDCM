@@ -424,6 +424,17 @@ using namespace gdcm;
 %include "gdcmEnumeratedValues.h"
 %include "gdcmPatient.h"
 %include "gdcmStudy.h"
+%include "gdcmModuleEntry.h"
+%extend gdcm::ModuleEntry
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmModule.h"
 %include "gdcmModules.h"
 %include "gdcmDefs.h"
@@ -432,7 +443,6 @@ using namespace gdcm;
 %include "gdcmTableEntry.h"
 %include "gdcmDefinedTerms.h"
 %include "gdcmSeries.h"
-%include "gdcmModuleEntry.h"
 %include "gdcmIODEntry.h"
 %include "gdcmRescaler.h"
 %include "gdcmSegmentedPaletteColorLookupTable.h"

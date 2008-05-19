@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 
     }
 
-  if( ms == gdcm::MediaStorage::MRImageStorage && false )
+  if( ms == gdcm::MediaStorage::MRImageStorage )
     {
     const gdcm::Global& g = gdcm::Global::GetInstance();
     const gdcm::Defs &defs = g.GetDefs();
@@ -82,8 +82,15 @@ int main(int argc, char *argv[])
       {
       const gdcm::Tag &tag = it->first;
       const gdcm::ModuleEntry &me = it->second;
+      const gdcm::Type &type = me.GetType();
       if( ds.FindDataElement( tag ) )
         {
+        // element found
+        const gdcm::DataElement &de = ds.GetDataElement( tag );
+        if ( de.IsEmpty() && (type == gdcm::Type::T1 || type == gdcm::Type::T1C ) )
+          {
+          std::cerr << "T1 element cannot be empty: " << de << std::endl;
+          }
         }
       else
         {
