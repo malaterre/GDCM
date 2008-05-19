@@ -39,7 +39,10 @@ def TestStringFilter(filename, verbose = False):
     pds.Next()
   #print dic1
   #print dic2
-  print dic2[ '(0028,0103)' ]
+  try:
+    print "Pixel Representation=",dic2[ '(0028,0103)' ]
+  except KeyError:
+    print "Tag not found in dataset"
   return 0
 
 if __name__ == "__main__":
@@ -49,6 +52,7 @@ if __name__ == "__main__":
     sucess += TestStringFilter( filename, True )
   except:
     # loop over all files:
+    gdcm.Trace.WarningOff()
     t = gdcm.Testing()
     nfiles = t.GetNumberOfFileNames()
     for i in range(0,nfiles):
