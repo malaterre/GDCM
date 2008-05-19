@@ -9,12 +9,6 @@ MARK_AS_ADVANCED(CMAKE_BACKWARDS_COMPATIBILITY CMAKE_BUILD_TYPE CMAKE_INSTALL_PR
 SET(GDCM_CMAKE_DIR "${GDCM_SOURCE_DIR}/CMake" CACHE INTERNAL "")
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${GDCM_CMAKE_DIR}")
 
-IF(WIN32)
-  #SET(GDCM_USE_SYSTEM_UUID 1)
-ELSE(WIN32)
-  FIND_PACKAGE(UUID)
-  #SET(GDCM_USE_SYSTEM_UUID 1)
-ENDIF(WIN32)
 
 #-----------------------------------------------------------------------------
 # Disallow insource build since I never test that
@@ -192,6 +186,7 @@ ELSE(GDCM_BUILD_SHARED_LIBS)
 ENDIF(GDCM_BUILD_SHARED_LIBS)
 
 #-----------------------------------------------------------------------------
+#System stuff, mainly for packager or paranoid people with up-to-date lib moto
 OPTION(GDCM_USE_SYSTEM_ZLIB "Use system zlib" OFF)
 IF(UNIX)
   # I think that FreeBSD/MaxOSX do not need that only Linux should...
@@ -199,6 +194,23 @@ IF(UNIX)
 ENDIF(UNIX)
 #OPTION(GDCM_USE_SYSTEM_EXPAT "Use system expat" OFF)
 MARK_AS_ADVANCED(GDCM_USE_SYSTEM_ZLIB GDCM_USE_SYSTEM_UUID GDCM_USE_SYSTEM_EXPAT)
+
+IF(GDCM_USE_SYSTEM_ZLIB)
+  # If user say so, then this is a requirement !
+  FIND_PACKAGE(ZLIB REQUIRED)
+  SET(GDCM_ZLIB_LIBRARIES ${ZLIB_LIBRARIES})
+ELSE(GDCM_USE_SYSTEM_ZLIB)
+  SET(GDCM_ZLIB_LIBRARIES "gdcmzlib")
+ENDIF(GDCM_USE_SYSTEM_ZLIB)
+
+IF(GDCM_USE_SYSTEM_UUID)
+  # If user say so, then this is a requirement !
+  FIND_PACKAGE(UUID REQUIRED)
+  SET(GDCM_UUID_LIBRARIES ${UUID_LIBRARIES})
+ELSE(GDCM_USE_SYSTEM_UUID)
+  SET(GDCM_UUID_LIBRARIES "gdcmuuid")
+ENDIF(GDCM_USE_SYSTEM_UUID)
+
 
 #-----------------------------------------------------------------------------
 OPTION(GDCM_BUILD_EXAMPLES "Build GDCM examples." OFF)

@@ -26,7 +26,7 @@
 
 #include <cstring> // std::memcpy
 
-#include <zlib/zlib.h>
+#include <gdcm_zlib.h>
 
 /*
  * Implementation found at:
