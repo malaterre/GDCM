@@ -74,6 +74,7 @@ SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} gdcmMSFF gdcmIOD ${PYTHON
 IF(WIN32 AND NOT CYGWIN)
   SET_TARGET_PROPERTIES(${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME} PROPERTIES SUFFIX ".pyd")
 ENDIF(WIN32 AND NOT CYGWIN)
+#SET_TARGET_PROPERTIES(${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME} PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
 
 # swig generates a _gdcm.so and a gdcm.py, we need to copy gdcm.py to the proper place:
 # gdcm.py is the interface name != implementation name, so we need to keep 'gdcm', so that 'import gdcm'
@@ -106,4 +107,8 @@ ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 IF(BUILD_TESTING)
   ADD_PYTHON_TEST(TestWrapPython TestWrap.py ${GDCM_SOURCE_DIR}/Source)
 ENDIF(BUILD_TESTING)
+
+# TODO
+# python -c "from distutils import sysconfig; print sysconfig.get_python_lib()"
+# /usr/lib/python2.4/site-packages
 

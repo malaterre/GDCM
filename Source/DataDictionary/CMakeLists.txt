@@ -110,3 +110,12 @@ IF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
     DESTINATION ${GDCM_INSTALL_INCLUDE_DIR} COMPONENT Development
   )
 ENDIF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
+
+#-----------------------------------------------------------------------------
+# Install Part6.xml
+INSTALL(FILES 
+  ${CMAKE_CURRENT_SOURCE_DIR}/Part6.xml
+  ${CMAKE_CURRENT_SOURCE_DIR}/Part7.xml
+  DESTINATION ${GDCM_INSTALL_INCLUDE_DIR}/XML COMPONENT Runtime
+)
+

@@ -51,6 +51,13 @@ IF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
     DESTINATION ${GDCM_INSTALL_INCLUDE_DIR} COMPONENT Development
   )
 ENDIF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
+
+#-----------------------------------------------------------------------------
+# Install Part3.xml
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/Part3.xml
+  DESTINATION ${GDCM_INSTALL_INCLUDE_DIR}/XML COMPONENT Runtime
+)
+
 #-----------------------------------------------------------------------------
 FILE(GLOB GDCM_XML_TABLES_GLOB
   "${CMAKE_CURRENT_SOURCE_DIR}/*.xml"
