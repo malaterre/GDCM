@@ -1081,7 +1081,11 @@ int vtkGDCMImageReader::RequestDataCompat()
     {
     const char *filename = this->FileName;
     unsigned long len;
-    this->LoadSingleFile( filename, pointer, len ); (void)len;
+    int load = this->LoadSingleFile( filename, pointer, len ); (void)len;
+    if( !load )
+      {
+      return 0;
+      }
     }
   else
     {
@@ -1094,6 +1098,10 @@ int vtkGDCMImageReader::RequestDataCompat()
       const char *filename = this->FileNames->GetValue( j );
       unsigned long len = 0;
       int load = this->LoadSingleFile( filename, pointer, len ); (void)load;
+      if( !load )
+        {
+        return 0;
+        }
       assert( len );
       pointer += len;
       }
