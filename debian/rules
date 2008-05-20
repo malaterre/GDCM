@@ -1,0 +1,78 @@
+#!/usr/bin/make -f
+
+DARCH      := $(shell dpkg --print-installation-architecture)
+CFLAGS     := -Wall -g $(if $(findstring noopt,$(DEB_BUILD_OPTIONS)),-O0,-O2)
+
+configure: configure-stamp
+configure-stamp:
+	dh_testdir
+	# pre-load the cache to avoid setting rpath:
+	rm -rf Build && mkdir -p Build
+	echo CMAKE_SKIP_RPATH:BOOL=YES        >> Build/CMakeCache.txt
+	#echo TARGET_VERSION:STRING=          >> Build/CMakeCache.txt
+	#echo TARGET_SOVERSION:STRING=        >> Build/CMakeCache.txt
+	#echo BUILD_DOCUMENTATION:BOOL=ON     >> Build/CMakeCache.txt
+	#echo BUILD_DOXYGEN:BOOL=ON           >> Build/CMakeCache.txt
+	#echo BUILD_WXDialog:BOOL=ON          >> Build/CMakeCache.txt
+	echo VERBOSE_BUILD:BOOL=ON            >> Build/CMakeCache.txt
+	echo CMAKE_C_FLAGS:STRING=$(CFLAGS)   >> Build/CMakeCache.txt
+	echo CMAKE_CXX_FLAGS:STRING=$(CFLAGS) >> Build/CMakeCache.txt
+	$(if $(USE_DARTP),echo DART_ROOT:PATH=/usr/share/Dart              >> Build/CMakeCache.txt)
+	$(if $(USE_DARTP),echo BUILDNAME:STRING=cmake_2.2.3-1_$(DARCH).deb >> Build/CMakeCache.txt)
+	cd Build && ../bootstrap --prefix=/usr --docdir=/share/doc/cmake --mandir=/share/man
+	chmod -x ChangeLog.manual
+	chmod -x Modules/*.cmake  Modules/*.cmake.in Modules/*.cxx Modules/Platform/*
+	touch $@
+
+build: patch-stamp configure-stamp build-stamp
+build-stamp:
+	dh_testdir
+	cd Build && $(MAKE) $(if $(USE_DARTP),Experimental && $(MAKE) ExperimentalSubmit)
+	touch $@
+
+clean: unpatch
+	dh_testdir
+	dh_testroot
+	rm -rf .pc build-stamp configure-stamp patch-stamp
+	rm -rf Build
+	dh_clean
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+	# Add here commands to install the package into debian/cmake.
+	cd Build && $(MAKE) DESTDIR=$(CURDIR)/debian/cmake install
+	#install -D -m 644 debian/cmake.xpm      debian/cmake/usr/share/pixmaps/cmake.xpm
+	#install -D -m 644 debian/cmake.lintian  debian/cmake/usr/share/lintian/overrides/cmake
+	#cp Docs/cmake-syntax.vim debian/cmake/usr/share/vim/addons/syntax/cmake.vim
+	#cp Docs/cmake-mode.el debian/cmake/usr/share/emacs/site-lisp/
+
+# Build architecture-independent files here.
+binary-indep: build install
+
+# Build architecture-dependent files here.
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installdocs
+	dh_installexamples
+	dh_installmenu
+	dh_installemacsen
+	dh_installcron
+	dh_installman
+	dh_installinfo
+	dh_installchangelogs ChangeLog.txt ChangeLog.manual
+	dh_link
+	dh_strip
+	dh_compress -XCMake.pdf
+	dh_fixperms
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install configure patch unpatch
