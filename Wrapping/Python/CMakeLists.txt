@@ -16,6 +16,9 @@ FIND_PACKAGE(SWIG REQUIRED)
 MARK_AS_ADVANCED(SWIG_DIR SWIG_EXECUTABLE)
 INCLUDE(${SWIG_USE_FILE})
 
+# Note:
+# python -c "from struct import pack; print  pack('5b', (41*len('99')), pow(8,2)+20, 4900**0.5, range(78)[-1], 10)"
+
 INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/Common"
