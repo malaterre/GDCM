@@ -38,7 +38,7 @@ SET(GDCM_EXECUTABLE_NAME
   gdcmraw
   gdcmscanner
   #gdcmoverlay
-  #gdcmimg
+  gdcmimg
   #deflate
   gdcmconv
   gdcminfo

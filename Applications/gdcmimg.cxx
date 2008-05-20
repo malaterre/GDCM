@@ -320,11 +320,11 @@ int main (int argc, char *argv[])
 
     // Set our filled image instead:
     writer.SetImage( image );
+#if 0
     // <entry group="0028" element="0301" vr="CS" vm="1" name="Burned In Annotation"/>
     gdcm::Attribute<0x0028,0x0301> at;
     at.SetValue( "NO" ); // 'YES'
     ds.Replace( at.GetAsDataElement() );
-#if 1
     // (0008,2111) ST [MedCom Resample v]                      #  18, 1 DerivationDescriptio
     gdcm::Attribute<0x0008,0x2111> at2;
     std::ostringstream os;
@@ -342,7 +342,7 @@ int main (int argc, char *argv[])
 Don't do that ... leave Image Type alone (unless you are changing
 the UID ... vide infra). 
 */
-#if 1
+#if 0
     // (0008,0008) CS [ORIGINAL\SECONDARY]                     #  18, 2 ImageType
     gdcm::Attribute<0x0008,0x0008> at3;
     static const gdcm::CSComp values[] = {"DERIVED","SECONDARY"}; 
