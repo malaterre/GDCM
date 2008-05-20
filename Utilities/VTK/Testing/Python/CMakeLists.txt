@@ -26,6 +26,7 @@ IF(GDCM_WRAP_PYTHON)
   ENDIF(VTK_PYTHONPATH_DIRS)
   SET(VTK_PYTHON_TESTS
     TestvtkGDCMImageWriter
+    TestMultiframeGrayscaleWordSecondaryCaptureImageStorage
   )
   IF(CMAKE_HAVE_PTHREAD_H)
     SET(VTK_PYTHON_TESTS ${VTK_PYTHON_TESTS}

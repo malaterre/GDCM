@@ -866,6 +866,23 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
         return 0;
         }
       }
+    else if( this->FileDimensionality == 3 &&
+      pixeltype.GetSamplesPerPixel() == 1 &&
+      pi == gdcm::PhotometricInterpretation::MONOCHROME2 &&
+      pixeltype.GetBitsAllocated() == 16 &&
+      pixeltype.GetBitsStored() <= 16 && pixeltype.GetBitsStored() >= 9 &&
+      pixeltype.GetHighBit() == pixeltype.GetBitsStored() - 1 &&
+      pixeltype.GetPixelRepresentation() == 0 
+      // image.GetPlanarConfiguration()
+    )
+      {
+      ms = gdcm::MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage;
+      if( this->Shift != 0 || this->Scale != 1 )
+        {
+        vtkErrorMacro( "Cannot have shift/scale" );
+        return 0;
+        }
+      }
     else
       {
       vtkErrorMacro( "Cannot handle Multi Frame image in SecondaryCaptureImageStorage" );
