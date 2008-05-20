@@ -58,6 +58,29 @@ IF(MSVC)
 ENDIF(MSVC)
 SET_SOURCE_FILES_PROPERTIES(gdcm.i PROPERTIES CPLUSPLUS ON)
 
+# Python install
+FIND_PACKAGE(PythonInterp REQUIRED)
+#MACRO(GET_PYTHON_SITE_PACKAGE dir)
+  EXECUTE_PROCESS(
+  	COMMAND ${PYTHON_EXECUTABLE} "-c" "from distutils import sysconfig; print sysconfig.get_python_lib()"
+  	#WORKING_DIRECTORY @LIBRARY_OUTPUT_PATH@
+  	RESULT_VARIABLE import_res
+  	OUTPUT_VARIABLE import_output
+  	ERROR_VARIABLE  import_error
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  #MESSAGE("ici: ${PYTHON_EXECUTABLE}")
+  #MESSAGE("ici: ${import_res}")
+  #MESSAGE("ici: ${import_output}")
+  #SET(dir ${import_output})
+#ENDMACRO(GET_PYTHON_SITE_PACKAGE)
+
+
+#GET_PYTHON_SITE_PACKAGE(python_site_package)
+SET(python_site_package ${import_output})
+MESSAGE(${python_site_package})
+
+
 # Some old swig 1.3 did not support this option:
 #SET(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_BINARY_DIR}")
 
@@ -73,6 +96,9 @@ SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
 # the other gdcm lib. bad !!!
 SWIG_ADD_MODULE(${GDCM_PYTHON_IMPLEMENTATION_NAME} python gdcm.i)
 SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} gdcmMSFF gdcmIOD ${PYTHON_LIBRARIES})
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/gdcm.pth.in
+  ${CMAKE_CURRENT_BINARY_DIR}/gdcm.pth
+)
 
 # Python extension modules on Windows must have the extension ".pyd"
 # instead of ".dll" as of Python 2.5.  Older python versions do support
@@ -98,13 +124,20 @@ ADD_CUSTOM_COMMAND(
 # right next to the other dlls
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS ${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME}
-    RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime
-    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
-    ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
+    #RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime
+    #LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
+    #ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
+    DESTINATION ${python_site_package}/${subdir}
   )
 # the python file is not a dev file, but part of the gdcm module...
-  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gdcm.py 
-    DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
+  INSTALL(FILES 
+    ${CMAKE_CURRENT_BINARY_DIR}/gdcm.py 
+    #DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
+    DESTINATION ${python_site_package}/${subdir}
+  )
+  INSTALL(FILES 
+    ${CMAKE_CURRENT_BINARY_DIR}/gdcm.pth
+    DESTINATION ${python_site_package}
   )
 ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 
@@ -117,4 +150,5 @@ ENDIF(BUILD_TESTING)
 # TODO
 # python -c "from distutils import sysconfig; print sysconfig.get_python_lib()"
 # /usr/lib/python2.4/site-packages
+
 
