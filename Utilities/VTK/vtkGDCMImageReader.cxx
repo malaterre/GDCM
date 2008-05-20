@@ -1084,6 +1084,7 @@ int vtkGDCMImageReader::RequestDataCompat()
     int load = this->LoadSingleFile( filename, pointer, len ); (void)len;
     if( !load )
       {
+      // FIXME: I need to fill the buffer with 0, shouldn't I ?
       return 0;
       }
     }
@@ -1093,14 +1094,18 @@ int vtkGDCMImageReader::RequestDataCompat()
 
     // Load each 2D files
     int *dext = this->GetDataExtent();
+    // HACK: len is moved out of the loop so that when file > 1 start failing we can still know
+    // the len of the buffer...technically all file should have the same len (not checked for now)
+    unsigned long len = 0;
     for(int j = dext[4]; j <= dext[5]; ++j)
       {
       const char *filename = this->FileNames->GetValue( j );
-      unsigned long len = 0;
-      int load = this->LoadSingleFile( filename, pointer, len ); (void)load;
+      int load = this->LoadSingleFile( filename, pointer, len );
       if( !load )
         {
-        return 0;
+        // hum... we could not read this file within the series, let's just fill
+        // the slice with 0 value, hopefully this should be the right thing to do
+        memset( pointer, 0, len);
         }
       assert( len );
       pointer += len;
