@@ -37,7 +37,7 @@ configure-stamp:
 build: patch-stamp configure-stamp build-stamp
 build-stamp:
 	dh_testdir
-	cd ../Build && $(MAKE) $(if $(USE_DARTP),Experimental && $(MAKE) ExperimentalSubmit)
+	cd ../Build && $(MAKE) -j4 $(if $(USE_DARTP),Experimental && $(MAKE) ExperimentalSubmit) && make package
 	touch $@
 
 clean: unpatch
@@ -73,10 +73,10 @@ binary-arch: build install
 	dh_installcron
 	dh_installman
 	dh_installinfo
-	dh_installchangelogs ChangeLog.txt ChangeLog.manual
+	#dh_installchangelogs ChangeLog.txt ChangeLog.manual
 	dh_link
 	dh_strip
-	dh_compress -XCMake.pdf
+	#dh_compress -XCMake.pdf
 	dh_fixperms
 	dh_installdeb
 	dh_shlibdeps
