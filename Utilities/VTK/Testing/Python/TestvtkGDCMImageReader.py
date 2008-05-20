@@ -33,3 +33,30 @@ r.Update()
 # Image Position (Patient)
 # -13.3034, -80.8219, 119.178
 
+# try to rewrite it:
+w = vtkgdcm.vtkGDCMImageWriter()
+w.SetInput( r.GetOutput() )
+w.SetMedicalImageProperties( r.GetMedicalImageProperties() )
+w.SetDirectionCosines( r.GetDirectionCosines() )
+w.SetFileName( "mr.001.dcm" )
+w.Write()
+
+# beach.tif
+#tiffreader = vtk.vtkTIFFReader()
+#tiffreader.SetFileName( VTK_DATA_ROOT + "/Data/beach.tif" )
+#tiffreader.Update()
+# print tiffreader.GetOutput()
+# -> TIFF reader was apparently broken in VTK until some very recent
+# version and thus image appear upside down, unless you also update VTKData :(
+
+jpegreader = vtk.vtkJPEGReader()
+jpegreader.SetFileName( VTK_DATA_ROOT + "/Data/beach.jpg" )
+#jpegreader.Update()
+
+# Need a new writer otherwise MedicalImageProperties are re-used...
+w2 = vtkgdcm.vtkGDCMImageWriter()
+#w2.SetInput( tiffreader.GetOutput() )
+w2.SetInput( jpegreader.GetOutput() )
+w2.SetFileName( "beach.dcm" )
+w2.Write()
+

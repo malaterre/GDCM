@@ -900,7 +900,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
   // Image Type is pretty much always required:
   gdcm::Attribute<0x0008,0x0008> imagetype;
-  const gdcm::CSComp values[] = { "DERIVED", "PRIMARY" };
+  const gdcm::CSComp values[] = { "ORIGINAL", "PRIMARY" };
   imagetype.SetValues( values, 2 );
   ds.Insert( imagetype.GetAsDataElement() );
 
