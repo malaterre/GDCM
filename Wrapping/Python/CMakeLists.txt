@@ -65,7 +65,12 @@ SET_SOURCE_FILES_PROPERTIES(gdcm.i PROPERTIES CPLUSPLUS ON)
 SET(GDCM_PYTHON_IMPLEMENTATION_NAME gdcm)
 SET(CMAKE_SWIG_FLAGS "-interface _${GDCM_PYTHON_IMPLEMENTATION_NAME}")
 SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
-SET(CMAKE_CXX_FLAGS "")
+
+# While trying to get rid of the compilation warning in swig generated c++ code, I thought I could
+# simply do the following:
+#SET(CMAKE_CXX_FLAGS "")
+# well no, you cannot, it get rid of some important flags, and make the _gdcm.so incompatible with
+# the other gdcm lib. bad !!!
 SWIG_ADD_MODULE(${GDCM_PYTHON_IMPLEMENTATION_NAME} python gdcm.i)
 SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} gdcmMSFF gdcmIOD ${PYTHON_LIBRARIES})
 
