@@ -83,6 +83,11 @@ bool JPEG2000Codec::CanDecode(TransferSyntax const &ts)
 
 bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
 {
+  /* I cannot figure out how to use openjpeg to support multiframes
+   * as encoded in DICOM
+   */
+//#define SUPPORT_MULTIFRAMESJ2K_ONLY
+#ifdef SUPPORT_MULTIFRAMESJ2K_ONLY
   const SequenceOfFragments *sf = in.GetSequenceOfFragments();
   assert( sf );
   std::stringstream os;
@@ -90,11 +95,12 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
     {
     std::stringstream is;
     const Fragment &frag = sf->GetFragment(i);
-      if( frag.IsEmpty() ) return false;
-    const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
-    char *mybuffer = new char[bv.GetLength()];
-    bv.GetBuffer(mybuffer, bv.GetLength());
-    is.write(mybuffer, bv.GetLength());
+    if( frag.IsEmpty() ) return false;
+    const ByteValue *bv = frag.GetByteValue();
+    assert( bv );
+    char *mybuffer = new char[bv->GetLength()];
+    bv->GetBuffer(mybuffer, bv->GetLength());
+    is.write(mybuffer, bv->GetLength());
     delete[] mybuffer;
     bool r = Decode(is, os);
     assert( r == true );
@@ -103,6 +109,24 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
   out.SetByteValue( &str[0], str.size() );
 
   return true;
+#else
+  const SequenceOfFragments *sf = in.GetSequenceOfFragments();
+  std::stringstream is;
+  unsigned long totalLen = sf->ComputeByteLength();
+  char *buffer = new char[totalLen];
+  sf->GetBuffer(buffer, totalLen);
+  is.write(buffer, totalLen);
+  delete[] buffer;
+  std::stringstream os;
+  bool r = Decode(is, os);
+  assert( r );
+  out = in;
+  std::string str = os.str();
+  out.SetByteValue( &str[0], str.size() );
+  //memcpy(buffer, os.str().c_str(), len);
+  return r;
+
+#endif
 }
 
 bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
