@@ -325,7 +325,7 @@ ENDIF(BUILD_APPLICATIONS)
 # CPack stuff
 IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
 
-  SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "GDCM - Grass Root DICOM")
+  SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "GDCM - Grass Root DICOM\n GDCM is yet another DICOM library.")
   SET(CPACK_PACKAGE_VENDOR "GDCM")
   SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt")
   SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt")
@@ -358,7 +358,9 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   ENDIF(NOT DEFINED CPACK_SYSTEM_NAME)
   # Need to set the architecture for debian package
 
-  SET(CPACK_PACKAGE_CONTACT "gdcm-developers@lists.sourceforge.net")
+  SET(CPACK_PACKAGE_CONTACT "Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>")
+  SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6, libstdc++6 (>= 4.0.2-4), libuuid1, zlib1g (>= 1:1.2.1), libgcc1 (>= 1:4.0.2), libexpat1")
+  SET(CPACK_DEBIAN_PACKAGE_SUGGESTS "dcmtk")
 
   # List executables
   #SET(CPACK_PACKAGE_EXECUTABLES "gdcmviewer" "VIEWER")
