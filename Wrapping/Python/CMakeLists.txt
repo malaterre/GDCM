@@ -77,7 +77,11 @@ FIND_PACKAGE(PythonInterp REQUIRED)
 
 
 #GET_PYTHON_SITE_PACKAGE(python_site_package)
-SET(python_site_package ${import_output})
+STRING(LENGTH ${import_output} len)
+# let's remove the "/usr" part...
+MATH(EXPR fileend "${len} - 5") 
+STRING(SUBSTRING ${import_output} 5 ${fileend} dummy1)
+SET(python_site_package ${dummy1})
 MESSAGE(${python_site_package})
 
 
