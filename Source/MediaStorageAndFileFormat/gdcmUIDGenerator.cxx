@@ -56,6 +56,15 @@ std::string UIDGenerator::Root = GetGDCMUID();
 std::string UIDGenerator::EncodedHardwareAddress; // = System::GetHardwareAddress();
 
 const char *UIDGenerator::GetRoot() { return Root.c_str(); }
+  bool UIDGenerator::SetRoot(const char * root) { 
+    if( IsValid( root ) )
+      {
+      Root = root; 
+      return true;
+      }
+    return false;
+  }
+
 const char *UIDGenerator::GetGDCMUID()
 {
   return GDCM_UID;
