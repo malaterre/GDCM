@@ -3,38 +3,48 @@
 DARCH      := $(shell dpkg --print-installation-architecture)
 CFLAGS     := -Wall -g $(if $(findstring noopt,$(DEB_BUILD_OPTIONS)),-O0,-O2)
 
+patch: patch-stamp
+patch-stamp:
+	echo "patch-stamp"
+
 configure: configure-stamp
 configure-stamp:
 	dh_testdir
 	# pre-load the cache to avoid setting rpath:
-	rm -rf Build && mkdir -p Build
-	echo CMAKE_SKIP_RPATH:BOOL=YES        >> Build/CMakeCache.txt
-	#echo TARGET_VERSION:STRING=          >> Build/CMakeCache.txt
-	#echo TARGET_SOVERSION:STRING=        >> Build/CMakeCache.txt
-	#echo BUILD_DOCUMENTATION:BOOL=ON     >> Build/CMakeCache.txt
-	#echo BUILD_DOXYGEN:BOOL=ON           >> Build/CMakeCache.txt
-	#echo BUILD_WXDialog:BOOL=ON          >> Build/CMakeCache.txt
-	echo VERBOSE_BUILD:BOOL=ON            >> Build/CMakeCache.txt
-	echo CMAKE_C_FLAGS:STRING=$(CFLAGS)   >> Build/CMakeCache.txt
-	echo CMAKE_CXX_FLAGS:STRING=$(CFLAGS) >> Build/CMakeCache.txt
-	$(if $(USE_DARTP),echo DART_ROOT:PATH=/usr/share/Dart              >> Build/CMakeCache.txt)
-	$(if $(USE_DARTP),echo BUILDNAME:STRING=cmake_2.2.3-1_$(DARCH).deb >> Build/CMakeCache.txt)
-	cd Build && ../bootstrap --prefix=/usr --docdir=/share/doc/cmake --mandir=/share/man
-	chmod -x ChangeLog.manual
-	chmod -x Modules/*.cmake  Modules/*.cmake.in Modules/*.cxx Modules/Platform/*
+	rm -rf ../Build && mkdir -p ../Build
+	echo VERBOSE_BUILD:BOOL=ON            >> ../Build/CMakeCache.txt
+	echo CMAKE_C_FLAGS:STRING=$(CFLAGS)   >> ../Build/CMakeCache.txt
+	echo CMAKE_CXX_FLAGS:STRING=$(CFLAGS) >> ../Build/CMakeCache.txt
+	echo GDCM_BUILD_APPLICATIONS:BOOL=ON  >> ../Build/CMakeCache.txt
+	echo GDCM_BUILD_SHARED_LIBS:BOOL=ON   >> ../Build/CMakeCache.txt
+	echo GDCM_BUILD_TESTING:BOOL=OFF      >> ../Build/CMakeCache.txt
+	echo GDCM_WRAP_PYTHON:BOOL=ON         >> ../Build/CMakeCache.txt
+	echo CMAKE_BUILD_TYPE:STRING=Release  >> ../Build/CMakeCache.txt
+	echo CMAKE_CXX_FLAGS:STRING=          >> ../Build/CMakeCache.txt
+	echo CMAKE_C_FLAGS:STRING=            >> ../Build/CMakeCache.txt
+	echo GDCM_USE_SYSTEM_EXPAT:BOOL=ON    >> ../Build/CMakeCache.txt
+	echo GDCM_USE_SYSTEM_UUID:BOOL=ON     >> ../Build/CMakeCache.txt
+	echo GDCM_USE_SYSTEM_ZLIB:BOOL=ON     >> ../Build/CMakeCache.txt
+	echo CPACK_BINARY_DEB:BOOL=ON         >> ../Build/CMakeCache.txt
+	echo CPACK_BINARY_RPM:BOOL=ON         >> ../Build/CMakeCache.txt
+	#$(if $(USE_DARTP),echo DART_ROOT:PATH=/usr/share/Dart              >> Build/CMakeCache.txt)
+	#$(if $(USE_DARTP),echo BUILDNAME:STRING=cmake_2.2.3-1_$(DARCH).deb >> Build/CMakeCache.txt)
+	cd ../Build && cmake ../gdcm-2.0.0
+	#chmod -x ChangeLog.manual
+	#chmod -x Modules/*.cmake  Modules/*.cmake.in Modules/*.cxx Modules/Platform/*
 	touch $@
 
 build: patch-stamp configure-stamp build-stamp
 build-stamp:
 	dh_testdir
-	cd Build && $(MAKE) $(if $(USE_DARTP),Experimental && $(MAKE) ExperimentalSubmit)
+	cd ../Build && $(MAKE) $(if $(USE_DARTP),Experimental && $(MAKE) ExperimentalSubmit)
 	touch $@
 
 clean: unpatch
 	dh_testdir
 	dh_testroot
 	rm -rf .pc build-stamp configure-stamp patch-stamp
-	rm -rf Build
+	rm -rf ../Build
 	dh_clean
 
 install: build
@@ -43,7 +53,7 @@ install: build
 	dh_clean -k
 	dh_installdirs
 	# Add here commands to install the package into debian/cmake.
-	cd Build && $(MAKE) DESTDIR=$(CURDIR)/debian/cmake install
+	cd ../Build && $(MAKE) DESTDIR=$(CURDIR)/debian/cmake install
 	#install -D -m 644 debian/cmake.xpm      debian/cmake/usr/share/pixmaps/cmake.xpm
 	#install -D -m 644 debian/cmake.lintian  debian/cmake/usr/share/lintian/overrides/cmake
 	#cp Docs/cmake-syntax.vim debian/cmake/usr/share/vim/addons/syntax/cmake.vim
