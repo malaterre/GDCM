@@ -17,7 +17,7 @@
 
 #include <iostream>
 #include <fstream>
-#include "expat/lib/expat.h"
+#include "gdcm_expat.h"
 
 #include <stdio.h> // for stderr
 #include <string.h>
