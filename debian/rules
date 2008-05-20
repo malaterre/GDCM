@@ -25,8 +25,17 @@ configure-stamp:
 	echo GDCM_USE_SYSTEM_EXPAT:BOOL=ON    >> ../Build/CMakeCache.txt
 	echo GDCM_USE_SYSTEM_UUID:BOOL=ON     >> ../Build/CMakeCache.txt
 	echo GDCM_USE_SYSTEM_ZLIB:BOOL=ON     >> ../Build/CMakeCache.txt
+	# turn on debian package only, deactivate all others:
 	echo CPACK_BINARY_DEB:BOOL=ON         >> ../Build/CMakeCache.txt
-	echo CPACK_BINARY_RPM:BOOL=ON         >> ../Build/CMakeCache.txt
+	echo CPACK_BINARY_RPM:BOOL=OFF        >> ../Build/CMakeCache.txt
+	echo CPACK_BINARY_STGZ:BOOL=OFF       >> ../Build/CMakeCache.txt
+	echo CPACK_BINARY_TBZ2:BOOL=OFF       >> ../Build/CMakeCache.txt
+	echo CPACK_BINARY_TGZ:BOOL=OFF        >> ../Build/CMakeCache.txt
+	echo CPACK_BINARY_TZ:BOOL=OFF         >> ../Build/CMakeCache.txt
+	echo CPACK_SOURCE_TBZ2:BOOL=OFF       >> ../Build/CMakeCache.txt
+	echo CPACK_SOURCE_TGZ:BOOL=OFF        >> ../Build/CMakeCache.txt
+	echo CPACK_SOURCE_TZ:BOOL=OFF         >> ../Build/CMakeCache.txt
+	echo CPACK_SOURCE_ZIP:BOOL=OFF        >> ../Build/CMakeCache.txt
 	#$(if $(USE_DARTP),echo DART_ROOT:PATH=/usr/share/Dart              >> Build/CMakeCache.txt)
 	#$(if $(USE_DARTP),echo BUILDNAME:STRING=cmake_2.2.3-1_$(DARCH).deb >> Build/CMakeCache.txt)
 	cd ../Build && cmake ../gdcm-2.0.0
