@@ -1,8 +1,7 @@
 gdcm (2.0.0) unstable; urgency=low
 
-  * Initial Release.
-    (Closes: #121610)
+  * Initial Release. This is a dummy file, discard
 
- -- Mathieu Malaterre <bla@debian.org>  Wed, 28 Nov 2001 08:45:22 -0500
+ -- Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>  Tue, 20 May 2008 16:15:22 -0500
 
 

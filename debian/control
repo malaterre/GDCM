@@ -1,25 +1,14 @@
 Source: gdcm
 Section: devel
 Priority: optional
-Maintainer: A. Maitland Bottoms <bottoms@debian.org>
-Uploaders: Pierre Habouzit <madcoder@debian.org>
+Maintainer: Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>
 Build-Depends: debhelper (>> 5.0.0), cmake (>> 2.6)
 Standards-Version: 3.7.3
 
-Package: cmake
+Package: gdcm
 Architecture: any
 Depends: ${shlibs:Depends}
-Description: A cross-platform, open-source make system
- CMake is used to control the software compilation process using
- simple platform and compiler independent configuration files. CMake
- generates native makefiles and workspaces that can be used in the
- compiler environment of your choice. CMake is quite sophisticated: it
- is possible to support complex environments requiring system
- configuration, pre-processor generation, code generation, and template
- instantiation.
- .
- CMake was developed by Kitware as part of the NLM Insight
- Segmentation and Registration Toolkit project. The ASCI VIEWS project
- also provided support in the context of their parallel computation
- environment. Other sponsors include the Insight, VTK, and VXL open
- source software communities.
+Description: A DICOM library
+ This is a dummy file, this will NOT be used to package gdcm, since
+ the process is using cpack (cmake) for generating. But we need
+ this fake file to please dpkg-buildpackage
