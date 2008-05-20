@@ -55,6 +55,7 @@ std::string UIDGenerator::Root = GetGDCMUID();
 // The following contains the *encoded* hardware address (not the raw as in ipconfig/ifconfig)
 std::string UIDGenerator::EncodedHardwareAddress; // = System::GetHardwareAddress();
 
+const char *UIDGenerator::GetRoot() { return Root.c_str(); }
 const char *UIDGenerator::GetGDCMUID()
 {
   return GDCM_UID;

@@ -62,7 +62,7 @@ public:
       }
     return false;
   }
-  static const char *GetRoot() { return Root.c_str(); }
+  static const char *GetRoot();
 
   // Internally uses a std::string, so two calls have the same pointer !
   // save into a std::string
