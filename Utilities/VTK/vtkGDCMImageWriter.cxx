@@ -268,6 +268,15 @@ void vtkGDCMImageWriter::Write()
   // Get the whole extent of the input
   input->GetWholeExtent(this->DataUpdateExtent);
 
+  if (this->DataUpdateExtent[0] == (this->DataUpdateExtent[1] + 1) ||
+      this->DataUpdateExtent[2] == (this->DataUpdateExtent[3] + 1) ||
+      this->DataUpdateExtent[4] == (this->DataUpdateExtent[5] + 1))
+    {
+    vtkErrorMacro("Write: Empty input supplied.");
+    return;
+    }
+
+
   // For both case (2d file or 3d file) we need a common uid for the Series/Study:
   gdcm::UIDGenerator uidgen;
   const char *uid = uidgen.Generate();
