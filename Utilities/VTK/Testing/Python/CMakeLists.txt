@@ -25,6 +25,7 @@ IF(GDCM_WRAP_PYTHON)
     ENDIF(VTK_SOURCE_DIR)
   ENDIF(VTK_PYTHONPATH_DIRS)
   SET(VTK_PYTHON_TESTS
+    TestvtkGDCMImageReader
     TestvtkGDCMImageWriter
     TestMultiframeGrayscaleWordSecondaryCaptureImageStorage
   )
