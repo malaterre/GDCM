@@ -6,7 +6,7 @@ SET(GDCM_PYTHON_TEST_SRCS
   TestUIDGenerator
   TestModifyFields
   TestAnonymizer
-  TestStringFilter
+  #TestStringFilter
   )
 
 # Loop over files and create executables

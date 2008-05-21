@@ -163,7 +163,7 @@ void delta_encode(unsigned short *inbuffer, size_t length, std::vector<char> &ou
       output[i-2+2] = prev0;
       output.erase( output.begin() + i, output.begin() + i - 2 + j);
       }
-    else if( (output[i] == 0x5a || output[i] == 0xa5 - 256) && prev1 == prev0 ) 
+    else if( output[i] == 0x5a && prev1 == prev0 ) 
       {
       /*
        * Why would you want to replace 0E 0E with A5 01 0E ???

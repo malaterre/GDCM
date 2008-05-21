@@ -52,6 +52,7 @@ SET(BLACK_LIST_READER
   BogugsSequenceLengthCorrectItemLength.dcm
   BogugsItemAndSequenceLength.dcm
   BogusACRWithFileMeta.dcm
+  TheralysGDCM120Bug.dcm
 
 # vtkGDCMImageWriter + rescale does not work on the following images:
   LIBIDO-24-ACR_NEMA-Rectangle.dcm
