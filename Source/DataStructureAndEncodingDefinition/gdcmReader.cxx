@@ -276,16 +276,19 @@ std::istream &is = Stream;
   // algorithm
   if( ts == TransferSyntax::DeflatedExplicitVRLittleEndian )
     {
-    //gzistream gzis(is.rdbuf());
-{
+#if 0
+  std::ofstream out( "/tmp/deflate.raw");
+  out << is.rdbuf();
+  out.close();
+#endif
     zlib_stream::zip_istream gzis( is );
     // FIXME: we also know in this case that we are dealing with Explicit:
     assert( ts.GetNegociatedType() == TransferSyntax::Explicit );
     F->GetDataSet().Read<ExplicitDataElement,SwapperNoOp>(gzis);
-}
-    //is.seekg(0, std::ios::end);
-    //is.peek();
-
+    // I need the following hack to read: srwithgraphdeflated.dcm
+    //is.clear();
+    // well not anymore, see special handling of trailing \0 in:
+    // basic_unzip_streambuf<charT, traits>::fill_input_buffer(void)
     return is;
     }
 
@@ -637,15 +640,10 @@ std::istream &is = Stream;
   // algorithm
   if( ts == TransferSyntax::DeflatedExplicitVRLittleEndian )
     {
-    //gzistream gzis(is.rdbuf());
-{
     zlib_stream::zip_istream gzis( is );
     // FIXME: we also know in this case that we are dealing with Explicit:
     assert( ts.GetNegociatedType() == TransferSyntax::Explicit );
     F->GetDataSet().ReadUpToTag<ExplicitDataElement,SwapperNoOp>(gzis,tag);
-}
-    //is.seekg(0, std::ios::end);
-    //is.peek();
 
     return is;
     }

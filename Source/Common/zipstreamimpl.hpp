@@ -492,8 +492,21 @@ basic_unzip_streambuf<charT, traits>::fill_input_buffer(void)
     _istream.read((char_type*) &_input_buffer[0], 
                   static_cast<std::streamsize>(_input_buffer.size() /
                                                sizeof(char_type)));
+    size_t nbytesread = _istream.gcount()*sizeof(char_type);
+    if( !_istream )
+      {
+      if( _istream.eof() )
+        {
+        // Ok so we reached the end of file, since we did not read no header
+        // we have to explicitely tell zlib the compress stream ends, therefore
+        // we add an extra \0 character...it may not always be needed...
+        assert( nbytesread < _input_buffer.size() / sizeof(char_type) );
+        _input_buffer[ nbytesread ] = 0;
+        ++nbytesread;
+        }
+      }
         
-    return _zip_stream.avail_in = _istream.gcount()*sizeof(char_type);
+    return _zip_stream.avail_in = nbytesread;
 }
 
 
