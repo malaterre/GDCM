@@ -26,13 +26,9 @@
 
 void encode_a5(std::vector<char> & output, int v1, int v2)
 {
-  assert( v2 != 0xa5 && v2 != 0x5a );
-
-  output.push_back( 0x5a );
   output.push_back( 0xa5 );
   output.push_back( 0x00 );
   output.push_back( 0xa5 );
-  output.push_back( v2 );
 }
 
 void encode_5a(std::vector<char> & output, int v1, int v2)
@@ -63,11 +59,9 @@ void delta_encode(unsigned short *inbuffer, size_t length)
   // Do delta encoding:
   for(unsigned int i = 0; i < length; ++i)
     {
-    //assert( output.size() == i );
     int diff = inbuffer[i] - prev;
     char cdiff = (char)diff;
-    //std::cout << std::hex << i << ":" << std::dec << diff << " - > " << std::hex << std::setfill( '0' ) << /*std::left <<*/ std::setw(2) << (short)cdiff << std::endl;
-    //if( diff == (int)cdiff )
+
     int v1 = inbuffer[i] % 256;
     int v2 = inbuffer[i] / 256;
     assert( v1 != 0xa5 - 256 );
@@ -77,19 +71,13 @@ void delta_encode(unsigned short *inbuffer, size_t length)
       {
       if( cdiff == 0xa5 - 256 )
         {
-        //output.push_back( 'M' );
-        output.push_back( 0xa5 );
-        output.push_back( 0x0 );
-        output.push_back( 0xa5 );
+        encode_a5(output, v1, v2);
         }
       else if( cdiff == 0x5a  )
         {
-        //output.push_back( 'N' );
         if ( v1 == 0xa5 )
           {
-          output.push_back( 'M' );
-          output.push_back( 'A' );
-          output.push_back( 'T' );
+          encode_a5(output, v1, v2);
           }
         else if ( v1 == 0x5a )
           {
@@ -109,7 +97,12 @@ void delta_encode(unsigned short *inbuffer, size_t length)
       {
       if( v1 == 0xa5 )
         {
+        assert( v2 != 0xa5 && v2 != 0x5a );
+        output.push_back( 0x5a );
+
         encode_a5(output, v1, v2);
+
+        output.push_back( v2 );
         }
       else if( v1 == 0x5a )
         {
@@ -137,7 +130,6 @@ void delta_encode(unsigned short *inbuffer, size_t length)
         }
       ++j; // count cprev too
       // in place:
-      //std::cout << "I:     " <<   i << std::endl;
       output[i-2] = 0xa5;
       assert( j != 0 && j != 1 );
       output[i-2+1] = j;
@@ -149,6 +141,7 @@ void delta_encode(unsigned short *inbuffer, size_t length)
       {
       /*
        * Why would you want to replace 0E 0E with A5 01 0E ???
+       * oh well ...
        */
       output.insert( output.begin()+i-2+2, 1, 'M' );
       output[i-2] = 0xa5;
