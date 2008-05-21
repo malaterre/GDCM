@@ -26,6 +26,7 @@
 
 void encode_a5(std::vector<char> & output, int v1, int v2)
 {
+  (void)v1; (void)v2;
   output.push_back( 0xa5 );
   output.push_back( 0x00 );
   output.push_back( 0xa5 );
@@ -33,7 +34,7 @@ void encode_a5(std::vector<char> & output, int v1, int v2)
 
 void encode_5a(std::vector<char> & output, int v1, int v2)
 {
-  assert( v2 != 0xa5 && v2 != 0x5a );
+  assert( v2 != 0xa5 && v2 != 0x5a ); (void)v1;
 
   output.push_back( 0xa5 );
   output.push_back( 0x01 );
@@ -55,7 +56,7 @@ void delta_encode(unsigned short *inbuffer, size_t length)
 {
   std::vector<char> output;
   unsigned short prev = 0;
-  //length = 100;
+
   // Do delta encoding:
   for(unsigned int i = 0; i < length; ++i)
     {
