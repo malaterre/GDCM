@@ -24,6 +24,37 @@
 #include <stdlib.h>
 
 
+void encode_a5(std::vector<char> & output, int v1, int v2)
+{
+  assert( v2 != 0xa5 && v2 != 0x5a );
+
+  output.push_back( 0x5a );
+  output.push_back( 0xa5 );
+  output.push_back( 0x00 );
+  output.push_back( 0xa5 );
+  output.push_back( v2 );
+}
+
+void encode_5a(std::vector<char> & output, int v1, int v2)
+{
+  assert( v2 != 0xa5 && v2 != 0x5a );
+
+  output.push_back( 0xa5 );
+  output.push_back( 0x01 );
+  output.push_back( 0x5a );
+  output.push_back( v2 );
+}
+
+void encode_v1_v2(std::vector<char> & output, int v1, int v2)
+{
+  assert( v1 != 0xa5 && v1 != 0x5a );
+  assert( v2 != 0xa5 && v2 != 0x5a );
+
+  output.push_back( 0x5a );
+  output.push_back( v1 );
+  output.push_back( v2 );
+}
+
 void delta_encode(unsigned short *inbuffer, size_t length)
 {
   std::vector<char> output;
@@ -62,18 +93,11 @@ void delta_encode(unsigned short *inbuffer, size_t length)
           }
         else if ( v1 == 0x5a )
           {
-          output.push_back( 0xa5 );
-          output.push_back( 0x01 );
-          output.push_back( 0x5a );
-          output.push_back( v2 );
+          encode_5a(output, v1, v2);
           }
         else
           {
-          output.push_back( 0x5a );
-          assert( v1 != 0xa5 && v1 != 0x5a );
-          assert( v2 != 0xa5 && v2 != 0x5a );
-          output.push_back( v1 );
-          output.push_back( v2 );
+          encode_v1_v2(output, v1, v2);
           }
         }
       else
@@ -85,35 +109,15 @@ void delta_encode(unsigned short *inbuffer, size_t length)
       {
       if( v1 == 0xa5 )
         {
-        output.push_back( 0x5a );
-        output.push_back( 0xa5 );
-        output.push_back( 0x00 );
-        output.push_back( 0xa5 );
-        assert( v2 != 0xa5 && v2 != 0x5a );
-        output.push_back( v2 );
-        //output.push_back( 'M' );
-        //output.push_back( 'A' );
-        //output.push_back( 'T' );
-        //output.push_back( 'H' );
+        encode_a5(output, v1, v2);
         }
       else if( v1 == 0x5a )
         {
-        output.push_back( 0xa5 );
-        //output.push_back( 'I' );
-        //output.push_back( 'E' );
-        //output.push_back( 'U' );
-        output.push_back( 0x01 );
-        output.push_back( 0x5a );
-        assert( v2 != 0xa5 && v2 != 0x5a );
-        output.push_back( v2 );
+        encode_5a(output, v1, v2);
         }
       else
         {
-        output.push_back( 0x5a );
-        output.push_back( (unsigned char)v1 );
-        assert( v1 != 0xa5 && v1 != 0x5a );
-        assert( v2 != 0xa5 && v2 != 0x5a );
-        output.push_back( (unsigned char)v2 );
+        encode_v1_v2(output, v1, v2);
         }
       }
     prev = inbuffer[i];
