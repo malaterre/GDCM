@@ -35,6 +35,20 @@ Altered by: Mathieu Malaterre 2008, for GDCM project
             also when writing deflate back to disk, the add_footer must be called
 */
 
+/*
+Code is from:
+
+http://www.codeproject.com/KB/stl/zipstream.aspx
+
+ TODO:
+   
+zran.c
+    index a zlib or gzip stream and randomly access it
+    - illustrates the use of Z_BLOCK, inflatePrime(), and
+      inflateSetDictionary() to provide random access
+
+  So I might after all be able to implement seeking :)
+*/
 #ifndef _ZIPSTREAM_H_
 #define _ZIPSTREAM_H_
 

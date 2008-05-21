@@ -22,3 +22,5 @@ TARGET_LINK_LIBRARIES(uid_unique gdcmMSFF)
 
 ADD_EXECUTABLE(delta_encode delta_encode.cxx)
 ADD_EXECUTABLE(delta_decode delta_decode.cxx)
+
+ADD_EXECUTABLE(checkdeflate checkdeflate.c puff.c)

@@ -54,7 +54,7 @@ public:
   // function will return a string), but will truncate the high bits of the 128bits UUID until the 
   // generated string fits on 64 bits. The authors disclaims any 
   // responsabitlity for garanteeing uniqueness of UIDs when the root is longer than 26 bytes.
-  static bool SetRoot(const char * root);
+  static void SetRoot(const char * root);
   static const char *GetRoot();
 
   // Internally uses a std::string, so two calls have the same pointer !
