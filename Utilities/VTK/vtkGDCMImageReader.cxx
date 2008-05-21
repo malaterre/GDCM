@@ -464,6 +464,21 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
       }
     }
 
+#if 0
+  // gdcmData/JDDICOM_Sample4.dcm 
+  // -> (0008,0060) CS [DM  Digital microscopy]                 #  24, 1 Modality
+  gdcm::MediaStorage ms1 = gdcm::MediaStorage::SecondaryCaptureImageStorage;
+  ms1.GuessFromModality( this->MedicalImageProperties->GetModality(), this->FileDimensionality );
+  gdcm::MediaStorage ms2;
+  ms2.SetFromFile( reader.GetFile() );
+  if( ms2 != ms1 && ms2 != gdcm::MediaStorage::SecondaryCaptureImageStorage )
+    {
+    vtkWarningMacro( "SHOULD NOT HAPPEN. Unrecognized Modality: " << this->MedicalImageProperties->GetModality() 
+      << " Will be set instead to the known one: " << ms2.GetModality() )
+    this->MedicalImageProperties->SetModality( ms2.GetModality() );
+    }
+#endif
+ 
   // Add more info:
 
 }
