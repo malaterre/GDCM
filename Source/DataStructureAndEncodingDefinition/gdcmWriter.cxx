@@ -28,7 +28,7 @@
 #include "gdcmSequenceOfItems.h"
 #include "gdcmParseException.h"
 
-#include "gdcmDeflateStream.h"
+#include "gdcmDeflateStream2.h"
 
 namespace gdcm
 {
@@ -91,9 +91,13 @@ DataSet &DS = F->GetDataSet();
 
   if( ts == TransferSyntax::DeflatedExplicitVRLittleEndian )
     {
-    gzostream gzos(os.rdbuf());
+    //gzostream gzos(os.rdbuf());
+{
+    zlib_stream::zip_ostream gzos( os );
     assert( ts.GetNegociatedType() == TransferSyntax::Explicit );
     DS.Write<ExplicitDataElement,SwapperNoOp>(gzos);
+    //gzos.flush();
+}
 
     return os;
     }

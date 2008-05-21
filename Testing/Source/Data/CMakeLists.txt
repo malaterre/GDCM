@@ -51,7 +51,6 @@ SET(BLACK_LIST_READER
   tst_not.dcm
   BogugsSequenceLengthCorrectItemLength.dcm
   BogugsItemAndSequenceLength.dcm
-  srwithgraphdeflated.dcm # ???
   BogusACRWithFileMeta.dcm
 
 # vtkGDCMImageWriter + rescale does not work on the following images:

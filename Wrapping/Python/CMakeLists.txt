@@ -72,9 +72,6 @@ FIND_PACKAGE(PythonInterp REQUIRED)
   	ERROR_VARIABLE  import_error
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
-  #MESSAGE("ici: ${PYTHON_EXECUTABLE}")
-  #MESSAGE("ici: ${import_res}")
-  #MESSAGE("ici: ${import_output}")
   #SET(dir ${import_output})
 #ENDMACRO(GET_PYTHON_SITE_PACKAGE)
 
@@ -85,7 +82,7 @@ STRING(LENGTH ${import_output} len)
 MATH(EXPR fileend "${len} - 5") 
 STRING(SUBSTRING ${import_output} 5 ${fileend} dummy1)
 SET(python_site_package ${dummy1})
-MESSAGE(${python_site_package})
+#MESSAGE(${python_site_package})
 
 
 # Some old swig 1.3 did not support this option:

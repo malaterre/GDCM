@@ -18,7 +18,8 @@
 #include "gdcmFileMetaInformation.h"
 #include "gdcmSwapper.h"
 
-#include "gdcmDeflateStream.h"
+//#include "gdcmDeflateStream.h"
+#include "gdcmDeflateStream2.h"
 
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
@@ -275,12 +276,15 @@ std::istream &is = Stream;
   // algorithm
   if( ts == TransferSyntax::DeflatedExplicitVRLittleEndian )
     {
-    gzistream gzis(is.rdbuf());
+    //gzistream gzis(is.rdbuf());
+{
+    zlib_stream::zip_istream gzis( is );
     // FIXME: we also know in this case that we are dealing with Explicit:
     assert( ts.GetNegociatedType() == TransferSyntax::Explicit );
     F->GetDataSet().Read<ExplicitDataElement,SwapperNoOp>(gzis);
-    is.seekg(0, std::ios::end);
-    is.peek();
+}
+    //is.seekg(0, std::ios::end);
+    //is.peek();
 
     return is;
     }
@@ -633,12 +637,15 @@ std::istream &is = Stream;
   // algorithm
   if( ts == TransferSyntax::DeflatedExplicitVRLittleEndian )
     {
-    gzistream gzis(is.rdbuf());
+    //gzistream gzis(is.rdbuf());
+{
+    zlib_stream::zip_istream gzis( is );
     // FIXME: we also know in this case that we are dealing with Explicit:
     assert( ts.GetNegociatedType() == TransferSyntax::Explicit );
     F->GetDataSet().ReadUpToTag<ExplicitDataElement,SwapperNoOp>(gzis,tag);
-    is.seekg(0, std::ios::end);
-    is.peek();
+}
+    //is.seekg(0, std::ios::end);
+    //is.peek();
 
     return is;
     }

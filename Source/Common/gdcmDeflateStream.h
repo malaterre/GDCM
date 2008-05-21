@@ -28,6 +28,8 @@
 
 #include <gdcm_zlib.h>
 
+#error
+
 /*
  * Implementation found at:
  * http://forum.idg.pl/index.php?showtopic=72330
@@ -55,6 +57,7 @@ namespace gdcm
 
     bool process_block() {
       int num = pptr() - pbase();
+      assert( num > 0 );
       cstream.next_in = (Bytef*)pbase();
       cstream.avail_in = num;
 
@@ -69,8 +72,12 @@ namespace gdcm
 
         // write the data to the underlying stream buffer
         int out_size = out_buffer.size() - cstream.avail_out;
-        if (dest->sputn(&out_buffer[0], out_size) != out_size)
+        //assert( out_size > 0 );
+        if (out_size && dest->sputn(&out_buffer[0], out_size) != out_size)
+          {
+          abort();
           return false;
+          }
       }
 
       pbump(-num);
@@ -122,12 +129,16 @@ namespace gdcm
     }
 
     virtual int_type overflow(int_type c) {
-      if (!traits_type::eq_int_type(c, traits_type::eof())) {
+      if (this->pbase())
+        {
+        abort();
+        }
+      else if (!traits_type::eq_int_type(c, traits_type::eof())) {
         // put this character in the last position
         // (this function is called when pptr() == eptr() but we
         // have reserved one byte more in the constructor, thus
         // *epptr() and now *pptr() point to valid positions)
-        *pptr() = c;
+        *pptr() = traits_type::to_char_type(c);
         pbump(1);
       }
 
@@ -190,8 +201,9 @@ namespace gdcm
 
       // set the buffer pointers; use one character less for the
       // stream buffer than the really available one
-      setp(&buffer[0], &buffer[0]+buffer.size()-1);
-      assert( &buffer[0]+buffer.size()-1 == &*--buffer.end() );
+      assert( buffer.size() > 0 );
+      setp(&buffer[0], &buffer[buffer.size()-1]);
+      //assert( &buffer[0]+buffer.size()-1 == &*--buffer.end() );
 
       // initialize the compressor stream
       memset(&cstream, 0, sizeof(cstream)); // FIXME ??
@@ -208,7 +220,7 @@ namespace gdcm
 #define Z_BEST_COMPRESSION       9
 #define Z_DEFAULT_COMPRESSION  (-1)
 */
-      int ret = deflateInit2(&cstream, Z_BEST_COMPRESSION /*Z_BEST_SPEED*/,
+      int ret = deflateInit2(&cstream, Z_NO_COMPRESSION /*Z_BEST_SPEED*/,
         Z_DEFLATED, -MAX_WBITS, MAX_MEM_LEVEL, Z_DEFAULT_STRATEGY);
 
       switch (ret) {
@@ -282,6 +294,12 @@ namespace gdcm
     z_stream dstream;
 
     virtual int_type underflow() {
+      // If something is left in the get area by chance, return it
+      // (this shouldn't normally happen, as underflow is only supposed
+      // to be called when gptr >= egptr, but it serves as error check)
+      if (this->gptr() && (this->gptr() < this->egptr()))
+        return traits_type::to_int_type(*(this->gptr()));
+
       // calculate the new size of the putback area
       int new_putback_num = std::min(gptr() - eback(),
         putback_end - &buffer[0]);
