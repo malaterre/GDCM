@@ -138,18 +138,24 @@ void delta_encode(unsigned short *inbuffer, size_t length)
       output[i-2+2] = prev0;
       output.erase( output.begin() + i, output.begin() + i - 2 + j);
       }
-    else if( output[i] == 0x5a && prev1 == prev0 ) 
+    else if( output[i] == 0x5a && prev1 == prev0 
+    //else if( (output[i] == 0x5a || (output[i] == 0xa5 - 256)) && prev1 == prev0 
+    //       && (output[i-3] != 0xa5 - 256)
+    //       && (output[i-3] != 0x5a)
+    ) 
       {
       /*
        * Why would you want to replace 0E 0E with A5 01 0E ???
        * oh well ...
        */
+      //assert( output[i-3] != 0xa5 - 256 );
+      //assert( output[i-3] != 0x5a );
       output.insert( output.begin()+i-2+2, 1, 'M' );
       output[i-2] = 0xa5;
       output[i-2+1] = 0x01;
       output[i-2+2] = prev0;
       ++i; // I might need to update prev0/prev1 ...
-      assert( output[i] == 0x5a );
+      assert( output[i] == 0x5a || output[i] == 0xa5 - 256 );
       prev1 = output[i-1]; // is it really needed ?
       }
     prev0 = prev1;

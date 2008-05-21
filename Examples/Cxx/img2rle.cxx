@@ -163,7 +163,7 @@ void delta_encode(unsigned short *inbuffer, size_t length, std::vector<char> &ou
       output[i-2+2] = prev0;
       output.erase( output.begin() + i, output.begin() + i - 2 + j);
       }
-    else if( output[i] == 0x5a && prev1 == prev0 ) 
+    else if( (output[i] == 0x5a || output[i] == 0xa5 - 256) && prev1 == prev0 ) 
       {
       /*
        * Why would you want to replace 0E 0E with A5 01 0E ???
@@ -174,7 +174,7 @@ void delta_encode(unsigned short *inbuffer, size_t length, std::vector<char> &ou
       output[i-2+1] = 0x01;
       output[i-2+2] = prev0;
       ++i; // I might need to update prev0/prev1 ...
-      assert( output[i] == 0x5a );
+      assert( output[i] == 0x5a || output[i] == 0xa5 - 256 );
       prev1 = output[i-1]; // is it really needed ?
       }
     prev0 = prev1;
@@ -225,8 +225,14 @@ int CompareRLE(std::vector<char> const & rlepixeldata, const char *filename)
     }
 
   int cmp = memcmp(&rlepixeldata[0], bv2->GetPointer(), bv2->GetLength() );
+  if( cmp )
+    {
+    //std::ofstream out(
+    
+    }
 
-  return cmp;
+  // cmp can be <= 0 ...
+  return cmp == 0 ? 0 : 1;
 }
 
 int check_files(const char *rawfile, const char *rlefile)
