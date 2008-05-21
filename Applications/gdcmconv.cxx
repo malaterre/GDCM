@@ -67,6 +67,7 @@
 #include "gdcmDataSet.h"
 #include "gdcmAttribute.h"
 #include "gdcmSequenceOfItems.h"
+#include "gdcmUIDGenerator.h"
 
 #include <string>
 #include <iostream>
@@ -90,7 +91,9 @@ int main (int argc, char *argv[])
 
   std::string filename;
   std::string outfilename;
+  std::string root;
   int raw = 0;
+  int rootuid = 0;
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -109,6 +112,7 @@ int main (int argc, char *argv[])
         {"deflate", 1, 0, 0}, // 1 - 9 / best = 9 / fast = 1
         {"tag", 1, 0, 0}, // need to specify a tag xxxx,yyyy = value to override default
         {"name", 1, 0, 0}, // same as tag but explicit use of name
+        {"root-uid", 1, &rootuid, 1}, // specific Root (not GDCM)
 // Image specific options:
         {"pixeldata", 1, 0, 0}, // valid
         {"raw", 0, &raw, 1}, // default (implicit VR, LE) / Explicit LE / Explicit BE
@@ -143,7 +147,13 @@ int main (int argc, char *argv[])
             assert( filename.empty() );
             filename = optarg;
             }
-          printf (" with arg %s", optarg);
+          else if( option_index == 14 ) /* root-uid */
+            {
+            assert( strcmp(s, "root-uid") == 0 );
+            assert( root.empty() );
+            root = optarg;
+            }
+          printf (" with arg %s, index = %d", optarg, option_index);
           }
         printf ("\n");
         }
@@ -193,6 +203,15 @@ int main (int argc, char *argv[])
     }
   
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmconv" );
+  if( rootuid )
+    {
+    if( !gdcm::UIDGenerator::IsValid( root.c_str() ) )
+      {
+      std::cerr << "specified Root UID is not valid: " << root << std::endl;
+      return 1;
+      }
+    gdcm::UIDGenerator::SetRoot( root.c_str() );
+    }
   if( raw )
     {
     gdcm::ImageReader reader;
