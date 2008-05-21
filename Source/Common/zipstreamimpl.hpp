@@ -535,7 +535,7 @@ basic_zip_ostream<charT, traits>::basic_zip_ostream(ostream_reference ostream,
 template <class charT, class traits>
 basic_zip_ostream<charT, traits>::~basic_zip_ostream(void)
 {
-    if(_is_gzip)
+    //if(_is_gzip)
         add_footer();
 }
 
