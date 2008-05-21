@@ -109,7 +109,11 @@ int main(int argc, char *argv[])
   len = sourcelen;
   if( len % 2 )
     {
-    fprintf( "len of bit stream is odd: %d. Continuing anyway\n", len );
+    printf( "len of bit stream is odd: %d. Continuing anyway\n", len );
+    }
+  else
+    {
+    printf( "deflate stream has proper length: %d\n", len );
     }
 
   ret = puff(NULL, &destlen, source, &sourcelen);
