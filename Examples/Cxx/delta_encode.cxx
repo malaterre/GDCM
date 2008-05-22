@@ -19,37 +19,84 @@
 #include <fstream>
 #include <iostream>
 #include <iomanip>
+#include <limits>
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 
-
-void encode_a5(std::vector<char> & output, int v1, int v2)
+void encode_a5(std::vector<char> & output, int value)
 {
-  (void)v1; (void)v2;
+  assert( value == 0xa5 - 256  );
   output.push_back( 0xa5 );
-  output.push_back( 0x00 );
+  output.push_back( 0x0 );
   output.push_back( 0xa5 );
 }
 
-void encode_5a(std::vector<char> & output, int v1, int v2)
+void encode_5a(std::vector<char> & output, int value)
 {
-  assert( v2 != 0xa5 && v2 != 0x5a ); (void)v1;
-
+  assert( value == 0x5a );
   output.push_back( 0xa5 );
   output.push_back( 0x01 );
   output.push_back( 0x5a );
-  output.push_back( v2 );
 }
 
-void encode_v1_v2(std::vector<char> & output, int v1, int v2)
+void encode_special(std::vector<char> & output, int value)
 {
-  assert( v1 != 0xa5 && v1 != 0x5a );
-  assert( v2 != 0xa5 && v2 != 0x5a );
+  if( value == 0xa5 - 256 )
+    {
+    encode_a5(output, value);
+    }
+  else if( value == 0x5a )
+    {
+    output.push_back( 'N' );
+    }
+  else if( value <= 0x7f && value >= -0x80 )
+    {
+    assert( value != 0xa5 - 256 && value != 0x5a );
+    output.push_back( value );
+    }
+  else
+    {
+    output.push_back( value );
+    }
+}
 
-  output.push_back( 0x5a );
-  output.push_back( v1 );
-  output.push_back( v2 );
+void encode_value(std::vector<char> & output, unsigned short current)
+{
+    // This is an integer that cannot be stored on a char value, thus store
+    // it as modulo and remainder
+    int v1 = (int)current % 256;
+    int v2 = (int)current / 256;
+    assert( v1 >= 0 && v1 <= std::numeric_limits<uint16_t>::max() );
+    assert( v2 >= 0 && v2 <= std::numeric_limits<uint16_t>::max() );
+    output.push_back( 0x5a );
+    encode_special( output, v1 );
+    encode_special( output, v2 );
+}
+
+void encode_diff(std::vector<char> & output, unsigned short current, unsigned short prev)
+{
+  int diff = (int)current - prev;
+  if( diff <= 0x7f && diff >= -0x80 )
+    {
+    if( diff == 0xa5 - 256 )
+      {
+      encode_a5(output, diff);
+      }
+    else if( diff == 0x5a )
+      {
+      encode_5a( output, diff);
+      }
+    else
+      {
+      encode_special(output, diff);
+      assert( output[ output.size() - 1 ] == diff );
+      }
+    }
+  else
+    {
+    encode_value( output, current );
+    }
 }
 
 void delta_encode(unsigned short *inbuffer, size_t length)
@@ -60,60 +107,7 @@ void delta_encode(unsigned short *inbuffer, size_t length)
   // Do delta encoding:
   for(unsigned int i = 0; i < length; ++i)
     {
-    int diff = inbuffer[i] - prev;
-    char cdiff = (char)diff;
-
-    int v1 = inbuffer[i] % 256;
-    int v2 = inbuffer[i] / 256;
-    assert( v1 != 0xa5 - 256 );
-    assert( v2 != 0xa5 - 256 );
-    assert( v2 != 0x5a );
-    if( diff <= 0x7f && diff >= -0x80 )
-      {
-      if( cdiff == 0xa5 - 256 )
-        {
-        encode_a5(output, v1, v2);
-        }
-      else if( cdiff == 0x5a  )
-        {
-        if ( v1 == 0xa5 )
-          {
-          encode_a5(output, v1, v2);
-          }
-        else if ( v1 == 0x5a )
-          {
-          encode_5a(output, v1, v2);
-          }
-        else
-          {
-          encode_v1_v2(output, v1, v2);
-          }
-        }
-      else
-        {
-        output.push_back( cdiff );
-        }
-      }
-    else
-      {
-      if( v1 == 0xa5 )
-        {
-        assert( v2 != 0xa5 && v2 != 0x5a );
-        output.push_back( 0x5a );
-
-        encode_a5(output, v1, v2);
-
-        output.push_back( v2 );
-        }
-      else if( v1 == 0x5a )
-        {
-        encode_5a(output, v1, v2);
-        }
-      else
-        {
-        encode_v1_v2(output, v1, v2);
-        }
-      }
+    encode_diff( output, inbuffer[i], prev );
     prev = inbuffer[i];
     }
 
@@ -131,6 +125,7 @@ void delta_encode(unsigned short *inbuffer, size_t length)
         }
       ++j; // count cprev too
       // in place:
+      //assert( i == 2 || output[i-3] != 0xa5 - 256 );
       output[i-2] = 0xa5;
       assert( j != 0 && j != 1 );
       output[i-2+1] = j;
@@ -153,6 +148,7 @@ void delta_encode(unsigned short *inbuffer, size_t length)
       output.insert( output.begin()+i-2+2, 1, 'M' );
       output[i-2] = 0xa5;
       output[i-2+1] = 0x01;
+      assert( prev0 != 0xa5 - 256 );
       output[i-2+2] = prev0;
       ++i; // I might need to update prev0/prev1 ...
       assert( output[i] == 0x5a || output[i] == 0xa5 - 256 );
