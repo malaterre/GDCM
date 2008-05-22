@@ -24,6 +24,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "gdcmTypes.h"
+
 void encode_a5(std::vector<char> & output, int value)
 {
   assert( value == 0xa5 - 256 );
