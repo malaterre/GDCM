@@ -1,3 +1,31 @@
+gdcm (2.0.4) unstable; urgency=low
+
+  * Bump up
+
+ -- Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>  Tue, 20 May 2008 16:15:26 -0500
+
+
+gdcm (2.0.3) unstable; urgency=low
+
+  * Bump up
+
+ -- Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>  Tue, 20 May 2008 16:15:25 -0500
+
+
+gdcm (2.0.2) unstable; urgency=low
+
+  * Bump up
+
+ -- Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>  Tue, 20 May 2008 16:15:24 -0500
+
+
+gdcm (2.0.1) unstable; urgency=low
+
+  * Bump up
+
+ -- Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>  Tue, 20 May 2008 16:15:23 -0500
+
+
 gdcm (2.0.0) unstable; urgency=low
 
   * Initial Release. This is a dummy file, discard
