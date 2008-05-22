@@ -26,7 +26,7 @@ int TestRead(const char* filename)
   reader.SetFileName( filename );
   if ( !reader.Read() )
     {
-    std::cerr << "Failed to read: " << filename << std::endl;
+    std::cerr << "TestReadError: Failed to read: " << filename << std::endl;
     return 1;
     }
 
@@ -40,6 +40,7 @@ int TestRead(const char* filename)
   ms.SetFromFile( reader.GetFile() );
   if( ms == gdcm::MediaStorage::MS_END )
     {
+    std::cerr << "TestReadError: MediaStorage: " << ms << std::endl;
     return 1;
     }
 
