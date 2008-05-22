@@ -44,9 +44,14 @@ int main(int argc, char *argv[])
   unsigned char *buf;
   FILE *in;
   struct stat s;
+  const char *name = 0;
+  union { uint32_t tag; uint16_t tags[2]; char bytes[4]; } tag;
+  char vr[3];
+  uint16_t vl;
+  uint32_t value;
 
   if (argc < 2) return 2;
-  const char *name = argv[1];
+  name = argv[1];
 
   len = 0;
   if (stat(name, &s)) return 1;
@@ -75,13 +80,11 @@ int main(int argc, char *argv[])
   source += 128 + 4;
   sourcelen -= 128 + 4;
 
-  union { uint32_t tag; uint16_t tags[2]; char bytes[4]; } tag;
   memcpy(&tag, source, sizeof(tag) );
   printf( "tag: %d, %d\n", tag.tags[0], tag.tags[1] );
   source += sizeof(tag);
   sourcelen -= sizeof(tag);
 
-  char vr[3];
   vr[2] = 0;
   memcpy(vr, source, 2);
   printf( "vr: %s\n", vr);
@@ -89,14 +92,12 @@ int main(int argc, char *argv[])
   source += 2;
   sourcelen -= 2;
 
-  uint16_t vl;
   memcpy(&vl, source, sizeof(vl));
   printf( "vl: %d\n", vl);
 
   source += sizeof(vl);
   sourcelen -= sizeof(vl);
 
-  uint32_t value;
   memcpy(&value, source, sizeof(value));
   printf( "value: %d\n", value);
 
