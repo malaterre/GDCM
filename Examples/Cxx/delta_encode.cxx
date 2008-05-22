@@ -88,7 +88,7 @@ void encode_diff_value(std::vector<char> & output, int value)
     }
   else if( value <= (int)std::numeric_limits<char>::max() && value >= (int)std::numeric_limits<char>::min() )
     {
-    assert( value != 0xa5 - 256 && value != 0x5a );
+    assert( value != 0xa5 - 256 && value != 0x5a && value != 0xa5 );
     //assert( value != 0x3c );
     output.push_back( value );
     //assert( output.size() != 0x3C67 );
@@ -132,7 +132,7 @@ void delta_encode(unsigned short *inbuffer, size_t length)
   char prev1 = output[1];
   for(unsigned int i = 2; i < output.size(); ++i)
     {
-    if( output[i] == prev1 && prev1 == prev0 ) 
+    if( output[i] == prev1 && prev1 == prev0 && prev0 != 0xa5 - 256 ) 
       {
       unsigned int j = 0; // nb repetition
       while( (i+j) < output.size() && output[i+j] == prev0 )
@@ -149,11 +149,7 @@ void delta_encode(unsigned short *inbuffer, size_t length)
       output[i-2+2] = prev0;
       output.erase( output.begin() + i, output.begin() + i - 2 + j);
       }
-    else if( output[i] == 0x5a && prev1 == prev0 
-    //else if( (output[i] == 0x5a || (output[i] == 0xa5 - 256)) && prev1 == prev0 
-    //       && (output[i-3] != 0xa5 - 256)
-    //       && (output[i-3] != 0x5a)
-    ) 
+    else if( output[i] == 0x5a && prev1 == prev0 ) 
       {
       /*
        * Why would you want to replace 0E 0E with A5 01 0E ???
@@ -161,13 +157,23 @@ void delta_encode(unsigned short *inbuffer, size_t length)
        */
       //assert( output[i-3] != 0xa5 - 256 );
       //assert( output[i-3] != 0x5a );
-      output.insert( output.begin()+i-2+2, 1, 'M' );
-      output[i-2] = 0xa5;
-      output[i-2+1] = 0x01;
-      assert( prev0 != 0xa5 - 256 );
-      output[i-2+2] = prev0;
+      if( output[i-3] == 0xa5 - 256 )
+        {
+        assert( prev0 == 0 );
+        //output[i-2] = 0x3E;
+        output[i-2+1] = prev0;
+        output[i-2+2] = 0x5a;
+        }
+      else
+        {
+        output.insert( output.begin()+i-2+2, 1, 'M' );
+        output[i-2] = 0xa5;
+        output[i-2+1] = 0x01;
+        assert( prev0 != 0xa5 - 256 );
+        output[i-2+2] = prev0;
+        }
       ++i; // I might need to update prev0/prev1 ...
-      assert( output[i] == 0x5a || output[i] == 0xa5 - 256 );
+      //assert( output[i] == 0x5a || output[i] == 0xa5 - 256 );
       prev1 = output[i-1]; // is it really needed ?
       }
     prev0 = prev1;
