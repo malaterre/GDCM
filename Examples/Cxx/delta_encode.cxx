@@ -40,7 +40,40 @@ void encode_5a(std::vector<char> & output, int value)
   output.push_back( 0x5a );
 }
 
-void encode_value(std::vector<char> & output, int value)
+void encode_div_mod(std::vector<char> & output, int value)
+{
+  assert( value >= 0 );
+  // This is an integer that cannot be stored on a char value, thus store
+  // it as modulo and remainder
+  int v1 = (int)value % 256;
+  int v2 = (int)value / 256;
+  assert( v1 >= 0 && v1 <= std::numeric_limits<uint16_t>::max() );
+  assert( v2 >= 0 && v2 <= std::numeric_limits<uint16_t>::max() );
+  if( v1 == 0x5a)
+    {
+    output.push_back( 0xa5 );
+    output.push_back( 0x01 );
+    output.push_back( 0x5a );
+    output.push_back( v2 );
+    }
+  else if( v1 == 0xa5 )
+    {
+    // 5A  A5 00 A5 00
+    output.push_back( 0x5a );
+    output.push_back( 0xa5 );
+    output.push_back( 0x00 );
+    output.push_back( 0xa5 );
+    output.push_back( v2 );
+    }
+  else
+    {
+    output.push_back( 0x5a );
+    output.push_back( v1 );
+    output.push_back( v2 );
+    }
+}
+
+void encode_diff_value(std::vector<char> & output, int value)
 {
   if( value == 0xa5 - 256 )
     {
@@ -48,31 +81,27 @@ void encode_value(std::vector<char> & output, int value)
     }
   else if( value == 0x5a )
     {
-    encode_5a(output, value);
+    // happen ?
+    output.push_back( 'M' );
+    output.push_back( 'O' );
+    output.push_back( 'M' );
     }
-  else if( value <= 0x7f && value >= -0x80 )
+  else if( value <= (int)std::numeric_limits<char>::max() && value >= (int)std::numeric_limits<char>::min() )
     {
     assert( value != 0xa5 - 256 && value != 0x5a );
+    //assert( value != 0x3c );
     output.push_back( value );
+    //assert( output.size() != 0x3C67 );
     }
   else
     {
-    assert( value >= 0 );
-    // This is an integer that cannot be stored on a char value, thus store
-    // it as modulo and remainder
-    int v1 = (int)value % 256;
-    int v2 = (int)value / 256;
-    assert( v1 >= 0 && v1 <= std::numeric_limits<uint16_t>::max() );
-    assert( v2 >= 0 && v2 <= std::numeric_limits<uint16_t>::max() );
-    output.push_back( 0x5a );
-    //assert( v1 != 0xa5 - 256 && v1 != 0xa5 );
-    output.push_back( v1 );
-    output.push_back( v2 );
+    abort();
     }
 }
 
-void encode_diff(std::vector<char> & output, unsigned short current, unsigned short prev)
+void encode_pixel_value(std::vector<char> & output, unsigned short value)
 {
+  encode_div_mod(output, value);
 }
 
 void delta_encode(unsigned short *inbuffer, size_t length)
@@ -84,13 +113,16 @@ void delta_encode(unsigned short *inbuffer, size_t length)
   for(unsigned int i = 0; i < length; ++i)
     {
     int diff = (int)inbuffer[i] - prev;
-    if( diff <= std::numeric_limits<char>::max() && diff >= std::numeric_limits<char>::min() )
+    if( diff <= (int)std::numeric_limits<char>::max() 
+      && diff >= (int)std::numeric_limits<char>::min() 
+      && diff != 0x5a
+    )
       {
-      encode_value( output, diff );
+      encode_diff_value( output, diff );
       }
     else
       {
-      encode_value( output, inbuffer[i] );
+      encode_pixel_value( output, inbuffer[i] );
       }
     prev = inbuffer[i];
     }
