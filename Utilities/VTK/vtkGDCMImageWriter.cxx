@@ -889,6 +889,14 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
       return 0;
       }
     }
+
+  // De activate those for now:
+  if( ms == gdcm::MediaStorage::EnhancedMRImageStorage || ms == gdcm::MediaStorage::EnhancedCTImageStorage )
+    {
+    vtkErrorMacro( "Regression were found for this media storage. Deactivated for now" );
+    return 0;
+    }
+    
   // FIXME: new Secondary object handle multi frames...
   assert( gdcm::MediaStorage::IsImage( ms ) );
 {
