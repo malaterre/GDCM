@@ -47,7 +47,7 @@ std::istream &UNExplicitDataElement::Read(std::istream &is)
     pe.SetLastElement( *this );
     throw pe;
     }
-  //assert( TagField != Tag(0xfffe,0xe0dd) );
+  assert( TagField != Tag(0xfffe,0xe0dd) );
 
   const Tag itemDelItem(0xfffe,0xe00d);
   if( TagField == itemDelItem )

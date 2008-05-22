@@ -38,6 +38,7 @@ std::istream &UNExplicitImplicitDataElement::Read(std::istream &is)
     }
   catch(ParseException &ex)
     {
+    de.SetVR( VR::INVALID ); // EXTREMELY IMPORTANT !
     if( ex.GetLastElement().GetTag() == Tag(0xfffe,0xe0dd) )
       {
       // We have never read the 2 bytes for the VR, since exception raised earlier

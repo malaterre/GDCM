@@ -63,6 +63,7 @@
 #include "gdcmImageReader.h"
 #include "gdcmImageWriter.h"
 #include "gdcmWriter.h"
+#include "gdcmSystem.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmDataSet.h"
 #include "gdcmAttribute.h"
@@ -328,6 +329,15 @@ int main (int argc, char *argv[])
     if( !writer.Write() )
       {
       std::cerr << "Failed to write: " << outfilename << std::endl;
+      // remove file to avoid any temptation
+      if( filename != outfilename )
+        {
+        gdcm::System::RemoveFile( outfilename.c_str() );
+        }
+      else
+        {
+        std::cerr << "gdcmconv just corrupted: " << filename << " for you (data lost)." << std::endl;
+        }
       return 1;
       }
     }

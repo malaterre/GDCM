@@ -230,8 +230,8 @@ protected:
   // so depending whether we are getting called from a dataset or file meta header
   // the condition is different
   void InsertDataElement(const DataElement& de) {
-    //assert( de.GetTag() != Tag(0xfffe,0xe00d) );
-    //assert( de.GetTag() != Tag(0xfffe,0xe0dd) );
+    //if( de.GetTag() == Tag(0xfffe,0xe00d) ) return;
+    //if( de.GetTag() == Tag(0xfffe,0xe0dd) ) return;
     std::pair<Iterator,bool> pr = DES.insert(de);
 #ifndef NDEBUG
     if( pr.second == false )

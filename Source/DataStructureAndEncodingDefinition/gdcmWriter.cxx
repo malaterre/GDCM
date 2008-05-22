@@ -83,7 +83,7 @@ DataSet &DS = F->GetDataSet();
       {
       os.seekp(128+4, std::ios::beg);
       }
-    Header.DataSet::Write<ImplicitDataElement,SwapperNoOp>(os);
+      Header.DataSet::Write<ImplicitDataElement,SwapperNoOp>(os);
     }
 
   const TransferSyntax &ts = Header.GetDataSetTransferSyntax();
@@ -102,6 +102,8 @@ DataSet &DS = F->GetDataSet();
     return os;
     }
 
+try
+{
   if( ts.GetSwapCode() == SwapCode::BigEndian )
     {
     //US-RGB-8-epicard.dcm is big endian
@@ -129,6 +131,12 @@ DataSet &DS = F->GetDataSet();
       DS.Write<ExplicitDataElement,SwapperNoOp>(os);
       }
     }
+}
+catch(...)
+{
+  Stream.close();
+  return false;
+}
 
 
 

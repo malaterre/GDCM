@@ -38,7 +38,7 @@ namespace gdcm
       if( pe.GetLastElement().GetTag() == Tag(0xfffe,0xe0dd) )
         {
         //  BogusItemStartItemEnd.dcm
-        gdcmWarningMacro( "SQ End found but no no Item end found" );
+        gdcmWarningMacro( "SQ End found but no Item end found" );
         de.SetTag( itemDelItem );
         is.seekg( -4, std::ios::cur );
         }
