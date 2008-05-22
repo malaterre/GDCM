@@ -26,7 +26,7 @@
 
 void encode_a5(std::vector<char> & output, int value)
 {
-  assert( value == 0xa5 - 256  );
+  assert( value == 0xa5 - 256 );
   output.push_back( 0xa5 );
   output.push_back( 0x0 );
   output.push_back( 0xa5 );
@@ -40,7 +40,7 @@ void encode_5a(std::vector<char> & output, int value)
   output.push_back( 0x5a );
 }
 
-void encode_special(std::vector<char> & output, int value)
+void encode_value(std::vector<char> & output, int value)
 {
   if( value == 0xa5 - 256 )
     {
@@ -48,7 +48,7 @@ void encode_special(std::vector<char> & output, int value)
     }
   else if( value == 0x5a )
     {
-    output.push_back( 'N' );
+    encode_5a(output, value);
     }
   else if( value <= 0x7f && value >= -0x80 )
     {
@@ -57,46 +57,22 @@ void encode_special(std::vector<char> & output, int value)
     }
   else
     {
-    output.push_back( value );
-    }
-}
-
-void encode_value(std::vector<char> & output, unsigned short current)
-{
+    assert( value >= 0 );
     // This is an integer that cannot be stored on a char value, thus store
     // it as modulo and remainder
-    int v1 = (int)current % 256;
-    int v2 = (int)current / 256;
+    int v1 = (int)value % 256;
+    int v2 = (int)value / 256;
     assert( v1 >= 0 && v1 <= std::numeric_limits<uint16_t>::max() );
     assert( v2 >= 0 && v2 <= std::numeric_limits<uint16_t>::max() );
     output.push_back( 0x5a );
-    encode_special( output, v1 );
-    encode_special( output, v2 );
+    //assert( v1 != 0xa5 - 256 && v1 != 0xa5 );
+    output.push_back( v1 );
+    output.push_back( v2 );
+    }
 }
 
 void encode_diff(std::vector<char> & output, unsigned short current, unsigned short prev)
 {
-  int diff = (int)current - prev;
-  if( diff <= 0x7f && diff >= -0x80 )
-    {
-    if( diff == 0xa5 - 256 )
-      {
-      encode_a5(output, diff);
-      }
-    else if( diff == 0x5a )
-      {
-      encode_5a( output, diff);
-      }
-    else
-      {
-      encode_special(output, diff);
-      assert( output[ output.size() - 1 ] == diff );
-      }
-    }
-  else
-    {
-    encode_value( output, current );
-    }
 }
 
 void delta_encode(unsigned short *inbuffer, size_t length)
@@ -107,7 +83,15 @@ void delta_encode(unsigned short *inbuffer, size_t length)
   // Do delta encoding:
   for(unsigned int i = 0; i < length; ++i)
     {
-    encode_diff( output, inbuffer[i], prev );
+    int diff = (int)inbuffer[i] - prev;
+    if( diff <= std::numeric_limits<char>::max() && diff >= std::numeric_limits<char>::min() )
+      {
+      encode_value( output, diff );
+      }
+    else
+      {
+      encode_value( output, inbuffer[i] );
+      }
     prev = inbuffer[i];
     }
 
