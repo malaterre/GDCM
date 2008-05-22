@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmDeflateStream2.h"
+#include "gdcmDeflateStream.h"
 
 namespace gdcm
 {
