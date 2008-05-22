@@ -104,9 +104,8 @@ void encode_pixel_value(std::vector<char> & output, unsigned short value)
   encode_div_mod(output, value);
 }
 
-void delta_encode(unsigned short *inbuffer, size_t length)
+void delta_encode(unsigned short *inbuffer, size_t length, std::vector<char>& output)
 {
-  std::vector<char> output;
   unsigned short prev = 0;
 
   // Do delta encoding:
@@ -159,7 +158,7 @@ void delta_encode(unsigned short *inbuffer, size_t length)
       //assert( output[i-3] != 0x5a );
       if( output[i-3] == 0xa5 - 256 )
         {
-        assert( prev0 == 0 );
+        //assert( prev0 == 0 );
         //output[i-2] = 0x3E;
         output[i-2+1] = prev0;
         output[i-2+2] = 0x5a;
@@ -186,9 +185,6 @@ void delta_encode(unsigned short *inbuffer, size_t length)
     output.push_back( 0x0 );
     }
   std::cout << output.size() << std::endl;
-  std::ofstream out("comp.rle");
-  out.write( &output[0], output.size() );
-  out.close();
 }
 
 int main(int argc, char *argv [])
@@ -202,7 +198,13 @@ int main(int argc, char *argv [])
   memset(ref,0,size);
   i.read( ref, size);
   i.close();
-  delta_encode((unsigned short*)ref, size / 2);
+  std::vector<char> output;
+
+  delta_encode((unsigned short*)ref, size / 2, output);
+
+  std::ofstream out("comp.rle");
+  out.write( &output[0], output.size() );
+  out.close();
 
   return 0;
 }
