@@ -18,8 +18,7 @@
 #include "gdcmFileMetaInformation.h"
 #include "gdcmSwapper.h"
 
-//#include "gdcmDeflateStream.h"
-#include "gdcmDeflateStream2.h"
+#include "gdcmDeflateStream.h"
 
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"

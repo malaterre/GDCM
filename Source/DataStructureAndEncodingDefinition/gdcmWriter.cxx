@@ -28,7 +28,7 @@
 #include "gdcmSequenceOfItems.h"
 #include "gdcmParseException.h"
 
-#include "gdcmDeflateStream2.h"
+#include "gdcmDeflateStream.h"
 
 namespace gdcm
 {
