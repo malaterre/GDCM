@@ -310,7 +310,7 @@ std::istream &ExplicitDataElement::ReadWithLength(std::istream &is, VL & length)
 template <typename TSwap>
 const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
 {
-  if( TagField != Tag(0xfffe,0xe0dd) ) throw Exception( "Impossible" );
+  if( TagField == Tag(0xfffe,0xe0dd) ) throw Exception( "Impossible" );
   //if( TagField == Tag(0xfffe,0xe0dd) ) return os;
   if( !TagField.Write<TSwap>(os) )
     {
