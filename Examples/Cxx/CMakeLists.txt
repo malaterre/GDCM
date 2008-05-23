@@ -14,16 +14,7 @@ INCLUDE_DIRECTORIES(
 ADD_EXECUTABLE(csa2img csa2img.cxx)
 TARGET_LINK_LIBRARIES(csa2img gdcmMSFF)
 
-ADD_EXECUTABLE(rle2img rle2img.cxx)
-TARGET_LINK_LIBRARIES(rle2img gdcmMSFF)
-
-ADD_EXECUTABLE(img2rle img2rle.cxx)
-TARGET_LINK_LIBRARIES(img2rle gdcmMSFF)
-
 ADD_EXECUTABLE(uid_unique uid_unique.cxx)
 TARGET_LINK_LIBRARIES(uid_unique gdcmMSFF)
-
-ADD_EXECUTABLE(delta_encode delta_encode.cxx)
-ADD_EXECUTABLE(delta_decode delta_decode.cxx)
 
 ADD_EXECUTABLE(checkdeflate checkdeflate.c puff.c)
