@@ -30,8 +30,8 @@ void encode_a5(std::vector<char> & output, int value)
 {
   assert( value == 0xa5 - 256 );
   output.push_back( 0xa5 );
-  output.push_back( 0x0 );
-  output.push_back( 0xa5 );
+  //output.push_back( 0x0 );
+  //output.push_back( 0xa5 );
 }
 
 void encode_5a(std::vector<char> & output, int value)
@@ -51,23 +51,23 @@ void encode_div_mod(std::vector<char> & output, int value)
   int v2 = (int)value / 256;
   assert( v1 >= 0 && v1 <= std::numeric_limits<uint16_t>::max() );
   assert( v2 >= 0 && v2 <= std::numeric_limits<uint16_t>::max() );
-  if( v1 == 0x5a)
-    {
-    output.push_back( 0xa5 );
-    output.push_back( 0x01 );
-    output.push_back( 0x5a );
-    output.push_back( v2 );
-    }
-  else if( v1 == 0xa5 )
-    {
-    // 5A  A5 00 A5 00
-    output.push_back( 0x5a );
-    output.push_back( 0xa5 );
-    output.push_back( 0x00 );
-    output.push_back( 0xa5 );
-    output.push_back( v2 );
-    }
-  else
+//  if( v1 == 0x5a)
+//    {
+//    output.push_back( 0xa5 );
+//    output.push_back( 0x01 );
+//    output.push_back( 0x5a );
+//    output.push_back( v2 );
+//    }
+//  else if( v1 == 0xa5 )
+//    {
+//    // 5A  A5 00 A5 00
+//    output.push_back( 0x5a );
+//    output.push_back( 0xa5 );
+//    output.push_back( 0x00 );
+//    output.push_back( 0xa5 );
+//    output.push_back( v2 );
+//    }
+//  else
     {
     output.push_back( 0x5a );
     output.push_back( v1 );
@@ -84,9 +84,10 @@ void encode_diff_value(std::vector<char> & output, int value)
   else if( value == 0x5a )
     {
     // happen ?
-    output.push_back( 'M' );
-    output.push_back( 'O' );
-    output.push_back( 'M' );
+   // output.push_back( 'M' );
+   // output.push_back( 'O' );
+   // output.push_back( 'M' );
+  output.push_back( 0x5a );
     }
   else if( value <= (int)std::numeric_limits<char>::max() && value >= (int)std::numeric_limits<char>::min() )
     {
@@ -131,10 +132,41 @@ void delta_encode(unsigned short *inbuffer, size_t length, std::vector<char>& ou
   // Do Run Length now:
   char prev0 = output[0];
   char prev1 = output[1];
+  assert( prev0 != 0xa5 - 256 && prev1 != 0xa5 - 256 );
   for(unsigned int i = 2; i < output.size(); ++i)
     {
-    if( output[i] == prev1 && prev1 == prev0 && prev0 != 0xa5 - 256 ) 
+    if( output[i] == 0xa5 - 256 )
       {
+      unsigned int j = 0; // nb repetition
+      while( (i+j) < output.size() && output[i+j] == 0xa5 - 256 )
+        {
+        ++j;
+        }
+      // insert a5 00 before:
+      output.insert( output.begin()+i, 2, 0xa5 );
+      output[i+1] = j - 1;
+      // remove duplicates
+      output.erase( output.begin() + i + 1 + 1, output.begin() + i + 1 + j);
+      i+=2;
+      }
+    else if( output[i] == 0x5a && output[i-1] == 0x5a )
+      {
+      unsigned int j = 0; // nb repetition
+      while( (i+j) < output.size() && output[i+j] == 0x5a )
+        {
+        ++j;
+        }
+      ++j;
+      // insert a5 00 before:
+      output.insert( output.begin()+i-1, 2, 0xa5 );
+      output[i] = j - 1;
+      // remove duplicates
+      output.erase( output.begin() + i + 1, output.begin() + i + j);
+      i+=2;
+      }
+    else if( output[i] == prev1 && prev1 == prev0 && prev0 != 0xa5 - 256 ) 
+      {
+      assert( prev0 != 0x5a && prev0 != 0xa5 - 256 );
       unsigned int j = 0; // nb repetition
       while( (i+j) < output.size() && output[i+j] == prev0 )
         {
@@ -172,12 +204,11 @@ void delta_encode(unsigned short *inbuffer, size_t length, std::vector<char>& ou
         output[i-2+1] = 0x01;
         assert( prev0 != 0xa5 - 256 );
         output[i-2+2] = prev0;
+        ++i;
         }
-      ++i; // I might need to update prev0/prev1 ...
       //assert( output[i] == 0x5a || output[i] == 0xa5 - 256 );
-      prev1 = output[i-1]; // is it really needed ?
       }
-    prev0 = prev1;
+    prev0 = output[i-1];
     prev1 = output[i];
     }
 
