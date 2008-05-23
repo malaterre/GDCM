@@ -49,23 +49,6 @@ int GetPixelData(const char *filename, std::vector<char> &output)
   return 0;
 }
 
-
-void encode_a5(std::vector<char> & output, int value)
-{
-  assert( value == 0xa5 - 256 );
-  output.push_back( 0xa5 );
-  //output.push_back( 0x0 );
-  //output.push_back( 0xa5 );
-}
-
-void encode_5a(std::vector<char> & output, int value)
-{
-  assert( value == 0x5a );
-  output.push_back( 0xa5 );
-  output.push_back( 0x01 );
-  output.push_back( 0x5a );
-}
-
 void encode_div_mod(std::vector<char> & output, int value)
 {
   assert( value >= 0 );
@@ -75,55 +58,15 @@ void encode_div_mod(std::vector<char> & output, int value)
   int v2 = (int)value / 256;
   assert( v1 >= 0 && v1 <= std::numeric_limits<uint16_t>::max() );
   assert( v2 >= 0 && v2 <= std::numeric_limits<uint16_t>::max() );
-//  if( v1 == 0x5a)
-//    {
-//    output.push_back( 0xa5 );
-//    output.push_back( 0x01 );
-//    output.push_back( 0x5a );
-//    output.push_back( v2 );
-//    }
-//  else if( v1 == 0xa5 )
-//    {
-//    // 5A  A5 00 A5 00
-//    output.push_back( 0x5a );
-//    output.push_back( 0xa5 );
-//    output.push_back( 0x00 );
-//    output.push_back( 0xa5 );
-//    output.push_back( v2 );
-//    }
-//  else
-    {
-    output.push_back( 0x5a );
-    output.push_back( v1 );
-    output.push_back( v2 );
-    }
+  output.push_back( 0x5a );
+  output.push_back( v1 );
+  output.push_back( v2 );
 }
 
 void encode_diff_value(std::vector<char> & output, int value)
 {
-  if( value == 0xa5 - 256 )
-    {
-    encode_a5(output, value);
-    }
-  else if( value == 0x5a )
-    {
-    // happen ?
-   // output.push_back( 'M' );
-   // output.push_back( 'O' );
-   // output.push_back( 'M' );
-  output.push_back( 0x5a );
-    }
-  else if( value <= (int)std::numeric_limits<char>::max() && value >= (int)std::numeric_limits<char>::min() )
-    {
-    assert( value != 0xa5 - 256 && value != 0x5a && value != 0xa5 );
-    //assert( value != 0x3c );
-    output.push_back( value );
-    //assert( output.size() != 0x3C67 );
-    }
-  else
-    {
-    abort();
-    }
+  assert( value <= (int)std::numeric_limits<char>::max() && value >= (int)std::numeric_limits<char>::min() );
+  output.push_back( value );
 }
 
 void encode_pixel_value(std::vector<char> & output, unsigned short value)
@@ -131,7 +74,6 @@ void encode_pixel_value(std::vector<char> & output, unsigned short value)
   encode_div_mod(output, value);
 }
 
-void foodebug() {}
 void delta_encode(unsigned short *inbuffer, size_t length, std::vector<char>& output)
 {
   unsigned short prev = 0;
@@ -154,16 +96,12 @@ void delta_encode(unsigned short *inbuffer, size_t length, std::vector<char>& ou
     prev = inbuffer[i];
     }
 
-  // Do Run Length now:
+  // Do Run Length Encoding now:
   char prev0 = output[0];
   char prev1 = output[1];
   assert( prev0 != 0xa5 - 256 && prev1 != 0xa5 - 256 );
   for(unsigned int i = 2; i < output.size(); ++i)
     {
-if( i == 0xbc0A )
-{
-foodebug();
-}
     if( output[i] == 0xa5 - 256 )
       {
       unsigned int j = 0; // nb repetition
@@ -213,7 +151,7 @@ foodebug();
       output[i-2+2] = prev0;
       //assert( output[i-2+1] != output[i-2+2] );
       output.erase( output.begin() + i, output.begin() + i - 2 + j);
-      // HACK: when the next char is 05A, and 
+      // HACK: when the next char is 0x5A, and 
       // output[i-2+1] == output[i-2+2] 
       // we enter a degenerate case where yet anothre rle is done...
       if( i+1 < output.size() && output[i+1] == 0x5a )
@@ -227,24 +165,12 @@ foodebug();
        * Why would you want to replace 0E 0E with A5 01 0E ???
        * oh well ...
        */
-      //assert( output[i-3] != 0xa5 - 256 );
-      //assert( output[i-3] != 0x5a );
-      //if( output[i-3] == 0xa5 - 256 )
-      //  {
-      //  //assert( prev0 == 0 );
-      //  //output[i-2] = 0x3E;
-      //  output[i-2+1] = prev0;
-      //  output[i-2+2] = 0x5a;
-      //  }
-      //else
-        {
-        output.insert( output.begin()+i-2+2, 1, 'M' );
-        output[i-2] = 0xa5;
-        output[i-2+1] = 0x01;
-        assert( prev0 != 0xa5 - 256 );
-        output[i-2+2] = prev0;
-        ++i;
-        }
+      output.insert( output.begin()+i-2+2, 1, 'M' );
+      output[i-2] = 0xa5;
+      output[i-2+1] = 0x01;
+      assert( prev0 != 0xa5 - 256 );
+      output[i-2+2] = prev0;
+      ++i;
       //assert( output[i] == 0x5a || output[i] == 0xa5 - 256 );
       }
     prev0 = output[i-1];
@@ -367,7 +293,6 @@ static const char *rawfilenames[] = {
 "/home/mmalaterre/Creatis/gdcmData/study1-original/1.3.12.2.1107.5.2.1.5356.20080310085222000/1.3.12.2.1107.5.2.1.5356.20080310090236000003/1.3.12.2.1107.5.2.1.5356.20080310090236000003042",
 "/home/mmalaterre/Creatis/gdcmData/study1-original/1.3.12.2.1107.5.2.1.5356.20080310085222000/1.3.12.2.1107.5.2.1.5356.20080310090236000003/1.3.12.2.1107.5.2.1.5356.20080310090236000003043",
 
-
 "/home/mmalaterre/Creatis/gdcmData/study1-original/1.3.12.2.1107.5.2.1.5356.20080310085222000/1.3.12.2.1107.5.2.1.5356.20080310090725000004/1.3.12.2.1107.5.2.1.5356.20080310090726000004044",
 "/home/mmalaterre/Creatis/gdcmData/study1-original/1.3.12.2.1107.5.2.1.5356.20080310085222000/1.3.12.2.1107.5.2.1.5356.20080310090725000004/1.3.12.2.1107.5.2.1.5356.20080310090726000004045",
 "/home/mmalaterre/Creatis/gdcmData/study1-original/1.3.12.2.1107.5.2.1.5356.20080310085222000/1.3.12.2.1107.5.2.1.5356.20080310090725000004/1.3.12.2.1107.5.2.1.5356.20080310090726000004046",
@@ -438,49 +363,47 @@ static const char *rlefilenames[] = {
   "/home/mmalaterre/Creatis/gdcmData/study1/s10/i20",
   "/home/mmalaterre/Creatis/gdcmData/study1/s10/i30",
 
-"/home/mmalaterre/Creatis/gdcmData/study1/s20/i40",
-"/home/mmalaterre/Creatis/gdcmData/study1/s20/i50",
-"/home/mmalaterre/Creatis/gdcmData/study1/s20/i60",
-"/home/mmalaterre/Creatis/gdcmData/study1/s20/i70",
-"/home/mmalaterre/Creatis/gdcmData/study1/s20/i80",
-"/home/mmalaterre/Creatis/gdcmData/study1/s20/i90",
-"/home/mmalaterre/Creatis/gdcmData/study1/s20/i100",
-"/home/mmalaterre/Creatis/gdcmData/study1/s20/i110",
-"/home/mmalaterre/Creatis/gdcmData/study1/s20/i120",
-"/home/mmalaterre/Creatis/gdcmData/study1/s20/i130",
-"/home/mmalaterre/Creatis/gdcmData/study1/s20/i140",
-"/home/mmalaterre/Creatis/gdcmData/study1/s20/i150",
-"/home/mmalaterre/Creatis/gdcmData/study1/s20/i160",
-"/home/mmalaterre/Creatis/gdcmData/study1/s20/i170",
-"/home/mmalaterre/Creatis/gdcmData/study1/s20/i180",
-"/home/mmalaterre/Creatis/gdcmData/study1/s20/i190",
-"/home/mmalaterre/Creatis/gdcmData/study1/s20/i200",
-"/home/mmalaterre/Creatis/gdcmData/study1/s20/i210",
-"/home/mmalaterre/Creatis/gdcmData/study1/s20/i220",
-"/home/mmalaterre/Creatis/gdcmData/study1/s20/i230",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s20/i40",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s20/i50",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s20/i60",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s20/i70",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s20/i80",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s20/i90",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s20/i100",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s20/i110",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s20/i120",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s20/i130",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s20/i140",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s20/i150",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s20/i160",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s20/i170",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s20/i180",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s20/i190",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s20/i200",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s20/i210",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s20/i220",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s20/i230",
 
-"/home/mmalaterre/Creatis/gdcmData/study1/s30/i240",
-"/home/mmalaterre/Creatis/gdcmData/study1/s30/i250",
-"/home/mmalaterre/Creatis/gdcmData/study1/s30/i260",
-"/home/mmalaterre/Creatis/gdcmData/study1/s30/i270",
-"/home/mmalaterre/Creatis/gdcmData/study1/s30/i280",
-"/home/mmalaterre/Creatis/gdcmData/study1/s30/i290",
-"/home/mmalaterre/Creatis/gdcmData/study1/s30/i300",
-"/home/mmalaterre/Creatis/gdcmData/study1/s30/i310",
-"/home/mmalaterre/Creatis/gdcmData/study1/s30/i320",
-"/home/mmalaterre/Creatis/gdcmData/study1/s30/i330",
-"/home/mmalaterre/Creatis/gdcmData/study1/s30/i340",
-"/home/mmalaterre/Creatis/gdcmData/study1/s30/i350",
-"/home/mmalaterre/Creatis/gdcmData/study1/s30/i360",
-"/home/mmalaterre/Creatis/gdcmData/study1/s30/i370",
-"/home/mmalaterre/Creatis/gdcmData/study1/s30/i380",
-"/home/mmalaterre/Creatis/gdcmData/study1/s30/i390",
-"/home/mmalaterre/Creatis/gdcmData/study1/s30/i400",
-"/home/mmalaterre/Creatis/gdcmData/study1/s30/i410",
-"/home/mmalaterre/Creatis/gdcmData/study1/s30/i420",
-"/home/mmalaterre/Creatis/gdcmData/study1/s30/i430",
-
-
+  "/home/mmalaterre/Creatis/gdcmData/study1/s30/i240",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s30/i250",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s30/i260",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s30/i270",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s30/i280",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s30/i290",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s30/i300",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s30/i310",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s30/i320",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s30/i330",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s30/i340",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s30/i350",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s30/i360",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s30/i370",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s30/i380",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s30/i390",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s30/i400",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s30/i410",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s30/i420",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s30/i430",
 
   "/home/mmalaterre/Creatis/gdcmData/study1/s40/i440",
   "/home/mmalaterre/Creatis/gdcmData/study1/s40/i450",
@@ -503,46 +426,46 @@ static const char *rlefilenames[] = {
   "/home/mmalaterre/Creatis/gdcmData/study1/s40/i620",
   "/home/mmalaterre/Creatis/gdcmData/study1/s40/i630",
 
-"/home/mmalaterre/Creatis/gdcmData/study1/s50/i640",
-"/home/mmalaterre/Creatis/gdcmData/study1/s50/i650",
-"/home/mmalaterre/Creatis/gdcmData/study1/s50/i660",
-"/home/mmalaterre/Creatis/gdcmData/study1/s50/i670",
-"/home/mmalaterre/Creatis/gdcmData/study1/s50/i680",
-"/home/mmalaterre/Creatis/gdcmData/study1/s50/i690",
-"/home/mmalaterre/Creatis/gdcmData/study1/s50/i700",
-"/home/mmalaterre/Creatis/gdcmData/study1/s50/i710",
-"/home/mmalaterre/Creatis/gdcmData/study1/s50/i720",
-"/home/mmalaterre/Creatis/gdcmData/study1/s50/i730",
-"/home/mmalaterre/Creatis/gdcmData/study1/s50/i740",
-"/home/mmalaterre/Creatis/gdcmData/study1/s50/i750",
-"/home/mmalaterre/Creatis/gdcmData/study1/s50/i760",
-"/home/mmalaterre/Creatis/gdcmData/study1/s50/i770",
-"/home/mmalaterre/Creatis/gdcmData/study1/s50/i780",
-"/home/mmalaterre/Creatis/gdcmData/study1/s50/i790",
-"/home/mmalaterre/Creatis/gdcmData/study1/s50/i800",
-"/home/mmalaterre/Creatis/gdcmData/study1/s50/i810",
-"/home/mmalaterre/Creatis/gdcmData/study1/s50/i820",
-"/home/mmalaterre/Creatis/gdcmData/study1/s50/i830",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s50/i640",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s50/i650",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s50/i660",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s50/i670",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s50/i680",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s50/i690",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s50/i700",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s50/i710",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s50/i720",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s50/i730",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s50/i740",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s50/i750",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s50/i760",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s50/i770",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s50/i780",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s50/i790",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s50/i800",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s50/i810",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s50/i820",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s50/i830",
 
-"/home/mmalaterre/Creatis/gdcmData/study1/s60/i840" ,
-"/home/mmalaterre/Creatis/gdcmData/study1/s60/i850" ,
-"/home/mmalaterre/Creatis/gdcmData/study1/s60/i860" ,
-"/home/mmalaterre/Creatis/gdcmData/study1/s60/i870" ,
-"/home/mmalaterre/Creatis/gdcmData/study1/s60/i880" ,
-"/home/mmalaterre/Creatis/gdcmData/study1/s60/i890" ,
-"/home/mmalaterre/Creatis/gdcmData/study1/s60/i900" ,
-"/home/mmalaterre/Creatis/gdcmData/study1/s60/i910" ,
-"/home/mmalaterre/Creatis/gdcmData/study1/s60/i920" ,
-"/home/mmalaterre/Creatis/gdcmData/study1/s60/i930" ,
-"/home/mmalaterre/Creatis/gdcmData/study1/s60/i940" ,
-"/home/mmalaterre/Creatis/gdcmData/study1/s60/i950" ,
-"/home/mmalaterre/Creatis/gdcmData/study1/s60/i960" ,
-"/home/mmalaterre/Creatis/gdcmData/study1/s60/i970" ,
-"/home/mmalaterre/Creatis/gdcmData/study1/s60/i980" ,
-"/home/mmalaterre/Creatis/gdcmData/study1/s60/i990" ,
-"/home/mmalaterre/Creatis/gdcmData/study1/s60/i1000",
-"/home/mmalaterre/Creatis/gdcmData/study1/s60/i1010",
-"/home/mmalaterre/Creatis/gdcmData/study1/s60/i1020",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s60/i840",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s60/i850",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s60/i860",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s60/i870",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s60/i880",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s60/i890",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s60/i900",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s60/i910",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s60/i920",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s60/i930",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s60/i940",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s60/i950",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s60/i960",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s60/i970",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s60/i980",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s60/i990",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s60/i1000",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s60/i1010",
+  "/home/mmalaterre/Creatis/gdcmData/study1/s60/i1020",
 
   0
 };
