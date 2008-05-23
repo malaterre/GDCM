@@ -381,5 +381,16 @@ SUBDIRS(Wrapping)
 
 #-----------------------------------------------------------------------------
 # Need to be the last operation:
+SET(GDCM_INCLUDE_PATH 
+  "${GDCM_SOURCE_DIR}/Source/Common"
+  "${GDCM_BINARY_DIR}/Source/Common"
+  "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
+  "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
+  "${GDCM_SOURCE_DIR}/Source/DataDictionary"
+  "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
+  #"${GDCM_SOURCE_DIR}/Utilities"
+  #"${GDCM_BINARY_DIR}/Utilities/openjpeg"
+  )
+SET(GDCM_LIBRARY_DIRS ${LIBRARY_OUTPUT_PATH})
 SUBDIRS(CMake/ExportConfiguration)
 
