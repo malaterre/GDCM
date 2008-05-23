@@ -17,7 +17,16 @@
  * image so that it is readable by most 3rd party software (DICOM does
  * not specify this particular encoding).
  * This is required for the sake of interoperability with any standard
- * conformring DICOM system.
+ * conforming DICOM system.
+ * 
+ * Everything done in this code is for the sole purpose of writing interoperable 
+ * software under Sect. 1201 (f) Reverse Engineering exception of the DMCA.
+ * If you believe anything in this code violates any law or any of your rights, 
+ * please contact us (gdcm-developers@lists.sourceforge.net) so that we can 
+ * find a solution. 
+ *
+ * Everything you do with this code is at your own risk, since decompression
+ * algorithm was not written from specification documents.
  *
  * Special thanks to:
  * Mauro Maiorca for bringing to our attention on this new ELSCINT1 

@@ -894,7 +894,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   if( ms == gdcm::MediaStorage::EnhancedMRImageStorage || ms == gdcm::MediaStorage::EnhancedCTImageStorage )
     {
     vtkErrorMacro( "Regression were found for this media storage. Deactivated for now" );
-    return 0;
+    //return 0;
     }
     
   // FIXME: new Secondary object handle multi frames...
