@@ -107,6 +107,7 @@ void encode_pixel_value(std::vector<char> & output, unsigned short value)
   encode_div_mod(output, value);
 }
 
+void foodebug() {}
 void delta_encode(unsigned short *inbuffer, size_t length, std::vector<char>& output)
 {
   unsigned short prev = 0;
@@ -135,6 +136,10 @@ void delta_encode(unsigned short *inbuffer, size_t length, std::vector<char>& ou
   assert( prev0 != 0xa5 - 256 && prev1 != 0xa5 - 256 );
   for(unsigned int i = 2; i < output.size(); ++i)
     {
+if( i == 0xbc0A )
+{
+foodebug();
+}
     if( output[i] == 0xa5 - 256 )
       {
       unsigned int j = 0; // nb repetition
@@ -151,6 +156,7 @@ void delta_encode(unsigned short *inbuffer, size_t length, std::vector<char>& ou
       }
     else if( output[i] == 0x5a && output[i-1] == 0x5a )
       {
+      assert( output[i-1] != 0xc8 - 256 );
       unsigned int j = 0; // nb repetition
       while( (i+j) < output.size() && output[i+j] == 0x5a )
         {
@@ -164,7 +170,7 @@ void delta_encode(unsigned short *inbuffer, size_t length, std::vector<char>& ou
       output.erase( output.begin() + i + 1, output.begin() + i + j);
       i+=2;
       }
-    else if( output[i] == prev1 && prev1 == prev0 && prev0 != 0xa5 - 256 ) 
+    else if( output[i] == output[i-1] && output[i-1] == output[i-2] && output[i-2] != 0xa5 - 256 ) 
       {
       assert( prev0 != 0x5a && prev0 != 0xa5 - 256 );
       unsigned int j = 0; // nb repetition
@@ -175,14 +181,23 @@ void delta_encode(unsigned short *inbuffer, size_t length, std::vector<char>& ou
       ++j; // count cprev too
       // in place:
       //assert( i == 2 || output[i-3] != 0xa5 - 256 );
+      //if ( i > 3 ) assert( output[i-3] != 0xa5 - 256 );
       output[i-2] = 0xa5;
       assert( j != 0 && j != 1 );
       output[i-2+1] = j;
       assert( prev0 != 0xa5 - 256 );
       output[i-2+2] = prev0;
+      //assert( output[i-2+1] != output[i-2+2] );
       output.erase( output.begin() + i, output.begin() + i - 2 + j);
+      // HACK: when the next char is 05A, and 
+      // output[i-2+1] == output[i-2+2] 
+      // we enter a degenerate case where yet anothre rle is done...
+      if( i+1 < output.size() && output[i+1] == 0x5a )
+        {
+        i+=1;
+        }
       }
-    else if( output[i] == 0x5a && prev1 == prev0 ) 
+    else if( output[i] == 0x5a && output[i-1] == output[i-2] ) 
       {
       /*
        * Why would you want to replace 0E 0E with A5 01 0E ???
@@ -190,14 +205,14 @@ void delta_encode(unsigned short *inbuffer, size_t length, std::vector<char>& ou
        */
       //assert( output[i-3] != 0xa5 - 256 );
       //assert( output[i-3] != 0x5a );
-      if( output[i-3] == 0xa5 - 256 )
-        {
-        //assert( prev0 == 0 );
-        //output[i-2] = 0x3E;
-        output[i-2+1] = prev0;
-        output[i-2+2] = 0x5a;
-        }
-      else
+      //if( output[i-3] == 0xa5 - 256 )
+      //  {
+      //  //assert( prev0 == 0 );
+      //  //output[i-2] = 0x3E;
+      //  output[i-2+1] = prev0;
+      //  output[i-2+2] = 0x5a;
+      //  }
+      //else
         {
         output.insert( output.begin()+i-2+2, 1, 'M' );
         output[i-2] = 0xa5;
@@ -210,6 +225,7 @@ void delta_encode(unsigned short *inbuffer, size_t length, std::vector<char>& ou
       }
     prev0 = output[i-1];
     prev1 = output[i];
+    //assert( prev0 != prev1 );
     }
 
   // DICOM need % 2
