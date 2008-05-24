@@ -86,6 +86,7 @@ int TestvtkGDCMImageRead4(const char *filename, bool verbose)
 
   vtkMedicalImageProperties * medprop = reader->GetMedicalImageProperties();
 
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   const char *value1 =  scanner.GetValue( filename, t1 );
   const gdcm::DictEntry& de1 = ds.GetDictEntry( t1 );
   medprop->AddUserDefinedValue(de1.GetName(), value1);
@@ -93,9 +94,10 @@ int TestvtkGDCMImageRead4(const char *filename, bool verbose)
   const char *value2 =  scanner.GetValue( filename, t2 );
   const gdcm::DictEntry& de2 = ds.GetDictEntry( t2 );
   medprop->AddUserDefinedValue(de2.GetName(), value2);
+#endif
 
   if( verbose )
-    { 
+    {
     reader->GetOutput()->Print( cout );
     reader->GetMedicalImageProperties()->Print( cout );
     }
