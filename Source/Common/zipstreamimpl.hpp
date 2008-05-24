@@ -531,7 +531,7 @@ basic_unzip_streambuf<charT, traits>::fill_input_buffer(void)
  */
 template <class charT, class traits> inline
 basic_zip_ostream<charT, traits>::basic_zip_ostream(ostream_reference ostream,
-                                                    bool is_gzip,
+                                                    bool isgzip,
                                                     int level,
                                                     EStrategy strategy,
                                                     int window_size,
@@ -540,7 +540,7 @@ basic_zip_ostream<charT, traits>::basic_zip_ostream(ostream_reference ostream,
     basic_zip_streambuf<charT, traits>(ostream, level, strategy, window_size,
                                        memory_level, buffer_size),
     std::basic_ostream<charT, traits>(this),
-    _is_gzip(is_gzip),
+    _is_gzip(isgzip),
     _added_footer(false)
 {
 		if(_is_gzip)
