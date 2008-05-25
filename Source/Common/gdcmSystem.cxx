@@ -17,8 +17,9 @@
 #include "gdcmFilename.h"
 #include "gdcmException.h"
 
+#ifdef GDCM_BUILD_TESTING
 #include "gdcm_md5.h"
-//#include "gdcm_uuid.h"
+#endif
 
 #include <iostream>
 #include <string>
@@ -67,6 +68,7 @@
 namespace gdcm
 {
 
+#ifdef GDCM_BUILD_TESTING
 inline void process_file(const char *filename, md5_byte_t *digest)
 {
   if( !filename || !digest ) return;
@@ -143,6 +145,7 @@ bool System::ComputeFileMD5(const char *filename, char *digest_str)
   digest_str[2*16] = '\0';
   return true;
 }
+#endif
 
 #if defined(_WIN32) && (defined(_MSC_VER) || defined(__WATCOMC__) || defined(__BORLANDC__) || defined(__MINGW32__)) 
 inline int Mkdir(const char* dir)

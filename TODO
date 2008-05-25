@@ -123,3 +123,17 @@ Multiframe j2k was broken no test trigger the issue...
 Fix issue with Spacing EnhanceMR at write time.
 -----------------------------------------------------------------------
 Issue with origin and filelowerleftOff
+-----------------------------------------------------------------------
+Hum, looks like vs 2007+1 can be used to redistribute binaries:
+http://www.microsoft.com/express/support/faq/
+
+# Can I use Express Editions for commercial use?
+
+Yes, there are no licensing restrictions for applications built using Visual Studio Express Editions.
+
+
+Some random links:
+
+http://blogs.msdn.com/nikolad/archive/2006/04/11/Download-location-for-VCRedist.aspx
+http://blogs.msdn.com/vcblog/archive/2007/10/12/how-to-redistribute-the-visual-c-libraries-with-your-application.aspx
+
