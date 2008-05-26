@@ -254,6 +254,11 @@ ENDIF(BUILD_TESTING AND GDCM_WRAP_PYTHON)
 # Need pthread for the following class:
 CHECK_INCLUDE_FILE("pthread.h"      CMAKE_HAVE_PTHREAD_H)
 
+# Big endian thing:
+INCLUDE (${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
+TEST_BIG_ENDIAN(GDCM_WORDS_BIGENDIAN)
+
+
 SUBDIRS(
   Utilities
   Source
