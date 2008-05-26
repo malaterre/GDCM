@@ -35,8 +35,10 @@ class GDCM_EXPORT ImageHelper
 {
 public:
   static std::vector<double> GetOriginValue(File const & f);
+  static void SetOriginValue(DataSet & ds, const std::vector<double> & origin);
 
   static std::vector<double> GetDirectionCosinesValue(File const & f);
+  static void SetDirectionCosinesValue(DataSet & ds, const std::vector<double> & dircos);
 
   static std::vector<double> GetSpacingValue(File const & f);
   static void SetSpacingValue(DataSet & ds, const std::vector<double> & spacing);

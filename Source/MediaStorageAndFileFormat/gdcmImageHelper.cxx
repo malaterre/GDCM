@@ -194,7 +194,7 @@ std::vector<double> ImageHelper::GetOriginValue(File const & f)
       assert( ori.size() == 3 );
       return ori;
       }
-    abort();
+    //abort();
     }
   ori.resize( 3 );
 
@@ -238,7 +238,7 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
       assert( dircos.size() == 6 );
       return dircos;
       }
-    abort();
+    //abort();
     }
   dircos.resize( 6 );
 
@@ -459,11 +459,13 @@ $ dcmdump D_CLUNIE_NM1_JPLL.dcm" | grep 0028,0009
 
 void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spacing)
 {
+  assert( spacing.size() == 3 );
   MediaStorage ms;
   ms.SetFromDataSet(ds);
   assert( MediaStorage::IsImage( ms ) );
 
-  if( ms == MediaStorage::EnhancedMRImageStorage )
+  if( ms == MediaStorage::EnhancedCTImageStorage
+   || ms == MediaStorage::EnhancedMRImageStorage )
     {
     const Tag tfgs(0x5200,0x9229);
     SequenceOfItems * sqi;
@@ -532,65 +534,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
     DataSet &subds = item2.GetNestedDataSet();
     subds.Insert( de );
 
-{
-    Item item( Tag(0xfffe,0xe000) );
-    item.SetVLToUndefined();
-
-    Attribute<0x0020,0x0037> at3 = {};
-    at3.SetValue(1, 0);
-    at3.SetValue(1, 4);
-    item.InsertDataElement( at3.GetAsDataElement() );
-
-    SequenceOfItems * sqi3 = new SequenceOfItems;
-    sqi3->SetLengthToUndefined();
-    sqi3->AddItem( item );
-
-    const Tag tpms(0x0020,0x9116);
-    DataElement de( tpms );
-    de.SetVR( VR::SQ );
-    de.SetValue( *sqi3 );
-    de.SetVLToUndefined();
-
-    //Item item3( Tag(0xfffe,0xe000) );
-    //item3.SetVLToUndefined();
-
-    //DataSet &subds = item3.GetNestedDataSet();
-    subds.Insert( de );
-    //sqi->AddItem( item3 );
-}
-{
-/*
-    (0020,9113) SQ (Sequence with undefined length #=1)     # u/l, 1 PlanePositionSequence
-      (fffe,e000) na (Item with undefined length #=1)         # u/l, 1 Item
-        (0020,0032) DS [40.0000\-105.000\105.000]               #  24, 3 ImagePositionPatient
-      (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
-    (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
-*/
-    Item item( Tag(0xfffe,0xe000) );
-    item.SetVLToUndefined();
-
-    Attribute<0x0020,0x0032> at3 = {};
-    item.InsertDataElement( at3.GetAsDataElement() );
-
-    SequenceOfItems * sqi3 = new SequenceOfItems;
-    sqi3->SetLengthToUndefined();
-    sqi3->AddItem( item );
-
-    const Tag tpms(0x0020,0x9113);
-    DataElement de( tpms );
-    de.SetVR( VR::SQ );
-    de.SetValue( *sqi3 );
-    de.SetVLToUndefined();
-
-    //Item item3( Tag(0xfffe,0xe000) );
-    //item3.SetVLToUndefined();
-
-    //DataSet &subds = item3.GetNestedDataSet();
-    subds.Insert( de );
-    //sqi->AddItem( item3 );
-}
     sqi->AddItem( item2 );
-    
 
     return;
     }
@@ -672,6 +616,137 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
       }
     }
 
+}
+
+void ImageHelper::SetOriginValue(DataSet & ds, const std::vector<double> & origin)
+{
+  assert( origin.size() == 3 );
+  MediaStorage ms;
+  ms.SetFromDataSet(ds);
+  assert( MediaStorage::IsImage( ms ) );
+
+  if( ms == MediaStorage::EnhancedCTImageStorage
+   || ms == MediaStorage::EnhancedMRImageStorage )
+    {
+    return;
+    const Tag tfgs(0x5200,0x9229);
+    SequenceOfItems * sqi;
+    if( !ds.FindDataElement( tfgs ) )
+      {
+  abort();
+      sqi = new SequenceOfItems;
+      DataElement de( tfgs );
+      de.SetVR( VR::SQ );
+      de.SetValue( *sqi );
+      de.SetVLToUndefined();
+      ds.Insert( de );
+      }
+    sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
+    //sqi->SetLengthToUndefined();
+
+    // Get first item:
+    const Item &item = sqi->GetItem(1);
+    const DataSet & subds1 = item.GetNestedDataSet();
+
+    // Plane position Sequence
+    const Tag tpms(0x0020,0x9113);
+    assert( subds1.FindDataElement(tpms) );
+    const SequenceOfItems * sqi2 = subds1.GetDataElement( tpms ).GetSequenceOfItems();
+    assert( sqi2 );
+    const Item &item2 = sqi2->GetItem(1);
+    DataSet & subds2 = (DataSet&)item2.GetNestedDataSet();
+
+{
+/*
+    (0020,9113) SQ (Sequence with undefined length #=1)     # u/l, 1 PlanePositionSequence
+      (fffe,e000) na (Item with undefined length #=1)         # u/l, 1 Item
+        (0020,0032) DS [40.0000\-105.000\105.000]               #  24, 3 ImagePositionPatient
+      (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
+    (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
+*/
+    Item item( Tag(0xfffe,0xe000) );
+    item.SetVLToUndefined();
+
+    Attribute<0x0020,0x0032> at3 = {{}};
+    item.InsertDataElement( at3.GetAsDataElement() );
+
+    SequenceOfItems * sqi3 = new SequenceOfItems;
+    sqi3->SetLengthToUndefined();
+    sqi3->AddItem( item );
+
+    const Tag tpms(0x0020,0x9113);
+    DataElement de( tpms );
+    de.SetVR( VR::SQ );
+    de.SetValue( *sqi3 );
+    de.SetVLToUndefined();
+
+    //Item item3( Tag(0xfffe,0xe000) );
+    //item3.SetVLToUndefined();
+
+    //DataSet &subds = item3.GetNestedDataSet();
+    subds2.Insert( de );
+    //sqi->AddItem( item3 );
+}
+    return;
+    }
+
+  // Image Position (Patient)
+  gdcm::Attribute<0x0020,0x0032> ipp = {{0,0,0}}; // default value
+  ipp.SetValue( origin[0], 0);
+  ipp.SetValue( origin[1], 1);
+  ipp.SetValue( origin[2], 2);
+
+  ds.Insert( ipp.GetAsDataElement() );
+}
+
+void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<double> & dircos)
+{
+  assert( dircos.size() == 6 );
+  MediaStorage ms;
+  ms.SetFromDataSet(ds);
+  assert( MediaStorage::IsImage( ms ) );
+
+  if( ms == MediaStorage::EnhancedCTImageStorage
+   || ms == MediaStorage::EnhancedMRImageStorage )
+    {
+{
+#if 0
+    Item item( Tag(0xfffe,0xe000) );
+    item.SetVLToUndefined();
+
+    Attribute<0x0020,0x0037> at3 = {{}};
+    at3.SetValue(1, 0);
+    at3.SetValue(1, 4);
+    item.InsertDataElement( at3.GetAsDataElement() );
+
+    SequenceOfItems * sqi3 = new SequenceOfItems;
+    sqi3->SetLengthToUndefined();
+    sqi3->AddItem( item );
+
+    const Tag tpms(0x0020,0x9116);
+    DataElement de( tpms );
+    de.SetVR( VR::SQ );
+    de.SetValue( *sqi3 );
+    de.SetVLToUndefined();
+
+    //subds.Insert( de );
+#endif
+}
+
+    return;
+    }
+
+
+  // Image Orientation (Patient)
+  gdcm::Attribute<0x0020,0x0037> iop = {{1,0,0,0,1,0}}; // default value
+  iop.SetValue( dircos[0], 0);
+  iop.SetValue( dircos[1], 1);
+  iop.SetValue( dircos[2], 2);
+  iop.SetValue( dircos[3], 3);
+  iop.SetValue( dircos[4], 4);
+  iop.SetValue( dircos[5], 5);
+
+  ds.Insert( iop.GetAsDataElement() );
 }
 
 bool ImageHelper::ComputeSpacingFromImagePositionPatient(const std::vector<double> & imageposition, std::vector<double> & spacing)
