@@ -216,14 +216,14 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
       assert( byte <= 127 );
       numberOfReadBytes++;
       //std::cerr << "Byte: " << int(byte) << "\n";
-      if( byte >= 0 /*&& byte <= 127*/ )
+      if( byte >= char(0) /*&& byte <= 127*/ )
         {
         is.read( dummy_buffer, byte+1 );
         numberOfReadBytes += byte+1;
         numOutBytes += byte+ 1;
         tmpos.write( dummy_buffer, byte+1 );
         }
-      else if( byte <= -1 && byte >= -127 )
+      else if( byte <= char(-1) && byte >= char(-127) )
         {
         char nextByte;
         is.read( &nextByte, 1);
@@ -237,7 +237,7 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
         }
       else /* byte == -128 */
         {
-        assert( byte == -128 );
+        assert( byte == char(-128) );
         }
         assert( is.eof()
         || numberOfReadBytes + frame.Header.Offset[i] - is.tellg() == 0);

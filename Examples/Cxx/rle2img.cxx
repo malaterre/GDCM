@@ -51,7 +51,7 @@ void delta_decode(const char *inbuffer, size_t length, std::vector<unsigned shor
   std::vector<char> temp;
   for(size_t i = 0; i < length; ++i)
     {
-    if( inbuffer[i] == 0xa5 - 256 )
+    if( inbuffer[i] == (char)0xa5 )
       {
       unsigned char repeat = (unsigned char)inbuffer[i+1] + 1;
       char value = inbuffer[i+2];
