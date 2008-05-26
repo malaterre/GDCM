@@ -668,8 +668,8 @@ basic_zip_istream<charT, traits>::basic_zip_istream(istream_reference istream,
 {
   if(this->get_zerr() == Z_OK)
     {
-    int check = check_header();
-    std::cerr << "check_header:" << check << std::endl;
+    int check = check_header();(void)check;
+    //std::cerr << "check_header:" << check << std::endl;
     }
 }
 
