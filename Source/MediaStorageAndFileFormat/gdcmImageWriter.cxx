@@ -19,7 +19,7 @@
 #include "gdcmAttribute.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmSystem.h"
-#include "gdcmSpacingHelper.h"
+#include "gdcmImageHelper.h"
 #include "gdcmLookupTable.h"
 #include "gdcmItem.h"
 #include "gdcmSequenceOfItems.h"
@@ -365,7 +365,7 @@ bool ImageWriter::Write()
     sp.resize(3);
     sp[2] = PixelData.GetSpacing(2); // might be a dummy value...
     }
-  SpacingHelper::SetSpacingValue(ds, sp);
+  ImageHelper::SetSpacingValue(ds, sp);
 
   // UIDs:
   // (0008,0018) UI [1.3.6.1.4.1.5962.1.1.1.1.3.20040826185059.5457] #  46, 1 SOPInstanceUID

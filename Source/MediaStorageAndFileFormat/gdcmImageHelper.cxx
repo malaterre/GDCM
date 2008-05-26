@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmSpacingHelper.h"
+#include "gdcmImageHelper.h"
 #include "gdcmMediaStorage.h"
 #include "gdcmFile.h"
 #include "gdcmDataSet.h"
@@ -27,7 +27,7 @@
 namespace gdcm
 {
 
-Tag SpacingHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
+Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
 {
   Tag t;
 
@@ -62,7 +62,7 @@ Tag SpacingHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
   return t;
 }
 
-Tag SpacingHelper::GetZSpacingTagFromMediaStorage(MediaStorage const &ms)
+Tag ImageHelper::GetZSpacingTagFromMediaStorage(MediaStorage const &ms)
 {
   Tag t;
 
@@ -128,7 +128,7 @@ bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector
     return true;
 }
 
-std::vector<double> SpacingHelper::GetSpacingValue(File const & f)
+std::vector<double> ImageHelper::GetSpacingValue(File const & f)
 {
   std::vector<double> sp;
   MediaStorage ms;
@@ -191,7 +191,7 @@ std::vector<double> SpacingHelper::GetSpacingValue(File const & f)
     }
   assert( sp.size() == 2 );
   // Do Z:
-  Tag zspacingtag = SpacingHelper::GetZSpacingTagFromMediaStorage(ms);
+  Tag zspacingtag = ImageHelper::GetZSpacingTagFromMediaStorage(ms);
   if( zspacingtag != Tag(0xffff,0xffff) && ds.FindDataElement( zspacingtag ) )
     {
     const DataElement& de = ds.GetDataElement( zspacingtag );
@@ -264,7 +264,7 @@ $ dcmdump D_CLUNIE_NM1_JPLL.dcm" | grep 0028,0009
   return sp;
 }
 
-void SpacingHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spacing)
+void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spacing)
 {
   MediaStorage ms;
   ms.SetFromDataSet(ds);
@@ -393,7 +393,7 @@ void SpacingHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & sp
 
 }
 
-bool SpacingHelper::ComputeSpacingFromImagePositionPatient(const std::vector<double> & imageposition, std::vector<double> & spacing)
+bool ImageHelper::ComputeSpacingFromImagePositionPatient(const std::vector<double> & imageposition, std::vector<double> & spacing)
 {
   if( imageposition.size() % 3 != 0 )
     {

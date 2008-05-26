@@ -23,7 +23,7 @@
 #include "gdcmTransferSyntax.h"
 #include "gdcmLookupTable.h"
 #include "gdcmAttribute.h"
-#include "gdcmSpacingHelper.h"
+#include "gdcmImageHelper.h"
 #include "gdcmIconImage.h"
 #include "gdcmPrivateTag.h"
 #include "gdcmJPEGCodec.h"
@@ -637,7 +637,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     }
 
   // 4 1/2 Let's do Pixel Spacing
-  std::vector<double> spacing = SpacingHelper::GetSpacingValue(*F);
+  std::vector<double> spacing = ImageHelper::GetSpacingValue(*F);
   // FIXME: Only SC is allowed not to have spacing:
   if( !spacing.empty() )
     {

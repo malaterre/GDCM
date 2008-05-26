@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmSpacingHelper_h
-#define __gdcmSpacingHelper_h
+#ifndef __gdcmImageHelper_h
+#define __gdcmImageHelper_h
 
 #include "gdcmTypes.h"
 #include "gdcmTag.h"
@@ -31,7 +31,7 @@ namespace gdcm
 class MediaStorage;
 class DataSet;
 class File;
-class GDCM_EXPORT SpacingHelper
+class GDCM_EXPORT ImageHelper
 {
 public:
   static std::vector<double> GetSpacingValue(File const & f);

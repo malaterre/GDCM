@@ -22,7 +22,7 @@ SET(MSFF_SRCS
   gdcmDeltaEncodingCodec.cxx
   gdcmImageWriter.cxx
   gdcmStringFilter.cxx
-  gdcmSpacingHelper.cxx
+  gdcmImageHelper.cxx
   gdcmValidate.cxx
   gdcmDumper.cxx
   gdcmImage.cxx

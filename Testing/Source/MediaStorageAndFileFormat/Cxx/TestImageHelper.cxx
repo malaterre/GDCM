@@ -12,11 +12,11 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmSpacingHelper.h"
+#include "gdcmImageHelper.h"
 
-int TestSpacingHelper(int, char *[])
+int TestImageHelper(int, char *[])
 {
-  gdcm::SpacingHelper sh;
+  gdcm::ImageHelper sh;
   const double pos[] = { 0,0,0,
                          1,1,1};
   const double answer[3] = {1,1,1};
@@ -24,7 +24,7 @@ int TestSpacingHelper(int, char *[])
   std::vector<double> impos(pos,pos+6);
   std::vector<double> spacing;
   spacing.resize(3);
-  if( !gdcm::SpacingHelper::ComputeSpacingFromImagePositionPatient(impos, spacing) )
+  if( !gdcm::ImageHelper::ComputeSpacingFromImagePositionPatient(impos, spacing) )
     {
     return 1;
     }

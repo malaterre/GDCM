@@ -4,7 +4,7 @@ SET(MSFF_TEST_SRCS
   TestAnonymizer
   TestOrientation
   TestIconImage
-  TestSpacingHelper
+  TestImageHelper
   TestCoder
   TestDecoder
   TestRescaler
