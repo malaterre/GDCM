@@ -175,7 +175,9 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
+#ifdef GDCM_BUILD_TESTING
 %include "gdcmTesting.h"
+#endif
 %include "gdcmObject.h"
 %include "gdcmValue.h"
 %extend gdcm::Value
