@@ -206,24 +206,23 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
       }
 
     unsigned long numOutBytes = 0;
-    char byte;
+    signed char byte;
     //std::cerr << "Length: " << Length << "\n";
     //assert( (uint32_t)is.Tellg() == frame.Header.Offset[i] );
     while( numOutBytes < length )
       {
       //std::cerr << "numOutBytes: " << numOutBytes << " / " << length << "\n";
-      is.read(&byte, 1);
+      is.read((char*)&byte, 1);
       assert( byte <= 127 );
       numberOfReadBytes++;
-      //std::cerr << "Byte: " << int(byte) << "\n";
-      if( byte >= char(0) /*&& byte <= 127*/ )
+      if( byte >= 0 /*&& byte <= 127*/ ) /* 2nd is always true */
         {
         is.read( dummy_buffer, byte+1 );
         numberOfReadBytes += byte+1;
         numOutBytes += byte+ 1;
         tmpos.write( dummy_buffer, byte+1 );
         }
-      else if( byte <= char(-1) && byte >= char(-127) )
+      else if( byte <= -1 && byte >= -127 )
         {
         char nextByte;
         is.read( &nextByte, 1);
@@ -237,14 +236,12 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
         }
       else /* byte == -128 */
         {
-        assert( byte == char(-128) );
+        assert( byte == -128 );
         }
         assert( is.eof()
         || numberOfReadBytes + frame.Header.Offset[i] - is.tellg() == 0);
       }
     assert( numOutBytes == length );
-    //std::cerr << "numOutBytes:" << numOutBytes << " " << length << "\n";
-    //std::cerr << "DEBUG: " << numberOfReadBytes << std::endl;
     }
 
   return ImageCodec::Decode(tmpos,os);
