@@ -686,26 +686,28 @@ int vtkGDCMImageReader::RequestInformationCompat()
       rotatedorigin[1] = dcos[1] * origin[0] + dcos[4] * origin[1] + dcos[7] * origin[2];
       rotatedorigin[2] = dcos[2] * origin[0] + dcos[5] * origin[1] + dcos[8] * origin[2];
 #endif
-      //gdcm::Orientation::OrientationType type = gdcm::Orientation::GetType(dircos);
-      //const char *label = gdcm::Orientation::GetLabel( type );
-      // Invert spacing
-      //if( !this->FileLowerLeft )
-      //  {
-      //  this->DataSpacing[1] = -spacing[1];
-      //  }
 
-      //if( this->FileLowerLeft )
+      if( this->FileLowerLeft )
         {
+        // Since we are not doing the VTK Y-flipping operation, Origin and Image Position (Patient)
+        // are the same:
         this->DataOrigin[0] = origin[0];
         this->DataOrigin[1] = origin[1];
         this->DataOrigin[2] = origin[2];
         }
-      //else
-      //  {
-      //  this->DataOrigin[0] = origin[0];
-      //  this->DataOrigin[1] = origin[1] - this->DataSpacing[1]*dims[1];
-      //  this->DataOrigin[2] = origin[2];
-      //  }
+      else
+        {
+        // We are doing the Y-flip:
+        // translate Image Position (Patient) along the Y-vector of the Image Orientation (Patient):
+        // Step 1: Compute norm of translation vector:
+        // Because position is in the center of the pixel, we need to substract 1 to the dimY:
+        assert( dims[1] >=1 );
+        double norm = (dims[1] - 1) * this->DataSpacing[1];
+        // Step 2: translate:
+        this->DataOrigin[0] += origin[0] + norm * dircos[3+0];
+        this->DataOrigin[1] += origin[1] + norm * dircos[3+1];
+        this->DataOrigin[2] += origin[2] + norm * dircos[3+2];
+        }
       }
     // Need to set the rest to 0 ???
 
