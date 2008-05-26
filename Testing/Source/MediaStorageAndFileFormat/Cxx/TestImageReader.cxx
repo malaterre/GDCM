@@ -45,7 +45,7 @@ int TestImageRead(const char* filename, bool verbose = false)
     // a md5sum computed on LittleEndian would fail. Thus we need to
     // byteswap (again!) here:
 #ifdef GDCM_WORDS_BIGENDIAN
-    if( img.GetPixelType().GetBitsAllocated() == 16 )
+    if( img.GetPixelFormat().GetBitsAllocated() == 16 )
       {
       assert( !(len % 2) );
       assert( img.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME1
