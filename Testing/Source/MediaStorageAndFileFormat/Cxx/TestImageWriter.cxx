@@ -92,7 +92,7 @@ int TestImageWrite(const char *subdir, const char* filename)
     const char *ref = Testing::GetMD5FromFile(filename);
 
     char digest[33] = {};
-    System::ComputeMD5(buffer, len, digest);
+    Testing::ComputeMD5(buffer, len, digest);
     if( !ref )
       {
       // new regression image needs a md5 sum

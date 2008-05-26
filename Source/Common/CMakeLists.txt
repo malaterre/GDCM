@@ -60,7 +60,6 @@ ENDIF(NOT GDCM_USE_SYSTEM_ZLIB)
 SET(Common_SRCS
   gdcmVersion.cxx
   gdcmObject.cxx
-  gdcmTesting.cxx
   gdcmDirectory.cxx
   gdcmTerminal.cxx
   gdcmString.cxx
@@ -75,6 +74,12 @@ SET(Common_SRCS
   #gdcmSwapper.cxx
   gdcmUnpacker12Bits.cxx
   )
+
+IF(GDCM_BUILD_TESTING)
+SET(Common_SRCS ${Common_SRCS}
+  gdcmTesting.cxx
+)
+ENDIF(GDCM_BUILD_TESTING)
 
 ADD_LIBRARY(gdcmCommon ${Common_SRCS})
 SET_TARGET_PROPERTIES(gdcmCommon PROPERTIES ${GDCM_LIBRARY_PROPERTIES})

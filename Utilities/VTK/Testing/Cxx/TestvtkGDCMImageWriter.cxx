@@ -117,7 +117,7 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
         }
       const char *ref = gdcm::Testing::GetMD5FromFile(filename);
       char digest[33];
-      gdcm::System::ComputeMD5(buffer, len, digest);
+      gdcm::Testing::ComputeMD5(buffer, len, digest);
       if( !ref )
         {
         std::cerr << "Could not compute md5" << std::endl;

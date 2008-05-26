@@ -66,8 +66,8 @@ int TestWrite(const char *subdir, const char* filename)
 
   // Ok we have now two files let's compare their md5 sum:
   char digest[33], outdigest[33];
-  System::ComputeFileMD5(filename, digest);
-  System::ComputeFileMD5(outfilename.c_str(), outdigest);
+  Testing::ComputeFileMD5(filename, digest);
+  Testing::ComputeFileMD5(outfilename.c_str(), outdigest);
   if( strcmp(digest, outdigest) )
     {
     // too bad the file is not identical, so let's be paranoid and
