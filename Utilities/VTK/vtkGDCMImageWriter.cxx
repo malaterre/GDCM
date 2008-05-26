@@ -406,6 +406,12 @@ void SetStringValueFromTag(const char *s, const gdcm::Tag& t, gdcm::DataSet& ds)
     {
     gdcm::DataElement de( t );
     de.SetByteValue( s, strlen( s ) );
+    const gdcm::Global& g = gdcm::Global::GetInstance();
+    const gdcm::Dicts &dicts = g.GetDicts();
+    // FIXME: we know the tag at compile time we could save some time
+    // Using the static dict instead of the run-time one:
+    const gdcm::DictEntry &dictentry = dicts.GetDictEntry( t );
+    de.SetVR( dictentry.GetVR() );
     ds.Insert( de );
     }
 }
@@ -436,6 +442,8 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   //writer.SetImage( image );
 
   gdcm::ImageValue &image = dynamic_cast<gdcm::ImageValue&>(writer.GetImage());
+  // Nowadays this is the default one:
+  image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
   image.SetNumberOfDimensions( 2 ); // good default
   const int *dims = data->GetDimensions();
   assert( dims[0] >= 0 && dims[1] >= 0 && dims[2] >= 0 );
@@ -903,6 +911,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
   const char* msstr = gdcm::MediaStorage::GetMSString(ms);
   de.SetByteValue( msstr, strlen(msstr) );
+  de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
   ds.Insert( de );
 }
 
@@ -981,11 +990,13 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 {
   gdcm::DataElement de( gdcm::Tag(0x0020,0x000d) );
   de.SetByteValue( uid, strlen(uid) );
+  de.SetVR( gdcm::Attribute<0x0020, 0x000d>::GetVR() );
   ds.Insert( de );
 }
 {
   gdcm::DataElement de( gdcm::Tag(0x0020,0x000e) );
   de.SetByteValue( uid, strlen(uid) );
+  de.SetVR( gdcm::Attribute<0x0020, 0x000e>::GetVR() );
   ds.Insert( de );
 }
 

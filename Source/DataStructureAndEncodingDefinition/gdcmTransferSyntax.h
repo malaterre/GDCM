@@ -102,6 +102,8 @@ public:
 
   operator TSType () const { return TSField; }
 
+  // FIXME: ImplicitVRLittleEndian used to be the default, but nowadays
+  // this is rather the ExplicitVRLittleEndian instead...should be change the default ?
   TransferSyntax(TSType type = ImplicitVRLittleEndian):TSField(type) {}
 
   // return if dataset is encoded or not (Deflate Explicit VR)
