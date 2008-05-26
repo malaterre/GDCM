@@ -531,7 +531,6 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
 
     DataSet &subds = item2.GetNestedDataSet();
     subds.Insert( de );
-    sqi->AddItem( item2 );
 
 {
     Item item( Tag(0xfffe,0xe000) );
@@ -590,6 +589,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
     subds.Insert( de );
     //sqi->AddItem( item3 );
 }
+    sqi->AddItem( item2 );
     
 
     return;
