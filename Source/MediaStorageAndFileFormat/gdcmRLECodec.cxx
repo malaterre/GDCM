@@ -213,6 +213,7 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
       {
       //std::cerr << "numOutBytes: " << numOutBytes << " / " << length << "\n";
       is.read(&byte, 1);
+      assert( byte <= 127 );
       numberOfReadBytes++;
       //std::cerr << "Byte: " << int(byte) << "\n";
       if( byte >= 0 /*&& byte <= 127*/ )
