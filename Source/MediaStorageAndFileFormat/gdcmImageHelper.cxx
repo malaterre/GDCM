@@ -27,6 +27,246 @@
 namespace gdcm
 {
 
+bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &ori)
+{
+    //  (0028,9110) SQ (Sequence with undefined length #=1)     # u/l, 1 PixelMeasuresSequence
+    //      (fffe,e000) na (Item with undefined length #=2)         # u/l, 1 Item
+    //        (0018,0050) DS [0.5]                                    #   4, 1 SliceThickness
+    //        (0028,0030) DS [0.322\0.322]                            #  12, 2 PixelSpacing
+    // <entry group="5200" element="9229" vr="SQ" vm="1" name="Shared Functional Groups Sequence"/>
+    //const Tag tfgs(0x5200,0x9229);
+    //const Tag tfgs(0x5200,0x9230);
+    //assert( ds.FindDataElement( tfgs ) );
+    if( !ds.FindDataElement( tfgs ) ) return false;
+    const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+    assert( sqi );
+    // Get first item:
+    const Item &item = sqi->GetItem(1);
+    const DataSet & subds = item.GetNestedDataSet();
+    // Plane position Sequence
+    const Tag tpms(0x0020,0x9113);
+    if( !subds.FindDataElement(tpms) ) return false;
+    const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+    assert( sqi2 );
+    const Item &item2 = sqi2->GetItem(1);
+    const DataSet & subds2 = item2.GetNestedDataSet();
+    // 
+    const Tag tps(0x0020,0x0032);
+    if( !subds2.FindDataElement(tps) ) return false;
+    const DataElement &de = subds2.GetDataElement( tps );
+    //assert( bv );
+    gdcm::Attribute<0x0020,0x0032> at;
+    at.SetFromDataElement( de );
+    //at.Print( std::cout );
+    ori.push_back( at.GetValue(0) );
+    ori.push_back( at.GetValue(1) );
+    ori.push_back( at.GetValue(2) );
+
+
+    return true;
+}
+
+bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &dircos)
+{
+    //  (0028,9110) SQ (Sequence with undefined length #=1)     # u/l, 1 PixelMeasuresSequence
+    //      (fffe,e000) na (Item with undefined length #=2)         # u/l, 1 Item
+    //        (0018,0050) DS [0.5]                                    #   4, 1 SliceThickness
+    //        (0028,0030) DS [0.322\0.322]                            #  12, 2 PixelSpacing
+    // <entry group="5200" element="9229" vr="SQ" vm="1" name="Shared Functional Groups Sequence"/>
+    //const Tag tfgs(0x5200,0x9229);
+    //const Tag tfgs(0x5200,0x9230);
+    //assert( ds.FindDataElement( tfgs ) );
+    if( !ds.FindDataElement( tfgs ) ) return false;
+    const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+    assert( sqi );
+    // Get first item:
+    const Item &item = sqi->GetItem(1);
+    const DataSet & subds = item.GetNestedDataSet();
+    // Plane position Sequence
+    const Tag tpms(0x0020,0x9116);
+    if( !subds.FindDataElement(tpms) ) return false;
+    const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+    assert( sqi2 );
+    const Item &item2 = sqi2->GetItem(1);
+    const DataSet & subds2 = item2.GetNestedDataSet();
+    // 
+    const Tag tps(0x0020,0x0037);
+    if( !subds2.FindDataElement(tps) ) return false;
+    const DataElement &de = subds2.GetDataElement( tps );
+    //assert( bv );
+    gdcm::Attribute<0x0020,0x0037> at;
+    at.SetFromDataElement( de );
+    //at.Print( std::cout );
+    dircos.push_back( at.GetValue(0) );
+    dircos.push_back( at.GetValue(1) );
+    dircos.push_back( at.GetValue(2) );
+    dircos.push_back( at.GetValue(3) );
+    dircos.push_back( at.GetValue(4) );
+    dircos.push_back( at.GetValue(5) );
+
+
+    return true;
+}
+
+bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &sp)
+{
+    //  (0028,9110) SQ (Sequence with undefined length #=1)     # u/l, 1 PixelMeasuresSequence
+    //      (fffe,e000) na (Item with undefined length #=2)         # u/l, 1 Item
+    //        (0018,0050) DS [0.5]                                    #   4, 1 SliceThickness
+    //        (0028,0030) DS [0.322\0.322]                            #  12, 2 PixelSpacing
+    // <entry group="5200" element="9229" vr="SQ" vm="1" name="Shared Functional Groups Sequence"/>
+    //const Tag tfgs(0x5200,0x9229);
+    //const Tag tfgs(0x5200,0x9230);
+    //assert( ds.FindDataElement( tfgs ) );
+    if( !ds.FindDataElement( tfgs ) ) return false;
+    const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+    assert( sqi );
+    // Get first item:
+    const Item &item = sqi->GetItem(1);
+    const DataSet & subds = item.GetNestedDataSet();
+    // <entry group="0028" element="9110" vr="SQ" vm="1" name="Pixel Measures Sequence"/>
+    const Tag tpms(0x0028,0x9110);
+    if( !subds.FindDataElement(tpms) ) return false;
+    const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+    assert( sqi2 );
+    const Item &item2 = sqi2->GetItem(1);
+    const DataSet & subds2 = item2.GetNestedDataSet();
+    // <entry group="0028" element="0030" vr="DS" vm="2" name="Pixel Spacing"/>
+    const Tag tps(0x0028,0x0030);
+    if( !subds2.FindDataElement(tps) ) return false;
+    const DataElement &de = subds2.GetDataElement( tps );
+    //assert( bv );
+    gdcm::Attribute<0x0028,0x0030> at;
+    at.SetFromDataElement( de );
+    //at.Print( std::cout );
+    sp.push_back( at.GetValue(0) );
+    sp.push_back( at.GetValue(1) );
+
+    // Do the 3rd dimension zspacing:
+    // <entry group="0018" element="0050" vr="DS" vm="1" name="Slice Thickness"/>
+    const Tag tst(0x0018,0x0050);
+    if( !subds2.FindDataElement(tst) ) return false;
+    const DataElement &de2 = subds2.GetDataElement( tst );
+    gdcm::Attribute<0x0018,0x0050> at2;
+    at2.SetFromDataElement( de2 );
+    //at2.Print( std::cout );
+    sp.push_back( at2.GetValue(0) );
+
+    return true;
+}
+
+
+/* Enhanced stuff looks like:
+
+    (0020,9113) SQ (Sequence with undefined length #=1)     # u/l, 1 PlanePositionSequence
+      (fffe,e000) na (Item with undefined length #=1)         # u/l, 1 Item
+        (0020,0032) DS [73.5100815890831\-129.65028828174\189.777023529388] #  50, 3 ImagePositionPatient
+      (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
+    (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
+    (0020,9116) SQ (Sequence with undefined length #=1)     # u/l, 1 PlaneOrientationSequence
+      (fffe,e000) na (Item with undefined length #=1)         # u/l, 1 Item
+        (0020,0037) DS [0.01604138687252\0.99942564964294\-0.0298495516180\0.0060454937629... # 102, 6 ImageOrientationPatient
+      (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
+    (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
+    (0028,9110) SQ (Sequence with undefined length #=1)     # u/l, 1 PixelMeasuresSequence
+      (fffe,e000) na (Item with undefined length #=2)         # u/l, 1 Item
+        (0018,0050) DS [1]                                      #   2, 1 SliceThickness
+        (0028,0030) DS [0.83333331346511\0.83333331346511]      #  34, 2 PixelSpacing
+      (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
+    (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
+*/
+
+std::vector<double> ImageHelper::GetOriginValue(File const & f)
+{
+  std::vector<double> ori;
+  MediaStorage ms;
+  ms.SetFromFile(f);
+  const DataSet& ds = f.GetDataSet();
+
+  if( ms == MediaStorage::EnhancedCTImageStorage
+    ||  ms == MediaStorage::EnhancedMRImageStorage )
+    {
+    const Tag t1(0x5200,0x9229);
+    const Tag t2(0x5200,0x9230);
+    if( GetOriginValueFromSequence(ds,t1, ori) 
+     || GetOriginValueFromSequence(ds, t2, ori) )
+      {
+      assert( ori.size() == 3 );
+      return ori;
+      }
+    abort();
+    }
+  ori.resize( 3 );
+
+  // else
+  const Tag timagepositionpatient(0x0020, 0x0032);
+  if( ds.FindDataElement( timagepositionpatient ) )
+    {
+    const DataElement& de = ds.GetDataElement( timagepositionpatient );
+    Attribute<0x0020,0x0032> at = {{0,0,0}}; // default value if empty
+    at.SetFromDataElement( de );
+    for( unsigned int i = 0; i < at.GetNumberOfValues(); ++i )
+      {
+      ori[i] = at.GetValue(i);
+      }
+    }
+  else
+    {
+    ori[0] = 0;
+    ori[1] = 0;
+    ori[2] = 0;
+    }
+  assert( ori.size() == 3 );
+  return ori;
+}
+
+std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
+{
+  std::vector<double> dircos;
+  MediaStorage ms;
+  ms.SetFromFile(f);
+  const DataSet& ds = f.GetDataSet();
+
+  if( ms == MediaStorage::EnhancedCTImageStorage
+    ||  ms == MediaStorage::EnhancedMRImageStorage )
+    {
+    const Tag t1(0x5200,0x9229);
+    const Tag t2(0x5200,0x9230);
+    if( GetDirectionCosinesValueFromSequence(ds,t1, dircos) 
+     || GetDirectionCosinesValueFromSequence(ds, t2, dircos) )
+      {
+      assert( dircos.size() == 6 );
+      return dircos;
+      }
+    abort();
+    }
+  dircos.resize( 6 );
+
+  // else
+  const Tag timageorientationpatient(0x0020, 0x0037);
+  if( ds.FindDataElement( timageorientationpatient ) )
+    {
+    const DataElement& de = ds.GetDataElement( timageorientationpatient );
+    Attribute<0x0020,0x0037> at = {{1,0,0,0,1,0}}; // default value if empty
+    at.SetFromDataElement( de );
+    for( unsigned int i = 0; i < at.GetNumberOfValues(); ++i )
+      {
+      dircos[i] = at.GetValue(i);
+      }
+    }
+  else
+    {
+    dircos[0] = 1;
+    dircos[1] = 0;
+    dircos[2] = 0;
+    dircos[3] = 0;
+    dircos[4] = 1;
+    dircos[5] = 0;
+    }
+  assert( dircos.size() == 6 );
+  return dircos;
+}
+
 Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
 {
   Tag t;
@@ -79,53 +319,6 @@ Tag ImageHelper::GetZSpacingTagFromMediaStorage(MediaStorage const &ms)
     break;
     }
   return t;
-}
-
-bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &sp)
-{
-    //  (0028,9110) SQ (Sequence with undefined length #=1)     # u/l, 1 PixelMeasuresSequence
-    //      (fffe,e000) na (Item with undefined length #=2)         # u/l, 1 Item
-    //        (0018,0050) DS [0.5]                                    #   4, 1 SliceThickness
-    //        (0028,0030) DS [0.322\0.322]                            #  12, 2 PixelSpacing
-    // <entry group="5200" element="9229" vr="SQ" vm="1" name="Shared Functional Groups Sequence"/>
-    //const Tag tfgs(0x5200,0x9229);
-    //const Tag tfgs(0x5200,0x9230);
-    //assert( ds.FindDataElement( tfgs ) );
-    if( !ds.FindDataElement( tfgs ) ) return false;
-    const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
-    assert( sqi );
-    // Get first item:
-    const Item &item = sqi->GetItem(1);
-    const DataSet & subds = item.GetNestedDataSet();
-    // <entry group="0028" element="9110" vr="SQ" vm="1" name="Pixel Measures Sequence"/>
-    const Tag tpms(0x0028,0x9110);
-    if( !subds.FindDataElement(tpms) ) return false;
-    const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
-    assert( sqi2 );
-    const Item &item2 = sqi2->GetItem(1);
-    const DataSet & subds2 = item2.GetNestedDataSet();
-    // <entry group="0028" element="0030" vr="DS" vm="2" name="Pixel Spacing"/>
-    const Tag tps(0x0028,0x0030);
-    if( !subds2.FindDataElement(tps) ) return false;
-    const DataElement &de = subds2.GetDataElement( tps );
-    //assert( bv );
-    gdcm::Attribute<0x0028,0x0030> at;
-    at.SetFromDataElement( de );
-    //at.Print( std::cout );
-    sp.push_back( at.GetValue(0) );
-    sp.push_back( at.GetValue(1) );
-
-    // Do the 3rd dimension zspacing:
-    // <entry group="0018" element="0050" vr="DS" vm="1" name="Slice Thickness"/>
-    const Tag tst(0x0018,0x0050);
-    if( !subds2.FindDataElement(tst) ) return false;
-    const DataElement &de2 = subds2.GetDataElement( tst );
-    gdcm::Attribute<0x0018,0x0050> at2;
-    at2.SetFromDataElement( de2 );
-    //at2.Print( std::cout );
-    sp.push_back( at2.GetValue(0) );
-
-    return true;
 }
 
 std::vector<double> ImageHelper::GetSpacingValue(File const & f)

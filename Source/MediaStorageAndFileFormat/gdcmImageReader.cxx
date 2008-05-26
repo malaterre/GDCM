@@ -649,33 +649,20 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
       }
     }
   // 4 2/3 Let's do Origin
-  const Tag timagepositionpatient(0x0020, 0x0032);
-  if( ds.FindDataElement( timagepositionpatient ) )
+  std::vector<double> origin = ImageHelper::GetOriginValue(*F);
+  if( !origin.empty() )
     {
-    const DataElement& de = ds.GetDataElement( timagepositionpatient );
-    Attribute<0x0020,0x0032> at = {0,0,0}; // default value if empty
-    at.SetFromDataElement( de );
-    PixelData.SetOrigin( at.GetValues() );
-    if( at.GetNumberOfValues() > PixelData.GetNumberOfDimensions() ) // FIXME HACK
+    PixelData.SetOrigin( &origin[0] );
+    if( origin.size() > PixelData.GetNumberOfDimensions() ) // FIXME HACK
       {
-      PixelData.SetOrigin(PixelData.GetNumberOfDimensions(), at.GetValue(PixelData.GetNumberOfDimensions()) );
+      PixelData.SetOrigin(PixelData.GetNumberOfDimensions(), origin[PixelData.GetNumberOfDimensions()] );
       }
     }
-  else
+
+  std::vector<double> dircos = ImageHelper::GetDirectionCosinesValue(*F);
+  if( !dircos.empty() )
     {
-    gdcmDebugMacro( "No Image Position (Patient) for ms=" << ms );
-    }
-  const Tag timageorientationpatient(0x0020, 0x0037);
-  if( ds.FindDataElement( timageorientationpatient ) )
-    {
-    const DataElement& de = ds.GetDataElement( timageorientationpatient );
-    Attribute<0x0020,0x0037> at = {1,0,0,0,1,0}; // default value if empty
-    at.SetFromDataElement( de );
-    PixelData.SetDirectionCosines( at.GetValues() );
-    }
-  else
-    {
-    gdcmDebugMacro( "No Image Orientation (Patient) for ms=" << ms );
+    PixelData.SetDirectionCosines( &dircos[0] );
     }
 
   // 5. Photometric Interpretation

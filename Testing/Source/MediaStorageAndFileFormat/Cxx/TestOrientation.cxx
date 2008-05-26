@@ -17,5 +17,7 @@
 int TestOrientation(int, char *[])
 {
   gdcm::Orientation o;
+  double dircos[] = { 0, 1, 0, 0, 1, 0 };
+  gdcm::Orientation::OrientationType type = gdcm::Orientation::GetType(dircos);
   return 0;
 }
