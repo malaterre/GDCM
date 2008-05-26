@@ -63,6 +63,9 @@ IF(GDCM_WORDS_BIGENDIAN)
     ${BLACK_LIST_READER}
     MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm
     MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.dcm
+    PHILIPS_Intera-16-MONO2-Uncompress.dcm
+    SIEMENS_MAGNETOM-12-MONO2-GDCM12-VRUN.dcm
+    IM-0001-0066.dcm
   )
 ENDIF(GDCM_WORDS_BIGENDIAN)
 
