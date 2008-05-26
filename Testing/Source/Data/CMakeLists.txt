@@ -62,6 +62,7 @@ IF(GDCM_WORDS_BIGENDIAN)
   SET(BLACK_LIST_READER
     ${BLACK_LIST_READER}
     MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm
+    MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.dcm
   )
 ENDIF(GDCM_WORDS_BIGENDIAN)
 
