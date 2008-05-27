@@ -317,9 +317,19 @@ PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ double in
   PixelFormat st = PixelFormat::UNKNOWN;
   //assert( slope == (int)slope && intercept == (int)intercept);
   
-  double min = (_min - intercept ) / slope;
-  double max = (_max - intercept ) / slope;
-  assert( min <= max );
+  double dmin = (_min - intercept ) / slope;
+  double dmax = (_max - intercept ) / slope;
+  assert( dmin <= dmax );
+  assert( dmax <= std::numeric_limits<int64_t>::max() );
+  assert( dmin >= std::numeric_limits<int64_t>::min() );
+  /*
+   * Tricky: what happen in the case where floating point approximate dmax as: 65535.000244081035
+   * Take for instance: _max = 64527, intercept = -1024, slope = 1.000244140625
+   * => dmax = 65535.000244081035
+   * thus we must always make sure to cast to an integer first.
+   */
+  int64_t min = dmin;
+  int64_t max = dmax;
   if( min >= 0 ) // unsigned
     {
     if( max <= std::numeric_limits<uint8_t>::max() )

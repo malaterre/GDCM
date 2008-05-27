@@ -444,7 +444,14 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
   gdcm::ImageValue &image = dynamic_cast<gdcm::ImageValue&>(writer.GetImage());
   // Nowadays this is the default one:
+#ifdef GDCM_WORDS_BIGENDIAN
+  // FIXME: this is not the default syntax, but should be a little faster on big endian machine
+  // let see if people complain dataset cannot be sent
+  image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRBigEndian );
+#else
+  // that's the default syntax AND it is the fastest syntax to write to disk.
   image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
+#endif
   image.SetNumberOfDimensions( 2 ); // good default
   const int *dims = data->GetDimensions();
   assert( dims[0] >= 0 && dims[1] >= 0 && dims[2] >= 0 );

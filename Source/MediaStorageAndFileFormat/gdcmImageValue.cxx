@@ -91,6 +91,7 @@ bool ImageValue::TryJPEGCodec(char *buffer) const
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
     // DermaColorLossLess.dcm has a len of 63531, but DICOM will give us: 63532 ...
+    assert( len <= outbv->GetLength() );
     memcpy(buffer, outbv->GetPointer(), len /*outbv->GetLength()*/ );  // FIXME
 
     return true;

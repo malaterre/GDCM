@@ -324,7 +324,7 @@ bool ImageWriter::Write()
     if( bv )
       {
       modality2 = std::string( bv->GetPointer(), bv->GetLength() );
-      assert( modality2.find( ' ' ) == std::string::npos ); // no space ...
+      //assert( modality2.find( ' ' ) == std::string::npos ); // no space ...
       }
     else
       {
