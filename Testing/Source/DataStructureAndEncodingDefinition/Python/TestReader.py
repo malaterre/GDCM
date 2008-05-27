@@ -31,6 +31,8 @@ if __name__ == "__main__":
     sucess += TestRead( filename, True )
   except:
     # loop over all files:
+    gdcm.Trace.DebugOff()
+    gdcm.Trace.WarningOff()
     t = gdcm.Testing()
     nfiles = t.GetNumberOfFileNames()
     for i in range(0,nfiles):
