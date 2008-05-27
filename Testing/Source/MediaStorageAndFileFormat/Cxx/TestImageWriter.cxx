@@ -31,7 +31,8 @@ int TestImageWrite(const char *subdir, const char* filename)
     const FileMetaInformation &header = reader.GetFile().GetHeader();
     MediaStorage ms = header.GetMediaStorage();
     bool isImage = MediaStorage::IsImage( ms );
-    if( isImage )
+    bool pixeldata = reader.GetFile().GetDataSet().FindDataElement( Tag(0x7fe0,0x0010) );
+    if( isImage && pixeldata )
       {
       std::cerr << "Failed to read: " << filename << std::endl;
       return 1;
@@ -39,6 +40,7 @@ int TestImageWrite(const char *subdir, const char* filename)
     else
       {
       // not an image give up...
+      std::cerr << "Problem with: " << filename << " but that's ok" << std::endl;
       return 0;
       }
     }
@@ -159,6 +161,8 @@ int TestImageWriter(int argc, char *argv[])
     }
 
   // else
+  gdcm::Trace::DebugOff();
+  gdcm::Trace::WarningOff();
   int r = 0, i = 0;
   const char *filename;
   const char * const *filenames = gdcm::Testing::GetFileNames();

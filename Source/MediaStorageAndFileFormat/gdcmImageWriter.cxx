@@ -357,14 +357,10 @@ bool ImageWriter::Write()
 
   // Spacing:
   std::vector<double> sp;
-  sp.resize(2); // important !
+  sp.resize(3); // important !
   sp[0] = PixelData.GetSpacing(0);
   sp[1] = PixelData.GetSpacing(1);
-  if( ms != MediaStorage::SecondaryCaptureImageStorage ) 
-    {
-    sp.resize(3);
-    sp[2] = PixelData.GetSpacing(2); // might be a dummy value...
-    }
+  sp[2] = PixelData.GetSpacing(2); // might be a dummy value...
   ImageHelper::SetSpacingValue(ds, sp);
 
   // UIDs:

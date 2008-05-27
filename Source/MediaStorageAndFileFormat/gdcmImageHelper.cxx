@@ -470,10 +470,14 @@ $ dcmdump D_CLUNIE_NM1_JPLL.dcm" | grep 0028,0009
 
 void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spacing)
 {
-  assert( spacing.size() == 3 );
   MediaStorage ms;
   ms.SetFromDataSet(ds);
   assert( MediaStorage::IsImage( ms ) );
+  if( ms == MediaStorage::SecondaryCaptureImageStorage )
+    {
+    return;
+    }
+  assert( spacing.size() == 3 );
 
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage )
