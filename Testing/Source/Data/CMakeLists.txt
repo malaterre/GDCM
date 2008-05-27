@@ -69,6 +69,7 @@ IF(GDCM_WORDS_BIGENDIAN)
     MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.dcm
     PHILIPS_Intera-16-MONO2-Uncompress.dcm
     SIEMENS_MAGNETOM-12-MONO2-GDCM12-VRUN.dcm
+    PICKER-16-MONO2-No_DicomV3_Preamble.dcm
   )
 ENDIF(GDCM_WORDS_BIGENDIAN)
 
