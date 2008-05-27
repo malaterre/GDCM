@@ -63,7 +63,7 @@ inline void process_file(const char *filename, md5_byte_t *digest)
   {
     printf("%02x", digest[di]);
   }
-  printf("\t%s\n", filename);
+  //printf("\t%s\n", filename);
   free(buffer);
   fclose(file);
 }
