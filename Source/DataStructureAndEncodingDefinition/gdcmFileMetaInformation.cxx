@@ -106,6 +106,20 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     xde.SetByteValue( version, 2 /*strlen(version)*/ );
     Insert( xde );
     }
+  else
+    {
+    const DataElement &de = GetDataElement( Tag(0x0002,0x0001) );
+    const ByteValue *bv = de.GetByteValue();
+    if( bv->GetLength() != 2 
+      || memcmp( bv->GetPointer(), FileMetaInformation::GetFileMetaInformationVersion(), 2 ) != 0 )
+      {
+      xde.SetTag( Tag(0x0002, 0x0001) );
+      xde.SetVR( VR::OB );
+      const char *version = FileMetaInformation::GetFileMetaInformationVersion();
+      xde.SetByteValue( version, 2 /*strlen(version)*/ );
+      Replace( xde );
+      }
+    }
   // Media Storage SOP Class UID (0002,0002) -> see (0008,0016)
   if( !FindDataElement( Tag(0x0002, 0x0002) ) )
     {

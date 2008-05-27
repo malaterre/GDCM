@@ -59,6 +59,11 @@
  * - DA should be correct, PN should be correct (no space!)
  * - Enumerated Value should be correct
  */
+/*
+ check-meta is ideal for image like:
+
+  make gdcmconv && ./bin/gdcmconv -i ~/Creatis/gdcmData/PICKER-16-MONO2-No_DicomV3_Preamble.dcm -o bla.dcm 
+*/
 #include "gdcmReader.h"
 #include "gdcmImageReader.h"
 #include "gdcmImageWriter.h"
@@ -95,6 +100,7 @@ int main (int argc, char *argv[])
   std::string root;
   int raw = 0;
   int rootuid = 0;
+  int checkmeta = 0;
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -114,6 +120,7 @@ int main (int argc, char *argv[])
         {"tag", 1, 0, 0}, // need to specify a tag xxxx,yyyy = value to override default
         {"name", 1, 0, 0}, // same as tag but explicit use of name
         {"root-uid", 1, &rootuid, 1}, // specific Root (not GDCM)
+        {"check-meta", 0, &checkmeta, 1}, // specific Root (not GDCM)
 // Image specific options:
         {"pixeldata", 1, 0, 0}, // valid
         {"raw", 0, &raw, 1}, // default (implicit VR, LE) / Explicit LE / Explicit BE
@@ -323,7 +330,7 @@ int main (int argc, char *argv[])
 
     gdcm::Writer writer;
     writer.SetFileName( outfilename.c_str() );
-    writer.SetCheckFileMetaInformation( false );
+    writer.SetCheckFileMetaInformation( checkmeta );
     //writer.SetFile( f );
     writer.SetFile( reader.GetFile() );
     if( !writer.Write() )

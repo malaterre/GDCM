@@ -135,8 +135,8 @@ int ExecuteInformation(const char *filename, TReader *vtkreader)
 
   vtkreader->SetDataExtent( dataextent );
   vtkreader->SetDataScalarType ( datascalartype );
-  vtkreader->SetShift( image.GetIntercept() );
-  vtkreader->SetScale( image.GetSlope() );
+  //vtkreader->SetShift( image.GetIntercept() );
+  //vtkreader->SetScale( image.GetSlope() );
   vtkreader->SetNumberOfScalarComponents( numberOfScalarComponents );
   vtkreader->LoadOverlaysOff();
   if( image.GetNumberOfOverlays() )
