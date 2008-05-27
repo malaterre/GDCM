@@ -915,79 +915,15 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   imagetype.SetValues( values, 2 );
   ds.Insert( imagetype.GetAsDataElement() );
 
-#if 0
-  // I am pretty sure that for all other images it is valid to add an Image Position (Patient)
-  // and an Image Orientation (Patient)
-  if ( ms != gdcm::MediaStorage::SecondaryCaptureImageStorage 
-    && ms != gdcm::MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
-    && ms != gdcm::MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage )
-    {
-    // we need these iop arrays later when calculating the IPP per
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
-    double iop1[3], iop2[3];
-#else
-    float iop1[3], iop2[3];
-#endif
-
-    // Image Orientation (Patient)
-    gdcm::Attribute<0x0020,0x0037> iop = {{1,0,0,0,1,0}}; // default value
-    const vtkMatrix4x4 *dircos = this->DirectionCosines;
-    for(int i = 0; i < 3; ++i)
-    {
-      iop.SetValue( dircos->GetElement(i,0), i );
-      iop1[i] = dircos->GetElement(i,0);
-    }
-      
-    for(int i = 0; i < 3; ++i)
-    {
-      iop.SetValue( dircos->GetElement(i,1), i+3 );
-      iop2[i] = dircos->GetElement(i,1);
-    }
-
-    ds.Insert( iop.GetAsDataElement() );
-
-    // Image Position (Patient)
-    gdcm::Attribute<0x0020,0x0032> ipp = {{0,0,0}}; // default value
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
-    const double *origin = data->GetOrigin();
-    double new_origin[3];
-    double zaxis[3];
-#else
-    const float *origin = data->GetOrigin();
-    float new_origin[3];
-    float zaxis[3];
-#endif
-
-    // cross product of direction cosines gives the direction along
-    // which the slices are stacked
-    vtkMath::Cross(iop1, iop2, zaxis);
-    // determine the relative index of the current slice
-    // in the case of a single volume, this will be 0
-    // since inExt (UpdateExtent) and WholeExt are the same
-    int n = inExt[4] - inWholeExt[4];
-    for (int i = 0; i < 3; i++)
-    {
-        // the n'th slice is n * z-spacing aloung the IOP-derived
-        // z-axis
-        new_origin[i] = origin[i] + zaxis[i] * n * spacing[2];
-    }
-
-    for(int i = 0; i < 3; ++i)
-      ipp.SetValue( new_origin[i], i );
-
-    ds.Insert( ipp.GetAsDataElement() );
-    }
-#else
-
   // Image Orientation (Patient)
   //gdcm::Attribute<0x0020,0x0037> iop = {{1,0,0,0,1,0}}; // default value
   std::vector<double> iop;
   iop.resize(6);
   const vtkMatrix4x4 *dircos = this->DirectionCosines;
   for(int i = 0; i < 3; ++i)
-  {
+    {
     iop[i] = dircos->GetElement(i,0);
-  }
+    }
   
   for(int i = 0; i < 3; ++i)
   {
@@ -1037,7 +973,6 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
       ipp[i] = new_origin[i];
 
   gdcm::ImageHelper::SetOriginValue(ds, ipp);
-#endif
 
 
   // Here come the important part: generate proper UID for Series/Study so that people knows this is the same Study/Series
