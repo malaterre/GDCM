@@ -20,6 +20,7 @@ import sys,os,stat
 import gdcm
 
 blacklist = (
+"treamimpl" # :)
 # DataStructureAndEncodingDefinition
 "ByteBuffer" # WTF ?
 "ExplicitDataElement"
@@ -77,7 +78,7 @@ blacklist = (
 "PDFCodec"
 "Decoder"
 "ImageValue" # yeah this one should disapear real soon
-"SpacingHelper"
+"ImageHelper"
 "Coder"
 )
 
