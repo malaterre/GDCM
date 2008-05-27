@@ -196,6 +196,7 @@ bool ImageWriter::Write()
         de.SetVR( VR::OB );
         break;
       case 16:
+      case 32:
         de.SetVR( VR::OW );
         break;
       default:

@@ -210,7 +210,7 @@ static MSModalityType MSModalityTypes[] = {
   {"  ", 2},//SpacialFiducialsStorage,
   {"  ", 2},//PETImageStorage,
   {"  ", 2},//RTImageStorage,
-  {"  ", 2},//RTDoseStorage,
+  {"RTDOSE", 3},//RTDoseStorage,
   {"  ", 2},//RTStructureSetStorage,
   {"  ", 2},//RTPlanStorage,
   {"  ", 2},//CSANonImageStorage,

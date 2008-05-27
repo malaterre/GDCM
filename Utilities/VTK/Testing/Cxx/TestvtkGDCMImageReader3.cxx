@@ -79,7 +79,7 @@ int TestvtkGDCMImageReade3(const char *dir, const char *studyuid)
     assert( s.IsKey( filename ) );
     const gdcm::Tag &reftag = t1;
     const char *value =  s.GetValue( filename, reftag );
-    if( strcmp( value, studyuid ) == 0 )
+    if( value && strcmp( value, studyuid ) == 0 )
       {
       //std::cout << "file: " << filename << std::endl;
       sarray->InsertNextValue( filename );
