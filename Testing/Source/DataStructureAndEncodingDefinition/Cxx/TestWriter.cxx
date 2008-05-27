@@ -110,6 +110,8 @@ int TestWriter(int argc, char *argv[])
 
   // else
   int r = 0, i = 0;
+  gdcm::Trace::DebugOff();
+  gdcm::Trace::WarningOff();
   const char *filename;
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
