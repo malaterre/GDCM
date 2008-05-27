@@ -582,6 +582,11 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "ec87a838931d4d5d2e94a04644788a55" , "test_att.acr" },
 { "0621954acd5815e0b4f7b65fcc6506b1" , "SIEMENS_ImageLocationUN.dcm" },
 
+{ "e1e34e81050d17b07a20c0e43c355187" , "GDCMFakeJPEG.dcm" },
+{ "ef9f915086db838334ddc656a10486f2" , "DMCPACS_ExplicitImplicit_BogusIOP.dcm" },
+{ "498f80fd27882351b9a09e6ceef470bc" , "ELSCINT1_GDCM12Bug.dcm" },
+{ "34b5c1ce40f09f0dbede87ebf3f6ed3c" , "korean_agfa_infinitt_2008-3.dcm" },
+
 
 /* Stopping condition */
 { 0 ,0 }
