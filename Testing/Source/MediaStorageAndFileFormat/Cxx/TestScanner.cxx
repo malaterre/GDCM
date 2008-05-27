@@ -21,6 +21,42 @@
 //
 // $ find   /images/ -type f -exec dcmdump -s +P 0010,0010 {} \; 
 
+int TestScannerExtra()
+{
+  const char *extradataroot = gdcm::Testing::GetDataExtraRoot();
+  if( !extradataroot )
+    {
+    return 1;
+    }
+
+  gdcm::Directory d;
+  unsigned int nfiles = d.Load( extradataroot, true ); // no recursion
+  std::cout << "done retrieving file list. " << nfiles << " files found." <<  std::endl;
+
+  gdcm::Scanner s;
+  const gdcm::Tag t1(0x0020,0x000d); // Study Instance UID
+  const gdcm::Tag t2(0x0020,0x000e); // Series Instance UID
+  const gdcm::Tag t3(0x0010,0x0010); // Patient's Name
+  const gdcm::Tag t4(0x0004,0x5678); // DUMMY element
+  const gdcm::Tag t5(0x0028,0x0010); // Rows
+  const gdcm::Tag t6(0x0028,0x0011); // Columns
+  s.AddTag( t1 );
+  s.AddTag( t2 );
+  s.AddTag( t3 );
+  s.AddTag( t4 );
+  s.AddTag( t5 );
+  s.AddTag( t6 );
+  bool b = s.Scan( d.GetFilenames() );
+  if( !b )
+    {
+    std::cerr << "Scanner failed" << std::endl;
+    return 1;
+    }
+  //s.Print( std::cout );
+
+  return 0;
+}
+
 int TestScanner(int argc, char *argv[])
 {
   gdcm::Trace::WarningOff();
@@ -124,6 +160,7 @@ int TestScanner(int argc, char *argv[])
     }
 }
 */
+  int b2 = TestScannerExtra(); (void)b2;
   
 
   return 0;
