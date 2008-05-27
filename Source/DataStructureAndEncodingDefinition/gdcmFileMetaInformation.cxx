@@ -420,7 +420,6 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
     {
     throw Exception( "Serious bug" );
     }
-  std::streampos start = is.tellg();
   Tag t;
   t.Read<SwapperNoOp>(is);
   if( t.GetGroup() == 0x0002 )
@@ -449,20 +448,37 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
   else if( t.GetGroup() == 0x0800 ) // Good ol' ACR NEMA
     {
     is.seekg(-4, std::ios::cur); // Seek back
-    //MetaInformationTS = TransferSyntax::Explicit;
     DataSetTS = TransferSyntax::ImplicitVRBigEndianACRNEMA;
     }
   else if( t.GetElement() == 0x0010 ) // Hum, is it a private creator ?
     {
     is.seekg(-4, std::ios::cur); // Seek back
-    //MetaInformationTS = TransferSyntax::Explicit;
     DataSetTS = TransferSyntax::ImplicitVRLittleEndian;
     }
   else
     {
-    is.seekg(-4, std::ios::cur); // Seek back
     //assert( t.GetElement() == 0x0 );
-    throw Exception( "INVALID" ); // Does not start with a 0x0002 group element
+    char vr_str[3];
+    is.read(vr_str, 2);
+    vr_str[2] = '\0';
+    VR::VRType vr = VR::GetVRType(vr_str);
+    is.seekg(-6, std::ios::cur); // Seek back
+    if( vr != VR::VR_END )
+      {
+      // Ok we found a VR, this is 99% likely to be our safe bet
+      DataSetTS = TransferSyntax::ExplicitVRLittleEndian;
+      }
+    else
+      {
+      std::streampos start = is.tellg();
+      ImplicitDataElement ide;
+      ide.Read<SwapperNoOp>(is); // might throw an expection which will NOT be caught
+      std::streampos cur = is.tellg();
+      std::cout << "s-c" << start - cur << std::endl;
+      is.seekg( start - cur, std::ios::cur );
+      // ok we could read at least one implicit element
+      DataSetTS = TransferSyntax::ImplicitVRLittleEndian;
+      }
     }
   return is;
 }

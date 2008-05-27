@@ -98,7 +98,7 @@ int TestvtkGDCMImageWrite2(const char *filename, bool verbose = false)
       filenames->InsertNextValue( fg.GetFilename(i) );
       std::cerr << fg.GetFilename(i) << std::endl;
       }
-    assert( filenames->GetNumberOfValues() == fg.GetNumberOfFilenames() );
+    assert( filenames->GetNumberOfValues() == (int)fg.GetNumberOfFilenames() );
     writer->SetFileNames( filenames );
     writer->Write();
     //if( verbose )  std::cerr << "Write out: " << gdcmfile << std::endl;

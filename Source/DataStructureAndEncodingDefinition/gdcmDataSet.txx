@@ -194,7 +194,10 @@ namespace gdcm
     for( ; it != DES.end(); ++it)
       {
       const DataElement & de = *it;
-      de.Write<TDE,TSwap>(os);
+      //if( de.GetTag().GetGroup() >= 0x0008 || de.GetTag().GetGroup() == 0x0002 )
+        {
+        de.Write<TDE,TSwap>(os);
+        }
       }
     return os;
   }
