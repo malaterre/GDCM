@@ -57,6 +57,10 @@ SET(BLACK_LIST_READER
 
 # vtkGDCMImageWriter + rescale does not work on the following images:
   LIBIDO-24-ACR_NEMA-Rectangle.dcm
+
+# remove for now
+  IM-0001-0066.dcm
+  4hd2a332a0je.dcm
 )
 IF(GDCM_WORDS_BIGENDIAN)
   SET(BLACK_LIST_READER
@@ -65,7 +69,6 @@ IF(GDCM_WORDS_BIGENDIAN)
     MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.dcm
     PHILIPS_Intera-16-MONO2-Uncompress.dcm
     SIEMENS_MAGNETOM-12-MONO2-GDCM12-VRUN.dcm
-    IM-0001-0066.dcm
   )
 ENDIF(GDCM_WORDS_BIGENDIAN)
 
