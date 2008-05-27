@@ -670,23 +670,6 @@ int vtkGDCMImageReader::RequestInformationCompat()
     // Apply transform:
     if( dircos && origin )
       {
-      double dcos[9];
-      for(int i=0;i<6;++i)
-        dcos[i] = dircos[i];
-      dcos[6] = dircos[1] * dircos[5] - dircos[2] * dircos[4];
-      dcos[7] = dircos[2] * dircos[3] - dircos[0] * dircos[5];
-      dcos[8] = dircos[0] * dircos[4] - dircos[3] * dircos[1];
-      double rotatedorigin[3];
-#if 1
-      rotatedorigin[0] = dcos[0] * origin[0] + dcos[1] * origin[1] + dcos[2] * origin[2];
-      rotatedorigin[1] = dcos[3] * origin[0] + dcos[4] * origin[1] + dcos[5] * origin[2];
-      rotatedorigin[2] = dcos[6] * origin[0] + dcos[7] * origin[1] + dcos[8] * origin[2];
-#else
-      rotatedorigin[0] = dcos[0] * origin[0] + dcos[3] * origin[1] + dcos[6] * origin[2];
-      rotatedorigin[1] = dcos[1] * origin[0] + dcos[4] * origin[1] + dcos[7] * origin[2];
-      rotatedorigin[2] = dcos[2] * origin[0] + dcos[5] * origin[1] + dcos[8] * origin[2];
-#endif
-
       if( this->FileLowerLeft )
         {
         // Since we are not doing the VTK Y-flipping operation, Origin and Image Position (Patient)
@@ -704,9 +687,9 @@ int vtkGDCMImageReader::RequestInformationCompat()
         assert( dims[1] >=1 );
         double norm = (dims[1] - 1) * this->DataSpacing[1];
         // Step 2: translate:
-        this->DataOrigin[0] += origin[0] + norm * dircos[3+0];
-        this->DataOrigin[1] += origin[1] + norm * dircos[3+1];
-        this->DataOrigin[2] += origin[2] + norm * dircos[3+2];
+        this->DataOrigin[0] = origin[0] + norm * dircos[3+0];
+        this->DataOrigin[1] = origin[1] + norm * dircos[3+1];
+        this->DataOrigin[2] = origin[2] + norm * dircos[3+2];
         }
       }
     // Need to set the rest to 0 ???

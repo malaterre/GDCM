@@ -1010,7 +1010,21 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     // in the case of a single volume, this will be 0
     // since inExt (UpdateExtent) and WholeExt are the same
     int n = inExt[4] - inWholeExt[4];
-    const vtkFloatingPointType *origin = data->GetOrigin();
+    const vtkFloatingPointType *vtkorigin = data->GetOrigin();
+    vtkFloatingPointType origin[3];
+    if( this->FileLowerLeft )
+    {
+      origin[0] = vtkorigin[0];
+      origin[1] = vtkorigin[1];
+      origin[2] = vtkorigin[2];
+    }
+    else
+    {
+      double norm = (dims[1] - 1) * spacing[1];
+      origin[0] = vtkorigin[0] - norm * iop[3+0];
+      origin[1] = vtkorigin[1] - norm * iop[3+1];
+      origin[2] = vtkorigin[2] - norm * iop[3+2];
+    }
     double new_origin[3];
     for (int i = 0; i < 3; i++)
     {
