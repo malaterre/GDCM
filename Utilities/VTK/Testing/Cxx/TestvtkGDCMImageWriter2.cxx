@@ -85,6 +85,7 @@ int TestvtkGDCMImageWrite2(const char *filename, bool verbose = false)
     
     vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
     writer->SetInput( reader->GetOutput() );
+    writer->SetFileLowerLeft( reader->GetFileLowerLeft() );
     writer->SetDirectionCosines( reader->GetDirectionCosines() );
     writer->SetImageFormat( reader->GetImageFormat() );
     writer->SetFileDimensionality( 2 ); // test the 3D to 2D writing mode
@@ -126,6 +127,9 @@ int TestvtkGDCMImageWrite2(const char *filename, bool verbose = false)
           const double *origin = image.GetOrigin();
           if( origin )
             {
+/*
+FIXME: it would be nice if this test would also handle FileLowerLeftOff to do d'une pierre deux coups.
+*/
             vtkImageData * vtkimg = reader->GetOutput();
             const vtkFloatingPointType *vtkorigin = vtkimg->GetOrigin();
             if( fabs(vtkorigin[0] - origin[0]) > 1.e-3 
