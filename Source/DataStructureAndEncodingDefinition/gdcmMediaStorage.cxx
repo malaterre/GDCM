@@ -176,7 +176,7 @@ static MSModalityType MSModalityTypes[] = {
   {"  ", 2},//DigitalIntraoralXrayImageStorageForPresentation,
   {"  ", 2},//DigitalIntraoralXRayImageStorageForProcessing,
   {"CT", 2},//CTImageStorage,
-  {"  ", 2},//EnhancedCTImageStorage,
+  {"CT", 3},//EnhancedCTImageStorage,
   {"  ", 2},//UltrasoundMultiFrameImageStorageRetired,
   {"IVUS", 3},//UltrasoundMultiFrameImageStorage,
   {"MR", 2},//MRImageStorage,
