@@ -330,8 +330,8 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
       // If we get here, the JPEG code has signaled an error.
       // We need to clean up the JPEG object, close the input file, and return.
       jpeg_destroy_decompress(&cinfo);
-      //fclose(infile);
-      abort();
+      // TODO: www.dcm4che.org/jira/secure/attachment/10185/ct-implicit-little.dcm
+      // weird Icon Image from GE...
       return false;
       }
     }
