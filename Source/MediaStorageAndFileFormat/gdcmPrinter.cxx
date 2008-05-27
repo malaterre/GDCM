@@ -732,6 +732,14 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
       case VR::OB:
       case VR::OW:
       case VR::OB_OW:
+      case VR::UN:
+      case VR::US_SS_OW: // TODO: check with ModalityLUT.dcm 
+/*
+  VR::US_SS_OW:
+  undefined_length_un_vr.dcm
+  GDCMFakeJPEG.dcm
+  PhilipsWith15Overlays.dcm
+*/
           {
           if ( bv )
             {
@@ -755,10 +763,9 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
             }
           }
         break;
-      case VR::UN:
       case VR::US_SS:
-      case VR::US_SS_OW:
-        os << "TODO";
+        // impossible...
+        assert( refvr != VR::US_SS );
         break;
       case VR::SQ:
         if( !de.GetSequenceOfItems() && !de.IsEmpty() && de.GetValue().GetLength() )
