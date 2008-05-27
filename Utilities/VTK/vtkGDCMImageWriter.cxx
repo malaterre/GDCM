@@ -994,10 +994,6 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     iop[i+3] = dircos->GetElement(i,1);
   }
   
-  std::vector<double> dummy;
-  dummy.resize(3);
-  gdcm::ImageHelper::SetSpacingValue(ds, dummy);
-
   gdcm::ImageHelper::SetDirectionCosinesValue(ds, iop);
 
     std::vector<double> ipp;
