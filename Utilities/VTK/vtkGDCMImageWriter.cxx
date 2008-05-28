@@ -979,7 +979,9 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     for(int i = 0; i < 3; ++i)
       ipp[i] = new_origin[i];
 
-   image.SetOrigin( &ipp[0] );
+   image.SetOrigin(0, ipp[0] );
+   image.SetOrigin(1, ipp[1] );
+   image.SetOrigin(2, ipp[2] );
   assert( ipp.size() < 3 || image.GetOrigin(2) == ipp[2] );
    //gdcm::ImageHelper::SetOriginValue(ds, ipp, dims[2], spacing[2]);
 
