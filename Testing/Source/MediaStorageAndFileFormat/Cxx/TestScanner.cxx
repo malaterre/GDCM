@@ -160,7 +160,7 @@ int TestScanner(int argc, char *argv[])
     }
 }
 */
-  int b2 = TestScannerExtra(); (void)b2;
+  //int b2 = TestScannerExtra(); (void)b2;
   
 
   return 0;
