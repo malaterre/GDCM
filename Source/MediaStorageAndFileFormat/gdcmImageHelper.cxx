@@ -148,7 +148,19 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
     for (int i = 0; i < 3; ++i) dist += normal[i]*ipp[i];
     distances.push_back( dist );
     }
-  zspacing = distances[1] - distances[0];
+  assert( distances.size() == nitems );
+  double meanspacing = 0;
+  double prev = distances[0];
+  for(unsigned int i = 1; i < nitems; ++i)
+    {
+    double current = distances[i] - prev;
+    meanspacing += current;
+    prev = distances[i];
+    }
+  meanspacing /= (nitems - 1);
+  
+  //zspacing = distances[1] - distances[0];
+  zspacing = meanspacing;
   return true;
 }
 
