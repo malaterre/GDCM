@@ -135,4 +135,8 @@ TODO:
 -----------------------------------------------------------------------
 ZSpacing for RTDoseStorage is not handled properly:
 bin/gdcmvtkGDCMTests TestvtkGDCMImageWriter BogugsItemAndSequenceLengthCorrected.dcm    
+-----------------------------------------------------------------------
+There are still some subtel issues with Enhanced modality:
+* what if frames are not order according to IPP ?
+* what is the intercept/slope are not constant throughtout the frames ?
 

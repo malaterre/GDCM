@@ -687,40 +687,10 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   PixelData.SetPhotometricInterpretation( pi );
 
   // Do the Rescale Intercept & Slope
-  Attribute<0x0028,0x1052> at1;
-  bool intercept = ds.FindDataElement(at1.GetTag());
-  if( intercept )
-  {
-  if( !ds.GetDataElement(at1.GetTag()).IsEmpty() )
-    {
-    at1.SetFromDataElement( ds.GetDataElement(at1.GetTag()) );
-    PixelData.SetIntercept( at1.GetValue() );
-    }
-  else
-    {
-    PixelData.SetIntercept( 0 );
-    }
-  }
-  Attribute<0x0028,0x1053> at2;
-  bool slope     = ds.FindDataElement(at2.GetTag());
-  if ( slope )
-  {
-  if( !ds.GetDataElement(at2.GetTag()).IsEmpty() )
-    {
-    at2.SetFromDataElement( ds.GetDataElement(at2.GetTag()) );
-    PixelData.SetSlope( at2.GetValue() );
-    if( PixelData.GetSlope() == 0 )
-      {
-      // come' on ! WTF
-      gdcmWarningMacro( "Cannot have slope == 0. Defaulting to 1.0 instead" );
-      PixelData.SetSlope( 1 );
-      }
-    }
-  else
-    {
-    PixelData.SetSlope( 1 );
-    }
-  }
+  std::vector<double> is = ImageHelper::GetRescaleInterceptSlopeValue(*F);
+  PixelData.SetIntercept( is[0] );
+  PixelData.SetSlope( is[1] );
+
   // Do the Palette Color:
   // 1. Modality LUT Sequence
   bool modlut = ds.FindDataElement(Tag(0x0028,0x3000) );

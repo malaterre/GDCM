@@ -44,8 +44,10 @@ class Image;
 class GDCM_EXPORT ImageHelper
 {
 public:
+  static std::vector<double> GetRescaleInterceptSlopeValue(File const & f);
+  static void SetRescaleInterceptSlopeValue(DataSet & ds, const Image & img);
+
   static std::vector<double> GetOriginValue(File const & f);
-  //static void SetOriginValue(DataSet & ds, const std::vector<double> & origin, int dimz = 0, double zspacing = 0);
   static void SetOriginValue(DataSet & ds, const Image & img);
 
   static std::vector<double> GetDirectionCosinesValue(File const & f);

@@ -103,6 +103,48 @@ bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& tfgs, st
   return true;
 }
 
+bool GetInterceptSlopeValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &intslope)
+{
+  if( !ds.FindDataElement( tfgs ) ) return false;
+  const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+  assert( sqi );
+  // Get first item:
+  const Item &item = sqi->GetItem(1);
+  const DataSet & subds = item.GetNestedDataSet();
+  // (0028,9145) SQ (Sequence with undefined length)               # u/l,1 Pixel Value Transformation Sequence
+  const Tag tpms(0x0028,0x9145);
+  if( !subds.FindDataElement(tpms) ) return false;
+  const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+  assert( sqi2 );
+  const Item &item2 = sqi2->GetItem(1);
+  const DataSet & subds2 = item2.GetNestedDataSet();
+{
+  //  (0028,1052) DS [0]                                        # 2,1 Rescale Intercept
+  const Tag tps(0x0028,0x1052);
+  if( !subds2.FindDataElement(tps) ) return false;
+  const DataElement &de = subds2.GetDataElement( tps );
+  //assert( bv );
+  gdcm::Attribute<0x0028,0x1052> at;
+  at.SetFromDataElement( de );
+  //at.Print( std::cout );
+  intslope.push_back( at.GetValue() );
+}
+{
+  // (0028,1053) DS [5.65470085470085]                         # 16,1 Rescale Slope
+  const Tag tps(0x0028,0x1053);
+  if( !subds2.FindDataElement(tps) ) return false;
+  const DataElement &de = subds2.GetDataElement( tps );
+  //assert( bv );
+  gdcm::Attribute<0x0028,0x1053> at;
+  at.SetFromDataElement( de );
+  //at.Print( std::cout );
+  intslope.push_back( at.GetValue() );
+}
+
+  assert( intslope.size() == 2 );
+  return true;
+}
+
 bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
 {
   // first we need to get the direction cosines:
@@ -332,6 +374,61 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
     }
   assert( dircos.size() == 6 );
   return dircos;
+}
+
+std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
+{
+  std::vector<double> interceptslope;
+  MediaStorage ms;
+  ms.SetFromFile(f);
+  const DataSet& ds = f.GetDataSet();
+
+  if( ms == MediaStorage::EnhancedCTImageStorage
+   || ms == MediaStorage::EnhancedMRImageStorage )
+    {
+    const Tag t1(0x5200,0x9229);
+    const Tag t2(0x5200,0x9230);
+    if( GetInterceptSlopeValueFromSequence(ds,t1, interceptslope) 
+     || GetInterceptSlopeValueFromSequence(ds,t2, interceptslope) )
+      {
+      assert( interceptslope.size() == 2 );
+      return interceptslope;
+      }
+    abort();
+    }
+
+  // else
+  interceptslope.resize( 2 );
+  interceptslope[0] = 0;
+  interceptslope[1] = 1;
+  Attribute<0x0028,0x1052> at1;
+  bool intercept = ds.FindDataElement(at1.GetTag());
+  if( intercept )
+    {
+    if( !ds.GetDataElement(at1.GetTag()).IsEmpty() )
+      {
+      at1.SetFromDataElement( ds.GetDataElement(at1.GetTag()) );
+      interceptslope[0] = at1.GetValue();
+      }
+    }
+  Attribute<0x0028,0x1053> at2;
+  bool slope     = ds.FindDataElement(at2.GetTag());
+  if ( slope )
+    {
+    if( !ds.GetDataElement(at2.GetTag()).IsEmpty() )
+      {
+      at2.SetFromDataElement( ds.GetDataElement(at2.GetTag()) );
+      interceptslope[1] = at2.GetValue();
+      if( interceptslope[1] == 0 )
+        {
+        // come' on ! WTF
+        gdcmWarningMacro( "Cannot have slope == 0. Defaulting to 1.0 instead" );
+        interceptslope[1] = 1;
+        }
+      }
+    }
+
+  return interceptslope;
 }
 
 Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
@@ -938,6 +1035,86 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
   iop.SetValue( dircos[5], 5);
 
   ds.Insert( iop.GetAsDataElement() );
+}
+
+void ImageHelper::SetRescaleInterceptSlopeValue(DataSet & ds, const Image & img)
+{
+  MediaStorage ms;
+  ms.SetFromDataSet(ds);
+  assert( MediaStorage::IsImage( ms ) );
+
+  if( ms == MediaStorage::EnhancedCTImageStorage
+   || ms == MediaStorage::EnhancedMRImageStorage )
+    {
+/*
+    (0020,9116) SQ (Sequence with undefined length #=1)     # u/l, 1 PlaneOrientationSequence
+      (fffe,e000) na (Item with undefined length #=1)         # u/l, 1 Item
+        (0020,0037) DS [0.00000\1.00000\0.00000\0.00000\0.00000\-1.00000] #  48, 6 ImageOrientationPatient
+      (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
+    (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
+*/
+    const Tag tfgs(0x5200,0x9229);
+    SequenceOfItems * sqi;
+    if( !ds.FindDataElement( tfgs ) )
+      {
+      sqi = new SequenceOfItems;
+      DataElement de( tfgs );
+      de.SetVR( VR::SQ );
+      de.SetValue( *sqi );
+      de.SetVLToUndefined();
+      ds.Insert( de );
+      }
+    sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
+    sqi->SetLengthToUndefined();
+
+    if( !sqi->GetNumberOfItems() )
+      {
+      Item item( Tag(0xfffe,0xe000) );
+      item.SetVLToUndefined();
+      sqi->AddItem( item );
+      }
+    Item &item1 = sqi->GetItem(1);
+    DataSet &subds = item1.GetNestedDataSet();
+    const Tag tpms(0x0028,0x9145);
+    if( !subds.FindDataElement( tpms ) )
+      {
+      SequenceOfItems *sqi2 = new SequenceOfItems;
+      DataElement de( tpms );
+      de.SetVR( VR::SQ );
+      de.SetValue( *sqi2 );
+      de.SetVLToUndefined();
+      subds.Insert( de );
+      }
+
+    sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
+    sqi->SetLengthToUndefined();
+
+    if( !sqi->GetNumberOfItems() )
+      {
+      Item item( Tag(0xfffe,0xe000) );
+      item.SetVLToUndefined();
+      sqi->AddItem( item );
+      }
+    Item &item2 = sqi->GetItem(1);
+    DataSet &subds2 = item2.GetNestedDataSet();
+
+    Attribute<0x0028,0x1052> at1;
+    at1.SetValue( img.GetIntercept() );
+    subds2.Insert( at1.GetAsDataElement() );
+    Attribute<0x0028,0x1053> at2;
+    at2.SetValue( img.GetSlope() );
+    subds2.Insert( at2.GetAsDataElement() );
+
+    return;
+    }
+
+  // Question: should I always insert them ?
+  Attribute<0x0028,0x1052> at1;
+  at1.SetValue( img.GetIntercept() );
+  ds.Insert( at1.GetAsDataElement() );
+  Attribute<0x0028,0x1053> at2;
+  at2.SetValue( img.GetSlope() );
+  ds.Insert( at2.GetAsDataElement() );
 }
 
 bool ImageHelper::ComputeSpacingFromImagePositionPatient(const std::vector<double> & imageposition, std::vector<double> & spacing)

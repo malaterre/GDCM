@@ -149,7 +149,7 @@ void Image::SetOrigin(const float *ori)
 {
   assert( NumberOfDimensions );
   Origin.resize( NumberOfDimensions );
-  for(int i = 0; i < NumberOfDimensions; ++i)
+  for(unsigned int i = 0; i < NumberOfDimensions; ++i)
     {
     Origin[i] = ori[i];
     }
@@ -253,7 +253,7 @@ bool Image::AreOverlaysInPixelData() const
     {
     total += (int)it->IsInPixelData();
     }
-  assert( total == GetNumberOfOverlays() || !total );
+  assert( total == (int)GetNumberOfOverlays() || !total );
   return total != 0;
 }
 
@@ -307,6 +307,9 @@ void Image::Print(std::ostream &os) const
       }
     }
   os << ")\n";
+}
+{
+  os << "Rescale Intercept/Slope: (" << Intercept << "," << Slope << ")\n";
 }
     //std::vector<double> Spacing;
     //std::vector<double> Origin;
