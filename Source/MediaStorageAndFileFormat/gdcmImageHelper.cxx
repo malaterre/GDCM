@@ -103,6 +103,55 @@ bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& tfgs, st
   return true;
 }
 
+bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
+{
+  // first we need to get the direction cosines:
+  const Tag t1(0x5200,0x9229);
+  const Tag t2(0x5200,0x9230);
+  std::vector<double> cosines;
+  // For some reason TOSHIBA-EnhancedCT.dcm is storing the direction cosines in the per-frame section
+  // and not the shared one... oh well
+  bool b1 = GetDirectionCosinesValueFromSequence(ds, t1, cosines) 
+    || GetDirectionCosinesValueFromSequence(ds,t2,cosines);
+  assert( b1 && cosines.size() == 6 ); // yeah we really need that
+
+  const Tag tfgs(0x5200,0x9230);
+  if( !ds.FindDataElement( tfgs ) ) return false;
+  const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
+  assert( sqi );
+  double normal[3];
+  normal[0] = cosines[1]*cosines[5] - cosines[2]*cosines[4];
+  normal[1] = cosines[2]*cosines[3] - cosines[0]*cosines[5];
+  normal[2] = cosines[0]*cosines[4] - cosines[1]*cosines[3];
+
+  // For each item
+  std::vector<double> distances;
+  unsigned int nitems = sqi->GetNumberOfItems();
+  for(unsigned int i = 1; i <= nitems; ++i)
+    {
+    const Item &item = sqi->GetItem(i);
+    const DataSet & subds = item.GetNestedDataSet();
+    // (0020,9113) SQ (Sequence with undefined length #=1)     # u/l, 1 PlanePositionSequence
+    const Tag tpms(0x0020,0x9113);
+    if( !subds.FindDataElement(tpms) ) return false;
+    const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+    assert( sqi2 );
+    const Item &item2 = sqi2->GetItem(1);
+    const DataSet & subds2 = item2.GetNestedDataSet();
+    // (0020,0032) DS [-82.5\-82.5\1153.75]                    #  20, 3 ImagePositionPatient
+    const Tag tps(0x0020,0x0032);
+    if( !subds2.FindDataElement(tps) ) return false;
+    const DataElement &de = subds2.GetDataElement( tps );
+    Attribute<0x0020,0x0032> ipp;
+    ipp.SetFromDataElement(de);
+    double dist = 0;
+    for (int i = 0; i < 3; ++i) dist += normal[i]*ipp[i];
+    distances.push_back( dist );
+    }
+  zspacing = distances[1] - distances[0];
+  return true;
+}
+
 bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &sp)
 {
   //  (0028,9110) SQ (Sequence with undefined length #=1)     # u/l, 1 PixelMeasuresSequence
@@ -137,6 +186,10 @@ bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector
   sp.push_back( at.GetValue(0) );
   sp.push_back( at.GetValue(1) );
 
+  // BUG ! Check for instace:
+  // gdcmData/BRTUM001.dcm
+  // Slice Thickness is 5.0 while the Zspacing should be 6.0 !
+#if 0
   // Do the 3rd dimension zspacing:
   // <entry group="0018" element="0050" vr="DS" vm="1" name="Slice Thickness"/>
   const Tag tst(0x0018,0x0050);
@@ -146,9 +199,16 @@ bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector
   at2.SetFromDataElement( de2 );
   //at2.Print( std::cout );
   sp.push_back( at2.GetValue(0) );
+#endif
+  double zspacing;
+  bool b = ComputeZSpacingFromIPP(ds, zspacing);
+  if( !b ) return false;
+
+  sp.push_back( zspacing );
 
   return true;
 }
+
 
 
 /* Enhanced stuff looks like:

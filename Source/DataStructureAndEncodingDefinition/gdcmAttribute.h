@@ -127,10 +127,16 @@ public:
     assert( idx < GetNumberOfValues() );
     return Internal[idx];
   }
+  ArrayType operator[] (unsigned int idx) {
+    return GetValue(idx);
+  }
   // const reference
   ArrayType const &GetValue(unsigned int idx = 0) const {
     assert( idx < GetNumberOfValues() );
     return Internal[idx];
+  }
+  ArrayType const & operator[] (unsigned int idx) const {
+    return GetValue(idx);
   }
   void SetValue(ArrayType v, unsigned int idx = 0) {
     assert( idx < GetNumberOfValues() );
