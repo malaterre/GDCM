@@ -56,6 +56,9 @@
 /* only cerr, for instance 'invalid file' will be allowed */
 #cmakedefine GDCM_DEBUG
 
+#define GDCM_CMAKE_INSTALL_PREFIX "@CMAKE_INSTALL_PREFIX@"
+#define GDCM_INSTALL_INCLUDE_DIR "@GDCM_INSTALL_INCLUDE_DIR@"
+
 /* Whether we are building shared libraries.  */
 #cmakedefine GDCM_BUILD_SHARED_LIBS
 
