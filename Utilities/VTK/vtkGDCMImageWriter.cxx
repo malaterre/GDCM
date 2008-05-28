@@ -939,22 +939,22 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   
   gdcm::ImageHelper::SetDirectionCosinesValue(ds, iop);
 
-    std::vector<double> ipp;
-    ipp.resize(3);
-    // Image Position (Patient)
-    // cross product of direction cosines gives the direction along
-    // which the slices are stacked
-    const double *iop1 = &iop[0];
-    const double *iop2 = iop1+3;
-    double zaxis[3];
-    vtkMath::Cross(iop1, iop2, zaxis);
+  std::vector<double> ipp;
+  ipp.resize(3);
+  // Image Position (Patient)
+  // cross product of direction cosines gives the direction along
+  // which the slices are stacked
+  const double *iop1 = &iop[0];
+  const double *iop2 = iop1+3;
+  double zaxis[3];
+  vtkMath::Cross(iop1, iop2, zaxis);
 
-    // determine the relative index of the current slice
-    // in the case of a single volume, this will be 0
-    // since inExt (UpdateExtent) and WholeExt are the same
-    int n = inExt[4] - inWholeExt[4];
-    const vtkFloatingPointType *vtkorigin = data->GetOrigin();
-    vtkFloatingPointType origin[3];
+  // determine the relative index of the current slice
+  // in the case of a single volume, this will be 0
+  // since inExt (UpdateExtent) and WholeExt are the same
+  int n = inExt[4] - inWholeExt[4];
+  const vtkFloatingPointType *vtkorigin = data->GetOrigin();
+  vtkFloatingPointType origin[3];
     if( this->FileLowerLeft )
     {
       origin[0] = vtkorigin[0];
@@ -979,7 +979,9 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     for(int i = 0; i < 3; ++i)
       ipp[i] = new_origin[i];
 
-  gdcm::ImageHelper::SetOriginValue(ds, ipp);
+   image.SetOrigin( &ipp[0] );
+  assert( ipp.size() < 3 || image.GetOrigin(2) == ipp[2] );
+   //gdcm::ImageHelper::SetOriginValue(ds, ipp, dims[2], spacing[2]);
 
 
   // Here come the important part: generate proper UID for Series/Study so that people knows this is the same Study/Series

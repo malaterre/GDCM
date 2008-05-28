@@ -23,19 +23,30 @@ namespace gdcm
 {
 
 /**
- * \brief Spacing
+ * \brief ImageHelper (internal class)
+ *
  * \note
- * This is one of the most complex class in the toolkit since it needs to knows exactly where
- * the spacing is stored for each DICOM object (MR, CT, PET, US ... )
+ * Helper for writing World images in DICOM. DICOM has a 'template' approach to image where 
+ * MR Image Storage are distinct object from Enhanced MR Image Storage. For example the
+ * Pixel Spacing in one object is not at the same position (ie Tag) as in the other
+ * this class is the central (read: fragile) place where all the dispatching is done from
+ * a united view of a world image (typically VTK or ITK point of view) down to the low
+ * level DICOM point of view.
+ *
+ * Warning: do not expect the API of this class to be maintain at any point, since as
+ * Modalities are added the API might have to be augmented or behavior changed to cope
+ * with new modalities.
  */
 class MediaStorage;
 class DataSet;
 class File;
+class Image;
 class GDCM_EXPORT ImageHelper
 {
 public:
   static std::vector<double> GetOriginValue(File const & f);
-  static void SetOriginValue(DataSet & ds, const std::vector<double> & origin);
+  //static void SetOriginValue(DataSet & ds, const std::vector<double> & origin, int dimz = 0, double zspacing = 0);
+  static void SetOriginValue(DataSet & ds, const Image & img);
 
   static std::vector<double> GetDirectionCosinesValue(File const & f);
   static void SetDirectionCosinesValue(DataSet & ds, const std::vector<double> & dircos);

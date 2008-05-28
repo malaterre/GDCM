@@ -23,6 +23,7 @@
 #include "gdcmDictEntry.h"
 #include "gdcmDicts.h"
 #include "gdcmAttribute.h"
+#include "gdcmImage.h"
 
   /* TODO:
    * 
@@ -667,24 +668,9 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
 
 }
 
-void ImageHelper::SetOriginValue(DataSet & ds, const std::vector<double> & origin)
+void SetDataElementInSQAsItemNumber(DataSet & ds, DataElement const & de, Tag const & sqtag, unsigned int itemidx)
 {
-  assert( origin.size() == 3 );
-  MediaStorage ms;
-  ms.SetFromDataSet(ds);
-  assert( MediaStorage::IsImage( ms ) );
-
-  if( ms == MediaStorage::EnhancedCTImageStorage
-   || ms == MediaStorage::EnhancedMRImageStorage )
-    {
-/*
-    (0020,9113) SQ (Sequence with undefined length #=1)     # u/l, 1 PlanePositionSequence
-      (fffe,e000) na (Item with undefined length #=1)         # u/l, 1 Item
-        (0020,0032) DS [40.0000\-105.000\105.000]               #  24, 3 ImagePositionPatient
-      (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
-    (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
-*/
-    const Tag tfgs(0x5200,0x9230);
+    const Tag tfgs = sqtag; //(0x5200,0x9230);
     SequenceOfItems * sqi;
     if( !ds.FindDataElement( tfgs ) )
       {
@@ -698,13 +684,13 @@ void ImageHelper::SetOriginValue(DataSet & ds, const std::vector<double> & origi
     sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
     sqi->SetLengthToUndefined();
 
-    if( !sqi->GetNumberOfItems() )
+    if( sqi->GetNumberOfItems() < itemidx )
       {
       Item item( Tag(0xfffe,0xe000) );
       item.SetVLToUndefined();
       sqi->AddItem( item );
       }
-    Item &item1 = sqi->GetItem(1);
+    Item &item1 = sqi->GetItem(itemidx);
     DataSet &subds = item1.GetNestedDataSet();
     const Tag tpms(0x0020,0x9113);
     if( !subds.FindDataElement( tpms ) )
@@ -729,12 +715,45 @@ void ImageHelper::SetOriginValue(DataSet & ds, const std::vector<double> & origi
     Item &item2 = sqi->GetItem(1);
     DataSet &subds2 = item2.GetNestedDataSet();
 
-    gdcm::Attribute<0x0020,0x0032> ipp = {{0,0,0}}; // default value
-    ipp.SetValue( origin[0], 0);
-    ipp.SetValue( origin[1], 1);
-    ipp.SetValue( origin[2], 2);
+    //gdcm::Attribute<0x0020,0x0032> ipp = {{0,0,0}}; // default value
+    //ipp.SetValue( origin[0], 0);
+    //ipp.SetValue( origin[1], 1);
+    //ipp.SetValue( origin[2], 2);
 
-    subds2.Replace( ipp.GetAsDataElement() );
+    subds2.Replace( de );
+}
+
+void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
+{
+  const double *origin = image.GetOrigin();
+  //assert( origin.size() == 3 );
+  MediaStorage ms;
+  ms.SetFromDataSet(ds);
+  assert( MediaStorage::IsImage( ms ) );
+
+  if( ms == MediaStorage::EnhancedCTImageStorage
+   || ms == MediaStorage::EnhancedMRImageStorage )
+    {
+/*
+    (0020,9113) SQ (Sequence with undefined length #=1)     # u/l, 1 PlanePositionSequence
+      (fffe,e000) na (Item with undefined length #=1)         # u/l, 1 Item
+        (0020,0032) DS [40.0000\-105.000\105.000]               #  24, 3 ImagePositionPatient
+      (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
+    (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
+*/
+    const Tag tfgs(0x5200,0x9230);
+
+    gdcm::Attribute<0x0020,0x0032> ipp = {{0,0,0}}; // default value
+    double zspacing = image.GetSpacing(2);
+    unsigned int dimz = image.GetDimension(2);
+
+    for(unsigned int i = 0; i < dimz; ++i )
+      {
+      ipp.SetValue( origin[0], 0);
+      ipp.SetValue( origin[1], 1);
+      ipp.SetValue( origin[2] + i*zspacing, 2);
+      SetDataElementInSQAsItemNumber(ds, ipp.GetAsDataElement(), tfgs, i+1);
+      }
 
     return;
     }

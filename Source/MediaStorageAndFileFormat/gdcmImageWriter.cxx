@@ -364,6 +364,9 @@ bool ImageWriter::Write()
   sp[2] = PixelData.GetSpacing(2); // might be a dummy value...
   ImageHelper::SetSpacingValue(ds, sp);
 
+  // Origin:
+  ImageHelper::SetOriginValue(ds, PixelData);
+
   // UIDs:
   // (0008,0018) UI [1.3.6.1.4.1.5962.1.1.1.1.3.20040826185059.5457] #  46, 1 SOPInstanceUID
   // (0020,000d) UI [1.3.6.1.4.1.5962.1.2.1.20040826185059.5457] #  42, 1 StudyInstanceUID
