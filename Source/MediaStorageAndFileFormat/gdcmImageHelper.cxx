@@ -470,6 +470,7 @@ Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
     t = Tag(0x3002,0x0011); // ImagePlanePixelSpacing
     break;
   case MediaStorage::SecondaryCaptureImageStorage:
+  case MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage:
     t = Tag(0xffff,0xffff);
     break;
   case MediaStorage::UltrasoundImageStorage: // ??
@@ -527,6 +528,7 @@ Warning - Dicom dataset contains attributes not present in standard DICOM IOD - 
   case MediaStorage::UltrasoundMultiFrameImageStorageRetired:
   // SC:
   case MediaStorage::SecondaryCaptureImageStorage:
+  case MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage:
     t = Tag(0xffff,0xffff);
     break;
   case MediaStorage::NuclearMedicineImageStorage: // gdcmData/Nm.dcm
