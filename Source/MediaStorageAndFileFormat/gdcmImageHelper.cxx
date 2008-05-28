@@ -801,17 +801,32 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
       (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
     (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
 */
+
     const Tag tfgs(0x5200,0x9230);
 
     gdcm::Attribute<0x0020,0x0032> ipp = {{0,0,0}}; // default value
     double zspacing = image.GetSpacing(2);
     unsigned int dimz = image.GetDimension(2);
+  const double *cosines = image.GetDirectionCosines();
+
+  double normal[3];
+  normal[0] = cosines[1]*cosines[5] - cosines[2]*cosines[4];
+  normal[1] = cosines[2]*cosines[3] - cosines[0]*cosines[5];
+  normal[2] = cosines[0]*cosines[4] - cosines[1]*cosines[3];
 
     for(unsigned int i = 0; i < dimz; ++i )
       {
-      ipp.SetValue( origin[0], 0);
-      ipp.SetValue( origin[1], 1);
-      ipp.SetValue( origin[2] + i*zspacing, 2);
+    double new_origin[3];
+    for (int j = 0; j < 3; j++)
+    {
+        // the n'th slice is n * z-spacing aloung the IOP-derived
+        // z-axis
+        new_origin[j] = origin[j] + normal[j] * i * zspacing;
+    }
+
+      ipp.SetValue( new_origin[0], 0);
+      ipp.SetValue( new_origin[1], 1);
+      ipp.SetValue( new_origin[2], 2);
       SetDataElementInSQAsItemNumber(ds, ipp.GetAsDataElement(), tfgs, i+1);
       }
 

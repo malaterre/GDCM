@@ -364,8 +364,21 @@ bool ImageWriter::Write()
   sp[2] = PixelData.GetSpacing(2); // might be a dummy value...
   ImageHelper::SetSpacingValue(ds, sp);
 
+  // Direction Cosines:
+  const double *dircos = PixelData.GetDirectionCosines();
+  std::vector<double> iop;
+  iop.resize(6);
+  iop[0] = dircos[0];
+  iop[1] = dircos[1];
+  iop[2] = dircos[2];
+  iop[3] = dircos[3];
+  iop[4] = dircos[4];
+  iop[5] = dircos[5];
+  ImageHelper::SetDirectionCosinesValue(ds, iop);
+
   // Origin:
   ImageHelper::SetOriginValue(ds, PixelData);
+
 
   // UIDs:
   // (0008,0018) UI [1.3.6.1.4.1.5962.1.1.1.1.3.20040826185059.5457] #  46, 1 SOPInstanceUID
