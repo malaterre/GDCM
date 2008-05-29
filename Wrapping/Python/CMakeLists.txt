@@ -115,36 +115,34 @@ ENDIF(WIN32 AND NOT CYGWIN)
 # swig generates a _gdcm.so and a gdcm.py, we need to copy gdcm.py to the proper place:
 # gdcm.py is the interface name != implementation name, so we need to keep 'gdcm', so that 'import gdcm'
 # from a python script always work
-#ADD_CUSTOM_COMMAND(
-#  TARGET    ${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME}
-#  POST_BUILD
-#  COMMAND   ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/gdcm.py ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}
-#  DEPENDS "${swig_generated_file_fullname}"
-#  COMMENT   "Copy gdcm.py into ${LIBRARY_OUTPUT_PATH}"
-#)
-CONFIGURE_FILE(${CMAKE_CURRENT_BINARY_DIR}/gdcm.py 
-  ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}/gdcm.py COPYONLY)
+ADD_CUSTOM_COMMAND(
+  TARGET    ${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME}
+  POST_BUILD
+  COMMAND   ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/gdcm.py ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}
+  DEPENDS "${swig_generated_file_fullname}" "${CMAKE_CURRENT_BINARY_DIR}/gdcm.py"
+  COMMENT   "Copy gdcm.py into ${LIBRARY_OUTPUT_PATH}"
+)
 
 #Module are always place in the library destination
 #but for poor win32 user I decided to place them
 # right next to the other dlls
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS ${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME}
-    #RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime
-    #LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
-    #ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
-    DESTINATION ${python_site_package}/${subdir}
+    RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime
+    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
+    ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
+    #DESTINATION ${python_site_package}/${subdir}
   )
 # the python file is not a dev file, but part of the gdcm module...
   INSTALL(FILES 
     ${CMAKE_CURRENT_BINARY_DIR}/gdcm.py 
-    #DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
-    DESTINATION ${python_site_package}/${subdir}
+    DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
+    #DESTINATION ${python_site_package}/${subdir}
   )
-  INSTALL(FILES 
-    ${CMAKE_CURRENT_BINARY_DIR}/gdcm.pth
-    DESTINATION ${python_site_package}
-  )
+  #INSTALL(FILES 
+  #  ${CMAKE_CURRENT_BINARY_DIR}/gdcm.pth
+  #  DESTINATION ${python_site_package}
+  #)
 ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 
 # Test that will try to load any class in the target language: python
