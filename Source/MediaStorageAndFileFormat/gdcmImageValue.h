@@ -16,8 +16,8 @@
 #ifndef __gdcmImageValue_h
 #define __gdcmImageValue_h
 
+#error do not use
 #include "gdcmImage.h"
-#include "gdcmDataElement.h"
 
 namespace gdcm
 {
@@ -44,14 +44,8 @@ public:
     {
     }
 
-protected:
-  bool TryRAWCodec(char *buffer) const;
-  bool TryJPEGCodec(char *buffer) const;
-  bool TryJPEG2000Codec(char *buffer) const;
-  bool TryRLECodec(char *buffer) const;
 
 private:
-  DataElement PixelData; //copied from 7fe0,0010
 };
 
 } // end namespace gdcm

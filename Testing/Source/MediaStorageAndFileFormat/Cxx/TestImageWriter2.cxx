@@ -14,7 +14,7 @@
 =========================================================================*/
 #include "gdcmImageWriter.h"
 #include "gdcmImageReader.h"
-#include "gdcmImageValue.h"
+#include "gdcmImage.h"
 
 int TestImageWriter2(int argc, char *argv[])
 {
@@ -24,7 +24,7 @@ int TestImageWriter2(int argc, char *argv[])
 
   const gdcm::Image &ir = reader.GetImage();
 
-  gdcm::ImageValue image;
+  gdcm::Image image;
   image.SetNumberOfDimensions( ir.GetNumberOfDimensions() );
 
   const unsigned int *dims = ir.GetDimensions();

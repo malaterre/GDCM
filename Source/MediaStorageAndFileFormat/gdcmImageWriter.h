@@ -17,7 +17,7 @@
 #define __gdcmImageWriter_h
 
 #include "gdcmWriter.h"
-#include "gdcmImageValue.h"
+#include "gdcmImage.h"
 
 namespace gdcm
 {
@@ -38,7 +38,7 @@ public:
   bool Write(); // Execute()
 
 private:
-  ImageValue PixelData;
+  Image PixelData;
 };
 
 } // end namespace gdcm

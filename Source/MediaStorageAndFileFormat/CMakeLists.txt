@@ -28,7 +28,6 @@ SET(MSFF_SRCS
   gdcmImage.cxx
   gdcmImageConverter.cxx
   gdcmImageCodec.cxx
-  gdcmImageValue.cxx
   gdcmJPEG12Codec.cxx
   gdcmRLECodec.cxx
   gdcmPDFCodec.cxx

@@ -33,7 +33,6 @@ SET(MSFF_TEST_SRCS
   TestCurve
   TestPixelFormat
   TestPersonName
-  TestImageValue
   TestImageCodec
   TestImageConverter
   TestJPEGCodec

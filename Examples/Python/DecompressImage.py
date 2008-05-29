@@ -32,7 +32,7 @@ if __name__ == "__main__":
   if not r.Read():
     sys.exit(1)
   
-  image = gdcm.ImageValue()
+  image = gdcm.Image()
   ir = r.GetImage()
   
   image.SetNumberOfDimensions( ir.GetNumberOfDimensions() );

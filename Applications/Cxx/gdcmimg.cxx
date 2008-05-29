@@ -243,7 +243,7 @@ int main (int argc, char *argv[])
     const gdcm::PixelFormat &pixeltype = imageori.GetPixelFormat();
     assert( imageori.GetNumberOfDimensions() == 2 || imageori.GetNumberOfDimensions() == 3 );
     unsigned long len = imageori.GetBufferLength();
-    gdcm::ImageValue image;
+    gdcm::Image image;
     image.SetNumberOfDimensions( 2 ); // good default
     const unsigned int *dims = imageori.GetDimensions();
     if ( region[0] > region[1] 

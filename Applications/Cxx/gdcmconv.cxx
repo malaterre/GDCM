@@ -232,7 +232,7 @@ int main (int argc, char *argv[])
 
     const gdcm::Image &ir = reader.GetImage();
 
-    gdcm::ImageValue image( ir );
+    gdcm::Image image( ir );
     const gdcm::TransferSyntax &ts = ir.GetTransferSyntax();
     if( ts.IsExplicit() )
       {

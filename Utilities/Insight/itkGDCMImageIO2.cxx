@@ -334,7 +334,7 @@ void GDCMImageIO2::Write(const void* buffer)
 
   gdcm::ImageWriter writer;
   //this->SetNumberOfDimensions(3);
-  gdcm::ImageValue &image = dynamic_cast<gdcm::ImageValue&>(writer.GetImage());
+  gdcm::Image &image = writer.GetImage();
   image.SetNumberOfDimensions( 2 ); // good default
   image.SetDimension(0, m_Dimensions[0] );
   image.SetDimension(1, m_Dimensions[1] );

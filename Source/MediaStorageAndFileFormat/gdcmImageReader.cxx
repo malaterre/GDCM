@@ -212,7 +212,7 @@ int ImageReader::ReadISFromTag( Tag const &t, std::stringstream &ss,
 }
 
 // PICKER-16-MONO2-Nested_icon.dcm
-void DoIconImage(const DataSet& rootds, ImageValue& image)
+void DoIconImage(const DataSet& rootds, Image& image)
 {
   const Tag ticonimage(0x0088,0x0200);
   //const Tag tgeiconimage(0x0009,0x1010);
@@ -402,7 +402,7 @@ void DoIconImage(const DataSet& rootds, ImageValue& image)
     }
 }
 
-void DoCurves(const DataSet& ds, ImageValue& pixeldata)
+void DoCurves(const DataSet& ds, Image& pixeldata)
 {
   unsigned int numcurves;
   if( (numcurves = Curve::GetNumberOfCurves( ds )) )
@@ -454,7 +454,7 @@ void DoCurves(const DataSet& ds, ImageValue& pixeldata)
     }
 }
 
-void DoOverlays(const DataSet& ds, ImageValue& pixeldata)
+void DoOverlays(const DataSet& ds, Image& pixeldata)
 {
   unsigned int numoverlays;
   if( (numoverlays = Overlay::GetNumberOfOverlays( ds )) )

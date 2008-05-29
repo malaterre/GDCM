@@ -140,7 +140,7 @@ int main(int argc, char *argv [])
   // FIXME does not work...
   //writer.GetFile().GetDataSet().Remove( tcompressedpixeldata );
 
-  gdcm::ImageValue &image = dynamic_cast<gdcm::ImageValue&>(writer.GetImage());
+  gdcm::Image &image = writer.GetImage();
   image.SetNumberOfDimensions( 2 ); // good default
   image.SetDimension(0, 256 );
   image.SetDimension(1, 256 );

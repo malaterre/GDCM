@@ -97,7 +97,7 @@ int main(int argc, char *argv [])
 
   gdcm::ImageWriter writer;
 
-  gdcm::ImageValue &image = dynamic_cast<gdcm::ImageValue&>(writer.GetImage());
+  gdcm::Image &image = writer.GetImage();
   image.SetNumberOfDimensions( 2 ); // good default
   image.SetDimension(0, dims[0] );
   image.SetDimension(1, dims[1] );

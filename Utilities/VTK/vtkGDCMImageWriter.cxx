@@ -442,7 +442,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   gdcm::ImageWriter writer;
   //writer.SetImage( image );
 
-  gdcm::ImageValue &image = dynamic_cast<gdcm::ImageValue&>(writer.GetImage());
+  gdcm::Image &image = writer.GetImage();
   // Nowadays this is the default one:
 #ifdef GDCM_WORDS_BIGENDIAN
   // FIXME: this is not the default syntax, but should be a little faster on big endian machine

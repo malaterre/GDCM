@@ -38,7 +38,7 @@ ImageWriter::~ImageWriter()
 void ImageWriter::SetImage(Image const &img)
 {
   //assert( Stream.is_open() );
-  const ImageValue &iv = dynamic_cast<const ImageValue&>( img );
+  const Image &iv = img;
   PixelData = iv;
   //assert( Stream.is_open() );
 }

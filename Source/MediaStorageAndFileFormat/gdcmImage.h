@@ -24,6 +24,7 @@
 #include "gdcmOverlay.h"
 #include "gdcmCurve.h"
 #include "gdcmIconImage.h"
+#include "gdcmDataElement.h"
 
 #include <vector>
 
@@ -52,12 +53,14 @@ namespace gdcm
 class GDCM_EXPORT Image
 {
 public:
-  Image ():NumberOfDimensions(0),PlanarConfiguration(0),Dimensions(),Spacing(),SC(),NeedByteSwap(false),LUT(0),Overlays(),Curves(),Icon(),Intercept(0),Slope(1) {}
+  Image ():NumberOfDimensions(0),PlanarConfiguration(0),Dimensions(),Spacing(),SC(),NeedByteSwap(false),LUT(0),Overlays(),Curves(),Icon(),Intercept(0),Slope(1),PixelData() {}
   virtual ~Image() {}
 
+  // Return the number of dimension of the pixel data bytes; for example 2 for a 2D matrices of values
   unsigned int GetNumberOfDimensions() const;
   void SetNumberOfDimensions(unsigned int dim);
 
+  // Return the dimension of the pixel data, first dimension (x), then 2nd (y), then 3rd (z)...
   const unsigned int *GetDimensions() const;
   unsigned int GetDimension(unsigned int idx) const;
   void SetDimensions(unsigned int *dims);
@@ -74,31 +77,40 @@ public:
     }
 
   // Acces the raw data
-  virtual bool GetBuffer(char *buffer) const;
+  bool GetBuffer(char *buffer) const;
 
-  // TODO does this really belong here ?
+  // Return a 3-tuples specifying the spacing
+  // NOTE: 3rd value can be an aribtrary 1 value when the spacing was not specified (ex. 2D image).
+  // WARNING: when the spacing is not specifier, a default value of 1 will be returned
   const double *GetSpacing() const;
   double GetSpacing(unsigned int idx) const;
   void SetSpacing(const double *spacing);
   void SetSpacing(unsigned int idx, double spacing);
 
+  // Return a 3-tuples specifying the origin
+  // Will return (0,0,0) if the origin was not specified.
   const double *GetOrigin() const;
   double GetOrigin(unsigned int idx) const;
   void SetOrigin(const float *ori);
   void SetOrigin(const double *ori);
   void SetOrigin(unsigned int idx, double ori);
 
+  // Return a 6-tuples specifying the direction cosines
+  // A default value of (1,0,0,0,1,0) will be return when the direction cosines was not specified.
   const double *GetDirectionCosines() const;
   double GetDirectionCosines(unsigned int idx) const;
   void SetDirectionCosines(const float *dircos);
   void SetDirectionCosines(const double *dircos);
   void SetDirectionCosines(unsigned int idx, double dircos);
 
+  // print
   void Print(std::ostream &os) const;
 
+  // return the planar configuration
   unsigned int GetPlanarConfiguration() const;
   void SetPlanarConfiguration(unsigned int pc);
 
+  // return the photometric interpretation
   const PhotometricInterpretation &GetPhotometricInterpretation() const;
   void SetPhotometricInterpretation(PhotometricInterpretation const &pi);
 
@@ -167,12 +179,11 @@ public:
 //  Image &operator= (Image const&);
 
   // Return the length of the image after decompression
-  // It will NOT take into account the Palette Color
+  // WARNING for palette color: It will NOT take into account the Palette Color
+  // thus you need to multiply this length by 3 if theimage is RGB for instance.
   unsigned long GetBufferLength() const;
 
-  // Same as above but takes into account Palette Color
-  //unsigned long GetBufferPaletteLength() const;
-
+  // Transfer syntax
   void SetTransferSyntax(TransferSyntax const &ts) {
     TS = ts;
   }
@@ -180,11 +191,25 @@ public:
     return TS;
   }
 
+  // intercept
   void SetIntercept(double intercept) { Intercept = intercept; }
   double GetIntercept() const { return Intercept; }
 
+  // slope
   void SetSlope(double slope) { Slope = slope; }
   double GetSlope() const { return Slope; }
+
+
+  void SetDataElement(DataElement const &de) {
+    PixelData = de;
+  }
+  const DataElement& GetDataElement() const { return PixelData; }
+
+protected:
+  bool TryRAWCodec(char *buffer) const;
+  bool TryJPEGCodec(char *buffer) const;
+  bool TryJPEG2000Codec(char *buffer) const;
+  bool TryRLECodec(char *buffer) const;
 
 private:
   unsigned int NumberOfDimensions;
@@ -208,6 +233,8 @@ private:
   IconImage Icon;
   double Intercept;
   double Slope;
+
+  DataElement PixelData; //copied from 7fe0,0010
 
 };
 

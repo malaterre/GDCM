@@ -77,7 +77,6 @@ blacklist = (
 "JPEGCodec"
 "PDFCodec"
 "Decoder"
-"ImageValue" # yeah this one should disapear real soon
 "ImageHelper"
 "Coder"
 )
