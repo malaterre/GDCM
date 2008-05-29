@@ -114,14 +114,16 @@ ENDIF(WIN32 AND NOT CYGWIN)
 
 # swig generates a _gdcm.so and a gdcm.py, we need to copy gdcm.py to the proper place:
 # gdcm.py is the interface name != implementation name, so we need to keep 'gdcm', so that 'import gdcm'
-# from a python script alsways work
-ADD_CUSTOM_COMMAND(
-  TARGET    ${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME}
-  POST_BUILD
-  COMMAND   ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/gdcm.py ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}
-  DEPENDS "${swig_generated_file_fullname}"
-  COMMENT   "Copy gdcm.py into ${LIBRARY_OUTPUT_PATH}"
-)
+# from a python script always work
+#ADD_CUSTOM_COMMAND(
+#  TARGET    ${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME}
+#  POST_BUILD
+#  COMMAND   ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/gdcm.py ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}
+#  DEPENDS "${swig_generated_file_fullname}"
+#  COMMENT   "Copy gdcm.py into ${LIBRARY_OUTPUT_PATH}"
+#)
+CONFIGURE_FILE(${CMAKE_CURRENT_BINARY_DIR}/gdcm.py 
+  ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}/gdcm.py COPYONLY)
 
 #Module are always place in the library destination
 #but for poor win32 user I decided to place them
