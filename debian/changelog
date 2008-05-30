@@ -1,3 +1,10 @@
+gdcm (2.0.5) unstable; urgency=low
+
+  * Bump up
+
+ -- Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>  Tue, 30 May 2008 16:15:26 -0500
+
+
 gdcm (2.0.4) unstable; urgency=low
 
   * Bump up
