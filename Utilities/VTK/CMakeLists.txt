@@ -146,14 +146,15 @@ IF(GDCM_WRAP_PYTHON)
       COMMENT   "Copy vtkgdcm.py into ${LIBRARY_OUTPUT_PATH}"
     )
     IF(NOT GDCM_INSTALL_NO_LIBRARIES)
+MESSAGE(${python_site_package})
         INSTALL(TARGETS ${PROJECT_NAME}PythonD ${PROJECT_NAME}Python
-          RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime
-          LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
-          ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
+          #RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime
+          LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Runtime
+          ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Development
         )
     # the python file is not a dev file, but part of the gdcm module...
       INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm.py 
-        DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
+        DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Runtime
       )
     ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 

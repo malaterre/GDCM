@@ -61,29 +61,6 @@ IF(MSVC)
 ENDIF(MSVC)
 SET_SOURCE_FILES_PROPERTIES(gdcm.i PROPERTIES CPLUSPLUS ON)
 
-# Python install
-FIND_PACKAGE(PythonInterp REQUIRED)
-#MACRO(GET_PYTHON_SITE_PACKAGE dir)
-  EXECUTE_PROCESS(
-  	COMMAND ${PYTHON_EXECUTABLE} "-c" "from distutils import sysconfig; print sysconfig.get_python_lib()"
-  	#WORKING_DIRECTORY @LIBRARY_OUTPUT_PATH@
-  	RESULT_VARIABLE import_res
-  	OUTPUT_VARIABLE import_output
-  	ERROR_VARIABLE  import_error
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-  )
-  #SET(dir ${import_output})
-#ENDMACRO(GET_PYTHON_SITE_PACKAGE)
-
-
-#GET_PYTHON_SITE_PACKAGE(python_site_package)
-STRING(LENGTH ${import_output} len)
-# let's remove the "/usr" part...
-MATH(EXPR fileend "${len} - 5") 
-STRING(SUBSTRING ${import_output} 5 ${fileend} dummy1)
-SET(python_site_package ${dummy1})
-#MESSAGE(${python_site_package})
-
 
 # Some old swig 1.3 did not support this option:
 #SET(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_BINARY_DIR}")
@@ -128,21 +105,22 @@ ADD_CUSTOM_COMMAND(
 # right next to the other dlls
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS ${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME}
-    RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime
-    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
-    ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
+    #RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime
+    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Runtime
+    ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Development
     #DESTINATION ${python_site_package}/${subdir}
   )
 # the python file is not a dev file, but part of the gdcm module...
   INSTALL(FILES 
     ${CMAKE_CURRENT_BINARY_DIR}/gdcm.py 
-    DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
+    DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Runtime
     #DESTINATION ${python_site_package}/${subdir}
   )
-  #INSTALL(FILES 
-  #  ${CMAKE_CURRENT_BINARY_DIR}/gdcm.pth
-  #  DESTINATION ${python_site_package}
-  #)
+  INSTALL(FILES 
+    ${CMAKE_CURRENT_BINARY_DIR}/gdcm.pth
+    DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Runtime
+    #DESTINATION ${python_site_package}
+  )
 ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 
 # Test that will try to load any class in the target language: python

@@ -234,6 +234,30 @@ SET(BUILD_TESTING ${GDCM_BUILD_TESTING} CACHE BOOL "" FORCE)
 MARK_AS_ADVANCED(BUILD_TESTING)
 
 #-----------------------------------------------------------------------------
+# Python install
+FIND_PACKAGE(PythonInterp REQUIRED)
+#MACRO(GET_PYTHON_SITE_PACKAGE dir)
+  EXECUTE_PROCESS(
+  	COMMAND ${PYTHON_EXECUTABLE} "-c" "from distutils import sysconfig; print sysconfig.get_python_lib()"
+  	#WORKING_DIRECTORY @LIBRARY_OUTPUT_PATH@
+  	RESULT_VARIABLE import_res
+  	OUTPUT_VARIABLE import_output
+  	ERROR_VARIABLE  import_error
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  #SET(dir ${import_output})
+#ENDMACRO(GET_PYTHON_SITE_PACKAGE)
+
+
+#GET_PYTHON_SITE_PACKAGE(python_site_package)
+STRING(LENGTH ${import_output} len)
+# let's remove the "/usr/lib" part...
+MATH(EXPR fileend "${len} - 9") 
+STRING(SUBSTRING ${import_output} 9 ${fileend} dummy1)
+SET(python_site_package ${dummy1})
+
+
+#-----------------------------------------------------------------------------
 # Wrapping
 OPTION(GDCM_WRAP_PYTHON "build python wrapping" OFF)
 IF(GDCM_BUILD_WRAPPING)
@@ -243,6 +267,7 @@ ENDIF(GDCM_BUILD_WRAPPING)
 OPTION(GDCM_WRAP_PHP "php wrapping (experimental !)" OFF)
 OPTION(GDCM_WRAP_JAVA "build java wrapping (experimental !)" OFF)
 MARK_AS_ADVANCED(GDCM_WRAP_PHP GDCM_WRAP_JAVA)
+SUBDIRS(Wrapping)
 
 #-----------------------------------------------------------------------------
 # Special CMake Module required when doing Python Testing
@@ -300,6 +325,7 @@ ENDIF(UNIX AND GDCM_TEST_BOOSTRAP)
 
 #-----------------------------------------------------------------------------
 OPTION(GDCM_DOCUMENTATION "Build source documentation using doxygen." OFF)
+
 
 #-----------------------------------------------------------------------------
 OPTION(GDCM_USE_VTK "vtk bridge ?" OFF)
@@ -382,7 +408,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
 
 ENDIF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
 
-SUBDIRS(Wrapping)
+
 
 #-----------------------------------------------------------------------------
 # Need to be the last operation:
