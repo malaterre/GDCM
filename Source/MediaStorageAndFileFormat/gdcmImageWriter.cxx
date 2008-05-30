@@ -280,12 +280,13 @@ bool ImageWriter::Write()
       }
     }
 
-  // Do the Rescale Intercept & Slope
-  ImageHelper::SetRescaleInterceptSlopeValue(ds, PixelData);
-
   MediaStorage ms;
   ms.SetFromFile( GetFile() );
   assert( ms != MediaStorage::MS_END );
+
+  // Do the Rescale Intercept & Slope
+  ImageHelper::SetRescaleInterceptSlopeValue(GetFile(), PixelData);
+
   const char* msstr = MediaStorage::GetMSString(ms);
   if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )
     {
@@ -358,18 +359,25 @@ bool ImageWriter::Write()
 
   // Direction Cosines:
   const double *dircos = PixelData.GetDirectionCosines();
-  std::vector<double> iop;
-  iop.resize(6);
-  iop[0] = dircos[0];
-  iop[1] = dircos[1];
-  iop[2] = dircos[2];
-  iop[3] = dircos[3];
-  iop[4] = dircos[4];
-  iop[5] = dircos[5];
-  ImageHelper::SetDirectionCosinesValue(ds, iop);
+  if( dircos )
+    {
+    std::vector<double> iop;
+    iop.resize(6);
+    iop[0] = dircos[0];
+    iop[1] = dircos[1];
+    iop[2] = dircos[2];
+    iop[3] = dircos[3];
+    iop[4] = dircos[4];
+    iop[5] = dircos[5];
+    ImageHelper::SetDirectionCosinesValue(ds, iop);
+    }
 
   // Origin:
-  ImageHelper::SetOriginValue(ds, PixelData);
+  const double *origin = PixelData.GetOrigin();
+  if( origin )
+    {
+    ImageHelper::SetOriginValue(ds, PixelData);
+    }
 
 
   // UIDs:
@@ -561,7 +569,7 @@ bool ImageWriter::Write()
     ds.Insert( de );
     }
   // Patient Orientation
-  if( !ds.FindDataElement( Tag(0x0020,0x0020) ) && false )
+  if( ms == MediaStorage::SecondaryCaptureImageStorage && !ds.FindDataElement( Tag(0x0020,0x0020) ) )
     {
     DataElement de( Tag(0x0020,0x0020) );
     de.SetVR( Attribute<0x0020,0x0020>::GetVR() );

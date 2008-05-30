@@ -902,6 +902,11 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
   ms.SetFromDataSet(ds);
   assert( MediaStorage::IsImage( ms ) );
 
+  if( ms == MediaStorage::SecondaryCaptureImageStorage )
+    {
+    return;
+    }
+
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage )
     {
@@ -959,6 +964,11 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
   MediaStorage ms;
   ms.SetFromDataSet(ds);
   assert( MediaStorage::IsImage( ms ) );
+
+  if( ms == MediaStorage::SecondaryCaptureImageStorage )
+    {
+    return;
+    }
 
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage )
@@ -1039,11 +1049,13 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
   ds.Insert( iop.GetAsDataElement() );
 }
 
-void ImageHelper::SetRescaleInterceptSlopeValue(DataSet & ds, const Image & img)
+void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
 {
   MediaStorage ms;
-  ms.SetFromDataSet(ds);
+  // SetFromFile is required here, SetFromDataSet is not enought for all cases
+  ms.SetFromFile(f);
   assert( MediaStorage::IsImage( ms ) );
+  DataSet &ds = f.GetDataSet();
 
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage )
@@ -1117,6 +1129,10 @@ void ImageHelper::SetRescaleInterceptSlopeValue(DataSet & ds, const Image & img)
   Attribute<0x0028,0x1053> at2;
   at2.SetValue( img.GetSlope() );
   ds.Insert( at2.GetAsDataElement() );
+
+  Attribute<0x0028,0x1054> at3; // Rescale Type
+  at3.SetValue( "US" ); // FIXME
+  ds.Insert( at3.GetAsDataElement() );
 }
 
 bool ImageHelper::ComputeSpacingFromImagePositionPatient(const std::vector<double> & imageposition, std::vector<double> & spacing)

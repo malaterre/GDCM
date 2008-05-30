@@ -45,7 +45,7 @@ class GDCM_EXPORT ImageHelper
 {
 public:
   static std::vector<double> GetRescaleInterceptSlopeValue(File const & f);
-  static void SetRescaleInterceptSlopeValue(DataSet & ds, const Image & img);
+  static void SetRescaleInterceptSlopeValue(File & f, const Image & img);
 
   static std::vector<double> GetOriginValue(File const & f);
   static void SetOriginValue(DataSet & ds, const Image & img);
