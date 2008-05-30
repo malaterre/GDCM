@@ -113,6 +113,8 @@ IF(WIN32 AND NOT CYGWIN)
   INCLUDE_DIRECTORIES(
     "${GDCM_SOURCE_DIR}/Utilities/C99"
   )
+  # Process the install rules from C99
+  SUBDIRS(C99)
 ENDIF(WIN32 AND NOT CYGWIN)
 
 # --------------------------------------------------------------------------
@@ -390,7 +392,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   # Need to set the architecture for debian package
 
   SET(CPACK_PACKAGE_CONTACT "Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>")
-  SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6, libstdc++6 (>= 4.0.2-4), libuuid1, zlib1g (>= 1:1.2.1), libgcc1 (>= 1:4.0.2), libexpat1, swig")
+  SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6, libstdc++6 (>= 4.0.2-4), libuuid1, zlib1g (>= 1:1.2.1), libgcc1 (>= 1:4.0.2), libexpat1, swig") # bug: missing dep to python...
   SET(CPACK_DEBIAN_PACKAGE_SUGGESTS "dcmtk")
 
   # List executables
