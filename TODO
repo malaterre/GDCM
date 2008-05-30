@@ -140,3 +140,8 @@ There are still some subtel issues with Enhanced modality:
 * what if frames are not order according to IPP ?
 * what is the intercept/slope are not constant throughtout the frames ?
 
+-----------------------------------------------------------------------
+Explicit-VR transfer syntax limits the value
+multiplicity of DICOM data elements with
+decimal string (DS) value representation
+http://www.iop.org/EJ/article/0031-9155/51/5/L01/pmb6_5_l01.pdf?request-id=00122d0d-5f95-4c78-bbeb-e9555ef639ae

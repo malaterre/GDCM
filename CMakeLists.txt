@@ -114,7 +114,7 @@ IF(WIN32 AND NOT CYGWIN)
     "${GDCM_SOURCE_DIR}/Utilities/C99"
   )
   # Process the install rules from C99
-  SUBDIRS(C99)
+  SUBDIRS(Utilities/C99)
 ENDIF(WIN32 AND NOT CYGWIN)
 
 # --------------------------------------------------------------------------
@@ -256,7 +256,9 @@ STRING(LENGTH ${import_output} len)
 # let's remove the "/usr/lib" part...
 MATH(EXPR fileend "${len} - 9") 
 STRING(SUBSTRING ${import_output} 9 ${fileend} dummy1)
+IF(UNIX)
 SET(python_site_package ${dummy1})
+ENDIF(UNIX)
 
 
 #-----------------------------------------------------------------------------
