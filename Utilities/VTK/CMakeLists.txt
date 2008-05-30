@@ -146,7 +146,7 @@ IF(GDCM_WRAP_PYTHON)
       COMMENT   "Copy vtkgdcm.py into ${LIBRARY_OUTPUT_PATH}"
     )
     IF(NOT GDCM_INSTALL_NO_LIBRARIES)
-MESSAGE(${python_site_package})
+#MESSAGE(${python_site_package})
         INSTALL(TARGETS ${PROJECT_NAME}PythonD ${PROJECT_NAME}Python
           #RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime
           LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Runtime
