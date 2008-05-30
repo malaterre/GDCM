@@ -25,6 +25,7 @@ Orientation::~Orientation() {}
 void Orientation::Print(std::ostream &) const {}
 
 static const char *OrientationStrings[] = {
+  "UNKNOWN",
   "AXIAL",
   "CORONAL",
   "SAGITTAL",
@@ -33,8 +34,8 @@ static const char *OrientationStrings[] = {
 };
 
 // http://public.kitware.com/pipermail/insight-users/2005-March/012246.html
-static const double obliquityThresholdCosineValue = 0.8;
-char GetMajorAxisFromPatientRelativeDirectionCosine(double x, double y, double z)
+const double Orientation::obliquityThresholdCosineValue = 0.8;
+char Orientation::GetMajorAxisFromPatientRelativeDirectionCosine(double x, double y, double z)
 {
   char axis = 0;
 
@@ -71,6 +72,10 @@ char GetMajorAxisFromPatientRelativeDirectionCosine(double x, double y, double z
 
 Orientation::OrientationType Orientation::GetType(const double *dircos)
 {
+  if( !dircos )
+    {
+    return Orientation::UNKNOWN;
+    }
   OrientationType type;
   char rowAxis = GetMajorAxisFromPatientRelativeDirectionCosine(dircos[0],dircos[1],dircos[2]);
   char colAxis = GetMajorAxisFromPatientRelativeDirectionCosine(dircos[3],dircos[4],dircos[5]);

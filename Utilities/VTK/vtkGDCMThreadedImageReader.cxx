@@ -301,10 +301,13 @@ void *ReadFilesThread(void *voidparams)
 
     // Update progress
     // We are done reading one file, let's shout it loud:
+    //assert( params->reader->Debug == 0 );
     pthread_mutex_lock(&params->lock);
     // critical section
     const double progress = params->reader->GetProgress(); // other thread might have updated it also...
     params->reader->UpdateProgress( progress + progressdelta );
+      const double shift = params->reader->GetShift();
+      const double scale = params->reader->GetScale();
     pthread_mutex_unlock(&params->lock);
 
     const gdcm::Image &image = reader.GetImage();
@@ -312,7 +315,9 @@ void *ReadFilesThread(void *voidparams)
     // When not applying a transform:
     // len -> sizeof stored image
     // params->len sizeof world value image (after transform)
-    if( params->reader->GetShift() == 1 && params->reader->GetScale() == 0 )
+    //double reader_shift = params->reader->GetShift();
+    //double reader_scale = params->reader->GetScale();
+    if( shift == 1 && scale == 0 )
       assert( len == params->len ); // that would be very bad 
 
     char * pointer = params->scalarpointer;
@@ -333,11 +338,10 @@ void *ReadFilesThread(void *voidparams)
       assert( (unsigned long)ov.GetRows()*ov.GetColumns() <= params->overlaylen );
       ov.GetUnpackBuffer(tempimage2);
       }
-    if( params->reader->GetShift() != 1 || params->reader->GetScale() != 0 )
+    //if( params->reader->GetShift() != 1 || params->reader->GetScale() != 0 )
+    if( shift != 1 || scale != 0 )
       {
-      const double shift = params->reader->GetShift();
       const int shift_int = (int)shift;
-      const double scale = params->reader->GetScale();
       const int scale_int = (int)scale;
       if( scale == 1 && shift == (double)shift_int )
         {
@@ -416,6 +420,10 @@ void vtkGDCMThreadedImageReader::ReadFiles(unsigned int nfiles, const char *file
   pthread_mutex_init(&lock, NULL);
 
   pthread_t *pthread = new pthread_t[nthreads];
+  pthread_attr_t attr;
+  pthread_attr_init(&attr);
+  pthread_attr_setscope(&attr, PTHREAD_SCOPE_PROCESS);
+  this->Debug = 0;
 
   // There is nfiles, and nThreads
   assert( nfiles >= nthreads );
@@ -438,9 +446,12 @@ void vtkGDCMThreadedImageReader::ReadFiles(unsigned int nfiles, const char *file
     params[thread].overlaylen = overlaylen;
     params[thread].totalfiles = nfiles;
     params[thread].lock = lock;
+    assert( this->Debug == 0 );
     params[thread].reader = this;
+    assert( params[thread].reader->Debug == 0 );
     // start thread:
-    int res = pthread_create( &pthread[thread], NULL, ReadFilesThread, &params[thread]);
+    //int res = pthread_create( &pthread[thread], NULL, ReadFilesThread, &params[thread]);
+    int res = pthread_create( &pthread[thread], &attr, ReadFilesThread, &params[thread]);
     if( res )
       {
       std::cerr << "Unable to start a new thread, pthread returned: " << res << std::endl;

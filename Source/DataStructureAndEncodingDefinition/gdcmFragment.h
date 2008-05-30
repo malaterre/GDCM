@@ -71,7 +71,8 @@ public:
     if( !bv->Read<TSwap>(is) )
       {
       // Fragment is incomplete, but is a itemStart, let's try to push it anyway...
-      gdcmWarningMacro( "Fragment could not read" );
+      gdcmWarningMacro( "Fragment could not be read" );
+      //bv->SetLength(is.gcount());
       ValueField = bv;
       ParseException pe;
       pe.SetLastElement( *this );

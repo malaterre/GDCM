@@ -51,15 +51,28 @@ SET(BLACK_LIST_READER
   tst_not.dcm
   BogugsSequenceLengthCorrectItemLength.dcm
   BogugsItemAndSequenceLength.dcm
-  srwithgraphdeflated.dcm # ???
   BogusACRWithFileMeta.dcm
   TheralysGDCM120Bug.dcm
   CompressedLossy.dcm
-  IM-0001-0066.dcm
 
 # vtkGDCMImageWriter + rescale does not work on the following images:
   LIBIDO-24-ACR_NEMA-Rectangle.dcm
+
+# remove for now
+  IM-0001-0066.dcm
+  4hd2a332a0je.dcm
 )
+IF(GDCM_WORDS_BIGENDIAN)
+  SET(BLACK_LIST_READER
+    ${BLACK_LIST_READER}
+    MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm
+    MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.dcm
+    PHILIPS_Intera-16-MONO2-Uncompress.dcm
+    SIEMENS_MAGNETOM-12-MONO2-GDCM12-VRUN.dcm
+    PICKER-16-MONO2-No_DicomV3_Preamble.dcm
+  )
+ENDIF(GDCM_WORDS_BIGENDIAN)
+
 
 SET(GDCM_DATA_FILENAMES)
 SET(GDCM_BLACK_LIST_READER_DATA_FILENAMES)

@@ -60,7 +60,7 @@ void Scanner::AddTag( Tag const & t )
 bool Scanner::IsKey( const char * filename ) const
 {
 /*
-  // std::find on contiguous array will operate in 0(n) which is way too slow, assume user is not too dump...
+  // std::find on contiguous array will operate in 0(n) which is way too slow, assume user is not too dumb...
   Directory::FilenamesType::const_iterator it = std::find(Filenames.begin(), Filenames.end(), filename);
   if( it == Filenames.end() )
     {
@@ -192,10 +192,9 @@ Scanner::TagToValue const & Scanner::GetMapping(const char *filename) const
   return Mappings.find("")->second; // dummy file could not be found
 }
 
-/*
-std::vector<const char *> Scanner::GetKeys() const
+Directory::FilenamesType Scanner::GetKeys() const
 {
-  std::vector<const char *> keys;
+  Directory::FilenamesType keys;
 
   Directory::FilenamesType::const_iterator file = Filenames.begin();
   for(; file != Filenames.end(); ++file)
@@ -210,7 +209,7 @@ std::vector<const char *> Scanner::GetKeys() const
   assert( keys.size() <= Filenames.size() );
   return keys;
 }
-*/
+
 
 const char* Scanner::GetValue(const char *filename, Tag const &t) const
 {

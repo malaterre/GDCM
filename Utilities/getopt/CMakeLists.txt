@@ -29,6 +29,7 @@ ENDIF(WIN32)
 # so this lib will be for the poor Win32 user (those
 # guys really need help)
 ADD_LIBRARY(${GETOPT_LIBRARY_NAME} ${GETOPT_SRCS})
+SET_TARGET_PROPERTIES(${GETOPT_LIBRARY_NAME} PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
 
 IF(BUILD_EXAMPLES)
 ADD_EXECUTABLE(ex_getopt ex_getopt.c)

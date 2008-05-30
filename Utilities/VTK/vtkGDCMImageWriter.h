@@ -28,6 +28,9 @@
 // You need to set the FileDimensionality to match the dim of your 
 // data for now (generating a 2D series out of 3D volume is not 
 // currently supported)
+// .SECTION NOTE Shift/Scale are global to all DICOM files written for example
+// as 2D slice, therefore the shift/scale operation might not be optimized for 
+// all slices.
 //
 // .SECTION See Also
 // vtkImageWriter vtkMedicalImageProperties
@@ -76,14 +79,21 @@ public:
   virtual void SetDirectionCosines(vtkMatrix4x4 *matrix);
   vtkGetObjectMacro(DirectionCosines, vtkMatrix4x4);
 
-  //TODO
-  //vtkSetMacro(RescaleSlope, double);
-  //vtkGetMacro(RescaleSlope, double);
-  //vtkSetMacro(RescaleIntercept, double);
-  //vtkGetMacro(RescaleIntercept, double);
+  // Modality LUT
+  vtkSetMacro(Shift, double);
+  vtkGetMacro(Shift, double);
+  vtkSetMacro(Scale, double);
+  vtkGetMacro(Scale, double);
 
   vtkGetMacro(ImageFormat,int);
   vtkSetMacro(ImageFormat,int);
+
+  // Description:
+  // Set/Get whether the data comes from the file starting in the lower left
+  // corner or upper left corner.
+  vtkBooleanMacro(FileLowerLeft, int);
+  vtkGetMacro(FileLowerLeft, int);
+  vtkSetMacro(FileLowerLeft, int);
 
 protected:
   vtkGDCMImageWriter();
@@ -126,6 +136,10 @@ private:
 
   vtkStringArray *FileNames;
   vtkMatrix4x4 *DirectionCosines;
+
+  double Shift;
+  double Scale;
+  int FileLowerLeft;
 };
 
 #endif

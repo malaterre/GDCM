@@ -20,6 +20,7 @@ import sys,os,stat
 import gdcm
 
 blacklist = (
+"treamimpl" # :)
 # DataStructureAndEncodingDefinition
 "ByteBuffer" # WTF ?
 "ExplicitDataElement"
@@ -31,6 +32,7 @@ blacklist = (
 "ByteSwapFilter"
 "ExplicitImplicitDataElement"
 "UNExplicitDataElement"
+"UNExplicitImplicitDataElement"
 "Attribute"
 "VR16ExplicitDataElement"
 "LO" # stupid swig
@@ -67,6 +69,7 @@ blacklist = (
 "JPEG2000Codec"
 # For now remove the codec part:
 "ImageCodec"
+"DeltaEncodingCodec"
 "RLECodec"
 "RAWCodec"
 "AudioCodec"
@@ -74,8 +77,7 @@ blacklist = (
 "JPEGCodec"
 "PDFCodec"
 "Decoder"
-"ImageValue" # yeah this one should disapear real soon
-"SpacingHelper"
+"ImageHelper"
 "Coder"
 )
 

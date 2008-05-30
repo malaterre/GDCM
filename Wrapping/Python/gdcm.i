@@ -42,6 +42,7 @@
 //#include "gdcmString.h"
 #include "gdcmPreamble.h"
 #include "gdcmFile.h"
+#include "gdcmImage.h"
 #include "gdcmFragment.h"
 #include "gdcmCSAHeader.h"
 #include "gdcmSequenceOfFragments.h"
@@ -90,10 +91,15 @@
 #include "gdcmPatient.h"
 #include "gdcmStudy.h"
 #include "gdcmModule.h"
+#include "gdcmModules.h"
+#include "gdcmDefs.h"
+#include "gdcmIOD.h"
+#include "gdcmIODs.h"
 #include "gdcmTableEntry.h"
 #include "gdcmDefinedTerms.h"
 #include "gdcmSeries.h"
 #include "gdcmModuleEntry.h"
+#include "gdcmIODEntry.h"
 #include "gdcmRescaler.h"
 #include "gdcmSegmentedPaletteColorLookupTable.h"
 #include "gdcmUnpacker12Bits.h"
@@ -103,6 +109,7 @@ using namespace gdcm;
 
 // swig need to know what are uint16_t, uint8_t...
 %include "stdint.i"
+//%include "typemaps.i"
 
 // gdcm does not use std::string in its interface, but we do need it for the 
 // %extend (see below)
@@ -111,6 +118,7 @@ using namespace gdcm;
 %include "std_vector.i"
 %include "std_pair.i"
 %include "std_map.i"
+%include "exception.i"
 
 // operator= is not needed in python AFAIK
 %ignore operator=;                      // Ignore = everywhere.
@@ -166,7 +174,6 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
-%include "gdcmTesting.h"
 %include "gdcmObject.h"
 %include "gdcmValue.h"
 %extend gdcm::Value
@@ -281,9 +288,19 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
+//%newobject gdcm::Image::GetBuffer;
+%include "cstring.i"
 %include "gdcmImage.h"
+%ignore gdcm::Image::GetBuffer(char*) const;
 %extend gdcm::Image
 {
+  %cstring_output_allocate_size(char **buffer, unsigned int *size, free(*$1) );
+  void GetBuffer(char **buffer, unsigned int *size) {
+    *size = self->GetBufferLength();
+    *buffer = (char*)malloc(*size);
+    self->GetBuffer(*buffer);
+  }
+
   const char *__str__() {
     static std::string buffer;
     std::stringstream s;
@@ -325,6 +342,18 @@ using namespace gdcm;
 };
 %include "gdcmDict.h"
 %include "gdcmDicts.h"
+
+%exception ReadFooBar {
+   try {
+      $action
+   } catch (std::exception &e) {
+      PyErr_SetString(PyExc_IndexError, const_cast<char*>(e.what()));
+      return false;
+   } catch ( ... ) {
+      PyErr_SetString(PyExc_IndexError, "foobarstuff");
+      return false;
+   }
+}
 %include "gdcmReader.h"
 %include "gdcmImageReader.h"
 %include "gdcmWriter.h"
@@ -392,13 +421,32 @@ using namespace gdcm;
 %include "gdcmEnumeratedValues.h"
 %include "gdcmPatient.h"
 %include "gdcmStudy.h"
+%include "gdcmModuleEntry.h"
+%extend gdcm::ModuleEntry
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmModule.h"
+%include "gdcmModules.h"
+%include "gdcmDefs.h"
+%include "gdcmIOD.h"
+%include "gdcmIODs.h"
 %include "gdcmTableEntry.h"
 %include "gdcmDefinedTerms.h"
 %include "gdcmSeries.h"
-%include "gdcmModuleEntry.h"
+%include "gdcmIODEntry.h"
 %include "gdcmRescaler.h"
 %include "gdcmSegmentedPaletteColorLookupTable.h"
 %include "gdcmUnpacker12Bits.h"
 
+%include "gdcmConfigure.h"
+#ifdef GDCM_BUILD_TESTING
+%include "gdcmTesting.h"
+#endif
 

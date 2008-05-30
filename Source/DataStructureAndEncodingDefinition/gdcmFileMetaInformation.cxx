@@ -28,7 +28,8 @@ namespace gdcm
 {
 
 const char FileMetaInformation::GDCM_FILE_META_INFORMATION_VERSION[] = "\0\1";
-const char FileMetaInformation::GDCM_IMPLEMENTATION_CLASS_UID[] = "147.144.143.155";
+
+const char FileMetaInformation::GDCM_IMPLEMENTATION_CLASS_UID[] = "107.104.103.115";
 const char FileMetaInformation::GDCM_IMPLEMENTATION_VERSION_NAME[] = "GDCM " GDCM_VERSION;
 const char FileMetaInformation::GDCM_SOURCE_APPLICATION_ENTITY_TITLE[] = "GDCM";
 // Default initialize those static std::string, with GDCM values:
@@ -104,6 +105,20 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     const char *version = FileMetaInformation::GetFileMetaInformationVersion();
     xde.SetByteValue( version, 2 /*strlen(version)*/ );
     Insert( xde );
+    }
+  else
+    {
+    const DataElement &de = GetDataElement( Tag(0x0002,0x0001) );
+    const ByteValue *bv = de.GetByteValue();
+    if( bv->GetLength() != 2 
+      || memcmp( bv->GetPointer(), FileMetaInformation::GetFileMetaInformationVersion(), 2 ) != 0 )
+      {
+      xde.SetTag( Tag(0x0002, 0x0001) );
+      xde.SetVR( VR::OB );
+      const char *version = FileMetaInformation::GetFileMetaInformationVersion();
+      xde.SetByteValue( version, 2 /*strlen(version)*/ );
+      Replace( xde );
+      }
     }
   // Media Storage SOP Class UID (0002,0002) -> see (0008,0016)
   if( !FindDataElement( Tag(0x0002, 0x0002) ) )
@@ -419,7 +434,6 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
     {
     throw Exception( "Serious bug" );
     }
-  std::streampos start = is.tellg();
   Tag t;
   t.Read<SwapperNoOp>(is);
   if( t.GetGroup() == 0x0002 )
@@ -448,20 +462,37 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
   else if( t.GetGroup() == 0x0800 ) // Good ol' ACR NEMA
     {
     is.seekg(-4, std::ios::cur); // Seek back
-    //MetaInformationTS = TransferSyntax::Explicit;
     DataSetTS = TransferSyntax::ImplicitVRBigEndianACRNEMA;
     }
   else if( t.GetElement() == 0x0010 ) // Hum, is it a private creator ?
     {
     is.seekg(-4, std::ios::cur); // Seek back
-    //MetaInformationTS = TransferSyntax::Explicit;
     DataSetTS = TransferSyntax::ImplicitVRLittleEndian;
     }
   else
     {
-    is.seekg(-4, std::ios::cur); // Seek back
     //assert( t.GetElement() == 0x0 );
-    throw Exception( "INVALID" ); // Does not start with a 0x0002 group element
+    char vr_str[3];
+    is.read(vr_str, 2);
+    vr_str[2] = '\0';
+    VR::VRType vr = VR::GetVRType(vr_str);
+    is.seekg(-6, std::ios::cur); // Seek back
+    if( vr != VR::VR_END )
+      {
+      // Ok we found a VR, this is 99% likely to be our safe bet
+      DataSetTS = TransferSyntax::ExplicitVRLittleEndian;
+      }
+    else
+      {
+      std::streampos start = is.tellg();
+      ImplicitDataElement ide;
+      ide.Read<SwapperNoOp>(is); // might throw an expection which will NOT be caught
+      std::streampos cur = is.tellg();
+      std::cout << "s-c" << start - cur << std::endl;
+      is.seekg( start - cur, std::ios::cur );
+      // ok we could read at least one implicit element
+      DataSetTS = TransferSyntax::ImplicitVRLittleEndian;
+      }
     }
   return is;
 }

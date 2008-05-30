@@ -18,20 +18,21 @@
 // this reader is single threaded.
 // .SECTION Implementation note: when FileLowerLeft is set to on the image is not flipped
 // upside down as VTK would expect, use this option only if you know what you are doing
+// .SECTION Implementation note: when reading a series of 2D slices, user is expected to provide an ordered list of filenames. No sorting will be applied afterward. 
+// .SECTION Implementation note: Although 99% of the time the Zspacing as read from a tag in a 2D DICOM file should be correct, there has been reports that this value can be missing, or incorrect, in which case users are advised to override this value using the return value from gdcm::IPPSorter::GetZSpacing() and set it via vtkImageChangeInformation on the reader itself.
 // .SECTION TODO
 // This reader does not handle a series of 3D images, only a single 3D (multi frame) or a 
 // list of 2D files are supported for now.
-// .SECTION TODO
-// Modality LUT with rescale slope/intercept is not applied. You need to use a vtkImageShiftScale externally for now.
 // .SECTION BUG
 // Overlay are assumed to have the same extent as image. Right now if overlay origin is not
 // 0,0 the overlay will have an offset...
 // Only the very first overlay is loaded at the VTK level, for now (even if there are more than one in the file)
-// .SECTION BUG
-// Only the first Curve Data is loaded at the VTK layer, for now.
 // .SECTION DataOrigin
-// In the case of a direction cosine (1,0,0,0,1,0) the DataOrigin is properly set. Otherwise user
-// need to use the GetPatientPosition to compute the proper pixel x,y,z position.
+// When the reader is instanciated with FileLowerLeftOn the DataOrigin and Image Position (Patient) are
+// identical. But when FileLowerLeft is Off, we have to reorder the Y-line of the image, and thus the DataOrigin
+// is then translated to the other side of the image.
+// .SECTION Spacing
+// When reading a 3D volume, the spacing along the Z dimension might be negative
 
 // .SECTION See Also
 // vtkMedicalImageReader2 vtkMedicalImageProperties
@@ -178,6 +179,10 @@ public:
   virtual void SetCurve(vtkPolyData *pd);
 
   // Modality LUT
+  // DEPRECATED:
+  // Value returned by GetShift/GetScale might be innacurate since Shift/Scale could be
+  // varying along the Series read. Therefore user are advices not to use those function
+  // anymore
   vtkGetMacro(Shift,double);
   vtkGetMacro(Scale,double);
 
@@ -235,6 +240,7 @@ protected:
   int ApplyYBRToRGB;
   // I think that planar configuration need to always be applied as far as VTK is concerned
   int ApplyPlanarConfiguration;
+  int ApplyShiftScale;
 
   int LoadSingleFile(const char *filename, char *pointer, unsigned long &outlen);
 

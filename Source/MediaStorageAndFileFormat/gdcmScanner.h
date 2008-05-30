@@ -71,7 +71,7 @@ public:
 
   // Return the list of filename that are key in the internal map,
   // which means those filename were properly parsed
-  //std::vector<const char *> GetKeys() const;
+  Directory::FilenamesType GetKeys() const;
 
   // struct to store all the values found:
   typedef std::set< std::string > ValuesType;
@@ -95,7 +95,7 @@ public:
   // Mappings are the mapping from a particular tag to the map, mapping filename to value:
   MappingType const & GetMappings() const { return Mappings; }
 
-  // Get the std::map mapping filenames to value for tag 't'
+  // Get the std::map mapping filenames to value for file 'filename'
   TagToValue const & GetMapping(const char *filename) const;
 
   // Retrieve the value found for tag: t associated with file: filename

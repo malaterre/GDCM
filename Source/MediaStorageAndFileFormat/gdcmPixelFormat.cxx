@@ -19,14 +19,14 @@
 namespace gdcm
 {
 static const char *ScalarTypeStrings[] = {
-  "INT8",
   "UINT8",
-  "INT12",
+  "INT8",
   "UINT12",
-  "INT16",
+  "INT12",
   "UINT16",
+  "INT16",
+  "UINT32",
   "INT32",
-  "UINT32",  
   NULL,
 };
 
@@ -82,6 +82,16 @@ void PixelFormat::SetScalarType(ScalarType st)
     BitsAllocated = 32;
     PixelRepresentation = 1;
     break;
+  case PixelFormat::FLOAT16:
+    BitsAllocated = 16;
+    // secret code:
+    PixelRepresentation = 2;
+    break;
+  case PixelFormat::FLOAT32:
+    BitsAllocated = 32;
+    // secret code:
+    PixelRepresentation = 3;
+    break;
   case PixelFormat::UNKNOWN:
     BitsAllocated = 0;
     PixelRepresentation = 0;
@@ -124,11 +134,29 @@ PixelFormat::ScalarType PixelFormat::GetScalarType() const
       << BitsAllocated );
     abort();
     }
-  if( PixelRepresentation )
+  if( PixelRepresentation == 0 )
+    {
+    // all set !
+    }
+  else if( PixelRepresentation == 1 )
     {
     assert( type <= INT32 );
     // That's why you need to order properly type in ScalarType
     type = ScalarType(int(type)+1);
+    }
+  else if( PixelRepresentation == 2 )
+    {
+    assert( BitsAllocated == 16 );
+    return FLOAT16;
+    }
+  else if( PixelRepresentation == 3 )
+    {
+    assert( BitsAllocated == 32 );
+    return FLOAT32;
+    }
+  else
+    {
+    abort();
     }
   return type;
 }
@@ -154,10 +182,9 @@ uint8_t PixelFormat::GetPixelSize() const
 
 int64_t PixelFormat::GetMin() const
 {
-  assert( PixelRepresentation == 0 );
   if( PixelRepresentation )
     {
-    return 0;
+    return ~(((1ull << BitsStored) - 1) >> 1);
     }
   else
     {
@@ -167,14 +194,13 @@ int64_t PixelFormat::GetMin() const
 
 int64_t PixelFormat::GetMax() const
 {
-  assert( PixelRepresentation == 0 );
   if( PixelRepresentation )
     {
-    return 0;
+    return ((1ull << BitsStored) - 1) >> 1;
     }
   else
     {
-    return (1 << BitsStored);
+    return (1ull << BitsStored) - 1;
     }
 }
 

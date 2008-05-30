@@ -24,6 +24,22 @@
 namespace gdcm
 {
 
+#ifdef GDCM_WORDS_BIGENDIAN
+  template <> inline uint16_t SwapperNoOp::Swap<uint16_t>(uint16_t val)
+    {
+    return bswap_16(val);
+    }
+  template <> inline uint32_t SwapperNoOp::Swap<uint32_t>(uint32_t val)
+    {
+    return bswap_32(val);
+    }
+  template <> inline uint64_t SwapperNoOp::Swap<uint64_t>(uint64_t val)
+    {
+    return bswap_64(val);
+    }
+
+  template <> inline void SwapperNoOp::SwapArray(uint8_t *, unsigned int ) {}
+#else
   template <> inline uint16_t SwapperDoOp::Swap<uint16_t>(uint16_t val)
     {
 #ifdef HAVE_BYTESWAP_H
@@ -55,6 +71,7 @@ namespace gdcm
 
   template <> inline void SwapperDoOp::SwapArray(uint8_t *, unsigned int ) {}
 
+#endif
 } // end namespace gdcm
  
 #endif // __gdcmSwapper_txx

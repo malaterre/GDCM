@@ -17,7 +17,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
      PURPOSE.  See the above copyright notice for more information.
 -->
 <tables edition="2008">
-  <macro ref="Table 5.4-1" name="Example Module Table">
+  <!--module ref="Table 5.4-1" name="Example Module Table">
     <entry group="aaaa" element="aaaa" name="Attribute A" type="1">
       <description>This is an example.</description>
     </entry>
@@ -25,7 +25,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
       <description>This is an example of a Sequence Attribute</description>
     </entry>
     <include ref="&gt;Include 'Example Macro' Table 5.4-2" description="In this Module, Attribute D (dddd,dddd) is Type 1"/>
-  </macro>
+  </module>
   <macro ref="Table 5.4-2" name="Example Macro">
     <entry group="cccc" element="cccc" name="Attribute C" type="1">
       <description>This is an example.</description>
@@ -47,7 +47,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <entry group="dddd" element="dddd" name="&gt;Attribute D" type="1">
       <description>In this Module, this Attribute has been specialized to Type 1 as indicated in Table 5.4-1.</description>
     </entry>
-  </macro>
+  </macro-->
   <macro ref="Table 8.8-1" name="Common Attribute Set For Code Sequence Attributes (invoked AS “code Sequence Macro”)">
     <include ref="BASIC CODED ENTRY ATTRIBUTES"/>
     <entry group="0008" element="0100" name="Code Value" type="1">

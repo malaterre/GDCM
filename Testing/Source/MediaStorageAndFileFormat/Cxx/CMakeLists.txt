@@ -4,7 +4,7 @@ SET(MSFF_TEST_SRCS
   TestAnonymizer
   TestOrientation
   TestIconImage
-  TestSpacingHelper
+  TestImageHelper
   TestCoder
   TestDecoder
   TestRescaler
@@ -13,6 +13,7 @@ SET(MSFF_TEST_SRCS
   TestApplicationEntity
   TestStringFilter
   TestUIDGenerator
+  TestUIDGenerator3
   TestPrinter
   TestScanner
   TestSorter
@@ -32,7 +33,6 @@ SET(MSFF_TEST_SRCS
   TestCurve
   TestPixelFormat
   TestPersonName
-  TestImageValue
   TestImageCodec
   TestImageConverter
   TestJPEGCodec
@@ -43,6 +43,19 @@ SET(MSFF_TEST_SRCS
   TestEncapsulatedDocument
   TestSpectroscopy
   )
+
+IF(CMAKE_HAVE_PTHREAD_H)
+SET(MSFF_TEST_SRCS ${MSFF_TEST_SRCS}
+  TestUIDGenerator2
+  )
+ENDIF(CMAKE_HAVE_PTHREAD_H)
+IF(GDCM_PIXEL_SPACING_DATA_ROOT)
+  SET(MSFF_TEST_SRCS
+    ${MSFF_TEST_SRCS}
+    TestImageReaderPixelSpacing
+  )
+ENDIF(GDCM_PIXEL_SPACING_DATA_ROOT)
+
 
 # Add the include paths
 INCLUDE_DIRECTORIES(
@@ -58,6 +71,9 @@ INCLUDE_DIRECTORIES(
 CREATE_TEST_SOURCELIST(MSFFTests gdcmMSFFTests.cxx ${MSFF_TEST_SRCS})
 ADD_EXECUTABLE(gdcmMSFFTests ${MSFFTests})
 TARGET_LINK_LIBRARIES(gdcmMSFFTests gdcmMSFF)
+IF(CMAKE_HAVE_PTHREAD_H)
+TARGET_LINK_LIBRARIES(gdcmMSFFTests pthread)
+ENDIF(CMAKE_HAVE_PTHREAD_H)
 
 #Don't understand why I need that ??
 SET(GDCM_MSFF_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmMSFFTests")
@@ -75,7 +91,7 @@ FOREACH(filename ${gdcm_data_filenames_glob})
   IF(NOT bad_dicom)
     IF(GDCM_TEST_DCMTK)
       IF(DCMTK_DCMDUMP_EXECUTABLE)
-        #-M : load short tags
+        # -M : load short tags
         # -dc: disable correction
         ADD_TEST("DCMDUMP-${filename_name}" ${DCMTK_DCMDUMP_EXECUTABLE} -M -dc
           "${GDCM_TEMP_DIRECTORY}/TestWriter/${filename_name}")

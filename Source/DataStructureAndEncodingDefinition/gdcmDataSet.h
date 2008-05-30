@@ -230,6 +230,8 @@ protected:
   // so depending whether we are getting called from a dataset or file meta header
   // the condition is different
   void InsertDataElement(const DataElement& de) {
+    //if( de.GetTag() == Tag(0xfffe,0xe00d) ) return;
+    //if( de.GetTag() == Tag(0xfffe,0xe0dd) ) return;
     std::pair<Iterator,bool> pr = DES.insert(de);
 #ifndef NDEBUG
     if( pr.second == false )
@@ -241,6 +243,8 @@ protected:
     }
 
 protected:
+  // Internal function, that will compute the actual Tag (if found) of
+  // a requested Private Tag (XXXX,YY,"PRIVATE")
   Tag ComputeDataElement(const PrivateTag & t) const;
 
 private:

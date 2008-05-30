@@ -17,14 +17,13 @@
 
 #include <iostream>
 #include <fstream>
-//#include "expat/lib/expat.h"
+#include "gdcm_expat.h"
 
 #include <stdio.h> // for stderr
 #include <string.h>
 
 namespace gdcm
 {
-#if 0
 #ifdef XML_LARGE_SIZE
 #if defined(XML_USE_MSC_EXTENSIONS) && _MSC_VER < 1400
 #define XML_FMT_INT_MOD "I64"
@@ -58,6 +57,192 @@ static void XMLCALL characterDataHandler(void* userData, const char* data,
   tr->CharacterDataHandler(data,length);
 }
 
+void TableReader::HandleMacroEntryDescription(const char **atts)
+{
+  assert( ParsingMacroEntryDescription == false );
+  ParsingMacroEntryDescription = true;
+  assert( *atts == NULL );
+  assert( Description == "" );
+}
+
+void TableReader::HandleModuleEntryDescription(const char **atts)
+{
+  assert( ParsingModuleEntryDescription == false );
+  ParsingModuleEntryDescription = true;
+  assert( *atts == NULL );
+  assert( Description == "" );
+}
+
+void TableReader::HandleMacroEntry(const char **atts)
+{
+  std::string strgrp = "group";
+  std::string strelt = "element";
+  std::string strname = "name";
+  std::string strtype = "type";
+  Tag &tag = CurrentTag;
+  MacroEntry &moduleentry = CurrentMacroEntry;
+  const char **current = atts;
+  while(*current /*&& current+1*/)
+    {
+    if( strgrp == *current )
+      {
+      unsigned int v;
+      const char *raw = *(current+1);
+      int r = sscanf(raw, "%04x", &v);
+      assert( r == 1 );
+      assert( v <= 0xFFFF );
+      tag.SetGroup( v );
+      }
+    else if( strelt == *current )
+      {
+      unsigned int v;
+      const char *raw = *(current+1);
+      int r = sscanf(raw, "%04x", &v);
+      assert( r == 1 );
+      assert( v <= 0xFFFF );
+      tag.SetElement( v );
+      }
+    else if( strname == *current )
+      {
+      const char *raw = *(current+1);
+      moduleentry.SetName( raw );
+      }
+    else if( strtype == *current )
+      {
+      const char *raw = *(current+1);
+	    moduleentry.SetType( Type::GetTypeType(raw) );
+      }
+    else
+      {
+      abort();
+      }
+    ++current;
+    ++current;
+    }
+}
+
+void TableReader::HandleModuleEntry(const char **atts)
+{
+  std::string strgrp = "group";
+  std::string strelt = "element";
+  std::string strname = "name";
+  std::string strtype = "type";
+  Tag &tag = CurrentTag;
+  ModuleEntry &moduleentry = CurrentModuleEntry;
+  const char **current = atts;
+  while(*current /*&& current+1*/)
+    {
+    if( strgrp == *current )
+      {
+      unsigned int v;
+      const char *raw = *(current+1);
+      int r = sscanf(raw, "%04x", &v);
+      assert( r == 1 );
+      assert( v <= 0xFFFF );
+      tag.SetGroup( v );
+      }
+    else if( strelt == *current )
+      {
+      unsigned int v;
+      const char *raw = *(current+1);
+      int r = sscanf(raw, "%04x", &v);
+      assert( r == 1 );
+      assert( v <= 0xFFFF );
+      tag.SetElement( v );
+      }
+    else if( strname == *current )
+      {
+      const char *raw = *(current+1);
+      moduleentry.SetName( raw );
+      }
+    else if( strtype == *current )
+      {
+      const char *raw = *(current+1);
+	    moduleentry.SetType( Type::GetTypeType(raw) );
+      }
+    else
+      {
+      abort();
+      }
+    ++current;
+    ++current;
+    }
+}
+
+void TableReader::HandleIODEntry(const char **atts)
+{
+  std::string strie = "ie";
+  std::string strname  = "name";
+  std::string strref = "ref";
+  std::string strusage = "usage";
+  // <iod ref="Table B.7-1" name="Film Session IOD Modules">
+  std::string strdesc = "description";
+  IODEntry &iodentry = CurrentIODEntry;
+  const char **current = atts;
+  while(*current /*&& current+1*/)
+    {
+    const char *raw = *(current+1);
+    if( strie == *current )
+      {
+      iodentry.SetIE( raw );
+      }
+    else if( strname == *current )
+      {
+      iodentry.SetName( raw );
+      }
+    else if( strref == *current )
+      {
+      iodentry.SetRef( raw );
+      }
+    else if( strusage == *current )
+      {
+      iodentry.SetUsage( raw );
+      }
+    else if( strdesc == *current )
+      {
+      //iodentry.SetDescription( raw );
+      }
+    else
+      {
+      abort();
+      }
+    ++current;
+    ++current;
+    }
+}
+
+void TableReader::HandleIOD(const char **atts)
+{
+  HandleModule(atts);
+}
+
+void TableReader::HandleMacro(const char **atts)
+{
+  HandleModule(atts);
+}
+
+void TableReader::HandleModule(const char **atts)
+{
+  std::string strref = "ref";
+  std::string strname = "name";
+  const char **current = atts;
+  while(*current /*&& current+1*/)
+    {
+    if( strref == *current )
+      {
+      }
+    else if( strname == *current )
+      {
+      CurrentModuleName = *(current+1);
+      }
+    else
+      {
+      abort();
+      }
+    ++current;
+    ++current;
+    }
+}
 
 void TableReader::StartElement(const char *name, const char **atts)
 {
@@ -65,13 +250,67 @@ void TableReader::StartElement(const char *name, const char **atts)
   //int *depthPtr = (int *)userData;
 //  for (i = 0; i < *depthPtr; i++)
 //    putchar('\t');
-  std::cout << name << " : " << atts[0] << "=" << atts[1] << std::endl;
-  if( strcmp(name, "Table" ) == 0 )
+  //std::cout << name << /*" : " << atts[0] << "=" << atts[1] <<*/ std::endl;
+  if( strcmp(name, "tables" ) == 0 )
     {
     //*depthPtr += 1;
     }
+  else if( strcmp(name, "macro" ) == 0 )
+    {
+    ParsingMacro = true;
+    HandleMacro(atts);
+    }
+  else if( strcmp(name, "module" ) == 0 )
+    {
+    //std::cout << "Start Module" << std::endl;
+    ParsingModule = true;
+    HandleModule(atts);
+    }
+  else if( strcmp(name, "iod" ) == 0 )
+    {
+    ParsingIOD = true;
+    HandleIOD(atts);
+    }
+  else if( strcmp(name, "entry" ) == 0 )
+    {
+    if( ParsingModule ) 
+      {
+      ParsingModuleEntry = true;
+      HandleModuleEntry(atts);
+      }
+    else if( ParsingMacro ) 
+      {
+      ParsingMacroEntry = true;
+      HandleMacroEntry(atts);
+      }
+    else if( ParsingIOD ) 
+      {
+      ParsingIODEntry = true;
+      HandleIODEntry(atts);
+      }
+    }
+  else if( strcmp(name, "description" ) == 0 )
+    {
+    if( ParsingModuleEntry )
+      {
+      HandleModuleEntryDescription(atts);
+      }
+    else if( ParsingMacroEntry )
+      {
+      HandleMacroEntryDescription(atts);
+      }
+    else /*if( ParsingIODoEntry )*/
+      {
+      abort();
+      }
+    }
+  else if( strcmp(name, "include" ) == 0 )
+    {
+    // TODO !
+    }
   else
     {
+    abort();
     }
 }
 
@@ -79,10 +318,107 @@ void TableReader::EndElement(const char *name)
 {
 //  int *depthPtr = (int *)userData;
 //  *depthPtr -= 1;
+  if( strcmp(name, "tables" ) == 0 )
+    {
+    }
+  else if( strcmp(name, "macro" ) == 0 )
+    {
+    //std::cout << "Start Macro" << std::endl;
+    CurrentDefs.GetMacros().AddModule( CurrentModuleName.c_str(), CurrentMacro);
+    CurrentModuleName.clear();
+    CurrentMacro.Clear();
+    ParsingMacro = false;
+    }
+  else if( strcmp( "module", name) == 0 )
+    {
+    CurrentDefs.GetModules().AddModule( CurrentModuleName.c_str(), CurrentModule);
+    //std::cout << "End Module:" << CurrentModuleName << std::endl;
+    CurrentModuleName.clear();
+    CurrentModule.Clear();
+    ParsingModule = false;
+    }
+  else if( strcmp(name, "iod" ) == 0 )
+    {
+    CurrentDefs.GetIODs().AddIOD( CurrentModuleName.c_str(), CurrentIOD);
+    CurrentModuleName.clear();
+    CurrentIOD.Clear();
+    ParsingIOD = false;
+    }
+  else if( strcmp(name, "entry" ) == 0 )
+    {
+    if( ParsingModule ) 
+      {
+      ParsingModuleEntry = false;
+      CurrentModule.AddModuleEntry( CurrentTag, CurrentModuleEntry);
+      }
+    else if( ParsingMacro ) 
+      {
+      ParsingMacroEntry = false;
+      CurrentMacro.AddModuleEntry( CurrentTag, CurrentMacroEntry);
+      }
+    else if( ParsingIOD ) 
+      {
+      ParsingIODEntry = false;
+      CurrentIOD.AddIODEntry( CurrentIODEntry);
+      }
+    }
+  else if( strcmp(name, "description" ) == 0 )
+    {
+    if( ParsingModuleEntry )
+      {
+      ParsingModuleEntryDescription = false;
+      CurrentModuleEntry.SetDescription( Description.c_str() );
+      Description = "";
+      }
+    else if( ParsingMacroEntry )
+      {
+      ParsingMacroEntryDescription = false;
+      //assert( !Description.empty() );
+      CurrentMacroEntry.SetDescription( Description.c_str() );
+      Description = "";
+      }
+    else
+      {
+      abort();
+      }
+    }
+  else if( strcmp(name, "include" ) == 0 )
+    {
+    if( ParsingModule )
+      {
+      }
+    else if( ParsingMacro )
+      {
+      }
+    else
+      {
+      abort();
+      }
+    }
+  else
+    {
+    abort();
+    }
 }
 
 void TableReader::CharacterDataHandler(const char *data, int length)
 {
+  if( ParsingModuleEntryDescription )
+    {
+    std::string name( data, length);
+    assert( length == strlen( name.c_str() ) );
+    Description.append( name );
+    }
+  else if( ParsingMacroEntryDescription )
+    {
+    std::string name( data, length);
+    assert( length == strlen( name.c_str() ) );
+    Description.append( name );
+    }
+  else
+    {
+    //abort();
+    }
 }
 
 int TableReader::Read()
@@ -115,10 +451,4 @@ int TableReader::Read()
   return ret;
 }
 
-#else
-void TableReader::StartElement(const char *name, const char **atts) {}
-void TableReader::EndElement(const char *name) {}
-void TableReader::CharacterDataHandler(const char *data, int length) {}
-int TableReader::Read() { return 0; }
-#endif
 } // end namespace gdcm

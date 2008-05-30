@@ -171,4 +171,38 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t) con
   return ret;
 }
 
+std::string StringFilter::FromString(const Tag&t, const char * value, VL const & vl)
+{
+  const Global &g = GlobalInstance;
+  const Dicts &dicts = g.GetDicts();
+  const DictEntry &entry = dicts.GetDictEntry(t);
+  const VM &vm = entry.GetVM();
+  const VR &vr = entry.GetVR();
+  if( vl != vm.GetLength() * vr.GetSizeof() )
+    {
+    abort();
+    }
+
+  std::string s(value,value+vl);
+  std::istringstream is;
+  is.str( s );
+  std::ostringstream os;
+  switch(vr)
+    {
+  case VR::US:
+      {
+      Element<VR::US,VM::VM1_n> el;
+      el.SetLength( vl );
+      for(unsigned int i = 0; i < vm.GetLength(); ++i)
+        is >> el.GetValue(i);
+      el.Write(os);
+      }
+    break;
+  default:
+    gdcmErrorMacro( "Not implemented" );
+    abort();
+    }
+  return os.str();
+}
+
 }

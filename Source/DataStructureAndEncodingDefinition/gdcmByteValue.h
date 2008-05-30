@@ -54,27 +54,7 @@ public:
 
   // When 'dumping' dicom file we still have some information from
   // Either the VR: eg LO (private tag)
-  void PrintASCII(std::ostream &os, VL maxlength ) const {
-    VL length = std::min(maxlength, Length);
-    // Special case for VR::UI, do not print the trailing \0
-    if( length && length == Length )
-      {
-      if( *Internal.rbegin() == 0 )
-        {
-        length = length - 1;
-        }
-      }
-    // I cannot check IsPrintable some file contains \2 or \0 in a VR::LO element
-    // See: acr_image_with_non_printable_in_0051_1010.acr 
-    //assert( IsPrintable(length) );
-    std::vector<char>::const_iterator it = Internal.begin();
-    for(; it != Internal.begin()+length; ++it)
-      {
-      const char &c = *it;
-      if ( !( isprint((unsigned char)c) || isspace((unsigned char)c) ) ) os << ".";
-      else os << c;
-      }
-  }
+  void PrintASCII(std::ostream &os, VL maxlength ) const;
 
   void PrintHex(std::ostream &os, VL maxlength) const;
 
@@ -89,12 +69,17 @@ public:
   // Does a reallocation
   void SetLength(VL vl) {
     VL l(vl);
-    assert( !l.IsUndefined() );
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+    // CompressedLossy.dcm
+    if( l.IsUndefined() ) throw Exception( "Impossible" );
     if ( l.IsOdd() ) {
       gdcmDebugMacro(
         "BUGGY HEADER: Your dicom contain odd length value field." );
       ++l;
       }
+#else
+    assert( !l.IsUndefined() && !l.IsOdd() );
+#endif
     // I cannot use reserve for now. I need to implement:
     // STL - vector<> and istream
     // http://groups.google.com/group/comp.lang.c++/msg/37ec052ed8283e74
@@ -109,7 +94,8 @@ public:
       }
     catch(...)
       {
-      exit(1);
+      //throw Exception("Impossible to allocate: " << l << " bytes." );
+      throw Exception("Impossible to allocate" );
       }
     // Keep the exact length
     Length = vl;

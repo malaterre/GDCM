@@ -38,7 +38,7 @@ namespace gdcm
       if( pe.GetLastElement().GetTag() == Tag(0xfffe,0xe0dd) )
         {
         //  BogusItemStartItemEnd.dcm
-        gdcmWarningMacro( "SQ End found but no no Item end found" );
+        gdcmWarningMacro( "SQ End found but no Item end found" );
         de.SetTag( itemDelItem );
         is.seekg( -4, std::ios::cur );
         }
@@ -194,7 +194,10 @@ namespace gdcm
     for( ; it != DES.end(); ++it)
       {
       const DataElement & de = *it;
-      de.Write<TDE,TSwap>(os);
+      //if( de.GetTag().GetGroup() >= 0x0008 || de.GetTag().GetGroup() == 0x0002 )
+        {
+        de.Write<TDE,TSwap>(os);
+        }
       }
     return os;
   }

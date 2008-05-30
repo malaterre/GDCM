@@ -19,15 +19,15 @@ SET(MSFF_SRCS
   gdcmDictPrinter.cxx
   gdcmScanner.cxx
   gdcmImageReader.cxx
+  gdcmDeltaEncodingCodec.cxx
   gdcmImageWriter.cxx
   gdcmStringFilter.cxx
-  gdcmSpacingHelper.cxx
+  gdcmImageHelper.cxx
   gdcmValidate.cxx
   gdcmDumper.cxx
   gdcmImage.cxx
   gdcmImageConverter.cxx
   gdcmImageCodec.cxx
-  gdcmImageValue.cxx
   gdcmJPEG12Codec.cxx
   gdcmRLECodec.cxx
   gdcmPDFCodec.cxx
@@ -65,18 +65,41 @@ INCLUDE_DIRECTORIES(
   # FIXME:
   "${GDCM_SOURCE_DIR}/Utilities"
   "${GDCM_BINARY_DIR}/Utilities"
-  "${GDCM_BINARY_DIR}/Utilities/uuid" # uuid_mangle.h
   #"${GDCM_BINARY_DIR}/Utilities/jpeg/8"
   #"${GDCM_SOURCE_DIR}/Utilities/jpeg"
   #"${GDCM_SOURCE_DIR}/Utilities/openjpeg/libopenjpeg"
   "${GDCM_BINARY_DIR}/Utilities/openjpeg"
-  "${GDCM_BINARY_DIR}/Utilities/zlib"
- 
   )
+IF(NOT GDCM_USE_SYSTEM_ZLIB)
+INCLUDE_DIRECTORIES(
+  "${GDCM_BINARY_DIR}/Utilities/gdcmzlib"
+)
+ENDIF(NOT GDCM_USE_SYSTEM_ZLIB)
+IF(GDCM_USE_SYSTEM_UUID)
+  INCLUDE_DIRECTORIES(
+    ${UUID_INCLUDE_DIR}
+  )
+  SET(GDCMUUID ${UUID_LIBRARIES})
+ELSE(GDCM_USE_SYSTEM_UUID)
+  INCLUDE_DIRECTORIES(
+    "${GDCM_BINARY_DIR}/Utilities/gdcmuuid" # uuid_mangle.h
+  )
+  SET(GDCMUUID gdcmuuid)
+ENDIF(GDCM_USE_SYSTEM_UUID)
 
 ADD_LIBRARY(gdcmMSFF ${MSFF_SRCS})
+SET_TARGET_PROPERTIES(gdcmMSFF PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
 TARGET_LINK_LIBRARIES(gdcmMSFF gdcmDSED gdcmDICT
   gdcmjpeg8 gdcmjpeg12 gdcmjpeg16 gdcmopenjpeg)
+#IF(HAVE_UUIDCREATE)
+IF(WIN32)
+  # For UuidCreate
+  # http://msdn.microsoft.com/en-us/library/aa379205(VS.85).aspx
+  TARGET_LINK_LIBRARIES(gdcmMSFF Rpcrt4)
+#ENDIF(HAVE_UUIDCREATE)
+ELSE(WIN32)
+TARGET_LINK_LIBRARIES(gdcmMSFF ${GDCMUUID})
+ENDIF(WIN32)
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS gdcmMSFF
     RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime

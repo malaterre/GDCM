@@ -127,10 +127,16 @@ public:
     assert( idx < GetNumberOfValues() );
     return Internal[idx];
   }
+  ArrayType operator[] (unsigned int idx) {
+    return GetValue(idx);
+  }
   // const reference
   ArrayType const &GetValue(unsigned int idx = 0) const {
     assert( idx < GetNumberOfValues() );
     return Internal[idx];
+  }
+  ArrayType const & operator[] (unsigned int idx) const {
+    return GetValue(idx);
   }
   void SetValue(ArrayType v, unsigned int idx = 0) {
     assert( idx < GetNumberOfValues() );
@@ -327,6 +333,7 @@ public:
     // This is kind of hackish but since I do not generate other element than the first one: 0x6000 I should be ok:
     assert( GetTag() == de.GetTag() || GetTag().GetGroup() == 0x6000 );
     assert( GetVR().Compatible( de.GetVR() ) ); // In case of VR::INVALID cannot use the & operator
+    assert( !de.IsEmpty() );
     const ByteValue *bv = de.GetByteValue();
     SetByteValue(bv);
   }
@@ -335,6 +342,7 @@ protected:
     assert( bv ); // FIXME
     std::stringstream ss;
     std::string s = std::string( bv->GetPointer(), bv->GetLength() );
+    Length = bv->GetLength(); // HACK FIXME
     ss.str( s );
     ArrayType internal[10]; // FIXME 
     EncodingImplementation<VRToEncoding<TVR>::Mode>::ReadComputeLength(internal, Length, ss);

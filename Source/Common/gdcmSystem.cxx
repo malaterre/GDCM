@@ -17,9 +17,6 @@
 #include "gdcmFilename.h"
 #include "gdcmException.h"
 
-#include "md5/md5.h"
-#include "uuid/uuid.h"
-
 #include <iostream>
 #include <string>
 
@@ -66,83 +63,6 @@
 
 namespace gdcm
 {
-
-inline void process_file(const char *filename, md5_byte_t *digest)
-{
-  if( !filename || !digest ) return;
-
-  FILE *file = fopen(filename, "rb");
-  if(!file) 
-    {
-    throw Exception("Could not open");
-    }
-
-  /* go to the end */
-  /*int*/ fseek(file, 0, SEEK_END);
-  size_t file_size = ftell(file);
-  /*int*/ fseek(file, 0, SEEK_SET);
-  void *buffer = malloc(file_size);
-  if(!buffer) 
-    {
-    fclose(file);
-    throw Exception("could not allocate");
-    }
-  size_t read = fread(buffer, 1, file_size, file);
-  assert( read == file_size ); (void)read;
-
-  md5_state_t state;
-  md5_init(&state);
-  md5_append(&state, (const md5_byte_t *)buffer, file_size);
-  md5_finish(&state, digest);
-  /*printf("MD5 (\"%s\") = ", test[i]); */
-  for (int di = 0; di < 16; ++di)
-  {
-    printf("%02x", digest[di]);
-  }
-  printf("\t%s\n", filename);
-  free(buffer);
-  fclose(file);
-}
-
-bool System::ComputeMD5(const char *buffer, const unsigned long buf_len,
-  char *digest_str)
-{
-  if( !buffer || !buf_len )
-    {
-    return false;
-    }
-  md5_byte_t digest[16];
-  md5_state_t state;
-  md5_init(&state);
-  md5_append(&state, (const md5_byte_t *)buffer, buf_len);
-  md5_finish(&state, digest);
-
-  //char digest_str[2*16+1];
-  for (int di = 0; di < 16; ++di)
-  {
-    sprintf(digest_str+2*di, "%02x", digest[di]);
-  }
-  digest_str[2*16] = '\0';
-  return true;
-}
-
-bool System::ComputeFileMD5(const char *filename, char *digest_str)
-{
-  // If not file exist
-  // return false;
-  md5_byte_t digest[16];
-
-  /* Do the file */
-  process_file(filename, digest);
-
-  //char digest_str[2*16+1];
-  for (int di = 0; di < 16; ++di)
-  {
-    sprintf(digest_str+2*di, "%02x", digest[di]);
-  }
-  digest_str[2*16] = '\0';
-  return true;
-}
 
 #if defined(_WIN32) && (defined(_MSC_VER) || defined(__WATCOMC__) || defined(__BORLANDC__) || defined(__MINGW32__)) 
 inline int Mkdir(const char* dir)
@@ -339,7 +259,7 @@ inline int getlastdigit(unsigned char *data, unsigned long size)
   return carry;
 }
 
-int System::EncodeBytes(char *out, unsigned char *data, int size)
+size_t System::EncodeBytes(char *out, const unsigned char *data, int size)
 {
   bool zero = false;
   int res;
@@ -363,9 +283,10 @@ int System::EncodeBytes(char *out, unsigned char *data, int size)
   return sres.size();
 }
 
-int System::GetHardwareAddress(unsigned char addr[6])
+bool System::GetHardwareAddress(unsigned char addr[6])
 {
-  int stat = uuid_get_node_id(addr);
+  int stat = 0; //uuid_get_node_id(addr);
+  memset(addr,0,6);
   /*
   // For debugging you need to consider the worse case where hardware addres is max number:
   addr[0] = 255;
@@ -377,14 +298,39 @@ int System::GetHardwareAddress(unsigned char addr[6])
   */
   if (stat == 1) // success
     {
-    return stat;
+    return true;
     }
   // else
-  gdcmWarningMacro("Problem in finding the MAC Address");
-  return 0;
+  //gdcmWarningMacro("Problem in finding the MAC Address");
+  return false;
 }
 
-int System::GetCurrentDateTime(char date[18])
+#if defined(_WIN32)
+#include <stdio.h>
+static int gettimeofday(struct timeval *tv, struct timezone *tz)
+{
+  FILETIME ft;
+  const uint64_t c1 = 27111902;
+  const uint64_t c2 = 3577643008UL;
+  const uint64_t OFFSET = (c1 << 32) + c2;
+  uint64_t filetime;
+  GetSystemTimeAsFileTime(&ft);
+
+  filetime = ft.dwHighDateTime;
+  filetime = filetime << 32;
+  filetime += ft.dwLowDateTime;
+  filetime -= OFFSET;
+
+  memset(tv,0, sizeof(*tv));
+  assert( sizeof(*tv) == sizeof(struct timeval));
+  tv->tv_sec = (time_t)(filetime / 10000000); /* seconds since epoch */
+  tv->tv_usec = (uint32_t)((filetime % 10000000) / 10);
+
+  return 0;
+}
+#endif
+
+bool System::GetCurrentDateTime(char date[18])
 {
   const size_t maxsize = 40;
   char tmp[maxsize];
@@ -392,7 +338,7 @@ int System::GetCurrentDateTime(char date[18])
   time_t timep;
 
   struct timeval tv;
-  uuid_gettimeofday (&tv, NULL);
+  gettimeofday (&tv, NULL);
   timep = tv.tv_sec;
   // Compute milliseconds from microseconds.
   milliseconds = tv.tv_usec / 1000;
@@ -402,8 +348,7 @@ int System::GetCurrentDateTime(char date[18])
   size_t ret = strftime (tmp, sizeof (tmp), "%Y%m%d%H%M%S", ptm);
   if( ret == 0 || ret >= maxsize )
     {
-    //return "";
-    return 0;
+    return false;
     }
 
   // Add milliseconds
@@ -413,12 +358,11 @@ int System::GetCurrentDateTime(char date[18])
   assert( ret2 >= 0 );
   if( (unsigned int)ret2 >= maxsizall )
     {
-    //return "";
-    return 0;
+    return false;
     }
 
   // Ok !
-  return 1;
+  return true;
 }
 
 int System::StrNCaseCmp(const char *s1, const char *s2, size_t n)

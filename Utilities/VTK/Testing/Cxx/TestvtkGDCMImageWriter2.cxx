@@ -85,10 +85,13 @@ int TestvtkGDCMImageWrite2(const char *filename, bool verbose = false)
     
     vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
     writer->SetInput( reader->GetOutput() );
+    writer->SetFileLowerLeft( reader->GetFileLowerLeft() );
     writer->SetDirectionCosines( reader->GetDirectionCosines() );
     writer->SetImageFormat( reader->GetImageFormat() );
     writer->SetFileDimensionality( 2 ); // test the 3D to 2D writing mode
     writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
+    writer->SetShift( reader->GetShift() );
+    writer->SetScale( reader->GetScale() );
     //writer->SetFileName( gdcmfile.c_str() );
     vtkStringArray *filenames = vtkStringArray::New();
     for(unsigned int i = 0; i < fg.GetNumberOfFilenames(); ++i)
@@ -96,46 +99,59 @@ int TestvtkGDCMImageWrite2(const char *filename, bool verbose = false)
       filenames->InsertNextValue( fg.GetFilename(i) );
       std::cerr << fg.GetFilename(i) << std::endl;
       }
-    assert( filenames->GetNumberOfValues() == fg.GetNumberOfFilenames() );
+    assert( filenames->GetNumberOfValues() == (int)fg.GetNumberOfFilenames() );
     writer->SetFileNames( filenames );
-    filenames->Delete();
     writer->Write();
-    if( verbose )  std::cerr << "Write out: " << gdcmfile << std::endl;
+    //if( verbose )  std::cerr << "Write out: " << gdcmfile << std::endl;
 
     writer->Delete();
 
-    // Need to check we can still read this image back:
-    gdcm::ImageReader r;
-    r.SetFileName( gdcmfile.c_str() );
-    if( !r.Read() )
+    // Need to check we can still read those files back:
+    for(int file=0; file<filenames->GetNumberOfValues(); ++file)
       {
-      std::cerr << "failed to read back:" << gdcmfile << std::endl;
-      res = 1;
+      const char *fname = filenames->GetValue(file);
+      gdcm::ImageReader r;
+      //r.SetFileName( gdcmfile.c_str() );
+      r.SetFileName( fname );
+      if( !r.Read() )
+        {
+        std::cerr << "failed to read back:" << fname << std::endl;
+        res = 1;
+        }
+      else
+        {
+        if( file == 0 )
+          {
+          // ok could read the file, now check origin is ok:
+          const gdcm::Image &image = r.GetImage();
+          const double *origin = image.GetOrigin();
+          if( origin )
+            {
+/*
+FIXME: it would be nice if this test would also handle FileLowerLeftOff to do d'une pierre deux coups.
+*/
+            vtkImageData * vtkimg = reader->GetOutput();
+            const vtkFloatingPointType *vtkorigin = vtkimg->GetOrigin();
+            if( fabs(vtkorigin[0] - origin[0]) > 1.e-3 
+              || fabs(vtkorigin[1] - origin[1]) > 1.e-3 
+              || fabs(vtkorigin[2] - origin[2]) > 1.e-3 )
+              {
+              std::cerr << "Problem:" << vtkorigin[0] << "," << vtkorigin[1] << "," << vtkorigin[2] ;
+              std::cerr << " should be:" << origin[0] << "," << origin[1] << "," << origin[2] << std::endl ;
+              res = 1;
+              }
+            }
+          }
+        }
       }
-    else
-    {
-      // ok could read the file, now check origin is ok:
-      const gdcm::Image &image = r.GetImage();
-      const double *origin = image.GetOrigin();
-      if( origin )
-      {
-      vtkImageData * vtkimg = reader->GetOutput();
-      const vtkFloatingPointType *vtkorigin = vtkimg->GetOrigin();
-      if( fabs(vtkorigin[0] - origin[0]) > 1.e-3 
-       || fabs(vtkorigin[1] - origin[1]) > 1.e-3 
-       || fabs(vtkorigin[2] - origin[2]) > 1.e-3 )
-      {
-         std::cerr << "Problem:" << vtkorigin[0] << "," << vtkorigin[1] << "," << vtkorigin[2] ;
-         std::cerr << " should be:" << origin[0] << "," << origin[1] << "," << origin[2] << std::endl ;
-      res = 1;
-      }
-      }
-    }
+
+    filenames->Delete();
     }
   else
     {
     if( verbose )
       std::cerr << "vtkGDCMImageReader cannot read: " << filename << std::endl;
+    res++;
     }
   reader->Delete();
 

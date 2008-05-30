@@ -19,10 +19,11 @@
 #include "gdcmFileMetaInformation.h"
 #include "gdcmElement.h"
 #include "gdcmPhotometricInterpretation.h"
+#include "gdcmSegmentedPaletteColorLookupTable.h"
 #include "gdcmTransferSyntax.h"
 #include "gdcmLookupTable.h"
 #include "gdcmAttribute.h"
-#include "gdcmSpacingHelper.h"
+#include "gdcmImageHelper.h"
 #include "gdcmIconImage.h"
 #include "gdcmPrivateTag.h"
 #include "gdcmJPEGCodec.h"
@@ -62,6 +63,9 @@ bool ImageReader::Read()
 {
   if( !Reader::Read() )
     {
+    // cemra_bug/IM-0001-0066.dcm 
+    // will return from the parser with an error
+    // but a partial Pixel Data can be seen
     return false;
     }
 
@@ -208,7 +212,7 @@ int ImageReader::ReadISFromTag( Tag const &t, std::stringstream &ss,
 }
 
 // PICKER-16-MONO2-Nested_icon.dcm
-void DoIconImage(const DataSet& rootds, ImageValue& image)
+void DoIconImage(const DataSet& rootds, Image& image)
 {
   const Tag ticonimage(0x0088,0x0200);
   //const Tag tgeiconimage(0x0009,0x1010);
@@ -398,7 +402,7 @@ void DoIconImage(const DataSet& rootds, ImageValue& image)
     }
 }
 
-void DoCurves(const DataSet& ds, ImageValue& pixeldata)
+void DoCurves(const DataSet& ds, Image& pixeldata)
 {
   unsigned int numcurves;
   if( (numcurves = Curve::GetNumberOfCurves( ds )) )
@@ -450,7 +454,7 @@ void DoCurves(const DataSet& ds, ImageValue& pixeldata)
     }
 }
 
-void DoOverlays(const DataSet& ds, ImageValue& pixeldata)
+void DoOverlays(const DataSet& ds, Image& pixeldata)
 {
   unsigned int numoverlays;
   if( (numoverlays = Overlay::GetNumberOfOverlays( ds )) )
@@ -633,7 +637,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     }
 
   // 4 1/2 Let's do Pixel Spacing
-  std::vector<double> spacing = SpacingHelper::GetSpacingValue(*F);
+  std::vector<double> spacing = ImageHelper::GetSpacingValue(*F);
   // FIXME: Only SC is allowed not to have spacing:
   if( !spacing.empty() )
     {
@@ -645,33 +649,20 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
       }
     }
   // 4 2/3 Let's do Origin
-  const Tag timagepositionpatient(0x0020, 0x0032);
-  if( ds.FindDataElement( timagepositionpatient ) )
+  std::vector<double> origin = ImageHelper::GetOriginValue(*F);
+  if( !origin.empty() )
     {
-    const DataElement& de = ds.GetDataElement( timagepositionpatient );
-    Attribute<0x0020,0x0032> at;
-    at.SetFromDataElement( de );
-    PixelData.SetOrigin( at.GetValues() );
-    if( at.GetNumberOfValues() > PixelData.GetNumberOfDimensions() ) // FIXME HACK
+    PixelData.SetOrigin( &origin[0] );
+    if( origin.size() > PixelData.GetNumberOfDimensions() ) // FIXME HACK
       {
-      PixelData.SetOrigin(PixelData.GetNumberOfDimensions(), at.GetValue(PixelData.GetNumberOfDimensions()) );
+      PixelData.SetOrigin(PixelData.GetNumberOfDimensions(), origin[PixelData.GetNumberOfDimensions()] );
       }
     }
-  else
+
+  std::vector<double> dircos = ImageHelper::GetDirectionCosinesValue(*F);
+  if( !dircos.empty() )
     {
-    gdcmDebugMacro( "No Image Position (Patient) for ms=" << ms );
-    }
-  const Tag timageorientationpatient(0x0020, 0x0037);
-  if( ds.FindDataElement( timageorientationpatient ) )
-    {
-    const DataElement& de = ds.GetDataElement( timageorientationpatient );
-    Attribute<0x0020,0x0037> at;
-    at.SetFromDataElement( de );
-    PixelData.SetDirectionCosines( at.GetValues() );
-    }
-  else
-    {
-    gdcmDebugMacro( "No Image Orientation (Patient) for ms=" << ms );
+    PixelData.SetDirectionCosines( &dircos[0] );
     }
 
   // 5. Photometric Interpretation
@@ -696,20 +687,10 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   PixelData.SetPhotometricInterpretation( pi );
 
   // Do the Rescale Intercept & Slope
-  Attribute<0x0028,0x1052> at1;
-  bool intercept = ds.FindDataElement(at1.GetTag());
-  if( intercept )
-  {
-    at1.SetFromDataElement( ds.GetDataElement(at1.GetTag()) );
-    PixelData.SetIntercept( at1.GetValue() );
-  }
-  Attribute<0x0028,0x1053> at2;
-  bool slope     = ds.FindDataElement(at2.GetTag());
-  if ( slope )
-  {
-    at2.SetFromDataElement( ds.GetDataElement(at2.GetTag()) );
-    PixelData.SetSlope( at2.GetValue() );
-  }
+  std::vector<double> is = ImageHelper::GetRescaleInterceptSlopeValue(*F);
+  PixelData.SetIntercept( is[0] );
+  PixelData.SetSlope( is[1] );
+
   // Do the Palette Color:
   // 1. Modality LUT Sequence
   bool modlut = ds.FindDataElement(Tag(0x0028,0x3000) );
@@ -718,7 +699,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     gdcmWarningMacro( "Modality LUT (0028,3000) are not handled. Image will not be displayed properly" );
     }
   // 2. LUTData (0028,3006)
-  // technically I do not need to warn about LUTData since either modality lut XOR VOI LUt need to 
+  // technically I do not need to warn about LUTData since either modality lut XOR VOI LUT need to 
   // be sent to require a LUT Data...
   bool lutdata = ds.FindDataElement(Tag(0x0028,0x3006) );
   if( lutdata )
@@ -733,9 +714,33 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     }
   // (0028,0120) US 32767                                    #   2, 1 PixelPaddingValue
   bool pixelpaddingvalue = ds.FindDataElement(Tag(0x0028,0x0120));
+
+  // PS 3.3 - 2008 / C.7.5.1.1.2 Pixel Padding Value and Pixel Padding Range Limit
   if(pixelpaddingvalue)
     {
-    gdcmWarningMacro( "Pixel Padding Value (0028,0120) is not handled. Image will not be displayed properly" );
+    // Technically if Pixel Padding Value is 0 on MONOCHROME2 image, then appearance should be fine...
+    bool vizissue = true;
+    if( pf.GetPixelRepresentation() == 0 )
+      {
+      Element<VR::US,VM::VM1> ppv;
+      if( !ds.GetDataElement(Tag(0x0028,0x0120) ).IsEmpty() )
+        {
+        ppv.Set( ds.GetDataElement(Tag(0x0028,0x0120)).GetValue() );
+        if( pi == PhotometricInterpretation::MONOCHROME2 && ppv.GetValue() == 0 )
+          {
+          vizissue = false;
+          }
+        }
+      }
+    else if( pf.GetPixelRepresentation() == 1 )
+      {
+      gdcmWarningMacro( "TODO" );
+      }
+    // test if there is any viz issue:
+    if( vizissue )
+      {
+      gdcmWarningMacro( "Pixel Padding Value (0028,0120) is not handled. Image will not be displayed properly" );
+      }
     }
   // 4. Palette Color Lookup Table Descriptor
   if ( pi == PhotometricInterpretation::PALETTE_COLOR )
@@ -746,6 +751,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     //const DataSet &ds = it->GetNestedDataSet();
 
     SmartPointer<LookupTable> lut = new LookupTable;
+    //SmartPointer<SegmentedPaletteColorLookupTable> lut = new SegmentedPaletteColorLookupTable;
     lut->Allocate( pf.GetBitsAllocated() );
 
     // for each red, green, blue:
@@ -789,10 +795,16 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
         }
       else if( ds.FindDataElement( seglut ) )
         {
-        gdcmWarningMacro( "TODO" ); abort();
-        const ByteValue *lut_raw = GetPointerFromElement( seglut );
+        const ByteValue *lut_raw = ds.GetDataElement( seglut ).GetByteValue();
+        assert( lut_raw );
         lut->SetLUT( LookupTable::LookupTableType(i),
           (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
+        //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
+
+        unsigned long check =
+          (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
+          * el_us3.GetValue(2) / 8;
+        assert( check == lut_raw->GetLength() ); (void)check;
         }
       else
         {

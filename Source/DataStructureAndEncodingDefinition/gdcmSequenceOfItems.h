@@ -78,6 +78,8 @@ public:
    */
   const Item &GetItem(unsigned int position) const;
 
+  Item &GetItem(unsigned int position);
+
   SequenceOfItems &operator=(const SequenceOfItems &val) {
     SequenceLengthField = val.SequenceLengthField;
     Items = val.Items;

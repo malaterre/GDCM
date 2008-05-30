@@ -7,13 +7,14 @@ SET(GDCM_VIEWER_APP_SRCS
   )
 SET(GDCM_VTK_APPS
   gdcmviewer # vtkImageViewer
-  gdcmviewer2 # vtkImageViewer2
+  #gdcmviewer2 # vtkImageViewer2
   )
 
 FOREACH(app ${GDCM_VTK_APPS})
   ADD_EXECUTABLE(${app} 
 #MACOSX_BUNDLE 
 ${GDCM_VIEWER_APP_SRCS})
+  SET_TARGET_PROPERTIES(${app} PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES})
   TARGET_LINK_LIBRARIES(${app} vtkgdcm vtkRendering)
   IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
     TARGET_LINK_LIBRARIES(${app} vtkgdcm vtkWidgets)

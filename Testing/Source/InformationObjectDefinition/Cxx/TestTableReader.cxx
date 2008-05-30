@@ -13,15 +13,27 @@
 
 =========================================================================*/
 #include "gdcmTableReader.h"
+#include "gdcmModules.h"
 
 // generated file:
 #include "gdcmTables.h"
 
 void TestReadTable(const char *filename)
 {
-  gdcm::TableReader tr;
+  gdcm::Defs defs;
+  gdcm::TableReader tr(defs);
   tr.SetFilename(filename);
   tr.Read();
+
+  
+  const gdcm::Modules &modules = defs.GetModules();
+  std::cout << modules << std::endl;
+
+  const gdcm::Macros &macros = defs.GetMacros();
+  std::cout << macros << std::endl;
+
+  const gdcm::IODs &iods = defs.GetIODs();
+  std::cout << iods << std::endl;
 }
 
 int TestTableReader(int argc, char *argv[])

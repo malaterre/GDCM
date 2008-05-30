@@ -31,6 +31,12 @@ public :
   Testing() {};
   ~Testing() {};
 
+  // MD5 stuff
+  // digest_str needs to be at least : strlen = [2*16+1];
+  static bool ComputeMD5(const char *buffer, const unsigned long buf_len,
+    char *digest_str);
+  static bool ComputeFileMD5(const char *filename, char *digest_str);
+
   // Print
   void Print(std::ostream &os = std::cout);
 
@@ -49,6 +55,10 @@ public :
 
   // Return the GDCM DATA ROOT
   static const char * GetDataRoot();
+
+  static const char * GetDataExtraRoot();
+
+  static const char * GetPixelSpacingDataRoot();
 
   // NOT THREAD SAFE
   // Returns the temp directory as used in testing needing to output data:

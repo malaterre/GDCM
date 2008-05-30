@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmRAWcodec_h
-#define __gdcmRAWcodec_h
+#ifndef __gdcmRAWCodec_h
+#define __gdcmRAWCodec_h
 
 #include "gdcmImageCodec.h"
 

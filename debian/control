@@ -1,0 +1,14 @@
+Source: gdcm
+Section: devel
+Priority: optional
+Maintainer: Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>
+Build-Depends: debhelper (>> 5.0.0), cmake (>> 2.6)
+Standards-Version: 3.7.3
+
+Package: gdcm
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: A DICOM library
+ This is a dummy file, this will NOT be used to package gdcm, since
+ the process is using cpack (cmake) for generating. But we need
+ this fake file to please dpkg-buildpackage

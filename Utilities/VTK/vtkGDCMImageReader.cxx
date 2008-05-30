@@ -47,6 +47,16 @@
 vtkCxxRevisionMacro(vtkGDCMImageReader, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMImageReader)
 
+inline bool vtkGDCMImageReader_IsCharTypeSigned()
+{
+#ifndef VTK_TYPE_CHAR_IS_SIGNED
+  unsigned char uc = 255;
+  return (*reinterpret_cast<char*>(&uc) < 0) ? true : false;
+#else
+  return VTK_TYPE_CHAR_IS_SIGNED;
+#endif
+}
+
 // Output Ports are as follow:
 // #0: The image/volume (root PixelData element)
 // #1: (if present): the Icon Image (0088,0200)
@@ -87,6 +97,7 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   this->ApplyLookupTable = 0;
   this->ApplyYBRToRGB = 0;
   this->ApplyPlanarConfiguration = 1;
+  this->ApplyShiftScale = 1;
   memset(this->ImagePositionPatient,0,3*sizeof(double));
   memset(this->ImageOrientationPatient,0,6*sizeof(double));
   this->Curve = 0;
@@ -439,11 +450,11 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
       std::stringstream ss;
       ss.str( "" );
       std::string swe = std::string( bvwe->GetPointer(), bvwe->GetLength() );
-      unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swe.c_str(), swe.size());
+      unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swe.c_str(), swe.size()); (void)count;
       // I found a case with only one W/L but two comments: WINDOW1\WINDOW2
       // SIEMENS-IncompletePixelData.dcm
-      assert( count >= (unsigned int)n );
-      elwe.SetLength( count * vr.GetSizeof() );
+      //assert( count >= (unsigned int)n );
+      elwe.SetLength( /*count*/ n * vr.GetSizeof() );
       ss.str( swe );
       elwe.Read( ss );
       for(int i = 0; i < n; ++i)
@@ -452,6 +463,23 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
         }
       }
     }
+
+#if 0
+  // gdcmData/JDDICOM_Sample4.dcm 
+  // -> (0008,0060) CS [DM  Digital microscopy]                 #  24, 1 Modality
+  gdcm::MediaStorage ms1 = gdcm::MediaStorage::SecondaryCaptureImageStorage;
+  ms1.GuessFromModality( this->MedicalImageProperties->GetModality(), this->FileDimensionality );
+  gdcm::MediaStorage ms2;
+  ms2.SetFromFile( reader.GetFile() );
+  if( ms2 != ms1 && ms2 != gdcm::MediaStorage::SecondaryCaptureImageStorage )
+    {
+    vtkWarningMacro( "SHOULD NOT HAPPEN. Unrecognized Modality: " << this->MedicalImageProperties->GetModality() 
+      << " Will be set instead to the known one: " << ms2.GetModality() )
+    this->MedicalImageProperties->SetModality( ms2.GetModality() );
+    }
+#endif
+ 
+  // Add more info:
 
 }
 
@@ -531,6 +559,13 @@ int vtkGDCMImageReader::RequestInformationCompat()
     vtkErrorMacro( "ApplyLookupTable/ApplyYBRToRGB/ApplyInverseVideo not compatible" );
     return 0;
     }
+  // I do not think this is a good idea anyway to let the user decide
+  // wether or not she wants *not* to apply shift/scale...
+  if( !this->ApplyShiftScale )
+  {
+    vtkErrorMacro("ApplyShiftScale not compatible" );
+    return 0;
+   }
   // I do not think this one will ever be implemented:
   if( !this->ApplyPlanarConfiguration )
     {
@@ -544,10 +579,16 @@ int vtkGDCMImageReader::RequestInformationCompat()
     {
     filename = this->FileName;
     }
-  else
+  else if ( this->FileNames )
     {
     assert( this->FileNames && this->FileNames->GetNumberOfValues() >= 1 );
     filename = this->FileNames->GetValue( 0 );
+    }
+  else
+    {
+    // hey! I need at least one file to schew on !
+    vtkErrorMacro( "You did not specify any filenames" );
+    return 0;
     }
   gdcm::ImageReader reader;
   reader.SetFileName( filename );
@@ -599,10 +640,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
     {
     this->DataSpacing[0] = spacing[0];
     this->DataSpacing[1] = spacing[1];
-    if( image.GetNumberOfDimensions() == 3 )
-      {
-      this->DataSpacing[2] = image.GetSpacing(2);
-      }
+    this->DataSpacing[2] = image.GetSpacing(2);
     }
 
     const double *origin = image.GetOrigin();
@@ -628,52 +666,52 @@ int vtkGDCMImageReader::RequestInformationCompat()
     // Apply transform:
     if( dircos && origin )
       {
-      double dcos[9];
-      for(int i=0;i<6;++i)
-        dcos[i] = dircos[i];
-      dcos[6] = dircos[1] * dircos[5] - dircos[2] * dircos[4];
-      dcos[7] = dircos[2] * dircos[3] - dircos[0] * dircos[5];
-      dcos[8] = dircos[0] * dircos[4] - dircos[3] * dircos[1];
-      double rotatedorigin[3];
-#if 1
-      rotatedorigin[0] = dcos[0] * origin[0] + dcos[1] * origin[1] + dcos[2] * origin[2];
-      rotatedorigin[1] = dcos[3] * origin[0] + dcos[4] * origin[1] + dcos[5] * origin[2];
-      rotatedorigin[2] = dcos[6] * origin[0] + dcos[7] * origin[1] + dcos[8] * origin[2];
-#else
-      rotatedorigin[0] = dcos[0] * origin[0] + dcos[3] * origin[1] + dcos[6] * origin[2];
-      rotatedorigin[1] = dcos[1] * origin[0] + dcos[4] * origin[1] + dcos[7] * origin[2];
-      rotatedorigin[2] = dcos[2] * origin[0] + dcos[5] * origin[1] + dcos[8] * origin[2];
-#endif
-      //gdcm::Orientation::OrientationType type = gdcm::Orientation::GetType(dircos);
-      //const char *label = gdcm::Orientation::GetLabel( type );
-      // Invert spacing
-      //if( !this->FileLowerLeft )
-      //  {
-      //  this->DataSpacing[1] = -spacing[1];
-      //  }
-
       if( this->FileLowerLeft )
         {
+        // Since we are not doing the VTK Y-flipping operation, Origin and Image Position (Patient)
+        // are the same:
         this->DataOrigin[0] = origin[0];
         this->DataOrigin[1] = origin[1];
         this->DataOrigin[2] = origin[2];
         }
       else
         {
-        this->DataOrigin[0] = origin[0];
-        this->DataOrigin[1] = origin[1] - this->DataSpacing[1]*dims[1];
-        this->DataOrigin[2] = origin[2];
+        // We are doing the Y-flip:
+        // translate Image Position (Patient) along the Y-vector of the Image Orientation (Patient):
+        // Step 1: Compute norm of translation vector:
+        // Because position is in the center of the pixel, we need to substract 1 to the dimY:
+        assert( dims[1] >=1 );
+        double norm = (dims[1] - 1) * this->DataSpacing[1];
+        // Step 2: translate:
+        this->DataOrigin[0] = origin[0] + norm * dircos[3+0];
+        this->DataOrigin[1] = origin[1] + norm * dircos[3+1];
+        this->DataOrigin[2] = origin[2] + norm * dircos[3+2];
         }
       }
     // Need to set the rest to 0 ???
 
   const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
-  switch( pixeltype )
+  this->Shift = image.GetIntercept();
+  this->Scale = image.GetSlope();
+  gdcm::Rescaler r;
+  r.SetIntercept( this->Shift );
+  r.SetSlope( this->Scale );
+  r.SetPixelFormat( pixeltype );
+  gdcm::PixelFormat::ScalarType outputpt = r.ComputeInterceptSlopePixelType();
+  assert( pixeltype <= outputpt );
+  //if( pixeltype != outputpt ) assert( Shift != 0. || Scale != 1 );
+  //std::cerr << "PF:" << pixeltype << " -> " << outputpt << std::endl;
+
+  switch( outputpt )
     {
   case gdcm::PixelFormat::INT8:
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
     this->DataScalarType = VTK_SIGNED_CHAR;
 #else
+    if( !vtkGDCMImageReader_IsCharTypeSigned() )
+      {
+      vtkErrorMacro( "Output Pixel Type will be incorrect, go get a newer VTK version" );
+      }
     this->DataScalarType = VTK_CHAR;
 #endif
     break;
@@ -693,21 +731,20 @@ int vtkGDCMImageReader::RequestInformationCompat()
   case gdcm::PixelFormat::UINT32:
     this->DataScalarType = VTK_UNSIGNED_INT;
     break;
-  // FIXME 12bits should not be that hard...
   case gdcm::PixelFormat::INT12:
     this->DataScalarType = VTK_SHORT;
     break;
   case gdcm::PixelFormat::UINT12:
     this->DataScalarType = VTK_UNSIGNED_SHORT;
     break;
+  //case gdcm::PixelFormat::FLOAT16: // TODO
+  case gdcm::PixelFormat::FLOAT32:
+    this->DataScalarType = VTK_FLOAT;
+    break;
   default:
     vtkErrorMacro( "Do not support this Pixel Type: " << pixeltype );
     return 0;
     }
-  //this->Shift = image.GetIntercept();
-  //this->Scale = image.GetSlope();
-  //this->DataScalarType = VTK_SHORT;
-
   this->NumberOfScalarComponents = pixeltype.GetSamplesPerPixel();
 
   // Ok let's fill in the 'extra' info:
@@ -833,6 +870,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   image.GetBuffer(pointer);
   if( pixeltype == gdcm::PixelFormat::UINT12 || pixeltype == gdcm::PixelFormat::INT12 )
   {
+    assert( Scale == 1.0 && Shift == 0.0 );
     // FIXME: I could avoid this extra copy:
     char * copy = new char[len];
     memcpy(copy, pointer, len);
@@ -842,12 +880,22 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     len = 16 * len / 12;
     delete[] copy;
   }
+  // HACK: Make sure that Shift/Scale are the one from the file:
+  this->Shift = image.GetIntercept();
+  this->Scale = image.GetSlope();
+
   if( Scale != 1.0 || Shift != 0.0 )
   {
     gdcm::Rescaler r;
     r.SetIntercept( Shift );
     r.SetSlope( Scale );
-    r.Rescale(pointer,pointer,len);
+    r.SetPixelFormat( pixeltype );
+    char * copy = new char[len];
+    memcpy(copy, pointer, len);
+    r.Rescale(pointer,copy,len);
+    delete[] copy;
+    // WARNING: sizeof(Real World Value) != sizeof(Stored Pixel)
+    outlen = data->GetScalarSize() * data->GetNumberOfPoints() / data->GetDimensions()[2];
   }
   // Do the Icon Image:
   this->NumberOfIconImages = image.GetIconImage().IsEmpty() ? 0 : 1;
@@ -1029,7 +1077,12 @@ int vtkGDCMImageReader::RequestDataCompat()
     {
     const char *filename = this->FileName;
     unsigned long len;
-    this->LoadSingleFile( filename, pointer, len ); (void)len;
+    int load = this->LoadSingleFile( filename, pointer, len ); (void)len;
+    if( !load )
+      {
+      // FIXME: I need to fill the buffer with 0, shouldn't I ?
+      return 0;
+      }
     }
   else
     {
@@ -1037,11 +1090,19 @@ int vtkGDCMImageReader::RequestDataCompat()
 
     // Load each 2D files
     int *dext = this->GetDataExtent();
+    // HACK: len is moved out of the loop so that when file > 1 start failing we can still know
+    // the len of the buffer...technically all file should have the same len (not checked for now)
+    unsigned long len = 0;
     for(int j = dext[4]; j <= dext[5]; ++j)
       {
       const char *filename = this->FileNames->GetValue( j );
-      unsigned long len = 0;
-      int load = this->LoadSingleFile( filename, pointer, len ); (void)load;
+      int load = this->LoadSingleFile( filename, pointer, len );
+      if( !load )
+        {
+        // hum... we could not read this file within the series, let's just fill
+        // the slice with 0 value, hopefully this should be the right thing to do
+        memset( pointer, 0, len);
+        }
       assert( len );
       pointer += len;
       }

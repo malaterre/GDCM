@@ -655,8 +655,9 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
       }
     assert( refvr != VR::OB_OW );
 
-    if( !vr.Compatible( vr_read ) )
+    if( vr != VR::INVALID && (!vr.Compatible( vr_read ) || vr_read == VR::INVALID) )
       {
+      assert( vr != VR::INVALID );
       // FIXME : if terminal supports it: print in red/green !
       os << GDCM_TERMINAL_VT100_FOREGROUND_GREEN;
       if( vr == VR::US_SS || vr == VR::OB_OW )
@@ -731,6 +732,14 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
       case VR::OB:
       case VR::OW:
       case VR::OB_OW:
+      case VR::UN:
+      case VR::US_SS_OW: // TODO: check with ModalityLUT.dcm 
+/*
+  VR::US_SS_OW:
+  undefined_length_un_vr.dcm
+  GDCMFakeJPEG.dcm
+  PhilipsWith15Overlays.dcm
+*/
           {
           if ( bv )
             {
@@ -754,10 +763,9 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
             }
           }
         break;
-      case VR::UN:
       case VR::US_SS:
-      case VR::US_SS_OW:
-        os << "TODO";
+        // impossible...
+        assert( refvr != VR::US_SS );
         break;
       case VR::SQ:
         if( !de.GetSequenceOfItems() && !de.IsEmpty() && de.GetValue().GetLength() )
@@ -979,7 +987,7 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
           std::string nextindent = indent + "  ";
           os << nextindent << deitem.GetTag();
           os << " ";
-          os << deitem.GetVR();
+          os << "na"; //deitem.GetVR();
           os << " ";
           if( deitem.GetVL().IsUndefined() )
             {

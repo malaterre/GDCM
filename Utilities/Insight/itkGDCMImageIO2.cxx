@@ -36,7 +36,7 @@ GDCMImageIO2::GDCMImageIO2()
   this->SetNumberOfDimensions(3);
   // UIDPrefix is the ITK root id tacked with a ".1"
   // allowing to designate a subspace of the id space for ITK generated DICOM
-  gdcm::UIDGenerator::SetRoot( "1.2.826.0.1.3680043.2.1125.1" );
+  gdcm::UIDGenerator::SetRoot( "1.2.826.0.1.3680043.2.1125" );
 
   // Set some file info ITK specific stuff:
   // echo "ITK" | od -b
@@ -127,9 +127,8 @@ bool GDCMImageIO2::OpenGDCMFileForWriting(std::ofstream& os,
 bool GDCMImageIO2::CanReadFile(const char* filename)
 {
   std::ifstream file;
-  std::string fname(filename);
 
-  if(  fname == "" )
+  if( !filename || !*filename )
     {
     itkDebugMacro(<<"No filename specified.");
     return false;
@@ -335,7 +334,7 @@ void GDCMImageIO2::Write(const void* buffer)
 
   gdcm::ImageWriter writer;
   //this->SetNumberOfDimensions(3);
-  gdcm::ImageValue &image = dynamic_cast<gdcm::ImageValue&>(writer.GetImage());
+  gdcm::Image &image = writer.GetImage();
   image.SetNumberOfDimensions( 2 ); // good default
   image.SetDimension(0, m_Dimensions[0] );
   image.SetDimension(1, m_Dimensions[1] );

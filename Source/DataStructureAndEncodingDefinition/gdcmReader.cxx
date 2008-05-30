@@ -27,6 +27,7 @@
 #include "gdcmUNExplicitDataElement.h"
 #include "gdcmCP246ExplicitDataElement.h"
 #include "gdcmExplicitImplicitDataElement.h"
+#include "gdcmUNExplicitImplicitDataElement.h"
 #include "gdcmVR16ExplicitDataElement.h"
 #endif
 
@@ -274,13 +275,19 @@ std::istream &is = Stream;
   // algorithm
   if( ts == TransferSyntax::DeflatedExplicitVRLittleEndian )
     {
-    gzistream gzis(is.rdbuf());
+#if 0
+  std::ofstream out( "/tmp/deflate.raw");
+  out << is.rdbuf();
+  out.close();
+#endif
+    zlib_stream::zip_istream gzis( is );
     // FIXME: we also know in this case that we are dealing with Explicit:
     assert( ts.GetNegociatedType() == TransferSyntax::Explicit );
     F->GetDataSet().Read<ExplicitDataElement,SwapperNoOp>(gzis);
-    is.seekg(0, std::ios::end);
-    is.peek();
-
+    // I need the following hack to read: srwithgraphdeflated.dcm
+    //is.clear();
+    // well not anymore, see special handling of trailing \0 in:
+    // basic_unzip_streambuf<charT, traits>::fill_input_buffer(void)
     return is;
     }
 
@@ -427,31 +434,58 @@ std::istream &is = Stream;
           }
         catch ( Exception &ex )
           {
-          // Ouch ! the file is neither:
-          // 1. An Explicit encoded
-          // 2. I could not reread it using the VR16Explicit reader, last option is
-          // that the file is explicit/implicit
-          is.clear();
-          if( haspreamble )
+          try
             {
-            is.seekg(128+4, std::ios::beg);
-            }
-          else
-            {
-            is.seekg(0, std::ios::beg);
-            }
-          if( hasmetaheader )
-            {
-            // FIXME: we are reading twice the same meta-header, we succedeed the first time...
-            // We should be able to seek to proper place instead of re-reading
-            FileMetaInformation header;
-            header.Read(is);
-            }
+            // Ouch ! the file is neither:
+            // 1. An Explicit encoded
+            // 2. I could not reread it using the VR16Explicit reader, last option is
+            // that the file is explicit/implicit
+            is.clear();
+            if( haspreamble )
+              {
+              is.seekg(128+4, std::ios::beg);
+              }
+            else
+              {
+              is.seekg(0, std::ios::beg);
+              }
+            if( hasmetaheader )
+              {
+              // FIXME: we are reading twice the same meta-header, we succedeed the first time...
+              // We should be able to seek to proper place instead of re-reading
+              FileMetaInformation header;
+              header.Read(is);
+              }
 
-          // Explicit/Implicit
-          gdcmWarningMacro( "Attempt to read file with explicit/implicit" );
-          F->GetDataSet().Clear(); // remove garbage from 1st attempt...
-          F->GetDataSet().Read<ExplicitImplicitDataElement,SwapperNoOp>(is);
+            // Explicit/Implicit
+            gdcmWarningMacro( "Attempt to read file with explicit/implicit" );
+            F->GetDataSet().Clear(); // remove garbage from 1st attempt...
+            F->GetDataSet().Read<ExplicitImplicitDataElement,SwapperNoOp>(is);
+            }
+          catch ( Exception &ex )
+            {
+            is.clear();
+            if( haspreamble )
+              {
+              is.seekg(128+4, std::ios::beg);
+              }
+            else
+              {
+              is.seekg(0, std::ios::beg);
+              }
+            if( hasmetaheader )
+              {
+              // FIXME: we are reading twice the same meta-header, we succedeed the first time...
+              // We should be able to seek to proper place instead of re-reading
+              FileMetaInformation header;
+              header.Read(is);
+              }
+
+            // Explicit/Implicit
+            gdcmWarningMacro( "Attempt to read file with explicit/implicit" );
+            F->GetDataSet().Clear(); // remove garbage from 1st attempt...
+            F->GetDataSet().Read<UNExplicitImplicitDataElement,SwapperNoOp>(is);
+            }
           }
         }
       }
@@ -486,18 +520,18 @@ std::istream &is = Stream;
         }
       }
 #else
-    std::cerr << ex.what() << std::endl;
+    gdcmDebugMacro( ex.what() );
     success = false;
 #endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
     }
   catch( Exception &ex )
     {
-    std::cerr << ex.what() << std::endl;
+    gdcmDebugMacro( ex.what() );
     success = false;
     }
   catch( ... )
     {
-    std::cerr << "Unknown exception" << std::endl;
+    gdcmWarningMacro( "Unknown exception" );
     success = false;
     }
 
@@ -505,12 +539,12 @@ std::istream &is = Stream;
     }
   catch( Exception &ex )
     {
-    std::cerr << ex.what() << std::endl;
+    gdcmDebugMacro( ex.what() );
     success = false;
     }
   catch( ... )
     {
-    std::cerr << "Unknown exception" << std::endl;
+    gdcmWarningMacro( "Unknown exception" );
     success = false;
     }
 //  if( !success )
@@ -605,12 +639,10 @@ std::istream &is = Stream;
   // algorithm
   if( ts == TransferSyntax::DeflatedExplicitVRLittleEndian )
     {
-    gzistream gzis(is.rdbuf());
+    zlib_stream::zip_istream gzis( is );
     // FIXME: we also know in this case that we are dealing with Explicit:
     assert( ts.GetNegociatedType() == TransferSyntax::Explicit );
     F->GetDataSet().ReadUpToTag<ExplicitDataElement,SwapperNoOp>(gzis,tag);
-    is.seekg(0, std::ios::end);
-    is.peek();
 
     return is;
     }
@@ -776,12 +808,12 @@ std::istream &is = Stream;
     }
   catch( Exception &ex )
     {
-    std::cerr << ex.what() << std::endl;
+    gdcmDebugMacro( ex.what() );
     success = false;
     }
   catch( ... )
     {
-    std::cerr << "Unknown exception" << std::endl;
+    gdcmWarningMacro( "Unknown exception" );
     success = false;
     }
 
@@ -789,12 +821,12 @@ std::istream &is = Stream;
     }
   catch( Exception &ex )
     {
-    std::cerr << ex.what() << std::endl;
+    gdcmDebugMacro( ex.what() );
     success = false;
     }
   catch( ... )
     {
-    std::cerr << "Unknown exception" << std::endl;
+    gdcmWarningMacro( "Unknown exception" );
     success = false;
     }
 

@@ -25,16 +25,36 @@ namespace gdcm
 class GDCM_EXPORT Rescaler
 {
 public:
-  Rescaler():Intercept(0),Slope(1),PF() {}
+  Rescaler():Intercept(0),Slope(1),PF(PixelFormat::UNKNOWN) {}
   ~Rescaler() {}
+
   bool Rescale(char *out, const char *in, size_t n);
+  bool InverseRescale(char *out, const char *in, size_t n);
+
   void SetIntercept(double i) { Intercept = i; }
   void SetSlope(double s) { Slope = s; }
+  void SetPixelFormat(PixelFormat const & pf) { PF = pf; }
+
+  PixelFormat::ScalarType ComputeInterceptSlopePixelType();
+  void SetMinMaxForPixelType(double min, double max)
+    {
+    ScalarRangeMin = min;
+    ScalarRangeMax = max;
+    }
+  PixelFormat ComputePixelTypeFromMinMax();
+
+protected:
+  template <typename TIn>
+    void RescaleFunctionIntoBestFit(char *out, const TIn *in, size_t n);
+  template <typename TIn>
+    void InverseRescaleFunctionIntoBestFit(char *out, const TIn *in, size_t n);
 
 private:
   double Intercept; // 0028,1052
   double Slope;     // 0028,1053
   PixelFormat PF;
+  double ScalarRangeMin;
+  double ScalarRangeMax;
 };
 
 } // end namespace gdcm

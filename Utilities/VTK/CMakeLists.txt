@@ -10,9 +10,6 @@ SET(vtkgdcm_SRCS
   vtkGDCMImageWriter.cxx
   )
 
-# Need pthread for the following class:
-CHECK_INCLUDE_FILE("pthread.h"      CMAKE_HAVE_PTHREAD_H)
-
 IF(CMAKE_HAVE_PTHREAD_H)
   SET(vtkgdcm_SRCS ${vtkgdcm_SRCS}
   vtkGDCMThreadedImageReader.cxx
@@ -82,7 +79,14 @@ ELSE( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
   )
 ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
 
-ADD_LIBRARY(vtkgdcm ${vtkgdcm_SRCS} ${vtkgdcmInstantiator_SRCS})
+#Hum... not sure why this is needed.
+IF(NOT VTK_BUILD_SHARED_LIBS AND GDCM_BUILD_SHARED_LIBS)
+  ADD_LIBRARY(vtkgdcm STATIC ${vtkgdcm_SRCS} ${vtkgdcmInstantiator_SRCS})
+ELSE(NOT VTK_BUILD_SHARED_LIBS AND GDCM_BUILD_SHARED_LIBS)
+  ADD_LIBRARY(vtkgdcm ${vtkgdcm_SRCS} ${vtkgdcmInstantiator_SRCS})
+ENDIF(NOT VTK_BUILD_SHARED_LIBS AND GDCM_BUILD_SHARED_LIBS)
+
+SET_TARGET_PROPERTIES(vtkgdcm PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
 TARGET_LINK_LIBRARIES(vtkgdcm gdcmMSFF ${vtkgdcm_LIBS})
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS vtkgdcm
@@ -119,38 +123,40 @@ IF(GDCM_WRAP_PYTHON)
       SET(DEXTENSION "D")
     ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
     ADD_LIBRARY(${PROJECT_NAME}PythonD ${vtkgdcmPYTHON_SRCS})
+    SET_TARGET_PROPERTIES(${PROJECT_NAME}PythonD PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
     ADD_LIBRARY(${PROJECT_NAME}Python MODULE ${PROJECT_NAME}PythonInit.cxx)
+    SET_TARGET_PROPERTIES(${PROJECT_NAME}Python PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
     TARGET_LINK_LIBRARIES(${PROJECT_NAME}PythonD ${PROJECT_NAME})
     FOREACH(c ${vtkgdcm_LIBS})
       TARGET_LINK_LIBRARIES(${PROJECT_NAME}PythonD ${c}Python${DEXTENSION})
     ENDFOREACH(c)
     TARGET_LINK_LIBRARIES(${PROJECT_NAME}Python ${PROJECT_NAME}PythonD)
-# Python extension modules on Windows must have the extension ".pyd"
-# instead of ".dll" as of Python 2.5.  Older python versions do support
-# this suffix.
-IF(WIN32 AND NOT CYGWIN)
-  SET_TARGET_PROPERTIES(${PROJECT_NAME}Python PROPERTIES SUFFIX ".pyd")
-ENDIF(WIN32 AND NOT CYGWIN)
+    # Python extension modules on Windows must have the extension ".pyd"
+    # instead of ".dll" as of Python 2.5.  Older python versions do support
+    # this suffix.
+    IF(WIN32 AND NOT CYGWIN)
+      SET_TARGET_PROPERTIES(${PROJECT_NAME}Python PROPERTIES SUFFIX ".pyd")
+    ENDIF(WIN32 AND NOT CYGWIN)
 
-    #ADD_CUSTOM_COMMAND(
-    #  TARGET    ${PROJECT_NAME}Python
-    #  POST_BUILD
-    #  COMMAND   cmake -E copy ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm.py ${LIBRARY_OUTPUT_PATH}
-    #  DEPENDS   "${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm.py"
-    #  COMMENT   "Copy vtkgdcm.py into ${LIBRARY_OUTPUT_PATH}"
-    #)
-    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm.py ${LIBRARY_OUTPUT_PATH}/vtkgdcm.py COPYONLY)
-IF(NOT GDCM_INSTALL_NO_LIBRARIES)
-    INSTALL(TARGETS ${PROJECT_NAME}PythonD ${PROJECT_NAME}Python
-      RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime
-      LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
-      ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
+    ADD_CUSTOM_COMMAND(
+      TARGET    ${PROJECT_NAME}Python
+      POST_BUILD
+      COMMAND   ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm.py ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}
+      DEPENDS   "${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm.py"
+      COMMENT   "Copy vtkgdcm.py into ${LIBRARY_OUTPUT_PATH}"
     )
-# the python file is not a dev file, but part of the gdcm module...
-  INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm.py 
-    DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
-  )
-ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
+    IF(NOT GDCM_INSTALL_NO_LIBRARIES)
+MESSAGE(${python_site_package})
+        INSTALL(TARGETS ${PROJECT_NAME}PythonD ${PROJECT_NAME}Python
+          #RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime
+          LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Runtime
+          ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Development
+        )
+    # the python file is not a dev file, but part of the gdcm module...
+      INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm.py 
+        DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Runtime
+      )
+    ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 
   ENDIF(VTK_WRAP_PYTHON)
 ENDIF(GDCM_WRAP_PYTHON)

@@ -45,7 +45,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
     assert(0 && "Should not happen");
     return is;
     }
-  //std::cout << "imp cur tag=" << TagField <<  " VL=" << ValueLengthField << std::endl;
+  //std::cerr << "imp cur tag=" << TagField <<  " VL=" << ValueLengthField << std::endl;
   if( ValueLengthField == 0 )
     {
     // Simple fast path

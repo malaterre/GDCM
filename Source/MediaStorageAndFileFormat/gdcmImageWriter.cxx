@@ -19,7 +19,7 @@
 #include "gdcmAttribute.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmSystem.h"
-#include "gdcmSpacingHelper.h"
+#include "gdcmImageHelper.h"
 #include "gdcmLookupTable.h"
 #include "gdcmItem.h"
 #include "gdcmSequenceOfItems.h"
@@ -38,7 +38,7 @@ ImageWriter::~ImageWriter()
 void ImageWriter::SetImage(Image const &img)
 {
   //assert( Stream.is_open() );
-  const ImageValue &iv = dynamic_cast<const ImageValue&>( img );
+  const Image &iv = img;
   PixelData = iv;
   //assert( Stream.is_open() );
 }
@@ -196,6 +196,7 @@ bool ImageWriter::Write()
         de.SetVR( VR::OB );
         break;
       case 16:
+      case 32:
         de.SetVR( VR::OW );
         break;
       default:
@@ -293,6 +294,10 @@ bool ImageWriter::Write()
   MediaStorage ms;
   ms.SetFromFile( GetFile() );
   assert( ms != MediaStorage::MS_END );
+
+  // Do the Rescale Intercept & Slope
+  ImageHelper::SetRescaleInterceptSlopeValue(GetFile(), PixelData);
+
   const char* msstr = MediaStorage::GetMSString(ms);
   if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )
     {
@@ -324,7 +329,7 @@ bool ImageWriter::Write()
     if( bv )
       {
       modality2 = std::string( bv->GetPointer(), bv->GetLength() );
-      assert( modality2.find( ' ' ) == std::string::npos ); // no space ...
+      //assert( modality2.find( ' ' ) == std::string::npos ); // no space ...
       }
     else
       {
@@ -357,15 +362,34 @@ bool ImageWriter::Write()
 
   // Spacing:
   std::vector<double> sp;
-  sp.resize(2); // important !
+  sp.resize(3); // important !
   sp[0] = PixelData.GetSpacing(0);
   sp[1] = PixelData.GetSpacing(1);
-  if( ms != MediaStorage::SecondaryCaptureImageStorage ) 
+  sp[2] = PixelData.GetSpacing(2); // might be a dummy value...
+  ImageHelper::SetSpacingValue(ds, sp);
+
+  // Direction Cosines:
+  const double *dircos = PixelData.GetDirectionCosines();
+  if( dircos )
     {
-    sp.resize(3);
-    sp[2] = PixelData.GetSpacing(2); // might be a dummy value...
+    std::vector<double> iop;
+    iop.resize(6);
+    iop[0] = dircos[0];
+    iop[1] = dircos[1];
+    iop[2] = dircos[2];
+    iop[3] = dircos[3];
+    iop[4] = dircos[4];
+    iop[5] = dircos[5];
+    ImageHelper::SetDirectionCosinesValue(ds, iop);
     }
-  SpacingHelper::SetSpacingValue(ds, sp);
+
+  // Origin:
+  const double *origin = PixelData.GetOrigin();
+  if( origin )
+    {
+    ImageHelper::SetOriginValue(ds, PixelData);
+    }
+
 
   // UIDs:
   // (0008,0018) UI [1.3.6.1.4.1.5962.1.1.1.1.3.20040826185059.5457] #  46, 1 SOPInstanceUID
@@ -556,7 +580,7 @@ bool ImageWriter::Write()
     ds.Insert( de );
     }
   // Patient Orientation
-  if( !ds.FindDataElement( Tag(0x0020,0x0020) ) && false )
+  if( ms == MediaStorage::SecondaryCaptureImageStorage && !ds.FindDataElement( Tag(0x0020,0x0020) ) )
     {
     DataElement de( Tag(0x0020,0x0020) );
     de.SetVR( Attribute<0x0020,0x0020>::GetVR() );

@@ -115,6 +115,7 @@ SET(GDCM_CMAKE_DIR_CONFIG
 # should be set to the value of VTK_INSTALL_PACKAGE_DIR. Otherwise, if not set,
 # then we are using an outside VTK whose location will not change when we
 # install.
+#IF(GDCM_USE_VTK)
 IF(VTK_BINARY_DIR)
   IF(NOT GDCM_VTK_INSTALL_PACKAGE_DIR)
     MESSAGE(
@@ -124,6 +125,7 @@ IF(VTK_BINARY_DIR)
 ELSE(VTK_BINARY_DIR)
   SET(GDCM_VTK_DIR_CONFIG ${VTK_DIR})
 ENDIF(VTK_BINARY_DIR)
+#ENDIF(GDCM_USE_VTK)
 
 # The build configuration information.
 # The install tree only has one configuration.

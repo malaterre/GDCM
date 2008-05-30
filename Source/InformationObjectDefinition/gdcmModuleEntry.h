@@ -30,16 +30,24 @@ namespace gdcm
 class GDCM_EXPORT ModuleEntry
 {
 public:
-  ModuleEntry(const char *name, const char *type, const char *description):Name(name)/*,Type(type)*/,DescriptionField(description) {
+  ModuleEntry(const char *name = "", const char *type = "3", const char *description = ""):Name(name)/*,Type(type)*/,DescriptionField(description) {
 	  DataElementType = Type::GetTypeType(type);
   }
   friend std::ostream& operator<<(std::ostream& _os, const ModuleEntry &_val);
 
+  void SetName(const char *name) { Name = name; }
   const char *GetName() const { return Name.c_str(); }
 
+  void SetType(const Type &type) { DataElementType = type; }
   const Type &GetType() const { return DataElementType; }
 
+  /*
+   * WARNING: 'Description' is currently a std::string, but it might change in the future
+   * do not expect it to remain the same, and always use the ModuleEntry::Description typedef
+   * instead.
+   */
   typedef std::string Description;
+  void SetDescription(const char *d) { DescriptionField = d; }
   const Description & GetDescription() const { return DescriptionField; }
 
 private:
@@ -57,9 +65,11 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const ModuleEntry &_val)
 {
-  _os << _val.DataElementType << "\t" << _val.DescriptionField;
+  _os << _val.Name << "\t" << _val.DataElementType << "\t" << _val.DescriptionField;
   return _os;
 }
+
+typedef ModuleEntry MacroEntry;
 
 
 } // end namespace gdcm

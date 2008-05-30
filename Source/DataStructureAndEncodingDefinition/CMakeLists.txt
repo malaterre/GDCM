@@ -6,6 +6,7 @@ SET(DSED_SRCS
   gdcmFileSet.cxx
   gdcmDataSet.cxx
   gdcmByteSwapFilter.cxx
+  gdcmUNExplicitImplicitDataElement.cxx
   gdcmExplicitDataElement.cxx
   gdcmFileMetaInformation.cxx
   gdcmFragment.cxx
@@ -35,7 +36,6 @@ SET(DSED_SRCS
 INCLUDE_DIRECTORIES(
   # Bin:
   "${GDCM_BINARY_DIR}/Source/Common"
-  "${GDCM_BINARY_DIR}/Utilities/zlib"
 
   # src:
   "${GDCM_SOURCE_DIR}/Source/Common"
@@ -45,10 +45,16 @@ INCLUDE_DIRECTORIES(
 
   "${GDCM_SOURCE_DIR}/Utilities"
  )
+IF(NOT GDCM_USE_SYSTEM_ZLIB)
+INCLUDE_DIRECTORIES(
+  "${GDCM_BINARY_DIR}/Utilities/gdcmzlib"
+)
+ENDIF(NOT GDCM_USE_SYSTEM_ZLIB)
 
 
 ADD_LIBRARY(gdcmDSED ${DSED_SRCS})
-TARGET_LINK_LIBRARIES(gdcmDSED gdcmzlib gdcmCommon)
+TARGET_LINK_LIBRARIES(gdcmDSED gdcmCommon)
+SET_TARGET_PROPERTIES(gdcmDSED PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS gdcmDSED
     RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime

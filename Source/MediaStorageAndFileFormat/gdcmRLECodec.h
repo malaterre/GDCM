@@ -19,7 +19,7 @@
 
 namespace gdcm
 {
-  
+
 class RLEInternals;
 class RLECodec : public ImageCodec
 {

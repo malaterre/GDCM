@@ -61,5 +61,9 @@ int TestSystem(int, char *[])
     return 1;
     }
 
+  char datetime[18];
+  int res = gdcm::System::GetCurrentDateTime(datetime);
+  std::cerr << datetime << std::endl;
+ 
   return 0;
 }

@@ -18,6 +18,7 @@
 #include "vtkObjectFactory.h"
 #include "vtkImageData.h"
 #include "vtkLookupTable.h"
+#include "vtkMath.h"
 #include "vtkMatrix4x4.h"
 #include "vtkMedicalImageProperties.h"
 #include "vtkStringArray.h"
@@ -33,6 +34,14 @@
 #include "gdcmByteValue.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmAttribute.h"
+#include "gdcmRescaler.h"
+#include "gdcmGlobal.h"
+#include "gdcmDicts.h"
+#include "gdcmDict.h"
+#include "gdcmTag.h"
+#include "gdcmImageHelper.h"
+
+#include <limits>
 
 vtkCxxRevisionMacro(vtkGDCMImageWriter, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMImageWriter)
@@ -41,6 +50,20 @@ vtkCxxSetObjectMacro(vtkGDCMImageWriter,LookupTable,vtkLookupTable)
 vtkCxxSetObjectMacro(vtkGDCMImageWriter,MedicalImageProperties,vtkMedicalImageProperties)
 vtkCxxSetObjectMacro(vtkGDCMImageWriter,FileNames,vtkStringArray)
 vtkCxxSetObjectMacro(vtkGDCMImageWriter,DirectionCosines,vtkMatrix4x4)
+
+inline bool vtkGDCMImageWriter_IsCharTypeSigned()
+{
+#ifndef VTK_TYPE_CHAR_IS_SIGNED
+  unsigned char uc = 255;
+  return (*reinterpret_cast<char*>(&uc) < 0) ? true : false;
+#else
+  return VTK_TYPE_CHAR_IS_SIGNED;
+#endif
+}
+
+#ifndef vtkFloatingPointType
+#define vtkFloatingPointType float
+#endif
 
 vtkGDCMImageWriter::vtkGDCMImageWriter()
 {
@@ -64,7 +87,7 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
   this->DirectionCosines->SetElement(2,1,0);
 
   // This is the same root as ITK, but implementation version will be different...
-  gdcm::UIDGenerator::SetRoot( "1.2.826.0.1.3680043.2.1125.1" );
+  gdcm::UIDGenerator::SetRoot( "1.2.826.0.1.3680043.2.1125" );
 
   // echo "VTK" | od -b
   gdcm::FileMetaInformation::AppendImplementationClassUID( "126.124.113" );
@@ -73,6 +96,9 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
 
   this->ImageFormat = 0; // invalid
 
+  this->Shift = 0.;
+  this->Scale = 1.;
+  this->FileLowerLeft = 0; // same default as vtkImageReader2
 }
 
 //----------------------------------------------------------------------------
@@ -139,6 +165,15 @@ int vtkGDCMImageWriter::RequestInformation(
       mismatchedInputs = 1;
       return 0;
       }
+    }
+
+  // Technically we should be much more paranoid with the shift scale (like value bigger
+  // then stored pixel type: does this even make sense ?)
+  // Let's do the easy one here:
+  // do I really need to comment on this one:
+  if( this->Scale == 0 )
+    {
+    return 0;
     }
 
   return 1;
@@ -233,6 +268,15 @@ void vtkGDCMImageWriter::Write()
 
   // Get the whole extent of the input
   input->GetWholeExtent(this->DataUpdateExtent);
+
+  if (this->DataUpdateExtent[0] == (this->DataUpdateExtent[1] + 1) ||
+      this->DataUpdateExtent[2] == (this->DataUpdateExtent[3] + 1) ||
+      this->DataUpdateExtent[4] == (this->DataUpdateExtent[5] + 1))
+    {
+    vtkErrorMacro("Write: Empty input supplied.");
+    return;
+    }
+
 
   // For both case (2d file or 3d file) we need a common uid for the Series/Study:
   gdcm::UIDGenerator uidgen;
@@ -363,6 +407,12 @@ void SetStringValueFromTag(const char *s, const gdcm::Tag& t, gdcm::DataSet& ds)
     {
     gdcm::DataElement de( t );
     de.SetByteValue( s, strlen( s ) );
+    const gdcm::Global& g = gdcm::Global::GetInstance();
+    const gdcm::Dicts &dicts = g.GetDicts();
+    // FIXME: we know the tag at compile time we could save some time
+    // Using the static dict instead of the run-time one:
+    const gdcm::DictEntry &dictentry = dicts.GetDictEntry( t );
+    de.SetVR( dictentry.GetVR() );
     ds.Insert( de );
     }
 }
@@ -392,7 +442,16 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   gdcm::ImageWriter writer;
   //writer.SetImage( image );
 
-  gdcm::ImageValue &image = dynamic_cast<gdcm::ImageValue&>(writer.GetImage());
+  gdcm::Image &image = writer.GetImage();
+  // Nowadays this is the default one:
+#ifdef GDCM_WORDS_BIGENDIAN
+  // FIXME: this is not the default syntax, but should be a little faster on big endian machine
+  // let see if people complain dataset cannot be sent
+  image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRBigEndian );
+#else
+  // that's the default syntax AND it is the fastest syntax to write to disk.
+  image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
+#endif
   image.SetNumberOfDimensions( 2 ); // good default
   const int *dims = data->GetDimensions();
   assert( dims[0] >= 0 && dims[1] >= 0 && dims[2] >= 0 );
@@ -411,6 +470,8 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     image.SetNumberOfDimensions( 3 );
     image.SetDimension(2, dims[2] );
     }
+  // Even in case of 2D image, pass the 3rd dimension spacing, this might
+  // Be needed for exmaple in MR : Spacing Between Slice tag
   image.SetSpacing(2, spacing[2] ); // should always be valid...
   // TODO: need to do Origin / Image Position (Patient)
   // For now FileDimensionality should match File Dimension
@@ -420,7 +481,10 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   switch( scalarType )
     {
   case VTK_CHAR:
-    pixeltype = gdcm::PixelFormat::INT8; // FIXME ??
+    if( vtkGDCMImageWriter_IsCharTypeSigned() )
+      pixeltype = gdcm::PixelFormat::INT8;
+    else
+      pixeltype = gdcm::PixelFormat::UINT8;
     break;
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   case VTK_SIGNED_CHAR:
@@ -441,6 +505,19 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     break;
   case VTK_UNSIGNED_INT:
     pixeltype = gdcm::PixelFormat::UINT32;
+    break;
+  case VTK_FLOAT:
+    if( this->Shift == (int)this->Shift && this->Scale == (int)this->Scale )
+      {
+      // I cannot consider that this is a problem, afterall a floating point type image
+      // could in fact really be only integer type, only print a warning to inform dummy user
+      vtkWarningMacro( "Image is floating point type, but rescale type is integer type. Rescaling anyway" );
+      }
+    /*
+    Note to myself: should I allow people to squeeze into unsigned char ? Or can I assume most people
+    will be doing unsigned short anyway...
+    */
+    pixeltype = gdcm::PixelFormat::FLOAT32;
     break;
   default:
     vtkErrorMacro( "Do not support this Pixel Type: " << scalarType );
@@ -491,6 +568,39 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
       }
     }
 
+  // Let's try to fake out the SOP Class UID here:
+  gdcm::MediaStorage ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
+  ms.GuessFromModality( this->MedicalImageProperties->GetModality(), this->FileDimensionality ); // Will override SC only if something is found...
+
+  // store in a safe place the 'raw' pixeltype from vtk
+  gdcm::PixelFormat savepixeltype = pixeltype;
+  if( this->Shift == 0 && this->Scale == 1 )
+    {
+    //assert( pixeltype == outputpt );
+    }
+  else
+    {
+    gdcm::Rescaler ir2;
+    ir2.SetIntercept( this->Shift );
+    ir2.SetSlope( this->Scale );
+    ir2.SetPixelFormat( pixeltype );
+    // TODO: Hum...ScalarRange is -I believe- computed on the WholeExtent...
+    vtkFloatingPointType srange[2];
+    data->GetScalarRange(srange);
+    // HACK !!!
+    // MR Image Storage cannot have Shift / Rescale , however it looks like people are doing it 
+    // anyway, so let's make GDCM just as bad as any other library, by providing a fix:
+    if( ms == gdcm::MediaStorage::MRImageStorage /*&& pixeltype.GetBitsAllocated() == 8*/ )
+      {
+      srange[1] = std::numeric_limits<uint16_t>::max() * this->Scale + this->Shift;
+      }
+    ir2.SetMinMaxForPixelType( srange[0], srange[1] );
+    //gdcm::PixelFormat::ScalarType outputpt = ir2.ComputeInterceptSlopePixelType();
+    gdcm::PixelFormat outputpt = ir2.ComputePixelTypeFromMinMax();
+    // override pixeltype with what is found by Rescaler
+    pixeltype = outputpt;
+    }
+
   pixeltype.SetSamplesPerPixel( data->GetNumberOfScalarComponents() );
   image.SetPhotometricInterpretation( pi );
   image.SetPixelFormat( pixeltype );
@@ -517,6 +627,9 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     }
 
   unsigned long len = image.GetBufferLength();
+  vtkIdType npts = data->GetNumberOfPoints();
+  int ssize = data->GetScalarSize();
+  unsigned long vtklen = npts * ssize;
 
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
   gdcm::ByteValue *bv = new gdcm::ByteValue(); // (char*)data->GetScalarPointer(), len );
@@ -534,11 +647,57 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   int *dext = data->GetExtent();
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
   int j = dext[4];
+
+
+  bool rescaled = false;
+  char * copy = NULL;
+  // Whenever shift / scale is needed... do it !
+  if( this->Shift != 0 || this->Scale != 1 )
+    {
+    // rescale from float to unsigned short
+    gdcm::Rescaler ir;
+    ir.SetIntercept( this->Shift );
+    ir.SetSlope( this->Scale );
+    ir.SetPixelFormat( savepixeltype );
+    vtkFloatingPointType srange[2];
+    data->GetScalarRange(srange);
+    // HACK !!!
+    // MR Image Storage cannot have Shift / Rescale , however it looks like people are doing it 
+    // anyway, so let's make GDCM just as bad as any other library, by providing a fix:
+    if( ms == gdcm::MediaStorage::MRImageStorage /*&& pixeltype.GetBitsAllocated() == 8*/ )
+      {
+      srange[1] = std::numeric_limits<uint16_t>::max() * this->Scale + this->Shift;
+      }
+    ir.SetMinMaxForPixelType( srange[0], srange[1] );
+    image.SetIntercept( this->Shift );
+    image.SetSlope( this->Scale );
+    copy = new char[len];
+    ir.InverseRescale(copy,tempimage,vtklen);
+    rescaled = true;
+    tempimage = copy;
+    }
+
   //std::cerr << "dext[4]:" << j << std::endl;
   //std::cerr << "inExt[4]:" << inExt[4] << std::endl;
-  if( dims[2] > 1 && this->FileDimensionality == 3 )
+  if( this->FileLowerLeft )
     {
-    for(int j = dext[4]; j <= dext[5]; ++j)
+    memcpy(pointer,tempimage,len);
+    }
+  else
+    {
+    if( dims[2] > 1 && this->FileDimensionality == 3 )
+      {
+      for(int j = dext[4]; j <= dext[5]; ++j)
+        {
+        for(int i = dext[2]; i <= dext[3]; ++i)
+          {
+          memcpy(pointer,
+            tempimage+((dext[3] - i)+j*(dext[3]+1))*outsize, outsize);
+          pointer += outsize;
+          }
+        }
+      }
+    else
       {
       for(int i = dext[2]; i <= dext[3]; ++i)
         {
@@ -548,29 +707,23 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
         }
       }
     }
-  else
+  if( rescaled )
     {
-    //for(int j = dext[4]; j <= dext[5]; ++j)
-      {
-      for(int i = dext[2]; i <= dext[3]; ++i)
-        {
-        memcpy(pointer,
-          tempimage+((dext[3] - i)+j*(dext[3]+1))*outsize, outsize);
-        pointer += outsize;
-        }
-      }
+    delete[] copy;
     }
 
   pixeldata.SetValue( *bv );
   image.SetDataElement( pixeldata );
 
 // DEBUG
+#ifndef NDEBUG
   const gdcm::DataElement &pixeldata2 = image.GetDataElement();
   //const gdcm::Value &v = image.GetValue();
   //const gdcm::ByteValue *bv1 = dynamic_cast<const gdcm::ByteValue*>(&v);
   const gdcm::ByteValue *bv1 = pixeldata2.GetByteValue();
   assert( bv1 && bv1 == bv );
   //image.Print( std::cerr );
+#endif
 // END DEBUG
 
 
@@ -679,66 +832,173 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   ds.Insert( de );
 }
 }
+#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
+  // User defined value
+  // Remap any user defined value from the DICOM name to the DICOM tag
+  unsigned int nvalues = this->MedicalImageProperties->GetNumberOfUserDefinedValues();
+  for(unsigned int i = 0; i < nvalues; ++i)
+    {
+    const char *name = this->MedicalImageProperties->GetUserDefinedNameByIndex(i);
+    const char *value = this->MedicalImageProperties->GetUserDefinedValueByIndex(i);
+    assert( name && value && *name && *value );
+    // Only deal with public elements:
+    const gdcm::Global& g = gdcm::Global::GetInstance();
+    const gdcm::Dicts &dicts = g.GetDicts();
+    const gdcm::Dict &pubdict = dicts.GetPublicDict();
+    gdcm::Tag t;
+    // Lookup up tag by name is truly inefficient : 0(n)
+    const gdcm::DictEntry &de = pubdict.GetDictEntryByName(name, t); (void)de;
+    SetStringValueFromTag( value, t, ds);
+    }
+#endif
 
 
-  // Let's try to fake out the SOP Class UID here:
-  gdcm::MediaStorage ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
-  ms.GuessFromModality( this->MedicalImageProperties->GetModality(), this->FileDimensionality ); // Will override SC only if something is found...
   if( this->FileDimensionality != 2 && ms == gdcm::MediaStorage::SecondaryCaptureImageStorage )
     {
-    vtkErrorMacro( "Cannot handle Multi Frame image in SecondaryCaptureImageStorage" );
-    //return 0;
+    // A.8.3.4 Multi-frame Grayscale Byte SC Image IOD Content Constraints
+/*
+- Samples per Pixel (0028,0002) shall be 1
+- Photometric Interpretation (0028,0004) shall be MONOCHROME2
+- Bits Allocated (0028,0100) shall be 8
+- Bits Stored (0028,0101) shall be 8
+- High Bit (0028,0102) shall be 7
+- Pixel Representation (0028,0103) shall be 0
+- Planar Configuration (0028,0006) shall not be present
+*/
+    if( this->FileDimensionality == 3 &&
+      pixeltype.GetSamplesPerPixel() == 1 &&
+      pi == gdcm::PhotometricInterpretation::MONOCHROME2 &&
+      pixeltype.GetBitsAllocated() == 8 &&
+      pixeltype.GetBitsStored() == 8 &&
+      pixeltype.GetHighBit() == 7 &&
+      pixeltype.GetPixelRepresentation() == 0 
+      // image.GetPlanarConfiguration()
+    )
+      {
+      ms = gdcm::MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage;
+      if( this->Shift != 0 || this->Scale != 1 )
+        {
+        vtkErrorMacro( "Cannot have shift/scale" );
+        return 0;
+        }
+      }
+    else if( this->FileDimensionality == 3 &&
+      pixeltype.GetSamplesPerPixel() == 1 &&
+      pi == gdcm::PhotometricInterpretation::MONOCHROME2 &&
+      pixeltype.GetBitsAllocated() == 16 &&
+      pixeltype.GetBitsStored() <= 16 && pixeltype.GetBitsStored() >= 9 &&
+      pixeltype.GetHighBit() == pixeltype.GetBitsStored() - 1 &&
+      pixeltype.GetPixelRepresentation() == 0 
+      // image.GetPlanarConfiguration()
+    )
+      {
+      ms = gdcm::MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage;
+      if( this->Shift != 0 || this->Scale != 1 )
+        {
+        vtkErrorMacro( "Cannot have shift/scale" );
+        return 0;
+        }
+      }
+    else
+      {
+      vtkErrorMacro( "Cannot handle Multi Frame image in SecondaryCaptureImageStorage" );
+      return 0;
+      }
     }
+
   // FIXME: new Secondary object handle multi frames...
   assert( gdcm::MediaStorage::IsImage( ms ) );
 {
   gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
   const char* msstr = gdcm::MediaStorage::GetMSString(ms);
   de.SetByteValue( msstr, strlen(msstr) );
+  de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
   ds.Insert( de );
 }
 
   // Image Type is pretty much always required:
   gdcm::Attribute<0x0008,0x0008> imagetype;
-  const gdcm::CSComp values[] = { "DERIVED", "PRIMARY" };
+  const gdcm::CSComp values[] = { "ORIGINAL", "PRIMARY" };
   imagetype.SetValues( values, 2 );
   ds.Insert( imagetype.GetAsDataElement() );
 
-  // I am pretty sure that for all other images it is valid to add an Image Position (Patient)
-  // and an Image Orientation (Patient)
-  if ( ms != gdcm::MediaStorage::SecondaryCaptureImageStorage )
+  // Image Orientation (Patient)
+  //gdcm::Attribute<0x0020,0x0037> iop = {{1,0,0,0,1,0}}; // default value
+  std::vector<double> iop;
+  iop.resize(6);
+  const vtkMatrix4x4 *dircos = this->DirectionCosines;
+  for(int i = 0; i < 3; ++i)
     {
-    // Image Position (Patient)
-    gdcm::Attribute<0x0020,0x0032> ipp = {{0,0,0}}; // default value
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
-    const double *origin = data->GetOrigin();
-#else
-    const float *origin = data->GetOrigin();
-#endif
-    for(int i = 0; i < 3; ++i)
-      ipp.SetValue( origin[i], i );
-    ds.Insert( ipp.GetAsDataElement() );
-
-    // Image Orientation (Patient)
-    gdcm::Attribute<0x0020,0x0037> iop = {{1,0,0,0,1,0}}; // default value
-    const vtkMatrix4x4 *dircos = this->DirectionCosines;
-    for(int i = 0; i < 3; ++i)
-      iop.SetValue( dircos->GetElement(i,0), i );
-    for(int i = 0; i < 3; ++i)
-      iop.SetValue( dircos->GetElement(i,1), i+3 );
-    ds.Insert( iop.GetAsDataElement() );
+    iop[i] = dircos->GetElement(i,0);
     }
+  
+  for(int i = 0; i < 3; ++i)
+  {
+    iop[i+3] = dircos->GetElement(i,1);
+  }
+  
+  image.SetDirectionCosines( &iop[0] );
+
+  std::vector<double> ipp;
+  ipp.resize(3);
+  // Image Position (Patient)
+  // cross product of direction cosines gives the direction along
+  // which the slices are stacked
+  const double *iop1 = &iop[0];
+  const double *iop2 = iop1+3;
+  double zaxis[3];
+  vtkMath::Cross(iop1, iop2, zaxis);
+
+  // determine the relative index of the current slice
+  // in the case of a single volume, this will be 0
+  // since inExt (UpdateExtent) and WholeExt are the same
+  int n = inExt[4] - inWholeExt[4];
+  const vtkFloatingPointType *vtkorigin = data->GetOrigin();
+  vtkFloatingPointType origin[3];
+    if( this->FileLowerLeft )
+    {
+      origin[0] = vtkorigin[0];
+      origin[1] = vtkorigin[1];
+      origin[2] = vtkorigin[2];
+    }
+    else
+    {
+      double norm = (dims[1] - 1) * spacing[1];
+      origin[0] = vtkorigin[0] - norm * iop[3+0];
+      origin[1] = vtkorigin[1] - norm * iop[3+1];
+      origin[2] = vtkorigin[2] - norm * iop[3+2];
+    }
+    double new_origin[3];
+    for (int i = 0; i < 3; i++)
+    {
+        // the n'th slice is n * z-spacing aloung the IOP-derived
+        // z-axis
+        new_origin[i] = origin[i] + zaxis[i] * n * spacing[2];
+    }
+
+    for(int i = 0; i < 3; ++i)
+      ipp[i] = new_origin[i];
+
+   image.SetOrigin(0, ipp[0] );
+   image.SetOrigin(1, ipp[1] );
+   image.SetOrigin(2, ipp[2] );
+  assert( ipp.size() < 3 || image.GetOrigin(2) == ipp[2] );
+   //gdcm::ImageHelper::SetOriginValue(ds, ipp, dims[2], spacing[2]);
+
 
   // Here come the important part: generate proper UID for Series/Study so that people knows this is the same Study/Series
   const char *uid = this->UID;
+  assert( uid ); // programmer error
 {
   gdcm::DataElement de( gdcm::Tag(0x0020,0x000d) );
   de.SetByteValue( uid, strlen(uid) );
+  de.SetVR( gdcm::Attribute<0x0020, 0x000d>::GetVR() );
   ds.Insert( de );
 }
 {
   gdcm::DataElement de( gdcm::Tag(0x0020,0x000e) );
   de.SetByteValue( uid, strlen(uid) );
+  de.SetVR( gdcm::Attribute<0x0020, 0x000e>::GetVR() );
   ds.Insert( de );
 }
 

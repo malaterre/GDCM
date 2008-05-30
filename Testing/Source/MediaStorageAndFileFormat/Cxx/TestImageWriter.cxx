@@ -18,6 +18,7 @@
 #include "gdcmSystem.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmTesting.h"
+#include "gdcmByteSwap.h"
 
 namespace gdcm
 {
@@ -30,7 +31,8 @@ int TestImageWrite(const char *subdir, const char* filename)
     const FileMetaInformation &header = reader.GetFile().GetHeader();
     MediaStorage ms = header.GetMediaStorage();
     bool isImage = MediaStorage::IsImage( ms );
-    if( isImage )
+    bool pixeldata = reader.GetFile().GetDataSet().FindDataElement( Tag(0x7fe0,0x0010) );
+    if( isImage && pixeldata )
       {
       std::cerr << "Failed to read: " << filename << std::endl;
       return 1;
@@ -38,6 +40,7 @@ int TestImageWrite(const char *subdir, const char* filename)
     else
       {
       // not an image give up...
+      std::cerr << "Problem with: " << filename << " but that's ok" << std::endl;
       return 0;
       }
     }
@@ -79,7 +82,7 @@ int TestImageWrite(const char *subdir, const char* filename)
     // a md5sum computed on LittleEndian would fail. Thus we need to
     // byteswap (again!) here:
 #ifdef GDCM_WORDS_BIGENDIAN
-    if( img.GetPixelType().GetBitsAllocated() == 16 )
+    if( img.GetPixelFormat().GetBitsAllocated() == 16 )
       {
       assert( !(len % 2) );
       assert( img.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1
@@ -92,7 +95,7 @@ int TestImageWrite(const char *subdir, const char* filename)
     const char *ref = Testing::GetMD5FromFile(filename);
 
     char digest[33] = {};
-    System::ComputeMD5(buffer, len, digest);
+    Testing::ComputeMD5(buffer, len, digest);
     if( !ref )
       {
       // new regression image needs a md5 sum
@@ -158,6 +161,8 @@ int TestImageWriter(int argc, char *argv[])
     }
 
   // else
+  gdcm::Trace::DebugOff();
+  gdcm::Trace::WarningOff();
   int r = 0, i = 0;
   const char *filename;
   const char * const *filenames = gdcm::Testing::GetFileNames();

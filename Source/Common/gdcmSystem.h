@@ -38,20 +38,16 @@ public:
   static const char *GetLastSystemError();
   static size_t FileSize(const char* filename);
 
-  // MD5 stuff
-  // digest_str needs to be at least : strlen = [2*16+1];
-  static bool ComputeMD5(const char *buffer, const unsigned long buf_len,
-    char *digest_str);
-  static bool ComputeFileMD5(const char *filename, char *digest_str);
-
   // TODO some system calls
   // Chdir
   // copy a file
 
+  // DO NOT USE: This function might disapear real time soon...
+  static bool GetHardwareAddress(unsigned char addr[6]);
+
   // somewhat UID specific:
-  static int GetHardwareAddress(unsigned char addr[6]);
-  static int GetCurrentDateTime(char date[18]);
-  static int EncodeBytes(char *out, unsigned char *data, int size);
+  static bool GetCurrentDateTime(char date[18]);
+  static size_t EncodeBytes(char *out, const unsigned char *data, int size);
 
   static int StrCaseCmp(const char *s1, const char *s2);
   static int StrNCaseCmp(const char *s1, const char *s2, size_t n);
@@ -59,6 +55,8 @@ public:
 protected:
   static bool GetPermissions(const char* file, unsigned short& mode);
   static bool SetPermissions(const char* file, unsigned short mode);
+
+private:
 };
 
 } // end namespace gdcm

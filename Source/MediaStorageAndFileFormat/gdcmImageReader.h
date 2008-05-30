@@ -16,7 +16,7 @@
 #define __gdcmImageReader_h
 
 #include "gdcmReader.h"
-#include "gdcmImageValue.h"
+#include "gdcmImage.h"
 
 namespace gdcm
 {
@@ -64,7 +64,7 @@ protected:
     std::string &conversion );
 
 private:
-  ImageValue PixelData;
+  Image PixelData;
 };
 
 } // end namespace gdcm

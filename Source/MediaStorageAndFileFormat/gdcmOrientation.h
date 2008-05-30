@@ -32,6 +32,7 @@ public:
   void Print(std::ostream &) const;
 
   typedef enum {
+    UNKNOWN,
     AXIAL,
     CORONAL,
     SAGITTAL,
@@ -41,7 +42,11 @@ public:
   static OrientationType GetType(const double *dircos);
   static const char *GetLabel(OrientationType type);
 
+protected:
+  static char GetMajorAxisFromPatientRelativeDirectionCosine(double x, double y, double z);
+
 private:
+  static const double obliquityThresholdCosineValue;
 };
 
 } // end namespace gdcm

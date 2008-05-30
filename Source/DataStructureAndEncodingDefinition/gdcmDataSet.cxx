@@ -40,6 +40,7 @@ std::string DataSet::GetPrivateCreator(const Tag &t) const
     const ByteValue *bv = de.GetByteValue();
     assert( bv );
     std::string owner = std::string(bv->GetPointer(),bv->GetLength());
+    // There should not be any trailing space character...
     if( owner[owner.size()-1] == ' ' )
       {
       owner.erase(owner.size()-1,1);

@@ -16,9 +16,15 @@
 #define __gdcmTableReader_h
 
 #include "gdcmTypes.h"
+#include "gdcmDefs.h"
+//#include "gdcmModule.h"
+//#include "gdcmIOD.h"
+//#include "gdcmIODs.h"
+//#include "gdcmModules.h"
 
 #include <string>
 #include <vector>
+#include <map>
 
 namespace gdcm
 {
@@ -29,8 +35,15 @@ namespace gdcm
 class GDCM_EXPORT TableReader
 {
 public:
-  TableReader() {}
-  ~TableReader() {}
+  TableReader(Defs &defs):CurrentDefs(defs),ParsingModule(false),ParsingModuleEntry(false),
+  ParsingModuleEntryDescription(false),
+  ParsingMacro(false),
+  ParsingMacroEntry(false),
+  ParsingMacroEntryDescription(false),
+  ParsingIOD(false),
+  ParsingIODEntry(false),
+  Description() {}
+  virtual ~TableReader() {}
 
   // Set/Get filename
   void SetFilename(const char *filename) { Filename = filename; }
@@ -44,8 +57,43 @@ public:
   virtual void EndElement(const char *name);
   virtual void CharacterDataHandler(const char *data, int length);
 
+void HandleModuleEntry(const char **atts);
+void HandleModule(const char **atts);
+void HandleModuleEntryDescription(const char **atts);
+void HandleMacroEntry(const char **atts);
+void HandleMacro(const char **atts);
+void HandleMacroEntryDescription(const char **atts);
+void HandleIODEntry(const char **atts);
+void HandleIOD(const char **atts);
+
+  //const Modules & GetModules() const { return CurrentModules; }
+  //const Macros & GetMacros() const { return CurrentMacros; }
+  //const IODs & GetIODs() const { return CurrentIODs; }
+  const Defs & GetDefs() const { return CurrentDefs; }
+
 private:
   std::string Filename;
+  Defs &CurrentDefs;
+  //Macros CurrentMacros;
+  //Modules CurrentModules;
+  //IODs CurrentIODs;
+  Macro CurrentMacro;
+  Module CurrentModule;
+  IOD CurrentIOD;
+  MacroEntry CurrentMacroEntry;
+  ModuleEntry CurrentModuleEntry;
+  IODEntry CurrentIODEntry;
+  std::string CurrentModuleName;
+  bool ParsingModule;
+  bool ParsingModuleEntry;
+  bool ParsingModuleEntryDescription;
+  bool ParsingMacro;
+  bool ParsingMacroEntry;
+  bool ParsingMacroEntryDescription;
+  bool ParsingIOD;
+  bool ParsingIODEntry;
+  Tag CurrentTag;
+  std::string Description;
 };
 
 } // end namespace gdcm

@@ -24,7 +24,7 @@ namespace gdcm
 
 IPPSorter::IPPSorter()
 {
-  ComputeZSpacing = false;
+  ComputeZSpacing = true;
   ZSpacing = 0;
   ZTolerance = 1e-6;
 }
@@ -135,13 +135,14 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
       Filenames.push_back( it->second );
       if( fabs((current - prev) - zspacing) > ZTolerance )
         {
+        gdcmDebugMacro( "ZTolerance test failed. You need to decrease ZTolerance." );
         spacingisgood = false;
         }
       // update prev for the next for-loop
       prev = current;
       }
     // is spacing good ?
-    if( spacingisgood )
+    if( spacingisgood && ComputeZSpacing )
       {
       ZSpacing = zspacing;
       }

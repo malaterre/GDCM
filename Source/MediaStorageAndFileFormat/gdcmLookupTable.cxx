@@ -84,6 +84,11 @@ void LookupTable::InitializeLUT(LookupTableType type, unsigned short length,
   Internal->BitSize[type] = bitsize;
 }
 
+unsigned short LookupTable::GetLUTLength(LookupTableType type) const
+{
+  return Internal->Length[type];
+}
+
 void LookupTable::SetLUT(LookupTableType type, const unsigned char *array,
   unsigned int length)
 {

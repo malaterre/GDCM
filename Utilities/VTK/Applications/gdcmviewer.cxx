@@ -33,8 +33,16 @@
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
 #include "vtkLogoWidget.h"
 #include "vtkLogoRepresentation.h"
+#include "vtkBiDimensionalWidget.h"
+#include "vtkBiDimensionalRepresentation2D.h"
+#include "vtkDistanceWidget.h"
+#include "vtkPointHandleRepresentation2D.h"
+#include "vtkDistanceRepresentation2D.h"
+#include "vtkProperty2D.h"
 #else
 class vtkLogoWidget;
+class vtkBiDimensionalWidget;
+class vtkDistanceWidget;
 class vtkLogoRepresentation;
 #endif
 #if VTK_MAJOR_VERSION >= 5
@@ -147,6 +155,8 @@ public:
     {
     ImageViewer = NULL;
     IconWidget = NULL;
+    DistanceWidget = NULL;
+    BiDimWidget = NULL;
     picker = vtkWorldPointPicker::New();
     }
   ~vtkGDCMObserver()
@@ -186,6 +196,14 @@ public:
           {
           IconWidget->Off();
           }
+        else if ( keycode == 'b' )
+          {
+          BiDimWidget->On();
+          }
+        else if ( keycode == 'd' )
+          {
+          DistanceWidget->On();
+          }
 #endif
         else
           {
@@ -224,6 +242,8 @@ public:
   TViewer *ImageViewer;
   vtkWorldPointPicker *picker;
   vtkLogoWidget *IconWidget;
+  vtkDistanceWidget *DistanceWidget;
+  vtkBiDimensionalWidget *BiDimWidget;
 };
 
 // A feature in VS6 make it painfull to write template code
@@ -251,7 +271,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   //reader->FileLowerLeftOn();
   reader->Update();
   //reader->Print( cout );
-  //reader->GetOutput()->Print( cout );
+  reader->GetOutput()->Print( cout );
   //reader->GetOutput(1)->Print( cout );
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
   double range[2];
@@ -273,6 +293,25 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     }
   // TODO: Icon can be added using the vtkLogoWidget
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+  vtkPointHandleRepresentation2D *handle = vtkPointHandleRepresentation2D::New();
+  handle->GetProperty()->SetColor(1,0,0);
+  vtkDistanceRepresentation2D *rep = vtkDistanceRepresentation2D::New();
+  rep->SetHandleRepresentation(handle);
+  handle->Delete();
+
+  vtkDistanceWidget *dwidget = vtkDistanceWidget::New();
+  dwidget->SetInteractor(iren);
+  dwidget->CreateDefaultRepresentation();
+  dwidget->SetRepresentation(rep);
+  rep->Delete();
+
+  vtkBiDimensionalRepresentation2D *brep = vtkBiDimensionalRepresentation2D::New();
+
+  vtkBiDimensionalWidget *bwidget = vtkBiDimensionalWidget::New();
+  bwidget->SetInteractor(iren);
+  bwidget->SetRepresentation(brep);
+  brep->Delete();
+
   vtkLogoWidget * iconwidget = 0;
   if( reader->GetNumberOfIconImages() )
     {
@@ -422,6 +461,8 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
   if(iconwidget) iconwidget->On();
   obs->IconWidget = iconwidget;
+  obs->DistanceWidget = dwidget;
+  obs->BiDimWidget = bwidget;
 #endif
   iren->AddObserver(vtkCommand::CharEvent,obs);
   iren->AddObserver(vtkCommand::EndPickEvent,obs);
@@ -455,6 +496,10 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 
   reader->Delete();
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+  dwidget->Off();
+  dwidget->Delete();
+  bwidget->Off();
+  bwidget->Delete();
   if( iconwidget )
     {
     iconwidget->Off();
@@ -482,33 +527,11 @@ int main(int argc, char *argv[])
     //names->Print( std::cout );
     }
 
-
-  gdcm::Filename viewer_type(argv[0]);
-  //assert( strcmp(viewer_type, "gdcmviewer"  ) == 0
-  //     || strcmp(viewer_type, "gdcmviewer2" ) == 0 );
-  
-  const char gdcmviewer[] = "gdcmviewer";
-  const char gdcmviewer2[] = "gdcmviewer2";
-  // can't do strcmp on WIN32...
-  // Need to order correctly when doing strncmp
-  if( strncmp(viewer_type.GetName(), gdcmviewer2, strlen(gdcmviewer2) ) == 0 )
-    {
-    vtkImageColorViewer *viewer = vtkImageColorViewer::New();
-    ExecuteViewer<vtkImageColorViewer>(viewer, filenames);
-    }
-  else if( strncmp(viewer_type.GetName(), gdcmviewer, strlen(gdcmviewer) ) == 0 )
-    {
-    vtkGDCMImageViewer *viewer = vtkGDCMImageViewer::New();
-    ExecuteViewer<vtkGDCMImageViewer>(viewer, filenames);
-    }
-  else
-    {
-    std::cerr << "Unhandled : " << viewer_type.GetName() << std::endl;
-    filenames->Delete();
-    return 1;
-    }
+  vtkImageColorViewer *viewer = vtkImageColorViewer::New();
+  ExecuteViewer<vtkImageColorViewer>(viewer, filenames);
 
   filenames->Delete();
+
   return 0;
 }
 

@@ -38,6 +38,11 @@
 
 #cmakedefine GDCM_BUILD_TESTING
 
+#cmakedefine GDCM_USE_SYSTEM_ZLIB
+#cmakedefine GDCM_USE_SYSTEM_UUID
+#cmakedefine GDCM_USE_SYSTEM_MD5
+#cmakedefine GDCM_USE_SYSTEM_EXPAT
+
 /* For older gcc / broken plateform */
 #cmakedefine GDCM_NO_ANSI_STRING_STREAM
 
@@ -50,6 +55,9 @@
 /* That means if GDCM_DEBUG is OFF there shouldn't be any 'cout' at all ! */
 /* only cerr, for instance 'invalid file' will be allowed */
 #cmakedefine GDCM_DEBUG
+
+#define GDCM_CMAKE_INSTALL_PREFIX "@CMAKE_INSTALL_PREFIX@"
+#define GDCM_INSTALL_INCLUDE_DIR "@GDCM_INSTALL_INCLUDE_DIR@"
 
 /* Whether we are building shared libraries.  */
 #cmakedefine GDCM_BUILD_SHARED_LIBS
@@ -65,6 +73,8 @@
 #endif
 #cmakedefine HAVE_WINSOCK_H
 #cmakedefine HAVE_BYTESWAP_H
+#cmakedefine HAVE_RPC_H
+//#cmakedefine HAVE_UUIDCREATE
 
 #cmakedefine CMAKE_HAVE_SYS_TIMES_H
 #cmakedefine CMAKE_HAVE_SYS_TIMEB_H
@@ -97,6 +107,9 @@
 
 /* Undocumented on purpose :-P */
 #cmakedefine GDCM_WRITE_ODD_LENGTH
+#ifdef GDCM_WRITE_ODD_LENGTH
+#error do not use !
+#endif
 
 /*--------------------------------------------------------------------------*/
 /* GDCM Versioning                                                          */
@@ -110,7 +123,7 @@
 /*
 #define GDCM_FILE_META_INFORMATION_VERSION "\0\1"
 // echo "gdcm" | od -b
-#define GDCM_IMPLEMENTATION_CLASS_UID "147.144.143.155"
+#define GDCM_IMPLEMENTATION_CLASS_UID "107.104.103.115";
 #define GDCM_IMPLEMENTATION_VERSION_NAME "GDCM " GDCM_VERSION
 #define GDCM_SOURCE_APPLICATION_ENTITY_TITLE "GDCM"
 */

@@ -29,7 +29,12 @@ int TestUIDGeneratorValid()
     {
     return 1;
     }
-  const char invalid1[] = "abcd";
+  const char invalid0[] = ".0.123";
+  if( gdcm::UIDGenerator::IsValid( invalid0 ) )
+    {
+    return 1;
+    }
+   const char invalid1[] = "abcd";
   if( gdcm::UIDGenerator::IsValid( invalid1 ) )
     {
     return 1;
@@ -69,6 +74,16 @@ int TestUIDGeneratorValid()
     {
     return 1;
     }
+  const char invalid9[] = "";
+  if( gdcm::UIDGenerator::IsValid( invalid9 ) )
+    {
+    return 1;
+    }
+  const char invalid10[] = ".";
+  if( gdcm::UIDGenerator::IsValid( invalid10 ) )
+    {
+    return 1;
+    }
   return 0; // no error
 }
 
@@ -81,9 +96,20 @@ int TestUIDGenerator(int argc, char *argv[])
     {
     return 1;
     }
-  const char myroot[] = "987654321"; // hopefully no one has this yet...
+  /*
+   * Purposely take a very long root, to test the robustness of the generator
+   * since we are left with fewer bytes to still generate uniq UID
+   */
+  // let's test 27 bytes root:
+  const char myroot[] = "9876543210.9876543210.98765"; // 26 bytes is the length of GDCM root
+  //if( strlen(myroot) != 26 )
+  //  {
+  //  return 1;
+  //  }
   uid.SetRoot( myroot );
+  std::cerr << "before generate" << std::endl;
   const char *s = uid.Generate();
+  std::cerr << "after generate" << std::endl;
   std::cout << "s:" << s << std::endl;
   if( strcmp( myroot, uid.GetRoot() ) != 0 )
     {

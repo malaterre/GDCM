@@ -2,16 +2,18 @@
 # IOD
 SET(IOD_SRCS
   gdcmModule.cxx
+  gdcmModules.cxx
   gdcmTableReader.cxx
   gdcmTable.cxx
   gdcmSeries.cxx
+  gdcmDefs.cxx
   gdcmDefinedTerms.cxx
   gdcmEnumeratedValues.cxx
   gdcmStudy.cxx
   gdcmPatient.cxx
   gdcmType.cxx
-  gdcmXMLDictReader.cxx
-  gdcmXMLPrivateDictReader.cxx
+  #gdcmXMLDictReader.cxx
+  #gdcmXMLPrivateDictReader.cxx
   )
 
 # expat stuff
@@ -32,8 +34,8 @@ INCLUDE_DIRECTORIES(
   )
 
 ADD_LIBRARY(gdcmIOD ${IOD_SRCS})
-#TARGET_LINK_LIBRARIES(gdcmIOD gdcmCommon gdcmexpat)
-TARGET_LINK_LIBRARIES(gdcmIOD gdcmDSED gdcmCommon) # gdcmexpat)
+SET_TARGET_PROPERTIES(gdcmIOD PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
+TARGET_LINK_LIBRARIES(gdcmIOD gdcmDSED gdcmCommon ${GDCM_EXPAT_LIBRARIES})
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS gdcmIOD
     RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime
@@ -48,6 +50,13 @@ IF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
     DESTINATION ${GDCM_INSTALL_INCLUDE_DIR} COMPONENT Development
   )
 ENDIF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
+
+#-----------------------------------------------------------------------------
+# Install Part3.xml
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/Part3.xml
+  DESTINATION ${GDCM_INSTALL_INCLUDE_DIR}/XML COMPONENT Runtime
+)
+
 #-----------------------------------------------------------------------------
 FILE(GLOB GDCM_XML_TABLES_GLOB
   "${CMAKE_CURRENT_SOURCE_DIR}/*.xml"
