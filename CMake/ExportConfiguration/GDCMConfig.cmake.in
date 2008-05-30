@@ -18,6 +18,7 @@ SET(GDCM_CMAKE_DIR "@GDCM_CMAKE_DIR_CONFIG@")
 
 # The configuration options.
 SET(GDCM_BUILD_SHARED_LIBS "@GDCM_BUILD_SHARED_LIBS@")
+SET(GDCM_USE_VTK "@GDCM_USE_VTK@")
 
 # The C and C++ flags added to the cmake-configured flags.
 SET(GDCM_REQUIRED_C_FLAGS
@@ -57,7 +58,9 @@ ENDIF(NOT GDCM_NO_LIBRARY_DEPENDS AND
   EXISTS "@GDCM_LIBRARY_DEPENDS_FILE@")
 
 # The VTK options.
-SET(GDCM_VTK_DIR "@GDCM_VTK_DIR_CONFIG@")
+IF(GDCM_USE_VTK)
+  SET(GDCM_VTK_DIR "@GDCM_VTK_DIR_CONFIG@")
+ENDIF(GDCM_USE_VTK)
 
 # An install tree always provides one build configuration.
 # A build tree may provide either one or multiple build
