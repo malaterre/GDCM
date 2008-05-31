@@ -26,6 +26,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
+  ${CMAKE_CURRENT_SOURCE_DIR}
 )
 # Provide some C99 compatilities for all win system...hopefully there won't be no collision
 IF(WIN32 AND NOT CYGWIN)
@@ -75,7 +76,7 @@ SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
 #SET(CMAKE_CXX_FLAGS "")
 # well no, you cannot, it get rid of some important flags, and make the _gdcm.so incompatible with
 # the other gdcm lib. bad !!!
-SWIG_ADD_MODULE(${GDCM_PYTHON_IMPLEMENTATION_NAME} python gdcm.i)
+SWIG_ADD_MODULE(${GDCM_PYTHON_IMPLEMENTATION_NAME} python gdcm.i gdcmPythonFilter.cxx)
 SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} gdcmMSFF gdcmIOD ${PYTHON_LIBRARIES})
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/gdcm.pth.in
   ${CMAKE_CURRENT_BINARY_DIR}/gdcm.pth

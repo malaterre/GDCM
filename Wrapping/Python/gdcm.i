@@ -103,6 +103,7 @@
 #include "gdcmRescaler.h"
 #include "gdcmSegmentedPaletteColorLookupTable.h"
 #include "gdcmUnpacker12Bits.h"
+#include "gdcmPythonFilter.h"
 
 using namespace gdcm;
 %}
@@ -449,4 +450,4 @@ using namespace gdcm;
 #ifdef GDCM_BUILD_TESTING
 %include "gdcmTesting.h"
 #endif
-
+%include "gdcmPythonFilter.h"
