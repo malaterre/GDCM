@@ -45,6 +45,7 @@ namespace gdcm
  * WARNING:
  * GDCM will not produce warning for unorder (non-alphabetical order). 
  * See gdcm::Writer for more info
+ * 
  */
 class GDCM_EXPORT Reader
 {
@@ -83,5 +84,10 @@ private:
 };
 
 } // end namespace gdcm
+
+/**
+ * \example TestReader.cxx TestReader.py
+ * This is an example on how to use gdcm::Reader
+ */
 
 #endif //__gdcmReader_h
