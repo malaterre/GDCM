@@ -71,3 +71,16 @@ IF(NOT GDCM_USE_SYSTEM_UUID)
 ENDIF(NOT GDCM_USE_SYSTEM_UUID)
 ENDIF(NOT WIN32)
 
+#IF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
+##  FILE(GLOB header_files "*.h" "*.txx")
+#  INSTALL(FILES 
+##${header_files}
+#gdcm_expat.h
+##gdcm_md5.h # In an install tree there should not be the need for the md5 lib...
+#gdcm_openjpeg.h
+#gdcm_uuid.h
+#gdcm_zlib.h
+#    DESTINATION ${GDCM_INSTALL_INCLUDE_DIR} COMPONENT Development
+#  )
+#ENDIF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
+

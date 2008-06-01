@@ -17,6 +17,7 @@
 #define __gdcmParser_h
 
 #include "gdcmTag.h"
+#error do not use
 #include "gdcmByteBuffer.h"
 
 #include <fstream> // std::ifstream
