@@ -83,17 +83,13 @@ private:
 #endif
 };
 
-} // end namespace gdcm
-
 /**
  * \example TestReader.cxx
+ * \example TestReader.py
  * This is a C++ example on how to use gdcm::Reader
  */
 
-/**
- * \example TestReader.py
- * This is a python example on how to use gdcm::Reader
- */
+} // end namespace gdcm
 
 
 #endif //__gdcmReader_h
