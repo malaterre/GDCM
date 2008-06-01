@@ -12,6 +12,9 @@ IF(GDCM_DOCUMENTATION)
 
   FILE(GLOB_RECURSE headerfiles
     "${GDCM_SOURCE_DIR}/Source/*.h"
+    "${GDCM_SOURCE_DIR}/Wrapping/*.h"
+    "${GDCM_SOURCE_DIR}/Utilities/VTK/*.h"
+    "${GDCM_SOURCE_DIR}/Utilities/Insight/*.h"
   )
   #MESSAGE(${headerfiles})
   # We are depending only on header files and README.txt but other files
