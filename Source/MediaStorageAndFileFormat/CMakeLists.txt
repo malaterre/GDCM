@@ -19,7 +19,6 @@ SET(MSFF_SRCS
   gdcmDictPrinter.cxx
   gdcmScanner.cxx
   gdcmImageReader.cxx
-  gdcmDeltaEncodingCodec.cxx
   gdcmImageWriter.cxx
   gdcmStringFilter.cxx
   gdcmImageHelper.cxx
