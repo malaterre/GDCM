@@ -24,8 +24,11 @@ int TestString2(int argc, char *argv[])
   gdcm::String<> s2 = "coucou!";
   std::cout << s2 << " -> " << s2.size() << std::endl;
 
-  gdcm::String<EOF,64,0> s3 = "coucou!";
+  gdcm::String<EOF,64,0> s3 = "coucou";
   std::cout << s3.c_str() << " -> " << s3.size() << std::endl;
+
+  gdcm::String<EOF,64,0> s4 = "coucou!";
+  std::cout << s4.c_str() << " -> " << s4.size() << std::endl;
 
   return 0;
 }

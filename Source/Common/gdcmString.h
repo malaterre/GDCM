@@ -58,6 +58,7 @@ public:
   // Idem...
   }
 
+  // WARNING: Trailing \0 might be lost in this operation:
   operator const char *() { return this->c_str(); }
 
   bool IsValid() const {
