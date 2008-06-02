@@ -16,6 +16,7 @@
 #define __gdcmDeltaEncodingodec_h
 
 #include "gdcmImageCodec.h"
+#error do not use
 
 namespace gdcm
 {
