@@ -402,6 +402,7 @@ bool Image::TryJPEG2000Codec(char *buffer) const
   JPEG2000Codec codec;
   if( codec.CanDecode( ts ) )
     {
+    codec.SetNumberOfDimensions( GetNumberOfDimensions() );
     codec.SetPlanarConfiguration( GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
     codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );

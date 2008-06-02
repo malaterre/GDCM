@@ -68,6 +68,7 @@ public:
 JPEG2000Codec::JPEG2000Codec()
 {
   Internals = new JPEG2000Internals;
+  NumberOfDimensions = 0;
 }
 
 JPEG2000Codec::~JPEG2000Codec()
@@ -75,58 +76,70 @@ JPEG2000Codec::~JPEG2000Codec()
   delete Internals;
 }
 
+void JPEG2000Codec::SetNumberOfDimensions(unsigned int dim)
+{
+  NumberOfDimensions = dim;
+}
+
 bool JPEG2000Codec::CanDecode(TransferSyntax const &ts)
 {
   return ts == TransferSyntax::JPEG2000Lossless 
-	  || ts == TransferSyntax::JPEG2000;
+    || ts == TransferSyntax::JPEG2000;
 }
 
 bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
 {
-  /* I cannot figure out how to use openjpeg to support multiframes
-   * as encoded in DICOM
-   */
-//#define SUPPORT_MULTIFRAMESJ2K_ONLY
-#ifdef SUPPORT_MULTIFRAMESJ2K_ONLY
-  const SequenceOfFragments *sf = in.GetSequenceOfFragments();
-  assert( sf );
-  std::stringstream os;
-  for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
+  if( NumberOfDimensions == 2 )
     {
+    const SequenceOfFragments *sf = in.GetSequenceOfFragments();
+    assert( sf );
     std::stringstream is;
-    const Fragment &frag = sf->GetFragment(i);
-    if( frag.IsEmpty() ) return false;
-    const ByteValue *bv = frag.GetByteValue();
-    assert( bv );
-    char *mybuffer = new char[bv->GetLength()];
-    bv->GetBuffer(mybuffer, bv->GetLength());
-    is.write(mybuffer, bv->GetLength());
-    delete[] mybuffer;
+    unsigned long totalLen = sf->ComputeByteLength();
+    char *buffer = new char[totalLen];
+    sf->GetBuffer(buffer, totalLen);
+    is.write(buffer, totalLen);
+    delete[] buffer;
+    std::stringstream os;
     bool r = Decode(is, os);
-    assert( r == true );
+    assert( r );
+    out = in;
+    std::string str = os.str();
+    out.SetByteValue( &str[0], str.size() );
+    //memcpy(buffer, os.str().c_str(), len);
+    return r;
     }
-  std::string str = os.str();
-  out.SetByteValue( &str[0], str.size() );
+  else if ( NumberOfDimensions == 3 )
+    {
+    /* I cannot figure out how to use openjpeg to support multiframes
+     * as encoded in DICOM
+     * MM: Hack. If we are lucky enough the number of encapsulated fragments actually match
+     * the number of Z frames.
+     */
+    //#ifdef SUPPORT_MULTIFRAMESJ2K_ONLY
+    const SequenceOfFragments *sf = in.GetSequenceOfFragments();
+    assert( sf );
+    std::stringstream os;
+    for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
+      {
+      std::stringstream is;
+      const Fragment &frag = sf->GetFragment(i);
+      if( frag.IsEmpty() ) return false;
+      const ByteValue *bv = frag.GetByteValue();
+      assert( bv );
+      char *mybuffer = new char[bv->GetLength()];
+      bv->GetBuffer(mybuffer, bv->GetLength());
+      is.write(mybuffer, bv->GetLength());
+      delete[] mybuffer;
+      bool r = Decode(is, os);
+      assert( r == true );
+      }
+    std::string str = os.str();
+    out.SetByteValue( &str[0], str.size() );
 
-  return true;
-#else
-  const SequenceOfFragments *sf = in.GetSequenceOfFragments();
-  std::stringstream is;
-  unsigned long totalLen = sf->ComputeByteLength();
-  char *buffer = new char[totalLen];
-  sf->GetBuffer(buffer, totalLen);
-  is.write(buffer, totalLen);
-  delete[] buffer;
-  std::stringstream os;
-  bool r = Decode(is, os);
-  assert( r );
-  out = in;
-  std::string str = os.str();
-  out.SetByteValue( &str[0], str.size() );
-  //memcpy(buffer, os.str().c_str(), len);
-  return r;
-
-#endif
+    return true;
+    }
+  // else
+  return false;
 }
 
 bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)

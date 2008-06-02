@@ -59,6 +59,8 @@ public:
   File &GetFile() { return *F; }
 
   void SetCheckFileMetaInformation(bool b) { CheckFileMetaInformation = b; }
+  void CheckFileMetaInformationOff() { CheckFileMetaInformation = false; }
+  void CheckFileMetaInformationOn() { CheckFileMetaInformation = true; }
 
 protected:
   std::ofstream Stream;

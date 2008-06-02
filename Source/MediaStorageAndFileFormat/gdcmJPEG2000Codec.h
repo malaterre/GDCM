@@ -28,10 +28,12 @@ public:
   ~JPEG2000Codec();
   bool CanDecode(TransferSyntax const &ts);
   bool Decode(DataElement const &is, DataElement &os);
+  void SetNumberOfDimensions(unsigned int dim);
 protected:
   bool Decode(std::istream &is, std::ostream &os);
 private:
   JPEG2000Internals *Internals;
+  unsigned int NumberOfDimensions;
 };
 
 } // end namespace gdcm
