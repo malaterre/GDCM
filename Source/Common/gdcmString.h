@@ -19,10 +19,10 @@
 
 namespace gdcm
 {
-template <char TDelimiter, unsigned int TMaxLength> class String;
-template <char TDelimiter, unsigned int TMaxLength> std::istream& operator>>(std::istream &is, String<TDelimiter,TMaxLength>& ms);
+template <char TDelimiter, unsigned int TMaxLength, char TPadChar> class String;
+template <char TDelimiter, unsigned int TMaxLength, char TPadChar> std::istream& operator>>(std::istream &is, String<TDelimiter,TMaxLength,TPadChar>& ms);
 
-template <char TDelimiter = EOF, unsigned int TMaxLength = 64>
+template <char TDelimiter = EOF, unsigned int TMaxLength = 64, char TPadChar = ' '>
 class /*GDCM_EXPORT*/ String : public std::string /* PLEASE do not export me */
 {
   friend std::istream& operator>> <TDelimiter>(std::istream &is, String<TDelimiter>& ms);
@@ -41,10 +41,22 @@ public:
 
   // String constructors.
   String(): std::string() {}
-  String(const value_type* s): std::string(s) {}
-  String(const value_type* s, size_type n): std::string(s, n) {}
+  String(const value_type* s): std::string(s)
+  {
+  if( size() % 2 )
+    {
+    push_back( TPadChar );
+    }
+  }
+  String(const value_type* s, size_type n): std::string(s, n) 
+  {
+  // This one is tricky since could contains a \0 already:
+  }
   String(const std::string& s, size_type pos=0, size_type n=npos):
-    std::string(s, pos, n) {}
+    std::string(s, pos, n) 
+  {
+  // Idem...
+  }
 
   operator const char *() { return this->c_str(); }
 
@@ -62,7 +74,6 @@ inline std::istream& operator>>(std::istream &is, String<TDelimiter,TMaxLength> 
   std::getline(is, ms, TDelimiter);
   // no such thing as std::get where the delim char would be left, so I need to manually add it back...
   // hopefully this is the right thing to do (no overhead)
-  //is.clear();
   is.putback( TDelimiter );
   return is;
 }
