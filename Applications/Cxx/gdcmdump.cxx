@@ -320,7 +320,8 @@ int main (int argc, char *argv[])
     }
   if( filename.empty() )
     {
-    std::cerr << "Need input file (-i)\n";
+    //std::cerr << "Need input file (-i)\n";
+    PrintHelp();
     return 1;
     }
   // Debug is a little too verbose
