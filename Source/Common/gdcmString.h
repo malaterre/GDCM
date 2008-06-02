@@ -16,6 +16,7 @@
 #define __gdcmString_h
 
 #include "gdcmTypes.h"
+#include "gdcmStaticAssert.h"
 
 namespace gdcm
 {
@@ -25,6 +26,9 @@ template <char TDelimiter, unsigned int TMaxLength, char TPadChar> std::istream&
 template <char TDelimiter = EOF, unsigned int TMaxLength = 64, char TPadChar = ' '>
 class /*GDCM_EXPORT*/ String : public std::string /* PLEASE do not export me */
 {
+  // UI wants \0 for pad character, while ASCII ones wants space char... do not allow anything else
+  GDCM_STATIC_ASSERT( TPadChar == ' ' || TPadChar == 0 );
+
   friend std::istream& operator>> <TDelimiter>(std::istream &is, String<TDelimiter>& ms);
 public:
   // typedef are not inherited:
@@ -50,12 +54,20 @@ public:
   }
   String(const value_type* s, size_type n): std::string(s, n) 
   {
-  // This one is tricky since could contains a \0 already:
+  // We are being passed a const char* pointer, so s[n-1] == 0 (garanteed!)
+  if( n % 2 )
+    {
+    push_back( TPadChar );
+    }
   }
   String(const std::string& s, size_type pos=0, size_type n=npos):
     std::string(s, pos, n) 
   {
   // Idem...
+  if( size() % 2 )
+    {
+    push_back( TPadChar );
+    }
   }
 
   // WARNING: Trailing \0 might be lost in this operation:
