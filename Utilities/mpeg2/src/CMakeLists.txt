@@ -1,4 +1,4 @@
 SUBDIRS(
   mpeg2dec 
-  # mpeg2enc
+  mpeg2enc
   )

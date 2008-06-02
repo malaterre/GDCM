@@ -28,3 +28,15 @@ ENDIF(UNIX)
 
 #ADD_EXECUTABLE(mpeg2encode mpeg2enc.c)
 #TARGET_LINK_LIBRARIES(mpeg2encode mpeg2enc)
+
+INSTALL(TARGETS mpeg2enc
+	RUNTIME DESTINATION bin
+	LIBRARY DESTINATION lib
+	ARCHIVE DESTINATION lib/static
+	)
+
+  FILE(GLOB header_files "*.h" )
+  INSTALL(FILES ${header_files}
+    DESTINATION include COMPONENT Development
+  )
+

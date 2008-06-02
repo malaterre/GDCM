@@ -28,6 +28,12 @@ INSTALL(TARGETS ${MPEG2_LIBRARY_NAME}
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib/static
 	)
+
+  FILE(GLOB header_files "*.h" )
+  INSTALL(FILES ${header_files}
+    DESTINATION include COMPONENT Development
+  )
+
 #ADD_DEFINITIONS(-DBUILD_MPEG2DEC)
 #ADD_EXECUTABLE(mpeg2decode ${MPEG2DEC_SRCS} mpeg2dec.c)
 #TARGET_LINK_LIBRARIES(mpeg2decode -lm)

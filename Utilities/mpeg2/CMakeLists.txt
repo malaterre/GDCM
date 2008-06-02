@@ -7,6 +7,7 @@ STRING(TOLOWER ${MPEG2_NAMESPACE} MPEG2_LIBRARY_NAME)
 
 PROJECT(${MPEG2_NAMESPACE} C)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.2)
+SET(BUILD_SHARED_LIBS ON)
 
 #-----------------------------------------------------------------------------
 # MPEG2 version number
