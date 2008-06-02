@@ -68,8 +68,8 @@ public:
   }
 
 };
-template <char TDelimiter, unsigned int TMaxLength>
-inline std::istream& operator>>(std::istream &is, String<TDelimiter,TMaxLength> &ms)
+template <char TDelimiter, unsigned int TMaxLength, char TPadChar>
+inline std::istream& operator>>(std::istream &is, String<TDelimiter,TMaxLength,TPadChar> &ms)
 {
   std::getline(is, ms, TDelimiter);
   // no such thing as std::get where the delim char would be left, so I need to manually add it back...
