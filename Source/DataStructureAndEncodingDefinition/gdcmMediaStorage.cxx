@@ -186,10 +186,10 @@ static MSModalityType MSModalityTypes[] = {
   {"  ", 2},//UltrasoundImageStorageRetired,
   {"US", 3},//UltrasoundImageStorage,
   {"OT", 2},//SecondaryCaptureImageStorage,
-  {"  ", 2},//MultiframeSingleBitSecondaryCaptureImageStorage,
-  {"OT", 2},//MultiframeGrayscaleByteSecondaryCaptureImageStorage,
-  {"  ", 2},//MultiframeGrayscaleWordSecondaryCaptureImageStorage,
-  {"  ", 2},//MultiframeTrueColorSecondaryCaptureImageStorage,
+  {"OT", 3},//MultiframeSingleBitSecondaryCaptureImageStorage,
+  {"OT", 3},//MultiframeGrayscaleByteSecondaryCaptureImageStorage,
+  {"OT", 3},//MultiframeGrayscaleWordSecondaryCaptureImageStorage,
+  {"OT", 3},//MultiframeTrueColorSecondaryCaptureImageStorage,
   {"  ", 2},//StandaloneOverlayStorage,
   {"  ", 2},//StandaloneCurveStorage,
   {"  ", 2},//LeadECGWaveformStorage, // 12-
@@ -221,6 +221,7 @@ static MSModalityType MSModalityTypes[] = {
 
 const char *MediaStorage::GetModality() const
 {
+  assert( MSModalityTypes[MSField].Modality[0] != ' ' );
   return MSModalityTypes[MSField].Modality;
 }
 
