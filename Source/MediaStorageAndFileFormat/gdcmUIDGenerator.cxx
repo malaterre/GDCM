@@ -30,7 +30,7 @@
 #endif
 
 #ifdef HAVE_RPC_H
-#include <Rpc.h>
+#include <rpc.h>
 #endif
 
 namespace gdcm
