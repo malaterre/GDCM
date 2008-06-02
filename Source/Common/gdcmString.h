@@ -63,7 +63,7 @@ public:
   String(const std::string& s, size_type pos=0, size_type n=npos):
     std::string(s, pos, n) 
   {
-  // Idem...
+  // FIXME: some users might already have padded the string 's' with a trailing \0...
   if( size() % 2 )
     {
     push_back( TPadChar );
