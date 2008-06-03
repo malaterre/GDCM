@@ -21,7 +21,7 @@
 #include <sys/stat.h>  //stat function
 #include <string.h> // strerror
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
   #include <windows.h>
   #include <direct.h>
 #else
@@ -39,7 +39,7 @@ unsigned int Directory::Explore(FilenameType const &name, bool recursive)
   std::string dirName = name;
   //assert( System::FileIsDirectory( dirName ) );
   Directories.push_back( dirName );
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
   WIN32_FIND_DATA fileData;
   dirName.append("/");
   assert( dirName[dirName.size()-1] == '/' );
