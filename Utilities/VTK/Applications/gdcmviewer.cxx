@@ -59,6 +59,8 @@ class vtkLogoRepresentation;
 #include "vtkWorldPointPicker.h"
 
 #include "gdcmFilename.h"
+#include "gdcmSystem.h"
+#include "gdcmDirectory.h"
 
 #include <assert.h>
 //----------------------------------------------------------------------------
@@ -520,9 +522,40 @@ int main(int argc, char *argv[])
     }
   else
     {
-    for(int i=1; i < argc; ++i)
+    const char *filename = argv[1];
+    if( argc == 2 && gdcm::System::FileIsDirectory( filename ) )
       {
-      filenames->InsertNextValue( argv[i] );
+      std::cout << "Loading directory: " << filename << std::endl;
+      bool recursive = false;
+      gdcm::Directory d;
+      d.Load(filename, recursive);
+      gdcm::Directory::FilenamesType const &files = d.GetFilenames();
+      for( gdcm::Directory::FilenamesType::const_iterator it = files.begin(); it != files.end(); ++it )
+        {
+        filenames->InsertNextValue( it->c_str() );
+        }
+      }
+    else
+      {
+      for(int i=1; i < argc; ++i)
+        {
+        filename = argv[i];
+        if( gdcm::System::FileExists( filename ) )
+          {
+          if( gdcm::System::FileIsDirectory( filename ) )
+            {
+            std::cerr << "Discarding directory: " << filename << std::endl;
+            }
+          else
+            {
+            filenames->InsertNextValue( filename );
+            }
+          }
+        else
+          {
+          std::cerr << "Discarding non existing file: " << filename << std::endl;
+          }
+        }
       }
     //names->Print( std::cout );
     }
