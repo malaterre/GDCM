@@ -22,6 +22,7 @@ int TestOneDirectory(const char *path, bool recursive = false )
 {
   if( !gdcm::System::FileIsDirectory(path) )
     {
+    std::cerr << path << " is not a directory" << std::endl;
     return 1;
     }
 
