@@ -522,6 +522,7 @@ int main(int argc, char *argv[])
     }
   else
     {
+    // Is it a single directory ? If so loop over all files contained in it:
     const char *filename = argv[1];
     if( argc == 2 && gdcm::System::FileIsDirectory( filename ) )
       {
@@ -535,7 +536,8 @@ int main(int argc, char *argv[])
         filenames->InsertNextValue( it->c_str() );
         }
       }
-    else
+    else // list of files passed directly on the cmd line:
+        // discard non-existing or directory
       {
       for(int i=1; i < argc; ++i)
         {
