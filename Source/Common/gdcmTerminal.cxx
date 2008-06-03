@@ -23,13 +23,12 @@
 #endif
 
 // FIXME on ming32 a couple of stuff are not defined:
-#ifndef COMMON_LVB_UNDERSCORE
-#define COMMON_LVB_UNDERSCORE 0
-#endif
 #ifndef COMMON_LVB_REVERSE_VIDEO
-#define COMMON_LVB_REVERSE_VIDEO 0
+#define COMMON_LVB_REVERSE_VIDEO 0x4000
 #endif
-
+#ifndef COMMON_LVB_UNDERSCORE
+#define COMMON_LVB_UNDERSCORE 0x8000
+#endif
 
 namespace gdcm
 {
