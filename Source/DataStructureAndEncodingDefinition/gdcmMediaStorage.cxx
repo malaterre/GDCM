@@ -153,6 +153,10 @@ bool MediaStorage::IsImage(MSType ms)
     || ms == EnhancedSR
     || ms == BasicTextSR
     || ms == ComprehensiveSR
+    || ms == StudyComponentManagementSOPClass
+    || ms == DetachedVisitManagementSOPClass
+    || ms == DetachedStudyManagementSOPClass
+    || ms == EncapsulatedPDFStorage
     || ms == RTStructureSetStorage )
     {
     return false;

@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 
     }
 
-  if( ms == gdcm::MediaStorage::MRImageStorage )
+  if( ms == gdcm::MediaStorage::MRImageStorage && false )
     {
     const gdcm::Global& g = gdcm::Global::GetInstance();
     const gdcm::Defs &defs = g.GetDefs();

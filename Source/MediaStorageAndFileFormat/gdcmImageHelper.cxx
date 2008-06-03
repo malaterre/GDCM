@@ -474,6 +474,12 @@ Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
   case MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage:
     t = Tag(0xffff,0xffff);
     break;
+  case MediaStorage::GEPrivate3DModelStorage: // FIXME FIXME !!!
+  case MediaStorage::Philips3D:
+  case MediaStorage::VideoEndoscopicImageStorage:
+    gdcmWarningMacro( "FIXME" );
+    t = Tag(0xffff,0xffff);
+    break;
   case MediaStorage::UltrasoundImageStorage: // ??
   case MediaStorage::UltrasoundMultiFrameImageStorage:
   case MediaStorage::UltrasoundImageStorageRetired:
@@ -535,6 +541,9 @@ Warning - Dicom dataset contains attributes not present in standard DICOM IOD - 
     break;
   case MediaStorage::NuclearMedicineImageStorage: // gdcmData/Nm.dcm
   case MediaStorage::RTDoseStorage: // gdcmData/BogugsItemAndSequenceLengthCorrected.dcm
+  case MediaStorage::GEPrivate3DModelStorage:
+  case MediaStorage::Philips3D:
+  case MediaStorage::VideoEndoscopicImageStorage:
     gdcmWarningMacro( "FIXME" );
     t = Tag(0xffff,0xffff);
     break;
