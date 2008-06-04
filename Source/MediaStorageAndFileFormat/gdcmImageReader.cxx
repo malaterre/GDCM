@@ -87,7 +87,9 @@ bool ImageReader::Read()
   bool isImage = MediaStorage::IsImage( ms );
   if( isImage )
     {
-    assert( ds.FindDataElement( Tag(0x7fe0,0x0010 ) ) );
+    // I cannot leave this here, since ELSCINT1 / LOSSLESS RICE declares CT Image Storage,
+    // when in fact this is a private Media Storage (no Pixel Data element)
+    //assert( ds.FindDataElement( Tag(0x7fe0,0x0010 ) ) );
     assert( ts != TransferSyntax::TS_END && ms != MediaStorage::MS_END );
     // Good it's the easy case. It's declared as an Image:
     gdcmDebugMacro( "Sweet ! Finally a good DICOM file !" );
@@ -96,6 +98,7 @@ bool ImageReader::Read()
     }
   else
     {
+    //assert( !ds.FindDataElement( Tag(0x7fe0,0x0010 ) ) );
     if( ms != MediaStorage::MS_END )
       {
       gdcmDebugMacro( "DICOM file is not an Image file but a : " <<

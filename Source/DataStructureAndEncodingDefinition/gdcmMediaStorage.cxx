@@ -150,6 +150,7 @@ bool MediaStorage::IsImage(MSType ms)
     || ms == RTPlanStorage
     || ms == GrayscaleSoftcopyPresentationStateStorageSOPClass
     || ms == CardiacElectrophysiologyWaveformStorage
+    || ms == ToshibaPrivateDataStorage // not an image I think...
     || ms == EnhancedSR
     || ms == BasicTextSR
     || ms == ComprehensiveSR
