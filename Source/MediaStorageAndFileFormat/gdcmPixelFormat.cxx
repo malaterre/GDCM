@@ -211,6 +211,7 @@ void PixelFormat::Print(std::ostream &os) const
   os << "BitsStored         :" << BitsStored          << "\n";
   os << "HighBit            :" << HighBit             << "\n";
   os << "PixelRepresentation:" << PixelRepresentation << "\n";
+  os << "ScalarType found   :" << GetScalarTypeAsString() << "\n";
 }
 
 } // end namespace gdcm
