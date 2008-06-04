@@ -1134,16 +1134,23 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     }
 
   // Question: should I always insert them ?
-  Attribute<0x0028,0x1052> at1;
-  at1.SetValue( img.GetIntercept() );
-  ds.Insert( at1.GetAsDataElement() );
-  Attribute<0x0028,0x1053> at2;
-  at2.SetValue( img.GetSlope() );
-  ds.Insert( at2.GetAsDataElement() );
+  // Answer: not always, let's discard MR if (1,0):
+  if( ms == MediaStorage::MRImageStorage && img.GetIntercept() == 0. && img.GetSlope() == 1. )
+    {
+    }
+  else
+    {
+    Attribute<0x0028,0x1052> at1;
+    at1.SetValue( img.GetIntercept() );
+    ds.Insert( at1.GetAsDataElement() );
+    Attribute<0x0028,0x1053> at2;
+    at2.SetValue( img.GetSlope() );
+    ds.Insert( at2.GetAsDataElement() );
 
-  Attribute<0x0028,0x1054> at3; // Rescale Type
-  at3.SetValue( "US" ); // FIXME
-  ds.Insert( at3.GetAsDataElement() );
+    Attribute<0x0028,0x1054> at3; // Rescale Type
+    at3.SetValue( "US" ); // FIXME
+    ds.Insert( at3.GetAsDataElement() );
+    }
 }
 
 bool ImageHelper::ComputeSpacingFromImagePositionPatient(const std::vector<double> & imageposition, std::vector<double> & spacing)
