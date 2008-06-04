@@ -151,7 +151,7 @@ FIXME: it would be nice if this test would also handle FileLowerLeftOff to do d'
     {
     if( verbose )
       std::cerr << "vtkGDCMImageReader cannot read: " << filename << std::endl;
-    res++;
+    //res++;
     }
   reader->Delete();
 
