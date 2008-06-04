@@ -141,3 +141,6 @@ Explicit-VR transfer syntax limits the value
 multiplicity of DICOM data elements with
 decimal string (DS) value representation
 http://www.iop.org/EJ/article/0031-9155/51/5/L01/pmb6_5_l01.pdf?request-id=00122d0d-5f95-4c78-bbeb-e9555ef639ae
+-----------------------------------------------------------------------
+Redo the threaded implementation to derive from Imagethreaded algorithm to take advantage of
+thread + internal implementation of progress report (might solve issue with python + thread)
