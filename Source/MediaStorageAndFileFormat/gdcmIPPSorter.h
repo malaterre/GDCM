@@ -28,7 +28,7 @@ namespace gdcm
  * (Patient) direction.
  * This algorithm does NOT support duplicate and will FAIL in case of duplicate
  * IPP.
- * WARNING: See special note for SetZSpacingTolerance when computing the ZSpacing
+ * \warning See special note for SetZSpacingTolerance when computing the ZSpacing
  * from the IPP of each DICOM files
  */
 class GDCM_EXPORT IPPSorter : public Sorter
