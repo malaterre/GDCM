@@ -5,9 +5,15 @@ SET(VTK_GDCM_TEST_SRCS
   TestvtkGDCMImageReader2
   TestvtkGDCMImageReader4
   #TestvtkGDCMImageActor
-  TestvtkGDCMImageWriter
-  TestvtkGDCMImageWriter2
 )
+IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 4.5 )
+  SET(VTK_GDCM_TEST_SRCS
+    ${VTK_GDCM_TEST_SRCS}
+    TestvtkGDCMImageWriter
+    TestvtkGDCMImageWriter2
+  )
+ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 4.5 )
+
 # Need gdcmDataExtra
 IF(GDCM_DATA_EXTRA_ROOT)
   SET(VTK_GDCM_TEST_SRCS
