@@ -634,7 +634,9 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   // 4. Planar Configuration
   // D 0028|0006 [US] [Planar Configuration] [1]
   const Tag planarconfiguration = Tag(0x0028, 0x0006);
-  if( ds.FindDataElement( planarconfiguration ) )
+  // FIXME: Whatif planaconfiguration is send in a grayscale image... it would be empty...
+  // well hopefully :(
+  if( ds.FindDataElement( planarconfiguration ) && !ds.GetDataElement( planarconfiguration ).IsEmpty() )
     {
     PixelData.SetPlanarConfiguration(
       ReadUSFromTag( planarconfiguration, ss, conversion ) );
