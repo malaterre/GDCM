@@ -18,4 +18,5 @@ SET(CTEST_CUSTOM_MEMCHECK_IGNORE
   "Python"
   "DCMDUMP"
   "DCDUMP"
+  "vtk"
   )
