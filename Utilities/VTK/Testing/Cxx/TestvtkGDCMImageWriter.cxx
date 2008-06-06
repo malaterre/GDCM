@@ -98,6 +98,7 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
           res = 1;
           }
         }
+
       gdcm::ImageReader r2;
       r2.SetFileName( filename );
       if( !r2.Read() )
@@ -106,6 +107,64 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
         res = 1;
         }
       const gdcm::Image &compimage = r2.GetImage();
+      // Check that Media Storage is still correct:
+      // Well this is difficult to implement as Retired class are replaced with newer one automatically
+      gdcm::MediaStorage ms1;
+      ms1.SetFromFile( r.GetFile() ); // our rewritten file
+      gdcm::MediaStorage ms2;
+      ms2.SetFromFile( r2.GetFile() ); // original file
+      if( ms1 != ms2 )
+        {
+        if( ms1 == gdcm::MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage )
+          {
+          // Hum I have this weird case when reading libido1.0-vol.acr...
+          }
+        else if( ms1 == gdcm::MediaStorage::XRayAngiographicImageStorage && ms2 == gdcm::MediaStorage::SecondaryCaptureImageStorage  )
+          {
+          // FIXME: D_CLUNIE_XA1_JPLL.dcm
+          }
+        else if( ms2 == gdcm::MediaStorage::XRayRadiofluoroscopingImageStorage )
+          {
+          // gdcmData/JDDICOM_Sample5.dcm
+          }
+        else if( ms1 == gdcm::MediaStorage::EnhancedMRImageStorage && ms2 == gdcm::MediaStorage::MRImageStorage )
+          {
+          // gdcmData/MR-MONO2-8-16x-heart.dcm
+          }
+        else if( ms1 == gdcm::MediaStorage::UltrasoundImageStorage && ms2 == gdcm::MediaStorage::UltrasoundImageStorageRetired )
+          {
+          // gdcmData/US-RGB-8-esopecho.dcm
+          }
+        else if( ms1 == gdcm::MediaStorage::UltrasoundMultiFrameImageStorage && ms2 == gdcm::MediaStorage::UltrasoundMultiFrameImageStorageRetired )
+          {
+          // gdcmData/US-MONO2-8-8x-execho.dcm
+          }
+        else if ( ms1 == gdcm::MediaStorage::NuclearMedicineImageStorage && ms2 == gdcm::MediaStorage::SecondaryCaptureImageStorage )
+          {
+          // gdcmData/Renal_Flow.dcm
+          }
+        else if ( ms1 == gdcm::MediaStorage::CTImageStorage && ms2 == gdcm::MediaStorage::SecondaryCaptureImageStorage )
+          {
+          // gdcmData/D_CLUNIE_SC1_JPLY.dcm
+          }
+        else if ( ms1 == gdcm::MediaStorage::EnhancedCTImageStorage && ms2 == gdcm::MediaStorage::CTImageStorage && compimage.GetNumberOfDimensions() == 3 )
+          {
+          // gdcmData/CroppedArm.dcm
+          }
+        else if( ms1 == gdcm::MediaStorage::MRImageStorage && ms2 == gdcm::MediaStorage::GeneralElectricMagneticResonanceImageStorage )
+          {
+          // gdcmData/MR00010001.dcm
+          }
+        else if( ms1 == gdcm::MediaStorage::UltrasoundImageStorage && ms2 == gdcm::MediaStorage::SecondaryCaptureImageStorage )
+          {
+          // gdcmData/GE_LOGIQBook-8-RGB-HugePreview.dcm
+          }
+        else
+          {
+          std::cerr << "MediaStorage incompatible: " << ms1 << " vs " << ms2 << std::endl;
+          res = 1;
+          }
+        }
       // Make sure that md5 is still ok:
       unsigned long len = image.GetBufferLength();
       char* buffer = new char[len];
@@ -145,7 +204,7 @@ out.close();
 #endif
         std::cerr << "Problem reading image from: " << filename << std::endl;
         std::cerr << "Found " << digest << " instead of " << ref << std::endl;
-        std::cerr << "Original MediaStorage was: " << compimage.GetTransferSyntax() << std::endl;
+        std::cerr << "Original TransferSyntax was: " << compimage.GetTransferSyntax() << std::endl;
         std::cerr << "Output image: " << gdcmfile << std::endl;
         res = 1;
         }

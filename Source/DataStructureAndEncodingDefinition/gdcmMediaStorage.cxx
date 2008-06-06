@@ -34,14 +34,14 @@ static const char *MSStrings[] = {
   "1.2.840.10008.5.1.4.1.1.1.3.1",
   "1.2.840.10008.5.1.4.1.1.2",    
   "1.2.840.10008.5.1.4.1.1.2.1",  
+  "1.2.840.10008.5.1.4.1.1.6",    
+  "1.2.840.10008.5.1.4.1.1.6.1",  // Ultrasound Image Storage
   "1.2.840.10008.5.1.4.1.1.3",    
   "1.2.840.10008.5.1.4.1.1.3.1",  
   "1.2.840.10008.5.1.4.1.1.4",    
   "1.2.840.10008.5.1.4.1.1.4.1",  
   "1.2.840.10008.5.1.4.1.1.4.2",  
   "1.2.840.10008.5.1.4.1.1.5",    
-  "1.2.840.10008.5.1.4.1.1.6",    
-  "1.2.840.10008.5.1.4.1.1.6.1",  
   "1.2.840.10008.5.1.4.1.1.7",    
   "1.2.840.10008.5.1.4.1.1.7.1",  
   "1.2.840.10008.5.1.4.1.1.7.2",  
@@ -182,14 +182,14 @@ static MSModalityType MSModalityTypes[] = {
   {"  ", 2},//DigitalIntraoralXRayImageStorageForProcessing,
   {"CT", 2},//CTImageStorage,
   {"CT", 3},//EnhancedCTImageStorage,
-  {"  ", 2},//UltrasoundMultiFrameImageStorageRetired,
-  {"IVUS", 3},//UltrasoundMultiFrameImageStorage,
+  {"  ", 2},//UltrasoundImageStorageRetired,
+  {"US", 2},//UltrasoundImageStorage,
+  {"  ", 3},//UltrasoundMultiFrameImageStorageRetired,
+  {"US", 3},//UltrasoundMultiFrameImageStorage,
   {"MR", 2},//MRImageStorage,
   {"MR", 3},//EnhancedMRImageStorage,
   {"  ", 2},//MRSpectroscopyStorage,
   {"  ", 2},//NuclearMedicineImageStorageRetired,
-  {"  ", 2},//UltrasoundImageStorageRetired,
-  {"US", 3},//UltrasoundImageStorage,
   {"OT", 2},//SecondaryCaptureImageStorage,
   {"OT", 3},//MultiframeSingleBitSecondaryCaptureImageStorage,
   {"OT", 3},//MultiframeGrayscaleByteSecondaryCaptureImageStorage,
@@ -213,8 +213,8 @@ static MSModalityType MSModalityTypes[] = {
   {"  ", 2},//RawDataStorage,
   {"  ", 2},//SpacialRegistrationStorage,
   {"  ", 2},//SpacialFiducialsStorage,
-  {"  ", 2},//PETImageStorage,
-  {"  ", 2},//RTImageStorage,
+  {"PT", 2},//PETImageStorage,
+  {"RTIMAGE ", 2},//RTImageStorage, // FIXME
   {"RTDOSE", 3},//RTDoseStorage,
   {"  ", 2},//RTStructureSetStorage,
   {"  ", 2},//RTPlanStorage,
@@ -252,7 +252,8 @@ void MediaStorage::SetFromHeader(FileMetaInformation const &fmi)
 
 void MediaStorage::GuessFromModality(const char *modality, unsigned int dim)
 {
-  if( !modality ) return;
+  // no default value is set, it is up to the user to decide initial value
+  if( !modality || !dim ) return;
   //if( strlen(modality) != 2 ) return;
   int i = 0;
   while( MSModalityTypes[i].Modality && 

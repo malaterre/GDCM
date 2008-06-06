@@ -148,3 +148,5 @@ thread + internal implementation of progress report (might solve issue with pyth
 Add support for LittleEndian declared as bigEndian (gdcmData/c_vf1001.dcm)
 -----------------------------------------------------------------------
 Add support for namelink packaging
+-----------------------------------------------------------------------
+Need a MediaStorage::IsRetired / UIDs::IsRetired
