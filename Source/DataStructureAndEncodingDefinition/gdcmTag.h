@@ -186,7 +186,7 @@ public:
     {
     // See PS 3.5 - 7.8.1 PRIVATE DATA ELEMENT TAGS
     // eg: 0x1234,0x0056 -> 0x1234,0x5678
-    assert( t.IsPrivate() && !t.IsPrivateCreator() );
+    assert( t.IsPrivate() /*&& t.IsPrivateCreator()*/ );
     uint16_t element = t.GetElement() << 8;
     SetElement( GetElement() + element );
     }

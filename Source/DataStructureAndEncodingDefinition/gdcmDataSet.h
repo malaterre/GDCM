@@ -123,7 +123,9 @@ public:
     return ll;
   }
   void Insert(const DataElement& de) {
-    if( de.GetTag().GetGroup() >= 0x0008 )
+    // FIXME: there is a special case where a dataset can have value < 0x8, see:
+    // $ gdcmdump --csa gdcmData/SIEMENS-JPEG-CorruptFrag.dcm 
+    if( true || de.GetTag().GetGroup() >= 0x0008 )
       {
       InsertDataElement( de );
       }
