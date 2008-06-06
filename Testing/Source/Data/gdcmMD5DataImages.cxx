@@ -586,6 +586,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "ef9f915086db838334ddc656a10486f2" , "DMCPACS_ExplicitImplicit_BogusIOP.dcm" },
 { "498f80fd27882351b9a09e6ceef470bc" , "ELSCINT1_GDCM12Bug.dcm" },
 { "34b5c1ce40f09f0dbede87ebf3f6ed3c" , "korean_agfa_infinitt_2008-3.dcm" },
+{ "2c8b8ee9950582af472cf652005f07d4" , "c_vf1001.dcm" },
 
 
 /* Stopping condition */
