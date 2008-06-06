@@ -123,7 +123,7 @@ public:
     return ll;
   }
   void Insert(const DataElement& de) {
-    if( de.GetTag().GetGroup() >= 0x0008 )
+    if( true || de.GetTag().GetGroup() >= 0x0008 )
       {
       InsertDataElement( de );
       }
