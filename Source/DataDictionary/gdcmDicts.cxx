@@ -68,10 +68,10 @@ const DictEntry &Dicts::GetDictEntry(const Tag& tag, const char *owner) const
     {
     assert( tag.IsPrivate() );
     // Check special private element: 0x0000 and [0x1,0xFF] are special cases:
-    if( tag.GetElement() <= 0xff )
+    if( tag.IsPrivateCreator() )
       {
       assert( tag.GetElement() ); // Not a group length !
-      assert( owner );
+      //assert( owner );
       assert( tag.IsPrivate() );
       std::string pc ( "Private Creator" );
       Dummy.SetName( pc.c_str() );

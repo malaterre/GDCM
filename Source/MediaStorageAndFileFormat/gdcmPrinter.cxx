@@ -552,7 +552,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
     std::string strowner;
     const char *owner = 0;
     const Tag& t = de.GetTag();
-    if( t.IsPrivate() )
+    if( t.IsPrivate() && !t.IsPrivateCreator() )
       { 
       strowner = ds.GetPrivateCreator(t);
       owner = strowner.c_str();
@@ -917,7 +917,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
     if( name && *name )
       {
       // No owner case !
-      if( t.IsPrivate() && (owner == 0 || *owner == 0 ) && t.IsPrivateCreator() )
+      if( t.IsPrivate() && (owner == 0 || *owner == 0 ) && !t.IsPrivateCreator() )
         {
         os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
         os << " " << name;

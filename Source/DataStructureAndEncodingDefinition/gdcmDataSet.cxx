@@ -54,7 +54,7 @@ std::string DataSet::GetPrivateCreator(const Tag &t) const
 Tag DataSet::ComputeDataElement(const PrivateTag & t) const
 {
   gdcmDebugMacro( "Entering ComputeDataElement" );
-  assert( t.GetElement() <= 0xff );
+  assert( t.IsPrivateCreator() );
   const Tag start(t.GetGroup(), 0x0010 ); // First possible private creator (0x0 -> 0x9 are reserved...)
   const DataElement r(start);
   ConstIterator it = DES.lower_bound(r);
