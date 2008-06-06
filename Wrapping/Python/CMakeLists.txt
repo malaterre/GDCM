@@ -28,12 +28,6 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   ${CMAKE_CURRENT_SOURCE_DIR}
 )
-# Provide some C99 compatilities for all win system...hopefully there won't be no collision
-IF(WIN32 AND NOT CYGWIN)
-  INCLUDE_DIRECTORIES(
-    "${GDCM_SOURCE_DIR}/Utilities/C99"
-  )
-ENDIF(WIN32 AND NOT CYGWIN)
 
 FIND_PACKAGE(PythonLibs REQUIRED)
 MARK_AS_ADVANCED(PYTHON_LIBRARY PYTHON_INCLUDE_PATH)
@@ -110,6 +104,7 @@ IF(NOT GDCM_INSTALL_NO_LIBRARIES)
     LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Runtime
     ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Development
     #DESTINATION ${python_site_package}/${subdir}
+  ${CPACK_NAMELINK_TYPE}
   )
 # the python file is not a dev file, but part of the gdcm module...
   INSTALL(FILES 

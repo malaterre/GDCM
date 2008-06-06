@@ -55,7 +55,7 @@ Tag DataSet::ComputeDataElement(const PrivateTag & t) const
 {
   gdcmDebugMacro( "Entering ComputeDataElement" );
   assert( t.GetElement() <= 0xff );
-  const Tag start(t.GetGroup(), 0x0001 ); // First possible private creator (0x0 is the group length)
+  const Tag start(t.GetGroup(), 0x0010 ); // First possible private creator (0x0 -> 0x9 are reserved...)
   const DataElement r(start);
   ConstIterator it = DES.lower_bound(r);
   const char *refowner = t.GetOwner();

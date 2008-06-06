@@ -29,6 +29,7 @@ namespace gdcm
 
 /**
  * \brief Class to represent a Private DICOM Data Element (Attribute) Tag (Group, Element, Owner)
+ * \note private tag have element value in: [0x10,0xff], for instance 0x0009,0x0000 is NOT a private tag
  */
 
 class GDCM_EXPORT PrivateTag : public Tag
@@ -37,6 +38,7 @@ class GDCM_EXPORT PrivateTag : public Tag
 public:
   PrivateTag(uint16_t group = 0, uint16_t element = 0, const char *owner = ""):Tag(group,element),Owner(owner) {
     std::transform(Owner.begin(), Owner.end(), Owner.begin(), tolower);
+    //assert( element > 0x0010 && element < 0x100 );
   }
 
   const char *GetOwner() const { return Owner.c_str(); }

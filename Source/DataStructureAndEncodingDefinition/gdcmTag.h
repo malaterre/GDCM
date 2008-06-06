@@ -172,12 +172,12 @@ public:
     return os.write((char*)(&copy), 4);
     }
 
-  // Private Creator Data Element
+  // Return the Private Creator Data Element tag of a private data element
   Tag GetPrivateCreator() const
     {
     // See PS 3.5 - 7.8.1 PRIVATE DATA ELEMENT TAGS
     // eg: 0x1234,0x1425 -> 0x1234,0x0014
-    assert( IsPrivate() );
+    assert( IsPrivate() && !IsPrivateCreator() );
     Tag r = *this;
     r.SetElement( GetElement() >> 8 );
     return r;
@@ -186,15 +186,15 @@ public:
     {
     // See PS 3.5 - 7.8.1 PRIVATE DATA ELEMENT TAGS
     // eg: 0x1234,0x0056 -> 0x1234,0x5678
-    assert( t.IsPrivate() && t.GetElement() < 0x100 );
+    assert( t.IsPrivate() && !t.IsPrivateCreator() );
     uint16_t element = t.GetElement() << 8;
     SetElement( GetElement() + element );
     }
 
-  // Returns if tag is a Private Creator (xxxx,00yy), where xxxx is odd number
+  // Returns if tag is a Private Creator (xxxx,00yy), where xxxx is odd number and yy in [0x10,0xFF]
   bool IsPrivateCreator() const
     {
-    return IsPrivate() && GetElement() > 0xFF;
+    return IsPrivate() && (GetElement() <= 0xFF && GetElement() >= 0x10);
     }
 
   // e.g 6002,3000 belong to groupXX: 6000,3000

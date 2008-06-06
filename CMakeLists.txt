@@ -20,6 +20,10 @@ IF(INSOURCE OR INSOURCESUBDIR)
     "Please create a separate binary directory and run CMake there.")
 ENDIF(INSOURCE OR INSOURCESUBDIR)
 
+#SET(CPACK_NAMELINK_TYPE NAMELINK_ONLY)
+#SET(CPACK_NAMELINK_TYPE NAMELINK_SKIP)
+SET(CPACK_NAMELINK_TYPE)
+
 #-----------------------------------------------------------------------------
 SET(GDCM_MAJOR_VERSION 2)
 SET(GDCM_MINOR_VERSION 1)
