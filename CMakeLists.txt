@@ -9,6 +9,13 @@ MARK_AS_ADVANCED(CMAKE_BACKWARDS_COMPATIBILITY CMAKE_BUILD_TYPE CMAKE_INSTALL_PR
 SET(GDCM_CMAKE_DIR "${GDCM_SOURCE_DIR}/CMake" CACHE INTERNAL "")
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${GDCM_CMAKE_DIR}")
 
+IF(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.6)
+SET(NAMELINK_ONLY NAMELINK_ONLY)
+SET(NAMELINK_SKIP NAMELINK_SKIP)
+ELSE(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.6)
+SET(NAMELINK_ONLY)
+SET(NAMELINK_SKIP)
+ENDIF(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.6)
 
 #-----------------------------------------------------------------------------
 # Disallow insource build since I never test that
@@ -20,8 +27,8 @@ IF(INSOURCE OR INSOURCESUBDIR)
     "Please create a separate binary directory and run CMake there.")
 ENDIF(INSOURCE OR INSOURCESUBDIR)
 
-#SET(CPACK_NAMELINK_TYPE NAMELINK_ONLY)
-#SET(CPACK_NAMELINK_TYPE NAMELINK_SKIP)
+#SET(CPACK_NAMELINK_TYPE ${NAMELINK_ONLY})
+#SET(CPACK_NAMELINK_TYPE ${NAMELINK_SKIP})
 SET(CPACK_NAMELINK_TYPE)
 
 #-----------------------------------------------------------------------------
@@ -256,6 +263,7 @@ FIND_PACKAGE(PythonInterp REQUIRED)
 
 
 #GET_PYTHON_SITE_PACKAGE(python_site_package)
+IF(import_output)
 STRING(LENGTH ${import_output} len)
 # let's remove the "/usr/lib" part...
 MATH(EXPR fileend "${len} - 9") 
@@ -263,6 +271,7 @@ STRING(SUBSTRING ${import_output} 9 ${fileend} dummy1)
 IF(UNIX)
 SET(python_site_package ${dummy1})
 ENDIF(UNIX)
+ENDIF(import_output)
 
 
 #-----------------------------------------------------------------------------
