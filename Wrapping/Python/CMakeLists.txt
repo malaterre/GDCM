@@ -100,22 +100,18 @@ ADD_CUSTOM_COMMAND(
 # right next to the other dlls
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS ${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME}
-    #RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime
+    RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR}/${python_site_package}/${subdir} COMPONENT Runtime
     LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Runtime
     ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Development
-    #DESTINATION ${python_site_package}/${subdir}
-  ${CPACK_NAMELINK_TYPE}
   )
 # the python file is not a dev file, but part of the gdcm module...
   INSTALL(FILES 
     ${CMAKE_CURRENT_BINARY_DIR}/gdcm.py 
     DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Runtime
-    #DESTINATION ${python_site_package}/${subdir}
   )
   INSTALL(FILES 
     ${CMAKE_CURRENT_BINARY_DIR}/gdcm.pth
     DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Runtime
-    #DESTINATION ${python_site_package}
   )
 ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 
