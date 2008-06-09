@@ -150,3 +150,8 @@ Add support for LittleEndian declared as bigEndian (gdcmData/c_vf1001.dcm)
 Add support for namelink packaging
 -----------------------------------------------------------------------
 Need a MediaStorage::IsRetired / UIDs::IsRetired
+-----------------------------------------------------------------------
+What if:
+(0018,0084) DS [ 63.89.73.30]                                       # 10,1 Imaging Frequency
+-----------------------------------------------------------------------
+need a gdcm::DirectionCosines class

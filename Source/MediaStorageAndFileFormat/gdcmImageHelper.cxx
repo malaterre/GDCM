@@ -24,6 +24,7 @@
 #include "gdcmDicts.h"
 #include "gdcmAttribute.h"
 #include "gdcmImage.h"
+#include "gdcmDirectionCosines.h"
 
   /* TODO:
    * 
@@ -973,7 +974,11 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
 
 void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<double> & dircos)
 {
+#ifndef NDEBUG
   assert( dircos.size() == 6 );
+  DirectionCosines dc( &dircos[0] );
+  assert( dc.IsValid() );
+#endif
   MediaStorage ms;
   ms.SetFromDataSet(ds);
   assert( MediaStorage::IsImage( ms ) );

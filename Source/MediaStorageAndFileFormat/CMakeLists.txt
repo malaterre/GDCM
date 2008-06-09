@@ -4,6 +4,7 @@ SET(MSFF_SRCS
   gdcmAnonymizer.cxx
   gdcmRescaler.cxx
   gdcmOrientation.cxx
+  gdcmDirectionCosines.cxx
   gdcmSorter.cxx
   gdcmIPPSorter.cxx
   gdcmApplicationEntity.cxx

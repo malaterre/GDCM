@@ -65,15 +65,14 @@ public:
   // since uid1 == uid2 
   const char* Generate();
 
-  const char* Generate2();
-
   // Find out if the string is a valid UID or not
   static bool IsValid(const char *uid);
 
   static const char *GetGDCMUID(); // who would want that in the public API ??
 
-//protected:
+protected:
   static bool GenerateUUID(unsigned char *uuid_data);
+  const char* Generate2();
 
 private:
   static const char GDCM_UID[];
