@@ -76,6 +76,30 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/gdcm.pth.in
   ${CMAKE_CURRENT_BINARY_DIR}/gdcm.pth
 )
 
+# Need to rebuild gdcmPYTHON...cxx when any header is modified...
+#  FILE(GLOB_RECURSE headerfiles
+#    "${GDCM_SOURCE_DIR}/Source/*.h"
+#  )
+ 
+#ADD_DEPENDENCIES(
+#  ${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME}
+#  ${headerfiles}
+#	)
+#SET_SOURCE_FILES_PROPERTIES(
+#  ${swig_generated_file_fullname}
+#  PROPERTIES OBJECT_DEPENDS
+#  #${headerfiles}
+#  ${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat/gdcmDirectionCosines.h
+#)
+#SET_SOURCE_FILES_PROPERTIES(
+#	${CMAKE_CURRENT_SOURCE_DIR}/gdcm.i
+#  PROPERTIES OBJECT_DEPENDS
+#  #${headerfiles}
+#  ${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat/gdcmDirectionCosines.h
+#)
+
+
+
 # Python extension modules on Windows must have the extension ".pyd"
 # instead of ".dll" as of Python 2.5.  Older python versions do support
 # this suffix.
