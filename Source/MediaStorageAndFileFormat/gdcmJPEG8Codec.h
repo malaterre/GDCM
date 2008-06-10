@@ -28,6 +28,7 @@ public:
   ~JPEG8Codec();
 
   bool Decode(std::istream &is, std::ostream &os);
+  bool Code(std::istream &is, std::ostream &os);
 
 private:
   JPEGInternals *Internals;

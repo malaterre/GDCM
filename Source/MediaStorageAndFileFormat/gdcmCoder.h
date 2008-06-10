@@ -30,7 +30,7 @@ class GDCM_EXPORT Coder
 public:
   virtual ~Coder() {}
   virtual bool CanCode(TransferSyntax const &) { return false; }
-  virtual bool Code(DataElement const &is, DataElement &os) { (void)is; (void)os; return false; }
+  virtual bool Code(DataElement const &in, DataElement &out) { (void)in; (void)out; return false; }
   //virtual bool Code(std::istream &is, std::ostream &os) { return false; }
 };
 

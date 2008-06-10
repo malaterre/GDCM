@@ -34,6 +34,9 @@ public:
   bool Decode(DataElement const &is, DataElement &os);
   void SetPixelFormat(PixelFormat const &pf);
 
+  // Compress into JPEG
+  bool Code(DataElement const &is, DataElement &os);
+
 protected:
   bool Decode(std::istream &is, std::ostream &os);
 

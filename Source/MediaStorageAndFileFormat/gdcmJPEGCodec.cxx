@@ -38,12 +38,12 @@ JPEGCodec::~JPEGCodec()
 bool JPEGCodec::CanDecode(TransferSyntax const &ts)
 {
   return ts == TransferSyntax::JPEGBaselineProcess1
-    || ts == TransferSyntax::JPEGExtendedProcess2_4
-    || ts == TransferSyntax::JPEGExtendedProcess3_5
-    || ts == TransferSyntax::JPEGSpectralSelectionProcess6_8
-    || ts == TransferSyntax::JPEGFullProgressionProcess10_12
-    || ts == TransferSyntax::JPEGLosslessProcess14
-    || ts == TransferSyntax::JPEGLosslessProcess14_1;
+      || ts == TransferSyntax::JPEGExtendedProcess2_4
+      || ts == TransferSyntax::JPEGExtendedProcess3_5
+      || ts == TransferSyntax::JPEGSpectralSelectionProcess6_8
+      || ts == TransferSyntax::JPEGFullProgressionProcess10_12
+      || ts == TransferSyntax::JPEGLosslessProcess14
+      || ts == TransferSyntax::JPEGLosslessProcess14_1;
 }
 
 void JPEGCodec::SetPixelFormat(PixelFormat const &pt)
@@ -128,6 +128,13 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
   out.SetByteValue( &str[0], str.size() );
   return true;
 }
+
+bool JPEGCodec::Code(DataElement const &in, DataElement &out)
+{
+  out = in;
+  const ByteValue *bv = in.GetByteValue();
+}
+
 
 bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
 {
