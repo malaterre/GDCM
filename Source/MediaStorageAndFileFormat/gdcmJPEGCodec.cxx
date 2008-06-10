@@ -46,6 +46,11 @@ bool JPEGCodec::CanDecode(TransferSyntax const &ts)
       || ts == TransferSyntax::JPEGLosslessProcess14_1;
 }
 
+bool JPEGCodec::CanCode(TransferSyntax const &ts)
+{
+  return ts == TransferSyntax::ImplicitVRLittleEndian;
+}
+
 void JPEGCodec::SetPixelFormat(PixelFormat const &pt)
 {
   ImageCodec::SetPixelFormat(pt);
@@ -133,6 +138,31 @@ bool JPEGCodec::Code(DataElement const &in, DataElement &out)
 {
   out = in;
   const ByteValue *bv = in.GetByteValue();
+  std::stringstream os;
+  std::stringstream is;
+  char *mybuffer = new char[bv->GetLength()];
+  bv->GetBuffer(mybuffer, bv->GetLength());
+  is.write(mybuffer, bv->GetLength());
+  delete[] mybuffer;
+  bool r = Code(is, os);
+  if( !r )
+    {
+    return false;
+    }
+
+  std::string str = os.str();
+  out.SetByteValue( &str[0], str.size() );
+  return true;
+}
+
+bool JPEGCodec::Code(std::istream &is, std::ostream &os)
+{
+  std::stringstream tmpos;
+  if ( !Internal->Code(is,tmpos) )
+    {
+    return false;
+    }
+  return true;
 }
 
 
@@ -186,6 +216,7 @@ bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
     }
   if( this->PI != Internal->PI )
     {
+    gdcmWarningMacro( "PhotometricInterpretation issue" );
     this->PI = Internal->PI;
     }
 

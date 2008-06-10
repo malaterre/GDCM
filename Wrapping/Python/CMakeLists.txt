@@ -133,7 +133,7 @@ IF(NOT GDCM_INSTALL_NO_LIBRARIES)
     LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Runtime
     ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Development
   )
-# the python file is not a dev file, but part of the gdcm module...
+  # the python file is not a dev file, but part of the gdcm module...
   INSTALL(FILES 
     ${CMAKE_CURRENT_BINARY_DIR}/gdcm.py 
     DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Runtime

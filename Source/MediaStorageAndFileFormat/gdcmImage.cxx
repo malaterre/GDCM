@@ -393,6 +393,45 @@ bool Image::TryJPEGCodec(char *buffer) const
     }
   return false;
 }
+
+bool Image::TryJPEGCodec2(char *buffer) const
+{
+  unsigned long len = GetBufferLength();
+  const TransferSyntax &ts = GetTransferSyntax();
+
+  JPEGCodec codec;
+  if( codec.CanCode( ts ) )
+    {
+    codec.SetPlanarConfiguration( GetPlanarConfiguration() );
+    codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
+    codec.SetPixelFormat( GetPixelFormat() );
+    codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );
+    DataElement out;
+    bool r = codec.Code(PixelData, out);
+    // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm    
+    if( !r )
+      {
+      return false;
+      }
+    // FIXME ! This should be done all the time for all codec:
+    // Did PI change or not ?
+    if ( GetPhotometricInterpretation() != codec.GetPhotometricInterpretation() )
+      {
+      // HACK
+      //gdcm::Image *i = (gdcm::Image*)this;
+      //i->SetPhotometricInterpretation( codec.GetPhotometricInterpretation() );
+      }
+    const ByteValue *outbv = out.GetByteValue();
+    assert( outbv );
+    unsigned long check = outbv->GetLength();  // FIXME
+    // DermaColorLossLess.dcm has a len of 63531, but DICOM will give us: 63532 ...
+    assert( len <= outbv->GetLength() );
+    memcpy(buffer, outbv->GetPointer(), len /*outbv->GetLength()*/ );  // FIXME
+
+    return true;
+    }
+  return false;
+}
    
 bool Image::TryJPEG2000Codec(char *buffer) const
 {
@@ -475,6 +514,23 @@ bool Image::GetBuffer(char *buffer) const
   if( !success ) success = TryJPEG2000Codec(buffer);
   if( !success ) success = TryRLECodec(buffer);
   //if( !success ) success = TryDeltaEncodingCodec(buffer);
+  if( !success )
+    {
+    buffer = 0;
+    //throw Exception( "No codec found for this image");
+    }
+
+  return success;
+}
+
+// Compress the raw data
+bool Image::GetBuffer2(char *buffer) const
+{
+  bool success = false;
+  //if( !success ) success = TryRAWCodec2(buffer);
+  if( !success ) success = TryJPEGCodec2(buffer);
+  //if( !success ) success = TryJPEG2000Codec2(buffer);
+  //if( !success ) success = TryRLECodec2(buffer);
   if( !success )
     {
     buffer = 0;

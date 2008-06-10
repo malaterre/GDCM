@@ -676,9 +676,11 @@ jpeg_stdio_dest (j_compress_ptr cinfo, /*FILE * */ std::ostream * outfile)
 bool JPEGBITSCodec::Code(std::istream &is, std::ostream &os)
 {
   int quality = 100;
-JSAMPLE * image_buffer;	/* Points to large array of R,G,B-order data */
-int image_height;	/* Number of rows in image */
-int image_width;		/* Number of columns in image */
+JSAMPLE * image_buffer = new JSAMPLE[300000];	/* Points to large array of R,G,B-order data */
+memset(image_buffer,0,300000*sizeof(JSAMPLE));
+is.read((char*)image_buffer, 262152);
+int image_height = 512;	/* Number of rows in image */
+int image_width = 512;		/* Number of columns in image */
 
   /* This struct contains the JPEG compression parameters and pointers to
    * working space (which is allocated as needed by the JPEG library).
@@ -736,6 +738,10 @@ int image_width;		/* Number of columns in image */
   cinfo.image_height = image_height;
   cinfo.input_components = 3;		/* # of color components per pixel */
   cinfo.in_color_space = JCS_RGB; 	/* colorspace of input image */
+
+    cinfo.input_components = 1;     /* # of color components per pixel */
+    cinfo.in_color_space = JCS_GRAYSCALE; /* colorspace of input image */
+
   /* Now use the library's routine to set default compression parameters.
    * (You must set at least cinfo.in_color_space before calling this,
    * since the defaults depend on the source color space.)
@@ -762,6 +768,7 @@ int image_width;		/* Number of columns in image */
    * more if you wish, though.
    */
   row_stride = image_width * 3;	/* JSAMPLEs per row in image_buffer */
+  row_stride = image_width * 1;	/* JSAMPLEs per row in image_buffer */
 
   while (cinfo.next_scanline < cinfo.image_height) {
     /* jpeg_write_scanlines expects an array of pointers to scanlines.
