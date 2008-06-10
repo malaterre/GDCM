@@ -103,6 +103,11 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/gdcm.pth.in
 # Python extension modules on Windows must have the extension ".pyd"
 # instead of ".dll" as of Python 2.5.  Older python versions do support
 # this suffix.
+# http://docs.python.org/whatsnew/ports.html#SECTION0001510000000000000000
+# <quote>
+# Windows: .dll is no longer supported as a filename extension for extension modules.
+# .pyd is now the only filename extension that will be searched for.
+# </quote>
 IF(WIN32 AND NOT CYGWIN)
   SET_TARGET_PROPERTIES(${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME} PROPERTIES SUFFIX ".pyd")
 ENDIF(WIN32 AND NOT CYGWIN)
@@ -133,6 +138,10 @@ IF(NOT GDCM_INSTALL_NO_LIBRARIES)
     ${CMAKE_CURRENT_BINARY_DIR}/gdcm.py 
     DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Runtime
   )
+  # pth file are actually a pain to use since they are *required* to be in some very specific location;
+  # for instance you have a /tmp/gdcm.pth file and set PYTHONPATH=/tmp ... well believe it or not
+  # this won't work ! I might actually have to go away from this solution for generic solution :(
+  # only official rpm/deb could be sure of where the user will install those python module
   INSTALL(FILES 
     ${CMAKE_CURRENT_BINARY_DIR}/gdcm.pth
     DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Runtime

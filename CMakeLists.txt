@@ -353,6 +353,7 @@ ENDIF(GDCM_USE_ITK)
 
 #-----------------------------------------------------------------------------
 OPTION(GDCM_USE_WXWIDGETS "wxWidgets bridge ?" OFF)
+MARK_AS_ADVANCED(GDCM_USE_WXWIDGETS)
 IF(GDCM_USE_WXWIDGETS)
   SUBDIRS(Utilities/wxWidgets)
 ENDIF(GDCM_USE_WXWIDGETS)
