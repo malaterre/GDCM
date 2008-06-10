@@ -104,6 +104,7 @@
 #include "gdcmSegmentedPaletteColorLookupTable.h"
 #include "gdcmUnpacker12Bits.h"
 #include "gdcmPythonFilter.h"
+#include "gdcmDirectionCosines.h"
 
 using namespace gdcm;
 %}
@@ -451,3 +452,4 @@ using namespace gdcm;
 %include "gdcmTesting.h"
 #endif
 %include "gdcmPythonFilter.h"
+%include "gdcmDirectionCosines.h"
