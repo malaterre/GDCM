@@ -18,6 +18,10 @@ Usage:
 
  python ManipulateSequence.py input.dcm output.dcm
 
+This was tested using:
+
+ python ManipulateSequence.py gdcmData/D_CLUNIE_CT1_J2KI.dcm myoutput.dcm
+
 This is a dummy example on how to modify a value set in a nested-nested dataset
 
 WARNING:
