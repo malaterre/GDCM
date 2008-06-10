@@ -48,7 +48,9 @@ void DirectionCosines::Print(std::ostream &) const {}
 
 bool DirectionCosines::IsValid() const
 {
-  const double epsilon = std::numeric_limits<double>::epsilon();
+  // gdcmData/gdcm-MR-SIEMENS-16-2.acr
+  // => {-1, -0, 0, -0, 0.05233599990606308, 0.99862951040267944}
+  const double epsilon = 1e-3; //std::numeric_limits<double>::epsilon();
 
   double norm_v1 = Values[0] * Values[0] + Values[1]*Values[1] + Values[2]*Values[2];
   double norm_v2 = Values[3] * Values[3] + Values[4]*Values[4] + Values[5]*Values[5];
