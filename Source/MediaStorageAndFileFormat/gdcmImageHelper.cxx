@@ -363,8 +363,24 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
       {
       dircos[i] = at.GetValue(i);
       }
+    DirectionCosines dc( &dircos[0] );
+    if( !dc.IsValid() )
+      {
+      dc.Normalize();
+      if( dc.IsValid() )
+        {
+        gdcmWarningMacro( "DirectionCosines was not normalized. Fixed" );
+        const double * p = dc;
+        dircos = std::vector<double>(p, p + 6);
+        return dircos;
+        }
+      else
+        {
+        gdcmWarningMacro( "Could not get DirectionCosines" );
+        }
+      }
     }
-  else
+  //else
     {
     dircos[0] = 1;
     dircos[1] = 0;

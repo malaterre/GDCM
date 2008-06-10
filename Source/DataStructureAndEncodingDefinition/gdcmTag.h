@@ -197,6 +197,19 @@ public:
     return IsPrivate() && (GetElement() <= 0xFF && GetElement() >= 0x10);
     }
 
+  bool IsIllegal() const 
+    {
+    // DICOM reserved those groups:
+    return GetGroup() == 0x0001 || GetGroup() == 0x0003 || GetGroup() == 0x0005 || GetGroup() == 0x0007
+    // This is a very special case, in private group, one cannot use element [0x01,0x09] ...
+      || (IsPrivate() && !IsPrivateCreator());
+    }
+
+  bool IsGroupLength() const
+    {
+    return GetElement() == 0x0;
+    }
+
   // e.g 6002,3000 belong to groupXX: 6000,3000
   bool IsGroupXX(const Tag &t) const
     {
