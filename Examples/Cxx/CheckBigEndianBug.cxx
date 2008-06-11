@@ -13,7 +13,13 @@
 
 =========================================================================*/
 /* 
+ * WARNING: This is a dev tool, do not use !
  * 
+ * Usage: after a gdcmconv, you would like to know if the conversion process is acceptable
+ * sometime a vbindiff is acceptable, sometime it is not. In the case of the famous Philips
+ * Little/Big Endian Explicit Transfer Syntax it is not easy to compare two files. However
+ * this only impact byte ordering, thus we can compute byte-indenpendant information to still
+ * compare the files.
  */
 
 #include "gdcmImageReader.h"
@@ -29,7 +35,7 @@ int main(int argc, char *argv[])
 {
   if( argc < 3 )
     {
-    std::cerr << argv[0] << " input.dcm output.dcm" << std::endl;
+    std::cerr << argv[0] << " input1.dcm input2.dcm" << std::endl;
     return 1;
     }
   const char *filename1 = argv[1];
@@ -101,6 +107,8 @@ int main(int argc, char *argv[])
     {
     std::cout << "set1 != set2" << std::endl;
     }
+  delete[] buffer1;
+  delete[] buffer2;
   
 
   return 0;
