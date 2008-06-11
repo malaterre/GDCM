@@ -216,6 +216,7 @@ protected:
   bool TryRLECodec(char *buffer) const;
 
   bool TryJPEGCodec2(std::ostream &os) const;
+  bool TryJPEG2000Codec2(std::ostream &os) const;
 
 private:
   unsigned int NumberOfDimensions;

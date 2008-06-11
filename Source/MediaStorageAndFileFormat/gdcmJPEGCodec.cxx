@@ -48,8 +48,13 @@ bool JPEGCodec::CanDecode(TransferSyntax const &ts)
 
 bool JPEGCodec::CanCode(TransferSyntax const &ts)
 {
-  return ts == TransferSyntax::ImplicitVRLittleEndian
-    || ts == TransferSyntax::ExplicitVRLittleEndian;
+  return ts == TransferSyntax::JPEGBaselineProcess1
+      || ts == TransferSyntax::JPEGExtendedProcess2_4
+      || ts == TransferSyntax::JPEGExtendedProcess3_5
+      || ts == TransferSyntax::JPEGSpectralSelectionProcess6_8
+      || ts == TransferSyntax::JPEGFullProgressionProcess10_12
+      || ts == TransferSyntax::JPEGLosslessProcess14
+      || ts == TransferSyntax::JPEGLosslessProcess14_1;
 }
 
 void JPEGCodec::SetPixelFormat(PixelFormat const &pt)

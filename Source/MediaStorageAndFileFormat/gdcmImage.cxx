@@ -459,6 +459,32 @@ bool Image::TryJPEG2000Codec(char *buffer) const
   return false;
 }
 
+bool Image::TryJPEG2000Codec2(std::ostream &os) const
+{
+  unsigned long len = GetBufferLength();
+  const TransferSyntax &ts = GetTransferSyntax();
+
+  JPEG2000Codec codec;
+  if( codec.CanCode( ts ) )
+    {
+    codec.SetDimensions( GetDimensions() );
+    codec.SetNumberOfDimensions( GetNumberOfDimensions() );
+    codec.SetPlanarConfiguration( GetPlanarConfiguration() );
+    codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
+    codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );
+    DataElement out;
+    bool r = codec.Code(PixelData, out);
+    assert( r );
+    const ByteValue *outbv = out.GetByteValue();
+    assert( outbv );
+    unsigned long check = outbv->GetLength();  // FIXME
+    //memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+    os.write(outbv->GetPointer(), outbv->GetLength() );
+    return r;
+    }
+  return false;
+}
+
 bool Image::TryRLECodec(char *buffer) const
 {
   unsigned long len = GetBufferLength();
@@ -531,7 +557,7 @@ bool Image::GetBuffer2(std::ostream &os) const
   bool success = false;
   //if( !success ) success = TryRAWCodec2(buffer);
   if( !success ) success = TryJPEGCodec2(os);
-  //if( !success ) success = TryJPEG2000Codec2(buffer);
+  if( !success ) success = TryJPEG2000Codec2(os);
   //if( !success ) success = TryRLECodec2(buffer);
   if( !success )
     {
