@@ -398,9 +398,10 @@ size_t inputlength = bv->GetLength();
 int image_width = dims[0];
 int image_height = dims[1];
 int numZ = 0; //dims[2];
-int sample_pixel = 1;
-int bitsallocated = 8;
-int sign = 0;
+const PixelFormat &pf = this->GetPixelFormat();
+int sample_pixel = pf.GetSamplesPerPixel();
+int bitsallocated = pf.GetBitsAllocated();
+int sign = pf.GetPixelRepresentation();
 int quality = 100;
 
 //// input_buffer is ONE image

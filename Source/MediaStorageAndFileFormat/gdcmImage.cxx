@@ -468,6 +468,7 @@ bool Image::TryJPEG2000Codec2(std::ostream &os) const
   if( codec.CanCode( ts ) )
     {
     codec.SetDimensions( GetDimensions() );
+    codec.SetPixelFormat( GetPixelFormat() );
     codec.SetNumberOfDimensions( GetNumberOfDimensions() );
     codec.SetPlanarConfiguration( GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
