@@ -98,6 +98,9 @@ public:
   template <typename TDE, typename TSwap>
   std::istream &Read(std::istream &is) {
     // Superclass
+        DataSet &nested = NestedDataSet;
+        nested.Clear();
+        assert( nested.IsEmpty() );
     if( !TagField.Read<TSwap>(is) )
       {
       throw Exception("Should not happen");
@@ -236,6 +239,7 @@ public:
         {
         gdcmWarningMacro( "SegDelItem found in defined length Sequence" );
         assert( ValueLengthField == 0 );
+        assert( NestedDataSet.Size() == 0 );
         }
       if( !TagField.Write<TSwap>(os) )
         {

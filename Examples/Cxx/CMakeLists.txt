@@ -28,3 +28,6 @@ TARGET_LINK_LIBRARIES(HelloWorld gdcmMSFF)
 ADD_EXECUTABLE(CompressImage CompressImage.cxx)
 TARGET_LINK_LIBRARIES(CompressImage gdcmMSFF)
 
+ADD_EXECUTABLE(CheckBigEndianBug CheckBigEndianBug.cxx)
+TARGET_LINK_LIBRARIES(CheckBigEndianBug gdcmMSFF)
+

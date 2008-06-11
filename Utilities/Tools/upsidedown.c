@@ -37,9 +37,9 @@ int main(int argc, char *argv[])
   assert( len == x*y*bit );
 
   for(i = y; i > 0; --i)
-  {
-  fwrite(buffer+bit*x*(i-1),1,bit*x,out);
-  }
+    {
+    fwrite(buffer+bit*x*(i-1),1,bit*x,out);
+    }
   fclose(in);
   fclose(out);
   free(buffer);
