@@ -48,7 +48,8 @@ bool JPEGCodec::CanDecode(TransferSyntax const &ts)
 
 bool JPEGCodec::CanCode(TransferSyntax const &ts)
 {
-  return ts == TransferSyntax::ImplicitVRLittleEndian;
+  return ts == TransferSyntax::ImplicitVRLittleEndian
+    || ts == TransferSyntax::ExplicitVRLittleEndian;
 }
 
 void JPEGCodec::SetPixelFormat(PixelFormat const &pt)
@@ -81,6 +82,7 @@ void JPEGCodec::SetBitSample(int bit)
     delete Internal;
     Internal = NULL;
     }
+  Internal->SetDimensions( this->GetDimensions() );
   Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
   Internal->ImageCodec::SetPixelFormat( this->ImageCodec::GetPixelFormat() );
 }
@@ -139,29 +141,20 @@ bool JPEGCodec::Code(DataElement const &in, DataElement &out)
   out = in;
   const ByteValue *bv = in.GetByteValue();
   std::stringstream os;
-  std::stringstream is;
-  char *mybuffer = new char[bv->GetLength()];
-  bv->GetBuffer(mybuffer, bv->GetLength());
-  is.write(mybuffer, bv->GetLength());
-  delete[] mybuffer;
-  bool r = Code(is, os);
+  //std::stringstream is;
+  //char *mybuffer = new char[bv->GetLength()];
+  //bv->GetBuffer(mybuffer, bv->GetLength());
+  //is.write(mybuffer, bv->GetLength());
+  //delete[] mybuffer;
+  bool r = Internal->InternalCode(bv,os);
   if( !r )
     {
     return false;
     }
 
   std::string str = os.str();
+  assert( str.size() );
   out.SetByteValue( &str[0], str.size() );
-  return true;
-}
-
-bool JPEGCodec::Code(std::istream &is, std::ostream &os)
-{
-  std::stringstream tmpos;
-  if ( !Internal->Code(is,tmpos) )
-    {
-    return false;
-    }
   return true;
 }
 

@@ -36,11 +36,10 @@ public:
   void SetPixelFormat(PixelFormat const &pf);
 
   // Compress into JPEG
-  bool Code(DataElement const &is, DataElement &os);
+  bool Code(DataElement const &in, DataElement &out);
 
 protected:
   bool Decode(std::istream &is, std::ostream &os);
-  bool Code(std::istream &is, std::ostream &os);
 
 protected:
   // Internal method called by SetPixelFormat

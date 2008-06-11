@@ -80,6 +80,13 @@ public:
     return *LUT;
     }
 
+  void SetDimensions(const unsigned int *d)
+    {
+    Dimensions[0] = d[0];
+    Dimensions[1] = d[1];
+    //Dimensions[2] = d[2];
+    }
+  const unsigned int *GetDimensions() const { return Dimensions; }
 protected:
   bool RequestPlanarConfiguration;
   bool RequestPaddedCompositePixelCode;
@@ -92,6 +99,7 @@ protected:
 
   typedef SmartPointer<LookupTable> LUTPtr;
   LUTPtr LUT;
+  unsigned int Dimensions[3]; // FIXME
 
   bool DoOverlayCleanup(std::istream &is, std::ostream &os);
   bool DoByteSwap(std::istream &is, std::ostream &os);

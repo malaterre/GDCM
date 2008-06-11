@@ -394,7 +394,7 @@ bool Image::TryJPEGCodec(char *buffer) const
   return false;
 }
 
-bool Image::TryJPEGCodec2(char *buffer) const
+bool Image::TryJPEGCodec2(std::ostream &os) const
 {
   unsigned long len = GetBufferLength();
   const TransferSyntax &ts = GetTransferSyntax();
@@ -402,6 +402,7 @@ bool Image::TryJPEGCodec2(char *buffer) const
   JPEGCodec codec;
   if( codec.CanCode( ts ) )
     {
+    codec.SetDimensions( GetDimensions() );
     codec.SetPlanarConfiguration( GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
     codec.SetPixelFormat( GetPixelFormat() );
@@ -425,8 +426,9 @@ bool Image::TryJPEGCodec2(char *buffer) const
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
     // DermaColorLossLess.dcm has a len of 63531, but DICOM will give us: 63532 ...
-    assert( len <= outbv->GetLength() );
-    memcpy(buffer, outbv->GetPointer(), len /*outbv->GetLength()*/ );  // FIXME
+    assert( outbv->GetLength() < len );
+    //memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );
+    os.write( outbv->GetPointer(), outbv->GetLength() );
 
     return true;
     }
@@ -524,16 +526,16 @@ bool Image::GetBuffer(char *buffer) const
 }
 
 // Compress the raw data
-bool Image::GetBuffer2(char *buffer) const
+bool Image::GetBuffer2(std::ostream &os) const
 {
   bool success = false;
   //if( !success ) success = TryRAWCodec2(buffer);
-  if( !success ) success = TryJPEGCodec2(buffer);
+  if( !success ) success = TryJPEGCodec2(os);
   //if( !success ) success = TryJPEG2000Codec2(buffer);
   //if( !success ) success = TryRLECodec2(buffer);
   if( !success )
     {
-    buffer = 0;
+    //buffer = 0;
     //throw Exception( "No codec found for this image");
     }
 

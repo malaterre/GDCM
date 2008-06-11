@@ -50,15 +50,9 @@ int main(int argc, char *argv[])
 
   const gdcm::Image &image = reader.GetImage();
 
-  char *tmp = new char[10000];
-  memset(tmp,0,10000);
-  image.GetBuffer2(tmp);
-
   std::ofstream out( outfilename );
-  out.write( tmp, 10000 );
+  image.GetBuffer2(out);
   out.close();
-
-  delete[] tmp;
 
   return 0;
 }
