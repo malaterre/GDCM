@@ -41,7 +41,6 @@ Dicts::~Dicts()
 const DictEntry &Dicts::GetDictEntry(const Tag& tag, const char *owner) const
 {
   static DictEntry Dummy;
-  assert( !tag.IsIllegal() );
   if( tag.IsGroupLength() )
     {
     const DictEntry & de = PublicDict.GetDictEntry(tag);
@@ -69,8 +68,18 @@ const DictEntry &Dicts::GetDictEntry(const Tag& tag, const char *owner) const
     {
     assert( tag.IsPrivate() );
     // Check special private element: 0x0000 and [0x1,0xFF] are special cases:
-    if( tag.IsPrivateCreator() )
+    if( tag.IsIllegal() )
       {
+      std::string pc ( "Illegal Element" );
+      Dummy.SetName( pc.c_str() );
+      Dummy.SetVR( VR::INVALID );
+      Dummy.SetVM( VM::VM0 );
+      Dummy.SetRetired( false ); // ??
+      return Dummy;
+      }
+    else if( tag.IsPrivateCreator() )
+      {
+      assert( !tag.IsIllegal() );
       assert( tag.GetElement() ); // Not a group length !
       //assert( owner );
       assert( tag.IsPrivate() );

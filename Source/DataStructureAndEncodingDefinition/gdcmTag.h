@@ -202,7 +202,8 @@ public:
     // DICOM reserved those groups:
     return GetGroup() == 0x0001 || GetGroup() == 0x0003 || GetGroup() == 0x0005 || GetGroup() == 0x0007
     // This is a very special case, in private group, one cannot use element [0x01,0x09] ...
-      || (IsPrivate() && !IsPrivateCreator());
+//      || (IsPrivate() && !IsPrivateCreator() && !IsGroupLength());
+      || (IsPrivate() && GetElement() > 0x0 && GetElement() < 0x10 );
     }
 
   bool IsGroupLength() const
