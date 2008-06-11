@@ -756,6 +756,16 @@ bool JPEGBITSCodec::InternalCode(const ByteValue* bv, std::ostream &os)
    * since the defaults depend on the source color space.)
    */
   jpeg_set_defaults(&cinfo);
+
+  /*
+   * predictor = 1
+   * point_transform = 0
+   * => lossless transformation.
+   * Basicaly you need to have point_transform = 0, but you can pick whichever predictor [1...7] you want
+   * TODO: is there a way to pick the right predictor (best compression/fastest ?)
+   */
+  jpeg_simple_lossless (&cinfo, 1, 0);
+
   /* Now you can set any non-default parameters you wish to.
    * Here we just illustrate the use of quality (quantization table) scaling:
    */
@@ -792,7 +802,6 @@ bool JPEGBITSCodec::InternalCode(const ByteValue* bv, std::ostream &os)
   jpeg_finish_compress(&cinfo);
   /* After finish_compress, we can close the output file. */
   //fclose(outfile);
-  //outfile->close();
 
   /* Step 7: release JPEG compression object */
 
