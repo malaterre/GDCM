@@ -128,8 +128,10 @@ private:
   // VTK structs:
   vtkLookupTable *LookupTable;
   vtkMedicalImageProperties *MedicalImageProperties;
-  vtkSetStringMacro(UID);
-  char *UID;
+  vtkSetStringMacro(StudyUID);
+  vtkSetStringMacro(SeriesUID);
+  char *StudyUID;
+  char *SeriesUID;
 
   int DataUpdateExtent[6];
   int ImageFormat;
