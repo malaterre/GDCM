@@ -161,7 +161,7 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
           }
         else
           {
-          std::cerr << "MediaStorage incompatible: " << ms1 << " vs " << ms2 << std::endl;
+          std::cerr << "MediaStorage incompatible: " << ms1 << " vs " << ms2 << " for file: " << filename << std::endl;
           res = 1;
           }
         }
