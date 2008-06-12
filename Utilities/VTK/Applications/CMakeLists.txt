@@ -2,18 +2,14 @@
 INCLUDE_DIRECTORIES(
   ${GDCM_SOURCE_DIR}/Utilities/VTK
   )
-SET(GDCM_VIEWER_APP_SRCS
-  gdcmviewer.cxx
-  )
+
 SET(GDCM_VTK_APPS
-  gdcmviewer # vtkImageViewer
-  #gdcmviewer2 # vtkImageViewer2
+  gdcmviewer # vtkImageViewer2
+  gdcmorthoplanes
   )
 
 FOREACH(app ${GDCM_VTK_APPS})
-  ADD_EXECUTABLE(${app} 
-#MACOSX_BUNDLE 
-${GDCM_VIEWER_APP_SRCS})
+  ADD_EXECUTABLE(${app} ${app}.cxx)
   SET_TARGET_PROPERTIES(${app} PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES})
   TARGET_LINK_LIBRARIES(${app} vtkgdcm vtkRendering)
   IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
@@ -24,7 +20,6 @@ ${GDCM_VIEWER_APP_SRCS})
       RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime
       LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
       ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
-  ${CPACK_NAMELINK_TYPE}
     )
   ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 ENDFOREACH(app)
@@ -38,6 +33,4 @@ ENDIF(CMAKE_HAVE_PTHREAD_H)
 #ADD_EXECUTABLE(gdcm2vtk gdcm2vtk.cxx)
 #TARGET_LINK_LIBRARIES(gdcm2vtk gdcmMSFF pthread)
 
-ADD_EXECUTABLE(gdcmorthoplanes gdcmorthoplanes.cxx)
-TARGET_LINK_LIBRARIES(gdcmorthoplanes gdcmMSFF vtkgdcm vtkWidgets)
 
