@@ -558,12 +558,12 @@ bool Image::GetBuffer2(std::ostream &os) const
   bool success = false;
   //if( !success ) success = TryRAWCodec2(buffer);
   if( !success ) success = TryJPEGCodec2(os);
-  if( !success ) success = TryJPEG2000Codec2(os);
+  //if( !success ) success = TryJPEG2000Codec2(os);
   //if( !success ) success = TryRLECodec2(buffer);
   if( !success )
     {
     //buffer = 0;
-    //throw Exception( "No codec found for this image");
+    throw Exception( "No codec found for this image");
     }
 
   return success;

@@ -48,6 +48,7 @@ bool JPEGCodec::CanDecode(TransferSyntax const &ts)
 
 bool JPEGCodec::CanCode(TransferSyntax const &ts)
 {
+  return true;
   return ts == TransferSyntax::JPEGBaselineProcess1
       || ts == TransferSyntax::JPEGExtendedProcess2_4
       || ts == TransferSyntax::JPEGExtendedProcess3_5

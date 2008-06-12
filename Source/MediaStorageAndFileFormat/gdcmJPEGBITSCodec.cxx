@@ -771,6 +771,11 @@ bool JPEGBITSCodec::InternalCode(const ByteValue* bv, std::ostream &os)
    */
   jpeg_set_quality(&cinfo, quality, TRUE /* limit to baseline-JPEG values */);
 
+  /*
+   * See write_file_header
+   */
+  //cinfo.write_JFIF_header = 0;
+
   /* Step 4: Start compressor */
 
   /* TRUE ensures that we will write a complete interchange-JPEG file.
