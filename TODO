@@ -154,4 +154,5 @@ Need a MediaStorage::IsRetired / UIDs::IsRetired
 What if:
 (0018,0084) DS [ 63.89.73.30]                                       # 10,1 Imaging Frequency
 -----------------------------------------------------------------------
-need a gdcm::DirectionCosines class
+play with imageplanewdg / Orthoplanewidget
+http://www.itk.org/pipermail/insight-users/2006-January/016463.html

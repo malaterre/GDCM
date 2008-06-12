@@ -206,6 +206,9 @@ public:
           {
           DistanceWidget->On();
           }
+        else if ( keycode == 'p' )
+          {
+          }
 #endif
         else
           {
