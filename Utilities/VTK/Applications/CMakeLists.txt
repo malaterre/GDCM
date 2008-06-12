@@ -38,3 +38,6 @@ ENDIF(CMAKE_HAVE_PTHREAD_H)
 #ADD_EXECUTABLE(gdcm2vtk gdcm2vtk.cxx)
 #TARGET_LINK_LIBRARIES(gdcm2vtk gdcmMSFF pthread)
 
+ADD_EXECUTABLE(gdcmorthoplanes gdcmorthoplanes.cxx)
+TARGET_LINK_LIBRARIES(gdcmorthoplanes gdcmMSFF vtkgdcm vtkWidgets)
+
