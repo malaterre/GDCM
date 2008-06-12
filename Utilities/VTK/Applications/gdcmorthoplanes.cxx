@@ -172,6 +172,7 @@ int main( int argc, char *argv[] )
 
   //delete[] fname;
   vtkGDCMImageReader * reader = vtkGDCMImageReader::New();
+  //reader->SetFileLowerLeft( 1 );
   reader->SetFileNames( files );
   reader->Update(); // important
   //reader->GetOutput()->Print( std::cout );

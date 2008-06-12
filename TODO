@@ -156,3 +156,5 @@ What if:
 -----------------------------------------------------------------------
 play with imageplanewdg / Orthoplanewidget
 http://www.itk.org/pipermail/insight-users/2006-January/016463.html
+-----------------------------------------------------------------------
+window level in Enhanced objects is not handled
