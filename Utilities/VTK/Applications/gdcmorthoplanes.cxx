@@ -34,10 +34,16 @@
 #include "vtkImageChangeInformation.h"
 
 #include "vtkGDCMImageReader.h"
+#include "vtkGDCMImageWriter.h"
 #include "vtkStringArray.h"
 
 #include "gdcmSystem.h"
 #include "gdcmDirectory.h"
+#include "gdcmIPPSorter.h"
+
+#ifndef vtkFloatingPointType
+#define vtkFloatingPointType float
+#endif
 
 //----------------------------------------------------------------------------
 class vtkOrthoPlanesCallback : public vtkCommand
@@ -91,7 +97,7 @@ int main( int argc, char *argv[] )
   //  v16->SetFilePrefix( fname );
   //  v16->SetDataMask( 0x7fff);
   //  v16->Update();
-  vtkStringArray *filenames = vtkStringArray::New();
+  std::vector<std::string> filenames;
   if( argc < 2 )
     {
     std::cerr << argv[0] << " filename1.dcm [filename2.dcm ...]\n";
@@ -110,7 +116,7 @@ int main( int argc, char *argv[] )
       gdcm::Directory::FilenamesType const &files = d.GetFilenames();
       for( gdcm::Directory::FilenamesType::const_iterator it = files.begin(); it != files.end(); ++it )
         {
-        filenames->InsertNextValue( it->c_str() );
+        filenames.push_back( it->c_str() );
         }
       }
     else // list of files passed directly on the cmd line:
@@ -127,7 +133,7 @@ int main( int argc, char *argv[] )
             }
           else
             {
-            filenames->InsertNextValue( filename );
+            filenames.push_back( filename );
             }
           }
         else
@@ -139,20 +145,60 @@ int main( int argc, char *argv[] )
     //names->Print( std::cout );
     }
 
+  gdcm::IPPSorter s;
+  s.SetComputeZSpacing( true );
+  s.SetZSpacingTolerance( 1e-3 );
+  bool b = s.Sort( filenames );
+  if( !b )
+    {
+    //std::cerr << "Failed to sort:" << directory << std::endl;
+    return 1;
+    }
+  std::cout << "Sorting succeeded:" << std::endl;
+  s.Print( std::cout );
+
+  std::cout << "Found z-spacing:" << std::endl;
+  std::cout << s.GetZSpacing() << std::endl;
+  double ippzspacing = s.GetZSpacing();
+
+  const std::vector<std::string> & sorted = s.GetFilenames();
+  vtkStringArray *files = vtkStringArray::New();
+  std::vector< std::string >::const_iterator it = sorted.begin();
+  for( ; it != sorted.end(); ++it)
+    {
+    const std::string &f = *it;
+    files->InsertNextValue( f.c_str() );
+    }
+
   //delete[] fname;
   vtkGDCMImageReader * reader = vtkGDCMImageReader::New();
-  reader->SetFileNames( filenames );
-  reader->Update();
+  reader->SetFileNames( files );
+  reader->Update(); // important
   //reader->GetOutput()->Print( std::cout );
+
+  const vtkFloatingPointType *spacing = reader->GetOutput()->GetSpacing();
 
   vtkImageChangeInformation *v16 = vtkImageChangeInformation::New();
   v16->SetInput( reader->GetOutput() );
-  //v16->SetOutputSpacing( spacing2[0], spacing2[1], ippzspacing );
-  v16->SetOutputSpacing( 1,1,1 );
+  v16->SetOutputSpacing( spacing[0], spacing[1], ippzspacing );
   v16->Update();
 
+#if 0
+    vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
+    writer->SetInput( v16->GetOutput() );
+    writer->SetFileLowerLeft( reader->GetFileLowerLeft() );
+    writer->SetDirectionCosines( reader->GetDirectionCosines() );
+    writer->SetImageFormat( reader->GetImageFormat() );
+    writer->SetFileDimensionality( 3); //reader->GetFileDimensionality() );
+    writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
+    writer->SetShift( reader->GetShift() );
+    writer->SetScale( reader->GetScale() );
+    writer->SetFileName( "out.dcm" );
+    writer->Write();
+#endif
 
-  filenames->Delete();
+
+  files->Delete();
 
   vtkOutlineFilter* outline = vtkOutlineFilter::New();
     outline->SetInputConnection(v16->GetOutputPort());
