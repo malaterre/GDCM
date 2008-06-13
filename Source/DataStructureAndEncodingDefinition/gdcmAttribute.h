@@ -344,9 +344,9 @@ protected:
     std::string s = std::string( bv->GetPointer(), bv->GetLength() );
     Length = bv->GetLength(); // HACK FIXME
     ss.str( s );
-    ArrayType internal[100]; // FIXME 
+    ArrayType internal[200]; // FIXME 
     EncodingImplementation<VRToEncoding<TVR>::Mode>::ReadComputeLength(internal, Length, ss);
-    assert( Length < 100 );
+    assert( Length < 200 );
     SetValues( internal, Length, true );
     //EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
     //  GetNumberOfValues(),ss);

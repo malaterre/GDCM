@@ -27,7 +27,13 @@ int main(int argc, char *argv[])
   reader->SetFileName( filename );
   reader->Update();
 
-  reader->GetOutput()->Print( std::cout );
+  reader->Print( std::cout );
+  unsigned int noutputs = reader->GetNumberOfOutputPorts();
+  std::cout << noutputs << std::endl;
+  for(unsigned int i = 0; i < noutputs; ++i)
+    {
+    reader->GetOutput(i)->Print( std::cout );
+    }
 
   return 0;
 }

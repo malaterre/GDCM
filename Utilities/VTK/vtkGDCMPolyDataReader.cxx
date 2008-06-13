@@ -28,17 +28,20 @@
 vtkCxxRevisionMacro(vtkGDCMPolyDataReader, "$Revision: 1.74 $");
 vtkStandardNewMacro(vtkGDCMPolyDataReader);
 
+//----------------------------------------------------------------------------
 vtkGDCMPolyDataReader::vtkGDCMPolyDataReader()
 {
   this->FileName = NULL;
   this->SetNumberOfInputPorts(0);
 }
 
+//----------------------------------------------------------------------------
 vtkGDCMPolyDataReader::~vtkGDCMPolyDataReader()
 {
   this->SetFileName(0);
 }
 
+//----------------------------------------------------------------------------
 int vtkGDCMPolyDataReader::RequestData(
   vtkInformation *vtkNotUsed(request),
   vtkInformationVector **vtkNotUsed(inputVector),
@@ -61,7 +64,7 @@ int vtkGDCMPolyDataReader::RequestData(
     return 0;
     }
 
-  if (!this->FileName || (this->FileName && (0==strlen(this->FileName))))
+  if ( !this->FileName || !*this->FileName )
     {
     vtkErrorMacro(<<"A FileName must be specified.");
     return 0;
@@ -70,6 +73,13 @@ int vtkGDCMPolyDataReader::RequestData(
   gdcm::Reader reader;
   reader.SetFileName( this->FileName );
   if( !reader.Read() )
+    {
+    return 0;
+    }
+  gdcm::MediaStorage ms;
+  ms.SetFromFile( reader.GetFile() );
+  //std::cout << ms << std::endl;
+  if( ms != gdcm::MediaStorage::RTStructureSetStorage )
     {
     return 0;
     }
@@ -110,35 +120,53 @@ int vtkGDCMPolyDataReader::RequestData(
     {
     return 0;
     }
-  const gdcm::Item & item2 = sqi2->GetItem(1);
-
-  const gdcm::DataSet& nestedds2 = item2.GetNestedDataSet();
-  //std::cout << nestedds2 << std::endl;
-  // (3006,0050) DS [43.57636\65.52504\-10.0\46.043102\62.564945\-10.0\49.126537\60.714... # 398,48 ContourData
-  gdcm::Tag tcontourdata(0x3006,0x0050);
-  const gdcm::DataElement & contourdata = nestedds2.GetDataElement( tcontourdata );
-  std::cout << contourdata << std::endl;
-
-  //const gdcm::ByteValue *bv = contourdata.GetByteValue();
-  gdcm::Attribute<0x3006,0x0050> at;
-  at.SetFromDataElement( contourdata );
-
-  vtkPoints *newPts = vtkPoints::New();
-  newPts->SetNumberOfPoints( at.GetNumberOfValues() / 3 );
-  const float* pts = at.GetValues();
-  for(unsigned int i = 0; i < at.GetNumberOfValues(); i+=3)
+  unsigned int nitems = sqi2->GetNumberOfItems();
+  std::cout << nitems << std::endl;
+  this->SetNumberOfOutputPorts(nitems);
+  for(unsigned int i = 0; i < nitems; ++i)
     {
-    float x[3];
-    x[0] = pts[i+0];
-    x[1] = pts[i+1];
-    x[2] = pts[i+2];
-    newPts->SetPoint( i / 3, x);
+    vtkInformation *ioutInfo = outputVector->GetInformationObject(i);
+    if( !this->GetOutput(i) )
+      {
+      vtkPolyData *pd = vtkPolyData::New();
+      this->GetExecutive()->SetOutputData(i, pd );
+      pd->Delete();
+      }
+    vtkPolyData *ioutput = vtkPolyData::SafeDownCast(
+      ioutInfo->Get(vtkDataObject::DATA_OBJECT()));
+
+    const gdcm::Item & item2 = sqi2->GetItem(i+1); // Item start at #1
+
+    const gdcm::DataSet& nestedds2 = item2.GetNestedDataSet();
+    //std::cout << nestedds2 << std::endl;
+    // (3006,0050) DS [43.57636\65.52504\-10.0\46.043102\62.564945\-10.0\49.126537\60.714... # 398,48 ContourData
+    gdcm::Tag tcontourdata(0x3006,0x0050);
+    const gdcm::DataElement & contourdata = nestedds2.GetDataElement( tcontourdata );
+    //std::cout << contourdata << std::endl;
+
+    //const gdcm::ByteValue *bv = contourdata.GetByteValue();
+    gdcm::Attribute<0x3006,0x0050> at;
+    at.SetFromDataElement( contourdata );
+
+    vtkPoints *newPts = vtkPoints::New();
+    newPts->SetNumberOfPoints( at.GetNumberOfValues() / 3 );
+    //assert( at.GetNumberOfValues() % 3 == 0); // FIXME
+    const float* pts = at.GetValues();
+    for(unsigned int i = 0; i < (at.GetNumberOfValues() / 3) * 3; i+=3)
+      {
+      float x[3];
+      x[0] = pts[i+0];
+      x[1] = pts[i+1];
+      x[2] = pts[i+2];
+      newPts->SetPoint( i / 3, x);
+      }
+    ioutput->SetPoints(newPts);
     }
-  output->SetPoints(newPts);
 
   return 1;
 }
 
+//----------------------------------------------------------------------------
 void vtkGDCMPolyDataReader::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os,indent);
