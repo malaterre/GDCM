@@ -158,3 +158,6 @@ play with imageplanewdg / Orthoplanewidget
 http://www.itk.org/pipermail/insight-users/2006-January/016463.html
 -----------------------------------------------------------------------
 window level in Enhanced objects is not handled
+-----------------------------------------------------------------------
+wow cpack is finally documented:
+http://www.itk.org/Wiki/CMake:Component_Install_With_CPack
