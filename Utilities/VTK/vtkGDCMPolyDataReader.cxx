@@ -20,6 +20,7 @@
 #include "vtkPolyData.h"
 #include "vtkStreamingDemandDrivenPipeline.h"
 #include "vtkFloatArray.h"
+#include "vtkCellArray.h"
 
 #include "gdcmReader.h"
 #include "gdcmAttribute.h"
@@ -122,22 +123,11 @@ int vtkGDCMPolyDataReader::RequestData(
     }
   unsigned int nitems = sqi2->GetNumberOfItems();
   std::cout << nitems << std::endl;
-  this->SetNumberOfOutputPorts(nitems);
+  //this->SetNumberOfOutputPorts(nitems);
+  vtkPoints *newPts = vtkPoints::New();
+  vtkCellArray *polys = vtkCellArray::New();
   for(unsigned int i = 0; i < nitems; ++i)
     {
-    vtkInformation *ioutInfo = outputVector->GetInformationObject(i);
-    ioutInfo->Set(vtkStreamingDemandDrivenPipeline::MAXIMUM_NUMBER_OF_PIECES(),
-      1);
-
-    if( !this->GetOutput(i) )
-      {
-      vtkPolyData *pd = vtkPolyData::New();
-      this->GetExecutive()->SetOutputData(i, pd );
-      pd->Delete();
-      }
-    vtkPolyData *ioutput = vtkPolyData::SafeDownCast(
-      ioutInfo->Get(vtkDataObject::DATA_OBJECT()));
-
     const gdcm::Item & item2 = sqi2->GetItem(i+1); // Item start at #1
 
     const gdcm::DataSet& nestedds2 = item2.GetNestedDataSet();
@@ -151,20 +141,26 @@ int vtkGDCMPolyDataReader::RequestData(
     gdcm::Attribute<0x3006,0x0050> at;
     at.SetFromDataElement( contourdata );
 
-    vtkPoints *newPts = vtkPoints::New();
-    newPts->SetNumberOfPoints( at.GetNumberOfValues() / 3 );
+    //newPts->SetNumberOfPoints( at.GetNumberOfValues() / 3 );
     //assert( at.GetNumberOfValues() % 3 == 0); // FIXME
     const float* pts = at.GetValues();
+    vtkIdType buffer[256];
     for(unsigned int i = 0; i < (at.GetNumberOfValues() / 3) * 3; i+=3)
       {
       float x[3];
       x[0] = pts[i+0];
       x[1] = pts[i+1];
       x[2] = pts[i+2];
-      newPts->SetPoint( i / 3, x);
+      vtkIdType ptId = newPts->InsertNextPoint( x );
+      buffer[i / 3] = ptId;
       }
-    ioutput->SetPoints(newPts);
+    // Each Contour Data is in fact a Cell:
+    polys->InsertNextCell( at.GetNumberOfValues() / 3 , buffer);
     }
+  output->SetPoints(newPts);
+  newPts->Delete();
+  output->SetPolys(polys);
+  polys->Delete();
 
   return 1;
 }

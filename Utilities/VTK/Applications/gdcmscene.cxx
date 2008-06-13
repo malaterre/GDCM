@@ -15,6 +15,7 @@
 #include "vtkGDCMPolyDataReader.h"
 
 #include "vtkAppendPolyData.h"
+#include "vtkPolyDataWriter.h"
 
 int main(int argc, char *argv[])
 {
@@ -30,20 +31,16 @@ int main(int argc, char *argv[])
   reader->Update();
 
   reader->Print( std::cout );
-  unsigned int noutputs = reader->GetNumberOfOutputPorts();
-  std::cout << noutputs << std::endl;
-  vtkAppendPolyData * append = vtkAppendPolyData::New();
-  for(unsigned int i = 0; i < noutputs; ++i)
-    {
-    //reader->GetOutput(i)->Print( std::cout );
-    append->AddInput( reader->GetOutput(i) );
-    }
-  append->Update();
+  reader->GetOutput()->Print( std::cout );
 
-  append->GetOutput()->Print( std::cout );
 
-  append->Delete();
+  vtkPolyDataWriter * writer = vtkPolyDataWriter::New();
+  writer->SetInput( reader->GetOutput() );
+  writer->SetFileName( "rtstruct.vtk" );
+  writer->Write();
+  
   reader->Delete();
+  writer->Delete();
 
   return 0;
 }
