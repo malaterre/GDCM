@@ -6,6 +6,7 @@ INCLUDE_DIRECTORIES(
 SET(GDCM_VTK_APPS
   gdcmviewer # vtkImageViewer2
   gdcmorthoplanes
+  gdcmscene
   )
 
 FOREACH(app ${GDCM_VTK_APPS})
