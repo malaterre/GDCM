@@ -344,10 +344,22 @@ protected:
     std::string s = std::string( bv->GetPointer(), bv->GetLength() );
     Length = bv->GetLength(); // HACK FIXME
     ss.str( s );
-    ArrayType internal[200]; // FIXME 
+    ArrayType *internal;
+    ArrayType buffer[256];
+    if( bv->GetLength() < 256 )
+      {
+      internal = buffer;
+      }
+    else
+      {
+      internal = new ArrayType[bv->GetLength()]; // over allocation
+      }
     EncodingImplementation<VRToEncoding<TVR>::Mode>::ReadComputeLength(internal, Length, ss);
-    assert( Length < 200 );
     SetValues( internal, Length, true );
+    if( !(bv->GetLength() < 256) )
+      {
+      delete[] internal;
+      }
     //EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
     //  GetNumberOfValues(),ss);
   }
