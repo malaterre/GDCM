@@ -22,6 +22,8 @@
 #include "vtkFloatArray.h"
 
 #include "gdcmReader.h"
+#include "gdcmAttribute.h"
+#include "gdcmSequenceOfItems.h"
 
 vtkCxxRevisionMacro(vtkGDCMPolyDataReader, "$Revision: 1.74 $");
 vtkStandardNewMacro(vtkGDCMPolyDataReader);
@@ -49,10 +51,9 @@ int vtkGDCMPolyDataReader::RequestData(
   vtkPolyData *output = vtkPolyData::SafeDownCast(
     outInfo->Get(vtkDataObject::DATA_OBJECT()));
 
-  FILE *fp;
-  vtkPoints *newPts, *mergedPts;
-  vtkCellArray *newPolys, *mergedPolys;
-  vtkFloatArray *newScalars=0, *mergedScalars=0;
+  //vtkPoints *newPts, *mergedPts;
+  //vtkCellArray *newPolys, *mergedPolys;
+  //vtkFloatArray *newScalars=0, *mergedScalars=0;
 
   // All of the data in the first piece.
   if (outInfo->Get(vtkStreamingDemandDrivenPipeline::UPDATE_PIECE_NUMBER()) > 0)
@@ -73,8 +74,67 @@ int vtkGDCMPolyDataReader::RequestData(
     return 0;
     }
 
-  
+  const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
+  // (3006,0020) SQ (Sequence with explicit length #=4)      # 370, 1 StructureSetROISequence  
+  // (3006,0039) SQ (Sequence with explicit length #=4)      # 24216, 1 ROIContourSequence
+  gdcm::Tag troicsq(0x3006,0x0039);
+  if( !ds.FindDataElement( troicsq ) )
+    {
+    return 0;
+    }
 
+  const gdcm::DataElement &roicsq = ds.GetDataElement( troicsq );
+  //std::cout << roicsq << std::endl;
+  const gdcm::SequenceOfItems *sqi = roicsq.GetSequenceOfItems();
+  if( !sqi || !sqi->GetNumberOfItems() )
+    {
+    return 0;
+    }
+
+  const gdcm::Item & item = sqi->GetItem(1);
+  //std::cout << item << std::endl;
+
+  const gdcm::DataSet& nestedds = item.GetNestedDataSet();
+  //std::cout << nestedds << std::endl;
+  //(3006,0040) SQ (Sequence with explicit length #=8)      # 4326, 1 ContourSequence
+  gdcm::Tag tcsq(0x3006,0x0040);
+  if( !nestedds.FindDataElement( tcsq ) )
+    {
+    return 0;
+    }
+  const gdcm::DataElement& csq = nestedds.GetDataElement( tcsq );
+  //std::cout << csq << std::endl;
+
+  const gdcm::SequenceOfItems *sqi2 = csq.GetSequenceOfItems();
+  if( !sqi2 || !sqi2->GetNumberOfItems() )
+    {
+    return 0;
+    }
+  const gdcm::Item & item2 = sqi2->GetItem(1);
+
+  const gdcm::DataSet& nestedds2 = item2.GetNestedDataSet();
+  //std::cout << nestedds2 << std::endl;
+  // (3006,0050) DS [43.57636\65.52504\-10.0\46.043102\62.564945\-10.0\49.126537\60.714... # 398,48 ContourData
+  gdcm::Tag tcontourdata(0x3006,0x0050);
+  const gdcm::DataElement & contourdata = nestedds2.GetDataElement( tcontourdata );
+  std::cout << contourdata << std::endl;
+
+  //const gdcm::ByteValue *bv = contourdata.GetByteValue();
+  gdcm::Attribute<0x3006,0x0050> at;
+  at.SetFromDataElement( contourdata );
+
+  vtkPoints *newPts = vtkPoints::New();
+  newPts->SetNumberOfPoints( at.GetNumberOfValues() / 3 );
+  const float* pts = at.GetValues();
+  for(unsigned int i = 0; i < at.GetNumberOfValues(); i+=3)
+    {
+    float x[3];
+    x[0] = pts[i+0];
+    x[1] = pts[i+1];
+    x[2] = pts[i+2];
+    newPts->SetPoint( i / 3, x);
+    }
+  output->SetPoints(newPts);
 
   return 1;
 }

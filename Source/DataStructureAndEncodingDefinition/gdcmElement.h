@@ -104,7 +104,8 @@ public:
       // Get the separator in between the values
       assert( _is );
       _is.get(sep);
-      assert( sep == '\\' ); // FIXME: Bad use of assert
+      assert( sep == '\\' || sep == ' ' ); // FIXME: Bad use of assert
+      if( sep == ' ' ) length--; // FIXME
       }
     }
 
