@@ -14,6 +14,8 @@
 =========================================================================*/
 #include "vtkGDCMPolyDataReader.h"
 
+#include "vtkAppendPolyData.h"
+
 int main(int argc, char *argv[])
 {
   if( argc < 2 )
@@ -30,10 +32,18 @@ int main(int argc, char *argv[])
   reader->Print( std::cout );
   unsigned int noutputs = reader->GetNumberOfOutputPorts();
   std::cout << noutputs << std::endl;
+  vtkAppendPolyData * append = vtkAppendPolyData::New();
   for(unsigned int i = 0; i < noutputs; ++i)
     {
-    reader->GetOutput(i)->Print( std::cout );
+    //reader->GetOutput(i)->Print( std::cout );
+    append->AddInput( reader->GetOutput(i) );
     }
+  append->Update();
+
+  append->GetOutput()->Print( std::cout );
+
+  append->Delete();
+  reader->Delete();
 
   return 0;
 }

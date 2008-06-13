@@ -38,6 +38,10 @@ protected:
   char *FileName;
 
   int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *);
+  int RequestInformation(
+    vtkInformation *vtkNotUsed(request),
+    vtkInformationVector **vtkNotUsed(inputVector),
+    vtkInformationVector *outputVector);
 
 private:
   vtkGDCMPolyDataReader(const vtkGDCMPolyDataReader&);  // Not implemented.
