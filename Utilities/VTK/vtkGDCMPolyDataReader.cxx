@@ -26,8 +26,8 @@
 #include "gdcmAttribute.h"
 #include "gdcmSequenceOfItems.h"
 
-vtkCxxRevisionMacro(vtkGDCMPolyDataReader, "$Revision: 1.74 $");
-vtkStandardNewMacro(vtkGDCMPolyDataReader);
+vtkCxxRevisionMacro(vtkGDCMPolyDataReader, "$Revision: 1.74 $")
+vtkStandardNewMacro(vtkGDCMPolyDataReader)
 
 //----------------------------------------------------------------------------
 vtkGDCMPolyDataReader::vtkGDCMPolyDataReader()
