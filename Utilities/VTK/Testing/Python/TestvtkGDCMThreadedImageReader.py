@@ -95,7 +95,7 @@ if __name__ == "__main__":
     r.SetFileNames( fullpath )
     assert fullpath.GetNumberOfValues() # Need at least one file
     ExecuteInformation(r, fullpath.GetValue(0), fullpath.GetNumberOfValues() )
-    #r.AddObserver("ProgressEvent", PrintProgress)
+    r.AddObserver("ProgressEvent", PrintProgress)
     r.Update()
     #print r.GetOutput()
     #print vtkMultiThreader.GetGlobalDefaultNumberOfThreads()
