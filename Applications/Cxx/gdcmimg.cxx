@@ -38,6 +38,7 @@
  *   DICOM avi  <->  avi
  *   DICOM wav  <->  wav
  *   DICOM pdf  <->  pdf
+ * Todo: check compat API with jhead 
  */
 #include "gdcmFilename.h"
 #include "gdcmReader.h"
