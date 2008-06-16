@@ -599,9 +599,24 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
         // PhilipsWith15Overlays.dcm has a Private SQ with public elements such as
         // 0028,3002, so we cannot look up element in current dataset, but have to get the root dataset
         // to loop up...
-        assert( rootds.FindDataElement( pixelrep ) );
+
+        // FIXME:
+        // gdcmDataExtra/gdcmSampleData/ImagesPapyrus/TestImages/wristb.pap
+        // It's the contrary: root dataset does not have a Pixel Representation, but each SQ do...
+        assert( rootds.FindDataElement( pixelrep ) || ds.FindDataElement( pixelrep ) );
         Attribute<0x0028,0x0103> at;
-        at.SetFromDataElement( rootds.GetDataElement( pixelrep ) );
+        if( ds.FindDataElement( pixelrep ) )
+          {
+          at.SetFromDataElement( ds.GetDataElement( pixelrep ) );
+          }
+        else if( rootds.FindDataElement( pixelrep ) )
+          {
+          at.SetFromDataElement( rootds.GetDataElement( pixelrep ) );
+          }
+        else
+          {
+          throw Exception( "Unhandled" );
+          }
         assert( at.GetValue() == 0 || at.GetValue() == 1 );
         if( at.GetValue() )
           {
@@ -684,6 +699,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
     // Print Value now:
     if( refvr & VR::VRASCII )
       {
+      assert( !sqi && !sqf );
       if( bv )
         {
         VL l = std::min( bv->GetLength(), MaxPrintLength );
