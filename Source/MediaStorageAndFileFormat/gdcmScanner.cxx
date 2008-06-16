@@ -35,6 +35,7 @@ void Scanner::ClearTags()
   Tags.clear();
 }
 
+// Warning: API is passing a public tag (no way to specify private tag)
 void Scanner::AddTag( Tag const & t )
 {
   static const Global &g = GlobalInstance;

@@ -755,6 +755,12 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
             assert( t == Tag(0x7fe0,0x0010) );
             //os << *sqf;
             }
+          else if ( sqi )
+            {
+            // gdcmDataExtra/gdcmSampleData/images_of_interest/illegal_UN_stands_for_SQ.dcm  
+            gdcmErrorMacro( "Should not happen: VR=UN but contains a SQ" );
+            //os << *sqi;
+            }
           else
             {
             assert( !sqi && !sqf );
