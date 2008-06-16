@@ -13,6 +13,7 @@ SET(vtkgdcm_SRCS
 IF(CMAKE_HAVE_PTHREAD_H)
   SET(vtkgdcm_SRCS ${vtkgdcm_SRCS}
   vtkGDCMThreadedImageReader.cxx
+  #vtkGDCMThreadedImageReader2.cxx
   )
 ENDIF(CMAKE_HAVE_PTHREAD_H)
 
