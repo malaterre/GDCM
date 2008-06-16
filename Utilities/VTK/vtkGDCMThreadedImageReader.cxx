@@ -312,16 +312,20 @@ void *ReadFilesThread(void *voidparams)
       // actually represent nthreads times the local progress...
       params->reader->UpdateProgress( progress + params->nthreads*progressdelta );
       }
-    const double shift = params->reader->GetShift();
-    const double scale = params->reader->GetScale();
-
+    // BUG:
+    //const double shift = params->reader->GetShift();
+    //const double scale = params->reader->GetScale();
+    // This is NOT safe to assume that shift/scale is constant thoughout the Series, this is better to
+    // read the shift/scale from the image
     const gdcm::Image &image = reader.GetImage();
+
+    const double shift = image.GetIntercept();
+    const double scale = image.GetSlope();
+
     unsigned long len = image.GetBufferLength();
     // When not applying a transform:
     // len -> sizeof stored image
     // params->len sizeof world value image (after transform)
-    //double reader_shift = params->reader->GetShift();
-    //double reader_scale = params->reader->GetScale();
     if( shift == 1 && scale == 0 )
       assert( len == params->len ); // that would be very bad 
 
