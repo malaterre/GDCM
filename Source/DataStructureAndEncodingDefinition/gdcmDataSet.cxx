@@ -41,11 +41,12 @@ std::string DataSet::GetPrivateCreator(const Tag &t) const
     assert( bv );
     std::string owner = std::string(bv->GetPointer(),bv->GetLength());
     // There should not be any trailing space character...
-    if( owner[owner.size()-1] == ' ' )
+    while( owner.size() && owner[owner.size()-1] == ' ' )
       {
+      // osirix/AbdominalCT/36382443 
       owner.erase(owner.size()-1,1);
       }
-    assert( owner[owner.size()-1] != ' ' );
+    assert( owner.size() == 0 || owner[owner.size()-1] != ' ' );
     return owner;
     }
   return "";
