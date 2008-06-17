@@ -383,6 +383,7 @@ int main( int argc, char *argv[] )
   ren1->Delete();
   ren2->Delete();
   v16->Delete();
+  reader->Delete();
 
   return 0;
 }

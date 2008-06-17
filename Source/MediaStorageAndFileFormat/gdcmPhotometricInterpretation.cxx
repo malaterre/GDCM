@@ -64,7 +64,7 @@ PhotometricInterpretation::PIType PhotometricInterpretation::GetPIType(const cha
     {
     if( strncmp(pi, PIStrings[i], strlen(pi) ) == 0 )
       {
-      gdcmWarningMacro( "PhotometricInterpretation was found: [" << pi 
+      gdcmDebugMacro( "PhotometricInterpretation was found: [" << pi 
         << "], but is invalid. It should be padded with a space" );
       return PIType(i);
       }
