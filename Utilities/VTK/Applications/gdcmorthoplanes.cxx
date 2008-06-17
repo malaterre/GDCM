@@ -237,7 +237,7 @@ int main( int argc, char *argv[] )
     planeWidgetX->SetResliceInterpolateToNearestNeighbour();
     planeWidgetX->SetInput(v16->GetOutput());
     planeWidgetX->SetPlaneOrientationToXAxes();
-    planeWidgetX->SetSliceIndex(32);
+    //planeWidgetX->SetSliceIndex(32);
     planeWidgetX->DisplayTextOn();
     planeWidgetX->On();
     planeWidgetX->InteractionOff();
@@ -253,9 +253,9 @@ int main( int argc, char *argv[] )
     planeWidgetY->SetResliceInterpolateToLinear();
     planeWidgetY->SetInput(v16->GetOutput());
     planeWidgetY->SetPlaneOrientationToYAxes();
-    planeWidgetY->SetSlicePosition(102.4);
+    //planeWidgetY->SetSlicePosition(102.4);
     planeWidgetY->SetLookupTable( planeWidgetX->GetLookupTable());
-    planeWidgetY->DisplayTextOff();
+    planeWidgetY->DisplayTextOn();
     planeWidgetY->UpdatePlacement();
     planeWidgetY->On();
 
@@ -269,7 +269,7 @@ int main( int argc, char *argv[] )
     planeWidgetZ->SetResliceInterpolateToCubic();
     planeWidgetZ->SetInput(v16->GetOutput());
     planeWidgetZ->SetPlaneOrientationToZAxes();
-    planeWidgetZ->SetSliceIndex(25);
+    //planeWidgetZ->SetSliceIndex(25);
     planeWidgetZ->SetLookupTable( planeWidgetX->GetLookupTable());
     planeWidgetZ->DisplayTextOn();
     planeWidgetZ->On();
@@ -321,18 +321,18 @@ int main( int argc, char *argv[] )
   // Set the actors' postions
   //
   renWin->Render();
-  iren->SetEventPosition( 175,175);
-  iren->SetKeyCode('r');
-  iren->InvokeEvent(vtkCommand::CharEvent,NULL);
-  iren->SetEventPosition( 475,175);
-  iren->SetKeyCode('r');
-  iren->InvokeEvent(vtkCommand::CharEvent,NULL);
-  renWin->Render();
+  //iren->SetEventPosition( 175,175);
+  //iren->SetKeyCode('r');
+  //iren->InvokeEvent(vtkCommand::CharEvent,NULL);
+  //iren->SetEventPosition( 475,175);
+  //iren->SetKeyCode('r');
+  //iren->InvokeEvent(vtkCommand::CharEvent,NULL);
+  //renWin->Render();
 
-  ren1->GetActiveCamera()->Elevation(110);
-  ren1->GetActiveCamera()->SetViewUp(0, 0, -1);
-  ren1->GetActiveCamera()->Azimuth(45);
-  ren1->GetActiveCamera()->Dolly(1.15);
+  //ren1->GetActiveCamera()->Elevation(110);
+  //ren1->GetActiveCamera()->SetViewUp(0, 0, -1);
+  //ren1->GetActiveCamera()->Azimuth(45);
+  //ren1->GetActiveCamera()->Dolly(1.15);
   ren1->ResetCameraClippingRange();
 
   // Playback recorded events
@@ -350,10 +350,10 @@ int main( int argc, char *argv[] )
 
   // Test SetKeyPressActivationValue for one of the widgets
   //
-  iren->SetKeyCode('z');
-  iren->InvokeEvent(vtkCommand::CharEvent,NULL);
-  iren->SetKeyCode('z');
-  iren->InvokeEvent(vtkCommand::CharEvent,NULL);
+  //iren->SetKeyCode('z');
+  //iren->InvokeEvent(vtkCommand::CharEvent,NULL);
+  //iren->SetKeyCode('z');
+  //iren->InvokeEvent(vtkCommand::CharEvent,NULL);
 
   //int retVal = vtkRegressionTestImage( renWin );
   //
