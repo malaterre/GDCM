@@ -41,6 +41,7 @@ std::string DataSet::GetPrivateCreator(const Tag &t) const
     assert( bv );
     std::string owner = std::string(bv->GetPointer(),bv->GetLength());
     // There should not be any trailing space character...
+    // TODO: tmp.erase(tmp.find_last_not_of(' ') + 1);
     while( owner.size() && owner[owner.size()-1] == ' ' )
       {
       // osirix/AbdominalCT/36382443 
@@ -72,7 +73,7 @@ Tag DataSet::ComputeDataElement(const PrivateTag & t) const
     std::string tmp(bv->GetPointer(),bv->GetLength());
     // trim trailing whitespaces:
     tmp.erase(tmp.find_last_not_of(' ') + 1);
-    assert( tmp[ tmp.size() - 1 ] != ' ' ); // FIXME
+    assert( tmp.size() == 0 || tmp[ tmp.size() - 1 ] != ' ' ); // FIXME
     if( System::StrCaseCmp( tmp.c_str(), refowner ) == 0 )
       {
       // found !
