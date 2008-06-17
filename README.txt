@@ -27,13 +27,4 @@ that something won't work. Cheers !
 
 (*) http://www.cmake.org for more information
 
-/**
-\mainpage GDCM Documentation
 
-This is the developpers documentation.
-
-A PDF version of this doxygen documentation can be found here:
-
-http://gdcm.sourceforge.net/gdcm.pdf
-
-*/
