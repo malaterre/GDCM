@@ -95,6 +95,8 @@ public:
     GEPrivate3DModelStorage,
     ToshibaPrivateDataStorage,
     MammographyCADSR,
+    KeyObjectSelectionDocument,
+    HangingProtocolStorage,
     MS_END
   } MSType; // Media Storage Type
 

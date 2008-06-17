@@ -108,6 +108,10 @@ static const char *MSStrings[] = {
   "1.2.392.200036.9116.7.8.1.1.1",
   // MammographyCADSR,
   "1.2.840.10008.5.1.4.1.1.88.50",
+  // KeyObjectSelectionDocument
+  "1.2.840.10008.5.1.4.1.1.88.59",
+  // HangingProtocolStorage
+  "1.2.840.10008.5.1.4.38.1",
   0
 };
 
@@ -158,6 +162,8 @@ bool MediaStorage::IsImage(MSType ms)
     || ms == DetachedVisitManagementSOPClass
     || ms == DetachedStudyManagementSOPClass
     || ms == EncapsulatedPDFStorage
+    || ms == KeyObjectSelectionDocument
+    || ms == HangingProtocolStorage
     || ms == RTStructureSetStorage )
     {
     return false;

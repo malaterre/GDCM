@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
   reader.SetFileName( filename );
   if( !reader.Read() )
     {
+    std::cerr << "Failed to read: " << filename << std::endl;
     return 1;
     }
   const gdcm::File &file = reader.GetFile();
