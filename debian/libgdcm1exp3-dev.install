@@ -1,5 +1,2 @@
-usr/lib/libgdcm.a
 usr/lib/libgdcm.so
-usr/lib/pkgconfig/gdcm-2.0.pc
 usr/include/gdcm-2.*/gdcm/*
-usr/share/gdcm-2.*/cmake

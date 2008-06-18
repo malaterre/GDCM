@@ -1,2 +1,3 @@
-usr/lib/python*/site-packages/gdcm.py 
-usr/lib/python*/site-packages/_gdcm.so* 
+usr/lib/python*/site-packages/gdcm-2.0/gdcm.py
+usr/lib/python*/site-packages/gdcm-2.0/_gdcm.so
+usr/lib/python*/site-packages/gdcm.pth

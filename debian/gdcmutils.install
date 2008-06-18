@@ -1,2 +1,2 @@
-usr/bin/osyncdump
-usr/bin/osyncbinary
+usr/bin/gdcmdump
+usr/bin/gdcmconv
