@@ -387,7 +387,8 @@ void MediaStorage::SetFromFile(File const &file)
       SetFromModality( ds );
       }
     }
-  //assert( MediaStorage::IsImage( ms ) );
+// BEGIN SPECIAL HANDLING FOR GDCM 1.2.x 'ReWrite'n files
+#if 0
   else if( MSField == MediaStorage::SecondaryCaptureImageStorage )
     {
     /*
@@ -407,6 +408,7 @@ void MediaStorage::SetFromFile(File const &file)
       MSField = ms2;
       }
     }
+#endif
 }
 
 } // end namespace gdcm
