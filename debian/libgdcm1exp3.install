@@ -1,6 +1,6 @@
-usr/lib/libopensync*.so.*
-usr/lib/opensync-*/formats/*.so
-usr/lib/opensync-*/osplugin 
-usr/share/opensync-*/capabilities
-usr/share/opensync-*/descriptions
-usr/share/opensync-*/schemas
+usr/lib/libgdcm*.so.*
+usr/lib/gdcm-*/formats/*.so
+usr/lib/gdcm-*/osplugin 
+usr/share/gdcm-*/capabilities
+usr/share/gdcm-*/descriptions
+usr/share/gdcm-*/schemas

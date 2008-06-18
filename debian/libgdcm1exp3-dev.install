@@ -1,5 +1,5 @@
-usr/lib/libopensync.a
-usr/lib/libopensync.so
-usr/lib/pkgconfig/opensync-1.0.pc
-usr/include/opensync-0.*/opensync/*
-usr/share/opensync-0.*/cmake
+usr/lib/libgdcm.a
+usr/lib/libgdcm.so
+usr/lib/pkgconfig/gdcm-2.0.pc
+usr/include/gdcm-2.*/gdcm/*
+usr/share/gdcm-2.*/cmake
