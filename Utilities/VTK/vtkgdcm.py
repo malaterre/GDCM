@@ -27,6 +27,7 @@ if os.name == 'posix':
   # revert:
   sys.setdlopenflags(orig_dlopen_flags)
   del sys, dl
+  del orig_dlopen_flags
 else:
   from vtkgdcmPython import *
 
