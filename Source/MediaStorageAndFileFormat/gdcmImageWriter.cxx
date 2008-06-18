@@ -285,7 +285,11 @@ bool ImageWriter::Write()
   assert( ms != MediaStorage::MS_END );
 
   // Do the Rescale Intercept & Slope
-  ImageHelper::SetRescaleInterceptSlopeValue(GetFile(), PixelData);
+  if( pf.GetSamplesPerPixel() == 1 )
+    {
+    assert( pi == PhotometricInterpretation::MONOCHROME1 || pi == PhotometricInterpretation::MONOCHROME2 );
+    ImageHelper::SetRescaleInterceptSlopeValue(GetFile(), PixelData);
+    }
 
   const char* msstr = MediaStorage::GetMSString(ms);
   if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )

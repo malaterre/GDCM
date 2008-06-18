@@ -7,6 +7,7 @@ SET(GDCM_VTK_APPS
   gdcmviewer # vtkImageViewer2
   gdcmorthoplanes
   gdcmscene
+  gdcm2vtk
   )
 
 FOREACH(app ${GDCM_VTK_APPS})
