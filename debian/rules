@@ -1,97 +1,132 @@
 #!/usr/bin/make -f
+# Based on the multi2 sample debian/rules file:
+# ---
+# Sample debian/rules that uses debhelper.
+# This file is public domain software, originally written by Joey Hess.
+#
+# This version is for a multibinary package. It also allows you to build any
+# of the binary packages independantly, via binary-<package> targets.
+# ---
 
-DARCH      := $(shell dpkg --print-installation-architecture)
-CFLAGS     := -Wall -g $(if $(findstring noopt,$(DEB_BUILD_OPTIONS)),-O0,-O2)
+# Uncomment this to turn on verbose mode. 
+#export DH_VERBOSE=1
 
-patch: patch-stamp
-patch-stamp:
-	echo "patch-stamp"
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
 
-configure: configure-stamp
-configure-stamp:
-	dh_testdir
-	# pre-load the cache to avoid setting rpath:
-	rm -rf ../Build && mkdir -p ../Build
-	echo VERBOSE_BUILD:BOOL=ON            >> ../Build/CMakeCache.txt
-	echo CMAKE_C_FLAGS:STRING=$(CFLAGS)   >> ../Build/CMakeCache.txt
-	echo CMAKE_CXX_FLAGS:STRING=$(CFLAGS) >> ../Build/CMakeCache.txt
-	echo GDCM_BUILD_APPLICATIONS:BOOL=ON  >> ../Build/CMakeCache.txt
-	echo GDCM_BUILD_SHARED_LIBS:BOOL=ON   >> ../Build/CMakeCache.txt
-	echo GDCM_BUILD_TESTING:BOOL=OFF      >> ../Build/CMakeCache.txt
-	echo GDCM_WRAP_PYTHON:BOOL=ON         >> ../Build/CMakeCache.txt
-	echo CMAKE_BUILD_TYPE:STRING=Release  >> ../Build/CMakeCache.txt
-	echo CMAKE_CXX_FLAGS:STRING=          >> ../Build/CMakeCache.txt
-	echo CMAKE_C_FLAGS:STRING=            >> ../Build/CMakeCache.txt
-	echo GDCM_USE_SYSTEM_EXPAT:BOOL=ON    >> ../Build/CMakeCache.txt
-	echo GDCM_USE_SYSTEM_UUID:BOOL=ON     >> ../Build/CMakeCache.txt
-	echo GDCM_USE_SYSTEM_ZLIB:BOOL=ON     >> ../Build/CMakeCache.txt
-	# turn on debian package only, deactivate all others:
-	echo CPACK_BINARY_DEB:BOOL=ON         >> ../Build/CMakeCache.txt
-	echo CPACK_BINARY_RPM:BOOL=OFF        >> ../Build/CMakeCache.txt
-	echo CPACK_BINARY_STGZ:BOOL=OFF       >> ../Build/CMakeCache.txt
-	echo CPACK_BINARY_TBZ2:BOOL=OFF       >> ../Build/CMakeCache.txt
-	echo CPACK_BINARY_TGZ:BOOL=OFF        >> ../Build/CMakeCache.txt
-	echo CPACK_BINARY_TZ:BOOL=OFF         >> ../Build/CMakeCache.txt
-	echo CPACK_SOURCE_TBZ2:BOOL=OFF       >> ../Build/CMakeCache.txt
-	echo CPACK_SOURCE_TGZ:BOOL=OFF        >> ../Build/CMakeCache.txt
-	echo CPACK_SOURCE_TZ:BOOL=OFF         >> ../Build/CMakeCache.txt
-	echo CPACK_SOURCE_ZIP:BOOL=OFF        >> ../Build/CMakeCache.txt
-	#$(if $(USE_DARTP),echo DART_ROOT:PATH=/usr/share/Dart              >> Build/CMakeCache.txt)
-	#$(if $(USE_DARTP),echo BUILDNAME:STRING=cmake_2.2.3-1_$(DARCH).deb >> Build/CMakeCache.txt)
-	cd ../Build && cmake ../gdcm-2.0.0
-	#chmod -x ChangeLog.manual
-	#chmod -x Modules/*.cmake  Modules/*.cmake.in Modules/*.cxx Modules/Platform/*
+# These are used for cross-compiling and for saving the configure script
+# from having to guess our platform (since we know it already)
+DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+
+CFLAGS = -Werror -g
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+	CFLAGS += -O0
+else
+	CFLAGS += -O2
+endif
+
+export CFLAGS
+
+SRC	:= $(CURDIR)
+BUILD	:= $(CURDIR)/debian/build
+TARGET	:= $(CURDIR)/debian/tmp
+
+PYVERS  := $(shell pyversions -vs)
+
+debian/configure-stamp: $(PYVERS:%=debian/configure-python%-stamp) 
 	touch $@
 
-build: patch-stamp configure-stamp build-stamp
-build-stamp:
+debian/configure-python%-stamp: 
 	dh_testdir
-	cd ../Build && $(MAKE) -j4 $(if $(USE_DARTP),Experimental && $(MAKE) ExperimentalSubmit) && make package
+	[ -d $(BUILD)-python$* ] || mkdir $(BUILD)-python$*
+	cd $(BUILD)-python$* && cmake $(CURDIR) -DCMAKE_INSTALL_PREFIX="/usr" \
+		-DCMAKE_C_COMPILER="/usr/bin/cc" \
+		-DCMAKE_C_FLAGS="-g -Wall -O2" \
+		-DCMAKE_SKIP_RPATH=ON \
+		-DCMAKE_VERBOSE_MAKEFILE=ON \
+		-DPREFERRED_PYTHON_VERSION=python$* \
+		-DOPENSYNC_DEBUG_MODULES=ON \
+		-DOPENSYNC_UNITTESTS=ON
 	touch $@
 
-clean: unpatch
+build: debian/build-stamp
+
+debian/build-stamp: debian/configure-stamp $(PYVERS:%=debian/build-python%-stamp)
+	touch $@
+
+debian/build-python%-stamp: 
+	dh_testdir
+	$(MAKE) -C $(BUILD)-python$*
+	-(cd $(BUILD)-python$* && LD_LIBRARY_PATH=$(BUILD)-python$*/opensync ctest --force-new-ctest-process -V)
+	touch $@
+
+clean:
 	dh_testdir
 	dh_testroot
-	rm -rf .pc build-stamp configure-stamp patch-stamp
-	rm -rf ../Build
+	rm -f debian/configure*stamp debian/build*stamp 
+	rm -rf debian/build*
 	dh_clean
 
-install: build
+install: DH_OPTIONS=
+install: debian/build-stamp install-common $(PYVERS:%=install-python%)
+install-common:
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	# Add here commands to install the package into debian/cmake.
-	cd ../Build && $(MAKE) DESTDIR=$(CURDIR)/debian/cmake install
-	#install -D -m 644 debian/cmake.xpm      debian/cmake/usr/share/pixmaps/cmake.xpm
-	#install -D -m 644 debian/cmake.lintian  debian/cmake/usr/share/lintian/overrides/cmake
-	#cp Docs/cmake-syntax.vim debian/cmake/usr/share/vim/addons/syntax/cmake.vim
-	#cp Docs/cmake-mode.el debian/cmake/usr/share/emacs/site-lisp/
 
-# Build architecture-independent files here.
-binary-indep: build install
+install-python%:
+	$(MAKE) -C $(BUILD)-python$* install DESTDIR=$(TARGET)
 
-# Build architecture-dependent files here.
-binary-arch: build install
+# This single target is used to build all the packages, all at once, or
+# one at a time. So keep in mind: any options passed to commands here will
+# affect _all_ packages. Anything you want to only affect one package
+# should be put in another target, such as the install target.
+binary-common:
 	dh_testdir
 	dh_testroot
+	dh_installchangelogs
 	dh_installdocs
 	dh_installexamples
 	dh_installmenu
-	dh_installemacsen
-	dh_installcron
-	dh_installman
-	dh_installinfo
-	#dh_installchangelogs ChangeLog.txt ChangeLog.manual
+#	dh_installdebconf
+#	dh_installlogrotate
+#	dh_installemacsen
+#	dh_installcatalogs
+#	dh_installpam
+#	dh_installmime
+#	dh_installinit
+#	dh_installman
+#	dh_installcron
+#	dh_installinfo
+	dh_install --sourcedir=$(TARGET) --fail-missing
+	dh_strip --dbg-package=libopensync1exp3-dbg
 	dh_link
-	dh_strip
-	#dh_compress -XCMake.pdf
+	dh_compress
 	dh_fixperms
+#	dh_perl
+	dh_pysupport
+	dh_python
+	dh_makeshlibs -Xformats -V
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb
 
+# Build architecture independant packages using the common target.
+binary-indep: build install
+# (Uncomment this next line if you have such packages.)
+#	 $(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
+
+# Build architecture dependant packages using the common target.
+binary-arch: build install
+	$(MAKE) -f $(SRC)/debian/rules DH_OPTIONS=-a binary-common
+
+# Any other binary targets build just one binary package at a time.
+binary-%: build install
+	make -f $(SRC)/debian/rules binary-common DH_OPTIONS=-p$*
+
 binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install configure patch unpatch
+.PHONY: build clean binary-indep binary-arch binary-common binary install install-common
