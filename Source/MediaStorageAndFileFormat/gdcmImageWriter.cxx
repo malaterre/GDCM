@@ -290,6 +290,10 @@ bool ImageWriter::Write()
     assert( pi == PhotometricInterpretation::MONOCHROME1 || pi == PhotometricInterpretation::MONOCHROME2 );
     ImageHelper::SetRescaleInterceptSlopeValue(GetFile(), PixelData);
     }
+  else
+    {
+    assert( PixelData.GetIntercept() == 0 && PixelData.GetSlope() == 1 );
+    }
 
   const char* msstr = MediaStorage::GetMSString(ms);
   if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )
