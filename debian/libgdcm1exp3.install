@@ -1,0 +1,6 @@
+usr/lib/libopensync*.so.*
+usr/lib/opensync-*/formats/*.so
+usr/lib/opensync-*/osplugin 
+usr/share/opensync-*/capabilities
+usr/share/opensync-*/descriptions
+usr/share/opensync-*/schemas

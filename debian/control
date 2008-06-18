@@ -1,14 +1,48 @@
 Source: gdcm
-Section: devel
+Section: libs
 Priority: optional
-Maintainer: Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>
-Build-Depends: debhelper (>> 5.0.0), cmake (>> 2.6)
+Maintainer: Mathieu Malaterre <mathieu.malaterre@gmail.com>
+Uploaders: Bla Foo <bla.foo@example.org>
+Build-Depends: debhelper (>= 5.0.37.2), python-all-dev (>= 2.3.5-11), 
+ python-support (>= 0.3.9), 
+ swig, cmake
 Standards-Version: 3.7.3
 
-Package: gdcm
+Package: gdcmutils
 Architecture: any
+Section: utils
 Depends: ${shlibs:Depends}
-Description: A DICOM library
- This is a dummy file, this will NOT be used to package gdcm, since
- the process is using cpack (cmake) for generating. But we need
- this fake file to please dpkg-buildpackage
+Description: Command line utilities for libgdcm
+ Libgdcm provides a number of command line debugging and utility programs.
+ Install this package for the osyncdump, osyncstress, osyncplugin, osynctest,
+ osyncbinary programs.
+
+Package: libgdcm1exp3-dev
+Section: libdevel
+Provides: libgdcm-dev
+Conflicts: libgdcm-dev
+Architecture: any
+Depends: libgdcm1exp3 (= ${binary:Version}), libglib2.0-dev, libsqlite3-dev, libxml2-dev
+Description: Headers and static libraries for libgdcm
+ Headers and static libraries for libgdcm. These are not needed to use
+ gdcm, but are needed to build plugins or programs like multisync that
+ link against libgdcm.
+
+Package: libgdcm1exp3-dbg
+Architecture: any
+Priority: extra
+Depends: libgdcm1exp3 (= ${binary:Version})
+Description: Debug symbols for libgdcm1exp3
+ Debug symbols for libgdcm that will allow useful tracebacks and debugging
+ on end user machines.
+
+Package: python-gdcm
+Section: python
+Architecture: any
+Depends: ${shlibs:Depends}, ${python:Depends}, libgdcm1exp3 (= ${binary:Version})
+Provides: ${python:Provides}
+Replaces: python2.4-gdcm (<< 0.18-2.1)
+Conflicts: python2.4-gdcm (<< 0.18-2.1)
+XB-Python-Version: ${python:Versions}
+Description: Python bindings to the gdcm synchronisation engine
+ Python bindings to the gdcm synchronisation engine.
