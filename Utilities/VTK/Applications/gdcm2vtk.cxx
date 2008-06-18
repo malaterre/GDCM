@@ -18,6 +18,11 @@
 #include "vtkImageReader2Factory.h"
 #include "vtkImageReader2.h"
 #include "vtkImageData.h"
+#include "vtkMINCImageReader.h"
+#include "vtkMINCImageAttributes.h"
+#include "vtkMedicalImageProperties.h"
+
+#include "gdcmFilename.h"
 
 int main(int argc, char *argv[])
 {
@@ -37,7 +42,22 @@ int main(int argc, char *argv[])
   vtkGDCMImageWriter * writer = vtkGDCMImageWriter::New();
   writer->SetFileName( outfilename );
   writer->SetInput( imgreader->GetOutput() );
+
+  gdcm::Filename fn( filename );
+  if( strcmp(fn.GetExtension(), ".mnc") == 0 )
+    {
+    //std::cout << "minc" << std::endl;
+    vtkMINCImageReader *reader = vtkMINCImageReader::SafeDownCast( imgreader );
+    writer->SetDirectionCosines( reader->GetDirectionCosines() );
+    //writer->GetMedicalImageProperties()->SetModality( "MR" );
+    writer->SetScale( reader->GetRescaleSlope() );
+    writer->SetShift( reader->GetRescaleIntercept() );
+    reader->GetImageAttributes()->PrintFileHeader();
+    }
+
   writer->Write();
+
+  imgreader->GetOutput()->Print( std::cout );
 
   writer->Delete();
   imgreader->Delete();
