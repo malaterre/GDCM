@@ -46,7 +46,7 @@
 vtkCxxRevisionMacro(vtkGDCMImageWriter, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMImageWriter)
 
-vtkCxxSetObjectMacro(vtkGDCMImageWriter,LookupTable,vtkLookupTable)
+//vtkCxxSetObjectMacro(vtkGDCMImageWriter,LookupTable,vtkLookupTable)
 vtkCxxSetObjectMacro(vtkGDCMImageWriter,MedicalImageProperties,vtkMedicalImageProperties)
 vtkCxxSetObjectMacro(vtkGDCMImageWriter,FileNames,vtkStringArray)
 vtkCxxSetObjectMacro(vtkGDCMImageWriter,DirectionCosines,vtkMatrix4x4)
@@ -74,7 +74,7 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
   this->DataUpdateExtent[4] = 0;
   this->DataUpdateExtent[5] = 0;
 
-  this->LookupTable = vtkLookupTable::New();
+  //this->LookupTable = vtkLookupTable::New();
   this->MedicalImageProperties = vtkMedicalImageProperties::New();
   this->FileNames = vtkStringArray::New();
   this->StudyUID = 0;
@@ -105,7 +105,7 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
 //----------------------------------------------------------------------------
 vtkGDCMImageWriter::~vtkGDCMImageWriter()
 {
-  this->LookupTable->Delete();
+  //this->LookupTable->Delete();
   this->MedicalImageProperties->Delete();
   this->FileNames->Delete();
   this->SetStudyUID(NULL);
@@ -615,6 +615,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   if( pi == gdcm::PhotometricInterpretation::PALETTE_COLOR )
     {
     vtkLookupTable * vtklut = data->GetPointData()->GetScalars()->GetLookupTable();
+    //vtkLookupTable * vtklut = this->LookupTable;
     assert( vtklut );
     assert( vtklut->GetNumberOfTableValues() == 256 );
     gdcm::SmartPointer<gdcm::LookupTable> lut = new gdcm::LookupTable;

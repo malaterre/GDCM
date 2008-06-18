@@ -285,9 +285,9 @@ bool ImageWriter::Write()
   assert( ms != MediaStorage::MS_END );
 
   // Do the Rescale Intercept & Slope
-  if( pf.GetSamplesPerPixel() == 1 )
+  if( pi == PhotometricInterpretation::MONOCHROME1 || pi == PhotometricInterpretation::MONOCHROME2 )
     {
-    assert( pi == PhotometricInterpretation::MONOCHROME1 || pi == PhotometricInterpretation::MONOCHROME2 );
+    assert( pf.GetSamplesPerPixel() == 1 );
     ImageHelper::SetRescaleInterceptSlopeValue(GetFile(), PixelData);
     }
   else

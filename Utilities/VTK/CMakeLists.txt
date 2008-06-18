@@ -67,6 +67,7 @@ ELSE( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageColorViewer.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageMapToWindowLevelColors2.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageYBRToRGB.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageRGBToYBR.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkGDCMPolyDataReader.cxx
   )
 
