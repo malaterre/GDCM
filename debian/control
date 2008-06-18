@@ -3,8 +3,8 @@ Section: libs
 Priority: optional
 Maintainer: Mathieu Malaterre <mathieu.malaterre@gmail.com>
 Uploaders: Bla Foo <bla.foo@example.org>
-Build-Depends: debhelper (>= 5.0.37.2), python-all-dev (>= 2.3.5-11), 
- python-support (>= 0.3.9), 
+Build-Depends: debhelper (>= 5.0.37.2), python-all-dev (>= 2.3.5-11),
+ python-support (>= 0.3.9), uuid-dev, zlib1g-dev, libexpat1-dev,
  swig, cmake
 Standards-Version: 3.7.3
 
@@ -14,18 +14,18 @@ Section: utils
 Depends: ${shlibs:Depends}
 Description: Command line utilities for libgdcm
  Libgdcm provides a number of command line debugging and utility programs.
- Install this package for the osyncdump, osyncstress, osyncplugin, osynctest,
- osyncbinary programs.
+ Install this package for the gdcmdump, gdcmconv, gdcmimg, gdcmscanner,
+ gdcmviewer programs.
 
 Package: libgdcm1exp3-dev
 Section: libdevel
 Provides: libgdcm-dev
 Conflicts: libgdcm-dev
 Architecture: any
-Depends: libgdcm1exp3 (= ${binary:Version}), libglib2.0-dev, libsqlite3-dev, libxml2-dev
+Depends: libgdcm1exp3 (= ${binary:Version}), libuuid-dev
 Description: Headers and static libraries for libgdcm
  Headers and static libraries for libgdcm. These are not needed to use
- gdcm, but are needed to build plugins or programs like multisync that
+ gdcm, but are needed to build plugins or programs like foobar that
  link against libgdcm.
 
 Package: libgdcm1exp3-dbg
@@ -44,5 +44,5 @@ Provides: ${python:Provides}
 Replaces: python2.4-gdcm (<< 0.18-2.1)
 Conflicts: python2.4-gdcm (<< 0.18-2.1)
 XB-Python-Version: ${python:Versions}
-Description: Python bindings to the gdcm synchronisation engine
- Python bindings to the gdcm synchronisation engine.
+Description: Python bindings to the gdcm DICOM library
+ Python bindings to the gdcm DICOM library.
