@@ -625,8 +625,17 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
 
   // D 0028|0103 [US] [Pixel Representation] [0]
-  pf.SetPixelRepresentation(
-    ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
+  Tag tpixelrep(0x0028, 0x0103);
+  if( ds.FindDataElement( tpixelrep ) && !ds.GetDataElement( tpixelrep ).IsEmpty() )
+    {
+    pf.SetPixelRepresentation(
+      ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
+    }
+  else
+    {
+    gdcmWarningMacro( "Pixel Representation was not found. Default to Unsigned Pixel Representation" );
+    pf.SetPixelRepresentation( 0 );
+    }
 
   // Very important to set the PixelFormat here before PlanarConfiguration
   PixelData.SetPixelFormat( pf );

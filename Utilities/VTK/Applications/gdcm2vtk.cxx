@@ -21,6 +21,7 @@
 #include "vtkMINCImageReader.h"
 #include "vtkMINCImageAttributes.h"
 #include "vtkMedicalImageProperties.h"
+#include "vtkTIFFReader.h"
 
 #include "gdcmFilename.h"
 
@@ -33,7 +34,10 @@ int main(int argc, char *argv[])
   const char *filename = argv[1];
   const char *outfilename = argv[2];
 
+  vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
+
   vtkImageReader2Factory* imgfactory = vtkImageReader2Factory::New();
+  imgfactory->RegisterReader( reader );
   vtkImageReader2* imgreader =
     imgfactory->CreateImageReader2(filename);
   imgreader->SetFileName(filename);
@@ -44,15 +48,27 @@ int main(int argc, char *argv[])
   writer->SetInput( imgreader->GetOutput() );
 
   gdcm::Filename fn( filename );
-  if( strcmp(fn.GetExtension(), ".mnc") == 0 )
+
+  if( vtkGDCMImageReader * reader = vtkGDCMImageReader::SafeDownCast(imgreader) )
     {
-    //std::cout << "minc" << std::endl;
-    vtkMINCImageReader *reader = vtkMINCImageReader::SafeDownCast( imgreader );
+    writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
+    }
+  else if( vtkMINCImageReader *reader = vtkMINCImageReader::SafeDownCast( imgreader ) )
+    {
     writer->SetDirectionCosines( reader->GetDirectionCosines() );
     //writer->GetMedicalImageProperties()->SetModality( "MR" );
-    writer->SetScale( reader->GetRescaleSlope() );
-    writer->SetShift( reader->GetRescaleIntercept() );
+    // the following does not work with VTKData/Data/t3_grid_0.mnc
+    //writer->SetScale( reader->GetRescaleSlope() );
+    //writer->SetShift( reader->GetRescaleIntercept() );
     reader->GetImageAttributes()->PrintFileHeader();
+    }
+  else if( vtkTIFFReader *reader = vtkTIFFReader::SafeDownCast( imgreader ) )
+    {
+    // TIFF has resolution (spacing), and VTK make sure to set set in mm
+    // For some reason vtkTIFFReader is all skrew up and will load the image in whatever orientation
+    // as stored on file, thus this is up to the user to set it properly...
+    // If anyone has any clue why...
+    reader->SetOrientationType( 4 );
     }
 
   writer->Write();
@@ -61,6 +77,7 @@ int main(int argc, char *argv[])
 
   writer->Delete();
   imgreader->Delete();
+  reader->Delete();
 
   return 0;
 }
