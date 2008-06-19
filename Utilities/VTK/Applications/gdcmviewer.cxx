@@ -46,6 +46,7 @@ class vtkLogoWidget;
 class vtkBiDimensionalWidget;
 class vtkDistanceWidget;
 class vtkLogoRepresentation;
+class vtkContourWidget;
 #endif
 #if VTK_MAJOR_VERSION >= 5
 #include "vtkImageYBRToRGB.h"
