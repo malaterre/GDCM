@@ -8,6 +8,16 @@ Build-Depends: debhelper (>= 5.0.37.2), python-all-dev (>= 2.3.5-11),
  swig, cmake
 Standards-Version: 3.7.3
 
+Package: libgdcm1exp3
+Architecture: any
+Depends: ${shlibs:Depends}
+Recommends: dcmtk
+Suggests: msynctool
+Description: Synchronisation framework for email/pdas/and more
+ A synchronisation framework for synchronising data in various format. You
+ can use libopensync from programs. See multisync for an existing X11 gui
+ program that uses opensync.
+
 Package: gdcmutils
 Architecture: any
 Section: utils
