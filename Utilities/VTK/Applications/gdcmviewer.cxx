@@ -31,8 +31,12 @@
 #include "vtkImageActor.h"
 #include "vtkWindowToImageFilter.h"
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#include "vtkBalloonWidget.h"
+#include "vtkBalloonRepresentation.h"
 #include "vtkLogoWidget.h"
 #include "vtkLogoRepresentation.h"
+#include "vtkAngleWidget.h"
+#include "vtkAngleRepresentation2D.h"
 #include "vtkBiDimensionalWidget.h"
 #include "vtkBiDimensionalRepresentation2D.h"
 #include "vtkDistanceWidget.h"
@@ -47,6 +51,7 @@ class vtkBiDimensionalWidget;
 class vtkDistanceWidget;
 class vtkLogoRepresentation;
 class vtkContourWidget;
+class vtkAngleWidget;
 #endif
 #if VTK_MAJOR_VERSION >= 5
 #include "vtkImageYBRToRGB.h"
@@ -162,6 +167,7 @@ public:
     IconWidget = NULL;
     DistanceWidget = NULL;
     BiDimWidget = NULL;
+    AngleWidget = NULL;
     ContourWidget = NULL;
     picker = vtkWorldPointPicker::New();
     }
@@ -201,6 +207,10 @@ public:
         else if ( keycode == 'l' )
           {
           IconWidget->Off();
+          }
+        else if ( keycode == 'a' )
+          {
+          AngleWidget->On();
           }
         else if ( keycode == 'b' )
           {
@@ -256,10 +266,27 @@ public:
   vtkWorldPointPicker *picker;
   vtkLogoWidget *IconWidget;
   vtkDistanceWidget *DistanceWidget;
+  vtkAngleWidget *AngleWidget;
   vtkBiDimensionalWidget *BiDimWidget;
   vtkContourWidget *ContourWidget;
 
 };
+
+class vtkBalloonCallback : public vtkCommand
+{
+public:
+  static vtkBalloonCallback *New() 
+    { return new vtkBalloonCallback; }
+  virtual void Execute(vtkObject *caller, unsigned long, void*)
+    {
+      vtkBalloonWidget *balloonWidget = reinterpret_cast<vtkBalloonWidget*>(caller);
+      if ( balloonWidget->GetCurrentProp() != NULL )
+        {
+        cout << "Prop selected\n";
+        }
+    }
+};
+
 
 // A feature in VS6 make it painfull to write template code
 // that do not contain the template parameter in the function
@@ -320,8 +347,13 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   dwidget->SetRepresentation(rep);
   rep->Delete();
 
-  vtkBiDimensionalRepresentation2D *brep = vtkBiDimensionalRepresentation2D::New();
+  vtkAngleRepresentation2D *anglerep = vtkAngleRepresentation2D::New();
+  vtkAngleWidget *anglewidget = vtkAngleWidget::New();
+  anglewidget->SetInteractor(iren);
+  anglewidget->SetRepresentation(anglerep);
+  anglerep->Delete();
 
+  vtkBiDimensionalRepresentation2D *brep = vtkBiDimensionalRepresentation2D::New();
   vtkBiDimensionalWidget *bwidget = vtkBiDimensionalWidget::New();
   bwidget->SetInteractor(iren);
   bwidget->SetRepresentation(brep);
@@ -333,6 +365,16 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   contourWidget->SetRepresentation(contourRep);
   contourRep->Delete();
 
+  vtkBalloonRepresentation *balloonrep = vtkBalloonRepresentation::New();
+  balloonrep->SetBalloonLayoutToImageRight();
+
+  vtkBalloonWidget *balloonwidget = vtkBalloonWidget::New();
+  balloonwidget->SetInteractor(iren);
+  balloonwidget->SetRepresentation(balloonrep);
+  balloonwidget->AddBalloon(viewer->GetImageActor(),"This is a DICOM image",NULL);
+
+  vtkBalloonCallback *cbk = vtkBalloonCallback::New();
+  balloonwidget->AddObserver(vtkCommand::WidgetActivateEvent,cbk);
 
   vtkLogoWidget * iconwidget = 0;
   if( reader->GetNumberOfIconImages() )
@@ -340,6 +382,10 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     vtkLogoRepresentation *rep = vtkLogoRepresentation::New();
     rep->SetImage(reader->GetIconImage());
     //reader->GetIconImage()->Print( std::cout );
+
+    //vtkPropCollection *pc = vtkPropCollection::New();
+    //rep->GetActors2D(pc);
+    //balloonwidget->AddBalloon(pc->GetLastProp(),"This is a DICOM thumbnail image",NULL);
 
     vtkLogoWidget *widget = vtkLogoWidget::New();
     widget->SetInteractor(iren);
@@ -484,8 +530,10 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   if(iconwidget) iconwidget->On();
   obs->IconWidget = iconwidget;
   obs->DistanceWidget = dwidget;
+  obs->AngleWidget = anglewidget;
   obs->BiDimWidget = bwidget;
   obs->ContourWidget = contourWidget;
+  balloonwidget->On();
 #endif
   iren->AddObserver(vtkCommand::CharEvent,obs);
   iren->AddObserver(vtkCommand::EndPickEvent,obs);
@@ -520,7 +568,11 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   reader->Delete();
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
   dwidget->Off();
+  balloonwidget->Off();
+  balloonwidget->Delete();
   dwidget->Delete();
+  anglewidget->Off();
+  anglewidget->Delete();
   bwidget->Off();
   bwidget->Delete();
   contourWidget->Off();
