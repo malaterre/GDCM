@@ -85,7 +85,7 @@ private:
   VR ValueRepresentation;
   VM ValueMultiplicity;
   bool Retired : 1;
-  bool GroupXX : 1 ;
+  bool GroupXX : 1;
   bool ElementXX : 1;
 };
 
