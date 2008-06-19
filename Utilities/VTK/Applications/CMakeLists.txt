@@ -5,10 +5,15 @@ INCLUDE_DIRECTORIES(
 
 SET(GDCM_VTK_APPS
   gdcmviewer # vtkImageViewer2
-  gdcmorthoplanes
-  gdcmscene
-  gdcm2vtk
   )
+IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
+  SET(GDCM_VTK_APPS
+    ${GDCM_VTK_APPS}
+    gdcmorthoplanes
+    gdcm2vtk
+  gdcmscene
+  )
+ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
 
 FOREACH(app ${GDCM_VTK_APPS})
   ADD_EXECUTABLE(${app} ${app}.cxx)
