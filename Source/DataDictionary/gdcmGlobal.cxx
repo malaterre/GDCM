@@ -38,6 +38,14 @@ Global::Global()
     {
     assert( Internals == NULL ); // paranoid
     Internals = new GlobalInternal;
+    assert( Internals->GlobalDicts.IsEmpty() );
+    // Fill in with default values now !
+    // at startup time is safer as later call might be from different thread
+    // thus initialization of std::map would be all skrew up
+    Internals->GlobalDicts.LoadDefaults();
+    assert( Internals->GlobalDefs.IsEmpty() );
+    // Same goes for GlobalDefs:
+    Internals->GlobalDefs.LoadDefaults();
     }
 }
 
@@ -53,21 +61,13 @@ Global::~Global()
 
 Dicts const &Global::GetDicts() const
 {
-  if( Internals->GlobalDicts.IsEmpty() )
-    {
-    // Fill in with default values:
-    Internals->GlobalDicts.LoadDefaults();
-    }
+  assert( !Internals->GlobalDicts.IsEmpty() );
   return Internals->GlobalDicts;
 }
 
 Defs const &Global::GetDefs() const
 {
-  if( Internals->GlobalDefs.IsEmpty() )
-    {
-    // Fill in with default values:
-    Internals->GlobalDefs.LoadDefaults();
-    }
+  assert( !Internals->GlobalDefs.IsEmpty() );
   return Internals->GlobalDefs;
 }
 
