@@ -1,2 +1,2 @@
-usr/lib/libgdcm.so
+usr/lib/libgdcm*.so
 usr/include/gdcm-2.*/gdcm/*
