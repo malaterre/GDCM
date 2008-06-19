@@ -12,6 +12,11 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+/*
+ * TODO: vtkPlaybackWidget would be cool for 4D images...
+ *       should I do it here, or a specified 4Dviewer application that will reexecute the reader (TIME*
+ *       stuff in vtk)
+ */
 #include "vtkGDCMImageReader.h"
 
 #include "vtkXMLImageDataWriter.h"
