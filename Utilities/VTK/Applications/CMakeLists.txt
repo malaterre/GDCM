@@ -11,7 +11,7 @@ IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
     ${GDCM_VTK_APPS}
     gdcmorthoplanes
     gdcm2vtk
-  gdcmscene
+    gdcmscene
   )
 ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
 

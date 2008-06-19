@@ -36,6 +36,8 @@
 #include "vtkBiDimensionalWidget.h"
 #include "vtkBiDimensionalRepresentation2D.h"
 #include "vtkDistanceWidget.h"
+#include "vtkContourWidget.h"
+#include "vtkOrientedGlyphContourRepresentation.h"
 #include "vtkPointHandleRepresentation2D.h"
 #include "vtkDistanceRepresentation2D.h"
 #include "vtkProperty2D.h"
@@ -159,6 +161,7 @@ public:
     IconWidget = NULL;
     DistanceWidget = NULL;
     BiDimWidget = NULL;
+    ContourWidget = NULL;
     picker = vtkWorldPointPicker::New();
     }
   ~vtkGDCMObserver()
@@ -201,6 +204,10 @@ public:
         else if ( keycode == 'b' )
           {
           BiDimWidget->On();
+          }
+        else if ( keycode == 'c' )
+          {
+          ContourWidget->On();
           }
         else if ( keycode == 'd' )
           {
@@ -249,6 +256,8 @@ public:
   vtkLogoWidget *IconWidget;
   vtkDistanceWidget *DistanceWidget;
   vtkBiDimensionalWidget *BiDimWidget;
+  vtkContourWidget *ContourWidget;
+
 };
 
 // A feature in VS6 make it painfull to write template code
@@ -316,6 +325,13 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   bwidget->SetInteractor(iren);
   bwidget->SetRepresentation(brep);
   brep->Delete();
+
+  vtkOrientedGlyphContourRepresentation *contourRep = vtkOrientedGlyphContourRepresentation::New();
+  vtkContourWidget *contourWidget = vtkContourWidget::New();
+  contourWidget->SetInteractor(iren);
+  contourWidget->SetRepresentation(contourRep);
+  contourRep->Delete();
+
 
   vtkLogoWidget * iconwidget = 0;
   if( reader->GetNumberOfIconImages() )
@@ -468,6 +484,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   obs->IconWidget = iconwidget;
   obs->DistanceWidget = dwidget;
   obs->BiDimWidget = bwidget;
+  obs->ContourWidget = contourWidget;
 #endif
   iren->AddObserver(vtkCommand::CharEvent,obs);
   iren->AddObserver(vtkCommand::EndPickEvent,obs);
@@ -505,6 +522,8 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   dwidget->Delete();
   bwidget->Off();
   bwidget->Delete();
+  contourWidget->Off();
+  contourWidget->Delete();
   if( iconwidget )
     {
     iconwidget->Off();
