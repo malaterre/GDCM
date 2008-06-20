@@ -150,10 +150,12 @@ int TestvtkGDCMImageReader2(int argc, char *argv[])
     }
   assert( wfilenames->GetNumberOfValues() == fg.GetNumberOfFilenames() );
   writer->SetFileNames( wfilenames );
+  wfilenames->Delete();
   writer->Write();
 
   change->Delete();
   reader->Delete();
+  reader2->Delete();
   writer->Delete();
   files->Delete();
 
