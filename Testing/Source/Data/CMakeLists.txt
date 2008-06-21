@@ -64,6 +64,9 @@ SET(BLACK_LIST_READER
   TheralysNoModalityNoObject.dcm
   ImplicitDeclaredAsExplicit.dcm
   TheralysGDCM1.dcm
+#SC that are well hidden MR Image Storage
+  fffc0000UN.dcm
+  MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm
 )
 IF(GDCM_WORDS_BIGENDIAN)
   SET(BLACK_LIST_READER
