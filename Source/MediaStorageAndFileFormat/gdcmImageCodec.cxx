@@ -38,6 +38,7 @@ ImageCodec::ImageCodec()
   //LUT = LookupTable(LookupTable::UNKNOWN);
   NeedByteSwap = false;
   NeedOverlayCleanup = false;
+  Dimensions[0] = Dimensions[1] = Dimensions[2] = 0;
 }
 
 ImageCodec::~ImageCodec()

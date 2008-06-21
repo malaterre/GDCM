@@ -147,8 +147,26 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
       }
     else if ( dictentry.GetVR() & VR::VRBINARY )
       {
-      gdcmWarningMacro( "You need to explicitely specify the length for this type of vr: " << dictentry.GetVR() );
-      ret = false;
+      if( vl == 0 )
+        {
+        DataElement de( t );
+        if( ds.FindDataElement( t ) )
+          {
+          de.SetVR( ds.GetDataElement(t).GetVR() );
+          }
+        else
+          {
+          de.SetVR( dictentry.GetVR() );
+          }
+        de.SetByteValue( "", 0 );
+        ds.Replace( de );
+        ret = true;
+        }
+      else
+        {
+        gdcmWarningMacro( "You need to explicitely specify the length for this type of vr: " << dictentry.GetVR() );
+        ret = false;
+        }
 #if 0
       StringFilter sf;
       sf.SetFile( *F );

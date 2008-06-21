@@ -9,6 +9,13 @@ MARK_AS_ADVANCED(CMAKE_BACKWARDS_COMPATIBILITY CMAKE_BUILD_TYPE CMAKE_INSTALL_PR
 SET(GDCM_CMAKE_DIR "${GDCM_SOURCE_DIR}/CMake" CACHE INTERNAL "")
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${GDCM_CMAKE_DIR}")
 
+IF(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.6)
+  SET(NAMELINK_ONLY NAMELINK_ONLY)
+  SET(NAMELINK_SKIP NAMELINK_SKIP)
+ELSE(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.6)
+  SET(NAMELINK_ONLY)
+  SET(NAMELINK_SKIP)
+ENDIF(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.6)
 
 #-----------------------------------------------------------------------------
 # Disallow insource build since I never test that
@@ -23,7 +30,7 @@ ENDIF(INSOURCE OR INSOURCESUBDIR)
 #-----------------------------------------------------------------------------
 SET(GDCM_MAJOR_VERSION 2)
 SET(GDCM_MINOR_VERSION 0)
-SET(GDCM_BUILD_VERSION 5)
+SET(GDCM_BUILD_VERSION 6)
 SET(GDCM_VERSION
   "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}.${GDCM_BUILD_VERSION}")
 SET(GDCM_LIBRARY_PROPERTIES ${GDCM_LIBRARY_PROPERTIES}
@@ -40,7 +47,6 @@ IF(CMAKE_COMPILER_2005)
   ADD_DEFINITIONS(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE)
   ADD_DEFINITIONS(-D_SCL_SECURE_NO_DEPRECATE)
 ENDIF(CMAKE_COMPILER_2005)
-
 
 #-----------------------------------------------------------------------------
 # Build shared lib by default
@@ -252,6 +258,7 @@ FIND_PACKAGE(PythonInterp REQUIRED)
 
 
 #GET_PYTHON_SITE_PACKAGE(python_site_package)
+IF(import_output)
 STRING(LENGTH ${import_output} len)
 # let's remove the "/usr/lib" part...
 MATH(EXPR fileend "${len} - 9") 
@@ -259,6 +266,7 @@ STRING(SUBSTRING ${import_output} 9 ${fileend} dummy1)
 IF(UNIX)
 SET(python_site_package ${dummy1})
 ENDIF(UNIX)
+ENDIF(import_output)
 
 
 #-----------------------------------------------------------------------------
@@ -345,6 +353,7 @@ ENDIF(GDCM_USE_ITK)
 
 #-----------------------------------------------------------------------------
 OPTION(GDCM_USE_WXWIDGETS "wxWidgets bridge ?" OFF)
+MARK_AS_ADVANCED(GDCM_USE_WXWIDGETS)
 IF(GDCM_USE_WXWIDGETS)
   SUBDIRS(Utilities/wxWidgets)
 ENDIF(GDCM_USE_WXWIDGETS)

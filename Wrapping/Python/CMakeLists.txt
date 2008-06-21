@@ -26,13 +26,8 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
+  ${CMAKE_CURRENT_SOURCE_DIR}
 )
-# Provide some C99 compatilities for all win system...hopefully there won't be no collision
-IF(WIN32 AND NOT CYGWIN)
-  INCLUDE_DIRECTORIES(
-    "${GDCM_SOURCE_DIR}/Utilities/C99"
-  )
-ENDIF(WIN32 AND NOT CYGWIN)
 
 FIND_PACKAGE(PythonLibs REQUIRED)
 MARK_AS_ADVANCED(PYTHON_LIBRARY PYTHON_INCLUDE_PATH)
@@ -75,15 +70,44 @@ SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
 #SET(CMAKE_CXX_FLAGS "")
 # well no, you cannot, it get rid of some important flags, and make the _gdcm.so incompatible with
 # the other gdcm lib. bad !!!
-SWIG_ADD_MODULE(${GDCM_PYTHON_IMPLEMENTATION_NAME} python gdcm.i)
+SWIG_ADD_MODULE(${GDCM_PYTHON_IMPLEMENTATION_NAME} python gdcm.i gdcmPythonFilter.cxx)
 SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} gdcmMSFF gdcmIOD ${PYTHON_LIBRARIES})
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/gdcm.pth.in
   ${CMAKE_CURRENT_BINARY_DIR}/gdcm.pth
 )
 
+# Need to rebuild gdcmPYTHON...cxx when any header is modified...
+#  FILE(GLOB_RECURSE headerfiles
+#    "${GDCM_SOURCE_DIR}/Source/*.h"
+#  )
+ 
+#ADD_DEPENDENCIES(
+#  ${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME}
+#  ${headerfiles}
+#	)
+#SET_SOURCE_FILES_PROPERTIES(
+#  ${swig_generated_file_fullname}
+#  PROPERTIES OBJECT_DEPENDS
+#  #${headerfiles}
+#  ${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat/gdcmDirectionCosines.h
+#)
+#SET_SOURCE_FILES_PROPERTIES(
+#	${CMAKE_CURRENT_SOURCE_DIR}/gdcm.i
+#  PROPERTIES OBJECT_DEPENDS
+#  #${headerfiles}
+#  ${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat/gdcmDirectionCosines.h
+#)
+
+
+
 # Python extension modules on Windows must have the extension ".pyd"
 # instead of ".dll" as of Python 2.5.  Older python versions do support
 # this suffix.
+# http://docs.python.org/whatsnew/ports.html#SECTION0001510000000000000000
+# <quote>
+# Windows: .dll is no longer supported as a filename extension for extension modules.
+# .pyd is now the only filename extension that will be searched for.
+# </quote>
 IF(WIN32 AND NOT CYGWIN)
   SET_TARGET_PROPERTIES(${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME} PROPERTIES SUFFIX ".pyd")
 ENDIF(WIN32 AND NOT CYGWIN)
@@ -105,21 +129,22 @@ ADD_CUSTOM_COMMAND(
 # right next to the other dlls
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS ${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME}
-    #RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime
+    RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR}/${python_site_package}/${subdir} COMPONENT Runtime
     LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Runtime
     ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Development
-    #DESTINATION ${python_site_package}/${subdir}
   )
-# the python file is not a dev file, but part of the gdcm module...
+  # the python file is not a dev file, but part of the gdcm module...
   INSTALL(FILES 
     ${CMAKE_CURRENT_BINARY_DIR}/gdcm.py 
     DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Runtime
-    #DESTINATION ${python_site_package}/${subdir}
   )
+  # pth file are actually a pain to use since they are *required* to be in some very specific location;
+  # for instance you have a /tmp/gdcm.pth file and set PYTHONPATH=/tmp ... well believe it or not
+  # this won't work ! I might actually have to go away from this solution for generic solution :(
+  # only official rpm/deb could be sure of where the user will install those python module
   INSTALL(FILES 
     ${CMAKE_CURRENT_BINARY_DIR}/gdcm.pth
     DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Runtime
-    #DESTINATION ${python_site_package}
   )
 ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 

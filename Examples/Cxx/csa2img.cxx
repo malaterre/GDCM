@@ -17,6 +17,10 @@
  *
  * http://atonal.ucdavis.edu/matlab/fmri/spm5/spm_dicom_convert.m
  *
+ * This example is an attempt at understanding the format used by SIEMENS
+ * their "SIEMENS CSA NON-IMAGE" DICOM file (1.3.12.2.1107.5.9.1)
+ * 
+ *
  */
 #include "gdcmReader.h"
 #include "gdcmImageWriter.h"

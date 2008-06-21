@@ -16,6 +16,71 @@
 
 #include "gdcmSwapper.h"
 
+int TestPrivate()
+{
+  gdcm::Tag t1(0x0009,0x0000);
+  if( t1.IsPublic() )
+    {
+    return 1;
+    }
+  if( !t1.IsPrivate() )
+    {
+    return 1;
+    }
+  if( t1.IsPrivateCreator() )
+    {
+    return 1;
+    }
+
+  gdcm::Tag t2(0x0009,0x0001);
+  if( t2.IsPublic() )
+    {
+    return 1;
+    }
+  if( !t2.IsPrivate() )
+    {
+    return 1;
+    }
+  if( t2.IsPrivateCreator() )
+    {
+    return 1;
+    }
+
+  gdcm::Tag t3(0x0009,0x0010);
+  if( t3.IsPublic() )
+    {
+    return 1;
+    }
+  if( !t3.IsPrivate() )
+    {
+    return 1;
+    }
+  if( !t3.IsPrivateCreator() )
+    {
+    return 1;
+    }
+
+  gdcm::Tag t4(0x0009,0x1010);
+  gdcm::Tag t4_creator(0x0009,0x0010);
+  if( t4.IsPublic() )
+    {
+    return 1;
+    }
+  if( !t4.IsPrivate() )
+    {
+    return 1;
+    }
+  if( t4.IsPrivateCreator() )
+    {
+    return 1;
+    }
+  if( t4.GetPrivateCreator() != t4_creator )
+    {
+    return 1;
+    }
+  return 0;
+}
+
 int TestOperator()
 {
   gdcm::Tag t1(0x1234,0x5678);
@@ -241,6 +306,8 @@ int TestTag(int , char * [])
     }
 
   int res = TestOperator();
+  if( res ) return res;
+  res = TestPrivate();
   if( res ) return res;
 
   return 0;

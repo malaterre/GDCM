@@ -266,6 +266,8 @@ int vtkGDCMThreadedImageReader::RequestInformation(vtkInformation *request,
 
 struct threadparams
 {
+  unsigned int threadid;
+  unsigned int nthreads;
   const char **filenames;             // array of filenames thread will process (order is important!)
   unsigned int nfiles;                // number of files the thread will process
   char *scalarpointer;                // start of the image buffer affected to the thread
@@ -301,22 +303,29 @@ void *ReadFilesThread(void *voidparams)
 
     // Update progress
     // We are done reading one file, let's shout it loud:
-    //assert( params->reader->Debug == 0 );
-    pthread_mutex_lock(&params->lock);
-    // critical section
+    assert( params->reader->GetDebug() == 0 );
     const double progress = params->reader->GetProgress(); // other thread might have updated it also...
-    params->reader->UpdateProgress( progress + progressdelta );
-      const double shift = params->reader->GetShift();
-      const double scale = params->reader->GetScale();
-    pthread_mutex_unlock(&params->lock);
-
+    if( params->threadid == 0 )
+      {
+      // IMPLEMENTATION NOTE (WARNING)
+      // I think this is ok to assume that thread are equally distributed and the progress of thread 0
+      // actually represent nthreads times the local progress...
+      params->reader->UpdateProgress( progress + params->nthreads*progressdelta );
+      }
+    // BUG:
+    //const double shift = params->reader->GetShift();
+    //const double scale = params->reader->GetScale();
+    // This is NOT safe to assume that shift/scale is constant thoughout the Series, this is better to
+    // read the shift/scale from the image
     const gdcm::Image &image = reader.GetImage();
+
+    const double shift = image.GetIntercept();
+    const double scale = image.GetSlope();
+
     unsigned long len = image.GetBufferLength();
     // When not applying a transform:
     // len -> sizeof stored image
     // params->len sizeof world value image (after transform)
-    //double reader_shift = params->reader->GetShift();
-    //double reader_scale = params->reader->GetScale();
     if( shift == 1 && scale == 0 )
       assert( len == params->len ); // that would be very bad 
 
@@ -445,6 +454,8 @@ void vtkGDCMThreadedImageReader::ReadFiles(unsigned int nfiles, const char *file
     params[thread].len = len;
     params[thread].overlaylen = overlaylen;
     params[thread].totalfiles = nfiles;
+    params[thread].threadid = thread;
+    params[thread].nthreads = nthreads;
     params[thread].lock = lock;
     assert( this->Debug == 0 );
     params[thread].reader = this;

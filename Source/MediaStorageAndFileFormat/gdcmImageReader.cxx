@@ -87,6 +87,9 @@ bool ImageReader::Read()
   bool isImage = MediaStorage::IsImage( ms );
   if( isImage )
     {
+    // I cannot leave this here, since ELSCINT1 / LOSSLESS RICE declares CT Image Storage,
+    // when in fact this is a private Media Storage (no Pixel Data element)
+    //assert( ds.FindDataElement( Tag(0x7fe0,0x0010 ) ) );
     assert( ts != TransferSyntax::TS_END && ms != MediaStorage::MS_END );
     // Good it's the easy case. It's declared as an Image:
     gdcmDebugMacro( "Sweet ! Finally a good DICOM file !" );
@@ -95,6 +98,7 @@ bool ImageReader::Read()
     }
   else
     {
+    //assert( !ds.FindDataElement( Tag(0x7fe0,0x0010 ) ) );
     if( ms != MediaStorage::MS_END )
       {
       gdcmDebugMacro( "DICOM file is not an Image file but a : " <<
@@ -621,8 +625,17 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
 
   // D 0028|0103 [US] [Pixel Representation] [0]
-  pf.SetPixelRepresentation(
-    ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
+  Tag tpixelrep(0x0028, 0x0103);
+  if( ds.FindDataElement( tpixelrep ) && !ds.GetDataElement( tpixelrep ).IsEmpty() )
+    {
+    pf.SetPixelRepresentation(
+      ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
+    }
+  else
+    {
+    gdcmWarningMacro( "Pixel Representation was not found. Default to Unsigned Pixel Representation" );
+    pf.SetPixelRepresentation( 0 );
+    }
 
   // Very important to set the PixelFormat here before PlanarConfiguration
   PixelData.SetPixelFormat( pf );
@@ -630,7 +643,9 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   // 4. Planar Configuration
   // D 0028|0006 [US] [Planar Configuration] [1]
   const Tag planarconfiguration = Tag(0x0028, 0x0006);
-  if( ds.FindDataElement( planarconfiguration ) )
+  // FIXME: Whatif planaconfiguration is send in a grayscale image... it would be empty...
+  // well hopefully :(
+  if( ds.FindDataElement( planarconfiguration ) && !ds.GetDataElement( planarconfiguration ).IsEmpty() )
     {
     PixelData.SetPlanarConfiguration(
       ReadUSFromTag( planarconfiguration, ss, conversion ) );

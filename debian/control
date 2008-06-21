@@ -1,14 +1,58 @@
 Source: gdcm
-Section: devel
+Section: libs
 Priority: optional
-Maintainer: Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>
-Build-Depends: debhelper (>> 5.0.0), cmake (>> 2.6)
+Maintainer: Mathieu Malaterre <mathieu.malaterre@gmail.com>
+Uploaders: Bla Foo <bla.foo@example.org>
+Build-Depends: debhelper (>= 5.0.37.2), python-all-dev (>= 2.3.5-11),
+ python-support (>= 0.3.9), uuid-dev, zlib1g-dev, libexpat1-dev,
+ swig, cmake
 Standards-Version: 3.7.3
 
-Package: gdcm
+Package: libgdcm1exp3
 Architecture: any
 Depends: ${shlibs:Depends}
-Description: A DICOM library
- This is a dummy file, this will NOT be used to package gdcm, since
- the process is using cpack (cmake) for generating. But we need
- this fake file to please dpkg-buildpackage
+Recommends: dcmtk
+Suggests: msynctool
+Description: Synchronisation framework for email/pdas/and more
+ A synchronisation framework for synchronising data in various format. You
+ can use libopensync from programs. See multisync for an existing X11 gui
+ program that uses opensync.
+
+Package: gdcmutils
+Architecture: any
+Section: utils
+Depends: ${shlibs:Depends}
+Description: Command line utilities for libgdcm
+ Libgdcm provides a number of command line debugging and utility programs.
+ Install this package for the gdcmdump, gdcmconv, gdcmimg, gdcmscanner,
+ gdcmviewer programs.
+
+Package: libgdcm1exp3-dev
+Section: libdevel
+Provides: libgdcm-dev
+Conflicts: libgdcm-dev
+Architecture: any
+Depends: libgdcm1exp3 (= ${binary:Version}), libuuid-dev
+Description: Headers and static libraries for libgdcm
+ Headers and static libraries for libgdcm. These are not needed to use
+ gdcm, but are needed to build plugins or programs like foobar that
+ link against libgdcm.
+
+Package: libgdcm1exp3-dbg
+Architecture: any
+Priority: extra
+Depends: libgdcm1exp3 (= ${binary:Version})
+Description: Debug symbols for libgdcm1exp3
+ Debug symbols for libgdcm that will allow useful tracebacks and debugging
+ on end user machines.
+
+Package: python-gdcm
+Section: python
+Architecture: any
+Depends: ${shlibs:Depends}, ${python:Depends}, libgdcm1exp3 (= ${binary:Version})
+Provides: ${python:Provides}
+Replaces: python2.4-gdcm (<< 0.18-2.1)
+Conflicts: python2.4-gdcm (<< 0.18-2.1)
+XB-Python-Version: ${python:Versions}
+Description: Python bindings to the gdcm DICOM library
+ Python bindings to the gdcm DICOM library.

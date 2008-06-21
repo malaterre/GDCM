@@ -81,6 +81,8 @@ public:
   // Acces the raw data
   bool GetBuffer(char *buffer) const;
 
+  bool GetBuffer2(std::ostream &os) const;
+
   // Return a 3-tuples specifying the spacing
   // NOTE: 3rd value can be an aribtrary 1 value when the spacing was not specified (ex. 2D image).
   // WARNING: when the spacing is not specifier, a default value of 1 will be returned
@@ -212,6 +214,9 @@ protected:
   bool TryJPEGCodec(char *buffer) const;
   bool TryJPEG2000Codec(char *buffer) const;
   bool TryRLECodec(char *buffer) const;
+
+  bool TryJPEGCodec2(std::ostream &os) const;
+  bool TryJPEG2000Codec2(std::ostream &os) const;
 
 private:
   unsigned int NumberOfDimensions;

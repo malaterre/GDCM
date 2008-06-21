@@ -435,7 +435,11 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
     throw Exception( "Serious bug" );
     }
   Tag t;
-  t.Read<SwapperNoOp>(is);
+  if( !t.Read<SwapperNoOp>(is) )
+    {
+    throw Exception( "Cannot read very first tag" );
+    return is;
+    }
   if( t.GetGroup() == 0x0002 )
     {
     // GE_DLX-8-MONO2-PrivateSyntax.dcm is in Implicit...
@@ -473,9 +477,16 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
     {
     //assert( t.GetElement() == 0x0 );
     char vr_str[3];
-    is.read(vr_str, 2);
-    vr_str[2] = '\0';
-    VR::VRType vr = VR::GetVRType(vr_str);
+    VR::VRType vr = VR::VR_END;
+    if( is.read(vr_str, 2) )
+      {
+      vr_str[2] = '\0';
+      vr = VR::GetVRType(vr_str);
+      }
+    else
+      {
+      throw Exception( "Impossible: cannot read 2bytes for VR" );
+      }
     is.seekg(-6, std::ios::cur); // Seek back
     if( vr != VR::VR_END )
       {

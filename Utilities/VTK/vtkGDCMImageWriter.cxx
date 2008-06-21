@@ -46,7 +46,7 @@
 vtkCxxRevisionMacro(vtkGDCMImageWriter, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMImageWriter)
 
-vtkCxxSetObjectMacro(vtkGDCMImageWriter,LookupTable,vtkLookupTable)
+//vtkCxxSetObjectMacro(vtkGDCMImageWriter,LookupTable,vtkLookupTable)
 vtkCxxSetObjectMacro(vtkGDCMImageWriter,MedicalImageProperties,vtkMedicalImageProperties)
 vtkCxxSetObjectMacro(vtkGDCMImageWriter,FileNames,vtkStringArray)
 vtkCxxSetObjectMacro(vtkGDCMImageWriter,DirectionCosines,vtkMatrix4x4)
@@ -74,10 +74,11 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
   this->DataUpdateExtent[4] = 0;
   this->DataUpdateExtent[5] = 0;
 
-  this->LookupTable = vtkLookupTable::New();
+  //this->LookupTable = vtkLookupTable::New();
   this->MedicalImageProperties = vtkMedicalImageProperties::New();
   this->FileNames = vtkStringArray::New();
-  this->UID = 0;
+  this->StudyUID = 0;
+  this->SeriesUID = 0;
   this->DirectionCosines = vtkMatrix4x4::New();
   this->DirectionCosines->SetElement(0,0,1);
   this->DirectionCosines->SetElement(1,0,0);
@@ -104,10 +105,11 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
 //----------------------------------------------------------------------------
 vtkGDCMImageWriter::~vtkGDCMImageWriter()
 {
-  this->LookupTable->Delete();
+  //this->LookupTable->Delete();
   this->MedicalImageProperties->Delete();
   this->FileNames->Delete();
-  this->SetUID(NULL);
+  this->SetStudyUID(NULL);
+  this->SetSeriesUID(NULL);
   this->DirectionCosines->Delete();
 }
 
@@ -281,7 +283,9 @@ void vtkGDCMImageWriter::Write()
   // For both case (2d file or 3d file) we need a common uid for the Series/Study:
   gdcm::UIDGenerator uidgen;
   const char *uid = uidgen.Generate();
-  this->SetUID(uid);
+  this->SetStudyUID(uid);
+  uid = uidgen.Generate();
+  this->SetSeriesUID(uid);
 
   // Did the user specified dim of output file to be 2 ?
   if( this->FileDimensionality == 2 )
@@ -344,7 +348,9 @@ void vtkGDCMImageWriter::Write()
   // For both case (2d file or 3d file) we need a common uid for the Series/Study:
   gdcm::UIDGenerator uidgen;
   const char *uid = uidgen.Generate();
-  this->SetUID(uid);
+  this->SetStudyUID(uid);
+  uid = uidgen.Generate();
+  this->SetSeriesUID(uid);
 
   // Make sure the file name is allocated
   this->InternalFileName =  0;
@@ -609,6 +615,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   if( pi == gdcm::PhotometricInterpretation::PALETTE_COLOR )
     {
     vtkLookupTable * vtklut = data->GetPointData()->GetScalars()->GetLookupTable();
+    //vtkLookupTable * vtklut = this->LookupTable;
     assert( vtklut );
     assert( vtklut->GetNumberOfTableValues() == 256 );
     gdcm::SmartPointer<gdcm::LookupTable> lut = new gdcm::LookupTable;
@@ -987,17 +994,19 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
 
   // Here come the important part: generate proper UID for Series/Study so that people knows this is the same Study/Series
-  const char *uid = this->UID;
-  assert( uid ); // programmer error
+  const char *studyuid = this->StudyUID;
+  assert( studyuid ); // programmer error
 {
-  gdcm::DataElement de( gdcm::Tag(0x0020,0x000d) );
-  de.SetByteValue( uid, strlen(uid) );
+  gdcm::DataElement de( gdcm::Tag(0x0020,0x000d) ); // Study
+  de.SetByteValue( studyuid, strlen(studyuid) );
   de.SetVR( gdcm::Attribute<0x0020, 0x000d>::GetVR() );
   ds.Insert( de );
 }
+  const char *seriesuid = this->SeriesUID;
+  assert( seriesuid ); // programmer error
 {
-  gdcm::DataElement de( gdcm::Tag(0x0020,0x000e) );
-  de.SetByteValue( uid, strlen(uid) );
+  gdcm::DataElement de( gdcm::Tag(0x0020,0x000e) ); // Series
+  de.SetByteValue( seriesuid, strlen(seriesuid) );
   de.SetVR( gdcm::Attribute<0x0020, 0x000e>::GetVR() );
   ds.Insert( de );
 }

@@ -12,6 +12,9 @@ IF(GDCM_DOCUMENTATION)
 
   FILE(GLOB_RECURSE headerfiles
     "${GDCM_SOURCE_DIR}/Source/*.h"
+    "${GDCM_SOURCE_DIR}/Wrapping/*.h"
+    "${GDCM_SOURCE_DIR}/Utilities/VTK/*.h"
+    "${GDCM_SOURCE_DIR}/Utilities/Insight/*.h"
   )
   #MESSAGE(${headerfiles})
   # We are depending only on header files and README.txt but other files
@@ -21,7 +24,7 @@ IF(GDCM_DOCUMENTATION)
     COMMAND  ${DOXYGEN}
     ARGS     ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
     DEPENDS  ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
-             ${GDCM_SOURCE_DIR}/README.txt
+             ${GDCM_SOURCE_DIR}/Utilities/doxygen/README.txt
              ${headerfiles}
     COMMENT  "Creating doxygen doc"
 	  #WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}

@@ -21,6 +21,7 @@ namespace gdcm
 {
   
 class JPEGInternals;
+class ByteValue;
 class JPEG12Codec : public JPEGCodec
 {
 public:
@@ -28,6 +29,7 @@ public:
   ~JPEG12Codec();
 
   bool Decode(std::istream &is, std::ostream &os);
+  bool InternalCode(const ByteValue *bv, std::ostream &os);
 
 private:
   JPEGInternals *Internals;

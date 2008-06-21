@@ -52,8 +52,8 @@ public:
   vtkTypeRevisionMacro(vtkGDCMImageWriter,vtkImageWriter);
   virtual void PrintSelf(ostream& os, vtkIndent indent);
 
-  virtual void SetLookupTable(vtkLookupTable*);
-  vtkGetObjectMacro(LookupTable, vtkLookupTable);
+  //virtual void SetLookupTable(vtkLookupTable*);
+  //vtkGetObjectMacro(LookupTable, vtkLookupTable);
 
   vtkGetObjectMacro(MedicalImageProperties, vtkMedicalImageProperties);
   virtual void SetMedicalImageProperties(vtkMedicalImageProperties*);
@@ -126,10 +126,12 @@ private:
   void operator=(const vtkGDCMImageWriter&);  // Not implemented.
 
   // VTK structs:
-  vtkLookupTable *LookupTable;
+  //vtkLookupTable *LookupTable;
   vtkMedicalImageProperties *MedicalImageProperties;
-  vtkSetStringMacro(UID);
-  char *UID;
+  vtkSetStringMacro(StudyUID);
+  vtkSetStringMacro(SeriesUID);
+  char *StudyUID;
+  char *SeriesUID;
 
   int DataUpdateExtent[6];
   int ImageFormat;

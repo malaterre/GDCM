@@ -4,6 +4,7 @@ SET(MSFF_SRCS
   gdcmAnonymizer.cxx
   gdcmRescaler.cxx
   gdcmOrientation.cxx
+  gdcmDirectionCosines.cxx
   gdcmSorter.cxx
   gdcmIPPSorter.cxx
   gdcmApplicationEntity.cxx
@@ -19,7 +20,6 @@ SET(MSFF_SRCS
   gdcmDictPrinter.cxx
   gdcmScanner.cxx
   gdcmImageReader.cxx
-  gdcmDeltaEncodingCodec.cxx
   gdcmImageWriter.cxx
   gdcmStringFilter.cxx
   gdcmImageHelper.cxx
@@ -103,9 +103,12 @@ ENDIF(WIN32)
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS gdcmMSFF
     RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime
-    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
+    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime ${NAMELINK_SKIP}
     ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
   )
+  #INSTALL(TARGETS gdcmMSFF
+  #  LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development ${NAMELINK_ONLY}
+  #  )
 ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 
 IF(NOT GDCM_INSTALL_NO_DEVELOPMENT)

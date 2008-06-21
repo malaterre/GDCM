@@ -24,6 +24,7 @@
 #include "gdcmDicts.h"
 #include "gdcmAttribute.h"
 #include "gdcmImage.h"
+#include "gdcmDirectionCosines.h"
 
   /* TODO:
    * 
@@ -362,8 +363,24 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
       {
       dircos[i] = at.GetValue(i);
       }
+    DirectionCosines dc( &dircos[0] );
+    if( !dc.IsValid() )
+      {
+      dc.Normalize();
+      if( dc.IsValid() )
+        {
+        gdcmWarningMacro( "DirectionCosines was not normalized. Fixed" );
+        const double * p = dc;
+        dircos = std::vector<double>(p, p + 6);
+        return dircos;
+        }
+      else
+        {
+        gdcmWarningMacro( "Could not get DirectionCosines" );
+        }
+      }
     }
-  else
+  //else
     {
     dircos[0] = 1;
     dircos[1] = 0;
@@ -472,6 +489,7 @@ Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
   case MediaStorage::SecondaryCaptureImageStorage:
   case MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage:
   case MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage:
+  case MediaStorage::HardcopyGrayscaleImageStorage:
     t = Tag(0xffff,0xffff);
     break;
   case MediaStorage::GEPrivate3DModelStorage: // FIXME FIXME !!!
@@ -537,6 +555,7 @@ Warning - Dicom dataset contains attributes not present in standard DICOM IOD - 
   case MediaStorage::SecondaryCaptureImageStorage:
   case MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage:
   case MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage:
+  case MediaStorage::HardcopyGrayscaleImageStorage:
     t = Tag(0xffff,0xffff);
     break;
   case MediaStorage::NuclearMedicineImageStorage: // gdcmData/Nm.dcm
@@ -971,7 +990,11 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
 
 void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<double> & dircos)
 {
+#ifndef NDEBUG
   assert( dircos.size() == 6 );
+  DirectionCosines dc( &dircos[0] );
+  assert( dc.IsValid() );
+#endif
   MediaStorage ms;
   ms.SetFromDataSet(ds);
   assert( MediaStorage::IsImage( ms ) );

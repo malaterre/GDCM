@@ -1,0 +1,19 @@
+See the wiki page at:
+http://gdcm.sourceforge.net/wiki/index.php/Getting_Started
+
+If you are reading this file, it certainly means you do not know how to build GDCM. See:
+http://gdcm.sourceforge.net/wiki/index.php/Configuring_and_Building
+
+On UNIX (with cmake) this is simply a matter of doing:
+ * svn co https://gdcm.svn.sourceforge.net/svnroot/gdcm/branches/gdcm-2-0
+ * mkdir gdcmbin
+ * cd gdcmbin
+ * ccmake ../gdcm
+   [select your configuration]
+ * Press 'c' (configure), Press 'g' (generate)
+ * make
+ * make install
+
+If you want to live on the edge, you should try the latest trunk instead:
+
+ * svn co https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk

@@ -24,12 +24,22 @@ namespace gdcm
 /*
  * \brief Class for CSAHeader
  *
- * WARNING: the API of this class is subject to change in the near future. DO NOT USE.
+ * Everything done in this code is for the sole purpose of writing interoperable 
+ * software under Sect. 1201 (f) Reverse Engineering exception of the DMCA.
+ * If you believe anything in this code violates any law or any of your rights, 
+ * please contact us (gdcm-developers@lists.sourceforge.net) so that we can 
+ * find a solution. 
+ * 
+ * \warning:
+ * Everything you do with this code is at your own risk, since decoding process
+ * was not written from specification documents.
  *
- * TODO:
+ * \WARNING: the API of this class is subject to change in the near future. DO NOT USE.
+ *
+ * \TODO:
  * MrEvaProtocol in 29,1020 contains ^M that would be nice to get rid of on UNIX system...
  *
- * See also
+ * \See also
  * 5.1.3.2.4.1 MEDCOM History Information
  * and 5.1.4.3 CSA Non-Image Module
  * in 

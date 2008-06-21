@@ -12,6 +12,11 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+/*
+ * TODO: vtkPlaybackWidget would be cool for 4D images...
+ *       should I do it here, or a specified 4Dviewer application that will reexecute the reader (TIME*
+ *       stuff in vtk)
+ */
 #include "vtkGDCMImageReader.h"
 
 #include "vtkXMLImageDataWriter.h"
@@ -31,11 +36,17 @@
 #include "vtkImageActor.h"
 #include "vtkWindowToImageFilter.h"
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#include "vtkBalloonWidget.h"
+#include "vtkBalloonRepresentation.h"
 #include "vtkLogoWidget.h"
 #include "vtkLogoRepresentation.h"
+#include "vtkAngleWidget.h"
+#include "vtkAngleRepresentation2D.h"
 #include "vtkBiDimensionalWidget.h"
 #include "vtkBiDimensionalRepresentation2D.h"
 #include "vtkDistanceWidget.h"
+#include "vtkContourWidget.h"
+#include "vtkOrientedGlyphContourRepresentation.h"
 #include "vtkPointHandleRepresentation2D.h"
 #include "vtkDistanceRepresentation2D.h"
 #include "vtkProperty2D.h"
@@ -44,6 +55,8 @@ class vtkLogoWidget;
 class vtkBiDimensionalWidget;
 class vtkDistanceWidget;
 class vtkLogoRepresentation;
+class vtkContourWidget;
+class vtkAngleWidget;
 #endif
 #if VTK_MAJOR_VERSION >= 5
 #include "vtkImageYBRToRGB.h"
@@ -59,6 +72,8 @@ class vtkLogoRepresentation;
 #include "vtkWorldPointPicker.h"
 
 #include "gdcmFilename.h"
+#include "gdcmSystem.h"
+#include "gdcmDirectory.h"
 
 #include <assert.h>
 //----------------------------------------------------------------------------
@@ -157,6 +172,8 @@ public:
     IconWidget = NULL;
     DistanceWidget = NULL;
     BiDimWidget = NULL;
+    AngleWidget = NULL;
+    ContourWidget = NULL;
     picker = vtkWorldPointPicker::New();
     }
   ~vtkGDCMObserver()
@@ -196,13 +213,24 @@ public:
           {
           IconWidget->Off();
           }
+        else if ( keycode == 'a' )
+          {
+          AngleWidget->On();
+          }
         else if ( keycode == 'b' )
           {
           BiDimWidget->On();
           }
+        else if ( keycode == 'c' )
+          {
+          ContourWidget->On();
+          }
         else if ( keycode == 'd' )
           {
           DistanceWidget->On();
+          }
+        else if ( keycode == 'p' )
+          {
           }
 #endif
         else
@@ -243,8 +271,27 @@ public:
   vtkWorldPointPicker *picker;
   vtkLogoWidget *IconWidget;
   vtkDistanceWidget *DistanceWidget;
+  vtkAngleWidget *AngleWidget;
   vtkBiDimensionalWidget *BiDimWidget;
+  vtkContourWidget *ContourWidget;
+
 };
+
+class vtkBalloonCallback : public vtkCommand
+{
+public:
+  static vtkBalloonCallback *New() 
+    { return new vtkBalloonCallback; }
+  virtual void Execute(vtkObject *caller, unsigned long, void*)
+    {
+      vtkBalloonWidget *balloonWidget = reinterpret_cast<vtkBalloonWidget*>(caller);
+      if ( balloonWidget->GetCurrentProp() != NULL )
+        {
+        cout << "Prop selected\n";
+        }
+    }
+};
+
 
 // A feature in VS6 make it painfull to write template code
 // that do not contain the template parameter in the function
@@ -305,12 +352,34 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   dwidget->SetRepresentation(rep);
   rep->Delete();
 
-  vtkBiDimensionalRepresentation2D *brep = vtkBiDimensionalRepresentation2D::New();
+  vtkAngleRepresentation2D *anglerep = vtkAngleRepresentation2D::New();
+  vtkAngleWidget *anglewidget = vtkAngleWidget::New();
+  anglewidget->SetInteractor(iren);
+  anglewidget->SetRepresentation(anglerep);
+  anglerep->Delete();
 
+  vtkBiDimensionalRepresentation2D *brep = vtkBiDimensionalRepresentation2D::New();
   vtkBiDimensionalWidget *bwidget = vtkBiDimensionalWidget::New();
   bwidget->SetInteractor(iren);
   bwidget->SetRepresentation(brep);
   brep->Delete();
+
+  vtkOrientedGlyphContourRepresentation *contourRep = vtkOrientedGlyphContourRepresentation::New();
+  vtkContourWidget *contourWidget = vtkContourWidget::New();
+  contourWidget->SetInteractor(iren);
+  contourWidget->SetRepresentation(contourRep);
+  contourRep->Delete();
+
+  vtkBalloonRepresentation *balloonrep = vtkBalloonRepresentation::New();
+  balloonrep->SetBalloonLayoutToImageRight();
+
+  vtkBalloonWidget *balloonwidget = vtkBalloonWidget::New();
+  balloonwidget->SetInteractor(iren);
+  balloonwidget->SetRepresentation(balloonrep);
+  balloonwidget->AddBalloon(viewer->GetImageActor(),"This is a DICOM image",NULL);
+
+  vtkBalloonCallback *cbk = vtkBalloonCallback::New();
+  balloonwidget->AddObserver(vtkCommand::WidgetActivateEvent,cbk);
 
   vtkLogoWidget * iconwidget = 0;
   if( reader->GetNumberOfIconImages() )
@@ -318,6 +387,10 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     vtkLogoRepresentation *rep = vtkLogoRepresentation::New();
     rep->SetImage(reader->GetIconImage());
     //reader->GetIconImage()->Print( std::cout );
+
+    //vtkPropCollection *pc = vtkPropCollection::New();
+    //rep->GetActors2D(pc);
+    //balloonwidget->AddBalloon(pc->GetLastProp(),"This is a DICOM thumbnail image",NULL);
 
     vtkLogoWidget *widget = vtkLogoWidget::New();
     widget->SetInteractor(iren);
@@ -462,7 +535,10 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   if(iconwidget) iconwidget->On();
   obs->IconWidget = iconwidget;
   obs->DistanceWidget = dwidget;
+  obs->AngleWidget = anglewidget;
   obs->BiDimWidget = bwidget;
+  obs->ContourWidget = contourWidget;
+  balloonwidget->On();
 #endif
   iren->AddObserver(vtkCommand::CharEvent,obs);
   iren->AddObserver(vtkCommand::EndPickEvent,obs);
@@ -497,9 +573,15 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   reader->Delete();
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
   dwidget->Off();
+  balloonwidget->Off();
+  balloonwidget->Delete();
   dwidget->Delete();
+  anglewidget->Off();
+  anglewidget->Delete();
   bwidget->Off();
   bwidget->Delete();
+  contourWidget->Off();
+  contourWidget->Delete();
   if( iconwidget )
     {
     iconwidget->Off();
@@ -520,9 +602,42 @@ int main(int argc, char *argv[])
     }
   else
     {
-    for(int i=1; i < argc; ++i)
+    // Is it a single directory ? If so loop over all files contained in it:
+    const char *filename = argv[1];
+    if( argc == 2 && gdcm::System::FileIsDirectory( filename ) )
       {
-      filenames->InsertNextValue( argv[i] );
+      std::cout << "Loading directory: " << filename << std::endl;
+      bool recursive = false;
+      gdcm::Directory d;
+      d.Load(filename, recursive);
+      gdcm::Directory::FilenamesType const &files = d.GetFilenames();
+      for( gdcm::Directory::FilenamesType::const_iterator it = files.begin(); it != files.end(); ++it )
+        {
+        filenames->InsertNextValue( it->c_str() );
+        }
+      }
+    else // list of files passed directly on the cmd line:
+        // discard non-existing or directory
+      {
+      for(int i=1; i < argc; ++i)
+        {
+        filename = argv[i];
+        if( gdcm::System::FileExists( filename ) )
+          {
+          if( gdcm::System::FileIsDirectory( filename ) )
+            {
+            std::cerr << "Discarding directory: " << filename << std::endl;
+            }
+          else
+            {
+            filenames->InsertNextValue( filename );
+            }
+          }
+        else
+          {
+          std::cerr << "Discarding non existing file: " << filename << std::endl;
+          }
+        }
       }
     //names->Print( std::cout );
     }

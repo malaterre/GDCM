@@ -16,15 +16,19 @@
 #define __gdcmString_h
 
 #include "gdcmTypes.h"
+#include "gdcmStaticAssert.h"
 
 namespace gdcm
 {
-template <char TDelimiter, unsigned int TMaxLength> class String;
-template <char TDelimiter, unsigned int TMaxLength> std::istream& operator>>(std::istream &is, String<TDelimiter,TMaxLength>& ms);
+template <char TDelimiter, unsigned int TMaxLength, char TPadChar> class String;
+template <char TDelimiter, unsigned int TMaxLength, char TPadChar> std::istream& operator>>(std::istream &is, String<TDelimiter,TMaxLength,TPadChar>& ms);
 
-template <char TDelimiter = EOF, unsigned int TMaxLength = 64>
+template <char TDelimiter = EOF, unsigned int TMaxLength = 64, char TPadChar = ' '>
 class /*GDCM_EXPORT*/ String : public std::string /* PLEASE do not export me */
 {
+  // UI wants \0 for pad character, while ASCII ones wants space char... do not allow anything else
+  GDCM_STATIC_ASSERT( TPadChar == ' ' || TPadChar == 0 );
+
   friend std::istream& operator>> <TDelimiter>(std::istream &is, String<TDelimiter>& ms);
 public:
   // typedef are not inherited:
@@ -41,11 +45,32 @@ public:
 
   // String constructors.
   String(): std::string() {}
-  String(const value_type* s): std::string(s) {}
-  String(const value_type* s, size_type n): std::string(s, n) {}
+  String(const value_type* s): std::string(s)
+  {
+  if( size() % 2 )
+    {
+    push_back( TPadChar );
+    }
+  }
+  String(const value_type* s, size_type n): std::string(s, n) 
+  {
+  // We are being passed a const char* pointer, so s[n-1] == 0 (garanteed!)
+  if( n % 2 )
+    {
+    push_back( TPadChar );
+    }
+  }
   String(const std::string& s, size_type pos=0, size_type n=npos):
-    std::string(s, pos, n) {}
+    std::string(s, pos, n) 
+  {
+  // FIXME: some users might already have padded the string 's' with a trailing \0...
+  if( size() % 2 )
+    {
+    push_back( TPadChar );
+    }
+  }
 
+  // WARNING: Trailing \0 might be lost in this operation:
   operator const char *() { return this->c_str(); }
 
   bool IsValid() const {
@@ -56,13 +81,12 @@ public:
   }
 
 };
-template <char TDelimiter, unsigned int TMaxLength>
-inline std::istream& operator>>(std::istream &is, String<TDelimiter,TMaxLength> &ms)
+template <char TDelimiter, unsigned int TMaxLength, char TPadChar>
+inline std::istream& operator>>(std::istream &is, String<TDelimiter,TMaxLength,TPadChar> &ms)
 {
   std::getline(is, ms, TDelimiter);
   // no such thing as std::get where the delim char would be left, so I need to manually add it back...
   // hopefully this is the right thing to do (no overhead)
-  //is.clear();
   is.putback( TDelimiter );
   return is;
 }

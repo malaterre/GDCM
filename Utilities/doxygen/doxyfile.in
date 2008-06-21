@@ -463,7 +463,7 @@ INPUT                  = @GDCM_SOURCE_DIR@/Source \
                          @GDCM_SOURCE_DIR@/Wrapping \
                          @GDCM_SOURCE_DIR@/Utilities/VTK \
                          @GDCM_SOURCE_DIR@/Utilities/Insight \
-                         @GDCM_SOURCE_DIR@/README.txt
+                         @GDCM_SOURCE_DIR@/Utilities/doxygen/README.txt
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
@@ -498,7 +498,7 @@ EXCLUDE_SYMLINKS       = NO
 # against the file with absolute path, so to exclude all test directories 
 # for example use the pattern */test/*
 
-EXCLUDE_PATTERNS       = 
+EXCLUDE_PATTERNS       = */.svn */.svn/* */VTK4/*
 
 # The EXAMPLE_PATH tag can be used to specify one or more files or 
 # directories that contain example code fragments that are included (see 
@@ -750,7 +750,7 @@ TREEVIEW_WIDTH         = 250
 # If the GENERATE_LATEX tag is set to YES (the default) Doxygen will 
 # generate Latex output.
 
-GENERATE_LATEX         = NO
+GENERATE_LATEX         = YES
 
 # The LATEX_OUTPUT tag is used to specify where the LaTeX docs will be put. 
 # If a relative path is entered the value of OUTPUT_DIRECTORY will be 

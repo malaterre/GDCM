@@ -38,12 +38,24 @@ JPEGCodec::~JPEGCodec()
 bool JPEGCodec::CanDecode(TransferSyntax const &ts)
 {
   return ts == TransferSyntax::JPEGBaselineProcess1
-    || ts == TransferSyntax::JPEGExtendedProcess2_4
-    || ts == TransferSyntax::JPEGExtendedProcess3_5
-    || ts == TransferSyntax::JPEGSpectralSelectionProcess6_8
-    || ts == TransferSyntax::JPEGFullProgressionProcess10_12
-    || ts == TransferSyntax::JPEGLosslessProcess14
-    || ts == TransferSyntax::JPEGLosslessProcess14_1;
+      || ts == TransferSyntax::JPEGExtendedProcess2_4
+      || ts == TransferSyntax::JPEGExtendedProcess3_5
+      || ts == TransferSyntax::JPEGSpectralSelectionProcess6_8
+      || ts == TransferSyntax::JPEGFullProgressionProcess10_12
+      || ts == TransferSyntax::JPEGLosslessProcess14
+      || ts == TransferSyntax::JPEGLosslessProcess14_1;
+}
+
+bool JPEGCodec::CanCode(TransferSyntax const &ts)
+{
+  return true;
+  return ts == TransferSyntax::JPEGBaselineProcess1
+      || ts == TransferSyntax::JPEGExtendedProcess2_4
+      || ts == TransferSyntax::JPEGExtendedProcess3_5
+      || ts == TransferSyntax::JPEGSpectralSelectionProcess6_8
+      || ts == TransferSyntax::JPEGFullProgressionProcess10_12
+      || ts == TransferSyntax::JPEGLosslessProcess14
+      || ts == TransferSyntax::JPEGLosslessProcess14_1;
 }
 
 void JPEGCodec::SetPixelFormat(PixelFormat const &pt)
@@ -76,6 +88,7 @@ void JPEGCodec::SetBitSample(int bit)
     delete Internal;
     Internal = NULL;
     }
+  Internal->SetDimensions( this->GetDimensions() );
   Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
   Internal->ImageCodec::SetPixelFormat( this->ImageCodec::GetPixelFormat() );
 }
@@ -129,6 +142,29 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
   return true;
 }
 
+bool JPEGCodec::Code(DataElement const &in, DataElement &out)
+{
+  out = in;
+  const ByteValue *bv = in.GetByteValue();
+  std::stringstream os;
+  //std::stringstream is;
+  //char *mybuffer = new char[bv->GetLength()];
+  //bv->GetBuffer(mybuffer, bv->GetLength());
+  //is.write(mybuffer, bv->GetLength());
+  //delete[] mybuffer;
+  bool r = Internal->InternalCode(bv,os);
+  if( !r )
+    {
+    return false;
+    }
+
+  std::string str = os.str();
+  assert( str.size() );
+  out.SetByteValue( &str[0], str.size() );
+  return true;
+}
+
+
 bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
 {
   std::stringstream tmpos;
@@ -179,6 +215,7 @@ bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
     }
   if( this->PI != Internal->PI )
     {
+    gdcmWarningMacro( "PhotometricInterpretation issue" );
     this->PI = Internal->PI;
     }
 

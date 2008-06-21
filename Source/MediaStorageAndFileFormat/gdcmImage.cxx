@@ -393,6 +393,47 @@ bool Image::TryJPEGCodec(char *buffer) const
     }
   return false;
 }
+
+bool Image::TryJPEGCodec2(std::ostream &os) const
+{
+  unsigned long len = GetBufferLength();
+  const TransferSyntax &ts = GetTransferSyntax();
+
+  JPEGCodec codec;
+  if( codec.CanCode( ts ) )
+    {
+    codec.SetDimensions( GetDimensions() );
+    codec.SetPlanarConfiguration( GetPlanarConfiguration() );
+    codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
+    codec.SetPixelFormat( GetPixelFormat() );
+    codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );
+    DataElement out;
+    bool r = codec.Code(PixelData, out);
+    // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm    
+    if( !r )
+      {
+      return false;
+      }
+    // FIXME ! This should be done all the time for all codec:
+    // Did PI change or not ?
+    if ( GetPhotometricInterpretation() != codec.GetPhotometricInterpretation() )
+      {
+      // HACK
+      //gdcm::Image *i = (gdcm::Image*)this;
+      //i->SetPhotometricInterpretation( codec.GetPhotometricInterpretation() );
+      }
+    const ByteValue *outbv = out.GetByteValue();
+    assert( outbv );
+    unsigned long check = outbv->GetLength();  // FIXME
+    // DermaColorLossLess.dcm has a len of 63531, but DICOM will give us: 63532 ...
+    assert( outbv->GetLength() < len );
+    //memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );
+    os.write( outbv->GetPointer(), outbv->GetLength() );
+
+    return true;
+    }
+  return false;
+}
    
 bool Image::TryJPEG2000Codec(char *buffer) const
 {
@@ -402,6 +443,7 @@ bool Image::TryJPEG2000Codec(char *buffer) const
   JPEG2000Codec codec;
   if( codec.CanDecode( ts ) )
     {
+    codec.SetNumberOfDimensions( GetNumberOfDimensions() );
     codec.SetPlanarConfiguration( GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
     codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );
@@ -412,6 +454,33 @@ bool Image::TryJPEG2000Codec(char *buffer) const
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
     memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+    return r;
+    }
+  return false;
+}
+
+bool Image::TryJPEG2000Codec2(std::ostream &os) const
+{
+  unsigned long len = GetBufferLength();
+  const TransferSyntax &ts = GetTransferSyntax();
+
+  JPEG2000Codec codec;
+  if( codec.CanCode( ts ) )
+    {
+    codec.SetDimensions( GetDimensions() );
+    codec.SetPixelFormat( GetPixelFormat() );
+    codec.SetNumberOfDimensions( GetNumberOfDimensions() );
+    codec.SetPlanarConfiguration( GetPlanarConfiguration() );
+    codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
+    codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );
+    DataElement out;
+    bool r = codec.Code(PixelData, out);
+    assert( r );
+    const ByteValue *outbv = out.GetByteValue();
+    assert( outbv );
+    unsigned long check = outbv->GetLength();  // FIXME
+    //memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+    os.write(outbv->GetPointer(), outbv->GetLength() );
     return r;
     }
   return false;
@@ -478,6 +547,23 @@ bool Image::GetBuffer(char *buffer) const
     {
     buffer = 0;
     //throw Exception( "No codec found for this image");
+    }
+
+  return success;
+}
+
+// Compress the raw data
+bool Image::GetBuffer2(std::ostream &os) const
+{
+  bool success = false;
+  //if( !success ) success = TryRAWCodec2(buffer);
+  if( !success ) success = TryJPEGCodec2(os);
+  //if( !success ) success = TryJPEG2000Codec2(os);
+  //if( !success ) success = TryRLECodec2(buffer);
+  if( !success )
+    {
+    //buffer = 0;
+    throw Exception( "No codec found for this image");
     }
 
   return success;

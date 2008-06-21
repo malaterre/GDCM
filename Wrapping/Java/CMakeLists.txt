@@ -11,12 +11,6 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
 )
-# Provide some C99 compatilities for all win system...hopefully there won't be no collision
-IF(WIN32)
-  INCLUDE_DIRECTORIES(
-    "${GDCM_SOURCE_DIR}/Utilities/C99"
-  )
-ENDIF(WIN32)
 
 # $ export JAVA_HOME=/usr/lib/j2sdk1.6-sun/ 
 # $ export JAVA_HOME=/usr/lib/jvm/java-1.5.0-sun/
@@ -110,6 +104,7 @@ IF(NOT GDCM_INSTALL_NO_LIBRARIES)
     RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Runtime
     LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
     ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
+  ${CPACK_NAMELINK_TYPE}
   )
   # because gdcm.jar is constructed with custom commands, it need the INSTALL(FILES signature:
   INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gdcm.jar

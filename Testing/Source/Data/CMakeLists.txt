@@ -61,6 +61,9 @@ SET(BLACK_LIST_READER
 # remove for now
   IM-0001-0066.dcm
   4hd2a332a0je.dcm
+  TheralysNoModalityNoObject.dcm
+  ImplicitDeclaredAsExplicit.dcm
+  TheralysGDCM1.dcm
 )
 IF(GDCM_WORDS_BIGENDIAN)
   SET(BLACK_LIST_READER

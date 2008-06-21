@@ -31,8 +31,12 @@ public:
   JPEGCodec();
   ~JPEGCodec();
   bool CanDecode(TransferSyntax const &ts);
+  bool CanCode(TransferSyntax const &ts);
   bool Decode(DataElement const &is, DataElement &os);
   void SetPixelFormat(PixelFormat const &pf);
+
+  // Compress into JPEG
+  bool Code(DataElement const &in, DataElement &out);
 
 protected:
   bool Decode(std::istream &is, std::ostream &os);

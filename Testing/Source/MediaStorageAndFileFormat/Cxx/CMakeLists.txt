@@ -13,13 +13,14 @@ SET(MSFF_TEST_SRCS
   TestApplicationEntity
   TestStringFilter
   TestUIDGenerator
-  TestUIDGenerator3
+  #TestUIDGenerator3
   TestPrinter
   TestScanner
   TestSorter
   TestIPPSorter
   TestImageReader
   TestCopyDataSet
+  TestDirectionCosines
   TestImageWriter
   #TestImageWriter2
   TestCodec

@@ -6,6 +6,7 @@ SET(Common_TEST_SRCS
   TestSwapper
   TestByteSwap
   TestString
+  TestString2
   TestDirectory
   TestTerminal
   TestFilename

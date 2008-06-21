@@ -118,7 +118,7 @@ int TestScanner(int argc, char *argv[])
   const gdcm::Scanner::TagToValue &tv = it->second;
   //const std::string &filename = d.GetFilenames()[0];
   gdcm::Scanner::TagToValue::const_iterator it2 = tv.find( t1 );
-  if( t1 != it2->first ) return 1;
+  if( it2 == tv.end() || t1 != it2->first ) return 1;
   const char * t1value = it2->second;
   std::cout << filename << " -> " << t1 << " = " << (*t1value ? t1value : "none" ) << std::endl;
 
