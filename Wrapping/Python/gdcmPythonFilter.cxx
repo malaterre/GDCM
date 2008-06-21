@@ -87,8 +87,10 @@ PyObject *PythonFilter::ToPyObject(const Tag& t) const
     }
     }
  
+      PyObject *o = Py_BuildValue("s", "unhandled" );
+      Py_INCREF(o);
 
-   return 0;
+   return o;
 }
 
 }
