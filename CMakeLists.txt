@@ -244,7 +244,7 @@ MARK_AS_ADVANCED(BUILD_TESTING)
 #-----------------------------------------------------------------------------
 # Python install
 FIND_PACKAGE(PythonInterp REQUIRED)
-#MACRO(GET_PYTHON_SITE_PACKAGE dir)
+MACRO(GET_PYTHON_SITE_PACKAGE dir)
   EXECUTE_PROCESS(
   	COMMAND ${PYTHON_EXECUTABLE} "-c" "from distutils import sysconfig; print sysconfig.get_python_lib()"
   	#WORKING_DIRECTORY @LIBRARY_OUTPUT_PATH@
@@ -254,10 +254,10 @@ FIND_PACKAGE(PythonInterp REQUIRED)
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
   #SET(dir ${import_output})
-#ENDMACRO(GET_PYTHON_SITE_PACKAGE)
+ENDMACRO(GET_PYTHON_SITE_PACKAGE)
 
 
-#GET_PYTHON_SITE_PACKAGE(python_site_package)
+GET_PYTHON_SITE_PACKAGE(python_site_package)
 IF(import_output)
 STRING(LENGTH ${import_output} len)
 # let's remove the "/usr/lib" part...

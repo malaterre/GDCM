@@ -20,8 +20,6 @@ TARGET_LINK_LIBRARIES(rle2img gdcmMSFF)
 ADD_EXECUTABLE(uid_unique uid_unique.cxx)
 TARGET_LINK_LIBRARIES(uid_unique gdcmMSFF)
 
-ADD_EXECUTABLE(checkdeflate checkdeflate.c puff.c)
-
 ADD_EXECUTABLE(HelloWorld HelloWorld.cxx)
 TARGET_LINK_LIBRARIES(HelloWorld gdcmMSFF)
 

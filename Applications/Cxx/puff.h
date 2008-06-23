@@ -21,6 +21,11 @@
   Mark Adler    madler@alumni.caltech.edu
  */
 
+#ifdef __cplusplus
+extern "C" 
+{
+#endif
+
 
 /*
  * See puff.c for purpose and usage.
@@ -29,3 +34,9 @@ int puff(unsigned char *dest,           /* pointer to destination pointer */
          unsigned long *destlen,        /* amount of output space */
          unsigned char *source,         /* pointer to source data pointer */
          unsigned long *sourcelen);     /* amount of input available */
+
+#ifdef __cplusplus
+}  /* end extern "C" */
+#endif
+
+
