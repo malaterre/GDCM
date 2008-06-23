@@ -17,6 +17,7 @@
 # (VTK 5.2 contains the proper patch now)
 import vtkgdcm
 from vtkgdcm import vtkStringArray
+from vtk.util import vtkConstants as vtkType
 import gdcm # for gdcm.Directory
 import os,sys
 
@@ -26,7 +27,8 @@ def PrintProgress(object, event):
 
 if __name__ == "__main__":
   root = gdcm.Testing.GetDataExtraRoot()
-  dirname = os.path.join(root, "ForSeriesTesting/Perfusion/images" )
+  dirname = os.path.join(root, "gdcmSampleData/ForSeriesTesting/Perfusion/images" )
+  print dirname
 
   # setup reader
   r = vtkgdcm.vtkGDCMThreadedImageReader2()
@@ -79,10 +81,11 @@ if __name__ == "__main__":
     r.SetDataExtent( 0, dims[0] - 1, 0, dims[1] - 1, 0, dims[2] - 1 )
     r.SetDataScalarType ( datascalartype )
     r.SetNumberOfScalarComponents( numberOfScalarComponents )
-    r.SetSpacing( spacing )
+    r.SetDataOrigin( origin )
+    r.SetDataSpacing( spacing )
     # Useless only for backward compatibily, the real shift/scale will be read from files:
-    r.SetShift( intercept_slope[0] )
-    r.SetScale( intercept_slope[1] )
+    #r.SetShift( intercept_slope[0] )
+    #r.SetScale( intercept_slope[1] )
 
     # Setup the ProgressEvent
     r.AddObserver("ProgressEvent", PrintProgress)

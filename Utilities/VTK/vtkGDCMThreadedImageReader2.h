@@ -46,6 +46,12 @@ public:
   vtkSetVector6Macro(DataExtent,int);
   vtkGetVector6Macro(DataExtent,int);
 
+  vtkSetVector3Macro(DataOrigin,double);
+  vtkGetVector3Macro(DataOrigin,double);
+
+  vtkSetVector3Macro(DataSpacing,double);
+  vtkGetVector3Macro(DataSpacing,double);
+
   vtkGetStringMacro(FileName);
   vtkSetStringMacro(FileName);
 

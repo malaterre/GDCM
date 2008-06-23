@@ -294,7 +294,7 @@ void vtkImageWeightedSumExecute(vtkGDCMThreadedImageReader2 *self,
 
     //char * pointer = static_cast<char*>(outData->GetScalarPointerForExtent(outExt));
     char * pointer = static_cast<char*>(outData->GetScalarPointer(0,0,i));
-printf("pointer:%i\n",*pointer);
+//printf("pointer:%i\n",*pointer);
     gdcm::ImageReader reader;
     reader.SetFileName( filename );
     if( !reader.Read() )
