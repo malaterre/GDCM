@@ -207,6 +207,7 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
   return true;
 }
 
+// EnhancedMRImageStorage & EnhancedCTImageStorage
 bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &sp)
 {
   //  (0028,9110) SQ (Sequence with undefined length #=1)     # u/l, 1 PixelMeasuresSequence
@@ -261,6 +262,53 @@ bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector
 
   sp.push_back( zspacing );
 
+  return true;
+}
+
+// UltrasoundMultiframeImageStorage
+bool GetUltraSoundSpacingValueFromSequence(const DataSet& ds, std::vector<double> &sp)
+{
+/*
+(0018,6011) SQ (Sequence with explicit length #=1)      # 196, 1 SequenceOfUltrasoundRegions
+  (fffe,e000) na (Item with explicit length #=15)         # 188, 1 Item
+    (0018,6012) US 1                                        #   2, 1 RegionSpatialFormat
+    (0018,6014) US 1                                        #   2, 1 RegionDataType
+    (0018,6016) UL 0                                        #   4, 1 RegionFlags
+    (0018,6018) UL 0                                        #   4, 1 RegionLocationMinX0
+    (0018,601a) UL 0                                        #   4, 1 RegionLocationMinY0
+    (0018,601c) UL 479                                      #   4, 1 RegionLocationMaxX1
+    (0018,601e) UL 479                                      #   4, 1 RegionLocationMaxY1
+    (0018,6020) SL 0                                        #   4, 1 ReferencePixelX0
+    (0018,6022) SL 0                                        #   4, 1 ReferencePixelY0
+    (0018,6024) US 3                                        #   2, 1 PhysicalUnitsXDirection
+    (0018,6026) US 3                                        #   2, 1 PhysicalUnitsYDirection
+    (0018,6028) FD 0                                        #   8, 1 ReferencePixelPhysicalValueX
+    (0018,602a) FD 0                                        #   8, 1 ReferencePixelPhysicalValueY
+    (0018,602c) FD 0.002                                    #   8, 1 PhysicalDeltaX
+    (0018,602e) FD 0.002                                    #   8, 1 PhysicalDeltaY
+  (fffe,e00d) na (ItemDelimitationItem for re-encoding)   #   0, 0 ItemDelimitationItem
+(fffe,e0dd) na (SequenceDelimitationItem for re-encod.) #   0, 0 SequenceDelimitationItem
+*/
+  const Tag tsqusreg(0x0018,0x6011);
+  if( !ds.FindDataElement( tsqusreg ) ) return false;
+  const SequenceOfItems * sqi = ds.GetDataElement( tsqusreg ).GetSequenceOfItems();
+  assert( sqi );
+  // Get first item:
+  const Item &item = sqi->GetItem(1);
+  const DataSet & subds = item.GetNestedDataSet();
+  //  (0018,602c) FD 0.002                                    #   8, 1 PhysicalDeltaX
+  //  (0018,602e) FD 0.002                                    #   8, 1 PhysicalDeltaY
+  gdcm::Attribute<0x0018,0x602c> at1;
+  gdcm::Attribute<0x0018,0x602e> at2;
+  const DataElement &de1 = subds.GetDataElement( at1.GetTag() );
+  at1.SetFromDataElement( de1 );
+  assert( at1.GetNumberOfValues() == 1 );
+  const DataElement &de2 = subds.GetDataElement( at2.GetTag() );
+  at2.SetFromDataElement( de2 );
+  assert( at2.GetNumberOfValues() == 1 );
+  sp.push_back( at1.GetValue() );
+  sp.push_back( at2.GetValue() );
+ 
   return true;
 }
 
@@ -498,8 +546,10 @@ Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
     gdcmWarningMacro( "FIXME" );
     t = Tag(0xffff,0xffff);
     break;
-  case MediaStorage::UltrasoundImageStorage: // ??
   case MediaStorage::UltrasoundMultiFrameImageStorage:
+    abort();
+    break;
+  case MediaStorage::UltrasoundImageStorage: // ??
   case MediaStorage::UltrasoundImageStorageRetired:
   case MediaStorage::UltrasoundMultiFrameImageStorageRetired:
     // (0028,0034) IS [4\3]                                    #   4, 2 PixelAspectRatio
@@ -592,6 +642,17 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
       || GetSpacingValueFromSequence(ds, t2, sp) )
       {
       assert( sp.size() == 3 );
+      return sp;
+      }
+    abort();
+    }
+  else if( ms == MediaStorage::UltrasoundMultiFrameImageStorage )
+    {
+    if( GetUltraSoundSpacingValueFromSequence(ds, sp) )
+      {
+      // 3rd dimension is too difficult to handle for now...
+      // (0018,1065) DS [0\ 957\ 990\ 990\1023\1023\ 990\ 990\1023\ 957\1023\1023\1023\ 990... # 562,113 FrameTimeVector
+      sp.push_back( 1.0 );
       return sp;
       }
     abort();
