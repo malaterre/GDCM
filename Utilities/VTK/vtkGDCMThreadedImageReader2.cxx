@@ -281,7 +281,7 @@ void vtkImageWeightedSumExecute(vtkGDCMThreadedImageReader2 *self,
 {
   printf("outExt:%d,%d,%d,%d,%d,%d\n",
     outExt[0], outExt[1], outExt[2], outExt[3], outExt[4], outExt[5]);
-  for( int i = outExt[4]; i < outExt[5]; ++i )
+  for( int i = outExt[4]; i <= outExt[5]; ++i )
     {
     const char *filename = self->GetFileNames()->GetValue( i );
     //ReadOneFile( filename );
@@ -289,10 +289,12 @@ void vtkImageWeightedSumExecute(vtkGDCMThreadedImageReader2 *self,
 
 
     if( id == 0 )
-      self->UpdateProgress(float(i)/float(outExt[5]-outExt[4]));
+      self->UpdateProgress(float(i)/float(outExt[5]-outExt[4]+1));
 
 
-    char * pointer = static_cast<char*>(outData->GetScalarPointerForExtent(outExt));
+    //char * pointer = static_cast<char*>(outData->GetScalarPointerForExtent(outExt));
+    char * pointer = static_cast<char*>(outData->GetScalarPointer(0,0,i));
+printf("pointer:%i\n",*pointer);
     gdcm::ImageReader reader;
     reader.SetFileName( filename );
     if( !reader.Read() )
