@@ -54,41 +54,64 @@ int checkmagick(unsigned char *input)
   return 0;
 }
 
-int checkdeflate(int argc, char *argv[])
+//int checkdeflate(int argc, char *argv[])
+int checkdeflate(const char *name)
 {
   int ret;
   unsigned char *source;
   unsigned long len, sourcelen, destlen;
 
   unsigned long size;
+  unsigned long size1;
   unsigned char *buf;
   FILE *in;
   struct stat s;
-  const char *name = 0;
+  //const char *name = 0;
   union { uint32_t tag; uint16_t tags[2]; char bytes[4]; } tag;
   char vr[3];
   uint16_t vl;
   uint32_t value;
 
-  if (argc < 2) return 2;
-  name = argv[1];
+  //if (argc < 2) return 2;
+  //name = argv[1];
 
   len = 0;
-  if (stat(name, &s)) return 1;
-  if ((s.st_mode & S_IFMT) != S_IFREG) return 1;
+  if (stat(name, &s)) 
+  {
+    fprintf( stderr, "Cannot stat: %s\n", name );
+	  return 1;
+  }
+  if ((s.st_mode & S_IFMT) != S_IFREG) 
+  {
+    fprintf( stderr, "not a regular file\n" );
+	  return 1;
+  }
   size = (unsigned long)(s.st_size);
-  if (size == 0 || (off_t)size != s.st_size) return 1;
+  if (size == 0 || (off_t)size != s.st_size) 
+  {
+    fprintf( stderr, "size mismatch\n" );
+	  return 1;
+  }
   in = fopen(name, "r");
-  if (in == NULL) return 1;
+  if (in == NULL) 
+  {
+    fprintf( stderr, "in is NULL\n" );
+	  return 1;
+  }
   buf = (unsigned char*)malloc(size);
-  if (buf != NULL && fread(buf, 1, size, in) != size) {
+  if (buf != NULL && (size1 = fread(buf, 1, size, in)) != size) {
     free(buf);
     buf = NULL;
+    fprintf( stderr, "could not fread: %u bytes != %u\n", size, size1 );
+    fprintf( stderr, "feof: %i ferror %i\n", feof(in), ferror(in) );
   }
   fclose(in);
   len = size;
   source = buf;
-  if( source == NULL ) return 1;
+  if( source == NULL ) {
+    fprintf( stderr, "source is NULL\n" );
+	  return 1;
+  }
   sourcelen = len;
 
   if( !checkmagick(source) )
@@ -101,7 +124,7 @@ int checkdeflate(int argc, char *argv[])
   sourcelen -= 128 + 4;
 
   memcpy(&tag, source, sizeof(tag) );
-  printf( "tag: %d, %d\n", tag.tags[0], tag.tags[1] );
+  fprintf( stdout,"tag: %d, %d\n", tag.tags[0], tag.tags[1] );
   source += sizeof(tag);
   sourcelen -= sizeof(tag);
 
@@ -140,9 +163,9 @@ int checkdeflate(int argc, char *argv[])
   ret = puff(NULL, &destlen, source, &sourcelen);
 
   if (ret)
-    printf("puff() failed with return code %d\n", ret);
+    fprintf(stdout,"puff() failed with return code %d\n", ret);
   else {
-    printf("puff() succeeded uncompressing %lu bytes\n", destlen);
+    fprintf(stdout,"puff() succeeded uncompressing %lu bytes\n", destlen);
     if (sourcelen < len) printf("%lu compressed bytes unused\n",
       len - sourcelen);
   }
@@ -299,10 +322,29 @@ int main(int argc, char *argv[])
     return 0;
     }
 
- 
+  if( filename.empty() )
+    {
+    //std::cerr << "Need input file (-i)\n";
+    PrintHelp();
+    return 1;
+    }
+  
+  // Debug is a little too verbose
+  gdcm::Trace::SetDebug( debug );
+  gdcm::Trace::SetWarning( warning );
+  gdcm::Trace::SetError( error );
+  // when verbose is true, make sure warning+error are turned on:
+  if( verbose )
+    {
+    gdcm::Trace::SetWarning( verbose );
+    gdcm::Trace::SetError( verbose);
+    }
 
-  gdcm::Trace::DebugOff();
-  gdcm::Trace::WarningOff();
+  if( deflate )
+  {
+    return checkdeflate(filename.c_str());
+  }
+ 
   //const char *filename = argv[1];
   //std::cout << "filename: " << filename << std::endl;
   gdcm::Reader reader;
