@@ -8,7 +8,7 @@ Build-Depends: debhelper (>= 5.0.37.2), python-all-dev (>= 2.3.5-11),
  swig, cmake
 Standards-Version: 3.7.3
 
-Package: libgdcm1exp3
+Package: libgdcm20
 Architecture: any
 Depends: ${shlibs:Depends}
 Recommends: dcmtk
@@ -27,29 +27,29 @@ Description: Command line utilities for libgdcm
  Install this package for the gdcmdump, gdcmconv, gdcmimg, gdcmscanner,
  gdcmviewer programs.
 
-Package: libgdcm1exp3-dev
+Package: libgdcm20-dev
 Section: libdevel
 Provides: libgdcm-dev
 Conflicts: libgdcm-dev
 Architecture: any
-Depends: libgdcm1exp3 (= ${binary:Version}), libuuid-dev
+Depends: libgdcm20 (= ${binary:Version}), libuuid-dev
 Description: Headers and static libraries for libgdcm
  Headers and static libraries for libgdcm. These are not needed to use
  gdcm, but are needed to build plugins or programs like foobar that
  link against libgdcm.
 
-Package: libgdcm1exp3-dbg
+Package: libgdcm20-dbg
 Architecture: any
 Priority: extra
-Depends: libgdcm1exp3 (= ${binary:Version})
-Description: Debug symbols for libgdcm1exp3
+Depends: libgdcm20 (= ${binary:Version})
+Description: Debug symbols for libgdcm20
  Debug symbols for libgdcm that will allow useful tracebacks and debugging
  on end user machines.
 
 Package: python-gdcm
 Section: python
 Architecture: any
-Depends: ${shlibs:Depends}, ${python:Depends}, libgdcm1exp3 (= ${binary:Version})
+Depends: ${shlibs:Depends}, ${python:Depends}, libgdcm20 (= ${binary:Version})
 Provides: ${python:Provides}
 Replaces: python2.4-gdcm (<< 0.18-2.1)
 Conflicts: python2.4-gdcm (<< 0.18-2.1)
