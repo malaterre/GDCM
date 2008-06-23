@@ -22,12 +22,6 @@
 #include "vtkDemandDrivenPipeline.h"
 #include "vtkStreamingDemandDrivenPipeline.h"
 
-//FIXME
-#include "vtkImageIterator.h"
-#include "vtkImageProgressIterator.h"
-#include "vtkDoubleArray.h"
-// END FIXME
-
 #include "gdcmImageReader.h"
 
 #include <assert.h>
@@ -279,6 +273,7 @@ void vtkImageWeightedSumExecute(vtkGDCMThreadedImageReader2 *self,
                           vtkImageData **inDatas, int numFiles, vtkImageData *outData,
                           int outExt[6], int id, T*)
 {
+  (void)numFiles; (void)inDatas;
   printf("outExt:%d,%d,%d,%d,%d,%d\n",
     outExt[0], outExt[1], outExt[2], outExt[3], outExt[4], outExt[5]);
   for( int i = outExt[4]; i <= outExt[5]; ++i )
@@ -289,7 +284,12 @@ void vtkImageWeightedSumExecute(vtkGDCMThreadedImageReader2 *self,
 
 
     if( id == 0 )
+      {
+      // we only consider outExt here for computing the progress, while in fact we should really
+      // consider numFiles to compute exact update progress...oh well let's assume this is almost 
+      // correct.
       self->UpdateProgress(float(i)/float(outExt[5]-outExt[4]+1));
+      }
 
 
     //char * pointer = static_cast<char*>(outData->GetScalarPointerForExtent(outExt));
@@ -304,6 +304,7 @@ void vtkImageWeightedSumExecute(vtkGDCMThreadedImageReader2 *self,
     const gdcm::Image &image = reader.GetImage();
     unsigned long len = image.GetBufferLength();
     image.GetBuffer(pointer);
+(void)len;
     }
 
 }
@@ -459,6 +460,7 @@ void vtkGDCMThreadedImageReader2::ThreadedRequestData (
   vtkImageData **outData,
   int outExt[6], int id)
 {
+(void)inData;
 //  printf("ThreadedRequestData::outExt:%d,%d,%d,%d,%d,%d\n",
 //    outExt[0], outExt[1], outExt[2], outExt[3], outExt[4], outExt[5]);
 
