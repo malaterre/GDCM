@@ -13,7 +13,7 @@
 #
 ############################################################################
 
-# This used to be important for now to load the vtkgdcm module first
+# This used to be important to load the vtkgdcm module first
 # (VTK 5.2 contains the proper patch now)
 import vtkgdcm
 from vtkgdcm import vtkStringArray
