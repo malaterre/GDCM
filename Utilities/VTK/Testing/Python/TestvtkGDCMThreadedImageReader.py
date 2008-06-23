@@ -78,7 +78,7 @@ if __name__ == "__main__":
     sys.exit(1)
   
   # setup reader
-  r = vtkgdcm.vtkGDCMThreadedImageReader2()
+  r = vtkgdcm.vtkGDCMThreadedImageReader()
   r.FileLowerLeftOn()
   #dir = vtkDirectory()
   dir = gdcm.Directory()
