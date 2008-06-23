@@ -279,23 +279,30 @@ void vtkImageWeightedSumExecute(vtkGDCMThreadedImageReader2 *self,
                           vtkImageData **inDatas, int numFiles, vtkImageData *outData,
                           int outExt[6], int id, T*)
 {
-  //printf("outExt:%d,%d,%d,%d,%d,%d\n",
-  //  outExt[0], outExt[1], outExt[2], outExt[3], outExt[4], outExt[5]);
-      int i = outExt[4];
-     const char *filename = self->GetFileNames()->GetValue( i );
-  //ReadOneFile( filename );
-  //outData->GetPointData()->GetScalars()->SetName("GDCMImage");
-
-  char * pointer = static_cast<char*>(outData->GetScalarPointerForExtent(outExt));
-  gdcm::ImageReader reader;
-  reader.SetFileName( filename );
-  if( !reader.Read() )
+  printf("outExt:%d,%d,%d,%d,%d,%d\n",
+    outExt[0], outExt[1], outExt[2], outExt[3], outExt[4], outExt[5]);
+  for( int i = outExt[4]; i < outExt[5]; ++i )
     {
-    abort();
+    const char *filename = self->GetFileNames()->GetValue( i );
+    //ReadOneFile( filename );
+    //outData->GetPointData()->GetScalars()->SetName("GDCMImage");
+
+
+    if( id == 0 )
+      self->UpdateProgress(float(i)/float(outExt[5]-outExt[4]));
+
+
+    char * pointer = static_cast<char*>(outData->GetScalarPointerForExtent(outExt));
+    gdcm::ImageReader reader;
+    reader.SetFileName( filename );
+    if( !reader.Read() )
+      {
+      abort();
+      }
+    const gdcm::Image &image = reader.GetImage();
+    unsigned long len = image.GetBufferLength();
+    image.GetBuffer(pointer);
     }
-  const gdcm::Image &image = reader.GetImage();
-  unsigned long len = image.GetBufferLength();
-  image.GetBuffer(pointer);
 
 }
 
