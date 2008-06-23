@@ -98,18 +98,15 @@ protected:
   int RequestInformation(vtkInformation *request,
                          vtkInformationVector **inputVector,
                          vtkInformationVector *outputVector);
-  //int RequestData(vtkInformation *request,
-  //                vtkInformationVector **inputVector,
-  //                vtkInformationVector *outputVector);
 
 protected:
-void ThreadedRequestData (
-  vtkInformation * vtkNotUsed( request ), 
-  vtkInformationVector** vtkNotUsed( inputVector ),
-  vtkInformationVector * vtkNotUsed( outputVector ),
-  vtkImageData ***inData, 
-  vtkImageData **outData,
-  int outExt[6], int id);
+  void ThreadedRequestData (
+    vtkInformation * request, 
+    vtkInformationVector** inputVector,
+    vtkInformationVector * outputVector,
+    vtkImageData ***inData, 
+    vtkImageData **outData,
+    int outExt[6], int id);
 
 private:
   int FileLowerLeft;
@@ -118,7 +115,7 @@ private:
   int LoadIconImage;
   int DataExtent[6];
   int LoadOverlays;
-    int NumberOfOverlays;
+  int NumberOfOverlays;
   int DataScalarType;
 
   int NumberOfScalarComponents;

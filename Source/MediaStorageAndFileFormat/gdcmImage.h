@@ -58,17 +58,17 @@ public:
   }
   virtual ~Image() {}
 
-  // Return the number of dimension of the pixel data bytes; for example 2 for a 2D matrices of values
+  /// Return the number of dimension of the pixel data bytes; for example 2 for a 2D matrices of values
   unsigned int GetNumberOfDimensions() const;
   void SetNumberOfDimensions(unsigned int dim);
 
-  // Return the dimension of the pixel data, first dimension (x), then 2nd (y), then 3rd (z)...
+  /// Return the dimension of the pixel data, first dimension (x), then 2nd (y), then 3rd (z)...
   const unsigned int *GetDimensions() const;
   unsigned int GetDimension(unsigned int idx) const;
   void SetDimensions(unsigned int *dims);
   void SetDimension(unsigned int idx, unsigned int dim);
 
-  // Get/Set PixelFormat
+  /// Get/Set PixelFormat
   const PixelFormat &GetPixelFormat() const
     {
     return PF;
@@ -78,43 +78,43 @@ public:
     PF = pf;
     }
 
-  // Acces the raw data
+  /// Acces the raw data
   bool GetBuffer(char *buffer) const;
 
   bool GetBuffer2(std::ostream &os) const;
 
-  // Return a 3-tuples specifying the spacing
-  // NOTE: 3rd value can be an aribtrary 1 value when the spacing was not specified (ex. 2D image).
-  // WARNING: when the spacing is not specifier, a default value of 1 will be returned
+  /// Return a 3-tuples specifying the spacing
+  /// NOTE: 3rd value can be an aribtrary 1 value when the spacing was not specified (ex. 2D image).
+  /// WARNING: when the spacing is not specifier, a default value of 1 will be returned
   const double *GetSpacing() const;
   double GetSpacing(unsigned int idx) const;
   void SetSpacing(const double *spacing);
   void SetSpacing(unsigned int idx, double spacing);
 
-  // Return a 3-tuples specifying the origin
-  // Will return (0,0,0) if the origin was not specified.
+  /// Return a 3-tuples specifying the origin
+  /// Will return (0,0,0) if the origin was not specified.
   const double *GetOrigin() const;
   double GetOrigin(unsigned int idx) const;
   void SetOrigin(const float *ori);
   void SetOrigin(const double *ori);
   void SetOrigin(unsigned int idx, double ori);
 
-  // Return a 6-tuples specifying the direction cosines
-  // A default value of (1,0,0,0,1,0) will be return when the direction cosines was not specified.
+  /// Return a 6-tuples specifying the direction cosines
+  /// A default value of (1,0,0,0,1,0) will be return when the direction cosines was not specified.
   const double *GetDirectionCosines() const;
   double GetDirectionCosines(unsigned int idx) const;
   void SetDirectionCosines(const float *dircos);
   void SetDirectionCosines(const double *dircos);
   void SetDirectionCosines(unsigned int idx, double dircos);
 
-  // print
+  /// print
   void Print(std::ostream &os) const;
 
-  // return the planar configuration
+  /// return the planar configuration
   unsigned int GetPlanarConfiguration() const;
   void SetPlanarConfiguration(unsigned int pc);
 
-  // return the photometric interpretation
+  /// return the photometric interpretation
   const PhotometricInterpretation &GetPhotometricInterpretation() const;
   void SetPhotometricInterpretation(PhotometricInterpretation const &pi);
 
@@ -149,7 +149,7 @@ public:
     return *LUT;
     }
 
-  // Curve: group 50xx
+  /// Curve: group 50xx
   Curve& GetCurve(unsigned int i = 0) { 
     assert( i < Curves.size() );
     return Curves[i]; 
@@ -161,7 +161,7 @@ public:
   unsigned int GetNumberOfCurves() const { return Curves.size(); }
   void SetNumberOfCurves(unsigned int n) { Curves.resize(n); }
 
-  // Overlay: group 60xx
+  /// Overlay: group 60xx
   Overlay& GetOverlay(unsigned int i = 0) { 
     assert( i < Overlays.size() );
     return Overlays[i]; 
@@ -173,7 +173,7 @@ public:
   unsigned int GetNumberOfOverlays() const { return Overlays.size(); }
   void SetNumberOfOverlays(unsigned int n) { Overlays.resize(n); }
 
-  // returns if Overlays are stored in the unused bit of the pixel data:
+  /// returns if Overlays are stored in the unused bit of the pixel data:
   bool AreOverlaysInPixelData() const;
 
   const IconImage &GetIconImage() const { return Icon; }
@@ -182,12 +182,12 @@ public:
 //  Image(Image const&);
 //  Image &operator= (Image const&);
 
-  // Return the length of the image after decompression
-  // WARNING for palette color: It will NOT take into account the Palette Color
-  // thus you need to multiply this length by 3 if theimage is RGB for instance.
+  /// Return the length of the image after decompression
+  /// WARNING for palette color: It will NOT take into account the Palette Color
+  /// thus you need to multiply this length by 3 if theimage is RGB for instance.
   unsigned long GetBufferLength() const;
 
-  // Transfer syntax
+  /// Transfer syntax
   void SetTransferSyntax(TransferSyntax const &ts) {
     TS = ts;
   }
@@ -195,11 +195,11 @@ public:
     return TS;
   }
 
-  // intercept
+  /// intercept
   void SetIntercept(double intercept) { Intercept = intercept; }
   double GetIntercept() const { return Intercept; }
 
-  // slope
+  /// slope
   void SetSlope(double slope) { Slope = slope; }
   double GetSlope() const { return Slope; }
 
