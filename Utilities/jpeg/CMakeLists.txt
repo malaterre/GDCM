@@ -24,7 +24,6 @@ SET(JPEG_LIBRARY_PROPERTIES ${JPEG_LIBRARY_PROPERTIES}
   SOVERSION "${JPEG_MAJOR_VERSION}.${JPEG_MINOR_VERSION}"
 )
 
-
 # memmgr back ends: compile only one of these into a working library
 # (For now, let's use the mode that requires the image fit into memory.
 # This is the recommended mode for Win32 anyway.)
