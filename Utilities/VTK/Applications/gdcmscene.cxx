@@ -40,9 +40,17 @@ int main(int argc, char *argv[])
   reader->SetFileName( filename );
   reader->Update();
 
+  // print reader output:
   reader->Print( std::cout );
+  // print first output:
   reader->GetOutput()->Print( std::cout );
 
+  vtkAppendPolyData *append = vtkAppendPolyData::New();
+  int n = reader->GetNumberOfOutputPorts();
+  for(int i = 0; i < n; ++i)
+    {
+    append->AddInput( reader->GetOutput(i) );
+    }
 
   vtkPolyDataWriter * writer = vtkPolyDataWriter::New();
   writer->SetInput( reader->GetOutput() );
@@ -51,7 +59,8 @@ int main(int argc, char *argv[])
 
   // Now we'll look at it.
   vtkPolyDataMapper *cubeMapper = vtkPolyDataMapper::New();
-      cubeMapper->SetInput( reader->GetOutput() );
+      //cubeMapper->SetInput( reader->GetOutput() );
+      cubeMapper->SetInput( append->GetOutput() );
       cubeMapper->SetScalarRange(0,7);
   vtkActor *cubeActor = vtkActor::New();
       cubeActor->SetMapper(cubeMapper);
@@ -85,6 +94,7 @@ int main(int argc, char *argv[])
 
   
   reader->Delete();
+  append->Delete();
   cubeMapper->Delete();
   cubeActor->Delete();
 //  camera->Delete();

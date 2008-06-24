@@ -48,13 +48,7 @@ int vtkGDCMPolyDataReader::RequestData(
   vtkInformationVector **vtkNotUsed(inputVector),
   vtkInformationVector *outputVector)
 {
-  // get the info object
   vtkInformation *outInfo = outputVector->GetInformationObject(0);
-
-  // get the ouptut
-  vtkPolyData *output = vtkPolyData::SafeDownCast(
-    outInfo->Get(vtkDataObject::DATA_OBJECT()));
-
   //vtkPoints *newPts, *mergedPts;
   //vtkCellArray *newPolys, *mergedPolys;
   //vtkFloatArray *newScalars=0, *mergedScalars=0;
@@ -77,19 +71,26 @@ int vtkGDCMPolyDataReader::RequestData(
     {
     return 0;
     }
-  gdcm::MediaStorage ms;
-  ms.SetFromFile( reader.GetFile() );
-  //std::cout << ms << std::endl;
-  if( ms != gdcm::MediaStorage::RTStructureSetStorage )
-    {
-    return 0;
-    }
+
+// This is done in RequestInformation
+//  gdcm::MediaStorage ms;
+//  ms.SetFromFile( reader.GetFile() );
+//  //std::cout << ms << std::endl;
+//  if( ms != gdcm::MediaStorage::RTStructureSetStorage )
+//    {
+//    return 0;
+//    }
 
   const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
   // (3006,0020) SQ (Sequence with explicit length #=4)      # 370, 1 StructureSetROISequence  
   // (3006,0039) SQ (Sequence with explicit length #=4)      # 24216, 1 ROIContourSequence
   gdcm::Tag troicsq(0x3006,0x0039);
   if( !ds.FindDataElement( troicsq ) )
+    {
+    return 0;
+    }
+  gdcm::Tag tssroisq(0x3006,0x0020);
+  if( !ds.FindDataElement( tssroisq ) )
     {
     return 0;
     }
@@ -101,9 +102,35 @@ int vtkGDCMPolyDataReader::RequestData(
     {
     return 0;
     }
+  const gdcm::DataElement &ssroisq = ds.GetDataElement( tssroisq );
+  const gdcm::SequenceOfItems *ssqi = ssroisq.GetSequenceOfItems();
+  if( !ssqi || !ssqi->GetNumberOfItems() )
+    {
+    return 0;
+    }
 
-  const gdcm::Item & item = sqi->GetItem(1);
+  for(unsigned int pd = 0; pd < sqi->GetNumberOfItems(); ++pd)
+{
+  // get the info object
+  vtkInformation *outInfo1 = outputVector->GetInformationObject(pd);
+
+  // get the ouptut
+  vtkPolyData *output = vtkPolyData::SafeDownCast(
+    outInfo1->Get(vtkDataObject::DATA_OBJECT()));
+
+
+  const gdcm::Item & item = sqi->GetItem(pd+1); // Item start at #1
   //std::cout << item << std::endl;
+  const gdcm::Item & sitem = ssqi->GetItem(pd+1); // Item start at #1
+  const gdcm::DataSet& snestedds = sitem.GetNestedDataSet();
+  // (3006,0026) ?? (LO) [date]                                    # 4,1 ROI Name
+  gdcm::Tag stcsq(0x3006,0x0026);
+  if( !snestedds.FindDataElement( stcsq ) )
+    {
+    return 0;
+    }
+  const gdcm::DataElement &sde = snestedds.GetDataElement( stcsq );
+
 
   const gdcm::DataSet& nestedds = item.GetNestedDataSet();
   //std::cout << nestedds << std::endl;
@@ -125,6 +152,9 @@ int vtkGDCMPolyDataReader::RequestData(
   std::cout << nitems << std::endl;
   //this->SetNumberOfOutputPorts(nitems);
   vtkPoints *newPts = vtkPoints::New();
+  std::string s(sde.GetByteValue()->GetPointer(), sde.GetByteValue()->GetLength());
+std::cout << s << std::endl;
+  newPts->GetData()->SetName( s.c_str() );
   vtkCellArray *polys = vtkCellArray::New();
   for(unsigned int i = 0; i < nitems; ++i)
     {
@@ -145,22 +175,37 @@ int vtkGDCMPolyDataReader::RequestData(
     //assert( at.GetNumberOfValues() % 3 == 0); // FIXME
     const float* pts = at.GetValues();
     vtkIdType buffer[256];
-    for(unsigned int i = 0; i < (at.GetNumberOfValues() / 3) * 3; i+=3)
+    vtkIdType *ptIds;
+    unsigned int npts = at.GetNumberOfValues() / 3;
+    if(npts>256)
+      {
+      ptIds = new vtkIdType[npts];
+      }
+    else
+      {
+      ptIds = buffer;
+      }
+    for(unsigned int i = 0; i < npts * 3; i+=3)
       {
       float x[3];
       x[0] = pts[i+0];
       x[1] = pts[i+1];
       x[2] = pts[i+2];
       vtkIdType ptId = newPts->InsertNextPoint( x );
-      buffer[i / 3] = ptId;
+      ptIds[i / 3] = ptId;
       }
     // Each Contour Data is in fact a Cell:
-    polys->InsertNextCell( at.GetNumberOfValues() / 3 , buffer);
+    polys->InsertNextCell( npts , ptIds);
+    if(npts>256)
+      {
+      delete[] ptIds;
+      }
     }
   output->SetPoints(newPts);
   newPts->Delete();
   output->SetPolys(polys);
   polys->Delete();
+}
 
   return 1;
 }
@@ -172,10 +217,50 @@ int vtkGDCMPolyDataReader::RequestInformation(
   vtkInformationVector *outputVector)
 {
   // get the info object
-  vtkInformation *outInfo = outputVector->GetInformationObject(0);
+//  vtkInformation *outInfo = outputVector->GetInformationObject(0);
+//
+//  outInfo->Set(vtkStreamingDemandDrivenPipeline::MAXIMUM_NUMBER_OF_PIECES(),
+//               -1);
+  gdcm::Reader reader;
+  reader.SetFileName( this->FileName );
+  if( !reader.Read() )
+    {
+    return 0;
+    }
 
-  outInfo->Set(vtkStreamingDemandDrivenPipeline::MAXIMUM_NUMBER_OF_PIECES(),
-               -1);
+  gdcm::MediaStorage ms;
+  ms.SetFromFile( reader.GetFile() );
+  //std::cout << ms << std::endl;
+  if( ms != gdcm::MediaStorage::RTStructureSetStorage )
+    {
+    return 0;
+    }
+
+  const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
+  // (3006,0020) SQ (Sequence with explicit length #=4)      # 370, 1 StructureSetROISequence  
+  gdcm::Tag tssroisq(0x3006,0x0020);
+  if( !ds.FindDataElement( tssroisq ) )
+    {
+    return 0;
+    }
+
+  const gdcm::DataElement &ssroisq = ds.GetDataElement( tssroisq );
+  const gdcm::SequenceOfItems *sqi = ssroisq.GetSequenceOfItems();
+  if( !sqi || !sqi->GetNumberOfItems() )
+    {
+    return 0;
+    }
+  unsigned int npds = sqi->GetNumberOfItems();
+
+  std::cout << "Nb pd:" << npds << std::endl;
+  this->SetNumberOfOutputPorts( npds );
+
+  for(unsigned int i = 1; i < npds; ++i) // first output is allocated for us 
+    {
+    vtkPolyData *output2 = vtkPolyData::New();
+    this->GetExecutive()->SetOutputData(i, output2);
+    output2->Delete();
+    }
 
   return 1;
 }

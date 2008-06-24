@@ -10,8 +10,8 @@ IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
   SET(GDCM_VTK_APPS
     ${GDCM_VTK_APPS}
     gdcmorthoplanes
-    #gdcm2vtk
-    #gdcmscene
+    gdcm2vtk
+    gdcmscene
   )
 ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
 
