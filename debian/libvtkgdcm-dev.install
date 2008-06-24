@@ -1,3 +1,2 @@
 usr/lib/libvtkgdcm*.so
-usr/include/gdcm-2.*/*
 usr/include/gdcm-2.*/vtk*
