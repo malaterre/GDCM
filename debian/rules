@@ -53,6 +53,7 @@ debian/configure-python%-stamp:
 		-DGDCM_USE_SYSTEM_EXPAT:BOOL=ON \
 		-DGDCM_USE_SYSTEM_UUID:BOOL=ON \
 		-DGDCM_USE_SYSTEM_ZLIB:BOOL=ON \
+		-DGDCM_USE_VTK:BOOL=ON \
 		-DPREFERRED_PYTHON_VERSION=python$*
 	touch $@
 
