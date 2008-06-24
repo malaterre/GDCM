@@ -184,7 +184,7 @@ public:
 
   /// Return the length of the image after decompression
   /// WARNING for palette color: It will NOT take into account the Palette Color
-  /// thus you need to multiply this length by 3 if theimage is RGB for instance.
+  /// thus you need to multiply this length by 3 if the image is RGB for instance.
   unsigned long GetBufferLength() const;
 
   /// Transfer syntax
