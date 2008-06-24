@@ -21,6 +21,7 @@
 #include "vtkStreamingDemandDrivenPipeline.h"
 #include "vtkFloatArray.h"
 #include "vtkCellArray.h"
+#include "vtkCellData.h"
 
 #include "gdcmReader.h"
 #include "gdcmAttribute.h"
@@ -134,6 +135,15 @@ int vtkGDCMPolyDataReader::RequestData(
 
   const gdcm::DataSet& nestedds = item.GetNestedDataSet();
   //std::cout << nestedds << std::endl;
+  //(3006,002a) IS [255\192\96]                              # 10,3 ROI Display Color
+  gdcm::Tag troidc(0x3006,0x002a);
+  gdcm::Attribute<0x3006,0x002a> color = {};
+  if( nestedds.FindDataElement( troidc) )
+    {
+    const gdcm::DataElement &decolor = nestedds.GetDataElement( troidc );
+    color.SetFromDataElement( decolor );
+std::cout << "color:" << color[0] << "," << color[1] << "," << color[2] << std::endl;
+    }
   //(3006,0040) SQ (Sequence with explicit length #=8)      # 4326, 1 ContourSequence
   gdcm::Tag tcsq(0x3006,0x0040);
   if( !nestedds.FindDataElement( tcsq ) )
@@ -151,6 +161,9 @@ int vtkGDCMPolyDataReader::RequestData(
   unsigned int nitems = sqi2->GetNumberOfItems();
   std::cout << nitems << std::endl;
   //this->SetNumberOfOutputPorts(nitems);
+  vtkFloatArray *scalars = vtkFloatArray::New();
+scalars->SetNumberOfComponents(3);
+
   vtkPoints *newPts = vtkPoints::New();
   std::string s(sde.GetByteValue()->GetPointer(), sde.GetByteValue()->GetLength());
 std::cout << s << std::endl;
@@ -195,7 +208,8 @@ std::cout << s << std::endl;
       ptIds[i / 3] = ptId;
       }
     // Each Contour Data is in fact a Cell:
-    polys->InsertNextCell( npts , ptIds);
+    vtkIdType cellId = polys->InsertNextCell( npts , ptIds);
+    scalars->InsertTuple3(cellId, (double)color[0]/255.0, (double)color[1]/255.0, (double)color[2]/255.0);
     if(npts>256)
       {
       delete[] ptIds;
@@ -205,6 +219,8 @@ std::cout << s << std::endl;
   newPts->Delete();
   output->SetPolys(polys);
   polys->Delete();
+  output->GetCellData()->SetScalars(scalars);
+  scalars->Delete();
 }
 
   return 1;
