@@ -277,6 +277,7 @@ public:
 
 };
 
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
 class vtkBalloonCallback : public vtkCommand
 {
 public:
@@ -291,6 +292,7 @@ public:
         }
     }
 };
+#endif
 
 
 // A feature in VS6 make it painfull to write template code
