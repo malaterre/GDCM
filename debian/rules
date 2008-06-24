@@ -54,7 +54,7 @@ debian/configure-python%-stamp:
 		-DGDCM_USE_SYSTEM_UUID:BOOL=ON \
 		-DGDCM_USE_SYSTEM_ZLIB:BOOL=ON \
 		-DGDCM_USE_VTK:BOOL=ON \
-		-DVTK_DIR:PATH=/usr/lib/vtk/ \
+		-DVTK_DIR:PATH=/usr/lib/vtk-5.0/ \
 		-DPREFERRED_PYTHON_VERSION=python$*
 	touch $@
 
