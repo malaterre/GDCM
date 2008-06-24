@@ -167,7 +167,10 @@ scalars->SetNumberOfComponents(3);
   vtkPoints *newPts = vtkPoints::New();
   std::string s(sde.GetByteValue()->GetPointer(), sde.GetByteValue()->GetLength());
 std::cout << s << std::endl;
-  newPts->GetData()->SetName( s.c_str() );
+  //newPts->GetData()->SetName( s.c_str() );
+  // In VTK there is no API to specify the name of a vtkPolyData, you can only specify Name
+  // for the scalars (pointdata or celldata), so let's do that...
+  scalars->SetName(s.c_str());
   vtkCellArray *polys = vtkCellArray::New();
   for(unsigned int i = 0; i < nitems; ++i)
     {
