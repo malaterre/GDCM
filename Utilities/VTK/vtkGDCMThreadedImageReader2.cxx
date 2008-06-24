@@ -28,7 +28,7 @@
 
 vtkCxxRevisionMacro(vtkGDCMThreadedImageReader2, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMThreadedImageReader2)
-vtkCxxSetObjectMacro(vtkGDCMThreadedImageReader2,FileNames,vtkStringArray);
+vtkCxxSetObjectMacro(vtkGDCMThreadedImageReader2,FileNames,vtkStringArray)
 
 // Output Ports are as follow:
 // #0: The image/volume (root PixelData element)
