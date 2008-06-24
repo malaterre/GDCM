@@ -54,6 +54,7 @@ debian/configure-python%-stamp:
 		-DGDCM_USE_SYSTEM_UUID:BOOL=ON \
 		-DGDCM_USE_SYSTEM_ZLIB:BOOL=ON \
 		-DGDCM_USE_VTK:BOOL=ON \
+		-DVTK_DIR:PATH=/usr/lib/vtk/ \
 		-DPREFERRED_PYTHON_VERSION=python$*
 	touch $@
 
@@ -108,7 +109,7 @@ binary-common:
 #	dh_installcron
 #	dh_installinfo
 	dh_install --sourcedir=$(TARGET) --fail-missing
-	dh_strip --dbg-package=libgdcm1exp3-dbg
+	dh_strip --dbg-package=libgdcm2-dbg
 	dh_link
 	dh_compress
 	dh_fixperms
