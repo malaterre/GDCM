@@ -53,6 +53,8 @@ debian/configure-python%-stamp:
 		-DGDCM_USE_SYSTEM_EXPAT:BOOL=ON \
 		-DGDCM_USE_SYSTEM_UUID:BOOL=ON \
 		-DGDCM_USE_SYSTEM_ZLIB:BOOL=ON \
+		-DGDCM_USE_VTK:BOOL=ON \
+		-DVTK_DIR:PATH=/usr/lib/vtk/ \
 		-DPREFERRED_PYTHON_VERSION=python$*
 	touch $@
 
@@ -63,7 +65,7 @@ debian/build-stamp: debian/configure-stamp $(PYVERS:%=debian/build-python%-stamp
 
 debian/build-python%-stamp: 
 	dh_testdir
-	$(MAKE) -C $(BUILD)-python$*
+	$(MAKE) -j4 -C $(BUILD)-python$*
 	-(cd $(BUILD)-python$* && LD_LIBRARY_PATH=$(BUILD)-python$*/gdcm ctest --force-new-ctest-process -V)
 	touch $@
 
@@ -83,7 +85,7 @@ install-common:
 	dh_installdirs
 
 install-python%:
-	$(MAKE) -C $(BUILD)-python$* install DESTDIR=$(TARGET)
+	$(MAKE) -j4 -C $(BUILD)-python$* install DESTDIR=$(TARGET)
 
 # This single target is used to build all the packages, all at once, or
 # one at a time. So keep in mind: any options passed to commands here will
@@ -107,7 +109,7 @@ binary-common:
 #	dh_installcron
 #	dh_installinfo
 	dh_install --sourcedir=$(TARGET) --fail-missing
-	dh_strip --dbg-package=libgdcm1exp3-dbg
+	dh_strip --dbg-package=libgdcm2-dbg
 	dh_link
 	dh_compress
 	dh_fixperms
