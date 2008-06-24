@@ -1,0 +1,5 @@
+usr/lib/libgdcm*.so
+usr/lib/gdcm-2.*/*
+usr/include/gdcm-2.*/gdcm*
+usr/include/gdcm-2.*/zip*
+usr/include/gdcm-2.*/XML/*
