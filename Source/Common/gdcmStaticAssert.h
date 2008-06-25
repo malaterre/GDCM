@@ -31,7 +31,7 @@ namespace gdcm
 #define GDCM_DO_JOIN2( X, Y ) X##Y
 
 
-// The GDCM_JOIN  + __LINE__ is needed to create a uniq identifier
+/// The GDCM_JOIN  + __LINE__ is needed to create a uniq identifier
 #define GDCM_STATIC_ASSERT( B ) \
    typedef ::gdcm::static_assert_test<\
       sizeof(::gdcm::STATIC_ASSERTION_FAILURE< (bool)( B ) >)>\

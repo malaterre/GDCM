@@ -30,6 +30,7 @@ public:
 
   Object():ReferenceCount(0) {}
 
+  // Implementation note:
   // If I move ~Object in the protected section I can prevent people
   // from writing:
   // SmartPointer<Object> p = new Object;

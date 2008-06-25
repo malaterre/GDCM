@@ -21,8 +21,9 @@
 
 namespace gdcm
 {
-/*
- * \brief Class for Testing
+/**
+ * \class Class for Testing
+ * \brief this class is used for the nightly regression system for GDCM
  */
 //-----------------------------------------------------------------------------
 class GDCM_EXPORT Testing
@@ -37,34 +38,36 @@ public :
     char *digest_str);
   static bool ComputeFileMD5(const char *filename, char *digest_str);
 
-  // Print
+  /// Print
   void Print(std::ostream &os = std::cout);
 
-  // return the table of fullpath to gdcmData DICOM files:
+  /// return the table of fullpath to gdcmData DICOM files:
   static const char * const * GetFileNames();
   static unsigned int GetNumberOfFileNames();
   static const char * GetFileName(unsigned int file);
 
-  // return the table that map the md5 (as in md5sum) of the Pixel Data associated
-  // to a filename
+  /// return the table that map the md5 (as in md5sum) of the Pixel Data associated
+  /// to a filename
   typedef const char* const (*MD5DataImagesType)[2];
   static MD5DataImagesType GetMD5DataImages();
   static unsigned int GetNumberOfMD5DataImages();
   static const char * const * GetMD5DataImage(unsigned int file);
   static const char * GetMD5FromFile(const char *filepath);
 
-  // Return the GDCM DATA ROOT
+  /// Return the GDCM DATA ROOT
   static const char * GetDataRoot();
 
+  /// Return the GDCM DATA EXTRA ROOT
   static const char * GetDataExtraRoot();
 
+  /// Return the GDCM PIXEL SPACING DATA ROOT (See David Clunie website for dataset)
   static const char * GetPixelSpacingDataRoot();
 
-  // NOT THREAD SAFE
-  // Returns the temp directory as used in testing needing to output data:
+  /// NOT THREAD SAFE
+  /// Returns the temp directory as used in testing needing to output data:
   static const char * GetTempDirectory(const char * subdir = 0);
 
-  // NOT THREAD SAFE
+  /// NOT THREAD SAFE
   static const char * GetTempFilename(const char *filename, const char * subdir = 0);
 };
 } // end namespace gdcm

@@ -43,7 +43,7 @@ public:
   typedef std::string::reverse_iterator       reverse_iterator;
   typedef std::string::const_reverse_iterator const_reverse_iterator;
 
-  // String constructors.
+  /// String constructors.
   String(): std::string() {}
   String(const value_type* s): std::string(s)
   {
@@ -70,9 +70,10 @@ public:
     }
   }
 
-  // WARNING: Trailing \0 might be lost in this operation:
+  /// WARNING: Trailing \0 might be lost in this operation:
   operator const char *() { return this->c_str(); }
 
+  /// return if string is valid
   bool IsValid() const {
     // Check Length:
     size_type l = size();

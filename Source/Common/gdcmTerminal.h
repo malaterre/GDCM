@@ -20,8 +20,9 @@
 
 namespace gdcm
 {
-/*
- * \brief Class for Terminal
+/**
+ * \class Class for Terminal
+ * \brief Allow one to print in color in a shell
  */
 //-----------------------------------------------------------------------------
 

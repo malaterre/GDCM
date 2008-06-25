@@ -19,7 +19,9 @@
 
 namespace gdcm
 {
-
+/** \class Unpacker12Bits
+ * \brief Unpacked 12 bits pixel into 16bits 
+ */
 
 class GDCM_EXPORT Unpacker12Bits
 {

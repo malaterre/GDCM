@@ -21,7 +21,8 @@
 namespace gdcm 
 {
 
-/* \brief SwapCode class
+/** \class SwapCode
+ * \brief SwapCode representation
  */
 class GDCM_EXPORT SwapCode
 {

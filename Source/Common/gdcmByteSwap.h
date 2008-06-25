@@ -49,6 +49,11 @@ private:
   
 };
 
+/**
+ * \example TestDirectory.cxx
+ * This is a C++ example on how to use gdcm::Reader
+ */
+
 } // end namespace gdcm
 
 #include "gdcmByteSwap.txx"

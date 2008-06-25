@@ -22,33 +22,41 @@ namespace gdcm
 
 /**
  * \brief Class to do system operation
- * \note bla
+ * \note OS independant functionalities
  */
 class GDCM_EXPORT System
 {
 public:
-  // system operation 
+  /// Create a directory
   static bool MakeDirectory(const char *path); 
+  /// Check whether the specified file exist on the sytem
   static bool FileExists(const char* filename);
+  /// Check whether the file specified is a directory:
   static bool FileIsDirectory(const char* name);
+  /// remove a file
   static bool RemoveFile(const char* source);
   //static bool MakeDirectory(FilenameType const &name) { (void)name; return false; }; // TODO
   //static bool DeleteDirectory(FilenameType const &name) { (void)name; return false; }; // TODO
 
+  /// Return the last error
   static const char *GetLastSystemError();
+  /// Return the filesize
   static size_t FileSize(const char* filename);
 
   // TODO some system calls
   // Chdir
   // copy a file
 
-  // DO NOT USE: This function might disapear real time soon...
+  /// DO NOT USE: This function might disapear real time soon...
   static bool GetHardwareAddress(unsigned char addr[6]);
 
   // somewhat UID specific:
+  /// Return the current data time
   static bool GetCurrentDateTime(char date[18]);
+  /// Encode bytes
   static size_t EncodeBytes(char *out, const unsigned char *data, int size);
 
+  /// consistant func for C99 spec of strcasecmp/strncasecmp
   static int StrCaseCmp(const char *s1, const char *s2);
   static int StrNCaseCmp(const char *s1, const char *s2, size_t n);
 
