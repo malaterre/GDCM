@@ -294,6 +294,9 @@ int main (int argc, char *argv[])
       }
     }
 
+  //
+  gdcm::System::SetArgv0( argv[0] );
+
   if( version )
     {
     //std::cout << "version" << std::endl;

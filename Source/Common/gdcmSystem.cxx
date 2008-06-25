@@ -73,6 +73,12 @@ inline int Rmdir(const char* dir)
 {
   return _rmdir(dir);
 }
+inline const char* Getcwd(char* buf, unsigned int len)
+{
+  const char* ret = _getcwd(buf, len);
+  return ret;
+}
+
 #else
 inline int Mkdir(const char* dir)
 {
@@ -82,7 +88,39 @@ inline int Rmdir(const char* dir)
 {
   return rmdir(dir);
 }
+inline const char* Getcwd(char* buf, unsigned int len)
+{
+  const char* ret = getcwd(buf, len);
+  return ret;
+}
 #endif
+
+// http://www.faqs.org/faqs/unix-faq/programmer/faq/
+static std::string Argv0;
+
+void System::SetArgv0(const char *argv0)
+{
+  Argv0 = argv0;
+//std::cout << "Set:" << Argv0 << std::endl;
+}
+
+const char* System::GetArgv0()
+{
+//std::cout << "Get:" << Argv0 << std::endl;
+  return Argv0.c_str();
+}
+
+std::string System::GetCWD()
+{
+  char buf[2048];
+  const char* cwd = Getcwd(buf, 2048);
+  std::string path;
+  if ( cwd )
+    {
+    path = cwd;
+    }
+  return path;
+}
 
 bool System::MakeDirectory(const char *path)
 {

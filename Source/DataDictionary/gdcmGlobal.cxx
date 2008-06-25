@@ -49,6 +49,10 @@ Global::Global()
     }
 }
 
+//void Global::Initialize(const char *argv0)
+//{
+//}
+
 Global::~Global()
 {
   if(--GlobalCount == 0)

@@ -60,6 +60,14 @@ public:
   static int StrCaseCmp(const char *s1, const char *s2);
   static int StrNCaseCmp(const char *s1, const char *s2, size_t n);
 
+  /// Return current working directory
+  /// Warning: if current working path is too long (>2048 bytes) the call will fail
+  static std::string GetCWD();
+
+  /// NOT THREAD SAFE
+  static void SetArgv0(const char *);
+  static const char* GetArgv0();
+
 protected:
   static bool GetPermissions(const char* file, unsigned short& mode);
   static bool SetPermissions(const char* file, unsigned short mode);
