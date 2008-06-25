@@ -7,17 +7,22 @@ SUBDIRS(
   )
 
 MACRO(PROCESSONEDIR DIRNAME SRCS TESTS)
+  SET(mysrc)
+  SET(mytests)
   FILE(GLOB files
     ${DIRNAME}/*
   )
   FOREACH(file ${files})
     IF(IS_DIRECTORY ${file})
       IF("${file}" MATCHES ".svn")
-        MESSAGE("${file} is svn dir")
-        SET(SRCS ${SRCS} ${file})
+        #MESSAGE("${file} is svn dir")
+        set(mysrcs ${mysrcs} ${file})
       ELSE("${file}" MATCHES ".svn")
         #MESSAGE("${file} is dir")
-        PROCESSONEDIR( ${file} "${SRCS}" "${TESTS}" )
+        PROCESSONEDIR( ${file} mysrcs2 mytests2)
+        MESSAGE("${mytests2}")
+        SET(mysrcs ${mysrcs} ${mysrcs2})
+        SET(mytests ${mytests} ${mytests2})
       ENDIF("${file}" MATCHES ".svn")
     ELSE(IS_DIRECTORY ${file})
       #MESSAGE("${file} is file")
@@ -28,21 +33,22 @@ MACRO(PROCESSONEDIR DIRNAME SRCS TESTS)
         MATH(EXPR fileend "${filename_length} - 4 - 4") # Need to remove 'Test' and '.cxx'
         STRING(SUBSTRING ${filename} 4 ${fileend} classname)
         #MESSAGE("${classname} is tested")
-        SET(TESTS ${TESTS} ${classname})
+        SET(mytests ${mytests} ${classname})
       #ENDIF("${filename}" MATCHES "Test")
       ENDIF("${filename}" MATCHES "Test" AND ${filename} MATCHES ".cxx")
     ENDIF(IS_DIRECTORY ${file})
   ENDFOREACH(file)
+  SET(${TESTS} ${mytests})
 ENDMACRO(PROCESSONEDIR)
 
 #SET(gdcm_src)
 #SET(gdcm_tests)
 #PROCESSONEDIR(
-#    ${CMAKE_CURRENT_SOURCE_DIR}/Source
-#    "${gdcm_src}"
-#    "${gdcm_tests}"
+#    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Common
+#    gdcm_src
+#    gdcm_tests
 #)
 #
-#MESSAGE("${gdcm_src}")
+##MESSAGE("${gdcm_src}")
 #MESSAGE("${gdcm_tests}")
 
