@@ -95,6 +95,7 @@ inline const char* Getcwd(char* buf, unsigned int len)
 }
 #endif
 
+// 1.14 How can I find a process' executable file?
 // http://www.faqs.org/faqs/unix-faq/programmer/faq/
 static std::string Argv0;
 
