@@ -244,7 +244,7 @@ MARK_AS_ADVANCED(BUILD_TESTING)
 #-----------------------------------------------------------------------------
 # Python install
 FIND_PACKAGE(PythonInterp REQUIRED)
-#MACRO(GET_PYTHON_SITE_PACKAGE dir)
+MACRO(GET_PYTHON_SITE_PACKAGE dir)
   EXECUTE_PROCESS(
   	COMMAND ${PYTHON_EXECUTABLE} "-c" "from distutils import sysconfig; print sysconfig.get_python_lib()"
   	#WORKING_DIRECTORY @LIBRARY_OUTPUT_PATH@
@@ -254,10 +254,10 @@ FIND_PACKAGE(PythonInterp REQUIRED)
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
   #SET(dir ${import_output})
-#ENDMACRO(GET_PYTHON_SITE_PACKAGE)
+ENDMACRO(GET_PYTHON_SITE_PACKAGE)
 
 
-#GET_PYTHON_SITE_PACKAGE(python_site_package)
+GET_PYTHON_SITE_PACKAGE(python_site_package)
 IF(import_output)
 STRING(LENGTH ${import_output} len)
 # let's remove the "/usr/lib" part...
@@ -405,6 +405,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   SET(CPACK_PACKAGE_CONTACT "Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>")
   SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6, libstdc++6 (>= 4.0.2-4), libuuid1, zlib1g (>= 1:1.2.1), libgcc1 (>= 1:4.0.2), libexpat1, swig") # bug: missing dep to python...
   SET(CPACK_DEBIAN_PACKAGE_SUGGESTS "dcmtk")
+  SET(CPACK_IGNORE_FILES "/debian/;/\\.svn/;\\.swp$;\\.#;/#")
 
   # List executables
   #SET(CPACK_PACKAGE_EXECUTABLES "gdcmviewer" "VIEWER")
