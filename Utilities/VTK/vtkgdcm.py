@@ -8,6 +8,8 @@ if os.name == 'posix':
   # http://gcc.gnu.org/faq.html#dso
   # http://mail.python.org/pipermail/python-dev/2002-May/023923.html
   # http://wiki.python.org/moin/boost.python/CrossExtensionModuleDependencies
+  # This is now merged in VTK 5.2:
+  # http://vtk.org/cgi-bin/viewcvs.cgi/Wrapping/Python/vtk/__init__.py?r1=1.13&r2=1.14
   import sys
   orig_dlopen_flags = sys.getdlopenflags()
   try:
@@ -21,8 +23,8 @@ if os.name == 'posix':
       dl = None
   if dl:
     #print "dl was imported"
-    #sys.setdlopenflags(dl.RTLD_LAZY|dl.RTLD_GLOBAL)    
-    sys.setdlopenflags(dl.RTLD_NOW|dl.RTLD_GLOBAL)    
+    #sys.setdlopenflags(dl.RTLD_LAZY|dl.RTLD_GLOBAL)
+    sys.setdlopenflags(dl.RTLD_NOW|dl.RTLD_GLOBAL)
   from libvtkgdcmPython import *
   # revert:
   sys.setdlopenflags(orig_dlopen_flags)
