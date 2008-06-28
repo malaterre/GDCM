@@ -164,3 +164,6 @@ http://www.itk.org/Wiki/CMake:Component_Install_With_CPack
 -----------------------------------------------------------------------
 TODO:
 gdcmData/GDCMPrinterDisplayUNasSQ.dcm
+-----------------------------------------------------------------------
+STL-based (non-validating) XML Parser
+http://www.codeguru.com/cpp/i-n/internet/xml/article.php/c3451/

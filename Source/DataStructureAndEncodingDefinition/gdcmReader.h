@@ -24,6 +24,9 @@ namespace gdcm
 {
 /**
  * \brief Reader ala DOM (Document Object Model)
+ * This class is a non-validating reader, it will only performs well-
+ * formedness check only, and to some extent catch known error (non
+ * well-formed document).
  *
  * Detailled description here
  *
