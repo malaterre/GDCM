@@ -2,6 +2,7 @@
 # MSFF
 SET(MSFF_SRCS
   gdcmAnonymizer.cxx
+  gdcmTagPath.cxx
   gdcmRescaler.cxx
   gdcmOrientation.cxx
   gdcmDirectionCosines.cxx
