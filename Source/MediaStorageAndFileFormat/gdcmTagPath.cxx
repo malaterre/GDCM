@@ -20,7 +20,7 @@
 namespace gdcm
 {
 
-TagPath::TagPath()
+TagPath::TagPath():Path()
 {
 }
 
@@ -30,6 +30,11 @@ TagPath::~TagPath()
 
 void TagPath::Print(std::ostream &os) const
 {
+  std::vector<Tag>::const_iterator it = Path.begin();
+  for(; it != Path.end(); ++it)
+  {
+	  os << *it << std::endl;
+  }
 }
 
 bool TagPath::IsValid(const char *path)
@@ -46,6 +51,7 @@ void TagPath::ConstructFromString(const char *path)
 {
   size_t pos = 0;
   const size_t len = strlen(path);
+  Path.clear();
   while( pos != len )
   {
   if( path[pos] == '/' )
@@ -54,6 +60,8 @@ void TagPath::ConstructFromString(const char *path)
   }
   Tag t;
   t.ReadFromCommaSeparatedString( path+pos );
+  pos += 4 + 4 + 1;
+  Path.push_back( t );
   }
 }
 

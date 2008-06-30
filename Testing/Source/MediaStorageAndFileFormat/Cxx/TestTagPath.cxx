@@ -23,6 +23,14 @@ int TestTagPath(int argc, char *argv[])
   const char path[] = "/0010,0010";
   tp.ConstructFromString( path );
 
+  tp.Print( std::cout );
+
+  const char path2[] = "/0010,0011/1234,5678";
+  tp.ConstructFromString( path2 );
+
+  tp.Print( std::cout );
+
+
   return 0;
 }
 

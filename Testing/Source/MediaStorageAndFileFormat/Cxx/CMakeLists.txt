@@ -2,6 +2,7 @@
 # MSFF
 SET(MSFF_TEST_SRCS
   TestAnonymizer
+  TestTagPath
   TestOrientation
   TestIconImage
   TestImageHelper
