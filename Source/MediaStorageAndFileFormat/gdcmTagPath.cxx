@@ -66,5 +66,14 @@ void TagPath::ConstructFromString(const char *path)
   }
 }
 
+void TagPath::Push(Tag const & t)
+{
+  Path.push_back( t );
+}
+
+void TagPath::Push(unsigned int itemnum)
+{
+}
+
 }
 

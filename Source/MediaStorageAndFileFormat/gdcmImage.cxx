@@ -319,6 +319,7 @@ void Image::Print(std::ostream &os) const
 
     PF.Print(os);
     }
+  os << "TransferSyntax: " << TS << "\n";
 }
 
 bool Image::TryRAWCodec(char *buffer) const

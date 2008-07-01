@@ -4,6 +4,7 @@ SET(MSFF_SRCS
   gdcmAnonymizer.cxx
   gdcmTagPath.cxx
   gdcmRescaler.cxx
+  gdcmImageToImageFilter.cxx
   gdcmOrientation.cxx
   gdcmDirectionCosines.cxx
   gdcmSorter.cxx

@@ -35,6 +35,17 @@ void Scanner::ClearTags()
   Tags.clear();
 }
 
+void Scanner::ClearSkipTags()
+{
+  SkipTags.clear();
+}
+
+void Scanner::AddSkipTag( Tag const & t )
+{
+  SkipTags.insert( t );
+  abort(); // This is NOT implemented for now
+}
+
 // Warning: API is passing a public tag (no way to specify private tag)
 void Scanner::AddTag( Tag const & t )
 {
@@ -105,7 +116,7 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
     try
       {
       // Start reading all tags, including the 'last' one:
-      read = reader.ReadUpToTag(last);
+      read = reader.ReadUpToTag(last, SkipTags);
       }
     catch(std::exception & ex)
       {
