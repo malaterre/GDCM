@@ -208,6 +208,7 @@ public:
     PixelData = de;
   }
   const DataElement& GetDataElement() const { return PixelData; }
+  DataElement& GetDataElement() { return PixelData; }
 
 protected:
   bool TryRAWCodec(char *buffer) const;

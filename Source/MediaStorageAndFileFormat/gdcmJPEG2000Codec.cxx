@@ -89,8 +89,8 @@ bool JPEG2000Codec::CanDecode(TransferSyntax const &ts)
 
 bool JPEG2000Codec::CanCode(TransferSyntax const &ts)
 {
-  return ts == TransferSyntax::ImplicitVRLittleEndian
-    || ts == TransferSyntax::ExplicitVRLittleEndian;
+  return ts == TransferSyntax::JPEG2000Lossless 
+    || ts == TransferSyntax::JPEG2000;
 }
 
 bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)

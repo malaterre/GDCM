@@ -69,6 +69,7 @@ public:
   bool WriteBuffer(std::ostream &os) const;
 
   const BasicOffsetTable &GetTable() const { return Table; }
+  BasicOffsetTable &GetTable() { return Table; }
 
 
 template <typename TSwap>

@@ -378,6 +378,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   vtkBalloonWidget *balloonwidget = vtkBalloonWidget::New();
   balloonwidget->SetInteractor(iren);
   balloonwidget->SetRepresentation(balloonrep);
+  balloonrep->Delete();
   balloonwidget->AddBalloon(viewer->GetImageActor(),"This is a DICOM image",NULL);
 
   vtkBalloonCallback *cbk = vtkBalloonCallback::New();
@@ -574,6 +575,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 
   reader->Delete();
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+  cbk->Delete();
   dwidget->Off();
   balloonwidget->Off();
   balloonwidget->Delete();

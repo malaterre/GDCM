@@ -33,6 +33,10 @@ public:
 
   bool Change();
 
+protected:
+  bool TryJPEGCodec();
+  bool TryJPEG2000Codec();
+
 private:
   TransferSyntax TS;
 };
