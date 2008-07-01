@@ -61,7 +61,7 @@ SET_SOURCE_FILES_PROPERTIES(gdcm.i PROPERTIES CPLUSPLUS ON)
 #SET(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_BINARY_DIR}")
 
 #SET(GDCM_PYTHON_IMPLEMENTATION_NAME gdcmpython)
-SET(GDCM_PYTHON_IMPLEMENTATION_NAME gdcm)
+SET(GDCM_PYTHON_IMPLEMENTATION_NAME gdcmswig)
 SET(CMAKE_SWIG_FLAGS "-interface _${GDCM_PYTHON_IMPLEMENTATION_NAME}")
 SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
 
@@ -119,9 +119,10 @@ ENDIF(WIN32 AND NOT CYGWIN)
 ADD_CUSTOM_COMMAND(
   TARGET    ${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME}
   POST_BUILD
-  COMMAND   ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/gdcm.py ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}
-  DEPENDS "${swig_generated_file_fullname}" "${CMAKE_CURRENT_BINARY_DIR}/gdcm.py"
-  COMMENT   "Copy gdcm.py into ${LIBRARY_OUTPUT_PATH}"
+  COMMAND   ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/gdcmswig.py ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}
+  COMMAND   ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/gdcm.py ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}
+  DEPENDS ${swig_generated_file_fullname} ${CMAKE_CURRENT_BINARY_DIR}/gdcmswig.py ${CMAKE_CURRENT_SOURCE_DIR}/gdcm.py
+  COMMENT   "Copy gdcmswig.py into ${LIBRARY_OUTPUT_PATH}"
 )
 
 #Module are always place in the library destination
@@ -135,7 +136,8 @@ IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   )
   # the python file is not a dev file, but part of the gdcm module...
   INSTALL(FILES 
-    ${CMAKE_CURRENT_BINARY_DIR}/gdcm.py 
+    ${CMAKE_CURRENT_BINARY_DIR}/gdcmswig.py 
+    ${CMAKE_CURRENT_SOURCE_DIR}/gdcm.py 
     DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Runtime
   )
   # pth file are actually a pain to use since they are *required* to be in some very specific location;

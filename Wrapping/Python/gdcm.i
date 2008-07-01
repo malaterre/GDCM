@@ -17,7 +17,7 @@
 // http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus
 // http://www.geocities.com/foetsch/python/extending_python.htm
 
-%module(directors="1",docstring="A DICOM library") gdcm
+%module(directors="1",docstring="A DICOM library") gdcmswig
 #pragma SWIG nowarn=504,510
 %{
 #include "gdcmTypes.h"
@@ -108,6 +108,11 @@
 
 using namespace gdcm;
 %}
+
+//%insert("runtime") %{
+//#include "myheader.h"
+//%}
+
 
 // swig need to know what are uint16_t, uint8_t...
 %include "stdint.i"
