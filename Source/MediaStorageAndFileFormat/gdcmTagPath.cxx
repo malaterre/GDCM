@@ -16,6 +16,7 @@
 #include "gdcmTag.h"
 
 #include <vector>
+#include <string.h> // strlen
 
 namespace gdcm
 {

@@ -17,6 +17,19 @@ ELSE(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.6)
   SET(NAMELINK_SKIP)
 ENDIF(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.6)
 
+# TODO
+# http://www.vtk.org/pipermail/vtkusers/2007-May/090968.html 
+# 
+# False memory leak reports are caused by VTK dlls loading *before* MFC dlls.
+# You have to use the linker's /delayload flag to avoid this issue.
+# 
+# The /delayload flag should be correct by default in the MFC examples if you
+# are using CVS VTK... If you are using a previous version of VTK (5.0 or
+# earlier) then you will have to figure out a way to link with that flag.
+# 
+# See the CVS version of files in VTK/GUISupport/MFC for details. Or grep the
+# VTK source tree for "DELAYLOAD"
+
 #-----------------------------------------------------------------------------
 # Disallow insource build since I never test that
 STRING(COMPARE EQUAL "${GDCM_SOURCE_DIR}" "${GDCM_BINARY_DIR}" INSOURCE)
