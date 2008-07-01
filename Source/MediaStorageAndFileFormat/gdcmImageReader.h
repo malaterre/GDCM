@@ -64,7 +64,7 @@ protected:
     std::string &conversion );
 
 private:
-  Image PixelData;
+  SmartPointer<Image> PixelData;
 };
 
 } // end namespace gdcm

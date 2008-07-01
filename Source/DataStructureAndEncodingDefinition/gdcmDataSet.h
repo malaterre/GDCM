@@ -210,7 +210,7 @@ public:
   std::istream &Read(std::istream &is);
 
   template <typename TDE, typename TSwap>
-  std::istream &ReadUpToTag(std::istream &is, const Tag &t);
+  std::istream &ReadUpToTag(std::istream &is, const Tag &t, std::set<Tag> const & skiptags);
 
   template <typename TDE, typename TSwap>
   std::istream &ReadUpToTagWithLength(std::istream &is, const Tag &t, VL & length);

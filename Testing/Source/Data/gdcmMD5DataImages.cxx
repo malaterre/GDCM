@@ -587,6 +587,13 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "498f80fd27882351b9a09e6ceef470bc" , "ELSCINT1_GDCM12Bug.dcm" },
 { "34b5c1ce40f09f0dbede87ebf3f6ed3c" , "korean_agfa_infinitt_2008-3.dcm" },
 { "2c8b8ee9950582af472cf652005f07d4" , "c_vf1001.dcm" },
+{ "a1ea6633f17ef1e0d702cdd46434b393" , "MARTIN_ALBERT-20010502-2-1.nema" },
+{ "d85237c7ff838f5246643a027d3727ae" , "GDCMPrinterDisplayUNasSQ.dcm" },
+{ "2dbe2da7fbcf1bd73e2221e9cd4ad7ee" , "MissingPixelRepresentation.dcm" },
+{ "a3009bc70444148c5ea2441a099f9dc6" , "E00001S03I0015.dcm" },
+
+
+
 
 
 /* Stopping condition */

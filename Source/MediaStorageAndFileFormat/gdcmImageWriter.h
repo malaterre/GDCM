@@ -31,14 +31,14 @@ public:
   ImageWriter();
   ~ImageWriter();
 
-  const Image& GetImage() const { return PixelData; }
-  Image& GetImage() { return PixelData; } // FIXME 
+  const Image& GetImage() const { return *PixelData; }
+  Image& GetImage() { return *PixelData; } // FIXME 
   void SetImage(Image const &img);
 
   bool Write(); // Execute()
 
 private:
-  Image PixelData;
+  SmartPointer<Image> PixelData;
 };
 
 } // end namespace gdcm

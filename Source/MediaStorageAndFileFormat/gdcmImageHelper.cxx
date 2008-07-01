@@ -655,7 +655,18 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
       sp.push_back( 1.0 );
       return sp;
       }
-    abort();
+    else
+      {
+      // TODO this one is easy:
+      // (0028,0009) AT (0018,1063)                              #   4, 1 FrameIncrementPointer
+      // -> (0018,1063) DS [76.000000]                              #  10, 1 FrameTime
+
+      gdcmWarningMacro( "No spacing value found" );
+      sp.push_back( 1.0 );
+      sp.push_back( 1.0 );
+      sp.push_back( 1.0 );
+      return sp;
+      }
     }
 
   Tag spacingtag = GetSpacingTagFromMediaStorage(ms);

@@ -21,6 +21,8 @@
 #include "gdcmByteValue.h"
 #include "gdcmSmartPointer.h"
 
+#include <set>
+
 namespace gdcm
 {
 /**
@@ -161,6 +163,12 @@ public:
 
   template <typename TDE, typename TSwap>
   std::istream &Read(std::istream &is) {
+    return static_cast<TDE*>(this)->template Read<TSwap>(is);
+  }
+
+  template <typename TDE, typename TSwap>
+  std::istream &ReadOrSkip(std::istream &is, std::set<Tag> const &skiptags) {
+    (void)skiptags;
     return static_cast<TDE*>(this)->template Read<TSwap>(is);
   }
 

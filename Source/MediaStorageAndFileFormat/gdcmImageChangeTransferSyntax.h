@@ -12,30 +12,32 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmImageToImageFilter_h
-#define __gdcmImageToImageFilter_h
+#ifndef __gdcmImageChangeTransferSyntax_h
+#define __gdcmImageChangeTransferSyntax_h
 
-#include "gdcmImage.h"
+#include "gdcmImageToImageFilter.h"
+#include "gdcmTransferSyntax.h"
 
 namespace gdcm
 {
 
 
-class GDCM_EXPORT ImageToImageFilter
+class GDCM_EXPORT ImageChangeTransferSyntax : public ImageToImageFilter
 {
 public:
-  ImageToImageFilter():Input(new Image),Output(new Image) {}
-  ~ImageToImageFilter() {}
+  ImageChangeTransferSyntax() {}
+  ~ImageChangeTransferSyntax() {}
 
-  void SetInput(const Image& image);
-  const Image &GetOutput() const { return *Output; }
+  void SetTransferSyntax(const TransferSyntax &ts) { TS = ts; }
+  const TransferSyntax &GetTransferSyntax() const { return TS; }
 
-protected:
-  SmartPointer<Image> Input;
-  SmartPointer<Image> Output;
+  bool Change();
+
+private:
+  TransferSyntax TS;
 };
 
 } // end namespace gdcm
 
-#endif //__gdcmImageToImageFilter_h
+#endif //__gdcmImageChangeTransferSyntax_h
 

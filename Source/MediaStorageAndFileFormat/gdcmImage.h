@@ -50,13 +50,13 @@ namespace gdcm
  * FIXME:
  * Still missing the Orientation !
  */
-class GDCM_EXPORT Image
+class GDCM_EXPORT Image : public Object
 {
 public:
   Image ():NumberOfDimensions(0),PlanarConfiguration(0),Dimensions(),Spacing(),SC(),NeedByteSwap(false),LUT(0),Overlays(),Curves(),Icon(),Intercept(0),Slope(1),PixelData() {
     //DirectionCosines.resize(6);
   }
-  virtual ~Image() {}
+  ~Image() {}
 
   /// Return the number of dimension of the pixel data bytes; for example 2 for a 2D matrices of values
   unsigned int GetNumberOfDimensions() const;

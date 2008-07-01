@@ -559,7 +559,7 @@ std::istream &is = Stream;
   return success;
 }
 
-bool Reader::ReadUpToTag(const Tag & tag)
+bool Reader::ReadUpToTag(const Tag & tag, std::set<Tag> const & skiptags)
 {
   if( !Stream.is_open() )
     {
@@ -642,7 +642,7 @@ std::istream &is = Stream;
     zlib_stream::zip_istream gzis( is );
     // FIXME: we also know in this case that we are dealing with Explicit:
     assert( ts.GetNegociatedType() == TransferSyntax::Explicit );
-    F->GetDataSet().ReadUpToTag<ExplicitDataElement,SwapperNoOp>(gzis,tag);
+    F->GetDataSet().ReadUpToTag<ExplicitDataElement,SwapperNoOp>(gzis,tag, skiptags);
 
     return is;
     }
@@ -656,11 +656,11 @@ std::istream &is = Stream;
         {
         // There is no such thing as Implicit Big Endian... oh well
         // LIBIDO-16-ACR_NEMA-Volume.dcm 
-        F->GetDataSet().ReadUpToTag<ImplicitDataElement,SwapperDoOp>(is,tag);
+        F->GetDataSet().ReadUpToTag<ImplicitDataElement,SwapperDoOp>(is,tag, skiptags);
         }
       else
         {
-        F->GetDataSet().ReadUpToTag<ExplicitDataElement,SwapperDoOp>(is,tag);
+        F->GetDataSet().ReadUpToTag<ExplicitDataElement,SwapperDoOp>(is,tag, skiptags);
         }
       }
     else // LittleEndian
@@ -669,7 +669,7 @@ std::istream &is = Stream;
         {
         if( hasmetaheader && haspreamble )
           {
-          F->GetDataSet().ReadUpToTag<ImplicitDataElement,SwapperNoOp>(is,tag);
+          F->GetDataSet().ReadUpToTag<ImplicitDataElement,SwapperNoOp>(is,tag, skiptags);
           }
         else
           {
@@ -684,7 +684,7 @@ std::istream &is = Stream;
         }
       else
         {
-        F->GetDataSet().ReadUpToTag<ExplicitDataElement,SwapperNoOp>(is,tag);
+        F->GetDataSet().ReadUpToTag<ExplicitDataElement,SwapperNoOp>(is,tag, skiptags);
         }
       }
     }
@@ -716,7 +716,7 @@ std::istream &is = Stream;
       // GDCM 1.X
       gdcmWarningMacro( "Attempt to read non CP 246" );
       F->GetDataSet().Clear(); // remove garbage from 1st attempt...
-      F->GetDataSet().ReadUpToTag<CP246ExplicitDataElement,SwapperNoOp>(is,tag);
+      F->GetDataSet().ReadUpToTag<CP246ExplicitDataElement,SwapperNoOp>(is,tag, skiptags);
       }
     else if( ex.GetLastElement().GetVR() == VR::UN )
       {
@@ -741,7 +741,7 @@ std::istream &is = Stream;
       // GDCM 1.X
       gdcmWarningMacro( "Attempt to read GDCM 1.X wrongly encoded");
       F->GetDataSet().Clear(); // remove garbage from 1st attempt...
-      F->GetDataSet().ReadUpToTag<UNExplicitDataElement,SwapperNoOp>(is,tag);
+      F->GetDataSet().ReadUpToTag<UNExplicitDataElement,SwapperNoOp>(is,tag, skiptags);
       // This file can only be rewritten as implicit...
       }
     else if ( ex.GetLastElement().GetTag() == Tag(0xfeff,0x00e0) )
@@ -797,7 +797,7 @@ std::istream &is = Stream;
         // Philips
         gdcmWarningMacro( "Attempt to read the file as mixture of explicit/implicit");
         F->GetDataSet().Clear(); // remove garbage from 1st attempt...
-        F->GetDataSet().ReadUpToTag<ExplicitImplicitDataElement,SwapperNoOp>(is,tag);
+        F->GetDataSet().ReadUpToTag<ExplicitImplicitDataElement,SwapperNoOp>(is,tag, skiptags);
         // This file can only be rewritten as implicit...
         }
       }

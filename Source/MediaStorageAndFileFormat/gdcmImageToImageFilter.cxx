@@ -20,6 +20,11 @@
 namespace gdcm
 {
 
+void ImageToImageFilter::SetInput(const Image& image)
+{
+  Input = &image;
+}
+
 
 } // end namespace gdcm
 

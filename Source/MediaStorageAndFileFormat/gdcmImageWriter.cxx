@@ -27,7 +27,7 @@
 namespace gdcm
 {
 
-ImageWriter::ImageWriter():PixelData()
+ImageWriter::ImageWriter():PixelData(new Image)
 {
 }
 
@@ -37,10 +37,7 @@ ImageWriter::~ImageWriter()
 
 void ImageWriter::SetImage(Image const &img)
 {
-  //assert( Stream.is_open() );
-  const Image &iv = img;
-  PixelData = iv;
-  //assert( Stream.is_open() );
+  PixelData = &img;
 }
 
 bool ImageWriter::Write()
@@ -51,24 +48,24 @@ bool ImageWriter::Write()
 
   // col & rows:
   Attribute<0x0028, 0x0011> columns;
-  columns.SetValue( PixelData.GetDimension(0) );
+  columns.SetValue( PixelData->GetDimension(0) );
   ds.Replace( columns.GetAsDataElement() );
 
   Attribute<0x0028, 0x0010> rows;
-  rows.SetValue( PixelData.GetDimension(1) );
+  rows.SetValue( PixelData->GetDimension(1) );
   ds.Replace( rows.GetAsDataElement() );
 
   // (0028,0008) IS [12]                                     #   2, 1 NumberOfFrames
-  if( PixelData.GetNumberOfDimensions() == 3 )
+  if( PixelData->GetNumberOfDimensions() == 3 )
     {
     Attribute<0x0028, 0x0008> numberofframes;
-    assert( PixelData.GetDimension(2) > 1 );
-    numberofframes.SetValue( PixelData.GetDimension(2) );
+    assert( PixelData->GetDimension(2) > 1 );
+    numberofframes.SetValue( PixelData->GetDimension(2) );
     ds.Replace( numberofframes.GetAsDataElement() );
     }
 
-  PixelFormat pf = PixelData.GetPixelFormat();
-  PhotometricInterpretation pi = PixelData.GetPhotometricInterpretation();
+  PixelFormat pf = PixelData->GetPixelFormat();
+  PhotometricInterpretation pi = PixelData->GetPhotometricInterpretation();
   // FIXME HACK !
   if( pf.GetBitsAllocated() == 24 )
     {
@@ -104,7 +101,7 @@ bool ImageWriter::Write()
   ds.Replace( samplesperpixel.GetAsDataElement() );
 
   // Overlay Data 60xx
-  unsigned int nOv = PixelData.GetNumberOfOverlays();
+  unsigned int nOv = PixelData->GetNumberOfOverlays();
   for( unsigned int ovidx = 0; ovidx < nOv; ++ovidx )
     {
     // (6000,0010) US 484                                      #   2, 1 OverlayRows
@@ -118,7 +115,7 @@ bool ImageWriter::Write()
     // (6000,0102) US 0                                        #   2, 1 OverlayBitPosition
     // (6000,3000) OW 0000\0000\0000\0000\0000\0000\0000\0000\0000\0000\0000\0000\0000... # 29282, 1 OverlayData
     DataElement de;
-    const Overlay &ov = PixelData.GetOverlay(ovidx);
+    const Overlay &ov = PixelData->GetOverlay(ovidx);
     Attribute<0x6000,0x0010> overlayrows;
     overlayrows.SetValue( ov.GetRows() );
     de = overlayrows.GetAsDataElement();
@@ -172,10 +169,10 @@ bool ImageWriter::Write()
 
   // Pixel Data
   DataElement de( Tag(0x7fe0,0x0010) );
-  const Value &v = PixelData.GetDataElement().GetValue();
+  const Value &v = PixelData->GetDataElement().GetValue();
   de.SetValue( v );
   const ByteValue *bv = de.GetByteValue();
-  const TransferSyntax &ts = PixelData.GetTransferSyntax();
+  const TransferSyntax &ts = PixelData->GetTransferSyntax();
   assert( ts.IsExplicit() || ts.IsImplicit() );
   VL vl;
   if( bv )
@@ -222,12 +219,12 @@ bool ImageWriter::Write()
       || pi == PhotometricInterpretation::YBR_FULL ) // FIXME
       {
       Attribute<0x0028, 0x0006> planarconfiguration;
-      planarconfiguration.SetValue( PixelData.GetPlanarConfiguration() );
+      planarconfiguration.SetValue( PixelData->GetPlanarConfiguration() );
       ds.Replace( planarconfiguration.GetAsDataElement() );
       }
     else if ( pi == PhotometricInterpretation::PALETTE_COLOR )
       {
-      const LookupTable &lut = PixelData.GetLUT();
+      const LookupTable &lut = PixelData->GetLUT();
       assert( pf.GetBitsAllocated() == 8 && pf.GetPixelRepresentation() == 0 );
       // lut descriptor:
       // (0028,1101) US 256\0\16                                 #   6, 3 RedPaletteColorLookupTableDescriptor
@@ -288,11 +285,11 @@ bool ImageWriter::Write()
   if( pi == PhotometricInterpretation::MONOCHROME1 || pi == PhotometricInterpretation::MONOCHROME2 )
     {
     assert( pf.GetSamplesPerPixel() == 1 );
-    ImageHelper::SetRescaleInterceptSlopeValue(GetFile(), PixelData);
+    ImageHelper::SetRescaleInterceptSlopeValue(GetFile(), *PixelData);
     }
   else
     {
-    assert( PixelData.GetIntercept() == 0 && PixelData.GetSlope() == 1 );
+    assert( PixelData->GetIntercept() == 0 && PixelData->GetSlope() == 1 );
     }
 
   const char* msstr = MediaStorage::GetMSString(ms);
@@ -360,13 +357,13 @@ bool ImageWriter::Write()
   // Spacing:
   std::vector<double> sp;
   sp.resize(3); // important !
-  sp[0] = PixelData.GetSpacing(0);
-  sp[1] = PixelData.GetSpacing(1);
-  sp[2] = PixelData.GetSpacing(2); // might be a dummy value...
+  sp[0] = PixelData->GetSpacing(0);
+  sp[1] = PixelData->GetSpacing(1);
+  sp[2] = PixelData->GetSpacing(2); // might be a dummy value...
   ImageHelper::SetSpacingValue(ds, sp);
 
   // Direction Cosines:
-  const double *dircos = PixelData.GetDirectionCosines();
+  const double *dircos = PixelData->GetDirectionCosines();
   if( dircos )
     {
     std::vector<double> iop;
@@ -381,10 +378,10 @@ bool ImageWriter::Write()
     }
 
   // Origin:
-  const double *origin = PixelData.GetOrigin();
+  const double *origin = PixelData->GetOrigin();
   if( origin )
     {
-    ImageHelper::SetOriginValue(ds, PixelData);
+    ImageHelper::SetOriginValue(ds, *PixelData);
     }
 
 

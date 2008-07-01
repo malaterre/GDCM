@@ -30,7 +30,7 @@
 
 namespace gdcm
 {
-ImageReader::ImageReader()
+ImageReader::ImageReader():PixelData(new Image)
 {
 }
 
@@ -40,7 +40,7 @@ ImageReader::~ImageReader()
 
 const Image& ImageReader::GetImage() const
 {
-  return PixelData;
+  return *PixelData;
 }
 
 //void ImageReader::SetImage(Image const &img)
@@ -74,7 +74,7 @@ bool ImageReader::Read()
   const TransferSyntax &ts = header.GetDataSetTransferSyntax();
 
   // Need to set the type of image we are dealing with:
-  PixelData.SetTransferSyntax( ts );
+  PixelData->SetTransferSyntax( ts );
 
   bool res = false;
   /* Does it really make sense to check for Media Storage SOP Class UID?
@@ -93,7 +93,7 @@ bool ImageReader::Read()
     assert( ts != TransferSyntax::TS_END && ms != MediaStorage::MS_END );
     // Good it's the easy case. It's declared as an Image:
     gdcmDebugMacro( "Sweet ! Finally a good DICOM file !" );
-    //PixelData.SetCompressionFromTransferSyntax( ts );
+    //PixelData->SetCompressionFromTransferSyntax( ts );
     res = ReadImage(ms);
     }
   else
@@ -128,8 +128,8 @@ bool ImageReader::Read()
           gdcmDebugMacro( "After all it might be a DICOM file "
             "(Mallinckrodt-like)" );
           
-    //PixelData.SetCompressionFromTransferSyntax( ts );
-          //PixelData.SetCompressionType( Compression::RAW );
+    //PixelData->SetCompressionFromTransferSyntax( ts );
+          //PixelData->SetCompressionType( Compression::RAW );
           res = ReadImage(ms2);
           }
         else
@@ -144,7 +144,7 @@ bool ImageReader::Read()
         // Those transfer syntax have a high probability of being ACR NEMA
         gdcmDebugMacro( "Looks like an ACR-NEMA file" );
         // Hopefully all ACR-NEMA are RAW:
-        //PixelData.SetCompressionType( Compression::RAW );
+        //PixelData->SetCompressionType( Compression::RAW );
         res = ReadACRNEMAImage();
         }
       else // there is a Unknown Media Storage Syntax
@@ -169,7 +169,7 @@ bool ImageReader::Read()
       }
     }
 
-  //if(res) PixelData.Print( std::cout );
+  //if(res) PixelData->Print( std::cout );
   return res;
 }
 
@@ -556,20 +556,20 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     assert( numberofframes != 0 );
     if( numberofframes > 1 )
       {
-      PixelData.SetNumberOfDimensions(3);
-      PixelData.SetDimension(2, numberofframes );
+      PixelData->SetNumberOfDimensions(3);
+      PixelData->SetDimension(2, numberofframes );
       }
     else
       {
       gdcmDebugMacro( "NumberOfFrames was specified with a value of: "
         << numberofframes );
-      PixelData.SetNumberOfDimensions(2);
+      PixelData->SetNumberOfDimensions(2);
       }
     }
   else
     {
     gdcmDebugMacro( "Attempting a guess for the number of dimensions" ); // FIXME
-    PixelData.SetNumberOfDimensions(2);
+    PixelData->SetNumberOfDimensions(2);
     }
 
  
@@ -578,7 +578,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   const Tag tcolumns(0x0028, 0x0011);
   if( ds.FindDataElement( tcolumns ) )
     {
-    PixelData.SetDimension(0,
+    PixelData->SetDimension(0,
       ReadUSFromTag( tcolumns, ss, conversion ) );
     }
   else
@@ -590,11 +590,11 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     }
 
   // D 0028|0010 [US] [Rows] [512]
-  PixelData.SetDimension(1,
+  PixelData->SetDimension(1,
     ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
 
   // Dummy check
-  const unsigned int *dims = PixelData.GetDimensions();
+  const unsigned int *dims = PixelData->GetDimensions();
   if( dims[0] == 0 || dims[1] == 0 )
     {
     // PhilipsLosslessRice.dcm
@@ -638,7 +638,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     }
 
   // Very important to set the PixelFormat here before PlanarConfiguration
-  PixelData.SetPixelFormat( pf );
+  PixelData->SetPixelFormat( pf );
 
   // 4. Planar Configuration
   // D 0028|0006 [US] [Planar Configuration] [1]
@@ -647,7 +647,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   // well hopefully :(
   if( ds.FindDataElement( planarconfiguration ) && !ds.GetDataElement( planarconfiguration ).IsEmpty() )
     {
-    PixelData.SetPlanarConfiguration(
+    PixelData->SetPlanarConfiguration(
       ReadUSFromTag( planarconfiguration, ss, conversion ) );
     }
 
@@ -656,28 +656,28 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   // FIXME: Only SC is allowed not to have spacing:
   if( !spacing.empty() )
     {
-    assert( spacing.size() >= PixelData.GetNumberOfDimensions() ); // In MR, you can have a Z spacing, but store a 2D image
-    PixelData.SetSpacing( &spacing[0] );
-    if( spacing.size() > PixelData.GetNumberOfDimensions() ) // FIXME HACK
+    assert( spacing.size() >= PixelData->GetNumberOfDimensions() ); // In MR, you can have a Z spacing, but store a 2D image
+    PixelData->SetSpacing( &spacing[0] );
+    if( spacing.size() > PixelData->GetNumberOfDimensions() ) // FIXME HACK
       {
-      PixelData.SetSpacing(PixelData.GetNumberOfDimensions(), spacing[PixelData.GetNumberOfDimensions()] );
+      PixelData->SetSpacing(PixelData->GetNumberOfDimensions(), spacing[PixelData->GetNumberOfDimensions()] );
       }
     }
   // 4 2/3 Let's do Origin
   std::vector<double> origin = ImageHelper::GetOriginValue(*F);
   if( !origin.empty() )
     {
-    PixelData.SetOrigin( &origin[0] );
-    if( origin.size() > PixelData.GetNumberOfDimensions() ) // FIXME HACK
+    PixelData->SetOrigin( &origin[0] );
+    if( origin.size() > PixelData->GetNumberOfDimensions() ) // FIXME HACK
       {
-      PixelData.SetOrigin(PixelData.GetNumberOfDimensions(), origin[PixelData.GetNumberOfDimensions()] );
+      PixelData->SetOrigin(PixelData->GetNumberOfDimensions(), origin[PixelData->GetNumberOfDimensions()] );
       }
     }
 
   std::vector<double> dircos = ImageHelper::GetDirectionCosinesValue(*F);
   if( !dircos.empty() )
     {
-    PixelData.SetDirectionCosines( &dircos[0] );
+    PixelData->SetDirectionCosines( &dircos[0] );
     }
 
   // 5. Photometric Interpretation
@@ -699,12 +699,12 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     gdcmWarningMacro( "No PhotometricInterpretation found, default to MONOCHROME2" );
     }
   assert( pi != PhotometricInterpretation::UNKNOW );
-  PixelData.SetPhotometricInterpretation( pi );
+  PixelData->SetPhotometricInterpretation( pi );
 
   // Do the Rescale Intercept & Slope
   std::vector<double> is = ImageHelper::GetRescaleInterceptSlopeValue(*F);
-  PixelData.SetIntercept( is[0] );
-  PixelData.SetSlope( is[1] );
+  PixelData->SetIntercept( is[0] );
+  PixelData->SetSlope( is[1] );
 
   // Do the Palette Color:
   // 1. Modality LUT Sequence
@@ -826,19 +826,19 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
         abort();
         }
       }
-    PixelData.SetLUT(*lut);
+    PixelData->SetLUT(*lut);
     }
   // TODO
   //assert( pi.GetSamplesPerPixel() == pf.GetSamplesPerPixel() );
 
   // 5.5 Do IconImage if any
-  DoIconImage(ds, PixelData);
+  DoIconImage(ds, *PixelData);
 
   // 6. Do the Curves if any
-  DoCurves(ds, PixelData);
+  DoCurves(ds, *PixelData);
 
   // 7. Do the Overlays if any
-  DoOverlays(ds, PixelData);
+  DoOverlays(ds, *PixelData);
 
   // 8. Do the PixelData
   const Tag pixeldata = Tag(0x7fe0, 0x0010);
@@ -848,12 +848,12 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     return false;
     }
   const DataElement& xde = ds.GetDataElement( pixeldata );
-  bool need = PixelData.GetTransferSyntax() == TransferSyntax::ImplicitVRBigEndianPrivateGE;
-  PixelData.SetNeedByteSwap( need );
-  PixelData.SetDataElement( xde );
+  bool need = PixelData->GetTransferSyntax() == TransferSyntax::ImplicitVRBigEndianPrivateGE;
+  PixelData->SetNeedByteSwap( need );
+  PixelData->SetDataElement( xde );
 
   // FIXME:
-  // We should check that when PixelData is RAW that Col * Dim == PixelData.GetLength()
+  // We should check that when PixelData is RAW that Col * Dim == PixelData->GetLength()
 
   return true;
 }
@@ -878,18 +878,18 @@ bool ImageReader::ReadACRNEMAImage()
     assert( imagedimensions == ReadSSFromTag( timagedimensions, ss, conversion ) );
     if ( imagedimensions == 3 )
       {
-      PixelData.SetNumberOfDimensions(3);
+      PixelData->SetNumberOfDimensions(3);
       // D 0028|0012 [US] [Planes] [262]
       const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0012) );
       Attribute<0x0028,0x0012> at;
       at.SetFromDataElement( de );
       assert( at.GetNumberOfValues() == 1 );
-      PixelData.SetDimension(2, at.GetValue() );
+      PixelData->SetDimension(2, at.GetValue() );
       assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0012), ss, conversion ) );
       }
     else if ( imagedimensions == 2 )
       {
-      PixelData.SetNumberOfDimensions(2);
+      PixelData->SetNumberOfDimensions(2);
       }
     else
       {
@@ -899,7 +899,7 @@ bool ImageReader::ReadACRNEMAImage()
   else
     {
     gdcmWarningMacro( "Attempting a guess for the number of dimensions" );
-    PixelData.SetNumberOfDimensions( 2 );
+    PixelData->SetNumberOfDimensions( 2 );
     }
 
   // 2. What are the col & rows:
@@ -908,7 +908,7 @@ bool ImageReader::ReadACRNEMAImage()
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0011) );
     Attribute<0x0028,0x0011> at;
     at.SetFromDataElement( de );
-    PixelData.SetDimension(0, at.GetValue() );
+    PixelData->SetDimension(0, at.GetValue() );
     assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0011), ss, conversion ) );
     }
 
@@ -917,7 +917,7 @@ bool ImageReader::ReadACRNEMAImage()
     const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
     Attribute<0x0028,0x0010> at;
     at.SetFromDataElement( de );
-    PixelData.SetDimension(1, at.GetValue() );
+    PixelData->SetDimension(1, at.GetValue() );
     assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
     }
 
@@ -935,11 +935,11 @@ bool ImageReader::ReadACRNEMAImage()
     if( strcmp(libido_str.c_str() , "ACRNEMA_LIBIDO_1.1") == 0 || strcmp(libido_str.c_str() , "ACRNEMA_LIBIDO_1.0") == 0 )
       {
       // Swap Columns & Rows
-      // assert( PixelData.GetNumberOfDimensions() == 2 );
-      const unsigned int *dims = PixelData.GetDimensions();
+      // assert( PixelData->GetNumberOfDimensions() == 2 );
+      const unsigned int *dims = PixelData->GetDimensions();
       unsigned int tmp = dims[0];
-      PixelData.SetDimension(0, dims[1] );
-      PixelData.SetDimension(1, tmp );
+      PixelData->SetDimension(0, dims[1] );
+      PixelData->SetDimension(1, tmp );
       }
     else
       {
@@ -993,11 +993,11 @@ bool ImageReader::ReadACRNEMAImage()
     assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
     }
 
-  PixelData.SetPixelFormat( pf );
+  PixelData->SetPixelFormat( pf );
 
   // 4. Do the Curves/Overlays if any
-  DoCurves(ds, PixelData);
-  DoOverlays(ds, PixelData);
+  DoCurves(ds, *PixelData);
+  DoOverlays(ds, *PixelData);
 
   // 4 1/2 Let's do Pixel Spacing
   const Tag tpixelspacing(0x0028, 0x0030);
@@ -1006,8 +1006,8 @@ bool ImageReader::ReadACRNEMAImage()
     const DataElement& de = ds.GetDataElement( tpixelspacing );
     Attribute<0x0028,0x0030> at;
     at.SetFromDataElement( de );
-    PixelData.SetSpacing( 0, at.GetValue(0));
-    PixelData.SetSpacing( 1, at.GetValue(1));
+    PixelData->SetSpacing( 0, at.GetValue(0));
+    PixelData->SetSpacing( 1, at.GetValue(1));
     }
   // 4 2/3 Let's do Origin
   const Tag timageposition(0x0020, 0x0030);
@@ -1016,10 +1016,10 @@ bool ImageReader::ReadACRNEMAImage()
     const DataElement& de = ds.GetDataElement( timageposition);
     Attribute<0x0020,0x0030> at = {};
     at.SetFromDataElement( de );
-    PixelData.SetOrigin( at.GetValues() );
-    if( at.GetNumberOfValues() > PixelData.GetNumberOfDimensions() ) // FIXME HACK
+    PixelData->SetOrigin( at.GetValues() );
+    if( at.GetNumberOfValues() > PixelData->GetNumberOfDimensions() ) // FIXME HACK
       {
-      PixelData.SetOrigin(PixelData.GetNumberOfDimensions(), at.GetValue(PixelData.GetNumberOfDimensions()) );
+      PixelData->SetOrigin(PixelData->GetNumberOfDimensions(), at.GetValue(PixelData->GetNumberOfDimensions()) );
       }
     }
   const Tag timageorientation(0x0020, 0x0035);
@@ -1028,7 +1028,7 @@ bool ImageReader::ReadACRNEMAImage()
     const DataElement& de = ds.GetDataElement( timageorientation);
     Attribute<0x0020,0x0035> at = {1,0,0,0,1,0};
     at.SetFromDataElement( de );
-    PixelData.SetDirectionCosines( at.GetValues() );
+    PixelData->SetDirectionCosines( at.GetValues() );
     }
 
   // 5. Do the PixelData
@@ -1042,15 +1042,15 @@ bool ImageReader::ReadACRNEMAImage()
   if ( de.GetVR() == VR::OW )
     {
     //abort();
-    //PixelData.SetNeedByteSwap(true);
+    //PixelData->SetNeedByteSwap(true);
     }
-  PixelData.SetDataElement( de );
+  PixelData->SetDataElement( de );
 
   // There is no such thing as Photometric Interpretation and 
   // Planar Configuration in ACR NEMA so let's default to something ...
-  PixelData.SetPhotometricInterpretation(
+  PixelData->SetPhotometricInterpretation(
     PhotometricInterpretation::MONOCHROME2 );
-  PixelData.SetPlanarConfiguration(0);
+  PixelData->SetPlanarConfiguration(0);
   const Tag planarconfiguration = Tag(0x0028, 0x0006);
   assert( !ds.FindDataElement( planarconfiguration ) );
   const Tag tphotometricinterpretation(0x0028, 0x0004);

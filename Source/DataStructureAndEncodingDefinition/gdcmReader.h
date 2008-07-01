@@ -69,7 +69,7 @@ public:
   void SetFile(File& file) { F = &file; }
 
   // Will read only up to Tag 'tag'
-  bool ReadUpToTag(const Tag & tag);
+  bool ReadUpToTag(const Tag & tag, std::set<Tag> const & skiptags);
 
 protected:
   bool ReadPreamble();
