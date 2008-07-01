@@ -93,6 +93,31 @@ bool RLECodec::CanDecode(TransferSyntax const &ts)
   return ts == TransferSyntax::RLELossless;
 }
 
+/*
+G.3 THE RLE ALGORITHM
+The RLE algorithm described in this section is used to compress Byte Segments into RLE Segments.
+There is a one-to-one correspondence between Byte Segments and RLE Segments. Each RLE segment
+must be an even number of bytes or padded at its end with zero to make it even.
+G.3.1 The RLE encoder
+A sequence of identical bytes (Replicate Run) is encoded as a two-byte code:
+< -count + 1 > <byte value>, where
+count = the number of bytes in the run, and
+2 <= count <= 128
+and a non-repetitive sequence of bytes (Literal Run) is encoded as:
+< count - 1 > <Iiteral sequence of bytes>, where
+count = number of bytes in the sequence, and
+1 <= count <= 128.
+The value of -128 may not be used to prefix a byte value.
+Note: It is common to encode a 2-byte repeat run as a Replicate Run except when preceded and followed by
+a Literal Run, in which case it's best to merge the three runs into a Literal Run.
+Three-byte repeats shall be encoded as Replicate Runs. Each row of the image shall be encoded
+separately and not cross a row boundary.
+*/
+bool RLECodec::Code(DataElement const &in, DataElement &out)
+{
+  return false;
+}
+
 // G.3.2 The RLE decoder
 // Pseudo code for the RLE decoder is shown below:
 // Loop until the number of output bytes equals the uncompressed segment size

@@ -93,6 +93,16 @@ bool JPEG2000Codec::CanCode(TransferSyntax const &ts)
     || ts == TransferSyntax::JPEG2000;
 }
 
+/*
+A.4.4 JPEG 2000 image compression
+
+  If the object allows multi-frame images in the pixel data field, then for these JPEG 2000 Part 1 Transfer
+  Syntaxes, each frame shall be encoded separately. Each fragment shall contain encoded data from a
+  single frame.
+  Note: That is, the processes defined in ISO/IEC 15444-1 shall be applied on a per-frame basis. The proposal
+  for encapsulation of multiple frames in a non-DICOM manner in so-called ¿Motion-JPEG¿ or ¿M-JPEG¿
+  defined in 15444-3 is not used.
+*/
 bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
 {
   if( NumberOfDimensions == 2 )
@@ -120,6 +130,7 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
      * as encoded in DICOM
      * MM: Hack. If we are lucky enough the number of encapsulated fragments actually match
      * the number of Z frames.
+     * MM: hopefully this is the standard so people are following it ...
      */
     //#ifdef SUPPORT_MULTIFRAMESJ2K_ONLY
     const SequenceOfFragments *sf = in.GetSequenceOfFragments();

@@ -106,6 +106,15 @@ bool ImageChangeTransferSyntax::Change()
   // Fast path
   if( Input->GetTransferSyntax() == TS ) return true;
 
+  // FIXME
+  // For now only support raw input, otherwise we would need to first decompress them
+  if( Input->GetTransferSyntax() != TransferSyntax::ImplicitVRLittleEndian 
+   && Input->GetTransferSyntax() != TransferSyntax::ExplicitVRLittleEndian
+   && Input->GetTransferSyntax() != TransferSyntax::ExplicitVRBigEndian ) 
+    {
+    return false;
+    }
+
   // too bad we actually have to do some work...
   bool success = false;
   //if( !success ) success = TryRAWCodec(buffer);

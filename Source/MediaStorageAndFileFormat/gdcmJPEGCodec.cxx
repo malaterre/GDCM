@@ -92,6 +92,12 @@ void JPEGCodec::SetBitSample(int bit)
   Internal->ImageCodec::SetPixelFormat( this->ImageCodec::GetPixelFormat() );
 }
 
+/*
+A.4.1 JPEG image compression
+
+For all images, including all frames of a multi-frame image, the JPEG Interchange Format shall be used
+(the table specification shall be included).
+*/
 bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
 {
   out = in;
