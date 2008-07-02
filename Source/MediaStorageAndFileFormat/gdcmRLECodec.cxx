@@ -113,10 +113,10 @@ a Literal Run, in which case it's best to merge the three runs into a Literal Ru
 Three-byte repeats shall be encoded as Replicate Runs. Each row of the image shall be encoded
 separately and not cross a row boundary.
 */
-bool RLECodec::Code(DataElement const &in, DataElement &out)
-{
-  return false;
-}
+//bool RLECodec::Code(DataElement const &in, DataElement &out)
+//{
+//  return false;
+//}
 
 // G.3.2 The RLE decoder
 // Pseudo code for the RLE decoder is shown below:
