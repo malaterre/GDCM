@@ -31,6 +31,8 @@ public:
   unsigned long GetBufferLength() const { return BufferLength; }
   void SetBufferLength(unsigned long l) { BufferLength = l; }
 
+  bool Code(DataElement const &in, DataElement &out);
+
 protected:
   bool Decode(std::istream &is, std::ostream &os);
 public:

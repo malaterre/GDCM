@@ -149,8 +149,6 @@ int main(int argc, char *argv [])
   gdcm::PixelFormat pixeltype = gdcm::PixelFormat::INT16;
 
   image.SetNumberOfDimensions( 2 );
-  //image.SetDimension(2, p / pixeltype.GetPixelSize() );
-  //image.SetDimension(2, numberOfImagesInMosaic );
 
   gdcm::PhotometricInterpretation pi;
   pi = gdcm::PhotometricInterpretation::MONOCHROME2;
