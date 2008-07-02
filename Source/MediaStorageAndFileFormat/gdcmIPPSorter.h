@@ -29,7 +29,8 @@ namespace gdcm
  * This algorithm does NOT support duplicate and will FAIL in case of duplicate
  * IPP.
  * \warning See special note for SetZSpacingTolerance when computing the ZSpacing
- * from the IPP of each DICOM files
+ * from the IPP of each DICOM files (default tolerance for consistant spacing is: 
+ * 1e-6mm)
  */
 class GDCM_EXPORT IPPSorter : public Sorter
 {
@@ -38,30 +39,31 @@ public:
   ~IPPSorter();
 
   // FIXME: I do not like public virtual function...
-  // Main entry point to the sorter.
-  // It will execute the filter, option should be set before
-  // running this function (SetZSpacingTolerance, ...)
+  /// Main entry point to the sorter.
+  /// It will execute the filter, option should be set before
+  /// running this function (SetZSpacingTolerance, ...)
   virtual bool Sort(std::vector<std::string> const & filenames);
 
-  // Functions related to Z-Spacing computation
-  // Set to true when sort algorithm should also perform a regular
-  // Z-Spacing computation using the Image Position (Patient)
-  // Potential reason for failure:
-  // 1. ALL slices are taken into account, if one slice if 
-  // missing then ZSpacing will be set to 0 since the spacing
-  // will not be found to be regular along the Series
+  /// Functions related to Z-Spacing computation
+  /// Set to true when sort algorithm should also perform a regular
+  /// Z-Spacing computation using the Image Position (Patient)
+  /// Potential reason for failure:
+  /// 1. ALL slices are taken into account, if one slice if 
+  /// missing then ZSpacing will be set to 0 since the spacing
+  /// will not be found to be regular along the Series
   void SetComputeZSpacing(bool b) { ComputeZSpacing = b; }
-  // 2. Another reason for failure is that that Z-Spacing is only 
-  // slightly changing (eg 1e-3) along the serie, a human can determine
-  // that this is ok and change the tolerance from its default value: 1e-6
+  /// 2. Another reason for failure is that that Z-Spacing is only 
+  /// slightly changing (eg 1e-3) along the serie, a human can determine
+  /// that this is ok and change the tolerance from its default value: 1e-6
   void SetZSpacingTolerance(double tol) { ZTolerance = tol; }
+  double GetZSpacingTolerance() const { return ZTolerance; }
 
-  // Read-only function to provide access to the computed value for the Z-Spacing
-  // The ComputeZSpacing must have been set to true before execution of
-  // sort algorithm
-  // Z-Spacing will be 0 on 2 occsasions:
-  // 1. Sorting simply failed, potentially duplicate IPP => ZSpacing = 0
-  // 2. ZSpacing could not be computed (Z-Spacing is not constant, or ZTolerance is too low)
+  /// Read-only function to provide access to the computed value for the Z-Spacing
+  /// The ComputeZSpacing must have been set to true before execution of
+  /// sort algorithm
+  /// Z-Spacing will be 0 on 2 occsasions:
+  /// 1. Sorting simply failed, potentially duplicate IPP => ZSpacing = 0
+  /// 2. ZSpacing could not be computed (Z-Spacing is not constant, or ZTolerance is too low)
   double GetZSpacing() const { return ZSpacing; }
 
 protected:

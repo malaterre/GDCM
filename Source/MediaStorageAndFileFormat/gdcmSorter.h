@@ -33,13 +33,17 @@ public:
   Sorter();
   virtual ~Sorter();
 
-  // Typically the output of gdcm::Directory::GetFilenames()
+  /// Typically the output of gdcm::Directory::GetFilenames()
   virtual bool Sort(std::vector<std::string> const & filenames);
 
+  /// Return the list of filenames as sorted by the specific algorithm used.
+  /// Empty by default (before Sort() is called)
   const std::vector<std::string> &GetFilenames() const { return Filenames; }
 
+  /// Print
   void Print( std::ostream &os);
 
+  /// UNSUPPORTED FOR NOW
   bool AddSelect( Tag const &tag, const char *value );
 
 protected:

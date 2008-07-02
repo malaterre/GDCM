@@ -149,6 +149,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
     }
 }
 
+  assert( ZSpacing > ZTolerance && ZTolerance > 0 );
   return true;
 }
 
