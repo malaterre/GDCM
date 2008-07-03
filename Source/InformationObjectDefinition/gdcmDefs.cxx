@@ -62,6 +62,9 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage &ms) const
     case MediaStorage::MRImageStorage:
       iodname = "MR Image IOD Modules";
       break;
+    case MediaStorage::CTImageStorage:
+      iodname = "CT Image IOD Modules";
+      break;
     default:
       iodname = 0;
     }
@@ -86,12 +89,15 @@ bool Defs::Verify(const DataSet& ds) const
   //std::cout << iod.GetIODEntry(14) << std::endl;
   unsigned int niods = iod.GetNumberOfIODs();
   bool v = true;
+  // Iterate over each iod entry in order:
   for(unsigned int idx = 0; idx < niods; ++idx)
     {
-    const char *ref = iod.GetIODEntry(idx).GetRef();
+    const IODEntry &iodentry = iod.GetIODEntry(idx);
+    const char *ref = iodentry.GetRef();
+    IODEntry::UsageType ut = iodentry.GetUsageType();
 
     const Modules &modules = GetModules();
-    const Module module = modules.GetModule( ref );
+    const Module &module = modules.GetModule( ref );
     //std::cout << module << std::endl;
     v = v && module.Verify( ds );
     }

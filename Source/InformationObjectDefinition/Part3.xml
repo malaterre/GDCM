@@ -216,7 +216,7 @@ One or more Items may be included in this Sequence.</description>
     <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Defined Context ID is 2, unless otherwise defined in the macro invocation."/>
     <include ref="Include 'Primary Anatomic Structure Macro' Table 10-8" description="Context ID may be defined in the macro invocation."/>
   </macro>
-  <macro ref="Table 10-7" name="General Anatomy Optional Macro Attributes">
+  <macro ref="10.5" table="10-7" name="General Anatomy Optional Macro Attributes">
     <entry group="0008" element="2218" name="Anatomic Region Sequence" type="3">
       <description>Sequence that identifies the anatomic region of interest in this Instance (i.e. external anatomy, surface anatomy, or general region of the body).
 Only a single Item shall be permitted in this sequence.</description>
@@ -5229,7 +5229,7 @@ PORTRAIT</description>
     </entry>
     <include ref="Include 'General Anatomy Optional Macro' Table 10-7" description="Defined Context ID for the Anatomic Region Sequence is 4009."/>
   </module>
-  <module ref="Table C.8-3" name="CT Image Module Attributes">
+  <module ref="C.8.2.1" table="C.8-3" name="CT Image Module Attributes">
     <entry group="0008" element="0008" name="Image Type" type="1">
       <description>Image identification characteristics. See C.8.2.1.1.1 for specialization.</description>
     </entry>
