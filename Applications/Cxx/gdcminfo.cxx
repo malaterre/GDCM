@@ -419,7 +419,14 @@ int main(int argc, char *argv[])
     const gdcm::Defs &defs = g.GetDefs();
     const gdcm::IODs &iods = defs.GetIODs();
     const gdcm::IOD &iod = iods.GetIOD( "MR Image IOD Modules" );
-    std::cout << iod << std::endl;
+    //std::cout << iod << std::endl;
+    //std::cout << iod.GetIODEntry(14) << std::endl;
+    const char *ref = iod.GetIODEntry(14).GetRef();
+
+    const gdcm::Modules &modules = defs.GetModules();
+    const gdcm::Module module = modules.GetModule( ref );
+    std::cout << module << std::endl;
+
     }
 
 

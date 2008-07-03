@@ -57,11 +57,14 @@ public:
     assert( it->first == tag );
     return it->second;
     }
+  void SetName( const char *name) { Name = name; }
+  const char *GetName() const { return Name.c_str(); }
 private:
   //Module &operator=(const Module &_val); // purposely not implemented
   //Module(const Module &_val); // purposely not implemented
 
   MapModuleEntry ModuleInternal;
+  std::string Name;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const Module &_val)

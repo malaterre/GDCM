@@ -5388,7 +5388,7 @@ One or more items may be present.</description>
       <description>The X-Ray absorbing material used in the filter.</description>
     </entry>
   </module>
-  <module ref="Table C.8-4" name="MR Image Module Attributes">
+  <module ref="C.8.3.1" table="C.8-4" name="MR Image Module Attributes">
     <entry group="0008" element="0008" name="Image Type" type="1">
       <description>Image identification characteristics. See C.8.3.1.1.1 for specialization.</description>
     </entry>
