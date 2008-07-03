@@ -47,7 +47,7 @@ int TestvtkGDCMPolyDataRead(const char *filename, int nb, bool verbose)
   if( verbose )
     { 
     reader->GetOutput()->Print( cout );
-    //reader->GetMedicalImageProperties()->Print( cout );
+    reader->GetMedicalImageProperties()->Print( cout );
     }
 
   //std::cout << reader->GetNumberOfOutputPorts() << std::endl;

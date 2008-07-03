@@ -307,7 +307,7 @@ int vtkGDCMImageReader::ProcessRequest(vtkInformation* request,
 
 
 //----------------------------------------------------------------------------
-const char *GetStringValueFromTag(const gdcm::Tag& t, const gdcm::DataSet& ds)
+inline const char *GetStringValueFromTag(const gdcm::Tag& t, const gdcm::DataSet& ds)
 {
   static std::string buffer;
   buffer = "";  // cleanup previous call

@@ -23,7 +23,9 @@
 #define __vtkGDCMPolyDataReader_h
 
 #include "vtkPolyDataAlgorithm.h"
+#include "gdcmReader.h"
 
+class vtkMedicalImageProperties;
 class VTK_EXPORT vtkGDCMPolyDataReader : public vtkPolyDataAlgorithm
 {
 public:
@@ -35,11 +37,19 @@ public:
   vtkSetStringMacro(FileName);
   vtkGetStringMacro(FileName);
 
+  // Description:
+  // Get the medical image properties object
+  vtkGetObjectMacro(MedicalImageProperties, vtkMedicalImageProperties);
+
 protected:
   vtkGDCMPolyDataReader();
   ~vtkGDCMPolyDataReader();
 
   char *FileName;
+  vtkMedicalImageProperties *MedicalImageProperties;
+//BTX
+  void FillMedicalImageInformation(const gdcm::Reader &reader);
+//ETX
 
   int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *);
   int RequestInformation(
