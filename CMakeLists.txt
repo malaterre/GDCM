@@ -436,6 +436,39 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
 ENDIF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
 
 
+MACRO(PROCESSONEDIR DIRNAME myoutput)
+  FILE(GLOB files
+    ${DIRNAME}/*
+  )
+  FOREACH(file ${files})
+    IF(IS_DIRECTORY ${file})
+      IF("${file}" MATCHES ".svn")
+        #MESSAGE("${file} is svn dir")
+      ELSE("${file}" MATCHES ".svn")
+        #MESSAGE("${file} is dir")
+        PROCESSONEDIR(${file} mytests2)
+        LIST(APPEND ${myoutput} ${mytests2})
+      ENDIF("${file}" MATCHES ".svn")
+    ELSE(IS_DIRECTORY ${file})
+      #MESSAGE("${file} is file")
+      GET_FILENAME_COMPONENT(filename ${file} NAME)
+      IF("${filename}" MATCHES "Test" AND ${filename} MATCHES ".cxx")
+        STRING(LENGTH ${filename} filename_length)
+        #MESSAGE("${filename} is test, ${filename_length}")
+        MATH(EXPR fileend "${filename_length} - 4 - 4") # Need to remove 'Test' and '.cxx'
+        STRING(SUBSTRING ${filename} 4 ${fileend} classname)
+        #MESSAGE("${classname} is tested")
+        LIST(APPEND ${myoutput} ${classname})
+      ENDIF("${filename}" MATCHES "Test" AND ${filename} MATCHES ".cxx")
+    ENDIF(IS_DIRECTORY ${file})
+  ENDFOREACH(file)
+ENDMACRO(PROCESSONEDIR)
+
+#PROCESSONEDIR(
+#  ${CMAKE_CURRENT_SOURCE_DIR}/Testing/Source/Common
+#  theoutput
+#)
+#MESSAGE("${theoutput}")
 
 #-----------------------------------------------------------------------------
 # Need to be the last operation:
