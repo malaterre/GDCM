@@ -3285,7 +3285,7 @@ See Section C.4.23.1.1</description>
       <description>Uniquely identifies the offline storage media on which the instance resides.</description>
     </entry>
   </module>
-  <module ref="Table C.7-1" name="Patient Module Attributes">
+  <module ref="C.7.1.1" table="C.7-1" name="Patient Module Attributes">
     <entry group="0010" element="0010" name="Patient's Name" type="2">
       <description>Patient's full name.</description>
     </entry>
@@ -3424,7 +3424,7 @@ Required if Patient Identity Removed (0012,0062) is present and has a value of Y
 Required if the Specimen is a Slide.</description>
     </entry>
   </module>
-  <module ref="Table C.7-2b" name="Clinical Trial Subject Module Attributes">
+  <module ref="C.7.1.3" table="C.7-2b" name="Clinical Trial Subject Module Attributes">
     <entry group="0012" element="0010" name="Clinical Trial Sponsor Name" type="1">
       <description>The name of the clinical trial sponsor. See C.7.1.3.1.1.</description>
     </entry>
@@ -3447,7 +3447,7 @@ Required if the Specimen is a Slide.</description>
       <description>Identifies the subject for blinded evaluations. Shall be present if Clinical Trial Subject ID (0012,0040) is absent. May be present otherwise. See C.7.1.3.1.7.</description>
     </entry>
   </module>
-  <module ref="Table C.7-3" name="General Study Module Attributes">
+  <module ref="C.7.2.1" table="C.7-3" name="General Study Module Attributes">
     <entry group="0020" element="000D" name="Study Instance UID" type="1">
       <description>Unique identifier for the Study.</description>
     </entry>
@@ -3496,7 +3496,7 @@ Required if the Specimen is a Slide.</description>
     </entry>
     <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/>
   </module>
-  <module ref="Table C.7-4a" name="Patient Study Module Attributes">
+  <module ref="C.7.2.2" table="C.7-4a" name="Patient Study Module Attributes">
     <entry group="0008" element="1080" name="Admitting Diagnoses Description" type="3">
       <description>Description of the admitting diagnosis (diagnoses)</description>
     </entry>
@@ -3543,7 +3543,7 @@ Note: If this Attribute is present but has no value then the status is unknown.
 Required if patient is an animal. May be present otherwise.</description>
     </entry>
   </module>
-  <module ref="Table C.7-4b" name="Clinical Trial Study Module Attributes">
+  <module ref="C.7.2.3" table="C.7-4b" name="Clinical Trial Study Module Attributes">
     <entry group="0012" element="0050" name="Clinical Trial Time Point ID" type="2">
       <description>An identifier specifying the one or more studies that are grouped together as a clinical time point or submission in a clinical trial. See C.7.2.3.1.1.</description>
     </entry>
@@ -3551,7 +3551,7 @@ Required if patient is an animal. May be present otherwise.</description>
       <description>A description of a set of one or more studies that are grouped together to represent a clinical time point or submission in a clinical trial. See C.7.2.3.1.1.</description>
     </entry>
   </module>
-  <module ref="Table C.7-5a" name="General Series Module Attributes">
+  <module ref="C.7.3.1" table="C.7-5a" name="General Series Module Attributes">
     <entry group="0008" element="0060" name="Modality" type="1">
       <description>Type of equipment that originally acquired the data used to create the images in this Series. See C.7.3.1.1.1 for Defined Terms.</description>
     </entry>
@@ -3635,7 +3635,7 @@ The sequence may have one or more Items.</description>
     <include ref="&gt;Include Request Attributes Macro Table 10-9" description="No Baseline Context IDs defined"/>
     <include ref="Include Performed Procedure Step Summary Macro Table 10-16" description="No Baseline Context IDs defined"/>
   </module>
-  <module ref="Table C.7-5b" name="Clinical Trial Series Module Attributes">
+  <module ref="C.7.3.2" table="C.7-5b" name="Clinical Trial Series Module Attributes">
     <entry group="0012" element="0060" name="Clinical Trial Coordinating Center Name" type="2">
       <description>The name of the institution that is responsible for coordinating the medical imaging data for the clinical trial. See C.7.3.2.1.1.</description>
     </entry>
@@ -3658,7 +3658,7 @@ Required if the Modality Performed Procedure Step SOP Class or General Purpose P
     </entry>
     <include ref="&gt;Include SOP Instance Reference Macro Table 10-11"/>
   </module>
-  <module ref="Table C.7-6" name="Frame of Reference Module Attributes">
+  <module ref="C.7.4.1" table="C.7-6" name="Frame of Reference Module Attributes">
     <entry group="0020" element="0052" name="Frame of Reference UID" type="1">
       <description>Uniquely identifies the frame of reference for a Series. See C.7.4.1.1.1 for further explanation.</description>
     </entry>
@@ -3706,7 +3706,7 @@ SNTP - Simple Network Time Protocol</description>
 Note: Identity of this value in two instances acquired contemporaneously implies a common time base. The NTP Source Address may not persist over time.</description>
     </entry>
   </module>
-  <module ref="Table C.7-8" name="General Equipment Module Attributes">
+  <module ref="C.7.5.1" table="C.7-8" name="General Equipment Module Attributes">
     <entry group="0008" element="0070" name="Manufacturer" type="2">
       <description>Manufacturer of the equipment that produced the composite instances.</description>
     </entry>
@@ -3764,7 +3764,7 @@ Note: The Value Representation of this Attribute is determined by the value of P
       <description>Manufacturer's designation of software version of the equipment that produced the composite instances.</description>
     </entry>
   </module>
-  <module ref="Table C.7-9" name="General Image Module Attributes">
+  <module  ref="C.7.6.1" table="C.7-9" name="General Image Module Attributes">
     <entry group="0020" element="0013" name="Instance Number" type="2">
       <description>A number that identifies this image.
 Note: This Attribute was named Image Number in earlier versions of this Standard.</description>
@@ -3897,7 +3897,7 @@ When this attribute is used with a color photometric interpretation then the lum
       <description>Unique identification of the irradiation event(s) associated with the acquisition of this image. See C.7.6.1.1.7.</description>
     </entry>
   </module>
-  <module ref="Table C.7-10" name="Image Plane Module Attributes">
+  <module ref="C.7.6.2" table="C.7-10" name="Image Plane Module Attributes">
     <entry group="0028" element="0030" name="Pixel Spacing" type="1">
       <description>Physical distance in the patient between the center of each pixel, specified by a numeric pair - adjacent row spacing (delimiter) adjacent column spacing in mm. See 10.7.1.3 for further explanation.</description>
     </entry>
@@ -3914,7 +3914,7 @@ When this attribute is used with a color photometric interpretation then the lum
       <description>Relative position of the image plane expressed in mm. C.7.6.2.1.2 for further explanation.</description>
     </entry>
   </module>
-  <module ref="Table C.7-11a" name="Image Pixel Module Attributes">
+  <module ref="C.7.6.3" table="C.7-11a" name="Image Pixel Module Attributes">
     <include ref="Include 'Image Pixel Macro' Table C.7-11b"/>
     <entry group="0028" element="7FE0" name="Pixel Data Provider URL" type="1C">
       <description>A URL of a provider service that supplies the pixel data of the Image.
@@ -3998,7 +3998,7 @@ When present, defines the color space of color Pixel Data (7FE0,0010) values, an
 Note: The profile applies only to the Pixel Data (7FE0,0010) attribute at the same level of the dataset and not to any icons nested within sequences, which may or may not have their own ICC profile specified.</description>
     </entry>
   </macro>
-  <module ref="Table C.7-12" name="Contrast/bolus Module Attributes">
+  <module ref="C.7.6.4" table="C.7-12" name="Contrast/bolus Module Attributes">
     <entry group="0018" element="0010" name="Contrast/Bolus Agent" type="2">
       <description>Contrast or bolus agent</description>
     </entry>
@@ -4269,7 +4269,7 @@ Note: The maximum P-Value for this Attribute may be different from the maximum P
       <description>A color triplet value used to replace those parts of the image occluded by the shutter, when rendered on a color display. The units are specified in PCS-Values, and the value is encoded as CIELab. See C.10.7.1.1.</description>
     </entry>
   </macro>
-  <module ref="Table C.7-18" name="Device Module Attributes">
+  <module ref="C.7.6.12" table="C.7-18" name="Device Module Attributes">
     <entry group="0050" element="0010" name="Device Sequence" type="3">
       <description>Introduces sequence of items describing devices used that may be visible in the image.
 One or more Items may be included in this Sequence.</description>
@@ -15743,7 +15743,7 @@ Enumerated Values and Defined Terms are the same as those for the four values of
       <description>The Item number of the X-Ray 3D Reconstruction Sequence (0018,9530) that describes the characteristics of the 3D Reconstruction to which this frame is part of.</description>
     </entry>
   </macro>
-  <module ref="Table C.9-2" name="Overlay Plane Module Attributes">
+  <module ref="C.9.2" table="C.9-2" name="Overlay Plane Module Attributes">
     <entry group="60xx" element="0010" name="Overlay Rows" type="1">
       <description>Number of Rows in Overlay.</description>
     </entry>
@@ -16278,7 +16278,7 @@ See C.11.1.1.2 for further explanation.
 Required if Rescale Intercept is present.</description>
     </entry>
   </macro>
-  <module ref="Table C.11-2" name="VOI LUT Module Attributes">
+  <module ref="C.11.2" table="C.11-2" name="VOI LUT Module Attributes">
     <include ref="Include VOI LUT Macro Table C.11-2b"/>
   </module>
   <macro ref="Table C.11-2b" name="VOI LUT Macro Attributes">
@@ -16528,7 +16528,7 @@ Note: A Spatial Registration Instance may identify registration between frames o
       <description>An ICC Profile encoding the transformation of device-dependent color stored pixel values into PCS-Values.</description>
     </entry>
   </module>
-  <module ref="Table C.12-1" name="SOP Common Module Attributes">
+  <module ref="C.12.1" table="C.12-1" name="SOP Common Module Attributes">
     <entry group="0008" element="0016" name="SOP Class UID" type="1">
       <description>Uniquely identifies the SOP Class. See C.12.1.1.1 for further explanation. See also PS 3.4.</description>
     </entry>

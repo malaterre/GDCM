@@ -16,6 +16,7 @@
 #include "gdcmTableReader.h"
 #include "gdcmSystem.h"
 #include "gdcmMediaStorage.h"
+#include "gdcmTrace.h"
 
 namespace gdcm
 {
@@ -74,16 +75,26 @@ bool Defs::Verify(const DataSet& ds) const
 
   const gdcm::IODs &iods = GetIODs();
   const char *iodname = GetIODNameFromMediaStorage( ms );
+  if( !iodname )
+    {
+    gdcmErrorMacro( "Not implemented" );
+    return false;
+    }
   const gdcm::IOD &iod = iods.GetIOD( iodname );
 
   //std::cout << iod << std::endl;
   //std::cout << iod.GetIODEntry(14) << std::endl;
-  const char *ref = iod.GetIODEntry(14).GetRef();
+  unsigned int niods = iod.GetNumberOfIODs();
+  bool v = true;
+  for(unsigned int idx = 0; idx < niods; ++idx)
+    {
+    const char *ref = iod.GetIODEntry(idx).GetRef();
 
-  const Modules &modules = GetModules();
-  const Module module = modules.GetModule( ref );
-  //std::cout << module << std::endl;
-  bool v = module.Verify( ds );
+    const Modules &modules = GetModules();
+    const Module module = modules.GetModule( ref );
+    //std::cout << module << std::endl;
+    v = v && module.Verify( ds );
+    }
 
   return v;
 

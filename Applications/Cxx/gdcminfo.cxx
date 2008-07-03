@@ -381,6 +381,7 @@ int main(int argc, char *argv[])
     std::cout << "Orientation Label: " << label << std::endl;
     }
 
+// Do the IOD verification !
     {
     const gdcm::Global& g = gdcm::Global::GetInstance();
     const gdcm::Defs &defs = g.GetDefs();
