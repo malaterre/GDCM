@@ -379,54 +379,13 @@ int main(int argc, char *argv[])
     const char *label = gdcm::Orientation::GetLabel( type );
     image.Print( std::cout );
     std::cout << "Orientation Label: " << label << std::endl;
-
     }
 
-  if( ms == gdcm::MediaStorage::MRImageStorage && false )
     {
     const gdcm::Global& g = gdcm::Global::GetInstance();
     const gdcm::Defs &defs = g.GetDefs();
-    const gdcm::Modules &modules = defs.GetModules();
-    const gdcm::Module module = modules.GetModule( "MR Image Module Attributes" );
-    //std::cout << module << std::endl;
-    gdcm::Module::ConstIterator it = module.Begin();
-    for(; it != module.End(); ++it)
-      {
-      const gdcm::Tag &tag = it->first;
-      const gdcm::ModuleEntry &me = it->second;
-      const gdcm::Type &type = me.GetType();
-      if( ds.FindDataElement( tag ) )
-        {
-        // element found
-        const gdcm::DataElement &de = ds.GetDataElement( tag );
-        if ( de.IsEmpty() && (type == gdcm::Type::T1 || type == gdcm::Type::T1C ) )
-          {
-          std::cerr << "T1 element cannot be empty: " << de << std::endl;
-          }
-        }
-      else
-        {
-        //if( me.GetType() == )
-          {
-          std::cerr << "DataSet is missing tag: " << tag << std::endl;
-          std::cerr << "ModuleEntry specify: " << me << std::endl;
-          }
-        }
-      }
-    }
-    {
-    const gdcm::Global& g = gdcm::Global::GetInstance();
-    const gdcm::Defs &defs = g.GetDefs();
-    const gdcm::IODs &iods = defs.GetIODs();
-    const gdcm::IOD &iod = iods.GetIOD( "MR Image IOD Modules" );
-    //std::cout << iod << std::endl;
-    //std::cout << iod.GetIODEntry(14) << std::endl;
-    const char *ref = iod.GetIODEntry(14).GetRef();
-
-    const gdcm::Modules &modules = defs.GetModules();
-    const gdcm::Module module = modules.GetModule( ref );
-    std::cout << module << std::endl;
-
+    bool v = defs.Verify( ds );
+    std::cerr << "IOD Verification: " << (v ? "succeed" : "failed") << std::endl;
     }
 
 

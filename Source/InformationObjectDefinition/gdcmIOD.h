@@ -29,6 +29,7 @@ namespace gdcm
  * 
  * \sa Dict
  */
+class DataSet;
 class GDCM_EXPORT IOD
 {
 public:

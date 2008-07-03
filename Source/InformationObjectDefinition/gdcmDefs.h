@@ -27,6 +27,8 @@ namespace gdcm
  * \brief FIXME I do not like the name 'Defs'
  * \note bla
  */
+class DataSet;
+class MediaStorage;
 class GDCM_EXPORT Defs
 {
 public:
@@ -44,9 +46,13 @@ public:
 
   bool IsEmpty() const { return GetModules().IsEmpty(); }
 
+  bool Verify(const DataSet& ds) const;
+
 protected:
   friend class Global;
   void LoadDefaults();
+
+  const char *GetIODNameFromMediaStorage(MediaStorage &ms) const;
 
 private:
   // Part 3 stuff:

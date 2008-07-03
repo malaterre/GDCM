@@ -15,6 +15,7 @@
 #include "gdcmDefs.h"
 #include "gdcmTableReader.h"
 #include "gdcmSystem.h"
+#include "gdcmMediaStorage.h"
 
 namespace gdcm
 {
@@ -50,6 +51,42 @@ void Defs::LoadDefaults()
     throw Exception( "Impossible" );
     }
   tr.Read();
+}
+
+const char *Defs::GetIODNameFromMediaStorage(MediaStorage &ms) const
+{
+  const char *iodname;
+  switch(ms)
+    {
+    case MediaStorage::MRImageStorage:
+      iodname = "MR Image IOD Modules";
+      break;
+    default:
+      iodname = 0;
+    }
+  return iodname;
+}
+
+bool Defs::Verify(const DataSet& ds) const
+{
+  gdcm::MediaStorage ms;
+  ms.SetFromDataSet(ds);
+
+  const gdcm::IODs &iods = GetIODs();
+  const char *iodname = GetIODNameFromMediaStorage( ms );
+  const gdcm::IOD &iod = iods.GetIOD( iodname );
+
+  //std::cout << iod << std::endl;
+  //std::cout << iod.GetIODEntry(14) << std::endl;
+  const char *ref = iod.GetIODEntry(14).GetRef();
+
+  const Modules &modules = GetModules();
+  const Module module = modules.GetModule( ref );
+  //std::cout << module << std::endl;
+  bool v = module.Verify( ds );
+
+  return v;
+
 }
 
 
