@@ -14105,7 +14105,7 @@ One or more items may be present.</description>
       <description>The X-Ray absorbing material used in the filter.</description>
     </entry>
   </macro>
-  <macro ref="Table C.8-131" name="Common Ct/mr Image Description Macro Attributes">
+  <macro ref="Table C.8-131" name="Common CT/MR Image Description Macro Attributes">
     <entry group="0008" element="9205" name="Pixel Presentation" type="1">
       <description>Indication of the presence or absence of color information that may be used during rendering. See C.8.16.2.1.1 for a description and Enumerated Values.</description>
     </entry>

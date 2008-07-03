@@ -414,6 +414,14 @@ int main(int argc, char *argv[])
         }
       }
     }
+    {
+    const gdcm::Global& g = gdcm::Global::GetInstance();
+    const gdcm::Defs &defs = g.GetDefs();
+    const gdcm::IODs &iods = defs.GetIODs();
+    const gdcm::IOD &iod = iods.GetIOD( "MR Image IOD Modules" );
+    std::cout << iod << std::endl;
+    }
+
 
   return 0;
 }

@@ -3,6 +3,7 @@
 SET(IOD_SRCS
   gdcmModule.cxx
   gdcmModules.cxx
+  gdcmIODEntry.cxx
   gdcmTableReader.cxx
   gdcmTable.cxx
   gdcmSeries.cxx
