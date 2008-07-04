@@ -69,7 +69,7 @@ public:
     Invalid,
     Mandatory, // (see A.1.3.1) , abbreviated M
     Conditional, // (see A.1.3.2) , abbreviated C
-    UserOption, // (see A.1.3.3) , abbreviated U
+    UserOption // (see A.1.3.3) , abbreviated U
   } UsageType;
 
   void SetUsage(const char *usage) { Usage = usage; }
