@@ -351,7 +351,7 @@ over and over. We need to get the last ie name we found to fill in the blank:
     <xsl:param name="n"/>
     <xsl:variable name="para" select="preceding::para[$n]"/>
     <xsl:choose>
-      <xsl:when test="$n > 10">
+      <xsl:when test="$n > 100"> <!-- C.8.4.8	NM Multi-frame Module  -->
               <xsl:value-of select="'SECTION ERROR'"/>
       </xsl:when>
       <xsl:when test="matches($para, $myregex)">
