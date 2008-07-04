@@ -31,7 +31,7 @@ Defs::~Defs()
 
 void Defs::LoadDefaults()
 {
-  gdcm::TableReader tr(*this);
+  TableReader tr(*this);
   // FIXME: hardcoded path:
   const char filename1[] = GDCM_SOURCE_DIR "/Source/InformationObjectDefinition/Part3.xml";
   const char filename2[] = GDCM_CMAKE_INSTALL_PREFIX "/" GDCM_INSTALL_INCLUDE_DIR "/XML/Part3.xml";
@@ -73,17 +73,18 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage &ms) const
 
 bool Defs::Verify(const DataSet& ds) const
 {
-  gdcm::MediaStorage ms;
+  MediaStorage ms;
   ms.SetFromDataSet(ds);
 
-  const gdcm::IODs &iods = GetIODs();
+  const IODs &iods = GetIODs();
+  const Modules &modules = GetModules();
   const char *iodname = GetIODNameFromMediaStorage( ms );
   if( !iodname )
     {
     gdcmErrorMacro( "Not implemented" );
     return false;
     }
-  const gdcm::IOD &iod = iods.GetIOD( iodname );
+  const IOD &iod = iods.GetIOD( iodname );
 
   //std::cout << iod << std::endl;
   //std::cout << iod.GetIODEntry(14) << std::endl;
@@ -96,7 +97,6 @@ bool Defs::Verify(const DataSet& ds) const
     const char *ref = iodentry.GetRef();
     IODEntry::UsageType ut = iodentry.GetUsageType();
 
-    const Modules &modules = GetModules();
     const Module &module = modules.GetModule( ref );
     //std::cout << module << std::endl;
     v = v && module.Verify( ds );
