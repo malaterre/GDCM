@@ -344,47 +344,33 @@ over and over. We need to get the last ie name we found to fill in the blank:
     </xsl:analyze-string>
   </xsl:template>
 <!-- function to extract the table ref (ie: Table C.2-1) -->
+  <xsl:variable name="myregex">^([CF]\.[0-9\.]+)\s*(.*)$</xsl:variable>
+
   <xsl:template name="get-section-reference">
-    <xsl:param name="para1"/>
-    <xsl:param name="para2"/>
-    <xsl:param name="para3"/>
-    <xsl:param name="para4"/>
-    <xsl:param name="para5"/>
-    <xsl:variable name="myregex">^([CF]\.[0-9\.]+)\s*(.*)$</xsl:variable>
-    <!-- BUG: seems like if para? is empty the regex succeed  -->
-    <xsl:analyze-string select="$para2" regex="{$myregex}">
-      <xsl:matching-substring>
-        <xsl:value-of select="regex-group(1)"/>
-      </xsl:matching-substring>
-      <xsl:non-matching-substring>
-      <xsl:analyze-string select="$para3" regex="{$myregex}">
-        <xsl:matching-substring>
-          <xsl:value-of select="regex-group(1)"/>
-        </xsl:matching-substring>
-        <xsl:non-matching-substring>
-          <xsl:analyze-string select="$para4" regex="{$myregex}">
-            <xsl:matching-substring>
+    <xsl:param name="article"/>
+    <xsl:param name="n"/>
+    <xsl:variable name="para" select="preceding::para[$n]"/>
+    <xsl:choose>
+      <xsl:when test="$n > 10">
+              <xsl:value-of select="'SECTION ERROR'"/>
+      </xsl:when>
+      <xsl:when test="matches($para, $myregex)">
+        <xsl:analyze-string select="$para" regex="{$myregex}">
+          <xsl:matching-substring>
+            <match>
               <xsl:value-of select="regex-group(1)"/>
-            </xsl:matching-substring>
-            <xsl:non-matching-substring>
-              <xsl:analyze-string select="$para5" regex="{$myregex}">
-                <xsl:matching-substring>
-                  <xsl:value-of select="regex-group(1)"/>
-                </xsl:matching-substring>
-                <xsl:non-matching-substring>
-                  <xsl:text>SECTION ERROR: </xsl:text>
-                  <xsl:value-of select="$para2"/>
-                  <xsl:value-of select="$para3"/>
-                  <xsl:value-of select="$para4"/>
-                  <xsl:value-of select="$para5"/>
-                </xsl:non-matching-substring>
-              </xsl:analyze-string>
-            </xsl:non-matching-substring>
-          </xsl:analyze-string>
-        </xsl:non-matching-substring>
-      </xsl:analyze-string>
-      </xsl:non-matching-substring>
-    </xsl:analyze-string>
+            </match>
+          </xsl:matching-substring>
+<!-- no need to non matching-substring case -->
+        </xsl:analyze-string>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="get-section-reference">
+          <xsl:with-param name="article" select="."/>
+          <xsl:with-param name="n" select="$n+1"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 <!--
 
@@ -461,11 +447,8 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
         <xsl:variable name="table_name_raw" select="preceding::para[1]"/>
         <xsl:variable name="section_ref">
           <xsl:call-template name="get-section-reference">
-            <xsl:with-param name="para5" select="normalize-space($para5)"/>
-            <xsl:with-param name="para4" select="normalize-space($para4)"/>
-            <xsl:with-param name="para3" select="normalize-space($para3)"/>
-            <xsl:with-param name="para2" select="normalize-space($table_ref_raw)"/>
-            <xsl:with-param name="para1" select="normalize-space($table_name_raw)"/>
+            <xsl:with-param name="article" select="."/>
+            <xsl:with-param name="n" select="1"/>
           </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="table_ref">
