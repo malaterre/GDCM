@@ -417,31 +417,8 @@ Function to remove the dash from a text:
 
 
 -->
-<!-- main template -->
-  <xsl:template match="/">
-    <xsl:processing-instruction name="xml-stylesheet">
-type="text/xsl" href="ma2html.xsl"
-</xsl:processing-instruction>
-    <xsl:comment> to produce output use:
-$ xsltproc ma2html.xsl ModuleAttributes.xml
-    </xsl:comment>
-    <xsl:comment>
-  Program: GDCM (Grass Root DICOM). A DICOM library
-  Module:  $URL$
-
-  Copyright (c) 2006-2008 Mathieu Malaterre
-  All rights reserved.
-  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notice for more information.
-</xsl:comment>
-    <tables edition="2008">
-      <xsl:for-each select="//informaltable">
-        <xsl:variable name="para5" select="preceding::para[5]"/>
-        <xsl:variable name="para4" select="preceding::para[4]"/>
-        <xsl:variable name="para3" select="preceding::para[3]"/>
+  <xsl:template match="informaltable">
+      <!--xsl:for-each select="//informaltable"-->
         <xsl:variable name="table_ref_raw" select="preceding::para[2]"/>
 <!-- might contain the Table ref or not ... -->
         <xsl:variable name="table_name_raw" select="preceding::para[1]"/>
@@ -474,6 +451,12 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
               <module ref="{$section_ref}" table="{$table_ref}" name="{my:camel-case($table_name)}">
                 <xsl:apply-templates select="row" mode="macro"/>
               </module>
+<!--
+Here is how you would get to the article and extract the section specified:
+              <xsl:call-template name="extract-section-paragraphs">
+                <xsl:with-param name="article" select="../../.."/>
+              </xsl:call-template>
+-->
             </xsl:when>
             <xsl:when test="$attribute_name = 'Attribute Name' or $attribute_name = 'Attribute name' or (contains($table_name,'MACRO') and ends-with($table_name,'ATTRIBUTES') and not(contains($table_name,'Module')) )">
               <!-- macro are referenced by table idx -->
@@ -505,7 +488,78 @@ att name=</xsl:text>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:for-each>
-      </xsl:for-each>
+      <!--/xsl:for-each-->
+  </xsl:template>
+
+  <xsl:template name="extract-section-paragraphs">
+    <xsl:param name="article"/>
+    <xsl:variable name="extractsection" select="'C.8.3.1.1.1'"/>
+    <xsl:variable name="extract-section" select="$extractsection"/>
+    <xsl:variable name="section-number" select="concat($extract-section,' ')"/>
+    <xsl:variable name="section-anchor" select="$article/para[starts-with(normalize-space(.),$section-number)]"/>
+    <xsl:variable name="section-name" select="substring-after(para[starts-with(normalize-space(.),$section-number)],$extract-section)"/>
+<xsl:message>
+<xsl:value-of select="$article/para[1]"/>
+</xsl:message>
+    <xsl:choose>
+      <xsl:when test="count($section-anchor)=1">
+        <xsl:message>Info: section <xsl:value-of select="$extract-section"/> found</xsl:message>
+        <xsl:element name="section">
+          <xsl:attribute name="ref" select="$extract-section"/>
+          <xsl:attribute name="name" select="normalize-space($section-name)"/>
+          <xsl:call-template name="copy-section-paragraphs">
+            <xsl:with-param name="section-paragraphs" select="$section-anchor/following-sibling::*"/>
+          </xsl:call-template>
+        </xsl:element>
+        <xsl:message>Info: all paragraphs extracted</xsl:message>
+      </xsl:when>
+      <xsl:when test="count($section-anchor)&gt;1">
+        <xsl:message>Error: section <xsl:value-of select="$extract-section"/> found multiple times!</xsl:message>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:message>Error: section <xsl:value-of select="$extract-section"/> not found!</xsl:message>
+      </xsl:otherwise>
+    </xsl:choose>
+
+  </xsl:template>
+
+  <xsl:template name="copy-section-paragraphs">
+    <xsl:param name="section-paragraphs"/>
+    <xsl:variable name="current-paragraph" select="$section-paragraphs[1]"/>
+<!-- search for next section title -->
+    <xsl:if test="($current-paragraph[name()='para' or name()='informaltable']) and not(matches(normalize-space($current-paragraph),'^([A-F]|[1-9]+[0-9]?)(\.[1-9]?[0-9]+)+ '))">
+      <xsl:apply-templates select="$current-paragraph"/>
+      <xsl:call-template name="copy-section-paragraphs">
+        <xsl:with-param name="section-paragraphs" select="$section-paragraphs[position()&gt;1]"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="article">
+      <xsl:apply-templates select="informaltable"/>
+  </xsl:template>
+<!-- main template -->
+  <xsl:template match="/">
+    <xsl:processing-instruction name="xml-stylesheet">
+type="text/xsl" href="ma2html.xsl"
+</xsl:processing-instruction>
+    <xsl:comment> to produce output use:
+$ xsltproc ma2html.xsl ModuleAttributes.xml
+    </xsl:comment>
+    <xsl:comment>
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006-2008 Mathieu Malaterre
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+</xsl:comment>
+    <tables edition="2008">
+      <xsl:apply-templates select="article"/>
     </tables>
   </xsl:template>
 </xsl:stylesheet>
