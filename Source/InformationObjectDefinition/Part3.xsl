@@ -604,19 +604,51 @@ att name=</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+<!-- TEMPLATES -->
+  <xsl:template match="para" mode="extract">
+    <xsl:value-of select="concat(.,'&#10;')"/>
+  </xsl:template>
+<!-- TODO need work on tables to parse defined terms / enumerated-->
+  <xsl:template match="informaltable" mode="extract">
+<!-- iterate over all rows -->
+    <xsl:for-each select="tgroup/tbody/row">
+      <xsl:choose>
+<!-- output define term and description -->
+        <xsl:when test="count(entry)&gt;1 and string(entry[2])">
+          <xsl:value-of select="concat(entry[1]/para[1],' ')"/>
+          <xsl:if test="not(matches(entry[1]/para[1],'= *$') or matches(entry[2]/para[1],'^ *='))">
+            <xsl:value-of select="'= '"/>
+          </xsl:if>
+          <xsl:value-of select="entry[2]/para[1]"/>
+        </xsl:when>
+<!-- output defined term only -->
+        <xsl:otherwise>
+          <xsl:value-of select="entry[1]/para[1]"/>
+        </xsl:otherwise>
+      </xsl:choose>
+<!-- output newline -->
+      <xsl:if test="not(position()=last())">
+        <xsl:value-of select="'&#10;'"/>
+      </xsl:if>
+    </xsl:for-each>
+  </xsl:template>
+ 
   <xsl:template name="copy-section-paragraphs">
     <xsl:param name="section-paragraphs"/>
     <xsl:variable name="current-paragraph" select="$section-paragraphs[1]"/>
     <!-- search for next section title -->
-    <xsl:if test="($current-paragraph[name()='para' or name()='informaltable']) and not(matches(normalize-space($current-paragraph),'^([A-F]|[1-9ab]+[0-9ab]?)(\.[1-9ab]?[0-9ab]+)+ '))">
+    <xsl:if test="($current-paragraph[name()='para' or name()='informaltable']) 
+	    and not(matches(normalize-space($current-paragraph),'^([A-F]|[1-9]+[0-9ab]?)(\.[1-9ab]?[0-9ab]+)+ '))">
 	    <xsl:if test="not(starts-with(normalize-space($current-paragraph),'0M8R4KGxG'))"> <!-- embedded graphics ? -->
-      <xsl:apply-templates select="$current-paragraph"/>
+      <xsl:apply-templates select="$current-paragraph" mode="extract"/>
       <xsl:call-template name="copy-section-paragraphs">
         <xsl:with-param name="section-paragraphs" select="$section-paragraphs[position()&gt;1]"/>
       </xsl:call-template>
     </xsl:if>
     </xsl:if>
   </xsl:template>
+  <!--
+  -->
   <xsl:template match="article">
     <xsl:apply-templates select="informaltable"/>
   </xsl:template>
