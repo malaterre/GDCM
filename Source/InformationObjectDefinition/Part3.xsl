@@ -595,10 +595,12 @@ att name=</xsl:text>
     <xsl:variable name="current-paragraph" select="$section-paragraphs[1]"/>
     <!-- search for next section title -->
     <xsl:if test="($current-paragraph[name()='para' or name()='informaltable']) and not(matches(normalize-space($current-paragraph),'^([A-F]|[1-9]+[0-9]?)(\.[1-9]?[0-9]+)+ '))">
+	    <xsl:if test="not(starts-with(normalize-space($current-paragraph),'0M8R4KGxG'))"> <!-- embedded graphics ? -->
       <xsl:apply-templates select="$current-paragraph"/>
       <xsl:call-template name="copy-section-paragraphs">
         <xsl:with-param name="section-paragraphs" select="$section-paragraphs[position()&gt;1]"/>
       </xsl:call-template>
+    </xsl:if>
     </xsl:if>
   </xsl:template>
   <xsl:template match="article">
