@@ -175,11 +175,23 @@ Here is how you would get to the article and extract the section specified:
           <xsl:otherwise>
             <entry group="{$group}" element="{$element}" name="{$name_translate}">
               <!-- type ?? -->
-              <description>
-                <xsl:variable name="desc" select="translate($type,$single_quote1,$single_quote2)"/>
                 <!-- very specific -->
-                <xsl:value-of select="my:normalize-paragraph($desc)"/>
+                <xsl:variable name="desc" select="translate($type,$single_quote1,$single_quote2)"/>
+                <xsl:variable name="n_description" select="my:normalize-paragraph($desc)"/>
+              <description>
+                <xsl:value-of select="$n_description"/>
               </description>
+                  <xsl:variable name="dummy">
+                    <xsl:call-template name="get-description-reference">
+                      <xsl:with-param name="description" select="$n_description"/>
+                    </xsl:call-template>
+                  </xsl:variable>
+                  <xsl:if test="$dummy !=''">
+                    <xsl:call-template name="extract-section-paragraphs">
+                      <xsl:with-param name="article" select="../../../.."/>
+                      <xsl:with-param name="extractsection" select="$dummy"/>
+                    </xsl:call-template>
+                  </xsl:if>
             </entry>
           </xsl:otherwise>
         </xsl:choose>
