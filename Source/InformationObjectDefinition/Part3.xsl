@@ -370,11 +370,22 @@ over and over. We need to get the last ie name we found to fill in the blank:
   <!-- extract a See C.X.Y from a description string -->
   <xsl:template name="get-description-reference">
     <xsl:param name="description"/>
-    <xsl:variable name="section_regex">See ([C]\.[0-9\.]+) for specialization</xsl:variable>
+    <xsl:variable name="regex1">See ([C]\.[0-9\.]+) for specialization</xsl:variable>
+    <xsl:variable name="regex2">See ([C]\.[0-9\.]+) for further explanation</xsl:variable>
     <xsl:choose>
-    <xsl:when test="matches($description, $section_regex)">
+    <xsl:when test="matches($description, $regex1)">
     <!--xsl:message>DESCRIPTION FOUND:<xsl:value-of select="$description"/></xsl:message-->
-        <xsl:analyze-string select="$description" regex="{$section_regex}">
+        <xsl:analyze-string select="$description" regex="{$regex1}">
+          <xsl:matching-substring>
+            <match>
+              <xsl:value-of select="regex-group(1)"/>
+            </match>
+          </xsl:matching-substring>
+	</xsl:analyze-string>
+    </xsl:when>
+     <xsl:when test="matches($description, $regex2)">
+    <!--xsl:message>DESCRIPTION FOUND:<xsl:value-of select="$description"/></xsl:message-->
+        <xsl:analyze-string select="$description" regex="{$regex2}">
           <xsl:matching-substring>
             <match>
               <xsl:value-of select="regex-group(1)"/>
