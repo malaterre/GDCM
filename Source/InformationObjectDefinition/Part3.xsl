@@ -12,6 +12,24 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 -->
+<!-- =====================================================================
+ |
+ |  Copyright (C) 2007, ICSMED AG
+ |
+ |  This software and supporting documentation were developed by
+ |
+ |    ICSMED AG
+ |    Escherweg 2
+ |    26121 Oldenburg
+ |    Germany
+ |
+ |  Purpose: Extract particular section from part 3 of the DICOM standard.
+ |           Subsections and tables within the section are not extracted.
+ |
+ ======================================================================= -->
+<!--
+Special Thanks to Jörg Riesmeier for the extract_section.xsl script !
+-->
 <!--
 TODO:
 * Make sure a <include/> is indeed a Include `' ...
