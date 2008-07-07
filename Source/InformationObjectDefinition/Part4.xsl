@@ -45,7 +45,12 @@
  
   <xsl:template match="row">
     <!--xsl:apply-templates/-->
-    <mapping sop-class-name="{entry[1]/para}" sop-class-uid="{entry[2]/para}" iod="{entry[3]/para}" />
+    <xsl:variable name="classname" select="entry[1]/para"/>
+    <xsl:variable name="classuid" select="entry[2]/para"/>
+    <xsl:variable name="iod" select="entry[3]/para"/>
+    <xsl:if test="$classname != 'SOP Class Name'">
+    <mapping sop-class-name="{$classname}" sop-class-uid="{normalize-space($classuid)}" iod="{$iod}" />
+    </xsl:if>
   </xsl:template>
 
   <!--
