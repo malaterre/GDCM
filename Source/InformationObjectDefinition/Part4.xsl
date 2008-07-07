@@ -3,7 +3,7 @@
   <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 <!--
   Program: GDCM (Grass Root DICOM). A DICOM library
-  Module:  $URL: https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk/Source/InformationObjectDefinition/getelements.xsl $
+  Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
   All rights reserved.
@@ -36,16 +36,16 @@
     <xsl:variable name="section-number" select="'Table B.5-1STANDARD SOP CLASSES'"/>
     <xsl:variable name="section-anchor" select="para[starts-with(normalize-space(.),$section-number)]"/>
     <xsl:message><xsl:value-of select="$section-anchor"/></xsl:message>
-    <sops>
+    <standard-sop-classes>
 	    <!--xsl:apply-templates select="article/sect1/sect2/informaltable"/-->
 	    <!--xsl:apply-templates select="informaltable"/-->
-	    <xsl:apply-templates select="sect1/sect2"/>
-    </sops>
+	    <xsl:apply-templates select="sect1/sect2/informaltable"/>
+    </standard-sop-classes>
   </xsl:template>
  
   <xsl:template match="row">
     <!--xsl:apply-templates/-->
-    <sop sopclassname="{entry[1]/para}" sopclassuid="{entry[2]/para}" spec="{entry[3]/para}" />
+    <mapping sop-class-name="{entry[1]/para}" sop-class-uid="{entry[2]/para}" iod="{entry[3]/para}" />
   </xsl:template>
 
   <!--
@@ -59,7 +59,19 @@
   -->
  
   <xsl:template match="/">
-    <xsl:apply-templates select="article"/>
+    <xsl:comment>
+  Program: GDCM (Grass Root DICOM). A DICOM library
+  Module:  $URL$
+
+  Copyright (c) 2006-2008 Mathieu Malaterre
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+</xsl:comment>
+     <xsl:apply-templates select="article"/>
  </xsl:template>
 </xsl:stylesheet>
 
