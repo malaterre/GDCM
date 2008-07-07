@@ -290,6 +290,7 @@ Note: The condition is to allow the contents of this macro to be present (e.g., 
     <include ref="&gt;&gt;Include 'Content Item Macro' Table 10-2" description="Context ID may be defined in the macro invocation."/>
     <entry group="0040" element="0441" name="&gt;&gt; Content Item Modifier Sequence" type="3">
       <description>Sequence that specifies modifiers for a Protocol Context Content Item. One or more items may be included in this sequence. See Section C.4.10.1.</description>
+      <section ref="C.4.10.1" name="">The Protocol Context Sequence (0040,0440) allows the specification of parameters that further qualify the scheduled protocol, provided through a set of generic name/value pairs of context Content Items. Note:	This allows the specification of clinical, acquisition, or procedural qualifiers for the scheduled protocol, such as a specific body part, imaging technique, or parameters of a preparatory event (e.g., radionuclide injection). Specific uses of this Sequence may be documented in a Template defined in accordance with PS3.16. </section>
     </entry>
     <include ref="&gt;&gt;&gt;Include 'Content Item Macro' Table 10-2" description="Context ID may be defined in the macro invocation."/>
   </macro>
@@ -461,6 +462,7 @@ Only a single Item shall be permitted in this Sequence.</description>
     <entry group="0054" element="0414" name="Patient Gantry Relationship Code Sequence" type="3">
       <description>Sequence that describes the orientation of the patient with respect to the head of the table. See Section C.8.4.6.1.3 for further explanation.
 Only a single Item shall be permitted in this Sequence.</description>
+      <section ref="C.8.4.6.1.3" name="">Patient Gantry Relationship Code Sequence (0054,0414) is used to describe the patient direction within the gantry, such as head-first or feet-first. When imaging the extremities, these directions are related to normal anatomic position.Example: In normal anatomic position, the fingers point towards the feet.</section>
     </entry>
     <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1." description="Baseline Context ID 21"/>
   </macro>
@@ -487,6 +489,7 @@ Only a single Item shall be permitted in this Sequence.</description>
     <include ref="&gt;&gt;Include 'Content Item Macro' Table 10-2" description="Context ID may be defined in the macro invocation."/>
     <entry group="0040" element="0441" name="&gt;&gt; Content Item Modifier Sequence" type="3">
       <description>Sequence that specifies modifiers for a Protocol Context Content Item. One or more items may be included in this sequence. See Section C.4.10.1.</description>
+      <section ref="C.4.10.1" name="">The Protocol Context Sequence (0040,0440) allows the specification of parameters that further qualify the scheduled protocol, provided through a set of generic name/value pairs of context Content Items. Note:	This allows the specification of clinical, acquisition, or procedural qualifiers for the scheduled protocol, such as a specific body part, imaging technique, or parameters of a preparatory event (e.g., radionuclide injection). Specific uses of this Sequence may be documented in a Template defined in accordance with PS3.16. </section>
     </entry>
     <include ref="&gt;&gt;&gt;Include 'Content Item Macro' Table 10-2" description="Context ID may be defined in the macro invocation."/>
     <entry group="0040" element="0280" name="Comments on the Performed Procedure Step" type="3">
@@ -3412,12 +3415,14 @@ Required if Patient Identity Removed (0012,0062) is present and has a value of Y
   <module ref="C.7.1.2" table="C.7-2a" name="Specimen Identification Module Attributes">
     <entry group="0040" element="050A" name="Specimen Accession Number" type="1">
       <description>A departmental Information System identifier that identifies the Accession. See Section C.7.1.2.1.1 for further explanation.</description>
+      <section ref="C.7.1.2.1.1" name="">Specimen Accession Number (0040,050A) is the primary identifier of the Specimen.Note: 	Specimen Accession Number (0040,050A) identifies tissue or fluid obtained from a Patient in a Specimen-harvest procedure. This Attribute was created to differentiate Accession Numbers, as used in Anatomic Pathology to identify specimens, from other uses of the term “Accession Number” in Information Systems. The Specimen Accession Number (0040,050A) is typically unique within the scope of the institution in which the Accession is performed. An Accession may contain multiple Specimens. Typically, an Accession contains the Specimens obtained in one Specimen-harvest procedure and submitted by one Requesting Physician. However, multiple Specimen-harvest procedures may be involved.</section>
     </entry>
     <entry group="0040" element="0550" name="Specimen Sequence" type="2">
       <description>Detailed description of one or more specimens. Zero or more Items may be included in this Sequence.</description>
     </entry>
     <entry group="0040" element="0551" name="&gt;Specimen Identifier" type="2">
       <description>A departmental information system identifier for the Specimen. See Section C.7.1.2.1.2 for further explanation.</description>
+      <section ref="C.7.1.2.1.2" name="">Specimen Identifier (0040,0551) may be used to convey a slide number, a block number, or other secondary identifier of the Specimen.Note: 	The Specimen Identifier (0040,0551) is typically unique within the scope of the institution in which the related Accession is performed. However, a value of Specimen Identifier (0040,0551) does not always exist. For example, it is common practice in some Anatomic Pathology departments to use a Specimen Identifier (0040,0551) to identify specimen-containers or blocks only if multiple containers or blocks are submitted for a single Accession. Therefore, Specimen Identifier (0040,0551) is modeled as a Type 2 Attribute.</section>
     </entry>
     <entry group="0040" element="059A" name="&gt;Specimen Type Code Sequence" type="2C">
       <description>Specimen Type. Only a single Item shall be permitted in this Sequence. Required if Specimen Identifier (0040,0551) is sent with a value.</description>
@@ -3451,6 +3456,7 @@ Required if the Specimen is a Slide.</description>
     </entry>
     <entry group="0012" element="0040" name="Clinical Trial Subject ID" type="1C">
       <description>The assigned identifier for the clinical trial subject. See C.7.1.3.1.6. Shall be present if Clinical Trial Subject Reading ID (0012,0042) is absent. May be present otherwise.</description>
+      <section ref="C.7.1.3.1.6" name="">The Clinical Trial Subject ID (0012,0040) identifies the subject within the investigational protocol specified by Clinical Trial Protocol ID (0012,0020).</section>
     </entry>
     <entry group="0012" element="0042" name="Clinical Trial Subject Reading ID" type="1C">
       <description>Identifies the subject for blinded evaluations. Shall be present if Clinical Trial Subject ID (0012,0040) is absent. May be present otherwise. See C.7.1.3.1.7.</description>
@@ -4729,6 +4735,12 @@ Enumerated Values:
 YES
 NO
 See Section C.7.6.4b.1.</description>
+      <section ref="C.7.6.4" name="">Table C.7-12 specifies the Attributes that describe the contrast /bolus used in the acquisition of the Image.Table C.7-12
+CONTRAST/BOLUS MODULE ATTRIBUTES<module ref="C.7.6.4" table="C.7-12" name="Contrast/bolus Module Attributes"><entry group="0018" element="0010" name="Contrast/Bolus Agent" type="2"><description>Contrast or bolus agent</description></entry><entry group="0018" element="0012" name="Contrast/Bolus Agent Sequence" type="3"><description>Sequence that identifies the contrast agent. One or more Items may be present.</description></entry><include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 12."/><entry group="0018" element="1040" name="Contrast/Bolus Route" type="3"><description>Administration route of contrast agent</description></entry><entry group="0018" element="0014" name="Contrast/Bolus Administration Route Sequence" type="3"><description>Sequence that identifies the route of administration of contrast agent. Only a single Item shall be permitted in this sequence.</description></entry><include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 11."/><entry group="0018" element="002A" name="&gt;Additional Drug Sequence" type="3"><description>Sequence that identifies any additional drug that is administered with the contrast agent bolus. One or more Items may be present.</description></entry><include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="No Baseline Context ID is defined."/><entry group="0018" element="1041" name="Contrast/Bolus Volume" type="3"><description>Volume injected in milliliters of diluted contrast agent</description></entry><entry group="0018" element="1042" name="Contrast/Bolus Start Time" type="3"><description>Time of start of injection</description></entry><entry group="0018" element="1043" name="Contrast/Bolus Stop Time" type="3"><description>Time of end of contrast injection</description></entry><entry group="0018" element="1044" name="Contrast/Bolus Total Dose" type="3"><description>Total amount in milliliters of the undiluted contrast agent</description></entry><entry group="0018" element="1046" name="Contrast Flow Rate" type="3"><description>Rate(s) of injection(s) in milliliters/sec</description></entry><entry group="0018" element="1047" name="Contrast Flow Duration" type="3"><description>Duration(s) of injection(s) in seconds. Each Contrast Flow Duration value shall correspond to a value of Contrast Flow Rate (0018,1046).</description></entry><entry group="0018" element="1048" name="Contrast/Bolus Ingredient" type="3"><description>Active ingredient of agent. Defined Terms:
+IODINE
+GADOLINIUM
+CARBON DIOXIDE
+BARIUM</description></entry><entry group="0018" element="1049" name="Contrast/Bolus Ingredient Concentration" type="3"><description>Milligrams of active ingredient per milliliter of (diluted) agent</description></entry></module>Note:	1. Flow duration is an alternate method of specifying stop time	2. Flow rate allows for stepped injections by being capable of multiple values (1,N) instances.	3. For a 100 ml injection of 76% Diatrizoate and meglumine/sodium, diluted 1:1, 		the Contrast/Bolus Agent would be “76% Diatrizoate” as text 		the Contrast/Bolus Volume would be 100 ml, 		the Contrast/Bolus Total Dose would be 50 ml, 		the Contrast/Bolus Ingredient would be “IODINE”, 		the Contrast/Bolus Ingredient Concentration would be 370mg/ml.</section>
     </entry>
     <entry group="0018" element="9340" name="&gt;Contrast Administration Profile Sequence" type="3">
       <description>Sequence that describes one or more phases of contrast administered. If present, shall contain one or more Items.</description>
@@ -4792,6 +4804,7 @@ Note: Frame Time Vector arrays may not be properly encoded if Explicit-VR transf
     <entry group="003A" element="0300" name="Multiplexed Audio Channels Description Code Sequence" type="2C">
       <description>Description of any multiplexed audio channels. See Section C.7.6.5.1.3.
 Required if the Transfer Syntax used to encode the multi-frame image contains multiplexed (interleaved) audio channels, such as is possible with MPEG2. Zero or more items may be present in this sequence.</description>
+      <section ref="C.7.6.5.1.3" name="">During a video acquisition, audio may be used for voice commentary of what is being observed, as well as to record sound-based physiological information such as Doppler audio.Some Transfer Syntaxes allow for the multiplexing of interleaved audio with video data, and the Attributes of the Cine Module support this encoding paradigm. They are not intended to describe audio acquired simultaneously when it is encoded in other SOP Instances or within Attributes other than Pixel Data (7FE0,0010) of the same SOP Instance.Synchronization between audio and video is assumed to be encoded at the Transfer Syntax level (i.e. within the encoded bit stream).Note:	If no audio was recorded, the Multiplexed Audio Channels Description Code Sequence (003A,0300) will be present and contain no sequence items.</section>
     </entry>
     <entry group="003A" element="0301" name="&gt;Channel Identification Code" type="1">
       <description>A reference to the audio channel as identified within Transfer Syntax encoded bit stream (1 for the main channel, 2 for the second channel and 3 to 9 to the complementary channels).</description>
@@ -4848,6 +4861,8 @@ ENDSYSTOLE = the frame closest to end of systole, at the end of the T-wave</desc
       <description>Identification of the Subtraction Item used to associate a certain Mask Sub-Pixel Shift (0028,6114) in the Frame Pixel Shift Functional Group.
 See C.7.6.16.2.14.1.
 Required if SOP Class UID (0008,0016) equals "1.2.840.10008.5.1.4.1.1.12.1.1" or "1.2.840.10008.5.1.4.1.1.12.2.1". May be present otherwise.</description>
+      <section ref="C.7.6.16.2.14.1" name="">Subtraction Item ID (0028,9416) specifies the ID of a subtraction operation to which the Mask Sub-pixel Shift (0028,6114) is associated. The Subtraction Item ID is also present in the Mask Subtraction Sequence (0028,6100) to allow this association.When used as per-frame macro, the Subtraction Item ID (0028,9416) allows to specify different values of Mask Sub-pixel Shift (0028,6114) individually frame by frame, and relate them to a single item of the Mask Subtraction Sequence (0028,6100).Note:	There is no restriction in the number of Subtraction Item ID’s associated to each contrast frame. The same contrast frame may be present in several items of the Mask Subtraction Sequence, each item having a different value of Subtraction Item ID.When used as shared macro, the Subtraction Item ID (0028,9416) allows to specify one or more values of Mask Sub-pixel Shift that will be applied to all the frames of the Multi-frame image.Note:	Example of usage of Subtraction Item ID in a per-frame macro, see Figure C.7.6.16-8:	In this example of Multi-Frame Image with 3 frames, one Mask Frame (i.e., Frame 1) is applied to the next two frames of the Multi-Frame image (i.e., Frames 2 and 3). Therefore, there is only one item in the Mask Subtraction Sequence, containing its own Subtraction Item ID value (i.e., 100). The Frame Pixel Shift Macro allows to define a Mask Sub-Pixel Shift different for each contrast frame.	First Frame Subtracted: Subtraction of Frame 1 (Mask) to Frame 2, with Sub-Pixel Shift 1.3\2.4	Second Frame Subtracted: Subtraction of Frame 1 (Mask) to Frame 3, with Sub-Pixel Shift 1.9\3.0Figure C.7.6.16-8
+Example of usage of Subtraction Item ID in a per-frame Macro</section>
     </entry>
     <entry group="0028" element="6102" name="&gt;Applicable Frame Range" type="1C">
       <description>Each pair of numbers in this multi-valued attribute specify a beginning and ending frame number inclusive of a range where this particular mask operation is valid. Discontinuous ranges are represented by multiple pairs of numbers. Frames in a Multi-frame Image are specified by sequentially increasing number values beginning with 1. If this Attribute is missing in this particular sequence item, then the mask operation is applicable throughout the entire Multi-frame Image, subject to certain limits as described in C.7.6.10.1.1.
@@ -4862,6 +4877,7 @@ Required if Mask Operation (0028,6101) equals REV_TID. May be present otherwise.
     <entry group="0028" element="6114" name="&gt;Mask Sub-pixel Shift" type="3">
       <description>A pair of floating point numbers specifying the fractional vertical [adjacent row spacing] and horizontal [adjacent column spacing] pixel shift applied to the mask before subtracting it from the contrast frame. See Section C.7.6.10.1.2.
 Note: When the Frame Pixel Shift Functional Group is present the values of the Mask Pixel Shift attribute of that Functional Group prevails over the values specified in this module.</description>
+      <section ref="C.7.6.10.1.2" name="">A pair of floating point numbers specifying the fractional vertical [adjacent row spacing] and horizontal [adjacent column spacing] pixel shift applied to the mask before subtracting it from the contrast frame. The row offset results in a shift of the pixels along the column axis. The column offset results in a shift of the pixels along the row axis. A positive row offset is a shift toward the pixels of the lower row of the pixel plane. A positive column offset is a shift toward the pixels of the left hand side column of the pixel plane.</section>
     </entry>
     <entry group="0028" element="6120" name="&gt;TID Offset" type="2C">
       <description>If Mask Operation is TID, specifies the offset to be subtracted from the current frame number in order to locate the mask frame in TID mode.
@@ -5101,6 +5117,7 @@ See section C.7.6.16.1.1 for further explanation.</description>
       <description>Sequence that contains the Functional Group Macros corresponding to each frame of the Multi-frame Image. The first Item corresponds with the first frame, and so on.
 Each Item shall contain the same set of Functional Group Macros.
 This Sequence shall contain the same number of Items as the number of frames in the Multi-frame image. See Section C.7.6.16.1.2 for further explanation.</description>
+      <section ref="C.7.6.16.1.2" name="">The Per-frame Functional Groups Sequence Attribute (5200,9230) consists of a Sequence of Items. Each Item describes the frame of the same rank in the multi-frame pixel data. The first Item describes frame 1, the second Item describes frame 2, etc. Frames are implicitly numbered starting from 1. See Figure C.7.6.16-1.</section>
     </entry>
     <include ref="&gt;Include one or more Functional Group Macros."/>
     <entry group="0020" element="0013" name="Instance Number" type="1">
@@ -6131,6 +6148,7 @@ j {} ##
   <macro table="C.7.6.16-6" name="Referenced Image Macro Attributes">
     <entry group="0008" element="1140" name="Referenced Image Sequence" type="2">
       <description>A sequence that provides reference to a set of SOP Class/Instance pairs identifying images or other composite SOP Instances used to plan the acquisition or significant related images. See Section C.7.6.16.2.5.1 for further explanation. Zero or more Items may be included in this Sequence.</description>
+      <section ref="C.7.6.16.2.5.1" name="">Referenced Image Sequence (0008,1140) shall be used to provide a reference to a set of SOP Class/Instance pairs identifying other data objects used to plan the acquisition of this image where the images shall share the same Frame of Reference UID (0020,0052). For each Item that contains such a reference, the value of the Purpose of Reference Code Sequence (0040,A170) shall be (”121311”, DCM, ”Localizer"). Applications can use the Referenced Image Sequence (0008,1140) in combination with data in Plane Position and Plane Orientation Macros to provide projections of the position of an image with respect to the referenced image.The Referenced Image Sequence (0008,1140) may also be present when references to other images (or frames within other images) are required for other reasons, as specified by Purpose of Reference Code Sequence (0040,A170).Note:	An Image may contain references to itself (e.g. to other frames within itself).</section>
     </entry>
     <include ref="&gt;Include 'Image SOP Instance Reference Macro' Table 10-3"/>
     <entry group="0040" element="A170" name="&gt;Purpose of Reference Code Sequence" type="1">
@@ -6382,6 +6400,7 @@ Example of usage of Subtraction Item ID in a per-frame Macro</section>
       <description>A pair of floating point numbers specifying the fractional vertical [adjacent row spacing] and horizontal [adjacent column spacing] pixel shift applied to the mask before subtracting it from this contrast frame.
 Note: If no pixel shift has to be applied a pair of zero values should be specified.
 See Section C.7.6.10.1.2.</description>
+      <section ref="C.7.6.10.1.2" name="">A pair of floating point numbers specifying the fractional vertical [adjacent row spacing] and horizontal [adjacent column spacing] pixel shift applied to the mask before subtracting it from the contrast frame. The row offset results in a shift of the pixels along the column axis. The column offset results in a shift of the pixels along the row axis. A positive row offset is a shift toward the pixels of the lower row of the pixel plane. A positive column offset is a shift toward the pixels of the left hand side column of the pixel plane.</section>
     </entry>
   </macro>
   <macro table="C.7.6.16-16" name="Patient Orientation in Frame Macro Attributes">
@@ -6574,6 +6593,44 @@ BACK = time back before trigger
 PCNT = percentage of R-R forward from trigger
 See C.7.6.18.1.1.1.
 Required if type of framing is not time forward from trigger, may be present otherwise.</description>
+      <section ref="C.7.6.18.1.1.1" name="">Cardiac Framing Type (0018,1064) is the mechanism used to select the data acquired to construct the frames within a specified cardiac timing interval.C.7.6.18.2	Respiratory Synchronization ModuleTable C7.6.18-2 specifies the attributes of the Respiratory Synchronization Module.Table C.7.6.18-2
+RESPIRATORY SYNCHRONIZATION MODULE ATTRIBUTES<module ref="C.7.6.18.1.1.1" table="C.7.6.18-2" name="Respiratory Synchronization Module Attributes"><entry group="0018" element="9170" name="Respiratory Motion Compensation Technique" type="1C"><description>Applied technique to reduce respiratory motion artifacts.
+Defined Terms:
+NONE
+BREATH_HOLD
+REALTIME =
+image acquisition shorter than respiratory cycle
+GATING = Prospective gating
+TRACKING =
+prospective through-plane or in-plane motion tracking
+PHASE_ORDERING =
+prospective phase ordering
+PHASE_RESCANNING =
+prospective techniques, such as real-time averaging, diminishing variance and motion adaptive gating
+RETROSPECTIVE =
+retrospective gating
+CORRECTION =
+retrospective image correction
+Required if Image Type (0008,0008) Value 1 is ORIGINAL or MIXED. May be present otherwise.</description></entry><entry group="0018" element="9171" name="Respiratory Signal Source" type="1C"><description>Signal source from which respiratory motion is derived.
+Defined Terms:
+NONE
+BELT = includes various devices that detect or track expansion of the chest
+NASAL_PROBE
+CO2_SENSOR
+NAVIGATOR = MR navigator and organ edge detection
+MR_PHASE = phase (of center k-space line)
+ECG = baseline demodulation of the ECG
+Required if Image Type (0008,0008) Value 1 is ORIGINAL or MIXED and Respiratory Motion Compensation Technique (0018,9170) equals other than NONE.
+Otherwise may be present if Image Type (0008,0008) Value 1 is DERIVED and Respiratory Motion Compensation Technique (0018,9170 equals other than NONE.</description></entry><entry group="0020" element="9256" name="Respiratory Trigger Delay Threshold" type="1C"><description>Respiratory trigger threshold in percent of the chest expansion for the frame relative to the last Respiratory-Peak. See C.7.6.16.2.17.1 for further explanation.
+Required if Respiratory Motion Compensation Technique (0018,9170) equals other than NONE, REALTIME or BREATH_HOLD and if Image Type (0008,0008) Value 1 is ORIGINAL or MIXED. May be present otherwise.</description><section ref="C.7.6.16.2.17.1" name="">For time based respiratory gating, the Nominal Respiratory Trigger Delay Time (0020,9255) is the prescribed trigger delay time in ms from the previous Respiratory-peak to the value of the Frame Reference DateTime (0018,9151). When frames are acquired with prospective gating, that is, the data acquisition actually begins in response to a timed delay from the Respiratory trigger, it may be that Actual Respiratory Trigger Delay Time (0020,9257) and the Nominal Respiratory Trigger Delay Time (0020,9255) have the same value.However, when frames are the result of retrospective gating, that is, the data is continuously acquired and then later compared with a simultaneously acquired respiratory waveform and fitted into bins corresponding to nominal phases of the respiratory cycle, then Nominal Respiratory Trigger Delay Time (0020,9255) and the Actual Respiratory Trigger Delay Time (0020,9257) may have different values. Figure C.7.6.16-9a and C.7.6.16-9b depict the usage.Figure C.7.6.16-9a
+Respiratory Timing TagsFigure C.7.6.16-9b
+Relationship of Respiratory Amplitude Attributes</section></entry><entry group="0020" element="9250" name="Respiratory Trigger Type" type="1C"><description>Characteristic of the respiratory signal used to the define the respiratory triggering.
+Defined Terms:
+TIME
+AMPLITUDE
+BOTH
+Required if the value is not TIME, may be present otherwise.</description></entry></module>
+         </section>
     </entry>
   </module>
   <module ref="C.7.6.18.1.1.1" table="C.7.6.18-2" name="Respiratory Synchronization Module Attributes">
@@ -7037,6 +7094,7 @@ M rSub { size 8{"31"} }  {} # M rSub { size 8{"32"} }  {} # M rSub { size 8{"33"
       <description>Identification of the type of equipment coordinate system in which the projection images were acquired. See C.7.6.21.2.
 Defined Terms:
 ISOCENTER</description>
+      <section ref="C.7.6.21.2" name="">The Equipment Coordinate System Identification (0028,9537) identifies the Reference Coordinate System to which the Image to Equipment Mapping Matrix (0028,9520) is related.The Defined Term ISOCENTER refers to a coordinate reference system where the origin corresponds with the center of rotation of the projections.Note:	For X-Ray 3D Angiographic Images created from SOP Instances of the Enhanced XA SOP Class (1.2.840.10008.5.1.4.1.1.12.1.1) the isocenter coordinate system is used to describe the positioning of the table and positioner (see C.8.19.6.13), and will use only the Defined Term ISOCENTER.</section>
     </entry>
   </module>
   <macro table="C.7-22" name="Palette Color Lookup Module">
@@ -7248,6 +7306,7 @@ PORTRAIT</description>
     <entry group="0018" element="9318" name="Reconstruction Target Center (Patient)" type="3">
       <description>The x, y, and z coordinates (in the patient coordinate system) of the reconstruction center target point as used for reconstruction in mm. See C.8.15.3.6.1.
 Note: If the reconstructed image is not magnified or panned the value corresponds with the Data Collection Center (Patient) (0018,9313) attribute.</description>
+      <section ref="C.8.15.3.6.1" name="">In Figure C.8-19 the relationship of the Geometric Attributes within the CT Geometry and CT Reconstruction functional groups is shown. The figure, viewed from the front of the gantry (where the table enters the gantry), is informative only and is not meant to represent a standardization of an equipment-based frame of reference. Figure C.8-19: Geometry of CT Acquisition System</section>
     </entry>
     <entry group="0018" element="1110" name="Distance Source to Detector" type="3">
       <description>Distance in mm from source to detector center.
@@ -7568,6 +7627,7 @@ N = no</description>
     <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 20. The Coding Scheme Designator (0008,0102) shall have an Enumerated Value of “99SDM” for historical reasons. Code Meaning (0008,0104) shall be Type 3 for historical reasons."/>
     <entry group="0054" element="0414" name="Patient Gantry Relationship Code Sequence" type="2">
       <description>Sequence which describes the orientation of the patient with respect to the gantry. See Section C.8.4.6.1.3 for further explanation. Zero or one item shall be present in the sequence.</description>
+      <section ref="C.8.4.6.1.3" name="">Patient Gantry Relationship Code Sequence (0054,0414) is used to describe the patient direction within the gantry, such as head-first or feet-first. When imaging the extremities, these directions are related to normal anatomic position.Example: In normal anatomic position, the fingers point towards the feet.</section>
     </entry>
     <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="Baseline Context ID is 21. The Coding Scheme Designator (0008,0102) shall have an Enumerated Value of “99SDM” for historical reasons. Code Meaning (0008,0104) shall be Type 3 for historical reasons."/>
   </module>
@@ -8714,6 +8774,7 @@ The number of items shall be equal to Number of Phases (0054,0031). The first it
     </entry>
     <entry group="0054" element="0210" name="&gt;Trigger Vector" type="3">
       <description>An array of trigger times when gating information is acquired simultaneously with the dynamic image data. See Section C.8.4.14.1.1 for further explanation.</description>
+      <section ref="C.8.4.14.1.1" name="">Trigger Vector (0054,0210) is an array containing a list of the inter-trigger interval times in milliseconds in the order in which they were acquired, with the first being measured from the start time of the first frame of the image data in the Phase. If this element is used, the start times are required to be the same so that a mathematical correlation can be made between trigger times and frame start times.</section>
     </entry>
     <entry group="0054" element="0211" name="&gt;Number of Triggers in Phase" type="1C">
       <description>The number of entries in the Trigger Vector (0054,0210) for this phase. Required if Trigger Vector (0054,0210) is present.</description>
@@ -9056,12 +9117,14 @@ PEAK DOSE</description>
       <description>Sequence that describes the view of the patient anatomy in this image.
 Only a single Item shall be permitted in this Sequence.
 See Section C.8.5.6.1.19.</description>
+      <section ref="C.8.5.6.1.19" name="">The view of the patient anatomy may be described using coded terminology in the View Code Sequence (0054,0220). The view is typically specified by transducer position relative to the patient anatomy and/or transducer orientation, The view may be described by a single Code Sequence Item, or by combination of post-coordinated Code Sequence Items. The principal coded item is specified in View Code Sequence, and modifier terms in the View Modifier Code Sequence (0054,0222). The Baseline Context IDs for post-coordinated encoding of view are:</section>
     </entry>
     <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1" description="See Section C.8.5.6.1.19 for Context Group IDs."/>
     <entry group="0054" element="0222" name="&gt;View Modifier Code Sequence" type="3">
       <description>Sequence that provides modifiers for the view of the patient anatomy.
 Zero or more Items shall be permitted in this Sequence.
 See Section C.8.5.6.1.19.</description>
+      <section ref="C.8.5.6.1.19" name="">The view of the patient anatomy may be described using coded terminology in the View Code Sequence (0054,0220). The view is typically specified by transducer position relative to the patient anatomy and/or transducer orientation, The view may be described by a single Code Sequence Item, or by combination of post-coordinated Code Sequence Items. The principal coded item is specified in View Code Sequence, and modifier terms in the View Modifier Code Sequence (0054,0222). The Baseline Context IDs for post-coordinated encoding of view are:</section>
     </entry>
     <include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1" description="See Section C.8.5.6.1.19 for Context Group IDs."/>
     <entry group="0008" element="002A" name="Acquisition DateTime" type="1C">
@@ -9362,6 +9425,7 @@ d.	Other Values are implementation specific (optional).</section>
     <entry group="0028" element="1040" name="Pixel Intensity Relationship" type="1">
       <description>The relationship between the Pixel sample values and the X-Ray beam intensity.
 See Section C.8.7.1.1.2.</description>
+      <section ref="C.8.7.1.1.2" name="">Pixel Intensity Relationship (0028,1040) shall identify the relationship of the pixel values to the X-Ray beam intensity. Defined terms are:</section>
     </entry>
     <entry group="0028" element="0002" name="Samples per Pixel" type="1">
       <description>Number of samples (color planes) in this image shall have a value of 1.</description>
@@ -9372,14 +9436,17 @@ See Section C.8.7.1.1.2.</description>
     <entry group="0028" element="0100" name="Bits Allocated" type="1">
       <description>Number of bits allocated for each pixel sample.
 See Section C.8.7.1.1.6.</description>
+      <section ref="C.8.7.1.1.6" name="">For X-Ray Images, Bits Allocated (0028,0100) shall have the Enumerated Value of 8 or 16.</section>
     </entry>
     <entry group="0028" element="0101" name="Bits Stored" type="1">
       <description>Number of bits stored for each pixel sample.
 See Section C.8.7.1.1.7.</description>
+      <section ref="C.8.7.1.1.7" name="">For X-Ray Images, Bits Stored (0028,0101) shall have the Enumerated Values of 8, 10, 12, or 16.</section>
     </entry>
     <entry group="0028" element="0102" name="High Bit" type="1">
       <description>Most significant bit for pixel sample data.
 See Section C.8.7.1.1.8.</description>
+      <section ref="C.8.7.1.1.8" name="">For X-Ray Images, High Bit (0028,0102) shall have the Enumerated Value of one less than the value in Bit Stored.</section>
     </entry>
     <entry group="0028" element="0103" name="Pixel Representation" type="1">
       <description>Data representation of the pixel samples.
@@ -9397,6 +9464,7 @@ See Section C. 8.7.1.1.4.</description>
     <entry group="0008" element="1140" name="Referenced Image Sequence" type="1C">
       <description>A sequence which provides reference to a set of Image SOP Class/Instance identifying other images significantly related to this image. Shall be present if Image Type (0008,0008) Value 3 is BIPLANE A or BIPLANE B. May be present otherwise. One or more items may be included in this sequence..
 See Section C.8.7.1.1.13.</description>
+      <section ref="C.8.7.1.1.13" name="">When Image Type (0008,0008) Value 3 is BIPLANE A or BIPLANE B, Referenced Image Sequence (0008,1140) shall be used to identify the corresponding SOP Instance of the Biplane acquisition. In this case, either: </section>
     </entry>
     <include ref="&gt;Include 'Image SOP Instance Reference Macro' Table 10-3"/>
     <entry group="0040" element="A170" name="&gt;Purpose of Reference Code Sequence" type="3">
@@ -9411,6 +9479,7 @@ See C.8.7.1.1.5 for further explanation.</description>
     <entry group="0018" element="1400" name="Acquisition Device Processing Description" type="3">
       <description>Indicates any visual processing performed on the images prior to exchange.
 See Section C.8.7.1.1.3.</description>
+      <section ref="C.8.7.1.1.3" name="">Acquisition Device Processing Description (0018,1400) provides some indication in human readable text of the digital processing on the images before exchange. Examples of this processing are: edge enhanced, subtracted, time filtered, gamma corrected, convolved (spatially filtered).</section>
     </entry>
     <entry group="0018" element="2002" name="Frame Label Vector" type="3">
       <description>A multi-valued attribute that contains a descriptive label for each of the image frames. The number of values shall equal the number of frames.</description>
@@ -9418,6 +9487,11 @@ See Section C.8.7.1.1.3.</description>
     <entry group="0028" element="000A" name="Frame Dimension Pointer" type="3">
       <description>Contains the Data Element Tags of one or more attributes that vary or increment for the frames of a multi-frame image. See C.8.7.1.1.12.
 Shall not be present if it would contain only one value and that value would be Frame Time (0018,1063) or Frame Time Vector (0018,1065).</description>
+      <section ref="C.8.7.1.1.12" name="">Frame Dimension Pointer (0028,000A) identifies attributes that vary or increment with each frame, and which are clinically significant for viewing or processing the image. This is intended for SOP Instances whose preferred clinical presentation is dependent on frame relationships other than simply time. Defined Terms for multiframe cine from the Cine Module (see C.7.6.5) are: 00181063H = Frame Time (0018,1063) 
+00181065H = Frame Time Vector (0018,1065)Defined Terms for rotational acquisition from the XA Positioner Module (see C.8.7.5) are:00181520H = Positioner Primary Angle Increment (0018,1520)
+00181521H = Positioner Secondary Angle Increment (0018,1521)Defined Terms for stepped acquisition from the X-Ray Table Module (see C.8.7.4) are:00181135H = Table Vertical Increment (0018,1135)
+00181137H = Table Longitudinal Increment (0018,1137)
+00181136H = Table Lateral Increment (0018,1136)Defined Terms for an arbitrary labeled increment:00182002H = Frame Label Vector (0018,2002)Notes:	1. Previous editions of the standard did not include the optional Frame Dimension Pointer (0028,000A), but instead depended entirely on the mandatory Frame Increment Pointer (0028,0009), and envisaged that only time and no other dimension would relate frames. Image creators that add the Frame Dimension Pointer (0028,000A) must anticipate that many implementations will ignore or discard this attribute when displaying or storing images and continue to assume that frames are temporally related.	2. Frame Time (0018,1063) or Frame Time Vector (0018,1065) will also be present and will contain appropriate values consistent with the times of acquisition of the frames.</section>
     </entry>
     <entry group="0050" element="0004" name="Calibration Image" type="3">
       <description>Indicates whether a reference object (phantom) of known size is present in the image and was used for calibration. Enumerated Values:
@@ -9484,6 +9558,7 @@ PULSED</description>
       <description>Shape of the Image Intensifier Field of View. See C.8.7.2.1.2. Defined Terms are:
 ROUND
 RECTANGLE</description>
+      <section ref="C.8.7.2.1.2" name="">The Field of View Attribute describes the shape and dimensions of the Image Intensifier Field of View (zoom mode). This could be further restricted by the Collimator. See Section C.8.7.3.</section>
     </entry>
     <entry group="0018" element="1149" name="Field of View Dimension(s)" type="3">
       <description>Dimensions of the Image Intensifier Field of View in mm. If Rectangle, row dimension followed by column; if Round, diameter.</description>
@@ -9554,10 +9629,14 @@ Required if Table Motion is DYNAMIC.</description>
     <entry group="0018" element="1137" name="Table Longitudinal Increment" type="2C">
       <description>Incremental change in Longitudinal position of the table relative to first frame of Multi-frame image in mm. Table motion towards +90°position of the primary angle of the positioner is positive. See C.8.7.4.1.2.
 Required if Table Motion is DYNAMIC.</description>
+      <section ref="C.8.7.4.1.2" name="">The direction of the longitudinal movement is perpendicular to the primary axis of rotation of the positioner. A positive value of Table Longitudinal Increment (0018,1137) attributes indicates a movement towards the +90° position of the positioner, see figure C.8-9a.Figure C.8-9a
+Table Longitudinal Movement</section>
     </entry>
     <entry group="0018" element="1136" name="Table Lateral Increment" type="2C">
       <description>Incremental change in Lateral position of the table relative to first frame of Multi-frame image given in mm. Table motion towards +90°position of the secondary angle of the positioner is positive. See C.8.7.4.1.3.
 Required if Table Motion is DYNAMIC.</description>
+      <section ref="C.8.7.4.1.3" name="">The direction of the lateral movement is perpendicular to the secondary axis of rotation of the positioner. A positive value of Table Lateral Increment (0018,1136) attributes indicates a movement towards the +90° position of the positioner, see figure C.8-9b.Figure C.8-9b
+Table Lateral MovementNote:		The terms “longitudinal” and “lateral” are relative to an operator standing tableside, and facing the patient. Thus lateral movement is to the left and right of the operator, and longitudinal movement is towards or away from the operator.</section>
     </entry>
     <entry group="0018" element="1138" name="Table Angle" type="3">
       <description>Angle of table plane in degrees relative to horizontal plane [Gravity plane]. Positive values indicate that the head of the table is upwards.</description>
@@ -9600,11 +9679,13 @@ Positioner Secondary Angle</section>
       <description>Incremental change in primary positioner angle for each frame.
 See C.8.7.5.1.3.
 Required if Positioner Motion is DYNAMIC.</description>
+      <section ref="C.8.7.5.1.3" name="">If the positioner angles change during acquisition of a multi-frame image, the Positioner Angle Increment attributes describe the angular change per frame. If the change in positioner angle is nominally constant for each frame, these fields may contain a single value of the average angular change per frame. Alternatively, the fields may contain a vector of offsets from the (initial) Positioner Angle attributes, with one value for each frame in the multi-frame image. The number of values in the Positioner Angle Increment attributes must be one, or must be equal to the Number of Frames attribute (0028,0008) in the Multi-Frame Module (see Section C.7.6.6).Note:	It is permissible to generate a vector of the absolute positioner angles in the Positioner Angle Increment attributes, and set the Positioner Primary and Secondary Angle attributes to value 0.</section>
     </entry>
     <entry group="0018" element="1521" name="Positioner Secondary Angle Increment" type="2C">
       <description>Incremental change in secondary positioner angle for each frame.
 See C.8.7.5.1.3.
 Required if Positioner Motion is DYNAMIC.</description>
+      <section ref="C.8.7.5.1.3" name="">If the positioner angles change during acquisition of a multi-frame image, the Positioner Angle Increment attributes describe the angular change per frame. If the change in positioner angle is nominally constant for each frame, these fields may contain a single value of the average angular change per frame. Alternatively, the fields may contain a vector of offsets from the (initial) Positioner Angle attributes, with one value for each frame in the multi-frame image. The number of values in the Positioner Angle Increment attributes must be one, or must be equal to the Number of Frames attribute (0028,0008) in the Multi-Frame Module (see Section C.7.6.6).Note:	It is permissible to generate a vector of the absolute positioner angles in the Positioner Angle Increment attributes, and set the Positioner Primary and Secondary Angle attributes to value 0.</section>
     </entry>
     <entry group="0018" element="1530" name="Detector Primary Angle" type="3">
       <description>Angle of the X-Ray beam in the row direction in degrees relative to the normal to the detector plane. Positive values indicate that the X-Ray beam is tilted towards higher numbered columns. Negative values indicate that the X-Ray beam is tilted towards lower numbered columns.
@@ -10256,6 +10337,7 @@ MEASURED=Measured by exposure to a film or detector.</description>
 Required if Isocenter Position (300A,012C) is present. May be present otherwise.
 See Section C.8.8.12.1.2 for Defined Terms and further explanation.
 Note: The orientation of the patient relative to the patient support device is denoted in the same manner as in the RT Patient Setup module. It defines the relation of the patient-based DICOM coordinate system identified by the frame of reference module of the RT Image to the IEC coordinate system and together with the Isocenter Position (300A,012C) allows the RT Image to be placed into the patient frame of reference. It also allows a system using an RT Image to verify that the patient is setup in a similar position relative to the patient support device.</description>
+      <section ref="C.8.8.12.1.2" name="">Defined Terms for Patient Position shall be those specified in Section C.7.3.1.1.2, plus the following:	SITTINGIn the sitting position, the patient’s face is towards the front of the chair.</section>
     </entry>
   </module>
   <module ref="C.8.8.3" table="C.8-39" name="RT Dose Module Attributes">
@@ -10388,6 +10470,7 @@ WATER = entire volume treated as water equivalent</description>
     </entry>
     <entry group="3004" element="0062" name="&gt;&gt;DVH ROI Contribution Type" type="1">
       <description>Specifies whether volume within ROI is included or excluded in DVH. See C.8.8.4.2. Enumerated Values: INCLUDED, EXCLUDED.</description>
+      <section ref="C.8.8.4.2" name="">The volume used to calculate the DVH shall be the geometric union of ROIs where DVH ROI Contribution Type (3004,0062) is INCLUDED, minus the geometric union of ROIs where DVH ROI Contribution Type (3004,0062) is EXCLUDED.</section>
     </entry>
     <entry group="3004" element="0001" name="&gt;DVH Type" type="1">
       <description>Type of DVH.
@@ -10554,6 +10637,7 @@ POINT = single point
 OPEN_PLANAR = open contour containing coplanar points
 OPEN_NONPLANAR = open contour containing non-coplanar points
 CLOSED_PLANAR = closed contour (polygon) containing coplanar points</description>
+      <section ref="C.8.8.6.1" name="">A contour can be one of the following geometric types:-		A Contour Geometric Type (3006,0042) of POINT indicates that the contour is a single point, defining a specific location of significance.-		A Contour Geometric Type (3006,0042) of OPEN_PLANAR indicates that the last vertex shall not be connected to the first point, and that all points in Contour Data (3006,0050) shall be coplanar.-		A Contour Geometric Type (3006,0042) of OPEN_NONPLANAR indicates that the last vertex shall not be connected to the first point, and that the points in Contour Data (3006,0050) may be non-coplanar. Contours having a Geometric Type (3006,0042) of OPEN_NONPLANAR can be used to represent objects best described by a single, possibly non-coplanar curve, such as a brachytherapy applicator.-		A Contour Geometric Type (3006,0042) of CLOSED_PLANAR indicates that the last point shall be connected to the first point, where the first point is not repeated in the Contour Data (3006,0050). All points in Contour Data (3006,0050) shall be coplanar.</section>
     </entry>
     <entry group="3006" element="0044" name="&gt;&gt;Contour Slab Thickness" type="3">
       <description>Thickness of slab (in mm) represented by contour, where the Contour Data (3006,0050) defines a plane in the center of the slab, offset by the Contour Offset Vector (3006,0045) if it is present. See C.8.8.6.2.</description>
@@ -10655,6 +10739,7 @@ SUPPORT = external patient support device
 FIXATION = external patient fixation or immobilisation device
 DOSE_REGION = ROI to be used as a dose reference
 CONTROL = ROI to be used in control of dose optimization and calculation</description>
+      <section ref="C.8.8.8.1" name="">RT ROI Interpreted Type (3006,00A4) shall describe the class of ROI (e.g. CTV, PTV). Individual instances of each class of structure (e.g. CTV1, CTV2) can be distinguished using ROI Observation Label (3006,0085).</section>
     </entry>
     <entry group="3006" element="00A6" name="&gt;ROI Interpreter" type="2">
       <description>Name of person performing the interpretation.</description>
@@ -10735,6 +10820,7 @@ SERVICE = Machine repair or maintenance operation</description>
 Defined Terms:
 PATIENT = RT Structure Set exists
 TREATMENT_DEVICE = RT Structure Set does not exist</description>
+      <section ref="C.8.8.9.1" name="">An RT Plan Geometry (300A,000C) of PATIENT shall signify that an RT Structure Set has been defined upon which the plan geometry is based, and this RT Structure Set shall be specified in the Referenced Structure Set Sequence (300C,0060). An RT Plan Geometry (300A,000C) of TREATMENT_DEVICE shall indicate that no patient geometry is available, and that the RT Plan is being defined with respect to the IEC FIXED Coordinate System.</section>
     </entry>
     <entry group="300C" element="0060" name="Referenced Structure Set Sequence" type="1C">
       <description>Introduces sequence of one Class/Instance pair describing instance of RT Structure Set on which the RT Plan is based. Only a single item shall be permitted in this sequence. Required if RT Plan Geometry (300A,000C) is PATIENT.</description>
@@ -10900,6 +10986,7 @@ MLCY = multileaf (multi-element) jaw pair in IEC Y direction</description>
     </entry>
     <entry group="0018" element="5100" name="&gt;Patient Position" type="1C">
       <description>Patient position descriptor relative to the equipment. Required if Patient Additional Position (300A,0184) is not present. See Section C.8.8.12.1.2 for Defined Terms and further explanation.</description>
+      <section ref="C.8.8.12.1.2" name="">Defined Terms for Patient Position shall be those specified in Section C.7.3.1.1.2, plus the following:	SITTINGIn the sitting position, the patient’s face is towards the front of the chair.</section>
     </entry>
     <entry group="300A" element="0184" name="&gt;Patient Additional Position" type="1C">
       <description>User-defined additional description of patient position. Required if Patient Position (0018,5100) is not present.</description>
@@ -11226,6 +11313,7 @@ See C.8.8.14.1.
 Enumerated Values:
 MU = Monitor Unit
 MINUTE = minute</description>
+      <section ref="C.8.8.14.1" name="">The Meterset at a given Control Point is equal to the Beam Meterset (300A,0086) specified in the Referenced Beam Sequence (300C,0004) of the RT Fraction Scheme Module, multiplied by the Cumulative Meterset Weight (300A,0134) for the Control Point, divided by the Final Cumulative Meterset Weight (300A,010E). The Meterset is specified in units defined by Primary Dosimeter Unit (300A,00B3). If the calculation for Meterset results in a meterset value which is not an exact multiple of the primary meterset resolution, then the result shall be rounded to the nearest allowed meterset value (i.e. less than a half resolution unit shall be rounded down to the nearest resolution unit, and equal or greater than half a resolution unit shall be rounded up to the nearest resolution unit).Note also that if Final Cumulative Meterset Weight (300A,010E) is equal to 100, then Cumulative Meterset Weight (300A,0134) becomes equivalent to the percentage of Beam Meterset (300A,0086) delivered at each control point. If Final Cumulative Meterset Weight (300A,010E) is equal to Beam Meterset (300A,0086), then the Cumulative Meterset Weight (300A,0134) at each control point becomes equal to the cumulative Meterset delivered at that control point.</section>
     </entry>
     <entry group="300C" element="00A0" name="&gt;Referenced Tolerance Table Number" type="3">
       <description>Uniquely identifies Tolerance Table specified by Tolerance Table Number (300A,0042) within Tolerance Table Sequence in RT Tolerance Tables Module. These tolerances are to be used for verification of treatment machine settings.</description>
@@ -11468,6 +11556,7 @@ Note: Compensator Thickness Data may not be properly encoded if Explicit-VR tran
 Enumerated Values:
 SHIELDING = blocking material is inside contour
 APERTURE = blocking material is outside contour</description>
+      <section ref="C.8.8.14.4" name="">All blocks with Block Type (300A,00F8) of APERTURE for a given beam shall have equal values of Block Transmission (300A,0102) and/or Block Thickness (300A,0100) if they are specified. The composite aperture shall be evaluated as the union of the individual apertures within a single Block. Shielding block transmission(s) shall be applied multiplicatively after the (composite) aperture has been evaluated.</section>
     </entry>
     <entry group="300A" element="00FA" name="&gt;&gt;Block Divergence" type="2C">
       <description>Indicates presence or otherwise of geometrical divergence. Required if Block Sequence (300A,00F4) is sent.
@@ -11592,6 +11681,7 @@ Required if RT Dose is being sent, and Dose Summation Type (3004,000A) equals CO
       <description>A Sequence of Items describing Wedge Positions for the current control point.
 Required for first item of Control Point Sequence if Number of Wedges (300A,00D0) is non-zero, and in subsequent control points if Wedge Position (300A,0118) changes during Beam. See C.8.8.14.5.
 The number of items in this sequence shall equal the value of Number of Wedges (300A,00D0).</description>
+      <section ref="C.8.8.14.5" name="">The DICOM RT Beams Module uses a single beam model to handle static, arc, and dynamic delivery of external beam radiation by a medical accelerator or gamma beam therapy equipment (cobalt unit). All applicable parameters shall be specified at Control Point 0, with the exception of couch positions (see C.8.8.14.6). All parameters that change at any control point of a given beam shall be specified explicitly at all control points (including those preceding the change). No assumptions are made about the behavior of machine parameters between specified control points, and communicating devices shall agree on this behavior outside the current standard.Gantry Rotation Direction (300A,011F), Beam Limiting Device Rotation Direction (300A,0121), Patient Support Rotation Direction (300A,0123), and Table Top Eccentric Rotation Direction (300A,0126) are defined as applying to the segment following the control point, and changes to these parameters during treatment may be specified without use of a “non-irradiation” segment. All other Control Point Sequence attributes are defined only at the control point. To unambiguously encode changes in discrete-valued attributes such as Wedge Position (300A,0118) and Nominal Beam Energy (300A,0114), a non-irradiation segment where Cumulative Meterset Weight (300A,0134) does not change, shall be used.Some examples of beam specification using control points are as follows:a)	Static delivery:	Control Point 0: All applicable treatment parameters defined, Cumulative Meterset Weight = 0	Control Point 1: Cumulative Meterset Weight = 1, no other parameters definedb)	Arc delivery:	Control Point 0: All applicable treatment parameters defined, Cumulative Meterset Weight = 0, Gantry Rotation Direction = rotation direction, Gantry Angle = initial angle	Control Point 1: Cumulative Meterset Weight = 1, Gantry Rotation Direction = NONE, Gantry Angle = final anglec)	Dynamic delivery of two equally weighted segments:	Control Point 0: All applicable treatment parameters defined, Cumulative Meterset Weight = 0	Control Point 1: All changing treatment parameters defined (including those which do not change at this control point), Cumulative Meterset Weight = 0.5	Control Point 2: All changing treatment parameters defined (including those which do not change at this control point), Cumulative Meterset Weight = 1d)	Dynamic Delivery of two unequally weighted segments with a step change in table angle:	Control Point 0: All applicable treatment parameters defined, Patient Support Angle = initial angle, Patient Support Rotation Direction = NONE, Cumulative Meterset Weight = 0	Control Point 1: All changing parameters defined (including those that do not change at this control point), Cumulative Meterset Weight = 0.3, Patient Support Angle = initial angle, Patient Support Rotation Direction = rotation direction	Control Point 2: All changing parameters defined (although none should change at this control point), Cumulative Meterset Weight = 0.3, Patient Support Angle = new angle, Patient Support Rotation Direction = NONE	Control Point 3: All changing parameters defined (including those that do not change at this control point), Cumulative Meterset Weight = 1, Patient Support Angle = new angle, Patient Support Rotation Direction = NONE</section>
     </entry>
     <entry group="300C" element="00C0" name="&gt;&gt;&gt;Referenced Wedge Number" type="1C">
       <description>Uniquely references Wedge described by Wedge Number (300A,00D2) in Wedge Sequence (300A,00D1). Required if Wedge Position Sequence (300A,0116) is sent.</description>
@@ -11627,6 +11717,7 @@ Enumerated Values:
 CW = clockwise
 CC = counter-clockwise
 NONE = no rotation</description>
+      <section ref="C.8.8.14.8" name="">For the machine rotation angles Gantry Angle (300A,011E), Beam Limiting Device Angle (300A,0120), Patient Support Angle (300A,0122) , and Table Top Eccentric Angle (300A,0125), rotation direction is specified as clockwise (CW), counter-clockwise (CC), or NONE. The maximum permitted rotation between two Control Points is 360 degrees. Examples:a) 	Gantry Angle moves from 5 degrees to 5 degrees, Gantry Rotation Direction = NONE:	No movement.b) 	Gantry Angle moves from 5 degrees to 5 degrees, Gantry Rotation Direction = CW: 	Full clockwise rotation (360 degrees).c) 	Table Angle moves from 170 degrees to 160 degrees, Table Rotation Direction = CC: 	Counter-clockwise rotation by 350 degrees (note direction of increasing table angle as defined by IEC 61217).</section>
     </entry>
     <entry group="300A" element="014A" name="&gt;&gt;Gantry Pitch Angle" type="3">
       <description>Gantry Pitch Angle. i.e. the rotation of the IEC GANTRY coordinate system about the X-axis of the IEC GANTRY coordinate system (degrees). If used, must be present for first item of Control Point Sequence, or if used and Gantry Pitch Rotation Angle changes during Beam, must be present. See C.8.8.25.6.5.</description>
@@ -11649,6 +11740,7 @@ Enumerated Values:
 CW = clockwise
 CC = counter-clockwise
 NONE = no rotation</description>
+      <section ref="C.8.8.14.8" name="">For the machine rotation angles Gantry Angle (300A,011E), Beam Limiting Device Angle (300A,0120), Patient Support Angle (300A,0122) , and Table Top Eccentric Angle (300A,0125), rotation direction is specified as clockwise (CW), counter-clockwise (CC), or NONE. The maximum permitted rotation between two Control Points is 360 degrees. Examples:a) 	Gantry Angle moves from 5 degrees to 5 degrees, Gantry Rotation Direction = NONE:	No movement.b) 	Gantry Angle moves from 5 degrees to 5 degrees, Gantry Rotation Direction = CW: 	Full clockwise rotation (360 degrees).c) 	Table Angle moves from 170 degrees to 160 degrees, Table Rotation Direction = CC: 	Counter-clockwise rotation by 350 degrees (note direction of increasing table angle as defined by IEC 61217).</section>
     </entry>
     <entry group="300A" element="0122" name="&gt;&gt;Patient Support Angle" type="1C">
       <description>Patient Support angle, i.e. orientation of IEC PATIENT SUPPORT (turntable) coordinate system with respect to IEC FIXED REFERENCE coordinate system (degrees). Required for first item of Control Point Sequence, or if Patient Support Angle changes during Beam.</description>
@@ -11659,6 +11751,7 @@ Enumerated Values:
 CW = clockwise
 CC = counter-clockwise
 NONE = no rotation</description>
+      <section ref="C.8.8.14.8" name="">For the machine rotation angles Gantry Angle (300A,011E), Beam Limiting Device Angle (300A,0120), Patient Support Angle (300A,0122) , and Table Top Eccentric Angle (300A,0125), rotation direction is specified as clockwise (CW), counter-clockwise (CC), or NONE. The maximum permitted rotation between two Control Points is 360 degrees. Examples:a) 	Gantry Angle moves from 5 degrees to 5 degrees, Gantry Rotation Direction = NONE:	No movement.b) 	Gantry Angle moves from 5 degrees to 5 degrees, Gantry Rotation Direction = CW: 	Full clockwise rotation (360 degrees).c) 	Table Angle moves from 170 degrees to 160 degrees, Table Rotation Direction = CC: 	Counter-clockwise rotation by 350 degrees (note direction of increasing table angle as defined by IEC 61217).</section>
     </entry>
     <entry group="300A" element="0124" name="&gt;&gt;Table Top Eccentric Axis Distance" type="3">
       <description>Distance (positive) from the IEC PATIENT SUPPORT vertical axis to the IEC TABLE TOP ECCENTRIC vertical axis (mm).</description>
@@ -11672,6 +11765,7 @@ Enumerated Values:
 CW = clockwise
 CC = counter-clockwise
 NONE = no rotation</description>
+      <section ref="C.8.8.14.8" name="">For the machine rotation angles Gantry Angle (300A,011E), Beam Limiting Device Angle (300A,0120), Patient Support Angle (300A,0122) , and Table Top Eccentric Angle (300A,0125), rotation direction is specified as clockwise (CW), counter-clockwise (CC), or NONE. The maximum permitted rotation between two Control Points is 360 degrees. Examples:a) 	Gantry Angle moves from 5 degrees to 5 degrees, Gantry Rotation Direction = NONE:	No movement.b) 	Gantry Angle moves from 5 degrees to 5 degrees, Gantry Rotation Direction = CW: 	Full clockwise rotation (360 degrees).c) 	Table Angle moves from 170 degrees to 160 degrees, Table Rotation Direction = CC: 	Counter-clockwise rotation by 350 degrees (note direction of increasing table angle as defined by IEC 61217).</section>
     </entry>
     <entry group="300A" element="0140" name="&gt;&gt;Table Top Pitch Angle" type="1C">
       <description>Table Top Pitch Angle, i.e. the rotation of the IEC TABLE TOP coordinate system about the X-axis of the IEC TABLE TOP coordinate system (degrees). If required by treatment delivery device, shall be present for first item of Control Point Sequence. If required by treatment delivery device and if Table Top Pitch Angle changes during Beam, shall be present in all subsequent items of Control Point Sequence. See C.8.8.25.6.2.</description>
@@ -11922,6 +12016,7 @@ STEPWISE
 FIXED
 OSCILLATING
 UNIDIRECTIONAL</description>
+      <section ref="C.8.8.15.4" name="">In brachytherapy treatment techniques involving oscillating source movement (i.e. when Source Movement Type (300A,0288) is OSCILLATING), the Brachy Control Point Sequence (300A,02D0) shall consist of two items. The first Control Point shall have Cumulative Time Weight (300A,02D6) = 0, and Control Point Relative Position (300A,02D2) equal to one end point of the oscillation. The second Control Point shall have Cumulative Time Weight (300A,02D6) = Final Cumulative Time Weight (300A,02C8), and Control Point Relative Position (300A,02D2) equal to the other end point of the oscillation. Transit time shall not be modeled explicitly for oscillating techniques.</section>
     </entry>
     <entry group="300A" element="028A" name="&gt;&gt;Number of Pulses" type="1C">
       <description>Number of Pulses per fraction for current Channel. Required if Brachy Treatment Type (300A,0202) is PDR.</description>
@@ -14733,6 +14828,7 @@ Shall be one less than the value in Bits Stored (0028,0101).</description>
 01 = Image has been subjected to lossy compression.
 See C.7.6.1.1.5.
 Required if Lossy Compression has been performed on the image.</description>
+      <section ref="C.7.6.1.1.5" name="">The Attribute Lossy Image Compression (0028,2110) conveys that the Image has undergone lossy compression. It provides a means to record that the Image has been compressed (at a point in its lifetime) with a lossy algorithm and changes have been introduced into the pixel data. Once the value has been set to “01”, it shall not be reset.Note:	If an image is compressed with a lossy algorithm, the attribute Lossy Image Compression (0028,2110) is set to “01”. Subsequently, if the image is decompressed and transferred in uncompressed format, this attribute value remains “01”.The value of the Lossy Image Compression (0028,2110) Attribute in SOP Instances containing multiple frames in which one or more of the frames have undergone lossy compression shall be “01”.Note:	It is recommended that the applicable frames be noted in the Attribute Derivation Description (0008,2111).If an image is originally obtained as a lossy compressed image from the sensor, then Lossy Image Compression (0028,2110) is set to “01” and Value 1 of the Attribute Image Type (0008,0008) shall be set to ORIGINAL.If an image is a compressed version of another image, Lossy Image Compression (0028,2110) is set to “01”, Value 1 of the Attribute Image Type (0008,0008) shall be set to DERIVED, and if the predecessor was a DICOM image, then the Image shall receive a new SOP Instance UID.Note:	1. It is recommended that the approximate compression ratio be provided in the Attribute Derivation Description (0008,2111). Furthermore, it is recommended that Derivation Description (0008,2111) be used to indicate when pixel data changes might affect professional interpretation. (see C.7.6.1.1.3).	2. The attribute Lossy Image Compression (0028,2110) is defined as Type 3 for backward compatibility with existing IODs. It is expected to be required (i.e., defined as Type 1C) for new Image IODs and for existing IODs that undergo a major revision (e.g. a new IOD is specified).The Defined Terms for Lossy Image Compression Method (0028,2114) are:ISO_10918_1 = JPEG Lossy CompressionISO_14495_1 = JPEG-LS Near-lossless CompressionISO_15444_1 = JPEG 2000 Irreversible CompressionISO_13818_2 = MPEG2 Compression</section>
     </entry>
     <entry group="0054" element="1330" name="Image Index" type="1">
       <description>An index identifying the position of this image within a PET Series. See C.8.9.4.1.9 for explanation.</description>
@@ -15245,7 +15341,7 @@ Note: This may occur when a breast is larger than the active area of the detecto
 If this Attribute is present, its value shall be NO if there is a View Modifier Code Sequence (0054,0222) Item of value (R-102D6, SNM3, "Magnification") or (R-102D7, SNM3, "Spot Compression").</description></entry><entry group="0028" element="1351" name="Partial View Description" type="3"><description>Free text description of the portion of the breast captured in a partial view image.
 This Attribute shall not be present if there is a View Modifier Code Sequence (0054,0222) Item of value (R-102D6, SNM3, "Magnification") or (R-102D7, SNM3, "Spot Compression").</description></entry><entry group="0028" element="1352" name="Partial View Code Sequence" type="3"><description>Sequence that describes the portion or section of the breast captured in a partial view image. One or two Items may be present. See C.8.11.7.1.3.
 If this Attribute is absent, then the image may or may not be a partial view.
-This Attribute shall not be present if there is a View Modifier Code Sequence (0054,0222) Item of value (R-102D6, SNM3, "Magnification") or (R-102D7, SNM3, "Spot Compression").</description></entry><include ref="&gt;Include 'Code Sequence Macro' (Table 8.8-1)." description="Defined Context ID is 4005."/><include ref="Include 'General Anatomy Mandatory Macro' Table 10-5" description="Defined Context ID for the Anatomic Region Sequence is 4013."/><entry group="0054" element="0220" name="View Code Sequence" type="1"><description>Sequence that describes the projection of the anatomic region of interest on the image receptor.
+This Attribute shall not be present if there is a View Modifier Code Sequence (0054,0222) Item of value (R-102D6, SNM3, "Magnification") or (R-102D7, SNM3, "Spot Compression").</description><section ref="C.8.11.7.1.3" name="">The following combinations of coded terms may be used to express the breast sections, for example, for the left cranio-caudal (L CC) view. These terms would also apply to the R CC, and the right and left FB, XCC, XCCL and XCCM views:Note: If six images are required, then the “Central, Anterior” combination would be added.The following combinations of coded terms may be used to express the breast sections, for example, for the left medio-lateral oblique (L MLO) view. These terms would also apply to the R MLO, and to the right and left LM, ML, LMO, and SIO views:Note: If six images are required, then the “Central, Anterior” combination would be added.</section></entry><include ref="&gt;Include 'Code Sequence Macro' (Table 8.8-1)." description="Defined Context ID is 4005."/><include ref="Include 'General Anatomy Mandatory Macro' Table 10-5" description="Defined Context ID for the Anatomic Region Sequence is 4013."/><entry group="0054" element="0220" name="View Code Sequence" type="1"><description>Sequence that describes the projection of the anatomic region of interest on the image receptor.
 Only a single Item shall be permitted in this Sequence.</description></entry><include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1." description="Enumerated Value for Context ID is 4014."/><entry group="0054" element="0222" name="&gt;View Modifier Code Sequence" type="2"><description>View modifier.
 Zero or more Items may be included in this Sequence.</description></entry><include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1." description="Enumerated Value for Context ID is 4015."/></module>
          </section>
@@ -15278,7 +15374,7 @@ Note: This may occur when a breast is larger than the active area of the detecto
 If this Attribute is present, its value shall be NO if there is a View Modifier Code Sequence (0054,0222) Item of value (R-102D6, SNM3, "Magnification") or (R-102D7, SNM3, "Spot Compression").</description></entry><entry group="0028" element="1351" name="Partial View Description" type="3"><description>Free text description of the portion of the breast captured in a partial view image.
 This Attribute shall not be present if there is a View Modifier Code Sequence (0054,0222) Item of value (R-102D6, SNM3, "Magnification") or (R-102D7, SNM3, "Spot Compression").</description></entry><entry group="0028" element="1352" name="Partial View Code Sequence" type="3"><description>Sequence that describes the portion or section of the breast captured in a partial view image. One or two Items may be present. See C.8.11.7.1.3.
 If this Attribute is absent, then the image may or may not be a partial view.
-This Attribute shall not be present if there is a View Modifier Code Sequence (0054,0222) Item of value (R-102D6, SNM3, "Magnification") or (R-102D7, SNM3, "Spot Compression").</description></entry><include ref="&gt;Include 'Code Sequence Macro' (Table 8.8-1)." description="Defined Context ID is 4005."/><include ref="Include 'General Anatomy Mandatory Macro' Table 10-5" description="Defined Context ID for the Anatomic Region Sequence is 4013."/><entry group="0054" element="0220" name="View Code Sequence" type="1"><description>Sequence that describes the projection of the anatomic region of interest on the image receptor.
+This Attribute shall not be present if there is a View Modifier Code Sequence (0054,0222) Item of value (R-102D6, SNM3, "Magnification") or (R-102D7, SNM3, "Spot Compression").</description><section ref="C.8.11.7.1.3" name="">The following combinations of coded terms may be used to express the breast sections, for example, for the left cranio-caudal (L CC) view. These terms would also apply to the R CC, and the right and left FB, XCC, XCCL and XCCM views:Note: If six images are required, then the “Central, Anterior” combination would be added.The following combinations of coded terms may be used to express the breast sections, for example, for the left medio-lateral oblique (L MLO) view. These terms would also apply to the R MLO, and to the right and left LM, ML, LMO, and SIO views:Note: If six images are required, then the “Central, Anterior” combination would be added.</section></entry><include ref="&gt;Include 'Code Sequence Macro' (Table 8.8-1)." description="Defined Context ID is 4005."/><include ref="Include 'General Anatomy Mandatory Macro' Table 10-5" description="Defined Context ID for the Anatomic Region Sequence is 4013."/><entry group="0054" element="0220" name="View Code Sequence" type="1"><description>Sequence that describes the projection of the anatomic region of interest on the image receptor.
 Only a single Item shall be permitted in this Sequence.</description></entry><include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1." description="Enumerated Value for Context ID is 4014."/><entry group="0054" element="0222" name="&gt;View Modifier Code Sequence" type="2"><description>View modifier.
 Zero or more Items may be included in this Sequence.</description></entry><include ref="&gt;&gt;Include 'Code Sequence Macro' Table 8.8-1." description="Enumerated Value for Context ID is 4015."/></module>
          </section>
@@ -15411,6 +15507,7 @@ This Attribute shall not be present if there is a View Modifier Code Sequence (0
       <description>Sequence that describes the portion or section of the breast captured in a partial view image. One or two Items may be present. See C.8.11.7.1.3.
 If this Attribute is absent, then the image may or may not be a partial view.
 This Attribute shall not be present if there is a View Modifier Code Sequence (0054,0222) Item of value (R-102D6, SNM3, "Magnification") or (R-102D7, SNM3, "Spot Compression").</description>
+      <section ref="C.8.11.7.1.3" name="">The following combinations of coded terms may be used to express the breast sections, for example, for the left cranio-caudal (L CC) view. These terms would also apply to the R CC, and the right and left FB, XCC, XCCL and XCCM views:Note: If six images are required, then the “Central, Anterior” combination would be added.The following combinations of coded terms may be used to express the breast sections, for example, for the left medio-lateral oblique (L MLO) view. These terms would also apply to the R MLO, and to the right and left LM, ML, LMO, and SIO views:Note: If six images are required, then the “Central, Anterior” combination would be added.</section>
     </entry>
     <include ref="&gt;Include 'Code Sequence Macro' (Table 8.8-1)." description="Defined Context ID is 4005."/>
     <include ref="Include 'General Anatomy Mandatory Macro' Table 10-5" description="Defined Context ID for the Anatomic Region Sequence is 4013."/>
@@ -15498,6 +15595,7 @@ See C.8.12.1.1.2 for specialization of this Attribute. See PS 3.5 for further ex
     <entry group="0028" element="0103" name="Pixel Representation" type="1">
       <description>Data representation of the pixel samples. Each sample shall have the same pixel representation.
 See Section C.8.12.1.1.3 for specialization of this Attribute.</description>
+      <section ref="C.8.12.1.1.3" name="">The Enumerated Value of Pixel Representation (0028,0103) shall be 0.</section>
     </entry>
     <entry group="0028" element="0002" name="Samples per Pixel" type="1">
       <description>Number of samples (planes) per image.
@@ -15523,6 +15621,7 @@ See C.7.6.1.1.5</description>
     <entry group="0008" element="1140" name="Referenced Image Sequence" type="1C">
       <description>A Sequence that references other images significantly related to this image. One or more items may be included in this sequence.
 Required if Image Type (0008,0008) Value 3 is present and has a value of "STEREO L" or "STEREO R". May also be present otherwise. See Section C.8.12.1.1.7.</description>
+      <section ref="C.8.12.1.1.7" name="">When Image Type (0008,0008) Value 3 is STEREO L or STEREO R, Referenced Image Sequence (0008,1140) shall be used to identify the corresponding SOP Instance of the Stereoscopic acquisition. In this case, either: </section>
     </entry>
     <include ref="&gt;Include 'Image SOP Instance Reference Macro' Table 10-3"/>
     <entry group="0040" element="A170" name="&gt;Purpose of Reference Code Sequence" type="2">
@@ -15562,6 +15661,9 @@ Shall have the same number of items as the value of Samples per Pixel (0028,0002
   <module ref="C.8.12.2" table="C.8-78" name="Slide Coordinates Module Attributes">
     <entry group="0040" element="071A" name="Image Center Point Coordinates Sequence" type="2">
       <description>The coordinates of the center point of the Image in the Slide Coordinate System Frame of Reference. Zero or one item shall be present in the sequence. See Section C.8.12.2.1.1 for further explanation.</description>
+      <section ref="C.8.12.2.1.1" name="">This Section defines the Slide Coordinate System and specifies the Attributes that shall be used to describe the location of the center point of the Image pixel plane (as captured through a microscope) in the Slide Coordinate System Frame of Reference. Note:	In Slide Microscopy (SM), the Microscope is equipped with a moveable Stage and position sensors that enable storage of the location of the center point of the displayed image with respect to the examined Specimen.The Stage is the part of the Microscope to which the Slide is attached for viewing. The Objective Lens is the lens that is closest to the Specimen. The Top Surface of the Slide is the surface of the Slide on which the Specimen in Mounted. The Bottom Surface of the Slide is the opposite surface. This Specification presumes that: 1) the Slide is rectangular; 2) the Top Surface of the Slide is oriented toward the Objective Lens of the Microscope; and 3) the Bottom Surface of the Slide is in perfect contact with the Microscope Stage when the Slide is attached to the Stage for viewing.Notes:	1. The Label of the Slide is presumed to be mounted-on or written-on the Top Surface of the Slide.	2. Specification of the mechanical form, function, or tolerances of the Microscope are outside the scope of this Standard.Figure C.8-16 depicts the Top Surface of the Slide on the Microscope Stage from the perspective of the Objective Lens. This is Reference Slide Orientation. The X, Y, and Z axes of the Slide Coordinate System in Reference Slide Orientation are defined as follows. The Y-axis is a line that includes the Left Edge of the Slide. The X-axis is a line that is orthogonal to the Y-axis and includes at least one point of the Specimen Edge of the Slide. The Z-axis is a line that passes through the intersection of the X-axis and Y-axis and is orthogonal to the Microscope Stage. The Origin (0,0,0) of the Slide Coordinate System is the point of intersection of the X, Y, and Z axes.Figure C.8-16
+REFERENCE SLIDE ORIENTATIONNotes:	1. An improperly-placed coverslip or Specimen that overlaps an Edge of a Slide is not considered part of the Edge a Slide for purposes of defining the Slide Coordinate System. However, such objects may cause inaccurate positioning of the Slide on the Stage.	2. If the Left Edge and Specimen Edge of the Slide are not orthogonal (e.g. the Slide is damaged or defective or the Specimen Edge is curvilinear), then the lower left-hand corner of the Slide may not be located at the Origin.	3. The definitions of X, Y, and Z axes are the same for inverted microscopes, with the Top Surface of the slide (i.e. Specimen side of the Slide) still being closest to the Objective Lens.Figure C.8-17 depicts the Z-axis center point location. The X-axis value of Image Center Point Location (0040,073A) shall increase from the Origin toward the Right Edge in Reference Slide Orientation. The Y-axis value of Image Center Point Location (0040,073A) shall increase from the Origin toward the Label Edge in Reference Slide Orientation. The Z-axis value of Image Center Point Location (0040,073A) shall be referenced as zero at the image substrate reference plane (i.e. utilized surface of a glass slide) and shall increase in a positive fashion coincident with increased distance from the substrate surface. Figure C.8-17
+Z-AXIS CENTER POINT LOCATION, VIEW FROM RIGHT EDGE OF SLIDE</section>
     </entry>
     <entry group="0040" element="072A" name="&gt;X Offset in Slide Coordinate System" type="1">
       <description>The X offset in millimeters from the Origin of the Slide Coordinate System. See Figure C.8-16.</description>
@@ -18461,6 +18563,7 @@ Required if Frame Type (0008,9007) Value 1 of this frame is ORIGINAL. May be pre
       <description>The diameter in mm of the region over which data were collected. See C.8.15.3.6.1.
 Note: In the case of an Acquisition Type (0018,9302) of CONSTANT_ANGLE, the diameter is that in a plane normal to the central ray of the diverging X-Ray beam as it passes through the data collection center.
 Required if Frame Type (0008,9007) Value 1 of this frame is ORIGINAL. May be present otherwise.</description>
+      <section ref="C.8.15.3.6.1" name="">In Figure C.8-19 the relationship of the Geometric Attributes within the CT Geometry and CT Reconstruction functional groups is shown. The figure, viewed from the front of the gantry (where the table enters the gantry), is informative only and is not meant to represent a standardization of an equipment-based frame of reference. Figure C.8-19: Geometry of CT Acquisition System</section>
     </entry>
   </macro>
   <macro table="C.8-120" name="CT Table Dynamics Macro Attributes">
@@ -18498,11 +18601,13 @@ Required if Frame Type (0008,9007) Value 1 of this frame is ORIGINAL. May be pre
     <entry group="0018" element="9313" name="&gt;Data Collection Center (Patient)" type="1C">
       <description>The x, y, and z coordinates (in the patient coordinate system) in mm of the center of the region in which data were collected. See C.8.15.3.6.1.
 Required if Frame Type (0008,9007) Value 1 of this frame is ORIGINAL. May be present otherwise.</description>
+      <section ref="C.8.15.3.6.1" name="">In Figure C.8-19 the relationship of the Geometric Attributes within the CT Geometry and CT Reconstruction functional groups is shown. The figure, viewed from the front of the gantry (where the table enters the gantry), is informative only and is not meant to represent a standardization of an equipment-based frame of reference. Figure C.8-19: Geometry of CT Acquisition System</section>
     </entry>
     <entry group="0018" element="9318" name="&gt;Reconstruction Target Center (Patient)" type="1C">
       <description>The x, y, and z coordinates (in the patient coordinate system) of the reconstruction center target point as used for reconstruction in mm. See C.8.15.3.6.1.
 Note: If the reconstructed image is not magnified or panned the value corresponds with the Data Collection Center (0018,9313) attribute.
 Required if Frame Type (0008,9007) Value 1 of this frame is ORIGINAL. May be present otherwise.</description>
+      <section ref="C.8.15.3.6.1" name="">In Figure C.8-19 the relationship of the Geometric Attributes within the CT Geometry and CT Reconstruction functional groups is shown. The figure, viewed from the front of the gantry (where the table enters the gantry), is informative only and is not meant to represent a standardization of an equipment-based frame of reference. Figure C.8-19: Geometry of CT Acquisition System</section>
     </entry>
   </macro>
   <macro table="C.8-122" name="CT Geometry Macro Attributes">
@@ -18513,10 +18618,12 @@ Required if Frame Type (0008,9007) Value 1 of this frame is ORIGINAL. May be pre
       <description>Distance in mm from source to detector center. See C.8.15.3.6.1.
 Note: This value is traditionally referred to as Source Image Receptor Distance (SID).
 Required if Frame Type (0008,9007) Value 1 of this frame is ORIGINAL. May be present otherwise.</description>
+      <section ref="C.8.15.3.6.1" name="">In Figure C.8-19 the relationship of the Geometric Attributes within the CT Geometry and CT Reconstruction functional groups is shown. The figure, viewed from the front of the gantry (where the table enters the gantry), is informative only and is not meant to represent a standardization of an equipment-based frame of reference. Figure C.8-19: Geometry of CT Acquisition System</section>
     </entry>
     <entry group="0018" element="9335" name="&gt;Distance Source to Data Collection Center" type="1C">
       <description>Distance in mm from source to data collection center. See C.8.15.3.6.1.
 Required if Frame Type (0008,9007) Value 1 of this frame is ORIGINAL. May be present otherwise.</description>
+      <section ref="C.8.15.3.6.1" name="">In Figure C.8-19 the relationship of the Geometric Attributes within the CT Geometry and CT Reconstruction functional groups is shown. The figure, viewed from the front of the gantry (where the table enters the gantry), is informative only and is not meant to represent a standardization of an equipment-based frame of reference. Figure C.8-19: Geometry of CT Acquisition System</section>
     </entry>
   </macro>
   <macro table="C.8-123" name="CT Reconstruction Macro Attributes">
@@ -18548,6 +18655,7 @@ Required if Convolution Kernel (0018,1210) is present. May be present otherwise.
       <description>The diameter in mm of the region from which data were used in creating the reconstruction of the image. Data may exist outside this region and portions of the patient may exist outside this region. See C.8.15.3.6.1.
 Required if Frame Type (0008,9007) Value 1 of this frame is ORIGINAL and Reconstruction Field of View (0018,9317) is not present.
 Otherwise may be present if Frame Type (0008,9007) Value 1 of this frame is DERIVED and Reconstruction Field of View (0018,9317) is not present.</description>
+      <section ref="C.8.15.3.6.1" name="">In Figure C.8-19 the relationship of the Geometric Attributes within the CT Geometry and CT Reconstruction functional groups is shown. The figure, viewed from the front of the gantry (where the table enters the gantry), is informative only and is not meant to represent a standardization of an equipment-based frame of reference. Figure C.8-19: Geometry of CT Acquisition System</section>
     </entry>
     <entry group="0018" element="9317" name="&gt;Reconstruction Field of View" type="1C">
       <description>The field of view width (x-dimension) followed by height (y-dimension) as used for reconstruction in mm.
@@ -19214,6 +19322,7 @@ Only a single Item shall be permitted in this Sequence.</description>
       <description>Sequence that describes the orientation of the patient with respect to the head of the table. See Section C.8.4.6.1.3 for further explanation.
 Zero or one item shall be present in the sequence.
 Required if Positioner Type (0018,1508) equals CARM and C-arm Positioner Tabletop Relationship (0018,9474) equals YES. May be present otherwise.</description>
+      <section ref="C.8.4.6.1.3" name="">Patient Gantry Relationship Code Sequence (0054,0414) is used to describe the patient direction within the gantry, such as head-first or feet-first. When imaging the extremities, these directions are related to normal anatomic position.Example: In normal anatomic position, the fingers point towards the feet.</section>
     </entry>
     <include ref="&gt;Include 'Code Sequence Macro' Table 8.8-1." description="Baseline Context ID 21"/>
     <entry group="0010" element="9431" name="Examined Body Thickness" type="3">
@@ -19313,6 +19422,7 @@ Required if Exposure in mAs (0018,9332) is not present. May be present otherwise
     <entry group="0018" element="9328" name="Exposure Time in ms" type="1C">
       <description>Duration of X-Ray exposure in milliseconds. See C.8.7.2.1.1.
 Required if Exposure in mAs (0018,9332) is not present. May be present otherwise.</description>
+      <section ref="C.8.7.2.1.1" name="">Exposure time is the cumulative time the patient received X-Ray exposure during this image (Multi-frame image acquisition). Calculation is pulse width * number of frames.</section>
     </entry>
     <entry group="0018" element="9332" name="Exposure in mAs" type="1C">
       <description>The exposure expressed in milliampereseconds, for example calculated from Exposure Time and X-Ray Tube Current.
@@ -19434,6 +19544,7 @@ See C.8.7.1.1.5 for further explanation.</description>
     <entry group="0018" element="1400" name="&gt;Acquisition Device Processing Description" type="3">
       <description>Indicates any visual processing performed on the frame prior to exchange.
 See Section C.8.7.1.1.3.</description>
+      <section ref="C.8.7.1.1.3" name="">Acquisition Device Processing Description (0018,1400) provides some indication in human readable text of the digital processing on the images before exchange. Examples of this processing are: edge enhanced, subtracted, time filtered, gamma corrected, convolved (spatially filtered).</section>
     </entry>
     <entry group="0018" element="1401" name="&gt;Acquisition Device Processing Code" type="3">
       <description>Code representing the device-specific processing associated with the frame (e.g. Organ Filtering code)
@@ -19641,6 +19752,7 @@ Notes: 1.This value is always positive, the object is assumed to be above the ta
       <description>Physical distance within the anatomic region of interest in the center of the beam and perpendicular to the beam between the center of each pixel, specified by a numeric pair adjacent row spacing (delimiter) adjacent column spacing in mm. See C.8.19.6.9.2. See 10.7.1.3 for further explanation of the value order.
 Required if Distance Object to Table Top (0018,9403) is not empty.
 Note: This value is provided besides the values that are the input parameters of the calibration algorithm.</description>
+      <section ref="C.8.19.6.9.2" name="">The value provided for the Beam Angle (0018,9449) attribute shall correspond to the other attribute values within this module and according to the mathematic terms listed in section C.8.19.6.9.1.The terms listed will result in infinite result when used with 90-degree beam angles.It is outside the scope of this Standard to define reasonable limits for single input values in the above-mentioned terms, or to define the mathematical accuracy of applications using those terms.Note:	It may be reasonable to limit automatic calculations to a narrow range of +/- 60 degrees for Beam Angle and inform users about possible deviations in the calibration result when exceeding such range limits.</section>
     </entry>
     <entry group="0018" element="1130" name="&gt;Table Height" type="1C">
       <description>The distance of the top of the patient table to the center of rotation of the source (i.e. the isocenter) in mm. A positive value indicates that the tabletop is below the isocenter.
@@ -19662,6 +19774,9 @@ Only a single Item shall be permitted in this sequence.</description>
       <description>Position of the X-Ray Image Intensifier about the patient from the RAO to LAO direction where movement from RAO to vertical is positive.
 See C.8.7.5.1.2.
 Required if Positioner Type (0018,1508) equals CARM.</description>
+      <section ref="C.8.7.5.1.2" name="">The definitions of Positioner Angles shall be with respect to the patient as illustrated in Figures C.8-11 and C.8-12 Zero degree is referenced to the origin perpendicular to the patient's chest. The Positioner Primary Angle definition is like longitude (in the equatorial plan); the Positioner Secondary Angle definition is like latitude (in the sagittal plane). The Positioner Angle attributes apply to the first frame of a multi-frame image. The valid range of Primary Positioner Angle is -180 to +180 degrees and the Secondary Positioner Angle range is -90 to + 90 degrees.The Patient Plane is defined by the isocenter of the imaging device and slices through the patient such that it is perpendicular to the sagittal plane of the body. The Primary Axis of rotation is defined at the intersection of the Patient Plane and of the Sagittal Plane. The Positioner Primary Angle is defined in the transaxial plane at the isocenter with zero degrees in the direction perpendicular to the patient's chest and + 90 degrees at the Patient left hand side (LAO) and -90 at the Patient right hand side (RAO). The valid range of Primary Positioner Angle is -180 to +180 degrees.The Secondary Axis is in the Patient Plane and is perpendicular to the Primary Axis at the isocenter. The Positioner Secondary Angle is defined in the Sagittal Plane at the isocenter with zero degrees in the direction perpendicular to the patient's chest. +90 degrees corresponds to the cranial direction. The Secondary Positioner Angle range is -90 to + 90 degrees.At a 0 angle for both the Primary Angle (0018,1510) and Secondary Angle (0018,1511), the patient faces the Image Intensifier.The Positioner Primary Angle (0018,1510) and Secondary Angle (0018,1511) apply to the first frame of a multi-frame image.Figure C.8-11
+Positioner Primary AngleFigure C.8-12
+Positioner Secondary Angle</section>
     </entry>
     <entry group="0018" element="1511" name="&gt;Positioner Secondary Angle" type="1C">
       <description>Position of the X-Ray Image Intensifier about the patient from the CAU to CRA direction where movement from CAU to vertical is positive.
@@ -19882,12 +19997,15 @@ MONOCHROME2</description>
     </entry>
     <entry group="0028" element="0100" name="Bits Allocated" type="1">
       <description>If Segmentation Type (0062,0001) is BINARY, shall be 1. Otherwise it shall be 8. See Section C.8.20.2.1.</description>
+      <section ref="C.8.20.2.1" name="">As a consequence of the enumerated Bits Allocated and Bits Stored attribute values, single bit pixels shall be packed 8 to a byte as defined by the encoding rules in PS 3.5.</section>
     </entry>
     <entry group="0028" element="0101" name="Bits Stored" type="1">
       <description>If Segmentation Type (0062,0001) is BINARY, shall be 1. Otherwise it shall be 8. See Section C.8.20.2.1.</description>
+      <section ref="C.8.20.2.1" name="">As a consequence of the enumerated Bits Allocated and Bits Stored attribute values, single bit pixels shall be packed 8 to a byte as defined by the encoding rules in PS 3.5.</section>
     </entry>
     <entry group="0028" element="0102" name="High Bit" type="1">
       <description>If Segmentation Type (0062,0001) is BINARY, shall be 0. Otherwise it shall be 7. See Section C.8.20.2.1.</description>
+      <section ref="C.8.20.2.1" name="">As a consequence of the enumerated Bits Allocated and Bits Stored attribute values, single bit pixels shall be packed 8 to a byte as defined by the encoding rules in PS 3.5.</section>
     </entry>
     <entry group="0028" element="2110" name="Lossy Image Compression" type="1">
       <description>Specifies whether an Image has undergone lossy compression.
@@ -19895,6 +20013,7 @@ Enumerated Values:
 00 = Image has NOT been subjected to lossy compression.
 01 = Image has been subjected to lossy compression.
 See Section C.8.20.2.2</description>
+      <section ref="C.8.20.2.2" name="">If Lossy Image Compression (0028,2110) in any of the source images is “01”, the value shall be “01” for the Segmentation instance.The process of segmentation itself is defined not to be lossy compression, even though it involves loss. If the Segmentation instance is encoded using a lossy compression transfer syntax, then the value shall be set to “01”.Notes:	It is not advisable to lossy compress a Segmentation SOP Instance. In particular, a binary segmentation should not be lossy compressed.</section>
     </entry>
     <entry group="0028" element="2112" name="Lossy Image Compression Ratio" type="1C">
       <description>Describes the approximate lossy compression ratio(s) that have been applied to this image.
@@ -20072,6 +20191,7 @@ One or more Items may be present.</description>
       <description>Indicates any visual processing performed on the frame prior to exchange.
 See Section C.8.7.1.1.3.
 Required if present and consistent in the contributing SOP Instances.</description>
+      <section ref="C.8.7.1.1.3" name="">Acquisition Device Processing Description (0018,1400) provides some indication in human readable text of the digital processing on the images before exchange. Examples of this processing are: edge enhanced, subtracted, time filtered, gamma corrected, convolved (spatially filtered).</section>
     </entry>
     <entry group="0018" element="1401" name="&gt;Acquisition Device Processing Code" type="1C">
       <description>Code representing the device-specific processing associated with the frame (e.g. Organ Filtering code)
@@ -20101,6 +20221,7 @@ One or more Items may be present.</description>
       <description>Indicates any visual processing performed on the frame prior to exchange.
 See Section C.8.7.1.1.3.
 Required if present and consistent in the contributing SOP Instances.</description>
+      <section ref="C.8.7.1.1.3" name="">Acquisition Device Processing Description (0018,1400) provides some indication in human readable text of the digital processing on the images before exchange. Examples of this processing are: edge enhanced, subtracted, time filtered, gamma corrected, convolved (spatially filtered).</section>
     </entry>
     <entry group="0018" element="1401" name="&gt;Acquisition Device Processing Code" type="1C">
       <description>Code representing the device-specific processing associated with the frame (e.g. Organ Filtering code).
@@ -20192,6 +20313,7 @@ Required if present and consistent in the contributing SOP Instances.</descripti
     <entry group="0018" element="9328" name="Exposure Time in ms" type="1C">
       <description>Duration of X-Ray exposure in milliseconds. See C.8.7.2.1.1.
 Required if present and consistent in the contributing SOP Instances.</description>
+      <section ref="C.8.7.2.1.1" name="">Exposure time is the cumulative time the patient received X-Ray exposure during this image (Multi-frame image acquisition). Calculation is pulse width * number of frames.</section>
     </entry>
     <entry group="0018" element="9332" name="Exposure in mAs" type="1C">
       <description>The exposure expressed in milliampereseconds, for example calculated from Exposure Time and X-Ray Tube Current.
@@ -20292,6 +20414,7 @@ or distance in mm from source to detector
 center on the chest wall line See C.8.11.7.1.1.
 Required if present and consistent in the contributing SOP Instances.
 Note: This value is traditionally referred to as Source Image Receptor Distance (SID).</description>
+      <section ref="C.8.11.7.1.1" name="">Figure C.8-8 shows the X-Ray beam for a digital mammography system. The X-Ray beam vector is defined from the Focal Spot to the center of the chest wall line of the Image Detection device.Figure C.8-8</section>
     </entry>
     <entry group="0018" element="9402" name="&gt;Distance Source to Isocenter" type="1C">
       <description>Distance from source to isocenter in mm.
@@ -20338,10 +20461,16 @@ Required if present and consistent in the contributing SOP Instances.</descripti
     <entry group="0018" element="9510" name="&gt;Primary Positioner Scan Start Angle" type="1C">
       <description>Start position of the primary positioner in degrees. See C.8.7.5.1.2.
 Required if present and consistent in the contributing SOP Instances.</description>
+      <section ref="C.8.7.5.1.2" name="">The definitions of Positioner Angles shall be with respect to the patient as illustrated in Figures C.8-11 and C.8-12 Zero degree is referenced to the origin perpendicular to the patient's chest. The Positioner Primary Angle definition is like longitude (in the equatorial plan); the Positioner Secondary Angle definition is like latitude (in the sagittal plane). The Positioner Angle attributes apply to the first frame of a multi-frame image. The valid range of Primary Positioner Angle is -180 to +180 degrees and the Secondary Positioner Angle range is -90 to + 90 degrees.The Patient Plane is defined by the isocenter of the imaging device and slices through the patient such that it is perpendicular to the sagittal plane of the body. The Primary Axis of rotation is defined at the intersection of the Patient Plane and of the Sagittal Plane. The Positioner Primary Angle is defined in the transaxial plane at the isocenter with zero degrees in the direction perpendicular to the patient's chest and + 90 degrees at the Patient left hand side (LAO) and -90 at the Patient right hand side (RAO). The valid range of Primary Positioner Angle is -180 to +180 degrees.The Secondary Axis is in the Patient Plane and is perpendicular to the Primary Axis at the isocenter. The Positioner Secondary Angle is defined in the Sagittal Plane at the isocenter with zero degrees in the direction perpendicular to the patient's chest. +90 degrees corresponds to the cranial direction. The Secondary Positioner Angle range is -90 to + 90 degrees.At a 0 angle for both the Primary Angle (0018,1510) and Secondary Angle (0018,1511), the patient faces the Image Intensifier.The Positioner Primary Angle (0018,1510) and Secondary Angle (0018,1511) apply to the first frame of a multi-frame image.Figure C.8-11
+Positioner Primary AngleFigure C.8-12
+Positioner Secondary Angle</section>
     </entry>
     <entry group="0018" element="9514" name="&gt;Primary Positioner Increment" type="1C">
       <description>Nominal increment of the primary positioner angle in degrees. Positive values indicate moving from RAO to LAO position through the anterior. See C.8.7.5.1.2.
 Required if present and consistent in the contributing SOP Instances.</description>
+      <section ref="C.8.7.5.1.2" name="">The definitions of Positioner Angles shall be with respect to the patient as illustrated in Figures C.8-11 and C.8-12 Zero degree is referenced to the origin perpendicular to the patient's chest. The Positioner Primary Angle definition is like longitude (in the equatorial plan); the Positioner Secondary Angle definition is like latitude (in the sagittal plane). The Positioner Angle attributes apply to the first frame of a multi-frame image. The valid range of Primary Positioner Angle is -180 to +180 degrees and the Secondary Positioner Angle range is -90 to + 90 degrees.The Patient Plane is defined by the isocenter of the imaging device and slices through the patient such that it is perpendicular to the sagittal plane of the body. The Primary Axis of rotation is defined at the intersection of the Patient Plane and of the Sagittal Plane. The Positioner Primary Angle is defined in the transaxial plane at the isocenter with zero degrees in the direction perpendicular to the patient's chest and + 90 degrees at the Patient left hand side (LAO) and -90 at the Patient right hand side (RAO). The valid range of Primary Positioner Angle is -180 to +180 degrees.The Secondary Axis is in the Patient Plane and is perpendicular to the Primary Axis at the isocenter. The Positioner Secondary Angle is defined in the Sagittal Plane at the isocenter with zero degrees in the direction perpendicular to the patient's chest. +90 degrees corresponds to the cranial direction. The Secondary Positioner Angle range is -90 to + 90 degrees.At a 0 angle for both the Primary Angle (0018,1510) and Secondary Angle (0018,1511), the patient faces the Image Intensifier.The Positioner Primary Angle (0018,1510) and Secondary Angle (0018,1511) apply to the first frame of a multi-frame image.Figure C.8-11
+Positioner Primary AngleFigure C.8-12
+Positioner Secondary Angle</section>
     </entry>
     <entry group="0018" element="9509" name="&gt;Secondary Positioner Scan Arc" type="1C">
       <description>Total amount of rotation of the secondary positioner in degrees.
@@ -20350,10 +20479,16 @@ Required if present and consistent in the contributing SOP Instances.</descripti
     <entry group="0018" element="9511" name="&gt;Secondary Positioner Scan Start Angle" type="1C">
       <description>Start position of the secondary positioner in degrees. See C.8.7.5.1.2.
 Required if present and consistent in the contributing SOP Instances.</description>
+      <section ref="C.8.7.5.1.2" name="">The definitions of Positioner Angles shall be with respect to the patient as illustrated in Figures C.8-11 and C.8-12 Zero degree is referenced to the origin perpendicular to the patient's chest. The Positioner Primary Angle definition is like longitude (in the equatorial plan); the Positioner Secondary Angle definition is like latitude (in the sagittal plane). The Positioner Angle attributes apply to the first frame of a multi-frame image. The valid range of Primary Positioner Angle is -180 to +180 degrees and the Secondary Positioner Angle range is -90 to + 90 degrees.The Patient Plane is defined by the isocenter of the imaging device and slices through the patient such that it is perpendicular to the sagittal plane of the body. The Primary Axis of rotation is defined at the intersection of the Patient Plane and of the Sagittal Plane. The Positioner Primary Angle is defined in the transaxial plane at the isocenter with zero degrees in the direction perpendicular to the patient's chest and + 90 degrees at the Patient left hand side (LAO) and -90 at the Patient right hand side (RAO). The valid range of Primary Positioner Angle is -180 to +180 degrees.The Secondary Axis is in the Patient Plane and is perpendicular to the Primary Axis at the isocenter. The Positioner Secondary Angle is defined in the Sagittal Plane at the isocenter with zero degrees in the direction perpendicular to the patient's chest. +90 degrees corresponds to the cranial direction. The Secondary Positioner Angle range is -90 to + 90 degrees.At a 0 angle for both the Primary Angle (0018,1510) and Secondary Angle (0018,1511), the patient faces the Image Intensifier.The Positioner Primary Angle (0018,1510) and Secondary Angle (0018,1511) apply to the first frame of a multi-frame image.Figure C.8-11
+Positioner Primary AngleFigure C.8-12
+Positioner Secondary Angle</section>
     </entry>
     <entry group="0018" element="9515" name="&gt;Secondary Positioner Increment" type="1C">
       <description>Nominal increment of the secondary positioner angle in degrees. Positive values indicate moving from CAU to CRA through the anterior. See C.8.7.5.1.2.
 Required if present and consistent in the contributing SOP Instances.</description>
+      <section ref="C.8.7.5.1.2" name="">The definitions of Positioner Angles shall be with respect to the patient as illustrated in Figures C.8-11 and C.8-12 Zero degree is referenced to the origin perpendicular to the patient's chest. The Positioner Primary Angle definition is like longitude (in the equatorial plan); the Positioner Secondary Angle definition is like latitude (in the sagittal plane). The Positioner Angle attributes apply to the first frame of a multi-frame image. The valid range of Primary Positioner Angle is -180 to +180 degrees and the Secondary Positioner Angle range is -90 to + 90 degrees.The Patient Plane is defined by the isocenter of the imaging device and slices through the patient such that it is perpendicular to the sagittal plane of the body. The Primary Axis of rotation is defined at the intersection of the Patient Plane and of the Sagittal Plane. The Positioner Primary Angle is defined in the transaxial plane at the isocenter with zero degrees in the direction perpendicular to the patient's chest and + 90 degrees at the Patient left hand side (LAO) and -90 at the Patient right hand side (RAO). The valid range of Primary Positioner Angle is -180 to +180 degrees.The Secondary Axis is in the Patient Plane and is perpendicular to the Primary Axis at the isocenter. The Positioner Secondary Angle is defined in the Sagittal Plane at the isocenter with zero degrees in the direction perpendicular to the patient's chest. +90 degrees corresponds to the cranial direction. The Secondary Positioner Angle range is -90 to + 90 degrees.At a 0 angle for both the Primary Angle (0018,1510) and Secondary Angle (0018,1511), the patient faces the Image Intensifier.The Positioner Primary Angle (0018,1510) and Secondary Angle (0018,1511) apply to the first frame of a multi-frame image.Figure C.8-11
+Positioner Primary AngleFigure C.8-12
+Positioner Secondary Angle</section>
     </entry>
     <entry group="0018" element="9538" name="&gt;Per Projection Acquisition Sequence" type="1C">
       <description>Sequence containing detailed acquisition context of each individual projection used in this acquisition context.
@@ -20544,6 +20679,7 @@ May be present if Presentation Size Mode (0070,0100) is SCALE TO FIT or MAGNIFY,
 Required if Presentation Pixel Spacing (0070,0101) is not present.
 Notes: 1. This value may be different from the aspect ratio specified by Pixel Aspect Ratio (0028,0034) in the referenced image, or implied by the values of Pixel Spacing (0028,0030) or Imager Pixel Spacing (0018,1164) specified in the referenced image, which are ignored.
 2. This value must be specified even if the aspect ratio is 1:1.</description>
+      <section ref="C.7.6.3.1.7" name="">The pixel aspect ratio is the ratio of the vertical size and horizontal size of the pixels in the image specified by a pair of integer values where the first value is the vertical pixel size, and the second value is the horizontal pixel size. To illustrate, consider the following example pixel size:Pixel Aspect Ratio = Vertical Size \ Horizontal Size = 0.30 mm \0.25 mm. Thus the Pixel Aspect Ratio could be represented as the multivalued integer string "6\5", "60\50", or any equivalent integer ratio.</section>
     </entry>
     <entry group="0070" element="0103" name="&gt;Presentation Pixel Magnification Ratio" type="1C">
       <description>Ratio of displayed pixels to source pixels, specified in one dimension.
@@ -20589,6 +20725,7 @@ Required if Anchor Point (0070,0014) is present.</description>
 The text value may contain spaces, as well as multiple lines separated by either LF, CR, CR LF or LF CR, but otherwise no format control characters (such as horizontal or vertical tab and form feed) shall be present, even if permitted by the Value Representation of ST.
 The text shall be interpreted as specified by Specific Character Set (0008,0005) if present in the SOP Common Module.
 Note: The text may contain single or multi-byte characters and use code extension techniques as described in PS 3.5 if permitted by the values of Specific Character Set (0008,0005).</description>
+      <section ref="C.10.5.1.1" name="">The text shall be displayed if any part of the bounding box or anchor point is within the Specified Display Area.The text need not be confined to within the bounding box, but shall be rendered in a direction from the Top Left Hand Corner (TLHC) of the bounding box to the Bottom Right Hand Corner (BRHC) of the bounding box, even if these coordinates have been specified in an image relative space and then transformed (rotated, flipped or scaled).Notes:	1. An implementation may render text outside the confines of the bounding box if necessary to display all the specified text.	2. Alternatively, an implementation may choose to render the text in a scrolling box, or a link to another fixed or popup window as appropriate.Whether the contents of the bounding box completely opacify the underlying image or whether the box is “transparent” is undefined.Notes:	1. For example, an implementation may choose an “exclusive or” style opacification to be sure that the text is discernible over light and dark portions of the image.	2. Commonly, the region of the bounding box around the text will be rendered “transparently”, i.e. the image will be visible, though some implementations may choose to opacify the bounding box behind the text to improve its readability.An alternative to specifying a bounding box, is to specify an Anchor Point (0070,0014), i.e. some point in an image or Specified Displayed Area that is related to the text. The semantics of this relationship, and the manner of positioning or linking the text to this point, are unspecified.Notes:	1. For example, a description of a feature may be linked to a point in the image, and when that image is displayed, if it is magnified and panned, the rendered text (and any arrow or line drawn in response to Anchor Point Visibility (0070,0015)) might be repositioned as appropriate so as not to be cropped out of the Specified Displayed Area.	2. As another example, the text could be rendered in a pop-up window when a hypertext link flagged on the displayed image at the location of the Anchor Point (0070,0014) is selected.	3. The bounding box and anchor point need not be defined with the same axis units, i.e. one can be image pixel relative, and the other displayed area relative.The size, font and rotation of the individual rendered text characters are unspecified.</section>
     </entry>
     <entry group="0070" element="0010" name="&gt;&gt;Bounding Box Top Left Hand Corner" type="1C">
       <description>Location of the Top Left Hand Corner (TLHC) of the bounding box in which Unformatted Text Value (0070,0006) is to be displayed, in Bounding Box Annotation Units (0070,0003), given as column\row. Column is the horizontal offset and row is the vertical offset.
@@ -20645,6 +20782,8 @@ POLYLINE
 INTERPOLATED
 CIRCLE
 ELLIPSE</description>
+      <section ref="C.10.5.1.2" name="">Graphic Data (0070,0022) contains the points in the graphic annotation, each dimension for the first point, followed by dimensions for second point, etc. For a two dimensional curve: X1, Y1, X2, Y2, etc. The first (X) dimension corresponds to the image or Specified Displayed Area column (horizontal offset), and the second (Y) dimension corresponds to the image or Specified Displayed Area row (vertical offset). The Value Representation of all components of the N-tuple shall be the same. The image or Specified Displayed Area relative drawing space is defined in Graphic Annotation Units (0070,0005).If Graphic Type (0070,0023) is POINT, then two values (one point) shall be specified and the single point specified is to be drawn.If Graphic Type (0070,0023) is POLYLINE, then the points are to be interpreted as an n-tuple list of end points between which straight lines are to be drawn.If Graphic Type (0070,0023) is INTERPOLATED, then the points are to be interpreted as an n-tuple list of end points between which some form of implementation dependent curved lines are to be drawn. The rendered line shall pass through all the specified points.If Graphic Type (0070,0023) is CIRCLE, then exactly two points shall be present; the first point is to be interpreted as the center and the second point as a point on the circumference of a circle, some form of implementation dependent representation of which is to be drawn.If Graphic Type (0070,0023) is ELLIPSE, then exactly four points shall be present; the first two points are to be interpreted as the endpoints of the major axis and the second two points as the endpoints of the minor axis of an ellipse, some form of implementation dependent representation of which is to be drawn.The notion of “open” or “closed” has no inherent meaning in the context of an arbitrary graphic, other than in the condition for the presence of Graphic Filled (0070,0024). The graphic has no semantic notion of an associated observation such as a region of interest, except that which the unformatted text in the same Item may describe.The choice of pixel value used to represent the graphic on a display is defined in the Graphic Layer Module C.10.7.Figure C.10.5-1
+Sub-pixel Addressing Units in PIXEL Space</section>
     </entry>
     <entry group="0070" element="0024" name="&gt;&gt;Graphic Filled" type="1C">
       <description>Whether or not the closed graphics element is displayed as filled (in some unspecified manner that shall be distinguishable from an outline) or as an outline. See C.10.5.1.2.
@@ -20652,6 +20791,8 @@ Enumerated Values:
 Y = yes
 N = no
 Required if Graphic Data (0070,0022) is "closed", that is Graphic Type (0070,0023) is CIRCLE or ELLIPSE, or Graphic Type (0070,0023) is POLYLINE or INTERPOLATED and the first data point is the same as the last data point.</description>
+      <section ref="C.10.5.1.2" name="">Graphic Data (0070,0022) contains the points in the graphic annotation, each dimension for the first point, followed by dimensions for second point, etc. For a two dimensional curve: X1, Y1, X2, Y2, etc. The first (X) dimension corresponds to the image or Specified Displayed Area column (horizontal offset), and the second (Y) dimension corresponds to the image or Specified Displayed Area row (vertical offset). The Value Representation of all components of the N-tuple shall be the same. The image or Specified Displayed Area relative drawing space is defined in Graphic Annotation Units (0070,0005).If Graphic Type (0070,0023) is POINT, then two values (one point) shall be specified and the single point specified is to be drawn.If Graphic Type (0070,0023) is POLYLINE, then the points are to be interpreted as an n-tuple list of end points between which straight lines are to be drawn.If Graphic Type (0070,0023) is INTERPOLATED, then the points are to be interpreted as an n-tuple list of end points between which some form of implementation dependent curved lines are to be drawn. The rendered line shall pass through all the specified points.If Graphic Type (0070,0023) is CIRCLE, then exactly two points shall be present; the first point is to be interpreted as the center and the second point as a point on the circumference of a circle, some form of implementation dependent representation of which is to be drawn.If Graphic Type (0070,0023) is ELLIPSE, then exactly four points shall be present; the first two points are to be interpreted as the endpoints of the major axis and the second two points as the endpoints of the minor axis of an ellipse, some form of implementation dependent representation of which is to be drawn.The notion of “open” or “closed” has no inherent meaning in the context of an arbitrary graphic, other than in the condition for the presence of Graphic Filled (0070,0024). The graphic has no semantic notion of an associated observation such as a region of interest, except that which the unformatted text in the same Item may describe.The choice of pixel value used to represent the graphic on a display is defined in the Graphic Layer Module C.10.7.Figure C.10.5-1
+Sub-pixel Addressing Units in PIXEL Space</section>
     </entry>
   </module>
   <module ref="C.10.6" table="C.10-6" name="Spatial Transformation Module Attributes">
@@ -20734,6 +20875,7 @@ Required if Acquisition Time Synchronized (0018,1800) value is Y; may be present
       <description>See C.10.9.1.3. Enumerated values:
 ORIGINAL
 DERIVED</description>
+      <section ref="C.10.9.1.3" name="">Waveform Originality (003A,0004) shall have the value ORIGINAL if the Waveform Data samples are the original or source data, and shall have the value DERIVED if the Waveform Data samples have been derived in some manner from the sample data of other waveforms.Notes :	1. The Waveform Originality (003A,0004) attribute is comparable to the Image Type (0008,0008) attribute value 1 (see C.7.6.1.1.2). Within a single Multiplex Group, all channels shall have the same Originality value.	2. Waveform data which has been transcoded from a non-DICOM format may have Waveform Originality value ORIGINAL if the samples are unchanged from the originally acquired waveform samples.</section>
     </entry>
     <entry group="003A" element="0005" name="&gt; Number of Waveform Channels" type="1">
       <description>Number of channels for this multiplex group.</description>
@@ -21182,6 +21324,7 @@ Note: The requirement in this module is type 1C which overrides the type 3 in th
       <description>A color triplet value used to replace those parts of the image occluded by the shutter, when rendered on a color display. The units are specified in PCS-Values, and the value is encoded as CIELab. See C.10.7.1.1.
 Required if the Display Shutter Module or Bitmap Display Shutter Module is present and the SOP Class is other than Grayscale Softcopy Presentation State Storage.
 Note: The requirement in this module is type 1C, which overrides the type 3 in the Display Shutter and Bitmap Display Shutter Modules.</description>
+      <section ref="C.10.7.1.1" name="">Attributes such as Graphic Layer Recommended Display CIELab Value (0070,0401) consist of three unsigned short values:</section>
     </entry>
   </module>
   <module ref="C.11.13" table="C.11.13-1" name="Presentation State Mask Module Attributes">
@@ -21195,9 +21338,10 @@ Notes: 1. This Sequence is replicated here in order to specify one Item, additio
       <section ref="C.7.6.10" name="">Table C.7-16 specifies the Attributes that describe mask operations for a Multi-frame image.Table C.7-16 
 MASK MODULE ATTRIBUTES<module ref="C.7.6.10" table="C.7-16" name="Mask Module Attributes"><entry group="0028" element="6100" name="Mask Subtraction Sequence" type="1"><description>Defines a sequence that describes mask subtraction operations for a Multi-frame Image. One or more items may be included in this sequence.</description></entry><entry group="0028" element="6101" name="&gt;Mask Operation" type="1"><description>Defined Term identifying the type of mask operation to be performed. See C.7.6.10.1 for further explanation.</description><section ref="C.7.6.10.1" name=""/></entry><entry group="0028" element="9416" name="&gt;Subtraction Item ID" type="1C"><description>Identification of the Subtraction Item used to associate a certain Mask Sub-Pixel Shift (0028,6114) in the Frame Pixel Shift Functional Group.
 See C.7.6.16.2.14.1.
-Required if SOP Class UID (0008,0016) equals "1.2.840.10008.5.1.4.1.1.12.1.1" or "1.2.840.10008.5.1.4.1.1.12.2.1". May be present otherwise.</description></entry><entry group="0028" element="6102" name="&gt;Applicable Frame Range" type="1C"><description>Each pair of numbers in this multi-valued attribute specify a beginning and ending frame number inclusive of a range where this particular mask operation is valid. Discontinuous ranges are represented by multiple pairs of numbers. Frames in a Multi-frame Image are specified by sequentially increasing number values beginning with 1. If this Attribute is missing in this particular sequence item, then the mask operation is applicable throughout the entire Multi-frame Image, subject to certain limits as described in C.7.6.10.1.1.
+Required if SOP Class UID (0008,0016) equals "1.2.840.10008.5.1.4.1.1.12.1.1" or "1.2.840.10008.5.1.4.1.1.12.2.1". May be present otherwise.</description><section ref="C.7.6.16.2.14.1" name="">Subtraction Item ID (0028,9416) specifies the ID of a subtraction operation to which the Mask Sub-pixel Shift (0028,6114) is associated. The Subtraction Item ID is also present in the Mask Subtraction Sequence (0028,6100) to allow this association.When used as per-frame macro, the Subtraction Item ID (0028,9416) allows to specify different values of Mask Sub-pixel Shift (0028,6114) individually frame by frame, and relate them to a single item of the Mask Subtraction Sequence (0028,6100).Note:	There is no restriction in the number of Subtraction Item ID’s associated to each contrast frame. The same contrast frame may be present in several items of the Mask Subtraction Sequence, each item having a different value of Subtraction Item ID.When used as shared macro, the Subtraction Item ID (0028,9416) allows to specify one or more values of Mask Sub-pixel Shift that will be applied to all the frames of the Multi-frame image.Note:	Example of usage of Subtraction Item ID in a per-frame macro, see Figure C.7.6.16-8:	In this example of Multi-Frame Image with 3 frames, one Mask Frame (i.e., Frame 1) is applied to the next two frames of the Multi-Frame image (i.e., Frames 2 and 3). Therefore, there is only one item in the Mask Subtraction Sequence, containing its own Subtraction Item ID value (i.e., 100). The Frame Pixel Shift Macro allows to define a Mask Sub-Pixel Shift different for each contrast frame.	First Frame Subtracted: Subtraction of Frame 1 (Mask) to Frame 2, with Sub-Pixel Shift 1.3\2.4	Second Frame Subtracted: Subtraction of Frame 1 (Mask) to Frame 3, with Sub-Pixel Shift 1.9\3.0Figure C.7.6.16-8
+Example of usage of Subtraction Item ID in a per-frame Macro</section></entry><entry group="0028" element="6102" name="&gt;Applicable Frame Range" type="1C"><description>Each pair of numbers in this multi-valued attribute specify a beginning and ending frame number inclusive of a range where this particular mask operation is valid. Discontinuous ranges are represented by multiple pairs of numbers. Frames in a Multi-frame Image are specified by sequentially increasing number values beginning with 1. If this Attribute is missing in this particular sequence item, then the mask operation is applicable throughout the entire Multi-frame Image, subject to certain limits as described in C.7.6.10.1.1.
 Required if Mask Operation (0028,6101) equals REV_TID. May be present otherwise.</description></entry><entry group="0028" element="6110" name="&gt;Mask Frame Numbers" type="1C"><description>Specifies the frame numbers of the pixel data used to generate this mask. Frames in a Multi-frame Image are specified by sequentially increasing number values beginning with 1. Required if the Mask Operation (0028,6101) is AVG_SUB.</description></entry><entry group="0028" element="6112" name="&gt;Contrast Frame Averaging" type="3"><description>Specifies the number of contrast frames to average together before performing the mask operation. If the Attribute is missing, no averaging is performed.</description></entry><entry group="0028" element="6114" name="&gt;Mask Sub-pixel Shift" type="3"><description>A pair of floating point numbers specifying the fractional vertical [adjacent row spacing] and horizontal [adjacent column spacing] pixel shift applied to the mask before subtracting it from the contrast frame. See Section C.7.6.10.1.2.
-Note: When the Frame Pixel Shift Functional Group is present the values of the Mask Pixel Shift attribute of that Functional Group prevails over the values specified in this module.</description></entry><entry group="0028" element="6120" name="&gt;TID Offset" type="2C"><description>If Mask Operation is TID, specifies the offset to be subtracted from the current frame number in order to locate the mask frame in TID mode.
+Note: When the Frame Pixel Shift Functional Group is present the values of the Mask Pixel Shift attribute of that Functional Group prevails over the values specified in this module.</description><section ref="C.7.6.10.1.2" name="">A pair of floating point numbers specifying the fractional vertical [adjacent row spacing] and horizontal [adjacent column spacing] pixel shift applied to the mask before subtracting it from the contrast frame. The row offset results in a shift of the pixels along the column axis. The column offset results in a shift of the pixels along the row axis. A positive row offset is a shift toward the pixels of the lower row of the pixel plane. A positive column offset is a shift toward the pixels of the left hand side column of the pixel plane.</section></entry><entry group="0028" element="6120" name="&gt;TID Offset" type="2C"><description>If Mask Operation is TID, specifies the offset to be subtracted from the current frame number in order to locate the mask frame in TID mode.
 If Mask Operation is REV_TID, specifies the initial offset to be subtracted from the first contrast frame number. See section C.7.6.10.1.1.
 If zero length, TID Offset defaults to 1. Required if Mask Operation (0028,6101) is TID or REV_TID.</description></entry><entry group="0028" element="6190" name="&gt;Mask Operation Explanation" type="3"><description>Free form explanation of this particular mask operation.</description></entry><entry group="0028" element="9454" name="&gt;Mask Selection Mode" type="3"><description>Specifies the method of selection of the mask operations of this item.
 Defined Terms:
@@ -21460,6 +21604,10 @@ CORRECT = Replace incorrect values, such as Patient Name or ID, for example, whe
       <description>Sequence of items defining mapping and/or access mechanism for HL7 Structured Documents referenced from the current SOP Instance. One or more Items may be included in this sequence.
 See C.12.1.1.6.
 Required if HL7 Structured Documents are referenced within the Instance.</description>
+      <section ref="C.12.1.1.6" name="">The HL7 Structured Document Reference Sequence (0040,A390) identifies instances of Structured Documents defined under an HL7 standard. The HL7 standards that define such documents include the Clinical Document Architecture (CDA) and Structured Product Labeling (SPL) standards.References to HL7 Structured Documents from within DICOM SOP Instances shall be encoded with a SOP Class UID and SOP Instance UID pair. The Abstract Syntax of an HL7 Structured Document is defined by its Hierarchical Message Description; the Object Identifier of the Hierarchical Message Description shall be used as the SOP Class UID for the Structured Document reference. Notes:	1. The Hierarchical Message Description Object Identifiers are specified in the HL7 OID Registry (http://hl7.org/oid). The HL7 OIDs for these types of documents are:
+	CDA Release 1		2.16.840.1.113883.1.7.1
+	CDA Release 2		2.16.840.1.113883.1.7.2
+	SPL Release 1		2.16.840.1.113883.1.7.3		2. The Hierarchical Message Description Object Identifiers do not imply a network or media storage service, as do SOP Class UIDs. However, they do identify the Abstract Syntax, similar to SOP Class UIDs.The HL7 Structured Document instances are natively identified by an attribute using the Instance Identifier (II) Data Type, as defined in HL7 v3 Data Types - Abstract Specification. A UID as defined by the DICOM UI Value Representation is a valid identifier under the II Data Type; however, an II attribute is not always encodable as a UID. Therefore a UID shall be constructed for use within the DICOM Data Set that can be mapped to the native instance identifier encoded as an HL7 II Data Type. This mapping is performed through the combination of the local Referenced SOP Instance UID (0008,1155) and the HL7 Instance Identifier (0040,E001) attributes in the HL7 Structured Document Reference Sequence (0040,A390). Notes:	1. An HL7 II is not encodable as a UID if it exceeds 64 characters, or if it includes an extension. See HL7 v3 DT R1.	2. Even though an II may contain just a UID, applications should take care to use the II specified in HL7 Instance Identifier (0040,E001) to access the Structured Document. If the instance identifier used natively within the referenced document is encodable using the UI VR, i.e., it is an ISO 8824 OID up to 64 characters without an extension, it is recommended to be used as the Referenced SOP Instance UID within the current Instance. 	3. The Referenced SOP Instance UID used to reference a particular HL7 Structured Document is not necessarily the same in all DICOM Instances. For example, two SR Documents may internally use different SOP Instance UIDs to reference the same HL7 Structured Document, but they will each contain a mapping to the same HL7 Instance Identifier as the external identifier. 	4. The HL7 Instance Identifier is encoded in attribute (0040,E001) as a serialization of the UID and Extension (if any) separated by a caret character. This is the same format adopted in the IHE Cross-Enterprise Document Sharing (XDS) profile (see http://www.ihe.net).	5. See Figure C.12-3.Figure C.12-3 HL7 Structured Document References</section>
     </entry>
     <entry group="0008" element="1150" name="&gt;Referenced SOP Class UID" type="1">
       <description>Unique identifier for the class of HL7 Structured Document.</description>
@@ -21495,6 +21643,7 @@ Note: Digital Signature Security Profiles (see PS 3.15) may require the use of a
     </entry>
     <entry group="0400" element="0020" name="&gt;Data Elements Signed" type="1">
       <description>A list of Data Element Tags in the order they appear in the Data Set which identify the Data Elements used in creating the MAC for the Digital Signature. See Section C.12.1.1.3.1.1.</description>
+      <section ref="C.12.1.1.3.1.1" name="">The Data Elements Signed Attribute shall list the Tags of the Data Elements that are included in the MAC calculation. The Tags listed shall reference Data Elements at the same level as the Mac Parameters Sequence (4FFE,0001) Data Element in which the Data Elements Signed Attribute appears. Tags included in Data Elements Signed shall be listed in the order in which they appear within the Data Set. The following Data Elements shall not be included either implicitly or explicitly in the list of Tags in Data Elements Signed, nor included as part of the MAC calculation:</section>
     </entry>
     <entry group="FFFA" element="FFFA" name="Digital Signatures Sequence" type="3">
       <description>Sequence holding Digital Signatures. One or more items may be included in this sequence.</description>
@@ -21521,6 +21670,8 @@ Notes: 1. As technology advances, additional encryption algorithms may be allowe
     </entry>
     <entry group="0400" element="0120" name="&gt;Signature" type="1">
       <description>The MAC generated as described in Section C.12.1.1.3.1.1 and encrypted using the algorithm, parameters, and private key associated with the Certificate of the Signer (0400,0115). See Section C.12.1.1.3.1.2.</description>
+      <section ref="C.12.1.1.3.1.2" name="">To generate the MAC, Data Elements referenced either explicitly or implicitly by the Tags in the Data Elements Signed list shall be encoded using the Transfer Syntax identified by the MAC Calculation Transfer Syntax UID (0400,0010) of the MAC Parameters Sequence item where the Data Elements Signed Attribute appears. Data shall be formed into a byte stream and presented to the MAC Algorithm for computation of the MAC according to the following rules:For all Data Elements except those with a VR of SQ or with a VR of OB with an undefined length, all Data Element fields, including the Tag, the VR, the reserved field (if any), the Value Length, and the Value, shall be placed into the byte stream in the order encountered. For Data Elements with a VR of SQ or with a VR of OB with an undefined length, the Tag, the VR, and the reserved field are placed into the byte stream. The Value Length shall not be included. This is followed by each Item Tag in the order encountered, without including the Value Length, followed by the contents of the Value for that item. In the case of an Item within a Data Element whose VR is SQ, these rules are applied recursively to all of the Data Elements within the Value of that Item. After all the Items have been incorporate into the byte stream, a Sequence Delimitation Item Tag (FFFE,E0DD) shall be added to the byte stream presented to the MAC Algorithm, regardless of whether or not it was originally present.Note:	Since the Value Length of Data Elements with a VR of SQ can be either explicit or undefined, the Value Lengths of such Data Elements are left out of the MAC calculation. Similarly, the Value Length of Data Elements with a VR of OB with an undefined length are also left out so that they are handled consistently. If such Data Elements do come with undefined lengths, including the Item Tags that separate the Items or fragments insures that Data Elements cannot be moved between Items or Fragments without compromising the Digital Signature. For those Data Elements with explicit lengths, if the length of an item changes, the added or removed portions would also impact the MAC calculation, so it is not necessary to include explicit lengths in the MAC calculation. It is possible that including the Value Lengths could make cryptoanalysis easier. 
+After the fields of all the Data Elements in the Data Elements Signed list have been placed into the byte stream presented to the MAC Algorithm according to the above rules, all of the Data Elements within the Digital Signatures Sequence item except the Certificate of Signer (0400,0115), Signature (0400,0120), Certified Timestamp Type (0400,0305), and Certified Timestamp (0400,0310) shall also be encoded according to the above rules, and presented to the MAC algorithm (i.e., the Attributes of the Digital Signature Sequence Item for this particular Digital Signature are also implicitly included in the list of Data Elements Signed, except as noted above).The resulting MAC code after processing this byte stream by the MAC Algorithm is then encrypted as specified in the Certificate of Signer and placed in the Value of the Signature Data Element.Notes:	1. The Transfer Syntax used in the MAC calculation may differ from the Transfer Syntax used to exchange the Data Set.	2. Digital Signatures require explicit VR in order to calculate the MAC. An Application Entity which receives a Data Set with an implicit VR Transfer Syntax may not be able to verify Digital Signatures that include Private Data Elements or Data Elements unknown to that Application Entity.This also true of any Data Elements whose VR is UN. Without knowledge of the Value Representation, the receiving Application Entity would be unable to perform proper byte swapping or be able to properly parse sequences in order to generate a MAC. 	3. If more than one entity signs, each Digital Signature would appear in its own Digital Signatures Sequence item. The Digital Signatures may or may not share the same MAC Parameters Sequence item. 4. The notion of a notary public (i.e., someone who verifies the identity of the signer) for Digital Signatures is partially filled by the authority that issued the Certificate of Signer.</section>
     </entry>
     <entry group="0400" element="0305" name="&gt;Certified Timestamp Type" type="1C">
       <description>The type of certified timestamp used in the Certified Timestamp (0400,0310) Attribute. Required if Certified Timestamp (0400,0310) is present.
@@ -21529,6 +21680,8 @@ Note: Digital Signature Security Profiles (see PS 3.15) may require the use of a
     </entry>
     <entry group="0400" element="0310" name="&gt;Certified Timestamp" type="3">
       <description>A certified timestamp of the Digital Signature (0400,0120) Attribute Value, which shall be obtained when the Digital Signature is created. See Section C.12.1.1.3.1.3.</description>
+      <section ref="C.12.1.1.3.1.3" name="">To generate a certified timestamp, the Value of the Signature (0400,0120) Attribute is sent to a third party, as specified by the protocol referred to by the Certified Timestamp Type (0400,0305) Attribute. The third party then generates and returns a certified timestamp in the form specified by that protocol. The certified timestamp returned by the third party is encoded as a stream of bytes in the Certified Timestamp Attribute.Note:	The timestamp protocol may be specified by a Profile in PS 3.15.
+</section>
     </entry>
     <entry group="0400" element="0401" name="&gt;Digital Signature Purpose Code Sequence" type="3">
       <description>The purpose of this Digital Signature. Only a single Item shall be permitted in this sequence.</description>
@@ -22142,6 +22295,7 @@ SOURCE - Equipment that contributed to the content
 ENT - Data enterer (e.g., transcriptionist)
 ATTEST - Attestor
 Note: In HL7 Structured Documents, the participation comparable to Attestor is the "Authenticator".</description>
+      <section ref="C.17.2.5" name="">The Verifying Observer Sequence (0040,A073), Author Observer Sequence (0040,A078), and Participant Sequence (0040,A07A) identify significant contributors to the SR document. The Author creates the clinical content of the document. The Verifying Observer verifies and accepts legal responsibility for the content. Other participants may include an Attestor, a person identified as a Participant who “signs” an SR document, but who does not have legal authority to verify the clinical content. E.g., an SR document may be authored and attested by a resident, and then verified by a staff physician; or a document may be authored by a CAD device and attested by a technologist, and then verified by a physician; or a technologist working with a measurement software package may be the author, the package is a Source participant, and the final content is verified by a physician. An individual shall not be identified in both the Verifying Observer Sequence (as the legal authenticator) and in the Participant Sequence as an Attestor. An individual may be identified in both the Author Observer Sequence and either the Verifying Observer Sequence or the Participant Sequence.The participation DateTime for the Verifying Observer is conveyed in Verification DateTime (0040,A030) within the Verifying Observer Sequence, for the Author Observer in the Observation DateTime (0040,A032) in the main Data Set (see C.17.3), and for other participants in Participation DateTime (0040,A082) within the Participant Sequence.</section>
     </entry>
     <entry group="0040" element="A082" name="&gt;Participation DateTime" type="2">
       <description>DateTime of participation with respect to the clinical content of this document.</description>
@@ -22403,6 +22557,7 @@ Each subsequent integer represents an ordinal position of a Content Item in the 
 Note: 1. See C.17.3.2.5.
 2. Content Items are ordered in a Content Sequence starting from 1 as defined in VR of SQ (See PS 3.5).
 Required if the Target Content Item is denoted by-reference, i.e. the Document Relationship Macro and Document Content Macro are not included.</description>
+      <section ref="C.17.3.2.5" name="">Content Items are identified by their position in the Content Item tree. They have an implicit order as defined by the order of the Sequence Items. When a Content Item is the target of a by-reference relationship, its position is specified in the Referenced Content Item Identifier (0040,DB73) in a Content Sequence Item subsidiary to the source Content Item.Note:	Figure C.17.3-3 illustrates an SR content tree and identifiers associated with each Content Item:</section>
     </entry>
   </macro>
   <module ref="C.17.6.1" table="C.17.6-1" name="Key Object Document Series Module Attributes">
@@ -26895,6 +27050,7 @@ Note: The capture rate may change within the image object, as specified in Frame
 Defined terms:
 IMAGE_PLANE
 Required if Selector Attribute (0072,0026) is not present.</description>
+      <section ref="C.23.3.1.1" name="">The items in the Filter Operations Sequence (0072,0400) determine which subset of the images in the identified Image Set are to be displayed in the associated Display Set image boxes. If there are multiple Items in the Filter Operations Sequence (0072,0400), the filter operations shall be applied in Item order, and the output of the preceding filter shall serve as the input to the succeeding filter (i.e., an AND operation).When Filter-by Category (0072,0402) has a value of IMAGE_PLANE, Selector Attribute VR (0072,0050) shall have a value of “CS”, and abstract enumerated values shall be used for the value of the associated Selector CS Value (0072,0062) attribute, which may be computed from the values of Image Orientation (Patient) (0020,0037) or Patient Orientation (0020,0020). Enumerated Values: TRANSVERSE, CORONAL, SAGITTAL, OBLIQUE.Note:	Cross-sectional images do not normally contain a categorical description of the image plane, but rather only a patient-relative row and column direction cosines that are unit vectors. The category of image plane can be determined first by categorizing the row and column major directions (or detecting if the orientation is oblique according to a pre-specified threshold), and then using those categories to select a plan category.	The following pseudo-code can be used to determine the major axis (R or L, A or P, H or F) from a single direction cosine that is an (x,y,z) tuple (as defined in C.7.6.2.1.1):		if (abs(x) &gt; threshold)			axis = “RL”		else if (abs(y) &gt; threshold)			axis = “AP”		else if (abs(z) &gt; threshold)			axis = “HF”		else			is OBLIQUE	Having determined the major axis of the row and column, the category of plane can be obtained from a table lookup:	Alternatively, one can obtain a single vector that is the normal to the orientation (cross product of the row and column unit vectors), then find which of the x, y and z components has the maximum absolute value that is above threshold; if x then SAGITTAL, if y then CORONAL, if z then TRANSVERSE; if all of the components are below threshold then the orientation is OBLIQUE.	Since it is also necessary to determine whether or not to flip or rotate the image into the preferred orientation (as specified by Display Set Patient orientation (0072,0700)) for the category of plane (e.g., sagittals are normally viewed with row direction posteriorly and column direction towards the feet), the categorical row and column direction to use can be obtained as above, additional accounting for the sign of the direction cosine, e.g.:		if x &lt; 0 then orientationX = “R” else orientationX = “L”		if y &lt; 0 then orientationY = “A” else orientationY = “P”		if z &lt; 0 then orientationZ = “F” else orientationZ = “H”		if (abs(x) &gt; threshold)			orientation = orientationX		…An application that is applying a Hanging Protocol Instance shall support any value for Selector Attribute (0072,0026). If the attribute identified by Selector Attribute is not present in an image of the referenced Image Set, then the image is included in the filter output. The attributes of the Hanging Protocol Selector Attribute Context Macro specify whether the Selector Attribute (0072,0026) is contained in a Sequence, Functional Group Sequence, or Private Group.Notes:	1. The following attributes from image IODs are examples of some possible values for the Selector Attribute (0072,0026) of the Filter Operations Sequence (0072,0400). This is not a complete list:</section>
     </entry>
     <entry group="0072" element="0404" name="&gt;&gt;Filter-by Attribute Presence" type="1C">
       <description>Operation to be applied based on the presence or absence of the attribute represented by Selector Attribute (0072,0026) in each image of the Image Set.
@@ -26930,6 +27086,7 @@ GREATER_THAN: applies only to numeric Selector Attribute (0072,0026)
 LESS_THAN: applies only to numeric Selector Attribute (0072,0026)
 MEMBER_OF: one of the values in the image is present in the values of the selector; if one value is present in each, this is an "equal to" operator
 NOT_MEMBER_OF: none of the values in the image is present in the values of the selector; if one value is present in each, this is a "not equal to" operator</description>
+      <section ref="C.23.3.1.1" name="">The items in the Filter Operations Sequence (0072,0400) determine which subset of the images in the identified Image Set are to be displayed in the associated Display Set image boxes. If there are multiple Items in the Filter Operations Sequence (0072,0400), the filter operations shall be applied in Item order, and the output of the preceding filter shall serve as the input to the succeeding filter (i.e., an AND operation).When Filter-by Category (0072,0402) has a value of IMAGE_PLANE, Selector Attribute VR (0072,0050) shall have a value of “CS”, and abstract enumerated values shall be used for the value of the associated Selector CS Value (0072,0062) attribute, which may be computed from the values of Image Orientation (Patient) (0020,0037) or Patient Orientation (0020,0020). Enumerated Values: TRANSVERSE, CORONAL, SAGITTAL, OBLIQUE.Note:	Cross-sectional images do not normally contain a categorical description of the image plane, but rather only a patient-relative row and column direction cosines that are unit vectors. The category of image plane can be determined first by categorizing the row and column major directions (or detecting if the orientation is oblique according to a pre-specified threshold), and then using those categories to select a plan category.	The following pseudo-code can be used to determine the major axis (R or L, A or P, H or F) from a single direction cosine that is an (x,y,z) tuple (as defined in C.7.6.2.1.1):		if (abs(x) &gt; threshold)			axis = “RL”		else if (abs(y) &gt; threshold)			axis = “AP”		else if (abs(z) &gt; threshold)			axis = “HF”		else			is OBLIQUE	Having determined the major axis of the row and column, the category of plane can be obtained from a table lookup:	Alternatively, one can obtain a single vector that is the normal to the orientation (cross product of the row and column unit vectors), then find which of the x, y and z components has the maximum absolute value that is above threshold; if x then SAGITTAL, if y then CORONAL, if z then TRANSVERSE; if all of the components are below threshold then the orientation is OBLIQUE.	Since it is also necessary to determine whether or not to flip or rotate the image into the preferred orientation (as specified by Display Set Patient orientation (0072,0700)) for the category of plane (e.g., sagittals are normally viewed with row direction posteriorly and column direction towards the feet), the categorical row and column direction to use can be obtained as above, additional accounting for the sign of the direction cosine, e.g.:		if x &lt; 0 then orientationX = “R” else orientationX = “L”		if y &lt; 0 then orientationY = “A” else orientationY = “P”		if z &lt; 0 then orientationZ = “F” else orientationZ = “H”		if (abs(x) &gt; threshold)			orientation = orientationX		…An application that is applying a Hanging Protocol Instance shall support any value for Selector Attribute (0072,0026). If the attribute identified by Selector Attribute is not present in an image of the referenced Image Set, then the image is included in the filter output. The attributes of the Hanging Protocol Selector Attribute Context Macro specify whether the Selector Attribute (0072,0026) is contained in a Sequence, Functional Group Sequence, or Private Group.Notes:	1. The following attributes from image IODs are examples of some possible values for the Selector Attribute (0072,0026) of the Filter Operations Sequence (0072,0400). This is not a complete list:</section>
     </entry>
     <entry group="0072" element="0600" name="&gt;Sorting Operations Sequence" type="2">
       <description>Sequence that defines sorting criteria to be applied to the result of filter and reformat operations, to define the order in which to present the images in the Image Boxes. Zero or more items shall be included in this sequence. See C.23.3.1.2.</description>
@@ -26951,6 +27108,7 @@ Defined terms:
 ALONG_AXIS: for CT, MR, other cross-sectional image sets
 BY_ACQ_TIME
 Required if Selector Attribute (0072,0026) is not present.</description>
+      <section ref="C.23.3.1.2" name="">The Items in the Sorting Operations Sequence (0072,0600) define the order in which the images resulting from the filter and reformat operations on the Image Set are to be displayed in the associated Image Boxes of the Display Set. The sorting criteria may include the value of a numeric, date, or time Attribute that is expected to be present in each of the image objects in the filtered Image Set, and/or an abstract sorting category. A sorting direction shall be associated with each sorting criterion. If a textual Attribute is used for sorting, then the INCREASING sorting direction indicates alpabetical order, and DECREASING indicates reverse alphabetical order.If a code sequence Attribute is used for sorting, then the Code Meaning (0008,0104) shall be sorted alphabetically. If a string numeric Attribute is used for sorting (VR of IS or DS), then sorting shall be on the numeric value, and padding shall be ignored. When sorting by date or time Attribute, then sorting shall be on the temporal value, not the alphabetic string.If there are multiple Items in the Sorting Operations Sequence (0072,0600), then the sorting operations shall be applied in Item order. The least rapidly varying attribute for the sorting operation shall be the first Item in the sequence.Note:	For example, a Sorting Operations Sequence (0072,0600) with two Items:		Item #1: (0018,5101) View Position, INCREASING		Item #2: (0008,0020) Study Date, INCREASING	results in the following order, based on these attribute values in the image objects:When the Sort-by Category (0072,0602) is used with a value of ALONG_AXIS, such as for CT, MR or other cross-sectional image sets, the sorting operation is computed from the values Image Position (Patient) (0020,0032) and Image Orientation (Patient) (0020,0037) in the image objects.For the image set to be displayed, a “dominant axis” of the set shall be determined. The dominant axis is the normal to the Image Orientation (Patient) (0020,0037) attribute (assuming all selected images are parallel), computed as the dot product in a right-handed coordinate system (see C.7.6.2.1.1). The INCREASING direction for ALONG_AXIS of the image set shall be in the positive direction along the dominant axis. The DECREASING direction shall be in the negative direction along that axis.When the Sort-by Category (0072,0602) is used with a value of BY_ACQ_TIME, the sorting operation is computed from appropriate values in the image objects (e.g., Frame Acquisition DateTime, Acquisition Time, Content Time, Acquisition DateTime), since the specific attribute used may vary from one Image Instance or SOP Class to another, yet the Hanging Protocol Instance may be generally applicable.An application that is applying a Hanging Protocol Instance shall support any value for Selector Attribute (0072,0026), provided that it is present in the referenced Image Set. The attributes of the Hanging Protocol Selector Attribute Context Macro specify whether the Selector Attribute (0072,0026) is contained in a Sequence, Functional Group Sequence or Private Group.Notes:	1. The following attributes from image IODs are examples of some possible values for the Selector Attribute (0072,0026) of the Sorting Operations Sequence (0072,0600). This is not a complete list:</section>
     </entry>
     <entry group="0072" element="0604" name="&gt;&gt;Sorting Direction" type="1">
       <description>Sorting direction to be applied to the value(s) in the image set of the attribute identified by Selector Attribute (0072,0026) or Sort-by Category (0072,0602).
@@ -26960,6 +27118,7 @@ Enumerated Values: INCREASING, DECREASING</description>
       <description>Type of blending of superimposed and underlying images from the image set, performed before reformatting. See C.23.3.1.3.
 Defined Terms:
 COLOR - apply a pseudo-color to the superimposed image while blending</description>
+      <section ref="C.23.3.1.3" name="">A Blending Operation Type (0072,0500) of COLOR implies that the filtered selected image set contains two sets of images appropriate for blending, such as CT and PET images defined in the same frame of reference or associated by a spatial registration object. The decision as to which subset are the underlying images and which subset are the superimposed images is left to the discretion of the display application. There is no mechanism to explicitly specify the two subsets.The relative opacity and color-related aspects of blending are not specified by the Hanging Protocol, and are left to the discretion of the application.</section>
     </entry>
     <entry group="0072" element="0510" name="&gt;Reformatting Operation Type" type="3">
       <description>Reformatting operation to be applied to the Image Set.
@@ -27030,6 +27189,7 @@ YES = The maximum output value after the display pipeline has been applied shall
 NO = The maximum output value after the display pipeline has been applied shall be displayed with the maximum available luminance.
 Notes: 1. The YES and NO values of this Attribute correspond to the Presentation LUT Shape (2050,0020) values of INVERSE and IDENTITY, as described in C.11.6.1.2.
 2. Only applicable to display of grayscale images.</description>
+      <section ref="C.23.3.1.4" name="">The attributes that indicate the presentation intent for each Display Set of a Hanging Protocol Instance are: Display Set Patient Orientation (0072,0700), VOI Type (0072,0702), Pseudo-color Type (0072,0704), Show Grayscale Inverted (0072,0706), Show Image True Size Flag (0072,0710), Show Graphic Annotation Flag (0072,0712), Show Patient Demographics Flag (0072,0714), and Show Acquisition Techniques Flag (0072,0716).</section>
     </entry>
     <entry group="0072" element="0710" name="&gt;Show Image True Size Flag" type="3">
       <description>Indicates whether or not to display images with the physical size of the rendered image pixel the same on the screen as specified in the image attributes, unless overridden by a Presentation State instance.

@@ -57,6 +57,16 @@ Special normalize-space
     <xsl:sequence select="for $s in $string return string-join( for $word in tokenize($s, $linebreak) return normalize-space($word), $linebreak)"/>
   </xsl:function>
   <!--
+  -->
+  <xsl:function name="my:remove-trailing-dot" as="xs:string*">
+    <xsl:param name="string" as="xs:string"/>
+    <xsl:variable name="result" as="xs:string" select="if (ends-with($string,'.'))
+	    then substring($string,1,string-length($string)-1)
+	    else $string"/>
+<xsl:value-of select="$result"/>
+	    
+  </xsl:function>
+  <!--
 
 Weird camel case function to get closer to docbook version
 
@@ -139,6 +149,7 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
                       <xsl:with-param name="description" select="$n_description"/>
                     </xsl:call-template>
                   </xsl:variable>
+                  <!--xsl:if test="$dummy !='' and $dummy != 'C.10.4' and $dummy != 'C.7.6.4'"-->
                   <xsl:if test="$dummy !='' and $dummy != 'C.10.4'">
                     <!-- infinite recursion in C.10.4 -->
                     <!--xsl:message>reference found: <xsl:value-of select="$dummy"/></xsl:message-->
@@ -386,26 +397,17 @@ over and over. We need to get the last ie name we found to fill in the blank:
   <!-- extract a See C.X.Y from a description string -->
   <xsl:template name="get-description-reference">
     <xsl:param name="description"/>
-    <xsl:variable name="regex1">See ([C]\.[0-9\.]+) for specialization</xsl:variable>
-    <!--xsl:variable name="regex2">See ([C]\.[0-9\.]+) for further explanation</xsl:variable-->
-    <xsl:variable name="regex2">See ([C]\.[0-9\.]+)\.$</xsl:variable>
-    <!-- special case to remove trailing dot -->
-    <xsl:variable name="regex3">See ([C]\.[0-9\.]+)</xsl:variable>
+    <!--
+<para>See Section C.7.6.4b.1.</para>
+-->
+    <xsl:variable name="regex2">See Section ([C]\.[0-9\.]+)</xsl:variable>
+    <xsl:variable name="regex3">See ([C]\.[0-9a-f\.]+)</xsl:variable>
     <xsl:choose>
-      <!--xsl:when test="matches($description, $regex1)">
-        <xsl:analyze-string select="$description" regex="{$regex1}">
-          <xsl:matching-substring>
-            <match>
-              <xsl:value-of select="regex-group(1)"/>
-            </match>
-          </xsl:matching-substring>
-	</xsl:analyze-string>
-    </xsl:when-->
       <xsl:when test="matches($description, $regex2)">
         <xsl:analyze-string select="$description" regex="{$regex2}">
           <xsl:matching-substring>
             <match>
-              <xsl:value-of select="regex-group(1)"/>
+              <xsl:value-of select="my:remove-trailing-dot(regex-group(1))"/>
             </match>
           </xsl:matching-substring>
         </xsl:analyze-string>
@@ -414,7 +416,7 @@ over and over. We need to get the last ie name we found to fill in the blank:
         <xsl:analyze-string select="$description" regex="{$regex3}">
           <xsl:matching-substring>
             <match>
-              <xsl:value-of select="regex-group(1)"/>
+              <xsl:value-of select="my:remove-trailing-dot(regex-group(1))"/>
             </match>
           </xsl:matching-substring>
         </xsl:analyze-string>
@@ -594,7 +596,7 @@ att name=</xsl:text>
     <xsl:param name="section-paragraphs"/>
     <xsl:variable name="current-paragraph" select="$section-paragraphs[1]"/>
     <!-- search for next section title -->
-    <xsl:if test="($current-paragraph[name()='para' or name()='informaltable']) and not(matches(normalize-space($current-paragraph),'^([A-F]|[1-9]+[0-9]?)(\.[1-9]?[0-9]+)+ '))">
+    <xsl:if test="($current-paragraph[name()='para' or name()='informaltable']) and not(matches(normalize-space($current-paragraph),'^([A-F]|[1-9ab]+[0-9ab]?)(\.[1-9ab]?[0-9ab]+)+ '))">
 	    <xsl:if test="not(starts-with(normalize-space($current-paragraph),'0M8R4KGxG'))"> <!-- embedded graphics ? -->
       <xsl:apply-templates select="$current-paragraph"/>
       <xsl:call-template name="copy-section-paragraphs">
