@@ -121,7 +121,7 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
                     <xsl:with-param name="description" select="$n_description"/>
 		  </xsl:call-template>
 	  </xsl:variable>
-	  <xsl:if test="$dummy !=''">
+	  <xsl:if test="$dummy !='' and $dummy != 'C.10.4'"> <!-- infinite recursion in C.10.4 -->
 	  <!--xsl:message>reference found: <xsl:value-of select="$dummy"/></xsl:message-->
 <!--
 Here is how you would get to the article and extract the section specified:
@@ -371,10 +371,11 @@ over and over. We need to get the last ie name we found to fill in the blank:
   <xsl:template name="get-description-reference">
     <xsl:param name="description"/>
     <xsl:variable name="regex1">See ([C]\.[0-9\.]+) for specialization</xsl:variable>
-    <xsl:variable name="regex2">See ([C]\.[0-9\.]+) for further explanation</xsl:variable>
+    <!--xsl:variable name="regex2">See ([C]\.[0-9\.]+) for further explanation</xsl:variable-->
+    <xsl:variable name="regex2">See ([C]\.[0-9\.]+)\.$</xsl:variable> <!-- special case to remove trailing dot -->
+    <xsl:variable name="regex3">See ([C]\.[0-9\.]+)</xsl:variable>
     <xsl:choose>
-    <xsl:when test="matches($description, $regex1)">
-    <!--xsl:message>DESCRIPTION FOUND:<xsl:value-of select="$description"/></xsl:message-->
+    <!--xsl:when test="matches($description, $regex1)">
         <xsl:analyze-string select="$description" regex="{$regex1}">
           <xsl:matching-substring>
             <match>
@@ -382,10 +383,18 @@ over and over. We need to get the last ie name we found to fill in the blank:
             </match>
           </xsl:matching-substring>
 	</xsl:analyze-string>
-    </xsl:when>
+    </xsl:when-->
      <xsl:when test="matches($description, $regex2)">
-    <!--xsl:message>DESCRIPTION FOUND:<xsl:value-of select="$description"/></xsl:message-->
         <xsl:analyze-string select="$description" regex="{$regex2}">
+          <xsl:matching-substring>
+            <match>
+              <xsl:value-of select="regex-group(1)"/>
+            </match>
+          </xsl:matching-substring>
+	</xsl:analyze-string>
+    </xsl:when>
+      <xsl:when test="matches($description, $regex3) and not(matches($description,$regex2))">
+        <xsl:analyze-string select="$description" regex="{$regex3}">
           <xsl:matching-substring>
             <match>
               <xsl:value-of select="regex-group(1)"/>
