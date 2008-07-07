@@ -614,6 +614,14 @@ att name=</xsl:text>
     <xsl:for-each select="tgroup/tbody/row">
       <xsl:choose>
 <!-- output define term and description -->
+<!-- FIXME this is difficult if not impossible to deal both with:
+<para>C.7.3.1.1.1	Modality</para>
+and
+<para>C.8.3.1.1.1	Image Type</para>
+
+FIXME:
+See C.8.7.10 and C.8.15.3.9 ... reference a complete module instead of directly defined terms... pffff
+-->
         <xsl:when test="count(entry)&gt;1 and string(entry[2])">
           <xsl:value-of select="concat(entry[1]/para[1],' ')"/>
           <xsl:if test="not(matches(entry[1]/para[1],'= *$') or matches(entry[2]/para[1],'^ *='))">
