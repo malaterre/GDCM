@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:my="urn:my" version="2.0" exclude-result-prefixes="#all">
-<!--
+  <!--
   Program: GDCM (Grass Root DICOM). A DICOM library
   Module:  $URL$
 
@@ -12,7 +12,7 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 -->
-<!-- =====================================================================
+  <!-- =====================================================================
  |
  |  Copyright (C) 2007, ICSMED AG
  |
@@ -27,10 +27,10 @@
  |           Subsections and tables within the section are not extracted.
  |
  ======================================================================= -->
-<!--
-Special Thanks to J�rg Riesmeier for the extract_section.xsl script !
+  <!--
+Special Thanks to Joerg Riesmeier for the extract_section.xsl script !
 -->
-<!--
+  <!--
 TODO:
 * Make sure a <include/> is indeed a Include `' ...
   eg. Fix RAW DATA KEYS, Key are recognized as `Include`
@@ -47,7 +47,7 @@ $ java -jar ~/Software/saxon/saxon8.jar  08_03pu.xml Part3.xsl > ModuleAttribute
     <xsl:text>
 </xsl:text>
   </xsl:variable>
-<!--
+  <!--
 
 Special normalize-space
 
@@ -56,7 +56,7 @@ Special normalize-space
     <xsl:param name="string" as="xs:string*"/>
     <xsl:sequence select="for $s in $string return string-join( for $word in tokenize($s, $linebreak) return normalize-space($word), $linebreak)"/>
   </xsl:function>
-<!--
+  <!--
 
 Weird camel case function to get closer to docbook version
 
@@ -93,7 +93,7 @@ Weird camel case function to get closer to docbook version
     <xsl:variable name="tmp23" select="replace($tmp22,' Ct/mr ',' CT/MR ')"/>
     <xsl:value-of select="$tmp23"/>
   </xsl:function>
-<!--
+  <!--
 Function to parse a row from an informaltable specifically for a Macro/Module table:
 -->
   <xsl:template match="row" mode="macro">
@@ -110,12 +110,12 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
       <xsl:when test="substring($tag,1,1) = '(' and substring($tag,11,1) = ')'">
         <xsl:variable name="group" select="normalize-space(substring-after(substring-before($tag,','), '('))"/>
         <xsl:variable name="element" select="normalize-space(substring-after(substring-before($tag,')'), ','))"/>
-<!--used internally to find out if type is indeed type of if column type was missing ... not full proof -->
+        <!--used internally to find out if type is indeed type of if column type was missing ... not full proof -->
         <xsl:variable name="internal_type" select="normalize-space(string-join(entry[3]/para,' '))"/>
         <xsl:variable name="type">
           <xsl:value-of select="entry[3]/para" separator="{$linebreak}"/>
         </xsl:variable>
-<!-- some funny quote is in the way, replace it: -->
+        <!-- some funny quote is in the way, replace it: -->
         <xsl:variable name="single_quote1">’“”– ­</xsl:variable>
         <xsl:variable name="single_quote2" select="concat(concat(concat($apos, $doublequote),$doublequote),'- µ')"/>
         <xsl:variable name="description_tmp">
@@ -123,9 +123,9 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
         </xsl:variable>
         <xsl:variable name="name_translate" select="normalize-space(translate($name,$single_quote1,$single_quote2))"/>
         <xsl:variable name="description" select="translate($description_tmp,$single_quote1,$single_quote2)"/>
-<!-- Attribute Name  Tag  Type  Attribute Description -->
+        <!-- Attribute Name  Tag  Type  Attribute Description -->
         <xsl:choose>
-<!-- Try to figure if this table is busted (missing Type column -->
+          <!-- Try to figure if this table is busted (missing Type column -->
           <xsl:when test="string-length($internal_type) &gt; 0 and string-length($internal_type) &lt;= 2">
             <xsl:choose>
               <xsl:when test="$group != '' and $element != ''">
@@ -134,23 +134,22 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
                   <description>
                     <xsl:value-of select="$n_description"/>
                   </description>
-		  <xsl:variable name="dummy">
-                  <xsl:call-template name="get-description-reference">
-                    <xsl:with-param name="description" select="$n_description"/>
-		  </xsl:call-template>
-	  </xsl:variable>
-	  <xsl:if test="$dummy !='' and $dummy != 'C.10.4'"> <!-- infinite recursion in C.10.4 -->
-	  <!--xsl:message>reference found: <xsl:value-of select="$dummy"/></xsl:message-->
-<!--
+                  <xsl:variable name="dummy">
+                    <xsl:call-template name="get-description-reference">
+                      <xsl:with-param name="description" select="$n_description"/>
+                    </xsl:call-template>
+                  </xsl:variable>
+                  <xsl:if test="$dummy !='' and $dummy != 'C.10.4'">
+                    <!-- infinite recursion in C.10.4 -->
+                    <!--xsl:message>reference found: <xsl:value-of select="$dummy"/></xsl:message-->
+                    <!--
 Here is how you would get to the article and extract the section specified:
 -->
-              <xsl:call-template name="extract-section-paragraphs">
-		      <xsl:with-param name="article" select="../../../.."/>
-                <xsl:with-param name="extractsection" select="$dummy"/>
-              </xsl:call-template>
- 
-  </xsl:if>
-
+                    <xsl:call-template name="extract-section-paragraphs">
+                      <xsl:with-param name="article" select="../../../.."/>
+                      <xsl:with-param name="extractsection" select="$dummy"/>
+                    </xsl:call-template>
+                  </xsl:if>
                   <!--xsl:variable name="section" />
                     <xsl:apply-templates select="entry" mode="iod2"/>
                   </xsl:variable-->
@@ -158,16 +157,16 @@ Here is how you would get to the article and extract the section specified:
               </xsl:when>
               <xsl:otherwise>
                 <xsl:message>SHOULD NOT HAPPEN</xsl:message>
-<!--include ref="{translate($name_translate,'','µ')}" type="{normalize-space($type)}"/-->
+                <!--include ref="{translate($name_translate,'','µ')}" type="{normalize-space($type)}"/-->
               </xsl:otherwise>
             </xsl:choose>
           </xsl:when>
           <xsl:otherwise>
             <entry group="{$group}" element="{$element}" name="{$name_translate}">
-<!-- type ?? -->
+              <!-- type ?? -->
               <description>
                 <xsl:variable name="desc" select="translate($type,$single_quote1,$single_quote2)"/>
-<!-- very specific -->
+                <!-- very specific -->
                 <xsl:value-of select="my:normalize-paragraph($desc)"/>
               </description>
             </entry>
@@ -175,11 +174,11 @@ Here is how you would get to the article and extract the section specified:
         </xsl:choose>
       </xsl:when>
       <xsl:when test="$name = 'Attribute Name' or $name = 'Attribute name' or $name = 'Key'">
-<!-- This is supposed to be the very first line of each table -->
-<!-- someday I might add more stuff here... -->
+        <!-- This is supposed to be the very first line of each table -->
+        <!-- someday I might add more stuff here... -->
       </xsl:when>
       <xsl:otherwise>
-<!-- I should check if this is indeed a Include line or not... -->
+        <!-- I should check if this is indeed a Include line or not... -->
         <xsl:choose>
           <xsl:when test="entry[1]/@namest = 'c1' and entry[1]/@nameend = 'c2'">
             <xsl:choose>
@@ -242,12 +241,12 @@ Here is how you would get to the article and extract the section specified:
           </xsl:when>
           <xsl:otherwise>
             <xsl:variable name="include" select="normalize-space(string-join(entry,' '))"/>
-<!-- Table Table C.10-9 Waveform Module Attributes has two empty lines ... -->
+            <!-- Table Table C.10-9 Waveform Module Attributes has two empty lines ... -->
             <xsl:if test="$include != ''">
-<!--include ref="{$include}"/-->
+              <!--include ref="{$include}"/-->
               <xsl:variable name="include" select="normalize-space(translate(translate(entry[1],'‘',$apos),'’',$apos))"/>
-<!-- nothing in entry[2] -->
-<!-- FIXME I should check that -->
+              <!-- nothing in entry[2] -->
+              <!-- FIXME I should check that -->
               <xsl:variable name="type" select="normalize-space(entry[3])"/>
               <xsl:variable name="description" select="normalize-space(entry[4])"/>
               <include ref="{$include}">
@@ -264,7 +263,7 @@ Here is how you would get to the article and extract the section specified:
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-<!--
+  <!--
 
 Function to parse an entry from a row in an IOD table
 Take the ie name as input
@@ -280,7 +279,7 @@ Take the ie name as input
       </xsl:if>
     </xsl:for-each>
   </xsl:template>
-<!--
+  <!--
 
 
 -->
@@ -291,7 +290,7 @@ Take the ie name as input
       <entry ie="{normalize-space(para)}" name="{normalize-space(following-sibling::entry[1]/para)}" ref="{normalize-space(following-sibling::entry[2]/para)}" usage="{$usage_required}"/>
     </xsl:for-each>
   </xsl:template>
-<!--
+  <!--
 
 Function to parse a row from an informaltable specifically for an IOD table:
 For instance:
@@ -299,7 +298,7 @@ Table A.2-1 (CR Image IOD Modules) to A.51-1 (Segmentation IOD Modules).
 -->
   <xsl:template match="row" mode="iod">
     <xsl:choose>
-<!--
+      <!--
 Some tables have a specific layout, when namest='c2' and nameend='c4', deals with them properly
 as they do not repeat the ie name each time:
 -->
@@ -311,17 +310,17 @@ as they do not repeat the ie name each time:
       <xsl:when test="entry[5]/para = 'Module Description'">
         <xsl:apply-templates select="entry" mode="iod2"/>
       </xsl:when>
-<!-- Get rid of the first line in the table: IE / Reference / Usage / ... -->
+      <!-- Get rid of the first line in the table: IE / Reference / Usage / ... -->
       <xsl:when test="entry[1]/para = 'IE' or entry[1]/para = 'Module'">
       </xsl:when>
-<!--
+      <!--
 Most of the IE table simply have an empty entry[1]/para to avoid duplicating the ie name
 over and over. We need to get the last ie name we found to fill in the blank:
 -->
       <xsl:otherwise>
         <xsl:variable name="ref_joined">
           <xsl:value-of select="entry[3]/para" separator=" "/>
-<!-- actually space is the default separator for value-of -->
+          <!-- actually space is the default separator for value-of -->
         </xsl:variable>
         <xsl:variable name="usage_joined">
           <xsl:value-of select="entry[4]/para" separator=" "/>
@@ -338,7 +337,7 @@ over and over. We need to get the last ie name we found to fill in the blank:
               <entry name="{translate($ie,'­','')}" ref="{normalize-space(entry[2]/para)}" description="{normalize-space(translate($ref_joined,'­',''))}"/>
             </xsl:if>
           </xsl:when>
-<!-- Table B.18.2 IOD Modules -->
+          <!-- Table B.18.2 IOD Modules -->
           <xsl:when test="count(entry) = 2">
             <entry name="{$ie}" ref="{normalize-space(entry[2]/para)}"/>
           </xsl:when>
@@ -349,18 +348,18 @@ over and over. We need to get the last ie name we found to fill in the blank:
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-<!--
+  <!--
 
 
 -->
-<!-- Table C.2-1PATIENT RELATIONSHIP MODULE ATTRIBUTES -->
-<!-- function to extract the table ref (ie: Table C.2-1) -->
+  <!-- Table C.2-1PATIENT RELATIONSHIP MODULE ATTRIBUTES -->
+  <!-- function to extract the table ref (ie: Table C.2-1) -->
   <xsl:template name="get-table-reference">
     <xsl:param name="reference"/>
     <xsl:param name="table_name"/>
     <xsl:variable name="title">
       <xsl:choose>
-<!-- need to do it first, since most of the time $reference is busted and contains garbage misleading us... -->
+        <!-- need to do it first, since most of the time $reference is busted and contains garbage misleading us... -->
         <xsl:when test="substring($table_name,1,5) = 'Table'">
           <xsl:value-of select="$table_name"/>
         </xsl:when>
@@ -382,18 +381,18 @@ over and over. We need to get the last ie name we found to fill in the blank:
       </xsl:non-matching-substring>
     </xsl:analyze-string>
   </xsl:template>
-<!-- function to extract the table ref (ie: Table C.2-1) -->
+  <!-- function to extract the table ref (ie: Table C.2-1) -->
   <xsl:variable name="myregex">^([CF]\.[0-9\.]+)\s*(.*)$</xsl:variable>
-
   <!-- extract a See C.X.Y from a description string -->
   <xsl:template name="get-description-reference">
     <xsl:param name="description"/>
     <xsl:variable name="regex1">See ([C]\.[0-9\.]+) for specialization</xsl:variable>
     <!--xsl:variable name="regex2">See ([C]\.[0-9\.]+) for further explanation</xsl:variable-->
-    <xsl:variable name="regex2">See ([C]\.[0-9\.]+)\.$</xsl:variable> <!-- special case to remove trailing dot -->
+    <xsl:variable name="regex2">See ([C]\.[0-9\.]+)\.$</xsl:variable>
+    <!-- special case to remove trailing dot -->
     <xsl:variable name="regex3">See ([C]\.[0-9\.]+)</xsl:variable>
     <xsl:choose>
-    <!--xsl:when test="matches($description, $regex1)">
+      <!--xsl:when test="matches($description, $regex1)">
         <xsl:analyze-string select="$description" regex="{$regex1}">
           <xsl:matching-substring>
             <match>
@@ -402,15 +401,15 @@ over and over. We need to get the last ie name we found to fill in the blank:
           </xsl:matching-substring>
 	</xsl:analyze-string>
     </xsl:when-->
-     <xsl:when test="matches($description, $regex2)">
+      <xsl:when test="matches($description, $regex2)">
         <xsl:analyze-string select="$description" regex="{$regex2}">
           <xsl:matching-substring>
             <match>
               <xsl:value-of select="regex-group(1)"/>
             </match>
           </xsl:matching-substring>
-	</xsl:analyze-string>
-    </xsl:when>
+        </xsl:analyze-string>
+      </xsl:when>
       <xsl:when test="matches($description, $regex3) and not(matches($description,$regex2))">
         <xsl:analyze-string select="$description" regex="{$regex3}">
           <xsl:matching-substring>
@@ -418,18 +417,18 @@ over and over. We need to get the last ie name we found to fill in the blank:
               <xsl:value-of select="regex-group(1)"/>
             </match>
           </xsl:matching-substring>
-	</xsl:analyze-string>
-    </xsl:when>
+        </xsl:analyze-string>
+      </xsl:when>
     </xsl:choose>
   </xsl:template>
-
   <xsl:template name="get-section-reference">
     <xsl:param name="article"/>
     <xsl:param name="n"/>
     <xsl:variable name="para" select="preceding::para[$n]"/>
     <xsl:choose>
-      <xsl:when test="$n > 100"> <!-- C.8.4.8	NM Multi-frame Module  -->
-              <xsl:value-of select="'SECTION ERROR'"/>
+      <xsl:when test="$n &gt; 100">
+        <!-- C.8.4.8	NM Multi-frame Module  -->
+        <xsl:value-of select="'SECTION ERROR'"/>
       </xsl:when>
       <xsl:when test="matches($para, $myregex)">
         <xsl:analyze-string select="$para" regex="{$myregex}">
@@ -438,7 +437,7 @@ over and over. We need to get the last ie name we found to fill in the blank:
               <xsl:value-of select="regex-group(1)"/>
             </match>
           </xsl:matching-substring>
-<!-- no need to non matching-substring case -->
+          <!-- no need to non matching-substring case -->
         </xsl:analyze-string>
       </xsl:when>
       <xsl:otherwise>
@@ -449,11 +448,11 @@ over and over. We need to get the last ie name we found to fill in the blank:
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-<!--
+  <!--
 
 
 -->
-<!-- function to extract the table ref (ie: PATIENT RELATIONSHIP MODULE ATTRIBUTES) -->
+  <!-- function to extract the table ref (ie: PATIENT RELATIONSHIP MODULE ATTRIBUTES) -->
   <xsl:template name="get-table-name">
     <xsl:param name="reference"/>
     <xsl:param name="table_name"/>
@@ -475,7 +474,7 @@ over and over. We need to get the last ie name we found to fill in the blank:
       <xsl:with-param name="text" select="$clean"/>
     </xsl:call-template>
   </xsl:template>
-<!--
+  <!--
 
 Function to remove the dash from a text:
 -->
@@ -490,86 +489,85 @@ Function to remove the dash from a text:
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-<!--
+  <!--
 
 
 -->
   <xsl:template match="informaltable">
-      <!--xsl:for-each select="//informaltable"-->
-        <xsl:variable name="table_ref_raw" select="preceding::para[2]"/>
-<!-- might contain the Table ref or not ... -->
-        <xsl:variable name="table_name_raw" select="preceding::para[1]"/>
-        <xsl:variable name="section_ref">
-          <xsl:call-template name="get-section-reference">
-            <xsl:with-param name="article" select="."/>
-            <xsl:with-param name="n" select="1"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="table_ref">
-          <xsl:call-template name="get-table-reference">
-            <xsl:with-param name="reference" select="normalize-space($table_ref_raw)"/>
-            <xsl:with-param name="table_name" select="normalize-space($table_name_raw)"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="table_name">
-          <xsl:call-template name="get-table-name">
-            <xsl:with-param name="reference" select="normalize-space($table_ref_raw)"/>
-            <xsl:with-param name="table_name" select="normalize-space($table_name_raw)"/>
-          </xsl:call-template>
-        </xsl:variable>
-<!-- most of the time it should be equal to 4: -->
-        <xsl:variable name="tgroup_cols" select="tgroup/@cols"/>
-<!--xsl:for-each select="tgroup/thead"-->
-        <xsl:for-each select="tgroup/tbody">
-          <xsl:variable name="attribute_name" select="normalize-space(string-join(row[1]/entry[1]/para,' '))"/>
-          <xsl:choose>
-            <xsl:when test="$attribute_name = 'Key' or ends-with(my:camel-case($table_name),'Module Attributes')">
-              <!-- module are referenced by section idx -->
-              <module ref="{$section_ref}" table="{$table_ref}" name="{my:camel-case($table_name)}">
-                <xsl:apply-templates select="row" mode="macro"/>
-              </module>
-           </xsl:when>
-            <xsl:when test="$attribute_name = 'Attribute Name' or $attribute_name = 'Attribute name' or (contains($table_name,'MACRO') and ends-with($table_name,'ATTRIBUTES') and not(contains($table_name,'Module')) )">
-              <!-- macro are referenced by table idx -->
-              <macro table="{$table_ref}" name="{my:camel-case($table_name)}">
-                <xsl:apply-templates select="row" mode="macro"/>
-              </macro>
-            </xsl:when>
-<!--
+    <!--xsl:for-each select="//informaltable"-->
+    <xsl:variable name="table_ref_raw" select="preceding::para[2]"/>
+    <!-- might contain the Table ref or not ... -->
+    <xsl:variable name="table_name_raw" select="preceding::para[1]"/>
+    <xsl:variable name="section_ref">
+      <xsl:call-template name="get-section-reference">
+        <xsl:with-param name="article" select="."/>
+        <xsl:with-param name="n" select="1"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="table_ref">
+      <xsl:call-template name="get-table-reference">
+        <xsl:with-param name="reference" select="normalize-space($table_ref_raw)"/>
+        <xsl:with-param name="table_name" select="normalize-space($table_name_raw)"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="table_name">
+      <xsl:call-template name="get-table-name">
+        <xsl:with-param name="reference" select="normalize-space($table_ref_raw)"/>
+        <xsl:with-param name="table_name" select="normalize-space($table_name_raw)"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <!-- most of the time it should be equal to 4: -->
+    <xsl:variable name="tgroup_cols" select="tgroup/@cols"/>
+    <!--xsl:for-each select="tgroup/thead"-->
+    <xsl:for-each select="tgroup/tbody">
+      <xsl:variable name="attribute_name" select="normalize-space(string-join(row[1]/entry[1]/para,' '))"/>
+      <xsl:choose>
+        <xsl:when test="$attribute_name = 'Key' or ends-with(my:camel-case($table_name),'Module Attributes')">
+          <!-- module are referenced by section idx -->
+          <module ref="{$section_ref}" table="{$table_ref}" name="{my:camel-case($table_name)}">
+            <xsl:apply-templates select="row" mode="macro"/>
+          </module>
+        </xsl:when>
+        <xsl:when test="$attribute_name = 'Attribute Name' or $attribute_name = 'Attribute name' or (contains($table_name,'MACRO') and ends-with($table_name,'ATTRIBUTES') and not(contains($table_name,'Module')) )">
+          <!-- macro are referenced by table idx -->
+          <macro table="{$table_ref}" name="{my:camel-case($table_name)}">
+            <xsl:apply-templates select="row" mode="macro"/>
+          </macro>
+        </xsl:when>
+        <!--
 Table A.2-1 (CR Image IOD Modules) to A.51-1 (Segmentation IOD Modules).
 -->
-            <xsl:when test="$attribute_name = 'IE' or $attribute_name = 'Module'">
-              <!-- I think we do not need the section number for iod -->
-              <iod table="{$table_ref}" name="{my:camel-case($table_name)}">
-                <xsl:apply-templates select="row" mode="iod"/>
-              </iod>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:message>
-                <xsl:text>
+        <xsl:when test="$attribute_name = 'IE' or $attribute_name = 'Module'">
+          <!-- I think we do not need the section number for iod -->
+          <iod table="{$table_ref}" name="{my:camel-case($table_name)}">
+            <xsl:apply-templates select="row" mode="iod"/>
+          </iod>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:message>
+            <xsl:text>
 ref=</xsl:text>
-                <xsl:value-of select="$table_ref_raw"/>
-                <xsl:text>
+            <xsl:value-of select="$table_ref_raw"/>
+            <xsl:text>
 name=</xsl:text>
-                <xsl:value-of select="$table_name_raw"/>
-                <xsl:text>
+            <xsl:value-of select="$table_name_raw"/>
+            <xsl:text>
 att name=</xsl:text>
-                <xsl:value-of select="$attribute_name"/>
-              </xsl:message>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:for-each>
-      <!--/xsl:for-each-->
+            <xsl:value-of select="$attribute_name"/>
+          </xsl:message>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
+    <!--/xsl:for-each-->
   </xsl:template>
-
   <xsl:template name="extract-section-paragraphs">
     <xsl:param name="article"/>
-    <xsl:param name="extractsection" />
+    <xsl:param name="extractsection"/>
     <xsl:variable name="extract-section" select="$extractsection"/>
     <xsl:variable name="section-number" select="concat($extract-section,' ')"/>
     <xsl:variable name="section-anchor" select="$article/para[starts-with(normalize-space(.),$section-number)]"/>
     <xsl:variable name="section-name" select="substring-after(para[starts-with(normalize-space(.),$section-number)],$extract-section)"/>
-<!--xsl:message>
+    <!--xsl:message>
 <xsl:value-of select="$article/para[1]"/>
 </xsl:message-->
     <xsl:choose>
@@ -591,13 +589,11 @@ att name=</xsl:text>
         <xsl:message>Error: section <xsl:value-of select="$extract-section"/> not found!</xsl:message>
       </xsl:otherwise>
     </xsl:choose>
-
   </xsl:template>
-
   <xsl:template name="copy-section-paragraphs">
     <xsl:param name="section-paragraphs"/>
     <xsl:variable name="current-paragraph" select="$section-paragraphs[1]"/>
-<!-- search for next section title -->
+    <!-- search for next section title -->
     <xsl:if test="($current-paragraph[name()='para' or name()='informaltable']) and not(matches(normalize-space($current-paragraph),'^([A-F]|[1-9]+[0-9]?)(\.[1-9]?[0-9]+)+ '))">
       <xsl:apply-templates select="$current-paragraph"/>
       <xsl:call-template name="copy-section-paragraphs">
@@ -605,11 +601,10 @@ att name=</xsl:text>
       </xsl:call-template>
     </xsl:if>
   </xsl:template>
-
   <xsl:template match="article">
-      <xsl:apply-templates select="informaltable"/>
+    <xsl:apply-templates select="informaltable"/>
   </xsl:template>
-<!-- main template -->
+  <!-- main template -->
   <xsl:template match="/">
     <xsl:processing-instruction name="xml-stylesheet">
 type="text/xsl" href="ma2html.xsl"
