@@ -112,9 +112,30 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
             <xsl:choose>
               <xsl:when test="$group != '' and $element != ''">
                 <entry group="{$group}" element="{$element}" name="{$name_translate}" type="{normalize-space($type)}">
+                  <xsl:variable name="n_description" select="my:normalize-paragraph($description)"/>
                   <description>
-                    <xsl:value-of select="my:normalize-paragraph($description)"/>
+                    <xsl:value-of select="$n_description"/>
                   </description>
+		  <xsl:variable name="dummy">
+                  <xsl:call-template name="get-description-reference">
+                    <xsl:with-param name="description" select="$n_description"/>
+		  </xsl:call-template>
+	  </xsl:variable>
+	  <xsl:if test="$dummy !=''">
+	  <!--xsl:message>reference found: <xsl:value-of select="$dummy"/></xsl:message-->
+<!--
+Here is how you would get to the article and extract the section specified:
+-->
+              <xsl:call-template name="extract-section-paragraphs">
+		      <xsl:with-param name="article" select="../../../.."/>
+                <xsl:with-param name="extractsection" select="$dummy"/>
+              </xsl:call-template>
+ 
+  </xsl:if>
+
+                  <!--xsl:variable name="section" />
+                    <xsl:apply-templates select="entry" mode="iod2"/>
+                  </xsl:variable-->
                 </entry>
               </xsl:when>
               <xsl:otherwise>
@@ -346,6 +367,24 @@ over and over. We need to get the last ie name we found to fill in the blank:
 <!-- function to extract the table ref (ie: Table C.2-1) -->
   <xsl:variable name="myregex">^([CF]\.[0-9\.]+)\s*(.*)$</xsl:variable>
 
+  <!-- extract a See C.X.Y from a description string -->
+  <xsl:template name="get-description-reference">
+    <xsl:param name="description"/>
+    <xsl:variable name="section_regex">See ([C]\.[0-9\.]+) for specialization</xsl:variable>
+    <xsl:choose>
+    <xsl:when test="matches($description, $section_regex)">
+    <!--xsl:message>DESCRIPTION FOUND:<xsl:value-of select="$description"/></xsl:message-->
+        <xsl:analyze-string select="$description" regex="{$section_regex}">
+          <xsl:matching-substring>
+            <match>
+              <xsl:value-of select="regex-group(1)"/>
+            </match>
+          </xsl:matching-substring>
+	</xsl:analyze-string>
+    </xsl:when>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template name="get-section-reference">
     <xsl:param name="article"/>
     <xsl:param name="n"/>
@@ -451,13 +490,7 @@ Function to remove the dash from a text:
               <module ref="{$section_ref}" table="{$table_ref}" name="{my:camel-case($table_name)}">
                 <xsl:apply-templates select="row" mode="macro"/>
               </module>
-<!--
-Here is how you would get to the article and extract the section specified:
-              <xsl:call-template name="extract-section-paragraphs">
-                <xsl:with-param name="article" select="../../.."/>
-              </xsl:call-template>
--->
-            </xsl:when>
+           </xsl:when>
             <xsl:when test="$attribute_name = 'Attribute Name' or $attribute_name = 'Attribute name' or (contains($table_name,'MACRO') and ends-with($table_name,'ATTRIBUTES') and not(contains($table_name,'Module')) )">
               <!-- macro are referenced by table idx -->
               <macro table="{$table_ref}" name="{my:camel-case($table_name)}">
@@ -493,14 +526,14 @@ att name=</xsl:text>
 
   <xsl:template name="extract-section-paragraphs">
     <xsl:param name="article"/>
-    <xsl:variable name="extractsection" select="'C.8.3.1.1.1'"/>
+    <xsl:param name="extractsection" />
     <xsl:variable name="extract-section" select="$extractsection"/>
     <xsl:variable name="section-number" select="concat($extract-section,' ')"/>
     <xsl:variable name="section-anchor" select="$article/para[starts-with(normalize-space(.),$section-number)]"/>
     <xsl:variable name="section-name" select="substring-after(para[starts-with(normalize-space(.),$section-number)],$extract-section)"/>
-<xsl:message>
+<!--xsl:message>
 <xsl:value-of select="$article/para[1]"/>
-</xsl:message>
+</xsl:message-->
     <xsl:choose>
       <xsl:when test="count($section-anchor)=1">
         <xsl:message>Info: section <xsl:value-of select="$extract-section"/> found</xsl:message>

@@ -5232,21 +5232,27 @@ PORTRAIT</description>
   <module ref="C.8.2.1" table="C.8-3" name="CT Image Module Attributes">
     <entry group="0008" element="0008" name="Image Type" type="1">
       <description>Image identification characteristics. See C.8.2.1.1.1 for specialization.</description>
+      <section ref="C.8.2.1.1.1" name="">For CT Images, Image Type (0008,0008) is specified to be Type 1 and uses one of the following Defined Terms for Value 3:AXIAL		identifies a CT Axial ImageLOCALIZER	identifies a CT Localizer ImageNote:	Axial in this context means any cross-sectional image, and includes transverse, coronal, sagittal and oblique images.</section>
     </entry>
     <entry group="0028" element="0002" name="Samples per Pixel" type="1">
       <description>Number of samples (planes) in this image. See C.8.2.1.1.2 for specialization.</description>
+      <section ref="C.8.2.1.1.2" name="">For CT Images, Samples per Pixel (0028,0002) shall have an Enumerated Value of 1.</section>
     </entry>
     <entry group="0028" element="0004" name="Photometric Interpretation" type="1">
       <description>Specifies the intended interpretation of the pixel data. See C.8.2.1.1.3 for specialization.</description>
+      <section ref="C.8.2.1.1.3" name="">For CT Images, Photometric Interpretation (0028,0004) shall have one of the following Enumerated Values:	MONOCHROME1	MONOCHROME2See C.7.6.3.1.1.2 for definition of these terms.</section>
     </entry>
     <entry group="0028" element="0100" name="Bits Allocated" type="1">
       <description>Number of bits allocated for each pixel sample. Each sample shall have the same number of bits allocated. See C.8.2.1.1.4 for specialization.</description>
+      <section ref="C.8.2.1.1.4" name="">For CT Images, Bits Allocated (0028,0100) shall have the Enumerated Value of 16.</section>
     </entry>
     <entry group="0028" element="0101" name="Bits Stored" type="1">
       <description>Number of bits stored for each pixel sample. Each sample shall have the same number of bits stored. See C.8.2.1.1.5 for specialization.</description>
+      <section ref="C.8.2.1.1.5" name="">For CT Images, Bits Stored (0028,0101) shall have the Enumerated Values of 12 to 16.</section>
     </entry>
     <entry group="0028" element="0102" name="High Bit" type="1">
       <description>Most significant bit for pixel sample data. Each sample shall have the same high bit. See C.8.2.1.1.6 for specialization.</description>
+      <section ref="C.8.2.1.1.6" name="">For CT Images, High Bit (0028,0102) shall have only the Enumerated Value of one less than the value sent in Bits Stored.</section>
     </entry>
     <entry group="0028" element="1052" name="Rescale Intercept" type="1">
       <description>The value b in relationship between stored values (SV) and Hounsfield (HU). HU = m*SV+b</description>
@@ -5391,15 +5397,19 @@ One or more items may be present.</description>
   <module ref="C.8.3.1" table="C.8-4" name="MR Image Module Attributes">
     <entry group="0008" element="0008" name="Image Type" type="1">
       <description>Image identification characteristics. See C.8.3.1.1.1 for specialization.</description>
+      <section ref="C.8.3.1.1.1" name="">For MR Images, Image Type (0008,0008) is specified to be Type 1 and use one of the following Defined Terms for Value 3:</section>
     </entry>
     <entry group="0028" element="0002" name="Samples per Pixel" type="1">
       <description>Number of samples (planes) in this image. See C.8.3.1.1.2 for specialization.</description>
+      <section ref="C.8.3.1.1.2" name="">For MR Images, Samples per Pixel (0028,0002) shall have an Enumerated Value of 1.</section>
     </entry>
     <entry group="0028" element="0004" name="Photometric Interpretation" type="1">
       <description>Specifies the intended interpretation of the pixel data. See C.8.3.1.1.3 for specialization.</description>
+      <section ref="C.8.3.1.1.3" name="">For MR Images, Photometric Interpretation (0028,0004) shall have one of the following Enumerated Values:		MONOCHROME1		MONOCHROME2See C.7.6.3.1.2 for definition of these terms.</section>
     </entry>
     <entry group="0028" element="0100" name="Bits Allocated" type="1">
       <description>Number of bits allocated for each pixel sample. Each sample shall have the same number of bits allocated. See C.8.3.1.1.4 for specialization.</description>
+      <section ref="C.8.3.1.1.4" name="">For MR Images, Bits Allocated (0028,0100) shall have the Enumerated Value of 16.</section>
     </entry>
     <entry group="0018" element="0020" name="Scanning Sequence" type="1">
       <description>Description of the type of data taken.
@@ -5619,24 +5629,33 @@ Shall be one less than the value in Bits Stored (0028,0101).</description>
     </entry>
     <entry group="0054" element="0010" name="Energy Window Vector" type="1C">
       <description>An array which contains the energy window number for each frame. Required if the value of the Frame Increment Pointer (0028,0009) includes the Tag for Energy Window Vector (0054,0010). See C.8.4.8.1.2 for specialization.</description>
+      <section ref="C.8.4.8.1.2" name="">Number of Energy Windows (0054,0011) is the number of distinct energy window groupings acquired in this image. See C.8.4.10.1. When Image Type (0008,0008), Value 3, is RECON TOMO or RECON GATED TOMO, then the Number of Energy Windows (0054,0011) shall be 1.Energy Window Vector (0054,0010) is an indexing vector. The value of the nth element of this vector is the energy window number for the nth frame in this image, and shall have a value from 1 to Number of Energy Windows (0054,0011).</section>
     </entry>
     <entry group="0054" element="0011" name="Number of Energy Windows" type="1">
       <description>Number of energy window groupings. See C.8.4.8.1.2 for specialization.</description>
+      <section ref="C.8.4.8.1.2" name="">Number of Energy Windows (0054,0011) is the number of distinct energy window groupings acquired in this image. See C.8.4.10.1. When Image Type (0008,0008), Value 3, is RECON TOMO or RECON GATED TOMO, then the Number of Energy Windows (0054,0011) shall be 1.Energy Window Vector (0054,0010) is an indexing vector. The value of the nth element of this vector is the energy window number for the nth frame in this image, and shall have a value from 1 to Number of Energy Windows (0054,0011).</section>
     </entry>
     <entry group="0054" element="0020" name="Detector Vector" type="1C">
       <description>An array which contains the detector number for each frame. Required if the value of the Frame Increment Pointer (0028,0009) includes the Tag for Detector Vector (0054,0020). See C.8.4.8.1.3 for specialization.</description>
+      <section ref="C.8.4.8.1.3" name="">Number of Detectors (0054,0021) is the number of separate detectors which differentiate the frames in this image. When Image Type (0008,0008), Value 3, is RECON TOMO or RECON GATED TOMO, then the Number of Detectors (0054,0021) shall be 1.Note:	Number of Detectors (0054,0021) does not necessarily represent the actual number of detectors used during data acquisition.	Example 1: In a TOMO acquisition in which frames from 2 or more detectors are interleaved to form one continuous set of frames, then no distinction is made between frames on the basis of which detector created them. In this case, the Number of Detectors (0054,0021) would be 1.	Example 2: In a WHOLE BODY acquisition in which a single detector acquires anterior and posterior views in two separate passes, the Number of Detectors (0054,0021) would be 2.
+Detector Vector (0054,0020) is an indexing vector. The value of the nth element of this vector is the detector number of the nth frame in this image, and shall have a value from 1 to Number of Detectors (0054,0021).</section>
     </entry>
     <entry group="0054" element="0021" name="Number of Detectors" type="1">
       <description>Number of detectors. See C.8.4.8.1.3 for specialization.</description>
+      <section ref="C.8.4.8.1.3" name="">Number of Detectors (0054,0021) is the number of separate detectors which differentiate the frames in this image. When Image Type (0008,0008), Value 3, is RECON TOMO or RECON GATED TOMO, then the Number of Detectors (0054,0021) shall be 1.Note:	Number of Detectors (0054,0021) does not necessarily represent the actual number of detectors used during data acquisition.	Example 1: In a TOMO acquisition in which frames from 2 or more detectors are interleaved to form one continuous set of frames, then no distinction is made between frames on the basis of which detector created them. In this case, the Number of Detectors (0054,0021) would be 1.	Example 2: In a WHOLE BODY acquisition in which a single detector acquires anterior and posterior views in two separate passes, the Number of Detectors (0054,0021) would be 2.
+Detector Vector (0054,0020) is an indexing vector. The value of the nth element of this vector is the detector number of the nth frame in this image, and shall have a value from 1 to Number of Detectors (0054,0021).</section>
     </entry>
     <entry group="0054" element="0030" name="Phase Vector" type="1C">
       <description>An array which contains the phase number for each frame. Required if the value of the Frame Increment Pointer (0028,0009) includes the Tag for Phase Vector (0054,0030). See C.8.4.8.1.4 for specialization.</description>
+      <section ref="C.8.4.8.1.4" name="">Number of Phases (0054,0031) is the number of dynamic phases, independent of the number of Detectors and Isotopes. See Section C.8.4.14 for definition of a phase.Phase Vector (0054,0030) is an indexing vector. The value of the nth element of this vector is the phase number of the nth frame in this image, and shall have a value from 1 to Number of Phases (0054,0031).</section>
     </entry>
     <entry group="0054" element="0031" name="Number of Phases" type="1C">
       <description>Number of phases. Required if the value of the Frame Increment Pointer (0028,0009) includes the Tag for Phase Vector (0054,0030). See C.8.4.8.1.4 for specialization.</description>
+      <section ref="C.8.4.8.1.4" name="">Number of Phases (0054,0031) is the number of dynamic phases, independent of the number of Detectors and Isotopes. See Section C.8.4.14 for definition of a phase.Phase Vector (0054,0030) is an indexing vector. The value of the nth element of this vector is the phase number of the nth frame in this image, and shall have a value from 1 to Number of Phases (0054,0031).</section>
     </entry>
     <entry group="0054" element="0050" name="Rotation Vector" type="1C">
       <description>An array which contains the rotation number for each frame. Required if the value of the Frame Increment Pointer (0028,0009) includes the Tag for Rotation Vector (0054,0050). See C.8.4.8.1.5 for specialization.</description>
+      <section ref="C.8.4.8.1.5" name="">Number of Rotations (0054,0051) is the number of separate rotations. See Section C.8.4.12 for definition of a rotation. When Image Type (0008,0008), Value 3, is RECON TOMO, GATED TOMO or RECON GATED TOMO, then the Number of Rotations (0054,0051) shall be 1.Rotation Vector (0054,0050) is an indexing vector. The value of the nth element of this vector is the rotation number of the nth frame in this image, and shall have a value from 1 to Number of Rotations (0054,0051).</section>
     </entry>
     <entry group="0054" element="0051" name="Number of Rotations" type="1C">
       <description>Number of rotations. Required if Image Type (0008,0008), Value 3 is
@@ -5645,35 +5664,48 @@ GATED TOMO,
 RECON TOMO, or
 RECON GATED TOMO.
 See C.8.4.8.1.5 for specialization.</description>
+      <section ref="C.8.4.8.1.5" name="">Number of Rotations (0054,0051) is the number of separate rotations. See Section C.8.4.12 for definition of a rotation. When Image Type (0008,0008), Value 3, is RECON TOMO, GATED TOMO or RECON GATED TOMO, then the Number of Rotations (0054,0051) shall be 1.Rotation Vector (0054,0050) is an indexing vector. The value of the nth element of this vector is the rotation number of the nth frame in this image, and shall have a value from 1 to Number of Rotations (0054,0051).</section>
     </entry>
     <entry group="0054" element="0060" name="R-R Interval Vector" type="1C">
       <description>An array which contains the R-R interval number for each frame. Required if the value of the Frame Increment Pointer (0028,0009) includes the Tag for R-R Interval Vector (0054,0060). See C.8.4.8.1.6 for specialization.</description>
+      <section ref="C.8.4.8.1.6" name="">Number of R-R Intervals (0054,0061) is the number of ranges of heartbeat durations collected. A gated acquisition may employ one R-R Interval to collect data from normal beats, a second R-R Interval to collect data from ectopic beats, and possibly others. Each R-R Interval accepts beats whose duration is greater than its Low R-R Value (0018,1081) and shorter than its High R-R Value (0018,1082). Beats which do not fall within these ranges may be accepted by another R-R Interval, or may be rejected.The Number of R-R Intervals (0054,0061) is the total number of such ranges.R-R Interval Vector (0054,0060) is an indexing vector. The value of the nth element of this vector is the interval number of the nth frame in this image, and shall have a value from 1 to Number of R-R Intervals (0054,0061).</section>
     </entry>
     <entry group="0054" element="0061" name="Number of R-R Intervals" type="1C">
       <description>Number of R-R intervals. Required if the value of the Frame Increment Pointer (0028,0009) includes the Tag for R-R Interval Vector (0054,0060). See C.8.4.8.1.6 for specialization.</description>
+      <section ref="C.8.4.8.1.6" name="">Number of R-R Intervals (0054,0061) is the number of ranges of heartbeat durations collected. A gated acquisition may employ one R-R Interval to collect data from normal beats, a second R-R Interval to collect data from ectopic beats, and possibly others. Each R-R Interval accepts beats whose duration is greater than its Low R-R Value (0018,1081) and shorter than its High R-R Value (0018,1082). Beats which do not fall within these ranges may be accepted by another R-R Interval, or may be rejected.The Number of R-R Intervals (0054,0061) is the total number of such ranges.R-R Interval Vector (0054,0060) is an indexing vector. The value of the nth element of this vector is the interval number of the nth frame in this image, and shall have a value from 1 to Number of R-R Intervals (0054,0061).</section>
     </entry>
     <entry group="0054" element="0070" name="Time Slot Vector" type="1C">
       <description>An array which contains the time slot number for each frame. Required if the value of the Frame Increment Pointer (0028,0009) includes the Tag for Time Slot Vector (0054,0070). See C.8.4.8.1.7 for specialization.</description>
+      <section ref="C.8.4.8.1.7" name="">Number of Time Slots (0054,0071) is the number of frames into which each gating event is divided in a gated acquisition. For example, in a cardiac gated acquisition, data from a number of heartbeats are then combined by summing together the first frames from all beats into a summed first frame, all the second frames into a summed second frame, and so on. The result has the same number of frames as the Number of Time Slots in each beat.Time Slot Vector (0054,0070) is an indexing vector. The value of the nth element of this vector is the time slot number of the nth frame in this image, and shall have a value from 1 to Number of Time Slots (0054,0071).</section>
     </entry>
     <entry group="0054" element="0071" name="Number of Time Slots" type="1C">
       <description>Number of time slots. Required if the value of the Frame Increment Pointer (0028,0009) includes the Tag for Time Slot Vector (0054,0070). See C.8.4.8.1.7 for specialization.</description>
+      <section ref="C.8.4.8.1.7" name="">Number of Time Slots (0054,0071) is the number of frames into which each gating event is divided in a gated acquisition. For example, in a cardiac gated acquisition, data from a number of heartbeats are then combined by summing together the first frames from all beats into a summed first frame, all the second frames into a summed second frame, and so on. The result has the same number of frames as the Number of Time Slots in each beat.Time Slot Vector (0054,0070) is an indexing vector. The value of the nth element of this vector is the time slot number of the nth frame in this image, and shall have a value from 1 to Number of Time Slots (0054,0071).</section>
     </entry>
     <entry group="0054" element="0080" name="Slice Vector" type="1C">
       <description>An array which contains the spatial slice number for each frame. Required if the value of the Frame Increment Pointer (0028,0009) includes the Tag for Slice Vector (0054,0080). See C.8.4.8.1.8 for specialization.</description>
+      <section ref="C.8.4.8.1.8" name="">Number of Slices (0054,0081) is the number of slices in each separate volume.Note:	For images with Image Type (0008,0008), Value 3, equal to RECON GATED TOMO this implies that Number of Slices (0054,0081) is the same for all R-R Intervals and Time Slots.
+Slice Vector (0054,0080) is an indexing vector. The value of the nth element of this vector is the slice number of the nth frame in this image, and shall have a value from 1 to Number of Slices (0054,0081).</section>
     </entry>
     <entry group="0054" element="0081" name="Number of Slices" type="1C">
       <description>Number of slices. Required if the value of the Frame Increment Pointer (0028,0009) includes the Tag for Slice Vector (0054,0080). See C.8.4.8.1.8 for specialization.</description>
+      <section ref="C.8.4.8.1.8" name="">Number of Slices (0054,0081) is the number of slices in each separate volume.Note:	For images with Image Type (0008,0008), Value 3, equal to RECON GATED TOMO this implies that Number of Slices (0054,0081) is the same for all R-R Intervals and Time Slots.
+Slice Vector (0054,0080) is an indexing vector. The value of the nth element of this vector is the slice number of the nth frame in this image, and shall have a value from 1 to Number of Slices (0054,0081).</section>
     </entry>
     <entry group="0054" element="0090" name="Angular View Vector" type="1C">
       <description>An array which contains the angular view number for each frame. Required if the value of the Frame Increment Pointer (0028,0009) includes the Tag for Angular View Vector (0054,0090). See C.8.4.8.1.9 for specialization.</description>
+      <section ref="C.8.4.8.1.9" name="">Angular View Vector (0054,0090) is an indexing vector. The value of the nth element of this vector is the angular view number of the nth frame in this image. If Image Type (0008,0008), Value 3, is TOMO or GATED TOMO, then the value shall be from 1 to Number of Frames in Rotation (0054,0053).</section>
     </entry>
     <entry group="0054" element="0100" name="Time Slice Vector" type="1C">
       <description>An array which contains the time slice number for each frame. Required if the value of the Frame Increment Pointer (0028,0009) includes the Tag for Time Slice Vector (0054,0100). See C.8.4.8.1.10 for specialization.</description>
+      <section ref="C.8.4.8.1.10" name="">Time Slice Vector (0054,0100) is an indexing vector. The value of the nth element of this vector is the time slice number of the nth frame in this image, and shall have a value from 1 to Number of Frames in Phase (0054,0033).</section>
     </entry>
   </module>
   <module ref="C.8.4.9" table="C.8-9" name="NM Image Module Attributes">
     <entry group="0008" element="0008" name="Image Type" type="1">
       <description>Image identification characteristics. See C.8.4.9.1.1 for specialization.</description>
+      <section ref="C.8.4.9.1.1" name="">For NM images, Image Type (0008,0008) Value 3 is specified to be Type 1 and use one of the following Enumerated Values:STATICDYNAMICGATEDWHOLE BODYTOMOGATED TOMORECON TOMORECON GATED TOMOFor NM images, Image Type (0008,0008) Value 4 is specified to use one of the following Enumerated Values:EMISSIONTRANSMISSIONNote:	For NM images, Image Type (0008,0008) Value 1 will be ORIGINAL for all raw data and reconstructed images. DERIVED may be appropriate for some other results images.	For NM images, Image Type (0008,0008) Value 2 will be PRIMARY.
+</section>
     </entry>
     <entry group="0054" element="0400" name="Image ID" type="3">
       <description>User or equipment generated Image identifier.</description>
@@ -5687,6 +5719,7 @@ Required if Lossy Compression has been performed on the Image.</description>
     </entry>
     <entry group="0018" element="0070" name="Counts Accumulated" type="2">
       <description>Sum of all gamma events for all frames in the image. See C.8.4.9.1.2 for specialization.</description>
+      <section ref="C.8.4.9.1.2" name="">Counts Accumulated (0018,0070) is the total of all gamma events accumulated in all frames of this Image. This attribute applies to acquisition data, and often does not apply to processed images (DERIVED, SECONDARY).</section>
     </entry>
     <entry group="0018" element="0071" name="Acquisition Termination Condition" type="3">
       <description>Description of how the data collection was stopped. Defined Terms:
@@ -5697,6 +5730,7 @@ OVFL = data overflow
 TIME = time
 TRIG = physiological trigger
 See C.8.4.9.1.3 for specialization.</description>
+      <section ref="C.8.4.9.1.3" name="">Acquisition Termination Condition (0018,0071) is the method of acquisition termination which was actually applied to the data collection. The Defined Terms and definitions are:CNTS	=	preset count limit was reachedDENS	=	preset count density was reachedMANU	=	acquisition was terminated manually OVFL	=	acquisition was terminated automatically by pixel data overflow conditionTIME	=	preset time limit was reachedTRIG	=	preset number of physiological triggers was reached</section>
     </entry>
     <entry group="0018" element="1130" name="Table Height" type="3">
       <description>The height of the patient table in mm. The range and values of this element are determined by the manufacturer. Should not be included if Image Type (0008,0008), Value 3, is
@@ -5717,6 +5751,7 @@ RECON GATED TOMO.</description>
 WHOLE BODY or
 STATIC.
 See C.8.4.9.1.4 for specialization.</description>
+      <section ref="C.8.4.9.1.4" name="">Actual Frame Duration (0018,1242) is defined as the elapsed time in msec for a single frame of an acquisition. For some types of multi-frame images, Actual Frame Duration (0018,1242) may have a more specialized meaning as defined in the appropriate IOD Module.</section>
     </entry>
     <entry group="0018" element="1243" name="Count Rate" type="3">
       <description>Maximum count rate achieved during the acquisition in counts/sec.</description>
@@ -6255,39 +6290,55 @@ See C.8.5.5.1.10 for further explanation.</description>
     <entry group="0028" element="0002" name="Samples Per Pixel" type="1">
       <description>Number of samples (planes) in this image.
 See C.8.5.6.1.12 for specialization</description>
+      <section ref="C.8.5.6.1.12" name="">For US Images, Samples Per Pixel (0028,0002) is specified to use the following values for specific Photometric Interpretations:Table C.8-19
+US SAMPLES PER PIXEL </section>
     </entry>
     <entry group="0028" element="0004" name="Photometric Interpretation" type="1">
       <description>Specifies the intended interpretation of the pixel data.
 See C.8.5.6.1.2 for specialization.</description>
+      <section ref="C.8.5.6.1.2" name="">For US Images, Photometric Interpretation (0028,0004) is specified to use the following Defined Terms:Note:	It is recommended that future implementations should not use ARGB photometric interpretation.
+See PS 3.5 for restrictions imposed by compressed Transfer Syntaxes.</section>
     </entry>
     <entry group="0028" element="0100" name="Bits Allocated" type="1">
       <description>Number of bits allocated for each pixel sample.
 See C.8.5.6.1.13 for specialization.</description>
+      <section ref="C.8.5.6.1.13" name="">For US Images, Bits Allocated (0028,0100) is specified to use the following values for specific Photometric Interpretations:Table C.8-20
+US BITS ALLOCATED</section>
     </entry>
     <entry group="0028" element="0101" name="Bits Stored" type="1">
       <description>Number of bits stored for each pixel sample.
 See C.8.5.6.1.14 for specialization.</description>
+      <section ref="C.8.5.6.1.14" name="">For US Images, Bits Stored (0028,0101) is specified to use the following values for specific Photometric Interpretations:Table C.8-21
+US BITS STORED</section>
     </entry>
     <entry group="0028" element="0102" name="High Bit" type="1">
       <description>Most significant bit for pixel sample data.
 See C.8.5.6.1.15 for specialization.</description>
+      <section ref="C.8.5.6.1.15" name="">For US Images, High Bit (0028,0102) is specified to use the following values for specific Photometric Interpretations:Table C.8-22
+US HIGH BIT</section>
     </entry>
     <entry group="0028" element="0006" name="Planar Configuration" type="1C">
       <description>Indicates whether the pixel data are sent color-by-plane or color-by-pixel.
 Required if Samples per Pixel (0028,0002) has a value greater than 1.
 See C.8.5.6.1.16 for specialization.</description>
+      <section ref="C.8.5.6.1.16" name="">For US Images, Planar Configuration (0028,0006) is specified to use the following values for specific Photometric Interpretations:Table C.8-23
+US PLANAR CONFIGURATION</section>
     </entry>
     <entry group="0028" element="0103" name="Pixel Representation" type="1">
       <description>Data representation of pixel samples.
 See C.8.5.6.1.3 for specialization.</description>
+      <section ref="C.8.5.6.1.3" name="">For US Images, Pixel Representation (0028,0103) is specified to use the following Enumerated Value:0000H = unsigned integer</section>
     </entry>
     <entry group="0028" element="0009" name="Frame Increment Pointer" type="1C">
       <description>Contains the Data Element Tag of the attribute which is used as the frame increment in Multi-frame pixel data (see C.7.6.6). Required if Number of Frames is sent.
 See C.8.5.6.1.4 for specialization.</description>
+      <section ref="C.8.5.6.1.4" name="">For US Multi-frame images, the Attribute Frame Increment Pointer (0028,0009) of the Multi-frame Module (see Section C.7.6.6) is specified by the following Defined Terms:00181063 = sequencing by Frame Time (0018,1063)00181065 = sequencing by Frame Time Vector (0018,1065)</section>
     </entry>
     <entry group="0008" element="0008" name="Image Type" type="2">
       <description>Image identification characteristics.
 See C.8.5.6.1.1 for specialization.</description>
+      <section ref="C.8.5.6.1.1" name="">For US Images, Image Type (0008,0008) is specified to be Type 2. The Defined Terms for Value 3 are:Value 4 is constructed as a modality bit map to allow for a description of multi-modality displays. In using this bit map, the sum of the values of the various modalities will unambiguously determine the constituent modalities.Notes:	1. All Values are hexadecimal encoded as a CS. See PS 3.5.	2. For example, Color Flow with CW spectral Doppler would have a value 4 = 0015. Note that no assumption should be made in Color Doppler or Color M-Mode regarding underlying B or M-Mode, respectively.
+</section>
     </entry>
     <entry group="0028" element="2110" name="Lossy Image Compression" type="1C">
       <description>Specifies whether an Image has undergone lossy compression. Enumerated Values:
@@ -6466,6 +6517,7 @@ VECTOR_PHASED</description>
     <entry group="60xx" element="0045" name="Overlay Subtype" type="3">
       <description>Defined term which identifies the intended purpose of the ROI Overlay Type.
 See C.8.5.6.1.11 for specialization.</description>
+      <section ref="C.8.5.6.1.11" name="">For US Images, Overlay Subtype (60xx,0045) shall use the following Defined Terms: ACTIVE 2D/BMODE IMAGE AREA = identification of the active area of a 2D/B-mode image. </section>
     </entry>
   </module>
   <module ref="C.8.6.1" table="C.8-24" name="SC Equipment Module Attributes">
@@ -6625,6 +6677,8 @@ Required if Lossy Compression has been performed on the Image.</description>
     <entry group="0008" element="0008" name="Image Type" type="1">
       <description>Image identification characteristics.
 See C.8.7.1.1.1 for specialization.</description>
+      <section ref="C.8.7.1.1.1" name="">The Image Type attribute identifies important image characteristics in a multiple valued data element. For X-Ray, Image Type is specialized as follows:a.	Value 1 shall identify the Pixel Data Characteristics in accordance with Section C.7.6.1.1.2; Enumerated Values are: ORIGINAL and DERIVED;b.	Value 2 shall identify the Patient Examination Characteristics in accordance with Section C.7.6.1.1.2; Enumerated Values are: PRIMARY and SECONDARY.Note:	X-Ray images generally use PRIMARY value for images captured from patient exposure.c.	Value 3 shall identify the image set in terms of the imaging planes. Enumerated Values are:
+d.	Other Values are implementation specific (optional).</section>
     </entry>
     <entry group="0028" element="1040" name="Pixel Intensity Relationship" type="1">
       <description>The relationship between the Pixel sample values and the X-Ray beam intensity.
@@ -7186,21 +7240,27 @@ The sequence may have one or more Items.</description>
   <module ref="C.8.8.2" table="C.8-38" name="RT Image Module Attributes">
     <entry group="0028" element="0002" name="Samples per Pixel" type="1">
       <description>Number of samples (planes) in this image. See C.8.8.2.6.1 for specialization.</description>
+      <section ref="C.8.8.2.6.1" name="">For RT Images, Samples per Pixel (0028,0002) shall have the Enumerated Value of 0001H.</section>
     </entry>
     <entry group="0028" element="0004" name="Photometric Interpretation" type="1">
       <description>Specifies the intended interpretation of the pixel data. See C.8.8.2.6.2 for specialization.</description>
+      <section ref="C.8.8.2.6.2" name="">For RT Images, Photometric Interpretation (0028,0004) shall have the Enumerated Value of MONOCHROME2.</section>
     </entry>
     <entry group="0028" element="0100" name="Bits Allocated" type="1">
       <description>Number of bits allocated for each pixel sample. Each sample shall have the same number of bits allocated. See C.8.8.2.6.3 for specialization.</description>
+      <section ref="C.8.8.2.6.3" name="">For RT Images, Bits Allocated (0028,0100) shall have an Enumerated Value of 8 or 16.</section>
     </entry>
     <entry group="0028" element="0101" name="Bits Stored" type="1">
       <description>Number of bits stored for each pixel sample. Each sample shall have the same number of bits stored. See C.8.8.2.6.4 for specialization.</description>
+      <section ref="C.8.8.2.6.4" name="">For RT Images, Bits Stored (0028,0101) shall have an Enumerated Value of:	8 		when Bits Allocated (0028,0100) is 8	12-16	when Bits Allocated (0028,0100) is 16</section>
     </entry>
     <entry group="0028" element="0102" name="High Bit" type="1">
       <description>Most significant bit for each pixel sample. Each sample shall have the same high bit. See C.8.8.2.6.5 for specialization.</description>
+      <section ref="C.8.8.2.6.5" name="">For RT Images, High Bit (0028,0102) shall have the Enumerated Value of one less than the value sent in Bits Stored (0028,0101).</section>
     </entry>
     <entry group="0028" element="0103" name="Pixel Representation" type="1">
       <description>Data representation of the pixel samples. Each sample shall have the same pixel representation. See C.8.8.2.6.6 for specialization.</description>
+      <section ref="C.8.8.2.6.6" name="">For RT Images, Pixel Representation (0028,0103) shall have the Enumerated Value of 0000H (unsigned integer).</section>
     </entry>
     <entry group="0028" element="1040" name="Pixel Intensity Relationship" type="3">
       <description>The relationship between the Pixel sample values and the X-Ray beam intensity.
@@ -7487,21 +7547,27 @@ Note: The orientation of the patient relative to the patient support device is d
   <module ref="C.8.8.3" table="C.8-39" name="RT Dose Module Attributes">
     <entry group="0028" element="0002" name="Samples per Pixel" type="1C">
       <description>Number of samples (planes) in this image. See C.8.8.3.4.1 for specialization. Required if Pixel Data (7FE0,0010) is present.</description>
+      <section ref="C.8.8.3.4.1" name="">For RT Doses, Samples per Pixel (0028,0002) shall have the Enumerated Value of 1.</section>
     </entry>
     <entry group="0028" element="0004" name="Photometric Interpretation" type="1C">
       <description>Specifies the intended interpretation of the pixel data. See C.8.8.3.4.2 for specialization. Required if Pixel Data (7FE0,0010) is present.</description>
+      <section ref="C.8.8.3.4.2" name="">For RT Doses, Photometric Interpretation (0028,0004) shall have the Enumerated Value of MONOCHROME2.</section>
     </entry>
     <entry group="0028" element="0100" name="Bits Allocated" type="1C">
       <description>Number of bits allocated for each pixel sample. Each sample shall have the same number of bits allocated. See C.8.8.3.4.3 for specialization. Required Pixel Data (7FE0,0010) is present.</description>
+      <section ref="C.8.8.3.4.3" name="">For RT Doses, Bits Allocated (0028,0100) shall have an Enumerated Value of 16 or 32.</section>
     </entry>
     <entry group="0028" element="0101" name="Bits Stored" type="1C">
       <description>Number of bits stored for each pixel sample. Each sample shall have the same number of bits stored. See C.8.8.3.4.4 for specialization. Required if Pixel Data (7FE0,0010) is present.</description>
+      <section ref="C.8.8.3.4.4" name="">For RT Doses, Bits Stored (0028,0101) shall have an Enumerated Value equal to Bits Allocated (0028,0100).</section>
     </entry>
     <entry group="0028" element="0102" name="High Bit" type="1C">
       <description>Most significant bit for each pixel sample. Each sample shall have the same high bit. See C.8.8.3.4.5 for specialization. Required if Pixel Data (7FE0,0010) is present.</description>
+      <section ref="C.8.8.3.4.5" name="">For RT Doses, High Bit (0028,0102) shall have the Enumerated Value of one less than the value sent in Bits Stored (0028,0101).</section>
     </entry>
     <entry group="0028" element="0103" name="Pixel Representation" type="1C">
       <description>Data representation of the pixel samples. Each sample shall have the same pixel representation. See C.8.8.3.4.6 for specialization. Required Pixel Data (7FE0,0010) is present.</description>
+      <section ref="C.8.8.3.4.6" name="">For RT Doses, Pixel Representation (0028,0103) is specified to use the following Enumerated Values:0001H = two’s complement integer, when Dose Type (3004,0004) = ERROR0000H = unsigned integer, otherwise.</section>
     </entry>
     <entry group="3004" element="0002" name="Dose Units" type="1">
       <description>Units used to describe dose.
@@ -11465,9 +11531,11 @@ See section C.8.8.25.6.3.</description>
   <module ref="C.8.9.1" table="C.8-60" name="PET Series Module Attributes">
     <entry group="0008" element="0021" name="Series Date" type="1">
       <description>Date the Series started. See C.8.9.1.1.2 for specialization.</description>
+      <section ref="C.8.9.1.1.2" name="">For PET Series, Series Date (0008,0021) and Series Time (0008,0031) are specified to be Type 1. The Series Date (0008,0021) and Series Time (0008,0031) are used as the reference time for all PET Image attributes that are temporally related, including activity measurements. The Series Date (0008,0021) and Series Time (0008,0031) are not tied to any real-world event (e.g. acquisition start, radiopharmaceutical administration) and their real-world meaning are implementation dependent.</section>
     </entry>
     <entry group="0008" element="0031" name="Series Time" type="1">
       <description>Time the Series started. See C.8.9.1.1.2 for specialization.</description>
+      <section ref="C.8.9.1.1.2" name="">For PET Series, Series Date (0008,0021) and Series Time (0008,0031) are specified to be Type 1. The Series Date (0008,0021) and Series Time (0008,0031) are used as the reference time for all PET Image attributes that are temporally related, including activity measurements. The Series Date (0008,0021) and Series Time (0008,0031) are not tied to any real-world event (e.g. acquisition start, radiopharmaceutical administration) and their real-world meaning are implementation dependent.</section>
     </entry>
     <entry group="0054" element="1001" name="Units" type="1">
       <description>Pixel value units. See C.8.9.1.1.3 for explanation. Defined terms:
@@ -11744,12 +11812,15 @@ See C.7.6.18.1.1.1.</description>
   <module ref="C.8.9.4" table="C.8-63" name="PET Image Module Attributes">
     <entry group="0008" element="0008" name="Image Type" type="1">
       <description>Image identification characteristics. See C.8.9.4.1.1 for specialization.</description>
+      <section ref="C.8.9.4.1.1" name="">For PET Images, Image Type (0008,0008) is specified to be Type 1.Note:	For PET images, Image Type (0008,0008) Value 1 will be ORIGINAL for reconstructed images. DERIVED may be appropriate for some other results images. For PET images, Image Type (0008,0008) Value 2 will be PRIMARY.
+</section>
     </entry>
     <entry group="0028" element="0002" name="Samples per Pixel" type="1">
       <description>Number of samples (planes) in this image. This value shall be 1.</description>
     </entry>
     <entry group="0028" element="0004" name="Photometric Interpretation" type="1">
       <description>Specifies the intended interpretation of the pixel data. See C.8.9.4.1.2 for specialization.</description>
+      <section ref="C.8.9.4.1.2" name="">For PET images, Photometric Interpretation (0028,0004) shall have one of the following Enumerated Values:	MONOCHROME2See C.7.6.3.1.2 for definition of this term.</section>
     </entry>
     <entry group="0028" element="0100" name="Bits Allocated" type="1">
       <description>Number of bits allocated for each pixel sample. Each sample shall have the same number of bits allocated. Enumerated values: 16.</description>
@@ -11794,9 +11865,11 @@ Required if Lossy Compression has been performed on the image.</description>
     </entry>
     <entry group="0008" element="0022" name="Acquisition Date" type="2">
       <description>The date the acquisition of data that resulted in this image started. See C.8.9.4.1.4 for specialization.</description>
+      <section ref="C.8.9.4.1.4" name="">For PET Images, Acquisition Date (0008,0022) and Acquisition Time (0008,0032) are specified to be Type 2. The Acquisition Date (0008,0022) and Acquisition Time (0008,0032) use the same time base as Series Time (0008,0031).For Series Type (0054,1000) Value 1 equal to STATIC, WHOLE BODY, or DYNAMIC, the Acquisition Time (0008,0032) is the real-world beginning of the accumulation of events into this Image. For STATIC, WHOLE BODY, or DYNAMIC Series, the Acquisition Time (0008,0032) may vary from Image to Image within a PET Series.For Series Type (0054,1000) Value 1 equal to GATED, the Acquisition Time (0008,0032) is the real-world beginning of the capability of accumulating events into this Image. (The actual accumulation of events has only occurred during an R-R Interval.) For GATED Series, the Acquisition Time (0008,0032) shall not vary from Image to Image within a PET Series.</section>
     </entry>
     <entry group="0008" element="0032" name="Acquisition Time" type="2">
       <description>The time the acquisition of data that resulted in this image started. See C.8.9.4.1.4 for specialization.</description>
+      <section ref="C.8.9.4.1.4" name="">For PET Images, Acquisition Date (0008,0022) and Acquisition Time (0008,0032) are specified to be Type 2. The Acquisition Date (0008,0022) and Acquisition Time (0008,0032) use the same time base as Series Time (0008,0031).For Series Type (0054,1000) Value 1 equal to STATIC, WHOLE BODY, or DYNAMIC, the Acquisition Time (0008,0032) is the real-world beginning of the accumulation of events into this Image. For STATIC, WHOLE BODY, or DYNAMIC Series, the Acquisition Time (0008,0032) may vary from Image to Image within a PET Series.For Series Type (0054,1000) Value 1 equal to GATED, the Acquisition Time (0008,0032) is the real-world beginning of the capability of accumulating events into this Image. (The actual accumulation of events has only occurred during an R-R Interval.) For GATED Series, the Acquisition Time (0008,0032) shall not vary from Image to Image within a PET Series.</section>
     </entry>
     <entry group="0018" element="1242" name="Actual Frame Duration" type="2">
       <description>Elapsed time of the data acquisition for this image, in msec. See C.8.9.4.1.6 for explanation.</description>
@@ -11892,6 +11965,8 @@ Note: Laterality (0020,0060) is a Series level Attribute and must be the same fo
     <entry group="0008" element="0008" name="Image Type" type="1">
       <description>Image identification characteristics.
 See C.8.11.3.1.1 for specialization.</description>
+      <section ref="C.8.11.3.1.1" name="">Value 1 shall identify the Pixel Data Characteristics in accordance with Section C.7.6.1.1.2 where the Enumerated Values are defined to be ORIGINAL or DERIVED.Note:	DX images may still be of type ORIGINAL rather than DERIVED despite the possibility that they may have undergone some processing. In this case a DERIVED image would have undergone yet further processing to make it substantially different from the original.Value 2 shall identify the Patient Examination Characteristics in accordance with Section C.7.6.1.1.2 where the Enumerated Values are defined to be PRIMARY or SECONDARY.Note:	DX images generally use PRIMARY value for images captured from patient exposure.If images from the same exposure exist with different Values of Image Type, then they shall have different SOP Instance UIDs.Note:	Source Image Sequence (0008,2112) may be used to relate these images.
+Value 3 (which is specific to the IOD) shall be present and have zero length (null value).Other Values (4 and beyond) are optional and implementation specific.</section>
     </entry>
     <entry group="0028" element="0002" name="Samples per Pixel" type="1">
       <description>Number of samples in this image. Shall have an Enumerated Value of 1.</description>
@@ -12418,22 +12493,29 @@ One or more Items may be included in this Sequence.</description>
     <entry group="0008" element="0008" name="Image Type" type="1">
       <description>Image identification characteristics.
 See C.8.12.1.1.6 for specialization.</description>
+      <section ref="C.8.12.1.1.6" name="">The Image Type attribute identifies important image characteristics in a multiple valued data element. For Visible Light, Image Type is specialized as follows:a.	Value 1 shall identify the Pixel Data Characteristics in accordance with Section C.7.6.1.1.2; Enumerated Values are: ORIGINAL and DERIVED;b.	Value 2 shall identify the Patient Examination Characteristics in accordance with Section C.7.6.1.1.2; Enumerated Values are: PRIMARY and SECONDARY.c.	Value 3 may be absent, but if present shall identify the members of a stereo pair, in which case Referenced Image Sequence (0008,1140) is used to identify the other member of the pair. If present, the Enumerated Values are:
+d.	Other Values are implementation specific (optional).
+</section>
     </entry>
     <entry group="0028" element="0004" name="Photometric Interpretation" type="1">
       <description>Specifies the intended interpretation of the pixel data.
 See C.8.12.1.1.1 for specialization of this Attribute.</description>
+      <section ref="C.8.12.1.1.1" name="">The Enumerated Values of Photometric Interpretation (0028,0004) shall be:MONOCHROME2RGBYBR_FULL_422YBR_PARTIAL_420YBR_RCTYBR_ICTNote:	There is no formal color space defined, hence “false” color applications that encode near-visible light images may be encoded, for example, as RGB.</section>
     </entry>
     <entry group="0028" element="0100" name="Bits Allocated" type="1">
       <description>Number of bits allocated for each pixel sample. Each sample shall have the same number of bits allocated.
 See C.8.12.1.1.2 for specialization of this Attribute. See PS 3.5 for further explanation.</description>
+      <section ref="C.8.12.1.1.2" name="">The Enumerated Value of Bits Allocated (0028,0100) shall be 8; the Enumerated Value of Bits Stored (0028,0101) shall be 8; and the Enumerated Value of High Bit (0028,0102) shall be 7.</section>
     </entry>
     <entry group="0028" element="0101" name="Bits Stored" type="1">
       <description>Number of bits stored for each pixel sample. Each sample shall have the same number of bits stored.
 See C.8.12.1.1.2 for specialization of this Attribute. See PS 3.5 for further explanation.</description>
+      <section ref="C.8.12.1.1.2" name="">The Enumerated Value of Bits Allocated (0028,0100) shall be 8; the Enumerated Value of Bits Stored (0028,0101) shall be 8; and the Enumerated Value of High Bit (0028,0102) shall be 7.</section>
     </entry>
     <entry group="0028" element="0102" name="High Bit" type="1">
       <description>Most significant bit for pixel sample data. Each sample shall have the same high bit.
 See C.8.12.1.1.2 for specialization of this Attribute. See PS 3.5 for further explanation.</description>
+      <section ref="C.8.12.1.1.2" name="">The Enumerated Value of Bits Allocated (0028,0100) shall be 8; the Enumerated Value of Bits Stored (0028,0101) shall be 8; and the Enumerated Value of High Bit (0028,0102) shall be 7.</section>
     </entry>
     <entry group="0028" element="0103" name="Pixel Representation" type="1">
       <description>Data representation of the pixel samples. Each sample shall have the same pixel representation.
@@ -12442,10 +12524,12 @@ See Section C.8.12.1.1.3 for specialization of this Attribute.</description>
     <entry group="0028" element="0002" name="Samples per Pixel" type="1">
       <description>Number of samples (planes) per image.
 See C.8.12.1.1.4 for specialization of this Attribute.</description>
+      <section ref="C.8.12.1.1.4" name="">The Enumerated Values of Samples per Pixel (0028,0002) shall be as follows: If the value of Photometric Interpretation (0028,0004) is MONOCHROME2, then the Enumerated Value of Samples per Pixel (0028,0002) shall be one (1). If the value of Photometric Interpretation (0028,0004) is RGB or YBR_FULL_422 or YBR_PARTIAL_420 or YBR_RCT or YBR_ICT, then the Enumerated Value of Samples per Pixel (0028,0002) shall be three (3).</section>
     </entry>
     <entry group="0028" element="0006" name="Planar Configuration" type="1C">
       <description>Indicates whether the pixel data are sent color-by-plane or color-by-pixel. Required if Samples per Pixel (0028,0002) has a value greater than 1.
 See C.8.12.1.1.5 for specialization of this Attribute.</description>
+      <section ref="C.8.12.1.1.5" name="">If present, the Enumerated Value of Planar Configuration (0028,0006) shall be 0. This value shall be present if Samples per Pixel (0028,0002) has a value greater than 1.</section>
     </entry>
     <entry group="0008" element="0033" name="Content Time" type="1C">
       <description>The time the image pixel data creation started. Required if the Image is part of a series in which the images are temporally related.
@@ -12540,6 +12624,9 @@ Shall have the same number of items as the value of Samples per Pixel (0028,0002
     </entry>
     <entry group="0028" element="0101" name="Bits Stored" type="1">
       <description>Number of bits stored for each pixel sample. Each sample shall have the same number of bits stored. Enumerated Values: 8, 12 and 16. See C.8.13.1.1.1 for specialization.</description>
+      <section ref="C.8.13.1.1.1" name="">Table C.8-80 specifies the allowed combinations of Bits Allocated (0028,0100) and Bits Stored (0028,0101).Table C.8-80
+ALLOWED COMBINATIONS OF ATTRIBUTE VALUES
+ FOR BITS ALLOCATED AND BITS STORED </section>
     </entry>
     <entry group="0028" element="0102" name="High Bit" type="1">
       <description>Most significant bit for pixel sample data. Each sample shall have the same high bit. Shall be one less than the value in Bits Stored (0028,0101).</description>
@@ -14125,6 +14212,7 @@ One or more items may be present.</description>
     <entry group="0008" element="0008" name="Image Type" type="1">
       <description>Image identification characteristics.
 See C.8.17.2.1.4 for specialization.</description>
+      <section ref="C.8.17.2.1.4" name="">The Image Type attribute (0008,0008) (General Image Module, C.7.6.1) identifies important image characteristics in a multiple valued data element. For the Ophthalmic Photography Image IOD, Image Type is specified as a Type 1 attribute and further specialized as follows:a.	Value 1 shall identify the Pixel Data Characteristics in accordance with Section C.7.6.1.1.2; Enumerated Values are: ORIGINAL and DERIVED;</section>
     </entry>
     <entry group="0020" element="0013" name="Instance Number" type="1">
       <description>A number that identifies this image.
@@ -14519,6 +14607,8 @@ Required if the Modality Performed Procedure Step SOP Class, General Purpose Per
     <entry group="0008" element="0008" name="Image Type" type="1">
       <description>Image identification characteristics.
 See C.8.19.2.1.1 for specialization.</description>
+      <section ref="C.8.19.2.1.1" name="">The Image Type attribute identifies important image characteristics in a multiple valued data element. For X-Ray, Image Type is specialized as follows:a.	Value 1 shall identify the Pixel Data Characteristics in accordance with Section C.7.6.1.1.2; Enumerated Values are: ORIGINAL and DERIVED;b.	Value 2 shall identify the Patient Examination Characteristics in accordance with Section C.7.6.1.1.2; Enumerated Values are: PRIMARY and SECONDARY.Note:	X-Ray images generally use PRIMARY value for images captured from patient exposure.c.	Value 3 shall identify the image set in terms of the imaging planes. Enumerated Values are:
+d.	Other Values are implementation specific (optional).</section>
     </entry>
     <entry group="0018" element="9457" name="Plane Identification" type="1C">
       <description>Identification of the plane used to acquire this image.
@@ -14543,6 +14633,9 @@ Note: The synchronization of this time with an external clock is specified in th
     </entry>
     <entry group="0028" element="0101" name="Bits Stored" type="1">
       <description>Number of bits stored for each pixel sample. Each sample shall have the same number of bits stored. Enumerated Values: 8 to 16. See C.8.19.2.1.2 for specialization.</description>
+      <section ref="C.8.19.2.1.2" name="">Table C.8.X2-2 specifies the allowed combinations of Bits Allocated (0028,0100) and Bits Stored (0028,0101).Table C.8.19.2-2
+ALLOWED COMBINATIONS OF ATTRIBUTE VALUES
+ FOR BITS ALLOCATED AND BITS STORED </section>
     </entry>
     <entry group="0028" element="0102" name="High Bit" type="1">
       <description>Most significant bit for pixel sample data. Each sample shall have the same high bit. Shall be one less than the value in Bits Stored (0028,0101).</description>
@@ -15309,6 +15402,7 @@ Note: The maximum P-Value for this Attribute may be different from the maximum P
     <entry group="0008" element="0008" name="Image Type" type="1">
       <description>Image identification characteristics.
 See C.8.21.1.1.1 for specialization.</description>
+      <section ref="C.8.21.1.1.1" name="">In addition to the requirements specified in C.8.16.1 Image Type, the following additional requirements and Defined Terms are specified.</section>
     </entry>
     <include ref="Include 'Common CT/MR Image Description Macro' Table C.8-131"/>
     <entry group="0028" element="0100" name="Bits Allocated" type="1">
