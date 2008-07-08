@@ -5,13 +5,13 @@ SET(VTK_GDCM_TEST_SRCS
   TestvtkGDCMImageReader2
   TestvtkGDCMImageReader4
   #TestvtkGDCMImageActor
-  TestvtkGDCMPolyDataReader
 )
 IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 4.5 )
   SET(VTK_GDCM_TEST_SRCS
     ${VTK_GDCM_TEST_SRCS}
     TestvtkGDCMImageWriter
     TestvtkGDCMImageWriter2
+    TestvtkGDCMPolyDataReader
   )
 ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 4.5 )
 
