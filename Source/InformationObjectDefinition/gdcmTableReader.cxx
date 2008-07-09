@@ -311,6 +311,10 @@ void TableReader::StartElement(const char *name, const char **atts)
       abort();
       }
     }
+  else if( strcmp(name, "section" ) == 0 )
+    {
+    // TODO !
+    }
   else if( strcmp(name, "include" ) == 0 )
     {
     // TODO !
@@ -391,6 +395,9 @@ void TableReader::EndElement(const char *name)
       abort();
       }
     }
+  else if( strcmp(name, "section" ) == 0 )
+{
+}
   else if( strcmp(name, "include" ) == 0 )
     {
     if( ParsingModule )
