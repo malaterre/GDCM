@@ -35,7 +35,7 @@
 
 namespace gdcm
 {
-int TestWrite(const char *subdir, const char* filename)
+int TestWrite(const char *subdir, const char* filename, bool recursing)
 {
   Reader reader;
   reader.SetFileName( filename );
@@ -70,13 +70,15 @@ int TestWrite(const char *subdir, const char* filename)
   Testing::ComputeFileMD5(outfilename.c_str(), outdigest);
   if( strcmp(digest, outdigest) )
     {
+	  if (recursing)
+		  return 1;
     // too bad the file is not identical, so let's be paranoid and
     // try to reread-rewrite this just-writen file:
     // TODO: Copy file System::CopyFile( );
     std::string subsubdir = subdir;
     subsubdir += "/";
     subsubdir += subdir;
-    if( TestWrite(subsubdir.c_str(), outfilename.c_str() ) )
+    if( TestWrite(subsubdir.c_str(), outfilename.c_str(), true ) )
       {
       std::cerr << filename << " and "
         << outfilename << " are different\n";
@@ -105,7 +107,7 @@ int TestWriter(int argc, char *argv[])
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return gdcm::TestWrite(argv[0], filename);
+    return gdcm::TestWrite(argv[0], filename, false);
     }
 
   // else
@@ -116,7 +118,7 @@ int TestWriter(int argc, char *argv[])
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
     {
-    r += gdcm::TestWrite(argv[0], filename );
+    r += gdcm::TestWrite(argv[0], filename, false );
     ++i;
     }
 
