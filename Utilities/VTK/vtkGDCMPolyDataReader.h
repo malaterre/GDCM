@@ -18,6 +18,10 @@
 // See Contour Data
 // .SECTION TODO
 // Need to do the same job for DVH Sequence/DVH Data...
+//
+// .SECTION See Also
+// vtkMedicalImageReader2 vtkMedicalImageProperties vtkGDCMImageReader
+
 
 #ifndef __vtkGDCMPolyDataReader_h
 #define __vtkGDCMPolyDataReader_h

@@ -17,7 +17,7 @@
 // vtkGDCMImageReader is a source object that reads some DICOM files
 // this reader is single threaded.
 // .SECTION Implementation note: when FileLowerLeft is set to on the image is not flipped
-// upside down as VTK would expect, use this option only if you know what you are doing
+// upside down as VTK would expect, use this option only if you know what you are doing.
 // .SECTION Implementation note: when reading a series of 2D slices, user is
 // expected to provide an ordered list of filenames. No sorting will be applied afterward. 
 // .SECTION Implementation note: Although 99% of the time the Zspacing as read 
@@ -38,9 +38,13 @@
 // is then translated to the other side of the image.
 // .SECTION Spacing
 // When reading a 3D volume, the spacing along the Z dimension might be negative
+// .SECTION Warning
+// When using vtkGDCMPolyDataReader in conjonction with vtkGDCMImageReader 
+// it is *required* that FileLowerLeft is set to ON as coordinate system
+// would be inconsistant in between the two data structures.
 
 // .SECTION See Also
-// vtkMedicalImageReader2 vtkMedicalImageProperties
+// vtkMedicalImageReader2 vtkMedicalImageProperties vtkGDCMPolyDataReader
 
 #ifndef __vtkGDCMImageReader_h
 #define __vtkGDCMImageReader_h
