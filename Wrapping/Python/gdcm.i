@@ -108,6 +108,7 @@
 #include "gdcmTagPath.h"
 #include "gdcmImageToImageFilter.h"
 #include "gdcmSOPClassUIDToIOD.h"
+#include "gdcmImageChangeTransferSyntax.h"
 
 using namespace gdcm;
 %}
@@ -464,3 +465,4 @@ using namespace gdcm;
 %include "gdcmTagPath.h"
 %include "gdcmImageToImageFilter.h"
 %include "gdcmSOPClassUIDToIOD.h"
+%include "gdcmImageChangeTransferSyntax.h"
