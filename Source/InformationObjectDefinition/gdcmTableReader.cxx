@@ -403,6 +403,14 @@ void TableReader::EndElement(const char *name)
       abort();
       }
     }
+  else if( strcmp(name, "mapping" ) == 0 )
+  {
+    // TODO !
+  }
+  else if( strcmp(name, "standard-sop-classes" ) == 0 )
+  {
+    // TODO !
+  }
   else if( strcmp(name, "section" ) == 0 )
     {
     // TODO !
