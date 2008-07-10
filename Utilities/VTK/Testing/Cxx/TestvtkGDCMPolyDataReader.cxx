@@ -81,7 +81,7 @@ int TestvtkGDCMPolyDataReader(int argc, char *argv[])
     std::string fullpath = extradataroot;
     fullpath += "/";
     fullpath += filename;
-    r += TestvtkGDCMPolyDataRead( fullpath.c_str(), rtstruct_files_nb[i], false );
+    r += TestvtkGDCMPolyDataRead( fullpath.c_str(), rtstruct_files_nb[i], true);
     ++i;
     }
 
