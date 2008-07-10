@@ -38,6 +38,7 @@ public:
   virtual void PrintSelf(ostream& os, vtkIndent indent);
 
   // Description:
+  // Set/Get the filename of the file to be read
   vtkSetStringMacro(FileName);
   vtkGetStringMacro(FileName);
 
