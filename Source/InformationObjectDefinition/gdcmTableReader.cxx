@@ -323,6 +323,10 @@ void TableReader::StartElement(const char *name, const char **atts)
   {
 	  // TODO !
   }
+   else if ( strcmp(name,"mapping") == 0 )
+  {
+	  // TODO !
+  }
   else
     {
     abort();
