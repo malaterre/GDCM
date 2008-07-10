@@ -6,6 +6,8 @@ SET(MSFF_TEST_SRCS
   TestOrientation
   TestIconImage
   TestImageHelper
+  TestImageToImageFilter
+  TestImageChangeTransferSyntax
   TestCoder
   TestDecoder
   TestRescaler
