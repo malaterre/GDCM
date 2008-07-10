@@ -33,7 +33,7 @@ class GDCM_EXPORT MediaStorage
 {
 public:
   typedef enum {
-    MediaStorageDirectoryStorage,
+    MediaStorageDirectoryStorage = 0,
     ComputedRadiographyImageStorage,
     DigitalXRayImageStorageForPresentation,
     DigitalXRayImageStorageForProcessing,
