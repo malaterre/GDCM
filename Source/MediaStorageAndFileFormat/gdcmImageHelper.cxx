@@ -547,7 +547,9 @@ Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
     t = Tag(0xffff,0xffff);
     break;
   case MediaStorage::UltrasoundMultiFrameImageStorage:
-    abort();
+    gdcmWarningMacro( "FIXME" );
+    t = Tag(0xffff,0xffff);
+    //abort();
     break;
   case MediaStorage::UltrasoundImageStorage: // ??
   case MediaStorage::UltrasoundImageStorageRetired:
