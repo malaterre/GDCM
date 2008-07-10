@@ -19,7 +19,8 @@ import os,sys
 g = gdcm.Global.GetInstance()
 defs = g.GetDefs()
 modules = defs.GetModules()
-module = modules.GetModule( "MR Image Module Attributes" )
+#module = modules.GetModule( "MR Image Module Attributes" )
+module = modules.GetModule( "C.8.3.1" )
 #print dir(module)
 
 mentry = module.GetModuleEntry( gdcm.Tag(0x0018,0x0087) )
