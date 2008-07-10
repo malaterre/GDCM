@@ -549,7 +549,9 @@ Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
   case MediaStorage::UltrasoundMultiFrameImageStorage:
     // gdcmData/US-MONO2-8-8x-execho.dcm
     // this should be handled somewhere else
-    abort();
+    //abort();
+    gdcmWarningMacro( "FIXME" );
+    t = Tag(0xffff,0xffff);
     break;
   case MediaStorage::UltrasoundImageStorage: // ??
   case MediaStorage::UltrasoundImageStorageRetired:
