@@ -105,6 +105,9 @@
 #include "gdcmUnpacker12Bits.h"
 #include "gdcmPythonFilter.h"
 #include "gdcmDirectionCosines.h"
+#include "gdcmTagPath.h"
+#include "gdcmImageToImageFilter.h"
+#include "gdcmSOPClassUIDToIOD.h"
 
 using namespace gdcm;
 %}
@@ -458,3 +461,6 @@ using namespace gdcm;
 #endif
 %include "gdcmPythonFilter.h"
 %include "gdcmDirectionCosines.h"
+%include "gdcmTagPath.h"
+%include "gdcmImageToImageFilter.h"
+%include "gdcmSOPClassUIDToIOD.h"
