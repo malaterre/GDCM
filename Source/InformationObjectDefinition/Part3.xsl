@@ -665,7 +665,9 @@ See C.8.7.10 and C.8.15.3.9 ... reference a complete module instead of directly 
         </xsl:when>
         <!-- output defined term only -->
         <xsl:otherwise>
-          <entry value="{entry[1]/para[1]}"/>
+                  <xsl:element name="{$entry}">
+          <xsl:attribute name="value" select="entry[1]/para[1]"/>
+     </xsl:element>
           <!--xsl:value-of select="entry[1]/para[1]"/-->
         </xsl:otherwise>
       </xsl:choose>

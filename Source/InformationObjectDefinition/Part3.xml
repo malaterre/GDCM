@@ -2495,7 +2495,7 @@ Note: The Comments attribute is intended to transmit non-structured information,
     <entry group="0008" element="0060" name="&gt;Modality">
       <description>Source equipment for the image. See Section C.7.3.1.1.1 for Defined Terms.</description>
       <section ref="C.7.3.1.1.1" name="">Defined Terms for the Modality (0008,0060) are:
-<defined-terms><term value="CR" meaning="Computed Radiography"/><term value="MR" meaning="Magnetic Resonance"/><term value="US" meaning="Ultrasound"/><term value="BI" meaning="Biomagnetic imaging"/><term value="DD" meaning="Duplex Doppler"/><term value="ES" meaning="Endoscopy"/><entry value=""/><term value="PT" meaning="Positron emission tomography (PET)"/><term value="ST" meaning="Single-photon emission computed tomography (SPECT)"/><term value="XA" meaning="X-Ray Angiography"/><term value="RTIMAGE" meaning="Radiotherapy Image"/><term value="RTSTRUCT" meaning="Radiotherapy Structure Set"/><term value="RTRECORD" meaning="RT Treatment Record"/><term value="DX" meaning="Digital Radiography"/><term value="IO" meaning="Intra-oral Radiography"/><term value="GM" meaning="General Microscopy"/><term value="XC" meaning="External-camera Photography"/><term value="AU" meaning="Audio"/><term value="EPS" meaning="Cardiac Electrophysiology"/><term value="SR" meaning="SR Document"/><term value="OP" meaning="Ophthalmic Photography"/><term value="OCT" meaning="Optical Coherence Tomography (non-Ophthalmic)"/><term value="OPV" meaning="Ophthalmic Visual Field"/><term value="KO" meaning="Key Object Selection"/><term value="REG" meaning="Registration"/><term value="BDUS" meaning="Bone Densitometry (ultrasound)"/><term value="DOC" meaning="Document"/></defined-terms>
+<defined-terms><term value="CR" meaning="Computed Radiography"/><term value="MR" meaning="Magnetic Resonance"/><term value="US" meaning="Ultrasound"/><term value="BI" meaning="Biomagnetic imaging"/><term value="DD" meaning="Duplex Doppler"/><term value="ES" meaning="Endoscopy"/><term value=""/><term value="PT" meaning="Positron emission tomography (PET)"/><term value="ST" meaning="Single-photon emission computed tomography (SPECT)"/><term value="XA" meaning="X-Ray Angiography"/><term value="RTIMAGE" meaning="Radiotherapy Image"/><term value="RTSTRUCT" meaning="Radiotherapy Structure Set"/><term value="RTRECORD" meaning="RT Treatment Record"/><term value="DX" meaning="Digital Radiography"/><term value="IO" meaning="Intra-oral Radiography"/><term value="GM" meaning="General Microscopy"/><term value="XC" meaning="External-camera Photography"/><term value="AU" meaning="Audio"/><term value="EPS" meaning="Cardiac Electrophysiology"/><term value="SR" meaning="SR Document"/><term value="OP" meaning="Ophthalmic Photography"/><term value="OCT" meaning="Optical Coherence Tomography (non-Ophthalmic)"/><term value="OPV" meaning="Ophthalmic Visual Field"/><term value="KO" meaning="Key Object Selection"/><term value="REG" meaning="Registration"/><term value="BDUS" meaning="Bone Densitometry (ultrasound)"/><term value="DOC" meaning="Document"/></defined-terms>
 Retired Defined Terms for the Modality (0008,0060) are:
 <retired-defined-terms><term value="DS" meaning="Digital Subtraction Angiography (retired)"/><term value="DF" meaning="Digital fluoroscopy (retired)"/><term value="AS" meaning="Angioscopy"/><term value="EC" meaning="Echocardiography"/><term value="FA" meaning="Fluorescein angiography"/><term value="DM" meaning="Digital microscopy"/><term value="MA" meaning="Magnetic resonance angiography"/></retired-defined-terms>
 Note:	1. The XA modality incorporates the retired modality DS.
@@ -2770,7 +2770,7 @@ COMPLETED = Successfully completed</description>
       <description>Type of equipment that originally acquired the data used to create the images associated with this Modality Performed Procedure Step. See C.7.3.1.1.1 for Defined Terms.
 Note: A Modality value in the created SOP Instances may be different from the MPPS Modality value. For example, multiple series may have been created during the MPPS (images, waveforms, softcopy presentation states and/or structured reports) with SOP Instances in different series having different modality values.</description>
       <section ref="C.7.3.1.1.1" name="">Defined Terms for the Modality (0008,0060) are:
-<defined-terms><term value="CR" meaning="Computed Radiography"/><term value="MR" meaning="Magnetic Resonance"/><term value="US" meaning="Ultrasound"/><term value="BI" meaning="Biomagnetic imaging"/><term value="DD" meaning="Duplex Doppler"/><term value="ES" meaning="Endoscopy"/><entry value=""/><term value="PT" meaning="Positron emission tomography (PET)"/><term value="ST" meaning="Single-photon emission computed tomography (SPECT)"/><term value="XA" meaning="X-Ray Angiography"/><term value="RTIMAGE" meaning="Radiotherapy Image"/><term value="RTSTRUCT" meaning="Radiotherapy Structure Set"/><term value="RTRECORD" meaning="RT Treatment Record"/><term value="DX" meaning="Digital Radiography"/><term value="IO" meaning="Intra-oral Radiography"/><term value="GM" meaning="General Microscopy"/><term value="XC" meaning="External-camera Photography"/><term value="AU" meaning="Audio"/><term value="EPS" meaning="Cardiac Electrophysiology"/><term value="SR" meaning="SR Document"/><term value="OP" meaning="Ophthalmic Photography"/><term value="OCT" meaning="Optical Coherence Tomography (non-Ophthalmic)"/><term value="OPV" meaning="Ophthalmic Visual Field"/><term value="KO" meaning="Key Object Selection"/><term value="REG" meaning="Registration"/><term value="BDUS" meaning="Bone Densitometry (ultrasound)"/><term value="DOC" meaning="Document"/></defined-terms>
+<defined-terms><term value="CR" meaning="Computed Radiography"/><term value="MR" meaning="Magnetic Resonance"/><term value="US" meaning="Ultrasound"/><term value="BI" meaning="Biomagnetic imaging"/><term value="DD" meaning="Duplex Doppler"/><term value="ES" meaning="Endoscopy"/><term value=""/><term value="PT" meaning="Positron emission tomography (PET)"/><term value="ST" meaning="Single-photon emission computed tomography (SPECT)"/><term value="XA" meaning="X-Ray Angiography"/><term value="RTIMAGE" meaning="Radiotherapy Image"/><term value="RTSTRUCT" meaning="Radiotherapy Structure Set"/><term value="RTRECORD" meaning="RT Treatment Record"/><term value="DX" meaning="Digital Radiography"/><term value="IO" meaning="Intra-oral Radiography"/><term value="GM" meaning="General Microscopy"/><term value="XC" meaning="External-camera Photography"/><term value="AU" meaning="Audio"/><term value="EPS" meaning="Cardiac Electrophysiology"/><term value="SR" meaning="SR Document"/><term value="OP" meaning="Ophthalmic Photography"/><term value="OCT" meaning="Optical Coherence Tomography (non-Ophthalmic)"/><term value="OPV" meaning="Ophthalmic Visual Field"/><term value="KO" meaning="Key Object Selection"/><term value="REG" meaning="Registration"/><term value="BDUS" meaning="Bone Densitometry (ultrasound)"/><term value="DOC" meaning="Document"/></defined-terms>
 Retired Defined Terms for the Modality (0008,0060) are:
 <retired-defined-terms><term value="DS" meaning="Digital Subtraction Angiography (retired)"/><term value="DF" meaning="Digital fluoroscopy (retired)"/><term value="AS" meaning="Angioscopy"/><term value="EC" meaning="Echocardiography"/><term value="FA" meaning="Fluorescein angiography"/><term value="DM" meaning="Digital microscopy"/><term value="MA" meaning="Magnetic resonance angiography"/></retired-defined-terms>
 Note:	1. The XA modality incorporates the retired modality DS.
@@ -3705,7 +3705,7 @@ Required if patient is an animal. May be present otherwise.</description>
     <entry group="0008" element="0060" name="Modality" type="1">
       <description>Type of equipment that originally acquired the data used to create the images in this Series. See C.7.3.1.1.1 for Defined Terms.</description>
       <section ref="C.7.3.1.1.1" name="">Defined Terms for the Modality (0008,0060) are:
-<defined-terms><term value="CR" meaning="Computed Radiography"/><term value="MR" meaning="Magnetic Resonance"/><term value="US" meaning="Ultrasound"/><term value="BI" meaning="Biomagnetic imaging"/><term value="DD" meaning="Duplex Doppler"/><term value="ES" meaning="Endoscopy"/><entry value=""/><term value="PT" meaning="Positron emission tomography (PET)"/><term value="ST" meaning="Single-photon emission computed tomography (SPECT)"/><term value="XA" meaning="X-Ray Angiography"/><term value="RTIMAGE" meaning="Radiotherapy Image"/><term value="RTSTRUCT" meaning="Radiotherapy Structure Set"/><term value="RTRECORD" meaning="RT Treatment Record"/><term value="DX" meaning="Digital Radiography"/><term value="IO" meaning="Intra-oral Radiography"/><term value="GM" meaning="General Microscopy"/><term value="XC" meaning="External-camera Photography"/><term value="AU" meaning="Audio"/><term value="EPS" meaning="Cardiac Electrophysiology"/><term value="SR" meaning="SR Document"/><term value="OP" meaning="Ophthalmic Photography"/><term value="OCT" meaning="Optical Coherence Tomography (non-Ophthalmic)"/><term value="OPV" meaning="Ophthalmic Visual Field"/><term value="KO" meaning="Key Object Selection"/><term value="REG" meaning="Registration"/><term value="BDUS" meaning="Bone Densitometry (ultrasound)"/><term value="DOC" meaning="Document"/></defined-terms>
+<defined-terms><term value="CR" meaning="Computed Radiography"/><term value="MR" meaning="Magnetic Resonance"/><term value="US" meaning="Ultrasound"/><term value="BI" meaning="Biomagnetic imaging"/><term value="DD" meaning="Duplex Doppler"/><term value="ES" meaning="Endoscopy"/><term value=""/><term value="PT" meaning="Positron emission tomography (PET)"/><term value="ST" meaning="Single-photon emission computed tomography (SPECT)"/><term value="XA" meaning="X-Ray Angiography"/><term value="RTIMAGE" meaning="Radiotherapy Image"/><term value="RTSTRUCT" meaning="Radiotherapy Structure Set"/><term value="RTRECORD" meaning="RT Treatment Record"/><term value="DX" meaning="Digital Radiography"/><term value="IO" meaning="Intra-oral Radiography"/><term value="GM" meaning="General Microscopy"/><term value="XC" meaning="External-camera Photography"/><term value="AU" meaning="Audio"/><term value="EPS" meaning="Cardiac Electrophysiology"/><term value="SR" meaning="SR Document"/><term value="OP" meaning="Ophthalmic Photography"/><term value="OCT" meaning="Optical Coherence Tomography (non-Ophthalmic)"/><term value="OPV" meaning="Ophthalmic Visual Field"/><term value="KO" meaning="Key Object Selection"/><term value="REG" meaning="Registration"/><term value="BDUS" meaning="Bone Densitometry (ultrasound)"/><term value="DOC" meaning="Document"/></defined-terms>
 Retired Defined Terms for the Modality (0008,0060) are:
 <retired-defined-terms><term value="DS" meaning="Digital Subtraction Angiography (retired)"/><term value="DF" meaning="Digital fluoroscopy (retired)"/><term value="AS" meaning="Angioscopy"/><term value="EC" meaning="Echocardiography"/><term value="FA" meaning="Fluorescein angiography"/><term value="DM" meaning="Digital microscopy"/><term value="MA" meaning="Magnetic resonance angiography"/></retired-defined-terms>
 Note:	1. The XA modality incorporates the retired modality DS.
@@ -8055,7 +8055,7 @@ These lookup tables are required when the value of Photometric Interpretation (0
 These lookup tables shall be used only when segmented lookup table data use is desriable and there is a single sample per pixel (single image plane) in the image.
 Table C.7-23
 COMPRESSED PALETTE COLOR LOOKUP TABLE DATA
-<unrecognized-rows><entry value="Segment 0"/><entry value="Segment 1"/><entry value="..."/><entry value="Segment n"/></unrecognized-rows>
+<unrecognized-rows><term value="Segment 0"/><term value="Segment 1"/><term value="..."/><term value="Segment n"/></unrecognized-rows>
 There are currently three types of segments: discrete, linear, and indirect. The segments type is identified by the opcodes in Table C.7-24:
 Table C.7-24
 SEGMENT TYPES
@@ -8068,7 +8068,7 @@ SEGMENT TYPES
 These lookup tables shall be used only when segmented lookup table data use is desriable and there is a single sample per pixel (single image plane) in the image.
 Table C.7-23
 COMPRESSED PALETTE COLOR LOOKUP TABLE DATA
-<unrecognized-rows><entry value="Segment 0"/><entry value="Segment 1"/><entry value="..."/><entry value="Segment n"/></unrecognized-rows>
+<unrecognized-rows><term value="Segment 0"/><term value="Segment 1"/><term value="..."/><term value="Segment n"/></unrecognized-rows>
 There are currently three types of segments: discrete, linear, and indirect. The segments type is identified by the opcodes in Table C.7-24:
 Table C.7-24
 SEGMENT TYPES
@@ -8081,7 +8081,7 @@ SEGMENT TYPES
 These lookup tables shall be used only when segmented lookup table data use is desriable and there is a single sample per pixel (single image plane) in the image.
 Table C.7-23
 COMPRESSED PALETTE COLOR LOOKUP TABLE DATA
-<unrecognized-rows><entry value="Segment 0"/><entry value="Segment 1"/><entry value="..."/><entry value="Segment n"/></unrecognized-rows>
+<unrecognized-rows><term value="Segment 0"/><term value="Segment 1"/><term value="..."/><term value="Segment n"/></unrecognized-rows>
 There are currently three types of segments: discrete, linear, and indirect. The segments type is identified by the opcodes in Table C.7-24:
 Table C.7-24
 SEGMENT TYPES
@@ -10004,7 +10004,7 @@ See C.8.5.5.1.1 for Enumerated Values.</description>
       <description>The type of data within the region.
 See C.8.5.5.1.2 for Enumerated Values.</description>
       <section ref="C.8.5.5.1.2" name="">Enumerated Values for Region Data Type (0018,6014) indicate the type of data within the region.
-<enumerated-values><term value="Value Meaning" meaning="Value Meaning"/><term value="0000H None or not applicable" meaning="0001H Tissue"/><term value="0002H Color Flow" meaning="0003H PW Spectral Doppler"/><term value="0004H CW Spectral Doppler" meaning="0005H Doppler Mean Trace"/><term value="0006H Doppler Mode Trace" meaning="0007H Doppler Max Trace"/><term value="0008H Volume Trace" meaning="0009H d(volume)/dt Trace"/><term value="000AH ECG Trace" meaning="000BH Pulse Trace"/><term value="000CH Phonocardiogram Trace" meaning="000DH Gray bar"/><term value="000EH Color bar" meaning="000FH Integrated Backscatter"/><term value="0010H Area Trace" meaning="0011H d(area)/dt"/><entry value="0012H&#9;Other Physiological (Amplitude vs. Time) input "/></enumerated-values>
+<enumerated-values><term value="Value Meaning" meaning="Value Meaning"/><term value="0000H None or not applicable" meaning="0001H Tissue"/><term value="0002H Color Flow" meaning="0003H PW Spectral Doppler"/><term value="0004H CW Spectral Doppler" meaning="0005H Doppler Mean Trace"/><term value="0006H Doppler Mode Trace" meaning="0007H Doppler Max Trace"/><term value="0008H Volume Trace" meaning="0009H d(volume)/dt Trace"/><term value="000AH ECG Trace" meaning="000BH Pulse Trace"/><term value="000CH Phonocardiogram Trace" meaning="000DH Gray bar"/><term value="000EH Color bar" meaning="000FH Integrated Backscatter"/><term value="0010H Area Trace" meaning="0011H d(area)/dt"/><term value="0012H&#9;Other Physiological (Amplitude vs. Time) input "/></enumerated-values>
          </section>
     </entry>
     <entry group="0018" element="6016" name="&gt;Region Flags" type="1">
@@ -10083,7 +10083,7 @@ Required if Pixel Component Organization = Ranges.</description>
 Required if Pixel Component Organization exists.
 See C.8.5.5.1.6 for further explanation.</description>
       <section ref="C.8.5.5.1.6" name="">For Pixel Component Physical Units (0018,604C), the Enumerated Values describing the physical units to be applied to the pixel component are:
-<enumerated-values><term value="Value Meaning" meaning="Value Meaning"/><term value="0000H None or not applicable" meaning="0001H Percent"/><term value="0002H dB" meaning="0003H cm"/><term value="0004H seconds" meaning="0005H hertz(seconds-1)"/><term value="0006H dB/seconds" meaning="0007H cm/sec"/><term value="0008H cm2" meaning="0009H cm2/sec"/><term value="000AH cm3" meaning="000BH cm3/sec"/><entry value="000CH&#9;degrees"/></enumerated-values>
+<enumerated-values><term value="Value Meaning" meaning="Value Meaning"/><term value="0000H None or not applicable" meaning="0001H Percent"/><term value="0002H dB" meaning="0003H cm"/><term value="0004H seconds" meaning="0005H hertz(seconds-1)"/><term value="0006H dB/seconds" meaning="0007H cm/sec"/><term value="0008H cm2" meaning="0009H cm2/sec"/><term value="000AH cm3" meaning="000BH cm3/sec"/><term value="000CH&#9;degrees"/></enumerated-values>
          </section>
     </entry>
     <entry group="0018" element="604E" name="&gt;Pixel Component Data Type" type="1C">
@@ -10534,7 +10534,7 @@ SYN = Synthetic Image</description>
       <description>Source equipment for the image. This type definition shall override the definition in the General Series Module.
 See C.7.3.1.1.1 for Defined Terms.</description>
       <section ref="C.7.3.1.1.1" name="">Defined Terms for the Modality (0008,0060) are:
-<defined-terms><term value="CR" meaning="Computed Radiography"/><term value="MR" meaning="Magnetic Resonance"/><term value="US" meaning="Ultrasound"/><term value="BI" meaning="Biomagnetic imaging"/><term value="DD" meaning="Duplex Doppler"/><term value="ES" meaning="Endoscopy"/><entry value=""/><term value="PT" meaning="Positron emission tomography (PET)"/><term value="ST" meaning="Single-photon emission computed tomography (SPECT)"/><term value="XA" meaning="X-Ray Angiography"/><term value="RTIMAGE" meaning="Radiotherapy Image"/><term value="RTSTRUCT" meaning="Radiotherapy Structure Set"/><term value="RTRECORD" meaning="RT Treatment Record"/><term value="DX" meaning="Digital Radiography"/><term value="IO" meaning="Intra-oral Radiography"/><term value="GM" meaning="General Microscopy"/><term value="XC" meaning="External-camera Photography"/><term value="AU" meaning="Audio"/><term value="EPS" meaning="Cardiac Electrophysiology"/><term value="SR" meaning="SR Document"/><term value="OP" meaning="Ophthalmic Photography"/><term value="OCT" meaning="Optical Coherence Tomography (non-Ophthalmic)"/><term value="OPV" meaning="Ophthalmic Visual Field"/><term value="KO" meaning="Key Object Selection"/><term value="REG" meaning="Registration"/><term value="BDUS" meaning="Bone Densitometry (ultrasound)"/><term value="DOC" meaning="Document"/></defined-terms>
+<defined-terms><term value="CR" meaning="Computed Radiography"/><term value="MR" meaning="Magnetic Resonance"/><term value="US" meaning="Ultrasound"/><term value="BI" meaning="Biomagnetic imaging"/><term value="DD" meaning="Duplex Doppler"/><term value="ES" meaning="Endoscopy"/><term value=""/><term value="PT" meaning="Positron emission tomography (PET)"/><term value="ST" meaning="Single-photon emission computed tomography (SPECT)"/><term value="XA" meaning="X-Ray Angiography"/><term value="RTIMAGE" meaning="Radiotherapy Image"/><term value="RTSTRUCT" meaning="Radiotherapy Structure Set"/><term value="RTRECORD" meaning="RT Treatment Record"/><term value="DX" meaning="Digital Radiography"/><term value="IO" meaning="Intra-oral Radiography"/><term value="GM" meaning="General Microscopy"/><term value="XC" meaning="External-camera Photography"/><term value="AU" meaning="Audio"/><term value="EPS" meaning="Cardiac Electrophysiology"/><term value="SR" meaning="SR Document"/><term value="OP" meaning="Ophthalmic Photography"/><term value="OCT" meaning="Optical Coherence Tomography (non-Ophthalmic)"/><term value="OPV" meaning="Ophthalmic Visual Field"/><term value="KO" meaning="Key Object Selection"/><term value="REG" meaning="Registration"/><term value="BDUS" meaning="Bone Densitometry (ultrasound)"/><term value="DOC" meaning="Document"/></defined-terms>
 Retired Defined Terms for the Modality (0008,0060) are:
 <retired-defined-terms><term value="DS" meaning="Digital Subtraction Angiography (retired)"/><term value="DF" meaning="Digital fluoroscopy (retired)"/><term value="AS" meaning="Angioscopy"/><term value="EC" meaning="Echocardiography"/><term value="FA" meaning="Fluorescein angiography"/><term value="DM" meaning="Digital microscopy"/><term value="MA" meaning="Magnetic resonance angiography"/></retired-defined-terms>
 Note:	1. The XA modality incorporates the retired modality DS.
@@ -17825,11 +17825,11 @@ This Attribute shall not be present if there is a View Modifier Code Sequence (0
 If this Attribute is absent, then the image may or may not be a partial view.
 This Attribute shall not be present if there is a View Modifier Code Sequence (0054,0222) Item of value (R-102D6, SNM3, "Magnification") or (R-102D7, SNM3, "Spot Compression").</description>
       <section ref="C.8.11.7.1.3" name="">The following combinations of coded terms may be used to express the breast sections, for example, for the left cranio-caudal (L CC) view. These terms would also apply to the R CC, and the right and left FB, XCC, XCCL and XCCM views:
-<unrecognized-rows><entry value="A) item 1 = Lateral"/><entry value="A) item 1 = Posterior"/><entry value="A) item 1 = Lateral, item 2 = Posterior"/><entry value="A) item 1 = Lateral, item 2 = Posterior"/><entry value="A) item 1 = Lateral, item 2 = Posterior"/></unrecognized-rows>
+<unrecognized-rows><term value="A) item 1 = Lateral"/><term value="A) item 1 = Posterior"/><term value="A) item 1 = Lateral, item 2 = Posterior"/><term value="A) item 1 = Lateral, item 2 = Posterior"/><term value="A) item 1 = Lateral, item 2 = Posterior"/></unrecognized-rows>
 Note: If six images are required, then the “Central, Anterior” combination would be added.
 
 The following combinations of coded terms may be used to express the breast sections, for example, for the left medio-lateral oblique (L MLO) view. These terms would also apply to the R MLO, and to the right and left LM, ML, LMO, and SIO views:
-<unrecognized-rows><entry value="A) item 1 = Superior"/><entry value="A) item 1 = Posterior"/><entry value="A) item 1 = Superior, item 2 = Posterior"/><entry value="A) item 1 = Superior, item 2 = Posterior"/><entry value="A) item 1 = Superior, item 2 = Posterior"/></unrecognized-rows>
+<unrecognized-rows><term value="A) item 1 = Superior"/><term value="A) item 1 = Posterior"/><term value="A) item 1 = Superior, item 2 = Posterior"/><term value="A) item 1 = Superior, item 2 = Posterior"/><term value="A) item 1 = Superior, item 2 = Posterior"/></unrecognized-rows>
 Note: If six images are required, then the “Central, Anterior” combination would be added.
 
 </section>
@@ -25139,7 +25139,7 @@ Required if the VOI LUT transformation in this Item does not apply to all the im
 PR = Presentation State
 See C.7.3.1.1.1.</description>
       <section ref="C.7.3.1.1.1" name="">Defined Terms for the Modality (0008,0060) are:
-<defined-terms><term value="CR" meaning="Computed Radiography"/><term value="MR" meaning="Magnetic Resonance"/><term value="US" meaning="Ultrasound"/><term value="BI" meaning="Biomagnetic imaging"/><term value="DD" meaning="Duplex Doppler"/><term value="ES" meaning="Endoscopy"/><entry value=""/><term value="PT" meaning="Positron emission tomography (PET)"/><term value="ST" meaning="Single-photon emission computed tomography (SPECT)"/><term value="XA" meaning="X-Ray Angiography"/><term value="RTIMAGE" meaning="Radiotherapy Image"/><term value="RTSTRUCT" meaning="Radiotherapy Structure Set"/><term value="RTRECORD" meaning="RT Treatment Record"/><term value="DX" meaning="Digital Radiography"/><term value="IO" meaning="Intra-oral Radiography"/><term value="GM" meaning="General Microscopy"/><term value="XC" meaning="External-camera Photography"/><term value="AU" meaning="Audio"/><term value="EPS" meaning="Cardiac Electrophysiology"/><term value="SR" meaning="SR Document"/><term value="OP" meaning="Ophthalmic Photography"/><term value="OCT" meaning="Optical Coherence Tomography (non-Ophthalmic)"/><term value="OPV" meaning="Ophthalmic Visual Field"/><term value="KO" meaning="Key Object Selection"/><term value="REG" meaning="Registration"/><term value="BDUS" meaning="Bone Densitometry (ultrasound)"/><term value="DOC" meaning="Document"/></defined-terms>
+<defined-terms><term value="CR" meaning="Computed Radiography"/><term value="MR" meaning="Magnetic Resonance"/><term value="US" meaning="Ultrasound"/><term value="BI" meaning="Biomagnetic imaging"/><term value="DD" meaning="Duplex Doppler"/><term value="ES" meaning="Endoscopy"/><term value=""/><term value="PT" meaning="Positron emission tomography (PET)"/><term value="ST" meaning="Single-photon emission computed tomography (SPECT)"/><term value="XA" meaning="X-Ray Angiography"/><term value="RTIMAGE" meaning="Radiotherapy Image"/><term value="RTSTRUCT" meaning="Radiotherapy Structure Set"/><term value="RTRECORD" meaning="RT Treatment Record"/><term value="DX" meaning="Digital Radiography"/><term value="IO" meaning="Intra-oral Radiography"/><term value="GM" meaning="General Microscopy"/><term value="XC" meaning="External-camera Photography"/><term value="AU" meaning="Audio"/><term value="EPS" meaning="Cardiac Electrophysiology"/><term value="SR" meaning="SR Document"/><term value="OP" meaning="Ophthalmic Photography"/><term value="OCT" meaning="Optical Coherence Tomography (non-Ophthalmic)"/><term value="OPV" meaning="Ophthalmic Visual Field"/><term value="KO" meaning="Key Object Selection"/><term value="REG" meaning="Registration"/><term value="BDUS" meaning="Bone Densitometry (ultrasound)"/><term value="DOC" meaning="Document"/></defined-terms>
 Retired Defined Terms for the Modality (0008,0060) are:
 <retired-defined-terms><term value="DS" meaning="Digital Subtraction Angiography (retired)"/><term value="DF" meaning="Digital fluoroscopy (retired)"/><term value="AS" meaning="Angioscopy"/><term value="EC" meaning="Echocardiography"/><term value="FA" meaning="Fluorescein angiography"/><term value="DM" meaning="Digital microscopy"/><term value="MA" meaning="Magnetic resonance angiography"/></retired-defined-terms>
 Note:	1. The XA modality incorporates the retired modality DS.
@@ -25301,14 +25301,14 @@ See C.12.1.1.2 for Defined Terms.</description>
 If the Attribute Specific Character Set (0008,0005) is not present or has only a single value, Code Extension techniques are not used. Defined terms for the Attribute Specific Character Set (0008,0005), when single valued, are derived from the International Registration Number as per ISO 2375 (e.g., ISO_IR 100 for Latin alphabet No. 1). See Table C.12-2.
 Table C.12-2
  DEFINED TERMS FOR SINGLE-BYTE CHARACTER SETS WITHOUT CODE EXTENSIONS
-<unrecognized-rows><term value="Character Set Description" meaning="Defined Term"/><term value="Default repertoire" meaning="none"/><term value="Latin alphabet No. 1" meaning="ISO_IR 100"/><entry value=""/><term value="Latin alphabet No. 2" meaning="ISO_IR 101"/><entry value=""/><term value="Latin alphabet No. 3" meaning="ISO_IR 109"/><entry value=""/><term value="Latin alphabet No. 4" meaning="ISO_IR 110"/><entry value=""/><term value="Cyrillic" meaning="ISO_IR 144"/><entry value=""/><term value="Arabic" meaning="ISO_IR 127"/><entry value=""/><term value="Greek" meaning="ISO_IR 126"/><entry value=""/><term value="Hebrew" meaning="ISO_IR 138"/><entry value=""/><term value="Latin alphabet No. 5" meaning="ISO_IR 148"/><entry value=""/><term value="Japanese" meaning="ISO_IR 13"/><entry value=""/><term value="Thai" meaning="ISO_IR 166"/><entry value=""/></unrecognized-rows>
+<unrecognized-rows><term value="Character Set Description" meaning="Defined Term"/><term value="Default repertoire" meaning="none"/><term value="Latin alphabet No. 1" meaning="ISO_IR 100"/><term value=""/><term value="Latin alphabet No. 2" meaning="ISO_IR 101"/><term value=""/><term value="Latin alphabet No. 3" meaning="ISO_IR 109"/><term value=""/><term value="Latin alphabet No. 4" meaning="ISO_IR 110"/><term value=""/><term value="Cyrillic" meaning="ISO_IR 144"/><term value=""/><term value="Arabic" meaning="ISO_IR 127"/><term value=""/><term value="Greek" meaning="ISO_IR 126"/><term value=""/><term value="Hebrew" meaning="ISO_IR 138"/><term value=""/><term value="Latin alphabet No. 5" meaning="ISO_IR 148"/><term value=""/><term value="Japanese" meaning="ISO_IR 13"/><term value=""/><term value="Thai" meaning="ISO_IR 166"/><term value=""/></unrecognized-rows>
 Note:	To use the single-byte code table of JIS X0201, the value of attribute Specific Character Set (0008,0005), value 1 should be ISO_IR 13. This means that ISO-IR 13 is designated as the G1 code element which is invoked in the GR area. It should be understood that, in addition, ISO-IR 14 is designated as the G0 code element and this is invoked in the GL area.
 
 If the attribute Specific Character Set (0008,0005) has more than one value, Code Extension techniques are used and Escape Sequences may be encountered in all character sets. Requirements for the use of Code Extension techniques are specified in PS 3.5. In order to indicate the presence of Code Extension, the Defined Terms for the repertoires have the prefix “ISO 2022”, e.g., ISO 2022 IR 100 for the Latin Alphabet No. 1. See Table 12-3 and Table 12-4. Table 12-3 describes single-byte character sets for value 1 to value n of the attribute Specific Character Set (0008,0005), and Table 12-4 describes multi-byte character sets for value 2 to value n of the attribute Specific Character Set (0008,0005).
 Note:	A prefix other than “ISO 2022” may be needed in the future if other Code Extension techniques are adopted.
 Table C.12-3
 DEFINED TERMS FOR SINGLE-BYTE CHARACTER SETS WITH CODE EXTENSIONS
-<unrecognized-rows><term value="Character Set Description" meaning="Defined Term"/><term value="Default repertoire" meaning="ISO 2022 IR 6"/><impossible-happen/><term value="No. 1" meaning="ISO 2022 IR 100"/><impossible-happen/><term value="No. 2" meaning="ISO 2022 IR 101"/><impossible-happen/><term value="No. 3" meaning="ISO 2022 IR 109"/><impossible-happen/><term value="No. 4" meaning="ISO 2022 IR 110"/><term value="Cyrillic" meaning="ISO 2022 IR 144"/><term value="Arabic" meaning="ISO 2022 IR 127"/><term value="Greek" meaning="ISO 2022 IR 126"/><term value="Hebrew" meaning="ISO 2022 IR 138"/><impossible-happen/><term value="No. 5" meaning="ISO 2022 IR 148"/><term value="Japanese" meaning="ISO 2022 IR 13"/><term value="Thai" meaning="ISO 2022 IR 166"/><entry value=""/></unrecognized-rows>
+<unrecognized-rows><term value="Character Set Description" meaning="Defined Term"/><term value="Default repertoire" meaning="ISO 2022 IR 6"/><impossible-happen/><term value="No. 1" meaning="ISO 2022 IR 100"/><impossible-happen/><term value="No. 2" meaning="ISO 2022 IR 101"/><impossible-happen/><term value="No. 3" meaning="ISO 2022 IR 109"/><impossible-happen/><term value="No. 4" meaning="ISO 2022 IR 110"/><term value="Cyrillic" meaning="ISO 2022 IR 144"/><term value="Arabic" meaning="ISO 2022 IR 127"/><term value="Greek" meaning="ISO 2022 IR 126"/><term value="Hebrew" meaning="ISO 2022 IR 138"/><impossible-happen/><term value="No. 5" meaning="ISO 2022 IR 148"/><term value="Japanese" meaning="ISO 2022 IR 13"/><term value="Thai" meaning="ISO 2022 IR 166"/><term value=""/></unrecognized-rows>
 Note:	If the attribute Specific Character Set (0008,0005) has more than one value and value 1 is empty, it is assumed that value 1 is ISO 2022 IR 6.
 
 Table C.12-4
@@ -25483,7 +25483,7 @@ Note:	1. Content encryption may require that the content (the DICOM Data Set) be
 
 Table C.12-7
 ENCRYPTED ATTRIBUTES DATA SET ATTRIBUTES
-<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><term value="Modified Attributes Sequence" meaning="(0400,0550)"/><entry value="&gt; Any Attribute from the main dataset that was modified or removed during the de-identification process."/></unrecognized-rows>
+<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><term value="Modified Attributes Sequence" meaning="(0400,0550)"/><term value="&gt; Any Attribute from the main dataset that was modified or removed during the de-identification process."/></unrecognized-rows>
          </section>
     </entry>
     <entry group="0400" element="0561" name="Original Attributes Sequence" type="3">
@@ -25847,7 +25847,7 @@ See PS 3.4 for further description.</description>
       <section ref="C.7.6.3" name="">Table C.7-11a describes the Image Pixel Module.	
 Table C.7-11a
 IMAGE PIXEL MODULE ATTRIBUTES
-<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><entry value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
+<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><term value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
 Table C.7-11b specifies the common attributes that describe the pixel data of the image.
 
 Table C.7-11b
@@ -25862,7 +25862,7 @@ MONOCHROME2</description>
       <section ref="C.7.6.3" name="">Table C.7-11a describes the Image Pixel Module.	
 Table C.7-11a
 IMAGE PIXEL MODULE ATTRIBUTES
-<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><entry value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
+<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><term value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
 Table C.7-11b specifies the common attributes that describe the pixel data of the image.
 
 Table C.7-11b
@@ -25875,7 +25875,7 @@ IMAGE PIXEL MACRO ATTRIBUTES
       <section ref="C.7.6.3" name="">Table C.7-11a describes the Image Pixel Module.	
 Table C.7-11a
 IMAGE PIXEL MODULE ATTRIBUTES
-<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><entry value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
+<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><term value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
 Table C.7-11b specifies the common attributes that describe the pixel data of the image.
 
 Table C.7-11b
@@ -25888,7 +25888,7 @@ IMAGE PIXEL MACRO ATTRIBUTES
       <section ref="C.7.6.3" name="">Table C.7-11a describes the Image Pixel Module.	
 Table C.7-11a
 IMAGE PIXEL MODULE ATTRIBUTES
-<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><entry value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
+<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><term value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
 Table C.7-11b specifies the common attributes that describe the pixel data of the image.
 
 Table C.7-11b
@@ -25901,7 +25901,7 @@ IMAGE PIXEL MACRO ATTRIBUTES
       <section ref="C.7.6.3" name="">Table C.7-11a describes the Image Pixel Module.	
 Table C.7-11a
 IMAGE PIXEL MODULE ATTRIBUTES
-<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><entry value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
+<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><term value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
 Table C.7-11b specifies the common attributes that describe the pixel data of the image.
 
 Table C.7-11b
@@ -25916,7 +25916,7 @@ IMAGE PIXEL MACRO ATTRIBUTES
       <section ref="C.7.6.3" name="">Table C.7-11a describes the Image Pixel Module.	
 Table C.7-11a
 IMAGE PIXEL MODULE ATTRIBUTES
-<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><entry value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
+<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><term value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
 Table C.7-11b specifies the common attributes that describe the pixel data of the image.
 
 Table C.7-11b
@@ -25931,7 +25931,7 @@ IMAGE PIXEL MACRO ATTRIBUTES
       <section ref="C.7.6.3" name="">Table C.7-11a describes the Image Pixel Module.	
 Table C.7-11a
 IMAGE PIXEL MODULE ATTRIBUTES
-<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><entry value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
+<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><term value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
 Table C.7-11b specifies the common attributes that describe the pixel data of the image.
 
 Table C.7-11b
@@ -25946,7 +25946,7 @@ IMAGE PIXEL MACRO ATTRIBUTES
       <section ref="C.7.6.3" name="">Table C.7-11a describes the Image Pixel Module.	
 Table C.7-11a
 IMAGE PIXEL MODULE ATTRIBUTES
-<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><entry value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
+<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><term value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
 Table C.7-11b specifies the common attributes that describe the pixel data of the image.
 
 Table C.7-11b
@@ -25960,7 +25960,7 @@ IMAGE PIXEL MACRO ATTRIBUTES
       <section ref="C.7.6.3" name="">Table C.7-11a describes the Image Pixel Module.	
 Table C.7-11a
 IMAGE PIXEL MODULE ATTRIBUTES
-<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><entry value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
+<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><term value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
 Table C.7-11b specifies the common attributes that describe the pixel data of the image.
 
 Table C.7-11b
@@ -25973,7 +25973,7 @@ IMAGE PIXEL MACRO ATTRIBUTES
       <section ref="C.7.6.3" name="">Table C.7-11a describes the Image Pixel Module.	
 Table C.7-11a
 IMAGE PIXEL MODULE ATTRIBUTES
-<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><entry value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
+<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><term value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
 Table C.7-11b specifies the common attributes that describe the pixel data of the image.
 
 Table C.7-11b
@@ -25991,7 +25991,7 @@ See PS 3.4 for further description.</description>
       <section ref="C.7.6.3" name="">Table C.7-11a describes the Image Pixel Module.	
 Table C.7-11a
 IMAGE PIXEL MODULE ATTRIBUTES
-<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><entry value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
+<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><term value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
 Table C.7-11b specifies the common attributes that describe the pixel data of the image.
 
 Table C.7-11b
@@ -26005,7 +26005,7 @@ RGB</description>
       <section ref="C.7.6.3" name="">Table C.7-11a describes the Image Pixel Module.	
 Table C.7-11a
 IMAGE PIXEL MODULE ATTRIBUTES
-<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><entry value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
+<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><term value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
 Table C.7-11b specifies the common attributes that describe the pixel data of the image.
 
 Table C.7-11b
@@ -26019,7 +26019,7 @@ IMAGE PIXEL MACRO ATTRIBUTES
       <section ref="C.7.6.3" name="">Table C.7-11a describes the Image Pixel Module.	
 Table C.7-11a
 IMAGE PIXEL MODULE ATTRIBUTES
-<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><entry value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
+<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><term value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
 Table C.7-11b specifies the common attributes that describe the pixel data of the image.
 
 Table C.7-11b
@@ -26032,7 +26032,7 @@ IMAGE PIXEL MACRO ATTRIBUTES
       <section ref="C.7.6.3" name="">Table C.7-11a describes the Image Pixel Module.	
 Table C.7-11a
 IMAGE PIXEL MODULE ATTRIBUTES
-<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><entry value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
+<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><term value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
 Table C.7-11b specifies the common attributes that describe the pixel data of the image.
 
 Table C.7-11b
@@ -26045,7 +26045,7 @@ IMAGE PIXEL MACRO ATTRIBUTES
       <section ref="C.7.6.3" name="">Table C.7-11a describes the Image Pixel Module.	
 Table C.7-11a
 IMAGE PIXEL MODULE ATTRIBUTES
-<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><entry value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
+<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><term value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
 Table C.7-11b specifies the common attributes that describe the pixel data of the image.
 
 Table C.7-11b
@@ -26058,7 +26058,7 @@ IMAGE PIXEL MACRO ATTRIBUTES
       <section ref="C.7.6.3" name="">Table C.7-11a describes the Image Pixel Module.	
 Table C.7-11a
 IMAGE PIXEL MODULE ATTRIBUTES
-<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><entry value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
+<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><term value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
 Table C.7-11b specifies the common attributes that describe the pixel data of the image.
 
 Table C.7-11b
@@ -26071,7 +26071,7 @@ IMAGE PIXEL MACRO ATTRIBUTES
       <section ref="C.7.6.3" name="">Table C.7-11a describes the Image Pixel Module.	
 Table C.7-11a
 IMAGE PIXEL MODULE ATTRIBUTES
-<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><entry value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
+<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><term value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
 Table C.7-11b specifies the common attributes that describe the pixel data of the image.
 
 Table C.7-11b
@@ -26085,7 +26085,7 @@ IMAGE PIXEL MACRO ATTRIBUTES
       <section ref="C.7.6.3" name="">Table C.7-11a describes the Image Pixel Module.	
 Table C.7-11a
 IMAGE PIXEL MODULE ATTRIBUTES
-<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><entry value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
+<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><term value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
 Table C.7-11b specifies the common attributes that describe the pixel data of the image.
 
 Table C.7-11b
@@ -26099,7 +26099,7 @@ IMAGE PIXEL MACRO ATTRIBUTES
       <section ref="C.7.6.3" name="">Table C.7-11a describes the Image Pixel Module.	
 Table C.7-11a
 IMAGE PIXEL MODULE ATTRIBUTES
-<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><entry value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
+<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><term value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
 Table C.7-11b specifies the common attributes that describe the pixel data of the image.
 
 Table C.7-11b
@@ -26113,7 +26113,7 @@ IMAGE PIXEL MACRO ATTRIBUTES
       <section ref="C.7.6.3" name="">Table C.7-11a describes the Image Pixel Module.	
 Table C.7-11a
 IMAGE PIXEL MODULE ATTRIBUTES
-<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><entry value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
+<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><term value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
 Table C.7-11b specifies the common attributes that describe the pixel data of the image.
 
 Table C.7-11b
@@ -26126,7 +26126,7 @@ IMAGE PIXEL MACRO ATTRIBUTES
       <section ref="C.7.6.3" name="">Table C.7-11a describes the Image Pixel Module.	
 Table C.7-11a
 IMAGE PIXEL MODULE ATTRIBUTES
-<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><entry value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
+<unrecognized-rows><term value="Attribute Name" meaning="Tag"/><term value="Include ‘Image Pixel Macro’ Table C.7-11b"/><term value="Pixel Data Provider URL" meaning="(0028,7FE0)"/><term value="Pixel Padding Range Limit" meaning="(0028,0121)"/></unrecognized-rows>
 Table C.7-11b specifies the common attributes that describe the pixel data of the image.
 
 Table C.7-11b
@@ -31286,7 +31286,7 @@ Procedure Code Sequence (0008,1032):
       <description>Type of equipment that originally acquired the data used to create images or related objects to which this Hanging Protocol applies. See C.7.3.1.1.1 for Defined Terms.
 Required if Anatomic Region Sequence (0008,2218) is not present. May be present otherwise.</description>
       <section ref="C.7.3.1.1.1" name="">Defined Terms for the Modality (0008,0060) are:
-<defined-terms><term value="CR" meaning="Computed Radiography"/><term value="MR" meaning="Magnetic Resonance"/><term value="US" meaning="Ultrasound"/><term value="BI" meaning="Biomagnetic imaging"/><term value="DD" meaning="Duplex Doppler"/><term value="ES" meaning="Endoscopy"/><entry value=""/><term value="PT" meaning="Positron emission tomography (PET)"/><term value="ST" meaning="Single-photon emission computed tomography (SPECT)"/><term value="XA" meaning="X-Ray Angiography"/><term value="RTIMAGE" meaning="Radiotherapy Image"/><term value="RTSTRUCT" meaning="Radiotherapy Structure Set"/><term value="RTRECORD" meaning="RT Treatment Record"/><term value="DX" meaning="Digital Radiography"/><term value="IO" meaning="Intra-oral Radiography"/><term value="GM" meaning="General Microscopy"/><term value="XC" meaning="External-camera Photography"/><term value="AU" meaning="Audio"/><term value="EPS" meaning="Cardiac Electrophysiology"/><term value="SR" meaning="SR Document"/><term value="OP" meaning="Ophthalmic Photography"/><term value="OCT" meaning="Optical Coherence Tomography (non-Ophthalmic)"/><term value="OPV" meaning="Ophthalmic Visual Field"/><term value="KO" meaning="Key Object Selection"/><term value="REG" meaning="Registration"/><term value="BDUS" meaning="Bone Densitometry (ultrasound)"/><term value="DOC" meaning="Document"/></defined-terms>
+<defined-terms><term value="CR" meaning="Computed Radiography"/><term value="MR" meaning="Magnetic Resonance"/><term value="US" meaning="Ultrasound"/><term value="BI" meaning="Biomagnetic imaging"/><term value="DD" meaning="Duplex Doppler"/><term value="ES" meaning="Endoscopy"/><term value=""/><term value="PT" meaning="Positron emission tomography (PET)"/><term value="ST" meaning="Single-photon emission computed tomography (SPECT)"/><term value="XA" meaning="X-Ray Angiography"/><term value="RTIMAGE" meaning="Radiotherapy Image"/><term value="RTSTRUCT" meaning="Radiotherapy Structure Set"/><term value="RTRECORD" meaning="RT Treatment Record"/><term value="DX" meaning="Digital Radiography"/><term value="IO" meaning="Intra-oral Radiography"/><term value="GM" meaning="General Microscopy"/><term value="XC" meaning="External-camera Photography"/><term value="AU" meaning="Audio"/><term value="EPS" meaning="Cardiac Electrophysiology"/><term value="SR" meaning="SR Document"/><term value="OP" meaning="Ophthalmic Photography"/><term value="OCT" meaning="Optical Coherence Tomography (non-Ophthalmic)"/><term value="OPV" meaning="Ophthalmic Visual Field"/><term value="KO" meaning="Key Object Selection"/><term value="REG" meaning="Registration"/><term value="BDUS" meaning="Bone Densitometry (ultrasound)"/><term value="DOC" meaning="Document"/></defined-terms>
 Retired Defined Terms for the Modality (0008,0060) are:
 <retired-defined-terms><term value="DS" meaning="Digital Subtraction Angiography (retired)"/><term value="DF" meaning="Digital fluoroscopy (retired)"/><term value="AS" meaning="Angioscopy"/><term value="EC" meaning="Echocardiography"/><term value="FA" meaning="Fluorescein angiography"/><term value="DM" meaning="Digital microscopy"/><term value="MA" meaning="Magnetic resonance angiography"/></retired-defined-terms>
 Note:	1. The XA modality incorporates the retired modality DS.
@@ -32177,14 +32177,14 @@ Note: This File is not DICOM formatted (no Preamble, nor DICM Prefix and Meta In
 If the Attribute Specific Character Set (0008,0005) is not present or has only a single value, Code Extension techniques are not used. Defined terms for the Attribute Specific Character Set (0008,0005), when single valued, are derived from the International Registration Number as per ISO 2375 (e.g., ISO_IR 100 for Latin alphabet No. 1). See Table C.12-2.
 Table C.12-2
  DEFINED TERMS FOR SINGLE-BYTE CHARACTER SETS WITHOUT CODE EXTENSIONS
-<unrecognized-rows><term value="Character Set Description" meaning="Defined Term"/><term value="Default repertoire" meaning="none"/><term value="Latin alphabet No. 1" meaning="ISO_IR 100"/><entry value=""/><term value="Latin alphabet No. 2" meaning="ISO_IR 101"/><entry value=""/><term value="Latin alphabet No. 3" meaning="ISO_IR 109"/><entry value=""/><term value="Latin alphabet No. 4" meaning="ISO_IR 110"/><entry value=""/><term value="Cyrillic" meaning="ISO_IR 144"/><entry value=""/><term value="Arabic" meaning="ISO_IR 127"/><entry value=""/><term value="Greek" meaning="ISO_IR 126"/><entry value=""/><term value="Hebrew" meaning="ISO_IR 138"/><entry value=""/><term value="Latin alphabet No. 5" meaning="ISO_IR 148"/><entry value=""/><term value="Japanese" meaning="ISO_IR 13"/><entry value=""/><term value="Thai" meaning="ISO_IR 166"/><entry value=""/></unrecognized-rows>
+<unrecognized-rows><term value="Character Set Description" meaning="Defined Term"/><term value="Default repertoire" meaning="none"/><term value="Latin alphabet No. 1" meaning="ISO_IR 100"/><term value=""/><term value="Latin alphabet No. 2" meaning="ISO_IR 101"/><term value=""/><term value="Latin alphabet No. 3" meaning="ISO_IR 109"/><term value=""/><term value="Latin alphabet No. 4" meaning="ISO_IR 110"/><term value=""/><term value="Cyrillic" meaning="ISO_IR 144"/><term value=""/><term value="Arabic" meaning="ISO_IR 127"/><term value=""/><term value="Greek" meaning="ISO_IR 126"/><term value=""/><term value="Hebrew" meaning="ISO_IR 138"/><term value=""/><term value="Latin alphabet No. 5" meaning="ISO_IR 148"/><term value=""/><term value="Japanese" meaning="ISO_IR 13"/><term value=""/><term value="Thai" meaning="ISO_IR 166"/><term value=""/></unrecognized-rows>
 Note:	To use the single-byte code table of JIS X0201, the value of attribute Specific Character Set (0008,0005), value 1 should be ISO_IR 13. This means that ISO-IR 13 is designated as the G1 code element which is invoked in the GR area. It should be understood that, in addition, ISO-IR 14 is designated as the G0 code element and this is invoked in the GL area.
 
 If the attribute Specific Character Set (0008,0005) has more than one value, Code Extension techniques are used and Escape Sequences may be encountered in all character sets. Requirements for the use of Code Extension techniques are specified in PS 3.5. In order to indicate the presence of Code Extension, the Defined Terms for the repertoires have the prefix “ISO 2022”, e.g., ISO 2022 IR 100 for the Latin Alphabet No. 1. See Table 12-3 and Table 12-4. Table 12-3 describes single-byte character sets for value 1 to value n of the attribute Specific Character Set (0008,0005), and Table 12-4 describes multi-byte character sets for value 2 to value n of the attribute Specific Character Set (0008,0005).
 Note:	A prefix other than “ISO 2022” may be needed in the future if other Code Extension techniques are adopted.
 Table C.12-3
 DEFINED TERMS FOR SINGLE-BYTE CHARACTER SETS WITH CODE EXTENSIONS
-<unrecognized-rows><term value="Character Set Description" meaning="Defined Term"/><term value="Default repertoire" meaning="ISO 2022 IR 6"/><impossible-happen/><term value="No. 1" meaning="ISO 2022 IR 100"/><impossible-happen/><term value="No. 2" meaning="ISO 2022 IR 101"/><impossible-happen/><term value="No. 3" meaning="ISO 2022 IR 109"/><impossible-happen/><term value="No. 4" meaning="ISO 2022 IR 110"/><term value="Cyrillic" meaning="ISO 2022 IR 144"/><term value="Arabic" meaning="ISO 2022 IR 127"/><term value="Greek" meaning="ISO 2022 IR 126"/><term value="Hebrew" meaning="ISO 2022 IR 138"/><impossible-happen/><term value="No. 5" meaning="ISO 2022 IR 148"/><term value="Japanese" meaning="ISO 2022 IR 13"/><term value="Thai" meaning="ISO 2022 IR 166"/><entry value=""/></unrecognized-rows>
+<unrecognized-rows><term value="Character Set Description" meaning="Defined Term"/><term value="Default repertoire" meaning="ISO 2022 IR 6"/><impossible-happen/><term value="No. 1" meaning="ISO 2022 IR 100"/><impossible-happen/><term value="No. 2" meaning="ISO 2022 IR 101"/><impossible-happen/><term value="No. 3" meaning="ISO 2022 IR 109"/><impossible-happen/><term value="No. 4" meaning="ISO 2022 IR 110"/><term value="Cyrillic" meaning="ISO 2022 IR 144"/><term value="Arabic" meaning="ISO 2022 IR 127"/><term value="Greek" meaning="ISO 2022 IR 126"/><term value="Hebrew" meaning="ISO 2022 IR 138"/><impossible-happen/><term value="No. 5" meaning="ISO 2022 IR 148"/><term value="Japanese" meaning="ISO 2022 IR 13"/><term value="Thai" meaning="ISO 2022 IR 166"/><term value=""/></unrecognized-rows>
 Note:	If the attribute Specific Character Set (0008,0005) has more than one value and value 1 is empty, it is assumed that value 1 is ISO 2022 IR 6.
 
 Table C.12-4
