@@ -60,11 +60,8 @@ Special normalize-space
   -->
   <xsl:function name="my:remove-trailing-dot" as="xs:string*">
     <xsl:param name="string" as="xs:string"/>
-    <xsl:variable name="result" as="xs:string" select="if (ends-with($string,'.'))
-	    then substring($string,1,string-length($string)-1)
-	    else $string"/>
-<xsl:value-of select="$result"/>
-	    
+    <xsl:variable name="result" as="xs:string" select="if (ends-with($string,'.'))      then substring($string,1,string-length($string)-1)      else $string"/>
+    <xsl:value-of select="$result"/>
   </xsl:function>
   <!--
 
@@ -175,23 +172,23 @@ Here is how you would get to the article and extract the section specified:
           <xsl:otherwise>
             <entry group="{$group}" element="{$element}" name="{$name_translate}">
               <!-- type ?? -->
-                <!-- very specific -->
-                <xsl:variable name="desc" select="translate($type,$single_quote1,$single_quote2)"/>
-                <xsl:variable name="n_description" select="my:normalize-paragraph($desc)"/>
+              <!-- very specific -->
+              <xsl:variable name="desc" select="translate($type,$single_quote1,$single_quote2)"/>
+              <xsl:variable name="n_description" select="my:normalize-paragraph($desc)"/>
               <description>
                 <xsl:value-of select="$n_description"/>
               </description>
-                  <xsl:variable name="dummy">
-                    <xsl:call-template name="get-description-reference">
-                      <xsl:with-param name="description" select="$n_description"/>
-                    </xsl:call-template>
-                  </xsl:variable>
-                  <xsl:if test="$dummy !=''">
-                    <xsl:call-template name="extract-section-paragraphs">
-                      <xsl:with-param name="article" select="../../../.."/>
-                      <xsl:with-param name="extractsection" select="$dummy"/>
-                    </xsl:call-template>
-                  </xsl:if>
+              <xsl:variable name="dummy">
+                <xsl:call-template name="get-description-reference">
+                  <xsl:with-param name="description" select="$n_description"/>
+                </xsl:call-template>
+              </xsl:variable>
+              <xsl:if test="$dummy !=''">
+                <xsl:call-template name="extract-section-paragraphs">
+                  <xsl:with-param name="article" select="../../../.."/>
+                  <xsl:with-param name="extractsection" select="$dummy"/>
+                </xsl:call-template>
+              </xsl:if>
             </entry>
           </xsl:otherwise>
         </xsl:choose>
@@ -604,16 +601,16 @@ att name=</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-<!-- TEMPLATES -->
+  <!-- TEMPLATES -->
   <xsl:template match="para" mode="extract">
     <xsl:value-of select="concat(.,'&#10;')"/>
   </xsl:template>
-<!-- TODO need work on tables to parse defined terms / enumerated-->
+  <!-- TODO need work on tables to parse defined terms / enumerated-->
   <xsl:template match="informaltable" mode="new">
-<!-- iterate over all rows -->
-<xsl:for-each select="tgroup/tbody/row/entry">
-<!-- output define term and description -->
-<!-- FIXME this is difficult if not impossible to deal both with:
+    <!-- iterate over all rows -->
+    <xsl:for-each select="tgroup/tbody/row/entry">
+      <!-- output define term and description -->
+      <!-- FIXME this is difficult if not impossible to deal both with:
 <para>C.7.3.1.1.1	Modality</para>
 and
 <para>C.8.3.1.1.1	Image Type</para>
@@ -621,20 +618,21 @@ and
 FIXME:
 See C.8.7.10 and C.8.15.3.9 ... reference a complete module instead of directly defined terms... pffff
 -->
-<!-- output defined term only -->
-          <xsl:value-of select="para"/>
-<!-- output newline -->
-      <xsl:if test="not(position()=last())">
+      <!-- output defined term only -->
+      <entry value="{para}"/>
+      <!--xsl:value-of select="para"/-->
+      <!-- output newline -->
+      <!--xsl:if test="not(position()=last())">
         <xsl:value-of select="'&#10;'"/>
-      </xsl:if>
+      </xsl:if-->
     </xsl:for-each>
-   </xsl:template>
+  </xsl:template>
   <xsl:template match="informaltable" mode="old">
-<!-- iterate over all rows -->
+    <!-- iterate over all rows -->
     <xsl:for-each select="tgroup/tbody/row">
       <xsl:choose>
-<!-- output define term and description -->
-<!-- FIXME this is difficult if not impossible to deal both with:
+        <!-- output define term and description -->
+        <!-- FIXME this is difficult if not impossible to deal both with:
 <para>C.7.3.1.1.1	Modality</para>
 and
 <para>C.8.3.1.1.1	Image Type</para>
@@ -643,47 +641,81 @@ FIXME:
 See C.8.7.10 and C.8.15.3.9 ... reference a complete module instead of directly defined terms... pffff
 -->
         <xsl:when test="count(entry)&gt;1 and string(entry[2])">
+                <xsl:variable name="dummy">
           <xsl:value-of select="concat(entry[1]/para[1],' ')"/>
           <xsl:if test="not(matches(entry[1]/para[1],'= *$') or matches(entry[2]/para[1],'^ *='))">
             <xsl:value-of select="'= '"/>
           </xsl:if>
           <xsl:value-of select="entry[2]/para[1]"/>
+  </xsl:variable>
+                  <xsl:analyze-string select="$dummy" regex="(.*)=(.*)">
+          <xsl:matching-substring>
+             <entry value="{normalize-space(regex-group(1))}" meaning="{normalize-space(regex-group(2))}"/>
+          </xsl:matching-substring>
+        <xsl:non-matching-substring>
+             <impossible-happen/>
+        </xsl:non-matching-substring>
+        </xsl:analyze-string>
         </xsl:when>
-<!-- output defined term only -->
+        <!-- output defined term only -->
         <xsl:otherwise>
-          <xsl:value-of select="entry[1]/para[1]"/>
+          <entry value="{entry[1]/para[1]}"/>
+          <!--xsl:value-of select="entry[1]/para[1]"/-->
         </xsl:otherwise>
       </xsl:choose>
-<!-- output newline -->
-      <xsl:if test="not(position()=last())">
+      <!-- output newline -->
+      <!--xsl:if test="not(position()=last())">
         <xsl:value-of select="'&#10;'"/>
-      </xsl:if>
+      </xsl:if-->
     </xsl:for-each>
-   </xsl:template>
-
+  </xsl:template>
   <xsl:template match="informaltable" mode="extract">
-      <xsl:choose>
-              <xsl:when test="tgroup/colspec">
-          <xsl:apply-templates select="." mode="new" />
-              </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates select="." mode="old" />
-        </xsl:otherwise>
-      </xsl:choose>
- </xsl:template>
- 
+    <xsl:variable name="prevpara" select="preceding::para[1]"/>
+    <!--xsl:message>
+            PREC PARA:<xsl:value-of select="$prevpara"/>
+    </xsl:message-->
+    <xsl:variable name="tabletype">
+            <xsl:choose>
+                    <xsl:when test="matches($prevpara,'Retired Defined Terms')">
+                            <xsl:value-of select="'retired-defined-terms'"/>
+                    </xsl:when>
+                     <xsl:when test="matches($prevpara,'Defined Terms') and not(matches($prevpara,'Retired'))">
+                            <xsl:value-of select="'defined-terms'"/>
+                    </xsl:when>
+                    <xsl:when test="matches($prevpara,'Enumerated Values')">
+                            <xsl:value-of select="'enumerated-values'"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                            <xsl:value-of select="'unrecognized'"/>
+                    </xsl:otherwise>
+             </xsl:choose>
+    </xsl:variable>
+    <!--xsl:message>
+            PREC PARA TYPE:<xsl:value-of select="$tabletype"/>
+    </xsl:message-->
+    <xsl:element name="{$tabletype}">
+    <xsl:choose>
+      <xsl:when test="tgroup/colspec">
+        <xsl:apply-templates select="." mode="new"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="." mode="old"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    </xsl:element>
+  </xsl:template>
   <xsl:template name="copy-section-paragraphs">
     <xsl:param name="section-paragraphs"/>
     <xsl:variable name="current-paragraph" select="$section-paragraphs[1]"/>
     <!-- search for next section title -->
-    <xsl:if test="($current-paragraph[name()='para' or name()='informaltable']) 
-	    and not(matches(normalize-space($current-paragraph),'^([A-F]|[1-9]+[0-9ab]?)(\.[1-9ab]?[0-9ab]+)+ '))">
-	    <xsl:if test="not(starts-with(normalize-space($current-paragraph),'0M8R4KGxG'))"> <!-- embedded graphics ? -->
-      <xsl:apply-templates select="$current-paragraph" mode="extract"/>
-      <xsl:call-template name="copy-section-paragraphs">
-        <xsl:with-param name="section-paragraphs" select="$section-paragraphs[position()&gt;1]"/>
-      </xsl:call-template>
-    </xsl:if>
+    <xsl:if test="($current-paragraph[name()='para' or name()='informaltable'])       and not(matches(normalize-space($current-paragraph),'^([A-F]|[1-9]+[0-9ab]?)(\.[1-9ab]?[0-9ab]+)+ '))">
+      <xsl:if test="not(starts-with(normalize-space($current-paragraph),'0M8R4KGxG'))">
+        <!-- embedded graphics ? -->
+        <xsl:apply-templates select="$current-paragraph" mode="extract"/>
+        <xsl:call-template name="copy-section-paragraphs">
+          <xsl:with-param name="section-paragraphs" select="$section-paragraphs[position()&gt;1]"/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:if>
   </xsl:template>
   <!--
