@@ -42,20 +42,33 @@ class FileMetaInformation;
 class GDCM_EXPORT Writer
 {
 public:
-  Writer():Stream(),F(new File),CheckFileMetaInformation(true) {}
+  Writer():F(new File),CheckFileMetaInformation(true) {
+	  Stream = NULL;
+	  Ofstream = NULL;
+  }
   virtual ~Writer();
 
   virtual bool Write(); // Execute()
   void SetFileName(const char *filename) {
-    //std::cerr << "Stream: " << filename << std::endl;
-    Stream.open(filename, std::ios::out | std::ios::binary );
-    assert( Stream.is_open() );
-    assert( !Stream.fail() );
+    std::cerr << "Stream: " << filename << std::endl;
+	std::cerr << "Ofstream: " << Ofstream << std::endl;
+	if (Ofstream && Ofstream->is_open())
+	{
+		Ofstream->close();
+	}
+	Ofstream = new std::ofstream();
+    Ofstream->open(filename, std::ios::out | std::ios::binary );
+    assert( Ofstream->is_open() );
+    assert( !Ofstream->fail() );
     //std::cerr << Stream.is_open() << std::endl;
+    Stream = Ofstream;
 #ifndef NDEBUG
     DebugFileName = filename;
 #endif
    }
+  void SetStream(std::ostream &input_stream) {
+	  Stream = &input_stream;
+  }
 
   void SetFile(const File& f) { F = &f; }
   File &GetFile() { return *F; }
@@ -65,7 +78,8 @@ public:
   void CheckFileMetaInformationOn() { CheckFileMetaInformation = true; }
 
 protected:
-  std::ofstream Stream;
+  std::ostream *Stream;
+  std::ofstream *Ofstream;
 
 private:
   SmartPointer<File> F;

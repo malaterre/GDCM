@@ -585,7 +585,7 @@ bool ImageWriter::Write()
   //Stream << dummy;
 
 
-  assert( Stream.is_open() );
+  assert( Stream );
   if( !Writer::Write() )
     {
     return false;
