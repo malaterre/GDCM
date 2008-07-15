@@ -320,13 +320,33 @@ void TableReader::StartElement(const char *name, const char **atts)
     // TODO !
     }
   else if ( strcmp(name,"standard-sop-classes") == 0 )
-  {
-	  // TODO !
-  }
-   else if ( strcmp(name,"mapping") == 0 )
-  {
-	  // TODO !
-  }
+    {
+    // TODO !
+    }
+  else if ( strcmp(name,"mapping") == 0 )
+    {
+    // TODO !
+    }
+  else if ( strcmp(name,"unrecognized-rows") == 0 )
+    {
+    // TODO !
+    }
+  else if ( strcmp(name,"retired-defined-terms") == 0 )
+    {
+    // TODO !
+    }
+  else if ( strcmp(name,"enumerated-values") == 0 )
+    {
+    // TODO !
+    }
+  else if ( strcmp(name,"defined-terms") == 0 )
+    {
+    // TODO !
+    }
+  else if ( strcmp(name,"term") == 0 )
+    {
+    // TODO !
+    }
   else
     {
     abort();
@@ -404,14 +424,34 @@ void TableReader::EndElement(const char *name)
       }
     }
   else if( strcmp(name, "mapping" ) == 0 )
-  {
+    {
     // TODO !
-  }
+    }
   else if( strcmp(name, "standard-sop-classes" ) == 0 )
-  {
+    {
     // TODO !
-  }
+    }
   else if( strcmp(name, "section" ) == 0 )
+    {
+    // TODO !
+    }
+  else if( strcmp(name, "unrecognized-rows" ) == 0 )
+    {
+    // TODO !
+    }
+  else if( strcmp(name, "retired-defined-terms" ) == 0 )
+    {
+    // TODO !
+    }
+  else if( strcmp(name, "enumerated-values" ) == 0 )
+    {
+    // TODO !
+    }
+  else if( strcmp(name, "defined-terms" ) == 0 )
+    {
+    // TODO !
+    }
+  else if( strcmp(name, "term" ) == 0 )
     {
     // TODO !
     }
