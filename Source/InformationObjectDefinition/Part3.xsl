@@ -659,7 +659,7 @@ See C.8.7.10 and C.8.15.3.9 ... reference a complete module instead of directly 
      </xsl:element>
           </xsl:matching-substring>
         <xsl:non-matching-substring>
-             <impossible-happen/>
+             <!--impossible-happen/-->
         </xsl:non-matching-substring>
         </xsl:analyze-string>
         </xsl:when>

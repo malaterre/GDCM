@@ -8641,7 +8641,7 @@ Shall be one less than the value in Bits Stored (0028,0101).</description>
       <section ref="C.8.4.8.1.1" name="">By definition, NM Images are multi-dimensional Multi-frame Images. The value of the Frame Increment Pointer (0028,0009) contains the Tag for one or more frame indexing vectors. This determines the number of dimensions of frame indices in the image, and the order in which these indices vary from one frame to the next, with the last Tag indicating the most rapidly changing index. The Enumerated Values for the Frame Increment Pointer (0028,0009) are determined by the Image Type (0008,0008), Value 3, as shown in Table C.8-8.
 Table C.8-8
 ENUMERATED VALUES FOR FRAME INCREMENT POINTER
-<unrecognized-rows><term value="Image Type (0008,0008), Value 3" meaning="Frame Increment Pointer (0028,0009)"/><term value="STATIC or WHOLE BODY" meaning="0054H 0010H \ 0054H 0020H"/><impossible-happen/><term value="DYNAMIC" meaning="0054H 0010H \ 0054H 0020H \ 0054H 0030H \ 0054H 0100H"/><impossible-happen/><term value="GATED" meaning="0054H 0010H \ 0054H 0020H \ 0054H 0060H \ 0054H 0070H"/><impossible-happen/><term value="TOMO" meaning="0054H 0010H \ 0054H 0020H \ 0054H 0050H \ 0054H 0090H"/><impossible-happen/><term value="GATED TOMO" meaning="0054H 0010H \ 0054H 0020H \ 0054H 0050H \ 0054H 0060H \ 0054H 0070H \ 0054H 0090H"/><term value="RECON TOMO" meaning="0054H 0080H"/><term value="RECON GATED TOMO" meaning="0054H 0060H \ 0054H 0070H \ 0054H 0080H"/></unrecognized-rows>
+<unrecognized-rows><term value="Image Type (0008,0008), Value 3" meaning="Frame Increment Pointer (0028,0009)"/><term value="STATIC or WHOLE BODY" meaning="0054H 0010H \ 0054H 0020H"/><term value="DYNAMIC" meaning="0054H 0010H \ 0054H 0020H \ 0054H 0030H \ 0054H 0100H"/><term value="GATED" meaning="0054H 0010H \ 0054H 0020H \ 0054H 0060H \ 0054H 0070H"/><term value="TOMO" meaning="0054H 0010H \ 0054H 0020H \ 0054H 0050H \ 0054H 0090H"/><term value="GATED TOMO" meaning="0054H 0010H \ 0054H 0020H \ 0054H 0050H \ 0054H 0060H \ 0054H 0070H \ 0054H 0090H"/><term value="RECON TOMO" meaning="0054H 0080H"/><term value="RECON GATED TOMO" meaning="0054H 0060H \ 0054H 0070H \ 0054H 0080H"/></unrecognized-rows>
          </section>
     </entry>
     <entry group="0054" element="0010" name="Energy Window Vector" type="1C">
@@ -10737,7 +10737,7 @@ Note:	X-Ray images generally use PRIMARY value for images captured from patient 
 
 c.	Value 3 shall identify the image set in terms of the imaging planes. Enumerated Values are:
 
-<enumerated-values><term value="SINGLE PLANE" meaning="Image is a single plane acquisition;"/><impossible-happen/><term value="BIPLANE A" meaning="Image is the first plane (e.g., Frontal) of a Bi-plane acquisition;"/><impossible-happen/><term value="BIPLANE B" meaning="Image is the second plane (e.g., Lateral) of a Bi-plane acquisition"/><impossible-happen/></enumerated-values>
+<enumerated-values><term value="SINGLE PLANE" meaning="Image is a single plane acquisition;"/><term value="BIPLANE A" meaning="Image is the first plane (e.g., Frontal) of a Bi-plane acquisition;"/><term value="BIPLANE B" meaning="Image is the second plane (e.g., Lateral) of a Bi-plane acquisition"/></enumerated-values>
 d.	Other Values are implementation specific (optional).
 
 </section>
@@ -10746,7 +10746,7 @@ d.	Other Values are implementation specific (optional).
       <description>The relationship between the Pixel sample values and the X-Ray beam intensity.
 See Section C.8.7.1.1.2.</description>
       <section ref="C.8.7.1.1.2" name="">Pixel Intensity Relationship (0028,1040) shall identify the relationship of the pixel values to the X-Ray beam intensity. Defined terms are:
-<unrecognized-rows><term value="LIN" meaning="Approximately proportional to X-Ray beam intensity;"/><impossible-happen/><term value="LOG" meaning="Non-linear “ Log Function”; A Modality LUT shall be included with the image to allow it to be scaled back to its proportional value to X-Ray beam intensity;"/><impossible-happen/><term value="DISP" meaning="Ready to be displayed; A Modality LUT may be included with the image to allow it to be scaled back to its proportional value to X-Ray beam intensity. The Attribute Acquisition Device Processing Description may be used to provide some indication on the pre-processing performed to create the ready to be displayed image."/></unrecognized-rows>
+<unrecognized-rows><term value="LIN" meaning="Approximately proportional to X-Ray beam intensity;"/><term value="LOG" meaning="Non-linear “ Log Function”; A Modality LUT shall be included with the image to allow it to be scaled back to its proportional value to X-Ray beam intensity;"/><term value="DISP" meaning="Ready to be displayed; A Modality LUT may be included with the image to allow it to be scaled back to its proportional value to X-Ray beam intensity. The Attribute Acquisition Device Processing Description may be used to provide some indication on the pre-processing performed to create the ready to be displayed image."/></unrecognized-rows>
          </section>
     </entry>
     <entry group="0028" element="0002" name="Samples per Pixel" type="1">
@@ -16811,9 +16811,9 @@ ISO_13818_2 = MPEG2 Compression
       <section ref="C.8.9.4.1.9" name="">Image Index (0054,1330) is an index identifying the position of this image within a PET Series.
 Note:	The scheme for encoding Image Index (0054,1330) is as follows. Images within a PET Series can be viewed as a multi-dimensional array whose possible dimensions include R-R Intervals, Time Slots, Time Slices, and Slices. The dimensions of the array are defined by the Series Type (0054,1000) Value 1. Each dimension of the array has an index that identifies the position of this image in the array. The indices are: R-R Interval Index, Time Slot Index, Time Slice Index, Slice Index. The indices are calculated as follows:
 
-<unrecognized-rows><term value="Index" meaning="Range of Index"/><impossible-happen/><term value="Index" meaning="1 to"/><impossible-happen/><impossible-happen/><term value="Index" meaning="1 to"/><impossible-happen/><impossible-happen/><term value="Index" meaning="1 to"/><impossible-happen/><term value="Slice Index" meaning="1 to"/><impossible-happen/></unrecognized-rows>
+<unrecognized-rows><term value="Index" meaning="Range of Index"/><term value="Index" meaning="1 to"/><term value="Index" meaning="1 to"/><term value="Index" meaning="1 to"/><term value="Slice Index" meaning="1 to"/></unrecognized-rows>
 Using these index values the position of this image within the multi-dimensional array (the Image Index (0054,1330)) is calculated as follows:
-<unrecognized-rows><impossible-happen/><term value="Value 1" meaning="Dimensions of Array"/><impossible-happen/><term value="STATIC" meaning="Slice"/><term value="WHOLE BODY" meaning="Slice"/><term value="DYNAMIC" meaning="Time Slice \"/><impossible-happen/><term value="GATED" meaning="R-R Interval \"/><impossible-happen/></unrecognized-rows>
+<unrecognized-rows><term value="Value 1" meaning="Dimensions of Array"/><term value="STATIC" meaning="Slice"/><term value="WHOLE BODY" meaning="Slice"/><term value="DYNAMIC" meaning="Time Slice \"/><term value="GATED" meaning="R-R Interval \"/></unrecognized-rows>
          </section>
     </entry>
     <entry group="0008" element="0022" name="Acquisition Date" type="2">
@@ -17901,7 +17901,7 @@ a.	Value 1 shall identify the Pixel Data Characteristics in accordance with Sect
 b.	Value 2 shall identify the Patient Examination Characteristics in accordance with Section C.7.6.1.1.2; Enumerated Values are: PRIMARY and SECONDARY.
 c.	Value 3 may be absent, but if present shall identify the members of a stereo pair, in which case Referenced Image Sequence (0008,1140) is used to identify the other member of the pair. If present, the Enumerated Values are:
 
-<enumerated-values><term value="STEREO L" meaning="Image is the left image (relative to the observer's left) of a stereo pair acquisition;"/><impossible-happen/><term value="STEREO R" meaning="Image is the right image (relative to the observer's right) of a stereo pair acquisition."/><impossible-happen/></enumerated-values>
+<enumerated-values><term value="STEREO L" meaning="Image is the left image (relative to the observer's left) of a stereo pair acquisition;"/><term value="STEREO R" meaning="Image is the right image (relative to the observer's right) of a stereo pair acquisition."/></enumerated-values>
 d.	Other Values are implementation specific (optional).
 
 </section>
@@ -22269,7 +22269,7 @@ Note:	X-Ray images generally use PRIMARY value for images captured from patient 
 
 c.	Value 3 shall identify the image set in terms of the imaging planes. Enumerated Values are:
 
-<enumerated-values><term value="SINGLE PLANE" meaning="Image is a single plane acquisition;"/><impossible-happen/><term value="BIPLANE A" meaning="Image is the first plane (e.g., Frontal) of a Bi-plane acquisition;"/><impossible-happen/><term value="BIPLANE B" meaning="Image is the second plane (e.g., Lateral) of a Bi-plane acquisition"/><impossible-happen/><term value="UNDEFINED" meaning="Image is created by using data from one or two planes (e.g., reconstructed projection). May only be used when Image Type Value 1 equals DERIVED."/></enumerated-values>
+<enumerated-values><term value="SINGLE PLANE" meaning="Image is a single plane acquisition;"/><term value="BIPLANE A" meaning="Image is the first plane (e.g., Frontal) of a Bi-plane acquisition;"/><term value="BIPLANE B" meaning="Image is the second plane (e.g., Lateral) of a Bi-plane acquisition"/><term value="UNDEFINED" meaning="Image is created by using data from one or two planes (e.g., reconstructed projection). May only be used when Image Type Value 1 equals DERIVED."/></enumerated-values>
 d.	Other Values are implementation specific (optional).
 
 </section>
@@ -22888,7 +22888,7 @@ Only a single Item shall be permitted in this sequence.</description>
     <entry group="0028" element="1040" name="&gt;Pixel Intensity Relationship" type="1">
       <description>The relationship between the Pixel and the X-Ray beam intensity. See C.8.19.6.4.1.</description>
       <section ref="C.8.19.6.4.1" name="">Pixel Intensity Relationship (0028,1040) shall identify the relationship of the pixel values to the X-Ray beam intensity. Defined terms are:
-<unrecognized-rows><term value="LIN" meaning="Approximately proportional to X-Ray beam intensity."/><impossible-happen/><term value="LOG" meaning="Non-linear “ Log Function”; A Pixel Intensity Relationship LUT shall be included with the image to allow it to be mapped back to its proportional value to X-Ray beam intensity."/><impossible-happen/><term value="OTHER" meaning="Not proportional to X-Ray beam intensity. If a TO_LINEAR Pixel Intensity Relationship LUT item is supplied, scaling back to X-Ray beam intensity is possible."/></unrecognized-rows>
+<unrecognized-rows><term value="LIN" meaning="Approximately proportional to X-Ray beam intensity."/><term value="LOG" meaning="Non-linear “ Log Function”; A Pixel Intensity Relationship LUT shall be included with the image to allow it to be mapped back to its proportional value to X-Ray beam intensity."/><term value="OTHER" meaning="Not proportional to X-Ray beam intensity. If a TO_LINEAR Pixel Intensity Relationship LUT item is supplied, scaling back to X-Ray beam intensity is possible."/></unrecognized-rows>
          </section>
     </entry>
     <entry group="0028" element="1041" name="&gt;Pixel Intensity Relationship Sign" type="1">
@@ -25308,7 +25308,7 @@ If the attribute Specific Character Set (0008,0005) has more than one value, Cod
 Note:	A prefix other than “ISO 2022” may be needed in the future if other Code Extension techniques are adopted.
 Table C.12-3
 DEFINED TERMS FOR SINGLE-BYTE CHARACTER SETS WITH CODE EXTENSIONS
-<unrecognized-rows><term value="Character Set Description" meaning="Defined Term"/><term value="Default repertoire" meaning="ISO 2022 IR 6"/><impossible-happen/><term value="No. 1" meaning="ISO 2022 IR 100"/><impossible-happen/><term value="No. 2" meaning="ISO 2022 IR 101"/><impossible-happen/><term value="No. 3" meaning="ISO 2022 IR 109"/><impossible-happen/><term value="No. 4" meaning="ISO 2022 IR 110"/><term value="Cyrillic" meaning="ISO 2022 IR 144"/><term value="Arabic" meaning="ISO 2022 IR 127"/><term value="Greek" meaning="ISO 2022 IR 126"/><term value="Hebrew" meaning="ISO 2022 IR 138"/><impossible-happen/><term value="No. 5" meaning="ISO 2022 IR 148"/><term value="Japanese" meaning="ISO 2022 IR 13"/><term value="Thai" meaning="ISO 2022 IR 166"/><term value=""/></unrecognized-rows>
+<unrecognized-rows><term value="Character Set Description" meaning="Defined Term"/><term value="Default repertoire" meaning="ISO 2022 IR 6"/><term value="No. 1" meaning="ISO 2022 IR 100"/><term value="No. 2" meaning="ISO 2022 IR 101"/><term value="No. 3" meaning="ISO 2022 IR 109"/><term value="No. 4" meaning="ISO 2022 IR 110"/><term value="Cyrillic" meaning="ISO 2022 IR 144"/><term value="Arabic" meaning="ISO 2022 IR 127"/><term value="Greek" meaning="ISO 2022 IR 126"/><term value="Hebrew" meaning="ISO 2022 IR 138"/><term value="No. 5" meaning="ISO 2022 IR 148"/><term value="Japanese" meaning="ISO 2022 IR 13"/><term value="Thai" meaning="ISO 2022 IR 166"/><term value=""/></unrecognized-rows>
 Note:	If the attribute Specific Character Set (0008,0005) has more than one value and value 1 is empty, it is assumed that value 1 is ISO 2022 IR 6.
 
 Table C.12-4
@@ -32184,7 +32184,7 @@ If the attribute Specific Character Set (0008,0005) has more than one value, Cod
 Note:	A prefix other than “ISO 2022” may be needed in the future if other Code Extension techniques are adopted.
 Table C.12-3
 DEFINED TERMS FOR SINGLE-BYTE CHARACTER SETS WITH CODE EXTENSIONS
-<unrecognized-rows><term value="Character Set Description" meaning="Defined Term"/><term value="Default repertoire" meaning="ISO 2022 IR 6"/><impossible-happen/><term value="No. 1" meaning="ISO 2022 IR 100"/><impossible-happen/><term value="No. 2" meaning="ISO 2022 IR 101"/><impossible-happen/><term value="No. 3" meaning="ISO 2022 IR 109"/><impossible-happen/><term value="No. 4" meaning="ISO 2022 IR 110"/><term value="Cyrillic" meaning="ISO 2022 IR 144"/><term value="Arabic" meaning="ISO 2022 IR 127"/><term value="Greek" meaning="ISO 2022 IR 126"/><term value="Hebrew" meaning="ISO 2022 IR 138"/><impossible-happen/><term value="No. 5" meaning="ISO 2022 IR 148"/><term value="Japanese" meaning="ISO 2022 IR 13"/><term value="Thai" meaning="ISO 2022 IR 166"/><term value=""/></unrecognized-rows>
+<unrecognized-rows><term value="Character Set Description" meaning="Defined Term"/><term value="Default repertoire" meaning="ISO 2022 IR 6"/><term value="No. 1" meaning="ISO 2022 IR 100"/><term value="No. 2" meaning="ISO 2022 IR 101"/><term value="No. 3" meaning="ISO 2022 IR 109"/><term value="No. 4" meaning="ISO 2022 IR 110"/><term value="Cyrillic" meaning="ISO 2022 IR 144"/><term value="Arabic" meaning="ISO 2022 IR 127"/><term value="Greek" meaning="ISO 2022 IR 126"/><term value="Hebrew" meaning="ISO 2022 IR 138"/><term value="No. 5" meaning="ISO 2022 IR 148"/><term value="Japanese" meaning="ISO 2022 IR 13"/><term value="Thai" meaning="ISO 2022 IR 166"/><term value=""/></unrecognized-rows>
 Note:	If the attribute Specific Character Set (0008,0005) has more than one value and value 1 is empty, it is assumed that value 1 is ISO 2022 IR 6.
 
 Table C.12-4
