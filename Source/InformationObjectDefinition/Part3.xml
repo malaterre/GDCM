@@ -3888,10 +3888,14 @@ Note: Some IODs support the Anatomic Region Sequence (0008,2218), which can prov
       <section ref="C.7.3.1.1.2" name="">Patient Position (0018,5100) specifies the position of the patient relative to the imaging equipment space. This attribute is intended for annotation purposes only. It does not provide an exact mathematical relationship of the patient to the imaging equipment.
 When facing the front of the imaging equipment, Head First is defined as the patient’s head being positioned toward the front of the imaging equipment. Feet First is defined as the patient’s feet being positioned toward the front of the imaging equipment. Prone is defined as the patient’s face being positioned in a downward (gravity) direction. Supine is defined as the patient’s face being in an upward direction. Decubitus Right is defined as the patient’s right side being in a downward direction. Decubitus Left is defined as the patient’s left side being in a downward direction.
 The Defined Terms are:
-HFP	= Head First-Prone = HFS	= Head First-Supine
-HFDR	= Head First-Decubitus Right = HFDL	= Head First-Decubitus Left
-FFDR	= Feet First-Decubitus Right = FFDL	= Feet First-Decubitus Left
-FFP	= Feet First-Prone = FFS	= Feet First-Supine
+HFP	= Head First-Prone
+HFS	= Head First-Supine
+HFDR	= Head First-Decubitus Right
+HFDL	= Head First-Decubitus Left
+FFDR	= Feet First-Decubitus Right
+FFDL	= Feet First-Decubitus Left
+FFP	= Feet First-Prone
+FFS	= Feet First-Supine
 </section>
     </entry>
     <entry group="0028" element="0108" name="Smallest Pixel Value in Series" type="3">
@@ -8550,10 +8554,18 @@ One or more items may be present.</description>
     <entry group="0008" element="0008" name="Image Type" type="1">
       <description>Image identification characteristics. See C.8.3.1.1.1 for specialization.</description>
       <section ref="C.8.3.1.1.1" name="">For MR Images, Image Type (0008,0008) is specified to be Type 1 and use one of the following Defined Terms for Value 3:
-MPR = PROJECTION IMAGE
-T2 MAP = DIFFUSION MAP
-PHASE MAP = VELOCITY MAP
-PHASE SUBTRACT = MODULUS SUBTRACT
+MPR
+PROJECTION IMAGE
+T1 MAP
+T2 MAP
+DIFFUSION MAP
+DENSITY MAP
+PHASE MAP
+VELOCITY MAP
+IMAGE ADDITION
+PHASE SUBTRACT
+MODULUS SUBTRACT
+OTHER
 </section>
     </entry>
     <entry group="0028" element="0002" name="Samples per Pixel" type="1">
@@ -10438,10 +10450,18 @@ PALETTE COLOR = 1
       <description>Specifies the intended interpretation of the pixel data.
 See C.8.5.6.1.2 for specialization.</description>
       <section ref="C.8.5.6.1.2" name="">For US Images, Photometric Interpretation (0028,0004) is specified to use the following Defined Terms:
-MONOCHROME2 = PALETTE COLOR
-ARGB (retired) = YBR_FULL
-YBR_PARTIAL_422 = YBR_RCT
+MONOCHROME2
+PALETTE COLOR
+RGB
+ARGB (retired)
+YBR_FULL
+YBR_FULL_422
+YBR_PARTIAL_422
+YBR_RCT
+YBR_ICT
 YBR_PARTIAL_420
+
+
 Note:	It is recommended that future implementations should not use ARGB photometric interpretation.
 
 See PS 3.5 for restrictions imposed by compressed Transfer Syntaxes.
@@ -10537,19 +10557,43 @@ See C.8.5.6.1.4 for specialization.</description>
       <description>Image identification characteristics.
 See C.8.5.6.1.1 for specialization.</description>
       <section ref="C.8.5.6.1.1" name="">For US Images, Image Type (0008,0008) is specified to be Type 2. The Defined Terms for Value 3 are:
-ABDOMINAL = BREAST
-ENDOCAVITARY = ENDORECTAL
-EPICARDIAL = FETAL HEART
-INTRACARDIAC = INTRAOPERATIVE
-MUSCULOSKELETAL = NEONATAL HEAD
-OPHTHALMIC = PEDIATRIC
-RETROPERITONEAL = SCROTAL
-TEE = THYROID
-TTE = US BIOPSY
+ABDOMINAL
+BREAST
+CHEST
+ENDOCAVITARY
+ENDORECTAL
+ENDOVAGINAL
+EPICARDIAL
+FETAL HEART
+GYNECOLOGY
+INTRACARDIAC
+INTRAOPERATIVE
+INTRAVASCULAR
+MUSCULOSKELETAL
+NEONATAL HEAD
+OBSTETRICAL
+OPHTHALMIC
+PEDIATRIC
+PELVIC
+RETROPERITONEAL
+SCROTAL
+SMALL PARTS
+TEE
+THYROID
+TRANSCRANIAL
+TTE
+US BIOPSY
+VASCULAR
 Value 4 is constructed as a modality bit map to allow for a description of multi-modality displays. In using this bit map, the sum of the values of the various modalities will unambiguously determine the constituent modalities.
-0001 = 2D Imaging = 0002 = M-Mode
-0008 = PW Doppler = 0010 = Color Doppler
-0040 = 3D Rendering = 0100 = Color Power Mode
+0001 = 2D Imaging
+0002 = M-Mode
+0004 = CW Doppler
+0008 = PW Doppler
+0010 = Color Doppler
+0020 = Color M-Mode
+0040 = 3D Rendering
+0100 = Color Power Mode
+0200 = Tissue Characterization
 Notes:	1. All Values are hexadecimal encoded as a CS. See PS 3.5.
 	2. For example, Color Flow with CW spectral Doppler would have a value 4 = 0015. Note that no assumption should be made in Color Doppler or Color M-Mode regarding underlying B or M-Mode, respectively.
 
@@ -17989,10 +18033,14 @@ If present, shall be consistent with Patient Gantry Relationship Code Sequence (
       <section ref="C.7.3.1.1.2" name="">Patient Position (0018,5100) specifies the position of the patient relative to the imaging equipment space. This attribute is intended for annotation purposes only. It does not provide an exact mathematical relationship of the patient to the imaging equipment.
 When facing the front of the imaging equipment, Head First is defined as the patient’s head being positioned toward the front of the imaging equipment. Feet First is defined as the patient’s feet being positioned toward the front of the imaging equipment. Prone is defined as the patient’s face being positioned in a downward (gravity) direction. Supine is defined as the patient’s face being in an upward direction. Decubitus Right is defined as the patient’s right side being in a downward direction. Decubitus Left is defined as the patient’s left side being in a downward direction.
 The Defined Terms are:
-HFP	= Head First-Prone = HFS	= Head First-Supine
-HFDR	= Head First-Decubitus Right = HFDL	= Head First-Decubitus Left
-FFDR	= Feet First-Decubitus Right = FFDL	= Feet First-Decubitus Left
-FFP	= Feet First-Prone = FFS	= Feet First-Supine
+HFP	= Head First-Prone
+HFS	= Head First-Supine
+HFDR	= Head First-Decubitus Right
+HFDL	= Head First-Decubitus Left
+FFDR	= Feet First-Decubitus Right
+FFDL	= Feet First-Decubitus Left
+FFP	= Feet First-Prone
+FFS	= Feet First-Supine
 </section>
     </entry>
     <entry group="0018" element="5101" name="View Position" type="3">
@@ -33195,11 +33243,24 @@ Note:	Cross-sectional images do not normally contain a categorical description o
 
 	Having determined the major axis of the row and column, the category of plane can be obtained from a table lookup:
 
- = Row
-Column = RL
+
+Row
+Column
 RL
-AP = TRANSVERSE
-HF = CORONAL
+AP
+HF
+RL
+
+TRANSVERSE
+CORONAL
+AP
+TRANSVERSE
+
+SAGITTAL
+HF
+CORONAL
+SAGITTAL
+
 	Alternatively, one can obtain a single vector that is the normal to the orientation (cross product of the row and column unit vectors), then find which of the x, y and z components has the maximum absolute value that is above threshold; if x then SAGITTAL, if y then CORONAL, if z then TRANSVERSE; if all of the components are below threshold then the orientation is OBLIQUE.
 
 	Since it is also necessary to determine whether or not to flip or rotate the image into the preferred orientation (as specified by Display Set Patient orientation (0072,0700)) for the category of plane (e.g., sagittals are normally viewed with row direction posteriorly and column direction towards the feet), the categorical row and column direction to use can be obtained as above, additional accounting for the sign of the direction cosine, e.g.:
@@ -33236,11 +33297,24 @@ Note:	Cross-sectional images do not normally contain a categorical description o
 
 	Having determined the major axis of the row and column, the category of plane can be obtained from a table lookup:
 
- = Row
-Column = RL
+
+Row
+Column
 RL
-AP = TRANSVERSE
-HF = CORONAL
+AP
+HF
+RL
+
+TRANSVERSE
+CORONAL
+AP
+TRANSVERSE
+
+SAGITTAL
+HF
+CORONAL
+SAGITTAL
+
 	Alternatively, one can obtain a single vector that is the normal to the orientation (cross product of the row and column unit vectors), then find which of the x, y and z components has the maximum absolute value that is above threshold; if x then SAGITTAL, if y then CORONAL, if z then TRANSVERSE; if all of the components are below threshold then the orientation is OBLIQUE.
 
 	Since it is also necessary to determine whether or not to flip or rotate the image into the preferred orientation (as specified by Display Set Patient orientation (0072,0700)) for the category of plane (e.g., sagittals are normally viewed with row direction posteriorly and column direction towards the feet), the categorical row and column direction to use can be obtained as above, additional accounting for the sign of the direction cosine, e.g.:
@@ -33282,11 +33356,24 @@ Note:	Cross-sectional images do not normally contain a categorical description o
 
 	Having determined the major axis of the row and column, the category of plane can be obtained from a table lookup:
 
- = Row
-Column = RL
+
+Row
+Column
 RL
-AP = TRANSVERSE
-HF = CORONAL
+AP
+HF
+RL
+
+TRANSVERSE
+CORONAL
+AP
+TRANSVERSE
+
+SAGITTAL
+HF
+CORONAL
+SAGITTAL
+
 	Alternatively, one can obtain a single vector that is the normal to the orientation (cross product of the row and column unit vectors), then find which of the x, y and z components has the maximum absolute value that is above threshold; if x then SAGITTAL, if y then CORONAL, if z then TRANSVERSE; if all of the components are below threshold then the orientation is OBLIQUE.
 
 	Since it is also necessary to determine whether or not to flip or rotate the image into the preferred orientation (as specified by Display Set Patient orientation (0072,0700)) for the category of plane (e.g., sagittals are normally viewed with row direction posteriorly and column direction towards the feet), the categorical row and column direction to use can be obtained as above, additional accounting for the sign of the direction cosine, e.g.:
@@ -33340,11 +33427,24 @@ Note:	Cross-sectional images do not normally contain a categorical description o
 
 	Having determined the major axis of the row and column, the category of plane can be obtained from a table lookup:
 
- = Row
-Column = RL
+
+Row
+Column
 RL
-AP = TRANSVERSE
-HF = CORONAL
+AP
+HF
+RL
+
+TRANSVERSE
+CORONAL
+AP
+TRANSVERSE
+
+SAGITTAL
+HF
+CORONAL
+SAGITTAL
+
 	Alternatively, one can obtain a single vector that is the normal to the orientation (cross product of the row and column unit vectors), then find which of the x, y and z components has the maximum absolute value that is above threshold; if x then SAGITTAL, if y then CORONAL, if z then TRANSVERSE; if all of the components are below threshold then the orientation is OBLIQUE.
 
 	Since it is also necessary to determine whether or not to flip or rotate the image into the preferred orientation (as specified by Display Set Patient orientation (0072,0700)) for the category of plane (e.g., sagittals are normally viewed with row direction posteriorly and column direction towards the feet), the categorical row and column direction to use can be obtained as above, additional accounting for the sign of the direction cosine, e.g.:

@@ -609,7 +609,27 @@ att name=</xsl:text>
     <xsl:value-of select="concat(.,'&#10;')"/>
   </xsl:template>
 <!-- TODO need work on tables to parse defined terms / enumerated-->
-  <xsl:template match="informaltable" mode="extract">
+  <xsl:template match="informaltable" mode="new">
+<!-- iterate over all rows -->
+<xsl:for-each select="tgroup/tbody/row/entry">
+<!-- output define term and description -->
+<!-- FIXME this is difficult if not impossible to deal both with:
+<para>C.7.3.1.1.1	Modality</para>
+and
+<para>C.8.3.1.1.1	Image Type</para>
+
+FIXME:
+See C.8.7.10 and C.8.15.3.9 ... reference a complete module instead of directly defined terms... pffff
+-->
+<!-- output defined term only -->
+          <xsl:value-of select="para"/>
+<!-- output newline -->
+      <xsl:if test="not(position()=last())">
+        <xsl:value-of select="'&#10;'"/>
+      </xsl:if>
+    </xsl:for-each>
+   </xsl:template>
+  <xsl:template match="informaltable" mode="old">
 <!-- iterate over all rows -->
     <xsl:for-each select="tgroup/tbody/row">
       <xsl:choose>
@@ -639,7 +659,18 @@ See C.8.7.10 and C.8.15.3.9 ... reference a complete module instead of directly 
         <xsl:value-of select="'&#10;'"/>
       </xsl:if>
     </xsl:for-each>
-  </xsl:template>
+   </xsl:template>
+
+  <xsl:template match="informaltable" mode="extract">
+      <xsl:choose>
+              <xsl:when test="tgroup/colspec">
+          <xsl:apply-templates select="." mode="new" />
+              </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="." mode="old" />
+        </xsl:otherwise>
+      </xsl:choose>
+ </xsl:template>
  
   <xsl:template name="copy-section-paragraphs">
     <xsl:param name="section-paragraphs"/>
