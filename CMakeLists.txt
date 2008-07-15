@@ -472,7 +472,7 @@ ENDMACRO(PROCESSONEDIR)
 
 #-----------------------------------------------------------------------------
 # Need to be the last operation:
-SET(GDCM_INCLUDE_PATH 
+SET(GDCM_INCLUDE_PATH
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
@@ -482,6 +482,12 @@ SET(GDCM_INCLUDE_PATH
   #"${GDCM_SOURCE_DIR}/Utilities"
   #"${GDCM_BINARY_DIR}/Utilities/openjpeg"
   )
+IF(MSVC)
+  SET(GDCM_INCLUDE_PATH
+${GDCM_INCLUDE_PATH}
+    "${GDCM_SOURCE_DIR}/Utilities/C99"
+)
+ENDIF(MSVC)
 SET(GDCM_LIBRARY_DIRS ${LIBRARY_OUTPUT_PATH})
 SUBDIRS(CMake/ExportConfiguration)
 
