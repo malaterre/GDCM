@@ -607,6 +607,7 @@ att name=</xsl:text>
   </xsl:template>
   <!-- TODO need work on tables to parse defined terms / enumerated-->
   <xsl:template match="informaltable" mode="new">
+          <xsl:param name="entry"/>
     <!-- iterate over all rows -->
     <xsl:for-each select="tgroup/tbody/row/entry">
       <!-- output define term and description -->
@@ -619,7 +620,8 @@ FIXME:
 See C.8.7.10 and C.8.15.3.9 ... reference a complete module instead of directly defined terms... pffff
 -->
       <!-- output defined term only -->
-      <entry value="{para}"/>
+      <xsl:element name="{$entry}"><xsl:attribute name="value" select="para"/>
+      </xsl:element>
       <!--xsl:value-of select="para"/-->
       <!-- output newline -->
       <!--xsl:if test="not(position()=last())">
@@ -628,6 +630,7 @@ See C.8.7.10 and C.8.15.3.9 ... reference a complete module instead of directly 
     </xsl:for-each>
   </xsl:template>
   <xsl:template match="informaltable" mode="old">
+          <xsl:param name="entry"/>
     <!-- iterate over all rows -->
     <xsl:for-each select="tgroup/tbody/row">
       <xsl:choose>
@@ -650,7 +653,10 @@ See C.8.7.10 and C.8.15.3.9 ... reference a complete module instead of directly 
   </xsl:variable>
                   <xsl:analyze-string select="$dummy" regex="(.*)=(.*)">
           <xsl:matching-substring>
-             <entry value="{normalize-space(regex-group(1))}" meaning="{normalize-space(regex-group(2))}"/>
+                  <xsl:element name="{$entry}">
+                          <xsl:attribute name="value" select="normalize-space(regex-group(1))" />
+                          <xsl:attribute name="meaning" select="normalize-space(regex-group(2))"/>
+     </xsl:element>
           </xsl:matching-substring>
         <xsl:non-matching-substring>
              <impossible-happen/>
@@ -686,20 +692,25 @@ See C.8.7.10 and C.8.15.3.9 ... reference a complete module instead of directly 
                             <xsl:value-of select="'enumerated-values'"/>
                     </xsl:when>
                     <xsl:otherwise>
-                            <xsl:value-of select="'unrecognized'"/>
+                            <xsl:value-of select="'unrecognized-rows'"/>
                     </xsl:otherwise>
              </xsl:choose>
     </xsl:variable>
     <!--xsl:message>
             PREC PARA TYPE:<xsl:value-of select="$tabletype"/>
     </xsl:message-->
+    <!--xsl:variable name="entryname" select=""/-->
     <xsl:element name="{$tabletype}">
     <xsl:choose>
       <xsl:when test="tgroup/colspec">
-        <xsl:apply-templates select="." mode="new"/>
+        <xsl:apply-templates select="." mode="new">
+                <xsl:with-param name="entry" select="'term'"/>
+        </xsl:apply-templates>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates select="." mode="old"/>
+        <xsl:apply-templates select="." mode="old">
+                <xsl:with-param name="entry" select="'term'"/>
+        </xsl:apply-templates>
       </xsl:otherwise>
     </xsl:choose>
     </xsl:element>
