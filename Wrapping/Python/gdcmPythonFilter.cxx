@@ -90,16 +90,16 @@ PyObject *PythonFilter::ToPyObject(const Tag& t) const
         CSComp el[4];
         std::stringstream ss;
         ss << s;
-        //int i = 0;
-        //while( os >> el[i] )
-        //{
-        //        ++i;
-        //}
-        ss >> el[0];
-        ss >> el[1];
-        ss >> el[2];
+        unsigned int i = 0;
+        while( i < count && ss >> el[i] )
+        {
+                ++i;
+        }
+        //ss >> el[0];
+        //ss >> el[1];
+        //ss >> el[2];
       //PyObject *o = Py_BuildValue("s", s.c_str() );
-      PyObject *o = Py_BuildValue("s", el[0].c_str() );
+      PyObject *o = Py_BuildValue("s", el[1].c_str() );
       Py_INCREF(o);
       return o;
     }
