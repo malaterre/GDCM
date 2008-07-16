@@ -84,16 +84,21 @@ PyObject *PythonFilter::ToPyObject(const Tag& t) const
       std::string s( bv->GetPointer(), bv->GetLength() );
       s.resize( std::min( s.size(), strlen( s.c_str() ) ) ); // strlen is garantee to be lower or equal to ::size()
       // http://www.python.org/doc/current/ext/buildValue.html
+      // http://mail.python.org/pipermail/python-list/2002-April/137612.html
         unsigned int count = VM::GetNumberOfElementsFromArray(bv->GetPointer(), bv->GetLength());
         CSComp el[4];
-        std::ofstringstream os(s);
-        int i = 0;
-        while( os >> el[i] )
-        {
-                ++i;
-        }
+        std::sstringstream ss;
+        os << s;
+        //int i = 0;
+        //while( os >> el[i] )
+        //{
+        //        ++i;
+        //}
+        ss >> el[0];
+        ss >> el[1];
+        ss >> el[2];
       //PyObject *o = Py_BuildValue("s", s.c_str() );
-      PyObject *o = Py_BuildValue("s", el[i] );
+      PyObject *o = Py_BuildValue("s", el[0].c_str() );
       Py_INCREF(o);
       return o;
     }
