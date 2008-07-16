@@ -22,5 +22,5 @@ r.Read()
 
 f = gdcm.PythonFilter()
 f.SetFile( r.GetFile() )
-t = gdcm.Tag( 0x0, 0x1 )
+t = gdcm.Tag( 0x8, 0x8 )
 print f.ToPyObject( t )

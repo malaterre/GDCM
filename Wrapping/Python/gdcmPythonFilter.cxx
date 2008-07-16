@@ -18,6 +18,7 @@
 #include "gdcmByteValue.h"
 #include "gdcmAttribute.h"
 
+#include <sstream>
 
 namespace gdcm
 {
@@ -87,7 +88,7 @@ PyObject *PythonFilter::ToPyObject(const Tag& t) const
       // http://mail.python.org/pipermail/python-list/2002-April/137612.html
         unsigned int count = VM::GetNumberOfElementsFromArray(bv->GetPointer(), bv->GetLength());
         CSComp el[4];
-        std::sstringstream ss;
+        std::stringstream ss;
         os << s;
         //int i = 0;
         //while( os >> el[i] )
