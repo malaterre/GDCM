@@ -89,7 +89,7 @@ PyObject *PythonFilter::ToPyObject(const Tag& t) const
         unsigned int count = VM::GetNumberOfElementsFromArray(bv->GetPointer(), bv->GetLength());
         CSComp el[4];
         std::stringstream ss;
-        os << s;
+        ss << s;
         //int i = 0;
         //while( os >> el[i] )
         //{
