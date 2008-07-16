@@ -21,6 +21,8 @@
 
 namespace gdcm
 {
+// Py_BuildValue:
+// http://www.python.org/doc/1.5.2p2/ext/buildValue.html
 
 PythonFilter::PythonFilter():F(new File)
 {
@@ -61,6 +63,7 @@ PyObject *PythonFilter::ToPyObject(const Tag& t) const
     }
 
   VR vr = entry.GetVR();
+  VM vm = entry.GetVM();
   // If Explicit override with coded VR:
   if( de.GetVR() != VR::INVALID && de.GetVR() != VR::UN )
     {
@@ -81,7 +84,16 @@ PyObject *PythonFilter::ToPyObject(const Tag& t) const
       std::string s( bv->GetPointer(), bv->GetLength() );
       s.resize( std::min( s.size(), strlen( s.c_str() ) ) ); // strlen is garantee to be lower or equal to ::size()
       // http://www.python.org/doc/current/ext/buildValue.html
-      PyObject *o = Py_BuildValue("s", s.c_str() );
+        unsigned int count = VM::GetNumberOfElementsFromArray(bv->GetPointer(), bv->GetLength());
+        CSComp el[4];
+        std::ofstringstream os(s);
+        int i = 0;
+        while( os >> el[i] )
+        {
+                ++i;
+        }
+      //PyObject *o = Py_BuildValue("s", s.c_str() );
+      PyObject *o = Py_BuildValue("s", el[i] );
       Py_INCREF(o);
       return o;
     }
