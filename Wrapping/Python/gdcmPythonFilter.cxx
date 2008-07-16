@@ -87,19 +87,39 @@ PyObject *PythonFilter::ToPyObject(const Tag& t) const
       // http://www.python.org/doc/current/ext/buildValue.html
       // http://mail.python.org/pipermail/python-list/2002-April/137612.html
         unsigned int count = VM::GetNumberOfElementsFromArray(bv->GetPointer(), bv->GetLength());
-        CSComp el[4];
+        //CSComp el[4];
         std::stringstream ss;
         ss << s;
+/*
         unsigned int i = 0;
         while( i < count && ss >> el[i] )
         {
                 ++i;
         }
+*/
+        Element<VR::CS,VM::VM4> el;
+        el.Set( de.GetValue() );
+//std::cout << "DEBUG:" << el[0] << std::endl;
+//std::cout << "DEBUG:" << el[1] << std::endl;
+//std::cout << "DEBUG:" << el[2] << std::endl;
+//std::cout << "DEBUG:" << el[3] << std::endl;
+//std::cout << "DEBUG:" << count << std::endl;
         //ss >> el[0];
         //ss >> el[1];
         //ss >> el[2];
       //PyObject *o = Py_BuildValue("s", s.c_str() );
-      PyObject *o = Py_BuildValue("s", el[1].c_str() );
+      //PyObject *o = Py_BuildValue("s", el[0].c_str() );
+PyObject* tuple = PyTuple_New(count);
+
+    for (int i = 0; i < count; i++) {
+        //double rVal = data[i];
+        //PyTuple_SetItem(tuple, i, Py_BuildValue("d", rVal));
+        const char *s = el[i];
+        PyTuple_SetItem(tuple, i, Py_BuildValue("s", s));
+    }
+PyObject *o = tuple;
+
+
       Py_INCREF(o);
       return o;
     }
