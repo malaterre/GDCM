@@ -174,12 +174,29 @@ PyObject *DataElementToPyObject(DataElement const &de, VR const &vr)
       s.resize( std::min( s.size(), strlen( s.c_str() ) ) ); // strlen is garantee to be lower or equal to ::size()
       // http://www.python.org/doc/current/ext/buildValue.html
       // http://mail.python.org/pipermail/python-list/2002-April/137612.html
-      unsigned int count = VM::GetNumberOfElementsFromArray(bv->GetPointer(), bv->GetLength());
+      unsigned int count;
+      if( vr & VR::VRASCII )
+             count = VM::GetNumberOfElementsFromArray(bv->GetPointer(), bv->GetLength());
+      else /*( vr & VR::VRASCII ) */
+             count = bv->GetLength() / vr.GetSize();
       const char *ptype = GetPythonTypeFromVR( vr );
 //std::cout << "DEBUG:" << ptype << std::endl;
       Element<T,VM::VM1_n> el;
       el.SetLength( count * sizeof(typename Element<T,VM::VM1_n>::Type) );
       el.Set( de.GetValue() );
+      PyObject *o;
+      if( count == 0 )
+      {
+              o = 0;
+      }
+      else if( count == 1 )
+      {
+        helper s = el[i];
+        o = Py_BuildValue((char*)ptype, s);
+       }
+      else
+      {
+
       PyObject* tuple = PyTuple_New(count);
 
       for (int i = 0; i < count; i++) {
@@ -189,7 +206,8 @@ PyObject *DataElementToPyObject(DataElement const &de, VR const &vr)
         //PyTuple_SetItem(tuple, i, Py_BuildValue("s", s));
         PyTuple_SetItem(tuple, i, Py_BuildValue((char*)ptype, s));
       }
-      PyObject *o = tuple;
+      o = tuple;
+      }
 
 
       Py_INCREF(o);
