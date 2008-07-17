@@ -332,7 +332,7 @@ public:
   void Set(Value const &v) {
     const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
     assert( bv ); // That would be bad...
-    if( VR::IsBinary( VR(TVR) ) )
+    if( VRToEncoding<TVR>::Mode == VRBINARY )
       {
       const Type* array = (Type*)bv->GetPointer();
       if( array ) {
