@@ -191,7 +191,7 @@ PyObject *DataElementToPyObject(DataElement const &de, VR const &vr)
       }
       else if( count == 1 )
       {
-        helper s = el[i];
+        helper s = el[0];
         o = Py_BuildValue((char*)ptype, s);
        }
       else
