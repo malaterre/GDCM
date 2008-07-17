@@ -332,18 +332,22 @@ public:
   void Set(Value const &v) {
     const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
     assert( bv ); // That would be bad...
-    //const Type* array = (Type*)bv->GetPointer();
-    //if( array ) {
-    //assert( array ); // That would be bad...
-    //assert( Internal == 0 );
-    ////assert( VR::IsBinary( VR(TVR) ) );
-    //SetArray(array, bv->GetLength() ); }
-    std::stringstream ss;
-    std::string s = std::string( bv->GetPointer(), bv->GetLength() );
-    ss.str( s );
-    EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
-      GetLength(),ss);
- 
+    if( VR::IsBinary( VR(TVR) ) )
+      {
+      const Type* array = (Type*)bv->GetPointer();
+      if( array ) {
+        assert( array ); // That would be bad...
+        assert( Internal == 0 );
+        SetArray(array, bv->GetLength() ); }
+      }
+    else
+      {
+      std::stringstream ss;
+      std::string s = std::string( bv->GetPointer(), bv->GetLength() );
+      ss.str( s );
+      EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal,
+        GetLength(),ss);
+      }
   }
 
   // Need to be placed after definition of EncodingImplementation<VR::VRASCII>
