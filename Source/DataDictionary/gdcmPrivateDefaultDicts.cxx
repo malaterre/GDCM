@@ -7123,7 +7123,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   //{0x1135,0x0000,"Voxar 2.16.124.113543.6003.1999.12.20.12.5.0",VR::UL,VM::VM1,"Group Length 1135",true },
   //{0x3115,0x0000,"http://www.gemedicalsystems.com/it_solutions/rad_pacs/",VR::UL,VM::VM1,"Group Length 3115",true },
 
-  {0xffff,0xffff,"",VR::INVALID,VM::VM0,"",true }, // Dummy invalid element
+  {0xffff,0xffff,"GDCM Private Sentinel",VR::INVALID,VM::VM0,"",true }, // Dummy invalid element
   {0xffff,0xffff,"",VR::INVALID,VM::VM0,0,true } // Gard (will NOT be added)
 };
 
