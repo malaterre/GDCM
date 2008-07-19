@@ -67,7 +67,7 @@ namespace gdcm
   template <typename TDE, typename TSwap>
   std::istream &DataSet::ReadUpToTag(std::istream &is, const Tag &t, const std::set<Tag> & skiptags) {
     DataElement de;
-    while( !is.eof() && de.ReadOrSkip<TDE,TSwap>(is, skiptags) )
+    while( !is.eof() && de.template ReadOrSkip<TDE,TSwap>(is, skiptags) )
       {
       // If tag read was in skiptags then we should NOT add it:
       if( skiptags.count( de.GetTag() ) == 0 )
