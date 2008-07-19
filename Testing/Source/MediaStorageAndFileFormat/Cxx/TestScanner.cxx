@@ -117,8 +117,12 @@ int TestScanner(int argc, char *argv[])
   std::cout << "Mapping for " << filename << " is :" << std::endl;
   const gdcm::Scanner::TagToValue &tv = it->second;
   //const std::string &filename = d.GetFilenames()[0];
-  gdcm::Scanner::TagToValue::const_iterator it2 = tv.find( t1 );
-  if( it2 == tv.end() || t1 != it2->first ) return 1;
+  gdcm::Scanner::TagToValue::const_iterator it2 = tv.find( t5 );
+  if( it2 == tv.end() || t5 != it2->first ) 
+    {
+    std::cerr << "Could not find tag:" << t5 << std::endl;
+    return 1;
+    }
   const char * t1value = it2->second;
   std::cout << filename << " -> " << t1 << " = " << (*t1value ? t1value : "none" ) << std::endl;
 
@@ -137,7 +141,7 @@ int TestScanner(int argc, char *argv[])
       }
     else
       {
-      std::cout << filename << " has " << reftag << " = no value !" << std::endl;
+      std::cout << filename << " has " << reftag << " = no value or not DICOM" << std::endl;
       }
     }
 }

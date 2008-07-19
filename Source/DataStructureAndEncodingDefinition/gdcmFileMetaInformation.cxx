@@ -495,14 +495,15 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
       }
     else
       {
-      std::streampos start = is.tellg();
-      ImplicitDataElement ide;
-      ide.Read<SwapperNoOp>(is); // might throw an expection which will NOT be caught
-      std::streampos cur = is.tellg();
-      std::cout << "s-c" << start - cur << std::endl;
-      is.seekg( start - cur, std::ios::cur );
-      // ok we could read at least one implicit element
-      DataSetTS = TransferSyntax::ImplicitVRLittleEndian;
+    throw Exception( "Cannot find DICOM type. Giving up." );
+    //  std::streampos start = is.tellg();
+    //  ImplicitDataElement ide;
+    //  ide.Read<SwapperNoOp>(is); // might throw an expection which will NOT be caught
+    //  std::streampos cur = is.tellg();
+    //  std::cout << "s-c" << start - cur << std::endl;
+    //  is.seekg( start - cur, std::ios::cur );
+    //  // ok we could read at least one implicit element
+    //  DataSetTS = TransferSyntax::ImplicitVRLittleEndian;
       }
     }
   return is;
