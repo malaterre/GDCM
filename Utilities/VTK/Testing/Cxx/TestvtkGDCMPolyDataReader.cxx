@@ -20,7 +20,7 @@
 #include "gdcmTrace.h"
 
 static const char * rtstruct_files[] = {
-  "gdcmNonImageData/RT/RTSTRUCT_1.3.6.1.4.1.22213.1.1396.2.dcm",
+  "gdcmNonImageData/RTSTRUCT_1.3.6.1.4.1.22213.1.1396.2.dcm",
   "gdcmNonImageData/RT/RTStruct.dcm",
   "gdcmNonImageData/exRT_Structure_Set_Storage.dcm",
   0
