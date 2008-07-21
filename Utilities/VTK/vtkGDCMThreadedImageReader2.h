@@ -27,11 +27,7 @@
 //
 // .SECTION FIXME: need to implement the other mode where FileLowerLeft is set to OFF
 //
-// .SECTION FIXME: you need to call SetFileName when reading a volume file (multiple slices DICOM)
-// since SetFileNames expect each single file to be single slice (see parent class)
-//
-// .SECTION Implementation note: we need to reimplement SplitExtent to make sure we are only
-// splitting in the case of multiple files (and not single multi-frames image).
+// .SECTION FIXME: need to implement reading of series of 3D files
 //
 // .SECTION Implementation note: this class is meant to superseed vtkGDCMThreadedImageReader
 // because it had support for ProgressEvent support even from python layer. There is a

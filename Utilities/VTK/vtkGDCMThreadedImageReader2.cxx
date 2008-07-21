@@ -56,6 +56,7 @@ vtkGDCMThreadedImageReader2::vtkGDCMThreadedImageReader2()
   memset(this->IconImageDataExtent,0,6*sizeof(*IconImageDataExtent));
 }
 
+//----------------------------------------------------------------------------
 vtkGDCMThreadedImageReader2::~vtkGDCMThreadedImageReader2()
 {
   if( this->FileNames )
@@ -65,11 +66,13 @@ vtkGDCMThreadedImageReader2::~vtkGDCMThreadedImageReader2()
   this->SetFileName(NULL);
 }
 
+//----------------------------------------------------------------------------
 const char *vtkGDCMThreadedImageReader2::GetFileName(int i)
 {
   return this->FileNames->GetValue( i );
 }
 
+//----------------------------------------------------------------------------
 void vtkGDCMThreadedImageReader2::SetFileName(const char *filename)
 {
   if( !filename )
@@ -78,6 +81,7 @@ void vtkGDCMThreadedImageReader2::SetFileName(const char *filename)
     }
   //this->FileNames->Clear();
   this->FileNames->InsertNextValue( filename );
+  assert( this->FileNames->GetNumberOfValues() == 1 );
 }
 
 //----------------------------------------------------------------------------
@@ -91,12 +95,17 @@ void vtkGDCMThreadedImageReader2Execute(vtkGDCMThreadedImageReader2 *self,
   (void)numFiles; (void)inDatas;
   printf("outExt:%d,%d,%d,%d,%d,%d\n",
     outExt[0], outExt[1], outExt[2], outExt[3], outExt[4], outExt[5]);
-  for( int i = outExt[4]; i <= outExt[5]; ++i )
+  // FIXME:
+  // The code could be a little tidier, all I am trying to do here is differenciate the 
+  // case where we have a series of 2D files and the case where we have a single multi-frames
+  // files...
+  int maxfiles = self->GetFileNames()->GetNumberOfValues();
+  for( int i = outExt[4]; i <= outExt[5] && i < maxfiles; ++i )
     {
+    assert( i < maxfiles );
     const char *filename = self->GetFileNames()->GetValue( i );
     //ReadOneFile( filename );
     //outData->GetPointData()->GetScalars()->SetName("GDCMImage");
-
 
     if( id == 0 )
       {
@@ -109,7 +118,7 @@ void vtkGDCMThreadedImageReader2Execute(vtkGDCMThreadedImageReader2 *self,
 
     //char * pointer = static_cast<char*>(outData->GetScalarPointerForExtent(outExt));
     char * pointer = static_cast<char*>(outData->GetScalarPointer(0,0,i));
-//printf("pointer:%i\n",*pointer);
+    //printf("pointer:%i\n",*pointer);
     gdcm::ImageReader reader;
     reader.SetFileName( filename );
     if( !reader.Read() )
@@ -119,11 +128,12 @@ void vtkGDCMThreadedImageReader2Execute(vtkGDCMThreadedImageReader2 *self,
     const gdcm::Image &image = reader.GetImage();
     unsigned long len = image.GetBufferLength();
     image.GetBuffer(pointer);
-(void)len;
+    (void)len;
     }
 
 }
 
+//----------------------------------------------------------------------------
 int vtkGDCMThreadedImageReader2::RequestInformation (
   vtkInformation * request,
   vtkInformationVector** inputVector,
@@ -145,17 +155,19 @@ int vtkGDCMThreadedImageReader2::RequestInformation (
     return 0;
     }
 
+  /*
   if( this->FileNames )
-    {
-    int zmin = 0;
-    int zmax = 0;
-    zmax = this->FileNames->GetNumberOfValues() - 1;
-    if( this->DataExtent[4] != zmin || this->DataExtent[5] != zmax )
-      {
-      vtkErrorMacro( "Problem with extent" );
-      return 0;
-      }
-    }
+  {
+  int zmin = 0;
+  int zmax = 0;
+  zmax = this->FileNames->GetNumberOfValues() - 1;
+  if( this->DataExtent[4] != zmin || this->DataExtent[5] != zmax )
+  {
+  vtkErrorMacro( "Problem with extent" );
+  return 0;
+  }
+  }
+   */
   // Cannot deduce anything else otherwise...
 
   int numvol = 1;
@@ -185,7 +197,7 @@ int vtkGDCMThreadedImageReader2::RequestInformation (
     vtkInformation *outInfo = outputVector->GetInformationObject(i);
     switch(i)
       {
-    // root Pixel Data
+      // root Pixel Data
     case 0:
       outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), this->DataExtent, 6);
       //outInfo->Set(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), this->DataExtent, 6);
@@ -193,13 +205,13 @@ int vtkGDCMThreadedImageReader2::RequestInformation (
       outInfo->Set(vtkDataObject::ORIGIN(), this->DataOrigin, 3);
       vtkDataObject::SetPointDataActiveScalarInfo(outInfo, this->DataScalarType, this->NumberOfScalarComponents);
       break;
-    // Icon Image
+      // Icon Image
     case IconImagePortNumber:
       outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), this->IconImageDataExtent, 6);
       vtkDataObject::SetPointDataActiveScalarInfo(outInfo, VTK_UNSIGNED_CHAR, 1);
       break;
-    // Overlays:
-    //case OverlayPortNumber:
+      // Overlays:
+      //case OverlayPortNumber:
     default:
       outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), 
         this->DataExtent[0], this->DataExtent[1], 
@@ -244,6 +256,12 @@ int vtkGDCMThreadedImageReader2::SplitExtent(int splitExt[6], int startExt[6],
     return 1;
     }
 
+  // If single file always says 1:
+  // FIXME need to handle series of 3D files too...
+  if( this->GetFileNames()->GetNumberOfValues() == 1 )
+    {
+    return 1;
+    }
   // else normal SplitExtent as copied from vtkThreadedImageAlgorithm
 
   // determine the actual number of pieces that will be generated
@@ -260,9 +278,6 @@ int vtkGDCMThreadedImageReader2::SplitExtent(int splitExt[6], int startExt[6],
     splitExt[splitAxis*2] = splitExt[splitAxis*2] + num*valuesPerThread;
     }
   
-  vtkDebugMacro("  Split Piece: ( " <<splitExt[0]<< ", " <<splitExt[1]<< ", "
-                << splitExt[2] << ", " << splitExt[3] << ", "
-                << splitExt[4] << ", " << splitExt[5] << ")");
 
   return maxThreadIdUsed + 1;
 }
