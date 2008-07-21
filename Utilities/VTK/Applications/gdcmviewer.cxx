@@ -379,7 +379,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   balloonwidget->SetInteractor(iren);
   balloonwidget->SetRepresentation(balloonrep);
   balloonrep->Delete();
-  balloonwidget->AddBalloon(viewer->GetImageActor(),"This is a DICOM image",NULL);
+  //balloonwidget->AddBalloon(viewer->GetImageActor(),"This is a DICOM image",NULL);
 
   vtkBalloonCallback *cbk = vtkBalloonCallback::New();
   balloonwidget->AddObserver(vtkCommand::WidgetActivateEvent,cbk);
