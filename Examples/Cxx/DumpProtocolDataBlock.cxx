@@ -50,7 +50,8 @@ int readprotocoldatablock(const char *input, size_t inputlen)
 //    }
 
   std::string out;
-  while( gzis >> out )
+  //while( gzis >> out )
+  while( std::getline(gzis , out ) )
     {
     std::cout << out << std::endl;
     }
