@@ -34,17 +34,27 @@ int readprotocoldatablock(const char *input, size_t inputlen)
   // First 4 bytes are the length (again)
   uint32_t len = *(uint32_t*)input;
   std::cout << len << "," << inputlen << std::endl;
+  if( len + 4 == inputlen + 1 )
+    {
+    std::cout << "gzip stream was padded with an extra \0 \n";
+    }
+  else if( len + 4 == inputlen )
+    {
+    std::cout << "gzip stream was not padded with an extra \0 \n";
+    }
+  else
+    {
+    return 1;
+    }
   // Alright we need to check if the binary blob was padded, if padded we need to 
   // discard the trailing \0 to please gzip:
   std::string str( input + 4, input + len );
   std::istringstream is( str );
 
   zlib_stream::zip_istream gzis( is );
-  //std::cout << gzis << std::endl;
 
 //  if (gzis.is_gzip())
 //    {
-//    std::cout << "gzip" << std::endl;
 //    std::cout<<"crc check: "<<( gzis.check_crc() ? "ok" : "failed");
 //    std::cout << std::endl;
 //    }
@@ -79,7 +89,8 @@ int main(int argc, char *argv [])
   if ( protocoldatablock.IsEmpty() ) return 1;
   const gdcm::ByteValue * bv = protocoldatablock.GetByteValue();
 
+  std::cout << "Dumping: " << tprotocoldatablock << std::endl;
   int ret = readprotocoldatablock( bv->GetPointer(), bv->GetLength() );
 
-  return 0;
+  return ret;
 }
