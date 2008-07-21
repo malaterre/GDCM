@@ -43,7 +43,7 @@ vtkGDCMThreadedImageReader2::vtkGDCMThreadedImageReader2()
   this->SetNumberOfInputPorts(0);
   this->FileLowerLeft = 1;
   this->FileName = NULL;
-  this->FileNames = NULL;
+  this->FileNames = vtkStringArray::New();
   this->LoadIconImage = 0;
   memset(this->DataExtent,0,6*sizeof(*DataExtent));
   this->LoadOverlays = 0;
@@ -63,6 +63,21 @@ vtkGDCMThreadedImageReader2::~vtkGDCMThreadedImageReader2()
     this->FileNames->Delete();
     }
   this->SetFileName(NULL);
+}
+
+const char *vtkGDCMThreadedImageReader2::GetFileName(int i)
+{
+  return this->FileNames->GetValue( i );
+}
+
+void vtkGDCMThreadedImageReader2::SetFileName(const char *filename)
+{
+  if( !filename )
+    {
+    return;
+    }
+  //this->FileNames->Clear();
+  this->FileNames->InsertNextValue( filename );
 }
 
 //----------------------------------------------------------------------------

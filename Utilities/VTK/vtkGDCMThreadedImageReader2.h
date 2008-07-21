@@ -82,8 +82,10 @@ public:
   vtkSetVector3Macro(DataSpacing,double);
   vtkGetVector3Macro(DataSpacing,double);
 
-  vtkGetStringMacro(FileName);
-  vtkSetStringMacro(FileName);
+  //vtkGetStringMacro(FileName);
+  //vtkSetStringMacro(FileName);
+  virtual const char *GetFileName(int i = 0);
+  virtual void SetFileName(const char *filename);
 
   virtual void SetFileNames(vtkStringArray*);
   vtkGetObjectMacro(FileNames, vtkStringArray);
