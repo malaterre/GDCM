@@ -111,7 +111,7 @@ int main(int argc, char *argv [])
 
 /*
  * Harvested data:
- * A lot of them are still non-obvisous (ETL -> Echo Train Length...)
+ * A lot of them are still non-obvious (ETL -> Echo Train Length...)
  
 ANREF "IC"
 ANREF "NA"
