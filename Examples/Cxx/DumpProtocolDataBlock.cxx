@@ -17,10 +17,24 @@
  * which is documented as Protocol Data Block (compressed).
  * in fact this is a simple text format compressed using the gzip algorithm
  *
- * Typically:
+ * Typically one could do:
  *
+ *   $ gdcmraw -i input.dcm -o output.raw -t 0025,101b 
  *
- * THANKS to: John Reiser for hints
+ * Skip the binary length (little endian encoding):
+ *
+ *   $ dd bs=4 skip=1 if=output.raw of=foo 
+ *
+ * Check file type:
+ *
+ *   $ file foo
+ *   foo: gzip compressed data, was "Ex421Ser8Scan1", from Unix
+ *
+ * Gunzip !
+ *   $ gzip -dc < foo > bar
+ *   $ cat bar
+ *
+ * THANKS to: John Reiser (BitWagon.com) for hints
  */
 #include "gdcmReader.h"
 #include "gdcmTag.h"
