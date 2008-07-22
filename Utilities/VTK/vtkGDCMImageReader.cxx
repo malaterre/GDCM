@@ -579,9 +579,8 @@ int vtkGDCMImageReader::RequestInformationCompat()
     {
     filename = this->FileName;
     }
-  else if ( this->FileNames )
+  else if ( this->FileNames && this->FileNames->GetNumberOfValues() > 0 )
     {
-    assert( this->FileNames && this->FileNames->GetNumberOfValues() >= 1 );
     filename = this->FileNames->GetValue( 0 );
     }
   else
@@ -1084,10 +1083,8 @@ int vtkGDCMImageReader::RequestDataCompat()
       return 0;
       }
     }
-  else
+  else if( this->FileNames && this->FileNames->GetNumberOfValues() >= 1 )
     {
-    assert( this->FileNames && this->FileNames->GetNumberOfValues() >= 1 );
-
     // Load each 2D files
     int *dext = this->GetDataExtent();
     // HACK: len is moved out of the loop so that when file > 1 start failing we can still know
@@ -1106,6 +1103,10 @@ int vtkGDCMImageReader::RequestDataCompat()
       assert( len );
       pointer += len;
       }
+    }
+  else
+    {
+    return 0;
     }
   // Y-flip image
   if (!this->FileLowerLeft)
