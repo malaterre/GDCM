@@ -267,8 +267,7 @@ std::istream &ImplicitDataElement::ReadWithLength(std::istream &is, VL & length)
       else if ( item == itemPMSStart )
         {
         // MR_Philips_Intera_No_PrivateSequenceImplicitVR.dcm
-        gdcmWarningMacro( "Illegal: Explicit SQ found in a file with "
-          "TransferSyntax=Implicit for tag: " << TagField );
+        gdcmWarningMacro( "Illegal Tag for Item starter: " << TagField << " should be: " << itemStart );
         // TODO: We READ Explicit ok...but we store Implicit !
         // Indeed when copying the VR will be saved... pretty cool eh ?
         ValueField = new SequenceOfItems;
@@ -280,6 +279,8 @@ std::istream &ImplicitDataElement::ReadWithLength(std::istream &is, VL & length)
             {
             assert(0 && "Should not happen");
             }
+          gdcmWarningMacro( "Illegal: Explicit SQ found in a file with "
+            "TransferSyntax=Implicit for tag: " << TagField );
           }
         catch( Exception &ex )
           {
