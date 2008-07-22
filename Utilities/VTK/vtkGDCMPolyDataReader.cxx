@@ -442,7 +442,7 @@ int pd = 0;
     {
     float x[3];
     x[0] = (float)p[i] / 8800;
-std::cout << p[i] << std::endl;
+//std::cout << p[i] << std::endl;
     x[1] = i;
     x[2] = 0;
     vtkIdType ptId = newPts->InsertNextPoint( x );
