@@ -273,12 +273,22 @@ std::istream &ImplicitDataElement::ReadWithLength(std::istream &is, VL & length)
         // Indeed when copying the VR will be saved... pretty cool eh ?
         ValueField = new SequenceOfItems;
         ValueField->SetLength(ValueLengthField); // perform realloc
+        std::streampos start = is.tellg();
         try
           {
           if( !ValueIO<ExplicitDataElement,SwapperDoOp>::Read(is,*ValueField) )
             {
             assert(0 && "Should not happen");
             }
+          }
+        catch( Exception &ex )
+          {
+          // MR_ELSCINT1_00e1_1042_SQ_feff_00e0_Item.dcm
+          std::streampos current = is.tellg();
+          int diff = start - current;
+          is.seekg( diff, std::ios::cur );
+          assert( diff == -14 );
+          ValueIO<ImplicitDataElement,SwapperDoOp>::Read(is,*ValueField);
           }
         catch( std::exception &ex )
           {
