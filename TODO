@@ -176,6 +176,8 @@ http://www.codeguru.com/cpp/i-n/internet/xml/article.php/c3451/
 Undefined length and explicit length are not interchangeable. Explicit length
 has an hardocded limit: 0xffff.... while undefined not.
 -----------------------------------------------------------------------
+Explicit VR when SQ is encoded as UN with explicit length is is not printed correctly
+-----------------------------------------------------------------------
 There is subttel bug in the Part3 support:
 
     <entry group="0010" element="1002" name="Other Patient IDs Sequence" type="3">
