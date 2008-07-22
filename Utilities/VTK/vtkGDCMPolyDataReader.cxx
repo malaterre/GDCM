@@ -225,36 +225,9 @@ void vtkGDCMPolyDataReader::FillMedicalImageInformation(const gdcm::Reader &read
 
 }
 
-//----------------------------------------------------------------------------
-int vtkGDCMPolyDataReader::RequestData(
-  vtkInformation *vtkNotUsed(request),
-  vtkInformationVector **vtkNotUsed(inputVector),
+int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const &reader, 
   vtkInformationVector *outputVector)
 {
-  vtkInformation *outInfo = outputVector->GetInformationObject(0);
-  //vtkPoints *newPts, *mergedPts;
-  //vtkCellArray *newPolys, *mergedPolys;
-  //vtkFloatArray *newScalars=0, *mergedScalars=0;
-
-  // All of the data in the first piece.
-  if (outInfo->Get(vtkStreamingDemandDrivenPipeline::UPDATE_PIECE_NUMBER()) > 0)
-    {
-    return 0;
-    }
-
-  if ( !this->FileName || !*this->FileName )
-    {
-    vtkErrorMacro(<<"A FileName must be specified.");
-    return 0;
-    }
-
-  gdcm::Reader reader;
-  reader.SetFileName( this->FileName );
-  if( !reader.Read() )
-    {
-    return 0;
-    }
-
 // This is done in RequestInformation
 //  gdcm::MediaStorage ms;
 //  ms.SetFromFile( reader.GetFile() );
@@ -412,17 +385,112 @@ int vtkGDCMPolyDataReader::RequestData(
   return 1;
 }
 
+int vtkGDCMPolyDataReader::RequestData_HemodynamicWaveformStorage(gdcm::Reader const &reader, 
+  vtkInformationVector *outputVector)
+{
+  const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
+  // (5400,0100) SQ (Sequence with undefined length #=1)     # u/l, 1 WaveformSequence
+  gdcm::Tag twsq(0x5400,0x0100);
+  if( !ds.FindDataElement( twsq) )
+    {
+    return 0;
+    }
+  const gdcm::DataElement &wsq = ds.GetDataElement( twsq );
+  //std::cout << wsq << std::endl;
+  const gdcm::SequenceOfItems *sqi = wsq.GetSequenceOfItems();
+  if( !sqi || !sqi->GetNumberOfItems() )
+    {
+    return 0;
+    }
+
+  const gdcm::Item & item = sqi->GetItem(1); // Item start at #1
+  const gdcm::DataSet& nestedds = item.GetNestedDataSet();
+
+  // (5400,1004) US 16                                       #   2, 1 WaveformBitsAllocated
+  gdcm::Tag twba(0x5400,0x1004);
+  if( !nestedds.FindDataElement( twba ) )
+    {
+    return 0;
+    }
+  const gdcm::DataElement &wba= nestedds.GetDataElement( twba );
+
+  //std::cout << wba << std::endl;
+  //  (5400,1006) CS [SS]                                     #   2, 1 WaveformSampleInterpretation
+  // (5400,1010) OW 00ba\0030\ff76\ff8b\00a2\ffd3\ffae\ff50\0062\00c4\011e\00c2\00ba... # 57600, 1 WaveformData
+  gdcm::Tag twd(0x5400,0x1010);
+  if( !nestedds.FindDataElement( twd ) )
+    {
+    return 0;
+    }
+  const gdcm::DataElement &wd = nestedds.GetDataElement( twd );
+  const gdcm::ByteValue *bv = wd.GetByteValue();
+  size_t len = bv->GetLength();
+  int16_t *p = (int16_t*)bv;
+
+    // get the info object
+int pd = 0;
+    vtkInformation *outInfo1 = outputVector->GetInformationObject(pd);
+
+    // get the ouptut
+    vtkPolyData *output = vtkPolyData::SafeDownCast(
+      outInfo1->Get(vtkDataObject::DATA_OBJECT()));
+
+    vtkPoints *newPts = vtkPoints::New();
+  size_t npts = len / 2;
+//npts = 10; // DEBUG !
+  for(size_t i = 0; i < npts; ++i )
+    {
+    float x[3];
+    x[0] = (float)p[i] / 8800;
+std::cout << p[i] << std::endl;
+    x[1] = i;
+    x[2] = 0;
+    vtkIdType ptId = newPts->InsertNextPoint( x );
+    }
+    output->SetPoints(newPts);
+    newPts->Delete();
+
+    vtkCellArray* lines = vtkCellArray::New();
+    for ( int i = 0; i < newPts->GetNumberOfPoints() - 1; ++i )
+      {
+      vtkIdType topol[2];
+      topol[0] = i;
+      topol[1] = i+1;
+      lines->InsertNextCell( 2, topol );
+      }
+
+    output->SetLines(lines);
+    lines->Delete();
+output->BuildCells();
+    //output->GetCellData()->SetScalars(scalars);
+    //scalars->Delete();
+
+  return 1;
+}
+
 //----------------------------------------------------------------------------
-int vtkGDCMPolyDataReader::RequestInformation(
+int vtkGDCMPolyDataReader::RequestData(
   vtkInformation *vtkNotUsed(request),
   vtkInformationVector **vtkNotUsed(inputVector),
   vtkInformationVector *outputVector)
 {
-  // get the info object
-//  vtkInformation *outInfo = outputVector->GetInformationObject(0);
-//
-//  outInfo->Set(vtkStreamingDemandDrivenPipeline::MAXIMUM_NUMBER_OF_PIECES(),
-//               -1);
+  vtkInformation *outInfo = outputVector->GetInformationObject(0);
+  //vtkPoints *newPts, *mergedPts;
+  //vtkCellArray *newPolys, *mergedPolys;
+  //vtkFloatArray *newScalars=0, *mergedScalars=0;
+
+  // All of the data in the first piece.
+  if (outInfo->Get(vtkStreamingDemandDrivenPipeline::UPDATE_PIECE_NUMBER()) > 0)
+    {
+    return 0;
+    }
+
+  if ( !this->FileName || !*this->FileName )
+    {
+    vtkErrorMacro(<<"A FileName must be specified.");
+    return 0;
+    }
+
   gdcm::Reader reader;
   reader.SetFileName( this->FileName );
   if( !reader.Read() )
@@ -432,12 +500,27 @@ int vtkGDCMPolyDataReader::RequestInformation(
 
   gdcm::MediaStorage ms;
   ms.SetFromFile( reader.GetFile() );
-  //std::cout << ms << std::endl;
-  if( ms != gdcm::MediaStorage::RTStructureSetStorage )
+
+  int ret;
+  if( ms == gdcm::MediaStorage::RTStructureSetStorage )
     {
-    return 0;
+    ret = this->RequestData_RTStructureSetStorage(reader, outputVector);
+    }
+  else if( ms == gdcm::MediaStorage::HemodynamicWaveformStorage)
+    {
+    ret = this->RequestData_HemodynamicWaveformStorage(reader, outputVector);
+    }
+  else
+    {
+    // not handled assume error
+    ret = 0;
     }
 
+  return ret;
+}
+
+int vtkGDCMPolyDataReader::RequestInformation_RTStructureSetStorage(gdcm::Reader const & reader)
+{
   const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
   // (3006,0020) SQ (Sequence with explicit length #=4)      # 370, 1 StructureSetROISequence  
   gdcm::Tag tssroisq(0x3006,0x0020);
@@ -464,11 +547,57 @@ int vtkGDCMPolyDataReader::RequestInformation(
     this->GetExecutive()->SetOutputData(i, output2);
     output2->Delete();
     }
-
-  // Ok let's fill in the 'extra' info:
-  this->FillMedicalImageInformation(reader);
-
   return 1;
+}
+
+int vtkGDCMPolyDataReader::RequestInformation_HemodynamicWaveformStorage(gdcm::Reader const & reader)
+{
+  return 1;
+}
+
+//----------------------------------------------------------------------------
+int vtkGDCMPolyDataReader::RequestInformation(
+  vtkInformation *vtkNotUsed(request),
+  vtkInformationVector **vtkNotUsed(inputVector),
+  vtkInformationVector *outputVector)
+{
+  // get the info object
+//  vtkInformation *outInfo = outputVector->GetInformationObject(0);
+//
+//  outInfo->Set(vtkStreamingDemandDrivenPipeline::MAXIMUM_NUMBER_OF_PIECES(),
+//               -1);
+  gdcm::Reader reader;
+  reader.SetFileName( this->FileName );
+  if( !reader.Read() )
+    {
+    return 0;
+    }
+
+  gdcm::MediaStorage ms;
+  ms.SetFromFile( reader.GetFile() );
+
+  int ret;
+  if( ms == gdcm::MediaStorage::RTStructureSetStorage )
+    {
+    ret = this->RequestInformation_RTStructureSetStorage(reader);
+    }
+  else if( ms == gdcm::MediaStorage::HemodynamicWaveformStorage)
+    {
+    ret = this->RequestInformation_HemodynamicWaveformStorage(reader);
+    }
+  else
+    {
+    // not handled assume error
+    ret = 0;
+    }
+
+  if( ret )
+    {
+    // Ok let's fill in the 'extra' info:
+    this->FillMedicalImageInformation(reader);
+    }
+
+  return ret;
 }
 
 

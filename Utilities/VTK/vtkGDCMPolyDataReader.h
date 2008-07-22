@@ -61,6 +61,12 @@ protected:
     vtkInformation *vtkNotUsed(request),
     vtkInformationVector **vtkNotUsed(inputVector),
     vtkInformationVector *outputVector);
+//BTX
+  int RequestInformation_RTStructureSetStorage(gdcm::Reader const & reader);
+  int RequestData_RTStructureSetStorage(gdcm::Reader const &reader, vtkInformationVector *outputVector);
+  int RequestInformation_HemodynamicWaveformStorage(gdcm::Reader const & reader);
+  int RequestData_HemodynamicWaveformStorage(gdcm::Reader const &reader, vtkInformationVector *outputVector);
+//ETX
 
 private:
   vtkGDCMPolyDataReader(const vtkGDCMPolyDataReader&);  // Not implemented.
