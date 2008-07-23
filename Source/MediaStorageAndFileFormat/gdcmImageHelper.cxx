@@ -561,7 +561,7 @@ Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
     break;
   default:
     gdcmWarningMacro( "Do not handle: " << ms );
-    abort();
+    //abort();
     t = Tag(0xffff,0xffff);
     break;
     }
@@ -623,7 +623,7 @@ Warning - Dicom dataset contains attributes not present in standard DICOM IOD - 
   default:
     gdcmWarningMacro( "Do not handle Z spacing for: " << ms );
     t = Tag(0xffff,0xffff);
-    abort();
+    //abort();
     break;
     }
   return t;

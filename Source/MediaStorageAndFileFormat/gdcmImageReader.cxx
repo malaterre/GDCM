@@ -96,6 +96,10 @@ bool ImageReader::Read()
     //PixelData->SetCompressionFromTransferSyntax( ts );
     res = ReadImage(ms);
     }
+  else if( ms == MediaStorage::MRSpectroscopyStorage )
+    {
+    res = ReadImage(ms);
+    }
   else
     {
     //assert( !ds.FindDataElement( Tag(0x7fe0,0x0010 ) ) );
@@ -612,29 +616,37 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
       ReadUSFromTag( samplesperpixel, ss, conversion ) );
     }
 
-  // D 0028|0100 [US] [Bits Allocated] [16]
-  pf.SetBitsAllocated(
-    ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
-
-  // D 0028|0101 [US] [Bits Stored] [12]
-  pf.SetBitsStored(
-    ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
-
-  // D 0028|0102 [US] [High Bit] [11]
-  pf.SetHighBit(
-    ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
-
-  // D 0028|0103 [US] [Pixel Representation] [0]
-  Tag tpixelrep(0x0028, 0x0103);
-  if( ds.FindDataElement( tpixelrep ) && !ds.GetDataElement( tpixelrep ).IsEmpty() )
+  if( ms == MediaStorage::MRSpectroscopyStorage )
     {
-    pf.SetPixelRepresentation(
-      ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
+    pf.SetScalarType( PixelFormat::FLOAT32 );
     }
   else
     {
-    gdcmWarningMacro( "Pixel Representation was not found. Default to Unsigned Pixel Representation" );
-    pf.SetPixelRepresentation( 0 );
+    assert( MediaStorage::IsImage( ms ) );
+    // D 0028|0100 [US] [Bits Allocated] [16]
+    pf.SetBitsAllocated(
+      ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
+
+    // D 0028|0101 [US] [Bits Stored] [12]
+    pf.SetBitsStored(
+      ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
+
+    // D 0028|0102 [US] [High Bit] [11]
+    pf.SetHighBit(
+      ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
+
+    // D 0028|0103 [US] [Pixel Representation] [0]
+    Tag tpixelrep(0x0028, 0x0103);
+    if( ds.FindDataElement( tpixelrep ) && !ds.GetDataElement( tpixelrep ).IsEmpty() )
+      {
+      pf.SetPixelRepresentation(
+        ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
+      }
+    else
+      {
+      gdcmWarningMacro( "Pixel Representation was not found. Default to Unsigned Pixel Representation" );
+      pf.SetPixelRepresentation( 0 );
+      }
     }
 
   // Very important to set the PixelFormat here before PlanarConfiguration
@@ -841,19 +853,36 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   DoOverlays(ds, *PixelData);
 
   // 8. Do the PixelData
-  const Tag pixeldata = Tag(0x7fe0, 0x0010);
-  if( !ds.FindDataElement( pixeldata ) )
+  if( ms == MediaStorage::MRSpectroscopyStorage )
     {
-    gdcmWarningMacro( "No Pixel Data Found" );
-    return false;
+    const Tag spectdata = Tag(0x5600, 0x0020);
+    if( !ds.FindDataElement( spectdata ) )
+      {
+      gdcmWarningMacro( "No Spectroscopy Data Found" );
+      return false;
+      }
+    const DataElement& xde = ds.GetDataElement( spectdata );
+    //bool need = PixelData->GetTransferSyntax() == TransferSyntax::ImplicitVRBigEndianPrivateGE;
+    //PixelData->SetNeedByteSwap( need );
+    PixelData->SetDataElement( xde );
     }
-  const DataElement& xde = ds.GetDataElement( pixeldata );
-  bool need = PixelData->GetTransferSyntax() == TransferSyntax::ImplicitVRBigEndianPrivateGE;
-  PixelData->SetNeedByteSwap( need );
-  PixelData->SetDataElement( xde );
+  else
+    {
+    const Tag pixeldata = Tag(0x7fe0, 0x0010);
+    if( !ds.FindDataElement( pixeldata ) )
+      {
+      gdcmWarningMacro( "No Pixel Data Found" );
+      return false;
+      }
+    const DataElement& xde = ds.GetDataElement( pixeldata );
+    bool need = PixelData->GetTransferSyntax() == TransferSyntax::ImplicitVRBigEndianPrivateGE;
+    PixelData->SetNeedByteSwap( need );
+    PixelData->SetDataElement( xde );
 
-  // FIXME:
-  // We should check that when PixelData is RAW that Col * Dim == PixelData->GetLength()
+    // FIXME:
+    // We should check that when PixelData is RAW that Col * Dim == PixelData->GetLength()
+
+    }
 
   return true;
 }

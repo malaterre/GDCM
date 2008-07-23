@@ -92,6 +92,11 @@ void PixelFormat::SetScalarType(ScalarType st)
     // secret code:
     PixelRepresentation = 3;
     break;
+  case PixelFormat::FLOAT64:
+    BitsAllocated = 64;
+    // secret code:
+    PixelRepresentation = 4;
+    break;
   case PixelFormat::UNKNOWN:
     BitsAllocated = 0;
     PixelRepresentation = 0;
@@ -153,6 +158,11 @@ PixelFormat::ScalarType PixelFormat::GetScalarType() const
     {
     assert( BitsAllocated == 32 );
     return FLOAT32;
+    }
+  else if( PixelRepresentation == 4 )
+    {
+    assert( BitsAllocated == 64 );
+    return FLOAT64;
     }
   else
     {

@@ -630,7 +630,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
     }
   gdcm::MediaStorage ms;
   ms.SetFromFile( reader.GetFile() );
-  assert( gdcm::MediaStorage::IsImage( ms ) );
+  assert( gdcm::MediaStorage::IsImage( ms ) || ms == gdcm::MediaStorage::MRSpectroscopyStorage );
   // There is no point in adding world info to a SC object since noone but GDCM can use this info...
   //if( ms != gdcm::MediaStorage::SecondaryCaptureImageStorage )
 
@@ -697,7 +697,14 @@ int vtkGDCMImageReader::RequestInformationCompat()
   r.SetSlope( this->Scale );
   r.SetPixelFormat( pixeltype );
   gdcm::PixelFormat::ScalarType outputpt = r.ComputeInterceptSlopePixelType();
-  assert( pixeltype <= outputpt );
+  if( ms == gdcm::MediaStorage::MRSpectroscopyStorage )
+    {
+    outputpt = pixeltype;
+    }
+  else
+    {
+    assert( pixeltype <= outputpt );
+    }
   //if( pixeltype != outputpt ) assert( Shift != 0. || Scale != 1 );
   //std::cerr << "PF:" << pixeltype << " -> " << outputpt << std::endl;
 
