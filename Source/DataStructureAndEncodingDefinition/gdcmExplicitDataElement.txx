@@ -72,7 +72,19 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     {
     //assert(0 && "Should not happen" );
     // gdcmDataExtra/gdcmBreakers/DigitexAlpha_no_7FE0.dcm
-    throw Exception( "Unhandled" );
+    is.seekg( -4, std::ios::cur );
+    TagField = Tag(0x7fe0,0x0010);
+    VRField = VR::OW;
+    ValueField = new ByteValue;
+    std::streampos s = is.tellg();
+    is.seekg( 0, std::ios::end);
+    std::streampos e = is.tellg();
+    is.seekg( s, std::ios::beg );
+    ValueField->SetLength( e - s);
+    ValueLengthField = ValueField->GetLength();
+    bool failed = !ValueIO<ExplicitDataElement,TSwap,uint16_t>::Read(is,*ValueField);
+    return is;
+    //throw Exception( "Unhandled" );
     }
 #endif
   // Read VR
