@@ -70,8 +70,8 @@ int TestImageChangeTransferSyntaxJPEG(const char *filename)
 
   ImageWriter writer;
   writer.SetFileName( outfilename.c_str() );
-  writer.SetFile( reader.GetFile() ); // increase test goal
-  writer.SetImage( reader.GetImage() );
+  //writer.SetFile( reader.GetFile() ); // increase test goal
+  writer.SetImage( change.GetOutput() );
   if( !writer.Write() )
     {
     std::cerr << "Failed to write: " << outfilename << std::endl;
