@@ -64,6 +64,7 @@ SET(BLACK_LIST_READER
   TheralysNoModalityNoObject.dcm
   ImplicitDeclaredAsExplicit.dcm
   TheralysGDCM1.dcm
+  MR_Spectroscopy_SIEMENS_OF.dcm
 #SC that are well hidden MR Image Storage
   fffc0000UN.dcm
   MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm
