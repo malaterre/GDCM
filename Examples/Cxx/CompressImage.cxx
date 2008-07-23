@@ -58,7 +58,12 @@ int main(int argc, char *argv[])
   change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLosslessProcess14_1 );
   //change.SetTransferSyntax( image.GetTransferSyntax() );
   change.SetInput( image );
-  change.Change();
+  bool b = change.Change();
+  if( !b )
+    {
+    std::cerr << "Could not change the Transfer Syntax" << std::endl;
+    return 1;
+    }
 
   //std::ofstream out( outfilename );
   //image.GetBuffer2(out);

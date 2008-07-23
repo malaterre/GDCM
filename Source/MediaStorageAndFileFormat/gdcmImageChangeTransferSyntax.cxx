@@ -124,7 +124,8 @@ bool ImageChangeTransferSyntax::Change()
   Output->SetTransferSyntax( TS );
   if( !success )
     {
-    abort();
+    //abort();
+    return false;
     }
 
   assert( Output->GetTransferSyntax() == TS );

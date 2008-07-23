@@ -748,7 +748,9 @@ bool JPEGBITSCodec::InternalCode(const ByteValue* bv, std::ostream &os)
     }
   else
     {
-    abort();
+    //abort();
+    std::cerr << "Not supported: " << this->GetPhotometricInterpretation() << std::endl;
+    return false;
     }
 
   /* Now use the library's routine to set default compression parameters.
