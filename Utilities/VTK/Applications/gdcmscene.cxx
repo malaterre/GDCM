@@ -62,17 +62,17 @@ int main(int argc, char *argv[])
   //writer->Write();
 
   // Now we'll look at it.
-  //vtkPolyDataMapper *cubeMapper = vtkPolyDataMapper::New();
-  vtkPolyDataMapper2D* cubeMapper = vtkPolyDataMapper2D::New();
+  vtkPolyDataMapper *cubeMapper = vtkPolyDataMapper::New();
+  //vtkPolyDataMapper2D* cubeMapper = vtkPolyDataMapper2D::New();
       //cubeMapper->SetInput( reader->GetOutput() );
       cubeMapper->SetInput( append->GetOutput() );
       cubeMapper->SetScalarRange(0,7);
-  //vtkActor *cubeActor = vtkActor::New();
-  vtkActor2D* cubeActor = vtkActor2D::New();
+  vtkActor *cubeActor = vtkActor::New();
+  //vtkActor2D* cubeActor = vtkActor2D::New();
       cubeActor->SetMapper(cubeMapper);
-  //vtkProperty * property = cubeActor->GetProperty();
-  //property->SetRepresentationToWireframe();
-  cubeActor->GetProperty()->SetColor(1, 0, 0);
+  vtkProperty * property = cubeActor->GetProperty();
+  property->SetRepresentationToWireframe();
+  //cubeActor->GetProperty()->SetColor(1, 0, 0);
 
 
   // The usual rendering stuff.
@@ -87,8 +87,8 @@ int main(int argc, char *argv[])
   vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::New();
     iren->SetRenderWindow(renWin);
 
-  //renderer->AddActor(cubeActor);
-  renderer->AddActor2D(cubeActor);
+  renderer->AddActor(cubeActor);
+  //renderer->AddActor2D(cubeActor);
       //renderer->SetActiveCamera(camera);
       renderer->ResetCamera();
       renderer->SetBackground(1,1,1);
