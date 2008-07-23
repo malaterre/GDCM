@@ -23,7 +23,7 @@
 namespace gdcm
 {
 
-int TestImageChangeTransferSyntaxJPEG(const char *filename)
+int TestImageChangeTransferSyntaxJ2K(const char *filename)
 {
   ImageReader reader;
   reader.SetFileName( filename );
@@ -49,7 +49,7 @@ int TestImageChangeTransferSyntaxJPEG(const char *filename)
   const gdcm::Image &image = reader.GetImage();
 
   gdcm::ImageChangeTransferSyntax change;
-  change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLosslessProcess14_1 );
+  change.SetTransferSyntax( gdcm::TransferSyntax::JPEG2000Lossless );
   change.SetInput( image );
   bool b = change.Change();
   if( !b )
@@ -93,12 +93,12 @@ int TestImageChangeTransferSyntaxJPEG(const char *filename)
 
 } // end namespace gdcm
 
-int TestImageChangeTransferSyntax(int argc, char *argv[])
+int TestImageChangeTransferSyntax2(int argc, char *argv[])
 {
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return gdcm::TestImageChangeTransferSyntaxJPEG(filename);
+    return gdcm::TestImageChangeTransferSyntaxJ2K(filename);
     }
 
   // else
@@ -109,7 +109,7 @@ int TestImageChangeTransferSyntax(int argc, char *argv[])
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
     {
-    r += gdcm::TestImageChangeTransferSyntaxJPEG( filename );
+    r += gdcm::TestImageChangeTransferSyntaxJ2K( filename );
     ++i;
     }
 

@@ -8,6 +8,7 @@ SET(MSFF_TEST_SRCS
   TestImageHelper
   TestImageToImageFilter
   TestImageChangeTransferSyntax
+  TestImageChangeTransferSyntax2
   TestCoder
   TestDecoder
   TestRescaler
