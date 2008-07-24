@@ -595,6 +595,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 
 
 
+{ "4d790e17ee35572d64e37c55dbc36725" , "MR_ELSCINT1_00e1_1042_SQ_feff_00e0_Item.dcm" },
 
 
 
