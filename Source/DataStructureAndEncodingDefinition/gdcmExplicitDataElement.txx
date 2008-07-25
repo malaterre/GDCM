@@ -80,7 +80,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     is.seekg( 0, std::ios::end);
     std::streampos e = is.tellg();
     is.seekg( s, std::ios::beg );
-    ValueField->SetLength( e - s);
+    ValueField->SetLength( (int32_t)(e - s) );
     ValueLengthField = ValueField->GetLength();
     bool failed = !ValueIO<ExplicitDataElement,TSwap,uint16_t>::Read(is,*ValueField);
     return is;
