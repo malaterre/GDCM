@@ -50,13 +50,14 @@ public:
 
   virtual bool Write(); // Execute()
   void SetFileName(const char *filename) {
-    std::cerr << "Stream: " << filename << std::endl;
-	std::cerr << "Ofstream: " << Ofstream << std::endl;
-	if (Ofstream && Ofstream->is_open())
-	{
-		Ofstream->close();
-	}
-	Ofstream = new std::ofstream();
+    //std::cerr << "Stream: " << filename << std::endl;
+    //std::cerr << "Ofstream: " << Ofstream << std::endl;
+    if (Ofstream && Ofstream->is_open())
+      {
+      Ofstream->close();
+      delete Ofstream;
+      }
+    Ofstream = new std::ofstream();
     Ofstream->open(filename, std::ios::out | std::ios::binary );
     assert( Ofstream->is_open() );
     assert( !Ofstream->fail() );
@@ -65,9 +66,9 @@ public:
 #ifndef NDEBUG
     DebugFileName = filename;
 #endif
-   }
-  void SetStream(std::ostream &input_stream) {
-	  Stream = &input_stream;
+  }
+  void SetStream(std::ostream &output_stream) {
+    Stream = &output_stream;
   }
 
   void SetFile(const File& f) { F = &f; }
