@@ -60,8 +60,8 @@ bool JPEGCodec::CanCode(TransferSyntax const &ts)
 void JPEGCodec::SetPixelFormat(PixelFormat const &pt)
 {
   ImageCodec::SetPixelFormat(pt);
-  //SetBitSample( pt.GetBitsAllocated() );
-  SetBitSample( pt.GetBitsStored() );
+  SetBitSample( pt.GetBitsAllocated() );
+  //SetBitSample( pt.GetBitsStored() );
 }
 
 void JPEGCodec::SetBitSample(int bit)
