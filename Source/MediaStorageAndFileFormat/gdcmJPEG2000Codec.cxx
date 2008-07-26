@@ -402,15 +402,11 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
 bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
 {
   out = in;
-    //
-    // Create a Sequence Of Fragments:
-    SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
-    const Tag itemStart(0xfffe, 0xe000);
-    sq->GetTable().SetTag( itemStart );
-//    out.SetTag( itemStart );
-//    sq->AddFragment( (Fragment const&)out );
-//    unsigned int n = sq->GetNumberOfFragments();
-//    assert( sq->GetNumberOfFragments() == 1 );
+  //
+  // Create a Sequence Of Fragments:
+  SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
+  const Tag itemStart(0xfffe, 0xe000);
+  sq->GetTable().SetTag( itemStart );
 
   const unsigned int *dims = this->GetDimensions();
 
@@ -421,72 +417,72 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
   size_t inputlength = image_len;
 
   for(unsigned int dim = 0; dim < dims[2]; ++dim)
-{
+    {
 
-  std::ostringstream os;
-  std::ostream *fp = &os;
-  const char *inputdata = input + dim * image_len; //bv->GetPointer();
-  //size_t inputlength = bv->GetLength();
-  int image_width = dims[0];
-  int image_height = dims[1];
-  int numZ = 0; //dims[2];
-  const PixelFormat &pf = this->GetPixelFormat();
-  int sample_pixel = pf.GetSamplesPerPixel();
-  int bitsallocated = pf.GetBitsAllocated();
-  int sign = pf.GetPixelRepresentation();
-  int quality = 100;
+    std::ostringstream os;
+    std::ostream *fp = &os;
+    const char *inputdata = input + dim * image_len; //bv->GetPointer();
+    //size_t inputlength = bv->GetLength();
+    int image_width = dims[0];
+    int image_height = dims[1];
+    int numZ = 0; //dims[2];
+    const PixelFormat &pf = this->GetPixelFormat();
+    int sample_pixel = pf.GetSamplesPerPixel();
+    int bitsallocated = pf.GetBitsAllocated();
+    int sign = pf.GetPixelRepresentation();
+    int quality = 100;
 
-  //// input_buffer is ONE image
-  //// fragment_size is the size of this image (fragment)
-  (void)numZ;
-  bool bSuccess;
-  //bool delete_comment = true;
-  opj_cparameters_t parameters;  /* compression parameters */
-  opj_event_mgr_t event_mgr;    /* event manager */
-  opj_image_t *image = NULL;
-  //quality = 100;
+    //// input_buffer is ONE image
+    //// fragment_size is the size of this image (fragment)
+    (void)numZ;
+    bool bSuccess;
+    //bool delete_comment = true;
+    opj_cparameters_t parameters;  /* compression parameters */
+    opj_event_mgr_t event_mgr;    /* event manager */
+    opj_image_t *image = NULL;
+    //quality = 100;
 
-  /*
-  configure the event callbacks (not required)
-  setting of each callback is optionnal
-  */
-  memset(&event_mgr, 0, sizeof(opj_event_mgr_t));
-  event_mgr.error_handler = error_callback;
-  event_mgr.warning_handler = warning_callback;
-  event_mgr.info_handler = info_callback;
+    /*
+    configure the event callbacks (not required)
+    setting of each callback is optionnal
+    */
+    memset(&event_mgr, 0, sizeof(opj_event_mgr_t));
+    event_mgr.error_handler = error_callback;
+    event_mgr.warning_handler = warning_callback;
+    event_mgr.info_handler = info_callback;
 
-  /* set encoding parameters to default values */
-  memset(&parameters, 0, sizeof(parameters));
-  opj_set_default_encoder_parameters(&parameters);
+    /* set encoding parameters to default values */
+    memset(&parameters, 0, sizeof(parameters));
+    opj_set_default_encoder_parameters(&parameters);
 
-  /* if no rate entered, lossless by default */
-  parameters.tcp_rates[0] = 0;
-  parameters.tcp_numlayers = 1;
-  parameters.cp_disto_alloc = 1;
+    /* if no rate entered, lossless by default */
+    parameters.tcp_rates[0] = 0;
+    parameters.tcp_numlayers = 1;
+    parameters.cp_disto_alloc = 1;
 
-  if(parameters.cp_comment == NULL) {
-    const char comment[] = "Created by GDCM/OpenJPEG version 1.0";
-    parameters.cp_comment = (char*)malloc(strlen(comment) + 1);
-    strcpy(parameters.cp_comment, comment);
-    /* no need to delete parameters.cp_comment on exit */
-    //delete_comment = false;
-  }
+    if(parameters.cp_comment == NULL) {
+      const char comment[] = "Created by GDCM/OpenJPEG version 1.0";
+      parameters.cp_comment = (char*)malloc(strlen(comment) + 1);
+      strcpy(parameters.cp_comment, comment);
+      /* no need to delete parameters.cp_comment on exit */
+      //delete_comment = false;
+    }
 
-  
-  /* decode the source image */
-  /* ----------------------- */
 
-  image = rawtoimage((char*)inputdata, &parameters, 
-    static_cast<int>( inputlength ), 
-    image_width, image_height,
-    sample_pixel, bitsallocated, sign, quality);
-  if (!image) {
-    return 1;
-  }
+    /* decode the source image */
+    /* ----------------------- */
+
+    image = rawtoimage((char*)inputdata, &parameters, 
+      static_cast<int>( inputlength ), 
+      image_width, image_height,
+      sample_pixel, bitsallocated, sign, quality);
+    if (!image) {
+      return 1;
+    }
 
     /* encode the destination image */
-  /* ---------------------------- */
-   parameters.cod_format = J2K_CFMT; /* J2K format output */
+    /* ---------------------------- */
+    parameters.cod_format = J2K_CFMT; /* J2K format output */
     int codestream_length;
     opj_cio_t *cio = NULL;
     //FILE *f = NULL;
@@ -520,7 +516,7 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     //  return 1;
     //}
     //fwrite(cio->buffer, 1, codestream_length, f);
-//#define MDEBUG
+    //#define MDEBUG
 #ifdef MDEBUG
     static int c = 0;
     std::ostringstream os;
@@ -542,28 +538,28 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     opj_destroy_compress(cinfo);
 
 
-      /* free user parameters structure */
-  //if(delete_comment) {
+    /* free user parameters structure */
+    //if(delete_comment) {
     if(parameters.cp_comment) free(parameters.cp_comment);
-  //}
-  if(parameters.cp_matrice) free(parameters.cp_matrice);
+    //}
+    if(parameters.cp_matrice) free(parameters.cp_matrice);
 
-  /* free image data */
-  opj_image_destroy(image);
+    /* free image data */
+    opj_image_destroy(image);
 
 
 
-  std::string str = os.str();
-  assert( str.size() );
-  Fragment frag;
+    std::string str = os.str();
+    assert( str.size() );
+    Fragment frag;
     frag.SetTag( itemStart );
-  frag.SetByteValue( &str[0], str.size() );
+    frag.SetByteValue( &str[0], str.size() );
     sq->AddFragment( frag );
-}
+    }
 
-    //unsigned int nfrags = sq->GetNumberOfFragments();
-    assert( sq->GetNumberOfFragments() == dims[2] );
-out.SetValue( *sq );
+  //unsigned int nfrags = sq->GetNumberOfFragments();
+  assert( sq->GetNumberOfFragments() == dims[2] );
+  out.SetValue( *sq );
 
   return true;
 }
