@@ -322,7 +322,7 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
     color_space = CLRSPC_SRGB;
     }
   assert( bitsallocated % 8 == 0 );
-  assert( fragment_size == image_height * image_width * numcomps * sample_pixel * (bitsallocated/8) );
+  assert( fragment_size == image_height * image_width * numcomps * (bitsallocated/8) );
   int subsampling_dx = parameters->subsampling_dx;
   int subsampling_dy = parameters->subsampling_dy;
 
