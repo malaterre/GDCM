@@ -736,7 +736,8 @@ bool JPEGBITSCodec::InternalCode(const ByteValue* bv, std::ostream &os)
   cinfo.image_width = image_width; 	/* image width and height, in pixels */
   cinfo.image_height = image_height;
 
-  if( this->GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2 )
+  if( this->GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2
+   || this->GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1 )
     {
     cinfo.input_components = 1;     /* # of color components per pixel */
     cinfo.in_color_space = JCS_GRAYSCALE; /* colorspace of input image */
