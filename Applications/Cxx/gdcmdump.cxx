@@ -131,7 +131,8 @@ void PrintHelp()
   std::cout << "  -d --dump      dump value (limited use)." << std::endl;
   std::cout << "  -p --print     print value instead of simply dumping (default)." << std::endl;
   std::cout << "  -c --color     print in color." << std::endl;
-  std::cout << "  -C --csa       print SIEMENS CSA Header typically (0029,xx10)." << std::endl;
+  std::cout << "  -C --csa       print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER)." << std::endl;
+  std::cout << "  -P --pdb       print GEMS Protocol Data Block (0025,10,GEMS_SERS_01)." << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning   print warning info." << std::endl;
   std::cout << "  -D --debug     print debug info." << std::endl;
@@ -151,6 +152,7 @@ int main (int argc, char *argv[])
   int print = 0;
   int color = 0;
   int printcsa = 0;
+  int printpdb = 0;
   int verbose = 0;
   int warning = 0;
   int debug = 0;
@@ -177,6 +179,7 @@ int main (int argc, char *argv[])
         {"dump", 0, &dump, 1},
         {"color", 0, &color, 1},
         {"csa", 0, &printcsa, 1},
+        {"pdb", 0, &printpdb, 1},
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
         {"debug", 0, &debug, 1},
@@ -185,7 +188,7 @@ int main (int argc, char *argv[])
         {"version", 0, &version, 1},
         {0, 0, 0, 0} // required
     };
-    static const char short_options[] = "i:xrpdcVWDEhv";
+    static const char short_options[] = "i:xrpdcCPVWDEhv";
     c = getopt_long (argc, argv, short_options,
       long_options, &option_index);
     if (c == -1)
@@ -246,6 +249,10 @@ int main (int argc, char *argv[])
       printcsa = 1;
       break;
 
+    case 'P':
+      printpdb = 1;
+      break;
+
     case 'V':
       verbose = 1;
       break;
@@ -295,7 +302,7 @@ int main (int argc, char *argv[])
     }
 
   //
-  gdcm::System::SetArgv0( argv[0] );
+  //gdcm::System::SetArgv0( argv[0] );
 
   if( version )
     {
