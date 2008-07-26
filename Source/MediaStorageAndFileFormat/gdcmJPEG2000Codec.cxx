@@ -304,7 +304,6 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
   int bitsallocated, int sign, int quality)
 {
   (void)quality;
-  (void)fragment_size;
   int w, h;
   int numcomps;
   OPJ_COLOR_SPACE color_space;
@@ -322,6 +321,8 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
     numcomps = 3;
     color_space = CLRSPC_SRGB;
     }
+  assert( bitsallocated % 8 == 0 );
+  assert( fragment_size == image_height * image_width * numcomps * sample_pixel * (bitsallocated/8) );
   int subsampling_dx = parameters->subsampling_dx;
   int subsampling_dy = parameters->subsampling_dy;
 
@@ -400,23 +401,43 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
   // Compress into JPEG
 bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
 {
-  const unsigned int *dims = this->GetDimensions();
-std::ostringstream os;
-std::ostream *fp = &os;
-const ByteValue *bv = in.GetByteValue();
-const char *inputdata = bv->GetPointer();
-size_t inputlength = bv->GetLength();
-int image_width = dims[0];
-int image_height = dims[1];
-int numZ = 0; //dims[2];
-const PixelFormat &pf = this->GetPixelFormat();
-int sample_pixel = pf.GetSamplesPerPixel();
-int bitsallocated = pf.GetBitsAllocated();
-int sign = pf.GetPixelRepresentation();
-int quality = 100;
+  out = in;
+    //
+    // Create a Sequence Of Fragments:
+    SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
+    const Tag itemStart(0xfffe, 0xe000);
+    sq->GetTable().SetTag( itemStart );
+//    out.SetTag( itemStart );
+//    sq->AddFragment( (Fragment const&)out );
+//    unsigned int n = sq->GetNumberOfFragments();
+//    assert( sq->GetNumberOfFragments() == 1 );
 
-//// input_buffer is ONE image
-//// fragment_size is the size of this image (fragment)
+  const unsigned int *dims = this->GetDimensions();
+
+  const ByteValue *bv = in.GetByteValue();
+  const char *input = bv->GetPointer();
+  unsigned long len = bv->GetLength();
+  unsigned long image_len = len / dims[2];
+  size_t inputlength = image_len;
+
+  for(unsigned int dim = 0; dim < dims[2]; ++dim)
+{
+
+  std::ostringstream os;
+  std::ostream *fp = &os;
+  const char *inputdata = input + dim * image_len; //bv->GetPointer();
+  //size_t inputlength = bv->GetLength();
+  int image_width = dims[0];
+  int image_height = dims[1];
+  int numZ = 0; //dims[2];
+  const PixelFormat &pf = this->GetPixelFormat();
+  int sample_pixel = pf.GetSamplesPerPixel();
+  int bitsallocated = pf.GetBitsAllocated();
+  int sign = pf.GetPixelRepresentation();
+  int quality = 100;
+
+  //// input_buffer is ONE image
+  //// fragment_size is the size of this image (fragment)
   (void)numZ;
   bool bSuccess;
   //bool delete_comment = true;
@@ -533,8 +554,16 @@ int quality = 100;
 
 
   std::string str = os.str();
-  out = in;
-  out.SetByteValue( &str[0], str.size() );
+  assert( str.size() );
+  Fragment frag;
+    frag.SetTag( itemStart );
+  frag.SetByteValue( &str[0], str.size() );
+    sq->AddFragment( frag );
+}
+
+    //unsigned int nfrags = sq->GetNumberOfFragments();
+    assert( sq->GetNumberOfFragments() == dims[2] );
+out.SetValue( *sq );
 
   return true;
 }

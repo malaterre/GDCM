@@ -54,12 +54,12 @@ int TestImageChangeTransferSyntaxJ2K(const char *filename)
   bool b = change.Change();
   if( !b )
     {
-    std::cerr << "Could not change the Transfer Syntax" << std::endl;
+    std::cerr << "Could not change the Transfer Syntax: " << filename << std::endl;
     return 1;
     }
 
   // Create directory first:
-  const char subdir[] = "TestImageChangeTransferSyntax";
+  const char subdir[] = "TestImageChangeTransferSyntax2";
   std::string tmpdir = Testing::GetTempDirectory( subdir );
   if( !System::FileIsDirectory( tmpdir.c_str() ) )
     {

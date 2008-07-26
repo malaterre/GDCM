@@ -22,6 +22,7 @@ namespace gdcm
 {
 
 
+class DataElement;
 class GDCM_EXPORT ImageChangeTransferSyntax : public ImageToImageFilter
 {
 public:
@@ -34,8 +35,8 @@ public:
   bool Change();
 
 protected:
-  bool TryJPEGCodec();
-  bool TryJPEG2000Codec();
+  bool TryJPEGCodec(const DataElement &pixelde);
+  bool TryJPEG2000Codec(const DataElement &pixelde);
 
 private:
   TransferSyntax TS;

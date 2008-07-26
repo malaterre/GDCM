@@ -84,7 +84,7 @@ public:
     {
     Dimensions[0] = d[0];
     Dimensions[1] = d[1];
-    //Dimensions[2] = d[2];
+    Dimensions[2] = d[2];
     }
   const unsigned int *GetDimensions() const { return Dimensions; }
 protected:

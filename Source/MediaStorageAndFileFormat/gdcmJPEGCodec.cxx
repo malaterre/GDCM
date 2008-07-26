@@ -150,14 +150,28 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
 bool JPEGCodec::Code(DataElement const &in, DataElement &out)
 {
   out = in;
+
+    // Create a Sequence Of Fragments:
+    SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
+    const Tag itemStart(0xfffe, 0xe000);
+    sq->GetTable().SetTag( itemStart );
+
   const ByteValue *bv = in.GetByteValue();
+  const unsigned int *dims = this->GetDimensions();
+  const char *input = bv->GetPointer();
+  unsigned long len = bv->GetLength();
+  unsigned long image_len = len / dims[2];
+  for(unsigned int dim = 0; dim < dims[2]; ++dim)
+{
   std::stringstream os;
   //std::stringstream is;
   //char *mybuffer = new char[bv->GetLength()];
   //bv->GetBuffer(mybuffer, bv->GetLength());
   //is.write(mybuffer, bv->GetLength());
   //delete[] mybuffer;
-  bool r = Internal->InternalCode(bv,os);
+  //bool r = Internal->InternalCode(bv,os);
+  const char *p = input + dim * image_len;
+  bool r = Internal->InternalCode(p, image_len, os);
   if( !r )
     {
     return false;
@@ -165,7 +179,16 @@ bool JPEGCodec::Code(DataElement const &in, DataElement &out)
 
   std::string str = os.str();
   assert( str.size() );
-  out.SetByteValue( &str[0], str.size() );
+  Fragment frag;
+    frag.SetTag( itemStart );
+  frag.SetByteValue( &str[0], str.size() );
+    sq->AddFragment( frag );
+
+}
+    unsigned int n = sq->GetNumberOfFragments();
+    assert( sq->GetNumberOfFragments() == dims[2] );
+out.SetValue( *sq );
+
   return true;
 }
 

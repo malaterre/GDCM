@@ -29,7 +29,7 @@ public:
   ~JPEG8Codec();
 
   bool Decode(std::istream &is, std::ostream &os);
-  bool InternalCode(const ByteValue *bv, std::ostream &os);
+  bool InternalCode(const char *input, unsigned long len, std::ostream &os);
 
 private:
   JPEGInternals *Internals;

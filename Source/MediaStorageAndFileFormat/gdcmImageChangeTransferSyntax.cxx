@@ -24,9 +24,10 @@
 namespace gdcm
 {
 
-bool ImageChangeTransferSyntax::TryJPEGCodec()
+bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde)
 {
   unsigned long len = Input->GetBufferLength();
+  assert( len == pixelde.GetByteValue()->GetLength() );
   const TransferSyntax &ts = GetTransferSyntax();
 
   JPEGCodec codec;
@@ -38,17 +39,11 @@ bool ImageChangeTransferSyntax::TryJPEGCodec()
     codec.SetPixelFormat( Input->GetPixelFormat() );
     codec.SetNeedOverlayCleanup( Input->AreOverlaysInPixelData() );
     DataElement out;
-    bool r = codec.Code(Input->GetDataElement(), out);
-    // Create a Sequence Of Fragments:
-    SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
-    const Tag itemStart(0xfffe, 0xe000);
-    sq->GetTable().SetTag( itemStart );
-    out.SetTag( itemStart );
-    sq->AddFragment( (Fragment const&)out );
-    unsigned int n = sq->GetNumberOfFragments();
-    assert( sq->GetNumberOfFragments() == 1 );
+    //bool r = codec.Code(Input->GetDataElement(), out);
+    bool r = codec.Code(pixelde, out);
+
     DataElement &de = Output->GetDataElement();
-    de.SetValue( *sq );
+    de.SetValue( out.GetValue() );
     // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm    
     if( !r )
       {
@@ -67,9 +62,10 @@ bool ImageChangeTransferSyntax::TryJPEGCodec()
   return false;
 }
 
-bool ImageChangeTransferSyntax::TryJPEG2000Codec()
+bool ImageChangeTransferSyntax::TryJPEG2000Codec(const DataElement &pixelde)
 {
   unsigned long len = Input->GetBufferLength();
+  assert( len == pixelde.GetByteValue()->GetLength() );
   const TransferSyntax &ts = GetTransferSyntax();
 
   JPEG2000Codec codec;
@@ -82,17 +78,11 @@ bool ImageChangeTransferSyntax::TryJPEG2000Codec()
     codec.SetPhotometricInterpretation( Input->GetPhotometricInterpretation() );
     codec.SetNeedOverlayCleanup( Input->AreOverlaysInPixelData() );
     DataElement out;
-    bool r = codec.Code(Input->GetDataElement(), out);
-    // Create a Sequence Of Fragments:
-    SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
-    const Tag itemStart(0xfffe, 0xe000);
-    sq->GetTable().SetTag( itemStart );
-    out.SetTag( itemStart );
-    sq->AddFragment( (Fragment const&)out );
-    unsigned int n = sq->GetNumberOfFragments();
-    assert( sq->GetNumberOfFragments() == 1 );
+    //bool r = codec.Code(Input->GetDataElement(), out);
+    bool r = codec.Code(pixelde, out);
+
     DataElement &de = Output->GetDataElement();
-    de.SetValue( *sq );
+    de.SetValue( out.GetValue() );
     assert( r );
     return r;
     }
@@ -112,14 +102,35 @@ bool ImageChangeTransferSyntax::Change()
    && Input->GetTransferSyntax() != TransferSyntax::ExplicitVRLittleEndian
    && Input->GetTransferSyntax() != TransferSyntax::ExplicitVRBigEndian ) 
     {
+    // In memory decompression:
+    gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
+    gdcm::ByteValue *bv = new gdcm::ByteValue();
+    unsigned long len = Input->GetBufferLength();
+    bv->SetLength( len );
+    Input->GetBuffer( (char*)bv->GetPointer() );
+    pixeldata.SetValue( *bv );
+
+  bool success = false;
+  //if( !success ) success = TryRAWCodec(buffer);
+  if( !success ) success = TryJPEGCodec(pixeldata);
+  if( !success ) success = TryJPEG2000Codec(pixeldata);
+  //if( !success ) success = TryRLECodec(buffer);
+  Output->SetTransferSyntax( TS );
+  if( !success )
+    {
+    //abort();
     return false;
+    }
+
+  assert( Output->GetTransferSyntax() == TS );
+  return success;
     }
 
   // too bad we actually have to do some work...
   bool success = false;
   //if( !success ) success = TryRAWCodec(buffer);
-  if( !success ) success = TryJPEGCodec();
-  if( !success ) success = TryJPEG2000Codec();
+  if( !success ) success = TryJPEGCodec(Input->GetDataElement());
+  if( !success ) success = TryJPEG2000Codec(Input->GetDataElement());
   //if( !success ) success = TryRLECodec(buffer);
   Output->SetTransferSyntax( TS );
   if( !success )

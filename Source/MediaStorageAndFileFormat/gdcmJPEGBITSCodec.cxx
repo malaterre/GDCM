@@ -673,10 +673,10 @@ jpeg_stdio_dest (j_compress_ptr cinfo, /*FILE * */ std::ostream * outfile)
  * and a compression quality factor are passed in.
  */
 
-bool JPEGBITSCodec::InternalCode(const ByteValue* bv, std::ostream &os)
+bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostream &os)
 {
   int quality = 100;
-  JSAMPLE * image_buffer = (JSAMPLE*)bv->GetPointer();	/* Points to large array of R,G,B-order data */
+  JSAMPLE * image_buffer = (JSAMPLE*)input;	/* Points to large array of R,G,B-order data */
   const unsigned int *dims = this->GetDimensions();
   int image_height = dims[1];	/* Number of rows in image */
   int image_width = dims[0];		/* Number of columns in image */
@@ -753,6 +753,7 @@ bool JPEGBITSCodec::InternalCode(const ByteValue* bv, std::ostream &os)
     std::cerr << "Not supported: " << this->GetPhotometricInterpretation() << std::endl;
     return false;
     }
+  assert( cinfo.image_height * cinfo.image_width * cinfo.input_components * sizeof(JSAMPLE) == len );
 
   /* Now use the library's routine to set default compression parameters.
    * (You must set at least cinfo.in_color_space before calling this,

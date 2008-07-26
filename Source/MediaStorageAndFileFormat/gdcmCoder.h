@@ -32,7 +32,7 @@ public:
   virtual bool CanCode(TransferSyntax const &) { return false; }
   virtual bool Code(DataElement const &in, DataElement &out) { (void)in; (void)out; return false; }
 protected:
-  virtual bool InternalCode(const ByteValue *bv, std::ostream &os) { (void)bv;(void)os;return false; } 
+  virtual bool InternalCode(const char *bv, unsigned long len, std::ostream &os) { (void)bv;(void)os;return false; } 
 };
 
 } // end namespace gdcm

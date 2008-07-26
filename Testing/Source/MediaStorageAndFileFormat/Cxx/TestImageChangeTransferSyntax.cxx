@@ -77,7 +77,6 @@ int TestImageChangeTransferSyntaxJPEG(const char *filename)
     std::cerr << "Failed to write: " << outfilename << std::endl;
     return 1;
     }
-  std::cout << "success: " << outfilename << std::endl;
 
   // Let's read that file back in !
   ImageReader reader2;
@@ -131,6 +130,8 @@ int TestImageChangeTransferSyntaxJPEG(const char *filename)
       std::cerr << "Found " << digest << " instead of " << ref << std::endl;
       res = 1;
       }
+  std::cout << "success: " << outfilename << std::endl;
+
     delete[] buffer;
     return res;
 
