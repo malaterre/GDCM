@@ -38,7 +38,7 @@ void Defs::LoadDefaults()
   const char filename1[] = GDCM_SOURCE_DIR "/Source/InformationObjectDefinition/Part3.xml";
   const char filename2[] = GDCM_CMAKE_INSTALL_PREFIX "/" GDCM_INSTALL_INCLUDE_DIR "/XML/Part3.xml";
   std::string filename3 = System::GetProcessDirectory();
-  filename3 += "../" GDCM_INSTALL_INCLUDE_DIR "/XML/Part3.xml";
+  filename3 += "/../" GDCM_INSTALL_INCLUDE_DIR "/XML/Part3.xml";
     std::cerr << filename3 << std::endl;
 //    std::cerr << filename2 << std::endl;
 //    std::cerr << filename1 << std::endl;
