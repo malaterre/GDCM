@@ -287,6 +287,7 @@ size_t System::FileSize(const char* filename)
   The path is placed into BUFFER, which is of length LEN. Returns
   the number of characters in the path, or -1 on error. */
 
+#ifndef _WIN32
 size_t read_executable_path_from_proc (char* buffer, size_t len)
 {
  char* path_end;
@@ -306,6 +307,7 @@ size_t read_executable_path_from_proc (char* buffer, size_t len)
    last slash. */
  return (size_t) (path_end - buffer);
 }
+#endif
 
 const char *System::GetProcessDirectory()
 {
@@ -322,11 +324,14 @@ const char *System::GetProcessDirectory()
  * ...
  */
 #ifdef _WIN32
-  static char buf[MAX_PATH];
+  char buf[MAX_PATH];
   if ( ::GetModuleFileName(0, buf, sizeof(buf)) )
   {
-    return buf;
+    static Filename fn(buf);
+    //return buf;
+    return Filename.GetPath();
   }
+  return 0;
 #else
  static char path[PATH_MAX];
  read_executable_path_from_proc(path, sizeof (path));

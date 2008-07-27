@@ -277,7 +277,7 @@ STRING(LENGTH ${import_output} len)
 MATH(EXPR fileend "${len} - 9") 
 STRING(SUBSTRING ${import_output} 9 ${fileend} dummy1)
 IF(UNIX)
-SET(python_site_package ${dummy1})
+  #SET(python_site_package ${dummy1})
 ENDIF(UNIX)
 ENDIF(import_output)
 
