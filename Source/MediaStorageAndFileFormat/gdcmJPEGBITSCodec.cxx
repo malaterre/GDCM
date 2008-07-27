@@ -753,7 +753,7 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
     std::cerr << "Not supported: " << this->GetPhotometricInterpretation() << std::endl;
     return false;
     }
-  assert( cinfo.image_height * cinfo.image_width * cinfo.input_components * sizeof(JSAMPLE) == len );
+  //assert( cinfo.image_height * cinfo.image_width * cinfo.input_components * sizeof(JSAMPLE) == len );
 
   /* Now use the library's routine to set default compression parameters.
    * (You must set at least cinfo.in_color_space before calling this,

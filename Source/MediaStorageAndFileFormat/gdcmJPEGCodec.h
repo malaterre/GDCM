@@ -35,6 +35,9 @@ public:
   bool Decode(DataElement const &is, DataElement &os);
   void SetPixelFormat(PixelFormat const &pf);
 
+  // Compute the offset table:
+  void ComputeOffsetTable(bool b);
+
   // Compress into JPEG
   bool Code(DataElement const &in, DataElement &out);
 

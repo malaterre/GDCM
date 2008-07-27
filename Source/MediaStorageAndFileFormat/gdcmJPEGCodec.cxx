@@ -147,6 +147,12 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
   return true;
 }
 
+void JPEGCodec::ComputeOffsetTable(bool b)
+{
+  // Not implemented 
+  abort();
+}
+
 bool JPEGCodec::Code(DataElement const &in, DataElement &out)
 {
   out = in;
@@ -164,12 +170,6 @@ bool JPEGCodec::Code(DataElement const &in, DataElement &out)
   for(unsigned int dim = 0; dim < dims[2]; ++dim)
     {
     std::stringstream os;
-    //std::stringstream is;
-    //char *mybuffer = new char[bv->GetLength()];
-    //bv->GetBuffer(mybuffer, bv->GetLength());
-    //is.write(mybuffer, bv->GetLength());
-    //delete[] mybuffer;
-    //bool r = Internal->InternalCode(bv,os);
     const char *p = input + dim * image_len;
     bool r = Internal->InternalCode(p, image_len, os);
     if( !r )

@@ -3035,7 +3035,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0041,0x0042,"PAPYRUS 3.0",VR::UI,VM::VM1,"Referenced Image SOP Instance UID",false },
   {0x0041,0x0050,"PAPYRUS 3.0",VR::SQ,VM::VM1,"Image Sequence",false },
   {0x0009,0x0010,"PHILIPS MR",VR::LO,VM::VM1,"SPI Release",false },
-  {0x0009,0x0012,"PHILIPS MR",VR::LO,VM::VM1,"?",false },
+  {0x0009,0x0012,"PHILIPS MR",VR::DA,VM::VM1,"date",false },
   {0x0019,0x0000,"PHILIPS MR R5.5/PART",VR::DS,VM::VM1,"Field of View",false },
   {0x0019,0x0000,"PHILIPS MR R5.6/PART",VR::DS,VM::VM1,"Field of View",false },
   {0x0019,0x0001,"PHILIPS MR SPECTRO;1",VR::US,VM::VM1,"?",false },
