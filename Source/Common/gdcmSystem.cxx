@@ -299,7 +299,7 @@ size_t read_executable_path_from_proc (char* buffer, size_t len)
  if (path_end == NULL)
   return -1;
  /* Advance to the character past the last slash. */
- ++path_end;
+ //++path_end;
  /* Obtain the directory containing the program by truncating the
    path after the last slash. */
  *path_end = '\0';
@@ -329,7 +329,7 @@ const char *System::GetProcessDirectory()
   {
     static Filename fn(buf);
     //return buf;
-    return Filename.GetPath();
+    return fn.GetPath();
   }
   return 0;
 #else
