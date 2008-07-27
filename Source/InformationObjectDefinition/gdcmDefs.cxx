@@ -18,6 +18,8 @@
 #include "gdcmMediaStorage.h"
 #include "gdcmTrace.h"
 
+#include <stdlib.h>
+
 namespace gdcm
 {
 
@@ -35,16 +37,25 @@ void Defs::LoadDefaults()
   // FIXME: hardcoded path:
   const char filename1[] = GDCM_SOURCE_DIR "/Source/InformationObjectDefinition/Part3.xml";
   const char filename2[] = GDCM_CMAKE_INSTALL_PREFIX "/" GDCM_INSTALL_INCLUDE_DIR "/XML/Part3.xml";
+  std::string filename3 = System::GetProcessDirectory();
+  filename3 += "../" GDCM_INSTALL_INCLUDE_DIR "/XML/Part3.xml";
 //    std::cerr << filename2 << std::endl;
 //    std::cerr << filename1 << std::endl;
 //    std::cout << System::GetCWD() << std::endl;
 //   std::cout << "Argv0:" << System::GetArgv0() << std::endl;
-  if( System::FileExists(filename2) )
+  if( System::FileExists(filename3.c_str()) )
     {
-    tr.SetFilename(filename2);
+    tr.SetFilename(filename3.c_str());
     }
+  // Should I keep the hardcoded one ? It should be handled by the previous if ??
+  //else if( System::FileExists(filename2) )
+  //  {
+  //  tr.SetFilename(filename2);
+  //  }
+  // This one should at least print a warning that source cannot be deleted
   else if( System::FileExists(filename1) )
     {
+    gdcmWarningMacro( "Using file from the source directory: " << filename1 );
     tr.SetFilename(filename1);
     }
   else
