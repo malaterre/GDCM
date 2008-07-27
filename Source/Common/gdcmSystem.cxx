@@ -26,6 +26,7 @@
 #include <assert.h>
 #include <errno.h>
 #include <sys/stat.h>
+#include <limits.h> // PATH_MAX
 
 // gettimeofday
 #ifdef HAVE_SYS_TIME_H
@@ -280,6 +281,57 @@ size_t System::FileSize(const char* filename)
     {
     return fs.st_size;
     }
+}
+
+/* Finds the path containing the currently running program executable.
+  The path is placed into BUFFER, which is of length LEN. Returns
+  the number of characters in the path, or -1 on error. */
+
+size_t read_executable_path_from_proc (char* buffer, size_t len)
+{
+ char* path_end;
+ /* Read the target of /proc/self/exe. */
+ if (readlink ("/proc/self/exe", buffer, len) <= 0)
+  return -1;
+ /* Find the last occurrence of a forward slash, the path separator. */
+ path_end = strrchr (buffer, '/');
+ if (path_end == NULL)
+  return -1;
+ /* Advance to the character past the last slash. */
+ ++path_end;
+ /* Obtain the directory containing the program by truncating the
+   path after the last slash. */
+ *path_end = '\0';
+ /* The length of the path is the number of characters up through the
+   last slash. */
+ return (size_t) (path_end - buffer);
+}
+
+const char *System::GetProcessDirectory()
+{
+/* 
+ * TODO:
+ * check cygwin
+ * check beos : get_next_image_info
+ * check solaris
+ * check hpux
+ * check os2: DosGetInfoBlocks / DosQueryModuleName
+ * check macosx : 
+ *  ProcessSerialNumber psn = {kNoProcess, kCurrentProcess};
+ *  GetProcessInformation -> FSMakeFSSpec
+ * ...
+ */
+#ifdef _WIN32
+  static char buf[MAX_PATH];
+  if ( ::GetModuleFileName(0, buf, sizeof(buf)) )
+  {
+    return buf;
+  }
+#else
+ static char path[PATH_MAX];
+ read_executable_path_from_proc(path, sizeof (path));
+ return path;
+#endif
 }
 
 /**

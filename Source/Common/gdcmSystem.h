@@ -43,6 +43,9 @@ public:
   /// Return the filesize
   static size_t FileSize(const char* filename);
 
+  /// Return the directory the current process is running into:
+  static const char *GetProcessDirectory();
+
   // TODO some system calls
   // Chdir
   // copy a file

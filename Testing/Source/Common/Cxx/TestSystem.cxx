@@ -64,6 +64,22 @@ int TestSystem(int, char *[])
   char datetime[18];
   int res = gdcm::System::GetCurrentDateTime(datetime);
   std::cerr << datetime << std::endl;
+
+/*
+ * I can do this kind of testing here since I know testing:
+ * - cannot be installed (no rule in cmakelists)
+ * - they cannot be moved around since cmake is not relocatable
+ * thus this is safe to assume that current process directory is actually the executable output
+ * path as computed by cmake:
+ *
+ * TODO: there can be trailing slash...
+ */
+  const char *path = gdcm::System::GetProcessDirectory();
+  if( strncmp(GDCM_EXECUTABLE_OUTPUT_PATH, path, strlen(GDCM_EXECUTABLE_OUTPUT_PATH)) != 0 )
+    {
+    std::cerr << GDCM_EXECUTABLE_OUTPUT_PATH << "!=" << path << std::endl;
+    return 1;
+    }
  
   return 0;
 }
