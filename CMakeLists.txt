@@ -256,32 +256,36 @@ MARK_AS_ADVANCED(BUILD_TESTING)
 
 #-----------------------------------------------------------------------------
 # Python install
-FIND_PACKAGE(PythonInterp REQUIRED)
-MACRO(GET_PYTHON_SITE_PACKAGE dir)
-  EXECUTE_PROCESS(
-  	COMMAND ${PYTHON_EXECUTABLE} "-c" "from distutils import sysconfig; print sysconfig.get_python_lib()"
-  	#WORKING_DIRECTORY @LIBRARY_OUTPUT_PATH@
-  	RESULT_VARIABLE import_res
-  	OUTPUT_VARIABLE import_output
-  	ERROR_VARIABLE  import_error
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-  )
-  #SET(dir ${import_output})
-ENDMACRO(GET_PYTHON_SITE_PACKAGE)
+#FIND_PACKAGE(PythonInterp REQUIRED)
+#MACRO(GET_PYTHON_SITE_PACKAGE dir)
+#  EXECUTE_PROCESS(
+#  	COMMAND ${PYTHON_EXECUTABLE} "-c" "from distutils import sysconfig; print sysconfig.get_python_lib()"
+#  	#WORKING_DIRECTORY @LIBRARY_OUTPUT_PATH@
+#  	RESULT_VARIABLE import_res
+#  	OUTPUT_VARIABLE import_output
+#  	ERROR_VARIABLE  import_error
+#    OUTPUT_STRIP_TRAILING_WHITESPACE
+#  )
+#  #SET(dir ${import_output})
+#ENDMACRO(GET_PYTHON_SITE_PACKAGE)
+#
+#
+#GET_PYTHON_SITE_PACKAGE(python_site_package)
+#IF(import_output)
+#STRING(LENGTH ${import_output} len)
+## let's remove the "/usr/lib" part...
+#MATH(EXPR fileend "${len} - 9") 
+#STRING(SUBSTRING ${import_output} 9 ${fileend} dummy1)
+#IF(UNIX)
+#  SET(python_site_package ${dummy1})
+#  MESSAGE(${python_site_package})
+#ENDIF(UNIX)
+#ENDIF(import_output)
 
-
-GET_PYTHON_SITE_PACKAGE(python_site_package)
-IF(import_output)
-STRING(LENGTH ${import_output} len)
-# let's remove the "/usr/lib" part...
-MATH(EXPR fileend "${len} - 9") 
-STRING(SUBSTRING ${import_output} 9 ${fileend} dummy1)
-IF(UNIX)
-  SET(python_site_package ${dummy1})
-  MESSAGE(${python_site_package})
-ENDIF(UNIX)
-ENDIF(import_output)
-#SET(python_site_package "site-packages")
+# On unix one have: "python2.4/site-packages"
+# while on Win32: "c:/Python24/Lib/site-packages/"
+# give up for now and place python modules stuff in a general 'python' subdir
+SET(python_site_package "python/site-packages")
 
 
 #-----------------------------------------------------------------------------
