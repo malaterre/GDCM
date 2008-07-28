@@ -29,6 +29,3 @@ TARGET_LINK_LIBRARIES(CompressImage gdcmMSFF)
 ADD_EXECUTABLE(CheckBigEndianBug CheckBigEndianBug.cxx)
 TARGET_LINK_LIBRARIES(CheckBigEndianBug gdcmMSFF)
 
-ADD_EXECUTABLE(DumpProtocolDataBlock DumpProtocolDataBlock.cxx)
-TARGET_LINK_LIBRARIES(DumpProtocolDataBlock gdcmMSFF)
-
