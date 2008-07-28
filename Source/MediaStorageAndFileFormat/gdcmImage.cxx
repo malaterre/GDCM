@@ -145,7 +145,7 @@ void Image::SetSpacing(const double *spacing)
 
 void Image::SetSpacing(unsigned int idx, double spacing)
 {
-  Spacing.resize( idx + 1 );
+  Spacing.resize( 3 /*idx + 1*/ );
   Spacing[idx] = spacing;
 }
 

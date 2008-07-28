@@ -70,6 +70,7 @@ SET(BLACK_LIST_READER
   SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm
   MR-MONO2-12-angio-an1.acr
   image.acr
+  PHILIPS_Gyroscan-8-MONO2-Odd_Sequence.dcm
 #SC that are well hidden MR Image Storage
   fffc0000UN.dcm
   MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm
