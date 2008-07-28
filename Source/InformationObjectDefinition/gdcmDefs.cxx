@@ -37,10 +37,10 @@ void Defs::LoadDefaults()
   TableReader tr(*this);
   // FIXME: hardcoded path:
   const char filename1[] = GDCM_SOURCE_DIR "/Source/InformationObjectDefinition/Part3.xml";
-  const char filename2[] = GDCM_CMAKE_INSTALL_PREFIX "/" GDCM_INSTALL_INCLUDE_DIR "/XML/Part3.xml";
+  const char filename2[] = GDCM_CMAKE_INSTALL_PREFIX "/" GDCM_INSTALL_DATA_DIR "/XML/Part3.xml";
   gdcm::Filename fn( System::GetCurrentProcessFileName() );
   std::string filename3 = fn.GetPath();
-  filename3 += "/../" GDCM_INSTALL_INCLUDE_DIR "/XML/Part3.xml";
+  filename3 += "/../" GDCM_INSTALL_DATA_DIR "/XML/Part3.xml";
   //std::cerr << filename3 << std::endl;
   //std::cerr << "where: " << myenv << std::endl;
   //std::cerr << "python: " << fn.GetName() << std::endl;
@@ -55,8 +55,9 @@ void Defs::LoadDefaults()
     {
     const char *myenv = getenv("GDCM_WHEREAMI");
     filename4 = myenv;
-    filename4 += "/../../" GDCM_INSTALL_INCLUDE_DIR "/XML/Part3.xml";
+    filename4 += "/../../../" GDCM_INSTALL_DATA_DIR "/XML/Part3.xml";
     }
+//    std::cerr << filename4 << std::endl;
 //    std::cerr << filename2 << std::endl;
 //    std::cerr << filename1 << std::endl;
 //    std::cout << System::GetCWD() << std::endl;

@@ -61,7 +61,7 @@ ENDIF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
 #-----------------------------------------------------------------------------
 # Install Part3.xml
 INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/Part3.xml
-  DESTINATION ${GDCM_INSTALL_INCLUDE_DIR}/XML COMPONENT Runtime
+  DESTINATION ${GDCM_INSTALL_DATA_DIR}/XML COMPONENT Runtime
 )
 
 #-----------------------------------------------------------------------------
