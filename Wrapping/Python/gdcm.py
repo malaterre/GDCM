@@ -18,6 +18,20 @@ its namespace.  This is a required module."""
 
 import os
 
+# GDCM_WHEREAMI is a secret variable used to passed the location of the gdcm.py
+# to the global singleton initialization internal to gdcm:
+# I cannot use getcwd not /proc/self/exe since the process really is: python
+# Solution:
+# 1. Create a dummy env var within python
+# 2. Load the gdcm_wrapped interface
+# 3. The internal gdcm C++ will inspect for this variable, if set: use it !
+#if os.environ["GDCM_WHEREAMI"]:
+#  os.exit(1)
+# WARNING: this is currently the implementation chosen to pass in the information
+# during the singleton initalization, but is subject to change without notice
+# do not expect this env var to be present at any time in your project
+
+os.environ["GDCM_WHEREAMI"]=os.path.dirname(__file__)
 if os.name == 'posix':
   # extremely important !
   # http://gcc.gnu.org/faq.html#dso
@@ -47,4 +61,5 @@ else:
   from gdcmswig import *
 
 # bye bye
+# once the process dies, the changed environment dies with it.
 del os

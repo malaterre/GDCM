@@ -17,6 +17,7 @@
 #include "gdcmSystem.h"
 #include "gdcmMediaStorage.h"
 #include "gdcmTrace.h"
+#include "gdcmFilename.h"
 
 #include <stdlib.h>
 
@@ -37,22 +38,47 @@ void Defs::LoadDefaults()
   // FIXME: hardcoded path:
   const char filename1[] = GDCM_SOURCE_DIR "/Source/InformationObjectDefinition/Part3.xml";
   const char filename2[] = GDCM_CMAKE_INSTALL_PREFIX "/" GDCM_INSTALL_INCLUDE_DIR "/XML/Part3.xml";
-  std::string filename3 = System::GetProcessDirectory();
+  gdcm::Filename fn( System::GetCurrentProcessFileName() );
+  std::string filename3 = fn.GetPath();
   filename3 += "/../" GDCM_INSTALL_INCLUDE_DIR "/XML/Part3.xml";
-    std::cerr << filename3 << std::endl;
+  //std::cerr << filename3 << std::endl;
+  //std::cerr << "where: " << myenv << std::endl;
+  //std::cerr << "python: " << fn.GetName() << std::endl;
+  // python2.4
+  // python2.5
+  // Python.exe 
+  // ...
+  // let's do a simple comparison:
+  const char python[] = "python";
+  std::string filename4;
+  if( System::StrNCaseCmp( python, fn.GetName(), strlen(python) ) == 0 )
+    {
+    const char *myenv = getenv("GDCM_WHEREAMI");
+    filename4 = myenv;
+    filename4 += "/../../" GDCM_INSTALL_INCLUDE_DIR "/XML/Part3.xml";
+    }
 //    std::cerr << filename2 << std::endl;
 //    std::cerr << filename1 << std::endl;
 //    std::cout << System::GetCWD() << std::endl;
 //   std::cout << "Argv0:" << System::GetArgv0() << std::endl;
-  if( System::FileExists(filename3.c_str()) )
+/* Order is:
+ * 1. Check installation directory (static)
+ * 2. If not found: check relative to current process execution dir (dynamic)
+ * 3. If process is python, check env var to get directory path (dynamic)
+ * 4. Hum, alright let's check in the source tree (+warning) (static)
+ */
+  if( System::FileExists(filename2) )
+    {
+    tr.SetFilename(filename2);
+    }
+  else if( System::FileExists(filename3.c_str()) )
     {
     tr.SetFilename(filename3.c_str());
     }
-  // Should I keep the hardcoded one ? It should be handled by the previous if ??
-  //else if( System::FileExists(filename2) )
-  //  {
-  //  tr.SetFilename(filename2);
-  //  }
+  else if( System::FileExists(filename4.c_str()) )
+    {
+    tr.SetFilename(filename4.c_str());
+    }
   // This one should at least print a warning that source cannot be deleted
   else if( System::FileExists(filename1) )
     {

@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmSystem.h"
+#include "gdcmFilename.h"
 #include <iostream>
 #include <string.h> // strlen
 
@@ -74,10 +75,19 @@ int TestSystem(int, char *[])
  *
  * TODO: there can be trailing slash...
  */
-  const char *path = gdcm::System::GetProcessDirectory();
-  if( strncmp(GDCM_EXECUTABLE_OUTPUT_PATH, path, strlen(GDCM_EXECUTABLE_OUTPUT_PATH)) != 0 )
+  const char *path = gdcm::System::GetCurrentProcessFileName();
+  gdcm::Filename fn( path );
+//std::cerr << path << std::endl;
+  if( strncmp(GDCM_EXECUTABLE_OUTPUT_PATH, fn.GetPath(), strlen(GDCM_EXECUTABLE_OUTPUT_PATH)) != 0 )
     {
-    std::cerr << GDCM_EXECUTABLE_OUTPUT_PATH << "!=" << path << std::endl;
+    std::cerr << GDCM_EXECUTABLE_OUTPUT_PATH << "!=" << fn.GetPath() << std::endl;
+    return 1;
+    }
+  // gdcmCommonTests
+  const char exename[] = "gdcmCommonTests";
+  if( strncmp(exename, fn.GetName(), strlen(exename)) != 0 )
+    {
+    std::cerr << exename << "!=" << fn.GetName() << std::endl;
     return 1;
     }
  

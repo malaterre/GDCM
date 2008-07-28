@@ -44,7 +44,8 @@ public:
   static size_t FileSize(const char* filename);
 
   /// Return the directory the current process is running into:
-  static const char *GetProcessDirectory();
+  /// NOT THREAD SAFE
+  static const char *GetCurrentProcessFileName();
 
   // TODO some system calls
   // Chdir
