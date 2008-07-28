@@ -277,9 +277,11 @@ STRING(LENGTH ${import_output} len)
 MATH(EXPR fileend "${len} - 9") 
 STRING(SUBSTRING ${import_output} 9 ${fileend} dummy1)
 IF(UNIX)
-  #SET(python_site_package ${dummy1})
+  SET(python_site_package ${dummy1})
+  MESSAGE(${python_site_package})
 ENDIF(UNIX)
 ENDIF(import_output)
+#SET(python_site_package "site-packages")
 
 
 #-----------------------------------------------------------------------------
@@ -484,9 +486,9 @@ SET(GDCM_INCLUDE_PATH
   )
 IF(MSVC)
   SET(GDCM_INCLUDE_PATH
-${GDCM_INCLUDE_PATH}
+    ${GDCM_INCLUDE_PATH}
     "${GDCM_SOURCE_DIR}/Utilities/C99"
-)
+  )
 ENDIF(MSVC)
 SET(GDCM_LIBRARY_DIRS ${LIBRARY_OUTPUT_PATH})
 SUBDIRS(CMake/ExportConfiguration)
