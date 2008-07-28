@@ -83,7 +83,7 @@ void Defs::LoadDefaults()
   // This one should at least print a warning that source cannot be deleted
   else if( System::FileExists(filename1) )
     {
-    gdcmWarningMacro( "Using file from the source directory: " << filename1 );
+    gdcmDebugMacro( "Using file from the source directory: " << filename1 );
     tr.SetFilename(filename1);
     }
   else
