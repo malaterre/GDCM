@@ -135,7 +135,11 @@ int DumpProtocolDataBlock(const std::string & filename, bool verbose)
   const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
 
   const gdcm::PrivateTag tprotocoldatablock(0x0025,0x1b,"GEMS_SERS_01");
-  if( !ds.FindDataElement( tprotocoldatablock) ) return 1;
+  if( !ds.FindDataElement( tprotocoldatablock) ) 
+    {
+    std::cerr << "Could not find tag: " << tprotocoldatablock << std::endl;
+    return 1;
+    }
   const gdcm::DataElement& protocoldatablock= ds.GetDataElement( tprotocoldatablock);
   if ( protocoldatablock.IsEmpty() ) return 1;
   const gdcm::ByteValue * bv = protocoldatablock.GetByteValue();
