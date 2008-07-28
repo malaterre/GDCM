@@ -298,13 +298,6 @@ const char *System::GetCurrentProcessFileName()
  * ...
  */
 #ifdef _WIN32
-  HANDLE PyWin_DLLhModule;
-  char dllpath[MAX_PATH+1];
-  if (!GetModuleFileName(PyWin_DLLhModule, dllpath, sizeof(MAX_PATH)))
-    {
-    dllpath[0] = 0;
-    }
-  std::cerr << "dll:" << dllpath << std::endl;
   static char buf[MAX_PATH];
   if ( ::GetModuleFileName(0, buf, sizeof(buf)) )
   {
