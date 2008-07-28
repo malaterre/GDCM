@@ -71,6 +71,9 @@ SET(BLACK_LIST_READER
   MR-MONO2-12-angio-an1.acr
   image.acr
   PHILIPS_Gyroscan-8-MONO2-Odd_Sequence.dcm
+  MergeCOM3_330_IM50.dcm
+  ImplicitVRInExplicitDataSet2.dcm
+  BogugsItemAndSequenceLengthCorrected.dcm
 #SC that are well hidden MR Image Storage
   fffc0000UN.dcm
   MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm
