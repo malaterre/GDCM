@@ -20,7 +20,7 @@ import os
 
 # GDCM_WHEREAMI is a secret variable used to passed the location of the gdcm.py
 # to the global singleton initialization internal to gdcm:
-# I cannot use getcwd not /proc/self/exe since the process really is: python
+# I cannot use neither getcwd nor /proc/self/exe since the process really is: `python`
 # Solution:
 # 1. Create a dummy env var within python
 # 2. Load the gdcm_wrapped interface
