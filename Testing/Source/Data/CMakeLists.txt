@@ -65,10 +65,11 @@ SET(BLACK_LIST_READER
   ImplicitDeclaredAsExplicit.dcm
   TheralysGDCM1.dcm
   MR_Spectroscopy_SIEMENS_OF.dcm
-# Recent issue with compression/decompression:
+# Recent issue with compression/decompression:
   SIEMENS_GBS_III-16-ACR_NEMA_1.acr
   SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm
   MR-MONO2-12-angio-an1.acr
+  image.acr
 #SC that are well hidden MR Image Storage
   fffc0000UN.dcm
   MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm

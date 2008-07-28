@@ -42,8 +42,8 @@ void Image::SetNumberOfDimensions(unsigned int dim)
 {
   NumberOfDimensions = dim;
   assert( NumberOfDimensions );
-  Dimensions.resize( NumberOfDimensions ); // fill with 0
-  Spacing.resize( NumberOfDimensions, 1 ); // fill with 1
+  Dimensions.resize( 3 /*NumberOfDimensions*/ ); // fill with 0
+  Spacing.resize( 3 /*NumberOfDimensions*/, 1 ); // fill with 1
   assert( NumberOfDimensions == 2 || NumberOfDimensions == 3 );
   if( NumberOfDimensions == 2 )
     {
