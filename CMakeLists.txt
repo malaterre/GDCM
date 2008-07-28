@@ -287,6 +287,14 @@ MARK_AS_ADVANCED(BUILD_TESTING)
 # give up for now and place python modules stuff in a general 'python' subdir
 SET(python_site_package "python/site-packages")
 
+# Typical runtime env should be then
+# (assuming CMAKE_INSTALL_PREFIX:PATH=/tmp/local)
+# One would do:
+#   export PYTHONPATH=/tmp/local/lib/python/site-packages/gdcm-2.1
+#   export LD_LIBRARY_PATH=/tmp/local/lib/
+#   python
+#   > import gdcm
+
 
 #-----------------------------------------------------------------------------
 # Wrapping
