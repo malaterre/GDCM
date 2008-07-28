@@ -96,6 +96,7 @@ inline const char* Getcwd(char* buf, unsigned int len)
 }
 #endif
 
+/*
 // 1.14 How can I find a process' executable file?
 // http://www.faqs.org/faqs/unix-faq/programmer/faq/
 static std::string Argv0;
@@ -111,17 +112,21 @@ const char* System::GetArgv0()
 //std::cout << "Get:" << Argv0 << std::endl;
   return Argv0.c_str();
 }
+*/
 
-std::string System::GetCWD()
+const char * System::GetCWD()
 {
-  char buf[2048];
+  static char buf[2048];
   const char* cwd = Getcwd(buf, 2048);
+  return cwd;
+/*
   std::string path;
   if ( cwd )
     {
     path = cwd;
     }
   return path;
+*/
 }
 
 bool System::MakeDirectory(const char *path)

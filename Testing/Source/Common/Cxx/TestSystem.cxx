@@ -66,6 +66,10 @@ int TestSystem(int, char *[])
   int res = gdcm::System::GetCurrentDateTime(datetime);
   std::cerr << datetime << std::endl;
 
+  const char *cwd = gdcm::System::GetCWD();
+  std::cerr << "cwd:" << cwd << std::endl;
+  // GDCM_EXECUTABLE_OUTPUT_PATH "/../" "/Testing/Source/Common/Cxx"
+
 /*
  * I can do this kind of testing here since I know testing:
  * - cannot be installed (no rule in cmakelists)
