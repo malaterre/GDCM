@@ -69,6 +69,7 @@ ELSE( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageRGBToYBR.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkGDCMPolyDataReader.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkLookupTable16.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageMapToColors16.cxx
   )
   IF(CMAKE_HAVE_PTHREAD_H)
     SET(vtkgdcm_SRCS ${vtkgdcm_SRCS}
