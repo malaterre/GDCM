@@ -14,6 +14,7 @@
 =========================================================================*/
 #include "gdcmLookupTable.h"
 #include <vector>
+#include <string.h>
 
 namespace gdcm
 {
@@ -304,6 +305,7 @@ bool LookupTable::GetBufferAsRGBA(unsigned char *rgba) const
     size_t s = Internal->RGB.size();
     s /= 2;
     s /= 3;
+    memset(rgba,0,Internal->RGB.size() * 4 / 3); // FIXME
     for(size_t i = 0; i < s; ++i)
       {
       // RED
@@ -313,8 +315,9 @@ bool LookupTable::GetBufferAsRGBA(unsigned char *rgba) const
       // BLUE
       *rgba16++ = *uchar16++;
       // ALPHA
-      *rgba16++ = 0;
+      *rgba16++ = 255*255;
       }
+
     ret = true;
     }
   return ret;
