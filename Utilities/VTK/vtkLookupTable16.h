@@ -12,41 +12,62 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-// .NAME vtkLookupTable16 - map scalar values into colors via a lookup table
+// .NAME vtkLookupTable16 - 
 // .SECTION Description
-// vtkLookupTable16 is an object that is used by mapper objects to map scalar 
-// values into rgba (red-green-blue-alpha transparency) color specification, 
-// or rgba into scalar values. The color table can be created by direct 
-// insertion of color values, or by specifying  hue, saturation, value, and 
-// alpha range and generating a table.
 //
 // .SECTION Caveats
-// You need to explicitely call Build() when constructing the LUT by hand.
 //
 // .SECTION See Also
-// vtkLogLookupTable vtkWindowLevelLookupTable
+// vtkLookupTable 
 
 #ifndef __vtkLookupTable16_h
 #define __vtkLookupTable16_h
 
 #include "vtkLookupTable.h"
+#include "vtkUnsignedShortArray.h"
 
 class VTK_EXPORT vtkLookupTable16 : public vtkLookupTable
 {
 public:
-  // Description:
-  // Construct with range=[0,1]; and hsv ranges set up for rainbow color table 
-  // (from red to blue).
   static vtkLookupTable16 *New();
   
   vtkTypeRevisionMacro(vtkLookupTable16,vtkLookupTable);
   void PrintSelf(ostream& os, vtkIndent indent);
-  
+
+  void Build();
+
+  void SetNumberOfTableValues(vtkIdType number);
+
+  unsigned char *WritePointer(const vtkIdType id, const int number);
+
+  unsigned short *GetPointer(const vtkIdType id) {
+    return this->Table16->GetPointer(4*id); };
+
+protected:
+  vtkLookupTable16(int sze=256, int ext=256);
+  ~vtkLookupTable16();
+
+  vtkUnsignedShortArray *Table16;
+
+void MapScalarsThroughTable2(void *input, 
+                                             unsigned char *output,
+                                             int inputDataType, 
+                                             int numberOfValues,
+                                             int inputIncrement,
+                                             int outputFormat);
+ 
 private:
   vtkLookupTable16(const vtkLookupTable16&);  // Not implemented.
   void operator=(const vtkLookupTable16&);  // Not implemented.
 };
 
+//----------------------------------------------------------------------------
+inline unsigned char *vtkLookupTable16::WritePointer(const vtkIdType id, 
+                                                   const int number)
+{
+  //this->InsertTime.Modified();
+  return (unsigned char*)this->Table16->WritePointer(4*id,4*number);
+}
 
 #endif
 
