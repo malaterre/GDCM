@@ -23,6 +23,7 @@
 #include "vtkStringArray.h"
 #include "vtkPointData.h"
 #include "vtkLookupTable.h"
+#include "vtkLookupTable16.h"
 #include "vtkWindowLevelLookupTable.h"
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #include "vtkInformationVector.h"
@@ -981,17 +982,35 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     {
     this->ImageFormat = VTK_LOOKUP_TABLE;
     const gdcm::LookupTable &lut = image.GetLUT();
-    vtkLookupTable *vtklut = vtkLookupTable::New();
-    vtklut->SetNumberOfTableValues(256);
-    // SOLVED: GetPointer(0) is skrew up, need to replace it with WritePointer(0,4) ...
-    if( !lut.GetBufferAsRGBA( vtklut->WritePointer(0,4) ) )
+    if( lut.GetBitSample() == 8 )
       {
-      vtkWarningMacro( "Could not get values from LUT" );
-      return 0;
+      vtkLookupTable *vtklut = vtkLookupTable::New();
+      vtklut->SetNumberOfTableValues(256);
+      // SOLVED: GetPointer(0) is skrew up, need to replace it with WritePointer(0,4) ...
+      if( !lut.GetBufferAsRGBA( vtklut->WritePointer(0,4) ) )
+        {
+        vtkWarningMacro( "Could not get values from LUT" );
+        return 0;
+        }
+      vtklut->SetRange(0,255);
+      data->GetPointData()->GetScalars()->SetLookupTable( vtklut );
+      vtklut->Delete();
       }
-    vtklut->SetRange(0,255);
-    data->GetPointData()->GetScalars()->SetLookupTable( vtklut );
-    vtklut->Delete();
+    else 
+      {
+      assert( lut.GetBitSample() == 16 );
+      vtkLookupTable16 *vtklut = vtkLookupTable16::New();
+      vtklut->SetNumberOfTableValues(256*256);
+      // SOLVED: GetPointer(0) is skrew up, need to replace it with WritePointer(0,4) ...
+      if( !lut.GetBufferAsRGBA( (unsigned char*)vtklut->WritePointer(0,4) ) )
+        {
+        vtkWarningMacro( "Could not get values from LUT" );
+        return 0;
+        }
+      vtklut->SetRange(0,256*256-1);
+      data->GetPointData()->GetScalars()->SetLookupTable( vtklut );
+      vtklut->Delete();
+      }
     }
   else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME1 )
     {
