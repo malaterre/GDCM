@@ -7,6 +7,7 @@ SET(GDCM_PYTHON_TEST_SRCS
   TestModifyFields
   TestAnonymizer
   #TestStringFilter
+  TestKakaduDecompressionMD5
   )
 
 # Loop over files and create executables
