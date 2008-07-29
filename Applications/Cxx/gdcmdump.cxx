@@ -222,7 +222,7 @@ void PrintHelp()
 {
   PrintVersion();
   std::cout << "Usage: gdcmdump [OPTION]... [FILE]..." << std::endl;
-  std::cout << "dumps a DICOM file, it will display the structure and values containes in the specified DICOM file\n";
+  std::cout << "dumps a DICOM file, it will display the structure and values contained in the specified DICOM file\n";
   std::cout << "Parameter:" << std::endl;
   std::cout << "  -i --input     DICOM filename or directory" << std::endl;
   std::cout << "Options:" << std::endl;
