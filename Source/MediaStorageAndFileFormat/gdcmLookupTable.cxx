@@ -84,7 +84,7 @@ void LookupTable::InitializeLUT(LookupTableType type, unsigned short length,
   Internal->BitSize[type] = bitsize;
 }
 
-unsigned short LookupTable::GetLUTLength(LookupTableType type) const
+unsigned int LookupTable::GetLUTLength(LookupTableType type) const
 {
   return Internal->Length[type];
 }
@@ -298,7 +298,24 @@ bool LookupTable::GetBufferAsRGBA(unsigned char *rgba) const
 
     ret = true;
 */
-    ret = false;
+    //std::vector<unsigned char>::const_iterator it = Internal->RGB.begin();
+    uint16_t *uchar16 = (uint16_t*)&Internal->RGB[0];
+    uint16_t *rgba16 = (uint16_t*)rgba;
+    size_t s = Internal->RGB.size();
+    s /= 2;
+    s /= 3;
+    for(size_t i = 0; i < s; ++i)
+      {
+      // RED
+      *rgba16++ = *uchar16++;
+      // GREEN
+      *rgba16++ = *uchar16++;
+      // BLUE
+      *rgba16++ = *uchar16++;
+      // ALPHA
+      *rgba16++ = 0;
+      }
+    ret = true;
     }
   return ret;
 }

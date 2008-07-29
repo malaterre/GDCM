@@ -778,6 +778,11 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     //const DataSet &ds = it->GetNestedDataSet();
 
     SmartPointer<LookupTable> lut = new LookupTable;
+    const Tag testseglut(0x0028, (0x1221 + 0));
+    if( ds.FindDataElement( testseglut ) )
+      {
+      lut = new SegmentedPaletteColorLookupTable;
+      }
     //SmartPointer<SegmentedPaletteColorLookupTable> lut = new SegmentedPaletteColorLookupTable;
     lut->Allocate( pf.GetBitsAllocated() );
 
@@ -831,7 +836,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
         unsigned long check =
           (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
           * el_us3.GetValue(2) / 8;
-        assert( check == lut_raw->GetLength() ); (void)check;
+        //assert( check == lut_raw->GetLength() ); (void)check;
         }
       else
         {

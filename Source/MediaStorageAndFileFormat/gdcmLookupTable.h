@@ -43,8 +43,8 @@ public:
   // Generic interface:
   void InitializeLUT(LookupTableType type, unsigned short length,
     unsigned short subscript, unsigned short bitsize);
-  unsigned short GetLUTLength(LookupTableType type) const;
-  void SetLUT(LookupTableType type, const unsigned char *array,
+  unsigned int GetLUTLength(LookupTableType type) const;
+  virtual void SetLUT(LookupTableType type, const unsigned char *array,
     unsigned int length);
   void GetLUT(LookupTableType type, unsigned char *array, unsigned int &length) const;
   void GetLUTDescriptor(LookupTableType type, unsigned short &length,
@@ -71,6 +71,8 @@ public:
   bool GetBufferAsRGBA(unsigned char *rgba) const;
   const unsigned char *GetPointer() const;
   bool WriteBufferAsRGBA(unsigned char *rgba);
+
+  unsigned short GetBitSample() const { return BitSample; }
 
 private:
 protected:
