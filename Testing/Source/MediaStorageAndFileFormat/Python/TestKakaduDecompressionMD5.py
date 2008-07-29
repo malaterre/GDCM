@@ -23,11 +23,9 @@ def TestKakadu(filename):
   testbasename = fn.GetName()
   ext = fn.GetExtension()
   print ext
-  ref = gdcm.Testing.GetMD5FromFile(filename)
-  print ref
   kakadu_path = '/home/mmalaterre/Software/Kakadu60'
   kdu_expand = kakadu_path + '/kdu_expand'
-  kdu_args = ' -i '
+  kdu_args = ' -quiet -i '
   output_dcm = testdir + '/kakadu/' + testbasename
   output_j2k = output_dcm + '.j2k'
   output_raw = output_dcm + '.rawl' # FIXME: little endian only...
@@ -38,14 +36,24 @@ def TestKakadu(filename):
   outputfilename = output_j2k
   gdcmraw_args = ' -i ' + filename + ' -o ' + outputfilename
   gdcmraw += gdcmraw_args
-  print gdcmraw
+  #print gdcmraw
   ret = os.system( gdcmraw )
-  print kdu_expand
+  #print "ret:",ret
+  #print kdu_expand
   os.environ["LD_LIBRARY_PATH"]=kakadu_path
   ret = os.system( kdu_expand )
-  #print ret
+  #print "ret:",ret
+  md5 = gdcm.Testing.ComputeFileMD5( output_raw ) 
+  # ok this is the md5 as computed after decompression using kdu_expand
+  # let see if it match out previously (stored) md5:
+  ref = gdcm.Testing.GetMD5FromFile(filename)
+  print ref
+  retval = 0
+  if ref != md5:
+    print "md5 are different: %s should be: %s"%(md5,ref)
+    retval = 1
 
-  return 0
+  return retval
 
 if __name__ == "__main__":
   sucess = 0
@@ -71,8 +79,7 @@ if __name__ == "__main__":
     for i in range(0,nfiles):
       filename = files[i]
       sucess += TestKakadu( filename )
-  
-  
+
   # Test succeed ?
-  sys.exit(sucess == 0)
+  sys.exit(sucess)
 

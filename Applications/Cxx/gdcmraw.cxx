@@ -87,13 +87,13 @@ int main(int argc, char *argv[])
       break;
 
     case 'i':
-      printf ("option i with value '%s'\n", optarg);
+      //printf ("option i with value '%s'\n", optarg);
       assert( filename.empty() );
       filename = optarg;
       break;
 
     case 'o':
-      printf ("option o with value '%s'\n", optarg);
+      //printf ("option o with value '%s'\n", optarg);
       assert( outfilename.empty() );
       outfilename = optarg;
       break;
@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
     }
 
   const gdcm::FileMetaInformation &h = reader.GetFile().GetHeader();
-  std::cout << h << std::endl;
+  //std::cout << h << std::endl;
 
   const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
   //std::cout << ds << std::endl;

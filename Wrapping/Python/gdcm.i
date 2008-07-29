@@ -459,6 +459,15 @@ using namespace gdcm;
 %include "gdcmConfigure.h"
 #ifdef GDCM_BUILD_TESTING
 %include "gdcmTesting.h"
+%ignore gdcm::Testing::ComputeFileMD5(const char*, char *);
+%extend gdcm::Testing
+{
+  static const char *ComputeFileMD5(const char *filename) {
+    static char buffer[33];
+    gdcm::Testing::ComputeFileMD5(filename, buffer);
+    return buffer;
+  }
+};
 #endif
 %include "gdcmPythonFilter.h"
 %include "gdcmDirectionCosines.h"
