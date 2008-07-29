@@ -119,3 +119,21 @@ FOREACH(filename ${gdcm_data_filenames_glob})
   ENDIF(NOT bad_dicom)
 ENDFOREACH(filename)
 
+# There is a new test that compress all images using the jpeg compression alg:
+# try to decompress them with dcmtk:
+FILE(MAKE_DIRECTORY "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax/dcmdjpeg/")
+
+FOREACH(filename ${gdcm_data_filenames_glob})
+  GET_FILENAME_COMPONENT(filename_name ${filename} NAME)
+  STRING(REGEX MATCH ${filename_name} bad_dicom ${black_list_reader})
+  IF(NOT bad_dicom)
+    IF(GDCM_TEST_DCMTK)
+      IF(DCMTK_DCMDJPEG_EXECUTABLE)
+        ADD_TEST("DCMDJPEG-${filename_name}" ${DCMTK_DCMDJPEG_EXECUTABLE}
+          "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax/${filename_name}"
+          "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax/dcmdjpeg/${filename_name}")
+      ENDIF(DCMTK_DCMDJPEG_EXECUTABLE)
+    ENDIF(GDCM_TEST_DCMTK)
+  ENDIF(NOT bad_dicom)
+ENDFOREACH(filename)
+
