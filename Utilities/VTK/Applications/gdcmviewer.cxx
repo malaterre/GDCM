@@ -433,21 +433,43 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     assert( reader->GetOutput()->GetPointData()->GetScalars() 
       && reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable() );
     //convert to color:
-    vtkImageMapToColors16 *map = vtkImageMapToColors16::New ();
-    map->SetInput (reader->GetOutput());
-    map->SetLookupTable (reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable());
-    if( reader->GetImageFormat() == VTK_LOOKUP_TABLE )
+    vtkLookupTable *lut = reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable();
+    if( lut->IsA( "vtkLookupTable16" ) )
       {
-      map->SetOutputFormatToRGB();
+      vtkImageMapToColors *map = vtkImageMapToColors::New ();
+      map->SetInput (reader->GetOutput());
+      map->SetLookupTable (reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable());
+      if( reader->GetImageFormat() == VTK_LOOKUP_TABLE )
+        {
+        map->SetOutputFormatToRGB();
+        }
+      else if( reader->GetImageFormat() == VTK_INVERSE_LUMINANCE )
+        {
+        map->SetOutputFormatToLuminance();
+        }
+      map->Update();
+      map->GetOutput()->GetScalarRange(range);
+      viewer->SetInput( map->GetOutput() );
+      map->Delete();
       }
-    else if( reader->GetImageFormat() == VTK_INVERSE_LUMINANCE )
+    else
       {
-      map->SetOutputFormatToLuminance();
+      vtkImageMapToColors16 *map = vtkImageMapToColors16::New ();
+      map->SetInput (reader->GetOutput());
+      map->SetLookupTable (reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable());
+      if( reader->GetImageFormat() == VTK_LOOKUP_TABLE )
+        {
+        map->SetOutputFormatToRGB();
+        }
+      else if( reader->GetImageFormat() == VTK_INVERSE_LUMINANCE )
+        {
+        map->SetOutputFormatToLuminance();
+        }
+      map->Update();
+      map->GetOutput()->GetScalarRange(range);
+      viewer->SetInput( map->GetOutput() );
+      map->Delete();
       }
-    map->Update();
-    map->GetOutput()->GetScalarRange(range);
-    viewer->SetInput( map->GetOutput() );
-    map->Delete();
     }
   else if( reader->GetImageFormat() == VTK_YBR )
     {
