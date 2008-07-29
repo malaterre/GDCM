@@ -36,6 +36,8 @@
 #include <getopt.h>
 #include <string.h>
 
+int color = 0;
+
 template <typename TPrinter>
 int DoOperation(const std::string & filename)
 {
@@ -49,6 +51,7 @@ int DoOperation(const std::string & filename)
 
   TPrinter printer;
   printer.SetFile ( reader.GetFile() );
+  printer.SetColor( color );
   printer.Print( std::cout );
 
   return 0;
@@ -238,6 +241,7 @@ void PrintHelp()
   std::cout << "  -v --version   print version." << std::endl;
 }
 
+
 int main (int argc, char *argv[])
 {
   int c;
@@ -247,7 +251,6 @@ int main (int argc, char *argv[])
   int printdict = 0;
   int dump = 0;
   int print = 0;
-  int color = 0;
   int printcsa = 0;
   int printpdb = 0;
   int verbose = 0;
