@@ -139,7 +139,7 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
           {
           val = vtkApplyLogScale16(*input, range, logRange);
           cptr = vtkLinearLookup16(val, table, maxIndex, shift, scale); 
-          *output++ = static_cast<unsigned char>(cptr[0]*0.30 + cptr[1]*0.59 + 
+          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 + 
                                                  cptr[2]*0.11 + 0.5);
           *output++ = cptr[3];
           input += inIncr;
@@ -151,7 +151,7 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
           {
           val = vtkApplyLogScale16(*input, range, logRange);
           cptr = vtkLinearLookup16(val, table, maxIndex, shift, scale); 
-          *output++ = static_cast<unsigned char>(cptr[0]*0.30 + cptr[1]*0.59 + 
+          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 + 
                                                  cptr[2]*0.11 + 0.5);
           input += inIncr;
           }
@@ -200,7 +200,7 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
         while (--i >= 0) 
           {
           cptr = vtkLinearLookup16(*input, table, maxIndex, shift, scale); 
-          *output++ = static_cast<unsigned char>(cptr[0]*0.30 + cptr[1]*0.59 + 
+          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 + 
                                                  cptr[2]*0.11 + 0.5);
           *output++ = cptr[3];
           input += inIncr;
@@ -211,7 +211,7 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
         while (--i >= 0) 
           {
           cptr = vtkLinearLookup16(*input, table, maxIndex, shift, scale); 
-          *output++ = static_cast<unsigned char>(cptr[0]*0.30 + cptr[1]*0.59 + 
+          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 + 
                                                  cptr[2]*0.11 + 0.5);
           input += inIncr;
           }
@@ -246,7 +246,7 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
           *output++ = *cptr++;
           *output++ = *cptr++;
           *output++ = *cptr++;
-          *output++ = static_cast<unsigned char>((*cptr)*alpha); cptr++;
+          *output++ = static_cast<unsigned short>((*cptr)*alpha); cptr++;
           input += inIncr;
           }
         }
@@ -268,9 +268,9 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
           {
           val = vtkApplyLogScale16(*input, range, logRange);
           cptr = vtkLinearLookup16(val, table, maxIndex, shift, scale); 
-          *output++ = static_cast<unsigned char>(cptr[0]*0.30 + cptr[1]*0.59 + 
+          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 + 
                                                  cptr[2]*0.11 + 0.5);
-          *output++ = static_cast<unsigned char>(alpha*cptr[3]);
+          *output++ = static_cast<unsigned short>(alpha*cptr[3]);
           input += inIncr;
           }
         }
@@ -280,7 +280,7 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
           {
           val = vtkApplyLogScale16(*input, range, logRange);
           cptr = vtkLinearLookup16(val, table, maxIndex, shift, scale); 
-          *output++ = static_cast<unsigned char>(cptr[0]*0.30 + cptr[1]*0.59 + 
+          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 + 
                                                  cptr[2]*0.11 + 0.5);
           input += inIncr;
           }
@@ -309,7 +309,7 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
           *output++ = *cptr++;
           *output++ = *cptr++;
           *output++ = *cptr++;
-          *output++ = static_cast<unsigned char>((*cptr)*alpha); cptr++;
+          *output++ = static_cast<unsigned short>((*cptr)*alpha); cptr++;
           input += inIncr;
           }
         }
@@ -329,9 +329,9 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
         while (--i >= 0) 
           {
           cptr = vtkLinearLookup16(*input, table, maxIndex, shift, scale); 
-          *output++ = static_cast<unsigned char>(cptr[0]*0.30 + cptr[1]*0.59 + 
+          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 + 
                                                  cptr[2]*0.11 + 0.5);
-          *output++ = static_cast<unsigned char>(cptr[3]*alpha);
+          *output++ = static_cast<unsigned short>(cptr[3]*alpha);
           input += inIncr;
           }
         }
@@ -340,7 +340,7 @@ void vtkLookupTable16MapData(vtkLookupTable16 *self, T *input,
         while (--i >= 0) 
           {
           cptr = vtkLinearLookup16(*input, table, maxIndex, shift, scale); 
-          *output++ = static_cast<unsigned char>(cptr[0]*0.30 + cptr[1]*0.59 + 
+          *output++ = static_cast<unsigned short>(cptr[0]*0.30 + cptr[1]*0.59 + 
                                                  cptr[2]*0.11 + 0.5);
           input += inIncr;
           }
