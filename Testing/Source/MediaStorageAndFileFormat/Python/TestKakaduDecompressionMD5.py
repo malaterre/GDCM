@@ -17,12 +17,11 @@ import gdcm
 import os,sys
 
 def TestKakadu(filename):
-  print filename
   fn = gdcm.Filename(filename)
   testdir = fn.GetPath()
   testbasename = fn.GetName()
   ext = fn.GetExtension()
-  print ext
+  #print ext
   kakadu_path = '/home/mmalaterre/Software/Kakadu60'
   kdu_expand = kakadu_path + '/kdu_expand'
   kdu_args = ' -quiet -i '
@@ -47,10 +46,10 @@ def TestKakadu(filename):
   # ok this is the md5 as computed after decompression using kdu_expand
   # let see if it match out previously (stored) md5:
   ref = gdcm.Testing.GetMD5FromFile(filename)
-  print ref
+  #print ref
   retval = 0
   if ref != md5:
-    print "md5 are different: %s should be: %s"%(md5,ref)
+    print "md5 are different: %s should be: %s for file %s"%(md5,ref,filename)
     retval = 1
 
   return retval
