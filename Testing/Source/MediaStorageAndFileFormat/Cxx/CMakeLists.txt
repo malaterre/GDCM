@@ -132,6 +132,12 @@ FOREACH(filename ${gdcm_data_filenames_glob})
         ADD_TEST("DCMDJPEG-${filename_name}" ${DCMTK_DCMDJPEG_EXECUTABLE}
           "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax/${filename_name}"
           "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax/dcmdjpeg/${filename_name}")
+        # Special handling of the DICOMDIR files:
+        STRING(REGEX MATCH ${filename_name} is_dicomdir ${gdcm_data_dicomdir_filenames_glob})
+        IF(is_dicomdir)
+          #MESSAGE("IS DICOMDIR ${filename_name}")
+          SET_TESTS_PROPERTIES("DCMDJPEG-${filename_name}" PROPERTIES WILL_FAIL TRUE)
+        ENDIF(is_dicomdir)
       ENDIF(DCMTK_DCMDJPEG_EXECUTABLE)
     ENDIF(GDCM_TEST_DCMTK)
   ENDIF(NOT bad_dicom)
