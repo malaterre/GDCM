@@ -436,7 +436,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     vtkLookupTable *lut = reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable();
     if( lut->IsA( "vtkLookupTable16" ) )
       {
-      vtkImageMapToColors *map = vtkImageMapToColors::New ();
+      vtkImageMapToColors16 *map = vtkImageMapToColors16::New ();
       map->SetInput (reader->GetOutput());
       map->SetLookupTable (reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable());
       if( reader->GetImageFormat() == VTK_LOOKUP_TABLE )
@@ -454,7 +454,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
       }
     else
       {
-      vtkImageMapToColors16 *map = vtkImageMapToColors16::New ();
+      vtkImageMapToColors *map = vtkImageMapToColors::New ();
       map->SetInput (reader->GetOutput());
       map->SetLookupTable (reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable());
       if( reader->GetImageFormat() == VTK_LOOKUP_TABLE )
