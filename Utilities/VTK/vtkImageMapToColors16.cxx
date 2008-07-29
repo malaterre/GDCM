@@ -169,7 +169,7 @@ int vtkImageMapToColors16::RequestInformation (
 void vtkImageMapToColors16Execute(vtkImageMapToColors16 *self,
                                 vtkImageData *inData, void *inPtr,
                                 vtkImageData *outData,
-                                unsigned char *outPtr,
+                                unsigned short *outPtr,
                                 int outExt[6], int id)
 {
   int idxY, idxZ;
@@ -183,7 +183,7 @@ void vtkImageMapToColors16Execute(vtkImageMapToColors16 *self,
   int numberOfComponents,numberOfOutputComponents,outputFormat;
   int rowLength;
   vtkScalarsToColors *lookupTable = self->GetLookupTable();
-  unsigned char *outPtr1;
+  unsigned short *outPtr1;
   void *inPtr1;
 
   // find the region to loop over
@@ -222,23 +222,23 @@ void vtkImageMapToColors16Execute(vtkImageMapToColors16 *self,
           }
         count++;
         }
-      lookupTable->MapScalarsThroughTable2(inPtr1,outPtr1,
+      lookupTable->MapScalarsThroughTable2(inPtr1,(unsigned char*)outPtr1,
                                            dataType,extX,numberOfComponents,
                                            outputFormat);
-      if (self->GetPassAlphaToOutput() &&
-          dataType == VTK_UNSIGNED_CHAR && numberOfComponents > 1 &&
-          (outputFormat == VTK_RGBA || outputFormat == VTK_LUMINANCE_ALPHA))
-        {
-        unsigned char *outPtr2 = outPtr1 + numberOfOutputComponents - 1;
-        unsigned char *inPtr2 = static_cast<unsigned char *>(inPtr1)
-          - self->GetActiveComponent()*scalarSize + numberOfComponents - 1;
-        for (int i = 0; i < extX; i++)
-          {
-          *outPtr2 = (*outPtr2 * *inPtr2)/255;
-          outPtr2 += numberOfOutputComponents;
-          inPtr2 += numberOfComponents;
-          }
-        }
+      //if (self->GetPassAlphaToOutput() &&
+      //    dataType == VTK_UNSIGNED_CHAR && numberOfComponents > 1 &&
+      //    (outputFormat == VTK_RGBA || outputFormat == VTK_LUMINANCE_ALPHA))
+      //  {
+      //  unsigned char *outPtr2 = outPtr1 + numberOfOutputComponents - 1;
+      //  unsigned char *inPtr2 = static_cast<unsigned char *>(inPtr1)
+      //    - self->GetActiveComponent()*scalarSize + numberOfComponents - 1;
+      //  for (int i = 0; i < extX; i++)
+      //    {
+      //    *outPtr2 = (*outPtr2 * *inPtr2)/255;
+      //    outPtr2 += numberOfOutputComponents;
+      //    inPtr2 += numberOfComponents;
+      //    }
+      //  }
       outPtr1 += outIncY + extX*numberOfOutputComponents;
       inPtr1 = static_cast<void *>(
         static_cast<char *>(inPtr1) + inIncY + rowLength);
@@ -264,7 +264,7 @@ void vtkImageMapToColors16::ThreadedRequestData(
   void *outPtr = outData[0]->GetScalarPointerForExtent(outExt);
 
   vtkImageMapToColors16Execute(this, inData[0][0], inPtr,
-                             outData[0], static_cast<unsigned char *>(outPtr),
+                             outData[0], static_cast<unsigned short *>(outPtr),
                              outExt, id);
 }
 

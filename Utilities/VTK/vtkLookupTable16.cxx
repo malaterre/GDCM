@@ -400,7 +400,7 @@ abort();
 
     vtkTemplateMacro(
       vtkLookupTable16MapData(this,static_cast<VTK_TT*>(input),(unsigned short*)output,
-                            numberOfValues,inputIncrement,outputFormat)
+                            numberOfValues*2,inputIncrement,outputFormat)
       );
     default:
       vtkErrorMacro(<< "MapImageThroughTable: Unknown input ScalarType");

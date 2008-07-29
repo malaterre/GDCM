@@ -30,6 +30,7 @@
 #include "vtkImageViewer.h"
 #include "vtkPointData.h"
 #include "vtkImageMapToColors.h"
+#include "vtkImageMapToColors16.h"
 #include "vtkLookupTable.h"
 #include "vtkActor2D.h"
 #include "vtkImageMapToWindowLevelColors.h"
@@ -432,7 +433,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     assert( reader->GetOutput()->GetPointData()->GetScalars() 
       && reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable() );
     //convert to color:
-    vtkImageMapToColors *map = vtkImageMapToColors::New ();
+    vtkImageMapToColors16 *map = vtkImageMapToColors16::New ();
     map->SetInput (reader->GetOutput());
     map->SetLookupTable (reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable());
     if( reader->GetImageFormat() == VTK_LOOKUP_TABLE )
