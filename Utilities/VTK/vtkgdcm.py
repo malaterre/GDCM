@@ -18,6 +18,9 @@ its namespace.  This is a required module."""
 
 import os
 
+# FIXME: GDCM_WHEREAMI need also to be set here, since the lib is dlopen'ed before gdcm.py is
+# actually read...
+os.environ["GDCM_WHEREAMI"]=os.path.dirname(__file__)
 if os.name == 'posix':
   # extremely important !
   # http://gcc.gnu.org/faq.html#dso
@@ -36,8 +39,8 @@ if os.name == 'posix':
       dl = None
   if dl:
     #print "dl was imported"
-    #sys.setdlopenflags(dl.RTLD_LAZY|dl.RTLD_GLOBAL)    
-    sys.setdlopenflags(dl.RTLD_NOW|dl.RTLD_GLOBAL)    
+    #sys.setdlopenflags(dl.RTLD_LAZY|dl.RTLD_GLOBAL)
+    sys.setdlopenflags(dl.RTLD_NOW|dl.RTLD_GLOBAL)
   from libvtkgdcmPython import *
   # revert:
   sys.setdlopenflags(orig_dlopen_flags)
