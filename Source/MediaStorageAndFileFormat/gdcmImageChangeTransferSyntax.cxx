@@ -53,6 +53,35 @@ bool ImageChangeTransferSyntax::TryRAWCodec(const DataElement &pixelde)
   return false;
 }
 
+bool ImageChangeTransferSyntax::TryRLECodec(const DataElement &pixelde)
+{
+  unsigned long len = Input->GetBufferLength();
+  assert( len == pixelde.GetByteValue()->GetLength() );
+  const TransferSyntax &ts = GetTransferSyntax();
+
+  RLECodec codec;
+  if( codec.CanCode( ts ) )
+    {
+    codec.SetDimensions( Input->GetDimensions() );
+    codec.SetPlanarConfiguration( Input->GetPlanarConfiguration() );
+    codec.SetPhotometricInterpretation( Input->GetPhotometricInterpretation() );
+    codec.SetPixelFormat( Input->GetPixelFormat() );
+    codec.SetNeedOverlayCleanup( Input->AreOverlaysInPixelData() );
+    DataElement out;
+    //bool r = codec.Code(Input->GetDataElement(), out);
+    bool r = codec.Code(pixelde, out);
+
+    DataElement &de = Output->GetDataElement();
+    de.SetValue( out.GetValue() );
+    if( !r )
+      {
+      return false;
+      }
+    return true;
+    }
+  return false;
+}
+
 bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde)
 {
   unsigned long len = Input->GetBufferLength();
@@ -152,7 +181,7 @@ bool ImageChangeTransferSyntax::Change()
     if( !success ) success = TryRAWCodec(pixeldata);
     if( !success ) success = TryJPEGCodec(pixeldata);
     if( !success ) success = TryJPEG2000Codec(pixeldata);
-    //if( !success ) success = TryRLECodec(buffer);
+    if( !success ) success = TryRLECodec(pixeldata);
     Output->SetTransferSyntax( TS );
     if( !success )
       {
@@ -169,7 +198,7 @@ bool ImageChangeTransferSyntax::Change()
   if( !success ) success = TryRAWCodec(Input->GetDataElement());
   if( !success ) success = TryJPEGCodec(Input->GetDataElement());
   if( !success ) success = TryJPEG2000Codec(Input->GetDataElement());
-  //if( !success ) success = TryRLECodec(buffer);
+  if( !success ) success = TryRLECodec(Input->GetDataElement());
   Output->SetTransferSyntax( TS );
   if( !success )
     {

@@ -333,7 +333,7 @@ int main (int argc, char *argv[])
       }
     else if( rle )
       {
-      return 1;
+      change.SetTransferSyntax( gdcm::TransferSyntax::RLELossless );
       }
     else
       {

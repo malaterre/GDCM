@@ -18,6 +18,7 @@
 #include "gdcmByteSwap.txx"
 #include "gdcmDataElement.h"
 #include "gdcmSequenceOfFragments.h"
+#include "gdcmSmartPointer.h"
 
 #include <vector>
 
@@ -95,9 +96,7 @@ bool RLECodec::CanDecode(TransferSyntax const &ts) const
 
 bool RLECodec::CanCode(TransferSyntax const &ts) const
 {
-  //return ts == TransferSyntax::RLELossless;
-  // TODO: implement compression !
-  return false;
+  return ts == TransferSyntax::RLELossless;
 }
 
 /*
@@ -120,9 +119,60 @@ a Literal Run, in which case it's best to merge the three runs into a Literal Ru
 Three-byte repeats shall be encoded as Replicate Runs. Each row of the image shall be encoded
 separately and not cross a row boundary.
 */
+int rle_encode()
+{
+  return 0;
+}
+
 bool RLECodec::Code(DataElement const &in, DataElement &out)
 {
-  return false;
+  const unsigned int n = 256*256;
+  uint8_t outbuf[n];
+
+  // Create a Sequence Of Fragments:
+  SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
+  const Tag itemStart(0xfffe, 0xe000);
+  sq->GetTable().SetTag( itemStart );
+
+  const ByteValue *bv = in.GetByteValue();
+  assert( bv );
+  const uint8_t *ptr = (const uint8_t*)bv->GetPointer();
+  int bvl = bv->GetLength();
+  const uint8_t *end = ptr + bvl;
+  int bpp = 1;
+  const unsigned int *dims = this->GetDimensions();
+  int width = dims[0];
+  int height = dims[1];
+  int w = width;
+
+  std::stringstream data;
+  RLEHeader header;
+  header.NumSegments = 0; //height;
+  //for(int i = 0; i < 15;++i)
+  //  header.Offset[i] = 0;
+  header.Offset[0] = 64;
+  int y = 0;
+  while( ptr != end )
+    {
+    int length = rle_encode();
+    ptr += height;
+    header.Offset[y+1] = header.Offset[y] + length;
+    data.write((char*)outbuf, length);
+    }
+  std::stringstream os;
+  os.write((char*)&header,sizeof(header));
+
+    std::string str = os.str() + data.str();
+    assert( str.size() );
+    Fragment frag;
+    frag.SetTag( itemStart );
+    frag.SetByteValue( &str[0], str.size() );
+    sq->AddFragment( frag );
+
+  out.SetValue( *sq );
+
+
+  return true;
 }
 
 // G.3.2 The RLE decoder
