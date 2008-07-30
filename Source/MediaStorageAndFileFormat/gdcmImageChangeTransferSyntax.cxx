@@ -123,13 +123,14 @@ bool ImageChangeTransferSyntax::Change()
   Output = Input;
 
   // Fast path
-  if( Input->GetTransferSyntax() == TS ) return true;
+  if( Input->GetTransferSyntax() == TS && !Force ) return true;
 
   // FIXME
   // For now only support raw input, otherwise we would need to first decompress them
   if( Input->GetTransferSyntax() != TransferSyntax::ImplicitVRLittleEndian 
     && Input->GetTransferSyntax() != TransferSyntax::ExplicitVRLittleEndian
-    && Input->GetTransferSyntax() != TransferSyntax::ExplicitVRBigEndian ) 
+    && Input->GetTransferSyntax() != TransferSyntax::ExplicitVRBigEndian
+    || Force )
     {
     // In memory decompression:
     gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
@@ -140,7 +141,7 @@ bool ImageChangeTransferSyntax::Change()
     pixeldata.SetValue( *bv );
 
     bool success = false;
-    //if( !success ) success = TryRAWCodec(buffer);
+    if( !success ) success = TryRAWCodec(pixeldata);
     if( !success ) success = TryJPEGCodec(pixeldata);
     if( !success ) success = TryJPEG2000Codec(pixeldata);
     //if( !success ) success = TryRLECodec(buffer);

@@ -26,13 +26,15 @@ class DataElement;
 class GDCM_EXPORT ImageChangeTransferSyntax : public ImageToImageFilter
 {
 public:
-  ImageChangeTransferSyntax() {}
+  ImageChangeTransferSyntax():TS(),Force(false) {}
   ~ImageChangeTransferSyntax() {}
 
   void SetTransferSyntax(const TransferSyntax &ts) { TS = ts; }
   const TransferSyntax &GetTransferSyntax() const { return TS; }
 
   bool Change();
+
+  void SetForce( bool f ) { Force = f; }
 
 protected:
   bool TryJPEGCodec(const DataElement &pixelde);
@@ -41,6 +43,7 @@ protected:
 
 private:
   TransferSyntax TS;
+  bool Force;
 };
 
 } // end namespace gdcm

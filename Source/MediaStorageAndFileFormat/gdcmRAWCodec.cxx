@@ -54,6 +54,13 @@ bool RAWCodec::CanDecode(TransferSyntax const &ts) const
    || ts == TransferSyntax::ImplicitVRBigEndianPrivateGE;
 }
 
+bool RAWCodec::Code(DataElement const &in, DataElement &out)
+{
+  out = in;
+  //abort();
+  return true;
+}
+
 bool RAWCodec::Decode(DataElement const &in, DataElement &out)
 {
   // First let's see if we can do a fast-path:

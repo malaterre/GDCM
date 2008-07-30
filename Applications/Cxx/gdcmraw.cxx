@@ -30,6 +30,7 @@
 #include "gdcmTag.h"
 #include "gdcmByteValue.h"
 #include "gdcmSequenceOfFragments.h"
+#include "gdcmFragment.h"
 #include "gdcmFilename.h"
 
 #include <string>
@@ -49,6 +50,7 @@ int main(int argc, char *argv[])
   gdcm::Tag rawTag(0x7fe0, 0x0010); // Default to Pixel Data
   std::string filename;
   std::string outfilename;
+  int splitfrags = 0;
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -56,6 +58,7 @@ int main(int argc, char *argv[])
         {"input", 1, 0, 0},
         {"output", 1, 0, 0},
         {"tag", 1, 0, 0},
+        {"split-frags", 0, &splitfrags, 1},
         {0, 0, 0, 0}
     };
 
@@ -163,22 +166,38 @@ int main(int argc, char *argv[])
 
   std::ofstream output(outfilename.c_str(), std::ios::binary);
   const gdcm::DataElement& pdde = ds.GetDataElement( rawTag );
-  const gdcm::Value &v = pdde.GetValue();
-  const gdcm::ByteValue *bv = dynamic_cast<const gdcm::ByteValue*>(&v);
+  const gdcm::ByteValue *bv = pdde.GetByteValue();
+  const gdcm::SequenceOfFragments *sf = pdde.GetSequenceOfFragments();
   if( bv )
     {
     bv->WriteBuffer(output);
     }
+  else if( sf )
+    {
+    if( splitfrags )
+      {
+      unsigned int nfrags = sf->GetNumberOfFragments();
+      for(unsigned int i = 0; i < nfrags; ++i)
+        {
+        const gdcm::Fragment& frag = sf->GetFragment(i);
+        const gdcm::ByteValue *fragbv = frag.GetByteValue();
+        std::ostringstream os;
+        os << outfilename;
+        os << i;
+        std::string outfilenamei = os.str();
+        std::ofstream outputi(outfilenamei.c_str(), std::ios::binary);
+        fragbv->WriteBuffer(outputi);
+        }
+      }
+    else
+      {
+      sf->WriteBuffer(output);
+      }
+    }
   else
     {
-    const gdcm::SequenceOfFragments *sf =
-      dynamic_cast<const gdcm::SequenceOfFragments*>(&v);
-    if( !sf )
-      {
-      std::cerr << "Unknown error" << std::endl;
-      return 1;
-      }
-    sf->WriteBuffer(output);
+    std::cerr << "Unhandled" << std::endl;
+    return 1;
     }
 
   return 0;

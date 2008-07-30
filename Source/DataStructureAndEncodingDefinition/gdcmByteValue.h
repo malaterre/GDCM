@@ -137,7 +137,7 @@ public:
     return false;
     }
   bool WriteBuffer(std::ostream &os) const {
-    assert( Internal.size() <= Length );
+    //assert( Internal.size() <= Length );
     assert( !(Internal.size() % 2) );
     os.write(&Internal[0], Internal.size() );
     return true;

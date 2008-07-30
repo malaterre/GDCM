@@ -29,6 +29,7 @@ public:
   bool CanCode(TransferSyntax const &ts) const;
   bool CanDecode(TransferSyntax const &ts) const;
   bool Decode(DataElement const &is, DataElement &os);
+  bool Code(DataElement const &in, DataElement &out);
 protected:
   bool Decode(std::istream &is, std::ostream &os);
 

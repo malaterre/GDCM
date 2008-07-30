@@ -223,7 +223,7 @@ void PrintHelp()
   PrintVersion();
   std::cout << "Usage: gdcmdump [OPTION]... [FILE]..." << std::endl;
   std::cout << "dumps a DICOM file, it will display the structure and values contained in the specified DICOM file\n";
-  std::cout << "Parameter:" << std::endl;
+  std::cout << "Parameter (required):" << std::endl;
   std::cout << "  -i --input     DICOM filename or directory" << std::endl;
   std::cout << "Options:" << std::endl;
   std::cout << "  -x --xml-dict  generate the XML dict (only private elements for now)." << std::endl;
@@ -233,6 +233,7 @@ void PrintHelp()
   std::cout << "  -c --color     print in color." << std::endl;
   std::cout << "  -C --csa       print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER)." << std::endl;
   std::cout << "  -P --pdb       print GEMS Protocol Data Block (0025,10,GEMS_SERS_01)." << std::endl;
+  std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning   print warning info." << std::endl;
   std::cout << "  -D --debug     print debug info." << std::endl;
