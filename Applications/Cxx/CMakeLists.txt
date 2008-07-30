@@ -4,9 +4,6 @@
 # gdcminfo
 # gdcmconv
 
-CHECK_INCLUDE_FILE("fcntl.h"      CMAKE_HAVE_FCNTL_H)
-CHECK_INCLUDE_FILE("sched.h"      CMAKE_HAVE_SHED_H)
-CHECK_INCLUDE_FILE("sys/mman.h"   CMAKE_HAVE_SYS_MMAN_H)
 
 IF(WIN32 AND NOT CYGWIN)
   INCLUDE_DIRECTORIES(
@@ -43,13 +40,6 @@ SET(GDCM_EXECUTABLE_NAME
   gdcmconv
   gdcminfo
   )
-# Need mmap
-#IF(CMAKE_HAVE_SYS_MMAN_H)
-#  SET(GDCM_EXECUTABLE_NAME ${GDCM_EXECUTABLE_NAME}
-#    gdcmmmap
-#    gdcmfile
-#  )
-#ENDIF(CMAKE_HAVE_SYS_MMAN_H)
 
 FOREACH(exename ${GDCM_EXECUTABLE_NAME})
   IF(${exename} STREQUAL "gdcminfo")

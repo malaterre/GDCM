@@ -42,6 +42,17 @@ SET(DSED_TEST_SRCS
   TestElement5
   )
 
+CHECK_INCLUDE_FILE("fcntl.h"      CMAKE_HAVE_FCNTL_H)
+CHECK_INCLUDE_FILE("sched.h"      CMAKE_HAVE_SHED_H)
+CHECK_INCLUDE_FILE("sys/mman.h"   CMAKE_HAVE_SYS_MMAN_H)
+
+# Need mmap
+IF(CMAKE_HAVE_SYS_MMAN_H)
+  SET(DSED_TEST_SRCS ${DSED_TEST_SRCS}
+    TestReader3
+  )
+ENDIF(CMAKE_HAVE_SYS_MMAN_H)
+
 OPTION(SHARED_PTR "shared_ptr" OFF)
 MARK_AS_ADVANCED(SHARED_PTR)
 IF(SHARED_PTR)
@@ -57,6 +68,8 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
+  "${GDCM_BINARY_DIR}/Utilities/zlib"
+  "${GDCM_SOURCE_DIR}/Utilities"
   )
 
 CREATE_TEST_SOURCELIST(DSEDTests gdcmDSEDTests.cxx ${DSED_TEST_SRCS})

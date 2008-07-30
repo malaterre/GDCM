@@ -33,19 +33,13 @@
 #include <sys/mman.h>
 
 #include "gdcmFile.h"
-#include "gdcmObject.h"
 #include "gdcmDataSet.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmSmartPointer.h"
-#include "gdcmDeflateStream.h"
-#include "gdcmDumper.h"
-#include "gdcmDirectory.h"
 #include "gdcmReader.h"
 #include "gdcmSystem.h"
+#include "gdcmTesting.h"
 
-#include "gdcmUNExplicitDataElement.h"
-#include "gdcmCP246ExplicitDataElement.h"
-#include "gdcmExplicitImplicitDataElement.h"
 
 /*
  * http://www.ecst.csuchico.edu/~beej/guide/ipc/mmap.html
@@ -107,18 +101,18 @@ std::istream & DoTheMMapRead(std::istream &is)
   reader.SetStream(is);
   reader.Read();
 
-  gdcm::Dumper printer;
-  printer.SetFile ( reader.GetFile() );
+  //gdcm::Dumper printer;
+  //printer.SetFile ( reader.GetFile() );
   //printer.Print( std::cout );
-
+  return is;
 }
 
-int DoOperation(std::string const & path)
+int TestRead3(const char * path)
 {
   bool readonly = true;
   int flags = (readonly ? O_RDONLY : O_RDWR);
 
-  int handle = ::open(path.c_str(), flags, S_IRWXU);
+  int handle = ::open(path, flags, S_IRWXU);
 
   bool success = true;
   struct stat info;
@@ -153,30 +147,25 @@ int DoOperation(std::string const & path)
   return 0;
 }
 
-int main(int argc, char *argv[])
+int TestReader3(int argc, char *argv[])
 {
-  if( argc < 2 )
+  if( argc == 2 )
     {
-    return 1;
-    }
-  std::string filename = argv[1];
-
-  int res = 0;
-  if( gdcm::System::FileIsDirectory( filename.c_str() ) )
-    {
-    gdcm::Directory d;
-    d.Load(filename);
-    gdcm::Directory::FilenamesType const &filenames = d.GetFilenames();
-    for( gdcm::Directory::FilenamesType::const_iterator it = filenames.begin(); it != filenames.end(); ++it )
-      {
-      res += DoOperation(*it);
-      }
-    }
-  else
-    {
-    res += DoOperation(filename);
+    const char *filename = argv[1];
+    return TestRead3(filename);
     }
 
-  return res;
+  // else
+  gdcm::Trace::DebugOff();
+  gdcm::Trace::WarningOff();
+  int r = 0, i = 0;
+  const char *filename;
+  const char * const *filenames = gdcm::Testing::GetFileNames();
+  while( (filename = filenames[i]) )
+    {
+    r += TestRead3( filename );
+    ++i;
+    }
+
+  return r;
 }
-
