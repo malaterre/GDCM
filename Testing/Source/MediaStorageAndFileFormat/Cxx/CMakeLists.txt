@@ -144,3 +144,25 @@ FOREACH(filename ${gdcm_data_filenames_glob})
   ENDIF(NOT bad_dicom)
 ENDFOREACH(filename)
 
+FILE(MAKE_DIRECTORY "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax/dcmdrle/")
+
+FOREACH(filename ${gdcm_data_filenames_glob})
+  GET_FILENAME_COMPONENT(filename_name ${filename} NAME)
+  STRING(REGEX MATCH ${filename_name} bad_dicom ${black_list_reader})
+  IF(NOT bad_dicom)
+    IF(GDCM_TEST_DCMTK)
+      IF(DCMTK_DCMDRLE_EXECUTABLE)
+        ADD_TEST("DCMDRLE-${filename_name}" ${DCMTK_DCMDRLE_EXECUTABLE}
+          "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax3/${filename_name}"
+          "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax3/dcmdrle/${filename_name}")
+        # Special handling of the DICOMDIR files:
+        STRING(REGEX MATCH ${filename_name} is_dicomdir ${gdcm_data_dicomdir_filenames_glob})
+        IF(is_dicomdir)
+          #MESSAGE("IS DICOMDIR ${filename_name}")
+          SET_TESTS_PROPERTIES("DCMDRLE-${filename_name}" PROPERTIES WILL_FAIL TRUE)
+        ENDIF(is_dicomdir)
+      ENDIF(DCMTK_DCMDRLE_EXECUTABLE)
+    ENDIF(GDCM_TEST_DCMTK)
+  ENDIF(NOT bad_dicom)
+ENDFOREACH(filename)
+
