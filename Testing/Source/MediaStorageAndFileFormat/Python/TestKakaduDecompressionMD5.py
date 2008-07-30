@@ -49,8 +49,8 @@ def TestKakadu(filename):
   #print ref
   retval = 0
   if ref != md5:
-    imgr = gdcm.ImageReader()
-    imgr.SetFileName( filename )
+    img = gdcm.ImageReader()
+    img.SetFileName( filename )
     img.Read()
     if img.GetImage().GetDimension(2) != 1:
       print "Test do not handle multiframes for now"
