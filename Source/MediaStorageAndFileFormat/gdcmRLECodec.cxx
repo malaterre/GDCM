@@ -253,11 +253,19 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
       unsigned long j = 0;
       for(unsigned long i = 0; i < image_len/2; ++i)
         {
+#ifdef GDCM_WORDS_BIGENDIAN
+        buffer[i] = ptr[2*i];
+#else
         buffer[i] = ptr[2*i+1];
+#endif
         }
       for(unsigned long i = 0; i < image_len/2; ++i)
         {
+#ifdef GDCM_WORDS_BIGENDIAN
+        buffer[i+image_len/2] = ptr[2*i+1];
+#else
         buffer[i+image_len/2] = ptr[2*i];
+#endif
         }
       ptr = buffer;
       }
