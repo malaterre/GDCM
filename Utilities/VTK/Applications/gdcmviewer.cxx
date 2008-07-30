@@ -30,13 +30,13 @@
 #include "vtkImageViewer.h"
 #include "vtkPointData.h"
 #include "vtkImageMapToColors.h"
-#include "vtkImageMapToColors16.h"
 #include "vtkLookupTable.h"
 #include "vtkActor2D.h"
 #include "vtkImageMapToWindowLevelColors.h"
 #include "vtkImageActor.h"
 #include "vtkWindowToImageFilter.h"
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#include "vtkImageMapToColors16.h"
 #include "vtkBalloonWidget.h"
 #include "vtkBalloonRepresentation.h"
 #include "vtkLogoWidget.h"
@@ -434,6 +434,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
       && reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable() );
     //convert to color:
     vtkLookupTable *lut = reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable();
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
     if( lut->IsA( "vtkLookupTable16" ) )
       {
       vtkImageMapToColors16 *map = vtkImageMapToColors16::New ();
@@ -453,6 +454,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
       map->Delete();
       }
     else
+#endif
       {
       vtkImageMapToColors *map = vtkImageMapToColors::New ();
       map->SetInput (reader->GetOutput());
