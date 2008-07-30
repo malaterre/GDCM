@@ -748,6 +748,12 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
     cinfo.input_components = 3;		/* # of color components per pixel */
     cinfo.in_color_space = JCS_RGB; 	/* colorspace of input image */
     }
+  else if( this->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL 
+    || this->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 )
+    {
+    cinfo.input_components = 3;		/* # of color components per pixel */
+    cinfo.in_color_space = JCS_YCbCr; 	/* colorspace of input image */
+    }
   else
     {
     //abort();

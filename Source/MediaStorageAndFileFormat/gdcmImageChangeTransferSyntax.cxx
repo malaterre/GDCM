@@ -63,6 +63,12 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde)
   if( codec.CanCode( ts ) )
     {
     codec.SetDimensions( Input->GetDimensions() );
+    // FIXME: GDCM always apply the planar configuration to 0...
+    if( Input->GetPlanarConfiguration() )
+      {
+      // Fow now simply return an error
+      return 1;
+      }
     codec.SetPlanarConfiguration( Input->GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( Input->GetPhotometricInterpretation() );
     codec.SetPixelFormat( Input->GetPixelFormat() );
@@ -78,6 +84,8 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde)
       {
       return false;
       }
+    // When compressing with JPEG I think planar should always be:
+    //Output->SetPlanarConfiguration(0);
     // FIXME ! This should be done all the time for all codec:
     // Did PI change or not ?
     if ( Output->GetPhotometricInterpretation() != codec.GetPhotometricInterpretation() )
