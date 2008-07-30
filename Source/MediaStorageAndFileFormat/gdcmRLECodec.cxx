@@ -121,6 +121,7 @@ separately and not cross a row boundary.
 */
 inline int count_identical_bytes(const char *start, unsigned int len)
 {
+  assert( len );
 #if 1
   const char *p = start + 1;
   const unsigned int cmin = std::min(128u,len);
@@ -145,6 +146,7 @@ inline int count_identical_bytes(const char *start, unsigned int len)
 
 inline int count_nonrepetitive_bytes(const char *start, unsigned int len)
 {
+  assert( len );
 #if 1
   const char *prev = start;
   const char *p = start + 1;
