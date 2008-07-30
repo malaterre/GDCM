@@ -1,6 +1,3 @@
-XML Stuff:
-* Part 3: Extract section that are referenced in informaltable
------------------------------------------------------------------------
 PrepGroupName.cxx does not handle Pixel Data group name since it has a space in the name...
 
 -----------------------------------------------------------------------
@@ -27,13 +24,6 @@ from sup58_ft2.doc
 >CTDIvol  	(0018,9445)  	2C  	Computed Tomography Dose Index (CTDIvol), im mGy according to IEC 60601-2-44, Ed.2.1 (Clause 29.1.103.4), The Volume CTDIvol. It describes the average dose for this frame for the selected CT conditions of operation.
 -----------------------------------------------------------------------
 Calling dcmodify [1][2] with option --erase-tag should do what you want. 
------------------------------------------------------------------------
-PHILIPS_PrivateSeqWithPublicElems this File contains a private sequence 
-which itself contains public elements...
------------------------------------------------------------------------
-Provide an alternative to SIEMENS dcmInfo.exe and dump shadow elements
-0029,xxxx using there formats:
-67 - 'SlicePosition_PCS'        VM 3, VR FD, SyngoDT 4, NoOfItems 6, Data '-185.77913332'\'-163.80459213'\'72.73944092'
 -----------------------------------------------------------------------
 Add a FindKAKADU to find kakadu and thus be able to check compression
 done by openjpeg
@@ -62,9 +52,6 @@ CT0014
 GFUNCST2
 MRVPWCB2 
 -----------------------------------------------------------------------
-When gdcmimg will be ready the RLE format will still be missing need
-to check if RLE DICOM is compatible with Utah RLE
------------------------------------------------------------------------
 Wrong Private element in dcmtk:
 (0009,1227) TM [210959.000000]                          #  14, 1 LastMoveTime
 I found:
@@ -87,18 +74,11 @@ PHANTOM.MR.CARDIO_COEUR_S_QUENCE_DE_REP_RAGE.9.257.2008.03.20.14.53.25.578125.43
 TODO: need a gdcm::ExtractOverlayFromPixelDataFilter
 to rewrite a gdcm::Image
 -----------------------------------------------------------------------
-Do SegmentedLUT !
------------------------------------------------------------------------
 Rewrite IconImage !
------------------------------------------------------------------------
-Convert the HTML page into c++ code:
-http://www.mmrrcc.upenn.edu/CAMRIS/cfn/dicomhdr.html
 -----------------------------------------------------------------------
 Provide operator() ==  for String<LO> (should discard length, space char...)
 -----------------------------------------------------------------------
 Should handle old Date format (with - separator)
------------------------------------------------------------------------
-Provide something for 16bits lut...
 -----------------------------------------------------------------------
 Do gdcm::Printer::Print
 In a consistant way if possible...
@@ -109,8 +89,6 @@ vtkMedicalImageProp user defined value should be written back to disk
 Filter should use OpenMP ?
 -----------------------------------------------------------------------
 GDCMFakeJPEG should be detected (at least a warning
------------------------------------------------------------------------
-Multiframe j2k was broken no test trigger the issue...
 -----------------------------------------------------------------------
 Hum, looks like vs 2007+1 can be used to redistribute binaries:
 http://www.microsoft.com/express/support/faq/
@@ -195,6 +173,3 @@ BARCODE
 Note: The identifier is coded as a string regardless of the type, not as a binary value.</description>
 
 What this means is that 10,22 is Type 1 only within sequence 10,1002
------------------------------------------------------------------------
-RLE Compression !
-
