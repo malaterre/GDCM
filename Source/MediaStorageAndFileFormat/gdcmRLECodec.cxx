@@ -123,7 +123,8 @@ int count_identical_bytes(const char *start, int len)
 {
   char ref = start[0];
   int count = 1; // start at one
-  while( start[count] == ref && count < 128 )
+  int cmin = std::min(128,len);
+  while( count < cmin && start[count] == ref )
     {
     ++count;
     }
@@ -135,7 +136,8 @@ int count_nonrepetitive_bytes(const char *start, int len)
 {
   char prev = start[0];
   int count = 1;
-  while( start[count] != prev && count < 128 )
+  int cmin = std::min(128,len);
+  while( count < cmin  && start[count] != prev )
     {
     prev = start[count]; // update
     ++count;
@@ -145,7 +147,7 @@ int count_nonrepetitive_bytes(const char *start, int len)
 }
 
 /* return output length */
-int rle_encode(char *output, const char *input, unsigned int inputlength)
+int rle_encode(char *output, unsigned int outputlength, const char *input, unsigned int inputlength)
 {
   char *pout = output;
   const char *pin = input;
@@ -158,6 +160,8 @@ int rle_encode(char *output, const char *input, unsigned int inputlength)
       {
       // repeat case:
       //
+      // Test first we are allowed to write two bytes:
+      if( pout + 1 + 1 > output + outputlength ) return -1;
       *pout = -count + 1;
       ++pout;
       *pout = *pin;
@@ -168,6 +172,8 @@ int rle_encode(char *output, const char *input, unsigned int inputlength)
       // non repeat case:
       // ok need to compute non-repeat:
       count = count_nonrepetitive_bytes(pin, length);
+      // first test we are allowed to write 1 + count bytes in the output buffer:
+      if( pout + count + 1 > output + outputlength ) return -1;
       *pout = count - 1;
       ++pout;
       memcpy(pout, pin, count);
@@ -183,6 +189,7 @@ int rle_encode(char *output, const char *input, unsigned int inputlength)
 
 bool RLECodec::Code(DataElement const &in, DataElement &out)
 {
+  const unsigned int *dims = this->GetDimensions();
   const unsigned int n = 256*256*10;
   char outbuf[n];
 
@@ -193,28 +200,29 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
 
   const ByteValue *bv = in.GetByteValue();
   assert( bv );
-  const char *ptr = bv->GetPointer();
-  int bvl = bv->GetLength();
-  const char *end = ptr + bvl;
-  int bpp = 1;
-  const unsigned int *dims = this->GetDimensions();
-  int width = dims[0];
-  int height = dims[1];
-  int w = width;
+  const char *input = bv->GetPointer();
+  unsigned long bvl = bv->GetLength();
+  unsigned long image_len = bvl / dims[2];
 
-  std::stringstream data;
+
   RLEHeader header;
   header.NumSegments = 1;
   for(int i = 0; i < 15;++i)
     header.Offset[i] = 0;
   header.Offset[0] = 64;
-  int y = 0;
+  for(unsigned int dim = 0; dim < dims[2]; ++dim)
     {
-    int length = rle_encode(outbuf, ptr, bvl);
+    const char *ptr = input + dim * image_len;
+    std::stringstream data;
+    int length = rle_encode(outbuf, n, ptr, image_len);
+    if( length < 0 )
+      {
+      std::cerr << "RLE compressor error" << std::endl;
+      return false;
+      }
     data.write((char*)outbuf, length);
-    }
-  std::stringstream os;
-  os.write((char*)&header,sizeof(header));
+    std::stringstream os;
+    os.write((char*)&header,sizeof(header));
 
     std::string str = os.str() + data.str();
     assert( str.size() );
@@ -222,6 +230,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     frag.SetTag( itemStart );
     frag.SetByteValue( &str[0], str.size() );
     sq->AddFragment( frag );
+    }
 
   out.SetValue( *sq );
 
