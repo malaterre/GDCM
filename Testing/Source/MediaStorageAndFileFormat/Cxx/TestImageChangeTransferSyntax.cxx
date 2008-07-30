@@ -23,7 +23,7 @@
 namespace gdcm
 {
 
-int TestImageChangeTransferSyntaxJPEG(const char *filename)
+int TestImageChangeTransferSyntaxJPEG(const char *filename, bool verbose = false)
 {
   ImageReader reader;
   reader.SetFileName( filename );
@@ -130,7 +130,14 @@ int TestImageChangeTransferSyntaxJPEG(const char *filename)
       std::cerr << "Found " << digest << " instead of " << ref << std::endl;
       res = 1;
       }
-  std::cout << "success: " << outfilename << std::endl;
+    if(res)
+      {
+      std::cerr << "problem with: " << outfilename << std::endl;
+      }
+    if( verbose )
+      {
+      std::cout << "file was written in: " << outfilename << std::endl;
+      }
 
     delete[] buffer;
     return res;
@@ -146,7 +153,7 @@ int TestImageChangeTransferSyntax(int argc, char *argv[])
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return gdcm::TestImageChangeTransferSyntaxJPEG(filename);
+    return gdcm::TestImageChangeTransferSyntaxJPEG(filename, true);
     }
 
   // else
