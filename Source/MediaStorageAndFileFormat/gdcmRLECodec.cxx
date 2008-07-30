@@ -119,15 +119,72 @@ a Literal Run, in which case it's best to merge the three runs into a Literal Ru
 Three-byte repeats shall be encoded as Replicate Runs. Each row of the image shall be encoded
 separately and not cross a row boundary.
 */
-int rle_encode()
+int count_identical_bytes(const char *start, int len)
 {
-  return 0;
+  char ref = start[0];
+  int count = 1; // start at one
+  while( start[count] == ref && count < 128 )
+    {
+    ++count;
+    }
+  assert( /*2 <= count && */ count <= 128 ); // remove post condition as it will be our return error code
+  return count;
+}
+
+int count_nonrepetitive_bytes(const char *start, int len)
+{
+  char prev = start[0];
+  int count = 1;
+  while( start[count] != prev && count < 128 )
+    {
+    prev = start[count]; // update
+    ++count;
+    }
+  assert( 1 <= count && count <= 128 );
+  return count;
+}
+
+/* return output length */
+int rle_encode(char *output, const char *input, unsigned int inputlength)
+{
+  char *pout = output;
+  const char *pin = input;
+  int length = inputlength;
+  while( pin != input + inputlength )
+    {
+    assert( pin <= input + inputlength );
+    int count = count_identical_bytes(pin, length);
+    if( count > 1 )
+      {
+      // repeat case:
+      //
+      *pout = -count + 1;
+      ++pout;
+      *pout = *pin;
+      ++pout;
+      }
+    else
+      {
+      // non repeat case:
+      // ok need to compute non-repeat:
+      count = count_nonrepetitive_bytes(pin, length);
+      *pout = count - 1;
+      ++pout;
+      memcpy(pout, pin, count);
+      pout += count;
+      }
+    // count byte where read, move pin to new position:
+    pin += count;
+    // compute remaining length:
+    length -= count;
+    }
+  return pout - output;
 }
 
 bool RLECodec::Code(DataElement const &in, DataElement &out)
 {
-  const unsigned int n = 256*256;
-  uint8_t outbuf[n];
+  const unsigned int n = 256*256*10;
+  char outbuf[n];
 
   // Create a Sequence Of Fragments:
   SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
@@ -136,9 +193,9 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
 
   const ByteValue *bv = in.GetByteValue();
   assert( bv );
-  const uint8_t *ptr = (const uint8_t*)bv->GetPointer();
+  const char *ptr = bv->GetPointer();
   int bvl = bv->GetLength();
-  const uint8_t *end = ptr + bvl;
+  const char *end = ptr + bvl;
   int bpp = 1;
   const unsigned int *dims = this->GetDimensions();
   int width = dims[0];
@@ -147,16 +204,13 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
 
   std::stringstream data;
   RLEHeader header;
-  header.NumSegments = 0; //height;
-  //for(int i = 0; i < 15;++i)
-  //  header.Offset[i] = 0;
+  header.NumSegments = 1;
+  for(int i = 0; i < 15;++i)
+    header.Offset[i] = 0;
   header.Offset[0] = 64;
   int y = 0;
-  while( ptr != end )
     {
-    int length = rle_encode();
-    ptr += height;
-    header.Offset[y+1] = header.Offset[y] + length;
+    int length = rle_encode(outbuf, ptr, bvl);
     data.write((char*)outbuf, length);
     }
   std::stringstream os;
