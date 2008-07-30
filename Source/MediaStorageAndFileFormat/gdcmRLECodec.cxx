@@ -119,31 +119,55 @@ a Literal Run, in which case it's best to merge the three runs into a Literal Ru
 Three-byte repeats shall be encoded as Replicate Runs. Each row of the image shall be encoded
 separately and not cross a row boundary.
 */
-int count_identical_bytes(const char *start, int len)
+inline int count_identical_bytes(const char *start, unsigned int len)
 {
-  char ref = start[0];
+#if 1
+  const char *p = start + 1;
+  const unsigned int cmin = std::min(128u,len);
+  const char *end = start + cmin;
+  while( p < end && *p == *start )
+    {
+    ++p;
+    }
+  return p - start;
+#else
+  const char ref = start[0];
   int count = 1; // start at one
-  int cmin = std::min(128,len);
+  const unsigned int cmin = std::min(128u,len);
   while( count < cmin && start[count] == ref )
     {
     ++count;
     }
   assert( /*2 <= count && */ count <= 128 ); // remove post condition as it will be our return error code
   return count;
+#endif
 }
 
-int count_nonrepetitive_bytes(const char *start, int len)
+inline int count_nonrepetitive_bytes(const char *start, unsigned int len)
 {
+#if 1
+  const char *prev = start;
+  const char *p = start + 1;
+  const unsigned int cmin = std::min(128u,len);
+  const char *end = start + cmin;
+  while( p < end && *p != *prev )
+    {
+    ++prev;
+    ++p;
+    }
+  return p - start;
+#else
   char prev = start[0];
   int count = 1;
-  int cmin = std::min(128,len);
-  while( count < cmin  && start[count] != prev )
+  const unsigned int cmin = std::min(128u,len);
+  while( count < cmin && start[count] != prev )
     {
     prev = start[count]; // update
     ++count;
     }
   assert( 1 <= count && count <= 128 );
   return count;
+#endif
 }
 
 /* return output length */
