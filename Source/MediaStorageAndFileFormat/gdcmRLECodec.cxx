@@ -122,7 +122,7 @@ separately and not cross a row boundary.
 inline int count_identical_bytes(const char *start, unsigned int len)
 {
   assert( len );
-#if 1
+#if 0
   const char *p = start + 1;
   const unsigned int cmin = std::min(128u,len);
   const char *end = start + cmin;
@@ -137,6 +137,7 @@ inline int count_identical_bytes(const char *start, unsigned int len)
   const unsigned int cmin = std::min(128u,len);
   while( count < cmin && start[count] == ref )
     {
+  //std::cerr << "count/len:" << count << "," << len << std::endl;
     ++count;
     }
   assert( /*2 <= count && */ count <= 128 ); // remove post condition as it will be our return error code
@@ -147,7 +148,7 @@ inline int count_identical_bytes(const char *start, unsigned int len)
 inline int count_nonrepetitive_bytes(const char *start, unsigned int len)
 {
   assert( len );
-#if 1
+#if 0
   const char *prev = start;
   const char *p = start + 1;
   const unsigned int cmin = std::min(128u,len);
@@ -230,15 +231,36 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
   unsigned long bvl = bv->GetLength();
   unsigned long image_len = bvl / dims[2];
 
+  // If 16bits, need to do the padded composite...
+  char *buffer = 0;
+  if( GetPixelFormat().GetBitsAllocated() == 16 )
+    {
+    //RequestPaddedCompositePixelCode = true;
+    buffer = new char [ image_len ];
+    }
 
   RLEHeader header;
-  header.NumSegments = 1;
+  header.NumSegments = dims[2];
   for(int i = 0; i < 15;++i)
     header.Offset[i] = 0;
   header.Offset[0] = 64;
   for(unsigned int dim = 0; dim < dims[2]; ++dim)
     {
     const char *ptr = input + dim * image_len;
+    if( GetPixelFormat().GetBitsAllocated() == 16 )
+      {
+      assert( !(image_len % 2) );
+      unsigned long j = 0;
+      for(unsigned long i = 0; i < image_len/2; ++i)
+        {
+        buffer[i] = ptr[2*i+1];
+        }
+      for(unsigned long i = 0; i < image_len/2; ++i)
+        {
+        buffer[i+image_len/2] = ptr[2*i];
+        }
+      ptr = buffer;
+      }
     std::stringstream data;
     int length = rle_encode(outbuf, n, ptr, image_len);
     if( length < 0 )
@@ -260,6 +282,11 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
 
   out.SetValue( *sq );
 
+  if( GetPixelFormat().GetBitsAllocated() == 16 )
+    {
+    //RequestPaddedCompositePixelCode = true;
+    delete[] buffer;
+    }
 
   return true;
 }
