@@ -15,8 +15,8 @@
 #include "vtkLookupTable16.h"
 #include "vtkObjectFactory.h"
 
-vtkCxxRevisionMacro(vtkLookupTable16, "$Revision: 1.107 $");
-vtkStandardNewMacro(vtkLookupTable16);
+vtkCxxRevisionMacro(vtkLookupTable16, "$Revision: 1.107 $")
+vtkStandardNewMacro(vtkLookupTable16)
 
 vtkLookupTable16::vtkLookupTable16(int sze, int ext)
   : vtkLookupTable(sze, ext)

@@ -22,9 +22,9 @@
 #include "vtkScalarsToColors.h"
 #include "vtkPointData.h"
 
-vtkCxxRevisionMacro(vtkImageMapToColors16, "$Revision: 1.30 $");
-vtkStandardNewMacro(vtkImageMapToColors16);
-vtkCxxSetObjectMacro(vtkImageMapToColors16,LookupTable,vtkScalarsToColors);
+vtkCxxRevisionMacro(vtkImageMapToColors16, "$Revision: 1.30 $")
+vtkStandardNewMacro(vtkImageMapToColors16)
+vtkCxxSetObjectMacro(vtkImageMapToColors16,LookupTable,vtkScalarsToColors)
 
 //----------------------------------------------------------------------------
 // Constructor sets default values
