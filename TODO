@@ -195,4 +195,6 @@ BARCODE
 Note: The identifier is coded as a string regardless of the type, not as a binary value.</description>
 
 What this means is that 10,22 is Type 1 only within sequence 10,1002
+-----------------------------------------------------------------------
+RLE Compression !
 

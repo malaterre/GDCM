@@ -88,9 +88,16 @@ RLECodec::~RLECodec()
   delete Internals;
 }
 
-bool RLECodec::CanDecode(TransferSyntax const &ts)
+bool RLECodec::CanDecode(TransferSyntax const &ts) const
 {
   return ts == TransferSyntax::RLELossless;
+}
+
+bool RLECodec::CanCode(TransferSyntax const &ts) const
+{
+  //return ts == TransferSyntax::RLELossless;
+  // TODO: implement compression !
+  return false;
 }
 
 /*

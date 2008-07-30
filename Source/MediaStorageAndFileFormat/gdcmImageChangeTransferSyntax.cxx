@@ -24,6 +24,35 @@
 namespace gdcm
 {
 
+bool ImageChangeTransferSyntax::TryRAWCodec(const DataElement &pixelde)
+{
+  unsigned long len = Input->GetBufferLength();
+  assert( len == pixelde.GetByteValue()->GetLength() );
+  const TransferSyntax &ts = GetTransferSyntax();
+
+  RAWCodec codec;
+  if( codec.CanCode( ts ) )
+    {
+    codec.SetDimensions( Input->GetDimensions() );
+    codec.SetPlanarConfiguration( Input->GetPlanarConfiguration() );
+    codec.SetPhotometricInterpretation( Input->GetPhotometricInterpretation() );
+    codec.SetPixelFormat( Input->GetPixelFormat() );
+    codec.SetNeedOverlayCleanup( Input->AreOverlaysInPixelData() );
+    DataElement out;
+    //bool r = codec.Code(Input->GetDataElement(), out);
+    bool r = codec.Code(pixelde, out);
+
+    DataElement &de = Output->GetDataElement();
+    de.SetValue( out.GetValue() );
+    if( !r )
+      {
+      return false;
+      }
+    return true;
+    }
+  return false;
+}
+
 bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde)
 {
   unsigned long len = Input->GetBufferLength();
@@ -99,8 +128,8 @@ bool ImageChangeTransferSyntax::Change()
   // FIXME
   // For now only support raw input, otherwise we would need to first decompress them
   if( Input->GetTransferSyntax() != TransferSyntax::ImplicitVRLittleEndian 
-   && Input->GetTransferSyntax() != TransferSyntax::ExplicitVRLittleEndian
-   && Input->GetTransferSyntax() != TransferSyntax::ExplicitVRBigEndian ) 
+    && Input->GetTransferSyntax() != TransferSyntax::ExplicitVRLittleEndian
+    && Input->GetTransferSyntax() != TransferSyntax::ExplicitVRBigEndian ) 
     {
     // In memory decompression:
     gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
@@ -110,25 +139,25 @@ bool ImageChangeTransferSyntax::Change()
     Input->GetBuffer( (char*)bv->GetPointer() );
     pixeldata.SetValue( *bv );
 
-  bool success = false;
-  //if( !success ) success = TryRAWCodec(buffer);
-  if( !success ) success = TryJPEGCodec(pixeldata);
-  if( !success ) success = TryJPEG2000Codec(pixeldata);
-  //if( !success ) success = TryRLECodec(buffer);
-  Output->SetTransferSyntax( TS );
-  if( !success )
-    {
-    //abort();
-    return false;
-    }
+    bool success = false;
+    //if( !success ) success = TryRAWCodec(buffer);
+    if( !success ) success = TryJPEGCodec(pixeldata);
+    if( !success ) success = TryJPEG2000Codec(pixeldata);
+    //if( !success ) success = TryRLECodec(buffer);
+    Output->SetTransferSyntax( TS );
+    if( !success )
+      {
+      //abort();
+      return false;
+      }
 
-  assert( Output->GetTransferSyntax() == TS );
-  return success;
+    assert( Output->GetTransferSyntax() == TS );
+    return success;
     }
 
   // too bad we actually have to do some work...
   bool success = false;
-  //if( !success ) success = TryRAWCodec(buffer);
+  if( !success ) success = TryRAWCodec(Input->GetDataElement());
   if( !success ) success = TryJPEGCodec(Input->GetDataElement());
   if( !success ) success = TryJPEG2000Codec(Input->GetDataElement());
   //if( !success ) success = TryRLECodec(buffer);

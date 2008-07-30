@@ -30,8 +30,8 @@ class JPEGCodec : public ImageCodec
 public:
   JPEGCodec();
   ~JPEGCodec();
-  bool CanDecode(TransferSyntax const &ts);
-  bool CanCode(TransferSyntax const &ts);
+  bool CanDecode(TransferSyntax const &ts) const;
+  bool CanCode(TransferSyntax const &ts) const;
   bool Decode(DataElement const &is, DataElement &os);
   void SetPixelFormat(PixelFormat const &pf);
 

@@ -14,9 +14,18 @@
 =========================================================================*/
 #include "gdcmDecoder.h"
 
+namespace gdcm
+{
+class DummyDecoder : public Decoder
+{
+public:
+  bool CanDecode(TransferSyntax const &) const { return false; }
+};
+}
+
 int TestDecoder(int, char *[])
 {
-  gdcm::Decoder d;
+  gdcm::DummyDecoder d;
   return 0;
 }
 

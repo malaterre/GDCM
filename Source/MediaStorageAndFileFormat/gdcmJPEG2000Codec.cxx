@@ -81,13 +81,13 @@ void JPEG2000Codec::SetNumberOfDimensions(unsigned int dim)
   NumberOfDimensions = dim;
 }
 
-bool JPEG2000Codec::CanDecode(TransferSyntax const &ts)
+bool JPEG2000Codec::CanDecode(TransferSyntax const &ts) const
 {
   return ts == TransferSyntax::JPEG2000Lossless 
     || ts == TransferSyntax::JPEG2000;
 }
 
-bool JPEG2000Codec::CanCode(TransferSyntax const &ts)
+bool JPEG2000Codec::CanCode(TransferSyntax const &ts) const
 {
   return ts == TransferSyntax::JPEG2000Lossless 
     || ts == TransferSyntax::JPEG2000;

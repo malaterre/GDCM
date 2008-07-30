@@ -14,9 +14,18 @@
 =========================================================================*/
 #include "gdcmCoder.h"
 
+namespace gdcm
+{
+class DummyCoder : public Coder
+{
+public:
+  bool CanCode(TransferSyntax const &) const { return false; }
+};
+}
+
 int TestCoder(int, char *[])
 {
-  gdcm::Coder c;
+  gdcm::DummyCoder c;
   return 0;
 }
 

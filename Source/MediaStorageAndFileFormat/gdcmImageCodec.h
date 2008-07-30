@@ -33,7 +33,7 @@ class ImageCodec : public Codec
 public:
   ImageCodec();
   ~ImageCodec();
-  bool CanDecode(TransferSyntax const &) { return false; }
+  bool CanDecode(TransferSyntax const &) const { return false; }
   bool Decode(DataElement const &is, DataElement &os);
 protected:
   bool Decode(std::istream &is, std::ostream &os);

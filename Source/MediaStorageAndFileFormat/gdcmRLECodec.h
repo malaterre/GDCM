@@ -26,7 +26,8 @@ class RLECodec : public ImageCodec
 public:
   RLECodec();
   ~RLECodec();
-  bool CanDecode(TransferSyntax const &ts);
+  bool CanCode(TransferSyntax const &ts) const;
+  bool CanDecode(TransferSyntax const &ts) const;
   bool Decode(DataElement const &is, DataElement &os);
   unsigned long GetBufferLength() const { return BufferLength; }
   void SetBufferLength(unsigned long l) { BufferLength = l; }

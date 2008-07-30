@@ -37,6 +37,7 @@ public:
 protected:
   bool TryJPEGCodec(const DataElement &pixelde);
   bool TryJPEG2000Codec(const DataElement &pixelde);
+  bool TryRAWCodec(const DataElement &pixelde);
 
 private:
   TransferSyntax TS;

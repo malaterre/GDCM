@@ -35,7 +35,7 @@ JPEGCodec::~JPEGCodec()
   delete Internal;
 }
 
-bool JPEGCodec::CanDecode(TransferSyntax const &ts)
+bool JPEGCodec::CanDecode(TransferSyntax const &ts) const
 {
   return ts == TransferSyntax::JPEGBaselineProcess1
       || ts == TransferSyntax::JPEGExtendedProcess2_4
@@ -46,7 +46,7 @@ bool JPEGCodec::CanDecode(TransferSyntax const &ts)
       || ts == TransferSyntax::JPEGLosslessProcess14_1;
 }
 
-bool JPEGCodec::CanCode(TransferSyntax const &ts)
+bool JPEGCodec::CanCode(TransferSyntax const &ts) const
 {
   return ts == TransferSyntax::JPEGBaselineProcess1
       || ts == TransferSyntax::JPEGExtendedProcess2_4
