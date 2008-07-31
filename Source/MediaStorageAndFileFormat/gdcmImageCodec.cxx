@@ -155,6 +155,7 @@ abort(); // Do not use this code !
 
 bool ImageCodec::DoPlanarConfiguration(std::istream &is, std::ostream &os)
 {
+abort();
   // FIXME: Do some stupid work:
   std::streampos start = is.tellg();
   assert( 0 - start == 0 );
@@ -493,8 +494,8 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
 
   if( PlanarConfiguration || RequestPlanarConfiguration )
     {
-    DoPlanarConfiguration(*cur_is,pl_os);
-    cur_is = &pl_os;
+    //DoPlanarConfiguration(*cur_is,pl_os);
+    //cur_is = &pl_os;
     }
 
   // Do the overlay cleanup (cleanup the unused bits)
