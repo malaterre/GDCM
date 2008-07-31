@@ -27,7 +27,7 @@ namespace gdcm
 bool ImageChangeTransferSyntax::TryRAWCodec(const DataElement &pixelde)
 {
   unsigned long len = Input->GetBufferLength();
-  assert( len == pixelde.GetByteValue()->GetLength() );
+  //assert( len == pixelde.GetByteValue()->GetLength() );
   const TransferSyntax &ts = GetTransferSyntax();
 
   RAWCodec codec;
@@ -56,7 +56,7 @@ bool ImageChangeTransferSyntax::TryRAWCodec(const DataElement &pixelde)
 bool ImageChangeTransferSyntax::TryRLECodec(const DataElement &pixelde)
 {
   unsigned long len = Input->GetBufferLength();
-  assert( len == pixelde.GetByteValue()->GetLength() );
+  //assert( len == pixelde.GetByteValue()->GetLength() );
   const TransferSyntax &ts = GetTransferSyntax();
 
   RLECodec codec;
@@ -85,7 +85,7 @@ bool ImageChangeTransferSyntax::TryRLECodec(const DataElement &pixelde)
 bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde)
 {
   unsigned long len = Input->GetBufferLength();
-  assert( len == pixelde.GetByteValue()->GetLength() );
+  //assert( len == pixelde.GetByteValue()->GetLength() );
   const TransferSyntax &ts = GetTransferSyntax();
 
   JPEGCodec codec;
@@ -131,7 +131,7 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde)
 bool ImageChangeTransferSyntax::TryJPEG2000Codec(const DataElement &pixelde)
 {
   unsigned long len = Input->GetBufferLength();
-  assert( len == pixelde.GetByteValue()->GetLength() );
+  //assert( len == pixelde.GetByteValue()->GetLength() );
   const TransferSyntax &ts = GetTransferSyntax();
 
   JPEG2000Codec codec;

@@ -190,11 +190,13 @@ bool ImageCodec::DoPlanarConfiguration(std::istream &is, std::ostream &os)
   return true;
 }
 
-bool ImageCodec::DoInvertPlanarConfiguration(char *output, const char *input, uint32_t length)
+bool ImageCodec::DoInvertPlanarConfiguration(char *output, const char *input, uint32_t inputlength)
 {
   const char *r = input+0;
   const char *g = input+1;
   const char *b = input+2;
+  uint32_t length = (inputlength / 3) * 3; // remove the 0 padding
+  assert( length == inputlength || length == inputlength - 1 );
   assert( length % 3 == 0 );
   uint32_t plane_length = length / 3;
   char *pout = output;
