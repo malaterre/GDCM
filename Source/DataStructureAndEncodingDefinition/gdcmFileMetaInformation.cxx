@@ -152,18 +152,35 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     Replace( mssopclass );
     }
   // Media Storage SOP Instance UID (0002,0003) -> see (0008,0018)
-  if( !FindDataElement( Tag(0x0002, 0x0003) ) )
+  const DataElement &dummy = GetDataElement(Tag(0x0002,0x0003));
+  if( !FindDataElement( Tag(0x0002, 0x0003) ) || GetDataElement( Tag(0x0002,0x0003) ).IsEmpty() )
     {
     if( ds.FindDataElement( Tag(0x0008, 0x0018) ) )
       {
       const DataElement& msinst = ds.GetDataElement( Tag(0x0008, 0x0018) );
-      xde = msinst;
+      if( msinst.IsEmpty() )
+        {
+        // Ok there is nothing...
+        //UIDGenerator uid;
+        //const char *s = uid.Generate();
+        //xde.SetByteValue( s, strlen(s) );
+        // FIXME somebody before should make sure there is something...
+        xde = msinst;
+        }
+      else
+        {
+        xde = msinst;
+        }
       xde.SetTag( Tag(0x0002, 0x0003) );
       if( msinst.GetVR() == VR::UN || msinst.GetVR() == VR::INVALID )
         {
         xde.SetVR( VR::UI );
         }
-      Insert( xde );
+      Replace( xde );
+      }
+    else
+      {
+      abort();
       }
     }
   else // Ok there is a value in (0002,0003) let see if it match (0008,0018)
@@ -178,6 +195,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     mssopinst.SetByteValue( bv->GetPointer(), bv->GetLength() );
     Replace( mssopinst );
     }
+  //assert( !GetDataElement( Tag(0x0002,0x0003) ).IsEmpty() );
   // Transfer Syntax UID (0002,0010) -> ??? (computed at write time at most)
   if( FindDataElement( Tag(0x0002, 0x0010) ) )
     {

@@ -331,6 +331,7 @@ bool ImageWriter::Write()
       ds.Remove( Tag(0x0008, 0x0060 ) ); // Modality is Type 1 !
       assert( ms != MediaStorage::MS_END );
       }
+/*
     if( modality2 != ms.GetModality() )
       {
       assert( std::string(ms.GetModality()).find( ' ' ) == std::string::npos ); // no space ...
@@ -340,6 +341,7 @@ bool ImageWriter::Write()
       ds.Insert( de ); // FIXME: should we always replace ?
       // Well technically you could have a SecondaryCaptureImageStorage with a modality of NM...
       }
+*/
     }
   if( !ds.FindDataElement( Tag(0x0008, 0x0064) ) )
     {
