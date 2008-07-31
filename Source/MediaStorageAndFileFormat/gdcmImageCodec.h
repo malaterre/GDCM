@@ -108,6 +108,8 @@ protected:
   bool DoSimpleCopy(std::istream &is, std::ostream &os);
   bool DoPaddedCompositePixelCode(std::istream &is, std::ostream &os);
   bool DoInvertMonochrome(std::istream &is, std::ostream &os);
+
+  bool DoInvertPlanarConfiguration(char *output, const char *input, uint32_t length);
 };
 
 } // end namespace gdcm

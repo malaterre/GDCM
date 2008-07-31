@@ -280,12 +280,17 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     //RequestPaddedCompositePixelCode = true;
     buffer = new char [ image_len ];
     }
+  if ( GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
+    {
+    buffer = new char [ image_len ];
+    }
 
   int MaxNumSegments = 1;
   if( GetPixelFormat().GetBitsAllocated() == 16 )
     {
     MaxNumSegments = 2;
     }
+
   RLEHeader header;
   header.NumSegments = MaxNumSegments;
   for(int i = 0; i < 15;++i)
@@ -323,6 +328,11 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
       //  {
       //  assert( ptr_img[i] == 0 );
       //  }
+      }
+    if ( GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
+      {
+      DoInvertPlanarConfiguration(buffer, ptr_img, image_len);
+      ptr_img = buffer;
       }
     const int input_seg_length = image_len / MaxNumSegments;
     std::string datastr;
@@ -367,6 +377,10 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
   if( GetPixelFormat().GetBitsAllocated() == 16 )
     {
     //RequestPaddedCompositePixelCode = true;
+    delete[] buffer;
+    }
+  if ( GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
+    {
     delete[] buffer;
     }
 
