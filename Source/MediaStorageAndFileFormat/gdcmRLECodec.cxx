@@ -246,8 +246,18 @@ int rle_encode(char *output, unsigned int outputlength, const char *input, unsig
 bool RLECodec::Code(DataElement const &in, DataElement &out)
 {
   const unsigned int *dims = this->GetDimensions();
-  const unsigned int n = 256*256*10;
-  char outbuf[n];
+  unsigned int n = 256*256;
+  char *outbuf;
+  char small_buffer[256*256];
+  if( dims[0] * dims[1] > n )
+    {
+    outbuf = new char[ dims[0] * dims[1] * 10 ];
+    n = dims[0] * dims[1] * 10;
+    }
+  else
+    {
+    outbuf = small_buffer;
+    }
 
   // Create a Sequence Of Fragments:
   SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
@@ -358,6 +368,11 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     {
     //RequestPaddedCompositePixelCode = true;
     delete[] buffer;
+    }
+
+  if( dims[0] * dims[1] > n )
+    {
+    delete[] outbuf;
     }
 
   return true;
