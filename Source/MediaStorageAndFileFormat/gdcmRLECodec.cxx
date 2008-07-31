@@ -350,6 +350,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
       DoInvertPlanarConfiguration(buffer, ptr_img, image_len);
       ptr_img = buffer;
       }
+    assert( image_len % MaxNumSegments == 0 );
     const int input_seg_length = image_len / MaxNumSegments;
     std::string datastr;
     for(int seg = 0; seg < MaxNumSegments; ++seg )
@@ -362,19 +363,28 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
         partition += image_len % MaxNumSegments;
         assert( (MaxNumSegments-1) * input_seg_length + partition == image_len );
         }
+      assert( partition == image_len );
 
       std::stringstream data;
-      int length = rle_encode(outbuf, n, ptr, partition /*image_len*/);
-      if( length < 0 )
+      assert( partition % dims[1] == 0 );
+      int length = 0;
+      // Do not cross row boundary:
+      for(unsigned int y = 0; y < dims[1]; ++y)
         {
-        std::cerr << "RLE compressor error" << std::endl;
-        return false;
+        int llength = rle_encode(outbuf, n, ptr + y*dims[1], partition / dims[1] /*image_len*/);
+        if( llength < 0 )
+          {
+          std::cerr << "RLE compressor error" << std::endl;
+          return false;
+          }
+        assert( llength );
+        data.write((char*)outbuf, llength);
+        length += llength;
         }
-      assert( length );
-      data.write((char*)outbuf, length);
       // update header
       header.Offset[1+seg] = header.Offset[seg] + length;
 
+      assert( data.str().size() == length );
       datastr += data.str();
       }
     std::stringstream os;
