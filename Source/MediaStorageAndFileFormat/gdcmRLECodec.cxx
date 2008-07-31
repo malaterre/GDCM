@@ -264,13 +264,15 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
   const unsigned int *dims = this->GetDimensions();
   unsigned int n = 256*256;
   char *outbuf;
+  // At most we are encoding a single row at a time, so we would be very unlucky
+  // if the row *after* compression would not fit in 256*256 bytes...
   char small_buffer[256*256];
-  if( dims[0] * dims[1] > n )
-    {
-    outbuf = new char[ dims[0] * dims[1] * 10 ];
-    n = dims[0] * dims[1] * 10;
-    }
-  else
+  //if( dims[0] * dims[1] > n )
+  //  {
+  //  outbuf = new char[ dims[0] * dims[1] * 10 ];
+  //  n = dims[0] * dims[1] * 10;
+  //  }
+  //else
     {
     outbuf = small_buffer;
     }
@@ -410,10 +412,10 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     delete[] buffer;
     }
 
-  if( dims[0] * dims[1] > n )
-    {
-    delete[] outbuf;
-    }
+  //if( dims[0] * dims[1] > n )
+  //  {
+  //  delete[] outbuf;
+  //  }
 
   return true;
 }
