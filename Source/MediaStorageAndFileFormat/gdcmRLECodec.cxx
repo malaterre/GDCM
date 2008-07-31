@@ -363,7 +363,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
         partition += image_len % MaxNumSegments;
         assert( (MaxNumSegments-1) * input_seg_length + partition == image_len );
         }
-      assert( partition == image_len );
+      assert( partition == input_seg_length );
 
       std::stringstream data;
       assert( partition % dims[1] == 0 );
@@ -371,7 +371,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
       // Do not cross row boundary:
       for(unsigned int y = 0; y < dims[1]; ++y)
         {
-        int llength = rle_encode(outbuf, n, ptr + y*dims[1], partition / dims[1] /*image_len*/);
+        int llength = rle_encode(outbuf, n, ptr + y*dims[0], partition / dims[1] /*image_len*/);
         if( llength < 0 )
           {
           std::cerr << "RLE compressor error" << std::endl;
