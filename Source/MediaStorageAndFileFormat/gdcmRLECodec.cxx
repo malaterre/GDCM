@@ -342,7 +342,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
       datastr += data.str();
       }
     std::stringstream os;
-    header.Print( std::cout );
+    //header.Print( std::cout );
     os.write((char*)&header,sizeof(header));
     std::string str = os.str() + datastr;
     assert( str.size() );
@@ -473,7 +473,6 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
       // check == 2 for gdcmDataExtra/gdcmSampleData/US_DataSet/GE_US/2929J686-breaker
       assert( check == 1 || check == 2);
       is.seekg( frame.Header.Offset[i], std::ios::beg );
-    abort();
       }
 
     unsigned long numOutBytes = 0;
