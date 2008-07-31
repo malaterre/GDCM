@@ -170,8 +170,12 @@ public:
   vtkBooleanMacro(ApplyYBRToRGB,int);
 
   // Description:
-  // Return VTK_LUMINANCE, VTK_RGB, VTK_LOOKUP_TABLE or VTK_YBR
+  // Return VTK_LUMINANCE, VTK_RGB, VTK_LOOKUP_TABLE or VTK_YBR, VTK_RGB_PLANES
   vtkGetMacro(ImageFormat,int);
+
+  // Description:
+  // Return the Planar Configuration
+  vtkGetMacro(PlanarConfiguration,int);
 
   // Description:
   // Return the 'raw' information stored in the DICOM file:
@@ -257,6 +261,7 @@ protected:
   double Scale;
   int IconDataScalarType;
   int IconNumberOfScalarComponents;
+  int PlanarConfiguration;
 
 private:
   vtkGDCMImageReader(const vtkGDCMImageReader&);  // Not implemented.

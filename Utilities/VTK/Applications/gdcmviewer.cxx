@@ -37,6 +37,7 @@
 #include "vtkWindowToImageFilter.h"
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
 #include "vtkImageMapToColors16.h"
+#include "vtkImagePlanarComponentsToComponents.h"
 #include "vtkBalloonWidget.h"
 #include "vtkBalloonRepresentation.h"
 #include "vtkLogoWidget.h"
@@ -485,6 +486,22 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 #else
     std::cerr << "Not implemented" << std::endl;
 #endif
+    }
+  else if( reader->GetImageFormat() == VTK_RGB )
+    {
+    if( reader->GetPlanarConfiguration() )
+      {
+#if VTK_MAJOR_VERSION >= 5
+      vtkImagePlanarComponentsToComponents *rgbplanes = vtkImagePlanarComponentsToComponents::New();
+      rgbplanes->SetInput( reader->GetOutput() );
+      rgbplanes->Update();
+      rgbplanes->GetOutput()->GetScalarRange(range);
+      viewer->SetInput( rgbplanes->GetOutput() );
+      rgbplanes->Delete();
+#else
+      std::cerr << "Not implemented" << std::endl;
+#endif
+      }
     }
 //  vtkImageShiftScale *ss = vtkImageShiftScale::New();
 //  ss->SetInput( reader->GetOutput() );

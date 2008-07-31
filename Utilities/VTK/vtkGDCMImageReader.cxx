@@ -106,6 +106,7 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   this->Scale = 1.;
   this->IconDataScalarType = VTK_CHAR;
   this->IconNumberOfScalarComponents = 1;
+  this->PlanarConfiguration = 0;
 }
 
 vtkGDCMImageReader::~vtkGDCMImageReader()
@@ -1053,6 +1054,8 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     this->ImageFormat = VTK_LUMINANCE;
     }
   assert( this->ImageFormat );
+  this->PlanarConfiguration = image.GetPlanarConfiguration();
+  //assert( this->PlanarConfiguration == 0 || this->PlanarConfiguration == 1 );
 
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
   if( numoverlays ) assert( (unsigned long)overlayoutsize * ( dext[3] - dext[2] + 1 ) == overlaylen );
