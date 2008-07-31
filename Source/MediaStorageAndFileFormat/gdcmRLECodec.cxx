@@ -185,11 +185,27 @@ a Literal Run, in which case it's best to merge the three runs into a Literal Ru
     ++count;
     }
 #else
+#if 1
+  // This version properly encode: 0 1 1 0 as: 3 0 1 1 0 ...
+  for( count = 1; count < cmin; ++count )
+    {
+    if( start[count] == start[count-1] )
+      {
+      if( count + 1 < cmin && start[count] != start[count+1] )
+        {
+        continue;
+        }
+      --count;
+      break;
+      }
+    }
+#else
   // This version does not handle 0 1 1 0 as specified in the note in the DICOM standard
   while( count < cmin && start[count] != start[count-1] )
     {
     ++count;
     }
+#endif
 #endif
   assert( 1 <= count && count <= 128 );
   return count;
