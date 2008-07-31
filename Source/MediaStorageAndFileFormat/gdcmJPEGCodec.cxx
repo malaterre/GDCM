@@ -161,6 +161,8 @@ bool JPEGCodec::Code(DataElement const &in, DataElement &out)
   SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
   const Tag itemStart(0xfffe, 0xe000);
   sq->GetTable().SetTag( itemStart );
+  //const char dummy[4] = {};
+  //sq->GetTable().SetByteValue( dummy, sizeof(dummy) );
 
   const ByteValue *bv = in.GetByteValue();
   const unsigned int *dims = this->GetDimensions();

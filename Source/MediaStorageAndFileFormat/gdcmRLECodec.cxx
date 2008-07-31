@@ -141,12 +141,19 @@ inline int count_identical_bytes(const char *start, unsigned int len)
     ++count;
     }
   assert( /*2 <= count && */ count <= 128 ); // remove post condition as it will be our return error code
+  assert( count >= 1 );
   return count;
 #endif
 }
 
 inline int count_nonrepetitive_bytes(const char *start, unsigned int len)
 {
+/*
+ * TODO:
+ * I need a special handling when there is only a one repetition that break the Literal run...
+Note: It is common to encode a 2-byte repeat run as a Replicate Run except when preceded and followed by
+a Literal Run, in which case it's best to merge the three runs into a Literal Run.
+*/
   assert( len );
 #if 0
   const char *prev = start;
@@ -178,18 +185,21 @@ int rle_encode(char *output, unsigned int outputlength, const char *input, unsig
 {
   char *pout = output;
   const char *pin = input;
-  int length = inputlength;
+  unsigned int length = inputlength;
   while( pin != input + inputlength )
     {
+    assert( length <= inputlength );
     assert( pin <= input + inputlength );
     int count = count_identical_bytes(pin, length);
-    if( count > 1 )
+    if( count > 1 ) /* or 2 ? */
       {
       // repeat case:
       //
       // Test first we are allowed to write two bytes:
       if( pout + 1 + 1 > output + outputlength ) return -1;
       *pout = -count + 1;
+      assert( *pout != -128 && 1 - *pout == count );
+      assert( *pout <= -1 && *pout >= -127 );
       ++pout;
       *pout = *pin;
       ++pout;
@@ -202,6 +212,8 @@ int rle_encode(char *output, unsigned int outputlength, const char *input, unsig
       // first test we are allowed to write 1 + count bytes in the output buffer:
       if( pout + count + 1 > output + outputlength ) return -1;
       *pout = count - 1;
+      assert( *pout != -128 && *pout+1 == count );
+      assert( *pout >= 0 );
       ++pout;
       memcpy(pout, pin, count);
       pout += count;
@@ -209,6 +221,7 @@ int rle_encode(char *output, unsigned int outputlength, const char *input, unsig
     // count byte where read, move pin to new position:
     pin += count;
     // compute remaining length:
+    assert( count <= length );
     length -= count;
     }
   return pout - output;
@@ -224,6 +237,9 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
   SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
   const Tag itemStart(0xfffe, 0xe000);
   sq->GetTable().SetTag( itemStart );
+  // FIXME  ? Is this compulsary ?
+  const char dummy[4] = {};
+  sq->GetTable().SetByteValue( dummy, sizeof(dummy) );
 
   const ByteValue *bv = in.GetByteValue();
   assert( bv );
@@ -239,14 +255,23 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     buffer = new char [ image_len ];
     }
 
+  int MaxNumSegments = 1;
+  if( GetPixelFormat().GetBitsAllocated() == 16 )
+    {
+    MaxNumSegments = 2;
+    }
   RLEHeader header;
-  header.NumSegments = dims[2];
+  header.NumSegments = MaxNumSegments;
   for(int i = 0; i < 15;++i)
     header.Offset[i] = 0;
   header.Offset[0] = 64;
+  // Create a RLE Frame for each frame:
   for(unsigned int dim = 0; dim < dims[2]; ++dim)
     {
-    const char *ptr = input + dim * image_len;
+    // Within each frame, create the RLE Segments:
+    // lets' try a simple scheme where each Segments is given an equal portion
+    // of the input image.
+    const char *ptr_img = input + dim * image_len;
     if( GetPixelFormat().GetBitsAllocated() == 16 )
       {
       assert( !(image_len % 2) );
@@ -254,33 +279,56 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
       for(unsigned long i = 0; i < image_len/2; ++i)
         {
 #ifdef GDCM_WORDS_BIGENDIAN
-        buffer[i] = ptr[2*i];
+        buffer[i] = ptr_img[2*i];
 #else
-        buffer[i] = ptr[2*i+1];
+        buffer[i] = ptr_img[2*i+1];
 #endif
         }
       for(unsigned long i = 0; i < image_len/2; ++i)
         {
 #ifdef GDCM_WORDS_BIGENDIAN
-        buffer[i+image_len/2] = ptr[2*i+1];
+        buffer[i+image_len/2] = ptr_img[2*i+1];
 #else
-        buffer[i+image_len/2] = ptr[2*i];
+        buffer[i+image_len/2] = ptr_img[2*i];
 #endif
         }
-      ptr = buffer;
+      ptr_img = buffer;
+      //for(unsigned long i = 0; i < image_len ; ++i)
+      //  {
+      //  assert( ptr_img[i] == 0 );
+      //  }
       }
-    std::stringstream data;
-    int length = rle_encode(outbuf, n, ptr, image_len);
-    if( length < 0 )
+    const int input_seg_length = image_len / MaxNumSegments;
+    std::string datastr;
+    for(int seg = 0; seg < MaxNumSegments; ++seg )
       {
-      std::cerr << "RLE compressor error" << std::endl;
-      return false;
-      }
-    data.write((char*)outbuf, length);
-    std::stringstream os;
-    os.write((char*)&header,sizeof(header));
+      int partition =  input_seg_length;
+      const char *ptr = ptr_img + seg * input_seg_length;
+      assert( ptr < ptr_img + image_len );
+      if( seg == MaxNumSegments - 1 )
+        {
+        partition += image_len % MaxNumSegments;
+        assert( (MaxNumSegments-1) * input_seg_length + partition == image_len );
+        }
 
-    std::string str = os.str() + data.str();
+      std::stringstream data;
+      int length = rle_encode(outbuf, n, ptr, partition /*image_len*/);
+      if( length < 0 )
+        {
+        std::cerr << "RLE compressor error" << std::endl;
+        return false;
+        }
+      assert( length );
+      data.write((char*)outbuf, length);
+      // update header
+      header.Offset[1+seg] = header.Offset[seg] + length;
+
+      datastr += data.str();
+      }
+    std::stringstream os;
+    header.Print( std::cout );
+    os.write((char*)&header,sizeof(header));
+    std::string str = os.str() + datastr;
     assert( str.size() );
     Fragment frag;
     frag.SetTag( itemStart );
@@ -409,6 +457,7 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
       // check == 2 for gdcmDataExtra/gdcmSampleData/US_DataSet/GE_US/2929J686-breaker
       assert( check == 1 || check == 2);
       is.seekg( frame.Header.Offset[i], std::ios::beg );
+    abort();
       }
 
     unsigned long numOutBytes = 0;
@@ -442,6 +491,7 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
       else /* byte == -128 */
         {
         assert( byte == -128 );
+abort();
         }
         assert( is.eof()
         || numberOfReadBytes + frame.Header.Offset[i] - is.tellg() == 0);
