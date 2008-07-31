@@ -23,7 +23,6 @@ namespace gdcm
 /**
  * \brief Class to do RLE
  * \note
- * For now it does not handle RGB
  */
 class RLEInternals;
 class RLECodec : public ImageCodec
