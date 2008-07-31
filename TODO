@@ -25,9 +25,6 @@ from sup58_ft2.doc
 -----------------------------------------------------------------------
 Calling dcmodify [1][2] with option --erase-tag should do what you want. 
 -----------------------------------------------------------------------
-Add a FindKAKADU to find kakadu and thus be able to check compression
-done by openjpeg
------------------------------------------------------------------------
 You should be able to say: this file is a ACR NEMA read it ! So the wizard 
 should be bypass and the discovery step can be skipped.
 -----------------------------------------------------------------------
