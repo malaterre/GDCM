@@ -21,13 +21,16 @@
 #ifndef __vtkImagePlanarComponentsToComponents_h
 #define __vtkImagePlanarComponentsToComponents_h
 
-#include "vtkThreadedImageAlgorithm.h"
+//#include "vtkThreadedImageAlgorithm.h"
+#include "vtkImageAlgorithm.h"
 
-class VTK_EXPORT vtkImagePlanarComponentsToComponents : public vtkThreadedImageAlgorithm
+//class VTK_EXPORT vtkImagePlanarComponentsToComponents : public vtkThreadedImageAlgorithm
+class VTK_EXPORT vtkImagePlanarComponentsToComponents : public vtkImageAlgorithm
 {
 public:
   static vtkImagePlanarComponentsToComponents *New();
-  vtkTypeRevisionMacro(vtkImagePlanarComponentsToComponents,vtkThreadedImageAlgorithm);
+  //vtkTypeRevisionMacro(vtkImagePlanarComponentsToComponents,vtkThreadedImageAlgorithm);
+  vtkTypeRevisionMacro(vtkImagePlanarComponentsToComponents,vtkImageAlgorithm);
 
   void PrintSelf(ostream& os, vtkIndent indent);
 
@@ -35,8 +38,11 @@ protected:
   vtkImagePlanarComponentsToComponents();
   ~vtkImagePlanarComponentsToComponents() {};
 
-  void ThreadedExecute (vtkImageData *inData, vtkImageData *outData,
-                       int ext[6], int id);
+//  void ThreadedExecute (vtkImageData *inData, vtkImageData *outData,
+//                       int ext[6], int id);
+//  virtual int RequestInformation (vtkInformation *, vtkInformationVector**, vtkInformationVector *);
+  virtual int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *);
+
 private:
   vtkImagePlanarComponentsToComponents(const vtkImagePlanarComponentsToComponents&);  // Not implemented.
   void operator=(const vtkImagePlanarComponentsToComponents&);  // Not implemented.
