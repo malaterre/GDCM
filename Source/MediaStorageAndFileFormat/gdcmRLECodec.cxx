@@ -167,14 +167,30 @@ a Literal Run, in which case it's best to merge the three runs into a Literal Ru
     }
   return p - start;
 #else
-  char prev = start[0];
   int count = 1;
   const unsigned int cmin = std::min(128u,len);
-  while( count < cmin && start[count] != prev )
+#if 0
+  // TODO: this version that handles the note still does not work...
+  while( count < cmin )
     {
-    prev = start[count]; // update
+    if ( start[count] != start[count-1] )
+      {
+      // Special case:
+      if( count + 1 < cmin && start[count] != start[count+1] )
+        {
+        continue;
+        }
+      break;
+      }
     ++count;
     }
+#else
+  // This version does not handle 0 1 1 0 as specified in the note in the DICOM standard
+  while( count < cmin && start[count] != start[count-1] )
+    {
+    ++count;
+    }
+#endif
   assert( 1 <= count && count <= 128 );
   return count;
 #endif
