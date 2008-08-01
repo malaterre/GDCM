@@ -479,6 +479,15 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 #if VTK_MAJOR_VERSION >= 5
     vtkImageYBRToRGB *filter = vtkImageYBRToRGB::New();
     filter->SetInput( reader->GetOutput() );
+    if( reader->GetPlanarConfiguration() )
+      {
+      vtkImagePlanarComponentsToComponents *rgbplanes = vtkImagePlanarComponentsToComponents::New();
+      rgbplanes->SetInput( reader->GetOutput() );
+      rgbplanes->Update();
+      //rgbplanes->GetOutput()->GetScalarRange(range);
+      filter->SetInput( rgbplanes->GetOutput() );
+      rgbplanes->Delete();
+      }
     filter->Update();
     filter->GetOutput()->GetScalarRange(range);
     viewer->SetInput( filter->GetOutput() );

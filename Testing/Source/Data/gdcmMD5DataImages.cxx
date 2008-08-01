@@ -14,6 +14,14 @@
 =========================================================================*/
 
 // See tst2md5 in GDCM/Utilities/md5
+//
+// Another way to do it is:
+//
+// dcmdrle ACUSON-24-YBR_FULL-RLE.dcm bla.dcm
+// gdcmraw -i bla.dcm -o bla.raw
+// md5sum bla.raw
+// So this md5 checksum should match the one in dcmtk...hopefully :)
+//
 static const char * const gdcmMD5DataImages[][2] = { 
 /* gdcm 512 512 4 8 1 */
 { "bfff320d1b058e91b4819aa4560c16f7" , "00191113.dcm" },
@@ -31,10 +39,12 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "6a796be399aefebc1479e924f6051d69" , "ACUSON-24-YBR_FULL_422-Jpeg_Baseline_1.dcm" },
 /* gdcm 384 288 1 8 3 */
 //{ "2a922d5c606354612bfdbece1421d863" , "ACUSON-24-YBR_FULL-RLE-b.dcm" },
-{ "22b32f23beb118f7b64c13bf04bc2809" , "ACUSON-24-YBR_FULL-RLE-b.dcm" },
+//{ "22b32f23beb118f7b64c13bf04bc2809" , "ACUSON-24-YBR_FULL-RLE-b.dcm" },
+{ "2d7a28cae6c3b3183284d1b4ae08307f" , "ACUSON-24-YBR_FULL-RLE-b.dcm" },
 /* gdcm 768 576 1 8 3 */
 //{ "f9bb8a37acabdf8b0cfa4fd1b471e6aa" , "ACUSON-24-YBR_FULL-RLE.dcm" },
-{ "435c66f7e113d11d226d500294aae865" , "ACUSON-24-YBR_FULL-RLE.dcm" },
+//{ "435c66f7e113d11d226d500294aae865" , "ACUSON-24-YBR_FULL-RLE.dcm" },
+{ "429f31f0b70bd515b3feeda5dea5eac0" , "ACUSON-24-YBR_FULL-RLE.dcm" },
 /* gdcm 768 576 25 8 3 */
 { "e36350b0711fd34eb86c386164554679" , "ACUSON-8-YBR_FULL-JPEG-TrailingInfo.dcm" },
 /* gdcm 608 420 1 8 1 */
@@ -344,7 +354,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 //{ "c70309b66045140b8e08c11aa319c0ab" , "US-PAL-8-10x-echo.dcm" },
 { "1785f4d8af4717c17bfb78ba74c18ea5" , "US-PAL-8-10x-echo.dcm" },
 /* gdcm 640 480 1 8 3 */
-{ "fe2d477d699e327be2d3d65eb76203e9" , "US-RGB-8-epicard.dcm" },
+//{ "fe2d477d699e327be2d3d65eb76203e9" , "US-RGB-8-epicard.dcm" },
+{ "eb3433568c6b0cee90688ccf228ffc02" , "US-RGB-8-epicard.dcm" },
 /* gdcm 256 120 1 8 3 */
 { "4b350b9353a93c747917c7c3bf9b8f44" , "US-RGB-8-esopecho.dcm" },
 /* gdcm 512 512 12 8 1 */
@@ -596,6 +607,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 
 
 { "4d790e17ee35572d64e37c55dbc36725" , "MR_ELSCINT1_00e1_1042_SQ_feff_00e0_Item.dcm" },
+{ "93ddc0c3d642af60f55630232d2801ae" , "CT_Image_Storage_multiframe.dcm" },
+
 
 
 

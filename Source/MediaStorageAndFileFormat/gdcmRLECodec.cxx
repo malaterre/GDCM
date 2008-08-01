@@ -512,7 +512,7 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
   if ( GetPhotometricInterpretation() ==
     PhotometricInterpretation::RGB )
     {
-    //RequestPlanarConfiguration = true;
+    RequestPlanarConfiguration = true;
     }
   length /= numSegments;
   for(unsigned long i = 0; i<numSegments; ++i)
