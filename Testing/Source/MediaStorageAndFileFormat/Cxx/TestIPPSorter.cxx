@@ -66,6 +66,12 @@ int TestIPPSorter(int argc, char *argv[])
   std::cout << "Sorting succeeded:" << std::endl;
   s.Print( std::cout );
 
+  double zspacing = s.GetZSpacing();
+  if(!zspacing)
+    {
+    std::cerr << "computation of ZSpacing failed." << std::endl;
+    return 1;
+    }
   std::cout << "Found z-spacing:" << std::endl;
   std::cout << s.GetZSpacing() << std::endl;
 
