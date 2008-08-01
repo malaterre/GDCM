@@ -146,10 +146,11 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
       {
       ZSpacing = zspacing;
       }
+    assert( spacingisgood == false ||  (ZSpacing > ZTolerance && ZTolerance > 0) );
     }
 }
 
-  assert( ZSpacing > ZTolerance && ZTolerance > 0 );
+  // return true: means sorting succeed, it does not mean spacing computation succeded !
   return true;
 }
 
