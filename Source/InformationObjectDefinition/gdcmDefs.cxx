@@ -91,7 +91,8 @@ void Defs::LoadDefaults()
     }
   else
     {
-    throw Exception( "Impossible" );
+    //throw Exception( "Impossible" );
+    return;
     }
   tr.Read();
 }
