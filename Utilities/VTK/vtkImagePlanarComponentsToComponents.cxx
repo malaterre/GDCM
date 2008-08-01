@@ -22,6 +22,8 @@
 #include "vtkObjectFactory.h"
 #include "vtkStreamingDemandDrivenPipeline.h"
 
+#include <assert.h>
+
 vtkCxxRevisionMacro(vtkImagePlanarComponentsToComponents, "$Revision: 1.31 $")
 vtkStandardNewMacro(vtkImagePlanarComponentsToComponents)
 
@@ -44,31 +46,38 @@ void vtkImagePlanarComponentsToComponentsExecute(vtkImagePlanarComponentsToCompo
   vtkImageIterator<T> inIt(inData, outExt);
   vtkImageProgressIterator<T> outIt(outData, outExt, self, id);
   int idxC;
+
+  int maxC = inData->GetNumberOfScalarComponents();
+  assert( maxC == 3 );
   
       //const T* r = inIt.BeginSpan();
       //const T* g = r + 307200/2;
       //const T* b = g + 307200/2;
     T* outSI = outIt.BeginSpan();
   // Loop through ouput pixels
+    T* inSI = inIt.BeginSpan();
+      T *r = (inSI + 0 * 307200); //++inSI;
+      T *g = (inSI + 1 * 307200); //++inSI;
+      T *b = (inSI + 2 * 307200); //++inSI;
   while (!outIt.IsAtEnd())
     {
-    T* inSI = inIt.BeginSpan();
     T* outSI = outIt.BeginSpan();
     T* outSIEnd = outIt.EndSpan();
     while (outSI != outSIEnd)
       {
-      T r = *(inSI + 0 * 307200); //++inSI;
-      T g = *(inSI + 1 * 307200); //++inSI;
-      T b = *(inSI + 2 * 307200); //++inSI;
-++inSI;
-
-      *outSI = r; ++outSI;
-      *outSI = g; ++outSI;
-      *outSI = b; ++outSI;
+      *outSI = 0; ++outSI;
+      ++r;
+      *outSI = 0; ++outSI;
+      ++g;
+      *outSI = 0; ++outSI;
+      ++b;
       }
-    inIt.NextSpan();
+    //inIt.NextSpan();
     outIt.NextSpan();
     }
+  //assert( inIt.IsAtEnd() );
+     outSI = outIt.BeginSpan();
+  memset(outSI, 0, 307200 * 3);
 }
 
 //----------------------------------------------------------------------------
@@ -164,36 +173,16 @@ int vtkImagePlanarComponentsToComponents::RequestData(
   target++;
 
   // Loop through ouput pixels
-  //temp2 = 1.0 / (2.0 * this->StandardDeviation * this->StandardDeviation);
 
+  unsigned long size = (maxX+1) * (maxY+1) * (maxZ+1);
   const char *r = inPtr;
-  const char *g = inPtr + 307200;
-  const char *b = inPtr + 307200 * 2;
-/*
-  for (idxZ = 0; idxZ <= maxZ; idxZ++)
-    {
-    for (idxY = 0; !this->AbortExecute && idxY <= maxY; idxY++)
-      {
-      if (!(count%target))
-        {
-        this->UpdateProgress(count/(50.0*target));
-        }
-      count++;
-      for (idxX = 0; idxX <= maxX; idxX++)
-        {
-        // Pixel operation
-        *(outPtr++) = *(r++);
-        *(outPtr++) = *(g++);
-        *(outPtr++) = *(b++);
-        }
-      }
-    }
-*/
-  memcpy( outPtr, inPtr, 3*307200);
+  const char *g = inPtr + size;
+  const char *b = inPtr + size + size;
 
   char *p = outPtr;
-  for (unsigned long j = 0; j < 307200; ++j)
+  for (unsigned long j = 0; j < size && !this->AbortExecute; ++j)
     {
+    //this->UpdateProgress(count/(50.0*target));
     *(p++) = *(r++);
     *(p++) = *(g++);
     *(p++) = *(b++);

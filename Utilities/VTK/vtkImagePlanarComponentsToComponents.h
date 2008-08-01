@@ -16,7 +16,8 @@
 // .SECTION Description
 
 // .SECTION See Also
-//
+// TODO: Can I make this filter threaded ?
+// TODO: How do I handle the VTK-flipping (FileLowerLeft)?
 
 #ifndef __vtkImagePlanarComponentsToComponents_h
 #define __vtkImagePlanarComponentsToComponents_h

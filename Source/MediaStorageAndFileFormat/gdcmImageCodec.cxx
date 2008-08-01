@@ -155,7 +155,7 @@ abort(); // Do not use this code !
 
 bool ImageCodec::DoPlanarConfiguration(std::istream &is, std::ostream &os)
 {
-abort();
+abort(); // Do not use this code
   // FIXME: Do some stupid work:
   std::streampos start = is.tellg();
   assert( 0 - start == 0 );
@@ -172,22 +172,22 @@ abort();
   assert( buf_size % 3 == 0 );
   unsigned long size = buf_size/3;
   char *copy = new char[ buf_size ];
-  memmove( copy, dummy_buffer, buf_size);
+  //memmove( copy, dummy_buffer, buf_size);
 
-  const char *r = copy;
-  const char *g = copy + size;
-  const char *b = copy + size + size;
+  const char *r = dummy_buffer /*copy*/;
+  const char *g = dummy_buffer /*copy*/ + size;
+  const char *b = dummy_buffer /*copy*/ + size + size;
 
-  char *p = dummy_buffer;
+  char *p = copy /*dummy_buffer*/;
   for (unsigned long j = 0; j < size; ++j)
     {
     *(p++) = *(r++);
     *(p++) = *(g++);
     *(p++) = *(b++);
     }
-  delete[] copy;
+  delete[] dummy_buffer /*copy*/;
 
-  os.write(dummy_buffer, buf_size);
+  os.write(copy /*dummy_buffer*/, buf_size);
   return true;
 }
 
@@ -225,6 +225,7 @@ bool ImageCodec::DoInvertPlanarConfiguration(char *output, const char *input, ui
     }
   assert( b == input + length + 2);
   assert ( pout = output + length );
+  return true;
 }
 
 bool ImageCodec::DoSimpleCopy(std::istream &is, std::ostream &os)
