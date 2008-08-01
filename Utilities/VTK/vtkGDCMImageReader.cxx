@@ -23,9 +23,9 @@
 #include "vtkStringArray.h"
 #include "vtkPointData.h"
 #include "vtkLookupTable.h"
-#include "vtkLookupTable16.h"
 #include "vtkWindowLevelLookupTable.h"
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+#include "vtkLookupTable16.h"
 #include "vtkInformationVector.h"
 #include "vtkInformation.h"
 #include "vtkDemandDrivenPipeline.h"
@@ -999,6 +999,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
       }
     else 
       {
+#if (VTK_MAJOR_VERSION >= 5)
       assert( lut.GetBitSample() == 16 );
       vtkLookupTable16 *vtklut = vtkLookupTable16::New();
       vtklut->SetNumberOfTableValues(256*256);
@@ -1011,6 +1012,9 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
       vtklut->SetRange(0,256*256-1);
       data->GetPointData()->GetScalars()->SetLookupTable( vtklut );
       vtklut->Delete();
+#else
+      vtkWarningMacro( "Unhandled" );
+#endif
       }
     }
   else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME1 )
