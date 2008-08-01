@@ -20,7 +20,6 @@ def TestDCMTKMD5( filename, verbose = False ):
   #print filename
   dcmdump_exec = "dcmdump -dc -E +P 2,10 -s " + filename + " 2> /dev/null"
   #print dcmdump_exec
-  #ret = os.system( dcmdump_exec )
   f = os.popen(dcmdump_exec)
   ret = f.read()
   #assert ret == 0
@@ -28,17 +27,42 @@ def TestDCMTKMD5( filename, verbose = False ):
   jpegre = re.compile('^.*JPEGLossless.*$')
   rlere = re.compile('^.*RLELossless.*$')
   lexre = re.compile('^.*LittleEndianExplicit.*$')
+  testing = gdcm.Testing()
+  outputdir = testing.GetTempDirectory( "TestDCMTKMD5" )
+  gdcm.System.MakeDirectory( outputdir )
+  outputfilename = testing.GetTempFilename( filename, "TestDCMTKMD5" )
+  executable_output_path = gdcm.GDCM_EXECUTABLE_OUTPUT_PATH
+  gdcmraw = executable_output_path + '/gdcmraw'
+
   if not ret:
     print "empty, problem with:", filename
-    return 1
-  if type(ret) != type(''):
+    return 0
+  elif type(ret) != type(''):
     print "problem of type with:", filename
-    return 1
+    return 0
   #print ret
   #print ret.__class__
-  if( jpegre.match( ret ) ):
-    print "jpeg: ",filename
-  return 0
+  elif( jpegre.match( ret ) ):
+    #print "jpeg: ",filename
+    dcmdjpeg_exec = "dcmdjpeg " + filename + " " + outputfilename
+    ret = os.system( dcmdjpeg_exec )
+
+    gdcmraw_args = ' -i ' + outputfilename + ' -o ' + outputfilename + ".raw"
+    gdcmraw += gdcmraw_args
+    #print gdcmraw
+    ret = os.system( gdcmraw )
+    md5 = gdcm.Testing.ComputeFileMD5( outputfilename + ".raw" ) 
+    ref = gdcm.Testing.GetMD5FromFile(filename)
+    #print md5
+    retval  = 0
+    if ref != md5:
+      print "md5 are different: %s should be: %s for file %s"%(md5,ref,filename)
+      retval = 1
+    #print outputfilename
+    return retval
+  #else
+  print "Unhandled:",filename
+  return 1
 
 if __name__ == "__main__":
   sucess = 0
