@@ -7,6 +7,7 @@ SET(GDCM_PYTHON_TEST_SRCS
   TestModifyFields
   TestAnonymizer
   #TestStringFilter
+  TestDCMTKMD5
   )
 IF(BUILD_APPLICATIONS)
   SET(GDCM_PYTHON_TEST_SRCS
