@@ -65,6 +65,9 @@ def TestDCMTKMD5( filename, verbose = False ):
     #print "rle: ",filename
     dcmdrle_exec = "dcmdrle " + filename + " " + outputfilename
     ret = os.system( dcmdrle_exec )
+    if ret:
+      print "failed with: ", dcmdrle_exec
+      return 1
 
     gdcmraw_args = ' -i ' + outputfilename + ' -o ' + outputfilename + ".raw"
     gdcmraw += gdcmraw_args
@@ -88,6 +91,9 @@ def TestDCMTKMD5( filename, verbose = False ):
     gdcmraw += gdcmraw_args
     #print gdcmraw
     ret = os.system( gdcmraw )
+    if ret:
+      print "failed with: ", gdcmraw
+      return 1
     md5 = gdcm.Testing.ComputeFileMD5( outputfilename + ".raw" ) 
     ref = gdcm.Testing.GetMD5FromFile(filename)
     #print md5
@@ -109,6 +115,7 @@ if __name__ == "__main__":
   except:
     # loop over all files:
     t = gdcm.Testing()
+    gdcm.Trace.WarningOff()
     nfiles = t.GetNumberOfFileNames()
     for i in range(0,nfiles):
       filename = t.GetFileName(i)
