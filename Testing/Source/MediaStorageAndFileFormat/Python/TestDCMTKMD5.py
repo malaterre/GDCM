@@ -27,6 +27,7 @@ def TestDCMTKMD5( filename, verbose = False ):
   jpegre = re.compile('^.*JPEGLossless.*$')
   rlere = re.compile('^.*RLELossless.*$')
   lexre = re.compile('^.*LittleEndianExplicit.*$')
+  leire = re.compile('^.*LittleEndianImplicit.*$')
   testing = gdcm.Testing()
   outputdir = testing.GetTempDirectory( "TestDCMTKMD5" )
   gdcm.System.MakeDirectory( outputdir )
@@ -48,6 +49,42 @@ def TestDCMTKMD5( filename, verbose = False ):
     ret = os.system( dcmdjpeg_exec )
 
     gdcmraw_args = ' -i ' + outputfilename + ' -o ' + outputfilename + ".raw"
+    gdcmraw += gdcmraw_args
+    #print gdcmraw
+    ret = os.system( gdcmraw )
+    md5 = gdcm.Testing.ComputeFileMD5( outputfilename + ".raw" ) 
+    ref = gdcm.Testing.GetMD5FromFile(filename)
+    #print md5
+    retval  = 0
+    if ref != md5:
+      print "md5 are different: %s should be: %s for file %s"%(md5,ref,filename)
+      retval = 1
+    #print outputfilename
+    return retval
+  elif( rlere.match( ret ) ):
+    #print "rle: ",filename
+    dcmdrle_exec = "dcmdrle " + filename + " " + outputfilename
+    ret = os.system( dcmdrle_exec )
+
+    gdcmraw_args = ' -i ' + outputfilename + ' -o ' + outputfilename + ".raw"
+    gdcmraw += gdcmraw_args
+    #print gdcmraw
+    ret = os.system( gdcmraw )
+    md5 = gdcm.Testing.ComputeFileMD5( outputfilename + ".raw" ) 
+    ref = gdcm.Testing.GetMD5FromFile(filename)
+    #print md5
+    retval  = 0
+    if ref != md5:
+      print "md5 are different: %s should be: %s for file %s"%(md5,ref,filename)
+      retval = 1
+    #print outputfilename
+    return retval
+  elif( lexre.match( ret ) or leire.match(ret) ):
+    #print "rle: ",filename
+    #dcmdrle_exec = "dcmdrle " + filename + " " + outputfilename
+    #ret = os.system( dcmdrle_exec )
+
+    gdcmraw_args = ' -i ' + filename + ' -o ' + outputfilename + ".raw"
     gdcmraw += gdcmraw_args
     #print gdcmraw
     ret = os.system( gdcmraw )
