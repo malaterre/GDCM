@@ -40,11 +40,13 @@ int TestDump(const char *filename)
 
   if( ds.FindDataElement( t1 ) )
     {
-    csa.Print( ds.GetDataElement( t1 ) );
+    csa.LoadFromDataElement( ds.GetDataElement( t1 ) );
+    csa.Print( std::cout );
     }
   if( ds.FindDataElement( t2 ) )
     {
-    csa.Print( ds.GetDataElement( t2 ) );
+    csa.LoadFromDataElement( ds.GetDataElement( t2 ) );
+    csa.Print( std::cout );
     }
   if( csa.GetFormat() == gdcm::CSAHeader::DATASET_FORMAT )
     {
