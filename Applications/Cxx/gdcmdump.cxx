@@ -180,7 +180,8 @@ int PrintCSA(const std::string & filename)
 	      bool found = false;
       if( ds.FindDataElement( t1 ) )
         {
-        csa.Print( ds.GetDataElement( t1 ) );
+        csa.LoadFromDataElement( ds.GetDataElement( t1 ) );
+        csa.Print( std::cout );
 	found = true;
 	//const gdcm::CSAElement &csael = csa.GetCSAElementByName( "Columns" );
 	//std::cout << "Looking for Columns:" << std::endl;
@@ -188,7 +189,8 @@ int PrintCSA(const std::string & filename)
         }
       if( ds.FindDataElement( t2 ) )
         {
-        csa.Print( ds.GetDataElement( t2 ) );
+        csa.LoadFromDataElement( ds.GetDataElement( t2 ) );
+        csa.Print( std::cout );
 	found = true;
         }
       if( !found )
