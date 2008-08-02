@@ -68,7 +68,9 @@ public :
   template <typename TSwap>
   const std::ostream &Write(std::ostream &os) const;
 
-  void Print(DataElement const &de);
+  void LoadFromDataElement(DataElement const &de);
+
+  void Print(std::ostream &os) const;
 
   const DataSet& GetDataSet() const { return InternalDataSet; }
 
@@ -84,6 +86,7 @@ private:
   std::set<CSAElement> InternalCSADataSet;
   DataSet InternalDataSet;
   CSAHeaderType InternalType;
+  Tag DataElementTag;
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
