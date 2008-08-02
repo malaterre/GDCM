@@ -75,6 +75,7 @@ inline double vtkApplyLogScale16(double v, double range[2],
                                double logRange[2])
 {
 abort();
+ return 0;
 }
 
 template<class T>
