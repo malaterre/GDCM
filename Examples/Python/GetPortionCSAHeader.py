@@ -60,3 +60,12 @@ if __name__ == "__main__":
     csa_t2.LoadFromDataElement( ds.GetDataElement( t2 ) )
     # print csa_t2
 
+  gdt = csa_t2.GetCSAElementByName( "GradientDelayTime" )
+  print gdt
+
+  bv = gdt.GetByteValue();
+  #print bv
+  str = bv.GetPointer()
+  print str.split("\\")
+
+
