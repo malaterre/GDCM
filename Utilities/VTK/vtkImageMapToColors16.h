@@ -31,7 +31,7 @@
 
 class vtkScalarsToColors;
 
-class VTK_IMAGING_EXPORT vtkImageMapToColors16 : public vtkThreadedImageAlgorithm
+class VTK_EXPORT vtkImageMapToColors16 : public vtkThreadedImageAlgorithm
 {
 public:
   static vtkImageMapToColors16 *New();
