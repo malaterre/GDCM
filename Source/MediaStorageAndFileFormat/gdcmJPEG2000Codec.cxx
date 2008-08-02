@@ -191,14 +191,36 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   //   parameters.decod_format=-1;
   //   parameters.cod_format=-1;
 
-  /* JPEG-2000 codestream */
-  parameters.decod_format = J2K_CFMT;
-  assert(parameters.decod_format == J2K_CFMT);
+  const char jp2magic[] = "\x00\x00\x00\x0C\x6A\x50\x20\x20\x0D\x0A\x87\x0A";
+  if( memcmp( src, jp2magic, sizeof(jp2magic) ) == 0 )
+    {
+    /* JPEG-2000 compressed image data */
+    // gdcmData/ELSCINT1_JP2vsJ2K.dcm
+    gdcmWarningMacro( "J2K start like JPEG-2000 compressed image data instead of codestream" );
+    parameters.decod_format = JP2_CFMT;
+    assert(parameters.decod_format == JP2_CFMT);
+    }
+  else
+    {
+    /* JPEG-2000 codestream */
+    parameters.decod_format = J2K_CFMT;
+    assert(parameters.decod_format == J2K_CFMT);
+    }
   parameters.cod_format = PGX_DFMT;
   assert(parameters.cod_format == PGX_DFMT);
 
   /* get a decoder handle */
-  dinfo = opj_create_decompress(CODEC_J2K);
+  switch(parameters.decod_format )
+    {
+  case J2K_CFMT:
+    dinfo = opj_create_decompress(CODEC_J2K);
+    break;
+  case JP2_CFMT:
+    dinfo = opj_create_decompress(CODEC_JP2);
+    break;
+  default:
+    abort();
+    }
 
   /* catch events using our callbacks and give a local context */
   opj_set_event_mgr((opj_common_ptr)dinfo, &event_mgr, NULL);      
