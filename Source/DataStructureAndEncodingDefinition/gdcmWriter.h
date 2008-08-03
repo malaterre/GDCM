@@ -37,6 +37,9 @@ namespace gdcm
  * - Even length for any elements
  * - Alphabetical order for elements (garanteed by design of internals)
  * - 32bits VR will be rewritten with 00
+ *
+ *
+ * WARNING: gdcm::Writer cannot write a DataSet if no SOP Instance UID (0008,0018) is found
  */
 class FileMetaInformation;
 class GDCM_EXPORT Writer
