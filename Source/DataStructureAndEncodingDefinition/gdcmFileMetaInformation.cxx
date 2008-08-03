@@ -123,9 +123,17 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
   // Media Storage SOP Class UID (0002,0002) -> see (0008,0016)
   if( !FindDataElement( Tag(0x0002, 0x0002) ) )
     {
-    if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )
+    if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) || ds.GetDataElement( Tag(0x0008,0x0016) ).IsEmpty()  )
       {
-      abort();
+      gdcm::MediaStorage ms;
+      ms.SetFromModality(ds);
+      const char *msstr = ms.GetString();
+      xde.SetByteValue( msstr, strlen(msstr) );
+      xde.SetTag( Tag(0x0002, 0x0002) );
+        {
+        xde.SetVR( VR::UI );
+        }
+      Insert( xde );
       }
     else
       {
@@ -143,13 +151,20 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     {
     if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )
       {
-      abort();
+      //abort();
+      // What should I do here ??
+      gdcmWarningMacro( "Missing SOPClassUID in DataSet but found in FileMeta" );
       }
-    const DataElement& sopclass = ds.GetDataElement( Tag(0x0008, 0x0016) );
-    DataElement mssopclass = GetDataElement( Tag(0x0002, 0x0002) );
-    const ByteValue *bv = sopclass.GetByteValue();
-    mssopclass.SetByteValue( bv->GetPointer(), bv->GetLength() );
-    Replace( mssopclass );
+    else
+      {
+      const DataElement& sopclass = ds.GetDataElement( Tag(0x0008, 0x0016) );
+      DataElement mssopclass = GetDataElement( Tag(0x0002, 0x0002) );
+      assert( !mssopclass.IsEmpty() );
+      const ByteValue *bv = sopclass.GetByteValue();
+      assert( bv );
+      mssopclass.SetByteValue( bv->GetPointer(), bv->GetLength() );
+      Replace( mssopclass );
+      }
     }
   // Media Storage SOP Instance UID (0002,0003) -> see (0008,0018)
   const DataElement &dummy = GetDataElement(Tag(0x0002,0x0003));
@@ -197,7 +212,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     }
   //assert( !GetDataElement( Tag(0x0002,0x0003) ).IsEmpty() );
   // Transfer Syntax UID (0002,0010) -> ??? (computed at write time at most)
-  if( FindDataElement( Tag(0x0002, 0x0010) ) )
+  if( FindDataElement( Tag(0x0002, 0x0010) ) && !GetDataElement( Tag(0x0002,0x0010) ).IsEmpty() )
     {
     const DataElement& tsuid = GetDataElement( Tag(0x0002, 0x0010) );
     if( tsuid.GetVR() != VR::UI )
@@ -210,7 +225,13 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
   else
     {
     // Very bad !!
-    throw Exception( "No (0002,0010) element found" );
+    //throw Exception( "No (0002,0010) element found" );
+    // Constuct it from DataSetTS
+    const char* str = TransferSyntax::GetTSString(DataSetTS);
+    xde.SetByteValue(str,strlen(str));
+    xde.SetVR( VR::UI );
+    xde.SetTag( Tag(0x0002,0x0010) );
+    Insert( xde );
     }
   // Implementation Class UID (0002,0012) -> ??
   if( !FindDataElement( Tag(0x0002, 0x0012) ) )

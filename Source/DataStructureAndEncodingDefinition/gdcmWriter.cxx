@@ -51,6 +51,10 @@ std::ostream &os = *Stream;
 FileMetaInformation &Header = F->GetHeader();
 DataSet &DS = F->GetDataSet();
 
+if( DS.IsEmpty() )
+  {
+  return 1;
+  }
 
   // Should I check that 0002,0002 / 0008,0016 and 0002,0003 / 0008,0018 match ?
 
