@@ -37,8 +37,10 @@
 #include "gdcmFileMetaInformation.h"
 #include "gdcmSmartPointer.h"
 #include "gdcmReader.h"
+#include "gdcmWriter.h"
 #include "gdcmSystem.h"
 #include "gdcmTesting.h"
+#include "gdcmAttribute.h"
 
 
 /*
@@ -107,8 +109,44 @@ std::istream & DoTheMMapRead(std::istream &is)
   return is;
 }
 
-int TestRead3(const char * path)
+int TestRead3(const char *subdir, const char * filename)
 {
+/// FIXME Because GDCM is seeging back and forth in the DICOM file
+// we cannot just apply mmap on any file, so let's clean them first:
+//
+  gdcm::Reader r;
+  r.SetFileName( filename );
+  if( !r.Read() )
+    {
+    return 1;
+    }
+  //
+  // Create directory first:
+  const char * tmpdir = gdcm::Testing::GetTempDirectory( subdir );
+  if( !gdcm::System::FileIsDirectory( tmpdir ) )
+    {
+    gdcm::System::MakeDirectory( tmpdir );
+    //return 1;
+    }
+  const char * outfilename = gdcm::Testing::GetTempFilename( filename, subdir );
+
+  // HACK:
+  gdcm::DataSet &ds = r.GetFile().GetDataSet();
+  gdcm::Attribute<0x0008,0x0018> at;
+  if( !ds.FindDataElement( at.GetTag() ) || ds.GetDataElement( at.GetTag() ).IsEmpty() )
+    {
+    const gdcm::UIComp dummyuid = "1.2.3.4.5.6.7.8.9.0";
+    at.SetValue( dummyuid );
+    ds.Replace( at.GetAsDataElement() );
+    }
+  gdcm::Writer w;
+  w.SetFile( r.GetFile() );
+  w.SetFileName( outfilename );
+  if( !w.Write() )
+    {
+    return 1;
+    }
+  const char *path = outfilename;
   bool readonly = true;
   int flags = (readonly ? O_RDONLY : O_RDWR);
 
@@ -152,7 +190,7 @@ int TestReader3(int argc, char *argv[])
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestRead3(filename);
+    return TestRead3(argv[0], filename);
     }
 
   // else
@@ -163,7 +201,7 @@ int TestReader3(int argc, char *argv[])
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
     {
-    r += TestRead3( filename );
+    r += TestRead3( argv[0], filename );
     ++i;
     }
 
