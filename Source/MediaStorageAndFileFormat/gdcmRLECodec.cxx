@@ -298,7 +298,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     //RequestPaddedCompositePixelCode = true;
     buffer = new char [ image_len ];
     }
-  if ( GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
+  else if ( GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
     {
     buffer = new char [ image_len ];
     }
@@ -407,7 +407,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     //RequestPaddedCompositePixelCode = true;
     delete[] buffer;
     }
-  if ( GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
+  else if ( GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
     {
     delete[] buffer;
     }
