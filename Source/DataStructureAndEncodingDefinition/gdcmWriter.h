@@ -51,7 +51,10 @@ public:
   }
   virtual ~Writer();
 
+  /// Main function to tell the writer to write
   virtual bool Write(); // Execute()
+
+  /// Set the filename of DICOM file to write:
   void SetFileName(const char *filename) {
     //std::cerr << "Stream: " << filename << std::endl;
     //std::cerr << "Ofstream: " << Ofstream << std::endl;
@@ -70,13 +73,16 @@ public:
     DebugFileName = filename;
 #endif
   }
+  /// Set user ostream buffer
   void SetStream(std::ostream &output_stream) {
     Stream = &output_stream;
   }
 
+  /// Set/Get the DICOM file (DataSet + Header)
   void SetFile(const File& f) { F = &f; }
   File &GetFile() { return *F; }
 
+  /// Undocumented function, do not use.
   void SetCheckFileMetaInformation(bool b) { CheckFileMetaInformation = b; }
   void CheckFileMetaInformationOff() { CheckFileMetaInformation = false; }
   void CheckFileMetaInformationOn() { CheckFileMetaInformation = true; }
