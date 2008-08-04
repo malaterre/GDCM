@@ -157,6 +157,13 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     throw pe;
     }
 
+#ifdef ELSCINT1_01F7_1070
+  if( TagField == Tag(0x01f7,0x1070) )
+    {
+    ValueLengthField = ValueLengthField - 7;
+    }
+#endif
+
   if( ValueLengthField == 0 )
     {
     // Simple fast path
