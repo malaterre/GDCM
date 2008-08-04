@@ -54,7 +54,7 @@ IF(MSVC)
       ${PYTHON_INCLUDE_PATH}
     )
 ENDIF(MSVC)
-SET_SOURCE_FILES_PROPERTIES(gdcm.i PROPERTIES CPLUSPLUS ON)
+SET_SOURCE_FILES_PROPERTIES(gdcmswig.i PROPERTIES CPLUSPLUS ON)
 
 
 # Some old swig 1.3 did not support this option:
@@ -62,15 +62,18 @@ SET_SOURCE_FILES_PROPERTIES(gdcm.i PROPERTIES CPLUSPLUS ON)
 
 #SET(GDCM_PYTHON_IMPLEMENTATION_NAME gdcmpython)
 SET(GDCM_PYTHON_IMPLEMENTATION_NAME gdcmswig)
-SET(CMAKE_SWIG_FLAGS "-interface _${GDCM_PYTHON_IMPLEMENTATION_NAME}")
-SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
+# BUG: DO NOT USE -interface flag it is NOT supported in cmake and in cmake > 2.6 will cause infinite rebuild
+# Ref: http://www.cmake.org/pipermail/cmake/2008-August/023237.html
+# UseSWIG and -interface flag (was: Re: CMake 2.6.1 available for download)
+#SET(CMAKE_SWIG_FLAGS "-interface _${GDCM_PYTHON_IMPLEMENTATION_NAME}")
+#SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
 
 # While trying to get rid of the compilation warning in swig generated c++ code, I thought I could
 # simply do the following:
 #SET(CMAKE_CXX_FLAGS "")
 # well no, you cannot, it get rid of some important flags, and make the _gdcm.so incompatible with
 # the other gdcm lib. bad !!!
-SWIG_ADD_MODULE(${GDCM_PYTHON_IMPLEMENTATION_NAME} python gdcm.i gdcmPythonFilter.cxx)
+SWIG_ADD_MODULE(${GDCM_PYTHON_IMPLEMENTATION_NAME} python gdcmswig.i gdcmPythonFilter.cxx)
 SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} gdcmMSFF gdcmIOD ${PYTHON_LIBRARIES})
 #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/gdcm.pth.in
 #  ${CMAKE_CURRENT_BINARY_DIR}/gdcm.pth
