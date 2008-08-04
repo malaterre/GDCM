@@ -1,7 +1,12 @@
 PROJECT(WXGDCM)
 # wxWidgets stuff changed a lot within the 2.4.2 to 2.4.3
 # I wonder if this has something to do with adding features on a stable branch?
-CMAKE_MINIMUM_REQUIRED(VERSION 2.4.2)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6.1)
+
+if(COMMAND cmake_policy)
+cmake_policy(SET CMP0003 NEW)
+endif(COMMAND cmake_policy)
+
 
 #-----------------------------------------------------------------------------
 FIND_PACKAGE(VTK REQUIRED)
