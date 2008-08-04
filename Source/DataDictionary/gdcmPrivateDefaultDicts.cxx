@@ -454,9 +454,9 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x00e1,0x0022,"ELSCINT1",VR::DS,VM::VM2,"Presentation Relative Center",false },
   {0x00e1,0x0023,"ELSCINT1",VR::DS,VM::VM2,"Presentation Relative Part",false },
   {0x00e1,0x0024,"ELSCINT1",VR::CS,VM::VM1,"Presentation Horizontal Invert",false },
-  {0x00e1,0x0025,"ELSCINT1",VR::CS,VM::VM1,"?",false },
+  {0x00e1,0x0025,"ELSCINT1",VR::CS,VM::VM1,"Presentation Vertical Invert",false },
   {0x00e1,0x0040,"ELSCINT1",VR::SH,VM::VM1,"Image Label",false },
-  {0x00e1,0x0042,"ELSCINT1",VR::LO,VM::VM1,"?",false },
+  {0x00e1,0x0042,"ELSCINT1",VR::SQ,VM::VM1,"?",false },
   {0x00e1,0x0050,"ELSCINT1",VR::DS,VM::VM1,"Acquisition Duration",false },
   {0x00e1,0x0061,"ELSCINT1",VR::LO,VM::VM1,"Protocol File Name",false },
   {0x00e1,0x0063,"ELSCINT1",VR::SH,VM::VM1,"Patient Language",false },
@@ -3035,7 +3035,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0041,0x0042,"PAPYRUS 3.0",VR::UI,VM::VM1,"Referenced Image SOP Instance UID",false },
   {0x0041,0x0050,"PAPYRUS 3.0",VR::SQ,VM::VM1,"Image Sequence",false },
   {0x0009,0x0010,"PHILIPS MR",VR::LO,VM::VM1,"SPI Release",false },
-  {0x0009,0x0012,"PHILIPS MR",VR::LO,VM::VM1,"?",false },
+  {0x0009,0x0012,"PHILIPS MR",VR::DA,VM::VM1,"date",false },
   {0x0019,0x0000,"PHILIPS MR R5.5/PART",VR::DS,VM::VM1,"Field of View",false },
   {0x0019,0x0000,"PHILIPS MR R5.6/PART",VR::DS,VM::VM1,"Field of View",false },
   {0x0019,0x0001,"PHILIPS MR SPECTRO;1",VR::US,VM::VM1,"?",false },
@@ -7123,7 +7123,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   //{0x1135,0x0000,"Voxar 2.16.124.113543.6003.1999.12.20.12.5.0",VR::UL,VM::VM1,"Group Length 1135",true },
   //{0x3115,0x0000,"http://www.gemedicalsystems.com/it_solutions/rad_pacs/",VR::UL,VM::VM1,"Group Length 3115",true },
 
-  {0xffff,0xffff,"",VR::INVALID,VM::VM0,"",true }, // Dummy invalid element
+  {0xffff,0xffff,"GDCM Private Sentinel",VR::INVALID,VM::VM0,"",true }, // Dummy invalid element
   {0xffff,0xffff,"",VR::INVALID,VM::VM0,0,true } // Gard (will NOT be added)
 };
 

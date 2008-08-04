@@ -31,7 +31,7 @@
  * What if the Series we are trying to read contained a changing shift/scale ?
  */
 
-int TestvtkGDCMImageReade3(const char *dir, const char *studyuid)
+int TestvtkGDCMImageRead3(const char *dir, const char *studyuid)
 {
   std::cout << "Working on : " << dir << std::endl;
   int ret = 0;
@@ -155,9 +155,9 @@ int TestvtkGDCMImageReader3(int argc, char *argv[])
     "1.76.380.18.1.10713.1.1335"
   };
 
-  ret += TestvtkGDCMImageReade3(dir1.c_str(), studyuids[0]);
-  ret += TestvtkGDCMImageReade3(dir2.c_str(), studyuids[1]);
-  ret += TestvtkGDCMImageReade3(dir3.c_str(), studyuids[2]);
+  ret += TestvtkGDCMImageRead3(dir1.c_str(), studyuids[0]);
+  ret += TestvtkGDCMImageRead3(dir2.c_str(), studyuids[1]);
+  ret += TestvtkGDCMImageRead3(dir3.c_str(), studyuids[2]);
 
 
   return ret;

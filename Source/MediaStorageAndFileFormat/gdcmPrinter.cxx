@@ -28,53 +28,49 @@
 
 #include <typeinfo> // for typeid
 
-#define GDCM_TERMINAL_DISABLE_COLOR
+#define gdcm_terminal_vt100_normal              "\33[0m"
+#define gdcm_terminal_vt100_bold                "\33[1m"
+#define gdcm_terminal_vt100_underline           "\33[4m"
+#define gdcm_terminal_vt100_blink               "\33[5m"
+#define gdcm_terminal_vt100_inverse             "\33[7m"
+#define gdcm_terminal_vt100_foreground_black    "\33[30m"
+#define gdcm_terminal_vt100_foreground_red      "\33[31m"
+#define gdcm_terminal_vt100_foreground_green    "\33[32m"
+#define gdcm_terminal_vt100_foreground_yellow   "\33[33m"
+#define gdcm_terminal_vt100_foreground_blue     "\33[34m"
+#define gdcm_terminal_vt100_foreground_magenta  "\33[35m"
+#define gdcm_terminal_vt100_foreground_cyan     "\33[36m"
+#define gdcm_terminal_vt100_foreground_white    "\33[37m"
+#define gdcm_terminal_vt100_background_black    "\33[40m"
+#define gdcm_terminal_vt100_background_red      "\33[41m"
+#define gdcm_terminal_vt100_background_green    "\33[42m"
+#define gdcm_terminal_vt100_background_yellow   "\33[43m"
+#define gdcm_terminal_vt100_background_blue     "\33[44m"
+#define gdcm_terminal_vt100_background_magenta  "\33[45m"
+#define gdcm_terminal_vt100_background_cyan     "\33[46m"
+#define gdcm_terminal_vt100_background_white    "\33[47m"
 
-#ifdef GDCM_TERMINAL_DISABLE_COLOR
-#define GDCM_TERMINAL_VT100_NORMAL              ""
-#define GDCM_TERMINAL_VT100_BOLD                ""
-#define GDCM_TERMINAL_VT100_UNDERLINE           ""
-#define GDCM_TERMINAL_VT100_BLINK               ""
-#define GDCM_TERMINAL_VT100_INVERSE             ""
-#define GDCM_TERMINAL_VT100_FOREGROUND_BLACK    ""
-#define GDCM_TERMINAL_VT100_FOREGROUND_RED      ""
-#define GDCM_TERMINAL_VT100_FOREGROUND_GREEN    ""
-#define GDCM_TERMINAL_VT100_FOREGROUND_YELLOW   ""
-#define GDCM_TERMINAL_VT100_FOREGROUND_BLUE     ""
-#define GDCM_TERMINAL_VT100_FOREGROUND_MAGENTA  ""
-#define GDCM_TERMINAL_VT100_FOREGROUND_CYAN     ""
-#define GDCM_TERMINAL_VT100_FOREGROUND_WHITE    ""
-#define GDCM_TERMINAL_VT100_BACKGROUND_BLACK    ""
-#define GDCM_TERMINAL_VT100_BACKGROUND_RED      ""
-#define GDCM_TERMINAL_VT100_BACKGROUND_GREEN    ""
-#define GDCM_TERMINAL_VT100_BACKGROUND_YELLOW   ""
-#define GDCM_TERMINAL_VT100_BACKGROUND_BLUE     ""
-#define GDCM_TERMINAL_VT100_BACKGROUND_MAGENTA  ""
-#define GDCM_TERMINAL_VT100_BACKGROUND_CYAN     ""
-#define GDCM_TERMINAL_VT100_BACKGROUND_WHITE    ""
-#else
-#define GDCM_TERMINAL_VT100_NORMAL              "\33[0m"
-#define GDCM_TERMINAL_VT100_BOLD                "\33[1m"
-#define GDCM_TERMINAL_VT100_UNDERLINE           "\33[4m"
-#define GDCM_TERMINAL_VT100_BLINK               "\33[5m"
-#define GDCM_TERMINAL_VT100_INVERSE             "\33[7m"
-#define GDCM_TERMINAL_VT100_FOREGROUND_BLACK    "\33[30m"
-#define GDCM_TERMINAL_VT100_FOREGROUND_RED      "\33[31m"
-#define GDCM_TERMINAL_VT100_FOREGROUND_GREEN    "\33[32m"
-#define GDCM_TERMINAL_VT100_FOREGROUND_YELLOW   "\33[33m"
-#define GDCM_TERMINAL_VT100_FOREGROUND_BLUE     "\33[34m"
-#define GDCM_TERMINAL_VT100_FOREGROUND_MAGENTA  "\33[35m"
-#define GDCM_TERMINAL_VT100_FOREGROUND_CYAN     "\33[36m"
-#define GDCM_TERMINAL_VT100_FOREGROUND_WHITE    "\33[37m"
-#define GDCM_TERMINAL_VT100_BACKGROUND_BLACK    "\33[40m"
-#define GDCM_TERMINAL_VT100_BACKGROUND_RED      "\33[41m"
-#define GDCM_TERMINAL_VT100_BACKGROUND_GREEN    "\33[42m"
-#define GDCM_TERMINAL_VT100_BACKGROUND_YELLOW   "\33[43m"
-#define GDCM_TERMINAL_VT100_BACKGROUND_BLUE     "\33[44m"
-#define GDCM_TERMINAL_VT100_BACKGROUND_MAGENTA  "\33[45m"
-#define GDCM_TERMINAL_VT100_BACKGROUND_CYAN     "\33[46m"
-#define GDCM_TERMINAL_VT100_BACKGROUND_WHITE    "\33[47m"
-#endif
+static const char * GDCM_TERMINAL_VT100_NORMAL               = "";
+static const char * GDCM_TERMINAL_VT100_BOLD                 = "";
+static const char * GDCM_TERMINAL_VT100_UNDERLINE            = "";
+static const char * GDCM_TERMINAL_VT100_BLINK                = "";
+static const char * GDCM_TERMINAL_VT100_INVERSE              = "";
+static const char * GDCM_TERMINAL_VT100_FOREGROUND_BLACK     = "";
+static const char * GDCM_TERMINAL_VT100_FOREGROUND_RED       = "";
+static const char * GDCM_TERMINAL_VT100_FOREGROUND_GREEN     = "";
+static const char * GDCM_TERMINAL_VT100_FOREGROUND_YELLOW    = "";
+static const char * GDCM_TERMINAL_VT100_FOREGROUND_BLUE      = "";
+static const char * GDCM_TERMINAL_VT100_FOREGROUND_MAGENTA   = "";
+static const char * GDCM_TERMINAL_VT100_FOREGROUND_CYAN      = "";
+static const char * GDCM_TERMINAL_VT100_FOREGROUND_WHITE     = "";
+static const char * GDCM_TERMINAL_VT100_BACKGROUND_BLACK     = "";
+static const char * GDCM_TERMINAL_VT100_BACKGROUND_RED       = "";
+static const char * GDCM_TERMINAL_VT100_BACKGROUND_GREEN     = "";
+static const char * GDCM_TERMINAL_VT100_BACKGROUND_YELLOW    = "";
+static const char * GDCM_TERMINAL_VT100_BACKGROUND_BLUE      = "";
+static const char * GDCM_TERMINAL_VT100_BACKGROUND_MAGENTA   = "";
+static const char * GDCM_TERMINAL_VT100_BACKGROUND_CYAN      = "";
+static const char * GDCM_TERMINAL_VT100_BACKGROUND_WHITE     = "";
 
 namespace gdcm
 {
@@ -82,10 +78,64 @@ namespace gdcm
 Printer::Printer():PrintStyle(Printer::VERBOSE_STYLE),F(0)
 {
   MaxPrintLength = 0x100; // Need to be %2 
+
 }
 //-----------------------------------------------------------------------------
 Printer::~Printer()
 {
+}
+
+void Printer::SetColor(bool c)
+{
+  if( c )
+    {
+    GDCM_TERMINAL_VT100_NORMAL               =  gdcm_terminal_vt100_normal              ; 
+    GDCM_TERMINAL_VT100_BOLD                 =  gdcm_terminal_vt100_bold                ; 
+    GDCM_TERMINAL_VT100_UNDERLINE            =  gdcm_terminal_vt100_underline           ; 
+    GDCM_TERMINAL_VT100_BLINK                =  gdcm_terminal_vt100_blink               ; 
+    GDCM_TERMINAL_VT100_INVERSE              =  gdcm_terminal_vt100_inverse             ; 
+    GDCM_TERMINAL_VT100_FOREGROUND_BLACK     =  gdcm_terminal_vt100_foreground_black    ; 
+    GDCM_TERMINAL_VT100_FOREGROUND_RED       =  gdcm_terminal_vt100_foreground_red      ; 
+    GDCM_TERMINAL_VT100_FOREGROUND_GREEN     =  gdcm_terminal_vt100_foreground_green    ; 
+    GDCM_TERMINAL_VT100_FOREGROUND_YELLOW    =  gdcm_terminal_vt100_foreground_yellow   ; 
+    GDCM_TERMINAL_VT100_FOREGROUND_BLUE      =  gdcm_terminal_vt100_foreground_blue     ; 
+    GDCM_TERMINAL_VT100_FOREGROUND_MAGENTA   =  gdcm_terminal_vt100_foreground_magenta  ; 
+    GDCM_TERMINAL_VT100_FOREGROUND_CYAN      =  gdcm_terminal_vt100_foreground_cyan     ; 
+    GDCM_TERMINAL_VT100_FOREGROUND_WHITE     =  gdcm_terminal_vt100_foreground_white    ; 
+    GDCM_TERMINAL_VT100_BACKGROUND_BLACK     =  gdcm_terminal_vt100_background_black    ; 
+    GDCM_TERMINAL_VT100_BACKGROUND_RED       =  gdcm_terminal_vt100_background_red      ; 
+    GDCM_TERMINAL_VT100_BACKGROUND_GREEN     =  gdcm_terminal_vt100_background_green    ; 
+    GDCM_TERMINAL_VT100_BACKGROUND_YELLOW    =  gdcm_terminal_vt100_background_yellow   ; 
+    GDCM_TERMINAL_VT100_BACKGROUND_BLUE      =  gdcm_terminal_vt100_background_blue     ; 
+    GDCM_TERMINAL_VT100_BACKGROUND_MAGENTA   =  gdcm_terminal_vt100_background_magenta  ; 
+    GDCM_TERMINAL_VT100_BACKGROUND_CYAN      =  gdcm_terminal_vt100_background_cyan     ; 
+    GDCM_TERMINAL_VT100_BACKGROUND_WHITE     =  gdcm_terminal_vt100_background_white    ; 
+    }
+  else
+    {
+    GDCM_TERMINAL_VT100_NORMAL               = "";
+    GDCM_TERMINAL_VT100_BOLD                 = "";
+    GDCM_TERMINAL_VT100_UNDERLINE            = "";
+    GDCM_TERMINAL_VT100_BLINK                = "";
+    GDCM_TERMINAL_VT100_INVERSE              = "";
+    GDCM_TERMINAL_VT100_FOREGROUND_BLACK     = "";
+    GDCM_TERMINAL_VT100_FOREGROUND_RED       = "";
+    GDCM_TERMINAL_VT100_FOREGROUND_GREEN     = "";
+    GDCM_TERMINAL_VT100_FOREGROUND_YELLOW    = "";
+    GDCM_TERMINAL_VT100_FOREGROUND_BLUE      = "";
+    GDCM_TERMINAL_VT100_FOREGROUND_MAGENTA   = "";
+    GDCM_TERMINAL_VT100_FOREGROUND_CYAN      = "";
+    GDCM_TERMINAL_VT100_FOREGROUND_WHITE     = "";
+    GDCM_TERMINAL_VT100_BACKGROUND_BLACK     = "";
+    GDCM_TERMINAL_VT100_BACKGROUND_RED       = "";
+    GDCM_TERMINAL_VT100_BACKGROUND_GREEN     = "";
+    GDCM_TERMINAL_VT100_BACKGROUND_YELLOW    = "";
+    GDCM_TERMINAL_VT100_BACKGROUND_BLUE      = "";
+    GDCM_TERMINAL_VT100_BACKGROUND_MAGENTA   = "";
+    GDCM_TERMINAL_VT100_BACKGROUND_CYAN      = "";
+    GDCM_TERMINAL_VT100_BACKGROUND_WHITE     = "";
+
+    }
 }
 
 void PrintValue(VR::VRType const &vr, VM const &vm, const Value &v);

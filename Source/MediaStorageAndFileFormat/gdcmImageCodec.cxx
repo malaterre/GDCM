@@ -168,25 +168,62 @@ bool ImageCodec::DoPlanarConfiguration(std::istream &is, std::ostream &os)
 
   // US-RGB-8-epicard.dcm
   //assert( image.GetNumberOfDimensions() == 3 );
-  assert( !(buf_size % 3) );
+  assert( buf_size % 3 == 0 );
   unsigned long size = buf_size/3;
   char *copy = new char[ buf_size ];
-  memmove( copy, dummy_buffer, buf_size);
+  //memmove( copy, dummy_buffer, buf_size);
 
-  const char *r = copy;
-  const char *g = copy + size;
-  const char *b = copy + size + size;
+  const char *r = dummy_buffer /*copy*/;
+  const char *g = dummy_buffer /*copy*/ + size;
+  const char *b = dummy_buffer /*copy*/ + size + size;
 
-  char *p = dummy_buffer;
+  char *p = copy /*dummy_buffer*/;
   for (unsigned long j = 0; j < size; ++j)
     {
     *(p++) = *(r++);
     *(p++) = *(g++);
     *(p++) = *(b++);
     }
-  delete[] copy;
+  delete[] dummy_buffer /*copy*/;
 
-  os.write(dummy_buffer, buf_size);
+  os.write(copy /*dummy_buffer*/, buf_size);
+  return true;
+}
+
+bool ImageCodec::DoInvertPlanarConfiguration(char *output, const char *input, uint32_t inputlength)
+{
+  const char *r = input+0;
+  const char *g = input+1;
+  const char *b = input+2;
+  uint32_t length = (inputlength / 3) * 3; // remove the 0 padding
+  assert( length == inputlength || length == inputlength - 1 );
+  assert( length % 3 == 0 );
+  uint32_t plane_length = length / 3;
+  char *pout = output;
+  // copy red plane:
+  while( pout != output + plane_length * 1 )
+    {
+    *pout++ = *r;
+    r += 3;
+    }
+  assert( r == input + length );
+  // copy green plane:
+  assert( pout == output + plane_length );
+  while( pout != output + plane_length * 2 )
+    {
+    *pout++ = *g;
+    g += 3;
+    }
+  assert( g == input + length + 1);
+  // copy blue plane:
+  assert( pout == output + 2*plane_length );
+  while( pout != output + plane_length * 3 )
+    {
+    *pout++ = *b;
+    b += 3;
+    }
+  assert( b == input + length + 2);
+  assert ( pout = output + length );
   return true;
 }
 
@@ -455,7 +492,7 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
     abort();
     }
 
-  if( PlanarConfiguration || RequestPlanarConfiguration )
+  if( /*PlanarConfiguration ||*/ RequestPlanarConfiguration )
     {
     DoPlanarConfiguration(*cur_is,pl_os);
     cur_is = &pl_os;

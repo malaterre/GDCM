@@ -378,12 +378,13 @@ void *ReadFilesThread(void *voidparams)
           *pout = *pin * (float)scale; // scale is a double, but DICOM specify 32bits for floating point value
           ++pin;
           }
-        assert( pin == in + len / sizeof(unsigned short) );
+        //assert( pin == in + len / sizeof(unsigned short) );
         delete[] duplicate;
         }
       else
         {
-        assert( 0 && "Not Implemented" );
+        //assert( 0 && "Not Implemented" );
+        vtkGenericWarningMacro( "Not Implemented" );
         }
       }
     }

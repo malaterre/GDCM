@@ -56,7 +56,8 @@ std::string DataSet::GetPrivateCreator(const Tag &t) const
 Tag DataSet::ComputeDataElement(const PrivateTag & t) const
 {
   gdcmDebugMacro( "Entering ComputeDataElement" );
-  assert( t.IsPrivateCreator() );
+  //assert( t.IsPrivateCreator() ); // No this is wrong to do the assert: eg. (0x07a1,0x000a,"ELSCINT1")
+  // is valid because we have not yet done the mapping, so 0xa < 0x10 fails but might not later on
   const Tag start(t.GetGroup(), 0x0010 ); // First possible private creator (0x0 -> 0x9 are reserved...)
   const DataElement r(start);
   ConstIterator it = DES.lower_bound(r);

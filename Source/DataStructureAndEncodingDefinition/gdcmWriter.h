@@ -22,6 +22,8 @@ namespace gdcm
 {
 /**
  * \brief Writer ala DOM (Document Object Model)
+ * This class is a non-validating writer, it will only performs well-
+ * formedness check only.
  *
  * Detailled description here
  * To avoid GDCM being yet another broken DICOM lib we try to 
@@ -35,35 +37,59 @@ namespace gdcm
  * - Even length for any elements
  * - Alphabetical order for elements (garanteed by design of internals)
  * - 32bits VR will be rewritten with 00
+ *
+ *
+ * WARNING: gdcm::Writer cannot write a DataSet if no SOP Instance UID (0008,0018) is found
  */
 class FileMetaInformation;
 class GDCM_EXPORT Writer
 {
 public:
-  Writer():Stream(),F(new File),CheckFileMetaInformation(true) {}
+  Writer():F(new File),CheckFileMetaInformation(true) {
+	  Stream = NULL;
+	  Ofstream = NULL;
+  }
   virtual ~Writer();
 
+  /// Main function to tell the writer to write
   virtual bool Write(); // Execute()
+
+  /// Set the filename of DICOM file to write:
   void SetFileName(const char *filename) {
     //std::cerr << "Stream: " << filename << std::endl;
-    Stream.open(filename, std::ios::out | std::ios::binary );
-    assert( Stream.is_open() );
-    assert( !Stream.fail() );
+    //std::cerr << "Ofstream: " << Ofstream << std::endl;
+    if (Ofstream && Ofstream->is_open())
+      {
+      Ofstream->close();
+      delete Ofstream;
+      }
+    Ofstream = new std::ofstream();
+    Ofstream->open(filename, std::ios::out | std::ios::binary );
+    assert( Ofstream->is_open() );
+    assert( !Ofstream->fail() );
     //std::cerr << Stream.is_open() << std::endl;
+    Stream = Ofstream;
 #ifndef NDEBUG
     DebugFileName = filename;
 #endif
-   }
+  }
+  /// Set user ostream buffer
+  void SetStream(std::ostream &output_stream) {
+    Stream = &output_stream;
+  }
 
+  /// Set/Get the DICOM file (DataSet + Header)
   void SetFile(const File& f) { F = &f; }
   File &GetFile() { return *F; }
 
+  /// Undocumented function, do not use.
   void SetCheckFileMetaInformation(bool b) { CheckFileMetaInformation = b; }
   void CheckFileMetaInformationOff() { CheckFileMetaInformation = false; }
   void CheckFileMetaInformationOn() { CheckFileMetaInformation = true; }
 
 protected:
-  std::ofstream Stream;
+  std::ostream *Stream;
+  std::ofstream *Ofstream;
 
 private:
   SmartPointer<File> F;

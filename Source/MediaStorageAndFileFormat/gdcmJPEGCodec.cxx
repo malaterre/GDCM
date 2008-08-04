@@ -35,7 +35,7 @@ JPEGCodec::~JPEGCodec()
   delete Internal;
 }
 
-bool JPEGCodec::CanDecode(TransferSyntax const &ts)
+bool JPEGCodec::CanDecode(TransferSyntax const &ts) const
 {
   return ts == TransferSyntax::JPEGBaselineProcess1
       || ts == TransferSyntax::JPEGExtendedProcess2_4
@@ -46,9 +46,8 @@ bool JPEGCodec::CanDecode(TransferSyntax const &ts)
       || ts == TransferSyntax::JPEGLosslessProcess14_1;
 }
 
-bool JPEGCodec::CanCode(TransferSyntax const &ts)
+bool JPEGCodec::CanCode(TransferSyntax const &ts) const
 {
-  return true;
   return ts == TransferSyntax::JPEGBaselineProcess1
       || ts == TransferSyntax::JPEGExtendedProcess2_4
       || ts == TransferSyntax::JPEGExtendedProcess3_5
@@ -93,6 +92,12 @@ void JPEGCodec::SetBitSample(int bit)
   Internal->ImageCodec::SetPixelFormat( this->ImageCodec::GetPixelFormat() );
 }
 
+/*
+A.4.1 JPEG image compression
+
+For all images, including all frames of a multi-frame image, the JPEG Interchange Format shall be used
+(the table specification shall be included).
+*/
 bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
 {
   out = in;
@@ -142,25 +147,50 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
   return true;
 }
 
+void JPEGCodec::ComputeOffsetTable(bool b)
+{
+  // Not implemented 
+  abort();
+}
+
 bool JPEGCodec::Code(DataElement const &in, DataElement &out)
 {
   out = in;
-  const ByteValue *bv = in.GetByteValue();
-  std::stringstream os;
-  //std::stringstream is;
-  //char *mybuffer = new char[bv->GetLength()];
-  //bv->GetBuffer(mybuffer, bv->GetLength());
-  //is.write(mybuffer, bv->GetLength());
-  //delete[] mybuffer;
-  bool r = Internal->InternalCode(bv,os);
-  if( !r )
-    {
-    return false;
-    }
 
-  std::string str = os.str();
-  assert( str.size() );
-  out.SetByteValue( &str[0], str.size() );
+  // Create a Sequence Of Fragments:
+  SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
+  const Tag itemStart(0xfffe, 0xe000);
+  sq->GetTable().SetTag( itemStart );
+  //const char dummy[4] = {};
+  //sq->GetTable().SetByteValue( dummy, sizeof(dummy) );
+
+  const ByteValue *bv = in.GetByteValue();
+  const unsigned int *dims = this->GetDimensions();
+  const char *input = bv->GetPointer();
+  unsigned long len = bv->GetLength();
+  unsigned long image_len = len / dims[2];
+  for(unsigned int dim = 0; dim < dims[2]; ++dim)
+    {
+    std::stringstream os;
+    const char *p = input + dim * image_len;
+    bool r = Internal->InternalCode(p, image_len, os);
+    if( !r )
+      {
+      return false;
+      }
+
+    std::string str = os.str();
+    assert( str.size() );
+    Fragment frag;
+    frag.SetTag( itemStart );
+    frag.SetByteValue( &str[0], str.size() );
+    sq->AddFragment( frag );
+
+    }
+  unsigned int n = sq->GetNumberOfFragments();
+  assert( sq->GetNumberOfFragments() == dims[2] );
+  out.SetValue( *sq );
+
   return true;
 }
 

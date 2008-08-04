@@ -30,6 +30,7 @@
 #include "gdcmTag.h"
 #include "gdcmByteValue.h"
 #include "gdcmSequenceOfFragments.h"
+#include "gdcmFragment.h"
 #include "gdcmFilename.h"
 
 #include <string>
@@ -49,17 +50,21 @@ int main(int argc, char *argv[])
   gdcm::Tag rawTag(0x7fe0, 0x0010); // Default to Pixel Data
   std::string filename;
   std::string outfilename;
+  std::string pattern;
+  int splitfrags = 0;
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
     static struct option long_options[] = {
-        {"input", 1, 0, 0},
-        {"output", 1, 0, 0},
-        {"tag", 1, 0, 0},
+        {"input", 1, 0, 0},                 // i
+        {"output", 1, 0, 0},                // o
+        {"tag", 1, 0, 0},                   // t
+        {"split-frags", 0, &splitfrags, 1}, // f
+        {"pattern", 1, 0, 0},               // p
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:t:",
+    c = getopt_long (argc, argv, "i:o:t:p:f",
       long_options, &option_index);
     if (c == -1)
       {
@@ -80,6 +85,12 @@ int main(int argc, char *argv[])
             assert( filename.empty() );
             filename = optarg;
             }
+          else if( option_index == 4 ) /* input */
+            {
+            assert( strcmp(s, "pattern") == 0 );
+            assert( pattern.empty() );
+            pattern = optarg;
+            }
           printf (" with arg %s", optarg);
           }
         printf ("\n");
@@ -87,13 +98,13 @@ int main(int argc, char *argv[])
       break;
 
     case 'i':
-      printf ("option i with value '%s'\n", optarg);
+      //printf ("option i with value '%s'\n", optarg);
       assert( filename.empty() );
       filename = optarg;
       break;
 
     case 'o':
-      printf ("option o with value '%s'\n", optarg);
+      //printf ("option o with value '%s'\n", optarg);
       assert( outfilename.empty() );
       outfilename = optarg;
       break;
@@ -138,7 +149,7 @@ int main(int argc, char *argv[])
     }
 
   const gdcm::FileMetaInformation &h = reader.GetFile().GetHeader();
-  std::cout << h << std::endl;
+  //std::cout << h << std::endl;
 
   const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
   //std::cout << ds << std::endl;
@@ -161,24 +172,50 @@ int main(int argc, char *argv[])
     return 1;
     }
 
-  std::ofstream output(outfilename.c_str(), std::ios::binary);
   const gdcm::DataElement& pdde = ds.GetDataElement( rawTag );
-  const gdcm::Value &v = pdde.GetValue();
-  const gdcm::ByteValue *bv = dynamic_cast<const gdcm::ByteValue*>(&v);
+  const gdcm::ByteValue *bv = pdde.GetByteValue();
+  const gdcm::SequenceOfFragments *sf = pdde.GetSequenceOfFragments();
   if( bv )
     {
+    std::ofstream output(outfilename.c_str(), std::ios::binary);
     bv->WriteBuffer(output);
+    }
+  else if( sf )
+    {
+    if( splitfrags )
+      {
+      unsigned int nfrags = sf->GetNumberOfFragments();
+      for(unsigned int i = 0; i < nfrags; ++i)
+        {
+        const gdcm::Fragment& frag = sf->GetFragment(i);
+        const gdcm::ByteValue *fragbv = frag.GetByteValue();
+        std::ostringstream os;
+        os << outfilename;
+        if( pattern.empty() )
+          {
+          os << i;
+          }
+        else
+          {
+          char buffer[256]; // hope that's enough...
+          sprintf(buffer, pattern.c_str(), i);
+          os << buffer;
+          }
+        std::string outfilenamei = os.str();
+        std::ofstream outputi(outfilenamei.c_str(), std::ios::binary);
+        fragbv->WriteBuffer(outputi);
+        }
+      }
+    else
+      {
+      std::ofstream output(outfilename.c_str(), std::ios::binary);
+      sf->WriteBuffer(output);
+      }
     }
   else
     {
-    const gdcm::SequenceOfFragments *sf =
-      dynamic_cast<const gdcm::SequenceOfFragments*>(&v);
-    if( !sf )
-      {
-      std::cerr << "Unknown error" << std::endl;
-      return 1;
-      }
-    sf->WriteBuffer(output);
+    std::cerr << "Unhandled" << std::endl;
+    return 1;
     }
 
   return 0;

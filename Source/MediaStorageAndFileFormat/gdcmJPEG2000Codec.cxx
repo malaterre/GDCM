@@ -81,18 +81,28 @@ void JPEG2000Codec::SetNumberOfDimensions(unsigned int dim)
   NumberOfDimensions = dim;
 }
 
-bool JPEG2000Codec::CanDecode(TransferSyntax const &ts)
+bool JPEG2000Codec::CanDecode(TransferSyntax const &ts) const
 {
   return ts == TransferSyntax::JPEG2000Lossless 
     || ts == TransferSyntax::JPEG2000;
 }
 
-bool JPEG2000Codec::CanCode(TransferSyntax const &ts)
+bool JPEG2000Codec::CanCode(TransferSyntax const &ts) const
 {
-  return ts == TransferSyntax::ImplicitVRLittleEndian
-    || ts == TransferSyntax::ExplicitVRLittleEndian;
+  return ts == TransferSyntax::JPEG2000Lossless 
+    || ts == TransferSyntax::JPEG2000;
 }
 
+/*
+A.4.4 JPEG 2000 image compression
+
+  If the object allows multi-frame images in the pixel data field, then for these JPEG 2000 Part 1 Transfer
+  Syntaxes, each frame shall be encoded separately. Each fragment shall contain encoded data from a
+  single frame.
+  Note: That is, the processes defined in ISO/IEC 15444-1 shall be applied on a per-frame basis. The proposal
+  for encapsulation of multiple frames in a non-DICOM manner in so-called ¿Motion-JPEG¿ or ¿M-JPEG¿
+  defined in 15444-3 is not used.
+*/
 bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
 {
   if( NumberOfDimensions == 2 )
@@ -120,6 +130,7 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
      * as encoded in DICOM
      * MM: Hack. If we are lucky enough the number of encapsulated fragments actually match
      * the number of Z frames.
+     * MM: hopefully this is the standard so people are following it ...
      */
     //#ifdef SUPPORT_MULTIFRAMESJ2K_ONLY
     const SequenceOfFragments *sf = in.GetSequenceOfFragments();
@@ -180,14 +191,36 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   //   parameters.decod_format=-1;
   //   parameters.cod_format=-1;
 
-  /* JPEG-2000 codestream */
-  parameters.decod_format = J2K_CFMT;
-  assert(parameters.decod_format == J2K_CFMT);
+  const char jp2magic[] = "\x00\x00\x00\x0C\x6A\x50\x20\x20\x0D\x0A\x87\x0A";
+  if( memcmp( src, jp2magic, sizeof(jp2magic) ) == 0 )
+    {
+    /* JPEG-2000 compressed image data */
+    // gdcmData/ELSCINT1_JP2vsJ2K.dcm
+    gdcmWarningMacro( "J2K start like JPEG-2000 compressed image data instead of codestream" );
+    parameters.decod_format = JP2_CFMT;
+    assert(parameters.decod_format == JP2_CFMT);
+    }
+  else
+    {
+    /* JPEG-2000 codestream */
+    parameters.decod_format = J2K_CFMT;
+    assert(parameters.decod_format == J2K_CFMT);
+    }
   parameters.cod_format = PGX_DFMT;
   assert(parameters.cod_format == PGX_DFMT);
 
   /* get a decoder handle */
-  dinfo = opj_create_decompress(CODEC_J2K);
+  switch(parameters.decod_format )
+    {
+  case J2K_CFMT:
+    dinfo = opj_create_decompress(CODEC_J2K);
+    break;
+  case JP2_CFMT:
+    dinfo = opj_create_decompress(CODEC_JP2);
+    break;
+  default:
+    abort();
+    }
 
   /* catch events using our callbacks and give a local context */
   opj_set_event_mgr((opj_common_ptr)dinfo, &event_mgr, NULL);      
@@ -293,7 +326,6 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
   int bitsallocated, int sign, int quality)
 {
   (void)quality;
-  (void)fragment_size;
   int w, h;
   int numcomps;
   OPJ_COLOR_SPACE color_space;
@@ -311,6 +343,8 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
     numcomps = 3;
     color_space = CLRSPC_SRGB;
     }
+  assert( bitsallocated % 8 == 0 );
+  assert( fragment_size == image_height * image_width * numcomps * (bitsallocated/8) );
   int subsampling_dx = parameters->subsampling_dx;
   int subsampling_dy = parameters->subsampling_dy;
 
@@ -389,72 +423,88 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
   // Compress into JPEG
 bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
 {
+  out = in;
+  //
+  // Create a Sequence Of Fragments:
+  SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
+  const Tag itemStart(0xfffe, 0xe000);
+  sq->GetTable().SetTag( itemStart );
+
   const unsigned int *dims = this->GetDimensions();
-std::ostringstream os;
-std::ostream *fp = &os;
-const ByteValue *bv = in.GetByteValue();
-const char *inputdata = bv->GetPointer();
-size_t inputlength = bv->GetLength();
-int image_width = dims[0];
-int image_height = dims[1];
-int numZ = 0; //dims[2];
-const PixelFormat &pf = this->GetPixelFormat();
-int sample_pixel = pf.GetSamplesPerPixel();
-int bitsallocated = pf.GetBitsAllocated();
-int sign = pf.GetPixelRepresentation();
-int quality = 100;
 
-//// input_buffer is ONE image
-//// fragment_size is the size of this image (fragment)
-  (void)numZ;
-  bool bSuccess;
-  //bool delete_comment = true;
-  opj_cparameters_t parameters;  /* compression parameters */
-  opj_event_mgr_t event_mgr;    /* event manager */
-  opj_image_t *image = NULL;
-  //quality = 100;
+  const ByteValue *bv = in.GetByteValue();
+  const char *input = bv->GetPointer();
+  unsigned long len = bv->GetLength();
+  unsigned long image_len = len / dims[2];
+  size_t inputlength = image_len;
 
-  /*
-  configure the event callbacks (not required)
-  setting of each callback is optionnal
-  */
-  memset(&event_mgr, 0, sizeof(opj_event_mgr_t));
-  event_mgr.error_handler = error_callback;
-  event_mgr.warning_handler = warning_callback;
-  event_mgr.info_handler = info_callback;
+  for(unsigned int dim = 0; dim < dims[2]; ++dim)
+    {
 
-  /* set encoding parameters to default values */
-  memset(&parameters, 0, sizeof(parameters));
-  opj_set_default_encoder_parameters(&parameters);
+    std::ostringstream os;
+    std::ostream *fp = &os;
+    const char *inputdata = input + dim * image_len; //bv->GetPointer();
+    //size_t inputlength = bv->GetLength();
+    int image_width = dims[0];
+    int image_height = dims[1];
+    int numZ = 0; //dims[2];
+    const PixelFormat &pf = this->GetPixelFormat();
+    int sample_pixel = pf.GetSamplesPerPixel();
+    int bitsallocated = pf.GetBitsAllocated();
+    int sign = pf.GetPixelRepresentation();
+    int quality = 100;
 
-  /* if no rate entered, lossless by default */
-  parameters.tcp_rates[0] = 0;
-  parameters.tcp_numlayers = 1;
-  parameters.cp_disto_alloc = 1;
+    //// input_buffer is ONE image
+    //// fragment_size is the size of this image (fragment)
+    (void)numZ;
+    bool bSuccess;
+    //bool delete_comment = true;
+    opj_cparameters_t parameters;  /* compression parameters */
+    opj_event_mgr_t event_mgr;    /* event manager */
+    opj_image_t *image = NULL;
+    //quality = 100;
 
-  if(parameters.cp_comment == NULL) {
-    const char comment[] = "Created by GDCM/OpenJPEG version 1.0";
-    parameters.cp_comment = (char*)malloc(strlen(comment) + 1);
-    strcpy(parameters.cp_comment, comment);
-    /* no need to delete parameters.cp_comment on exit */
-    //delete_comment = false;
-  }
+    /*
+    configure the event callbacks (not required)
+    setting of each callback is optionnal
+    */
+    memset(&event_mgr, 0, sizeof(opj_event_mgr_t));
+    event_mgr.error_handler = error_callback;
+    event_mgr.warning_handler = warning_callback;
+    event_mgr.info_handler = info_callback;
 
-  
-  /* decode the source image */
-  /* ----------------------- */
+    /* set encoding parameters to default values */
+    memset(&parameters, 0, sizeof(parameters));
+    opj_set_default_encoder_parameters(&parameters);
 
-  image = rawtoimage((char*)inputdata, &parameters, 
-    static_cast<int>( inputlength ), 
-    image_width, image_height,
-    sample_pixel, bitsallocated, sign, quality);
-  if (!image) {
-    return 1;
-  }
+    /* if no rate entered, lossless by default */
+    parameters.tcp_rates[0] = 0;
+    parameters.tcp_numlayers = 1;
+    parameters.cp_disto_alloc = 1;
+
+    if(parameters.cp_comment == NULL) {
+      const char comment[] = "Created by GDCM/OpenJPEG version 1.0";
+      parameters.cp_comment = (char*)malloc(strlen(comment) + 1);
+      strcpy(parameters.cp_comment, comment);
+      /* no need to delete parameters.cp_comment on exit */
+      //delete_comment = false;
+    }
+
+
+    /* decode the source image */
+    /* ----------------------- */
+
+    image = rawtoimage((char*)inputdata, &parameters, 
+      static_cast<int>( inputlength ), 
+      image_width, image_height,
+      sample_pixel, bitsallocated, sign, quality);
+    if (!image) {
+      return 1;
+    }
 
     /* encode the destination image */
-  /* ---------------------------- */
-   parameters.cod_format = J2K_CFMT; /* J2K format output */
+    /* ---------------------------- */
+    parameters.cod_format = J2K_CFMT; /* J2K format output */
     int codestream_length;
     opj_cio_t *cio = NULL;
     //FILE *f = NULL;
@@ -488,7 +538,7 @@ int quality = 100;
     //  return 1;
     //}
     //fwrite(cio->buffer, 1, codestream_length, f);
-//#define MDEBUG
+    //#define MDEBUG
 #ifdef MDEBUG
     static int c = 0;
     std::ostringstream os;
@@ -510,20 +560,28 @@ int quality = 100;
     opj_destroy_compress(cinfo);
 
 
-      /* free user parameters structure */
-  //if(delete_comment) {
+    /* free user parameters structure */
+    //if(delete_comment) {
     if(parameters.cp_comment) free(parameters.cp_comment);
-  //}
-  if(parameters.cp_matrice) free(parameters.cp_matrice);
+    //}
+    if(parameters.cp_matrice) free(parameters.cp_matrice);
 
-  /* free image data */
-  opj_image_destroy(image);
+    /* free image data */
+    opj_image_destroy(image);
 
 
 
-  std::string str = os.str();
-  out = in;
-  out.SetByteValue( &str[0], str.size() );
+    std::string str = os.str();
+    assert( str.size() );
+    Fragment frag;
+    frag.SetTag( itemStart );
+    frag.SetByteValue( &str[0], str.size() );
+    sq->AddFragment( frag );
+    }
+
+  //unsigned int nfrags = sq->GetNumberOfFragments();
+  assert( sq->GetNumberOfFragments() == dims[2] );
+  out.SetValue( *sq );
 
   return true;
 }

@@ -105,6 +105,10 @@
 #include "gdcmUnpacker12Bits.h"
 #include "gdcmPythonFilter.h"
 #include "gdcmDirectionCosines.h"
+#include "gdcmTagPath.h"
+#include "gdcmImageToImageFilter.h"
+#include "gdcmSOPClassUIDToIOD.h"
+#include "gdcmImageChangeTransferSyntax.h"
 
 using namespace gdcm;
 %}
@@ -326,12 +330,32 @@ using namespace gdcm;
 
 };
 %include "gdcmFragment.h"
+%include "gdcmCSAElement.h"
+%extend gdcm::CSAElement
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmCSAHeader.h"
+%extend gdcm::CSAHeader
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmSequenceOfFragments.h"
 %include "gdcmTransferSyntax.h"
 %include "gdcmBasicOffsetTable.h"
 //%include "gdcmLO.h"
-%include "gdcmCSAElement.h"
 %include "gdcmFileSet.h"
 
 %include "gdcmGlobal.h"
@@ -455,6 +479,19 @@ using namespace gdcm;
 %include "gdcmConfigure.h"
 #ifdef GDCM_BUILD_TESTING
 %include "gdcmTesting.h"
+%ignore gdcm::Testing::ComputeFileMD5(const char*, char *);
+%extend gdcm::Testing
+{
+  static const char *ComputeFileMD5(const char *filename) {
+    static char buffer[33];
+    gdcm::Testing::ComputeFileMD5(filename, buffer);
+    return buffer;
+  }
+};
 #endif
 %include "gdcmPythonFilter.h"
 %include "gdcmDirectionCosines.h"
+%include "gdcmTagPath.h"
+%include "gdcmImageToImageFilter.h"
+%include "gdcmSOPClassUIDToIOD.h"
+%include "gdcmImageChangeTransferSyntax.h"

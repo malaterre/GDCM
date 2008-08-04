@@ -28,7 +28,7 @@ namespace gdcm
  * techniques (e.g., Data Element structure, byte ordering, compression) 
  * they are able to support, thereby allowing these Application Entities
  * to communicate.
- * \todo: The implementation is completely retarded
+ * \todo: The implementation is completely retarded -> see gdcm::UIDs for a replacement
  * We need: IsSupported
  * We need preprocess of raw/xml file
  * We need GetFullName()

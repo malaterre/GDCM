@@ -37,6 +37,10 @@ namespace gdcm
 
 Reader::~Reader()
 {
+	if (Ifstream) {
+		Ifstream->close();
+		delete Ifstream;
+	}
 }
 
 /// \brief tells us if "DICM" is found as position 128
@@ -69,12 +73,12 @@ TransferSyntax Reader::GuessTransferSyntax()
 {
   // Don't call this function if you have a meta file info
   //assert( Header->GetTransferSyntaxType() == TransferSyntax::TS_END );
-  std::streampos start = Stream.tellg();
+  std::streampos start = Stream->tellg();
   SwapCode sc = SwapCode::Unknown;
   TransferSyntax::NegociatedType nts = TransferSyntax::Unknown;
   TransferSyntax ts (TransferSyntax::TS_END);
   Tag t;
-  t.Read<SwapperNoOp>(Stream);
+  t.Read<SwapperNoOp>(*Stream);
   if( ! (t.GetGroup() % 2) )
     {
     switch( t.GetGroup() )
@@ -90,7 +94,7 @@ TransferSyntax Reader::GuessTransferSyntax()
       }
     // Purposely not Re-use ReadVR since we can read VR_END
     char vr_str[3];
-    Stream.read(vr_str, 2);
+    Stream->read(vr_str, 2);
     vr_str[2] = '\0';
     // Cannot use GetVRTypeFromFile since is assert ...
     VR::VRType vr = VR::GetVRType(vr_str);
@@ -101,11 +105,11 @@ TransferSyntax Reader::GuessTransferSyntax()
     else
       {
       assert( !(VR::IsSwap(vr_str)));
-      Stream.seekg(-2, std::ios::cur); // Seek back
+      Stream->seekg(-2, std::ios::cur); // Seek back
       if( t.GetElement() == 0x0000 )
         {
         VL gl; // group length
-        gl.Read<SwapperNoOp>(Stream);
+        gl.Read<SwapperNoOp>(*Stream);
         switch(gl)
           {
         case 0x00000004 :
@@ -143,7 +147,7 @@ TransferSyntax Reader::GuessTransferSyntax()
       }
     // Purposely not Re-use ReadVR since we can read VR_END
     char vr_str[3];
-    Stream.read(vr_str, 2);
+    Stream->read(vr_str, 2);
     vr_str[2] = '\0';
     // Cannot use GetVRTypeFromFile since is assert ...
     VR::VRType vr = VR::GetVRType(vr_str);
@@ -181,14 +185,14 @@ TransferSyntax Reader::GuessTransferSyntax()
     {
     abort();
     }
-  Stream.seekg( start, std::ios::beg );
+  Stream->seekg( start, std::ios::beg );
   assert( ts != TransferSyntax::TS_END );
   return ts;
 }
 
 bool Reader::Read()
 {
-  if( !Stream.is_open() )
+  if( !Stream )
     {
     gdcmErrorMacro( "No File" );
     return false;
@@ -197,7 +201,7 @@ bool Reader::Read()
 
 try
     {
-std::istream &is = Stream;
+std::istream &is = *Stream;
 
   bool haspreamble = true;
   try
@@ -299,7 +303,7 @@ std::istream &is = Stream;
       if( ts.GetNegociatedType() == TransferSyntax::Implicit )
         {
         // There is no such thing as Implicit Big Endian... oh well
-        // LIBIDO-16-ACR_NEMA-Volume.dcm 
+        // LIBIDO-16-ACR_NEMA-Volume.dcm
         F->GetDataSet().Read<ImplicitDataElement,SwapperDoOp>(is);
         }
       else
@@ -410,7 +414,7 @@ std::istream &is = Stream;
         header.Read(is);
         }
 
-      // 
+      //
       gdcmWarningMacro( "Attempt to read Philips with ByteSwap private sequence wrongly encoded");
       F->GetDataSet().Clear(); // remove garbage from 1st attempt...
       abort();  // TODO FIXME
@@ -535,7 +539,7 @@ std::istream &is = Stream;
     success = false;
     }
 
-    if( success ) assert( Stream.eof() );
+    if( success ) assert( Stream->eof() );
     }
   catch( Exception &ex )
     {
@@ -554,14 +558,20 @@ std::istream &is = Stream;
 //    }
 
   // FIXME : call this function twice...
-  Stream.close();
+  if (Ifstream && Ifstream->is_open())
+    {
+    Ifstream->close();
+    delete Ifstream;
+    Ifstream = NULL;
+    Stream = NULL;
+    }
 
   return success;
 }
 
-bool Reader::ReadUpToTag(const Tag & tag)
+bool Reader::ReadUpToTag(const Tag & tag, std::set<Tag> const & skiptags)
 {
-  if( !Stream.is_open() )
+  if( !Stream )
     {
     gdcmErrorMacro( "No File" );
     return false;
@@ -570,7 +580,7 @@ bool Reader::ReadUpToTag(const Tag & tag)
 
   try
     {
-std::istream &is = Stream;
+std::istream &is = *Stream;
 
   bool haspreamble = true;
   try
@@ -642,7 +652,7 @@ std::istream &is = Stream;
     zlib_stream::zip_istream gzis( is );
     // FIXME: we also know in this case that we are dealing with Explicit:
     assert( ts.GetNegociatedType() == TransferSyntax::Explicit );
-    F->GetDataSet().ReadUpToTag<ExplicitDataElement,SwapperNoOp>(gzis,tag);
+    F->GetDataSet().ReadUpToTag<ExplicitDataElement,SwapperNoOp>(gzis,tag, skiptags);
 
     return is;
     }
@@ -655,12 +665,12 @@ std::istream &is = Stream;
       if( ts.GetNegociatedType() == TransferSyntax::Implicit )
         {
         // There is no such thing as Implicit Big Endian... oh well
-        // LIBIDO-16-ACR_NEMA-Volume.dcm 
-        F->GetDataSet().ReadUpToTag<ImplicitDataElement,SwapperDoOp>(is,tag);
+        // LIBIDO-16-ACR_NEMA-Volume.dcm
+        F->GetDataSet().ReadUpToTag<ImplicitDataElement,SwapperDoOp>(is,tag, skiptags);
         }
       else
         {
-        F->GetDataSet().ReadUpToTag<ExplicitDataElement,SwapperDoOp>(is,tag);
+        F->GetDataSet().ReadUpToTag<ExplicitDataElement,SwapperDoOp>(is,tag, skiptags);
         }
       }
     else // LittleEndian
@@ -669,7 +679,7 @@ std::istream &is = Stream;
         {
         if( hasmetaheader && haspreamble )
           {
-          F->GetDataSet().ReadUpToTag<ImplicitDataElement,SwapperNoOp>(is,tag);
+          F->GetDataSet().ReadUpToTag<ImplicitDataElement,SwapperNoOp>(is,tag, skiptags);
           }
         else
           {
@@ -684,7 +694,7 @@ std::istream &is = Stream;
         }
       else
         {
-        F->GetDataSet().ReadUpToTag<ExplicitDataElement,SwapperNoOp>(is,tag);
+        F->GetDataSet().ReadUpToTag<ExplicitDataElement,SwapperNoOp>(is,tag, skiptags);
         }
       }
     }
@@ -716,7 +726,7 @@ std::istream &is = Stream;
       // GDCM 1.X
       gdcmWarningMacro( "Attempt to read non CP 246" );
       F->GetDataSet().Clear(); // remove garbage from 1st attempt...
-      F->GetDataSet().ReadUpToTag<CP246ExplicitDataElement,SwapperNoOp>(is,tag);
+      F->GetDataSet().ReadUpToTag<CP246ExplicitDataElement,SwapperNoOp>(is,tag, skiptags);
       }
     else if( ex.GetLastElement().GetVR() == VR::UN )
       {
@@ -741,7 +751,7 @@ std::istream &is = Stream;
       // GDCM 1.X
       gdcmWarningMacro( "Attempt to read GDCM 1.X wrongly encoded");
       F->GetDataSet().Clear(); // remove garbage from 1st attempt...
-      F->GetDataSet().ReadUpToTag<UNExplicitDataElement,SwapperNoOp>(is,tag);
+      F->GetDataSet().ReadUpToTag<UNExplicitDataElement,SwapperNoOp>(is,tag, skiptags);
       // This file can only be rewritten as implicit...
       }
     else if ( ex.GetLastElement().GetTag() == Tag(0xfeff,0x00e0) )
@@ -766,7 +776,7 @@ std::istream &is = Stream;
         header.Read(is);
         }
 
-      // 
+      //
       gdcmWarningMacro( "Attempt to read Philips with ByteSwap private sequence wrongly encoded");
       F->GetDataSet().Clear(); // remove garbage from 1st attempt...
       abort();  // TODO FIXME
@@ -797,7 +807,7 @@ std::istream &is = Stream;
         // Philips
         gdcmWarningMacro( "Attempt to read the file as mixture of explicit/implicit");
         F->GetDataSet().Clear(); // remove garbage from 1st attempt...
-        F->GetDataSet().ReadUpToTag<ExplicitImplicitDataElement,SwapperNoOp>(is,tag);
+        F->GetDataSet().ReadUpToTag<ExplicitImplicitDataElement,SwapperNoOp>(is,tag, skiptags);
         // This file can only be rewritten as implicit...
         }
       }
@@ -817,7 +827,7 @@ std::istream &is = Stream;
     success = false;
     }
 
-    //assert( Stream.eof() );
+    //assert( Stream->eof() );
     }
   catch( Exception &ex )
     {
@@ -831,7 +841,7 @@ std::istream &is = Stream;
     }
 
   // FIXME : call this function twice...
-  Stream.close();
+  //Stream->close();
 
   return success;
 }

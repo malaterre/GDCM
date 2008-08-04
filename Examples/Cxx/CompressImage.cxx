@@ -20,6 +20,8 @@
 #include "gdcmImage.h"
 #include "gdcmWriter.h"
 #include "gdcmAttribute.h"
+#include "gdcmImageWriter.h"
+#include "gdcmImageChangeTransferSyntax.h"
 
 #include <iostream>
 #include <fstream>
@@ -49,10 +51,28 @@ int main(int argc, char *argv[])
   gdcm::DataSet &ds = file.GetDataSet();
 
   const gdcm::Image &image = reader.GetImage();
+  image.Print( std::cout );
 
-  std::ofstream out( outfilename );
-  image.GetBuffer2(out);
-  out.close();
+  gdcm::ImageChangeTransferSyntax change;
+  change.SetTransferSyntax( gdcm::TransferSyntax::JPEG2000Lossless );
+  change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLosslessProcess14_1 );
+  //change.SetTransferSyntax( image.GetTransferSyntax() );
+  change.SetInput( image );
+  bool b = change.Change();
+  if( !b )
+    {
+    std::cerr << "Could not change the Transfer Syntax" << std::endl;
+    return 1;
+    }
+
+  //std::ofstream out( outfilename );
+  //image.GetBuffer2(out);
+  //out.close();
+  gdcm::ImageWriter writer;
+  writer.SetImage( change.GetOutput() );
+  writer.SetFile( reader.GetFile() );
+  writer.SetFileName( outfilename );
+  writer.Write();
 
   return 0;
 }

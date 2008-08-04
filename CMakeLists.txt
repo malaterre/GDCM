@@ -17,6 +17,19 @@ ELSE(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.6)
   SET(NAMELINK_SKIP)
 ENDIF(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.6)
 
+# TODO
+# http://www.vtk.org/pipermail/vtkusers/2007-May/090968.html 
+# 
+# False memory leak reports are caused by VTK dlls loading *before* MFC dlls.
+# You have to use the linker's /delayload flag to avoid this issue.
+# 
+# The /delayload flag should be correct by default in the MFC examples if you
+# are using CVS VTK... If you are using a previous version of VTK (5.0 or
+# earlier) then you will have to figure out a way to link with that flag.
+# 
+# See the CVS version of files in VTK/GUISupport/MFC for details. Or grep the
+# VTK source tree for "DELAYLOAD"
+
 #-----------------------------------------------------------------------------
 # Disallow insource build since I never test that
 STRING(COMPARE EQUAL "${GDCM_SOURCE_DIR}" "${GDCM_BINARY_DIR}" INSOURCE)
@@ -30,7 +43,7 @@ ENDIF(INSOURCE OR INSOURCESUBDIR)
 #-----------------------------------------------------------------------------
 SET(GDCM_MAJOR_VERSION 2)
 SET(GDCM_MINOR_VERSION 0)
-SET(GDCM_BUILD_VERSION 6)
+SET(GDCM_BUILD_VERSION 7)
 SET(GDCM_VERSION
   "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}.${GDCM_BUILD_VERSION}")
 SET(GDCM_LIBRARY_PROPERTIES ${GDCM_LIBRARY_PROPERTIES}
@@ -243,30 +256,44 @@ MARK_AS_ADVANCED(BUILD_TESTING)
 
 #-----------------------------------------------------------------------------
 # Python install
-FIND_PACKAGE(PythonInterp REQUIRED)
-MACRO(GET_PYTHON_SITE_PACKAGE dir)
-  EXECUTE_PROCESS(
-  	COMMAND ${PYTHON_EXECUTABLE} "-c" "from distutils import sysconfig; print sysconfig.get_python_lib()"
-  	#WORKING_DIRECTORY @LIBRARY_OUTPUT_PATH@
-  	RESULT_VARIABLE import_res
-  	OUTPUT_VARIABLE import_output
-  	ERROR_VARIABLE  import_error
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-  )
-  #SET(dir ${import_output})
-ENDMACRO(GET_PYTHON_SITE_PACKAGE)
+#FIND_PACKAGE(PythonInterp REQUIRED)
+#MACRO(GET_PYTHON_SITE_PACKAGE dir)
+#  EXECUTE_PROCESS(
+#  	COMMAND ${PYTHON_EXECUTABLE} "-c" "from distutils import sysconfig; print sysconfig.get_python_lib()"
+#  	#WORKING_DIRECTORY @LIBRARY_OUTPUT_PATH@
+#  	RESULT_VARIABLE import_res
+#  	OUTPUT_VARIABLE import_output
+#  	ERROR_VARIABLE  import_error
+#    OUTPUT_STRIP_TRAILING_WHITESPACE
+#  )
+#  #SET(dir ${import_output})
+#ENDMACRO(GET_PYTHON_SITE_PACKAGE)
+#
+#
+#GET_PYTHON_SITE_PACKAGE(python_site_package)
+#IF(import_output)
+#STRING(LENGTH ${import_output} len)
+## let's remove the "/usr/lib" part...
+#MATH(EXPR fileend "${len} - 9") 
+#STRING(SUBSTRING ${import_output} 9 ${fileend} dummy1)
+#IF(UNIX)
+#  SET(python_site_package ${dummy1})
+#  MESSAGE(${python_site_package})
+#ENDIF(UNIX)
+#ENDIF(import_output)
 
+# On unix one have: "python2.4/site-packages"
+# while on Win32: "c:/Python24/Lib/site-packages/"
+# give up for now and place python modules stuff in a general 'python' subdir
+SET(python_site_package "python/site-packages")
 
-GET_PYTHON_SITE_PACKAGE(python_site_package)
-IF(import_output)
-STRING(LENGTH ${import_output} len)
-# let's remove the "/usr/lib" part...
-MATH(EXPR fileend "${len} - 9") 
-STRING(SUBSTRING ${import_output} 9 ${fileend} dummy1)
-IF(UNIX)
-SET(python_site_package ${dummy1})
-ENDIF(UNIX)
-ENDIF(import_output)
+# Typical runtime env should be then
+# (assuming CMAKE_INSTALL_PREFIX:PATH=/tmp/local)
+# One would do:
+#   export PYTHONPATH=/tmp/local/lib/python/site-packages/gdcm-2.1
+#   export LD_LIBRARY_PATH=/tmp/local/lib/
+#   python
+#   > import gdcm
 
 
 #-----------------------------------------------------------------------------
@@ -423,10 +450,43 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
 ENDIF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
 
 
+MACRO(PROCESSONEDIR DIRNAME myoutput)
+  FILE(GLOB files
+    ${DIRNAME}/*
+  )
+  FOREACH(file ${files})
+    IF(IS_DIRECTORY ${file})
+      IF("${file}" MATCHES ".svn")
+        #MESSAGE("${file} is svn dir")
+      ELSE("${file}" MATCHES ".svn")
+        #MESSAGE("${file} is dir")
+        PROCESSONEDIR(${file} mytests2)
+        LIST(APPEND ${myoutput} ${mytests2})
+      ENDIF("${file}" MATCHES ".svn")
+    ELSE(IS_DIRECTORY ${file})
+      #MESSAGE("${file} is file")
+      GET_FILENAME_COMPONENT(filename ${file} NAME)
+      IF("${filename}" MATCHES "Test" AND ${filename} MATCHES ".cxx")
+        STRING(LENGTH ${filename} filename_length)
+        #MESSAGE("${filename} is test, ${filename_length}")
+        MATH(EXPR fileend "${filename_length} - 4 - 4") # Need to remove 'Test' and '.cxx'
+        STRING(SUBSTRING ${filename} 4 ${fileend} classname)
+        #MESSAGE("${classname} is tested")
+        LIST(APPEND ${myoutput} ${classname})
+      ENDIF("${filename}" MATCHES "Test" AND ${filename} MATCHES ".cxx")
+    ENDIF(IS_DIRECTORY ${file})
+  ENDFOREACH(file)
+ENDMACRO(PROCESSONEDIR)
+
+#PROCESSONEDIR(
+#  ${CMAKE_CURRENT_SOURCE_DIR}/Testing/Source/Common
+#  theoutput
+#)
+#MESSAGE("${theoutput}")
 
 #-----------------------------------------------------------------------------
 # Need to be the last operation:
-SET(GDCM_INCLUDE_PATH 
+SET(GDCM_INCLUDE_PATH
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
@@ -436,6 +496,12 @@ SET(GDCM_INCLUDE_PATH
   #"${GDCM_SOURCE_DIR}/Utilities"
   #"${GDCM_BINARY_DIR}/Utilities/openjpeg"
   )
+IF(MSVC)
+  SET(GDCM_INCLUDE_PATH
+    ${GDCM_INCLUDE_PATH}
+    "${GDCM_SOURCE_DIR}/Utilities/C99"
+  )
+ENDIF(MSVC)
 SET(GDCM_LIBRARY_DIRS ${LIBRARY_OUTPUT_PATH})
 SUBDIRS(CMake/ExportConfiguration)
 

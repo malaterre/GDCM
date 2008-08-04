@@ -18,6 +18,7 @@
 #include "gdcmByteSwap.txx"
 #include "gdcmDataElement.h"
 #include "gdcmSequenceOfFragments.h"
+#include "gdcmSmartPointer.h"
 
 #include <vector>
 
@@ -88,9 +89,335 @@ RLECodec::~RLECodec()
   delete Internals;
 }
 
-bool RLECodec::CanDecode(TransferSyntax const &ts)
+bool RLECodec::CanDecode(TransferSyntax const &ts) const
 {
   return ts == TransferSyntax::RLELossless;
+}
+
+bool RLECodec::CanCode(TransferSyntax const &ts) const
+{
+  return ts == TransferSyntax::RLELossless;
+}
+
+/*
+G.3 THE RLE ALGORITHM
+The RLE algorithm described in this section is used to compress Byte Segments into RLE Segments.
+There is a one-to-one correspondence between Byte Segments and RLE Segments. Each RLE segment
+must be an even number of bytes or padded at its end with zero to make it even.
+G.3.1 The RLE encoder
+A sequence of identical bytes (Replicate Run) is encoded as a two-byte code:
+< -count + 1 > <byte value>, where
+count = the number of bytes in the run, and
+2 <= count <= 128
+and a non-repetitive sequence of bytes (Literal Run) is encoded as:
+< count - 1 > <Iiteral sequence of bytes>, where
+count = number of bytes in the sequence, and
+1 <= count <= 128.
+The value of -128 may not be used to prefix a byte value.
+Note: It is common to encode a 2-byte repeat run as a Replicate Run except when preceded and followed by
+a Literal Run, in which case it's best to merge the three runs into a Literal Run.
+Three-byte repeats shall be encoded as Replicate Runs. Each row of the image shall be encoded
+separately and not cross a row boundary.
+*/
+inline int count_identical_bytes(const char *start, unsigned int len)
+{
+  assert( len );
+#if 0
+  const char *p = start + 1;
+  const unsigned int cmin = std::min(128u,len);
+  const char *end = start + cmin;
+  while( p < end && *p == *start )
+    {
+    ++p;
+    }
+  return p - start;
+#else
+  const char ref = start[0];
+  int count = 1; // start at one
+  const unsigned int cmin = std::min(128u,len);
+  while( count < cmin && start[count] == ref )
+    {
+  //std::cerr << "count/len:" << count << "," << len << std::endl;
+    ++count;
+    }
+  assert( /*2 <= count && */ count <= 128 ); // remove post condition as it will be our return error code
+  assert( count >= 1 );
+  return count;
+#endif
+}
+
+inline int count_nonrepetitive_bytes(const char *start, unsigned int len)
+{
+/*
+ * TODO:
+ * I need a special handling when there is only a one repetition that break the Literal run...
+Note: It is common to encode a 2-byte repeat run as a Replicate Run except when preceded and followed by
+a Literal Run, in which case it's best to merge the three runs into a Literal Run.
+*/
+  assert( len );
+#if 0
+  const char *prev = start;
+  const char *p = start + 1;
+  const unsigned int cmin = std::min(128u,len);
+  const char *end = start + cmin;
+  while( p < end && *p != *prev )
+    {
+    ++prev;
+    ++p;
+    }
+  return p - start;
+#else
+  int count = 1;
+  const unsigned int cmin = std::min(128u,len);
+#if 0
+  // TODO: this version that handles the note still does not work...
+  while( count < cmin )
+    {
+    if ( start[count] != start[count-1] )
+      {
+      // Special case:
+      if( count + 1 < cmin && start[count] != start[count+1] )
+        {
+        continue;
+        }
+      break;
+      }
+    ++count;
+    }
+#else
+#if 1
+  // This version properly encode: 0 1 1 0 as: 3 0 1 1 0 ...
+  for( count = 1; count < cmin; ++count )
+    {
+    if( start[count] == start[count-1] )
+      {
+      if( count + 1 < cmin && start[count] != start[count+1] )
+        {
+        continue;
+        }
+      --count;
+      break;
+      }
+    }
+#else
+  // This version does not handle 0 1 1 0 as specified in the note in the DICOM standard
+  while( count < cmin && start[count] != start[count-1] )
+    {
+    ++count;
+    }
+#endif
+#endif
+  assert( 1 <= count && count <= 128 );
+  return count;
+#endif
+}
+
+/* return output length */
+int rle_encode(char *output, unsigned int outputlength, const char *input, unsigned int inputlength)
+{
+  char *pout = output;
+  const char *pin = input;
+  unsigned int length = inputlength;
+  while( pin != input + inputlength )
+    {
+    assert( length <= inputlength );
+    assert( pin <= input + inputlength );
+    int count = count_identical_bytes(pin, length);
+    if( count > 1 ) /* or 2 ? */
+      {
+      // repeat case:
+      //
+      // Test first we are allowed to write two bytes:
+      if( pout + 1 + 1 > output + outputlength ) return -1;
+      *pout = -count + 1;
+      assert( *pout != -128 && 1 - *pout == count );
+      assert( *pout <= -1 && *pout >= -127 );
+      ++pout;
+      *pout = *pin;
+      ++pout;
+      }
+    else
+      {
+      // non repeat case:
+      // ok need to compute non-repeat:
+      count = count_nonrepetitive_bytes(pin, length);
+      // first test we are allowed to write 1 + count bytes in the output buffer:
+      if( pout + count + 1 > output + outputlength ) return -1;
+      *pout = count - 1;
+      assert( *pout != -128 && *pout+1 == count );
+      assert( *pout >= 0 );
+      ++pout;
+      memcpy(pout, pin, count);
+      pout += count;
+      }
+    // count byte where read, move pin to new position:
+    pin += count;
+    // compute remaining length:
+    assert( count <= length );
+    length -= count;
+    }
+  return pout - output;
+}
+
+bool RLECodec::Code(DataElement const &in, DataElement &out)
+{
+  const unsigned int *dims = this->GetDimensions();
+  unsigned int n = 256*256;
+  char *outbuf;
+  // At most we are encoding a single row at a time, so we would be very unlucky
+  // if the row *after* compression would not fit in 256*256 bytes...
+  char small_buffer[256*256];
+  //if( dims[0] * dims[1] > n )
+  //  {
+  //  outbuf = new char[ dims[0] * dims[1] * 10 ];
+  //  n = dims[0] * dims[1] * 10;
+  //  }
+  //else
+    {
+    outbuf = small_buffer;
+    }
+
+  // Create a Sequence Of Fragments:
+  SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
+  const Tag itemStart(0xfffe, 0xe000);
+  sq->GetTable().SetTag( itemStart );
+  // FIXME  ? Is this compulsary ?
+  const char dummy[4] = {};
+  sq->GetTable().SetByteValue( dummy, sizeof(dummy) );
+
+  const ByteValue *bv = in.GetByteValue();
+  assert( bv );
+  const char *input = bv->GetPointer();
+  unsigned long bvl = bv->GetLength();
+  unsigned long image_len = bvl / dims[2];
+
+  // If 16bits, need to do the padded composite...
+  char *buffer = 0;
+  if( GetPixelFormat().GetBitsAllocated() == 16 )
+    {
+    //RequestPaddedCompositePixelCode = true;
+    buffer = new char [ image_len ];
+    }
+  else if ( GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
+    {
+    buffer = new char [ image_len ];
+    }
+
+  int MaxNumSegments = 1;
+  if( GetPixelFormat().GetBitsAllocated() == 16 )
+    {
+    MaxNumSegments = 2;
+    }
+
+  RLEHeader header;
+  header.NumSegments = MaxNumSegments;
+  for(int i = 0; i < 15;++i)
+    header.Offset[i] = 0;
+  header.Offset[0] = 64;
+  // Create a RLE Frame for each frame:
+  for(unsigned int dim = 0; dim < dims[2]; ++dim)
+    {
+    // Within each frame, create the RLE Segments:
+    // lets' try a simple scheme where each Segments is given an equal portion
+    // of the input image.
+    const char *ptr_img = input + dim * image_len;
+    if( GetPixelFormat().GetBitsAllocated() == 16 )
+      {
+      assert( !(image_len % 2) );
+      unsigned long j = 0;
+      for(unsigned long i = 0; i < image_len/2; ++i)
+        {
+#ifdef GDCM_WORDS_BIGENDIAN
+        buffer[i] = ptr_img[2*i];
+#else
+        buffer[i] = ptr_img[2*i+1];
+#endif
+        }
+      for(unsigned long i = 0; i < image_len/2; ++i)
+        {
+#ifdef GDCM_WORDS_BIGENDIAN
+        buffer[i+image_len/2] = ptr_img[2*i+1];
+#else
+        buffer[i+image_len/2] = ptr_img[2*i];
+#endif
+        }
+      ptr_img = buffer;
+      //for(unsigned long i = 0; i < image_len ; ++i)
+      //  {
+      //  assert( ptr_img[i] == 0 );
+      //  }
+      }
+    if ( GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
+      {
+      DoInvertPlanarConfiguration(buffer, ptr_img, image_len);
+      ptr_img = buffer;
+      }
+    assert( image_len % MaxNumSegments == 0 );
+    const int input_seg_length = image_len / MaxNumSegments;
+    std::string datastr;
+    for(int seg = 0; seg < MaxNumSegments; ++seg )
+      {
+      int partition =  input_seg_length;
+      const char *ptr = ptr_img + seg * input_seg_length;
+      assert( ptr < ptr_img + image_len );
+      if( seg == MaxNumSegments - 1 )
+        {
+        partition += image_len % MaxNumSegments;
+        assert( (MaxNumSegments-1) * input_seg_length + partition == image_len );
+        }
+      assert( partition == input_seg_length );
+
+      std::stringstream data;
+      assert( partition % dims[1] == 0 );
+      int length = 0;
+      // Do not cross row boundary:
+      for(unsigned int y = 0; y < dims[1]; ++y)
+        {
+        int llength = rle_encode(outbuf, n, ptr + y*dims[0], partition / dims[1] /*image_len*/);
+        if( llength < 0 )
+          {
+          std::cerr << "RLE compressor error" << std::endl;
+          return false;
+          }
+        assert( llength );
+        data.write((char*)outbuf, llength);
+        length += llength;
+        }
+      // update header
+      header.Offset[1+seg] = header.Offset[seg] + length;
+
+      assert( data.str().size() == length );
+      datastr += data.str();
+      }
+    std::stringstream os;
+    //header.Print( std::cout );
+    os.write((char*)&header,sizeof(header));
+    std::string str = os.str() + datastr;
+    assert( str.size() );
+    Fragment frag;
+    frag.SetTag( itemStart );
+    frag.SetByteValue( &str[0], str.size() );
+    sq->AddFragment( frag );
+    }
+
+  out.SetValue( *sq );
+
+  if( GetPixelFormat().GetBitsAllocated() == 16 )
+    {
+    //RequestPaddedCompositePixelCode = true;
+    delete[] buffer;
+    }
+  else if ( GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
+    {
+    delete[] buffer;
+    }
+
+  //if( dims[0] * dims[1] > n )
+  //  {
+  //  delete[] outbuf;
+  //  }
+
+  return true;
 }
 
 // G.3.2 The RLE decoder
@@ -236,6 +563,7 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
       else /* byte == -128 */
         {
         assert( byte == -128 );
+abort();
         }
         assert( is.eof()
         || numberOfReadBytes + frame.Header.Offset[i] - is.tellg() == 0);

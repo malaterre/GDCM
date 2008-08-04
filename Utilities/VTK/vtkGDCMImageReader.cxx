@@ -25,6 +25,7 @@
 #include "vtkLookupTable.h"
 #include "vtkWindowLevelLookupTable.h"
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+#include "vtkLookupTable16.h"
 #include "vtkInformationVector.h"
 #include "vtkInformation.h"
 #include "vtkDemandDrivenPipeline.h"
@@ -105,6 +106,7 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   this->Scale = 1.;
   this->IconDataScalarType = VTK_CHAR;
   this->IconNumberOfScalarComponents = 1;
+  this->PlanarConfiguration = 0;
 }
 
 vtkGDCMImageReader::~vtkGDCMImageReader()
@@ -307,7 +309,7 @@ int vtkGDCMImageReader::ProcessRequest(vtkInformation* request,
 
 
 //----------------------------------------------------------------------------
-const char *GetStringValueFromTag(const gdcm::Tag& t, const gdcm::DataSet& ds)
+inline const char *GetStringValueFromTag(const gdcm::Tag& t, const gdcm::DataSet& ds)
 {
   static std::string buffer;
   buffer = "";  // cleanup previous call
@@ -579,9 +581,8 @@ int vtkGDCMImageReader::RequestInformationCompat()
     {
     filename = this->FileName;
     }
-  else if ( this->FileNames )
+  else if ( this->FileNames && this->FileNames->GetNumberOfValues() > 0 )
     {
-    assert( this->FileNames && this->FileNames->GetNumberOfValues() >= 1 );
     filename = this->FileNames->GetValue( 0 );
     }
   else
@@ -631,7 +632,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
     }
   gdcm::MediaStorage ms;
   ms.SetFromFile( reader.GetFile() );
-  assert( gdcm::MediaStorage::IsImage( ms ) );
+  assert( gdcm::MediaStorage::IsImage( ms ) || ms == gdcm::MediaStorage::MRSpectroscopyStorage );
   // There is no point in adding world info to a SC object since noone but GDCM can use this info...
   //if( ms != gdcm::MediaStorage::SecondaryCaptureImageStorage )
 
@@ -698,7 +699,14 @@ int vtkGDCMImageReader::RequestInformationCompat()
   r.SetSlope( this->Scale );
   r.SetPixelFormat( pixeltype );
   gdcm::PixelFormat::ScalarType outputpt = r.ComputeInterceptSlopePixelType();
-  assert( pixeltype <= outputpt );
+  if( ms == gdcm::MediaStorage::MRSpectroscopyStorage )
+    {
+    outputpt = pixeltype;
+    }
+  else
+    {
+    assert( pixeltype <= outputpt );
+    }
   //if( pixeltype != outputpt ) assert( Shift != 0. || Scale != 1 );
   //std::cerr << "PF:" << pixeltype << " -> " << outputpt << std::endl;
 
@@ -975,17 +983,39 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     {
     this->ImageFormat = VTK_LOOKUP_TABLE;
     const gdcm::LookupTable &lut = image.GetLUT();
-    vtkLookupTable *vtklut = vtkLookupTable::New();
-    vtklut->SetNumberOfTableValues(256);
-    // SOLVED: GetPointer(0) is skrew up, need to replace it with WritePointer(0,4) ...
-    if( !lut.GetBufferAsRGBA( vtklut->WritePointer(0,4) ) )
+    if( lut.GetBitSample() == 8 )
       {
-      vtkWarningMacro( "Could not get values from LUT" );
-      return 0;
+      vtkLookupTable *vtklut = vtkLookupTable::New();
+      vtklut->SetNumberOfTableValues(256);
+      // SOLVED: GetPointer(0) is skrew up, need to replace it with WritePointer(0,4) ...
+      if( !lut.GetBufferAsRGBA( vtklut->WritePointer(0,4) ) )
+        {
+        vtkWarningMacro( "Could not get values from LUT" );
+        return 0;
+        }
+      vtklut->SetRange(0,255);
+      data->GetPointData()->GetScalars()->SetLookupTable( vtklut );
+      vtklut->Delete();
       }
-    vtklut->SetRange(0,255);
-    data->GetPointData()->GetScalars()->SetLookupTable( vtklut );
-    vtklut->Delete();
+    else 
+      {
+#if (VTK_MAJOR_VERSION >= 5)
+      assert( lut.GetBitSample() == 16 );
+      vtkLookupTable16 *vtklut = vtkLookupTable16::New();
+      vtklut->SetNumberOfTableValues(256*256);
+      // SOLVED: GetPointer(0) is skrew up, need to replace it with WritePointer(0,4) ...
+      if( !lut.GetBufferAsRGBA( (unsigned char*)vtklut->WritePointer(0,4) ) )
+        {
+        vtkWarningMacro( "Could not get values from LUT" );
+        return 0;
+        }
+      vtklut->SetRange(0,256*256-1);
+      data->GetPointData()->GetScalars()->SetLookupTable( vtklut );
+      vtklut->Delete();
+#else
+      vtkWarningMacro( "Unhandled" );
+#endif
+      }
     }
   else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME1 )
     {
@@ -1028,6 +1058,8 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     this->ImageFormat = VTK_LUMINANCE;
     }
   assert( this->ImageFormat );
+  this->PlanarConfiguration = image.GetPlanarConfiguration();
+  //assert( this->PlanarConfiguration == 0 || this->PlanarConfiguration == 1 );
 
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
   if( numoverlays ) assert( (unsigned long)overlayoutsize * ( dext[3] - dext[2] + 1 ) == overlaylen );
@@ -1084,10 +1116,8 @@ int vtkGDCMImageReader::RequestDataCompat()
       return 0;
       }
     }
-  else
+  else if( this->FileNames && this->FileNames->GetNumberOfValues() >= 1 )
     {
-    assert( this->FileNames && this->FileNames->GetNumberOfValues() >= 1 );
-
     // Load each 2D files
     int *dext = this->GetDataExtent();
     // HACK: len is moved out of the loop so that when file > 1 start failing we can still know
@@ -1106,6 +1136,10 @@ int vtkGDCMImageReader::RequestDataCompat()
       assert( len );
       pointer += len;
       }
+    }
+  else
+    {
+    return 0;
     }
   // Y-flip image
   if (!this->FileLowerLeft)

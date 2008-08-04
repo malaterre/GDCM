@@ -42,8 +42,14 @@ void Image::SetNumberOfDimensions(unsigned int dim)
 {
   NumberOfDimensions = dim;
   assert( NumberOfDimensions );
-  Dimensions.resize( NumberOfDimensions ); // fill with 0
-  Spacing.resize( NumberOfDimensions, 1 ); // fill with 1
+  Dimensions.resize( 3 /*NumberOfDimensions*/ ); // fill with 0
+  Spacing.resize( 3 /*NumberOfDimensions*/, 1 ); // fill with 1
+  assert( NumberOfDimensions == 2 || NumberOfDimensions == 3 );
+  if( NumberOfDimensions == 2 )
+    {
+    Dimensions[2] == 1;
+    Spacing[2] == 1;
+    }
 }
 
 // TODO does it make sense to PlanarConfiguration in Image
@@ -86,6 +92,7 @@ const unsigned int *Image::GetDimensions() const
 
 unsigned int Image::GetDimension(unsigned int idx) const
 {
+  assert( NumberOfDimensions );
   return Dimensions[idx];
 }
 
@@ -101,9 +108,15 @@ void Image::SetDimension(unsigned int idx, unsigned int dim)
 {
   assert( NumberOfDimensions );
   assert( idx < NumberOfDimensions );
-  Dimensions.resize( NumberOfDimensions );
+  Dimensions.resize( 3 /*NumberOfDimensions*/ );
   // Can dim be 0 ??
+  // -> no !
+  assert( dim );
   Dimensions[idx] = dim;
+  if( NumberOfDimensions == 2 )
+    {
+    Dimensions[2] = 1;
+    }
 }
 
 const double *Image::GetSpacing() const
@@ -115,12 +128,12 @@ const double *Image::GetSpacing() const
 double Image::GetSpacing(unsigned int idx) const
 {
   assert( NumberOfDimensions );
-  if( idx < Spacing.size() )
+  //if( idx < Spacing.size() )
     {
     return Spacing[idx];
     }
   //assert( 0 && "Should not happen" );
-  return 1; // FIXME ???
+  //return 1; // FIXME ???
 }
 
 void Image::SetSpacing(const double *spacing)
@@ -132,7 +145,7 @@ void Image::SetSpacing(const double *spacing)
 
 void Image::SetSpacing(unsigned int idx, double spacing)
 {
-  Spacing.resize( idx + 1 );
+  Spacing.resize( 3 /*idx + 1*/ );
   Spacing[idx] = spacing;
 }
 
@@ -217,7 +230,11 @@ void Image::SetDirectionCosines(unsigned int idx, double dircos)
 unsigned long Image::GetBufferLength() const
 {
   assert( NumberOfDimensions );
-  assert( NumberOfDimensions == Dimensions.size() );
+  //assert( NumberOfDimensions == Dimensions.size() );
+  if( NumberOfDimensions != Dimensions.size() )
+    {
+    assert( Dimensions[2] == 1 );
+    }
   unsigned long len = 0;
   unsigned int mul = 1;
   // First multiply the dimensions:
@@ -319,6 +336,7 @@ void Image::Print(std::ostream &os) const
 
     PF.Print(os);
     }
+  os << "TransferSyntax: " << TS << "\n";
 }
 
 bool Image::TryRAWCodec(char *buffer) const

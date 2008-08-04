@@ -37,10 +37,11 @@ public:
 
   void Clear() { ModulesInternal.clear(); }
 
-  void AddModule(const char *name , const Module & module )
+  // A Module is inserted based on it's ref
+  void AddModule(const char *ref, const Module & module )
     {
     ModulesInternal.insert(
-      ModuleMapType::value_type(name, module));
+      ModuleMapType::value_type(ref, module));
     }
   const Module &GetModule(const char *name) const
     {

@@ -11,6 +11,7 @@ IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 4.5 )
     ${VTK_GDCM_TEST_SRCS}
     TestvtkGDCMImageWriter
     TestvtkGDCMImageWriter2
+    TestvtkGDCMThreadedImageReader2
   )
 ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 4.5 )
 
@@ -19,6 +20,7 @@ IF(GDCM_DATA_EXTRA_ROOT)
   SET(VTK_GDCM_TEST_SRCS
     ${VTK_GDCM_TEST_SRCS}
     TestvtkGDCMImageReader3
+    TestvtkGDCMPolyDataReader
   )
 ENDIF(GDCM_DATA_EXTRA_ROOT)
 IF(CMAKE_HAVE_PTHREAD_H)

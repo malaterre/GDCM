@@ -24,8 +24,10 @@
 
 namespace gdcm
 {
+/** \class FilenameGenerator
+ * \brief class to generate filenames based on a pattern (C-style)
+ */
 
-// It's a source
 class GDCM_EXPORT FilenameGenerator
 {
 public:
@@ -35,15 +37,21 @@ public:
   typedef std::string FilenameType;
   typedef std::vector<FilenameType> FilenamesType;
 
+  /// Set/Get pattern
   void SetPattern(const char *pattern) { Pattern = pattern; }
   const char *GetPattern() const { return Pattern.c_str(); }
 
+  /// Generate (return success)
   bool Generate();
 
+  /// Set/Get the number of filenames to generate
   void SetNumberOfFilenames(unsigned int nfiles);
   unsigned int GetNumberOfFilenames() const;
+
+  /// Get a particular filename (call after Generate)
   const char * GetFilename(unsigned int n) const;
 
+  /// Return all filenames 
   FilenamesType const & GetFilenames() const { assert( !Pattern.empty() ); return Filenames; }
 
 private:

@@ -23,20 +23,29 @@ namespace gdcm
 {
 /**
  * \brief Class to manipulate file name's
- * \note bla
+ * \note OS independant representation of a filename (to query path, name and extension from a filename)
  */
 class GDCM_EXPORT Filename
 {
 public:
-  Filename(const char* filename = ""):FileName(filename) {}
+  Filename(const char* filename = ""):FileName(filename ? filename : "") {}
 
+  /// Return the full filename
   const char *GetFileName() const { return FileName.c_str(); }
+  /// Return only the path component of a filename
   const char *GetPath();
+  /// return only the name part of a filename
   const char *GetName();
+  /// return only the extension part of a filename
   const char *GetExtension();
+  /// Convert backslash (windows style) to UNIX style slash.
   const char *ToUnixSlashes();
+  /// return whether the filename is empty
   bool IsEmpty() const { return FileName.empty(); }
 
+  /// Simple operator to allow
+  /// Filename myfilename( "..." );
+  /// const char * s = myfilename;
   operator const char * () const { return GetFileName(); }
 
   // FIXME: I don't like this function

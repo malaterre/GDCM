@@ -33,7 +33,7 @@ class ImageCodec : public Codec
 public:
   ImageCodec();
   ~ImageCodec();
-  bool CanDecode(TransferSyntax const &) { return false; }
+  bool CanDecode(TransferSyntax const &) const { return false; }
   bool Decode(DataElement const &is, DataElement &os);
 protected:
   bool Decode(std::istream &is, std::ostream &os);
@@ -84,7 +84,7 @@ public:
     {
     Dimensions[0] = d[0];
     Dimensions[1] = d[1];
-    //Dimensions[2] = d[2];
+    Dimensions[2] = d[2];
     }
   const unsigned int *GetDimensions() const { return Dimensions; }
 protected:
@@ -108,6 +108,8 @@ protected:
   bool DoSimpleCopy(std::istream &is, std::ostream &os);
   bool DoPaddedCompositePixelCode(std::istream &is, std::ostream &os);
   bool DoInvertMonochrome(std::istream &is, std::ostream &os);
+
+  bool DoInvertPlanarConfiguration(char *output, const char *input, uint32_t length);
 };
 
 } // end namespace gdcm

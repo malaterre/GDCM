@@ -4,9 +4,6 @@
 # gdcminfo
 # gdcmconv
 
-CHECK_INCLUDE_FILE("fcntl.h"      CMAKE_HAVE_FCNTL_H)
-CHECK_INCLUDE_FILE("sched.h"      CMAKE_HAVE_SHED_H)
-CHECK_INCLUDE_FILE("sys/mman.h"   CMAKE_HAVE_SYS_MMAN_H)
 
 IF(WIN32 AND NOT CYGWIN)
   INCLUDE_DIRECTORIES(
@@ -43,22 +40,15 @@ SET(GDCM_EXECUTABLE_NAME
   gdcmconv
   gdcminfo
   )
-# Need mmap
-#IF(CMAKE_HAVE_SYS_MMAN_H)
-#  SET(GDCM_EXECUTABLE_NAME ${GDCM_EXECUTABLE_NAME}
-#    gdcmmmap
-#    gdcmfile
-#  )
-#ENDIF(CMAKE_HAVE_SYS_MMAN_H)
 
 FOREACH(exename ${GDCM_EXECUTABLE_NAME})
+  IF(${exename} STREQUAL "gdcminfo")
+  ADD_EXECUTABLE(${exename} ${exename}.cxx puff.c)
+  ELSE(${exename} STREQUAL "gdcminfo")
   ADD_EXECUTABLE(${exename} ${exename}.cxx)
-  SET_TARGET_PROPERTIES(${exename} PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES})
-  IF(${exename} STREQUAL "gdcminfobla")
-    TARGET_LINK_LIBRARIES(${exename} gdcmDSED gdcmDICT)
-  ELSE(${exename} STREQUAL "gdcminfobla")
+  ENDIF(${exename} STREQUAL "gdcminfo")
     TARGET_LINK_LIBRARIES(${exename} gdcmMSFF)
-  ENDIF(${exename} STREQUAL "gdcminfobla")
+  SET_TARGET_PROPERTIES(${exename} PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES})
   IF(WIN32 AND NOT CYGWIN)
     TARGET_LINK_LIBRARIES(${exename} gdcmgetopt)
   ENDIF(WIN32 AND NOT CYGWIN)

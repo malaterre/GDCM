@@ -65,6 +65,7 @@
   make gdcmconv && ./bin/gdcmconv -i ~/Creatis/gdcmData/PICKER-16-MONO2-No_DicomV3_Preamble.dcm -o bla.dcm 
 */
 #include "gdcmReader.h"
+#include "gdcmVersion.h"
 #include "gdcmImageReader.h"
 #include "gdcmImageWriter.h"
 #include "gdcmWriter.h"
@@ -74,6 +75,7 @@
 #include "gdcmAttribute.h"
 #include "gdcmSequenceOfItems.h"
 #include "gdcmUIDGenerator.h"
+#include "gdcmImageChangeTransferSyntax.h"
 
 #include <string>
 #include <iostream>
@@ -90,6 +92,39 @@ struct SetSQToUndefined
   }
 };
 
+void PrintVersion()
+{
+  std::cout << "gdcmconv: gdcm " << gdcm::Version::GetVersion() << " ";
+  const char date[] = "$Date$";
+  std::cout << date << std::endl;
+}
+
+void PrintHelp()
+{
+  PrintVersion();
+  std::cout << "Usage: gdcmconv [OPTION] -i input.dcm -o output.dcm" << std::endl;
+  std::cout << "Convert a DICOM file into another DICOM file.\n";
+  std::cout << "Parameter (required):" << std::endl;
+  std::cout << "  -i --input     DICOM filename" << std::endl;
+  std::cout << "  -o --output    DICOM filename (generated)" << std::endl;
+  std::cout << "Options:" << std::endl;
+  std::cout << "  -W --raw       Decompress image." << std::endl;
+  std::cout << "  -J --jpeg      Compress image in jpeg." << std::endl;
+  std::cout << "  -K --j2k       Compress image in j2k." << std::endl;
+  std::cout << "  -L --jpegls    Compress image in jpeg-ls." << std::endl;
+  std::cout << "  -R --rle       Compress image in rle." << std::endl;
+  std::cout << "  -F --force     Force decompression before recompression." << std::endl;
+  std::cout << "  -Y --lossy  %d Use the lossy (if possible), followed by comp. ratio" << std::endl;
+  std::cout << "General Options:" << std::endl;
+  std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
+  std::cout << "  -W --warning   print warning info." << std::endl;
+  std::cout << "  -D --debug     print debug info." << std::endl;
+  std::cout << "  -E --error     print error info." << std::endl;
+  std::cout << "  -h --help      print help." << std::endl;
+  std::cout << "  -v --version   print version." << std::endl;
+}
+
+
 int main (int argc, char *argv[])
 {
   int c;
@@ -101,6 +136,20 @@ int main (int argc, char *argv[])
   int raw = 0;
   int rootuid = 0;
   int checkmeta = 0;
+  int jpeg = 0;
+  int jpegls = 0;
+  int j2k = 0;
+  int lossy = 0;
+  int rle = 0;
+  int force = 0;
+
+  int verbose = 0;
+  int warning = 0;
+  int debug = 0;
+  int error = 0;
+  int help = 0;
+  int version = 0;
+
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -124,13 +173,23 @@ int main (int argc, char *argv[])
 // Image specific options:
         {"pixeldata", 1, 0, 0}, // valid
         {"raw", 0, &raw, 1}, // default (implicit VR, LE) / Explicit LE / Explicit BE
-        {"jpeg", 1, 0, 0}, // JPEG lossy
-        {"jpegll", 1, 0, 0}, // JPEG lossless
-        {"jpegls", 1, 0, 0}, // JPEG-LS: lossy / lossless
-        {"j2k", 1, 0, 0}, // J2K: lossy / lossless
-        {"rle", 1, 0, 0}, // lossless !
-        {"mpeg2", 1, 0, 0}, // lossy !
-        {"jpip", 1, 0, 0}, // ??
+        {"lossy", 1, &lossy, 1}, // Specify the compression ratio for lossy comp
+        {"force", 0, &force, 1}, // force decompression even if target compression is identical
+        {"jpeg", 0, &jpeg, 1}, // JPEG lossy / lossless
+        {"jpegls", 0, &jpegls, 1}, // JPEG-LS: lossy / lossless
+        {"j2k", 0, &j2k, 1}, // J2K: lossy / lossless
+        {"rle", 0, &rle, 1}, // lossless !
+        {"mpeg2", 0, 0, 0}, // lossy !
+        {"jpip", 0, 0, 0}, // ??
+
+// General options !
+        {"verbose", 0, &verbose, 1},
+        {"warning", 0, &warning, 1},
+        {"debug", 0, &debug, 1},
+        {"error", 0, &error, 1},
+        {"help", 0, &help, 1},
+        {"version", 0, &version, 1},
+
         {0, 0, 0, 0}
     };
 
@@ -190,23 +249,39 @@ int main (int argc, char *argv[])
   // For now only support one input / one output
   if (optind < argc)
     {
-    printf ("non-option ARGV-elements: ");
-    while (optind < argc)
-      {
-      printf ("%s ", argv[optind++]);
-      }
-    printf ("\n");
+    //printf ("non-option ARGV-elements: ");
+    //while (optind < argc)
+    //  {
+    //  printf ("%s ", argv[optind++]);
+    //  }
+    //printf ("\n");
     return 1;
+    }
+
+  if( version )
+    {
+    //std::cout << "version" << std::endl;
+    PrintVersion();
+    return 0;
+    }
+
+  if( help )
+    {
+    //std::cout << "help" << std::endl;
+    PrintHelp();
+    return 0;
     }
 
   if( filename.empty() )
     {
-    std::cerr << "Need input file (-i)\n";
+    //std::cerr << "Need input file (-i)\n";
+    PrintHelp();
     return 1;
     }
   if( outfilename.empty() )
     {
-    std::cerr << "Need output file (-o)\n";
+    //std::cerr << "Need output file (-o)\n";
+    PrintHelp();
     return 1;
     }
   
@@ -220,7 +295,69 @@ int main (int argc, char *argv[])
       }
     gdcm::UIDGenerator::SetRoot( root.c_str() );
     }
-  if( raw )
+
+  if( lossy )
+    {
+    std::cerr << "not supported for now" << std::endl;
+    return 1;
+    }
+
+  if( jpeg || j2k || jpegls || rle || raw )
+    {
+    gdcm::ImageReader reader;
+    reader.SetFileName( filename.c_str() );
+    if( !reader.Read() )
+      {
+      std::cerr << "could not read: " << filename << std::endl;
+      return 1;
+      }
+    const gdcm::Image &image = reader.GetImage();
+
+    gdcm::ImageChangeTransferSyntax change;
+    change.SetForce( force );
+    if( jpeg )
+      {
+      change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLosslessProcess14_1 );
+      }
+    else if( jpegls )
+      {
+      return 1;
+      }
+    else if( j2k )
+      {
+      change.SetTransferSyntax( gdcm::TransferSyntax::JPEG2000Lossless );
+      }
+    else if( raw )
+      {
+      change.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
+      }
+    else if( rle )
+      {
+      change.SetTransferSyntax( gdcm::TransferSyntax::RLELossless );
+      }
+    else
+      {
+      return 1;
+      }
+    change.SetInput( image );
+    bool b = change.Change();
+    if( !b )
+      {
+      std::cerr << "Could not change the Transfer Syntax: " << filename << std::endl;
+      return 1;
+      }
+    gdcm::ImageWriter writer;
+    writer.SetFileName( outfilename.c_str() );
+    writer.SetFile( reader.GetFile() );
+    writer.SetImage( change.GetOutput() );
+    if( !writer.Write() )
+      {
+      std::cerr << "Failed to write: " << outfilename << std::endl;
+      return 1;
+      }
+
+    }
+  else if( raw && false )
     {
     gdcm::ImageReader reader;
     reader.SetFileName( filename.c_str() );

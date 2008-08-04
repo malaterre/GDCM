@@ -45,19 +45,19 @@ public:
     Pointer = 0;
   }
 
-  // Overload operator -> 
+  /// Overload operator -> 
   ObjectType *operator -> () const
     { return Pointer; }
 
-  // Return pointer to object.
+  /// Return pointer to object.
   operator ObjectType * () const 
     { return Pointer; }
 
-  // Overload operator assignment.
+  /// Overload operator assignment.
   SmartPointer &operator = (SmartPointer const &r)
     { return operator = (r.Pointer); }
   
-  // Overload operator assignment.
+  /// Overload operator assignment.
   SmartPointer &operator = (ObjectType const *r)
     {                                                              
     if (Pointer != r)

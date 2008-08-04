@@ -42,39 +42,40 @@ public :
 
   void Print(std::ostream &_os = std::cout);
 
-  // Get the name of the toplevel directory
+  /// Get the name of the toplevel directory
   FilenameType const &GetToplevel() const { return Toplevel; }
 
-  // Set/Get the file names within the directory
+  /// Set/Get the file names within the directory
   FilenamesType const &GetFilenames() const {
     assert( !(Toplevel.empty()) && "Need to call Explore first" );
     return Filenames; }
-  // FIXME TODO
+
+  /// Return the Directories traversed
   FilenamesType const &GetDirectories() const { return Directories; }
 
-  // construct a list of filenames and subdirectory beneath directory: name
+  /// construct a list of filenames and subdirectory beneath directory: name
   unsigned int Load(FilenameType const &name, bool recursive = false) {
     Filenames.clear(); // clear previous
     Directories.clear(); // clear previous
     Toplevel = name;
     return Explore( Toplevel, recursive );
   }
-  // TODO later: GLOB
+  // \todo later: GLOB
   // The glob() function searches for all the pathnames matching pattern according to 
   // the rules used by the shell (see glob(7)).  No tilde expansion or parameter 
   // substitution is done; if you want these, use wordexp(3).
   // int Glob(...);
 
 protected:
-  // Return number of file found when 'recursive'ly exploring directory `name`
+  /// Return number of file found when 'recursive'ly exploring directory `name`
   unsigned int Explore(FilenameType const &name, bool recursive);
 
 private :
-  // List of file names
+  /// List of file names
   FilenamesType Filenames;
   FilenamesType Directories;
 
-  // name of the toplevel directory to explore
+  /// name of the toplevel directory to explore
   FilenameType Toplevel;
 };
 } // end namespace gdcm

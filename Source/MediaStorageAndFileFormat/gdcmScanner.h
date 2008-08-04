@@ -17,7 +17,6 @@
 
 #include "gdcmDirectory.h"
 #include "gdcmTag.h"
-//#include "gdcmConstCharWrapper.h"
 
 #include <map>
 #include <set>
@@ -43,34 +42,38 @@ public:
   Scanner():Values(),Filenames(),Mappings() {}
   ~Scanner();
 
-  // struct to map a filename to a value
-  // Implementation note:
-  // all std::map in this class will be using const char * and not std::string
-  // since we are pointing to existing std::string (hold in a std::vector)
-  // this avoid an extra copy of the byte array.
-  // Tag are used as Tag class since sizeof(tag) <= sizeof(pointer)
+  /// struct to map a filename to a value
+  /// Implementation note:
+  /// all std::map in this class will be using const char * and not std::string
+  /// since we are pointing to existing std::string (hold in a std::vector)
+  /// this avoid an extra copy of the byte array.
+  /// Tag are used as Tag class since sizeof(tag) <= sizeof(pointer)
   typedef std::map<Tag, const char*> TagToValue;
   //typedef std::map<Tag, ConstCharWrapper> TagToValue; //StringMap;
   //typedef TagToStringMap TagToValue;
   typedef TagToValue::value_type TagToValueValueType;
 
-  // Add a tag that will need to be read
+  /// Add a tag that will need to be read. Those are root level skip tags
   void AddTag( Tag const & t );
   void ClearTags();
 
-  // Start the scan !
+  /// Add a tag that will need to be skipped. Those are root level skip tags
+  void AddSkipTag( Tag const & t );
+  void ClearSkipTags();
+
+  /// Start the scan !
   bool Scan( Directory::FilenamesType const & filenames );
 
-  // Print result
+  /// Print result
   void Print( std::ostream & os ) const;
 
-  // Check if filename is a key in the Mapping table.
-  // returns true only of file can be found, which means
-  // the file was indeed a DICOM file that could be processed
+  /// Check if filename is a key in the Mapping table.
+  /// returns true only of file can be found, which means
+  /// the file was indeed a DICOM file that could be processed
   bool IsKey( const char * filename ) const;
 
-  // Return the list of filename that are key in the internal map,
-  // which means those filename were properly parsed
+  /// Return the list of filename that are key in the internal map,
+  /// which means those filename were properly parsed
   Directory::FilenamesType GetKeys() const;
 
   // struct to store all the values found:
@@ -92,22 +95,23 @@ public:
   ConstIterator Begin() const { return Mappings.begin(); }
   ConstIterator End() const { return Mappings.end(); }
 
-  // Mappings are the mapping from a particular tag to the map, mapping filename to value:
+  /// Mappings are the mapping from a particular tag to the map, mapping filename to value:
   MappingType const & GetMappings() const { return Mappings; }
 
-  // Get the std::map mapping filenames to value for file 'filename'
+  /// Get the std::map mapping filenames to value for file 'filename'
   TagToValue const & GetMapping(const char *filename) const;
 
-  // Retrieve the value found for tag: t associated with file: filename
-  // This is meant for a single short call. If multiple calls (multiple tags)
-  // should be done, prefer the GetMapping function, and then reuse the TagToValue
-  // hash table.
+  /// Retrieve the value found for tag: t associated with file: filename
+  /// This is meant for a single short call. If multiple calls (multiple tags)
+  /// should be done, prefer the GetMapping function, and then reuse the TagToValue
+  /// hash table.
   const char* GetValue(const char *filename, Tag const &t) const;
 
 private:
   // struct to store all uniq tags in ascending order:
   typedef std::set< Tag > TagsType;
   std::set< Tag > Tags;
+  std::set< Tag > SkipTags;
   ValuesType Values;
   Directory::FilenamesType Filenames;
 

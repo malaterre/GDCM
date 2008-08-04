@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmSystem.h"
+#include "gdcmFilename.h"
 #include <iostream>
 #include <string.h> // strlen
 
@@ -64,6 +65,35 @@ int TestSystem(int, char *[])
   char datetime[18];
   int res = gdcm::System::GetCurrentDateTime(datetime);
   std::cerr << datetime << std::endl;
+
+  const char *cwd = gdcm::System::GetCWD();
+  std::cerr << "cwd:" << cwd << std::endl;
+  // GDCM_EXECUTABLE_OUTPUT_PATH "/../" "/Testing/Source/Common/Cxx"
+
+/*
+ * I can do this kind of testing here since I know testing:
+ * - cannot be installed (no rule in cmakelists)
+ * - they cannot be moved around since cmake is not relocatable
+ * thus this is safe to assume that current process directory is actually the executable output
+ * path as computed by cmake:
+ *
+ * TODO: there can be trailing slash...
+ */
+  const char *path = gdcm::System::GetCurrentProcessFileName();
+  gdcm::Filename fn( path );
+//std::cerr << path << std::endl;
+  if( strncmp(GDCM_EXECUTABLE_OUTPUT_PATH, fn.GetPath(), strlen(GDCM_EXECUTABLE_OUTPUT_PATH)) != 0 )
+    {
+    std::cerr << GDCM_EXECUTABLE_OUTPUT_PATH << "!=" << fn.GetPath() << std::endl;
+    return 1;
+    }
+  // gdcmCommonTests
+  const char exename[] = "gdcmCommonTests";
+  if( strncmp(exename, fn.GetName(), strlen(exename)) != 0 )
+    {
+    std::cerr << exename << "!=" << fn.GetName() << std::endl;
+    return 1;
+    }
  
   return 0;
 }

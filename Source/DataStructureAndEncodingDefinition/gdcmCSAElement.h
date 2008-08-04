@@ -126,14 +126,40 @@ protected:
 inline std::ostream& operator<<(std::ostream &os, const CSAElement &val)
 {
   os << val.KeyField;
-  os << "\t" << val.NameField;
-  os << "\t" << val.ValueMultiplicityField;
-  os << "\t" << val.VRField;
-  os << "\t" << val.SyngoDTField;
-  os << "\t" << val.NoOfItemsField;
+  os << " - '" << val.NameField;
+  os << "' VM " << val.ValueMultiplicityField;
+  os << ", VR " << val.VRField;
+  os << ", SyngoDT " << val.SyngoDTField;
+  os << ", NoOfItems " << val.NoOfItemsField;
+  os << ", Data ";
   if( val.DataField )
     {
-    val.DataField->Print( os << "\t" );
+    //val.DataField->Print( os << "'" );
+    const ByteValue * bv = dynamic_cast<ByteValue*>(&*val.DataField);
+    assert( bv );
+    const char * p = bv->GetPointer();
+    std::string str(p, p + bv->GetLength() );
+    if( val.ValueMultiplicityField == VM::VM1 )
+      {
+      os << "'" << str.c_str() << "'";
+      }
+    else
+      {
+      std::istringstream is( str );
+      std::string s;
+      bool sep = false;
+      while( std::getline(is, s, '\\' ) )
+        {
+        if( sep )
+          {
+          os << '\\';
+          }
+        sep = true;
+        os << "'" << s.c_str() << "'";
+        }
+      //bv->Print( os << "'" );
+      //os << "'";
+      }
     }
   return os;
 }

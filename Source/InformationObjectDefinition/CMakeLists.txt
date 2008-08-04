@@ -3,6 +3,7 @@
 SET(IOD_SRCS
   gdcmModule.cxx
   gdcmModules.cxx
+  gdcmIODEntry.cxx
   gdcmTableReader.cxx
   gdcmTable.cxx
   gdcmSeries.cxx
@@ -12,6 +13,7 @@ SET(IOD_SRCS
   gdcmStudy.cxx
   gdcmPatient.cxx
   gdcmType.cxx
+  gdcmIOD.cxx
   #gdcmXMLDictReader.cxx
   #gdcmXMLPrivateDictReader.cxx
   )
@@ -59,7 +61,7 @@ ENDIF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
 #-----------------------------------------------------------------------------
 # Install Part3.xml
 INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/Part3.xml
-  DESTINATION ${GDCM_INSTALL_INCLUDE_DIR}/XML COMPONENT Runtime
+  DESTINATION ${GDCM_INSTALL_DATA_DIR}/XML COMPONENT Runtime
 )
 
 #-----------------------------------------------------------------------------

@@ -62,7 +62,7 @@ public:
     return true;
   }
           
-  // Multiple calls to what ??
+  /// what implementation
   const char* what() const throw()
     { 
     static std::string strwhat;
@@ -73,6 +73,7 @@ public:
     return strwhat.c_str();
     }
 
+  /// Return the Description
   const char * GetDescription() const { return Description.c_str(); }
 
 private:

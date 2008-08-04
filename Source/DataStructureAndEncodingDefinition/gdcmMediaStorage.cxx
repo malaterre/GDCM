@@ -164,6 +164,7 @@ bool MediaStorage::IsImage(MSType ms)
     || ms == EncapsulatedPDFStorage
     || ms == KeyObjectSelectionDocument
     || ms == HangingProtocolStorage
+    || ms == MRSpectroscopyStorage
     || ms == RTStructureSetStorage )
     {
     return false;

@@ -12,6 +12,32 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+// .NAME vtkGDCMThreadedImageReader2 - read DICOM files with multiple threads
+// .SECTION Description
+// vtkGDCMThreadedImageReader2 is a source object that reads some DICOM files
+// This reader is threaded. Meaning that on a multiple core CPU with N cpu, it will
+// read approx N times faster than when reading in a single thread.
+//
+// .SECTION Warning: Advanced users only. Do not use this class in the general case, 
+// you have to understand how physicaly medium works first (sequencial reading for 
+// instance) before playing with this class
+//
+// .SECTION Implementation note: when FileLowerLeft is set to on the image is not flipped
+// upside down as VTK would expect, use this option only if you know what you are doing
+//
+// .SECTION FIXME: need to implement the other mode where FileLowerLeft is set to OFF
+//
+// .SECTION FIXME: need to implement reading of series of 3D files
+//
+// .SECTION Implementation note: this class is meant to superseed vtkGDCMThreadedImageReader
+// because it had support for ProgressEvent support even from python layer. There is a
+// subtle trick down in the threading mechanism in VTK were the main thread (talking to the
+// python interpreter) is also part of the execution process (and the N-1 other thread
+// are just there to execute the remaining of ThreadedRequestData), this separation into
+// two types of thread is necessary to acheive a working implementation of UpdateProgress
+
+// .SECTION See Also
+// vtkMedicalImageReader2 vtkMedicalImageProperties
 
 #ifndef __vtkGDCMThreadedImageReader2_h
 #define __vtkGDCMThreadedImageReader2_h
@@ -46,8 +72,16 @@ public:
   vtkSetVector6Macro(DataExtent,int);
   vtkGetVector6Macro(DataExtent,int);
 
-  vtkGetStringMacro(FileName);
-  vtkSetStringMacro(FileName);
+  vtkSetVector3Macro(DataOrigin,double);
+  vtkGetVector3Macro(DataOrigin,double);
+
+  vtkSetVector3Macro(DataSpacing,double);
+  vtkGetVector3Macro(DataSpacing,double);
+
+  //vtkGetStringMacro(FileName);
+  //vtkSetStringMacro(FileName);
+  virtual const char *GetFileName(int i = 0);
+  virtual void SetFileName(const char *filename);
 
   virtual void SetFileNames(vtkStringArray*);
   vtkGetObjectMacro(FileNames, vtkStringArray);
@@ -62,18 +96,15 @@ protected:
   int RequestInformation(vtkInformation *request,
                          vtkInformationVector **inputVector,
                          vtkInformationVector *outputVector);
-  //int RequestData(vtkInformation *request,
-  //                vtkInformationVector **inputVector,
-  //                vtkInformationVector *outputVector);
 
 protected:
-void ThreadedRequestData (
-  vtkInformation * vtkNotUsed( request ), 
-  vtkInformationVector** vtkNotUsed( inputVector ),
-  vtkInformationVector * vtkNotUsed( outputVector ),
-  vtkImageData ***inData, 
-  vtkImageData **outData,
-  int outExt[6], int id);
+  void ThreadedRequestData (
+    vtkInformation * request, 
+    vtkInformationVector** inputVector,
+    vtkInformationVector * outputVector,
+    vtkImageData ***inData, 
+    vtkImageData **outData,
+    int outExt[6], int id);
 
 private:
   int FileLowerLeft;
@@ -82,7 +113,7 @@ private:
   int LoadIconImage;
   int DataExtent[6];
   int LoadOverlays;
-    int NumberOfOverlays;
+  int NumberOfOverlays;
   int DataScalarType;
 
   int NumberOfScalarComponents;

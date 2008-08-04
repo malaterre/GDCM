@@ -31,7 +31,8 @@ IF(GDCM_WRAP_PYTHON)
   )
   IF(CMAKE_HAVE_PTHREAD_H)
     SET(VTK_PYTHON_TESTS ${VTK_PYTHON_TESTS}
-      TestvtkGDCMThreadedImageReader
+      #TestvtkGDCMThreadedImageReader
+      TestvtkGDCMThreadedImageReader2
     )
   ENDIF(CMAKE_HAVE_PTHREAD_H)
 

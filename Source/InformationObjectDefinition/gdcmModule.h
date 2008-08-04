@@ -30,6 +30,7 @@ namespace gdcm
  * are logically related to each other.
  * \sa Dict
  */
+class DataSet;
 class GDCM_EXPORT Module
 {
 public:
@@ -57,11 +58,19 @@ public:
     assert( it->first == tag );
     return it->second;
     }
+  void SetName( const char *name) { Name = name; }
+  const char *GetName() const { return Name.c_str(); }
+
+  // Verify will print on std::cerr for error
+  // Upon success will return true, false otherwise
+  bool Verify(const DataSet& ds) const;
+
 private:
   //Module &operator=(const Module &_val); // purposely not implemented
   //Module(const Module &_val); // purposely not implemented
 
   MapModuleEntry ModuleInternal;
+  std::string Name;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& _os, const Module &_val)

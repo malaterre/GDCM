@@ -17,14 +17,18 @@
 #include "vtkAppendPolyData.h"
 #include "vtkPolyDataWriter.h"
 #include "vtkPolyDataMapper.h"
+#include "vtkPolyDataMapper2D.h"
+#include "vtkActor2D.h"
 #include "vtkRenderWindowInteractor.h"
 #include "vtkRenderWindow.h"
 #include "vtkRenderer.h"
 #include "vtkCamera.h"
 #include "vtkProperty.h"
+#include "vtkProperty2D.h"
 
 
 // gdcmDataExtra/gdcmNonImageData/exRT_Structure_Set_Storage.dcm
+// gdcmDataExtra/gdcmNonImageData/RTSTRUCT_1.3.6.1.4.1.22213.1.1396.2.dcm
 // gdcmDataExtra/gdcmNonImageData/RT/RTStruct.dcm
 
 int main(int argc, char *argv[])
@@ -40,9 +44,17 @@ int main(int argc, char *argv[])
   reader->SetFileName( filename );
   reader->Update();
 
+  // print reader output:
   reader->Print( std::cout );
+  // print first output:
   reader->GetOutput()->Print( std::cout );
 
+  vtkAppendPolyData *append = vtkAppendPolyData::New();
+  int n = reader->GetNumberOfOutputPorts();
+  for(int i = 0; i < n; ++i)
+    {
+    append->AddInput( reader->GetOutput(i) );
+    }
 
   vtkPolyDataWriter * writer = vtkPolyDataWriter::New();
   writer->SetInput( reader->GetOutput() );
@@ -51,12 +63,16 @@ int main(int argc, char *argv[])
 
   // Now we'll look at it.
   vtkPolyDataMapper *cubeMapper = vtkPolyDataMapper::New();
-      cubeMapper->SetInput( reader->GetOutput() );
+  //vtkPolyDataMapper2D* cubeMapper = vtkPolyDataMapper2D::New();
+      //cubeMapper->SetInput( reader->GetOutput() );
+      cubeMapper->SetInput( append->GetOutput() );
       cubeMapper->SetScalarRange(0,7);
   vtkActor *cubeActor = vtkActor::New();
+  //vtkActor2D* cubeActor = vtkActor2D::New();
       cubeActor->SetMapper(cubeMapper);
   vtkProperty * property = cubeActor->GetProperty();
   property->SetRepresentationToWireframe();
+  //cubeActor->GetProperty()->SetColor(1, 0, 0);
 
 
   // The usual rendering stuff.
@@ -72,6 +88,7 @@ int main(int argc, char *argv[])
     iren->SetRenderWindow(renWin);
 
   renderer->AddActor(cubeActor);
+  //renderer->AddActor2D(cubeActor);
       //renderer->SetActiveCamera(camera);
       renderer->ResetCamera();
       renderer->SetBackground(1,1,1);
@@ -85,6 +102,7 @@ int main(int argc, char *argv[])
 
   
   reader->Delete();
+  append->Delete();
   cubeMapper->Delete();
   cubeActor->Delete();
 //  camera->Delete();

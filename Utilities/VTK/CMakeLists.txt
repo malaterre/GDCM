@@ -13,7 +13,6 @@ SET(vtkgdcm_SRCS
 IF(CMAKE_HAVE_PTHREAD_H)
   SET(vtkgdcm_SRCS ${vtkgdcm_SRCS}
   vtkGDCMThreadedImageReader.cxx
-  #vtkGDCMThreadedImageReader2.cxx
   )
 ENDIF(CMAKE_HAVE_PTHREAD_H)
 
@@ -69,7 +68,15 @@ ELSE( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageYBRToRGB.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageRGBToYBR.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkGDCMPolyDataReader.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/vtkLookupTable16.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageMapToColors16.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/vtkImagePlanarComponentsToComponents.cxx
   )
+  IF(CMAKE_HAVE_PTHREAD_H)
+    SET(vtkgdcm_SRCS ${vtkgdcm_SRCS}
+    vtkGDCMThreadedImageReader2.cxx
+    )
+  ENDIF(CMAKE_HAVE_PTHREAD_H)
 
   SET(VTK_USE_INSTANTIATOR_NEW 1)
   VTK_MAKE_INSTANTIATOR3(

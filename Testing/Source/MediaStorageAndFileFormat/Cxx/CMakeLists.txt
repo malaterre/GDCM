@@ -2,9 +2,14 @@
 # MSFF
 SET(MSFF_TEST_SRCS
   TestAnonymizer
+  TestTagPath
   TestOrientation
   TestIconImage
   TestImageHelper
+  TestImageToImageFilter
+  TestImageChangeTransferSyntax
+  TestImageChangeTransferSyntax2
+  TestImageChangeTransferSyntax3
   TestCoder
   TestDecoder
   TestRescaler
@@ -112,6 +117,52 @@ FOREACH(filename ${gdcm_data_filenames_glob})
           "${GDCM_TEMP_DIRECTORY}/TestWriter/${filename_name}")
       ENDIF(DCDUMP_EXECUTABLE)
     ENDIF(GDCM_TEST_DICOM3TOOLS)
+  ENDIF(NOT bad_dicom)
+ENDFOREACH(filename)
+
+# There is a new test that compress all images using the jpeg compression alg:
+# try to decompress them with dcmtk:
+FILE(MAKE_DIRECTORY "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax/dcmdjpeg/")
+
+FOREACH(filename ${gdcm_data_filenames_glob})
+  GET_FILENAME_COMPONENT(filename_name ${filename} NAME)
+  STRING(REGEX MATCH ${filename_name} bad_dicom ${black_list_reader})
+  IF(NOT bad_dicom)
+    IF(GDCM_TEST_DCMTK)
+      IF(DCMTK_DCMDJPEG_EXECUTABLE)
+        ADD_TEST("DCMDJPEG-${filename_name}" ${DCMTK_DCMDJPEG_EXECUTABLE}
+          "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax/${filename_name}"
+          "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax/dcmdjpeg/${filename_name}")
+        # Special handling of the DICOMDIR files:
+        STRING(REGEX MATCH ${filename_name} is_dicomdir ${gdcm_data_dicomdir_filenames_glob})
+        IF(is_dicomdir)
+          #MESSAGE("IS DICOMDIR ${filename_name}")
+          SET_TESTS_PROPERTIES("DCMDJPEG-${filename_name}" PROPERTIES WILL_FAIL TRUE)
+        ENDIF(is_dicomdir)
+      ENDIF(DCMTK_DCMDJPEG_EXECUTABLE)
+    ENDIF(GDCM_TEST_DCMTK)
+  ENDIF(NOT bad_dicom)
+ENDFOREACH(filename)
+
+FILE(MAKE_DIRECTORY "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax/dcmdrle/")
+
+FOREACH(filename ${gdcm_data_filenames_glob})
+  GET_FILENAME_COMPONENT(filename_name ${filename} NAME)
+  STRING(REGEX MATCH ${filename_name} bad_dicom ${black_list_reader})
+  IF(NOT bad_dicom)
+    IF(GDCM_TEST_DCMTK)
+      IF(DCMTK_DCMDRLE_EXECUTABLE)
+        ADD_TEST("DCMDRLE-${filename_name}" ${DCMTK_DCMDRLE_EXECUTABLE}
+          "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax3/${filename_name}"
+          "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax3/dcmdrle/${filename_name}")
+        # Special handling of the DICOMDIR files:
+        STRING(REGEX MATCH ${filename_name} is_dicomdir ${gdcm_data_dicomdir_filenames_glob})
+        IF(is_dicomdir)
+          #MESSAGE("IS DICOMDIR ${filename_name}")
+          SET_TESTS_PROPERTIES("DCMDRLE-${filename_name}" PROPERTIES WILL_FAIL TRUE)
+        ENDIF(is_dicomdir)
+      ENDIF(DCMTK_DCMDRLE_EXECUTABLE)
+    ENDIF(GDCM_TEST_DCMTK)
   ENDIF(NOT bad_dicom)
 ENDFOREACH(filename)
 

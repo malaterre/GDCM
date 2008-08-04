@@ -59,4 +59,4 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmUnpacker12Bits_h
+#endif //__gdcmRescaler_h

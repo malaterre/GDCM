@@ -29,7 +29,18 @@ namespace itk
  *
  *  \ingroup IOFilters
  */
-class ITK_EXPORT GDCMImageIO2 : public ImageIOBase
+
+/* I could not figure out where/what was the API in ITK to achieve that,
+ * instead duplicate code here */
+#if defined(WIN32) && defined(ITK_BUILD_SHARED_LIBS)
+ #if defined(itkgdcm2_EXPORTS)
+  #define ITK_GDCM_EXPORT __declspec( dllexport ) 
+ #else
+  #define ITK_GDCM_EXPORT __declspec( dllimport ) 
+ #endif
+#endif
+
+class ITK_GDCM_EXPORT GDCMImageIO2 : public ImageIOBase
 {
 public:
   /** Standard class typedefs. */

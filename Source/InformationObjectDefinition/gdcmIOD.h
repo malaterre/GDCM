@@ -29,6 +29,7 @@ namespace gdcm
  * 
  * \sa Dict
  */
+class DataSet;
 class GDCM_EXPORT IOD
 {
 public:
@@ -43,6 +44,16 @@ public:
     {
     IODInternal.push_back(iode);
     }
+
+  unsigned int GetNumberOfIODs() const {
+    return IODInternal.size();
+  }
+
+  const IODEntry& GetIODEntry(unsigned int idx) const 
+    {
+    return IODInternal[idx];
+    }
+
 private:
   //IOD &operator=(const IOD &_val); // purposely not implemented
   //IOD(const IOD &_val); // purposely not implemented

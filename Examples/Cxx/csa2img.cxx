@@ -49,7 +49,8 @@ int main(int argc, char *argv [])
 
   if( ds.FindDataElement( t1 ) )
     {
-    csa.Print( ds.GetDataElement( t1 ) );
+    csa.LoadFromDataElement( ds.GetDataElement( t1 ) );
+    csa.Print( std::cout );
     }
 #if 0
   int dims[2];

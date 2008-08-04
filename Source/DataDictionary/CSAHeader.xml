@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
   Program: GDCM (Grass Root DICOM). A DICOM library
-  Module:  $URL: https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk/Source/DataDictionary/Part6.xml $
+  Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
   All rights reserved.
@@ -10,6 +10,11 @@
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
+-->
+<!--
+XMLified version of:
+
+http://www.mmrrcc.upenn.edu/CAMRIS/cfn/dicomhdr.html
 -->
 <dict>
   <entry name="Attribute Name" type="Type" vr="VR" vm="VM" description="Descriptiom"/>

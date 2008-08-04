@@ -25,7 +25,8 @@ class GDCM_EXPORT AudioCodec : public Codec
 public:
   AudioCodec();
   ~AudioCodec();
-  bool CanDecode(TransferSyntax const &) { return false; }
+  bool CanCode(TransferSyntax const &) const { return false; }
+  bool CanDecode(TransferSyntax const &) const { return false; }
   bool Decode(DataElement const &is, DataElement &os);
 };
 

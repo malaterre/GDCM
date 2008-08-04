@@ -26,6 +26,7 @@
 #include <assert.h>
 #include <errno.h>
 #include <sys/stat.h>
+#include <limits.h> // PATH_MAX
 
 // gettimeofday
 #ifdef HAVE_SYS_TIME_H
@@ -73,6 +74,12 @@ inline int Rmdir(const char* dir)
 {
   return _rmdir(dir);
 }
+inline const char* Getcwd(char* buf, unsigned int len)
+{
+  const char* ret = _getcwd(buf, len);
+  return ret;
+}
+
 #else
 inline int Mkdir(const char* dir)
 {
@@ -82,7 +89,45 @@ inline int Rmdir(const char* dir)
 {
   return rmdir(dir);
 }
+inline const char* Getcwd(char* buf, unsigned int len)
+{
+  const char* ret = getcwd(buf, len);
+  return ret;
+}
 #endif
+
+/*
+// 1.14 How can I find a process' executable file?
+// http://www.faqs.org/faqs/unix-faq/programmer/faq/
+static std::string Argv0;
+
+void System::SetArgv0(const char *argv0)
+{
+  Argv0 = argv0;
+//std::cout << "Set:" << Argv0 << std::endl;
+}
+
+const char* System::GetArgv0()
+{
+//std::cout << "Get:" << Argv0 << std::endl;
+  return Argv0.c_str();
+}
+*/
+
+const char * System::GetCWD()
+{
+  static char buf[2048];
+  const char* cwd = Getcwd(buf, 2048);
+  return cwd;
+/*
+  std::string path;
+  if ( cwd )
+    {
+    path = cwd;
+    }
+  return path;
+*/
+}
 
 bool System::MakeDirectory(const char *path)
 {
@@ -241,6 +286,37 @@ size_t System::FileSize(const char* filename)
     {
     return fs.st_size;
     }
+}
+
+const char *System::GetCurrentProcessFileName()
+{
+/* 
+ * TODO:
+ * check cygwin
+ * check beos : get_next_image_info
+ * check solaris
+ * check hpux
+ * check os2: DosGetInfoBlocks / DosQueryModuleName
+ * check macosx : 
+ *  ProcessSerialNumber psn = {kNoProcess, kCurrentProcess};
+ *  GetProcessInformation -> FSMakeFSSpec
+ * ...
+ */
+#ifdef _WIN32
+  static char buf[MAX_PATH];
+  if ( ::GetModuleFileName(0, buf, sizeof(buf)) )
+  {
+    return buf;
+  }
+  return 0;
+#else
+ static char path[PATH_MAX];
+ if (readlink ("/proc/self/exe", path, sizeof(path)) <= 0)
+   {
+   return 0;
+   }
+ return path;
+#endif
 }
 
 /**

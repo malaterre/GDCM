@@ -225,11 +225,18 @@ void TableReader::HandleModule(const char **atts)
 {
   std::string strref = "ref";
   std::string strname = "name";
+  std::string strtable = "table";
   const char **current = atts;
   while(*current /*&& current+1*/)
     {
     if( strref == *current )
       {
+      CurrentModuleRef = *(current+1);
+      }
+    else if( strtable == *current )
+      {
+      // ref to table is absolutely not useful :(
+      // simply discard
       }
     else if( strname == *current )
       {
@@ -304,7 +311,39 @@ void TableReader::StartElement(const char *name, const char **atts)
       abort();
       }
     }
+  else if( strcmp(name, "section" ) == 0 )
+    {
+    // TODO !
+    }
   else if( strcmp(name, "include" ) == 0 )
+    {
+    // TODO !
+    }
+  else if ( strcmp(name,"standard-sop-classes") == 0 )
+    {
+    // TODO !
+    }
+  else if ( strcmp(name,"mapping") == 0 )
+    {
+    // TODO !
+    }
+  else if ( strcmp(name,"unrecognized-rows") == 0 )
+    {
+    // TODO !
+    }
+  else if ( strcmp(name,"retired-defined-terms") == 0 )
+    {
+    // TODO !
+    }
+  else if ( strcmp(name,"enumerated-values") == 0 )
+    {
+    // TODO !
+    }
+  else if ( strcmp(name,"defined-terms") == 0 )
+    {
+    // TODO !
+    }
+  else if ( strcmp(name,"term") == 0 )
     {
     // TODO !
     }
@@ -324,14 +363,16 @@ void TableReader::EndElement(const char *name)
   else if( strcmp(name, "macro" ) == 0 )
     {
     //std::cout << "Start Macro" << std::endl;
-    CurrentDefs.GetMacros().AddModule( CurrentModuleName.c_str(), CurrentMacro);
+    CurrentMacro.SetName( CurrentModuleName.c_str() );
+    CurrentDefs.GetMacros().AddModule( CurrentModuleRef.c_str(), CurrentMacro);
     CurrentModuleName.clear();
     CurrentMacro.Clear();
     ParsingMacro = false;
     }
   else if( strcmp( "module", name) == 0 )
     {
-    CurrentDefs.GetModules().AddModule( CurrentModuleName.c_str(), CurrentModule);
+    CurrentModule.SetName( CurrentModuleName.c_str() );
+    CurrentDefs.GetModules().AddModule( CurrentModuleRef.c_str(), CurrentModule);
     //std::cout << "End Module:" << CurrentModuleName << std::endl;
     CurrentModuleName.clear();
     CurrentModule.Clear();
@@ -381,6 +422,38 @@ void TableReader::EndElement(const char *name)
       {
       abort();
       }
+    }
+  else if( strcmp(name, "mapping" ) == 0 )
+    {
+    // TODO !
+    }
+  else if( strcmp(name, "standard-sop-classes" ) == 0 )
+    {
+    // TODO !
+    }
+  else if( strcmp(name, "section" ) == 0 )
+    {
+    // TODO !
+    }
+  else if( strcmp(name, "unrecognized-rows" ) == 0 )
+    {
+    // TODO !
+    }
+  else if( strcmp(name, "retired-defined-terms" ) == 0 )
+    {
+    // TODO !
+    }
+  else if( strcmp(name, "enumerated-values" ) == 0 )
+    {
+    // TODO !
+    }
+  else if( strcmp(name, "defined-terms" ) == 0 )
+    {
+    // TODO !
+    }
+  else if( strcmp(name, "term" ) == 0 )
+    {
+    // TODO !
     }
   else if( strcmp(name, "include" ) == 0 )
     {

@@ -2,7 +2,10 @@
 # MSFF
 SET(MSFF_SRCS
   gdcmAnonymizer.cxx
+  gdcmTagPath.cxx
   gdcmRescaler.cxx
+  gdcmImageToImageFilter.cxx
+  gdcmImageChangeTransferSyntax.cxx
   gdcmOrientation.cxx
   gdcmDirectionCosines.cxx
   gdcmSorter.cxx

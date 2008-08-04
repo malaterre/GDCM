@@ -22,18 +22,13 @@
 #include "vtkDemandDrivenPipeline.h"
 #include "vtkStreamingDemandDrivenPipeline.h"
 
-//FIXME
-#include "vtkImageIterator.h"
-#include "vtkImageProgressIterator.h"
-#include "vtkDoubleArray.h"
-// END FIXME
-
 #include "gdcmImageReader.h"
 
 #include <assert.h>
 
 vtkCxxRevisionMacro(vtkGDCMThreadedImageReader2, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMThreadedImageReader2)
+vtkCxxSetObjectMacro(vtkGDCMThreadedImageReader2,FileNames,vtkStringArray)
 
 // Output Ports are as follow:
 // #0: The image/volume (root PixelData element)
@@ -47,16 +42,21 @@ vtkGDCMThreadedImageReader2::vtkGDCMThreadedImageReader2()
 {
   this->SetNumberOfInputPorts(0);
   this->FileLowerLeft = 1;
-  this->FileNames = NULL;
   this->FileName = NULL;
-  LoadIconImage = 0;
-  memset(DataExtent,0,6*sizeof(*DataExtent));
-  DataSpacing[0] = DataSpacing[1] = DataSpacing[2] = 1;
-  LoadOverlays = 0;
-  NumberOfOverlays = 0;
-  DataScalarType = VTK_VOID;
+  this->FileNames = vtkStringArray::New();
+  this->LoadIconImage = 0;
+  memset(this->DataExtent,0,6*sizeof(*DataExtent));
+  this->LoadOverlays = 0;
+  this->NumberOfOverlays = 0;
+  this->DataScalarType = VTK_VOID;
+
+  this->NumberOfScalarComponents = 1;
+  this->DataSpacing[0] = DataSpacing[1] = DataSpacing[2] = 1;
+  this->DataOrigin[0] = DataOrigin[1] = DataOrigin[2] = 0;
+  memset(this->IconImageDataExtent,0,6*sizeof(*IconImageDataExtent));
 }
 
+//----------------------------------------------------------------------------
 vtkGDCMThreadedImageReader2::~vtkGDCMThreadedImageReader2()
 {
   if( this->FileNames )
@@ -66,239 +66,74 @@ vtkGDCMThreadedImageReader2::~vtkGDCMThreadedImageReader2()
   this->SetFileName(NULL);
 }
 
-#if 0
-struct threadparams
+//----------------------------------------------------------------------------
+const char *vtkGDCMThreadedImageReader2::GetFileName(int i)
 {
-  const char **filenames;             // array of filenames thread will process (order is important!)
-  unsigned int nfiles;                // number of files the thread will process
-  char *scalarpointer;                // start of the image buffer affected to the thread
-  unsigned char *overlayscalarpointer;
-  unsigned long len;                  // This is not required but useful to check if files are consistant
-  unsigned long overlaylen;
-  unsigned long totalfiles;           // total number of files being processed (needed to compute progress)
-  pthread_mutex_t lock;               // critial section for updating progress
-  vtkGDCMThreadedImageReader2 *reader; // needed for calling updateprogress
-};
-
-void *ReadFilesThread(void *voidparams)
-{
-  threadparams *params = static_cast<threadparams *> (voidparams);
-  assert( params );
-
-  const unsigned int nfiles = params->nfiles;
-  assert( nfiles ); //
-  // pre compute progress delta for one file:
-  assert( params->totalfiles );
-  const double progressdelta = 1. / params->totalfiles;
-  for(unsigned int file = 0; file < nfiles; ++file)
-    {
-    const char *filename = params->filenames[file];
-    //std::cerr << filename << std::endl;
-
-    }
-
-  return voidparams;
-}
-
-void ShowFilenames(const threadparams &params)
-{
-  std::cout << "start" << std::endl;
-  for(unsigned int i = 0; i < params.nfiles; ++i)
-    {
-    const char *filename = params.filenames[i];
-    std::cout << filename << std::endl;
-    }
-  std::cout << "end" << std::endl;
+  return this->FileNames->GetValue( i );
 }
 
 //----------------------------------------------------------------------------
-void vtkGDCMThreadedImageReader2::ReadFiles(unsigned int nfiles, const char *filenames[])
+void vtkGDCMThreadedImageReader2::SetFileName(const char *filename)
 {
-  // image data:
-  vtkImageData *output = this->GetOutput(0);
-  assert( output->GetNumberOfPoints() % nfiles == 0 );
-  const unsigned long len = output->GetNumberOfPoints() * output->GetScalarSize() / nfiles;
-  const unsigned long overlaylen = output->GetNumberOfPoints() / nfiles;
-  char * scalarpointer = static_cast<char*>(output->GetScalarPointer());
-  // overlay data:
-  unsigned char * overlayscalarpointer = 0;
-  if( this->LoadOverlays )
+  if( !filename )
     {
-    vtkImageData *overlayoutput = this->GetOutput(OverlayPortNumber);
-    overlayoutput->SetScalarTypeToUnsignedChar();
-    overlayoutput->AllocateScalars();
-    overlayscalarpointer = static_cast<unsigned char*>(overlayoutput->GetScalarPointer());
+    return;
     }
-
-  const unsigned int nprocs = sysconf( _SC_NPROCESSORS_ONLN );
-  const unsigned int nthreads = std::min( nprocs, nfiles );
-  threadparams *params = new threadparams[nthreads];
-
-  pthread_mutex_t lock;
-  pthread_mutex_init(&lock, NULL);
-
-  pthread_t *pthread = new pthread_t[nthreads];
-  pthread_attr_t attr;
-  pthread_attr_init(&attr);
-  pthread_attr_setscope(&attr, PTHREAD_SCOPE_PROCESS);
-  this->Debug = 0;
-
-  // There is nfiles, and nThreads
-  assert( nfiles >= nthreads );
-  const unsigned int partition = nfiles / nthreads;
-  assert( partition );
-  for (unsigned int thread=0; thread < nthreads; ++thread)
-    {
-    params[thread].filenames = filenames + thread * partition;
-    params[thread].nfiles = partition;
-    if( thread == nthreads - 1 )
-      {
-      // There is slightly more files to process in this thread:
-      params[thread].nfiles += nfiles % nthreads;
-      }
-    assert( thread * partition < nfiles );
-    //ShowFilenames(params[thread]);
-    params[thread].scalarpointer = scalarpointer + thread * partition * len;
-    params[thread].overlayscalarpointer = overlayscalarpointer + thread * partition * len;
-    params[thread].len = len;
-    params[thread].overlaylen = overlaylen;
-    params[thread].totalfiles = nfiles;
-    params[thread].lock = lock;
-    assert( this->Debug == 0 );
-    params[thread].reader = this;
-    assert( params[thread].reader->Debug == 0 );
-    // start thread:
-    //int res = pthread_create( &pthread[thread], NULL, ReadFilesThread, &params[thread]);
-    int res = pthread_create( &pthread[thread], &attr, ReadFilesThread, &params[thread]);
-    if( res )
-      {
-      std::cerr << "Unable to start a new thread, pthread returned: " << res << std::endl;
-      abort();
-      }
-    }
-// DEBUG
-  unsigned int total = 0;
-  for (unsigned int thread=0; thread < nthreads; ++thread)
-    {
-    total += params[thread].nfiles;
-    }
-  assert( total == nfiles );
-// END DEBUG
-
-  for (unsigned int thread=0;thread<nthreads;thread++)
-    {
-    pthread_join( pthread[thread], NULL);
-    }
-  delete[] pthread;
-
-  pthread_mutex_destroy(&lock);
-  delete[] params;
- 
-/*
-  // For some reason writing down the file is painfully slow...
-  vtkStructuredPointsWriter *writer = vtkStructuredPointsWriter::New();
-  writer->SetInput( output );
-  writer->SetFileName( "/tmp/threadgdcm.vtk" );
-  writer->SetFileTypeToBinary();
-  //writer->Write();
-  writer->Delete();
-*/
-
-  //output->Print( std::cout );
+  //this->FileNames->Clear();
+  this->FileNames->InsertNextValue( filename );
+  assert( this->FileNames->GetNumberOfValues() == 1 );
 }
-
-//----------------------------------------------------------------------------
-int vtkGDCMThreadedImageReader2::RequestData(vtkInformation *vtkNotUsed(request),
-                                vtkInformationVector **vtkNotUsed(inputVector),
-                                vtkInformationVector *outputVector)
-{
-  (void)outputVector;
-  //std::cerr << "vtkGDCMThreadedImageReader2::RequestData Start" << std::endl;
-  //this->UpdateProgress(0.2);
-
-  // Make sure the output dimension is OK, and allocate its scalars
-
-  for(int i = 0; i < this->GetNumberOfOutputPorts(); ++i)
-    {
-    // Copy/paste from vtkImageAlgorithm::AllocateScalars. Cf. "this needs to be fixed -Ken"
-    vtkStreamingDemandDrivenPipeline *sddp = 
-      vtkStreamingDemandDrivenPipeline::SafeDownCast(this->GetExecutive());
-    if (sddp)
-      {
-      int extent[6];
-      sddp->GetOutputInformation(i)->Get(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(),extent);
-      this->GetOutput(i)->SetExtent(extent);
-      }
-    this->GetOutput(i)->AllocateScalars();
-    }
-
-  RequestDataCompat();
-
-  //std::cerr << "vtkGDCMThreadedImageReader2::RequestData End" << std::endl;
-  return 1;
-}
-
-void vtkGDCMThreadedImageReader2::RequestDataCompat()
-{
-  int *dext = this->GetDataExtent();
-  if( this->FileNames )
-    {
-    // Make sure that each file is single slice
-    assert( dext[5] - dext[4] == this->FileNames->GetNumberOfValues() - 1 ); (void)dext;
-    const unsigned int nfiles = this->FileNames->GetNumberOfValues();
-    const char **filenames = new const char* [ nfiles ];
-    for(unsigned int i = 0; i < nfiles; ++i)
-      {
-      filenames[i] = this->FileNames->GetValue( i );
-      //std::cerr << filenames[i] << std::endl;
-      }
-    ReadFiles(nfiles, filenames);
-    delete[] filenames;
-    }
-  else if( this->FileName )
-    {
-    // File can be a volume
-    const char *filename = this->FileName;
-    ReadFiles(1, &filename);
-    }
-  else
-    {
-    // Impossible case since ExecuteInformation would have failed earlier...
-    assert( 0 && "Impossible happen" );
-    }
-
-}
-#endif
-
 
 //----------------------------------------------------------------------------
 // Description:
 // This templated function executes the filter for any type of data.
 template <class T>
-void vtkImageWeightedSumExecute(vtkGDCMThreadedImageReader2 *self,
+void vtkGDCMThreadedImageReader2Execute(vtkGDCMThreadedImageReader2 *self,
                           vtkImageData **inDatas, int numFiles, vtkImageData *outData,
                           int outExt[6], int id, T*)
 {
-  //printf("outExt:%d,%d,%d,%d,%d,%d\n",
-  //  outExt[0], outExt[1], outExt[2], outExt[3], outExt[4], outExt[5]);
-      int i = outExt[4];
-     const char *filename = self->GetFileNames()->GetValue( i );
-  //ReadOneFile( filename );
-  //outData->GetPointData()->GetScalars()->SetName("GDCMImage");
-
-  char * pointer = static_cast<char*>(outData->GetScalarPointerForExtent(outExt));
-  gdcm::ImageReader reader;
-  reader.SetFileName( filename );
-  if( !reader.Read() )
+  (void)numFiles; (void)inDatas;
+  printf("outExt:%d,%d,%d,%d,%d,%d\n",
+    outExt[0], outExt[1], outExt[2], outExt[3], outExt[4], outExt[5]);
+  // FIXME:
+  // The code could be a little tidier, all I am trying to do here is differenciate the 
+  // case where we have a series of 2D files and the case where we have a single multi-frames
+  // files...
+  int maxfiles = self->GetFileNames()->GetNumberOfValues();
+  for( int i = outExt[4]; i <= outExt[5] && i < maxfiles; ++i )
     {
-    abort();
+    assert( i < maxfiles );
+    const char *filename = self->GetFileNames()->GetValue( i );
+    //ReadOneFile( filename );
+    //outData->GetPointData()->GetScalars()->SetName("GDCMImage");
+
+    if( id == 0 )
+      {
+      // we only consider outExt here for computing the progress, while in fact we should really
+      // consider numFiles to compute exact update progress...oh well let's assume this is almost 
+      // correct.
+      self->UpdateProgress(float(i)/float(outExt[5]-outExt[4]+1));
+      }
+
+
+    //char * pointer = static_cast<char*>(outData->GetScalarPointerForExtent(outExt));
+    char * pointer = static_cast<char*>(outData->GetScalarPointer(0,0,i));
+    //printf("pointer:%i\n",*pointer);
+    gdcm::ImageReader reader;
+    reader.SetFileName( filename );
+    if( !reader.Read() )
+      {
+      abort();
+      }
+    const gdcm::Image &image = reader.GetImage();
+    unsigned long len = image.GetBufferLength();
+    image.GetBuffer(pointer);
+    (void)len;
     }
-  const gdcm::Image &image = reader.GetImage();
-  unsigned long len = image.GetBufferLength();
-  image.GetBuffer(pointer);
 
 }
 
+//----------------------------------------------------------------------------
 int vtkGDCMThreadedImageReader2::RequestInformation (
   vtkInformation * request,
   vtkInformationVector** inputVector,
@@ -320,17 +155,19 @@ int vtkGDCMThreadedImageReader2::RequestInformation (
     return 0;
     }
 
+  /*
   if( this->FileNames )
-    {
-    int zmin = 0;
-    int zmax = 0;
-    zmax = this->FileNames->GetNumberOfValues() - 1;
-    if( this->DataExtent[4] != zmin || this->DataExtent[5] != zmax )
-      {
-      vtkErrorMacro( "Problem with extent" );
-      return 0;
-      }
-    }
+  {
+  int zmin = 0;
+  int zmax = 0;
+  zmax = this->FileNames->GetNumberOfValues() - 1;
+  if( this->DataExtent[4] != zmin || this->DataExtent[5] != zmax )
+  {
+  vtkErrorMacro( "Problem with extent" );
+  return 0;
+  }
+  }
+   */
   // Cannot deduce anything else otherwise...
 
   int numvol = 1;
@@ -360,7 +197,7 @@ int vtkGDCMThreadedImageReader2::RequestInformation (
     vtkInformation *outInfo = outputVector->GetInformationObject(i);
     switch(i)
       {
-    // root Pixel Data
+      // root Pixel Data
     case 0:
       outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), this->DataExtent, 6);
       //outInfo->Set(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), this->DataExtent, 6);
@@ -368,13 +205,13 @@ int vtkGDCMThreadedImageReader2::RequestInformation (
       outInfo->Set(vtkDataObject::ORIGIN(), this->DataOrigin, 3);
       vtkDataObject::SetPointDataActiveScalarInfo(outInfo, this->DataScalarType, this->NumberOfScalarComponents);
       break;
-    // Icon Image
+      // Icon Image
     case IconImagePortNumber:
       outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), this->IconImageDataExtent, 6);
       vtkDataObject::SetPointDataActiveScalarInfo(outInfo, VTK_UNSIGNED_CHAR, 1);
       break;
-    // Overlays:
-    //case OverlayPortNumber:
+      // Overlays:
+      //case OverlayPortNumber:
     default:
       outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), 
         this->DataExtent[0], this->DataExtent[1], 
@@ -419,6 +256,12 @@ int vtkGDCMThreadedImageReader2::SplitExtent(int splitExt[6], int startExt[6],
     return 1;
     }
 
+  // If single file always says 1:
+  // FIXME need to handle series of 3D files too...
+  if( this->GetFileNames()->GetNumberOfValues() == 1 )
+    {
+    return 1;
+    }
   // else normal SplitExtent as copied from vtkThreadedImageAlgorithm
 
   // determine the actual number of pieces that will be generated
@@ -435,9 +278,6 @@ int vtkGDCMThreadedImageReader2::SplitExtent(int splitExt[6], int startExt[6],
     splitExt[splitAxis*2] = splitExt[splitAxis*2] + num*valuesPerThread;
     }
   
-  vtkDebugMacro("  Split Piece: ( " <<splitExt[0]<< ", " <<splitExt[1]<< ", "
-                << splitExt[2] << ", " << splitExt[3] << ", "
-                << splitExt[4] << ", " << splitExt[5] << ")");
 
   return maxThreadIdUsed + 1;
 }
@@ -450,71 +290,23 @@ void vtkGDCMThreadedImageReader2::ThreadedRequestData (
   vtkImageData **outData,
   int outExt[6], int id)
 {
-//  printf("ThreadedRequestData::outExt:%d,%d,%d,%d,%d,%d\n",
-//    outExt[0], outExt[1], outExt[2], outExt[3], outExt[4], outExt[5]);
+  (void)inData;
+  //  printf("ThreadedRequestData::outExt:%d,%d,%d,%d,%d,%d\n",
+  //    outExt[0], outExt[1], outExt[2], outExt[3], outExt[4], outExt[5]);
 
   assert( this->DataScalarType != VTK_VOID );
 
-  //switch (inData[0][0]->GetScalarType())
   switch (this->GetDataScalarType())
     {
     vtkTemplateMacro(
-      vtkImageWeightedSumExecute(this , 0 /*inData[0]*/, 3,
+      vtkGDCMThreadedImageReader2Execute(this , 0 , 3,
         outData[0], outExt, id, static_cast<VTK_TT *>(0))
       );
     default:
       vtkErrorMacro(<< "Execute: Unknown ScalarType");
       return;
     }
-  //float progress = this->GetProgress();
-  //int i = outExt[4];
-  //int numFiles = 1920;
-  //this->UpdateProgress(float(i)/float(numFiles));
-
 }
-
-void vtkGDCMThreadedImageReader2::SetFileNames(vtkStringArray *filenames)
-{
-  if (filenames == this->FileNames)
-    {
-    return;
-    }
-  if (this->FileNames)
-    {
-    this->FileNames->Delete();
-    this->FileNames = 0;
-    }
-  if (filenames)
-    {
-    this->FileNames = filenames;
-    this->FileNames->Register(this);
-    if (this->FileNames->GetNumberOfValues() > 0)
-      {
-      this->DataExtent[4] = 0;
-      this->DataExtent[5] = this->FileNames->GetNumberOfValues() - 1;
-      }
-    //if (this->FilePrefix)
-    //  {
-    //  delete [] this->FilePrefix;
-    //  this->FilePrefix = NULL;
-    //  }
-    if (this->FileName)
-      {
-      delete [] this->FileName;
-      this->FileName = NULL;
-      }
-    }
-
-  this->Modified();
-}
-
-//----------------------------------------------------------------------------
-//int vtkGDCMThreadedImageReader2::FillInputPortInformation(int i, vtkInformation* info)
-//{
-//  info->Set(vtkAlgorithm::INPUT_IS_REPEATABLE(), 1);
-//  return this->Superclass::FillInputPortInformation(i,info);
-//}
-
 
 //----------------------------------------------------------------------------
 void vtkGDCMThreadedImageReader2::PrintSelf(ostream& os, vtkIndent indent)

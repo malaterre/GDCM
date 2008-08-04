@@ -1,6 +1,3 @@
-XML Stuff:
-* Part 3: Extract section that are referenced in informaltable
------------------------------------------------------------------------
 PrepGroupName.cxx does not handle Pixel Data group name since it has a space in the name...
 
 -----------------------------------------------------------------------
@@ -28,16 +25,6 @@ from sup58_ft2.doc
 -----------------------------------------------------------------------
 Calling dcmodify [1][2] with option --erase-tag should do what you want. 
 -----------------------------------------------------------------------
-PHILIPS_PrivateSeqWithPublicElems this File contains a private sequence 
-which itself contains public elements...
------------------------------------------------------------------------
-Provide an alternative to SIEMENS dcmInfo.exe and dump shadow elements
-0029,xxxx using there formats:
-67 - 'SlicePosition_PCS'        VM 3, VR FD, SyngoDT 4, NoOfItems 6, Data '-185.77913332'\'-163.80459213'\'72.73944092'
------------------------------------------------------------------------
-Add a FindKAKADU to find kakadu and thus be able to check compression
-done by openjpeg
------------------------------------------------------------------------
 You should be able to say: this file is a ACR NEMA read it ! So the wizard 
 should be bypass and the discovery step can be skipped.
 -----------------------------------------------------------------------
@@ -62,9 +49,6 @@ CT0014
 GFUNCST2
 MRVPWCB2 
 -----------------------------------------------------------------------
-When gdcmimg will be ready the RLE format will still be missing need
-to check if RLE DICOM is compatible with Utah RLE
------------------------------------------------------------------------
 Wrong Private element in dcmtk:
 (0009,1227) TM [210959.000000]                          #  14, 1 LastMoveTime
 I found:
@@ -87,18 +71,11 @@ PHANTOM.MR.CARDIO_COEUR_S_QUENCE_DE_REP_RAGE.9.257.2008.03.20.14.53.25.578125.43
 TODO: need a gdcm::ExtractOverlayFromPixelDataFilter
 to rewrite a gdcm::Image
 -----------------------------------------------------------------------
-Do SegmentedLUT !
------------------------------------------------------------------------
 Rewrite IconImage !
------------------------------------------------------------------------
-Convert the HTML page into c++ code:
-http://www.mmrrcc.upenn.edu/CAMRIS/cfn/dicomhdr.html
 -----------------------------------------------------------------------
 Provide operator() ==  for String<LO> (should discard length, space char...)
 -----------------------------------------------------------------------
 Should handle old Date format (with - separator)
------------------------------------------------------------------------
-Provide something for 16bits lut...
 -----------------------------------------------------------------------
 Do gdcm::Printer::Print
 In a consistant way if possible...
@@ -109,8 +86,6 @@ vtkMedicalImageProp user defined value should be written back to disk
 Filter should use OpenMP ?
 -----------------------------------------------------------------------
 GDCMFakeJPEG should be detected (at least a warning
------------------------------------------------------------------------
-Multiframe j2k was broken no test trigger the issue...
 -----------------------------------------------------------------------
 Hum, looks like vs 2007+1 can be used to redistribute binaries:
 http://www.microsoft.com/express/support/faq/
@@ -142,9 +117,6 @@ multiplicity of DICOM data elements with
 decimal string (DS) value representation
 http://www.iop.org/EJ/article/0031-9155/51/5/L01/pmb6_5_l01.pdf?request-id=00122d0d-5f95-4c78-bbeb-e9555ef639ae
 -----------------------------------------------------------------------
-Redo the threaded implementation to derive from Imagethreaded algorithm to take advantage of
-thread + internal implementation of progress report (might solve issue with python + thread)
------------------------------------------------------------------------
 Add support for LittleEndian declared as bigEndian (gdcmData/c_vf1001.dcm)
 -----------------------------------------------------------------------
 Add support for namelink packaging
@@ -161,3 +133,40 @@ window level in Enhanced objects is not handled
 -----------------------------------------------------------------------
 wow cpack is finally documented:
 http://www.itk.org/Wiki/CMake:Component_Install_With_CPack
+-----------------------------------------------------------------------
+TODO:
+gdcmData/GDCMPrinterDisplayUNasSQ.dcm
+-----------------------------------------------------------------------
+http://mlblog.osdir.com/programming.swig/2003-02/msg00053.html
+-----------------------------------------------------------------------
+doxygen is pretty advanced for this project:
+http://sourceforge.net/projects/od1n/
+-----------------------------------------------------------------------
+STL-based (non-validating) XML Parser
+http://www.codeguru.com/cpp/i-n/internet/xml/article.php/c3451/
+-----------------------------------------------------------------------
+Undefined length and explicit length are not interchangeable. Explicit length
+has an hardocded limit: 0xffff.... while undefined not.
+-----------------------------------------------------------------------
+Explicit VR when SQ is encoded as UN with explicit length is not printed correctly
+-----------------------------------------------------------------------
+There is subttel bug in the Part3 support:
+
+    <entry group="0010" element="1002" name="Other Patient IDs Sequence" type="3">
+      <description>A sequence of identification numbers or codes used to identify the patient, which may or may not be human readable, and may or may not have been obtained from an implanted or attached device such as an RFID or barcode.
+If present, shall contain one or more items.</description>
+    </entry>
+    <entry group="0010" element="0020" name="&gt;Patient ID" type="1">
+      <description>An identification number or code used to identify the patient.</description>
+    </entry>
+    <entry group="0010" element="0021" name="&gt;Issuer of Patient ID" type="1">
+      <description>Identifier of the Assigning Authority that issued the Patient ID.</description>
+    </entry>
+    <entry group="0010" element="0022" name="&gt;Type of Patient ID" type="1">
+      <description>The type of identifier in this item. Defined Terms:
+TEXT
+RFID
+BARCODE
+Note: The identifier is coded as a string regardless of the type, not as a binary value.</description>
+
+What this means is that 10,22 is Type 1 only within sequence 10,1002

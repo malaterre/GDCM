@@ -27,7 +27,7 @@ unsigned int SequenceOfFragments::GetNumberOfFragments() const
 
 void SequenceOfFragments::AddFragment(Fragment const &item)
 {
-  (void)item;
+  Fragments.push_back(item);
 }
 
 VL SequenceOfFragments::ComputeLength() const

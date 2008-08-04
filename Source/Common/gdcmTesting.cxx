@@ -59,10 +59,10 @@ inline void process_file(const char *filename, md5_byte_t *digest)
   md5_append(&state, (const md5_byte_t *)buffer, file_size);
   md5_finish(&state, digest);
   /*printf("MD5 (\"%s\") = ", test[i]); */
-  for (int di = 0; di < 16; ++di)
+  /*for (int di = 0; di < 16; ++di)
   {
     printf("%02x", digest[di]);
-  }
+  }*/
   //printf("\t%s\n", filename);
   free(buffer);
   fclose(file);

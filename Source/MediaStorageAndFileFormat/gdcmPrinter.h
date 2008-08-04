@@ -62,6 +62,8 @@ public:
 
   void SetFile(File const &f) { F = &f; }
 
+  void SetColor(bool c);
+
   typedef enum {
     VERBOSE_STYLE = 0, // GDCM Legacy VERBOSE one
     CONDENSED_STYLE, //

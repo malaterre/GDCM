@@ -36,6 +36,8 @@
 #include "vtkImageActor.h"
 #include "vtkWindowToImageFilter.h"
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#include "vtkImageMapToColors16.h"
+#include "vtkImagePlanarComponentsToComponents.h"
 #include "vtkBalloonWidget.h"
 #include "vtkBalloonRepresentation.h"
 #include "vtkLogoWidget.h"
@@ -378,7 +380,8 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   vtkBalloonWidget *balloonwidget = vtkBalloonWidget::New();
   balloonwidget->SetInteractor(iren);
   balloonwidget->SetRepresentation(balloonrep);
-  balloonwidget->AddBalloon(viewer->GetImageActor(),"This is a DICOM image",NULL);
+  balloonrep->Delete();
+  //balloonwidget->AddBalloon(viewer->GetImageActor(),"This is a DICOM image",NULL);
 
   vtkBalloonCallback *cbk = vtkBalloonCallback::New();
   balloonwidget->AddObserver(vtkCommand::WidgetActivateEvent,cbk);
@@ -431,27 +434,60 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     assert( reader->GetOutput()->GetPointData()->GetScalars() 
       && reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable() );
     //convert to color:
-    vtkImageMapToColors *map = vtkImageMapToColors::New ();
-    map->SetInput (reader->GetOutput());
-    map->SetLookupTable (reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable());
-    if( reader->GetImageFormat() == VTK_LOOKUP_TABLE )
+    vtkLookupTable *lut = reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable();
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+    if( lut->IsA( "vtkLookupTable16" ) )
       {
-      map->SetOutputFormatToRGB();
+      vtkImageMapToColors16 *map = vtkImageMapToColors16::New ();
+      map->SetInput (reader->GetOutput());
+      map->SetLookupTable (reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable());
+      if( reader->GetImageFormat() == VTK_LOOKUP_TABLE )
+        {
+        map->SetOutputFormatToRGB();
+        }
+      else if( reader->GetImageFormat() == VTK_INVERSE_LUMINANCE )
+        {
+        map->SetOutputFormatToLuminance();
+        }
+      map->Update();
+      map->GetOutput()->GetScalarRange(range);
+      viewer->SetInput( map->GetOutput() );
+      map->Delete();
       }
-    else if( reader->GetImageFormat() == VTK_INVERSE_LUMINANCE )
+    else
+#endif
       {
-      map->SetOutputFormatToLuminance();
+      vtkImageMapToColors *map = vtkImageMapToColors::New ();
+      map->SetInput (reader->GetOutput());
+      map->SetLookupTable (reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable());
+      if( reader->GetImageFormat() == VTK_LOOKUP_TABLE )
+        {
+        map->SetOutputFormatToRGB();
+        }
+      else if( reader->GetImageFormat() == VTK_INVERSE_LUMINANCE )
+        {
+        map->SetOutputFormatToLuminance();
+        }
+      map->Update();
+      map->GetOutput()->GetScalarRange(range);
+      viewer->SetInput( map->GetOutput() );
+      map->Delete();
       }
-    map->Update();
-    map->GetOutput()->GetScalarRange(range);
-    viewer->SetInput( map->GetOutput() );
-    map->Delete();
     }
   else if( reader->GetImageFormat() == VTK_YBR )
     {
 #if VTK_MAJOR_VERSION >= 5
     vtkImageYBRToRGB *filter = vtkImageYBRToRGB::New();
     filter->SetInput( reader->GetOutput() );
+    if( reader->GetPlanarConfiguration() )
+      {
+      vtkImagePlanarComponentsToComponents *rgbplanes = vtkImagePlanarComponentsToComponents::New();
+      rgbplanes->SetInput( reader->GetOutput() );
+      rgbplanes->Update();
+      //rgbplanes->GetOutput()->GetScalarRange(range);
+      filter->SetInput( rgbplanes->GetOutput() );
+      rgbplanes->Delete();
+      }
     filter->Update();
     filter->GetOutput()->GetScalarRange(range);
     viewer->SetInput( filter->GetOutput() );
@@ -459,6 +495,22 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 #else
     std::cerr << "Not implemented" << std::endl;
 #endif
+    }
+  else if( reader->GetImageFormat() == VTK_RGB )
+    {
+    if( reader->GetPlanarConfiguration() )
+      {
+#if VTK_MAJOR_VERSION >= 5
+      vtkImagePlanarComponentsToComponents *rgbplanes = vtkImagePlanarComponentsToComponents::New();
+      rgbplanes->SetInput( reader->GetOutput() );
+      rgbplanes->Update();
+      rgbplanes->GetOutput()->GetScalarRange(range);
+      viewer->SetInput( rgbplanes->GetOutput() );
+      rgbplanes->Delete();
+#else
+      std::cerr << "Not implemented" << std::endl;
+#endif
+      }
     }
 //  vtkImageShiftScale *ss = vtkImageShiftScale::New();
 //  ss->SetInput( reader->GetOutput() );
@@ -574,6 +626,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 
   reader->Delete();
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+  cbk->Delete();
   dwidget->Off();
   balloonwidget->Off();
   balloonwidget->Delete();

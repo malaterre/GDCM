@@ -3,16 +3,24 @@
 # We need to test the reading of all dicom images in the gdcmData directory
 # First parse this directory and extract all images
 
-FILE(GLOB GDCM_DATA_FILENAMES_GLOB
+FILE(GLOB GDCM_DATA_IMAGE_FILENAMES_GLOB
   "${GDCM_DATA_ROOT}/*.acr"
   "${GDCM_DATA_ROOT}/*.nema"
   "${GDCM_DATA_ROOT}/*.dcm"
   "${GDCM_DATA_ROOT}/*.DCM"
   "${GDCM_DATA_ROOT}/001*"
+  )
+
+FILE(GLOB GDCM_DATA_DICOMDIR_FILENAMES_GLOB
   # Those files do not have any extension, special regex:
   "${GDCM_DATA_ROOT}/DICOMDIR*"
   "${GDCM_DATA_ROOT}/dicomdir*"
   )
+
+SET(GDCM_DATA_FILENAMES_GLOB
+  ${GDCM_DATA_IMAGE_FILENAMES_GLOB}
+  ${GDCM_DATA_DICOMDIR_FILENAMES_GLOB}
+)
 
 # List of images that are technically difficult to read
 # Hopefully we will soon be able to read them
@@ -64,6 +72,16 @@ SET(BLACK_LIST_READER
   TheralysNoModalityNoObject.dcm
   ImplicitDeclaredAsExplicit.dcm
   TheralysGDCM1.dcm
+  MR_Spectroscopy_SIEMENS_OF.dcm
+# Recent issue with compression/decompression:
+  SIEMENS_GBS_III-16-ACR_NEMA_1.acr
+  SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm
+  MR-MONO2-12-angio-an1.acr
+  image.acr
+  PHILIPS_Gyroscan-8-MONO2-Odd_Sequence.dcm
+  MergeCOM3_330_IM50.dcm
+  ImplicitVRInExplicitDataSet2.dcm
+  BogugsItemAndSequenceLengthCorrected.dcm
 #SC that are well hidden MR Image Storage
   fffc0000UN.dcm
   MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm

@@ -14,9 +14,19 @@
 =========================================================================*/
 #include "gdcmCodec.h"
 
+namespace gdcm
+{
+class DummyCodec : public Codec
+{
+public:
+  bool CanDecode(TransferSyntax const &) const { return false; }
+  bool CanCode(TransferSyntax const &) const { return false; }
+};
+}
+
 int TestCodec(int , char *[])
 {
-  gdcm::Codec c;
+  gdcm::DummyCodec c;
   (void)c;
 
   return 0;

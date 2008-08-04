@@ -19,8 +19,9 @@
 
 namespace gdcm
 {
-/*
- * \brief Class for Version
+/**
+ * \class Version
+ * \brief major/minor and build version
  */
 //-----------------------------------------------------------------------------
 class GDCM_EXPORT Version

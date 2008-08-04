@@ -39,7 +39,7 @@ Writer::~Writer()
 
 bool Writer::Write()
 {
-  if( !Stream.is_open() )
+  if( !Stream )
     {
     gdcmErrorMacro( "No Filename" );
     return false;
@@ -47,10 +47,14 @@ bool Writer::Write()
 
   //assert( F );
   //F->Write( Stream );
-std::ostream &os = Stream;
+std::ostream &os = *Stream;
 FileMetaInformation &Header = F->GetHeader();
 DataSet &DS = F->GetDataSet();
 
+if( DS.IsEmpty() )
+  {
+  return 1;
+  }
 
   // Should I check that 0002,0002 / 0008,0016 and 0002,0003 / 0008,0018 match ?
 
@@ -110,7 +114,7 @@ try
     if( ts.GetNegociatedType() == TransferSyntax::Implicit )
       {
       // There is no such thing as Implicit Big Endian... oh well
-      // LIBIDO-16-ACR_NEMA-Volume.dcm 
+      // LIBIDO-16-ACR_NEMA-Volume.dcm
       DS.Write<ImplicitDataElement,SwapperDoOp>(os);
       }
     else
@@ -134,14 +138,19 @@ try
 }
 catch(...)
 {
-  Stream.close();
   return false;
 }
 
 
 
   // FIXME : call this function twice...
-  Stream.close();
+  if (Ofstream)
+  {
+	Ofstream->close();
+	delete Ofstream;
+	Ofstream = NULL;
+	Stream = NULL;
+  }
 
   return true;
 }

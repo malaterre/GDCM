@@ -210,7 +210,7 @@ public:
     if (it == DictInternal.end())
       {
       //assert( 0 && "Impossible" );
-      it = DictInternal.find( PrivateTag(0xffff,0xffff) );
+      it = DictInternal.find( PrivateTag(0xffff,0xffff,"GDCM Private Sentinel" ) );
       assert (it != DictInternal.end());
       return it->second;
       }

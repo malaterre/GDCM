@@ -24,6 +24,9 @@ namespace gdcm
 {
 /**
  * \brief Reader ala DOM (Document Object Model)
+ * This class is a non-validating reader, it will only performs well-
+ * formedness check only, and to some extent catch known error (non
+ * well-formed document).
  *
  * Detailled description here
  *
@@ -43,22 +46,30 @@ namespace gdcm
  * therefore this feature did not make it into GDCM2
  *
  * WARNING:
- * GDCM will not produce warning for unorder (non-alphabetical order). 
+ * GDCM will not produce warning for unorder (non-alphabetical order).
  * See gdcm::Writer for more info
- * 
+ *
  */
 class GDCM_EXPORT Reader
 {
 public:
-  Reader():F(new File),Stream() {}
+  Reader():F(new File){
+	  Stream = NULL;
+	  Ifstream = NULL;
+  }
   virtual ~Reader();
 
   virtual bool Read(); // Execute()
   void SetFileName(const char *filename) {
-	  Stream.open(filename, std::ios::binary);
+	  Ifstream = new std::ifstream();
+	  Ifstream->open(filename, std::ios::binary);
+	  Stream = Ifstream;
 #ifndef NDEBUG
     DebugFileName = filename;
 #endif
+  }
+  void SetStream(std::istream &input_stream) {
+	  Stream = &input_stream;
   }
 
   const File &GetFile() const { return *F; }
@@ -66,7 +77,7 @@ public:
   void SetFile(File& file) { F = &file; }
 
   // Will read only up to Tag 'tag'
-  bool ReadUpToTag(const Tag & tag);
+  bool ReadUpToTag(const Tag & tag, std::set<Tag> const & skiptags);
 
 protected:
   bool ReadPreamble();
@@ -77,7 +88,8 @@ protected:
 
 private:
   TransferSyntax GuessTransferSyntax();
-  std::ifstream Stream;
+  std::istream *Stream;
+  std::ifstream *Ifstream;
 #ifndef NDEBUG
   std::string DebugFileName;
 #endif

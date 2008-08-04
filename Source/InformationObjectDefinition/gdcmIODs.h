@@ -42,9 +42,12 @@ public:
     IODsInternal.insert(
       IODMapType::value_type(name, module));
     }
-  const IOD &GetIOD(const char *name)
+  const IOD &GetIOD(const char *name) const
     {
-    return IODsInternal[name];
+    //return IODsInternal[name];
+    IODMapType::const_iterator it = IODsInternal.find( name );
+    assert( it->first == name );
+    return it->second;
     }
 
 private:

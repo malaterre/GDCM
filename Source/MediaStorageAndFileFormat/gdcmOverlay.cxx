@@ -412,7 +412,9 @@ bool Overlay::GetUnpackBuffer(unsigned char *buffer) const
   unsigned char *unpackedbytes = buffer;
   for( std::vector<char>::const_iterator it = Internal->Data.begin(); it != Internal->Data.end(); ++it )
     {
-    const unsigned char &packedbytes = *it;
+    // const unsigned char &packedbytes = *it;
+    // weird bug with gcc 3.3 (prerelease on SuSE) apparently:
+    unsigned char packedbytes = static_cast<unsigned char>(*it);
     unsigned char mask = 1;
     for (unsigned int i = 0; i < 8; ++i)
       {

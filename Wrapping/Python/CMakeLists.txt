@@ -72,9 +72,9 @@ SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
 # the other gdcm lib. bad !!!
 SWIG_ADD_MODULE(${GDCM_PYTHON_IMPLEMENTATION_NAME} python gdcm.i gdcmPythonFilter.cxx)
 SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} gdcmMSFF gdcmIOD ${PYTHON_LIBRARIES})
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/gdcm.pth.in
-  ${CMAKE_CURRENT_BINARY_DIR}/gdcm.pth
-)
+#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/gdcm.pth.in
+#  ${CMAKE_CURRENT_BINARY_DIR}/gdcm.pth
+#)
 
 # Need to rebuild gdcmPYTHON...cxx when any header is modified...
 #  FILE(GLOB_RECURSE headerfiles
@@ -130,24 +130,25 @@ ADD_CUSTOM_COMMAND(
 # right next to the other dlls
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS ${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME}
-    RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR}/${python_site_package}/${subdir} COMPONENT Runtime
-    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Runtime
-    ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Development
+    RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR}/${python_site_package} COMPONENT Runtime
+    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Runtime
+    ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Development
   )
   # the python file is not a dev file, but part of the gdcm module...
   INSTALL(FILES 
     ${CMAKE_CURRENT_BINARY_DIR}/gdcmswig.py 
     ${CMAKE_CURRENT_SOURCE_DIR}/gdcm.py 
-    DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Runtime
+    #DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package}/${subdir} COMPONENT Runtime
+    DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Runtime
   )
   # pth file are actually a pain to use since they are *required* to be in some very specific location;
   # for instance you have a /tmp/gdcm.pth file and set PYTHONPATH=/tmp ... well believe it or not
   # this won't work ! I might actually have to go away from this solution for generic solution :(
   # only official rpm/deb could be sure of where the user will install those python module
-  INSTALL(FILES 
-    ${CMAKE_CURRENT_BINARY_DIR}/gdcm.pth
-    DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Runtime
-  )
+  #INSTALL(FILES 
+  #  ${CMAKE_CURRENT_BINARY_DIR}/gdcm.pth
+  #  DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT Runtime
+  #)
 ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 
 # Test that will try to load any class in the target language: python
