@@ -138,9 +138,13 @@ Function to parse a row from an informaltable specifically for a Macro/Module ta
               <xsl:when test="$group != '' and $element != ''">
                 <entry group="{$group}" element="{$element}" name="{$name_translate}" type="{normalize-space($type)}">
                   <xsl:variable name="n_description" select="my:normalize-paragraph($description)"/>
-                  <description>
+                  <xsl:call-template name="description-extractor">
+                          <xsl:with-param name="desc" select="$n_description"/>
+                  </xsl:call-template>
+
+                  <!--description>
                     <xsl:value-of select="$n_description"/>
-                  </description>
+                  </description-->
                   <xsl:variable name="dummy">
                     <xsl:call-template name="get-description-reference">
                       <xsl:with-param name="description" select="$n_description"/>
@@ -736,6 +740,113 @@ See C.8.7.10 and C.8.15.3.9 ... reference a complete module instead of directly 
   <xsl:template match="article">
     <xsl:apply-templates select="informaltable"/>
   </xsl:template>
+  <!--
+  description post processor to extract defined term
+  -->
+  <xsl:template name="parse-enum">
+    <xsl:param name="text"/>
+    <enumerated-values>
+      <xsl:analyze-string select="$text" regex="\n">
+        <xsl:matching-substring>
+<!--do nothing -->
+        </xsl:matching-substring>
+        <xsl:non-matching-substring>
+          <xsl:element name="term">
+            <xsl:analyze-string select="." regex="\s*([A-Z0-9]+)\s*=\s*(.+)\s*">
+              <xsl:matching-substring>
+                <xsl:attribute name="value">
+                  <xsl:value-of select="regex-group(1)"/>
+                </xsl:attribute>
+                <xsl:attribute name="meaning">
+                  <xsl:value-of select="regex-group(2)"/>
+                </xsl:attribute>
+              </xsl:matching-substring>
+                    <xsl:non-matching-substring>
+                <xsl:attribute name="dummy">
+                      <xsl:value-of select="'IMPOSSIBLE ENUM'"/>
+            </xsl:attribute>
+                    </xsl:non-matching-substring>
+             </xsl:analyze-string>
+          </xsl:element>
+        </xsl:non-matching-substring>
+      </xsl:analyze-string>
+    </enumerated-values>
+  </xsl:template>
+<!--
+
+-->
+  <xsl:template name="parse-defined">
+    <xsl:param name="text"/>
+    <defined-terms>
+      <xsl:analyze-string select="$text" regex="\n">
+        <xsl:matching-substring>
+<!--do nothing -->
+        </xsl:matching-substring>
+        <xsl:non-matching-substring>
+          <xsl:element name="term">
+            <xsl:analyze-string select="." regex="\s*([A-Z]+)\s*=\s*(.*)\s*">
+              <xsl:matching-substring>
+                <xsl:attribute name="value">
+                  <xsl:value-of select="regex-group(1)"/>
+                </xsl:attribute>
+                <xsl:attribute name="meaning">
+                  <xsl:value-of select="regex-group(2)"/>
+                </xsl:attribute>
+              </xsl:matching-substring>
+              <xsl:non-matching-substring>
+                <xsl:attribute name="value">
+                  <xsl:analyze-string select="." regex="\s*([A-Z]+)\s*">
+                    <xsl:matching-substring>
+                      <xsl:value-of select="regex-group(1)"/>
+                    </xsl:matching-substring>
+                    <xsl:non-matching-substring>
+                      <xsl:value-of select="'IMPOSSIBLE DEFINED'"/>
+                    </xsl:non-matching-substring>
+                  </xsl:analyze-string>
+                </xsl:attribute>
+              </xsl:non-matching-substring>
+            </xsl:analyze-string>
+          </xsl:element>
+        </xsl:non-matching-substring>
+      </xsl:analyze-string>
+    </defined-terms>
+  </xsl:template>
+<!--
+
+-->
+ <xsl:template name="description-extractor">
+         <xsl:param name="desc"/>
+         <xsl:variable name="evregex">(.*Enumerated [Vv]alue[s]?\s*(are)*\s*:)(.*)</xsl:variable>
+         <xsl:variable name="dtregex">(.*Defined [Tt]erm[s]?\s*(are)*\s*:)(.*)</xsl:variable>
+    <description>
+            <xsl:choose>
+      <xsl:when test="matches($desc,$evregex)">
+           <xsl:analyze-string select="$desc" regex="{$evregex}" flags="s">
+        <xsl:matching-substring>
+          <xsl:value-of select="regex-group(1)"/>
+          <xsl:call-template name="parse-enum">
+            <xsl:with-param name="text" select="regex-group(3)"/>
+          </xsl:call-template>
+        </xsl:matching-substring>
+      </xsl:analyze-string>
+      </xsl:when>
+      <xsl:when test="matches($desc,$dtregex)">
+              <xsl:analyze-string select="$desc" regex="{$dtregex}" flags="s">
+        <xsl:matching-substring>
+          <xsl:value-of select="regex-group(1)"/>
+          <xsl:call-template name="parse-defined">
+            <xsl:with-param name="text" select="regex-group(3)"/>
+          </xsl:call-template>
+        </xsl:matching-substring>
+      </xsl:analyze-string>
+      </xsl:when>
+      <xsl:otherwise>
+              <xsl:value-of select="$desc"/>
+      </xsl:otherwise>
+           </xsl:choose>
+     </description>
+  </xsl:template>
+ 
   <!-- main template -->
   <xsl:template match="/">
     <xsl:processing-instruction name="xml-stylesheet">
