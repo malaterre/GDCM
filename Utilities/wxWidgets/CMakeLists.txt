@@ -40,24 +40,20 @@ ELSE(WIN32)
     INCLUDE_DIRECTORIES(${GTK2_INCLUDE_DIRS})
     LINK_LIBRARIES(${GTK2_LIBRARIES})
 
-    ADD_DEFINITIONS(-D__WXGTK__)
-    SET(WXWINDOWS_USE_GL 1) # CMake 2.4.2
-    # important on GNU/Linux since we need wxGLCanvas
-    # adv is for wxGrid::CreateGrid
-    SET(wxWidgets_USE_LIBS adv gl) # CMake 2.4.3 and up
+    # Can I require all my user to have the gl lib on linux, even if they do not really need it...
+    SET(WXGLCANVASLIBS "gl")
   ENDIF(APPLE)
 ENDIF(WIN32)
 
 # wxWidgets is required to build the project
-FIND_PACKAGE(wxWidgets REQUIRED)
-# Blocker to do the right thing depending of CMake version
-IF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" EQUAL 2.4)
-  IF(${CMAKE_CACHE_RELEASE_VERSION} STREQUAL "patch 2")
-    INCLUDE(UsewxWidgets) # CMake 2.4.2
-  ELSE(${CMAKE_CACHE_RELEASE_VERSION} STREQUAL "patch 2")
-    INCLUDE( ${wxWidgets_USE_FILE} )
-  ENDIF(${CMAKE_CACHE_RELEASE_VERSION} STREQUAL "patch 2")
-ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" EQUAL 2.4)
+# For GTK we need a couple of stuff:
+# gl: GLCanvas
+# adv: wxSashLayoutWindow and such...
+FIND_PACKAGE(wxWidgets COMPONENTS base core adv ${WXGLCANVASLIBS})
+
+IF(wxWidgets_FOUND)
+  INCLUDE( ${wxWidgets_USE_FILE} )
+ENDIF(wxWidgets_FOUND)
 
 INCLUDE_DIRECTORIES(
   ${GDCM_BINARY_DIR}/Source/Common # gdcmConfigure.h
