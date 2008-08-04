@@ -50,19 +50,21 @@ int main(int argc, char *argv[])
   gdcm::Tag rawTag(0x7fe0, 0x0010); // Default to Pixel Data
   std::string filename;
   std::string outfilename;
+  std::string pattern;
   int splitfrags = 0;
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
     static struct option long_options[] = {
-        {"input", 1, 0, 0},
-        {"output", 1, 0, 0},
-        {"tag", 1, 0, 0},
-        {"split-frags", 0, &splitfrags, 1},
+        {"input", 1, 0, 0},                 // i
+        {"output", 1, 0, 0},                // o
+        {"tag", 1, 0, 0},                   // t
+        {"split-frags", 0, &splitfrags, 1}, // f
+        {"pattern", 1, 0, 0},               // p
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:t:",
+    c = getopt_long (argc, argv, "i:o:t:p:f",
       long_options, &option_index);
     if (c == -1)
       {
@@ -82,6 +84,12 @@ int main(int argc, char *argv[])
             assert( strcmp(s, "input") == 0 );
             assert( filename.empty() );
             filename = optarg;
+            }
+          else if( option_index == 4 ) /* input */
+            {
+            assert( strcmp(s, "pattern") == 0 );
+            assert( pattern.empty() );
+            pattern = optarg;
             }
           printf (" with arg %s", optarg);
           }
@@ -164,12 +172,12 @@ int main(int argc, char *argv[])
     return 1;
     }
 
-  std::ofstream output(outfilename.c_str(), std::ios::binary);
   const gdcm::DataElement& pdde = ds.GetDataElement( rawTag );
   const gdcm::ByteValue *bv = pdde.GetByteValue();
   const gdcm::SequenceOfFragments *sf = pdde.GetSequenceOfFragments();
   if( bv )
     {
+    std::ofstream output(outfilename.c_str(), std::ios::binary);
     bv->WriteBuffer(output);
     }
   else if( sf )
@@ -183,7 +191,16 @@ int main(int argc, char *argv[])
         const gdcm::ByteValue *fragbv = frag.GetByteValue();
         std::ostringstream os;
         os << outfilename;
-        os << i;
+        if( pattern.empty() )
+          {
+          os << i;
+          }
+        else
+          {
+          char buffer[256]; // hope that's enough...
+          sprintf(buffer, pattern.c_str(), i);
+          os << buffer;
+          }
         std::string outfilenamei = os.str();
         std::ofstream outputi(outfilenamei.c_str(), std::ios::binary);
         fragbv->WriteBuffer(outputi);
@@ -191,6 +208,7 @@ int main(int argc, char *argv[])
       }
     else
       {
+      std::ofstream output(outfilename.c_str(), std::ios::binary);
       sf->WriteBuffer(output);
       }
     }
