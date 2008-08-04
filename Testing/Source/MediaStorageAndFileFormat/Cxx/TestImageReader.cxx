@@ -37,6 +37,7 @@ int TestImageRead(const char* filename, bool verbose = false)
     bool res2 = img.GetBuffer(buffer);
     if( !res2 )
       {
+      std::cerr << "res2 failure:" << filename << std::endl;
       return 1;
       }
     // On big Endian system we have byteswapped the buffer (duh!)
