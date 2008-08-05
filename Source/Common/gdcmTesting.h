@@ -22,8 +22,8 @@
 namespace gdcm
 {
 /**
- * \class Class for Testing
- * \brief this class is used for the nightly regression system for GDCM
+ * \brief class for testing
+ * this class is used for the nightly regression system for GDCM
  */
 //-----------------------------------------------------------------------------
 class GDCM_EXPORT Testing
