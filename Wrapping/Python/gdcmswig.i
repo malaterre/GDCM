@@ -109,6 +109,7 @@
 #include "gdcmImageToImageFilter.h"
 #include "gdcmSOPClassUIDToIOD.h"
 #include "gdcmImageChangeTransferSyntax.h"
+#include "gdcmImageApplyLookupTable.h"
 
 using namespace gdcm;
 %}
@@ -495,3 +496,4 @@ using namespace gdcm;
 %include "gdcmImageToImageFilter.h"
 %include "gdcmSOPClassUIDToIOD.h"
 %include "gdcmImageChangeTransferSyntax.h"
+%include "gdcmImageApplyLookupTable.h"
