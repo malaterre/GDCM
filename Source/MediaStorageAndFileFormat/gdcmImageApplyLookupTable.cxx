@@ -38,7 +38,7 @@ bool ImageApplyLookupTable::Apply()
   DataElement &de = Output->GetDataElement();
   std::string str = os.str();
   de.SetByteValue( str.c_str(), str.size() );
-  //Output->GetLUT().Clear();
+  Output->GetLUT().Clear();
   Output->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
   Output->GetPixelFormat().SetSamplesPerPixel( 3 );
   Output->SetPlanarConfiguration( 0 ); // FIXME OT-PAL-8-face.dcm has a PlanarConfiguration while being PALETTE COLOR...

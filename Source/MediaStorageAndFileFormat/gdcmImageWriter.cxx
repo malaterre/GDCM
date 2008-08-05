@@ -100,6 +100,17 @@ bool ImageWriter::Write()
   samplesperpixel.SetValue( pf.GetSamplesPerPixel() );
   ds.Replace( samplesperpixel.GetAsDataElement() );
 
+//  Attribute<0x0028, 0x0004> photometricinterpretation;
+//  photometricinterpretation.SetValue( pi );
+//  ds.Replace( photometricinterpretation.GetAsDataElement() );
+{
+    const char *pistr = PhotometricInterpretation::GetPIString(pi);
+    DataElement de( Tag(0x0028, 0x0004 ) );
+    de.SetByteValue( pistr, strlen(pistr) );
+    de.SetVR( Attribute<0x0028,0x0004>::GetVR() );
+    ds.Replace( de );
+}
+
   // Overlay Data 60xx
   unsigned int nOv = PixelData->GetNumberOfOverlays();
   for( unsigned int ovidx = 0; ovidx < nOv; ++ovidx )
@@ -275,6 +286,27 @@ bool ImageWriter::Write()
       bluedesc.SetValue(length,0); bluedesc.SetValue(subscript,1); bluedesc.SetValue(bitsize,2);
       ds.Replace( bluedesc.GetAsDataElement() );
       }
+    }
+
+  // FIXME shouldn't this be done by the ImageApplyLookupTable filter ?
+  if( pi == PhotometricInterpretation::RGB )
+    {
+    // usual tags:
+    ds.Remove( Tag(0x0028, 0x1101) );
+    ds.Remove( Tag(0x0028, 0x1102) );
+    ds.Remove( Tag(0x0028, 0x1103) );
+
+    ds.Remove( Tag(0x0028, 0x1201) );
+    ds.Remove( Tag(0x0028, 0x1202) );
+    ds.Remove( Tag(0x0028, 0x1203) );
+
+    // Dont' forget the segmented one:
+    ds.Remove( Tag(0x0028, 0x1221) );
+    ds.Remove( Tag(0x0028, 0x1222) );
+    ds.Remove( Tag(0x0028, 0x1223) );
+
+    // PaletteColorLookupTableUID ??
+    ds.Remove( Tag(0x0028, 0x1199) );
     }
 
   MediaStorage ms;

@@ -51,6 +51,7 @@ void LookupTable::Clear()
 {
   BitSample = 0;
   delete Internal;
+  Internal = 0; // important
 }
 
 void LookupTable::Allocate( unsigned short bitsample )
