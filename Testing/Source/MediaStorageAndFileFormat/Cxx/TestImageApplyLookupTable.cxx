@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmImageApplyLookupTable.h"
+#include "gdcmTesting.h"
 
 
 int TestImageApplyLookupTableFunc(const char *filename, bool verbose = false)
