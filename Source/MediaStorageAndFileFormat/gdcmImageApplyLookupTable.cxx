@@ -41,6 +41,7 @@ bool ImageApplyLookupTable::Apply()
   //Output->GetLUT().Clear();
   Output->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
   Output->GetPixelFormat().SetSamplesPerPixel( 3 );
+  Output->SetPlanarConfiguration( 0 ); // FIXME OT-PAL-8-face.dcm has a PlanarConfiguration while being PALETTE COLOR...
 
   bool success = true;
   return success;
