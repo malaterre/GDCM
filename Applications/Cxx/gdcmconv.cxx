@@ -76,6 +76,7 @@
 #include "gdcmSequenceOfItems.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmImageChangeTransferSyntax.h"
+#include "gdcmImageApplyLookupTable.h"
 
 #include <string>
 #include <iostream>
@@ -108,6 +109,7 @@ void PrintHelp()
   std::cout << "  -i --input     DICOM filename" << std::endl;
   std::cout << "  -o --output    DICOM filename (generated)" << std::endl;
   std::cout << "Options:" << std::endl;
+  std::cout << "  -l --lut       Apply LUT." << std::endl;
   std::cout << "  -W --raw       Decompress image." << std::endl;
   std::cout << "  -J --jpeg      Compress image in jpeg." << std::endl;
   std::cout << "  -K --j2k       Compress image in j2k." << std::endl;
@@ -133,6 +135,7 @@ int main (int argc, char *argv[])
   std::string filename;
   std::string outfilename;
   std::string root;
+  int lut = 0;
   int raw = 0;
   int rootuid = 0;
   int checkmeta = 0;
@@ -172,6 +175,7 @@ int main (int argc, char *argv[])
         {"check-meta", 0, &checkmeta, 1}, // specific Root (not GDCM)
 // Image specific options:
         {"pixeldata", 1, 0, 0}, // valid
+        {"lut", 0, &lut, 1}, // default (implicit VR, LE) / Explicit LE / Explicit BE
         {"raw", 0, &raw, 1}, // default (implicit VR, LE) / Explicit LE / Explicit BE
         {"lossy", 1, &lossy, 1}, // Specify the compression ratio for lossy comp
         {"force", 0, &force, 1}, // force decompression even if target compression is identical
@@ -302,7 +306,36 @@ int main (int argc, char *argv[])
     return 1;
     }
 
-  if( jpeg || j2k || jpegls || rle || raw )
+  if( lut )
+    {
+    gdcm::ImageReader reader;
+    reader.SetFileName( filename.c_str() );
+    if( !reader.Read() )
+      {
+      std::cerr << "could not read: " << filename << std::endl;
+      return 1;
+      }
+    const gdcm::Image &image = reader.GetImage();
+
+    gdcm::ImageApplyLookupTable lutfilt;
+    lutfilt.SetInput( image );
+    bool b = lutfilt.Apply();
+    if( !b )
+      {
+      std::cerr << "Could not apply LUT: " << filename << std::endl;
+      return 1;
+      }
+    gdcm::ImageWriter writer;
+    writer.SetFileName( outfilename.c_str() );
+    writer.SetFile( reader.GetFile() );
+    writer.SetImage( lutfilt.GetOutput() );
+    if( !writer.Write() )
+      {
+      std::cerr << "Failed to write: " << outfilename << std::endl;
+      return 1;
+      }
+    }
+  else if( jpeg || j2k || jpegls || rle || raw )
     {
     gdcm::ImageReader reader;
     reader.SetFileName( filename.c_str() );
