@@ -7,12 +7,12 @@ SET(GDCM_PYTHON_TEST_SRCS
   TestModifyFields
   TestAnonymizer
   #TestStringFilter
-  TestDCMTKMD5
   )
 IF(BUILD_APPLICATIONS)
   SET(GDCM_PYTHON_TEST_SRCS
     ${GDCM_PYTHON_TEST_SRCS}
     TestKakaduDecompressionMD5
+  TestDCMTKMD5
   )
 ENDIF(BUILD_APPLICATIONS)
 
