@@ -339,6 +339,10 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     {
     MaxNumSegments = 2;
     }
+  else if( GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
+    {
+    MaxNumSegments = 3;
+    }
 
   RLEHeader header;
   header.NumSegments = MaxNumSegments;
