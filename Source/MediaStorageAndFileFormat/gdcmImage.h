@@ -73,6 +73,10 @@ public:
     {
     return PF;
     }
+  PixelFormat &GetPixelFormat()
+    {
+    return PF;
+    }
   void SetPixelFormat(PixelFormat const &pf)
     {
     PF = pf;

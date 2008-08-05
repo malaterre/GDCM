@@ -16,7 +16,6 @@
 #define __gdcmImageApplyLookupTable_h
 
 #include "gdcmImageToImageFilter.h"
-#include "gdcmTransferSyntax.h"
 
 namespace gdcm
 {

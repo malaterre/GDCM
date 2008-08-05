@@ -19,6 +19,29 @@ namespace gdcm
 
 bool ImageApplyLookupTable::Apply()
 {
+  Output = Input;
+  const Image &image = *Input;
+
+  const gdcm::LookupTable &lut = image.GetLUT();
+  int bitsample = lut.GetBitSample();
+  assert( bitsample );
+
+  const DataElement& pixeldata = image.GetDataElement();
+  const ByteValue *bv = pixeldata.GetByteValue();
+  const char *p = bv->GetPointer();
+  std::istringstream is;
+  is.str( std::string( p, p + bv->GetLength() ) );
+
+  std::ostringstream os;
+  lut.Decode(is, os);
+
+  DataElement &de = Output->GetDataElement();
+  std::string str = os.str();
+  de.SetByteValue( str.c_str(), str.size() );
+  //Output->GetLUT().Clear();
+  Output->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
+  Output->GetPixelFormat().SetSamplesPerPixel( 3 );
+
   bool success = true;
   return success;
 }

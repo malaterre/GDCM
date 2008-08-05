@@ -38,11 +38,18 @@ public:
 LookupTable::LookupTable()
 {
   Internal = new LookupTableInternal;
+  BitSample = 0;
   IncompleteLUT = false;
 }
 
 LookupTable::~LookupTable()
 {
+  delete Internal;
+}
+
+void LookupTable::Clear()
+{
+  BitSample = 0;
   delete Internal;
 }
 
@@ -203,7 +210,7 @@ void LookupTable::SetBlueLUT(const unsigned char *blue, unsigned int length)
   SetLUT(BLUE, blue, length);
 }
 
-void LookupTable::Decode(std::istream &is, std::ostream &os)
+void LookupTable::Decode(std::istream &is, std::ostream &os) const
 {
   if ( BitSample == 8 )
     {
