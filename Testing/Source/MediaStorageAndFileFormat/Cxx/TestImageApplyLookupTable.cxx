@@ -14,10 +14,49 @@
 =========================================================================*/
 #include "gdcmImageApplyLookupTable.h"
 #include "gdcmTesting.h"
-
+#include "gdcmSystem.h"
+#include "gdcmImageReader.h"
+#include "gdcmImageWriter.h"
 
 int TestImageApplyLookupTableFunc(const char *filename, bool verbose = false)
 {
+  gdcm::ImageReader reader;
+  reader.SetFileName( filename );
+  if ( !reader.Read() )
+    {
+    return 1;
+    }
+  const gdcm::Image &image = reader.GetImage();
+
+  gdcm::ImageApplyLookupTable lutfilt;
+  lutfilt.SetInput( image );
+  bool b = lutfilt.Apply();
+  if( !b )
+    {
+    std::cerr << "Could not apply lut: " << filename << std::endl;
+    return 1;
+    }
+
+  // Create directory first:
+  const char subdir[] = "TestImageApplyLookupTable";
+  std::string tmpdir = gdcm::Testing::GetTempDirectory( subdir );
+  if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
+    {
+    gdcm::System::MakeDirectory( tmpdir.c_str() );
+    //return 1;
+    }
+  std::string outfilename = gdcm::Testing::GetTempFilename( filename, subdir );
+
+  gdcm::ImageWriter writer;
+  writer.SetFileName( outfilename.c_str() );
+  //writer.SetFile( reader.GetFile() ); // increase test goal
+  writer.SetImage( lutfilt.GetOutput() );
+  if( !writer.Write() )
+    {
+    std::cerr << "Failed to write: " << outfilename << std::endl;
+    return 1;
+    }
+
   return 0;
 }
 
