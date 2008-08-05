@@ -174,7 +174,6 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   is.read( dummy_buffer, buf_size);
   unsigned char *src = (unsigned char*)dummy_buffer;
   int file_length = buf_size;
-  char *raw = NULL;
 
   /* configure the event callbacks (not required) */
   memset(&event_mgr, 0, sizeof(opj_event_mgr_t));
@@ -244,6 +243,10 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
 
   //raw = (char*)src;
   // Copy buffer
+    char *raw = NULL;
+  //assert(image->prec % 8 == 0);
+  unsigned long len = Dimensions[0]*Dimensions[1]*Dimensions[2] * (PF.GetBitsAllocated() / 8) * image->numcomps;
+  raw = new char[len];
   for (int compno = 0; compno < image->numcomps; compno++)
     {
     opj_image_comp_t *comp = &image->comps[compno];
@@ -253,43 +256,45 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
 
     //int h = image.comps[compno].h;
     int hr = int_ceildivpow2(image->comps[compno].h, image->comps[compno].factor);
+      assert(  wr * hr * 1 * image->numcomps == len );
 
     if (comp->prec <= 8)
       {
-      raw = new char[wr * hr];
-      uint8_t *data8 = (uint8_t*)raw;
+      assert( comp->prec == 8 && comp->prec == PF.GetBitsAllocated() );
+      uint8_t *data8 = (uint8_t*)raw + compno;
       for (int i = 0; i < wr * hr; i++) 
         {
         int v = image->comps[compno].data[i / wr * w + i % wr];
-        *data8++ = (uint8_t)v;
+        *data8 = (uint8_t)v;
+        data8 += image->numcomps;
         }
-      os.write(raw, wr * hr * 1);
       }
     else if (comp->prec <= 16)
       {
-      raw = new char[wr * hr * 2];
-      uint16_t *data16 = (uint16_t*)raw;
+      assert( comp->prec == 16 && comp->prec == PF.GetBitsAllocated());
+      uint16_t *data16 = (uint16_t*)raw + compno;
       for (int i = 0; i < wr * hr; i++) 
         {
         int v = image->comps[compno].data[i / wr * w + i % wr];
-        *data16++ = (uint16_t)v;
+        *data16 = (uint16_t)v;
+        data16 += image->numcomps;
         }
-      os.write(raw, wr * hr * 2);
       }
     else
       {
-      raw = new char[wr * hr * 4];
-      uint32_t *data32 = (uint32_t*)raw;
+      assert( comp->prec == 32 && comp->prec == PF.GetBitsAllocated());
+      uint32_t *data32 = (uint32_t*)raw + compno;
       for (int i = 0; i < wr * hr; i++) 
         {
         int v = image->comps[compno].data[i / wr * w + i % wr];
-        *data32++ = (uint32_t)v;
+        *data32 = (uint32_t)v;
+        data32 += image->numcomps;
         }
-      os.write(raw, wr * hr * 4);
       }
-    delete[] raw;
     //free(image.comps[compno].data);
     }
+    os.write(raw, len );
+    delete[] raw;
   /* free the memory containing the code-stream */
   delete[] src;  //FIXME
 

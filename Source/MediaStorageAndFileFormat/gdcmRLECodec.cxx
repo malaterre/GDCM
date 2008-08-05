@@ -386,7 +386,9 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
         }
       else /* ( GetPixelFormat().GetBitsAllocated() == 16 ) */
         {
-        DoInvertPlanarConfiguration<short>((short*)buffer, (short*)ptr_img, image_len / sizeof(short));
+        // should not happen right ?
+        abort();
+        //DoInvertPlanarConfiguration<short>((short*)buffer, (short*)ptr_img, image_len / sizeof(short));
         }
       ptr_img = buffer;
       }
