@@ -259,23 +259,54 @@ int rle_encode(char *output, unsigned int outputlength, const char *input, unsig
   return pout - output;
 }
 
+template <typename T>
+bool DoInvertPlanarConfiguration(T *output, const T *input, uint32_t inputlength)
+{
+  const T *r = input+0;
+  const T *g = input+1;
+  const T *b = input+2;
+  uint32_t length = (inputlength / 3) * 3; // remove the 0 padding
+  assert( length == inputlength || length == inputlength - 1 );
+  assert( length % 3 == 0 );
+  uint32_t plane_length = length / 3;
+  T *pout = output;
+  // copy red plane:
+  while( pout != output + plane_length * 1 )
+    {
+    *pout++ = *r;
+    r += 3;
+    }
+  assert( r == input + length );
+  // copy green plane:
+  assert( pout == output + plane_length );
+  while( pout != output + plane_length * 2 )
+    {
+    *pout++ = *g;
+    g += 3;
+    }
+  assert( g == input + length + 1);
+  // copy blue plane:
+  assert( pout == output + 2*plane_length );
+  while( pout != output + plane_length * 3 )
+    {
+    *pout++ = *b;
+    b += 3;
+    }
+  assert( b == input + length + 2);
+  assert ( pout = output + length );
+  return true;
+}
+
+
 bool RLECodec::Code(DataElement const &in, DataElement &out)
 {
   const unsigned int *dims = this->GetDimensions();
-  unsigned int n = 256*256;
+  const unsigned int n = 256*256;
   char *outbuf;
   // At most we are encoding a single row at a time, so we would be very unlucky
   // if the row *after* compression would not fit in 256*256 bytes...
-  char small_buffer[256*256];
-  //if( dims[0] * dims[1] > n )
-  //  {
-  //  outbuf = new char[ dims[0] * dims[1] * 10 ];
-  //  n = dims[0] * dims[1] * 10;
-  //  }
-  //else
-    {
-    outbuf = small_buffer;
-    }
+  char small_buffer[n];
+  outbuf = small_buffer;
 
   // Create a Sequence Of Fragments:
   SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
@@ -349,7 +380,14 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
       }
     if ( GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
       {
-      DoInvertPlanarConfiguration(buffer, ptr_img, image_len);
+      if( GetPixelFormat().GetBitsAllocated() == 8 )
+        {
+        DoInvertPlanarConfiguration<char>(buffer, ptr_img, image_len / sizeof(char));
+        }
+      else /* ( GetPixelFormat().GetBitsAllocated() == 16 ) */
+        {
+        DoInvertPlanarConfiguration<short>((short*)buffer, (short*)ptr_img, image_len / sizeof(short));
+        }
       ptr_img = buffer;
       }
     assert( image_len % MaxNumSegments == 0 );

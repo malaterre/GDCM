@@ -217,6 +217,11 @@ bool ImageWriter::Write()
     }
   de.SetVL( vl );
   ds.Replace( de );
+
+//      Attribute<0x0028, 0x0006> planarconfiguration;
+//      planarconfiguration.SetValue( PixelData->GetPlanarConfiguration() );
+//      ds.Replace( planarconfiguration.GetAsDataElement() );
+
   // PhotometricInterpretation
   // const Tag tphotometricinterpretation(0x0028, 0x0004);
   if( !ds.FindDataElement( Tag(0x0028, 0x0004) ) )
