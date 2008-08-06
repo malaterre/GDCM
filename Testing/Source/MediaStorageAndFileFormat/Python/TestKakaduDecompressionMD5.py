@@ -28,14 +28,14 @@ def TestKakadu(filename, kdu_expand):
   kdu_args = ' -quiet -i '
   output_dcm = testdir + '/kakadu/' + testbasename
   output_j2k = output_dcm + '.j2k'
+  output_ppm = output_dcm + '.ppm' #
   output_raw = output_dcm + '.rawl' # FIXME: little endian only...
   kdu_expand += kdu_args + output_j2k + ' -o ' + output_raw
   # $ ./bin/gdcmraw -i .../TestImageChangeTransferSyntax2/012345.002.050.dcm -o toto.j2k
   executable_output_path = gdcm.GDCM_EXECUTABLE_OUTPUT_PATH
   gdcmraw = executable_output_path + '/gdcmraw'
   outputfilename = output_j2k
-  # IMPORTANT: need the --pixel-data flag !
-  gdcmraw_args = ' --pixel-data -i ' + filename + ' -o ' + outputfilename
+  gdcmraw_args = ' -i ' + filename + ' -o ' + outputfilename
   gdcmraw += gdcmraw_args
   #print gdcmraw
   ret = os.system( gdcmraw )
@@ -43,6 +43,8 @@ def TestKakadu(filename, kdu_expand):
   #print kdu_expand
   os.environ["LD_LIBRARY_PATH"]=kakadu_path
   ret = os.system( kdu_expand )
+  # now need to skip the ppm header:
+  dd_cmd = 'dd bs=15 skip=1 if=%s of = %s'%(output_ppm,output_raw)
   #print "ret:",ret
   md5 = gdcm.Testing.ComputeFileMD5( output_raw ) 
   # ok this is the md5 as computed after decompression using kdu_expand
