@@ -84,7 +84,7 @@ int TestImageChangeTransferSyntaxJPEG(const char *filename, bool verbose = false
   reader2.SetFileName( outfilename.c_str() );
   if ( !reader2.Read() )
     {
-    std::cerr << "Could not even reread our generated file ! " << std::endl;
+    std::cerr << "Could not even reread our generated file : " << outfilename << std::endl;
     return 1;
     }
   // Check that after decompression we still find the same thing:
