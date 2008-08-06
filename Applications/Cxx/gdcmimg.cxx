@@ -47,6 +47,7 @@
 #include "gdcmFileMetaInformation.h"
 #include "gdcmDataSet.h"
 #include "gdcmAttribute.h"
+#include "gdcmJPEGCodec.h"
 
 #include <string>
 #include <iostream>
@@ -222,6 +223,18 @@ int main (int argc, char *argv[])
 
   const char *inputextension = filename.GetExtension();
   const char *outputextension = outfilename.GetExtension();
+
+/*
+  if( strcmp(inputextension, ".jpg") == 0 
+    || strcmp(inputextension,".jpeg") == 0
+    || strcmp(inputextension,".ljpeg") == 0 )
+    {
+    gdcm::JPEGCodec jpeg;
+    std::ifstream is(filename);
+    jpeg.GetHeaderInfo( is, );
+    return 0;
+    }
+*/
 
   gdcm::ImageReader reader;
   reader.SetFileName( filename );
