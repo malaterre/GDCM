@@ -121,7 +121,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
       }
     }
   // Media Storage SOP Class UID (0002,0002) -> see (0008,0016)
-  if( !FindDataElement( Tag(0x0002, 0x0002) ) )
+  if( !FindDataElement( Tag(0x0002, 0x0002) ) || GetDataElement( Tag(0x0002,0x0002) ).IsEmpty() )
     {
     if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) || ds.GetDataElement( Tag(0x0008,0x0016) ).IsEmpty()  )
       {
