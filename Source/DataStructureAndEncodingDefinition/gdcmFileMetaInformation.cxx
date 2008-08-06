@@ -205,8 +205,11 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
       abort();
       }
     const DataElement& sopinst = ds.GetDataElement( Tag(0x0008, 0x0018) );
+    //const DataElement & foo = GetDataElement( Tag(0x0002, 0x0003) );
+    assert( !GetDataElement( Tag(0x0002, 0x0003) ).IsEmpty() );
     DataElement mssopinst = GetDataElement( Tag(0x0002, 0x0003) );
     const ByteValue *bv = sopinst.GetByteValue();
+    assert( bv );
     mssopinst.SetByteValue( bv->GetPointer(), bv->GetLength() );
     Replace( mssopinst );
     }
@@ -356,11 +359,18 @@ bool ReadExplicitDataElement(std::istream &is, ExplicitDataElement &de)
   //std::cout << "Value : ";
   //bv->Print( std::cout );
   //std::cout << std::endl;
+  assert( bv->GetLength() == vl );
 
   de.SetTag(t);
   de.SetVR(vr);
   de.SetVL(vl);
+  // FIXME: There should be a way to set the Value to the NULL pointer...
   de.SetValue(*bv);
+
+//  if( vl == 0 )
+//    {
+//    assert( de.IsEmpty() );
+//    }
 
   return true;
 }
