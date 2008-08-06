@@ -100,16 +100,6 @@ bool ImageWriter::Write()
   samplesperpixel.SetValue( pf.GetSamplesPerPixel() );
   ds.Replace( samplesperpixel.GetAsDataElement() );
 
-//  Attribute<0x0028, 0x0004> photometricinterpretation;
-//  photometricinterpretation.SetValue( pi );
-//  ds.Replace( photometricinterpretation.GetAsDataElement() );
-{
-    const char *pistr = PhotometricInterpretation::GetPIString(pi);
-    DataElement de( Tag(0x0028, 0x0004 ) );
-    de.SetByteValue( pistr, strlen(pistr) );
-    de.SetVR( Attribute<0x0028,0x0004>::GetVR() );
-    ds.Replace( de );
-}
 
   // Overlay Data 60xx
   unsigned int nOv = PixelData->GetNumberOfOverlays();
@@ -313,6 +303,19 @@ bool ImageWriter::Write()
     // PaletteColorLookupTableUID ??
     ds.Remove( Tag(0x0028, 0x1199) );
     }
+//  Attribute<0x0028, 0x0004> photometricinterpretation;
+//  photometricinterpretation.SetValue( pi );
+//  ds.Replace( photometricinterpretation.GetAsDataElement() );
+Attribute<0x0028,0x0004> piat;
+//const DataElement &pide = ds.GetDataElement( piat.GetTag() );
+//const char *str1 = pide.GetByteValue()->GetPointer();
+{
+    const char *pistr = PhotometricInterpretation::GetPIString(pi);
+    DataElement de( Tag(0x0028, 0x0004 ) );
+    de.SetByteValue( pistr, strlen(pistr) );
+    de.SetVR( piat.GetVR() );
+    ds.Replace( de );
+}
 
   MediaStorage ms;
   ms.SetFromFile( GetFile() );
