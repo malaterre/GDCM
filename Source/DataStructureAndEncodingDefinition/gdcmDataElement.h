@@ -85,7 +85,7 @@ public:
     //assert( ValueField == 0 );
     ValueField = &vl;
   }
-  bool IsEmpty() const { return ValueField == 0 || GetByteValue()->IsEmpty(); }
+  bool IsEmpty() const { return ValueField == 0 || (GetByteValue() && GetByteValue()->IsEmpty()); }
 
   // Helper:
 //  void SetByteValue(ByteValue const &bv )
