@@ -109,7 +109,7 @@ void PrintHelp()
   std::cout << "  -i --input     DICOM filename" << std::endl;
   std::cout << "  -o --output    DICOM filename (generated)" << std::endl;
   std::cout << "Options:" << std::endl;
-  std::cout << "  -l --lut       Apply LUT." << std::endl;
+  //std::cout << "  -l --lut       Apply LUT." << std::endl;
   std::cout << "  -W --raw       Decompress image." << std::endl;
   std::cout << "  -J --jpeg      Compress image in jpeg." << std::endl;
   std::cout << "  -K --j2k       Compress image in j2k." << std::endl;
