@@ -256,7 +256,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
 
     //int h = image.comps[compno].h;
     int hr = int_ceildivpow2(image->comps[compno].h, image->comps[compno].factor);
-      assert(  wr * hr * 1 * image->numcomps == len );
+      assert(  wr * hr * 1 * image->numcomps * (comp->prec/8) == len );
 
     if (comp->prec <= 8)
       {
