@@ -397,8 +397,9 @@ bool Image::TryJPEGCodec(char *buffer) const
     if ( GetPhotometricInterpretation() != codec.GetPhotometricInterpretation() )
       {
       // HACK
-      //gdcm::Image *i = (gdcm::Image*)this;
-      //i->SetPhotometricInterpretation( codec.GetPhotometricInterpretation() );
+      // YBRisGray.dcm 
+      gdcm::Image *i = (gdcm::Image*)this;
+      i->SetPhotometricInterpretation( codec.GetPhotometricInterpretation() );
       }
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );

@@ -343,8 +343,16 @@ Attribute<0x0028,0x0004> piat;
   else
     {
     const ByteValue *bv = ds.GetDataElement( Tag(0x0008,0x0016) ).GetByteValue();
-    assert( strncmp( bv->GetPointer(), msstr, bv->GetLength() ) == 0 );
-    assert( bv->GetLength() == strlen( msstr ) || bv->GetLength() == strlen(msstr) + 1 );
+    if( strncmp( bv->GetPointer(), msstr, bv->GetLength() ) != 0 )
+      {
+      DataElement de = ds.GetDataElement( Tag(0x0008,0x0016) );
+      de.SetByteValue( msstr, strlen(msstr) );
+      ds.Replace( de );
+      }
+    else
+      {
+      assert( bv->GetLength() == strlen( msstr ) || bv->GetLength() == strlen(msstr) + 1 );
+      }
     }
 
   // (re)Compute MediaStorage:

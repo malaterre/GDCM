@@ -422,11 +422,15 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
       // we will loose the SQ, therefore change the length into undefined length
       // and add a seq del item:
       ValueIO<ImplicitDataElement,TSwap>::Write(os,*ValueField);
-      // seq del item is not stored, write it !
-      const Tag seqDelItem(0xfffe,0xe0dd);
-      seqDelItem.Write<TSwap>(os);
-      VL zero = 0;
-      zero.Write<TSwap>(os);
+      if( !ValueLengthField.IsUndefined() )
+        {
+        // eg. TestWriter with ExplicitVRforPublicElementsImplicitVRforShadowElements.dcm
+        // seq del item is not stored, write it !
+        const Tag seqDelItem(0xfffe,0xe0dd);
+        seqDelItem.Write<TSwap>(os);
+        VL zero = 0;
+        zero.Write<TSwap>(os);
+        }
       }
 #endif
     else 
