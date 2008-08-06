@@ -34,7 +34,8 @@ def TestKakadu(filename, kdu_expand):
   executable_output_path = gdcm.GDCM_EXECUTABLE_OUTPUT_PATH
   gdcmraw = executable_output_path + '/gdcmraw'
   outputfilename = output_j2k
-  gdcmraw_args = ' -i ' + filename + ' -o ' + outputfilename
+  # IMPORTANT: need the --pixel-data flag !
+  gdcmraw_args = ' --pixel-data -i ' + filename + ' -o ' + outputfilename
   gdcmraw += gdcmraw_args
   #print gdcmraw
   ret = os.system( gdcmraw )

@@ -59,6 +59,11 @@ int TestImageRead(const char* filename, bool verbose = false)
 
     char digest[33];
     gdcm::Testing::ComputeMD5(buffer, len, digest);
+    if( verbose )
+      {
+      std::cout << "ref=" << ref << std::endl;
+      std::cout << "md5=" << digest << std::endl;
+      }
     if( !ref )
       {
       // new regression image needs a md5 sum
