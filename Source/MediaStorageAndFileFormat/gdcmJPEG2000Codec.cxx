@@ -256,7 +256,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
 
     //int h = image.comps[compno].h;
     int hr = int_ceildivpow2(image->comps[compno].h, image->comps[compno].factor);
-      assert(  wr * hr * 1 * image->numcomps * (comp->prec/8) == len );
+    //assert(  wr * hr * 1 * image->numcomps * (comp->prec/8) == len );
 
     if (comp->prec <= 8)
       {
@@ -271,7 +271,8 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
       }
     else if (comp->prec <= 16)
       {
-      assert( comp->prec == 16 && comp->prec == PF.GetBitsAllocated());
+      // ELSCINT1_JP2vsJ2K.dcm is a 12bits image
+      //assert( comp->prec == 16 && comp->prec == PF.GetBitsAllocated());
       uint16_t *data16 = (uint16_t*)raw + compno;
       for (int i = 0; i < wr * hr; i++) 
         {
