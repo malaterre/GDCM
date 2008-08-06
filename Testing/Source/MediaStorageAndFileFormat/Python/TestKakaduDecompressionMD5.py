@@ -16,14 +16,15 @@
 import gdcm
 import os,sys
 
-def TestKakadu(filename):
+def TestKakadu(filename, kdu_expand):
   fn = gdcm.Filename(filename)
   testdir = fn.GetPath()
   testbasename = fn.GetName()
   ext = fn.GetExtension()
   #print ext
-  kakadu_path = '/home/mmalaterre/Software/Kakadu60'
-  kdu_expand = kakadu_path + '/kdu_expand'
+  #kakadu_path = '/home/mmalaterre/Software/Kakadu60'
+  kakadu_path = os.path.dirname( kdu_expand )
+  #kdu_expand = kakadu_path + '/kdu_expand'
   kdu_args = ' -quiet -i '
   output_dcm = testdir + '/kakadu/' + testbasename
   output_j2k = output_dcm + '.j2k'
@@ -61,11 +62,11 @@ def TestKakadu(filename):
   return retval
 
 if __name__ == "__main__":
-  sucess = 0
-  try:
-    filename = os.sys.argv[1]
-    sucess += TestKakadu( filename )
-  except:
+    sucess = 0
+    #try:
+    #  filename = os.sys.argv[1]
+    #  sucess += TestKakadu( filename )
+    #except:
     # loop over all files:
     #t = gdcm.Testing()
     #nfiles = t.GetNumberOfFileNames()
@@ -83,8 +84,8 @@ if __name__ == "__main__":
     files = d.GetFilenames()
     for i in range(0,nfiles):
       filename = files[i]
-      sucess += TestKakadu( filename )
+      sucess += TestKakadu( filename, os.sys.argv[1] )
 
-  # Test succeed ?
-  sys.exit(sucess)
+    # Test succeed ?
+    sys.exit(sucess)
 
