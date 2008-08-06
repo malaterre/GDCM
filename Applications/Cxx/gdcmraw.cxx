@@ -25,6 +25,8 @@
 */
 
 #include "gdcmReader.h"
+#include "gdcmImageReader.h"
+#include "gdcmImage.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmDataSet.h"
 #include "gdcmTag.h"
@@ -52,6 +54,7 @@ int main(int argc, char *argv[])
   std::string outfilename;
   std::string pattern;
   int splitfrags = 0;
+  int pixeldata = 0;
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -60,11 +63,18 @@ int main(int argc, char *argv[])
         {"output", 1, 0, 0},                // o
         {"tag", 1, 0, 0},                   // t
         {"split-frags", 0, &splitfrags, 1}, // f
+/*
+ * pixel-data flag is important for image like DermaColorLossLess.dcm since the bytevalue is
+ * 63532, because of the DICOM \0 padding, but we would rather have the image buffer instead
+ * which is simply one byte shorter, so add a special flag that simply mimic what TestImageReader
+ * would expect
+ */
+        {"pixel-data", 0, &pixeldata, 1},   // P
         {"pattern", 1, 0, 0},               // p
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:t:p:f",
+    c = getopt_long (argc, argv, "i:o:t:p:fP",
       long_options, &option_index);
     if (c == -1)
       {
@@ -140,6 +150,32 @@ int main(int argc, char *argv[])
     }
   // else
   //std::cout << "Filename: " << filename << std::endl;
+
+  // very special option, handle it first:
+  if( pixeldata )
+    {
+    if( rawTag != gdcm::Tag(0x7fe0,0x0010) )
+      {
+      return 1;
+      }
+    gdcm::ImageReader reader;
+    reader.SetFileName( filename.c_str() );
+    if( !reader.Read() )
+      {
+      std::cerr << "Failed to read: " << filename << std::endl;
+      return 1;
+      }
+    const gdcm::Image& image = reader.GetImage();
+    unsigned long len = image.GetBufferLength();
+    char * buf = new char[len];
+    image.GetBuffer( buf );
+
+    std::ofstream output(outfilename.c_str(), std::ios::binary);
+    output.write( buf, len );
+    
+    delete[] buf;
+    return 0;
+    }
   gdcm::Reader reader;
   reader.SetFileName( filename.c_str() );
   if( !reader.Read() )
