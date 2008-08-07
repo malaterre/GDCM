@@ -112,6 +112,8 @@ public:
   bool IsImplicit() const;
   bool IsExplicit() const;
 
+  const char *GetString() { return TransferSyntax::GetTSString(TSField); }
+
   friend std::ostream &operator<<(std::ostream &os, const TransferSyntax &ts);
 private:
   // DO NOT EXPOSE the following. Internal details of TransferSyntax

@@ -48,7 +48,7 @@ public:
   bool IsValid() const { return true; }
 
   TransferSyntax::NegociatedType GetMetaInformationTS() const { return MetaInformationTS; }
-  void SetDataSetTransferSyntax(const TransferSyntax &ts) { DataSetTS = ts; }
+  void SetDataSetTransferSyntax(const TransferSyntax &ts);
   const TransferSyntax &GetDataSetTransferSyntax() const { return DataSetTS; }
   MediaStorage GetMediaStorage() const;
 
@@ -94,6 +94,9 @@ public:
 
   FileMetaInformation(FileMetaInformation const &fmi):DataSet(fmi)
     {
+  DataSetTS = fmi.DataSetTS;
+  MetaInformationTS = fmi.MetaInformationTS;
+  DataSetMS = fmi.DataSetMS;
     }
 
 protected:

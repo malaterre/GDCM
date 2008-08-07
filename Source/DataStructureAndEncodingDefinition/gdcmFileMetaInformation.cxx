@@ -218,6 +218,17 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
   if( FindDataElement( Tag(0x0002, 0x0010) ) && !GetDataElement( Tag(0x0002,0x0010) ).IsEmpty() )
     {
     const DataElement& tsuid = GetDataElement( Tag(0x0002, 0x0010) );
+    const char * datasetts = DataSetTS.GetString();
+    const ByteValue * bv = tsuid.GetByteValue();
+    assert( bv );
+    std::string currentts( bv->GetPointer(), bv->GetPointer() + bv->GetLength() );
+    if( strlen(currentts.c_str()) != strlen(datasetts)
+      || strcmp( currentts.c_str(), datasetts ) != 0 )
+      {
+      xde = tsuid;
+      xde.SetByteValue( datasetts, strlen(datasetts) );
+      Replace( xde );
+      }
     if( tsuid.GetVR() != VR::UI )
       {
       xde = tsuid;
@@ -690,6 +701,11 @@ void FileMetaInformation::ComputeDataSetTransferSyntax()
 
   // postcondition
   DataSetTS.IsValid();
+}
+
+void FileMetaInformation::SetDataSetTransferSyntax(const TransferSyntax &ts)
+{ 
+DataSetTS = ts; 
 }
 
 MediaStorage FileMetaInformation::GetMediaStorage() const
