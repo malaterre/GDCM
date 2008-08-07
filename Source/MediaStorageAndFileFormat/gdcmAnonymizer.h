@@ -33,22 +33,26 @@ public:
   Anonymizer():F(new File) {}
   ~Anonymizer();
 
-  // Make tag t empty (if not found tag will be created)
+  /// Make Tag t empty (if not found tag will be created)
+  /// Warning: does not handle SQ element
   bool Empty( Tag const &t );
 
-  // remove a tag (even a SQ can be removed)
+  /// remove a tag (even a SQ can be removed)
   bool Remove( Tag const &t );
 
-  // Replace tag with another value, if tag is not found it will be created:
-  // WARNING: this function can only execute if tag is a VRASCII
+  /// Replace tag with another value, if tag is not found it will be created:
+  /// WARNING: this function can only execute if tag is a VRASCII
   bool Replace( Tag const &t, const char *value );
 
-  // when the value contains \0, it is a good idea to specify the length. This function
-  // is required when dealing with VRBINARY tag
+  /// when the value contains \0, it is a good idea to specify the length. This function
+  /// is required when dealing with VRBINARY tag
   bool Replace( Tag const &t, const char *value, VL const & vl );
 
-  // Main function that loop over all elements and remove private tags
+  /// Main function that loop over all elements and remove private tags
   bool RemovePrivateTags();
+
+  /// Main function that loop over all elements and remove group length
+  bool RemoveGroupLength();
 
   void SetFile(const File& f) { F = &f; }
   //const File &GetFile() const { return *F; }
