@@ -336,6 +336,7 @@ void Image::Print(std::ostream &os) const
 
     PF.Print(os);
     }
+  os << "PhotometricInterpretation: " << PI << "\n";
   os << "TransferSyntax: " << TS << "\n";
 }
 
