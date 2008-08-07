@@ -73,6 +73,7 @@ SET(BLACK_LIST_READER
   ImplicitDeclaredAsExplicit.dcm
   TheralysGDCM1.dcm
   MR_Spectroscopy_SIEMENS_OF.dcm
+  US-GE-4AICL142.dcm
 # Recent issue with compression/decompression:
   SIEMENS_GBS_III-16-ACR_NEMA_1.acr
   SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm
