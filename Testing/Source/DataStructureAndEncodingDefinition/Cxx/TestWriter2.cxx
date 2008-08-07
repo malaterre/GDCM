@@ -43,11 +43,11 @@ int TestWrite2(const char *subdir, const char* filename, bool recursing)
 
   // Invert Transfer Syntax just for fun:
   const TransferSyntax &ts = reader.GetFile().GetHeader().GetDataSetTransferSyntax();
-/*  if( ts.IsExplicit() )
+  if( ts.IsExplicit() && ts == TransferSyntax::ExplicitVRLittleEndian )
     {
     reader.GetFile().GetHeader().SetDataSetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
     }
-  else*/ if( ts.IsImplicit() )
+  else if( ts.IsImplicit() )
     {
     reader.GetFile().GetHeader().SetDataSetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
     }
