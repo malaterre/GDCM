@@ -28,6 +28,13 @@ int TestImageApplyLookupTableFunc(const char *filename, bool verbose = false)
     }
   const gdcm::Image &image = reader.GetImage();
 
+  const gdcm::PhotometricInterpretation &pi = image.GetPhotometricInterpretation();
+  if( pi != PhotometricInterpretation::PALETTE_COLOR )
+    {
+    // yeah well not much I can do here...
+    return 0;
+    }
+
   gdcm::ImageApplyLookupTable lutfilt;
   lutfilt.SetInput( image );
   bool b = lutfilt.Apply();
