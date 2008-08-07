@@ -278,6 +278,17 @@ using namespace gdcm;
 %template (DataElementSet) std::set<gdcm::DataElement>;
 //%rename (SetString2) gdcm::DataElementSet;
 %include "gdcmPreamble.h"
+%include "gdcmTransferSyntax.h"
+%extend gdcm::TransferSyntax
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmFileMetaInformation.h"
 %extend gdcm::FileMetaInformation
 {
@@ -354,7 +365,6 @@ using namespace gdcm;
   }
 };
 %include "gdcmSequenceOfFragments.h"
-%include "gdcmTransferSyntax.h"
 %include "gdcmBasicOffsetTable.h"
 //%include "gdcmLO.h"
 %include "gdcmFileSet.h"
