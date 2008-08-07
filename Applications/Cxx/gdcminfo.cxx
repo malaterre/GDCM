@@ -77,27 +77,27 @@ int checkdeflate(const char *name)
 
   len = 0;
   if (stat(name, &s)) 
-  {
+    {
     fprintf( stderr, "Cannot stat: %s\n", name );
-	  return 1;
-  }
+    return 1;
+    }
   if ((s.st_mode & S_IFMT) != S_IFREG) 
-  {
+    {
     fprintf( stderr, "not a regular file\n" );
-	  return 1;
-  }
+    return 1;
+    }
   size = (unsigned long)(s.st_size);
   if (size == 0 || (off_t)size != s.st_size) 
-  {
+    {
     fprintf( stderr, "size mismatch\n" );
-	  return 1;
-  }
+    return 1;
+    }
   in = fopen(name, "r");
   if (in == NULL) 
-  {
+    {
     fprintf( stderr, "in is NULL\n" );
-	  return 1;
-  }
+    return 1;
+    }
   buf = (unsigned char*)malloc(size);
   if (buf != NULL && (size1 = fread(buf, 1, size, in)) != size) {
     free(buf);
@@ -110,7 +110,7 @@ int checkdeflate(const char *name)
   source = buf;
   if( source == NULL ) {
     fprintf( stderr, "source is NULL\n" );
-	  return 1;
+    return 1;
   }
   sourcelen = len;
 
