@@ -19,6 +19,7 @@ SET(CTEST_CUSTOM_MEMCHECK_IGNORE
   "DCMDUMP"
   "DCDUMP"
   "DCMDJPEG" # dcmdjpeg is actually leaking memory
+  "DCMDRLE"
   )
 
 # ==3201== 8 bytes in 1 blocks are still reachable in loss record 2 of 8
