@@ -167,7 +167,6 @@ int PrintCSA(const std::string & filename)
   const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
 
   const gdcm::PrivateTag &t1 = csa.GetCSAImageHeaderInfoTag();
-  std::cout << t1 << std::endl;
   const gdcm::PrivateTag &t2 = csa.GetCSASeriesHeaderInfoTag();
 
   bool found = false;
