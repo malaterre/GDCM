@@ -17,6 +17,7 @@
 #include "gdcmSystem.h"
 #include "gdcmImageReader.h"
 #include "gdcmImageWriter.h"
+#include "gdcmImage.h"
 
 int TestImageApplyLookupTableFunc(const char *filename, bool verbose = false)
 {
@@ -29,9 +30,13 @@ int TestImageApplyLookupTableFunc(const char *filename, bool verbose = false)
   const gdcm::Image &image = reader.GetImage();
 
   const gdcm::PhotometricInterpretation &pi = image.GetPhotometricInterpretation();
-  if( pi != PhotometricInterpretation::PALETTE_COLOR )
+  if( pi != gdcm::PhotometricInterpretation::PALETTE_COLOR )
     {
     // yeah well not much I can do here...
+    if( verbose )
+      {
+      std::cout << "PhotometricInterpretation is: " << pi << " cannot apply LUT then..." << std::endl;
+      }
     return 0;
     }
 
