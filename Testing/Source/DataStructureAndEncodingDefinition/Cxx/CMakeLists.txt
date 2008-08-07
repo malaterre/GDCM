@@ -11,6 +11,7 @@ SET(DSED_TEST_SRCS
   TestReader
   TestReader2
   TestWriter
+  TestWriter2
   TestCSAHeader
   TestByteSwapFilter
   TestBasicOffsetTable
