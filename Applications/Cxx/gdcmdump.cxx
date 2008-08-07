@@ -170,42 +170,46 @@ int PrintCSA(const std::string & filename)
   std::cout << t1 << std::endl;
   const gdcm::PrivateTag &t2 = csa.GetCSASeriesHeaderInfoTag();
 
-  //if( pde.GetTag().GetElement() != 0xffff /*ds.FindDataElement( t0 )*/ )
+  bool found = false;
+  if( ds.FindDataElement( t1 ) )
     {
-    //const gdcm::ByteValue *bv = pde.GetByteValue(); //ds.GetDataElement( t0 ).GetByteValue();
-    //if( strncmp( bv->GetPointer(), csaheader, strlen(csaheader) ) ==  0 )
+    csa.LoadFromDataElement( ds.GetDataElement( t1 ) );
+    csa.Print( std::cout );
+    found = true;
+    if( csa.GetFormat() == gdcm::CSAHeader::ZEROED_OUT )
       {
-      //gdcm::Tag t3(0x0029,0x1120); ???
-      //std::cerr << "Working on: " << filename << std::endl;
-	      bool found = false;
-      if( ds.FindDataElement( t1 ) )
-        {
-        csa.LoadFromDataElement( ds.GetDataElement( t1 ) );
-        csa.Print( std::cout );
-	found = true;
-	//const gdcm::CSAElement &csael = csa.GetCSAElementByName( "Columns" );
-	//std::cout << "Looking for Columns:" << std::endl;
-	//std::cout << csael << std::endl;
-        }
-      if( ds.FindDataElement( t2 ) )
-        {
-        csa.LoadFromDataElement( ds.GetDataElement( t2 ) );
-        csa.Print( std::cout );
-	found = true;
-        }
-      if( !found )
+      std::cout << "CSA Header has been zero-out (contains only 0)" << std::endl;
+      }
+    else if( csa.GetFormat() == gdcm::CSAHeader::DATASET_FORMAT )
       {
-	      std::cout << "no csa tag found" << std::endl;
+      gdcm::Printer p;
+      gdcm::File f;
+      f.SetDataSet( csa.GetDataSet() );
+      p.SetFile( f );
+      p.Print( std::cout );
       }
-      if( csa.GetFormat() == gdcm::CSAHeader::DATASET_FORMAT )
-        {
-        gdcm::Printer p;
-        gdcm::File f;
-        f.SetDataSet( csa.GetDataSet() );
-        p.SetFile( f );
-        p.Print( std::cout );
-        }
+    }
+  if( ds.FindDataElement( t2 ) )
+    {
+    csa.LoadFromDataElement( ds.GetDataElement( t2 ) );
+    csa.Print( std::cout );
+    found = true;
+    if( csa.GetFormat() == gdcm::CSAHeader::ZEROED_OUT )
+      {
+      std::cout << "CSA Header has been zero-out (contains only 0)" << std::endl;
       }
+    else if( csa.GetFormat() == gdcm::CSAHeader::DATASET_FORMAT )
+      {
+      gdcm::Printer p;
+      gdcm::File f;
+      f.SetDataSet( csa.GetDataSet() );
+      p.SetFile( f );
+      p.Print( std::cout );
+      }
+    }
+  if( !found )
+    {
+    std::cout << "no csa tag found" << std::endl;
     }
 
   return 0;
