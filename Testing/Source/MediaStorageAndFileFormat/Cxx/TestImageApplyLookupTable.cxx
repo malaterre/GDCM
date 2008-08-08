@@ -25,7 +25,15 @@ int TestImageApplyLookupTableFunc(const char *filename, bool verbose = false)
   reader.SetFileName( filename );
   if ( !reader.Read() )
     {
-    return 1;
+    const gdcm::FileMetaInformation &header = reader.GetFile().GetHeader();
+    gdcm::MediaStorage ms = header.GetMediaStorage();
+    bool isImage = gdcm::MediaStorage::IsImage( ms );
+    if( isImage )
+      {
+      std::cout << "Could not read: " << filename << std::endl;
+      return 1;
+      }
+    return 0;
     }
   const gdcm::Image &image = reader.GetImage();
 
