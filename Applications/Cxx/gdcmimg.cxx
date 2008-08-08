@@ -226,6 +226,87 @@ int main (int argc, char *argv[])
   const char *inputextension = filename.GetExtension();
   const char *outputextension = outfilename.GetExtension();
 
+  if(  gdcm::System::StrCaseCmp(inputextension,".pgm") == 0 
+    || gdcm::System::StrCaseCmp(inputextension,".pnm") == 0 
+    || gdcm::System::StrCaseCmp(inputextension,".ppm") == 0 )
+    {
+    size_t len = gdcm::System::FileSize(filename);
+    std::ifstream is(filename);
+    std::string type, str;
+    std::getline(is,type);
+    gdcm::PhotometricInterpretation pi;
+    if( type == "P5" )
+      pi = gdcm::PhotometricInterpretation::MONOCHROME2;
+    else if( type == "P6" )
+      pi = gdcm::PhotometricInterpretation::RGB;
+    else return 1;
+
+    // skip comments:
+    while( is.peek() == '#' )
+      {
+      std::getline(is, str);
+      //std::cout << str << std::endl;
+      }
+    unsigned int dims[3] = {};
+    is >> dims[0]; is >> dims[1];
+    unsigned int maxval;
+    is >> maxval;
+    // some kind of empty line...
+    while( is.peek() == '\n' )
+      {
+      is.get();
+      }
+    std::streampos pos = is.tellg();
+    size_t m = (len - pos ) / ( dims[0]*dims[1] );
+    if( m * dims[0] * dims[1] != len - pos )
+      {
+      std::cerr << "Problem computing length" << std::endl;
+      return 1;
+      }
+    gdcm::PixelFormat pf;
+    switch(pf)
+      {
+      case 255:
+      pf = gdcm::PixelFormat::UINT8;
+      break;
+      case 65535:
+      pf = gdcm::PixelFormat::UINT16;
+      break;
+      }
+    if( pi == gdcm::PhotometricInterpretation::RGB )
+      {
+      pf.SetSamplesPerPixel( 3 );
+      }
+    //if ( m * 8 != bpp ) return 1;
+
+    gdcm::ImageWriter writer;
+    gdcm::Image &image = writer.GetImage();
+    image.SetNumberOfDimensions( 2 );
+    image.SetDimensions( dims );
+    image.SetPixelFormat( pf );
+    image.SetPhotometricInterpretation( pi );
+    image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRBigEndian ); // PGM are big endian
+    //image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian ); // PGM are big endian
+
+    size_t pdlen = image.GetBufferLength();
+    char * buf = new char[pdlen];
+    // is should be at right offset, just read!
+    is.read(buf, len);
+    if( !is.eof() ) return 1;
+
+    gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
+    pixeldata.SetByteValue( buf, pdlen );
+    image.SetDataElement( pixeldata );
+
+    writer.SetFileName( outfilename );
+    if( !writer.Write() )
+      {
+      return 1;
+      }
+
+    return 0;
+    }
+
   if(  gdcm::System::StrCaseCmp(inputextension,".jpg") == 0 
     || gdcm::System::StrCaseCmp(inputextension,".jpeg") == 0
     || gdcm::System::StrCaseCmp(inputextension,".ljpeg") == 0 )

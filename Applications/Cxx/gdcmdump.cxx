@@ -92,7 +92,7 @@ int readprotocoldatablock(const char *input, size_t inputlen, bool verbose)
   uint32_t len = *(uint32_t*)input;
   if( verbose )
     std::cout << len << "," << inputlen << std::endl;
-  if( len + 4 == inputlen + 1 )
+  if( len + 4 + 1 == inputlen )
     {
     if( verbose )
       std::cout << "gzip stream was padded with an extra 0 \n";
@@ -104,6 +104,7 @@ int readprotocoldatablock(const char *input, size_t inputlen, bool verbose)
     }
   else
     {
+    std::cerr << "Found the Protocol Data Block but could not read length..." << std::endl;
     return 1;
     }
   // Alright we need to check if the binary blob was padded, if padded we need to 

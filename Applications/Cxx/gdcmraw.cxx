@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
             assert( filename.empty() );
             filename = optarg;
             }
-          else if( option_index == 4 ) /* input */
+          else if( option_index == 5 ) /* input */
             {
             assert( strcmp(s, "pattern") == 0 );
             assert( pattern.empty() );
