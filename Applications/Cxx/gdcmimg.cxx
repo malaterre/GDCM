@@ -256,15 +256,15 @@ int main (int argc, char *argv[])
     is.read(buf, len);
     gdcm::DataElement pixeldata;
 
-  gdcm::SmartPointer<gdcm::SequenceOfFragments> sq = new gdcm::SequenceOfFragments;
-  const gdcm::Tag itemStart(0xfffe, 0xe000);
-  sq->GetTable().SetTag( itemStart );
+    gdcm::SmartPointer<gdcm::SequenceOfFragments> sq = new gdcm::SequenceOfFragments;
+    const gdcm::Tag itemStart(0xfffe, 0xe000);
+    sq->GetTable().SetTag( itemStart );
 
     gdcm::Fragment frag;
     frag.SetTag( itemStart );
     frag.SetByteValue( buf, len );
     sq->AddFragment( frag );
-  pixeldata.SetValue( *sq );
+    pixeldata.SetValue( *sq );
 
     //pixeldata.SetByteValue( buf, len );
     image.SetDataElement( pixeldata );
@@ -272,7 +272,10 @@ int main (int argc, char *argv[])
     //writer.SetFile( file );
     //writer.SetImage( image );
     writer.SetFileName( outfilename );
-    writer.Write();
+    if( !writer.Write() )
+      {
+      return 1;
+      }
 
     return 0;
     }
