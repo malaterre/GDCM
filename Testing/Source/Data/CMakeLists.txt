@@ -87,6 +87,8 @@ SET(BLACK_LIST_READER
 #SC that are well hidden MR Image Storage
   fffc0000UN.dcm
   MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm
+# Private tags is SQ, but SQ is busted, GDCM fails since it tries to parse the SQ (dcmtk does not even try)
+  BogusItemLengthImplicitPrivateAtt.dcm
 )
 IF(GDCM_WORDS_BIGENDIAN)
   SET(BLACK_LIST_READER
