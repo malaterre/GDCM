@@ -263,6 +263,7 @@ int main (int argc, char *argv[])
     gdcm::Fragment frag;
     frag.SetTag( itemStart );
     frag.SetByteValue( buf, len );
+    delete[] buf;
     sq->AddFragment( frag );
     pixeldata.SetValue( *sq );
 
