@@ -41,6 +41,8 @@
  * Todo: check compat API with jhead 
  */
 #include "gdcmFilename.h"
+#include "gdcmSequenceOfFragments.h"
+#include "gdcmSystem.h"
 #include "gdcmReader.h"
 #include "gdcmImageWriter.h"
 #include "gdcmImageReader.h"
@@ -224,17 +226,56 @@ int main (int argc, char *argv[])
   const char *inputextension = filename.GetExtension();
   const char *outputextension = outfilename.GetExtension();
 
-/*
-  if( strcmp(inputextension, ".jpg") == 0 
-    || strcmp(inputextension,".jpeg") == 0
-    || strcmp(inputextension,".ljpeg") == 0 )
+  if(  gdcm::System::StrCaseCmp(inputextension,".jpg") == 0 
+    || gdcm::System::StrCaseCmp(inputextension,".jpeg") == 0
+    || gdcm::System::StrCaseCmp(inputextension,".ljpeg") == 0 )
     {
     gdcm::JPEGCodec jpeg;
     std::ifstream is(filename);
-    jpeg.GetHeaderInfo( is, );
+    gdcm::PixelFormat pf ( gdcm::PixelFormat::UINT8 ); // usual guess...
+    jpeg.SetPixelFormat( pf );
+    gdcm::TransferSyntax ts;
+    bool b = jpeg.GetHeaderInfo( is, ts );
+    if( !b )
+      {
+      return 1;
+      }
+
+    gdcm::ImageWriter writer;
+    gdcm::Image &image = writer.GetImage();
+    image.SetNumberOfDimensions( 2 );
+    image.SetDimensions( jpeg.GetDimensions() );
+    image.SetPixelFormat( jpeg.GetPixelFormat() );
+    image.SetPhotometricInterpretation( jpeg.GetPhotometricInterpretation() );
+    image.SetTransferSyntax( ts );
+
+    size_t len = gdcm::System::FileSize(filename);
+
+    char * buf = new char[len];
+    is.seekg(0, std::ios::beg );// rewind !
+    is.read(buf, len);
+    gdcm::DataElement pixeldata;
+
+  gdcm::SmartPointer<gdcm::SequenceOfFragments> sq = new gdcm::SequenceOfFragments;
+  const gdcm::Tag itemStart(0xfffe, 0xe000);
+  sq->GetTable().SetTag( itemStart );
+
+    gdcm::Fragment frag;
+    frag.SetTag( itemStart );
+    frag.SetByteValue( buf, len );
+    sq->AddFragment( frag );
+  pixeldata.SetValue( *sq );
+
+    //pixeldata.SetByteValue( buf, len );
+    image.SetDataElement( pixeldata );
+
+    //writer.SetFile( file );
+    //writer.SetImage( image );
+    writer.SetFileName( outfilename );
+    writer.Write();
+
     return 0;
     }
-*/
 
   gdcm::ImageReader reader;
   reader.SetFileName( filename );
