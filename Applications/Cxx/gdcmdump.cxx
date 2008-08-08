@@ -58,7 +58,7 @@ int DoOperation(const std::string & filename)
 }
 
 /*
- * In some GE MEDICAL SYSTEMS image one can find a Data Element: 0025,xx10,GEMS_SERS_01
+ * In some GE MEDICAL SYSTEMS image one can find a Data Element: 0025,xx1b,GEMS_SERS_01
  * which is documented as Protocol Data Block (compressed).
  * in fact this is a simple text format compressed using the gzip algorithm
  *
@@ -80,6 +80,10 @@ int DoOperation(const std::string & filename)
  *   $ cat bar
  *
  * THANKS to: John Reiser (BitWagon.com) for hints
+ *
+ * For sample see:
+ * GE_MR_0025xx1bProtocolDataBlock.dcm
+ * ( <=> http://server.oersted.dtu.dk/personal/jw/jwpublic/courses/31540/mri/second_set/dicom/t2/b17.dcm)
  */
 
 int readprotocoldatablock(const char *input, size_t inputlen, bool verbose)
@@ -170,6 +174,7 @@ int PrintCSA(const std::string & filename)
   const gdcm::PrivateTag &t2 = csa.GetCSASeriesHeaderInfoTag();
 
   bool found = false;
+  int ret = 0;
   if( ds.FindDataElement( t1 ) )
     {
     csa.LoadFromDataElement( ds.GetDataElement( t1 ) );
@@ -178,6 +183,7 @@ int PrintCSA(const std::string & filename)
     if( csa.GetFormat() == gdcm::CSAHeader::ZEROED_OUT )
       {
       std::cout << "CSA Header has been zero-out (contains only 0)" << std::endl;
+      ret = 1;
       }
     else if( csa.GetFormat() == gdcm::CSAHeader::DATASET_FORMAT )
       {
@@ -196,6 +202,7 @@ int PrintCSA(const std::string & filename)
     if( csa.GetFormat() == gdcm::CSAHeader::ZEROED_OUT )
       {
       std::cout << "CSA Header has been zero-out (contains only 0)" << std::endl;
+      ret = 1;
       }
     else if( csa.GetFormat() == gdcm::CSAHeader::DATASET_FORMAT )
       {
@@ -209,9 +216,10 @@ int PrintCSA(const std::string & filename)
   if( !found )
     {
     std::cout << "no csa tag found" << std::endl;
+    ret = 1;
     }
 
-  return 0;
+  return ret;
 }
 
 
