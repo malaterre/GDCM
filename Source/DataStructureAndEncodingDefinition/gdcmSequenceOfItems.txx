@@ -33,8 +33,8 @@ VL SequenceOfItems::ComputeLength() const
     }
   // For defined length SQ, make sure computation is correct (compare
   // to original length)
-  assert( SequenceLengthField.IsUndefined()
-    || length == SequenceLengthField );
+  //assert( SequenceLengthField.IsUndefined()
+  //  || length == SequenceLengthField );
   return length;
 }
 

@@ -441,7 +441,7 @@ void DictPrinter::Print(std::ostream& os)
     std::string strowner;
     const char *owner = 0;
     const Tag& t = de.GetTag();
-    if( t.IsPrivate() )
+    if( t.IsPrivate() && !t.IsPrivateCreator() )
       { 
       strowner = ds.GetPrivateCreator(t);
       owner = strowner.c_str();

@@ -339,6 +339,7 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
   const Tag itemDelItem(0xfffe,0xe00d);
   if( TagField == itemDelItem )
     {
+    abort();
     assert( ValueField == 0 );
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     if( ValueLengthField != 0 )
@@ -403,7 +404,18 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
   if( ValueLengthField )
     {
 #ifdef NDEBUG
-    if( dynamic_cast<const ByteValue*>(&*ValueField) )
+    if( GetByteValue() )
+      {
+      assert( ValueField->GetLength() == ValueLengthField );
+      }
+    else if( GetSequenceOfItems() )
+      {
+      assert( ValueField->GetLength() == ValueLengthField );
+      SequenceOfItems *sq = GetSequenceOfItems();
+      VL dummy = sq->ComputeLength<ExplicitDataElement>();
+abort();
+      }
+    else if( GetSequenceOfFragments() )
       {
       assert( ValueField->GetLength() == ValueLengthField );
       }
@@ -411,7 +423,7 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
     // We have the length we should be able to write the value
     if( VRField == VR::UN && ValueLengthField.IsUndefined() )
       {
-      //assert( dynamic_cast<const SequenceOfItems*>(ValueField) );
+      assert( GetSequenceOfItems() );
       ValueIO<ImplicitDataElement,TSwap>::Write(os,*ValueField);
       }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
