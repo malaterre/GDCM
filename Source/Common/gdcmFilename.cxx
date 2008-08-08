@@ -117,7 +117,7 @@ inline void Realpath(const char *path, std::string & resolved_path)
 const char *Filename::GetExtension()
 {
   std::string name = GetName();
-  std::string::size_type dot_pos = name.find(".");
+  std::string::size_type dot_pos = name.rfind(".");
   if(dot_pos != std::string::npos)
     {
     return GetName() + dot_pos;
