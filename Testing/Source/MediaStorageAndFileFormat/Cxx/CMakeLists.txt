@@ -10,6 +10,7 @@ SET(MSFF_TEST_SRCS
   TestImageChangeTransferSyntax
   TestImageChangeTransferSyntax2
   TestImageChangeTransferSyntax3
+  TestImageChangeTransferSyntax4
   TestImageApplyLookupTable
   TestCoder
   TestDecoder
