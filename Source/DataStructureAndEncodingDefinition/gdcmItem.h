@@ -247,13 +247,23 @@ public:
         return os;
         }
       }
-    VL dummy = NestedDataSet.GetLength<TDE>();
-    //assert( ValueLengthField == dummy );
-    //if( !ValueLengthField.Write<TSwap>(os) )
-    if( !dummy.Write<TSwap>(os) )
+    if( ValueLengthField.IsUndefined() )
       {
-      assert(0 && "Should not happen");
-      return os;
+      if( !ValueLengthField.Write<TSwap>(os) )
+        {
+        assert(0 && "Should not happen");
+        return os;
+        }
+      }
+    else
+      {
+      VL dummy = NestedDataSet.GetLength<TDE>();
+      //assert( ValueLengthField == dummy );
+      if( !dummy.Write<TSwap>(os) )
+        {
+        assert(0 && "Should not happen");
+        return os;
+        }
       }
     // Self
     NestedDataSet.Write<TDE,TSwap>(os);
