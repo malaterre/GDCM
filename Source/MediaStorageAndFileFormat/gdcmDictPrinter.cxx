@@ -16,6 +16,7 @@
 #include "gdcmDict.h"
 #include "gdcmGlobal.h"
 #include "gdcmDicts.h"
+#include "gdcmSequenceOfItems.h"
 
 namespace gdcm
 {
@@ -427,7 +428,7 @@ std::string GetOwner(DataSet const &ds, DataElement const &de)
    return ds.GetPrivateCreator(de.GetTag());
 }
 
-void DictPrinter::PrintDataElement2(std::ostream& os, const DataElement &de)
+void DictPrinter::PrintDataElement2(std::ostream& os, const DataSet &ds, const DataElement &de)
 {
   const Global& g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
@@ -467,13 +468,13 @@ void DictPrinter::PrintDataElement2(std::ostream& os, const DataElement &de)
 
     os << 
       "<entry group=\"" << std::hex << std::setw(4) << std::setfill('0') << 
-      t.GetGroup() << "\" element=\"" << std::setw(4) << t.GetElement() << "\" ";
+      t.GetGroup() << "\" element=\"" << std::setw(4) << ((uint16_t)(t.GetElement() << 8) >> 8) << "\" ";
 
     os <<  "vr=\"" << pvr << "\" vm=\"" << vm << "\" ";
     //os <<  "\" retired=\"false\";
     if( de.GetTag().IsPrivate() )
       {
-      os << "owner=\"" << owner
+      os << "name=\"?\" owner=\"" << owner
         << /*"\"  version=\"" << version << */ "\"/>\n";
       }
     //os << "\n  <description>?</description>\n";
@@ -509,7 +510,7 @@ void DictPrinter::PrintDataSet2(std::ostream& os, const DataSet &ds)
   for( ; it != ds.End(); ++it )
     {
     const DataElement &de = *it;
-    PrintDataElement2(os, de);
+    PrintDataElement2(os, ds, de);
     }
 }
 

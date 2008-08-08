@@ -30,8 +30,8 @@ public:
   void Print(std::ostream& os);
 
 protected:
-  void PrintElement(std::ostream& os, const DataElement &ide, const DictEntry &entry);
-  void PrintDataSet(std::ostream& os, const DataSet &ds);
+  void PrintDataElement2(std::ostream& os, const DataSet &ds, const DataElement &ide);
+  void PrintDataSet2(std::ostream& os, const DataSet &ds);
 };
 
 } // end namespace gdcm
