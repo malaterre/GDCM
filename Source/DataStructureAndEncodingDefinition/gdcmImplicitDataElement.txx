@@ -390,7 +390,8 @@ const std::ostream &ImplicitDataElement::Write(std::ostream &os) const
     return os;
     }
   // Write Value Length
-  if( const SequenceOfItems *sqi = GetSequenceOfItems() )
+  const SequenceOfItems *sqi = GetSequenceOfItems();
+  if( sqi && !ValueLengthField.IsUndefined() )
     {
     // Hum, we might have to recompute the length:
     VL len = sqi->ComputeLength<ImplicitDataElement>();
