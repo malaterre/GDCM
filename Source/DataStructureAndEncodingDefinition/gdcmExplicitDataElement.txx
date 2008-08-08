@@ -403,7 +403,7 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
     }
   if( ValueLengthField )
     {
-#ifdef NDEBUG
+#ifndef NDEBUG
     if( GetByteValue() )
       {
       assert( ValueField->GetLength() == ValueLengthField );
@@ -411,9 +411,9 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
     else if( GetSequenceOfItems() )
       {
       assert( ValueField->GetLength() == ValueLengthField );
-      SequenceOfItems *sq = GetSequenceOfItems();
+      const SequenceOfItems *sq = GetSequenceOfItems();
       VL dummy = sq->ComputeLength<ExplicitDataElement>();
-abort();
+      assert( ValueLengthField.IsUndefined() || dummy == ValueLengthField );
       }
     else if( GetSequenceOfFragments() )
       {
