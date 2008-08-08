@@ -36,7 +36,6 @@ namespace gdcm
     else if( SequenceOfItems *si = dynamic_cast<SequenceOfItems*>(v) )
       {
       si->template Read<TDE,TSwap>(is);
-      VL dummy = si->ComputeLength<TDE>();
       }
     else if( SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(v) )
       {
