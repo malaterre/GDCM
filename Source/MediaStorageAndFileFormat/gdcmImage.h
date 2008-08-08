@@ -65,7 +65,7 @@ public:
   /// Return the dimension of the pixel data, first dimension (x), then 2nd (y), then 3rd (z)...
   const unsigned int *GetDimensions() const;
   unsigned int GetDimension(unsigned int idx) const;
-  void SetDimensions(unsigned int *dims);
+  void SetDimensions(const unsigned int *dims);
   void SetDimension(unsigned int idx, unsigned int dim);
 
   /// Get/Set PixelFormat

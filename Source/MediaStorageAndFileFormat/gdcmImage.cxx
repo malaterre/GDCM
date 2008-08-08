@@ -96,10 +96,10 @@ unsigned int Image::GetDimension(unsigned int idx) const
   return Dimensions[idx];
 }
 
-void Image::SetDimensions(unsigned int *dims)
+void Image::SetDimensions(const unsigned int *dims)
 {
   assert( NumberOfDimensions );
-  assert( Dimensions.empty() );
+  //assert( Dimensions.empty() );
   Dimensions = std::vector<unsigned int>(dims, 
     dims+NumberOfDimensions);
 }

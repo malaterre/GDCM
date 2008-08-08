@@ -153,6 +153,62 @@ void JPEGCodec::ComputeOffsetTable(bool b)
   abort();
 }
 
+bool JPEGCodec::GetHeaderInfo( std::istream & is, TransferSyntax &ts )
+{
+  if ( !Internal->GetHeaderInfo(is, ts) )
+    {
+    // let's check if this is one of those buggy lossless JPEG
+    if( this->BitSample != Internal->BitSample )
+      {
+      // MARCONI_MxTWin-12-MONO2-JpegLossless-ZeroLengthSQ.dcm
+      // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
+      gdcmWarningMacro( "DICOM header said it was " << this->BitSample <<
+        " but JPEG header says it's: " << Internal->BitSample );
+      if( this->BitSample < Internal->BitSample )
+        {
+        //abort(); // Outside buffer will be too small
+        }
+      this->BitSample = Internal->BitSample; // Store the value found before destroying Internal
+      delete Internal; Internal = 0; // Do not attempt to reuse the pointer
+      is.seekg(0, std::ios::beg);
+      switch( this->BitSample )
+        {
+      case 8:
+        Internal = new JPEG8Codec;
+        break;
+      case 12:
+        Internal = new JPEG12Codec;
+        break;
+      case 16:
+        Internal = new JPEG16Codec;
+        break;
+      default:
+        abort();
+        }
+      if( Internal->GetHeaderInfo(is, ts) )
+        {
+        // Foward everything back to meta jpeg codec:
+        this->SetDimensions( Internal->GetDimensions() );
+        this->SetPhotometricInterpretation( Internal->GetPhotometricInterpretation() );
+        this->PF = Internal->GetPixelFormat(); // DO NOT CALL SetPixelFormat
+        return true;
+        }
+      else
+        {
+        abort(); // FATAL ERROR
+        }
+      }
+    return false;
+    }
+  if( this->PI != Internal->PI )
+    {
+    gdcmWarningMacro( "PhotometricInterpretation issue" );
+    this->PI = Internal->PI;
+    }
+
+  return true;
+}
+
 bool JPEGCodec::Code(DataElement const &in, DataElement &out)
 {
   out = in;
