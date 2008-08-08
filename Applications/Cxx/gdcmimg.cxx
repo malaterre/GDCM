@@ -264,7 +264,7 @@ int main (int argc, char *argv[])
       return 1;
       }
     gdcm::PixelFormat pf;
-    switch(pf)
+    switch(maxval)
       {
       case 255:
       pf = gdcm::PixelFormat::UINT8;
@@ -277,7 +277,7 @@ int main (int argc, char *argv[])
       {
       pf.SetSamplesPerPixel( 3 );
       }
-    //if ( m * 8 != bpp ) return 1;
+    //if ( maxval * 8 != bpp ) return 1;
 
     gdcm::ImageWriter writer;
     gdcm::Image &image = writer.GetImage();
