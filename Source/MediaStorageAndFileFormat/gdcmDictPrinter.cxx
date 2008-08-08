@@ -427,71 +427,96 @@ std::string GetOwner(DataSet const &ds, DataElement const &de)
    return ds.GetPrivateCreator(de.GetTag());
 }
 
-//-----------------------------------------------------------------------------
-void DictPrinter::Print(std::ostream& os)
+void DictPrinter::PrintDataElement2(std::ostream& os, const DataElement &de)
 {
   const Global& g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
 
-  const DataSet &ds = F->GetDataSet();
+  const SequenceOfItems *sqi = de.GetSequenceOfItems();
+  const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
+
+  std::string strowner;
+  const char *owner = 0;
+  const Tag& t = de.GetTag();
+  if( t.IsPrivate() && !t.IsPrivateCreator() )
+    { 
+    strowner = ds.GetPrivateCreator(t);
+    owner = strowner.c_str();
+    }
+  const DictEntry &entry = dicts.GetDictEntry(t,owner);
+
+  if( de.GetTag().IsPrivate() && de.GetTag().GetElement() >= 0x0100 )
+    {
+    //owner = GetOwner(ds,de);
+    //version = GetVersion(owner);
+
+    const Tag &t = de.GetTag();
+    const VR &vr = de.GetVR();
+    VR pvr = vr;
+    if( vr == VR::INVALID ) pvr = VR::UN;
+    if( de.GetTag().GetElement() == 0x0 )
+      {
+      pvr = VR::UL;
+      }
+    else if( de.GetTag().GetElement() <= 0xFF  )
+      {
+      pvr = VR::LO;
+      owner = "Private Creator";
+      }
+    VM vm = GuessVMType(de);
+
+    os << 
+      "<entry group=\"" << std::hex << std::setw(4) << std::setfill('0') << 
+      t.GetGroup() << "\" element=\"" << std::setw(4) << t.GetElement() << "\" ";
+
+    os <<  "vr=\"" << pvr << "\" vm=\"" << vm << "\" ";
+    //os <<  "\" retired=\"false\";
+    if( de.GetTag().IsPrivate() )
+      {
+      os << "owner=\"" << owner
+        << /*"\"  version=\"" << version << */ "\"/>\n";
+      }
+    //os << "\n  <description>?</description>\n";
+    //os << "</entry>\n";
+    //os << "/>\n";
+    //os << "  <description>Unknown ";
+    //os << (t.IsPrivate() ? "Private" : "Public");
+    //os << " Tag & Data</description>\n";
+    //os << "  <representations>\n";
+    //os << "    <representation vr=\"" << vr << "\" vm=\"" << 
+    //  VM::GetVMString(vm) << "\"/>\n";
+    //os << "  </representations>\n";
+    //os << "</entry>\n";
+    }
+
+  if( sqi )
+    {
+    SequenceOfItems::ItemVector::const_iterator it = sqi->Items.begin();
+    for(; it != sqi->Items.end(); ++it)
+      {
+      const Item &item = *it;
+      const DataSet &ds = item.GetNestedDataSet();
+      const DataElement &deitem = item;
+      PrintDataSet2(os, ds);
+      }
+    }
+}
+
+//-----------------------------------------------------------------------------
+void DictPrinter::PrintDataSet2(std::ostream& os, const DataSet &ds)
+{
   DataSet::ConstIterator it = ds.Begin();
   for( ; it != ds.End(); ++it )
     {
     const DataElement &de = *it;
-    std::string strowner;
-    const char *owner = 0;
-    const Tag& t = de.GetTag();
-    if( t.IsPrivate() && !t.IsPrivateCreator() )
-      { 
-      strowner = ds.GetPrivateCreator(t);
-      owner = strowner.c_str();
-      }
-    const DictEntry &entry = dicts.GetDictEntry(t,owner);
-
-    if( de.GetTag().IsPrivate() && de.GetTag().GetElement() >= 0x0100 )
-      {
-      //owner = GetOwner(ds,de);
-      //version = GetVersion(owner);
-
-      const Tag &t = de.GetTag();
-      const VR &vr = de.GetVR();
-      VR pvr = vr;
-      if( vr == VR::INVALID ) pvr = VR::UN;
-      if( de.GetTag().GetElement() == 0x0 )
-        {
-        pvr = VR::UL;
-        }
-      else if( de.GetTag().GetElement() <= 0xFF  )
-        {
-        pvr = VR::LO;
-        owner = "Private Creator";
-        }
-      VM vm = GuessVMType(de);
-
-      os << 
-        "<entry group=\"" << std::hex << std::setw(4) << std::setfill('0') << 
-        t.GetGroup() << "\" element=\"" << std::setw(4) << t.GetElement() << "\" ";
-
-      os <<  "vr=\"" << pvr << "\" vm=\"" << vm << "\" ";
-      //os <<  "\" retired=\"false\";
-      if( de.GetTag().IsPrivate() )
-        {
-        os << "owner=\"" << owner
-          << /*"\"  version=\"" << version << */ "\"/>\n";
-        }
-      //os << "\n  <description>?</description>\n";
-      //os << "</entry>\n";
-      //os << "/>\n";
-      //os << "  <description>Unknown ";
-      //os << (t.IsPrivate() ? "Private" : "Public");
-      //os << " Tag & Data</description>\n";
-      //os << "  <representations>\n";
-      //os << "    <representation vr=\"" << vr << "\" vm=\"" << 
-      //  VM::GetVMString(vm) << "\"/>\n";
-      //os << "  </representations>\n";
-      //os << "</entry>\n";
-      }
+    PrintDataElement2(os, de);
     }
+}
+
+void DictPrinter::Print(std::ostream& os)
+{
+  const DataSet &ds = F->GetDataSet();
+  PrintDataSet2(os, ds);
   //os << "</dict>\n";
 }
 

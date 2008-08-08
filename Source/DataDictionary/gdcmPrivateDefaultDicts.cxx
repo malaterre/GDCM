@@ -6849,6 +6849,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0029,0x00e0,"SPI-P-Private_ICS Release 1;4",VR::SQ,VM::VM1,"?",false },
   {0x0029,0x0050,"SPI-P-Private_ICS Release 1;5",VR::CS,VM::VM1,"?",false },
   {0x0029,0x0055,"SPI-P-Private_ICS Release 1;5",VR::CS,VM::VM1,"?",false },
+/*
   {0x0029,0x0001,"SPI-P-Private_ICS Release 1;6",VR::FL,VM::VM1,"?",false },
   {0x0029,0x0003,"SPI-P-Private_ICS Release 1;6",VR::UL,VM::VM1,"?",false },
   {0x0029,0x0007,"SPI-P-Private_ICS Release 1;6",VR::SQ,VM::VM1,"?",false },
@@ -6890,6 +6891,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0029,0x0065,"SPI-P-Private_ICS Release 1;6",VR::SQ,VM::VM1,"?",false },
   {0x0029,0x0066,"SPI-P-Private_ICS Release 1;6",VR::UL,VM::VM1,"?",false },
   {0x0029,0x0067,"SPI-P-Private_ICS Release 1;6",VR::UL,VM::VM1,"?",false },
+*/
   {0x0019,0x0010,"SPI-P-XSB-DCI Release 1",VR::LT,VM::VM1,"Video Beam Boost",false },
   {0x0019,0x0011,"SPI-P-XSB-DCI Release 1",VR::US,VM::VM1,"Channel Generating Video Sync",false },
   {0x0019,0x0012,"SPI-P-XSB-DCI Release 1",VR::US,VM::VM1,"Video Gain",false },
