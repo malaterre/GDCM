@@ -18,7 +18,7 @@ SET(CTEST_CUSTOM_MEMCHECK_IGNORE
   "Python"
   "DCMDUMP"
   "DCDUMP"
-  "DCMDJPEG" # dcmdjpeg is actually leaking memory
+  "DCMDJPEG"
   "DCMDRLE"
   )
 
