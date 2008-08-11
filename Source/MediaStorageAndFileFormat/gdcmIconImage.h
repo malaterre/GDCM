@@ -56,6 +56,7 @@ public:
   void SetPhotometricInterpretation(PhotometricInterpretation const &pi);
 
   bool IsEmpty() const { return Dimensions.size() == 0; }
+  void Clear();
 
   bool GetBuffer(char *buffer) const;
 
