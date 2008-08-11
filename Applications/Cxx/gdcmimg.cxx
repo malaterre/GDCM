@@ -307,6 +307,7 @@ int main (int argc, char *argv[])
       {
       return 1;
       }
+    delete[] buf;
 
     return 0;
     }
