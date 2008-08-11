@@ -63,12 +63,14 @@ IF(GDCM_DOCUMENTATION)
     #ADD_CUSTOM_COMMAND(
     #  ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_SOURCE_DIR}/patchtex.cmake 
     #) 
+    # TODO, FOREACH(*.tex)
+    # sed -i -e "/home/mmalaterre/Projects/" ...
     ADD_CUSTOM_COMMAND(
       OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.tex.tmp # output #1 (fake)
                ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf # output #2
       # Command #1
       COMMAND  ${SED_EXECUTABLE}
-      ARGS     -i.tmp -e "'s/]{hyperref}/]{hyperref}\\\\hypersetup{pdftitle={GDCM Reference Guide},pdfauthor={Mathieu Malaterre and co.},pdfsubject={Grassroots DICOM API reference},pdfkeywords={GDCM,DICOM,JPEG,Lossless JPEG,JPEG-LS,J2K,JPEG 2000,RLE},pdfpagemode={UseOutlines},bookmarks,bookmarksopen,pdfstartview={FitH},backref,colorlinks,linkcolor={black},citecolor={black},urlcolor={black},pdffitwindow=true,baseurl={http:\\/\\/gdcm.sourceforge.net}}\\\\hyperbaseurl{http:\\/\\/gdcm.sourceforge.net}/g'" ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.tex
+      ARGS     -i.tmp -e "'s/]{hyperref}/]{hyperref}\\\\hypersetup{pdftitle={GDCM Reference Manual},pdfauthor={Mathieu Malaterre and co.},pdfsubject={Grassroots DICOM API reference},pdfkeywords={GDCM,DICOM,JPEG,Lossless JPEG,JPEG-LS,J2K,JPEG 2000,RLE},pdfpagemode={UseOutlines},bookmarks,bookmarksopen,pdfstartview={FitH},backref,colorlinks,linkcolor={black},citecolor={black},urlcolor={black},baseurl={http:\\/\\/gdcm.sourceforge.net}}\\\\hyperbaseurl{http:\\/\\/gdcm.sourceforge.net}/g'" ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.tex
       # Command #2
       COMMAND  ${CMAKE_MAKE_PROGRAM}
       DEPENDS  #${CMAKE_CURRENT_BINARY_DIR}/latex/refman.tex 
