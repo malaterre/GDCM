@@ -305,11 +305,13 @@ void DoIconImage(const DataSet& rootds, Image& image)
     assert( pi != PhotometricInterpretation::UNKNOW);
     pixeldata.SetPhotometricInterpretation( pi );
     const Tag tpixeldata = Tag(0x7fe0, 0x0010);
-    assert( ds.FindDataElement( tpixeldata ) );
+    if( !ds.FindDataElement( tpixeldata ) )
       {
-      const DataElement& de = ds.GetDataElement( tpixeldata );
-      pixeldata.SetDataElement( de );
+      pixeldata.Clear();
+      return;
       }
+    const DataElement& de = ds.GetDataElement( tpixeldata );
+    pixeldata.SetDataElement( de );
     }
   else if( rootds.FindDataElement( tgeiconimage ) )
     {

@@ -52,6 +52,11 @@ void IconImage::SetDimension(unsigned int idx, unsigned int dim)
   Dimensions[idx] = dim;
 }
 
+void IconImage::Clear()
+{
+  Dimensions.clear();
+}
+
 const PhotometricInterpretation &IconImage::GetPhotometricInterpretation() const
 {
   return PI;
@@ -65,7 +70,11 @@ void IconImage::SetPhotometricInterpretation(
 
 bool IconImage::GetBuffer(char *buffer) const
 {
-  if( IsEmpty() ) return false;
+  if( IsEmpty() )
+    {
+    buffer = 0;
+    return false;
+    }
 
   const ByteValue *bv = PixelData.GetByteValue();
   assert( bv );
