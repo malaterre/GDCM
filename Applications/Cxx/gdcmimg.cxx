@@ -239,7 +239,11 @@ int main (int argc, char *argv[])
       pi = gdcm::PhotometricInterpretation::MONOCHROME2;
     else if( type == "P6" )
       pi = gdcm::PhotometricInterpretation::RGB;
-    else return 1;
+    else 
+      {
+      std::cerr << "Unhandled PGM type: " << type << std::endl;
+      return 1;
+      }
 
     // skip comments:
     while( is.peek() == '#' )
