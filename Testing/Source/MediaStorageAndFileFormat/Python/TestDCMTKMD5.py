@@ -25,6 +25,7 @@ def TestDCMTKMD5( filename, verbose = False ):
   #assert ret == 0
   #print ret
   jpegre = re.compile('^.*JPEGLossless.*$')
+  jpegre2 = re.compile('^.*JPEGExtended.*$')
   rlere = re.compile('^.*RLELossless.*$')
   lexre = re.compile('^.*LittleEndianExplicit.*$')
   leire = re.compile('^.*LittleEndianImplicit.*$')
@@ -43,10 +44,13 @@ def TestDCMTKMD5( filename, verbose = False ):
     return 0
   #print ret
   #print ret.__class__
-  elif( jpegre.match( ret ) ):
+  elif( jpegre.match( ret ) or jpegre2.match(ret) ):
     #print "jpeg: ",filename
     dcmdjpeg_exec = "dcmdjpeg " + filename + " " + outputfilename
     ret = os.system( dcmdjpeg_exec )
+    if ret:
+      print "dcmdjpeg failed to decompress file. giving up"
+      return 0
 
     gdcmraw_args = ' -i ' + outputfilename + ' -o ' + outputfilename + ".raw"
     gdcmraw += gdcmraw_args
@@ -104,7 +108,7 @@ def TestDCMTKMD5( filename, verbose = False ):
     #print outputfilename
     return retval
   #else
-  print "Unhandled:",filename
+  print "Unhandled:",filename,"with ret=",ret
   return 1
 
 if __name__ == "__main__":
@@ -116,6 +120,7 @@ if __name__ == "__main__":
     # loop over all files:
     t = gdcm.Testing()
     gdcm.Trace.WarningOff()
+    gdcm.Trace.DebugOff()
     nfiles = t.GetNumberOfFileNames()
     for i in range(0,nfiles):
       filename = t.GetFileName(i)
