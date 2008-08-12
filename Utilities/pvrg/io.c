@@ -458,7 +458,7 @@ static void ReadResizeBuffer(len,buffer)
 
   location = buffer->streamoffs+buffer->currentoffs;
   amount = buffer->size-(buffer->tptr - buffer->space);
-  lseek(buffer->iob->file,location,L_SET);
+  lseek(buffer->iob->file,location,SEEK_SET);
 #ifdef IO_DEBUG
   printf("Read: Filed %d  Buf: %x  NBytes: %d\n",
 	 buffer->iob->file,buffer->tptr,amount);
@@ -494,7 +494,7 @@ static void FlushBuffer(buffer)
 #ifdef IO_DEBUG
   printf("WriteLseek %d\n",buffer->streamoffs+buffer->currentoffs);
 #endif
-  lseek(buffer->iob->file,buffer->streamoffs+buffer->currentoffs,L_SET);
+  lseek(buffer->iob->file,buffer->streamoffs+buffer->currentoffs,SEEK_SET);
   if ((retval = write(buffer->iob->file,
 		      buffer->space,
 		      (buffer->bptr - buffer->space))) < 0)
