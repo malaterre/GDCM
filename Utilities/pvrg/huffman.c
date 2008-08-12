@@ -33,6 +33,7 @@ and can be improved, but comprise very little of software run-time.
 
 #include "globals.h"
 #include "stream.h"
+#include <stdlib.h> /* exit */
 
 /*PUBLIC*/
 

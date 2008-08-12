@@ -33,6 +33,7 @@ This file contains the main calling routines for the JPEG coder.
 #ifdef SYSV
 #include <sys/fcntl.h>
 #endif
+#include <stdlib.h> /* exit */
 
 /*
   Define the functions to be used with ANSI prototyping.
@@ -99,7 +100,7 @@ int ScanComponentThreshold=SCAN_COMPONENT_THRESHOLD;
 /* Define the support/utility variables.*/
 int ErrorValue=0;             /* Holds error upon return */
 int Loud=MUTE;                /* Loudness gives level of debug traces */
-int HuffmanTrace=NULL;        /* When set, dumps Huffman statistics */
+int HuffmanTrace=0;        /* When set, dumps Huffman statistics */
 int Notify=1;                 /* When set, gives image size feedback */
 int Robust=0;
 static int LargeQ=0;          /* When set, large quantization is enabled */
@@ -2105,6 +2106,7 @@ int CheckBaseline()
       printf("Caution: JPEG++ Mode.\n");
       ErrorValue = 0;
     }
+  return 0;
 }
 
 /*BFUNC

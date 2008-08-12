@@ -35,6 +35,7 @@ access routines bgetc...
 #ifdef SYSV
 #include <sys/fcntl.h>
 #endif
+#include <stdlib.h> /* exit */
 
 /*PUBLIC*/
 extern void WriteSoi();
@@ -198,7 +199,7 @@ that we must have defined number of lines before as 0.
 EFUNC*/
 
 
-WriteDnl()
+void WriteDnl()
 {
   BEGIN("WriteDnl");
 

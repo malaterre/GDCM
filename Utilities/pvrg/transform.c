@@ -33,6 +33,7 @@ algorithms.
 #include "globals.h"
 #include "dct.h"
 #include <math.h>
+#include <stdlib.h> /* exit */
 
 /*PUBLIC*/
 

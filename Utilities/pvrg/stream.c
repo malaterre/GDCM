@@ -32,6 +32,7 @@ This file is used for management of bit-aligned files.
 #include "globals.h"
 #include "marker.h"
 #include "stream.h"
+#include <stdlib.h> /* exit */
 
 /*PUBLIC*/
 
@@ -675,7 +676,7 @@ int DoMarker()
   read_position= -1;                    /* Make sure we are byte-flush. */
   while(marker_read_byte==MARKER_FIL)   /* Get rid of FIL markers */
     {
-#ifdef VERSION_1.0
+#ifdef VERSION_1_0
       if ((marker_read_byte = bgetc())!=MARKER_MARKER)
 	{
 	  WHEREAMI();
