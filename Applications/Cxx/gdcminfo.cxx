@@ -362,6 +362,9 @@ int main(int argc, char *argv[])
   gdcm::UIDs uid;
   uid.SetFromUID( ms.GetString() );
   std::cout << "MediaStorage is " << ms << " [" << uid.GetName() << "]" << std::endl;
+  const gdcm::TransferSyntax &ts = file.GetHeader().GetDataSetTransferSyntax();
+  uid.SetFromUID( ts.GetString() );
+  std::cout << "TransferSyntax is " << ts << " [" << uid.GetName() <<  "]" << std::endl;
 
   if( gdcm::MediaStorage::IsImage( ms ) )
     {

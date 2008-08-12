@@ -289,8 +289,9 @@ int main (int argc, char *argv[])
     image.SetDimensions( dims );
     image.SetPixelFormat( pf );
     image.SetPhotometricInterpretation( pi );
-    image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRBigEndian ); // PGM are big endian
+    //image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRBigEndian ); // PGM are big endian
     //image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian ); // PGM are big endian
+    image.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRBigEndianPrivateGE ); // PGM are big endian
 
     size_t pdlen = image.GetBufferLength();
     char * buf = new char[pdlen];
