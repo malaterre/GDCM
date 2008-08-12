@@ -350,6 +350,7 @@ Correction: 1.2.840113619.4.27 -> 1.2.840.113619.4.27 ... sigh
 /* PACS_conformance_statement_10.2P2.pdf */
 {"1.2.752.24.3.7.6","Sectra Compression (Private Syntax)"},
 {"1.2.752.24.3.7.7","Sectra Compression LS (Private Syntax)"},
+{"1.2.840.113619.5.2", "Implicit VR Big Endian DLX (G.E Private)"},
 { 0, 0 }
 };
 
