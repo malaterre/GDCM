@@ -47,8 +47,8 @@ void Image::SetNumberOfDimensions(unsigned int dim)
   assert( NumberOfDimensions == 2 || NumberOfDimensions == 3 );
   if( NumberOfDimensions == 2 )
     {
-    Dimensions[2] == 1;
-    Spacing[2] == 1;
+    Dimensions[2] = 1;
+    Spacing[2] = 1;
     }
 }
 

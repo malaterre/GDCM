@@ -70,6 +70,20 @@ PhotometricInterpretation::PIType PhotometricInterpretation::GetPIType(const cha
       }
     ++i;
     }
+  // too many whitespaces ??
+  // http://deckard.mc.duke.edu/~samei/tg18_files/TG18-CH-dcm.zip
+  // TG18-CH-2k-01.dcm
+  i = 0;
+  while(PIStrings[i] != 0)
+    {
+    if( strncmp(pi, PIStrings[i], strlen(PIStrings[i]) ) == 0 )
+      {
+      gdcmDebugMacro( "PhotometricInterpretation was found: [" << pi 
+        << "], but is invalid. It should be padded with at most a single space" );
+      return PIType(i);
+      }
+    ++i;
+    }
 
   abort();
   return PI_END;
