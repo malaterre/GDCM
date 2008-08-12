@@ -137,7 +137,6 @@ jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, boolean isDC, int tblno,
   if (isDC) {
     for (i = 0; i < numsymbols; i++) {
       int sym = htbl->huffval[i];
-      if (sym < 0 || sym > 16)
 /* The following file contains a value of 17 in the huffman table, which is impossible
  * according to ISO 10918-1, H.1.2.2 Huffman coding of the modulo difference 
  * and table H.2. 
@@ -145,7 +144,28 @@ jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, boolean isDC, int tblno,
  * MM, 2008/08/12 I am breaking backward compatibility and decide not to support this image 
  * anymore. In fact the decompression using another library: PVRG was giving me
  * another result anyway.
+ *
+ * Steps:
+ *
+ * $ gdcmconv --raw -i PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm -o bla.dcm
+ * $ gdcmraw -i bla.dcm -o bla.raw
+ * $ gdcmraw -i PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm -o philips.jpg
+ * $ pvrgjpeg -d philips
+ * $ dd conv=swab if=philips.jpg.0 of=philips.raw
+ * $ vbindiff bla.raw philips.raw
+ *
+ * $ md5sum bla.raw philips.raw
+ * 4b0021efe5a675f24c82e1ff28a1e2eb  bla.raw
+ * d93d2f78d845c7a132489aab92eadd32  philips.raw
+ *
+ *
+ * footnote, I get a much closer result doing:
+ * $ pvrgjpeg -a -y -d philips
+ * after that the number of diff with IJG is getting lower
+ *
+ * 0f2570f5d91ddea5bd9d3825a86eaabe  philips.raw
  */
+      if (sym < 0 || sym > 16)
 	ERREXIT(cinfo, JERR_BAD_HUFF_TABLE);
     }
   }
