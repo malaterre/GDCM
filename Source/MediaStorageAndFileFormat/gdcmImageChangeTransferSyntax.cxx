@@ -174,7 +174,11 @@ bool ImageChangeTransferSyntax::Change()
     gdcm::ByteValue *bv = new gdcm::ByteValue();
     unsigned long len = Input->GetBufferLength();
     bv->SetLength( len );
-    Input->GetBuffer( (char*)bv->GetPointer() );
+    bool b = Input->GetBuffer( (char*)bv->GetPointer() );
+    if( !b )
+      {
+      return false;
+      }
     pixeldata.SetValue( *bv );
 
     bool success = false;
