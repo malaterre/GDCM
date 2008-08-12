@@ -770,7 +770,11 @@ void SeekEndIob()
 	  printf("file is too large, only first %d bytes valid\n",
 		 tsize);
 #else
+#ifdef WIN32
+	  chsize(Iob->file,tsize); /* no ftruncate on WIN32... */
+#else
 	  ftruncate(Iob->file,tsize);                   /* simply truncate*/
+#endif
 #endif
 	}
     }
