@@ -27,7 +27,10 @@ the JPEG coder.
 
 #ifndef SYSTEM_DONE
 #define SYSTEM_DONE
-#include <sys/file.h>
+//#include <sys/file.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #define IOB_BLOCK 0
 #define IOB_LINE 1

@@ -36,6 +36,13 @@ case, two-line-based, assumed to be of two lines per.
 #include <sys/fcntl.h>
 #include <sys/unistd.h>
 #endif
+#include <stdlib.h> /* malloc */
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#ifdef WIN32
+#include <io.h> /* lseek on win32 */
+#endif
 
 
 /* Functions which are local and which are exported. */
