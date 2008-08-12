@@ -26,7 +26,7 @@ namespace gdcm
  */
 class PixelFormat;
 class TransferSyntax;
-class JPEGCodec : public ImageCodec
+class GDCM_EXPORT JPEGCodec : public ImageCodec
 {
 public:
   JPEGCodec();
