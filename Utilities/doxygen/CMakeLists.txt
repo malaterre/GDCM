@@ -19,12 +19,17 @@ IF(GDCM_DOCUMENTATION)
   #MESSAGE(${headerfiles})
   # We are depending only on header files and README.txt but other files
   # could be needed for complete dependencies
+  CONFIGURE_FILE(
+    ${GDCM_SOURCE_DIR}/Utilities/doxygen/README.txt.in
+    ${GDCM_BINARY_DIR}/Utilities/doxygen/README.txt
+    @ONLY
+  )
 	ADD_CUSTOM_COMMAND(
 	  OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/html/index.html
     COMMAND  ${DOXYGEN}
     ARGS     ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
     DEPENDS  ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
-             ${GDCM_SOURCE_DIR}/Utilities/doxygen/README.txt
+             ${GDCM_BINARY_DIR}/Utilities/doxygen/README.txt
              ${headerfiles}
     COMMENT  "Creating doxygen doc"
 	  #WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
