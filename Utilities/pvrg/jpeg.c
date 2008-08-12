@@ -34,6 +34,7 @@ This file contains the main calling routines for the JPEG coder.
 #include <sys/fcntl.h>
 #endif
 #include <stdlib.h> /* exit */
+#include <string.h> /* strlen */
 
 /*
   Define the functions to be used with ANSI prototyping.

@@ -40,6 +40,7 @@ case, two-line-based, assumed to be of two lines per.
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <string.h> /* memcpy */
 #ifdef WIN32
 #include <io.h> /* lseek on win32 */
 #endif
