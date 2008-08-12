@@ -43,6 +43,7 @@
  */
 #include "gdcmReader.h"
 #include "gdcmPrivateTag.h"
+#include "gdcmAttribute.h"
 #include "gdcmImageWriter.h"
 
 void delta_decode(const char *inbuffer, size_t length, std::vector<unsigned short> &output)
@@ -132,31 +133,18 @@ int main(int argc, char *argv [])
   pixeldata.SetVR( gdcm::VR::OB );
   pixeldata.SetByteValue( (char*)&buffer[0], buffer.size() * sizeof( unsigned short ) );
 
+  // Add the pixel data element
+  reader.GetFile().GetDataSet().Insert( pixeldata );
 
-  gdcm::ImageWriter writer;
+  gdcm::Writer writer;
   writer.SetFile( reader.GetFile() );
 
   // Cleanup stuff:
-  // FIXME does not work...
-  //writer.GetFile().GetDataSet().Remove( tcompressedpixeldata );
-
-  gdcm::Image &image = writer.GetImage();
-  image.SetNumberOfDimensions( 2 ); // good default
-  image.SetDimension(0, 256 );
-  image.SetDimension(1, 256 );
-  //image.SetSpacing(0, spacing[0] );
-  //image.SetSpacing(1, spacing[1] );
-  gdcm::PixelFormat pixeltype = gdcm::PixelFormat::INT16;
-
-  image.SetNumberOfDimensions( 2 );
-
-  gdcm::PhotometricInterpretation pi;
-  pi = gdcm::PhotometricInterpretation::MONOCHROME2;
-  //pixeltype.SetSamplesPerPixel(  );
-  image.SetPhotometricInterpretation( pi );
-  image.SetPixelFormat( pixeltype );
-
-  image.SetDataElement( pixeldata );
+  // remove the compressed pixel data:
+  // FIXME: should I remove more private tags ? all of them ?
+  // oh well this is just an example
+  // use gdcm::Anonymizer::RemovePrivateTags if needed...
+  writer.GetFile().GetDataSet().Remove( compressionpixeldata.GetTag() );
 
   std::string outfilename = "outrle.dcm";
   writer.SetFileName( outfilename.c_str() );
