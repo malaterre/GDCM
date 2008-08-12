@@ -28,7 +28,7 @@ namespace gdcm
  * \brief ImageCodec
  * \note Main codec, this is a central place for all implementation
  */
-class ImageCodec : public Codec
+class GDCM_EXPORT ImageCodec : public Codec
 {
 public:
   ImageCodec();
