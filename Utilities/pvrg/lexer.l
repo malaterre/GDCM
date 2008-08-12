@@ -15,9 +15,26 @@ advertisement of this source code should refer to it as the Portable
 Video Research Group (PVRG) code, and not by any author(s) (or
 Stanford University) name.
 *************************************************************/
+%option yylineno
 %{
 
 /*LABEL lexer.c */
+
+/*
+ * flex command was run this way:
+ * 
+ *  $ lex -olexer.c lexer.l
+ */
+
+/* We do not care of interactive mode */
+#define YY_NEVER_INTERACTIVE 1
+#define YY_NO_UNPUT 1
+
+/* Do not include unistd.h in generated source. */
+#define YY_NO_UNISTD_H
+
+/* Skip declaring this function.  It is a macro.  */
+#define YY_SKIP_YYWRAP
 
 /* Redefine the yywrap so that we don't have
    to worry about lex library */

@@ -1,5 +1,6 @@
+#line 2 "lexer.c"
 
-#line 3 "lex.yy.c"
+#line 4 "lexer.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -159,7 +160,20 @@ extern FILE *yyin, *yyout;
 #define EOB_ACT_END_OF_FILE 1
 #define EOB_ACT_LAST_MATCH 2
 
-    #define YY_LESS_LINENO(n)
+    /* Note: We specifically omit the test for yy_rule_can_match_eol because it requires
+     *       access to the local variable yy_act. Since yyless() is a macro, it would break
+     *       existing scanners that call yyless() from OUTSIDE yylex. 
+     *       One obvious solution it to make yy_act a global. I tried that, and saw
+     *       a 5% performance hit in a non-yylineno scanner, because yy_act is
+     *       normally declared as a register variable-- so it is not worth it.
+     */
+    #define  YY_LESS_LINENO(n) \
+            do { \
+                int yyl;\
+                for ( yyl = n; yyl < yyleng; ++yyl )\
+                    if ( yytext[yyl] == '\n' )\
+                        --yylineno;\
+            }while(0)
     
 /* Return all but the first "n" matched characters back to the input stream. */
 #define yyless(n) \
@@ -510,6 +524,11 @@ static yyconst flex_int16_t yy_chk[246] =
        72,   72,   72,   72,   72
     } ;
 
+/* Table of booleans, true if rule could match eol. */
+static yyconst flex_int32_t yy_rule_can_match_eol[19] =
+    {   0,
+1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0,     };
+
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
 
@@ -542,9 +561,25 @@ advertisement of this source code should refer to it as the Portable
 Video Research Group (PVRG) code, and not by any author(s) (or
 Stanford University) name.
 *************************************************************/
-#line 19 "lexer.l"
+#line 20 "lexer.l"
 
 /*LABEL lexer.c */
+
+/*
+ * flex command was run this way:
+ * 
+ *  $ lex -olexer.c lexer.l
+ */
+
+/* We do not care of interactive mode */
+#define YY_NEVER_INTERACTIVE 1
+#define YY_NO_UNPUT 1
+
+/* Do not include unistd.h in generated source. */
+#define YY_NO_UNISTD_H
+
+/* Skip declaring this function.  It is a macro.  */
+#define YY_SKIP_YYWRAP
 
 /* Redefine the yywrap so that we don't have
    to worry about lex library */
@@ -684,7 +719,7 @@ static char * getstr();
 /*NOPROTO*/
 
 
-#line 688 "lex.yy.c"
+#line 723 "lexer.c"
 
 #define INITIAL 0
 #define NORMAL 1
@@ -712,7 +747,7 @@ static int yy_init_globals (void );
 #ifdef __cplusplus
 extern "C" int yywrap (void );
 #else
-//extern int yywrap (void );
+extern int yywrap (void );
 #endif
 #endif
 
@@ -839,10 +874,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 183 "lexer.l"
+#line 200 "lexer.l"
 
 
-#line 846 "lex.yy.c"
+#line 881 "lexer.c"
 
 	if ( !(yy_init) )
 		{
@@ -914,6 +949,16 @@ yy_find_action:
 
 		YY_DO_BEFORE_ACTION;
 
+		if ( yy_act != YY_END_OF_BUFFER && yy_rule_can_match_eol[yy_act] )
+			{
+			int yyl;
+			for ( yyl = 0; yyl < yyleng; ++yyl )
+				if ( yytext[yyl] == '\n' )
+					   
+    yylineno++;
+;
+			}
+
 do_action:	/* This label is used only to access EOF actions. */
 
 		switch ( yy_act )
@@ -928,12 +973,12 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 185 "lexer.l"
+#line 202 "lexer.l"
 {}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 187 "lexer.l"
+#line 204 "lexer.l"
 {struct id *temp; temp = enter(0,yytext,yyleng); 
 		 if (LexDebug)
 		   {
@@ -954,7 +999,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 204 "lexer.l"
+#line 221 "lexer.l"
 {if (LexDebug)
 			   {
 			     printf("%s : %s\n", yytext, "REAL");
@@ -963,7 +1008,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 209 "lexer.l"
+#line 226 "lexer.l"
 {if (LexDebug)
 			   {             
 			     printf("%s : %s\n", yytext, "INTEGER");
@@ -973,7 +1018,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 215 "lexer.l"
+#line 232 "lexer.l"
 {if (LexDebug)
 			   {
 			     printf("%s : %s\n", yytext, "(HEX)INTEGER");
@@ -983,7 +1028,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 221 "lexer.l"
+#line 238 "lexer.l"
 {if (LexDebug)
 			   {
 			     printf("%s : %s\n", yytext, "(HEX)INTEGER");
@@ -993,7 +1038,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 227 "lexer.l"
+#line 244 "lexer.l"
 {if (LexDebug)
 			   {
 			     printf("%s : %s\n", yytext, "(OCT)INTEGER");
@@ -1003,7 +1048,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 233 "lexer.l"
+#line 250 "lexer.l"
 {if (LexDebug)
 			   {
 			     printf("%s : %s\n", yytext, "(OCT)INTEGER");
@@ -1014,7 +1059,7 @@ YY_RULE_SETUP
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 239 "lexer.l"
+#line 256 "lexer.l"
 {if (LexDebug)
 			   {
 			     printf("%s : %s\n", yytext, "(CHAR)INTEGER");
@@ -1064,7 +1109,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 285 "lexer.l"
+#line 302 "lexer.l"
 {if (LexDebug)
 			   {
 			     printf("%s : %s\n", yytext, "LBRACKET");
@@ -1073,7 +1118,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 290 "lexer.l"
+#line 307 "lexer.l"
 {if (LexDebug)
 			   {
 			     printf("%s : %s\n", yytext, "RBRACKET");
@@ -1082,7 +1127,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 295 "lexer.l"
+#line 312 "lexer.l"
 {if (LexDebug)
 			   {
 			     printf("%s : %s\n", yytext, "OPERATOR");
@@ -1092,7 +1137,7 @@ YY_RULE_SETUP
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 300 "lexer.l"
+#line 317 "lexer.l"
 {if (LexDebug)
 			   {
 			     printf("%s : %s\n", yytext, "STRING");
@@ -1101,17 +1146,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 306 "lexer.l"
+#line 323 "lexer.l"
 {CommentDepth++; BEGIN COMMENT;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 308 "lexer.l"
+#line 325 "lexer.l"
 {CommentDepth--;if(!CommentDepth) BEGIN NORMAL;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 310 "lexer.l"
+#line 327 "lexer.l"
 {
 		  	    /* None of the above rules applicable, so
 			       it's a bad symbol. */
@@ -1123,15 +1168,15 @@ YY_RULE_SETUP
 case 17:
 /* rule 17 can match eol */
 YY_RULE_SETUP
-#line 318 "lexer.l"
+#line 335 "lexer.l"
 {} /*Everything's AOK */
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 320 "lexer.l"
+#line 337 "lexer.l"
 ECHO;
 	YY_BREAK
-#line 1135 "lex.yy.c"
+#line 1180 "lexer.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(NORMAL):
 case YY_STATE_EOF(COMMENT):
@@ -1486,6 +1531,10 @@ static int yy_get_next_buffer (void)
 
 	*--yy_cp = (char) c;
 
+    if ( c == '\n' ){
+        --yylineno;
+    }
+
 	(yytext_ptr) = yy_bp;
 	(yy_hold_char) = *yy_cp;
 	(yy_c_buf_p) = yy_cp;
@@ -1560,6 +1609,11 @@ static int yy_get_next_buffer (void)
 	c = *(unsigned char *) (yy_c_buf_p);	/* cast for 8-bit char's */
 	*(yy_c_buf_p) = '\0';	/* preserve yytext */
 	(yy_hold_char) = *++(yy_c_buf_p);
+
+	if ( c == '\n' )
+		   
+    yylineno++;
+;
 
 	return c;
 }
@@ -2027,6 +2081,9 @@ static int yy_init_globals (void)
      * This function is called from yylex_destroy(), so don't allocate here.
      */
 
+    /* We do not touch yylineno unless the option is enabled. */
+    yylineno =  1;
+    
     (yy_buffer_stack) = 0;
     (yy_buffer_stack_top) = 0;
     (yy_buffer_stack_max) = 0;
@@ -2119,7 +2176,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 320 "lexer.l"
+#line 337 "lexer.l"
 
 
 
