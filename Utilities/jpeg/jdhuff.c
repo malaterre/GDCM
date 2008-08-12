@@ -138,12 +138,15 @@ jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, boolean isDC, int tblno,
     for (i = 0; i < numsymbols; i++) {
       int sym = htbl->huffval[i];
       if (sym < 0 || sym > 16)
-/* The following is needed to be able to read certain Philips DICOM MRI images */
-#if BITS_IN_JSAMPLE == 12
-        htbl->huffval[i]=15;
-#else
+/* The following file contains a value of 17 in the huffman table, which is impossible
+ * according to ISO 10918-1, H.1.2.2 Huffman coding of the modulo difference 
+ * and table H.2. 
+ * PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
+ * MM, 2008/08/12 I am breaking backward compatibility and decide not to support this image 
+ * anymore. In fact the decompression using another library: PVRG was giving me
+ * another result anyway.
+ */
 	ERREXIT(cinfo, JERR_BAD_HUFF_TABLE);
-#endif /* BITS_IN_JSAMPLE == 12 */
     }
   }
 }
