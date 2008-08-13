@@ -54,6 +54,7 @@ void delta_decode(const char *inbuffer, size_t length, std::vector<unsigned shor
     {
     if( inbuffer[i] == (char)0xa5 )
       {
+      assert( (unsigned char)inbuffer[i+1] != 255 );
       unsigned char repeat = (unsigned char)inbuffer[i+1] + 1;
       char value = inbuffer[i+2];
       while(repeat)
@@ -132,6 +133,7 @@ int main(int argc, char *argv [])
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
   pixeldata.SetVR( gdcm::VR::OB );
   pixeldata.SetByteValue( (char*)&buffer[0], buffer.size() * sizeof( unsigned short ) );
+  // TODO we should check that decompress byte buffer match the expected size (row*col*...)
 
   // Add the pixel data element
   reader.GetFile().GetDataSet().Insert( pixeldata );
@@ -154,7 +156,7 @@ int main(int argc, char *argv [])
     return 1;
     }
 
-    std::cout << "sucess !" << std::endl;
+  std::cout << "sucess !" << std::endl;
 
   return 0;
 }
