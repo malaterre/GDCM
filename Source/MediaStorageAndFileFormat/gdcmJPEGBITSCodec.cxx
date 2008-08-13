@@ -425,7 +425,17 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   this->PlanarConfiguration = 0;
   if( cinfo.process == JPROC_LOSSLESS )
     {
-    ts = TransferSyntax::JPEGLosslessProcess14_1;
+    int predictor = cinfo.Ss;
+    /* not very user friendly... */
+    switch(predictor)
+      {
+    case 1:
+      ts = TransferSyntax::JPEGLosslessProcess14_1;
+      break;
+    default:
+      ts = TransferSyntax::JPEGLosslessProcess14;
+      break;
+      }
     }
   else
     {
