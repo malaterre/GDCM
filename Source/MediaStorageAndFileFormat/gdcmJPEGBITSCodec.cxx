@@ -1035,6 +1035,7 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
    * TODO: is there a way to pick the right predictor (best compression/fastest ?)
    */
   jpeg_simple_lossless (&cinfo, 1, 0);
+  //jpeg_simple_lossless (&cinfo, 7, 0);
 
   /* Now you can set any non-default parameters you wish to.
    * Here we just illustrate the use of quality (quantization table) scaling:
@@ -1044,7 +1045,7 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
   /*
    * See write_file_header
    */
-  //cinfo.write_JFIF_header = 0;
+  cinfo.write_JFIF_header = 0;
 
   /* Step 4: Start compressor */
 
