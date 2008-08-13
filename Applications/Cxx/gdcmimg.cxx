@@ -29,7 +29,7 @@
  *
  *   DICOM RAW  <->  pnm/pgm
  *   DICOM jpg  <->  jpg
- *   DICOM jpgl <->  jpgl
+ *   DICOM ljpg <->  ljpg
  *   DICOM jpls <->  jpls
  *   DICOM j2k  <->  j2k
  *   DICOM rle  <->  Utah RLE ??
@@ -276,6 +276,9 @@ int main (int argc, char *argv[])
       case 65535:
       pf = gdcm::PixelFormat::UINT16;
       break;
+      default:
+        std::cerr << "Unhandled max val: " << maxval << std::endl;
+      return 1;
       }
     if( pi == gdcm::PhotometricInterpretation::RGB )
       {
@@ -315,6 +318,7 @@ int main (int argc, char *argv[])
 
   if(  gdcm::System::StrCaseCmp(inputextension,".jpg") == 0 
     || gdcm::System::StrCaseCmp(inputextension,".jpeg") == 0
+    || gdcm::System::StrCaseCmp(inputextension,".ljpg") == 0
     || gdcm::System::StrCaseCmp(inputextension,".ljpeg") == 0 )
     {
     gdcm::JPEGCodec jpeg;
