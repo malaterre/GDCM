@@ -200,6 +200,12 @@ bool JPEGCodec::GetHeaderInfo( std::istream & is, TransferSyntax &ts )
       }
     return false;
     }
+  // else
+  // Foward everything back to meta jpeg codec:
+  this->SetDimensions( Internal->GetDimensions() );
+  this->SetPhotometricInterpretation( Internal->GetPhotometricInterpretation() );
+  this->PF = Internal->GetPixelFormat(); // DO NOT CALL SetPixelFormat
+
   if( this->PI != Internal->PI )
     {
     gdcmWarningMacro( "PhotometricInterpretation issue" );

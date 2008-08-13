@@ -398,15 +398,24 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
       {
       abort();
       }
+
     if( cinfo.jpeg_color_space == JCS_GRAYSCALE )
       {
       assert( cinfo.num_components == 1 );
       PI = PhotometricInterpretation::MONOCHROME2;
+      this->PF.SetSamplesPerPixel( 1 );
       }
     else if( cinfo.jpeg_color_space == JCS_RGB )
       {
       assert( cinfo.num_components == 3 );
       PI = PhotometricInterpretation::RGB;
+      this->PF.SetSamplesPerPixel( 3 );
+      }
+    else if( cinfo.jpeg_color_space == JCS_YCbCr )
+      {
+      assert( cinfo.num_components == 3 );
+      PI = PhotometricInterpretation::YBR_FULL_422;
+      this->PF.SetSamplesPerPixel( 3 );
       }
     else
       {
