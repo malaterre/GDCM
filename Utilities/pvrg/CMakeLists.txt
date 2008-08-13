@@ -12,7 +12,18 @@ SET(
   transform.c
 )
 
-ADD_EXECUTABLE(pvrgjpeg ${PVRG_SRCS})
+
+# might not be portable, so simply rename the function in the code itself...
+#SET_SOURCE_FILES_PROPERTIES(jpeg.c 
+#  PROPERTIES
+#  COMPILE_FLAGS -Dmain=pvrgmain
+#)
+#ADD_DEFINITIONS(-DIO_DEBUG)
+ADD_LIBRARY(pvrg ${PVRG_SRCS})
+
+ADD_EXECUTABLE(pvrgjpeg pvrgjpeg.c)
+TARGET_LINK_LIBRARIES(pvrgjpeg pvrg)
+
 
 #
 # Should you wish to modify the interpreter

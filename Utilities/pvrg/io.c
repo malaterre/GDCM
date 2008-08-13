@@ -223,6 +223,12 @@ void MakeIob(type,flags,wsize)
 	  printf("Cannot allocate Iob bufferlist.\n");
 	  exit(ERROR_MEMORY);
 	}
+	   if( CFrame->tmpfile )
+{
+      temp->file = CFrame->tmpfile;
+}
+else
+{
       if ((temp->file =                               /* Open file */
 	   open(CFrame->ComponentFileName[CScan->ci[index]],
 		flags,UMASK)) < 0)
@@ -232,6 +238,8 @@ void MakeIob(type,flags,wsize)
 		 CFrame->ComponentFileName[CScan->ci[index]]);
 	  exit(ERROR_INIT_FILE);
 	}               /* Make buffer for every line of component in MDU */
+}
+
       for(sofs=0,current=temp->blist;current<temp->blist+temp->num;current++)
 	{
 	  *current = MakeXBuffer(CFrame->BufferSize, wsize);
@@ -799,7 +807,10 @@ void CloseIob()
 {
   BEGIN("CloseIob");
 
+  if( !CFrame->tmpfile ) /* if file is closed we loose it for good */
+{
   close(Iob->file);
+}
 }
 
 /*BFUNC

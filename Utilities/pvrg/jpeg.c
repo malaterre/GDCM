@@ -42,7 +42,6 @@ This file contains the main calling routines for the JPEG coder.
 
 /*PUBLIC*/
 
-int main();
 static void JpegEncodeFrame();
 static void JpegDecodeFrame();
 static void JpegDecodeScan();
@@ -123,7 +122,7 @@ program.
 
 EFUNC*/
 
-int main(argc,argv)
+int pvrgmain(argc,argv)
      int argc;
      char **argv;
 {
@@ -253,6 +252,9 @@ int main(argc,argv)
 	    case 'z':                    /* -z use default Huffman */
 	      CImage->JpegMode |= J_DEFAULTHUFFMAN;
 	      break;
+	    case 'g':                    /* -g GDCM secret option */
+	      CFrame->tmpfile = atoi(argv[++i]); /* very bad programming but should work :) */
+	      break;
 	    default:
 	      WHEREAMI();
 	      printf("Illegal option in command line: %c.\n",
@@ -322,7 +324,8 @@ int main(argc,argv)
       JpegEncodeFrame();                         /* Encode the frame */
       swclose();                                 /* Flush remaining bits */
     }
-  exit(ErrorValue);
+  /*exit(ErrorValue);*/
+  return(ErrorValue);
 }
 
 /*BFUNC
@@ -1881,6 +1884,7 @@ void MakeFrame()
   CFrame->Type=0;                   /* Baseline type */
   CFrame->InsertDnl = 0;            /* Set to default position */
   CFrame->Q = 0;
+  CFrame->tmpfile = 0;
   CFrame->GlobalHeight = 0;
   CFrame->GlobalWidth = 0;
   CFrame->DataPrecision = 8;         /* Default 8 precision */

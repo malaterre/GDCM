@@ -150,6 +150,7 @@ int Height[MAXIMUM_COMPONENTS];
 int BufferSize;                 /* Buffer sizes used */
 int Maxv, Maxh;                 /* Max Sampling Freq */
 int MDUWide, MDUHigh;           /* Number MDU wide */
+int tmpfile;
 IMAGE *Image;
 };
 
