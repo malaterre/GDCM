@@ -59,8 +59,10 @@ FOREACH(exename ${GDCM_EXECUTABLE_NAME})
 	)
 ENDFOREACH(exename)
 
-ADD_EXECUTABLE(gdcmpvrg gdcmpvrg.cxx)
-TARGET_LINK_LIBRARIES(gdcmpvrg pvrg)
+IF(GDCM_USE_PVRG)
+  ADD_EXECUTABLE(gdcmpvrg gdcmpvrg.cxx)
+  TARGET_LINK_LIBRARIES(gdcmpvrg pvrg)
+ENDIF(GDCM_USE_PVRG)
 
 #ADD_EXECUTABLE(deflate deflate.cxx)
 #TARGET_LINK_LIBRARIES(deflate gdcmzlib)
