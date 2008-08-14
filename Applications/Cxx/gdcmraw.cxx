@@ -55,6 +55,12 @@ int main(int argc, char *argv[])
   std::string pattern;
   int splitfrags = 0;
   int pixeldata = 0;
+  int verbose = 0;
+  int warning = 0;
+  int debug = 0;
+  int error = 0;
+  int help = 0;
+  int version = 0;
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -71,6 +77,14 @@ int main(int argc, char *argv[])
  */
         {"pixel-data", 0, &pixeldata, 1},   // P
         {"pattern", 1, 0, 0},               // p
+
+        {"verbose", 0, &verbose, 1},
+        {"warning", 0, &warning, 1},
+        {"debug", 0, &debug, 1},
+        {"error", 0, &error, 1},
+        {"help", 0, &help, 1},
+        {"version", 0, &version, 1},
+
         {0, 0, 0, 0}
     };
 
@@ -125,6 +139,30 @@ int main(int argc, char *argv[])
       //std::cerr << rawTag << std::endl;
       break;
 
+    case 'V':
+      verbose = 1;
+      break;
+
+    case 'W':
+      warning = 1;
+      break;
+
+    case 'D':
+      debug = 1;
+      break;
+
+    case 'E':
+      error = 1;
+      break;
+
+    case 'h':
+      help = 1;
+      break;
+
+    case 'v':
+      version = 1;
+      break;
+
     case '?':
       break;
 
@@ -148,6 +186,18 @@ int main(int argc, char *argv[])
     std::cerr << "Need input file (-i)\n";
     return 1;
     }
+ 
+  // Debug is a little too verbose
+  gdcm::Trace::SetDebug( debug );
+  gdcm::Trace::SetWarning( warning );
+  gdcm::Trace::SetError( error );
+  // when verbose is true, make sure warning+error are turned on:
+  if( verbose )
+    {
+    gdcm::Trace::SetWarning( verbose );
+    gdcm::Trace::SetError( verbose);
+    }
+
   // else
   //std::cout << "Filename: " << filename << std::endl;
 
