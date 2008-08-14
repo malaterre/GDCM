@@ -46,6 +46,7 @@
 #include "gdcmAttribute.h"
 #include "gdcmImageWriter.h"
 
+/* FIXME: Why is PhilipsLosslessRice.dcm a 512x512 image ... */
 void delta_decode(const char *inbuffer, size_t length, std::vector<unsigned short> &output)
 {
   // RLE pass
@@ -54,8 +55,9 @@ void delta_decode(const char *inbuffer, size_t length, std::vector<unsigned shor
     {
     if( inbuffer[i] == (char)0xa5 )
       {
-      assert( (unsigned char)inbuffer[i+1] != 255 );
-      unsigned char repeat = (unsigned char)inbuffer[i+1] + 1;
+      //unsigned char repeat = (unsigned char)inbuffer[i+1] + 1;
+      //assert( (unsigned char)inbuffer[i+1] != 255 );
+      int repeat = (unsigned char)inbuffer[i+1] + 1;
       char value = inbuffer[i+2];
       while(repeat)
         {
@@ -136,7 +138,7 @@ int main(int argc, char *argv [])
   // TODO we should check that decompress byte buffer match the expected size (row*col*...)
 
   // Add the pixel data element
-  reader.GetFile().GetDataSet().Insert( pixeldata );
+  reader.GetFile().GetDataSet().Replace( pixeldata );
 
   gdcm::Writer writer;
   writer.SetFile( reader.GetFile() );
