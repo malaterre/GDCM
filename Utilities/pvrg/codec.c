@@ -666,7 +666,9 @@ int LosslessDecodeDC()
   printf("DC Decode sig. %d\n",s);
 #endif
 
+  /* FIXME begin bug http://groups.google.com/group/comp.protocols.dicom/msg/6d90002f734a12eb?dmode=source */
   if (s==16)  return(32768);
+  /* end bug */
   else if (s)
     {
       coef = fgetv(s);
