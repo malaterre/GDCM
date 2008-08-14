@@ -26,9 +26,12 @@ def TestDCMTKMD5( filename, verbose = False ):
   #print ret
   jpegre = re.compile('^.*JPEGLossless.*$')
   jpegre2 = re.compile('^.*JPEGExtended.*$')
+  jpegre3 = re.compile('^.*JPEGBaseline.*$')
+  j2kre = re.compile('^.*JPEG2000.*$')
   rlere = re.compile('^.*RLELossless.*$')
   lexre = re.compile('^.*LittleEndianExplicit.*$')
   leire = re.compile('^.*LittleEndianImplicit.*$')
+  beire = re.compile('^.*BigEndianExplicit.*$')
   testing = gdcm.Testing()
   outputdir = testing.GetTempDirectory( "TestDCMTKMD5" )
   gdcm.System.MakeDirectory( outputdir )
@@ -44,7 +47,7 @@ def TestDCMTKMD5( filename, verbose = False ):
     return 0
   #print ret
   #print ret.__class__
-  elif( jpegre.match( ret ) or jpegre2.match(ret) ):
+  elif( jpegre.match( ret ) or jpegre2.match(ret) or jpegre3.match(ret) ):
     #print "jpeg: ",filename
     dcmdjpeg_exec = "dcmdjpeg " + filename + " " + outputfilename
     ret = os.system( dcmdjpeg_exec )
@@ -86,7 +89,9 @@ def TestDCMTKMD5( filename, verbose = False ):
       retval = 1
     #print outputfilename
     return retval
-  elif( lexre.match( ret ) or leire.match(ret) ):
+  elif( j2kre.match( ret ) ):
+    return 0
+  elif( lexre.match( ret ) or leire.match(ret) or beire.match(ret) ):
     #print "rle: ",filename
     #dcmdrle_exec = "dcmdrle " + filename + " " + outputfilename
     #ret = os.system( dcmdrle_exec )
