@@ -31,7 +31,14 @@ import os
 # during the singleton initalization, but is subject to change without notice
 # do not expect this env var to be present at any time in your project
 
-os.environ["GDCM_WHEREAMI"]=os.path.dirname(__file__)
+def main_is_frozen():
+  return hasattr(sys, "frozen")
+
+if main_is_frozen():
+  os.environ["GDCM_WHEREAMI"]=os.path.dirname(sys.executable)
+else:
+  os.environ["GDCM_WHEREAMI"]=os.path.dirname(__file__)
+
 if os.name == 'posix':
   # extremely important !
   # http://gcc.gnu.org/faq.html#dso
