@@ -54,11 +54,17 @@ void Defs::LoadDefaults()
   if( System::StrNCaseCmp( python, fn.GetName(), strlen(python) ) == 0 )
     {
     const char *myenv = getenv("GDCM_WHEREAMI");
+    const char *myenv2 = getenv("GDCM_WHEREAMI2");
     if(myenv)
       {
       filename4 = myenv;
+      filename4 += "/../../../" GDCM_INSTALL_DATA_DIR "/XML/Part3.xml";
       }
-    filename4 += "/../../../" GDCM_INSTALL_DATA_DIR "/XML/Part3.xml";
+    else if(myenv2)
+      {
+      filename4 = myenv2;
+      filename4 += "/Part3.xml";
+      }
     }
 //    std::cerr << filename4 << std::endl;
 //    std::cerr << filename2 << std::endl;

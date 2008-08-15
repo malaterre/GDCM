@@ -36,7 +36,7 @@ def main_is_frozen():
   return hasattr(sys, "frozen")
 
 if main_is_frozen():
-  os.environ["GDCM_WHEREAMI"]=os.path.dirname(sys.executable)
+  os.environ["GDCM_WHEREAMI2"]=os.path.dirname(sys.executable)
 else:
   os.environ["GDCM_WHEREAMI"]=os.path.dirname(__file__)
 
