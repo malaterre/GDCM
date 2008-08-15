@@ -432,7 +432,8 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   SET(CPACK_PACKAGE_CONTACT "Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>")
   SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6, libstdc++6 (>= 4.0.2-4), libuuid1, zlib1g (>= 1:1.2.1), libgcc1 (>= 1:4.0.2), libexpat1, swig") # bug: missing dep to python...
   SET(CPACK_DEBIAN_PACKAGE_SUGGESTS "dcmtk")
-  SET(CPACK_IGNORE_FILES "/debian/;/\\.svn/;\\.swp$;\\.#;/#")
+  SET(CPACK_SOURCE_IGNORE_FILES "/debian/" "/CVS/" "/\\\\.svn/" "TODO" ".NoDartCoverage")
+  SET(CPACK_IGNORE_FILES ${CPACK_SOURCE_IGNORE_FILES})
 
   # List executables
   #SET(CPACK_PACKAGE_EXECUTABLES "gdcmviewer" "VIEWER")
