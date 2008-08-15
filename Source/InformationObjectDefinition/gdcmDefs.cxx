@@ -97,7 +97,8 @@ void Defs::LoadDefaults()
     }
   else
     {
-    //throw Exception( "Impossible" );
+    gdcmErrorMacro( "Something went wrong in your installation of GDCM. Please report" );
+    throw Exception( "Impossible" );
     return;
     }
   tr.Read();
