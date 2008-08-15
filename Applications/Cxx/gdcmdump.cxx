@@ -26,7 +26,7 @@
 #include "gdcmSystem.h"
 #include "gdcmDirectory.h"
 #include "gdcmCSAHeader.h"
-#include "gdcmDeflateStream.h"
+#include "gdcmPDBHeader.h"
 
 #include <string>
 #include <iostream>
@@ -57,76 +57,7 @@ int DoOperation(const std::string & filename)
   return 0;
 }
 
-/*
- * In some GE MEDICAL SYSTEMS image one can find a Data Element: 0025,xx10,GEMS_SERS_01
- * which is documented as Protocol Data Block (compressed).
- * in fact this is a simple text format compressed using the gzip algorithm
- *
- * Typically one could do:
- *
- *   $ gdcmraw -i input.dcm -o output.raw -t 0025,101b 
- *
- * Skip the binary length (little endian encoding):
- *
- *   $ dd bs=4 skip=1 if=output.raw of=foo 
- *
- * Check file type:
- *
- *   $ file foo
- *   foo: gzip compressed data, was "Ex421Ser8Scan1", from Unix
- *
- * Gunzip !
- *   $ gzip -dc < foo > bar
- *   $ cat bar
- *
- * THANKS to: John Reiser (BitWagon.com) for hints
- */
-
-int readprotocoldatablock(const char *input, size_t inputlen, bool verbose)
-{
-  // First 4 bytes are the length (again)
-  uint32_t len = *(uint32_t*)input;
-  if( verbose )
-    std::cout << len << "," << inputlen << std::endl;
-  if( len + 4 == inputlen + 1 )
-    {
-    if( verbose )
-      std::cout << "gzip stream was padded with an extra 0 \n";
-    }
-  else if( len + 4 == inputlen )
-    {
-    if( verbose )
-      std::cout << "gzip stream was not padded with an extra 0 \n";
-    }
-  else
-    {
-    return 1;
-    }
-  // Alright we need to check if the binary blob was padded, if padded we need to 
-  // discard the trailing \0 to please gzip:
-  std::string str( input + 4, input + len );
-  std::istringstream is( str );
-
-  zlib_stream::zip_istream gzis( is );
-
-//  if (gzis.is_gzip())
-//    {
-//    std::cout<<"crc check: "<<( gzis.check_crc() ? "ok" : "failed");
-//    std::cout << std::endl;
-//    }
-
-  std::string out;
-  //while( gzis >> out )
-  while( std::getline(gzis , out ) )
-    {
-    std::cout << out << std::endl;
-    }
-  //std::cout << out.size();
-
-  return 0;
-}
-
-int DumpProtocolDataBlock(const std::string & filename, bool verbose)
+int PrintPDB(const std::string & filename, bool verbose)
 {
   gdcm::Reader reader;
   reader.SetFileName( filename.c_str() );
@@ -135,20 +66,25 @@ int DumpProtocolDataBlock(const std::string & filename, bool verbose)
     std::cerr << "Failed to read: " << filename << std::endl;
     return 1;
     }
+
+  gdcm::PDBHeader pdb;
   const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
 
-  const gdcm::PrivateTag tprotocoldatablock(0x0025,0x1b,"GEMS_SERS_01");
-  if( !ds.FindDataElement( tprotocoldatablock) ) 
-    {
-    std::cerr << "Could not find tag: " << tprotocoldatablock << std::endl;
-    return 1;
-    }
-  const gdcm::DataElement& protocoldatablock= ds.GetDataElement( tprotocoldatablock);
-  if ( protocoldatablock.IsEmpty() ) return 1;
-  const gdcm::ByteValue * bv = protocoldatablock.GetByteValue();
+  const gdcm::PrivateTag &t1 = pdb.GetPDBInfoTag();
 
-  std::cout << "Dumping: " << tprotocoldatablock << std::endl;
-  int ret = readprotocoldatablock( bv->GetPointer(), bv->GetLength(), verbose );
+  bool found = false;
+  int ret = 0;
+  if( ds.FindDataElement( t1 ) )
+    {
+    pdb.LoadFromDataElement( ds.GetDataElement( t1 ) );
+    pdb.Print( std::cout );
+    found = true;
+    }
+  if( !found )
+    {
+    std::cout << "no pdb tag found" << std::endl;
+    ret = 1;
+    }
 
   return ret;
 }
@@ -167,48 +103,55 @@ int PrintCSA(const std::string & filename)
   const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
 
   const gdcm::PrivateTag &t1 = csa.GetCSAImageHeaderInfoTag();
-  std::cout << t1 << std::endl;
   const gdcm::PrivateTag &t2 = csa.GetCSASeriesHeaderInfoTag();
 
-  //if( pde.GetTag().GetElement() != 0xffff /*ds.FindDataElement( t0 )*/ )
+  bool found = false;
+  int ret = 0;
+  if( ds.FindDataElement( t1 ) )
     {
-    //const gdcm::ByteValue *bv = pde.GetByteValue(); //ds.GetDataElement( t0 ).GetByteValue();
-    //if( strncmp( bv->GetPointer(), csaheader, strlen(csaheader) ) ==  0 )
+    csa.LoadFromDataElement( ds.GetDataElement( t1 ) );
+    csa.Print( std::cout );
+    found = true;
+    if( csa.GetFormat() == gdcm::CSAHeader::ZEROED_OUT )
       {
-      //gdcm::Tag t3(0x0029,0x1120); ???
-      //std::cerr << "Working on: " << filename << std::endl;
-	      bool found = false;
-      if( ds.FindDataElement( t1 ) )
-        {
-        csa.LoadFromDataElement( ds.GetDataElement( t1 ) );
-        csa.Print( std::cout );
-	found = true;
-	//const gdcm::CSAElement &csael = csa.GetCSAElementByName( "Columns" );
-	//std::cout << "Looking for Columns:" << std::endl;
-	//std::cout << csael << std::endl;
-        }
-      if( ds.FindDataElement( t2 ) )
-        {
-        csa.LoadFromDataElement( ds.GetDataElement( t2 ) );
-        csa.Print( std::cout );
-	found = true;
-        }
-      if( !found )
-      {
-	      std::cout << "no csa tag found" << std::endl;
+      std::cout << "CSA Header has been zero-out (contains only 0)" << std::endl;
+      ret = 1;
       }
-      if( csa.GetFormat() == gdcm::CSAHeader::DATASET_FORMAT )
-        {
-        gdcm::Printer p;
-        gdcm::File f;
-        f.SetDataSet( csa.GetDataSet() );
-        p.SetFile( f );
-        p.Print( std::cout );
-        }
+    else if( csa.GetFormat() == gdcm::CSAHeader::DATASET_FORMAT )
+      {
+      gdcm::Printer p;
+      gdcm::File f;
+      f.SetDataSet( csa.GetDataSet() );
+      p.SetFile( f );
+      p.Print( std::cout );
       }
     }
+  if( ds.FindDataElement( t2 ) )
+    {
+    csa.LoadFromDataElement( ds.GetDataElement( t2 ) );
+    csa.Print( std::cout );
+    found = true;
+    if( csa.GetFormat() == gdcm::CSAHeader::ZEROED_OUT )
+      {
+      std::cout << "CSA Header has been zero-out (contains only 0)" << std::endl;
+      ret = 1;
+      }
+    else if( csa.GetFormat() == gdcm::CSAHeader::DATASET_FORMAT )
+      {
+      gdcm::Printer p;
+      gdcm::File f;
+      f.SetDataSet( csa.GetDataSet() );
+      p.SetFile( f );
+      p.Print( std::cout );
+      }
+    }
+  if( !found )
+    {
+    std::cout << "no csa tag found" << std::endl;
+    ret = 1;
+    }
 
-  return 0;
+  return ret;
 }
 
 
@@ -234,7 +177,7 @@ void PrintHelp()
   std::cout << "  -p --print     print value instead of simply dumping (default)." << std::endl;
   std::cout << "  -c --color     print in color." << std::endl;
   std::cout << "  -C --csa       print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER)." << std::endl;
-  std::cout << "  -P --pdb       print GEMS Protocol Data Block (0025,10,GEMS_SERS_01)." << std::endl;
+  std::cout << "  -P --pdb       print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01)." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning   print warning info." << std::endl;
@@ -463,7 +406,7 @@ int main (int argc, char *argv[])
         }
       else if( printpdb )
         {
-        res += DumpProtocolDataBlock(*it, verbose);
+        res += PrintPDB(*it, verbose);
         }
       else if( printcsa )
         {
@@ -490,7 +433,7 @@ int main (int argc, char *argv[])
       }
     else if( printpdb )
       {
-      res += DumpProtocolDataBlock(filename, verbose);
+      res += PrintPDB(filename, verbose);
       }
     else if( printcsa )
       {

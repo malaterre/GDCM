@@ -6,6 +6,7 @@ SET(MSFF_SRCS
   gdcmRescaler.cxx
   gdcmImageToImageFilter.cxx
   gdcmImageChangeTransferSyntax.cxx
+  gdcmImageApplyLookupTable.cxx
   gdcmOrientation.cxx
   gdcmDirectionCosines.cxx
   gdcmSorter.cxx

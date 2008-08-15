@@ -40,7 +40,8 @@ VL Item::GetLength() const
     // Item Length            4
     // DataSet                ?
     return TagField.GetLength() /* 4 */ + ValueLengthField.GetLength() /* 4 */
-      + ValueLengthField;
+      //+ ValueLengthField;
+      + NestedDataSet.GetLength<TDE>();
     }
 }
 

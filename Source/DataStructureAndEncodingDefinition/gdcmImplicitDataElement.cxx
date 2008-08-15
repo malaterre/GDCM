@@ -35,7 +35,12 @@ VL ImplicitDataElement::GetLength() const
     assert( !ValueLengthField.IsUndefined() );
     return ValueLengthField;
     }
-  else // BUG !!! When a sequence is explicit length...
+  else if( const SequenceOfItems *sqi = GetSequenceOfItems() )
+    {
+    return TagField.GetLength() + ValueLengthField.GetLength() 
+      + sqi->ComputeLength<ImplicitDataElement>();
+    }
+  else
     {
     assert( !ValueField || ValueField->GetLength() == ValueLengthField );
     return TagField.GetLength() + ValueLengthField.GetLength() 

@@ -634,7 +634,8 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     }
 
   unsigned long len = image.GetBufferLength();
-  vtkIdType npts = data->GetNumberOfPoints();
+  vtkIdType npts = (inExt[5] - inExt[4] + 1) * (inExt[3] - inExt[2] + 1) * (inExt[1] - inExt[0] + 1);
+  //data->GetNumberOfPoints();
   int ssize = data->GetScalarSize();
   unsigned long vtklen = npts * ssize;
 

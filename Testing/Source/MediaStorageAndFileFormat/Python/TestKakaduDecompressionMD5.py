@@ -16,17 +16,19 @@
 import gdcm
 import os,sys
 
-def TestKakadu(filename):
+def TestKakadu(filename, kdu_expand):
   fn = gdcm.Filename(filename)
   testdir = fn.GetPath()
   testbasename = fn.GetName()
   ext = fn.GetExtension()
   #print ext
-  kakadu_path = '/home/mmalaterre/Software/Kakadu60'
-  kdu_expand = kakadu_path + '/kdu_expand'
+  #kakadu_path = '/home/mmalaterre/Software/Kakadu60'
+  kakadu_path = os.path.dirname( kdu_expand )
+  #kdu_expand = kakadu_path + '/kdu_expand'
   kdu_args = ' -quiet -i '
   output_dcm = testdir + '/kakadu/' + testbasename
   output_j2k = output_dcm + '.j2k'
+  output_ppm = output_dcm + '.ppm' #
   output_raw = output_dcm + '.rawl' # FIXME: little endian only...
   kdu_expand += kdu_args + output_j2k + ' -o ' + output_raw
   # $ ./bin/gdcmraw -i .../TestImageChangeTransferSyntax2/012345.002.050.dcm -o toto.j2k
@@ -41,6 +43,8 @@ def TestKakadu(filename):
   #print kdu_expand
   os.environ["LD_LIBRARY_PATH"]=kakadu_path
   ret = os.system( kdu_expand )
+  # now need to skip the ppm header:
+  dd_cmd = 'dd bs=15 skip=1 if=%s of = %s'%(output_ppm,output_raw)
   #print "ret:",ret
   md5 = gdcm.Testing.ComputeFileMD5( output_raw ) 
   # ok this is the md5 as computed after decompression using kdu_expand
@@ -61,11 +65,11 @@ def TestKakadu(filename):
   return retval
 
 if __name__ == "__main__":
-  sucess = 0
-  try:
-    filename = os.sys.argv[1]
-    sucess += TestKakadu( filename )
-  except:
+    sucess = 0
+    #try:
+    #  filename = os.sys.argv[1]
+    #  sucess += TestKakadu( filename )
+    #except:
     # loop over all files:
     #t = gdcm.Testing()
     #nfiles = t.GetNumberOfFileNames()
@@ -83,8 +87,8 @@ if __name__ == "__main__":
     files = d.GetFilenames()
     for i in range(0,nfiles):
       filename = files[i]
-      sucess += TestKakadu( filename )
+      sucess += TestKakadu( filename, os.sys.argv[1] )
 
-  # Test succeed ?
-  sys.exit(sucess)
+    # Test succeed ?
+    sys.exit(sucess)
 

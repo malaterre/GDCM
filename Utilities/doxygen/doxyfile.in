@@ -463,7 +463,7 @@ INPUT                  = @GDCM_SOURCE_DIR@/Source \
                          @GDCM_SOURCE_DIR@/Wrapping \
                          @GDCM_SOURCE_DIR@/Utilities/VTK \
                          @GDCM_SOURCE_DIR@/Utilities/Insight \
-                         @GDCM_SOURCE_DIR@/Utilities/doxygen/README.txt
+                         @GDCM_BINARY_DIR@/Utilities/doxygen/README.txt
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 

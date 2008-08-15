@@ -68,7 +68,7 @@ public :
   template <typename TSwap>
   const std::ostream &Write(std::ostream &os) const;
 
-  void LoadFromDataElement(DataElement const &de);
+  bool LoadFromDataElement(DataElement const &de);
 
   void Print(std::ostream &os) const;
 

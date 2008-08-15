@@ -16,6 +16,7 @@ SET(DSED_SRCS
   gdcmWriter.cxx
   #gdcmParser.cxx
   gdcmCSAHeader.cxx
+  gdcmPDBHeader.cxx
   gdcmSequenceOfFragments.cxx
   gdcmSequenceOfItems.cxx
   gdcmTransferSyntax.cxx

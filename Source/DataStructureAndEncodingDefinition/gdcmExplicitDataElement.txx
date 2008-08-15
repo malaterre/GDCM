@@ -157,6 +157,13 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     throw pe;
     }
 
+#ifdef ELSCINT1_01F7_1070
+  if( TagField == Tag(0x01f7,0x1070) )
+    {
+    ValueLengthField = ValueLengthField - 7;
+    }
+#endif
+
   if( ValueLengthField == 0 )
     {
     // Simple fast path
@@ -332,6 +339,7 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
   const Tag itemDelItem(0xfffe,0xe00d);
   if( TagField == itemDelItem )
     {
+    abort();
     assert( ValueField == 0 );
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     if( ValueLengthField != 0 )
@@ -395,8 +403,19 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
     }
   if( ValueLengthField )
     {
-#ifdef NDEBUG
-    if( dynamic_cast<const ByteValue*>(&*ValueField) )
+#ifndef NDEBUG
+    if( GetByteValue() )
+      {
+      assert( ValueField->GetLength() == ValueLengthField );
+      }
+    else if( GetSequenceOfItems() )
+      {
+      assert( ValueField->GetLength() == ValueLengthField );
+      const SequenceOfItems *sq = GetSequenceOfItems();
+      VL dummy = sq->ComputeLength<ExplicitDataElement>();
+      assert( ValueLengthField.IsUndefined() || dummy == ValueLengthField );
+      }
+    else if( GetSequenceOfFragments() )
       {
       assert( ValueField->GetLength() == ValueLengthField );
       }
@@ -404,7 +423,7 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
     // We have the length we should be able to write the value
     if( VRField == VR::UN && ValueLengthField.IsUndefined() )
       {
-      //assert( dynamic_cast<const SequenceOfItems*>(ValueField) );
+      assert( GetSequenceOfItems() );
       ValueIO<ImplicitDataElement,TSwap>::Write(os,*ValueField);
       }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
@@ -415,11 +434,15 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
       // we will loose the SQ, therefore change the length into undefined length
       // and add a seq del item:
       ValueIO<ImplicitDataElement,TSwap>::Write(os,*ValueField);
-      // seq del item is not stored, write it !
-      const Tag seqDelItem(0xfffe,0xe0dd);
-      seqDelItem.Write<TSwap>(os);
-      VL zero = 0;
-      zero.Write<TSwap>(os);
+      if( !ValueLengthField.IsUndefined() )
+        {
+        // eg. TestWriter with ExplicitVRforPublicElementsImplicitVRforShadowElements.dcm
+        // seq del item is not stored, write it !
+        const Tag seqDelItem(0xfffe,0xe0dd);
+        seqDelItem.Write<TSwap>(os);
+        VL zero = 0;
+        zero.Write<TSwap>(os);
+        }
       }
 #endif
     else 

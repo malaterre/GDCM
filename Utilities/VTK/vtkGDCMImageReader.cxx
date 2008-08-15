@@ -829,6 +829,7 @@ void InPlaceYFlipImage(vtkImageData* data)
       abort();
     }
   outsize *= (dext[1] - dext[0] + 1);
+  char * ref = static_cast<char*>(data->GetScalarPointer());
   char * pointer = static_cast<char*>(data->GetScalarPointer());
   assert( pointer );
 
@@ -837,19 +838,27 @@ void InPlaceYFlipImage(vtkImageData* data)
   for(int j = dext[4]; j <= dext[5]; ++j)
     {
     char *start = pointer;
+    assert( start == ref + j * outsize * (dext[3] - dext[2] + 1) );
     // Swap two-lines at a time
-    for(int i = dext[2]; i <= dext[3] / 2; ++i)
+    // when Rows is odd number (359) then dext[3] == 178 
+    // so we should avoid copying the line right in the center of the image
+    // since memcpy does not like copying on itself...
+    for(int i = dext[2]; i < (dext[3]+1) / 2; ++i)
       {
       // image:
       char * end = start+(dext[3] - i)*outsize;
-      memcpy(line,end,outsize); // duplicate
+      assert( (end - pointer) >= (int)outsize );
+      memcpy(line,end,outsize); // duplicate line
       memcpy(end,pointer,outsize);
       memcpy(pointer,line,outsize);
       pointer += outsize;
       }
     // because the for loop iterated only over 1/2 all lines, skip to the next slice:
-    pointer += (dext[3] - dext[3]/2)*outsize;
+    assert( dext[2] == 0 );
+    pointer += (dext[3] + 1 - (dext[3]+1)/2 )*outsize;
     }
+  // Did we reach the end ?
+  assert( pointer == ref + (dext[5]-dext[4]+1)*(dext[3]-dext[2]+1)*outsize );
   delete[] line;
 }
 

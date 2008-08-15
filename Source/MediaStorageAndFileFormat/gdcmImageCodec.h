@@ -28,7 +28,7 @@ namespace gdcm
  * \brief ImageCodec
  * \note Main codec, this is a central place for all implementation
  */
-class ImageCodec : public Codec
+class GDCM_EXPORT ImageCodec : public Codec
 {
 public:
   ImageCodec();
@@ -109,7 +109,8 @@ protected:
   bool DoPaddedCompositePixelCode(std::istream &is, std::ostream &os);
   bool DoInvertMonochrome(std::istream &is, std::ostream &os);
 
-  bool DoInvertPlanarConfiguration(char *output, const char *input, uint32_t length);
+  //template <typename T>
+  //bool DoInvertPlanarConfiguration(T *output, const T *input, uint32_t length);
 };
 
 } // end namespace gdcm

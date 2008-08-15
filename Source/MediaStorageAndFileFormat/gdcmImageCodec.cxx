@@ -190,43 +190,6 @@ bool ImageCodec::DoPlanarConfiguration(std::istream &is, std::ostream &os)
   return true;
 }
 
-bool ImageCodec::DoInvertPlanarConfiguration(char *output, const char *input, uint32_t inputlength)
-{
-  const char *r = input+0;
-  const char *g = input+1;
-  const char *b = input+2;
-  uint32_t length = (inputlength / 3) * 3; // remove the 0 padding
-  assert( length == inputlength || length == inputlength - 1 );
-  assert( length % 3 == 0 );
-  uint32_t plane_length = length / 3;
-  char *pout = output;
-  // copy red plane:
-  while( pout != output + plane_length * 1 )
-    {
-    *pout++ = *r;
-    r += 3;
-    }
-  assert( r == input + length );
-  // copy green plane:
-  assert( pout == output + plane_length );
-  while( pout != output + plane_length * 2 )
-    {
-    *pout++ = *g;
-    g += 3;
-    }
-  assert( g == input + length + 1);
-  // copy blue plane:
-  assert( pout == output + 2*plane_length );
-  while( pout != output + plane_length * 3 )
-    {
-    *pout++ = *b;
-    b += 3;
-    }
-  assert( b == input + length + 2);
-  assert ( pout = output + length );
-  return true;
-}
-
 bool ImageCodec::DoSimpleCopy(std::istream &is, std::ostream &os)
 {
 #if 1

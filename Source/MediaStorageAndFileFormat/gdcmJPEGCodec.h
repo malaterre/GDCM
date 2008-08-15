@@ -23,9 +23,16 @@ namespace gdcm
 /**
  * \brief Class to do JPEG
  * \note
+ * Things you should know if you ever want to dive into DICOM/JPEG world (among other):
+ *
+ * http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/625e46919f2080e1
+ * http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/75fdfccc65a6243
+ * http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/2d525ef6a2f093ed
+ * http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/6b93af410f8c921f
  */
 class PixelFormat;
-class JPEGCodec : public ImageCodec
+class TransferSyntax;
+class GDCM_EXPORT JPEGCodec : public ImageCodec
 {
 public:
   JPEGCodec();
@@ -35,11 +42,13 @@ public:
   bool Decode(DataElement const &is, DataElement &os);
   void SetPixelFormat(PixelFormat const &pf);
 
-  // Compute the offset table:
+  /// Compute the offset table:
   void ComputeOffsetTable(bool b);
 
-  // Compress into JPEG
+  /// Compress into JPEG
   bool Code(DataElement const &in, DataElement &out);
+
+  virtual bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);
 
 protected:
   bool Decode(std::istream &is, std::ostream &os);

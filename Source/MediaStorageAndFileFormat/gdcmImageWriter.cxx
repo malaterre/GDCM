@@ -100,6 +100,7 @@ bool ImageWriter::Write()
   samplesperpixel.SetValue( pf.GetSamplesPerPixel() );
   ds.Replace( samplesperpixel.GetAsDataElement() );
 
+
   // Overlay Data 60xx
   unsigned int nOv = PixelData->GetNumberOfOverlays();
   for( unsigned int ovidx = 0; ovidx < nOv; ++ovidx )
@@ -206,6 +207,11 @@ bool ImageWriter::Write()
     }
   de.SetVL( vl );
   ds.Replace( de );
+
+//      Attribute<0x0028, 0x0006> planarconfiguration;
+//      planarconfiguration.SetValue( PixelData->GetPlanarConfiguration() );
+//      ds.Replace( planarconfiguration.GetAsDataElement() );
+
   // PhotometricInterpretation
   // const Tag tphotometricinterpretation(0x0028, 0x0004);
   if( !ds.FindDataElement( Tag(0x0028, 0x0004) ) )
@@ -277,6 +283,40 @@ bool ImageWriter::Write()
       }
     }
 
+  // FIXME shouldn't this be done by the ImageApplyLookupTable filter ?
+  if( pi == PhotometricInterpretation::RGB )
+    {
+    // usual tags:
+    ds.Remove( Tag(0x0028, 0x1101) );
+    ds.Remove( Tag(0x0028, 0x1102) );
+    ds.Remove( Tag(0x0028, 0x1103) );
+
+    ds.Remove( Tag(0x0028, 0x1201) );
+    ds.Remove( Tag(0x0028, 0x1202) );
+    ds.Remove( Tag(0x0028, 0x1203) );
+
+    // Dont' forget the segmented one:
+    ds.Remove( Tag(0x0028, 0x1221) );
+    ds.Remove( Tag(0x0028, 0x1222) );
+    ds.Remove( Tag(0x0028, 0x1223) );
+
+    // PaletteColorLookupTableUID ??
+    ds.Remove( Tag(0x0028, 0x1199) );
+    }
+//  Attribute<0x0028, 0x0004> photometricinterpretation;
+//  photometricinterpretation.SetValue( pi );
+//  ds.Replace( photometricinterpretation.GetAsDataElement() );
+Attribute<0x0028,0x0004> piat;
+//const DataElement &pide = ds.GetDataElement( piat.GetTag() );
+//const char *str1 = pide.GetByteValue()->GetPointer();
+{
+    const char *pistr = PhotometricInterpretation::GetPIString(pi);
+    DataElement de( Tag(0x0028, 0x0004 ) );
+    de.SetByteValue( pistr, strlen(pistr) );
+    de.SetVR( piat.GetVR() );
+    ds.Replace( de );
+}
+
   MediaStorage ms;
   ms.SetFromFile( GetFile() );
   assert( ms != MediaStorage::MS_END );
@@ -303,8 +343,16 @@ bool ImageWriter::Write()
   else
     {
     const ByteValue *bv = ds.GetDataElement( Tag(0x0008,0x0016) ).GetByteValue();
-    assert( strncmp( bv->GetPointer(), msstr, bv->GetLength() ) == 0 );
-    assert( bv->GetLength() == strlen( msstr ) || bv->GetLength() == strlen(msstr) + 1 );
+    if( strncmp( bv->GetPointer(), msstr, bv->GetLength() ) != 0 )
+      {
+      DataElement de = ds.GetDataElement( Tag(0x0008,0x0016) );
+      de.SetByteValue( msstr, strlen(msstr) );
+      ds.Replace( de );
+      }
+    else
+      {
+      assert( bv->GetLength() == strlen( msstr ) || bv->GetLength() == strlen(msstr) + 1 );
+      }
     }
 
   // (re)Compute MediaStorage:

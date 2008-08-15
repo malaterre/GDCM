@@ -20,7 +20,6 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
 # FIXME:
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
-  "${GDCM_BINARY_DIR}/Utilities/gdcmzlib"
   "${GDCM_SOURCE_DIR}/Utilities"
   )
 
@@ -58,6 +57,11 @@ FOREACH(exename ${GDCM_EXECUTABLE_NAME})
 	ARCHIVE DESTINATION lib/static COMPONENT Development
 	)
 ENDFOREACH(exename)
+
+IF(GDCM_USE_PVRG)
+  ADD_EXECUTABLE(gdcmpvrg gdcmpvrg.cxx)
+  TARGET_LINK_LIBRARIES(gdcmpvrg pvrg)
+ENDIF(GDCM_USE_PVRG)
 
 #ADD_EXECUTABLE(deflate deflate.cxx)
 #TARGET_LINK_LIBRARIES(deflate gdcmzlib)

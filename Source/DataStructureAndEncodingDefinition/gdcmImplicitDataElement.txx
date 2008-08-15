@@ -390,10 +390,24 @@ const std::ostream &ImplicitDataElement::Write(std::ostream &os) const
     return os;
     }
   // Write Value Length
-  if( !ValueLengthField.Write<TSwap>(os) )
+  const SequenceOfItems *sqi = GetSequenceOfItems();
+  if( sqi && !ValueLengthField.IsUndefined() )
     {
-    assert(0 && "Should not happen");
-    return os;
+    // Hum, we might have to recompute the length:
+    VL len = sqi->ComputeLength<ImplicitDataElement>();
+    if( !len.Write<TSwap>(os) )
+      {
+      assert(0 && "Should not happen");
+      return os;
+      }
+    }
+  else // It should be safe to simply use the ValueLengthField as stored:
+    {
+    if( !ValueLengthField.Write<TSwap>(os) )
+      {
+      assert(0 && "Should not happen");
+      return os;
+      }
     }
   // Write Value
   if( ValueLengthField )

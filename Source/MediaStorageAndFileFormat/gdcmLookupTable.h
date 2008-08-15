@@ -61,7 +61,9 @@ public:
     unsigned short bitsize);
   void SetBlueLUT(const unsigned char *blue, unsigned int length);
 
-  void Decode(std::istream &is, std::ostream &os);
+  void Clear();
+
+  void Decode(std::istream &is, std::ostream &os) const;
 
   LookupTable(LookupTable const &lut):Object(lut)
     {

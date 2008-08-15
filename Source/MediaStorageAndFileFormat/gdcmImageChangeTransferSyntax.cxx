@@ -96,7 +96,7 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde)
     if( Input->GetPlanarConfiguration() )
       {
       // Fow now simply return an error
-      return 1;
+      return false;
       }
     codec.SetPlanarConfiguration( Input->GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( Input->GetPhotometricInterpretation() );
@@ -174,7 +174,11 @@ bool ImageChangeTransferSyntax::Change()
     gdcm::ByteValue *bv = new gdcm::ByteValue();
     unsigned long len = Input->GetBufferLength();
     bv->SetLength( len );
-    Input->GetBuffer( (char*)bv->GetPointer() );
+    bool b = Input->GetBuffer( (char*)bv->GetPointer() );
+    if( !b )
+      {
+      return false;
+      }
     pixeldata.SetValue( *bv );
 
     bool success = false;

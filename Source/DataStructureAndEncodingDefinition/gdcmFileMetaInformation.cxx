@@ -121,7 +121,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
       }
     }
   // Media Storage SOP Class UID (0002,0002) -> see (0008,0016)
-  if( !FindDataElement( Tag(0x0002, 0x0002) ) )
+  if( !FindDataElement( Tag(0x0002, 0x0002) ) || GetDataElement( Tag(0x0002,0x0002) ).IsEmpty() )
     {
     if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) || ds.GetDataElement( Tag(0x0008,0x0016) ).IsEmpty()  )
       {
@@ -205,8 +205,11 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
       abort();
       }
     const DataElement& sopinst = ds.GetDataElement( Tag(0x0008, 0x0018) );
+    //const DataElement & foo = GetDataElement( Tag(0x0002, 0x0003) );
+    assert( !GetDataElement( Tag(0x0002, 0x0003) ).IsEmpty() );
     DataElement mssopinst = GetDataElement( Tag(0x0002, 0x0003) );
     const ByteValue *bv = sopinst.GetByteValue();
+    assert( bv );
     mssopinst.SetByteValue( bv->GetPointer(), bv->GetLength() );
     Replace( mssopinst );
     }
@@ -215,6 +218,17 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
   if( FindDataElement( Tag(0x0002, 0x0010) ) && !GetDataElement( Tag(0x0002,0x0010) ).IsEmpty() )
     {
     const DataElement& tsuid = GetDataElement( Tag(0x0002, 0x0010) );
+    const char * datasetts = DataSetTS.GetString();
+    const ByteValue * bv = tsuid.GetByteValue();
+    assert( bv );
+    std::string currentts( bv->GetPointer(), bv->GetPointer() + bv->GetLength() );
+    if( strlen(currentts.c_str()) != strlen(datasetts)
+      || strcmp( currentts.c_str(), datasetts ) != 0 )
+      {
+      xde = tsuid;
+      xde.SetByteValue( datasetts, strlen(datasetts) );
+      Replace( xde );
+      }
     if( tsuid.GetVR() != VR::UI )
       {
       xde = tsuid;
@@ -356,11 +370,18 @@ bool ReadExplicitDataElement(std::istream &is, ExplicitDataElement &de)
   //std::cout << "Value : ";
   //bv->Print( std::cout );
   //std::cout << std::endl;
+  assert( bv->GetLength() == vl );
 
   de.SetTag(t);
   de.SetVR(vr);
   de.SetVL(vl);
+  // FIXME: There should be a way to set the Value to the NULL pointer...
   de.SetValue(*bv);
+
+//  if( vl == 0 )
+//    {
+//    assert( de.IsEmpty() );
+//    }
 
   return true;
 }
@@ -680,6 +701,11 @@ void FileMetaInformation::ComputeDataSetTransferSyntax()
 
   // postcondition
   DataSetTS.IsValid();
+}
+
+void FileMetaInformation::SetDataSetTransferSyntax(const TransferSyntax &ts)
+{ 
+DataSetTS = ts; 
 }
 
 MediaStorage FileMetaInformation::GetMediaStorage() const

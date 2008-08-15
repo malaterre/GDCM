@@ -222,6 +222,29 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
   return ret;
 }
 
+bool Anonymizer::RemoveGroupLength()
+{
+  DataSet &ds = F->GetDataSet();
+  DataSet::Iterator it = ds.Begin();
+  for( ; it != ds.End(); )
+    {
+    const DataElement &de = *it;
+    if( de.GetTag().IsGroupLength() )
+      {
+      // std::set::erase invalidate iterator, so we need to make a copy first:
+      DataSet::Iterator dup = it;
+      ++it;
+      ds.GetDES().erase(dup);
+      }
+    else
+      {
+      ++it;
+      }
+    }
+
+  return true;
+}
+
 bool Anonymizer::RemovePrivateTags()
 {
   DataSet &ds = F->GetDataSet();

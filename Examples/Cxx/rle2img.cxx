@@ -43,8 +43,10 @@
  */
 #include "gdcmReader.h"
 #include "gdcmPrivateTag.h"
+#include "gdcmAttribute.h"
 #include "gdcmImageWriter.h"
 
+/* FIXME: Why is PhilipsLosslessRice.dcm a 512x512 image ... */
 void delta_decode(const char *inbuffer, size_t length, std::vector<unsigned short> &output)
 {
   // RLE pass
@@ -53,7 +55,9 @@ void delta_decode(const char *inbuffer, size_t length, std::vector<unsigned shor
     {
     if( inbuffer[i] == (char)0xa5 )
       {
-      unsigned char repeat = (unsigned char)inbuffer[i+1] + 1;
+      //unsigned char repeat = (unsigned char)inbuffer[i+1] + 1;
+      //assert( (unsigned char)inbuffer[i+1] != 255 );
+      int repeat = (unsigned char)inbuffer[i+1] + 1;
       char value = inbuffer[i+2];
       while(repeat)
         {
@@ -131,32 +135,20 @@ int main(int argc, char *argv [])
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
   pixeldata.SetVR( gdcm::VR::OB );
   pixeldata.SetByteValue( (char*)&buffer[0], buffer.size() * sizeof( unsigned short ) );
+  // TODO we should check that decompress byte buffer match the expected size (row*col*...)
 
+  // Add the pixel data element
+  reader.GetFile().GetDataSet().Replace( pixeldata );
 
-  gdcm::ImageWriter writer;
+  gdcm::Writer writer;
   writer.SetFile( reader.GetFile() );
 
   // Cleanup stuff:
-  // FIXME does not work...
-  //writer.GetFile().GetDataSet().Remove( tcompressedpixeldata );
-
-  gdcm::Image &image = writer.GetImage();
-  image.SetNumberOfDimensions( 2 ); // good default
-  image.SetDimension(0, 256 );
-  image.SetDimension(1, 256 );
-  //image.SetSpacing(0, spacing[0] );
-  //image.SetSpacing(1, spacing[1] );
-  gdcm::PixelFormat pixeltype = gdcm::PixelFormat::INT16;
-
-  image.SetNumberOfDimensions( 2 );
-
-  gdcm::PhotometricInterpretation pi;
-  pi = gdcm::PhotometricInterpretation::MONOCHROME2;
-  //pixeltype.SetSamplesPerPixel(  );
-  image.SetPhotometricInterpretation( pi );
-  image.SetPixelFormat( pixeltype );
-
-  image.SetDataElement( pixeldata );
+  // remove the compressed pixel data:
+  // FIXME: should I remove more private tags ? all of them ?
+  // oh well this is just an example
+  // use gdcm::Anonymizer::RemovePrivateTags if needed...
+  writer.GetFile().GetDataSet().Remove( compressionpixeldata.GetTag() );
 
   std::string outfilename = "outrle.dcm";
   writer.SetFileName( outfilename.c_str() );
@@ -166,7 +158,7 @@ int main(int argc, char *argv [])
     return 1;
     }
 
-    std::cout << "sucess !" << std::endl;
+  std::cout << "sucess !" << std::endl;
 
   return 0;
 }

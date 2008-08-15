@@ -17,6 +17,7 @@
 its namespace.  This is a required module."""
 
 import os
+import sys
 
 # GDCM_WHEREAMI is a secret variable used to passed the location of the gdcm.py
 # to the global singleton initialization internal to gdcm:
@@ -31,13 +32,19 @@ import os
 # during the singleton initalization, but is subject to change without notice
 # do not expect this env var to be present at any time in your project
 
-os.environ["GDCM_WHEREAMI"]=os.path.dirname(__file__)
+def main_is_frozen():
+  return hasattr(sys, "frozen")
+
+if main_is_frozen():
+  os.environ["GDCM_WHEREAMI2"]=os.path.dirname(sys.executable)
+else:
+  os.environ["GDCM_WHEREAMI"]=os.path.dirname(__file__)
+
 if os.name == 'posix':
   # extremely important !
   # http://gcc.gnu.org/faq.html#dso
   # http://mail.python.org/pipermail/python-dev/2002-May/023923.html
   # http://wiki.python.org/moin/boost.python/CrossExtensionModuleDependencies
-  import sys
   orig_dlopen_flags = sys.getdlopenflags()
   try:
     import dl
@@ -55,11 +62,11 @@ if os.name == 'posix':
   from gdcmswig import *
   # revert:
   sys.setdlopenflags(orig_dlopen_flags)
-  del sys, dl
+  del dl
   del orig_dlopen_flags
 else:
   from gdcmswig import *
 
 # bye bye
 # once the process dies, the changed environment dies with it.
-del os
+del os,sys

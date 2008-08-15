@@ -608,6 +608,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 
 { "4d790e17ee35572d64e37c55dbc36725" , "MR_ELSCINT1_00e1_1042_SQ_feff_00e0_Item.dcm" },
 { "93ddc0c3d642af60f55630232d2801ae" , "CT_Image_Storage_multiframe.dcm" },
+{ "ff261592e1c4b205eca7eea99d0101c0" , "ELSCINT1_JP2vsJ2K.dcm" },
 
 
 

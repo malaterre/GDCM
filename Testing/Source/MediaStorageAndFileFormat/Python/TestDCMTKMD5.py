@@ -18,16 +18,24 @@ import os,sys,re
 
 def TestDCMTKMD5( filename, verbose = False ):
   #print filename
-  dcmdump_exec = "dcmdump -dc -E +P 2,10 -s " + filename + " 2> /dev/null"
+  # 
+  #dcmdump_exec = "dcmdump -dc -E +P 2,10 -s " + filename + " 2> /dev/null"
+  # I had to remove the -dc for the following file:
+  # GE_GENESIS-16-MONO2-Uncompressed-UnusualVR.dcm there is trailing space instead of \0
+  dcmdump_exec = "dcmdump -E +P 2,10 -s " + filename + " 2> /dev/null"
   #print dcmdump_exec
   f = os.popen(dcmdump_exec)
   ret = f.read()
   #assert ret == 0
   #print ret
   jpegre = re.compile('^.*JPEGLossless.*$')
+  jpegre2 = re.compile('^.*JPEGExtended.*$')
+  jpegre3 = re.compile('^.*JPEGBaseline.*$')
+  j2kre = re.compile('^.*JPEG2000.*$')
   rlere = re.compile('^.*RLELossless.*$')
   lexre = re.compile('^.*LittleEndianExplicit.*$')
   leire = re.compile('^.*LittleEndianImplicit.*$')
+  beire = re.compile('^.*BigEndianExplicit.*$')
   testing = gdcm.Testing()
   outputdir = testing.GetTempDirectory( "TestDCMTKMD5" )
   gdcm.System.MakeDirectory( outputdir )
@@ -36,17 +44,20 @@ def TestDCMTKMD5( filename, verbose = False ):
   gdcmraw = executable_output_path + '/gdcmraw'
 
   if not ret:
-    print "empty, problem with:", filename
+    #print "empty, problem with:", filename
     return 0
   elif type(ret) != type(''):
     print "problem of type with:", filename
     return 0
   #print ret
   #print ret.__class__
-  elif( jpegre.match( ret ) ):
+  elif( jpegre.match( ret ) or jpegre2.match(ret) or jpegre3.match(ret) ):
     #print "jpeg: ",filename
     dcmdjpeg_exec = "dcmdjpeg " + filename + " " + outputfilename
     ret = os.system( dcmdjpeg_exec )
+    if ret:
+      print "dcmdjpeg failed to decompress file. giving up"
+      return 0
 
     gdcmraw_args = ' -i ' + outputfilename + ' -o ' + outputfilename + ".raw"
     gdcmraw += gdcmraw_args
@@ -82,7 +93,9 @@ def TestDCMTKMD5( filename, verbose = False ):
       retval = 1
     #print outputfilename
     return retval
-  elif( lexre.match( ret ) or leire.match(ret) ):
+  elif( j2kre.match( ret ) ):
+    return 0
+  elif( lexre.match( ret ) or leire.match(ret) or beire.match(ret) ):
     #print "rle: ",filename
     #dcmdrle_exec = "dcmdrle " + filename + " " + outputfilename
     #ret = os.system( dcmdrle_exec )
@@ -104,7 +117,7 @@ def TestDCMTKMD5( filename, verbose = False ):
     #print outputfilename
     return retval
   #else
-  print "Unhandled:",filename
+  print "Unhandled:",filename,"with ret=",ret
   return 1
 
 if __name__ == "__main__":
@@ -116,6 +129,7 @@ if __name__ == "__main__":
     # loop over all files:
     t = gdcm.Testing()
     gdcm.Trace.WarningOff()
+    gdcm.Trace.DebugOff()
     nfiles = t.GetNumberOfFileNames()
     for i in range(0,nfiles):
       filename = t.GetFileName(i)

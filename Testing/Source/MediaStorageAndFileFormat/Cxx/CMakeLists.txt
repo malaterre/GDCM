@@ -10,6 +10,8 @@ SET(MSFF_TEST_SRCS
   TestImageChangeTransferSyntax
   TestImageChangeTransferSyntax2
   TestImageChangeTransferSyntax3
+  TestImageChangeTransferSyntax4
+  TestImageApplyLookupTable
   TestCoder
   TestDecoder
   TestRescaler
@@ -144,7 +146,7 @@ FOREACH(filename ${gdcm_data_filenames_glob})
   ENDIF(NOT bad_dicom)
 ENDFOREACH(filename)
 
-FILE(MAKE_DIRECTORY "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax/dcmdrle/")
+FILE(MAKE_DIRECTORY "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax3/dcmdrle/")
 
 FOREACH(filename ${gdcm_data_filenames_glob})
   GET_FILENAME_COMPONENT(filename_name ${filename} NAME)

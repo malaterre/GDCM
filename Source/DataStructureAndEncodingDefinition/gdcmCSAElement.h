@@ -34,31 +34,31 @@ public:
 
   friend std::ostream& operator<<(std::ostream &os, const CSAElement &val);
 
-  // Set/Get Key
+  /// Set/Get Key
   unsigned int GetKey() const { return KeyField; }
   void SetKey(unsigned int key) { KeyField = key; }
 
-  // Set/Get Name
+  /// Set/Get Name
   const char *GetName() const { return NameField.c_str(); }
   void SetName(const char *name) { NameField = name; }
 
-  // Set/Get VM
+  /// Set/Get VM
   const VM& GetVM() const { return ValueMultiplicityField; }
   void SetVM(const VM &vm) { ValueMultiplicityField = vm; }
 
-  // Set/Get VR
+  /// Set/Get VR
   VR const &GetVR() const { return VRField; }
   void SetVR(VR const &vr) { VRField = vr; }
 
-  // Set/Get SyngoDT
+  /// Set/Get SyngoDT
   unsigned int GetSyngoDT() const { return SyngoDTField; }
   void SetSyngoDT(unsigned int syngodt) { SyngoDTField = syngodt; }
 
-  // Set/Get NoOfItems
+  /// Set/Get NoOfItems
   unsigned int GetNoOfItems() const { return NoOfItemsField; }
   void SetNoOfItems(unsigned int items) { NoOfItemsField = items; }
 
-  // Set/Get Value (bytes array, SQ of items, SQ of fragments):
+  /// Set/Get Value (bytes array, SQ of items, SQ of fragments):
   Value const &GetValue() const { return *DataField; }
   Value &GetValue() { return *DataField; }
   void SetValue(Value const & vl) {

@@ -45,11 +45,13 @@
 #include "gdcmImage.h"
 #include "gdcmFragment.h"
 #include "gdcmCSAHeader.h"
+#include "gdcmPDBHeader.h"
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmTransferSyntax.h"
 #include "gdcmBasicOffsetTable.h"
 //#include "gdcmLO.h"
 #include "gdcmCSAElement.h"
+#include "gdcmPDBElement.h"
 #include "gdcmFileSet.h"
 
 #include "gdcmReader.h"
@@ -109,6 +111,7 @@
 #include "gdcmImageToImageFilter.h"
 #include "gdcmSOPClassUIDToIOD.h"
 #include "gdcmImageChangeTransferSyntax.h"
+#include "gdcmImageApplyLookupTable.h"
 
 using namespace gdcm;
 %}
@@ -277,6 +280,17 @@ using namespace gdcm;
 %template (DataElementSet) std::set<gdcm::DataElement>;
 //%rename (SetString2) gdcm::DataElementSet;
 %include "gdcmPreamble.h"
+%include "gdcmTransferSyntax.h"
+%extend gdcm::TransferSyntax
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmFileMetaInformation.h"
 %extend gdcm::FileMetaInformation
 {
@@ -330,6 +344,28 @@ using namespace gdcm;
 
 };
 %include "gdcmFragment.h"
+%include "gdcmPDBElement.h"
+%extend gdcm::PDBElement
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
+%include "gdcmPDBHeader.h"
+%extend gdcm::PDBHeader
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+};
 %include "gdcmCSAElement.h"
 %extend gdcm::CSAElement
 {
@@ -353,7 +389,6 @@ using namespace gdcm;
   }
 };
 %include "gdcmSequenceOfFragments.h"
-%include "gdcmTransferSyntax.h"
 %include "gdcmBasicOffsetTable.h"
 //%include "gdcmLO.h"
 %include "gdcmFileSet.h"
@@ -495,3 +530,4 @@ using namespace gdcm;
 %include "gdcmImageToImageFilter.h"
 %include "gdcmSOPClassUIDToIOD.h"
 %include "gdcmImageChangeTransferSyntax.h"
+%include "gdcmImageApplyLookupTable.h"

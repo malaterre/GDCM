@@ -47,8 +47,8 @@ void Image::SetNumberOfDimensions(unsigned int dim)
   assert( NumberOfDimensions == 2 || NumberOfDimensions == 3 );
   if( NumberOfDimensions == 2 )
     {
-    Dimensions[2] == 1;
-    Spacing[2] == 1;
+    Dimensions[2] = 1;
+    Spacing[2] = 1;
     }
 }
 
@@ -96,10 +96,10 @@ unsigned int Image::GetDimension(unsigned int idx) const
   return Dimensions[idx];
 }
 
-void Image::SetDimensions(unsigned int *dims)
+void Image::SetDimensions(const unsigned int *dims)
 {
   assert( NumberOfDimensions );
-  assert( Dimensions.empty() );
+  //assert( Dimensions.empty() );
   Dimensions = std::vector<unsigned int>(dims, 
     dims+NumberOfDimensions);
 }
@@ -336,6 +336,7 @@ void Image::Print(std::ostream &os) const
 
     PF.Print(os);
     }
+  os << "PhotometricInterpretation: " << PI << "\n";
   os << "TransferSyntax: " << TS << "\n";
 }
 
@@ -397,8 +398,9 @@ bool Image::TryJPEGCodec(char *buffer) const
     if ( GetPhotometricInterpretation() != codec.GetPhotometricInterpretation() )
       {
       // HACK
-      //gdcm::Image *i = (gdcm::Image*)this;
-      //i->SetPhotometricInterpretation( codec.GetPhotometricInterpretation() );
+      // YBRisGray.dcm 
+      gdcm::Image *i = (gdcm::Image*)this;
+      i->SetPhotometricInterpretation( codec.GetPhotometricInterpretation() );
       }
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
@@ -461,10 +463,12 @@ bool Image::TryJPEG2000Codec(char *buffer) const
   JPEG2000Codec codec;
   if( codec.CanDecode( ts ) )
     {
+    codec.SetPixelFormat( GetPixelFormat() );
     codec.SetNumberOfDimensions( GetNumberOfDimensions() );
     codec.SetPlanarConfiguration( GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
     codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );
+    codec.SetDimensions( GetDimensions() );
     DataElement out;
     bool r = codec.Decode(PixelData, out);
     assert( r );

@@ -107,6 +107,7 @@ public:
 
   template <typename TDE>
   VL GetLength() const {
+    if( DES.empty() ) return 0;
     assert( !DES.empty() );
     VL ll = 0;
     assert( ll == 0 );
