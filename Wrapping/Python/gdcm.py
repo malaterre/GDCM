@@ -17,6 +17,7 @@
 its namespace.  This is a required module."""
 
 import os
+import sys
 
 # GDCM_WHEREAMI is a secret variable used to passed the location of the gdcm.py
 # to the global singleton initialization internal to gdcm:
