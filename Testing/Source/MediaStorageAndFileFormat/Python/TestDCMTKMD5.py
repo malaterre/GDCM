@@ -18,7 +18,11 @@ import os,sys,re
 
 def TestDCMTKMD5( filename, verbose = False ):
   #print filename
-  dcmdump_exec = "dcmdump -dc -E +P 2,10 -s " + filename + " 2> /dev/null"
+  # 
+  #dcmdump_exec = "dcmdump -dc -E +P 2,10 -s " + filename + " 2> /dev/null"
+  # I had to remove the -dc for the following file:
+  # GE_GENESIS-16-MONO2-Uncompressed-UnusualVR.dcm there is trailing space instead of \0
+  dcmdump_exec = "dcmdump -E +P 2,10 -s " + filename + " 2> /dev/null"
   #print dcmdump_exec
   f = os.popen(dcmdump_exec)
   ret = f.read()
@@ -40,7 +44,7 @@ def TestDCMTKMD5( filename, verbose = False ):
   gdcmraw = executable_output_path + '/gdcmraw'
 
   if not ret:
-    print "empty, problem with:", filename
+    #print "empty, problem with:", filename
     return 0
   elif type(ret) != type(''):
     print "problem of type with:", filename
