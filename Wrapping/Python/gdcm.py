@@ -45,7 +45,6 @@ if os.name == 'posix':
   # http://gcc.gnu.org/faq.html#dso
   # http://mail.python.org/pipermail/python-dev/2002-May/023923.html
   # http://wiki.python.org/moin/boost.python/CrossExtensionModuleDependencies
-  import sys
   orig_dlopen_flags = sys.getdlopenflags()
   try:
     import dl
@@ -63,11 +62,11 @@ if os.name == 'posix':
   from gdcmswig import *
   # revert:
   sys.setdlopenflags(orig_dlopen_flags)
-  del sys, dl
+  del dl
   del orig_dlopen_flags
 else:
   from gdcmswig import *
 
 # bye bye
 # once the process dies, the changed environment dies with it.
-del os
+del os,sys
