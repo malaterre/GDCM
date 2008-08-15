@@ -402,7 +402,7 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
 
   // else
   const Tag timageorientationpatient(0x0020, 0x0037);
-  if( ds.FindDataElement( timageorientationpatient ) )
+  if( ds.FindDataElement( timageorientationpatient ) /*&& !ds.GetDataElement( timageorientationpatient ).IsEmpty()*/ )
     {
     const DataElement& de = ds.GetDataElement( timageorientationpatient );
     Attribute<0x0020,0x0037> at = {{1,0,0,0,1,0}}; // default value if empty
@@ -428,7 +428,7 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
         }
       }
     }
-  //else
+  else
     {
     dircos[0] = 1;
     dircos[1] = 0;
