@@ -40,6 +40,13 @@ if __name__ == "__main__":
   print ir.GetDimension(0);
   print ir.GetDimension(1);
   print "Dims:",dims
+
+  # Just for fun:
+  dircos =  ir.GetDirectionCosines()
+  t = gdcm.Orientation.GetType(dircos)
+  l = gdcm.Orientation.GetLabel(t)
+  print "Orientation label:",l
+
   image.SetDimension(0, ir.GetDimension(0) );
   image.SetDimension(1, ir.GetDimension(1) );
   
