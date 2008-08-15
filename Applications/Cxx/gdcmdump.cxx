@@ -177,7 +177,7 @@ void PrintHelp()
   std::cout << "  -p --print     print value instead of simply dumping (default)." << std::endl;
   std::cout << "  -c --color     print in color." << std::endl;
   std::cout << "  -C --csa       print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER)." << std::endl;
-  std::cout << "  -P --pdb       print GEMS Protocol Data Block (0025,10,GEMS_SERS_01)." << std::endl;
+  std::cout << "  -P --pdb       print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01)." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning   print warning info." << std::endl;
