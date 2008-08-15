@@ -12,17 +12,17 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmCSAHeader_h
-#define __gdcmCSAHeader_h
+#ifndef __gdcmPDBHeader_h
+#define __gdcmPDBHeader_h
 
 #include "gdcmTypes.h"
 #include "gdcmDataSet.h"
-#include "gdcmCSAElement.h"
+#include "gdcmPDBElement.h"
 
 namespace gdcm
 {
 /*
- * \brief Class for CSAHeader
+ * \brief Class for PDBHeader
  *
  * Everything done in this code is for the sole purpose of writing interoperable 
  * software under Sect. 1201 (f) Reverse Engineering exception of the DMCA.
@@ -36,58 +36,29 @@ namespace gdcm
  *
  * \WARNING: the API of this class is subject to change in the near future. DO NOT USE.
  *
- * \TODO:
- * MrEvaProtocol in 29,1020 contains ^M that would be nice to get rid of on UNIX system...
- *
- * \See also
- * 5.1.3.2.4.1 MEDCOM History Information
- * and 5.1.4.3 CSA Non-Image Module
- * in 
- * http://tamsinfo.toshiba.com/docrequest/pdf/E.Soft_v2.0.pdf
  */
 //-----------------------------------------------------------------------------
 class DataElement;
 class PrivateTag;
-class GDCM_EXPORT CSAHeader
+class GDCM_EXPORT PDBHeader
 {
 public :
-  CSAHeader():InternalDataSet(),InternalType(UNKNOWN) {};
-  ~CSAHeader() {};
-
-  typedef enum {
-    UNKNOWN = 0,
-    SV10,
-    NOMAGIC,
-    DATASET_FORMAT,
-    ZEROED_OUT
-  } CSAHeaderType;
-
-  template <typename TSwap>
-  std::istream &Read(std::istream &is);
-
-  template <typename TSwap>
-  const std::ostream &Write(std::ostream &os) const;
+  PDBHeader() {}
+  ~PDBHeader() {}
 
   bool LoadFromDataElement(DataElement const &de);
 
   void Print(std::ostream &os) const;
 
-  const DataSet& GetDataSet() const { return InternalDataSet; }
+  static const PrivateTag & GetPDBInfoTag();
 
-  CSAHeaderType GetFormat() const;
-
-  static const PrivateTag & GetCSAImageHeaderInfoTag();
-  static const PrivateTag & GetCSASeriesHeaderInfoTag();
-
-  const CSAElement &GetCSAElementByName(const char *name);
+  const PDBElement &GetPDBElementByName(const char *name);
 
 private:
-  CSAElement Dummy;
-  std::set<CSAElement> InternalCSADataSet;
-  DataSet InternalDataSet;
-  CSAHeaderType InternalType;
-  Tag DataElementTag;
+  int readprotocoldatablock(const char *input, size_t inputlen, bool verbose);
+  std::vector<PDBElement> InternalPDBDataSet;
+  PDBElement Dummy;
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //__gdcmCSAHeader_h
+#endif //__gdcmPDBHeader_h
