@@ -20,7 +20,6 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
 # FIXME:
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
-  "${GDCM_BINARY_DIR}/Utilities/gdcmzlib"
   "${GDCM_SOURCE_DIR}/Utilities"
   )
 
