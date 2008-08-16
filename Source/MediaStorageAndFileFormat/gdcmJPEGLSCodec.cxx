@@ -55,9 +55,16 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
 
   char *input  = tempnam(0, "gdcminjpegls");
   char *output = tempnam(0, "gdcmoutjpegls");
+  if( !input || !output ) 
+    {
+    //free(input);
+    //free(output);
+    return false;
+    }
 
   std::ofstream outfile(input, std::ios::binary);
   sf->WriteBuffer(outfile);
+  outfile.close(); // flush !
 
   gdcm::Filename fn( System::GetCurrentProcessFileName() );
   std::string executable_path = fn.GetPath();
@@ -69,10 +76,21 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
 
   std::cerr << locod_command << std::endl;
   int ret = system(locod_command.c_str());
+  //std::cerr << "system: " << ret << std::endl;
 
   PNMCodec pnm;
   pnm.SetBufferLength( GetBufferLength() );
   bool b = pnm.Read( output, out );
+
+  if( !System::RemoveFile(input) )
+    {
+    gdcmErrorMacro( "Could not delete input: " << input );
+    }
+
+  if( !System::RemoveFile(output) )
+    {
+    gdcmErrorMacro( "Could not delete output: " << output );
+    }
 
   free(input);
   free(output);
