@@ -26,7 +26,16 @@ SET (LIBRARY_OUTPUT_PATH ${JPEGLS_BINARY_DIR}/bin CACHE PATH "Single output dire
 MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
 
 
-
+# Need to warn user about licensing issue, using a very annoying warning message:
+MESSAGE( "
+   These programs are Copyright (c) University of British Columbia. All rights reserved.
+   They may be freely redistributed in their entirety provided that this copyright
+   notice is not removed.  THEY MAY NOT BE SOLD FOR PROFIT OR INCORPORATED IN
+   COMMERCIAL PROGRAMS WITHOUT THE WRITTEN PERMISSION OF THE COPYRIGHT HOLDER.
+   Each program is provided as is, without any express or implied warranty,
+   without even the warranty of fitness for a particular purpose.
+"
+  )
 
 INCLUDE (${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)
 CHECK_INCLUDE_FILE("unistd.h"    HAVE_UNISTD_H)
