@@ -24,16 +24,17 @@ IF(GDCM_DOCUMENTATION)
     ${GDCM_BINARY_DIR}/Utilities/doxygen/README.txt
     @ONLY
   )
-	ADD_CUSTOM_COMMAND(
-	  OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/html/index.html
+  ADD_CUSTOM_COMMAND(
+    OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/html/index.html
+             ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
     COMMAND  ${DOXYGEN}
     ARGS     ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
     DEPENDS  ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
              ${GDCM_BINARY_DIR}/Utilities/doxygen/README.txt
              ${headerfiles}
     COMMENT  "Creating doxygen doc"
-	  #WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-	  )
+    #WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    )
 
   SET(GDCM_DOC_TARBALL
     ${CMAKE_CURRENT_BINARY_DIR}/gdcm-${GDCM_VERSION}-doc.tgz
