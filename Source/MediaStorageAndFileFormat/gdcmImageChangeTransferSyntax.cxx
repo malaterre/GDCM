@@ -18,6 +18,7 @@
 #include "gdcmFragment.h"
 #include "gdcmRAWCodec.h"
 #include "gdcmJPEGCodec.h"
+#include "gdcmJPEGLSCodec.h"
 #include "gdcmJPEG2000Codec.h"
 #include "gdcmRLECodec.h"
 
@@ -128,6 +129,33 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde)
   return false;
 }
 
+bool ImageChangeTransferSyntax::TryJPEGLSCodec(const DataElement &pixelde)
+{
+  unsigned long len = Input->GetBufferLength();
+  //assert( len == pixelde.GetByteValue()->GetLength() );
+  const TransferSyntax &ts = GetTransferSyntax();
+
+  JPEGLSCodec codec;
+  if( codec.CanCode( ts ) )
+    {
+    //codec.SetDimensions( Input->GetDimensions() );
+    //codec.SetPixelFormat( Input->GetPixelFormat() );
+    //codec.SetNumberOfDimensions( Input->GetNumberOfDimensions() );
+    //codec.SetPlanarConfiguration( Input->GetPlanarConfiguration() );
+    //codec.SetPhotometricInterpretation( Input->GetPhotometricInterpretation() );
+    //codec.SetNeedOverlayCleanup( Input->AreOverlaysInPixelData() );
+    //DataElement out;
+    ////bool r = codec.Code(Input->GetDataElement(), out);
+    //bool r = codec.Code(pixelde, out);
+
+    //DataElement &de = Output->GetDataElement();
+    //de.SetValue( out.GetValue() );
+    //assert( r );
+    //return r;
+    }
+  return false;
+}
+
 bool ImageChangeTransferSyntax::TryJPEG2000Codec(const DataElement &pixelde)
 {
   unsigned long len = Input->GetBufferLength();
@@ -202,6 +230,7 @@ bool ImageChangeTransferSyntax::Change()
   if( !success ) success = TryRAWCodec(Input->GetDataElement());
   if( !success ) success = TryJPEGCodec(Input->GetDataElement());
   if( !success ) success = TryJPEG2000Codec(Input->GetDataElement());
+  if( !success ) success = TryJPEGLSCodec(Input->GetDataElement());
   if( !success ) success = TryRLECodec(Input->GetDataElement());
   Output->SetTransferSyntax( TS );
   if( !success )

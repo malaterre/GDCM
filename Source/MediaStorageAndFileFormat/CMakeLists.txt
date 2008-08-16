@@ -38,8 +38,10 @@ SET(MSFF_SRCS
   gdcmAudioCodec.cxx
   gdcmJPEG16Codec.cxx
   gdcmJPEG2000Codec.cxx
+  gdcmJPEGLSCodec.cxx
   gdcmJPEG8Codec.cxx
   gdcmJPEGCodec.cxx
+  gdcmPNMCodec.cxx
   gdcmRAWCodec.cxx
   gdcmLookupTable.cxx
   gdcmOverlay.cxx
