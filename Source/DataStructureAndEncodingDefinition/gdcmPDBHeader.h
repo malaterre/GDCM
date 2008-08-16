@@ -21,7 +21,7 @@
 
 namespace gdcm
 {
-/*
+/**
  * \brief Class for PDBHeader
  *
  * Everything done in this code is for the sole purpose of writing interoperable 
