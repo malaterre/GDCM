@@ -1233,8 +1233,8 @@ int main (int argc, char *argv[]) {
 
 	fprintf(msgfile,"Total bits out: %ld  Symbols in: %ld  %5.3lf bps  (%5.3lf : 1)\n",
 		       tot_out,
-		       tot_in,tot_out/(double)tot_in, 
-		       (log((double)alpha)/log(2.0))*tot_in/tot_out);
+		       tot_in,tot_out/(double)tot_in , 0 
+		       /*(log((double)alpha)/log(2.0))*tot_in/tot_out */);
 	fprintf(msgfile,"Time = %1.3lf secs : %1.0lf KSymbols/sec\n",t1-t0,
 					(tot_in)/(1024*(t1-t0)));
 

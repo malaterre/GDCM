@@ -287,7 +287,7 @@ int write_jpegls_extmarker(FILE *out, jpeg_ls_header *jp, int IDtype, char *mapf
 				i=200;
 
 			jp->TABLE[TID][i] = read_n_bytes(tablefile, Wt);
-			if feof(tablefile)
+			if(feof(tablefile))
 			{
 				fprintf(stderr,"Error Reading Table File - Premature EOF found.\n");
 				exit(1);

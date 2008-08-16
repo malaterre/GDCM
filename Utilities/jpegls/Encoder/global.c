@@ -68,7 +68,7 @@ without the written permission of the copyright holder.\n";
 FILE *in, *out;
 FILE *c_in[MAX_COMPONENTS];
 /*FILE *c_out[MAX_COMPONENTS];*/
-FILE *msgfile = stdout;
+FILE *msgfile = NULL; /* = stdout;*/
 
 /* Context quantization thresholds  - initially unset */
 int	T3 = -1,
