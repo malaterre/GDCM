@@ -50,6 +50,7 @@
  */
 
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <assert.h>
 #include "jpegls_config.h"
@@ -289,7 +290,8 @@ extern int	RESET;
 /* Portability types */
 typedef unsigned char byte;
 typedef unsigned short word;
-typedef unsigned long dword;
+/*typedef unsigned long dword;*/
+typedef uint32_t dword;
 
 typedef unsigned short pixel;
 

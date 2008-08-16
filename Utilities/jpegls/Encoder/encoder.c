@@ -448,6 +448,8 @@ void initialize(int argc, char *argv[])
 	}
 
 
+  /* msgfile seems to start being used here, let's initialize it here */
+  if ( !msgfile ) msgfile = stdout;
 	/* Assigns pointers to out files */
 	if ( outfilename == NULL ) {
 		usage();

@@ -44,6 +44,6 @@ INCLUDE_DIRECTORIES(BEFORE
   )
 SUBDIRS(
   Decoder
-  #Encoder
+  Encoder
   )
 
