@@ -354,7 +354,7 @@ int main (int argc, char *argv[])
       }
     else if( jpegls )
       {
-      return 1;
+      change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLSLossless );
       }
     else if( j2k )
       {
