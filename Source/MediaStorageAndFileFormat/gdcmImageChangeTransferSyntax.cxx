@@ -138,20 +138,20 @@ bool ImageChangeTransferSyntax::TryJPEGLSCodec(const DataElement &pixelde)
   JPEGLSCodec codec;
   if( codec.CanCode( ts ) )
     {
-    //codec.SetDimensions( Input->GetDimensions() );
-    //codec.SetPixelFormat( Input->GetPixelFormat() );
+    codec.SetDimensions( Input->GetDimensions() );
+    codec.SetPixelFormat( Input->GetPixelFormat() );
     //codec.SetNumberOfDimensions( Input->GetNumberOfDimensions() );
-    //codec.SetPlanarConfiguration( Input->GetPlanarConfiguration() );
-    //codec.SetPhotometricInterpretation( Input->GetPhotometricInterpretation() );
-    //codec.SetNeedOverlayCleanup( Input->AreOverlaysInPixelData() );
-    //DataElement out;
-    ////bool r = codec.Code(Input->GetDataElement(), out);
-    //bool r = codec.Code(pixelde, out);
+    codec.SetPlanarConfiguration( Input->GetPlanarConfiguration() );
+    codec.SetPhotometricInterpretation( Input->GetPhotometricInterpretation() );
+    codec.SetNeedOverlayCleanup( Input->AreOverlaysInPixelData() );
+    DataElement out;
+    //bool r = codec.Code(Input->GetDataElement(), out);
+    bool r = codec.Code(pixelde, out);
 
-    //DataElement &de = Output->GetDataElement();
-    //de.SetValue( out.GetValue() );
-    //assert( r );
-    //return r;
+    DataElement &de = Output->GetDataElement();
+    de.SetValue( out.GetValue() );
+    assert( r );
+    return r;
     }
   return false;
 }
@@ -212,6 +212,7 @@ bool ImageChangeTransferSyntax::Change()
     bool success = false;
     if( !success ) success = TryRAWCodec(pixeldata);
     if( !success ) success = TryJPEGCodec(pixeldata);
+    if( !success ) success = TryJPEGLSCodec(pixeldata);
     if( !success ) success = TryJPEG2000Codec(pixeldata);
     if( !success ) success = TryRLECodec(pixeldata);
     Output->SetTransferSyntax( TS );
