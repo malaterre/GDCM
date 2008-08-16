@@ -34,7 +34,7 @@ namespace gdcm
  * Everything you do with this code is at your own risk, since decoding process
  * was not written from specification documents.
  *
- * \WARNING: the API of this class is subject to change in the near future. DO NOT USE.
+ * \WARNING: the API of this class might change.
  *
  * \TODO:
  * MrEvaProtocol in 29,1020 contains ^M that would be nice to get rid of on UNIX system...
