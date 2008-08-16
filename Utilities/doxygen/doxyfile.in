@@ -498,14 +498,15 @@ EXCLUDE_SYMLINKS       = NO
 # against the file with absolute path, so to exclude all test directories 
 # for example use the pattern */test/*
 
-EXCLUDE_PATTERNS       = */.svn */.svn/* */VTK4/*
+EXCLUDE_PATTERNS       = */.svn/* */VTK4/*
 
 # The EXAMPLE_PATH tag can be used to specify one or more files or 
 # directories that contain example code fragments that are included (see 
 # the \include command).
 
 EXAMPLE_PATH           = @GDCM_SOURCE_DIR@/Testing \
-                         @GDCM_SOURCE_DIR@/Applications
+                         @GDCM_SOURCE_DIR@/Applications \
+                         @GDCM_SOURCE_DIR@/Examples
 
 # If the value of the EXAMPLE_PATH tag contains directories, you can use the 
 # EXAMPLE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
