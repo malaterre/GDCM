@@ -224,11 +224,11 @@ void MakeIob(type,flags,wsize)
 	  exit(ERROR_MEMORY);
 	}
 	   if( CFrame->tmpfile )
-{
+  {
       temp->file = CFrame->tmpfile;
-}
-else
-{
+  }
+    else
+  {
       if ((temp->file =                               /* Open file */
 	   open(CFrame->ComponentFileName[CScan->ci[index]],
 		flags,UMASK)) < 0)
@@ -238,7 +238,7 @@ else
 		 CFrame->ComponentFileName[CScan->ci[index]]);
 	  exit(ERROR_INIT_FILE);
 	}               /* Make buffer for every line of component in MDU */
-}
+  }
 
       for(sofs=0,current=temp->blist;current<temp->blist+temp->num;current++)
 	{

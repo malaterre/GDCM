@@ -20,7 +20,18 @@
 namespace gdcm
 {
   
-class PVRGInternals;
+/**
+ * \brief PVRGCodec
+ * \note pvrg is a broken implementation of the JPEG standard. It is known to have a bug 
+ * in the 16bits lossless implementation of the standard.
+ *
+ * In an ideal world, you should not need this codec at all. But to support some broken file
+ * such as:
+ *
+ * PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
+ *
+ * we have to...
+ */
 class PVRGCodec : public ImageCodec
 {
 public:

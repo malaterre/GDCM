@@ -19,10 +19,10 @@ SET(
 #  COMPILE_FLAGS -Dmain=pvrgmain
 #)
 #ADD_DEFINITIONS(-DIO_DEBUG)
-ADD_LIBRARY(pvrg ${PVRG_SRCS})
+#ADD_LIBRARY(pvrg ${PVRG_SRCS})
 
-ADD_EXECUTABLE(pvrgjpeg pvrgjpeg.c)
-TARGET_LINK_LIBRARIES(pvrgjpeg pvrg)
+ADD_EXECUTABLE(gdcmjpeg ${PVRG_SRCS})
+#TARGET_LINK_LIBRARIES(pvrgjpeg pvrg)
 
 
 #
