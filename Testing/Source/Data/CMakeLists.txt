@@ -30,7 +30,8 @@ SET(BLACK_LIST_READER
 
 # The following should really fails according to JPEG spec, IJG is failing and even when forcing
 # decompression using IJG output is different from PVRG...
-  PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
+# Apparently pvrg likes it this way...
+#  PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
 
 # grrrrrr do not handle swapping correctly (implicit dataset are such a pain)
   LIBIDO-16-ACR_NEMA-Volume.dcm

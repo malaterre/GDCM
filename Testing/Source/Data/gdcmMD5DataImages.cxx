@@ -287,7 +287,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 //{ "47715f0a5d5089268bbef6f83251a8ad" , "OT-PAL-8-face.dcm" },
 { "d7c30d57af821b02c67103250a744235" , "OT-PAL-8-face.dcm" },
 /* gdcm 512 512 1 16 1 */
-{ "4b0021efe5a675f24c82e1ff28a1e2eb" , "PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm" },
+//{ "4b0021efe5a675f24c82e1ff28a1e2eb" , "PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm" },
+{ "d93d2f78d845c7a132489aab92eadd32" , "PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm" },
 /* gdcm 256 256 1 16 1 */
 { "b78366162d9d43b2852d2637c5365c89" , "PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm" },
 /* gdcm 256 256 1 16 1 */
@@ -609,6 +610,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "4d790e17ee35572d64e37c55dbc36725" , "MR_ELSCINT1_00e1_1042_SQ_feff_00e0_Item.dcm" },
 { "93ddc0c3d642af60f55630232d2801ae" , "CT_Image_Storage_multiframe.dcm" },
 { "ff261592e1c4b205eca7eea99d0101c0" , "ELSCINT1_JP2vsJ2K.dcm" },
+{ "b620a57170941e26dfd07ff334c73cb4" , "GE_MR_0025xx1bProtocolDataBlock.dcm" },
+
 
 
 
