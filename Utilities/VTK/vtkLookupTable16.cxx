@@ -41,6 +41,12 @@ void vtkLookupTable16::Build()
 
 void vtkLookupTable16::SetNumberOfTableValues(vtkIdType number)
 {
+  if (this->NumberOfColors == number)
+    {
+    return;
+    }
+  this->Modified();
+  this->NumberOfColors = number;
   this->Table16->SetNumberOfTuples(number);
 }
 

@@ -72,6 +72,7 @@ class vtkAngleWidget;
 #include "vtkStringArray.h"
 #include "vtkDebugLeaks.h"
 #include "vtkWorldPointPicker.h"
+#include "vtkMultiThreader.h"
 
 #include "gdcmFilename.h"
 #include "gdcmSystem.h"
@@ -649,6 +650,8 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 
 int main(int argc, char *argv[])
 {
+  //vtkMultiThreader::SetGlobalMaximumNumberOfThreads(1);
+
   vtkStringArray *filenames = vtkStringArray::New();
   if( argc < 2 )
     {
