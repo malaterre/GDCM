@@ -217,6 +217,7 @@ public:
 protected:
   bool TryRAWCodec(char *buffer) const;
   bool TryJPEGCodec(char *buffer) const;
+  bool TryPVRGCodec(char *buffer) const;
   bool TryJPEGLSCodec(char *buffer) const;
   bool TryJPEG2000Codec(char *buffer) const;
   bool TryRLECodec(char *buffer) const;

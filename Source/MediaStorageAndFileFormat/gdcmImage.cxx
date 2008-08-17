@@ -21,6 +21,7 @@
 #include "gdcmFragment.h"
 #include "gdcmRAWCodec.h"
 #include "gdcmJPEGCodec.h"
+#include "gdcmPVRGCodec.h"
 #include "gdcmJPEGLSCodec.h"
 #include "gdcmJPEG2000Codec.h"
 #include "gdcmRLECodec.h"
@@ -455,6 +456,33 @@ bool Image::TryJPEGCodec2(std::ostream &os) const
     }
   return false;
 }
+
+bool Image::TryPVRGCodec(char *buffer) const
+{
+  unsigned long len = GetBufferLength();
+  const TransferSyntax &ts = GetTransferSyntax();
+
+  PVRGCodec codec;
+  if( codec.CanDecode( ts ) )
+    {
+    codec.SetPixelFormat( GetPixelFormat() );
+    //codec.SetBufferLength( len );
+    //codec.SetNumberOfDimensions( GetNumberOfDimensions() );
+    codec.SetPlanarConfiguration( GetPlanarConfiguration() );
+    codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
+    codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );
+    codec.SetDimensions( GetDimensions() );
+    DataElement out;
+    bool r = codec.Decode(PixelData, out);
+    assert( r );
+    const ByteValue *outbv = out.GetByteValue();
+    assert( outbv );
+    unsigned long check = outbv->GetLength();  // FIXME
+    memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+    return r;
+    }
+  return false;
+}
    
 bool Image::TryJPEGLSCodec(char *buffer) const
 {
@@ -590,6 +618,7 @@ bool Image::GetBuffer(char *buffer) const
   bool success = false;
   if( !success ) success = TryRAWCodec(buffer);
   if( !success ) success = TryJPEGCodec(buffer);
+  if( !success ) success = TryPVRGCodec(buffer); // AFTER IJG trial !
   if( !success ) success = TryJPEG2000Codec(buffer);
   if( !success ) success = TryJPEGLSCodec(buffer);
   if( !success ) success = TryRLECodec(buffer);

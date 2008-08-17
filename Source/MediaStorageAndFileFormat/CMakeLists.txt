@@ -41,6 +41,7 @@ SET(MSFF_SRCS
   gdcmJPEGLSCodec.cxx
   gdcmJPEG8Codec.cxx
   gdcmJPEGCodec.cxx
+  gdcmPVRGCodec.cxx
   gdcmPNMCodec.cxx
   gdcmRAWCodec.cxx
   gdcmLookupTable.cxx

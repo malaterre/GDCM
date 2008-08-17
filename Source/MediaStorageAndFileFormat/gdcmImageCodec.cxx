@@ -76,10 +76,6 @@ bool ImageCodec::DoByteSwap(std::istream &is, std::ostream &os)
     ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)
       dummy_buffer, SwapCode::LittleEndian, buf_size/2);
     }
-  else
-    {
-    gdcmDebugMacro( "Why would I byte swap ?" );
-    }
 #else
   // GE_DLX-8-MONO2-PrivateSyntax.dcm is 8bits
   //  assert( PF.GetBitsAllocated() == 16 );
