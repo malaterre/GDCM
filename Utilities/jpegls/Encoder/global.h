@@ -53,6 +53,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include "jpegls_config.h"
 
 #ifndef GLOBAL_H
 #define GLOBAL_H
