@@ -21,7 +21,11 @@ namespace gdcm
 {
 
 /**
- * \brief Class to do JPEG
+ * \brief Class to do JPEG (8bits, 12bits, 16bits lossy & lossless).
+ * It redispatch in between the different codec implementation: gdcm::JPEG8Codec, 
+ * gdcm::JPEG12Codec & gdcm::JPEG16Codec
+ * It also support inconsistency in between DICOM header and JPEG compressed stream
+ *
  * \note
  * Things you should know if you ever want to dive into DICOM/JPEG world (among other):
  *

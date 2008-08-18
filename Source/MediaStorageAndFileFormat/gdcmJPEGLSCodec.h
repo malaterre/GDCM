@@ -20,6 +20,10 @@
 namespace gdcm
 {
   
+/**
+ * \brief Class to do JPEG-LS
+ * \note
+ */
 class JPEGLSInternals;
 class JPEGLSCodec : public ImageCodec
 {

@@ -21,10 +21,10 @@
 
 namespace gdcm
 {
+
 /**
  * \brief Class to represent an PhotometricInterpretation
  */
-
 class GDCM_EXPORT PhotometricInterpretation
 {
 public:

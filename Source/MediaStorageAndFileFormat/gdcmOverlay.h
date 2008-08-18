@@ -21,6 +21,11 @@
 namespace gdcm
 {
   
+/**
+ * \brief Overlay class
+ * \note 
+ * see AreOverlaysInPixelData
+ */
 class OverlayInternal;
 class ByteValue;
 class DataSet;

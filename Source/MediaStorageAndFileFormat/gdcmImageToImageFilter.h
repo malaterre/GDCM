@@ -20,6 +20,9 @@
 namespace gdcm
 {
 
+/**
+ * \brief ImageToImageFilter class
+ */
 
 class GDCM_EXPORT ImageToImageFilter
 {

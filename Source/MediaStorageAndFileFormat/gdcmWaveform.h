@@ -20,7 +20,7 @@
 namespace gdcm
 {
 /**
- * \brief
+ * \brief Waveform class
  */
 class GDCM_EXPORT Waveform
 {

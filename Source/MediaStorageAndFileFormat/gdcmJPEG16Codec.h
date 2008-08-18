@@ -20,6 +20,10 @@
 namespace gdcm
 {
   
+/**
+ * \brief Class to do JPEG 16bits (lossless)
+ * \note
+ */
 class JPEGInternals;
 class ByteValue;
 class JPEG16Codec : public JPEGCodec

@@ -21,6 +21,9 @@
 namespace gdcm
 {
   
+/**
+ * \brief SegmentedPaletteColorLookupTable class
+ */
 class GDCM_EXPORT SegmentedPaletteColorLookupTable : public LookupTable
 {
 public:

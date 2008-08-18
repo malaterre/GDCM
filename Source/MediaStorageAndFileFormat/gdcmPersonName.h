@@ -25,6 +25,7 @@ namespace gdcm
 {
 
 /**
+ * \brief PersonName class
  */
 class GDCM_EXPORT PersonName
 {

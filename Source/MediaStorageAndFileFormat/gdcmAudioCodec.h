@@ -20,6 +20,9 @@
 namespace gdcm
 {
   
+/**
+ * \brief AudioCodec
+ */
 class GDCM_EXPORT AudioCodec : public Codec
 {
 public:

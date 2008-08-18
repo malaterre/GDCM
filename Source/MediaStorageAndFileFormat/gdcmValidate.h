@@ -20,6 +20,9 @@
 namespace gdcm
 {
 
+/**
+ * \brief Validate class
+ */
 class GDCM_EXPORT Validate
 {
 public:

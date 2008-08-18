@@ -17,8 +17,12 @@
 
 #include "gdcmPrinter.h"
 
-// Use it to simply dump value read from the file. No interpretation is done.
-// But it is real fast ! Almost no overhead
+/**
+ * \brief Codec class
+ * \note
+ * Use it to simply dump value read from the file. No interpretation is done.
+ * But it is real fast ! Almost no overhead
+ */
 namespace gdcm
 {
 

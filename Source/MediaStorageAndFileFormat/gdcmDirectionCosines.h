@@ -20,7 +20,7 @@
 namespace gdcm
 {
   
-/*
+/**
  * \brief class to handle DirectionCosines
  */
 class GDCM_EXPORT DirectionCosines

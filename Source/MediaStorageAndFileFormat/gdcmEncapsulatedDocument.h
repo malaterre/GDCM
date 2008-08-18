@@ -20,7 +20,7 @@
 namespace gdcm
 {
 /**
- * \brief
+ * \brief EncapsulatedDocument
  */
 class GDCM_EXPORT EncapsulatedDocument
 {

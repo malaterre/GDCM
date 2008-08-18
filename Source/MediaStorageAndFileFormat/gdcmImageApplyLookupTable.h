@@ -20,7 +20,10 @@
 namespace gdcm
 {
 
-
+/**
+ * \brief ImageApplyLookupTable class
+ * It apply the LUT the PixelData (only PALETTE_COLOR images)
+ */
 class DataElement;
 class GDCM_EXPORT ImageApplyLookupTable : public ImageToImageFilter
 {

@@ -20,7 +20,7 @@
 namespace gdcm
 {
 /**
- * \brief
+ * \brief Spectroscopy class
  */
 class GDCM_EXPORT Spectroscopy
 {

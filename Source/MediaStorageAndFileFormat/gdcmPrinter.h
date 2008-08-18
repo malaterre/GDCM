@@ -50,6 +50,9 @@
 namespace gdcm
 {
 
+/**
+ * \brief Printer class
+ */
 class DataSet;
 class DictEntry;
 class Dicts;

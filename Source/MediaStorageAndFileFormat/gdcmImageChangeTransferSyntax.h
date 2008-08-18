@@ -21,7 +21,10 @@
 namespace gdcm
 {
 
-
+/**
+ * \brief ImageChangeTransferSyntax class
+ * Class to change the transfer syntax of an input DICOM
+ */
 class DataElement;
 class GDCM_EXPORT ImageChangeTransferSyntax : public ImageToImageFilter
 {

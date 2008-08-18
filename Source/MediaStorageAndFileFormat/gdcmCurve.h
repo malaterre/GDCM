@@ -22,7 +22,7 @@ namespace gdcm
 {
   
 /*
- * \brief class to handle element 50xx,3000 Curve Data
+ * \brief Curve class to handle element 50xx,3000 Curve Data
  *  WARNING: This is deprecated and lastly defined in PS 3.3 - 2004
  *
  *  Example:

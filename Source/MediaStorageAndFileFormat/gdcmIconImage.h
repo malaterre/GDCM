@@ -25,6 +25,9 @@
 namespace gdcm
 {
   
+/**
+ * \brief IconImage class
+ */
 class GDCM_EXPORT IconImage : public Object
 {
 public:

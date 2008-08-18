@@ -22,7 +22,7 @@
 namespace gdcm
 {
   
-/*
+/**
  * \brief class to handle a path of tag.
  *
  * Any Resemblance to Existing XPath is Purely Coincidental

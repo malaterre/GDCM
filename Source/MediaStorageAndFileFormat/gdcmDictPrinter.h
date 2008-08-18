@@ -20,6 +20,9 @@
 namespace gdcm
 {
 
+/**
+ * \brief DictPrinter class
+ */
 // It's a sink there is no output
 class GDCM_EXPORT DictPrinter : public Printer
 {

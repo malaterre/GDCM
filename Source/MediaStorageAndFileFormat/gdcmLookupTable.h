@@ -22,7 +22,10 @@
 
 namespace gdcm
 {
-  
+
+/**
+ * \brief LookupTable class
+ */
 class LookupTableInternal;
 class GDCM_EXPORT LookupTable : public Object
 {

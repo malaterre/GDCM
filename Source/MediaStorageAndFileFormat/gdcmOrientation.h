@@ -20,7 +20,7 @@
 namespace gdcm
 {
   
-/*
+/**
  * \brief class to handle Orientation
  */
 class GDCM_EXPORT Orientation

@@ -22,7 +22,8 @@
 namespace gdcm
 {
 
-/** \class Coder
+/** 
+ * \brief Decoder
  */
 class TransferSyntax;
 class DataElement;

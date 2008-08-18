@@ -20,6 +20,9 @@
 namespace gdcm
 {
   
+/**
+ * \brief PDFCodec class
+ */
 class GDCM_EXPORT PDFCodec : public Codec
 {
 public:
