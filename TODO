@@ -170,3 +170,15 @@ BARCODE
 Note: The identifier is coded as a string regardless of the type, not as a binary value.</description>
 
 What this means is that 10,22 is Type 1 only within sequence 10,1002
+-----------------------------------------------------------------------
+Yet another brain dead philips DICOM image:
+
+gdcmDataExtra/gdcmBreakers/Unexpected-Sequence-Terminator/images/Philips-Intera_Unexpected_Sequence_Terminator_1.dcm 
+
+(2005,e005) DS (CS) [75.0]                               # 4,1 Synergy Reconstruction Type
+...
+(2005,e030) FL 79.9997\0                                  # 8,1 (2)  ?
+
+-----------------------------------------------------------------------
+Thread with Philips BigEndian/LittleEndian inversion
+http://www.creatis.insa-lyon.fr/pipermail/dcmlib/2004-November/000898.html
