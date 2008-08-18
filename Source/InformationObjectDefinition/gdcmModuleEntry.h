@@ -50,7 +50,7 @@ public:
   void SetDescription(const char *d) { DescriptionField = d; }
   const Description & GetDescription() const { return DescriptionField; }
 
-private:
+protected:
   // PS 3.3 repeats the name of an attribute, but often contains typos
   // for now we will not use this info, but instead access the DataDict instead
   std::string Name;
