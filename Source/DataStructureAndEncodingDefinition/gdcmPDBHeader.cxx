@@ -194,10 +194,10 @@ int PDBHeader::readprotocoldatablock(const char *input, size_t inputlen, bool ve
     is2 >> name;
     std::getline(is2, value);
     pdbel.SetName( name.c_str() );
+    // remove the first space character and the first & last " character
     std::string value2( value.begin()+2, value.end()-1);
     pdbel.SetValue( value2.c_str() );
-   InternalPDBDataSet.push_back( pdbel );
-    
+    InternalPDBDataSet.push_back( pdbel );
     }
   //std::cout << out.size();
 

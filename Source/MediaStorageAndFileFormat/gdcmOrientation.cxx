@@ -34,7 +34,10 @@ static const char *OrientationStrings[] = {
 };
 
 // http://public.kitware.com/pipermail/insight-users/2005-March/012246.html
+// 0.5477 would be the square root of 1 (unit vector sum of squares) divided by 3 (oblique axes - a "double" oblique)
+// 0.7071 would be the square root of 1 (unit vector sum of squares) divided by 2 (oblique axes)
 const double Orientation::obliquityThresholdCosineValue = 0.8;
+//const double Orientation::obliquityThresholdCosineValue = 0.7071;
 char Orientation::GetMajorAxisFromPatientRelativeDirectionCosine(double x, double y, double z)
 {
   char axis = 0;
