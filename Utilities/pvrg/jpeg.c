@@ -2132,7 +2132,7 @@ void ConfirmFileSize()
       if (CFrame->ComponentFileName[CScan->ci[i]])
 	{
 	  if ((test = fopen(CFrame->ComponentFileName[CScan->ci[i]],
-			    "r")) == NULL)
+			    "rb")) == NULL)
 	    {
 	      WHEREAMI();
 	      printf("Cannot open filename %s\n",
