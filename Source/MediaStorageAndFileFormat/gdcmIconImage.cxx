@@ -14,6 +14,7 @@
 =========================================================================*/
 #include "gdcmIconImage.h"
 #include "gdcmRAWCodec.h"
+#include "gdcmSequenceOfFragments.h"
 
 namespace gdcm
 {
@@ -77,13 +78,26 @@ bool IconImage::GetBuffer(char *buffer) const
     }
 
   const ByteValue *bv = PixelData.GetByteValue();
+  if( !bv )
+    {
+    // KODAK_CompressedIcon.dcm
+    // contains a compressed Icon Sequence, one has to guess this is lossless jpeg...
+#ifdef MDEBUG
+    const SequenceOfFragments *sqf = PixelData.GetSequenceOfFragments();
+    std::ofstream os( "/tmp/kodak.ljpeg");
+    sqf->WriteBuffer( os );
+#endif
+    gdcmWarningMacro( "Compressed Icon are not support for now" );
+    buffer = 0;
+    return false;
+    }
   assert( bv );
   RAWCodec codec;
   //assert( GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2 );
   //codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
   if( GetPhotometricInterpretation() != PhotometricInterpretation::MONOCHROME2 )
     {
-    gdcmWarningMacro( "PhotometricInterpretation: " << GetPhotometricInterpretation() << " not handled" );
+    gdcmWarningMacro( "PhotometricInterpretation: " << GetPhotometricInterpretation() << " not handled for now" );
     }
   codec.SetPhotometricInterpretation( PhotometricInterpretation::MONOCHROME2 );
   codec.SetPixelFormat( GetPixelFormat() );

@@ -54,7 +54,7 @@ VM GuessVMType(DataElement const &de)
     }
   else
     {
-    assert( VR::IsASCII( vr ) );
+    assert( VR::IsASCII( vr ) || vr == VR::INVALID );
     switch(vr)
       {
     case VR::INVALID:
