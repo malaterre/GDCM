@@ -328,8 +328,8 @@ PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ double in
    * => dmax = 65535.000244081035
    * thus we must always make sure to cast to an integer first.
    */
-  int64_t min = dmin;
-  int64_t max = dmax;
+  int64_t min = (int64_t)dmin;
+  int64_t max = (int64_t)dmax;
   if( min >= 0 ) // unsigned
     {
     if( max <= std::numeric_limits<uint8_t>::max() )

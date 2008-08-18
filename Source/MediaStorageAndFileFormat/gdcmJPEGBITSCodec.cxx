@@ -318,8 +318,8 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   my_error_mgr &jerr = Internals->jerr;
   /* More stuff */
   //FILE * infile;		/* source file */
-  JSAMPARRAY buffer;		/* Output row buffer */
-  int row_stride;		/* physical row width in output buffer */
+  //JSAMPARRAY buffer;		/* Output row buffer */
+  //int row_stride;		/* physical row width in output buffer */
 
   if( Internals->StateSuspension == 0 )
     {
