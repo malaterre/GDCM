@@ -54,8 +54,7 @@ int checkmagick(unsigned char *input)
   return 0;
 }
 
-//int checkdeflate(int argc, char *argv[])
-int checkdeflate(const char *name)
+int checkdeflated(const char *name)
 {
   int ret;
   unsigned char *source;
@@ -184,12 +183,11 @@ void PrintHelp()
 {
   PrintVersion();
   std::cout << "Usage: gdcminfo [OPTION]... [FILE]..." << std::endl;
-  std::cout << "by default gdcmdump, only dumps a DICOM file, that is the minimal operations required to\n"
-   " display information reader need to see the structure of a DICOM file and some value in its fields" << std::endl;
+  std::cout << "display info about the input DICOM file" << std::endl;
   std::cout << "Parameter:" << std::endl;
   std::cout << "  -i --input     DICOM filename or directory" << std::endl;
   std::cout << "Options:" << std::endl;
-  std::cout << "  -d --check-deflate   check if file is proper deflate syntax." << std::endl;
+  std::cout << "  -d --check-deflated   check if file is proper deflated syntax." << std::endl;
 //  std::cout << "  -b --check-big-endian   check if file is ." << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning   print warning info." << std::endl;
@@ -204,7 +202,7 @@ int main(int argc, char *argv[])
 {
   int c;
   std::string filename;
-  int deflate = 0; // check deflate
+  int deflated = 0; // check deflated
   int verbose = 0;
   int warning = 0;
   int help = 0;
@@ -216,7 +214,7 @@ int main(int argc, char *argv[])
     int option_index = 0;
     static struct option long_options[] = {
         {"input", 1, 0, 0},
-        {"check-deflate", 0, &deflate, 1},
+        {"check-deflated", 0, &deflated, 1},
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
         {"debug", 0, &debug, 1},
@@ -340,9 +338,9 @@ int main(int argc, char *argv[])
     gdcm::Trace::SetError( verbose);
     }
 
-  if( deflate )
+  if( deflated )
   {
-    return checkdeflate(filename.c_str());
+    return checkdeflated(filename.c_str());
   }
  
   //const char *filename = argv[1];
