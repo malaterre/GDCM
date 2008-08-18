@@ -33,18 +33,29 @@ JPEGLSCodec::~JPEGLSCodec()
 
 bool JPEGLSCodec::CanDecode(TransferSyntax const &ts) const
 {
+#ifndef GDCM_USE_JPEGLS
+  return false;
+#else
   return ts == TransferSyntax::JPEGLSLossless 
     || ts == TransferSyntax::JPEGLSNearLossless;
+#endif
 }
 
 bool JPEGLSCodec::CanCode(TransferSyntax const &ts) const
 {
+#ifndef GDCM_USE_JPEGLS
+  return false;
+#else
   return ts == TransferSyntax::JPEGLSLossless 
     || ts == TransferSyntax::JPEGLSNearLossless;
+#endif
 }
 
 bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
 {
+#ifndef GDCM_USE_JPEGLS
+  return false;
+#else
   // First thing create a jpegls file from the fragment:
   const gdcm::SequenceOfFragments *sf = in.GetSequenceOfFragments();
   assert(sf);
@@ -92,11 +103,15 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
   free(output);
 
   return true;
+#endif
 }
 
 // Compress into JPEG
 bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
 {
+#ifndef GDCM_USE_JPEGLS
+  return false;
+#else
   out = in;
   // First thing create a pnm file from the fragment:
   PNMCodec pnm;
@@ -156,8 +171,7 @@ bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
   free(output);
 
   return true;
-
-  return true;
+#endif
 }
 
 } // end namespace gdcm

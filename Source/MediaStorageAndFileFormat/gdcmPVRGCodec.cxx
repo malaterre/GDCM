@@ -35,6 +35,9 @@ PVRGCodec::~PVRGCodec()
 
 bool PVRGCodec::CanDecode(TransferSyntax const &ts) const
 {
+#ifndef GDCM_USE_PVRG
+  return false;
+#else
   return ts == TransferSyntax::JPEGBaselineProcess1
       || ts == TransferSyntax::JPEGExtendedProcess2_4
       || ts == TransferSyntax::JPEGExtendedProcess3_5
@@ -42,6 +45,7 @@ bool PVRGCodec::CanDecode(TransferSyntax const &ts) const
       || ts == TransferSyntax::JPEGFullProgressionProcess10_12
       || ts == TransferSyntax::JPEGLosslessProcess14
       || ts == TransferSyntax::JPEGLosslessProcess14_1;
+#endif
 }
 
 bool PVRGCodec::CanCode(TransferSyntax const &ts) const
@@ -59,6 +63,9 @@ bool PVRGCodec::CanCode(TransferSyntax const &ts) const
  */
 bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
 {
+#ifndef GDCM_USE_PVRG
+  return false;
+#else
   // First thing create a jpegls file from the fragment:
   const gdcm::SequenceOfFragments *sf = in.GetSequenceOfFragments();
   assert(sf);
@@ -126,72 +133,18 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
 
   //return ImageCodec::Decode(in,out);
   return true;
+#endif
 }
 
 // Compress into JPEG
 bool PVRGCodec::Code(DataElement const &in, DataElement &out)
 {
-  out = in;
-  // First thing create a pnm file from the fragment:
-  PNMCodec pnm;
-  pnm.SetDimensions( this->GetDimensions() );
-  char *input  = tempnam(0, "gdcminjpegls");
-  char *output = tempnam(0, "gdcmoutjpegls");
-  if( !input || !output ) 
-    {
-    //free(input);
-    //free(output);
-    return false;
-    }
-  pnm.Write( input, in );
-
-  gdcm::Filename fn( System::GetCurrentProcessFileName() );
-  std::string executable_path = fn.GetPath();
-  std::string locoe_command = executable_path + "/gdcmlocoe ";
-  locoe_command += "-i";
-  locoe_command += input; // no space !
-  locoe_command += " -o";
-  locoe_command += output; // no space !
-
-  std::cerr << locoe_command << std::endl;
-  int ret = system(locoe_command.c_str());
-  //std::cerr << "system: " << ret << std::endl;
-
-  size_t len = gdcm::System::FileSize(output);
-  std::ifstream is(output);
-  char *buf = new char[len];
-  is.read(buf, len);
-
-  // Create a Sequence Of Fragments:
-  SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
-  const Tag itemStart(0xfffe, 0xe000);
-  sq->GetTable().SetTag( itemStart );
-
-    Fragment frag;
-    frag.SetTag( itemStart );
-    frag.SetByteValue( buf, len );
-    sq->AddFragment( frag );
-  out.SetValue( *sq );
-
-  delete[] buf;
-
- 
-  if( !System::RemoveFile(input) )
-    {
-    gdcmErrorMacro( "Could not delete input: " << input );
-    }
-
-  if( !System::RemoveFile(output) )
-    {
-    gdcmErrorMacro( "Could not delete output: " << output );
-    }
-
-  free(input);
-  free(output);
-
-  return true;
-
-  return true;
+#ifndef GDCM_USE_PVRG
+  return false;
+#else
+  /* Do I really want to produce JPEG by PRVRG ? Shouldn't IJG handle all cases nicely ? */
+  return false;
+#endif
 }
 
 } // end namespace gdcm
