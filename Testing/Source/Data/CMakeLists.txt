@@ -28,11 +28,6 @@ SET(BLACK_LIST_READER
   EmptyPixelData.dcm # Emtpy pixel, dcmdump returns 0 ... I do not think this is the right thing to do though
   Siemens-leonardo-bugged.dcm # Nearly impossible, waste of time anyway...
 
-# The following should really fails according to JPEG spec, IJG is failing and even when forcing
-# decompression using IJG output is different from PVRG...
-# Apparently pvrg likes it this way...
-#  PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
-
 # grrrrrr do not handle swapping correctly (implicit dataset are such a pain)
   LIBIDO-16-ACR_NEMA-Volume.dcm
 # TODO add seg lut support
@@ -95,6 +90,16 @@ SET(BLACK_LIST_READER
 # Private tags is SQ, but SQ is busted, GDCM fails since it tries to parse the SQ (dcmtk does not even try)
   BogusItemLengthImplicitPrivateAtt.dcm
 )
+IF(NOT GDCM_USE_PVRG)
+  SET(BLACK_LIST_READER
+    # The following should really fails according to JPEG spec, IJG is failing and even when forcing
+    # decompression using IJG output is different from PVRG...
+    # Apparently pvrg likes it this way...
+    #  PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
+    ${BLACK_LIST_READER}
+    PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
+  )
+ENDIF(NOT GDCM_USE_PVRG)
 IF(GDCM_WORDS_BIGENDIAN)
   SET(BLACK_LIST_READER
     ${BLACK_LIST_READER}
