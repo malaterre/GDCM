@@ -43,6 +43,14 @@ void vtkImagePlanarComponentsToComponentsExecute(vtkImagePlanarComponentsToCompo
                              vtkImageData *outData,
                              int outExt[6], int id, T *)
 {
+  int maxX, maxY, maxZ;
+  // find the region to loop over
+  maxX = outExt[1] - outExt[0];
+  maxY = outExt[3] - outExt[2]; 
+  maxZ = outExt[5] - outExt[4];
+  
+
+/*
   vtkImageIterator<T> inIt(inData, outExt);
   vtkImageProgressIterator<T> outIt(outData, outExt, self, id);
   int idxC;
@@ -78,6 +86,30 @@ void vtkImagePlanarComponentsToComponentsExecute(vtkImagePlanarComponentsToCompo
   //assert( inIt.IsAtEnd() );
      outSI = outIt.BeginSpan();
   memset(outSI, 0, 307200 * 3);
+*/
+  //target = static_cast<unsigned long>((maxZ+1)*(maxY+1)/50.0);
+  //target++;
+
+  const T *inPtr = (T*)inData->GetScalarPointer(outExt[0],outExt[2],outExt[4]);
+  T *outPtr = static_cast<T*>(outData->GetScalarPointer(outExt[0],outExt[2],outExt[4]));
+
+  // Loop through ouput pixels
+
+  unsigned long size = (maxX+1) * (maxY+1) * (maxZ+1);
+  const T *r = inPtr;
+  const T *g = inPtr + size;
+  const T *b = inPtr + size + size;
+
+  T *p = outPtr;
+  for (unsigned long j = 0; j < size && !self->AbortExecute; ++j)
+    {
+    //this->UpdateProgress(count/(50.0*target));
+    *(p++) = *(r++);
+    *(p++) = *(g++);
+    *(p++) = *(b++);
+    }
+
+
 }
 
 //----------------------------------------------------------------------------
@@ -131,9 +163,7 @@ int vtkImagePlanarComponentsToComponents::RequestData(
   vtkInformationVector** inputVector,
   vtkInformationVector* outputVector)
 {
-  char *outPtr;
   int idxX, idxY, idxZ;
-  int maxX, maxY, maxZ;
   vtkIdType outIncX, outIncY, outIncZ;
   int *outExt;
   double sum;
@@ -152,40 +182,25 @@ int vtkImagePlanarComponentsToComponents::RequestData(
     outInfo->Get(vtkDataObject::DATA_OBJECT()));
   vtkImageData *data = this->AllocateOutputData(output);
 
-  if (data->GetScalarType() != VTK_UNSIGNED_CHAR)
+  if (data->GetScalarType() != VTK_UNSIGNED_CHAR
+    && data->GetScalarType() != VTK_UNSIGNED_SHORT )
     {
-    vtkErrorMacro("Execute: This source only outputs doubles");
+    vtkErrorMacro("Execute: This source only deal with uchar/ushort");
     }
   
   outExt = data->GetExtent();
   
-  // find the region to loop over
-  maxX = outExt[1] - outExt[0];
-  maxY = outExt[3] - outExt[2]; 
-  maxZ = outExt[5] - outExt[4];
-  
   // Get increments to march through data 
   data->GetContinuousIncrements(outExt, outIncX, outIncY, outIncZ);
-  const char *inPtr = (char*)inData->GetScalarPointer(outExt[0],outExt[2],outExt[4]);
-  outPtr = static_cast<char*>(data->GetScalarPointer(outExt[0],outExt[2],outExt[4]));
-  
-  target = static_cast<unsigned long>((maxZ+1)*(maxY+1)/50.0);
-  target++;
 
-  // Loop through ouput pixels
-
-  unsigned long size = (maxX+1) * (maxY+1) * (maxZ+1);
-  const char *r = inPtr;
-  const char *g = inPtr + size;
-  const char *b = inPtr + size + size;
-
-  char *p = outPtr;
-  for (unsigned long j = 0; j < size && !this->AbortExecute; ++j)
+  switch (inData->GetScalarType())
     {
-    //this->UpdateProgress(count/(50.0*target));
-    *(p++) = *(r++);
-    *(p++) = *(g++);
-    *(p++) = *(b++);
+    vtkTemplateMacro(
+      vtkImagePlanarComponentsToComponentsExecute(this, inData, 
+                              data, outExt, 0, static_cast<VTK_TT *>(0)));
+    default:
+      vtkErrorMacro(<< "Execute: Unknown ScalarType");
+      return 0;
     }
 
   return 1;
