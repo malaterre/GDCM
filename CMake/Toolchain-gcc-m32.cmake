@@ -3,6 +3,8 @@
 #
 #  $ cmake ../trunk -DCMAKE_TOOLCHAIN_FILE=../trunk/CMake/Toolchain-mingw32.cmake 
 #
+# To install let say zlib for i386 on a system:
+#  apt-cross --arch i386 -i zlib1g-dev
 
 # the name of the target operating system
 SET(CMAKE_SYSTEM_NAME Linux)
@@ -14,7 +16,7 @@ SET(CMAKE_CXX_COMPILER g++)
 SET(CMAKE_CXX_FLAGS -m32)
 
 # here is the target environment located
-SET(CMAKE_FIND_ROOT_PATH  /emul/ia32-linux )
+SET(CMAKE_FIND_ROOT_PATH   /usr/i486-linux-gnu )
 
 # adjust the default behaviour of the FIND_XXX() commands:
 # search headers and libraries in the target environment, search 
