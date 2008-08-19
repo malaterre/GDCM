@@ -23,6 +23,7 @@ namespace gdcm
 /**
  * \brief Class to do PNM
  * \note
+ * Only support P5 & P6 PNM file (binary grayscale and binary rgb)
  */
 class GDCM_EXPORT PNMCodec : public ImageCodec
 {
