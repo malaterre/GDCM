@@ -784,6 +784,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x5001,0x0083,"ELSCINT1",VR::FL,VM::VM1_n,"?",false },
   {0x5001,0x0084,"ELSCINT1",VR::SQ,VM::VM1,"?",false },
   {0x6001,0x0010,"ELSCINT1",VR::CS,VM::VM1,"Text Overlay Flag",false },
+  {0x6003,0x0010,"ELSCINT1",VR::CS,VM::VM1,"Text Overlay Flag",false },
   {0x7fdf,0x00f0,"ELSCINT1",VR::OB,VM::VM1,"?",false },
   {0x7fdf,0x00ff,"ELSCINT1",VR::SH,VM::VM1,"?",false },
   {0x0029,0x0030,"Eclispe 60",VR::UL,VM::VM1,"Private data",false },
