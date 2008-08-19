@@ -437,6 +437,10 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
       break;
       }
     }
+  else if( cinfo.process == JPROC_SEQUENTIAL )
+    {
+    ts = TransferSyntax::JPEGBaselineProcess1;
+    }
   else
     {
     abort(); // TODO
