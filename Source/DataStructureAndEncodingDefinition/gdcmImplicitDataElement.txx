@@ -56,8 +56,16 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
     {
     //assert( de.GetVR() == VR::SQ );
     // FIXME what if I am reading the pixel data...
-    assert( TagField != Tag(0x7fe0,0x0010) );
-    ValueField = new SequenceOfItems;
+    //assert( TagField != Tag(0x7fe0,0x0010) );
+    if( TagField != Tag(0x7fe0,0x0010) )
+      {
+      ValueField = new SequenceOfItems;
+      }
+    else
+      {
+      gdcmWarningMacro( "Undefined value length is impossible in non-encapsulated Transfer Syntax" );
+      ValueField = new SequenceOfFragments;
+      }
     //VRField = VR::SQ;
     }
   else

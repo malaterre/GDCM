@@ -720,7 +720,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
       }
     assert( refvr != VR::OB_OW );
 
-    if( vr != VR::INVALID && (!vr.Compatible( vr_read ) || vr_read == VR::INVALID) )
+    if( vr != VR::INVALID && (!vr.Compatible( vr_read ) || vr_read == VR::INVALID || vr_read == VR::UN ) )
       {
       assert( vr != VR::INVALID );
       // FIXME : if terminal supports it: print in red/green !
