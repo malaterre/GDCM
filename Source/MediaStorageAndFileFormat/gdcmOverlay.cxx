@@ -357,6 +357,17 @@ bool Overlay::IsEmpty() const
 {
   return Internal->Data.empty();
 }
+bool Overlay::IsZero() const
+{
+  if( IsEmpty() ) return false;
+
+  std::vector<char>::const_iterator it = Internal->Data.begin();
+  for(; it != Internal->Data.end(); ++it )
+    {
+    if( *it ) return true;
+    }
+  return false;
+}
 bool Overlay::IsInPixelData() const { return Internal->InPixelData; }
 void Overlay::IsInPixelData(bool b) { Internal->InPixelData = b; }
 

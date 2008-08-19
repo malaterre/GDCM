@@ -76,6 +76,9 @@ public:
 
   bool IsEmpty() const;
 
+  /// return true if all bits are set to 0
+  bool IsZero() const;
+
   // return if the Overlay is stored in the pixel data or not
   bool IsInPixelData() const;
   void IsInPixelData(bool b);
