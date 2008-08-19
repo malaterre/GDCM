@@ -3,8 +3,14 @@
 #
 #  $ cmake ../trunk -DCMAKE_TOOLCHAIN_FILE=../trunk/CMake/Toolchain-mingw32.cmake 
 #
-# To install let say zlib for i386 on a system:
+# For gdcm you need at least the following three package (2008/08/19):
+#
 #  apt-cross --arch i386 -i zlib1g-dev
+#  apt-cross --arch i386 -i uuid-dev
+#  apt-cross --arch i386 -i libexpat1-dev
+#
+# Do not forget to set to on the following:
+# GDCM_USE_SYSTEM_EXPAT / GDCM_USE_SYSTEM_ZLIB / GDCM_USE_SYSTEM_UUID
 
 # the name of the target operating system
 SET(CMAKE_SYSTEM_NAME Linux)
