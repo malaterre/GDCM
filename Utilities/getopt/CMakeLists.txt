@@ -41,6 +41,11 @@ SET(GETOPT_LIBRARY_PROPERTIES ${GETOPT_LIBRARY_PROPERTIES}
 # guys really need help)
 ADD_LIBRARY(${GETOPT_LIBRARY_NAME} ${GETOPT_SRCS})
 SET_TARGET_PROPERTIES(${GETOPT_LIBRARY_NAME} PROPERTIES ${GETOPT_LIBRARY_PROPERTIES})
+IF(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
+  # For some reason mingw fails to export the optind which is clearly marked as exported (using extern symbol)
+  # ... for now use this flag :
+  SET_TARGET_PROPERTIES(${GETOPT_LIBRARY_NAME} PROPERTIES LINK_FLAGS "-Wl,--export-all-symbols")
+ENDIF(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
 
 IF(BUILD_EXAMPLES)
 ADD_EXECUTABLE(ex_getopt ex_getopt.c)
