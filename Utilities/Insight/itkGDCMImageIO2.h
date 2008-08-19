@@ -38,6 +38,8 @@ namespace itk
  #else
   #define ITK_GDCM_EXPORT __declspec( dllimport ) 
  #endif
+#else
+  #define ITK_GDCM_EXPORT
 #endif
 
 class ITK_GDCM_EXPORT GDCMImageIO2 : public ImageIOBase
