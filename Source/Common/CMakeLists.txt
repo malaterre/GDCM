@@ -25,6 +25,10 @@ CHECK_FUNCTION_EXISTS(_stricmp    HAVE__STRICMP)
 CHECK_FUNCTION_EXISTS(_strnicmp   HAVE__STRNICMP)
 CHECK_FUNCTION_EXISTS(_snprintf   HAVE__SNPRINTF)
 
+#INCLUDE(CheckSymbolExists)
+CHECK_FUNCTION_EXISTS(gettimeofday HAVE_GETTIMEOFDAY)
+
+
 CONFIGURE_FILE(
   "${GDCM_SOURCE_DIR}/Source/Common/gdcmConfigure.h.in"
   "${GDCM_BINARY_DIR}/Source/Common/gdcmConfigure.h"

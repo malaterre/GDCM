@@ -381,7 +381,7 @@ bool System::GetHardwareAddress(unsigned char addr[6])
   return false;
 }
 
-#if defined(_WIN32) && !defined(__MINGW32__)
+#if defined(_WIN32) && !defined(HAVE_GETTIMEOFDAY)
 #include <stdio.h>
 static int gettimeofday(struct timeval *tv, struct timezone *tz)
 {

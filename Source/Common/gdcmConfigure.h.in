@@ -101,6 +101,7 @@
 #cmakedefine HAVE__STRICMP
 #cmakedefine HAVE__STRNICMP
 #cmakedefine HAVE__SNPRINTF
+#cmakedefine HAVE_GETTIMEOFDAY
 
 #cmakedefine GDCM_FORCE_BIGENDIAN_EMULATION
 
