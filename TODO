@@ -182,3 +182,9 @@ gdcmDataExtra/gdcmBreakers/Unexpected-Sequence-Terminator/images/Philips-Intera_
 -----------------------------------------------------------------------
 Thread with Philips BigEndian/LittleEndian inversion
 http://www.creatis.insa-lyon.fr/pipermail/dcmlib/2004-November/000898.html
+-----------------------------------------------------------------------
+Looks like ELSCINT1 is doing a group xx for element:
+  {0x6003,0x0010,"ELSCINT1",VR::CS,VM::VM1,"Text Overlay Flag",false },
+need to repeat for:
+  {0x6005,0x0010,"ELSCINT1",VR::CS,VM::VM1,"Text Overlay Flag",false },
+and so and so forth...
