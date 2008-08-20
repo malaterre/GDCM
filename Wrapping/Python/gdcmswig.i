@@ -101,6 +101,7 @@
 #include "gdcmDefinedTerms.h"
 #include "gdcmSeries.h"
 #include "gdcmModuleEntry.h"
+#include "gdcmNestedModuleEntries.h"
 #include "gdcmIODEntry.h"
 #include "gdcmRescaler.h"
 #include "gdcmSegmentedPaletteColorLookupTable.h"
@@ -498,6 +499,7 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
+%include "gdcmNestedModuleEntries.h"
 %include "gdcmModule.h"
 %include "gdcmModules.h"
 %include "gdcmDefs.h"
