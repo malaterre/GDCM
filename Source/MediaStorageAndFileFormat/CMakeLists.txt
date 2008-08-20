@@ -98,6 +98,14 @@ ADD_LIBRARY(gdcmMSFF ${MSFF_SRCS})
 SET_TARGET_PROPERTIES(gdcmMSFF PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
 TARGET_LINK_LIBRARIES(gdcmMSFF gdcmDSED gdcmDICT
   gdcmjpeg8 gdcmjpeg12 gdcmjpeg16 gdcmopenjpeg)
+IF(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
+  # I am getting:
+# CMakeFiles/gdcmMSFF.dir/gdcmScanner.obj(.text$_ZN4gdcm6ReaderC1Ev[gdcm::Reader::Reader()]+0x3a):gdcmScanner.cxx: variable 'vtable for gdcm::Reader' can't be auto-imported. Please read the documentation for ld's --enable-auto-import for details.
+# CMakeFiles/gdcmMSFF.dir/gdcmImageReader.obj(.text$_ZN4gdcm6ReaderC2Ev[gdcm::Reader::Reader()]+0x3a):gdcmImageReader.cxx: variable 'vtable for gdcm::Reader' can't be auto-imported. Please read the documentation for ld's --enable-auto-import for details.
+# CMakeFiles/gdcmMSFF.dir/gdcmImageWriter.obj(.text$_ZN4gdcm6WriterC2Ev[gdcm::Writer::Writer()]+0x3a):gdcmImageWriter.cxx: variable 'vtable for gdcm::Writer' can't be auto-imported. Please read the documentation for ld's --enable-auto-import for details.
+
+  SET_TARGET_PROPERTIES(gdcmMSFF PROPERTIES LINK_FLAGS "-Wl,--enable-runtime-pseudo-reloc")
+ENDIF(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
 #IF(HAVE_UUIDCREATE)
 IF(WIN32)
   # For UuidCreate
