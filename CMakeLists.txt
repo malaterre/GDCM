@@ -395,6 +395,11 @@ ENDIF(BUILD_APPLICATIONS)
 #-----------------------------------------------------------------------------
 # CPack stuff
 IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
+  IF(EXISTS "${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake")
+    SET(CMAKE_INSTALL_MFC_LIBRARIES 0)
+    SET(CMAKE_INSTALL_DEBUG_LIBRARIES 0)
+    INCLUDE(${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake)
+  ENDIF(EXISTS "${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake")
 
   SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "GDCM - Grass Root DICOM\n GDCM is yet another DICOM library.")
   SET(CPACK_PACKAGE_VENDOR "GDCM")
