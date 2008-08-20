@@ -2,7 +2,7 @@
 #define WXGDCMFRAME_H
 
 #include "wxGDCMFrameBase.h"
-class vtkImageViewer;
+class vtkImageColorViewer;
 class vtkGDCMImageReader;
 class wxGDCMFrame: public wxGDCMFrameBase
 {
@@ -19,7 +19,7 @@ public:
 private:
     wxString	      directory;
     wxString        filename;
-    vtkImageViewer *imageViewer;
+    vtkImageColorViewer *imageViewer;
     vtkGDCMImageReader  *Reader;
 
     DECLARE_EVENT_TABLE( );

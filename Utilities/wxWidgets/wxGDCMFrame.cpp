@@ -2,8 +2,10 @@
 
 #include "wxGDCMFrame.h"
 #include "wxVTKRenderWindowInteractor.h"
-#include "vtkImageViewer.h"
+#include "vtkImageViewer2.h"
 #include "vtkGDCMImageReader.h"
+#include "vtkImageColorViewer.h"
+#include "vtkImageData.h"
 
 BEGIN_EVENT_TABLE( wxGDCMFrame, wxGDCMFrameBase )
     EVT_MENU(wxID_OPEN, wxGDCMFrame::OnOpen)
@@ -17,7 +19,7 @@ wxGDCMFrame::wxGDCMFrame(wxWindow* parent, int id, const wxString& title, const 
     wxGDCMFrameBase(parent, id, title, pos, size, wxDEFAULT_FRAME_STYLE)
 {
 
-    imageViewer = vtkImageViewer::New();
+    imageViewer = vtkImageColorViewer::New();
     imageViewer->SetupInteractor( VTKWindow );
     Reader      = vtkGDCMImageReader::New();
     directory = wxT( "" );
@@ -56,8 +58,9 @@ void wxGDCMFrame::OnOpen(wxCommandEvent& event)
     fn += "/";
     fn += (const char *)filename.fn_str();
     Reader->SetFileName( fn.c_str() );
-    //Reader->Update();
-    imageViewer->SetInput( Reader->GetOutput() );
+    Reader->Update();
+    Reader->GetOutput()->Print( std::cout );
+    imageViewer->SetInputConnection( Reader->GetOutputPort(0) );
     imageViewer->Render();
   }
   dialog->Close();

@@ -37,7 +37,6 @@
 #include "vtkWindowToImageFilter.h"
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
 #include "vtkImageMapToColors16.h"
-#include "vtkImagePlanarComponentsToComponents.h"
 #include "vtkBalloonWidget.h"
 #include "vtkBalloonRepresentation.h"
 #include "vtkLogoWidget.h"
@@ -61,6 +60,7 @@ class vtkContourWidget;
 class vtkAngleWidget;
 #endif
 #if VTK_MAJOR_VERSION >= 5
+#include "vtkImagePlanarComponentsToComponents.h"
 #include "vtkImageYBRToRGB.h"
 #include "vtkImageColorViewer.h"
 #else
