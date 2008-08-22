@@ -20,11 +20,37 @@
  * This example is an attempt at understanding the format used by SIEMENS
  * their "SIEMENS CSA NON-IMAGE" DICOM file (1.3.12.2.1107.5.9.1)
  * 
+ * Everything done in this code is for the sole purpose of writing interoperable 
+ * software under Sect. 1201 (f) Reverse Engineering exception of the DMCA.
+ * If you believe anything in this code violates any law or any of your rights, 
+ * please contact us (gdcm-developers@lists.sourceforge.net) so that we can 
+ * find a solution. 
  *
  */
 #include "gdcmReader.h"
+#include "gdcmImageReader.h"
 #include "gdcmImageWriter.h"
 #include "gdcmCSAHeader.h"
+#include "gdcmAttribute.h"
+
+#include <math.h>
+
+bool reorganize_mosaic(const unsigned short *input, const unsigned int *inputdims, unsigned int square,
+  const unsigned int *outputdims, unsigned short *output )
+{
+  for(unsigned x = 0; x < outputdims[0]; ++x)
+    {
+    for(unsigned y = 0; y < outputdims[1]; ++y)
+      {
+      for(unsigned z = 0; z < outputdims[2]; ++z)
+        {
+        output[ x + y*outputdims[0] + z*outputdims[0]*outputdims[1] ] = 
+          input[ (x + z * outputdims[0]) + (y + (z/square)*outputdims[0])*inputdims[0] ];
+        }
+      }
+    }
+  return true;
+}
 
 int main(int argc, char *argv [])
 {
@@ -32,7 +58,7 @@ int main(int argc, char *argv [])
   // gdcmDataExtra/gdcmNonImageData/exCSA_Non-Image_Storage.dcm
   // PHANTOM.MR.CARDIO_COEUR_S_QUENCE_DE_REP_RAGE.9.257.2008.03.20.14.53.25.578125.43151705.IMA
   const char *filename = argv[1];
-  gdcm::Reader reader;
+  gdcm::ImageReader reader;
   reader.SetFileName( filename );
   if( !reader.Read() )
     {
@@ -79,10 +105,27 @@ int main(int argc, char *argv [])
   std::cout << "PixelSpacing:" << el3.GetValue() << "," << el3.GetValue(1) << std::endl;
 #else
 
-  int dims[2] = { 448, 448 };
-  dims[0] /= 7;
-  dims[1] /= 7;
-  double spacing[2] = {1,1};
+  //int dims[2] = { 448, 448 };
+  //dims[0] /= 7;
+  //dims[1] /= 7;
+    unsigned int dims[3] = {};
+  //double spacing[2] = {1,1};
+    {
+    const gdcm::DataElement& de = ds.GetDataElement( gdcm::Tag(0x0028, 0x0011) );
+    gdcm::Attribute<0x0028,0x0011> at;
+    at.SetFromDataElement( de );
+    //pixeldata.SetDimension(0, at.GetValue() );
+    dims[0] = at.GetValue();
+    }
+
+    {
+    const gdcm::DataElement& de = ds.GetDataElement( gdcm::Tag(0x0028, 0x0010) );
+    gdcm::Attribute<0x0028,0x0010> at;
+    at.SetFromDataElement( de );
+    //pixeldata.SetDimension(1, at.GetValue() );
+    dims[1] = at.GetValue();
+    }
+
 
   // SliceThickness ??
  	const gdcm::CSAElement &csael4 = csa.GetCSAElementByName( "NumberOfImagesInMosaic" );
@@ -90,12 +133,33 @@ int main(int argc, char *argv [])
   gdcm::Element<gdcm::VR::IS, gdcm::VM::VM1> el4;
   el4.Set( csael4.GetValue() );
   int numberOfImagesInMosaic = el4.GetValue();
+
+  unsigned int div = ceil(sqrt( (double)numberOfImagesInMosaic ) );
+  dims[0] /= div;
+  dims[1] /= div;
+  dims[2] = numberOfImagesInMosaic;
+
   std::cout << "NumberOfImagesInMosaic:" << numberOfImagesInMosaic << std::endl;
 #endif
 
+  const gdcm::Image &inputimage = reader.GetImage();
+  const double *spacing = inputimage.GetSpacing();
+  unsigned long l = inputimage.GetBufferLength();
+  std::vector<char> buf;
+  buf.resize(l);
+  inputimage.GetBuffer( &buf[0] );
+  gdcm::DataElement pixeldata( gdcm::Tag(0x7fe1,0x1010) );
+
+  std::vector<char> outbuf;
+  outbuf.resize(l);
+  //outbuf = buf;
+
+  bool b = reorganize_mosaic((unsigned short*)&buf[0], inputimage.GetDimensions(), div, dims, (unsigned short*)&outbuf[0] );
+
+  pixeldata.SetByteValue( &outbuf[0], outbuf.size() );
   //const gdcm::DataElement & pixeldata = ds.GetDataElement( gdcm::Tag(0x7fe1,0x1010) );
-  const gdcm::DataElement & pixeldata = ds.GetDataElement( gdcm::Tag(0x7fe0,0x0010) );
-  const gdcm::VL &l = pixeldata.GetVL();
+  //const gdcm::DataElement & pixeldata = ds.GetDataElement( gdcm::Tag(0x7fe0,0x0010) );
+  //const gdcm::VL &l = pixeldata.GetVL();
   const int p =  l / (dims[0] * dims[1]);
   std::cout << "VL:" << l << std::endl;
   std::cout << "pixel:" << p << std::endl;
@@ -108,7 +172,7 @@ int main(int argc, char *argv [])
   image.SetDimension(1, dims[1] );
   image.SetSpacing(0, spacing[0] );
   image.SetSpacing(1, spacing[1] );
-  gdcm::PixelFormat pixeltype = gdcm::PixelFormat::INT16; // bytepix = spm_type('int16','bits')/8;
+  gdcm::PixelFormat pixeltype = inputimage.GetPixelFormat(); //gdcm::PixelFormat::INT16; // bytepix = spm_type('int16','bits')/8;
 
   image.SetNumberOfDimensions( 3 );
   //image.SetDimension(2, p / pixeltype.GetPixelSize() );
@@ -119,13 +183,17 @@ int main(int argc, char *argv [])
   //pixeltype.SetSamplesPerPixel(  );
   image.SetPhotometricInterpretation( pi );
   image.SetPixelFormat( pixeltype );
+  image.SetIntercept( inputimage.GetIntercept() );
+  image.SetSlope( inputimage.GetSlope() );
 
   image.SetDataElement( pixeldata );
 
   std::string outfilename = "outcsa.dcm";
+  //writer.SetFile( reader.GetFile() );
   writer.SetFileName( outfilename.c_str() );
   if( !writer.Write() )
     {
+    std::cerr << "could not write: " << outfilename << std::endl;
     return 1;
     }
 
