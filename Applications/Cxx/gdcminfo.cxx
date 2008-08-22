@@ -370,6 +370,7 @@ int main(int argc, char *argv[])
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
+      std::cerr << "Could not read image from: " << filename << std::endl;
       return 1;
       }
     const gdcm::File &file = reader.GetFile();
