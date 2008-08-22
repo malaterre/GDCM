@@ -412,7 +412,7 @@ const std::ostream &ImplicitDataElement::Write(std::ostream &os) const
   else // It should be safe to simply use the ValueLengthField as stored:
     {
     // Do not allow writing file such as: dcm4che_UndefinedValueLengthInImplicitTS.dcm
-    if( TagField == Tag(0x7fe0,0x0010) && ValueLengthField.IsUndefined() ) throw Exception( "Impossible" );
+    if( TagField == Tag(0x7fe0,0x0010) && ValueLengthField.IsUndefined() ) throw Exception( "VL u/f Impossible" );
     if( !ValueLengthField.Write<TSwap>(os) )
       {
       assert(0 && "Should not happen");

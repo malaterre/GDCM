@@ -35,6 +35,9 @@
 
 #include <math.h>
 
+/*
+ *  gdcmSampleData/images_of_interest/MR-sonata-3D-as-Tile.dcm  
+ */
 bool reorganize_mosaic(const unsigned short *input, const unsigned int *inputdims, unsigned int square,
   const unsigned int *outputdims, unsigned short *output )
 {

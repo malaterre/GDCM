@@ -53,7 +53,8 @@ DataSet &DS = F->GetDataSet();
 
 if( DS.IsEmpty() )
   {
-  return 1;
+  gdcmErrorMacro( "DS empty" );
+  return false;
   }
 
   // Should I check that 0002,0002 / 0008,0016 and 0002,0003 / 0008,0018 match ?
@@ -135,6 +136,11 @@ try
       DS.Write<ExplicitDataElement,SwapperNoOp>(os);
       }
     }
+}
+catch(std::exception &ex)
+{
+  std::cerr << ex.what() << std::endl;
+  return false;
 }
 catch(...)
 {

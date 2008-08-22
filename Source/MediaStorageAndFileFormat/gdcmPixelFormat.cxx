@@ -190,27 +190,53 @@ uint8_t PixelFormat::GetPixelSize() const
   return pixelsize;
 }
 
-int64_t PixelFormat::GetMin() const
+double PixelFormat::GetMin() const
 {
-  if( PixelRepresentation )
+  assert( BitsStored <= 32 );
+  if( PixelRepresentation == 1 )
     {
     return ~(((1ull << BitsStored) - 1) >> 1);
     }
-  else
+  else if( PixelRepresentation == 0 )
     {
     return 0;
     }
-}
-
-int64_t PixelFormat::GetMax() const
-{
-  if( PixelRepresentation )
+  else if( PixelRepresentation == 3 ) // 32bits float
     {
-    return ((1ull << BitsStored) - 1) >> 1;
+    return (float) -1.0e+38f;
+    }
+  else if( PixelRepresentation == 4 ) // 64bits float
+    {
+    return (double) -1.0e+299;
     }
   else
     {
+    abort();
+    }
+}
+
+double PixelFormat::GetMax() const
+{
+  assert( BitsStored <= 32 );
+  if( PixelRepresentation == 1 )
+    {
+    return ((1ull << BitsStored) - 1) >> 1;
+    }
+  else if( PixelRepresentation == 0 )
+    {
     return (1ull << BitsStored) - 1;
+    }
+  else if( PixelRepresentation == 3 ) // 32bits float
+    {
+    return (float)  1.0e+38f;
+    }
+  else if( PixelRepresentation == 4 ) // 64bits float
+    {
+    return (double)  1.0e+299;
+    }
+  else
+    {
+    abort();
     }
 }
 

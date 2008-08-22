@@ -97,6 +97,14 @@ PixelFormat::ScalarType ComputeBestFit(const PixelFormat &pf, double intercept, 
       {
       st = PixelFormat::UINT32;
       }
+    else if( max <= std::numeric_limits<float>::max() )
+      {
+      st = PixelFormat::FLOAT32;
+      }
+    else if( max <= std::numeric_limits<double>::max() )
+      {
+      st = PixelFormat::FLOAT64;
+      }
     else
       {
       abort();
@@ -115,6 +123,14 @@ PixelFormat::ScalarType ComputeBestFit(const PixelFormat &pf, double intercept, 
     else if( max <= std::numeric_limits<int32_t>::max() )
       {
       st = PixelFormat::INT32;
+      }
+    else if( max <= std::numeric_limits<float>::max() )
+      {
+      st = PixelFormat::FLOAT32;
+      }
+    else if( max <= std::numeric_limits<double>::max() )
+      {
+      st = PixelFormat::FLOAT64;
       }
     else
       {
