@@ -97,6 +97,7 @@ public:
     MammographyCADSR,
     KeyObjectSelectionDocument,
     HangingProtocolStorage,
+    ModalityPerformedProcedureStepSOPClass,
     MS_END
   } MSType; // Media Storage Type
 

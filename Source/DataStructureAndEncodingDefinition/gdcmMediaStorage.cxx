@@ -112,6 +112,8 @@ static const char *MSStrings[] = {
   "1.2.840.10008.5.1.4.1.1.88.59",
   // HangingProtocolStorage
   "1.2.840.10008.5.1.4.38.1",
+  // Modality Performed Procedure Step SOP Class
+  "1.2.840.10008.3.1.2.3.3",
   0
 };
 
@@ -165,6 +167,7 @@ bool MediaStorage::IsImage(MSType ms)
     || ms == KeyObjectSelectionDocument
     || ms == HangingProtocolStorage
     || ms == MRSpectroscopyStorage
+    || ms == ModalityPerformedProcedureStepSOPClass
     || ms == RTStructureSetStorage )
     {
     return false;

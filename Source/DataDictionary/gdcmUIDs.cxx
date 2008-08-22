@@ -372,6 +372,7 @@ UIDs::TransferSyntaxStringsType UIDs::GetTransferSyntaxStrings()
 
 bool UIDs::SetFromUID(const char *str)
 {
+  if(!str) return false;
   //static const unsigned int size = sizeof(TransferSyntaxStrings) / sizeof(*TransferSyntaxStrings) - 1;
   TransferSyntaxStringsType uids = GetTransferSyntaxStrings();
 
