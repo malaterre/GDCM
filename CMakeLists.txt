@@ -401,7 +401,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     INCLUDE(${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake)
   ENDIF(EXISTS "${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake")
 
-  SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "GDCM - Grass Root DICOM\n GDCM is yet another DICOM library.")
+  SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "GDCM - Grassroots DICOM\n GDCM is yet another DICOM library.")
   SET(CPACK_PACKAGE_VENDOR "GDCM")
   SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt")
   SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt")

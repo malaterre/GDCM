@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:my="urn:my" version="2.0" exclude-result-prefixes="#all">
   <!--
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -856,7 +856,7 @@ type="text/xsl" href="ma2html.xsl"
 $ xsltproc ma2html.xsl ModuleAttributes.xml
     </xsl:comment>
     <xsl:comment>
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre

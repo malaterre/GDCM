@@ -3,7 +3,7 @@
   <xsl:output method="text" indent="yes"/>
 <!-- XSL to convert XML GDCM2 data dictionay into HTML form -->
 <!--
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre

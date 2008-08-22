@@ -7,7 +7,7 @@ Checked against:
      dicom3tools_1.00.snapshot.20061120/libsrc/standard/elmdict/dicom3.tpl
 -->
 <!--
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre

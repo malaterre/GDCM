@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 <!--
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
