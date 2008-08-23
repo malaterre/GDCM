@@ -21,6 +21,7 @@
 #include "gdcmVM.h"
 #include "gdcmByteValue.h"
 #include "gdcmDataElement.h"
+#include "gdcmSwapper.h"
 
 #include <string>
 #include <vector>
