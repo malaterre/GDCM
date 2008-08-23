@@ -307,7 +307,7 @@ const char *System::GetCurrentDataDirectory()
     }
 #else
 
-    static char path[PATH_MAX];
+  static char path[PATH_MAX];
 
 #ifdef __APPLE__
   Boolean success = false;
@@ -319,7 +319,7 @@ const char *System::GetCurrentDataDirectory()
     }
   if (success)
     {
-    strncat(path, GDCM_INSTALL_DATA_DIR, PATH_MAX);
+    strncat(path, "/" GDCM_INSTALL_DATA_DIR, PATH_MAX);
     return path;
     }
 #endif
