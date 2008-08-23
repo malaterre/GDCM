@@ -126,7 +126,6 @@ public:
       assert( sep == '\\' ); // FIXME: Bad use of assert
       _is >> data[i];
       }
-    SwapperNoOp::SwapArray(data,length);
     }
 
   template<typename T>
@@ -179,6 +178,7 @@ public:
     }
     //ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem(data,
     //  _is.GetSwapCode(), length);
+    SwapperNoOp::SwapArray(data,length);
   }
   template<typename T>
   static inline void Write(const T* data, unsigned long length,

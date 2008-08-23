@@ -19,6 +19,7 @@
 // TODO: not cross platform...
 #include <byteswap.h>
 #endif
+#include <stdlib.h>
 
 
 namespace gdcm
@@ -70,6 +71,30 @@ namespace gdcm
     }
 
   template <> inline void SwapperDoOp::SwapArray(uint8_t *, unsigned int ) {}
+
+  template <> inline void SwapperDoOp::SwapArray(float *array, unsigned int n)
+    {
+    switch( sizeof(float) )
+      {
+      case 4:
+        SwapperDoOp::SwapArray<uint32_t>((uint32_t*)array,n);
+        break;
+      default:
+        abort();
+      }
+    }
+
+  template <> inline void SwapperDoOp::SwapArray(double *array, unsigned int n)
+    {
+    switch( sizeof(double) )
+      {
+      case 8:
+        SwapperDoOp::SwapArray<uint64_t>((uint64_t*)array,n);
+        break;
+      default:
+        abort();
+      }
+    }
 
 #endif
 } // end namespace gdcm
