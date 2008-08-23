@@ -71,7 +71,6 @@ SET(Common_SRCS
   gdcmException.cxx
   gdcmDeflateStream.cxx
   gdcmByteSwap.cxx
-  #gdcmSwapper.cxx
   gdcmUnpacker12Bits.cxx
   )
 
