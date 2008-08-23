@@ -235,7 +235,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   if(!image) {
     opj_destroy_decompress(dinfo);
     opj_cio_close(cio);
-    return 1;
+    return false;
   }
 
   /* close the byte stream */
@@ -588,6 +588,141 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
   //unsigned int nfrags = sq->GetNumberOfFragments();
   assert( sq->GetNumberOfFragments() == dims[2] );
   out.SetValue( *sq );
+
+  return true;
+}
+
+bool JPEG2000Codec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
+{
+  opj_dparameters_t parameters;  /* decompression parameters */
+  opj_event_mgr_t event_mgr;    /* event manager */
+  opj_image_t *image;
+  opj_dinfo_t* dinfo;  /* handle to a decompressor */
+  opj_cio_t *cio;
+  // FIXME: Do some stupid work:
+  is.seekg( 0, std::ios::end);
+  std::streampos buf_size = is.tellg();
+  char *dummy_buffer = new char[buf_size];
+  is.seekg(0, std::ios::beg);
+  is.read( dummy_buffer, buf_size);
+  unsigned char *src = (unsigned char*)dummy_buffer;
+  int file_length = buf_size;
+
+  /* configure the event callbacks (not required) */
+  memset(&event_mgr, 0, sizeof(opj_event_mgr_t));
+  event_mgr.error_handler = error_callback;
+  event_mgr.warning_handler = warning_callback;
+  event_mgr.info_handler = info_callback;
+
+  /* set decoding parameters to default values */
+  opj_set_default_decoder_parameters(&parameters);
+
+  // default blindly copied
+  parameters.cp_layer=0;
+  parameters.cp_reduce=0;
+  //   parameters.decod_format=-1;
+  //   parameters.cod_format=-1;
+
+  const char jp2magic[] = "\x00\x00\x00\x0C\x6A\x50\x20\x20\x0D\x0A\x87\x0A";
+  if( memcmp( src, jp2magic, sizeof(jp2magic) ) == 0 )
+    {
+    /* JPEG-2000 compressed image data */
+    // gdcmData/ELSCINT1_JP2vsJ2K.dcm
+    gdcmWarningMacro( "J2K start like JPEG-2000 compressed image data instead of codestream" );
+    parameters.decod_format = JP2_CFMT;
+    assert(parameters.decod_format == JP2_CFMT);
+    }
+  else
+    {
+    /* JPEG-2000 codestream */
+    parameters.decod_format = J2K_CFMT;
+    assert(parameters.decod_format == J2K_CFMT);
+    }
+  parameters.cod_format = PGX_DFMT;
+  assert(parameters.cod_format == PGX_DFMT);
+
+  /* get a decoder handle */
+  switch(parameters.decod_format )
+    {
+  case J2K_CFMT:
+    dinfo = opj_create_decompress(CODEC_J2K);
+    break;
+  case JP2_CFMT:
+    dinfo = opj_create_decompress(CODEC_JP2);
+    break;
+  default:
+    abort();
+    }
+
+  /* catch events using our callbacks and give a local context */
+  opj_set_event_mgr((opj_common_ptr)dinfo, &event_mgr, NULL);      
+
+  /* setup the decoder decoding parameters using user parameters */
+  opj_setup_decoder(dinfo, &parameters);
+
+  /* open a byte stream */
+  cio = opj_cio_open((opj_common_ptr)dinfo, src, file_length);
+
+  /* decode the stream and fill the image structure */
+  image = opj_decode(dinfo, cio);
+  if(!image) {
+    opj_destroy_decompress(dinfo);
+    opj_cio_close(cio);
+    return false;
+  }
+
+  int compno = 0;
+  opj_image_comp_t *comp = &image->comps[compno];
+
+    this->Dimensions[1] = comp->w;
+    this->Dimensions[0] = comp->h;
+
+    if( comp->prec <= 8 )
+      {
+      this->PF = PixelFormat( PixelFormat::UINT8 );
+      }
+    else if( comp->prec <= 16 )
+      {
+      this->PF = PixelFormat( PixelFormat::UINT16 );
+      }
+    else if( comp->prec <= 32 )
+      {
+      this->PF = PixelFormat( PixelFormat::UINT32 );
+      }
+    else
+      {
+      abort();
+      }
+    this->PF.SetBitsStored( comp->prec );
+    this->PF.SetHighBit( comp->prec - 1 );
+    this->PF.SetPixelRepresentation( comp->sgnd );
+
+    if( image->color_space == 0 )
+      {
+      assert( image->numcomps == 1 );
+      PI = PhotometricInterpretation::MONOCHROME2;
+      this->PF.SetSamplesPerPixel( 1 );
+      }
+    else
+      {
+      abort();
+      }
+    ts = TransferSyntax::JPEG2000Lossless;
+
+  /* close the byte stream */
+  opj_cio_close(cio);
+
+  /* free the memory containing the code-stream */
+  delete[] src;  //FIXME
+
+  /* free remaining structures */
+  if(dinfo) {
+    opj_destroy_decompress(dinfo);
+  }
+
+  /* free image data structure */
+  opj_image_destroy(image);
+
 
   return true;
 }

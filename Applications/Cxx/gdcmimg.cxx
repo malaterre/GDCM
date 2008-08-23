@@ -50,6 +50,7 @@
 #include "gdcmDataSet.h"
 #include "gdcmAttribute.h"
 #include "gdcmJPEGCodec.h"
+#include "gdcmJPEG2000Codec.h"
 
 #include <string>
 #include <iostream>
@@ -314,6 +315,63 @@ int main (int argc, char *argv[])
     delete[] buf;
 
     return 0;
+    }
+
+  if(  gdcm::System::StrCaseCmp(inputextension,".jp2") == 0 
+    || gdcm::System::StrCaseCmp(inputextension,".j2k") == 0
+    || gdcm::System::StrCaseCmp(inputextension,".jpc") == 0 )
+    {
+    gdcm::JPEG2000Codec jpeg;
+
+    std::ifstream is(filename);
+    gdcm::PixelFormat pf ( gdcm::PixelFormat::UINT8 ); // usual guess...
+    jpeg.SetPixelFormat( pf );
+    gdcm::TransferSyntax ts;
+    bool b = jpeg.GetHeaderInfo( is, ts );
+    if( !b )
+      {
+      return 1;
+      }
+
+    gdcm::ImageWriter writer;
+    gdcm::Image &image = writer.GetImage();
+    image.SetNumberOfDimensions( 2 );
+    image.SetDimensions( jpeg.GetDimensions() );
+    image.SetPixelFormat( jpeg.GetPixelFormat() );
+    image.SetPhotometricInterpretation( jpeg.GetPhotometricInterpretation() );
+    image.SetTransferSyntax( ts );
+
+    size_t len = gdcm::System::FileSize(filename);
+
+    char * buf = new char[len];
+    is.seekg(0, std::ios::beg );// rewind !
+    is.read(buf, len);
+    gdcm::DataElement pixeldata;
+
+    gdcm::SmartPointer<gdcm::SequenceOfFragments> sq = new gdcm::SequenceOfFragments;
+    const gdcm::Tag itemStart(0xfffe, 0xe000);
+    sq->GetTable().SetTag( itemStart );
+
+    gdcm::Fragment frag;
+    frag.SetTag( itemStart );
+    frag.SetByteValue( buf, len );
+    delete[] buf;
+    sq->AddFragment( frag );
+    pixeldata.SetValue( *sq );
+
+    //pixeldata.SetByteValue( buf, len );
+    image.SetDataElement( pixeldata );
+
+    //writer.SetFile( file );
+    //writer.SetImage( image );
+    writer.SetFileName( outfilename );
+    if( !writer.Write() )
+      {
+      return 1;
+      }
+
+    return 0;
+
     }
 
   if(  gdcm::System::StrCaseCmp(inputextension,".jpg") == 0 
