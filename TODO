@@ -188,3 +188,7 @@ Looks like ELSCINT1 is doing a group xx for element:
 need to repeat for:
   {0x6005,0x0010,"ELSCINT1",VR::CS,VM::VM1,"Text Overlay Flag",false },
 and so and so forth...
+-----------------------------------------------------------------------
+IconImage should derive from Image to support compression
+
+

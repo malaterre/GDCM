@@ -19,6 +19,7 @@
 #include "gdcmSystem.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmTesting.h"
+#include "gdcmByteSwap.h"
 
 namespace gdcm
 {
