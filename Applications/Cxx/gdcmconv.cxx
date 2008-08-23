@@ -382,6 +382,12 @@ int main (int argc, char *argv[])
       return 1;
       }
     const gdcm::Image &image = reader.GetImage();
+    const gdcm::IconImage &icon = image.GetIconImage();
+    if( !icon.IsEmpty() )
+      {
+      std::cerr << "Icon are not supported" << std::endl;
+      return 1;
+      }
 
     gdcm::ImageChangeTransferSyntax change;
     change.SetForce( force );
