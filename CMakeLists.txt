@@ -512,6 +512,12 @@ ENDMACRO(PROCESSONEDIR)
 #MESSAGE("${theoutput}")
 
 #-----------------------------------------------------------------------------
+# we need to link against CoreFoundation so that we can use CFBundle to get the executable path.
+IF(APPLE)
+  FIND_LIBRARY(COREFOUNDATION_LIBRARY CoreFoundation )
+ENDIF(APPLE)
+
+#-----------------------------------------------------------------------------
 # Need to be the last operation:
 SET(GDCM_INCLUDE_PATH
   "${GDCM_SOURCE_DIR}/Source/Common"

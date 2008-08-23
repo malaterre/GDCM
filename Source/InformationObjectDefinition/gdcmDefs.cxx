@@ -39,8 +39,12 @@ void Defs::LoadDefaults()
   const char filename1[] = GDCM_SOURCE_DIR "/Source/InformationObjectDefinition/Part3.xml";
   const char filename2[] = GDCM_CMAKE_INSTALL_PREFIX "/" GDCM_INSTALL_DATA_DIR "/XML/Part3.xml";
   gdcm::Filename fn( System::GetCurrentProcessFileName() );
-  std::string filename3 = fn.GetPath();
-  filename3 += "/../" GDCM_INSTALL_DATA_DIR "/XML/Part3.xml";
+  std::string filename3 = "";
+  if ( !fn.IsEmpty() )
+    {
+    filename3 = fn.GetPath();
+    filename3 += "/../" GDCM_INSTALL_DATA_DIR "/XML/Part3.xml";
+    }
   //std::cerr << filename3 << std::endl;
   //std::cerr << "where: " << myenv << std::endl;
   //std::cerr << "python: " << fn.GetName() << std::endl;

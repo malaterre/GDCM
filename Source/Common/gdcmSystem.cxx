@@ -42,6 +42,11 @@
 #elif defined(HAVE__SNPRINTF)
 #define snprintf _snprintf
 #endif
+#ifdef __APPLE__
+#include <CoreFoundation/CFBase.h>
+#include <CoreFoundation/CFBundle.h>
+#include <CoreFoundation/CFURL.h>
+#endif // __APPLE__
 
 #if defined(_WIN32) && (defined(_MSC_VER) || defined(__WATCOMC__) ||defined(__BORLANDC__) || defined(__MINGW32__))
 #include <io.h>
@@ -309,6 +314,16 @@ const char *System::GetCurrentProcessFileName()
     return buf;
   }
   return 0;
+#elif defined(__APPLE__)
+  static char buf[PATH_MAX];
+  Boolean success = false;
+  CFURLRef pathURL = CFBundleCopyExecutableURL(CFBundleGetMainBundle());
+  success = CFURLGetFileSystemRepresentation(pathURL, true /*resolveAgainstBase*/, (unsigned char*) buf, PATH_MAX);
+  CFRelease(pathURL);
+  if (success)
+      return buf;
+  else
+      return 0;
 #else
  static char path[PATH_MAX];
  if (readlink ("/proc/self/exe", path, sizeof(path)) <= 0)
