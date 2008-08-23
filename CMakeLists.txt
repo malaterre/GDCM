@@ -429,11 +429,19 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     SET(CPACK_PACKAGE_EXECUTABLES "gdcmviewer" "VIEWER")
 
   ENDIF(WIN32 AND NOT UNIX)
-  IF(NOT DEFINED CPACK_SYSTEM_NAME)
-    SET(CPACK_SYSTEM_NAME ${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR})
-  ENDIF(NOT DEFINED CPACK_SYSTEM_NAME)
-  # Need to set the architecture for debian package
 
+  #Cygwin stuff copied from cmake
+  IF(NOT DEFINED CPACK_SYSTEM_NAME)
+    # make sure package is not Cygwin-unknown, for Cygwin just
+    # cygwin is good for the system name
+    IF("${CMAKE_SYSTEM_NAME}" STREQUAL "CYGWIN")
+      SET(CPACK_SYSTEM_NAME Cygwin)
+    ELSE("${CMAKE_SYSTEM_NAME}" STREQUAL "CYGWIN")
+      SET(CPACK_SYSTEM_NAME ${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR})
+    ENDIF("${CMAKE_SYSTEM_NAME}" STREQUAL "CYGWIN")
+  ENDIF(NOT DEFINED CPACK_SYSTEM_NAME)
+
+  # Need to set the architecture for debian package
   SET(CPACK_PACKAGE_CONTACT "Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>")
   SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6, libstdc++6 (>= 4.0.2-4), libuuid1, zlib1g (>= 1:1.2.1), libgcc1 (>= 1:4.0.2), libexpat1, swig") # bug: missing dep to python...
   SET(CPACK_DEBIAN_PACKAGE_SUGGESTS "dcmtk")
