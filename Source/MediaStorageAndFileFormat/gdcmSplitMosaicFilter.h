@@ -12,17 +12,18 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmImageCSAFilter_h
-#define __gdcmImageCSAFilter_h
+#ifndef __gdcmSplitMosaicFilter_h
+#define __gdcmSplitMosaicFilter_h
 
 #include "gdcmFile.h"
+#include "gdcmImage.h"
 
 namespace gdcm
 {
 
 /**
- * \brief ImageCSAFilter class
- * Class to reshuffle byes for a SIEMENS Mosaic image
+ * \brief SplitMosaicFilter class
+ * Class to reshuffle bytes for a SIEMENS Mosaic image
  *
  * Everything done in this code is for the sole purpose of writing interoperable 
  * software under Sect. 1201 (f) Reverse Engineering exception of the DMCA.
@@ -31,20 +32,31 @@ namespace gdcm
  * find a solution. 
  *
  */
-class GDCM_EXPORT ImageCSAFilter
+class GDCM_EXPORT SplitMosaicFilter
 {
 public:
-  ImageCSAFilter();
-  ~ImageCSAFilter();
+  SplitMosaicFilter();
+  ~SplitMosaicFilter();
 
-  bool Filter();
+  /// Split the SIEMENS MOSAIC image
+  bool Split();
+
+  void SetImage(const Image& image);
+  const Image &GetImage() const { return *I; }
+  Image &GetImage() { return *I; }
+
+  void SetFile(const File& f) { F = &f; }
+  File &GetFile() { return *F; }
+  const File &GetFile() const { return *F; }
 
 protected:
 
 private:
+  SmartPointer<File> F;
+  SmartPointer<Image> I;
 };
 
 } // end namespace gdcm
 
-#endif //__gdcmImageCSAFilter_h
+#endif //__gdcmSplitMosaicFilter_h
 

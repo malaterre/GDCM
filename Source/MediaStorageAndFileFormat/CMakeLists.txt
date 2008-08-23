@@ -15,6 +15,7 @@ SET(MSFF_SRCS
   gdcmDICOMDIR.cxx
   gdcmSpectroscopy.cxx
   gdcmEncapsulatedDocument.cxx
+  gdcmSplitMosaicFilter.cxx
   gdcmFiducials.cxx
   gdcmWaveform.cxx
   gdcmPersonName.cxx
