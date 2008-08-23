@@ -15,11 +15,11 @@
 #ifndef __gdcmPythonFilter_h
 #define __gdcmPythonFilter_h
 
+#include <Python.h>
+
 #include "gdcmDataElement.h"
 #include "gdcmDicts.h"
 #include "gdcmFile.h"
-
-#include <Python.h>
 
 namespace gdcm
 {
