@@ -125,6 +125,7 @@ public:
       assert( sep == '\\' ); // FIXME: Bad use of assert
       _is >> data[i];
       }
+    SwapperNoOp::SwapArray(data,length);
     }
 
   template<typename T>
