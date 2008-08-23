@@ -195,7 +195,7 @@ double PixelFormat::GetMin() const
   assert( BitsStored <= 32 );
   if( PixelRepresentation == 1 )
     {
-    return ~(((1ull << BitsStored) - 1) >> 1);
+    return (int64_t)(~(((1ull << BitsStored) - 1) >> 1));
     }
   else if( PixelRepresentation == 0 )
     {
@@ -220,11 +220,11 @@ double PixelFormat::GetMax() const
   assert( BitsStored <= 32 );
   if( PixelRepresentation == 1 )
     {
-    return ((1ull << BitsStored) - 1) >> 1;
+    return (int64_t)(((1ull << BitsStored) - 1) >> 1);
     }
   else if( PixelRepresentation == 0 )
     {
-    return (1ull << BitsStored) - 1;
+    return (int64_t)((1ull << BitsStored) - 1);
     }
   else if( PixelRepresentation == 3 ) // 32bits float
     {
