@@ -117,15 +117,25 @@ IF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
   )
 ENDIF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
 
-#-----------------------------------------------------------------------------
-# Install Part6.xml
-INSTALL(FILES 
+SET(XML_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/CSAHeader.xml
   ${CMAKE_CURRENT_SOURCE_DIR}/DICOMV3.xml
   ${CMAKE_CURRENT_SOURCE_DIR}/Part6.xml
   ${CMAKE_CURRENT_SOURCE_DIR}/Part7.xml
   ${CMAKE_CURRENT_SOURCE_DIR}/UIDs.xml
   ${CMAKE_CURRENT_SOURCE_DIR}/cp699.xml
+  )
+
+SET_SOURCE_FILES_PROPERTIES(
+  ${XML_FILES}
+  PROPERTIES
+  MACOSX_PACKAGE_LOCATION Resources
+  )
+
+#-----------------------------------------------------------------------------
+# Install Part6.xml
+INSTALL(FILES 
+  ${XML_FILES}
   DESTINATION ${GDCM_INSTALL_DATA_DIR}/XML COMPONENT Runtime
 )
 
