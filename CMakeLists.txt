@@ -431,17 +431,17 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   ENDIF(WIN32 AND NOT UNIX)
 
   # cygwin stff also copied from cmake
-  IF(NOT DEFINED CPACK_PACKAGE_FILE_NAME)
-    # if the CPACK_PACKAGE_FILE_NAME is not defined by the cache
-    # default to source package - system, on cygwin system is not
-    # needed
-    IF(CYGWIN)
-      SET(CPACK_PACKAGE_FILE_NAME "${CPACK_SOURCE_PACKAGE_FILE_NAME}")
-    ELSE(CYGWIN)
-      SET(CPACK_PACKAGE_FILE_NAME
-        "${CPACK_SOURCE_PACKAGE_FILE_NAME}-${CPACK_SYSTEM_NAME}")
-    ENDIF(CYGWIN)
-  ENDIF(NOT DEFINED CPACK_PACKAGE_FILE_NAME)
+  #IF(NOT DEFINED CPACK_PACKAGE_FILE_NAME)
+  #  # if the CPACK_PACKAGE_FILE_NAME is not defined by the cache
+  #  # default to source package - system, on cygwin system is not
+  #  # needed
+  #  IF(CYGWIN)
+  #    SET(CPACK_PACKAGE_FILE_NAME "${CPACK_SOURCE_PACKAGE_FILE_NAME}")
+  #  ELSE(CYGWIN)
+  #    SET(CPACK_PACKAGE_FILE_NAME
+  #      "${CPACK_SOURCE_PACKAGE_FILE_NAME}-${CPACK_SYSTEM_NAME}")
+  #  ENDIF(CYGWIN)
+  #ENDIF(NOT DEFINED CPACK_PACKAGE_FILE_NAME)
 
   #Cygwin stuff copied from cmake
   IF(NOT DEFINED CPACK_SYSTEM_NAME)
