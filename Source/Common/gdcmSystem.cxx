@@ -305,12 +305,25 @@ const char *System::GetCurrentDataDirectory()
     strcpy(path, str.c_str());
     return path;
     }
-#elif defined(__APPLE__)
-  static char path[PATH_MAX];
-  // TODO
-
 #else
-  static char path[PATH_MAX];
+
+    static char path[PATH_MAX];
+
+#ifdef __APPLE__
+  Boolean success = false;
+  CFURLRef pathURL = CFBundleCopyResourcesDirectoryURL(CFBundleGetMainBundle());
+  if (pathURL != NULL)
+    {
+    success = CFURLGetFileSystemRepresentation(pathURL, true /*resolveAgainstBase*/, (unsigned char*) path, PATH_MAX);
+    CFRelease(pathURL);
+    }
+  if (success)
+    {
+    strncat(path, GDCM_INSTALL_DATA_DIR, PATH_MAX);
+    return path;
+    }
+#endif
+    
   gdcm::Filename fn( GetCurrentProcessFileName() );
   if ( !fn.IsEmpty() )
     {
@@ -347,8 +360,11 @@ const char *System::GetCurrentProcessFileName()
   static char buf[PATH_MAX];
   Boolean success = false;
   CFURLRef pathURL = CFBundleCopyExecutableURL(CFBundleGetMainBundle());
-  success = CFURLGetFileSystemRepresentation(pathURL, true /*resolveAgainstBase*/, (unsigned char*) buf, PATH_MAX);
-  CFRelease(pathURL);
+  if ( pathURL)
+    {
+    success = CFURLGetFileSystemRepresentation(pathURL, true /*resolveAgainstBase*/, (unsigned char*) buf, PATH_MAX);
+    CFRelease(pathURL);
+    }
   if (success)
     {
     return buf;
