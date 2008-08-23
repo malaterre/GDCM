@@ -16,7 +16,7 @@
 #define __gdcmSwapper_txx
 
 #ifdef HAVE_BYTESWAP_H
-// TODO: not cross plateform...
+// TODO: not cross platform...
 #include <byteswap.h>
 #endif
 
