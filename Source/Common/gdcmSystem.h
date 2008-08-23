@@ -47,6 +47,11 @@ public:
   /// NOT THREAD SAFE
   static const char *GetCurrentProcessFileName();
 
+  /// Return the directory where runtime data are located
+  /// On Apple it return the Resources directory of the current bundle
+  /// NOT THREAD SAFE
+  static const char *GetCurrentDataDirectory();
+
   // TODO some system calls
   // Chdir
   // copy a file

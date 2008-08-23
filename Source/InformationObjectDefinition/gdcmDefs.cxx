@@ -38,12 +38,12 @@ void Defs::LoadDefaults()
   // FIXME: hardcoded path:
   const char filename1[] = GDCM_SOURCE_DIR "/Source/InformationObjectDefinition/Part3.xml";
   const char filename2[] = GDCM_CMAKE_INSTALL_PREFIX "/" GDCM_INSTALL_DATA_DIR "/XML/Part3.xml";
-  gdcm::Filename fn( System::GetCurrentProcessFileName() );
-  std::string filename3 = "";
-  if ( !fn.IsEmpty() )
+  const char *datadir = System::GetCurrentDataDirectory();
+  std::string filename3;
+  if ( datadir )
     {
-    filename3 = fn.GetPath();
-    filename3 += "/../" GDCM_INSTALL_DATA_DIR "/XML/Part3.xml";
+    filename3 = datadir;
+    filename3 += "/XML/Part3.xml";
     }
   //std::cerr << filename3 << std::endl;
   //std::cerr << "where: " << myenv << std::endl;
@@ -55,6 +55,7 @@ void Defs::LoadDefaults()
   // let's do a simple comparison:
   const char python[] = "python";
   std::string filename4;
+  gdcm::Filename fn( System::GetCurrentProcessFileName() );
   if( System::StrNCaseCmp( python, fn.GetName(), strlen(python) ) == 0 )
     {
     const char *myenv = getenv("GDCM_WHEREAMI");
