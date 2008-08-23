@@ -97,11 +97,15 @@
 
 #cmakedefine HAVE_STRCASECMP
 #cmakedefine HAVE_STRNCASECMP
+#ifndef HAVE_SNPRINTF
 #cmakedefine HAVE_SNPRINTF
+#endif
 #cmakedefine HAVE__STRICMP
 #cmakedefine HAVE__STRNICMP
 #cmakedefine HAVE__SNPRINTF
+#ifndef HAVE_GETTIMEOFDAY
 #cmakedefine HAVE_GETTIMEOFDAY
+#endif
 
 #cmakedefine GDCM_FORCE_BIGENDIAN_EMULATION
 

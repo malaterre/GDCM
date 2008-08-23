@@ -188,7 +188,7 @@ void GDCMImageIO2::InternalReadImageInformation(std::ifstream& file)
     itkExceptionMacro(<< "Cannot read requested file");
     }
   const gdcm::Image &image = reader.GetImage();
-  const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
+  //const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
   const unsigned int *dims = image.GetDimensions();
 
   const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
