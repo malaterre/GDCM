@@ -155,6 +155,13 @@ bool SplitMosaicFilter::Split()
     {
     // Ok make it a MediaStorage::EnhancedMRImageStorage
     ms = gdcm::MediaStorage::EnhancedMRImageStorage;
+
+    // Remove old MRImageStorage attribute then:
+    ds.Remove( gdcm::Tag(0x0020,0x0032) ); // Image Position (Patient)
+    ds.Remove( gdcm::Tag(0x0020,0x0037) ); // Image Orientation (Patient)
+    ds.Remove( gdcm::Tag(0x0028,0x1052) ); // Rescale Intercept
+    ds.Remove( gdcm::Tag(0x0028,0x1053) ); // Rescale Slope
+    ds.Remove( gdcm::Tag(0x0028,0x1054) ); // Rescale Type
     }
   else
     {
