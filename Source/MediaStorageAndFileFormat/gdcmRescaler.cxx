@@ -83,6 +83,7 @@ PixelFormat::ScalarType ComputeBestFit(const PixelFormat &pf, double intercept, 
   double min = slope * pf.GetMin() + intercept;
   double max = slope * pf.GetMax() + intercept;
   assert( min <= max );
+  assert( min == (int64_t)min && max == (int64_t)max );
   if( min >= 0 ) // unsigned
     {
     if( max <= std::numeric_limits<uint8_t>::max() )
@@ -97,14 +98,14 @@ PixelFormat::ScalarType ComputeBestFit(const PixelFormat &pf, double intercept, 
       {
       st = PixelFormat::UINT32;
       }
-    else if( max <= std::numeric_limits<float>::max() )
-      {
-      st = PixelFormat::FLOAT32;
-      }
-    else if( max <= std::numeric_limits<double>::max() )
-      {
-      st = PixelFormat::FLOAT64;
-      }
+    //else if( max <= std::numeric_limits<float>::max() )
+    //  {
+    //  st = PixelFormat::FLOAT32;
+    //  }
+    //else if( max <= std::numeric_limits<double>::max() )
+    //  {
+    //  st = PixelFormat::FLOAT64;
+    //  }
     else
       {
       abort();
@@ -124,14 +125,14 @@ PixelFormat::ScalarType ComputeBestFit(const PixelFormat &pf, double intercept, 
       {
       st = PixelFormat::INT32;
       }
-    else if( max <= std::numeric_limits<float>::max() )
-      {
-      st = PixelFormat::FLOAT32;
-      }
-    else if( max <= std::numeric_limits<double>::max() )
-      {
-      st = PixelFormat::FLOAT64;
-      }
+    //else if( max <= std::numeric_limits<float>::max() )
+    //  {
+    //  st = PixelFormat::FLOAT32;
+    //  }
+    //else if( max <= std::numeric_limits<double>::max() )
+    //  {
+    //  st = PixelFormat::FLOAT64;
+    //  }
     else
       {
       abort();

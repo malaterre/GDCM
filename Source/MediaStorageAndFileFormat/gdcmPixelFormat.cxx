@@ -203,11 +203,13 @@ double PixelFormat::GetMin() const
     }
   else if( PixelRepresentation == 3 ) // 32bits float
     {
-    return (float) -1.0e+38f;
+    abort();
+    //return (float) -1.0e+38f;
     }
   else if( PixelRepresentation == 4 ) // 64bits float
     {
-    return (double) -1.0e+299;
+    abort();
+    //return (double) -1.0e+299;
     }
   else
     {
@@ -228,11 +230,13 @@ double PixelFormat::GetMax() const
     }
   else if( PixelRepresentation == 3 ) // 32bits float
     {
-    return (float)  1.0e+38f;
+    abort();
+    //return (float)  1.0e+38f;
     }
   else if( PixelRepresentation == 4 ) // 64bits float
     {
-    return (double)  1.0e+299;
+    abort();
+    //return (double)  1.0e+299;
     }
   else
     {

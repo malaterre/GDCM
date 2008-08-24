@@ -130,8 +130,8 @@ public:
 
   void Print(std::ostream &os) const;
 
-  double GetMin() const;
-  double GetMax() const;
+  int64_t GetMin() const;
+  int64_t GetMax() const;
 
 private:
   // D 0028|0002 [US] [Samples per Pixel] [1]
