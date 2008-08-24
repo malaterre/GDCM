@@ -611,6 +611,14 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "93ddc0c3d642af60f55630232d2801ae" , "CT_Image_Storage_multiframe.dcm" },
 { "ff261592e1c4b205eca7eea99d0101c0" , "ELSCINT1_JP2vsJ2K.dcm" },
 { "b620a57170941e26dfd07ff334c73cb4" , "GE_MR_0025xx1bProtocolDataBlock.dcm" },
+{ "4b5423b34ab4e104c222359a91448a5d" , "CT-SIEMENS-MissingPixelDataInIconSQ.dcm" },
+{ "79b8705f2e6c7464bd3e2fc7e1d3483b" , "KODAK_CompressedIcon.dcm" },
+{ "59071590099d21dd439896592338bf95" , "ima43.dcm" },
+{ "46bf12c412590767bb8cd7f0d53eaa87" , "TG18-CH-2k-01.dcm" },
+
+
+
+
 
 
 
