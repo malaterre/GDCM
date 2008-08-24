@@ -101,7 +101,7 @@ int ScanComponentThreshold=SCAN_COMPONENT_THRESHOLD;
 int ErrorValue=0;             /* Holds error upon return */
 int Loud=MUTE;                /* Loudness gives level of debug traces */
 int HuffmanTrace=0;        /* When set, dumps Huffman statistics */
-int Notify=0;                 /* When set, gives image size feedback */
+int Notify=1;                 /* When set, gives image size feedback */
 int Robust=0;
 static int LargeQ=0;          /* When set, large quantization is enabled */
 
