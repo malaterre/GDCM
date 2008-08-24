@@ -180,9 +180,9 @@ uint8_t PixelFormat::GetPixelSize() const
 {
   uint8_t pixelsize = BitsAllocated / 8;
   if( BitsAllocated == 12 )
-  {
-  pixelsize = 2; // fake a short value
-  }
+    {
+    pixelsize = 2; // fake a short value
+    }
   else
     assert( !(BitsAllocated % 8) );
   pixelsize *= SamplesPerPixel;
@@ -190,7 +190,7 @@ uint8_t PixelFormat::GetPixelSize() const
   return pixelsize;
 }
 
-double PixelFormat::GetMin() const
+int64_t PixelFormat::GetMin() const
 {
   assert( BitsStored <= 32 );
   if( PixelRepresentation == 1 )
@@ -201,23 +201,21 @@ double PixelFormat::GetMin() const
     {
     return 0;
     }
-  else if( PixelRepresentation == 3 ) // 32bits float
-    {
-    abort();
-    //return (float) -1.0e+38f;
-    }
-  else if( PixelRepresentation == 4 ) // 64bits float
-    {
-    abort();
-    //return (double) -1.0e+299;
-    }
+  //else if( PixelRepresentation == 3 ) // 32bits float
+  //  {
+  //  return (float) -1.0e+38f;
+  //  }
+  //else if( PixelRepresentation == 4 ) // 64bits float
+  //  {
+  //  return (double) -1.0e+299;
+  //  }
   else
     {
     abort();
     }
 }
 
-double PixelFormat::GetMax() const
+int64_t PixelFormat::GetMax() const
 {
   assert( BitsStored <= 32 );
   if( PixelRepresentation == 1 )
@@ -228,16 +226,14 @@ double PixelFormat::GetMax() const
     {
     return (int64_t)((1ull << BitsStored) - 1);
     }
-  else if( PixelRepresentation == 3 ) // 32bits float
-    {
-    abort();
-    //return (float)  1.0e+38f;
-    }
-  else if( PixelRepresentation == 4 ) // 64bits float
-    {
-    abort();
-    //return (double)  1.0e+299;
-    }
+  //else if( PixelRepresentation == 3 ) // 32bits float
+  //  {
+  //  return (float)  1.0e+38f;
+  //  }
+  //else if( PixelRepresentation == 4 ) // 64bits float
+  //  {
+  //  return (double)  1.0e+299;
+  //  }
   else
     {
     abort();
