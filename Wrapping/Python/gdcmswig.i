@@ -113,6 +113,7 @@
 #include "gdcmSOPClassUIDToIOD.h"
 #include "gdcmImageChangeTransferSyntax.h"
 #include "gdcmImageApplyLookupTable.h"
+#include "gdcmSplitMosaicFilter.h"
 
 using namespace gdcm;
 %}
@@ -533,3 +534,4 @@ using namespace gdcm;
 %include "gdcmSOPClassUIDToIOD.h"
 %include "gdcmImageChangeTransferSyntax.h"
 %include "gdcmImageApplyLookupTable.h"
+%include "gdcmSplitMosaicFilter.h"
