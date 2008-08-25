@@ -95,7 +95,7 @@ bool SplitMosaicFilter::Split()
   el4.Set( csael4.GetValue() );
   int numberOfImagesInMosaic = el4.GetValue();
 
-  unsigned int div = ceil(sqrt( (double)numberOfImagesInMosaic ) );
+  unsigned int div = (unsigned int )ceil(sqrt( (double)numberOfImagesInMosaic ) );
   dims[0] /= div;
   dims[1] /= div;
   dims[2] = numberOfImagesInMosaic;
