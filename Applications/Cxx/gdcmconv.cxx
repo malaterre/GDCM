@@ -312,6 +312,11 @@ int main (int argc, char *argv[])
 
   if( mosaic )
     {
+    std::cerr << "Not implemented" << std::endl;
+    return 1;
+    }
+  if( mosaic )
+    {
     gdcm::ImageReader reader;
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
