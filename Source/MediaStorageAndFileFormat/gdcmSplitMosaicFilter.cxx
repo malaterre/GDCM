@@ -102,27 +102,29 @@ bool SplitMosaicFilter::Split()
 
   std::cout << "NumberOfImagesInMosaic:" << numberOfImagesInMosaic << std::endl;
 
-  gdcm::Image &image = GetImage();
-  const double *spacing = image.GetSpacing();
-  unsigned long l = image.GetBufferLength();
+  const gdcm::Image &inputimage = GetImage();
+  const double *spacing = inputimage.GetSpacing();
+  unsigned long l = inputimage.GetBufferLength();
   std::vector<char> buf;
   buf.resize(l);
-  image.GetBuffer( &buf[0] );
+  inputimage.GetBuffer( &buf[0] );
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe1,0x1010) );
 
   std::vector<char> outbuf;
   outbuf.resize(l);
   //outbuf = buf;
 
-  bool b = reorganize_mosaic((unsigned short*)&buf[0], image.GetDimensions(), div, dims, (unsigned short*)&outbuf[0] );
+  bool b = reorganize_mosaic((unsigned short*)&buf[0], inputimage.GetDimensions(), div, dims, (unsigned short*)&outbuf[0] );
 
+  pixeldata.SetByteValue( &outbuf[0], outbuf.size() );
   //const gdcm::DataElement & pixeldata = ds.GetDataElement( gdcm::Tag(0x7fe1,0x1010) );
   //const gdcm::DataElement & pixeldata = ds.GetDataElement( gdcm::Tag(0x7fe0,0x0010) );
   //const gdcm::VL &l = pixeldata.GetVL();
-  //const int p =  l / (dims[0] * dims[1]);
-  //std::cout << "VL:" << l << std::endl;
-  //std::cout << "pixel:" << p << std::endl;
+  const int p =  l / (dims[0] * dims[1]);
+  std::cout << "VL:" << l << std::endl;
+  std::cout << "pixel:" << p << std::endl;
 
+  gdcm::Image &image = GetImage();
   //image.SetNumberOfDimensions( 2 ); // good default
   //image.SetSpacing(0, spacing[0] );
   //image.SetSpacing(1, spacing[1] );
@@ -133,10 +135,6 @@ bool SplitMosaicFilter::Split()
   image.SetDimension(0, dims[0] );
   image.SetDimension(1, dims[1] );
   image.SetDimension(2, numberOfImagesInMosaic );
-
-  //int v1 = outbuf.size();
-  //int v2 = image.GetBufferLength();
-  pixeldata.SetByteValue( &outbuf[0], image.GetBufferLength() );
 
   gdcm::PhotometricInterpretation pi;
   pi = gdcm::PhotometricInterpretation::MONOCHROME2;
@@ -161,7 +159,6 @@ bool SplitMosaicFilter::Split()
     // Remove old MRImageStorage attribute then:
     ds.Remove( gdcm::Tag(0x0020,0x0032) ); // Image Position (Patient)
     ds.Remove( gdcm::Tag(0x0020,0x0037) ); // Image Orientation (Patient)
-    ds.Remove( gdcm::Tag(0x0028,0x0030) ); // Pixel Spacing
     ds.Remove( gdcm::Tag(0x0028,0x1052) ); // Rescale Intercept
     ds.Remove( gdcm::Tag(0x0028,0x1053) ); // Rescale Slope
     ds.Remove( gdcm::Tag(0x0028,0x1054) ); // Rescale Type
