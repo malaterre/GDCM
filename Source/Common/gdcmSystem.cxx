@@ -296,7 +296,7 @@ size_t System::FileSize(const char* filename)
 const char *System::GetCurrentDataDirectory()
 {
 #ifdef _WIN32
-  static char buf[MAX_PATH];
+  static char path[MAX_PATH];
   gdcm::Filename fn( GetCurrentProcessFileName() );
   if ( !fn.IsEmpty() )
     {
