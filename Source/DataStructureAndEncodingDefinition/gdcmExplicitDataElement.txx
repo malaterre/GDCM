@@ -412,7 +412,7 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
       {
       assert( ValueField->GetLength() == ValueLengthField );
       const SequenceOfItems *sq = GetSequenceOfItems();
-      VL dummy = sq->ComputeLength<ExplicitDataElement>();
+      VL dummy = sq->template ComputeLength<ExplicitDataElement>();
       assert( ValueLengthField.IsUndefined() || dummy == ValueLengthField );
       }
     else if( GetSequenceOfFragments() )

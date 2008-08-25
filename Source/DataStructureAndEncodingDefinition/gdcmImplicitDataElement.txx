@@ -402,7 +402,7 @@ const std::ostream &ImplicitDataElement::Write(std::ostream &os) const
   if( sqi && !ValueLengthField.IsUndefined() )
     {
     // Hum, we might have to recompute the length:
-    VL len = sqi->ComputeLength<ImplicitDataElement>();
+    VL len = sqi->template ComputeLength<ImplicitDataElement>();
     if( !len.Write<TSwap>(os) )
       {
       assert(0 && "Should not happen");
