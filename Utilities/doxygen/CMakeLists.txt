@@ -62,6 +62,7 @@ IF(GDCM_DOCUMENTATION)
     FIND_PROGRAM(PDFOPT_EXECUTABLE pdfopt)
     FIND_PROGRAM(SED_EXECUTABLE sed)
     FIND_PACKAGE(LATEX REQUIRED)
+    MARK_AS_ADVANCED(PDFOPT_EXECUTABLE SED_EXECUTABLE)
     # Let's customize the pdf tags a little usind sed:
     # Apparently egrep is also needed...
     # BAD: there is a circular dependency where refman.tex depend on refman.tex in the sed steps... 
