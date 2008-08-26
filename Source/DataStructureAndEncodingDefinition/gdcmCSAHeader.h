@@ -21,15 +21,16 @@
 
 namespace gdcm
 {
-/**
- * \brief Class for CSAHeader
- *
+/*
  * Everything done in this code is for the sole purpose of writing interoperable 
  * software under Sect. 1201 (f) Reverse Engineering exception of the DMCA.
  * If you believe anything in this code violates any law or any of your rights, 
  * please contact us (gdcm-developers@lists.sourceforge.net) so that we can 
  * find a solution. 
- * 
+ */
+/**
+ * \brief Class for CSAHeader
+ *
  * \warning:
  * Everything you do with this code is at your own risk, since decoding process
  * was not written from specification documents.

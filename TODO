@@ -190,5 +190,11 @@ need to repeat for:
 and so and so forth...
 -----------------------------------------------------------------------
 IconImage should derive from Image to support compression
-
-
+-----------------------------------------------------------------------
+SIEMENS MrProt / IDEA  / Numaris stuff:
+apt-get source minc-tools
+conversion/dcm2mnc/dicom_to_minc.c
+./conversion/dcm2mnc/siemens_to_dicom.c
+./conversion/dcm2mnc/siemens_header_defs.h
+http://www.nmr.mgh.harvard.edu/~greve/dicom-unpack
+http://atonal.ucdavis.edu/matlab/fmri/spm5/spm_dicom_convert.m

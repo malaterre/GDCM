@@ -21,8 +21,8 @@ namespace gdcm
 {
   
 /**
- * \brief Class to do JPEG-LS
- * \note
+ * \brief JPEG-LS
+ * \note codec that implement the JPEG-LS compression
  */
 class JPEGLSInternals;
 class JPEGLSCodec : public ImageCodec

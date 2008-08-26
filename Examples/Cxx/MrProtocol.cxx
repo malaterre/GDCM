@@ -367,6 +367,8 @@ sEFISPEC.bEFIDataValid                   = 1
 */
 
 /*
+ * Table of equivalence:
+ *
 ulVersion                                = 0xbee332
 <=>
 27 - 'MrProtocolVersion' VM 1, VR IS, SyngoDT 6, NoOfItems 6, Data '12510002'
