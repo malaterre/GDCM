@@ -15,6 +15,26 @@
 XMLified version of:
 
 http://www.mmrrcc.upenn.edu/CAMRIS/cfn/dicomhdr.html
+
+Some more info can be found here:
+http://www.ion.ucl.ac.uk/division_NRNP/MDD/mdeft_sonata_unit_test.doc
+http://www.drcmr.dk/MagstripeProject/Docs/mfam180906/meas.asc 
+
+28 - 'MrProtocol' VM 1, VR UN, SyngoDT 0, NoOfItems 6, Data '### ASCCONV BEGIN ###
+...
+sKSpace.ucPhasePartialFourier = 0x10
+
+> the partial fourier information can take only 5 different values which are encoded as follows:
+>
+> 4/8 partial fourier = 0x1
+> 5/8 = 0x2
+> 6/8 = 0x4
+> 7/8 = 0x8
+> 8/8 = 0x10
+>
+> The factor defines how many lines of the k-space are measured and how many are reconstructed from the measured data. The number of measured fourier lines depends (at least) on the matrix size and the partial fourier factor.
+>
+
 -->
 <dict>
   <entry name="Attribute Name" type="Type" vr="VR" vm="VM" description="Descriptiom"/>
