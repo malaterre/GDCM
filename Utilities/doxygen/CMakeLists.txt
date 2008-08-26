@@ -74,7 +74,7 @@ IF(GDCM_DOCUMENTATION)
     STRING(REPLACE "/" "\\/" sed_gdcm_source_dir ${GDCM_SOURCE_DIR})
     #MESSAGE(${sed_gdcm_source_dir})
     ADD_CUSTOM_COMMAND(
-      OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.tex # output #1 (fake)
+      OUTPUT   #${CMAKE_CURRENT_BINARY_DIR}/latex/refman.tex # output #1 (fake)
                ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf # output #2
       # Command #1
       COMMAND  ${SED_EXECUTABLE}
