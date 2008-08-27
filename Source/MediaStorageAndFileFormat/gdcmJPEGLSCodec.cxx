@@ -85,6 +85,13 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
   int ret = system(locod_command.c_str());
   //std::cerr << "system: " << ret << std::endl;
 
+  // Do not use the return value from system (not portable AFAIK).
+  if ( !System::FileExists(output) )
+    {
+  free(input);
+  free(output);
+    return false;
+    }
   PNMCodec pnm;
   pnm.SetBufferLength( GetBufferLength() );
   bool b = pnm.Read( output, out );
@@ -102,7 +109,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
   free(input);
   free(output);
 
-  return true;
+  return b;
 #endif
 }
 
@@ -124,7 +131,9 @@ bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
     //free(output);
     return false;
     }
-  pnm.Write( input, in );
+  pnm.SetPixelFormat( GetPixelFormat() );
+  bool b = pnm.Write( input, in );
+  if( !b ) return false;
 
   gdcm::Filename fn( System::GetCurrentProcessFileName() );
   std::string executable_path = fn.GetPath();
@@ -138,6 +147,15 @@ bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
   int ret = system(locoe_command.c_str());
   //std::cerr << "system: " << ret << std::endl;
 
+  // I do not know how to interpret the return value of 'system', it looks like
+  // this is not very portable. Instead assume that if output file exist then 
+  // everything went smoothly
+  if ( !System::FileExists(output) )
+    {
+  free(input);
+  free(output);
+    return false;
+    }
   size_t len = gdcm::System::FileSize(output);
   std::ifstream is(output);
   char *buf = new char[len];

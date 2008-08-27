@@ -501,7 +501,7 @@ bool Image::TryJPEGLSCodec(char *buffer) const
     codec.SetDimensions( GetDimensions() );
     DataElement out;
     bool r = codec.Decode(PixelData, out);
-    assert( r );
+    if( !r ) return false;
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
