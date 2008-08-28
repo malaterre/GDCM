@@ -23,6 +23,11 @@ namespace gdcm
 template <char TDelimiter, unsigned int TMaxLength, char TPadChar> class String;
 template <char TDelimiter, unsigned int TMaxLength, char TPadChar> std::istream& operator>>(std::istream &is, String<TDelimiter,TMaxLength,TPadChar>& ms);
 
+/**
+ * \brief String
+ *
+ * \note bla
+ */
 template <char TDelimiter = EOF, unsigned int TMaxLength = 64, char TPadChar = ' '>
 class /*GDCM_EXPORT*/ String : public std::string /* PLEASE do not export me */
 {

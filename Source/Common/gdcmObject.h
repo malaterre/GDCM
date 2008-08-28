@@ -23,6 +23,13 @@
 //namespace std { class ostream; }
 namespace gdcm
 {
+
+/**
+ * \brief Object
+ *
+ * \note main superclass for object that want to use SmartPointer
+ * invasive ref counting system
+ */
 class GDCM_EXPORT Object
 {
 public:
