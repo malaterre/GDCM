@@ -32,6 +32,7 @@
 #include "gdcmImageWriter.h"
 #include "gdcmCSAHeader.h"
 #include "gdcmAttribute.h"
+#include "gdcmPrivateTag.h"
 
 #include <math.h>
 
@@ -61,7 +62,7 @@ int main(int argc, char *argv [])
   // gdcmDataExtra/gdcmNonImageData/exCSA_Non-Image_Storage.dcm
   // PHANTOM.MR.CARDIO_COEUR_S_QUENCE_DE_REP_RAGE.9.257.2008.03.20.14.53.25.578125.43151705.IMA
   const char *filename = argv[1];
-  gdcm::ImageReader reader;
+  gdcm::Reader reader;
   reader.SetFileName( filename );
   if( !reader.Read() )
     {
@@ -81,7 +82,8 @@ int main(int argc, char *argv [])
     csa.LoadFromDataElement( ds.GetDataElement( t1 ) );
     csa.Print( std::cout );
     }
-#if 0
+  //const gdcm::Image &inputimage = reader.GetImage();
+#if 1
   int dims[2];
 	const gdcm::CSAElement &csael = csa.GetCSAElementByName( "Columns" );
   std::cout << csael << std::endl;
@@ -106,7 +108,50 @@ int main(int argc, char *argv [])
   spacing[0] = el3.GetValue(0);
   spacing[1] = el3.GetValue(1);
   std::cout << "PixelSpacing:" << el3.GetValue() << "," << el3.GetValue(1) << std::endl;
+
+
+  gdcm::ImageWriter writer;
+
+  gdcm::Image &image = writer.GetImage();
+  image.SetNumberOfDimensions( 2 ); // good default
+  image.SetDimension(0, dims[0] );
+  image.SetDimension(1, dims[1] );
+  image.SetSpacing(0, spacing[0] );
+  image.SetSpacing(1, spacing[1] );
+  gdcm::PixelFormat pixeltype = gdcm::PixelFormat::INT16; // bytepix = spm_type('int16','bits')/8;
+
+  unsigned long l = image.GetBufferLength();
+  const int p =  l / (dims[0] * dims[1]);
+
+  //image.SetNumberOfDimensions( 3 );
+  //image.SetDimension(2, p / pixeltype.GetPixelSize() );
+
+  gdcm::PhotometricInterpretation pi;
+  pi = gdcm::PhotometricInterpretation::MONOCHROME2;
+  //pixeltype.SetSamplesPerPixel(  );
+  image.SetPhotometricInterpretation( pi );
+  image.SetPixelFormat( pixeltype );
+  //image.SetIntercept( inputimage.GetIntercept() );
+  //image.SetSlope( inputimage.GetSlope() );
+
+  //gdcm::DataElement pixeldata( gdcm::Tag(0x7fe1,0x1010) );
+  //pixeldata.SetByteValue( &outbuf[0], outbuf.size() );
+  gdcm::PrivateTag csanonimaget(0x7fe1,0x10,"SIEMENS CSA NON-IMAGE");
+  const gdcm::DataElement &pixeldata = ds.GetDataElement( csanonimaget );
+  image.SetDataElement( pixeldata );
+
+  std::string outfilename = "outcsa.dcm";
+  //writer.SetFile( reader.GetFile() );
+  writer.SetFileName( outfilename.c_str() );
+  if( !writer.Write() )
+    {
+    std::cerr << "could not write: " << outfilename << std::endl;
+    return 1;
+    }
+
 #else
+  // The following is deprecated.
+  // See gdcmconv --mosaic instead
 
   //int dims[2] = { 448, 448 };
   //dims[0] /= 7;
@@ -143,10 +188,8 @@ int main(int argc, char *argv [])
   dims[2] = numberOfImagesInMosaic;
 
   std::cout << "NumberOfImagesInMosaic:" << numberOfImagesInMosaic << std::endl;
-#endif
-
-  const gdcm::Image &inputimage = reader.GetImage();
   const double *spacing = inputimage.GetSpacing();
+
   unsigned long l = inputimage.GetBufferLength();
   std::vector<char> buf;
   buf.resize(l);
@@ -166,6 +209,7 @@ int main(int argc, char *argv [])
   const int p =  l / (dims[0] * dims[1]);
   std::cout << "VL:" << l << std::endl;
   std::cout << "pixel:" << p << std::endl;
+
 
   gdcm::ImageWriter writer;
 
@@ -199,6 +243,7 @@ int main(int argc, char *argv [])
     std::cerr << "could not write: " << outfilename << std::endl;
     return 1;
     }
+#endif
 
   return 0;
 }
