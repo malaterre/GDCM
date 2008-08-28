@@ -28,6 +28,7 @@
 namespace gdcm
 {
 
+class DataSet;
 /**
  * \brief Class to represent an Item
  * A component of the value of a Data Element that is of Value Representation Sequence of Items.
@@ -41,8 +42,6 @@ namespace gdcm
  * ITEM: A component of the Value of a Data Element that is of Value
  * Representation Sequence of Items. An Item contains a Data Set.
  */
-class DataSet;
-
 class GDCM_EXPORT Item : public DataElement
 {
 public:

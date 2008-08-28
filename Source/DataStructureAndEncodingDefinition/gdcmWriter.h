@@ -20,6 +20,8 @@
 
 namespace gdcm
 {
+
+class FileMetaInformation;
 /**
  * \brief Writer ala DOM (Document Object Model)
  * This class is a non-validating writer, it will only performs well-
@@ -41,7 +43,6 @@ namespace gdcm
  *
  * WARNING: gdcm::Writer cannot write a DataSet if no SOP Instance UID (0008,0018) is found
  */
-class FileMetaInformation;
 class GDCM_EXPORT Writer
 {
 public:

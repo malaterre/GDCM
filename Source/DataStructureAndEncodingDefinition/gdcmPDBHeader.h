@@ -28,6 +28,9 @@ namespace gdcm
  * please contact us (gdcm-developers@lists.sourceforge.net) so that we can 
  * find a solution. 
  */
+//-----------------------------------------------------------------------------
+class DataElement;
+class PrivateTag;
 /**
  * \brief Class for PDBHeader
  *
@@ -43,9 +46,6 @@ namespace gdcm
  * \WARNING: the API of this class might change.
  *
  */
-//-----------------------------------------------------------------------------
-class DataElement;
-class PrivateTag;
 class GDCM_EXPORT PDBHeader
 {
 public :

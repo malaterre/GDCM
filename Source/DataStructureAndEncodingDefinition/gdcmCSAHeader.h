@@ -28,6 +28,9 @@ namespace gdcm
  * please contact us (gdcm-developers@lists.sourceforge.net) so that we can 
  * find a solution. 
  */
+//-----------------------------------------------------------------------------
+class DataElement;
+class PrivateTag;
 /**
  * \brief Class for CSAHeader
  *
@@ -46,9 +49,6 @@ namespace gdcm
  * in 
  * http://tamsinfo.toshiba.com/docrequest/pdf/E.Soft_v2.0.pdf
  */
-//-----------------------------------------------------------------------------
-class DataElement;
-class PrivateTag;
 class GDCM_EXPORT CSAHeader
 {
 public :

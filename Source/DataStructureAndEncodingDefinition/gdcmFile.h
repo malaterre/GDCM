@@ -22,6 +22,8 @@
 
 namespace gdcm
 {
+
+class FileInternal;
 /**
  * \brief a DICOM File
  * See PS 3.10
@@ -29,7 +31,6 @@ namespace gdcm
  * at the beginning of the file and the last byte at the end of the File. Files are 
  * identified by a unique File ID and may by written, read and/or deleted.
  */
-class FileInternal;
 class GDCM_EXPORT File : public Object
 {
 public:

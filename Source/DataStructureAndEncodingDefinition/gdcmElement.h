@@ -30,9 +30,19 @@
 namespace gdcm
 {
 
-// Declaration, also serve as forward declaration
+// Forward declaration
+/**
+ * \brief EncodingImplementation
+ *
+ * \note TODO
+ */
 template<int T> class EncodingImplementation;
 
+/**
+ * \brief Element class
+ *
+ * \note TODO
+ */
 template<int TVR, int TVM>
 class Element
 {

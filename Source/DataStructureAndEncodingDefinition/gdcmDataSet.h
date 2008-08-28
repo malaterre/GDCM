@@ -25,6 +25,7 @@
 
 namespace gdcm
 {
+class PrivateTag;
 /**
  * \brief Class to represent a Data Set (which contains Data Elements)
  * A Data Set represents an instance of a real world Information Object
@@ -49,9 +50,6 @@ namespace gdcm
  * TODO:
  * a DataSet DOES NOT have a TS type... a file does !
  */
-
-//-----------------------------------------------------------------------------
-class PrivateTag;
 class GDCM_EXPORT DataSet
 {
   friend class CSAHeader;

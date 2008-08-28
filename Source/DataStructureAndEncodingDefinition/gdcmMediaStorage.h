@@ -20,15 +20,18 @@
 namespace gdcm
 {
 
-/*
+class DataSet;
+class FileMetaInformation;
+class File;
+/**
+ * \brief MediaStorage
+ *
+ * \note
  * FIXME There should not be any notion of Image and/or PDF at that point
  * Only the codec can answer yes I support this Media Storage or not...
  * For instance an ImageCodec will answer yes to most of them
  * while a PDFCodec will answer only for the Encaplusated PDF
  */
-class DataSet;
-class FileMetaInformation;
-class File;
 class GDCM_EXPORT MediaStorage
 {
 public:

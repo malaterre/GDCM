@@ -20,13 +20,14 @@
 
 namespace gdcm
 {
+
+class VL;
 /**
  * \brief Class to represent the value of a Data Element.
  * \note
  * VALUE: A component of a Value Field. A Value Field may consist of one
  * or more of these components.
  */
-class VL;
 class GDCM_EXPORT Value : public Object
 {
 public:

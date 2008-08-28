@@ -19,11 +19,12 @@
 
 namespace gdcm
 {
+
+class ExplicitImplicitDataElement;
 /**
  * \brief Class to represent an *Implicit VR* Data Element
  * \note bla
  */
-class ExplicitImplicitDataElement;
 class GDCM_EXPORT ImplicitDataElement : public DataElement
 {
 public:

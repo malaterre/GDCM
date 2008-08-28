@@ -20,6 +20,11 @@
 namespace gdcm
 {
 
+/**
+ * \brief LO
+ *
+ * \note TODO
+ */
 class /*GDCM_EXPORT*/ LO : public String<'\\',64> /* PLEASE do not export me */
 {
 public:
