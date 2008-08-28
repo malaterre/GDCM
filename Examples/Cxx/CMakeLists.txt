@@ -26,6 +26,9 @@ TARGET_LINK_LIBRARIES(uid_unique gdcmMSFF)
 ADD_EXECUTABLE(HelloWorld HelloWorld.cxx)
 TARGET_LINK_LIBRARIES(HelloWorld gdcmMSFF)
 
+ADD_EXECUTABLE(HelloVizWorld HelloVizWorld.cxx)
+TARGET_LINK_LIBRARIES(HelloVizWorld gdcmMSFF)
+
 ADD_EXECUTABLE(CompressImage CompressImage.cxx)
 TARGET_LINK_LIBRARIES(CompressImage gdcmMSFF)
 
