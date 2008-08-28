@@ -20,6 +20,8 @@
 namespace gdcm
 {
 
+class PixelFormat;
+class TransferSyntax;
 /**
  * \brief JPEG codec
  * Class to do JPEG (8bits, 12bits, 16bits lossy & lossless).
@@ -30,13 +32,11 @@ namespace gdcm
  * \note
  * Things you should know if you ever want to dive into DICOM/JPEG world (among other):
  *
- * http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/625e46919f2080e1
- * http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/75fdfccc65a6243
- * http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/2d525ef6a2f093ed
- * http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/6b93af410f8c921f
+ * - http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/625e46919f2080e1
+ * - http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/75fdfccc65a6243
+ * - http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/2d525ef6a2f093ed
+ * - http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/6b93af410f8c921f
  */
-class PixelFormat;
-class TransferSyntax;
 class GDCM_EXPORT JPEGCodec : public ImageCodec
 {
 public:
