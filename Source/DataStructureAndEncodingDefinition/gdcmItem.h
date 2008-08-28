@@ -98,9 +98,11 @@ public:
   template <typename TDE, typename TSwap>
   std::istream &Read(std::istream &is) {
     // Superclass
+    {
         DataSet &nested = NestedDataSet;
         nested.Clear();
         assert( nested.IsEmpty() );
+    }
     if( !TagField.Read<TSwap>(is) )
       {
       throw Exception("Should not happen");
