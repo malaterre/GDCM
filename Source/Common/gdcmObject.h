@@ -24,6 +24,8 @@
 namespace gdcm
 {
 
+template<class ObjectType> class SmartPointer;
+
 /**
  * \brief Object
  *
@@ -32,7 +34,8 @@ namespace gdcm
  */
 class GDCM_EXPORT Object
 {
-public:
+  template <class ObjectType> friend class SmartPointer;
+protected:
   friend std::ostream& operator<<(std::ostream &os, const Object &obj);
 
   Object():ReferenceCount(0) {}
@@ -69,7 +72,7 @@ public:
     }
 
 
-//protected:
+public:
   // For dealing with printing of object and polymorphism
   virtual void Print(std::ostream &) const {}
 

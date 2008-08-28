@@ -16,7 +16,7 @@
 
 int TestObject(int, char *[])
 {
-  gdcm::Object o;
+  gdcm::Object *o;
   (void)o;
 
   return 0;

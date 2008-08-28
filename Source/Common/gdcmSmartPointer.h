@@ -29,6 +29,10 @@ namespace gdcm
  * }
  * Class partly based on post by Bill Hubauer:
  * http://groups.google.com/group/comp.lang.c++/msg/173ddc38a827a930
+ * See also
+ * http://www.davethehat.com/articles/smartp.htm
+ *
+ * and itk::SmartPointer
  */
 
 template<class ObjectType>
