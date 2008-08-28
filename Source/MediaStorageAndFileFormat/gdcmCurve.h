@@ -21,20 +21,20 @@
 namespace gdcm
 {
   
-/*
+class CurveInternal;
+class ByteValue;
+class DataSet;
+class DataElement;
+/**
  * \brief Curve class to handle element 50xx,3000 Curve Data
  *  WARNING: This is deprecated and lastly defined in PS 3.3 - 2004
  *
- *  Example:
+ *  Examples:
  *  - GE_DLX-8-MONO2-Multiframe-Jpeg_Lossless.dcm
  *  - GE_DLX-8-MONO2-Multiframe.dcm
  *  - gdcmSampleData/Philips_Medical_Images/integris_HV_5000/xa_integris.dcm
  *  - TOSHIBA-CurveData[1-3].dcm
  */
-class CurveInternal;
-class ByteValue;
-class DataSet;
-class DataElement;
 class GDCM_EXPORT Curve : public Object
 {
 public:

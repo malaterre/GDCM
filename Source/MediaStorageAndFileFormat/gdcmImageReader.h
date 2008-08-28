@@ -20,6 +20,9 @@
 
 namespace gdcm
 {
+
+class ByteValue;
+class MediaStorage;
 /**
  * \brief ImageReader
  * \note its role is to convert the DICOM DataSet into a gdcm::Image
@@ -36,8 +39,6 @@ namespace gdcm
  * since I cannot find them *anywhere* I'll have to hard code them directly in a specific libido image reader
  * 
  */
-class ByteValue;
-class MediaStorage;
 class GDCM_EXPORT ImageReader : public Reader
 {
 public:

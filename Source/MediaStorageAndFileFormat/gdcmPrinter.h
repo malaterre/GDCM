@@ -50,12 +50,12 @@
 namespace gdcm
 {
 
-/**
- * \brief Printer class
- */
 class DataSet;
 class DictEntry;
 class Dicts;
+/**
+ * \brief Printer class
+ */
 // It's a sink there is no output
 class GDCM_EXPORT Printer
 {

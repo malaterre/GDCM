@@ -20,12 +20,12 @@
 namespace gdcm
 {
   
+class JPEGInternals;
+class ByteValue;
 /**
  * \brief Class to do JPEG 12bits (lossy & lossless)
  * \note
  */
-class JPEGInternals;
-class ByteValue;
 class JPEG12Codec : public JPEGCodec
 {
 public:

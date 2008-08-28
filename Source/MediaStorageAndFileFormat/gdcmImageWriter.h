@@ -21,10 +21,11 @@
 
 namespace gdcm
 {
+
+class Image;
 /**
  * \brief ImageWriter
  */
-class Image;
 class GDCM_EXPORT ImageWriter : public Writer
 {
 public:

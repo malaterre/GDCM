@@ -20,11 +20,12 @@
 
 namespace gdcm
 {
+
+class TransferSyntax;
+class DataElement;
 /**
  * \brief Coder
  */
-class TransferSyntax;
-class DataElement;
 class GDCM_EXPORT Coder
 {
 public:

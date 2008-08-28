@@ -22,11 +22,11 @@
 namespace gdcm
 {
 
+class TransferSyntax;
+class DataElement;
 /** 
  * \brief Decoder
  */
-class TransferSyntax;
-class DataElement;
 class GDCM_EXPORT Decoder
 {
 public:

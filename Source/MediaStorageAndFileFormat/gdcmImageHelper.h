@@ -22,6 +22,10 @@
 namespace gdcm
 {
 
+class MediaStorage;
+class DataSet;
+class File;
+class Image;
 /**
  * \brief ImageHelper (internal class)
  *
@@ -37,10 +41,6 @@ namespace gdcm
  * Modalities are added the API might have to be augmented or behavior changed to cope
  * with new modalities.
  */
-class MediaStorage;
-class DataSet;
-class File;
-class Image;
 class GDCM_EXPORT ImageHelper
 {
 public:

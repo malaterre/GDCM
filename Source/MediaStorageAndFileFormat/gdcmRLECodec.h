@@ -20,11 +20,11 @@
 namespace gdcm
 {
 
+class RLEInternals;
 /**
  * \brief Class to do RLE
  * \note
  */
-class RLEInternals;
 class RLECodec : public ImageCodec
 {
 public:

@@ -20,11 +20,11 @@
 namespace gdcm
 {
   
+class JPEG2000Internals;
 /**
  * \brief Class to do JPEG 2000
  * \note
  */
-class JPEG2000Internals;
 class GDCM_EXPORT JPEG2000Codec : public ImageCodec
 {
 public:

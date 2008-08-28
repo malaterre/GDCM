@@ -20,10 +20,10 @@
 namespace gdcm
 {
   
+class RAWInternals;
 /**
  * \brief RAWCodec class
  */
-class RAWInternals;
 class RAWCodec : public ImageCodec
 {
 public:

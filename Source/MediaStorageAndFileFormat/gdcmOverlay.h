@@ -21,17 +21,16 @@
 namespace gdcm
 {
   
-/**
- * \brief Overlay class
- * \note 
- * see AreOverlaysInPixelData
- */
 class OverlayInternal;
 class ByteValue;
 class DataSet;
 class DataElement;
-/*
- *  TODO:
+/**
+ * \brief Overlay class
+ * \note 
+ * see AreOverlaysInPixelData
+ *
+ * \todo
  *  Is there actually any way to recognize an overlay ? On images with multiple overlay I do not see
  *  any way to differenciate them (other than the group tag).
  *
