@@ -51,11 +51,15 @@ int main(int argc, char *argv[])
     imgfactory->CreateImageReader2(filename);
   vtkStructuredPointsReader *datareader = vtkStructuredPointsReader::New();
   datareader->SetFileName( filename );
-  int res = datareader->IsFileStructuredPoints();
-  if( !imgreader && !res )
+  int res = 0;
+  if( !imgreader )
     {
-    std::cerr << "could not find no reader to handle file: " << filename << std::endl;
-    return 1;
+    res = datareader->IsFileStructuredPoints();
+    if( !res )
+      {
+      std::cerr << "could not find no reader to handle file: " << filename << std::endl;
+      return 1;
+      }
     }
   imgfactory->Delete(); 
 
@@ -65,7 +69,7 @@ int main(int argc, char *argv[])
     imgreader->SetFileName(filename);
     imgreader->Update();
     imgdata = imgreader->GetOutput();
-  std::cout << imgreader->GetClassName() << std::endl;
+    std::cout << imgreader->GetClassName() << std::endl;
     }
   else if( res )
     {

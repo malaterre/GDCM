@@ -20,6 +20,7 @@
 #include "gdcmImageReader.h"
 #include "gdcmImageWriter.h"
 #include "gdcmImage.h"
+#include "gdcmPhotometricInterpretation.h"
 
 #include <iostream>
 
@@ -57,7 +58,7 @@ int main(int argc, char *argv[])
   const unsigned int *dims = image.GetDimensions();
   // Origin
   const double *origin = image.GetOrigin();
-  const PhotometricInterpretation &pi = image.GetPhotometricInterpretation();
+  const gdcm::PhotometricInterpretation &pi = image.GetPhotometricInterpretation();
   for(unsigned int i = 0; i < ndim; ++i)
     {
     std::cout << "Dim(" << i << "): " << dims[i] << std::endl;
@@ -67,9 +68,6 @@ int main(int argc, char *argv[])
     std::cout << "Origin(" << i << "): " << origin[i] << std::endl;
     }
   std::cout << "PhotometricInterpretation: " << pi << std::endl;
-
-  // the dataset is the the set of element we are interested in:
-  gdcm::DataSet &ds = file.GetDataSet();
 
   // Write the modified DataSet back to disk
   gdcm::ImageWriter writer;
