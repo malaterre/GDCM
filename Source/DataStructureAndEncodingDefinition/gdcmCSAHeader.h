@@ -58,6 +58,7 @@ public :
   CSAHeader():InternalDataSet(),InternalType(UNKNOWN) {};
   ~CSAHeader() {};
 
+  /// Divers format of CSAHeader as found 'in the wild'
   typedef enum {
     UNKNOWN = 0,
     SV10,
@@ -72,15 +73,22 @@ public :
   template <typename TSwap>
   const std::ostream &Write(std::ostream &os) const;
 
+  /// Decode the CSAHeader from element 'de'
   bool LoadFromDataElement(DataElement const &de);
 
+  /// Print the CSAHeader (use only if Format == SV10 or NOMAGIC)
   void Print(std::ostream &os) const;
 
+  /// Return the DataSet output (use only if Format == DATASET_FORMAT )
   const DataSet& GetDataSet() const { return InternalDataSet; }
 
+  /// return the format of the CSAHeader
   CSAHeaderType GetFormat() const;
 
+  /// Return the private tag used by SIEMENS to store the CSA Image Header
   static const PrivateTag & GetCSAImageHeaderInfoTag();
+
+  /// Return the private tag used by SIEMENS to store the CSA Series Header
   static const PrivateTag & GetCSASeriesHeaderInfoTag();
 
   /// Return the CSAElement corresponding to name 'name'
