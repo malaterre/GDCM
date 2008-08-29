@@ -12,41 +12,13 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include <stdio.h>
-#include <stdlib.h> // abort
-
 #include "rlelib.h"
-
-void std_print_header(rle_compressed_frame * frame)
-{
-  rle_header *header = frame->header;
-  unsigned long ns = header->num_segments;
-  printf("%lu\n", ns);
-}
-
-
-int write_RLE_file(const char *filename)
-{
-  abort();
-  return 0;
-}
-
-
-int fill_input_buffer(rle_decompressed_frame * frame)
-{
-  return 1;
-}
-
-int read_RLE_file(const char *filename)
-{
-  abort();
-  return 1;
-}
 
 int main(int argc, char *argv[])
 {
   rle_decompress_struct cinfo;
   FILE * infile;
+  int i;
 
   const char *filename;
   if( argc < 2 )
@@ -64,15 +36,13 @@ int main(int argc, char *argv[])
 
   rle_stdio_src(&cinfo, infile);
 
-  (void) rle_start_decompress(&cinfo);
+  //rle_header *h = cinfo.header;
+  printf("num segment: %d\n", cinfo.header->num_segments );
+  printf("offsets table:\n");
+  for(i = 0; i < 16; ++i)
+    printf("offset: %d\n", cinfo.header->offset[i] );
 
-  char buffer[1024];
-  while (cinfo.output_scanline < cinfo.output_height) {
-    (void) rle_read_scanlines(&cinfo, buffer, 1);
-    //put_scanline_someplace(buffer[0], row_stride);
-  }
-
-  (void) rle_finish_decompress(&cinfo);
+  // Simply dump the file info:
 
   rle_destroy_decompress(&cinfo);
 

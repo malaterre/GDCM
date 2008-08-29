@@ -11,3 +11,7 @@ INSTALL(TARGETS rle example
 	ARCHIVE DESTINATION lib/static
   ${CPACK_NAMELINK_TYPE}
 	)
+
+ADD_EXECUTABLE(rledump rledump.c)
+TARGET_LINK_LIBRARIES(rledump rle)
+
