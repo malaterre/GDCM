@@ -47,6 +47,7 @@ typedef struct
 {
   int output_scanline;
   int output_height;
+  int bits_allocated; // 8 or 16, when 16 need to do padded composite
   rle_header *header;
 } rle_decompress_struct;
 
@@ -72,6 +73,21 @@ void rle_stdio_src(rle_decompress_struct *cinfo, FILE *infile)
     }
 }
 
+/* 
+ * G.3.2 The RLE decoder
+ * Pseudo code for the RLE decoder is shown below:
+ * Loop until the number of output bytes equals the uncompressed segment size
+ * Read the next source byte into n
+ * If n> =0 and n <= 127 then
+ * output the next n+1 bytes literally
+ * Elseif n <= - 1 and n >= -127 then
+ * output the next byte -n+1 times
+ * Elseif n = - 128 then
+ * output nothing
+ * Endif
+ * Endloop
+ */
+
 int rle_start_decompress(rle_decompress_struct *cinfo)
 {
   return 1;
@@ -90,6 +106,7 @@ void rle_create_decompress(rle_decompress_struct *cinfo)
 
 int rle_read_scanlines(rle_decompress_struct *cinfo, char *buffer, int f)
 {
+  signed char byte;
   return 1;
 }
 
