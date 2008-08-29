@@ -17,6 +17,16 @@
 int TestCSAHeader(int , char * [])
 {
   gdcm::CSAHeader h;
+/*
+  try
+    {
+    const gdcm::CSAElement &foo = csa.GetCSAElementByName( "foo" );
+    }
+  catch( gdcm::CSAElementNameException &ex )
+    {
+    std::cout << ex.what() << std::endl;
+    }
+*/
 
   return 0;
 }
