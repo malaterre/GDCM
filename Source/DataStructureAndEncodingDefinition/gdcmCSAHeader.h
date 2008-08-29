@@ -100,7 +100,6 @@ public :
   bool FindCSAElementByName(const char *name);
 
 private:
-  CSAElement Dummy;
   std::set<CSAElement> InternalCSADataSet;
   DataSet InternalDataSet;
   CSAHeaderType InternalType;
