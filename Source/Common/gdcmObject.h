@@ -67,6 +67,7 @@ protected:
   // For the purpose of the invasive SmartPointer implementation
   void Register() {
     ReferenceCount++;
+    assert( ReferenceCount > 0 );
   }
   void UnRegister()
     {
@@ -90,7 +91,7 @@ private:
 //----------------------------------------------------------------------------
 // function do not carry vtable. Thus define in the base class the operator
 // and use the member function ->Print() to call the appropriate function
-// NOTE: All subclass of Value needs to implement the Print function
+// NOTE: All subclass of Object needs to implement the Print function
 inline std::ostream& operator<<(std::ostream &os, const Object &obj)
 {
   obj.Print(os);

@@ -65,17 +65,9 @@ public:
   //SmartPointer &operator = (ObjectType *r)
   void operator = (ObjectType const *r)
     {                                                              
-    if(Pointer) Pointer->UnRegister();
+    UnRegister();
     Pointer = const_cast<ObjectType*>(r);
-    if(Pointer) Pointer->Register();
-    //if (Pointer != r)
-    //  {
-    //  ObjectType* tmp = Pointer; //important
-    //  Pointer = r;
-    //  Register();
-    //  if ( tmp ) { tmp->UnRegister(); }
-    //  }
-    //return *this;
+    Register();
     }
 
 private:
