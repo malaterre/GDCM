@@ -47,30 +47,48 @@ typedef struct
 {
   int output_scanline;
   int output_height;
-  int bits_allocated; // 8 or 16, when 16 need to do padded composite
+  //int bits_allocated; // 8 or 16, when 16 need to do padded composite
+  int row;
+  int col;
+  FILE *stream;
+  int current_segment;
   rle_header *header;
 } rle_decompress_struct;
 
-void rle_stdio_src(rle_decompress_struct *cinfo, FILE *infile)
+void rle_stdio_src(rle_decompress_struct *cinfo, FILE *infile, int *dims)
 {
   int i;
   //is.read((char*)(&Header), sizeof(uint32_t)*16);
   size_t len = fread(cinfo->header, sizeof(uint32_t), 16, infile);
-  if( cinfo->header->num_segments > 16 )
+  cinfo->row = dims[0];
+  cinfo->col = dims[1];
+  if( cinfo->header->num_segments > 16 || cinfo->header->num_segments < 1 )
     {
     // Need to throw something here
+      abort();
     }
   if( cinfo->header->offset[0] != 64 )
     {
     // Need to throw something here
+      abort();
     }
-  for(i=1; i < 16; ++i)
+  for(i=1; i < cinfo->header->num_segments; ++i)
     {
     if( cinfo->header->offset[i-1] > cinfo->header->offset[i] )
       {
       // Need to throw something here
+      abort();
       }
     }
+  for(i=cinfo->header->num_segments; i < 16; ++i)
+    {
+    if( cinfo->header->offset[i] != 0 )
+      {
+      // Need to throw something here
+      abort();
+      }
+    }
+  cinfo->stream = infile;
 }
 
 /* 
@@ -90,6 +108,7 @@ void rle_stdio_src(rle_decompress_struct *cinfo, FILE *infile)
 
 int rle_start_decompress(rle_decompress_struct *cinfo)
 {
+  fseek(cinfo->stream, cinfo->header->offset[0], SEEK_SET );
   return 1;
 }
 
@@ -98,6 +117,7 @@ void rle_create_decompress(rle_decompress_struct *cinfo)
   int i;
   cinfo->output_scanline = 0;
   cinfo->output_height = 0;
+  cinfo->current_segment = 0;
   cinfo->header = (rle_header*)malloc(sizeof(rle_header));
   cinfo->header->num_segments = 0;
   for(i = 0; i < 16; ++i)

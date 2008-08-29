@@ -62,15 +62,18 @@ int main(int argc, char *argv[])
 
   rle_create_decompress(&cinfo);
 
-  rle_stdio_src(&cinfo, infile);
+  int dims[2] = { 1760,1760 };
+  int bpp = 16;
+  rle_stdio_src(&cinfo, infile, dims);
 
   (void) rle_start_decompress(&cinfo);
 
-  char buffer[1024];
+  char *buffer = (char*)malloc( dims[0] * (bpp / 8) );
   while (cinfo.output_scanline < cinfo.output_height) {
     (void) rle_read_scanlines(&cinfo, buffer, 1);
     //put_scanline_someplace(buffer[0], row_stride);
   }
+  free(buffer);
 
   (void) rle_finish_decompress(&cinfo);
 

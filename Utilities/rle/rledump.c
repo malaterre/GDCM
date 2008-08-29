@@ -34,7 +34,9 @@ int main(int argc, char *argv[])
 
   rle_create_decompress(&cinfo);
 
-  rle_stdio_src(&cinfo, infile);
+  // Dimensions: (1760,1760,1)
+  int dims[2] = { 1760,1760 };
+  rle_stdio_src(&cinfo, infile, dims);
 
   //rle_header *h = cinfo.header;
   printf("num segment: %d\n", cinfo.header->num_segments );
