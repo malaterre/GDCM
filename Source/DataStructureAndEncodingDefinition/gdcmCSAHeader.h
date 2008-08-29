@@ -29,6 +29,9 @@ namespace gdcm
  * find a solution. 
  */
 //-----------------------------------------------------------------------------
+
+class GDCM_EXPORT CSAElementNameException : public std::exception {};
+
 class DataElement;
 class PrivateTag;
 /**
@@ -80,7 +83,13 @@ public :
   static const PrivateTag & GetCSAImageHeaderInfoTag();
   static const PrivateTag & GetCSASeriesHeaderInfoTag();
 
+  /// Return the CSAElement corresponding to name 'name'
+  /// \warning Case Sensitive
+  /// Throw a CSAElementNameException if not found
   const CSAElement &GetCSAElementByName(const char *name);
+
+  /// Return true if the CSA element matching 'name' is found or not
+  bool FindCSAElementByName(const char *name);
 
 private:
   CSAElement Dummy;

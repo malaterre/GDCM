@@ -68,14 +68,14 @@ public:
     Insert(de);
   }
 
-  // Read
+  /// Read
   std::istream &Read(std::istream &is);
   std::istream &ReadCompat(std::istream &is);
 
-  // Write
+  /// Write
   std::ostream &Write(std::ostream &os) const;
 
-  // Construct a FileMetaInformation from an already existing DataSet:
+  /// Construct a FileMetaInformation from an already existing DataSet:
   void FillFromDataSet(DataSet const &ds);
 
   /// Get Preamble
@@ -83,7 +83,7 @@ public:
   Preamble &GetPreamble() { return P; }
   void SetPreamble(const Preamble &p) { P = p; }
  
-  // Override the GDCM 
+  /// Override the GDCM default values:
   static void SetImplementationClassUID(const char * imp);
   static void AppendImplementationClassUID(const char * imp);
   static const char *GetImplementationClassUID();
@@ -94,9 +94,9 @@ public:
 
   FileMetaInformation(FileMetaInformation const &fmi):DataSet(fmi)
     {
-  DataSetTS = fmi.DataSetTS;
-  MetaInformationTS = fmi.MetaInformationTS;
-  DataSetMS = fmi.DataSetMS;
+    DataSetTS = fmi.DataSetTS;
+    MetaInformationTS = fmi.MetaInformationTS;
+    DataSetMS = fmi.DataSetMS;
     }
 
 protected:

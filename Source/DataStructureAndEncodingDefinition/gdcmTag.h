@@ -108,8 +108,8 @@ public:
     return ElementTag.tag != _val.ElementTag.tag;
     }
 
-  // DICOM Standard expects the Data Element to be sorted by Tags
-  // All other comparison can be constructed from this one and operator ==
+  /// DICOM Standard expects the Data Element to be sorted by Tags
+  /// All other comparison can be constructed from this one and operator ==
   // FIXME FIXME FIXME TODO
   // the following is pretty dumb. Since we have control over who is group
   // and who is element, we should reverse them in little endian and big endian case
@@ -139,21 +139,22 @@ public:
     {
     ElementTag.tag = _val.ElementTag.tag;
     }
-  // Should be always true
+  /// return the length of tag (read: size on disk)
   uint32_t GetLength() const { return 4; }
 
-  // STANDARD DATA ELEMENT: A Data Element defined in the DICOM Standard,
-  // and therefore listed in the DICOM Data Element Dictionary in PS 3.6.
-  // Is the Tag from the Public dict...well the implementation is buggy
-  // it does not prove the element is indeed in the dict...
+  /// STANDARD DATA ELEMENT: A Data Element defined in the DICOM Standard,
+  /// and therefore listed in the DICOM Data Element Dictionary in PS 3.6.
+  /// Is the Tag from the Public dict...well the implementation is buggy
+  /// it does not prove the element is indeed in the dict...
   bool IsPublic() const { return !(ElementTag.tags[0] % 2); }
 
-  // PRIVATE DATA ELEMENT: Additional Data Element, defined by an 
-  // implementor, to communicate information that is not contained in 
-  // Standard Data Elements. Private Data elements have odd Group Numbers.
+  /// PRIVATE DATA ELEMENT: Additional Data Element, defined by an 
+  /// implementor, to communicate information that is not contained in 
+  /// Standard Data Elements. Private Data elements have odd Group Numbers.
   bool IsPrivate() const { return !IsPublic(); }
 
   //-----------------------------------------------------------------------------
+  /// Read a tag from binary representation
   template <typename TSwap>
   std::istream &Read(std::istream &is)
     {
@@ -162,6 +163,7 @@ public:
     return is;
     }
 
+  /// Write a tag in binary rep
   template <typename TSwap>
   const std::ostream &Write(std::ostream &os) const
     {
@@ -172,7 +174,7 @@ public:
     return os.write((char*)(&copy), 4);
     }
 
-  // Return the Private Creator Data Element tag of a private data element
+  /// Return the Private Creator Data Element tag of a private data element
   Tag GetPrivateCreator() const
     {
     // See PS 3.5 - 7.8.1 PRIVATE DATA ELEMENT TAGS
@@ -182,6 +184,7 @@ public:
     r.SetElement( GetElement() >> 8 );
     return r;
     }
+  /// Set private creator:
   void SetPrivateCreator(Tag const &t)
     {
     // See PS 3.5 - 7.8.1 PRIVATE DATA ELEMENT TAGS
@@ -191,12 +194,13 @@ public:
     SetElement( GetElement() + element );
     }
 
-  // Returns if tag is a Private Creator (xxxx,00yy), where xxxx is odd number and yy in [0x10,0xFF]
+  /// Returns if tag is a Private Creator (xxxx,00yy), where xxxx is odd number and yy in [0x10,0xFF]
   bool IsPrivateCreator() const
     {
     return IsPrivate() && (GetElement() <= 0xFF && GetElement() >= 0x10);
     }
 
+  /// return if the tag is considered to be an illegal tag
   bool IsIllegal() const 
     {
     // DICOM reserved those groups:
@@ -206,12 +210,13 @@ public:
       || (IsPrivate() && GetElement() > 0x0 && GetElement() < 0x10 );
     }
 
+  /// return whether the tag correspond to a group length tag:
   bool IsGroupLength() const
     {
     return GetElement() == 0x0;
     }
 
-  // e.g 6002,3000 belong to groupXX: 6000,3000
+  /// e.g 6002,3000 belong to groupXX: 6000,3000
   bool IsGroupXX(const Tag &t) const
     {
     if( t.GetElement() == GetElement() )
@@ -223,10 +228,11 @@ public:
     return false;
     }
 
-  // This is a highly user oriented function, the string should be formated as:
-  // 1234,5678 to specify the tag (0x1234,0x5678)
-  // The notation comes from the DICOM standard, and is handy to use from a command line
-  // program
+  /// Read from a comma separated string.
+  /// This is a highly user oriented function, the string should be formated as:
+  /// 1234,5678 to specify the tag (0x1234,0x5678)
+  /// The notation comes from the DICOM standard, and is handy to use from a command line
+  /// program
   void ReadFromCommaSeparatedString(const char *str);
 
 private:

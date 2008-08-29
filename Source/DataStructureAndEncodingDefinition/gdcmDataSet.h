@@ -122,6 +122,8 @@ public:
       }
     return ll;
   }
+  /// Insert a DataElement in the DataSet.
+  /// \warning: Tag need to be >= 0x8 to be considered valid data element
   void Insert(const DataElement& de) {
     // FIXME: there is a special case where a dataset can have value < 0x8, see:
     // $ gdcmdump --csa gdcmData/SIEMENS-JPEG-CorruptFrag.dcm 
@@ -134,18 +136,21 @@ public:
       gdcmErrorMacro( "Cannot add element with group < 0x0008 in the dataset" );
       }
   }
+  /// Replace a dataelement with another one
   void Replace(const DataElement& de) {
     if( DES.find(de) != DES.end() ) DES.erase(de);
     Insert(de);
   }
+  /// Completely remove a dataelement from the dataset
   SizeType Remove(const Tag& tag) {
     DataElementSet::size_type count = DES.erase(tag);
     assert( count == 0 || count == 1 );
     return count;
   }
 
-  // WARNING:
-  // This only search at the same level as the DataSet is !
+  /// Return the DataElement with Tag 't'
+  /// \warning:
+  /// This only search at the 'root level' of the DataSet
   const DataElement& GetDataElement(const Tag &t) const {
     const DataElement r(t);
     ConstIterator it = DES.find(r);
@@ -156,9 +161,12 @@ public:
   const DataElement& operator[] (const Tag &t) const { return GetDataElement(t); }
   const DataElement& operator() (uint16_t group, uint16_t element) const { return GetDataElement( Tag(group,element) ); }
 
+  /// Return the private creator of the private tag 't':
   std::string GetPrivateCreator(const Tag &t) const;
 
+  /// Look up if private tag 't' is present in the dataset:
   bool FindDataElement(const PrivateTag &t) const;
+  /// Return the dataelement
   const DataElement& GetDataElement(const PrivateTag &t) const;
 
   // DUMB: this only search within the level of the current DataSet
@@ -182,6 +190,7 @@ public:
     return GetDEEnd();
     }
 
+  /// Returns if the dataset is empty
   bool IsEmpty() const { return DES.empty(); };
 
   DataSet& operator=(DataSet const &val)
