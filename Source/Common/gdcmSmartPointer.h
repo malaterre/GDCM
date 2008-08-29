@@ -19,7 +19,7 @@
 
 namespace gdcm
 {
-/*
+/**
  * \brief Class for Smart Pointer
  * Will only work for subclass of gdcm::Object
  * See tr1/shared_ptr for a more general approach (not invasive)
@@ -34,7 +34,6 @@ namespace gdcm
  *
  * and itk::SmartPointer
  */
-
 template<class ObjectType>
 class SmartPointer
 {
@@ -58,31 +57,36 @@ public:
     { return Pointer; }
 
   /// Overload operator assignment.
-  SmartPointer &operator = (SmartPointer const &r)
+  //SmartPointer &operator = (SmartPointer const &r)
+  void operator = (SmartPointer const &r)
     { return operator = (r.Pointer); }
   
   /// Overload operator assignment.
-  SmartPointer &operator = (ObjectType const *r)
+  //SmartPointer &operator = (ObjectType *r)
+  void operator = (ObjectType const *r)
     {                                                              
-    if (Pointer != r)
-      {
-      ObjectType* tmp = Pointer; //important
-      Pointer = const_cast<ObjectType*>(r);
-      Register();
-      if ( tmp ) { tmp->UnRegister(); }
-      }
-    return *this;
+    if(Pointer) Pointer->UnRegister();
+    Pointer = const_cast<ObjectType*>(r);
+    if(Pointer) Pointer->Register();
+    //if (Pointer != r)
+    //  {
+    //  ObjectType* tmp = Pointer; //important
+    //  Pointer = r;
+    //  Register();
+    //  if ( tmp ) { tmp->UnRegister(); }
+    //  }
+    //return *this;
     }
 
 private:
   void Register()
     {
-    if(Pointer) { Pointer->Register(); }
+    if(Pointer) Pointer->Register();
     }
 
   void UnRegister()
     {
-    if(Pointer) { Pointer->UnRegister(); }
+    if(Pointer) Pointer->UnRegister();
     }
 
   ObjectType* Pointer;

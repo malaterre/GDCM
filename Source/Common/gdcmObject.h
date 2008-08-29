@@ -35,9 +35,9 @@ template<class ObjectType> class SmartPointer;
 class GDCM_EXPORT Object
 {
   template <class ObjectType> friend class SmartPointer;
-protected:
   friend std::ostream& operator<<(std::ostream &os, const Object &obj);
 
+public:
   Object():ReferenceCount(0) {}
 
   // Implementation note:
@@ -58,12 +58,19 @@ protected:
     assert(ReferenceCount == 0);
     }
 
+  // Set the ref count to 0
+  Object(const Object&){ ReferenceCount = 0; }
+  // Do NOT copy the reference count !
+  void operator=(const Object&){}
+
+protected:
   // For the purpose of the invasive SmartPointer implementation
   void Register() {
     ReferenceCount++;
   }
   void UnRegister()
     {
+    assert( ReferenceCount > 0 );
     ReferenceCount--;
     if(!ReferenceCount)
       {

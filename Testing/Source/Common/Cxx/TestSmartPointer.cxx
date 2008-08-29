@@ -41,11 +41,11 @@ void Fill(SmartPointer<Foo> &p)
   p = &rp;
 }
 
-class Object2 : public Foo {};
+//class Object2 : public Foo {};
 
 int TestSmartPointer(int, char *[])
 {
-  SmartPointer<Object2> p = new Object2;
+  SmartPointer<Object> p = new Object;
   SmartPointer<Foo> p2 = new Foo;
   p2->foo();
   SmartPointer<Object> p3 = new Foo;
