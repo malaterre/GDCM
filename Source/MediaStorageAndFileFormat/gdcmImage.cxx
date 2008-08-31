@@ -281,6 +281,7 @@ bool Image::AreOverlaysInPixelData() const
 
 void Image::Print(std::ostream &os) const
 {
+  Object::Print(os);
   //assert( NumberOfDimensions );
   os << "NumberOfDimensions: " << NumberOfDimensions << "\n";
   if( NumberOfDimensions )

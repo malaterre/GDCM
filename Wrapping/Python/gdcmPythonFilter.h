@@ -43,7 +43,7 @@ public:
   // Convert to string the ByteValue contained in a DataElement
   PyObject *ToPyObject(const Tag& t) const;
 
-  void SetFile(const File& f) { F = &f; }
+  void SetFile(const File& f) { F = f; }
   File &GetFile() { return *F; }
   const File &GetFile() const { return *F; }
 

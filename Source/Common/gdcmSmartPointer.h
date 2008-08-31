@@ -43,6 +43,11 @@ public:
     { Register(); }
   SmartPointer(ObjectType* p):Pointer(p)
     { Register(); }
+  SmartPointer(ObjectType const & p)
+    {
+    Pointer = const_cast<ObjectType*>(&p);
+    Register();
+    }
   ~SmartPointer() {
     UnRegister();
     Pointer = 0;
@@ -52,22 +57,38 @@ public:
   ObjectType *operator -> () const
     { return Pointer; }
 
+  ObjectType& operator * () const
+    { return *Pointer; }
+
   /// Return pointer to object.
   operator ObjectType * () const 
     { return Pointer; }
 
   /// Overload operator assignment.
-  //SmartPointer &operator = (SmartPointer const &r)
-  void operator = (SmartPointer const &r)
+  SmartPointer &operator = (SmartPointer const &r)
     { return operator = (r.Pointer); }
   
   /// Overload operator assignment.
-  //SmartPointer &operator = (ObjectType *r)
-  void operator = (ObjectType const *r)
+  SmartPointer &operator = (ObjectType *r)
     {                                                              
-    UnRegister();
-    Pointer = const_cast<ObjectType*>(r);
-    Register();
+    // http://www.parashift.com/c++-faq-lite/freestore-mgmt.html#faq-16.22
+    // DO NOT CHANGE THE ORDER OF THESE STATEMENTS!
+    // (This order properly handles self-assignment)
+    // (This order also properly handles recursion, e.g., if a ObjectType contains SmartPointer<ObjectType>s)
+    if( Pointer != r )
+      {
+      ObjectType* old = Pointer;
+      Pointer = r;
+      Register();
+      if ( old ) { old->UnRegister(); }
+      }
+    return *this;
+    }
+
+  SmartPointer &operator = (ObjectType const &r)
+    {
+    ObjectType* tmp = const_cast<ObjectType*>(&r);
+    return operator = (tmp);
     }
 
 private:

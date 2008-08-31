@@ -51,16 +51,17 @@ public:
   // class MyObject : public Object {};
   // SmartPointer<MyObject> o = new MyObject;
   // delete o; // grrrrrr
-  virtual ~Object()
-    {
+  virtual ~Object() {
     // If your debugger reach here it means you are doing something silly
     // like using SmartPointer on object allocated on the stack (vs heap)
     assert(ReferenceCount == 0);
     }
 
+  // http://www.parashift.com/c++-faq-lite/freestore-mgmt.html#faq-16.24
   // Set the ref count to 0
-  Object(const Object&){ ReferenceCount = 0; }
   // Do NOT copy the reference count !
+  /// Special requirement for copy/cstor, assigment operator
+  Object(const Object&):ReferenceCount(0){}
   void operator=(const Object&){}
 
 protected:
@@ -69,8 +70,7 @@ protected:
     ReferenceCount++;
     assert( ReferenceCount > 0 );
   }
-  void UnRegister()
-    {
+  void UnRegister() {
     assert( ReferenceCount > 0 );
     ReferenceCount--;
     if(!ReferenceCount)
@@ -78,7 +78,6 @@ protected:
       delete this;
       }
     }
-
 
 public:
   // For dealing with printing of object and polymorphism

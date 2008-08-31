@@ -63,7 +63,7 @@ public:
   Value &GetValue() { return *DataField; }
   void SetValue(Value const & vl) {
     //assert( DataField == 0 );
-    DataField = &vl;
+    DataField = vl;
   }
   bool IsEmpty() const { return DataField == 0; }
   void SetByteValue(const char *array, VL length)

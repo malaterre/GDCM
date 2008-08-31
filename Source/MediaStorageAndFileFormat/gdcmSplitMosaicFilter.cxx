@@ -46,7 +46,7 @@ bool reorganize_mosaic(const unsigned short *input, const unsigned int *inputdim
 
 void SplitMosaicFilter::SetImage(const Image& image)
 {
-  I = &image;
+  I = image;
 }
 
 bool SplitMosaicFilter::Split()

@@ -37,7 +37,7 @@ ImageWriter::~ImageWriter()
 
 void ImageWriter::SetImage(Image const &img)
 {
-  PixelData = &img;
+  PixelData = img;
 }
 
 bool ImageWriter::Write()

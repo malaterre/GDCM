@@ -54,7 +54,7 @@ public:
   /// Main function that loop over all elements and remove group length
   bool RemoveGroupLength();
 
-  void SetFile(const File& f) { F = &f; }
+  void SetFile(const File& f) { F = f; }
   //const File &GetFile() const { return *F; }
   File &GetFile() { return *F; }
 

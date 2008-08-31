@@ -50,7 +50,7 @@ public:
   std::string FromString(const Tag&t, const char * value, VL const & vl);
 
   //typedef std::map<Tag, gdcm::ConstCharWrapper> StringSet;
-  void SetFile(const File& f) { F = &f; }
+  void SetFile(const File& f) { F = f; }
   File &GetFile() { return *F; }
   const File &GetFile() const { return *F; }
 

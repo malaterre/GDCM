@@ -47,7 +47,7 @@ public:
   const Image &GetImage() const { return *I; }
   Image &GetImage() { return *I; }
 
-  void SetFile(const File& f) { F = &f; }
+  void SetFile(const File& f) { F = f; }
   File &GetFile() { return *F; }
   const File &GetFile() const { return *F; }
 

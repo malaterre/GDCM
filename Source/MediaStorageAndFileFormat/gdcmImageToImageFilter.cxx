@@ -22,7 +22,7 @@ namespace gdcm
 
 void ImageToImageFilter::SetInput(const Image& image)
 {
-  Input = &image;
+  Input = image;
 }
 
 

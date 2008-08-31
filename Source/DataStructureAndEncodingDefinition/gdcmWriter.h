@@ -80,7 +80,7 @@ public:
   }
 
   /// Set/Get the DICOM file (DataSet + Header)
-  void SetFile(const File& f) { F = &f; }
+  void SetFile(const File& f) { F = f; }
   File &GetFile() { return *F; }
 
   /// Undocumented function, do not use.

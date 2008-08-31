@@ -83,7 +83,7 @@ public:
   Value &GetValue() { return *ValueField; }
   void SetValue(Value const & vl) {
     //assert( ValueField == 0 );
-    ValueField = &vl;
+    ValueField = vl;
   }
   bool IsEmpty() const { return ValueField == 0 || (GetByteValue() && GetByteValue()->IsEmpty()); }
 
