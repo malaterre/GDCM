@@ -73,12 +73,15 @@ int TestUnpacker12Bits(int, char *[])
   if( b )
     {
     unsigned short * output_s = (unsigned short*)output;
-    const unsigned short outputvalues[] = { 0x0012, 0x0345, 0x0678, 0x09ab };
+    const unsigned short outputvalues[] = { 0x301, 0x452, 0x967, 0xab8 };
     const size_t outputlen = sizeof(outputvalues) / sizeof(*outputvalues);
     assert( outlen / 2 == outputlen );
     for(size_t i = 0; i < outputlen; ++i)
       {
-      //assert( outputvalues[i] == output_s[i] );
+      if( outputvalues[i] == output_s[i] )
+        {
+        ++res;
+        }
       }
     }
   delete[] output;
