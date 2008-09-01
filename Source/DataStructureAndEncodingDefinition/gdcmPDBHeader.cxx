@@ -267,7 +267,21 @@ const PDBElement &PDBHeader::GetPDBElementByName(const char *name)
       return *it;
       }
     }
-  return Dummy;
+  throw PDBElementNameException();
+}
+
+bool PDBHeader::FindPDBElementByName(const char *name)
+{
+  std::vector<PDBElement>::const_iterator it = InternalPDBDataSet.begin();
+  for(; it != InternalPDBDataSet.end(); ++it)
+    {
+    const char *itname = it->GetName();
+    if( strcmp(name, itname) == 0 )
+      {
+      return true;
+      }
+    }
+  return false;
 }
 
 static const char pdbheader[] = "GEMS_SERS_01";

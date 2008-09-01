@@ -30,6 +30,9 @@ namespace gdcm
  */
 //-----------------------------------------------------------------------------
 
+/** 
+ * \brief Exception when looking up element that's not present
+ */
 class GDCM_EXPORT CSAElementNameException : public std::exception {};
 
 class DataElement;
@@ -92,8 +95,8 @@ public :
   static const PrivateTag & GetCSASeriesHeaderInfoTag();
 
   /// Return the CSAElement corresponding to name 'name'
-  /// \warning Case Sensitive
   /// Throw a CSAElementNameException if not found
+  /// \warning Case Sensitive
   const CSAElement &GetCSAElementByName(const char *name);
 
   /// Return true if the CSA element matching 'name' is found or not
