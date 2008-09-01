@@ -14,6 +14,7 @@
 =========================================================================*/
 #include "gdcmUnpacker12Bits.h"
 #include <set>
+#include <stdlib.h>
 
 int TestUnpacker12Bits(int, char *[])
 {
@@ -78,13 +79,29 @@ int TestUnpacker12Bits(int, char *[])
     assert( outlen / 2 == outputlen );
     for(size_t i = 0; i < outputlen; ++i)
       {
-      if( outputvalues[i] == output_s[i] )
+      if( outputvalues[i] != output_s[i] )
         {
         ++res;
         }
       }
     }
   delete[] output;
+}
+
+{
+  const unsigned short input[] = { 0x301, 0x452, 0x967, 0xab8 };
+  gdcm::Unpacker12Bits u12;
+  unsigned char values[6] = {};
+  const unsigned char ref[] = { 0x01, 0x23, 0x45, 0x67, 0x89, 0xab };
+  bool b = u12.Pack((char*)values, (char*)input, 8); // 4 * sizeof(us) == 8
+  for(size_t i = 0; i < 6; ++i)
+    {
+    if( values[i] != ref[i] )
+      {
+      abort();
+      ++res;
+      }
+    }
 }
  
   return res;

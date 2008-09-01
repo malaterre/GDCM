@@ -39,6 +39,23 @@ bool Unpacker12Bits::Unpack(char *out, const char *in, size_t n)
 
 bool Unpacker12Bits::Pack(char *out, const char *in, size_t n)
 {
+  if( n % 2 ) return false;
+  unsigned char *q = (unsigned char*)out;
+  unsigned short *p = (unsigned short*)in;
+  const unsigned short *end = (unsigned short*)(in+n);
+  //unsigned char b0,b1,b2;
+  unsigned short b0,b1;
+
+  while(p!=end)
+    {
+    b0 = *p++;
+    b1 = *p++;
+
+    *q++ = (b0 & 0xff);
+    *q++ = (b0 >> 8) + ((b1 & 0xf) << 4);
+    *q++ = b1 >> 4;
+    }
+
   return false;
 }
 
