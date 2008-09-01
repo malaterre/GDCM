@@ -18,6 +18,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #define RLE_LIB_VERSION 0.0.1
 
@@ -52,6 +53,7 @@ typedef struct
   int col;
   FILE *stream;
   int current_segment;
+  unsigned long current_pos;
   rle_header *header;
 } rle_decompress_struct;
 
@@ -109,6 +111,7 @@ void rle_stdio_src(rle_decompress_struct *cinfo, FILE *infile, int *dims)
 int rle_start_decompress(rle_decompress_struct *cinfo)
 {
   fseek(cinfo->stream, cinfo->header->offset[0], SEEK_SET );
+  cinfo->current_pos = 0;
   return 1;
 }
 
@@ -127,6 +130,35 @@ void rle_create_decompress(rle_decompress_struct *cinfo)
 int rle_read_scanlines(rle_decompress_struct *cinfo, char *buffer, int f)
 {
   signed char byte;
+  signed char nextbyte;
+  unsigned long length = cinfo->row * cinfo->col;
+  unsigned long noutbytes = 0;
+  char * p = buffer;
+  int c;
+  while( noutbytes < cinfo->row )
+    {
+    //fseek(cinfo->stream, cinfo->header->offset[0], SEEK_SET );
+    size_t s1 = fread(&byte, 1, 1, cinfo->stream);
+    if( byte >= 0 )
+      {
+      fread(p, (int)byte+1, 1, cinfo->stream);
+      p+=(int)byte+1;
+      }
+    else if( byte < 0 && byte > -128 )
+      {
+      size_t s2 = fread(&nextbyte, 1, 1, cinfo->stream);
+      for( c = 0; c < (int)-byte + 1; ++c )
+        {
+        *p++ = nextbyte;
+        }
+      }
+    else
+      {
+      assert( byte == -128 );
+      }
+    }
+  assert( p - buffer == cinfo->row );
+
   return 1;
 }
 

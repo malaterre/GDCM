@@ -62,9 +62,15 @@ int main(int argc, char *argv[])
 
   rle_create_decompress(&cinfo);
 
+  int i;
   int dims[2] = { 1760,1760 };
   int bpp = 16;
   rle_stdio_src(&cinfo, infile, dims);
+
+  printf("num segment: %d\n", cinfo.header->num_segments );
+  printf("offsets table:\n");
+  for(i = 0; i < 16; ++i)
+    printf("offset: %d\n", cinfo.header->offset[i] );
 
   (void) rle_start_decompress(&cinfo);
 
