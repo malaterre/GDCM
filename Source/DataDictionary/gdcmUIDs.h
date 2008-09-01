@@ -25,6 +25,9 @@
 namespace gdcm
 {
 
+/**
+ * \brief all known uids
+ */
 class GDCM_EXPORT UIDs
 {
 public:

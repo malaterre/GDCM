@@ -21,6 +21,9 @@
 namespace gdcm
 {
 
+/**
+ * \brief Class convert a class uid into IOD
+ */
 class GDCM_EXPORT SOPClassUIDToIOD
 {
 public:

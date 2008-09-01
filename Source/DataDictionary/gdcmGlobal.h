@@ -35,6 +35,9 @@
 
 namespace gdcm
 {
+class GlobalInternal;
+class Dicts;
+class Defs;
 /**
  * \brief Global
  * \note bla
@@ -44,9 +47,6 @@ namespace gdcm
  * before and destroyed after all other singletons in VTK.
  * 
  */
-class GlobalInternal;
-class Dicts;
-class Defs;
 class GDCM_EXPORT Global // why expose the symbol I think I only need to expose the instance...
 {
 public:
