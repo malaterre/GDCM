@@ -19,16 +19,17 @@
 
 namespace gdcm
 {
-/** \class Unpacker12Bits
- * \brief Unpacked 12 bits pixel into 16bits 
+/**
+ * \brief Unpack 12 bits pixel into 16bits 
  */
-
 class GDCM_EXPORT Unpacker12Bits
 {
 public:
-  Unpacker12Bits() {}
-  ~Unpacker12Bits() {}
-  bool Unpack(char *out, const char *in, size_t n);
+  /// Unpack an array of 'packed' 12bits data into a more conventional 16bits array
+  static bool Unpack(char *out, const char *in, size_t n);
+
+  /// Pack (not implemented)
+  static bool Pack(char *out, const char *in, size_t n);
 };
 
 } // end namespace gdcm

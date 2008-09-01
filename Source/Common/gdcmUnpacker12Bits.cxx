@@ -27,14 +27,19 @@ bool Unpacker12Bits::Unpack(char *out, const char *in, size_t n)
   unsigned char b0,b1,b2;
 
   while (p!=end)
-  {
+    {
     b0 = *p++;
     b1 = *p++;
     b2 = *p++;
     *q++ =  ((b1 & 0xf) << 8) + b0;
     *q++ =  (b1>>4) + (b2<<4);
-  } 
+    } 
   return true;
+}
+
+bool Unpacker12Bits::Pack(char *out, const char *in, size_t n)
+{
+  return false;
 }
 
 } // end namespace gdcm
