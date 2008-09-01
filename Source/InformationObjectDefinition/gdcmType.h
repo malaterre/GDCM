@@ -23,7 +23,9 @@
 namespace gdcm
 {
 
-/*
+/**
+ * \brief Type
+ * \note
  * PS 3.5
  * 7.4 DATA ELEMENT TYPE
  * 7.4.1 TYPE 1 REQUIRED DATA ELEMENTS

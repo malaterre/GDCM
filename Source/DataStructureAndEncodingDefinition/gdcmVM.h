@@ -17,7 +17,12 @@
 
 #include "gdcmTypes.h"
 #include <iostream>
-/* \brief Value Multiplicity
+
+namespace gdcm
+{
+
+/**
+ * \brief Value Multiplicity
  * Looking at the DICOMV3 dict only there is very few cases:
  * 1
  * 2
@@ -58,11 +63,8 @@
  * 30_30n
  * 28
  *
- * 6-6n ... oh yeah baby!!!
+ * 6-6n 
  */
-namespace gdcm
-{
-
 class GDCM_EXPORT VM
 {
 public:
@@ -108,21 +110,22 @@ public:
     VM_END = VM1_n + 1  // Custom tag to count number of entry
   } VMType;
 
-  // Return the string as written in the official DICOM dict from 
-  // a custom enum type
+  /// Return the string as written in the official DICOM dict from 
+  /// a custom enum type
   static const char* GetVMString(VMType vm);
   static VMType GetVMType(const char *vm);
 
-  // Check if vm1 is valid compare to vm2, i.e vm1 is element of vm2
-  // vm1 is typically deduce from counting in a ValueField
+  /// Check if vm1 is valid compare to vm2, i.e vm1 is element of vm2
+  /// vm1 is typically deduce from counting in a ValueField
   static bool IsValid(int vm1, VMType vm2);
   //bool IsValid() { return VMField != VM0 && VMField < VM_END; }
 
-  // WARNING: Implementation deficiency
-  // The Compatible function is poorly implemented, the reference vm should be coming from
-  // the dictionary, while the passed in value is the value guess from the file.
+  /// WARNING: Implementation deficiency
+  /// The Compatible function is poorly implemented, the reference vm should be coming from
+  /// the dictionary, while the passed in value is the value guess from the file.
   bool Compatible(VM const &vm) const;
 
+  /// 
   static VMType GetVMTypeFromLength(unsigned int length, unsigned int size);
   static unsigned int GetNumberOfElementsFromArray(const char *array, unsigned int length);
 

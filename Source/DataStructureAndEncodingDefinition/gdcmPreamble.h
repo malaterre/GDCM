@@ -21,6 +21,9 @@
 namespace gdcm
 {
 
+/**
+ * \brief DICOM Preamble (Part 10)
+ */
 class GDCM_EXPORT Preamble
 {
 public:

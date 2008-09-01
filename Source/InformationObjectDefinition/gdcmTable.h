@@ -23,7 +23,8 @@
 namespace gdcm
 {
 
-/* \brief Table
+/**
+ * \brief Table
  */
 class Table
 {

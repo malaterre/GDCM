@@ -23,7 +23,7 @@
 namespace gdcm
 {
 /**
- * \brief
+ * \brief Study
  */
 class GDCM_EXPORT Study
 {

@@ -21,7 +21,7 @@ namespace gdcm
 {
 
 /**
- * \brief Class 
+ * \brief Class for generating unique UID
  * \note bla
  * Usage:
  * When constructing a Series or Study UID, user *has* to keep around the UID,
@@ -30,7 +30,7 @@ namespace gdcm
 class GDCM_EXPORT UIDGenerator
 {
 public:
-  // By default the root of a UID is a GDCM Root...
+  /// By default the root of a UID is a GDCM Root...
   UIDGenerator() {}
 
   // Function to override the GDCM root with a user one:
@@ -49,25 +49,26 @@ public:
   UID's that identify different objects.
   ...
    */
-  // The current implementation in GDCM make use of the UUID implementation (RFC 4122) and has been
-  // successfully been tested for a root of size 26 bytes. Any longer root should work (the ::Generate() 
-  // function will return a string), but will truncate the high bits of the 128bits UUID until the 
-  // generated string fits on 64 bits. The authors disclaims any 
-  // responsabitlity for garanteeing uniqueness of UIDs when the root is longer than 26 bytes.
+  /// The current implementation in GDCM make use of the UUID implementation (RFC 4122) and has been
+  /// successfully been tested for a root of size 26 bytes. Any longer root should work (the ::Generate() 
+  /// function will return a string), but will truncate the high bits of the 128bits UUID until the 
+  /// generated string fits on 64 bits. The authors disclaims any 
+  /// responsabitlity for garanteeing uniqueness of UIDs when the root is longer than 26 bytes.
   static void SetRoot(const char * root);
   static const char *GetRoot();
 
-  // Internally uses a std::string, so two calls have the same pointer !
-  // save into a std::string
-  // In summary do not write code like that:
-  // const char *uid1 = uid.Generate();
-  // const char *uid2 = uid.Generate();
-  // since uid1 == uid2 
+  /// Internally uses a std::string, so two calls have the same pointer !
+  /// save into a std::string
+  /// In summary do not write code like that:
+  /// const char *uid1 = uid.Generate();
+  /// const char *uid2 = uid.Generate();
+  /// since uid1 == uid2 
   const char* Generate();
 
-  // Find out if the string is a valid UID or not
+  /// Find out if the string is a valid UID or not
   static bool IsValid(const char *uid);
 
+  /// Return the default (GDCM) root UID:
   static const char *GetGDCMUID(); // who would want that in the public API ??
 
 protected:

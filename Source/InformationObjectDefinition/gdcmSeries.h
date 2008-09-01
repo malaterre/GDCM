@@ -20,7 +20,7 @@
 namespace gdcm
 {
 /**
- * \brief
+ * \brief Series
  */
 class GDCM_EXPORT Series
 {

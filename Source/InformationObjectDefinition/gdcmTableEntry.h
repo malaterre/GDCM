@@ -22,7 +22,8 @@
 namespace gdcm
 {
 
-/* \brief TableEntry
+/**
+ * \brief TableEntry
  */
 class TableEntry
 {

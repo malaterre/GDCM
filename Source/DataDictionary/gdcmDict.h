@@ -163,6 +163,10 @@ inline std::ostream& operator<<(std::ostream& os, const Dict &val)
 // ValueRepresentation = LO
 // ValueMultiplicity = 1
 // Owner = ""
+
+/**
+ * \brief Private Dict
+ */
 class GDCM_EXPORT PrivateDict
 {
   typedef std::map<PrivateTag, DictEntry> MapDictEntry;

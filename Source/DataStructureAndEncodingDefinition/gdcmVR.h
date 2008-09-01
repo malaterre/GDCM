@@ -25,7 +25,9 @@
 
 namespace gdcm
 {
-/* \brief VR class
+
+/**
+ * \brief VR class
  * This is adapted from DICOM standard
  * The biggest difference is the INVALID VR
  * and the composite one that differ from standard (more like an addition)
