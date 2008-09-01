@@ -39,7 +39,7 @@ bool Unpacker12Bits::Unpack(char *out, const char *in, size_t n)
 
 bool Unpacker12Bits::Pack(char *out, const char *in, size_t n)
 {
-  if( n % 2 ) return false;
+  if( n % 4 ) return false; // we need an even number of 'words' so that 2 words are split in 3 bytes
   unsigned char *q = (unsigned char*)out;
   unsigned short *p = (unsigned short*)in;
   const unsigned short *end = (unsigned short*)(in+n);
