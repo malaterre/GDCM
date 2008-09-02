@@ -13,8 +13,10 @@
 
 =========================================================================*/
 #include "gdcmUnpacker12Bits.h"
-#include <set>
 #include <stdlib.h>
+
+#include <set>
+#include <vector>
 
 int TestUnpacker12Bits(int, char *[])
 {
@@ -102,6 +104,31 @@ int TestUnpacker12Bits(int, char *[])
       ++res;
       }
     }
+}
+{
+  //struct uint12_t { unsigned short v:12; };
+  std::vector<unsigned short> v;
+  for(uint16_t val = 0; val < 4096; ++val)
+    {
+    v.push_back( val );
+    }
+  assert( v.size() == 4096 );
+  assert( v[0] == 0 );
+  gdcm::Unpacker12Bits u12;
+  const size_t outsize = 4096 / 2 * 3;
+  unsigned char outvalues[outsize] = {};
+  u12.Pack( (char*)outvalues, (char*)&v[0], 4096 * sizeof(unsigned short) );
+  unsigned short outvalues2[4096] = {};
+  u12.Unpack( (char*)outvalues2, (char*)outvalues, outsize);
+
+  for(uint16_t val = 0; val < 4096; ++val)
+    {
+    if( v[val] != outvalues2[val] )
+      {
+      ++res;
+      }
+    }
+  
 }
  
   return res;
