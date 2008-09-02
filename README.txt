@@ -19,9 +19,9 @@ A continuous dashboard make also sure that any commit did not introduce
 any error on another plateform, a warning or broke a test...
 
 Therefore you should be able to use GDCM from the bleeding edge without
-knowing to much on what is going on. All you need to do is have a look
+knowing too much on what is going on. All you need to do is have a look
 at the GDCM dashboard, and if your plateform is 'green' then you can 
-update your cvs copy and compile safely knowing that there are very few chances
+update your svn copy and compile safely knowing that there are very few chances
 that something won't work. Cheers !
 
 
