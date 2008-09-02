@@ -21,6 +21,7 @@
 namespace gdcm
 {
 
+class Image;
 /**
  * \brief Image Converter
  * \note
@@ -30,7 +31,6 @@ namespace gdcm
  * pass to third party application.
  * This filter is application level and not integrated directly in GDCM
  */
-class Image;
 class GDCM_EXPORT ImageConverter
 {
 public:
