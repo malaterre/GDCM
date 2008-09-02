@@ -21,7 +21,7 @@
   <xsl:template match="/">
     <xsl:text>
 // GENERATED FILE DO NOT EDIT
-// $ xsltproc CSADefaultDicts.xsl CSAHeader.xml &gt; gdcmCSAHeaderDict.cxx
+// $ xsltproc CSADefaultDicts.xsl CSAHeader.xml &gt; gdcmCSAHeaderDefaultDicts.cxx
 
 /*=========================================================================
 
@@ -41,10 +41,11 @@
 #ifndef __gdcmCSAHeaderDict_cxx
 #define __gdcmCSAHeaderDict_cxx
 
-#include "gdcmDicts.h"
+#include "gdcmCSAHeaderDict.h"
+#include "gdcmCSAHeaderDictEntry.h"
 #include "gdcmVR.h"
-#include "gdcmDict.h"
-#include "gdcmDictEntry.h"
+#include "gdcmVM.h"
+
 
 namespace gdcm {
 typedef struct
@@ -167,7 +168,7 @@ generating group length for arbitrary even group number seems to get my xsltproc
       </xsl:if>
     </xsl:for-each>
     <xsl:text>
-  {0xffff,0xffff,0,VR::INVALID,VM::VM0,0,true } // Gard
+  {0,0,VR::INVALID,VM::VM0,0 } // Gard
 };
 
 void CSAHeaderDict::LoadDefault()
@@ -176,12 +177,8 @@ void CSAHeaderDict::LoadDefault()
    CSA_DICT_ENTRY n = CSAHeaderDataDict[i];
    while( n.name != 0 )
    {
-     {
-     assert( n.owner == 0 );
-     Tag t(n.group, n.element);
-     CSADictEntry e( n.name, n.vr, n.vm, n.ret );
-     AddCSADictEntry( t, e );
-     }
+     CSAHeaderDictEntry e( n.name, n.vr, n.vm, n.description );
+     AddCSAHeaderDictEntry( e );
      n = CSAHeaderDataDict[++i];
    }
 }
