@@ -21,12 +21,12 @@
 namespace gdcm
 {
 
-/** \class ByteSwap
- * \brief Perform machine dependent byte swaping (Little Endian,
+/**
+ * \brief ByteSwap
+ * Perform machine dependent byte swaping (Little Endian,
  * Big Endian, Bad Little Endian, Bad Big Endian).
  * TODO: bswap_32 / bswap_64 ...
  */
-
 template<class T>
 class ByteSwap
 {

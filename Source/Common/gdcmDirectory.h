@@ -24,7 +24,7 @@
 
 namespace gdcm
 {
-/*
+/**
  * \brief Class for manipulation directories
  *
  * \note This implementation provide a cross platform implementation

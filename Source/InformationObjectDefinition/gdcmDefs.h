@@ -23,12 +23,12 @@
 
 namespace gdcm
 {
+class DataSet;
+class MediaStorage;
 /**
  * \brief FIXME I do not like the name 'Defs'
  * \note bla
  */
-class DataSet;
-class MediaStorage;
 class GDCM_EXPORT Defs
 {
 public:

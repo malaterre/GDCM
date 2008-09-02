@@ -17,16 +17,16 @@
 
 #include "gdcmPrinter.h"
 
+namespace gdcm
+{
+
+// It's a sink there is no output
 /**
  * \brief Codec class
  * \note
  * Use it to simply dump value read from the file. No interpretation is done.
  * But it is real fast ! Almost no overhead
  */
-namespace gdcm
-{
-
-// It's a sink there is no output
 class GDCM_EXPORT Dumper : public Printer
 {
 public:
