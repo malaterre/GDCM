@@ -301,6 +301,9 @@ static const CSA_DICT_ENTRY CSAHeaderDataDict [] = {
   {"sTXSPEC.asNucleusInfo[0].flAmplitudeCorrection","3",VR::FD,VM::VM1,"Transmitter amplitude correction factor, e.g. used for water suppression"},
   {"sTXSPEC.asNucleusInfo[0].bAmplitudeCorrectionValid","3",VR::SL,VM::VM1,"Amplitude correction valid flag"},
 
+/* Manually added */
+  {"sKSpace.ucSlicePartialFourier","1",VR::US,VM::VM1,"Partial Fourier Information 0x1,0x2,0x4,0x8,0x10 resp. 4/8,5/8,6/8,7/8,8/8"},
+
   {0,0,VR::INVALID,VM::VM0,0 } // Gard
 };
 

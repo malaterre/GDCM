@@ -437,7 +437,11 @@ int main(int argc, char *argv [])
       // ### ASCCONV END ###
       }
     }
-  MyMapType::const_iterator it = mymap.find ( "sKSpace.ucSlicePartialFourier" );
+  const char fourierstr[] = "sKSpace.ucSlicePartialFourier";
+  const gdcm::CSAHeaderDict &csadict = gdcm::Global::GetInstance().GetDicts().GetCSAHeaderDict();
+  const gdcm::CSAHeaderDictEntry &fourier = csadict.GetCSAHeaderDictEntry( fourierstr );
+  std::cout << fourier << std::endl;
+  MyMapType::const_iterator it = mymap.find ( fourierstr );
   if( it == mymap.end() ) return 1;
   //std::cout << it->second << std::endl;
   const std::string &partial_fourier = it->second;
@@ -475,7 +479,6 @@ int main(int argc, char *argv [])
   const std::string &dummy = it->second;
   std::cout << dummy << std::endl;
 
-  const gdcm::CSAHeaderDict &csadict = gdcm::Global::GetInstance().GetDicts().GetCSAHeaderDict();
   const gdcm::CSAHeaderDictEntry &csaentry = csadict.GetCSAHeaderDictEntry( gspec );
   std::cout << csaentry  << std::endl;
 #endif
