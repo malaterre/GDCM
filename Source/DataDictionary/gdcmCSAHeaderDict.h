@@ -22,9 +22,13 @@
 #include <iostream>
 #include <iomanip>
 #include <set>
+#include <exception>
 
 namespace gdcm
 {
+
+class GDCM_EXPORT CSAHeaderDictException : public std::exception {};
+
 /**
  * \brief Class to represent a map of CSAHeaderDictEntry
  */
@@ -57,11 +61,16 @@ public:
 
   const CSAHeaderDictEntry &GetCSAHeaderDictEntry(const char *name) const
     {
-    return *CSAHeaderDictInternal.begin();
+    MapCSAHeaderDictEntry::const_iterator it = CSAHeaderDictInternal.find( name );
+    if( it != CSAHeaderDictInternal.end() )
+      {
+      return *it;
+      }
+    throw CSAHeaderDictException();
     }
 
 protected:
-  friend class CSAHeaderDicts;
+  friend class Dicts;
   void LoadDefault();
 
 private:
@@ -73,6 +82,14 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& os, const CSAHeaderDict &val)
 {
+  CSAHeaderDict::MapCSAHeaderDictEntry::const_iterator it = val.CSAHeaderDictInternal.begin();
+  for(;it != val.CSAHeaderDictInternal.end(); ++it)
+    {
+    const CSAHeaderDictEntry &de = *it;
+    os << de << '\n';
+    }
+
+
   return os;
 }
 

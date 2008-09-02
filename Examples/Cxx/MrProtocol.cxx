@@ -379,6 +379,8 @@ ulVersion                                = 0xbee332
 #include "gdcmImageWriter.h"
 #include "gdcmCSAHeader.h"
 #include "gdcmAttribute.h"
+#include "gdcmGlobal.h"
+#include "gdcmDicts.h"
 
 #include <map>
 
@@ -436,6 +438,7 @@ int main(int argc, char *argv [])
       }
     }
   MyMapType::const_iterator it = mymap.find ( "sKSpace.ucSlicePartialFourier" );
+  if( it == mymap.end() ) return 1;
   //std::cout << it->second << std::endl;
   const std::string &partial_fourier = it->second;
   if( partial_fourier == "0x1" )
@@ -463,6 +466,19 @@ int main(int argc, char *argv [])
     std::cerr << "Impossible: " << partial_fourier << std::endl;
     return 1;
     }
+
+  // Below is an attemp to play with the CSAHeader dict:
+#if 0
+  const char gspec[] = "sGRADSPEC.flSensitivityX";
+  it = mymap.find( gspec );
+  if( it == mymap.end() ) return 1;
+  const std::string &dummy = it->second;
+  std::cout << dummy << std::endl;
+
+  const gdcm::CSAHeaderDict &csadict = gdcm::Global::GetInstance().GetDicts().GetCSAHeaderDict();
+  const gdcm::CSAHeaderDictEntry &csaentry = csadict.GetCSAHeaderDictEntry( gspec );
+  std::cout << csaentry  << std::endl;
+#endif
 
   return 0;
 }

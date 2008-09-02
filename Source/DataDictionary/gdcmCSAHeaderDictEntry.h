@@ -75,6 +75,19 @@ private:
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& os, const CSAHeaderDictEntry &val)
 {
+  if( val.Name.empty() )
+    {
+    os << "[No name]";
+    }
+  else
+    {
+    os << val.Name;
+    }
+  os << "\t" << val.ValueRepresentation << "\t" << val.ValueMultiplicity;
+  if( !val.Description.empty() )
+    {
+    os << "\t" << val.Description;
+    }
   return os;
 }
 

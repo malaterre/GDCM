@@ -127,11 +127,17 @@ const PrivateDict &Dicts::GetPrivateDict() const
   return ShadowDict;
 }
 
+const CSAHeaderDict &Dicts::GetCSAHeaderDict() const
+{
+  return CSADict;
+}
+
 void Dicts::LoadDefaults()
 {
   // TODO: should the user be able to control which dict to load ?
   PublicDict.LoadDefault();
   ShadowDict.LoadDefault();
+  CSADict.LoadDefault();
 }
 
 } // end namespace gdcm
