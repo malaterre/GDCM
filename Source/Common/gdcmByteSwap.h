@@ -42,16 +42,16 @@ public:
     unsigned int num);
 
 protected:
-  ByteSwap() {}
-  ~ByteSwap() {}
+//  ByteSwap() {}
+//  ~ByteSwap() {}
 
 private:
   
 };
 
 /**
- * \example TestDirectory.cxx
- * This is a C++ example on how to use gdcm::Reader
+ * \example TestByteSwap.cxx
+ * This is a C++ example on how to use gdcm::ByteSwap
  */
 
 } // end namespace gdcm

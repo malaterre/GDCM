@@ -100,9 +100,9 @@ public:
     return it->second;
     }
 
-  // Inefficient way of looking up tag by name. Technically DICOM
-  // does not garantee uniqueness (and Curve / Overlay are there to prove it). But
-  // most of the time name is in fact uniq and can be uniquely link to a tag
+  /// Inefficient way of looking up tag by name. Technically DICOM
+  /// does not garantee uniqueness (and Curve / Overlay are there to prove it). But
+  /// most of the time name is in fact uniq and can be uniquely link to a tag
   const DictEntry &GetDictEntryByName(const char *name, Tag & tag) const
     {
     MapDictEntry::const_iterator it = 

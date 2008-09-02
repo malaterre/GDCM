@@ -91,6 +91,7 @@ SET(DICT_SRCS
   gdcmDefaultGroupNames.cxx
   gdcmUIDs.cxx
   gdcmSOPClassUIDToIOD.cxx
+  #gdcmCSAHeaderDict.cxx
   )
 
 #MESSAGE( ${DICT_SRCS} )

@@ -31,6 +31,8 @@ namespace gdcm
  * \note bla
  * TODO FIXME: Need a PublicDictEntry...indeed DictEntry has a notion of retired which
  * does not exist in PrivateDictEntry...
+ *
+ * \see gdcm::Dict
  */
 class GDCM_EXPORT DictEntry
 {
@@ -57,28 +59,38 @@ public:
 
   friend std::ostream& operator<<(std::ostream& _os, const DictEntry &_val);
 
+  /// Set/Get VR
   const VR &GetVR() const { return ValueRepresentation; }
   void SetVR(const VR & vr) { ValueRepresentation = vr; }
 //  bool IsValid() const { return ValueRepresentation != VR::VR_END; }
 //	  !Name.empty() /*&& ValueRepresentation && ValueMultiplicity*/; }
 
+  /// Set/Get VM
   const VM &GetVM() const { return ValueMultiplicity; }
   void SetVM(VM const & vm) { ValueMultiplicity = vm; }
 
+  /// Set/Get Name
   const char *GetName() const { return Name.c_str(); }
   void SetName(const char* name) { Name = name; }
 
-  // same as GetName but without spaces
+  /// same as GetName but without spaces
   const char *GetKeyword() const { return ""; }
 
+  /// Set/Get Retired flag
   bool GetRetired() const { return Retired; }
   void SetRetired(bool retired) { Retired = retired; }
 
   // <entry group="50xx" element="0005" vr="US" vm="1" retired="true" version="3">
+  /// Set whether element is shared in multiple groups (Curve/Overlay typically)
   void SetGroupXX(bool v) { GroupXX = v; }
 
   // <entry group="0020" element="31xx" vr="CS" vm="1-n" retired="true" version="2">
+  /// Set whether element is shared in multiple elements (Source Image IDs typically)
   void SetElementXX(bool v) { ElementXX = v; }
+
+  /// Return whether the name of the DataElement can be considered to be unique.
+  /// As of 2008 all elements name were unique (except the expclitely 'XX' ones)
+  bool IsUnique() const { return ElementXX == false && GroupXX == false; }
 
 private:
   std::string Name;

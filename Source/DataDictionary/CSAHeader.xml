@@ -37,8 +37,8 @@ sKSpace.ucPhasePartialFourier = 0x10
 
 -->
 <dict>
-  <entry name="Attribute Name" type="Type" vr="VR" vm="VM" description="Descriptiom"/>
-  <entry name="General Image Attributes" type="&#xA0;" vr="&#xA0;" vm="&#xA0;" description=""/>
+  <!--entry name="Attribute Name" type="Type" vr="VR" vm="VM" description="Descriptiom"/-->
+  <!--entry name="General Image Attributes" type="1" vr="&#xA0;" vm="&#xA0;" description=""/-->
   <entry name="AcquisitionDate" type="3" vr="DA" vm="1" description="A number identifying the single continuous gathering of data over a period of time which resulted in this image"/>
   <entry name="ContentDate" type="2C" vr="DA" vm="1" description="The date the image data creation started. Required if image is part of a series in which the images are temporally related"/>
   <entry name="AcquisitionTime" type="3" vr="TM" vm="1" description="The time the acquisition of data that resulted in this image started"/>
@@ -49,19 +49,19 @@ sKSpace.ucPhasePartialFourier = 0x10
   <entry name="InstanceNumber" type="2" vr="IS" vm="1" description="A number that identifies this image"/>
   <entry name="ImageComments" type="3" vr="LT" vm="1" description="User-defined comments about the image"/>
   <entry name="ImageInAcquisition" type="3" vr="IS" vm="1" description="Number of images that resulted from this acquisition of data"/>
-  <entry name="ReferencedImageSequence" type="3" vr="link" vm="1" description="A sequence which provides reference to a set of Image SOP Class/Instance identifying other images significantly related to this image (localizer images)"/>
+  <!--entry name="ReferencedImageSequence" type="3" vr="link" vm="1" description="A sequence which provides reference to a set of Image SOP Class/Instance identifying other images significantly related to this image (localizer images)"/-->
   <entry name="&gt;Referenced SOP Class UID" type="1C" vr="UI" vm="1" description="Uniquely identifies the referenced SOP Class"/>
   <entry name="&gt;Referenced SOP Instance UID" type="1C" vr="UI" vm="1" description="Uniquely identifies the referenced SOP Instance"/>
   <entry name="&gt; Referenced Frame Number" type="3" vr="IS" vm="1-n" description="References one or more image frames of a Multi-frame Image SOP Instance, identifying which frames are siginificantly related to this image"/>
-  <entry name="SourceImageSequence" type="3" vr="link" vm="1" description="A sequence which identifies the set of Image SOP Class/Instance pairs of the images which were use to derive this image"/>
+  <!--entry name="SourceImageSequence" type="3" vr="link" vm="1" description="A sequence which identifies the set of Image SOP Class/Instance pairs of the images which were use to derive this image"/-->
   <entry name="&gt;Referenced SOP Class UID" type="1C" vr="UI" vm="1" description="Uniquely identifies the referenced SOP Class"/>
   <entry name="&gt;Referenced SOP Instance UID" type="1C" vr="UI" vm="1" description="Uniquely identifies the referenced SOP Instance"/>
   <entry name="&gt; Referenced Frame Number" type="3" vr="IS" vm="1-n" description="References one or more image frames of a Multi-frame Image SOP Instance, identifying which frames are siginificantly related to this image"/>
   <entry name="ImageType" type="3" vr="CS" vm="1-n" description="Image identification characteristics"/>
   <entry name="Lossy Image Compression" type="3" vr="CS" vm="1" description="Specifies whether an image has undergone lossy compression. Enumerated values: 00 = image has not been subjected to lossy compression. 01 = image has been subjected to lossy compression"/>
   <entry name="Quality Control Image" type="1C" vr="CS" vm="1" description="Indicates whether or not this image is a quality control or phantom image. Enumerated values: YES, NO"/>
-  <entry name="PatientOrientation" type="2" vr="CS" vm="k" description="Patient direction of the rows and columns of the image. Not required for MR images"/>
-  <entry name="MR Image Attributes" type="&#xA0;" vr="&#xA0;" vm="&#xA0;" description=""/>
+  <entry name="PatientOrientation" type="2" vr="CS" vm="1" description="Patient direction of the rows and columns of the image. Not required for MR images"/>
+  <!--entry name="MR Image Attributes" type="1" vr="&#xA0;" vm="&#xA0;" description=""/-->
   <entry name="ImageType" type="1" vr="CS" vm="1-n" description="Image identification characteristics"/>
   <entry name="Samples per Pixel" type="1" vr="US" vm="1" description="Number of samples (planes) in this image"/>
   <entry name="PhotometricInterpretation" type="1" vr="CS" vm="1" description="Specifies the intended interpretation of the pixel data"/>
@@ -70,7 +70,7 @@ sKSpace.ucPhasePartialFourier = 0x10
   <entry name="SequenceVariant" type="1" vr="CS" vm="1-n" description="Variant of the Scanning Sequence"/>
   <entry name="ScanOptions" type="2" vr="CS" vm="1-n" description="Parameters of scanning sequence"/>
   <entry name="MRAcquisitionType" type="2" vr="CS" vm="1" description="Identification of date encoding scheme. Enumerated Values: 2D = frequency x phase 3D = frequency x phase x phase"/>
-  <entry name="&#xA0;" type="&#xA0;" vr="&#xA0;" vm="&#xA0;" description="&#xA0;"/>
+  <!--entry name="&#xA0;" type="1" vr="&#xA0;" vm="&#xA0;" description="&#xA0;"/-->
   <entry name="SequenceName" type="3" vr="SH" vm="1" description="User defined name for the Scanning Sequence and Sequence Varaint combination"/>
   <entry name="AngioFlag" type="3" vr="CS" vm="1" description="Angio image indicator. Primary image for angio processing. Enumerated values: Y = image is Angio N = image is not Angio"/>
   <entry name="RepetitionTime" type="2C" vr="DS" vm="1" description="The period of time in msec between the beginning of a pulse sequence and the beginning of a succeeding (essentially identical) pulse sequence. Required except when Scanning Sequence is EP and Sequnece Variant is not segmented k-space"/>
@@ -102,13 +102,13 @@ sKSpace.ucPhasePartialFourier = 0x10
   <entry name="ReconstructionDiameter" type="3" vr="DS" vm="1" description="Diameter in mm of the region from within which data were used in creating the reconstruction of the image. Data may exist outside this region and portions of the patient may exist outside the region"/>
   <entry name="Receive Coil" type="3" vr="SH" vm="1" description="Received coil used"/>
   <entry name="TransmittingCoil" type="3" vr="SH" vm="1" description="Transmitted coil used"/>
-  <entry name="AcquisitionMatrix" type="3" vr="US" vm="4" description="Dimension of acquired frequency/phase data before reconstruction. Multi-valued: frequency rows\frequency columns\phase rows\phase columns"/>
+  <entry name="AcquisitionMatrix" type="3" vr="US" vm="4" description="Dimension of acquired frequency/phase data before reconstruction. Multi-valued: frequency rows/frequency columns/phase rows/phase columns"/>
   <entry name="PhaseEncodingDirection" type="3" vr="CS" vm="1" description="The axis of phase encoding with respect to the image. Enumerated Values: ROW = phase encoded in rows COL = phase encoded in columns"/>
   <entry name="FlipAngle" type="3" vr="DS" vm="1" description="Steady state angle in degrees to which the magnetic vector is flipped from the magnetic vector to the primary field"/>
   <entry name="VariableFlipAngleFlag" type="3" vr="CS" vm="1" description="Flip angle variation applied during image acquisition. Enumerated Values: Y = yes N = no"/>
   <entry name="SAR" type="3" vr="DS" vm="1" description="Calculated whole body specific absortion rate in watts/kilogram"/>
   <entry name="dbdt" type="3" vr="DS" vm="1" description="The rate of change of the gradient coil magnetic flux density with time (T/s)"/>
-  <entry name="Contrast Bolus Attributes" type="&#xA0;" vr="&#xA0;" vm="&#xA0;" description=""/>
+  <!--entry name="Contrast Bolus Attributes" type="1" vr="&#xA0;" vm="&#xA0;" description=""/-->
   <entry name="ContrastBolusAgent" type="2" vr="LO" vm="1" description="Contrast or bolus agent"/>
   <entry name="ContrastBolusStartTime" type="3" vr="TM" vm="1" description="Time of start of injection"/>
   <entry name="ContrastBolusStopTime" type="3" vr="TM" vm="1" description="Time of end of contrast injection"/>
@@ -116,10 +116,10 @@ sKSpace.ucPhasePartialFourier = 0x10
   <entry name="Contrast Flow Rate(s)" type="3" vr="DS" vm="1-n" description="Rate(s) of injection(s) in millilitres/sec"/>
   <entry name="ContrastBolusVolume" type="3" vr="DS" vm="1" description="Volume injected in milliliters of diluted contrast agent"/>
   <entry name="ContrastFlowDurations" type="3" vr="DS" vm="1-n" description="Duration(s) of injection(s) in seconds. Each Contrast Flow Duration value shall correspond to a value of Contrast Flow Rate (0018,1046)"/>
-  <entry name="&#xA0;" type="&#xA0;" vr="&#xA0;" vm="&#xA0;" description="&#xA0;"/>
+  <!--entry name="&#xA0;" type="1" vr="&#xA0;" vm="&#xA0;" description="&#xA0;"/-->
   <entry name="Contrast/Bolus Ingredient" type="3" vr="CS" vm="1" description="Active ingredient of agent, Defined Terms: IODINE, GADOLIMIUM, CARBON DIOXIDE, BARIUM"/>
   <entry name="Contrast/Bolus Ingredient Concentration" type="3" vr="DS" vm="1" description="Milligrams of active ingredient per milliliter of (diluted) agent"/>
-  <entry name="Image Pixel Attributes" type="&#xA0;" vr="&#xA0;" vm="&#xA0;" description=""/>
+  <!--entry name="Image Pixel Attributes" type="1" vr="&#xA0;" vm="&#xA0;" description=""/-->
   <entry name="SamplesPerPixel" type="1" vr="US" vm="1" description="Number of samples (planes) in this image"/>
   <entry name="PhotometricInterpretation" type="1" vr="CS" vm="1" description="Specifies the intended interpretation of the pixel data"/>
   <entry name="Rows" type="1" vr="US" vm="1" description="Number of rows in the image"/>
@@ -129,49 +129,49 @@ sKSpace.ucPhasePartialFourier = 0x10
   <entry name="BitsStored" type="1" vr="US" vm="1" description="Number of bits stored for each pixel sample. Each sample shall have the same number of bits stored"/>
   <entry name="HighBit" type="1" vr="US" vm="1" description="Most significant bit for pixel sample data. Each sample shall have the same high bit"/>
   <entry name="PixelRepresentation" type="1" vr="US" vm="1" description="Data representation of the pixel samples. Each sample shall have the same pixel representation. Enumerated values: 0000H = unsigned integer. 0001H = 2's complement."/>
-  <entry name="PixelData" type="1" vr="OW/OB" vm="1" description="A data stream of the pixel samples which comprises the image"/>
-  <entry name="Smallest Image Pixel Value" type="3" vr="US/SS" vm="1" description="The minimum actual pixel value encountered in this image"/>
-  <entry name="Largest Image Pixel Value" type="3" vr="US/SS" vm="1" description="The maximum actual pixel value encountered in this image"/>
-  <entry name="Image Plane Attributes" type="&#xA0;" vr="&#xA0;" vm="&#xA0;" description=""/>
+  <entry name="PixelData" type="1" vr="OB_OW" vm="1" description="A data stream of the pixel samples which comprises the image"/>
+  <entry name="Smallest Image Pixel Value" type="3" vr="US_SS" vm="1" description="The minimum actual pixel value encountered in this image"/>
+  <entry name="Largest Image Pixel Value" type="3" vr="US_SS" vm="1" description="The maximum actual pixel value encountered in this image"/>
+  <!--entry name="Image Plane Attributes" type="1" vr="&#xA0;" vm="&#xA0;" description=""/-->
   <entry name="SliceThickness" type="2" vr="DS" vm="1" description="Nominal slice thickness, in mm"/>
   <entry name="ImageOrientationPatient" type="1" vr="DS" vm="6" description="The direction cosines of the first row and the first column with respect to the patient"/>
   <entry name="ImagePositionPatient" type="1" vr="DS" vm="3" description="The x,y and z coordinates of the upper left and hand corner (first pixel transmitted) of the image, in mm"/>
   <entry name="SliceLocation" type="3" vr="DS" vm="1" description="Relative position of exposure expressed in mm"/>
   <entry name="PixelSpacing" type="1" vr="DS" vm="2" description="Physical distance in the patient between the center of each pixel, specified by a numeric pair-adjacent row spacing (delimiter) adjacent column spacing in mm"/>
-  <entry name="VOI Lookup Table" type="&#xA0;" vr="&#xA0;" vm="&#xA0;" description=""/>
+  <!--entry name="VOI Lookup Table" type="1" vr="&#xA0;" vm="&#xA0;" description=""/-->
   <entry name="WindowCenter" type="3" vr="DS" vm="1-n" description="Window center"/>
   <entry name="WindowWidth" type="1C" vr="DS" vm="1-n" description="Window width"/>
   <entry name="WindowCenterWidthExplanation" type="3" vr="LO" vm="1-n" description="Free form explanation of the meaning of the Window Center and Width. Multiple values correspond to multiple Window Center and Width values"/>
-  <entry name="Equipment Attributes" type="&#xA0;" vr="&#xA0;" vm="&#xA0;" description="&#xA0;"/>
+  <!--entry name="Equipment Attributes" type="1" vr="&#xA0;" vm="&#xA0;" description="&#xA0;"/-->
   <entry name="Manufacturer" type="2" vr="LO" vm="1" description="Manufacturer of the equipment that produced the digital images"/>
   <entry name="InstitutionName" type="3" vr="LO" vm="1" description="Institution where the equipment is located that produced the digital images"/>
   <entry name="InstitutionAddress" type="3" vr="ST" vm="1" description="Mailing address of the institution where the equipment is located that produced the digital images"/>
   <entry name="ManufacturersModelName" type="3" vr="LO" vm="1" description="Manufacturer's model number of the equipment that produced the digital images"/>
   <entry name="DeviceSerialNumber" type="3" vr="LO" vm="1" description="Manufacturer's seriel number of the equipment that produced the digital images"/>
   <entry name="SoftwareVersions" type="3" vr="LO" vm="1-n" description="Manufacturer's designation of software of the equipment that produced the digital images"/>
-  <entry name="Overlay Idendification Attributes" type="&#xA0;" vr="&#xA0;" vm="&#xA0;" description="&#xA0;"/>
+  <!--entry name="Overlay Idendification Attributes" type="1" vr="&#xA0;" vm="&#xA0;" description="&#xA0;"/-->
   <entry name="OverlayRows" type="1" vr="US" vm="1" description="Number of Rows in Overlay"/>
   <entry name="OverlayColumns" type="1" vr="US" vm="1" description="Number of Columns in Overlay"/>
   <entry name="OverlayType" type="1" vr="CS" vm="1" description="Indicates whether this overlay represents a region of interest or other graphics"/>
-  <entry name="Overlay Origin" type="1" vr="US" vm="1" description="Location of first overlay point with respect to pixel in the image, given as row\column"/>
+  <entry name="Overlay Origin" type="1" vr="US" vm="1" description="Location of first overlay point with respect to pixel in the image, given as row/column"/>
   <entry name="OverlayBitsAllocated" type="1" vr="US" vm="1" description="Number of bits allocated in the overlay"/>
   <entry name="OverlayBitPosition" type="1" vr="US" vm="1" description="Bit in which overlay is stored"/>
-  <entry name="Overlay Data" type="1C" vr="OB/OW" vm="1" description="Overlay pixel data"/>
-  <entry name="MEDCOM Header" type="&#xA0;" vr="&#xA0;" vm="&#xA0;" description="&#xA0;"/>
+  <entry name="Overlay Data" type="1C" vr="OB_OW" vm="1" description="Overlay pixel data"/>
+  <!--entry name="MEDCOM Header" type="1" vr="&#xA0;" vm="&#xA0;" description="&#xA0;"/-->
   <entry name="HeaderType" type="1C" vr="CS" vm="1" description="Medcom header characteristics. Defined Terms: MEDCOM 1"/>
   <entry name="HeaderVersion" type="2C" vr="LO" vm="1" description="Version of Medcom header"/>
   <entry name="HeaderInfo" type="3" vr="OB" vm="1" description="Manufacturer header info"/>
-  <entry name="HistoryInfo" type="3" vr="&#xA0;" vm="1" description="Patient registration history"/>
-  <entry name="MR and SC Private Attributes" type="&#xA0;" vr="&#xA0;" vm="&#xA0;" description="&#xA0;"/>
+  <entry name="HistoryInfo" type="3" vr="OB" vm="1" description="Patient registration history"/>
+  <!--entry name="MR and SC Private Attributes" type="1" vr="&#xA0;" vm="&#xA0;" description="&#xA0;"/-->
   <entry name="EchoLinePosition" type="1" vr="IS" vm="1" description="Fourier line position with the maximal echo for the performed acquisition"/>
   <entry name="EchoColumnPosition" type="1" vr="IS" vm="1" description="Echo column position for the performed acquisition"/>
   <entry name="EchoPartitionPosition" type="1" vr="IS" vm="1" description="Echo partition position for the performed acquisition"/>
-  <entry name="UsedChannelMask" type="1" vr="UL" vm="1" description="8 bit mask of the used receiver channels for the performed acquisition. Example: channel 0: 00000001 channel 3: 00000111 &#xB7;"/>
+  <entry name="UsedChannelMask" type="1" vr="UL" vm="1" description="8 bit mask of the used receiver channels for the performed acquisition. Example: channel 0: 00000001 channel 3: 00000111"/>
   <entry name="Actual3DImaPartNumber" type="1" vr="IS" vm="1" description="Number of a 3D partitions beginning with 0"/>
-  <entry name="ICE_Dims" type="1" vr="LO" vm="1" description="The 9 used ICE object dimensions of the performed acquisition. Combined/unset dimensions will be marked with &quot;X&quot;. E.g.: X_2_1_1_1_1_2_1_1"/>
-  <entry name="B_value" type="&#xA0;" vr="IS" vm="1" description="Diffusion effect in s/mm*mm of the ICE program for the performed acquisition"/>
-  <entry name="Filter1" type="1" vr="IS" vm="&#xA0;" description="Context vision filter"/>
-  <entry name="Filter2" type="1" vr="IS" vm="&#xA0;" description="not used"/>
+  <entry name="ICE_Dims" type="1" vr="LO" vm="1" description="The 9 used ICE object dimensions of the performed acquisition. Combined/unset dimensions will be marked with 'X'. E.g.: X_2_1_1_1_1_2_1_1"/>
+  <entry name="B_value" type="1;" vr="IS" vm="1" description="Diffusion effect in s/mm*mm of the ICE program for the performed acquisition"/>
+  <entry name="Filter1" type="1" vr="IS" vm="1" description="Context vision filter"/>
+  <entry name="Filter2" type="1" vr="IS" vm="1" description="not used"/>
   <entry name="ProtocolSliceNumber" type="1" vr="IS" vm="1" description="Number of the slice beginning with 0"/>
   <entry name="RealDwellTime" type="1" vr="IS" vm="1" description="The time in ns between the beginning of sampling one data point and the beginning of sampling of next data point in the acquired signal. This means the dwell time is the sampling rate during digital conversion of an acquired signal"/>
   <entry name="PixelFile" type="1" vr="UN" vm="1" description="Used raw data file for the performed acquisition"/>
@@ -180,21 +180,21 @@ sKSpace.ucPhasePartialFourier = 0x10
   <entry name="AcquisitionMatrixText" type="1" vr="SH" vm="1" description="Used acquisition matrix description"/>
   <entry name="SequenceMask" type="1" vr="UL" vm="1" description="Parameters used for acquisition, e.g. door open, interpolation, raw filter, Siemens seqence ...."/>
   <entry name="MeasuredFourierLines" type="1" vr="IS" vm="1" description="Number of performed fourier lines"/>
-  <entry name="FlowEncodingDirection" type="&#xA0;" vr="IS" vm="1" description="Flow encoding direction"/>
-  <entry name="FlowVenc" type="&#xA0;" vr="FD" vm="1" description="Flow Quant attribute"/>
-  <entry name="PhaseEncodingDirectionPositive" type="&#xA0;" vr="IS" vm="1" description="Phase encoding direction: 0 = negative; 1 = positive"/>
-  <entry name="NumberOfImagesInMosaic" type="&#xA0;" vr="US" vm="1" description="Number of slices in a mosaic image"/>
-  <entry name="DiffusionGradientDirection" type="&#xA0;" vr="FD" vm="3" description="Diffusion in gradient direction"/>
-  <entry name="ImageGroup" type="&#xA0;" vr="US" vm="1" description="Group of images"/>
-  <entry name="SliceNormalVector" type="&#xA0;" vr="FD" vm="3" description="X,y and z normal vector of the slices"/>
-  <entry name="DiffusionDirection" type="&#xA0;" vr="CS" vm="1" description="Diffusion direction"/>
-  <entry name="TimeAfterStart" type="&#xA0;" vr="DS" vm="1" description="Time delay after start of measurment"/>
-  <entry name="FlipAngle" type="&#xA0;" vr="DS" vm="1" description="Flip angle for SC images"/>
-  <entry name="SequenceName" type="&#xA0;" vr="SH" vm="1" description="Sequence name for SC images"/>
-  <entry name="RepetitionTime" type="&#xA0;" vr="DS" vm="1" description="Repetition time for SC images"/>
-  <entry name="EchoTime" type="&#xA0;" vr="DS" vm="1" description="Echo time for SC images"/>
-  <entry name="NumberOfAverages" type="&#xA0;" vr="DS" vm="n" description="Number of averages for SC images"/>
-  <entry name="MR NonImage (Raw Data, Spectra) Attributes" type="&#xA0;" vr="&#xA0;" vm="&#xA0;" description="&#xA0;"/>
+  <entry name="FlowEncodingDirection" type="1" vr="IS" vm="1" description="Flow encoding direction"/>
+  <entry name="FlowVenc" type="1" vr="FD" vm="1" description="Flow Quant attribute"/>
+  <entry name="PhaseEncodingDirectionPositive" type="1" vr="IS" vm="1" description="Phase encoding direction: 0 = negative; 1 = positive"/>
+  <entry name="NumberOfImagesInMosaic" type="1" vr="US" vm="1" description="Number of slices in a mosaic image"/>
+  <entry name="DiffusionGradientDirection" type="1" vr="FD" vm="3" description="Diffusion in gradient direction"/>
+  <entry name="ImageGroup" type="1" vr="US" vm="1" description="Group of images"/>
+  <entry name="SliceNormalVector" type="1" vr="FD" vm="3" description="X,y and z normal vector of the slices"/>
+  <entry name="DiffusionDirection" type="1" vr="CS" vm="1" description="Diffusion direction"/>
+  <entry name="TimeAfterStart" type="1" vr="DS" vm="1" description="Time delay after start of measurment"/>
+  <entry name="FlipAngle" type="1" vr="DS" vm="1" description="Flip angle for SC images"/>
+  <entry name="SequenceName" type="1" vr="SH" vm="1" description="Sequence name for SC images"/>
+  <entry name="RepetitionTime" type="1" vr="DS" vm="1" description="Repetition time for SC images"/>
+  <entry name="EchoTime" type="1" vr="DS" vm="1" description="Echo time for SC images"/>
+  <entry name="NumberOfAverages" type="1" vr="DS" vm="1_n" description="Number of averages for SC images"/>
+  <!--entry name="MR NonImage (Raw Data, Spectra) Attributes" type="1" vr="&#xA0;" vm="&#xA0;" description="&#xA0;"/-->
   <entry name="NonimageType" type="1" vr="CS" vm="1" description="Data identification characteristics. Defined terms: RAW DATA NUM 4; SPEC NUM4"/>
   <entry name="NonimageVersion" type="3" vr="LO" vm="1" description="Version of Non-image data"/>
   <entry name="NonimageInfo" type="3" vr="OB" vm="1" description="Description of Non-image data"/>
@@ -204,56 +204,56 @@ sKSpace.ucPhasePartialFourier = 0x10
   <entry name="AcquisitionTime" type="3" vr="TM" vm="1" description="The time the acquisition of data started"/>
   <entry name="DerivationDescription" type="3" vr="ST" vm="1" description="A text description of how this data set was derived"/>
   <entry name="AcquisitionNumber" type="2" vr="IS" vm="1" description="A number identifying the gathering of data over a period of time which resulted in this data set"/>
-  <entry name="ImageNumber" type="&#xA0;" vr="IS" vm="1" description="A number that identifies this image"/>
-  <entry name="ImageComments" type="&#xA0;" vr="LT" vm="1" description="User-defined comments about the image"/>
-  <entry name="ReferencedImageSequence" type="&#xA0;" vr="UI" vm="n" description="A sequence which provides reference to a set of Image SOP Class/Instance identifying other images significantly related to this image (localizer images)"/>
-  <entry name="PatientOrientation" type="&#xA0;" vr="CS" vm="1" description="Patient direction of the rows and columns of the image. Not required for MR images"/>
-  <entry name="ScanningSequence" type="&#xA0;" vr="CS" vm="n" description="Description of the type of data taken. Enumerated values: SE = Spin Echo; IR = Inversion Recovery; GR = Gradient Recalled; EP = Echo Planar; RM = Research Mode"/>
-  <entry name="SequenceName" type="&#xA0;" vr="SH" vm="1" description="User defined name for the Scanning Sequence and Sequence Varaint combination"/>
-  <entry name="RepetitionTime" type="&#xA0;" vr="DS" vm="1" description="The period of time in msec between the beginning of a pulse sequence and the beginning of a succeeding (essentially identical) pulse sequence. Required except when Scanning Sequence is EP and Sequnece Variant is not segmented k-space"/>
-  <entry name="EchoTime" type="&#xA0;" vr="DS" vm="1" description="Time in msec between the middle of the excitation pulse and the peak of the echo produced. In the case of segmented k-space, the TE(eff) is the time between the middle of the excitation pulse to the peak of the echo that is used to cover the center of k-space)"/>
-  <entry name="InversionTime" type="&#xA0;" vr="DS" vm="1" description="Time in msec after the middle of inverting RF pulse to middle of excitation pulse to detect the amount of longitudinal magnetization. Required if Scanning Sequence has value of IR"/>
-  <entry name="NumberOfAverages" type="&#xA0;" vr="DS" vm="1" description="Number of averages"/>
-  <entry name="ImagingFrequency" type="&#xA0;" vr="DS" vm="1" description="Precession frquency in MHz of the nucleus being addressed"/>
-  <entry name="ImagedNucleus" type="&#xA0;" vr="SH" vm="1" description="Nucleus that is resonant at the imaging frequency"/>
-  <entry name="EchoNumbers" type="&#xA0;" vr="IS" vm="1" description="The echo number used in generating this image. In the case of segmented k-space, it is the effective Echo Number"/>
-  <entry name="MagneticFieldStrength" type="&#xA0;" vr="DS" vm="1" description="Nominal Field strength of MR magnet, in Tesla"/>
-  <entry name="NumberOfPhaseEncodingSteps" type="&#xA0;" vr="IS" vm="1" description="Total number of lines in k-space in the y-direction collecting during acquisition"/>
-  <entry name="EchoTrainLength" type="&#xA0;" vr="IS" vm="1" description="Number of lines in k-space acquired per excitation per image"/>
-  <entry name="PercentSampling" type="&#xA0;" vr="DS" vm="1" description="Fraction of acquisition matrix lines acquired, expressed as a percent"/>
-  <entry name="PercentPhaseFieldOfView" type="&#xA0;" vr="DS" vm="1" description="Ration of field of view dimension in phase direction to field of view dimension in frequency direction, expressed as a percent"/>
-  <entry name="TriggerTime" type="&#xA0;" vr="DS" vm="1" description="Time, in msec, between peak of the R wave and the peak of the echo produced. In the case of segmented k-space, the TE(eff) is the time between the peak of the echo that is used to cover the center of k-space. Required for Scan Options which include heart gating"/>
-  <entry name="ReceivingCoil" type="&#xA0;" vr="SH" vm="1" description="Received coil used"/>
-  <entry name="TransmittingColi" type="&#xA0;" vr="SH" vm="1" description="Transmitted coil used"/>
-  <entry name="AcquisitionMatrixText" type="&#xA0;" vr="US" vm="4" description="Dimension of acquired frequency/phase data before reconstruction. Multi-valued: frequency rows\frequency columns\phase rows\phase columns"/>
-  <entry name="PhaseEncodingDirection" type="&#xA0;" vr="CS" vm="1" description="The axis of phase encoding with respect to the image. Enumerated Values: ROW = phase encoded in rows COL = phase encoded in columns"/>
-  <entry name="FlipAngle" type="&#xA0;" vr="DS" vm="1" description="Steady state angle in degrees to which the magnetic vector is flipped from the magnetic vector to the primary field"/>
-  <entry name="VariableFlipAngleFlag" type="&#xA0;" vr="CS" vm="1" description="Flip angle variation applied during image acquisition. Enumerated Values: Y = yes N = no"/>
-  <entry name="SAR" type="&#xA0;" vr="DS" vm="1" description="Calculated whole body specific absortion rate in watts/kilogram"/>
-  <entry name="dBdt" type="&#xA0;" vr="DS" vm="3" description="The rate of change of the gradient coil magnetic flux density with time (T/s)"/>
-  <entry name="Rows" type="&#xA0;" vr="US" vm="1" description="Number of rows in the image"/>
-  <entry name="Columns" type="&#xA0;" vr="US" vm="1" description="Number of columns in the image"/>
-  <entry name="SliceThickness" type="&#xA0;" vr="DS" vm="1" description="Nominal slice thickness, in mm"/>
-  <entry name="ImagePositionPatient" type="&#xA0;" vr="DS" vm="3" description="The direction cosines of the first row and the first column with respect to the patient"/>
-  <entry name="ImageOrientationPatient" type="&#xA0;" vr="DS" vm="6" description="The x,y and z coordinates of the upper left and hand corner (first pixel transmitted) of the image, in mm."/>
-  <entry name="SliceLocation" type="&#xA0;" vr="DS" vm="1" description="Relative position of exposure expressed in mm"/>
-  <entry name="EchoLinePosition" type="&#xA0;" vr="IS" vm="1" description="Fourier line position with the maximal echo for the performed acquisition"/>
-  <entry name="EchoColumnPosition" type="&#xA0;" vr="IS" vm="1" description="Echo column position for the performed acquisition"/>
-  <entry name="EchoPartitionPosition" type="&#xA0;" vr="IS" vm="1" description="Echo partition position for the performed acquisition"/>
-  <entry name="Actual3DImaPartNumber" type="&#xA0;" vr="IS" vm="1" description="Number of a 3D partitions beginning with 0"/>
-  <entry name="RealDwellTime" type="&#xA0;" vr="IS" vm="1" description="The time in ns between the beginning of sampling one data point and the beginning of sampling of next data point in the acquired signal. This means the dwell time is the sampling rate during digital conversion of an acquired signal"/>
-  <entry name="ProtocolSliceNumber" type="&#xA0;" vr="UN" vm="1" description="Number of the slice beginning with 0"/>
-  <entry name="PixelFile" type="&#xA0;" vr="UN" vm="1" description="Used raw data file for the performed acquisition"/>
-  <entry name="PixelFileName" type="&#xA0;" vr="LO" vm="1" description="Used raw data file name for the performed acquisition"/>
-  <entry name="ICE_Dims" type="&#xA0;" vr="DS" vm="1" description="The 9 used ICE object dimensions of the performed acquisition. Combined/unset dimensions will be marked with &quot;X&quot;. E.g.: X_2_1_1_1_1_2_1_1"/>
-  <entry name="PixelSpacing" type="&#xA0;" vr="DS" vm="2" description="Physical distance in the patient between the center of each pixel, specified by a numeric pair-adjacent row spacing (delimiter) adjacent column spacing in mm"/>
-  <entry name="SourceImageSequence" type="&#xA0;" vr="UI" vm="n" description="A sequence which identifies the set of Image SOP Class/Instance pairs of the images which were use to derive this image"/>
-  <entry name="PixelBandwidth" type="&#xA0;" vr="DS" vm="1" description="Reciprocal of the total sampling period, in hertz per pixel"/>
-  <entry name="SliceMeasurementDuration" type="&#xA0;" vr="DS" vm="1" description="Time duration between two slices of the performed acquisition"/>
-  <entry name="SequenceMask" type="&#xA0;" vr="UL" vm="1" description="Parameters used for acquisition, e.g. door open, interpolation, raw filter, Siemens seqence .&#xB7;"/>
-  <entry name="AcquisitionMatrixText" type="&#xA0;" vr="SH" vm="1" description="Used acquisition matrix description"/>
-  <entry name="MeasuredFourierLines" type="&#xA0;" vr="IS" vm="1" description="Number of performed fourier lines"/>
-  <entry name="MR Protocol" type="&#xA0;" vr="&#xA0;" vm="&#xA0;" description="&#xA0;"/>
+  <entry name="ImageNumber" type="1" vr="IS" vm="1" description="A number that identifies this image"/>
+  <entry name="ImageComments" type="1" vr="LT" vm="1" description="User-defined comments about the image"/>
+  <entry name="ReferencedImageSequence" type="1" vr="UI" vm="1_n" description="A sequence which provides reference to a set of Image SOP Class/Instance identifying other images significantly related to this image (localizer images)"/>
+  <entry name="PatientOrientation" type="1" vr="CS" vm="1" description="Patient direction of the rows and columns of the image. Not required for MR images"/>
+  <entry name="ScanningSequence" type="1" vr="CS" vm="1_n" description="Description of the type of data taken. Enumerated values: SE = Spin Echo; IR = Inversion Recovery; GR = Gradient Recalled; EP = Echo Planar; RM = Research Mode"/>
+  <entry name="SequenceName" type="1" vr="SH" vm="1" description="User defined name for the Scanning Sequence and Sequence Varaint combination"/>
+  <entry name="RepetitionTime" type="1" vr="DS" vm="1" description="The period of time in msec between the beginning of a pulse sequence and the beginning of a succeeding (essentially identical) pulse sequence. Required except when Scanning Sequence is EP and Sequnece Variant is not segmented k-space"/>
+  <entry name="EchoTime" type="1" vr="DS" vm="1" description="Time in msec between the middle of the excitation pulse and the peak of the echo produced. In the case of segmented k-space, the TE(eff) is the time between the middle of the excitation pulse to the peak of the echo that is used to cover the center of k-space)"/>
+  <entry name="InversionTime" type="1" vr="DS" vm="1" description="Time in msec after the middle of inverting RF pulse to middle of excitation pulse to detect the amount of longitudinal magnetization. Required if Scanning Sequence has value of IR"/>
+  <entry name="NumberOfAverages" type="1" vr="DS" vm="1" description="Number of averages"/>
+  <entry name="ImagingFrequency" type="1" vr="DS" vm="1" description="Precession frquency in MHz of the nucleus being addressed"/>
+  <entry name="ImagedNucleus" type="1" vr="SH" vm="1" description="Nucleus that is resonant at the imaging frequency"/>
+  <entry name="EchoNumbers" type="1" vr="IS" vm="1" description="The echo number used in generating this image. In the case of segmented k-space, it is the effective Echo Number"/>
+  <entry name="MagneticFieldStrength" type="1" vr="DS" vm="1" description="Nominal Field strength of MR magnet, in Tesla"/>
+  <entry name="NumberOfPhaseEncodingSteps" type="1" vr="IS" vm="1" description="Total number of lines in k-space in the y-direction collecting during acquisition"/>
+  <entry name="EchoTrainLength" type="1" vr="IS" vm="1" description="Number of lines in k-space acquired per excitation per image"/>
+  <entry name="PercentSampling" type="1" vr="DS" vm="1" description="Fraction of acquisition matrix lines acquired, expressed as a percent"/>
+  <entry name="PercentPhaseFieldOfView" type="1" vr="DS" vm="1" description="Ration of field of view dimension in phase direction to field of view dimension in frequency direction, expressed as a percent"/>
+  <entry name="TriggerTime" type="1" vr="DS" vm="1" description="Time, in msec, between peak of the R wave and the peak of the echo produced. In the case of segmented k-space, the TE(eff) is the time between the peak of the echo that is used to cover the center of k-space. Required for Scan Options which include heart gating"/>
+  <entry name="ReceivingCoil" type="1" vr="SH" vm="1" description="Received coil used"/>
+  <entry name="TransmittingColi" type="1" vr="SH" vm="1" description="Transmitted coil used"/>
+  <entry name="AcquisitionMatrixText" type="1" vr="US" vm="4" description="Dimension of acquired frequency/phase data before reconstruction. Multi-valued: frequency rows/frequency columns/phase rows/phase columns"/>
+  <entry name="PhaseEncodingDirection" type="1" vr="CS" vm="1" description="The axis of phase encoding with respect to the image. Enumerated Values: ROW = phase encoded in rows COL = phase encoded in columns"/>
+  <entry name="FlipAngle" type="1" vr="DS" vm="1" description="Steady state angle in degrees to which the magnetic vector is flipped from the magnetic vector to the primary field"/>
+  <entry name="VariableFlipAngleFlag" type="1" vr="CS" vm="1" description="Flip angle variation applied during image acquisition. Enumerated Values: Y = yes N = no"/>
+  <entry name="SAR" type="1" vr="DS" vm="1" description="Calculated whole body specific absortion rate in watts/kilogram"/>
+  <entry name="dBdt" type="1" vr="DS" vm="3" description="The rate of change of the gradient coil magnetic flux density with time (T/s)"/>
+  <entry name="Rows" type="1" vr="US" vm="1" description="Number of rows in the image"/>
+  <entry name="Columns" type="1" vr="US" vm="1" description="Number of columns in the image"/>
+  <entry name="SliceThickness" type="1" vr="DS" vm="1" description="Nominal slice thickness, in mm"/>
+  <entry name="ImagePositionPatient" type="1" vr="DS" vm="3" description="The direction cosines of the first row and the first column with respect to the patient"/>
+  <entry name="ImageOrientationPatient" type="1" vr="DS" vm="6" description="The x,y and z coordinates of the upper left and hand corner (first pixel transmitted) of the image, in mm."/>
+  <entry name="SliceLocation" type="1" vr="DS" vm="1" description="Relative position of exposure expressed in mm"/>
+  <entry name="EchoLinePosition" type="1" vr="IS" vm="1" description="Fourier line position with the maximal echo for the performed acquisition"/>
+  <entry name="EchoColumnPosition" type="1" vr="IS" vm="1" description="Echo column position for the performed acquisition"/>
+  <entry name="EchoPartitionPosition" type="1" vr="IS" vm="1" description="Echo partition position for the performed acquisition"/>
+  <entry name="Actual3DImaPartNumber" type="1" vr="IS" vm="1" description="Number of a 3D partitions beginning with 0"/>
+  <entry name="RealDwellTime" type="1" vr="IS" vm="1" description="The time in ns between the beginning of sampling one data point and the beginning of sampling of next data point in the acquired signal. This means the dwell time is the sampling rate during digital conversion of an acquired signal"/>
+  <entry name="ProtocolSliceNumber" type="1" vr="UN" vm="1" description="Number of the slice beginning with 0"/>
+  <entry name="PixelFile" type="1" vr="UN" vm="1" description="Used raw data file for the performed acquisition"/>
+  <entry name="PixelFileName" type="1" vr="LO" vm="1" description="Used raw data file name for the performed acquisition"/>
+  <entry name="ICE_Dims" type="1" vr="DS" vm="1" description="The 9 used ICE object dimensions of the performed acquisition. Combined/unset dimensions will be marked with 'X'. E.g.: X_2_1_1_1_1_2_1_1"/>
+  <entry name="PixelSpacing" type="1" vr="DS" vm="2" description="Physical distance in the patient between the center of each pixel, specified by a numeric pair-adjacent row spacing (delimiter) adjacent column spacing in mm"/>
+  <entry name="SourceImageSequence" type="1" vr="UI" vm="1_n" description="A sequence which identifies the set of Image SOP Class/Instance pairs of the images which were use to derive this image"/>
+  <entry name="PixelBandwidth" type="1" vr="DS" vm="1" description="Reciprocal of the total sampling period, in hertz per pixel"/>
+  <entry name="SliceMeasurementDuration" type="1" vr="DS" vm="1" description="Time duration between two slices of the performed acquisition"/>
+  <entry name="SequenceMask" type="1" vr="UL" vm="1" description="Parameters used for acquisition, e.g. door open, interpolation, raw filter, Siemens seqence .&#xB7;"/>
+  <entry name="AcquisitionMatrixText" type="1" vr="SH" vm="1" description="Used acquisition matrix description"/>
+  <entry name="MeasuredFourierLines" type="1" vr="IS" vm="1" description="Number of performed fourier lines"/>
+  <!--entry name="MR Protocol" type="1" vr="&#xA0;" vm="&#xA0;" description="&#xA0;"/-->
   <entry name="ulVersion" type="3" vr="UL" vm="1" description="Protocol version"/>
   <entry name="tSequenceFileName" type="3" vr="ST" vm="1" description="Sequence file name for actual measurement protocol"/>
   <entry name="tProtocolName" type="3" vr="ST" vm="1" description="Name of actual measurement protocol"/>
@@ -303,7 +303,7 @@ sKSpace.ucPhasePartialFourier = 0x10
   <entry name="sGRADSPEC.flSensitivityZ" type="3" vr="FD" vm="1" description="Gradient sensitivity z direction [mT/m]"/>
   <entry name="sGRADSPEC.bSensitivityValid" type="3" vr="SL" vm="1" description="Gradient sensitivity valid flag"/>
   <entry name="sGRADSPEC.flGSWDMinRiseTime" type="3" vr="FD" vm="1" description="Minimum gradient rise time for mode GRAD_GSWD_RISETIME"/>
-  <entry name="sGRADSPEC.alShimCurrent" type="3" vr="SL" vm="15" description="Shim current parameter [mA]"/>
+  <entry name="sGRADSPEC.alShimCurrent" type="3" vr="SL" vm="16" description="Shim current parameter [mA]"/>
   <entry name="sGRADSPEC.bShimCurrentValid" type="3" vr="SL" vm="1" description="Shim current parameter valid flag"/>
   <entry name="sGRADSPEC.ucMode" type="3" vr="SH" vm="1" description="Gradient mode: fast, normal, whisper"/>
   <entry name="sGRADSPEC.ucSpare0" type="3" vr="SH" vm="1" description="Reserved"/>
