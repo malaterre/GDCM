@@ -158,8 +158,8 @@ public:
     ConstIterator it = DES.find(r);
     if( it != DES.end() )
       return *it;
-    throw DataElementException();
-    //return GetDEEnd();
+    //throw DataElementException();
+    return GetDEEnd();
     }
   const DataElement& operator[] (const Tag &t) const { return GetDataElement(t); }
   const DataElement& operator() (uint16_t group, uint16_t element) const { return GetDataElement( Tag(group,element) ); }
