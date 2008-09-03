@@ -46,16 +46,33 @@ bool ImageChangePlanarConfiguration::Change()
   assert( framesize * dims[2] == len );
 
   char *copy = new char[len];
-  for(unsigned int z = 0; z < dims[2]; ++z)
+  size_t size = framesize / 3;
+  if( PlanarConfiguration == 0 )
     {
-    const char *frame = p + z * framesize;
-    size_t size = framesize / 3;
-    const char *r = frame + 0;
-    const char *g = frame + size;
-    const char *b = frame + size + size;
+    for(unsigned int z = 0; z < dims[2]; ++z)
+      {
+      const char *frame = p + z * framesize;
+      const char *r = frame + 0;
+      const char *g = frame + size;
+      const char *b = frame + size + size;
 
-    char *framecopy = copy + z * framesize;
-    ImageChangePlanarConfiguration::RGBPlanesToRGBPixels(framecopy, r, g, b, size);
+      char *framecopy = copy + z * framesize;
+      ImageChangePlanarConfiguration::RGBPlanesToRGBPixels(framecopy, r, g, b, size);
+      }
+    }
+  else // User requested to do PlanarConfiguration == 1
+    {
+    assert( PlanarConfiguration == 1 );
+    for(unsigned int z = 0; z < dims[2]; ++z)
+      {
+      const char *frame = p + z * framesize;
+      char *framecopy = copy + z * framesize;
+      char *r = framecopy + 0;
+      char *g = framecopy + size;
+      char *b = framecopy + size + size;
+
+      ImageChangePlanarConfiguration::RGBPixelsToRGBPlanes(r, g, b, frame, size);
+      }
     }
   delete[] p;
 
