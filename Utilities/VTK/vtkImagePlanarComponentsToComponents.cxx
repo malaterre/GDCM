@@ -50,6 +50,8 @@ void vtkImagePlanarComponentsToComponentsExecute(vtkImagePlanarComponentsToCompo
   maxX = outExt[1] - outExt[0];
   maxY = outExt[3] - outExt[2]; 
   maxZ = outExt[5] - outExt[4];
+  (void)self;
+  (void)id;
   
 
 /*
@@ -122,7 +124,7 @@ void vtkImagePlanarComponentsToComponentsExecute(vtkImagePlanarComponentsToCompo
     const T *b = frame + size + size;
 
     T *framecopy = outPtr + z * framesize;
-    gdcm::ImageChangePlanarConfiguration::RGBPlanesToRGBPixel(framecopy, r, g, b, size);
+    gdcm::ImageChangePlanarConfiguration::RGBPlanesToRGBPixels(framecopy, r, g, b, size);
     }
 
 

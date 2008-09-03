@@ -55,7 +55,7 @@ bool ImageChangePlanarConfiguration::Change()
     const char *b = frame + size + size;
 
     char *framecopy = copy + z * framesize;
-    ImageChangePlanarConfiguration::RGBPlanesToRGBPixel(framecopy, r, g, b, size);
+    ImageChangePlanarConfiguration::RGBPlanesToRGBPixels(framecopy, r, g, b, size);
     }
   delete[] p;
 

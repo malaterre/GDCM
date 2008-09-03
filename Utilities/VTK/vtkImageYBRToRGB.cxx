@@ -44,7 +44,7 @@ void vtkImageYBRToRGBExecute(vtkImageYBRToRGB *self,
   // find the region to loop over
   int maxC = inData->GetNumberOfScalarComponents()-1;
   
-  //int R, G, B;
+  int R, G, B;
   // Loop through ouput pixels
   while (!outIt.IsAtEnd())
     {
@@ -54,8 +54,8 @@ void vtkImageYBRToRGBExecute(vtkImageYBRToRGB *self,
     while (outSI != outSIEnd)
       {
       // Pixel operation
-#if 0
-#if 0
+#if 1
+#if 1
       unsigned char a = (unsigned char)(*inSI); ++inSI;
       unsigned char b = (unsigned char)(*inSI); ++inSI;
       unsigned char c = (unsigned char)(*inSI); ++inSI;
@@ -100,6 +100,7 @@ void vtkImageYBRToRGBExecute(vtkImageYBRToRGB *self,
       if (B > 255) B = 255;
 #endif
 
+/*
       double y = *inSI; ++inSI;
       double u = *inSI; ++inSI;
       double v = *inSI; ++inSI;
@@ -112,6 +113,7 @@ void vtkImageYBRToRGBExecute(vtkImageYBRToRGB *self,
   R = (dr < 0.0) ? 0 : ((dr+0.5) > maxval) ? maxval : (unsigned char)(dr+0.5);
   G = (dg < 0.0) ? 0 : ((dg+0.5) > maxval) ? maxval : (unsigned char)(dg+0.5);
   B = (db < 0.0) ? 0 : ((db+0.5) > maxval) ? maxval : (unsigned char)(db+0.5);
+*/
 
       // assign output.
       *outSI = (T)(R); ++outSI;

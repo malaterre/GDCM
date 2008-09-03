@@ -37,8 +37,12 @@ public:
   unsigned int GetPlanarConfiguration() const { return PlanarConfiguration; }
 
   /// s is the size of one plane (r,g or b). Thus the output buffer needs to be at least 3*s bytes long
+  /// s can be seen as the number of RGB pixels in the output
   template <typename T>
-  static size_t RGBPlanesToRGBPixel(T *out, const T *r, const T *g, const T *b, size_t s);
+  static size_t RGBPlanesToRGBPixels(T *out, const T *r, const T *g, const T *b, size_t s);
+
+  template <typename T>
+  static size_t RGBPixelsToRGBPlanes(T *r, T *g, T *b, const T* rgb, size_t s);
 
   /// Change
   bool Change();
@@ -50,7 +54,7 @@ private:
 };
 
 template <typename T>
-size_t ImageChangePlanarConfiguration::RGBPlanesToRGBPixel(T *out, const T *r, const T *g, const T *b, size_t s)
+size_t ImageChangePlanarConfiguration::RGBPlanesToRGBPixels(T *out, const T *r, const T *g, const T *b, size_t s)
 {
   T *pout = out;
   for(size_t i = 0; i < s; ++i )
@@ -60,8 +64,22 @@ size_t ImageChangePlanarConfiguration::RGBPlanesToRGBPixel(T *out, const T *r, c
     *pout++ = *b++;
     }
 
-  assert( (size_t)(pout - out) == 3 * s );
+  assert( (size_t)(pout - out) == 3 * s * sizeof(T) );
   return pout - out;
+}
+
+template <typename T>
+size_t ImageChangePlanarConfiguration::RGBPixelsToRGBPlanes(T *r, T *g, T *b, const T *rgb, size_t s)
+{
+  const T *prgb = rgb;
+  for(size_t i = 0; i < s; ++i )
+    {
+    *r++ = *rgb++;
+    *g++ = *rgb++;
+    *b++ = *rgb++;
+    }
+  assert( (size_t)(prgb - rgb) == 3 * s * sizeof(T) );
+  return prgb - rgb;
 }
 
 
