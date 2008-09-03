@@ -62,7 +62,9 @@
 #include "gdcmGlobal.h"
 #include "gdcmDicts.h"
 #include "gdcmDict.h"
+#include "gdcmCSAHeaderDict.h"
 #include "gdcmDictEntry.h"
+#include "gdcmCSAHeaderDictEntry.h"
 #include "gdcmUIDGenerator.h"
 //#include "gdcmConstCharWrapper.h"
 #include "gdcmScanner.h"
@@ -408,7 +410,20 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
+%include "gdcmCSAHeaderDictEntry.h"
+%extend gdcm::CSAHeaderDictEntry
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
+
 %include "gdcmDict.h"
+%include "gdcmCSAHeaderDict.h"
 %include "gdcmDicts.h"
 
 %exception ReadFooBar {
