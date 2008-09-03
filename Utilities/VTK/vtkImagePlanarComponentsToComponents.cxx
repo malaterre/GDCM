@@ -54,43 +54,6 @@ void vtkImagePlanarComponentsToComponentsExecute(vtkImagePlanarComponentsToCompo
   (void)id;
   
 
-/*
-  vtkImageIterator<T> inIt(inData, outExt);
-  vtkImageProgressIterator<T> outIt(outData, outExt, self, id);
-  int idxC;
-
-  int maxC = inData->GetNumberOfScalarComponents();
-  assert( maxC == 3 );
-  
-      //const T* r = inIt.BeginSpan();
-      //const T* g = r + 307200/2;
-      //const T* b = g + 307200/2;
-    T* outSI = outIt.BeginSpan();
-  // Loop through ouput pixels
-    T* inSI = inIt.BeginSpan();
-      T *r = (inSI + 0 * 307200); //++inSI;
-      T *g = (inSI + 1 * 307200); //++inSI;
-      T *b = (inSI + 2 * 307200); //++inSI;
-  while (!outIt.IsAtEnd())
-    {
-    T* outSI = outIt.BeginSpan();
-    T* outSIEnd = outIt.EndSpan();
-    while (outSI != outSIEnd)
-      {
-      *outSI = 0; ++outSI;
-      ++r;
-      *outSI = 0; ++outSI;
-      ++g;
-      *outSI = 0; ++outSI;
-      ++b;
-      }
-    //inIt.NextSpan();
-    outIt.NextSpan();
-    }
-  //assert( inIt.IsAtEnd() );
-     outSI = outIt.BeginSpan();
-  memset(outSI, 0, 307200 * 3);
-*/
   //target = static_cast<unsigned long>((maxZ+1)*(maxY+1)/50.0);
   //target++;
 
@@ -99,21 +62,6 @@ void vtkImagePlanarComponentsToComponentsExecute(vtkImagePlanarComponentsToCompo
 
   // Loop through ouput pixels
 
-/*
-  unsigned long size = (maxX+1) * (maxY+1) * (maxZ+1);
-  const T *r = inPtr;
-  const T *g = inPtr + size;
-  const T *b = inPtr + size + size;
-
-  T *p = outPtr;
-  for (unsigned long j = 0; j < size && !self->AbortExecute; ++j)
-    {
-    //this->UpdateProgress(count/(50.0*target));
-    *(p++) = *(r++);
-    *(p++) = *(g++);
-    *(p++) = *(b++);
-    }
-*/
   size_t framesize = (maxX+1) * (maxY+1) * 3;
   for(int z = 0; z <= maxZ; ++z)
     {
@@ -130,51 +78,6 @@ void vtkImagePlanarComponentsToComponentsExecute(vtkImagePlanarComponentsToCompo
 
 }
 
-//----------------------------------------------------------------------------
-/*
-void vtkImagePlanarComponentsToComponents::ThreadedExecute (vtkImageData *inData, 
-                                       vtkImageData *outData,
-                                       int outExt[6], int id)
-{
-  vtkDebugMacro(<< "Execute: inData = " << inData 
-    << ", outData = " << outData);
-  
-  // this filter expects that input is the same type as output.
-  if (inData->GetScalarType() != outData->GetScalarType())
-    {
-    vtkErrorMacro(<< "Execute: input ScalarType, " << inData->GetScalarType()
-    << ", must match out ScalarType " << outData->GetScalarType());
-    return;
-    }
-  if (inData->GetScalarType() != VTK_UNSIGNED_CHAR )
-    {
-    return;
-    }
-  
-  // need three components for input and output
-  if (inData->GetNumberOfScalarComponents() < 3)
-    {
-    vtkErrorMacro("Input has too few components");
-    return;
-    }
-  if (outData->GetNumberOfScalarComponents() < 3)
-    {
-    vtkErrorMacro("Output has too few components");
-    return;
-    }
-
-  switch (inData->GetScalarType())
-    {
-    vtkTemplateMacro(
-      vtkImagePlanarComponentsToComponentsExecute(this, inData, 
-                              outData, outExt, id, static_cast<VTK_TT *>(0)));
-    default:
-      vtkErrorMacro(<< "Execute: Unknown ScalarType");
-      return;
-    }
-}
-*/
-//
 //----------------------------------------------------------------------------
 int vtkImagePlanarComponentsToComponents::RequestData(
   vtkInformation* vtkNotUsed(request),
