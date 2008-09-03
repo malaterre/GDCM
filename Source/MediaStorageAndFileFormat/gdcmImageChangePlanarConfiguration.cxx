@@ -50,19 +50,27 @@ bool ImageChangePlanarConfiguration::Change()
 
   const Image &image = *Input;
 
+  const unsigned int *dims = image.GetDimensions();
   unsigned long len = image.GetBufferLength();
   char *p = new char[len];
   image.GetBuffer( p );
 
   assert( len % 3 == 0 );
-  size_t size = len / 3;
-
-  const char *r = p + 0;
-  const char *g = p + size;
-  const char *b = p + size + size;
+  size_t framesize = dims[0] * dims[1] * 3;
+  assert( framesize * dims[2] == len );
 
   char *copy = new char[len];
-  ImageChangePlanarConfiguration::RGBPlanesToRGBPixel(copy, r, g, b, size);
+  for(unsigned int z = 0; z < dims[2]; ++z)
+    {
+    const char *frame = p + z * framesize;
+    size_t size = framesize / 3;
+    const char *r = frame + 0;
+    const char *g = frame + size;
+    const char *b = frame + size + size;
+
+    char *framecopy = copy + z * framesize;
+    ImageChangePlanarConfiguration::RGBPlanesToRGBPixel(framecopy, r, g, b, size);
+    }
   delete[] p;
 
   DataElement &de = Output->GetDataElement();
