@@ -31,8 +31,8 @@ bool Unpacker12Bits::Unpack(char *out, const char *in, size_t n)
     b0 = *p++;
     b1 = *p++;
     b2 = *p++;
-    *q++ =  ((b1 & 0xf) << 8) + b0;
-    *q++ =  (b1>>4) + (b2<<4);
+    *q++ = ((b1 & 0xf) << 8) + b0;
+    *q++ = (b1>>4) + (b2<<4);
     } 
   return true;
 }

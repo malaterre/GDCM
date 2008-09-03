@@ -8,6 +8,7 @@ SET(MSFF_SRCS
   gdcmImageChangeTransferSyntax.cxx
   gdcmImageApplyLookupTable.cxx
   gdcmOrientation.cxx
+  gdcmImageChangePlanarConfiguration.cxx
   gdcmDirectionCosines.cxx
   gdcmSorter.cxx
   gdcmIPPSorter.cxx
