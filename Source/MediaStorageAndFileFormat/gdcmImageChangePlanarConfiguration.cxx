@@ -20,6 +20,20 @@
 namespace gdcm
 {
 
+size_t ImageChangePlanarConfiguration::RGBPlanesToRGBPixel(char *out, const char *r, const char *g, const char *b, size_t s)
+{
+  char *pout = out;
+  for(size_t i = 0; i < s; ++i )
+    {
+    *pout++ = *r++;
+    *pout++ = *g++;
+    *pout++ = *b++;
+    }
+
+  assert( (size_t)(pout - out) == 3 * s );
+  return pout - out;
+}
+
 bool ImageChangePlanarConfiguration::Change()
 {
   if( Input->GetPixelFormat().GetSamplesPerPixel() != 3 )
@@ -43,26 +57,19 @@ bool ImageChangePlanarConfiguration::Change()
   assert( len % 3 == 0 );
   size_t size = len / 3;
 
-  const char *a = p + 0;
-  const char *b = p + size;
-  const char *c = p + size + size;
+  const char *r = p + 0;
+  const char *g = p + size;
+  const char *b = p + size + size;
 
   char *copy = new char[len];
-  char *pcopy = copy;
-  for(size_t i = 0; i < size; ++i )
-    {
-    *pcopy++ = *a++;
-    *pcopy++ = *b++;
-    *pcopy++ = *c++;
-    }
+  ImageChangePlanarConfiguration::RGBPlanesToRGBPixel(copy, r, g, b, size);
+  delete[] p;
 
   DataElement &de = Output->GetDataElement();
   de.SetByteValue( copy, len );
+  delete[] copy;
 
   Output->SetPlanarConfiguration( PlanarConfiguration );
-
-  delete[] p;
-  delete[] copy;
 
   return true;
 }

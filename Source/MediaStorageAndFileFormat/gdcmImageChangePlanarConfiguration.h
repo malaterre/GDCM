@@ -32,9 +32,14 @@ public:
   ImageChangePlanarConfiguration():PlanarConfiguration(0) {}
   ~ImageChangePlanarConfiguration() {}
 
+  /// Set/Get requested PlanarConfigation
   void SetPlanarConfiguration(unsigned int pc) { PlanarConfiguration = pc; }
   unsigned int GetPlanarConfiguration() const { return PlanarConfiguration; }
 
+  /// s is the size of one plane (r,g or b). Thus the output buffer needs to be at least 3*s bytes long
+  static size_t RGBPlanesToRGBPixel(char *out, const char *r, const char *g, const char *b, size_t s);
+
+  /// Change
   bool Change();
 
 protected:
