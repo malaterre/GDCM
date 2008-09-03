@@ -22,6 +22,8 @@
 #include "vtkObjectFactory.h"
 #include "vtkStreamingDemandDrivenPipeline.h"
 
+#include "gdcmImageChangePlanarConfiguration.h"
+
 #include <assert.h>
 
 vtkCxxRevisionMacro(vtkImagePlanarComponentsToComponents, "$Revision: 1.31 $")
@@ -95,6 +97,7 @@ void vtkImagePlanarComponentsToComponentsExecute(vtkImagePlanarComponentsToCompo
 
   // Loop through ouput pixels
 
+/*
   unsigned long size = (maxX+1) * (maxY+1) * (maxZ+1);
   const T *r = inPtr;
   const T *g = inPtr + size;
@@ -107,6 +110,19 @@ void vtkImagePlanarComponentsToComponentsExecute(vtkImagePlanarComponentsToCompo
     *(p++) = *(r++);
     *(p++) = *(g++);
     *(p++) = *(b++);
+    }
+*/
+  size_t framesize = (maxX+1) * (maxY+1) * 3;
+  for(int z = 0; z <= maxZ; ++z)
+    {
+    const T *frame = inPtr + z * framesize;
+    size_t size = framesize / 3;
+    const T *r = frame + 0;
+    const T *g = frame + size;
+    const T *b = frame + size + size;
+
+    T *framecopy = outPtr + z * framesize;
+    gdcm::ImageChangePlanarConfiguration::RGBPlanesToRGBPixel(framecopy, r, g, b, size);
     }
 
 

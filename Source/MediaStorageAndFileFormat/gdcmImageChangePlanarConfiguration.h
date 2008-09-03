@@ -37,7 +37,8 @@ public:
   unsigned int GetPlanarConfiguration() const { return PlanarConfiguration; }
 
   /// s is the size of one plane (r,g or b). Thus the output buffer needs to be at least 3*s bytes long
-  static size_t RGBPlanesToRGBPixel(char *out, const char *r, const char *g, const char *b, size_t s);
+  template <typename T>
+  static size_t RGBPlanesToRGBPixel(T *out, const T *r, const T *g, const T *b, size_t s);
 
   /// Change
   bool Change();
@@ -47,6 +48,22 @@ protected:
 private:
   unsigned int PlanarConfiguration;
 };
+
+template <typename T>
+size_t ImageChangePlanarConfiguration::RGBPlanesToRGBPixel(T *out, const T *r, const T *g, const T *b, size_t s)
+{
+  T *pout = out;
+  for(size_t i = 0; i < s; ++i )
+    {
+    *pout++ = *r++;
+    *pout++ = *g++;
+    *pout++ = *b++;
+    }
+
+  assert( (size_t)(pout - out) == 3 * s );
+  return pout - out;
+}
+
 
 } // end namespace gdcm
 

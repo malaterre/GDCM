@@ -20,20 +20,6 @@
 namespace gdcm
 {
 
-size_t ImageChangePlanarConfiguration::RGBPlanesToRGBPixel(char *out, const char *r, const char *g, const char *b, size_t s)
-{
-  char *pout = out;
-  for(size_t i = 0; i < s; ++i )
-    {
-    *pout++ = *r++;
-    *pout++ = *g++;
-    *pout++ = *b++;
-    }
-
-  assert( (size_t)(pout - out) == 3 * s );
-  return pout - out;
-}
-
 bool ImageChangePlanarConfiguration::Change()
 {
   if( Input->GetPixelFormat().GetSamplesPerPixel() != 3 )
