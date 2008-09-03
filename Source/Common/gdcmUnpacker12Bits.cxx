@@ -19,7 +19,7 @@ namespace gdcm
 
 bool Unpacker12Bits::Unpack(char *out, const char *in, size_t n)
 {
-  if( n % 3 ) return false;
+  if( n % 3 ) return false; // 3bytes are actually 2 words
   // http://groups.google.com/group/comp.lang.c/msg/572bc9b085c717f3
   short *q = (short*)out;
   unsigned char *p = (unsigned char*)in;
@@ -43,7 +43,6 @@ bool Unpacker12Bits::Pack(char *out, const char *in, size_t n)
   unsigned char *q = (unsigned char*)out;
   unsigned short *p = (unsigned short*)in;
   const unsigned short *end = (unsigned short*)(in+n);
-  //unsigned char b0,b1,b2;
   unsigned short b0,b1;
 
   while(p!=end)
@@ -55,7 +54,6 @@ bool Unpacker12Bits::Pack(char *out, const char *in, size_t n)
     *q++ = (b0 >> 8) + ((b1 & 0xf) << 4);
     *q++ = b1 >> 4;
     }
-
   return false;
 }
 
