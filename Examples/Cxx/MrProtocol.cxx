@@ -410,10 +410,18 @@ int main(int argc, char *argv [])
     //csa.Print( std::cout );
     }
 
+  if( !csa.FindCSAElementByName( "MrProtocol" ) )
+    {
+    return 1;
+    }
   const gdcm::CSAElement &csael = csa.GetCSAElementByName( "MrProtocol" );
   //std::cout << csael << std::endl;
 
   const gdcm::ByteValue *bv = csael.GetByteValue();
+  if( !bv )
+    {
+    return 1;
+    }
   std::string str(bv->GetPointer(), bv->GetLength());
   std::istringstream is(str);
   std::string s;
