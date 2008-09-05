@@ -42,8 +42,9 @@ public:
   ~LookupTable();
   void Print(std::ostream &) const {}
 
+  /// Allocate the LUT
   void Allocate( unsigned short bitsample = 8 );
-  // Generic interface:
+  /// Generic interface:
   void InitializeLUT(LookupTableType type, unsigned short length,
     unsigned short subscript, unsigned short bitsize);
   unsigned int GetLUTLength(LookupTableType type) const;
@@ -53,7 +54,7 @@ public:
   void GetLUTDescriptor(LookupTableType type, unsigned short &length,
     unsigned short &subscript, unsigned short &bitsize) const;
 
-  // RED / GREEN / BLUE specific:
+  /// RED / GREEN / BLUE specific:
   void InitializeRedLUT(unsigned short length, unsigned short subscript,
     unsigned short bitsize);
   void SetRedLUT(const unsigned char *red, unsigned int length);
@@ -64,8 +65,10 @@ public:
     unsigned short bitsize);
   void SetBlueLUT(const unsigned char *blue, unsigned int length);
 
+  /// Clear the LUT
   void Clear();
 
+  /// Decode the LUT
   void Decode(std::istream &is, std::ostream &os) const;
 
   LookupTable(LookupTable const &lut):Object(lut)
@@ -73,10 +76,16 @@ public:
     abort();
     }
 
+  /// return the LUT as RGBA buffer
   bool GetBufferAsRGBA(unsigned char *rgba) const;
+
+  /// return a raw pointer to the LUT
   const unsigned char *GetPointer() const;
+
+  /// Write the LUT as RGBA
   bool WriteBufferAsRGBA(unsigned char *rgba);
 
+  /// return the bit sample
   unsigned short GetBitSample() const { return BitSample; }
 
 private:

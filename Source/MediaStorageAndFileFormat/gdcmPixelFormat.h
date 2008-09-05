@@ -72,14 +72,14 @@ public:
   // For transparency of use
   operator ScalarType() const { return GetScalarType(); }
 
-  // Samples Per Pixel
+  /// Samples Per Pixel
   unsigned short GetSamplesPerPixel() const;
   void SetSamplesPerPixel(unsigned short spp)
     {
     SamplesPerPixel = spp;
     }
 
-  // BitsAllocated
+  /// BitsAllocated
   unsigned short GetBitsAllocated() const
     {
     return BitsAllocated;
@@ -89,7 +89,7 @@ public:
     BitsAllocated = ba;
     }
 
-  // BitsStored
+  /// BitsStored
   unsigned short GetBitsStored() const
     {
     return BitsStored;
@@ -99,7 +99,7 @@ public:
     BitsStored = bs;
     }
 
-  // HighBit
+  /// HighBit
   unsigned short GetHighBit() const
     {
     return HighBit;
@@ -109,7 +109,7 @@ public:
     HighBit = hb;
     }
 
-  // PixelRepresentation
+  /// PixelRepresentation
   unsigned short GetPixelRepresentation() const
     {
     return PixelRepresentation;
@@ -121,16 +121,22 @@ public:
     PixelRepresentation = pr;
     }
 
+  /// ScalarType does not take into account the sample per pixel
   ScalarType GetScalarType() const;
   // BUG: You need to call SetScalarType *before* SetSamplesPerPixel
   void SetScalarType(ScalarType st);
   const char *GetScalarTypeAsString() const;
 
+  /// return the size of the pixel
   uint8_t GetPixelSize() const;
 
+  /// Print
   void Print(std::ostream &os) const;
 
+  /// return the min possible of the pixel
   int64_t GetMin() const;
+
+  /// return the max possible of the pixel
   int64_t GetMax() const;
 
 private:

@@ -30,16 +30,22 @@ public:
   DirectionCosines(const double *dircos = 0);
   ~DirectionCosines();
 
+  /// Print
   void Print(std::ostream &) const;
 
+  /// Compute Cross product
   void Cross(double z[3]) const;
+
+  /// Compute Dot
   double Dot() const;
 
-  // Normalize in-place
+  /// Normalize in-place
   void Normalize();
 
+  /// Make the class behave like a const double *
   operator const double* () const { return Values; }
 
+  /// Return whether or not this is a valid direction cosines
   bool IsValid() const;
 
 private:

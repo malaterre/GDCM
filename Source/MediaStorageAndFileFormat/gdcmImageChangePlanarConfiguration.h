@@ -41,6 +41,9 @@ public:
   template <typename T>
   static size_t RGBPlanesToRGBPixels(T *out, const T *r, const T *g, const T *b, size_t s);
 
+  /// Convert a regular RGB pixel image (R,G,B,R,G,B...) into a planar R,G,B image (R,R..,G,G...B,B)
+  /// \warning this works on a frame basis, you need to loop over all frames in multiple frames
+  /// image to apply this function
   template <typename T>
   static size_t RGBPixelsToRGBPlanes(T *r, T *g, T *b, const T* rgb, size_t s);
 

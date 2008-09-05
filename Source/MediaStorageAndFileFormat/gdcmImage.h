@@ -47,8 +47,8 @@ namespace gdcm
  * with gdcm::JPEGImage which would from the stream extract the header info
  * and fill it to please gdcm::Image...well except origin for instance
  * 
- * FIXME:
- * Still missing the Orientation !
+ * Basically you can see it as a storage for the PixelData element.
+ * However it was also used for MRSpectroscopy object (as proof of concept)
  */
 class GDCM_EXPORT Image : public Object
 {
@@ -140,6 +140,7 @@ public:
     NeedByteSwap = b;
     }
 
+  /// Set/Get LUT
   void SetLUT(LookupTable const &lut)
     {
     LUT = SmartPointer<LookupTable>( const_cast<LookupTable*>(&lut) );
@@ -180,6 +181,7 @@ public:
   /// returns if Overlays are stored in the unused bit of the pixel data:
   bool AreOverlaysInPixelData() const;
 
+  /// Set/Get Icon Image
   const IconImage &GetIconImage() const { return Icon; }
   IconImage &GetIconImage() { return Icon; }
 

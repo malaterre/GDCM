@@ -24,6 +24,7 @@ class JPEGLSInternals;
 /**
  * \brief JPEG-LS
  * \note codec that implement the JPEG-LS compression
+ * this is an implement of ImageCodec for JPEG-LS
  */
 class JPEGLSCodec : public ImageCodec
 {

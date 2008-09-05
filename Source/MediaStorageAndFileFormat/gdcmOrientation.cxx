@@ -73,7 +73,7 @@ char Orientation::GetMajorAxisFromPatientRelativeDirectionCosine(double x, doubl
   return axis;
 }
 
-Orientation::OrientationType Orientation::GetType(const double *dircos)
+Orientation::OrientationType Orientation::GetType(const double dircos[6])
 {
   if( !dircos )
     {

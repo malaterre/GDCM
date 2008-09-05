@@ -54,14 +54,15 @@ public:
   /// Main function that loop over all elements and remove group length
   bool RemoveGroupLength();
 
+  /// Set/Get File
   void SetFile(const File& f) { F = f; }
   //const File &GetFile() const { return *F; }
   File &GetFile() { return *F; }
 
-  // PS 3.15 
-  // E.1.1 De-Identifier
-  // An Application may claim conformance to the Basic Application Level Confidentiality Profile as a deidentifier
-  // if it protects all Attributes that might be used by unauthorized entities to identify the patient.
+  /// PS 3.15 
+  /// E.1.1 De-Identifier
+  /// An Application may claim conformance to the Basic Application Level Confidentiality Profile as a deidentifier
+  /// if it protects all Attributes that might be used by unauthorized entities to identify the patient.
   bool BasicApplicationLevelConfidentialityProfile();
 
 protected:

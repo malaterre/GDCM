@@ -31,7 +31,11 @@ class GDCM_EXPORT Decoder
 {
 public:
   virtual ~Decoder() {}
+
+  /// Return whether this decoder support this transfer syntax (can decode it)
   virtual bool CanDecode(TransferSyntax const &) const = 0;
+
+  /// Decode 
   virtual bool Decode(DataElement const &is, DataElement &os) { (void)is;(void)os;return false; }
 protected:
   virtual bool Decode(std::istream &is, std::ostream &os) { (void)is; (void)os;return false; }

@@ -22,15 +22,18 @@ namespace gdcm
 
 /**
  * \brief ImageToImageFilter class
+ * Super class for all filter taking an image and producing an output image
  */
-
 class GDCM_EXPORT ImageToImageFilter
 {
 public:
   ImageToImageFilter():Input(new Image),Output(new Image) {}
   ~ImageToImageFilter() {}
 
+  /// Set input image
   void SetInput(const Image& image);
+
+  /// Get Output image
   const Image &GetOutput() const { return *Output; }
 
 protected:

@@ -39,7 +39,7 @@ public:
   /// Change
   bool Change();
 
-  /// colorspace converstion (based on CCIR Recommendation 601-2
+  /// colorspace converstion (based on CCIR Recommendation 601-2)
   template <typename T>
   static void RGB2YBR(T ybr[3], const T rgb[3]);
   template <typename T>

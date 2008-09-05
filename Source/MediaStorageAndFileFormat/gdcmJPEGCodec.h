@@ -28,6 +28,7 @@ class TransferSyntax;
  * It redispatch in between the different codec implementation: gdcm::JPEG8Codec, 
  * gdcm::JPEG12Codec & gdcm::JPEG16Codec
  * It also support inconsistency in between DICOM header and JPEG compressed stream
+ * ImageCodec implementation for the JPEG case
  *
  * \note
  * Things you should know if you ever want to dive into DICOM/JPEG world (among other):

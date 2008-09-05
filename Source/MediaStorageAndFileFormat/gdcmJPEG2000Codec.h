@@ -24,12 +24,16 @@ class JPEG2000Internals;
 /**
  * \brief Class to do JPEG 2000
  * \note
+ * the class will produce JPC (JPEG 2000 codestream), since some private implementor
+ * are using full jp2 file the decoder tolerate jp2 input
+ * this is an implementation of an ImageCodec
  */
 class GDCM_EXPORT JPEG2000Codec : public ImageCodec
 {
 public:
   JPEG2000Codec();
   ~JPEG2000Codec();
+
   bool CanDecode(TransferSyntax const &ts) const;
   bool CanCode(TransferSyntax const &ts) const;
 

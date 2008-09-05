@@ -32,11 +32,18 @@ public:
   ImageChangeTransferSyntax():TS(),Force(false) {}
   ~ImageChangeTransferSyntax() {}
 
+  /// Set target Transfer Syntax
   void SetTransferSyntax(const TransferSyntax &ts) { TS = ts; }
+  /// Get Transfer Syntax
   const TransferSyntax &GetTransferSyntax() const { return TS; }
 
+  /// Change
   bool Change();
 
+  /// When target Transfer Syntax is identical to input target syntax, no operation
+  /// is actually done
+  /// This is an issue when someone wants to recompress using GDCM internal implementation
+  /// a JPEG (for example) image
   void SetForce( bool f ) { Force = f; }
 
 protected:

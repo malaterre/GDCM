@@ -24,7 +24,7 @@ class JPEGInternals;
 class ByteValue;
 /**
  * \brief Class to do JPEG 16bits (lossless)
- * \note
+ * \note internal class
  */
 class JPEG16Codec : public JPEGCodec
 {

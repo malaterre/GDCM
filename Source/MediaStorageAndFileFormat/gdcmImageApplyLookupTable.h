@@ -23,7 +23,8 @@ namespace gdcm
 class DataElement;
 /**
  * \brief ImageApplyLookupTable class
- * It apply the LUT the PixelData (only PALETTE_COLOR images)
+ * It applies the LUT the PixelData (only PALETTE_COLOR images)
+ * Output will be a PhotometricInterpretation=RGB image
  */
 class GDCM_EXPORT ImageApplyLookupTable : public ImageToImageFilter
 {
@@ -31,6 +32,7 @@ public:
   ImageApplyLookupTable() {}
   ~ImageApplyLookupTable() {}
 
+  /// Apply
   bool Apply();
 
 protected:

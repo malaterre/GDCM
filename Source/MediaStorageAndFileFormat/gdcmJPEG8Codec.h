@@ -24,7 +24,7 @@ class JPEGInternals;
 class ByteValue;
 /**
  * \brief Class to do JPEG 8bits (lossy & lossless)
- * \note
+ * \note internal class
  */
 class JPEG8Codec : public JPEGCodec
 {

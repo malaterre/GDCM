@@ -27,7 +27,7 @@ class DataSet;
 class File;
 class Image;
 /**
- * \brief ImageHelper (internal class)
+ * \brief ImageHelper (internal class, not intended for user)
  *
  * \note
  * Helper for writing World images in DICOM. DICOM has a 'template' approach to image where 

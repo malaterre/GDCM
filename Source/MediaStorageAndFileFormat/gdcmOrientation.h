@@ -29,6 +29,7 @@ public:
   Orientation();
   ~Orientation();
 
+  /// Print
   void Print(std::ostream &) const;
 
   typedef enum {
@@ -39,7 +40,11 @@ public:
     OBLIQUE
   } OrientationType;
 
-  static OrientationType GetType(const double *dircos);
+  /// Return the type of orientation from a direction cosines
+  /// Input is an array of 6 double
+  static OrientationType GetType(const double dircos[6]);
+
+  /// Return the label of an Orientation
   static const char *GetLabel(OrientationType type);
 
 protected:

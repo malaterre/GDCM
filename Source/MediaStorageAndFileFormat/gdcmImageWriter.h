@@ -32,10 +32,14 @@ public:
   ImageWriter();
   ~ImageWriter();
 
+  /// Set/Get Image to be written
+  /// It will overwrite anything Image infos found in DataSet
+  /// (see parent class to see how to pass dataset)
   const Image& GetImage() const { return *PixelData; }
   Image& GetImage() { return *PixelData; } // FIXME 
   void SetImage(Image const &img);
 
+  /// Write
   bool Write(); // Execute()
 
 private:

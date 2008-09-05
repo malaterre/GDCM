@@ -31,6 +31,7 @@ public:
   ~SegmentedPaletteColorLookupTable();
   void Print(std::ostream &) const {}
 
+  /// Initialize a SegmentedPaletteColorLookupTable
   void SetLUT(LookupTableType type, const unsigned char *array,
     unsigned int length);
 
