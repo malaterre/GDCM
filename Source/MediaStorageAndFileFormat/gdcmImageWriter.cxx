@@ -100,6 +100,10 @@ bool ImageWriter::Write()
   samplesperpixel.SetValue( pf.GetSamplesPerPixel() );
   ds.Replace( samplesperpixel.GetAsDataElement() );
 
+  Attribute<0x0028, 0x0006> planarconf;
+  planarconf.SetValue( PixelData->GetPlanarConfiguration() );
+  ds.Replace( planarconf.GetAsDataElement() );
+
 
   // Overlay Data 60xx
   unsigned int nOv = PixelData->GetNumberOfOverlays();

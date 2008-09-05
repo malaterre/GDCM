@@ -1087,14 +1087,38 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
    */
   row_stride = image_width * cinfo.input_components;	/* JSAMPLEs per row in image_buffer */
 
-  while (cinfo.next_scanline < cinfo.image_height) {
-    /* jpeg_write_scanlines expects an array of pointers to scanlines.
-     * Here the array is only one element long, but you could pass
-     * more than one scanline at a time if that's more convenient.
-     */
-    row_pointer[0] = & image_buffer[cinfo.next_scanline * row_stride];
-    (void) jpeg_write_scanlines(&cinfo, row_pointer, 1);
-  }
+  if( this->GetPlanarConfiguration() == 0 )
+    {
+    while (cinfo.next_scanline < cinfo.image_height) {
+      /* jpeg_write_scanlines expects an array of pointers to scanlines.
+       * Here the array is only one element long, but you could pass
+       * more than one scanline at a time if that's more convenient.
+       */
+      row_pointer[0] = & image_buffer[cinfo.next_scanline * row_stride];
+      (void) jpeg_write_scanlines(&cinfo, row_pointer, 1);
+    }
+    }
+  else
+    {
+    JSAMPLE *tempbuffer = (JSAMPLE*)malloc( row_stride * sizeof(JSAMPLE) );
+    row_pointer[0] = tempbuffer;
+    int offset = image_height * image_width;
+    while (cinfo.next_scanline < cinfo.image_height) {
+      assert( row_stride % 3 == 0 );
+      JSAMPLE* ptempbuffer = tempbuffer;
+      JSAMPLE* red   = image_buffer + cinfo.next_scanline * row_stride / 3;
+      JSAMPLE* green  = image_buffer + cinfo.next_scanline * row_stride / 3 + offset;
+      JSAMPLE* blue = image_buffer + cinfo.next_scanline * row_stride / 3 + offset * 2;
+      for(int i = 0; i < row_stride / 3; ++i )
+        {
+        *ptempbuffer++ = *red++;
+        *ptempbuffer++ = *green++;
+        *ptempbuffer++ = *blue++;
+        }
+      (void) jpeg_write_scanlines(&cinfo, row_pointer, 1);
+    }
+    free(tempbuffer);
+    }
 
   /* Step 6: Finish compression */
 
