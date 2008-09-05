@@ -95,6 +95,8 @@ public:
   vtkGetMacro(FileLowerLeft, int);
   vtkSetMacro(FileLowerLeft, int);
 
+  vtkSetMacro(PlanarConfiguration,int);
+
 protected:
   vtkGDCMImageWriter();
   ~vtkGDCMImageWriter();
@@ -142,6 +144,7 @@ private:
   double Shift;
   double Scale;
   int FileLowerLeft;
+  int PlanarConfiguration;
 };
 
 #endif

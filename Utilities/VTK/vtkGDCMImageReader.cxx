@@ -882,6 +882,9 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   gdcm::Image &image = reader.GetImage();
   //VTK does not cope with Planar Configuration, so let's schew the work to please it
   assert( this->PlanarConfiguration == 0 || this->PlanarConfiguration == 1 );
+  // Store the PlanarConfiguration before inverting it !
+  this->PlanarConfiguration = image.GetPlanarConfiguration();
+  //assert( this->PlanarConfiguration == 0 || this->PlanarConfiguration == 1 );
   if( image.GetPlanarConfiguration() == 1 )
     {
     gdcm::ImageChangePlanarConfiguration icpc;
@@ -1080,8 +1083,6 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     this->ImageFormat = VTK_LUMINANCE;
     }
   assert( this->ImageFormat );
-  this->PlanarConfiguration = image.GetPlanarConfiguration();
-  //assert( this->PlanarConfiguration == 0 || this->PlanarConfiguration == 1 );
 
   long outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
   if( numoverlays ) assert( (unsigned long)overlayoutsize * ( dext[3] - dext[2] + 1 ) == overlaylen );

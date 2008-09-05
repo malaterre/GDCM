@@ -57,7 +57,7 @@ SET(BLACK_LIST_READER
   CompressedLossy.dcm
 
 # vtkGDCMImageWriter + rescale does not work on the following images:
-#LIBIDO-24-ACR_NEMA-Rectangle.dcm
+  LIBIDO-24-ACR_NEMA-Rectangle.dcm
 
 # remove for now
   IM-0001-0066.dcm

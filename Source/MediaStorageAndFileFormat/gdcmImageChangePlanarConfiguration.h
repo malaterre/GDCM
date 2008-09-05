@@ -77,9 +77,9 @@ size_t ImageChangePlanarConfiguration::RGBPixelsToRGBPlanes(T *r, T *g, T *b, co
   const T *prgb = rgb;
   for(size_t i = 0; i < s; ++i )
     {
-    *r++ = *rgb++;
-    *g++ = *rgb++;
-    *b++ = *rgb++;
+    *r++ = *prgb++;
+    *g++ = *prgb++;
+    *b++ = *prgb++;
     }
   assert( (size_t)(prgb - rgb) == 3 * s * sizeof(T) );
   return prgb - rgb;

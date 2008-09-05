@@ -193,12 +193,14 @@ bool ImageWriter::Write()
       case 8:
         de.SetVR( VR::OB );
         break;
+      case 12:
       case 16:
       case 32:
         de.SetVR( VR::OW );
         break;
       default:
         assert( 0 && "should not happen" );
+        break;
       }
     }
   else

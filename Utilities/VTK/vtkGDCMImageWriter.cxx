@@ -40,6 +40,7 @@
 #include "gdcmDict.h"
 #include "gdcmTag.h"
 #include "gdcmImageHelper.h"
+#include "gdcmImageChangePlanarConfiguration.h"
 
 #include <limits>
 
@@ -100,6 +101,7 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
   this->Shift = 0.;
   this->Scale = 1.;
   this->FileLowerLeft = 0; // same default as vtkImageReader2
+  this->PlanarConfiguration = 0;
 }
 
 //----------------------------------------------------------------------------
@@ -611,6 +613,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   pixeltype.SetSamplesPerPixel( data->GetNumberOfScalarComponents() );
   image.SetPhotometricInterpretation( pi );
   image.SetPixelFormat( pixeltype );
+  image.SetPlanarConfiguration( 0 ); // VTK default
 
   // Setup LUt if any:
   if( pi == gdcm::PhotometricInterpretation::PALETTE_COLOR )
@@ -663,6 +666,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   // Whenever shift / scale is needed... do it !
   if( this->Shift != 0 || this->Scale != 1 )
     {
+    assert( this->PlanarConfiguration == 0 );
     // rescale from float to unsigned short
     gdcm::Rescaler ir;
     ir.SetIntercept( this->Shift );
@@ -734,6 +738,17 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   //image.Print( std::cerr );
 #endif
 // END DEBUG
+
+  // Do PlanarConfiguration
+  if( this->PlanarConfiguration )
+    {
+    gdcm::ImageChangePlanarConfiguration icpc;
+    icpc.SetInput( image );
+    icpc.SetPlanarConfiguration( 1 );
+    icpc.Change();
+    image = icpc.GetOutput();
+    assert( image.GetPlanarConfiguration() == 1 );
+    }
 
 
   gdcm::File& file = writer.GetFile();

@@ -97,7 +97,7 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde)
     if( Input->GetPlanarConfiguration() )
       {
       // Fow now simply return an error
-      return false;
+      //return false;
       }
     codec.SetPlanarConfiguration( Input->GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( Input->GetPhotometricInterpretation() );

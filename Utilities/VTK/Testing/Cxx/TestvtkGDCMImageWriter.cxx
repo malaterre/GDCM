@@ -64,6 +64,7 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
     writer->SetImageFormat( reader->GetImageFormat() );
     writer->SetFileDimensionality( reader->GetFileDimensionality() );
     writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
+    writer->SetPlanarConfiguration( reader->GetPlanarConfiguration() );
     writer->SetShift( reader->GetShift() );
     writer->SetScale( reader->GetScale() );
     writer->SetFileName( gdcmfile.c_str() );
