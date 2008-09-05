@@ -30,9 +30,6 @@ SET(BLACK_LIST_READER
 
 # grrrrrr do not handle swapping correctly (implicit dataset are such a pain)
   LIBIDO-16-ACR_NEMA-Volume.dcm
-# TODO add seg lut support
-  gdcm-US-ALOKA-16.dcm
-  SegmentedPalette.dcm
 # Papyrus:
   PET-cardio-Multiframe-Papyrus.dcm
 # No way to read this image:
@@ -47,10 +44,6 @@ SET(BLACK_LIST_READER
 # Pixel Data is not were it should be :)
   3DDCM011.dcm 
 
-# 16bits LUT...
-  rle16sti.dcm
-  rle16loo.dcm
-
 # Overlay Data in Unused bit are not passed in TestImageWriter:
 #  SIEMENS_GBS_III-16-ACR_NEMA_1.acr
 #  SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm
@@ -64,7 +57,7 @@ SET(BLACK_LIST_READER
   CompressedLossy.dcm
 
 # vtkGDCMImageWriter + rescale does not work on the following images:
-  LIBIDO-24-ACR_NEMA-Rectangle.dcm
+#LIBIDO-24-ACR_NEMA-Rectangle.dcm
 
 # remove for now
   IM-0001-0066.dcm
@@ -73,12 +66,11 @@ SET(BLACK_LIST_READER
   ImplicitDeclaredAsExplicit.dcm
   TheralysGDCM1.dcm
   MR_Spectroscopy_SIEMENS_OF.dcm
-  US-GE-4AICL142.dcm
-  SIEMENS-MR-RGB-16Bits.dcm
+  #SIEMENS-MR-RGB-16Bits.dcm
 # Recent issue with compression/decompression:
   SIEMENS_GBS_III-16-ACR_NEMA_1.acr
   SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm
-  MR-MONO2-12-angio-an1.acr
+  #MR-MONO2-12-angio-an1.acr
   image.acr
   PHILIPS_Gyroscan-8-MONO2-Odd_Sequence.dcm
   MergeCOM3_330_IM50.dcm

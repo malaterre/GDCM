@@ -231,19 +231,28 @@ bool ImageWriter::Write()
     else if ( pi == PhotometricInterpretation::PALETTE_COLOR )
       {
       const LookupTable &lut = PixelData->GetLUT();
-      assert( pf.GetBitsAllocated() == 8 && pf.GetPixelRepresentation() == 0 );
+      assert( pf.GetBitsAllocated() == 8  && pf.GetPixelRepresentation() == 0 
+           || pf.GetBitsAllocated() == 16 && pf.GetPixelRepresentation() == 0 );
       // lut descriptor:
       // (0028,1101) US 256\0\16                                 #   6, 3 RedPaletteColorLookupTableDescriptor
       // (0028,1102) US 256\0\16                                 #   6, 3 GreenPaletteColorLookupTableDescriptor
       // (0028,1103) US 256\0\16                                 #   6, 3 BluePaletteColorLookupTableDescriptor
       // lut data:
       unsigned short length, subscript, bitsize;
-      unsigned short rawlut[256];
+      unsigned short rawlut8[256];
+      unsigned short rawlut16[65536];
+      unsigned short *rawlut = rawlut8;
+      unsigned int lutlen = 256;
+      if( pf.GetBitsAllocated() == 16 )
+        {
+        rawlut = rawlut16;
+        lutlen = 65536;
+        }
       unsigned int l;
 
       // FIXME: should I really clear rawlut each time ?
       // RED
-      memset(rawlut,0,256*2);
+      memset(rawlut,0,lutlen*2);
       lut.GetLUT(LookupTable::RED, (unsigned char*)rawlut, l);
       DataElement redde( Tag(0x0028, 0x1201) );
       redde.SetVR( VR::OW );
@@ -256,7 +265,7 @@ bool ImageWriter::Write()
       ds.Replace( reddesc.GetAsDataElement() );
 
       // GREEN
-      memset(rawlut,0,256*2);
+      memset(rawlut,0,lutlen*2);
       lut.GetLUT(LookupTable::GREEN, (unsigned char*)rawlut, l);
       DataElement greende( Tag(0x0028, 0x1202) );
       greende.SetVR( VR::OW );
@@ -269,7 +278,7 @@ bool ImageWriter::Write()
       ds.Replace( greendesc.GetAsDataElement() );
 
       // BLUE
-      memset(rawlut,0,256*2);
+      memset(rawlut,0,lutlen*2);
       lut.GetLUT(LookupTable::BLUE, (unsigned char*)rawlut, l);
       DataElement bluede( Tag(0x0028, 0x1203) );
       bluede.SetVR( VR::OW );

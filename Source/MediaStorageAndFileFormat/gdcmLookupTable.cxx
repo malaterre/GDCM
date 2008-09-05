@@ -145,6 +145,7 @@ void LookupTable::GetLUT(LookupTableType type, unsigned char *array, unsigned in
     }
   else
     {
+    assert( BitSample == 16 );
     length = Internal->Length[type]*(BitSample/8);
     uint16_t *uchar16 = (uint16_t*)&Internal->RGB[0];
     uint16_t *array16 = (uint16_t*)array;
