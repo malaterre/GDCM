@@ -308,7 +308,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 136 92 1 16 1 */
 { "dbbf39ac11a39372b1e961f40ac6f62a" , "RadBWLossLess.dcm" },
 /* gdcm 600 430 1 16 3 */
-{ "964ea27345a7004325896d34b257f289" , "rle16sti.dcm" },
+//{ "964ea27345a7004325896d34b257f289" , "rle16sti.dcm" },
+{ "f799773abbe36a1a8a3a881e27f8084d" , "rle16sti.dcm" },
 /* gdcm 512 512 1 16 1 */
 { "80527e9c17a4a3d12d408e9a354f37f9" , "ser002img00026.dcm" },
 /* gdcm 512 512 1 16 1 */
@@ -391,7 +392,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 // Same thing
 { "b8b5030261f92574227fe91902738558" , "JDDICOM_Sample5.dcm" },
 // This one was computed from dcmtk, gdcm 1.x fails to read it...
-{ "49ca8ad45fa7f24b0406a5a03ba8aff6" , "rle16loo.dcm" },
+//{ "49ca8ad45fa7f24b0406a5a03ba8aff6" , "rle16loo.dcm" },
+{ "04b42f011bdcf56e8a22607cb715447c" , "rle16loo.dcm" },
 // Name is poorly choosen since it's actually a Dicom Objects bug
 // Cannot only be read by gdcm 1.2.x
 { "f1436c1800ccbba8da82acb7f2dff29d" , "GE_JPEG-Broken.dcm" },
