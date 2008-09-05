@@ -339,9 +339,16 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     {
     MaxNumSegments = 2;
     }
-  else if( GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
+  else if( GetPhotometricInterpretation() == PhotometricInterpretation::RGB 
+    || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL )
     {
     MaxNumSegments = 3;
+    }
+
+  assert( GetPixelFormat().GetBitsAllocated() == 8 || GetPixelFormat().GetBitsAllocated() == 16 );
+  if( GetPixelFormat().GetSamplesPerPixel() == 3 )
+    {
+    assert( MaxNumSegments == 3 );
     }
 
   RLEHeader header;
