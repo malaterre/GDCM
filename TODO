@@ -203,5 +203,6 @@ http://atonal.ucdavis.edu/matlab/fmri/spm5/spm_dicom_convert.m
 cmake export() might be helpful to cleanup cmakelists.txt
 -----------------------------------------------------------------------
 There is a bug in the YBR2RGB code...
+  Update: 09/04 PlanarConfiguration code has been fixed
 -----------------------------------------------------------------------
 Add exception when accessing DataElement not found in DataSet

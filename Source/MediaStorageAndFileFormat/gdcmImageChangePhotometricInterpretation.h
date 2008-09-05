@@ -39,11 +39,45 @@ public:
   /// Change
   bool Change();
 
+  /// colorspace converstion (based on CCIR Recommendation 601-2
+  template <typename T>
+  static void RGB2YBR(T ybr[3], const T rgb[3]);
+  template <typename T>
+  static void YBR2RGB(T rgb[3], const T ybr[3]);
+
 protected:
 
 private:
   PhotometricInterpretation PI;
 };
+
+template <typename T>
+void ImageChangePhotometricInterpretation::RGB2YBR(T ybr[3], const T rgb[3])
+{
+  const double R = rgb[0];
+  const double G = rgb[1];
+  const double B = rgb[2];
+  const double Y  =  .2990 * R + .5870 * G + .1140 * B;
+  const double CB = -.1687 * R - .3313 * G + .5000 * B + 128;
+  const double CR =  .5000 * R - .4187 * G - .0813 * B + 128;
+  ybr[0] = Y;
+  ybr[1] = CB;
+  ybr[2] = CR;
+}
+
+template <typename T>
+void ImageChangePhotometricInterpretation::YBR2RGB(T rgb[3], const T ybr[3])
+{
+  const double Y  = ybr[0];
+  const double CB = (double)ybr[1] - 128.;
+  const double CR = (double)ybr[2] - 128.;
+  const double R =  1.0000e+00 * Y - 3.6820e-05 * CB + 1.4020e+00 * CR;
+  const double G =  1.0000e+00 * Y - 3.4411e-01 * CB - 7.1410e-01 * CR;
+  const double B =  1.0000e+00 * Y + 1.7720e+00 * CB - 1.3458e-04 * CR;
+  rgb[0] = R;
+  rgb[1] = G;
+  rgb[2] = B;
+}
 
 } // end namespace gdcm
 
