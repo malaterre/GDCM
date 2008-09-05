@@ -60,7 +60,6 @@ class vtkContourWidget;
 class vtkAngleWidget;
 #endif
 #if VTK_MAJOR_VERSION >= 5
-#include "vtkImagePlanarComponentsToComponents.h"
 #include "vtkImageYBRToRGB.h"
 #include "vtkImageColorViewer.h"
 #else
@@ -480,15 +479,6 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 #if VTK_MAJOR_VERSION >= 5
     vtkImageYBRToRGB *filter = vtkImageYBRToRGB::New();
     filter->SetInput( reader->GetOutput() );
-    if( reader->GetPlanarConfiguration() )
-      {
-      vtkImagePlanarComponentsToComponents *rgbplanes = vtkImagePlanarComponentsToComponents::New();
-      rgbplanes->SetInput( reader->GetOutput() );
-      rgbplanes->Update();
-      //rgbplanes->GetOutput()->GetScalarRange(range);
-      filter->SetInput( rgbplanes->GetOutput() );
-      rgbplanes->Delete();
-      }
     filter->Update();
     filter->GetOutput()->GetScalarRange(range);
     viewer->SetInput( filter->GetOutput() );
@@ -499,19 +489,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     }
   else if( reader->GetImageFormat() == VTK_RGB )
     {
-    if( reader->GetPlanarConfiguration() )
-      {
-#if VTK_MAJOR_VERSION >= 5
-      vtkImagePlanarComponentsToComponents *rgbplanes = vtkImagePlanarComponentsToComponents::New();
-      rgbplanes->SetInput( reader->GetOutput() );
-      rgbplanes->Update();
-      rgbplanes->GetOutput()->GetScalarRange(range);
-      viewer->SetInput( rgbplanes->GetOutput() );
-      rgbplanes->Delete();
-#else
-      std::cerr << "Not implemented" << std::endl;
-#endif
-      }
+    // easy case !
     }
 //  vtkImageShiftScale *ss = vtkImageShiftScale::New();
 //  ss->SetInput( reader->GetOutput() );

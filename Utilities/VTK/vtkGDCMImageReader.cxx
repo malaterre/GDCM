@@ -42,6 +42,7 @@
 #include "gdcmUnpacker12Bits.h"
 #include "gdcmRescaler.h"
 #include "gdcmOrientation.h"
+#include "gdcmImageChangePlanarConfiguration.h"
 
 #include <sstream>
 
@@ -878,7 +879,18 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     vtkErrorMacro( "ImageReader failed: " << filename );
     return 0;
     }
-  const gdcm::Image &image = reader.GetImage();
+  gdcm::Image &image = reader.GetImage();
+  //VTK does not cope with Planar Configuration, so let's schew the work to please it
+  assert( this->PlanarConfiguration == 0 || this->PlanarConfiguration == 1 );
+  if( image.GetPlanarConfiguration() == 1 )
+    {
+    gdcm::ImageChangePlanarConfiguration icpc;
+    icpc.SetInput( image );
+    icpc.SetPlanarConfiguration( 0 );
+    icpc.Change();
+    image = icpc.GetOutput();
+    }
+
   const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
   assert( image.GetNumberOfDimensions() == 2 || image.GetNumberOfDimensions() == 3 );
   unsigned long len = image.GetBufferLength();
@@ -914,6 +926,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     // WARNING: sizeof(Real World Value) != sizeof(Stored Pixel)
     outlen = data->GetScalarSize() * data->GetNumberOfPoints() / data->GetDimensions()[2];
   }
+
   // Do the Icon Image:
   this->NumberOfIconImages = image.GetIconImage().IsEmpty() ? 0 : 1;
   if( this->NumberOfIconImages )

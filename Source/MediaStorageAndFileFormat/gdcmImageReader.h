@@ -54,6 +54,7 @@ public:
 
   /// Return the read image
   const Image& GetImage() const;
+  Image& GetImage();
   //void SetImage(Image const &img);
 
 protected:

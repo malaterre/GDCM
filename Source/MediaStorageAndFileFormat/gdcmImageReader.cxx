@@ -42,6 +42,10 @@ const Image& ImageReader::GetImage() const
 {
   return *PixelData;
 }
+Image& ImageReader::GetImage()
+{
+  return *PixelData;
+}
 
 //void ImageReader::SetImage(Image const &img)
 //{
