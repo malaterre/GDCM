@@ -431,6 +431,17 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
   case PhotometricInterpretation::YBR_FULL:
     //DoYBR(*cur_is,pi_os);
     //cur_is = &pi_os;
+    {
+      const JPEGCodec *c = dynamic_cast<const JPEGCodec*>(this);
+      if( c )
+        {
+        // The following is required for very special case of color space conversion
+        // dcmdrle ACUSON-24-YBR_FULL-RLE.dcm bla.dcm
+        // dcmcjpeg bla.dcm foo.dcm
+        // foo.dcm would be not displayed correctly
+        this->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
+        }
+    }
     break;
   case PhotometricInterpretation::PALETTE_COLOR:
     assert( LUT );
