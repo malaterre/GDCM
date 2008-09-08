@@ -118,7 +118,7 @@ void PrintHelp()
   std::cout << "  -K --j2k       Compress image in j2k." << std::endl;
   std::cout << "  -L --jpegls    Compress image in jpeg-ls." << std::endl;
   std::cout << "  -R --rle       Compress image in rle." << std::endl;
-  std::cout << "  -F --force     Force decompression before recompression." << std::endl;
+  std::cout << "  -F --force     Force decompression/merging before recompression/splitting." << std::endl;
   std::cout << "  -Y --lossy %d  Use the lossy (if possible), followed by comp. ratio" << std::endl;
   std::cout << "  -S --split %d  Write 2D image with multiple fragments (using max size)" << std::endl;
   std::cout << "General Options:" << std::endl;
