@@ -3,8 +3,8 @@
   Program:   Visualization Toolkit
   Module:    $RCSfile: wxVTKRenderWindowInteractor.h,v $
   Language:  C++
-  Date:      $Date: 2008/04/13 22:06:52 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2008/08/10 22:58:28 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) 1993-2002 Ken Martin, Will Schroeder, Bill Lorensen 
   All rights reserved.
@@ -130,13 +130,16 @@ class wxVTKRenderWindowInteractor : public wxWindow, public vtkRenderWindowInter
 #if !(VTK_MAJOR_VERSION == 3 && VTK_MINOR_VERSION == 1)
     void OnEnter(wxMouseEvent &event);
     void OnLeave(wxMouseEvent &event);
+    void OnMouseWheel(wxMouseEvent& event);
+#if wxCHECK_VERSION(2, 8, 0)
+    void OnMouseCaptureLost(wxMouseCaptureLostEvent& event);
+#endif
     void OnKeyDown(wxKeyEvent &event);
     void OnKeyUp(wxKeyEvent &event);
     void OnChar(wxKeyEvent &event);
 #endif
     void OnTimer(wxTimerEvent &event);
     void OnSize(wxSizeEvent &event);
-    void OnMouseWheel(wxMouseEvent& event);
 
     void Render();
     void SetRenderWhenDisabled(int newValue);

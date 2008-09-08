@@ -3,6 +3,7 @@
 
 #include "wxGDCMFrameBase.h"
 class vtkImageColorViewer;
+class vtkImageViewer;
 class vtkGDCMImageReader;
 class wxGDCMFrame: public wxGDCMFrameBase
 {
@@ -20,6 +21,7 @@ private:
     wxString	      directory;
     wxString        filename;
     vtkImageColorViewer *imageViewer;
+    //vtkImageViewer *imageViewer;
     vtkGDCMImageReader  *Reader;
 
     DECLARE_EVENT_TABLE( );

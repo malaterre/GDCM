@@ -3,9 +3,14 @@
 #include "wxGDCMFrame.h"
 #include "wxVTKRenderWindowInteractor.h"
 #include "vtkImageViewer2.h"
+#include "vtkImageViewer.h"
 #include "vtkGDCMImageReader.h"
 #include "vtkImageColorViewer.h"
 #include "vtkImageData.h"
+#include "vtkTesting.h"
+#include "vtkTestUtilities.h"
+#include "vtkPNGReader.h"
+#include "vtkRenderer.h"
 
 BEGIN_EVENT_TABLE( wxGDCMFrame, wxGDCMFrameBase )
     EVT_MENU(wxID_OPEN, wxGDCMFrame::OnOpen)
@@ -20,14 +25,30 @@ wxGDCMFrame::wxGDCMFrame(wxWindow* parent, int id, const wxString& title, const 
 {
 
     imageViewer = vtkImageColorViewer::New();
+    //imageViewer = vtkImageViewer::New();
+    //imageViewer->SetupInteractor( NULL );
+    //imageViewer->SetRenderWindow( VTKWindow->GetRenderWindow() );
+    //imageViewer->SetInput( vtkImageData::New() );
+  char* fname = vtkTestUtilities::ExpandDataFileName(0, 0, "Data/fullhead15.png");
+
+  //# Image pipeline
+vtkPNGReader*
+  reader = vtkPNGReader::New();
+  reader->SetDataSpacing (0.8, 0.8, 1.5);
+  reader->SetFileName ( fname );
+  delete[] fname;
+  imageViewer->SetInput ( reader->GetOutput());
+
     imageViewer->SetupInteractor( VTKWindow );
+    int s[2]={200,200};
+    imageViewer->SetSize( s );
     Reader      = vtkGDCMImageReader::New();
     directory = wxT( "" );
 }
 
 wxGDCMFrame::~wxGDCMFrame()
 {
-  VTKWindow->Delete();
+  //VTKWindow->Delete();
   imageViewer->Delete();
   Reader->Delete();
 }
@@ -60,7 +81,11 @@ void wxGDCMFrame::OnOpen(wxCommandEvent& event)
     Reader->SetFileName( fn.c_str() );
     Reader->Update();
     Reader->GetOutput()->Print( std::cout );
-    imageViewer->SetInputConnection( Reader->GetOutputPort(0) );
+    //imageViewer->SetInputConnection( Reader->GetOutputPort(0) );
+    imageViewer->SetInput( Reader->GetOutput(0) );
+    imageViewer->Modified();
+    imageViewer->GetRenderer()->ResetCameraClippingRange();
+
     imageViewer->Render();
   }
   dialog->Close();
