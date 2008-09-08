@@ -83,7 +83,7 @@ public:
   const unsigned char *GetPointer() const;
 
   /// Write the LUT as RGBA
-  bool WriteBufferAsRGBA(unsigned char *rgba);
+  bool WriteBufferAsRGBA(const unsigned char *rgba);
 
   /// return the bit sample
   unsigned short GetBitSample() const { return BitSample; }

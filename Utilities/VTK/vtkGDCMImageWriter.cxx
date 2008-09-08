@@ -621,13 +621,23 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     vtkLookupTable * vtklut = data->GetPointData()->GetScalars()->GetLookupTable();
     //vtkLookupTable * vtklut = this->LookupTable;
     assert( vtklut );
-    assert( vtklut->GetNumberOfTableValues() == 256 );
+    //assert( vtklut->GetNumberOfTableValues() == 256 );
+    unsigned int lutlen = 256;
+    assert( pixeltype.GetBitsAllocated() == 8 || pixeltype.GetBitsAllocated() == 16 );
+    if( pixeltype.GetBitsAllocated() == 8 )
+      {
+      lutlen = 256;
+      }
+    else
+      {
+      //assert( pixeltype.GetBitsAllocated() == 16 );
+      lutlen = 65536;
+      }
     gdcm::SmartPointer<gdcm::LookupTable> lut = new gdcm::LookupTable;
-    assert( pixeltype.GetBitsAllocated() == 8 );
     lut->Allocate( pixeltype.GetBitsAllocated() );
-    lut->InitializeLUT( gdcm::LookupTable::RED, 256, 0, 16 );
-    lut->InitializeLUT( gdcm::LookupTable::GREEN, 256, 0, 16 );
-    lut->InitializeLUT( gdcm::LookupTable::BLUE, 256, 0, 16 );
+    lut->InitializeLUT( gdcm::LookupTable::RED,   lutlen, 0, 16 );
+    lut->InitializeLUT( gdcm::LookupTable::GREEN, lutlen, 0, 16 );
+    lut->InitializeLUT( gdcm::LookupTable::BLUE,  lutlen, 0, 16 );
     if( !lut->WriteBufferAsRGBA( vtklut->WritePointer(0,4) ) )
       {
       vtkWarningMacro( "Could not get values from LUT" );
