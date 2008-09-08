@@ -81,6 +81,7 @@ SET(BLACK_LIST_READER
   MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm
 # Private tags is SQ, but SQ is busted, GDCM fails since it tries to parse the SQ (dcmtk does not even try)
   BogusItemLengthImplicitPrivateAtt.dcm
+  MR-MONO2-12-angio-an1.acr
 )
 IF(NOT GDCM_USE_PVRG)
   SET(BLACK_LIST_READER
