@@ -37,6 +37,7 @@ public:
   void SetBufferLength(unsigned long l) { BufferLength = l; }
 
   bool Code(DataElement const &in, DataElement &out);
+  void SetNumberOfDimensions(unsigned int dim);
 
 protected:
   bool Decode(std::istream &is, std::ostream &os);
@@ -50,6 +51,7 @@ private:
   RLEInternals *Internals;
   unsigned long Length;
   unsigned long BufferLength;
+  unsigned int NumberOfDimensions;
 };
 
 } // end namespace gdcm

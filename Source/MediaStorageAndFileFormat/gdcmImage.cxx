@@ -575,6 +575,7 @@ bool Image::TryRLECodec(char *buffer) const
     {
     //assert( sf->GetNumberOfFragments() == 1 );
     //assert( sf->GetNumberOfFragments() == GetDimensions(2) );
+    codec.SetNumberOfDimensions( GetNumberOfDimensions() );
     codec.SetPlanarConfiguration( GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
     codec.SetPixelFormat( GetPixelFormat() );

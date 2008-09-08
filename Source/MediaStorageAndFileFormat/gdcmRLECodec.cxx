@@ -82,6 +82,7 @@ RLECodec::RLECodec()
   Internals = new RLEInternals;
   Length = 0;
   BufferLength = 0;
+  NumberOfDimensions = 0;
 }
 
 RLECodec::~RLECodec()
@@ -483,56 +484,84 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
 // Endif
 // Endloop
 
+void RLECodec::SetNumberOfDimensions(unsigned int dim)
+{
+  NumberOfDimensions = dim;
+}
+
 bool RLECodec::Decode(DataElement const &in, DataElement &out)
 {
-  out = in;
-  const SequenceOfFragments *sf = in.GetSequenceOfFragments();
-  assert( sf );
-  unsigned long len = GetBufferLength();
-  char *buffer = new char[len];
-  unsigned long pos = 0;
-  // Each RLE Frame store a 2D frame. len is the 3d length
-  unsigned long llen = len / sf->GetNumberOfFragments();
-  // assert( GetNumberOfDimensions() == 2
-  //      || GetDimension(2) == sf->GetNumberOfFragments() );
-  for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
+  if( NumberOfDimensions == 2 )
     {
+    out = in;
+    const SequenceOfFragments *sf = in.GetSequenceOfFragments();
+    assert( sf );
+    unsigned long len = GetBufferLength();
+    //char *buffer = new char[len];
     std::stringstream is;
-    const Fragment &frag = sf->GetFragment(i);
-    const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
-    char *mybuffer = new char[bv.GetLength()];
-    bv.GetBuffer(mybuffer, bv.GetLength());
-    is.write(mybuffer, bv.GetLength());
-    delete[] mybuffer;
-    std::stringstream os;
-    SetLength( llen );
-    bool r = Decode(is, os);
-    assert( r == true );
-    std::streampos p = is.tellg();
-    // http://groups.google.com/group/microsoft.public.vc.stl/browse_thread/thread/96740930d0e4e6b8
-    if( !!is )
-      {
-      // Indeed the length of the RLE stream has been padded with a \0
-      // which is discarded
-      uint32_t check = bv.GetLength() - p;
-      // check == 2 for gdcmDataExtra/gdcmSampleData/US_DataSet/GE_US/2929J686-breaker
-      assert( check == 0 || check == 1 || check == 2 );
-      }
-    else
-      {
-      // ALOKA_SSD-8-MONO2-RLE-SQ.dcm
-      gdcmWarningMacro( "Bad RLE stream" );
-      }
-    std::string::size_type check = os.str().size();
-    // If the following assert fail expect big troubles:
-    assert( check == llen );
-    memcpy(buffer+pos, os.str().c_str(), check);
-    pos += check;
+    sf->WriteBuffer( is );
+    SetLength( len );
+      std::stringstream os;
+      bool r = Decode(is, os);
+      assert( r == true );
+    std::string str = os.str();
+    std::string::size_type check = str.size();
+    assert( check == len );
+    out.SetByteValue( &str[0], check );
+    return true;
     }
-  assert( pos == len );
-  out.SetByteValue( buffer, len );
-  delete[] buffer;
-  return true;
+  else if ( NumberOfDimensions == 3 )
+    {
+    out = in;
+    const SequenceOfFragments *sf = in.GetSequenceOfFragments();
+    assert( sf );
+    unsigned long len = GetBufferLength();
+    char *buffer = new char[len];
+    unsigned long pos = 0;
+    // Each RLE Frame store a 2D frame. len is the 3d length
+    unsigned long llen = len / sf->GetNumberOfFragments();
+    // assert( GetNumberOfDimensions() == 2
+    //      || GetDimension(2) == sf->GetNumberOfFragments() );
+    for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
+      {
+      std::stringstream is;
+      const Fragment &frag = sf->GetFragment(i);
+      const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
+      char *mybuffer = new char[bv.GetLength()];
+      bv.GetBuffer(mybuffer, bv.GetLength());
+      is.write(mybuffer, bv.GetLength());
+      delete[] mybuffer;
+      std::stringstream os;
+      SetLength( llen );
+      bool r = Decode(is, os);
+      assert( r == true );
+      std::streampos p = is.tellg();
+      // http://groups.google.com/group/microsoft.public.vc.stl/browse_thread/thread/96740930d0e4e6b8
+      if( !!is )
+        {
+        // Indeed the length of the RLE stream has been padded with a \0
+        // which is discarded
+        uint32_t check = bv.GetLength() - p;
+        // check == 2 for gdcmDataExtra/gdcmSampleData/US_DataSet/GE_US/2929J686-breaker
+        assert( check == 0 || check == 1 || check == 2 );
+        }
+      else
+        {
+        // ALOKA_SSD-8-MONO2-RLE-SQ.dcm
+        gdcmWarningMacro( "Bad RLE stream" );
+        }
+      std::string::size_type check = os.str().size();
+      // If the following assert fail expect big troubles:
+      assert( check == llen );
+      memcpy(buffer+pos, os.str().c_str(), check);
+      pos += check;
+      }
+    assert( pos == len );
+    out.SetByteValue( buffer, len );
+    delete[] buffer;
+    return true;
+    }
+  return false;
 }
 
 bool RLECodec::Decode(std::istream &is, std::ostream &os)

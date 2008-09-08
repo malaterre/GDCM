@@ -78,6 +78,7 @@
 #include "gdcmImageChangeTransferSyntax.h"
 #include "gdcmImageApplyLookupTable.h"
 #include "gdcmSplitMosaicFilter.h"
+#include "gdcmImageFragmentSplitter.h"
 
 #include <string>
 #include <iostream>
@@ -118,7 +119,8 @@ void PrintHelp()
   std::cout << "  -L --jpegls    Compress image in jpeg-ls." << std::endl;
   std::cout << "  -R --rle       Compress image in rle." << std::endl;
   std::cout << "  -F --force     Force decompression before recompression." << std::endl;
-  std::cout << "  -Y --lossy  %d Use the lossy (if possible), followed by comp. ratio" << std::endl;
+  std::cout << "  -Y --lossy %d  Use the lossy (if possible), followed by comp. ratio" << std::endl;
+  std::cout << "  -S --split %d  Write 2D image with multiple fragments (using max size)" << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning   print warning info." << std::endl;
@@ -146,6 +148,7 @@ int main (int argc, char *argv[])
   int jpegls = 0;
   int j2k = 0;
   int lossy = 0;
+  int split = 0;
   int rle = 0;
   int force = 0;
 
@@ -189,6 +192,7 @@ int main (int argc, char *argv[])
         {"mpeg2", 0, 0, 0}, // lossy !
         {"jpip", 0, 0, 0}, // ??
         {"mosaic", 0, &mosaic, 1}, // split siemens mosaic into multiple frames
+        {"split", 1, &split, 1}, // split fragments
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -227,6 +231,11 @@ int main (int argc, char *argv[])
             assert( strcmp(s, "root-uid") == 0 );
             assert( root.empty() );
             root = optarg;
+            }
+          else if( option_index == 28 ) /* split */
+            {
+            assert( strcmp(s, "split") == 0 );
+            split = atoi(optarg);
             }
           printf (" with arg %s, index = %d", optarg, option_index);
           }
@@ -348,7 +357,38 @@ int main (int argc, char *argv[])
     return 0;
     }
 
-  if( lut )
+  // split fragments
+  if( split )
+    {
+    gdcm::ImageReader reader;
+    reader.SetFileName( filename.c_str() );
+    if( !reader.Read() )
+      {
+      std::cerr << "could not read: " << filename << std::endl;
+      return 1;
+      }
+    const gdcm::Image &image = reader.GetImage();
+
+    gdcm::ImageFragmentSplitter splitter;
+    splitter.SetInput( image );
+    splitter.SetFragmentSizeMax( split );
+    bool b = splitter.Split();
+    if( !b )
+      {
+      std::cerr << "Could not split: " << filename << std::endl;
+      return 1;
+      }
+    gdcm::ImageWriter writer;
+    writer.SetFileName( outfilename.c_str() );
+    writer.SetFile( reader.GetFile() );
+    writer.SetImage( splitter.GetOutput() );
+    if( !writer.Write() )
+      {
+      std::cerr << "Failed to write: " << outfilename << std::endl;
+      return 1;
+      }
+    }
+  else if( lut )
     {
     gdcm::ImageReader reader;
     reader.SetFileName( filename.c_str() );
