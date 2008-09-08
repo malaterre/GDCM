@@ -22,14 +22,31 @@
 
 namespace gdcm
 {
+
+// Implementation detail:
+// I think Fragment should be a protected sublclass of DataElement:
+// looking somewhat like this:
+/*
+class GDCM_EXPORT Fragment : protected DataElement
+{
+public:
+  using DataElement::GetTag;
+  using DataElement::GetVL;
+  using DataElement::SetByteValue;
+  using DataElement::GetByteValue;
+  using DataElement::GetValue;
+*/
+// Instead I am only hiding the SetTag member...
+
 /**
  * \brief Class to represent an Fragment
  */
-
 class GDCM_EXPORT Fragment : public DataElement
 {
+//protected:
+//  void SetTag(const Tag &t);
 public:
-  Fragment(const Tag &t = Tag(0), VL const &vl = 0) : DataElement(t, vl) {}
+  Fragment(const Tag &t = Tag(0xfffe, 0xe000), VL const &vl = 0) : DataElement(t, vl) {}
   friend std::ostream &operator<<(std::ostream &os, const Fragment &val);
 
   VL GetLength() const {

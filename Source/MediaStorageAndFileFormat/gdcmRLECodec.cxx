@@ -311,7 +311,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
   // Create a Sequence Of Fragments:
   SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
   const Tag itemStart(0xfffe, 0xe000);
-  sq->GetTable().SetTag( itemStart );
+  //sq->GetTable().SetTag( itemStart );
   // FIXME  ? Is this compulsary ?
   const char dummy[4] = {};
   sq->GetTable().SetByteValue( dummy, sizeof(dummy) );
@@ -445,7 +445,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     std::string str = os.str() + datastr;
     assert( str.size() );
     Fragment frag;
-    frag.SetTag( itemStart );
+    //frag.SetTag( itemStart );
     frag.SetByteValue( &str[0], str.size() );
     sq->AddFragment( frag );
     }

@@ -60,6 +60,12 @@
 #include <getopt.h>
 #include <string.h>
 
+bool readsize(const char *str, unsigned int * size)
+{
+  int n = sscanf( str, "%i,%i", size, size+1);
+  return n == 2;
+}
+
 bool readgeometry(const char *geometry, unsigned int * region)
 {
   int n = sscanf( geometry, "%i,%i,%i,%i,%i,%i", region, region+1, region+2, region+3, region+4, region+5);
@@ -104,6 +110,7 @@ int main (int argc, char *argv[])
   bool b;
   int bregion = 0;
   int fill = 0;
+  unsigned int size[2] = {};
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -142,6 +149,11 @@ int main (int argc, char *argv[])
             assert( strcmp(s, "input") == 0 );
             assert( filename.IsEmpty() );
             filename = optarg;
+            }
+          else if( option_index == 3 ) /* size */
+            {
+            assert( strcmp(s, "size") == 0 );
+            readsize(optarg, size);
             }
           else if( option_index == 4 ) /* region */
             {
@@ -226,6 +238,56 @@ int main (int argc, char *argv[])
 
   const char *inputextension = filename.GetExtension();
   const char *outputextension = outfilename.GetExtension();
+
+  if(  gdcm::System::StrCaseCmp(inputextension,".rle") == 0 )
+    {
+    if( !size[0] || !size[1] )
+      {
+      std::cerr << "need to specify size of image stored in RLE file" << std::endl;
+      return 1;
+      }
+    size_t len = gdcm::System::FileSize(filename);
+    std::ifstream is(filename);
+
+    char * buf = new char[len];
+    is.read(buf, len);
+
+    gdcm::ImageWriter writer;
+    gdcm::Image &image = writer.GetImage();
+    image.SetNumberOfDimensions( 2 );
+    unsigned int dims[3] = {};
+    dims[0] = size[0];
+    dims[1] = size[1];
+    image.SetDimensions( size );
+    gdcm::PixelFormat pf = gdcm::PixelFormat::UINT16;
+    image.SetPixelFormat( pf );
+    gdcm::PhotometricInterpretation pi = gdcm::PhotometricInterpretation::MONOCHROME2;
+    image.SetPhotometricInterpretation( pi );
+    image.SetTransferSyntax( gdcm::TransferSyntax::RLELossless );
+
+    gdcm::DataElement pixeldata;
+
+    gdcm::SmartPointer<gdcm::SequenceOfFragments> sq = new gdcm::SequenceOfFragments;
+    const gdcm::Tag itemStart(0xfffe, 0xe000);
+    //sq->GetTable().SetTag( itemStart );
+
+    gdcm::Fragment frag;
+    //frag.SetTag( itemStart );
+    frag.SetByteValue( buf, len );
+    delete[] buf;
+    sq->AddFragment( frag );
+    pixeldata.SetValue( *sq );
+
+    image.SetDataElement( pixeldata );
+
+    writer.SetFileName( outfilename );
+    if( !writer.Write() )
+      {
+      return 1;
+      }
+
+    return 0;
+    }
 
   if(  gdcm::System::StrCaseCmp(inputextension,".pgm") == 0 
     || gdcm::System::StrCaseCmp(inputextension,".pnm") == 0 
@@ -350,10 +412,10 @@ int main (int argc, char *argv[])
 
     gdcm::SmartPointer<gdcm::SequenceOfFragments> sq = new gdcm::SequenceOfFragments;
     const gdcm::Tag itemStart(0xfffe, 0xe000);
-    sq->GetTable().SetTag( itemStart );
+    //sq->GetTable().SetTag( itemStart );
 
     gdcm::Fragment frag;
-    frag.SetTag( itemStart );
+    //frag.SetTag( itemStart );
     frag.SetByteValue( buf, len );
     delete[] buf;
     sq->AddFragment( frag );
@@ -407,10 +469,10 @@ int main (int argc, char *argv[])
 
     gdcm::SmartPointer<gdcm::SequenceOfFragments> sq = new gdcm::SequenceOfFragments;
     const gdcm::Tag itemStart(0xfffe, 0xe000);
-    sq->GetTable().SetTag( itemStart );
+    //sq->GetTable().SetTag( itemStart );
 
     gdcm::Fragment frag;
-    frag.SetTag( itemStart );
+    //frag.SetTag( itemStart );
     frag.SetByteValue( buf, len );
     delete[] buf;
     sq->AddFragment( frag );

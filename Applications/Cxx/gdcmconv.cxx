@@ -390,7 +390,7 @@ int main (int argc, char *argv[])
     const gdcm::IconImage &icon = image.GetIconImage();
     if( !icon.IsEmpty() )
       {
-      std::cerr << "Icon are not supported" << std::endl;
+      std::cerr << "Icons are not supported" << std::endl;
       return 1;
       }
 

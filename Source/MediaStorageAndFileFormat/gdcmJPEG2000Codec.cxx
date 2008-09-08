@@ -434,7 +434,7 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
   // Create a Sequence Of Fragments:
   SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
   const Tag itemStart(0xfffe, 0xe000);
-  sq->GetTable().SetTag( itemStart );
+  //sq->GetTable().SetTag( itemStart );
 
   const unsigned int *dims = this->GetDimensions();
 
@@ -580,7 +580,7 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     std::string str = os.str();
     assert( str.size() );
     Fragment frag;
-    frag.SetTag( itemStart );
+    //frag.SetTag( itemStart );
     frag.SetByteValue( &str[0], str.size() );
     sq->AddFragment( frag );
     }

@@ -28,8 +28,10 @@ namespace gdcm
 
 class GDCM_EXPORT BasicOffsetTable : public DataElement
 {
+//protected:
+//  void SetTag(const Tag &t);
 public:
-  BasicOffsetTable(const Tag &t = Tag(0), VL const &vl = 0) : DataElement(t, vl) {}
+  BasicOffsetTable(const Tag &t = Tag(0xfffe, 0xe000), VL const &vl = 0) : DataElement(t, vl) {}
   friend std::ostream &operator<<(std::ostream &os, const BasicOffsetTable &val);
 
   VL GetLength() const {
