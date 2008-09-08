@@ -36,14 +36,14 @@ bool ImageFragmentSplitter::Split()
     return false;
     }
 
-  assert( sqf->GetNumberOfFragments() == 1 );
+  //assert( sqf->GetNumberOfFragments() == 1 );
 
   // WARNING do not keep the same Basic Offset Table...
   const Fragment& frag = sqf->GetFragment(0);
   const ByteValue *bv = frag.GetByteValue();
   const char *p = bv->GetPointer();
   unsigned long len = bv->GetLength();
-  if( FragmentSizeMax > len )
+  if( FragmentSizeMax > len && !Force )
     {
     // I think it is ok
     return true;

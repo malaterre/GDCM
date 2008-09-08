@@ -372,6 +372,7 @@ int main (int argc, char *argv[])
     gdcm::ImageFragmentSplitter splitter;
     splitter.SetInput( image );
     splitter.SetFragmentSizeMax( split );
+    splitter.SetForce( force );
     bool b = splitter.Split();
     if( !b )
       {

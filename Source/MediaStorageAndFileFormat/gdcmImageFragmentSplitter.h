@@ -28,7 +28,7 @@ class DataElement;
 class GDCM_EXPORT ImageFragmentSplitter : public ImageToImageFilter
 {
 public:
-  ImageFragmentSplitter():FragmentSizeMax(0) {}
+  ImageFragmentSplitter():FragmentSizeMax(0),Force(false) {}
   ~ImageFragmentSplitter() {}
 
   /// Split
@@ -38,10 +38,15 @@ public:
   void SetFragmentSizeMax(unsigned int fragsize);
   unsigned int GetFragmentSizeMax() const { return FragmentSizeMax; }
 
+  /// When file already has all it's segment < FragmentSizeMax there is not need to run the filter.
+  /// Unless the user explicitly say 'force' recomputation !
+  void SetForce( bool f ) { Force = f; }
+
 protected:
 
 private:
   unsigned int FragmentSizeMax;
+  bool Force;
 };
 
 } // end namespace gdcm
