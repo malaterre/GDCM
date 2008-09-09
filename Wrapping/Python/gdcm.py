@@ -20,7 +20,7 @@ import os
 import sys
 
 # This file is a thin wrapper to the swig generated python module. It allows us to do a couple of things:
-# 1. do the RTLD_GLOBAL thingy on GNU system (with GNU compiler) before loading the compiled python module
+# 1. do the RTLD_GLOBAL thingy on GNU system (with GNU compiler) before loading the compiled python module
 # 2. Load some secret path using directly the locate of this gdcm.py file. 
 #    a. If the gdcm.py is installed in a normal installation then we can deduce where the Part3.xml can be found
 #    This is the 'non frozen' case
