@@ -53,13 +53,23 @@ public:
   Global();
   ~Global();
 
-  // retrieve the default/internal dicts 
+  /// retrieve the default/internal dicts (Part 6)
   Dicts const &GetDicts() const;
 
+  /// retrieve the default/internal (Part 3)
   Defs const &GetDefs() const;
 
-  // return the singleton instance
+  /// return the singleton instance
   static const Global& GetInstance();
+
+  /// Locate a ressource file
+  const char *Locate(const char *resfile) const;
+
+  /// Append path at the end of the path list
+  bool Append(const char *path);
+
+  /// Prepend path at the begining of the path list
+  bool Prepend(const char *path);
 
 private:
   Global &operator=(const Global &_val); // purposely not implemented
