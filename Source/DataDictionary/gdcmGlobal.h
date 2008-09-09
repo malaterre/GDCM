@@ -57,19 +57,25 @@ public:
   Dicts const &GetDicts() const;
 
   /// retrieve the default/internal (Part 3)
+  /// You need to explicitely call LoadXMLFiles before
   Defs const &GetDefs() const;
 
   /// return the singleton instance
   static const Global& GetInstance();
 
-  /// Locate a ressource file
-  const char *Locate(const char *resfile) const;
+  /// Load all internal XML files, ressource path need to have been
+  /// set before calling this member function (see Append/Prepend)
+  bool LoadXMLFiles();
 
   /// Append path at the end of the path list
   bool Append(const char *path);
 
   /// Prepend path at the begining of the path list
   bool Prepend(const char *path);
+
+protected:
+  /// Locate a ressource file
+  const char *Locate(const char *resfile) const;
 
 private:
   Global &operator=(const Global &_val); // purposely not implemented

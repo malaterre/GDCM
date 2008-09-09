@@ -47,6 +47,14 @@ void Defs::LoadDefaults()
 //    }
 }
 
+void Defs::LoadFromFile(const char *filename)
+{
+  assert( filename );
+  TableReader tr(*this);
+  tr.SetFilename(filename);
+  tr.Read();
+}
+
 const char *Defs::GetIODNameFromMediaStorage(MediaStorage &ms) const
 {
   const char *iodname;

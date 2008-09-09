@@ -94,6 +94,13 @@ Global::~Global()
     }
 }
 
+bool Global::LoadXMLFiles()
+{
+  assert( Internals != NULL ); // paranoid
+  const char *filename = Locate( "Part3.xml" );
+  Internals->GlobalDefs.LoadFromFile(filename);
+}
+
 bool Global::Append(const char *path)
 {
   if( !System::FileIsDirectory(path) )

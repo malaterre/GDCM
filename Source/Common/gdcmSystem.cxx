@@ -53,8 +53,8 @@
 #include <direct.h>
 #define _unlink unlink
 #else
-//#include <features.h>	// we want GNU extensions
-//#include <dlfcn.h>
+#include <features.h>	// we want GNU extensions
+#include <dlfcn.h>
 #include <sys/types.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -389,11 +389,11 @@ static void where_am_i() {}
 const char *System::GetCurrentModuleFileName()
 {
 #ifdef __USE_GNU
-//  Dl_info info;
-//  if (dladdr( (void*)&where_am_i, &info ) == 0)
-//    {
-//    return info.dli_fname; 
-//    }
+  Dl_info info;
+  if (dladdr( (void*)&where_am_i, &info ) == 0)
+    {
+    return info.dli_fname; 
+    }
 #endif
   return 0;
 }

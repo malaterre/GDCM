@@ -51,6 +51,7 @@ public:
 protected:
   friend class Global;
   void LoadDefaults();
+  void LoadFromFile(const char *filename);
 
   const char *GetIODNameFromMediaStorage(MediaStorage &ms) const;
 
