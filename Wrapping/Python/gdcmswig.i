@@ -127,6 +127,7 @@ using namespace gdcm;
 //#include "myheader.h"
 //%}
 
+%include "docstrings.i"
 
 // swig need to know what are uint16_t, uint8_t...
 %include "stdint.i"
