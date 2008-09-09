@@ -19,18 +19,15 @@ its namespace.  This is a required module."""
 import os
 import sys
 
-# GDCM_WHEREAMI is a secret variable used to passed the location of the gdcm.py
-# to the global singleton initialization internal to gdcm:
-# I cannot use neither getcwd nor /proc/self/exe since the process really is: `python`
-# Solution:
-# 1. Create a dummy env var within python
-# 2. Load the gdcm_wrapped interface
-# 3. The internal gdcm C++ will inspect for this variable, if set: use it !
-#if os.environ["GDCM_WHEREAMI"]:
-#  os.exit(1)
-# WARNING: this is currently the implementation chosen to pass in the information
-# during the singleton initalization, but is subject to change without notice
-# do not expect this env var to be present at any time in your project
+# This file is a thin wrapper to the swig generated python module. It allows us to do a couple of things:
+# 1. do the RTLD_GLOBAL thingy on GNU system (with GNU compiler) before loading the compiled python module
+# 2. Load some secret path using directly the locate of this gdcm.py file. 
+#    a. If the gdcm.py is installed in a normal installation then we can deduce where the Part3.xml can be found
+#    This is the 'non frozen' case
+#    b. Is the python executable is frozen then assume that everything is at the same level and look for Part3.xml
+#    at the same level as the frozen application is (see py2exe for more info)
+# 3. Finally this is also a good time to look up the env var and if GDCM_RESOURCES_PATH is set, then fill
+#    the 'resource manager' via the Global.Prepend interface.
 
 def main_is_frozen():
   return hasattr(sys, "frozen")
