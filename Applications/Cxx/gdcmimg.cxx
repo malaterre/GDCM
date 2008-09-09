@@ -238,6 +238,7 @@ int main (int argc, char *argv[])
 
   const char *inputextension = filename.GetExtension();
   const char *outputextension = outfilename.GetExtension();
+  if( !inputextension || !outputextension ) return 1;
 
   if(  gdcm::System::StrCaseCmp(inputextension,".rle") == 0 )
     {
