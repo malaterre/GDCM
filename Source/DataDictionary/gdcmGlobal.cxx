@@ -94,11 +94,17 @@ Global::~Global()
     }
 }
 
-bool Global::LoadXMLFiles()
+bool Global::LoadResourcesFiles()
 {
   assert( Internals != NULL ); // paranoid
   const char *filename = Locate( "Part3.xml" );
-  Internals->GlobalDefs.LoadFromFile(filename);
+  if( filename )
+    {
+    Internals->GlobalDefs.LoadFromFile(filename);
+    return true;
+    }
+  // resource manager was not set properly
+  return false;
 }
 
 bool Global::Append(const char *path)

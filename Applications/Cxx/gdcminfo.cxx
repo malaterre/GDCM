@@ -397,7 +397,7 @@ int main(int argc, char *argv[])
       g.Prepend( xmlpath );
       }
     // All set, then load the XML files:
-    g.LoadXMLFiles();
+    g.LoadResourcesFiles();
     const gdcm::Defs &defs = g.GetDefs();
     bool v = defs.Verify( ds );
     std::cerr << "IOD Verification: " << (v ? "succeed" : "failed") << std::endl;

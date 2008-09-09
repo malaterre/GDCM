@@ -66,8 +66,10 @@ else:
   Global.GetInstance().Prepend( os.path.dirname(__file__) + "/../../../"  + GDCM_INSTALL_DATA_DIR + "/XML/" )
 
 # Do it afterward so that it comes in first in the list
-if os.environ["GDCM_RESOURCES_PATH"]:
+try:
   Global.GetInstance().Prepend( os.environ["GDCM_RESOURCES_PATH"] )
+except:
+  pass
 
 # bye bye
 # once the process dies, the changed environment dies with it.

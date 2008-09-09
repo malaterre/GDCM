@@ -65,7 +65,7 @@ public:
 
   /// Load all internal XML files, ressource path need to have been
   /// set before calling this member function (see Append/Prepend)
-  bool LoadXMLFiles();
+  bool LoadResourcesFiles();
 
   /// Append path at the end of the path list
   bool Append(const char *path);
