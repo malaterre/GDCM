@@ -61,7 +61,7 @@ public:
   Defs const &GetDefs() const;
 
   /// return the singleton instance
-  static const Global& GetInstance();
+  static Global& GetInstance();
 
   /// Load all internal XML files, ressource path need to have been
   /// set before calling this member function (see Append/Prepend)

@@ -133,6 +133,7 @@ const char *Global::Locate(const char *resfile) const
   for( ; it != Internals->RessourcePaths.end(); ++it)
     {
     const std::string &p = *it;
+    gdcmDebugMacro( "Trying to locate in: " << p );
     std::string fullpath = p + "/" + resfile;
     if( System::FileExists(fullpath.c_str()) )
       {
@@ -157,7 +158,7 @@ Defs const &Global::GetDefs() const
   return Internals->GlobalDefs;
 }
 
-const Global& Global::GetInstance()
+Global& Global::GetInstance()
 {
   return GlobalInstance;
 }

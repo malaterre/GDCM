@@ -195,6 +195,8 @@ void PrintHelp()
   std::cout << "  -E --error     print error info." << std::endl;
   std::cout << "  -h --help      print help." << std::endl;
   std::cout << "  -v --version   print version." << std::endl;
+  std::cout << "Env var:" << std::endl;
+  std::cout << "  GDCM_RESOURCES_PATH path pointing to resources files (Part3.xml, ...)" << std::endl;
 }
 
 
@@ -385,7 +387,17 @@ int main(int argc, char *argv[])
 
 // Do the IOD verification !
     {
-    const gdcm::Global& g = gdcm::Global::GetInstance();
+    gdcm::Global& g = gdcm::Global::GetInstance();
+    // First thing we need to locate the XML dict
+    // did the user requested to look XML file in a particular directory ?
+    const char *xmlpath = getenv("GDCM_RESOURCES_PATH");
+    if( xmlpath )
+      {
+      // Make sure to look for XML dict in user explicitly specified dir first:
+      g.Prepend( xmlpath );
+      }
+    // All set, then load the XML files:
+    g.LoadXMLFiles();
     const gdcm::Defs &defs = g.GetDefs();
     bool v = defs.Verify( ds );
     std::cerr << "IOD Verification: " << (v ? "succeed" : "failed") << std::endl;
