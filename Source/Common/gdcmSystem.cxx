@@ -53,6 +53,8 @@
 #include <direct.h>
 #define _unlink unlink
 #else
+//#include <features.h>	// we want GNU extensions
+//#include <dlfcn.h>
 #include <sys/types.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -293,6 +295,7 @@ size_t System::FileSize(const char* filename)
     }
 }
 
+#if 0
 const char *System::GetCurrentDataDirectory()
 {
 #ifdef _WIN32
@@ -335,6 +338,7 @@ const char *System::GetCurrentDataDirectory()
 #endif
   return 0;
 }
+#endif
 
 /* 
  * TODO:
@@ -378,6 +382,40 @@ const char *System::GetCurrentProcessFileName()
     }
 #endif
    return 0;
+}
+
+static void where_am_i() {}
+
+const char *System::GetCurrentModuleFileName()
+{
+#ifdef __USE_GNU
+//  Dl_info info;
+//  if (dladdr( (void*)&where_am_i, &info ) == 0)
+//    {
+//    return info.dli_fname; 
+//    }
+#endif
+  return 0;
+}
+
+const char *System::GetCurrentResourcesDirectory()
+{
+#ifdef __APPLE__
+  Boolean success = false;
+  CFURLRef pathURL = CFBundleCopyResourcesDirectoryURL(CFBundleGetMainBundle());
+  if (pathURL != NULL)
+    {
+    success = CFURLGetFileSystemRepresentation(pathURL, true /*resolveAgainstBase*/, (unsigned char*) path, PATH_MAX);
+    CFRelease(pathURL);
+    }
+  if (success)
+    {
+    strncat(path, "/" GDCM_INSTALL_DATA_DIR, PATH_MAX);
+    return path;
+    }
+#endif
+  // Is there such beast on *any* other system but APPLE ?
+  return 0;
 }
 
 /**

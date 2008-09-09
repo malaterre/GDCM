@@ -40,17 +40,21 @@ public:
 
   /// Return the last error
   static const char *GetLastSystemError();
+
   /// Return the filesize
   static size_t FileSize(const char* filename);
 
-  /// Return the directory the current process is running into:
+  /// Return the directory the current process (executable) is located:
   /// NOT THREAD SAFE
   static const char *GetCurrentProcessFileName();
 
-  /// Return the directory where runtime data are located
-  /// On Apple it return the Resources directory of the current bundle
+  /// Return the directory the current module is located:
   /// NOT THREAD SAFE
-  static const char *GetCurrentDataDirectory();
+  static const char *GetCurrentModuleFileName();
+
+  /// On some system (Apple) return the path to the current bundled 'Resources' directory
+  /// NOT THREAD SAFE
+  static const char *GetCurrentResourcesDirectory();
 
   // TODO some system calls
   // Chdir
