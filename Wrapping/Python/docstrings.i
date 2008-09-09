@@ -749,9 +749,7 @@ gdcm::Coder::~Coder() ";
 
 
 // File: classstd_1_1complex.xml
-%feature("docstring") std::complex "
-
-STL class. ";
+//%feature("docstring") std::complex " STL class. ";
 
 
 // File: classgdcm_1_1ConstCharWrapper.xml
@@ -2722,25 +2720,17 @@ gdcm::ImageChangePhotometricInterpretation::Change()
 
 Change. ";
 
-%feature("docstring")  gdcm::ImageChangePhotometricInterpretation::Get
-PhotometricInterpretation " const PhotometricInterpretation& gdcm::Ima
-geChangePhotometricInterpretation::GetPhotometricInterpretation()
+%feature("docstring")  gdcm::ImageChangePhotometricInterpretation::GetPhotometricInterpretation " const PhotometricInterpretation& gdcm::ImageChangePhotometricInterpretation::GetPhotometricInterpretation()
 const ";
 
-%feature("docstring")  gdcm::ImageChangePhotometricInterpretation::Ima
-geChangePhotometricInterpretation " gdcm::ImageChangePhotometricInterp
-retation::ImageChangePhotometricInterpretation() ";
+%feature("docstring")  gdcm::ImageChangePhotometricInterpretation::ImageChangePhotometricInterpretation " gdcm::ImageChangePhotometricInterpretation::ImageChangePhotometricInterpretation() ";
 
-%feature("docstring")  gdcm::ImageChangePhotometricInterpretation::Set
-PhotometricInterpretation " void gdcm::ImageChangePhotometricInterpret
-ation::SetPhotometricInterpretation(PhotometricInterpretation const
+%feature("docstring")  gdcm::ImageChangePhotometricInterpretation::SetPhotometricInterpretation " void gdcm::ImageChangePhotometricInterpretation::SetPhotometricInterpretation(PhotometricInterpretation const
 &pi)
 
 Set/Get requested PhotometricInterpretation. ";
 
-%feature("docstring")  gdcm::ImageChangePhotometricInterpretation::~Im
-ageChangePhotometricInterpretation " gdcm::ImageChangePhotometricInter
-pretation::~ImageChangePhotometricInterpretation() ";
+%feature("docstring")  gdcm::ImageChangePhotometricInterpretation::~ImageChangePhotometricInterpretation " gdcm::ImageChangePhotometricInterpretation::~ImageChangePhotometricInterpretation() ";
 
 
 // File: classgdcm_1_1ImageChangePlanarConfiguration.xml
@@ -5110,9 +5100,7 @@ C++ includes: gdcmSegmentedPaletteColorLookupTable.h ";
 %feature("docstring")  gdcm::SegmentedPaletteColorLookupTable::Print "void gdcm::SegmentedPaletteColorLookupTable::Print(std::ostream &)
 const ";
 
-%feature("docstring")  gdcm::SegmentedPaletteColorLookupTable::Segment
-edPaletteColorLookupTable " gdcm::SegmentedPaletteColorLookupTable::Se
-gmentedPaletteColorLookupTable() ";
+%feature("docstring")  gdcm::SegmentedPaletteColorLookupTable::SegmentedPaletteColorLookupTable " gdcm::SegmentedPaletteColorLookupTable::SegmentedPaletteColorLookupTable() ";
 
 %feature("docstring")  gdcm::SegmentedPaletteColorLookupTable::SetLUT
 "void gdcm::SegmentedPaletteColorLookupTable::SetLUT(LookupTableType
@@ -5120,9 +5108,7 @@ type, const unsigned char *array, unsigned int length)
 
 Initialize a SegmentedPaletteColorLookupTable. ";
 
-%feature("docstring")  gdcm::SegmentedPaletteColorLookupTable::~Segmen
-tedPaletteColorLookupTable " gdcm::SegmentedPaletteColorLookupTable::~
-SegmentedPaletteColorLookupTable() ";
+%feature("docstring")  gdcm::SegmentedPaletteColorLookupTable::~SegmentedPaletteColorLookupTable " gdcm::SegmentedPaletteColorLookupTable::~SegmentedPaletteColorLookupTable() ";
 
 
 // File: classgdcm_1_1SequenceOfFragments.xml

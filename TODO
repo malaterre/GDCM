@@ -206,3 +206,8 @@ There is a bug in the YBR2RGB code...
   Update: 09/04 PlanarConfiguration code has been fixed
 -----------------------------------------------------------------------
 Add exception when accessing DataElement not found in DataSet
+-----------------------------------------------------------------------
+Add python documentation
+
+doxy2swig.py
+http://www.ae.iitm.ac.in/~prabhu/software/code/python/doxy2swig.py

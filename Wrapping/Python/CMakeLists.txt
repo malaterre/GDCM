@@ -74,8 +74,8 @@ SET(MODULE_NAME gdcmswig)
 #SET(CMAKE_CXX_FLAGS "")
 # well no, you cannot, it get rid of some important flags, and make the _gdcm.so incompatible with
 # the other gdcm lib. bad !!!
-SET (SWIG_MODULE_${MODULE_NAME}_EXTRA_DEPS ${SWIG_MODULE_${MODULE_NAME}_EXTRA_DEPS} ${CMAKE_CURRENT_SOURCE_DIR}/docstrings.i)
-SWIG_ADD_MODULE(${GDCM_PYTHON_IMPLEMENTATION_NAME} python gdcmswig.i docstrings.i gdcmPythonFilter.cxx)
+#SET (SWIG_MODULE_${MODULE_NAME}_EXTRA_DEPS ${SWIG_MODULE_${MODULE_NAME}_EXTRA_DEPS} ${CMAKE_CURRENT_SOURCE_DIR}/docstrings.i)
+SWIG_ADD_MODULE(${GDCM_PYTHON_IMPLEMENTATION_NAME} python gdcmswig.i gdcmPythonFilter.cxx)
 SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} gdcmMSFF gdcmIOD ${PYTHON_LIBRARIES})
 #MESSAGE(SWIG_MODULE_${MODULE_NAME}_EXTRA_DEPS)
 #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/gdcm.pth.in
