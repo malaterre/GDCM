@@ -15,7 +15,7 @@
 #include "gdcmDefs.h"
 #include "gdcmTableReader.h"
 #include "gdcmMediaStorage.h"
-#include "gdcmGlobal.h"
+//#include "gdcmGlobal.h"
 #include "gdcmTrace.h"
 
 namespace gdcm
@@ -31,20 +31,20 @@ Defs::~Defs()
 
 void Defs::LoadDefaults()
 {
-  TableReader tr(*this);
-  const Global &g = Global::GetInstance();
-  const char *filename = g.Locate( "Part3.xml" );
-  
-  if( filename )
-    {
-    tr.SetFilename(filename);
-    tr.Read();
-    }
-  else
-    {
-    gdcmErrorMacro( "Could not find Part3.xml file. Please report" );
-    throw Exception( "Impossible" );
-    }
+//  TableReader tr(*this);
+//  const Global &g = Global::GetInstance();
+//  const char *filename = g.Locate( "Part3.xml" );
+//  
+//  if( filename )
+//    {
+//    tr.SetFilename(filename);
+//    tr.Read();
+//    }
+//  else
+//    {
+//    gdcmErrorMacro( "Could not find Part3.xml file. Please report" );
+//    throw Exception( "Impossible" );
+//    }
 }
 
 const char *Defs::GetIODNameFromMediaStorage(MediaStorage &ms) const
