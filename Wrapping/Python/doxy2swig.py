@@ -13,11 +13,9 @@ the resulting output.
 input.xml is your doxygen generated XML file and output.i is where the
 output will be written (the file will be clobbered).
 
-Original code can be found at:
-http://www.ae.iitm.ac.in/~prabhu/software/python.html
-but the version at:
-http://trac.tuebingen.mpg.de/shogun/browser/branches/structure/src/.doxy2swig.py?rev=3227
-fix a couple of issues such as long member function names
+Code can be found at prabhu's page:
+
+http://www.aero.iitb.ac.in/~prabhu/software/code/python/doxy2swig.py
 
 """
 ######################################################################
