@@ -749,7 +749,9 @@ gdcm::Coder::~Coder() ";
 
 
 // File: classstd_1_1complex.xml
-//%feature("docstring") std::complex " STL class. ";
+%feature("docstring") std::complex "
+
+STL class. ";
 
 
 // File: classgdcm_1_1ConstCharWrapper.xml
@@ -2416,8 +2418,9 @@ gdcm::IconImage::SetDataElement(DataElement const &de) ";
 %feature("docstring")  gdcm::IconImage::SetDimension "void
 gdcm::IconImage::SetDimension(unsigned int idx, unsigned int dim) ";
 
-%feature("docstring")  gdcm::IconImage::SetPhotometricInterpretation "void gdcm::IconImage::SetPhotometricInterpretation(PhotometricInterpre
-tation const &pi) ";
+%feature("docstring")  gdcm::IconImage::SetPhotometricInterpretation "void
+gdcm::IconImage::SetPhotometricInterpretation(PhotometricInterpretation
+const &pi) ";
 
 %feature("docstring")  gdcm::IconImage::SetPixelFormat "void
 gdcm::IconImage::SetPixelFormat(PixelFormat const &pf) ";
@@ -2720,17 +2723,29 @@ gdcm::ImageChangePhotometricInterpretation::Change()
 
 Change. ";
 
-%feature("docstring")  gdcm::ImageChangePhotometricInterpretation::GetPhotometricInterpretation " const PhotometricInterpretation& gdcm::ImageChangePhotometricInterpretation::GetPhotometricInterpretation()
+%feature("docstring")
+gdcm::ImageChangePhotometricInterpretation::GetPhotometricInterpretation
+"const PhotometricInterpretation&
+gdcm::ImageChangePhotometricInterpretation::GetPhotometricInterpretation()
 const ";
 
-%feature("docstring")  gdcm::ImageChangePhotometricInterpretation::ImageChangePhotometricInterpretation " gdcm::ImageChangePhotometricInterpretation::ImageChangePhotometricInterpretation() ";
+%feature("docstring")
+gdcm::ImageChangePhotometricInterpretation::ImageChangePhotometricInterpretation
+"gdcm::ImageChangePhotometricInterpretation::ImageChangePhotometricInterpretation()
+";
 
-%feature("docstring")  gdcm::ImageChangePhotometricInterpretation::SetPhotometricInterpretation " void gdcm::ImageChangePhotometricInterpretation::SetPhotometricInterpretation(PhotometricInterpretation const
-&pi)
+%feature("docstring")
+gdcm::ImageChangePhotometricInterpretation::SetPhotometricInterpretation
+"void
+gdcm::ImageChangePhotometricInterpretation::SetPhotometricInterpretation(PhotometricInterpretation
+const &pi)
 
 Set/Get requested PhotometricInterpretation. ";
 
-%feature("docstring")  gdcm::ImageChangePhotometricInterpretation::~ImageChangePhotometricInterpretation " gdcm::ImageChangePhotometricInterpretation::~ImageChangePhotometricInterpretation() ";
+%feature("docstring")
+gdcm::ImageChangePhotometricInterpretation::~ImageChangePhotometricInterpretation
+"gdcm::ImageChangePhotometricInterpretation::~ImageChangePhotometricInterpretation()
+";
 
 
 // File: classgdcm_1_1ImageChangePlanarConfiguration.xml
@@ -2764,8 +2779,8 @@ Set/Get requested PlanarConfigation. ";
 
 %feature("docstring")
 gdcm::ImageChangePlanarConfiguration::~ImageChangePlanarConfiguration
-"gdcm::ImageChangePlanarConfiguration::~ImageChangePlanarConfiguratio
-n() ";
+"gdcm::ImageChangePlanarConfiguration::~ImageChangePlanarConfiguration()
+";
 
 
 // File: classgdcm_1_1ImageChangeTransferSyntax.xml
@@ -2862,8 +2877,9 @@ gdcm::ImageCodec::SetNeedByteSwap(bool b) ";
 gdcm::ImageCodec::SetNeedOverlayCleanup(bool b) ";
 
 %feature("docstring")  gdcm::ImageCodec::SetPhotometricInterpretation
-"void gdcm::ImageCodec::SetPhotometricInterpretation(PhotometricInter
-pretation const &pi) ";
+"void
+gdcm::ImageCodec::SetPhotometricInterpretation(PhotometricInterpretation
+const &pi) ";
 
 %feature("docstring")  gdcm::ImageCodec::SetPixelFormat "virtual void
 gdcm::ImageCodec::SetPixelFormat(PixelFormat const &pf) ";
@@ -3449,17 +3465,13 @@ stream ImageCodec implementation for the JPEG case.
 Things you should know if you ever want to dive into DICOM/JPEG world
 (among other):
 
-http://groups.google.com/group/comp.protocols.dicom/browse_thread/thre
-ad/625e46919f2080e1
+http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/625e46919f2080e1
 
-http://groups.google.com/group/comp.protocols.dicom/browse_thread/thre
-ad/75fdfccc65a6243
+http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/75fdfccc65a6243
 
-http://groups.google.com/group/comp.protocols.dicom/browse_thread/thre
-ad/2d525ef6a2f093ed
+http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/2d525ef6a2f093ed
 
-http://groups.google.com/group/comp.protocols.dicom/browse_thread/thre
-ad/6b93af410f8c921f
+http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/6b93af410f8c921f
 
 C++ includes: gdcmJPEGCodec.h ";
 
@@ -5100,7 +5112,10 @@ C++ includes: gdcmSegmentedPaletteColorLookupTable.h ";
 %feature("docstring")  gdcm::SegmentedPaletteColorLookupTable::Print "void gdcm::SegmentedPaletteColorLookupTable::Print(std::ostream &)
 const ";
 
-%feature("docstring")  gdcm::SegmentedPaletteColorLookupTable::SegmentedPaletteColorLookupTable " gdcm::SegmentedPaletteColorLookupTable::SegmentedPaletteColorLookupTable() ";
+%feature("docstring")
+gdcm::SegmentedPaletteColorLookupTable::SegmentedPaletteColorLookupTable
+"gdcm::SegmentedPaletteColorLookupTable::SegmentedPaletteColorLookupTable()
+";
 
 %feature("docstring")  gdcm::SegmentedPaletteColorLookupTable::SetLUT
 "void gdcm::SegmentedPaletteColorLookupTable::SetLUT(LookupTableType
@@ -5108,7 +5123,10 @@ type, const unsigned char *array, unsigned int length)
 
 Initialize a SegmentedPaletteColorLookupTable. ";
 
-%feature("docstring")  gdcm::SegmentedPaletteColorLookupTable::~SegmentedPaletteColorLookupTable " gdcm::SegmentedPaletteColorLookupTable::~SegmentedPaletteColorLookupTable() ";
+%feature("docstring")
+gdcm::SegmentedPaletteColorLookupTable::~SegmentedPaletteColorLookupTable
+"gdcm::SegmentedPaletteColorLookupTable::~SegmentedPaletteColorLookupTable()
+";
 
 
 // File: classgdcm_1_1SequenceOfFragments.xml
@@ -5297,9 +5315,9 @@ STL iterator class. ";
 Class for Smart Pointer Will only work for subclass of gdcm::Object
 See tr1/shared_ptr for a more general approach (not invasive) include
 <tr1/memory> { shared_ptr<Bla> b(new Bla); } Class partly based on
-post by Bill Hubauer:http://groups.google.com/group/comp.lang.c++/msg/
-173ddc38a827a930 See
-alsohttp://www.davethehat.com/articles/smartp.htm.
+post by Bill
+Hubauer:http://groups.google.com/group/comp.lang.c++/msg/173ddc38a827a930
+See alsohttp://www.davethehat.com/articles/smartp.htm.
 
 and itk::SmartPointer
 
@@ -6365,8 +6383,9 @@ vtkGDCMImageWriter::PrintSelf(ostream &os, vtkIndent indent) ";
 %feature("docstring")  vtkGDCMImageWriter::SetFileNames "virtual void
 vtkGDCMImageWriter::SetFileNames(vtkStringArray *) ";
 
-%feature("docstring")  vtkGDCMImageWriter::SetMedicalImageProperties "virtual void vtkGDCMImageWriter::SetMedicalImageProperties(vtkMedicalI
-mageProperties *) ";
+%feature("docstring")  vtkGDCMImageWriter::SetMedicalImageProperties "virtual void
+vtkGDCMImageWriter::SetMedicalImageProperties(vtkMedicalImageProperties
+*) ";
 
 %feature("docstring")  vtkGDCMImageWriter::vtkBooleanMacro "vtkGDCMImageWriter::vtkBooleanMacro(FileLowerLeft, int) ";
 
@@ -6434,8 +6453,7 @@ indent) ";
 %feature("docstring")  vtkGDCMThreadedImageReader::vtkSetMacro "vtkGDCMThreadedImageReader::vtkSetMacro(Shift, double) ";
 
 %feature("docstring")
-vtkGDCMThreadedImageReader::vtkTypeRevisionMacro "vtkGDCMThreadedImag
-eReader::vtkTypeRevisionMacro(vtkGDCMThreadedImageReader,
+vtkGDCMThreadedImageReader::vtkTypeRevisionMacro "vtkGDCMThreadedImageReader::vtkTypeRevisionMacro(vtkGDCMThreadedImageReader,
 vtkGDCMImageReader) ";
 
 
@@ -6510,8 +6528,7 @@ int) ";
 "vtkGDCMThreadedImageReader2::vtkSetVector6Macro(DataExtent, int) ";
 
 %feature("docstring")
-vtkGDCMThreadedImageReader2::vtkTypeRevisionMacro "vtkGDCMThreadedIma
-geReader2::vtkTypeRevisionMacro(vtkGDCMThreadedImageReader2,
+vtkGDCMThreadedImageReader2::vtkTypeRevisionMacro "vtkGDCMThreadedImageReader2::vtkTypeRevisionMacro(vtkGDCMThreadedImageReader2,
 vtkThreadedImageAlgorithm) ";
 
 
@@ -6722,9 +6739,8 @@ indent) ";
 %feature("docstring")  vtkImageMapToWindowLevelColors2::vtkSetMacro "vtkImageMapToWindowLevelColors2::vtkSetMacro(Window, double) ";
 
 %feature("docstring")
-vtkImageMapToWindowLevelColors2::vtkTypeRevisionMacro "vtkImageMapToW
-indowLevelColors2::vtkTypeRevisionMacro(vtkImageMapToWindowLevelColors
-2, vtkImageMapToColors) ";
+vtkImageMapToWindowLevelColors2::vtkTypeRevisionMacro "vtkImageMapToWindowLevelColors2::vtkTypeRevisionMacro(vtkImageMapToWindowLevelColors2,
+vtkImageMapToColors) ";
 
 
 // File: classvtkImagePlanarComponentsToComponents.xml
@@ -6736,9 +6752,8 @@ includes: vtkImagePlanarComponentsToComponents.h ";
 vtkIndent indent) ";
 
 %feature("docstring")
-vtkImagePlanarComponentsToComponents::vtkTypeRevisionMacro "vtkImageP
-lanarComponentsToComponents::vtkTypeRevisionMacro(vtkImagePlanarCompon
-entsToComponents, vtkImageAlgorithm) ";
+vtkImagePlanarComponentsToComponents::vtkTypeRevisionMacro "vtkImagePlanarComponentsToComponents::vtkTypeRevisionMacro(vtkImagePlanarComponentsToComponents,
+vtkImageAlgorithm) ";
 
 
 // File: classvtkImageRGBToYBR.xml
@@ -7004,9 +7019,35 @@ gdcm::XMLPrivateDictReader::~XMLPrivateDictReader "gdcm::XMLPrivateDictReader::~
 
 
 // File: namespacegdcm.xml
+%feature("docstring")  gdcm::terminal::TYPETOENCODING "gdcm::TYPETOENCODING(SQ, VRBINARY, unsigned char) TYPETOENCODING(UN ";
+
+%feature("docstring")  gdcm::terminal::TYPETOENCODING "gdcm::TYPETOENCODING(SQ, VRBINARY, unsigned char) TYPETOENCODING(UN ";
 
 
 // File: namespacegdcm_1_1terminal.xml
+%feature("docstring")  gdcm::terminal::setattribute "GDCM_EXPORT
+std::string gdcm::terminal::setattribute(Attribute att) ";
+
+%feature("docstring")  gdcm::terminal::setfgcolor "GDCM_EXPORT
+std::string gdcm::terminal::setfgcolor(Color c) ";
+
+%feature("docstring")  gdcm::terminal::setbgcolor "GDCM_EXPORT
+std::string gdcm::terminal::setbgcolor(Color c) ";
+
+%feature("docstring")  gdcm::terminal::setmode "GDCM_EXPORT void
+gdcm::terminal::setmode(Mode m) ";
+
+%feature("docstring")  gdcm::terminal::setattribute "GDCM_EXPORT
+std::string gdcm::terminal::setattribute(Attribute att) ";
+
+%feature("docstring")  gdcm::terminal::setbgcolor "GDCM_EXPORT
+std::string gdcm::terminal::setbgcolor(Color c) ";
+
+%feature("docstring")  gdcm::terminal::setfgcolor "GDCM_EXPORT
+std::string gdcm::terminal::setfgcolor(Color c) ";
+
+%feature("docstring")  gdcm::terminal::setmode "GDCM_EXPORT void
+gdcm::terminal::setmode(Mode m) ";
 
 
 // File: namespaceitk.xml
@@ -7016,6 +7057,15 @@ gdcm::XMLPrivateDictReader::~XMLPrivateDictReader "gdcm::XMLPrivateDictReader::~
 
 
 // File: namespacezlib__stream.xml
+%feature("docstring")  zlib_stream::detail::isGZip "bool
+zlib_stream::isGZip(std::istream &is)
+
+Helper function to check whether stream is compressed or not. ";
+
+%feature("docstring")  zlib_stream::detail::isGZip "bool
+zlib_stream::isGZip(std::istream &is)
+
+Helper function to check whether stream is compressed or not. ";
 
 
 // File: namespacezlib__stream_1_1detail.xml
