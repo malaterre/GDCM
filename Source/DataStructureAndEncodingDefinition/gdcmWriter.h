@@ -70,9 +70,6 @@ public:
     assert( !Ofstream->fail() );
     //std::cerr << Stream.is_open() << std::endl;
     Stream = Ofstream;
-#ifndef NDEBUG
-    DebugFileName = filename;
-#endif
   }
   /// Set user ostream buffer
   void SetStream(std::ostream &output_stream) {
@@ -95,9 +92,6 @@ protected:
 private:
   SmartPointer<File> F;
   bool CheckFileMetaInformation;
-#ifndef NDEBUG
-  std::string DebugFileName;
-#endif
 };
 
 } // end namespace gdcm
