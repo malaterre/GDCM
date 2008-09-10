@@ -61,6 +61,11 @@ public:
       {
       RessourcePaths.push_back( respath );
       }
+#ifdef GDCM_BUILD_TESTING
+    // Needed for backward compat and dashboard
+    const char src_path[] = GDCM_SOURCE_DIR "/Source/InformationObjectDefinition/";
+    RessourcePaths.push_back( src_path );
+#endif
     }
   std::vector<std::string> RessourcePaths;
 };

@@ -39,7 +39,7 @@ bool ImageChangePhotometricInterpretation::Change()
   else if( PI == PhotometricInterpretation::RGB )
     {
     /* octave:
-     * B = [.2990,.5870,.1140;- .1687, - .3313,  .5000; .5000, - .4187, - .0813]
+     * B = [.2990,.5870,.1140;- .16874, - .33126,  .5000; .5000, - .41869, - .08131]
      * inv(B)
      * 1.0000e+00   -3.6820e-05    1.4020e+00
      * 1.0000e+00   -3.4411e-01   -7.1410e-01

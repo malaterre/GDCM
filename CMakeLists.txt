@@ -60,17 +60,22 @@ CREATE_COPYRIGHT_FILE(${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt)
 APPEND_COPYRIGHT(${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt)
 
 #-----------------------------------------------------------------------------
-IF(NOT CMAKE_BUILD_TYPE)
+IF(GDCM_MINOR_VERSION MATCHES "[02468]$")
   # Are we building a release branch / tag (read: even number)?
   # By default dashboard are expected to run with Design by Contract on
   # to trigger any of the assert, but on the other hand no user really
   # can figure out they need to change this value
   # So unless the user *specifically* requested a particular cmake_build_type
   # do the work internally and append the NDEBUG def flag (hopefully portable)
-  IF(GDCM_MINOR_VERSION MATCHES "[02468]$")
+  IF(NOT CMAKE_BUILD_TYPE)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNDEBUG")
-  ENDIF(GDCM_MINOR_VERSION MATCHES "[02468]$")
-ENDIF(NOT CMAKE_BUILD_TYPE)
+  ENDIF(NOT CMAKE_BUILD_TYPE)
+  # Since we are on a release branch, chance is that people don't care about testing
+  # let's disable it for them
+  SET(GDCM_BUILD_TESTING_DEFAULT OFF)
+ELSE(GDCM_MINOR_VERSION MATCHES "[02468]$")
+  SET(GDCM_BUILD_TESTING_DEFAULT ON)
+ENDIF(GDCM_MINOR_VERSION MATCHES "[02468]$")
 
 #-----------------------------------------------------------------------------
 # VS 2005 declared that some C functions were deprecated...
@@ -268,7 +273,7 @@ ENDIF(BUILD_EXAMPLES)
 
 #-----------------------------------------------------------------------------
 # Add the testing directories
-OPTION(GDCM_BUILD_TESTING "Build testing." ON)
+OPTION(GDCM_BUILD_TESTING "Build testing." ${GDCM_BUILD_TESTING_DEFAULT})
 SET(BUILD_TESTING ${GDCM_BUILD_TESTING} CACHE BOOL "" FORCE)
 MARK_AS_ADVANCED(BUILD_TESTING)
 

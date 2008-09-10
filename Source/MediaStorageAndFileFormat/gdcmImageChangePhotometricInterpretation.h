@@ -52,6 +52,7 @@ private:
 };
 
 
+// http://en.wikipedia.org/wiki/YCbCr
 template <typename T>
 void ImageChangePhotometricInterpretation::RGB2YBR(T ybr[3], const T rgb[3])
 {
@@ -59,8 +60,11 @@ void ImageChangePhotometricInterpretation::RGB2YBR(T ybr[3], const T rgb[3])
   const double G = rgb[1];
   const double B = rgb[2];
   const double Y  =  .2990 * R + .5870 * G + .1140 * B;
-  const double CB = -.16874 * R - .33126 * G + .5000 * B + 128;
-  const double CR =  .5000 * R - .41869 * G - .08131 * B + 128;
+  const double CB = -.168736 * R - .331264 * G + .5000 * B + 128;
+  const double CR =  .5000 * R - .418688 * G - .081312 * B + 128;
+  //assert( Y >= 0  && Y <= 255 );
+  //assert( CB >= 0 && CB <= 255 );
+  //assert( CR >= 0 && CR <= 255 );
   ybr[0] = Y ;
   ybr[1] = CB;
   ybr[2] = CR;
@@ -76,10 +80,19 @@ void ImageChangePhotometricInterpretation::YBR2RGB(T rgb[3], const T ybr[3])
   //const double R =  1.0000e+00 * Y - 3.6820e-05 * CB + 1.4020e+00 * CR;
   //const double G =  1.0000e+00 * Y - 3.4411e-01 * CB - 7.1410e-01 * CR;
   //const double B =  1.0000e+00 * Y + 1.7720e+00 * CB - 1.3458e-04 * CR;
-  const double R = Y                    + 1.402   * (Cr-128);
-  const double G = Y - 0.34414 * (Cb-128) - 0.71414 * (Cr-128);
-  const double B = Y + 1.772   * (Cb-128);
-  rgb[0] = R;
+  const double r = Y                    + 1.402   * (Cr-128);
+  const double g = Y - 0.344136 * (Cb-128) - 0.714136 * (Cr-128);
+  const double b = Y + 1.772   * (Cb-128);
+  double R = r < 0 ? 0 : r;
+  R = R > 255 ? 255 : R;
+  double G = g < 0 ? 0 : g;
+  G = G > 255 ? 255 : G;
+  double B = b < 0 ? 0 : b;
+  B = B > 255 ? 255 : B;
+  assert( R >= 0 && R <= 255 );
+  assert( G >= 0 && G <= 255 );
+  assert( B >= 0 && B <= 255 );
+  rgb[0] = ((R < 0 ? 0 : R) > 255 ? 255 : R);
   rgb[1] = G;
   rgb[2] = B;
 

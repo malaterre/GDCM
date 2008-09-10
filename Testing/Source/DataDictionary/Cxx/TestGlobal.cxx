@@ -21,7 +21,8 @@ int TestGlobal(int, char *[])
 {
   // case 1
   // Get the global singleton:
-  const gdcm::Global& g = gdcm::GlobalInstance;
+  gdcm::Global& g = gdcm::Global::GetInstance();
+  g.LoadResourcesFiles();
   // get the Part 6 dicts from it:
   const gdcm::Dicts &ds = g.GetDicts();
   const gdcm::Dict &pub = ds.GetPublicDict();
