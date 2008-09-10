@@ -60,6 +60,19 @@ CREATE_COPYRIGHT_FILE(${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt)
 APPEND_COPYRIGHT(${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt)
 
 #-----------------------------------------------------------------------------
+IF(NOT CMAKE_BUILD_TYPE)
+  # Are we building a release branch / tag (read: even number)?
+  # By default dashboard are expected to run with Design by Contract on
+  # to trigger any of the assert, but on the other hand no user really
+  # can figure out they need to change this value
+  # So unless the user *specifically* requested a particular cmake_build_type
+  # do the work internally and append the NDEBUG def flag (hopefully portable)
+  IF(GDCM_MINOR_VERSION MATCHES "[02468]$")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNDEBUG")
+  ENDIF(GDCM_MINOR_VERSION MATCHES "[02468]$")
+ENDIF(NOT CMAKE_BUILD_TYPE)
+
+#-----------------------------------------------------------------------------
 # VS 2005 declared that some C functions were deprecated...
 IF(CMAKE_COMPILER_2005)
   ADD_DEFINITIONS(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE)
