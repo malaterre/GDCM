@@ -144,6 +144,7 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
       {
       // Let's give up !
       gdcmWarningMacro( "Cannot process tag: " << t << " with vr: " << dictentry.GetVR() );
+      //ret = false;
       }
     else if ( dictentry.GetVR() & VR::VRBINARY )
       {

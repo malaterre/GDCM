@@ -677,6 +677,10 @@ public:
 };
 */
 
+/**
+ * \example PatchFile.cxx
+ * This is a C++ example on how to use gdcm::Attribute
+ */
 
 } // namespace gdcm
 
