@@ -393,7 +393,12 @@ int main (int argc, char *argv[])
 
   // else
   int res = 0;
-  if( gdcm::System::FileIsDirectory( filename.c_str() ) )
+  if( !gdcm::System::FileExists(filename.c_str()) )
+    {
+    std::cerr << "no such file: " << filename << std::endl;
+    return 1;
+    }
+  else if( gdcm::System::FileIsDirectory( filename.c_str() ) )
     {
     gdcm::Directory d;
     d.Load(filename, recursive);
