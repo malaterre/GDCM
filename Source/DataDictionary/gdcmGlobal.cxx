@@ -19,6 +19,9 @@
 
 #include <limits.h> // PATH_MAX
 #include <string.h> // strcpy
+#ifdef _WIN32
+#include <windows.h> // MAX_PATH
+#endif
 
 namespace gdcm
 {
