@@ -64,9 +64,6 @@ public:
 	  Ifstream = new std::ifstream();
 	  Ifstream->open(filename, std::ios::binary);
 	  Stream = Ifstream;
-#ifndef NDEBUG
-    DebugFileName = filename;
-#endif
   }
   void SetStream(std::istream &input_stream) {
 	  Stream = &input_stream;
@@ -90,9 +87,6 @@ private:
   TransferSyntax GuessTransferSyntax();
   std::istream *Stream;
   std::ifstream *Ifstream;
-#ifndef NDEBUG
-  std::string DebugFileName;
-#endif
 };
 
 /**
