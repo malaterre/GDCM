@@ -182,7 +182,7 @@ PyObject *DataElementToPyObject(DataElement const &de, VR const &vr)
       const char *ptype = GetPythonTypeFromVR( vr );
 //std::cout << "DEBUG:" << ptype << std::endl;
       Element<T,VM::VM1_n> el;
-      el.SetLength( count * sizeof(typename Element<T,VM::VM1_n>::Type) );
+      //el.SetLength( count * sizeof(typename Element<T,VM::VM1_n>::Type) );
       el.Set( de.GetValue() );
       PyObject *o;
       if( count == 0 )
