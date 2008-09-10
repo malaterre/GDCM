@@ -35,6 +35,6 @@ TARGET_LINK_LIBRARIES(CompressImage gdcmMSFF)
 ADD_EXECUTABLE(CheckBigEndianBug CheckBigEndianBug.cxx)
 TARGET_LINK_LIBRARIES(CheckBigEndianBug gdcmMSFF)
 
-ADD_EXECUTABLE(PatchFile PathFile.cxx)
+ADD_EXECUTABLE(PatchFile PatchFile.cxx)
 TARGET_LINK_LIBRARIES(PatchFile gdcmMSFF)
 

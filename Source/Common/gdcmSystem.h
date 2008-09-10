@@ -22,7 +22,7 @@ namespace gdcm
 
 /**
  * \brief Class to do system operation
- * \note OS independant functionalities
+ * \details OS independant functionalities
  */
 class GDCM_EXPORT System
 {
@@ -60,7 +60,7 @@ public:
   // Chdir
   // copy a file
 
-  /// DO NOT USE: This function might disapear real time soon...
+  /// \deprecated DO NOT USE: This function might disapear real time soon...
   static bool GetHardwareAddress(unsigned char addr[6]);
 
   // somewhat UID specific:
@@ -71,6 +71,7 @@ public:
 
   /// consistant func for C99 spec of strcasecmp/strncasecmp
   static int StrCaseCmp(const char *s1, const char *s2);
+  /// \pre n != 0
   static int StrNCaseCmp(const char *s1, const char *s2, size_t n);
 
   /// Return current working directory
