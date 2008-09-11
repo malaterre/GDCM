@@ -27,6 +27,7 @@ bool ImageChangePlanarConfiguration::Change()
     return false;
     }
   assert( Input->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
+    || Input->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422
     || Input->GetPhotometricInterpretation() == PhotometricInterpretation::RGB );
   Output = Input;
   if( Input->GetPlanarConfiguration() == PlanarConfiguration )
