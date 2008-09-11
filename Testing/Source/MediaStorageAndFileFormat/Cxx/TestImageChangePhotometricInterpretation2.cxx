@@ -21,7 +21,7 @@ double diff(T rgb1[3], T rgb2[2])
 {
   double sum = 0;
   for(int i = 0; i < 3; ++i)
-    sum += fabs(rgb1[i] - rgb2[i]);
+    sum += fabs((double)(rgb1[i] - rgb2[i]));
   return sum < 1e-3 ? 0 : sum;
   //return sum;
 }
