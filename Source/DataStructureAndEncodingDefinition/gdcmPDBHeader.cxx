@@ -149,6 +149,13 @@ namespace gdcm
  * STATION "0"
  */
 
+PDBElement PDBHeader::PDBEEnd = PDBElement( );
+
+  const PDBElement& PDBHeader::GetPDBEEnd() const
+  {
+    return PDBEEnd;
+  }
+
 int PDBHeader::readprotocoldatablock(const char *input, size_t inputlen, bool verbose)
 {
   // First 4 bytes are the length (again)
@@ -267,7 +274,7 @@ const PDBElement &PDBHeader::GetPDBElementByName(const char *name)
       return *it;
       }
     }
-  throw PDBElementNameException();
+    return GetPDBEEnd();
 }
 
 bool PDBHeader::FindPDBElementByName(const char *name)

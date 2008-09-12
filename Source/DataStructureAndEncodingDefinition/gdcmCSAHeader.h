@@ -30,11 +30,6 @@ namespace gdcm
  */
 //-----------------------------------------------------------------------------
 
-/** 
- * \brief Exception when looking up element that's not present
- */
-class GDCM_EXPORT CSAElementNameException : public std::exception {};
-
 class DataElement;
 class PrivateTag;
 /**
@@ -95,18 +90,21 @@ public :
   static const PrivateTag & GetCSASeriesHeaderInfoTag();
 
   /// Return the CSAElement corresponding to name 'name'
-  /// Throw a CSAElementNameException if not found
   /// \warning Case Sensitive
   const CSAElement &GetCSAElementByName(const char *name);
 
   /// Return true if the CSA element matching 'name' is found or not
   bool FindCSAElementByName(const char *name);
 
+protected:
+  const CSAElement& GetCSAEEnd() const;
+
 private:
   std::set<CSAElement> InternalCSADataSet;
   DataSet InternalDataSet;
   CSAHeaderType InternalType;
   Tag DataElementTag;
+  static CSAElement CSAEEnd;
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------

@@ -30,10 +30,6 @@ namespace gdcm
  * find a solution. 
  */
 //-----------------------------------------------------------------------------
-/** 
- * \brief Exception when looking up element that's not present
- */
-class GDCM_EXPORT PDBElementNameException : public std::exception {};
 
 class DataElement;
 class PrivateTag;
@@ -68,16 +64,19 @@ public :
   static const PrivateTag & GetPDBInfoTag();
 
   /// Lookup in the PDB header if a PDB element match the name 'name':
-  /// throw a PDBElementNameException when not found
   /// \warning Case Sensitive
   const PDBElement &GetPDBElementByName(const char *name);
 
   /// Return true if the PDB element matching name is found or not
   bool FindPDBElementByName(const char *name);
 
+protected:
+  const PDBElement& GetPDBEEnd() const;
+
 private:
   int readprotocoldatablock(const char *input, size_t inputlen, bool verbose);
   std::vector<PDBElement> InternalPDBDataSet;
+  static PDBElement PDBEEnd;
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------

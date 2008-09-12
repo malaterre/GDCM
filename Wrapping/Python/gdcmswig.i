@@ -16,6 +16,8 @@
 // http://www.swig.org/Doc1.3/Python.html
 // http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus
 // http://www.geocities.com/foetsch/python/extending_python.htm
+// http://www.ddj.com/cpp/184401747
+// http://www.ddj.com/article/printableArticle.jhtml;jsessionid=VM4IXCQG5KM10QSNDLRSKH0CJUNN2JVN?articleID=184401747&dept_url=/cpp/
 
 %module(directors="1",docstring="A DICOM library") gdcmswig
 #pragma SWIG nowarn=504,510

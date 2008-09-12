@@ -30,7 +30,7 @@ namespace gdcm
 class GDCM_EXPORT CSAElement
 {
 public:
-  CSAElement():KeyField(0) {}
+  CSAElement(unsigned int kf = 0):KeyField(kf) {}
 
   friend std::ostream& operator<<(std::ostream &os, const CSAElement &val);
 

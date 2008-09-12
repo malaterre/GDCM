@@ -42,6 +42,12 @@ public:
   const char *GetValue() const { return ValueField.c_str(); }
   void SetValue(const char *value) { ValueField = value; }
 
+  bool operator==(const PDBElement &de) const
+    {
+    return ValueField == de.ValueField
+      && NameField == de.NameField;
+    }
+
 protected:
   std::string NameField;
   std::string ValueField;
