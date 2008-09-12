@@ -116,7 +116,7 @@
 #include "gdcmImageChangeTransferSyntax.h"
 #include "gdcmImageApplyLookupTable.h"
 #include "gdcmSplitMosaicFilter.h"
-#include "gdcmImageChangePhotometricInterpretation.h"
+//#include "gdcmImageChangePhotometricInterpretation.h"
 #include "gdcmImageChangePlanarConfiguration.h"
 #include "gdcmImageFragmentSplitter.h"
 
@@ -554,6 +554,6 @@ using namespace gdcm;
 %include "gdcmImageChangeTransferSyntax.h"
 %include "gdcmImageApplyLookupTable.h"
 %include "gdcmSplitMosaicFilter.h"
-%include "gdcmImageChangePhotometricInterpretation.h"
+//%include "gdcmImageChangePhotometricInterpretation.h"
 %include "gdcmImageChangePlanarConfiguration.h"
 %include "gdcmImageFragmentSplitter.h"

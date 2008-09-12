@@ -82,6 +82,7 @@ blacklist = (
 "Decoder"
 "ImageHelper"
 "Coder"
+"ImageChangePhotometricInterpretation"
 )
 
 def processonedir(dirname):

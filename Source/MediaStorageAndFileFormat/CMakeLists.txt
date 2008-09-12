@@ -10,7 +10,7 @@ SET(MSFF_SRCS
   gdcmImageApplyLookupTable.cxx
   gdcmOrientation.cxx
   gdcmImageChangePlanarConfiguration.cxx
-  gdcmImageChangePhotometricInterpretation.cxx
+  #gdcmImageChangePhotometricInterpretation.cxx
   gdcmDirectionCosines.cxx
   gdcmSorter.cxx
   gdcmIPPSorter.cxx

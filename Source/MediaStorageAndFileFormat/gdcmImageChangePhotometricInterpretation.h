@@ -18,6 +18,8 @@
 #include "gdcmImageToImageFilter.h"
 #include "gdcmPhotometricInterpretation.h"
 
+#error remove from release
+
 namespace gdcm
 {
 
@@ -56,6 +58,12 @@ private:
 template <typename T>
 void ImageChangePhotometricInterpretation::RGB2YBR(T ybr[3], const T rgb[3])
 {
+#if 1
+  ybr[0] =   65.738 * rgb[0] +    129.057 * rgb[1] +    25.064 * rgb[2] + 16;
+  ybr[1] =  -37.945 * rgb[0] +    -74.494 * rgb[1] +   112.439 * rgb[2] + 128;
+  ybr[2] =  112.439 * rgb[0] +    -94.154 * rgb[1] +   -18.285 * rgb[2] + 128;
+#else
+
   const double R = rgb[0];
   const double G = rgb[1];
   const double B = rgb[2];
@@ -65,15 +73,22 @@ void ImageChangePhotometricInterpretation::RGB2YBR(T ybr[3], const T rgb[3])
   //assert( Y >= 0  && Y <= 255 );
   //assert( CB >= 0 && CB <= 255 );
   //assert( CR >= 0 && CR <= 255 );
-  ybr[0] = Y ;
-  ybr[1] = CB;
-  ybr[2] = CR;
+  ybr[0] = Y  /*+ 0.5*/;
+  ybr[1] = CB /*+ 0.5*/;
+  ybr[2] = CR /*+ 0.5*/;
+#endif
 }
 
 template <typename T>
 void ImageChangePhotometricInterpretation::YBR2RGB(T rgb[3], const T ybr[3])
 {
 
+#if 1
+ rgb[0] = 298.082 * ((int)ybr[0]-16) +     0.    * ((int)ybr[1]-128) +   408.583 * ((int)ybr[2]-128) - 1. / 256;
+ rgb[1] = 298.082 * ((int)ybr[0]-16) +  -100.291 * ((int)ybr[1]-128) +  -208.12  * ((int)ybr[2]-128) - 1. / 256;
+ rgb[2] = 298.082 * ((int)ybr[0]-16) +   516.411 * ((int)ybr[1]-128) +     0.    * ((int)ybr[2]-128) - 1. / 256; 
+ 
+#else
   const double Y  = ybr[0];
   const double Cb = ybr[1];
   const double Cr = ybr[2];
@@ -95,6 +110,7 @@ void ImageChangePhotometricInterpretation::YBR2RGB(T rgb[3], const T ybr[3])
   rgb[0] = ((R < 0 ? 0 : R) > 255 ? 255 : R);
   rgb[1] = G;
   rgb[2] = B;
+#endif
 
 }
 

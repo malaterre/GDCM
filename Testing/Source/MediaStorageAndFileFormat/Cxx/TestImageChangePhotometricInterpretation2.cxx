@@ -36,9 +36,9 @@ int TestImageChangePhotometricInterpretation2(int argc, char *argv[])
   double max = 0;
   int nerrors = 0;
   int res = 0;
-  Type error[3];
-  Type error2[3];
-  Type yerror[3];
+  Type error[3] = {};
+  Type error2[3] = {};
+  Type yerror[3] = {};
   for(int r = 0; r < 256; ++r)
     for(int g = 0; g < 256; ++g)
       for(int b = 0; b < 256; ++b)
@@ -48,17 +48,19 @@ int TestImageChangePhotometricInterpretation2(int argc, char *argv[])
         Type rgb2[3] = {};
         rgb[0] = r;
         rgb[1] = g;
+        rgb[1] = 128;
         rgb[2] = b;
+        rgb[2] = 128;
         // convert rgb 2 ybr:
         //gdcm::ImageChangePhotometricInterpretation::RGB2YBR(ybr,rgb);
         gdcm::ImageChangePhotometricInterpretation::YBR2RGB(ybr,rgb);
         // convert back:
         //gdcm::ImageChangePhotometricInterpretation::YBR2RGB(rgb2,ybr);
         gdcm::ImageChangePhotometricInterpretation::RGB2YBR(rgb2,ybr);
-        if( memcmp(rgb,rgb2,3) != 0 )
+        if( memcmp(rgb,rgb2,3*sizeof(Type)) != 0 )
           {
-          //std::cerr << "Problem with R,G,B=" << r << "," << g << "," << b << 
-          //  " instead of " << (int)rgb2[0] << "," << (int)rgb2[1] << "," << (int)rgb2[2] << std::endl;
+          std::cerr << "Problem with R,G,B=" << r << "," << g << "," << b << 
+            " instead of " << (int)rgb2[0] << "," << (int)rgb2[1] << "," << (int)rgb2[2] << std::endl;
           //std::cerr << "diff:" << diff(rgb,rgb2) << std::endl;
           double d = diff(rgb,rgb2);
           sdiff += d;
