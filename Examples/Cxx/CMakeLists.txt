@@ -38,3 +38,6 @@ TARGET_LINK_LIBRARIES(CheckBigEndianBug gdcmMSFF)
 ADD_EXECUTABLE(PatchFile PatchFile.cxx)
 TARGET_LINK_LIBRARIES(PatchFile gdcmMSFF)
 
+ADD_EXECUTABLE(GenFakeImage GenFakeImage.cxx)
+TARGET_LINK_LIBRARIES(GenFakeImage gdcmMSFF)
+

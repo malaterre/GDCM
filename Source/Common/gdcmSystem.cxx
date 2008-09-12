@@ -416,6 +416,7 @@ const char *System::GetCurrentResourcesDirectory()
     }
 #endif
   // Is there such beast on *any* other system but APPLE ?
+  (void)path;
   return 0;
 }
 
