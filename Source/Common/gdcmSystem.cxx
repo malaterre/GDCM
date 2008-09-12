@@ -53,7 +53,7 @@
 #include <direct.h>
 #define _unlink unlink
 #else
-#include <features.h>	// we want GNU extensions
+//#include <features.h>	// we want GNU extensions
 #include <dlfcn.h>
 #include <sys/types.h>
 #include <fcntl.h>
@@ -400,6 +400,7 @@ const char *System::GetCurrentModuleFileName()
 
 const char *System::GetCurrentResourcesDirectory()
 {
+  static char path[PATH_MAX];
 #ifdef __APPLE__
   Boolean success = false;
   CFURLRef pathURL = CFBundleCopyResourcesDirectoryURL(CFBundleGetMainBundle());
