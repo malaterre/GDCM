@@ -79,6 +79,7 @@
 #include "gdcmImageApplyLookupTable.h"
 #include "gdcmSplitMosaicFilter.h"
 #include "gdcmImageFragmentSplitter.h"
+#include "gdcmImageChangePlanarConfiguration.h"
 
 #include <string>
 #include <iostream>
@@ -151,6 +152,7 @@ int main (int argc, char *argv[])
   int split = 0;
   int rle = 0;
   int force = 0;
+  int planarconf = 0;
 
   int verbose = 0;
   int warning = 0;
@@ -193,6 +195,7 @@ int main (int argc, char *argv[])
         {"jpip", 0, 0, 0}, // ??
         {"mosaic", 0, &mosaic, 1}, // split siemens mosaic into multiple frames
         {"split", 1, &split, 1}, // split fragments
+        {"planar-configuration", 1, &planarconf, 1}, // Planar Configuration
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -236,6 +239,11 @@ int main (int argc, char *argv[])
             {
             assert( strcmp(s, "split") == 0 );
             split = atoi(optarg);
+            }
+          else if( option_index == 29 ) /* planar conf*/
+            {
+            assert( strcmp(s, "planar-configuration") == 0 );
+            planarconf = atoi(optarg);
             }
           printf (" with arg %s, index = %d", optarg, option_index);
           }
@@ -432,7 +440,7 @@ int main (int argc, char *argv[])
     if( !icon.IsEmpty() )
       {
       std::cerr << "Icons are not supported" << std::endl;
-      return 1;
+      //return 1;
       }
 
     gdcm::ImageChangeTransferSyntax change;
@@ -461,7 +469,23 @@ int main (int argc, char *argv[])
       {
       return 1;
       }
-    change.SetInput( image );
+    if( raw )
+      {
+      gdcm::ImageChangePlanarConfiguration icpc;
+      icpc.SetPlanarConfiguration( planarconf );
+      icpc.SetInput( image );
+      bool b = icpc.Change();
+      if( !b )
+        {
+        std::cerr << "Could not change the Planar Configuration: " << filename << std::endl;
+        return 1;
+        }
+      change.SetInput( icpc.GetOutput() );
+      }
+    else
+      {
+      change.SetInput( image );
+      }
     bool b = change.Change();
     if( !b )
       {

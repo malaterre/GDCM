@@ -45,6 +45,7 @@ public:
     }
   void SetPlanarConfiguration(unsigned int pc)
     {
+    assert( pc == 0 || pc == 1 );
     PlanarConfiguration = pc;
     }
 

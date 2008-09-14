@@ -325,36 +325,43 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
 
   // If 16bits, need to do the padded composite...
   char *buffer = 0;
+  // if rgb (3 comp) need to the planar configuratio
+  char *bufferrgb = 0;
   if( GetPixelFormat().GetBitsAllocated() == 16 )
     {
     //RequestPaddedCompositePixelCode = true;
     buffer = new char [ image_len ];
     }
-  else if ( GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
+
+  if ( GetPhotometricInterpretation() == PhotometricInterpretation::RGB
+    || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
+    || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 )
     {
-    buffer = new char [ image_len ];
+    bufferrgb = new char [ image_len ];
     }
 
   int MaxNumSegments = 1;
   if( GetPixelFormat().GetBitsAllocated() == 16 )
     {
-    MaxNumSegments = 2;
+    MaxNumSegments *= 2;
     }
-  else if( GetPhotometricInterpretation() == PhotometricInterpretation::RGB 
-    || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL )
+
+  if( GetPhotometricInterpretation() == PhotometricInterpretation::RGB 
+    || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
+    || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 )
     {
-    MaxNumSegments = 3;
+    MaxNumSegments *= 3;
     }
 
   assert( GetPixelFormat().GetBitsAllocated() == 8 || GetPixelFormat().GetBitsAllocated() == 16 );
   if( GetPixelFormat().GetSamplesPerPixel() == 3 )
     {
-    assert( MaxNumSegments == 3 );
+    assert( MaxNumSegments % 3 == 0 );
     }
 
   RLEHeader header;
   header.NumSegments = MaxNumSegments;
-  for(int i = 0; i < 15;++i)
+  for(int i = 0; i < 16;++i)
     header.Offset[i] = 0;
   header.Offset[0] = 64;
   // Create a RLE Frame for each frame:
@@ -364,42 +371,47 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     // lets' try a simple scheme where each Segments is given an equal portion
     // of the input image.
     const char *ptr_img = input + dim * image_len;
-    if( GetPixelFormat().GetBitsAllocated() == 16 )
-      {
-      assert( !(image_len % 2) );
-      unsigned long j = 0;
-      for(unsigned long i = 0; i < image_len/2; ++i)
-        {
-#ifdef GDCM_WORDS_BIGENDIAN
-        buffer[i] = ptr_img[2*i];
-#else
-        buffer[i] = ptr_img[2*i+1];
-#endif
-        }
-      for(unsigned long i = 0; i < image_len/2; ++i)
-        {
-#ifdef GDCM_WORDS_BIGENDIAN
-        buffer[i+image_len/2] = ptr_img[2*i+1];
-#else
-        buffer[i+image_len/2] = ptr_img[2*i];
-#endif
-        }
-      ptr_img = buffer;
-      //for(unsigned long i = 0; i < image_len ; ++i)
-      //  {
-      //  assert( ptr_img[i] == 0 );
-      //  }
-      }
-    if ( GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
+    if( GetPlanarConfiguration() == 0 && GetPixelFormat().GetSamplesPerPixel() == 3 )
       {
       if( GetPixelFormat().GetBitsAllocated() == 8 )
         {
-        DoInvertPlanarConfiguration<char>(buffer, ptr_img, image_len / sizeof(char));
+        DoInvertPlanarConfiguration<char>(bufferrgb, ptr_img, image_len / sizeof(char));
         }
       else /* ( GetPixelFormat().GetBitsAllocated() == 16 ) */
         {
+        assert( GetPixelFormat().GetBitsAllocated() == 16 );
         // should not happen right ?
-        DoInvertPlanarConfiguration<short>((short*)buffer, (short*)ptr_img, image_len / sizeof(short));
+        DoInvertPlanarConfiguration<short>((short*)bufferrgb, (short*)ptr_img, image_len / sizeof(short));
+        }
+      ptr_img = bufferrgb;
+      }
+    if( GetPixelFormat().GetBitsAllocated() == 16 )
+      {
+      assert( !(image_len % 2) );
+      //assert( image_len % 3 == 0 );
+      unsigned int div = GetPixelFormat().GetSamplesPerPixel();
+      for(unsigned int j = 0; j < div; ++j)
+        {
+        unsigned long iimage_len = image_len / div;
+        char *ibuffer = buffer + j * iimage_len;
+        const char *iptr_img = ptr_img + j * iimage_len;
+        assert( iimage_len % 2 == 0 );
+        for(unsigned long i = 0; i < iimage_len/2; ++i)
+          {
+#ifdef GDCM_WORDS_BIGENDIAN
+          ibuffer[i] = iptr_img[2*i];
+#else
+          ibuffer[i] = iptr_img[2*i+1];
+#endif
+          }
+        for(unsigned long i = 0; i < iimage_len/2; ++i)
+          {
+#ifdef GDCM_WORDS_BIGENDIAN
+          ibuffer[i+iimage_len/2] = iptr_img[2*i+1];
+#else
+          ibuffer[i+iimage_len/2] = iptr_img[2*i];
+#endif
+          }
         }
       ptr_img = buffer;
       }
@@ -408,7 +420,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     std::string datastr;
     for(int seg = 0; seg < MaxNumSegments; ++seg )
       {
-      int partition =  input_seg_length;
+      int partition = input_seg_length;
       const char *ptr = ptr_img + seg * input_seg_length;
       assert( ptr < ptr_img + image_len );
       if( seg == MaxNumSegments - 1 )
@@ -440,6 +452,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
       assert( data.str().size() == length );
       datastr += data.str();
       }
+    header.Offset[MaxNumSegments] = 0;
     std::stringstream os;
     //header.Print( std::cout );
     os.write((char*)&header,sizeof(header));
@@ -453,14 +466,14 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
 
   out.SetValue( *sq );
 
-  if( GetPixelFormat().GetBitsAllocated() == 16 )
+  if( buffer /*GetPixelFormat().GetBitsAllocated() == 16*/ )
     {
     //RequestPaddedCompositePixelCode = true;
     delete[] buffer;
     }
-  else if ( GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
+  if ( bufferrgb /*GetPhotometricInterpretation() == PhotometricInterpretation::RGB*/ )
     {
-    delete[] buffer;
+    delete[] bufferrgb;
     }
 
   //if( dims[0] * dims[1] > n )
@@ -589,7 +602,15 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
     RequestPaddedCompositePixelCode = true;
     }
   //if ( GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
-  if ( GetPlanarConfiguration() == 0 )
+  //if ( GetPlanarConfiguration() == 1 )
+  //  {
+  //  RequestPlanarConfiguration = true;
+  //  }
+  //else
+  //  {
+  //  assert( GetPlanarConfiguration() == 1 );
+  //  }
+  if( GetPixelFormat().GetSamplesPerPixel() == 3 && GetPlanarConfiguration() == 0 )
     {
     RequestPlanarConfiguration = true;
     }

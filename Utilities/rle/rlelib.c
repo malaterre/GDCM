@@ -44,7 +44,8 @@ void rle_stdio_src(rle_decompress_struct *cinfo, FILE *infile, int *dims)
     if( cinfo->header->offset[i] != 0 )
       {
       // Need to throw something here
-      abort();
+      //abort();
+      fprintf(stderr, "Impossible : %d for offset # %d\n", cinfo->header->offset[i], i );
       }
     }
   cinfo->stream = infile;

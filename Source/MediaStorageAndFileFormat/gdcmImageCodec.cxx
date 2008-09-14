@@ -31,7 +31,7 @@ public:
 
 ImageCodec::ImageCodec()
 {
-  PlanarConfiguration = 2;
+  PlanarConfiguration = 0;
   RequestPlanarConfiguration = false;
   RequestPaddedCompositePixelCode = false;
   PI = PhotometricInterpretation::UNKNOW;
