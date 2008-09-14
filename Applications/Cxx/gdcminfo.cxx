@@ -358,6 +358,11 @@ int main(int argc, char *argv[])
   const gdcm::DataSet &ds = file.GetDataSet();
   gdcm::MediaStorage ms;
   ms.SetFromFile(file);
+  if( ms.IsUndefined() )
+    {
+    std::cerr << "Unknown MediaStorage" << std::endl;
+    return 1;
+    }
 
   gdcm::UIDs uid;
   uid.SetFromUID( ms.GetString() );

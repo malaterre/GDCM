@@ -297,7 +297,7 @@ void MediaStorage::SetFromDataSet(DataSet const &ds, bool guess)
       sopclassuid_str = sopclassuid_str.substr(0,pos);
       }
     MediaStorage ms = MediaStorage::GetMSType(sopclassuid_str.c_str());
-    assert( ms != MS_END );
+    //assert( ms != MS_END );
     MSField = ms;
     }
 //  else if( guess )
@@ -369,6 +369,7 @@ void MediaStorage::SetFromModality(DataSet const &ds)
     // to SC Object:
     if( MSField == MediaStorage::MS_END )
       {
+      gdcmWarningMacro( "Unknown/Unhandle MediaStorage, but Pixel Data element found" );
       MSField = MediaStorage::SecondaryCaptureImageStorage;
       }
     }

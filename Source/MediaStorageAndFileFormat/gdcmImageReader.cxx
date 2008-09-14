@@ -142,9 +142,17 @@ bool ImageReader::Read()
           }
         else
           {
-          gdcmDebugMacro( "DICOM file is not an Image file but a : " <<
-            MediaStorage::GetMSString(ms2) << " SOP Class UID" );
-          res = false;
+          ms2.SetFromFile( *F );
+          if( MediaStorage::IsImage( ms2 ) )
+            {
+            res = ReadImage(ms2);
+            }
+          else
+            {
+            gdcmDebugMacro( "DICOM file is not an Image file but a : " <<
+              MediaStorage::GetMSString(ms2) << " SOP Class UID" );
+            res = false;
+            }
           }
         }
       else if( ts == TransferSyntax::ImplicitVRBigEndianACRNEMA || header.IsEmpty() )

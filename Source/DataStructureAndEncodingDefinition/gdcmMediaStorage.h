@@ -140,6 +140,9 @@ typedef enum {
   void GuessFromModality(const char *modality, unsigned int dimension = 2);
 
   friend std::ostream &operator<<(std::ostream &os, const MediaStorage &ms);
+
+  bool IsUndefined() const { return MSField == MS_END; }
+
 private:
   MSType MSField;
 };
