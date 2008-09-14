@@ -1100,6 +1100,9 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
     }
   else
     {
+    /*
+     * warning: Need to read C.7.6.3.1.3 Planar Configuration (see note about Planar Configuration dummy value)
+     */
     JSAMPLE *tempbuffer = (JSAMPLE*)malloc( row_stride * sizeof(JSAMPLE) );
     row_pointer[0] = tempbuffer;
     int offset = image_height * image_width;
@@ -1107,8 +1110,8 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
       assert( row_stride % 3 == 0 );
       JSAMPLE* ptempbuffer = tempbuffer;
       JSAMPLE* red   = image_buffer + cinfo.next_scanline * row_stride / 3;
-      JSAMPLE* green  = image_buffer + cinfo.next_scanline * row_stride / 3 + offset;
-      JSAMPLE* blue = image_buffer + cinfo.next_scanline * row_stride / 3 + offset * 2;
+      JSAMPLE* green = image_buffer + cinfo.next_scanline * row_stride / 3 + offset;
+      JSAMPLE* blue  = image_buffer + cinfo.next_scanline * row_stride / 3 + offset * 2;
       for(int i = 0; i < row_stride / 3; ++i )
         {
         *ptempbuffer++ = *red++;

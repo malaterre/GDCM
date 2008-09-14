@@ -19,17 +19,26 @@
 
 namespace gdcm
 {
+/*
+ * C.7.6.3.1.3 Planar Configuration
+ * Note: Planar Configuration (0028,0006) is not meaningful when a compression transfer syntax is
+ * used that involves reorganization of sample components in the compressed bit stream. In such
+ * cases, since the Attribute is required to be sent, then an appropriate value to use may be
+ * specified in the description of the Transfer Syntax in PS 3.5, though in all likelihood the value of
+ * the Attribute will be ignored by the receiving implementation.
+ */
 
 bool ImageChangePlanarConfiguration::Change()
 {
+  if( PlanarConfiguration != 0 && PlanarConfiguration != 1 ) return false; // seriously
+  Output = Input;
   if( Input->GetPixelFormat().GetSamplesPerPixel() != 3 )
     {
-    return false;
+    return true;
     }
   assert( Input->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
     || Input->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422
     || Input->GetPhotometricInterpretation() == PhotometricInterpretation::RGB );
-  Output = Input;
   if( Input->GetPlanarConfiguration() == PlanarConfiguration )
     {
     return true;

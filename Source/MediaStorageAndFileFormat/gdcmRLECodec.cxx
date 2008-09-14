@@ -588,8 +588,8 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
     {
     RequestPaddedCompositePixelCode = true;
     }
-  if ( GetPhotometricInterpretation() ==
-    PhotometricInterpretation::RGB )
+  //if ( GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
+  if ( GetPlanarConfiguration() == 0 )
     {
     RequestPlanarConfiguration = true;
     }
