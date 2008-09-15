@@ -46,7 +46,7 @@ class GDCM_EXPORT Fragment : public DataElement
 //protected:
 //  void SetTag(const Tag &t);
 public:
-  Fragment(const Tag &t = Tag(0xfffe, 0xe000), VL const &vl = 0) : DataElement(t, vl) {}
+  Fragment() : DataElement(Tag(0xfffe, 0xe000), 0) {}
   friend std::ostream &operator<<(std::ostream &os, const Fragment &val);
 
   VL GetLength() const {
@@ -102,8 +102,7 @@ public:
 
 
   template <typename TSwap>
-  std::ostream &Write(std::ostream &os) const
-  {
+  std::ostream &Write(std::ostream &os) const {
     const Tag itemStart(0xfffe, 0xe000);
     const Tag seqDelItem(0xfffe,0xe0dd);
     if( !TagField.Write<TSwap>(os) )
@@ -118,20 +117,20 @@ public:
       assert(0 && "Should not happen");
       return os;
       }
-    // Self
-    const ByteValue *bv = GetByteValue();
-    assert( bv );
-    assert( bv->GetLength() == ValueLengthField );
-    if( !bv->Write<TSwap>(os) )
+    if( ValueLengthField )
       {
-      assert(0 && "Should not happen");
-      return os;
+      // Self
+      const ByteValue *bv = GetByteValue();
+      assert( bv );
+      assert( bv->GetLength() == ValueLengthField );
+      if( !bv->Write<TSwap>(os) )
+        {
+        assert(0 && "Should not happen");
+        return os;
+        }
       }
     return os;
     }
-
- 
-private:
 };
 //-----------------------------------------------------------------------------
 inline std::ostream &operator<<(std::ostream &os, const Fragment &val)

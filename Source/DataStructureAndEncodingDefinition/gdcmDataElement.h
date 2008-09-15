@@ -196,7 +196,6 @@ protected:
 
   // Value Representation
   VR VRField;
-  //typedef std::tr1::shared_ptr<gdcm::Value> ValuePtr;
   typedef SmartPointer<Value> ValuePtr;
   ValuePtr ValueField;
 };
