@@ -36,6 +36,22 @@ int TestImageFragmentSplitterFunc(const char *filename, bool verbose = false)
     return 0;
     }
   const gdcm::Image &image = reader.GetImage();
+  const unsigned int *dims = image.GetDimensions();
+  if( dims[2] != 1 )
+    {
+    return 0; // nothing to do
+    }
+  const gdcm::FileMetaInformation &header = reader.GetFile().GetHeader();
+  gdcm::MediaStorage ms = header.GetMediaStorage();
+  if( header.GetDataSetTransferSyntax() == TransferSyntax::ImplicitVRLittleEndian
+    || header.GetDataSetTransferSyntax() == TransferSyntax::ImplicitVRBigEndianPrivateGE
+    || header.GetDataSetTransferSyntax() == TransferSyntax::ExplicitVRLittleEndian
+    || header.GetDataSetTransferSyntax() == TransferSyntax::DeflatedExplicitVRLittleEndian
+    || header.GetDataSetTransferSyntax() == TransferSyntax::ExplicitVRBigEndian
+  )
+    {
+    return 0; // nothing to do
+    }
 
   gdcm::ImageFragmentSplitter splitter;
   splitter.SetInput( image );
