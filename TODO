@@ -211,3 +211,8 @@ Add python documentation
 
 doxy2swig.py
 http://www.ae.iitm.ac.in/~prabhu/software/code/python/doxy2swig.py
+-----------------------------------------------------------------------
+Need an ExplicitFilter before next release
+-----------------------------------------------------------------------
+gdcmconv --jpeg -i  gdcmData/GE_DLX-8-MONO2-Multiframe.dcm -o bla2.dcm
+creates VR::UN add a couple more attributes...
