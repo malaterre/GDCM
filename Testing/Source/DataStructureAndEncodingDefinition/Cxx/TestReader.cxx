@@ -38,7 +38,7 @@ int TestRead(const char* filename)
 
   gdcm::MediaStorage ms;
   ms.SetFromFile( reader.GetFile() );
-  if( ms == gdcm::MediaStorage::MS_END )
+  if( ms.IsUndefined() )
     {
     std::cerr << "TestReadError: MediaStorage: " << ms << std::endl;
     return 1;
