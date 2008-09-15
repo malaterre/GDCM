@@ -17,6 +17,7 @@
 #include "gdcmSystem.h"
 #include "gdcmImageReader.h"
 #include "gdcmImageWriter.h"
+#include "gdcmTransferSyntax.h"
 #include "gdcmImage.h"
 
 int TestImageFragmentSplitterFunc(const char *filename, bool verbose = false)
@@ -43,11 +44,11 @@ int TestImageFragmentSplitterFunc(const char *filename, bool verbose = false)
     }
   const gdcm::FileMetaInformation &header = reader.GetFile().GetHeader();
   gdcm::MediaStorage ms = header.GetMediaStorage();
-  if( header.GetDataSetTransferSyntax() == TransferSyntax::ImplicitVRLittleEndian
-    || header.GetDataSetTransferSyntax() == TransferSyntax::ImplicitVRBigEndianPrivateGE
-    || header.GetDataSetTransferSyntax() == TransferSyntax::ExplicitVRLittleEndian
-    || header.GetDataSetTransferSyntax() == TransferSyntax::DeflatedExplicitVRLittleEndian
-    || header.GetDataSetTransferSyntax() == TransferSyntax::ExplicitVRBigEndian
+  if(  header.GetDataSetTransferSyntax() == gdcm::TransferSyntax::ImplicitVRLittleEndian
+    || header.GetDataSetTransferSyntax() == gdcm::TransferSyntax::ImplicitVRBigEndianPrivateGE
+    || header.GetDataSetTransferSyntax() == gdcm::TransferSyntax::ExplicitVRLittleEndian
+    || header.GetDataSetTransferSyntax() == gdcm::TransferSyntax::DeflatedExplicitVRLittleEndian
+    || header.GetDataSetTransferSyntax() == gdcm::TransferSyntax::ExplicitVRBigEndian
   )
     {
     return 0; // nothing to do
