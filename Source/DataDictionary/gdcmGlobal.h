@@ -54,17 +54,18 @@ public:
   ~Global();
 
   /// retrieve the default/internal dicts (Part 6)
+  /// This dict is filled up at load time
   Dicts const &GetDicts() const;
 
   /// retrieve the default/internal (Part 3)
-  /// You need to explicitely call LoadXMLFiles before
+  /// You need to explicitely call LoadResourcesFiles before
   Defs const &GetDefs() const;
 
   /// return the singleton instance
   static Global& GetInstance();
 
   /// Load all internal XML files, ressource path need to have been
-  /// set before calling this member function (see Append/Prepend)
+  /// set before calling this member function (see Append/Prepend members func)
   bool LoadResourcesFiles();
 
   /// Append path at the end of the path list
