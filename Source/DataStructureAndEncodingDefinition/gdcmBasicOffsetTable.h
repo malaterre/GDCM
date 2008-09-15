@@ -69,6 +69,7 @@ public:
     return is;
     }
 
+/*
   template <typename TSwap>
   std::ostream &Write(std::ostream &os) const {
     const Tag itemStart(0xfffe, 0xe000);
@@ -98,6 +99,7 @@ public:
       }
     return os;
     }
+*/
 };
 //-----------------------------------------------------------------------------
 inline std::ostream &operator<<(std::ostream &os, const BasicOffsetTable &val)
