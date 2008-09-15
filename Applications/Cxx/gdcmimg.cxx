@@ -269,11 +269,8 @@ int main (int argc, char *argv[])
     gdcm::DataElement pixeldata;
 
     gdcm::SmartPointer<gdcm::SequenceOfFragments> sq = new gdcm::SequenceOfFragments;
-    const gdcm::Tag itemStart(0xfffe, 0xe000);
-    //sq->GetTable().SetTag( itemStart );
 
     gdcm::Fragment frag;
-    //frag.SetTag( itemStart );
     frag.SetByteValue( buf, len );
     delete[] buf;
     sq->AddFragment( frag );
@@ -384,6 +381,10 @@ int main (int argc, char *argv[])
     || gdcm::System::StrCaseCmp(inputextension,".j2k") == 0
     || gdcm::System::StrCaseCmp(inputextension,".jpc") == 0 )
     {
+    /*
+     * FIXME: Same problem as in classic JPEG: JP2 is NOT a J2K byte stream
+     * need to chop off all extra header information...
+     */
     gdcm::JPEG2000Codec jpeg;
 
     std::ifstream is(filename);
@@ -412,21 +413,15 @@ int main (int argc, char *argv[])
     gdcm::DataElement pixeldata;
 
     gdcm::SmartPointer<gdcm::SequenceOfFragments> sq = new gdcm::SequenceOfFragments;
-    const gdcm::Tag itemStart(0xfffe, 0xe000);
-    //sq->GetTable().SetTag( itemStart );
 
     gdcm::Fragment frag;
-    //frag.SetTag( itemStart );
     frag.SetByteValue( buf, len );
     delete[] buf;
     sq->AddFragment( frag );
     pixeldata.SetValue( *sq );
 
-    //pixeldata.SetByteValue( buf, len );
     image.SetDataElement( pixeldata );
 
-    //writer.SetFile( file );
-    //writer.SetImage( image );
     writer.SetFileName( outfilename );
     if( !writer.Write() )
       {
@@ -442,6 +437,11 @@ int main (int argc, char *argv[])
     || gdcm::System::StrCaseCmp(inputextension,".ljpg") == 0
     || gdcm::System::StrCaseCmp(inputextension,".ljpeg") == 0 )
     {
+    /*
+     * FIXME: when JPEG contains JFIF marker, we should only read them
+     * during header parsing but discard them when copying the JPG byte stream into 
+     * the encapsulated Pixel Data Element...
+     */
     gdcm::JPEGCodec jpeg;
     std::ifstream is(filename);
     gdcm::PixelFormat pf ( gdcm::PixelFormat::UINT8 ); // usual guess...
@@ -469,21 +469,15 @@ int main (int argc, char *argv[])
     gdcm::DataElement pixeldata;
 
     gdcm::SmartPointer<gdcm::SequenceOfFragments> sq = new gdcm::SequenceOfFragments;
-    const gdcm::Tag itemStart(0xfffe, 0xe000);
-    //sq->GetTable().SetTag( itemStart );
 
     gdcm::Fragment frag;
-    //frag.SetTag( itemStart );
     frag.SetByteValue( buf, len );
     delete[] buf;
     sq->AddFragment( frag );
     pixeldata.SetValue( *sq );
 
-    //pixeldata.SetByteValue( buf, len );
     image.SetDataElement( pixeldata );
 
-    //writer.SetFile( file );
-    //writer.SetImage( image );
     writer.SetFileName( outfilename );
     if( !writer.Write() )
       {

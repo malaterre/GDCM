@@ -675,8 +675,8 @@ bool JPEG2000Codec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   int compno = 0;
   opj_image_comp_t *comp = &image->comps[compno];
 
-    this->Dimensions[1] = comp->w;
-    this->Dimensions[0] = comp->h;
+    this->Dimensions[0] = comp->w;
+    this->Dimensions[1] = comp->h;
 
     if( comp->prec <= 8 )
       {
