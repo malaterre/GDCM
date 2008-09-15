@@ -39,7 +39,7 @@ public:
 // Instead I am only hiding the SetTag member...
 
 /**
- * \brief Class to represent an Fragment
+ * \brief Class to represent a Fragment
  */
 class GDCM_EXPORT Fragment : public DataElement
 {
@@ -119,9 +119,9 @@ public:
       return os;
       }
     // Self
-    const ByteValue *bv = dynamic_cast<const ByteValue*>(&*ValueField);
+    const ByteValue *bv = GetByteValue();
     assert( bv );
-    //if( !ValueField->Write<TSwap>(os) )
+    assert( bv->GetLength() == ValueLengthField );
     if( !bv->Write<TSwap>(os) )
       {
       assert(0 && "Should not happen");
