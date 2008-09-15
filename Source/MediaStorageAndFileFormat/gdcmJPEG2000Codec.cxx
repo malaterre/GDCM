@@ -151,6 +151,7 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
       assert( r == true );
       }
     std::string str = os.str();
+    assert( str.size() );
     out.SetByteValue( &str[0], str.size() );
 
     return true;
@@ -245,7 +246,7 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   // Copy buffer
     char *raw = NULL;
   //assert(image->prec % 8 == 0);
-  unsigned long len = Dimensions[0]*Dimensions[1]*Dimensions[2] * (PF.GetBitsAllocated() / 8) * image->numcomps;
+  unsigned long len = Dimensions[0]*Dimensions[1] /* *Dimensions[2]*/ * (PF.GetBitsAllocated() / 8) * image->numcomps;
   raw = new char[len];
   for (int compno = 0; compno < image->numcomps; compno++)
     {
