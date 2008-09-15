@@ -21,7 +21,7 @@ namespace gdcm
 {
 /**
  * \brief Pack/Unpack 12 bits pixel into 16bits 
- * - You can only pack an even number of 16bits, which means a mulitple of 4 (expressed in bytes)
+ * - You can only pack an even number of 16bits, which means a multiple of 4 (expressed in bytes)
  * - You can only unpack a multiple of 3 bytes
  */
 class GDCM_EXPORT Unpacker12Bits

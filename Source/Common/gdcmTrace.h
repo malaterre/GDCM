@@ -30,11 +30,10 @@
 namespace gdcm 
 {
 
-/** \class Trace
- * \brief Debug / Warning and Error are encapsulated in this class
+/**
+ * \brief Trace
+ * \details Debug / Warning and Error are encapsulated in this class
  */
-
-//-----------------------------------------------------------------------------
 class GDCM_EXPORT Trace
 {
 public :

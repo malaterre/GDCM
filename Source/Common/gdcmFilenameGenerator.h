@@ -24,8 +24,9 @@
 
 namespace gdcm
 {
-/** \class FilenameGenerator
- * \brief class to generate filenames based on a pattern (C-style)
+/**
+ * \brief FilenameGenerator
+ * \details class to generate filenames based on a pattern (C-style)
  */
 
 class GDCM_EXPORT FilenameGenerator

@@ -31,6 +31,8 @@ template<class ObjectType> class SmartPointer;
  *
  * \note main superclass for object that want to use SmartPointer
  * invasive ref counting system
+ *
+ * \see SmartPointer
  */
 class GDCM_EXPORT Object
 {

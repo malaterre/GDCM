@@ -27,8 +27,9 @@
 namespace gdcm
 {
 
-/** \class Exception
- * \brief Standard exception handling object.
+/**
+ * \brief Exception
+ * \details Standard exception handling object.
  *
  */
 class Exception : public std::exception
