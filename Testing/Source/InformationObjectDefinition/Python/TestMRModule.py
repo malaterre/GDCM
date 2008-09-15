@@ -17,6 +17,7 @@ import gdcm
 import os,sys
 
 g = gdcm.Global.GetInstance()
+g.LoadResourcesFiles()
 defs = g.GetDefs()
 modules = defs.GetModules()
 #module = modules.GetModule( "MR Image Module Attributes" )
