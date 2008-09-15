@@ -21,15 +21,17 @@ namespace gdcm
 {
 /**
  * \brief Class for Smart Pointer
+ * \details
  * Will only work for subclass of gdcm::Object
  * See tr1/shared_ptr for a more general approach (not invasive)
  * #include <tr1/memory>
  * {
  *   shared_ptr<Bla> b(new Bla);
  * }
+ * \note
  * Class partly based on post by Bill Hubauer:
  * http://groups.google.com/group/comp.lang.c++/msg/173ddc38a827a930
- * See also
+ * \see
  * http://www.davethehat.com/articles/smartp.htm
  *
  * and itk::SmartPointer
