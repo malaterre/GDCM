@@ -400,8 +400,8 @@ const char *System::GetCurrentModuleFileName()
 
 const char *System::GetCurrentResourcesDirectory()
 {
-  static char path[PATH_MAX];
 #ifdef __APPLE__
+  static char path[PATH_MAX];
   Boolean success = false;
   CFURLRef pathURL = CFBundleCopyResourcesDirectoryURL(CFBundleGetMainBundle());
   if (pathURL != NULL)
@@ -416,7 +416,6 @@ const char *System::GetCurrentResourcesDirectory()
     }
 #endif
   // Is there such beast on *any* other system but APPLE ?
-  (void)path;
   return 0;
 }
 
