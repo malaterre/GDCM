@@ -1087,7 +1087,7 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
    */
   row_stride = image_width * cinfo.input_components;	/* JSAMPLEs per row in image_buffer */
 
-  if( this->GetPlanarConfiguration() != 1 )
+  if( this->GetPlanarConfiguration() == 0 )
     {
     while (cinfo.next_scanline < cinfo.image_height) {
       /* jpeg_write_scanlines expects an array of pointers to scanlines.

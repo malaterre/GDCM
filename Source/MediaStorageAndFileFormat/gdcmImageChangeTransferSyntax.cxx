@@ -105,6 +105,11 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde)
     DataElement out;
     //bool r = codec.Code(Input->GetDataElement(), out);
     bool r = codec.Code(pixelde, out);
+    // FIXME: this is not the best place to change the Output image internal type,
+    // but since I know IJG is always applying the Planar Configuration, it does make
+    // any sense to EVER produce a JPEG image where the Planar Configuration would be one
+    // so let's be nice and actually sync JPEG configuration with DICOM Planar Conf.
+    Output->SetPlanarConfiguration( 0 );
 
     DataElement &de = Output->GetDataElement();
     de.SetValue( out.GetValue() );

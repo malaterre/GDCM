@@ -597,19 +597,20 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
 
   unsigned long length = Length;
   // Special case:
+  assert( GetPixelFormat().GetBitsAllocated() == 16 || GetPixelFormat().GetBitsAllocated() == 8 );
   if( GetPixelFormat().GetBitsAllocated() == 16 )
     {
     RequestPaddedCompositePixelCode = true;
     }
-  //if ( GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
-  //if ( GetPlanarConfiguration() == 1 )
-  //  {
-  //  RequestPlanarConfiguration = true;
-  //  }
-  //else
-  //  {
-  //  assert( GetPlanarConfiguration() == 1 );
-  //  }
+
+  assert( GetPixelFormat().GetSamplesPerPixel() == 3 || GetPixelFormat().GetSamplesPerPixel() == 1 );
+  // A footnote:
+  // RLE *by definition* with more than one component will have applied the Planar Configuration
+  // because it simply does not make sense to do it otherwise. So implicitely
+  // RLE is indeed PlanarConfiguration == 1. However when the image says: "hey I am PlanarConfiguration = 0
+  // AND RLE", then apply the PlanarConfiguration internally so that people don't get lost
+  // Because GDCM internally set PlanarConfiguration == 0 by default, even if the Attribute is not
+  // sent, it will still default to 0 and we will be consistant with ourselves...
   if( GetPixelFormat().GetSamplesPerPixel() == 3 && GetPlanarConfiguration() == 0 )
     {
     RequestPlanarConfiguration = true;

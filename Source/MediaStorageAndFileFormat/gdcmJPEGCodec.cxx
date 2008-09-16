@@ -88,8 +88,10 @@ void JPEGCodec::SetBitSample(int bit)
     Internal = NULL;
     }
   Internal->SetDimensions( this->GetDimensions() );
+  Internal->SetPlanarConfiguration( this->GetPlanarConfiguration() );
   Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
   Internal->ImageCodec::SetPixelFormat( this->ImageCodec::GetPixelFormat() );
+  //Internal->SetNeedOverlayCleanup( this->AreOverlaysInPixelData() );
 }
 
 /*
@@ -291,8 +293,8 @@ bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
       default:
         abort();
         }
-      Internal->SetPhotometricInterpretation(
-        this->GetPhotometricInterpretation() );
+      Internal->SetPlanarConfiguration( this->GetPlanarConfiguration() ); // meaning less ?
+      Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
       if( Internal->Decode(is,tmpos) )
         {
         return ImageCodec::Decode(tmpos,os);
