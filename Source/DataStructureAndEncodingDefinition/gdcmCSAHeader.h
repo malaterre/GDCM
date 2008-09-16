@@ -34,6 +34,14 @@ class DataElement;
 class PrivateTag;
 /**
  * \brief Class for CSAHeader
+ * \details SIEMENS store private information in tag (0x0029,0x10,"SIEMENS CSA HEADER")
+ * this class is meant for user wishing to access values stored within this private
+ * attribute.
+ * There are basically two main 'format' for this attribute : SV10/NOMAGIC and DATASET_FORMAT
+ * SV10 and NOMAGIC are from a user prospective identical, see CSAHeader.xml for possible
+ * name / value stored in this format.
+ * DATASET_FORMAT is in fact simply just another DICOM dataset (implicit) with -currently
+ * unknown- value. This can be only be printer for now.
  *
  * \warning:
  * Everything you do with this code is at your own risk, since decoding process
