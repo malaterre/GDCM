@@ -455,6 +455,7 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
       if( !c )
         {
         gdcmErrorMacro( "YBR_FULL_422 is not implemented in GDCM. Image will be displayed incorrectly" );
+        this->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
         }
       }
     break;

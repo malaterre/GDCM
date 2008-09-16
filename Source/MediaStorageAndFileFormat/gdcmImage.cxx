@@ -405,6 +405,11 @@ bool Image::TryJPEGCodec(char *buffer) const
       gdcm::Image *i = (gdcm::Image*)this;
       i->SetPhotometricInterpretation( codec.GetPhotometricInterpretation() );
       }
+    if ( GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 )
+      {
+      gdcm::Image *i = (gdcm::Image*)this;
+      i->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
+      }
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME

@@ -110,6 +110,7 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde)
     // any sense to EVER produce a JPEG image where the Planar Configuration would be one
     // so let's be nice and actually sync JPEG configuration with DICOM Planar Conf.
     Output->SetPlanarConfiguration( 0 );
+    //Output->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
 
     DataElement &de = Output->GetDataElement();
     de.SetValue( out.GetValue() );
@@ -127,6 +128,7 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde)
       // HACK
       //gdcm::Image *i = (gdcm::Image*)this;
       //i->SetPhotometricInterpretation( codec.GetPhotometricInterpretation() );
+abort();
       }
     return true;
     }
