@@ -389,12 +389,18 @@ static void where_am_i() {}
 const char *System::GetCurrentModuleFileName()
 {
 #ifdef __USE_GNU
+  static char path[PATH_MAX];
   Dl_info info;
   if (dladdr( (void*)&where_am_i, &info ) == 0)
     {
-    return info.dli_fname; 
+    strcpy(path,info.dli_fname);
+    return path; 
     }
+#elif defined(_WIN32)
+  // GetModuleFileName works the same on Win32 for library AFAIK
+  return System::GetCurrentProcessFileName();
 #endif
+
   return 0;
 }
 
