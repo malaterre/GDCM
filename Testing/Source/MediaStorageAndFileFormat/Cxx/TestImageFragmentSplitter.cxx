@@ -31,8 +31,11 @@ int TestImageFragmentSplitterFunc(const char *filename, bool verbose = false)
     bool isImage = gdcm::MediaStorage::IsImage( ms );
     if( isImage )
       {
-      std::cout << "Could not read: " << filename << std::endl;
-      return 1;
+      if( reader.GetFile().GetDataSet().FindDataElement( gdcm::Tag(0x7fe0,0x0010) ) )
+        {
+        std::cerr << "Could not read: " << filename << std::endl;
+        return 1;
+        }
       }
     return 0;
     }
@@ -83,7 +86,8 @@ int TestImageFragmentSplitterFunc(const char *filename, bool verbose = false)
     std::cerr << "Failed to write: " << outfilename << std::endl;
     return 1;
     }
-    std::cerr << "Success to write: " << outfilename << std::endl;
+  if( verbose )
+    std::cout << "Success to write: " << outfilename << std::endl;
 
   return 0;
 }
