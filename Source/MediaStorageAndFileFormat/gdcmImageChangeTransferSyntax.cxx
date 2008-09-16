@@ -94,10 +94,10 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde)
     {
     codec.SetDimensions( Input->GetDimensions() );
     // FIXME: GDCM always apply the planar configuration to 0...
-    if( Input->GetPlanarConfiguration() )
-      {
-      Output->SetPlanarConfiguration( 0 );
-      }
+    //if( Input->GetPlanarConfiguration() )
+    //  {
+    //  Output->SetPlanarConfiguration( 0 );
+    //  }
     codec.SetPlanarConfiguration( Input->GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( Input->GetPhotometricInterpretation() );
     codec.SetPixelFormat( Input->GetPixelFormat() );
