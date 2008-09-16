@@ -19,7 +19,7 @@ int TestMediaStorage(int argc, char *argv[])
   (void)argc;
   (void)argv;
   gdcm::MediaStorage ms;
-  if( ms.IsUndefined() )
+  if( !ms.IsUndefined() )
     {
     return 1;
     }
