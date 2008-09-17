@@ -439,7 +439,7 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
         // dcmdrle ACUSON-24-YBR_FULL-RLE.dcm bla.dcm
         // dcmcjpeg bla.dcm foo.dcm
         // foo.dcm would be not displayed correctly
-        this->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
+        //this->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
         }
     }
     break;
@@ -455,7 +455,7 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
       if( !c )
         {
         gdcmErrorMacro( "YBR_FULL_422 is not implemented in GDCM. Image will be displayed incorrectly" );
-        this->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
+        //this->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
         }
       }
     break;

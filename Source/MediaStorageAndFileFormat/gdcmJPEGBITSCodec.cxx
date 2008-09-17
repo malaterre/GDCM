@@ -585,6 +585,9 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
 
 }
 
+/*
+ * Note: see dcmdjpeg +cn option to avoid the YBR => RGB loss
+ */
 bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
 {
   /* This struct contains the JPEG decompression parameters and pointers to
@@ -675,6 +678,11 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
       break;
     case JCS_RGB:
       //assert( GetPhotometricInterpretation() == PhotometricInterpretation::RGB );
+        if ( cinfo.process == JPROC_LOSSLESS )
+          {
+          cinfo.jpeg_color_space = JCS_UNKNOWN;
+          cinfo.out_color_space = JCS_UNKNOWN;
+          }
       break;
     case JCS_YCbCr:
       if( GetPhotometricInterpretation() != PhotometricInterpretation::YBR_FULL &&
@@ -690,11 +698,11 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
         // correct DICOM file.
         // FIXME FIXME
         /* prevent the library from performing any color space conversion */
-        if ( cinfo.process == JPROC_LOSSLESS )
-          {
-          cinfo.jpeg_color_space = JCS_UNKNOWN;
-          cinfo.out_color_space = JCS_UNKNOWN;
-          }
+        }
+      if ( cinfo.process == JPROC_LOSSLESS )
+        {
+        cinfo.jpeg_color_space = JCS_UNKNOWN;
+        cinfo.out_color_space = JCS_UNKNOWN;
         }
       break;
     default:
