@@ -126,6 +126,8 @@ public:
     assert( data );
     assert( length ); // != 0
     assert( _is );
+    // FIXME BUG: what if >> operation fails ?
+    // gdcmData/MR00010001.dcm / SpacingBetweenSlices
     _is >> data[0];
     char sep;
     //std::cout << "GetLength: " << af->GetLength() << std::endl;

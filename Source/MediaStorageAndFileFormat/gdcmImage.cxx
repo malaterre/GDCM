@@ -113,7 +113,7 @@ void Image::SetDimension(unsigned int idx, unsigned int dim)
   Dimensions.resize( 3 /*NumberOfDimensions*/ );
   // Can dim be 0 ??
   // -> no !
-  assert( dim );
+  //assert( dim ); // PhilipsLosslessRice.dcm 
   Dimensions[idx] = dim;
   if( NumberOfDimensions == 2 )
     {
@@ -147,6 +147,7 @@ void Image::SetSpacing(const double *spacing)
 
 void Image::SetSpacing(unsigned int idx, double spacing)
 {
+  //assert( spacing > 1.e3 );
   Spacing.resize( 3 /*idx + 1*/ );
   Spacing[idx] = spacing;
 }

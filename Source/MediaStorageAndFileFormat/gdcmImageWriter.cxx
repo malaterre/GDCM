@@ -100,9 +100,12 @@ bool ImageWriter::Write()
   samplesperpixel.SetValue( pf.GetSamplesPerPixel() );
   ds.Replace( samplesperpixel.GetAsDataElement() );
 
-  Attribute<0x0028, 0x0006> planarconf;
-  planarconf.SetValue( PixelData->GetPlanarConfiguration() );
-  ds.Replace( planarconf.GetAsDataElement() );
+  if( pf.GetSamplesPerPixel() != 1 )
+    {
+    Attribute<0x0028, 0x0006> planarconf;
+    planarconf.SetValue( PixelData->GetPlanarConfiguration() );
+    ds.Replace( planarconf.GetAsDataElement() );
+    }
 
 
   // Overlay Data 60xx
@@ -237,8 +240,8 @@ bool ImageWriter::Write()
     else if ( pi == PhotometricInterpretation::PALETTE_COLOR )
       {
       const LookupTable &lut = PixelData->GetLUT();
-      assert( pf.GetBitsAllocated() == 8  && pf.GetPixelRepresentation() == 0 
-           || pf.GetBitsAllocated() == 16 && pf.GetPixelRepresentation() == 0 );
+      assert( (pf.GetBitsAllocated() == 8  && pf.GetPixelRepresentation() == 0) 
+           || (pf.GetBitsAllocated() == 16 && pf.GetPixelRepresentation() == 0) );
       // lut descriptor:
       // (0028,1101) US 256\0\16                                 #   6, 3 RedPaletteColorLookupTableDescriptor
       // (0028,1102) US 256\0\16                                 #   6, 3 GreenPaletteColorLookupTableDescriptor

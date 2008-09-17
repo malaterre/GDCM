@@ -632,6 +632,7 @@ Warning - Dicom dataset contains attributes not present in standard DICOM IOD - 
 std::vector<double> ImageHelper::GetSpacingValue(File const & f)
 {
   std::vector<double> sp;
+  sp.reserve(3);
   MediaStorage ms;
   ms.SetFromFile(f);
   const DataSet& ds = f.GetDataSet();
@@ -720,7 +721,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
     const DataElement& de = ds.GetDataElement( zspacingtag );
     if( de.IsEmpty() )
       {
-      sp.push_back( 0.0 );
+      sp.push_back( 1.0 );
       }
     else
       {
@@ -774,13 +775,13 @@ $ dcmdump D_CLUNIE_NM1_JPLL.dcm" | grep 0028,0009
       else
         {
         gdcmWarningMacro( "Dont know how to handle spacing for: " << de );
-        sp.push_back( 0.0 );
+        sp.push_back( 1.0 );
         }
       }
     }
   else
     {
-    sp.push_back( 0.0 );
+    sp.push_back( 1.0 );
     }
 
   assert( sp.size() == 3 );
@@ -896,6 +897,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
             }
           //assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
           std::stringstream os;
+          os.setf( std::ios::fixed );
           el.Write( os );
           de.SetVR( VR::DS );
           de.SetByteValue( os.str().c_str(), os.str().size() );
@@ -931,6 +933,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
             }
           //assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
           std::stringstream os;
+          os.setf( std::ios::fixed );
           el.Write( os );
           de.SetVR( VR::DS );
           de.SetByteValue( os.str().c_str(), os.str().size() );
@@ -1008,7 +1011,11 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
   ms.SetFromDataSet(ds);
   assert( MediaStorage::IsImage( ms ) );
 
-  if( ms == MediaStorage::SecondaryCaptureImageStorage )
+  // FIXME Hardcoded
+  if( ms != MediaStorage::CTImageStorage
+   || ms != MediaStorage::MRImageStorage
+   || ms != MediaStorage::EnhancedMRImageStorage
+   || ms != MediaStorage::EnhancedCTImageStorage )
     {
     return;
     }
@@ -1075,7 +1082,11 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
   ms.SetFromDataSet(ds);
   assert( MediaStorage::IsImage( ms ) );
 
-  if( ms == MediaStorage::SecondaryCaptureImageStorage )
+  // FIXME Hardcoded
+  if( ms != MediaStorage::CTImageStorage
+   || ms != MediaStorage::MRImageStorage
+   || ms != MediaStorage::EnhancedMRImageStorage
+   || ms != MediaStorage::EnhancedCTImageStorage )
     {
     return;
     }
@@ -1167,6 +1178,21 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
   assert( MediaStorage::IsImage( ms ) );
   DataSet &ds = f.GetDataSet();
 
+  // FIXME Hardcoded
+  if( ms != MediaStorage::CTImageStorage
+   && ms != MediaStorage::MRImageStorage
+   && ms != MediaStorage::PETImageStorage
+   && ms != MediaStorage::SecondaryCaptureImageStorage
+   && ms != MediaStorage::EnhancedMRImageStorage
+   && ms != MediaStorage::EnhancedCTImageStorage )
+    {
+    if( img.GetIntercept() != 0. || img.GetSlope() != 1. )
+      {
+      throw "Impossible"; // Please report
+      }
+    return;
+    }
+
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage )
     {
@@ -1234,21 +1260,24 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
 
   // Question: should I always insert them ?
   // Answer: not always, let's discard MR if (1,0):
-  if( ms == MediaStorage::MRImageStorage && img.GetIntercept() == 0. && img.GetSlope() == 1. )
+  if( /*ms == MediaStorage::MRImageStorage &&*/ img.GetIntercept() == 0. && img.GetSlope() == 1. )
     {
     }
   else
     {
     Attribute<0x0028,0x1052> at1;
     at1.SetValue( img.GetIntercept() );
-    ds.Insert( at1.GetAsDataElement() );
+    ds.Replace( at1.GetAsDataElement() );
     Attribute<0x0028,0x1053> at2;
     at2.SetValue( img.GetSlope() );
-    ds.Insert( at2.GetAsDataElement() );
+    ds.Replace( at2.GetAsDataElement() );
 
     Attribute<0x0028,0x1054> at3; // Rescale Type
-    at3.SetValue( "US" ); // FIXME
-    ds.Insert( at3.GetAsDataElement() );
+    if( ds.FindDataElement( at3.GetTag() ) )
+      {
+      at3.SetValue( "US" ); // FIXME
+      ds.Replace( at3.GetAsDataElement() );
+      }
     }
 }
 

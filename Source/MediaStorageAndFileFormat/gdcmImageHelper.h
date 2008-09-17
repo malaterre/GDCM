@@ -27,9 +27,9 @@ class DataSet;
 class File;
 class Image;
 /**
- * \brief ImageHelper (internal class, not intended for user)
+ * \brief ImageHelper (internal class, not intended for user level)
  *
- * \note
+ * \details
  * Helper for writing World images in DICOM. DICOM has a 'template' approach to image where 
  * MR Image Storage are distinct object from Enhanced MR Image Storage. For example the
  * Pixel Spacing in one object is not at the same position (ie Tag) as in the other
@@ -37,7 +37,7 @@ class Image;
  * a united view of a world image (typically VTK or ITK point of view) down to the low
  * level DICOM point of view.
  *
- * Warning: do not expect the API of this class to be maintain at any point, since as
+ * \warning: do not expect the API of this class to be maintain at any point, since as
  * Modalities are added the API might have to be augmented or behavior changed to cope
  * with new modalities.
  */
