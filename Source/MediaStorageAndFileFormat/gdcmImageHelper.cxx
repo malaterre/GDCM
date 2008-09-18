@@ -1013,9 +1013,9 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
 
   // FIXME Hardcoded
   if( ms != MediaStorage::CTImageStorage
-   || ms != MediaStorage::MRImageStorage
-   || ms != MediaStorage::EnhancedMRImageStorage
-   || ms != MediaStorage::EnhancedCTImageStorage )
+   && ms != MediaStorage::MRImageStorage
+   && ms != MediaStorage::EnhancedMRImageStorage
+   && ms != MediaStorage::EnhancedCTImageStorage )
     {
     return;
     }
@@ -1084,9 +1084,9 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
 
   // FIXME Hardcoded
   if( ms != MediaStorage::CTImageStorage
-   || ms != MediaStorage::MRImageStorage
-   || ms != MediaStorage::EnhancedMRImageStorage
-   || ms != MediaStorage::EnhancedCTImageStorage )
+   && ms != MediaStorage::MRImageStorage
+   && ms != MediaStorage::EnhancedMRImageStorage
+   && ms != MediaStorage::EnhancedCTImageStorage )
     {
     return;
     }

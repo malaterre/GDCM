@@ -46,7 +46,7 @@ int TestElement5(int , char *[])
   const char strspacing[] = "1.2345\\6.7890";
   std::stringstream ss;
   ss.str( strspacing );
-  unsigned int len = 2 * sizeof(float);
+  unsigned int len = 2 * sizeof(double);
   gdcm::VM vm = gdcm::VM::VM2;
   gdcm::VR vr = gdcm::VR::DS;
   if( len != vr.GetSizeof() * vm.GetLength() )
