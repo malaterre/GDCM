@@ -327,7 +327,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
   char *buffer = 0;
   // if rgb (3 comp) need to the planar configuratio
   char *bufferrgb = 0;
-  if( GetPixelFormat().GetBitsAllocated() == 16 )
+  if( GetPixelFormat().GetBitsAllocated() > 8 )
     {
     //RequestPaddedCompositePixelCode = true;
     buffer = new char [ image_len ];
@@ -345,6 +345,10 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     {
     MaxNumSegments *= 2;
     }
+  else if( GetPixelFormat().GetBitsAllocated() == 32 )
+    {
+    MaxNumSegments *= 4;
+    }
 
   if( GetPhotometricInterpretation() == PhotometricInterpretation::RGB 
     || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
@@ -353,7 +357,8 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     MaxNumSegments *= 3;
     }
 
-  assert( GetPixelFormat().GetBitsAllocated() == 8 || GetPixelFormat().GetBitsAllocated() == 16 );
+  assert( GetPixelFormat().GetBitsAllocated() == 8 || GetPixelFormat().GetBitsAllocated() == 16 
+    || GetPixelFormat().GetBitsAllocated() == 32 );
   if( GetPixelFormat().GetSamplesPerPixel() == 3 )
     {
     assert( MaxNumSegments % 3 == 0 );
@@ -385,7 +390,53 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
         }
       ptr_img = bufferrgb;
       }
-    if( GetPixelFormat().GetBitsAllocated() == 16 )
+    if( GetPixelFormat().GetBitsAllocated() == 32 )
+      {
+      assert( !(image_len % 4) );
+      //assert( image_len % 3 == 0 );
+      unsigned int div = GetPixelFormat().GetSamplesPerPixel();
+      for(unsigned int j = 0; j < div; ++j)
+        {
+        unsigned long iimage_len = image_len / div;
+        char *ibuffer = buffer + j * iimage_len;
+        const char *iptr_img = ptr_img + j * iimage_len;
+        assert( iimage_len % 4 == 0 );
+        for(unsigned long i = 0; i < iimage_len/4; ++i)
+          {
+#ifdef GDCM_WORDS_BIGENDIAN
+          ibuffer[i] = iptr_img[4*i+0];
+#else
+          ibuffer[i] = iptr_img[4*i+3];
+#endif
+          }
+        for(unsigned long i = 0; i < iimage_len/4; ++i)
+          {
+#ifdef GDCM_WORDS_BIGENDIAN
+          ibuffer[i+iimage_len/4] = iptr_img[4*i+1];
+#else
+          ibuffer[i+iimage_len/4] = iptr_img[4*i+2];
+#endif
+          }
+        for(unsigned long i = 0; i < iimage_len/4; ++i)
+          {
+#ifdef GDCM_WORDS_BIGENDIAN
+          ibuffer[i+2*iimage_len/4] = iptr_img[4*i+2];
+#else
+          ibuffer[i+2*iimage_len/4] = iptr_img[4*i+1];
+#endif
+          }
+        for(unsigned long i = 0; i < iimage_len/4; ++i)
+          {
+#ifdef GDCM_WORDS_BIGENDIAN
+          ibuffer[i+3*iimage_len/4] = iptr_img[4*i+3];
+#else
+          ibuffer[i+3*iimage_len/4] = iptr_img[4*i+0];
+#endif
+          }
+        }
+      ptr_img = buffer;
+      }
+    else if( GetPixelFormat().GetBitsAllocated() == 16 )
       {
       assert( !(image_len % 2) );
       //assert( image_len % 3 == 0 );
@@ -466,7 +517,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
 
   out.SetValue( *sq );
 
-  if( buffer /*GetPixelFormat().GetBitsAllocated() == 16*/ )
+  if( buffer /*GetPixelFormat().GetBitsAllocated() > 8*/ )
     {
     //RequestPaddedCompositePixelCode = true;
     delete[] buffer;
@@ -475,11 +526,6 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     {
     delete[] bufferrgb;
     }
-
-  //if( dims[0] * dims[1] > n )
-  //  {
-  //  delete[] outbuf;
-  //  }
 
   return true;
 }
@@ -597,8 +643,10 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
 
   unsigned long length = Length;
   // Special case:
-  assert( GetPixelFormat().GetBitsAllocated() == 16 || GetPixelFormat().GetBitsAllocated() == 8 );
-  if( GetPixelFormat().GetBitsAllocated() == 16 )
+  assert( GetPixelFormat().GetBitsAllocated() == 32 ||
+          GetPixelFormat().GetBitsAllocated() == 16 || 
+          GetPixelFormat().GetBitsAllocated() == 8 );
+  if( GetPixelFormat().GetBitsAllocated() > 8 )
     {
     RequestPaddedCompositePixelCode = true;
     }

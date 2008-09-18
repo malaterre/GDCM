@@ -222,15 +222,40 @@ bool ImageCodec::DoPaddedCompositePixelCode(std::istream &is, std::ostream &os)
   //SwapCode sc = is.GetSwapCode();
 
   assert( !(buf_size % 2) );
-  for(long i = 0; i < buf_size/2; ++i)
+  if( GetPixelFormat().GetBitsAllocated() == 16 )
     {
+    for(long i = 0; i < buf_size/2; ++i)
+      {
 #ifdef GDCM_WORDS_BIGENDIAN
-    os.write( dummy_buffer+i, 1 );
-    os.write( dummy_buffer+i+buf_size/2, 1 );
+      os.write( dummy_buffer+i, 1 );
+      os.write( dummy_buffer+i+buf_size/2, 1 );
 #else
-    os.write( dummy_buffer+i+buf_size/2, 1 );
-    os.write( dummy_buffer+i, 1 );
+      os.write( dummy_buffer+i+buf_size/2, 1 );
+      os.write( dummy_buffer+i, 1 );
 #endif
+      }
+    }
+  else if( GetPixelFormat().GetBitsAllocated() == 32 )
+    {
+  assert( !(buf_size % 4) );
+    for(long i = 0; i < buf_size/4; ++i)
+      {
+#ifdef GDCM_WORDS_BIGENDIAN
+      os.write( dummy_buffer+i, 1 );
+      os.write( dummy_buffer+i+1*buf_size/4, 1 );
+      os.write( dummy_buffer+i+2*buf_size/4, 1 );
+      os.write( dummy_buffer+i+3*buf_size/4, 1 );
+#else
+      os.write( dummy_buffer+i+3*buf_size/4, 1 );
+      os.write( dummy_buffer+i+2*buf_size/4, 1 );
+      os.write( dummy_buffer+i+1*buf_size/4, 1 );
+      os.write( dummy_buffer+i, 1 );
+#endif
+      }
+    }
+  else
+    {
+    return false;
     }
   return true;
 }
