@@ -18,6 +18,7 @@ SET(DSED_TEST_SRCS
   TestComposite
   #TestDataElement
   TestDataSet
+  TestVRDS
   TestElement
   #TestExplicitDataElement
   TestFileMetaInformation
