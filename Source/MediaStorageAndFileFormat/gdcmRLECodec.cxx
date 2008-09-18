@@ -341,13 +341,21 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     }
 
   int MaxNumSegments = 1;
-  if( GetPixelFormat().GetBitsAllocated() == 16 )
+  if( GetPixelFormat().GetBitsAllocated() == 8 )
+    {
+    MaxNumSegments *= 1;
+    }
+  else if( GetPixelFormat().GetBitsAllocated() == 16 )
     {
     MaxNumSegments *= 2;
     }
   else if( GetPixelFormat().GetBitsAllocated() == 32 )
     {
     MaxNumSegments *= 4;
+    }
+  else
+    {
+    return false;
     }
 
   if( GetPhotometricInterpretation() == PhotometricInterpretation::RGB 
@@ -368,7 +376,9 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
   header.NumSegments = MaxNumSegments;
   for(int i = 0; i < 16;++i)
     header.Offset[i] = 0;
-  header.Offset[0] = 64;
+  header.Offset[0] = 64; // there cannot be any space in between the end of the RLE header and the start
+  // of the first RLE segment
+  //
   // Create a RLE Frame for each frame:
   for(unsigned int dim = 0; dim < dims[2]; ++dim)
     {
