@@ -175,20 +175,21 @@ int checkdeflated(const char *name)
 void PrintVersion()
 {
   std::cout << "gdcminfo: gdcm " << gdcm::Version::GetVersion() << " ";
-  const char date[] = "$Date: 2008-06-02 09:20:26 +0200 (Mon, 02 Jun 2008) $";
+  const char date[] = "$Date$";
   std::cout << date << std::endl;
 }
 
 void PrintHelp()
 {
   PrintVersion();
-  std::cout << "Usage: gdcminfo [OPTION]... [FILE]..." << std::endl;
-  std::cout << "display info about the input DICOM file" << std::endl;
+  std::cout << "Usage: gdcminfo [OPTION]... FILE..." << std::endl;
+  std::cout << "display meta info about the input DICOM file" << std::endl;
   std::cout << "Parameter:" << std::endl;
   std::cout << "  -i --input     DICOM filename or directory" << std::endl;
   std::cout << "Options:" << std::endl;
   std::cout << "  -d --check-deflated   check if file is proper deflated syntax." << std::endl;
 //  std::cout << "  -b --check-big-endian   check if file is ." << std::endl;
+  std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning   print warning info." << std::endl;
   std::cout << "  -D --debug     print debug info." << std::endl;

@@ -113,22 +113,23 @@ void PrintHelp()
   std::cout << "  -o --output    DICOM filename (generated)" << std::endl;
   std::cout << "Options:" << std::endl;
   //std::cout << "  -l --lut       Apply LUT." << std::endl;
-  std::cout << "  -M --mosaic    Split SIEMENS Mosaic image into multiple frames." << std::endl;
-  std::cout << "  -W --raw       Decompress image." << std::endl;
-  std::cout << "  -J --jpeg      Compress image in jpeg." << std::endl;
-  std::cout << "  -K --j2k       Compress image in j2k." << std::endl;
-  std::cout << "  -L --jpegls    Compress image in jpeg-ls." << std::endl;
-  std::cout << "  -R --rle       Compress image in rle." << std::endl;
-  std::cout << "  -F --force     Force decompression/merging before recompression/splitting." << std::endl;
-  std::cout << "  -Y --lossy %d  Use the lossy (if possible), followed by comp. ratio" << std::endl;
-  std::cout << "  -S --split %d  Write 2D image with multiple fragments (using max size)" << std::endl;
+  std::cout << "  -C --check-meta Check File Meta Information." << std::endl;
+  std::cout << "  -M --mosaic     Split SIEMENS Mosaic image into multiple frames." << std::endl;
+  std::cout << "  -W --raw        Decompress image." << std::endl;
+  std::cout << "  -J --jpeg       Compress image in jpeg." << std::endl;
+  std::cout << "  -K --j2k        Compress image in j2k." << std::endl;
+  std::cout << "  -L --jpegls     Compress image in jpeg-ls." << std::endl;
+  std::cout << "  -R --rle        Compress image in rle (lossless only)." << std::endl;
+  std::cout << "  -F --force      Force decompression/merging before recompression/splitting." << std::endl;
+  std::cout << "  -Y --lossy %d   Use the lossy (if possible), followed by comp. ratio" << std::endl;
+  std::cout << "  -S --split %d   Write 2D image with multiple fragments (using max size)" << std::endl;
   std::cout << "General Options:" << std::endl;
-  std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
-  std::cout << "  -W --warning   print warning info." << std::endl;
-  std::cout << "  -D --debug     print debug info." << std::endl;
-  std::cout << "  -E --error     print error info." << std::endl;
-  std::cout << "  -h --help      print help." << std::endl;
-  std::cout << "  -v --version   print version." << std::endl;
+  std::cout << "  -V --verbose    more verbose (warning+error)." << std::endl;
+  std::cout << "  -W --warning    print warning info." << std::endl;
+  std::cout << "  -D --debug      print debug info." << std::endl;
+  std::cout << "  -E --error      print error info." << std::endl;
+  std::cout << "  -h --help       print help." << std::endl;
+  std::cout << "  -v --version    print version." << std::endl;
 }
 
 
@@ -280,6 +281,7 @@ int main (int argc, char *argv[])
     //  printf ("%s ", argv[optind++]);
     //  }
     //printf ("\n");
+    PrintHelp();
     return 1;
     }
 
