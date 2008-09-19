@@ -16,7 +16,22 @@
 import gdcm
 import os,sys,re
 
+"""
+You need to have dcmdump/dcmdrle/dcmdjpeg in your PATH
+"""
+
 def TestDCMTKMD5( filename, verbose = False ):
+  blacklist = ['SignedShortLosslessBug.dcm',
+  'JDDICOM_Sample2.dcm',
+  'GE_DLX-8-MONO2-PrivateSyntax.dcm',
+  'PrivateGEImplicitVRBigEndianTransferSyntax16Bits.dcm',
+  'DermaColorLossLess.dcm', # technically I could support this one...
+  'LEADTOOLS_FLOWERS-24-RGB-JpegLossy.dcm', # idem
+  'ALOKA_SSD-8-MONO2-RLE-SQ.dcm'] # this one is not supported by dcmtk 3.5.4
+  for f in blacklist:
+    if f in filename:
+      print "%s is on the black list, giving up"%filename
+      return 0
   #print filename
   #
   #dcmdump_exec = "dcmdump -dc -E +P 2,10 -s " + filename + " 2> /dev/null"
