@@ -51,6 +51,7 @@ def TestDCMTKMD5( filename, verbose = False ):
   lexre = re.compile('^.*LittleEndianExplicit.*$')
   leire = re.compile('^.*LittleEndianImplicit.*$')
   beire = re.compile('^.*BigEndianExplicit.*$')
+  dicomdir = re.compile('^.*MediaStorageDirectoryStorage.*$')
   testing = gdcm.Testing()
   outputdir = testing.GetTempDirectory( "TestDCMTKMD5" )
   gdcm.System.MakeDirectory( outputdir )
@@ -66,6 +67,9 @@ def TestDCMTKMD5( filename, verbose = False ):
     return 0
   #print ret
   #print ret.__class__
+  elif( dicomdir.match( ret ) ):
+    print "DICOMDIR, skipping ", filename
+    return 0
   elif( jpegre.match( ret ) or jpegre2.match(ret) or jpegre3.match(ret) ):
     #print "jpeg: ",filename
     dcmdjpeg_exec = "dcmdjpeg " + filename + " " + outputfilename
