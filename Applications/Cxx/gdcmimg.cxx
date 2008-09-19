@@ -51,6 +51,7 @@
 #include "gdcmAttribute.h"
 #include "gdcmJPEGCodec.h"
 #include "gdcmJPEG2000Codec.h"
+#include "gdcmVersion.h"
 
 #include <string>
 #include <iostream>
@@ -98,6 +99,35 @@ void FillRegionWithColor(char *cp, const unsigned int *dims, const unsigned int 
       }
 }
 
+void PrintVersion()
+{
+  std::cout << "gdcmimg: gdcm " << gdcm::Version::GetVersion() << " ";
+  const char date[] = "$Date$";
+  std::cout << date << std::endl;
+}
+
+void PrintHelp()
+{
+  PrintVersion();
+  std::cout << "Usage: gdcmimg [OPTION]... FILE..." << std::endl;
+  std::cout << "Manipulate DICOM file" << std::endl;
+  std::cout << "Parameter (required):" << std::endl;
+  std::cout << "  -i --input     Input filename" << std::endl;
+  std::cout << "  -o --output    Output filename" << std::endl;
+  std::cout << "Options:" << std::endl;
+  std::cout << "  -d --depth     Depth." << std::endl;
+  std::cout << "  -s --size      Size." << std::endl;
+  std::cout << "  -R --region    Region." << std::endl;
+  std::cout << "  -F --fill      Fill." << std::endl;
+  std::cout << "General Options:" << std::endl;
+  std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
+  std::cout << "  -W --warning   print warning info." << std::endl;
+  std::cout << "  -D --debug     print debug info." << std::endl;
+  std::cout << "  -E --error     print error info." << std::endl;
+  std::cout << "  -h --help      print help." << std::endl;
+  std::cout << "  -v --version   print version." << std::endl;
+}
+
 int main (int argc, char *argv[])
 {
   int c;
@@ -111,6 +141,14 @@ int main (int argc, char *argv[])
   int bregion = 0;
   int fill = 0;
   unsigned int size[2] = {};
+
+  int verbose = 0;
+  int warning = 0;
+  int debug = 0;
+  int error = 0;
+  int help = 0;
+  int version = 0;
+
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -122,6 +160,14 @@ int main (int argc, char *argv[])
         {"size", 1, 0, 0},
         {"region", 1, &bregion, 1},
         {"fill", 1, &fill, 1},
+
+// General options !
+        {"verbose", 0, &verbose, 1},
+        {"warning", 0, &warning, 1},
+        {"debug", 0, &debug, 1},
+        {"error", 0, &error, 1},
+        {"help", 0, &help, 1},
+        {"version", 0, &version, 1},
         {0, 0, 0, 0}
     };
 
@@ -216,23 +262,42 @@ int main (int argc, char *argv[])
   // For now only support one input / one output
   if (optind < argc)
     {
+/*
     printf ("non-option ARGV-elements: ");
     while (optind < argc)
       {
       printf ("%s ", argv[optind++]);
       }
     printf ("\n");
+*/
+    PrintHelp();
     return 1;
+    }
+
+  if( version )
+    {
+    //std::cout << "version" << std::endl;
+    PrintVersion();
+    return 0;
+    }
+
+  if( help )
+    {
+    //std::cout << "help" << std::endl;
+    PrintHelp();
+    return 0;
     }
 
   if( filename.IsEmpty() )
     {
-    std::cerr << "Need input file (-i)\n";
+    //std::cerr << "Need input file (-i)\n";
+    PrintHelp();
     return 1;
     }
   if( outfilename.IsEmpty() )
     {
-    std::cerr << "Need output file (-o)\n";
+    //std::cerr << "Need output file (-o)\n";
+    PrintHelp();
     return 1;
     }
 

@@ -110,7 +110,7 @@ void PrintHelp()
   std::cout << "Convert a DICOM file into another DICOM file.\n";
   std::cout << "Parameter (required):" << std::endl;
   std::cout << "  -i --input     DICOM filename" << std::endl;
-  std::cout << "  -o --output    DICOM filename (generated)" << std::endl;
+  std::cout << "  -o --output    DICOM filename" << std::endl;
   std::cout << "Options:" << std::endl;
   //std::cout << "  -l --lut       Apply LUT." << std::endl;
   std::cout << "  -C --check-meta Check File Meta Information." << std::endl;
