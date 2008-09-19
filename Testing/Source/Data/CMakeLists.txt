@@ -3,18 +3,38 @@
 # We need to test the reading of all dicom images in the gdcmData directory
 # First parse this directory and extract all images
 
-FILE(GLOB GDCM_DATA_IMAGE_FILENAMES_GLOB
+SET(GDCM_DATA_IMAGE_FILENAMES_GLOB_EXPR
   "${GDCM_DATA_ROOT}/*.acr"
   "${GDCM_DATA_ROOT}/*.nema"
   "${GDCM_DATA_ROOT}/*.dcm"
-  "${GDCM_DATA_ROOT}/*.DCM"
   "${GDCM_DATA_ROOT}/001*"
+)
+
+SET(GDCM_DATA_DICOMDIR_FILENAMES_GLOB_EXPR
+  # Those files do not have any extension, special regex:
+  "${GDCM_DATA_ROOT}/dicomdir*"
+)
+
+# Case sensitive system:
+IF(UNIX)
+  SET(GDCM_DATA_IMAGE_FILENAMES_GLOB_EXPR
+    ${GDCM_DATA_IMAGE_FILENAMES_GLOB_EXPR}
+    "${GDCM_DATA_ROOT}/*.DCM"
+  )
+  SET(GDCM_DATA_DICOMDIR_FILENAMES_GLOB_EXPR
+    ${GDCM_DATA_DICOMDIR_FILENAMES_GLOB_EXPR}
+    "${GDCM_DATA_ROOT}/DICOMDIR*"
+  )
+ENDIF(UNIX)
+
+# GLOB expression !
+FILE(GLOB GDCM_DATA_IMAGE_FILENAMES_GLOB
+  ${GDCM_DATA_IMAGE_FILENAMES_GLOB_EXPR}
   )
 
+# Same for DICOMDIR:
 FILE(GLOB GDCM_DATA_DICOMDIR_FILENAMES_GLOB
-  # Those files do not have any extension, special regex:
-  "${GDCM_DATA_ROOT}/DICOMDIR*"
-  "${GDCM_DATA_ROOT}/dicomdir*"
+  ${GDCM_DATA_DICOMDIR_FILENAMES_GLOB_EXPR}
   )
 
 SET(GDCM_DATA_FILENAMES_GLOB
