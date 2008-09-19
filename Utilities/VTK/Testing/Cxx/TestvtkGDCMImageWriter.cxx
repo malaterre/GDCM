@@ -96,6 +96,7 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
           {
           std::cerr << "Problem:" << vtkorigin[0] << "," << vtkorigin[1] << "," << vtkorigin[2] ;
           std::cerr << " should be:" << origin[0] << "," << origin[1] << "," << origin[2] << std::endl ;
+          std::cerr << filename << std::endl;
           res = 1;
           }
         }

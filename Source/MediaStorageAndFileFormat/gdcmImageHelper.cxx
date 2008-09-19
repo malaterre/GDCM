@@ -1014,6 +1014,7 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
   // FIXME Hardcoded
   if( ms != MediaStorage::CTImageStorage
    && ms != MediaStorage::MRImageStorage
+   //&& ms != MediaStorage::ComputedRadiographyImageStorage
    && ms != MediaStorage::EnhancedMRImageStorage
    && ms != MediaStorage::EnhancedCTImageStorage )
     {
@@ -1085,6 +1086,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
   // FIXME Hardcoded
   if( ms != MediaStorage::CTImageStorage
    && ms != MediaStorage::MRImageStorage
+   //&& ms != MediaStorage::ComputedRadiographyImageStorage
    && ms != MediaStorage::EnhancedMRImageStorage
    && ms != MediaStorage::EnhancedCTImageStorage )
     {

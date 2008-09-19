@@ -82,6 +82,10 @@ SET(BLACK_LIST_READER
 # Private tags is SQ, but SQ is busted, GDCM fails since it tries to parse the SQ (dcmtk does not even try)
   BogusItemLengthImplicitPrivateAtt.dcm
   MR-MONO2-12-angio-an1.acr
+
+# This image has an unknown Media Storage UID, when looking in Modality 'CR' is found;
+# but at the same time, there is no such thing as IPP/IOP in a ComputedRadiographyImageStorage ...
+  gdcm-CR-DCMTK-16-NonSamplePerPix.dcm
 )
 IF(NOT GDCM_USE_PVRG)
   SET(BLACK_LIST_READER
