@@ -200,7 +200,7 @@ public:
       // Some file written by GDCM 1.0 were written with 0xFFFFFFFF instead of 0x0
       if( ValueLengthField )
         {
-        gdcmWarningMacro( "ValueLengthField is not 0 but " << ValueLengthField );
+        gdcmDebugMacro( "ValueLengthField is not 0 but " << ValueLengthField );
         }
       }
     else if( ValueLengthField.IsUndefined() )
