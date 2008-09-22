@@ -100,7 +100,7 @@ bool SplitMosaicFilter::Split()
   dims[1] /= div;
   dims[2] = numberOfImagesInMosaic;
 
-  std::cout << "NumberOfImagesInMosaic:" << numberOfImagesInMosaic << std::endl;
+  //std::cout << "NumberOfImagesInMosaic:" << numberOfImagesInMosaic << std::endl;
 
   const gdcm::Image &inputimage = GetImage();
   const double *spacing = inputimage.GetSpacing();
@@ -154,14 +154,14 @@ bool SplitMosaicFilter::Split()
   if( ms == gdcm::MediaStorage::MRImageStorage )
     {
     // Ok make it a MediaStorage::EnhancedMRImageStorage
-    ms = gdcm::MediaStorage::EnhancedMRImageStorage;
-
-    // Remove old MRImageStorage attribute then:
-    ds.Remove( gdcm::Tag(0x0020,0x0032) ); // Image Position (Patient)
-    ds.Remove( gdcm::Tag(0x0020,0x0037) ); // Image Orientation (Patient)
-    ds.Remove( gdcm::Tag(0x0028,0x1052) ); // Rescale Intercept
-    ds.Remove( gdcm::Tag(0x0028,0x1053) ); // Rescale Slope
-    ds.Remove( gdcm::Tag(0x0028,0x1054) ); // Rescale Type
+//    ms = gdcm::MediaStorage::EnhancedMRImageStorage;
+//
+//    // Remove old MRImageStorage attribute then:
+//    ds.Remove( gdcm::Tag(0x0020,0x0032) ); // Image Position (Patient)
+//    ds.Remove( gdcm::Tag(0x0020,0x0037) ); // Image Orientation (Patient)
+//    ds.Remove( gdcm::Tag(0x0028,0x1052) ); // Rescale Intercept
+//    ds.Remove( gdcm::Tag(0x0028,0x1053) ); // Rescale Slope
+//    ds.Remove( gdcm::Tag(0x0028,0x1054) ); // Rescale Type
     }
   else
     {

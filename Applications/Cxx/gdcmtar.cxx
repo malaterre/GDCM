@@ -23,8 +23,10 @@
 #include "gdcmReader.h"
 #include "gdcmVersion.h"
 #include "gdcmImageReader.h"
+#include "gdcmDataElement.h"
 #include "gdcmImageWriter.h"
 #include "gdcmSplitMosaicFilter.h"
+#include "gdcmFilenameGenerator.h"
 
 #include <string>
 #include <iostream>
@@ -51,6 +53,7 @@ void PrintHelp()
   std::cout << "  -o --output    DICOM filename" << std::endl;
   std::cout << "Options:" << std::endl;
   std::cout << "  -M --mosaic     Split SIEMENS Mosaic image into multiple frames." << std::endl;
+  std::cout << "  -p --pattern    Specify trailing file pattern." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose    more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning    print warning info." << std::endl;
@@ -78,6 +81,7 @@ int main (int argc, char *argv[])
   int help = 0;
   int version = 0;
 
+  std::string pattern;
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
@@ -85,6 +89,7 @@ int main (int argc, char *argv[])
         {"input", 1, 0, 0},
         {"output", 1, 0, 0},
         {"mosaic", 0, &mosaic, 1}, // split siemens mosaic into multiple frames
+        {"pattern", 1, 0, 0},               // p
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -97,7 +102,7 @@ int main (int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:M:",
+    c = getopt_long (argc, argv, "i:o:Mp:",
       long_options, &option_index);
     if (c == -1)
       {
@@ -117,6 +122,12 @@ int main (int argc, char *argv[])
             assert( strcmp(s, "input") == 0 );
             assert( filename.empty() );
             filename = optarg;
+            }
+          else if( option_index == 3 ) /* pattern */
+            {
+            assert( strcmp(s, "pattern") == 0 );
+            assert( pattern.empty() );
+            pattern = optarg;
             }
           printf (" with arg %s, index = %d", optarg, option_index);
           }
@@ -138,6 +149,12 @@ int main (int argc, char *argv[])
     case 'M':
       //assert( outfilename.empty() );
       //outfilename = optarg;
+      mosaic = 1;
+      break;
+
+    case 'p':
+      assert( pattern.empty() );
+      pattern = optarg;
       break;
 
     case '?':
@@ -187,7 +204,18 @@ int main (int argc, char *argv[])
     PrintHelp();
     return 1;
     }
-  
+
+  // Debug is a little too verbose
+  gdcm::Trace::SetDebug( debug );
+  gdcm::Trace::SetWarning( warning );
+  gdcm::Trace::SetError( error );
+  // when verbose is true, make sure warning+error are turned on:
+  if( verbose )
+    {
+    gdcm::Trace::SetWarning( verbose );
+    gdcm::Trace::SetError( verbose);
+    }
+
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmtar" );
 
   if( mosaic )
@@ -210,14 +238,45 @@ int main (int argc, char *argv[])
       return 1;
       }
 
-    gdcm::ImageWriter writer;
-    writer.SetFileName( outfilename.c_str() );
-    writer.SetFile( filter.GetFile() );
-    writer.SetImage( filter.GetImage() );
-    if( !writer.Write() )
+    const gdcm::Image &image = filter.GetImage();
+    const unsigned int *dims = image.GetDimensions();
+    const gdcm::DataElement &pixeldata = image.GetDataElement();
+    const gdcm::ByteValue *bv = pixeldata.GetByteValue();
+    unsigned long slice_len = image.GetBufferLength() / dims[2];
+    //assert( image.GetBufferLength() == bv->GetLength() );
+
+    gdcm::FilenameGenerator fg;
+    fg.SetNumberOfFilenames( dims[2] );
+    fg.SetPrefix( outfilename.c_str() );
+    fg.SetPattern( pattern.c_str() );
+    if( !fg.Generate() )
       {
-      std::cerr << "Failed to write: " << outfilename << std::endl;
-      return 1;
+      std::cerr << "could not generate" << std::endl;
+      }
+
+    for(unsigned int i = 0; i < dims[2]; ++i)
+      {
+      const char *outfilenamei = fg.GetFilename(i);
+      gdcm::ImageWriter writer;
+      writer.SetFileName( outfilenamei );
+      //writer.SetFile( filter.GetFile() );
+      writer.SetFile( reader.GetFile() );
+      //
+      //writer.SetImage( filter.GetImage() );
+      gdcm::Image &slice = writer.GetImage();
+      slice = filter.GetImage();
+      assert( slice.GetPixelFormat() == filter.GetImage().GetPixelFormat() );
+      slice.SetNumberOfDimensions( 2 );
+      slice.SetSpacing(2, filter.GetImage().GetSpacing(2) );
+      gdcm::DataElement &pd = slice.GetDataElement();
+      const char *sliceptr = bv->GetPointer() + i * slice_len;
+      pd.SetByteValue( sliceptr, slice_len);
+      
+      if( !writer.Write() )
+        {
+        std::cerr << "Failed to write: " << outfilename << std::endl;
+        return 1;
+        }
       }
     
     return 0;

@@ -45,37 +45,60 @@ const char * FilenameGenerator::GetFilename(unsigned int n) const
 //-----------------------------------------------------------------------------
 bool FilenameGenerator::Generate()
 {
-  if( Pattern.empty() )
+  if( Pattern.empty() && Prefix.empty() )
     {
     return false;
     }
-  std::string::size_type pat_len = Pattern.size();
-  const unsigned int padding = 10; // FIXME is this large enough for all cases ?
-  const unsigned int internal_len = pat_len + padding;
-  const unsigned int numfiles = Filenames.size();
-  if( numfiles == 0 )
+  else if( Pattern.empty() && !Prefix.empty() ) // no pattern but a prefix
     {
-    gdcmDebugMacro( "Need to specify the number of files" );
-    // I am pretty sure this is an error:
-    return false;
+    const unsigned int numfiles = Filenames.size();
+    for( unsigned int i = 0; i < numfiles; ++i)
+      {
+      std::ostringstream os;
+      os << Prefix;
+      os << i;
+      Filenames[i] = os.str();
+      }
+    return true;
     }
-  bool success = true;
-  char *internal = new char[internal_len];
-  for( unsigned int i = 0; i < numfiles && success; ++i)
+  else if( !Pattern.empty() )
     {
-    int res = snprintf( internal, internal_len, Pattern.c_str(), i );
-    assert( res >= 0 );
-    success = (unsigned int)res < internal_len;
-    Filenames[i] = internal;
-    //assert( Filenames[i].size() == res ); // upon success only
+    std::string::size_type pat_len = Pattern.size();
+    const unsigned int padding = 10; // FIXME is this large enough for all cases ?
+    const unsigned int internal_len = pat_len + padding;
+    const unsigned int numfiles = Filenames.size();
+    if( numfiles == 0 )
+      {
+      gdcmDebugMacro( "Need to specify the number of files" );
+      // I am pretty sure this is an error:
+      return false;
+      }
+    bool success = true;
+    char *internal = new char[internal_len];
+    for( unsigned int i = 0; i < numfiles && success; ++i)
+      {
+      int res = snprintf( internal, internal_len, Pattern.c_str(), i );
+      assert( res >= 0 );
+      success = (unsigned int)res < internal_len;
+      if( Pattern.empty() )
+        {
+        Filenames[i] = internal;
+        }
+      else
+        {
+        Filenames[i] = Prefix + internal;
+        }
+      //assert( Filenames[i].size() == res ); // upon success only
+      }
+    delete[] internal;
+    if( !success )
+      {
+      Filenames.clear();
+      // invalidate size too ??
+      }
+    return success;
     }
-  delete[] internal;
-  if( !success )
-    {
-    Filenames.clear();
-    // invalidate size too ??
-    }
-  return success;
+  return false;
 }
 
 } // namespace gdcm

@@ -34,6 +34,7 @@
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmFragment.h"
 #include "gdcmFilename.h"
+#include "gdcmFilenameGenerator.h"
 #include "gdcmVersion.h"
 
 #include <string>
@@ -322,24 +323,17 @@ int main(int argc, char *argv[])
     if( splitfrags )
       {
       unsigned int nfrags = sf->GetNumberOfFragments();
+      gdcm::FilenameGenerator fg;
+      fg.SetNumberOfFilenames( nfrags );
+      fg.SetPrefix( outfilename.c_str() );
+      fg.SetPattern( pattern.c_str() );
+      fg.Generate();
       for(unsigned int i = 0; i < nfrags; ++i)
         {
         const gdcm::Fragment& frag = sf->GetFragment(i);
         const gdcm::ByteValue *fragbv = frag.GetByteValue();
-        std::ostringstream os;
-        os << outfilename;
-        if( pattern.empty() )
-          {
-          os << i;
-          }
-        else
-          {
-          char buffer[256]; // hope that's enough...
-          sprintf(buffer, pattern.c_str(), i);
-          os << buffer;
-          }
-        std::string outfilenamei = os.str();
-        std::ofstream outputi(outfilenamei.c_str(), std::ios::binary);
+        const char *outfilenamei = fg.GetFilename(i);
+        std::ofstream outputi(outfilenamei, std::ios::binary);
         fragbv->WriteBuffer(outputi);
         }
       }
