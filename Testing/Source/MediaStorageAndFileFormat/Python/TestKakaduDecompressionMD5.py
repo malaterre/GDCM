@@ -43,7 +43,7 @@ def TestKakadu(filename, kdu_expand):
   #print kdu_expand
   os.environ["LD_LIBRARY_PATH"]=kakadu_path
   ret = os.system( kdu_expand )
-  # now need to skip the ppm header:
+  # now need to skip the ppm header:
   dd_cmd = 'dd bs=15 skip=1 if=%s of = %s'%(output_ppm,output_raw)
   #print "ret:",ret
   md5 = gdcm.Testing.ComputeFileMD5( output_raw ) 
