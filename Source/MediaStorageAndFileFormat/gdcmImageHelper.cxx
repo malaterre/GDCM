@@ -897,7 +897,6 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
             }
           //assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
           std::stringstream os;
-          os.setf( std::ios::fixed );
           el.Write( os );
           de.SetVR( VR::DS );
           de.SetByteValue( os.str().c_str(), os.str().size() );
@@ -933,7 +932,6 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
             }
           //assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
           std::stringstream os;
-          os.setf( std::ios::fixed );
           el.Write( os );
           de.SetVR( VR::DS );
           de.SetByteValue( os.str().c_str(), os.str().size() );

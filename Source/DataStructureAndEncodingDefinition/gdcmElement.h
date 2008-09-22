@@ -26,6 +26,8 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <limits>
+#include <cmath>
 
 namespace gdcm
 {
@@ -153,6 +155,44 @@ public:
       }
     }
 };
+
+template < typename Float >
+std::string to_string ( Float data ) {
+  std::stringstream in;
+  unsigned long const digits =
+    static_cast< unsigned long >(
+    - std::log( std::numeric_limits<Float>::epsilon() )
+    / std::log( 10.0 ) );
+  if ( in << std::dec << std::setprecision(/*2+*/digits) << data ) {
+    return ( in.str() );
+  } else {
+    throw "Impossible Conversion"; // should not happen ...
+  }
+} 
+
+/* Writting VR::DS is not that easy after all */
+// http://groups.google.com/group/comp.lang.c++/browse_thread/thread/69ccd26f000a0802
+template<> inline void EncodingImplementation<VR::VRASCII>::Write(const float * data, unsigned long length, std::ostream &_os)  {
+    assert( data );
+    assert( length );
+    assert( _os );
+    _os << to_string(data[0]);
+    for(unsigned long i=1; i<length; ++i) {
+      assert( _os );
+      _os << "\\" << to_string(data[i]);
+      }
+    }
+
+template<> inline void EncodingImplementation<VR::VRASCII>::Write(const double* data, unsigned long length, std::ostream &_os)  {
+    assert( data );
+    assert( length );
+    assert( _os );
+    _os << to_string(data[0]);
+    for(unsigned long i=1; i<length; ++i) {
+      assert( _os );
+      _os << "\\" << to_string(data[i]);
+      }
+    }
 
 
 // Implementation to perform binary read and write

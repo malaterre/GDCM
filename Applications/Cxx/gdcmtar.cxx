@@ -283,10 +283,10 @@ int main (int argc, char *argv[])
       //writer.SetImage( filter.GetImage() );
       gdcm::Image &slice = writer.GetImage();
       slice = filter.GetImage();
-      assert( slice.GetPixelFormat() == filter.GetImage().GetPixelFormat() );
-      slice.SetSpacing(2, filter.GetImage().GetSpacing(2) );
       slice.SetOrigin( new_origin );
       slice.SetNumberOfDimensions( 2 );
+      assert( slice.GetPixelFormat() == filter.GetImage().GetPixelFormat() );
+      slice.SetSpacing(2, filter.GetImage().GetSpacing(2) );
       //slice.Print( std::cout );
       gdcm::DataElement &pd = slice.GetDataElement();
       const char *sliceptr = bv->GetPointer() + i * slice_len;
