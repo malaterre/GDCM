@@ -119,28 +119,28 @@ bool GetInterceptSlopeValueFromSequence(const DataSet& ds, const Tag& tfgs, std:
   assert( sqi2 );
   const Item &item2 = sqi2->GetItem(1);
   const DataSet & subds2 = item2.GetNestedDataSet();
-{
-  //  (0028,1052) DS [0]                                        # 2,1 Rescale Intercept
-  const Tag tps(0x0028,0x1052);
-  if( !subds2.FindDataElement(tps) ) return false;
-  const DataElement &de = subds2.GetDataElement( tps );
-  //assert( bv );
-  gdcm::Attribute<0x0028,0x1052> at;
-  at.SetFromDataElement( de );
-  //at.Print( std::cout );
-  intslope.push_back( at.GetValue() );
-}
-{
-  // (0028,1053) DS [5.65470085470085]                         # 16,1 Rescale Slope
-  const Tag tps(0x0028,0x1053);
-  if( !subds2.FindDataElement(tps) ) return false;
-  const DataElement &de = subds2.GetDataElement( tps );
-  //assert( bv );
-  gdcm::Attribute<0x0028,0x1053> at;
-  at.SetFromDataElement( de );
-  //at.Print( std::cout );
-  intslope.push_back( at.GetValue() );
-}
+    {
+    //  (0028,1052) DS [0]                                        # 2,1 Rescale Intercept
+    const Tag tps(0x0028,0x1052);
+    if( !subds2.FindDataElement(tps) ) return false;
+    const DataElement &de = subds2.GetDataElement( tps );
+    //assert( bv );
+    gdcm::Attribute<0x0028,0x1052> at;
+    at.SetFromDataElement( de );
+    //at.Print( std::cout );
+    intslope.push_back( at.GetValue() );
+    }
+    {
+    // (0028,1053) DS [5.65470085470085]                         # 16,1 Rescale Slope
+    const Tag tps(0x0028,0x1053);
+    if( !subds2.FindDataElement(tps) ) return false;
+    const DataElement &de = subds2.GetDataElement( tps );
+    //assert( bv );
+    gdcm::Attribute<0x0028,0x1053> at;
+    at.SetFromDataElement( de );
+    //at.Print( std::cout );
+    intslope.push_back( at.GetValue() );
+    }
 
   assert( intslope.size() == 2 );
   return true;
