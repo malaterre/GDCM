@@ -77,7 +77,6 @@
 #include "gdcmUIDGenerator.h"
 #include "gdcmImageChangeTransferSyntax.h"
 #include "gdcmImageApplyLookupTable.h"
-#include "gdcmSplitMosaicFilter.h"
 #include "gdcmImageFragmentSplitter.h"
 #include "gdcmImageChangePlanarConfiguration.h"
 
@@ -114,7 +113,6 @@ void PrintHelp()
   std::cout << "Options:" << std::endl;
   //std::cout << "  -l --lut       Apply LUT." << std::endl;
   std::cout << "  -C --check-meta Check File Meta Information." << std::endl;
-  std::cout << "  -M --mosaic     Split SIEMENS Mosaic image into multiple frames." << std::endl;
   std::cout << "  -W --raw        Decompress image." << std::endl;
   std::cout << "  -J --jpeg       Compress image in jpeg." << std::endl;
   std::cout << "  -K --j2k        Compress image in j2k." << std::endl;
@@ -142,7 +140,6 @@ int main (int argc, char *argv[])
   std::string outfilename;
   std::string root;
   int lut = 0;
-  int mosaic = 0;
   int raw = 0;
   int rootuid = 0;
   int checkmeta = 0;
@@ -194,7 +191,6 @@ int main (int argc, char *argv[])
         {"rle", 0, &rle, 1}, // lossless !
         {"mpeg2", 0, 0, 0}, // lossy !
         {"jpip", 0, 0, 0}, // ??
-        {"mosaic", 0, &mosaic, 1}, // split siemens mosaic into multiple frames
         {"split", 1, &split, 1}, // split fragments
         {"planar-configuration", 1, &planarconf, 1}, // Planar Configuration
 
@@ -327,44 +323,6 @@ int main (int argc, char *argv[])
     {
     std::cerr << "not supported for now" << std::endl;
     return 1;
-    }
-
-  if( mosaic )
-    {
-    std::cerr << "Not implemented" << std::endl;
-    return 1;
-    }
-  if( mosaic )
-    {
-    gdcm::ImageReader reader;
-    reader.SetFileName( filename.c_str() );
-    if( !reader.Read() )
-      {
-      std::cerr << "could not read: " << filename << std::endl;
-      return 1;
-      }
-
-    gdcm::SplitMosaicFilter filter;
-    filter.SetImage( reader.GetImage() );
-    filter.SetFile( reader.GetFile() );
-    bool b = filter.Split();
-    if( !b )
-      {
-      std::cerr << "Could not split << " << filename << std::endl;
-      return 1;
-      }
-
-    gdcm::ImageWriter writer;
-    writer.SetFileName( outfilename.c_str() );
-    writer.SetFile( filter.GetFile() );
-    writer.SetImage( filter.GetImage() );
-    if( !writer.Write() )
-      {
-      std::cerr << "Failed to write: " << outfilename << std::endl;
-      return 1;
-      }
-    
-    return 0;
     }
 
   // split fragments

@@ -37,6 +37,7 @@ SET(GDCM_EXECUTABLE_NAME
   gdcmimg
   #deflate
   gdcmconv
+  gdcmtar
   gdcminfo
   )
 
