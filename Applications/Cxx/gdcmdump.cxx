@@ -38,12 +38,14 @@
 
 int color = 0;
 
+int ignoreerrors = 0;
+
 template <typename TPrinter>
 int DoOperation(const std::string & filename)
 {
   gdcm::Reader reader;
   reader.SetFileName( filename.c_str() );
-  if( !reader.Read() )
+  if( !reader.Read() && !ignoreerrors )
     {
     std::cerr << "Failed to read: " << filename << std::endl;
     return 1;
@@ -185,6 +187,8 @@ void PrintHelp()
   std::cout << "  -E --error     print error info." << std::endl;
   std::cout << "  -h --help      print help." << std::endl;
   std::cout << "  -v --version   print version." << std::endl;
+  std::cout << "Special Options:" << std::endl;
+  std::cout << "  -I --ignore-errors   print even if file is corrupted." << std::endl;
 }
 
 
@@ -232,6 +236,7 @@ int main (int argc, char *argv[])
         {"error", 0, &error, 1},
         {"help", 0, &help, 1},
         {"version", 0, &version, 1},
+        {"ignore-errors", 0, &ignoreerrors, 1},
         {0, 0, 0, 0} // required
     };
     static const char short_options[] = "i:xrpdcCPVWDEhv";

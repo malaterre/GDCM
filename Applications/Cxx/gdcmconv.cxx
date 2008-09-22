@@ -128,6 +128,8 @@ void PrintHelp()
   std::cout << "  -E --error      print error info." << std::endl;
   std::cout << "  -h --help       print help." << std::endl;
   std::cout << "  -v --version    print version." << std::endl;
+  std::cout << "Special Options:" << std::endl;
+  std::cout << "  -I --ignore-errors   print even if file is corrupted (advanced users only, see disclaimers)." << std::endl;
 }
 
 
@@ -158,6 +160,7 @@ int main (int argc, char *argv[])
   int error = 0;
   int help = 0;
   int version = 0;
+  int ignoreerrors = 0;
 
   while (1) {
     //int this_option_optind = optind ? optind : 1;
@@ -201,6 +204,7 @@ int main (int argc, char *argv[])
         {"error", 0, &error, 1},
         {"help", 0, &help, 1},
         {"version", 0, &version, 1},
+        {"ignore-errors", 0, &ignoreerrors, 1},
 
         {0, 0, 0, 0}
     };
@@ -532,8 +536,17 @@ int main (int argc, char *argv[])
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
-      std::cerr << "Failed to read: " << filename << std::endl;
-      return 1;
+      if( ignoreerrors )
+        {
+        std::cerr << "WARNING: an error was found during the reading of your DICOM file." << std::endl;
+        std::cerr << "gdcmconv will still try to continue and rewrite your DICOM file." << std::endl;
+        std::cerr << "There is absolutely no garantee that your output file will be valid." << std::endl;
+        }
+      else
+        {
+        std::cerr << "Failed to read: " << filename << std::endl;
+        return 1;
+        }
       }
 
 #if 0
