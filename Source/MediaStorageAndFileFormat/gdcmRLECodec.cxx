@@ -695,10 +695,14 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
     signed char byte;
     //std::cerr << "Length: " << Length << "\n";
     //assert( (uint32_t)is.Tellg() == frame.Header.Offset[i] );
+
+    // FIXME: ALOKA_SSD-8-MONO2-RLE-SQ.dcm 
+    // I think the RLE decoder is off by one, we are reading in 128001 byte, while only 128000
+    // are present
     while( numOutBytes < length )
       {
-      //std::cerr << "numOutBytes: " << numOutBytes << " / " << length << "\n";
       is.read((char*)&byte, 1);
+      assert( is.good() );
       numberOfReadBytes++;
       if( byte >= 0 /*&& byte <= 127*/ ) /* 2nd is always true */
         {
@@ -712,20 +716,22 @@ bool RLECodec::Decode(std::istream &is, std::ostream &os)
         char nextByte;
         is.read( &nextByte, 1);
         numberOfReadBytes += 1;
-        for( int c = 0; c < -byte + 1; ++c )
-          {
-          dummy_buffer[c] = nextByte;
-          }
+        memset(dummy_buffer, nextByte, -byte + 1);
+        //for( int c = 0; c < -byte + 1; ++c )
+        //  {
+        //  dummy_buffer[c] = nextByte;
+        //  }
         numOutBytes += -byte + 1;
         tmpos.write( dummy_buffer, -byte+1 );
         }
       else /* byte == -128 */
         {
         assert( byte == -128 );
-abort();
         }
         assert( is.eof()
         || numberOfReadBytes + frame.Header.Offset[i] - is.tellg() == 0);
+      //std::cerr << "numOutBytes: " << numOutBytes << " / " << length << "\n";
+      //std::cerr << "numberOfReadBytes: " << numberOfReadBytes << "\n";
       }
     assert( numOutBytes == length );
     }

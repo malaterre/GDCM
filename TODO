@@ -218,3 +218,21 @@ gdcmconv --jpeg -i  gdcmData/GE_DLX-8-MONO2-Multiframe.dcm -o bla2.dcm
 creates VR::UN add a couple more attributes...
 -----------------------------------------------------------------------
 BasicOffsetTable is never computed...
+-----------------------------------------------------------------------
+Need a gdcm::DataSetToPythonDict class
+-----------------------------------------------------------------------
+Need a gdcm::ApplyRuleFilter class
+
+where Addrule:
+
+void AddRule( void(*func)(DataElement &de) )
+
+where
+
+void func(DataElement &de)
+{
+  if( de.IsPrivate() )
+    {
+    ds.Remove( de );
+    }
+}
