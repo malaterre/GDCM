@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL: https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk/Applications/Cxx/gdcmconv.cxx $
+  Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
   All rights reserved.
@@ -24,6 +24,7 @@
 #include "gdcmVersion.h"
 #include "gdcmImageReader.h"
 #include "gdcmImageWriter.h"
+#include "gdcmSplitMosaicFilter.h"
 
 #include <string>
 #include <iostream>
@@ -36,7 +37,7 @@
 void PrintVersion()
 {
   std::cout << "gdcmtar: gdcm " << gdcm::Version::GetVersion() << " ";
-  const char date[] = "$Date: 2008-09-19 10:35:20 +0200 (Fri, 19 Sep 2008) $";
+  const char date[] = "$Date$";
   std::cout << date << std::endl;
 }
 
@@ -116,22 +117,6 @@ int main (int argc, char *argv[])
             assert( strcmp(s, "input") == 0 );
             assert( filename.empty() );
             filename = optarg;
-            }
-          else if( option_index == 14 ) /* root-uid */
-            {
-            assert( strcmp(s, "root-uid") == 0 );
-            assert( root.empty() );
-            root = optarg;
-            }
-          else if( option_index == 28 ) /* split */
-            {
-            assert( strcmp(s, "split") == 0 );
-            split = atoi(optarg);
-            }
-          else if( option_index == 29 ) /* planar conf*/
-            {
-            assert( strcmp(s, "planar-configuration") == 0 );
-            planarconf = atoi(optarg);
             }
           printf (" with arg %s, index = %d", optarg, option_index);
           }
