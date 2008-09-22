@@ -213,6 +213,7 @@ doxy2swig.py
 http://www.ae.iitm.ac.in/~prabhu/software/code/python/doxy2swig.py
 -----------------------------------------------------------------------
 Need an ExplicitFilter before next release
++ check USE_PVRG works on WIN32 system
 -----------------------------------------------------------------------
 gdcmconv --jpeg -i  gdcmData/GE_DLX-8-MONO2-Multiframe.dcm -o bla2.dcm
 creates VR::UN add a couple more attributes...
