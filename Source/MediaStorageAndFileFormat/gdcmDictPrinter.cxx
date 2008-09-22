@@ -33,6 +33,7 @@ DictPrinter::~DictPrinter()
 
 VM GuessVMType(DataElement const &de)
 {
+  if( de.IsEmpty() ) return VM::VM1;
   const VR &vr = de.GetVR();
   const VL &vl = de.GetVL();
   const Value& value = de.GetValue();
