@@ -291,7 +291,7 @@ int main (int argc, char *argv[])
       gdcm::DataElement &pd = slice.GetDataElement();
       const char *sliceptr = bv->GetPointer() + i * slice_len;
       pd.SetByteValue( sliceptr, slice_len);
-      
+
       if( !writer.Write() )
         {
         std::cerr << "Failed to write: " << outfilename << std::endl;

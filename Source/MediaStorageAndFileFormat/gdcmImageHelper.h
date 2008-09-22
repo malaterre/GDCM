@@ -44,18 +44,23 @@ class Image;
 class GDCM_EXPORT ImageHelper
 {
 public:
+  /// Set/Get shift/scale from/to a file
   static std::vector<double> GetRescaleInterceptSlopeValue(File const & f);
   static void SetRescaleInterceptSlopeValue(File & f, const Image & img);
 
+  /// Set/Get Origin (IPP) from/to a file
   static std::vector<double> GetOriginValue(File const & f);
   static void SetOriginValue(DataSet & ds, const Image & img);
 
+  /// Set/Get Direction Cosines (IOP) from/to a file
   static std::vector<double> GetDirectionCosinesValue(File const & f);
   static void SetDirectionCosinesValue(DataSet & ds, const std::vector<double> & dircos);
 
+  /// Set/Get Spacing from/to a File
   static std::vector<double> GetSpacingValue(File const & f);
   static void SetSpacingValue(DataSet & ds, const std::vector<double> & spacing);
 
+  /// DO NOT USE
   static bool ComputeSpacingFromImagePositionPatient(const std::vector<double> &imageposition, std::vector<double> & spacing);
 
 protected:

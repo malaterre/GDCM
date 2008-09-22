@@ -163,9 +163,8 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
   const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
   assert( sqi );
   double normal[3];
-  normal[0] = cosines[1]*cosines[5] - cosines[2]*cosines[4];
-  normal[1] = cosines[2]*cosines[3] - cosines[0]*cosines[5];
-  normal[2] = cosines[0]*cosines[4] - cosines[1]*cosines[3];
+  DirectionCosines dc( &cosines[0] );
+  dc.Cross( normal );
 
   // For each item
   std::vector<double> distances;
@@ -1036,11 +1035,10 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
     double zspacing = image.GetSpacing(2);
     unsigned int dimz = image.GetDimension(2);
     const double *cosines = image.GetDirectionCosines();
+    DirectionCosines dc( cosines );
 
     double normal[3];
-    normal[0] = cosines[1]*cosines[5] - cosines[2]*cosines[4];
-    normal[1] = cosines[2]*cosines[3] - cosines[0]*cosines[5];
-    normal[2] = cosines[0]*cosines[4] - cosines[1]*cosines[3];
+    dc.Cross( normal );
 
     for(unsigned int i = 0; i < dimz; ++i )
       {
@@ -1283,6 +1281,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
 
 bool ImageHelper::ComputeSpacingFromImagePositionPatient(const std::vector<double> & imageposition, std::vector<double> & spacing)
 {
+abort();
   if( imageposition.size() % 3 != 0 )
     {
     return false;
