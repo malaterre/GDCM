@@ -1260,7 +1260,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
 
   // Question: should I always insert them ?
   // Answer: not always, let's discard MR if (1,0):
-  if( /*ms == MediaStorage::MRImageStorage &&*/ img.GetIntercept() == 0. && img.GetSlope() == 1. )
+  if( ms == MediaStorage::MRImageStorage && img.GetIntercept() == 0. && img.GetSlope() == 1. )
     {
     }
   else
