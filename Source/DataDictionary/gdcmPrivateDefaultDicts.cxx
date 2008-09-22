@@ -38,6 +38,8 @@ typedef struct
 } DICT_ENTRY;
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
+{0x0009,0x0000,"EMAGEON STUDY HOME",VR::IS,VM::VM1,"?",false},
+{0x0009,0x0001,"EMAGEON STUDY HOME",VR::LO,VM::VM1,"?",false},
   {0x0029,0x0000,"1.2.840.113663.1",VR::US,VM::VM1,"?",false },
   {0x0029,0x0001,"1.2.840.113663.1",VR::US,VM::VM1,"?",false },
   {0x0019,0x0010,"1.2.840.113681",VR::ST,VM::VM1,"CR Image Params Common",false },
