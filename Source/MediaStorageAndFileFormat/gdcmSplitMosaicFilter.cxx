@@ -63,7 +63,7 @@ bool SplitMosaicFilter::Split()
   if( ds.FindDataElement( t1 ) )
     {
     csa.LoadFromDataElement( ds.GetDataElement( t1 ) );
-    csa.Print( std::cout );
+    //csa.Print( std::cout );
     }
 
   //int dims[2] = { 448, 448 };
@@ -90,7 +90,7 @@ bool SplitMosaicFilter::Split()
 
   // SliceThickness ??
  	const gdcm::CSAElement &csael4 = csa.GetCSAElementByName( "NumberOfImagesInMosaic" );
-  std::cout << csael4 << std::endl;
+  //std::cout << csael4 << std::endl;
   gdcm::Element<gdcm::VR::IS, gdcm::VM::VM1> el4;
   el4.Set( csael4.GetValue() );
   int numberOfImagesInMosaic = el4.GetValue();
@@ -121,8 +121,8 @@ bool SplitMosaicFilter::Split()
   //const gdcm::DataElement & pixeldata = ds.GetDataElement( gdcm::Tag(0x7fe0,0x0010) );
   //const gdcm::VL &l = pixeldata.GetVL();
   const int p =  l / (dims[0] * dims[1]);
-  std::cout << "VL:" << l << std::endl;
-  std::cout << "pixel:" << p << std::endl;
+  //std::cout << "VL:" << l << std::endl;
+  //std::cout << "pixel:" << p << std::endl;
 
   gdcm::Image &image = GetImage();
   //image.SetNumberOfDimensions( 2 ); // good default

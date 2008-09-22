@@ -27,6 +27,8 @@
 #include "gdcmImageWriter.h"
 #include "gdcmSplitMosaicFilter.h"
 #include "gdcmFilenameGenerator.h"
+#include "gdcmDirectionCosines.h"
+#include "gdcmImageHelper.h"
 
 #include <string>
 #include <iostream>
@@ -252,22 +254,40 @@ int main (int argc, char *argv[])
     if( !fg.Generate() )
       {
       std::cerr << "could not generate" << std::endl;
+      return 1;
       }
+    const double *cosines = image.GetDirectionCosines();
+    gdcm::DirectionCosines dc( cosines );
+    double normal[3];
+    dc.Cross( normal );
+    const double *origin = image.GetOrigin();
+    double zspacing = image.GetSpacing(2);
 
     for(unsigned int i = 0; i < dims[2]; ++i)
       {
+      double new_origin[3];
+      for (int j = 0; j < 3; j++)
+        {
+        // the n'th slice is n * z-spacing aloung the IOP-derived
+        // z-axis
+        new_origin[j] = origin[j] + normal[j] * i * zspacing;
+        }
+
       const char *outfilenamei = fg.GetFilename(i);
       gdcm::ImageWriter writer;
       writer.SetFileName( outfilenamei );
       //writer.SetFile( filter.GetFile() );
       writer.SetFile( reader.GetFile() );
+
       //
       //writer.SetImage( filter.GetImage() );
       gdcm::Image &slice = writer.GetImage();
       slice = filter.GetImage();
       assert( slice.GetPixelFormat() == filter.GetImage().GetPixelFormat() );
-      slice.SetNumberOfDimensions( 2 );
       slice.SetSpacing(2, filter.GetImage().GetSpacing(2) );
+      slice.SetOrigin( new_origin );
+      slice.SetNumberOfDimensions( 2 );
+      //slice.Print( std::cout );
       gdcm::DataElement &pd = slice.GetDataElement();
       const char *sliceptr = bv->GetPointer() + i * slice_len;
       pd.SetByteValue( sliceptr, slice_len);
