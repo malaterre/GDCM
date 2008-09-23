@@ -17,6 +17,7 @@
 #include "gdcmElement.h"
 #include "gdcmByteValue.h"
 #include "gdcmAttribute.h"
+#include "gdcmDataSetHelper.h"
 
 namespace gdcm
 {
@@ -111,30 +112,11 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t) con
     if( bv )
       {
       VM::VMType vm = entry.GetVM();
+      //assert( vm == VM::VM1 );
       if( vr == VR::US_SS )
         {
-        // I believe all US_SS VR derived from the value from 0028,0103 ... except 0028,0071
-        if( t != Tag(0x0028,0x0071) )
-          {
-          // In case of SAX parser, we would have had to process Pixel Representation already:
-          Tag pixelrep(0x0028,0x0103);
-          assert( pixelrep < t );
-          const DataSet &rootds = F->GetDataSet();
-          assert( ds.FindDataElement( pixelrep ) );
-          Attribute<0x0028,0x0103> at;
-          at.SetFromDataElement( ds.GetDataElement( pixelrep ) );
-          assert( at.GetValue() == 0 || at.GetValue() == 1 );
-          if( at.GetValue() )
-            {
-            vr = VR::SS;
-            }
-          else
-            {
-            vr = VR::US;
-            }
-          }
+        vr = DataSetHelper::ComputeVR(GetFile(),ds, t);
         }
-      //assert( vm == VM::VM1 );
       std::ostringstream os;
       switch(vr)
         {
