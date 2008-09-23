@@ -137,7 +137,7 @@ void vtkGDCMThreadedImageReader2Execute(vtkGDCMThreadedImageReader2 *self,
     unsigned int numoverlays = image.GetNumberOfOverlays();
     if( numoverlays )
       {
-      vtkImageData *vtkimage = self->GetOutput(OVERLAYPORTNUMBER);
+      vtkImageData *vtkimage = self->GetOutput(OverlayPortNumber);
       const gdcm::Overlay& ov = image.GetOverlay();
       unsigned char * overlaypointer = static_cast<unsigned char*>(vtkimage->GetScalarPointer());
       ov.GetUnpackBuffer(overlaypointer);
