@@ -23,6 +23,9 @@
  * -t : tag (can be specified multiple times)
  * -p : print
  * -r : recursive (enter subdir of main directory)
+ *
+ * TODO:
+ * --bench...
  */
 
 #include "gdcmScanner.h"
@@ -219,17 +222,25 @@ int main(int argc, char *argv[])
     PrintHelp();
     return 1;
     }
-  // else
-  //std::cout << "Filename: " << filename << std::endl;
+  // Debug is a little too verbose
+  gdcm::Trace::SetDebug( debug );
+  gdcm::Trace::SetWarning( warning );
+  gdcm::Trace::SetError( error );
+  // when verbose is true, make sure warning+error are turned on:
+  if( verbose )
+    {
+    gdcm::Trace::SetWarning( verbose );
+    gdcm::Trace::SetError( verbose);
+    }
+
   if( verbose )
     {
     std::cout << "Will parse: " << dirname << std::endl;
     std::cout << "Looking for tags: \n";
+    std::copy(tags.begin(), tags.end(), 
+      std::ostream_iterator<gdcm::Tag>( std::cout, "\n"));
+    //std::cout << std::endl;
     }
-  std::copy(tags.begin(), tags.end(), 
-    std::ostream_iterator<gdcm::Tag>( std::cout, "\n"));
-  //std::cout << std::endl;
-  gdcm::Trace::WarningOff();
 
   gdcm::Directory d;
   unsigned int nfiles = d.Load( dirname.c_str(), recursive );

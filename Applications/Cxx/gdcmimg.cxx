@@ -175,7 +175,7 @@ int main (int argc, char *argv[])
     // I -> input directory
     // o -> output file
     // O -> output directory
-    c = getopt_long (argc, argv, "i:o:I:O:d:s:R:F:",
+    c = getopt_long (argc, argv, "i:o:I:O:d:s:R:F:VWDEhv",
       long_options, &option_index);
     if (c == -1)
       {
@@ -251,6 +251,30 @@ int main (int argc, char *argv[])
       fill = 1;
       break;
 
+    case 'V':
+      verbose = 1;
+      break;
+
+    case 'W':
+      warning = 1;
+      break;
+
+    case 'D':
+      debug = 1;
+      break;
+
+    case 'E':
+      error = 1;
+      break;
+
+    case 'h':
+      help = 1;
+      break;
+
+    case 'v':
+      version = 1;
+      break;
+
     case '?':
       break;
 
@@ -301,6 +325,17 @@ int main (int argc, char *argv[])
     return 1;
     }
 
+  // Debug is a little too verbose
+  gdcm::Trace::SetDebug( debug );
+  gdcm::Trace::SetWarning( warning );
+  gdcm::Trace::SetError( error );
+  // when verbose is true, make sure warning+error are turned on:
+  if( verbose )
+    {
+    gdcm::Trace::SetWarning( verbose );
+    gdcm::Trace::SetError( verbose);
+    }
+ 
   const char *inputextension = filename.GetExtension();
   const char *outputextension = outfilename.GetExtension();
   if( !inputextension || !outputextension ) return 1;

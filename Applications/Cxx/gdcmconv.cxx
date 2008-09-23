@@ -108,10 +108,10 @@ void PrintHelp()
   std::cout << "Usage: gdcmconv [OPTION] -i input.dcm -o output.dcm" << std::endl;
   std::cout << "Convert a DICOM file into another DICOM file.\n";
   std::cout << "Parameter (required):" << std::endl;
-  std::cout << "  -i --input     DICOM filename" << std::endl;
-  std::cout << "  -o --output    DICOM filename" << std::endl;
+  std::cout << "  -i --input      DICOM filename" << std::endl;
+  std::cout << "  -o --output     DICOM filename" << std::endl;
   std::cout << "Options:" << std::endl;
-  std::cout << "  -l --lut       Apply LUT." << std::endl;
+  std::cout << "  -l --lut        Apply LUT." << std::endl;
   std::cout << "  -C --check-meta Check File Meta Information." << std::endl;
   std::cout << "  -W --raw        Decompress image." << std::endl;
   std::cout << "  -J --jpeg       Compress image in jpeg." << std::endl;
@@ -209,7 +209,7 @@ int main (int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:",
+    c = getopt_long (argc, argv, "i:o:VWDEhv",
       long_options, &option_index);
     if (c == -1)
       {
@@ -264,6 +264,30 @@ int main (int argc, char *argv[])
       outfilename = optarg;
       break;
 
+    case 'V':
+      verbose = 1;
+      break;
+
+    case 'W':
+      warning = 1;
+      break;
+
+    case 'D':
+      debug = 1;
+      break;
+
+    case 'E':
+      error = 1;
+      break;
+
+    case 'h':
+      help = 1;
+      break;
+
+    case 'v':
+      version = 1;
+      break;
+
     case '?':
       break;
 
@@ -311,7 +335,18 @@ int main (int argc, char *argv[])
     PrintHelp();
     return 1;
     }
-  
+
+  // Debug is a little too verbose
+  gdcm::Trace::SetDebug( debug );
+  gdcm::Trace::SetWarning( warning );
+  gdcm::Trace::SetError( error );
+  // when verbose is true, make sure warning+error are turned on:
+  if( verbose )
+    {
+    gdcm::Trace::SetWarning( verbose );
+    gdcm::Trace::SetError( verbose);
+    }
+ 
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmconv" );
   if( rootuid )
     {

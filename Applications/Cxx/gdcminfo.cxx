@@ -261,7 +261,7 @@ int main(int argc, char *argv[])
       filename = optarg;
       break;
 
-   case 'V':
+    case 'V':
       verbose = 1;
       break;
 
