@@ -23,13 +23,13 @@ You need to have dcmdump/dcmdrle/dcmdjpeg in your PATH
 def TestDCMTKMD5( filename, verbose = False ):
   blacklist = [
   # Get rid of DICOMDIR if any:
-  DICOMDIR
-  DICOMDIR_MR_B_VA12A
-  DICOMDIR-Philips-EasyVision-4200-Entries
-  dicomdir_Acusson_WithPrivate_WithSR
-  dicomdir_Pms_With_heavy_embedded_sequence
-  dicomdir_Pms_WithVisit_WithPrivate_WithStudyComponents
-  dicomdir_With_embedded_icons
+  'DICOMDIR',
+  'DICOMDIR_MR_B_VA12A',
+  'DICOMDIR-Philips-EasyVision-4200-Entries',
+  'dicomdir_Acusson_WithPrivate_WithSR',
+  'dicomdir_Pms_With_heavy_embedded_sequence',
+  'dicomdir_Pms_WithVisit_WithPrivate_WithStudyComponents',
+  'dicomdir_With_embedded_icons',
   # Unsupported file:
   'SignedShortLosslessBug.dcm',
   'JDDICOM_Sample2.dcm',
