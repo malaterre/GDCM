@@ -104,7 +104,7 @@ int main (int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:Mp:",
+    c = getopt_long (argc, argv, "i:o:Mp:VWDEhv",
       long_options, &option_index);
     if (c == -1)
       {
@@ -157,6 +157,30 @@ int main (int argc, char *argv[])
     case 'p':
       assert( pattern.empty() );
       pattern = optarg;
+      break;
+
+    case 'V':
+      verbose = 1;
+      break;
+
+    case 'W':
+      warning = 1;
+      break;
+
+    case 'D':
+      debug = 1;
+      break;
+
+    case 'E':
+      error = 1;
+      break;
+
+    case 'h':
+      help = 1;
+      break;
+
+    case 'v':
+      version = 1;
       break;
 
     case '?':
@@ -300,6 +324,11 @@ int main (int argc, char *argv[])
       }
     
     return 0;
+    }
+  else
+    {
+    std::cerr << "Not implemented for now" << std::endl;
+    return 1;
     }
 
 

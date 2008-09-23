@@ -143,6 +143,7 @@ void PrintValue(VR::VRType const &vr, VM const &vm, const Value &v);
 //-----------------------------------------------------------------------------
 void Printer::PrintElement(std::ostream& os, const DataElement &xde, const DictEntry& entry) 
 {
+abort();
   const Tag &t = xde.GetTag();
   const VR &vr = xde.GetVR();
   const VL &vl = xde.GetVL();
