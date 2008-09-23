@@ -1281,7 +1281,6 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
 
 bool ImageHelper::ComputeSpacingFromImagePositionPatient(const std::vector<double> & imageposition, std::vector<double> & spacing)
 {
-abort();
   if( imageposition.size() % 3 != 0 )
     {
     return false;
