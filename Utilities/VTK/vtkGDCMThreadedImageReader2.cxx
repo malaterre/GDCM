@@ -54,6 +54,8 @@ vtkGDCMThreadedImageReader2::vtkGDCMThreadedImageReader2()
   this->DataSpacing[0] = DataSpacing[1] = DataSpacing[2] = 1;
   this->DataOrigin[0] = DataOrigin[1] = DataOrigin[2] = 0;
   memset(this->IconImageDataExtent,0,6*sizeof(*IconImageDataExtent));
+  this->Shift = 0.;
+  this->Scale = 1.;
 }
 
 //----------------------------------------------------------------------------
@@ -100,6 +102,7 @@ void vtkGDCMThreadedImageReader2Execute(vtkGDCMThreadedImageReader2 *self,
   // case where we have a series of 2D files and the case where we have a single multi-frames
   // files...
   int maxfiles = self->GetFileNames()->GetNumberOfValues();
+  const unsigned long params_len = self->GetOutput()->GetNumberOfPoints() * self->GetOutput()->GetScalarSize() / maxfiles;
   for( int i = outExt[4]; i <= outExt[5] && i < maxfiles; ++i )
     {
     assert( i < maxfiles );
@@ -123,12 +126,67 @@ void vtkGDCMThreadedImageReader2Execute(vtkGDCMThreadedImageReader2 *self,
     reader.SetFileName( filename );
     if( !reader.Read() )
       {
-      abort();
+      vtkGenericWarningMacro( "Could not read: " << filename );
+      //memset(pointer,);
+      return;
       }
     const gdcm::Image &image = reader.GetImage();
     unsigned long len = image.GetBufferLength();
     image.GetBuffer(pointer);
-    (void)len;
+
+    unsigned int numoverlays = image.GetNumberOfOverlays();
+    if( numoverlays )
+      {
+      //const gdcm::Overlay& ov = image.GetOverlay();
+      //unsigned char * overlaypointer = params->overlayscalarpointer;
+      //unsigned char *tempimage2 = overlaypointer + file*params->overlaylen;
+      //memset(tempimage2,0,params->overlaylen);
+      //assert( (unsigned long)ov.GetRows()*ov.GetColumns() <= params->overlaylen );
+      //ov.GetUnpackBuffer(tempimage2);
+      }
+
+    const double shift = image.GetIntercept();
+    const double scale = image.GetSlope();
+
+    if( shift != 1 || scale != 0 )
+      {
+      const int shift_int = (int)shift;
+      const int scale_int = (int)scale;
+      if( scale == 1 && shift == (double)shift_int )
+        {
+        unsigned short *out = (unsigned short*)pointer;
+        unsigned short *pout = out;
+        for( ; pout != out + params_len / sizeof(unsigned short); ++pout )
+          {
+          *pout = *pout + (short)shift;
+          }
+        }
+      else if ( shift == 0 && scale != (double)scale_int )
+        {
+        // FIXME TODO tempimage stored the DICOM image at the beginning of the buffer,
+        // we could avoid duplicating the memory by iterating over the buffer starting
+        // from the end and filling out the target buffer by the end...
+        // scale is a float !!
+        char * duplicate = new char[len];
+        memcpy(duplicate,pointer,len);
+        const unsigned short *in = (unsigned short*)duplicate;
+        const unsigned short *pin = in;
+        float *out = (float*)pointer;
+        float *pout = out;
+        for( ; pout != out + params_len / sizeof(float); ++pout )
+          {
+          *pout = *pin * (float)scale; // scale is a double, but DICOM specify 32bits for floating point value
+          ++pin;
+          }
+        //assert( pin == in + len / sizeof(unsigned short) );
+        delete[] duplicate;
+        }
+      else
+        {
+        //assert( 0 && "Not Implemented" );
+        vtkGenericWarningMacro( "Not Implemented" );
+        }
+      }
     }
 
 }
