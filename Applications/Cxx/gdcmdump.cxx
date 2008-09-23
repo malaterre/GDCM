@@ -12,6 +12,24 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+/*
+ * Simple command line tool to dump the layout/values of a DICOM file
+ * This is largely inspired by other tools available from other toolkit, namely:
+ * - dcdump (dicom3tools)
+ * - dcmdump (dcmtk)
+ * - dcmInfo (SIEMENS)
+ * - PrintFile (GDCM 1.x)
+ *
+ * For now all layout are harcoded (see --color/--xml-dict for instance)
+ *
+ * gdcmdump has some feature not described in the DICOM standard:
+ *   --csa : to print CSA information (dcmInfo.exe compatible)
+ *   --pdb : to print PDB information (GEMS private info)
+ *
+ *
+ * TODO: it would be nice to have custom printing, namely printing as HTML/XML
+ *       it would be nice to have runtime dict (instead of compile time)
+ */
 
 #include "gdcmReader.h"
 #include "gdcmVersion.h"
