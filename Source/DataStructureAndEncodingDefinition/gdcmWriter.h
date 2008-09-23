@@ -80,7 +80,7 @@ public:
   void SetFile(const File& f) { F = f; }
   File &GetFile() { return *F; }
 
-  /// Undocumented function, do not use.
+  /// Undocumented function, do not use (= leave default)
   void SetCheckFileMetaInformation(bool b) { CheckFileMetaInformation = b; }
   void CheckFileMetaInformationOff() { CheckFileMetaInformation = false; }
   void CheckFileMetaInformationOn() { CheckFileMetaInformation = true; }

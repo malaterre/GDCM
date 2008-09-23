@@ -9,6 +9,7 @@ SET(MSFF_TEST_SRCS
   TestImageHelper
   TestImageToImageFilter
   TestImageChangeTransferSyntax
+  TestImplicitToExplicitFilter
   #TestImageChangePhotometricInterpretation
   #TestImageChangePhotometricInterpretation2
   TestImageChangeTransferSyntax2

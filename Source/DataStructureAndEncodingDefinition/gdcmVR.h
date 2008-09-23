@@ -185,6 +185,8 @@ public:
 
   bool Compatible(VR const &vr) const;
 
+  bool IsVRFile() const;
+
 private:
   // Internal function that map a VRType to an index in the VRStrings table
   static int GetIndex(VRType vr);

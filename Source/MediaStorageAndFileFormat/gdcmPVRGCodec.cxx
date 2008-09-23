@@ -93,7 +93,7 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
   pvrg_command += " ";
   pvrg_command += output;
 
-  //std::cerr << pvrg_command << std::endl;
+  std::cerr << pvrg_command << std::endl;
   gdcmDebugMacro( pvrg_command );
   int ret = system(pvrg_command.c_str());
   //std::cerr << "system: " << ret << std::endl;

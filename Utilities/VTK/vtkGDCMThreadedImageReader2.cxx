@@ -95,8 +95,8 @@ void vtkGDCMThreadedImageReader2Execute(vtkGDCMThreadedImageReader2 *self,
                           int outExt[6], int id, T*)
 {
   (void)numFiles; (void)inDatas;
-  printf("outExt:%d,%d,%d,%d,%d,%d\n",
-    outExt[0], outExt[1], outExt[2], outExt[3], outExt[4], outExt[5]);
+  //printf("outExt:%d,%d,%d,%d,%d,%d\n",
+  //  outExt[0], outExt[1], outExt[2], outExt[3], outExt[4], outExt[5]);
   // FIXME:
   // The code could be a little tidier, all I am trying to do here is differenciate the 
   // case where we have a series of 2D files and the case where we have a single multi-frames
@@ -137,12 +137,10 @@ void vtkGDCMThreadedImageReader2Execute(vtkGDCMThreadedImageReader2 *self,
     unsigned int numoverlays = image.GetNumberOfOverlays();
     if( numoverlays )
       {
-      //const gdcm::Overlay& ov = image.GetOverlay();
-      //unsigned char * overlaypointer = params->overlayscalarpointer;
-      //unsigned char *tempimage2 = overlaypointer + file*params->overlaylen;
-      //memset(tempimage2,0,params->overlaylen);
-      //assert( (unsigned long)ov.GetRows()*ov.GetColumns() <= params->overlaylen );
-      //ov.GetUnpackBuffer(tempimage2);
+      vtkImageData *vtkimage = self->GetOutput(OVERLAYPORTNUMBER);
+      const gdcm::Overlay& ov = image.GetOverlay();
+      unsigned char * overlaypointer = static_cast<unsigned char*>(vtkimage->GetScalarPointer());
+      ov.GetUnpackBuffer(overlaypointer);
       }
 
     const double shift = image.GetIntercept();
@@ -175,7 +173,7 @@ void vtkGDCMThreadedImageReader2Execute(vtkGDCMThreadedImageReader2 *self,
         float *pout = out;
         for( ; pout != out + params_len / sizeof(float); ++pout )
           {
-          *pout = *pin * (float)scale; // scale is a double, but DICOM specify 32bits for floating point value
+          *pout = *pin * (float)scale; // scale is a double, but to be backward compatible we need the explicit cast
           ++pin;
           }
         //assert( pin == in + len / sizeof(unsigned short) );

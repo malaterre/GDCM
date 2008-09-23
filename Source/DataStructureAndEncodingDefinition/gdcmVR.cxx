@@ -86,6 +86,44 @@ static VR::VRType VRValue[] = {
     VR::UT
 };
 
+bool VR::IsVRFile() const
+{
+  switch(VRField)
+    {
+  case VR::INVALID:
+  case VR::AE:
+  case VR::AS:
+  case VR::AT:
+  case VR::CS:
+  case VR::DA:
+  case VR::DS:
+  case VR::DT:
+  case VR::FD:
+  case VR::FL:
+  case VR::IS:
+  case VR::LO:
+  case VR::LT:
+  case VR::OB:
+  case VR::OF:
+  case VR::OW:
+  case VR::PN:
+  case VR::SH:
+  case VR::SL:
+  case VR::SQ:
+  case VR::SS:
+  case VR::ST:
+  case VR::TM:
+  case VR::UI:
+  case VR::UL:
+  case VR::UN:
+  case VR::US:
+  case VR::UT:
+    return true;
+    }
+  return false;
+}
+
+
 unsigned int VR::GetSizeof() const
 {
   unsigned int size;

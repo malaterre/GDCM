@@ -35,6 +35,7 @@ public:
   ImplicitToExplicitFilter():F(new File),ChangePrivateTags(false),UseVRUN(true) {}
   ~ImplicitToExplicitFilter() {}
 
+  /// Decide whether or not to VR'ify private tags
   void SetChangePrivateTags(bool b) {}
 
   /// When VR=16bits in explicit but Implicit has a 32bits length, use VR=UN
@@ -42,6 +43,10 @@ public:
 
   /// Change
   bool Change();
+
+  /// Set/Get File
+  void SetFile(const File& f) { F = f; }
+  File &GetFile() { return *F; }
 
 protected:
 

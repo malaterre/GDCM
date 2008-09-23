@@ -64,31 +64,40 @@ public:
 
   friend std::ostream& operator<<(std::ostream &_os, const DataElement &_val);
 
-  /// Set/Get Tag
-  /// Use with cautious (need to match Part 6)
+  /// Get Tag
   const Tag& GetTag() const { return TagField; }
   Tag& GetTag() { return TagField; }
+  /// Set Tag
+  /// Use with cautious (need to match Part 6)
   void SetTag(const Tag &t) { TagField = t; }
 
-  /// Set/Get VL
-  /// Use with cautious (need to match Part 6), advanced user only
-  /// Set SetByteValue instead
+  /// Get VL
   const VL& GetVL() const { return ValueLengthField; }
+  /// Set VL
+  /// Use with cautious (need to match Part 6), advanced user only
+  /// \see SetByteValue
   void SetVL(const VL &vl) { ValueLengthField = vl; }
   void SetVLToUndefined();
 
-  /// Set/Get VR
-  /// Use with cautious (need to match Part 6), advanced user only
+  /// Get VR
   /// do not set VR::SQ on bytevalue data element
   VR const &GetVR() const { return VRField; }
-  void SetVR(VR const &vr) { VRField = vr; }
+  /// Set VR
+  /// Use with cautious (need to match Part 6), advanced user only
+  /// \pre vr is a VR::VRALL (not a dual one such as OB_OW)
+  void SetVR(VR const &vr) { 
+    assert( vr.IsVRFile() );
+    VRField = vr; 
+  }
 
   /// Set/Get Value (bytes array, SQ of items, SQ of fragments):
   Value const &GetValue() const { return *ValueField; }
   Value &GetValue() { return *ValueField; }
+  /// \warning you need to set the ValueLengthField explicitely
   void SetValue(Value const & vl) {
     //assert( ValueField == 0 );
     ValueField = vl;
+    ValueLengthField = vl.GetLength();
   }
   /// Check if Data Element is empty
   bool IsEmpty() const { return ValueField == 0 || (GetByteValue() && GetByteValue()->IsEmpty()); }
@@ -111,11 +120,11 @@ public:
   }
 
   /// Return the Value of DataElement as a Sequence Of Items (if possible)
-  // \warning: You need to check for NULL return value
+  /// \warning: You need to check for NULL return value
   const SequenceOfItems* GetSequenceOfItems() const;
 
   /// Return the Value of DataElement as a Sequence Of Fragments (if possible)
-  // \warning: You need to check for NULL return value
+  /// \warning: You need to check for NULL return value
   const SequenceOfFragments* GetSequenceOfFragments() const;
 
   /// return if Value Length if of undefined length
