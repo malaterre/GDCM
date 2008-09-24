@@ -420,7 +420,7 @@ void mwopen(filename,index)
   if ((Stack_Stream_Current!=index)) pushstream();
   current_write_byte=0;
   write_position=7;
-  if ((swout = fopen(filename,"w+"))==NULL)
+  if ((swout = fopen(filename,"wb+"))==NULL)
     {
       WHEREAMI();
       printf("Cannot open output file %s.\n",filename);
