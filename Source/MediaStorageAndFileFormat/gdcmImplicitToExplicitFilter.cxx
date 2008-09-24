@@ -22,6 +22,7 @@
 #include "gdcmGroupDict.h"
 #include "gdcmVR.h"
 #include "gdcmVM.h"
+#include "gdcmDataSetHelper.h"
 
 namespace gdcm
 {
@@ -54,7 +55,7 @@ bool ImplicitToExplicitFilter::Change()
     const VR &vr = entry.GetVR();
     const VM &vm = entry.GetVM();
 
-    assert( de.GetVR() == VR::INVALID );
+    //assert( de.GetVR() == VR::INVALID );
     VR cvr = DataSetHelper::ComputeVR(*F,ds, t);
     de.SetVR( cvr );
     ++it;

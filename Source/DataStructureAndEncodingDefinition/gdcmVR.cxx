@@ -456,5 +456,17 @@ bool VR::Compatible(VR const &vr) const
   else return VRField & vr.VRField;
 }
 
+bool VR::IsDual() const
+{
+  switch(VRField)
+    {
+  case OB_OW :
+  case US_SS :
+  case US_SS_OW :
+    return true;
+    }
+  return false;
+}
+
 
 } // end of namespace gdcm
