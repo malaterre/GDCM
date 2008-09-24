@@ -54,7 +54,9 @@ bool ImplicitToExplicitFilter::Change()
     const VR &vr = entry.GetVR();
     const VM &vm = entry.GetVM();
 
-    de.SetVR( vr );
+    assert( de.GetVR() == VR::INVALID );
+    VR cvr = DataSetHelper::ComputeVR(*F,ds, t);
+    de.SetVR( cvr );
     ++it;
     ds.Replace( de );
     }

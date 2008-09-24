@@ -38,11 +38,12 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
     owner = strowner.c_str();
     }
   const DictEntry &entry = dicts.GetDictEntry(t,owner);
-  const VR &vr = entry.GetVR();
-  const VM &vm = entry.GetVM();
+  const VR &refvr = entry.GetVR();
+  //const VM &vm = entry.GetVM();
 
-  VR outvr;
+  VR vr = refvr;
 
+  // Special handling of US or SS vr:
   if( vr == VR::US_SS )
     {
     // I believe all US_SS VR derived from the value from 0028,0103 ... except 0028,0071
@@ -52,22 +53,83 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
       Tag pixelrep(0x0028,0x0103);
       assert( pixelrep < t );
       const DataSet &rootds = file.GetDataSet();
-      assert( ds.FindDataElement( pixelrep ) );
+      // FIXME
+      // PhilipsWith15Overlays.dcm has a Private SQ with public elements such as
+      // 0028,3002, so we cannot look up element in current dataset, but have to get the root dataset
+      // to loop up...
+
+      // FIXME:
+      // gdcmDataExtra/gdcmSampleData/ImagesPapyrus/TestImages/wristb.pap
+      // It's the contrary: root dataset does not have a Pixel Representation, but each SQ do...
+      assert( rootds.FindDataElement( pixelrep ) || ds.FindDataElement( pixelrep ) );
       Attribute<0x0028,0x0103> at;
-      at.SetFromDataElement( ds.GetDataElement( pixelrep ) );
-      assert( at.GetValue() == 0 || at.GetValue() == 1 );
-      if( at.GetValue() )
+      if( ds.FindDataElement( pixelrep ) )
         {
-        outvr = VR::SS;
+        at.SetFromDataElement( ds.GetDataElement( pixelrep ) );
+        }
+      else if( rootds.FindDataElement( pixelrep ) )
+        {
+        at.SetFromDataElement( rootds.GetDataElement( pixelrep ) );
         }
       else
         {
-        outvr = VR::US;
+        //throw Exception( "Unhandled" );
+        gdcmWarningMacro( "Unhandled" );
+        vr = VR::INVALID;
+        }
+      assert( at.GetValue() == 0 || at.GetValue() == 1 );
+      if( at.GetValue() )
+        {
+        vr = VR::SS;
+        }
+      else
+        {
+        vr = VR::US;
         }
       }
     }
+  else if( vr == VR::OB_OW )
+    {
+    /*
+    For the Value Representations OB and OW, the encoding shall meet the following
+    specification depending on the Data Element Tag:
+    - Data Element (7FE0,0010) Pixel Data has the Value Representation OW and shall
+    be encoded in Little Endian.
+    - Data Element (60xx,3000) Overlay Data has the Value Representation OW and shall
+    be encoded in Little Endian.
 
-  return outvr;
+    See PS 3.5 - 2004
+    - Data Element (50xx,3000) Curve Data has the Value Representation OB with its
+    component points (n-tuples) having the Value Representation specified in Data
+    Value Representation (50xx,0103). The component points shall be encoded in Little
+    Endian.
+    */
+    Tag pixeldata(0x7fe0,0x0010);
+    Tag overlaydata(0x6000,0x3000);
+    Tag curvedata(0x5000,0x3000);
+    Tag bitsallocated(0x0028,0x0100);
+    assert( ds.FindDataElement( pixeldata ) );
+    assert( ds.FindDataElement( bitsallocated ) );
+    Attribute<0x0028,0x0100> at;
+    at.SetFromDataElement( ds.GetDataElement( bitsallocated ) );
+
+    if( pixeldata == t || t.IsGroupXX(overlaydata) )
+      {
+      vr = VR::OW;
+      }
+    else if ( t.IsGroupXX(curvedata) )
+      {
+      vr = VR::OB;
+      }
+    else
+      {
+      assert( 0 && "Should not happen" );
+      vr = VR::INVALID;
+      }
+    }
+  // TODO need to treat US_SS_OW too
+
+  return vr;
 }
 
 

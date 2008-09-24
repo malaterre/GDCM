@@ -113,7 +113,7 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t) con
       {
       VM::VMType vm = entry.GetVM();
       //assert( vm == VM::VM1 );
-      if( vr == VR::US_SS )
+      if( vr.IsDual() ) // This mean vr was read from a dict entry:
         {
         vr = DataSetHelper::ComputeVR(GetFile(),ds, t);
         }
