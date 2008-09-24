@@ -53,6 +53,13 @@ public:
   // Explicitely get/set the Rescale Slope (0028,1053)
   vtkSetMacro(Scale,double);
 
+  // Description:
+  // Determine whether or not reader should use value from Shift/Scale
+  // Default is 1
+  vtkSetMacro(UseShiftScale,int);
+  vtkGetMacro(UseShiftScale,int);
+  vtkBooleanMacro(UseShiftScale,int);
+
   // Within this class this is allowed to set the Number of Overlays from outside
   //vtkSetMacro(NumberOfOverlays,int);
 
@@ -78,6 +85,8 @@ protected:
 private:
   vtkGDCMThreadedImageReader(const vtkGDCMThreadedImageReader&);  // Not implemented.
   void operator=(const vtkGDCMThreadedImageReader&);  // Not implemented.
+
+  int UseShiftScale;
 };
 
 #endif

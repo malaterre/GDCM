@@ -49,6 +49,7 @@ vtkStandardNewMacro(vtkGDCMThreadedImageReader)
 vtkGDCMThreadedImageReader::vtkGDCMThreadedImageReader()
 {
   this->LoadIconImage = 0;
+  this->UseShiftScale = 1;
 }
 
 vtkGDCMThreadedImageReader::~vtkGDCMThreadedImageReader()
@@ -348,7 +349,7 @@ void *ReadFilesThread(void *voidparams)
       ov.GetUnpackBuffer(tempimage2);
       }
     //if( params->reader->GetShift() != 1 || params->reader->GetScale() != 0 )
-    if( shift != 1 || scale != 0 )
+    if( params->reader->GetUseShiftScale() && (shift != 1 || scale != 0) )
       {
       const int shift_int = (int)shift;
       const int scale_int = (int)scale;
