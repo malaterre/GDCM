@@ -574,22 +574,14 @@ zlib_stream::basic_zip_streambuf::~basic_zip_streambuf "zlib_stream::basic_zip_s
 // File: classgdcm_1_1BasicOffsetTable.xml
 %feature("docstring") gdcm::BasicOffsetTable "
 
-Class to represent an BasicOffsetTable TODO: this is A fragment need
-to subclass from fragment.
+Class to represent a BasicOffsetTable.
 
 C++ includes: gdcmBasicOffsetTable.h ";
 
-%feature("docstring")  gdcm::BasicOffsetTable::BasicOffsetTable "gdcm::BasicOffsetTable::BasicOffsetTable(const Tag &t=Tag(0xfffe,
-0xe000), VL const &vl=0) ";
-
-%feature("docstring")  gdcm::BasicOffsetTable::GetLength "VL
-gdcm::BasicOffsetTable::GetLength() const ";
+%feature("docstring")  gdcm::BasicOffsetTable::BasicOffsetTable "gdcm::BasicOffsetTable::BasicOffsetTable() ";
 
 %feature("docstring")  gdcm::BasicOffsetTable::Read "std::istream&
 gdcm::BasicOffsetTable::Read(std::istream &is) ";
-
-%feature("docstring")  gdcm::BasicOffsetTable::Write "std::ostream&
-gdcm::BasicOffsetTable::Write(std::ostream &os) const ";
 
 
 // File: classstd_1_1bitset.xml
@@ -626,9 +618,10 @@ gdcm::ByteBuffer::UpdatePosition() ";
 // File: classgdcm_1_1ByteSwap.xml
 %feature("docstring") gdcm::ByteSwap "
 
-ByteSwap Perform machine dependent byte swaping (Little Endian, Big
-Endian, Bad Little Endian, Bad Big Endian). TODO: bswap_32 / bswap_64
-...
+ByteSwap.
+
+Perform machine dependent byte swaping (Little Endian, Big Endian, Bad
+Little Endian, Bad Big Endian). TODO: bswap_32 / bswap_64 ...
 
 C++ includes: gdcmByteSwap.h ";
 
@@ -792,7 +785,7 @@ C++ includes: gdcmCSAElement.h ";
 
 %feature("docstring")  gdcm::CSAElement::CSAElement "gdcm::CSAElement::CSAElement(const CSAElement &_val) ";
 
-%feature("docstring")  gdcm::CSAElement::CSAElement "gdcm::CSAElement::CSAElement() ";
+%feature("docstring")  gdcm::CSAElement::CSAElement "gdcm::CSAElement::CSAElement(unsigned int kf=0) ";
 
 %feature("docstring")  gdcm::CSAElement::GetByteValue "const
 ByteValue* gdcm::CSAElement::GetByteValue() const ";
@@ -863,18 +856,19 @@ gdcm::CSAElement::SetVM(const VM &vm) ";
 gdcm::CSAElement::SetVR(VR const &vr) ";
 
 
-// File: classgdcm_1_1CSAElementNameException.xml
-%feature("docstring") gdcm::CSAElementNameException "
-
-Exception when looking up element that's not present.
-
-C++ includes: gdcmCSAHeader.h ";
-
-
 // File: classgdcm_1_1CSAHeader.xml
 %feature("docstring") gdcm::CSAHeader "
 
 Class for CSAHeader.
+
+SIEMENS store private information in tag (0x0029,0x10,\"SIEMENS CSA
+HEADER\") this class is meant for user wishing to access values stored
+within this private attribute. There are basically two main 'format'
+for this attribute : SV10/NOMAGIC and DATASET_FORMAT SV10 and NOMAGIC
+are from a user prospective identical, see CSAHeader.xml for possible
+name / value stored in this format. DATASET_FORMAT is in fact simply
+just another DICOM dataset (implicit) with -currently unknown- value.
+This can be only be printer for now.
 
 WARNING:  : Everything you do with this code is at your own risk,
 since decoding process was not written from specification documents.
@@ -898,8 +892,8 @@ Return true if the CSA element matching 'name' is found or not. ";
 %feature("docstring")  gdcm::CSAHeader::GetCSAElementByName "const
 CSAElement& gdcm::CSAHeader::GetCSAElementByName(const char *name)
 
-Return the CSAElement corresponding to name 'name' Throw a
-CSAElementNameException if not found WARNING:  Case Sensitive ";
+Return the CSAElement corresponding to name 'name' WARNING:  Case
+Sensitive ";
 
 %feature("docstring")  gdcm::CSAHeader::GetDataSet "const DataSet&
 gdcm::CSAHeader::GetDataSet() const
@@ -1091,7 +1085,7 @@ gdcm::Curve::Update(const DataElement &de) ";
 // File: classgdcm_1_1DataElement.xml
 %feature("docstring") gdcm::DataElement "
 
-Class to represent a Data Element Implicit / Explicit.
+Class to represent a Data Element either Implicit or Explicit.
 
 DATA ELEMENT: A unit of information as defined by a single entry in
 the data dictionary. An encoded Information Object Definition ( IOD)
@@ -1099,12 +1093,6 @@ Attribute that is composed of, at a minimum, three fields: a Data
 Element Tag, a Value Length, and a Value Field. For some specific
 Transfer Syntaxes, a Data Element also contains a VR Field where the
 Value Representation of that Data Element is specified explicitly.
-Design: # A DataElement in GDCM always store VL ( Value Length) on a
-32 bits integer even when VL is 16 bits # A DataElement always store
-the VR even for Implicit TS, in which case VR is defaulted to
-VR::INVALID # For Item start/end (See 0xfffe tags), Value is NULL
-
-See:   ExplicitDataElement ImplicitDataElement
 
 C++ includes: gdcmDataElement.h ";
 
@@ -1114,40 +1102,61 @@ C++ includes: gdcmDataElement.h ";
 const VR &vr=VR::INVALID) ";
 
 %feature("docstring")  gdcm::DataElement::GetByteValue "const
-ByteValue* gdcm::DataElement::GetByteValue() const ";
+ByteValue* gdcm::DataElement::GetByteValue() const
+
+Return the Value of DataElement as a ByteValue (if possible) WARNING:
+: You need to check for NULL return value ";
 
 %feature("docstring")  gdcm::DataElement::GetLength "VL
 gdcm::DataElement::GetLength() const ";
 
 %feature("docstring")  gdcm::DataElement::GetSequenceOfFragments "const SequenceOfFragments* gdcm::DataElement::GetSequenceOfFragments()
-const ";
+const
+
+Return the Value of DataElement as a Sequence Of Fragments (if
+possible) WARNING:  : You need to check for NULL return value ";
 
 %feature("docstring")  gdcm::DataElement::GetSequenceOfItems "const
-SequenceOfItems* gdcm::DataElement::GetSequenceOfItems() const ";
+SequenceOfItems* gdcm::DataElement::GetSequenceOfItems() const
+
+Return the Value of DataElement as a Sequence Of Items (if possible)
+WARNING:  : You need to check for NULL return value ";
 
 %feature("docstring")  gdcm::DataElement::GetTag "Tag&
 gdcm::DataElement::GetTag() ";
 
 %feature("docstring")  gdcm::DataElement::GetTag "const Tag&
-gdcm::DataElement::GetTag() const ";
+gdcm::DataElement::GetTag() const
+
+Get Tag. ";
 
 %feature("docstring")  gdcm::DataElement::GetValue "Value&
 gdcm::DataElement::GetValue() ";
 
 %feature("docstring")  gdcm::DataElement::GetValue "Value const&
-gdcm::DataElement::GetValue() const ";
+gdcm::DataElement::GetValue() const
+
+Set/Get Value (bytes array, SQ of items, SQ of fragments):. ";
 
 %feature("docstring")  gdcm::DataElement::GetVL "const VL&
-gdcm::DataElement::GetVL() const ";
+gdcm::DataElement::GetVL() const
+
+Get VL. ";
 
 %feature("docstring")  gdcm::DataElement::GetVR "VR const&
-gdcm::DataElement::GetVR() const ";
+gdcm::DataElement::GetVR() const
+
+Get VR do not set VR::SQ on bytevalue data element ";
 
 %feature("docstring")  gdcm::DataElement::IsEmpty "bool
-gdcm::DataElement::IsEmpty() const ";
+gdcm::DataElement::IsEmpty() const
+
+Check if Data Element is empty. ";
 
 %feature("docstring")  gdcm::DataElement::IsUndefinedLength "bool
-gdcm::DataElement::IsUndefinedLength() const ";
+gdcm::DataElement::IsUndefinedLength() const
+
+return if Value Length if of undefined length ";
 
 %feature("docstring")  gdcm::DataElement::Read "std::istream&
 gdcm::DataElement::Read(std::istream &is) ";
@@ -1160,22 +1169,34 @@ gdcm::DataElement::ReadOrSkip(std::istream &is, std::set< Tag > const
 &length) ";
 
 %feature("docstring")  gdcm::DataElement::SetByteValue "void
-gdcm::DataElement::SetByteValue(const char *array, VL length) ";
+gdcm::DataElement::SetByteValue(const char *array, VL length)
+
+Set the byte value. ";
 
 %feature("docstring")  gdcm::DataElement::SetTag "void
-gdcm::DataElement::SetTag(const Tag &t) ";
+gdcm::DataElement::SetTag(const Tag &t)
+
+Set Tag Use with cautious (need to match Part 6) ";
 
 %feature("docstring")  gdcm::DataElement::SetValue "void
-gdcm::DataElement::SetValue(Value const &vl) ";
+gdcm::DataElement::SetValue(Value const &vl)
+
+WARNING:  you need to set the ValueLengthField explicitely ";
 
 %feature("docstring")  gdcm::DataElement::SetVL "void
-gdcm::DataElement::SetVL(const VL &vl) ";
+gdcm::DataElement::SetVL(const VL &vl)
+
+Set VL Use with cautious (need to match Part 6), advanced user only
+See:   SetByteValue ";
 
 %feature("docstring")  gdcm::DataElement::SetVLToUndefined "void
 gdcm::DataElement::SetVLToUndefined() ";
 
 %feature("docstring")  gdcm::DataElement::SetVR "void
-gdcm::DataElement::SetVR(VR const &vr) ";
+gdcm::DataElement::SetVR(VR const &vr)
+
+Set VR Use with cautious (need to match Part 6), advanced user only vr
+is a VR::VRALL (not a dual one such as OB_OW) ";
 
 %feature("docstring")  gdcm::DataElement::Write "const std::ostream&
 gdcm::DataElement::Write(std::ostream &os) const ";
@@ -1232,7 +1253,16 @@ gdcm::DataSet::FindDataElement(const Tag &t) const ";
 %feature("docstring")  gdcm::DataSet::FindDataElement "bool
 gdcm::DataSet::FindDataElement(const PrivateTag &t) const
 
-Look up if private tag 't' is present in the dataset:. ";
+A DataElement in GDCM always store VL ( Value Length) on a 32 bits
+integer even when VL is 16 bits
+
+A DataElement always store the VR even for Implicit TS, in which case
+VR is defaulted to VR::INVALID
+
+For Item start/end (See 0xfffe tags), Value is NULL
+
+See:   ExplicitDataElement ImplicitDataElement Look up if private tag
+'t' is present in the dataset:. ";
 
 %feature("docstring")  gdcm::DataSet::FindNextDataElement "const
 DataElement& gdcm::DataSet::FindNextDataElement(const Tag &t) const ";
@@ -1308,6 +1338,14 @@ gdcm::DataSet::Size() const ";
 
 %feature("docstring")  gdcm::DataSet::Write "std::ostream const&
 gdcm::DataSet::Write(std::ostream &os) const ";
+
+
+// File: classgdcm_1_1DataSetHelper.xml
+%feature("docstring") gdcm::DataSetHelper "
+
+DataSetHelper (internal class, not intended for user level).
+
+C++ includes: gdcmDataSetHelper.h ";
 
 
 // File: classgdcm_1_1Decoder.xml
@@ -1914,6 +1952,16 @@ gdcm::EncapsulatedDocument::EncapsulatedDocument "gdcm::EncapsulatedDocument::En
 %feature("docstring") gdcm::EncodingImplementation< VR::VRASCII > "
 C++ includes: gdcmElement.h ";
 
+%feature("docstring")  gdcm::EncodingImplementation< VR::VRASCII
+>::Write " void gdcm::EncodingImplementation< VR::VRASCII
+>::Write(const double *data, unsigned long length, std::ostream &_os)
+";
+
+%feature("docstring")  gdcm::EncodingImplementation< VR::VRASCII
+>::Write " void gdcm::EncodingImplementation< VR::VRASCII
+>::Write(const float *data, unsigned long length, std::ostream &_os)
+";
+
 
 // File: classgdcm_1_1EncodingImplementation_3_01VR_1_1VRBINARY_01_4.xml
 %feature("docstring") gdcm::EncodingImplementation< VR::VRBINARY > "
@@ -1949,6 +1997,8 @@ STL class. ";
 
 // File: classgdcm_1_1Exception.xml
 %feature("docstring") gdcm::Exception "
+
+Exception.
 
 Standard exception handling object.
 
@@ -2192,7 +2242,16 @@ Convert backslash (windows style) to UNIX style slash. ";
 // File: classgdcm_1_1FilenameGenerator.xml
 %feature("docstring") gdcm::FilenameGenerator "
 
+FilenameGenerator.
+
 class to generate filenames based on a pattern (C-style)
+
+Output will be:
+
+for i = 0, number of filenames: outfilename[i] = prefix + (pattern %
+i)
+
+where pattern % i means C-style snprintf of Pattern using value 'i'
 
 C++ includes: gdcmFilenameGenerator.h ";
 
@@ -2217,6 +2276,9 @@ Return all filenames. ";
 %feature("docstring")  gdcm::FilenameGenerator::GetPattern "const
 char* gdcm::FilenameGenerator::GetPattern() const ";
 
+%feature("docstring")  gdcm::FilenameGenerator::GetPrefix "const
+char* gdcm::FilenameGenerator::GetPrefix() const ";
+
 %feature("docstring")  gdcm::FilenameGenerator::SetNumberOfFilenames "void gdcm::FilenameGenerator::SetNumberOfFilenames(unsigned int
 nfiles)
 
@@ -2226,6 +2288,11 @@ Set/Get the number of filenames to generate. ";
 gdcm::FilenameGenerator::SetPattern(const char *pattern)
 
 Set/Get pattern. ";
+
+%feature("docstring")  gdcm::FilenameGenerator::SetPrefix "void
+gdcm::FilenameGenerator::SetPrefix(const char *prefix)
+
+Set/Get prefix. ";
 
 %feature("docstring")  gdcm::FilenameGenerator::~FilenameGenerator "gdcm::FilenameGenerator::~FilenameGenerator() ";
 
@@ -2248,12 +2315,11 @@ gdcm::FileSet::AddFile(const File &file) ";
 // File: classgdcm_1_1Fragment.xml
 %feature("docstring") gdcm::Fragment "
 
-Class to represent an Fragment.
+Class to represent a Fragment.
 
 C++ includes: gdcmFragment.h ";
 
-%feature("docstring")  gdcm::Fragment::Fragment "gdcm::Fragment::Fragment(const Tag &t=Tag(0xfffe, 0xe000), VL const
-&vl=0) ";
+%feature("docstring")  gdcm::Fragment::Fragment "gdcm::Fragment::Fragment() ";
 
 %feature("docstring")  gdcm::Fragment::GetLength "VL
 gdcm::Fragment::GetLength() const ";
@@ -2335,14 +2401,37 @@ singletons in VTK.
 
 C++ includes: gdcmGlobal.h ";
 
+%feature("docstring")  gdcm::Global::Append "bool
+gdcm::Global::Append(const char *path)
+
+Append path at the end of the path list. ";
+
 %feature("docstring")  gdcm::Global::GetDefs "Defs const&
-gdcm::Global::GetDefs() const ";
+gdcm::Global::GetDefs() const
+
+retrieve the default/internal (Part 3) You need to explicitely call
+LoadResourcesFiles before ";
 
 %feature("docstring")  gdcm::Global::GetDicts "Dicts const&
-gdcm::Global::GetDicts() const ";
+gdcm::Global::GetDicts() const
+
+retrieve the default/internal dicts (Part 6) This dict is filled up at
+load time ";
 
 %feature("docstring")  gdcm::Global::Global "gdcm::Global::Global()
 ";
+
+%feature("docstring")  gdcm::Global::LoadResourcesFiles "bool
+gdcm::Global::LoadResourcesFiles()
+
+Load all internal XML files, ressource path need to have been set
+before calling this member function (see Append/Prepend members func)
+";
+
+%feature("docstring")  gdcm::Global::Prepend "bool
+gdcm::Global::Prepend(const char *path)
+
+Prepend path at the begining of the path list. ";
 
 %feature("docstring")  gdcm::Global::~Global "gdcm::Global::~Global()
 ";
@@ -2957,7 +3046,7 @@ gdcm::ImageFragmentSplitter::~ImageFragmentSplitter "gdcm::ImageFragmentSplitter
 // File: classgdcm_1_1ImageHelper.xml
 %feature("docstring") gdcm::ImageHelper "
 
-ImageHelper (internal class, not intended for user).
+ImageHelper (internal class, not intended for user level).
 
 Helper for writing World images in DICOM. DICOM has a 'template'
 approach to image where MR Image Storage are distinct object from
@@ -2965,10 +3054,11 @@ Enhanced MR Image Storage. For example the Pixel Spacing in one object
 is not at the same position (ie Tag) as in the other this class is the
 central (read: fragile) place where all the dispatching is done from a
 united view of a world image (typically VTK or ITK point of view) down
-to the low level DICOM point of view.  Warning: do not expect the API
-of this class to be maintain at any point, since as Modalities are
-added the API might have to be augmented or behavior changed to cope
-with new modalities.
+to the low level DICOM point of view.
+
+WARNING:  : do not expect the API of this class to be maintain at any
+point, since as Modalities are added the API might have to be
+augmented or behavior changed to cope with new modalities.
 
 C++ includes: gdcmImageHelper.h ";
 
@@ -2981,9 +3071,15 @@ ImageReader.
 its role is to convert the DICOM DataSet into a gdcm::Image
 representation By default it is also loading the lookup table and
 overlay when found as they impact the rendering or the image Todo old
-gdcm 1.X used to have in its dictionary: 0028 0015 US 1 UsedNbX ACR
-Special (RET) 0028 0016 US 1 UsedNbY ACR Special (RET) 0028 0017 US 1
-UsedNbZ ACR Special (RET) 0028 0018 US 1 UsedNbT ACR Special (RET)
+gdcm 1.X used to have in its dictionary:
+
+0028 0015 US 1 UsedNbX ACR Special (RET)
+
+0028 0016 US 1 UsedNbY ACR Special (RET)
+
+0028 0017 US 1 UsedNbZ ACR Special (RET)
+
+0028 0018 US 1 UsedNbT ACR Special (RET)
 
 since I cannot find them *anywhere* I'll have to hard code them
 directly in a specific libido image reader
@@ -3083,6 +3179,55 @@ gdcm::ImplicitDataElement::Read(std::istream &is) ";
 %feature("docstring")  gdcm::ImplicitDataElement::Write "const
 std::ostream& gdcm::ImplicitDataElement::Write(std::ostream &os) const
 ";
+
+
+// File: classgdcm_1_1ImplicitToExplicitFilter.xml
+%feature("docstring") gdcm::ImplicitToExplicitFilter "
+
+ImplicitToExplicitFilter class.
+
+WARNING:  changing an implicit dataset to an explicit dataset is NOT a
+trivial task of simply changing the VR to the dict one: One has to
+make sure SQ is properly set
+
+One has to recompute the explicit length SQ
+
+One has to make sure that Vr is valid for the encoding
+
+One has to make sure that VR 16bits can store the original value
+length
+
+C++ includes: gdcmImplicitToExplicitFilter.h ";
+
+%feature("docstring")  gdcm::ImplicitToExplicitFilter::Change "bool
+gdcm::ImplicitToExplicitFilter::Change()
+
+Change. ";
+
+%feature("docstring")  gdcm::ImplicitToExplicitFilter::GetFile "File&
+gdcm::ImplicitToExplicitFilter::GetFile() ";
+
+%feature("docstring")
+gdcm::ImplicitToExplicitFilter::ImplicitToExplicitFilter "gdcm::ImplicitToExplicitFilter::ImplicitToExplicitFilter() ";
+
+%feature("docstring")
+gdcm::ImplicitToExplicitFilter::SetChangePrivateTags "void
+gdcm::ImplicitToExplicitFilter::SetChangePrivateTags(bool b)
+
+Decide whether or not to VR'ify private tags. ";
+
+%feature("docstring")  gdcm::ImplicitToExplicitFilter::SetFile "void
+gdcm::ImplicitToExplicitFilter::SetFile(const File &f)
+
+Set/Get File. ";
+
+%feature("docstring")  gdcm::ImplicitToExplicitFilter::SetUseVRUN "void gdcm::ImplicitToExplicitFilter::SetUseVRUN(bool b)
+
+When VR=16bits in explicit but Implicit has a 32bits length, use
+VR=UN. ";
+
+%feature("docstring")
+gdcm::ImplicitToExplicitFilter::~ImplicitToExplicitFilter "gdcm::ImplicitToExplicitFilter::~ImplicitToExplicitFilter() ";
 
 
 // File: classstd_1_1invalid__argument.xml
@@ -3775,6 +3920,9 @@ gdcm::MediaStorage::GetString() const ";
 gdcm::MediaStorage::GuessFromModality(const char *modality, unsigned
 int dimension=2) ";
 
+%feature("docstring")  gdcm::MediaStorage::IsUndefined "bool
+gdcm::MediaStorage::IsUndefined() const ";
+
 %feature("docstring")  gdcm::MediaStorage::MediaStorage "gdcm::MediaStorage::MediaStorage(MSType type=MS_END) ";
 
 %feature("docstring")  gdcm::MediaStorage::SetFromDataSet "void
@@ -4000,6 +4148,8 @@ Object.
 
 main superclass for object that want to use SmartPointer invasive ref
 counting system
+
+See:   SmartPointer
 
 C++ includes: gdcmObject.h ";
 
@@ -4311,14 +4461,6 @@ gdcm::PDBElement::SetName(const char *name) ";
 gdcm::PDBElement::SetValue(const char *value) ";
 
 
-// File: classgdcm_1_1PDBElementNameException.xml
-%feature("docstring") gdcm::PDBElementNameException "
-
-Exception when looking up element that's not present.
-
-C++ includes: gdcmPDBHeader.h ";
-
-
 // File: classgdcm_1_1PDBHeader.xml
 %feature("docstring") gdcm::PDBHeader "
 
@@ -4344,8 +4486,8 @@ Return true if the PDB element matching name is found or not. ";
 %feature("docstring")  gdcm::PDBHeader::GetPDBElementByName "const
 PDBElement& gdcm::PDBHeader::GetPDBElementByName(const char *name)
 
-Lookup in the PDB header if a PDB element match the name 'name': throw
-a PDBElementNameException when not found WARNING:  Case Sensitive ";
+Lookup in the PDB header if a PDB element match the name 'name':
+WARNING:  Case Sensitive ";
 
 %feature("docstring")  gdcm::PDBHeader::LoadFromDataElement "bool
 gdcm::PDBHeader::LoadFromDataElement(DataElement const &de)
@@ -4860,9 +5002,11 @@ Decode. ";
 // File: classgdcm_1_1Reader.xml
 %feature("docstring") gdcm::Reader "
 
-Reader ala DOM (Document Object Model) This class is a non-validating
-reader, it will only performs well- formedness check only, and to some
-extent catch known error (non well-formed document).
+Reader ala DOM (Document Object Model).
+
+This class is a non-validating reader, it will only performs well-
+formedness check only, and to some extent catch known error (non well-
+formed document).
 
 Detailled description here
 
@@ -4957,6 +5101,13 @@ gdcm::Rescaler::SetSlope(double s) ";
 %feature("docstring") gdcm::RLECodec "
 
 Class to do RLE.
+
+ANSI X3.9 A.4.2 RLE Compression Annex G defines a RLE Compression
+Transfer Syntax. This transfer Syntax is identified by the UID value
+\"1.2.840.10008.1.2.5\". If the object allows multi-frame images in
+the pixel data field, then each frame shall be encoded separately.
+Each frame shall be encoded in one and only one Fragment (see PS
+3.5.8.2).
 
 C++ includes: gdcmRLECodec.h ";
 
@@ -5312,14 +5463,15 @@ STL iterator class. ";
 // File: classgdcm_1_1SmartPointer.xml
 %feature("docstring") gdcm::SmartPointer "
 
-Class for Smart Pointer Will only work for subclass of gdcm::Object
-See tr1/shared_ptr for a more general approach (not invasive) include
-<tr1/memory> { shared_ptr<Bla> b(new Bla); } Class partly based on
-post by Bill
-Hubauer:http://groups.google.com/group/comp.lang.c++/msg/173ddc38a827a930
-See alsohttp://www.davethehat.com/articles/smartp.htm.
+Class for Smart Pointer.
 
-and itk::SmartPointer
+Will only work for subclass of gdcm::Object See tr1/shared_ptr for a
+more general approach (not invasive) include <tr1/memory> {
+shared_ptr<Bla> b(new Bla); } Class partly based on post by Bill
+Hubauer:http://groups.google.com/group/comp.lang.c++/msg/173ddc38a827a930
+
+See:  http://www.davethehat.com/articles/smartp.htm  and
+itk::SmartPointer
 
 C++ includes: gdcmSmartPointer.h ";
 
@@ -5865,8 +6017,10 @@ gdcm::TagPath::Push(Tag const &t) ";
 // File: classgdcm_1_1Testing.xml
 %feature("docstring") gdcm::Testing "
 
-class for testing this class is used for the nightly regression system
-for GDCM
+class for testing
+
+this class is used for the nightly regression system for GDCM It makes
+heavily use of md5 computation
 
 C++ includes: gdcmTesting.h ";
 
@@ -5883,7 +6037,9 @@ Print. ";
 // File: classgdcm_1_1Trace.xml
 %feature("docstring") gdcm::Trace "
 
-Debug / Warning and Error are encapsulated in this class.
+Trace.
+
+Debug / Warning and Error are encapsulated in this class
 
 C++ includes: gdcmTrace.h ";
 
@@ -6041,7 +6197,7 @@ C++ includes: gdcmUNExplicitImplicitDataElement.h ";
 %feature("docstring") gdcm::Unpacker12Bits "
 
 Pack/Unpack 12 bits pixel into 16bits You can only pack an even number
-of 16bits, which means a mulitple of 4 (expressed in bytes)
+of 16bits, which means a multiple of 4 (expressed in bytes)
 
 You can only unpack a multiple of 3 bytes.
 
@@ -6242,6 +6398,12 @@ gdcm::VR::GetSize() const ";
 
 %feature("docstring")  gdcm::VR::GetSizeof "unsigned int
 gdcm::VR::GetSizeof() const ";
+
+%feature("docstring")  gdcm::VR::IsDual "bool gdcm::VR::IsDual()
+const ";
+
+%feature("docstring")  gdcm::VR::IsVRFile "bool gdcm::VR::IsVRFile()
+const ";
 
 %feature("docstring")  gdcm::VR::Read "std::istream&
 gdcm::VR::Read(std::istream &is) ";
@@ -6448,6 +6610,12 @@ vtkGDCMThreadedImageReader.h ";
 void vtkGDCMThreadedImageReader::PrintSelf(ostream &os, vtkIndent
 indent) ";
 
+%feature("docstring")  vtkGDCMThreadedImageReader::vtkBooleanMacro "vtkGDCMThreadedImageReader::vtkBooleanMacro(UseShiftScale, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader::vtkGetMacro "vtkGDCMThreadedImageReader::vtkGetMacro(UseShiftScale, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader::vtkSetMacro "vtkGDCMThreadedImageReader::vtkSetMacro(UseShiftScale, int) ";
+
 %feature("docstring")  vtkGDCMThreadedImageReader::vtkSetMacro "vtkGDCMThreadedImageReader::vtkSetMacro(Scale, double) ";
 
 %feature("docstring")  vtkGDCMThreadedImageReader::vtkSetMacro "vtkGDCMThreadedImageReader::vtkSetMacro(Shift, double) ";
@@ -6477,9 +6645,17 @@ vtkIndent indent) ";
 vtkGDCMThreadedImageReader2::SplitExtent(int splitExt[6], int
 startExt[6], int num, int total) ";
 
+%feature("docstring")  vtkGDCMThreadedImageReader2::vtkBooleanMacro "vtkGDCMThreadedImageReader2::vtkBooleanMacro(UseShiftScale, int) ";
+
 %feature("docstring")  vtkGDCMThreadedImageReader2::vtkBooleanMacro "vtkGDCMThreadedImageReader2::vtkBooleanMacro(LoadOverlays, int) ";
 
 %feature("docstring")  vtkGDCMThreadedImageReader2::vtkBooleanMacro "vtkGDCMThreadedImageReader2::vtkBooleanMacro(FileLowerLeft, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader2::vtkGetMacro "vtkGDCMThreadedImageReader2::vtkGetMacro(UseShiftScale, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader2::vtkGetMacro "vtkGDCMThreadedImageReader2::vtkGetMacro(Scale, double) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader2::vtkGetMacro "vtkGDCMThreadedImageReader2::vtkGetMacro(Shift, double) ";
 
 %feature("docstring")  vtkGDCMThreadedImageReader2::vtkGetMacro "vtkGDCMThreadedImageReader2::vtkGetMacro(LoadOverlays, int) ";
 
@@ -6506,6 +6682,12 @@ vtkStringArray) ";
 
 %feature("docstring")  vtkGDCMThreadedImageReader2::vtkGetVector6Macro
 "vtkGDCMThreadedImageReader2::vtkGetVector6Macro(DataExtent, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader2::vtkSetMacro "vtkGDCMThreadedImageReader2::vtkSetMacro(UseShiftScale, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader2::vtkSetMacro "vtkGDCMThreadedImageReader2::vtkSetMacro(Scale, double) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader2::vtkSetMacro "vtkGDCMThreadedImageReader2::vtkSetMacro(Shift, double) ";
 
 %feature("docstring")  vtkGDCMThreadedImageReader2::vtkSetMacro "vtkGDCMThreadedImageReader2::vtkSetMacro(LoadOverlays, int) ";
 
@@ -6896,7 +7078,7 @@ gdcm::Writer::GetFile() ";
 
 %feature("docstring")  gdcm::Writer::SetCheckFileMetaInformation "void gdcm::Writer::SetCheckFileMetaInformation(bool b)
 
-Undocumented function, do not use. ";
+Undocumented function, do not use (= leave default). ";
 
 %feature("docstring")  gdcm::Writer::SetFile "void
 gdcm::Writer::SetFile(const File &f)
@@ -7019,7 +7201,13 @@ gdcm::XMLPrivateDictReader::~XMLPrivateDictReader "gdcm::XMLPrivateDictReader::~
 
 
 // File: namespacegdcm.xml
+%feature("docstring")  gdcm::terminal::to_string "std::string
+gdcm::to_string(Float data) ";
+
 %feature("docstring")  gdcm::terminal::TYPETOENCODING "gdcm::TYPETOENCODING(SQ, VRBINARY, unsigned char) TYPETOENCODING(UN ";
+
+%feature("docstring")  gdcm::terminal::to_string "std::string
+gdcm::to_string(Float data) ";
 
 %feature("docstring")  gdcm::terminal::TYPETOENCODING "gdcm::TYPETOENCODING(SQ, VRBINARY, unsigned char) TYPETOENCODING(UN ";
 
@@ -7129,6 +7317,9 @@ Helper function to check whether stream is compressed or not. ";
 
 
 // File: gdcmDataSet_8h.xml
+
+
+// File: gdcmDataSetHelper_8h.xml
 
 
 // File: gdcmDecoder_8h.xml
@@ -7258,6 +7449,9 @@ Helper function to check whether stream is compressed or not. ";
 
 
 // File: gdcmImplicitDataElement_8h.xml
+
+
+// File: gdcmImplicitToExplicitFilter_8h.xml
 
 
 // File: gdcmIOD_8h.xml
@@ -7566,6 +7760,9 @@ Helper function to check whether stream is compressed or not. ";
 // File: todo.xml
 
 
+// File: deprecated.xml
+
+
 // File: dir_db69beffeec17032a5f863eb4093fbd2.xml
 
 
@@ -7600,6 +7797,9 @@ Helper function to check whether stream is compressed or not. ";
 
 
 // File: dir_afe0da99d9454278818946a15c05c018.xml
+
+
+// File: PatchFile_8cxx-example.xml
 
 
 // File: TestByteSwap_8cxx-example.xml
