@@ -44,8 +44,15 @@ class Image;
 class GDCM_EXPORT ImageHelper
 {
 public:
-  /// Undocumented
+  /// GDCM 1.x compatibility issue:
+  /// when using ReWrite an MR Image Storage would be rewritten with a Rescale Slope/Intercept
+  /// while the standard would prohibit this (Philips Medical System is still doing that)
   static void SetForceRescaleInterceptSlope(bool);
+
+  /// GDCM 1.x compatibility issue:
+  /// When using ReWrite an MR Image Storage would be rewritten as Secondary Capture Object while
+  /// still having a Pixel Spacing tag (0028,0030). If you have deal with those files, use this 
+  /// very special flag to handle them
   static void SetForcePixelSpacing(bool);
 
   /// Set/Get shift/scale from/to a file
