@@ -44,6 +44,9 @@ class Image;
 class GDCM_EXPORT ImageHelper
 {
 public:
+  /// Undocumented
+  static void SetForceRescaleInterceptSlopeValue(bool);
+
   /// Set/Get shift/scale from/to a file
   static std::vector<double> GetRescaleInterceptSlopeValue(File const & f);
   static void SetRescaleInterceptSlopeValue(File & f, const Image & img);
@@ -66,6 +69,9 @@ public:
 protected:
   static Tag GetSpacingTagFromMediaStorage(MediaStorage const &ms);
   static Tag GetZSpacingTagFromMediaStorage(MediaStorage const &ms);
+
+private:
+  static bool ForceRescaleInterceptSlopeValue;
 };
 
 } // end namespace gdcm

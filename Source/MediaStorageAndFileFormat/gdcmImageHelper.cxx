@@ -42,6 +42,8 @@
 namespace gdcm
 {
 
+bool ImageHelper::ForceRescaleInterceptSlopeValue = true;
+
 bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &ori)
 {
   if( !ds.FindDataElement( tfgs ) ) return false;
@@ -440,6 +442,11 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
   return dircos;
 }
 
+void ImageHelper::SetForceRescaleInterceptSlopeValue(bool b)
+{
+  ForceRescaleInterceptSlopeValue = b;
+}
+
 std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
 {
   std::vector<double> interceptslope;
@@ -465,29 +472,32 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
   interceptslope.resize( 2 );
   interceptslope[0] = 0;
   interceptslope[1] = 1;
-  Attribute<0x0028,0x1052> at1;
-  bool intercept = ds.FindDataElement(at1.GetTag());
-  if( intercept )
+  if( ms == MediaStorage::CTImageStorage || ForceRescaleInterceptSlopeValue )
     {
-    if( !ds.GetDataElement(at1.GetTag()).IsEmpty() )
+    Attribute<0x0028,0x1052> at1;
+    bool intercept = ds.FindDataElement(at1.GetTag());
+    if( intercept )
       {
-      at1.SetFromDataElement( ds.GetDataElement(at1.GetTag()) );
-      interceptslope[0] = at1.GetValue();
-      }
-    }
-  Attribute<0x0028,0x1053> at2;
-  bool slope     = ds.FindDataElement(at2.GetTag());
-  if ( slope )
-    {
-    if( !ds.GetDataElement(at2.GetTag()).IsEmpty() )
-      {
-      at2.SetFromDataElement( ds.GetDataElement(at2.GetTag()) );
-      interceptslope[1] = at2.GetValue();
-      if( interceptslope[1] == 0 )
+      if( !ds.GetDataElement(at1.GetTag()).IsEmpty() )
         {
-        // come' on ! WTF
-        gdcmWarningMacro( "Cannot have slope == 0. Defaulting to 1.0 instead" );
-        interceptslope[1] = 1;
+        at1.SetFromDataElement( ds.GetDataElement(at1.GetTag()) );
+        interceptslope[0] = at1.GetValue();
+        }
+      }
+    Attribute<0x0028,0x1053> at2;
+    bool slope     = ds.FindDataElement(at2.GetTag());
+    if ( slope )
+      {
+      if( !ds.GetDataElement(at2.GetTag()).IsEmpty() )
+        {
+        at2.SetFromDataElement( ds.GetDataElement(at2.GetTag()) );
+        interceptslope[1] = at2.GetValue();
+        if( interceptslope[1] == 0 )
+          {
+          // come' on ! WTF
+          gdcmWarningMacro( "Cannot have slope == 0. Defaulting to 1.0 instead" );
+          interceptslope[1] = 1;
+          }
         }
       }
     }

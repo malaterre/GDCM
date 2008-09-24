@@ -56,6 +56,7 @@ vtkGDCMThreadedImageReader2::vtkGDCMThreadedImageReader2()
   memset(this->IconImageDataExtent,0,6*sizeof(*IconImageDataExtent));
   this->Shift = 0.;
   this->Scale = 1.;
+  this->UseShiftScale = 1;
 }
 
 //----------------------------------------------------------------------------
@@ -145,8 +146,13 @@ void vtkGDCMThreadedImageReader2Execute(vtkGDCMThreadedImageReader2 *self,
 
     const double shift = image.GetIntercept();
     const double scale = image.GetSlope();
+    if( self->GetShift() != shift || self->GetScale() != scale )
+      {
+      vtkGenericWarningMacro( "Specified Shift/Scale do not match file. This is not supported" );
+      }
 
-    if( shift != 1 || scale != 0 )
+    //if( shift != 1 || scale != 0 )
+    if( self->GetUseShiftScale() && (shift != 1 || scale != 0) )
       {
       const int shift_int = (int)shift;
       const int scale_int = (int)scale;

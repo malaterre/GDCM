@@ -91,11 +91,19 @@ public:
   // Description:
   // Explicitely set the Rescale Intercept (0028,1052)
   vtkSetMacro(Shift,double);
+  vtkGetMacro(Shift,double);
 
   // Description:
   // Explicitely get/set the Rescale Slope (0028,1053)
   vtkSetMacro(Scale,double);
+  vtkGetMacro(Scale,double);
 
+  // Description:
+  // Determine whether or not reader should use value from Shift/Scale
+  // Default is 1
+  vtkSetMacro(UseShiftScale,int);
+  vtkGetMacro(UseShiftScale,int);
+  vtkBooleanMacro(UseShiftScale,int);
 
 protected:
   vtkGDCMThreadedImageReader2();
@@ -131,6 +139,7 @@ private:
 
   double Shift;
   double Scale;
+  int UseShiftScale;
 
 private:
   vtkGDCMThreadedImageReader2(const vtkGDCMThreadedImageReader2&);  // Not implemented.
