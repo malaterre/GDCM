@@ -23,6 +23,9 @@
 
 namespace gdcm
 {
+/*
+http://groups.google.com/group/comp.compression/browse_thread/thread/e2e20d85a436cfa5
+*/
 
 PVRGCodec::PVRGCodec()
 {
@@ -70,6 +73,8 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
   const gdcm::SequenceOfFragments *sf = in.GetSequenceOfFragments();
   assert(sf);
 
+  // http://msdn.microsoft.com/en-us/library/hs3e7355.aspx
+  // -> check if tempnam needs the 'free'
   char *input  = tempnam(0, "gdcminpvrg");
   char *output = tempnam(0, "gdcmoutpvrg");
   if( !input || !output ) 
