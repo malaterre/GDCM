@@ -121,6 +121,8 @@
 //#include "gdcmImageChangePhotometricInterpretation.h"
 #include "gdcmImageChangePlanarConfiguration.h"
 #include "gdcmImageFragmentSplitter.h"
+#include "gdcmDataSetHelper.h"
+#include "gdcmImplicitToExplicitFilter.h"
 
 using namespace gdcm;
 %}
@@ -559,3 +561,5 @@ using namespace gdcm;
 //%include "gdcmImageChangePhotometricInterpretation.h"
 %include "gdcmImageChangePlanarConfiguration.h"
 %include "gdcmImageFragmentSplitter.h"
+%include "gdcmDataSetHelper.h"
+%include "gdcmImplicitToExplicitFilter.h"
