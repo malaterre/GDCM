@@ -123,6 +123,7 @@
 #include "gdcmImageFragmentSplitter.h"
 #include "gdcmDataSetHelper.h"
 #include "gdcmImplicitToExplicitFilter.h"
+#include "gdcmImageHelper.h"
 
 using namespace gdcm;
 %}
@@ -563,3 +564,5 @@ using namespace gdcm;
 %include "gdcmImageFragmentSplitter.h"
 %include "gdcmDataSetHelper.h"
 %include "gdcmImplicitToExplicitFilter.h"
+%template (DoubleType) std::vector<double>;
+%include "gdcmImageHelper.h"

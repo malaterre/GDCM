@@ -42,7 +42,8 @@
 namespace gdcm
 {
 
-bool ImageHelper::ForceRescaleInterceptSlopeValue = false;
+bool ImageHelper::ForceRescaleInterceptSlope = false;
+bool ImageHelper::ForcePixelSpacing = false;
 
 bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &ori)
 {
@@ -442,9 +443,14 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
   return dircos;
 }
 
-void ImageHelper::SetForceRescaleInterceptSlopeValue(bool b)
+void ImageHelper::SetForceRescaleInterceptSlope(bool b)
 {
-  ForceRescaleInterceptSlopeValue = b;
+  ForceRescaleInterceptSlope = b;
+}
+
+void ImageHelper::SetForcePixelSpacing(bool b)
+{
+  ForcePixelSpacing = b;
 }
 
 std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
@@ -472,7 +478,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
   interceptslope.resize( 2 );
   interceptslope[0] = 0;
   interceptslope[1] = 1;
-  if( ms == MediaStorage::CTImageStorage || ForceRescaleInterceptSlopeValue )
+  if( ms == MediaStorage::CTImageStorage || ForceRescaleInterceptSlope )
     {
     Attribute<0x0028,0x1052> at1;
     bool intercept = ds.FindDataElement(at1.GetTag());
@@ -574,6 +580,12 @@ Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
     t = Tag(0xffff,0xffff);
     break;
     }
+
+  if( ForcePixelSpacing )
+    {
+    t = Tag(0x0028,0x0030);
+    }
+
   return t;
 }
 
@@ -634,6 +646,11 @@ Warning - Dicom dataset contains attributes not present in standard DICOM IOD - 
     t = Tag(0xffff,0xffff);
     //abort();
     break;
+    }
+
+  if( ForcePixelSpacing )
+    {
+    t = Tag(0x0018,0x0088);
     }
   return t;
 }

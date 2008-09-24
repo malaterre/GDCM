@@ -80,7 +80,6 @@ blacklist = (
 "PNMCodec"
 "PDFCodec"
 "Decoder"
-"ImageHelper"
 "Coder"
 "ImageChangePhotometricInterpretation"
 )
