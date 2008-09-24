@@ -239,6 +239,10 @@ ENDIF(UNIX)
 OPTION(GDCM_USE_SYSTEM_EXPAT "Use system expat" OFF)
 MARK_AS_ADVANCED(GDCM_USE_SYSTEM_ZLIB GDCM_USE_SYSTEM_UUID GDCM_USE_SYSTEM_EXPAT)
 
+# Very advanced user option:
+# This will cause building of the broken JPEG library released by the Standford PVRG group:
+OPTION(GDCM_USE_PVRG "Use pvrg lib, only turn it on if you know what you are doing." OFF)
+
 IF(GDCM_USE_SYSTEM_ZLIB)
   # If user say so, then this is a requirement !
   FIND_PACKAGE(ZLIB REQUIRED)
