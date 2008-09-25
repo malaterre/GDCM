@@ -81,15 +81,16 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
   locod_command += " -o";
   locod_command += output; // no space !
 
-  std::cerr << locod_command << std::endl;
+  //std::cerr << locod_command << std::endl;
+  gdcmDebugMacro( locod_command );
   int ret = system(locod_command.c_str());
   //std::cerr << "system: " << ret << std::endl;
 
   // Do not use the return value from system (not portable AFAIK).
   if ( !System::FileExists(output) )
     {
-  free(input);
-  free(output);
+    free(input);
+    free(output);
     return false;
     }
   PNMCodec pnm;
@@ -143,7 +144,8 @@ bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
   locoe_command += " -o";
   locoe_command += output; // no space !
 
-  std::cerr << locoe_command << std::endl;
+  //std::cerr << locoe_command << std::endl;
+  gdcmDebugMacro( locoe_command );
   int ret = system(locoe_command.c_str());
   //std::cerr << "system: " << ret << std::endl;
 
@@ -152,8 +154,9 @@ bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
   // everything went smoothly
   if ( !System::FileExists(output) )
     {
-  free(input);
-  free(output);
+    gdcmErrorMacro( "locoe failed" );
+    free(input);
+    free(output);
     return false;
     }
   size_t len = gdcm::System::FileSize(output);
@@ -166,10 +169,10 @@ bool JPEGLSCodec::Code(DataElement const &in, DataElement &out)
   const Tag itemStart(0xfffe, 0xe000);
   //sq->GetTable().SetTag( itemStart );
 
-    Fragment frag;
-    //frag.SetTag( itemStart );
-    frag.SetByteValue( buf, len );
-    sq->AddFragment( frag );
+  Fragment frag;
+  //frag.SetTag( itemStart );
+  frag.SetByteValue( buf, len );
+  sq->AddFragment( frag );
   out.SetValue( *sq );
 
   delete[] buf;
