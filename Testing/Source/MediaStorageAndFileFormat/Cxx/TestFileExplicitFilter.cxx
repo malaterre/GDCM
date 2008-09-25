@@ -20,7 +20,7 @@
 
 int TestFileExplicitFilt(const char *subdir, const char *filename, bool verbose = false)
 {
-//  if( verbose )
+  if( verbose )
     std::cerr << "Reading: " << filename << std::endl;
   gdcm::Reader reader;
   reader.SetFileName( filename );
@@ -55,6 +55,32 @@ int TestFileExplicitFilt(const char *subdir, const char *filename, bool verbose 
     {
     std::cerr << "Failed to write: " << outfilename << std::endl;
     return 1;
+    }
+
+  if(verbose)
+    std::cerr << "write out: " << outfilename << std::endl;
+
+  char digest1[33] = {};
+  char digest2[33] = {};
+  bool b1 = gdcm::Testing::ComputeFileMD5(filename, digest1);
+  if( !b1 )
+    {
+    return 1;
+    }
+  bool b2 = gdcm::Testing::ComputeFileMD5(outfilename.c_str(), digest2);
+  if( !b2 )
+    {
+    return 1;
+    }
+  if( strcmp(digest1, digest2 ) == 0 )
+    {
+    // Easy case input file was explicit
+    return 0;
+    }
+  else
+    {
+    std::cerr << "input file contained wrong VR: " << filename << std::endl;
+    std::cerr << "see: " << outfilename << std::endl;
     }
 
   return 0;

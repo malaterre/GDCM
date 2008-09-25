@@ -129,13 +129,13 @@ public:
   void Insert(const DataElement& de) {
     // FIXME: there is a special case where a dataset can have value < 0x8, see:
     // $ gdcmdump --csa gdcmData/SIEMENS-JPEG-CorruptFrag.dcm 
-    if( de.GetTag().GetGroup() >= 0x0008 )
+    if( de.GetTag().GetGroup() >= 0x0008 || de.GetTag().GetGroup() == 0x4 )
       {
       InsertDataElement( de );
       }
     else
       {
-      gdcmErrorMacro( "Cannot add element with group < 0x0008 in the dataset" );
+      gdcmErrorMacro( "Cannot add element with group < 0x0008 and != 0x4 in the dataset" );
       }
   }
   /// Replace a dataelement with another one
