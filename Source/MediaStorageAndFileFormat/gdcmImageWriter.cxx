@@ -223,21 +223,22 @@ bool ImageWriter::Write()
 
   // PhotometricInterpretation
   // const Tag tphotometricinterpretation(0x0028, 0x0004);
-  if( !ds.FindDataElement( Tag(0x0028, 0x0004) ) )
+  //if( !ds.FindDataElement( Tag(0x0028, 0x0004) ) )
     {
     const char *pistr = PhotometricInterpretation::GetPIString(pi);
     DataElement de( Tag(0x0028, 0x0004 ) );
     de.SetByteValue( pistr, strlen(pistr) );
     de.SetVR( Attribute<0x0028,0x0004>::GetVR() );
     ds.Insert( de );
-    if( pi == PhotometricInterpretation::RGB
-      || pi == PhotometricInterpretation::YBR_FULL ) // FIXME
-      {
-      Attribute<0x0028, 0x0006> planarconfiguration;
-      planarconfiguration.SetValue( PixelData->GetPlanarConfiguration() );
-      ds.Replace( planarconfiguration.GetAsDataElement() );
-      }
-    else if ( pi == PhotometricInterpretation::PALETTE_COLOR )
+    //if( pi == PhotometricInterpretation::RGB
+    //  || pi == PhotometricInterpretation::YBR_FULL ) // FIXME
+    //  {
+    //  Attribute<0x0028, 0x0006> planarconfiguration;
+    //  planarconfiguration.SetValue( PixelData->GetPlanarConfiguration() );
+    //  ds.Replace( planarconfiguration.GetAsDataElement() );
+    //  }
+    //else
+    if ( pi == PhotometricInterpretation::PALETTE_COLOR )
       {
       const LookupTable &lut = PixelData->GetLUT();
       assert( (pf.GetBitsAllocated() == 8  && pf.GetPixelRepresentation() == 0) 
@@ -299,6 +300,11 @@ bool ImageWriter::Write()
       bluedesc.SetValue(length,0); bluedesc.SetValue(subscript,1); bluedesc.SetValue(bitsize,2);
       ds.Replace( bluedesc.GetAsDataElement() );
       }
+
+    ds.Remove( Tag(0x0028, 0x1221) );
+    ds.Remove( Tag(0x0028, 0x1222) );
+    ds.Remove( Tag(0x0028, 0x1223) );
+
     }
 
   // FIXME shouldn't this be done by the ImageApplyLookupTable filter ?

@@ -111,7 +111,7 @@ void PrintHelp()
   std::cout << "  -i --input      DICOM filename" << std::endl;
   std::cout << "  -o --output     DICOM filename" << std::endl;
   std::cout << "Options:" << std::endl;
-  std::cout << "  -l --lut        Apply LUT." << std::endl;
+  std::cout << "  -l --apply-lut  Apply LUT." << std::endl;
   std::cout << "  -C --check-meta Check File Meta Information." << std::endl;
   std::cout << "  -W --raw        Decompress image." << std::endl;
   std::cout << "  -J --jpeg       Compress image in jpeg." << std::endl;
@@ -184,7 +184,7 @@ int main (int argc, char *argv[])
         {"check-meta", 0, &checkmeta, 1}, // specific Root (not GDCM)
 // Image specific options:
         {"pixeldata", 1, 0, 0}, // valid
-        {"lut", 0, &lut, 1}, // default (implicit VR, LE) / Explicit LE / Explicit BE
+        {"apply-lut", 0, &lut, 1}, // default (implicit VR, LE) / Explicit LE / Explicit BE
         {"raw", 0, &raw, 1}, // default (implicit VR, LE) / Explicit LE / Explicit BE
         {"lossy", 1, &lossy, 1}, // Specify the compression ratio for lossy comp
         {"force", 0, &force, 1}, // force decompression even if target compression is identical

@@ -431,10 +431,17 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   // MONOCHROME1 is also implemented with a lookup table
   if( reader->GetImageFormat() == VTK_LOOKUP_TABLE || reader->GetImageFormat() == VTK_INVERSE_LUMINANCE )
     {
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
     assert( reader->GetOutput()->GetPointData()->GetScalars() 
       && reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable() );
+#endif
     //convert to color:
     vtkLookupTable *lut = reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable();
+    if( !lut )
+      {
+      // This must be a Segmented Palette and on VTK 4.4 this is not supported
+      std::cerr << "Not implemented. You will not see the Color LUT" << std::endl;
+      }
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
     if( lut->IsA( "vtkLookupTable16" ) )
       {
