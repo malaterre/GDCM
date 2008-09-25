@@ -39,7 +39,7 @@ public:
   void SetChangePrivateTags(bool b) { ChangePrivateTags = b;}
 
   /// When VR=16bits in explicit but Implicit has a 32bits length, use VR=UN
-  void SetUseVRUN(bool b) {}
+  void SetUseVRUN(bool b) { UseVRUN = b; }
 
   /// Change
   bool Change();
