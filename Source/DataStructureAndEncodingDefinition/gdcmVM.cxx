@@ -72,6 +72,9 @@ unsigned int VM::GetLength() const
   case VM::VM2:
     len = VMToLength<VM::VM2>::Length;
     break;
+  case VM::VM8:
+    len = VMToLength<VM::VM8>::Length;
+    break;
   case VM::VM16:
     len = VMToLength<VM::VM16>::Length;
     break;

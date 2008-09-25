@@ -365,6 +365,10 @@ IF(BUILD_TESTING)
   ENABLE_TESTING()
   INCLUDE(CTest)
   SUBDIRS(Testing)
+  IF(NOT GDCM_DATA_ROOT)
+    # http://gdcm.sourceforge.net/wiki/index.php/General_questions#What_is_gdcmData_.3F
+    MESSAGE(FATAL_ERROR "You need to set the path to GDCM_DATA_ROOT")
+  ENDIF(NOT GDCM_DATA_ROOT)
 ENDIF(BUILD_TESTING)
 
 
