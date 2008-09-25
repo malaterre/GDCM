@@ -59,6 +59,7 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
     break;
   default:
     gdcmErrorMacro( "Unhandled PF: " << pf );
+    return false;
     }
   os << "\n";
 
