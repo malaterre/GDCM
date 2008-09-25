@@ -617,6 +617,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "79b8705f2e6c7464bd3e2fc7e1d3483b" , "KODAK_CompressedIcon.dcm" },
 { "59071590099d21dd439896592338bf95" , "ima43.dcm" },
 { "46bf12c412590767bb8cd7f0d53eaa87" , "TG18-CH-2k-01.dcm" },
+{ "9214cc4f62fbea873ffad88e1be877c5" , "LJPEG_BuginGDCM12.dcm" },
+
 
 
 
