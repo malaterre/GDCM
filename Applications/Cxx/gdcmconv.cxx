@@ -458,7 +458,20 @@ int main (int argc, char *argv[])
       }
     else if( raw )
       {
-      change.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
+      const gdcm::TransferSyntax &ts = image.GetTransferSyntax();
+#ifdef GDCM_WORDS_BIGENDIAN
+      change.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRBigEndian );
+#else
+      if( ts.IsExplicit() )
+        {
+        change.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
+        }
+      else
+        {
+        assert( ts.IsImplicit() );
+        change.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+        }
+#endif
       }
     else if( rle )
       {
