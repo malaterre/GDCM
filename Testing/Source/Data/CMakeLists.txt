@@ -64,6 +64,9 @@ SET(BLACK_LIST_READER
 # Pixel Data is not were it should be :)
   3DDCM011.dcm 
 
+# Name says it all
+BogusItemStartItemEnd.dcm 
+
 # Overlay Data in Unused bit are not passed in TestImageWriter:
 #  SIEMENS_GBS_III-16-ACR_NEMA_1.acr
 #  SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm
