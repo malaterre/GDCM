@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -20,6 +20,9 @@
 namespace gdcm
 {
 
+/**
+ * \brief DictPrinter class
+ */
 // It's a sink there is no output
 class GDCM_EXPORT DictPrinter : public Printer
 {

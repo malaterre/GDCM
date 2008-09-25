@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -182,7 +182,7 @@ PyObject *DataElementToPyObject(DataElement const &de, VR const &vr)
       const char *ptype = GetPythonTypeFromVR( vr );
 //std::cout << "DEBUG:" << ptype << std::endl;
       Element<T,VM::VM1_n> el;
-      el.SetLength( count * sizeof(typename Element<T,VM::VM1_n>::Type) );
+      //el.SetLength( count * sizeof(typename Element<T,VM::VM1_n>::Type) );
       el.Set( de.GetValue() );
       PyObject *o;
       if( count == 0 )

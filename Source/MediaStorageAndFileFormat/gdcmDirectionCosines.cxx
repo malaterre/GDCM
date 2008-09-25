@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -69,6 +69,7 @@ bool DirectionCosines::IsValid() const
 
 void DirectionCosines::Cross(double z[3]) const
 {
+  //assert( Dot() == 0 );
   const double *x = Values;
   const double *y = x+3;
   double Zx = x[1]*y[2] - x[2]*y[1];

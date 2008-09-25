@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -17,6 +17,16 @@
 int TestCSAHeader(int , char * [])
 {
   gdcm::CSAHeader h;
+/*
+  try
+    {
+    const gdcm::CSAElement &foo = csa.GetCSAElementByName( "foo" );
+    }
+  catch( gdcm::CSAElementNameException &ex )
+    {
+    std::cout << ex.what() << std::endl;
+    }
+*/
 
   return 0;
 }

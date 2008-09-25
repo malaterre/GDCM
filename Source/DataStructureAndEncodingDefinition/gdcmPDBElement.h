@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -41,6 +41,12 @@ public:
   /// Set/Get Value
   const char *GetValue() const { return ValueField.c_str(); }
   void SetValue(const char *value) { ValueField = value; }
+
+  bool operator==(const PDBElement &de) const
+    {
+    return ValueField == de.ValueField
+      && NameField == de.NameField;
+    }
 
 protected:
   std::string NameField;

@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -23,7 +23,9 @@
 namespace gdcm
 {
 
-/*
+/**
+ * \brief Type
+ * \note
  * PS 3.5
  * 7.4 DATA ELEMENT TYPE
  * 7.4.1 TYPE 1 REQUIRED DATA ELEMENTS

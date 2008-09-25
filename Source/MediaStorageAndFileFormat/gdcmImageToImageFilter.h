@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -20,14 +20,20 @@
 namespace gdcm
 {
 
-
+/**
+ * \brief ImageToImageFilter class
+ * Super class for all filter taking an image and producing an output image
+ */
 class GDCM_EXPORT ImageToImageFilter
 {
 public:
   ImageToImageFilter():Input(new Image),Output(new Image) {}
   ~ImageToImageFilter() {}
 
+  /// Set input image
   void SetInput(const Image& image);
+
+  /// Get Output image
   const Image &GetOutput() const { return *Output; }
 
 protected:

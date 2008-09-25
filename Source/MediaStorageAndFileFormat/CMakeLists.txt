@@ -2,12 +2,17 @@
 # MSFF
 SET(MSFF_SRCS
   gdcmAnonymizer.cxx
+  gdcmFileExplicitFilter.cxx
+  gdcmImageFragmentSplitter.cxx
   gdcmTagPath.cxx
   gdcmRescaler.cxx
   gdcmImageToImageFilter.cxx
   gdcmImageChangeTransferSyntax.cxx
   gdcmImageApplyLookupTable.cxx
   gdcmOrientation.cxx
+  gdcmDataSetHelper.cxx
+  gdcmImageChangePlanarConfiguration.cxx
+  #gdcmImageChangePhotometricInterpretation.cxx
   gdcmDirectionCosines.cxx
   gdcmSorter.cxx
   gdcmIPPSorter.cxx
@@ -15,6 +20,7 @@ SET(MSFF_SRCS
   gdcmDICOMDIR.cxx
   gdcmSpectroscopy.cxx
   gdcmEncapsulatedDocument.cxx
+  gdcmSplitMosaicFilter.cxx
   gdcmFiducials.cxx
   gdcmWaveform.cxx
   gdcmPersonName.cxx
@@ -38,8 +44,11 @@ SET(MSFF_SRCS
   gdcmAudioCodec.cxx
   gdcmJPEG16Codec.cxx
   gdcmJPEG2000Codec.cxx
+  gdcmJPEGLSCodec.cxx
   gdcmJPEG8Codec.cxx
   gdcmJPEGCodec.cxx
+  gdcmPVRGCodec.cxx
+  gdcmPNMCodec.cxx
   gdcmRAWCodec.cxx
   gdcmLookupTable.cxx
   gdcmOverlay.cxx
@@ -95,11 +104,19 @@ ADD_LIBRARY(gdcmMSFF ${MSFF_SRCS})
 SET_TARGET_PROPERTIES(gdcmMSFF PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
 TARGET_LINK_LIBRARIES(gdcmMSFF gdcmDSED gdcmDICT
   gdcmjpeg8 gdcmjpeg12 gdcmjpeg16 gdcmopenjpeg)
+IF(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
+  # I am getting:
+# CMakeFiles/gdcmMSFF.dir/gdcmScanner.obj(.text$_ZN4gdcm6ReaderC1Ev[gdcm::Reader::Reader()]+0x3a):gdcmScanner.cxx: variable 'vtable for gdcm::Reader' can't be auto-imported. Please read the documentation for ld's --enable-auto-import for details.
+# CMakeFiles/gdcmMSFF.dir/gdcmImageReader.obj(.text$_ZN4gdcm6ReaderC2Ev[gdcm::Reader::Reader()]+0x3a):gdcmImageReader.cxx: variable 'vtable for gdcm::Reader' can't be auto-imported. Please read the documentation for ld's --enable-auto-import for details.
+# CMakeFiles/gdcmMSFF.dir/gdcmImageWriter.obj(.text$_ZN4gdcm6WriterC2Ev[gdcm::Writer::Writer()]+0x3a):gdcmImageWriter.cxx: variable 'vtable for gdcm::Writer' can't be auto-imported. Please read the documentation for ld's --enable-auto-import for details.
+
+  SET_TARGET_PROPERTIES(gdcmMSFF PROPERTIES LINK_FLAGS "-Wl,--enable-runtime-pseudo-reloc")
+ENDIF(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
 #IF(HAVE_UUIDCREATE)
 IF(WIN32)
   # For UuidCreate
   # http://msdn.microsoft.com/en-us/library/aa379205(VS.85).aspx
-  TARGET_LINK_LIBRARIES(gdcmMSFF Rpcrt4)
+  TARGET_LINK_LIBRARIES(gdcmMSFF rpcrt4)
 #ENDIF(HAVE_UUIDCREATE)
 ELSE(WIN32)
 TARGET_LINK_LIBRARIES(gdcmMSFF ${GDCMUUID})

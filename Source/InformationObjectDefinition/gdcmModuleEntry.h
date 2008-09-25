@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -33,6 +33,7 @@ public:
   ModuleEntry(const char *name = "", const char *type = "3", const char *description = ""):Name(name)/*,Type(type)*/,DescriptionField(description) {
 	  DataElementType = Type::GetTypeType(type);
   }
+  virtual ~ModuleEntry() {} // important
   friend std::ostream& operator<<(std::ostream& _os, const ModuleEntry &_val);
 
   void SetName(const char *name) { Name = name; }
@@ -50,7 +51,7 @@ public:
   void SetDescription(const char *d) { DescriptionField = d; }
   const Description & GetDescription() const { return DescriptionField; }
 
-private:
+protected:
   // PS 3.3 repeats the name of an attribute, but often contains typos
   // for now we will not use this info, but instead access the DataDict instead
   std::string Name;

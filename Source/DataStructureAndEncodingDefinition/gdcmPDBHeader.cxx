@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -149,6 +149,13 @@ namespace gdcm
  * STATION "0"
  */
 
+PDBElement PDBHeader::PDBEEnd = PDBElement( );
+
+  const PDBElement& PDBHeader::GetPDBEEnd() const
+  {
+    return PDBEEnd;
+  }
+
 int PDBHeader::readprotocoldatablock(const char *input, size_t inputlen, bool verbose)
 {
   // First 4 bytes are the length (again)
@@ -194,10 +201,10 @@ int PDBHeader::readprotocoldatablock(const char *input, size_t inputlen, bool ve
     is2 >> name;
     std::getline(is2, value);
     pdbel.SetName( name.c_str() );
+    // remove the first space character and the first & last " character
     std::string value2( value.begin()+2, value.end()-1);
     pdbel.SetValue( value2.c_str() );
-   InternalPDBDataSet.push_back( pdbel );
-    
+    InternalPDBDataSet.push_back( pdbel );
     }
   //std::cout << out.size();
 
@@ -267,7 +274,21 @@ const PDBElement &PDBHeader::GetPDBElementByName(const char *name)
       return *it;
       }
     }
-  return Dummy;
+    return GetPDBEEnd();
+}
+
+bool PDBHeader::FindPDBElementByName(const char *name)
+{
+  std::vector<PDBElement>::const_iterator it = InternalPDBDataSet.begin();
+  for(; it != InternalPDBDataSet.end(); ++it)
+    {
+    const char *itname = it->GetName();
+    if( strcmp(name, itname) == 0 )
+      {
+      return true;
+      }
+    }
+  return false;
 }
 
 static const char pdbheader[] = "GEMS_SERS_01";

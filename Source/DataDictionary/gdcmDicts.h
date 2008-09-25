@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -16,6 +16,7 @@
 #define __gdcmDicts_h
 
 #include "gdcmDict.h"
+#include "gdcmCSAHeaderDict.h"
 
 #include <string>
 
@@ -44,6 +45,8 @@ public:
 
   const PrivateDict &GetPrivateDict() const;
 
+  const CSAHeaderDict &GetCSAHeaderDict() const;
+
   bool IsEmpty() const { return GetPublicDict().IsEmpty(); }
 
 protected:
@@ -64,6 +67,8 @@ private:
 
   // Private Dicts:
   PrivateDict ShadowDict;
+
+  CSAHeaderDict CSADict;
   Dicts &operator=(const Dicts &_val); // purposely not implemented
   Dicts(const Dicts &_val); // purposely not implemented
 };

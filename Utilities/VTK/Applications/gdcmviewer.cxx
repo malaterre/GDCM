@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -37,7 +37,6 @@
 #include "vtkWindowToImageFilter.h"
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
 #include "vtkImageMapToColors16.h"
-#include "vtkImagePlanarComponentsToComponents.h"
 #include "vtkBalloonWidget.h"
 #include "vtkBalloonRepresentation.h"
 #include "vtkLogoWidget.h"
@@ -72,6 +71,7 @@ class vtkAngleWidget;
 #include "vtkStringArray.h"
 #include "vtkDebugLeaks.h"
 #include "vtkWorldPointPicker.h"
+#include "vtkMultiThreader.h"
 
 #include "gdcmFilename.h"
 #include "gdcmSystem.h"
@@ -431,10 +431,17 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   // MONOCHROME1 is also implemented with a lookup table
   if( reader->GetImageFormat() == VTK_LOOKUP_TABLE || reader->GetImageFormat() == VTK_INVERSE_LUMINANCE )
     {
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
     assert( reader->GetOutput()->GetPointData()->GetScalars() 
       && reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable() );
+#endif
     //convert to color:
     vtkLookupTable *lut = reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable();
+    if( !lut )
+      {
+      // This must be a Segmented Palette and on VTK 4.4 this is not supported
+      std::cerr << "Not implemented. You will not see the Color LUT" << std::endl;
+      }
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
     if( lut->IsA( "vtkLookupTable16" ) )
       {
@@ -479,15 +486,6 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 #if VTK_MAJOR_VERSION >= 5
     vtkImageYBRToRGB *filter = vtkImageYBRToRGB::New();
     filter->SetInput( reader->GetOutput() );
-    if( reader->GetPlanarConfiguration() )
-      {
-      vtkImagePlanarComponentsToComponents *rgbplanes = vtkImagePlanarComponentsToComponents::New();
-      rgbplanes->SetInput( reader->GetOutput() );
-      rgbplanes->Update();
-      //rgbplanes->GetOutput()->GetScalarRange(range);
-      filter->SetInput( rgbplanes->GetOutput() );
-      rgbplanes->Delete();
-      }
     filter->Update();
     filter->GetOutput()->GetScalarRange(range);
     viewer->SetInput( filter->GetOutput() );
@@ -498,19 +496,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     }
   else if( reader->GetImageFormat() == VTK_RGB )
     {
-    if( reader->GetPlanarConfiguration() )
-      {
-#if VTK_MAJOR_VERSION >= 5
-      vtkImagePlanarComponentsToComponents *rgbplanes = vtkImagePlanarComponentsToComponents::New();
-      rgbplanes->SetInput( reader->GetOutput() );
-      rgbplanes->Update();
-      rgbplanes->GetOutput()->GetScalarRange(range);
-      viewer->SetInput( rgbplanes->GetOutput() );
-      rgbplanes->Delete();
-#else
-      std::cerr << "Not implemented" << std::endl;
-#endif
-      }
+    // easy case !
     }
 //  vtkImageShiftScale *ss = vtkImageShiftScale::New();
 //  ss->SetInput( reader->GetOutput() );
@@ -649,6 +635,8 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 
 int main(int argc, char *argv[])
 {
+  //vtkMultiThreader::SetGlobalMaximumNumberOfThreads(1);
+
   vtkStringArray *filenames = vtkStringArray::New();
   if( argc < 2 )
     {

@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -35,6 +35,9 @@
 
 namespace gdcm
 {
+class GlobalInternal;
+class Dicts;
+class Defs;
 /**
  * \brief Global
  * \note bla
@@ -44,22 +47,36 @@ namespace gdcm
  * before and destroyed after all other singletons in VTK.
  * 
  */
-class GlobalInternal;
-class Dicts;
-class Defs;
 class GDCM_EXPORT Global // why expose the symbol I think I only need to expose the instance...
 {
 public:
   Global();
   ~Global();
 
-  // retrieve the default/internal dicts 
+  /// retrieve the default/internal dicts (Part 6)
+  /// This dict is filled up at load time
   Dicts const &GetDicts() const;
 
+  /// retrieve the default/internal (Part 3)
+  /// You need to explicitely call LoadResourcesFiles before
   Defs const &GetDefs() const;
 
-  // return the singleton instance
-  static const Global& GetInstance();
+  /// return the singleton instance
+  static Global& GetInstance();
+
+  /// Load all internal XML files, ressource path need to have been
+  /// set before calling this member function (see Append/Prepend members func)
+  bool LoadResourcesFiles();
+
+  /// Append path at the end of the path list
+  bool Append(const char *path);
+
+  /// Prepend path at the begining of the path list
+  bool Prepend(const char *path);
+
+protected:
+  /// Locate a ressource file
+  const char *Locate(const char *resfile) const;
 
 private:
   Global &operator=(const Global &_val); // purposely not implemented

@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -34,6 +34,8 @@
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmFragment.h"
 #include "gdcmFilename.h"
+#include "gdcmFilenameGenerator.h"
+#include "gdcmVersion.h"
 
 #include <string>
 #include <iostream>
@@ -43,6 +45,33 @@
 #include <getopt.h>
 #include <string.h>
 
+void PrintVersion()
+{
+  std::cout << "gdcmraw: gdcm " << gdcm::Version::GetVersion() << " ";
+  const char date[] = "$Date$";
+  std::cout << date << std::endl;
+}
+
+void PrintHelp()
+{
+  PrintVersion();
+  std::cout << "Usage: gdcmraw [OPTION]... FILE..." << std::endl;
+  std::cout << "Extract Data Element Value Field" << std::endl;
+  std::cout << "Parameter (required):" << std::endl;
+  std::cout << "  -i --input     DICOM filename" << std::endl;
+  std::cout << "  -t --tag         Specify tag to extract value from." << std::endl;
+  std::cout << "Options:" << std::endl;
+  std::cout << "  -S --split-frags Split fragments into multiple files." << std::endl;
+  std::cout << "  -p --pattern     Specify trailing file pattern (see split-frags)." << std::endl;
+  std::cout << "  -P --pixel-data  Pixel Data trailing 0." << std::endl;
+  std::cout << "General Options:" << std::endl;
+  std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
+  std::cout << "  -W --warning   print warning info." << std::endl;
+  std::cout << "  -D --debug     print debug info." << std::endl;
+  std::cout << "  -E --error     print error info." << std::endl;
+  std::cout << "  -h --help      print help." << std::endl;
+  std::cout << "  -v --version   print version." << std::endl;
+}
 
 int main(int argc, char *argv[])
 {
@@ -133,6 +162,11 @@ int main(int argc, char *argv[])
       outfilename = optarg;
       break;
 
+    case 'p':
+      assert( pattern.empty() );
+      pattern = optarg;
+      break;
+
     case 't':
       printf ("option t with value '%s'\n", optarg);
       rawTag.ReadFromCommaSeparatedString(optarg);
@@ -173,17 +207,35 @@ int main(int argc, char *argv[])
 
   if (optind < argc)
     {
+/*
     printf ("non-option ARGV-elements: ");
     while (optind < argc)
       {
       printf ("%s ", argv[optind++]);
       }
     printf ("\n");
+*/
+    PrintHelp();
+    }
+
+  if( version )
+    {
+    //std::cout << "version" << std::endl;
+    PrintVersion();
+    return 0;
+    }
+
+  if( help )
+    {
+    //std::cout << "help" << std::endl;
+    PrintHelp();
+    return 0;
     }
 
   if( filename.empty() )
     {
-    std::cerr << "Need input file (-i)\n";
+    //std::cerr << "Need input file (-i)\n";
+    PrintHelp();
     return 1;
     }
  
@@ -271,24 +323,17 @@ int main(int argc, char *argv[])
     if( splitfrags )
       {
       unsigned int nfrags = sf->GetNumberOfFragments();
+      gdcm::FilenameGenerator fg;
+      fg.SetNumberOfFilenames( nfrags );
+      fg.SetPrefix( outfilename.c_str() );
+      fg.SetPattern( pattern.c_str() );
+      fg.Generate();
       for(unsigned int i = 0; i < nfrags; ++i)
         {
         const gdcm::Fragment& frag = sf->GetFragment(i);
         const gdcm::ByteValue *fragbv = frag.GetByteValue();
-        std::ostringstream os;
-        os << outfilename;
-        if( pattern.empty() )
-          {
-          os << i;
-          }
-        else
-          {
-          char buffer[256]; // hope that's enough...
-          sprintf(buffer, pattern.c_str(), i);
-          os << buffer;
-          }
-        std::string outfilenamei = os.str();
-        std::ofstream outputi(outfilenamei.c_str(), std::ios::binary);
+        const char *outfilenamei = fg.GetFilename(i);
+        std::ofstream outputi(outfilenamei, std::ios::binary);
         fragbv->WriteBuffer(outputi);
         }
       }

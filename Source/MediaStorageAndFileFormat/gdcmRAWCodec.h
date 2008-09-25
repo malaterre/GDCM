@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -21,6 +21,9 @@ namespace gdcm
 {
   
 class RAWInternals;
+/**
+ * \brief RAWCodec class
+ */
 class RAWCodec : public ImageCodec
 {
 public:

@@ -8,6 +8,7 @@ SET(IOD_TEST_SRCS
   TestModule
   TestModules
   TestModuleEntry
+  TestNestedModuleEntries
   TestIODEntry
   TestIOD
   TestIODs

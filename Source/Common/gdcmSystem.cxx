@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -42,12 +42,19 @@
 #elif defined(HAVE__SNPRINTF)
 #define snprintf _snprintf
 #endif
+#ifdef __APPLE__
+#include <CoreFoundation/CFBase.h>
+#include <CoreFoundation/CFBundle.h>
+#include <CoreFoundation/CFURL.h>
+#endif // __APPLE__
 
 #if defined(_WIN32) && (defined(_MSC_VER) || defined(__WATCOMC__) ||defined(__BORLANDC__) || defined(__MINGW32__))
 #include <io.h>
 #include <direct.h>
 #define _unlink unlink
 #else
+//#include <features.h>	// we want GNU extensions
+#include <dlfcn.h>
 #include <sys/types.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -288,8 +295,51 @@ size_t System::FileSize(const char* filename)
     }
 }
 
-const char *System::GetCurrentProcessFileName()
+#if 0
+const char *System::GetCurrentDataDirectory()
 {
+#ifdef _WIN32
+  static char path[MAX_PATH];
+  gdcm::Filename fn( GetCurrentProcessFileName() );
+  if ( !fn.IsEmpty() )
+    {
+    std::string str = fn.GetPath();
+    str += "/../" GDCM_INSTALL_DATA_DIR;
+    strcpy(path, str.c_str());
+    return path;
+    }
+#else
+
+  static char path[PATH_MAX];
+
+#ifdef __APPLE__
+  Boolean success = false;
+  CFURLRef pathURL = CFBundleCopyResourcesDirectoryURL(CFBundleGetMainBundle());
+  if (pathURL != NULL)
+    {
+    success = CFURLGetFileSystemRepresentation(pathURL, true /*resolveAgainstBase*/, (unsigned char*) path, PATH_MAX);
+    CFRelease(pathURL);
+    }
+  if (success)
+    {
+    strncat(path, "/" GDCM_INSTALL_DATA_DIR, PATH_MAX);
+    return path;
+    }
+#endif
+    
+  gdcm::Filename fn( GetCurrentProcessFileName() );
+  if ( !fn.IsEmpty() )
+    {
+    std::string str = fn.GetPath();
+    str += "/../" GDCM_INSTALL_DATA_DIR;
+    strcpy(path, str.c_str());
+    return path;
+    }
+#endif
+  return 0;
+}
+#endif
+
 /* 
  * TODO:
  * check cygwin
@@ -302,21 +352,77 @@ const char *System::GetCurrentProcessFileName()
  *  GetProcessInformation -> FSMakeFSSpec
  * ...
  */
+const char *System::GetCurrentProcessFileName()
+{
 #ifdef _WIN32
   static char buf[MAX_PATH];
   if ( ::GetModuleFileName(0, buf, sizeof(buf)) )
-  {
+    {
     return buf;
-  }
-  return 0;
+    }
+#elif defined(__APPLE__)
+  static char buf[PATH_MAX];
+  Boolean success = false;
+  CFURLRef pathURL = CFBundleCopyExecutableURL(CFBundleGetMainBundle());
+  if ( pathURL)
+    {
+    success = CFURLGetFileSystemRepresentation(pathURL, true /*resolveAgainstBase*/, (unsigned char*) buf, PATH_MAX);
+    CFRelease(pathURL);
+    }
+  if (success)
+    {
+    return buf;
+    }
 #else
- static char path[PATH_MAX];
- if (readlink ("/proc/self/exe", path, sizeof(path)) <= 0)
-   {
-   return 0;
-   }
- return path;
+  static char path[PATH_MAX];
+  if ( readlink ("/proc/self/exe", path, sizeof(path)) > 0) // Technically 0 is not an error, but that would mean
+                                                            // 0 byte were copied ... thus considered it as an error
+    {
+    return path;
+    }
 #endif
+   return 0;
+}
+
+static void where_am_i() {}
+
+const char *System::GetCurrentModuleFileName()
+{
+#ifdef __USE_GNU
+  static char path[PATH_MAX];
+  Dl_info info;
+  if (dladdr( (void*)&where_am_i, &info ) == 0)
+    {
+    strcpy(path,info.dli_fname);
+    return path; 
+    }
+#elif defined(_WIN32)
+  // GetModuleFileName works the same on Win32 for library AFAIK
+  return System::GetCurrentProcessFileName();
+#endif
+
+  return 0;
+}
+
+const char *System::GetCurrentResourcesDirectory()
+{
+#ifdef __APPLE__
+  static char path[PATH_MAX];
+  Boolean success = false;
+  CFURLRef pathURL = CFBundleCopyResourcesDirectoryURL(CFBundleGetMainBundle());
+  if (pathURL != NULL)
+    {
+    success = CFURLGetFileSystemRepresentation(pathURL, true /*resolveAgainstBase*/, (unsigned char*) path, PATH_MAX);
+    CFRelease(pathURL);
+    }
+  if (success)
+    {
+    strncat(path, "/" GDCM_INSTALL_DATA_DIR, PATH_MAX);
+    return path;
+    }
+#endif
+  // Is there such beast on *any* other system but APPLE ?
+  return 0;
 }
 
 /**
@@ -381,7 +487,7 @@ bool System::GetHardwareAddress(unsigned char addr[6])
   return false;
 }
 
-#if defined(_WIN32) && !defined(__MINGW32__)
+#if defined(_WIN32) && !defined(HAVE_GETTIMEOFDAY)
 #include <stdio.h>
 static int gettimeofday(struct timeval *tv, struct timezone *tz)
 {

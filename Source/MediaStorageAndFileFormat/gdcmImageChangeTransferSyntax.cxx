@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -18,6 +18,7 @@
 #include "gdcmFragment.h"
 #include "gdcmRAWCodec.h"
 #include "gdcmJPEGCodec.h"
+#include "gdcmJPEGLSCodec.h"
 #include "gdcmJPEG2000Codec.h"
 #include "gdcmRLECodec.h"
 
@@ -93,11 +94,10 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde)
     {
     codec.SetDimensions( Input->GetDimensions() );
     // FIXME: GDCM always apply the planar configuration to 0...
-    if( Input->GetPlanarConfiguration() )
-      {
-      // Fow now simply return an error
-      return false;
-      }
+    //if( Input->GetPlanarConfiguration() )
+    //  {
+    //  Output->SetPlanarConfiguration( 0 );
+    //  }
     codec.SetPlanarConfiguration( Input->GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( Input->GetPhotometricInterpretation() );
     codec.SetPixelFormat( Input->GetPixelFormat() );
@@ -105,6 +105,12 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde)
     DataElement out;
     //bool r = codec.Code(Input->GetDataElement(), out);
     bool r = codec.Code(pixelde, out);
+    // FIXME: this is not the best place to change the Output image internal type,
+    // but since I know IJG is always applying the Planar Configuration, it does make
+    // any sense to EVER produce a JPEG image where the Planar Configuration would be one
+    // so let's be nice and actually sync JPEG configuration with DICOM Planar Conf.
+    Output->SetPlanarConfiguration( 0 );
+    //Output->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
 
     DataElement &de = Output->GetDataElement();
     de.SetValue( out.GetValue() );
@@ -122,8 +128,36 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde)
       // HACK
       //gdcm::Image *i = (gdcm::Image*)this;
       //i->SetPhotometricInterpretation( codec.GetPhotometricInterpretation() );
+abort();
       }
     return true;
+    }
+  return false;
+}
+
+bool ImageChangeTransferSyntax::TryJPEGLSCodec(const DataElement &pixelde)
+{
+  unsigned long len = Input->GetBufferLength();
+  //assert( len == pixelde.GetByteValue()->GetLength() );
+  const TransferSyntax &ts = GetTransferSyntax();
+
+  JPEGLSCodec codec;
+  if( codec.CanCode( ts ) )
+    {
+    codec.SetDimensions( Input->GetDimensions() );
+    codec.SetPixelFormat( Input->GetPixelFormat() );
+    //codec.SetNumberOfDimensions( Input->GetNumberOfDimensions() );
+    codec.SetPlanarConfiguration( Input->GetPlanarConfiguration() );
+    codec.SetPhotometricInterpretation( Input->GetPhotometricInterpretation() );
+    codec.SetNeedOverlayCleanup( Input->AreOverlaysInPixelData() );
+    DataElement out;
+    //bool r = codec.Code(Input->GetDataElement(), out);
+    bool r = codec.Code(pixelde, out);
+
+    DataElement &de = Output->GetDataElement();
+    de.SetValue( out.GetValue() );
+    assert( r );
+    return r;
     }
   return false;
 }
@@ -184,6 +218,7 @@ bool ImageChangeTransferSyntax::Change()
     bool success = false;
     if( !success ) success = TryRAWCodec(pixeldata);
     if( !success ) success = TryJPEGCodec(pixeldata);
+    if( !success ) success = TryJPEGLSCodec(pixeldata);
     if( !success ) success = TryJPEG2000Codec(pixeldata);
     if( !success ) success = TryRLECodec(pixeldata);
     Output->SetTransferSyntax( TS );
@@ -202,6 +237,7 @@ bool ImageChangeTransferSyntax::Change()
   if( !success ) success = TryRAWCodec(Input->GetDataElement());
   if( !success ) success = TryJPEGCodec(Input->GetDataElement());
   if( !success ) success = TryJPEG2000Codec(Input->GetDataElement());
+  if( !success ) success = TryJPEGLSCodec(Input->GetDataElement());
   if( !success ) success = TryRLECodec(Input->GetDataElement());
   Output->SetTransferSyntax( TS );
   if( !success )

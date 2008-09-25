@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -38,7 +38,7 @@ int TestRead(const char* filename)
 
   gdcm::MediaStorage ms;
   ms.SetFromFile( reader.GetFile() );
-  if( ms == gdcm::MediaStorage::MS_END )
+  if( ms.IsUndefined() )
     {
     std::cerr << "TestReadError: MediaStorage: " << ms << std::endl;
     return 1;

@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -20,6 +20,9 @@
 
 namespace gdcm
 {
+
+class ByteValue;
+class MediaStorage;
 /**
  * \brief ImageReader
  * \note its role is to convert the DICOM DataSet into a gdcm::Image
@@ -28,26 +31,30 @@ namespace gdcm
  * \todo
  * old gdcm 1.X used to have in its dictionary:
  *
- * 0028 0015 US 1 UsedNbX ACR Special (RET)
- * 0028 0016 US 1 UsedNbY ACR Special (RET)
- * 0028 0017 US 1 UsedNbZ ACR Special (RET)
- * 0028 0018 US 1 UsedNbT ACR Special (RET)
+ * - 0028 0015 US 1 UsedNbX ACR Special (RET)
+ * - 0028 0016 US 1 UsedNbY ACR Special (RET)
+ * - 0028 0017 US 1 UsedNbZ ACR Special (RET)
+ * - 0028 0018 US 1 UsedNbT ACR Special (RET)
  *
  * since I cannot find them *anywhere* I'll have to hard code them directly in a specific libido image reader
  * 
  */
-class ByteValue;
-class MediaStorage;
 class GDCM_EXPORT ImageReader : public Reader
 {
 public:
   ImageReader();
   ~ImageReader();
 
+  /// Read the DICOM image. There are two reason for failure:
+  /// 1. The input filename is not DICOM
+  /// 2. The input DICOM file does not contains an Image
   bool Read();
 
   // Following methods are valid only after a call to 'Read'
+
+  /// Return the read image
   const Image& GetImage() const;
+  Image& GetImage();
   //void SetImage(Image const &img);
 
 protected:

@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -174,7 +174,8 @@ public:
   vtkGetMacro(ImageFormat,int);
 
   // Description:
-  // Return the Planar Configuration
+  // Return the Planar Configuration. This simply means that the internal DICOM image was stored
+  // using a particular planar configuration (most of the time: 0)
   vtkGetMacro(PlanarConfiguration,int);
 
   // Description:

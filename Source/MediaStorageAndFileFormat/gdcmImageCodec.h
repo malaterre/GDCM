@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -24,7 +24,7 @@
 namespace gdcm
 {
   
-/*
+/**
  * \brief ImageCodec
  * \note Main codec, this is a central place for all implementation
  */
@@ -45,6 +45,7 @@ public:
     }
   void SetPlanarConfiguration(unsigned int pc)
     {
+    assert( pc == 0 || pc == 1 );
     PlanarConfiguration = pc;
     }
 

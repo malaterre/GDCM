@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -21,17 +21,30 @@
 #include "gdcmVM.h"
 #include "gdcmByteValue.h"
 #include "gdcmDataElement.h"
+#include "gdcmSwapper.h"
 
 #include <string>
 #include <vector>
 #include <sstream>
+#include <limits>
+#include <cmath>
 
 namespace gdcm
 {
 
-// Declaration, also serve as forward declaration
+// Forward declaration
+/**
+ * \brief EncodingImplementation
+ *
+ * \note TODO
+ */
 template<int T> class EncodingImplementation;
 
+/**
+ * \brief Element class
+ *
+ * \note TODO
+ */
 template<int TVR, int TVM>
 class Element
 {
@@ -115,6 +128,8 @@ public:
     assert( data );
     assert( length ); // != 0
     assert( _is );
+    // FIXME BUG: what if >> operation fails ?
+    // gdcmData/MR00010001.dcm / SpacingBetweenSlices
     _is >> data[0];
     char sep;
     //std::cout << "GetLength: " << af->GetLength() << std::endl;
@@ -140,6 +155,44 @@ public:
       }
     }
 };
+
+template < typename Float >
+std::string to_string ( Float data ) {
+  std::stringstream in;
+  unsigned long const digits =
+    static_cast< unsigned long >(
+    - std::log( std::numeric_limits<Float>::epsilon() )
+    / std::log( 10.0 ) );
+  if ( in << std::dec << std::setprecision(/*2+*/digits) << data ) {
+    return ( in.str() );
+  } else {
+    throw "Impossible Conversion"; // should not happen ...
+  }
+} 
+
+/* Writting VR::DS is not that easy after all */
+// http://groups.google.com/group/comp.lang.c++/browse_thread/thread/69ccd26f000a0802
+template<> inline void EncodingImplementation<VR::VRASCII>::Write(const float * data, unsigned long length, std::ostream &_os)  {
+    assert( data );
+    assert( length );
+    assert( _os );
+    _os << to_string(data[0]);
+    for(unsigned long i=1; i<length; ++i) {
+      assert( _os );
+      _os << "\\" << to_string(data[i]);
+      }
+    }
+
+template<> inline void EncodingImplementation<VR::VRASCII>::Write(const double* data, unsigned long length, std::ostream &_os)  {
+    assert( data );
+    assert( length );
+    assert( _os );
+    _os << to_string(data[0]);
+    for(unsigned long i=1; i<length; ++i) {
+      assert( _os );
+      _os << "\\" << to_string(data[i]);
+      }
+    }
 
 
 // Implementation to perform binary read and write
@@ -177,6 +230,7 @@ public:
     }
     //ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem(data,
     //  _is.GetSwapCode(), length);
+    SwapperNoOp::SwapArray(data,length);
   }
   template<typename T>
   static inline void Write(const T* data, unsigned long length,
@@ -332,7 +386,7 @@ public:
   void Set(Value const &v) {
     const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
     assert( bv ); // That would be bad...
-    if( VRToEncoding<TVR>::Mode == VR::VRBINARY )
+    if( (VR::VRType)(VRToEncoding<TVR>::Mode) == VR::VRBINARY )
       {
       const Type* array = (Type*)bv->GetPointer();
       if( array ) {

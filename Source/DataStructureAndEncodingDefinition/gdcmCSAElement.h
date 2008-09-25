@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -30,7 +30,7 @@ namespace gdcm
 class GDCM_EXPORT CSAElement
 {
 public:
-  CSAElement():KeyField(0) {}
+  CSAElement(unsigned int kf = 0):KeyField(kf) {}
 
   friend std::ostream& operator<<(std::ostream &os, const CSAElement &val);
 
@@ -63,7 +63,7 @@ public:
   Value &GetValue() { return *DataField; }
   void SetValue(Value const & vl) {
     //assert( DataField == 0 );
-    DataField = &vl;
+    DataField = vl;
   }
   bool IsEmpty() const { return DataField == 0; }
   void SetByteValue(const char *array, VL length)

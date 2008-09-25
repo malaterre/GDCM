@@ -22,6 +22,8 @@
 #include "vtkObjectFactory.h"
 #include "vtkStreamingDemandDrivenPipeline.h"
 
+#include "gdcmImageChangePlanarConfiguration.h"
+
 #include <assert.h>
 
 vtkCxxRevisionMacro(vtkImagePlanarComponentsToComponents, "$Revision: 1.31 $")
@@ -43,97 +45,46 @@ void vtkImagePlanarComponentsToComponentsExecute(vtkImagePlanarComponentsToCompo
                              vtkImageData *outData,
                              int outExt[6], int id, T *)
 {
-  vtkImageIterator<T> inIt(inData, outExt);
-  vtkImageProgressIterator<T> outIt(outData, outExt, self, id);
-  int idxC;
-
-  int maxC = inData->GetNumberOfScalarComponents();
-  assert( maxC == 3 );
+  int maxX, maxY, maxZ;
+  // find the region to loop over
+  maxX = outExt[1] - outExt[0];
+  maxY = outExt[3] - outExt[2]; 
+  maxZ = outExt[5] - outExt[4];
+  (void)self;
+  (void)id;
   
-      //const T* r = inIt.BeginSpan();
-      //const T* g = r + 307200/2;
-      //const T* b = g + 307200/2;
-    T* outSI = outIt.BeginSpan();
+
+  //target = static_cast<unsigned long>((maxZ+1)*(maxY+1)/50.0);
+  //target++;
+
+  const T *inPtr = (T*)inData->GetScalarPointer(outExt[0],outExt[2],outExt[4]);
+  T *outPtr = static_cast<T*>(outData->GetScalarPointer(outExt[0],outExt[2],outExt[4]));
+
   // Loop through ouput pixels
-    T* inSI = inIt.BeginSpan();
-      T *r = (inSI + 0 * 307200); //++inSI;
-      T *g = (inSI + 1 * 307200); //++inSI;
-      T *b = (inSI + 2 * 307200); //++inSI;
-  while (!outIt.IsAtEnd())
-    {
-    T* outSI = outIt.BeginSpan();
-    T* outSIEnd = outIt.EndSpan();
-    while (outSI != outSIEnd)
-      {
-      *outSI = 0; ++outSI;
-      ++r;
-      *outSI = 0; ++outSI;
-      ++g;
-      *outSI = 0; ++outSI;
-      ++b;
-      }
-    //inIt.NextSpan();
-    outIt.NextSpan();
-    }
-  //assert( inIt.IsAtEnd() );
-     outSI = outIt.BeginSpan();
-  memset(outSI, 0, 307200 * 3);
-}
 
-//----------------------------------------------------------------------------
-/*
-void vtkImagePlanarComponentsToComponents::ThreadedExecute (vtkImageData *inData, 
-                                       vtkImageData *outData,
-                                       int outExt[6], int id)
-{
-  vtkDebugMacro(<< "Execute: inData = " << inData 
-    << ", outData = " << outData);
-  
-  // this filter expects that input is the same type as output.
-  if (inData->GetScalarType() != outData->GetScalarType())
+  size_t framesize = (maxX+1) * (maxY+1) * 3;
+  for(int z = 0; z <= maxZ; ++z)
     {
-    vtkErrorMacro(<< "Execute: input ScalarType, " << inData->GetScalarType()
-    << ", must match out ScalarType " << outData->GetScalarType());
-    return;
-    }
-  if (inData->GetScalarType() != VTK_UNSIGNED_CHAR )
-    {
-    return;
-    }
-  
-  // need three components for input and output
-  if (inData->GetNumberOfScalarComponents() < 3)
-    {
-    vtkErrorMacro("Input has too few components");
-    return;
-    }
-  if (outData->GetNumberOfScalarComponents() < 3)
-    {
-    vtkErrorMacro("Output has too few components");
-    return;
+    const T *frame = inPtr + z * framesize;
+    size_t size = framesize / 3;
+    const T *r = frame + 0;
+    const T *g = frame + size;
+    const T *b = frame + size + size;
+
+    T *framecopy = outPtr + z * framesize;
+    gdcm::ImageChangePlanarConfiguration::RGBPlanesToRGBPixels(framecopy, r, g, b, size);
     }
 
-  switch (inData->GetScalarType())
-    {
-    vtkTemplateMacro(
-      vtkImagePlanarComponentsToComponentsExecute(this, inData, 
-                              outData, outExt, id, static_cast<VTK_TT *>(0)));
-    default:
-      vtkErrorMacro(<< "Execute: Unknown ScalarType");
-      return;
-    }
+
 }
-*/
-//
+
 //----------------------------------------------------------------------------
 int vtkImagePlanarComponentsToComponents::RequestData(
   vtkInformation* vtkNotUsed(request),
   vtkInformationVector** inputVector,
   vtkInformationVector* outputVector)
 {
-  char *outPtr;
   int idxX, idxY, idxZ;
-  int maxX, maxY, maxZ;
   vtkIdType outIncX, outIncY, outIncZ;
   int *outExt;
   double sum;
@@ -152,40 +103,25 @@ int vtkImagePlanarComponentsToComponents::RequestData(
     outInfo->Get(vtkDataObject::DATA_OBJECT()));
   vtkImageData *data = this->AllocateOutputData(output);
 
-  if (data->GetScalarType() != VTK_UNSIGNED_CHAR)
+  if (data->GetScalarType() != VTK_UNSIGNED_CHAR
+    && data->GetScalarType() != VTK_UNSIGNED_SHORT )
     {
-    vtkErrorMacro("Execute: This source only outputs doubles");
+    vtkErrorMacro("Execute: This source only deal with uchar/ushort");
     }
   
   outExt = data->GetExtent();
   
-  // find the region to loop over
-  maxX = outExt[1] - outExt[0];
-  maxY = outExt[3] - outExt[2]; 
-  maxZ = outExt[5] - outExt[4];
-  
   // Get increments to march through data 
   data->GetContinuousIncrements(outExt, outIncX, outIncY, outIncZ);
-  const char *inPtr = (char*)inData->GetScalarPointer(outExt[0],outExt[2],outExt[4]);
-  outPtr = static_cast<char*>(data->GetScalarPointer(outExt[0],outExt[2],outExt[4]));
-  
-  target = static_cast<unsigned long>((maxZ+1)*(maxY+1)/50.0);
-  target++;
 
-  // Loop through ouput pixels
-
-  unsigned long size = (maxX+1) * (maxY+1) * (maxZ+1);
-  const char *r = inPtr;
-  const char *g = inPtr + size;
-  const char *b = inPtr + size + size;
-
-  char *p = outPtr;
-  for (unsigned long j = 0; j < size && !this->AbortExecute; ++j)
+  switch (inData->GetScalarType())
     {
-    //this->UpdateProgress(count/(50.0*target));
-    *(p++) = *(r++);
-    *(p++) = *(g++);
-    *(p++) = *(b++);
+    vtkTemplateMacro(
+      vtkImagePlanarComponentsToComponentsExecute(this, inData, 
+                              data, outExt, 0, static_cast<VTK_TT *>(0)));
+    default:
+      vtkErrorMacro(<< "Execute: Unknown ScalarType");
+      return 0;
     }
 
   return 1;

@@ -794,7 +794,7 @@ double vtkImageColorViewer::GetOverlayVisibility()
 
 void vtkImageColorViewer::SetOverlayVisibility(double vis) 
 {
-  this->OverlayImageActor->SetVisibility(vis);
+  this->OverlayImageActor->SetVisibility((int)vis);
 }
 
 //----------------------------------------------------------------------------

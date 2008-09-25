@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -21,20 +21,25 @@
 
 namespace gdcm
 {
+
+class Image;
 /**
  * \brief ImageWriter
  */
-class Image;
 class GDCM_EXPORT ImageWriter : public Writer
 {
 public:
   ImageWriter();
   ~ImageWriter();
 
+  /// Set/Get Image to be written
+  /// It will overwrite anything Image infos found in DataSet
+  /// (see parent class to see how to pass dataset)
   const Image& GetImage() const { return *PixelData; }
   Image& GetImage() { return *PixelData; } // FIXME 
   void SetImage(Image const &img);
 
+  /// Write
   bool Write(); // Execute()
 
 private:

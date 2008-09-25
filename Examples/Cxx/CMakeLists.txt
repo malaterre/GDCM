@@ -14,6 +14,9 @@ INCLUDE_DIRECTORIES(
 ADD_EXECUTABLE(csa2img csa2img.cxx)
 TARGET_LINK_LIBRARIES(csa2img gdcmMSFF)
 
+ADD_EXECUTABLE(MrProtocol MrProtocol.cxx)
+TARGET_LINK_LIBRARIES(MrProtocol gdcmMSFF)
+
 ADD_EXECUTABLE(rle2img rle2img.cxx)
 TARGET_LINK_LIBRARIES(rle2img gdcmMSFF)
 
@@ -23,9 +26,18 @@ TARGET_LINK_LIBRARIES(uid_unique gdcmMSFF)
 ADD_EXECUTABLE(HelloWorld HelloWorld.cxx)
 TARGET_LINK_LIBRARIES(HelloWorld gdcmMSFF)
 
+ADD_EXECUTABLE(HelloVizWorld HelloVizWorld.cxx)
+TARGET_LINK_LIBRARIES(HelloVizWorld gdcmMSFF)
+
 ADD_EXECUTABLE(CompressImage CompressImage.cxx)
 TARGET_LINK_LIBRARIES(CompressImage gdcmMSFF)
 
 ADD_EXECUTABLE(CheckBigEndianBug CheckBigEndianBug.cxx)
 TARGET_LINK_LIBRARIES(CheckBigEndianBug gdcmMSFF)
+
+ADD_EXECUTABLE(PatchFile PatchFile.cxx)
+TARGET_LINK_LIBRARIES(PatchFile gdcmMSFF)
+
+ADD_EXECUTABLE(GenFakeImage GenFakeImage.cxx)
+TARGET_LINK_LIBRARIES(GenFakeImage gdcmMSFF)
 

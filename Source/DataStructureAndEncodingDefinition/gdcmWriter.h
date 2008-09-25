@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -20,6 +20,8 @@
 
 namespace gdcm
 {
+
+class FileMetaInformation;
 /**
  * \brief Writer ala DOM (Document Object Model)
  * This class is a non-validating writer, it will only performs well-
@@ -41,7 +43,6 @@ namespace gdcm
  *
  * WARNING: gdcm::Writer cannot write a DataSet if no SOP Instance UID (0008,0018) is found
  */
-class FileMetaInformation;
 class GDCM_EXPORT Writer
 {
 public:
@@ -69,9 +70,6 @@ public:
     assert( !Ofstream->fail() );
     //std::cerr << Stream.is_open() << std::endl;
     Stream = Ofstream;
-#ifndef NDEBUG
-    DebugFileName = filename;
-#endif
   }
   /// Set user ostream buffer
   void SetStream(std::ostream &output_stream) {
@@ -79,10 +77,10 @@ public:
   }
 
   /// Set/Get the DICOM file (DataSet + Header)
-  void SetFile(const File& f) { F = &f; }
+  void SetFile(const File& f) { F = f; }
   File &GetFile() { return *F; }
 
-  /// Undocumented function, do not use.
+  /// Undocumented function, do not use (= leave default)
   void SetCheckFileMetaInformation(bool b) { CheckFileMetaInformation = b; }
   void CheckFileMetaInformationOff() { CheckFileMetaInformation = false; }
   void CheckFileMetaInformationOn() { CheckFileMetaInformation = true; }
@@ -94,9 +92,6 @@ protected:
 private:
   SmartPointer<File> F;
   bool CheckFileMetaInformation;
-#ifndef NDEBUG
-  std::string DebugFileName;
-#endif
 };
 
 } // end namespace gdcm

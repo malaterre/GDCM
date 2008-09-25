@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -180,9 +180,9 @@ uint8_t PixelFormat::GetPixelSize() const
 {
   uint8_t pixelsize = BitsAllocated / 8;
   if( BitsAllocated == 12 )
-  {
-  pixelsize = 2; // fake a short value
-  }
+    {
+    pixelsize = 2; // fake a short value
+    }
   else
     assert( !(BitsAllocated % 8) );
   pixelsize *= SamplesPerPixel;
@@ -192,25 +192,51 @@ uint8_t PixelFormat::GetPixelSize() const
 
 int64_t PixelFormat::GetMin() const
 {
-  if( PixelRepresentation )
+  assert( BitsStored <= 32 );
+  if( PixelRepresentation == 1 )
     {
-    return ~(((1ull << BitsStored) - 1) >> 1);
+    return (int64_t)(~(((1ull << BitsStored) - 1) >> 1));
     }
-  else
+  else if( PixelRepresentation == 0 )
     {
     return 0;
+    }
+  //else if( PixelRepresentation == 3 ) // 32bits float
+  //  {
+  //  return (float) -1.0e+38f;
+  //  }
+  //else if( PixelRepresentation == 4 ) // 64bits float
+  //  {
+  //  return (double) -1.0e+299;
+  //  }
+  else
+    {
+    abort();
     }
 }
 
 int64_t PixelFormat::GetMax() const
 {
-  if( PixelRepresentation )
+  assert( BitsStored <= 32 );
+  if( PixelRepresentation == 1 )
     {
-    return ((1ull << BitsStored) - 1) >> 1;
+    return (int64_t)(((1ull << BitsStored) - 1) >> 1);
     }
+  else if( PixelRepresentation == 0 )
+    {
+    return (int64_t)((1ull << BitsStored) - 1);
+    }
+  //else if( PixelRepresentation == 3 ) // 32bits float
+  //  {
+  //  return (float)  1.0e+38f;
+  //  }
+  //else if( PixelRepresentation == 4 ) // 64bits float
+  //  {
+  //  return (double)  1.0e+299;
+  //  }
   else
     {
-    return (1ull << BitsStored) - 1;
+    abort();
     }
 }
 

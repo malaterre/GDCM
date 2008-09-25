@@ -22,8 +22,12 @@
 #ifndef __vtkImagePlanarComponentsToComponents_h
 #define __vtkImagePlanarComponentsToComponents_h
 
-//#include "vtkThreadedImageAlgorithm.h"
 #include "vtkImageAlgorithm.h"
+
+// everything is now handled within the vtkGDCMImageReader as Planar Configuration can not
+// be externalized (conflict with file lower left)
+
+#error do not use this class 
 
 //class VTK_EXPORT vtkImagePlanarComponentsToComponents : public vtkThreadedImageAlgorithm
 class VTK_EXPORT vtkImagePlanarComponentsToComponents : public vtkImageAlgorithm

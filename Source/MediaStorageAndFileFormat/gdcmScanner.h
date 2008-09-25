@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -79,7 +79,7 @@ public:
   // struct to store all the values found:
   typedef std::set< std::string > ValuesType;
 
-  // Get all the values found (in lexicographic order)
+  /// Get all the values found (in lexicographic order)
   ValuesType const & GetValues() const { return Values; }
 
   /* ltstr is CRITICAL, otherwise pointers value are used to do the key comparison */

@@ -3,7 +3,7 @@
   <xsl:output method="text"/>
 <!-- XSL to extract XML GDCM2 data owner -->
 <!--
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre

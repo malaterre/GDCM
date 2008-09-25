@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -16,6 +16,8 @@
 // http://www.swig.org/Doc1.3/Python.html
 // http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus
 // http://www.geocities.com/foetsch/python/extending_python.htm
+// http://www.ddj.com/cpp/184401747
+// http://www.ddj.com/article/printableArticle.jhtml;jsessionid=VM4IXCQG5KM10QSNDLRSKH0CJUNN2JVN?articleID=184401747&dept_url=/cpp/
 
 %module(directors="1",docstring="A DICOM library") gdcmswig
 #pragma SWIG nowarn=504,510
@@ -62,7 +64,9 @@
 #include "gdcmGlobal.h"
 #include "gdcmDicts.h"
 #include "gdcmDict.h"
+#include "gdcmCSAHeaderDict.h"
 #include "gdcmDictEntry.h"
+#include "gdcmCSAHeaderDictEntry.h"
 #include "gdcmUIDGenerator.h"
 //#include "gdcmConstCharWrapper.h"
 #include "gdcmScanner.h"
@@ -101,6 +105,7 @@
 #include "gdcmDefinedTerms.h"
 #include "gdcmSeries.h"
 #include "gdcmModuleEntry.h"
+#include "gdcmNestedModuleEntries.h"
 #include "gdcmIODEntry.h"
 #include "gdcmRescaler.h"
 #include "gdcmSegmentedPaletteColorLookupTable.h"
@@ -112,6 +117,13 @@
 #include "gdcmSOPClassUIDToIOD.h"
 #include "gdcmImageChangeTransferSyntax.h"
 #include "gdcmImageApplyLookupTable.h"
+#include "gdcmSplitMosaicFilter.h"
+//#include "gdcmImageChangePhotometricInterpretation.h"
+#include "gdcmImageChangePlanarConfiguration.h"
+#include "gdcmImageFragmentSplitter.h"
+#include "gdcmDataSetHelper.h"
+#include "gdcmFileExplicitFilter.h"
+#include "gdcmImageHelper.h"
 
 using namespace gdcm;
 %}
@@ -120,6 +132,7 @@ using namespace gdcm;
 //#include "myheader.h"
 //%}
 
+%include "docstrings.i"
 
 // swig need to know what are uint16_t, uint8_t...
 %include "stdint.i"
@@ -406,7 +419,20 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
+%include "gdcmCSAHeaderDictEntry.h"
+%extend gdcm::CSAHeaderDictEntry
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::ostringstream os;
+    os << *self;
+    buffer = os.str();
+    return buffer.c_str();
+  }
+};
+
 %include "gdcmDict.h"
+%include "gdcmCSAHeaderDict.h"
 %include "gdcmDicts.h"
 
 %exception ReadFooBar {
@@ -498,6 +524,7 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
+%include "gdcmNestedModuleEntries.h"
 %include "gdcmModule.h"
 %include "gdcmModules.h"
 %include "gdcmDefs.h"
@@ -531,3 +558,11 @@ using namespace gdcm;
 %include "gdcmSOPClassUIDToIOD.h"
 %include "gdcmImageChangeTransferSyntax.h"
 %include "gdcmImageApplyLookupTable.h"
+%include "gdcmSplitMosaicFilter.h"
+//%include "gdcmImageChangePhotometricInterpretation.h"
+%include "gdcmImageChangePlanarConfiguration.h"
+%include "gdcmImageFragmentSplitter.h"
+%include "gdcmDataSetHelper.h"
+%include "gdcmFileExplicitFilter.h"
+%template (DoubleType) std::vector<double>;
+%include "gdcmImageHelper.h"

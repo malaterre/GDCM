@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -25,25 +25,6 @@
 
 namespace gdcm
 {
-/**
- * \brief Class to represent a Data Element
- * Implicit / Explicit
- * \note
- * DATA ELEMENT: 
- * A unit of information as defined by a single entry in the data dictionary.
- * An encoded Information Object Definition (IOD) Attribute that is composed
- * of, at a minimum, three fields: a Data Element Tag, a Value Length, 
- * and a Value Field. For some specific Transfer Syntaxes, a Data Element
- * also contains a VR Field where the Value Representation of that Data 
- * Element is specified explicitly.
- *
- * Design:
- * # A DataElement in GDCM always store VL (Value Length) on a 32 bits integer even when VL is 16 bits
- * # A DataElement always store the VR even for Implicit TS, in which case VR is defaulted to VR::INVALID
- * # For Item start/end (See 0xfffe tags), Value is NULL
- *
- * \see ExplicitDataElement ImplicitDataElement
- */
 // Data Element
 // Contains multiple fields:
 // -> Tag
@@ -56,6 +37,25 @@ namespace gdcm
 
 class SequenceOfItems;
 class SequenceOfFragments;
+/**
+ * \brief Class to represent a Data Element
+ * either Implicit or Explicit
+ * \details
+ * DATA ELEMENT: 
+ * A unit of information as defined by a single entry in the data dictionary.
+ * An encoded Information Object Definition (IOD) Attribute that is composed
+ * of, at a minimum, three fields: a Data Element Tag, a Value Length, 
+ * and a Value Field. For some specific Transfer Syntaxes, a Data Element
+ * also contains a VR Field where the Value Representation of that Data 
+ * Element is specified explicitly.
+ *
+ * \section Design:
+ * - A DataElement in GDCM always store VL (Value Length) on a 32 bits integer even when VL is 16 bits
+ * - A DataElement always store the VR even for Implicit TS, in which case VR is defaulted to VR::INVALID
+ * - For Item start/end (See 0xfffe tags), Value is NULL
+ *
+ * \see ExplicitDataElement ImplicitDataElement
+ */
 class GDCM_EXPORT DataElement
 {
 public:
@@ -64,54 +64,68 @@ public:
 
   friend std::ostream& operator<<(std::ostream &_os, const DataElement &_val);
 
-  // Set/Get Tag
+  /// Get Tag
   const Tag& GetTag() const { return TagField; }
   Tag& GetTag() { return TagField; }
+  /// Set Tag
+  /// Use with cautious (need to match Part 6)
   void SetTag(const Tag &t) { TagField = t; }
 
-  // Set/Get VL
+  /// Get VL
   const VL& GetVL() const { return ValueLengthField; }
+  /// Set VL
+  /// Use with cautious (need to match Part 6), advanced user only
+  /// \see SetByteValue
   void SetVL(const VL &vl) { ValueLengthField = vl; }
   void SetVLToUndefined();
 
-  // Set/Get VR
+  /// Get VR
+  /// do not set VR::SQ on bytevalue data element
   VR const &GetVR() const { return VRField; }
-  void SetVR(VR const &vr) { VRField = vr; }
+  /// Set VR
+  /// Use with cautious (need to match Part 6), advanced user only
+  /// \pre vr is a VR::VRALL (not a dual one such as OB_OW)
+  void SetVR(VR const &vr) { 
+    assert( vr.IsVRFile() );
+    VRField = vr; 
+  }
 
-  // Set/Get Value (bytes array, SQ of items, SQ of fragments):
+  /// Set/Get Value (bytes array, SQ of items, SQ of fragments):
   Value const &GetValue() const { return *ValueField; }
   Value &GetValue() { return *ValueField; }
+  /// \warning you need to set the ValueLengthField explicitely
   void SetValue(Value const & vl) {
     //assert( ValueField == 0 );
-    ValueField = &vl;
+    ValueField = vl;
+    ValueLengthField = vl.GetLength();
   }
+  /// Check if Data Element is empty
   bool IsEmpty() const { return ValueField == 0 || (GetByteValue() && GetByteValue()->IsEmpty()); }
 
   // Helper:
-//  void SetByteValue(ByteValue const &bv )
-//    {
-//    ByteValue *bv = new ByteValue(array,length);
-//    SetVL( bv.GetLength() );
-//    SetValue( *bv );
-//    }
+  /// Set the byte value
   void SetByteValue(const char *array, VL length)
     {
     ByteValue *bv = new ByteValue(array,length);
-    // Warning length could have been odd, so retrieve the length as stored in the byte value:
-    SetVL( bv->GetLength() );
     SetValue( *bv );
     }
-  // WARNING: You need to check for NULL return value
+  /// Return the Value of DataElement as a ByteValue (if possible)
+  /// \warning: You need to check for NULL return value
   const ByteValue* GetByteValue() const {
     const Value &v = GetValue();
     const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
     return bv; // Will return NULL if not ByteValue
   }
-  // WARNING: You need to check for NULL return value
+
+  /// Return the Value of DataElement as a Sequence Of Items (if possible)
+  /// \warning: You need to check for NULL return value
   const SequenceOfItems* GetSequenceOfItems() const;
+
+  /// Return the Value of DataElement as a Sequence Of Fragments (if possible)
+  /// \warning: You need to check for NULL return value
   const SequenceOfFragments* GetSequenceOfFragments() const;
 
-  // Helper:
+  /// return if Value Length if of undefined length
   bool IsUndefinedLength() const {
     return ValueLengthField.IsUndefined();
   }
@@ -189,7 +203,6 @@ protected:
 
   // Value Representation
   VR VRField;
-  //typedef std::tr1::shared_ptr<gdcm::Value> ValuePtr;
   typedef SmartPointer<Value> ValuePtr;
   ValuePtr ValueField;
 };

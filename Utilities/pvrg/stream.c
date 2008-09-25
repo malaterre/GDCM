@@ -361,7 +361,7 @@ void mropen(filename,index)
   if (Stack_Stream_Current!=index) pushstream();
   current_read_byte=0;
   read_position = -1;
-  if ((srin = fopen(filename,"r"))==NULL)
+  if ((srin = fopen(filename,"rb"))==NULL)
     {
       WHEREAMI();
       printf("Cannot read input file %s.\n",
@@ -420,7 +420,7 @@ void mwopen(filename,index)
   if ((Stack_Stream_Current!=index)) pushstream();
   current_write_byte=0;
   write_position=7;
-  if ((swout = fopen(filename,"w+"))==NULL)
+  if ((swout = fopen(filename,"wb+"))==NULL)
     {
       WHEREAMI();
       printf("Cannot open output file %s.\n",filename);

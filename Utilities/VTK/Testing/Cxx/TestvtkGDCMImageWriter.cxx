@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -64,6 +64,7 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
     writer->SetImageFormat( reader->GetImageFormat() );
     writer->SetFileDimensionality( reader->GetFileDimensionality() );
     writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
+    writer->SetPlanarConfiguration( reader->GetPlanarConfiguration() );
     writer->SetShift( reader->GetShift() );
     writer->SetScale( reader->GetScale() );
     writer->SetFileName( gdcmfile.c_str() );
@@ -95,6 +96,7 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
           {
           std::cerr << "Problem:" << vtkorigin[0] << "," << vtkorigin[1] << "," << vtkorigin[2] ;
           std::cerr << " should be:" << origin[0] << "," << origin[1] << "," << origin[2] << std::endl ;
+          std::cerr << filename << std::endl;
           res = 1;
           }
         }

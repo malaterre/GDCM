@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -38,6 +38,8 @@ namespace itk
  #else
   #define ITK_GDCM_EXPORT __declspec( dllimport ) 
  #endif
+#else
+  #define ITK_GDCM_EXPORT
 #endif
 
 class ITK_GDCM_EXPORT GDCMImageIO2 : public ImageIOBase

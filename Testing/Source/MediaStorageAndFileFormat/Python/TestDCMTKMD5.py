@@ -1,6 +1,6 @@
 ############################################################################
 #
-#  Program: GDCM (Grass Root DICOM). A DICOM library
+#  Program: GDCM (Grassroots DICOM). A DICOM library
 #  Module:  $URL$
 #
 #  Copyright (c) 2006-2008 Mathieu Malaterre
@@ -16,12 +16,37 @@
 import gdcm
 import os,sys,re
 
+"""
+You need to have dcmdump/dcmdrle/dcmdjpeg in your PATH
+"""
+
 def TestDCMTKMD5( filename, verbose = False ):
+  blacklist = [
+  # Get rid of DICOMDIR if any:
+  'DICOMDIR',
+  'DICOMDIR_MR_B_VA12A',
+  'DICOMDIR-Philips-EasyVision-4200-Entries',
+  'dicomdir_Acusson_WithPrivate_WithSR',
+  'dicomdir_Pms_With_heavy_embedded_sequence',
+  'dicomdir_Pms_WithVisit_WithPrivate_WithStudyComponents',
+  'dicomdir_With_embedded_icons',
+  # Unsupported file:
+  'SignedShortLosslessBug.dcm',
+  'JDDICOM_Sample2.dcm',
+  'GE_DLX-8-MONO2-PrivateSyntax.dcm',
+  'PrivateGEImplicitVRBigEndianTransferSyntax16Bits.dcm',
+  'DermaColorLossLess.dcm', # technically I could support this one...
+  'LEADTOOLS_FLOWERS-24-RGB-JpegLossy.dcm', # idem
+  'ALOKA_SSD-8-MONO2-RLE-SQ.dcm'] # this one is not supported by dcmtk 3.5.4
+  for f in blacklist:
+    if f in filename:
+      print "%s is on the black list, giving up"%filename
+      return 0
   #print filename
-  # 
+  #
   #dcmdump_exec = "dcmdump -dc -E +P 2,10 -s " + filename + " 2> /dev/null"
-  # I had to remove the -dc for the following file:
-  # GE_GENESIS-16-MONO2-Uncompressed-UnusualVR.dcm there is trailing space instead of \0
+  # I had to remove the -dc for the following file:
+  # GE_GENESIS-16-MONO2-Uncompressed-UnusualVR.dcm there is trailing space instead of \0
   dcmdump_exec = "dcmdump -E +P 2,10 -s " + filename + " 2> /dev/null"
   #print dcmdump_exec
   f = os.popen(dcmdump_exec)

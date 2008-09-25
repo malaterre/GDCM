@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -287,7 +287,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 //{ "47715f0a5d5089268bbef6f83251a8ad" , "OT-PAL-8-face.dcm" },
 { "d7c30d57af821b02c67103250a744235" , "OT-PAL-8-face.dcm" },
 /* gdcm 512 512 1 16 1 */
-{ "4b0021efe5a675f24c82e1ff28a1e2eb" , "PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm" },
+//{ "4b0021efe5a675f24c82e1ff28a1e2eb" , "PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm" },
+{ "d93d2f78d845c7a132489aab92eadd32" , "PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm" },
 /* gdcm 256 256 1 16 1 */
 { "b78366162d9d43b2852d2637c5365c89" , "PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm" },
 /* gdcm 256 256 1 16 1 */
@@ -307,7 +308,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 136 92 1 16 1 */
 { "dbbf39ac11a39372b1e961f40ac6f62a" , "RadBWLossLess.dcm" },
 /* gdcm 600 430 1 16 3 */
-{ "964ea27345a7004325896d34b257f289" , "rle16sti.dcm" },
+//{ "964ea27345a7004325896d34b257f289" , "rle16sti.dcm" },
+{ "f799773abbe36a1a8a3a881e27f8084d" , "rle16sti.dcm" },
 /* gdcm 512 512 1 16 1 */
 { "80527e9c17a4a3d12d408e9a354f37f9" , "ser002img00026.dcm" },
 /* gdcm 512 512 1 16 1 */
@@ -390,7 +392,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 // Same thing
 { "b8b5030261f92574227fe91902738558" , "JDDICOM_Sample5.dcm" },
 // This one was computed from dcmtk, gdcm 1.x fails to read it...
-{ "49ca8ad45fa7f24b0406a5a03ba8aff6" , "rle16loo.dcm" },
+//{ "49ca8ad45fa7f24b0406a5a03ba8aff6" , "rle16loo.dcm" },
+{ "04b42f011bdcf56e8a22607cb715447c" , "rle16loo.dcm" },
 // Name is poorly choosen since it's actually a Dicom Objects bug
 // Cannot only be read by gdcm 1.2.x
 { "f1436c1800ccbba8da82acb7f2dff29d" , "GE_JPEG-Broken.dcm" },
@@ -609,6 +612,16 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "4d790e17ee35572d64e37c55dbc36725" , "MR_ELSCINT1_00e1_1042_SQ_feff_00e0_Item.dcm" },
 { "93ddc0c3d642af60f55630232d2801ae" , "CT_Image_Storage_multiframe.dcm" },
 { "ff261592e1c4b205eca7eea99d0101c0" , "ELSCINT1_JP2vsJ2K.dcm" },
+{ "b620a57170941e26dfd07ff334c73cb4" , "GE_MR_0025xx1bProtocolDataBlock.dcm" },
+{ "4b5423b34ab4e104c222359a91448a5d" , "CT-SIEMENS-MissingPixelDataInIconSQ.dcm" },
+{ "79b8705f2e6c7464bd3e2fc7e1d3483b" , "KODAK_CompressedIcon.dcm" },
+{ "59071590099d21dd439896592338bf95" , "ima43.dcm" },
+{ "46bf12c412590767bb8cd7f0d53eaa87" , "TG18-CH-2k-01.dcm" },
+
+
+
+
+
 
 
 

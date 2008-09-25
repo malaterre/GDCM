@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -31,7 +31,7 @@ public:
 
 ImageCodec::ImageCodec()
 {
-  PlanarConfiguration = 2;
+  PlanarConfiguration = 0;
   RequestPlanarConfiguration = false;
   RequestPaddedCompositePixelCode = false;
   PI = PhotometricInterpretation::UNKNOW;
@@ -75,10 +75,6 @@ bool ImageCodec::DoByteSwap(std::istream &is, std::ostream &os)
     {
     ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)
       dummy_buffer, SwapCode::LittleEndian, buf_size/2);
-    }
-  else
-    {
-    gdcmDebugMacro( "Why would I byte swap ?" );
     }
 #else
   // GE_DLX-8-MONO2-PrivateSyntax.dcm is 8bits
@@ -226,15 +222,40 @@ bool ImageCodec::DoPaddedCompositePixelCode(std::istream &is, std::ostream &os)
   //SwapCode sc = is.GetSwapCode();
 
   assert( !(buf_size % 2) );
-  for(long i = 0; i < buf_size/2; ++i)
+  if( GetPixelFormat().GetBitsAllocated() == 16 )
     {
+    for(long i = 0; i < buf_size/2; ++i)
+      {
 #ifdef GDCM_WORDS_BIGENDIAN
-    os.write( dummy_buffer+i, 1 );
-    os.write( dummy_buffer+i+buf_size/2, 1 );
+      os.write( dummy_buffer+i, 1 );
+      os.write( dummy_buffer+i+buf_size/2, 1 );
 #else
-    os.write( dummy_buffer+i+buf_size/2, 1 );
-    os.write( dummy_buffer+i, 1 );
+      os.write( dummy_buffer+i+buf_size/2, 1 );
+      os.write( dummy_buffer+i, 1 );
 #endif
+      }
+    }
+  else if( GetPixelFormat().GetBitsAllocated() == 32 )
+    {
+  assert( !(buf_size % 4) );
+    for(long i = 0; i < buf_size/4; ++i)
+      {
+#ifdef GDCM_WORDS_BIGENDIAN
+      os.write( dummy_buffer+i, 1 );
+      os.write( dummy_buffer+i+1*buf_size/4, 1 );
+      os.write( dummy_buffer+i+2*buf_size/4, 1 );
+      os.write( dummy_buffer+i+3*buf_size/4, 1 );
+#else
+      os.write( dummy_buffer+i+3*buf_size/4, 1 );
+      os.write( dummy_buffer+i+2*buf_size/4, 1 );
+      os.write( dummy_buffer+i+1*buf_size/4, 1 );
+      os.write( dummy_buffer+i, 1 );
+#endif
+      }
+    }
+  else
+    {
+    return false;
     }
   return true;
 }
@@ -435,6 +456,17 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
   case PhotometricInterpretation::YBR_FULL:
     //DoYBR(*cur_is,pi_os);
     //cur_is = &pi_os;
+    {
+      const JPEGCodec *c = dynamic_cast<const JPEGCodec*>(this);
+      if( c )
+        {
+        // The following is required for very special case of color space conversion
+        // dcmdrle ACUSON-24-YBR_FULL-RLE.dcm bla.dcm
+        // dcmcjpeg bla.dcm foo.dcm
+        // foo.dcm would be not displayed correctly
+        //this->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
+        }
+    }
     break;
   case PhotometricInterpretation::PALETTE_COLOR:
     assert( LUT );
@@ -448,6 +480,7 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
       if( !c )
         {
         gdcmErrorMacro( "YBR_FULL_422 is not implemented in GDCM. Image will be displayed incorrectly" );
+        //this->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
         }
       }
     break;

@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -88,8 +88,10 @@ void JPEGCodec::SetBitSample(int bit)
     Internal = NULL;
     }
   Internal->SetDimensions( this->GetDimensions() );
+  Internal->SetPlanarConfiguration( this->GetPlanarConfiguration() );
   Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
   Internal->ImageCodec::SetPixelFormat( this->ImageCodec::GetPixelFormat() );
+  //Internal->SetNeedOverlayCleanup( this->AreOverlaysInPixelData() );
 }
 
 /*
@@ -222,7 +224,7 @@ bool JPEGCodec::Code(DataElement const &in, DataElement &out)
   // Create a Sequence Of Fragments:
   SmartPointer<SequenceOfFragments> sq = new SequenceOfFragments;
   const Tag itemStart(0xfffe, 0xe000);
-  sq->GetTable().SetTag( itemStart );
+  //sq->GetTable().SetTag( itemStart );
   //const char dummy[4] = {};
   //sq->GetTable().SetByteValue( dummy, sizeof(dummy) );
 
@@ -244,7 +246,7 @@ bool JPEGCodec::Code(DataElement const &in, DataElement &out)
     std::string str = os.str();
     assert( str.size() );
     Fragment frag;
-    frag.SetTag( itemStart );
+    //frag.SetTag( itemStart );
     frag.SetByteValue( &str[0], str.size() );
     sq->AddFragment( frag );
 
@@ -291,8 +293,8 @@ bool JPEGCodec::Decode(std::istream &is, std::ostream &os)
       default:
         abort();
         }
-      Internal->SetPhotometricInterpretation(
-        this->GetPhotometricInterpretation() );
+      Internal->SetPlanarConfiguration( this->GetPlanarConfiguration() ); // meaning less ?
+      Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
       if( Internal->Decode(is,tmpos) )
         {
         return ImageCodec::Decode(tmpos,os);

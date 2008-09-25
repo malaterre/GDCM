@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -54,8 +54,7 @@ int checkmagick(unsigned char *input)
   return 0;
 }
 
-//int checkdeflate(int argc, char *argv[])
-int checkdeflate(const char *name)
+int checkdeflated(const char *name)
 {
   int ret;
   unsigned char *source;
@@ -176,27 +175,29 @@ int checkdeflate(const char *name)
 void PrintVersion()
 {
   std::cout << "gdcminfo: gdcm " << gdcm::Version::GetVersion() << " ";
-  const char date[] = "$Date: 2008-06-02 09:20:26 +0200 (Mon, 02 Jun 2008) $";
+  const char date[] = "$Date$";
   std::cout << date << std::endl;
 }
 
 void PrintHelp()
 {
   PrintVersion();
-  std::cout << "Usage: gdcminfo [OPTION]... [FILE]..." << std::endl;
-  std::cout << "by default gdcmdump, only dumps a DICOM file, that is the minimal operations required to\n"
-   " display information reader need to see the structure of a DICOM file and some value in its fields" << std::endl;
+  std::cout << "Usage: gdcminfo [OPTION]... FILE..." << std::endl;
+  std::cout << "display meta info about the input DICOM file" << std::endl;
   std::cout << "Parameter:" << std::endl;
   std::cout << "  -i --input     DICOM filename or directory" << std::endl;
   std::cout << "Options:" << std::endl;
-  std::cout << "  -d --check-deflate   check if file is proper deflate syntax." << std::endl;
+  std::cout << "  -d --check-deflated   check if file is proper deflated syntax." << std::endl;
 //  std::cout << "  -b --check-big-endian   check if file is ." << std::endl;
+  std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning   print warning info." << std::endl;
   std::cout << "  -D --debug     print debug info." << std::endl;
   std::cout << "  -E --error     print error info." << std::endl;
   std::cout << "  -h --help      print help." << std::endl;
   std::cout << "  -v --version   print version." << std::endl;
+  std::cout << "Env var:" << std::endl;
+  std::cout << "  GDCM_RESOURCES_PATH path pointing to resources files (Part3.xml, ...)" << std::endl;
 }
 
 
@@ -204,7 +205,7 @@ int main(int argc, char *argv[])
 {
   int c;
   std::string filename;
-  int deflate = 0; // check deflate
+  int deflated = 0; // check deflated
   int verbose = 0;
   int warning = 0;
   int help = 0;
@@ -216,7 +217,7 @@ int main(int argc, char *argv[])
     int option_index = 0;
     static struct option long_options[] = {
         {"input", 1, 0, 0},
-        {"check-deflate", 0, &deflate, 1},
+        {"check-deflated", 0, &deflated, 1},
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
         {"debug", 0, &debug, 1},
@@ -260,7 +261,7 @@ int main(int argc, char *argv[])
       filename = optarg;
       break;
 
-   case 'V':
+    case 'V':
       verbose = 1;
       break;
 
@@ -340,9 +341,9 @@ int main(int argc, char *argv[])
     gdcm::Trace::SetError( verbose);
     }
 
-  if( deflate )
+  if( deflated )
   {
-    return checkdeflate(filename.c_str());
+    return checkdeflated(filename.c_str());
   }
  
   //const char *filename = argv[1];
@@ -358,6 +359,11 @@ int main(int argc, char *argv[])
   const gdcm::DataSet &ds = file.GetDataSet();
   gdcm::MediaStorage ms;
   ms.SetFromFile(file);
+  if( ms.IsUndefined() )
+    {
+    std::cerr << "Unknown MediaStorage" << std::endl;
+    return 1;
+    }
 
   gdcm::UIDs uid;
   uid.SetFromUID( ms.GetString() );
@@ -372,6 +378,7 @@ int main(int argc, char *argv[])
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
+      std::cerr << "Could not read image from: " << filename << std::endl;
       return 1;
       }
     const gdcm::File &file = reader.GetFile();
@@ -386,7 +393,17 @@ int main(int argc, char *argv[])
 
 // Do the IOD verification !
     {
-    const gdcm::Global& g = gdcm::Global::GetInstance();
+    gdcm::Global& g = gdcm::Global::GetInstance();
+    // First thing we need to locate the XML dict
+    // did the user requested to look XML file in a particular directory ?
+    const char *xmlpath = getenv("GDCM_RESOURCES_PATH");
+    if( xmlpath )
+      {
+      // Make sure to look for XML dict in user explicitly specified dir first:
+      g.Prepend( xmlpath );
+      }
+    // All set, then load the XML files:
+    g.LoadResourcesFiles();
     const gdcm::Defs &defs = g.GetDefs();
     bool v = defs.Verify( ds );
     std::cerr << "IOD Verification: " << (v ? "succeed" : "failed") << std::endl;

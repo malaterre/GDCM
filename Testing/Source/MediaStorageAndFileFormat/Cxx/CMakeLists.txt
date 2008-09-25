@@ -2,16 +2,21 @@
 # MSFF
 SET(MSFF_TEST_SRCS
   TestAnonymizer
+  TestFileExplicitFilter
+  TestImageFragmentSplitter
   TestTagPath
   TestOrientation
   TestIconImage
   TestImageHelper
   TestImageToImageFilter
   TestImageChangeTransferSyntax
+  #TestImageChangePhotometricInterpretation
+  #TestImageChangePhotometricInterpretation2
   TestImageChangeTransferSyntax2
   TestImageChangeTransferSyntax3
   TestImageChangeTransferSyntax4
   TestImageApplyLookupTable
+  TestImageChangePlanarConfiguration
   TestCoder
   TestDecoder
   TestRescaler
@@ -51,6 +56,12 @@ SET(MSFF_TEST_SRCS
   TestEncapsulatedDocument
   TestSpectroscopy
   )
+
+IF(GDCM_USE_JPEGLS)
+  SET(MSFF_TEST_SRCS ${MSFF_TEST_SRCS}
+    TestImageChangeTransferSyntax5
+  )
+ENDIF(GDCM_USE_JPEGLS)
 
 IF(CMAKE_HAVE_PTHREAD_H)
 SET(MSFF_TEST_SRCS ${MSFF_TEST_SRCS}
@@ -163,6 +174,10 @@ FOREACH(filename ${gdcm_data_filenames_glob})
           #MESSAGE("IS DICOMDIR ${filename_name}")
           SET_TESTS_PROPERTIES("DCMDRLE-${filename_name}" PROPERTIES WILL_FAIL TRUE)
         ENDIF(is_dicomdir)
+        # 
+        IF(filename_name STREQUAL "ALOKA_SSD-8-MONO2-RLE-SQ.dcm")
+          SET_TESTS_PROPERTIES("DCMDRLE-${filename_name}" PROPERTIES WILL_FAIL TRUE)
+        ENDIF(filename_name STREQUAL "ALOKA_SSD-8-MONO2-RLE-SQ.dcm")
       ENDIF(DCMTK_DCMDRLE_EXECUTABLE)
     ENDIF(GDCM_TEST_DCMTK)
   ENDIF(NOT bad_dicom)

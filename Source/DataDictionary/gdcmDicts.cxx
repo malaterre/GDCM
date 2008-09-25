@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -127,11 +127,17 @@ const PrivateDict &Dicts::GetPrivateDict() const
   return ShadowDict;
 }
 
+const CSAHeaderDict &Dicts::GetCSAHeaderDict() const
+{
+  return CSADict;
+}
+
 void Dicts::LoadDefaults()
 {
   // TODO: should the user be able to control which dict to load ?
   PublicDict.LoadDefault();
   ShadowDict.LoadDefault();
+  CSADict.LoadDefault();
 }
 
 } // end namespace gdcm

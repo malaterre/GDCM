@@ -3,8 +3,8 @@
   Program:   Visualization Toolkit
   Module:    $RCSfile: wxVTKRenderWindowInteractor.cxx,v $
   Language:  C++
-  Date:      $Date: 2008/04/14 15:12:00 $
-  Version:   $Revision: 1.36 $
+  Date:      $Date: 2008/08/25 00:27:39 $
+  Version:   $Revision: 1.42 $
 
   Copyright (c) 1993-2002 Ken Martin, Will Schroeder, Bill Lorensen 
   All rights reserved.
@@ -33,7 +33,11 @@
 #include "vtkDebugLeaks.h"
 
 #ifdef __WXMAC__
+#ifdef __WXCOCOA__
+#include "vtkCocoaRenderWindow.h"
+#else
 #include "vtkCarbonRenderWindow.h"
+#endif
 #endif
 
 //Keep this for compatibilty reason, this was introduced in wxGTK 2.4.0
@@ -119,6 +123,9 @@ BEGIN_EVENT_TABLE(wxVTKRenderWindowInteractor, wxWindow)
   EVT_ENTER_WINDOW(wxVTKRenderWindowInteractor::OnEnter)
   EVT_LEAVE_WINDOW(wxVTKRenderWindowInteractor::OnLeave)
   EVT_MOUSEWHEEL  (wxVTKRenderWindowInteractor::OnMouseWheel)
+#if wxCHECK_VERSION(2, 8, 0)
+  EVT_MOUSE_CAPTURE_LOST(wxVTKRenderWindowInteractor::OnMouseCaptureLost)
+#endif
   EVT_KEY_DOWN    (wxVTKRenderWindowInteractor::OnKeyDown)
   EVT_KEY_UP      (wxVTKRenderWindowInteractor::OnKeyUp)
   EVT_CHAR        (wxVTKRenderWindowInteractor::OnChar)
@@ -127,7 +134,7 @@ BEGIN_EVENT_TABLE(wxVTKRenderWindowInteractor, wxWindow)
   EVT_SIZE        (wxVTKRenderWindowInteractor::OnSize)
 END_EVENT_TABLE()
 
-vtkCxxRevisionMacro(wxVTKRenderWindowInteractor, "$Revision: 1.36 $")
+vtkCxxRevisionMacro(wxVTKRenderWindowInteractor, "$Revision: 1.42 $")
 vtkInstantiatorNewMacro(wxVTKRenderWindowInteractor)
 
 //---------------------------------------------------------------------------
@@ -361,6 +368,9 @@ void wxVTKRenderWindowInteractor::OnPaint(wxPaintEvent& WXUNUSED(event))
   {
     Handle = GetHandleHack();
     RenderWindow->SetWindowId(reinterpret_cast<void *>(Handle));
+// Cocoa
+// this->GetNSView() <-> DisplayId
+// this->GetTopLevel()->GetNSWindow() <-> WindowId
 #ifdef __WXMSW__
     RenderWindow->SetParentId(reinterpret_cast<void *>(this->GetParent()->GetHWND()));
 #endif //__WXMSW__
@@ -370,11 +380,19 @@ void wxVTKRenderWindowInteractor::OnPaint(wxPaintEvent& WXUNUSED(event))
 #ifdef __WXMAC__
   // This solves a problem with repainting after a window resize
   // See also: http://sourceforge.net/mailarchive/forum.php?thread_id=31690967&forum_id=41789
+#ifdef __WXCOCOA__
+  vtkCocoaRenderWindow * rwin = vtkCocoaRenderWindow::SafeDownCast(RenderWindow);
+  if( rwin )
+  {
+    rwin->UpdateContext();
+  }
+#else
   vtkCarbonRenderWindow* rwin = vtkCarbonRenderWindow::SafeDownCast(RenderWindow);
   if( rwin )
   {
     rwin->UpdateGLRegion();
   }
+#endif
 #endif
 }
 //---------------------------------------------------------------------------
@@ -621,6 +639,9 @@ void wxVTKRenderWindowInteractor::OnButtonUp(wxMouseEvent &event)
     return;
     }
 
+  // See report by Shang Mu / Kerry Loux on wxVTK mailing list
+    this->SetFocus();
+
 #if VTK_MAJOR_VERSION > 4 || (VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 0)
   SetEventInformationFlipY(event.GetX(), event.GetY(), 
     event.ControlDown(), event.ShiftDown(), '\0', 0, NULL);
@@ -674,7 +695,7 @@ void wxVTKRenderWindowInteractor::OnMouseWheel(wxMouseEvent& event)
   // new style
   //Set vtk event information ... The numebr of wheel rotations is stored in
   //the x varible.  y varible is zero
-  SetEventInformationFlipY(event.GetWheelRotation() / event.GetWheelDelta(), 0, 
+  SetEventInformationFlipY(event.GetX() , event.GetY(), 
                            event.ControlDown(), event.ShiftDown(), '\0', 0, NULL);
   if(event.GetWheelRotation() > 0)
     {
@@ -689,6 +710,23 @@ void wxVTKRenderWindowInteractor::OnMouseWheel(wxMouseEvent& event)
 #endif
     
 }
+
+//---------------------------------------------------------------------------
+#if wxCHECK_VERSION(2, 8, 0)
+void wxVTKRenderWindowInteractor::OnMouseCaptureLost(wxMouseCaptureLostEvent& event)
+{
+   if (ActiveButton != wxEVT_NULL)
+   {
+       //Maybe also invoke the button release event here
+   }
+   // Reset ActiveButton so that
+   // 1. we do not process mouse button up events any more,
+   // 2. the next button down event will be processed and call CaptureMouse().
+   // Otherwise ReleaseMouse() will be called
+   // without a previous CaptureMouse().
+   ActiveButton = wxEVT_NULL;
+}
+#endif
 
 //---------------------------------------------------------------------------
 void wxVTKRenderWindowInteractor::Render()

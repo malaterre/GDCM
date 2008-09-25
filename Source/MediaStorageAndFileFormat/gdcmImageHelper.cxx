@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -41,6 +41,9 @@
 
 namespace gdcm
 {
+
+bool ImageHelper::ForceRescaleInterceptSlope = false;
+bool ImageHelper::ForcePixelSpacing = false;
 
 bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &ori)
 {
@@ -119,28 +122,28 @@ bool GetInterceptSlopeValueFromSequence(const DataSet& ds, const Tag& tfgs, std:
   assert( sqi2 );
   const Item &item2 = sqi2->GetItem(1);
   const DataSet & subds2 = item2.GetNestedDataSet();
-{
-  //  (0028,1052) DS [0]                                        # 2,1 Rescale Intercept
-  const Tag tps(0x0028,0x1052);
-  if( !subds2.FindDataElement(tps) ) return false;
-  const DataElement &de = subds2.GetDataElement( tps );
-  //assert( bv );
-  gdcm::Attribute<0x0028,0x1052> at;
-  at.SetFromDataElement( de );
-  //at.Print( std::cout );
-  intslope.push_back( at.GetValue() );
-}
-{
-  // (0028,1053) DS [5.65470085470085]                         # 16,1 Rescale Slope
-  const Tag tps(0x0028,0x1053);
-  if( !subds2.FindDataElement(tps) ) return false;
-  const DataElement &de = subds2.GetDataElement( tps );
-  //assert( bv );
-  gdcm::Attribute<0x0028,0x1053> at;
-  at.SetFromDataElement( de );
-  //at.Print( std::cout );
-  intslope.push_back( at.GetValue() );
-}
+    {
+    //  (0028,1052) DS [0]                                        # 2,1 Rescale Intercept
+    const Tag tps(0x0028,0x1052);
+    if( !subds2.FindDataElement(tps) ) return false;
+    const DataElement &de = subds2.GetDataElement( tps );
+    //assert( bv );
+    gdcm::Attribute<0x0028,0x1052> at;
+    at.SetFromDataElement( de );
+    //at.Print( std::cout );
+    intslope.push_back( at.GetValue() );
+    }
+    {
+    // (0028,1053) DS [5.65470085470085]                         # 16,1 Rescale Slope
+    const Tag tps(0x0028,0x1053);
+    if( !subds2.FindDataElement(tps) ) return false;
+    const DataElement &de = subds2.GetDataElement( tps );
+    //assert( bv );
+    gdcm::Attribute<0x0028,0x1053> at;
+    at.SetFromDataElement( de );
+    //at.Print( std::cout );
+    intslope.push_back( at.GetValue() );
+    }
 
   assert( intslope.size() == 2 );
   return true;
@@ -163,9 +166,8 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
   const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
   assert( sqi );
   double normal[3];
-  normal[0] = cosines[1]*cosines[5] - cosines[2]*cosines[4];
-  normal[1] = cosines[2]*cosines[3] - cosines[0]*cosines[5];
-  normal[2] = cosines[0]*cosines[4] - cosines[1]*cosines[3];
+  DirectionCosines dc( &cosines[0] );
+  dc.Cross( normal );
 
   // For each item
   std::vector<double> distances;
@@ -441,6 +443,16 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
   return dircos;
 }
 
+void ImageHelper::SetForceRescaleInterceptSlope(bool b)
+{
+  ForceRescaleInterceptSlope = b;
+}
+
+void ImageHelper::SetForcePixelSpacing(bool b)
+{
+  ForcePixelSpacing = b;
+}
+
 std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
 {
   std::vector<double> interceptslope;
@@ -466,29 +478,32 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
   interceptslope.resize( 2 );
   interceptslope[0] = 0;
   interceptslope[1] = 1;
-  Attribute<0x0028,0x1052> at1;
-  bool intercept = ds.FindDataElement(at1.GetTag());
-  if( intercept )
+  if( ms == MediaStorage::CTImageStorage || ForceRescaleInterceptSlope )
     {
-    if( !ds.GetDataElement(at1.GetTag()).IsEmpty() )
+    Attribute<0x0028,0x1052> at1;
+    bool intercept = ds.FindDataElement(at1.GetTag());
+    if( intercept )
       {
-      at1.SetFromDataElement( ds.GetDataElement(at1.GetTag()) );
-      interceptslope[0] = at1.GetValue();
-      }
-    }
-  Attribute<0x0028,0x1053> at2;
-  bool slope     = ds.FindDataElement(at2.GetTag());
-  if ( slope )
-    {
-    if( !ds.GetDataElement(at2.GetTag()).IsEmpty() )
-      {
-      at2.SetFromDataElement( ds.GetDataElement(at2.GetTag()) );
-      interceptslope[1] = at2.GetValue();
-      if( interceptslope[1] == 0 )
+      if( !ds.GetDataElement(at1.GetTag()).IsEmpty() )
         {
-        // come' on ! WTF
-        gdcmWarningMacro( "Cannot have slope == 0. Defaulting to 1.0 instead" );
-        interceptslope[1] = 1;
+        at1.SetFromDataElement( ds.GetDataElement(at1.GetTag()) );
+        interceptslope[0] = at1.GetValue();
+        }
+      }
+    Attribute<0x0028,0x1053> at2;
+    bool slope     = ds.FindDataElement(at2.GetTag());
+    if ( slope )
+      {
+      if( !ds.GetDataElement(at2.GetTag()).IsEmpty() )
+        {
+        at2.SetFromDataElement( ds.GetDataElement(at2.GetTag()) );
+        interceptslope[1] = at2.GetValue();
+        if( interceptslope[1] == 0 )
+          {
+          // come' on ! WTF
+          gdcmWarningMacro( "Cannot have slope == 0. Defaulting to 1.0 instead" );
+          interceptslope[1] = 1;
+          }
         }
       }
     }
@@ -565,6 +580,12 @@ Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
     t = Tag(0xffff,0xffff);
     break;
     }
+
+  if( ForcePixelSpacing )
+    {
+    t = Tag(0x0028,0x0030);
+    }
+
   return t;
 }
 
@@ -626,12 +647,18 @@ Warning - Dicom dataset contains attributes not present in standard DICOM IOD - 
     //abort();
     break;
     }
+
+  if( ForcePixelSpacing )
+    {
+    t = Tag(0x0018,0x0088);
+    }
   return t;
 }
 
 std::vector<double> ImageHelper::GetSpacingValue(File const & f)
 {
   std::vector<double> sp;
+  sp.reserve(3);
   MediaStorage ms;
   ms.SetFromFile(f);
   const DataSet& ds = f.GetDataSet();
@@ -720,7 +747,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
     const DataElement& de = ds.GetDataElement( zspacingtag );
     if( de.IsEmpty() )
       {
-      sp.push_back( 0.0 );
+      sp.push_back( 1.0 );
       }
     else
       {
@@ -774,13 +801,13 @@ $ dcmdump D_CLUNIE_NM1_JPLL.dcm" | grep 0028,0009
       else
         {
         gdcmWarningMacro( "Dont know how to handle spacing for: " << de );
-        sp.push_back( 0.0 );
+        sp.push_back( 1.0 );
         }
       }
     }
   else
     {
-    sp.push_back( 0.0 );
+    sp.push_back( 1.0 );
     }
 
   assert( sp.size() == 3 );
@@ -1008,7 +1035,12 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
   ms.SetFromDataSet(ds);
   assert( MediaStorage::IsImage( ms ) );
 
-  if( ms == MediaStorage::SecondaryCaptureImageStorage )
+  // FIXME Hardcoded
+  if( ms != MediaStorage::CTImageStorage
+   && ms != MediaStorage::MRImageStorage
+   //&& ms != MediaStorage::ComputedRadiographyImageStorage
+   && ms != MediaStorage::EnhancedMRImageStorage
+   && ms != MediaStorage::EnhancedCTImageStorage )
     {
     return;
     }
@@ -1029,22 +1061,21 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
     gdcm::Attribute<0x0020,0x0032> ipp = {{0,0,0}}; // default value
     double zspacing = image.GetSpacing(2);
     unsigned int dimz = image.GetDimension(2);
-  const double *cosines = image.GetDirectionCosines();
+    const double *cosines = image.GetDirectionCosines();
+    DirectionCosines dc( cosines );
 
-  double normal[3];
-  normal[0] = cosines[1]*cosines[5] - cosines[2]*cosines[4];
-  normal[1] = cosines[2]*cosines[3] - cosines[0]*cosines[5];
-  normal[2] = cosines[0]*cosines[4] - cosines[1]*cosines[3];
+    double normal[3];
+    dc.Cross( normal );
 
     for(unsigned int i = 0; i < dimz; ++i )
       {
-    double new_origin[3];
-    for (int j = 0; j < 3; j++)
-    {
+      double new_origin[3];
+      for (int j = 0; j < 3; j++)
+        {
         // the n'th slice is n * z-spacing aloung the IOP-derived
         // z-axis
         new_origin[j] = origin[j] + normal[j] * i * zspacing;
-    }
+        }
 
       ipp.SetValue( new_origin[0], 0);
       ipp.SetValue( new_origin[1], 1);
@@ -1061,7 +1092,7 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
   ipp.SetValue( origin[1], 1);
   ipp.SetValue( origin[2], 2);
 
-  ds.Insert( ipp.GetAsDataElement() );
+  ds.Replace( ipp.GetAsDataElement() );
 }
 
 void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<double> & dircos)
@@ -1075,7 +1106,12 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
   ms.SetFromDataSet(ds);
   assert( MediaStorage::IsImage( ms ) );
 
-  if( ms == MediaStorage::SecondaryCaptureImageStorage )
+  // FIXME Hardcoded
+  if( ms != MediaStorage::CTImageStorage
+   && ms != MediaStorage::MRImageStorage
+   //&& ms != MediaStorage::ComputedRadiographyImageStorage
+   && ms != MediaStorage::EnhancedMRImageStorage
+   && ms != MediaStorage::EnhancedCTImageStorage )
     {
     return;
     }
@@ -1156,7 +1192,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
   iop.SetValue( dircos[4], 4);
   iop.SetValue( dircos[5], 5);
 
-  ds.Insert( iop.GetAsDataElement() );
+  ds.Replace( iop.GetAsDataElement() );
 }
 
 void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
@@ -1166,6 +1202,21 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
   ms.SetFromFile(f);
   assert( MediaStorage::IsImage( ms ) );
   DataSet &ds = f.GetDataSet();
+
+  // FIXME Hardcoded
+  if( ms != MediaStorage::CTImageStorage
+   && ms != MediaStorage::MRImageStorage
+   && ms != MediaStorage::PETImageStorage
+   && ms != MediaStorage::SecondaryCaptureImageStorage
+   && ms != MediaStorage::EnhancedMRImageStorage
+   && ms != MediaStorage::EnhancedCTImageStorage )
+    {
+    if( img.GetIntercept() != 0. || img.GetSlope() != 1. )
+      {
+      throw "Impossible"; // Please report
+      }
+    return;
+    }
 
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage )
@@ -1241,14 +1292,17 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     {
     Attribute<0x0028,0x1052> at1;
     at1.SetValue( img.GetIntercept() );
-    ds.Insert( at1.GetAsDataElement() );
+    ds.Replace( at1.GetAsDataElement() );
     Attribute<0x0028,0x1053> at2;
     at2.SetValue( img.GetSlope() );
-    ds.Insert( at2.GetAsDataElement() );
+    ds.Replace( at2.GetAsDataElement() );
 
     Attribute<0x0028,0x1054> at3; // Rescale Type
-    at3.SetValue( "US" ); // FIXME
-    ds.Insert( at3.GetAsDataElement() );
+    if( ds.FindDataElement( at3.GetTag() ) )
+      {
+      at3.SetValue( "US" ); // FIXME
+      ds.Replace( at3.GetAsDataElement() );
+      }
     }
 }
 

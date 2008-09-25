@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -12,6 +12,24 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+/*
+ * Simple command line tool to dump the layout/values of a DICOM file
+ * This is largely inspired by other tools available from other toolkit, namely:
+ * - dcdump (dicom3tools)
+ * - dcmdump (dcmtk)
+ * - dcmInfo (SIEMENS)
+ * - PrintFile (GDCM 1.x)
+ *
+ * For now all layout are harcoded (see --color/--xml-dict for instance)
+ *
+ * gdcmdump has some feature not described in the DICOM standard:
+ *   --csa : to print CSA information (dcmInfo.exe compatible)
+ *   --pdb : to print PDB information (GEMS private info)
+ *
+ *
+ * TODO: it would be nice to have custom printing, namely printing as HTML/XML
+ *       it would be nice to have runtime dict (instead of compile time)
+ */
 
 #include "gdcmReader.h"
 #include "gdcmVersion.h"
@@ -38,12 +56,14 @@
 
 int color = 0;
 
+int ignoreerrors = 0;
+
 template <typename TPrinter>
 int DoOperation(const std::string & filename)
 {
   gdcm::Reader reader;
   reader.SetFileName( filename.c_str() );
-  if( !reader.Read() )
+  if( !reader.Read() && !ignoreerrors )
     {
     std::cerr << "Failed to read: " << filename << std::endl;
     return 1;
@@ -166,7 +186,7 @@ void PrintVersion()
 void PrintHelp()
 {
   PrintVersion();
-  std::cout << "Usage: gdcmdump [OPTION]... [FILE]..." << std::endl;
+  std::cout << "Usage: gdcmdump [OPTION]... FILE..." << std::endl;
   std::cout << "dumps a DICOM file, it will display the structure and values contained in the specified DICOM file\n";
   std::cout << "Parameter (required):" << std::endl;
   std::cout << "  -i --input     DICOM filename or directory" << std::endl;
@@ -185,6 +205,8 @@ void PrintHelp()
   std::cout << "  -E --error     print error info." << std::endl;
   std::cout << "  -h --help      print help." << std::endl;
   std::cout << "  -v --version   print version." << std::endl;
+  std::cout << "Special Options:" << std::endl;
+  std::cout << "  -I --ignore-errors   print even if file is corrupted." << std::endl;
 }
 
 
@@ -232,6 +254,7 @@ int main (int argc, char *argv[])
         {"error", 0, &error, 1},
         {"help", 0, &help, 1},
         {"version", 0, &version, 1},
+        {"ignore-errors", 0, &ignoreerrors, 1},
         {0, 0, 0, 0} // required
     };
     static const char short_options[] = "i:xrpdcCPVWDEhv";
@@ -393,7 +416,12 @@ int main (int argc, char *argv[])
 
   // else
   int res = 0;
-  if( gdcm::System::FileIsDirectory( filename.c_str() ) )
+  if( !gdcm::System::FileExists(filename.c_str()) )
+    {
+    std::cerr << "no such file: " << filename << std::endl;
+    return 1;
+    }
+  else if( gdcm::System::FileIsDirectory( filename.c_str() ) )
     {
     gdcm::Directory d;
     d.Load(filename, recursive);

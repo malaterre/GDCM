@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -16,28 +16,30 @@
 #ifndef __gdcmBasicOffsetTable_h
 #define __gdcmBasicOffsetTable_h
 
-#include "gdcmDataElement.h"
-#include "gdcmTag.h"
+#include "gdcmFragment.h"
 
 namespace gdcm
 {
 /**
- * \brief Class to represent an BasicOffsetTable
- * TODO: this is A fragment need to subclass from fragment
+ * \brief Class to represent a BasicOffsetTable
  */
 
-class GDCM_EXPORT BasicOffsetTable : public DataElement
+class GDCM_EXPORT BasicOffsetTable : public Fragment
 {
+//protected:
+//  void SetTag(const Tag &t);
 public:
-  BasicOffsetTable(const Tag &t = Tag(0), VL const &vl = 0) : DataElement(t, vl) {}
+  BasicOffsetTable() : Fragment() {}
   friend std::ostream &operator<<(std::ostream &os, const BasicOffsetTable &val);
 
+/*
   VL GetLength() const {
     assert( !ValueLengthField.IsUndefined() );
     assert( !ValueField || ValueField->GetLength() == ValueLengthField );
     return TagField.GetLength() + ValueLengthField.GetLength() 
       + ValueLengthField;
   }
+*/
 
   template <typename TSwap>
   std::istream &Read(std::istream &is) {
@@ -57,7 +59,6 @@ public:
       }
     // Self
     SmartPointer<ByteValue> bv = new ByteValue;
-    //ValueField = new ByteValue;
     bv->SetLength(ValueLengthField);
     if( !bv->Read<TSwap>(is) )
       {
@@ -68,9 +69,9 @@ public:
     return is;
     }
 
+/*
   template <typename TSwap>
   std::ostream &Write(std::ostream &os) const {
-    // Superclass 
     const Tag itemStart(0xfffe, 0xe000);
     const Tag seqDelItem(0xfffe,0xe0dd);
     if( !TagField.Write<TSwap>(os) )
@@ -87,9 +88,9 @@ public:
     if( ValueLengthField )
       {
       // Self
-      const ByteValue *bv = dynamic_cast<const ByteValue*>(&*ValueField);
+      const ByteValue *bv = GetByteValue();
       assert( bv );
-      //if( !ValueField->Write<TSwap>(os) )
+      assert( bv->GetLength() == ValueLengthField );
       if( !bv->Write<TSwap>(os) )
         {
         assert(0 && "Should not happen");
@@ -98,8 +99,7 @@ public:
       }
     return os;
     }
-
-private:
+*/
 };
 //-----------------------------------------------------------------------------
 inline std::ostream &operator<<(std::ostream &os, const BasicOffsetTable &val)

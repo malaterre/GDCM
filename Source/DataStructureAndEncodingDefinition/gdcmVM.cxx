@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -71,6 +71,9 @@ unsigned int VM::GetLength() const
     break;
   case VM::VM2:
     len = VMToLength<VM::VM2>::Length;
+    break;
+  case VM::VM8:
+    len = VMToLength<VM::VM8>::Length;
     break;
   case VM::VM16:
     len = VMToLength<VM::VM16>::Length;

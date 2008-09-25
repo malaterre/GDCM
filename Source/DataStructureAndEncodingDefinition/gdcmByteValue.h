@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -140,9 +140,11 @@ public:
     return false;
     }
   bool WriteBuffer(std::ostream &os) const {
-    //assert( Internal.size() <= Length );
-    assert( !(Internal.size() % 2) );
-    os.write(&Internal[0], Internal.size() );
+    if( Length ) {
+      //assert( Internal.size() <= Length );
+      assert( !(Internal.size() % 2) );
+      os.write(&Internal[0], Internal.size() );
+      }
     return true;
   }
 

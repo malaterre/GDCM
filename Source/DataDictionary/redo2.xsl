@@ -3,7 +3,7 @@
   <xsl:output method="xml" indent="yes"/>
 <!-- XSL to convert Part7 into GDCM2 xml dict -->
 <!--
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -35,7 +35,7 @@ type="text/xsl" href="gdcm2html.xsl"
 $ xsltproc gdcm2html.xsl GDCM2.xml
     </xsl:comment>
     <xsl:comment>
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre

@@ -24,16 +24,17 @@ IF(GDCM_DOCUMENTATION)
     ${GDCM_BINARY_DIR}/Utilities/doxygen/README.txt
     @ONLY
   )
-	ADD_CUSTOM_COMMAND(
-	  OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/html/index.html
+  ADD_CUSTOM_COMMAND(
+    OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/html/index.html
+             ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
     COMMAND  ${DOXYGEN}
     ARGS     ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
     DEPENDS  ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
              ${GDCM_BINARY_DIR}/Utilities/doxygen/README.txt
              ${headerfiles}
     COMMENT  "Creating doxygen doc"
-	  #WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-	  )
+    #WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    )
 
   SET(GDCM_DOC_TARBALL
     ${CMAKE_CURRENT_BINARY_DIR}/gdcm-${GDCM_VERSION}-doc.tgz
@@ -61,6 +62,7 @@ IF(GDCM_DOCUMENTATION)
     FIND_PROGRAM(PDFOPT_EXECUTABLE pdfopt)
     FIND_PROGRAM(SED_EXECUTABLE sed)
     FIND_PACKAGE(LATEX REQUIRED)
+    MARK_AS_ADVANCED(PDFOPT_EXECUTABLE SED_EXECUTABLE)
     # Let's customize the pdf tags a little usind sed:
     # Apparently egrep is also needed...
     # BAD: there is a circular dependency where refman.tex depend on refman.tex in the sed steps... 
@@ -70,13 +72,18 @@ IF(GDCM_DOCUMENTATION)
     #) 
     # TODO, FOREACH(*.tex)
     # sed -i -e "/home/mmalaterre/Projects/" ...
+    STRING(REPLACE "/" "\\/" sed_gdcm_source_dir ${GDCM_SOURCE_DIR})
+    #MESSAGE(${sed_gdcm_source_dir})
     ADD_CUSTOM_COMMAND(
-      OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.tex.tmp # output #1 (fake)
+      OUTPUT   #${CMAKE_CURRENT_BINARY_DIR}/latex/refman.tex # output #1 (fake)
                ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf # output #2
       # Command #1
       COMMAND  ${SED_EXECUTABLE}
       ARGS     -i.tmp -e "'s/]{hyperref}/]{hyperref}\\\\hypersetup{pdftitle={GDCM Reference Manual},pdfauthor={Mathieu Malaterre and co.},pdfsubject={Grassroots DICOM API reference},pdfkeywords={GDCM,DICOM,JPEG,Lossless JPEG,JPEG-LS,J2K,JPEG 2000,RLE},pdfpagemode={UseOutlines},bookmarks,bookmarksopen,pdfstartview={FitH},backref,colorlinks,linkcolor={black},citecolor={black},urlcolor={black},baseurl={http:\\/\\/gdcm.sourceforge.net}}\\\\hyperbaseurl{http:\\/\\/gdcm.sourceforge.net}/g'" ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.tex
       # Command #2
+      COMMAND  ${SED_EXECUTABLE}
+      ARGS     -i.tmp -e "'s/${sed_gdcm_source_dir}/gdcm/g'" ${CMAKE_CURRENT_BINARY_DIR}/latex/*.tex
+      # Command #3
       COMMAND  ${CMAKE_MAKE_PROGRAM}
       DEPENDS  #${CMAKE_CURRENT_BINARY_DIR}/latex/refman.tex 
 ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile

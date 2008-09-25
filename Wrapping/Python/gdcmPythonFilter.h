@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -15,11 +15,11 @@
 #ifndef __gdcmPythonFilter_h
 #define __gdcmPythonFilter_h
 
+#include <Python.h>
+
 #include "gdcmDataElement.h"
 #include "gdcmDicts.h"
 #include "gdcmFile.h"
-
-#include <Python.h>
 
 namespace gdcm
 {
@@ -43,7 +43,7 @@ public:
   // Convert to string the ByteValue contained in a DataElement
   PyObject *ToPyObject(const Tag& t) const;
 
-  void SetFile(const File& f) { F = &f; }
+  void SetFile(const File& f) { F = f; }
   File &GetFile() { return *F; }
   const File &GetFile() const { return *F; }
 

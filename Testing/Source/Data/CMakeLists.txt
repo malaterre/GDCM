@@ -3,18 +3,38 @@
 # We need to test the reading of all dicom images in the gdcmData directory
 # First parse this directory and extract all images
 
-FILE(GLOB GDCM_DATA_IMAGE_FILENAMES_GLOB
+SET(GDCM_DATA_IMAGE_FILENAMES_GLOB_EXPR
   "${GDCM_DATA_ROOT}/*.acr"
   "${GDCM_DATA_ROOT}/*.nema"
   "${GDCM_DATA_ROOT}/*.dcm"
-  "${GDCM_DATA_ROOT}/*.DCM"
   "${GDCM_DATA_ROOT}/001*"
+)
+
+SET(GDCM_DATA_DICOMDIR_FILENAMES_GLOB_EXPR
+  # Those files do not have any extension, special regex:
+  "${GDCM_DATA_ROOT}/dicomdir*"
+)
+
+# Case sensitive system:
+IF(UNIX)
+  SET(GDCM_DATA_IMAGE_FILENAMES_GLOB_EXPR
+    ${GDCM_DATA_IMAGE_FILENAMES_GLOB_EXPR}
+    "${GDCM_DATA_ROOT}/*.DCM"
+  )
+  SET(GDCM_DATA_DICOMDIR_FILENAMES_GLOB_EXPR
+    ${GDCM_DATA_DICOMDIR_FILENAMES_GLOB_EXPR}
+    "${GDCM_DATA_ROOT}/DICOMDIR*"
+  )
+ENDIF(UNIX)
+
+# GLOB expression !
+FILE(GLOB GDCM_DATA_IMAGE_FILENAMES_GLOB
+  ${GDCM_DATA_IMAGE_FILENAMES_GLOB_EXPR}
   )
 
+# Same for DICOMDIR:
 FILE(GLOB GDCM_DATA_DICOMDIR_FILENAMES_GLOB
-  # Those files do not have any extension, special regex:
-  "${GDCM_DATA_ROOT}/DICOMDIR*"
-  "${GDCM_DATA_ROOT}/dicomdir*"
+  ${GDCM_DATA_DICOMDIR_FILENAMES_GLOB_EXPR}
   )
 
 SET(GDCM_DATA_FILENAMES_GLOB
@@ -28,15 +48,8 @@ SET(BLACK_LIST_READER
   EmptyPixelData.dcm # Emtpy pixel, dcmdump returns 0 ... I do not think this is the right thing to do though
   Siemens-leonardo-bugged.dcm # Nearly impossible, waste of time anyway...
 
-# The following should really fails according to JPEG spec, IJG is failing and even when forcing
-# decompression using IJG output is different from PVRG...
-  PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
-
 # grrrrrr do not handle swapping correctly (implicit dataset are such a pain)
   LIBIDO-16-ACR_NEMA-Volume.dcm
-# TODO add seg lut support
-  gdcm-US-ALOKA-16.dcm
-  SegmentedPalette.dcm
 # Papyrus:
   PET-cardio-Multiframe-Papyrus.dcm
 # No way to read this image:
@@ -51,9 +64,8 @@ SET(BLACK_LIST_READER
 # Pixel Data is not were it should be :)
   3DDCM011.dcm 
 
-# 16bits LUT...
-  rle16sti.dcm
-  rle16loo.dcm
+# Name says it all
+BogusItemStartItemEnd.dcm 
 
 # Overlay Data in Unused bit are not passed in TestImageWriter:
 #  SIEMENS_GBS_III-16-ACR_NEMA_1.acr
@@ -77,12 +89,11 @@ SET(BLACK_LIST_READER
   ImplicitDeclaredAsExplicit.dcm
   TheralysGDCM1.dcm
   MR_Spectroscopy_SIEMENS_OF.dcm
-  US-GE-4AICL142.dcm
-  SIEMENS-MR-RGB-16Bits.dcm
+  #SIEMENS-MR-RGB-16Bits.dcm
 # Recent issue with compression/decompression:
   SIEMENS_GBS_III-16-ACR_NEMA_1.acr
   SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm
-  MR-MONO2-12-angio-an1.acr
+  #MR-MONO2-12-angio-an1.acr
   image.acr
   PHILIPS_Gyroscan-8-MONO2-Odd_Sequence.dcm
   MergeCOM3_330_IM50.dcm
@@ -93,7 +104,22 @@ SET(BLACK_LIST_READER
   MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm
 # Private tags is SQ, but SQ is busted, GDCM fails since it tries to parse the SQ (dcmtk does not even try)
   BogusItemLengthImplicitPrivateAtt.dcm
+  MR-MONO2-12-angio-an1.acr
+
+# This image has an unknown Media Storage UID, when looking in Modality 'CR' is found;
+# but at the same time, there is no such thing as IPP/IOP in a ComputedRadiographyImageStorage ...
+  gdcm-CR-DCMTK-16-NonSamplePerPix.dcm
 )
+IF(NOT GDCM_USE_PVRG)
+  SET(BLACK_LIST_READER
+    # The following should really fails according to JPEG spec, IJG is failing and even when forcing
+    # decompression using IJG output is different from PVRG...
+    # Apparently pvrg likes it this way...
+    #  PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
+    ${BLACK_LIST_READER}
+    PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
+  )
+ENDIF(NOT GDCM_USE_PVRG)
 IF(GDCM_WORDS_BIGENDIAN)
   SET(BLACK_LIST_READER
     ${BLACK_LIST_READER}

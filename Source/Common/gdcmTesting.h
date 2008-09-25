@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -23,7 +23,8 @@ namespace gdcm
 {
 /**
  * \brief class for testing
- * this class is used for the nightly regression system for GDCM
+ * \details this class is used for the nightly regression system for GDCM
+ * It makes heavily use of md5 computation
  */
 //-----------------------------------------------------------------------------
 class GDCM_EXPORT Testing

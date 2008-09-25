@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -19,11 +19,12 @@
 
 namespace gdcm
 {
+
+class ExplicitImplicitDataElement;
 /**
  * \brief Class to represent an *Implicit VR* Data Element
  * \note bla
  */
-class ExplicitImplicitDataElement;
 class GDCM_EXPORT ImplicitDataElement : public DataElement
 {
 public:

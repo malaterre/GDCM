@@ -13,7 +13,7 @@ INCLUDE_REGULAR_EXPRESSION("^(gdcm).*$")
 # http://mail.python.org/pipermail/python-dev/2002-May/023923.html
 
 FIND_PACKAGE(SWIG REQUIRED)
-MARK_AS_ADVANCED(SWIG_DIR SWIG_EXECUTABLE)
+MARK_AS_ADVANCED(SWIG_DIR SWIG_EXECUTABLE SWIG_VERSION)
 INCLUDE(${SWIG_USE_FILE})
 
 # Note:
@@ -62,7 +62,8 @@ SET_SOURCE_FILES_PROPERTIES(gdcmswig.i PROPERTIES CPLUSPLUS ON)
 
 #SET(GDCM_PYTHON_IMPLEMENTATION_NAME gdcmpython)
 SET(GDCM_PYTHON_IMPLEMENTATION_NAME gdcmswig)
-# BUG: DO NOT USE -interface flag it is NOT supported in cmake and in cmake > 2.6 will cause infinite rebuild
+SET(MODULE_NAME gdcmswig)
+# BUG: DO NOT USE -interface flag it is NOT supported in cmake and in cmake > 2.6 will cause infinite rebuild
 # Ref: http://www.cmake.org/pipermail/cmake/2008-August/023237.html
 # UseSWIG and -interface flag (was: Re: CMake 2.6.1 available for download)
 #SET(CMAKE_SWIG_FLAGS "-interface _${GDCM_PYTHON_IMPLEMENTATION_NAME}")
@@ -73,8 +74,10 @@ SET(GDCM_PYTHON_IMPLEMENTATION_NAME gdcmswig)
 #SET(CMAKE_CXX_FLAGS "")
 # well no, you cannot, it get rid of some important flags, and make the _gdcm.so incompatible with
 # the other gdcm lib. bad !!!
+#SET (SWIG_MODULE_${MODULE_NAME}_EXTRA_DEPS ${SWIG_MODULE_${MODULE_NAME}_EXTRA_DEPS} ${CMAKE_CURRENT_SOURCE_DIR}/docstrings.i)
 SWIG_ADD_MODULE(${GDCM_PYTHON_IMPLEMENTATION_NAME} python gdcmswig.i gdcmPythonFilter.cxx)
 SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} gdcmMSFF gdcmIOD ${PYTHON_LIBRARIES})
+#MESSAGE(SWIG_MODULE_${MODULE_NAME}_EXTRA_DEPS)
 #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/gdcm.pth.in
 #  ${CMAKE_CURRENT_BINARY_DIR}/gdcm.pth
 #)

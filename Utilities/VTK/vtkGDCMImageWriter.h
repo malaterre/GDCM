@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -95,6 +95,8 @@ public:
   vtkGetMacro(FileLowerLeft, int);
   vtkSetMacro(FileLowerLeft, int);
 
+  vtkSetMacro(PlanarConfiguration,int);
+
 protected:
   vtkGDCMImageWriter();
   ~vtkGDCMImageWriter();
@@ -142,6 +144,7 @@ private:
   double Shift;
   double Scale;
   int FileLowerLeft;
+  int PlanarConfiguration;
 };
 
 #endif

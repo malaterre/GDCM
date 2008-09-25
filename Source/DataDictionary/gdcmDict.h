@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -100,9 +100,9 @@ public:
     return it->second;
     }
 
-  // Inefficient way of looking up tag by name. Technically DICOM
-  // does not garantee uniqueness (and Curve / Overlay are there to prove it). But
-  // most of the time name is in fact uniq and can be uniquely link to a tag
+  /// Inefficient way of looking up tag by name. Technically DICOM
+  /// does not garantee uniqueness (and Curve / Overlay are there to prove it). But
+  /// most of the time name is in fact uniq and can be uniquely link to a tag
   const DictEntry &GetDictEntryByName(const char *name, Tag & tag) const
     {
     MapDictEntry::const_iterator it = 
@@ -163,6 +163,10 @@ inline std::ostream& operator<<(std::ostream& os, const Dict &val)
 // ValueRepresentation = LO
 // ValueMultiplicity = 1
 // Owner = ""
+
+/**
+ * \brief Private Dict
+ */
 class GDCM_EXPORT PrivateDict
 {
   typedef std::map<PrivateTag, DictEntry> MapDictEntry;

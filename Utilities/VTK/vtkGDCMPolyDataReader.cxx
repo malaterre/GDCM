@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -345,7 +345,7 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
 
       //newPts->SetNumberOfPoints( at.GetNumberOfValues() / 3 );
       //assert( at.GetNumberOfValues() % 3 == 0); // FIXME
-      const float* pts = at.GetValues();
+      const double* pts = at.GetValues();
       vtkIdType buffer[256];
       vtkIdType *ptIds;
       unsigned int npts = at.GetNumberOfValues() / 3;

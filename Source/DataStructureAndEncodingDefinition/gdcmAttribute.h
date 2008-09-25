@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -63,7 +63,8 @@ public:
     }
 };
 
-/* \brief Attribute class
+/**
+ * \brief Attribute class
  * This class use template metaprograming tricks to let the user know when the template
  * instanciation does not match the public dictionary. 
  *
@@ -676,6 +677,10 @@ public:
 };
 */
 
+/**
+ * \example PatchFile.cxx
+ * This is a C++ example on how to use gdcm::Attribute
+ */
 
 } // namespace gdcm
 

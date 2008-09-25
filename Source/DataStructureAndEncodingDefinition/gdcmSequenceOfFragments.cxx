@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -107,9 +107,10 @@ bool SequenceOfFragments::WriteBuffer(std::ostream &os) const
   for(;it != Fragments.end(); ++it)
     {
     const Fragment &frag = *it;
-    const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
+    const ByteValue *bv = frag.GetByteValue();
+    assert( bv );
     const VL len = frag.GetVL();
-    bv.WriteBuffer(os);
+    bv->WriteBuffer(os);
     total += len;
     }
   //if( total != length )

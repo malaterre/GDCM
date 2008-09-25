@@ -43,7 +43,7 @@ ENDIF(INSOURCE OR INSOURCESUBDIR)
 #-----------------------------------------------------------------------------
 SET(GDCM_MAJOR_VERSION 2)
 SET(GDCM_MINOR_VERSION 0)
-SET(GDCM_BUILD_VERSION 8)
+SET(GDCM_BUILD_VERSION 9)
 SET(GDCM_VERSION
   "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}.${GDCM_BUILD_VERSION}")
 SET(GDCM_LIBRARY_PROPERTIES ${GDCM_LIBRARY_PROPERTIES}
@@ -55,17 +55,27 @@ SET(GDCM_EXECUTABLE_PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES}
 )
 
 #-----------------------------------------------------------------------------
-IF(NOT CMAKE_BUILD_TYPE)
+INCLUDE(${GDCM_SOURCE_DIR}/CMake/UseCopyright.cmake)
+CREATE_COPYRIGHT_FILE(${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt)
+APPEND_COPYRIGHT(${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt)
+
+#-----------------------------------------------------------------------------
+IF(GDCM_MINOR_VERSION MATCHES "[02468]$")
   # Are we building a release branch / tag (read: even number)?
   # By default dashboard are expected to run with Design by Contract on
   # to trigger any of the assert, but on the other hand no user really
   # can figure out they need to change this value
   # So unless the user *specifically* requested a particular cmake_build_type
   # do the work internally and append the NDEBUG def flag (hopefully portable)
-  IF(GDCM_MINOR_VERSION MATCHES "[02468]$")
+  IF(NOT CMAKE_BUILD_TYPE)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNDEBUG")
-  ENDIF(GDCM_MINOR_VERSION MATCHES "[02468]$")
-ENDIF(NOT CMAKE_BUILD_TYPE)
+  ENDIF(NOT CMAKE_BUILD_TYPE)
+  # Since we are on a release branch, chance is that people don't care about testing
+  # let's disable it for them
+  SET(GDCM_BUILD_TESTING_DEFAULT OFF)
+ELSE(GDCM_MINOR_VERSION MATCHES "[02468]$")
+  SET(GDCM_BUILD_TESTING_DEFAULT ON)
+ENDIF(GDCM_MINOR_VERSION MATCHES "[02468]$")
 
 #-----------------------------------------------------------------------------
 # VS 2005 declared that some C functions were deprecated...
@@ -229,6 +239,11 @@ ENDIF(UNIX)
 OPTION(GDCM_USE_SYSTEM_EXPAT "Use system expat" OFF)
 MARK_AS_ADVANCED(GDCM_USE_SYSTEM_ZLIB GDCM_USE_SYSTEM_UUID GDCM_USE_SYSTEM_EXPAT)
 
+# Very advanced user option:
+# This will cause building of the broken JPEG library released by the Standford PVRG group:
+OPTION(GDCM_USE_PVRG "Use pvrg lib, only turn it on if you know what you are doing." OFF)
+MARK_AS_ADVANCED(GDCM_USE_PVRG)
+
 IF(GDCM_USE_SYSTEM_ZLIB)
   # If user say so, then this is a requirement !
   FIND_PACKAGE(ZLIB REQUIRED)
@@ -263,7 +278,7 @@ ENDIF(BUILD_EXAMPLES)
 
 #-----------------------------------------------------------------------------
 # Add the testing directories
-OPTION(GDCM_BUILD_TESTING "Build testing." ON)
+OPTION(GDCM_BUILD_TESTING "Build testing." ${GDCM_BUILD_TESTING_DEFAULT})
 SET(BUILD_TESTING ${GDCM_BUILD_TESTING} CACHE BOOL "" FORCE)
 MARK_AS_ADVANCED(BUILD_TESTING)
 
@@ -350,6 +365,10 @@ IF(BUILD_TESTING)
   ENABLE_TESTING()
   INCLUDE(CTest)
   SUBDIRS(Testing)
+  IF(NOT GDCM_DATA_ROOT)
+    # http://gdcm.sourceforge.net/wiki/index.php/General_questions#What_is_gdcmData_.3F
+    MESSAGE(FATAL_ERROR "You need to set the path to GDCM_DATA_ROOT")
+  ENDIF(NOT GDCM_DATA_ROOT)
 ENDIF(BUILD_TESTING)
 
 
@@ -408,11 +427,16 @@ ENDIF(BUILD_APPLICATIONS)
 #-----------------------------------------------------------------------------
 # CPack stuff
 IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
+  IF(EXISTS "${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake")
+    SET(CMAKE_INSTALL_MFC_LIBRARIES 0)
+    SET(CMAKE_INSTALL_DEBUG_LIBRARIES 0)
+    INCLUDE(${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake)
+  ENDIF(EXISTS "${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake")
 
-  SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "GDCM - Grass Root DICOM\n GDCM is yet another DICOM library.")
+  SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "GDCM - Grassroots DICOM\n GDCM is yet another DICOM library.")
   SET(CPACK_PACKAGE_VENDOR "GDCM")
-  SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt")
-  SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt")
+  SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt")
+  SET(CPACK_RESOURCE_FILE_LICENSE    "${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt")
   SET(CPACK_PACKAGE_VERSION_MAJOR "${GDCM_MAJOR_VERSION}")
   SET(CPACK_PACKAGE_VERSION_MINOR "${GDCM_MINOR_VERSION}")
   SET(CPACK_PACKAGE_VERSION_PATCH "${GDCM_BUILD_VERSION}")
@@ -437,11 +461,32 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     SET(CPACK_PACKAGE_EXECUTABLES "gdcmviewer" "VIEWER")
 
   ENDIF(WIN32 AND NOT UNIX)
-  IF(NOT DEFINED CPACK_SYSTEM_NAME)
-    SET(CPACK_SYSTEM_NAME ${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR})
-  ENDIF(NOT DEFINED CPACK_SYSTEM_NAME)
-  # Need to set the architecture for debian package
 
+  # cygwin stff also copied from cmake
+  #IF(NOT DEFINED CPACK_PACKAGE_FILE_NAME)
+  #  # if the CPACK_PACKAGE_FILE_NAME is not defined by the cache
+  #  # default to source package - system, on cygwin system is not
+  #  # needed
+  #  IF(CYGWIN)
+  #    SET(CPACK_PACKAGE_FILE_NAME "${CPACK_SOURCE_PACKAGE_FILE_NAME}")
+  #  ELSE(CYGWIN)
+  #    SET(CPACK_PACKAGE_FILE_NAME
+  #      "${CPACK_SOURCE_PACKAGE_FILE_NAME}-${CPACK_SYSTEM_NAME}")
+  #  ENDIF(CYGWIN)
+  #ENDIF(NOT DEFINED CPACK_PACKAGE_FILE_NAME)
+
+  #Cygwin stuff copied from cmake
+  IF(NOT DEFINED CPACK_SYSTEM_NAME)
+    # make sure package is not Cygwin-unknown, for Cygwin just
+    # cygwin is good for the system name
+    IF("${CMAKE_SYSTEM_NAME}" STREQUAL "CYGWIN")
+      SET(CPACK_SYSTEM_NAME Cygwin)
+    ELSE("${CMAKE_SYSTEM_NAME}" STREQUAL "CYGWIN")
+      SET(CPACK_SYSTEM_NAME ${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR})
+    ENDIF("${CMAKE_SYSTEM_NAME}" STREQUAL "CYGWIN")
+  ENDIF(NOT DEFINED CPACK_SYSTEM_NAME)
+
+  # Need to set the architecture for debian package
   SET(CPACK_PACKAGE_CONTACT "Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>")
   SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6, libstdc++6 (>= 4.0.2-4), libuuid1, zlib1g (>= 1:1.2.1), libgcc1 (>= 1:4.0.2), libexpat1, swig") # bug: missing dep to python...
   SET(CPACK_DEBIAN_PACKAGE_SUGGESTS "dcmtk")
@@ -497,6 +542,12 @@ ENDMACRO(PROCESSONEDIR)
 #  theoutput
 #)
 #MESSAGE("${theoutput}")
+
+#-----------------------------------------------------------------------------
+# we need to link against CoreFoundation so that we can use CFBundle to get the executable path.
+IF(APPLE)
+  FIND_LIBRARY(COREFOUNDATION_LIBRARY CoreFoundation )
+ENDIF(APPLE)
 
 #-----------------------------------------------------------------------------
 # Need to be the last operation:

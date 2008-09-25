@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -40,6 +40,8 @@ void Fill(SmartPointer<Foo> &p)
   Foo & rp = *in;
   p = &rp;
 }
+
+//class Object2 : public Foo {};
 
 int TestSmartPointer(int, char *[])
 {

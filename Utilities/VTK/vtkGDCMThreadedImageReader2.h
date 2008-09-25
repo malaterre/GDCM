@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -42,7 +42,6 @@
 #ifndef __vtkGDCMThreadedImageReader2_h
 #define __vtkGDCMThreadedImageReader2_h
 
-//#include "vtkGDCMImageReader.h"
 #include "vtkThreadedImageAlgorithm.h"
 
 class vtkStringArray;
@@ -89,6 +88,23 @@ public:
   int SplitExtent(int splitExt[6], int startExt[6], 
                   int num, int total);
 
+  // Description:
+  // Explicitely set the Rescale Intercept (0028,1052)
+  vtkSetMacro(Shift,double);
+  vtkGetMacro(Shift,double);
+
+  // Description:
+  // Explicitely get/set the Rescale Slope (0028,1053)
+  vtkSetMacro(Scale,double);
+  vtkGetMacro(Scale,double);
+
+  // Description:
+  // Determine whether or not reader should use value from Shift/Scale
+  // Default is 1
+  vtkSetMacro(UseShiftScale,int);
+  vtkGetMacro(UseShiftScale,int);
+  vtkBooleanMacro(UseShiftScale,int);
+
 protected:
   vtkGDCMThreadedImageReader2();
   ~vtkGDCMThreadedImageReader2();
@@ -120,6 +136,10 @@ private:
   double DataSpacing[3];
   double DataOrigin[3];
   int IconImageDataExtent[6];
+
+  double Shift;
+  double Scale;
+  int UseShiftScale;
 
 private:
   vtkGDCMThreadedImageReader2(const vtkGDCMThreadedImageReader2&);  // Not implemented.

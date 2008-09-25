@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -23,11 +23,23 @@
 //namespace std { class ostream; }
 namespace gdcm
 {
+
+template<class ObjectType> class SmartPointer;
+
+/**
+ * \brief Object
+ *
+ * \note main superclass for object that want to use SmartPointer
+ * invasive ref counting system
+ *
+ * \see SmartPointer
+ */
 class GDCM_EXPORT Object
 {
-public:
+  template <class ObjectType> friend class SmartPointer;
   friend std::ostream& operator<<(std::ostream &os, const Object &obj);
 
+public:
   Object():ReferenceCount(0) {}
 
   // Implementation note:
@@ -41,19 +53,27 @@ public:
   // class MyObject : public Object {};
   // SmartPointer<MyObject> o = new MyObject;
   // delete o; // grrrrrr
-  virtual ~Object()
-    {
+  virtual ~Object() {
     // If your debugger reach here it means you are doing something silly
     // like using SmartPointer on object allocated on the stack (vs heap)
     assert(ReferenceCount == 0);
     }
 
+  // http://www.parashift.com/c++-faq-lite/freestore-mgmt.html#faq-16.24
+  // Set the ref count to 0
+  // Do NOT copy the reference count !
+  /// Special requirement for copy/cstor, assigment operator
+  Object(const Object&):ReferenceCount(0){}
+  void operator=(const Object&){}
+
+protected:
   // For the purpose of the invasive SmartPointer implementation
   void Register() {
     ReferenceCount++;
+    assert( ReferenceCount > 0 );
   }
-  void UnRegister()
-    {
+  void UnRegister() {
+    assert( ReferenceCount > 0 );
     ReferenceCount--;
     if(!ReferenceCount)
       {
@@ -61,8 +81,7 @@ public:
       }
     }
 
-
-//protected:
+public:
   // For dealing with printing of object and polymorphism
   virtual void Print(std::ostream &) const {}
 
@@ -73,7 +92,7 @@ private:
 //----------------------------------------------------------------------------
 // function do not carry vtable. Thus define in the base class the operator
 // and use the member function ->Print() to call the appropriate function
-// NOTE: All subclass of Value needs to implement the Print function
+// NOTE: All subclass of Object needs to implement the Print function
 inline std::ostream& operator<<(std::ostream &os, const Object &obj)
 {
   obj.Print(os);

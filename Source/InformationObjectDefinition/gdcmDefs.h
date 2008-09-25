@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -23,12 +23,12 @@
 
 namespace gdcm
 {
+class DataSet;
+class MediaStorage;
 /**
  * \brief FIXME I do not like the name 'Defs'
  * \note bla
  */
-class DataSet;
-class MediaStorage;
 class GDCM_EXPORT Defs
 {
 public:
@@ -51,6 +51,7 @@ public:
 protected:
   friend class Global;
   void LoadDefaults();
+  void LoadFromFile(const char *filename);
 
   const char *GetIODNameFromMediaStorage(MediaStorage &ms) const;
 

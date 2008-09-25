@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -12,7 +12,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #ifndef __gdcmFile_h
 #define __gdcmFile_h
 
@@ -22,6 +21,8 @@
 
 namespace gdcm
 {
+
+class FileInternal;
 /**
  * \brief a DICOM File
  * See PS 3.10
@@ -29,7 +30,6 @@ namespace gdcm
  * at the beginning of the file and the last byte at the end of the File. Files are 
  * identified by a unique File ID and may by written, read and/or deleted.
  */
-class FileInternal;
 class GDCM_EXPORT File : public Object
 {
 public:

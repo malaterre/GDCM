@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -19,18 +19,23 @@
 
 namespace gdcm
 {
-/*
+/**
  * \brief Class for Smart Pointer
+ * \details
  * Will only work for subclass of gdcm::Object
  * See tr1/shared_ptr for a more general approach (not invasive)
  * #include <tr1/memory>
  * {
  *   shared_ptr<Bla> b(new Bla);
  * }
+ * \note
  * Class partly based on post by Bill Hubauer:
  * http://groups.google.com/group/comp.lang.c++/msg/173ddc38a827a930
+ * \see
+ * http://www.davethehat.com/articles/smartp.htm
+ *
+ * and itk::SmartPointer
  */
-
 template<class ObjectType>
 class SmartPointer
 {
@@ -40,6 +45,11 @@ public:
     { Register(); }
   SmartPointer(ObjectType* p):Pointer(p)
     { Register(); }
+  SmartPointer(ObjectType const & p)
+    {
+    Pointer = const_cast<ObjectType*>(&p);
+    Register();
+    }
   ~SmartPointer() {
     UnRegister();
     Pointer = 0;
@@ -48,6 +58,9 @@ public:
   /// Overload operator -> 
   ObjectType *operator -> () const
     { return Pointer; }
+
+  ObjectType& operator * () const
+    { return *Pointer; }
 
   /// Return pointer to object.
   operator ObjectType * () const 
@@ -58,27 +71,37 @@ public:
     { return operator = (r.Pointer); }
   
   /// Overload operator assignment.
-  SmartPointer &operator = (ObjectType const *r)
+  SmartPointer &operator = (ObjectType *r)
     {                                                              
-    if (Pointer != r)
+    // http://www.parashift.com/c++-faq-lite/freestore-mgmt.html#faq-16.22
+    // DO NOT CHANGE THE ORDER OF THESE STATEMENTS!
+    // (This order properly handles self-assignment)
+    // (This order also properly handles recursion, e.g., if a ObjectType contains SmartPointer<ObjectType>s)
+    if( Pointer != r )
       {
-      ObjectType* tmp = Pointer; //important
-      Pointer = const_cast<ObjectType*>(r);
+      ObjectType* old = Pointer;
+      Pointer = r;
       Register();
-      if ( tmp ) { tmp->UnRegister(); }
+      if ( old ) { old->UnRegister(); }
       }
     return *this;
+    }
+
+  SmartPointer &operator = (ObjectType const &r)
+    {
+    ObjectType* tmp = const_cast<ObjectType*>(&r);
+    return operator = (tmp);
     }
 
 private:
   void Register()
     {
-    if(Pointer) { Pointer->Register(); }
+    if(Pointer) Pointer->Register();
     }
 
   void UnRegister()
     {
-    if(Pointer) { Pointer->UnRegister(); }
+    if(Pointer) Pointer->UnRegister();
     }
 
   ObjectType* Pointer;

@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -22,14 +22,31 @@
 
 namespace gdcm
 {
-/**
- * \brief Class to represent an Fragment
- */
 
-class GDCM_EXPORT Fragment : public DataElement
+// Implementation detail:
+// I think Fragment should be a protected sublclass of DataElement:
+// looking somewhat like this:
+/*
+class GDCM_EXPORT Fragment : protected DataElement
 {
 public:
-  Fragment(const Tag &t = Tag(0), VL const &vl = 0) : DataElement(t, vl) {}
+  using DataElement::GetTag;
+  using DataElement::GetVL;
+  using DataElement::SetByteValue;
+  using DataElement::GetByteValue;
+  using DataElement::GetValue;
+*/
+// Instead I am only hiding the SetTag member...
+
+/**
+ * \brief Class to represent a Fragment
+ */
+class GDCM_EXPORT Fragment : public DataElement
+{
+//protected:
+//  void SetTag(const Tag &t);
+public:
+  Fragment() : DataElement(Tag(0xfffe, 0xe000), 0) {}
   friend std::ostream &operator<<(std::ostream &os, const Fragment &val);
 
   VL GetLength() const {
@@ -85,8 +102,7 @@ public:
 
 
   template <typename TSwap>
-  std::ostream &Write(std::ostream &os) const
-  {
+  std::ostream &Write(std::ostream &os) const {
     const Tag itemStart(0xfffe, 0xe000);
     const Tag seqDelItem(0xfffe,0xe0dd);
     if( !TagField.Write<TSwap>(os) )
@@ -101,20 +117,20 @@ public:
       assert(0 && "Should not happen");
       return os;
       }
-    // Self
-    const ByteValue *bv = dynamic_cast<const ByteValue*>(&*ValueField);
-    assert( bv );
-    //if( !ValueField->Write<TSwap>(os) )
-    if( !bv->Write<TSwap>(os) )
+    if( ValueLengthField )
       {
-      assert(0 && "Should not happen");
-      return os;
+      // Self
+      const ByteValue *bv = GetByteValue();
+      assert( bv );
+      assert( bv->GetLength() == ValueLengthField );
+      if( !bv->Write<TSwap>(os) )
+        {
+        assert(0 && "Should not happen");
+        return os;
+        }
       }
     return os;
     }
-
- 
-private:
 };
 //-----------------------------------------------------------------------------
 inline std::ostream &operator<<(std::ostream &os, const Fragment &val)

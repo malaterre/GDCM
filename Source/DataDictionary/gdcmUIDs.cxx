@@ -4,7 +4,7 @@
 
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL: https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk/Source/DataDictionary/TagToType.xsl $
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -372,6 +372,7 @@ UIDs::TransferSyntaxStringsType UIDs::GetTransferSyntaxStrings()
 
 bool UIDs::SetFromUID(const char *str)
 {
+  if(!str) return false;
   //static const unsigned int size = sizeof(TransferSyntaxStrings) / sizeof(*TransferSyntaxStrings) - 1;
   TransferSyntaxStringsType uids = GetTransferSyntaxStrings();
 

@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -42,7 +42,8 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
   // Read Value Length
   if( !ValueLengthField.Read<TSwap>(is) )
     {
-    assert(0 && "Should not happen");
+    //assert(0 && "Should not happen");
+    throw Exception("Impossible");
     return is;
     }
   //std::cerr << "imp cur tag=" << TagField <<  " VL=" << ValueLengthField << std::endl;
@@ -56,8 +57,16 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
     {
     //assert( de.GetVR() == VR::SQ );
     // FIXME what if I am reading the pixel data...
-    assert( TagField != Tag(0x7fe0,0x0010) );
-    ValueField = new SequenceOfItems;
+    //assert( TagField != Tag(0x7fe0,0x0010) );
+    if( TagField != Tag(0x7fe0,0x0010) )
+      {
+      ValueField = new SequenceOfItems;
+      }
+    else
+      {
+      gdcmWarningMacro( "Undefined value length is impossible in non-encapsulated Transfer Syntax" );
+      ValueField = new SequenceOfFragments;
+      }
     //VRField = VR::SQ;
     }
   else
@@ -403,6 +412,8 @@ const std::ostream &ImplicitDataElement::Write(std::ostream &os) const
     }
   else // It should be safe to simply use the ValueLengthField as stored:
     {
+    // Do not allow writing file such as: dcm4che_UndefinedValueLengthInImplicitTS.dcm
+    if( TagField == Tag(0x7fe0,0x0010) && ValueLengthField.IsUndefined() ) throw Exception( "VL u/f Impossible" );
     if( !ValueLengthField.Write<TSwap>(os) )
       {
       assert(0 && "Should not happen");

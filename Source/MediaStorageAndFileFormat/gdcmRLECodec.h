@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -20,11 +20,17 @@
 namespace gdcm
 {
 
+class RLEInternals;
 /**
  * \brief Class to do RLE
  * \note
+ * ANSI X3.9
+ * A.4.2 RLE Compression
+ * Annex G defines a RLE Compression Transfer Syntax. This transfer Syntax is identified by the UID value
+ * "1.2.840.10008.1.2.5". If the object allows multi-frame images in the pixel data field, then each frame shall
+ * be encoded separately. Each frame shall be encoded in one and only one Fragment (see PS 3.5.8.2).
+ *
  */
-class RLEInternals;
 class RLECodec : public ImageCodec
 {
 public:
@@ -37,6 +43,7 @@ public:
   void SetBufferLength(unsigned long l) { BufferLength = l; }
 
   bool Code(DataElement const &in, DataElement &out);
+  void SetNumberOfDimensions(unsigned int dim);
 
 protected:
   bool Decode(std::istream &is, std::ostream &os);
@@ -50,6 +57,7 @@ private:
   RLEInternals *Internals;
   unsigned long Length;
   unsigned long BufferLength;
+  unsigned int NumberOfDimensions;
 };
 
 } // end namespace gdcm

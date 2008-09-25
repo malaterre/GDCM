@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -24,7 +24,7 @@ namespace gdcm
 {
 /**
  * \brief Reader ala DOM (Document Object Model)
- * This class is a non-validating reader, it will only performs well-
+ * \details This class is a non-validating reader, it will only performs well-
  * formedness check only, and to some extent catch known error (non
  * well-formed document).
  *
@@ -64,9 +64,6 @@ public:
 	  Ifstream = new std::ifstream();
 	  Ifstream->open(filename, std::ios::binary);
 	  Stream = Ifstream;
-#ifndef NDEBUG
-    DebugFileName = filename;
-#endif
   }
   void SetStream(std::istream &input_stream) {
 	  Stream = &input_stream;
@@ -90,9 +87,6 @@ private:
   TransferSyntax GuessTransferSyntax();
   std::istream *Stream;
   std::ifstream *Ifstream;
-#ifndef NDEBUG
-  std::string DebugFileName;
-#endif
 };
 
 /**

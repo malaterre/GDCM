@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -40,6 +40,7 @@
 #include "gdcmDict.h"
 #include "gdcmTag.h"
 #include "gdcmImageHelper.h"
+#include "gdcmImageChangePlanarConfiguration.h"
 
 #include <limits>
 
@@ -100,6 +101,7 @@ vtkGDCMImageWriter::vtkGDCMImageWriter()
   this->Shift = 0.;
   this->Scale = 1.;
   this->FileLowerLeft = 0; // same default as vtkImageReader2
+  this->PlanarConfiguration = 0;
 }
 
 //----------------------------------------------------------------------------
@@ -513,6 +515,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     pixeltype = gdcm::PixelFormat::UINT32;
     break;
   case VTK_FLOAT:
+  case VTK_DOUBLE:
     if( this->Shift == (int)this->Shift && this->Scale == (int)this->Scale )
       {
       // I cannot consider that this is a problem, afterall a floating point type image
@@ -610,6 +613,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   pixeltype.SetSamplesPerPixel( data->GetNumberOfScalarComponents() );
   image.SetPhotometricInterpretation( pi );
   image.SetPixelFormat( pixeltype );
+  image.SetPlanarConfiguration( 0 ); // VTK default
 
   // Setup LUt if any:
   if( pi == gdcm::PhotometricInterpretation::PALETTE_COLOR )
@@ -617,13 +621,23 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     vtkLookupTable * vtklut = data->GetPointData()->GetScalars()->GetLookupTable();
     //vtkLookupTable * vtklut = this->LookupTable;
     assert( vtklut );
-    assert( vtklut->GetNumberOfTableValues() == 256 );
+    //assert( vtklut->GetNumberOfTableValues() == 256 );
+    unsigned int lutlen = 256;
+    assert( pixeltype.GetBitsAllocated() == 8 || pixeltype.GetBitsAllocated() == 16 );
+    if( pixeltype.GetBitsAllocated() == 8 )
+      {
+      lutlen = 256;
+      }
+    else
+      {
+      //assert( pixeltype.GetBitsAllocated() == 16 );
+      lutlen = 65536;
+      }
     gdcm::SmartPointer<gdcm::LookupTable> lut = new gdcm::LookupTable;
-    assert( pixeltype.GetBitsAllocated() == 8 );
     lut->Allocate( pixeltype.GetBitsAllocated() );
-    lut->InitializeLUT( gdcm::LookupTable::RED, 256, 0, 16 );
-    lut->InitializeLUT( gdcm::LookupTable::GREEN, 256, 0, 16 );
-    lut->InitializeLUT( gdcm::LookupTable::BLUE, 256, 0, 16 );
+    lut->InitializeLUT( gdcm::LookupTable::RED,   lutlen, 0, 16 );
+    lut->InitializeLUT( gdcm::LookupTable::GREEN, lutlen, 0, 16 );
+    lut->InitializeLUT( gdcm::LookupTable::BLUE,  lutlen, 0, 16 );
     if( !lut->WriteBufferAsRGBA( vtklut->WritePointer(0,4) ) )
       {
       vtkWarningMacro( "Could not get values from LUT" );
@@ -662,6 +676,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   // Whenever shift / scale is needed... do it !
   if( this->Shift != 0 || this->Scale != 1 )
     {
+    assert( this->PlanarConfiguration == 0 );
     // rescale from float to unsigned short
     gdcm::Rescaler ir;
     ir.SetIntercept( this->Shift );
@@ -733,6 +748,17 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   //image.Print( std::cerr );
 #endif
 // END DEBUG
+
+  // Do PlanarConfiguration
+  if( this->PlanarConfiguration )
+    {
+    gdcm::ImageChangePlanarConfiguration icpc;
+    icpc.SetInput( image );
+    icpc.SetPlanarConfiguration( 1 );
+    icpc.Change();
+    image = icpc.GetOutput();
+    assert( image.GetPlanarConfiguration() == 1 );
+    }
 
 
   gdcm::File& file = writer.GetFile();
@@ -807,39 +833,39 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   // Window Level / Window Center
   int numwl = this->MedicalImageProperties->GetNumberOfWindowLevelPresets();
   if( numwl )
-{
-  gdcm::VR vr = gdcm::VR::DS;
-  gdcm::Element<gdcm::VR::DS,gdcm::VM::VM1_n> elwc;
-  elwc.SetLength( numwl * vr.GetSizeof() );
-  gdcm::Element<gdcm::VR::DS,gdcm::VM::VM1_n> elww;
-  elww.SetLength( numwl * vr.GetSizeof() );
-  vr = gdcm::VR::LO;
-  gdcm::Element<gdcm::VR::LO,gdcm::VM::VM1_n> elwe;
-  elwe.SetLength( numwl * vr.GetSizeof() );
-  for(int i = 0; i < numwl; ++i)
     {
-    const double *wl = this->MedicalImageProperties->GetNthWindowLevelPreset(i);
-    elww.SetValue( wl[0], i );
-    elwc.SetValue( wl[1], i );
-    const char* we = this->MedicalImageProperties->GetNthWindowLevelPresetComment(i);
-    elwe.SetValue( we, i );
+    gdcm::VR vr = gdcm::VR::DS;
+    gdcm::Element<gdcm::VR::DS,gdcm::VM::VM1_n> elwc;
+    elwc.SetLength( numwl * vr.GetSizeof() );
+    gdcm::Element<gdcm::VR::DS,gdcm::VM::VM1_n> elww;
+    elww.SetLength( numwl * vr.GetSizeof() );
+    vr = gdcm::VR::LO;
+    gdcm::Element<gdcm::VR::LO,gdcm::VM::VM1_n> elwe;
+    elwe.SetLength( numwl * vr.GetSizeof() );
+    for(int i = 0; i < numwl; ++i)
+      {
+      const double *wl = this->MedicalImageProperties->GetNthWindowLevelPreset(i);
+      elww.SetValue( wl[0], i );
+      elwc.SetValue( wl[1], i );
+      const char* we = this->MedicalImageProperties->GetNthWindowLevelPresetComment(i);
+      elwe.SetValue( we, i );
+      }
+      {
+      gdcm::DataElement de = elwc.GetAsDataElement();
+      de.SetTag( gdcm::Tag(0x0028,0x1050) );
+      ds.Insert( de );
+      }
+      {
+      gdcm::DataElement de = elww.GetAsDataElement();
+      de.SetTag( gdcm::Tag(0x0028,0x1051) );
+      ds.Insert( de );
+      }
+      {
+      gdcm::DataElement de = elwe.GetAsDataElement();
+      de.SetTag( gdcm::Tag(0x0028,0x1055) );
+      ds.Insert( de );
+      }
     }
-{
-  gdcm::DataElement de = elwc.GetAsDataElement();
-  de.SetTag( gdcm::Tag(0x0028,0x1050) );
-  ds.Insert( de );
-}
-{
-  gdcm::DataElement de = elww.GetAsDataElement();
-  de.SetTag( gdcm::Tag(0x0028,0x1051) );
-  ds.Insert( de );
-}
-{
-  gdcm::DataElement de = elwe.GetAsDataElement();
-  de.SetTag( gdcm::Tag(0x0028,0x1055) );
-  ds.Insert( de );
-}
-}
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   // User defined value
   // Remap any user defined value from the DICOM name to the DICOM tag
@@ -907,6 +933,23 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
         return 0;
         }
       }
+    else if( this->FileDimensionality == 3 &&
+      pixeltype.GetSamplesPerPixel() == 3 &&
+      pi == gdcm::PhotometricInterpretation::RGB &&
+      pixeltype.GetBitsAllocated() == 8 &&
+      pixeltype.GetBitsStored() == 8 &&
+      pixeltype.GetHighBit() == 7 &&
+      pixeltype.GetPixelRepresentation() == 0 
+      // image.GetPlanarConfiguration()
+    )
+      {
+      ms = gdcm::MediaStorage::MultiframeTrueColorSecondaryCaptureImageStorage;
+      if( this->Shift != 0 || this->Scale != 1 )
+        {
+        vtkErrorMacro( "Cannot have shift/scale" );
+        return 0;
+        }
+      }
     else
       {
       vtkErrorMacro( "Cannot handle Multi Frame image in SecondaryCaptureImageStorage" );
@@ -916,13 +959,13 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
   // FIXME: new Secondary object handle multi frames...
   assert( gdcm::MediaStorage::IsImage( ms ) );
-{
-  gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
-  const char* msstr = gdcm::MediaStorage::GetMSString(ms);
-  de.SetByteValue( msstr, strlen(msstr) );
-  de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
-  ds.Insert( de );
-}
+    {
+    gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
+    const char* msstr = gdcm::MediaStorage::GetMSString(ms);
+    de.SetByteValue( msstr, strlen(msstr) );
+    de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
+    ds.Insert( de );
+    }
 
   // Image Type is pretty much always required:
   gdcm::Attribute<0x0008,0x0008> imagetype;
@@ -941,10 +984,10 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     }
   
   for(int i = 0; i < 3; ++i)
-  {
+    {
     iop[i+3] = dircos->GetElement(i,1);
-  }
-  
+    }
+
   image.SetDirectionCosines( &iop[0] );
 
   std::vector<double> ipp;
@@ -963,68 +1006,68 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   int n = inExt[4] - inWholeExt[4];
   const vtkFloatingPointType *vtkorigin = data->GetOrigin();
   vtkFloatingPointType origin[3];
-    if( this->FileLowerLeft )
+  if( this->FileLowerLeft )
     {
-      origin[0] = vtkorigin[0];
-      origin[1] = vtkorigin[1];
-      origin[2] = vtkorigin[2];
+    origin[0] = vtkorigin[0];
+    origin[1] = vtkorigin[1];
+    origin[2] = vtkorigin[2];
     }
-    else
+  else
     {
-      double norm = (dims[1] - 1) * spacing[1];
-      origin[0] = vtkorigin[0] - norm * iop[3+0];
-      origin[1] = vtkorigin[1] - norm * iop[3+1];
-      origin[2] = vtkorigin[2] - norm * iop[3+2];
+    double norm = (dims[1] - 1) * spacing[1];
+    origin[0] = vtkorigin[0] - norm * iop[3+0];
+    origin[1] = vtkorigin[1] - norm * iop[3+1];
+    origin[2] = vtkorigin[2] - norm * iop[3+2];
     }
-    double new_origin[3];
-    for (int i = 0; i < 3; i++)
+  double new_origin[3];
+  for (int i = 0; i < 3; i++)
     {
-        // the n'th slice is n * z-spacing aloung the IOP-derived
-        // z-axis
-        new_origin[i] = origin[i] + zaxis[i] * n * spacing[2];
+    // the n'th slice is n * z-spacing aloung the IOP-derived
+    // z-axis
+    new_origin[i] = origin[i] + zaxis[i] * n * spacing[2];
     }
 
-    for(int i = 0; i < 3; ++i)
-      ipp[i] = new_origin[i];
+  for(int i = 0; i < 3; ++i)
+    ipp[i] = new_origin[i];
 
-   image.SetOrigin(0, ipp[0] );
-   image.SetOrigin(1, ipp[1] );
-   image.SetOrigin(2, ipp[2] );
+  image.SetOrigin(0, ipp[0] );
+  image.SetOrigin(1, ipp[1] );
+  image.SetOrigin(2, ipp[2] );
   assert( ipp.size() < 3 || image.GetOrigin(2) == ipp[2] );
-   //gdcm::ImageHelper::SetOriginValue(ds, ipp, dims[2], spacing[2]);
+  //gdcm::ImageHelper::SetOriginValue(ds, ipp, dims[2], spacing[2]);
 
 
   // Here come the important part: generate proper UID for Series/Study so that people knows this is the same Study/Series
   const char *studyuid = this->StudyUID;
   assert( studyuid ); // programmer error
-{
-  gdcm::DataElement de( gdcm::Tag(0x0020,0x000d) ); // Study
-  de.SetByteValue( studyuid, strlen(studyuid) );
-  de.SetVR( gdcm::Attribute<0x0020, 0x000d>::GetVR() );
-  ds.Insert( de );
-}
+    {
+    gdcm::DataElement de( gdcm::Tag(0x0020,0x000d) ); // Study
+    de.SetByteValue( studyuid, strlen(studyuid) );
+    de.SetVR( gdcm::Attribute<0x0020, 0x000d>::GetVR() );
+    ds.Insert( de );
+    }
   const char *seriesuid = this->SeriesUID;
   assert( seriesuid ); // programmer error
-{
-  gdcm::DataElement de( gdcm::Tag(0x0020,0x000e) ); // Series
-  de.SetByteValue( seriesuid, strlen(seriesuid) );
-  de.SetVR( gdcm::Attribute<0x0020, 0x000e>::GetVR() );
-  ds.Insert( de );
-}
+    {
+    gdcm::DataElement de( gdcm::Tag(0x0020,0x000e) ); // Series
+    de.SetByteValue( seriesuid, strlen(seriesuid) );
+    de.SetVR( gdcm::Attribute<0x0020, 0x000e>::GetVR() );
+    ds.Insert( de );
+    }
 
   const char *filename = NULL;
   int k = inExt[4];
   if( this->FileNames->GetNumberOfValues() )
-  {
+    {
     //int n = this->FileNames->GetNumberOfValues();
     filename = this->FileNames->GetValue(k);
-  }
+    }
   else
-  {
+    {
     filename = this->GetFileName();
-  }
+    }
   assert( filename );
-  
+
   // Let's add an Instance Number just for fun:
   std::ostringstream os;
   os << k;

@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -28,6 +28,7 @@
 namespace gdcm
 {
 
+class DataSet;
 /**
  * \brief Class to represent an Item
  * A component of the value of a Data Element that is of Value Representation Sequence of Items.
@@ -41,8 +42,6 @@ namespace gdcm
  * ITEM: A component of the Value of a Data Element that is of Value
  * Representation Sequence of Items. An Item contains a Data Set.
  */
-class DataSet;
-
 class GDCM_EXPORT Item : public DataElement
 {
 public:
@@ -98,9 +97,11 @@ public:
   template <typename TDE, typename TSwap>
   std::istream &Read(std::istream &is) {
     // Superclass
+    {
         DataSet &nested = NestedDataSet;
         nested.Clear();
         assert( nested.IsEmpty() );
+    }
     if( !TagField.Read<TSwap>(is) )
       {
       throw Exception("Should not happen");
@@ -199,7 +200,7 @@ public:
       // Some file written by GDCM 1.0 were written with 0xFFFFFFFF instead of 0x0
       if( ValueLengthField )
         {
-        gdcmWarningMacro( "ValueLengthField is not 0 but " << ValueLengthField );
+        gdcmDebugMacro( "ValueLengthField is not 0 but " << ValueLengthField );
         }
       }
     else if( ValueLengthField.IsUndefined() )

@@ -224,11 +224,11 @@ void MakeIob(type,flags,wsize)
 	  exit(ERROR_MEMORY);
 	}
 	   if( CFrame->tmpfile )
-{
+  {
       temp->file = CFrame->tmpfile;
-}
-else
-{
+  }
+    else
+  {
       if ((temp->file =                               /* Open file */
 	   open(CFrame->ComponentFileName[CScan->ci[index]],
 		flags,UMASK)) < 0)
@@ -238,7 +238,7 @@ else
 		 CFrame->ComponentFileName[CScan->ci[index]]);
 	  exit(ERROR_INIT_FILE);
 	}               /* Make buffer for every line of component in MDU */
-}
+  }
 
       for(sofs=0,current=temp->blist;current<temp->blist+temp->num;current++)
 	{
@@ -766,7 +766,7 @@ void SeekEndIob()
   int size,tsize;
   static char Terminator[] = {0x80,0x00};
 
-  size = lseek(Iob->file,0,2);
+  size = lseek(Iob->file,0,SEEK_END);
   tsize = Iob->width*Iob->height*Iob->wsize;
   if (size !=  tsize)
     {
@@ -776,7 +776,7 @@ void SeekEndIob()
 
       if (size<tsize)
 	{
-	  lseek(Iob->file,tsize-1,0L);         /* Seek and terminate */
+	  lseek(Iob->file,tsize-1,SEEK_SET);         /* Seek and terminate */
 	  write(Iob->file,Terminator,1);
 	}
       else if (size > tsize)
@@ -930,7 +930,7 @@ void TerminateFile()
 		     CFrame->vf[CScan->ci[i]]);
 	      InstallIob(i);
 	      FlushIob();
-	      size = lseek(CScan->Iob[i]->file,0,2);
+	      size = lseek(CScan->Iob[i]->file,0,SEEK_END);
 	      if (size !=
 		  CFrame->Width[CScan->ci[i]]*CFrame->Height[CScan->ci[i]]*
 		  CScan->Iob[i]->wsize)
@@ -939,7 +939,7 @@ void TerminateFile()
 			(CFrame->Width[CScan->ci[i]]*  /* And writing byte */
 			 CFrame->Height[CScan->ci[i]]*
 			 CScan->Iob[i]->wsize)-1,      /* Making flush with */
-			0L);                           /* Original size  */
+			SEEK_SET);                           /* Original size  */
 		  write(CScan->Iob[i]->file,Terminator,1);
 		}
 	    }

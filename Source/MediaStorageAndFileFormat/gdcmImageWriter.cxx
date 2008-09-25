@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -37,7 +37,7 @@ ImageWriter::~ImageWriter()
 
 void ImageWriter::SetImage(Image const &img)
 {
-  PixelData = &img;
+  PixelData = img;
 }
 
 bool ImageWriter::Write()
@@ -99,6 +99,13 @@ bool ImageWriter::Write()
   Attribute<0x0028, 0x0002> samplesperpixel;
   samplesperpixel.SetValue( pf.GetSamplesPerPixel() );
   ds.Replace( samplesperpixel.GetAsDataElement() );
+
+  if( pf.GetSamplesPerPixel() != 1 )
+    {
+    Attribute<0x0028, 0x0006> planarconf;
+    planarconf.SetValue( PixelData->GetPlanarConfiguration() );
+    ds.Replace( planarconf.GetAsDataElement() );
+    }
 
 
   // Overlay Data 60xx
@@ -193,12 +200,14 @@ bool ImageWriter::Write()
       case 8:
         de.SetVR( VR::OB );
         break;
+      case 12:
       case 16:
       case 32:
         de.SetVR( VR::OW );
         break;
       default:
         assert( 0 && "should not happen" );
+        break;
       }
     }
   else
@@ -214,36 +223,46 @@ bool ImageWriter::Write()
 
   // PhotometricInterpretation
   // const Tag tphotometricinterpretation(0x0028, 0x0004);
-  if( !ds.FindDataElement( Tag(0x0028, 0x0004) ) )
+  //if( !ds.FindDataElement( Tag(0x0028, 0x0004) ) )
     {
     const char *pistr = PhotometricInterpretation::GetPIString(pi);
     DataElement de( Tag(0x0028, 0x0004 ) );
     de.SetByteValue( pistr, strlen(pistr) );
     de.SetVR( Attribute<0x0028,0x0004>::GetVR() );
     ds.Insert( de );
-    if( pi == PhotometricInterpretation::RGB
-      || pi == PhotometricInterpretation::YBR_FULL ) // FIXME
-      {
-      Attribute<0x0028, 0x0006> planarconfiguration;
-      planarconfiguration.SetValue( PixelData->GetPlanarConfiguration() );
-      ds.Replace( planarconfiguration.GetAsDataElement() );
-      }
-    else if ( pi == PhotometricInterpretation::PALETTE_COLOR )
+    //if( pi == PhotometricInterpretation::RGB
+    //  || pi == PhotometricInterpretation::YBR_FULL ) // FIXME
+    //  {
+    //  Attribute<0x0028, 0x0006> planarconfiguration;
+    //  planarconfiguration.SetValue( PixelData->GetPlanarConfiguration() );
+    //  ds.Replace( planarconfiguration.GetAsDataElement() );
+    //  }
+    //else
+    if ( pi == PhotometricInterpretation::PALETTE_COLOR )
       {
       const LookupTable &lut = PixelData->GetLUT();
-      assert( pf.GetBitsAllocated() == 8 && pf.GetPixelRepresentation() == 0 );
+      assert( (pf.GetBitsAllocated() == 8  && pf.GetPixelRepresentation() == 0) 
+           || (pf.GetBitsAllocated() == 16 && pf.GetPixelRepresentation() == 0) );
       // lut descriptor:
       // (0028,1101) US 256\0\16                                 #   6, 3 RedPaletteColorLookupTableDescriptor
       // (0028,1102) US 256\0\16                                 #   6, 3 GreenPaletteColorLookupTableDescriptor
       // (0028,1103) US 256\0\16                                 #   6, 3 BluePaletteColorLookupTableDescriptor
       // lut data:
       unsigned short length, subscript, bitsize;
-      unsigned short rawlut[256];
+      unsigned short rawlut8[256];
+      unsigned short rawlut16[65536];
+      unsigned short *rawlut = rawlut8;
+      unsigned int lutlen = 256;
+      if( pf.GetBitsAllocated() == 16 )
+        {
+        rawlut = rawlut16;
+        lutlen = 65536;
+        }
       unsigned int l;
 
       // FIXME: should I really clear rawlut each time ?
       // RED
-      memset(rawlut,0,256*2);
+      memset(rawlut,0,lutlen*2);
       lut.GetLUT(LookupTable::RED, (unsigned char*)rawlut, l);
       DataElement redde( Tag(0x0028, 0x1201) );
       redde.SetVR( VR::OW );
@@ -256,7 +275,7 @@ bool ImageWriter::Write()
       ds.Replace( reddesc.GetAsDataElement() );
 
       // GREEN
-      memset(rawlut,0,256*2);
+      memset(rawlut,0,lutlen*2);
       lut.GetLUT(LookupTable::GREEN, (unsigned char*)rawlut, l);
       DataElement greende( Tag(0x0028, 0x1202) );
       greende.SetVR( VR::OW );
@@ -269,7 +288,7 @@ bool ImageWriter::Write()
       ds.Replace( greendesc.GetAsDataElement() );
 
       // BLUE
-      memset(rawlut,0,256*2);
+      memset(rawlut,0,lutlen*2);
       lut.GetLUT(LookupTable::BLUE, (unsigned char*)rawlut, l);
       DataElement bluede( Tag(0x0028, 0x1203) );
       bluede.SetVR( VR::OW );
@@ -281,6 +300,11 @@ bool ImageWriter::Write()
       bluedesc.SetValue(length,0); bluedesc.SetValue(subscript,1); bluedesc.SetValue(bitsize,2);
       ds.Replace( bluedesc.GetAsDataElement() );
       }
+
+    ds.Remove( Tag(0x0028, 0x1221) );
+    ds.Remove( Tag(0x0028, 0x1222) );
+    ds.Remove( Tag(0x0028, 0x1223) );
+
     }
 
   // FIXME shouldn't this be done by the ImageApplyLookupTable filter ?

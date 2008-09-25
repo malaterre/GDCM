@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -77,6 +77,9 @@
 #include "gdcmUIDGenerator.h"
 #include "gdcmImageChangeTransferSyntax.h"
 #include "gdcmImageApplyLookupTable.h"
+#include "gdcmImageFragmentSplitter.h"
+#include "gdcmImageChangePlanarConfiguration.h"
+#include "gdcmFileExplicitFilter.h"
 
 #include <string>
 #include <iostream>
@@ -106,24 +109,28 @@ void PrintHelp()
   std::cout << "Usage: gdcmconv [OPTION] -i input.dcm -o output.dcm" << std::endl;
   std::cout << "Convert a DICOM file into another DICOM file.\n";
   std::cout << "Parameter (required):" << std::endl;
-  std::cout << "  -i --input     DICOM filename" << std::endl;
-  std::cout << "  -o --output    DICOM filename (generated)" << std::endl;
+  std::cout << "  -i --input      DICOM filename" << std::endl;
+  std::cout << "  -o --output     DICOM filename" << std::endl;
   std::cout << "Options:" << std::endl;
-  //std::cout << "  -l --lut       Apply LUT." << std::endl;
-  std::cout << "  -W --raw       Decompress image." << std::endl;
-  std::cout << "  -J --jpeg      Compress image in jpeg." << std::endl;
-  std::cout << "  -K --j2k       Compress image in j2k." << std::endl;
-  std::cout << "  -L --jpegls    Compress image in jpeg-ls." << std::endl;
-  std::cout << "  -R --rle       Compress image in rle." << std::endl;
-  std::cout << "  -F --force     Force decompression before recompression." << std::endl;
-  std::cout << "  -Y --lossy  %d Use the lossy (if possible), followed by comp. ratio" << std::endl;
+  std::cout << "  -l --apply-lut  Apply LUT." << std::endl;
+  std::cout << "  -C --check-meta Check File Meta Information." << std::endl;
+  std::cout << "  -W --raw        Decompress image." << std::endl;
+  std::cout << "  -J --jpeg       Compress image in jpeg." << std::endl;
+  std::cout << "  -K --j2k        Compress image in j2k." << std::endl;
+  std::cout << "  -L --jpegls     Compress image in jpeg-ls." << std::endl;
+  std::cout << "  -R --rle        Compress image in rle (lossless only)." << std::endl;
+  std::cout << "  -F --force      Force decompression/merging before recompression/splitting." << std::endl;
+  std::cout << "  -Y --lossy %d   Use the lossy (if possible), followed by comp. ratio" << std::endl;
+  std::cout << "  -S --split %d   Write 2D image with multiple fragments (using max size)" << std::endl;
   std::cout << "General Options:" << std::endl;
-  std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
-  std::cout << "  -W --warning   print warning info." << std::endl;
-  std::cout << "  -D --debug     print debug info." << std::endl;
-  std::cout << "  -E --error     print error info." << std::endl;
-  std::cout << "  -h --help      print help." << std::endl;
-  std::cout << "  -v --version   print version." << std::endl;
+  std::cout << "  -V --verbose    more verbose (warning+error)." << std::endl;
+  std::cout << "  -W --warning    print warning info." << std::endl;
+  std::cout << "  -D --debug      print debug info." << std::endl;
+  std::cout << "  -E --error      print error info." << std::endl;
+  std::cout << "  -h --help       print help." << std::endl;
+  std::cout << "  -v --version    print version." << std::endl;
+  std::cout << "Special Options:" << std::endl;
+  std::cout << "  -I --ignore-errors   print even if file is corrupted (advanced users only, see disclaimers)." << std::endl;
 }
 
 
@@ -143,8 +150,10 @@ int main (int argc, char *argv[])
   int jpegls = 0;
   int j2k = 0;
   int lossy = 0;
+  int split = 0;
   int rle = 0;
   int force = 0;
+  int planarconf = 0;
 
   int verbose = 0;
   int warning = 0;
@@ -152,6 +161,7 @@ int main (int argc, char *argv[])
   int error = 0;
   int help = 0;
   int version = 0;
+  int ignoreerrors = 0;
 
   while (1) {
     //int this_option_optind = optind ? optind : 1;
@@ -175,7 +185,7 @@ int main (int argc, char *argv[])
         {"check-meta", 0, &checkmeta, 1}, // specific Root (not GDCM)
 // Image specific options:
         {"pixeldata", 1, 0, 0}, // valid
-        {"lut", 0, &lut, 1}, // default (implicit VR, LE) / Explicit LE / Explicit BE
+        {"apply-lut", 0, &lut, 1}, // default (implicit VR, LE) / Explicit LE / Explicit BE
         {"raw", 0, &raw, 1}, // default (implicit VR, LE) / Explicit LE / Explicit BE
         {"lossy", 1, &lossy, 1}, // Specify the compression ratio for lossy comp
         {"force", 0, &force, 1}, // force decompression even if target compression is identical
@@ -185,6 +195,8 @@ int main (int argc, char *argv[])
         {"rle", 0, &rle, 1}, // lossless !
         {"mpeg2", 0, 0, 0}, // lossy !
         {"jpip", 0, 0, 0}, // ??
+        {"split", 1, &split, 1}, // split fragments
+        {"planar-configuration", 1, &planarconf, 1}, // Planar Configuration
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -193,11 +205,12 @@ int main (int argc, char *argv[])
         {"error", 0, &error, 1},
         {"help", 0, &help, 1},
         {"version", 0, &version, 1},
+        {"ignore-errors", 0, &ignoreerrors, 1},
 
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:",
+    c = getopt_long (argc, argv, "i:o:VWDEhv",
       long_options, &option_index);
     if (c == -1)
       {
@@ -224,6 +237,16 @@ int main (int argc, char *argv[])
             assert( root.empty() );
             root = optarg;
             }
+          else if( option_index == 28 ) /* split */
+            {
+            assert( strcmp(s, "split") == 0 );
+            split = atoi(optarg);
+            }
+          else if( option_index == 29 ) /* planar conf*/
+            {
+            assert( strcmp(s, "planar-configuration") == 0 );
+            planarconf = atoi(optarg);
+            }
           printf (" with arg %s, index = %d", optarg, option_index);
           }
         printf ("\n");
@@ -240,6 +263,30 @@ int main (int argc, char *argv[])
       printf ("option o with value '%s'\n", optarg);
       assert( outfilename.empty() );
       outfilename = optarg;
+      break;
+
+    case 'V':
+      verbose = 1;
+      break;
+
+    case 'W':
+      warning = 1;
+      break;
+
+    case 'D':
+      debug = 1;
+      break;
+
+    case 'E':
+      error = 1;
+      break;
+
+    case 'h':
+      help = 1;
+      break;
+
+    case 'v':
+      version = 1;
       break;
 
     case '?':
@@ -259,6 +306,7 @@ int main (int argc, char *argv[])
     //  printf ("%s ", argv[optind++]);
     //  }
     //printf ("\n");
+    PrintHelp();
     return 1;
     }
 
@@ -288,7 +336,18 @@ int main (int argc, char *argv[])
     PrintHelp();
     return 1;
     }
-  
+
+  // Debug is a little too verbose
+  gdcm::Trace::SetDebug( debug );
+  gdcm::Trace::SetWarning( warning );
+  gdcm::Trace::SetError( error );
+  // when verbose is true, make sure warning+error are turned on:
+  if( verbose )
+    {
+    gdcm::Trace::SetWarning( verbose );
+    gdcm::Trace::SetError( verbose);
+    }
+ 
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmconv" );
   if( rootuid )
     {
@@ -306,7 +365,39 @@ int main (int argc, char *argv[])
     return 1;
     }
 
-  if( lut )
+  // split fragments
+  if( split )
+    {
+    gdcm::ImageReader reader;
+    reader.SetFileName( filename.c_str() );
+    if( !reader.Read() )
+      {
+      std::cerr << "could not read: " << filename << std::endl;
+      return 1;
+      }
+    const gdcm::Image &image = reader.GetImage();
+
+    gdcm::ImageFragmentSplitter splitter;
+    splitter.SetInput( image );
+    splitter.SetFragmentSizeMax( split );
+    splitter.SetForce( force );
+    bool b = splitter.Split();
+    if( !b )
+      {
+      std::cerr << "Could not split: " << filename << std::endl;
+      return 1;
+      }
+    gdcm::ImageWriter writer;
+    writer.SetFileName( outfilename.c_str() );
+    writer.SetFile( reader.GetFile() );
+    writer.SetImage( splitter.GetOutput() );
+    if( !writer.Write() )
+      {
+      std::cerr << "Failed to write: " << outfilename << std::endl;
+      return 1;
+      }
+    }
+  else if( lut )
     {
     gdcm::ImageReader reader;
     reader.SetFileName( filename.c_str() );
@@ -348,8 +439,8 @@ int main (int argc, char *argv[])
     const gdcm::IconImage &icon = image.GetIconImage();
     if( !icon.IsEmpty() )
       {
-      std::cerr << "Icon are not supported" << std::endl;
-      return 1;
+      std::cerr << "Icons are not supported" << std::endl;
+      //return 1;
       }
 
     gdcm::ImageChangeTransferSyntax change;
@@ -360,7 +451,7 @@ int main (int argc, char *argv[])
       }
     else if( jpegls )
       {
-      return 1;
+      change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLSLossless );
       }
     else if( j2k )
       {
@@ -368,7 +459,20 @@ int main (int argc, char *argv[])
       }
     else if( raw )
       {
-      change.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
+      const gdcm::TransferSyntax &ts = image.GetTransferSyntax();
+#ifdef GDCM_WORDS_BIGENDIAN
+      change.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRBigEndian );
+#else
+      if( ts.IsExplicit() )
+        {
+        change.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
+        }
+      else
+        {
+        assert( ts.IsImplicit() );
+        change.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+        }
+#endif
       }
     else if( rle )
       {
@@ -378,16 +482,37 @@ int main (int argc, char *argv[])
       {
       return 1;
       }
-    change.SetInput( image );
+    if( raw )
+      {
+      gdcm::ImageChangePlanarConfiguration icpc;
+      icpc.SetPlanarConfiguration( planarconf );
+      icpc.SetInput( image );
+      bool b = icpc.Change();
+      if( !b )
+        {
+        std::cerr << "Could not change the Planar Configuration: " << filename << std::endl;
+        return 1;
+        }
+      change.SetInput( icpc.GetOutput() );
+      }
+    else
+      {
+      change.SetInput( image );
+      }
     bool b = change.Change();
     if( !b )
       {
       std::cerr << "Could not change the Transfer Syntax: " << filename << std::endl;
       return 1;
       }
+    //gdcm::FileExplicitFilter fef;
+    //fef.SetFile( reader.GetFile() );
+    //fef.Change();
+
     gdcm::ImageWriter writer;
     writer.SetFileName( outfilename.c_str() );
     writer.SetFile( reader.GetFile() );
+    //writer.SetFile( fef.GetFile() );
     writer.SetImage( change.GetOutput() );
     if( !writer.Write() )
       {
@@ -465,8 +590,17 @@ int main (int argc, char *argv[])
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
-      std::cerr << "Failed to read: " << filename << std::endl;
-      return 1;
+      if( ignoreerrors )
+        {
+        std::cerr << "WARNING: an error was found during the reading of your DICOM file." << std::endl;
+        std::cerr << "gdcmconv will still try to continue and rewrite your DICOM file." << std::endl;
+        std::cerr << "There is absolutely no garantee that your output file will be valid." << std::endl;
+        }
+      else
+        {
+        std::cerr << "Failed to read: " << filename << std::endl;
+        return 1;
+        }
       }
 
 #if 0

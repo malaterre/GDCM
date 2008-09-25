@@ -1,6 +1,7 @@
 PROJECT(itk_gdcm)
 # We need ITK
 FIND_PACKAGE(ITK REQUIRED)
+MARK_AS_ADVANCED(ITK_DIR)
 
 # Define the src for the itk-gdcm bridge
 SET(itkgdcm_SRCS

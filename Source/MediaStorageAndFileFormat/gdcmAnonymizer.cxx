@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -144,6 +144,7 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
       {
       // Let's give up !
       gdcmWarningMacro( "Cannot process tag: " << t << " with vr: " << dictentry.GetVR() );
+      //ret = false;
       }
     else if ( dictentry.GetVR() & VR::VRBINARY )
       {

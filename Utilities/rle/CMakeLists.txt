@@ -1,6 +1,6 @@
 PROJECT(RLE)
 
-ADD_LIBRARY(rle rle.c)
+ADD_LIBRARY(rle rle.c rlelib.c)
 #SET_TARGET_PROPERTIES(rle PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
 
 ADD_EXECUTABLE(example example.c)
@@ -11,3 +11,7 @@ INSTALL(TARGETS rle example
 	ARCHIVE DESTINATION lib/static
   ${CPACK_NAMELINK_TYPE}
 	)
+
+ADD_EXECUTABLE(rledump rledump.c)
+TARGET_LINK_LIBRARIES(rledump rle)
+

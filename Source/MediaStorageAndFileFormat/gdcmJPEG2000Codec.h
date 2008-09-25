@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -21,17 +21,27 @@ namespace gdcm
 {
   
 class JPEG2000Internals;
-class JPEG2000Codec : public ImageCodec
+/**
+ * \brief Class to do JPEG 2000
+ * \note
+ * the class will produce JPC (JPEG 2000 codestream), since some private implementor
+ * are using full jp2 file the decoder tolerate jp2 input
+ * this is an implementation of an ImageCodec
+ */
+class GDCM_EXPORT JPEG2000Codec : public ImageCodec
 {
 public:
   JPEG2000Codec();
   ~JPEG2000Codec();
+
   bool CanDecode(TransferSyntax const &ts) const;
   bool CanCode(TransferSyntax const &ts) const;
 
   bool Decode(DataElement const &is, DataElement &os);
   void SetNumberOfDimensions(unsigned int dim);
   bool Code(DataElement const &in, DataElement &out);
+
+  virtual bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);
 
 protected:
   bool Decode(std::istream &is, std::ostream &os);

@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -21,6 +21,8 @@
 #include "gdcmFragment.h"
 #include "gdcmRAWCodec.h"
 #include "gdcmJPEGCodec.h"
+#include "gdcmPVRGCodec.h"
+#include "gdcmJPEGLSCodec.h"
 #include "gdcmJPEG2000Codec.h"
 #include "gdcmRLECodec.h"
 
@@ -111,7 +113,7 @@ void Image::SetDimension(unsigned int idx, unsigned int dim)
   Dimensions.resize( 3 /*NumberOfDimensions*/ );
   // Can dim be 0 ??
   // -> no !
-  assert( dim );
+  //assert( dim ); // PhilipsLosslessRice.dcm 
   Dimensions[idx] = dim;
   if( NumberOfDimensions == 2 )
     {
@@ -145,6 +147,7 @@ void Image::SetSpacing(const double *spacing)
 
 void Image::SetSpacing(unsigned int idx, double spacing)
 {
+  //assert( spacing > 1.e3 );
   Spacing.resize( 3 /*idx + 1*/ );
   Spacing[idx] = spacing;
 }
@@ -279,6 +282,7 @@ bool Image::AreOverlaysInPixelData() const
 
 void Image::Print(std::ostream &os) const
 {
+  Object::Print(os);
   //assert( NumberOfDimensions );
   os << "NumberOfDimensions: " << NumberOfDimensions << "\n";
   if( NumberOfDimensions )
@@ -402,6 +406,11 @@ bool Image::TryJPEGCodec(char *buffer) const
       gdcm::Image *i = (gdcm::Image*)this;
       i->SetPhotometricInterpretation( codec.GetPhotometricInterpretation() );
       }
+    if ( GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 )
+      {
+      gdcm::Image *i = (gdcm::Image*)this;
+      i->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
+      }
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
@@ -454,7 +463,61 @@ bool Image::TryJPEGCodec2(std::ostream &os) const
     }
   return false;
 }
+
+bool Image::TryPVRGCodec(char *buffer) const
+{
+  unsigned long len = GetBufferLength();
+  const TransferSyntax &ts = GetTransferSyntax();
+
+  PVRGCodec codec;
+  if( codec.CanDecode( ts ) )
+    {
+    codec.SetPixelFormat( GetPixelFormat() );
+    //codec.SetBufferLength( len );
+    //codec.SetNumberOfDimensions( GetNumberOfDimensions() );
+    codec.SetPlanarConfiguration( GetPlanarConfiguration() );
+    codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
+    codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );
+    codec.SetDimensions( GetDimensions() );
+    DataElement out;
+    bool r = codec.Decode(PixelData, out);
+    assert( r );
+    const ByteValue *outbv = out.GetByteValue();
+    assert( outbv );
+    unsigned long check = outbv->GetLength();  // FIXME
+    memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+    return r;
+    }
+  return false;
+}
    
+bool Image::TryJPEGLSCodec(char *buffer) const
+{
+  unsigned long len = GetBufferLength();
+  const TransferSyntax &ts = GetTransferSyntax();
+
+  JPEGLSCodec codec;
+  if( codec.CanDecode( ts ) )
+    {
+    codec.SetPixelFormat( GetPixelFormat() );
+    codec.SetBufferLength( len );
+    //codec.SetNumberOfDimensions( GetNumberOfDimensions() );
+    codec.SetPlanarConfiguration( GetPlanarConfiguration() );
+    codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
+    codec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );
+    codec.SetDimensions( GetDimensions() );
+    DataElement out;
+    bool r = codec.Decode(PixelData, out);
+    if( !r ) return false;
+    const ByteValue *outbv = out.GetByteValue();
+    assert( outbv );
+    unsigned long check = outbv->GetLength();  // FIXME
+    memcpy(buffer, outbv->GetPointer(), outbv->GetLength() );  // FIXME
+    return r;
+    }
+  return false;
+}
+
 bool Image::TryJPEG2000Codec(char *buffer) const
 {
   unsigned long len = GetBufferLength();
@@ -518,6 +581,7 @@ bool Image::TryRLECodec(char *buffer) const
     {
     //assert( sf->GetNumberOfFragments() == 1 );
     //assert( sf->GetNumberOfFragments() == GetDimensions(2) );
+    codec.SetNumberOfDimensions( GetNumberOfDimensions() );
     codec.SetPlanarConfiguration( GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
     codec.SetPixelFormat( GetPixelFormat() );
@@ -562,7 +626,9 @@ bool Image::GetBuffer(char *buffer) const
   bool success = false;
   if( !success ) success = TryRAWCodec(buffer);
   if( !success ) success = TryJPEGCodec(buffer);
+  if( !success ) success = TryPVRGCodec(buffer); // AFTER IJG trial !
   if( !success ) success = TryJPEG2000Codec(buffer);
+  if( !success ) success = TryJPEGLSCodec(buffer);
   if( !success ) success = TryRLECodec(buffer);
   //if( !success ) success = TryDeltaEncodingCodec(buffer);
   if( !success )

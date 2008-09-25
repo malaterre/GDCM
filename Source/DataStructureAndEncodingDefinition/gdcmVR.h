@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -25,7 +25,9 @@
 
 namespace gdcm
 {
-/* \brief VR class
+
+/**
+ * \brief VR class
  * This is adapted from DICOM standard
  * The biggest difference is the INVALID VR
  * and the composite one that differ from standard (more like an addition)
@@ -183,6 +185,10 @@ public:
 
   bool Compatible(VR const &vr) const;
 
+  bool IsVRFile() const;
+
+  bool IsDual() const;
+
 private:
   // Internal function that map a VRType to an index in the VRStrings table
   static int GetIndex(VRType vr);
@@ -240,16 +246,16 @@ TYPETOENCODING(AS,VRASCII ,ASComp)
 TYPETOENCODING(AT,VRBINARY,Tag)
 TYPETOENCODING(CS,VRASCII ,CSComp)
 TYPETOENCODING(DA,VRASCII ,DAComp)
-TYPETOENCODING(DS,VRASCII ,float)
+TYPETOENCODING(DS,VRASCII ,double)
 TYPETOENCODING(DT,VRASCII ,DTComp)
 TYPETOENCODING(FL,VRBINARY,float)
 TYPETOENCODING(FD,VRBINARY,double)
-TYPETOENCODING(IS,VRASCII ,int)
+TYPETOENCODING(IS,VRASCII ,int32_t)
 TYPETOENCODING(LO,VRASCII ,LOComp)
 TYPETOENCODING(LT,VRASCII ,LTComp)
-TYPETOENCODING(OB,VRBINARY,unsigned char)
+TYPETOENCODING(OB,VRBINARY,uint8_t)
 TYPETOENCODING(OF,VRBINARY,float)
-TYPETOENCODING(OW,VRBINARY,unsigned short)
+TYPETOENCODING(OW,VRBINARY,uint16_t)
 TYPETOENCODING(PN,VRASCII ,PNComp)
 TYPETOENCODING(SH,VRASCII ,SHComp)
 TYPETOENCODING(SL,VRBINARY,int32_t)
@@ -259,9 +265,9 @@ TYPETOENCODING(ST,VRASCII ,STComp)
 TYPETOENCODING(TM,VRASCII ,TMComp)
 TYPETOENCODING(UI,VRASCII ,UIComp)
 TYPETOENCODING(UL,VRBINARY,uint32_t)
-TYPETOENCODING(UN,VRBINARY,unsigned char) // FIXME ?
+TYPETOENCODING(UN,VRBINARY,uint8_t) // FIXME ?
 TYPETOENCODING(US,VRBINARY,uint16_t)
-TYPETOENCODING(UT,VRASCII,UTComp)
+TYPETOENCODING(UT,VRASCII ,UTComp)
 
 #define VRTypeTemplateCase(type) \
   case VR::type: \

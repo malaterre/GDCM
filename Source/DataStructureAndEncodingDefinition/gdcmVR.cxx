@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -85,6 +85,44 @@ static VR::VRType VRValue[] = {
     VR::US ,
     VR::UT
 };
+
+bool VR::IsVRFile() const
+{
+  switch(VRField)
+    {
+  case VR::INVALID:
+  case VR::AE:
+  case VR::AS:
+  case VR::AT:
+  case VR::CS:
+  case VR::DA:
+  case VR::DS:
+  case VR::DT:
+  case VR::FD:
+  case VR::FL:
+  case VR::IS:
+  case VR::LO:
+  case VR::LT:
+  case VR::OB:
+  case VR::OF:
+  case VR::OW:
+  case VR::PN:
+  case VR::SH:
+  case VR::SL:
+  case VR::SQ:
+  case VR::SS:
+  case VR::ST:
+  case VR::TM:
+  case VR::UI:
+  case VR::UL:
+  case VR::UN:
+  case VR::US:
+  case VR::UT:
+    return true;
+    }
+  return false;
+}
+
 
 unsigned int VR::GetSizeof() const
 {
@@ -416,6 +454,18 @@ bool VR::Compatible(VR const &vr) const
   if( vr.VRField == VR::INVALID ) return true;
   else if( vr.VRField == VR::UN ) return true;
   else return VRField & vr.VRField;
+}
+
+bool VR::IsDual() const
+{
+  switch(VRField)
+    {
+  case OB_OW :
+  case US_SS :
+  case US_SS_OW :
+    return true;
+    }
+  return false;
 }
 
 

@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -21,7 +21,8 @@
 namespace gdcm
 {
 
-/** \class Codec
+/**
+ * \brief Codec class
  */
 class GDCM_EXPORT Codec : public Coder, public Decoder
 {

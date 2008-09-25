@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -145,6 +145,7 @@ void LookupTable::GetLUT(LookupTableType type, unsigned char *array, unsigned in
     }
   else
     {
+    assert( BitSample == 16 );
     length = Internal->Length[type]*(BitSample/8);
     uint16_t *uchar16 = (uint16_t*)&Internal->RGB[0];
     uint16_t *array16 = (uint16_t*)array;
@@ -331,7 +332,7 @@ bool LookupTable::GetBufferAsRGBA(unsigned char *rgba) const
   return ret;
 }
 
-bool LookupTable::WriteBufferAsRGBA(unsigned char *rgba)
+bool LookupTable::WriteBufferAsRGBA(const unsigned char *rgba)
 {
   bool ret;
   if ( BitSample == 8 )
@@ -346,27 +347,38 @@ bool LookupTable::WriteBufferAsRGBA(unsigned char *rgba)
       // BLUE
       *it++ = *rgba++;
       // ALPHA
-      *rgba++ = 255;
+      rgba++; // = 255;
       }
     ret = true;
     }
   else
     {
-/*
-    assert( Internal->Length[type]*(BitSample/8) == length );
+    //assert( Internal->Length[type]*(BitSample/8) == length );
     uint16_t *uchar16 = (uint16_t*)&Internal->RGB[0];
-    const uint16_t *array16 = (uint16_t*)array;
-    for( unsigned int i = 0; i < Internal->Length[type]; ++i)
+    const uint16_t *rgba16 = (uint16_t*)rgba;
+    size_t s = Internal->RGB.size();
+    s /= 2;
+    s /= 3;
+    assert( s == 65536 );
+
+    for( unsigned int i = 0; i < s /*i < Internal->Length[type]*/; ++i)
       {
-      assert( 2*i < length );
-      assert( 2*(3*i+type) < Internal->RGB.size() );
-      uchar16[3*i+type] = array16[i];
-      std::cout << i << " -> " << array16[i] << "\n";
+      //assert( 2*i < length );
+      //assert( 2*(3*i+type) < Internal->RGB.size() );
+      //uchar16[3*i+type] = array16[i];
+      //std::cout << i << " -> " << array16[i] << "\n";
+      // RED
+      *uchar16++ = *rgba16++;
+      // GREEN
+      *uchar16++ = *rgba16++;
+      // BLUE
+      *uchar16++ = *rgba16++;
+      //
+      rgba16++; // = *rgba16++;
       }
 
     ret = true;
-*/
-    ret = false;
+    //ret = false;
     }
   return ret;
 }

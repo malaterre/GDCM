@@ -122,7 +122,7 @@ program.
 
 EFUNC*/
 
-int pvrgmain(argc,argv)
+int main(argc,argv)
      int argc;
      char **argv;
 {
@@ -1898,6 +1898,7 @@ void MakeFrame()
       CFrame->tq[i] = 0;
       CFrame->Height[i] = 0;
       CFrame->Width[i] = 0;
+      CFrame->ComponentFileName[i] = 0;
     }
   CFrame->BufferSize = BUFFERSIZE;
   CFrame->Image = CImage;
@@ -1962,6 +1963,7 @@ void MakeScan()
   CScan->NumberComponents = 0;
   for(i=0;i<MAXIMUM_SOURCES;i++)
     {
+      CScan->ci[i] = 0;
       CScan->ta[i] = 0;
       CScan->td[i] = 0;
       CScan->sa[i] = 0;
@@ -2132,7 +2134,7 @@ void ConfirmFileSize()
       if (CFrame->ComponentFileName[CScan->ci[i]])
 	{
 	  if ((test = fopen(CFrame->ComponentFileName[CScan->ci[i]],
-			    "r")) == NULL)
+			    "rb")) == NULL)
 	    {
 	      WHEREAMI();
 	      printf("Cannot open filename %s\n",

@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -20,14 +20,19 @@
 namespace gdcm
 {
 
-
 class DataElement;
+/**
+ * \brief ImageApplyLookupTable class
+ * It applies the LUT the PixelData (only PALETTE_COLOR images)
+ * Output will be a PhotometricInterpretation=RGB image
+ */
 class GDCM_EXPORT ImageApplyLookupTable : public ImageToImageFilter
 {
 public:
   ImageApplyLookupTable() {}
   ~ImageApplyLookupTable() {}
 
+  /// Apply
   bool Apply();
 
 protected:

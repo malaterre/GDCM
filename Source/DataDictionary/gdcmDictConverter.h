@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -25,6 +25,7 @@
 namespace gdcm
 {
 
+class DictConverterInternal;
 /**
  * \brief Class to convert a .dic file into something else:
  *  - CXX code : embeded dict into shared lib (DICT_DEFAULT)
@@ -32,7 +33,6 @@ namespace gdcm
  *  - XML dict (DICT_XML)
  * \note
  */
-class DictConverterInternal;
 class GDCM_EXPORT DictConverter
 {
 public:

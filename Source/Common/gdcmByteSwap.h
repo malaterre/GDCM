@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -21,12 +21,12 @@
 namespace gdcm
 {
 
-/** \class ByteSwap
- * \brief Perform machine dependent byte swaping (Little Endian,
+/**
+ * \brief ByteSwap
+ * \details Perform machine dependent byte swaping (Little Endian,
  * Big Endian, Bad Little Endian, Bad Big Endian).
  * TODO: bswap_32 / bswap_64 ...
  */
-
 template<class T>
 class ByteSwap
 {
@@ -42,16 +42,16 @@ public:
     unsigned int num);
 
 protected:
-  ByteSwap() {}
-  ~ByteSwap() {}
+//  ByteSwap() {}
+//  ~ByteSwap() {}
 
 private:
   
 };
 
 /**
- * \example TestDirectory.cxx
- * This is a C++ example on how to use gdcm::Reader
+ * \example TestByteSwap.cxx
+ * This is a C++ example on how to use gdcm::ByteSwap
  */
 
 } // end namespace gdcm

@@ -107,9 +107,9 @@ TODO:
 ZSpacing for RTDoseStorage is not handled properly:
 bin/gdcmvtkGDCMTests TestvtkGDCMImageWriter BogugsItemAndSequenceLengthCorrected.dcm    
 -----------------------------------------------------------------------
-There are still some subtel issues with Enhanced modality:
+There are still some subtle issues with Enhanced modality:
 * what if frames are not order according to IPP ?
-* what is the intercept/slope are not constant throughtout the frames ?
+* what is the intercept/slope are not constant throughout the frames ?
 
 -----------------------------------------------------------------------
 Explicit-VR transfer syntax limits the value
@@ -150,7 +150,7 @@ has an hardocded limit: 0xffff.... while undefined not.
 -----------------------------------------------------------------------
 Explicit VR when SQ is encoded as UN with explicit length is not printed correctly
 -----------------------------------------------------------------------
-There is subttel bug in the Part3 support:
+There is subttle bug in the Part3 support:
 
     <entry group="0010" element="1002" name="Other Patient IDs Sequence" type="3">
       <description>A sequence of identification numbers or codes used to identify the patient, which may or may not be human readable, and may or may not have been obtained from an implanted or attached device such as an RFID or barcode.
@@ -170,3 +170,70 @@ BARCODE
 Note: The identifier is coded as a string regardless of the type, not as a binary value.</description>
 
 What this means is that 10,22 is Type 1 only within sequence 10,1002
+-----------------------------------------------------------------------
+Yet another brain dead philips DICOM image:
+
+gdcmDataExtra/gdcmBreakers/Unexpected-Sequence-Terminator/images/Philips-Intera_Unexpected_Sequence_Terminator_1.dcm 
+
+(2005,e005) DS (CS) [75.0]                               # 4,1 Synergy Reconstruction Type
+...
+(2005,e030) FL 79.9997\0                                  # 8,1 (2)  ?
+
+-----------------------------------------------------------------------
+Thread with Philips BigEndian/LittleEndian inversion
+http://www.creatis.insa-lyon.fr/pipermail/dcmlib/2004-November/000898.html
+-----------------------------------------------------------------------
+Looks like ELSCINT1 is doing a group xx for element:
+  {0x6003,0x0010,"ELSCINT1",VR::CS,VM::VM1,"Text Overlay Flag",false },
+need to repeat for:
+  {0x6005,0x0010,"ELSCINT1",VR::CS,VM::VM1,"Text Overlay Flag",false },
+and so and so forth...
+-----------------------------------------------------------------------
+IconImage should derive from Image to support compression
+-----------------------------------------------------------------------
+SIEMENS MrProt / IDEA  / Numaris stuff:
+apt-get source minc-tools
+conversion/dcm2mnc/dicom_to_minc.c
+./conversion/dcm2mnc/siemens_to_dicom.c
+./conversion/dcm2mnc/siemens_header_defs.h
+http://www.nmr.mgh.harvard.edu/~greve/dicom-unpack
+http://atonal.ucdavis.edu/matlab/fmri/spm5/spm_dicom_convert.m
+
+-----------------------------------------------------------------------
+cmake export() might be helpful to cleanup cmakelists.txt
+-----------------------------------------------------------------------
+There is a bug in the YBR2RGB code...
+  Update: 09/04 PlanarConfiguration code has been fixed
+-----------------------------------------------------------------------
+Add exception when accessing DataElement not found in DataSet
+-----------------------------------------------------------------------
+Add python documentation
+
+doxy2swig.py
+http://www.ae.iitm.ac.in/~prabhu/software/code/python/doxy2swig.py
+-----------------------------------------------------------------------
+Need an ExplicitFilter before next release
++ check USE_PVRG works on WIN32 system
+-----------------------------------------------------------------------
+gdcmconv --jpeg -i  gdcmData/GE_DLX-8-MONO2-Multiframe.dcm -o bla2.dcm
+creates VR::UN add a couple more attributes...
+-----------------------------------------------------------------------
+BasicOffsetTable is never computed...
+-----------------------------------------------------------------------
+Need a gdcm::DataSetToPythonDict class
+-----------------------------------------------------------------------
+Need a gdcm::ApplyRuleFilter class
+
+where Addrule:
+
+void AddRule( void(*func)(DataElement &de) )
+
+where
+
+void func(DataElement &de)
+{
+  if( de.IsPrivate() )
+    {
+    ds.Remove( de );
+    }
+}

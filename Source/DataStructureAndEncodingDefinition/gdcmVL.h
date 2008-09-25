@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -19,13 +19,14 @@
 
 #include <iostream>
 
-/* \brief Value Length
- * \warning this is a 4bytes value ! Do not try to use it for 2bytes value
- * length
- */
 namespace gdcm
 {
 
+/**
+ * \brief Value Length
+ * \warning this is a 4bytes value ! Do not try to use it for 2bytes value
+ * length
+ */
 class GDCM_EXPORT VL
 {
 public:

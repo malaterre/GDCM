@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -20,18 +20,24 @@
 namespace gdcm
 {
 
+class PixelFormat;
+class TransferSyntax;
 /**
- * \brief Class to do JPEG
+ * \brief JPEG codec
+ * Class to do JPEG (8bits, 12bits, 16bits lossy & lossless).
+ * It redispatch in between the different codec implementation: gdcm::JPEG8Codec, 
+ * gdcm::JPEG12Codec & gdcm::JPEG16Codec
+ * It also support inconsistency in between DICOM header and JPEG compressed stream
+ * ImageCodec implementation for the JPEG case
+ *
  * \note
  * Things you should know if you ever want to dive into DICOM/JPEG world (among other):
  *
- * http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/625e46919f2080e1
- * http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/75fdfccc65a6243
- * http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/2d525ef6a2f093ed
- * http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/6b93af410f8c921f
+ * - http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/625e46919f2080e1
+ * - http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/75fdfccc65a6243
+ * - http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/2d525ef6a2f093ed
+ * - http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/6b93af410f8c921f
  */
-class PixelFormat;
-class TransferSyntax;
 class GDCM_EXPORT JPEGCodec : public ImageCodec
 {
 public:

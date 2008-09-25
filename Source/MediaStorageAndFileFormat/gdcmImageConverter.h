@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -21,6 +21,7 @@
 namespace gdcm
 {
 
+class Image;
 /**
  * \brief Image Converter
  * \note
@@ -30,7 +31,6 @@ namespace gdcm
  * pass to third party application.
  * This filter is application level and not integrated directly in GDCM
  */
-class Image;
 class GDCM_EXPORT ImageConverter
 {
 public:

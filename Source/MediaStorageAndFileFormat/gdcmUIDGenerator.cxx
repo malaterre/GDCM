@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -46,7 +46,7 @@ namespace gdcm
  * Unfortunately root + '.' + suffix should be at most 64 bytes
  *
  * So to get a full UUID implementation as per RFC 4122
- * http://www.ietf.org/rfc/rfc4122.txt we need a shorted
+ * http://www.ietf.org/rfc/rfc4122.txt we need a shorter
  * root...
  *
  */

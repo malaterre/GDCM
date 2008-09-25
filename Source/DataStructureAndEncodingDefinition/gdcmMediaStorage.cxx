@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -112,6 +112,8 @@ static const char *MSStrings[] = {
   "1.2.840.10008.5.1.4.1.1.88.59",
   // HangingProtocolStorage
   "1.2.840.10008.5.1.4.38.1",
+  // Modality Performed Procedure Step SOP Class
+  "1.2.840.10008.3.1.2.3.3",
   0
 };
 
@@ -165,6 +167,7 @@ bool MediaStorage::IsImage(MSType ms)
     || ms == KeyObjectSelectionDocument
     || ms == HangingProtocolStorage
     || ms == MRSpectroscopyStorage
+    || ms == ModalityPerformedProcedureStepSOPClass
     || ms == RTStructureSetStorage )
     {
     return false;
@@ -294,7 +297,7 @@ void MediaStorage::SetFromDataSet(DataSet const &ds, bool guess)
       sopclassuid_str = sopclassuid_str.substr(0,pos);
       }
     MediaStorage ms = MediaStorage::GetMSType(sopclassuid_str.c_str());
-    assert( ms != MS_END );
+    //assert( ms != MS_END );
     MSField = ms;
     }
 //  else if( guess )
@@ -366,6 +369,7 @@ void MediaStorage::SetFromModality(DataSet const &ds)
     // to SC Object:
     if( MSField == MediaStorage::MS_END )
       {
+      gdcmWarningMacro( "Unknown/Unhandle MediaStorage, but Pixel Data element found" );
       MSField = MediaStorage::SecondaryCaptureImageStorage;
       }
     }

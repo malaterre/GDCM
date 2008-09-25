@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -33,6 +33,7 @@ DictPrinter::~DictPrinter()
 
 VM GuessVMType(DataElement const &de)
 {
+  if( de.IsEmpty() ) return VM::VM1;
   const VR &vr = de.GetVR();
   const VL &vl = de.GetVL();
   const Value& value = de.GetValue();
@@ -54,7 +55,7 @@ VM GuessVMType(DataElement const &de)
     }
   else
     {
-    assert( VR::IsASCII( vr ) );
+    assert( VR::IsASCII( vr ) || vr == VR::INVALID );
     switch(vr)
       {
     case VR::INVALID:

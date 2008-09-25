@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program: GDCM (Grass Root DICOM). A DICOM library
+  Program: GDCM (Grassroots DICOM). A DICOM library
   Module:  $URL$
 
   Copyright (c) 2006-2008 Mathieu Malaterre
@@ -22,7 +22,7 @@ namespace gdcm
 
 /**
  * \brief Class to do system operation
- * \note OS independant functionalities
+ * \details OS independant functionalities
  */
 class GDCM_EXPORT System
 {
@@ -40,18 +40,27 @@ public:
 
   /// Return the last error
   static const char *GetLastSystemError();
+
   /// Return the filesize
   static size_t FileSize(const char* filename);
 
-  /// Return the directory the current process is running into:
+  /// Return the directory the current process (executable) is located:
   /// NOT THREAD SAFE
   static const char *GetCurrentProcessFileName();
+
+  /// Return the directory the current module is located:
+  /// NOT THREAD SAFE
+  static const char *GetCurrentModuleFileName();
+
+  /// On some system (Apple) return the path to the current bundled 'Resources' directory
+  /// NOT THREAD SAFE
+  static const char *GetCurrentResourcesDirectory();
 
   // TODO some system calls
   // Chdir
   // copy a file
 
-  /// DO NOT USE: This function might disapear real time soon...
+  /// \deprecated DO NOT USE: This function might disapear real time soon...
   static bool GetHardwareAddress(unsigned char addr[6]);
 
   // somewhat UID specific:
@@ -62,6 +71,7 @@ public:
 
   /// consistant func for C99 spec of strcasecmp/strncasecmp
   static int StrCaseCmp(const char *s1, const char *s2);
+  /// \pre n != 0
   static int StrNCaseCmp(const char *s1, const char *s2, size_t n);
 
   /// Return current working directory
