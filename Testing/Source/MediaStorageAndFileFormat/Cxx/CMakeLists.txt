@@ -2,6 +2,7 @@
 # MSFF
 SET(MSFF_TEST_SRCS
   TestAnonymizer
+  TestFileExplicitFilter
   TestImageFragmentSplitter
   TestTagPath
   TestOrientation
@@ -9,7 +10,6 @@ SET(MSFF_TEST_SRCS
   TestImageHelper
   TestImageToImageFilter
   TestImageChangeTransferSyntax
-  TestImplicitToExplicitFilter
   #TestImageChangePhotometricInterpretation
   #TestImageChangePhotometricInterpretation2
   TestImageChangeTransferSyntax2

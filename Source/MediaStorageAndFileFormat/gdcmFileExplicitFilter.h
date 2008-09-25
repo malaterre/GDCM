@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef __gdcmImplicitToExplicitFilter_h
-#define __gdcmImplicitToExplicitFilter_h
+#ifndef __gdcmFileExplicitFilter_h
+#define __gdcmFileExplicitFilter_h
 
 #include "gdcmFile.h"
 
@@ -21,7 +21,7 @@ namespace gdcm
 {
 
 /**
- * \brief ImplicitToExplicitFilter class
+ * \brief FileExplicitFilter class
  * \warning changing an implicit dataset to an explicit dataset is NOT a trivial task of
  * simply changing the VR to the dict one:
  *   - One has to make sure SQ is properly set
@@ -29,11 +29,11 @@ namespace gdcm
  *   - One has to make sure that Vr is valid for the encoding
  *   - One has to make sure that VR 16bits can store the original value length
  */
-class GDCM_EXPORT ImplicitToExplicitFilter
+class GDCM_EXPORT FileExplicitFilter
 {
 public:
-  ImplicitToExplicitFilter():F(new File),ChangePrivateTags(false),UseVRUN(true) {}
-  ~ImplicitToExplicitFilter() {}
+  FileExplicitFilter():F(new File),ChangePrivateTags(false),UseVRUN(true) {}
+  ~FileExplicitFilter() {}
 
   /// Decide whether or not to VR'ify private tags
   void SetChangePrivateTags(bool b) {}
@@ -59,5 +59,5 @@ private:
 
 } // end namespace gdcm
 
-#endif //__gdcmImplicitToExplicitFilter_h
+#endif //__gdcmFileExplicitFilter_h
 

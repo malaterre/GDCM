@@ -12,7 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmImplicitToExplicitFilter.h"
+#include "gdcmFileExplicitFilter.h"
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmSequenceOfItems.h"
 #include "gdcmFragment.h"
@@ -27,7 +27,7 @@
 namespace gdcm
 {
 
-bool ImplicitToExplicitFilter::Change()
+bool FileExplicitFilter::Change()
 {
   if( !UseVRUN)
     {

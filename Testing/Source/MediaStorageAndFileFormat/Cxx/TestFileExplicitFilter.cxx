@@ -12,13 +12,13 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmImplicitToExplicitFilter.h"
+#include "gdcmFileExplicitFilter.h"
 #include "gdcmReader.h"
 #include "gdcmWriter.h"
 #include "gdcmTesting.h"
 #include "gdcmSystem.h"
 
-int TestImplicitToExplicitFilt(const char *subdir, const char *filename, bool verbose = false)
+int TestFileExplicitFilt(const char *subdir, const char *filename, bool verbose = false)
 {
 //  if( verbose )
     std::cerr << "Reading: " << filename << std::endl;
@@ -31,7 +31,7 @@ int TestImplicitToExplicitFilt(const char *subdir, const char *filename, bool ve
   //const gdcm::FileMetaInformation &h = reader.GetFile().GetHeader();
   //const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
 
-  gdcm::ImplicitToExplicitFilter im2ex;
+  gdcm::FileExplicitFilter im2ex;
   im2ex.SetFile( reader.GetFile() );
   if( !im2ex.Change() )
     {
@@ -60,12 +60,12 @@ int TestImplicitToExplicitFilt(const char *subdir, const char *filename, bool ve
   return 0;
 }
 
-int TestImplicitToExplicitFilter(int argc, char *argv[])
+int TestFileExplicitFilter(int argc, char *argv[])
 {
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestImplicitToExplicitFilt(argv[0], filename, true);
+    return TestFileExplicitFilt(argv[0], filename, true);
     }
 
   // else
@@ -77,7 +77,7 @@ int TestImplicitToExplicitFilter(int argc, char *argv[])
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
     {
-    r += TestImplicitToExplicitFilt( argv[0], filename );
+    r += TestFileExplicitFilt( argv[0], filename );
     ++i;
     }
 

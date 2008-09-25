@@ -122,7 +122,7 @@
 #include "gdcmImageChangePlanarConfiguration.h"
 #include "gdcmImageFragmentSplitter.h"
 #include "gdcmDataSetHelper.h"
-#include "gdcmImplicitToExplicitFilter.h"
+#include "gdcmFileExplicitFilter.h"
 #include "gdcmImageHelper.h"
 
 using namespace gdcm;
@@ -563,6 +563,6 @@ using namespace gdcm;
 %include "gdcmImageChangePlanarConfiguration.h"
 %include "gdcmImageFragmentSplitter.h"
 %include "gdcmDataSetHelper.h"
-%include "gdcmImplicitToExplicitFilter.h"
+%include "gdcmFileExplicitFilter.h"
 %template (DoubleType) std::vector<double>;
 %include "gdcmImageHelper.h"
