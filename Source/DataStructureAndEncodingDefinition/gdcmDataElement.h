@@ -107,8 +107,6 @@ public:
   void SetByteValue(const char *array, VL length)
     {
     ByteValue *bv = new ByteValue(array,length);
-    // Warning length could have been odd, so retrieve the length as stored in the byte value:
-    SetVL( bv->GetLength() );
     SetValue( *bv );
     }
   /// Return the Value of DataElement as a ByteValue (if possible)

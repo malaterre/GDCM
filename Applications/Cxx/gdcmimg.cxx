@@ -115,10 +115,10 @@ void PrintHelp()
   std::cout << "  -i --input     Input filename" << std::endl;
   std::cout << "  -o --output    Output filename" << std::endl;
   std::cout << "Options:" << std::endl;
-  std::cout << "  -d --depth     Depth." << std::endl;
-  std::cout << "  -s --size      Size." << std::endl;
-  std::cout << "  -R --region    Region." << std::endl;
-  std::cout << "  -F --fill      Fill." << std::endl;
+  std::cout << "  -d --depth      Depth." << std::endl;
+  std::cout << "  -s --size %d,%d Size." << std::endl;
+  std::cout << "  -R --region     Region." << std::endl;
+  std::cout << "  -F --fill       Fill." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning   print warning info." << std::endl;
@@ -231,12 +231,11 @@ int main (int argc, char *argv[])
 
     case 'd': // depth
       printf ("option d with value '%s'\n", optarg);
-      outfilename = optarg;
       break;
 
     case 's': // size
       printf ("option s with value '%s'\n", optarg);
-      outfilename = optarg;
+      readsize(optarg, size);
       break;
 
     case 'R': // region
@@ -339,6 +338,47 @@ int main (int argc, char *argv[])
   const char *inputextension = filename.GetExtension();
   const char *outputextension = outfilename.GetExtension();
   if( !inputextension || !outputextension ) return 1;
+
+  if(  gdcm::System::StrCaseCmp(inputextension,".raw") == 0 )
+    {
+    if( !size[0] || !size[1] )
+      {
+      std::cerr << "need to specify size of image stored in RAW file" << std::endl;
+      return 1;
+      }
+    size_t len = gdcm::System::FileSize(filename);
+    std::ifstream is(filename);
+
+    char * buf = new char[len];
+    is.read(buf, len);
+
+    gdcm::ImageWriter writer;
+    gdcm::Image &image = writer.GetImage();
+    image.SetNumberOfDimensions( 2 );
+    unsigned int dims[3] = {};
+    dims[0] = size[0];
+    dims[1] = size[1];
+    image.SetDimensions( size );
+    gdcm::PixelFormat pf = gdcm::PixelFormat::UINT16;
+    image.SetPixelFormat( pf );
+    gdcm::PhotometricInterpretation pi = gdcm::PhotometricInterpretation::MONOCHROME2;
+    image.SetPhotometricInterpretation( pi );
+    //image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
+    image.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRBigEndianPrivateGE ); // PGM are big endian
+
+    gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
+    pixeldata.SetByteValue( buf, len );
+    image.SetDataElement( pixeldata );
+
+    writer.SetFileName( outfilename );
+    if( !writer.Write() )
+      {
+      return 1;
+      }
+    delete[] buf;
+
+    return 0;
+    }
 
   if(  gdcm::System::StrCaseCmp(inputextension,".rle") == 0 )
     {

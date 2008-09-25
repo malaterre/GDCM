@@ -63,6 +63,7 @@ bool PVRGCodec::CanCode(TransferSyntax const &ts) const
  * means decompress input file: jpeg.jpg into out.raw
  * warning the -ci is important otherwise JFIF is assumed 
  * and comp # is assumed to be 1...
+ * -u reduce verbosity
  */
 bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
 {

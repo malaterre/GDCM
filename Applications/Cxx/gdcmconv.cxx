@@ -79,6 +79,7 @@
 #include "gdcmImageApplyLookupTable.h"
 #include "gdcmImageFragmentSplitter.h"
 #include "gdcmImageChangePlanarConfiguration.h"
+#include "gdcmFileExplicitFilter.h"
 
 #include <string>
 #include <iostream>
@@ -504,9 +505,14 @@ int main (int argc, char *argv[])
       std::cerr << "Could not change the Transfer Syntax: " << filename << std::endl;
       return 1;
       }
+    //gdcm::FileExplicitFilter fef;
+    //fef.SetFile( reader.GetFile() );
+    //fef.Change();
+
     gdcm::ImageWriter writer;
     writer.SetFileName( outfilename.c_str() );
     writer.SetFile( reader.GetFile() );
+    //writer.SetFile( fef.GetFile() );
     writer.SetImage( change.GetOutput() );
     if( !writer.Write() )
       {

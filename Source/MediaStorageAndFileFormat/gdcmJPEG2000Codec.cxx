@@ -698,11 +698,17 @@ bool JPEG2000Codec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     this->PF.SetHighBit( comp->prec - 1 );
     this->PF.SetPixelRepresentation( comp->sgnd );
 
-    if( image->color_space == 0 )
+    if( image->numcomps == 1 )
       {
-      assert( image->numcomps == 1 );
+      assert( image->color_space == 0 );
       PI = PhotometricInterpretation::MONOCHROME2;
       this->PF.SetSamplesPerPixel( 1 );
+      }
+    else if( image->numcomps == 3 )
+      {
+      assert( image->color_space == 0 );
+      PI = PhotometricInterpretation::RGB;
+      this->PF.SetSamplesPerPixel( 3 );
       }
     else
       {
