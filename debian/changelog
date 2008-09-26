@@ -1,3 +1,21 @@
+gdcm (2.0.9) experimental; urgency=low
+
+  * bump up
+
+ -- Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>  Fri, 26 Sep 2008 14:20:36 +0200
+
+gdcm (2.0.8) experimental; urgency=low
+
+  * bump up
+
+ -- Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>  Fri, 26 Sep 2008 14:19:26 +0200
+
+gdcm (2.0.7) experimental; urgency=low
+
+  * bump up
+
+ -- Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>  Fri, 26 Sep 2008 14:16:49 +0200
+
 gdcm (2.0.6) experimental; urgency=low
 
   * Bump up
