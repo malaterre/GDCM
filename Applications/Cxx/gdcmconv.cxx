@@ -440,7 +440,7 @@ int main (int argc, char *argv[])
     if( !icon.IsEmpty() )
       {
       std::cerr << "Icons are not supported" << std::endl;
-      //return 1;
+      return 1;
       }
 
     gdcm::ImageChangeTransferSyntax change;
