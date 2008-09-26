@@ -122,6 +122,7 @@ void PrintHelp()
   std::cout << "  -F --force      Force decompression/merging before recompression/splitting." << std::endl;
   std::cout << "  -Y --lossy %d   Use the lossy (if possible), followed by comp. ratio" << std::endl;
   std::cout << "  -S --split %d   Write 2D image with multiple fragments (using max size)" << std::endl;
+  std::cout << "     --root-uid   Root UID." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose    more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning    print warning info." << std::endl;
