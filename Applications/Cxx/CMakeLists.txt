@@ -43,20 +43,20 @@ SET(GDCM_EXECUTABLE_NAME
 
 FOREACH(exename ${GDCM_EXECUTABLE_NAME})
   IF(${exename} STREQUAL "gdcminfo")
-  ADD_EXECUTABLE(${exename} ${exename}.cxx puff.c)
+    ADD_EXECUTABLE(${exename} ${exename}.cxx puff.c)
   ELSE(${exename} STREQUAL "gdcminfo")
-  ADD_EXECUTABLE(${exename} ${exename}.cxx)
+    ADD_EXECUTABLE(${exename} ${exename}.cxx)
   ENDIF(${exename} STREQUAL "gdcminfo")
-    TARGET_LINK_LIBRARIES(${exename} gdcmMSFF)
+  TARGET_LINK_LIBRARIES(${exename} gdcmMSFF)
   SET_TARGET_PROPERTIES(${exename} PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES})
   IF(WIN32 AND NOT CYGWIN)
     TARGET_LINK_LIBRARIES(${exename} gdcmgetopt)
   ENDIF(WIN32 AND NOT CYGWIN)
   INSTALL(TARGETS ${exename}
-	RUNTIME DESTINATION bin COMPONENT Runtime
-	LIBRARY DESTINATION lib COMPONENT Runtime
-	ARCHIVE DESTINATION lib/static COMPONENT Development
-	)
+    RUNTIME DESTINATION bin COMPONENT Runtime
+    LIBRARY DESTINATION lib COMPONENT Runtime
+    ARCHIVE DESTINATION lib/static COMPONENT Development
+  )
 ENDFOREACH(exename)
 
 #IF(GDCM_USE_PVRG)
