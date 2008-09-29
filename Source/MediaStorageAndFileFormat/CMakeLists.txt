@@ -15,6 +15,7 @@ SET(MSFF_SRCS
   #gdcmImageChangePhotometricInterpretation.cxx
   gdcmDirectionCosines.cxx
   gdcmSorter.cxx
+  gdcmSerieHelper.cxx
   gdcmIPPSorter.cxx
   gdcmApplicationEntity.cxx
   gdcmDICOMDIR.cxx
