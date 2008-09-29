@@ -61,7 +61,7 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t) con
   const DataSet &ds = GetFile().GetDataSet();
   if( ds.IsEmpty() || !ds.FindDataElement(t) )
     {
-    gdcmWarningMacro( "DataSet is empty or does not contains tag:" );
+    gdcmDebugMacro( "DataSet is empty or does not contains tag:" );
     return ret;
     }
   if( t.IsPrivate() )

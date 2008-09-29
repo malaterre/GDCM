@@ -878,12 +878,12 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
       }
     else if( pf.GetPixelRepresentation() == 1 )
       {
-      gdcmWarningMacro( "TODO" );
+      gdcmDebugMacro( "TODO" );
       }
     // test if there is any viz issue:
     if( vizissue )
       {
-      gdcmWarningMacro( "Pixel Padding Value (0028,0120) is not handled. Image will not be displayed properly" );
+      gdcmDebugMacro( "Pixel Padding Value (0028,0120) is not handled. Image will not be displayed properly" );
       }
     }
   // 4. Palette Color Lookup Table Descriptor
