@@ -47,6 +47,7 @@ GDCMImageIO2::GDCMImageIO2()
   gdcm::FileMetaInformation::AppendImplementationClassUID( "111.124.113" );
   const std::string project_name = std::string("GDCM/ITK ") + Version::GetITKVersion();
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( project_name.c_str() );
+  gdcm::Trace::WarningOff();
 }
 
 GDCMImageIO2::~GDCMImageIO2()
