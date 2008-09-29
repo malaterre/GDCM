@@ -29,4 +29,14 @@ namespace gdcm
     SetGroup( group );
     SetElement( element );
     }
+  void Tag::ReadFromPipeSeparatedString(const char *str)
+    {
+    unsigned int group = 0, element = 0;
+    if( sscanf(str, "%04x|%04x", &group , &element) != 2 )
+      {
+      gdcmErrorMacro( "Problem reading the Tag: " << str );
+      }
+    SetGroup( group );
+    SetElement( element );
+    }
 } // end namespace gdcm

@@ -14,12 +14,16 @@
 =========================================================================*/
 #include "itkGDCMImageIO2.h"
 #include "itkVersion.h"
+#include "itkMetaDataObject.h" // ExposeMetaData
 
 // GDCM
 #include "gdcmFileMetaInformation.h"
 #include "gdcmImageReader.h"
 #include "gdcmImageWriter.h"
 #include "gdcmUIDGenerator.h"
+#include "gdcmGlobal.h"
+#include "gdcmDicts.h"
+#include "gdcmDictEntry.h"
 
 // KWSYS
 #include <itksys/SystemTools.hxx>
@@ -418,5 +422,142 @@ void GDCMImageIO2::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }
+
+bool GDCMImageIO2::GetLabelFromTag( const std::string & tag, 
+                               std::string & labelId )
+{
+  gdcm::Tag t;
+  t.ReadFromPipeSeparatedString( tag.c_str() );
+  if( t.IsPublic() )
+    {
+    const gdcm::Global &g = gdcm::Global::GetInstance();
+    const gdcm::Dicts &dicts = g.GetDicts();
+    const gdcm::DictEntry &entry = dicts.GetDictEntry(t);
+    labelId = entry.GetName();
+    return true;
+    }
+  return false;
+}
+
+bool GDCMImageIO2::GetValueFromTag(const std::string & tag, std::string & value)
+{
+  MetaDataDictionary & dict = this->GetMetaDataDictionary();
+  return ExposeMetaData<std::string>(dict, tag, value);
+}
+
+// Convenience methods to query patient and scanner information. These
+// methods are here for compatibility with the DICOMImageIO2 class.
+void GDCMImageIO2::GetPatientName( char *name)
+{
+  std::string value;
+  GetValueFromTag("0010|0010",value);
+  strcpy (name, value.c_str());
+}
+
+void GDCMImageIO2::GetPatientID( char *name)
+{
+  std::string value;
+  GetValueFromTag("0010|0020",value);
+  strcpy (name, value.c_str());
+}
+
+void GDCMImageIO2::GetPatientSex( char *name)
+{
+  std::string value;
+  GetValueFromTag("0010|0040",value);
+  strcpy (name, value.c_str());
+}
+
+void GDCMImageIO2::GetPatientAge( char *name)
+{
+  std::string value;
+  GetValueFromTag("0010|1010",value);
+  strcpy (name, value.c_str());
+}
+
+void GDCMImageIO2::GetStudyID( char *name)
+{
+  std::string value;
+  GetValueFromTag("0020|0010",value);
+  strcpy (name, value.c_str());
+}
+
+void GDCMImageIO2::GetPatientDOB( char *name)
+{
+  std::string value;
+  GetValueFromTag("0010|0030",value);
+  strcpy (name, value.c_str());
+}
+
+void GDCMImageIO2::GetStudyDescription( char *name)
+{
+  std::string value;
+  GetValueFromTag("0008|1030",value);
+  strcpy (name, value.c_str());
+}
+
+void GDCMImageIO2::GetBodyPart( char *name)
+{
+  std::string value;
+  GetValueFromTag("0018|0015",value);
+  strcpy (name, value.c_str());
+}
+
+void GDCMImageIO2::GetNumberOfSeriesInStudy( char *name)
+{
+  std::string value;
+  GetValueFromTag("0020|1000",value);
+  strcpy (name, value.c_str());
+}
+
+void GDCMImageIO2::GetNumberOfStudyRelatedSeries( char *name)
+{
+  std::string value;
+  GetValueFromTag("0020|1206",value);
+  strcpy (name, value.c_str());
+}
+
+void GDCMImageIO2::GetStudyDate( char *name)
+{
+  std::string value;
+  GetValueFromTag("0008|0020",value);
+  strcpy (name, value.c_str());
+}
+
+void GDCMImageIO2::GetModality( char *name)
+{
+  std::string value;
+  GetValueFromTag("0008|0060",value);
+  strcpy (name, value.c_str());
+}
+
+void GDCMImageIO2::GetManufacturer( char *name)
+{
+  std::string value;
+  GetValueFromTag("0008|0070",value);
+  strcpy (name, value.c_str());
+}
+
+void GDCMImageIO2::GetInstitution( char *name)
+{
+  std::string value;
+  GetValueFromTag("0008|0080",value);
+  strcpy (name, value.c_str());
+}
+
+void GDCMImageIO2::GetModel( char *name)
+{
+  std::string value;
+  GetValueFromTag("0008|1090",value);
+  strcpy (name, value.c_str());
+}
+
+void GDCMImageIO2::GetScanOptions( char *name)
+{
+  std::string value;
+  GetValueFromTag("0018|0022",value);
+  strcpy (name, value.c_str());
+}
+
 
 } // end namespace itk

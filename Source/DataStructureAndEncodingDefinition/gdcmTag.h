@@ -235,6 +235,10 @@ public:
   /// program
   void ReadFromCommaSeparatedString(const char *str);
 
+  /// Read from a pipe separated string (GDCM 1.x compat only). Do not use in newer code
+  /// \see ReadFromCommaSeparatedString
+  void ReadFromPipeSeparatedString(const char *str);
+
 private:
   union { uint32_t tag; uint16_t tags[2]; char bytes[4]; } ElementTag;
 };
