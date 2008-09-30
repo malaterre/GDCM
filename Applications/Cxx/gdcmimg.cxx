@@ -626,6 +626,7 @@ int main (int argc, char *argv[])
       bool b = jpeg.GetHeaderInfo( is, ts );
       if( !b )
         {
+        std::cerr << "Error: could not parse J2K header" << std::endl;
         return 1;
         }
 
