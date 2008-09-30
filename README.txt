@@ -27,4 +27,17 @@ that something won't work. Cheers !
 
 (*) http://www.cmake.org for more information
 
+For more help you can go online in the GDCM Wiki:
 
+* http://gdcm.sourceforge.net/wiki/index.php/GDCM_Release_2.0
+* http://gdcm.sourceforge.net/wiki/index.php/FAQ
+
+And a page describing each tool can be found at:
+* http://gdcm.sourceforge.net/wiki/index.php/Gdcmimg
+* http://gdcm.sourceforge.net/wiki/index.php/Gdcmraw
+* http://gdcm.sourceforge.net/wiki/index.php/Gdcmdump
+* http://gdcm.sourceforge.net/wiki/index.php/Gdcmconv
+* http://gdcm.sourceforge.net/wiki/index.php/Gdcmtar
+
+Need VTK:
+* http://gdcm.sourceforge.net/wiki/index.php/Gdcmviewer
