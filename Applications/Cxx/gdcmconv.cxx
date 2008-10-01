@@ -112,8 +112,13 @@ void PrintHelp()
   std::cout << "  -i --input      DICOM filename" << std::endl;
   std::cout << "  -o --output     DICOM filename" << std::endl;
   std::cout << "Options:" << std::endl;
-  std::cout << "  -l --apply-lut  Apply LUT." << std::endl;
+  std::cout << "  -X --explicit   Change Transfer Syntax to explicit." << std::endl;
+  std::cout << "  -M --implicit   Change Transfer Syntax to implicit." << std::endl;
+  std::cout << "  -U --use-dict   Use dict for VR." << std::endl;
   std::cout << "  -C --check-meta Check File Meta Information." << std::endl;
+  std::cout << "     --root-uid   Root UID." << std::endl;
+  std::cout << "Image only Options:" << std::endl;
+  std::cout << "  -l --apply-lut  Apply LUT." << std::endl;
   std::cout << "  -W --raw        Decompress image." << std::endl;
   std::cout << "  -J --jpeg       Compress image in jpeg." << std::endl;
   std::cout << "  -K --j2k        Compress image in j2k." << std::endl;
@@ -122,7 +127,6 @@ void PrintHelp()
   std::cout << "  -F --force      Force decompression/merging before recompression/splitting." << std::endl;
   std::cout << "  -Y --lossy %d   Use the lossy (if possible), followed by comp. ratio" << std::endl;
   std::cout << "  -S --split %d   Write 2D image with multiple fragments (using max size)" << std::endl;
-  std::cout << "     --root-uid   Root UID." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose    more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning    print warning info." << std::endl;
@@ -143,6 +147,8 @@ int main (int argc, char *argv[])
   std::string filename;
   std::string outfilename;
   std::string root;
+  int explicitts = 0; // explicit is a reserved keyword
+  int implicit = 0;
   int lut = 0;
   int raw = 0;
   int rootuid = 0;
@@ -155,6 +161,7 @@ int main (int argc, char *argv[])
   int rle = 0;
   int force = 0;
   int planarconf = 0;
+  int usedict = 0;
 
   int verbose = 0;
   int warning = 0;
@@ -198,6 +205,9 @@ int main (int argc, char *argv[])
         {"jpip", 0, 0, 0}, // ??
         {"split", 1, &split, 1}, // split fragments
         {"planar-configuration", 1, &planarconf, 1}, // Planar Configuration
+        {"explicit", 0, &explicitts, 1}, // 
+        {"implicit", 0, &implicit, 1}, // 
+        {"use-dict", 0, &usedict, 1}, // 
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -264,6 +274,18 @@ int main (int argc, char *argv[])
       printf ("option o with value '%s'\n", optarg);
       assert( outfilename.empty() );
       outfilename = optarg;
+      break;
+
+    case 'X':
+      explicitts = 1;
+      break;
+
+    case 'M':
+      implicit = 1;
+      break;
+
+    case 'U':
+      usedict = 1;
       break;
 
     case 'V':
@@ -364,6 +386,58 @@ int main (int argc, char *argv[])
     {
     std::cerr << "not supported for now" << std::endl;
     return 1;
+    }
+
+  // Handle here the general file (not required to be image)
+  if ( explicitts || implicit )
+    {
+    if( explicitts && implicit ) return 1; // guard
+    gdcm::Reader reader;
+    reader.SetFileName( filename.c_str() );
+    if( !reader.Read() )
+      {
+      std::cerr << "could not read: " << filename << std::endl;
+      return 1;
+      }
+
+    gdcm::Writer writer;
+    writer.SetFileName( outfilename.c_str() );
+    writer.SetFile( reader.GetFile() );
+    gdcm::File & file = writer.GetFile();
+    gdcm::FileMetaInformation &fmi = file.GetHeader();
+
+    gdcm::TransferSyntax ts = gdcm::TransferSyntax::ImplicitVRLittleEndian;
+    if( explicitts )
+      {
+      ts = gdcm::TransferSyntax::ExplicitVRLittleEndian;
+      }
+    const char *tsuid = gdcm::TransferSyntax::GetTSString( ts );
+    gdcm::DataElement de( gdcm::Tag(0x0002,0x0010) );
+    de.SetByteValue( tsuid, strlen(tsuid) );
+    de.SetVR( gdcm::Attribute<0x0002, 0x0010>::GetVR() );
+    fmi.Replace( de );
+    fmi.Remove( gdcm::Tag(0x0002,0x0012) ); // will be regenerated
+    fmi.Remove( gdcm::Tag(0x0002,0x0013) ); //  '   '    '
+    fmi.SetDataSetTransferSyntax(ts);
+
+    if( explicitts )
+      {
+      gdcm::FileExplicitFilter fef;
+      fef.SetFile( reader.GetFile() );
+      if( !fef.Change() )
+        {
+        std::cerr << "Failed to change: " << filename << std::endl;
+        return 1;
+        }
+      }
+
+    if( !writer.Write() )
+      {
+      std::cerr << "Failed to write: " << outfilename << std::endl;
+      return 1;
+      }
+ 
+    return 0;
     }
 
   // split fragments
