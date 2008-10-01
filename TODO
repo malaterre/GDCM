@@ -237,3 +237,11 @@ void func(DataElement &de)
     ds.Remove( de );
     }
 }
+-----------------------------------------------------------------------
+Fix the UseGDCM. So that user can do:
+
+FIND_PACKAGE(GDCM REQUIRED)
+INCLUDE( ${GDCM_USE_FILE} )
+
+ADD_EXECUTABLE(bla bla.cxx)
+TARGET_LIBK_LIBRARIES(bla vtkgdcm)
