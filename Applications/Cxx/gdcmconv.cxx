@@ -406,6 +406,13 @@ int main (int argc, char *argv[])
     gdcm::File & file = writer.GetFile();
     gdcm::FileMetaInformation &fmi = file.GetHeader();
 
+    const gdcm::TransferSyntax &orits = fmi.GetDataSetTransferSyntax();
+    if( orits != gdcm::TransferSyntax::ExplicitVRLittleEndian && orits != gdcm::TransferSyntax::ImplicitVRLittleEndian )
+      {
+      std::cerr << "Sorry input Transfer Syntax not supported for this conversion: " << orits << std::endl;
+      return 1;
+      }
+
     gdcm::TransferSyntax ts = gdcm::TransferSyntax::ImplicitVRLittleEndian;
     if( explicitts )
       {
