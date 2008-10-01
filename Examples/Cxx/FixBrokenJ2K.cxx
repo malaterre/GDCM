@@ -35,7 +35,13 @@
 */
 int main(int argc, char *argv[])
 {
+  if( argc < 3 )
+    {
+    std::cerr << argv[0] << " input.dcm output.dcm" << std::endl;
+    return 1;
+    }
   const char *filename = argv[1];
+  const char *outfilename = argv[2];
   gdcm::Reader reader;
   reader.SetFileName( filename );
   if( !reader.Read() )
@@ -59,9 +65,9 @@ int main(int argc, char *argv[])
   const char sig[] = "\x00\x00\x00\x00\x6A\x70\x32\x63";
   if( memcmp(ptr, sig, sizeof(sig) != 0 ) )
     {
+    std::cerr << "magic random signature not found" << std::endl;
     return 1;
     }
-  std::cout << frag << std::endl;
 
   // Apparently the flag to enable a color transform on 3 color components is set in
   // the COD marker. (YCC is byte[6] in the COD marker)
@@ -99,11 +105,20 @@ int main(int argc, char *argv[])
 
   gdcm::Writer writer;
   writer.SetFile( reader.GetFile() );
-  writer.SetFileName( "out.dcm" );
+  writer.SetFileName( outfilename );
   writer.CheckFileMetaInformationOff();
   if( !writer.Write() )
     {
     std::cerr << "Could not write" << std::endl;
+    }
+
+  // paranoid check:
+  gdcm::ImageReader ireader;
+  ireader.SetFileName( outfilename );
+  if( !ireader.Read() )
+    {
+    std::cerr << "file written is still not valid, please report" << std::endl;
+    return 1;
     }
 
 
