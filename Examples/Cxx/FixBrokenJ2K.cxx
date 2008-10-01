@@ -22,6 +22,17 @@
 //
 // -> BuggyJ2Kvvvua-fixed2-j2k.dcm
 
+/*
+ * This program attemps to fix a broken J2K/DICOM:
+ * It contains 2 bugs:
+ * 1. The first 8 bytes seems to be random bytes: remove them
+ * 2. YCC is set to 1, while image is grayscale need to set it back to 0
+ *
+ * Ref:
+ * It's a software from http://rentgenprom.ru/ , shipped with universal digital radiographic units 
+ * "ProScan-2000". The Ukrainian manufacturer developed own digital radiographic unit and it is 
+ * compatible with software from "ProScan-2000". 
+*/
 int main(int argc, char *argv[])
 {
   const char *filename = argv[1];
