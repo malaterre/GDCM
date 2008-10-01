@@ -45,7 +45,7 @@ public:
   void SetLength(VL length) {
     SequenceLengthField = length;
   }
-  void Clear() {}
+  void Clear();
 
   /// \brief Appends a Fragment to the already added ones
   void AddFragment(Fragment const &item);

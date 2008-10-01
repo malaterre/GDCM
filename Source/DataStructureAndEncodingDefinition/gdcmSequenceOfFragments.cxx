@@ -18,6 +18,12 @@
 namespace gdcm
 {
 
+void SequenceOfFragments::Clear()
+{
+  Table.SetByteValue( "", 0 );
+  Fragments.clear();
+}
+
 unsigned int SequenceOfFragments::GetNumberOfFragments() const
 {
   // Do not count the last fragment

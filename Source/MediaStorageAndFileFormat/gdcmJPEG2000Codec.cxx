@@ -176,6 +176,19 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   unsigned char *src = (unsigned char*)dummy_buffer;
   int file_length = buf_size;
 
+  // WARNING: OpenJPEG is very picky when there is a trailing 00 at the end of the JPC
+  // so we need to make sure to remove it:
+  // See for example: BuggyJ2Kvvvua-fixed2-j2k.dcm
+  if( src[file_length-1] == 0 )
+    {
+    file_length--;
+    }
+  else
+    {
+    //  Marker 0xffd9 EOI End of Image (JPEG 2000 EOC End of codestream)
+    assert( src[file_length-1] == 0xd9 );
+    }
+
   /* configure the event callbacks (not required) */
   memset(&event_mgr, 0, sizeof(opj_event_mgr_t));
   event_mgr.error_handler = error_callback;
