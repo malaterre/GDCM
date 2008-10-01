@@ -387,7 +387,7 @@ void MediaStorage::SetFromFile(File const &file)
     SetFromHeader( header );
     if( MSField == MediaStorage::MS_END ) // Nothing found...
       {
-      gdcmWarningMacro( "No MediaStorage found neither in DataSet nor in FileMetaInformation, trying from Modality" );
+      gdcmDebugMacro( "No MediaStorage found neither in DataSet nor in FileMetaInformation, trying from Modality" );
       // Attempt to read what's in Modality:
       SetFromModality( ds );
       }
