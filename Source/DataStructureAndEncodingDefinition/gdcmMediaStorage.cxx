@@ -383,7 +383,7 @@ void MediaStorage::SetFromFile(File const &file)
   if( MSField == MediaStorage::MS_END ) // Nothing found...
     {
     // try again but from header this time:
-    gdcmWarningMacro( "No MediaStorage found in DataSet, looking up in FileMetaInformation" );
+    gdcmDebugMacro( "No MediaStorage found in DataSet, looking up in FileMetaInformation" );
     SetFromHeader( header );
     if( MSField == MediaStorage::MS_END ) // Nothing found...
       {

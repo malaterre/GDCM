@@ -19,24 +19,28 @@
 
 namespace gdcm
 {
-  void Tag::ReadFromCommaSeparatedString(const char *str)
+  bool Tag::ReadFromCommaSeparatedString(const char *str)
     {
     unsigned int group = 0, element = 0;
     if( sscanf(str, "%04x,%04x", &group , &element) != 2 )
       {
-      gdcmErrorMacro( "Problem reading the Tag: " << str );
+      gdcmDebugMacro( "Problem reading the Tag: " << str );
+      return false;
       }
     SetGroup( group );
     SetElement( element );
+    return true;
     }
-  void Tag::ReadFromPipeSeparatedString(const char *str)
+  bool Tag::ReadFromPipeSeparatedString(const char *str)
     {
     unsigned int group = 0, element = 0;
     if( sscanf(str, "%04x|%04x", &group , &element) != 2 )
       {
-      gdcmErrorMacro( "Problem reading the Tag: " << str );
+      gdcmDebugMacro( "Problem reading the Tag: " << str );
+      return false;
       }
     SetGroup( group );
     SetElement( element );
+    return true;
     }
 } // end namespace gdcm
