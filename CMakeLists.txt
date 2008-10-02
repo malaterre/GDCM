@@ -401,6 +401,9 @@ ENDIF(UNIX AND GDCM_TEST_BOOSTRAP)
 
 #-----------------------------------------------------------------------------
 OPTION(GDCM_DOCUMENTATION "Build source documentation using doxygen." OFF)
+IF(GDCM_DOCUMENTATION)
+  OPTION(GDCM_PDF_DOCUMENTATION "Build source doxygen using doxygen as pdf" ON)
+ENDIF(GDCM_DOCUMENTATION)
 
 
 #-----------------------------------------------------------------------------

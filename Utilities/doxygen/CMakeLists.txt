@@ -58,7 +58,7 @@ IF(GDCM_DOCUMENTATION)
 
   # PDF building part:
   # When building latex, we have to run a custom command to produce the pdf file:
-  IF(UNIX)
+  IF(UNIX AND GDCM_PDF_DOCUMENTATION)
     FIND_PROGRAM(PDFOPT_EXECUTABLE pdfopt)
     FIND_PROGRAM(SED_EXECUTABLE sed)
     FIND_PACKAGE(LATEX REQUIRED)
@@ -111,7 +111,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
       ALL
       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
     )
-  ENDIF(UNIX)
+  ENDIF(UNIX AND GDCM_PDF_DOCUMENTATION)
 
 ENDIF(GDCM_DOCUMENTATION)
 
