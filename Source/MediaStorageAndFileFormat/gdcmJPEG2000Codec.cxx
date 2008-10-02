@@ -186,7 +186,8 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
   else
     {
     //  Marker 0xffd9 EOI End of Image (JPEG 2000 EOC End of codestream)
-    assert( src[file_length-1] == 0xd9 );
+    // gdcmData/D_CLUNIE_CT1_J2KR.dcm contains a trailing 0xFF which apparently is ok...
+    //assert( src[file_length-1] == 0xd9 );
     }
 
   /* configure the event callbacks (not required) */
