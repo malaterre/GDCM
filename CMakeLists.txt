@@ -461,6 +461,9 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     SET(CPACK_NSIS_URL_INFO_ABOUT "http://gdcm.sourceforge.net")
     SET(CPACK_NSIS_MODIFY_PATH ON)
   ELSE(WIN32 AND NOT UNIX)
+    # http://www.vtk.org/Wiki/CMake:CPackConfiguration
+    # List of files to be stripped. Starting with CMake 2.6.0 CPACK_STRIP_FILES will be a boolean variable which enables
+    # stripping of all files (a list of files evaluates to TRUE in CMake, so this change is compatible).
     SET(CPACK_STRIP_FILES "bin/gdcmdump;bin/gdcmconv;bin/gdcmscanner;bin/gdcminfo;bin/gdcmraw;bin/gdcmimg;bin/gdcmtar")
     SET(CPACK_SOURCE_STRIP_FILES "")
     SET(CPACK_PACKAGE_EXECUTABLES "gdcmviewer" "VIEWER")
