@@ -283,7 +283,9 @@ ENDIF(BUILD_EXAMPLES)
 # Add the testing directories
 OPTION(GDCM_BUILD_TESTING "Build testing." ${GDCM_BUILD_TESTING_DEFAULT})
 SET(BUILD_TESTING ${GDCM_BUILD_TESTING} CACHE BOOL "" FORCE)
-MARK_AS_ADVANCED(BUILD_TESTING)
+# Hide BUILD_TESTING as user tend to always turn all options on and then complains when something
+# does not work 'by default'
+MARK_AS_ADVANCED(BUILD_TESTING GDCM_BUILD_TESTING)
 
 #-----------------------------------------------------------------------------
 # Python install
@@ -370,7 +372,7 @@ IF(BUILD_TESTING)
   SUBDIRS(Testing)
   IF(NOT GDCM_DATA_ROOT)
     # http://gdcm.sourceforge.net/wiki/index.php/General_questions#What_is_gdcmData_.3F
-    MESSAGE(FATAL_ERROR "You need to set the path to GDCM_DATA_ROOT or disable GDCM_BUILD_TESTING")
+    MESSAGE(FATAL_ERROR "You need to set the path to GDCM_DATA_ROOT (advanced option) or disable GDCM_BUILD_TESTING")
   ENDIF(NOT GDCM_DATA_ROOT)
 ENDIF(BUILD_TESTING)
 
