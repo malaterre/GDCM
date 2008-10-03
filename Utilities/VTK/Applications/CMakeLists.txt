@@ -12,6 +12,8 @@ IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
     gdcmorthoplanes
     gdcm2vtk
     gdcmscene
+    gdcmvolume
+    gdcmtexture
   )
 ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
 
@@ -20,7 +22,7 @@ FOREACH(app ${GDCM_VTK_APPS})
   SET_TARGET_PROPERTIES(${app} PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES})
   TARGET_LINK_LIBRARIES(${app} vtkgdcm vtkRendering)
   IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
-    TARGET_LINK_LIBRARIES(${app} vtkgdcm vtkWidgets)
+    TARGET_LINK_LIBRARIES(${app} vtkgdcm vtkWidgets vtkVolumeRendering)
   ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
   IF(NOT GDCM_INSTALL_NO_LIBRARIES)
     INSTALL(TARGETS ${app}
