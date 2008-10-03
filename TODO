@@ -245,3 +245,5 @@ INCLUDE( ${GDCM_USE_FILE} )
 
 ADD_EXECUTABLE(bla bla.cxx)
 TARGET_LIBK_LIBRARIES(bla vtkgdcm)
+-----------------------------------------------------------------------
+Check perf of vtkTexturedActor2D vs vtkTexture
