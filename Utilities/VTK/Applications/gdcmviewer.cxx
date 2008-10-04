@@ -806,13 +806,12 @@ int main(int argc, char *argv[])
   gdcm::ImageHelper::SetForceRescaleInterceptSlope(forcerescale);
   gdcm::ImageHelper::SetForcePixelSpacing(forcespacing);
 
-  vtkStringArray *names = vtkStringArray::New();
   if( filenames.empty() )
     {
     PrintHelp();
     return 1;
     }
-  else
+  vtkStringArray *names = vtkStringArray::New();
     {
     // Is it a single directory ? If so loop over all files contained in it:
     //const char *filename = argv[1];
