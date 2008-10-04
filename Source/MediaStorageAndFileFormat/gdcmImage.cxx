@@ -77,9 +77,13 @@ unsigned int Image::GetPlanarConfiguration() const
 
 void Image::SetPlanarConfiguration(unsigned int pc)
 {
+  // precondition
+  assert( pc == 0 || pc == 1 );
   // LEADTOOLS_FLOWERS-8-MONO2-Uncompressed.dcm   
   if( pc ) assert( PF.GetSamplesPerPixel() == 3 ); // Please set PixelFormat first
   PlanarConfiguration = pc;
+  // \postcondition
+  assert( PlanarConfiguration == 0 || PlanarConfiguration == 1 );
 }
 
 const PhotometricInterpretation &Image::GetPhotometricInterpretation() const
