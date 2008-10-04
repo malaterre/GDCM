@@ -76,7 +76,11 @@ class vtkAngleWidget;
 #include "gdcmFilename.h"
 #include "gdcmSystem.h"
 #include "gdcmDirectory.h"
+#include "gdcmImageHelper.h"
+#include "gdcmTrace.h"
+#include "gdcmVersion.h"
 
+#include <getopt.h>
 #include <assert.h>
 //----------------------------------------------------------------------------
 // vtkImageViewer2 new interface wants SetSlice, but vtkImageViewer does not have
@@ -633,52 +637,218 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   viewer->Delete();
 }
 
+void PrintVersion()
+{
+  std::cout << "gdcmviewer: gdcm " << gdcm::Version::GetVersion() << " ";
+  const char date[] = "$Date$";
+  std::cout << date << std::endl;
+}
+
+void PrintHelp()
+{
+  PrintVersion();
+  std::cout << "Usage: gdcmviewer [OPTION] filename1.dcm [filename2.dcm...]" << std::endl;
+  std::cout << "or   : gdcmviewer [OPTION] directory" << std::endl;
+  std::cout << "Display a DICOM image file.\n";
+  std::cout << "Options:" << std::endl;
+  std::cout << "     --force-rescale    force rescale." << std::endl;
+  std::cout << "     --force-spacing    force spacing." << std::endl;
+  std::cout << "  -r --recursive        Recusively descend directory." << std::endl;
+  std::cout << "General Options:" << std::endl;
+  std::cout << "  -V --verbose    more verbose (warning+error)." << std::endl;
+  std::cout << "  -W --warning    print warning info." << std::endl;
+  std::cout << "  -D --debug      print debug info." << std::endl;
+  std::cout << "  -E --error      print error info." << std::endl;
+  std::cout << "  -h --help       print help." << std::endl;
+  std::cout << "  -v --version    print version." << std::endl;
+}
+
+
 int main(int argc, char *argv[])
 {
-  //vtkMultiThreader::SetGlobalMaximumNumberOfThreads(1);
+  int c;
+  //int digit_optind = 0;
 
-  vtkStringArray *filenames = vtkStringArray::New();
-  if( argc < 2 )
+  std::vector<std::string> filenames;
+  int forcerescale = 0;
+  int forcespacing = 0;
+  int recursive = 0;
+
+  int verbose = 0;
+  int warning = 0;
+  int debug = 0;
+  int error = 0;
+  int help = 0;
+  int version = 0;
+
+  while (1) {
+    //int this_option_optind = optind ? optind : 1;
+    int option_index = 0;
+    static struct option long_options[] = {
+        {"force-rescale", 0, &forcerescale, 1},
+        {"force-spacing", 0, &forcespacing, 1},
+        {"recursive", 0, &recursive, 1},
+
+// General options !
+        {"verbose", 0, &verbose, 1},
+        {"warning", 0, &warning, 1},
+        {"debug", 0, &debug, 1},
+        {"error", 0, &error, 1},
+        {"help", 0, &help, 1},
+        {"version", 0, &version, 1},
+
+        {0, 0, 0, 0}
+    };
+
+    c = getopt_long (argc, argv, "rVWDEhv",
+      long_options, &option_index);
+    if (c == -1)
+      {
+      break;
+      }
+
+    switch (c)
+      {
+    case 0:
+        {
+        const char *s = long_options[option_index].name;
+        printf ("option %s", s);
+        if (optarg)
+          {
+          if( option_index == 0 ) /* input */
+            {
+            assert( strcmp(s, "input") == 0 );
+            //assert( filename.empty() );
+            //filename = optarg;
+            }
+          printf (" with arg %s", optarg);
+          }
+        printf ("\n");
+        }
+      break;
+
+    case 'r':
+      recursive = 1;
+      break;
+
+    case 'V':
+      verbose = 1;
+      break;
+
+    case 'W':
+      warning = 1;
+      break;
+
+    case 'D':
+      debug = 1;
+      break;
+
+    case 'E':
+      error = 1;
+      break;
+
+    case 'h':
+      help = 1;
+      break;
+
+    case 'v':
+      version = 1;
+      break;
+
+    case '?':
+      break;
+
+    default:
+      printf ("?? getopt returned character code 0%o ??\n", c);
+      }
+  }
+
+  if (optind < argc)
     {
-    std::cerr << argv[0] << " filename1.dcm [filename2.dcm ...]\n";
+    printf ("non-option ARGV-elements: ");
+    while (optind < argc)
+      {
+      printf ("%s ", argv[optind]);
+      filenames.push_back( argv[optind++] );
+      }
+    printf ("\n");
+    }
+
+  if( version )
+    {
+    //std::cout << "version" << std::endl;
+    PrintVersion();
+    return 0;
+    }
+
+  if( help )
+    {
+    //std::cout << "help" << std::endl;
+    PrintHelp();
+    return 0;
+    }
+
+  // Debug is a little too verbose
+  gdcm::Trace::SetDebug( debug );
+  gdcm::Trace::SetWarning( warning );
+  gdcm::Trace::SetError( error );
+  // when verbose is true, make sure warning+error are turned on:
+  if( verbose )
+    {
+    gdcm::Trace::SetWarning( verbose );
+    gdcm::Trace::SetError( verbose);
+    }
+
+  //vtkMultiThreader::SetGlobalMaximumNumberOfThreads(1);
+  gdcm::ImageHelper::SetForceRescaleInterceptSlope(forcerescale);
+  gdcm::ImageHelper::SetForcePixelSpacing(forcespacing);
+
+  vtkStringArray *names = vtkStringArray::New();
+  if( filenames.empty() )
+    {
+    PrintHelp();
     return 1;
     }
   else
     {
     // Is it a single directory ? If so loop over all files contained in it:
-    const char *filename = argv[1];
-    if( argc == 2 && gdcm::System::FileIsDirectory( filename ) )
+    //const char *filename = argv[1];
+    if( filenames.size() == 1 && gdcm::System::FileIsDirectory( filenames[0].c_str() ) )
       {
-      std::cout << "Loading directory: " << filename << std::endl;
-      bool recursive = false;
+      if( verbose )
+        std::cout << "Loading directory: " << filenames[0] << std::endl;
       gdcm::Directory d;
-      d.Load(filename, recursive);
+      d.Load(filenames[0].c_str(), recursive);
       gdcm::Directory::FilenamesType const &files = d.GetFilenames();
       for( gdcm::Directory::FilenamesType::const_iterator it = files.begin(); it != files.end(); ++it )
         {
-        filenames->InsertNextValue( it->c_str() );
+        names->InsertNextValue( it->c_str() );
         }
       }
     else // list of files passed directly on the cmd line:
         // discard non-existing or directory
       {
-      for(int i=1; i < argc; ++i)
+      //for(int i=1; i < argc; ++i)
+      for(std::vector<std::string>::const_iterator it = filenames.begin(); it != filenames.end(); ++it)
         {
-        filename = argv[i];
-        if( gdcm::System::FileExists( filename ) )
+        //filename = argv[i];
+        const std::string & filename = *it;
+        if( gdcm::System::FileExists( filename.c_str() ) )
           {
-          if( gdcm::System::FileIsDirectory( filename ) )
+          if( gdcm::System::FileIsDirectory( filename.c_str() ) )
             {
-            std::cerr << "Discarding directory: " << filename << std::endl;
+            if(verbose)
+              std::cerr << "Discarding directory: " << filename << std::endl;
             }
           else
             {
-            filenames->InsertNextValue( filename );
+            names->InsertNextValue( filename.c_str() );
             }
           }
         else
           {
-          std::cerr << "Discarding non existing file: " << filename << std::endl;
+          if(verbose)
+            std::cerr << "Discarding non existing file: " << filename << std::endl;
           }
         }
       }
@@ -686,9 +856,9 @@ int main(int argc, char *argv[])
     }
 
   vtkImageColorViewer *viewer = vtkImageColorViewer::New();
-  ExecuteViewer<vtkImageColorViewer>(viewer, filenames);
+  ExecuteViewer<vtkImageColorViewer>(viewer, names);
 
-  filenames->Delete();
+  names->Delete();
 
   return 0;
 }
