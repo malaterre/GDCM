@@ -257,6 +257,7 @@ bool ImageCodec::DoPaddedCompositePixelCode(std::istream &is, std::ostream &os)
     {
     return false;
     }
+  delete[] dummy_buffer;
   return true;
 }
 

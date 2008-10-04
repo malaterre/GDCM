@@ -45,12 +45,16 @@ void Image::SetNumberOfDimensions(unsigned int dim)
   NumberOfDimensions = dim;
   assert( NumberOfDimensions );
   Dimensions.resize( 3 /*NumberOfDimensions*/ ); // fill with 0
+  Origin.resize( 3 /*NumberOfDimensions*/ ); // fill with 0
+  DirectionCosines.resize( 6 ); // fill with 0
+  DirectionCosines[0] = 1;
+  DirectionCosines[4] = 1;
   Spacing.resize( 3 /*NumberOfDimensions*/, 1 ); // fill with 1
   assert( NumberOfDimensions == 2 || NumberOfDimensions == 3 );
   if( NumberOfDimensions == 2 )
     {
     Dimensions[2] = 1;
-    Spacing[2] = 1;
+    //Spacing[2] = 1;
     }
 }
 
