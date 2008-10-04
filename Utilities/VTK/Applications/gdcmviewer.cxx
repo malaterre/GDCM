@@ -284,6 +284,8 @@ public:
 
 };
 
+int verbose;
+
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
 class vtkBalloonCallback : public vtkCommand
 {
@@ -327,7 +329,8 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   //reader->FileLowerLeftOn();
   reader->Update();
   //reader->Print( cout );
-  reader->GetOutput()->Print( cout );
+  if( verbose )
+    reader->GetOutput()->Print( cout );
   //reader->GetOutput(1)->Print( cout );
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
   double range[2];
@@ -561,7 +564,8 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   // Always overwriting default is not always nice looking...
   viewer->SetColorLevel (0.5 * (range[1] + range[0]));
   viewer->SetColorWindow (range[1] - range[0]);
-  std::cerr << "Range: " << range[0] << " " << range[1] << std::endl;
+  if( verbose )
+    std::cout << "Range: " << range[0] << " " << range[1] << std::endl;
 
   viewer->SetupInteractor (iren);
   int dims[3];
@@ -677,7 +681,7 @@ int main(int argc, char *argv[])
   int forcespacing = 0;
   int recursive = 0;
 
-  int verbose = 0;
+  verbose = 0;
   int warning = 0;
   int debug = 0;
   int error = 0;
@@ -768,13 +772,13 @@ int main(int argc, char *argv[])
 
   if (optind < argc)
     {
-    printf ("non-option ARGV-elements: ");
+    //printf ("non-option ARGV-elements: ");
     while (optind < argc)
       {
-      printf ("%s ", argv[optind]);
+      //printf ("%s ", argv[optind]);
       filenames.push_back( argv[optind++] );
       }
-    printf ("\n");
+    //printf ("\n");
     }
 
   if( version )
