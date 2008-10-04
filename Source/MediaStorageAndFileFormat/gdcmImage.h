@@ -80,6 +80,9 @@ public:
   void SetPixelFormat(PixelFormat const &pf)
     {
     PF = pf;
+    if( !PF.Validate() )
+      {
+      }
     }
 
   /// Acces the raw data

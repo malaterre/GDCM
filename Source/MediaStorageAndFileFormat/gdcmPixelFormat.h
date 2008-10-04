@@ -36,6 +36,7 @@ namespace gdcm
  */
 class GDCM_EXPORT PixelFormat
 {
+  friend class Image;
 public:
   // When adding a type please add its dual type (its unsigned conterpart)
   typedef enum {
@@ -138,6 +139,10 @@ public:
 
   /// return the max possible of the pixel
   int64_t GetMax() const;
+
+protected:
+  /// When image with 24/24/23 was read, need to validate
+  bool Validate();
 
 private:
   // D 0028|0002 [US] [Samples per Pixel] [1]

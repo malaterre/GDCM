@@ -1220,6 +1220,15 @@ bool ImageReader::ReadACRNEMAImage()
         photometricinterpretation_str.c_str()));
     assert( pi == PhotometricInterpretation::MONOCHROME2 );
     }
+  else
+    {
+    //assert( PixelData->GetPixelFormat().GetSamplesPerPixel() == 1 );
+    if( PixelData->GetPixelFormat().GetSamplesPerPixel() == 3 )
+      {
+      // LIBIDO-24-ACR_NEMA-Rectangle.dcm
+      PixelData->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
+      }
+    }
 
   return true;
 }

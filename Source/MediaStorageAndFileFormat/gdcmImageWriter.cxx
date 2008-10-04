@@ -69,6 +69,7 @@ bool ImageWriter::Write()
   // FIXME HACK !
   if( pf.GetBitsAllocated() == 24 )
     {
+    abort();
     pi = PhotometricInterpretation::RGB;
     pf.SetBitsAllocated( 8 );
     pf.SetBitsStored( 8 );

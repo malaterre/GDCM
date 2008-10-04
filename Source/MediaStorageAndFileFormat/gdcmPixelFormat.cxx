@@ -40,6 +40,7 @@ unsigned short PixelFormat::GetSamplesPerPixel() const
   if ( BitsAllocated == 24 )
     {
     gdcmWarningMacro( "This is illegal in DICOM, assuming a RGB image" );
+    abort();
     return 3;
     }
   return SamplesPerPixel;
@@ -132,6 +133,7 @@ PixelFormat::ScalarType PixelFormat::GetScalarType() const
   case 24:
     gdcmWarningMacro( "This is illegal in DICOM, assuming a RGB image" );
     type = PixelFormat::UINT8;
+    abort();
     break;
     
   default:
@@ -238,6 +240,20 @@ int64_t PixelFormat::GetMax() const
     {
     abort();
     }
+}
+
+bool PixelFormat::Validate()
+{
+  if ( BitsAllocated == 24 )
+    {
+    assert( BitsStored == 24 && HighBit == 23 && SamplesPerPixel == 1 );
+    BitsAllocated = 8;
+    BitsStored = 8;
+    HighBit = 7;
+    SamplesPerPixel = 3;
+    return false;
+    }
+  return true;
 }
 
 void PixelFormat::Print(std::ostream &os) const
