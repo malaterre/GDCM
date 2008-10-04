@@ -448,6 +448,11 @@ void ImageHelper::SetForceRescaleInterceptSlope(bool b)
   ForceRescaleInterceptSlope = b;
 }
 
+bool ImageHelper::GetForceRescaleInterceptSlope()
+{
+  return ForceRescaleInterceptSlope;
+}
+
 void ImageHelper::SetForcePixelSpacing(bool b)
 {
   ForcePixelSpacing = b;

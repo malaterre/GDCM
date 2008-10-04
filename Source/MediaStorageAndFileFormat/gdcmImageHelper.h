@@ -50,6 +50,7 @@ public:
   /// Unless explicitely set elsewhere by the standard, it will use value from 0028,1052 / 0028,1053
   /// for the Rescale Slope & Rescale Intercept values
   static void SetForceRescaleInterceptSlope(bool);
+  static bool GetForceRescaleInterceptSlope();
 
   /// GDCM 1.x compatibility issue:
   /// When using ReWrite an MR Image Storage would be rewritten as Secondary Capture Object while
