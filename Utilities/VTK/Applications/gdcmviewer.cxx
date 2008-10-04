@@ -19,6 +19,7 @@
  */
 #include "vtkGDCMImageReader.h"
 
+#include "vtkVersion.h"
 #include "vtkXMLImageDataWriter.h"
 #include "vtkPNGWriter.h"
 #include "vtkImageShiftScale.h"
@@ -642,6 +643,8 @@ void PrintVersion()
   std::cout << "gdcmviewer: gdcm " << gdcm::Version::GetVersion() << " ";
   const char date[] = "$Date$";
   std::cout << date << std::endl;
+  //std::cout << "             VTK " << vtkVersion::GetVTKVersion() << std::endl;
+  std::cout << "            " << vtkVersion::GetVTKSourceVersion() << std::endl;
 }
 
 void PrintHelp()
@@ -712,7 +715,7 @@ int main(int argc, char *argv[])
     case 0:
         {
         const char *s = long_options[option_index].name;
-        printf ("option %s", s);
+        //printf ("option %s", s);
         if (optarg)
           {
           if( option_index == 0 ) /* input */
@@ -723,7 +726,7 @@ int main(int argc, char *argv[])
             }
           printf (" with arg %s", optarg);
           }
-        printf ("\n");
+        //printf ("\n");
         }
       break;
 
