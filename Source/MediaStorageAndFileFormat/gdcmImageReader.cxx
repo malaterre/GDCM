@@ -100,10 +100,10 @@ bool ImageReader::Read()
     //PixelData->SetCompressionFromTransferSyntax( ts );
     res = ReadImage(ms);
     }
-  else if( ms == MediaStorage::MRSpectroscopyStorage )
-    {
-    res = ReadImage(ms);
-    }
+  //else if( ms == MediaStorage::MRSpectroscopyStorage )
+  //  {
+  //  res = ReadImage(ms);
+  //  }
   else
     {
     //assert( !ds.FindDataElement( Tag(0x7fe0,0x0010 ) ) );
