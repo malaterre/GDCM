@@ -478,7 +478,10 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
   interceptslope.resize( 2 );
   interceptslope[0] = 0;
   interceptslope[1] = 1;
-  if( ms == MediaStorage::CTImageStorage || ForceRescaleInterceptSlope )
+  if( ms == MediaStorage::CTImageStorage || 
+    ForceRescaleInterceptSlope 
+//   (( ms == MediaStorage::MRImageStorage || ms == MediaStorage::SecondaryCaptureImageStorage) && ForceRescaleInterceptSlope )
+  )
     {
     Attribute<0x0028,0x1052> at1;
     bool intercept = ds.FindDataElement(at1.GetTag());
@@ -575,13 +578,14 @@ Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
     t = Tag(0xffff,0xffff); // FIXME
     break;
   default:
-    gdcmWarningMacro( "Do not handle: " << ms );
-    //abort();
+    gdcmDebugMacro( "Do not handle: " << ms );
     t = Tag(0xffff,0xffff);
     break;
     }
 
-  if( ForcePixelSpacing )
+  // should only override unless Modality set it already
+  // basically only Secondary Capture should reach that point
+  if( ForcePixelSpacing && t == Tag(0xffff,0xffff) )
     {
     t = Tag(0x0028,0x0030);
     }
@@ -642,13 +646,12 @@ Warning - Dicom dataset contains attributes not present in standard DICOM IOD - 
     t = Tag(0xffff,0xffff);
     break;
   default:
-    gdcmWarningMacro( "Do not handle Z spacing for: " << ms );
+    gdcmDebugMacro( "Do not handle Z spacing for: " << ms );
     t = Tag(0xffff,0xffff);
-    //abort();
     break;
     }
 
-  if( ForcePixelSpacing )
+  if( ForcePixelSpacing && t == Tag(0xffff,0xffff) )
     {
     t = Tag(0x0018,0x0088);
     }
