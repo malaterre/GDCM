@@ -1045,7 +1045,7 @@ bool ImageReader::ReadACRNEMAImage()
     else
       {
       gdcmErrorMacro( "Unhandled Image Dimensions: " << imagedimensions );
-      throw Exception( "Image Dimensions" );
+      return false;
       }
     }
   else
