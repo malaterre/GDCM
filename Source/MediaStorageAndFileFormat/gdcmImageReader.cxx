@@ -1230,6 +1230,11 @@ bool ImageReader::ReadACRNEMAImage()
       }
     }
 
+  // Do the Rescale Intercept & Slope
+  std::vector<double> is = ImageHelper::GetRescaleInterceptSlopeValue(*F);
+  PixelData->SetIntercept( is[0] );
+  PixelData->SetSlope( is[1] );
+
   return true;
 }
 
