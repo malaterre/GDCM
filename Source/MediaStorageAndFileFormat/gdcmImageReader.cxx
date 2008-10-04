@@ -776,8 +776,13 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   // well hopefully :(
   if( ds.FindDataElement( planarconfiguration ) && !ds.GetDataElement( planarconfiguration ).IsEmpty() )
     {
-    PixelData->SetPlanarConfiguration(
-      ReadUSFromTag( planarconfiguration, ss, conversion ) );
+    unsigned int pc = ReadUSFromTag( planarconfiguration, ss, conversion );
+    if( pc && PixelData->GetPixelFormat().GetSamplesPerPixel() != 3 )
+      {
+      gdcmDebugMacro( "Cannot have PlanarConfiguration=1, when Sample Per Pixel != 3" );
+      pc = 0;
+      }
+    PixelData->SetPlanarConfiguration( pc );
     }
 
   // 4 1/2 Let's do Pixel Spacing

@@ -64,6 +64,7 @@ unsigned int Image::GetPlanarConfiguration() const
 {
   if( PlanarConfiguration && PF.GetSamplesPerPixel() != 3 )
     {
+    abort();
     // LEADTOOLS_FLOWERS-8-PAL-RLE.dcm
     // User specify PlanarConfiguration whereas SamplesPerPixel != 3
     gdcmWarningMacro( 
@@ -76,6 +77,8 @@ unsigned int Image::GetPlanarConfiguration() const
 
 void Image::SetPlanarConfiguration(unsigned int pc)
 {
+  // LEADTOOLS_FLOWERS-8-MONO2-Uncompressed.dcm   
+  if( pc ) assert( PF.GetSamplesPerPixel() == 3 ); // Please set PixelFormat first
   PlanarConfiguration = pc;
 }
 
@@ -345,6 +348,7 @@ void Image::Print(std::ostream &os) const
     PF.Print(os);
     }
   os << "PhotometricInterpretation: " << PI << "\n";
+  os << "PlanarConfiguration: " << PlanarConfiguration << "\n";
   os << "TransferSyntax: " << TS << "\n";
 }
 
