@@ -42,7 +42,7 @@ public:
 
   /// Decide whether or not to also compress the Icon Image using the same Transfer Syntax
   /// Default is to simply decompress icon image
-  void SetCompressIconImage(bool b);
+  void SetCompressIconImage(bool b) { CompressIconImage = b; }
 
   /// When target Transfer Syntax is identical to input target syntax, no operation
   /// is actually done
