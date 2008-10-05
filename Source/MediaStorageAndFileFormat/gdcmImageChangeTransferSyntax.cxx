@@ -246,20 +246,6 @@ bool ImageChangeTransferSyntax::Change()
       }
     pixeldata.SetValue( *bv );
 
-    // same goes for icon
-    gdcm::DataElement iconpixeldata( gdcm::Tag(0x7fe0,0x0010) );
-{
-    gdcm::ByteValue *bv = new gdcm::ByteValue();
-    unsigned long len = Input->GetIconImage().GetBufferLength();
-    bv->SetLength( len );
-    bool b = Input->GetIconImage().GetBuffer( (char*)bv->GetPointer() );
-    if( !b )
-      {
-      return false;
-      }
-    iconpixeldata.SetValue( *bv );
-}
-
     bool success = false;
     if( !success ) success = TryRAWCodec(pixeldata, *Input, *Output);
     if( !success ) success = TryJPEGCodec(pixeldata, *Input, *Output);
@@ -274,6 +260,20 @@ bool ImageChangeTransferSyntax::Change()
       }
 
     // same goes for icon
+    gdcm::DataElement iconpixeldata( gdcm::Tag(0x7fe0,0x0010) );
+    if( !Input->GetIconImage().IsEmpty() )
+{
+    // same goes for icon
+    gdcm::ByteValue *bv = new gdcm::ByteValue();
+    unsigned long len = Input->GetIconImage().GetBufferLength();
+    bv->SetLength( len );
+    bool b = Input->GetIconImage().GetBuffer( (char*)bv->GetPointer() );
+    if( !b )
+      {
+      return false;
+      }
+    iconpixeldata.SetValue( *bv );
+
     success = false;
     if( !success ) success = TryRAWCodec(iconpixeldata, Input->GetIconImage(), Output->GetIconImage());
     if( !success ) success = TryJPEGCodec(iconpixeldata, Input->GetIconImage(), Output->GetIconImage());
@@ -286,9 +286,10 @@ bool ImageChangeTransferSyntax::Change()
       //abort();
       return false;
       }
+    assert( Output->GetIconImage().GetTransferSyntax() == TS );
+}
 
     assert( Output->GetTransferSyntax() == TS );
-    assert( Output->GetIconImage().GetTransferSyntax() == TS );
     return success;
     }
 
@@ -306,7 +307,7 @@ bool ImageChangeTransferSyntax::Change()
     return false;
     }
 
-  if( CompressIconImage )
+    if( !Input->GetIconImage().IsEmpty() && CompressIconImage )
   {
     // same goes for icon
     success = false;

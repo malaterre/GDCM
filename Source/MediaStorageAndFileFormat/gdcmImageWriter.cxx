@@ -42,11 +42,16 @@ void ImageWriter::SetImage(Image const &img)
 
 void ImageWriter::DoIconImage(DataSet & rootds, Image const & image)
 {
-  const Tag ticonimage(0x0088,0x0200);
+  //const Tag ticonimage(0x0088,0x0200);
+  Attribute<0x0088,0x0200> iiat;
   const IconImage &icon = image.GetIconImage();
   if( !icon.IsEmpty() )
     {
-    DataElement iconimagesq = rootds.GetDataElement( ticonimage );
+    //DataElement iconimagesq = rootds.GetDataElement( ticonimage );
+    //iconimagesq.SetTag( ticonimage );
+    DataElement iconimagesq;
+    iconimagesq.SetTag( iiat.GetTag() );
+    iconimagesq.SetVR( VR::SQ );
     SmartPointer<SequenceOfItems> sq = new SequenceOfItems;
     sq->SetLengthToUndefined();
 

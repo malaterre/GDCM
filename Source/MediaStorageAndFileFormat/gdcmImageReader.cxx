@@ -409,7 +409,7 @@ abort();
     // Pass TransferSyntax:
     pixeldata.SetTransferSyntax( image.GetTransferSyntax() );
     }
-  else if( rootds.FindDataElement( tgeiconimage ) )
+  else if( false && rootds.FindDataElement( tgeiconimage ) )
     {
     const DataElement &iconimagesq = rootds.GetDataElement( tgeiconimage );
     const SequenceOfItems* sq = iconimagesq.GetSequenceOfItems();
@@ -502,7 +502,7 @@ abort();
       pixeldata.SetDataElement( de2 );
       }
     }
-  else if( rootds.FindDataElement( tgeiconimage2 ) )
+  else if( false && rootds.FindDataElement( tgeiconimage2 ) )
     {
     const DataElement &iconimagesq = rootds.GetDataElement( tgeiconimage2 );
     const SequenceOfItems* sq = iconimagesq.GetSequenceOfItems();
