@@ -41,6 +41,13 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
   const VR &refvr = entry.GetVR();
   //const VM &vm = entry.GetVM();
 
+  // not much we can do...
+  if( refvr == VR::INVALID || refvr == VR::UN )
+    {
+    // postcondition says it cannot be VR::INVALID, so return VR::UN
+    return VR::UN;
+    }
+
   VR vr = refvr;
 
   // Special handling of US or SS vr:
@@ -127,8 +134,15 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
       vr = VR::INVALID;
       }
     }
+  else if( vr == VR::US_SS_OW )
+    {
+    vr = VR::OW;
+    }
   // TODO need to treat US_SS_OW too
 
+  // \postcondition:
+  assert( vr.IsVRFile() );
+  assert( vr != VR::INVALID );
   return vr;
 }
 

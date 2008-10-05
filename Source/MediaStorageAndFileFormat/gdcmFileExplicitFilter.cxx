@@ -47,16 +47,46 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
 
     //assert( de.GetVR() == VR::INVALID );
     VR cvr = DataSetHelper::ComputeVR(*F,ds, t);
-    de.SetVR( cvr );
+    VR oldvr = de.GetVR();
     SequenceOfItems *sqi = de.GetSequenceOfItems();
     if( de.GetByteValue() )
       {
       // all set
-      assert( cvr != VR::SQ && cvr != VR::UN );
+      assert( cvr != VR::SQ /*&& cvr != VR::UN*/ );
+      assert( cvr != VR::INVALID );
+      if( cvr != VR::UN )
+        {
+        // about to change , make some paranoid test:
+        //assert( cvr.Compatible( oldvr ) ); // LT != LO but there are somewhat compatible
+        if( cvr & VR::VRASCII )
+          {
+          //assert( oldvr & VR::VRASCII || oldvr == VR::INVALID || oldvr == VR::UN );
+          // gdcm-JPEG-Extended.dcm has a couple of VR::OB private field
+          // is this a good idea to change them to an ASCII when we know this might not work ?
+          if( !(oldvr & VR::VRASCII || oldvr == VR::INVALID || oldvr == VR::UN) )
+            {
+            assert( t.IsPrivate() ); // Hopefully this only happen with private tag
+            gdcmErrorMacro( "Cannot convert VR for tag: " << t );
+            return false;
+            }
+          }
+        if( cvr & VR::VRBINARY )
+          {
+          // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
+          if( !( oldvr & VR::VRBINARY || oldvr == VR::INVALID || oldvr == VR::UN ) )
+            {
+            assert( t.IsPrivate() ); // Hopefully this only happen with private tag
+            gdcmErrorMacro( "Cannot convert VR for tag: " << t );
+            return false;
+            }
+          }
+        de.SetVR( cvr );
+        }
       }
     else if( sqi )
       {
       assert( cvr == VR::SQ );
+      de.SetVR( VR::SQ );
       sqi->SetLengthToUndefined();
       de.SetVLToUndefined();
       // recursive
