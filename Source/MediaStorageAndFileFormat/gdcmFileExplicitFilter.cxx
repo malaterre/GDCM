@@ -101,6 +101,13 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
             return false;
             }
           }
+
+        // let's do one more check we are going to make this attribute explicit VR, there is
+        // still a special case, when VL is > uint16_max then we must give up:
+        if( !(cvr & VR::VL32) && de.GetVL() > UINT16_MAX )
+          {
+          abort(); // TODO need testing
+          }
         de.SetVR( cvr );
         }
       }
@@ -134,11 +141,11 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
 
 bool FileExplicitFilter::Change()
 {
-  if( !UseVRUN)
-    {
-    gdcmErrorMacro( "Not implemented" );
-    return false;
-    }
+  //if( !UseVRUN)
+  //  {
+  //  gdcmErrorMacro( "Not implemented" );
+  //  return false;
+  //  }
   const Global& g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
   const Dict &d = dicts.GetPublicDict();
