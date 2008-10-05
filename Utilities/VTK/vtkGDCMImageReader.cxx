@@ -903,6 +903,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   if( pixeltype == gdcm::PixelFormat::UINT12 || pixeltype == gdcm::PixelFormat::INT12 )
   {
     assert( Scale == 1.0 && Shift == 0.0 );
+    assert( pixeltype.GetSamplesPerPixel() == 1 );
     // FIXME: I could avoid this extra copy:
     char * copy = new char[len];
     memcpy(copy, pointer, len);
@@ -918,6 +919,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
 
   if( Scale != 1.0 || Shift != 0.0 )
   {
+    assert( pixeltype.GetSamplesPerPixel() == 1 );
     gdcm::Rescaler r;
     r.SetIntercept( Shift );
     r.SetSlope( Scale );
@@ -928,6 +930,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     delete[] copy;
     // WARNING: sizeof(Real World Value) != sizeof(Stored Pixel)
     outlen = data->GetScalarSize() * data->GetNumberOfPoints() / data->GetDimensions()[2];
+    assert( data->GetNumberOfScalarComponents() == 1 );
   }
 
   // Do the Icon Image:
