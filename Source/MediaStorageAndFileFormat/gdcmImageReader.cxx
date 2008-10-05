@@ -330,6 +330,9 @@ void DoIconImage(const DataSet& rootds, Image& image)
       }
     const DataElement& de = ds.GetDataElement( tpixeldata );
     pixeldata.SetDataElement( de );
+
+    // Pass TransferSyntax:
+    pixeldata.SetTransferSyntax( image.GetTransferSyntax() );
     }
   else if( rootds.FindDataElement( tgeiconimage ) )
     {

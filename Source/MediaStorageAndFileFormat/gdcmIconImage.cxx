@@ -12,6 +12,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+#if 0
 #include "gdcmIconImage.h"
 #include "gdcmRAWCodec.h"
 #include "gdcmSequenceOfFragments.h"
@@ -37,6 +38,7 @@ namespace gdcm
 */
 
 IconImage::IconImage():
+  TS(),
   PF(),
   PI(),
   Dimensions(),
@@ -114,3 +116,4 @@ bool IconImage::GetBuffer(char *buffer) const
 
 
 }
+#endif

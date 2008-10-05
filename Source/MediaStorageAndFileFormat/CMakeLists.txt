@@ -5,6 +5,7 @@ SET(MSFF_SRCS
   gdcmFileExplicitFilter.cxx
   gdcmImageFragmentSplitter.cxx
   gdcmTagPath.cxx
+  gdcmPixmap.cxx
   gdcmRescaler.cxx
   gdcmImageToImageFilter.cxx
   gdcmImageChangeTransferSyntax.cxx

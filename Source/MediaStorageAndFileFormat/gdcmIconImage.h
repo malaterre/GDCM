@@ -15,10 +15,12 @@
 #ifndef __gdcmIconImage_h
 #define __gdcmIconImage_h
 
+#if 0
 #include "gdcmObject.h"
 #include "gdcmDataElement.h"
 #include "gdcmPhotometricInterpretation.h"
 #include "gdcmPixelFormat.h"
+#include "gdcmTransferSyntax.h"
 
 #include <vector>
 
@@ -35,6 +37,13 @@ public:
   ~IconImage();
   void Print(std::ostream &) const {}
 
+  /// Transfer syntax
+  void SetTransferSyntax(TransferSyntax const &ts) {
+    TS = ts;
+  }
+  const TransferSyntax &GetTransferSyntax() const {
+    return TS;
+  }
   void SetDataElement(DataElement const &de) {
     PixelData = de;
   }
@@ -64,6 +73,7 @@ public:
   bool GetBuffer(char *buffer) const;
 
 private:
+  TransferSyntax TS;
   PixelFormat PF; // SamplesPerPixel, BitsAllocated, BitsStored, HighBit, PixelRepresentation
   PhotometricInterpretation PI;
   std::vector<unsigned int> Dimensions; // Col/Row
@@ -73,5 +83,13 @@ private:
 };
 
 } // end namespace gdcm
+#endif
+#include "gdcmPixmap.h"
+
+namespace gdcm
+{
+  //class GDCM_EXPORT IconImage : public Pixmap {};
+  typedef Pixmap IconImage;
+}
 
 #endif //__gdcmIconImage_h

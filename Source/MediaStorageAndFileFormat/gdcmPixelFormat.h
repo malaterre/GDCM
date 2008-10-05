@@ -36,7 +36,7 @@ namespace gdcm
  */
 class GDCM_EXPORT PixelFormat
 {
-  friend class Image;
+  friend class Pixmap;
 public:
   // When adding a type please add its dual type (its unsigned conterpart)
   typedef enum {
