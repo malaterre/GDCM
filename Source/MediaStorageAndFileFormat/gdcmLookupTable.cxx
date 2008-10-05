@@ -144,11 +144,16 @@ void LookupTable::GetLUT(LookupTableType type, unsigned char *array, unsigned in
     {
     const unsigned int mult = Internal->BitSize[type]/8;
     length = Internal->Length[type]*mult;
+    unsigned int offset = 0;
+    if( mult == 2 )
+      {
+      offset = 1;
+      }
     for( unsigned int i = 0; i < Internal->Length[type]; ++i)
       {
-      assert( i*mult+1 < length );
+      assert( i*mult+offset < length );
       assert( 3*i+type < Internal->RGB.size() );
-      array[i*mult+1] = Internal->RGB[3*i+type];
+      array[i*mult+offset] = Internal->RGB[3*i+type];
       }
     }
   else
