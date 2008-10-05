@@ -46,6 +46,7 @@
 #include "gdcmFile.h"
 #include "gdcmPixmap.h"
 #include "gdcmImage.h"
+#include "gdcmIconImage.h"
 #include "gdcmFragment.h"
 #include "gdcmCSAHeader.h"
 #include "gdcmPDBHeader.h"
@@ -331,6 +332,7 @@ using namespace gdcm;
 %include "cstring.i"
 %include "gdcmPixmap.h"
 %extend gdcm::Pixmap
+%ignore gdcm::Pixmap::GetBuffer(char*) const;
 {
   %cstring_output_allocate_size(char **buffer, unsigned int *size, free(*$1) );
   void GetBuffer(char **buffer, unsigned int *size) {
@@ -348,8 +350,18 @@ using namespace gdcm;
   }
 };
 %include "gdcmImage.h"
-%ignore gdcm::Image::GetBuffer(char*) const;
 %extend gdcm::Image
+{
+  const char *__str__() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+  }
+};
+%include "gdcmIconImage.h"
+%extend gdcm::IconImage
 {
   const char *__str__() {
     static std::string buffer;
