@@ -46,6 +46,7 @@
 #include "gdcmFile.h"
 #include "gdcmPixmap.h"
 #include "gdcmImage.h"
+#include "gdcmIconImage.h"
 #include "gdcmFragment.h"
 #include "gdcmCSAHeader.h"
 #include "gdcmPDBHeader.h"
@@ -371,6 +372,7 @@ using namespace gdcm;
 //}
 
 };
+%include "gdcmIconImage.h"
 %include "gdcmFragment.h"
 %include "gdcmPDBElement.h"
 %extend gdcm::PDBElement
