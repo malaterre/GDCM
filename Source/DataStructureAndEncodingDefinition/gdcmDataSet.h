@@ -153,6 +153,13 @@ public:
   /// Return the DataElement with Tag 't'
   /// \warning:
   /// This only search at the 'root level' of the DataSet
+  //DataElement& GetDataElement(const Tag &t) {
+  //  DataElement r(t);
+  //  Iterator it = DES.find(r);
+  //  if( it != DES.end() )
+  //    return *it;
+  //  return GetDEEnd();
+  //  }
   const DataElement& GetDataElement(const Tag &t) const {
     const DataElement r(t);
     ConstIterator it = DES.find(r);
