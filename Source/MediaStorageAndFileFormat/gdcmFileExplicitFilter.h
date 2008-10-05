@@ -33,7 +33,7 @@ class Dicts;
 class GDCM_EXPORT FileExplicitFilter
 {
 public:
-  FileExplicitFilter():F(new File),ChangePrivateTags(false),UseVRUN(true) {}
+  FileExplicitFilter():F(new File),ChangePrivateTags(false),UseVRUN(true),RecomputeItemLength(false),RecomputeSequenceLength(false) {}
   ~FileExplicitFilter() {}
 
   /// Decide whether or not to VR'ify private tags
