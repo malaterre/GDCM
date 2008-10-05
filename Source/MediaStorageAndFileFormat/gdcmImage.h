@@ -16,15 +16,11 @@
 #define __gdcmImage_h
 
 #include "gdcmPixmap.h"
-#include "gdcmPixelFormat.h"
 #include "gdcmSwapCode.h"
-#include "gdcmPhotometricInterpretation.h"
 #include "gdcmSmartPointer.h"
-#include "gdcmTransferSyntax.h"
 #include "gdcmOverlay.h"
 #include "gdcmCurve.h"
 #include "gdcmIconImage.h"
-#include "gdcmDataElement.h"
 
 #include <vector>
 

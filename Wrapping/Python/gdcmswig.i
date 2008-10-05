@@ -46,7 +46,6 @@
 #include "gdcmFile.h"
 #include "gdcmPixmap.h"
 #include "gdcmImage.h"
-#include "gdcmIconImage.h"
 #include "gdcmFragment.h"
 #include "gdcmCSAHeader.h"
 #include "gdcmPDBHeader.h"
@@ -331,8 +330,8 @@ using namespace gdcm;
 //%newobject gdcm::Image::GetBuffer;
 %include "cstring.i"
 %include "gdcmPixmap.h"
-%extend gdcm::Pixmap
 %ignore gdcm::Pixmap::GetBuffer(char*) const;
+%extend gdcm::Pixmap
 {
   %cstring_output_allocate_size(char **buffer, unsigned int *size, free(*$1) );
   void GetBuffer(char **buffer, unsigned int *size) {
@@ -348,10 +347,13 @@ using namespace gdcm;
     buffer = s.str();
     return buffer.c_str();
   }
+
 };
+
 %include "gdcmImage.h"
 %extend gdcm::Image
 {
+
   const char *__str__() {
     static std::string buffer;
     std::stringstream s;
@@ -359,17 +361,15 @@ using namespace gdcm;
     buffer = s.str();
     return buffer.c_str();
   }
-};
-%include "gdcmIconImage.h"
-%extend gdcm::IconImage
-{
-  const char *__str__() {
-    static std::string buffer;
-    std::stringstream s;
-    self->Print(s);
-    buffer = s.str();
-    return buffer.c_str();
-  }
+//%typemap(python,out) const double * GetOrigin2 {
+//	//float* source=(float*)$source;
+//	float source[3]={0,0,0};
+//	$target = PyTuple_New(3);
+//	for(int i=0;i<3;i++){
+//		PyTuple_SetItem($target,i,Py_BuildValue("f",(source[i])));
+//	}	
+//}
+
 };
 %include "gdcmFragment.h"
 %include "gdcmPDBElement.h"
