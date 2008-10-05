@@ -31,6 +31,11 @@ namespace gdcm
     ValueLengthField.SetToUndefined();
   }
 
+  SequenceOfItems* DataElement::GetSequenceOfItems() {
+    Value &v = GetValue();
+    SequenceOfItems *sqi = dynamic_cast<SequenceOfItems*>(&v);
+    return sqi;
+  }
   const SequenceOfItems* DataElement::GetSequenceOfItems() const {
     const Value &v = GetValue();
     const SequenceOfItems *sqi = dynamic_cast<const SequenceOfItems*>(&v);

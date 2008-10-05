@@ -120,6 +120,7 @@ public:
   /// Return the Value of DataElement as a Sequence Of Items (if possible)
   /// \warning: You need to check for NULL return value
   const SequenceOfItems* GetSequenceOfItems() const;
+  SequenceOfItems* GetSequenceOfItems();
 
   /// Return the Value of DataElement as a Sequence Of Fragments (if possible)
   /// \warning: You need to check for NULL return value

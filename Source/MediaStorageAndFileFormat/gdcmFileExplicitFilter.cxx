@@ -27,18 +27,8 @@
 namespace gdcm
 {
 
-bool FileExplicitFilter::Change()
+bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
 {
-  if( !UseVRUN)
-    {
-    gdcmErrorMacro( "Not implemented" );
-    return false;
-    }
-  const Global& g = GlobalInstance;
-  const Dicts &dicts = g.GetDicts();
-  const Dict &d = dicts.GetPublicDict();
-
-  DataSet &ds = F->GetDataSet();
   DataSet::Iterator it = ds.Begin();
   for( ; it != ds.End(); )
     {
@@ -58,11 +48,55 @@ bool FileExplicitFilter::Change()
     //assert( de.GetVR() == VR::INVALID );
     VR cvr = DataSetHelper::ComputeVR(*F,ds, t);
     de.SetVR( cvr );
+    SequenceOfItems *sqi = de.GetSequenceOfItems();
+    if( de.GetByteValue() )
+      {
+      // all set
+      assert( cvr != VR::SQ && cvr != VR::UN );
+      }
+    else if( sqi )
+      {
+      assert( cvr == VR::SQ );
+      sqi->SetLengthToUndefined();
+      de.SetVLToUndefined();
+      // recursive
+      SequenceOfItems::ItemVector::iterator it = sqi->Items.begin();
+      for(; it != sqi->Items.end(); ++it)
+        {
+        //Item &item = const_cast<Item&>(*it);
+        Item &item = *it;
+        item.SetVLToUndefined();
+        DataSet &nds = item.GetNestedDataSet();
+        //const DataElement &deitem = item;
+        ProcessDataSet(nds, dicts);
+        }
+      }
+    else if( de.GetSequenceOfFragments() )
+      {
+      assert( cvr & VR::OB_OW );
+      }
     ++it;
     ds.Replace( de );
     }
-
   return true;
+}
+
+bool FileExplicitFilter::Change()
+{
+  if( !UseVRUN)
+    {
+    gdcmErrorMacro( "Not implemented" );
+    return false;
+    }
+  const Global& g = GlobalInstance;
+  const Dicts &dicts = g.GetDicts();
+  const Dict &d = dicts.GetPublicDict();
+
+  DataSet &ds = F->GetDataSet();
+
+  bool b = ProcessDataSet(ds, dicts);
+
+  return b;
 }
 
 
