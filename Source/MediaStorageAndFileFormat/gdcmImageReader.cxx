@@ -322,6 +322,81 @@ void DoIconImage(const DataSet& rootds, Image& image)
         photometricinterpretation_str.c_str()));
     assert( pi != PhotometricInterpretation::UNKNOW);
     pixeldata.SetPhotometricInterpretation( pi );
+   
+    // 
+  if ( pi == PhotometricInterpretation::PALETTE_COLOR )
+      {
+    SmartPointer<LookupTable> lut = new LookupTable;
+    const Tag testseglut(0x0028, (0x1221 + 0));
+    if( ds.FindDataElement( testseglut ) )
+      {
+abort();
+      lut = new SegmentedPaletteColorLookupTable;
+      }
+    //SmartPointer<SegmentedPaletteColorLookupTable> lut = new SegmentedPaletteColorLookupTable;
+    lut->Allocate( pf.GetBitsAllocated() );
+
+    // for each red, green, blue:
+    for(int i=0; i<3; ++i)
+      {
+      // (0028,1101) US 0\0\16
+      // (0028,1102) US 0\0\16
+      // (0028,1103) US 0\0\16
+      const Tag tdescriptor(0x0028, (0x1101 + i));
+      //const Tag tdescriptor(0x0028, 0x3002);
+      Element<VR::US,VM::VM3> el_us3;
+      // Now pass the byte array to a DICOMizer:
+      el_us3.Set( ds[tdescriptor].GetValue() );
+      lut->InitializeLUT( LookupTable::LookupTableType(i),
+        el_us3[0], el_us3[1], el_us3[2] );
+
+      // (0028,1201) OW 
+      // (0028,1202) OW
+      // (0028,1203) OW 
+      const Tag tlut(0x0028, (0x1201 + i));
+      //const Tag tlut(0x0028, 0x3006);
+      
+      // Segmented LUT
+      // (0028,1221) OW 
+      // (0028,1222) OW
+      // (0028,1223) OW 
+      const Tag seglut(0x0028, (0x1221 + i));
+      if( ds.FindDataElement( tlut ) )
+        {
+        const ByteValue *lut_raw = ds.GetDataElement( tlut ).GetByteValue();
+        assert( lut_raw );
+        // LookupTableType::RED == 0
+        lut->SetLUT( LookupTable::LookupTableType(i),
+          (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
+        //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
+
+        unsigned long check =
+          (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
+          * el_us3.GetValue(2) / 8;
+        assert( check == lut_raw->GetLength() ); (void)check;
+        }
+      else if( ds.FindDataElement( seglut ) )
+        {
+        const ByteValue *lut_raw = ds.GetDataElement( seglut ).GetByteValue();
+        assert( lut_raw );
+        lut->SetLUT( LookupTable::LookupTableType(i),
+          (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
+        //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
+
+        unsigned long check =
+          (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536) 
+          * el_us3.GetValue(2) / 8;
+        //assert( check == lut_raw->GetLength() ); (void)check;
+        }
+      else
+        {
+        abort();
+        }
+      }
+    pixeldata.SetLUT(*lut);
+
+      }
+
     const Tag tpixeldata = Tag(0x7fe0, 0x0010);
     if( !ds.FindDataElement( tpixeldata ) )
       {

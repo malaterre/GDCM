@@ -940,6 +940,24 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     char * iconpointer = static_cast<char*>(this->GetOutput(ICONIMAGEPORTNUMBER)->GetScalarPointer());
     assert( iconpointer );
     image.GetIconImage().GetBuffer( iconpointer );
+    if ( image.GetIconImage().GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::PALETTE_COLOR )
+      {
+      const gdcm::LookupTable &lut = image.GetIconImage().GetLUT();
+      assert( lut.GetBitSample() == 8 );
+        {
+        vtkLookupTable *vtklut = vtkLookupTable::New();
+        vtklut->SetNumberOfTableValues(256);
+        // SOLVED: GetPointer(0) is skrew up, need to replace it with WritePointer(0,4) ...
+        if( !lut.GetBufferAsRGBA( vtklut->WritePointer(0,4) ) )
+          {
+          vtkWarningMacro( "Could not get values from LUT" );
+          return 0;
+          }
+        vtklut->SetRange(0,255);
+        this->GetOutput(ICONIMAGEPORTNUMBER)->GetPointData()->GetScalars()->SetLookupTable( vtklut );
+        vtklut->Delete();
+        }
+      }
     }
 
   // Do the Curve:

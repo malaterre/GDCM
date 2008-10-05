@@ -399,6 +399,31 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     {
     vtkLogoRepresentation *rep = vtkLogoRepresentation::New();
     rep->SetImage(reader->GetIconImage());
+    if( reader->GetIconImage()->GetPointData()->GetScalars() 
+     && reader->GetIconImage()->GetPointData()->GetScalars()->GetLookupTable() )
+      {
+    vtkLookupTable *lut = reader->GetIconImage()->GetPointData()->GetScalars()->GetLookupTable();
+      vtkImageMapToColors *map = vtkImageMapToColors::New ();
+      map->SetInput (reader->GetIconImage());
+      map->SetLookupTable (reader->GetIconImage()->GetPointData()->GetScalars()->GetLookupTable());
+      //FIXME there is no way to know the type of LUT the icon is using:
+      //if( reader->GetImageFormat() == VTK_LOOKUP_TABLE )
+        {
+        map->SetOutputFormatToRGB();
+        }
+      //else if( reader->GetImageFormat() == VTK_INVERSE_LUMINANCE )
+      //  {
+      //  map->SetOutputFormatToLuminance();
+      //  }
+      map->Update();
+      //map->GetOutput()->GetScalarRange(range);
+      //viewer->SetInput( map->GetOutput() );
+      //map->GetOutput()->Print( std::cout );
+      rep->SetImage( map->GetOutput() );
+      map->Delete();
+
+      }
+
     //reader->GetIconImage()->Print( std::cout );
 
     //vtkPropCollection *pc = vtkPropCollection::New();

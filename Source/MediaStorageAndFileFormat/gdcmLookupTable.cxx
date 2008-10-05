@@ -105,15 +105,23 @@ void LookupTable::SetLUT(LookupTableType type, const unsigned char *array,
     {
     assert( Internal->RGB.size() == 3*Internal->Length[type]*(BitSample/8) );
     }
+  // Too funny: 05115014-mr-siemens-avanto-syngo-with-palette-icone.dcm 
+  // There is pseudo PALETTE_COLOR LUT in the Icon, if one look carefully the LUT values
+  // goes like this: 0, 1, 2, 3, 4, 5, 6, 7 ...
   if( BitSample == 8 )
     {
     const unsigned int mult = Internal->BitSize[type]/8;
     assert( Internal->Length[type]*mult == length );
+    unsigned int offset = 0;
+    if( mult == 2 )
+      {
+      offset = 1;
+      }
     for( unsigned int i = 0; i < Internal->Length[type]; ++i)
       {
-      assert( i*mult+1 < length );
+      assert( i*mult+offset < length );
       assert( 3*i+type < Internal->RGB.size() );
-      Internal->RGB[3*i+type] = array[i*mult+1];
+      Internal->RGB[3*i+type] = array[i*mult+offset];
       }
     }
   else
