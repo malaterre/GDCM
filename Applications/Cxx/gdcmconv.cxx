@@ -65,6 +65,7 @@
   make gdcmconv && ./bin/gdcmconv -i ~/Creatis/gdcmData/PICKER-16-MONO2-No_DicomV3_Preamble.dcm -o bla.dcm 
 */
 #include "gdcmReader.h"
+#include "gdcmAnonymizer.h"
 #include "gdcmVersion.h"
 #include "gdcmImageReader.h"
 #include "gdcmImageWriter.h"
@@ -117,6 +118,7 @@ void PrintHelp()
   std::cout << "  -U --use-dict   Use dict for VR." << std::endl;
   std::cout << "  -C --check-meta Check File Meta Information (advanced user only)." << std::endl;
   std::cout << "     --root-uid   Root UID." << std::endl;
+  std::cout << "     --remove-gl  Remove group length (deprecated in DICOM 2008)." << std::endl;
   std::cout << "Image only Options:" << std::endl;
   std::cout << "  -l --apply-lut      Apply LUT (non-standard, advanced user only)." << std::endl;
   std::cout << "  -w --raw            Decompress image." << std::endl;
@@ -126,7 +128,7 @@ void PrintHelp()
   std::cout << "  -R --rle            Compress image in rle (lossless only)." << std::endl;
   std::cout << "  -F --force          Force decompression/merging before recompression/splitting." << std::endl;
   std::cout << "     --compress-icon  Decide whether icon follows main TransferSyntax or remains uncompressed." << std::endl;
-  std::cout << "     --planar-configuration  Change planar configuration." << std::endl;
+  std::cout << "     --planar-configuration [01]  Change planar configuration." << std::endl;
   std::cout << "  -Y --lossy %d       Use the lossy (if possible), followed by comp. ratio" << std::endl;
   std::cout << "  -S --split %d       Write 2D image with multiple fragments (using max size)" << std::endl;
   std::cout << "General Options:" << std::endl;
@@ -164,8 +166,10 @@ int main (int argc, char *argv[])
   int rle = 0;
   int force = 0;
   int planarconf = 0;
+  int planarconfval = 0;
   int usedict = 0;
   int compressicon = 0;
+  int removegrouplength = 0;
 
   int verbose = 0;
   int warning = 0;
@@ -213,6 +217,7 @@ int main (int argc, char *argv[])
         {"implicit", 0, &implicit, 1}, // 
         {"use-dict", 0, &usedict, 1}, // 
         {"compress-icon", 0, &compressicon, 1}, // 
+        {"remove-gl", 0, &removegrouplength, 1}, // 
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -261,7 +266,7 @@ int main (int argc, char *argv[])
           else if( option_index == 28 ) /* planar conf*/
             {
             assert( strcmp(s, "planar-configuration") == 0 );
-            planarconf = atoi(optarg);
+            planarconfval = atoi(optarg);
             }
           //printf (" with arg %s, index = %d", optarg, option_index);
           }
@@ -369,13 +374,26 @@ int main (int argc, char *argv[])
   if (optind < argc)
     {
     //printf ("non-option ARGV-elements: ");
-    //while (optind < argc)
-    //  {
-    //  printf ("%s ", argv[optind++]);
-    //  }
+    std::vector<std::string> files;
+    while (optind < argc)
+      {
+      //printf ("%s\n", argv[optind++]);
+      files.push_back( argv[optind++] );
+      }
     //printf ("\n");
-    PrintHelp();
-    return 1;
+    if( files.size() == 2 
+      && filename.empty()
+      && outfilename.empty() 
+    )
+      {
+      filename = files[0];
+      outfilename = files[1];
+      }
+    else
+      {
+      PrintHelp();
+      return 1;
+      }
     }
 
   if( version )
@@ -431,6 +449,35 @@ int main (int argc, char *argv[])
     {
     std::cerr << "not supported for now" << std::endl;
     return 1;
+    }
+
+  if( removegrouplength )
+    {
+    gdcm::Reader reader;
+    reader.SetFileName( filename.c_str() );
+    if( !reader.Read() )
+      {
+      std::cerr << "could not read: " << filename << std::endl;
+      return 1;
+      }
+
+    gdcm::Anonymizer ano;
+    ano.SetFile( reader.GetFile() );
+    if( !ano.RemoveGroupLength() )
+      {
+      std::cerr << "Could not remove group length" << std::endl;
+      }
+
+    gdcm::Writer writer;
+    writer.SetFileName( outfilename.c_str() );
+    writer.SetFile( ano.GetFile() );
+    if( !writer.Write() )
+      {
+      std::cerr << "Failed to write: " << outfilename << std::endl;
+      return 1;
+      }
+
+    return 0;
     }
 
   // Handle here the general file (not required to be image)
@@ -553,7 +600,7 @@ int main (int argc, char *argv[])
       return 1;
       }
     }
-  else if( jpeg || j2k || jpegls || rle || raw )
+  else if( jpeg || j2k || jpegls || rle || raw /*|| planarconf*/ )
     {
     gdcm::ImageReader reader;
     reader.SetFileName( filename.c_str() );
@@ -613,7 +660,7 @@ int main (int argc, char *argv[])
     if( raw )
       {
       gdcm::ImageChangePlanarConfiguration icpc;
-      icpc.SetPlanarConfiguration( planarconf );
+      icpc.SetPlanarConfiguration( planarconfval );
       icpc.SetInput( image );
       bool b = icpc.Change();
       if( !b )
