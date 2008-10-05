@@ -162,6 +162,7 @@ int main (int argc, char *argv[])
   int force = 0;
   int planarconf = 0;
   int usedict = 0;
+  int compressicon = 0;
 
   int verbose = 0;
   int warning = 0;
@@ -208,6 +209,7 @@ int main (int argc, char *argv[])
         {"explicit", 0, &explicitts, 1}, // 
         {"implicit", 0, &implicit, 1}, // 
         {"use-dict", 0, &usedict, 1}, // 
+        {"compress-icon", 0, &compressicon, 1}, // 
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -518,15 +520,16 @@ int main (int argc, char *argv[])
       return 1;
       }
     const gdcm::Image &image = reader.GetImage();
-    const gdcm::IconImage &icon = image.GetIconImage();
-    if( !icon.IsEmpty() )
-      {
-      std::cerr << "Icons are not supported" << std::endl;
-      return 1;
-      }
+    //const gdcm::IconImage &icon = image.GetIconImage();
+    //if( !icon.IsEmpty() )
+    //  {
+    //  std::cerr << "Icons are not supported" << std::endl;
+    //  return 1;
+    //  }
 
     gdcm::ImageChangeTransferSyntax change;
     change.SetForce( force );
+    change.SetCompressIconImage( compressicon );
     if( jpeg )
       {
       change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLosslessProcess14_1 );

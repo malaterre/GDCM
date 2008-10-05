@@ -109,6 +109,10 @@ BogusItemStartItemEnd.dcm
 # This image has an unknown Media Storage UID, when looking in Modality 'CR' is found;
 # but at the same time, there is no such thing as IPP/IOP in a ComputedRadiographyImageStorage ...
   gdcm-CR-DCMTK-16-NonSamplePerPix.dcm
+
+  PixelDataWithVRUN.dcm
+  InvalidYCCForJ2K.dcm
+  DX_J2K_0Padding.dcm
 )
 IF(NOT GDCM_USE_PVRG)
   SET(BLACK_LIST_READER

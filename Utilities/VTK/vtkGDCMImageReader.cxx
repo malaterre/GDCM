@@ -1069,6 +1069,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
       }
     else if( image.GetPixelFormat().GetSamplesPerPixel() == 1 )
       {
+      abort();
       vtkWarningMacro( "Image was declared as YBR_FULL_422 but is just grayscale" );
       this->ImageFormat = VTK_LUMINANCE;
       }

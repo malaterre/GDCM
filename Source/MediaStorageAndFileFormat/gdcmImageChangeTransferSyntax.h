@@ -29,7 +29,7 @@ class DataElement;
 class GDCM_EXPORT ImageChangeTransferSyntax : public ImageToImageFilter
 {
 public:
-  ImageChangeTransferSyntax():TS(),Force(false) {}
+  ImageChangeTransferSyntax():TS(),Force(false),CompressIconImage(false) {}
   ~ImageChangeTransferSyntax() {}
 
   /// Set target Transfer Syntax
@@ -40,6 +40,10 @@ public:
   /// Change
   bool Change();
 
+  /// Decide whether or not to also compress the Icon Image using the same Transfer Syntax
+  /// Default is to simply decompress icon image
+  void SetCompressIconImage(bool b);
+
   /// When target Transfer Syntax is identical to input target syntax, no operation
   /// is actually done
   /// This is an issue when someone wants to recompress using GDCM internal implementation
@@ -47,15 +51,16 @@ public:
   void SetForce( bool f ) { Force = f; }
 
 protected:
-  bool TryJPEGCodec(const DataElement &pixelde);
-  bool TryJPEG2000Codec(const DataElement &pixelde);
-  bool TryJPEGLSCodec(const DataElement &pixelde);
-  bool TryRAWCodec(const DataElement &pixelde);
-  bool TryRLECodec(const DataElement &pixelde);
+  bool TryJPEGCodec(const DataElement &pixelde, Pixmap const &input, Pixmap &output);
+  bool TryJPEG2000Codec(const DataElement &pixelde, Pixmap const &input, Pixmap &output);
+  bool TryJPEGLSCodec(const DataElement &pixelde, Pixmap const &input, Pixmap &output);
+  bool TryRAWCodec(const DataElement &pixelde, Pixmap const &input, Pixmap &output);
+  bool TryRLECodec(const DataElement &pixelde, Pixmap const &input, Pixmap &output);
 
 private:
   TransferSyntax TS;
   bool Force;
+  bool CompressIconImage;
 };
 
 } // end namespace gdcm

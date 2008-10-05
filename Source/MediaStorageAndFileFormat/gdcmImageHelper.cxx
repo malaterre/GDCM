@@ -860,7 +860,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
 
     if( !sqi->GetNumberOfItems() )
       {
-      Item item( Tag(0xfffe,0xe000) );
+      Item item; //( Tag(0xfffe,0xe000) );
       item.SetVLToUndefined();
       sqi->AddItem( item );
       }
@@ -882,7 +882,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
 
     if( !sqi->GetNumberOfItems() )
       {
-      Item item( Tag(0xfffe,0xe000) );
+      Item item; //( Tag(0xfffe,0xe000) );
       item.SetVLToUndefined();
       sqi->AddItem( item );
       }
@@ -998,7 +998,7 @@ void SetDataElementInSQAsItemNumber(DataSet & ds, DataElement const & de, Tag co
 
     if( sqi->GetNumberOfItems() < itemidx )
       {
-      Item item( Tag(0xfffe,0xe000) );
+      Item item; //( Tag(0xfffe,0xe000) );
       item.SetVLToUndefined();
       sqi->AddItem( item );
       }
@@ -1020,7 +1020,7 @@ void SetDataElementInSQAsItemNumber(DataSet & ds, DataElement const & de, Tag co
 
     if( !sqi->GetNumberOfItems() )
       {
-      Item item( Tag(0xfffe,0xe000) );
+      Item item; //( Tag(0xfffe,0xe000) );
       item.SetVLToUndefined();
       sqi->AddItem( item );
       }
@@ -1150,7 +1150,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
 
     if( !sqi->GetNumberOfItems() )
       {
-      Item item( Tag(0xfffe,0xe000) );
+      Item item; //( Tag(0xfffe,0xe000) );
       item.SetVLToUndefined();
       sqi->AddItem( item );
       }
@@ -1172,7 +1172,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
 
     if( !sqi->GetNumberOfItems() )
       {
-      Item item( Tag(0xfffe,0xe000) );
+      Item item; //( Tag(0xfffe,0xe000) );
       item.SetVLToUndefined();
       sqi->AddItem( item );
       }
@@ -1252,7 +1252,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
 
     if( !sqi->GetNumberOfItems() )
       {
-      Item item( Tag(0xfffe,0xe000) );
+      Item item; //( Tag(0xfffe,0xe000) );
       item.SetVLToUndefined();
       sqi->AddItem( item );
       }
@@ -1274,7 +1274,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
 
     if( !sqi->GetNumberOfItems() )
       {
-      Item item( Tag(0xfffe,0xe000) );
+      Item item; //( Tag(0xfffe,0xe000) );
       item.SetVLToUndefined();
       sqi->AddItem( item );
       }
