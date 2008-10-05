@@ -115,17 +115,18 @@ void PrintHelp()
   std::cout << "  -X --explicit   Change Transfer Syntax to explicit." << std::endl;
   std::cout << "  -M --implicit   Change Transfer Syntax to implicit." << std::endl;
   std::cout << "  -U --use-dict   Use dict for VR." << std::endl;
-  std::cout << "  -C --check-meta Check File Meta Information." << std::endl;
+  std::cout << "  -C --check-meta Check File Meta Information (advanced user only)." << std::endl;
   std::cout << "     --root-uid   Root UID." << std::endl;
   std::cout << "Image only Options:" << std::endl;
-  std::cout << "  -l --apply-lut      Apply LUT." << std::endl;
-  std::cout << "  -W --raw            Decompress image." << std::endl;
+  std::cout << "  -l --apply-lut      Apply LUT (non-standard, advanced user only)." << std::endl;
+  std::cout << "  -w --raw            Decompress image." << std::endl;
   std::cout << "  -J --jpeg           Compress image in jpeg." << std::endl;
   std::cout << "  -K --j2k            Compress image in j2k." << std::endl;
   std::cout << "  -L --jpegls         Compress image in jpeg-ls." << std::endl;
   std::cout << "  -R --rle            Compress image in rle (lossless only)." << std::endl;
   std::cout << "  -F --force          Force decompression/merging before recompression/splitting." << std::endl;
   std::cout << "     --compress-icon  Decide whether icon follows main TransferSyntax or remains uncompressed." << std::endl;
+  std::cout << "     --planar-configuration  Change planar configuration." << std::endl;
   std::cout << "  -Y --lossy %d       Use the lossy (if possible), followed by comp. ratio" << std::endl;
   std::cout << "  -S --split %d       Write 2D image with multiple fragments (using max size)" << std::endl;
   std::cout << "General Options:" << std::endl;
@@ -159,6 +160,7 @@ int main (int argc, char *argv[])
   int j2k = 0;
   int lossy = 0;
   int split = 0;
+  int fragmentsize = 0;
   int rle = 0;
   int force = 0;
   int planarconf = 0;
@@ -224,7 +226,7 @@ int main (int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:VWDEhv",
+    c = getopt_long (argc, argv, "i:o:XMUClwJKRFYS:VWDEhv",
       long_options, &option_index);
     if (c == -1)
       {
@@ -236,7 +238,7 @@ int main (int argc, char *argv[])
     case 0:
         {
         const char *s = long_options[option_index].name;
-        printf ("option %s", s);
+        //printf ("option %s", s);
         if (optarg)
           {
           if( option_index == 0 ) /* input */
@@ -251,30 +253,30 @@ int main (int argc, char *argv[])
             assert( root.empty() );
             root = optarg;
             }
-          else if( option_index == 28 ) /* split */
+          else if( option_index == 27 ) /* split */
             {
             assert( strcmp(s, "split") == 0 );
-            split = atoi(optarg);
+            fragmentsize = atoi(optarg);
             }
-          else if( option_index == 29 ) /* planar conf*/
+          else if( option_index == 28 ) /* planar conf*/
             {
             assert( strcmp(s, "planar-configuration") == 0 );
             planarconf = atoi(optarg);
             }
-          printf (" with arg %s, index = %d", optarg, option_index);
+          //printf (" with arg %s, index = %d", optarg, option_index);
           }
-        printf ("\n");
+        //printf ("\n");
         }
       break;
 
     case 'i':
-      printf ("option i with value '%s'\n", optarg);
+      //printf ("option i with value '%s'\n", optarg);
       assert( filename.empty() );
       filename = optarg;
       break;
 
     case 'o':
-      printf ("option o with value '%s'\n", optarg);
+      //printf ("option o with value '%s'\n", optarg);
       assert( outfilename.empty() );
       outfilename = optarg;
       break;
@@ -291,6 +293,46 @@ int main (int argc, char *argv[])
       usedict = 1;
       break;
 
+    case 'C':
+      checkmeta = 1;
+      break;
+
+    // root-uid
+
+    case 'l':
+      lut = 1;
+      break;
+
+    case 'w':
+      raw = 1;
+      break;
+
+    case 'J':
+      jpeg = 1;
+      break;
+
+    case 'K':
+      j2k = 1;
+      break;
+
+    case 'R':
+      rle = 1;
+      break;
+
+    case 'F':
+      force = 1;
+      break;
+
+    case 'Y':
+      lossy = 1;
+      break;
+
+    case 'S':
+      split = 1;
+      fragmentsize = atoi(optarg);
+      break;
+
+    // General option
     case 'V':
       verbose = 1;
       break;
@@ -464,7 +506,7 @@ int main (int argc, char *argv[])
 
     gdcm::ImageFragmentSplitter splitter;
     splitter.SetInput( image );
-    splitter.SetFragmentSizeMax( split );
+    splitter.SetFragmentSizeMax( fragmentsize );
     splitter.SetForce( force );
     bool b = splitter.Split();
     if( !b )

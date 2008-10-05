@@ -1239,7 +1239,7 @@ opj_image_t* j2k_decode(opj_j2k_t *j2k, opj_cio_t *cio) {
 		int id = cio_read(cio, 2);
 		if (id >> 8 != 0xff) {
 			opj_image_destroy(image);
-			opj_event_msg(cinfo, EVT_ERROR, "%.8x: expected a marker instead of %x\n", cio_tell(cio) - 2, id);
+			opj_event_msg(cinfo, EVT_ERROR, "%x: expected a marker instead of %x\n", cio_tell(cio) - 2, id);
 			return 0;
 		}
 		e = j2k_dec_mstab_lookup(id);

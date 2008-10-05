@@ -26,6 +26,7 @@ bool ImageFragmentSplitter::Split()
   const unsigned int *dims = image.GetDimensions();
   if( dims[2] != 1 )
     {
+    gdcmDebugMacro( "Cannot split a 3D image" );
     return false;
     }
   const DataElement& pixeldata = image.GetDataElement();
@@ -33,6 +34,7 @@ bool ImageFragmentSplitter::Split()
   const SequenceOfFragments *sqf = pixeldata.GetSequenceOfFragments();
   if( !sqf )
     {
+    gdcmDebugMacro( "Cannot split a non-encapsulated syntax" );
     return false;
     }
 
@@ -51,6 +53,7 @@ bool ImageFragmentSplitter::Split()
   // prevent zero division
   if( FragmentSizeMax == 0 )
     {
+    gdcmDebugMacro( "Need to set a real value for fragment size" );
     return false; // seriously...
     }
   unsigned long nfrags = len / FragmentSizeMax;

@@ -178,16 +178,14 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
 
   // WARNING: OpenJPEG is very picky when there is a trailing 00 at the end of the JPC
   // so we need to make sure to remove it:
-  // See for example: BuggyJ2Kvvvua-fixed2-j2k.dcm
-  if( src[file_length-1] == 0 )
-    {
-    file_length--;
-    }
-  else
-    {
+  // See for example: DX_J2K_0Padding.dcm
+  //             and D_CLUNIE_CT1_J2KR.dcm
     //  Marker 0xffd9 EOI End of Image (JPEG 2000 EOC End of codestream)
     // gdcmData/D_CLUNIE_CT1_J2KR.dcm contains a trailing 0xFF which apparently is ok...
     //assert( src[file_length-1] == 0xd9 );
+  while( src[file_length-1] != 0xd9 )
+    {
+    file_length--;
     }
 
   /* configure the event callbacks (not required) */
