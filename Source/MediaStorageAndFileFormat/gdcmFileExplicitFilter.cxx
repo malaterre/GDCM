@@ -27,8 +27,23 @@
 namespace gdcm
 {
 
+void FileExplicitFilter::SetRecomputeItemLength(bool b)
+{
+  RecomputeItemLength = b;
+}
+
+void FileExplicitFilter::SetRecomputeSequenceLength(bool b)
+{
+  RecomputeSequenceLength = b;
+}
+
 bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
 {
+  if( RecomputeSequenceLength || RecomputeItemLength )
+    {
+    gdcmWarningMacro( "Not implemented sorry" );
+    return false;
+    }
   DataSet::Iterator it = ds.Begin();
   for( ; it != ds.End(); )
     {
@@ -36,6 +51,12 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
     std::string strowner;
     const char *owner = 0;
     const Tag& t = de.GetTag();
+    if( t.IsPrivate() && !ChangePrivateTags )
+      {
+      // nothing to do ! just skip
+      ++it;
+      continue;
+      }
     if( t.IsPrivate() && !t.IsPrivateCreator() )
       { 
       strowner = ds.GetPrivateCreator(t);
@@ -85,7 +106,7 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
       }
     else if( sqi )
       {
-      assert( cvr == VR::SQ );
+      assert( cvr == VR::SQ || cvr == VR::UN );
       de.SetVR( VR::SQ );
       sqi->SetLengthToUndefined();
       de.SetVLToUndefined();

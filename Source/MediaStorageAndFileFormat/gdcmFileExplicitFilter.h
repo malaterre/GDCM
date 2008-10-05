@@ -42,6 +42,10 @@ public:
   /// When VR=16bits in explicit but Implicit has a 32bits length, use VR=UN
   void SetUseVRUN(bool b) { UseVRUN = b; }
 
+  /// By default set Sequence & Item length to Undefined to avoid recomputing length:
+  void SetRecomputeItemLength(bool b);
+  void SetRecomputeSequenceLength(bool b);
+
   /// Change
   bool Change();
 
@@ -56,6 +60,8 @@ private:
   SmartPointer<File> F;
   bool ChangePrivateTags;
   bool UseVRUN;
+  bool RecomputeItemLength;
+  bool RecomputeSequenceLength;
 };
 
 
