@@ -14,11 +14,7 @@
 =========================================================================*/
 #include "gdcmJPEG12Codec.h"
 
-extern "C" {
-#include "jpeg/12/jinclude.h"
-#include "jpeg/12/jpeglib.h"
-#include "jpeg/12/jerror.h"
-}
+#include "gdcm_ljpeg12.h"
 
 #include <setjmp.h>
 

@@ -12,12 +12,22 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmJPEG16Codec.h"
+#ifndef __gdcm_ljpeg_h
+#define __gdcm_ljpeg_h
 
-#include "gdcm_ljpeg16.h"
+/* Use the ljpeg library configured for gdcm.  */
+#include "gdcmTypes.h"
 
-#include <setjmp.h>
+#ifdef GDCM_USE_SYSTEM_LJPEG
+# include <ljpeg-62/12/jinclude.h>
+# include <ljpeg-62/12/jpeglib.h>
+# include <ljpeg-62/12/jerror.h>
+#else
+extern "C" {
+#include "gdcmjpeg/12/jinclude.h"
+#include "gdcmjpeg/12/jpeglib.h"
+#include "gdcmjpeg/12/jerror.h"
+}
+#endif
 
-#define JPEGBITSCodec JPEG16Codec
-#include "gdcmJPEGBITSCodec.cxx"
-
+#endif

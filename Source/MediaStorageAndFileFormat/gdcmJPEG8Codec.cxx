@@ -14,11 +14,7 @@
 =========================================================================*/
 #include "gdcmJPEG8Codec.h"
 
-extern "C" {
-#include "jpeg/8/jinclude.h"
-#include "jpeg/8/jpeglib.h"
-#include "jpeg/8/jerror.h"
-}
+#include "gdcm_ljpeg8.h"
 
 #include <setjmp.h>
 

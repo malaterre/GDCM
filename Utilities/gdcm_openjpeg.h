@@ -12,7 +12,18 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+#ifndef __gdcm_expat_h
+#define __gdcm_expat_h
 
+/* Use the openjpeg library configured for gdcm.  */
+#include "gdcmTypes.h"
+#ifdef GDCM_USE_SYSTEM_OPENJPEG
+# include <openjpeg-1.0/openjpeg.h>
+#else
 extern "C" {
-#include "openjpeg/libopenjpeg/openjpeg.h"
+#include <gdcmopenjpeg/libopenjpeg/openjpeg.h>
 }
+#endif
+
+#endif
+

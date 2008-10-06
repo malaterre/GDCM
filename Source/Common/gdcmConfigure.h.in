@@ -42,6 +42,8 @@
 #cmakedefine GDCM_USE_SYSTEM_UUID
 #cmakedefine GDCM_USE_SYSTEM_MD5
 #cmakedefine GDCM_USE_SYSTEM_EXPAT
+#cmakedefine GDCM_USE_SYSTEM_LJPEG
+#cmakedefine GDCM_USE_SYSTEM_OPENJPEG
 
 #cmakedefine GDCM_USE_PVRG
 #cmakedefine GDCM_USE_JPEGLS
