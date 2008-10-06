@@ -19,9 +19,11 @@
 #include "gdcmTypes.h"
 
 #ifdef GDCM_USE_SYSTEM_LJPEG
+extern "C" {
 # include <ljpeg-62/16/jinclude.h>
 # include <ljpeg-62/16/jpeglib.h>
 # include <ljpeg-62/16/jerror.h>
+}
 #else
 extern "C" {
 #include "gdcmjpeg/16/jinclude.h"
