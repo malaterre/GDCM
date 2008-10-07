@@ -27,7 +27,7 @@ ENDIF(DONT_HAVE_GETOPT)
 
 # Headers file are located here:
 INCLUDE_DIRECTORIES(
-  ${OPENJPEG_SOURCE_DIR}/libopenjpeg
+  ${${OPENJPEG_NAMESPACE}_SOURCE_DIR}/libopenjpeg
   )
 
 # Do the proper thing when building static...if only there was configured
