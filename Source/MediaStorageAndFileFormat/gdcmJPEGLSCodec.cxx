@@ -31,6 +31,12 @@ JPEGLSCodec::~JPEGLSCodec()
 {
 }
 
+bool JPEGLSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
+{
+  (void)is; (void)ts;
+  return false;
+}
+
 bool JPEGLSCodec::CanDecode(TransferSyntax const &ts) const
 {
 #ifndef GDCM_USE_JPEGLS

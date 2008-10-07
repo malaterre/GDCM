@@ -40,6 +40,8 @@ public:
   bool Decode(DataElement const &is, DataElement &os);
   bool Code(DataElement const &in, DataElement &out);
 
+  bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);
+
 private:
   unsigned long BufferLength;
 };
