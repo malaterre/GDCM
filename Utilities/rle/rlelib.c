@@ -17,25 +17,25 @@
 void rle_stdio_src(rle_decompress_struct *cinfo, FILE *infile, int *dims)
 {
   int i;
-  //is.read((char*)(&Header), sizeof(uint32_t)*16);
+  /*is.read((char*)(&Header), sizeof(uint32_t)*16);*/
   size_t len = fread(cinfo->header, sizeof(uint32_t), 16, infile);
   cinfo->row = dims[0];
   cinfo->col = dims[1];
   if( cinfo->header->num_segments > 16 || cinfo->header->num_segments < 1 )
     {
-    // Need to throw something here
+    /* Need to throw something here*/
       abort();
     }
   if( cinfo->header->offset[0] != 64 )
     {
-    // Need to throw something here
+    /* Need to throw something here*/
       abort();
     }
   for(i=1; i < cinfo->header->num_segments; ++i)
     {
     if( cinfo->header->offset[i-1] > cinfo->header->offset[i] )
       {
-      // Need to throw something here
+      /* Need to throw something here*/
       abort();
       }
     }
@@ -43,8 +43,8 @@ void rle_stdio_src(rle_decompress_struct *cinfo, FILE *infile, int *dims)
     {
     if( cinfo->header->offset[i] != 0 )
       {
-      // Need to throw something here
-      //abort();
+      /* Need to throw something here*/
+      /*abort();*/
       fprintf(stderr, "Impossible : %d for offset # %d\n", cinfo->header->offset[i], i );
       }
     }
@@ -130,17 +130,17 @@ int rle_read_scanlines(rle_decompress_struct *cinfo, char *buffer, int f)
   assert( noutbytes == cinfo->row );
   cinfo->current_pos += cinfo->row;
   long pos = ftell(cinfo->stream);
-  //printf("pos: %d\n",pos);
+  /*printf("pos: %d\n",pos);*/
   cinfo->output_scanline++;
 
   assert( cinfo->current_pos <= length );
   if( cinfo->current_pos >= length ) 
     {
-   // if( cinfo->current_segment > cinfo->header->num_segments )
-   //   {
-   //   return 0;
-   //   }
-   // else
+   /* if( cinfo->current_segment > cinfo->header->num_segments )
+      {
+      return 0;
+      }
+    else*/
       {
       cinfo->current_segment++;
       cinfo->output_scanline = 0;
@@ -157,8 +157,8 @@ int rle_finish_decompress(rle_decompress_struct *cinfo)
 
 void rle_destroy_decompress(rle_decompress_struct *cinfo)
 {
-  cinfo->output_scanline = 0; // why not
-  cinfo->output_height = 0; // why not
+  cinfo->output_scanline = 0; /* why not*/
+  cinfo->output_height = 0; /* why not*/
   free(cinfo->header);
 }
 

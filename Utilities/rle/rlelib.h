@@ -48,7 +48,7 @@ typedef struct
 {
   int output_scanline;
   int output_height;
-  //int bits_allocated; // 8 or 16, when 16 need to do padded composite
+  /*int bits_allocated; // 8 or 16, when 16 need to do padded composite*/
   int row;
   int col;
   FILE *stream;

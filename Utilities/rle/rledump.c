@@ -34,17 +34,17 @@ int main(int argc, char *argv[])
 
   rle_create_decompress(&cinfo);
 
-  // Dimensions: (1760,1760,1)
+  /* Dimensions: (1760,1760,1)*/
   int dims[2] = { 1760,1760 };
   rle_stdio_src(&cinfo, infile, dims);
 
-  //rle_header *h = cinfo.header;
+  /*rle_header *h = cinfo.header;*/
   printf("num segment: %d\n", cinfo.header->num_segments );
   printf("offsets table:\n");
   for(i = 0; i < 16; ++i)
     printf("offset: %d\n", cinfo.header->offset[i] );
 
-  // Simply dump the file info:
+  /* Simply dump the file info:*/
 
   rle_destroy_decompress(&cinfo);
 
