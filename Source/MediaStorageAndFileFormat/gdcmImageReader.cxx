@@ -712,7 +712,7 @@ void DoOverlays(const DataSet& ds, Image& pixeldata)
         // since the overlays are stored in the unused bit of the PixelData
         if( !ov.IsEmpty() )
           {
-          assert( unpack.str().size() / 8 == ((ov.GetRows() * ov.GetColumns()) + 7 ) / 8 );
+          //assert( unpack.str().size() / 8 == ((ov.GetRows() * ov.GetColumns()) + 7 ) / 8 );
           assert( ov.IsInPixelData( ) == false );
           }
         else

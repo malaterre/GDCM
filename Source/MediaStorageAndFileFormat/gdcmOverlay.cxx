@@ -371,13 +371,25 @@ bool Overlay::IsZero() const
 bool Overlay::IsInPixelData() const { return Internal->InPixelData; }
 void Overlay::IsInPixelData(bool b) { Internal->InPixelData = b; }
 
+/*
+ * row,col = 400,400   => 20000
+ * row,col = 1665,1453 => 302406
+ * row,col = 20,198    => 495 words + 1 dicom \0 padding
+ */
+inline unsigned int compute_bit_and_dicom_padding(unsigned short rows, unsigned short columns)
+{
+  unsigned int word_padding = ( rows * columns + 7 ) / 8; // need to send full word (8bits at a time)
+  return word_padding + word_padding%2; // Cannot have odd length
+}
+
 void Overlay::SetOverlay(const char *array, unsigned int length)
 {
   if( !array || length == 0 ) return;
   //char * p = (char*)&Internal->Data[0];
   Internal->Data.resize( length ); // ??
   std::copy(array, array+length, Internal->Data.begin());
-  assert(length == (unsigned int)((Internal->Rows * Internal->Columns) + 7 ) / 8 );
+  /* warning need to take into account padding to the next word (8bits) */
+  assert( length == compute_bit_and_dicom_padding(Internal->Rows, Internal->Columns) );
   assert( Internal->Data.size() == length );
 }
 
