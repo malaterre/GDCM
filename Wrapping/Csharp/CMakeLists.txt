@@ -2,14 +2,17 @@
 # SWIG is really a pain in the neck to use, a better alternative is Py++ which is using
 # gccxml for the C++ parser and allow a full ANSI C++ support
 FIND_PACKAGE(SWIG REQUIRED)
+MARK_AS_ADVANCED(SWIG_DIR SWIG_EXECUTABLE SWIG_VERSION)
 INCLUDE(${SWIG_USE_FILE})
 
 INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
+  "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
+  #${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 # $ export JAVA_HOME=/usr/lib/j2sdk1.6-sun/ 
