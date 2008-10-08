@@ -22,11 +22,11 @@
 namespace gdcm
 {
   void DataElement::SetVLToUndefined() { 
-    Value &v = GetValue();
-    SequenceOfItems *sq = dynamic_cast<SequenceOfItems*>(&v);
-    if( sq )
+    assert( VRField == VR::SQ || VRField == VR::INVALID );
+    SequenceOfItems *sqi = GetSequenceOfItems();
+    if( sqi )
       {
-      sq->SetLengthToUndefined();
+      sqi->SetLengthToUndefined();
       }
     ValueLengthField.SetToUndefined();
   }

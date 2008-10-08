@@ -115,8 +115,8 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
       {
       assert( cvr == VR::SQ || cvr == VR::UN );
       de.SetVR( VR::SQ );
-      sqi->SetLengthToUndefined();
       de.SetVLToUndefined();
+      assert( sqi->GetLength().IsUndefined() );
       // recursive
       SequenceOfItems::ItemVector::iterator it = sqi->Items.begin();
       for(; it != sqi->Items.end(); ++it)
@@ -132,6 +132,12 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
     else if( de.GetSequenceOfFragments() )
       {
       assert( cvr & VR::OB_OW );
+      }
+    else
+      {
+      // Ok length is 0, it can be a 0 length explicit SQ (implicit) or a ByteValue...
+      // we cannot make any error here, simply change the VR
+      de.SetVR( cvr );
       }
     ++it;
     ds.Replace( de );
