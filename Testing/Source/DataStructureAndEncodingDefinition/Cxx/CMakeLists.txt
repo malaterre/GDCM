@@ -8,6 +8,7 @@ SET(DSED_TEST_SRCS
   #TestByteBuffer
   #TestByteValue
   TestPreamble
+  TestLCNumeric
   TestReader
   TestReader2
   TestWriter
