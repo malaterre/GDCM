@@ -110,7 +110,6 @@
 #include "gdcmRescaler.h"
 #include "gdcmSegmentedPaletteColorLookupTable.h"
 #include "gdcmUnpacker12Bits.h"
-#include "gdcmPythonFilter.h"
 #include "gdcmDirectionCosines.h"
 #include "gdcmTagPath.h"
 #include "gdcmImageToImageFilter.h"
@@ -273,7 +272,6 @@ using namespace gdcm;
   }
 };
 #endif
-%include "gdcmPythonFilter.h"
 %include "gdcmDirectionCosines.h"
 %include "gdcmTagPath.h"
 %include "gdcmImageToImageFilter.h"
