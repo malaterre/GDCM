@@ -377,7 +377,7 @@ void Overlay::SetOverlay(const char *array, unsigned int length)
   //char * p = (char*)&Internal->Data[0];
   Internal->Data.resize( length ); // ??
   std::copy(array, array+length, Internal->Data.begin());
-  assert( 8 * length == (unsigned int)Internal->Rows * Internal->Columns );
+  assert(length == (unsigned int)((Internal->Rows * Internal->Columns) + 7 ) / 8 );
   assert( Internal->Data.size() == length );
 }
 
