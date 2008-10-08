@@ -7,9 +7,7 @@ SET(Common_TEST_SRCS
   TestByteSwap
   TestString
   TestString2
-  TestDirectory
   TestTerminal
-  TestFilename
   TestFilenameGenerator
   TestObject
   TestSmartPointer
@@ -18,6 +16,14 @@ SET(Common_TEST_SRCS
   TestTrace
   TestUnpacker12Bits
   )
+
+IF(GDCM_DATA_ROOT)
+SET(Common_TEST_SRCS
+  ${Common_TEST_SRCS}
+  TestDirectory
+  TestFilename
+  )
+ENDIF(GDCM_DATA_ROOT)
 
 # Add the include paths
 INCLUDE_DIRECTORIES(

@@ -27,11 +27,8 @@ SET(MSFF_TEST_SRCS
   TestUIDGenerator
   #TestUIDGenerator3
   TestPrinter
-  TestScanner
   TestSorter
-  TestIPPSorter
   TestImageReader
-  TestCopyDataSet
   TestDirectionCosines
   TestImageWriter
   #TestImageWriter2
@@ -56,6 +53,15 @@ SET(MSFF_TEST_SRCS
   TestEncapsulatedDocument
   TestSpectroscopy
   )
+
+IF(GDCM_DATA_ROOT)
+  SET(MSFF_TEST_SRCS
+      ${MSFF_TEST_SRCS}
+  TestScanner
+  TestIPPSorter
+  TestCopyDataSet
+      )
+ENDIF(GDCM_DATA_ROOT)
 
 IF(GDCM_USE_JPEGLS)
   SET(MSFF_TEST_SRCS ${MSFF_TEST_SRCS}
