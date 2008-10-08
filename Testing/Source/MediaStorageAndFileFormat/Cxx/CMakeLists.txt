@@ -158,6 +158,8 @@ FOREACH(filename ${gdcm_data_filenames_glob})
           #MESSAGE("IS DICOMDIR ${filename_name}")
           SET_TESTS_PROPERTIES("DCMDJPEG-${filename_name}" PROPERTIES WILL_FAIL TRUE)
         ENDIF(is_dicomdir)
+        # No pixel data
+        SET_TESTS_PROPERTIES("DCMDJPEG-ELSCINT1_PMSCT_RLE1.dcm" PROPERTIES WILL_FAIL TRUE)
       ENDIF(DCMTK_DCMDJPEG_EXECUTABLE)
     ENDIF(GDCM_TEST_DCMTK)
   ENDIF(NOT bad_dicom)
@@ -181,9 +183,10 @@ FOREACH(filename ${gdcm_data_filenames_glob})
           SET_TESTS_PROPERTIES("DCMDRLE-${filename_name}" PROPERTIES WILL_FAIL TRUE)
         ENDIF(is_dicomdir)
         # 
-        IF(filename_name STREQUAL "ALOKA_SSD-8-MONO2-RLE-SQ.dcm")
-          SET_TESTS_PROPERTIES("DCMDRLE-${filename_name}" PROPERTIES WILL_FAIL TRUE)
-        ENDIF(filename_name STREQUAL "ALOKA_SSD-8-MONO2-RLE-SQ.dcm")
+        # It is missing the very last pixel, so technically is illegal
+        SET_TESTS_PROPERTIES("DCMDRLE-ALOKA_SSD-8-MONO2-RLE-SQ.dcm" PROPERTIES WILL_FAIL TRUE)
+        # No pixel data
+        SET_TESTS_PROPERTIES("DCMDRLE-ELSCINT1_PMSCT_RLE1.dcm" PROPERTIES WILL_FAIL TRUE)
       ENDIF(DCMTK_DCMDRLE_EXECUTABLE)
     ENDIF(GDCM_TEST_DCMTK)
   ENDIF(NOT bad_dicom)
