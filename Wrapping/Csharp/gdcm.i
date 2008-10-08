@@ -181,7 +181,7 @@ using namespace gdcm;
 %include "gdcmLookupTable.h"
 %include "gdcmOverlay.h"
 //%include "gdcmVL.h"
-%template (DataElementSet) std::set<gdcm::DataElement>;
+//%template (DataElementSet) std::set<gdcm::DataElement>;
 %include "gdcmPreamble.h"
 %include "gdcmTransferSyntax.h"
 %include "gdcmFileMetaInformation.h"
@@ -214,7 +214,7 @@ using namespace gdcm;
 //%template (MyM) std::map<gdcm::Tag,gdcm::ConstCharWrapper>;
 %include "gdcmStringFilter.h"
 %include "gdcmUIDGenerator.h"
-%template (ValuesType)      std::set<std::string>;
+//%template (ValuesType)      std::set<std::string>;
 %include "gdcmScanner.h"
 #define GDCM_STATIC_ASSERT(x)
 %include "gdcmAttribute.h"
