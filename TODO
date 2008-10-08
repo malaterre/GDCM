@@ -247,3 +247,7 @@ ADD_EXECUTABLE(bla bla.cxx)
 TARGET_LIBK_LIBRARIES(bla vtkgdcm)
 -----------------------------------------------------------------------
 Check perf of vtkTexturedActor2D vs vtkTexture
+-----------------------------------------------------------------------
+ std::locale::global( std::locale( "" ) ) ;  &
+ os.imbue(std::locale::classic()); 
+to make sure not to ever write double with comma
