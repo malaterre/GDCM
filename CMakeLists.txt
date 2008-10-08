@@ -355,7 +355,8 @@ IF(GDCM_BUILD_WRAPPING)
 ENDIF(GDCM_BUILD_WRAPPING)
 OPTION(GDCM_WRAP_PHP "php wrapping (experimental !)" OFF)
 OPTION(GDCM_WRAP_JAVA "build java wrapping (experimental !)" OFF)
-MARK_AS_ADVANCED(GDCM_WRAP_PHP GDCM_WRAP_JAVA)
+OPTION(GDCM_WRAP_CSHARP "build csharp wrapping (very experimental !)" OFF)
+MARK_AS_ADVANCED(GDCM_WRAP_PHP GDCM_WRAP_JAVA GDCM_WRAP_CSHARP)
 SUBDIRS(Wrapping)
 
 #-----------------------------------------------------------------------------
