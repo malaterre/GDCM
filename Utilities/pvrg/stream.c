@@ -156,7 +156,7 @@ EFUNC*/
 
 void initstream()
 {
-  BEGIN("initstream");
+  BEGIN("initstream")
   int i;
 
   Stack_Stream_Current= -1;
@@ -177,7 +177,7 @@ EFUNC*/
 
 void pushstream()
 {
-  BEGIN("pushstream");
+  BEGIN("pushstream")
 
   if (Stack_Stream_Current < 0) return;
   Stack_Stream_CleartoResync[Stack_Stream_Current]=CleartoResync;
@@ -205,7 +205,7 @@ EFUNC*/
 void popstream(index)
      int index;
 {
-  BEGIN("popstream");
+  BEGIN("popstream")
 
   if ((index < 0)||(!Stack_Stream_Active[index]))
     {
@@ -240,7 +240,7 @@ brtell() is used to find the location in the read stream.
 EFUNC*/
 
 int brtell()
-  {BEGIN("brtell");return(ftell(srin));}
+  {BEGIN("brtell") return(ftell(srin));}
 
 /*BFUNC
 
@@ -251,7 +251,7 @@ EFUNC*/
 int brseek(offset,ptr)
      int offset;
      int ptr;
-  {BEGIN("brseek");return(fseek(srin,offset,ptr));}
+  {BEGIN("brseek") return(fseek(srin,offset,ptr));}
 
 /*BFUNC
 
@@ -261,7 +261,7 @@ EFUNC*/
 
 void bpushc(value)
      int value;
-  {BEGIN("bpushc");ungetc(value,srin);}
+  {BEGIN("bpushc") ungetc(value,srin);}
 
 /*BFUNC
 
@@ -271,7 +271,7 @@ bypasses bit buffering.
 EFUNC*/
 
 int bgetc()
-  {BEGIN("bgetc");return(getc(srin));}
+  {BEGIN("bgetc") return(getc(srin));}
 
 /*BFUNC
 
@@ -280,7 +280,7 @@ bgetw() gets a msb word from the stream.
 EFUNC*/
 
 int bgetw()
-  {BEGIN("bgetw"); int fu; fu=getc(srin); return ((fu << 8)| getc(srin));}
+  {BEGIN("bgetw") int fu; fu=getc(srin); return ((fu << 8)| getc(srin));}
 
 /*BFUNC
 
@@ -291,7 +291,7 @@ EFUNC*/
 
 void bputc(c)
      int c;
-  {BEGIN("bputc");putc(c,swout);}
+  {BEGIN("bputc") putc(c,swout);}
 
 /* PROTECTED MARKER GETS AND FETCHES */
 
@@ -304,7 +304,7 @@ EFUNC*/
 
 static int pgetc()
 {
-  BEGIN("pgetc");
+  BEGIN("pgetc")
   int temp;
 
   if (CleartoResync)           /* If cleartoresync do not read from stream */
@@ -349,7 +349,7 @@ void mropen(filename,index)
      char *filename;
      int index;
 {
-  BEGIN("mropen");
+  BEGIN("mropen")
 
   if (Stack_Stream_Active[index])
     {
@@ -386,7 +386,7 @@ EFUNC*/
 
 void mrclose()
 {
-  BEGIN("mrclose");
+  BEGIN("mrclose")
   fclose(srin);
   srin=NULL;
   if (swout==NULL)
@@ -408,7 +408,7 @@ void mwopen(filename,index)
      char *filename;
      int index;
 {
-  BEGIN("mwopen");
+  BEGIN("mwopen")
 
   if (Stack_Stream_Active[index])
     {
@@ -439,7 +439,7 @@ EFUNC*/
 
 void swbytealign()
 {
-  BEGIN("swbytealign");
+  BEGIN("swbytealign")
 
   if (write_position !=7)
     {
@@ -458,7 +458,7 @@ EFUNC*/
 
 void mwclose()
 {
-  BEGIN("mwclose");
+  BEGIN("mwclose")
 
   swbytealign();
   fclose(swout);
@@ -478,7 +478,7 @@ EFUNC*/
 
 long mwtell()
 {
-  BEGIN("mwtell");
+  BEGIN("mwtell")
 
   return((ftell(swout)<<3) + (7 - write_position));
 }
@@ -491,7 +491,7 @@ EFUNC*/
 
 long mrtell()
 {
-  BEGIN("mrtell");
+  BEGIN("mrtell")
 
   return((ftell(srin)<<3) - (read_position+1));
 }
@@ -505,7 +505,7 @@ EFUNC*/
 void mwseek(distance)
      long distance;
 {
-  BEGIN("mwseek");
+  BEGIN("mwseek")
   int length;
 
   if (write_position!=7)             /* Must flush out current byte */
@@ -518,7 +518,7 @@ void mwseek(distance)
   if ((length<<3) <= distance)       /* Make sure we read clean stuff */
     {
       current_write_byte = 0;
-      write_position = 7 - distance & 0x7;
+      write_position = 7 - (distance & 0x7);
     }
   else
     {
@@ -538,7 +538,7 @@ EFUNC*/
 void mrseek(distance)
      long distance;
 {
-  BEGIN("mrseek");
+  BEGIN("mrseek")
 
   fseek(srin,(distance>>3),0L);       /* Go to location */
   current_read_byte = bgetc();        /* read byte in */
@@ -554,7 +554,7 @@ EFUNC*/
 
 int megetb()
 {
-  BEGIN("megetb");
+  BEGIN("megetb")
 
   if (read_position < 0)
     {
@@ -578,7 +578,7 @@ void meputv(n,b)
      int n;
      int b;
 {
-  BEGIN("meputv");
+  BEGIN("meputv")
   int p;
 
   n--;
@@ -629,7 +629,7 @@ EFUNC*/
 int megetv(n)
      int n;
 {
-  BEGIN("megetv");
+  BEGIN("megetv")
   int p,rv;
 
   n--;
@@ -669,7 +669,7 @@ EFUNC*/
 
 int DoMarker()
 {
-  BEGIN("DoMarker");
+  BEGIN("DoMarker")
   int i,hin,lon,marker,length;
 
   current_read_byte = 0;
@@ -807,13 +807,13 @@ EFUNC*/
 
 int ScreenMarker()
 {
-  BEGIN("ScreenMarker");
+  BEGIN("ScreenMarker")
 
   if (read_position!=7)                  /* Already read byte */
     {
       current_read_byte = 0;
       read_position= -1;                 /* Consume byte to be flush */
-      if ((marker_read_byte=bgetc())==EOF)
+      if ((marker_read_byte=bgetc())==(unsigned int)EOF)
 	{
 	  EndofFile=2;
 	  return(EOF);
@@ -838,7 +838,7 @@ int ScreenMarker()
 	  ErrorValue = ERROR_MARKER;
 	  return(-1);
 	}
-      if (marker_read_byte == EOF)        /* Found end of file */
+      if (marker_read_byte == (unsigned int)EOF)        /* Found end of file */
 	{
 	  EndofFile=2;
 	  return(EOF);
@@ -863,7 +863,7 @@ EFUNC*/
 
 void Resync()
 {
-  BEGIN("Resync");
+  BEGIN("Resync")
 
   if (!ResyncEnable)
     {
@@ -879,7 +879,7 @@ void Resync()
     {
       while((marker_read_byte = bgetc())!=MARKER_MARKER)
 	{
-	  if (marker_read_byte==EOF)
+	  if (marker_read_byte==(unsigned int)EOF)
 	    {
 	      WHEREAMI();
 	      printf("Attempt to resync at end of file.\n");
@@ -918,7 +918,7 @@ EFUNC*/
 
 void WriteResync()
 {
-  BEGIN("WriteResync");
+  BEGIN("WriteResync")
 
   swbytealign();                   /* This procedure writes a byte-aligned */
   bputc(MARKER_MARKER);            /* resync marker. */
@@ -935,7 +935,7 @@ EFUNC*/
 
 int ReadResync()
 {
-  BEGIN("ReadResync");
+  BEGIN("ReadResync")
   int ValueRead;
 
   if (Robust) InResync=1;
@@ -981,7 +981,7 @@ EFUNC*/
 
 int ScreenAllMarker()
 {
-  BEGIN("ScreenAllMarker");
+  BEGIN("ScreenAllMarker")
 
   if (ScreenMarker()<0)
     {
@@ -1002,7 +1002,7 @@ EFUNC*/
 
 int DoAllMarker()
 {
-  BEGIN("DoAllMarker");
+  BEGIN("DoAllMarker")
 
   if (DoMarker()<0)
     {

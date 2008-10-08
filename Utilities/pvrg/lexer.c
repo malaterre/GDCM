@@ -2223,14 +2223,15 @@ EFUNC*/
 static int hashpjw(s)
      char *s;
 {
-  BEGIN("hashpjw");
+  BEGIN("hashpjw")
   char *p;
-  unsigned int h=0,g;
+  unsigned int g, h;
+  h=0;
 
   for(p=s;*p!=EOS;p++)       /* Taken from Aho Sethi Ullman Compilers book. */
     {
       h = (h << 4) + *p;
-      if (g = h&0xf0000000)
+      if ((g = h&0xf0000000))
 	{
 	  h = h ^(g >> 24);
 	  h = h ^ g;
@@ -2252,7 +2253,7 @@ static LINK *MakeLink(tokentype,str,len)
      char *str;
      int len;
 {
-  BEGIN("MakeLink");
+  BEGIN("MakeLink")
   LINK *temp;
   
   if (!(temp = MakeStructure(LINK)))            /* Make link */
@@ -2289,7 +2290,7 @@ static struct id *enter(tokentype,str,len)
      char *str;
      int len;
 {
-  BEGIN("enter");
+  BEGIN("enter")
   int hashnum;
   LINK *temp,*current;
   char *ptr;
@@ -2333,7 +2334,7 @@ EFUNC*/
 
 static int getint()
 {
-  BEGIN("getint");
+  BEGIN("getint")
   int type;
   if ((type=yylex())!=R_INTEGER)
     {
@@ -2354,7 +2355,7 @@ EFUNC*/
 
 static char *getstr()
 {
-  BEGIN("getstr");
+  BEGIN("getstr")
   char *tmp,*ptr,*bptr;
   int i,accum,flag;
   if (yylex() != R_STRING)                      /* Check if string */
@@ -2476,13 +2477,13 @@ EFUNC*/
 
 void parser()
 {
-  BEGIN("parser");
+  BEGIN("parser")
   int i,dest,value,token,ntoken,arrayflag;
   int accum;
   int Start,End;
   int *ptr,*ptr2;
 
-  while(token=yylex())        /* The code handling is simple enough. */
+  while((token=yylex()))        /* The code handling is simple enough. */
     {                         /* just read the code and documentation */
       ErrorValue=0;           /* book... */
       arrayflag=0;

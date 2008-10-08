@@ -101,10 +101,18 @@ typedef void vFunc();
 
 /* BEGIN is used to start most routines. It sets up the Routine Name */
 /* which is used in the WHEREAMI() macro */
-#define BEGIN(name) static char RoutineName[]= name
+#ifdef CODEC_DEBUG
+#define BEGIN(name) static char RoutineName[]= name;
+#else
+#define BEGIN(name)
+#endif /*CODEC_DEBUG*/
 /* WHEREAMI prints out current location in code. */
+#ifdef CODEC_DEBUG
 #define WHEREAMI() printf("F>%s:R>%s:L>%d: ",\
 			  __FILE__,RoutineName,__LINE__)
+#else
+#define WHEREAMI()
+#endif /* CODEC_DEBUG */
 
 /* InBounds is used to test whether a value is in or out of bounds. */
 #define InBounds(var,lo,hi,str)\

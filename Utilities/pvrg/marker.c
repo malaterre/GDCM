@@ -78,7 +78,7 @@ EFUNC*/
 
 void WriteSoi()
 {
-  BEGIN("WriteSoi");
+  BEGIN("WriteSoi")
 
   swbytealign();
   bputc(MARKER_MARKER);
@@ -93,7 +93,7 @@ EFUNC*/
 
 void WriteEoi()
 {
-  BEGIN("WriteEoi");
+  BEGIN("WriteEoi")
 
   swbytealign();
   bputc(MARKER_MARKER);
@@ -109,7 +109,7 @@ EFUNC*/
 
 void WriteJfif()
 {
-  BEGIN("WriteJfif");
+  BEGIN("WriteJfif")
   int Start,End;
 
   swbytealign();
@@ -143,7 +143,7 @@ EFUNC*/
 
 void WriteSof()
 {
-  BEGIN("WriteSof");
+  BEGIN("WriteSof")
   int i,j,Start,End;
 
   swbytealign();
@@ -182,7 +182,7 @@ EFUNC*/
 
 void WriteDri()
 {
-  BEGIN("WriteDri");
+  BEGIN("WriteDri")
 
   swbytealign();
   bputc(MARKER_MARKER);
@@ -201,7 +201,7 @@ EFUNC*/
 
 void WriteDnl()
 {
-  BEGIN("WriteDnl");
+  BEGIN("WriteDnl")
 
   swbytealign();
   bputc(MARKER_MARKER);
@@ -219,7 +219,7 @@ EFUNC*/
 
 void WriteDqt()
 {
-  BEGIN("WriteDqt");
+  BEGIN("WriteDqt")
   int i,j,bignum_p,Start,End,*qmatrix;
 
   if (!(CScan->NumberQTablesSend))
@@ -272,7 +272,7 @@ EFUNC*/
 
 void WriteSos()
 {
-  BEGIN("WriteSos");
+  BEGIN("WriteSos")
   int i,Start,End;
 
   swbytealign();
@@ -308,7 +308,7 @@ EFUNC*/
 
 void WriteDht()
 {
-  BEGIN("WriteDht");
+  BEGIN("WriteDht")
   int i,Start,End;
 
   if (!(CScan->NumberDCTablesSend) && !(CScan->NumberACTablesSend))
@@ -358,7 +358,7 @@ void WriteDht()
 void ReadSof(Type)
      int Type;
 {
-  BEGIN("ReadSof");
+  BEGIN("ReadSof")
   int i,j,Length,Start,End,rb;
   
   Start = srtell();
@@ -405,7 +405,7 @@ void ReadSof(Type)
 
 void ReadDqt()
 {
-  BEGIN("ReadDqt");
+  BEGIN("ReadDqt")
   int i,Length,Qget,Index,Precision,Start,End;
   
   Start = srtell();
@@ -494,7 +494,7 @@ void ReadDqt()
 
 void ReadDht()
 {
-  BEGIN("ReadDht");
+  BEGIN("ReadDht")
   int Index,Where,Length,Start,End;
   
   Start = srtell();
@@ -539,7 +539,7 @@ void ReadDht()
 
 void ReadDri()
 {
-  BEGIN("ReadDri");
+  BEGIN("ReadDri")
   int Length;
   
   if ((Length=bgetw())!=4)            /* Constant length of 4 */
@@ -559,7 +559,7 @@ void ReadDri()
 
 void ReadDnl()
 {
-  BEGIN("ReadDnl");
+  BEGIN("ReadDnl")
   int Length;
   
   if ((Length=bgetw())!=4)             /* Constant length of 4 */
@@ -593,7 +593,7 @@ EFUNC*/
 
 int CheckMarker()
 {
-  BEGIN("CheckMarker");
+  BEGIN("CheckMarker")
   int Length;
   int v1;
 
@@ -618,7 +618,7 @@ EFUNC*/
 
 void ReadSos()
 {
-  BEGIN("ReadSos");
+  BEGIN("ReadSos")
   int i,Length,Start,End,rb;
   
   Start = srtell();
@@ -726,7 +726,7 @@ EFUNC*/
 
 void MakeConsistentFrameSize()
 {
-  BEGIN("MakeConsistentFrameSize");
+  BEGIN("MakeConsistentFrameSize")
   int i,Maxh,Maxv;
   int TestWide, TestHigh;
 

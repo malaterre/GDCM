@@ -31,6 +31,8 @@ the Huffman stream.
 #include "globals.h"
 #include "csize.h"
 
+#include <stdlib.h> /* abs */
+
 /* Definitions for renaming functions. */
 
 #define fputv meputv
@@ -112,7 +114,7 @@ EFUNC*/
 void FrequencyAC(matrix)
      int *matrix;
 {
-  BEGIN("FrequencyAC");
+  BEGIN("FrequencyAC")
   int i,k,r,ssss,cofac;
 
   for(k=r=0;++k < BLOCKSIZE;)  /* Like EncodeAC below except don't write out */
@@ -169,7 +171,7 @@ EFUNC*/
 void EncodeAC(matrix)
      int *matrix;
 {
-  BEGIN("EncodeAC");
+  BEGIN("EncodeAC")
   int i,k,r,ssss,cofac;
 
   for(k=r=0;++k<BLOCKSIZE;)
@@ -236,7 +238,7 @@ EFUNC*/
 void DecodeAC(matrix)
      int *matrix;
 {
-  BEGIN("DecodeAC");
+  BEGIN("DecodeAC")
   int k,r,s,n;
   register int *mptr;
 
@@ -284,7 +286,7 @@ EFUNC*/
 
 int DecodeDC()
 {
-  BEGIN("DecodeDC");
+  BEGIN("DecodeDC")
   int s,diff;
 
   s = DecodeHuffman();
@@ -320,7 +322,7 @@ EFUNC*/
 void FrequencyDC(coef)
      int coef;
 {
-  BEGIN("FrequencyDC");
+  BEGIN("FrequencyDC")
   int s,diff,cofac;
 
   diff = coef - *LastDC;         /* Do DPCM */
@@ -351,7 +353,7 @@ EFUNC*/
 void EncodeDC(coef)
      int coef;
 {
-  BEGIN("EncodeDC");
+  BEGIN("EncodeDC")
   int s,diff,cofac;
 
   diff = coef - *LastDC;
@@ -386,7 +388,7 @@ EFUNC*/
 
 void ResetCodec()
 {
-  BEGIN("ResetCodec");
+  BEGIN("ResetCodec")
   int i;
   
   for(i=0;i<CScan->NumberComponents;i++)
@@ -434,7 +436,7 @@ void AddFrequency(ptr1,ptr2)
      int *ptr1;
      int *ptr2;
 {
-  BEGIN("AddFrequency");
+  BEGIN("AddFrequency")
   int i;
   
   for(i=0;i<256;i++)
@@ -457,7 +459,7 @@ EFUNC*/
 void InstallFrequency(index)
      int index;
 {
-  BEGIN("InstallFrequency");
+  BEGIN("InstallFrequency")
   ACFrequency = CScan->ACFrequency[index];  /* Set the right pointers */
   DCFrequency = CScan->DCFrequency[index];
   LastDC = CScan->LastDC[index];
@@ -474,7 +476,7 @@ EFUNC*/
 void InstallPrediction(index)
      int index;
 {
-  BEGIN("InstallPrediction");
+  BEGIN("InstallPrediction")
 
   LastDC = CScan->LastDC[index];   /* Set the right pointer */
 }
@@ -489,7 +491,7 @@ EFUNC*/
 void PrintACEhuff(index)
      int index;
 {
-  BEGIN("PrintACEhuff");
+  BEGIN("PrintACEhuff")
   int place;
   EHUFF *eh;
   int *freq;
@@ -521,7 +523,7 @@ EFUNC*/
 int SizeACEhuff(index)
      int index;
 {
-  BEGIN("SizeACEhuff");
+  BEGIN("SizeACEhuff")
   int place,sumbits;
   EHUFF *eh;
   int *freq;
@@ -545,7 +547,7 @@ EFUNC*/
 void PrintDCEhuff(index)
      int index;
 {
-  BEGIN("PrintDCEhuff");
+  BEGIN("PrintDCEhuff")
   int place;
   EHUFF *eh;
   int *freq;
@@ -578,7 +580,7 @@ EFUNC*/
 int SizeDCEhuff(index)
      int index;
 {
-  BEGIN("SizeDCEhuff");
+  BEGIN("SizeDCEhuff")
   int place,sumbits;
   EHUFF *eh;
   int *freq;
@@ -603,7 +605,7 @@ EFUNC*/
 void LosslessFrequencyDC(coef)
      int coef;
 {
-  BEGIN("FrequencyDC");
+  BEGIN("FrequencyDC")
   int s,cofac;
 
   cofac = coef&0xffff;               /* Take modulo */
@@ -630,7 +632,7 @@ EFUNC*/
 void LosslessEncodeDC(coef)
      int coef;
 {
-  BEGIN("EncodeDC");
+  BEGIN("EncodeDC")
   int s,cofac;
 
   cofac = coef&0xffff;               /* Take modulo */
@@ -658,7 +660,7 @@ EFUNC*/
 
 int LosslessDecodeDC()
 {
-  BEGIN("DecodeDC");
+  BEGIN("DecodeDC")
   int s,coef;
 
   s = DecodeHuffman();

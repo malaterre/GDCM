@@ -8,10 +8,10 @@ SET(
   io.c
   chendct.c
   leedct.c
-  lexer.c
   marker.c
   stream.c
   transform.c
+  lexer.c
 )
 
 
