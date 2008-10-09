@@ -47,6 +47,8 @@ public:
   /// Set Pixel Format of input data
   void SetPixelFormat(PixelFormat const & pf) { PF = pf; }
 
+  /// Compute the Pixel Format of the output data
+  /// Used for direct transformation 
   PixelFormat::ScalarType ComputeInterceptSlopePixelType();
 
   /// Set target interval for output data. A best match will be computed (if possible)
