@@ -260,12 +260,12 @@ bool Rescaler::InverseRescale(char *out, const char *in, size_t n)
   case PixelFormat::INT16:
     InverseRescaleFunctionIntoBestFit<int16_t>(out,(int16_t*)in,n);
     break;
-  //case PixelFormat::UINT32:
-  //  RescaleFunctionIntoBestFit<uint32_t>(out,(uint32_t*)in,n);
-  //  break;
-  //case PixelFormat::INT32:
-  //  RescaleFunctionIntoBestFit<int32_t>(out,(int32_t*)in,n);
-  //  break;
+  case PixelFormat::UINT32:
+    InverseRescaleFunctionIntoBestFit<uint32_t>(out,(uint32_t*)in,n);
+    break;
+  case PixelFormat::INT32:
+    InverseRescaleFunctionIntoBestFit<int32_t>(out,(int32_t*)in,n);
+    break;
   case PixelFormat::FLOAT32:
     assert( sizeof(float) == 32 / 8 );
     InverseRescaleFunctionIntoBestFit<float>(out,(float*)in,n);
