@@ -158,12 +158,14 @@ FOREACH(filename ${gdcm_data_filenames_glob})
           #MESSAGE("IS DICOMDIR ${filename_name}")
           SET_TESTS_PROPERTIES("DCMDJPEG-${filename_name}" PROPERTIES WILL_FAIL TRUE)
         ENDIF(is_dicomdir)
-        # No pixel data
-        SET_TESTS_PROPERTIES("DCMDJPEG-ELSCINT1_PMSCT_RLE1.dcm" PROPERTIES WILL_FAIL TRUE)
       ENDIF(DCMTK_DCMDJPEG_EXECUTABLE)
     ENDIF(GDCM_TEST_DCMTK)
   ENDIF(NOT bad_dicom)
 ENDFOREACH(filename)
+
+# Need to SET_TESTS_PROPERTIES only *after* the loop is done (test need to have been declared first)
+# No pixel data
+SET_TESTS_PROPERTIES("DCMDJPEG-ELSCINT1_PMSCT_RLE1.dcm" PROPERTIES WILL_FAIL TRUE)
 
 FILE(MAKE_DIRECTORY "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax3/dcmdrle/")
 
@@ -183,12 +185,13 @@ FOREACH(filename ${gdcm_data_filenames_glob})
           SET_TESTS_PROPERTIES("DCMDRLE-${filename_name}" PROPERTIES WILL_FAIL TRUE)
         ENDIF(is_dicomdir)
         # 
-        # It is missing the very last pixel, so technically is illegal
-        SET_TESTS_PROPERTIES("DCMDRLE-ALOKA_SSD-8-MONO2-RLE-SQ.dcm" PROPERTIES WILL_FAIL TRUE)
-        # No pixel data
-        SET_TESTS_PROPERTIES("DCMDRLE-ELSCINT1_PMSCT_RLE1.dcm" PROPERTIES WILL_FAIL TRUE)
       ENDIF(DCMTK_DCMDRLE_EXECUTABLE)
     ENDIF(GDCM_TEST_DCMTK)
   ENDIF(NOT bad_dicom)
 ENDFOREACH(filename)
+
+# It is missing the very last pixel, so technically is illegal
+SET_TESTS_PROPERTIES("DCMDRLE-ALOKA_SSD-8-MONO2-RLE-SQ.dcm" PROPERTIES WILL_FAIL TRUE)
+# No pixel data
+SET_TESTS_PROPERTIES("DCMDRLE-ELSCINT1_PMSCT_RLE1.dcm" PROPERTIES WILL_FAIL TRUE)
 
