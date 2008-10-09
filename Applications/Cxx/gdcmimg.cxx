@@ -52,6 +52,7 @@
 #include "gdcmAttribute.h"
 #include "gdcmPNMCodec.h"
 #include "gdcmJPEGCodec.h"
+#include "gdcmJPEGLSCodec.h"
 #include "gdcmJPEG2000Codec.h"
 #include "gdcmVersion.h"
 
@@ -374,6 +375,7 @@ int main (int argc, char *argv[])
     return 1;
     }
 
+  // Ok so we are about to write a DICOM file, do not forget to stamp it GDCM !
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmimg" );
   if( rootuid )
     {
@@ -605,6 +607,55 @@ int main (int argc, char *argv[])
         return 1;
         }
       delete[] buf;
+
+      return 0;
+      }
+
+    if(  gdcm::System::StrCaseCmp(inputextension,".jls") == 0 )
+      {
+      gdcm::JPEGLSCodec jpeg;
+
+      std::ifstream is(filename);
+      gdcm::PixelFormat pf ( gdcm::PixelFormat::UINT8 ); // usual guess...
+      jpeg.SetPixelFormat( pf );
+      gdcm::TransferSyntax ts;
+      bool b = jpeg.GetHeaderInfo( is, ts );
+      if( !b )
+        {
+        std::cerr << "Error: could not parse J2K header" << std::endl;
+        return 1;
+        }
+
+      gdcm::ImageWriter writer;
+      gdcm::Image &image = writer.GetImage();
+      image.SetNumberOfDimensions( 2 );
+      image.SetDimensions( jpeg.GetDimensions() );
+      image.SetPixelFormat( jpeg.GetPixelFormat() );
+      image.SetPhotometricInterpretation( jpeg.GetPhotometricInterpretation() );
+      image.SetTransferSyntax( ts );
+
+      size_t len = gdcm::System::FileSize(filename);
+
+      char * buf = new char[len];
+      is.seekg(0, std::ios::beg );// rewind !
+      is.read(buf, len);
+      gdcm::DataElement pixeldata;
+
+      gdcm::SmartPointer<gdcm::SequenceOfFragments> sq = new gdcm::SequenceOfFragments;
+
+      gdcm::Fragment frag;
+      frag.SetByteValue( buf, len );
+      delete[] buf;
+      sq->AddFragment( frag );
+      pixeldata.SetValue( *sq );
+
+      image.SetDataElement( pixeldata );
+
+      writer.SetFileName( outfilename );
+      if( !writer.Write() )
+        {
+        return 1;
+        }
 
       return 0;
       }
@@ -885,8 +936,6 @@ the UID ... vide infra).
     }
   //  ds.Remove( gdcm::Tag(0x0,0x0) ); // FIXME
 
-  // Ok so we are about to write a DICOM file, do not forget to stamp it GDCM !
-  gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmimg" );
   if( !writer.Write() )
     {
     std::cerr << "Failed to write: " << outfilename << std::endl;
