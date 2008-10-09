@@ -251,3 +251,6 @@ Check perf of vtkTexturedActor2D vs vtkTexture
  std::locale::global( std::locale( "" ) ) ;  &
  os.imbue(std::locale::classic()); 
 to make sure not to ever write double with comma
+-----------------------------------------------------------------------
+Need to fix issue with Explicit SQ declared as UN
+
