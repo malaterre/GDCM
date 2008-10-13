@@ -18,7 +18,8 @@
 
 int TestLCNumeric(int argc, char *argv[])
 {
-  setenv("LC_NUMERIC", "fr_FR", 1);
+  //setenv("LC_NUMERIC", "fr_FR", 1);
+  putenv("LC_NUMERIC=fr_FR");
   std::ostringstream os;
   double d = 1.2;
   os << d;
