@@ -233,7 +233,7 @@ const char* UIDGenerator::Generate()
       while( ( Unique.size() + len > 64 ) && i < 8 )
         {
         x[7-i] = 0;
-        uuid[idx] = x.to_ulong();
+        uuid[idx] = (unsigned char)x.to_ulong();
         len = System::EncodeBytes(randbytesbuf, uuid, sizeof(uuid));
         ++i;
         }
