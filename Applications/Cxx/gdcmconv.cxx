@@ -80,6 +80,7 @@
 #include "gdcmImageApplyLookupTable.h"
 #include "gdcmImageFragmentSplitter.h"
 #include "gdcmImageChangePlanarConfiguration.h"
+#include "gdcmImageChangePhotometricInterpretation.h"
 #include "gdcmFileExplicitFilter.h"
 
 #include <string>
@@ -120,17 +121,18 @@ void PrintHelp()
   std::cout << "     --root-uid   Root UID." << std::endl;
   std::cout << "     --remove-gl  Remove group length (deprecated in DICOM 2008)." << std::endl;
   std::cout << "Image only Options:" << std::endl;
-  std::cout << "  -l --apply-lut      Apply LUT (non-standard, advanced user only)." << std::endl;
-  std::cout << "  -w --raw            Decompress image." << std::endl;
-  std::cout << "  -J --jpeg           Compress image in jpeg." << std::endl;
-  std::cout << "  -K --j2k            Compress image in j2k." << std::endl;
-  std::cout << "  -L --jpegls         Compress image in jpeg-ls." << std::endl;
-  std::cout << "  -R --rle            Compress image in rle (lossless only)." << std::endl;
-  std::cout << "  -F --force          Force decompression/merging before recompression/splitting." << std::endl;
-  std::cout << "     --compress-icon  Decide whether icon follows main TransferSyntax or remains uncompressed." << std::endl;
-  std::cout << "     --planar-configuration [01]  Change planar configuration." << std::endl;
-  std::cout << "  -Y --lossy %d       Use the lossy (if possible), followed by comp. ratio" << std::endl;
-  std::cout << "  -S --split %d       Write 2D image with multiple fragments (using max size)" << std::endl;
+  std::cout << "  -l --apply-lut                      Apply LUT (non-standard, advanced user only)." << std::endl;
+  std::cout << "  -P --photometric-interpretation %s  Change Photometric Interpretation (when possible)." << std::endl;
+  std::cout << "  -w --raw                            Decompress image." << std::endl;
+  std::cout << "  -J --jpeg                           Compress image in jpeg." << std::endl;
+  std::cout << "  -K --j2k                            Compress image in j2k." << std::endl;
+  std::cout << "  -L --jpegls                         Compress image in jpeg-ls." << std::endl;
+  std::cout << "  -R --rle                            Compress image in rle (lossless only)." << std::endl;
+  std::cout << "  -F --force                          Force decompression/merging before recompression/splitting." << std::endl;
+  std::cout << "     --compress-icon                  Decide whether icon follows main TransferSyntax or remains uncompressed." << std::endl;
+  std::cout << "     --planar-configuration [01]      Change planar configuration." << std::endl;
+  std::cout << "  -Y --lossy %d                       Use the lossy (if possible), followed by comp. ratio" << std::endl;
+  std::cout << "  -S --split %d                       Write 2D image with multiple fragments (using max size)" << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose    more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning    print warning info." << std::endl;
@@ -170,6 +172,8 @@ int main (int argc, char *argv[])
   int usedict = 0;
   int compressicon = 0;
   int removegrouplength = 0;
+  int photometricinterpretation = 0;
+  std::string photometricinterpretation_str;
 
   int verbose = 0;
   int warning = 0;
@@ -218,6 +222,7 @@ int main (int argc, char *argv[])
         {"use-dict", 0, &usedict, 1}, // 
         {"compress-icon", 0, &compressicon, 1}, // 
         {"remove-gl", 0, &removegrouplength, 1}, // 
+        {"photometric-interpretation", 1, &photometricinterpretation, 1}, // 
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -231,7 +236,7 @@ int main (int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:XMUClwJKRFYS:VWDEhv",
+    c = getopt_long (argc, argv, "i:o:XMUClwJKRFYS:P:VWDEhv",
       long_options, &option_index);
     if (c == -1)
       {
@@ -267,6 +272,11 @@ int main (int argc, char *argv[])
             {
             assert( strcmp(s, "planar-configuration") == 0 );
             planarconfval = atoi(optarg);
+            }
+          else if( option_index == 34 ) /* photometricinterpretation */
+            {
+            assert( strcmp(s, "photometric-interpretation") == 0 );
+            photometricinterpretation_str = optarg;
             }
           //printf (" with arg %s, index = %d", optarg, option_index);
           }
@@ -335,6 +345,11 @@ int main (int argc, char *argv[])
     case 'S':
       split = 1;
       fragmentsize = atoi(optarg);
+      break;
+
+    case 'P':
+      photometricinterpretation = 1;
+      photometricinterpretation_str = optarg;
       break;
 
     // General option
@@ -565,6 +580,38 @@ int main (int argc, char *argv[])
     writer.SetFileName( outfilename.c_str() );
     writer.SetFile( reader.GetFile() );
     writer.SetImage( splitter.GetOutput() );
+    if( !writer.Write() )
+      {
+      std::cerr << "Failed to write: " << outfilename << std::endl;
+      return 1;
+      }
+    }
+  else if( photometricinterpretation )
+    {
+    gdcm::ImageReader reader;
+    reader.SetFileName( filename.c_str() );
+    if( !reader.Read() )
+      {
+      std::cerr << "could not read: " << filename << std::endl;
+      return 1;
+      }
+    const gdcm::Image &image = reader.GetImage();
+
+    gdcm::PhotometricInterpretation pi (
+      gdcm::PhotometricInterpretation::GetPIType(photometricinterpretation_str.c_str()) );
+    gdcm::ImageChangePhotometricInterpretation pifilt;
+    pifilt.SetInput( image );
+    pifilt.SetPhotometricInterpretation( pi );
+    bool b = pifilt.Change();
+    if( !b )
+      {
+      std::cerr << "Could not apply PhotometricInterpretation: " << filename << std::endl;
+      return 1;
+      }
+    gdcm::ImageWriter writer;
+    writer.SetFileName( outfilename.c_str() );
+    writer.SetFile( reader.GetFile() );
+    writer.SetImage( pifilt.GetOutput() );
     if( !writer.Write() )
       {
       std::cerr << "Failed to write: " << outfilename << std::endl;
