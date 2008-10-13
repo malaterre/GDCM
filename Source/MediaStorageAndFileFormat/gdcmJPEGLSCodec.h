@@ -26,7 +26,7 @@ class JPEGLSInternals;
  * \note codec that implement the JPEG-LS compression
  * this is an implement of ImageCodec for JPEG-LS
  */
-class JPEGLSCodec : public ImageCodec
+class GDCM_EXPORT JPEGLSCodec : public ImageCodec
 {
 public:
   JPEGLSCodec();
