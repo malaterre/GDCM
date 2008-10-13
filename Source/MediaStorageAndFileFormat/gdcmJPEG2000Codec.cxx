@@ -148,6 +148,7 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
       is.write(mybuffer, bv->GetLength());
       delete[] mybuffer;
       bool r = Decode(is, os);
+      if(!r) return false;
       assert( r == true );
       }
     std::string str = os.str();
