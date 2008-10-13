@@ -14,6 +14,8 @@
 =========================================================================*/
 #include "gdcmAttribute.h"
 
+#include <stdlib.h> /* setenv */
+
 int TestLCNumeric(int argc, char *argv[])
 {
   setenv("LC_NUMERIC", "fr_FR", 1);
