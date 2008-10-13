@@ -18,8 +18,6 @@
 #include "gdcmImageToImageFilter.h"
 #include "gdcmPhotometricInterpretation.h"
 
-#error remove from release
-
 namespace gdcm
 {
 
@@ -48,6 +46,7 @@ public:
   static void YBR2RGB(T rgb[3], const T ybr[3]);
 
 protected:
+  bool ChangeMonochrome();
 
 private:
   PhotometricInterpretation PI;

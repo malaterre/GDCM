@@ -16,6 +16,7 @@
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmSequenceOfItems.h"
 #include "gdcmFragment.h"
+#include "gdcmRAWCodec.h"
 
 namespace gdcm
 {
@@ -27,6 +28,54 @@ namespace gdcm
  * http://forum.dcmtk.org/viewtopic.php?p=5441&sid=61ad1304edb31203c4136890ab651405
 YBR_FULL as Photometric Interpretation is really the right thing to do. The problem is that the JPEG bitstream as such does not contain any indication of the color model - it just specifies that there are three samples per pixel. In theory it is well possible to apply baseline JPEG compression to RGB pixel data, although this is an unusual approach since YCbCr provides for better compression ratio at given image quality. A JFIF header would contain that information, but the JFIF header is neither required nor recommended in the DICOM JPEG bitstream. In the absence of that information, and with a JPEG compressed DICOM file where Photometric Interpretation is "RGB", the parser needs to decide whether the encoder did something unsual but legal and decompress the JPEG bitstream as RGB, or whether the encoder just failed to correctly encode the color model of the JPEG bitstream (which in my experience is in most cases the correct assumption) and ignore Photometric Interpretation (and thus incorrectly decode unusual but legal images).
 */
+bool ImageChangePhotometricInterpretation::ChangeMonochrome()
+{
+  const Image &image = *Input;
+  PhotometricInterpretation pi = image.GetPhotometricInterpretation();
+  assert( pi == PhotometricInterpretation::MONOCHROME1 || pi == PhotometricInterpretation::MONOCHROME2 );
+  if( pi == PI )
+    {
+    return true;
+    }
+
+  unsigned long len = image.GetBufferLength();
+  char *p = new char[len];
+  image.GetBuffer( p );
+  std::stringstream is;
+  is.write( p, len );
+  delete[] p;
+
+  //ImageCodec ic;
+  RAWCodec ic;
+  std::ostringstream os;
+  ic.DoInvertMonochrome( is, os );
+
+  DataElement &de = Output->GetDataElement();
+  std::string str = os.str();
+  de.SetByteValue( str.c_str(), str.size() );
+  //Output->GetLUT().Clear();
+  Output->SetPhotometricInterpretation( PI );
+  //Output->GetPixelFormat().SetSamplesPerPixel( 3 );
+  //Output->SetPlanarConfiguration( 0 ); // FIXME OT-PAL-8-face.dcm has a PlanarConfiguration while being PALETTE COLOR...
+  //const gdcm::TransferSyntax &ts = image.GetTransferSyntax();
+  ////assert( ts == TransferSyntax::RLELossless );
+  //if( ts.IsExplicit() )
+  //  {
+  //  Output->SetTransferSyntax( TransferSyntax::ExplicitVRLittleEndian );
+  //  }
+  //else
+  //  {
+  //  assert( ts.IsImplicit() );
+  //  Output->SetTransferSyntax( TransferSyntax::ImplicitVRLittleEndian );
+  //  }
+
+
+  bool success = true;
+  return success;
+
+  return true;
+}
+
 bool ImageChangePhotometricInterpretation::Change()
 {
   // PS 3.3 - 2008 C.7.6.3.1.2 Photometric Interpretation
@@ -53,6 +102,10 @@ bool ImageChangePhotometricInterpretation::Change()
      * 1.0000e+00    1.7720e+00   -1.3458e-04
      */
 
+    }
+  else if( PI == PhotometricInterpretation::MONOCHROME1 || PhotometricInterpretation::MONOCHROME2 )
+    {
+    return ChangeMonochrome();
     }
   else
     {

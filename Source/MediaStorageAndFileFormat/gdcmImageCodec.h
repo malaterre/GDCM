@@ -30,6 +30,7 @@ namespace gdcm
  */
 class GDCM_EXPORT ImageCodec : public Codec
 {
+  friend class ImageChangePhotometricInterpretation;
 public:
   ImageCodec();
   ~ImageCodec();

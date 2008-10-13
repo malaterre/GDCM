@@ -49,7 +49,7 @@ namespace gdcm
 class GDCM_EXPORT Image : public Pixmap
 {
 public:
-  Image ():Spacing(),SC(),Overlays(),Curves(),Icon(),Intercept(0),Slope(1),Pixmap() {
+  Image ():Pixmap(),Spacing(),SC(),Overlays(),Curves(),Icon(),Intercept(0),Slope(1) {
     //DirectionCosines.resize(6);
   Origin.resize( 3 /*NumberOfDimensions*/ ); // fill with 0
   DirectionCosines.resize( 6 ); // fill with 0

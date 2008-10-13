@@ -13,7 +13,7 @@ SET(MSFF_SRCS
   gdcmOrientation.cxx
   gdcmDataSetHelper.cxx
   gdcmImageChangePlanarConfiguration.cxx
-  #gdcmImageChangePhotometricInterpretation.cxx
+  gdcmImageChangePhotometricInterpretation.cxx
   gdcmDirectionCosines.cxx
   gdcmSorter.cxx
   gdcmSerieHelper.cxx
