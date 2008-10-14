@@ -285,22 +285,22 @@ void Overlay::Update(const DataElement & de)
 
 void Overlay::GrabOverlayFromPixelData(DataSet const &ds)
 {
+  const unsigned int ovlength = Internal->Rows * Internal->Columns / 8;
+  Internal->Data.resize( ovlength ); // set to 0
   if( Internal->BitsAllocated == 16 )
     {
-    assert( Internal->BitPosition >= 12 );
+    //assert( Internal->BitPosition >= 12 );
     assert( ds.FindDataElement( Tag(0x7fe0,0x0010) ) );
     const DataElement &pixeldata = ds.GetDataElement( Tag(0x7fe0,0x0010) );
     const ByteValue *bv = pixeldata.GetByteValue();
     assert( bv );
     const char *array = bv->GetPointer();
-    const unsigned int ovlength = Internal->Rows * Internal->Columns / 8;
     // SIEMENS_GBS_III-16-ACR_NEMA_1.acr is pain to support,
     // I cannot simply use the bv->GetLength I have to use the image dim:
     const unsigned int length = ovlength * 8 * 2; //bv->GetLength();
     const uint16_t *p = (uint16_t*)array;
     const uint16_t *end = (uint16_t*)(array + length);
     //const unsigned int ovlength = length / (8*2);
-    Internal->Data.resize( ovlength ); // set to 0
     assert( 8 * ovlength == (unsigned int)Internal->Rows * Internal->Columns );
     unsigned char * overlay = (unsigned char*)&Internal->Data[0];
     int c = 0;
