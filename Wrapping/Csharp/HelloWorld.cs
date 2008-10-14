@@ -21,12 +21,16 @@ public class HelloWorld
   public static void Main(string[] args)
     {
     System.Console.WriteLine("Hello World !");
-    //System.Console.WriteLine( args[0] );
-    //gdcm.Reader reader;
-    //string filename = args[0];
-    //reader.SetFileName( filename );
-    //reader.Read();
-
+    //Reader reader;
+    string filename = args[0];
+    System.Console.WriteLine( "Reading: " + filename );
+    Reader reader = new Reader();
+    reader.SetFileName( filename );
+    bool ret = reader.Read();
+    if( !ret )
+      {
+      throw new Exception("Could not read: " + filename );
+      }
     }
 }
 

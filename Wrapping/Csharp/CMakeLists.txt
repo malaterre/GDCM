@@ -78,6 +78,7 @@ IF(UNIX)
     COMMAND ${GMCS_EXECUTABLE} ARGS "/r:gdcm_csharp.dll" "/out:HelloWorld.exe" ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gdcm_csharp.dll
+    ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
     COMMENT "Create HelloWorld.exe"
   )
 
