@@ -15,6 +15,12 @@
 // See docs:
 // http://www.swig.org/Doc1.3/CSharp.html
 // http://www.swig.org/Doc1.3/SWIGPlus.html
+// The main difference with this wrapping is that gdcm.System is now renamed
+// to gdcm.PosixEmulation. I could not figure out a way to preserve gdcm.System
+// as swig by default flatten all namespace and gdcm.System would conflict
+// with .NET 'System' namespace... fix welcome to get back gdcm.System
+// until then gdcm.PosixEmulation will remain the recommended way to access
+// gdcm.System API from C#
 
 %module(docstring="A DICOM library") gdcm
 #pragma SWIG nowarn=504,510
