@@ -90,11 +90,11 @@ public:
   unsigned int GetDimension(unsigned int idx) const;
 
   void SetColumns(unsigned int col) { SetDimension(0,col); }
+  unsigned int GetColumns() const { return GetDimension(0); }
   void SetRows(unsigned int rows) { SetDimension(1,rows); }
+  unsigned int GetRows() const { return GetDimension(1); }
   void SetDimensions(const unsigned int *dims);
   void SetDimension(unsigned int idx, unsigned int dim);
-  int GetColumns() const { return Dimensions[0]; }
-  int GetRows() const { return Dimensions[1]; }
   // Get/Set PixelFormat
   const PixelFormat &GetPixelFormat() const
     {
@@ -147,6 +147,8 @@ protected:
   TransferSyntax TS;
   PixelFormat PF; // SamplesPerPixel, BitsAllocated, BitsStored, HighBit, PixelRepresentation
   PhotometricInterpretation PI;
+  // Mind dump: unsigned int is required here, since we are reading (0028,0008) Number Of Frames
+  // which is VR::IS, so I cannot simply assumed that unsigned short is enough... :(
   std::vector<unsigned int> Dimensions; // Col/Row
   DataElement PixelData; // copied from 7fe0,0010
 
