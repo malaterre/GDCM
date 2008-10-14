@@ -229,7 +229,11 @@ using namespace gdcm;
 #define GDCM_STATIC_ASSERT(x)
 %include "gdcmAttribute.h"
 %include "gdcmAnonymizer.h"
-//%include "gdcmSystem.h"
+
+// System is a namespace in C#, need to rename to something different
+%rename (PosixEmulation) System; 
+%include "gdcmSystem.h"
+
 %include "gdcmTrace.h"
 %include "gdcmUIDs.h"
 //%feature("director") gdcm::IPPSorter;      
