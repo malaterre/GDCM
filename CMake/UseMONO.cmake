@@ -18,32 +18,12 @@
 #
 # Create Swig module
 #
-MACRO(MONO_ADD_MODULE name language)
-  MONO_MODULE_INITIALIZE(${name} ${language})
+MACRO(MONO_ADD_MODULE name)
   SET(swig_dot_i_sources)
-  SET(swig_other_sources)
   FOREACH(it ${ARGN})
-    IF(${it} MATCHES ".*\\.i$")
-      SET(swig_dot_i_sources ${swig_dot_i_sources} "${it}")
-    ELSE(${it} MATCHES ".*\\.i$")
-      SET(swig_other_sources ${swig_other_sources} "${it}")
-    ENDIF(${it} MATCHES ".*\\.i$")
+    SET(swig_dot_i_sources ${swig_dot_i_sources} "${it}")
   ENDFOREACH(it)
 
-  SET(swig_generated_sources)
-  FOREACH(it ${swig_dot_i_sources})
-    MONO_ADD_SOURCE_TO_MODULE(${name} swig_generated_source ${it})
-    SET(swig_generated_sources ${swig_generated_sources} "${swig_generated_source}")
-  ENDFOREACH(it)
-  GET_DIRECTORY_PROPERTY(swig_extra_clean_files ADDITIONAL_MAKE_CLEAN_FILES)
-  SET_DIRECTORY_PROPERTIES(PROPERTIES
-    ADDITIONAL_MAKE_CLEAN_FILES "${swig_extra_clean_files};${swig_generated_sources}")
-  ADD_LIBRARY(${MONO_MODULE_${name}_REAL_NAME}
-    MODULE
-    ${swig_generated_sources}
-    ${swig_other_sources})
-  SET_TARGET_PROPERTIES(${MONO_MODULE_${name}_REAL_NAME}
-    PROPERTIES PREFIX "")
 ENDMACRO(MONO_ADD_MODULE)
 
 #
