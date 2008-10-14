@@ -9,6 +9,9 @@ MARK_AS_ADVANCED(CMAKE_BACKWARDS_COMPATIBILITY CMAKE_BUILD_TYPE CMAKE_INSTALL_PR
 SET(GDCM_CMAKE_DIR "${GDCM_SOURCE_DIR}/CMake" CACHE INTERNAL "")
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${GDCM_CMAKE_DIR}")
 
+SET(GDCM_PACKAGE_DESCRIPTION_SUMMARY "GDCM - Grassroots DICOM. GDCM is yet another DICOM library.")
+SET(GDCM_PACKAGE_CONTACT "Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>")
+
 IF(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.6)
   SET(NAMELINK_ONLY NAMELINK_ONLY)
   SET(NAMELINK_SKIP NAMELINK_SKIP)
@@ -438,7 +441,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     INCLUDE(${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake)
   ENDIF(EXISTS "${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake")
 
-  SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "GDCM - Grassroots DICOM\n GDCM is yet another DICOM library.")
+  SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY ${GDCM_PACKAGE_DESCRIPTION_SUMMARY})
   SET(CPACK_PACKAGE_VENDOR "GDCM")
   SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt")
   SET(CPACK_RESOURCE_FILE_LICENSE    "${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt")
@@ -498,7 +501,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   ENDIF(NOT DEFINED CPACK_SYSTEM_NAME)
 
   # Need to set the architecture for debian package
-  SET(CPACK_PACKAGE_CONTACT "Mathieu Malaterre <gdcm-developers@lists.sourceforge.net>")
+  SET(CPACK_PACKAGE_CONTACT ${GDCM_PACKAGE_CONTACT})
   SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6, libstdc++6 (>= 4.0.2-4), libuuid1, zlib1g (>= 1:1.2.1), libgcc1 (>= 1:4.0.2), libexpat1, swig") # bug: missing dep to python...
   SET(CPACK_DEBIAN_PACKAGE_SUGGESTS "dcmtk")
   SET(CPACK_SOURCE_IGNORE_FILES "/debian/" "/CVS/" "/\\\\.svn/" "TODO" ".NoDartCoverage")
