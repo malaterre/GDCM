@@ -18,21 +18,23 @@ SET(MONO_FOUND FALSE)
 # $ mono HelloWorld.exe
 
 FIND_PROGRAM(MONO_EXECUTABLE mono)
-FIND_PROGRAM(MCS_EXECUTABLE mcs)
-FIND_PROGRAM(GMCS_EXECUTABLE gmcs)
+FIND_PROGRAM(MCS_EXECUTABLE mcs)    # 1.0 
+FIND_PROGRAM(GMCS_EXECUTABLE gmcs)  # 2.0
+FIND_PROGRAM(GMCS_EXECUTABLE smcs)  # Moonlight
 #FIND_PROGRAM(GACUTIL_EXECUTABLE gacutil)
 
-IF(MONO_EXECUTABLE)
+# We decide to declare mono found when both interpreter and compiler 1.0 are found.
+IF(MONO_EXECUTABLE AND MCS_EXECUTABLE)
 # TODO get version
 SET(MONO_FOUND TRUE)
-ENDIF(MONO_EXECUTABLE)
+ENDIF(MONO_EXECUTABLE AND MCS_EXECUTABLE)
 
 IF(NOT MONO_FOUND)
   IF(NOT MONO_FIND_QUIETLY)
     IF(MONO_FIND_REQUIRED)
-      MESSAGE(FATAL_ERROR "MONO was not found. Please specify mono/mcs/gmcs executable location")
+      MESSAGE(FATAL_ERROR "MONO was not found. Please specify mono/mcs executable location")
     ELSE(MONO_FIND_REQUIRED)
-      MESSAGE(STATUS "MONO was not found. Please specify mono/mcs/gmcs executable location")
+      MESSAGE(STATUS "MONO was not found. Please specify mono/mcs executable location")
     ENDIF(MONO_FIND_REQUIRED)
   ENDIF(NOT MONO_FIND_QUIETLY)
 ENDIF(NOT MONO_FOUND)
