@@ -508,7 +508,7 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
   if( this->LoadOverlays )
     {
     // If no icon found, we still need to be associated to port #2:
-    numvol = 3;
+    numvol = 2 + this->NumberOfOverlays;
     }
   this->SetNumberOfOutputPorts(numvol);
   // For each output:
@@ -695,17 +695,15 @@ int vtkGDCMImageReader::RequestInformationCompat()
   const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
   this->Shift = image.GetIntercept();
   this->Scale = image.GetSlope();
-  gdcm::Rescaler r;
-  r.SetIntercept( this->Shift );
-  r.SetSlope( this->Scale );
-  r.SetPixelFormat( pixeltype );
-  gdcm::PixelFormat::ScalarType outputpt = r.ComputeInterceptSlopePixelType();
-  if( ms == gdcm::MediaStorage::MRSpectroscopyStorage )
+  gdcm::PixelFormat::ScalarType outputpt = pixeltype;
+  // Compute output pixel format when Rescaling:
+  if( this->Shift != 0 || this->Scale != 1. )
     {
-    outputpt = pixeltype;
-    }
-  else
-    {
+    gdcm::Rescaler r;
+    r.SetIntercept( this->Shift );
+    r.SetSlope( this->Scale );
+    r.SetPixelFormat( pixeltype );
+    outputpt = r.ComputeInterceptSlopePixelType();
     assert( pixeltype <= outputpt );
     }
   //if( pixeltype != outputpt ) assert( Shift != 0. || Scale != 1 );
@@ -793,6 +791,10 @@ int vtkGDCMImageReader::RequestInformationCompat()
       }
     this->IconNumberOfScalarComponents = iconpixelformat.GetSamplesPerPixel();
     }
+
+  // Overlay!
+  unsigned int numoverlays = image.GetNumberOfOverlays();
+  this->NumberOfOverlays = numoverlays;
 
 //  return this->Superclass::RequestInformation(
 //    request, inputVector, outputVector);
@@ -990,13 +992,14 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   // Do the Overlay:
   unsigned int numoverlays = image.GetNumberOfOverlays();
   long overlayoutsize = (dext[1] - dext[0] + 1);
-  this->NumberOfOverlays = numoverlays;
-  if( numoverlays )
+  //this->NumberOfOverlays = numoverlays;
+  //if( numoverlays )
+  for( unsigned int ovidx = 0;  ovidx < numoverlays; ++ovidx )
     {
-    vtkImageData *vtkimage = this->GetOutput(OVERLAYPORTNUMBER);
+    vtkImageData *vtkimage = this->GetOutput(OVERLAYPORTNUMBER + ovidx);
     // vtkOpenGLImageMapper::RenderData does not support bit array (since OpenGL does not either)
     // we have to decompress the bit overlay into an unsigned char array to please everybody:
-    const gdcm::Overlay& ov1 = image.GetOverlay();
+    const gdcm::Overlay& ov1 = image.GetOverlay(ovidx);
     vtkUnsignedCharArray *chararray = vtkUnsignedCharArray::New();
     chararray->SetNumberOfTuples( overlayoutsize * ( dext[3] - dext[2] + 1 ) );
     overlaylen = overlayoutsize * ( dext[3] - dext[2] + 1 );
