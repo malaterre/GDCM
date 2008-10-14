@@ -7,12 +7,12 @@ using System.Runtime.CompilerServices;
 // change them to the information which is associated with the assembly
 // you compile.
 
-[assembly: AssemblyTitle("GDCM")]
+[assembly: AssemblyTitle("@CMAKE_PROJECT_NAME@")]
 [assembly: AssemblyDescription(".NET binding for GDCM")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyConfiguration("@GDCM_PACKAGE_DESCRIPTION_SUMMARY@")]
+[assembly: AssemblyCompany("@GDCM_PACKAGE_CONTACT@")]
+[assembly: AssemblyProduct("@GDCM_VERSION@")]
+[assembly: AssemblyCopyright("BSD")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
