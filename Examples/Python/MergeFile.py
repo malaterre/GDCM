@@ -42,9 +42,6 @@ if __name__ == "__main__":
   if not r2.Read():
     sys.exit(1)
 
-  print dir(r2.GetImage())
-  print r2.GetImage().GetDataElement()
-
   # Image from r2 could be Secondary Capture and thus would not contains neither IPP nor IOP
   # Instead always prefer to only copy the Raw Data Element.
   # Warning ! Image need to be identical ! Only the value of Stored Pixel can be different.
