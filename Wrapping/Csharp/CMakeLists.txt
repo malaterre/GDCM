@@ -87,6 +87,8 @@ IF(UNIX)
     COMMENT "Create HelloWorld.exe"
   )
 
+#  $ export MONO_LOG_LEVEL="debug"; export MONO_LOG_MASK="dll"
+# $ export LD_LIBRARY_PATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/Wrapping/Csharp/:/home/mmalaterre/Projects/gdcm/debug-gcc43/bin   
 ADD_CUSTOM_TARGET(GDCMCSharp ALL
   DEPENDS 
     ${CMAKE_CURRENT_BINARY_DIR}/gdcm_csharp.dll

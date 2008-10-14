@@ -152,7 +152,7 @@ using namespace gdcm;
 %include "gdcmTag.h"
 %extend gdcm::Tag
 {
-  const char *__str__() {
+  const char *toString() {
     static std::string buffer;
     std::ostringstream os;
     os << *self;
@@ -175,6 +175,17 @@ using namespace gdcm;
 %include "gdcmItem.h"
 %include "gdcmSequenceOfItems.h"
 %include "gdcmDataSet.h"
+%extend gdcm::DataSet
+{
+  const char *toString() {
+    static std::string buffer;
+    std::stringstream s;
+    self->Print(s);
+    buffer = s.str();
+    return buffer.c_str();
+    }
+};
+
 %include "gdcmPhotometricInterpretation.h"
 %include "gdcmObject.h"
 %include "gdcmLookupTable.h"

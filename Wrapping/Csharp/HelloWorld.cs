@@ -21,7 +21,7 @@ public class HelloWorld
   public static void Main(string[] args)
     {
     System.Console.WriteLine("Hello World !");
-    //Reader reader;
+    //gdcm.Reader reader2;
     string filename = args[0];
     System.Console.WriteLine( "Reading: " + filename );
     Reader reader = new Reader();
@@ -31,6 +31,10 @@ public class HelloWorld
       {
       throw new Exception("Could not read: " + filename );
       }
+    //std::cout << reader.GetFile() 
+    Tag t = new Tag(0x21,0x12);
+    System.Console.WriteLine( "out:" + t.toString() );
+    System.Console.WriteLine( "out:" + reader.GetFile().GetDataSet().toString() );
     }
 }
 
