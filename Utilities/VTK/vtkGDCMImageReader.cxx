@@ -794,7 +794,18 @@ int vtkGDCMImageReader::RequestInformationCompat()
 
   // Overlay!
   unsigned int numoverlays = image.GetNumberOfOverlays();
-  this->NumberOfOverlays = numoverlays;
+  if( this->LoadOverlays && numoverlays )
+    {
+    // Do overlay specific stuff...
+    // what if overlay do not have the same data extent as image ?
+    for( unsigned int ovidx = 0; ovidx < numoverlays; ++ovidx )
+      {
+      const gdcm::Overlay& ov = image.GetOverlay(ovidx);
+      assert( (unsigned int)ov.GetRows() == image.GetRows() );
+      assert( (unsigned int)ov.GetColumns() == image.GetColumns() );
+      }
+    this->NumberOfOverlays = numoverlays;
+    }
 
 //  return this->Superclass::RequestInformation(
 //    request, inputVector, outputVector);
