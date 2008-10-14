@@ -13,9 +13,8 @@
 
 =========================================================================*/
 // See docs:
-// http://www.swig.org/Doc1.3/Python.html
-// http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus
-// http://www.geocities.com/foetsch/python/extending_python.htm
+// http://www.swig.org/Doc1.3/CSharp.html
+// http://www.swig.org/Doc1.3/SWIGPlus.html
 
 %module(docstring="A DICOM library") gdcm
 #pragma SWIG nowarn=504,510
@@ -219,7 +218,7 @@ using namespace gdcm;
 #define GDCM_STATIC_ASSERT(x)
 %include "gdcmAttribute.h"
 %include "gdcmAnonymizer.h"
-%include "gdcmSystem.h"
+//%include "gdcmSystem.h"
 %include "gdcmTrace.h"
 %include "gdcmUIDs.h"
 //%feature("director") gdcm::IPPSorter;      
