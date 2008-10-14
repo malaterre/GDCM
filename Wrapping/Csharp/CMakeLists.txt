@@ -68,10 +68,26 @@ IF(UNIX)
     COMMENT "mcs *.cs"
   )
 
+# building HelloWorld:
+  ADD_CUSTOM_COMMAND(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/HelloWorld.exe
+#$(CSC) /r:mapscript_csharp.dll /out:shpdump.exe examples/shpdump.cs
+    COMMAND ${GMCS_EXECUTABLE} ARGS "/r:gdcm_csharp.dll" "/out:HelloWorld.exe" ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    DEPENDS "${swig_generated_file_fullname}"
+    COMMENT "Create HelloWorld.exe"
+  )
+
 ADD_CUSTOM_TARGET(GDCMCSharp ALL
-  DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gdcm_csharp.dll
+  DEPENDS 
+    ${CMAKE_CURRENT_BINARY_DIR}/gdcm_csharp.dll
+    ${CMAKE_CURRENT_BINARY_DIR}/HelloWorld.exe
   COMMENT "building gdcm_csharp.dll"
 )
+
+IF(BUILD_TESTING)
+  ADD_TEST(HelloWorldCSharp ${MONO_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/HelloWorld.exe)
+ENDIF(BUILD_TESTING)
 
 ENDIF(UNIX)
 

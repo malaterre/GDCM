@@ -22,10 +22,10 @@ public class HelloWorld
     {
     System.Console.WriteLine("Hello World !");
     //System.Console.WriteLine( args[0] );
-    gdcm.Reader reader;
-    string filename = args[0];
-    reader.SetFileName( filename );
-    reader.Read();
+    //gdcm.Reader reader;
+    //string filename = args[0];
+    //reader.SetFileName( filename );
+    //reader.Read();
 
     }
 }
