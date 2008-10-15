@@ -1005,7 +1005,8 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   long overlayoutsize = (dext[1] - dext[0] + 1);
   //this->NumberOfOverlays = numoverlays;
   //if( numoverlays )
-  for( unsigned int ovidx = 0;  ovidx < numoverlays; ++ovidx )
+  if( !this->LoadOverlays ) assert( this->NumberOfOverlays == 0 );
+  for( int ovidx = 0;  ovidx < this->NumberOfOverlays; ++ovidx )
     {
     vtkImageData *vtkimage = this->GetOutput(OVERLAYPORTNUMBER + ovidx);
     // vtkOpenGLImageMapper::RenderData does not support bit array (since OpenGL does not either)
@@ -1204,8 +1205,15 @@ int vtkGDCMImageReader::RequestDataCompat()
   if (!this->FileLowerLeft)
     {
     InPlaceYFlipImage(this->GetOutput(0));
-    InPlaceYFlipImage(this->GetOutput(ICONIMAGEPORTNUMBER));
-    InPlaceYFlipImage(this->GetOutput(OVERLAYPORTNUMBER));
+    if( this->LoadIconImage )
+      {
+      InPlaceYFlipImage(this->GetOutput(ICONIMAGEPORTNUMBER));
+      }
+    for( int ovidx = 0;  ovidx < this->NumberOfOverlays; ++ovidx )
+      {
+      assert( this->LoadOverlays );
+      InPlaceYFlipImage(this->GetOutput(OVERLAYPORTNUMBER+ovidx));
+      }
     }
 
   return 1;
