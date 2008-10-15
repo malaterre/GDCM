@@ -29,6 +29,7 @@ ENDIF(GDCM_DATA_ROOT)
 INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/Common"
+  "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   )
 
 CREATE_TEST_SOURCELIST(CommonTests gdcmCommonTests.cxx ${Common_TEST_SRCS})
