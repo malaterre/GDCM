@@ -21,6 +21,8 @@
 #endif
 #include <stdlib.h>
 
+#include "gdcmTag.h"
+
 
 namespace gdcm
 {
@@ -39,6 +41,7 @@ namespace gdcm
     return bswap_64(val);
     }
 
+
   template <> inline void SwapperNoOp::SwapArray(uint8_t *, unsigned int ) {}
 #else
   template <> inline uint16_t SwapperDoOp::Swap<uint16_t>(uint16_t val)
@@ -49,6 +52,10 @@ namespace gdcm
     return (val>>8) | (val<<8);
 #endif
     }
+  template <> inline int16_t SwapperDoOp::Swap<int16_t>(int16_t val)
+    {
+    return Swap((uint16_t)val);
+    }
   template <> inline uint32_t SwapperDoOp::Swap<uint32_t>(uint32_t val)
     {
 #ifdef HAVE_BYTESWAP_H
@@ -58,6 +65,14 @@ namespace gdcm
     val= (val>>16) | (val<<16);
     return val;
 #endif
+    }
+  template <> inline int32_t SwapperDoOp::Swap<int32_t>(int32_t val)
+    {
+    return Swap((uint32_t)val);
+    }
+  template <> inline Tag SwapperDoOp::Swap<Tag>(Tag val)
+    {
+    return Tag( Swap((uint32_t)val.GetElementTag()) );
     }
   template <> inline uint64_t SwapperDoOp::Swap<uint64_t>(uint64_t val)
     {
@@ -95,6 +110,7 @@ namespace gdcm
         abort();
       }
     }
+
 
 #endif
 } // end namespace gdcm
