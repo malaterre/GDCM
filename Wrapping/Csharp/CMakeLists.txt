@@ -87,6 +87,13 @@ ADD_CUSTOM_TARGET(CSharp_gdcm_sharp ALL
     DEPENDS ${SWIG_MODULE_gdcm_REAL_NAME}
   )
 
+# For some reason csc v1.1.4322 does not like full path, so I need to locally copy it to the binary dir
+IF(WIN32)
+  CONFIGURE_FILE(
+    ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
+    ${CMAKE_CURRENT_BINARY_DIR}/HelloWorld.cs
+  )
+ENDIF(WIN32)
 CSHARP_ADD_EXECUTABLE(HelloWorld HelloWorld.cs)
 CSHARP_LINK_LIBRARIES(HelloWorld gdcm_csharp)
 
