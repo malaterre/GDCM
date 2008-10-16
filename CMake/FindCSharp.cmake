@@ -1,3 +1,8 @@
+# A C# Module for cmake
+#
+# TODO:
+# Should I inspect the ENV{CSC} var first ?
+#
 #
 #  Copyright (c) 2008 Mathieu Malaterre <mathieu.malaterre@gmail.com>
 #
@@ -15,8 +20,6 @@ ELSE(WIN32)
 ENDIF(WIN32)
 
 # http://public.kitware.com/Bug/view.php?id=7757
-#MESSAGE("DEBUG:${CMAKE_CURRENT_LIST_FILE}")
 GET_FILENAME_COMPONENT(current_list_path ${CMAKE_CURRENT_LIST_FILE} PATH)
-#MESSAGE("DEBUG:${current_list_path}")
 SET(CSharp_USE_FILE ${current_list_path}/UseCSharp.cmake)
 

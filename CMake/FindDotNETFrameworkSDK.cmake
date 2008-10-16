@@ -24,6 +24,10 @@
 # Visual C# Language Concepts 
 # Building from the Command Line
 # http://msdn.microsoft.com/en-us/library/1700bbwd(VS.71).aspx
+
+# FIXME, path are hardcoded.
+# http://www.walkernews.net/2007/07/30/how-to-verify-dot-net-framework-version/
+
 FIND_PROGRAM(CSC_v1_EXECUTABLE csc
  $ENV{windir}/Microsoft.NET/Framework/v1.1.4322/
 )

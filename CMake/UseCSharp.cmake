@@ -14,6 +14,9 @@
 #  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
+# TODO:
+# http://www.cs.nuim.ie/~jpower/Research/csharp/Index.html
+
 IF(WIN32)
   INCLUDE(${DotNETFrameworkSDK_USE_FILE})
   # remap
@@ -28,7 +31,7 @@ ELSE(WIN32)
   SET(CMAKE_CSHARP2_COMPILER ${GMCS_EXECUTABLE})
   SET(CMAKE_CSHARP3_COMPILER ${SMCS_EXECUTABLE})
 
-  SET(CMAKE_CSHARP3_INTERPRETER ${MONO_EXECUTABLE})
+  SET(CMAKE_CSHARP_INTERPRETER ${MONO_EXECUTABLE})
 ENDIF(WIN32)
 
 # default to v1:
@@ -62,12 +65,13 @@ MACRO(CSHARP_ADD_EXECUTABLE name)
   SET(csharp_cs_sources)
   FOREACH(it ${ARGN})
     IF(EXISTS ${it})
-      SET(csharp_cs_sources ${csharp_cs_sources} "${it}")
+      SET(csharp_cs_sources "${csharp_cs_sources} ${it}")
     ELSE(EXISTS ${it})
       IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${it})
-        SET(csharp_cs_sources ${csharp_cs_sources} "${CMAKE_CURRENT_SOURCE_DIR}/${it}")
+        SET(csharp_cs_sources "${csharp_cs_sources} ${CMAKE_CURRENT_SOURCE_DIR}/${it}")
       ELSE(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${it})
         MESSAGE("Could not find: ${it}")
+        SET(csharp_cs_sources "${csharp_cs_sources} ${it}")
       ENDIF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${it})
     ENDIF(EXISTS ${it})
   ENDFOREACH(it)
@@ -77,6 +81,30 @@ MACRO(CSHARP_ADD_EXECUTABLE name)
     #"/r:gdcm_csharp.dll" 
     "/out:${name}.exe ${csharp_cs_sources}"
   )
+
+ENDMACRO(CSHARP_ADD_EXECUTABLE)
+
+MACRO(CSHARP_LINK_LIBRARIES name)
+  SET(csharp_libraries)
+  SET(csharp_libraries_depends)
+  FOREACH(it ${ARGN})
+    #IF(EXISTS ${it}.dll)
+      SET(csharp_libraries "${csharp_libraries} /r:${it}.dll")
+    #  SET(csharp_libraries_depends ${it}.dll)
+    #ELSE(EXISTS ${it}.dll)
+    #  IF(EXISTS ${CMAKE_CURRENT_BINARY_DIR}/${it}.dll)
+    #    SET(csharp_libraries "${csharp_libraries} /r:${it}.dll")
+    #    SET(csharp_libraries_depends ${CMAKE_CURRENT_BINARY_DIR}/${it}.dll)
+    #  ELSE(EXISTS ${CMAKE_CURRENT_BINARY_DIR}/${it}.dll)
+    #    MESSAGE("Could not find: ${it}")
+    #  ENDIF(EXISTS ${CMAKE_CURRENT_BINARY_DIR}/${it}.dll)
+    #ENDIF(EXISTS ${it}.dll)
+  ENDFOREACH(it)
+  SET(CSHARP_EXECUTABLE_${name}_ARGS " ${csharp_libraries} ${CSHARP_EXECUTABLE_${name}_ARGS}")
+  MESSAGE( "DEBUG: ${CSHARP_EXECUTABLE_${name}_ARGS}" )
+
+  # BAD DESIGN !
+  # This should be in the _ADD_EXECUTABLE...
   SEPARATE_ARGUMENTS(CSHARP_EXECUTABLE_${name}_ARGS)
   ADD_CUSTOM_COMMAND(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${name}.exe
@@ -88,22 +116,11 @@ MACRO(CSHARP_ADD_EXECUTABLE name)
     COMMENT "Create HelloWorld.exe"
   )
 
+  #MESSAGE("DEBUG2:${csharp_libraries_depends}")
   ADD_CUSTOM_TARGET(CSHARP_EXECUTABLE_${name} ALL
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${name}.exe
+            ${csharp_libraries_depends}
   )
 
-ENDMACRO(CSHARP_ADD_EXECUTABLE)
-
-MACRO(CSHARP_LINK_LIBRARIES name)
-  SET(csharp_libraries)
-  FOREACH(it ${ARGN})
-    #IF(EXISTS ${it})
-      SET(csharp_libraries "${csharp_libraries} /r:${it}")
-    #ELSE(EXISTS ${it})
-    #  MESSAGE("Could not find: ${it}")
-    #ENDIF(EXISTS ${it})
-  ENDFOREACH(it)
-  SET(CSHARP_EXECUTABLE_${name}_ARGS "${CSHARP_EXECUTABLE_${name}_ARGS} ${csharp_libraries}")
-  MESSAGE( "DEBUG: ${CSHARP_EXECUTABLE_${name}_ARGS}" )
 ENDMACRO(CSHARP_LINK_LIBRARIES)
 
