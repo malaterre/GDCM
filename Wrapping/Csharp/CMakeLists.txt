@@ -59,56 +59,114 @@ IF(NOT GDCM_INSTALL_NO_LIBRARIES)
 
 ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 
-#IF(UNIX)
-#  FIND_PACKAGE(MONO REQUIRED)
+
+
+##IF(UNIX)
+##  FIND_PACKAGE(MONO REQUIRED)
+#FIND_PACKAGE(CSharp REQUIRED)
+#INCLUDE(${CSharp_USE_FILE})
+#
+#  CONFIGURE_FILE(
+#    ${CMAKE_CURRENT_SOURCE_DIR}/AssemblyInfo.cs.in
+#    ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
+#    @ONLY)
+##  ADD_CUSTOM_COMMAND(
+##    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gdcm_csharp.dll
+##    # $(CSC) /t:library /out:mapscript_csharp.dll *.cs config/AssemblyInfo.cs
+##    COMMAND ${MCS_EXECUTABLE} ARGS "/t:library" "/out:gdcm_csharp.dll" "*.cs" ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
+##    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+##    DEPENDS "${swig_generated_file_fullname}"
+##      ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
+##    COMMENT "mcs *.cs"
+##  )
+#
+## building HelloWorld:
+##$(CSC) /r:mapscript_csharp.dll /out:shpdump.exe examples/shpdump.cs
+## Cannot use glob since files are not generated yet...
+##FILE(GLOB bla "${CMAKE_CURRENT_BINARY_DIR}/*.cs")
+#CSHARP_ADD_LIBRARY(gdcm_csharp ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs \"*.cs\")
+#ADD_CUSTOM_TARGET(CSharp_gdcm_sharp ALL
+#    DEPENDS ${SWIG_MODULE_gdcm_REAL_NAME}
+#  )
+#
+## For some reason csc v1.1.4322 does not like full path, so I need to locally copy it to the binary dir
+#IF(WIN32)
+#  CONFIGURE_FILE(
+#    ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
+#    ${CMAKE_CURRENT_BINARY_DIR}/HelloWorld.cs
+#  )
+#ENDIF(WIN32)
+##CSHARP_ADD_EXECUTABLE(HelloWorld HelloWorld.cs)
+##CSHARP_LINK_LIBRARIES(HelloWorld gdcm_csharp)
+##ADD_CUSTOM_TARGET(CSHARP_EXECUTABLE_HelloWorld ALL
+##    DEPENDS 
+##      ${CMAKE_CURRENT_BINARY_DIR}/gdcm_csharp.dll
+##    # CSharp_gdcm_csharp
+##  )
+#
+#
+#
+##  $ export MONO_LOG_LEVEL="debug"; export MONO_LOG_MASK="dll"
+## $ export LD_LIBRARY_PATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/Wrapping/Csharp/:/home/mmalaterre/Projects/gdcm/debug-gcc43/bin   
+##ADD_CUSTOM_TARGET(GDCMCSharp ALL
+##  DEPENDS 
+##    ${CMAKE_CURRENT_BINARY_DIR}/gdcm_csharp.dll
+##    ${CMAKE_CURRENT_BINARY_DIR}/HelloWorld.exe
+##  COMMENT "building gdcm_csharp.dll"
+##)
+#
+#IF(BUILD_TESTING)
+#  ADD_TEST(HelloWorldCSharp ${CMAKE_CSHARP_INTERPRETER} ${CMAKE_CURRENT_BINARY_DIR}/HelloWorld.exe ${GDCM_DATA_ROOT}/test.acr)
+#ENDIF(BUILD_TESTING)
+#
+##ENDIF(UNIX)
+
+
 FIND_PACKAGE(CSharp REQUIRED)
 INCLUDE(${CSharp_USE_FILE})
-
   CONFIGURE_FILE(
     ${CMAKE_CURRENT_SOURCE_DIR}/AssemblyInfo.cs.in
     ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
     @ONLY)
-#  ADD_CUSTOM_COMMAND(
-#    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gdcm_csharp.dll
-#    # $(CSC) /t:library /out:mapscript_csharp.dll *.cs config/AssemblyInfo.cs
-#    COMMAND ${MCS_EXECUTABLE} ARGS "/t:library" "/out:gdcm_csharp.dll" "*.cs" ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
-#    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-#    DEPENDS "${swig_generated_file_fullname}"
-#      ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
-#    COMMENT "mcs *.cs"
-#  )
-
-# building HelloWorld:
-#$(CSC) /r:mapscript_csharp.dll /out:shpdump.exe examples/shpdump.cs
-# Cannot use glob since files are not generated yet...
-#FILE(GLOB bla "${CMAKE_CURRENT_BINARY_DIR}/*.cs")
-CSHARP_ADD_LIBRARY(gdcm_csharp ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs \"*.cs\")
-ADD_CUSTOM_TARGET(CSharp_gdcm_sharp ALL
-    DEPENDS ${SWIG_MODULE_gdcm_REAL_NAME}
+  ADD_CUSTOM_COMMAND(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gdcm_csharp.dll
+    # $(CSC) /t:library /out:mapscript_csharp.dll *.cs config/AssemblyInfo.cs
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:gdcm_csharp.dll" "*.cs" ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    DEPENDS "${swig_generated_file_fullname}"
+      ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
+    COMMENT "mcs *.cs"
   )
 
-# For some reason csc v1.1.4322 does not like full path, so I need to locally copy it to the binary dir
+# building HelloWorld:
+  ADD_CUSTOM_COMMAND(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/HelloWorld.exe
+#$(CSC) /r:mapscript_csharp.dll /out:shpdump.exe examples/shpdump.cs
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:gdcm_csharp.dll" "/out:HelloWorld.exe" ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gdcm_csharp.dll
+    ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
+    COMMENT "Create HelloWorld.exe"
+  )
+
 IF(WIN32)
   CONFIGURE_FILE(
     ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
     ${CMAKE_CURRENT_BINARY_DIR}/HelloWorld.cs
   )
 ENDIF(WIN32)
-CSHARP_ADD_EXECUTABLE(HelloWorld HelloWorld.cs)
-CSHARP_LINK_LIBRARIES(HelloWorld gdcm_csharp)
 
 #  $ export MONO_LOG_LEVEL="debug"; export MONO_LOG_MASK="dll"
 # $ export LD_LIBRARY_PATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/Wrapping/Csharp/:/home/mmalaterre/Projects/gdcm/debug-gcc43/bin   
-#ADD_CUSTOM_TARGET(GDCMCSharp ALL
-#  DEPENDS 
-#    ${CMAKE_CURRENT_BINARY_DIR}/gdcm_csharp.dll
-#    ${CMAKE_CURRENT_BINARY_DIR}/HelloWorld.exe
-#  COMMENT "building gdcm_csharp.dll"
-#)
+ADD_CUSTOM_TARGET(GDCMCSharp ALL
+  DEPENDS 
+    ${CMAKE_CURRENT_BINARY_DIR}/gdcm_csharp.dll
+    ${CMAKE_CURRENT_BINARY_DIR}/HelloWorld.exe
+  COMMENT "building gdcm_csharp.dll"
+)
 
 IF(BUILD_TESTING)
   ADD_TEST(HelloWorldCSharp ${CMAKE_CSHARP_INTERPRETER} ${CMAKE_CURRENT_BINARY_DIR}/HelloWorld.exe ${GDCM_DATA_ROOT}/test.acr)
 ENDIF(BUILD_TESTING)
 
-#ENDIF(UNIX)
 
