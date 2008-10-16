@@ -12,6 +12,8 @@
 # Comparison Between C++ and C#
 # http://msdn.microsoft.com/en-us/library/yyaad03b(VS.71).aspx
 
+# http://www.akadia.com/services/dotnet_assemblies.html
+
 # Visual C# Language Concepts 
 # Building from the Command Line
 # http://msdn.microsoft.com/en-us/library/1700bbwd(VS.71).aspx
