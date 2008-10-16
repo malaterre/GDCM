@@ -39,21 +39,30 @@ SET(CMAKE_CSHARP_COMPILER ${CMAKE_CSHARP1_COMPILER})
 
 MACRO(CSHARP_ADD_LIBRARY name)
   SET(csharp_cs_sources)
+  SET(csharp_cs_sources_dep)
   FOREACH(it ${ARGN})
     IF(EXISTS ${it})
-      SET(csharp_cs_sources ${csharp_cs_sources} "${it}")
+      SET(csharp_cs_sources "${csharp_cs_sources} ${it}")
+      SET(csharp_cs_sources_dep ${csharp_cs_sources_dep} ${it})
     ELSE(EXISTS ${it})
-      MESSAGE("Could not find: ${it}")
+      IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${it})
+        SET(csharp_cs_sources "${csharp_cs_sources} ${CMAKE_CURRENT_SOURCE_DIR}/${it}")
+        SET(csharp_cs_sources_dep ${csharp_cs_sources_dep} ${CMAKE_CURRENT_SOURCE_DIR}/${it})
+      ELSE(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${it})
+        MESSAGE("Could not find: ${it}")
+        SET(csharp_cs_sources "${csharp_cs_sources} ${it}")
+      ENDIF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${it})
     ENDIF(EXISTS ${it})
   ENDFOREACH(it)
 
   #SET(SHARP #)
+  SEPARATE_ARGUMENTS(csharp_cs_sources)
   ADD_CUSTOM_COMMAND(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${name}.dll
     COMMAND ${CMAKE_CSHARP_COMPILER}
     ARGS "/t:library" "/out:${name}.dll" ${csharp_cs_sources}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    DEPENDS "${csharp_cs_sources}"
+    DEPENDS "${csharp_cs_sources_dep}"
     COMMENT "Creating Csharp library ${name}.cs"
   )
   ADD_CUSTOM_TARGET(CSharp_${name} ALL
@@ -112,7 +121,7 @@ MACRO(CSHARP_LINK_LIBRARIES name)
     #ARGS "/r:gdcm_csharp.dll" "/out:${name}.exe" ${csharp_cs_sources}
     ARGS ${CSHARP_EXECUTABLE_${name}_ARGS}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    DEPENDS ${csharp_cs_sources}
+    #DEPENDS ${csharp_cs_sources}
     COMMENT "Create HelloWorld.exe"
   )
 
