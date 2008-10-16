@@ -79,9 +79,10 @@ INCLUDE(${CSharp_USE_FILE})
 #  )
 
 # building HelloWorld:
+#$(CSC) /r:mapscript_csharp.dll /out:shpdump.exe examples/shpdump.cs
 # Cannot use glob since files are not generated yet...
 #FILE(GLOB bla "${CMAKE_CURRENT_BINARY_DIR}/*.cs")
-CSHARP_ADD_LIBRARY(gdcm_csharp \"*.cs\")#${bla} )#${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs)
+CSHARP_ADD_LIBRARY(gdcm_csharp ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs \"*.cs\")
 ADD_CUSTOM_TARGET(CSharp_gdcm_sharp ALL
     DEPENDS ${SWIG_MODULE_gdcm_REAL_NAME}
   )
