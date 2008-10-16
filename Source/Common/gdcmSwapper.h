@@ -25,7 +25,7 @@ namespace gdcm
 class SwapperDoOp
 {
 public:
-  template <typename T> static T Swap(T val) {}
+  template <typename T> static T Swap(T val) {return val;}
   template <typename T> static void SwapArray(T *, unsigned int ) {}
 };
 
@@ -47,7 +47,7 @@ public:
 class SwapperNoOp
 {
 public:
-  template <typename T> static T Swap(T val) {}
+  template <typename T> static T Swap(T val) {return val;}
   template <typename T> static void SwapArray(T *, unsigned int ) {}
 };
 

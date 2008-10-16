@@ -241,10 +241,12 @@ public:
     assert( _os ); // Is stream valid ?
     //ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem((T*)data,
     //  _os.GetSwapCode(), length);
-    _os.write( reinterpret_cast<const char*>(&(data[0])), type_size);
+    T swappedData = SwapperNoOp::Swap(data[0]);
+    _os.write( reinterpret_cast<const char*>(&swappedData), type_size);
     for(unsigned long i=1; i<length;++i) {
       assert( _os );
-      _os.write( reinterpret_cast<const char*>(&(data[i])), type_size );
+      swappedData = SwapperNoOp::Swap(data[i]);
+      _os.write( reinterpret_cast<const char*>(&swappedData), type_size );
     }
     //ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem((T*)data,
     //  _os.GetSwapCode(), length);
