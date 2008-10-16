@@ -39,5 +39,5 @@ FIND_PROGRAM(CSC_v3_EXECUTABLE csc
 )
 
 GET_FILENAME_COMPONENT(current_list_path ${CMAKE_CURRENT_LIST_FILE} PATH)
-SET(DotNETFrameworkSDK_USE_FILE_USE_FILE ${current_list_path}/UseDotNETFrameworkSDK.cmake)
+SET(DotNETFrameworkSDK_USE_FILE ${current_list_path}/UseDotNETFrameworkSDK.cmake)
 
