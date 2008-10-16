@@ -9,6 +9,12 @@
 # version to be found can be changed from the command line by
 # means of setting MONO_EXECUTABLE
 #
+#  Copyright (c) 2008 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+#
+#  Redistribution and use is allowed according to the terms of the New
+#  BSD license.
+#  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+#
 SET(MONO_FOUND FALSE)
 
 # apt-get install mono-jit mono-mcs mono-gac mono-gmcs

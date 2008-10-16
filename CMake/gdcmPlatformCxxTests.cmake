@@ -1,3 +1,10 @@
+#
+#  Copyright (c) 2008 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+#
+#  Redistribution and use is allowed according to the terms of the New
+#  BSD license.
+#  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+#
 # Macro to centralize all the plateform specific
 # tests.
 MACRO(GDCM_PLATFORM_CXX_TEST var description invert)

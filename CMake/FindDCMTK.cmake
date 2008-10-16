@@ -16,6 +16,13 @@
 # 
 # For debian you need:
 # sudo apt-get install libdcmtk1-dev dcmtk
+#
+#  Copyright (c) 2008 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+#
+#  Redistribution and use is allowed according to the terms of the New
+#  BSD license.
+#  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+#
 
 IF( NOT DCMTK_FOUND )
   SET( DCMTK_DIR "/usr/include/dcmtk/"

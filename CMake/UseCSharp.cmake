@@ -1,3 +1,19 @@
+# - C# module for CMake
+# Defines the following macros:
+#   CSHARP_ADD_EXECUTABLE(name [ files ])
+#     - Define C# executable with given name
+#   CSHARP_ADD_LIBRARY(name [ files ])
+#     - Define C# library with given name
+#   CSHARP_LINK_LIBRARIES(name [ libraries ])
+#     - Link libraries to csharp library
+#
+#  Copyright (c) 2008 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+#
+#  Redistribution and use is allowed according to the terms of the New
+#  BSD license.
+#  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+#
+
 IF(WIN32)
   INCLUDE(${DotNETFrameworkSDK_USE_FILE})
   # remap
@@ -71,7 +87,6 @@ MACRO(CSHARP_ADD_EXECUTABLE name)
     DEPENDS ${csharp_cs_sources}
     COMMENT "Create HelloWorld.exe"
   )
-
 
   ADD_CUSTOM_TARGET(CSHARP_EXECUTABLE_${name} ALL
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${name}.exe

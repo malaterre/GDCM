@@ -11,6 +11,13 @@
 #
 # Do not forget to set to on the following:
 # GDCM_USE_SYSTEM_EXPAT / GDCM_USE_SYSTEM_ZLIB / GDCM_USE_SYSTEM_UUID
+#
+#  Copyright (c) 2008 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+#
+#  Redistribution and use is allowed according to the terms of the New
+#  BSD license.
+#  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+#
 
 # the name of the target operating system
 SET(CMAKE_SYSTEM_NAME Linux)

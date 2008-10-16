@@ -1,5 +1,12 @@
 # - Find .NET Software Development Kit 
 # This module finds an installed .NET Software Development Kit.  It sets the following variables:
+# 
+#  Copyright (c) 2008 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+#
+#  Redistribution and use is allowed according to the terms of the New
+#  BSD license.
+#  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+#
 
 # Note:
 # .NET Framework SDK Version 1.1

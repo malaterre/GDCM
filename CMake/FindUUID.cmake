@@ -6,6 +6,13 @@
 #  UUID_FOUND, If false, do not try to use UUID.
 # also defined, but not for general use are
 #  UUID_LIBRARY, where to find the UUID library.
+#
+#  Copyright (c) 2008 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+#
+#  Redistribution and use is allowed according to the terms of the New
+#  BSD license.
+#  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+#
 
 FIND_PATH(UUID_INCLUDE_DIR uuid/uuid.h
 /usr/local/include

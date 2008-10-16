@@ -1,3 +1,10 @@
+#
+#  Copyright (c) 2008 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+#
+#  Redistribution and use is allowed according to the terms of the New
+#  BSD license.
+#  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+#
 
 FIND_PATH(LJPEG_INCLUDE_DIR ljpeg-62/jpeglib.h
 /usr/local/include
