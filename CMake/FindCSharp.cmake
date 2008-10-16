@@ -6,3 +6,9 @@ ELSE(WIN32)
   FIND_PACKAGE(MONO)
 ENDIF(WIN32)
 
+# http://public.kitware.com/Bug/view.php?id=7757
+#MESSAGE("DEBUG:${CMAKE_CURRENT_LIST_FILE}")
+GET_FILENAME_COMPONENT(current_list_path ${CMAKE_CURRENT_LIST_FILE} PATH)
+#MESSAGE("DEBUG:${current_list_path}")
+SET(CSharp_USE_FILE ${current_list_path}/UseCSharp.cmake)
+
