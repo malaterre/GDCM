@@ -17,4 +17,8 @@
 # Visual C# Language Concepts 
 # Building from the Command Line
 # http://msdn.microsoft.com/en-us/library/1700bbwd(VS.71).aspx
-FIND_PROGRAM(CSC_EXECUTABLE csc)
+FIND_PROGRAM(CSC_EXECUTABLE csc
+ $ENV{windir}/Microsoft.NET/Framework/v1.1.4322/
+ $ENV{windir}/Microsoft.NET/Framework/v2.0.50727/
+ $ENV{windir}/Microsoft.NET/Framework/v3.5/
+)
