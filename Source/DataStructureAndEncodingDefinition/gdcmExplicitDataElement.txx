@@ -278,6 +278,7 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     assert( VRField & VR::VRBINARY );
     unsigned int vrsize = VRField.GetSize();
     assert( vrsize == 1 || vrsize == 2 || vrsize == 4 || vrsize == 8 );
+    if(VRField==VR::AT) vrsize = 2;
     switch(vrsize)
       {
     case 1:
