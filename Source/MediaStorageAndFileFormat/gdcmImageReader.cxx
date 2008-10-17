@@ -194,11 +194,14 @@ signed short ImageReader::ReadSSFromTag( Tag const &t, std::stringstream &ss,
 {
   const ByteValue *bv = GetPointerFromElement(t);
   Element<VR::SS,VM::VM1> el;
+  const char *array = bv->GetPointer();
+  const VL &length = bv->GetLength();
   assert( bv->GetLength() == 2 );
-  conversion = std::string(bv->GetPointer(), 2); 
-  ss.clear();
-  ss.str( conversion );
-  el.Read( ss );
+  //conversion = std::string(bv->GetPointer(), 2); 
+  //ss.clear();
+  //ss.str( conversion );
+  //el.Read( ss );
+  memcpy( (void*)(&el), array, el.GetLength() * sizeof( VRToType<VR::SS>::Type) );
   return el.GetValue();
 }
 
