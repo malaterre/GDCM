@@ -17,6 +17,7 @@ SET(MSFF_TEST_SRCS
   TestImageChangeTransferSyntax4
   # see below
   TestImageChangeTransferSyntax6
+  TestImageChangeTransferSyntax7
   TestImageApplyLookupTable
   TestImageChangePlanarConfiguration
   TestCoder
