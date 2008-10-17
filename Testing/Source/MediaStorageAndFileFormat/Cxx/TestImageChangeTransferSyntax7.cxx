@@ -48,7 +48,6 @@ int TestImageChangeTransferSyntaxIM2RAWBE(const char *filename, bool verbose = f
     }
 
   const gdcm::Image &image = reader.GetImage();
-  const TransferSyntax &ts = reader.GetFile().GetHeader().GetDataSetTransferSyntax();
 
   gdcm::ImageChangeTransferSyntax change;
   change.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
@@ -94,7 +93,7 @@ int TestImageChangeTransferSyntaxIM2RAWBE(const char *filename, bool verbose = f
   change2.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRBigEndian );
   const gdcm::Image &image2 = reader2.GetImage();
   change2.SetInput( image2 );
-  bool b = change2.Change();
+  b = change2.Change();
   if( !b )
     {
     std::cerr << "Could not change the Transfer Syntax: " << outfilename << std::endl;
@@ -191,7 +190,7 @@ int TestImageChangeTransferSyntaxIM2RAWBE(const char *filename, bool verbose = f
 
 } // end namespace gdcm
 
-int TestImageChangeTransferSyntax6(int argc, char *argv[])
+int TestImageChangeTransferSyntax7(int argc, char *argv[])
 {
   if( argc == 2 )
     {
