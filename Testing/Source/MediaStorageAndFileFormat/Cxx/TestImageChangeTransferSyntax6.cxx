@@ -153,7 +153,7 @@ int TestImageChangeTransferSyntax6(int argc, char *argv[])
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return gdcm::TestImageChangeTransferSyntaxRAW(filename, true);
+    return gdcm::TestImageChangeTransferSyntaxRAWBE(filename, true);
     }
 
   // else
