@@ -60,7 +60,7 @@ int TestImageChangeTransferSyntaxJPEGLS(const char *filename, bool verbose = fal
     }
 
   // Create directory first:
-  const char subdir[] = "TestImageChangeTransferSyntax";
+  const char subdir[] = "TestImageChangeTransferSyntax5";
   std::string tmpdir = Testing::GetTempDirectory( subdir );
   if( !System::FileIsDirectory( tmpdir.c_str() ) )
     {

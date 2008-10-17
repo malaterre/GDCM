@@ -61,7 +61,7 @@ int TestImageChangeTransferSyntaxRAWBE(const char *filename, bool verbose = fals
     }
 
   // Create directory first:
-  const char subdir[] = "TestImageChangeTransferSyntax";
+  const char subdir[] = "TestImageChangeTransferSyntax6";
   std::string tmpdir = Testing::GetTempDirectory( subdir );
   if( !System::FileIsDirectory( tmpdir.c_str() ) )
     {

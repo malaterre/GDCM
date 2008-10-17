@@ -53,7 +53,7 @@ int TestImageChangeTransferSyntaxRAW(const char *filename, bool verbose = false)
   gdcm::ImageChangeTransferSyntax change;
   if( ts == gdcm::TransferSyntax::ExplicitVRLittleEndian )
     {
-    // TODO: I think that duplicate goals of TestWriter2  ...
+    // TODO: I think that duplicate goals of TestImageWriter2  ...
     change.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
     }
   else
@@ -69,7 +69,7 @@ int TestImageChangeTransferSyntaxRAW(const char *filename, bool verbose = false)
     }
 
   // Create directory first:
-  const char subdir[] = "TestImageChangeTransferSyntax";
+  const char subdir[] = "TestImageChangeTransferSyntax4";
   std::string tmpdir = Testing::GetTempDirectory( subdir );
   if( !System::FileIsDirectory( tmpdir.c_str() ) )
     {
