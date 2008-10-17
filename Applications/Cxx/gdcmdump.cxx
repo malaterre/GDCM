@@ -257,7 +257,7 @@ int main (int argc, char *argv[])
         {"ignore-errors", 0, &ignoreerrors, 1},
         {0, 0, 0, 0} // required
     };
-    static const char short_options[] = "i:xrpdcCPVWDEhv";
+    static const char short_options[] = "i:xrpdcCPVWDEhvI";
     c = getopt_long (argc, argv, short_options,
       long_options, &option_index);
     if (c == -1)
@@ -344,6 +344,10 @@ int main (int argc, char *argv[])
 
     case 'v':
       version = 1;
+      break;
+
+    case 'I':
+      ignoreerrors = 1;
       break;
 
     case '?':

@@ -236,7 +236,7 @@ int main (int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:XMUClwJKRFYS:P:VWDEhv",
+    c = getopt_long (argc, argv, "i:o:XMUClwJKRFYS:P:VWDEhvI",
       long_options, &option_index);
     if (c == -1)
       {
@@ -375,6 +375,10 @@ int main (int argc, char *argv[])
 
     case 'v':
       version = 1;
+      break;
+
+    case 'I':
+      ignoreerrors = 1;
       break;
 
     case '?':
