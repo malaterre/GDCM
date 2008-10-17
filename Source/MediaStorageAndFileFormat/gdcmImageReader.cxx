@@ -785,8 +785,12 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   const Tag tcolumns(0x0028, 0x0011);
   if( ds.FindDataElement( tcolumns ) )
     {
-    PixelData->SetDimension(0,
-      ReadUSFromTag( tcolumns, ss, conversion ) );
+    //PixelData->SetDimension(0,
+    //  ReadUSFromTag( tcolumns, ss, conversion ) );
+    const DataElement& de = ds.GetDataElement( tcolumns );
+    Attribute<0x0028,0x0011> at;
+    at.SetFromDataElement( de );
+    PixelData->SetDimension(0, at.GetValue() );
     }
   else
     {
@@ -797,8 +801,15 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     }
 
   // D 0028|0010 [US] [Rows] [512]
-  PixelData->SetDimension(1,
-    ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
+  //PixelData->SetDimension(1,
+  //  ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
+    {
+    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0010) );
+    Attribute<0x0028,0x0010> at;
+    at.SetFromDataElement( de );
+    PixelData->SetDimension(1, at.GetValue() );
+    //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
+    }
 
   // Dummy check
   const unsigned int *dims = PixelData->GetDimensions();
@@ -815,8 +826,12 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   const Tag samplesperpixel = Tag(0x0028, 0x0002);
   if( ds.FindDataElement( samplesperpixel ) )
     {
-    pf.SetSamplesPerPixel(
-      ReadUSFromTag( samplesperpixel, ss, conversion ) );
+    //pf.SetSamplesPerPixel(
+    //  ReadUSFromTag( samplesperpixel, ss, conversion ) );
+    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0002) );
+    Attribute<0x0028,0x0002> at;
+    at.SetFromDataElement( de );
+    pf.SetSamplesPerPixel( at.GetValue() );
     }
 
   if( ms == MediaStorage::MRSpectroscopyStorage )
@@ -827,23 +842,50 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
     {
     assert( MediaStorage::IsImage( ms ) );
     // D 0028|0100 [US] [Bits Allocated] [16]
-    pf.SetBitsAllocated(
-      ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
+    //pf.SetBitsAllocated(
+    //  ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
+    {
+    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
+    Attribute<0x0028,0x0100> at;
+    at.SetFromDataElement( de );
+    pf.SetBitsAllocated( at.GetValue() );
+    //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
+    }
 
     // D 0028|0101 [US] [Bits Stored] [12]
-    pf.SetBitsStored(
-      ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
+    //pf.SetBitsStored(
+    //  ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
+    {
+    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
+    Attribute<0x0028,0x0101> at;
+    at.SetFromDataElement( de );
+    pf.SetBitsStored( at.GetValue() );
+    //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
+    }
 
     // D 0028|0102 [US] [High Bit] [11]
-    pf.SetHighBit(
-      ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
+    //pf.SetHighBit(
+    //  ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
+    {
+    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
+    Attribute<0x0028,0x0102> at;
+    at.SetFromDataElement( de );
+    pf.SetHighBit( at.GetValue() );
+    //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
+    }
 
     // D 0028|0103 [US] [Pixel Representation] [0]
     Tag tpixelrep(0x0028, 0x0103);
     if( ds.FindDataElement( tpixelrep ) && !ds.GetDataElement( tpixelrep ).IsEmpty() )
       {
-      pf.SetPixelRepresentation(
-        ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
+      //pf.SetPixelRepresentation(
+      //  ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
+    const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0103) );
+    Attribute<0x0028,0x0103> at;
+    at.SetFromDataElement( de );
+    pf.SetPixelRepresentation( at.GetValue() );
+    //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
+
       }
     else
       {
@@ -862,7 +904,12 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
   // well hopefully :(
   if( ds.FindDataElement( planarconfiguration ) && !ds.GetDataElement( planarconfiguration ).IsEmpty() )
     {
-    unsigned int pc = ReadUSFromTag( planarconfiguration, ss, conversion );
+    const DataElement& de = ds.GetDataElement( planarconfiguration );
+    Attribute<0x0028,0x0006> at;
+    at.SetFromDataElement( de );
+
+    //unsigned int pc = ReadUSFromTag( planarconfiguration, ss, conversion );
+    unsigned int pc = at.GetValue();
     if( pc && PixelData->GetPixelFormat().GetSamplesPerPixel() != 3 )
       {
       gdcmDebugMacro( "Cannot have PlanarConfiguration=1, when Sample Per Pixel != 3" );
