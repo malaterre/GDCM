@@ -1117,7 +1117,7 @@ bool ImageReader::ReadACRNEMAImage()
     at.SetFromDataElement( de );
     assert( at.GetNumberOfValues() == 1 );
     unsigned short imagedimensions = at.GetValue();
-    assert( imagedimensions == ReadSSFromTag( timagedimensions, ss, conversion ) );
+    //assert( imagedimensions == ReadSSFromTag( timagedimensions, ss, conversion ) );
     if ( imagedimensions == 3 )
       {
       PixelData->SetNumberOfDimensions(3);
@@ -1127,7 +1127,7 @@ bool ImageReader::ReadACRNEMAImage()
       at.SetFromDataElement( de );
       assert( at.GetNumberOfValues() == 1 );
       PixelData->SetDimension(2, at.GetValue() );
-      assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0012), ss, conversion ) );
+      //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0012), ss, conversion ) );
       }
     else if ( imagedimensions == 2 )
       {
@@ -1206,7 +1206,7 @@ bool ImageReader::ReadACRNEMAImage()
     Attribute<0x0028,0x0100> at;
     at.SetFromDataElement( de );
     pf.SetBitsAllocated( at.GetValue() );
-    assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
+    //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
     }
 
   // D 0028|0101 [US] [Bits Stored] [12]
@@ -1215,7 +1215,7 @@ bool ImageReader::ReadACRNEMAImage()
     Attribute<0x0028,0x0101> at;
     at.SetFromDataElement( de );
     pf.SetBitsStored( at.GetValue() );
-    assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
+    //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
     }
 
   // D 0028|0102 [US] [High Bit] [11]
@@ -1224,7 +1224,7 @@ bool ImageReader::ReadACRNEMAImage()
     Attribute<0x0028,0x0102> at;
     at.SetFromDataElement( de );
     pf.SetHighBit( at.GetValue() );
-    assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
+    //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
     }
 
   // D 0028|0103 [US] [Pixel Representation] [0]
@@ -1233,7 +1233,7 @@ bool ImageReader::ReadACRNEMAImage()
     Attribute<0x0028,0x0103> at;
     at.SetFromDataElement( de );
     pf.SetPixelRepresentation( at.GetValue() );
-    assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
+    //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0103), ss, conversion ) );
     }
 
   PixelData->SetPixelFormat( pf );
