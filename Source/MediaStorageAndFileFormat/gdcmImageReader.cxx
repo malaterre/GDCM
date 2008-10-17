@@ -1152,7 +1152,7 @@ bool ImageReader::ReadACRNEMAImage()
     Attribute<0x0028,0x0011> at;
     at.SetFromDataElement( de );
     PixelData->SetDimension(0, at.GetValue() );
-    assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0011), ss, conversion ) );
+    //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0011), ss, conversion ) );
     }
 
   // D 0028|0010 [US] [Rows] [512]
@@ -1161,7 +1161,7 @@ bool ImageReader::ReadACRNEMAImage()
     Attribute<0x0028,0x0010> at;
     at.SetFromDataElement( de );
     PixelData->SetDimension(1, at.GetValue() );
-    assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
+    //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0010), ss, conversion ) );
     }
 
   // This is the definition of an ACR NEMA image:
