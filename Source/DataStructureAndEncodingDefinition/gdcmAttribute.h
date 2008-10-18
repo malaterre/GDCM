@@ -170,9 +170,33 @@ public:
     assert( GetVR() != VR::INVALID );
     assert( GetVR().Compatible( de.GetVR() ) || de.GetVR() == VR::INVALID ); // In case of VR::INVALID cannot use the & operator
     const ByteValue *bv = de.GetByteValue();
-    SetByteValue(bv);
+    if( de.GetVR() == VR::UN || de.GetVR() == VR::INVALID )
+      {
+      SetByteValueNoSwap(bv);
+      }
+    else
+      {
+      SetByteValue(bv);
+      }
   }
 protected:
+  void SetByteValueNoSwap(const ByteValue *bv) {
+    if( !bv ) return; // That would be bad...
+    assert( bv->GetPointer() && bv->GetLength() ); // [123]C element can be empty
+    //if( VRToEncoding<TVR>::Mode == VR::VRBINARY )
+    //  {
+    //  // always do a copy !
+    //  SetValues(bv->GetPointer(), bv->GetLength());
+    //  }
+    //else
+      {
+      std::stringstream ss;
+      std::string s = std::string( bv->GetPointer(), bv->GetLength() );
+      ss.str( s );
+      EncodingImplementation<VRToEncoding<TVR>::Mode>::ReadNoSwap(Internal, 
+        GetNumberOfValues(),ss);
+      }
+  }
   void SetByteValue(const ByteValue *bv) {
     if( !bv ) return; // That would be bad...
     assert( bv->GetPointer() && bv->GetLength() ); // [123]C element can be empty

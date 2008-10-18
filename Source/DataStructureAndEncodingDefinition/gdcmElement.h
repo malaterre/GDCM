@@ -143,6 +143,11 @@ public:
     }
 
   template<typename T>
+  static inline void ReadNoSwap(T* data, unsigned long length,
+                          std::istream &_is) {
+    Read(data,length,_is);
+}
+  template<typename T>
   static inline void Write(const T* data, unsigned long length,
                            std::ostream &_os)  {
     assert( data );
@@ -170,7 +175,7 @@ std::string to_string ( Float data ) {
   }
 } 
 
-/* Writting VR::DS is not that easy after all */
+/* Writing VR::DS is not that easy after all */
 // http://groups.google.com/group/comp.lang.c++/browse_thread/thread/69ccd26f000a0802
 template<> inline void EncodingImplementation<VR::VRASCII>::Write(const float * data, unsigned long length, std::ostream &_os)  {
     assert( data );
@@ -216,6 +221,22 @@ public:
       _is.read( reinterpret_cast<char*>(data+i), type_size );
     }
     }
+  template<typename T>
+  static inline void ReadNoSwap(T* data, unsigned long length,
+    std::istream &_is) {
+    const unsigned int type_size = sizeof(T);
+    assert( data ); // Can we read from pointer ?
+    assert( length );
+    assert( _is ); // Is stream valid ?
+    _is.read( reinterpret_cast<char*>(data+0), type_size);
+    for(unsigned long i=1; i<length; ++i) {
+      assert( _is );
+      _is.read( reinterpret_cast<char*>(data+i), type_size );
+    }
+    //ByteSwap<T>::SwapRangeFromSwapCodeIntoSystem(data,
+    //  _is.GetSwapCode(), length);
+    //SwapperNoOp::SwapArray(data,length);
+  }
   template<typename T>
   static inline void Read(T* data, unsigned long length,
     std::istream &_is) {
