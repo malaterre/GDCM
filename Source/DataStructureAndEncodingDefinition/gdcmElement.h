@@ -79,15 +79,16 @@ public:
     assert( idx < VMToLength<TVM>::Length );
     Internal[idx] = v;
   }
-  void Set(Value const &v) {
-    const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
-    assert( bv ); // That would be bad...
-    //memcpy(Internal, bv->GetPointer(), bv->GetLength());
-    std::stringstream ss;
-    std::string s = std::string( bv->GetPointer(), bv->GetLength() );
-    ss.str( s );
-    EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
-      GetLength(),ss);
+
+  void Set(DataElement const &de) {
+    if( de.GetVR() == VR::UN || de.GetVR() == VR::INVALID )
+      {
+      Set(bv);
+      }
+    else
+      {
+      SetNoSwap(bv);
+      }
   }
 
   void Read(std::istream &_is) {
@@ -98,6 +99,27 @@ public:
     return EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
       GetLength(),_os);
     }
+protected:
+  void SetNoSwap(Value const &v) {
+    const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
+    assert( bv ); // That would be bad...
+    //memcpy(Internal, bv->GetPointer(), bv->GetLength());
+    std::stringstream ss;
+    std::string s = std::string( bv->GetPointer(), bv->GetLength() );
+    ss.str( s );
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::ReadNoSwap(Internal, 
+      GetLength(),ss);
+  }
+  void Set(Value const &v) {
+    const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
+    assert( bv ); // That would be bad...
+    //memcpy(Internal, bv->GetPointer(), bv->GetLength());
+    std::stringstream ss;
+    std::string s = std::string( bv->GetPointer(), bv->GetLength() );
+    ss.str( s );
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+      GetLength(),ss);
+  }
 };
 
 
