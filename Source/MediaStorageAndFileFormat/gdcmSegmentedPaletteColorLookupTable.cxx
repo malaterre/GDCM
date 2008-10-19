@@ -191,6 +191,9 @@ void SegmentedPaletteColorLookupTable::SetLUT(LookupTableType type, const unsign
     std::vector<uint16_t> palette;
     unsigned int num_entries = GetLUTLength(type);
     palette.reserve(num_entries);
+    assert( length % 2 == 0 );
+    // FIXME: inplace byteswapping (BAD!)
+    SwapperNoOp::SwapArray((uint16_t*)segment_values,length/2);
     ExpandPalette(segment_values, length, palette);
     LookupTable::SetLUT(type, (unsigned char*)&palette[0], palette.size() * 2);
     }
