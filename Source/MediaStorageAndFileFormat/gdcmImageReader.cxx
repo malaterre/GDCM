@@ -354,7 +354,7 @@ abort();
       //const Tag tdescriptor(0x0028, 0x3002);
       Element<VR::US,VM::VM3> el_us3;
       // Now pass the byte array to a DICOMizer:
-      el_us3.Set( ds[tdescriptor].GetValue() );
+      el_us3.SetFromDataElement( ds[tdescriptor] ); //.GetValue() );
       lut->InitializeLUT( LookupTable::LookupTableType(i),
         el_us3[0], el_us3[1], el_us3[2] );
 
@@ -1007,7 +1007,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
       Element<VR::US,VM::VM1> ppv;
       if( !ds.GetDataElement(Tag(0x0028,0x0120) ).IsEmpty() )
         {
-        ppv.Set( ds.GetDataElement(Tag(0x0028,0x0120)).GetValue() );
+        ppv.SetFromDataElement( ds.GetDataElement(Tag(0x0028,0x0120)) ); //.GetValue() );
         if( pi == PhotometricInterpretation::MONOCHROME2 && ppv.GetValue() == 0 )
           {
           vizissue = false;
@@ -1051,7 +1051,7 @@ bool ImageReader::ReadImage(MediaStorage const &ms)
       //const Tag tdescriptor(0x0028, 0x3002);
       Element<VR::US,VM::VM3> el_us3;
       // Now pass the byte array to a DICOMizer:
-      el_us3.Set( ds[tdescriptor].GetValue() );
+      el_us3.SetFromDataElement( ds[tdescriptor] ); //.GetValue() );
       lut->InitializeLUT( LookupTable::LookupTableType(i),
         el_us3[0], el_us3[1], el_us3[2] );
 
