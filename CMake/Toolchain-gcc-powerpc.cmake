@@ -1,4 +1,5 @@
 # http://www.cmake.org/Wiki/CmakeMingw
+# http://doc.cliss21.com/index.php?title=QEMU
 # Usage:
 #
 #  $ cmake ../trunk -DCMAKE_TOOLCHAIN_FILE=../trunk/CMake/Toolchain-mingw32.cmake 
