@@ -5,6 +5,12 @@
 #
 # For gdcm you need at least the following three package (2008/08/19):
 #
+# fix /etc/apt/source.lists
+#  + deb http://www.emdebian.org/debian/ unstable main
+# 
+#  // prebuilt Emdebian project
+#  sudo apt-get install g++-4.1-powerpc-linux-gnu
+#
 #  apt-cross --arch powerpc -i zlib1g-dev
 #  apt-cross --arch powerpc -i uuid-dev
 #  apt-cross --arch powerpc -i libexpat1-dev
@@ -23,10 +29,8 @@
 SET(CMAKE_SYSTEM_NAME Linux)
 
 # which compilers to use for C and C++
-SET(CMAKE_C_COMPILER gcc)
-#SET(CMAKE_C_FLAGS -mpowerpc)
-SET(CMAKE_CXX_COMPILER g++)
-#SET(CMAKE_CXX_FLAGS -mpowerpc)
+SET(CMAKE_C_COMPILER powerpc-linux-gnu-gcc)
+SET(CMAKE_CXX_COMPILER powerpc-linux-gnu-g++)
 
 # here is the target environment located
 SET(CMAKE_FIND_ROOT_PATH   /usr/powerpc-linux-gnu )
