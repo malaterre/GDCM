@@ -374,7 +374,7 @@ const char *System::GetCurrentProcessFileName()
     return buf;
     }
 #else
-  static char path[2046]; //PATH_MAX];
+  static char path[PATH_MAX];
   if ( readlink ("/proc/self/exe", path, sizeof(path)) > 0) // Technically 0 is not an error, but that would mean
                                                             // 0 byte were copied ... thus considered it as an error
     {
@@ -389,7 +389,7 @@ static void where_am_i() {}
 const char *System::GetCurrentModuleFileName()
 {
 #ifdef __USE_GNU
-  static char path[2046]; //PATH_MAX];
+  static char path[PATH_MAX];
   Dl_info info;
   if (dladdr( (void*)&where_am_i, &info ) == 0)
     {
