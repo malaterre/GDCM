@@ -172,11 +172,11 @@ public:
     const ByteValue *bv = de.GetByteValue();
     if( de.GetVR() == VR::UN || de.GetVR() == VR::INVALID )
       {
-      SetByteValueNoSwap(bv);
+      SetByteValue(bv);
       }
     else
       {
-      SetByteValue(bv);
+      SetByteValueNoSwap(bv);
       }
   }
 protected:
