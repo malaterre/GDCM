@@ -19,6 +19,7 @@
 #include "gdcmDataElement.h"
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmSmartPointer.h"
+#include "gdcmSwapper.h"
 
 #include <vector>
 
