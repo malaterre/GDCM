@@ -793,6 +793,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
     const DataElement& de = ds.GetDataElement( Tag(0x0028,0x0009) );
     gdcm::Attribute<0x0028,0x0009> at;
     at.SetFromDataElement( de );
+    assert( ds.FindDataElement( at.GetValue() ) );
     if( ds.FindDataElement( at.GetValue() ) )
       {
 /*
