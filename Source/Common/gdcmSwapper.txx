@@ -73,7 +73,7 @@ namespace gdcm
 
   template <> inline Tag SwapperNoOp::Swap<Tag>(Tag val)
     {
-    return Tag( Swap((uint32_t)val.GetElementTag()) );
+    return Tag( Swap(val.GetGroup()), Swap(val.GetElement()) );
     }
 
   template <> inline void SwapperNoOp::SwapArray(uint8_t *, unsigned int ) {}
