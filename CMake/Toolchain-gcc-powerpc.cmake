@@ -15,6 +15,18 @@
 #  apt-cross --arch powerpc -i uuid-dev
 #  apt-cross --arch powerpc -i libexpat1-dev
 #
+#I was getting:
+#$ qemu-ppc ./a.out
+#/lib/ld.so.1: No such file or directory
+#
+#Two approach for solving it:
+#1.
+#CMAKE_EXE_LINKER_FLAGS:STRING=-static
+#2. 
+#$ qemu-ppc -L /usr/powerpc-linux-gnu/ ./a.out
+#Hello cross-compiling world!
+#
+#
 # Do not forget to set to on the following:
 # GDCM_USE_SYSTEM_EXPAT / GDCM_USE_SYSTEM_ZLIB / GDCM_USE_SYSTEM_UUID
 #
