@@ -53,6 +53,7 @@ public:
     assert( sizeof(RLEHeader) == 64 );
     //ByteSwap<unsigned long>::SwapRangeFromSwapCodeIntoSystem(
     //  (unsigned long*)&Header, is.GetSwapCode(), 16);
+    SwapperNoOp::SwapArray((uint32_t*)&Header,16);
     uint32_t numSegments = Header.NumSegments;
     if( numSegments >= 1 )
       {
