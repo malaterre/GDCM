@@ -80,7 +80,7 @@ public:
     Internal[idx] = v;
   }
 
-  void Set(DataElement const &de) {
+  void SetFromDataElement(DataElement const &de) {
     const ByteValue *bv = de.GetByteValue();
     assert( bv );
     if( de.GetVR() == VR::UN || de.GetVR() == VR::INVALID )
@@ -101,6 +101,19 @@ public:
     return EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
       GetLength(),_os);
     }
+
+  // FIXME: remove this function
+  // this is only used in gdcm::SplitMosaicFilter / to pass value of a CSAElement
+  void Set(Value const &v) {
+    const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
+    assert( bv ); // That would be bad...
+    //memcpy(Internal, bv->GetPointer(), bv->GetLength());
+    std::stringstream ss;
+    std::string s = std::string( bv->GetPointer(), bv->GetLength() );
+    ss.str( s );
+    EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
+      GetLength(),ss);
+  }
 protected:
   void SetNoSwap(Value const &v) {
     const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
@@ -110,16 +123,6 @@ protected:
     std::string s = std::string( bv->GetPointer(), bv->GetLength() );
     ss.str( s );
     EncodingImplementation<VRToEncoding<TVR>::Mode>::ReadNoSwap(Internal, 
-      GetLength(),ss);
-  }
-  void Set(Value const &v) {
-    const ByteValue *bv = dynamic_cast<const ByteValue*>(&v);
-    assert( bv ); // That would be bad...
-    //memcpy(Internal, bv->GetPointer(), bv->GetLength());
-    std::stringstream ss;
-    std::string s = std::string( bv->GetPointer(), bv->GetLength() );
-    ss.str( s );
-    EncodingImplementation<VRToEncoding<TVR>::Mode>::Read(Internal, 
       GetLength(),ss);
   }
 };
