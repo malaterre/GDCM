@@ -22,6 +22,26 @@
 // until then gdcm.PosixEmulation will remain the recommended way to access
 // gdcm.System API from C#
 
+/*
+> I want to wrap C++ code in C#. Is there a way to instruct swig to insert
+> a
+> series of "using" statements for each C# source file that gets generated?
+
+
+%pragma(csharp) moduleimports=%{
+using System;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
+using My.Own.Namespace;
+%}
+
+%pragma(csharp) imclassimports=%{
+using System;
+using System.Runtime.InteropServices;
+using My.Own.Namespace;
+%}
+*/
+
 %module(docstring="A DICOM library") gdcm
 #pragma SWIG nowarn=504,510
 %{
