@@ -791,7 +791,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
   else if( ds.FindDataElement( Tag(0x0028,0x0009) ) ) // Frame Increment Pointer
     {
     const DataElement& de = ds.GetDataElement( Tag(0x0028,0x0009) );
-    gdcm::Attribute<0x0028,0x0009> at;
+    gdcm::Attribute<0x0028,0x0009,VR::AT,VM::VM1> at;
     at.SetFromDataElement( de );
     assert( ds.FindDataElement( at.GetValue() ) );
     if( ds.FindDataElement( at.GetValue() ) )
