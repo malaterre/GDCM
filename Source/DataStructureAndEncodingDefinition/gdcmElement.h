@@ -85,11 +85,11 @@ public:
     assert( bv );
     if( de.GetVR() == VR::UN || de.GetVR() == VR::INVALID )
       {
-      Set(bv);
+      Set(de.GetValue());
       }
     else
       {
-      SetNoSwap(bv);
+      SetNoSwap(de.GetValue());
       }
   }
 
