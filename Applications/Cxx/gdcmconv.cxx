@@ -21,7 +21,7 @@
  *
  * Tools to conv. Goals being to 'purify' a DICOM file.
  * For now it will do the minimum:
- * - If Group Length is present, the length is garantee to be correct
+ * - If Group Length is present, the length is guarantee to be correct
  * - If Element with Group Tag 0x1, 0x3, 0x5 or 0x7 are present they are
  *   simply discarded (not written).
  * - Elements are written in alphabetical order
@@ -820,7 +820,7 @@ int main (int argc, char *argv[])
         {
         std::cerr << "WARNING: an error was found during the reading of your DICOM file." << std::endl;
         std::cerr << "gdcmconv will still try to continue and rewrite your DICOM file." << std::endl;
-        std::cerr << "There is absolutely no garantee that your output file will be valid." << std::endl;
+        std::cerr << "There is absolutely no guarantee that your output file will be valid." << std::endl;
         }
       else
         {
