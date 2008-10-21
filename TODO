@@ -258,4 +258,8 @@ Need to fix issue with Explicit SQ declared as UN
 Fix bug:
 $ ./bin/gdcmdump --color /home/mmalaterre/Projects/GDCMDataCron/gdcmData/GE_GENESIS-16-MONO2-WrongLengthItem.dcm | grep 1310
 (0018,1310) ?? (US) 12320\12892\13877\12334\12336\12336\23600\13618\11830\12336\12336\12336\12380         # 26,4 Acquisition Matrix
+-----------------------------------------------------------------------
+Change default behavior:
+do not load Imp VR:SQ when defined length. And at the same time, add option to force loading of well known SQ
+which will make a similar behavior in Vr:SQ when in explicit
 
