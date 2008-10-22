@@ -20,6 +20,11 @@ IF(GDCM_DOCUMENTATION)
   # We are depending only on header files and README.txt but other files
   # could be needed for complete dependencies
   CONFIGURE_FILE(
+    ${GDCM_SOURCE_DIR}/Utilities/doxygen/TestsList.txt
+    ${GDCM_BINARY_DIR}/Utilities/doxygen/TestsList.txt
+    @ONLY
+  )
+  CONFIGURE_FILE(
     ${GDCM_SOURCE_DIR}/Utilities/doxygen/README.txt.in
     ${GDCM_BINARY_DIR}/Utilities/doxygen/README.txt
     @ONLY
