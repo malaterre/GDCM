@@ -131,11 +131,12 @@ INCLUDE(${CSharp_USE_FILE})
   ADD_CUSTOM_COMMAND(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gdcm_csharp.dll
     # $(CSC) /t:library /out:mapscript_csharp.dll *.cs config/AssemblyInfo.cs
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:gdcm_csharp.dll" "*.cs" ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:gdcm_csharp.dll" "*.cs" 
+#${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS "${swig_generated_file_fullname}"
       ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
-    COMMENT "mcs *.cs"
+    COMMENT "csc *.cs"
   )
 
 # building HelloWorld:
