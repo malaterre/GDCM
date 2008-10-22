@@ -1,9 +1,5 @@
 # TODO:
-# SWIG is really a pain in the neck to use, a better alternative is Py++ which is using
-# gccxml for the C++ parser and allow a full ANSI C++ support
-# http://mvidner.blogspot.com/2007/07/first-time-with-mono.html
-# http://www.nabble.com/CMake-file-for-Qyoto-Kimono-td7547960.html
-# https://svn.osgeo.org/mapserver/trunk/mapserver/mapscript/csharp/Makefile.in
+# http://www.disconnectd.com/?p=21
 FIND_PACKAGE(SWIG REQUIRED)
 MARK_AS_ADVANCED(SWIG_DIR SWIG_EXECUTABLE SWIG_VERSION)
 INCLUDE(${SWIG_USE_FILE})
