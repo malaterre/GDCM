@@ -41,6 +41,7 @@
  * Todo: check compat API with jhead 
  */
 #include "gdcmFilename.h"
+#include "gdcmSmartPointer.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmSystem.h"
@@ -818,8 +819,8 @@ int main (int argc, char *argv[])
     const gdcm::PixelFormat &pixeltype = imageori.GetPixelFormat();
     assert( imageori.GetNumberOfDimensions() == 2 || imageori.GetNumberOfDimensions() == 3 );
     unsigned long len = imageori.GetBufferLength();
-    gdcm::Image image;
-    image.SetNumberOfDimensions( 2 ); // good default
+    gdcm::SmartPointer<gdcm::Image> image = new gdcm::Image;
+    image->SetNumberOfDimensions( 2 ); // good default
     const unsigned int *dims = imageori.GetDimensions();
     if ( region[0] > region[1] 
       || region[2] > region[3]
@@ -840,15 +841,15 @@ int main (int argc, char *argv[])
         }
       return 1;
       }
-    image.SetDimension(0, dims[0] );
-    image.SetDimension(1, dims[1] );
+    image->SetDimension(0, dims[0] );
+    image->SetDimension(1, dims[1] );
     if( imageori.GetNumberOfDimensions() == 3 )
       {
-      image.SetNumberOfDimensions( 3 );
-      image.SetDimension(2, dims[2] );
+      image->SetNumberOfDimensions( 3 );
+      image->SetDimension(2, dims[2] );
       }
-    image.SetPhotometricInterpretation( imageori.GetPhotometricInterpretation() );
-    image.SetPixelFormat( imageori.GetPixelFormat() );
+    image->SetPhotometricInterpretation( imageori.GetPhotometricInterpretation() );
+    image->SetPixelFormat( imageori.GetPixelFormat() );
     gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
     gdcm::ByteValue *bv = new gdcm::ByteValue();
     bv->SetLength( len );
@@ -876,25 +877,25 @@ int main (int argc, char *argv[])
       }
 
     pixeldata.SetValue( *bv );
-    image.SetDataElement( pixeldata );
-    image.SetSpacing( imageori.GetSpacing() );
-    image.SetSpacing(2, imageori.GetSpacing()[2] );
+    image->SetDataElement( pixeldata );
+    image->SetSpacing( imageori.GetSpacing() );
+    image->SetSpacing(2, imageori.GetSpacing()[2] );
     const gdcm::TransferSyntax &ts = imageori.GetTransferSyntax();
     // FIXME: for now we do not know how to recompress the image...
     if( ts.IsExplicit() )
       {
-      image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
+      image->SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
       }
     else 
       {
       assert( ts.IsImplicit() );
-      image.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+      image->SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
       }
     //imageori.Print( std::cout );
     //image.Print( std::cout );
 
     // Set our filled image instead:
-    writer.SetImage( image );
+    writer.SetImage( *image );
 #if 0
     // <entry group="0028" element="0301" vr="CS" vm="1" name="Burned In Annotation"/>
     gdcm::Attribute<0x0028,0x0301> at;
