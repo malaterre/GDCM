@@ -1,7 +1,7 @@
 /**
 
-\test TestFilename.cxx
-\test TestImageReader.cxx
-\test TestImageWriter
+\example TestFilename.cxx
+\example TestImageReader.cxx
+\example TestImageWriter
 
 */
