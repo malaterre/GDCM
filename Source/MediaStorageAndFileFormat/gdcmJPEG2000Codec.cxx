@@ -365,7 +365,7 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
     }
   assert( bitsallocated % 8 == 0 );
   // eg. fragment_size == 63532 and 181 * 117 * 3 * 8 == 63531 ...
-  assert( fragment_size == ((image_height * image_width * numcomps * (bitsallocated/8) + 1)/ 2 )* 2 );
+  assert( ((fragment_size + 1)/2 ) * 2 == ((image_height * image_width * numcomps * (bitsallocated/8) + 1)/ 2 )* 2 );
   int subsampling_dx = parameters->subsampling_dx;
   int subsampling_dy = parameters->subsampling_dy;
 
