@@ -94,6 +94,11 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
         vr = VR::US;
         }
       }
+    else
+      {
+      // FIXME ???
+      vr = VR::US;
+      }
     }
   else if( vr == VR::OB_OW )
     {
@@ -114,8 +119,9 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
     Tag pixeldata(0x7fe0,0x0010);
     Tag overlaydata(0x6000,0x3000);
     Tag curvedata(0x5000,0x3000);
+    Tag variablepixeldata(0x7f00,0x0010);
     Tag bitsallocated(0x0028,0x0100);
-    assert( ds.FindDataElement( pixeldata ) );
+    //assert( ds.FindDataElement( pixeldata ) );
     assert( ds.FindDataElement( bitsallocated ) );
     Attribute<0x0028,0x0100> at;
     at.SetFromDataElement( ds.GetDataElement( bitsallocated ) );
@@ -125,6 +131,10 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
       vr = VR::OW;
       }
     else if ( t.IsGroupXX(curvedata) )
+      {
+      vr = VR::OB;
+      }
+    else if ( t.IsGroupXX(variablepixeldata) )
       {
       vr = VR::OB;
       }
