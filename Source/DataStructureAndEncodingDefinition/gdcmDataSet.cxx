@@ -37,6 +37,7 @@ std::string DataSet::GetPrivateCreator(const Tag &t) const
       return "";
       }
     const DataElement &de = *it;
+    if( de.IsEmpty() ) return "";
     const ByteValue *bv = de.GetByteValue();
     assert( bv );
     std::string owner = std::string(bv->GetPointer(),bv->GetLength());
