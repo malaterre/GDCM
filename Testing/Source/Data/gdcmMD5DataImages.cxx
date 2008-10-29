@@ -618,6 +618,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "59071590099d21dd439896592338bf95" , "ima43.dcm" },
 { "46bf12c412590767bb8cd7f0d53eaa87" , "TG18-CH-2k-01.dcm" },
 { "9214cc4f62fbea873ffad88e1be877c5" , "LJPEG_BuginGDCM12.dcm" },
+{ "52607a16af1eaddbbc71c14d32e489d8" , "DX_J2K_0Padding.dcm" },
+
 
 
 
