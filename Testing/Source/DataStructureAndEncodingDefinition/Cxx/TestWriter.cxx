@@ -52,7 +52,7 @@ static const char * const gdcmMD5DataBrokenImages[][2] = {
 // big endian / little endian nightmare from PMS
 { "df0e01aae299317db1719e4de72b8937" , "MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.dcm" }, // size match and CheckbigEndian match => ok !
 { "df632a3b5ca38340faa612a23b907ac4" , "PHILIPS_Intera-16-MONO2-Uncompress.dcm" }, // size match and CheckbigEndian match => ok !
-
+{ "6bf002815fad665392acab24f09caa5e" , "MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm" }, // size match and CheckbigEndian match => ok !
 
 // little endian implicit meta header + a couple of attribute sent with correct, but odd length:
 { "e1b2956f781685fc9e46e0da26b8a0fd" , "THERALYS-12-MONO2-Uncompressed-Even_Length_Tag.dcm" },
