@@ -163,14 +163,19 @@ int TestWrite(const char *subdir, const char* filename, bool recursing)
       return 1;
       }
    const char * ref = GetMD5FromBrokenFile(filename);
-   if( ref && strcmp(ref, outdigest) == 0 )
+   if( ref )
      {
-      // ok this situation was already analyzed and the writen file is
-      // readable by dcmtk and such
-    size_t size1 = System::FileSize( filename );
-    size_t size2 = System::FileSize( outfilename.c_str() );
-    //assert( size1 == size2 ); // cannot deal with implicit VR meta data header
-      return 0;
+     if( strcmp(ref, outdigest) == 0 )
+       {
+       // ok this situation was already analyzed and the writen file is
+       // readable by dcmtk and such
+       size_t size1 = System::FileSize( filename );
+       size_t size2 = System::FileSize( outfilename.c_str() );
+       //assert( size1 == size2 ); // cannot deal with implicit VR meta data header
+       return 0;
+       }
+      std::cerr << "incompatible ref:" << ref << " vs " << outdigest << " for file: " << filename << " & " << outfilename << std::endl;
+      return 1; // ref exist but does not match, how is that possible ?
      }
    //if( !ref ) 
    //  {
