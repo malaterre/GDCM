@@ -212,6 +212,20 @@ bool ImageChangeTransferSyntax::TryJPEG2000Codec(const DataElement &pixelde, Pix
     //bool r = codec.Code(input.GetDataElement(), out);
     bool r = codec.Code(pixelde, out);
 
+    // The value of Planar Configuration (0028,0006) is irrelevant since the manner of encoding components is
+    // specified in the JPEG 2000 standard, hence it shall be set to 0.
+    output.SetPlanarConfiguration( 0 );
+
+    if( ts == TransferSyntax::JPEG2000Lossless )
+      {
+      output.SetPhotometricInterpretation( PhotometricInterpretation::YBR_RCT );
+      }
+    else 
+      {
+      assert( ts == TransferSyntax::JPEG2000 );
+      output.SetPhotometricInterpretation( PhotometricInterpretation::YBR_ICT );
+      }
+
     DataElement &de = output.GetDataElement();
     de.SetValue( out.GetValue() );
     assert( r );

@@ -327,23 +327,38 @@ bool JPEG2000Codec::Decode(std::istream &is, std::ostream &os)
 }
 
 template<typename T>
-void rawtoimage_fill(T *inputbuffer, int w, int h, int numcomps, opj_image_t *image)
+void rawtoimage_fill(T *inputbuffer, int w, int h, int numcomps, opj_image_t *image, int pc)
 {
   T *p = inputbuffer;
-  for (int i = 0; i < w * h; i++)
+  if( pc )
     {
     for(int compno = 0; compno < numcomps; compno++)
       {
-      /* compno : 0 = GREY, (0, 1, 2) = (R, G, B) */
-      image->comps[compno].data[i] = *p;
-      ++p;
+      for (int i = 0; i < w * h; i++)
+        {
+        /* compno : 0 = GREY, (0, 1, 2) = (R, G, B) */
+        image->comps[compno].data[i] = *p;
+        ++p;
+        }
+      }
+    }
+  else
+    {
+    for (int i = 0; i < w * h; i++)
+      {
+      for(int compno = 0; compno < numcomps; compno++)
+        {
+        /* compno : 0 = GREY, (0, 1, 2) = (R, G, B) */
+        image->comps[compno].data[i] = *p;
+        ++p;
+        }
       }
     }
 }
 
 opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
   int fragment_size, int image_width, int image_height, int sample_pixel,
-  int bitsallocated, int sign, int quality)
+  int bitsallocated, int sign, int quality, int pc)
 {
   (void)quality;
   int w, h;
@@ -404,33 +419,33 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
     {
     if( sign )
       {
-      rawtoimage_fill<int8_t>((int8_t*)inputbuffer,w,h,numcomps,image);
+      rawtoimage_fill<int8_t>((int8_t*)inputbuffer,w,h,numcomps,image,pc);
       }
     else
       {
-      rawtoimage_fill<uint8_t>((uint8_t*)inputbuffer,w,h,numcomps,image);
+      rawtoimage_fill<uint8_t>((uint8_t*)inputbuffer,w,h,numcomps,image,pc);
       }
     }
   else if (bitsallocated <= 16)
     {
     if( sign )
       {
-      rawtoimage_fill<int16_t>((int16_t*)inputbuffer,w,h,numcomps,image);
+      rawtoimage_fill<int16_t>((int16_t*)inputbuffer,w,h,numcomps,image,pc);
       }
     else
       {
-      rawtoimage_fill<uint16_t>((uint16_t*)inputbuffer,w,h,numcomps,image);
+      rawtoimage_fill<uint16_t>((uint16_t*)inputbuffer,w,h,numcomps,image,pc);
       }
     }
   else if (bitsallocated <= 32)
     {
     if( sign )
       {
-      rawtoimage_fill<int32_t>((int32_t*)inputbuffer,w,h,numcomps,image);
+      rawtoimage_fill<int32_t>((int32_t*)inputbuffer,w,h,numcomps,image,pc);
       }
     else
       {
-      rawtoimage_fill<uint32_t>((uint32_t*)inputbuffer,w,h,numcomps,image);
+      rawtoimage_fill<uint32_t>((uint32_t*)inputbuffer,w,h,numcomps,image,pc);
       }
     }
   else
@@ -518,7 +533,7 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     image = rawtoimage((char*)inputdata, &parameters, 
       static_cast<int>( inputlength ), 
       image_width, image_height,
-      sample_pixel, bitsallocated, sign, quality);
+      sample_pixel, bitsallocated, sign, quality, this->GetPlanarConfiguration() );
     if (!image) {
       return 1;
     }
@@ -721,7 +736,30 @@ bool JPEG2000Codec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     else if( image->numcomps == 3 )
       {
       assert( image->color_space == 0 );
-      PI = PhotometricInterpretation::RGB;
+      //PI = PhotometricInterpretation::RGB;
+/*
+8.2.4 JPEG 2000 IMAGE COMPRESSION
+The JPEG 2000 bit stream specifies whether or not a reversible or irreversible multi-component (color)
+transformation, if any, has been applied. If no multi-component transformation has been applied, then the
+components shall correspond to those specified by the DICOM Attribute Photometric Interpretation
+(0028,0004). If the JPEG 2000 Part 1 reversible multi-component transformation has been applied then
+the DICOM Attribute Photometric Interpretation (0028,0004) shall be YBR_RCT. If the JPEG 2000 Part 1
+irreversible multi-component transformation has been applied then the DICOM Attribute Photometric
+Interpretation (0028,0004) shall be YBR_ICT.
+Notes: 1. For example, single component may be present, and the Photometric Interpretation (0028,0004) may
+be MONOCHROME2.
+PS 3.5-2008
+Page 51
+- Standard -
+2. Though it would be unusual, would not take advantage of correlation between the red, green and blue
+components, and would not achieve effective compression, a Photometric Interpretation of RGB could
+be specified as long as no multi-component transformation was specified by the JPEG 2000 bit stream.
+3. Despite the application of a multi-component color transformation and its reflection in the Photometric
+Interpretation attribute, the ¿color space¿ remains undefined. There is currently no means of conveying
+¿standard color spaces¿ either by fixed values (such as sRGB) or by ICC profiles. Note in particular that
+the JP2 file header is not sent in the JPEG 2000 bitstream that is encapsulated in DICOM.
+*/
+      PI = PhotometricInterpretation::YBR_RCT;
       this->PF.SetSamplesPerPixel( 3 );
       }
     else
