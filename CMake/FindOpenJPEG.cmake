@@ -5,10 +5,19 @@
 #  BSD license.
 #  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
+# Apparently libopenjpeg-dev finally made it into debian.
+# Installation is:
+# 
+# /usr/lib/libopenjpeg.a
+# /usr/include/openjpeg.h
+# /usr/lib/libopenjpeg.so
 
-FIND_PATH(OPENJPEG_INCLUDE_DIR openjpeg-1.0/openjpeg.h
+
+FIND_PATH(OPENJPEG_INCLUDE_DIR openjpeg.h #openjpeg-1.0/openjpeg.h
 /usr/local/include
+/usr/local/include/openjpeg-1.0
 /usr/include
+/usr/include/openjpeg-1.0
 )
 
 FIND_LIBRARY(OPENJPEG_LIBRARY
@@ -36,6 +45,6 @@ ELSE (OPENJPEG_FOUND)
 ENDIF (OPENJPEG_FOUND)
 
 MARK_AS_ADVANCED(
-  OPENJPEG_LIBRARIES
+  OPENJPEG_LIBRARY
   OPENJPEG_INCLUDE_DIR
   )
