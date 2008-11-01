@@ -22,6 +22,7 @@ namespace gdcm
 {
 
 class DataElement;
+class ImageCodec;
 /**
  * \brief ImageChangeTransferSyntax class
  * Class to change the transfer syntax of an input DICOM
@@ -29,7 +30,7 @@ class DataElement;
 class GDCM_EXPORT ImageChangeTransferSyntax : public ImageToImageFilter
 {
 public:
-  ImageChangeTransferSyntax():TS(),Force(false),CompressIconImage(false) {}
+  ImageChangeTransferSyntax():TS(),Force(false),CompressIconImage(false),UserCodec(0) {}
   ~ImageChangeTransferSyntax() {}
 
   /// Set target Transfer Syntax
@@ -50,6 +51,8 @@ public:
   /// a JPEG (for example) image
   void SetForce( bool f ) { Force = f; }
 
+  void SetUserCodec(ImageCodec *ic) { UserCodec = ic; }
+
 protected:
   bool TryJPEGCodec(const DataElement &pixelde, Pixmap const &input, Pixmap &output);
   bool TryJPEG2000Codec(const DataElement &pixelde, Pixmap const &input, Pixmap &output);
@@ -61,6 +64,8 @@ private:
   TransferSyntax TS;
   bool Force;
   bool CompressIconImage;
+
+  ImageCodec *UserCodec;
 };
 
 } // end namespace gdcm

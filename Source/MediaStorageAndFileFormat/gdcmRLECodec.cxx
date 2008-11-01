@@ -84,7 +84,6 @@ RLECodec::RLECodec()
   Internals = new RLEInternals;
   Length = 0;
   BufferLength = 0;
-  NumberOfDimensions = 0;
 }
 
 RLECodec::~RLECodec()
@@ -554,11 +553,6 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
 // output nothing
 // Endif
 // Endloop
-
-void RLECodec::SetNumberOfDimensions(unsigned int dim)
-{
-  NumberOfDimensions = dim;
-}
 
 bool RLECodec::Decode(DataElement const &in, DataElement &out)
 {

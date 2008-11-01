@@ -199,18 +199,24 @@ bool ImageChangeTransferSyntax::TryJPEG2000Codec(const DataElement &pixelde, Pix
   //assert( len == pixelde.GetByteValue()->GetLength() );
   const TransferSyntax &ts = GetTransferSyntax();
 
-  JPEG2000Codec codec;
-  if( codec.CanCode( ts ) )
+  JPEG2000Codec j2kcodec;
+  ImageCodec *codec = &j2kcodec;
+  if( UserCodec && UserCodec->CanCode( ts ) )
     {
-    codec.SetDimensions( input.GetDimensions() );
-    codec.SetPixelFormat( input.GetPixelFormat() );
-    codec.SetNumberOfDimensions( input.GetNumberOfDimensions() );
-    codec.SetPlanarConfiguration( input.GetPlanarConfiguration() );
-    codec.SetPhotometricInterpretation( input.GetPhotometricInterpretation() );
-    codec.SetNeedOverlayCleanup( input.AreOverlaysInPixelData() );
+    codec = UserCodec;
+    }
+  
+  if( codec->CanCode( ts ) )
+    {
+    codec->SetDimensions( input.GetDimensions() );
+    codec->SetPixelFormat( input.GetPixelFormat() );
+    codec->SetNumberOfDimensions( input.GetNumberOfDimensions() );
+    codec->SetPlanarConfiguration( input.GetPlanarConfiguration() );
+    codec->SetPhotometricInterpretation( input.GetPhotometricInterpretation() );
+    codec->SetNeedOverlayCleanup( input.AreOverlaysInPixelData() );
     DataElement out;
     //bool r = codec.Code(input.GetDataElement(), out);
-    bool r = codec.Code(pixelde, out);
+    bool r = codec->Code(pixelde, out);
 
     // The value of Planar Configuration (0028,0006) is irrelevant since the manner of encoding components is
     // specified in the JPEG 2000 standard, hence it shall be set to 0.

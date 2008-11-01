@@ -82,6 +82,7 @@
 #include "gdcmImageChangePlanarConfiguration.h"
 #include "gdcmImageChangePhotometricInterpretation.h"
 #include "gdcmFileExplicitFilter.h"
+#include "gdcmJPEG2000Codec.h"
 
 #include <string>
 #include <iostream>
@@ -131,7 +132,7 @@ void PrintHelp()
   std::cout << "  -F --force                          Force decompression/merging before recompression/splitting." << std::endl;
   std::cout << "     --compress-icon                  Decide whether icon follows main TransferSyntax or remains uncompressed." << std::endl;
   std::cout << "     --planar-configuration [01]      Change planar configuration." << std::endl;
-  std::cout << "  -Y --lossy %d                       Use the lossy (if possible), followed by comp. ratio" << std::endl;
+  std::cout << "  -Y --lossy                          Use the lossy (if possible) compressor." << std::endl;
   std::cout << "  -S --split %d                       Write 2D image with multiple fragments (using max size)" << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose    more verbose (warning+error)." << std::endl;
@@ -140,6 +141,9 @@ void PrintHelp()
   std::cout << "  -E --error      print error info." << std::endl;
   std::cout << "  -h --help       print help." << std::endl;
   std::cout << "  -v --version    print version." << std::endl;
+  std::cout << "J2K Options:" << std::endl;
+  std::cout << "  -r --rate       set rate." << std::endl;
+  std::cout << "  -q --quality    set quality." << std::endl;
   std::cout << "Special Options:" << std::endl;
   std::cout << "  -I --ignore-errors   print even if file is corrupted (advanced users only, see disclaimers)." << std::endl;
   std::cout << "Env var:" << std::endl;
@@ -152,6 +156,17 @@ void PrintHelp()
  */
 }
 
+bool readfloatvector(std::vector<float> &v, const char *str)
+{
+  if( !str ) return false;
+  std::istringstream os( str );
+  float f;
+  while( os >> f )
+    {
+    v.push_back( f );
+    }
+  return true;
+}
 
 int main (int argc, char *argv[])
 {
@@ -182,6 +197,10 @@ int main (int argc, char *argv[])
   int removegrouplength = 0;
   int photometricinterpretation = 0;
   std::string photometricinterpretation_str;
+  int quality = 0;
+  int rate = 0;
+  std::vector<float> qualities;
+  std::vector<float> rates;
 
   int verbose = 0;
   int warning = 0;
@@ -215,7 +234,7 @@ int main (int argc, char *argv[])
         {"pixeldata", 1, 0, 0}, // valid
         {"apply-lut", 0, &lut, 1}, // default (implicit VR, LE) / Explicit LE / Explicit BE
         {"raw", 0, &raw, 1}, // default (implicit VR, LE) / Explicit LE / Explicit BE
-        {"lossy", 1, &lossy, 1}, // Specify the compression ratio for lossy comp
+        {"lossy", 0, &lossy, 1}, // Specify lossy comp
         {"force", 0, &force, 1}, // force decompression even if target compression is identical
         {"jpeg", 0, &jpeg, 1}, // JPEG lossy / lossless
         {"jpegls", 0, &jpegls, 1}, // JPEG-LS: lossy / lossless
@@ -231,6 +250,9 @@ int main (int argc, char *argv[])
         {"compress-icon", 0, &compressicon, 1}, // 
         {"remove-gl", 0, &removegrouplength, 1}, // 
         {"photometric-interpretation", 1, &photometricinterpretation, 1}, // 
+// j2k :
+        {"rate", 1, &rate, 1}, // 
+        {"quality", 1, &quality, 1}, // 
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -244,7 +266,7 @@ int main (int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:XMUClwJKRFYS:P:VWDEhvI",
+    c = getopt_long (argc, argv, "i:o:XMUClwJKRFYS:P:VWDEhvIr:q:",
       long_options, &option_index);
     if (c == -1)
       {
@@ -358,6 +380,16 @@ int main (int argc, char *argv[])
     case 'P':
       photometricinterpretation = 1;
       photometricinterpretation_str = optarg;
+      break;
+
+    case 'r':
+      rate = 1;
+      readfloatvector(rates, optarg);
+      break;
+
+    case 'q':
+      quality = 1;
+      readfloatvector(qualities, optarg);
       break;
 
     // General option
@@ -689,6 +721,7 @@ int main (int argc, char *argv[])
     //  return 1;
     //  }
 
+    gdcm::JPEG2000Codec j2kcodec;
     gdcm::ImageChangeTransferSyntax change;
     change.SetForce( force );
     change.SetCompressIconImage( compressicon );
@@ -703,6 +736,26 @@ int main (int argc, char *argv[])
     else if( j2k )
       {
       change.SetTransferSyntax( gdcm::TransferSyntax::JPEG2000Lossless );
+      if( lossy )
+        {
+        if( rate )
+          {
+          int i = 0;
+          for(std::vector<float>::const_iterator it = rates.begin(); it != rates.end(); ++it )
+            {
+            j2kcodec.SetRate(i++, *it );
+            }
+          }
+        if( quality )
+          {
+          int i = 0;
+          for(std::vector<float>::const_iterator it = qualities.begin(); it != qualities.end(); ++it )
+            {
+            j2kcodec.SetQuality( i++, *it );
+            }
+          }
+        change.SetUserCodec( &j2kcodec );
+        }
       }
     else if( raw )
       {

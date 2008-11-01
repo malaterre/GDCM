@@ -39,11 +39,18 @@ ImageCodec::ImageCodec()
   NeedByteSwap = false;
   NeedOverlayCleanup = false;
   Dimensions[0] = Dimensions[1] = Dimensions[2] = 0;
+  NumberOfDimensions = 0;
 }
 
 ImageCodec::~ImageCodec()
 {
 }
+
+void ImageCodec::SetNumberOfDimensions(unsigned int dim)
+{
+  NumberOfDimensions = dim;
+}
+
 
 const PhotometricInterpretation &ImageCodec::GetPhotometricInterpretation() const
 {

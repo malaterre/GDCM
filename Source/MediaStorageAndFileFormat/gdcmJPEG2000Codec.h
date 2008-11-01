@@ -38,16 +38,22 @@ public:
   bool CanCode(TransferSyntax const &ts) const;
 
   bool Decode(DataElement const &is, DataElement &os);
-  void SetNumberOfDimensions(unsigned int dim);
   bool Code(DataElement const &in, DataElement &out);
 
   virtual bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);
+
+  // JPEG-2000 / OpenJPEG specific way of encoding lossy-ness
+  // ref: http://www.openjpeg.org/index.php?menu=doc#encoder
+  void SetRate(unsigned int idx, double rate);
+  double GetRate(unsigned int idx = 0) const;
+
+  void SetQuality(unsigned int idx, double q);
+  double GetQuality(unsigned int idx = 0) const;
 
 protected:
   bool Decode(std::istream &is, std::ostream &os);
 private:
   JPEG2000Internals *Internals;
-  unsigned int NumberOfDimensions;
 };
 
 } // end namespace gdcm

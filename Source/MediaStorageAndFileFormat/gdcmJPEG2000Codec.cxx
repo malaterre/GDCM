@@ -63,22 +63,51 @@ inline int int_ceildivpow2(int a, int b) {
 class JPEG2000Internals
 {
 public:
+  JPEG2000Internals()
+    {
+    memset(&coder_param, 0, sizeof(coder_param));
+    opj_set_default_encoder_parameters(&coder_param);
+    }
+
+  opj_cparameters coder_param;
 };
+
+void JPEG2000Codec::SetRate(unsigned int idx, double rate)
+{
+  Internals->coder_param.tcp_rates[idx] = rate;
+  if( Internals->coder_param.tcp_numlayers <= idx )
+    {
+    Internals->coder_param.tcp_numlayers = idx + 1;
+    }
+				Internals->coder_param.cp_disto_alloc = 1;
+}
+double JPEG2000Codec::GetRate(unsigned int idx ) const
+{
+  return Internals->coder_param.tcp_rates[idx];
+}
+
+void JPEG2000Codec::SetQuality(unsigned int idx, double q)
+{
+  Internals->coder_param.tcp_distoratio[idx] = q;
+  if( Internals->coder_param.tcp_numlayers <= idx )
+    {
+    Internals->coder_param.tcp_numlayers = idx + 1;
+    }
+				Internals->coder_param.cp_fixed_quality = 1;
+}
+double JPEG2000Codec::GetQuality(unsigned int idx) const
+{
+  return Internals->coder_param.tcp_distoratio[idx];
+}
 
 JPEG2000Codec::JPEG2000Codec()
 {
   Internals = new JPEG2000Internals;
-  NumberOfDimensions = 0;
 }
 
 JPEG2000Codec::~JPEG2000Codec()
 {
   delete Internals;
-}
-
-void JPEG2000Codec::SetNumberOfDimensions(unsigned int dim)
-{
-  NumberOfDimensions = dim;
 }
 
 bool JPEG2000Codec::CanDecode(TransferSyntax const &ts) const
@@ -510,13 +539,24 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     event_mgr.info_handler = info_callback;
 
     /* set encoding parameters to default values */
-    memset(&parameters, 0, sizeof(parameters));
-    opj_set_default_encoder_parameters(&parameters);
+    //memset(&parameters, 0, sizeof(parameters));
+    //opj_set_default_encoder_parameters(&parameters);
+
+    memcpy(&parameters, &(Internals->coder_param), sizeof(parameters));
+
+    if ((parameters.cp_disto_alloc || parameters.cp_fixed_alloc || parameters.cp_fixed_quality)
+      && (!(parameters.cp_disto_alloc ^ parameters.cp_fixed_alloc ^ parameters.cp_fixed_quality))) {
+      fprintf(stderr, "Error: options -r -q and -f cannot be used together !!\n");
+      return false;
+    }				/* mod fixed_quality */
 
     /* if no rate entered, lossless by default */
-    parameters.tcp_rates[0] = 0;
-    parameters.tcp_numlayers = 1;
-    parameters.cp_disto_alloc = 1;
+    if (parameters.tcp_numlayers == 0) 
+      {
+      parameters.tcp_rates[0] = 0;
+      parameters.tcp_numlayers = 1;
+      parameters.cp_disto_alloc = 1;
+      }
 
     if(parameters.cp_comment == NULL) {
       const char comment[] = "Created by GDCM/OpenJPEG version 1.0";
@@ -535,7 +575,7 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
       image_width, image_height,
       sample_pixel, bitsallocated, sign, quality, this->GetPlanarConfiguration() );
     if (!image) {
-      return 1;
+      return false;
     }
 
     /* encode the destination image */
@@ -563,7 +603,7 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     if (!bSuccess) {
       opj_cio_close(cio);
       fprintf(stderr, "failed to encode image\n");
-      return 1;
+      return false;
     }
     codestream_length = cio_tell(cio);
 
