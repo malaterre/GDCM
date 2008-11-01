@@ -147,6 +147,7 @@ void PrintHelp()
   std::cout << "  -q --quality %*f           set quality." << std::endl;
   std::cout << "  -t --tile %d,%d            set tile size." << std::endl;
   std::cout << "  -n --number-resolution %d  set number of resolution." << std::endl;
+  std::cout << "     --irreversible          set irreversible." << std::endl;
   std::cout << "Special Options:" << std::endl;
   std::cout << "  -I --ignore-errors   print even if file is corrupted (advanced users only, see disclaimers)." << std::endl;
   std::cout << "Env var:" << std::endl;
