@@ -1052,6 +1052,7 @@ int main (int argc, char *argv[])
     //gdcm::FileExplicitFilter fef;
     //fef.SetFile( reader.GetFile() );
     //fef.Change();
+    if( lossy )
     gdcm::derives( reader.GetFile(), change.GetOutput() );
 
     gdcm::ImageWriter writer;
