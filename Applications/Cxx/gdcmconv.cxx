@@ -83,6 +83,7 @@
 #include "gdcmImageChangePhotometricInterpretation.h"
 #include "gdcmFileExplicitFilter.h"
 #include "gdcmJPEG2000Codec.h"
+#include "gdcmSequenceOfFragments.h"
 
 #include <string>
 #include <iostream>
@@ -170,6 +171,191 @@ unsigned int readvector(std::vector<T> &v, const char *str)
     os.get(); //  == ","
     }
   return v.size();
+}
+
+namespace gdcm
+{
+bool derives( File & file, const Image& compressed_image )
+{
+/*
+(0008,2111) ST [Lossy compression with JPEG extended sequential 8 bit, IJG quality... # 102, 1 DerivationDescription
+(0008,2112) SQ (Sequence with explicit length #=1)      # 188, 1 SourceImageSequence
+  (fffe,e000) na (Item with explicit length #=3)          # 180, 1 Item
+    (0008,1150) UI =UltrasoundImageStorage                  #  28, 1 ReferencedSOPClassUID
+    (0008,1155) UI [1.2.840.1136190195280574824680000700.3.0.1.19970424140438] #  58, 1 ReferencedSOPInstanceUID
+    (0040,a170) SQ (Sequence with explicit length #=1)      #  66, 1 PurposeOfReferenceCodeSequence
+      (fffe,e000) na (Item with explicit length #=3)          #  58, 1 Item
+        (0008,0100) SH [121320]                                 #   6, 1 CodeValue
+        (0008,0102) SH [DCM]                                    #   4, 1 CodingSchemeDesignator
+        (0008,0104) LO [Uncompressed predecessor]               #  24, 1 CodeMeaning
+      (fffe,e00d) na (ItemDelimitationItem for re-encoding)   #   0, 0 ItemDelimitationItem
+    (fffe,e0dd) na (SequenceDelimitationItem for re-encod.) #   0, 0 SequenceDelimitationItem
+  (fffe,e00d) na (ItemDelimitationItem for re-encoding)   #   0, 0 ItemDelimitationItem
+(fffe,e0dd) na (SequenceDelimitationItem for re-encod.) #   0, 0 SequenceDelimitationItem
+*/
+    const Tag sisq(0x8,0x2112);
+    SequenceOfItems * sqi;
+      sqi = new SequenceOfItems;
+      DataElement de( sisq);
+      de.SetVR( VR::SQ );
+      de.SetValue( *sqi );
+      de.SetVLToUndefined();
+
+  DataSet &ds = file.GetDataSet();
+      ds.Insert( de );
+{
+    // (0008,0008) CS [ORIGINAL\SECONDARY]                     #  18, 2 ImageType
+    gdcm::Attribute<0x0008,0x0008> at3;
+    static const gdcm::CSComp values[] = {"DERIVED","SECONDARY"}; 
+    at3.SetValues( values, 2, true ); // true => copy data !
+    if( ds.FindDataElement( at3.GetTag() ) )
+      {
+      const gdcm::DataElement &de = ds.GetDataElement( at3.GetTag() );
+      at3.SetFromDataElement( de );
+      // Make sure that value #1 is at least 'DERIVED', so override in all cases:
+      at3.SetValue( 0, values[0] );
+      }
+    ds.Replace( at3.GetAsDataElement() );
+
+}
+{
+    Attribute<0x0008,0x2111> at1;
+    at1.SetValue( "lossy conversion" );
+    ds.Replace( at1.GetAsDataElement() );
+}
+
+    sqi = (SequenceOfItems*)ds.GetDataElement( sisq ).GetSequenceOfItems();
+    sqi->SetLengthToUndefined();
+
+    if( !sqi->GetNumberOfItems() )
+      {
+      Item item; //( Tag(0xfffe,0xe000) );
+      item.SetVLToUndefined();
+      sqi->AddItem( item );
+      }
+
+    Item &item1 = sqi->GetItem(1);
+    DataSet &subds = item1.GetNestedDataSet();
+/*
+    (0008,1150) UI =UltrasoundImageStorage                  #  28, 1 ReferencedSOPClassUID
+    (0008,1155) UI [1.2.840.1136190195280574824680000700.3.0.1.19970424140438] #  58, 1 ReferencedSOPInstanceUID
+*/
+{
+    DataElement sopinstanceuid = ds.GetDataElement( Tag(0x0008,0x0016) );
+    sopinstanceuid.SetTag( Tag(0x8,0x1150 ) );
+    subds.Replace( sopinstanceuid );
+    DataElement sopclassuid = ds.GetDataElement( Tag(0x0008,0x0018) );
+    sopclassuid.SetTag( Tag(0x8,0x1155 ) );
+    subds.Replace( sopclassuid );
+    ds.Remove( Tag(0x8,0x18) );
+}
+
+    const Tag prcs(0x0040,0xa170);
+    if( !subds.FindDataElement( prcs) )
+      {
+      SequenceOfItems *sqi2 = new SequenceOfItems;
+      DataElement de( prcs );
+      de.SetVR( VR::SQ );
+      de.SetValue( *sqi2 );
+      de.SetVLToUndefined();
+      subds.Insert( de );
+      }
+
+    sqi = (SequenceOfItems*)subds.GetDataElement( prcs ).GetSequenceOfItems();
+    sqi->SetLengthToUndefined();
+
+    if( !sqi->GetNumberOfItems() )
+      {
+      Item item; //( Tag(0xfffe,0xe000) );
+      item.SetVLToUndefined();
+      sqi->AddItem( item );
+      }
+    Item &item2 = sqi->GetItem(1);
+    DataSet &subds2 = item2.GetNestedDataSet();
+
+/*
+        (0008,0100) SH [121320]                                 #   6, 1 CodeValue
+        (0008,0102) SH [DCM]                                    #   4, 1 CodingSchemeDesignator
+        (0008,0104) LO [Uncompressed predecessor]               #  24, 1 CodeMeaning
+*/
+
+    Attribute<0x0008,0x0100> at1;
+    at1.SetValue( "121320" );
+    subds2.Replace( at1.GetAsDataElement() );
+    Attribute<0x0008,0x0102> at2;
+    at2.SetValue( "DCM" );
+    subds2.Replace( at2.GetAsDataElement() );
+    Attribute<0x0008,0x0104> at3;
+    at3.SetValue( "Uncompressed predecessor" );
+    subds2.Replace( at3.GetAsDataElement() );
+
+/*
+(0008,9215) SQ (Sequence with explicit length #=1)      #  98, 1 DerivationCodeSequence
+  (fffe,e000) na (Item with explicit length #=3)          #  90, 1 Item
+    (0008,0100) SH [121327]                                 #   6, 1 CodeValue
+    (0008,0102) SH [DCM]                                    #   4, 1 CodingSchemeDesignator
+    (0008,0104) LO [Full fidelity image, uncompressed or lossless compressed] #  56, 1 CodeMeaning
+  (fffe,e00d) na (ItemDelimitationItem for re-encoding)   #   0, 0 ItemDelimitationItem
+(fffe,e0dd) na (SequenceDelimitationItem for re-encod.) #   0, 0 SequenceDelimitationItem
+*/
+{
+    const Tag sisq(0x8,0x9215);
+    SequenceOfItems * sqi;
+      sqi = new SequenceOfItems;
+      DataElement de( sisq );
+      de.SetVR( VR::SQ );
+      de.SetValue( *sqi );
+      de.SetVLToUndefined();
+      ds.Insert( de );
+    sqi = (SequenceOfItems*)ds.GetDataElement( sisq ).GetSequenceOfItems();
+    sqi->SetLengthToUndefined();
+
+    if( !sqi->GetNumberOfItems() )
+      {
+      Item item; //( Tag(0xfffe,0xe000) );
+      item.SetVLToUndefined();
+      sqi->AddItem( item );
+      }
+
+    Item &item1 = sqi->GetItem(1);
+    DataSet &subds3 = item1.GetNestedDataSet();
+
+    Attribute<0x0008,0x0100> at1;
+    at1.SetValue( "121327" );
+    subds3.Replace( at1.GetAsDataElement() );
+    Attribute<0x0008,0x0102> at2;
+    at2.SetValue( "DCM" );
+    subds3.Replace( at2.GetAsDataElement() );
+    Attribute<0x0008,0x0104> at3;
+    at3.SetValue( "Full fidelity image, uncompressed or lossless compressed" );
+    subds3.Replace( at3.GetAsDataElement() );
+}
+
+{
+/*
+(0028,2110) CS [01]                                     #   2, 1 LossyImageCompression
+(0028,2112) DS [15.95]                                  #   6, 1 LossyImageCompressionRatio
+(0028,2114) CS [ISO_10918_1]                            #  12, 1 LossyImageCompressionMethod
+*/
+  const DataElement & pixeldata = compressed_image.GetDataElement();
+  size_t len = pixeldata.GetSequenceOfFragments()->ComputeByteLength();
+  size_t reflen = compressed_image.GetBufferLength();
+  double ratio = (double)reflen / len;
+    Attribute<0x0028,0x2110> at1;
+    at1.SetValue( "01" );
+    ds.Replace( at1.GetAsDataElement() );
+    Attribute<0x0028,0x2112> at2;
+    at2.SetValues( &ratio, 1);
+    ds.Replace( at2.GetAsDataElement() );
+    Attribute<0x0028,0x2114> at3;
+static const CSComp newvalues2[] = {"ISO_10918_1"};
+    at3.SetValues(  newvalues2, 1 );
+    ds.Replace( at3.GetAsDataElement() );
+}
+
+  return true;
+
+}
 }
 
 int main (int argc, char *argv[])
@@ -780,6 +966,7 @@ int main (int argc, char *argv[])
       {
       if( lossy )
         {
+
         change.SetTransferSyntax( gdcm::TransferSyntax::JPEG2000 );
         if( rate )
           {
@@ -864,6 +1051,7 @@ int main (int argc, char *argv[])
     //gdcm::FileExplicitFilter fef;
     //fef.SetFile( reader.GetFile() );
     //fef.Change();
+    gdcm::derives( reader.GetFile(), change.GetOutput() );
 
     gdcm::ImageWriter writer;
     writer.SetFileName( outfilename.c_str() );
