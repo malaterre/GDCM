@@ -222,14 +222,21 @@ bool ImageChangeTransferSyntax::TryJPEG2000Codec(const DataElement &pixelde, Pix
     // specified in the JPEG 2000 standard, hence it shall be set to 0.
     output.SetPlanarConfiguration( 0 );
 
-    if( ts == TransferSyntax::JPEG2000Lossless )
+    if( input.GetPixelFormat().GetSamplesPerPixel() == 3 )
       {
-      output.SetPhotometricInterpretation( PhotometricInterpretation::YBR_RCT );
+      if( ts == TransferSyntax::JPEG2000Lossless )
+        {
+        output.SetPhotometricInterpretation( PhotometricInterpretation::YBR_RCT );
+        }
+      else 
+        {
+        assert( ts == TransferSyntax::JPEG2000 );
+        output.SetPhotometricInterpretation( PhotometricInterpretation::YBR_ICT );
+        }
       }
-    else 
+    else
       {
-      assert( ts == TransferSyntax::JPEG2000 );
-      output.SetPhotometricInterpretation( PhotometricInterpretation::YBR_ICT );
+      assert( input.GetPixelFormat().GetSamplesPerPixel() == 1 );
       }
 
     DataElement &de = output.GetDataElement();
