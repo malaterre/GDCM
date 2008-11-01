@@ -142,8 +142,10 @@ void PrintHelp()
   std::cout << "  -h --help       print help." << std::endl;
   std::cout << "  -v --version    print version." << std::endl;
   std::cout << "J2K Options:" << std::endl;
-  std::cout << "  -r --rate       set rate." << std::endl;
-  std::cout << "  -q --quality    set quality." << std::endl;
+  std::cout << "  -r --rate    %*f           set rate." << std::endl;
+  std::cout << "  -q --quality %*f           set quality." << std::endl;
+  std::cout << "  -t --tile %d,%d            set tile size." << std::endl;
+  std::cout << "  -n --number-resolution %d  set number of resolution." << std::endl;
   std::cout << "Special Options:" << std::endl;
   std::cout << "  -I --ignore-errors   print even if file is corrupted (advanced users only, see disclaimers)." << std::endl;
   std::cout << "Env var:" << std::endl;
@@ -156,16 +158,18 @@ void PrintHelp()
  */
 }
 
-bool readfloatvector(std::vector<float> &v, const char *str)
+template <typename T>
+unsigned int readvector(std::vector<T> &v, const char *str)
 {
-  if( !str ) return false;
+  if( !str ) return 0;
   std::istringstream os( str );
-  float f;
+  T f;
   while( os >> f )
     {
     v.push_back( f );
+    os.get(); //  == ","
     }
-  return true;
+  return v.size();
 }
 
 int main (int argc, char *argv[])
@@ -199,8 +203,13 @@ int main (int argc, char *argv[])
   std::string photometricinterpretation_str;
   int quality = 0;
   int rate = 0;
+  int tile = 0;
+  int nres = 0;
+  int nresvalue = 6; // ??
   std::vector<float> qualities;
   std::vector<float> rates;
+  std::vector<unsigned int> tilesize;
+  int irreversible = 0;
 
   int verbose = 0;
   int warning = 0;
@@ -253,6 +262,9 @@ int main (int argc, char *argv[])
 // j2k :
         {"rate", 1, &rate, 1}, // 
         {"quality", 1, &quality, 1}, // 
+        {"tile", 1, &tile, 1}, // 
+        {"number-resolution", 1, &nres, 1}, // 
+        {"irreversible", 0, &irreversible, 1}, // 
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -266,7 +278,7 @@ int main (int argc, char *argv[])
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:XMUClwJKRFYS:P:VWDEhvIr:q:",
+    c = getopt_long (argc, argv, "i:o:XMUClwJKRFYS:P:VWDEhvIr:q:t:n:",
       long_options, &option_index);
     if (c == -1)
       {
@@ -307,6 +319,27 @@ int main (int argc, char *argv[])
             {
             assert( strcmp(s, "photometric-interpretation") == 0 );
             photometricinterpretation_str = optarg;
+            }
+          else if( option_index == 35 ) /* rate */
+            {
+            assert( strcmp(s, "rate") == 0 );
+            readvector(rates, optarg);
+            }
+          else if( option_index == 36 ) /* qualit */
+            {
+            assert( strcmp(s, "quality") == 0 );
+            readvector(qualities, optarg);
+            }
+          else if( option_index == 37 ) /* tile */
+            {
+            assert( strcmp(s, "tile") == 0 );
+            unsigned int n = readvector(tilesize, optarg);
+            assert( n == 2 );
+            }
+          else if( option_index == 38 ) /* number of resolution */
+            {
+            assert( strcmp(s, ",number-resolution") == 0 );
+            nresvalue = atoi(optarg);
             }
           //printf (" with arg %s, index = %d", optarg, option_index);
           }
@@ -384,12 +417,22 @@ int main (int argc, char *argv[])
 
     case 'r':
       rate = 1;
-      readfloatvector(rates, optarg);
+      readvector(rates, optarg);
       break;
 
     case 'q':
       quality = 1;
-      readfloatvector(qualities, optarg);
+      readvector(qualities, optarg);
+      break;
+
+    case 't':
+      tile = 1;
+      readvector(tilesize, optarg);
+      break;
+
+    case 'n':
+      nres = 1;
+      nresvalue = atoi(optarg);
       break;
 
     // General option
@@ -735,9 +778,9 @@ int main (int argc, char *argv[])
       }
     else if( j2k )
       {
-      change.SetTransferSyntax( gdcm::TransferSyntax::JPEG2000Lossless );
       if( lossy )
         {
+        change.SetTransferSyntax( gdcm::TransferSyntax::JPEG2000 );
         if( rate )
           {
           int i = 0;
@@ -754,7 +797,20 @@ int main (int argc, char *argv[])
             j2kcodec.SetQuality( i++, *it );
             }
           }
+        if( tile )
+          {
+          j2kcodec.SetTileSize( tilesize[0], tilesize[1] );
+          }
+        if( nres )
+          {
+          j2kcodec.SetNumberOfResolutions( nresvalue );
+          }
+        j2kcodec.SetReversible( !irreversible );
         change.SetUserCodec( &j2kcodec );
+        }
+      else
+        {
+        change.SetTransferSyntax( gdcm::TransferSyntax::JPEG2000Lossless );
         }
       }
     else if( raw )

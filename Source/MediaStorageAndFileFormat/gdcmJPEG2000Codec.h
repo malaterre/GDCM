@@ -50,6 +50,12 @@ public:
   void SetQuality(unsigned int idx, double q);
   double GetQuality(unsigned int idx = 0) const;
 
+  void SetTileSize(unsigned int tx, unsigned int ty);
+
+  void SetNumberOfResolutions(unsigned int nres);
+
+  void SetReversible(bool res);
+
 protected:
   bool Decode(std::istream &is, std::ostream &os);
 private:

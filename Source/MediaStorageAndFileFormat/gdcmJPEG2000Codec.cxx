@@ -100,6 +100,23 @@ double JPEG2000Codec::GetQuality(unsigned int idx) const
   return Internals->coder_param.tcp_distoratio[idx];
 }
 
+void JPEG2000Codec::SetTileSize(unsigned int tx, unsigned int ty)
+{
+  Internals->coder_param.cp_tdx = tx;
+  Internals->coder_param.cp_tdy = ty;
+  Internals->coder_param.tile_size_on = true;
+}
+
+void JPEG2000Codec::SetNumberOfResolutions(unsigned int nres)
+{
+  Internals->coder_param.numresolution = nres;
+}
+
+void JPEG2000Codec::SetReversible(bool res)
+{
+  Internals->coder_param.irreversible = !res;
+}
+
 JPEG2000Codec::JPEG2000Codec()
 {
   Internals = new JPEG2000Internals;
