@@ -180,7 +180,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
     else
 #endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
       {
-      throw Exception("Should not happen");
+      throw Exception("Should not happen (imp)");
       }
     return is;
     }
@@ -365,7 +365,7 @@ std::istream &ImplicitDataElement::ReadWithLength(std::istream &is, VL & length)
     else
 #endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
       {
-      throw Exception("Should not happen");
+      throw Exception("Should not happen (imp2)");
       }
     return is;
     }

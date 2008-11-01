@@ -76,7 +76,6 @@ BogusItemStartItemEnd.dcm
   BogugsSequenceLengthCorrectItemLength.dcm
   BogugsItemAndSequenceLength.dcm
   BogusACRWithFileMeta.dcm
-  TheralysGDCM120Bug.dcm
   CompressedLossy.dcm
 
 # vtkGDCMImageWriter + rescale does not work on the following images:

@@ -91,6 +91,13 @@ static const char * const gdcmMD5DataBrokenImages[][2] = {
 // unordered dataset
 { "f221e76c6f0758877aa3cf13632480f4" , "dicomdir_Pms_WithVisit_WithPrivate_WithStudyComponents" }, // size match
 
+// frankenstein-type dicom file:
+// 1. Implicit encoding is used any time it is not known (most of the time, private element)
+// 2. > (0x2001,0x1068) SQ ?   VR=<SQ>   VL=<0xffffffff> is sent twice (don't ask), second entry cannot be stored...
+// dcdump kindda show file are somewhat compatible.
+{ "69ca7a4300967cf2841da34d7904c6c4" , "TheralysGDCM120Bug.dcm" }, // size mismatch
+
+
 { 0 ,0 }
 };
 

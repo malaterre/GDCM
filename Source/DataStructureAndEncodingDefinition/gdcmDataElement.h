@@ -208,6 +208,13 @@ public:
   const std::ostream &Write(std::ostream &os) const {
     return static_cast<const TDE*>(this)->template Write<TSwap>(os);
   }
+  void Clear()
+    {
+  TagField = 0;
+  ValueLengthField = 0;
+  VRField = VR::INVALID;
+  ValueField = 0;
+    }
 
 protected:
   Tag TagField;

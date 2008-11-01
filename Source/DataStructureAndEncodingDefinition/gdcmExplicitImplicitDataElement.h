@@ -35,6 +35,12 @@ public:
   template <typename TSwap>
   std::istream &Read(std::istream &is);
 
+template <typename TSwap>
+std::istream &ReadWithLength(std::istream &is, VL & length)
+{
+  return Read<TSwap>(is); (void)length;
+}
+
   // PURPOSELY do not provide an implementation for writing !
   //template <typename TSwap>
   //const std::ostream &Write(std::ostream &os) const;

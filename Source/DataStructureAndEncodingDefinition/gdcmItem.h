@@ -102,7 +102,7 @@ public:
     }
     if( !TagField.Read<TSwap>(is) )
       {
-      throw Exception("Should not happen");
+      throw Exception("Should not happen (item)");
       return is;
       }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
