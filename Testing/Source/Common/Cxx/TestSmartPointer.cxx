@@ -41,6 +41,33 @@ void Fill(SmartPointer<Foo> &p)
   p = &rp;
 }
 
+SmartPointer<Foo> gf;
+
+SmartPointer<Foo> TestReturn(int i)
+{
+  static int n = 0;
+  if( !n )
+    {
+    ++n;
+    gf = new Foo;
+    }
+
+  if( i == 0 )
+    {
+    return gf;
+    }
+  else if( i == 1 )
+    {
+    SmartPointer<Foo> f = new Foo;
+    return f;
+    }
+  else if( i == 2 )
+    {
+    return new Foo;
+    }
+  return 0;
+}
+
 //class Object2 : public Foo {};
 
 int TestSmartPointer(int, char *[])
@@ -81,6 +108,12 @@ int TestSmartPointer(int, char *[])
   // TODO:
   //SmartPointer<Object> s = new Foo;
   //delete s;
+
+  for(int i = 0; i < 5; ++i)
+    {
+    SmartPointer<Foo> f = TestReturn(i);
+    f->foo();
+    }
 
   return 0;
 }

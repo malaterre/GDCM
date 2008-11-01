@@ -88,6 +88,7 @@ protected:
   void PrintElement(std::ostream& os, const DataElement &xde, const DictEntry &entry);
   void PrintDataSet(const DataSet &ds, std::ostream& os, const std::string &s = "");
   VR PrintDataElement(std::ostringstream & os, const Dicts &dicts, const DataSet & ds, const DataElement &de, std::ostream &out, std::string const & indent );
+void PrintSQ(const SequenceOfItems *sqi, std::ostream & os, std::string const & indent);
 
   PrintStyles PrintStyle;
   const File *F;

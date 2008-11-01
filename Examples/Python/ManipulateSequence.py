@@ -47,7 +47,9 @@ if __name__ == "__main__":
   tsis = gdcm.Tag(0x0008,0x2112) # SourceImageSequence
   if ds.FindDataElement( tsis ):
     sis = ds.GetDataElement( tsis )
-    sqsis = sis.GetSequenceOfItems()
+    #sqsis = sis.GetSequenceOfItems()
+    # GetValueAsSQ handle more cases
+    sqsis = sis.GetValueAsSQ()
     if sqsis.GetNumberOfItems():
       item1 = sqsis.GetItem(1)
       nestedds = item1.GetNestedDataSet()

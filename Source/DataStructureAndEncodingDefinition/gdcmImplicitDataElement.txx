@@ -64,14 +64,14 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
       }
     else
       {
-      gdcmWarningMacro( "Undefined value length is impossible in non-encapsulated Transfer Syntax" );
+      gdcmErrorMacro( "Undefined value length is impossible in non-encapsulated Transfer Syntax" );
       ValueField = new SequenceOfFragments;
       }
     //VRField = VR::SQ;
     }
   else
     {
-    if( ValueLengthField < 8 )
+    if( true /*ValueLengthField < 8 */ )
       {
       ValueField = new ByteValue;
       }
@@ -191,7 +191,7 @@ std::istream &ImplicitDataElement::Read(std::istream &is)
   VL dummy = ValueField->GetLength();
   if( ValueLengthField != dummy )
     {
-    gdcmWarningMacro( "ValueLengthField was bogus" );
+    gdcmWarningMacro( "ValueLengthField was bogus" ); abort();
     ValueLengthField = dummy;
     }
 #else
@@ -245,7 +245,7 @@ std::istream &ImplicitDataElement::ReadWithLength(std::istream &is, VL & length)
     }
   else
     {
-    if( ValueLengthField < 8 )
+    if( true /*ValueLengthField < 8*/ )
       {
       ValueField = new ByteValue;
       }
@@ -399,11 +399,13 @@ const std::ostream &ImplicitDataElement::Write(std::ostream &os) const
     return os;
     }
   // Write Value Length
-  const SequenceOfItems *sqi = GetSequenceOfItems();
+  const SequenceOfItems *sqi = dynamic_cast<const SequenceOfItems*>(&GetValue()); //GetSequenceOfItems();
   if( sqi && !ValueLengthField.IsUndefined() )
     {
     // Hum, we might have to recompute the length:
+    // See TestWriter2, where an explicit SQ is converted to implicit SQ
     VL len = sqi->template ComputeLength<ImplicitDataElement>();
+    //assert( len == ValueLengthField );
     if( !len.Write<TSwap>(os) )
       {
       assert(0 && "Should not happen");

@@ -25,6 +25,7 @@
 #include "vtkMedicalImageProperties.h"
 
 #include "gdcmReader.h"
+#include "gdcmSmartPointer.h"
 #include "gdcmAttribute.h"
 #include "gdcmSequenceOfItems.h"
 
@@ -253,13 +254,15 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
 
   const gdcm::DataElement &roicsq = ds.GetDataElement( troicsq );
   //std::cout << roicsq << std::endl;
-  const gdcm::SequenceOfItems *sqi = roicsq.GetSequenceOfItems();
+  //const gdcm::SequenceOfItems *sqi = roicsq.GetSequenceOfItems();
+  gdcm::SmartPointer<gdcm::SequenceOfItems> sqi = roicsq.GetValueAsSQ();
   if( !sqi || !sqi->GetNumberOfItems() )
     {
     return 0;
     }
   const gdcm::DataElement &ssroisq = ds.GetDataElement( tssroisq );
-  const gdcm::SequenceOfItems *ssqi = ssroisq.GetSequenceOfItems();
+  //const gdcm::SequenceOfItems *ssqi = ssroisq.GetSequenceOfItems();
+  gdcm::SmartPointer<gdcm::SequenceOfItems> ssqi = ssroisq.GetValueAsSQ();
   if( !ssqi || !ssqi->GetNumberOfItems() )
     {
     return 0;
@@ -309,7 +312,8 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
     const gdcm::DataElement& csq = nestedds.GetDataElement( tcsq );
     //std::cout << csq << std::endl;
 
-    const gdcm::SequenceOfItems *sqi2 = csq.GetSequenceOfItems();
+    //const gdcm::SequenceOfItems *sqi2 = csq.GetSequenceOfItems();
+    gdcm::SmartPointer<gdcm::SequenceOfItems> sqi2 = csq.GetValueAsSQ();
     if( !sqi2 || !sqi2->GetNumberOfItems() )
       {
       return 0;
@@ -530,7 +534,8 @@ int vtkGDCMPolyDataReader::RequestInformation_RTStructureSetStorage(gdcm::Reader
     }
 
   const gdcm::DataElement &ssroisq = ds.GetDataElement( tssroisq );
-  const gdcm::SequenceOfItems *sqi = ssroisq.GetSequenceOfItems();
+  //const gdcm::SequenceOfItems *sqi = ssroisq.GetSequenceOfItems();
+  gdcm::SmartPointer<gdcm::SequenceOfItems> sqi = ssroisq.GetValueAsSQ();
   if( !sqi || !sqi->GetNumberOfItems() )
     {
     return 0;

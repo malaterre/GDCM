@@ -561,6 +561,7 @@ int main (int argc, char *argv[])
     if( explicitts )
       {
       gdcm::FileExplicitFilter fef;
+      fef.SetChangePrivateTags( true );
       fef.SetFile( reader.GetFile() );
       if( !fef.Change() )
         {

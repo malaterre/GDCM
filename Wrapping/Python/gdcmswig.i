@@ -23,6 +23,7 @@
 #pragma SWIG nowarn=504,510
 %{
 #include "gdcmTypes.h"
+#include "gdcmSmartPointer.h"
 #include "gdcmSwapCode.h"
 #include "gdcmDirectory.h"
 #include "gdcmTesting.h"
@@ -226,6 +227,8 @@ using namespace gdcm;
     return buffer.c_str();
   }
 };
+%include "gdcmSmartPointer.h"
+%template(SmartPtrSQ) gdcm::SmartPointer<gdcm::SequenceOfItems>;
 %include "gdcmDataElement.h"
 %extend gdcm::DataElement
 {

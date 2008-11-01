@@ -23,6 +23,7 @@ namespace gdcm
 class DataSet;
 class File;
 class Tag;
+class SequenceOfItems;
 
 /**
  * \brief DataSetHelper (internal class, not intended for user level)
@@ -35,6 +36,9 @@ public:
   /// ds -> current dataset, which is not the same as the root dataset
   /// return VR::INVALID in case of error
   static VR ComputeVR(File const & file, DataSet const &ds, const Tag& tag);
+
+
+  //static SequenceOfItems* ComputeSQFromByteValue(File const & file, DataSet const &ds, const Tag &tag);
 
 protected:
 };

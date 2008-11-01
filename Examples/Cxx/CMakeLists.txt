@@ -44,3 +44,6 @@ TARGET_LINK_LIBRARIES(GenFakeImage gdcmMSFF)
 ADD_EXECUTABLE(FixBrokenJ2K FixBrokenJ2K.cxx)
 TARGET_LINK_LIBRARIES(FixBrokenJ2K gdcmMSFF)
 
+ADD_EXECUTABLE(ReadExplicitLengthSQIVR ReadExplicitLengthSQIVR.cxx)
+TARGET_LINK_LIBRARIES(ReadExplicitLengthSQIVR gdcmMSFF)
+

@@ -13,6 +13,7 @@
 
 =========================================================================*/
 #include "gdcmFileExplicitFilter.h"
+#include "gdcmExplicitDataElement.h"
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmSequenceOfItems.h"
 #include "gdcmFragment.h"
@@ -35,6 +36,27 @@ void FileExplicitFilter::SetRecomputeItemLength(bool b)
 void FileExplicitFilter::SetRecomputeSequenceLength(bool b)
 {
   RecomputeSequenceLength = b;
+}
+
+bool FileExplicitFilter::ChangeFMI()
+{
+/*
+    gdcm::FileMetaInformation &fmi = F->GetHeader();
+    gdcm::TransferSyntax ts = gdcm::TransferSyntax::ImplicitVRLittleEndian;
+      {
+      ts = gdcm::TransferSyntax::ExplicitVRLittleEndian;
+      }
+    const char *tsuid = gdcm::TransferSyntax::GetTSString( ts );
+    gdcm::DataElement de( gdcm::Tag(0x0002,0x0010) );
+    de.SetByteValue( tsuid, strlen(tsuid) );
+    de.SetVR( gdcm::Attribute<0x0002, 0x0010>::GetVR() );
+    fmi.Replace( de );
+    //fmi.Remove( gdcm::Tag(0x0002,0x0012) ); // will be regenerated
+    //fmi.Remove( gdcm::Tag(0x0002,0x0013) ); //  '   '    '
+    fmi.SetDataSetTransferSyntax(ts);
+*/
+
+  return true;
 }
 
 bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
@@ -69,11 +91,17 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
     //assert( de.GetVR() == VR::INVALID );
     VR cvr = DataSetHelper::ComputeVR(*F,ds, t);
     VR oldvr = de.GetVR();
-    SequenceOfItems *sqi = de.GetSequenceOfItems();
-    if( de.GetByteValue() )
+    //SequenceOfItems *sqi = de.GetSequenceOfItems();
+    //SequenceOfItems *sqi = dynamic_cast<SequenceOfItems*>(&de.GetValue());
+    SmartPointer<SequenceOfItems> sqi = 0;
+    if( vr == VR::SQ )
+      {
+      sqi = de.GetValueAsSQ();
+      }
+    if( de.GetByteValue() && !sqi )
       {
       // all set
-      assert( cvr != VR::SQ /*&& cvr != VR::UN*/ );
+      //assert( cvr != VR::SQ /*&& cvr != VR::UN*/ );
       assert( cvr != VR::INVALID );
       if( cvr != VR::UN )
         {
@@ -115,6 +143,11 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
       {
       assert( cvr == VR::SQ || cvr == VR::UN );
       de.SetVR( VR::SQ );
+      if( de.GetByteValue() )
+        {
+        de.SetValue( *sqi );
+        //de.SetVL( sqi->ComputeLength<ExplicitDataElement>() );
+        }
       de.SetVLToUndefined();
       assert( sqi->GetLength().IsUndefined() );
       // recursive
@@ -127,6 +160,7 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
         DataSet &nds = item.GetNestedDataSet();
         //const DataElement &deitem = item;
         ProcessDataSet(nds, dicts);
+        item.SetVL( item.GetLength<ExplicitDataElement>() );
         }
       }
     else if( de.GetSequenceOfFragments() )

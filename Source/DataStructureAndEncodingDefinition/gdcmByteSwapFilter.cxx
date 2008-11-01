@@ -39,7 +39,7 @@ bool ByteSwapFilter::ByteSwap()
     {
     const DataElement &de = *it;
     VR const & vr = de.GetVR();
-    assert( vr & VR::VRASCII || vr & VR::VRBINARY );
+    //assert( vr & VR::VRASCII || vr & VR::VRBINARY );
     if( de.IsEmpty() )
       {
       }

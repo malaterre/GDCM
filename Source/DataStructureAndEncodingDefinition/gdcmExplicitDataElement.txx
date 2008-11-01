@@ -409,7 +409,8 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
       {
       assert( ValueField->GetLength() == ValueLengthField );
       }
-    else if( GetSequenceOfItems() )
+    //else if( GetSequenceOfItems() )
+    else if( dynamic_cast<const SequenceOfItems*>(&GetValue()) )
       {
       assert( ValueField->GetLength() == ValueLengthField );
       const SequenceOfItems *sq = GetSequenceOfItems();

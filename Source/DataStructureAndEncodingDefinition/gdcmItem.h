@@ -184,8 +184,11 @@ public:
       //TagField = Tag(0xfffe, 0xe000);
       }
 #endif
-    //assert ( TagField == Tag(0xfffe, 0xe000)
-    //  || TagField == Tag(0xfffe, 0xe0dd) );
+    if( TagField != Tag(0xfffe, 0xe000) && TagField != Tag(0xfffe, 0xe0dd) )
+      {
+      throw Exception( "Not a valid Item" );
+      }
+    assert( TagField == Tag(0xfffe, 0xe000) || TagField == Tag(0xfffe, 0xe0dd) );
 
     if( !ValueLengthField.Read<TSwap>(is) )
       {

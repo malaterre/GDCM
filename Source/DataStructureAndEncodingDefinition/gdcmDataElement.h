@@ -119,8 +119,20 @@ public:
 
   /// Return the Value of DataElement as a Sequence Of Items (if possible)
   /// \warning: You need to check for NULL return value
+  /// \warning: In some case a Value could not have been recognized as a SequenceOfItems
+  /// in those case the return of the function will be NULL, while the Value would be
+  /// a valid SequenceOfItems, in those case prefer GetValueAsSQ. In which case
+  /// the code internally trigger an assert to warn developper.
   const SequenceOfItems* GetSequenceOfItems() const;
   SequenceOfItems* GetSequenceOfItems();
+
+  /// Interpret the Value stored in the DataElement. This is more robust (but also more
+  /// expensive) to call this function rather than the simpliest form: GetSequenceOfItems()
+  /// It also return NULL when the Value is NOT of type SequenceOfItems
+  /// \warning in case GetSequenceOfItems() succeed the function return this value, otherwise
+  /// it creates a new SequenceOfItems, you should handle that in your case, for instance:
+  /// SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
+  SmartPointer<SequenceOfItems> GetValueAsSQ() const;
 
   /// Return the Value of DataElement as a Sequence Of Fragments (if possible)
   /// \warning: You need to check for NULL return value

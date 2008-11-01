@@ -191,6 +191,7 @@ public:
 template < typename Float >
 std::string to_string ( Float data ) {
   std::stringstream in;
+  // in.imbue(std::locale::classic()); // This is not required AFAIK
   unsigned long const digits =
     static_cast< unsigned long >(
     - std::log( std::numeric_limits<Float>::epsilon() )

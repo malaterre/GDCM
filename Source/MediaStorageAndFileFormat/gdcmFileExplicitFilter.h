@@ -46,6 +46,8 @@ public:
   void SetRecomputeItemLength(bool b);
   void SetRecomputeSequenceLength(bool b);
 
+  /// Set FMI Transfer Syntax
+
   /// Change
   bool Change();
 
@@ -55,6 +57,7 @@ public:
 
 protected:
   bool ProcessDataSet(DataSet &ds, Dicts const & dicts);
+  bool ChangeFMI();
 
 private:
   SmartPointer<File> F;

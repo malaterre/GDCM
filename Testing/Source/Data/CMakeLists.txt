@@ -112,7 +112,6 @@ BogusItemStartItemEnd.dcm
 
   PixelDataWithVRUN.dcm
   InvalidYCCForJ2K.dcm
-  DX_J2K_0Padding.dcm
 )
 IF(NOT GDCM_USE_PVRG)
   SET(BLACK_LIST_READER

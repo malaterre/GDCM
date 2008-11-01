@@ -15,6 +15,8 @@
 #include "gdcmDataSetHelper.h"
 #include "gdcmFile.h"
 #include "gdcmDataSet.h"
+#include "gdcmSequenceOfItems.h"
+#include "gdcmImplicitDataElement.h"
 #include "gdcmGlobal.h"
 #include "gdcmDicts.h"
 #include "gdcmDict.h"
@@ -157,5 +159,73 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
 }
 
 
+/*
+SequenceOfItems* DataSetHelper::ComputeSQFromByteValue(File const & file, DataSet const &ds, const Tag &tag)
+{
+  const TransferSyntax &ts = file.GetHeader().GetDataSetTransferSyntax();
+  assert( ts != TransferSyntax::DeflatedExplicitVRLittleEndian );
+  const DataElement &de = ds.GetDataElement( tag );
+  if( de.IsEmpty() )
+    {
+    return 0;
+    }
+  Value &v = const_cast<Value&>(de.GetValue());
+  SequenceOfItems *sq = dynamic_cast<SequenceOfItems*>(&v);
+  if( sq ) // all set !
+    {
+    SmartPointer<SequenceOfItems> sqi = sq;
+    return sqi;
+    }
+
+  try
+    {
+    if( ts.GetSwapCode() == SwapCode::BigEndian )
+      {
+      abort();
+      }
+    else
+      {
+      if( ts.GetNegociatedType() == TransferSyntax::Implicit )
+        {
+        assert( de.GetVR() == VR::INVALID );
+        const ByteValue *bv = de.GetByteValue();
+        assert( bv );
+        SequenceOfItems *sqi = new SequenceOfItems;
+        sqi->SetLength( bv->GetLength() );
+        std::stringstream ss;
+        ss.str( std::string( bv->GetPointer(), bv->GetLength() ) );
+        sqi->Read<ImplicitDataElement,SwapperNoOp>( ss );
+        return sqi;
+        }
+      else
+        {
+        assert( de.GetVR() == VR::UN ); // cp 246, IVRLE SQ
+        const ByteValue *bv = de.GetByteValue();
+        assert( bv );
+        SequenceOfItems *sqi = new SequenceOfItems;
+        sqi->SetLength( bv->GetLength() );
+        std::stringstream ss;
+        ss.str( std::string( bv->GetPointer(), bv->GetLength() ) );
+        sqi->Read<ImplicitDataElement,SwapperNoOp>( ss );
+        return sqi;
+        }
+      }
+    }
+  catch( ParseException &pex )
+    {
+    gdcmDebugMacro( pex.what() );
+    }
+  catch( Exception &ex )
+    {
+    gdcmDebugMacro( ex.what() );
+    }
+  catch( ... )
+    {
+    gdcmWarningMacro( "Unknown exception" );
+    }
+
+  return 0;
+}
+*/
 
 }

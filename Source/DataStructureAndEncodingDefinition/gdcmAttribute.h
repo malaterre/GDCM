@@ -156,6 +156,7 @@ public:
   DataElement GetAsDataElement() const {
     DataElement ret( GetTag() );
     std::ostringstream os;
+    // os.imbue(std::locale::classic()); // This is not required AFAIK
     EncodingImplementation<VRToEncoding<TVR>::Mode>::Write(Internal, 
       GetNumberOfValues(),os);
     ret.SetVR( GetVR() );

@@ -22,6 +22,7 @@ namespace gdcm
 
 VL ImplicitDataElement::GetLength() const
 {
+  const Value &v = GetValue();
   if( ValueLengthField.IsUndefined() )
     {
     assert( ValueField->GetLength().IsUndefined() );
@@ -35,8 +36,10 @@ VL ImplicitDataElement::GetLength() const
     assert( !ValueLengthField.IsUndefined() );
     return ValueLengthField;
     }
-  else if( const SequenceOfItems *sqi = GetSequenceOfItems() )
+  //else if( const SequenceOfItems *sqi = GetSequenceOfItems() )
+  else if( const SequenceOfItems *sqi = dynamic_cast<const SequenceOfItems*>(&v) )
     {
+    // TestWrite2
     return TagField.GetLength() + ValueLengthField.GetLength() 
       + sqi->ComputeLength<ImplicitDataElement>();
     }

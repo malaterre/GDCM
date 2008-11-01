@@ -598,7 +598,7 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
 VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const DataSet & ds, const DataElement &de, std::ostream &out, std::string const & indent )
 {
     const ByteValue *bv = de.GetByteValue();
-    const SequenceOfItems *sqi = de.GetSequenceOfItems();
+    const SequenceOfItems *sqi = 0; //de.GetSequenceOfItems();
     const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
 
     std::string strowner;
@@ -660,7 +660,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
         }
       os << GDCM_TERMINAL_VT100_NORMAL;
       }
-    else if( de.GetSequenceOfItems() && refvr == VR::INVALID )
+    else if( sqi /*de.GetSequenceOfItems()*/ && refvr == VR::INVALID )
       {
       // when vr == VR::INVALID and vr_read is also VR::INVALID, we have a seldom case where we can guess
       // the vr
@@ -765,15 +765,15 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
         assert( refvr != VR::US_SS );
         break;
       case VR::SQ:
-        if( !de.GetSequenceOfItems() && !de.IsEmpty() && de.GetValue().GetLength() )
+        if( !sqi /*!de.GetSequenceOfItems()*/ && !de.IsEmpty() && de.GetValue().GetLength() )
           {
           // This case is insane, this is an implicit file, with a defined length SQ.
           // Since this is a private element there is no way to guess that, and to 
           // make it even worse the binary blob does not start with item start...
           // Bug_Philips_ItemTag_3F3F.dcm 
-          os << GDCM_TERMINAL_VT100_BACKGROUND_RED;
-          bv->PrintHex(os, MaxPrintLength / 4);
-          os << GDCM_TERMINAL_VT100_NORMAL;
+          //os << GDCM_TERMINAL_VT100_BACKGROUND_RED;
+          //bv->PrintHex(os, MaxPrintLength / 4);
+          //os << GDCM_TERMINAL_VT100_NORMAL;
           }
         else
           {
@@ -951,30 +951,9 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
 return refvr;
 }
 
-void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string const & indent )
+void Printer::PrintSQ(const SequenceOfItems *sqi, std::ostream & os, std::string const & indent)
 {
-  const Global& g = GlobalInstance;
-  const Dicts &dicts = g.GetDicts();
-  const Dict &d = dicts.GetPublicDict(); (void)d;
- 
-  DataSet::ConstIterator it = ds.Begin();
-  for( ; it != ds.End(); ++it )
-    {
-    const DataElement &de = *it;
-
-    //const ByteValue *bv = de.GetByteValue();
-    const SequenceOfItems *sqi = de.GetSequenceOfItems();
-    const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
-
-    std::ostringstream os;
-
-    VR refvr = PrintDataElement(os, dicts, ds, de, out, indent);
-
-    if( refvr == VR::SQ || sqi )
-      {
-      if( sqi ) // empty SQ ?
-        {
-        assert( sqi );
+if( !sqi ) return;
         SequenceOfItems::ItemVector::const_iterator it = sqi->Items.begin();
         for(; it != sqi->Items.end(); ++it)
           {
@@ -1007,7 +986,53 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
           const Tag seqDelItem(0xfffe,0xe0dd);
           os << indent << seqDelItem << "\n";
           }
+}
+
+void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string const & indent )
+{
+  const Global& g = GlobalInstance;
+  const Dicts &dicts = g.GetDicts();
+  const Dict &d = dicts.GetPublicDict(); (void)d;
+ 
+  DataSet::ConstIterator it = ds.Begin();
+  for( ; it != ds.End(); ++it )
+    {
+    const DataElement &de = *it;
+
+    //const ByteValue *bv = de.GetByteValue();
+    const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
+
+    std::ostringstream os;
+
+    VR refvr = PrintDataElement(os, dicts, ds, de, out, indent);
+
+    if( refvr == VR::SQ /*|| sqi*/ )
+      {
+          //SmartPointer<SequenceOfItems> sqi2 = DataSetHelper::ComputeSQFromByteValue( *F, ds, de.GetTag() );
+          SmartPointer<SequenceOfItems> sqi2 = de.GetValueAsSQ();
+          PrintSQ(sqi2, os, indent);
+/*
+    const SequenceOfItems *sqi = de.GetSequenceOfItems();
+      if( sqi ) // empty SQ ?
+        {
+        assert( sqi );
+        PrintSQ(sqi, os, indent);
         }
+      else
+        {
+        if( !de.IsEmpty() )
+          {
+          // Ok so far we know:
+          // 1. VR is SQ sqi == NULL
+          // 2. DataElement is not empty ...
+          // => This is a VR:UN or Implicit SQ with defined length.
+          // let's try to interpret this sequence
+          SequenceOfItems *sqi2 = DataSetHelper::ComputeSQFromByteValue( *F, ds, de.GetTag() );
+          if(sqi2) PrintSQ(sqi2, os, indent);
+          delete sqi2;
+          }
+        }
+*/
       }
     else if ( sqf )
       {

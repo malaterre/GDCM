@@ -255,7 +255,8 @@ void DoIconImage(const DataSet& rootds, Image& image)
   if( rootds.FindDataElement( ticonimage ) )
     {
     const DataElement &iconimagesq = rootds.GetDataElement( ticonimage );
-    const SequenceOfItems* sq = iconimagesq.GetSequenceOfItems();
+    //const SequenceOfItems* sq = iconimagesq.GetSequenceOfItems();
+    SmartPointer<SequenceOfItems> sq = iconimagesq.GetValueAsSQ();
     // Is SQ empty ?
     if( !sq ) return;
     SequenceOfItems::ConstIterator it = sq->Begin();
