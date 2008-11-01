@@ -150,7 +150,7 @@ public:
           ByteSwapFilter bsf(nested);
           bsf.ByteSwap();
           }
-        catch(...)
+        catch(ParseException &pe)
           {
           // MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm
           // You have to byteswap the length but not the tag...sigh
@@ -164,6 +164,15 @@ public:
           // Tag are read in big endian, need to byteswap them back...
           bsf.SetByteSwapTag(true);
           bsf.ByteSwap();
+          }
+        catch(Exception &e)
+          {
+          // MR_Philips_Intera_No_PrivateSequenceImplicitVR.dcm
+          throw e;
+          }
+        catch(...)
+          {
+          abort();
           }
         }
       else /* if( ValueLengthField.IsUndefined() ) */
