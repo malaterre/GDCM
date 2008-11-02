@@ -97,6 +97,10 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
     if( vr == VR::SQ )
       {
       sqi = de.GetValueAsSQ();
+      if(!sqi)
+        {
+        assert( de.IsEmpty() );
+        }
       }
     if( de.GetByteValue() && !sqi )
       {
