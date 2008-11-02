@@ -1049,9 +1049,13 @@ int main (int argc, char *argv[])
       std::cerr << "Could not change the Transfer Syntax: " << filename << std::endl;
       return 1;
       }
-    //gdcm::FileExplicitFilter fef;
-    //fef.SetFile( reader.GetFile() );
-    //fef.Change();
+    const gdcm::TransferSyntax &ts = image.GetTransferSyntax();
+    if( ts.IsImplicit() )
+      {
+      gdcm::FileExplicitFilter fef;
+      fef.SetFile( reader.GetFile() );
+      fef.Change();
+      }
     if( lossy )
     gdcm::derives( reader.GetFile(), change.GetOutput() );
 
