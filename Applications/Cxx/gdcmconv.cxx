@@ -823,7 +823,7 @@ int main (int argc, char *argv[])
     if( explicitts )
       {
       gdcm::FileExplicitFilter fef;
-      fef.SetChangePrivateTags( true );
+      //fef.SetChangePrivateTags( true );
       fef.SetFile( reader.GetFile() );
       if( !fef.Change() )
         {
@@ -1053,8 +1053,13 @@ int main (int argc, char *argv[])
     if( ts.IsImplicit() )
       {
       gdcm::FileExplicitFilter fef;
+      //fef.SetChangePrivateTags( true );
       fef.SetFile( reader.GetFile() );
-      fef.Change();
+      if(!fef.Change())
+        {
+        std::cerr << "Failed to change: " << filename << std::endl;
+        return 1;
+        }
       }
     if( lossy )
     gdcm::derives( reader.GetFile(), change.GetOutput() );
