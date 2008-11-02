@@ -424,6 +424,10 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
     numcomps = 3;
     color_space = CLRSPC_SRGB;
     }
+  if( bitsallocated % 8 != 0 )
+    {
+    return 0;
+    }
   assert( bitsallocated % 8 == 0 );
   // eg. fragment_size == 63532 and 181 * 117 * 3 * 8 == 63531 ...
   assert( ((fragment_size + 1)/2 ) * 2 == ((image_height * image_width * numcomps * (bitsallocated/8) + 1)/ 2 )* 2 );

@@ -103,12 +103,12 @@ bool ImageChangeTransferSyntax::TryRLECodec(const DataElement &pixelde, Pixmap c
     //bool r = codec.Code(input.GetDataElement(), out);
     bool r = codec.Code(pixelde, out);
 
-    DataElement &de = output.GetDataElement();
-    de.SetValue( out.GetValue() );
     if( !r )
       {
       return false;
       }
+    DataElement &de = output.GetDataElement();
+    de.SetValue( out.GetValue() );
     return true;
     }
   return false;
@@ -241,6 +241,7 @@ bool ImageChangeTransferSyntax::TryJPEG2000Codec(const DataElement &pixelde, Pix
 
     DataElement &de = output.GetDataElement();
     de.SetValue( out.GetValue() );
+    if( !r ) return false;
     assert( r );
     return r;
     }
