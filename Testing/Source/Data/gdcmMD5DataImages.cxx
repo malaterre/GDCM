@@ -621,10 +621,9 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "52607a16af1eaddbbc71c14d32e489d8" , "DX_J2K_0Padding.dcm" },
 
 
-
-
-
-
+{ "6af53848fe77feb56a12aba74dadea8e" , "TheralysGDCM120Bug.dcm" },
+{ "79b8705f2e6c7464bd3e2fc7e1d3483b" , "TestVRSQUN2.dcm" },
+{ "71e4ea61df4f7ada2955799c91f93e74" , "TestVRSQUN1.dcm" },
 
 
 

@@ -40,7 +40,8 @@ int TestImageChangePhotometricInterpretationFunc(const char *filename, bool verb
     const gdcm::FileMetaInformation &header = reader.GetFile().GetHeader();
     gdcm::MediaStorage ms = header.GetMediaStorage();
     bool isImage = gdcm::MediaStorage::IsImage( ms );
-    if( isImage )
+    bool pixeldata = reader.GetFile().GetDataSet().FindDataElement( gdcm::Tag(0x7fe0,0x0010) );
+    if( isImage && pixeldata )
       {
       std::cout << "Could not read: " << filename << std::endl;
       return 1;
