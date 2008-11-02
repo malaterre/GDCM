@@ -71,14 +71,9 @@ PHANTOM.MR.CARDIO_COEUR_S_QUENCE_DE_REP_RAGE.9.257.2008.03.20.14.53.25.578125.43
 TODO: need a gdcm::ExtractOverlayFromPixelDataFilter
 to rewrite a gdcm::Image
 -----------------------------------------------------------------------
-Rewrite IconImage !
------------------------------------------------------------------------
 Provide operator() ==  for String<LO> (should discard length, space char...)
 -----------------------------------------------------------------------
 Should handle old Date format (with - separator)
------------------------------------------------------------------------
-Do gdcm::Printer::Print
-In a consistant way if possible...
 -----------------------------------------------------------------------
 vtkMedicalImageProp user defined value should be written back to disk
 -> TODO: SQ will be difficult to handle
@@ -110,14 +105,11 @@ bin/gdcmvtkGDCMTests TestvtkGDCMImageWriter BogugsItemAndSequenceLengthCorrected
 There are still some subtle issues with Enhanced modality:
 * what if frames are not order according to IPP ?
 * what is the intercept/slope are not constant throughout the frames ?
-
 -----------------------------------------------------------------------
 Explicit-VR transfer syntax limits the value
 multiplicity of DICOM data elements with
 decimal string (DS) value representation
 http://www.iop.org/EJ/article/0031-9155/51/5/L01/pmb6_5_l01.pdf?request-id=00122d0d-5f95-4c78-bbeb-e9555ef639ae
------------------------------------------------------------------------
-Add support for LittleEndian declared as bigEndian (gdcmData/c_vf1001.dcm)
 -----------------------------------------------------------------------
 Add support for namelink packaging
 -----------------------------------------------------------------------
@@ -147,8 +139,6 @@ http://www.codeguru.com/cpp/i-n/internet/xml/article.php/c3451/
 -----------------------------------------------------------------------
 Undefined length and explicit length are not interchangeable. Explicit length
 has an hardocded limit: 0xffff.... while undefined not.
------------------------------------------------------------------------
-Explicit VR when SQ is encoded as UN with explicit length is not printed correctly
 -----------------------------------------------------------------------
 There is subttle bug in the Part3 support:
 
@@ -189,8 +179,6 @@ need to repeat for:
   {0x6005,0x0010,"ELSCINT1",VR::CS,VM::VM1,"Text Overlay Flag",false },
 and so and so forth...
 -----------------------------------------------------------------------
-IconImage should derive from Image to support compression
------------------------------------------------------------------------
 SIEMENS MrProt / IDEA  / Numaris stuff:
 apt-get source minc-tools
 conversion/dcm2mnc/dicom_to_minc.c
@@ -201,22 +189,6 @@ http://atonal.ucdavis.edu/matlab/fmri/spm5/spm_dicom_convert.m
 
 -----------------------------------------------------------------------
 cmake export() might be helpful to cleanup cmakelists.txt
------------------------------------------------------------------------
-There is a bug in the YBR2RGB code...
-  Update: 09/04 PlanarConfiguration code has been fixed
------------------------------------------------------------------------
-Add exception when accessing DataElement not found in DataSet
------------------------------------------------------------------------
-Add python documentation
-
-doxy2swig.py
-http://www.ae.iitm.ac.in/~prabhu/software/code/python/doxy2swig.py
------------------------------------------------------------------------
-Need an ExplicitFilter before next release
-+ check USE_PVRG works on WIN32 system
------------------------------------------------------------------------
-gdcmconv --jpeg -i  gdcmData/GE_DLX-8-MONO2-Multiframe.dcm -o bla2.dcm
-creates VR::UN add a couple more attributes...
 -----------------------------------------------------------------------
 BasicOffsetTable is never computed...
 -----------------------------------------------------------------------
@@ -246,23 +218,6 @@ INCLUDE( ${GDCM_USE_FILE} )
 ADD_EXECUTABLE(bla bla.cxx)
 TARGET_LIBK_LIBRARIES(bla vtkgdcm)
 -----------------------------------------------------------------------
-Check perf of vtkTexturedActor2D vs vtkTexture
------------------------------------------------------------------------
- std::locale::global( std::locale( "" ) ) ;  &
- os.imbue(std::locale::classic()); 
-to make sure not to ever write double with comma
------------------------------------------------------------------------
-Need to fix issue with Explicit SQ declared as UN
-
------------------------------------------------------------------------
-Fix bug:
-$ ./bin/gdcmdump --color /home/mmalaterre/Projects/GDCMDataCron/gdcmData/GE_GENESIS-16-MONO2-WrongLengthItem.dcm | grep 1310
-(0018,1310) ?? (US) 12320\12892\13877\12334\12336\12336\23600\13618\11830\12336\12336\12336\12380         # 26,4 Acquisition Matrix
------------------------------------------------------------------------
-Change default behavior:
-do not load Imp VR:SQ when defined length. And at the same time, add option to force loading of well known SQ
-which will make a similar behavior in Vr:SQ when in explicit
-
 http://www.4bitterguys.com/phpBB2/viewtopic.php?t=7426
 http://www.data-compression.info/ABC/index.htm
 http://www.geocities.com/truth_out_there/additionalinfo.html
