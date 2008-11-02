@@ -181,13 +181,20 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
     }
   else if( ValueLengthField.IsUndefined() )
     {
-    if( VRField == VR::UN )
+    if( TagField == Tag(0x7fe0,0x0010) )
+      {
+      // Ok this is Pixel Data fragmented...
+      assert( VRField & VR::OB_OW || VRField == VR::UN );
+      ValueField = new SequenceOfFragments;
+      }
+    else
       {
       // Support cp246 conforming file:
       // Enhanced_MR_Image_Storage_PixelSpacingNotIn_0028_0030.dcm (illegal)
       // vs
       // undefined_length_un_vr.dcm
       assert( TagField != Tag(0x7fe0,0x0010) );
+      assert( VRField == VR::UN );
       ValueField = new SequenceOfItems;
       ValueField->SetLength(ValueLengthField); // perform realloc
       try
@@ -208,13 +215,6 @@ std::istream &ExplicitDataElement::Read(std::istream &is)
         throw pe;
         }
       return is;
-      }
-    else
-      {
-      // Ok this is Pixel Data fragmented...
-      assert( TagField == Tag(0x7fe0,0x0010) );
-      assert( VRField & VR::OB_OW );
-      ValueField = new SequenceOfFragments;
       }
     }
   else
@@ -427,7 +427,7 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
     // We have the length we should be able to write the value
     if( VRField == VR::UN && ValueLengthField.IsUndefined() )
       {
-      assert( GetSequenceOfItems() );
+      assert( TagField == Tag(0x7fe0,0x0010) || GetSequenceOfItems() );
       ValueIO<ImplicitDataElement,TSwap>::Write(os,*ValueField);
       }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION

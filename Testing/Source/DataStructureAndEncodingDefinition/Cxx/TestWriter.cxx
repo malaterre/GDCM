@@ -120,7 +120,7 @@ const char * GetMD5FromBrokenFile(const char *filepath)
   return md5s[i][0];
 }
 
-int TestWrite(const char *subdir, const char* filename, bool recursing)
+int TestWrite(const char *subdir, const char* filename, bool recursing, bool verbose = false)
 {
   Reader reader;
   reader.SetFileName( filename );
@@ -199,7 +199,8 @@ int TestWrite(const char *subdir, const char* filename, bool recursing)
     size_t size1 = System::FileSize( filename );
     size_t size2 = System::FileSize( outfilename.c_str() );
     assert( size1 == size2 );
-    //std::cerr << filename << " and " << outfilename << " are identical\n";
+    if(verbose)
+    std::cerr << filename << " and " << outfilename << " are identical\n";
     return 0;
     }
 }
@@ -210,7 +211,7 @@ int TestWriter(int argc, char *argv[])
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return gdcm::TestWrite(argv[0], filename, false);
+    return gdcm::TestWrite(argv[0], filename, false, true);
     }
 
   // else

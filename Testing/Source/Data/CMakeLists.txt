@@ -87,30 +87,30 @@ BogusItemStartItemEnd.dcm
   TheralysNoModalityNoObject.dcm
   ImplicitDeclaredAsExplicit.dcm
   TheralysGDCM1.dcm
-  MR_Spectroscopy_SIEMENS_OF.dcm
+  #MR_Spectroscopy_SIEMENS_OF.dcm
   #SIEMENS-MR-RGB-16Bits.dcm
-# Recent issue with compression/decompression:
+# Recent issue with compression/decompression (overlay in pixel data not handled)
   SIEMENS_GBS_III-16-ACR_NEMA_1.acr
   SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm
   #MR-MONO2-12-angio-an1.acr
   image.acr
-  PHILIPS_Gyroscan-8-MONO2-Odd_Sequence.dcm
+  #  PHILIPS_Gyroscan-8-MONO2-Odd_Sequence.dcm
   MergeCOM3_330_IM50.dcm
   ImplicitVRInExplicitDataSet2.dcm
   BogugsItemAndSequenceLengthCorrected.dcm
 #SC that are well hidden MR Image Storage
-  fffc0000UN.dcm
+#  fffc0000UN.dcm
   MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm
 # Private tags is SQ, but SQ is busted, GDCM fails since it tries to parse the SQ (dcmtk does not even try)
   BogusItemLengthImplicitPrivateAtt.dcm
-  MR-MONO2-12-angio-an1.acr
+  #  MR-MONO2-12-angio-an1.acr
 
 # This image has an unknown Media Storage UID, when looking in Modality 'CR' is found;
 # but at the same time, there is no such thing as IPP/IOP in a ComputedRadiographyImageStorage ...
-  gdcm-CR-DCMTK-16-NonSamplePerPix.dcm
+#  gdcm-CR-DCMTK-16-NonSamplePerPix.dcm
 
-  PixelDataWithVRUN.dcm
-  InvalidYCCForJ2K.dcm
+#  PixelDataWithVRUN.dcm
+  #  InvalidYCCForJ2K.dcm
 )
 IF(NOT GDCM_USE_PVRG)
   SET(BLACK_LIST_READER
