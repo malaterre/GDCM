@@ -906,7 +906,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
       }
     if( !vm.Compatible( guessvm ) )
       {
-      os << GDCM_TERMINAL_VT100_FOREGROUND_GREEN;
+      os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
       os << " (" << guessvm << ") ";
       os << GDCM_TERMINAL_VT100_NORMAL;
       }
