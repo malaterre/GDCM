@@ -18,7 +18,7 @@ using gdcm;
 
 public class HelloWorld
 {
-  public static void Main(string[] args)
+  public static int Main(string[] args)
     {
     System.Console.WriteLine("Hello World !");
     //gdcm.Reader reader2;
@@ -29,12 +29,31 @@ public class HelloWorld
     bool ret = reader.Read();
     if( !ret )
       {
-      throw new Exception("Could not read: " + filename );
+      //throw new Exception("Could not read: " + filename );
+      return 1;
       }
     //std::cout << reader.GetFile() 
-    Tag t = new Tag(0x21,0x12);
+    Tag t = new Tag(0x10,0x10);
     System.Console.WriteLine( "out:" + t.toString() );
     System.Console.WriteLine( "out:" + reader.GetFile().GetDataSet().toString() );
+
+    Anonymizer ano = new Anonymizer();
+    ano.SetFile( reader.GetFile() );
+    ano.RemovePrivateTags();
+    ano.RemoveGroupLength();
+    ano.Replace( t, "GDCM^Csharp^Test^Hello^World" );
+
+    Writer writer = new Writer();
+    writer.SetFileName( "testcs.dcm" );
+    writer.SetFile( ano.GetFile() );
+    ret = writer.Write();
+    if( !ret )
+      {
+      //throw new Exception("Could not read: " + filename );
+      return 1;
+      }
+    
+    return 0;
     }
 }
 
