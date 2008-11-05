@@ -390,11 +390,20 @@ void Overlay::SetOverlay(const char *array, unsigned int length)
 {
   if( !array || length == 0 ) return;
   //char * p = (char*)&Internal->Data[0];
-  Internal->Data.resize( length ); // ??
-  std::copy(array, array+length, Internal->Data.begin());
+  unsigned int computed_length = (Internal->Rows * Internal->Columns + 7) / 8;
+  Internal->Data.resize( computed_length ); // filled with 0 if length < computed_length
+  if( length < computed_length )
+    {
+    std::copy(array, array+length, Internal->Data.begin());
+    }
+  else
+    {
+    // do not try to copy more than allocated:
+    std::copy(array, array+computed_length, Internal->Data.begin());
+    }
   /* warning need to take into account padding to the next word (8bits) */
-  assert( length == compute_bit_and_dicom_padding(Internal->Rows, Internal->Columns) );
-  assert( Internal->Data.size() == length );
+  //assert( length == compute_bit_and_dicom_padding(Internal->Rows, Internal->Columns) );
+  assert( Internal->Data.size() == computed_length );
 }
 
 const ByteValue &Overlay::GetOverlayData() const
