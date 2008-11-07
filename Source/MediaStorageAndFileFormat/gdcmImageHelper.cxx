@@ -483,9 +483,8 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
   interceptslope.resize( 2 );
   interceptslope[0] = 0;
   interceptslope[1] = 1;
-  if( ms == MediaStorage::CTImageStorage || 
+  if( ms == MediaStorage::CTImageStorage || ms == MediaStorage::SecondaryCaptureImageStorage ||
     ForceRescaleInterceptSlope 
-//   (( ms == MediaStorage::MRImageStorage || ms == MediaStorage::SecondaryCaptureImageStorage) && ForceRescaleInterceptSlope )
   )
     {
     Attribute<0x0028,0x1052> at1;
@@ -1207,7 +1206,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
 void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
 {
   MediaStorage ms;
-  // SetFromFile is required here, SetFromDataSet is not enought for all cases
+  // SetFromFile is required here, SetFromDataSet is not enough for all cases
   ms.SetFromFile(f);
   assert( MediaStorage::IsImage( ms ) );
   DataSet &ds = f.GetDataSet();
