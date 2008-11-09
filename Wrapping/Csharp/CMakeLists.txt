@@ -117,17 +117,16 @@ ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 #
 ##ENDIF(UNIX)
 
+SET(OLDSTYLECSHARP 1)
 
-FIND_PACKAGE(CSharp REQUIRED)
-INCLUDE(${CSharp_USE_FILE})
+IF(OLDSTYLECSHARP)
   CONFIGURE_FILE(
     ${CMAKE_CURRENT_SOURCE_DIR}/AssemblyInfo.cs.in
     ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
     @ONLY)
   ADD_CUSTOM_COMMAND(
-    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gdcm_csharp.dll
-    # $(CSC) /t:library /out:mapscript_csharp.dll *.cs config/AssemblyInfo.cs
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:gdcm_csharp.dll" "*.cs" 
+    OUTPUT ${LIBRARY_OUTPUT_PATH}/gdcm_csharp.dll
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${LIBRARY_OUTPUT_PATH}/gdcm_csharp.dll" "*.cs" 
 #${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS "${swig_generated_file_fullname}"
@@ -137,12 +136,11 @@ INCLUDE(${CSharp_USE_FILE})
 
 # building HelloWorld:
   ADD_CUSTOM_COMMAND(
-    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/HelloWorld.exe
-#$(CSC) /r:mapscript_csharp.dll /out:shpdump.exe examples/shpdump.cs
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:gdcm_csharp.dll" "/out:HelloWorld.exe" ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
+    OUTPUT ${EXECUTABLE_OUTPUT_PATH}/HelloWorld.exe
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${LIBRARY_OUTPUT_PATH}/gdcm_csharp.dll" "/out:${EXECUTABLE_OUTPUT_PATH}/HelloWorld.exe" ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gdcm_csharp.dll
-    ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
+    DEPENDS ${LIBRARY_OUTPUT_PATH}/gdcm_csharp.dll
+            ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
     COMMENT "Create HelloWorld.exe"
   )
 
@@ -157,13 +155,18 @@ ENDIF(WIN32)
 # $ export LD_LIBRARY_PATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/Wrapping/Csharp/:/home/mmalaterre/Projects/gdcm/debug-gcc43/bin   
 ADD_CUSTOM_TARGET(GDCMCSharp ALL
   DEPENDS 
-    ${CMAKE_CURRENT_BINARY_DIR}/gdcm_csharp.dll
-    ${CMAKE_CURRENT_BINARY_DIR}/HelloWorld.exe
+    ${LIBRARY_OUTPUT_PATH}/gdcm_csharp.dll
+    ${EXECUTABLE_OUTPUT_PATH}/HelloWorld.exe
   COMMENT "building gdcm_csharp.dll"
 )
 
+
+
+ELSE(OLDSTYLECSHARP)
+ENDIF(OLDSTYLECSHARP)
+
 IF(BUILD_TESTING)
-  ADD_TEST(HelloWorldCSharp ${CMAKE_CSHARP_INTERPRETER} ${CMAKE_CURRENT_BINARY_DIR}/HelloWorld.exe ${GDCM_DATA_ROOT}/012345.002.050.dcm)
+  ADD_TEST(HelloWorldCSharp ${CMAKE_CSHARP_INTERPRETER} ${EXECUTABLE_OUTPUT_PATH}/HelloWorld.exe ${GDCM_DATA_ROOT}/012345.002.050.dcm)
 ENDIF(BUILD_TESTING)
 
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
@@ -174,7 +177,7 @@ IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   ${CPACK_NAMELINK_TYPE}
   )
   # because gdcm_csharp.dll is constructed with custom commands, it need the INSTALL(FILES signature:
-  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gdcm_csharp.dll
+  INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/gdcm_csharp.dll
     DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Runtime
   )
 ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)

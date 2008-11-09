@@ -107,6 +107,14 @@ void PrintVersion()
   std::cout << date << std::endl;
 }
 
+void PrintLossyWarning()
+{
+  std::cout << "You have selected a lossy compression transfer syntax." << std::endl;
+  std::cout << "This will degrade the quality of your input image, and can." << std::endl;
+  std::cout << "impact professional interpretation of the image." << std::endl;
+  std::cout << "Do not use if you do not understand the risk." << std::endl;
+}
+
 void PrintHelp()
 {
   PrintVersion();
@@ -746,12 +754,6 @@ int main (int argc, char *argv[])
     gdcm::UIDGenerator::SetRoot( root.c_str() );
     }
 
-  if( lossy )
-    {
-    std::cerr << "not supported for now" << std::endl;
-    return 1;
-    }
-
   if( removegrouplength )
     {
     gdcm::Reader reader;
@@ -967,7 +969,6 @@ int main (int argc, char *argv[])
       {
       if( lossy )
         {
-
         change.SetTransferSyntax( gdcm::TransferSyntax::JPEG2000 );
         if( rate )
           {
@@ -1049,8 +1050,12 @@ int main (int argc, char *argv[])
       std::cerr << "Could not change the Transfer Syntax: " << filename << std::endl;
       return 1;
       }
-    const gdcm::TransferSyntax &ts = image.GetTransferSyntax();
-    if( ts.IsImplicit() )
+    if( lossy )
+      {
+      PrintLossyWarning();
+      gdcm::derives( reader.GetFile(), change.GetOutput() );
+      }
+    if( usedict /*ts.IsImplicit()*/ )
       {
       gdcm::FileExplicitFilter fef;
       //fef.SetChangePrivateTags( true );
@@ -1061,8 +1066,6 @@ int main (int argc, char *argv[])
         return 1;
         }
       }
-    if( lossy )
-    gdcm::derives( reader.GetFile(), change.GetOutput() );
 
     gdcm::ImageWriter writer;
     writer.SetFileName( outfilename.c_str() );

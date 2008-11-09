@@ -143,6 +143,14 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde, Pixmap 
     output.SetPlanarConfiguration( 0 );
     //output.SetPhotometricInterpretation( PhotometricInterpretation::RGB );
 
+    // Indeed one cannot produce a true lossless RGB image according to DICOM standard
+    // when doing lossless jpeg:
+    if( output.GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
+      {
+      gdcmWarningMacro( "Technically this is not defined in the standard. \n"
+        "Some validator may complains this image is invalid, but would be wrong.");
+      }
+
     DataElement &de = output.GetDataElement();
     de.SetValue( out.GetValue() );
     // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm    
@@ -224,14 +232,36 @@ bool ImageChangeTransferSyntax::TryJPEG2000Codec(const DataElement &pixelde, Pix
 
     if( input.GetPixelFormat().GetSamplesPerPixel() == 3 )
       {
-      if( ts == TransferSyntax::JPEG2000Lossless )
+      if( input.GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
         {
-        output.SetPhotometricInterpretation( PhotometricInterpretation::YBR_RCT );
+        if( ts == TransferSyntax::JPEG2000Lossless )
+          {
+          output.SetPhotometricInterpretation( PhotometricInterpretation::YBR_RCT );
+          }
+        else 
+          {
+          assert( ts == TransferSyntax::JPEG2000 );
+          output.SetPhotometricInterpretation( PhotometricInterpretation::YBR_ICT );
+          }
         }
-      else 
+      else
         {
-        assert( ts == TransferSyntax::JPEG2000 );
-        output.SetPhotometricInterpretation( PhotometricInterpretation::YBR_ICT );
+        assert( input.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL );
+        if( ts == TransferSyntax::JPEG2000Lossless )
+          {
+          output.SetPhotometricInterpretation( PhotometricInterpretation::YBR_FULL );
+          // Indeed one cannot produce a true lossless RGB image according to DICOM standard
+          gdcmWarningMacro( "Technically this is not defined in the standard. \n"
+            "Some validator may complains this image is invalid, but would be wrong.");
+          }
+        else
+          {
+          assert( ts == TransferSyntax::JPEG2000 );
+          //output.SetPhotometricInterpretation( PhotometricInterpretation::YBR_ICT );
+          // FIXME: technically when doing lossy we could be standard compliant and first convert to
+          // RGB THEN compress to YBR_ICT. For now produce improper j2k image
+          output.SetPhotometricInterpretation( PhotometricInterpretation::YBR_FULL );
+          }
         }
       }
     else
@@ -250,6 +280,14 @@ bool ImageChangeTransferSyntax::TryJPEG2000Codec(const DataElement &pixelde, Pix
 
 bool ImageChangeTransferSyntax::Change()
 {
+  // let's get rid of some easy case:
+  if( Input->GetPhotometricInterpretation() == PhotometricInterpretation::PALETTE_COLOR && 
+    TS.IsLossy() )
+    {
+    gdcmErrorMacro( "PALETTE_COLOR and Lossy compression are impossible. Convert to RGB first." );
+    return false;
+    }
+
   Output = Input;
 
   // Fast path

@@ -365,6 +365,13 @@ OPTION(GDCM_WRAP_PHP "php wrapping (experimental !)" OFF)
 OPTION(GDCM_WRAP_JAVA "build java wrapping (experimental !)" OFF)
 OPTION(GDCM_WRAP_CSHARP "build csharp wrapping (very experimental !)" OFF)
 MARK_AS_ADVANCED(GDCM_WRAP_PHP GDCM_WRAP_JAVA GDCM_WRAP_CSHARP)
+IF(GDCM_WRAP_CSHARP)
+FIND_PACKAGE(CSharp REQUIRED)
+INCLUDE(${CSharp_USE_FILE})
+#  cmake_minimum_required(VERSION 2.6)
+#  enable_language(CSharp)
+ENDIF(GDCM_WRAP_CSHARP)
+
 SUBDIRS(Wrapping)
 
 #-----------------------------------------------------------------------------
