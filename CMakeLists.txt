@@ -300,9 +300,6 @@ ENDIF(GDCM_USE_SYSTEM_EXPAT)
 #-----------------------------------------------------------------------------
 OPTION(GDCM_BUILD_EXAMPLES "Build GDCM examples." OFF)
 SET(BUILD_EXAMPLES ${GDCM_BUILD_EXAMPLES})
-IF(BUILD_EXAMPLES)
-  SUBDIRS(Examples)
-ENDIF(BUILD_EXAMPLES)
 
 #-----------------------------------------------------------------------------
 # Add the testing directories
@@ -373,6 +370,10 @@ INCLUDE(${CSharp_USE_FILE})
 ENDIF(GDCM_WRAP_CSHARP)
 
 SUBDIRS(Wrapping)
+
+IF(BUILD_EXAMPLES)
+  SUBDIRS(Examples)
+ENDIF(BUILD_EXAMPLES)
 
 #-----------------------------------------------------------------------------
 # Special CMake Module required when doing Python Testing
