@@ -21,7 +21,7 @@
 using System;
 using gdcm;
 
-public class HelloWorld
+public class ManipulateFile
 {
   public static int Main(string[] args)
     {
