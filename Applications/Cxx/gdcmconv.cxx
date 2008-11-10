@@ -959,10 +959,20 @@ int main (int argc, char *argv[])
     change.SetCompressIconImage( compressicon );
     if( jpeg )
       {
+      if( lossy )
+        {
+        std::cerr << "not implemented" << std::endl;
+        return 1;
+        }
       change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLosslessProcess14_1 );
       }
     else if( jpegls )
       {
+      if( lossy )
+        {
+        std::cerr << "not implemented" << std::endl;
+        return 1;
+        }
       change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLSLossless );
       }
     else if( j2k )
@@ -1004,6 +1014,11 @@ int main (int argc, char *argv[])
       }
     else if( raw )
       {
+      if( lossy )
+        {
+        std::cerr << "no such thing as raw & lossy" << std::endl;
+        return 1;
+        }
       const gdcm::TransferSyntax &ts = image.GetTransferSyntax();
 #ifdef GDCM_WORDS_BIGENDIAN
       change.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRBigEndian );
@@ -1021,13 +1036,18 @@ int main (int argc, char *argv[])
       }
     else if( rle )
       {
+      if( lossy )
+        {
+        std::cerr << "no such thing as rle & lossy" << std::endl;
+        return 1;
+        }
       change.SetTransferSyntax( gdcm::TransferSyntax::RLELossless );
       }
     else
       {
       return 1;
       }
-    if( raw )
+    if( raw && planarconf )
       {
       gdcm::ImageChangePlanarConfiguration icpc;
       icpc.SetPlanarConfiguration( planarconfval );
