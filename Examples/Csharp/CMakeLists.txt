@@ -3,7 +3,7 @@
 
 SET(CSHARP_EXAMPLES
   ManipulateFile
-  DecompressImage
+#  DecompressImage
   )
 
 SET(DEP)
