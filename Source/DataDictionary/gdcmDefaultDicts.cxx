@@ -1798,7 +1798,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0040,0xa504,VR::SQ,VM::VM1,"Content Template Sequence",false },
   {0x0040,0xa525,VR::SQ,VM::VM1,"Identical Documents Sequence",false },
   {0x0040,0xa730,VR::SQ,VM::VM1,"Content Sequence",false },
-  {0x0040,0xb020,VR::SQ,VM::VM1,"Annotation Sequence",false },
+  {0x0040,0xb020,VR::SQ,VM::VM1,"Waveform Annotation Sequence",false },
   {0x0040,0xdb00,VR::CS,VM::VM1,"Template Identifier",false },
   {0x0040,0xdb06,VR::DT,VM::VM1,"Template Version",true },
   {0x0040,0xdb07,VR::DT,VM::VM1,"Template Local Version",true },
