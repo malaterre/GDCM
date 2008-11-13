@@ -60,16 +60,18 @@ public class DecompressImage
     image.SetPhotometricInterpretation( pi );
 
     DataElement pixeldata = new DataElement( new gdcm.Tag(0x7fe0,0x0010) );
-    string str1 = ir.GetBuffer();
-    System.Console.WriteLine( ir.GetBufferLength() );
-    pixeldata.SetByteValue( str1, gdcm.VL( len(str1) ) );
-    image.SetDataElement( pixeldata );
+    byte[] str1 = new byte[ ir.GetBufferLength()];
+    ir.GetBuffer( str1 );
+    //System.Console.WriteLine( ir.GetBufferLength() );
+    pixeldata.SetByteValue( str1, new gdcm.VL( (uint)str1.Length ) );
+    //image.SetDataElement( pixeldata );
+    ir.SetDataElement( pixeldata );
 
 
     ImageWriter writer = new ImageWriter();
     writer.SetFileName( file2 );
-    writer.SetFile( r.GetFile() );
-    writer.SetImage( image );
+    writer.SetFile( reader.GetFile() );
+    writer.SetImage( ir );
     ret = writer.Write();
     if( !ret )
       {
