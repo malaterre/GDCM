@@ -44,7 +44,7 @@ public class DecompressImage
     //print ir.GetDimension(1);
     //print "Dims:",dims
 
-    // Just for fun:
+    //Just for fun:
     //dircos =  ir.GetDirectionCosines();
     //t = gdcm.Orientation.GetType(dircos);
     //l = gdcm.Orientation.GetLabel(t);
