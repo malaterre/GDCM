@@ -394,10 +394,15 @@ void Overlay::SetOverlay(const char *array, unsigned int length)
   Internal->Data.resize( computed_length ); // filled with 0 if length < computed_length
   if( length < computed_length )
     {
+    gdcmWarningMacro( "Not enough data found in Overlay. Proceed with caution" );
     std::copy(array, array+length, Internal->Data.begin());
     }
   else
     {
+    if( length > computed_length )
+      {
+      gdcmWarningMacro( "Too much data found in Overlay. Discarding extra data: " << (length - computed_length) << " bytes." );
+      }
     // do not try to copy more than allocated:
     std::copy(array, array+computed_length, Internal->Data.begin());
     }
