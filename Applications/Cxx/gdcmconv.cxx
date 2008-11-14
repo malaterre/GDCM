@@ -157,7 +157,7 @@ void PrintHelp()
   std::cout << "  -n --number-resolution %d  set number of resolution." << std::endl;
   std::cout << "     --irreversible          set irreversible." << std::endl;
   std::cout << "Special Options:" << std::endl;
-  std::cout << "  -I --ignore-errors   print even if file is corrupted (advanced users only, see disclaimers)." << std::endl;
+  std::cout << "  -I --ignore-errors   convert even if file is corrupted (advanced users only, see disclaimers)." << std::endl;
   std::cout << "Env var:" << std::endl;
   std::cout << "  GDCM_ROOT_UID Root UID" << std::endl;
 /* 
