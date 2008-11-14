@@ -138,18 +138,18 @@ IF(OLDSTYLECSHARP)
   ADD_CUSTOM_COMMAND(
     OUTPUT ${GDCM_EXECUTABLE_DIR}/HelloWorld.exe
     COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/gdcm_csharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/HelloWorld.exe" ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     DEPENDS ${GDCM_LIBRARY_DIR}/gdcm_csharp.dll
             ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
     COMMENT "Create HelloWorld.exe"
   )
 
-IF(WIN32)
-  CONFIGURE_FILE(
-    ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
-    ${CMAKE_CURRENT_BINARY_DIR}/HelloWorld.cs
-  )
-ENDIF(WIN32)
+#IF(WIN32)
+#  CONFIGURE_FILE(
+#    ${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cs
+#    ${CMAKE_CURRENT_BINARY_DIR}/HelloWorld.cs
+#  )
+#ENDIF(WIN32)
 
 #  $ export MONO_LOG_LEVEL="debug"; export MONO_LOG_MASK="dll"
 # $ export LD_LIBRARY_PATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/Wrapping/Csharp/:/home/mmalaterre/Projects/gdcm/debug-gcc43/bin   
