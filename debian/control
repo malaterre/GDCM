@@ -5,7 +5,7 @@ Maintainer: Mathieu Malaterre <mathieu.malaterre@gmail.com>
 Uploaders: Bla Foo <bla.foo@example.org>
 Build-Depends: debhelper (>= 5.0.37.2), python-all-dev (>= 2.3.5-11),
  python-support (>= 0.3.9), uuid-dev, zlib1g-dev, libexpat1-dev,
- swig, cmake, libvtk5-dev, python-vtk, mono-mcs (>= 1.0) | c-sharp-compiler
+ swig, cmake, libvtk5-dev, python-vtk, mono-mcs (>= 1.0) | c-sharp-compiler, libopenjpeg-dev
 Standards-Version: 3.7.3
 
 Package: libgdcm2
