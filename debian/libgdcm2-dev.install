@@ -2,4 +2,8 @@ usr/lib/libgdcm*.so
 usr/lib/gdcm-2.*/*
 usr/include/gdcm-2.*/gdcm*
 usr/include/gdcm-2.*/zip*
+usr/include/gdcm-2.*/12/*
+usr/include/gdcm-2.*/16/*
+usr/include/gdcm-2.*/8/*
+usr/include/gdcm-2.*/j*.h
 usr/share/gdcm-2.*/XML

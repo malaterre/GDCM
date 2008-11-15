@@ -5,7 +5,7 @@ Maintainer: Mathieu Malaterre <mathieu.malaterre@gmail.com>
 Uploaders: Bla Foo <bla.foo@example.org>
 Build-Depends: debhelper (>= 5.0.37.2), python-all-dev (>= 2.3.5-11),
  python-support (>= 0.3.9), uuid-dev, zlib1g-dev, libexpat1-dev,
- swig, cmake, libvtk5-dev, python-vtk
+ swig, cmake, libvtk5-dev, python-vtk, mono-mcs (>= 1.0) | c-sharp-compiler, libopenjpeg-dev
 Standards-Version: 3.7.3
 
 Package: libgdcm2
@@ -45,6 +45,12 @@ Depends: libgdcm2 (= ${binary:Version})
 Description: Debug symbols for libgdcm2
  Debug symbols for libgdcm that will allow useful tracebacks and debugging
  on end user machines.
+
+Package: csharp-gdcm
+Architecture: any
+Depends: ${shlibs:Depends}, ${cli:Depends}, libgdcm2 (= ${binary:Version})
+Description: CLI bindings to the gdcm DICOM library
+ CLI bindings to the gdcm DICOM library.
 
 Package: python-gdcm
 Section: python
