@@ -46,6 +46,12 @@ Description: Debug symbols for libgdcm2
  Debug symbols for libgdcm that will allow useful tracebacks and debugging
  on end user machines.
 
+Package: csharp-gdcm
+Architecture: any
+Depends: ${shlibs:Depends}, ${cli:Depends}, libgdcm2 (= ${binary:Version})
+Description: CLI bindings to the gdcm DICOM library
+ CLI bindings to the gdcm DICOM library.
+
 Package: python-gdcm
 Section: python
 Architecture: any
