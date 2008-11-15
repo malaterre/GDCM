@@ -340,7 +340,8 @@ MARK_AS_ADVANCED(BUILD_TESTING GDCM_BUILD_TESTING)
 # On unix one have: "python2.4/site-packages"
 # while on Win32: "c:/Python24/Lib/site-packages/"
 # give up for now and place python modules stuff in a general 'python' subdir
-SET(python_site_package "python/site-packages")
+#SET(python_site_package "python/site-packages")
+SET(python_site_package "")
 
 # Typical runtime env should be then
 # (assuming CMAKE_INSTALL_PREFIX:PATH=/tmp/local)
